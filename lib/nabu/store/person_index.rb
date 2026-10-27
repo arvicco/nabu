@@ -17,7 +17,9 @@ module Nabu
     # (Nabu::EdhPersons), "elephantine" (Nabu::ElephantinePersons),
     # "aozora" (Nabu::AozoraPersons), "kokubunken"
     # (Nabu::KokubunkenPersons), and the NIKH index-markup authorities
-    # "sillok", "goryeosa", "goryeosa-jeoryo" (Nabu::NikhPersons).
+    # "sillok", "goryeosa", "goryeosa-jeoryo" (Nabu::NikhPersons), and
+    # "dprr" (Nabu::DprrPersons — the Roman Republic's elite, refs = the
+    # DPRR entity URI).
     # The column names are
     # CBDB-born; name_han is the NATIVE-form lane every authority fills
     # with its original-script/original-language name (CBDB: the Han name;
@@ -36,7 +38,7 @@ module Nabu
 
       # Every authority a producer derives (each keyed by its source slug),
       # the default first — the order name lookups search in.
-      AUTHORITIES = [DEFAULT_AUTHORITY, "edh", "elephantine", "aozora", "kokubunken",
+      AUTHORITIES = [DEFAULT_AUTHORITY, "edh", "elephantine", "aozora", "kokubunken", "dprr",
                      "sillok", "goryeosa", "goryeosa-jeoryo"].freeze
 
       Person = Data.define(:authority, :person_id, :name, :name_han,

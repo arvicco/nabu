@@ -148,13 +148,15 @@ module Nabu
       (~658k persons of Chinese history), EDH's attested persons (~93.6k
       Latin inscription persons, one card per attestation — the ref names
       the inscription), the Elephantine ancient persons, the Aozora Bunko
-      author/translator index (1,335 persons) and the kokubunken waka-poet
-      personographies (266). Input is an authority ref (cbdb:1762,
-      edh:HD000001/3, aozora:001257, kokubunken:紀貫之) or a name — hanzi,
+      author/translator index (1,335 persons), the kokubunken waka-poet
+      personographies (266) and DPRR's Roman Republican elite (~4.9k,
+      from Broughton/Rüpke/Zmeskal). Input is an authority ref (cbdb:1762,
+      edh:HD000001/3, aozora:001257, kokubunken:紀貫之, dprr:1) or a name — hanzi,
       pinyin, courtesy/studio names, kana readings, romaji, a Roman name
       as inscribed or in the nominative all key through the shared fold;
       matching is exact under the fold, never fuzzy; homonyms print
-      several cards (cbdb first, then edh, elephantine, aozora, kokubunken).
+      several cards (cbdb first, then edh, elephantine, aozora, kokubunken,
+      dprr, the NIKH authorities).
 
       A name also lists its CATALOGUE MENTIONS: the person-shaped document
       facets (oracc/cdli ruler, ancient_author, recipient, eponym; the

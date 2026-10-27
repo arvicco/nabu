@@ -6,7 +6,7 @@ compatibility: "Requires the nabu MCP server (`bin/nabu mcp`, read-only, stdio) 
 metadata:
   desk: classical
   origin: hand-tuned
-  sources: "corpus-corporum croala damos digiliblt diorisis first1k-greek glaux hypotactic ig-cyprus lasla lexica lila openmgh pedecerto perseus-greek perseus-latin proiel sigla ud vulgate"
+  sources: "corpus-corporum croala damos digiliblt diorisis dprr first1k-greek glaux hypotactic ig-cyprus lasla lexica lila openmgh pedecerto perseus-greek perseus-latin proiel sigla ud vulgate"
 ---
 
 # The Classicist — the `classical` desk
@@ -28,6 +28,7 @@ verbatim upstream terms are in `docs/02-sources.md` of the Nabu repository.
 | `damos` | DĀMOS — Database of Mycenaean at Oslo (the Linear B corpus) | nc |
 | `digiliblt` | digilibLT — Biblioteca digitale di testi latini tardoantichi (CIRCSE CoNLL-U) | attribution |
 | `diorisis` | Diorisis Ancient Greek Corpus (Vatri & McGillivray, figshare v1 2018) | attribution |
+| `dprr` | DPRR — Digital Prosopography of the Roman Republic (person authority) | nc |
 | `first1k-greek` | Open Greek and Latin — First1KGreek | attribution |
 | `glaux` | GLAUx — the Greek Language Automated (Keersmaekers) | attribution |
 | `hypotactic` | Hypotactic — Greek metrical scansions (D. Chamberlain) | attribution |

@@ -1819,6 +1819,23 @@ disco:
   wired: true    # P77 first sync owner-verified (1,215 docs), flipped 2026-08-18 (owner: "wire on all recent sources")
   sync_policy: manual
 
+dprr:   # 02-sources row 310
+  adapter: Nabu::Adapters::Dprr
+  adopted: "2026-10-27"
+  kind: module   # person authority — zero document rows, the cbdb shape
+  axes: [classical]
+  wired: false   # until the first real sync is verified
+  sync_policy: manual
+  # DPRR — Digital Prosopography of the Roman Republic (King's College
+  # London; Mouritsen, Robb, Bradley): the Republican elite from
+  # Broughton/Rüpke/Zmeskal. No bulk file: fetch sends two SELECTs to the
+  # public SPARQL endpoint (romanrepublic.ac.uk/rdf/endpoint/) and lands
+  # the sparql-results+json answers verbatim. LICENSE: CC BY-NC 4.0 — the
+  # RDF documentation footer and every RDF serialization's header
+  # verbatim, read on the live site 2026-10-27 → nc. EXPECTED FIRST SYNC
+  # (~4 MB, seconds): 4,876 persons (ids 1–5,684 with gaps) + 1,917 date
+  # assertions → a 4,876-row "dprr" person-index slice.
+
 dss:
   adapter: Nabu::Adapters::Dss
   adopted: "2026-07-18"
