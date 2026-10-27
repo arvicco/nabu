@@ -2525,6 +2525,18 @@ one `ExportCLI` command, against the contract stated in `lib/nabu/export.rb`
   (language, script) cell, its role (base / variant / uncollated), the
   variant's apparatus against the cell base, and its source and license;
   a variant quotes its base, so it draws on both.
+- `passage_sample` (P145, `export passages --stratum ...`) — a stratified,
+  seeded passage sample: cells by language / century (the exported
+  envelope's midpoint) / script (ScriptCheck over the held bytes) /
+  source, NULL its own cell; EQUAL allocation by default (`--per-cell`,
+  100 — a proportional draw only reproduces the library's skew) or
+  `--proportional TOTAL` (largest remainder); bottom-k under
+  sha256(seed:urn), so a seed redraws the same urns across rebuilds; each
+  row carries cell population, sampled count and the inverse-inclusion
+  weight. `--exclude-ocr` reads the one machine-readable OCR marker the
+  catalog carries — document metadata `text_nature` machine-ocr /
+  uncorrected-ocr, stamped only by the scan-shelf adapters — and
+  `--exclude-source` covers OCR-derived sources that carry no flag.
 
 Streaming is keyset paging (urn for documents, id for links) with one
 batched read per page per concern, so memory is constant at library scale;

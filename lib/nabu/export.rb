@@ -9,6 +9,7 @@ require_relative "export/lemmas"
 require_relative "export/align_hub"
 require_relative "export/align_pairs"
 require_relative "export/collation_readings"
+require_relative "export/passage_sample"
 
 module Nabu
   # The research exporter (P121-1, architecture §18): `nabu export <table>`
@@ -53,7 +54,8 @@ module Nabu
       Links::NAME => Links,
       Lemmas::NAME => Lemmas,
       AlignPairs::NAME => AlignPairs,
-      CollationReadings::NAME => CollationReadings
+      CollationReadings::NAME => CollationReadings,
+      PassageSample::NAME => PassageSample
     }.freeze
 
     module_function

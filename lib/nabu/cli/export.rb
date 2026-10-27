@@ -42,6 +42,8 @@ module Nabu
                     with lemma + decoded morphology; jsonl by default)
         collation   the align --collate apparatus as rows — per anchor ref,
                     each witness reading, its role and its variants
+        passages --stratum language,century,script
+                    a stratified, seeded passage sample (passage_sample.*)
 
       The passage stream (stdout, no manifest) is the default command:
         passages    --format plain | jsonl — jsonl lines carry the parsed
@@ -53,6 +55,7 @@ module Nabu
         nabu export links --kind parallel --dated --format jsonl
         nabu export align MARK 2 --with-morph
         nabu export collation --work nt --base ccmh-marianus
+        nabu export passages --stratum language,century --per-cell 50 --exclude-ocr --format jsonl
         nabu export --format jsonl --lang got > gothic.jsonl
 
     HELP
@@ -93,26 +96,73 @@ module Nabu
 
       Same --lang / --license / --source filters as search.
 
+      Stratified sample (--stratum): instead of the stream, write
+      exports/passage_sample.csv (or .jsonl) + its manifest — a seeded,
+      reproducible sample whose cells are the chosen strata:
+
+        language  the passage's language
+        century   signed century of the document envelope's midpoint
+                  (-1 = 1st c. BCE; undated is its own cell)
+        script    the dominant script of the held text (ISO 15924, latn…)
+        source    the source slug
+
+      Allocation is EQUAL per cell by default — up to --per-cell N (default
+      #{Nabu::Export::PassageSample::DEFAULT_PER_CELL}) passages per cell, smaller cells taken whole — because
+      a proportional draw just reproduces the library's skew and starves
+      the small cells; --proportional TOTAL splits TOTAL by population
+      share instead. Every row carries cell_population, cell_sampled and
+      weight (population / sampled) to restore population estimates. The
+      draw ranks passages by sha256(seed:urn): the same --seed over the same
+      library draws the same urns. --exclude-ocr drops documents flagged as
+      OCR text (metadata text_nature machine-ocr / uncorrected-ocr — the only
+      machine-readable OCR flag the catalog carries); --exclude-source drops
+      any further sources you know to be OCR-derived. Rows: urn,
+      document_urn, source, language, century, script, stratum,
+      cell_population, cell_sampled, weight, license_class, text.
+
       Examples:
         nabu export --format plain --lang got > gothic.txt
         nabu export --format jsonl --source ccmh > ccmh.jsonl
         nabu export --format jsonl --license open | jq -r .urn
         nabu export --format jsonl --lang chu | jq '.annotations' | head
+        nabu export passages --stratum language,century,script --format csv
+        nabu export passages --stratum language,century --per-cell 50 --exclude-ocr --seed 7 --format jsonl
+        nabu export passages --stratum language --proportional 5000 --license-class open,attribution --format csv
 
       Use cases: feed a corpus slice to external NLP tooling; a license-clean
       subset for anything you plan to publish; plain-text dumps for grep-scale
-      workflows or personal backups independent of nabu itself.
+      workflows or personal backups independent of nabu itself; a balanced,
+      citable thesis sample (--stratum).
     HELP
-    option :format, type: :string, required: true, desc: "plain | jsonl"
-    option :lang, type: :string, desc: "Restrict to a passage language (e.g. grc, lat)"
+    option :format, type: :string, required: true, desc: "plain | jsonl (with --stratum: csv | jsonl)"
+    option :lang, type: :string, desc: "Restrict to a passage language (e.g. grc, lat; with --stratum a list)"
     option :license, type: :string,
                      desc: "Restrict to an exact license class (open, attribution, nc, …)"
     option :source, type: :string, banner: "SLUG",
-                    desc: "Restrict to one source (`nabu list` names the slugs)"
+                    desc: "Restrict to one source (`nabu list` names the slugs; with --stratum a list)"
     option :axis, type: :string, banner: "NAME[,NAME...]",
                   desc: "Restrict to the members of one or more research axes (config/axes.yml) — the " \
                         "multi-source generalization of --source"
+    option :stratum, type: :string, banner: "NAME[,NAME...]",
+                     desc: "Write a stratified sample instead of the stream: cells by language, century, " \
+                           "script, source"
+    option :per_cell, type: :numeric, banner: "N",
+                      desc: "With --stratum: passages per cell (equal allocation, the default: " \
+                            "#{Nabu::Export::PassageSample::DEFAULT_PER_CELL})"
+    option :proportional, type: :numeric, banner: "TOTAL",
+                          desc: "With --stratum: TOTAL passages split across cells by population share"
+    option :seed, type: :numeric, banner: "N", desc: "With --stratum: the draw's seed (default 0)"
+    option :exclude_ocr, type: :boolean, desc: "With --stratum: drop documents flagged as OCR text"
+    option :exclude_source, type: :string, banner: "SLUG[,SLUG...]", desc: "With --stratum: drop these sources"
+    option :out, type: :string, banner: "DIR", desc: "With --stratum: output directory (default: exports/)"
+    option :license_class, type: :string, banner: "CLASS[,CLASS...]",
+                           desc: "With --stratum: keep only rows whose source is in these license classes"
     def passages
+      return stratified_passages if options[:stratum]
+
+      stray = STRATUM_ONLY.find { |name| !options[name].nil? }
+      raise Thor::Error, "export passages: --#{stray.to_s.tr('_', '-')} needs --stratum" if stray
+
       Nabu::CLI.new([], options).stream_passage_export
     end
 
@@ -337,7 +387,28 @@ module Nabu
       end
     end
 
+    # The stream's flags that only mean something with --stratum.
+    STRATUM_ONLY = %i[per_cell proportional seed exclude_ocr exclude_source out license_class].freeze
+    private_constant :STRATUM_ONLY
+
     private
+
+    def stratified_passages
+      raise Thor::Error, "export passages: --stratum takes --license-class, not --license" if options[:license]
+      raise Thor::Error, "export passages: --axis does not combine with --stratum yet — use --source" if options[:axis]
+
+      with_writer("passages") do |writer, config|
+        with_catalog(config) do |catalog|
+          table = Nabu::Export::PassageSample.new(
+            catalog: catalog, strata: list(options[:stratum]), per_cell: options[:per_cell],
+            proportional: options[:proportional], seed: options[:seed] || 0, sources: list(options[:source]),
+            langs: list(options[:lang]), exclude_sources: list(options[:exclude_source]),
+            exclude_ocr: options[:exclude_ocr] || false
+          )
+          report(writer.write(table))
+        end
+      end
+    end
 
     # The alignment-hub inputs, read-only: the catalog, the full-text file
     # (the ref index lives there), the registry.
