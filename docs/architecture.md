@@ -317,7 +317,9 @@ passage_entities(name_id, passage_id)         -- WITHOUT ROWID, PK (name_id, pas
    -- annotation (names marked INSIDE the text: EpidocParser::InlineLayer's
    -- persName/placeName/name spans on the Perseus editions, CopticTtParser's
    -- entity spans with Wikification identities, the DHARMA Deccan
-   -- person/place tags), whose typed record shape the facet lane's
+   -- person/place tags; okhc's <ner_TYPE> spans from the deposit's
+   -- parallel body_xml/title_xml, at LINE grain — no offsets), whose
+   -- typed record shape the facet lane's
    -- {"value","ref"} rule does not carry. Same dictionary encoding: one
    -- name row per distinct verbatim record per source, plus search_key —
    -- text/identity/key/ref each folded (Normalize.fold_diacritics +

@@ -168,9 +168,11 @@ module Nabu
           metadata: record_metadata(record)
         )
         record.lines.each_with_index do |text, index|
+          entities = record.entities[index]
           document << Nabu::Passage.new(
             urn: "#{document_ref.id}:#{index + 1}", language: record.language,
-            text: text, sequence: index
+            text: text, sequence: index,
+            annotations: entities ? { "entities" => entities } : {}
           )
         end
         document
