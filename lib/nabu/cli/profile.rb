@@ -265,6 +265,7 @@ module Nabu
       # blocked member in — each is skipped with the on-ramp line.
       def run_enable(config, registry, names, ledger:, catalog:)
         profile = effective_profile(config, registry, catalog: catalog)
+        before = Nabu::Focus.resolve(profile, registry).slugs
         entries = profile.entries.dup
         added = []
         names.each do |name|
@@ -275,8 +276,46 @@ module Nabu
           end
           added << name unless entries.include?(name)
         end
-        Nabu::Profile.new(entries + added).save(config.profile_path)
+        saved = Nabu::Profile.new(entries + added).save(config.profile_path)
         announce_enablement(config, registry, verb: "enabled", changed: added, catalog: catalog)
+        say enable_delta_line(registry, names, before, Nabu::Focus.resolve(saved, registry).slugs)
+      end
+
+      # The install plan (dependency survey F6): what this enable newly
+      # resolved, with the `requires:` chain it pulled in named apart and
+      # each requirement's nature flagged — a module never rides
+      # `sync --all`, a manual-drop upstream needs a file before it syncs,
+      # a grant-gated one syncs only by name.
+      def enable_delta_line(registry, names, before, after)
+        newly = after - before
+        return "newly resolved: nothing (already covered)" if newly.empty?
+
+        direct = names.flat_map { |name| registry.axes[name] ? registry.public_axis_members(name) : [name] }
+        named = newly & direct
+        pulled = newly - direct
+        line = "newly resolved: #{pluralize(newly.size, 'source')}"
+        line += " — #{named.join(', ')}" unless named.empty?
+        return line if pulled.empty?
+
+        plan = pulled.map do |slug|
+          notes = [requirement_nature(registry[slug]),
+                   "for #{(registry.required_by(slug) & after).join(', ')}"].compact
+          "#{slug} (#{notes.join(', ')})"
+        end
+        "#{line}; pulls in (required): #{plan.join(' · ')}"
+      end
+
+      # What a chain-pulled requirement needs before it is usable, or nil.
+      def requirement_nature(entry)
+        return "module" if entry.feature_module?
+        return "grant-gated — nabu sync #{entry.slug} to acknowledge" if entry.grant_required? || entry.blocked?
+
+        klass = Object.const_get(entry.adapter_class_name)
+        return unless klass.respond_to?(:manual_acquisition)
+
+        "manual drop — nabu sync #{entry.slug} after the file lands"
+      rescue NameError
+        nil
       end
 
       # One source being enabled by slug: a grant-gated (blocked) source with a
