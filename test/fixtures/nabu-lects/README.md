@@ -7,7 +7,21 @@ already small (340 + 40 lines) and the module's read seam
 full codemap to be exercised honestly (a trimmed slice would hide
 referential-integrity gaps the drift guard exists to catch).
 
-- **Retrieved 2026-10-27** — the Iron Age Hebrew package (the obm
+- **Retrieved 2026-10-27 (second cut)** — the South Asia / Greek-dialect
+  package: the ta:old and ta:mid (Old / Middle Tamil), te:old (Old
+  Telugu) and mr:old (Old Marathi) stages; the pmh (Maharastri
+  Prakrit) and psu (Sauraseni Prakrit) anchors; the grc att / ion /
+  dor / aeo dialect varieties; the ca (Catalan) anchor; the sinh
+  (Sinhala) row in the global scripts table; the ofs philology
+  backfill; and +11 codemap rows (oty → ta:old, ta-mid → ta:mid,
+  omr → mr:old, pra-mah → pmh, pra-sau → psu, pra-ard → pka,
+  grc-att / grc-ion / grc-dor / grc-aeo → the grc varieties,
+  cat → ca). Copied verbatim from canonical/nabu-lects (commit
+  `be79260a4bd9`, `main`). `lects.yml` 193,229 B, sha256
+  `bb44785480f63ffdf9ebf4780273199fff41ba610bf6745fc42add922e54aed2`;
+  `codemap.yml` 10,059 B, sha256
+  `747472d66bd881629b54d61b629a5867399ec682338b2a303bedd678beef8356`.
+- Previously retrieved 2026-10-27 — the Iron Age Hebrew package (the obm
   Moabite anchor, parent sem, with its Garr 1985 dialect-geography
   note, and the hbo:epi Epigraphic Hebrew stage, band [-1000, -586],
   Gogel 1998), copied verbatim from canonical/nabu-lects (commit

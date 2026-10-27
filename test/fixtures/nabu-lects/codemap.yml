@@ -18,6 +18,7 @@ map:
   nld:     nl
   spa:     es
   arg:     an
+  cat:     ca
   swe:     sv
   ita:     it
   eng:     en
@@ -87,6 +88,20 @@ map:
   roa-oit: it:old
   gmq-oda: da:old
   olt:     lt:old   # Wiktionary's Old Lithuanian — 188 reflex rows held
+  # The South Asian stage suite (2026-10-27): ISO 639-3 codes that name a
+  # PERIOD of an anchored language (oty Old Tamil, omr Old Marathi — the
+  # olt shape) and Wiktionary's etymology-only Tamil period code.
+  oty:     ta:old
+  ta-mid:  ta:mid
+  omr:     mr:old
+  # Wiktionary's etymology-only Prakrit codes onto the registry's member
+  # anchors (each parents pra on Wiktionary too): the same varieties under
+  # the ISO 639-3 codes the registry anchors. The other pra-* codes
+  # (Māgadhī, Paiśācī, Helu, Khasa, Niya, the dramatists' minor
+  # Prakrits) carry no registry node and stay identity.
+  pra-mah: pmh
+  pra-sau: psu
+  pra-ard: pka
 
   # Old/Middle Polish, Old/Middle Czech, Middle Bulgarian (Wiktionary
   # codes verified 2026-10-10: zlw-opl and zlw-ocs full languages,
@@ -102,6 +117,13 @@ map:
   # Greek stages that outgrew their codes
   gkm:     grc:byz
   grc-koi: grc:koi
+  # Wiktionary's etymology-only dialect codes onto grc's dialect varieties
+  # (2026-10-27; the region, not the period — a bare dialect claim spans
+  # the whole time-grid)
+  grc-att: grc/att
+  grc-ion: grc/ion
+  grc-dor: grc/dor
+  grc-aeo: grc/aeo
 
   # Chinese: two stages and the register ISO coded as their sibling
   och:     zho:old
