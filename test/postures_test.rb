@@ -179,7 +179,7 @@ class PosturesTest < Minitest::Test
   def test_the_lect_migration_kept_the_p59_4_census
     lect = postures.declarations.select { |d| d.layer == "lect" }
     by_posture = lect.group_by(&:posture).transform_values(&:size)
-    assert_equal 162, lect.size,
+    assert_equal 161, lect.size,
                  "the P59-4 declarations survive the move (61 at migration; itant retired P61-3," \
                  "oracc retired P62-2, etcsl/ccmh/freising/coptic-scriptorium retired P64-6, " \
                  "titus-avestan retired P66-1, osta+fornsvenska retired P77-r8, achemenet " \
@@ -337,7 +337,9 @@ class PosturesTest < Minitest::Test
                  "Frisian split rides the dialect facet, unstaged): 162→163; " \
                  "the South Asia / Greek-dialect package landing (nabu-lects grc att/ion/dor/aeo, " \
                  "canonical-synced 2026-10-27) RETIRES glaux — the glaux-dialect-* compose rules " \
-                 "refine its date-banded stages onto the dialect varieties (the shadowing rule): 163→162"
+                 "refine its date-banded stages onto the dialect varieties (the shadowing rule): 162→161; " \
+                 "the same package's sinh script row RETIRES tipitaka-lk — the pli → pli~sinh " \
+                 "override claims the Pāli's Sinhala surface (the shadowing rule): 162→161"
     # The epigraphic-belt registry package (merged + canonical-synced
     # 2026-10-18, the add-then-retire shape within one phase) retires both
     # P130 pendings, and the ociana-script rule + the ig-cyprus override
@@ -364,7 +366,8 @@ class PosturesTest < Minitest::Test
     # identity (pli + the si translation siblings): 122→123.
     # corpus-oudfries joins identity (ofs, Old Frisian): 123→124. glaux
     # retires (the glaux-dialect-* compose rules machine-posture it):
-    # identity 124→123.
-    assert_equal({ "dates" => 21, "codemap" => 17, "identity" => 123, "pending" => 1 }, by_posture)
+    # identity 123→122. tipitaka-lk retires (the pli~sinh override
+    # machine-postures it): identity 123→122.
+    assert_equal({ "dates" => 21, "codemap" => 17, "identity" => 122, "pending" => 1 }, by_posture)
   end
 end

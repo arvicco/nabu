@@ -287,10 +287,11 @@ sources:
     places: {posture: unplaced}
     script: {posture: implied}
   tipitaka-lk:
-    lect: {posture: identity, note: "pli — the Buddha Jayanthi canon and the CST
-        aṭṭhakathā/Visuddhimagga Pāli, one language at source grain (the suttacentral
-        posture); si — the modern Sinhala translation siblings, identity on the registry's
-        si anchor"}
+    # lect declaration retired 2026-10-27: the tipitaka-lk pli → pli~sinh
+    # override (config/lect_overrides.yml) machine-postures the source — the
+    # Pāli's Sinhala surface, expressible since the registry's sinh row; the
+    # si translation siblings stay bare si (no override row). Retired under
+    # the shadowing rule.
     dating: {posture: undatable, note: "the JSON carries no date field of any kind (census
         2026-10-22: filename, bookId, pageOffset, collection, pageNum, entries, footnotes —
         nothing date-shaped); the canon's and the commentaries' composition eras are
@@ -299,8 +300,9 @@ sources:
         (Buddha Jayanti series) but that is the print's provenance, not the texts'"}
     script: {posture: qualified, note: "the Pāli is held in SINHALA script (the BJT's own
         print convention), unlike the library's romanized Pāli (suttacentral); the claim
-        stays plain pli because the registry has no Sinhala script tag yet. The translation
-        is Sinhala in Sinhala script"}
+        is pli~sinh through the tipitaka-lk override (the registry's sinh row, 2026-10-27),
+        byte-checkable by the sinh ScriptCheck property. The translation is Sinhala in
+        Sinhala script, the bare si default"}
   ud:
     kind: {posture: unclassified, note: "every treebank README's Genre line (UD genre tags,
         all 36 treebanks) rides each split document as the genre facet, verbatim — never
