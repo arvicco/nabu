@@ -457,6 +457,10 @@ module Nabu
         details << dynasty unless dynasty.empty?
         details << "female" if card.female
         say "  #{details.join(' · ')}" unless details.empty?
+        # The external-identity lane (migration 044): the authority's own
+        # links into other prosopographies (Trismegistos, VIAF, EDH's
+        # romans1by1/Wikidata/PIR), verbatim.
+        say "  refs: #{card.refs}" unless card.refs.to_s.strip.empty?
       end
 
       # `nabu person mine SOURCE [AUTHORITY]` (P97-2; widened beyond Han):

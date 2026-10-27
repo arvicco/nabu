@@ -117,16 +117,58 @@ module Store
       end
     end
 
-    def test_open_ended_not_before_only_leaves_not_after_null
+    # A lone dat_jahr_a is EDH's spelling of a POINT year, not an open
+    # range: the record's own EpiDoc carries <origDate when-custom="…"> for
+    # 3,528 of the 3,529 such rows (2026-10-22 census; the 3,529th has no
+    # origDate attributes at all). The earlier open-ended reading
+    # (not_after NULL, "212–") contradicted upstream's XML.
+    def test_lone_dat_jahr_a_is_a_point_year
       with_csv_row("hd_nr" => "HD900002", "dat_jahr_a" => "212") do |dir|
         make_document("urn:nabu:edh:hd900002")
         counts = build!(canonical_dir: dir)
         row = timeline_for("urn:nabu:edh:hd900002")
         assert_equal 212, row.fetch(:not_before)
-        assert_nil row.fetch(:not_after)
-        assert_equal "range", row.fetch(:precision)
-        assert_equal "212–", row.fetch(:date_raw)
+        assert_equal 212, row.fetch(:not_after)
+        assert_equal "year", row.fetch(:precision)
+        assert_equal "212", row.fetch(:date_raw)
         assert_equal 0, counts[:undated]
+      end
+    end
+
+    # GODOT-dated records carry upstream's day and month (dat_tag /
+    # dat_monat) — HD072020, the Siscia altar of 22 May 217 (real row,
+    # test/fixtures/edh_identities). The typed day rides the same artifact
+    # row: precision "day", date_raw the ISO-shaped signed date.
+    def test_day_and_month_on_a_point_year_are_day_precision
+      make_document("urn:nabu:edh:hd072020")
+      build!(canonical_dir: File.join(FIXTURES_ROOT, "edh_identities"))
+      row = timeline_for("urn:nabu:edh:hd072020")
+      assert_equal [217, 217], row.values_at(:not_before, :not_after)
+      assert_equal "day", row.fetch(:precision)
+      assert_equal "217-05-22", row.fetch(:date_raw)
+      assert_nil row.fetch(:date_class), "an upstream artifact date (the NULL class)"
+    end
+
+    def test_month_without_a_day_is_month_precision
+      with_csv_row("hd_nr" => "HD900009", "dat_monat" => "3", "dat_jahr_a" => "-44") do |dir|
+        make_document("urn:nabu:edh:hd900009")
+        build!(canonical_dir: dir)
+        row = timeline_for("urn:nabu:edh:hd900009")
+        assert_equal "month", row.fetch(:precision)
+        assert_equal "-44-03", row.fetch(:date_raw)
+      end
+    end
+
+    # A day within a year RANGE (a festival day of an undated year — 299
+    # rows) keeps the range; the day rides the display string only.
+    def test_day_on_a_year_range_keeps_the_range
+      with_csv_row("hd_nr" => "HD900010", "dat_tag" => "13", "dat_monat" => "7",
+                   "dat_jahr_a" => "171", "dat_jahr_e" => "230") do |dir|
+        make_document("urn:nabu:edh:hd900010")
+        build!(canonical_dir: dir)
+        row = timeline_for("urn:nabu:edh:hd900010")
+        assert_equal "range", row.fetch(:precision)
+        assert_equal "171–230 (day 13.7.)", row.fetch(:date_raw)
       end
     end
 
@@ -186,7 +228,7 @@ module Store
     end
 
     HEADERS = %w[hd_nr fo_antik fo_modern pl_ancient_loc1 koordinaten1 geo_id1
-                 dat_jahr_a dat_jahr_e].freeze
+                 dat_tag dat_monat dat_jahr_a dat_jahr_e].freeze
 
     private
 

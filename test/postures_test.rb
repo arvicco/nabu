@@ -179,7 +179,7 @@ class PosturesTest < Minitest::Test
   def test_the_lect_migration_kept_the_p59_4_census
     lect = postures.declarations.select { |d| d.layer == "lect" }
     by_posture = lect.group_by(&:posture).transform_values(&:size)
-    assert_equal 162, lect.size,
+    assert_equal 163, lect.size,
                  "the P59-4 declarations survive the move (61 at migration; itant retired P61-3," \
                  "oracc retired P62-2, etcsl/ccmh/freising/coptic-scriptorium retired P64-6, " \
                  "titus-avestan retired P66-1, osta+fornsvenska retired P77-r8, achemenet " \
@@ -327,7 +327,8 @@ class PosturesTest < Minitest::Test
                  "memis ADDED — dates (medieval-to-new Latin inscriptions banded by their " \
                  "own origDate; the edr precedent): 160→161; " \
                  "extrabiblical ADDED (same phase) — PENDING on an obm (Moabite) anchor, an Iron Age " \
-                 "epigraphic hbo stage and the contested Deir Alla ruling: 161→162"
+                 "epigraphic hbo stage and the contested Deir Alla ruling: 161→162; " \
+                 "tipitaka-lk ADDED — identity (pli roots + si translation siblings): 162→163"
     # The epigraphic-belt registry package (merged + canonical-synced
     # 2026-10-18, the add-then-retire shape within one phase) retires both
     # P130 pendings, and the ociana-script rule + the ig-cyprus override
@@ -350,7 +351,8 @@ class PosturesTest < Minitest::Test
     # pending 2→1 (lasla alone again). memis joins dates (the
     # inscriptions' own origDate bands): 20→21. extrabiblical joins as
     # pending on the obm anchor + epigraphic hbo stage + the Deir Alla
-    # ruling: pending 1→2 (lasla, extrabiblical).
-    assert_equal({ "dates" => 21, "codemap" => 17, "identity" => 122, "pending" => 2 }, by_posture)
+    # ruling: pending 1→2 (lasla, extrabiblical). tipitaka-lk joins
+    # identity (pli + the si translation siblings): 122→123.
+    assert_equal({ "dates" => 21, "codemap" => 17, "identity" => 123, "pending" => 2 }, by_posture)
   end
 end

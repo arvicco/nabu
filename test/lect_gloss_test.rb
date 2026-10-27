@@ -60,4 +60,17 @@ class LectGlossTest < Minitest::Test
     assert_empty Nabu::LectGloss.payload("owner")
     assert_empty Nabu::LectGloss.payload("codemap")
   end
+
+  # The live config's stated tier words must be words the :lect_tier
+  # carrier knows: a typo ("certian") would read as an UNTIERED ruling —
+  # silently glossing nothing — rather than failing anywhere.
+  def test_every_live_tier_word_is_in_the_lect_tier_vocabulary
+    config = File.join(Nabu::Config::PROJECT_ROOT, "config")
+    words = Nabu::Lects.override_tiers([File.join(config, "lect_overrides.yml")]).values.flat_map(&:values)
+    words += Nabu::LectRules.load(File.join(config, "lect_facet_rules.yml")).rules.filter_map(&:tier)
+    refute_empty words, "the live rulings state tiers (P81 U-5)"
+    words.uniq.each do |word|
+      refute_nil Nabu::Certainty.tier(:lect_tier, word), "unknown lect tier word #{word.inspect} in config/"
+    end
+  end
 end

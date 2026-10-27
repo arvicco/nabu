@@ -19,11 +19,22 @@ module Nabu
       # hd_nr → urn:nabu:edh:hd<nr> → document_id, one document-grain row per
       # dated OR placed document:
       #
-      # - dat_jahr_a / dat_jahr_e → not_before / not_after. Open-ended rows
-      #   (one bound empty — 3,529 notBefore-only) keep the other bound NULL.
-      #   precision: "year" for a point, else "range" — width is visible in
-      #   the honest bounds themselves. date_raw joins the verbatim column
-      #   values ("71–130", "212–"). A literal year 0 is the Timeline
+      # - dat_jahr_a / dat_jahr_e → not_before / not_after. A LONE dat_jahr_a
+      #   is EDH's point year, not an open range: the record's own EpiDoc
+      #   carries <origDate when-custom="…"> for 3,528 of the 3,529 such
+      #   rows (the 3,529th has an attribute-less origDate) — censused
+      #   2026-10-22, correcting the survey-era open-ended reading. So
+      #   not_after = not_before there. precision: "year" for a point,
+      #   "range" for a span — width is visible in the honest bounds. date_raw
+      #   joins the verbatim column values ("71–130"; a point "217").
+      # - dat_monat / dat_tag: upstream's typed month and day (1,093 / 997
+      #   rows; 671 a full day on a point year — the GODOT-dated consular and
+      #   imperial dates). On a point year they sharpen the same artifact row:
+      #   precision "day" (or "month"), date_raw ISO-shaped "217-05-22" /
+      #   "-44-03". On a year SPAN (299 rows — a dated day of an undated
+      #   year) the range stands and the day rides date_raw only ("171–230
+      #   (day 13.7.)"). The GODOT record identity itself rides the links
+      #   graph (Nabu::EdhCitations), not a timeline column. A literal year 0 is the Timeline
       #   tripwire: skipped, counted invalid, never stored. The 330 records
       #   dated past 640 CE (post-antique copies/forgeries EDH records as
       #   such, up to 1998) ingest verbatim — the timeline does not editorialize.
@@ -95,13 +106,15 @@ module Nabu
           rescue Timeline::InvalidYear
             return :invalid
           end
+          # A lone dat_jahr_a is a POINT year (module note) — never open-ended.
+          not_after ||= not_before
           place_name, place_ref = extract_place(row)
           lat, lon = coordinates(row)
           return nil if not_before.nil? && not_after.nil? && place_name.nil? && lat.nil?
 
           {
             not_before: not_before, not_after: not_after,
-            precision: precision(not_before, not_after),
+            precision: precision(row, not_before, not_after),
             date_raw: date_raw(row, not_before, not_after),
             place_name: place_name, place_ref: place_ref,
             place_lat: lat, place_lon: lon
@@ -117,18 +130,50 @@ module Nabu
           [Float(match[1]), Float(match[2])]
         end
 
-        def precision(not_before, not_after)
+        # "day"/"month" when upstream types the day/month of a point year,
+        # else "year" for a point, "range" for a span.
+        def precision(row, not_before, not_after)
           return nil if not_before.nil? && not_after.nil?
+          return "range" unless not_before == not_after
 
-          not_before == not_after ? "year" : "range"
+          month, day = day_month(row)
+          return "day" if month && day
+
+          month ? "month" : "year"
         end
 
-        # The verbatim column values, joined for display: "71–130", "212–"
-        # (open-ended). nil for a place-only row.
+        # For display: a point year verbatim ("217"), with upstream's month
+        # and day ISO-shaped behind it ("217-05-22", "-44-03"); a span as
+        # the verbatim column values ("71–130"), a typed day kept in words
+        # ("171–230 (day 13.7.)"). nil for a place-only row.
         def date_raw(row, not_before, not_after)
           return nil if not_before.nil? && not_after.nil?
 
-          "#{row['dat_jahr_a'].to_s.strip}–#{row['dat_jahr_e'].to_s.strip}"
+          first = row["dat_jahr_a"].to_s.strip
+          month, day = day_month(row)
+          if not_before == not_after
+            [first, month && format("%02d", month), month && day && format("%02d", day)].compact.join("-")
+          else
+            span = "#{first}–#{row['dat_jahr_e'].to_s.strip}"
+            day && month ? "#{span} (day #{day}.#{month}.)" : span
+          end
+        end
+
+        # [month, day] as integers from dat_monat/dat_tag, each nil when
+        # absent or outside the calendar (a day never stands without its
+        # month).
+        def day_month(row)
+          month = calendar_int(row["dat_monat"], 12)
+          day = calendar_int(row["dat_tag"], 31)
+          [month, month && day]
+        end
+
+        def calendar_int(value, max)
+          text = value.to_s.strip
+          return nil unless text.match?(/\A\d{1,2}\z/)
+
+          number = text.to_i
+          number.between?(1, max) ? number : nil
         end
 
         def extract_place(row)

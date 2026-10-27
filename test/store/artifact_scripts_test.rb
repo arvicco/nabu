@@ -107,9 +107,20 @@ class ArtifactScriptsTest < Minitest::Test
       end
     end
     tags = shipped.values.flat_map { |langs| langs.values.map { |row| row["script"] } }.uniq.sort
-    assert_equal %w[avst cprt egyd hant ital lina linb phnx tibt ugar xsux], tags,
+    assert_equal %w[avst cprt egyd hant ital lina linb phnx runr tibt ugar xsux], tags,
                  "the owner-ruled census set (2026-08-28; the Aegean-syllabary tags joined " \
-                 "with the 2026-10-22 registry package that minted them for exactly this layer)"
+                 "with the 2026-10-22 registry package that minted them for exactly this layer; " \
+                 "runr for Menota's two runic manuscripts)"
+  end
+
+  # Menota's dan holdings are exactly its two RUNIC manuscripts (Codex
+  # Runicus AM 28 8vo, the Mariaklage SKB A 120): the stored text is the
+  # Latin-letter diplomatic level, the facsimile level is runes.
+  def test_menota_dan_is_marked_runic
+    shipped = YAML.safe_load_file(
+      File.join(Nabu::Config::PROJECT_ROOT, "config", "artifact_scripts.yml")
+    ).fetch("sources")
+    assert_equal "runr", shipped.dig("menota", "dan", "script")
   end
 
   # The 2026-08-29 regression class: YAML resolves a DUPLICATE source key by

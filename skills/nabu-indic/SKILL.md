@@ -6,7 +6,7 @@ compatibility: "Requires the nabu MCP server (`bin/nabu mcp`, read-only, stdio) 
 metadata:
   desk: indic
   origin: hand-tuned
-  sources: "dacon dcs dharma-deccan dharma-mdt dharma-tamil gretil gretil-legacy gu-wikisource kannada-texts madurai mw nabu-data prakrit-texts sarit shabados siddham sii-clean suttacentral tamilex te-wikisource ud vedaweb wiktionary-dv wiktionary-kn wiktionary-ml wiktionary-pra wiktionary-si wiktionary-ta wiktionary-te"
+  sources: "dacon dcs dharma-deccan dharma-mdt dharma-tamil gretil gretil-legacy gu-wikisource kannada-texts madurai mw nabu-data prakrit-texts sarit shabados siddham sii-clean suttacentral tamilex te-wikisource tipitaka-lk ud vedaweb wiktionary-dv wiktionary-kn wiktionary-ml wiktionary-pra wiktionary-si wiktionary-ta wiktionary-te"
 ---
 
 # The Indologist — the `indic` desk
@@ -43,6 +43,7 @@ verbatim upstream terms are in `docs/02-sources.md` of the Nabu repository.
 | `suttacentral` | SuttaCentral — bilara-data segmented canon (Pali Tipiṭaka + Chinese Āgamas + aligned English) | open |
 | `tamilex` | TAMILEX — critical editions of the classical Tamil corpus (Universität Hamburg) | nc |
 | `te-wikisource` | Telugu Wikisource — the classical cone (kāvya, prabandha, śataka; prints to 1930) | attribution |
+| `tipitaka-lk` | tipitaka.lk — Buddha Jayanthi Tripiṭaka and aṭṭhakathā, Pāli and Sinhala (Path Nirvana) | research_private |
 | `ud` | Universal Dependencies — ancient treebanks | nc |
 | `vedaweb` | VedaWeb — the Rigveda with the University of Zurich morphological annotation (Cologne Center for eHumanities) | attribution |
 | `wiktionary-dv` | Wiktionary Dhivehi — kaikki.org machine-readable extract | attribution |

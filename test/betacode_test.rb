@@ -60,4 +60,13 @@ class BetacodeTest < Minitest::Test
   def test_sigma_is_medial_before_a_letter_and_final_before_punctuation
     assert_equal "μηνίσκος, ὁ", decode("mhni/skos, o(")
   end
+
+  # The search surface's --betacode / betacode: true input: case-blind (TLG
+  # upper-case input), with the FTS query syntax passing through.
+  def test_decode_query_is_case_blind_and_keeps_search_syntax
+    assert_equal "μῆνιν", Nabu::Betacode.decode_query("MH=NIN")
+    assert_equal "Μῆνις", Nabu::Betacode.decode_query("*MH=NIS")
+    assert_equal "μηνι*", Nabu::Betacode.decode_query("mhni*")
+    assert_equal "\"ἄνδρα μοι\"", Nabu::Betacode.decode_query("\"a)/ndra moi\"")
+  end
 end

@@ -19,6 +19,15 @@ sources:
   #                       name 2,763 · ethnic 969; 10,606 with @key
   - dharma-deccan       # 751 passages · 1,121 records — person 881 · place 240, the editor's
   #                       pers:/pl: authority keys on 895
+  # The token-grain name lane (Store::EntityIndex::TOKEN_SHAPES): names marked
+  # by the token's own proper-noun class, read off the stored "tokens"
+  # annotation — no re-parse. Census 2026-10-22 (tokens · passages):
+  - achemenet           # 60,944 · 2,761 — qpn POS: PN 40,845 · SN 5,223 · LN 5,032 · MN 4,032 ·
+  #                       RN 3,056 · DN 1,290 …; key = the lemma (citation form)
+  - oracc               # 740,088 · 651,585 — qpn POS: PN 440,469 · DN 87,482 · SN 87,024 ·
+  #                       MN 54,818 · RN 31,233 · GN 10,948 …; 48,771 distinct class+citation forms
+  - tlhdig              # 25,188 · 20,820 — resolved morph class: DN 13,772 · GN 9,036 ·
+  #                       PNm 2,094 · PNf 286; key = the gloss (Muršili, Nerik); mixed analyses out
   # Same InlineLayer, no persName/placeName in the held deposits today
   # (0 records each) — listed so a re-parse that surfaces them is indexed:
   - first1k-greek

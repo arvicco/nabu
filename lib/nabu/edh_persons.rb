@@ -24,9 +24,20 @@ module Nabu
   # uncertainty is not a claim); EDH records no life years, so the year
   # columns stay nil. Everything else EDH structures about a person —
   # praenomen/nomen/cognomen, filiation, tribus, origo, status, kinship,
-  # function, occupation, age at death, the Wikidata/PIR refs — already
-  # rides each inscription's document metadata ("persons", the Edh
-  # adapter's PERSON_FIELDS), so the index needs no schema widening.
+  # function, occupation, age at death — already rides each inscription's
+  # document metadata ("persons", the Edh adapter's PERSON_FIELDS), so the
+  # index needs no schema widening.
+  #
+  # == Identity refs (the person index's refs lane, migration 044)
+  #
+  # EDH links an attestation to a person authority in two columns, and
+  # both land in refs, space-separated: `uri` verbatim (one URL per row —
+  # 12,331 rows: 8,138 romans1by1, 3,970 Wikidata, 223 SNAP:DRGN) and
+  # `pir` — the Prosopographia Imperii Romani entry (2,091 rows, all of the
+  # shape "PIR [(2. Aufl.) ]<letter> <number>") as a compact id naming the
+  # edition: "pir2:B.166", "pir1:T.169". PIR is a printed reference work
+  # with no URI space, so the compact id is the honest identity token
+  # (censused over canonical/edh/pers/edh_data_pers.csv 2026-10-22).
   #
   # == Name keys
   #
@@ -43,6 +54,8 @@ module Nabu
     PERS_CSV = File.join("pers", "edh_data_pers.csv")
 
     Census = Data.define(:persons, :seconds)
+
+    PIR = /\APIR (?<second>\(2\. Aufl\.\) )?(?<letter>[A-Z]) (?<number>\d+[a-z]?)\z/
 
     SIGLA = %r{[\[\]()<>{}⟦⟧/?!+*]}
     LACUNA = /-{2,}/
@@ -76,8 +89,24 @@ module Nabu
         authority: AUTHORITY, person_id: id, name: name, name_han: nil,
         birth_year: nil, death_year: nil, index_year: nil,
         dynasty: nil, dynasty_han: nil, female: row["geschlecht"].to_s.strip == "W",
-        name_keys: keys
+        name_keys: keys, refs: refs(row)
       )
+    end
+
+    # The identity refs (module note): the uri column's URL(s) verbatim,
+    # then the PIR entry as a compact id; nil when neither is present.
+    def refs(row)
+      urls = row["uri"].to_s.split.grep(%r{\Ahttps?://})
+      tokens = [*urls, pir_ref(row["pir"])].compact
+      tokens.empty? ? nil : tokens.join(" ")
+    end
+
+    # "PIR (2. Aufl.) B 166" → "pir2:B.166", "PIR S 429a" → "pir1:S.429a"
+    # (the first edition, Klebs/Dessau/Rohden); nil for anything else.
+    def pir_ref(value)
+      m = PIR.match(value.to_s.strip) or return nil
+
+      "pir#{m[:second] ? 2 : 1}:#{m[:letter]}.#{m[:number]}"
     end
 
     def name_keys(row)

@@ -1153,7 +1153,8 @@ class SourceRegistryTest < Minitest::Test
     assert_equal %w[etym iranian buddhist], registry["titus-khotanese"].axes
     assert_equal %w[titus-khotanese titus-tocharian-a titus-tocharian-b], registry.blocked_axis_members("buddhist"),
                  "the grant-gated TITUS Buddhist corpora ride buddhist, excluded from the public listing"
-    assert_equal %w[cbeta derge-kangyur derge-tengyur e84000 gretil lotsawa-house mvp sarit suttacentral],
+    assert_equal %w[cbeta derge-kangyur derge-tengyur e84000 gretil lotsawa-house mvp sarit suttacentral
+                    tipitaka-lk],
                  registry.public_axis_members("buddhist").sort
   end
 

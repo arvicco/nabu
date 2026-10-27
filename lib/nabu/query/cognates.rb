@@ -96,13 +96,15 @@ module Nabu
       # keeps tiny gold corpora (uga: 125 passages) from judging everything
       # common. The ratio is corpus-RELATIVE by design; the absolute floor
       # binds only tiny gold corpora and LOOSENS (not tightens) as they grow.
-      # P96 audit re-stamp (mechanisms verified scale-safe at 106.9M).
-      # census: 106877441, 2026-09-04, live fulltext gold lemmas (P57 full
-      # rebuild): 37 gold languages (23 at the 24.4M census), counts spanning
-      # sux 1,284,618 … down to the tiny floors — uga 125 (the calibration
-      # example, STILL unchanged), elx 162, xhu 247, arc 268, and two new
-      # micro-corpora below the old floor line (hlu 7, qur 8). The mechanism
-      # is scale-safe by design: the ratio binds large corpora, the absolute
+      # Re-stamped from the live reflex_root_stats table (the per-language
+      # gold-passage totals this suppression reads).
+      # census: 117497186, 2026-10-22, live fulltext gold lemmas: 52 gold
+      # languages (37 at the 2026-09-04 census, 23 at 24.4M), counts spanning
+      # sux 1,284,696 and san 807,107 … down to the tiny floors — uga 125
+      # (the calibration example, STILL unchanged), elx 162, xhu 247, and the
+      # micro-corpora below the floor line (hlu 7, qur 8, axm 27, gn 58);
+      # arc has grown off the floor (268 → 6,381). The mechanism is
+      # scale-safe by design: the ratio binds large corpora, the absolute
       # floor binds tiny ones and only LOOSENS as they grow. P15-3 stands.
       STOP_RATIO = 0.10
       STOP_MIN_DF = 50

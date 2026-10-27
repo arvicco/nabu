@@ -38,7 +38,9 @@ module Nabu
   # 5. the entry's derivation-shaping registry flags (translations, classes,
   #    lemma_tier, fuzzy_index): they change derived rows with no byte or
   #    code change, so they are part of the stamp (stored as plain JSON,
-  #    self-explanatory in the db).
+  #    self-explanatory in the db) — plus the content shas of the config/
+  #    DATA files the source's parser closure reads (CONFIG_DATA_READERS),
+  #    present in that JSON only for the sources that read any.
   #
   # DOCUMENTED LIMITS (over-rebuild-safe by refusal elsewhere, but honest):
   # gem upgrades (nokogiri et al.) and Ruby upgrades are not fingerprinted —
@@ -180,6 +182,35 @@ module Nabu
       hani.rb jpn.rb xct.rb
     ]).freeze
 
+    # Config DATA read at parse time (input 5's second half): project-root-
+    # relative files under config/ that shape a source's derived rows with
+    # no code change — the MW sigla crosswalk, the JIS X 0213 table, the
+    # regnal and era tables, the Starling glyph tables. Before this map an
+    # edit to one dirtied NO stamp and an incremental silently skipped the
+    # sources reading it. Keyed by the READER constant: a source depends on
+    # a file when that constant appears in the CODE of its parser closure
+    # (the same comment-stripped scan the closure BFS uses), so a family
+    # member composing the reader inherits the dependency — dharma_tamil
+    # reaches south_indian_reigns.yml through SouthIndianReigns. Explicit,
+    # not clever; the census guard in derivation_fingerprint_test fails
+    # when an adapter grows a config/ literal this map does not name.
+    #
+    # Deliberately absent: config/etruscan_loans.yml and sabellic_loans.yml
+    # — their adapters VENDOR the file into canonical/<slug>/ at fetch and
+    # parse the canonical copy, so the canonical identity already covers
+    # what parse reads (an edit takes effect through a sync, which moves
+    # that identity). Builder-side config (kind_map, facet_map, period
+    # bands, regnal years, …) shapes whole-table projections, not
+    # per-source rows, and is out of this per-source map.
+    CONFIG_DATA_READERS = {
+      "Eras" => %w[config/eras.yml],
+      "Jis0213" => %w[config/jis0213/jisx0213-2004-std.txt],
+      "MwSigla" => %w[config/mw_sigla.yml],
+      "SouthIndianReigns" => %w[config/south_indian_reigns.yml],
+      "StarlingText" => %w[config/starling/chslav.lst config/starling/unipro.lst]
+    }.freeze
+    PROJECT_DIR = File.expand_path("../..", LIB_DIR)
+
     # Namespace wrappers every adapter file opens — as "definitions" they
     # would make every file define (and reference) the same names, collapsing
     # the parser closure to the whole directory.
@@ -272,8 +303,18 @@ module Nabu
         parser_digest: parser_digest(entry),
         fold_digest: self.class.fold_digest(languages),
         migration_level: self.class.migration_level,
-        config_json: self.class.config_json(entry)
+        config_json: self.class.config_json(entry, data: config_data(entry))
       )
+    end
+
+    # The config-data files +entry+'s parser closure reads (CONFIG_DATA_READERS)
+    # as { project-relative path => sha256 }, sorted — {} for the many
+    # sources that read none.
+    def config_data(entry)
+      code = parser_files(entry).map { |file| code_lines(file) }.join("\n")
+      CONFIG_DATA_READERS.select { |reader, _| code.match?(/\b#{reader}\b/) }
+                         .values.flatten.uniq.sort
+                         .to_h { |rel| [rel, self.class.config_data_file_digest(File.join(PROJECT_DIR, rel))] }
     end
 
     # Snapshot of the identity memos' counters (hit/miss/racy/bypass) —
@@ -431,12 +472,22 @@ module Nabu
           .map { |file| File.basename(file).to_i }.max
       end
 
-      # The entry's derivation-shaping flags, canonically ordered.
-      def config_json(entry)
-        JSON.generate(
+      # The entry's derivation-shaping flags, canonically ordered, plus —
+      # ONLY when non-empty — the content shas of the config-data files its
+      # parser reads (#config_data). The key's absence for data-free sources
+      # keeps their stored config_json byte-identical (no stamp churn).
+      def config_json(entry, data: {})
+        flags = {
           "classes" => entry.classes, "fuzzy_index" => entry.fuzzy_index,
           "lemma_tier" => entry.lemma_tier, "translations" => entry.translations
-        )
+        }
+        flags["config_data"] = data unless data.empty?
+        JSON.generate(flags)
+      end
+
+      # Seam (tests divert one config-data file to simulate an edit).
+      def config_data_file_digest(path)
+        Digest::SHA256.file(path).hexdigest
       end
 
       # Seam (tests count plain-file content hashes — the sweep's cost).
@@ -608,10 +659,14 @@ module Nabu
     # documentation, not a dependency.
     def references(file)
       @references[file] ||= begin
-        code = File.read(file).lines.grep_v(/\A\s*#/).join
-        names = code.scan(reference_pattern).flatten.uniq
+        names = code_lines(file).scan(reference_pattern).flatten.uniq
         names.flat_map { |name| definitions.fetch(name) } - [file]
       end
+    end
+
+    # +file+'s code with full-line comments stripped (memoized).
+    def code_lines(file)
+      (@code_lines ||= {})[file] ||= File.read(file).lines.grep_v(/\A\s*#/).join
     end
 
     def reference_pattern

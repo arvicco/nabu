@@ -23,13 +23,13 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 A source wears every desk it serves — these three answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
-| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 22 October 2026)</span> |
+| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 23 October 2026)</span> |
 |---|---|---|---|---|
 | `betamasaheft-works` | texts | attribution | wired · auto | 3,818 docs / 66,933 passages |
 | `dillmann` | dictionary | nc | wired · manual | 13,727 entries |
 | `traces` | texts | nc | wired · manual | 15 docs / 75,436 passages |
 
-**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 22 October 2026)</span>: `gez` 17,538 · `amh` 22.
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 23 October 2026)</span>: `gez` 17,538 · `amh` 22.
 
 ## The desk's instruments
 

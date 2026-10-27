@@ -1633,6 +1633,46 @@ module Query
                  "df(aurora)=6 crosses the threshold alone, but min-df is df(rara)=1 — ranking is cheap"
     end
 
+    # The timing guard at the REAL ceiling (the P96 assumption audit's
+    # invariant): the threshold exists because the worst UNGUARDED ranked
+    # page — a term just under UBIQUITY_THRESHOLD postings — must stay near
+    # the ~1.5s live budget. A synthetic in-memory corpus at that df ranks
+    # in ~30ms on this box, so the 1.5s bound is ~50x headroom: CI-safe
+    # under load, but an order-of-magnitude regression in the ranked path
+    # (a per-candidate join, a lost LIMIT) fails it. The companion term one
+    # posting OVER the ceiling must take the guarded path, timed the same.
+    RANK_BUDGET_SECONDS = 1.5
+
+    def test_worst_unguarded_ranked_query_at_the_real_ceiling_stays_in_budget
+      ceiling = Nabu::Query::Search::UBIQUITY_THRESHOLD
+      doc = make_document(source: @open, urn: "urn:d:scale", language: "lat")
+      rows = Array.new(ceiling + 1) do |i|
+        text = i < ceiling - 1 ? "aurora lux verbum#{i % 997}" : "aurora verbum#{i % 997}"
+        { document_id: doc.id, urn: "urn:d:scale:#{i}", sequence: i, language: "lat", text: text,
+          text_normalized: Nabu::Normalize.search_form(text, language: "lat"),
+          content_sha256: "x", revision: 1, withdrawn: false }
+      end
+      @catalog[:passages].multi_insert(rows)
+      rebuild!
+
+      ranked = timed_search("lux") # df = ceiling - 1: the worst page still ranked
+      assert_nil ranked.fetch(:note), "df just under the ceiling must rank honestly"
+      assert_equal 20, ranked.fetch(:hits)
+      assert_operator ranked.fetch(:seconds), :<, RANK_BUDGET_SECONDS,
+                      "worst unguarded ranked page blew the budget — re-measure the live curve"
+
+      guarded = timed_search("aurora") # df = ceiling + 1: the guard must engage
+      assert_equal Nabu::Query::Search::RANK_SKIP_NOTE, guarded.fetch(:note)
+      assert_operator guarded.fetch(:seconds), :<, RANK_BUDGET_SECONDS
+    end
+
+    def timed_search(query)
+      searcher = Nabu::Query::Search.new(catalog: @catalog, fulltext: @fulltext)
+      started = Process.clock_gettime(Process::CLOCK_MONOTONIC)
+      hits = searcher.run(query).size
+      { seconds: Process.clock_gettime(Process::CLOCK_MONOTONIC) - started, note: searcher.rank_note, hits: hits }
+    end
+
     # The urn probe (the health golden replay) is ranking-independent by
     # design — the guard never rewrites it.
     def test_urn_probe_is_exempt_from_the_guard

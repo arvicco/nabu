@@ -1,0 +1,28 @@
+# Nabu fixture manifest (P5-4 "fixture sentinel"). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# pathnirvana/tipitaka.lk keeps the text under public/static/text/ (the
+# adapter's sparse cone); the fixture tree mirrors that layout. The three
+# text files are page-subset TRIMS (README recipe: whole pages kept,
+# upstream's own serialization); the data/ file is the whole rejected-grain
+# specimen.
+source: tipitaka-lk
+adapter_test:
+retrieved: 2026-10-22
+files:
+  - path: public/static/text/kn-khp.json
+    url: https://raw.githubusercontent.com/pathnirvana/tipitaka.lk/master/public/static/text/kn-khp.json
+    whole: false
+    trim: "pages[0,1,2,8] of 11 (printed pages 2, 4, 6, 18), whole pages, upstream serialization"
+  - path: public/static/text/atta-an-11.json
+    url: https://raw.githubusercontent.com/pathnirvana/tipitaka.lk/master/public/static/text/atta-an-11.json
+    whole: false
+    trim: "pages[0,1,10] of 11 (printed pages 1, 3, 21), whole pages, upstream serialization"
+  - path: public/static/text/ap-pat-2-83.json
+    url: https://raw.githubusercontent.com/pathnirvana/tipitaka.lk/master/public/static/text/ap-pat-2-83.json
+    whole: false
+    trim: "pages[0,1] of 38 (printed pages 1137-1138), whole pages, upstream serialization"
+  - path: public/static/data/footnote-abbreviations.json
+    url: https://raw.githubusercontent.com/pathnirvana/tipitaka.lk/master/public/static/data/footnote-abbreviations.json
+    whole: true
+    trim: none
