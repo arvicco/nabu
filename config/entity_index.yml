@@ -19,6 +19,12 @@ sources:
   #                       name 2,763 · ethnic 969; 10,606 with @key
   - dharma-deccan       # 751 passages · 1,121 records — person 881 · place 240, the editor's
   #                       pers:/pl: authority keys on 895
+  - okhc                # canonical census 2026-10-27 (pending the parse-only pass): the
+  #                       deposit's content.body_xml/title_xml <ner_TYPE> spans, line grain —
+  #                       ilseongnok 인물 1,531,000 · 관직 1,135,039 · 관서 312,431 · 지명 283,505 ·
+  #                       건물 142,860 · 물건 108,338 · 서명 35,647 · 능원 21,446 over 323,658
+  #                       records; aks royal documents person 2,723 · place 941 (287 records).
+  #                       세주/주석 and klc's unknown/948a54 classes are not names — skipped
   # The token-grain name lane (Store::EntityIndex::TOKEN_SHAPES): names marked
   # by the token's own proper-noun class, read off the stored "tokens"
   # annotation — no re-parse. Census 2026-10-22 (tokens · passages):

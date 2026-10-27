@@ -20,7 +20,19 @@ the P91-1 adapter.
   - `aks_collection:WU.1985.4886…` — one of the corpus's 73
     `CC BY-NC-ND 2.0 KR` records, pinning ND-earns-no-upgrade.
 
-37 records over 7 files; languages Classical Chinese / Hanmun / Early
+- Plus THREE real deposit rows for the named-entity markup (P146,
+  copied byte-verbatim from the same retrieval, 2026-10-27):
+  - `aks_royal:RD00158` — the AKS royal-court documents' `ner_person` /
+    `ner_place` spans in `content.body_xml`;
+  - `ilseongnok:1778-06-0-05-정조-GK12811_00-63-000-011` — a title-only
+    record whose only span is `ner_세주` (interlinear small-note — text
+    structure, skipped by rule);
+  - `klc:ITKC_MO_0220A_0120_000_0060` — klc's `ner_948a54` spans (a
+    colour class over 吐 reading particles — skipped by rule).
+  The earlier ilseongnok rows already carry name spans in both
+  `title_xml` (title-only record) and `body_xml`.
+
+42 records over 7 files (the adapter test's discover count); languages Classical Chinese / Hanmun / Early
 Modern Korean / Korean / Modern Korean; copyright "Public Domain" and
 null; multiline bodies included.
 
