@@ -179,7 +179,7 @@ class PosturesTest < Minitest::Test
   def test_the_lect_migration_kept_the_p59_4_census
     lect = postures.declarations.select { |d| d.layer == "lect" }
     by_posture = lect.group_by(&:posture).transform_values(&:size)
-    assert_equal 163, lect.size,
+    assert_equal 162, lect.size,
                  "the P59-4 declarations survive the move (61 at migration; itant retired P61-3," \
                  "oracc retired P62-2, etcsl/ccmh/freising/coptic-scriptorium retired P64-6, " \
                  "titus-avestan retired P66-1, osta+fornsvenska retired P77-r8, achemenet " \
@@ -334,7 +334,10 @@ class PosturesTest < Minitest::Test
                  "resolves to its anchor and the extrabiblical-book facet rule stages the rest " \
                  "(the shadowing rule; Balaam and the Qumran scrolls deliberately bare): 163→162; " \
                  "corpus-oudfries ADDED — identity ofs (a real anchor; the East/West Old " \
-                 "Frisian split rides the dialect facet, unstaged): 162→163"
+                 "Frisian split rides the dialect facet, unstaged): 162→163; " \
+                 "the South Asia / Greek-dialect package landing (nabu-lects grc att/ion/dor/aeo, " \
+                 "canonical-synced 2026-10-27) RETIRES glaux — the glaux-dialect-* compose rules " \
+                 "refine its date-banded stages onto the dialect varieties (the shadowing rule): 163→162"
     # The epigraphic-belt registry package (merged + canonical-synced
     # 2026-10-18, the add-then-retire shape within one phase) retires both
     # P130 pendings, and the ociana-script rule + the ig-cyprus override
@@ -359,7 +362,9 @@ class PosturesTest < Minitest::Test
     # pending on the obm anchor + epigraphic hbo stage + the Deir Alla
     # ruling: pending 1→2 (lasla, extrabiblical). tipitaka-lk joins
     # identity (pli + the si translation siblings): 122→123.
-    # corpus-oudfries joins identity (ofs, Old Frisian): 123→124.
-    assert_equal({ "dates" => 21, "codemap" => 17, "identity" => 124, "pending" => 1 }, by_posture)
+    # corpus-oudfries joins identity (ofs, Old Frisian): 123→124. glaux
+    # retires (the glaux-dialect-* compose rules machine-posture it):
+    # identity 124→123.
+    assert_equal({ "dates" => 21, "codemap" => 17, "identity" => 123, "pending" => 1 }, by_posture)
   end
 end

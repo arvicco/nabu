@@ -451,3 +451,61 @@ rules:
       "Mesad_Hashavyahu": "hbo:epi"
       "Pirqe": "heb:rab"
       "Shirata": "heb:rab"
+
+  # ── The GLAUx dialect grid (the treebank's per-text DIALECT field, the
+  # registry's grc att/ion/dor/aeo varieties). Census 2026-10-27, 1,421
+  # texts: Attic 322 · Attic/Koine 416 · Koine 214 · Ionic/Epic 111 ·
+  # Ionic 66 · Doric 45 · Aeolic 2 · unmarked 245. Dialect is regional and
+  # orthogonal to the hom/cla/koi/byz time grid (the registry's grc note),
+  # and the date-band inference already stages ~1,330 of these texts from
+  # their own start/end dates — so these are COMPOSE rules, not maps: the
+  # dialect label refines the dated stage in place (Lysias' grc:cla →
+  # grc:cla/att). A map rule would pre-empt the date band at re-derivation
+  # and trade the stage for a bare grc/att — a loss, not a refinement.
+  # The paired labels resolve exactly as the registry reads them, with the
+  # stage taken from the text's own date: the prefix match carries
+  # "Attic/Koine" to <stage>/att (409 of its 416 are koi-dated → grc:koi/att,
+  # the Atticizing literary Koine) and "Ionic/Epic" to <stage>/ion (the
+  # 24 hom-dated → grc:hom/ion, the epic Kunstsprache; the classical- and
+  # Hellenistic-dated epic — the Hymns, Apollonius — keep their own stage).
+  # Deliberately left alone: plain "Koine" (a STAGE, never a variety — the
+  # date band already carries it), and the ~50 undated dialect-labelled
+  # texts (no stage row to refine; a stage-less grc/att would pre-empt any
+  # future dating, so they stay bare grc). Transcription of upstream's own
+  # labels onto existing registry nodes (the header's rule).
+  - id: glaux-dialect-att
+    tier: certain
+    kind: compose
+    sources: [glaux]
+    code: grc
+    facet: dialect
+    match_prefix: "Attic"
+    variety: att
+    onto: ["grc:hom", "grc:cla", "grc:koi", "grc:byz"]
+  - id: glaux-dialect-ion
+    tier: certain
+    kind: compose
+    sources: [glaux]
+    code: grc
+    facet: dialect
+    match_prefix: "Ionic"
+    variety: ion
+    onto: ["grc:hom", "grc:cla", "grc:koi", "grc:byz"]
+  - id: glaux-dialect-dor
+    tier: certain
+    kind: compose
+    sources: [glaux]
+    code: grc
+    facet: dialect
+    match_prefix: "Doric"
+    variety: dor
+    onto: ["grc:hom", "grc:cla", "grc:koi", "grc:byz"]
+  - id: glaux-dialect-aeo
+    tier: certain
+    kind: compose
+    sources: [glaux]
+    code: grc
+    facet: dialect
+    match_prefix: "Aeolic"
+    variety: aeo
+    onto: ["grc:hom", "grc:cla", "grc:koi", "grc:byz"]

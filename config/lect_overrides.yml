@@ -44,7 +44,9 @@ sources:
   # the sanctioned survey pattern; per-document overlay refines later).
   # Epigraphy (edr, edh, isicily, iip, ceipom) and genuinely mixed corpora
   # (croala, first1k-greek, diorisis, glaux, ud) stay DELIBERATELY
-  # unstaged — bare-anchor honesty at source grain.
+  # unstaged — bare-anchor honesty at source grain. (glaux's per-text
+  # dialect labels refine its date-banded stages at DOCUMENT grain via
+  # the glaux-dialect-* compose rules — no source-grain claim.)
   openmgh:
     # MGH medieval critical editions — certain.
     lat: { lect: "lat:med", tier: certain }
