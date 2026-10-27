@@ -436,3 +436,8 @@ sinh:
     canon and its commentaries — Sri Lankan editions print Pāli in
     Sinhala letters, with extra signs for the Pāli/Sanskrit sounds.
     Unicode encodes it since 3.0.
+  desk: >-
+    The Sri Lankan Tipiṭaka shelf holds its Pāli and its Sinhala
+    translation directly in the Unicode Sinhala block (the Buddha
+    Jayanti print convention), so that Pāli claims pli~sinh while the
+    library's romanized Pāli shelves claim ~latn.

@@ -211,3 +211,13 @@ sources:
     # admission rule — parse-time work, the 2026-10-18 generalization.
     tel: { lect: "te:cls", tier: certain }
     te: { lect: "te:cls", tier: certain }
+  tipitaka-lk:
+    # The surface-script claim (the D60-b ~script axis, the itant ~latn
+    # shape): tipitaka.lk holds its Pali (the Buddha Jayanti canon and the
+    # CST commentaries) in SINHALA letters, the BJT's own print convention
+    # (the pali.entries text is Sinhala-block bytes), unlike the library's
+    # romanized Pali. The registry's sinh row (2026-10-27) makes the claim
+    # expressible; no stage is claimed (the canon spans its whole
+    # redaction history). The si translation siblings stay bare si:
+    # Sinhala in Sinhala script is the language's own default.
+    pli: { lect: "pli~sinh", tier: certain }
