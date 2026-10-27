@@ -844,6 +844,9 @@ class SourceRegistryTest < Minitest::Test
       YAML
     end
     assert_match(/"a".*requires unknown source "ghost"/, error.message)
+    # A dangling requirement fails EVERY command (the registry will not
+    # load), so the error carries its own remedy — both ways out.
+    assert_match(/drop "ghost" from "a"'s requires:, or restore the "ghost" row/, error.message)
   end
 
   def test_requires_refuses_cycles_loudly

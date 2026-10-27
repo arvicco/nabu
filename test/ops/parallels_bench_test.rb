@@ -247,6 +247,27 @@ module Ops
       fulltext&.disconnect
     end
 
+    def test_hub_demotion_is_a_named_switchable_knob
+      fulltext = Nabu::Store.connect_fulltext("sqlite::memory:")
+      off = Bench.options_from_env("GOLD" => "edh-edr")
+      refute off.hub, "hub demotion is off unless asked for"
+      assert_equal({ "hub" => nil, "hub_df" => nil },
+                   Bench.producer_for(off, catalog: @catalog, fulltext: fulltext, links: @links)
+                        .params.slice("hub", "hub_df"))
+      on = Bench.options_from_env("GOLD" => "edh-edr", "HUB" => "on", "HUB_DF" => "200")
+      engine = Bench.producer_for(on, catalog: @catalog, fulltext: fulltext, links: @links)
+      assert_equal({ "hub" => "on", "hub_df" => 200 }, engine.params.slice("hub", "hub_df"),
+                   "the sidecar records which tier ran, at which cutoff")
+      both = Bench.options_from_env("GOLD" => "edh-edr", "HUB" => "on", "FUZZY" => "fallback")
+      assert_equal({ "hub" => "on", "fuzzy" => "fallback" },
+                   Bench.producer_for(both, catalog: @catalog, fulltext: fulltext, links: @links)
+                        .params.slice("hub", "fuzzy"))
+      assert_raises(Bench::Error) { Bench.options_from_env("GOLD" => "edh-edr", "HUB" => "maybe") }
+      assert_raises(Bench::Error) { Bench.options_from_env("GOLD" => "edh-edr", "HUB_DF" => "lots") }
+    ensure
+      fulltext&.disconnect
+    end
+
     # -- the pinned baseline: the real engine over real edh/edr editions -------
 
     # The trimmed-real fixture editions are SHORT (one- to three-token
@@ -270,6 +291,13 @@ module Ops
     # damage ("[…]rtemo") and inflection ("caecina" / "caecinae"), below
     # the token grain the tier works at.
     FUZZY_PIN = { fallback: { 1 => [0, 6], 5 => [0, 6] }, all: { 1 => [0, 6], 5 => [0, 6] } }.freeze
+
+    # Hub demotion (Query::HubDemotion) at its default cutoff over the
+    # same editions, at both pinned gram sizes — pinned 2026-10-27 beside
+    # the off-state. It moves NOTHING here, by construction: no fixture
+    # gram reaches a df of ten (two editions per stone), so there is no
+    # hub mass to demote and the answer is the exact engine's.
+    HUB_PIN = { 4 => { 1 => [0, 6], 5 => [0, 6] }, 1 => { 1 => [2, 6], 5 => [2, 6] } }.freeze
 
     def test_engine_baseline_over_the_edh_edr_fixture_editions
       fulltext = load_edh_edr_fixture_editions
@@ -295,6 +323,20 @@ module Ops
         [scope, report.rows.to_h { |row| [row[:k], row.values_at(:found, :gold)] }]
       end
       assert_equal FUZZY_PIN, measured, "the fuzzy tier's recall over the fixture editions moved — re-measure"
+    ensure
+      fulltext&.disconnect
+    end
+
+    def test_hub_demotion_over_the_edh_edr_fixture_editions
+      fulltext = load_edh_edr_fixture_editions
+      gold = bench.gold_set(Bench.recipe("edh-edr"))
+      measured = HUB_PIN.keys.to_h do |gram_size|
+        producer = Bench::EngineProducer.new(catalog: @catalog, fulltext: fulltext, gram_size: gram_size, hub: true)
+        report = bench.run(gold: gold, producer: producer, ks: [1, 5], sample: nil)
+        [gram_size, report.rows.to_h { |row| [row[:k], row.values_at(:found, :gold)] }]
+      end
+      assert_equal HUB_PIN, measured, "hub demotion's recall over the fixture editions moved — re-measure"
+      assert_equal BASELINE, HUB_PIN, "no fixture gram is a hub: the on-state is the off-state"
     ensure
       fulltext&.disconnect
     end

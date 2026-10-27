@@ -201,7 +201,8 @@ module Nabu
     # what parse reads (an edit takes effect through a sync, which moves
     # that identity). Builder-side config (kind_map, facet_map, period
     # bands, regnal years, …) shapes whole-table projections, not
-    # per-source rows, and is out of this per-source map.
+    # per-source rows, and is out of this per-source map — it is covered
+    # by the builders digest instead (BUILDER_CONFIG_READERS below).
     CONFIG_DATA_READERS = {
       "Eras" => %w[config/eras.yml],
       "Jis0213" => %w[config/jis0213/jisx0213-2004-std.txt],
@@ -210,6 +211,34 @@ module Nabu
       "StarlingText" => %w[config/starling/chslav.lst config/starling/unipro.lst]
     }.freeze
     PROJECT_DIR = File.expand_path("../..", LIB_DIR)
+
+    # The builder-side counterpart: config/ DATA the corpus builder pass
+    # reads (keyed by the reader constant that loads it). Before this map
+    # an edit to one ALONE — a kind_map fold, a period band, a regnal
+    # row — with zero dirty sources left the builders digest unchanged,
+    # and an incremental never re-projected the axis it shapes. Their
+    # content shas join the builders digest tokens. Census (builder pass
+    # → reader → file): the timeline's metadata/oracc/kanripo/ud dates →
+    # PeriodBands; cdli dates → RegnalYears; metadata dates → WorkEras
+    # (which validates against period_bands too) and ArchiveAxes; facet /
+    # passage / entry facet builders → FacetMap; the kind builder → Kinds
+    # (classes + per-source folds); the entity index → its scope list;
+    # the artifact-script lane (re-derived in every builder pass because
+    # the timeline drops its axis rows) → ArtifactScripts. The census
+    # guard in derivation_fingerprint_test fails when builder code grows
+    # an undeclared table reader. Read from the project config/ (the
+    # builders digest is config-instance-free, like CONFIG_DATA_READERS);
+    # an absent file (a stripped clone) hashes as "absent".
+    BUILDER_CONFIG_READERS = {
+      "ArchiveAxes" => %w[config/archive_axes.yml],
+      "ArtifactScripts" => %w[config/artifact_scripts.yml],
+      "EntityIndex" => %w[config/entity_index.yml],
+      "FacetMap" => %w[config/facet_map.yml],
+      "Kinds" => %w[config/kind_classes.yml config/kind_map.yml],
+      "PeriodBands" => %w[config/period_bands.yml],
+      "RegnalYears" => %w[config/regnal_years.yml],
+      "WorkEras" => %w[config/work_eras.yml config/period_bands.yml]
+    }.freeze
 
     # Namespace wrappers every adapter file opens — as "definitions" they
     # would make every file define (and reference) the same names, collapsing
@@ -425,12 +454,22 @@ module Nabu
 
       # The scoped identity of the corpus-builder code (P89-1, owner ruling option c) —
       # stamped as the sentinel row; drift re-runs the builders without
-      # dirtying any per-source stamp.
+      # dirtying any per-source stamp. Covers the builder code AND the
+      # config data the builder pass reads (BUILDER_CONFIG_READERS).
       def builders_digest
         tokens = builder_files.sort.map do |file|
           "#{file.delete_prefix("#{LIB_DIR}#{File::SEPARATOR}")}:#{builder_file_digest(file)}"
         end
+        builder_config_files.each do |rel|
+          path = File.join(PROJECT_DIR, rel)
+          tokens << "#{rel}:#{File.file?(path) ? config_data_file_digest(path) : 'absent'}"
+        end
         Digest::SHA256.hexdigest(tokens.join("\n"))
+      end
+
+      # The project-relative config files the builder pass reads, sorted.
+      def builder_config_files
+        BUILDER_CONFIG_READERS.values.flatten.uniq.sort
       end
 
       # Seam (tests divert one file to simulate a builder change).

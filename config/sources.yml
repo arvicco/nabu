@@ -1040,6 +1040,9 @@ clics:
   adapter: Nabu::Adapters::Clics
   adopted: "2026-07-26"
   axes: [etym]
+  # soft edge, not requires: (architecture §5): nodes cite Concepticon
+  # ids the cldf-spine module can resolve (Nabu::CldfSpine, a read seam);
+  # nothing reads the spine at parse, and the entries are whole without it.
   wired: true    # flipped 2026-07-26 (owner ruling "flip all wired"; first sync verified on the live box)
                  # P46-6 pre-flip runbook (12 MB zip →
                    # 67 MB gml; CLAUDE.md checklist §6: bin/nabu sync clics,
@@ -1932,6 +1935,9 @@ edh:
   adapter: Nabu::Adapters::Edh
   adopted: "2026-07-13"
   axes: [epigraphy]
+  # soft edge, not requires: (architecture §5): place.pleiades ids
+  # resolve through the pleiades module, which the core chain already
+  # carries (nabu-places requires it) — no edge to declare.
   # P84-1: the epigraphy dictionary filter (see edr) — same argument, the
   # provinces' half of the same corpus family.
   lemma_dictionary_filter: true
@@ -2623,6 +2629,9 @@ iecor:
   adapter: Nabu::Adapters::Iecor
   adopted: "2026-07-14"
   axes: [etym]
+  # soft edge, not requires: (architecture §5): the family-glottocode
+  # table was verified against cldf-spine's Glottolog dump and lives in
+  # the parser — nothing reads canonical/cldf-spine at parse time.
   wired: true    # P18-5: first real sync is OWNER-FIRED (6.4 MB Zenodo zip,
                    # owner sign-off 2026-07-14: synced 4,981 entries / 26k reflex rows, eyeballed, flipped.
                    # sha-pinned; CLAUDE.md checklist §6: bin/nabu sync iecor,
@@ -2685,6 +2694,9 @@ iip:
   adapter: Nabu::Adapters::Iip
   adopted: "2026-07-18"
   axes: [epigraphy, hebrew]
+  # soft edge, not requires: (architecture §5): place.pleiades ids
+  # resolve through the pleiades module, which the core chain already
+  # carries (nabu-places requires it) — no edge to declare.
   wired: true # flipped 2026-07-19 (owner sign-off: Hebrew shelf synced, flip ordered)
                    # (CLAUDE.md checklist §6 — bin/nabu sync iip, eyeball
                    # nabu show urn:nabu:iip:dabb0001 (Jewish Aramaic
@@ -2906,6 +2918,10 @@ kanripo:
   adopted: "2026-07-20"
   cjk_index: true   # P93-3: the CJK bigram substring lane
   axes: [sinitic]
+  # soft edge, not requires: (architecture §5): kr-gaiji is the upstream
+  # gaiji list behind the committed config/gaiji/kanripo*.tsv tables the
+  # reading ladder consults — refreshed by hand, never read at parse or
+  # render, so kanripo works without canonical/kr-gaiji.
   wired: true   # flipped 2026-07-20 (owner order, post-P34 gate: P32+P33 sources on)
                    # first many-repo wave (KanripoFetch, architecture §8):
                    # KR-Catalog clone + 3,512 per-text shallow clones
@@ -3677,6 +3693,9 @@ mw:
   adapter: Nabu::Adapters::Mw
   adopted: "2026-07-13"
   axes: [indic]
+  # soft edge, not requires: (architecture §5): held-work citations
+  # (MwSigla) name urn:nabu:gretil:* documents — they resolve when gretil
+  # is synced; the dictionary itself is whole without it.
   wired: true    # owner sign-off 2026-07-13: synced 193,890 entries, flipped.
                    # Original gate note (P17-4): first real sync owner-fired — 11 MB
                    # zip fetch, 286,525 records / 193,890 grouped entries,
@@ -7059,6 +7078,10 @@ wold:
   adapter: Nabu::Adapters::Wold
   adopted: "2026-07-26"
   axes: [etym]
+  # soft edge, not requires: (architecture §5): parameters cite
+  # Concepticon ids the cldf-spine module can resolve; the donor
+  # glottocode table is transcribed into the adapter, never read from
+  # the spine, so the shelf is whole without it.
   # P49-r4 audit: 41 vocabulary shelves in 41 recipient languages sampled
   # worldwide by typological design (eng/goh/jpn/vie/yaq/…) — structurally
   # unbounded, dictionary-side. Whole-grain attribution put "axes: etym" on

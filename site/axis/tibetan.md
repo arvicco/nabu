@@ -23,7 +23,7 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 A source wears every desk it serves — these thirteen answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
-| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 23 October 2026)</span> |
+| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 27 October 2026)</span> |
 |---|---|---|---|---|
 | `actib` | feature module | attribution | wired · manual | nothing held yet |
 | `derge-kangyur` | texts | open | wired · manual | 1,198 docs / 458,972 passages |
@@ -39,7 +39,7 @@ A source wears every desk it serves — these thirteen answer this desk. Holding
 | `tibetan-verbs` | dictionary | open | wired · manual | 2,491 entries |
 | `wiktionary-bo` | dictionary | attribution | wired · manual | 3,651 entries |
 
-**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 23 October 2026)</span>: `bod` 455,971 · `xct` 63,710 · `san` 9,379 · `eng` 2,357 · `fra` 624 · `otb` 410 · `en` 388 · `spa` 333 · `deu` 277 · `cmn` 196 … and 4 more (`nabu axis tibetan` lists all).
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 27 October 2026)</span>: `bod` 455,971 · `xct` 63,710 · `san` 9,379 · `eng` 2,357 · `fra` 624 · `otb` 410 · `en` 388 · `spa` 333 · `deu` 277 · `cmn` 196 … and 4 more (`nabu axis tibetan` lists all).
 
 ## The desk's instruments
 

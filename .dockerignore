@@ -1,0 +1,13 @@
+# The permanent folders and derived stores never enter an image: the
+# library is ~100GB host state. The image carries code + config only.
+.git
+canonical/
+db/
+local/
+incoming/
+site/_site/
+test/fixtures/
+.docs/
+.claude/
+scratchpad/
+*.log

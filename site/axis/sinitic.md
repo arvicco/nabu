@@ -15,7 +15,7 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 A source wears every desk it serves — these twenty-two answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
-| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 23 October 2026)</span> |
+| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 27 October 2026)</span> |
 |---|---|---|---|---|
 | `babelstone-ids` | dictionary | open | wired · manual | 97,680 entries |
 | `baxter-sagart` | dictionary | attribution | wired · manual | 9,918 entries |
@@ -40,7 +40,7 @@ A source wears every desk it serves — these twenty-two answer this desk. Holdi
 | `zh-wikisource` | texts | attribution | wired · manual | 1,238 docs / 71,547 passages |
 | `zhongyuan` | dictionary | open | wired · manual | 5,877 entries |
 
-**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 23 October 2026)</span>: `zho` 543,313 · `lzh` 93,106 · `ltc` 58,680 · `och` 38,215 · `jpn` 32,607 · `xcl` 8,544 · `cmn` 7,387 · `pli` 7,288 · `sga` 6,691 · `gem-pro` 5,749 … and 42 more (`nabu axis sinitic` lists all).
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 27 October 2026)</span>: `zho` 543,313 · `lzh` 93,106 · `ltc` 58,680 · `och` 38,215 · `jpn` 32,607 · `xcl` 8,544 · `cmn` 7,387 · `pli` 7,288 · `sga` 6,691 · `gem-pro` 5,749 … and 42 more (`nabu axis sinitic` lists all).
 
 ## The desk's instruments
 
