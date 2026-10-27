@@ -517,6 +517,63 @@ class DerivationFingerprintTest < Minitest::Test
     end
   end
 
+  # -- builder-side config data -------------------------------------------
+  # The per-source map (CONFIG_DATA_READERS) covers parse-time config; the
+  # builders read their own ruled tables (kind folds, facet map, period
+  # bands, regnal years, archive/work eras, entity scope, artifact scripts).
+  # An edit to one ALONE, with zero dirty sources, must re-run the builders.
+
+  def test_a_kind_map_edit_moves_the_builders_digest
+    before = Nabu::DerivationFingerprint.builders_digest
+    with_changed_config_data_file("kind_map.yml") do
+      refute_equal before, Nabu::DerivationFingerprint.builders_digest,
+                   "a kind_map.yml edit must re-run the builders"
+    end
+  end
+
+  def test_every_builder_config_file_moves_the_builders_digest
+    before = Nabu::DerivationFingerprint.builders_digest
+    Nabu::DerivationFingerprint.builder_config_files.each do |rel|
+      with_changed_config_data_file(File.basename(rel)) do
+        refute_equal before, Nabu::DerivationFingerprint.builders_digest, "#{rel} is not in the builders digest"
+      end
+    end
+  end
+
+  def test_builder_config_census_names_existing_files
+    files = Nabu::DerivationFingerprint.builder_config_files
+    %w[kind_map.yml kind_classes.yml facet_map.yml period_bands.yml regnal_years.yml archive_axes.yml
+       work_eras.yml entity_index.yml artifact_scripts.yml].each do |name|
+      assert_includes files, "config/#{name}"
+    end
+    files.each do |rel|
+      assert File.file?(File.join(Nabu::DerivationFingerprint::PROJECT_DIR, rel)), "#{rel} missing"
+    end
+  end
+
+  # The census guard: every declared reader is genuinely reached by a
+  # builder pass (builder code or the incremental's corpus_builders), so a
+  # stale map entry is caught; and every builder-file reader constant that
+  # loads a config table is declared.
+  def test_builder_config_readers_are_reached_by_the_builder_pass
+    lib = Nabu::DerivationFingerprint::LIB_DIR
+    code = (Nabu::DerivationFingerprint.builder_files + [File.join(lib, "incremental_rebuild.rb")])
+           .map { |file| File.read(file).lines.grep_v(/\A\s*#/).join }.join("\n")
+    Nabu::DerivationFingerprint::BUILDER_CONFIG_READERS.each_key do |reader|
+      assert_match(/\b#{reader}\b/, code, "#{reader} is declared but no builder pass reaches it")
+    end
+    table_loaders = %w[PeriodBands RegnalYears ArchiveAxes WorkEras Eras SouthIndianReigns FacetMap Kinds
+                       EntityIndex ArtifactScripts]
+    builder_code = Nabu::DerivationFingerprint.builder_files
+                                              .map { |file| File.read(file).lines.grep_v(/\A\s*#/).join }.join("\n")
+    table_loaders.each do |reader|
+      next unless builder_code.match?(/\bNabu::#{reader}\b|\bStore::#{reader}\b|\b#{reader}\.(default|load)/)
+
+      assert Nabu::DerivationFingerprint::BUILDER_CONFIG_READERS.key?(reader),
+             "builder code reads #{reader} but BUILDER_CONFIG_READERS does not declare it"
+    end
+  end
+
   # -- P112-4: the fulltext-index carve-out ---------------------------
   # The P111 lesson: three index-side commits dirtied every source's parse
   # stamp, pricing the next incremental as a full catalog replay for edits
