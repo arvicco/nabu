@@ -3,7 +3,7 @@
 Real upstream rows from the **yawnoc TSV dump of the Baxter & Sagart 2014
 Old Chinese reconstruction** (`BaxterSagartOC2015-10-13.tsv`,
 github.com/yawnoc/baxter-sagart-old-chinese). Every kept line is
-**byte-verbatim** upstream data (header + 9 selected rows; a post-check
+**byte-verbatim** upstream data (header + 14 selected rows; a post-check
 asserted each emitted line is a literal line of the raw download); only
 the row SET was trimmed.
 
@@ -14,7 +14,7 @@ the row SET was trimmed.
   — 410,266 B, 4,960 lines (header + 4,959 rows; 4,056 distinct
   characters, 722 polyphones, max 5 readings), sha256
   `0151fafbb65277c9a522e22ec08f18dd442839cc44f6fd026f15eb2ae9b3d8c3`
-  (the adapter's frozen pin) → **header + 9 fixture rows**.
+  (the adapter's frozen pin) → **header + 14 fixture rows**.
 - **Selection (full-file line numbers):** 2 埃 + 3 哀 (plain rows), 6 +
   781 隘 (the polyphone pair ài/è → entry ids 隘 / 隘:2 — first
   occurrences in the FULL file too, so fixture ids match live ids),
@@ -23,6 +23,22 @@ the row SET was trimmed.
   (the file's ONE empty-`py` row), 3242 + 3880 宿 (row 3880's gloss is
   the file's ONE CSV-quoted field: `"""mansion"" of the zodiac …` — the
   TSV is Excel-style tab-separated CSV, quoting semantics and all).
+- **Phonetic-series additions (2026-10-27, the char card's 諧聲
+  neighbours):** 4130 + 4185 衣 (a polyphone — 衣 / 衣:2), 4131 依 —
+  哀's GSR series 0550 (哀 0550h, 衣 0550a, 依 0550f); 4188 益 — 隘's
+  series 0849; 167 𠓥 — one of the file's **12 `--` GSR rows** (no
+  Karlgren series: the card shows none). 埃 (0938b) stays the
+  singleton witness — B-S holds no other 0938 member.
+
+## The GSR column as phonetic series
+
+`GSR` is the Karlgren *Grammata Serica Recensa* number: four digits (the
+series — GSR is ordered by phonetic element, i.e. 諧聲 series) plus a
+member letter (`0550h`), sometimes primed (`0313a'`) or dashed (`0146-`,
+a character B-S assigns to the series without a GSR letter). Census of
+the full file: 1,149 series; 759 hold two or more distinct characters;
+3,656 characters have at least one held series neighbour; 12 rows carry
+`--` (no series).
 
 ## The provenance chain (License)
 

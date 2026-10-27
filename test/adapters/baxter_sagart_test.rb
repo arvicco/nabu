@@ -48,7 +48,7 @@ class BaxterSagartTest < Minitest::Test
     oc, mc = parsed
     assert_equal %w[baxter-sagart-oc baxter-sagart-mc], [oc.slug, mc.slug]
     assert_equal %w[och ltc], [oc.language, mc.language]
-    assert_equal [9, 9], [oc.count, mc.count], "every TSV row mints an entry in each lane"
+    assert_equal [14, 14], [oc.count, mc.count], "every TSV row mints an entry in each lane"
   end
 
   def test_oc_lane_leads_with_the_old_chinese_reconstruction
