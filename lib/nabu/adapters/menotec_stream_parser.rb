@@ -83,10 +83,12 @@ module Nabu
 
       # +paths+: the treebank's document files, in the order the caller wants
       # them concatenated (filename order). +canonical_path+: the treebank dir.
-      def parse(paths, urn:, language:, title: nil, canonical_path: nil)
+      # +metadata+: the caller's document-level metadata (the adapter's
+      # treebank facet), passed through untouched.
+      def parse(paths, urn:, language:, title: nil, canonical_path: nil, metadata: {})
         sentences = Array(paths).flat_map { |path| extract_file(path) }
         build_document(sentences, urn: urn, language: language, title: title,
-                                  canonical_path: canonical_path || Array(paths).first)
+                                  canonical_path: canonical_path || Array(paths).first, metadata: metadata)
       end
 
       private
@@ -152,8 +154,9 @@ module Nabu
         hash
       end
 
-      def build_document(sentences, urn:, language:, title:, canonical_path:)
-        document = Document.new(urn: urn, language: language, title: title, canonical_path: canonical_path)
+      def build_document(sentences, urn:, language:, title:, canonical_path:, metadata:)
+        document = Document.new(urn: urn, language: language, title: title, canonical_path: canonical_path,
+                                metadata: metadata)
         sentences.each_with_index do |sentence, sequence|
           next if sentence.text.empty? # a sentence of only empty tokens has no surface text
 

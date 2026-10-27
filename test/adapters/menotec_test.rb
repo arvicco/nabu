@@ -122,6 +122,18 @@ class MenotecTest < Minitest::Test
     assert_equal "island-id=19992", first.annotations.fetch("tokens").first.fetch("foreign_ids")
   end
 
+  # The INESS treebank name rides each document as the treebank facet — the
+  # grain the menotec-treebank lect rule reads (six Old Norwegian
+  # manuscripts, one Icelandic codex, all coded non upstream).
+  def test_each_document_carries_its_treebank_as_a_facet
+    adapter = Nabu::Adapters::Menotec.new
+    adapter.discover(FIXTURES).each do |ref|
+      document = adapter.parse(ref)
+      treebank = ref.metadata.fetch("treebank")
+      assert_equal({ "treebank" => { "value" => treebank } }, document.metadata.fetch("facets"))
+    end
+  end
+
   # --- registry round-trip ------------------------------------------------
 
   def test_registry_resolves_menotec_disabled_manual_until_first_sync
