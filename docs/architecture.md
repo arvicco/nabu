@@ -671,8 +671,16 @@ dropped and rebuilt with them). Since P26-5, a sync regenerates it only
 when the synced source actually holds a registry witness document
 (`Indexer.refresh_source!`'s relevance gate — the index is registry-scoped,
 157k rows live, so the full regeneration is cheap when it fires and skipped
-entirely when it cannot matter). No hand-curated rows exist anywhere in
-db/.
+entirely when it cannot matter). Every alignment build stamps the
+registry's semantic fingerprint (sha256 over its parsed works — a
+comment-only edit is no change) in
+`alignment_registry_stamp`, because a registry edit alone — wiring an
+already-held document as a new witness — changes no passage byte, and the
+P110-1 skip would otherwise leave it unmaterialized: a skipped sync whose
+registry fingerprint differs from the stamp rebuilds `alignment_refs` (and
+only it, never the slice) when the source holds a witness of the new
+registry or documents the standing refs index (so a dropped witness clears
+on its own source's sync). No hand-curated rows exist anywhere in db/.
 
 **Query surface: a new `align` subcommand.** `nabu align REF [--work ID]`
 (REF may also be a passage urn, pivoting from a show/search hit into its
