@@ -1669,3 +1669,21 @@ in sync upstream and never corrected locally; granted by Path
 Nirvana, by email 2026-10-22). Beside SuttaCentral's roman-script
 Mahāsaṅgīti (§8m), the library now holds two independent witnesses
 of the canon — and its first complete Sinhala translation layer.
+
+## 8au. Old Frisian (P146)
+
+Counts from the first sync, 2026-10-27:
+
+**`corpus-oudfries`** — the Old Frisian corpus (Instituut voor de
+Nederlandse Taal; compiled, lemmatized and PoS-tagged by Rita van de
+Poel): 177 manuscript witnesses / 14,136 lines / 235,462 tokens of
+the medieval Frisian legal record — the Seventeen Statutes and
+Twenty-Four Landlaws across the great codices (Codex Roorda, the
+Rüstringen, Emsingo, Fivelgo and Hunsingo manuscripts, Jus
+Municipale), c. 1200–1550, East and West of the Lauwers. Every token
+carries lemma and part of speech; witness and composition dates,
+regions and the legal-genre ladder are mined. Held under INT's
+research terms (the corpus owner's release permission, published in
+the INT catalogue 2026-10-23). The Germanic desk's twentieth member
+closes the continental West Germanic gap: Old Dutch, Old Saxon
+ancestry and now Old Frisian sit beside Old English and Old Norse.

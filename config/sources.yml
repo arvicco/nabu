@@ -1183,10 +1183,11 @@ corpus-oudfries:
   adapter: Nabu::Adapters::CorpusOudfries
   adopted: "2026-10-27"
   axes: [germanic]
-  wired: false   # until the first real sync is verified. Expected (full-archive
-                   # parse 2026-10-27): 177 docs / 14,136 passages / 235,462
-                   # tokens, 0 quarantines; README.txt skipped by rule; 18
-                   # word-less <l> lines skipped by rule.
+  wired: true    # first sync 2026-10-27: 177 docs / 14,136 passages EXACTLY on
+                   # the census (README.txt the 1 skipped-by-rule; 0 errored),
+                   # reconciled against upstream's README and the public index
+                   # (235,462 tokens); eyeballed R1-K17:1 — the first liodkest
+                   # verbatim.
   sync_policy: manual
   # The INT/IvdNT Corpus Oudfries v1.0 (hdl 10032/tm-a3-f6), compiled and
   # annotated by Rita van de Poel (Leiden PhD): 177 Old Frisian (ofs) text
