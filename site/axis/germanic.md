@@ -34,7 +34,7 @@ A source wears every desk it serves — these twenty answer this desk. Holdings 
 | `bosworth-toller` | dictionary | attribution | wired · manual | 62,815 entries |
 | `cme` | texts | open | wired · manual | 297 docs / 1,355,279 passages |
 | `corpus-gysseling` | texts | research_private | wired · manual | 2,226 docs / 207,793 passages |
-| `corpus-oudfries` | texts | research_private | not yet wired | not synced yet |
+| `corpus-oudfries` | texts | research_private | wired · manual | 177 docs / 14,136 passages |
 | `corpus-oudnederlands` | texts | research_private | wired · manual | 89 docs / 5,745 passages |
 | `dta` | texts | attribution | wired · manual | 5,478 docs / 729,090 passages |
 | `eebo-tcp` | texts | open | wired · manual | 60,325 docs / 25,065,921 passages |
@@ -51,7 +51,7 @@ A source wears every desk it serves — these twenty answer this desk. Holdings 
 | `rundata` | inscriptions | odbl | wired · manual | 30,647 docs / 30,645 passages |
 | `ud` | treebank | nc | wired · manual | 83 docs / 329,980 passages |
 
-**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 27 October 2026)</span>: `ang` 63,170 · `en` 59,433 · `non` 20,449 · `eng` 6,814 · `de` 5,668 · `swe` 3,397 · `dum` 2,226 · `lat` 532 · `gmh` 406 · `enm` 297 … and 48 more (`nabu axis germanic` lists all).
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 27 October 2026)</span>: `ang` 63,170 · `en` 59,433 · `non` 20,449 · `eng` 6,814 · `de` 5,668 · `swe` 3,397 · `dum` 2,226 · `lat` 532 · `gmh` 406 · `enm` 297 … and 49 more (`nabu axis germanic` lists all).
 
 ## The desk's instruments
 

@@ -3,25 +3,25 @@
 as_of: 27 October 2026
 classes:
 - head: literary
-  documents: 699342
-  documents_display: '699,342'
-  sources: 28
+  documents: 699347
+  documents_display: '699,347'
+  sources: 29
 - head: administrative
   documents: 489119
   documents_display: '489,119'
   sources: 16
 - head: historiography
-  documents: 357097
-  documents_display: '357,097'
-  sources: 24
+  documents: 357116
+  documents_display: '357,116'
+  sources: 25
 - head: funerary
   documents: 114916
   documents_display: '114,916'
   sources: 11
 - head: legal
-  documents: 37145
-  documents_display: '37,145'
-  sources: 20
+  documents: 37309
+  documents_display: '37,309'
+  sources: 21
 - head: letter
   documents: 34760
   documents_display: '34,760'
@@ -75,9 +75,9 @@ classes:
   documents_display: '5,278'
   sources: 7
 - head: sermon
-  documents: 5188
-  documents_display: '5,188'
-  sources: 3
+  documents: 5191
+  documents_display: '5,191'
+  sources: 4
 - head: magic
   documents: 3328
   documents_display: '3,328'
@@ -95,9 +95,9 @@ classes:
   documents_display: '1,267'
   sources: 9
 unclassified_sources: 130
-unknown_documents: 47047
-unknown_documents_display: '47,047'
+unknown_documents: 47058
+unknown_documents_display: '47,058'
 unmapped_documents: 11441
 unmapped_documents_display: '11,441'
-unclassified_documents: 490473
-unclassified_documents_display: '490,473'
+unclassified_documents: 490477
+unclassified_documents_display: '490,477'
