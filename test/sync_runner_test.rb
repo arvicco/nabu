@@ -926,6 +926,42 @@ class SyncRunnerTest < Minitest::Test
     assert_nil outcome.indexed
   end
 
+  # alignment_refs = f(catalog, config/alignments.yml): wiring a held
+  # document as a new witness changes no passage byte, so the next sync's
+  # P110-1 skip used to leave the registry edit unmaterialized forever. The
+  # registry fingerprint makes that sync rebuild the alignment refs — and
+  # ONLY them (the slice entry points stay forbidden).
+  def test_an_idempotent_resync_materializes_a_changed_alignment_registry
+    BreakerAdapter.reset!(urns: %w[urn:cts:test:w1])
+    alignments = File.join(@root, "alignments.yml")
+    runner = make_runner_with_alignments(alignments)
+    runner.sync("breaker")
+
+    outcome = forbidding_index_work { runner.sync("breaker") }
+    assert_nil outcome.indexed, "unchanged registry + unchanged content: the skip stands"
+
+    File.write(alignments, <<~YAML)
+      mark:
+        witnesses:
+          - label: breaker
+            extractor: cts-verse
+            documents:
+              MARK: urn:cts:test:w1
+    YAML
+    rebuilt = 0
+    outcome = forbidding_index_work(except: [Nabu::Store::AlignmentIndexer, :rebuild!]) do
+      spy_alignment_rebuilds(-> { rebuilt += 1 }) { runner.sync("breaker") }
+    end
+
+    assert_nil outcome.indexed, "the FTS slice stays skipped"
+    assert_equal 1, rebuilt, "the registry edit rebuilt the alignment refs once"
+    fulltext = Nabu::Store.connect_fulltext(config.fulltext_path)
+    assert_equal ["MARK 1"], fulltext[:alignment_refs].select_map(:ref)
+    fulltext.disconnect
+
+    forbidding_index_work { runner.sync("breaker") }
+  end
+
   # P111-1b (the SQLITE_FULL crash): a slice refresh that died mid-way
   # leaves the index behind the catalog, and the next idempotent re-sync's
   # load changes nothing — the P110-1 skip would freeze the staleness in
@@ -1090,8 +1126,26 @@ class SyncRunnerTest < Minitest::Test
     [Nabu::Store::ReflexRootsIndexer, :rebuild!]
   ].freeze
 
-  def forbidding_index_work
-    originals = INDEXER_ENTRY_POINTS.map do |mod, name|
+  def spy_alignment_rebuilds(on_call)
+    original = Nabu::Store::AlignmentIndexer.method(:rebuild!)
+    Nabu::Store::AlignmentIndexer.define_singleton_method(:rebuild!) do |**kwargs|
+      on_call.call
+      original.call(**kwargs)
+    end
+    yield
+  ensure
+    Nabu::Store::AlignmentIndexer.define_singleton_method(:rebuild!, original)
+  end
+
+  def make_runner_with_alignments(path)
+    cfg = Nabu::Config.new(canonical_dir: @canonical, db_dir: @root, sources_path: "(n/a)",
+                           config_path: File.join(@root, "config", "nabu.yml"), alignments_path: path)
+    Nabu::SyncRunner.new(config: cfg, registry: registry(entry("breaker", BreakerAdapter, wired: true)),
+                         db: @db, ledger: @ledger)
+  end
+
+  def forbidding_index_work(except: nil)
+    originals = (INDEXER_ENTRY_POINTS - [except]).map do |mod, name|
       original = mod.method(name)
       mod.define_singleton_method(name) do |*_args, **_kwargs|
         raise "#{mod}.#{name} invoked — index work is forbidden for an index-inert sync"
