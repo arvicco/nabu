@@ -90,18 +90,22 @@ module Nabu
       # before facet materialization, and losing db/lects.sqlite3 loses
       # nothing the backup cannot restore. Returns {owner:, rules:,
       # dates:} counts.
+      #
+      # Order: owner rows, map rules, date-band inference, THEN compose
+      # rules — a compose rule refines a variety onto an existing stage row
+      # of any rule basis, date-band included (a dated glaux text's
+      # grc:cla + its Attic label → grc:cla/att), so it must see the
+      # inferred stages; run before them it would find no row and the
+      # rebuilt journal would drop what the live one carries.
       def rederive!(db, catalog:, config:)
         db[:lect_assignments].delete
         owner = Nabu::LectRulings.apply!(config.lect_rulings_paths, journal: db)
-        rules_applied = 0
-        if (rules = Nabu::LectRules.load(config.lect_facet_rules_paths))
-          rules.rules.each do |rule|
-            outcome = rules.apply!(rule, catalog: catalog, journal: db)
-            rules_applied += outcome.assigned
-          end
-        end
+        rules = Nabu::LectRules.load(config.lect_facet_rules_paths)
+        composes, maps = (rules&.rules || []).partition(&:compose?)
+        rules_applied = maps.sum { |rule| rules.apply!(rule, catalog: catalog, journal: db).assigned }
         registry = Nabu::Lects.load_default(config: config)
         dates = registry ? Nabu::LectDates.new(registry: registry).apply!(catalog: catalog, journal: db).assigned : 0
+        rules_applied += composes.sum { |rule| rules.apply!(rule, catalog: catalog, journal: db).assigned }
         { owner: owner, rules: rules_applied, dates: dates }
       end
 
