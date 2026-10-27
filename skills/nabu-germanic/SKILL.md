@@ -6,7 +6,7 @@ compatibility: "Requires the nabu MCP server (`bin/nabu mcp`, read-only, stdio) 
 metadata:
   desk: germanic
   origin: generated
-  sources: "aspr bosworth-toller cme corpus-gysseling corpus-oudnederlands dta eebo-tcp fornsvenska helipad iswoc menota menotec perseus-anglit proiel ref rem ren rundata ud"
+  sources: "aspr bosworth-toller cme corpus-gysseling corpus-oudfries corpus-oudnederlands dta eebo-tcp fornsvenska helipad iswoc menota menotec perseus-anglit proiel ref rem ren rundata ud"
 ---
 
 # The Germanicist — the `germanic` desk
@@ -27,6 +27,7 @@ verbatim upstream terms are in `docs/02-sources.md` of the Nabu repository.
 | `bosworth-toller` | Bosworth-Toller — An Anglo-Saxon Dictionary (LINDAT dump) | attribution |
 | `cme` | Corpus of Middle English Prose and Verse (Middle English Compendium, Univ. of Michigan) | open |
 | `corpus-gysseling` | Corpus Gysseling — 13th-c. Early Middle Dutch, lemma+POS (INT/IvdNT) | research_private |
+| `corpus-oudfries` | Corpus Oudfries — Old Frisian text witnesses c. 1200–1550, lemma+POS (INT/IvdNT) | research_private |
 | `corpus-oudnederlands` | Corpus Oudnederlands — Old Dutch word material 475–1200 (INT/IvdNT) | research_private |
 | `dta` | Deutsches Textarchiv (BBAW) | attribution |
 | `eebo-tcp` | EEBO-TCP — Early English Books Online, Text Creation Partnership (Phases I–II) | open |
