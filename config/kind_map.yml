@@ -146,6 +146,37 @@ sources:
       "vertical format": "physical layout, not a genre"      # 176
       "horizontal format": "physical layout, not a genre"    # 88
       "polytheistic Egyptian": "cult context, not a genre"   # 196
+  corpus-oudfries:     # census 2026-10-27, all 177 witnesses: upstream's three-level
+    facet: genre       # text_category ladder, one facet row per filled level (177 + 100 + 33)
+    map:
+      "land law": legal/law                      # 28 L1 + 2 L2 + 8 L3 — the Landlaws, Skeltenariucht
+      "regional law": legal/law                  # 33 L1 + 29 L2 — a land's own statutes (Brokmonna
+      #                                            Bref, the Emsinger Dooms)
+      "compensation": legal/law                  # 32 — the compensation registers (Bußtaxen):
+      #                                            statutory tariffs of fines, law not account
+      "penal": legal/law                         # 15 L2 — Three Capital Crimes, Homicide
+      "canon law": legal/law                     # 8 L1 + 4 L2 — Synod laws, Crimes against God
+      "Roman law": legal/law                     # 4 L3 — Jurisprudentia Frisica, "Haet is riucht?"
+      "procedures": legal/law                    # 3 L1 + 1 L2 — Lawful Impediments, Instructions
+      #                                            for judges: procedural LAW, not court records
+      "pan-frisian": legal/law                   # 43 L1 + 2 L2 — every witness is the pan-Frisian
+      #                                            law (Seventeen Statutes, Twenty-four Landlaws,
+      #                                            Upstalsboom statutes) or its own prologue/
+      #                                            epilogue; the 10 bare-L1 rows carry no other label
+      "oaths/formulas": legal                    # 17 — the Fia-eth, Asega oath, Peace Oath: legal
+      #                                            instruments with no law/contract/court sub to fit
+      "charter": legal                           # 1 L3 — the Bishop's Treaty; one specimen, so the
+      #                                            bare head rather than a treaty sub for a charter label
+      "historiographical": historiography        # 4 L1 + 15 L3 — the Minor Old Frisian Chronicle,
+      #                                            the Magnus legend
+      "poetry": literary/poetry                  # 5 L3 — Fon alra Fresena fridome, the wedding speeches
+      "sermon": sermon                           # 3 — the Wedding Speeches (Baseler Codex)
+      "misc.": unknown                           # 1 L1 + 10 L2 — upstream's own miscellany (the
+      #                                            "miscellany"/"miscelaneo" precedent)
+    deliberate:
+      "supra-regional": "jurisdictional scope, not a genre — always beside compensation or land law (10)"
+      "Frisian matter": "the Frisian-freedom tradition (a thematic strand), not a genre — always beside pan-frisian or historiographical (27)"
+      "biblical": "biblical subject matter spanning Decalogue paraphrase and apocrypha (Fifteen Signs of Doomsday, Adam's Creation) — a content label, not one genre (5)"
   iip:
     facet: genre
     map:

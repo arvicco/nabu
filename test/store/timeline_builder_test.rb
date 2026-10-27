@@ -1036,6 +1036,21 @@ module Store
       assert_equal "Nederberg", timeline_for("urn:nabu:corpus-oudnederlands:w2")[:place_name]
     end
 
+    # The Corpus Oudfries: the witness span is the axis date (artifact
+    # class, never composition) and the manuscript region is the whole
+    # place claim; the composition span stays metadata-only.
+    def test_metadata_oudfries_witness_span_and_region
+      seed_metadata_doc("corpus-oudfries", "urn:nabu:corpus-oudfries:R1-K17",
+                        { "not_before" => 1250, "not_after" => 1300, "date_raw" => "1250-1300",
+                          "composition_not_before" => 1000, "composition_not_after" => 1100,
+                          "composition_date_raw" => "1000-1100", "region" => "Rüstringen" })
+      build!
+      row = timeline_for("urn:nabu:corpus-oudfries:R1-K17")
+      assert_equal [1250, 1300], [row[:not_before], row[:not_after]]
+      assert_nil row[:date_class], "the witness date is an artifact date"
+      assert_equal "Rüstringen", row[:place_name]
+    end
+
     # KorBa's pubPlace role=region (the corpus's own regional
     # classification) answers for the 117 place-less texts (census
     # 2026-10-21); its non-place classes — "zagranica" (abroad) and
