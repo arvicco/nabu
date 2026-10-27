@@ -96,8 +96,9 @@ module Nabu
 
       # A witness collated against the base: its label + effective license +
       # source, its divergences (empty ⇒ identical to base), its full raw tokens
-      # (rendered only under --long), and whether it IS the base row.
-      Reading = Data.define(:label, :license_class, :source_slug, :is_base, :edits, :tokens)
+      # (rendered only under --long), whether it IS the base row, and the
+      # passage urns its text comes from (the exporter's row identity).
+      Reading = Data.define(:label, :license_class, :source_slug, :is_base, :edits, :tokens, :urns)
 
       # A same-(language, script) cell of ≥2 witnesses collated against a base.
       # `readings` lead with the base row, then the rest in registry order.
@@ -107,7 +108,8 @@ module Nabu
       #   :cross_script — a same-language witness in a DIFFERENT script exists,
       #                   and the fold cannot bridge them (Cyrillic vs Helsinki)
       #   :sole         — the only witness of its (language, script) at this ref
-      Aside = Data.define(:label, :language, :script, :license_class, :source_slug, :text, :reason)
+      # +urns+ are the witness's passage urns, as on Reading.
+      Aside = Data.define(:label, :language, :script, :license_class, :source_slug, :text, :reason, :urns)
 
       # A witness with no collatable text here — named, never diffed. `status` is
       # :no_match / :not_synced (from Align) or :withheld (license-excluded on a
@@ -137,21 +139,24 @@ module Nabu
         validate_base!(aligned, base)
         case aligned
         when Align::RangeResult
-          refs = aligned.groups.map { |group| collate_ref(group.ref, group.witnesses, base, exclude_licenses) }
+          refs = aligned.groups.map do |group|
+            collate(group.ref, group.witnesses, base: base, exclude_licenses: exclude_licenses)
+          end
           Result.new(work: aligned.work, title: aligned.title, query: aligned.query,
                      refs: refs, truncated: aligned.truncated, total: aligned.total)
         else
-          rc = collate_ref(aligned.ref, aligned.witnesses, base, exclude_licenses)
+          rc = collate(aligned.ref, aligned.witnesses, base: base, exclude_licenses: exclude_licenses)
           Result.new(work: aligned.work, title: aligned.title, query: aligned.ref,
                      refs: [rc], truncated: false, total: 1)
         end
       end
 
-      private
-
-      # -- per-ref collation -------------------------------------------------------
-
-      def collate_ref(ref, witnesses, base, exclude_licenses)
+      # One ref's apparatus over Align's witnesses for it (the exporter's seam:
+      # it walks a whole work chapter by chapter through Align and collates
+      # each group). No range-wide --base check here — a base absent from this
+      # ref simply leaves each cell on its registry-order base, which is what
+      # a work-wide walk needs; #run keeps the caller-facing refusal.
+      def collate(ref, witnesses, base: nil, exclude_licenses: [])
         attesting = witnesses.select { |witness| witness.status == :ok }
         withheld, present = attesting.partition { |witness| exclude_licenses.include?(witness.license_class) }
         missing = witnesses.reject { |witness| witness.status == :ok }
@@ -161,6 +166,10 @@ module Nabu
         cells, asides = partition_cells(present, base)
         RefCollation.new(ref: ref, cells: cells, asides: asides, missing: missing)
       end
+
+      private
+
+      # -- per-ref collation -------------------------------------------------------
 
       # Group the present witnesses (registry order) by (language, script). A
       # cell of ≥2 collates; a lone witness becomes an aside — :cross_script when
@@ -179,7 +188,7 @@ module Nabu
             reason = by_language[language].size > 1 ? :cross_script : :sole
             asides << Aside.new(label: witness.label, language: language, script: script,
                                 license_class: witness.license_class, source_slug: witness.source_slug,
-                                text: witness_text(witness), reason: reason)
+                                text: witness_text(witness), reason: reason, urns: urns_of(witness))
           end
         end
         [cells, asides]
@@ -193,7 +202,7 @@ module Nabu
           Reading.new(label: witness.label, license_class: witness.license_class,
                       source_slug: witness.source_slug, is_base: is_base,
                       edits: is_base ? [] : diff(base_tokens, tokens_of(witness)),
-                      tokens: tokens_of(witness))
+                      tokens: tokens_of(witness), urns: urns_of(witness))
         end
         ordered = readings.select(&:is_base) + readings.reject(&:is_base)
         Cell.new(language: language, script: script, base_label: base_witness.label, readings: ordered)
@@ -203,6 +212,10 @@ module Nabu
 
       def witness_text(witness)
         witness.sentences.map(&:text).join(" ")
+      end
+
+      def urns_of(witness)
+        witness.sentences.map(&:urn)
       end
 
       def tokens_of(witness)
