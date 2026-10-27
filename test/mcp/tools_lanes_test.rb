@@ -36,7 +36,7 @@ module MCP
       search = Nabu::MCP::Tools::SEARCH_SCHEMA.fetch(:properties).keys
       assert_equal %i[query similar_to lemma morph gloss near window lang license from to century date_basis
                       place script kind facets meter meter_pattern words lect fuzzy translations sense
-                      sense_gloss limit include_restricted], search
+                      sense_gloss betacode limit include_restricted], search
       show = Nabu::MCP::Tools::SHOW_SCHEMA.fetch(:properties).keys
       assert_equal %i[urn parallel parallel_lang max_passages segmented senses include_restricted], show
     end
@@ -108,6 +108,43 @@ module MCP
         call("nabu_search", { "query" => "ρα", "fuzzy" => true })
       end
       assert_match(/under 3 characters/, error.message, "the trigram floor is a usage error, named")
+    end
+
+    # -- betacode (contract bump 2026-10-22, the CLI's search --betacode) ------
+
+    def test_betacode_decodes_the_query_and_echoes_the_decode
+      seed_papyri
+      body = payload(call("nabu_search", { "query" => "xai/rein", "betacode" => true }))
+      assert_equal(["urn:d:pap:1"], body.fetch("matches").map { |hit| hit.fetch("urn") })
+      assert_equal({ "query" => "χαίρειν" }, body.fetch("betacode"), "the decode rides a present-only key")
+
+      plain = payload(call("nabu_search", { "query" => "xai/rein" }))
+      assert_empty plain.fetch("matches"), "without the flag the Latin letters are searched as typed"
+      refute plain.key?("betacode"), "flag off: the payload is byte-identical to the frozen shape"
+    end
+
+    def test_betacode_composes_with_the_fuzzy_lane_case_blind
+      seed_papyri
+      body = payload(call("nabu_search", { "query" => "RATHG", "fuzzy" => true, "betacode" => true }))
+      assert_equal(["urn:d:pap:1"], body.fetch("matches").map { |hit| hit.fetch("urn") })
+      assert_equal({ "query" => "ρατηγ" }, body.fetch("betacode"))
+    end
+
+    def test_betacode_misses_are_notes_that_still_name_the_decode
+      seed_papyri
+      body = payload(call("nabu_search", { "query" => "zzzz", "betacode" => true }))
+      assert_empty body.fetch("matches")
+      assert_equal({ "query" => "ζζζζ" }, body.fetch("betacode"))
+    end
+
+    def test_betacode_refuses_what_it_cannot_decode
+      seed_papyri
+      [{ "betacode" => true, "limit" => 3 },
+       { "sense" => "finger", "betacode" => true },
+       { "similar_to" => "urn:d:pap:1", "betacode" => true },
+       { "query" => "mh=nin", "betacode" => "yes" }].each do |args|
+        assert_raises(Nabu::MCP::Tools::InvalidArguments, args.inspect) { call("nabu_search", args) }
+      end
     end
 
     def test_fuzzy_without_the_trigram_index_is_a_note

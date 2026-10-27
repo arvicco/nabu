@@ -62,6 +62,33 @@ class EdhPersonsTest < Minitest::Test
     refute(severus.name_keys.any? { |k| k.include?("0") || k.include?("-") || k.include?("?") })
   end
 
+  # --- identity refs (the uri + pir columns) -----------------------------------
+
+  # HD072020 (test/fixtures/edh_identities, real rows): the beneficiarius
+  # carries a romans1by1 person URI; the two consuls of 217 carry PIR²
+  # entries. Both land in the person index's refs lane — the external-
+  # authority identities (migration 044), space-separated.
+  def test_person_uris_and_pir_entries_become_identity_refs
+    rows = Nabu::EdhPersons.each_person(
+      File.join(Nabu::TestSupport.fixtures("edh_identities/edh"), "pers", "edh_data_pers.csv")
+    ).to_h { |p| [p.person_id, p.refs] }
+    assert_equal({ "HD072020/1" => "http://romans1by1.com/rpeople/18364",
+                   "HD072020/2" => "pir2:B.166", "HD072020/3" => "pir2:M.518" }, rows)
+    assert_nil person("HD000001/1").refs, "no uri/pir: no refs (never an empty string)"
+  end
+
+  def test_pir_ids_name_the_edition
+    assert_equal "pir2:B.166", Nabu::EdhPersons.pir_ref("PIR (2. Aufl.) B 166")
+    assert_equal "pir1:S.429a", Nabu::EdhPersons.pir_ref("PIR S 429a"), "the first edition, suffix kept"
+    assert_nil Nabu::EdhPersons.pir_ref("PIR"), "a shape outside the census mints nothing"
+  end
+
+  def test_refs_survive_the_derive
+    Nabu::EdhPersons::Producer.new(catalog: @catalog).run("edh", workdir: Nabu::TestSupport.fixtures("edh_identities/edh"))
+    card = Nabu::Store::PersonIndex.resolver(@catalog, authority: "edh").person("HD072020/2")
+    assert_equal "pir2:B.166", card.refs
+  end
+
   # --- the derive + resolver ---------------------------------------------------
 
   def test_producer_derives_the_edh_slice_beside_cbdb

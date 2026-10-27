@@ -71,7 +71,7 @@ minutes; `sblgnt` takes seconds); allow up to ten minutes on an ordinary
 connection, including the per-source index rebuilds. The command is
 idempotent — re-running it is an ordinary re-sync — and one source's
 failure never stops the rest: failures are reported at the end.
-`bin/nabu quickstart --list` prints the set without syncing anything.
+`bin/nabu quickstart --dry-run` prints the set without syncing anything.
 
 ## 4. First marvels
 

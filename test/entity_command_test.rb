@@ -121,6 +121,20 @@ class EntityCommandTest < Minitest::Test
     end
   end
 
+  # The token-grain name lane: an ORACC passage's qpn-tagged tokens (the
+  # live stored shape) answer the desk and `show --entities` alike.
+  def test_token_grain_names_answer_the_desk_and_show
+    with_entity_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[entity idrimi --type RN]) }
+      assert_nil status
+      assert_match(/RN\s+\{m\}id-ri-mi\s+\[key Idrimi\]\s+oracc\s+1 passage/, out)
+      shown, = with_config(config) { run_cli(%w[show urn:nabu:oracc:p1:1 --entities]) }
+      assert_match(/entities \(2\):/, shown, "the preposition is no name")
+      assert_match(/^  RN\s+\{m\}id-ri-mi\s+\[key Idrimi\]$/, shown)
+      assert_match(/^  DN\s+\{d\}IM\s+\[key Addu\]$/, shown)
+    end
+  end
+
   def test_show_entities_does_not_compose_with_random
     with_entity_corpus(build: false) do |config|
       _out, err, status = with_config(config) { run_cli(%w[show --random --entities]) }
@@ -142,7 +156,7 @@ class EntityCommandTest < Minitest::Test
       Nabu::Store.migrate!(db)
       Nabu::Store.setup!(db)
       seed
-      Nabu::Store::EntityIndex.rebuild!(catalog: db, sources: %w[perseus-greek coptic-scriptorium]) if build
+      Nabu::Store::EntityIndex.rebuild!(catalog: db, sources: %w[perseus-greek coptic-scriptorium oracc]) if build
       db.disconnect
       yield config
     end
@@ -161,6 +175,16 @@ class EntityCommandTest < Minitest::Test
     passage(apophthegmata, 4, "ⲁⲡⲁ ⲙⲁⲕⲁⲣⲓⲟⲥ ⲡⲉϫⲁϥ",
             [{ "head" => "#u3", "type" => "person", "text" => "ⲁⲡⲁ ⲙⲁⲕⲁⲣⲓⲟⲥ", "identity" => "Macarius of Egypt" }])
     passage(apophthegmata, 5, "ⲡⲉϫⲁϥ ⲛⲁϥ", nil)
+    oracc = document(source("oracc"), "urn:nabu:oracc:p1")
+    Nabu::Store::Passage.create(
+      document_id: oracc.id, urn: "urn:nabu:oracc:p1:1", sequence: 1, language: "akk",
+      text: "{m}id-ri-mi a-na {d}IM", text_normalized: "id ri mi a na im", content_sha256: "x", revision: 1,
+      annotations_json: JSON.generate("tokens" => [
+                                        { "form" => "{m}id-ri-mi", "lemma" => "Idrimi", "pos" => "RN" },
+                                        { "form" => "a-na", "lemma" => "ana", "pos" => "PRP" },
+                                        { "form" => "{d}IM", "lemma" => "Addu", "pos" => "DN" }
+                                      ])
+    )
   end
 
   def source(slug)

@@ -145,6 +145,31 @@ class FreisingTest < Minitest::Test
                  "identical line keys across layers — suffix-equality alignment needs no stored links"
   end
 
+  # The witness dating: the edition's own literature overview (bsBK-ovr,
+  # Kos's findings — "čas zapisa BS – 972–1039") and introduction (§135–137:
+  # Otto I's charter of 28 May 972 as terminus post quem, bishop Egilbert's
+  # death 1039 as terminus ante quem). The date of the WRITTEN RECORD, so it
+  # rides the transcription layers as an artifact date (no class); the
+  # modern translations carry none.
+  def test_transcription_layers_carry_the_editions_witness_dating
+    %w[urn:nabu:freising:bs1 urn:nabu:freising:bs2-dt urn:nabu:freising:bs3-pt].each do |urn|
+      date = parse_urn(urn).metadata.fetch("date")
+      assert_equal [972, 1039], date.values_at("not_before", "not_after"), urn
+      refute date.key?("class"), "the manuscripts' own dating — an artifact date, not composition"
+      assert_match(/Kos/, date.fetch("raw"))
+    end
+    refute parse_urn("urn:nabu:freising:bs1-tr-eng").metadata.key?("date"),
+           "a modern translation is not dated by the codex"
+  end
+
+  def test_the_dating_rides_the_structured_metadata_lane
+    assert_equal :structured, Nabu::Store::TimelineBuilder::MetadataDates::SHAPES["freising"]
+    row = Nabu::Store::TimelineBuilder::MetadataDates.axis_row(
+      { id: 1, metadata_json: JSON.generate("date" => Nabu::Adapters::Freising::WITNESS_DATING) }, :structured
+    )
+    assert_equal [972, 1039, nil], row.values_at(:not_before, :not_after, :date_class)
+  end
+
   def test_monument_two_cites_its_own_folio
     document = parse_urn("urn:nabu:freising:bs2")
     assert_equal "BS II, fol. 158v, l. 1", document.first.annotations["citation"]

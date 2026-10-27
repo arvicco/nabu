@@ -3,6 +3,7 @@
 require "json"
 
 require_relative "../errors"
+require_relative "../betacode"
 require_relative "../model/validation"
 require_relative "../store"
 require_relative "../query/search"
@@ -247,6 +248,7 @@ module Nabu
         "annotations, hits being the ORIGINAL passages with the matched `layer` (the CLI's " \
         "--translations); `sense` — the word-sense desk (a DCS WordSem id or sense name → the " \
         "passages whose tokens cite it, each with its citing tokens; the CLI's `nabu sense`). " \
+        "`betacode: true` reads query/lemma/near as TLG Beta Code (mh=nin → μῆνιν). " \
         "Use nabu_show with a hit's urn for " \
         "the full passage, nabu_status for what the corpus covers.".freeze
 
@@ -618,6 +620,13 @@ module Nabu
           sense_gloss: { type: "boolean", default: false,
                          description: "With sense: also match the term inside the sense's gloss " \
                                       "(\"linear measure\")." },
+          betacode: { type: "boolean", default: false,
+                      description: "Beta Code input (the CLI's search --betacode): query, lemma and " \
+                                   "near are TLG Beta Code, transliterated to Greek before matching " \
+                                   "(mh=nin → μῆνιν; case-blind, *capitals, FTS quotes and prefix* " \
+                                   "pass through). The decoded terms come back in a present-only " \
+                                   "`betacode` object. A deliberate flag — never auto-detected; " \
+                                   "not with sense/similar_to." },
           limit: { type: "integer", minimum: 1, maximum: SEARCH_MAX_LIMIT,
                    default: SEARCH_DEFAULT_LIMIT, description: "Maximum hits returned." },
           include_restricted: INCLUDE_RESTRICTED_SCHEMA
@@ -1115,7 +1124,47 @@ module Nabu
 
       # -- handlers --------------------------------------------------------------
 
+      # The betacode flag (contract bump 2026-10-22, the CLI's --betacode)
+      # wraps every search lane: decode query/lemma/near from Beta Code,
+      # run the lane on the Greek, and echo the decode in a present-only
+      # `betacode` key (flag off: the frozen payload, byte-identical).
       def search(args)
+        decoded = betacode_terms(args)
+        return search_lanes(args) if decoded.nil?
+
+        echo_betacode(search_lanes(args.merge(decoded).except("betacode")), decoded)
+      end
+
+      # {term key => Greek} for a betacode: true call, nil when the flag is
+      # off. Sense ids and similar_to urns are not Greek text: refused.
+      def betacode_terms(args)
+        flag = args["betacode"]
+        return nil if flag.nil? || flag == false
+        raise InvalidArguments, "betacode must be a boolean" unless flag == true
+        if !args["sense"].nil? || args["similar_to"]
+          raise InvalidArguments, "betacode decodes query/lemma/near — not sense or similar_to"
+        end
+
+        terms = %w[query lemma near].filter_map { |key| (raw = string_arg(args, key)) && [key, raw] }.to_h
+        raise InvalidArguments, "betacode needs a query, lemma or near term to decode" if terms.empty?
+
+        terms.transform_values { |raw| Betacode.decode_query(raw) }
+      end
+
+      # Merge the decode into a JSON payload; a plain-text note (a corpus
+      # state) is prefixed instead, so the decode is never lost.
+      def echo_betacode(result, decoded)
+        text = result[:content].fetch(0).fetch(:text)
+        payload = JSON.parse(text)
+        return result unless payload.is_a?(Hash)
+
+        json(payload.merge("betacode" => decoded))
+      rescue JSON::ParserError
+        echo = decoded.map { |key, greek| "#{key}=#{greek}" }.join(", ")
+        note("beta code decoded: #{echo} — #{text}")
+      end
+
+      def search_lanes(args)
         return similar_neighbors(args) if args["similar_to"]
         return sense_search(args) unless args["sense"].nil?
         raise InvalidArguments, "sense_gloss applies with sense only" if args["sense_gloss"] == true

@@ -105,6 +105,24 @@ class PersonCommandTest < Minitest::Test
     end
   end
 
+  # The refs lane (migration 044) prints on the card — the person's
+  # identities in other prosopographies (EDH: the uri column, PIR entries;
+  # the real HD072020 rows, test/fixtures/edh_identities).
+  def test_person_card_prints_the_identity_refs
+    with_person_env do |config|
+      catalog = Nabu::Store.connect(config.catalog_path)
+      Nabu::EdhPersons::Producer.new(catalog: catalog)
+                                .run("edh", workdir: Nabu::TestSupport.fixtures("edh_identities/edh"))
+      catalog.disconnect
+      out, err, status = with_config(config) { run_cli(%w[person edh:HD072020/2]) }
+      assert_nil status, err
+      assert_match(%r{Praesen\.  edh:HD072020/2}, out)
+      assert_match(/  refs: pir2:B\.166$/, out)
+      plain, = with_config(config) { run_cli(%w[person edh:HD072020/1]) }
+      assert_match(%r{  refs: http://romans1by1\.com/rpeople/18364$}, plain)
+    end
+  end
+
   private
 
   def with_person_env

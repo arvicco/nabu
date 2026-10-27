@@ -69,7 +69,8 @@ module Nabu
     option :format, banner: "tsv"
     # census: render cap only — the full journal is always in the tsv export;
     # truncation is announced (the house honesty vocabulary)
-    option :limit, type: :numeric, default: 50
+    option :limit, type: :numeric, default: 50,
+                   desc: "Rows shown (truncation is announced; --format tsv prints the full journal)"
     def list
       config = Nabu::Config.load
       journal = Nabu::Store::LectJournal.open_readonly(config.lects_journal_path)
