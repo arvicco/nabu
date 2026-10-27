@@ -341,6 +341,76 @@ class SiiCleanTest < Minitest::Test
                                   "Ś. 1069. (Prabhava.)").dig("date", "not_before")
   end
 
+  # Verbatim SII 10 headings (held canonical, 2026-10-27) where the editor
+  # restored the year's last digit in square brackets: the bracketed digit
+  # completes the four-digit year (it was read as Śaka 107 → 185 CE).
+  def test_the_saka_abbreviation_reads_the_editors_restored_last_digit
+    date = ->(title) { Nabu::Adapters::SiiClean.title_facts(title)["date"] }
+    assert_equal({ "not_before" => 1151, "not_after" => 1151, "raw" => "Ś. 107[3]", "era" => "saka",
+                   "era_year" => 1073, "basis" => "title" },
+                 date.call("No. 126. (A.R. No. 434 of 1893.) ON A PILLAR IN THE MAṆḌAPA OF THE TEMPLE OF " \
+                           "SVARṆĒŚVARA AT GAṆAPAVARAM, BHIMAVARAM TALUK, WEST GODAVARI DISTRICT. Ś. 107[3]."),
+                 "INSSIIv10p0i0126: the stone reads śakavarṣaṁbulu 107 3")
+    assert_equal 1526, date.call("No. 737. ON THE TEMPLE OF BHĀSKARĒŚVARA, UṆḌAVALLI, GUNTUR TALUK, SAME " \
+                                 "DISTRICT. Ś. 144[8] (Pārthiva)")["not_before"],
+                 "INSSIIv10p0i0737: Śaka 1448 is the Pārthiva year the heading names"
+    assert_equal 1214, date.call("No. 261. ON A PILLAR IN THE TEMPLE OF KĒŚAVASVĀMI, DUGGIRALA, TENALI " \
+                                 "TALUK, SAME DISTRICT. Ś. 113[6.] (Bhāva ?)")["not_before"],
+                 "INSSIIv10p0i0261: the '[6.]' variant"
+    assert_nil date.call("No. 1. ON A STONE. Ś. 107[3]. (?)"), "a hedged restored year stays unread"
+  end
+
+  # SII 39 spells the era out with the same restoration, in brackets or
+  # parentheses; the heading's own A.D. gloss confirms the four digits.
+  def test_the_spelled_out_saka_reads_the_restored_last_digit
+    date = ->(title) { Nabu::Adapters::SiiClean.title_facts(title)["date"] }
+    assert_equal({ "not_before" => 1597, "not_after" => 1597, "raw" => "ŚAKA 151[9]", "era" => "saka",
+                   "era_year" => 1519, "basis" => "title" },
+                 date.call("No. 45. (A.R. No. 45 of 1916.) TIRUKKĀḶAKKUḌI, TIRUPPATTUR TALUK, RAMNAD " \
+                           "DISTRICT. KAKŌḶANĀTH TEMPLE-ON THE NORTH WALL OF THE SAME MAṆḌAPA. •••••••••• " \
+                           "ŚAKA 151[9] (1596-97 A.D.)"), "INSSIIv39p0i0045")
+    assert_equal 1502, date.call("No. 47. (A.R. No. 47 of 1916.) TIRUKKĀḶAKKUḌI, TIRUPPATTUR TALUK, RAMNAD " \
+                                 "DISTRICT. KAKŌḶANĀTH TEMPLE-ON THE EAST WALL OF THE SAME MAṆḌAPA: RIGHT OF " \
+                                 "ENTRANCE NARASA NAYAKA-ŚAKA 142(4) (1502 A.D.)")["not_before"],
+                 "INSSIIv39p0i0047: the parenthesized variant"
+    assert_equal 1538, date.call("No. 252. TIRUPPANAṄGĀḌU. ŚIVA TEMPLE—ON THE SAME WALL. " \
+                                 "ACHYUTADĒVA-MAHĀRĀYA—Śaka 1460 (1538 A.D.)")["not_before"],
+                 "a four-digit year followed by its A.D. gloss is untouched"
+  end
+
+  # SII 10 headings whose year lost its last digit on the stone: the editor
+  # prints the surviving three ("Ś. 106." over "śakavarṣaṁbulu 106 [gap]")
+  # or a dash ("Ś. 108-."). Read as the decade, never as Śaka 1NN.
+  def test_the_saka_abbreviation_reads_a_lost_last_digit_as_its_decade
+    date = ->(title) { Nabu::Adapters::SiiClean.title_facts(title)["date"] }
+    assert_equal({ "not_before" => 1138, "not_after" => 1147, "raw" => "Ś. 106", "era" => "saka",
+                   "era_years" => [1060, 1069], "basis" => "title" },
+                 date.call("No. 106. (A.R. No. 332 of 1915.) ON A NĀGA PILLAR SET UP IN A GROVE IN " \
+                           "LINGAMGUNTA, NARASARAOPETA TALUK, SAME DISTRICT. Ś. 106."),
+                 "INSSIIv10p0i0106: the stone reads śakavarṣaṁbulu 106 followed by a lost character")
+    assert_equal [1158, 1167], date.call("No. 163. ON A PILLAR IN THE TEMPLE OF RĀMALINGASVĀMI, " \
+                                         "SĀTULŪRU, NARASARAOPETA TALUK, SAME DISTRICT. Ś. 108-.")
+                                   .values_at("not_before", "not_after"), "INSSIIv10p0i0163: the dash"
+    assert_equal [1278, 1287], date.call("No. 458. ON A MUTILATED STONE IN FRONT OF THE TEMPLE OF " \
+                                         "VĪRABHADRA AT RĀYAPŪḌI, GUNTUR TALUK, GUNTUR DISTRICT. Ś. 120. .")
+                                   .values_at("not_before", "not_after"), "INSSIIv10p0i0458"
+    assert_equal [1128, 1137], date.call("No. 688. ON A PILLAR IN THE MAṆḌAPA, NĀRĀYAṆAPURAM, BOBBILI " \
+                                         "TALUK, SAME DISTRICT. Ś. 105 • .")
+                                   .values_at("not_before", "not_after"), "INSSIIv10p0i0688"
+  end
+
+  # The genuine three-digit Eastern Chalukya years and the full four-digit
+  # readings are untouched by the restored/lost-digit rule.
+  def test_full_and_genuine_three_digit_saka_years_are_untouched
+    date = ->(title) { Nabu::Adapters::SiiClean.title_facts(title)["date"] }
+    assert_equal({ "not_before" => 1023, "not_after" => 1023, "raw" => "Ś. 945", "era" => "saka",
+                   "era_year" => 945, "basis" => "title" },
+                 date.call("No. 643. ON A SLAB FROM ERRAKŌṬA NOW AT JAGDĀLPŪR, BASTAR STATE, CENTRAL " \
+                           "PROVINCES. Ś. 945. (Rudhirōdgāri)"), "INSSIIv10p0i0643")
+    assert_equal 1139, date.call("No. 107. ON A PILLAR. Ś. 1061.")["not_before"]
+    assert_nil date.call("No. 100. ON A PILLAR. Ś. 1059(?)")
+  end
+
   # Real raw-layer headings (SII 4/6/7/9/10/22) whose findspot sentence
   # opens with a monument description or wraps the name in a gloss.
   def test_place_mining_reads_past_descriptions_and_glosses
