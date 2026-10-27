@@ -423,3 +423,31 @@ rules:
       "mishneh-torah": "heb:med"
       "tur": "heb:med"
       "shulchan-arukh": "heb:med"
+
+  # ── The extrabiblical book grid (the fixed BOOKS-table names ride the
+  # book facet). Each book IS one artifact group with a known register, so
+  # the assignment is parse-grade transcription of the corpus's own
+  # identifications: the six Iron Age II inscriptional books take the epi
+  # stage (Gogel 1998's corpus list, the hbo note's census); Pirqe Avot and
+  # Mekhilta Shirata are Rabbinic Hebrew by their own tradition (tannaitic
+  # works — heb:rab, heb's parent being hbo keeps the refinement on the
+  # ladder). Deliberately unmatched (bare-anchor honesty): Balaam — the
+  # Deir ʿAlla text's language is contested (Aramaic / Canaanite / its own
+  # dialect) and rides upstream's hbo claim until the registry carries its
+  # own node; B_1QS / B_1QM / B_1QHa — Qumran Hebrew stays bare hbo by the
+  # dss precedent (no Qumran stage minted). Mesa needs no row: the
+  # document's own code is obm, which now resolves to its anchor directly.
+  - id: extrabiblical-book
+    tier: certain
+    sources: [extrabiblical]
+    code: hbo
+    facet: book
+    map:
+      "Arad": "hbo:epi"
+      "Lachish": "hbo:epi"
+      "Ajrud": "hbo:epi"
+      "Siloam": "hbo:epi"
+      "Ketef_Hinnom": "hbo:epi"
+      "Mesad_Hashavyahu": "hbo:epi"
+      "Pirqe": "heb:rab"
+      "Shirata": "heb:rab"

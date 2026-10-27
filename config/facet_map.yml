@@ -633,3 +633,6 @@ sources:
     entry_fields:
       concept: concept        # the concept's English name, ref = its uuid (= the tls-concepts
       #                         entry id the word→concept crossref resolves to)
+  extrabiblical:              # census 2026-10-22: 13 books, one document each; the
+    fields:                   # BOOKS-table name verbatim (Arad, Mesa, Pirqe, …) — the
+      book: book              # same key work_eras.yml and kind_map.yml fold over

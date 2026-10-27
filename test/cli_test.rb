@@ -2008,6 +2008,29 @@ class CLITest < Minitest::Test
     end
   end
 
+  # The dependency survey's F6: enable names what it just pulled in — a
+  # package manager prints the install plan — flagging each requirement's
+  # nature (a module never rides `sync --all`; a manual drop needs a file).
+  def test_enable_prints_the_delta_with_chain_pulled_requirements
+    with_provenance_corpus do |config|
+      Nabu::Profile.new(%w[solo]).save(config.profile_path)
+      out, = with_config(config) { run_cli(%w[enable lex]) }
+      assert_match(/^newly resolved: 2 sources — lex; pulls in \(required\): dep-mod \(module, for lex\)$/, out)
+
+      out, = with_config(config) { run_cli(%w[enable lex]) }
+      assert_match(/^newly resolved: nothing \(already covered\)$/, out)
+    end
+  end
+
+  def test_enable_delta_flags_a_manual_drop_requirement
+    entry = Nabu::SourceRegistry::Entry.new(slug: "trismegistos-geo", wired: true, sync_policy: "manual",
+                                            adapter_class_name: "Nabu::Adapters::TrismegistosGeo")
+    assert_equal "manual drop — nabu sync trismegistos-geo after the file lands",
+                 Nabu::CLI.new.send(:requirement_nature, entry)
+    plain = entry.with(adapter_class_name: "Nabu::Adapters::Perseus")
+    assert_nil Nabu::CLI.new.send(:requirement_nature, plain)
+  end
+
   # P77-r2: the enablement printout groups by PROVENANCE — core (enabled by
   # default, even with no profile entry) first, then each axis entry with
   # the members it pulls in, then the individually enabled remainder; every

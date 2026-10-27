@@ -592,15 +592,14 @@ sources:
     # kind machine-postured — kind_map.yml folds the 13 books over metadata
     # book (letters, petition, building, royal, amulet, oracle, hymns, rule,
     # wisdom, midrash; Ajrud and 1QM declared deliberate).
-    lect: {posture: pending, note: "candidates: (1) an obm (Moabite) anchor in nabu-lects,
-        parent sem (Canaanite) — the Mesha Stele rides the bare obm code until it lands;
-        (2) an Iron Age (epigraphic) Hebrew stage on hbo for Arad, Lachish, Kuntillet
-        ʿAjrud, Siloam, Ketef Hinnom and Mesad Hashavyahu (hbo has no stages);
-        (3) the Deir ʿAlla text's language — CONTESTED (Aramaic / Canaanite / a dialect of
-        its own), a ruling; upstream's Hebrew claim rides as hbo meanwhile. Pirqe Avot and
-        Mekhilta Shirata are Rabbinic Hebrew — the heb:rab facet rule (book → heb:rab)
-        waits to land with the package (a rule would machine-posture the source).
-        1QS/1QM/1QHa stay bare hbo by the dss precedent (no Qumran-Hebrew stage)"}
+    # lect is machine-postured: the registry package landed (obm anchor + hbo:epi
+    # stage, 2026-10-27), so the Mesha Stele's obm resolves to its anchor directly,
+    # and the extrabiblical-book rule in config/lect_facet_rules.yml stages the six
+    # Iron Age inscriptional books hbo:epi and the two rabbinic works heb:rab.
+    # Deliberately bare there: the Deir ʿAlla text (Balaam) rides upstream's hbo
+    # claim — its language is CONTESTED (Aramaic / Canaanite / a dialect of its
+    # own) and waits on its own registry node; the three Qumran scrolls stay bare
+    # hbo by the dss precedent.
     dating: {posture: dated, note: "the asset carries no date field; each of the 13 books
         bands through its attributed era in config/work_eras.yml (handbook consensus,
         cited per row; MetadataDates :work_era, composition class, precision era) —
@@ -1757,7 +1756,8 @@ sources:
         kan → kn, san-Latn); plus pra-Latn (row), nld-Latn (nld → nl), lat-Latn (row),
         ara-Latn (ara) and fas-Latn (upstream's 639-2/B per-Latn, aliased; fas → fa) on
         held anchors; Tamil stages unminted, the bare anchor declared coarse; mar-Latn (4)
-        and sin-Latn (1) quarantine until mr/si anchors are minted"}
+        and sin-Latn (1) resolve on mr/si since the 2026-10-21 mint (mar/sin codemap
+        rows held; the adapter admits both codes)"}
     dating: {posture: partial, note: "no origDate in any header; the SII headings' own
         dating is mined in both layers: the editor's A.D. conversion, else a Śaka year via
         config/eras.yml (spelled out or SII 10's 'Ś. NNNN'), else the summary's single

@@ -282,6 +282,43 @@ module Store
       assert_equal ["MARK 13.11.B2", "MARK 2.3"], refs.order(:ref).select_map(:ref)
     end
 
+    # Coptic Scriptorium's Bohairic biblical corpora zero-pad the chapter
+    # in their CTS citations (…nt.mark.bohairic:01.1; the held catalog
+    # shape). The citation NUMBER is what aligns, not its spelling, so the
+    # cts-verse extractor folds each all-digit segment to its integer
+    # spelling: "01.1" indexes as "MARK 1.1" beside every unpadded witness.
+    # Before this fold the Bohairic NT's chapters 1-9 (3,894 refs) never
+    # co-aligned with anything. Non-numeric segments, verse 0 (a title
+    # verse) and the :b2 duplicate suffix pass through untouched.
+    PADDED_REGISTRY = <<~YAML
+      nt:
+        witnesses:
+          - label: bohairic NT
+            extractor: cts-verse
+            documents:
+              MARK: urn:nabu:coptic-scriptorium:nt.mark.bohairic
+    YAML
+
+    def test_cts_verse_folds_zero_padded_citation_numbers
+      doc = make_document(urn: "urn:nabu:coptic-scriptorium:nt.mark.bohairic")
+      make_verse(doc, urn: "urn:nabu:coptic-scriptorium:nt.mark.bohairic:01.1", sequence: 0)
+      make_verse(doc, urn: "urn:nabu:coptic-scriptorium:nt.mark.bohairic:09.05", sequence: 1)
+      make_verse(doc, urn: "urn:nabu:coptic-scriptorium:nt.mark.bohairic:16.20", sequence: 2)
+      make_verse(doc, urn: "urn:nabu:coptic-scriptorium:nt.mark.bohairic:01.0", sequence: 3)
+      make_verse(doc, urn: "urn:nabu:coptic-scriptorium:nt.mark.bohairic:13.011:b2", sequence: 4)
+
+      assert_equal 5, rebuild!(registry(PADDED_REGISTRY))
+      assert_equal ["MARK 1.0", "MARK 1.1", "MARK 13.11.B2", "MARK 16.20", "MARK 9.5"],
+                   refs.order(:ref).select_map(:ref)
+    end
+
+    def test_cts_verse_drops_a_zero_padded_chapter_zero_apparatus
+      doc = make_document(urn: "urn:nabu:coptic-scriptorium:nt.mark.bohairic")
+      make_verse(doc, urn: "urn:nabu:coptic-scriptorium:nt.mark.bohairic:00.1", sequence: 0)
+
+      assert_equal 0, rebuild!(registry(PADDED_REGISTRY))
+    end
+
     def test_cts_verse_skips_a_passage_urn_that_does_not_extend_its_document_urn
       doc = make_document(urn: "urn:cts:greekLit:tlg0527.tlg001.1st1K-grc1")
       make_verse(doc, urn: "urn:nabu:oddball:1.1", sequence: 0)
