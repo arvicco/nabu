@@ -18,10 +18,10 @@ A source wears every desk it serves — these three answer this desk. Holdings a
 | Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 28 October 2026)</span> |
 |---|---|---|---|---|
 | `senie` | texts | attribution | wired · manual | 183 docs / 48,995 passages |
-| `vakk` | texts | nc | not yet wired | nothing held yet |
+| `vakk` | texts | nc | wired · manual | 3,052 docs / 148,875 passages |
 | `vks` | texts | attribution | wired · manual | 128 docs / 65,311 passages |
 
-**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 28 October 2026)</span>: `lv` 172 · `fi` 128 · `de` 10 · `lat` 1.
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 28 October 2026)</span>: `et` 3,052 · `lv` 172 · `fi` 128 · `de` 10 · `lat` 1.
 
 ## The desk's instruments
 
