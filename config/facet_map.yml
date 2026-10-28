@@ -640,6 +640,12 @@ sources:
     entry_fields:
       concept: concept        # the concept's English name, ref = its uuid (= the tls-concepts
       #                         entry id the word→concept crossref resolves to)
-  extrabiblical:              # census 2026-10-22: 13 books, one document each; the
+  wilkens-oui:                # the book's own tradition/script marks (Abkürzungen, PDF pp. 13–14),
+    entry_fields:             # mapped by WilkensOui::MARK_FACETS; Buddhist terms go unmarked upstream
+      tradition: tradition    # (m) manichäisch → Manichaean 611 · (c) christlich → Christian 119
+      script: script          # (br) Brāhmī 498 · (r) Runenschrift → runic 200 · (tib) tibetische
+      #                         Schrift → Tibetan 41 · (p) ʾPhags pa (Schrift) → ʾPhags-pa 1 — the
+      #                         attesting script (whole-book census 2026-10-28, 49,619 entries)
+  extrabiblical:             # census 2026-10-22: 13 books, one document each; the
     fields:                   # BOOKS-table name verbatim (Arad, Mesa, Pirqe, …) — the
       book: book              # same key work_eras.yml and kind_map.yml fold over

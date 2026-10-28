@@ -60,6 +60,12 @@ compares the SEGMENTED entries, not the bytes.
   Gentium-Italic at the indent; Sanskrit citations are italic too.
 - Entries read `headword [(labels)] [< etymon] German || Türkisch`, senses
   chained `G1 || T1; G2 || T2`; `→` cross-references, `†` rejected readings.
+- The tradition/script marks, as the book's Abkürzungen (PDF pp. 13–14,
+  folios VII–VIII) define them: `(m)` manichäisch, `(c)` christlich, `(br)`
+  Brāhmī, in Brāhmī-Schrift, `(r)` Runenschrift, `(tib)` tibetische Schrift,
+  `(p)` ʾPhags pa (Schrift). The Hinweise (pp. 10–11) add that Buddhist terms
+  are deliberately left unmarked. The sample carries (m) ×8, (c) ×1, (br) ×2,
+  (r) ×5; (tib) and (p) occur only elsewhere in the book (41 and 1 entries).
 - Subscript digits (5.38 pt) mark word pairs ("Liebe₂") and, before a
   headword, homonym numbers; the parser renders both as `^n`.
 - Chinese characters in etymologies are set in a font without a ToUnicode
