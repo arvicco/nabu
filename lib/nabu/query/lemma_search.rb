@@ -9,6 +9,7 @@ require_relative "catalog_join"
 require_relative "define"
 require_relative "morph_facets"
 require_relative "token_glosses"
+require_relative "token_gloss_crosswalk"
 
 module Nabu
   module Query
@@ -96,6 +97,7 @@ module Nabu
       def run(lemma, lang: nil, license: nil, limit: 20, urn: nil, morph: nil, source: nil,
               sources: nil, gold_only: false, loans: nil, gloss: nil)
         @incomplete_hint = nil
+        @crosswalk = nil # per-run lexeme memo — never stale across a rebuild
         variants = Nabu::Normalize.query_forms(lemma.to_s)
         return [] if variants.first.strip.empty? # generic form first; extras never add characters
 
@@ -175,13 +177,16 @@ module Nabu
       # The plain path's token glosses (TokenGlosses): one extra catalog read
       # for the PAGE rows of gloss-bearing sources only (≤ limit passages),
       # then the lemma-matching tokens' glosses per hit. Results from other
-      # sources pass through untouched (token_gloss stays nil).
+      # sources pass through untouched (token_gloss stays nil). A crosswalk
+      # source (TokenGlossCrosswalk — dss → bhsa) borrows its gloss at read
+      # time through its lexeme crosswalk.
       def attach_token_glosses(results, page, variant_set)
         ids = page.map { |row| row.fetch(:passage_id) }
         rows = @catalog[:passages]
                .join(:documents, id: Sequel[:passages][:document_id])
                .join(:sources, id: Sequel[:documents][:source_id])
-               .where(Sequel[:passages][:id] => ids, Sequel[:sources][:slug] => TokenGlosses.sources)
+               .where(Sequel[:passages][:id] => ids,
+                      Sequel[:sources][:slug] => TokenGlosses.sources + TokenGlossCrosswalk.sources)
                .select(Sequel[:passages][:urn], Sequel[:passages][:language], Sequel[:passages][:annotations_json],
                        Sequel[:sources][:slug].as(:source_slug))
                .all.to_h { |row| [row.fetch(:urn), row] }
@@ -192,14 +197,23 @@ module Nabu
           spec = LemmaKeys.spec_for(row[:source_slug])
           tokens = passage_tokens(row.fetch(:annotations_json), spec)
                    .select { |token| lemma_in?(token, variant_set, row.fetch(:language), spec) }
-          result.with(token_gloss: token_gloss(tokens, row[:source_slug]))
+          result.with(token_gloss: token_gloss(tokens, row[:source_slug], language: row.fetch(:language)))
         end
       end
 
-      # The distinct glosses of +tokens+, "; "-joined; nil when none carries one.
-      def token_gloss(tokens, slug)
-        glosses = tokens.filter_map { |token| TokenGlosses.gloss(token, source: slug) }.uniq
+      # The distinct glosses of +tokens+, "; "-joined; nil when none carries
+      # one. A crosswalk source's tokens resolve through the crosswalk
+      # (+language+ = the passage language, its fold key).
+      def token_gloss(tokens, slug, language:)
+        glosses = tokens.filter_map do |token|
+          TokenGlosses.gloss(token, source: slug) || crosswalk.gloss(token, source: slug, language: language)
+        end.uniq
         glosses.empty? ? nil : glosses.join("; ")
+      end
+
+      # One crosswalk per search (its memo is the page's lexeme cache).
+      def crosswalk
+        @crosswalk ||= TokenGlossCrosswalk.new(catalog: @catalog, fulltext: @fulltext)
       end
 
       # [passage ids, { passage_id => tier }] for every distinct passage
@@ -311,7 +325,7 @@ module Nabu
                            .uniq.join("; ")
                   end),
           tier: tier || Store::Indexer::GOLD_TIER,
-          token_gloss: token_gloss(matches, slug)
+          token_gloss: token_gloss(matches, slug, language: row.fetch(:language))
         )
       end
 

@@ -96,6 +96,42 @@ module Query
       refute_includes search("parā", gloss: "aus").map(&:urn), "urn:nabu:tlhdig:786:hfr:kbo.20.119:95"
     end
 
+    # DSS tokens carry no gloss of their own, but lex_etcbc is the ETCBC
+    # crosswalk into BHSA's lexeme space: the gloss resolves at read time
+    # from a BHSA token with the same lex (and language). 11Q19 col. 10
+    # line 9 עשיתמה is lex_etcbc <FH[ — BHSA's "make" (Hag 2:4 in the
+    # bhsa fixture).
+    def test_dss_gloss_resolves_through_the_bhsa_lexeme_crosswalk
+      load_source("bhsa", "Bhsa")
+      load_source("dss", "Dss")
+      hit = search("עשה").find { |result| result.urn == "urn:nabu:dss:11q19:10.9" }
+      refute_nil hit
+      assert_equal "make", hit.token_gloss
+      gate = search("שער").find { |result| result.urn == "urn:nabu:dss:11q19:10.9" }
+      assert_equal "gate", gate.token_gloss
+    end
+
+    # The crosswalk joins on the EXACT lex, never the consonantal lemma
+    # key: 3Q15 1:12 עד is lex_etcbc <D ("unto"), while the bhsa fixture
+    # also carries the homograph <D=/ ("witness", Ruth 4:9).
+    def test_dss_crosswalk_keeps_consonantal_homographs_apart
+      load_source("bhsa", "Bhsa")
+      load_source("dss", "Dss")
+      hit = search("עד").find { |result| result.urn == "urn:nabu:dss:3q15:1.12" }
+      refute_nil hit
+      assert_equal "unto", hit.token_gloss
+      witness = search("עד").find { |result| result.urn == "urn:nabu:bhsa:ruth:4.9" }
+      assert_equal "witness", witness.token_gloss
+    end
+
+    # No BHSA in the catalog → nothing to cross into: honest absence.
+    def test_dss_without_bhsa_has_no_token_gloss
+      load_source("dss", "Dss")
+      hit = search("עשה").find { |result| result.urn == "urn:nabu:dss:11q19:10.9" }
+      refute_nil hit
+      assert_nil hit.token_gloss
+    end
+
     # A source with no registered gloss layer: the filter matches nothing,
     # plain hits carry no token gloss — honest absence.
     def test_unregistered_source_has_no_token_gloss
