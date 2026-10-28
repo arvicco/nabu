@@ -126,8 +126,6 @@ ebl.rb:
   reads: 1
 edh.rb:
   reads: 3
-edh_epidoc_parser.rb:
-  reads: 1
 edl.rb:
   reads: 1
 edr_epidoc_parser.rb:

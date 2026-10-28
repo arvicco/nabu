@@ -97,7 +97,7 @@ module Nabu
     # type="URI"> points at a STAGING host in the 2021 dumps and is never
     # trusted — survey §1). The caller-supplied urn must equal the minting
     # (mismatch → ParseError, the conformance identity).
-    class EdhEpidocParser
+    class EdhEpidocParser < StreamingTeiParser
       # The single lacuna marker every <gap> contributes (DdbdpParser::
       # GAP_MARKER's policy, restated here — the families are siblings, not
       # a hierarchy).
@@ -133,25 +133,7 @@ module Nabu
 
       private
 
-      def resolve_canonical_path(source, canonical_path)
-        return canonical_path if canonical_path
-        return source if source.is_a?(String)
-        return source.path if source.respond_to?(:path) && source.path
-
-        raise ArgumentError, "canonical_path: is required when parsing from an IO without a #path"
-      end
-
-      def extract(source, path:, urn:)
-        with_io(source) do |io|
-          Extraction.new(reader: Nokogiri::XML::Reader(io, path), path: path, urn: urn).call
-        end
-      rescue Nokogiri::XML::SyntaxError => e
-        raise ParseError, "#{path}: malformed XML: #{e.message}"
-      end
-
-      def with_io(source, &)
-        source.is_a?(String) ? File.open(source, "r", &) : yield(source)
-      end
+      def extraction_class = Extraction
 
       def build_document(extraction, urn:, language:, title:, csv:, persons:, path:)
         document = Document.new(
@@ -275,12 +257,7 @@ module Nabu
       # The single-pass Reader state machine: header phase captures localID +
       # the EAGLE-term layers; body phase reacts only inside
       # div[@type="edition"] (textpart path, keep/drop state, line buffer).
-      class Extraction
-        READER = Nokogiri::XML::Reader
-        TEXT_NODE_TYPES = [
-          READER::TYPE_TEXT, READER::TYPE_CDATA,
-          READER::TYPE_WHITESPACE, READER::TYPE_SIGNIFICANT_WHITESPACE
-        ].freeze
+      class Extraction < StreamingTeiParser::Walker
         # Never reading text (the DDbDP policy minus <del> — the per-source
         # divergence keeps del). <gap> is handled separately: marker first,
         # then its children drop too. <head> is the edition's own "Text"
@@ -291,7 +268,7 @@ module Nabu
         # placeName is special-cased on @type below).
         HEADER_CAPTURES = { "title" => :title, "objectType" => :object_type, "material" => :material,
                             "term" => :genre }.freeze
-        private_constant :READER, :TEXT_NODE_TYPES, :DROPPED_ELEMENTS, :HEADER_CAPTURES
+        private_constant :DROPPED_ELEMENTS, :HEADER_CAPTURES
 
         # What the header phase collected: :title, :genre, :province,
         # :material, :object_type (whitespace-collapsed, NFC), plus the
@@ -299,8 +276,7 @@ module Nabu
         attr_reader :header, :lines
 
         def initialize(reader:, path:, urn:)
-          @reader = reader
-          @path = path
+          super(reader: reader, path: path)
           @urn = urn
           @header = {}
           @capture = nil # the header key currently accumulating, or :local_id
@@ -341,14 +317,6 @@ module Nabu
         end
 
         private
-
-        def process(node)
-          case node.node_type
-          when READER::TYPE_ELEMENT then start_element(node)
-          when READER::TYPE_END_ELEMENT then end_element(node)
-          when *TEXT_NODE_TYPES then text_node(node)
-          end
-        end
 
         def start_element(node)
           return if dropping?
@@ -453,10 +421,6 @@ module Nabu
           count = value.gsub(/[[:space:]]/, "").grapheme_clusters.size
           @whole[:supplied] += count
           @current[:supplied] += count if @current
-        end
-
-        def dropping?
-          !@drop_depth.nil?
         end
 
         def in_edition?
@@ -607,10 +571,6 @@ module Nabu
             @textparts.pop
             @block = 1
           end
-        end
-
-        def local_name(node)
-          node.name.split(":").last
         end
       end
       private_constant :Extraction
