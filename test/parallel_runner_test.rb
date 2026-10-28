@@ -114,13 +114,59 @@ class ParallelRunnerTest < Minitest::Test
     refute_predicate outcome(success: false, result: result(failures: 1)), :crashed?
   end
 
+  # --- Run keying (concurrent runs never share an artifact) -----------------
+
+  def test_run_token_carries_the_worktree_digest_and_a_fresh_random_part
+    Dir.mktmpdir do |a|
+      Dir.mktmpdir do |b|
+        first = PT::RunKey.token(root: a)
+        second = PT::RunKey.token(root: a)
+        other = PT::RunKey.token(root: b)
+        refute_equal first, second, "two invocations in ONE worktree never share a token"
+        assert_equal first.split("-").first, second.split("-").first, "same worktree → same digest part"
+        refute_equal first.split("-").first, other.split("-").first, "different worktrees → different digest"
+        assert_match(/\A\h{12}-\h{16}\z/, first)
+      end
+    end
+  end
+
+  def test_every_runner_artifact_path_is_keyed_by_the_run_token
+    artifacts = PT::RunKey::Artifacts.new(run_dir: "/r", token: "abc-123")
+    assert_equal "/r/job-7-abc-123.json", artifacts.result(7)
+    assert_equal "/r/job-7-abc-123.log", artifacts.log(7)
+    assert_equal "/r/job-7-abc-123-tmp", artifacts.job_tmp(7)
+    refute_equal artifacts.result(7), PT::RunKey::Artifacts.new(run_dir: "/r", token: "abc-124").result(7)
+  end
+
+  def test_run_dir_is_a_fresh_directory_named_by_the_token
+    dir = PT::RunKey.make_run_dir("abc-123")
+    assert File.directory?(dir)
+    assert_includes File.basename(dir), "nabu-test-abc-123-"
+    refute_equal dir, (other = PT::RunKey.make_run_dir("abc-123"))
+  ensure
+    [dir, other].compact.each { |d| FileUtils.rm_rf(d) }
+  end
+
+  def test_a_result_from_a_foreign_run_is_never_merged
+    Dir.mktmpdir do |dir|
+      path = File.join(dir, "job-0.json")
+      File.write(path, JSON.generate(result.merge("run" => "theirs")))
+      assert_nil PT::RunKey.read_result(path, token: "ours"), "a foreign run's result is rejected"
+      File.write(path, JSON.generate(result.merge("run" => "ours")))
+      assert_equal 1, PT::RunKey.read_result(path, token: "ours")["count"]
+      File.write(path, "{torn")
+      assert_nil PT::RunKey.read_result(path, token: "ours")
+      assert_nil PT::RunKey.read_result(File.join(dir, "absent.json"), token: "ours")
+    end
+  end
+
   # --- A real worker -----------------------------------------------------
 
   def run_worker(dir, body)
     file = File.join(dir, "sample_case.rb")
     File.write(file, body)
     result_path = File.join(dir, "result.json")
-    env = { "NABU_TEST_RESULT" => result_path, "NABU_ALLOW_SKIPS" => "1" }
+    env = { "NABU_TEST_RESULT" => result_path, "NABU_TEST_RUN" => "run-tok", "NABU_ALLOW_SKIPS" => "1" }
     root = PT::Runner::ROOT
     _out, status = Open3.capture2e(env, RbConfig.ruby, "-I#{root}/lib", "-I#{root}/test", PT::Runner::WORKER,
                                    file, "--", "--seed", "1", chdir: root)
@@ -138,6 +184,7 @@ class ParallelRunnerTest < Minitest::Test
       RUBY
       refute_predicate status, :success?
       assert_equal 2, result["count"]
+      assert_equal "run-tok", result["run"], "the result is stamped with its invocation's token"
       assert_equal 1, result["failures"]
       assert_match(/ParallelSampleCase#test_fails.*Expected: 1\n  Actual: 2/m, result["results"].first["text"])
       assert_operator result["file_times"].values.sum, :>=, 0.0

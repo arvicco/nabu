@@ -71,7 +71,8 @@ Give **exactly one** of:
   has no inflectional morphology, so those facets never match it (honest
   absence). `morph` requires `lemma` (bare morphology search is out of scope).
   Lemma hits from sources that store upstream's own token gloss (bhsa,
-  achemenet: English; aes, tlhdig: German) carry `token_gloss`; an optional
+  achemenet: English; aes, tlhdig: German) carry `token_gloss` — DSS hits
+  too, borrowing BHSA's gloss through the `lex_etcbc` crosswalk; an optional
   `gloss` word (also only with `lemma`, composing with `morph`, not `near`)
   keeps only attestations whose token gloss contains it — `lemma` "דבר" +
   `gloss` "word" separates BHSA's consonantal homograph from "speak".

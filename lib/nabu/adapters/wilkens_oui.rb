@@ -84,7 +84,20 @@ module Nabu
     #   (tib) (p) script/tradition marks and grammar labels), shape
     #   (glossed / cross-reference / note / unsplit), rejected_reading
     #   (the † class: 6,817 records), cross_reference (the → target
-    #   text verbatim: 9,592 records), text_layer_loss.
+    #   text verbatim: 9,592 records), text_layer_loss, and the entry-facet
+    #   pair tradition / script (below).
+    # - Entry facets (config/facet_map.yml entry_fields): the six
+    #   tradition/script marks are mapped by MARK_FACETS per the book's
+    #   own Abkürzungen list (PDF pp. 13–14, folios VII–VIII) and its
+    #   Hinweise (pp. 10–11): Buddhist terms go UNMARKED ("manichäische
+    #   Termini [erhalten] den Vermerk (m), christliche ein (c)"); (br) and
+    #   (tib) flag sources in Brāhmī / Tibetan script where the
+    #   orthography deviates or the word is rare. So an unmarked entry
+    #   claims nothing — never "Buddhist" by default. Every other label
+    #   (grammar, n. pr. …) stays in "labels" unmapped, counted in the
+    #   census notes. Whole book (2026-10-28): tradition Manichaean 611 ·
+    #   Christian 119; script Brāhmī 498 · runic 200 · Tibetan 41 ·
+    #   ʾPhags-pa 1; 12,972 labels of 11 other kinds unmapped.
     # - crossrefs: a sub-entry points at its parent (kind "subentry-of",
     #   id-keyed — the shuowen chongwen-of shape); a cross-reference
     #   record mints one pointer per "→" link (kind "false-reading" for
@@ -129,6 +142,17 @@ module Nabu
       CHUNK_PAGES = 25
       SUB_SEPARATOR = "::"
       HOMONYM_TARGET = /\A\^(\d+)(.+)\z/
+
+      # The book's tradition/script marks → [entry-facet annotation key,
+      # value], from its Abkürzungen (PDF pp. 13–14): (m) "manichäisch",
+      # (c) "christlich", (br) "Brāhmī, in Brāhmī-Schrift", (r)
+      # "Runenschrift", (tib) "tibetische Schrift", (p) "ʾPhags pa
+      # (Schrift)" — the ʾPhags-pa script, NOT Pothī.
+      MARK_FACETS = {
+        "m" => %w[tradition Manichaean].freeze, "c" => %w[tradition Christian].freeze,
+        "br" => %w[script Brāhmī].freeze, "r" => %w[script runic].freeze,
+        "tib" => %w[script Tibetan].freeze, "p" => %w[script ʾPhags-pa].freeze
+      }.freeze
 
       MANIFEST = Nabu::SourceManifest.new(
         id: "wilkens-oui",
@@ -201,7 +225,8 @@ module Nabu
                                                 canonical_path: document_ref.path)
         skipped = mint(records, document)
         @census = { skipped: skipped, matter: matter, anomalies: segmenter.anomalies.dup,
-                    records: records.size, lost: document.count { |e| e.annotations.key?("text_layer_loss") } }
+                    records: records.size, lost: document.count { |e| e.annotations.key?("text_layer_loss") },
+                    labels: label_census(document) }
         document
       rescue Nabu::StextLayout::Error, Nabu::ValidationError, Normalize::EncodingError => e
         raise Nabu::ParseError, "wilkens-oui: #{document_ref.id}: #{e.message}"
@@ -375,7 +400,27 @@ module Nabu
           "rejected_reading" => (true if record.error),
           "cross_reference" => record.xref,
           "text_layer_loss" => (lost if lost.positive?)
-        }.compact
+        }.merge(mark_facets(record.labels)).compact
+      end
+
+      # {"tradition" => [...], "script" => [...]} from the record's marks
+      # (MARK_FACETS); no key when the record carries none.
+      def mark_facets(labels)
+        labels.filter_map { |label| MARK_FACETS[label] }
+              .group_by(&:first).transform_values { |pairs| pairs.map(&:last).uniq }
+      end
+
+      # Mapped facet values and unmapped labels, counted over the entries.
+      def label_census(document)
+        mapped = Hash.new(0)
+        unmapped = Hash.new(0)
+        document.each do |e|
+          (e.annotations["labels"] || []).each do |label|
+            pair = MARK_FACETS[label]
+            pair ? mapped[pair] += 1 : unmapped[label] += 1
+          end
+        end
+        { mapped: mapped, unmapped: unmapped }
       end
 
       def shape(record)
@@ -433,8 +478,24 @@ module Nabu
         end
         notes << "#{census[:lost]} entr(ies) carry U+FFFD where Chinese characters stood (text-layer loss)" if
           census[:lost].positive?
+        notes.concat(label_notes(census[:labels]))
         residue = census[:anomalies].select { |key, _| residue_key?(key) }
         notes << "segmenter residue: #{residue.sort.map { |k, n| "#{k} #{n}" }.join(', ')}" unless residue.empty?
+        notes
+      end
+
+      def label_notes(labels)
+        notes = []
+        unless labels[:mapped].empty?
+          facets = labels[:mapped].group_by { |(key, _), _| key }.sort.map do |key, rows|
+            "#{key} #{rows.map { |(_, value), n| "#{value} #{n}" }.sort.join(', ')}"
+          end
+          notes << "entry facets: #{facets.join('; ')}"
+        end
+        unless labels[:unmapped].empty?
+          notes << "labels left unmapped (grammar/name labels, no facet): #{labels[:unmapped].values.sum} " \
+                   "across #{labels[:unmapped].size} kinds"
+        end
         notes
       end
 
