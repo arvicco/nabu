@@ -1,0 +1,270 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI xml:lang="fr">
+<teiHeader>
+		<fileDesc>
+			<titleStmt>
+				<title>LE MISANTHROPE ou L'ATRABILAIRE AMOUREUX, COMÉDIE</title>
+				<author type="texte" ISNI="0000 0001 2319 7131">MOLIERE, Jean-Baptiste Poquelin dit (1622-1673)</author>
+			</titleStmt>
+			<publicationStmt>	
+				<publisher>Texte établi par Paul FIEVRE, Mai 2006.</publisher>
+				<publisher>publié par Paul FIEVRE, Mai 2006, révisions mai 2017, révision août 2020, avril 2022</publisher>
+				<idno>MOLIERE_MISANTHROPE</idno>
+				<rights>Creative Commons BY-NC-SA</rights>
+			</publicationStmt>
+			<SourceDesc>
+				<genre>Comédie</genre>
+				<inspiration>moeurs</inspiration>
+				<structure>Cinq actes</structure>
+				<type>vers</type>
+				<periode>1661-1670</periode>
+				<taille>1750-2000</taille>
+				<permalien cote="BnF ASP  RESERVE 8-RF-3144">https://gallica.bnf.fr/ark:/12148/bpt6k1280468t</permalien>
+				<keywords>
+					<keyword type="theme">Misanthropie</keyword>
+				</keywords>
+			</SourceDesc>
+		</fileDesc>
+</teiHeader>
+<text>
+	<front>
+		<docTitle>
+			<titlePart type="main">LE MISANTHROPE</titlePart>
+			<titlePart type="sub">COMÉDIE</titlePart>
+		</docTitle> 
+		<docDate value="1667">M. DC. LXVII. AVEC PRIVILÈGE DU ROI.</docDate>
+		<docAuthor id="MOLIERE" bio="moliere">Par J. B. P. DE MOLIÈRE</docAuthor>
+		<docImprint>
+			<privilege id="1666-06-21"><head>Extrait du privilège du Roi.</head>
+				<p>Par grâce et privilège du Roi, donné à Fontainebleau le 21 juin 1666. Signé, Par le Roi en son conseil, BERAUD : il est permis à J.B.P. de MOLIÈRE, Comédien de la Troupe de Monsieur le Duc d'Orléans, de faire imprimer, vendre et débiter une comédie par lui composée, intitulée, Le Misanthrope, pendant cinq années : Et défenses sont faites à tous autres, de l'imprimer, ni vendre, d'autre édition que de celle de l'exposant, ou de ceux qui auront droit de lui, à peine de quinze cent livres d'amende, confiscation des exemplaires contrefaits, et de tous dépens, dommages et intérêts, comme il est porté plus amplement par lesdites Lettres.</p>
+				<p>Et le dit Sieur DE MOLIÈRE a cédé son droit de privilège à JEAN RIBOU, Marchand libraire à Paris, pour en jouir suivant l'accord fait entre-eux.</p>
+				<p>Registré sur le livre de la Communauté, signé, PIGET, Syndic.</p>
+			</privilege>
+			<acheveImprime id="1666-12-24">Achevé d'imprimer pour le première fois, le 24 décembre 1666.</acheveImprime>
+			<printer id="RIBOU">À PARIS, chez JEAN RIBOU, au Palais, vis à vis de la Porte de l'Église de la Saint Chapelle, à l'Image Saint-Louis.</printer>
+		</docImprint>
+		<performance>
+			<premiere date="1666-06-04" location="Théâtre du Palais-Royal">Représenté pour la première fois le 4 juin 1666 au Théâtre du Palais Royal.</premiere>
+		</performance>
+		<div type="preface"><head>LE LIBRAIRE AU LECTEUR</head>
+			<p>Le Misanthrope, dès sa première représentation, ayant reçu au théâtre, l'approbation que le lecteur ne lui pourra refuser, et la Cour étant à Fontainebleau, lorsqu'il parut ; j'ai cru que je ne pouvais rien faire de plus agréable pour le public, que de lui faire part de cette lettre, qui fut écrite, un jour après, à une personne de qualité, sur le sujet de cette comédie. Celui qui l'écrivit étant un homme dont le mérite et l'esprit est fort connu, sa lettre fut vue de la meilleure partie de la Cour, et trouvé si juste par tout ce qu'il y a de gens les plus éclairés en ces matières, que je me suis persuadé qu'après leur avoir plu, le lecteur me serait obligé du soin que j'avais pris d'en chercher une copie pour la lui donner, et qu'il lui rendra la justice que tant de personnes de la plus haute naissance lui ont accordée.</p>
+		</div>
+		<div type="lettre"><head>LETTRE ÉCRITE SUR LA COMÉDIE DU MISANTHROPE.</head>
+			<p>MONSIEUR,</p>
+			<p>Vous devriez être satisfait de ce que je vous ai dit de la dernière Comédie de Monsieur de Molière, que vous avez vue aussi bien que moi, sans m'obliger à vous écrire mes sentiments. Je ne puis m'empêcher de faire ce que vous souhaitez ; mais souvenez-vous de la sincère amitié que vous m'avez promise et n'allez pas exposer à Fontainebleau, au jugement des courtisans, des remarques que je n'ai faites que pour vus obéir. Songez à ménager ma réputation ; et pensez que les gens de la Cour de qui le goût est si raffiné, n'auront pas, pour moi, la même indulgence que vous.</p>
+			<p>Il est à propos, avant que de parler à fond de cette Comédie, de voir quel a été le but de l'auteur ; et je crois qu'il mérite des louanges, s'il est venu à bout de ce qu'il s'est proposé ; et c'est la première chose qu'il faut examiner. Je pourrais vous dire en deux mots, si je voulais m'exempter de faire un grand discours, qu'il a pu, et que son intention étant de plaire, les Critiques ne peuvent pas dire qu'il ait mal fait, puisqu'en faisant mieux (si toutefois il est possible) son dessein n'aurait peut-être pas si bien réussi.</p>
+			<p>Examinons donc les endroits par où il a plu ; et voyons qu'elle a été le fin de son ouvrage. Il n'a point voulu faire une comédie pleine d'incidents, mais une pièce, seulement, où il put parler contre les Moeurs du Siècle. C'est ce qui lui a fait prendre pour son héros ; un Misanthrope ; et comme misanthrope veut dire Ennemi des Hommes ; on doit demeurer d'accord qu'il ne pouvait choisir un personnage qui, vraisemblablement, put mieux parler contre les hommes, que leur ennemi. Ce choix est encore admirable pour le Théâtre, et les chagrins, les dépits, les bizarreries, et les emportements d'un misanthrope, étant des choses qui font un grand jeu, ce caractère est un des plus brillants qu'on puisse produire sur la scène.</p>
+			<p>On n'a pas seulement, remarqué l'adresse de l'auteur dans le choix de ce personnage, mais encore dans tous les autres ; et comme rien ne fait paraître davantage une chose, que celle qui lui est opposée, on peut non seulement dire que l'ami du Misanthrope, qui est un homme sage et prudent, fait voir dans son jour le caractère de ce ridicule ; mais encore que l'humeur du Misanthrope fait connaître la sagesse de son ami.</p>
+			<p>Molière n'étant pas de ceux qui ne font pas tout également bien, n'a pas été moins heureux dans le choix de ses autres caractères, puisque la maîtresse du Misanthrope est une jeune veuve, coquette, et tout à fait médisante. Il faut s'écrier ici, et admirer l'adresse de l'auteur : ce n'est pas que le caractère ne soit assez ordinaire, et que plusieurs n'eussent pu s'en servir ; mais l'on doit admirer que dans une pièce, où Molière veut parler contre les moeurs du siècle, et n'épargner personne, il nous fait voir une médisante, avec un ennemi des hommes. Je vous laisse à penser, si ces deux personnes ne peuvent pas naturellement parler contre toute la terre, puisque l'un haït les hommes, et que l'autre se plaît à en dire tout le mal qu'elle ne sait. En vérité, l'adresse de cet auteur est admirable ; ce sont là de ces choses que tout le monde ne remarque pas, et qui sont faites avec beaucoup de jugement. Le Misanthrope seul n'aurait pu parler contre tous les hommes : mais en trouvent le moyen de la faire aider d'une médisante, c'est avoir trouvé, en même temps, celui de mettre dans une seule pièce, la dernière mais au portrait du siècle. Il y est tout entier, puisque nous voyons encore une femme qui veut paraître prude ; opposée à une coquette, et des marquis qui représentent la Cour : tellement qu'on peut assurer que dans cette comédie, l'on voit tout ce qu'on peut dire contre les moeurs du siècle. Mais comme il ne suffit pas d'avancer une chose, si l'on ne la prouve, je vais, en examinant cette pièce d'acte en acte, vous faire remarquer tout ce que j'ai dit, et vous faire voir cent choses qui sont mises en leur jour, avec beaucoup d'art, et qui ne sont connues que des personnes aussi éclairées que vous.</p>
+			<p>Les choses qui sont les plus précieuses d'elles-mêmes, ne seraient pas, souvent, estimées ce qu'elles sont, si l'art ne leur avait prêté quelques traits ; et l'on peut dire, que de quelque valeur qu'elles soient, il augmente toujours leur prix. Une pierre mise en oeuvre, a beaucoup plus d'éclat qu'auparavant ; et nous ne saurions bien voir le plus beau tableau du monde, s'il n'est dans son jour. Toutes choses ont besoin d'y être ; et les actions que l'on nous représente sur la scène, nous paraissent plus ou moins belles, selon l'art du poète nous les fait paraître. Ce n'est pas qu'on doive trop s'en servir, puisque le trop d'art n'est plus art, et que c'est en avoir beaucoup, que de ne le pas montrer. Tout excès est condamnable et nuisible ; et les plus grandes beautés perdent beaucoup de leur éclat, lorsqu'elles sont exposées à un trop grand jour. Les productions d'esprit sont de même, et surtout, celles qui regardent le théâtre ; il leur faut donner de certains jours qui sont plus difficiles à trouver, que les choses les plus spirituelles : car, enfin, il n'y a point d'esprit si grossiers, qui n'aient quelquefois de belles pensées ; mais il y en a peu qui sachent bien les mettre en oeuvre, s'il est permis de parler ainsi. C'est ce que Molière fait si bien, et ce que vous pouvez remarquer dans sa pièce. Cette ingénieuse et admirable Comédie, commence par le Misanthrope, qui, par son action, fait connaître à tout le monde que c'est lui, avant même d'ouvrir la bouche ; ce qui fait juger qu'il soutiendra bien son caractère, puisqu'il commence si bien de le faire remarquer.</p>
+			<p>Dans cette première scène, il blâme ceux qui sont tellement accoutumés à faire des prestations d'amitié, qui embrassent également leurs amis, et ceux qui leur doivent être indifférents, le faquin, et l'honnête homme : et dans le même temps, par la colère où il témoigne être contre son ami, il faut voir que ceux qui reçoivent ces embrassades avec trop de complaisance, ne sont pas moins, ne sont pas moins dignes de blâme, que ceux qui le font ; et par ce que lui répond son ami, il fait voir que son dessein est de rompre en visière à tout le genre humain ; et l'on connaît par ce peu de paroles, le caractère qu'il soutenir pendant toute le pièce. Mais comme il ne pouvait le faire paraître sans avoir de matière, l'auteur a cherché toutes les choses qui peuvent exercer la patience des hommes ; et comme il n'y en a presque point qui n'ait quelque procès, et que c'est une chose fort contraire à l'humeur d'un tel personnage, il n'a pas manqué de le faire plaider : et comme les plus sages s'emportent ordinairement, quand ils ont des procès, il a pu, justement, faire dire tout ce qu'il a voulu un misanthrope, qui doit, plus qu'un autre, faire voir sa mauvaise humeur, et contre ses juges, et contre sa partie.</p>
+
+			<p> Ce n'était pas assez de lui avait fait dire qu'il voulait rompre en visière à tout le genre humain, si l'on ne lui donnait lieu de la faire. Plusieurs disent des choses qu'ils ne font pas ; et l'auditeur ne lui a pas sitôt vu prendre cette résolution, qu'il souhaite d'en voir les effets : ce qu'il découvre dans la scène suivante, et ce qui lui doit faire connaître l'adresse de l'auteur, qui répond sitôt à ses désirs.</p>
+			
+			<p>Cette seconde scène réjouit et attache beaucoup, puisqu'on voit un Homme de Qualité, faire au Misanthrope les civilités qu'il vient de blâmer : et sans qu'il faut nécessairement, ou qu'il démente son caractère, ou qu'il lui rompe en visière. Mais il est, encor, plus embarrassé dans la suite, car la même personne lui lit un sonnet, et veut l'obliger d'en dire son sentiment. Le Misanthrope fait d'abord voir un peu de prudence, et tâche de lui faire comprendre ce qu'il ne veut pas lui dire ouvertement, pour lui épargner de la confusion ; mais enfin, il est obligé de lui rompre en visière : ce qu'il fait d'une manière qui doit beaucoup divertir le spectateur. Il lui fait voir que son sonnet vaut moins qu'un vieux couplet de chanson qu'il lui dit ; ce n'est qu'un jeu de paroles qui ne signifient rien ; mais que la chanson dit beaucoup plus, puisqu'elle fait du moins voir un homme amoureux, qui abandonnerait une ville, comme Paris, pour sa maîtresse.</p>
+			
+			<p>Je ne crois pas qu'on puisse rien voir de plus agréable que cette scène. Le sonnet n'est point méchant, selon la manière d'écrire d'aujourd'hui : et ceux qui cherchent ce que l'on appelle pointes et chutes, plutôt que le bon sens, le trouveront, sans doute, bon. J'en vis même, à la première représentation de cette pièce, qui se firent jouer, pendant qu'on représentait cette scène ; car ils crièrent que le sonnet était bon, avant que le Misanthrope en fit la critique, et demeurèrent ainsi tout confus.</p>
+			
+			<p>Il y a cent choses dans cette scène, qui doivent faire remarquer l'esprit de l'auteur ; et le choix du sonnet en est un, dans un temps où tous nos courtisans font des vers. On peut ajouter à cela, que les gens de qualité croient que leur naissance les doit excuser, lorsqu'ils écrivent mal ; qu'il sont les premiers à dire, « Cela est écrit cavalièrement, et un gentilhomme n'en doit point savoir davantage  ». Mais ils devraient plutôt se persuader que les gens de qualité doivent mieux faire que les autres, ou du moins ne point faire voir ce qu'il ne font pas bien.</p>
+
+			<p>Ce premier acte ayant plus à tout le monde, et n'ayant que deux scènes, doit être parfaitement beau, puis que les Français, qui voudraient toujours voir de nouveaux personnages, s'y seraient ennuyés, s'il ne les avait fort attachés et divertis.</p>
+			
+			<p>Après avoir vu le Misanthrope déchaîné contre ceux qui font également des protestations d'amitié à tout le monde, et ceux qui y répondent, avec le même emportement ; après l'avoir ouï parler contre sa partie, et l'avoir vu condamner le sonnet, et rompre en visière à son auteur, on ne pouvait plus souhaiter que le voir amoureux, puisque l'amour doit bien donner de la peine aux personnes de son caractère, et que l'on doit en cet état, en espérer quelque chose de plaisant, chacun traitant ordinairement cette passion selon son tempérament ; et c'est d'où vient que l'on attribue tant de choses à l'amour, qui ne doivent, souvent, être attribuées qu'à l'humeur des hommes.</p>
+
+			<p>Si l'on souhaite de voir le Misanthrope amoureux, on doit être satisfait dans cette scène, puisqu'il y paraît avec sa maîtresse, mais avec sa hauteur ordinaire à ceux de son caractère. Il n'est point soumis, il n'est point languissant mais il lui découvre librement, les défauts qu'il voit en elle, et lui reproche qu'elle reçoit bien tout l'univers ; et pour douceurs, il lui dit qu'il voudrait bien ne la pas aimer, et qu'il ne l'aime que pour ses pêchers. Ce n'est pas qu'avec tous ces discours il ne paraisse aussi amoureux que les autres, comme nous verrons dans la suite. Pendant leur entretien, quelques gens viennent visiter sa maîtresse : il voudrait l'obliger à ne les pas voir, et comme elle lui répond, que l'un d'eux la sert dans un procès, il lui dit, qu'elle devrait perdre sa cause, plutôt que de les voir.</p>
+
+			<p>Il faut demeurer d'accord, que cette pensée ne se peut payer, et qu'il n'y a qu'un misanthrope qui puisse dire des choses semblables. Enfin, toute la compagnie arrive ; et le Misanthrope conçoit tant de dépit, qu'il veut s'en aller. C'est, ici, où l'esprit de Molière se fait remarquer, puisqu'en deux vers, joints à quelque action qui marque du dépit, il fait voir ce que peut l'amour sur le coeur de tous les hommes, et sur celui du Misanthrope même, sans le faire sortir de son caractère. Sa maîtresse lui dit deux fois, de demeurer, il témoigne qu'il n'en veut rien faire : et sitôt qu'elle lui donne congé avec un peu de froideur, il demeure, et montre en faisant deux ou trois pas pour s'en aller, et en revenant aussitôt, que l'amour, pendant ce temps, combat contre son caractère, et demeure vainqueur : ce que l'auteur a fait judicieusement, puisque l'amour surmonte tout. Je trouve, encore une chose admirable en cet endroit ; c'est la manière dont les femmes agissent pour se faire obéir : et comme une femme a le pouvoir  de mettre à la raison, un homme comme le Misanthrope, qui la vient même de quereller en lui disant « Je veux que vous demeuriez », et puis en changeant de ton, « Vous pouvez vous en aller ». Cependant, cela se fait tous les jours : et l'on ne peut le voir mieux représenté qu'il est dans cette scène. Après tant de choses si différentes, et si naturellement, touchées et représentées dans l'espace de conversation, où se rencontrent deux marquis, l'ami du Misanthrope, et la cousine de la maîtresse de ce dernier. La jeune veuve, chez qui toute la compagnie se trouve, n'est point fâchée d'avoir la Cour chez elle : et comme elle est bien aise d'en avoir, qu'elle est politique, et veut ménager tout le monde, elle n'avait pas voulu faire dire qu'elle n'y était pas aux deux marquis, comme le souhaitait le Misanthrope. La conversation est toute au dépens du prochain ; et la coquette médisante, fait voir ce qu'elle sait, quand il s'agit de la dauber ; et qu'elle est de celles qui déchirent sous main, jusqu'à leurs meilleurs amis.</p>
+
+			<p>Cette conversation fait voir, que l'auteur n'est pas épuisé, puisqu'on y parle de vingt caractères de gens qui sont admirablement bien dépeints en peu de vers, chacun ; et l'on peut dire que ce sont autant de sujets de comédie que Molière donne, libéralement, à ceux qui s'en voudront servir. Le Misanthrope soutient bien son caractère pendant cette conversation, et leur parle avec la liberté qui lui est ordinaire. Elle est à peine finie, qu'il fait une action digne de lui, en disant aux deux marquis, qu'il ne sortira point, qu'ils ne soient sortis, et ils le feraient sans doute, puisque les gens de son caractère ne se démentent jamais, s'ils n'étaient obligé de suivre un garde pour le différend qu'il a eu avec Oronte, en condamnant son sonnet. C'est par où cet acte finit. </p>
+			
+			<p>L'ouverture du troisième, se fait par une scène entre les deux marquis, qui disent des choses fort convenables à leurs caractères, et qui font voir, par les applaudissement qu'ils reçoivent, que l'on peut toujours mettre des marquis sur la scène, tant qu'on leur fait dire quelque chose que les autres n'aient point encore dit. L'accord qu'ils font entre eux, de se dire les marques d'estime qu'ils recevront de la leur maîtresse, est une adresse de l'auteur qui prépare la fin de sa pièce, comme vous remarquerez dans la suite.</p>
+			
+			<p> Il y a dans le même acte, une scène entre deux femmes, que l'on trouve d'autant plus belle, que leurs caractères sont tout à fait opposés, et se font ainsi paraître l'un l'autre. L'une est, la jeune veuve, aussi coquette que médisant ; et l'autre une femme qui veut passer pour prude, et qui dans l'âme, n'est pas moins du monde que la coquette. Elle donne à cette dernière, des avis charitables sur sa conduite ; le coquette les reçoit fort bien, en apparence ; et lui dit, à son tour, pour le payer de cette obligation, qu'elle veut l'avertir de ce que l'on dit d'elle, et lui fait un tableau de la vie des feintes prudes, dont les couleurs sont aussi fortes, que celles que la prude avait employées pour lui représenter la vie des coquettes : et ce qui doit faire trouver cette scène fort agréable, est, que celle qui a parlé la première, se fâche, quand l'autre la paye en même monnaie.</p>
+			
+			<p>L'on peut assurer, que l'on voit dans cette scène, tout ce que l'on peut dire de toutes les femmes, puisqu'elles sont toutes de l'un ou de l'autre caractère, ou que si elles ont quelque chose de plus, ou de moins, ce qu'elle ont a, toujours, du rapport à l'un ou à l'autre.</p>
+			
+			<p>Ces deux femmes, après s'être parlé à coeur ouvert touchant leurs vies, se séparent ; et la coquette laisse la prude avec le Misanthrope, qu'elle voit entrer chez elle. Comme la prude a de l'esprit, et qu'elle n'a choisi ce caractère que pour mieux faire ses affaires, elle tâche par toutes sortes de voies d'attirer le Misanthrope qu'elle aime. Elle le loue, elle parle contre la coquette, lui veut persuader qu'on le trompe, et la mène chez elle, pour lui en donner des preuves ; ce qui donne sujet à une partie des choses qui se passent au quatrième acte.</p>
+			
+			<p>Cet acte commence par le récit de l'accommodement du Misanthrope, avec l'homme du sonnet ; et l'ami de ce premier en entretient la cousine de la coquette. Les vers de ce récit sont tout à fait beau ; mais ce que l'on doit y remarquer, est, que le caractère du Misanthrope est soutenu avec la même vigueur qu'il fait paraître en ouvrant la pièce. Ces deux personnes parlent, quelque temps, des sentiments de leurs coeurs, et sont interrompues par le Misanthrope même, qui paraît furieux et jaloux : et l'auditeur se persuade aisément parce qu'il a vu sortir, lui a inspiré ses sentiments. Le dépit lui fait faire ce que tous les hommes feraient en sa place, de quelque humeur qu'ils fussent : il offre son coeur à la belle parente de sa maîtresse ; mais elle lui fait voir que ce n'est que le dépit qui le fait parler, et qu'une coupable aimée est bientôt innocente. Ils le laissent avec sa maîtresse qui paraît, et se retirent.</p>
+			
+			<p>Je ne crois pas qu'on puisse rien voir de plus beau que cette scène. Elle est toute sérieuse ; et cependant il y en a peu dans la pièce qui divertissent davantage. On y voit un portrait, naturellement, représenté, de ce que les amants font tous les jours, en de semblables rencontres. Le Misanthrope paraît d'abord aussi emporté, que jaloux ; il semble que rien ne peut diminuer sa colère, et que la pleine justification de sa maîtresse ne pourrait qu'avec peine, calmer sa fureur. Cependant, admirez l'adresse de l'auteur. Ce jaloux, cet emporté, ce furieux, paraît tout radouci, il ne parle que du désir qu'il a de faire du bien à sa maîtresse ; et ce qui est admirable, est, qu'il lui dit toutes ces choses avant qu'elle se soit justifiée ; et lorsqu'elle lui dit qu'il a raison d'être jaloux. C'est faire voir ce que peut l'amour sur le coeur de tous les hommes : et faire connaître, en même temps, par une adresse que l'on ne peut assez admirer, ce que peuvent les femmes sur leurs amants, en changeant, seulement, le ton de leurs voix, et prenant un air qui paraît ensemble, et fier, et attirant. Pour moi, je ne puis assez m'étonner, quand je vois une coquette ramener, avant que s'être justifiée, non pas un amant soumis, et languissant, mais un Misanthrope, et l'obliger, non seulement, à la prière de se justifier, mais encore à des protestations d'amour, qui n'ont pour but que le bien de l'objet aimé ; et, cependant, demeurer ferme, après l'avoir ramené, et ne le point éclaircir, pour avoir le plaisir, de s'applaudir d'un plein triomphe. Voilà ce qui s'appelle manier des scène  ; voilà ce qui s'appelle travailler avec art, et représenter, avec des traits délicats, ce qui se passe, tous les jours, dans le Monde. Je ne crois pas que les beautés de cette scène, soient connues de tous ceux qui l'on vue représenter. Elle est trop délicatement traitée ; mais je puis assurer que tout le monde a remarqué qu'elle était bien écrite, et que les personnes d'esprit en ont bien su connaître les finesses. </p>
+			
+			<p>Dans le reste de l'acte, le valet du Misanthrope vient cherche son maître, pour l'avertir qu'on lui est venu signifier quelque chose qui regarde son procès. Comme l'esprit paraît aussi bien dans les petites choses, que dans les grandes, on en voit beaucoup dans cette scène, puisque le valet exerce la patience du Misanthrope ; et que ce qu'il dit, ferait moins d'effet, s'il était à un maître qui fut d'un autre humeur.</p>
+			
+			<p>La scène du valet, au quatrième acte, devait faire croire que l'on entendrait, bientôt, parler du procès. Aussi apprend-on, à l'ouverture du cinquième, qu'il est perdu ; et le Misanthrope agit selon ce que j'ai dit au premier. Son chagrin, qui l'oblige à se promener, et rêver, le fait retirer dans un coin de la chambre, d'où il voit aussitôt entrer sa maîtresse, accompagnée de l'homme avec qui il a eu démêlé pour le sonnet. Il la presse de se déclarer, et de faire un choix entre lui, et ses rivaux ; ce qui donne lieu au Misanthrope, de faire une action qui est bien d'un homme de son caractère. Il sort de l'endroit  où il est, et lui fait la même prière. La coquette agit, toujours, en femme adroite, et spirituelle ; et par un procédé qui paraît honnête, leur dit, qu'elle sait bien quel choix elle doit faire, qu'elle ne balance pas ; mais qu'elle ne veut point se déclarer en présence de celui qu'elle ne doit pas choisir. Ils sont interrompus par la prude, et par les Marquis, qui apportent, chacun, une lettre qu'elle a écrite contre eux : ce que l'auteur a préparé dès le troisième acte, en leur faisant promettre qu'ils se montreraient ce qu'ils recevraient de leur maîtresse. Cette scène est fort agréable. Tous les acteurs sont raillés dans les deux lettres ; et quoi que cela soit nouveau au théâtre, il fait voir néanmoins, la véritable manière d'agir des coquettes médisantes, qui parlent, et écrivent, continuellement, contre ceux qu'elles voient tous les jours, et à qui elles font bonne mine. Les marquis la quittent, et lui témoignent plus de mépris, que de colère.</p>
+			
+			<p>La coquette paraît un peu mortifiée dans cette scène. Ce n'est pas qu'elle démente son caractère ; mais la surprise qu'elle a de se voir abandonnée, et le chagrin d'apprendre que son jeu est découvert, lui causent un secret dépit qui paraît jusques sur son visage. Cet endroit est tout à fait judicieux. Comme la médisance est un vice, il était nécessaire, qu'à la fin de la comédie, elle eût quelque sorte de punition : et l'auteur a trouvé le moyen de la punir, et de lui faire, en même temps, soutenir son caractère. Il ne faut point d'autre preuve, pour montrer qu'elle se soutient, que le refus qu'elle fait d'épouser le Misanthrope, et d'aller vivre dans son désert. Il ne tient qu'à elle de le faire ; mais leurs humeurs étant incompatibles, ils seraient trop mal assortis ; et la coquette peut se corriger, en demeurant dans le Monde, sans choisir un désert pour faire pénitence ; son crime, qui ne part que d'un esprit encore jeune, ne demandant pas qu'elle ne fasse une si grande. </p>
+			
+			<p>Pour ce qui regarde le Misanthrope, on peut dire qu'il soutient son caractère jusqu'au bout. Nous en voyons, souvent qui ont bien de la peine à le garder pendant le cours d'une comédie : mais si, comme j'ai dit tantôt, celui-ci a fait connaître le sien, avant que parler, il faut voir, en finissant, qu'il le conservera toute sa vie, en se retirant du Monde.</p>
+			
+			<p>Voilà, Monsieur, ce que je pense de la comédie du Misanthrope amoureux, que je trouve d'autant plus admirable, que le héros en est le plaisant, sans être trop ridicule ; et qu'il fait rire les honnêtes gens, sans dire des plaisanterie fades et basses, comme l'on a accoutumé de voir dans les pièces comiques. Celles de cette nature, me semblent plus divertissantes, encore que l'on y rie moins haut ; et je crois qu'elle divertissent davantage, qu'elle attachent, et qu'elles font continuellement rire dans l'âme. Le Misanthrope, malgré sa folie, si l'on peut ainsi appeler son humeur, a le caractère d'un honnête homme, et beaucoup de fermeté, comme l'on peut connaître dans l'affaire du sonnet. Nous voyons de grand hommes, dans des pièces héroïques, qui en ont bien moins, qui n'ont point de caractère, et démentent, souvent, au théâtre, par leur lâcheté, la bonne opinion que l'histoire a fait concevoir d'eux.</p>
+			
+			<p>L'auteur ne représente pas, finalement, le Misanthrope, sous ce caractère, mais il fait, encore, parler à son héros, d'une partie des moeurs du temps : et ce qui est admirable, est, que bien qu'il paraisse, en quelque façon, ridicule, il dit des choses fort justes. Il est vrai qu'il semble trop exiger ; mais il faut demander beaucoup, pour obtenir quelque chose, et pour obliger les hommes à se corriger un peu de leurs défauts, il est nécessaire de les leur faire paraître bien grands.</p>
+
+			<p>Molière, par une adresse qui lui est particulière, laisse, partout, deviner plus qu'il ne dit : et n'imite pas ceux qui parlent beaucoup, et ne disent rien.</p>
+			
+			<p>On peur assurer, que cette pièce est une perpétuelle, et divertissante instruction ; qu'il y a des tours, et des délicatesses inimitables ; que les vers sont fort beaux, au sentiment de tout le monde ; les scènes bien tournées, et bien maniées, et que l'on ne peut ne pas la trouver bonne, sans faire voir que l'on n'est pas de ce monde, et que l'on ignore sa la manière de vivre de la Cour, et celle des plus illustres personnes de la ville.</p>
+			
+			<p>Il n'y a rien dans cette comédie, qui ne puisse être utile, et dont l'on ne doive profiter. L'ami du Misanthrope est si raisonnable, que tout le monde devrait l'imiter ; il n'est ni trop [vrai], ni trop peu critique ; et ne portant les choses dans l'un, ni dans l'autre excès, sa conduite doit être approuvée de tout le monde. Pour le Misanthrope, il doit inspirer à tous ses semblables, le désir de se corriger. Les coquettes médisantes, par l'exemple de Célimène, voyant qu'elles peuvent s'attirer des Affaires qui les feront mépriser, doivent apprendre à ne pas déchirer, sous main, leurs meilleurs amis. Les fausses prudes, doivent connaître que leurs grimaces ne servent de rien ; et que quand elles seraient aussi sages qu'elles le veulent paraître, elles seront toujours blâmées, tant qu'elles voudront passer pour prudes. Je ne dis rien des Marquis, je les crois les plus incorrigibles ; et il y a tant de choses à reprendre, encore, en eux, que tout le monde avoue, qu'on les peut, encore, jouer longtemps, bien qu'ils n'en demeurant pas d'accord.</p>
+			
+			<p>Vous trouverez, sans doute, ma lettre trop longue ; mais je n'ai pu m'arrêter, et j'ai trouvé qu'il était difficile de parler sur un si grand sujet, en peu de mots. Ce long discours ne devrait pas déplaire aux courtisans, puisqu'ils ont assez fait voir, par leurs applaudissements, qu'ils trouvaient la Comédie belle. En tout cas, je n'ai écrit que pour vous ; et j'espère que vous cacherez ceci, si vous jugez qu'il ne vaille pas la peine d'être montré. Ne craignez pas que j'y trouve à redire ; je suis autrement soumis à votre jugement, qu'Oronte ne l'était aux avis du Misanthrope.</p>
+		</div>
+	<castList><head>ACTEURS</head>
+	<castItem><role id="ALCESTE" sex="1" type="H" statut="aristocrate" age="A" stat_amour="Célimène">ALCESTE</role>, amant de Célimène.</castItem>
+	<castItem><role id="PHILINTE" sex="1" type="H" statut="aristocrate" age="A" stat_amour="néant">PHILINTE</role>, un ami d'Alceste.</castItem>
+	<castItem><role id="ORONTE" sex="1" type="H" statut="aristocrate" age="A" stat_amour="Célimène">ORONTE</role>, amant de Célimène.</castItem>
+	<castItem><role id="CÉLIMÈNE" sex="2" type="H" statut="aristocrate" age="A" stat_amour="Alceste">CÉLIMÈNE</role>, amante d'Alceste.</castItem>
+	<castItem><role id="ÉLIANTE" sex="2" type="H" statut="aristocrate" age="A" stat_amour="néant">ÉLIANTE</role>, cousine de Célimène.</castItem>
+	<castItem><role id="ARSINOÉ" sex="2" type="H" statut="aristocrate" age="A" stat_amour="néant">ARSINOÉ</role>, amie de Célimène.</castItem>
+	<castItem><role id="ACASTE" sex="1" type="H" statut="marquis" age="A" stat_amour="néant">ACASTE</role>, marquis.</castItem>
+	<castItem><role id="CLITANDRE" sex="1" type="H" statut="marquis" age="A" stat_amour="néant">CLITANDRE</role>, marquis.</castItem>
+	<castItem><role id="BASQUE" sex="1" type="H" statut="valet" age="A" stat_amour="néant">BASQUE</role>, valet de Célimène.</castItem>
+	<castItem><role id="DUBOIS" sex="1" type="H" statut="valet" age="A" stat_amour="néant">DU BOIS</role>, valet d'Alceste.</castItem>
+	<castItem><role id="UN GARDE" sex="1" type="H" statut="garde" age="A" stat_amour="néant">UN GARDE</role> de la maréchaussée de France.</castItem>
+	</castList>
+	<set location="Paris" country="France" periode="XVIIème" gps="48.856614, 2.352222">La scène est à Paris.</set>
+	</front>
+<body>
+<div1 type="acte" n="1"><head>ACTE I</head>
+<div2 type="scene" n="1"><head>SCÈNE PREMIÈRE. Philinte, Alceste.</head>
+<sp who="PHILINTE"><speaker>PHILINTE.</speaker>
+	<l id="1" part="i">Qu'est-ce donc ? Qu'avez-vous ?</l>
+</sp>
+<sp who="ALCESTE"><speaker>ALCESTE.</speaker>
+	<l id="1" part="f">Laissez-moi, je vous prie.</l>
+</sp>
+<sp who="PHILINTE"><speaker>PHILINTE.</speaker>
+	<l id="2">Mais, encor, dites-moi, quelle bizarrerie...</l>
+</sp>
+<sp who="ALCESTE"><speaker>ALCESTE.</speaker>
+	<l id="3">Laissez-moi là, vous dis-je, et courez vous cacher.</l>
+</sp>
+<sp who="PHILINTE"><speaker>PHILINTE.</speaker>
+	<l id="4">Mais on entend les gens, au moins, sans se fâcher.</l>
+</sp>
+<sp who="ALCESTE"><speaker>ALCESTE.</speaker>
+	<l id="5">Moi, je veux me fâcher, et ne veux point entendre.</l>
+</sp>
+<sp who="PHILINTE"><speaker>PHILINTE.</speaker>
+	<l id="6">Dans vos brusques chagrins je ne puis vous comprendre,</l>
+	<l id="7">Et quoique amis enfin, je suis tout des premiers...</l>
+</sp>
+<sp who="ALCESTE"><speaker>ALCESTE.</speaker>
+	<l id="8">Moi, votre ami ? Rayez cela de vos papiers.</l>
+	<l id="9">J'ai fait jusques ici, profession de l'être ;</l>
+	<l id="10">Mais après ce qu'en vous, je viens de voir paraître,</l>
+	<l id="11">Je vous déclare net, que je ne le suis plus,</l>
+	<l id="12">Et ne veux nulle place en des coeurs corrompus.</l>
+</sp>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div2>
+
+
+</div1>
+<div1 type="acte" n="2"><head>ACTE II</head>
+<div2 type="scene" n="1"><head>SCÈNE PREMIÈRE. Alceste, Célimène.</head>
+<sp who="ALCESTE"><speaker>ALCESTE.</speaker>
+	<l id="447">Madame, voulez-vous que je vous parle net ?</l>
+	<l id="448">De vos façons d'agir, je suis mal satisfait :</l>
+	<l id="449">Contre elles, dans mon coeur, trop de bile s'assemble,</l>
+	<l id="450">Et je sens qu'il faudra que nous rompions ensemble.</l>
+	<l id="451">Oui, je vous tromperais de parler autrement,</l>
+	<l id="452">Tôt, ou tard, nous romprons indubitablement ;</l>
+	<l id="453">Et je vous promettrais, mille fois, le contraire,</l>
+	<l id="454">Que je ne serais pas en pouvoir de le faire.</l>
+</sp>
+<sp who="CÉLIMÈNE"><speaker>CÉLIMÈNE.</speaker>
+	<l id="455">C'est pour me quereller, donc, à ce que je vois,</l>
+	<l id="456">Que vous avez voulu me ramener chez moi ?</l>
+</sp>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div2>
+
+
+
+
+
+</div1>
+
+
+
+</body>
+</text>
+</TEI>

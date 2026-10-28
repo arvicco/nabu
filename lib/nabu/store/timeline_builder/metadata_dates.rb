@@ -244,6 +244,9 @@ module Nabu
           #                                         never the poets' composition era)
           "th-wikisource" => :edition_year_text, # P120-3: the Index ปี= print year,
           #                                         BE converted to CE (date_class edition)
+          "theatre-classique" => :structured, # the transcribed edition's title-page year (class
+          #                                     edition), else the site's periode band
+          #                                     (composition); place = the imprint city
           "ticha" => :structured,
           "titus-bactrian" => :structured,
           "titus-manichaica" => :place_only,

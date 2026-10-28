@@ -1,0 +1,316 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI>
+<teiHeader>
+		<fileDesc>
+			<titleStmt>
+				<title>MOLIÈRE, DRAME.</title>
+				<author type="texte" ISNI="0000 0001 2130 9531">SAND, George (1804-1876)</author>
+			</titleStmt>
+			<publicationStmt>	
+				<editor>Texte établi par Paul Fièvre octobre 2018</editor>
+				<publisher>publié par Paul FIEVRE octobre 2018</publisher>
+				<rights>Creative Commons BY-NC-SA</rights>
+			</publicationStmt>
+			<SourceDesc>
+				<genre>Comédie</genre>
+				<inspiration>vie littéraire</inspiration>				<structure>Deux actes</structure>
+				<type>prose</type>
+				<periode>1851-1860</periode>
+				<taille>(mesure non pertinente)</taille>
+				<permalien>https://gallica.bnf.fr/ark:/12148/bpt6k868337/f474.image</permalien>
+			</SourceDesc>
+		</fileDesc>
+</teiHeader>
+<text>
+	<front>
+		<docTitle>
+			<titlePart type="main">MOLIÈRE</titlePart>
+			<titlePart type="sub">DRAME EN CINQ ACTES</titlePart>
+			<titlePart type="sub">Gaité - 10 mai 1851</titlePart>
+		</docTitle> 
+		<docDate value="1851"/>
+		<docAuthor id="SAND, George"/>
+		<docImprint>
+			<privilege id=""><head/>
+			</privilege>
+			<editor id=""/>
+			<printer id="BIELEFELD">BIELEFELD</printer>
+		</docImprint>
+		<performance>
+			<premiere date="" location=""/>
+		</performance>
+		<div type="dedicace"><adresse>À ALEXANDRE DUMAS</adresse>
+			<p>Si je vous prie d'agréer fraternellement la dédicace de cette faible étude, c'est parce qu'elle présente, par l'absence, un peu volontaire, je l'avoue, d'incidents et d'action, un contraste marqué avec les vivantes et brillantes compositions dont vous avez illustré la scène moderne. Je tiens à protester contre la tendance qu'on pourrait m'attribuer, de regarder l'absence d'action, au théâtre, comme une réaction systématique contre l'école dont vous êtes le chef. Loin de moi ce blasphème contre le mouvement et la vie. J'aime trop vos ouvrages, je les lis, je les écoute avec trop de conscience et d'émotion, je suis trop artiste dans mon coeur, pour souhaiter que la moindre atteinte soit portée à vos triomphes. Bien des gens croient que les artistes sont nécessairement jaloux les uns des autres. Je plains ces gens-là d'être si peu artistes eux-mêmes, et de ne pas comprendre que la pensée d'assassiner nos émules serait celle de notre propre suicide.</p>
+			<p>Puisque l'occasion s'en présente, je veux la saisir pour vous soumettre quelques réflexions générales dont chacun peut faire son profit.</p>
+			<p>L'action dramatique exclut-elle l'analyse des sentiments et des passions, et réciproquement ? l'homme intérieur peut-il être suffisamment révélé dans les courtes proportions de la scène, au milieu du mouvement précipité des incidents de sa vie extérieure ? Je n'hésite pas à dire oui, je n'hésite pas à reconnaître que vous l'avez plusieurs fois prouvé. Cependant l'activité de l'imagination, la fièvre de la vie vous ont aussi plusieurs fois emporté jusqu'à sacrifier des nuances, des développements de caractère ; et, par là, vous n'avez pas satisfait le besoin que j'éprouve de bien connaître les personnages dont je vois les actions et de bien pénétrer le motif de leurs actions. Je crois qu'avec la volonté, la merveilleuse puissance que vous avez de tenir notre intérêt en haleine, vous pouviez sacrifier un peu mon genre de scrupule à l'éclat des choses extérieures. Quand vous l'avez fait, vous avez bien fait, après tout, puisque vous pouviez en dédommagement, nous donner tant de belles choses dramatiques. Mais, à ces mouvants tableaux, à ces enchaînements de péripéties, je préfère celles de vos oeuvres où l'esprit est satisfait par la réflexion autant que par l'imprévu.</p>
+			<p>Donc, on peut resserrer dans le cadre étroit de la représentation l'analyse du coeur humain et l'imprévu rapide de la vie réelle. Mais c'est fort difficile ; tout le monde n'est pas vous, et, en cherchant à imiter votre manière, on a trop habitué le public à se passer de ce dont vous n'avez jamais fait bon marché, vous dont il est possible d'imiter le costume, mais non l'être qui le porte.</p>
+			<p>J'ai donc souhaité, moi dont les instincts sont plus concentrés et la création moins colorée, de donner au public ce qui était en moi, sans songer à imiter un maître dont je chéris la puissance, et je me suis dit avec le bonhomme :</p>
+			<p type="v">Ne forçons point notre talent.</p>
+			<p>De là cette pièce de Molière, où je n'ai cherché à représenter que la vie intime, et où rien ne m'a intéressé que les combats intérieurs et les chagrins secrets. Existence romanesque et insouciante au début, laborieuse et tendre dans la seconde période, douloureuse et déchirée ensuite, calomniée et torturée à son déclin, et finissant par une mort profondément triste et solennelle. Un mot navrant, un mot historique résume cette vie près de s'éteindre : Mais, mon_Dieu, qu'un homme souffre avant de pouvoir mourir ! On pourrait ajouter que plus cet homme est grand et bon, plus il souffre. - Voilà tout ce qui m'a frappé dans Molière, en dehors de tout ce que le monde sait de sa vie extérieure et de tout ce qu'on eût pu inventer ou présumer autour de lui. Vous eussiez trouvé moyen, vous, de montrer l'intérieur et l'extérieur de cette grande existence, et vous le ferez quand vous voudrez. Moi, je me suis contenté de ce qui me plaisait. J'ignore si le public s'en contentera, car je vous écris ceci, une heure avant le lever du rideau. Mais le mécontentement du public ne me découragerait nullement. Je me dirai, s'il en est ainsi, que la faute est dans la nature incomplète de mon talent, et non dans le but que je me suis proposé.</p>
+			<p>Ce but, je tiens à le constater et à vous le dire : vous avez monté l'action dramatique à sa plus haute puissance, sans vouloir sacrifier l'analyse psychologique ; mais, en voulant faire comme vous, on a sacrifié cette seconde condition essentielle, parce qu'il faut être très-fort pour mener de front les deux choses. Je ne veux pas vous imiter, je ne le pourrais pas, et j'aurais mauvaise grâce à trouver trop vert le raisin luxuriant que vous avez planté et fait mûrir. Je veux faire de mon mieux dans ma voie, et je serais désolé que quelques-uns crussent devoir m'imiter dans mes défauts. Si le théâtre devenait exclusivement une école de patiente et calme analyse, nous n'aurions plus de théâtre ; mais ces mêmes défauts, si on s'habitue à me les pardonner et à prendre en considération mes efforts pour ramener la part d'analyse qui doit être faite, auront produit un bon résultat. La grande difficulté de nos jours, c'est d'analyser rapidement. Nos pères n'étaient pas sceptiques et raisonneurs comme nous : leurs caractères étaient plus d'une pièce, beaucoup de croyances et, par conséquent, de sentiments et de résolutions, n'étaient pas soumis à la discussion. Aujourd'hui, nous sommes autant de mondes philosophiques que nous sommes d'individus pensants. Un Othello moderne aurait besoin de s'expliquer davantage pour être accepté de tous. Et cependant on veut des scènes courtes, des dialogues serrés. - Allons, allons, on va commencer mon humble épreuve ; je vous quitte, et je vous dis : faites mieux que moi, et, dans le bon chemin, donnez l'exemple à moi et aux autres.</p>
+			<signature>G. S.</signature>
+			<p>10 mai 1851.</p>
+			<p>P.-S. - L'épreuve a été acceptée par un public bienveillant et grâce aux efforts des artistes dramatiques auxquels j'adresse mes remercîments. Je ne parlerai pas, cette fois, de mon ami M. Bocage ; ayant toujours à le remercier pour les soins affectueux et intelligents qu'il donne à la mise en scène et à l'interprétation de mes ouvrages, je ne ferais que répéter ce que je lui ai déjà dit deux fois, ce que j'espère avoir à lui dire encore bientôt. - Je me bornerai à dire qu'il est digne par le talent, digne par le coeur.</p>
+			<p>Je dois aussi et j'adresse cordialement d'affectueux éloges à mesdames Lacressonnière, Boudeville et Jouve ; à MM. Ménier, Lacressonnière, Matis, Baron, tous consciencieux et habiles interprètes d'une pensée qui n'est pas à la hauteur du sujet, mais qui est du moins religieuse et fervente pour la mémoire de l'homme de bien et de génie qui fut Molière.</p>
+		</div>
+		<div type="preface"><head>PRÉFACE</head>
+			<p>Depuis quelque temps, j'ai lu, avec assez d'attention pour en faire consciencieusement mon profit, ce qui a été écrit sur mes essais dramatiques. Mais, à mon grand regret, je n'y ai trouvé aucun profit. À quoi cela tient-il ? À la diversité des opinions et des points de vue. Ainsi, pour cette pièce de Molière, l'un m'a dit : « Armande est odieuse, inacceptable au théâtre. » Un autre : « Armande n'est pas assez coupable pour justifier les fureurs et les douleurs de Molière : elle est trop excusable, trop innocente. » Un autre : « Vous avez oublié Molière et sa femme : vous n'avez fait qu'Alceste et Célimène. » Un autre : « Vous auriez dû chercher Alceste et Célimène dans Molière et sa femme : vous avez eu tort de n'y pas songer. » Un autre : « Vous avez fait Molière grand et bon : il était bas et méchant. « Un autre : « Il était grand et fort : vous l'avez fait trop faible, trop humain. » Un autre : « Vous avez traité Condé en petit garçon, et Molière lui frappe trop sur l'épaule. » Un autre : « Vous avez inventé autour de l'agonie de Molière des ouvriers qui n'y étaient point, et cela, pour faire du socialisme. » Un autre : « Vous avez oublié de montrer dans l'agonie de Molière son dévouement pour les machinistes, ce dévouement, cause unique de sa mort, et vous avez perdu là une belle occasion de faire du socialisme. » Un autre : « Le drame s'enfonce dans une obscurité incroyable. » Un autre : « Le drame est d'une simplicité puérile. » Un autre : « Vous avez rabaissé Molière en le montrant jaloux. » Un autre : « Vous avez oublié de nous montrer la jalousie de Molière. » Un autre : « Vous avez supposé bien gratuitement Molière irrité contre les grands seigneurs. » Un autre : « Vous avez omis le sentiment de rage que Molière devait nourrir contre les grands seigneurs, » etc., etc., etc.</p>
+			<p>Je n'exagère pas, je cite textuellement, et ce serait une assez curieuse étude que de rassembler dans un seul tableau tous ces jugements contradictoires avec leurs considérants et leurs attendus.</p>
+			<p>Que conclure de tout cela ? Qu'à force d'avoir des critiques, nous n'avons plus de critique ; et c'est un grand mal que d'être forcé de chercher la vérité tout seul et sans l'aide d'amis ou d'ennemis qui s'entendent pour nous encourager ou nous redresser. Et, cependant, chacun d'eux a raison à son point de vue. Mais pourquoi voient-ils chacun dans une oeuvre dramatique précisément le contraire de ce qu'y voit son voisin ? Ce n'est pas leur faute : c'est celle du temps où nous vivons. Toute chose est discutée, discutable, et c'est ce qui rend l'analyse bien difficile au théâtre.</p>
+			<p>Nos pères n'étaient pas sceptiques en raisonnements comme nous : leurs caractères étaient plus d'une pièce. Beaucoup de croyances et, par conséquent, de sentiments et de résolutions, n'étaient pas soumis à la discussion. Aujourd'hui, nous sommes autant de mondes philosophiques que nous sommes d'individus pensants. Un Othello moderne aurait besoin de s'expliquer davantage pour être accepté de tous, et, cependant, on veut des scènes courtes, des dialogues serrés.</p>
+			<p>Je me garderai bien de défendre le mérite littéraire d'une oeuvre quelconque de mon fait, et je reconnais à la critique tous les droits possibles de contester ce mérite-là. Quant au mérite dramatique, j'en ai fait bon marché, plus que personne, en la dédiant affectueusement à un maître dont je n'essaye même pas d'imiter les qualités, tant je les juge au-dessus des miennes. Ce que je crois devoir défendre envers et contre tous, c'est mon sentiment propre, c'est mon appréciation personnelle du grand Molière, du bon Molière, de l'honnête Molière, quoi qu'on en dise. C'est un tribut que je veux apporter religieusement à la mémoire du maître des maîtres, et je m'en fais un devoir d'autant plus sérieux, que les Tartufes, les Montfleury, les bigots et les calomniateurs de toute espèce, qui l'ont outragé de son vivant, semblent avoir voulu ressusciter tout exprès pour le poursuivre dans ces temps-ci.</p>
+			<p>Avant tout, je demande aux esprits consciencieux, littéraires, religieux ou politiques, qui ne regarderont pas le nom de Molière comme une question sans actualité, de lire, s'ils ne l'ont déjà fait, l'excellent article que M. Despois vient de publier dans la Liberté de penser. Je ne trouverais pas un mot à changer dans cette appréciation historique, si j'avais à en faire le résumé de mes propres notions sur Molière. Après ce consciencieux et véridique travail, dont je voudrais pouvoir faire la préface du mien, je n'ai qu'à confirmer de tout le poids de ma conviction et de ma certitude ces points principaux. Non, Molière ne fut pas l'amant de la mère de sa femme, cela est désormais acquis à l'histoire par des preuves certaines. - Non, rien ne prouve qu'il ait été même l'amant de la soeur de sa femme, de Madeleine Béjart. - Non, rien ne prouve qu'il fût l'amant de mademoiselle Duparc ou de mademoiselle Debrie. - Non, rien ne prouve que sa femme, Armande Béjart, lui ait été infidèle par les sens, tandis que tout prouve qu'elle lui a été infidèle par le coeur. - Non, Molière ne fut pas le courtisan lâche, mais l'ami fidèle de Louis XIV et de Condé. - Non, Amphitryon n'est pas et ne peut pas avoir été la réhabilitation de l'adultère du roi. - Non, Tartufe n'est pas l'appui servile donné au roi contre un parti persécuté. - Non, le mépris de Molière pour la calomnie n'est pas une preuve de sa culpabilité, mais de son innocence. - Non, Molière ne fut ni insolent, ni servile, ni ridicule, ni vindicatif : il fut homme de bien autant qu'homme de génie : son coeur fut le plus ardent, le plus tendre, le plus pur, le plus fidèle coeur de son époque. Son caractère fut irascible, ce fut là tout son défaut ; mais, malade et accablé de fatigue, de souffrance et de chagrin, comme il le fut presque toute sa vie, lui était-il possible d'être autrement ?</p>
+			<p>Fut-il aimé et vénéré jusqu'à sa dernière heure par ses amis, par sa servante, par son protecteur Condé, qui, certes, n'aimait pas les flatteurs, par son élève Baron, qui cependant aimait ou avait aimé sa femme ? Oui, et c'est une preuve irrécusable que la bonté de son coeur et la grandeur de ses sentiments faisaient oublier les inégalités de son humeur.</p>
+			<p>Voilà tout ce que j'ai à dire aux ennemis de l'auteur de Tartufe. Qu'ils tâchent de lire l'histoire de bonne foi, et ils verront que ce n'est pas moi qui ai eu l'honneur d'inventer Molière honnête homme, mais que c'est le témoignage de tous ceux qui l'ont connu et jugé avec impartialité.</p>
+			<p>Quant à ceux qui me reprochent de l'avoir montré trop terre à terre, trop semblable aux autres hommes, trop malheureux des choses vulgaires de la vie, pas assez homme de génie, pas assez grand homme enfin, et qui partent de là pour me faire un crime, une insolence, une audace inouïe du sujet et du titre de ma pièce, je leur répondrai ceci : « Vous auriez raison de me reprocher mon audace, si j'avais tenté de vous montrer Molière écrivain, Molière satirique, Molière railleur, Molière raisonneur, aux prises avec les beaux esprits, les théologues, les philosophes et les critiques de son temps. Mais vous voyez bien que je n'y ai pas même songé, et que l'insolence ne m'est pas venue de vous montrer le coté de l'homme que vous connaissez aussi bien que moi, et que vous appréciez peut-être encore mieux que je ne saurais le faire. Je n'ai voulu peindre de Molière que ce que tout le monde, le premier venu, la servante de Molière par exemple, eût pu voir, comprendre et raconter. Si jamais entreprise fut modeste, c'est celle-là, et vous n'êtes pas justes de chercher l'outrecuidance où il n'y a qu'humilité respectueuse. »</p>
+			<p>À quoi eût servi de vouloir montrer les preuves de la gloire de Molière ? qui donc les ignore ? Lisez Tartufe, lisez le Misanthrope, lisez tous ses chefs-d'oeuvre, et ne demandez pas autre chose. Mais on n'est pas grand homme à toutes les heures de sa vie, parce qu'on est homme avant tout, homme toujours. Certains grands hommes sont de pauvres hommes, vus de près, et, moi, j'ai voulu montrer que Molière, même lorsqu'il était homme faible, malheureux, tourmenté, égaré, était encore un homme excellent, jamais un pauvre homme. J'ai été plus religieux envers lui que la plupart des écrivains de son temps et que tous ses biographes, car tous ont recherché en lui le côté plaisant ou ridicule, même ceux qui l'aimaient et l'admiraient. Mais, dans ce temps-là, on se croyait obligé de trouver un côté comique dans la vie d'un comique : c'était le goût, la mode. Thezzelin croyait rendre hommage à la mémoire de Scaramouche en lui attribuant la vie et les aventures d'un truand, et en écrivant la biographie de cet incomparable artiste dans le goût d'un canevas de bouffonneries italiennes[1]. Brécourt lui-même, le fidèle Brécourt, qui, dans une préface, rendait hommage aux vertus sérieuses de Molière, ne le présentait-il pas sur la scène comme un personnage burlesque dans sa comédie de l'Ombre de Molière ? - De là une foule d'aventures puériles, invraisemblables, apocryphes même, pour avoir l'occasion de dire un bon mot sur Molière ou de faire dire un bon mot à Molière. Je n'ai pas voulu, moi, faire faire de l'esprit à Molière : l'essai m'eût paru une profanation. Il n'y a que Molière qui puisse avoir l'esprit de Molière. Je ne lui ai fait dire que deux mots historiques : l'un tout à fait bonhomme à propos du bonhomme la Fontaine ; l'autre déchirant, celui de son agonie, celui qui pour moi résume toute sa vie de coeur : « Mon_Dieu ! qu'un homme souffre avant de pouvoir mourir ! »</p>
+			<p>Mais à quoi bon ? m'a-t-on dit. Quelle est la morale, quelle est l'utilité de cette peinture domestique ? En quoi Molière nous est-il révélé à son avantage dans ces luttes intimes que tout le monde sait de reste ?</p>
+			<p>D'abord, je vous répondrai que tout le monde ne le savait pas de reste, puisqu'en les racontant, on les a si diversement jugées, puisque, aujourd'hui encore, il est de tradition que Molière fut un Sganarelle, un Arnolphe, sa femme une courtisane, son mariage un inceste flanqué de deux adultères, et la jalousie de Madeleine Béjart une persécution, un danger, un reproche et une malédiction pour lui. Or, si rien de tout cela n'était vrai, n'aurais-je pas fait une chose nouvelle et utile en vous remettant la vérité sous les yeux ?</p>
+			<p>Vous dites que cette vérité-là est de mon invention, que c'est une fantaisie, et, torturant les paroles d'Alexandre Dumas sur Napoléon et sur le libre examen de l'écrivain qui fait parler les grands hommes, vous prétendez connaître le fond du coeur des grands hommes mieux que nous. Eh bien, j'ose vous dire que vous ne le connaissez pas, que vous ne pouvez pas le connaître aussi bien que nous lorsque vous ne vous êtes pas trouvé aux prises avec la nécessité de l'interprétation. La critique est parfois savante (je ne parle pas de celle qui attribue Paul et Virginie à l'abbé de Saint-Pierre : je respecte trop l'originalité de cet aperçu pour le contredire) ; la critique, en général, sait beaucoup, mais elle ne sait, en général, que ce qu'elle a lu.</p>
+			<p>Elle n'a pas le temps, à propos de tout ce qui lui passe sous les yeux, de faire la part des documents sincères et authentiques, et celle des documents mensongers et apocryphes. Elle juge par la mémoire, elle prononce du haut de l'érudition. Elle ne peut faire davantage ; mais je dirais volontiers à tel critique que j'ai vu trancher lestement sur la vie et les sentiments de Molière : « Voyons, faites-nous une biographie de Molière, mais faites-la consciencieuse, impartiale ; feuilletez à nouveau les biographies et les écrits du temps, pesez-en la valeur ; cherchez la vérité au milieu des contradictions flagrantes de ces témoignages contemporains, et concluez avec votre raison, avec votre justice, avec vos entrailles. Eh bien, j'ai la certitude que vous feriez ce que j'ai fait. Lassé de la frivolité, de l'aveuglement ou de la mauvaise foi de ces jugements inconciliables, vous chercheriez Molière dans Molière.</p>
+			<p>D'abord, peut-être dans ses entretiens avec ses amis, qui certes, n'ont pas su rapporter ses propres paroles, mais qui ont, au moins, Chapelle surtout, traduit d'une certaine façon sa pensée, et, enfin, vous reviendriez à Alceste. Vous le reliriez pour la millième fois, mais avec une lumière nouvelle, et vous y verriez la rigidité et la douleur de Molière honnête homme ; la jalousie, la passion, la faiblesse et la force de Molière amoureux ; la miséricorde, la tendresse, la douceur de Molière généreux et bon. Tout cela est dans le Misanthrope. Armande y est tout entière aussi avec sa froideur, sa moquerie, sa vanité, son ingratitude, sa sagesse même ; car, pour moi, Armande est sage, plus sage encore que Célimène. Il y a autant de témoignages en faveur de cette froide vertu qu'il y en a contre, et le témoignage concluant, c'est celui de Molière dans son entretien avec Chapelle, et dans toutes les occasions de sa vie où il a eu occasion de parler de sa femme.</p>
+			<p>Quoi ! À supposer que je me trompe, l'opinion de Molière sur son propre amour serait sans valeur et ne mériterait pas d'être préférée à celle des pamphlétaires de son temps ! C'est un caprice, une fantaisie de ma part d'avoir cru Molière plus clairvoyant et plus véridique que ses détracteurs, ses envieux, ou même ses amis ! La ténacité de son amour, la douleur qui le tue, ne sont-elles pas, d'ailleurs, des preuves sérieuses pour qui regarde sérieusement le caractère de cet homme si sérieux ? On a vu, on voit, je le sais, de grands esprits et de grands coeurs être dupes ; mais est-ce une nécessité qu'ils le soient et n'y a-t-il pas plus de chances pour qu'ils soient justes et lucides ? Moi, je crois que Molière eût méprisé et oublié une femme dissolue ; je crois qu'il a pu estimer la sienne, qu'il n'a souffert que de son ingratitude, de sa coquetterie, de ses travers, de sa sécheresse, et que c'en était bien assez pour le tuer.</p>
+			<p>Ce n'est pas mon oeuvre littéraire que je défends ici, je le répète : je ne suis pas sujet à ce genre d'acharnement. Je défends Molière ; je n'avais pas besoin de défendre son génie, je ne l'ai pas tenté. Mais vous voyez bien que sa vie privée pouvait être défendue, puisqu'elle était attaquée, et qu'en y regardant bien, on peut la trouver pure, douloureuse, grave et surtout, ce qui me tenait au coeur, exempte de ridicule.</p>
+			<p>Quant à Madeleine Béjart, il est hors de doute qu'elle fut l'amie fidèle et dévouée de Molière. Vous voulez qu'elle ait été sa maîtresse. Pourquoi le voulez-vous ? qu'en savez-vous ? Nous n'en avons aucune preuve ; on l'a dit, voilà tout ; mais n'a-t-on pas dit, n'a-t-on pas écrit qu'elle a été sa belle-mère ? Et vous avez maintenant des actes qui établissent également qu'elle était la soeur d'Armande. N'a-t-on pas raconté minutieusement le mariage secret de Molière avec Armande, par crainte de cette mère jalouse qui se serait brouillée avec Molière, et qui certes aurait dû se brouiller d'une manière irrévocable ! Ne sait-on pas aujourd'hui que le mariage de Molière ne fut pas secret, que sa femme porta son nom aussitôt qu'elle en eut le droit, que la fille de Molière porta le doux nom de Madeleine, et que Madeleine Béjart ne cessa pas de faire partie de la troupe de Molière, après le mariage, deux faits qui n'indiquent pas une rupture éclatante, irrévocable, mais, au contraire, des relations de famille très-douces et très pures.</p>
+			<p>Je ne défends plus ici Molière contre ses ennemis, puisqu'il est vrai, hélas ! qu'après deux cents ans, le père de la comédie, le plus grand homme avec Corneille de notre littérature classique, Molière a encore des ennemis acharnés. Mais vous qui aimez Molière, critiquez, censurez ma pièce, la forme, le style, la conduite, blâmez tout, excepté le sentiment qui m'a fait vous montrer un grand homme victime de sa sensibilité, de sa confiance, de sa bonté, de sa franchise, de toutes les causes secrètes de sa grandeur et de son génie.</p>
+			<p>Les causes secrètes, intimes, elles sont du domaine du roman et du théâtre tout comme les effets éclatants. J'eusse pu, je le sais, interpréter autrement et faire une pièce plus gaie ou plus dramatique ; j'eusse pu aussi rester dans la donnée que j'ai suivie et mieux agencer mon petit drame. Ceci est la faute de mon talent et non celle de mon sujet. Critiquez donc ma forme et mes moyens, je vous accorde ce droit-là, et non celui de blâmer mon appréciation, car je la maintiens plus honnête, plus morale, plus vraie que toutes celles que vous m'avez indiquées après coup et que pour rien au monde je n'eusse voulu adopter, même avec la certitude d'une grande réussite de talent.</p>
+			<p>Un mot pour le choix que j'ai fait du théâtre de la Gaieté pour représenter la pièce de Molière. À qui donc en ont ceux qui m'ont blâmé de ce choix ? Ici encore, à propos des acteurs, comme à propos de la pièce, s'élèvent toute sorte de contradictions. « Ces pauvres acteurs du boulevard, a-t-on dit, ils étaient bien étonnés, bien mal à l'aise, d'avoir à débiter une prose plus soignée que celle du mélodrame. » Et cependant, dans les mêmes articles, on reconnaît que tous ces acteurs ont admirablement joué ; on déclare que la pièce a été montée et mise en scène avec un soin exquis ; que madame Lacressonnière a été une Célimène excellente, et M. Paulin Ménier un comique du premier ordre dont la place est aux Français et non à la Gaieté. Pourquoi donc faut-il envoyer au Théâtre-Français tous les talents, toutes les capacités, toutes les grâces ? Est-ce que le Théâtre-Français manque de tout cela ? Non, certes. Et c'est parce qu'il est riche et complet qu'il faut désirer que les artistes éminents des autres théâtres, surtout ceux du boulevard, restent où ils sont ; c'est parce qu'il y a de grands artistes aux boulevards, à la Gaieté comme ailleurs, qu'il faut travailler pour les artistes du boulevard. Quel besoin le Théâtre-Français a-t-il des modernes ? Faibles ou forts, aucun d'eux n'effacera Corneille, Molière, Racine et tant d'autres dont les théâtres subventionnés ont le monopole. Pourquoi les théâtres qui, par leur situation et la modicité des places, sont seuls à la portée du peuple, sont-ils privés de Molière, de Corneille, de Racine et de tous les chefs-d'oeuvre classiques ? On prétend qu'il faut conserver pures les traditions et favoriser la stabilité d'un monument élevé à la mémoire des grands écrivains dramatiques. C'est bien vu dans un certain sens ; mais pourquoi les traditions du Théâtre-Français seraient-elles perdues, pourquoi les savants artistes de ce théâtre seraient-ils découragés ou délaissés si le privilège de représenter les vieux chefs-d'oeuvre cessait d'être leur apanage exclusif ? La question est bien discutable, on l'avouera, et je m'étonne qu'elle n'ait pas été sérieusement entamée sous un gouvernement républicain. Comment ! vous proclamez pour la plupart que le peuple est ignorant, qu'il fréquente les cabarets, qu'il a des moeurs grossières, et vous ne voulez pas l'éclairer ni le moraliser ! vous en évitez, vous en repoussez les moyens ! Vous décrétez que le peuple est indigne d'entendre les oeuvres des maîtres, vous le privez de cette nourriture saine et robuste que les maîtres ont préparée pour lui, cependant, et vous la réservez pour une classe lettrée qui la dédaigne à force d'en être rebattue, qui n'y trouve plus rien de neuf et qui, grâce à l'élégance de ses moeurs, prétend, certes, n'avoir plus besoin des naïfs enseignements de nos pères ! Eh bien, si vous voulez favoriser certaines écoles dramatiques et lyriques, faites-le plus largement encore, si largement que les théâtres subventionnés soient des spectacles gratuits dont tout le monde puisse profiter. De cette manière, je comprendrai votre sollicitude pour un certain groupe d'artistes choisis et pour un certain répertoire d'élite. Mais, si vous n'ouvrez ces sanctuaires qu'aux riches, si leur situation et leur cherté en excluent les pauvres, je n'en vois pas l'utilité. Les riches ont tant d'autres moyens de s'instruire, et les pauvres en ont si peu !</p>
+			<p>Maintenant, dans l'état où sont les choses, n'est-ce pas un devoir pour les gens de lettres, quand ils peuvent le faire, quand des raisons d'affection ou de convenance personnelle ne les en empêchent pas, de porter aux théâtres populaires, le fruit de leur travail le plus soigné, l'expression de leurs sentiments les plus chers ? Appellerez-vous cela du socialisme ? Faites-le si vous voulez, mais vous n'oseriez pas dire que vous n'êtes pas socialiste dans ce cas-là, et à ce point là, de vouloir instruire et moraliser des classes avec lesquelles il faudra compter tôt ou tard. N'est-ce pas votre intérêt comme le leur ? Est-on votre ennemi parce qu'on vous conseille ? Est-ce qu'Alexandre Dumas, que vous n'accusez pas de socialisme échevelé et qui a chanté toutes les puissances comme toutes les misères, n'a pas bien fait de donner au Cirque une magnifique étude de Napoléon ? Est-ce qu'il n'est pas le seul jusqu'à cette heure qui ait fait parler avec grandeur ce grand personnage ? Est-ce qu'il n'est pas écouté et compris par ces spectateurs à cinquante centimes, plus naïvement, plus religieusement qu'il ne le serait par les habitués de la rue de Richelieu ? Les lettrés ! nous n'avons rien à leur apprendre, ils en savent tous autant les uns que les autres, autant que nous par conséquent ; mais le peuple, il est beau temps qu'on lui donne à sentir ce qu'on peut faire de mieux. La littérature sérieuse l'ennuie, dit-on ; il ne la comprend pas. Je n'en crois rien ; mais, s'il en est ainsi, raison de plus pour insister auprès de lui et pour l'habituer aux émotions ou aux réflexions sérieuses.</p>
+			<p>Quant à moi qui ne suis pas habile et qui cherche toujours sans jamais me flatter d'avoir trouvé, je suis satisfait d'avoir donné à un théâtre du peuple, non pas une pièce que j'estime bonne, mais une pièce que j'ai faite avec soin et conscience, où j'ai été impartial, je m'en flatte, et dont l'utilité m'est suffisamment démontrée par les colères étranges de certaines gens.</p>
+			<p>La pièce complète que je publie ici est le premier jet de ma pensée sur la vie intérieure de Molière : c'était long, trop long de beaucoup pour le théâtre, et on a dû en retrancher une partie considérable. Il est résulté de ces retranchements faits un peu tard, à cause de mon éloignement, que la pièce, sans acquérir le mouvement qui lui manquait, a perdu, selon moi, quelques qualités essentielles de l'analyse. Plusieurs esprits sérieux m'ont reproché avec raison d'avoir fait représenter une analyse incomplète. Elle était trop complète d'abord, pas assez ensuite ; mais la faute en est à moi seul, nullement aux conseils qui m'ont dirigé dans cette exécution. La faute était et est restée dans la pièce elle-même. Si certains développements eussent été à leur place, on n'eût pas été forcé de les retrancher absolument : on eût laissé le nécessaire. La pièce était donc faible de contexture et peu réparable de ce côté. Mais, ceci accordé, on trouvera peut-être quelque intérêt à la lecture. Du moins, ceux qui se sont attendris naïvement en voyant souffrir un grand homme, ceux qui aiment le côté humain des caractères, le calice de l'homme divin et sa défaillance à la veille du sacrifice, les larmes de Jeanne d'Arc blessée et découragée, la faiblesse des forts, en un mot, cette faiblesse touchante qui les fait aimer de tous, parce qu'en ces moments-là tous les comprennent et les sentent vivre dans leur propre coeur, ceux-là, dis-je, liront avec bienveillance une étude plus développée et pardonneront ainsi à l'absence des qualités dramatiques.</p>
+		</div>
+
+	<castList><head>DISTRIBUTION.</head>
+		<castItem><role id="MOLIÈRE" sex="1" type="H" statut="auteur" age="A" stat_amour="néant">MOLIÈRE</role>. M. Bocage.</castItem>
+		<castItem><role id="CONDÉ" sex="1" type="H" statut="prince" age="A" stat_amour="néant">CONDÉ</role>. M. Lacressonnière.</castItem>
+		<castItem><role id="BRÉCOURT" sex="1" type="H" statut="comédien" age="A" stat_amour="néant">BRÉCOURT</role>. M. Matis.</castItem>
+		<castItem><role id="DUPARC" sex="1" type="H" statut="comédien" age="A" stat_amour="néant">DUPARC</role>, dit Gros-René (Paulin Ménier).</castItem>
+		<castItem><role id="BARON" sex="1" type="H" statut="comédien" age="A" stat_amour="néant">BARON</role>, Baron.</castItem>
+		<castItem><role id="LOUIS XIV" sex="1" type="H" statut="roi" age="A" stat_amour="néant">LOUIS XIV</role>, Eugène Bondois.</castItem>
+		<castItem><role id="UN BEL ESPRIT" sex="1" type="H" statut="aristocrate" age="A" stat_amour="néant">UN BEL ESPRIT</role>. ***</castItem>
+		<castItem><role id="UN DOUCEREUX" sex="1" type="H" statut="aristocrate" age="A" stat_amour="néant">UN DOUCEREUX</role>. ***</castItem>
+		<castItem><role id="UN MARQUIS" sex="1" type="H" statut="marquis" age="A" stat_amour="néant">UN MARQUIS</role>. ***</castItem>
+		<castItem><role id="CHEF MACHINISTE" sex="1" type="H" statut="machiniste" age="A" stat_amour="néant">CHEF MACHINISTE</role>, (Fresne).</castItem>
+		<castItem><role id="BRIGADIER MACHINISTE" sex="1" type="H" statut="machiniste" age="A" stat_amour="néant">BRIGADIER MACHINISTE</role>, (Richer).</castItem>
+		<castItem><role id="MADELEINE BÉJART" sex="2" type="H" statut="comédien" age="A" stat_amour="néant">MADELEINE BÉJART</role>, (Mmes Boudeville).</castItem>
+		<castItem><role id="ARMANDE BÉJART" sex="2" type="H" statut="comédien" age="A" stat_amour="néant">ARMANDE BÉJART</role>, (Lacressonnière).</castItem>
+		<castItem><role id="PIERRETTE LAFORÊT" sex="2" type="H" statut="domestique" age="A" stat_amour="néant">PIERRETTE LAFORÊT</role>, servante de Molière (Hortense Jouve).</castItem>
+		<castItem><role id="MADELEINE" sex="2" type="H" statut="enfant" age="E" stat_amour="néant">MADELEINE</role>, fille de Molière (de six à huit ans). (Marie Collin).</castItem>
+		<castItem><role id="DEUX BELLES DAMES" sex="2" type="H" statut="bourgeois" age="A" stat_amour="néant">DEUX BELLES DAMES</role>.</castItem>
+		<castItem><role id="UNE VIEILLE DAME" sex="2" type="H" statut="bourgeois" age="V" stat_amour="néant">UNE VIEILLE DAME</role>.</castItem>
+		<castItem><role id="PEUPLE" sex="0" type="H" statut="peuple" age="A" stat_amour="néant">OUVRIERS, DAMES ET MESSIEURS, MUSICIENS</role>, etc.</castItem> 
+	</castList>
+	<set location="France" country="France" periode="XVIIème" gps="(N/A)">Le premier acte, dans le Limousin ; le deuxième, à Versailles ; le troisième, à Auteuil ; le quatrième et le cinquième, à Paris.</set>
+	<note>Tiré de "Théâtre complet de George Sand - Première série", Calmann Lévy, 1877. pp. 320-454. </note> 
+</front>
+<body>
+<div1 type="act" n="1"><head>ACTE I</head>
+<stage type="decor">Arbres et rochers sur une hauteur. - Chemin creux au fond.</stage>
+<div2 type="scene" n="1"><head>SCÈNE PREMIÈRE. DUPARC, puis BRÉCOURT.</head>
+<stage type="location/vehicule/stop">Brécourt est dans une carriole-fourgon traînée par un cheval, qu'il arrête sur le théâtre.</stage>
+<sp stage="entrance" who="BRÉCOURT"><speaker>BRÉCOURT, descendant du fourgon.</speaker>
+<p id="1">
+	<s id="1">Cet endroit-ci me semble disposé à souhait pour la halte, le repas et la sieste. </s>
+	<s id="2">Ces paysans nous avaient bien dit que nous trouverions une fontaine ombragée au faîte de la montée.</s>
+</p>
+</sp>
+<sp stage="get/away" who="DUPARC"><speaker>DUPARC, ôtant son arquebuse et descendant un sentier.</speaker>
+<stage type="whistle">Il siffle ses chiens.</stage>
+<p id="2">
+	<s id="1">Tiburce ! </s>
+	<s id="2">Artaban !</s>
+</p>
+</sp>
+<sp who="BRÉCOURT"><speaker>BRÉCOURT.</speaker>
+<p id="3">
+	<s id="1">Oublie donc un peu tes chiens, et me viens aider à déballer nos provisions de bouche. </s>
+	<s id="2">Nous serons bien ici... </s>
+	<s id="3">Les coussins du chariot pour asseoir nos dames… le panier aux vivres... </s>
+	<s id="4">Tout doux ! </s>
+	<s id="5">Ne cassons rien... </s>
+	<s id="6">Nous y sommes. </s>
+	<s id="7">Et si nous allumions du feu ?</s>
+</p>
+</sp>
+<sp stage="help/exit/furniture" who="DUPARC"><speaker>DUPARC, qui l'a aidé à sortir du fourgon un grand panier carré, des coussins et divers ustensiles.</speaker>
+<p id="4">
+	<s id="1">Pourquoi faire ?</s>
+</p>
+</sp>
+
+
+
+
+
+
+</div2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div1>
+<div1 type="act" n="1"><head>ACTE II</head>
+<stage type="decor">Au palais de Versailles. - Une salle d'attente servant de foyer aux acteurs. Toilettes, miroirs. Porte au fond. Une fenêtre donnant sur les jardins. Une porte de côté qui est celle du cabinet de toilette de Molière.</stage>
+<div2 type="scene" n="1"><head>SCÈNE PREMIÈRE. Pierrette, Molière.</head>
+<stage type="costume">Molière, en costume de Sganarelle, sort du cabinet avec Pierrette Laforêt, qui continue de l'habiller en marchant.</stage>
+<sp who="MOLIÈRE"><speaker>MOLIÈRE.</speaker>
+<p id="1">
+	<s id="1">Allons, allons, Laforêt, c'est bien ; je suis prêt, n'est-ce pas ?</s>
+</p>
+<stage type="">Il s'approche et regarde l'heure à une pendule placée sur la cheminée.</stage>
+</sp>
+<sp who="PIERETTE"><speaker>PIERETTE.</speaker>
+<p id="2">
+	<s id="1">Hé, monsieur Molière, donnez-vous le temps ! </s>
+	<s id="2">Que vous êtes donc vif !</s>
+</p>
+</sp>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div1>
+<div1 type="act" n="3"><head>ACTE III</head>
+<stage type="location/decor">À Auteuil. - Une chambre de travail confortable mais simple, éclairée faiblement par une lampe à chapiteau. Un bureau avec des papiers épars. Une fenêtre fermée de rideaux épais est à la gauche de Molière. Le bureau se trouve entre cette fenêtre et le canapé. Une porte, à la droite de l'acteur, conduit il la chambre à coucher de Molière.</stage>
+
+
+
+
+
+
+
+<div2 type="scene" n="8"><head>SCÈNE VIII. Les mêmes, Duparc, Madeleine, Brécourt.</head>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<sp who="DUPARC"><speaker>DUPARC.</speaker>
+<p id="29">
+	<s id="1">C'en est trop et j'éclate à la fin ! </s>
+	<s id="2">Il faut que vous n'ayez point de honte de vouloir imputer des torts à qui vaut mille fois mieux que vous ! </s>
+	<s id="3">À votre soeur, qui s'est sacrifiée pour vous ! </s>
+	<s id="4">Oh ! </s>
+	<s id="5">Nous le savons tous, encore qu'elle ne l'ait jamais dit, et, vous qui le savez mieux que personne, vous lui en faites un reproche ! </s>
+	<s id="6">À Molière ! </s>
+	<s id="7">Molière, dont votre infernale coquetterie a usé les jours, comme ces flambeaux que les enfants et les fous promènent et secouent à tous les vents, pour réjouir leurs yeux stupides des combats et des défaillances de leur flamme ! </s>
+	<s id="8">Vous prétendez être vertueuse, vous ? Vous profanez un mot qui ne vous convient point. </s>
+	<s id="9">Vous ne livrez pas votre coeur, vous n'avez pas de coeur ! </s>
+	<s id="10">Mais vous prostituez votre froid visage à toutes les oeillades impertinentes, votre oreille banale à tous les sots propos, vos heures fainéantes à toutes les promenades et parades où se complaît la vanité des coquettes. </s>
+	<s id="11">Oui, je vous le dis, vous êtes une coquette, et c'est ce qu'il y a de plus froid, de plus lâche et de plus méchant dans le monde.</s>
+</p>
+<stage type="away/stand/frighten/furious">Armande fait un pas pour s'en aller, Baron se lève et fait un mouvement. Il rencontre les yeux triomphants d'Armande, qui est restée comme impassible aux reproches de Duparc. Baron, effrayé, se recule. Armande perd son sang-froid et laisse voir sa rage et sa douleur.</stage>
+</sp>
+<sp who="ARMANDE"><speaker>ARMANDE.</speaker>
+<p id="30">
+	<s id="1">Je méprise les injures ; mais, puisque j'y suis exposée dans ma propre maison, sans que Molière veuille m'accueillir comme sa femme et me protéger comme il le doit, je cède la place à ceux qui la veulent prendre.</s>
+</p>
+D'un ton impératif et repoussant Brécourt et Madeleine, qui veulent la retenir.
+<p id="31">
+	<s id="1">Restez, restez, vous autres ! </s>
+	<s id="2">Car je vous abandonne Molière, et c'est pour toujours ! </s>
+	<s id="3">Ah ! </s>
+	<s id="4">C'est bien moi qui puis dire comme l'un de ses personnages : « Ma maison m'est effroyable, et je n'y rentre point sans y trouver le désespoir !... »</s>
+</p>
+<stage type="exit/faint/fall">Elle sort en cachant sa figure dans ses mains. Madeleine tombe pâmée sur une chaise, Baron retombe sur la table, la tête dans ses deux mains.</stage>
+</sp>
+</div2>
+
+</div1>
+
+
+</body>
+</text>
+</TEI>

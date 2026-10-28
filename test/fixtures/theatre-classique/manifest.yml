@@ -1,0 +1,25 @@
+# Nabu fixture manifest (P5-4 "fixture sentinel"). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# Three files are documented TRIMS (fetched for URL-liveness only); the
+# fourth is byte-identical to the mirror at the pinned commit.
+source: theatre-classique
+adapter_test: null
+retrieved: "2026-10-28"
+files:
+  - path: xml/MOLIERE_MISANTHROPE.xml
+    url: https://raw.githubusercontent.com/dracor-org/theatre-classique/d6ed03d8844f4be19f83a78d00ebf3cf7c86b95e/xml/MOLIERE_MISANTHROPE.xml
+    whole: false
+    trim: teiHeader + front verbatim; act 1 scene 1 (first 8 speeches) + act 2 scene 1 (first 2) (README)
+  - path: xml/SAND_MOLIERE.xml
+    url: https://raw.githubusercontent.com/dracor-org/theatre-classique/d6ed03d8844f4be19f83a78d00ebf3cf7c86b95e/xml/SAND_MOLIERE.xml
+    whole: false
+    trim: teiHeader + front verbatim; act 1 scene 1 (first 4), act 2 scene 1 (first 2), act 3 scene 8 cut to the loose-stage speech + neighbours (README)
+  - path: xml/ABEILLE_CORIOLAN.xml
+    url: https://raw.githubusercontent.com/dracor-org/theatre-classique/d6ed03d8844f4be19f83a78d00ebf3cf7c86b95e/xml/ABEILLE_CORIOLAN.xml
+    whole: false
+    trim: teiHeader + front verbatim; act 1 scene 1 (first 4 speeches) + act 2 scene 1 (first 2) (README)
+  - path: xml/BARY_BELLESMAINS.xml
+    url: https://raw.githubusercontent.com/dracor-org/theatre-classique/d6ed03d8844f4be19f83a78d00ebf3cf7c86b95e/xml/BARY_BELLESMAINS.xml
+    whole: true
+    trim: none
