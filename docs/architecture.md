@@ -1474,6 +1474,29 @@ It stays a bench-only module outside the links-stamp closure (no
 persisted scope re-mines); the fixture pin carries the on-state, equal
 to the off-state by construction (no fixture gram reaches df 10).
 
+**The third borrowing — the contiguity bonus** (`Query::ContiguityBonus`,
+`ParallelsContiguous` and its fuzzy/hub compositions, bench knobs
+`CONTIGUITY=off|on` and `CONTIGUITY_WEIGHT=<W>`). The exact tier scores a
+bag of shared grams, so a candidate holding two anchor grams as ONE
+continuous phrase ties one holding them scattered. Anchor gram i
+CONTINUES its predecessor when both are matched and the candidate's stored
+search form holds the anchor's (gram_size + 1)-token phrase at i−1
+verbatim (verified on the candidate side — two phrase hits prove
+presence, never adjacency); each continuing gram earns W × its own 1/df
+on top, so score' = score + W·Σ 1/df(continuing grams): linear in the
+run's rarity mass, contiguous strictly above scattered at equal count and
+rarity, bounded by (1 + W)·score, nothing manufactured from common grams.
+W defaults to 1; W = 0 reports the figures with scoring byte-identical
+to the exact engine's. Every hit carries two figures, in anchor tokens,
+never conflated: `longest_run` (the longest anchor phrase the candidate
+holds verbatim through matched grams) and `bridged_span` (the longest
+chain of such runs joined across at most one damaged, lost or intruded
+token on each side, verified in both texts — reported, never scored).
+Like its predecessors it sits outside the links-stamp closure, reachable
+only through the bench; the fixture pin carries the on-state, equal to
+the off-state (no fixture line yields a run). Recall on the live gold
+sets: not yet measured.
+
 ## 14. The timeline — when and where a document is from (P15-2)
 
 The historical linguist and documentary historian ask "only 2nd-century
