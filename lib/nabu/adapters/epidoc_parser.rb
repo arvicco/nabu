@@ -176,7 +176,7 @@ module Nabu
     # Perseus adapter passes ["translation", "edition"] for translation refs
     # (785 of 786 perseus-eng files use "translation"; one uses "edition"; none
     # carries both, verified against the 2026-07-03 snapshot).
-    class EpidocParser
+    class EpidocParser < StreamingTeiParser
       # One citable unit as extracted from the stream: citation is the dotted
       # path (e.g. "2", "1.7"), text is cleaned NFC content, annotations the
       # inline layers mined beside it (InlineLayer; {} when none).
@@ -388,9 +388,12 @@ module Nabu
                           "also failed: #{e.message.delete_prefix("#{path}: ")}"
       end
 
+      # The second extractor: the skeleton's #extract binds the one
+      # #extraction_class, so the P4 rung opens its own Reader over the
+      # shared IO seam (same malformed-XML wording).
       def extract_p4_units(source, path:, mode:)
         with_io(source) do |io|
-          P4Extraction.new(reader: Nokogiri::XML::Reader(io, path), mode: mode).call
+          P4Extraction.new(reader: Nokogiri::XML::Reader(io, path), path: path, mode: mode).call
         end
       rescue Nokogiri::XML::SyntaxError => e
         raise ParseError, "#{path}: malformed XML: #{e.message}"
@@ -411,26 +414,11 @@ module Nabu
         end
       end
 
-      def resolve_canonical_path(source, canonical_path)
-        return canonical_path if canonical_path
-        return source if source.is_a?(String)
-        return source.path if source.respond_to?(:path) && source.path
-
-        raise ArgumentError, "canonical_path: is required when parsing from an IO without a #path"
-      end
-
       def extract_units(source, path:, urn:, division_types:, structural:)
-        with_io(source) do |io|
-          Extraction.new(reader: Nokogiri::XML::Reader(io, path), path: path, urn: urn,
-                         division_types: division_types, structural: structural).call
-        end
-      rescue Nokogiri::XML::SyntaxError => e
-        raise ParseError, "#{path}: malformed XML: #{e.message}"
+        extract(source, path: path, urn: urn, division_types: division_types, structural: structural)
       end
 
-      def with_io(source, &)
-        source.is_a?(String) ? File.open(source, "r", &) : yield(source)
-      end
+      def extraction_class = Extraction
 
       def build_document(units, urn:, language:, title:, path:, division_types: DIVISION_TYPES)
         document = Document.new(urn: urn, language: language, title: title, canonical_path: path)
@@ -457,12 +445,7 @@ module Nabu
       # The single-pass Reader state machine. Header phase records
       # cRefPatterns; body phase tracks the div stack and captures the text of
       # leaf citation units.
-      class Extraction
-        READER = Nokogiri::XML::Reader
-        TEXT_NODE_TYPES = [
-          READER::TYPE_TEXT, READER::TYPE_CDATA,
-          READER::TYPE_WHITESPACE, READER::TYPE_SIGNIFICANT_WHITESPACE
-        ].freeze
+      class Extraction < StreamingTeiParser::Walker
         DROPPED_ELEMENTS = %w[note].freeze
         BREAK_ELEMENTS = %w[lb pb milestone].freeze
 
@@ -493,8 +476,7 @@ module Nabu
         end
 
         def initialize(reader:, path:, urn:, division_types: DIVISION_TYPES, structural: false)
-          @reader = reader
-          @path = path
+          super(reader: reader, path: path)
           @urn = urn
           @division_types = division_types
           @structural = structural
@@ -515,14 +497,6 @@ module Nabu
         end
 
         private
-
-        def process(node)
-          case node.node_type
-          when READER::TYPE_ELEMENT then start_element(node)
-          when READER::TYPE_END_ELEMENT then end_element(node)
-          when *TEXT_NODE_TYPES then text_node(node)
-          end
-        end
 
         def start_element(node)
           name = local_name(node)
@@ -875,10 +849,6 @@ module Nabu
 
           @units << Unit.new(citation: citation, text: Normalize.nfc(text), annotations: annotations)
         end
-
-        def local_name(node)
-          node.name.split(":").last
-        end
       end
       private_constant :Extraction
 
@@ -887,11 +857,9 @@ module Nabu
       # structure — numbered container divs + milestone streams (:containers),
       # numbered lb marks (:lines), or bare p ordinals (:paragraphs). Raises
       # P4Declined the moment the header shows a usable CTS cRefPattern.
-      class P4Extraction
+      class P4Extraction < StreamingTeiParser::Walker
         MODES = %i[containers lines paragraphs].freeze
 
-        READER = Nokogiri::XML::Reader
-        TEXT_NODE_TYPES = Extraction::TEXT_NODE_TYPES
         # <note> parity with the P5 pass; <head> is title apparatus that the
         # P5 pass excludes structurally (it sits outside citation units) but a
         # P4 container div would otherwise swallow.
@@ -913,8 +881,8 @@ module Nabu
           "lsquo" => "‘", "rsquo" => "’", "ldquo" => "“", "rdquo" => "”"
         }.freeze
 
-        def initialize(reader:, mode:)
-          @reader = reader
+        def initialize(reader:, path:, mode:)
+          super(reader: reader, path: path)
           @mode = mode
           @body_depth = 0
           @drop_depth = 0
@@ -938,6 +906,8 @@ module Nabu
 
         private
 
+        # The Walker dispatch plus entity references (the unfetchable P4
+        # DTD's names), and text routed through #text rather than a handler.
         def process(node)
           case node.node_type
           when READER::TYPE_ELEMENT then start_element(node)
@@ -1116,10 +1086,6 @@ module Nabu
 
         def blank?(value)
           value.nil? || value.empty?
-        end
-
-        def local_name(node)
-          node.name.split(":").last
         end
       end
       private_constant :P4Extraction
