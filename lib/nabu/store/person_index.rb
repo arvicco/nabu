@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require "json"
+
 module Nabu
   module Store
     # The derived person index (P97-2, migration 031 — owner-ruled 2026-09-11, option b):
@@ -28,9 +30,16 @@ module Nabu
     # kokubunken: the record's own form, which is already native), and
     # refs (migration 044) carries links into other prosopographies as
     # verbatim URLs (Elephantine: Trismegistos; kokubunken: VIAF).
+    # Migration 052 adds two lanes, both optional per authority: texts
+    # (person_index_texts — the person's attestations, the publication as
+    # the authority cites it plus the HELD document's urn when the
+    # derivation resolved one) and attributes (attributes_json — the
+    # authority's own fields the CBDB-born columns have no lane for).
+    # "pna" (Nabu::PnaPersons) fills both.
     module PersonIndex
       TABLE = :person_index
       NAMES_TABLE = :person_index_names
+      TEXTS_TABLE = :person_index_texts
 
       INSERT_SLICE = 2_000
 
@@ -38,14 +47,20 @@ module Nabu
 
       # Every authority a producer derives (each keyed by its source slug),
       # the default first — the order name lookups search in.
-      AUTHORITIES = [DEFAULT_AUTHORITY, "edh", "elephantine", "aozora", "kokubunken", "dprr",
+      AUTHORITIES = [DEFAULT_AUTHORITY, "edh", "elephantine", "aozora", "kokubunken", "dprr", "pna",
                      "sillok", "goryeosa", "goryeosa-jeoryo"].freeze
+
+      # One attestation: the publication as the authority cites it, and the
+      # held document's urn (nil = a bare citation).
+      Text = Data.define(:publication, :urn)
 
       Person = Data.define(:authority, :person_id, :name, :name_han,
                            :birth_year, :death_year, :index_year,
-                           :dynasty, :dynasty_han, :female, :name_keys, :refs) do
-        # refs is optional: an authority without external links omits it.
-        def initialize(refs: nil, **fields)
+                           :dynasty, :dynasty_han, :female, :name_keys, :refs,
+                           :attributes, :texts) do
+        # refs, attributes and texts are optional: an authority without
+        # external links, extra fields or attestations omits them.
+        def initialize(refs: nil, attributes: nil, texts: nil, **fields)
           super
         end
       end
@@ -74,33 +89,52 @@ module Nabu
         return nil unless available?(db)
 
         count = 0
+        # Migration 052's lanes (texts + attributes) ride when the catalog has them.
+        lanes = db.table_exists?(TEXTS_TABLE)
         db.transaction do
           db[NAMES_TABLE].where(authority: authority).delete
+          db[TEXTS_TABLE].where(authority: authority).delete if lanes
           db[TABLE].where(authority: authority).delete
-          rows = []
-          name_rows = []
+          batch = { TABLE => [], NAMES_TABLE => [], TEXTS_TABLE => [] }
           persons.each do |person|
-            rows << { authority: authority, person_id: person.person_id,
-                      name: person.name, name_han: person.name_han,
-                      birth_year: person.birth_year, death_year: person.death_year,
-                      index_year: person.index_year, dynasty: person.dynasty,
-                      dynasty_han: person.dynasty_han, female: person.female,
-                      refs: person.refs }
+            batch[TABLE] << person_row(authority, person, lanes: lanes)
             person.name_keys.uniq.each do |key|
-              name_rows << { authority: authority, person_id: person.person_id, name_key: key }
+              batch[NAMES_TABLE] << { authority: authority, person_id: person.person_id, name_key: key }
             end
+            batch[TEXTS_TABLE].concat(text_rows(authority, person)) if lanes
             count += 1
-            next unless rows.size >= INSERT_SLICE
-
-            db[TABLE].multi_insert(rows)
-            db[NAMES_TABLE].multi_insert(name_rows)
-            rows.clear
-            name_rows.clear
+            flush!(db, batch) if batch[TABLE].size >= INSERT_SLICE
           end
-          db[TABLE].multi_insert(rows) unless rows.empty?
-          db[NAMES_TABLE].multi_insert(name_rows) unless name_rows.empty?
+          flush!(db, batch)
         end
         count
+      end
+
+      def person_row(authority, person, lanes:)
+        row = { authority: authority, person_id: person.person_id,
+                name: person.name, name_han: person.name_han,
+                birth_year: person.birth_year, death_year: person.death_year,
+                index_year: person.index_year, dynasty: person.dynasty,
+                dynasty_han: person.dynasty_han, female: person.female,
+                refs: person.refs }
+        row[:attributes_json] = person.attributes && JSON.generate(person.attributes) if lanes
+        row
+      end
+
+      def text_rows(authority, person)
+        Array(person.texts).each_with_index.map do |text, position|
+          { authority: authority, person_id: person.person_id, position: position,
+            publication: text.publication, urn: text.urn }
+        end
+      end
+
+      def flush!(db, batch)
+        batch.each do |table, rows|
+          next if rows.empty?
+
+          db[table].multi_insert(rows)
+          rows.clear
+        end
       end
 
       # Reads over one authority's derived slice.
@@ -141,8 +175,20 @@ module Nabu
             birth_year: row[:birth_year], death_year: row[:death_year],
             index_year: row[:index_year], dynasty: row[:dynasty],
             dynasty_han: row[:dynasty_han], female: row[:female],
-            name_keys: [], refs: row[:refs]
+            name_keys: [], refs: row[:refs],
+            attributes: row[:attributes_json] && JSON.parse(row[:attributes_json]),
+            texts: texts_of(row[:person_id])
           )
+        end
+
+        # The person's attestations in the authority's order; nil when the
+        # authority derives none (the lane is optional per authority).
+        def texts_of(person_id)
+          return nil unless @db.table_exists?(TEXTS_TABLE)
+
+          texts = @db[TEXTS_TABLE].where(authority: @authority, person_id: person_id).order(:position)
+                                  .map { |row| Text.new(publication: row[:publication], urn: row[:urn]) }
+          texts.empty? ? nil : texts
         end
       end
     end

@@ -1,0 +1,19 @@
+Id = unique id number of the person
+
+Label = name of the person
+
+NameOrigin = language of the personal name (see Lists/languages)
+
+Gender = gender of the personal name (fem, masc, masc/fem, Unknown)
+
+Time = period when the person is attested (corresponding to the reigns of Assyrian kings; see Lists/timeperiods)
+
+Profession = profession or a similar description of the person (see Lists/professionCategory)
+
+Place = place where the person is primarily attested (see Lists/places)
+
+Ethnicity = ethnicity or geographic origin of the person (see Lists/origins)
+
+start date = date when the Time attribute starts (DD/MM/YYYY BCE)
+
+end date = date when the Time attribute ends (DD/MM/YYYY BCE)
