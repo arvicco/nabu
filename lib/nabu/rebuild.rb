@@ -637,7 +637,10 @@ module Nabu
 
         producer = entry.adapter_class.person_index_producer(catalog: db)
         authority = producer.respond_to?(:authority) ? producer.authority : Store::PersonIndex::DEFAULT_AUTHORITY
-        next if dirty && !dirty.include?(entry.slug) && Store::PersonIndex.populated?(db, authority: authority)
+        # A producer that reads OTHER sources' held documents (pna's
+        # crosswalk over oracc/cdli) re-derives when any of them is dirty.
+        inputs = [entry.slug, *(producer.respond_to?(:reads_sources) ? producer.reads_sources : [])]
+        next if dirty && !inputs.intersect?(dirty) && Store::PersonIndex.populated?(db, authority: authority)
 
         producer.run(entry.slug, workdir: workdir_for(entry.slug))
       end

@@ -45,4 +45,26 @@ class RebuildPersonIndexTest < Minitest::Test
     assert Nabu::Store::PersonIndex.populated?(@catalog, authority: "elephantine"),
            "the cbdb slice must not stand in for the elephantine one"
   end
+
+  # The pna producer resolves its links against the HELD oracc/cdli
+  # documents, so a dirty oracc must re-derive a clean pna slice — else an
+  # incremental run would keep links a full rebuild would re-resolve.
+  def test_a_clean_producer_re_derives_when_a_source_it_reads_is_dirty
+    FileUtils.mkdir_p(File.join(@root, "pna"))
+    PnaFixtureZips.pack!(Nabu::TestSupport.fixtures("pna"), File.join(@root, "pna"))
+    stale = Nabu::Store::PersonIndex::Person.new(
+      authority: "pna", person_id: "stale_1", name: "stale", name_han: nil, birth_year: nil, death_year: nil,
+      index_year: nil, dynasty: nil, dynasty_han: nil, female: false, name_keys: []
+    )
+    Nabu::Store::PersonIndex.derive!(@catalog, authority: "pna", persons: [stale])
+    registry = Registry.new([Entry.new("pna", Nabu::Adapters::Pna)])
+    rebuild = Nabu::Rebuild.new(config: Config.new(@root), registry: registry)
+
+    rebuild.send(:replay_person_index, @catalog, dirty: ["dprr"])
+    assert_equal 1, Nabu::Store::PersonIndex.resolver(@catalog, authority: "pna").size,
+                 "an unrelated dirty source leaves the populated slice alone"
+
+    rebuild.send(:replay_person_index, @catalog, dirty: ["oracc"])
+    assert_equal 8, Nabu::Store::PersonIndex.resolver(@catalog, authority: "pna").size
+  end
 end

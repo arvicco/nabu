@@ -4603,6 +4603,27 @@ pleiades:
   # dump is large + version-pinned; the Zenodo URL-pin stays optional).
   sync_policy: manual
 
+pna:   # 02-sources row 311
+  adapter: Nabu::Adapters::Pna
+  adopted: "2026-10-28"
+  kind: module   # person authority — zero document rows, the cbdb/dprr shape
+  axes: [cuneiform]
+  wired: false   # until the first real sync is verified
+  sync_policy: manual
+  # PNA — "A Social Network of the Prosopography of the Neo-Assyrian
+  # Empire" (Jauhiainen & Alstola, Helsinki; JOHD 8:8, 2022): the persons
+  # of the Prosopography of the Neo-Assyrian Empire (Radner & Baker eds.)
+  # with their attestations. Zenodo record 6220409 = version 3 of concept
+  # 10.5281/zenodo.5862904; three files fetched verbatim behind hard
+  # sha256 pins (immutable — a new version is an owner re-pin). LICENSE:
+  # README.txt verbatim "These files are licensed under a Creative Commons
+  # Attribution-ShareAlike 3.0 Unported License." (the record field agrees,
+  # cc-by-sa-3.0; read 2026-10-28) → attribution. EXPECTED FIRST SYNC
+  # (~8 MB, seconds): 17,387 persons + 25,164 person-text links → a
+  # 17,387-row "pna" person-index slice; the crosswalk resolves 17,789
+  # links (3,084 of 4,188 texts) onto held oracc/cdli documents. The
+  # 149,045 co-occurrence edges are skipped by rule (no relation lane).
+
 prague-bible-1488:   # P116-1
   adapter: Nabu::Adapters::PragueBible1488
   adopted: "2026-10-10"

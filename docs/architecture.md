@@ -2105,6 +2105,20 @@ a prefix range per facet over the existing (facet, value) index, kept at
 a word boundary — no new table, no derivation step, nothing for rebuild
 to replay.
 
+**Attestations and attributes on a person (migration 052).** An authority
+whose persons are defined by their texts (PNA, `Nabu::PnaPersons`) fills
+two optional lanes of its slice: `person_index_texts` — each person's
+texts in the authority's order, the publication as cited plus the urn of
+the HELD document the derivation's crosswalk resolved (NULL = a bare
+citation) — and `person_index.attributes_json`, the authority's own
+per-person fields verbatim. Both are derived wholesale with the slice.
+Because PNA's crosswalk reads the catalog's held oracc/cdli documents, its
+producer declares `reads_sources`, and an incremental rebuild re-derives
+the slice whenever one of those sources is dirty (a full rebuild replays
+the person index after every source has loaded). A plain sync of oracc or
+cdli does not re-resolve the links — they wait for the next pna sync or
+rebuild.
+
 **Read surface.** Every reader opens the links UNION (`Store::LinkLayers`):
 the journal with the mined store ATTACHed read-only and two temp views
 (`links`, `link_runs`) shadowing the tables — mined rows carry negated
