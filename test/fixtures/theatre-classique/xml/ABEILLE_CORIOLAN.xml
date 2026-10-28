@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI.2>
+<teiHeader>
+	<fileDesc>
+		<titleStmt>
+			<title>CORIOLAN, TRAGÉDIE.</title>
+			<author type="texte" ISNI="0000 0000 4746 9827">ABEILLE, Gaspard (1648-1718)</author>
+		</titleStmt>
+		<publicationStmt>	
+			<editor>Texte établi par Paul FIEVRE, juin 2017.</editor>
+			<publisher>Publié par Paul FIEVRE, juin 2017.</publisher>
+			<idno>ABEILLE_CORIOLAN</idno>
+			<rights>Creative Commons BY-NC-SA</rights>
+		</publicationStmt>
+		<SourceDesc>
+				<genre>Tragédie</genre>
+				<inspiration>histoire</inspiration>				<structure>Cinq actes</structure>
+				<type>vers</type>
+				<periode>1671-1680</periode>
+				<taille>1500-1750</taille>
+				<permalien>https://gallica.bnf.fr/ark:/12148/bpt6k5742924x</permalien>
+		</SourceDesc>
+	</fileDesc>
+</teiHeader>
+<text>
+	<front>
+		<docTitle>
+			<titlePart type="main">CORIOLAN</titlePart>
+			<titlePart type="sub">TRAGÉDIE</titlePart>
+		</docTitle> 
+		<docDate value="1676">M. DC LXXVI.</docDate>
+		<docAuthor id="ABEILLE, Gaspard">PAR Mr. ABEILLE</docAuthor>
+		<docImprint>
+			<privilege><head>EXTRAIT DU PRIVILÈGE DU ROI.</head>
+				<p>Par Grâce et Privilège du Roi donné à Saint-Germain en Laye le 5. Mars 1676. Signé, Par le Roi en son conseil, DESVIEUX : Il est permis au Sieur Gaspard Abeille, de faire imprimer, vendre et débiter, par tel Imprimeur ou Libraire qu'il voudra choisir, un Livre intitulé Coriolan, pendant le temps et espace de six années, à commencer du jour qu'il sera achevé d'imprimer pour la première fois ; avec défenses à toutes personnes, de quelque qualité et condition qu'elles soient, d'imprimer ou faire imprimer ledit Livre, à peine de mille livres d'amende, de tous dépens, dommages et intérêts, comme il est plus au long porté par lesdites Lettres.</p>
+				<p>Registré sur le Livre de la Communauté des Imprimeurs et Libraires. D. THIERRY, Syndic.</p>
+				<p>Et ledit Sieur Abeille a cédé son droit de privilège à Claude Barbin, Marchand Libraire à Paris, suivant l'accord fait entre eux.</p>
+			</privilege>
+			<acheveImprime id="1676-03-28">Achevé d'imprimer pour la première fois le 28. Mars 1676.</acheveImprime>
+			<printer id="MOETJENS">A LA HAYE, Chez ADRIAN MOETJENS, Marchand Libraire près de la Cour, à la Librairie Française</printer>
+		</docImprint>
+		<performance>
+			<premiere date="1676-01-24" location="Hôtel Guénégaud"/>
+		</performance>
+	<div type="dedicace"><adresse>À SON ALTESSE MONSEIGNEUR LE CHEVALIER DE VENDÔME.</adresse>
+		<head>Monseigneur,</head>
+		<p>Je ne sais de quel côté je dois regarder Coriolan, pour trouver entre Votre Altesse et lui quelque sorte de ressemblance, que je puisse proposer au public, selon la coutume des auteurs, comme le véritable motif du présent que j'ose vous faire. Coriolan fit une cruelle guerre à sa Patrie. Vous, Monseigneur, non seulement vous vous êtes signalé pour la gloire de la vôtre : Mais comme si vous aviez voulu imiter les Sages de l'Antiquité, qui se vantaient d'avoir tout l'Univers pour Patrie ; Vous avez défendu les limites du monde Chrétien avec autant d'ardeur que si vous eussiez gardé les frontières de la France : et n'avez point fait scrupule d'aller prodiguer le Sang des Bourbons pour le salut des Insulaires de Candie.</p>
+		<p>Ce zèle généreux, Monseigneur, est bien contraire à l'emportement de mon Romain : Mais la comparaison de l'âge, où vous avez fait de si grandes actions, avec le temps de ses Victoires, serait pour lui quelque chose de plus honteux. Les Infidèles craignaient votre nom dans un âge, où les Citoyens de ce héros ne savaient presque pas qu'il fut au monde. On vous voyait traverser le Rhin à la nage, et enfoncer les escadrons qui en défendaient les bords, quand à peine les autres Princes font dans leurs Palais un paisible apprentissage de l'Art de la guerre. Enfin, Monseigneur, dans le temps où l'on ne peut sentir tout au plus que les premiers désirs de devenir brave, vous aviez déjà donné des preuves si extraordinaires de valeur et d'intrépidité, que vous vous êtes réduit à la nécessité de faire à l'avenir des prodiges, si vous voulez augmenter la réputation de bravoure que vous n'avez acquise que trop tôt.</p>
+		<p>Ainsi ce serait inutilement que je voudrais chercher quelque rapport entre Votre Altesse et mon Héros, pour tâcher de vous le rendre plus considérable. Je sais, Monseigneur, que vous l'avez vu favorablement sur le théâtre ; et que vous avez pris plaisir à l'entendre plus d'une fois. Cela suffit pour me persuader que s'il n'est pas sans défaut, il n'est point aussi sans quelque beauté capable de toucher les grandes âmes ; et je ferais tort â cette pénétration d'esprit, et à cette justesse de discernement que tout le monde admire en Votre Altesse, si je croyais cet ouvrage tout à fait indigne des applaudissements dont vous l'avez honoré.</p>
+		<p>C'est aussi dans cette confiance que je prends la liberté de vous l'offrir, pour avoir lieu de vous donner une marque publique du profond respect avec lequel je suis,</p>
+		<p>MONSEIGNEUR,</p>
+		<p>de V. A.</p>
+		<p>le très humble et très obéissant serviteur,</p>
+		<p>ABEILLE.</p>
+	</div>	
+	<div type="preface"><head>AU LECTEUR,</head>
+		<p>Tous ceux qui connaissent l'ancienne Rome, savent ce que c'est que Coriolan : et ce serait faire tort à mes Lecteurs, que de vouloir les en instruire. Je me contenterai de marquer quelques circonstances plus obscures de mon Histoire, que l'on pourrait prendre, sans cela, pour des inventions de la Poésie.</p>
+		<p>Plutarque et Tite-Live ne s'accordent pas sur les noms des personnes qui eurent part à cette action. Tite-Live nomme le Général des Volques Attius Tullus, la mère de Coriolan Veturie , et sa femme Volumnie. Au contraire, Plutarque donne le nom de Volumnie à la mère, celui de Virgilie à la femme, et celui de Tullus Ausidius au Volque. J'ai préféré ces derniers noms aux premiers, parce qu'ils m'ont semblé plus commodes à nostre Langue ; quoi que peut-être l'autorité de l'auteur Grec, qui les rapporte, soit moins forte que celle du Romain.</p>
+		<p>Valérie n'est point un personnage fabuleux, comme quelques-uns ont cru. C'est elle, disent ces auteurs, à qui les Dieux inspirèrent le dessein d'envoyer vers Coriolan sa mère, et sa femme ; et qui les conduisit elle-même au Camp des Volques. Ainsi, puisque Virgilie n'y parut véritablement que sous la conduite de cette Dame, j'ai pu feindre avec vraisemblance qu'elle n'y parut que sous son nom : et que ce nom jeta Aufide et Coriolan dans une erreur, qui ne sait pas une des moindres beautés de la pièce.</p>
+		<p>L'ordre rigoureux de Coriolan contre les députés Romains, qui est le fondement de ma Fable, est fondé sur la vérité de l'Histoire. Denis d'Halicarnasse rapporte, qu'il fit défense à ces Députés de revenir dans son Camp ; et qu'il les menaça de les traiter en espions, pour se délivrer de l'importunité de leurs prières. J'ai ajouté à ce motif la crainte des soupçons des Volques , qui devaient être offensez de sa trop grande facilité à recevoir trois et quatre fois des députations inutiles.</p>
+		<p>Pour ce qui est de son caractère, ceux qui m'ont blâmé de l'avoir trop attendri, lui sont tort de le croire à l'égard de sa mère et de sa femme tel qu'il était à ses ennemis. Le même Coriolan que sa férocité naturelle, et la rigueur de sa vertu rendaient si terrible, et si odieux à la populace de Rome, ne peut tenir ses pleurs à l'abord de deux personnes si chères. Avant même qu'elles eussent ouvert la bouche pour lui parler, il fut emporté par sa tendresse comme par un torrent, à ce que dit Plutarque : et au rapport de Denis d'Halicarnasse, il s'abandonna aux mouvements les plus passionnés dont le coeur humain soit capable. Il n'était pas même dans un âge à se défendre de ces douces faiblesses. Tite-Live l'appelle jeune homme au siège de Coriole, qui ne précéda sa mort que de cinq ans. Et puisque dans la vérité des choses, les pleurs de deux femmes étouffèrent en un seul jour, et par un seul entretien toute la violence de ses ressentiments, il faut dire qu'il ne perdit la vie que pour avoir eu l'âme trop tendre. Je ne vois donc pas quelle raison il y a de se le figurer comme un homme glacé par le froid de l'âge, et par l'austérité de sa vertu. j'ai fait assez éclater cette austérité dans les scènes où il s'agit principalement des intérêts de sa gloire, au premier et au quatrième acte. Mais dans les scènes où il ménage ceux de son amour ; je me suis contenté d'interrompre de temps en temps le cours de sa tendresse par quelques subits retours de colère, qui servent à marquer son caractère naturel, et les combats qu'il rend pour le soutenir contre l'amour.</p>
+		<p>La mère de Coriolan que j'ai mise à l'écart à cause de son grand âge, et sa femme que j'ai changée en maîtresse, sont deux libertés si commodes, et que tant de gens trouvent si fort à leur gré, que je dois avoir peu d'égard à la critique de quelques esprits délicats, qui se croient seuls en droit de tourner les circonstances de l'Histoire à leur avantage. Je n'ignore pas que Virgilie n'eût eu des enfants de son mariage : mais ce mariage était si récent, et ces enfants si petits au temps de l'exil de Coriolan, que deux ans après, au rapport de Plutarque, lorsque Valérie vint trouver Volumnie dans sa maison, pour concerter le dessein de leur sortie, elle trouva ces mêmes enfants, qui jouaient sur le sein de leur mère. Cela suffit, pour faire voir que le parachronisme n'est pas si criminel dans l'usage que j'en ai fait : ayant mis les choses en telle disposition, que le jour de l'exil de Coriolan, était celui-là même qu'il avait destiné pour son mariage.</p>
+		<p>C'est avec la même liberté que j'ai changé le temps et le lieu de sa mort. Elle arriva chez les Volques dans une sédition qu'Auside excita contre lui. Il est certain que ce fut dans la même année, et sous les mêmes Consuls qui gouvernaient Rome durant le siège : et depuis cette mort jusqu'à la fin de l'année il se passa tant de choses, qu'il faut croire que la mort de Coriolan suivit de bien près son retour au pays des Volques. De sorte que je n'ai avancé les événements que de peu de jours, quand je l'ai fait mourir au Camp devant Rome, et la nuit même du décampement.</p>
+		<p>Quelqu'un pourrait-il s'en offenser, après que toute la France a donné de si justes applaudissements à une pièce, où tous les périls que César courut en Égypte après la mort de Pompée, et plus d'une année de sa vie est resserrée avec tant d'art et tant de majesté dans l'espace du jour dramatique ? Après que la mort de Pyrrhus a été si heureusement transportée de Delphes à Buthrot, par un auteur qui est si bien entré dans l'esprit des Anciens, et dans les plus tendres endroits du coeur de l'homme ? On ne lui a pas non plus reproché l'admirable caprice d'Hermionne, qui est la première à se désespérer de la mort de Pyrrhus, dont sa jalousie est la seule cause : et qui tourne contre Oreste, qu'elle a choisi pour en être l'instrument, toute la fureur qu'elle semblait devoir également faire tomber sur lui, et sur Andromaque sa rivale. C'est cet exemple qui m'a enhardi à choisir Camille pour faire un récit passionné de la mort de Coriolan, et à lui donner pour son frère qui en est l'auteur, des sentiments si violents de dépit et de vengeance. Ma conduite, et celle de ce grand auteur, sont appuyées sur des raisons prises de la nature des mouvements de notre âme. Dans les atteintes subites de plusieurs passions opposées, la dernière blessure est touiours la plus sensible. De deux biens que l'on recherche avec ardeur, celui que nous perdons nous inspire avec plus de douleur le regret de sa perte, que la possession de celui qui nous reste ne nous inspire de plaisir. Ainsi Camille est plus vivement touchée de la perte imprévue de Coriolan, que du plaisir de la vengeance qu'elle pourrait exercer sur sa rivale : et le coup qu'Aufide vient de porter à son coeur est plus cruel et plus pénétrant que l'injure qu'elle avéit reçue de Virgilie. C'est pourquoi dans cet instant, elle regarde son frère comme son principal ennemi, et sa rivale lui devient chère par la conformité de leurs intérêts, et de leurs passions.</p>
+		<p>J'ajoute que je crois avoir assez bien établi la vertu, et la modération de Camille à l'égard de Virgilie, pour la rendre capable de cet effort. Pour ce qui est du rang qu'elle tient dans le Gouvernement de l'État et de l'armée : l'exemple de Tanaquil et de Tullie que je sais rapporter par Albin dés la première scène, suffit, ce me semble, pour l'autoriser. Son humeur guerrière a son modèle dans la Camille de l'Eneïde, qui était Volque aussi bien qu'elle, et qui avait formé aux exercices des Amazones plusieurs filles de la même Nation. C'est de là que j'ai tiré exprès le nom, et une partie du caractère de cette Princesse.</p>
+		<p>Ma principale gloire est de n'avoir point déplu dans un sujet que l'on n'avait pu jusqu'à présent assujettir aux règles du théâtre : et que tant de fameux auteurs n'auraient pas abandonné à ceux qui voudraient suivre leurs pas, s'ils l'eussent cru capable de quelque ornement et de quelque grâce. J'avoue que je dois une partie de son succès aux soins de ceux qui l'ont représenté : et quoi que leur propre gloire les engageait à faire tous leurs efforts pour réussir dans les sujets sérieux dont on les croyait moins capables que des comiques ; je ne laisse pas de leur avoir obligation d'avoir désabusé le public d'une erreur qui ne leur était guère plus désavantageuse qu'à moi, qui n'aurai plus tant de sujet de craindre pour les pièces que j'espère leur confier à l'avenir.</p>
+	</div>
+	<castList><head>ACTEURS</head>
+		<castItem><role id="CORIOLAN" sex="1" type="H" statut="roi" age="A" stat_amour="néant">C. MARTIUS</role>, surnommé Coriolan depuis la prise de Coriole sur les Volques.</castItem>
+		<castItem><role id="AUFIDE" sex="1" type="H" statut="général" age="A" stat_amour="néant">AUFIDE</role>, Général des Volques.</castItem>
+		<castItem><role id="CAMILLE" sex="2" type="H" statut="aristocrate" age="A" stat_amour="néant">CAMILLE</role>, soeur d'Aufide, Amante de Coriolan.</castItem>
+		<castItem><role id="VIRGILIE" sex="2" type="H" statut="aristocrate" age="A" stat_amour="néant">VIRGILIE</role>, Romaine, maîtresse de Coriolan.</castItem>
+		<castItem><role id="ALBIN" sex="1" type="H" statut="lieutenant" age="A" stat_amour="néant">ALBIN</role>, Lieutenant de Coriolan.</castItem>
+		<castItem><role id="SABINE" sex="2" type="H" statut="confident" age="A" stat_amour="néant">SABINE</role>, Confidente de Camille.</castItem>
+		<castItem><role id="SOLDATS" sex="9" type="H" statut="soldat" age="A" stat_amour="néant">SOLDATS</role>.</castItem>
+	</castList>
+	<set location="Rome" country="Italie" periode="Avant JC IIème" gps="41.902783, 12.496365">La scène est dans le Camp des Volques devant Rome.</set>
+</front>
+<body>
+<div1 type="acte" n="1"><head>ACTE I</head>
+<div2 type="scene" n="1"><head>SCÈNE PREMIÈRE. Coriolan, Albin.</head>
+<sp who="CORIOLAN"><speaker>CORIOLAN.</speaker>
+	<l id="1">Quoi toujours les Romains viendront m'inquiéter ?</l>
+	<l id="2">De quoi leurs députés peuvent-ils se flatter,</l>
+	<l id="3">Albin ? N'ont-ils pas su que s'ils osaient paraître,</l>
+	<l id="4">Le Volque de leur sort disposerait en maître ?</l>
+	<l id="5">Que la mort ou les fers les attendaient ici ?</l>
+	<l id="6" syll="6" part="i">Ils n'ont pu l'ignorer.</l>
+</sp>
+<sp who="ALBIN"><speaker>ALBIN.</speaker>
+	<l id="6" syll="6" part="f">Ils l'ont appris aussi,</l>
+	<l id="7">Seigneur : mais ils ont crû qu'un ordre si sévère</l>
+	<l id="8">N'était point contre un sexe à qui chacun veut plaire :</l>
+	<l id="9">Et qu'ils éviteraient l'effet de vos rigueurs,</l>
+<note type="L">Vestale : Fille vierge chez les Romains, qui était consacrée au service de la déesse Vesta, pour garder le feu sacré de son temple. [F]</note>	
+	<l id="10">S'ils envoyaient vers vous les Vestales en pleurs.</l>
+	<l id="11">Elles sont en ces lieux. Dans le quartier d'Aufide</l>
+	<l id="12">Les Volques ont conduit cette troupe timide :</l>
+	<l id="13">Chez Camille, Seigneur, elle a passé la nuit.</l>
+	<l id="14">Voyez à quel péril votre ordre les réduit ?</l>
+	<l id="15">On sait que votre abord aux Romains trop facile,</l>
+	<l id="16">Vous a rendu suspect à ce peuple indocile :</l>
+	<l id="17">Et que pour apaiser les esprits irrités,</l>
+	<l id="18">Aufide vous engage à ces sévérités :</l>
+	<l id="19">Mais exposerez-vous au caprice d'un homme...</l>
+</sp>
+<sp who="CORIOLAN"><speaker>CORIOLAN.</speaker>
+	<l id="20">Ramenons-les, Albin, triomphantes à Rome :</l>
+	<l id="21">Et sur ses murs détruits brisons avec éclat</l>
+	<l id="22">Leurs chaînes et les fers que porte le Sénat.</l>
+	<l id="23">Aussi bien il est temps qu'une pleine victoire</l>
+	<l id="24">Venge enfin mon amour et répare ma gloire.</l>
+	<l id="25">Ces prêtres, ces tribuns rampants à mes genoux,</l>
+	<l id="26">N'ont que trop suspendu l'effet de mon courroux.</l>
+	<l id="27">Dans le sang des ingrats dont l'audace m'affronte,</l>
+	<l id="28">Il faut de mon exil aller laver la honte :</l>
+	<l id="29">Et leur faire expier l'oubli de mes bienfaits,</l>
+	<l id="30">Par un long souvenir des maux que j'aurai faits.</l>
+</sp>
+<sp who="ALBIN"><speaker>ALBIN.</speaker>
+	<l id="31">Oui, si Rome n'obtient la paix qu'elle demande ,</l>
+	<l id="32">À vos efforts, Seigneur, il faut qu'elle se rende :</l>
+	<l id="33">Mais si pour se défendre elle manque de bras,</l>
+	<l id="34">Croyez-vous que les Dieux ne la défendent pas ?</l>
+	<l id="35">Ces Dieux qui par cent voix dont retentit le Tibre,</l>
+	<l id="36">Déclarent qu'à jamais Rome doit être libre :</l>
+	<l id="37">Et qui depuis vingt ans qu'elle n'a plus de Rois,</l>
+	<l id="38">Ont soumis nos voisins à ses nouvelles Lois ?</l>
+	<l id="39">Voudront-ils maintenant démentir leurs présages ?</l>
+	<l id="40">Eux dont vous avez vu les plus saintes images</l>
+	<l id="41">Entre les bras tremblants de leurs prêtres confus,</l>
+	<l id="42">Vous demander la paix en ennemis vaincus ;</l>
+	<l id="43">Se livrer pour garants de la foi populaire ;</l>
+	<l id="44">Et sans pouvoir fléchir votre âme trop sévère,</l>
+	<l id="45">Remporter vos refus jusques sur les autels</l>
+	<l id="46">Où leur courroux se rend aux soupirs des mortels.</l>
+</sp>
+
+
+
+
+
+
+
+
+</div2>
+
+
+
+</div1>
+<div1 type="acte" n="2"><head>ACTE II</head>
+<div2 type="scene" n="1"><head>SCÈNE PREMIÈRE. Camille, Sabine.</head>
+<sp who="SABINE"><speaker>SABINE.</speaker>
+	<l id="395">TAndis que tout le camp s'abandonne à la joie,</l>
+	<l id="396">Madame, à quels chagrins demeurez-vous en proie ?</l>
+	<l id="397">Et d'où vient qu'en un temps pour vous si glorieux,</l>
+	<l id="398">Des larmes en secret échappent de vos yeux ?</l>
+</sp>
+<sp who="CAMILLE"><speaker>CAMILLE.</speaker>
+	<l id="399">As-tu sait avertir cette aimable Romaine,</l>
+	<l id="400" syll="2" part="i">Sabine ?</l>
+</sp>
+
+
+
+
+
+
+
+
+</div2>
+
+
+
+
+</div1>
+
+
+
+</body>
+</text>
+</TEI.2>

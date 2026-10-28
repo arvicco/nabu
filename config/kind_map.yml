@@ -852,6 +852,16 @@ sources:
     #   textDesc size/canonicity/sex/time-slot keys), so the whole-source
     #   declaration is the honest grain, the canon/chronicle shape applied to a
     #   literary collection
+  theatre-classique:         # census 2026-10-28: 1,940 plays, 80 <genre> labels
+    source_kind: literary/drama
+    #   (the loop's call, the eltec-srp whole-source shape): Théâtre Classique
+    #   IS a theatre corpus — every file is encoded as a play (sp/speaker/
+    #   castList), and every one of its 80 genre labels is a dramatic form
+    #   (Comédie 750 · Tragédie 334 · Proverbe 139 · Monologue 98 · Dialogue
+    #   95 · Tragi-comédie 95 · Saynète 87 · opéra, parade, farce, mystère …;
+    #   the singletons "Conte", "Poème", "Apologie" are the site's own labels on
+    #   pieces it encodes as spoken scenes). The raw label rides metadata
+    #   "genre" verbatim; no finer drama sub-kind exists in the house taxonomy
   aozora:             # NDC codes ("NDC 913", children's "NDC K913", multi "NDC 913 914")
     metadata: ndc
     regex_map:

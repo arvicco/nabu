@@ -5800,6 +5800,24 @@ th-wikisource:   # P120-3, 02-sources row 264
   # 3:1,265 · 4:196 (+0:3, 2:1). Publisher (ผู้เผยแพร่=) verbatim. Texts
   # PD; transcription layer CC BY-SA 4.0.
 
+theatre-classique:   # 02-sources row 311
+  adapter: Nabu::Adapters::TheatreClassique
+  adopted: "2026-10-28"
+  axes: [romance]
+  wired: false   # until the first real sync is verified
+  sync_policy: manual
+  # Théâtre Classique (Paul Fièvre, theatre-classique.fr): French plays
+  # 1550s–1930s in the site's own pre-P5 TEI (the theatre-classique-tei
+  # family), fetched from DraCor's verbatim mirror
+  # github.com/dracor-org/theatre-classique (sparse xml/ + README.md) —
+  # the site's robots.txt disallows /pages/documents/, so the site itself
+  # is never fetched. Per-file <rights> CC BY-NC-SA + the site's rights
+  # page (free non-commercial reuse, source credited) → nc. EXPECTED
+  # FIRST SYNC (census 2026-10-28, mirror main @d6ed03d8): 1,939 docs /
+  # 1,601,085 passages, 0 rule-skips (life+70 cutoff 1955; latest
+  # textual death 1951), 1 quarantined (CORNEILLET_LAODICE.xml — declared
+  # ISO-8859-1, Latin-1 bytes; the UTF-8 belt refuses it). Clone ≈ 61 MB.
+
 tibetan-verbs:
   adapter: Nabu::Adapters::TibetanVerbs
   adopted: "2026-07-28"
