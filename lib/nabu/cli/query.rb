@@ -103,6 +103,8 @@ module Nabu
       TOKEN GLOSSES (--gloss WORD): sources that store upstream's own word
       meaning on each token (bhsa, achemenet: English; aes, tlhdig: German)
       show it on every lemma hit in ‘quotes’, beside any dictionary gloss.
+      DSS hits show BHSA's English gloss, borrowed through the lex_etcbc
+      lexeme crosswalk at read time (display only — not a --gloss filter).
       With --lemma, --gloss keeps only attestations whose token gloss
       contains WORD (whole word, case-insensitive) — e.g. BHSA's consonantal
       דבר as "word" vs "speak". Composes with --morph; not with --near.
