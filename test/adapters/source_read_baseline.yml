@@ -144,8 +144,6 @@ elephantine_tei_parser.rb:
   reads: 1
 eltec_tei_parser.rb:
   reads: 2
-epidoc_parser.rb:
-  reads: 1
 esukhia_text_parser.rb:
   reads: 1
 etcsl_tei_parser.rb:
