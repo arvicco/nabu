@@ -91,7 +91,7 @@ module Nabu
       feature names — case, number, gender, person, tense, mood, voice,
       degree (values dat, pl/sg, masc, aor, opt, sub…); UD treebanks match on
       their `feats`; PROIEL/TOROT, GLAUx (AGDT postag), Diorisis, BHSA/DSS,
-      OSHB, ReM/ReN (CorA msd), goo300k (IMP msd), Menota (msa) and Coptic
+      OSHB, ReM/ReN/REF (CorA msd/morph), goo300k (IMP msd), Menota (msa) and Coptic
       Scriptorium (pos: polarity, prontype, definite, verbform) are
       decoded into the same names — Hebrew/Aramaic add state, stem and
       conjugation (e.g. --morph stem=piel,conjugation=wayq). Ambiguous
@@ -103,6 +103,8 @@ module Nabu
       TOKEN GLOSSES (--gloss WORD): sources that store upstream's own word
       meaning on each token (bhsa, achemenet: English; aes, tlhdig: German)
       show it on every lemma hit in ‘quotes’, beside any dictionary gloss.
+      DSS hits show BHSA's English gloss, borrowed through the lex_etcbc
+      lexeme crosswalk at read time (display only — not a --gloss filter).
       With --lemma, --gloss keeps only attestations whose token gloss
       contains WORD (whole word, case-insensitive) — e.g. BHSA's consonantal
       דבר as "word" vs "speak". Composes with --morph; not with --near.

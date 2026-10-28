@@ -360,7 +360,13 @@ sources carries `token_gloss`, rendered in ‘quotes’ beside any dictionary
 gloss — and filterable on the same lemma-anchored token pass as `--morph`:
 `search --lemma דבר --gloss word` keeps the attestations whose gloss contains
 the word (whole word, case-insensitive), which splits BHSA's consonantal
-lexeme key back into its homographs (דבר "speak" / "word"). Not rows: tla-hf's
+lexeme key back into its homographs (דבר "speak" / "word"). DSS tokens carry
+no gloss of their own but do carry `lex_etcbc`, the ETCBC crosswalk into
+BHSA's lexeme ids: `Query::TokenGlossCrosswalk` borrows the BHSA gloss at READ
+time (lemma index → BHSA passages attesting the consonantal lexeme → the token
+with the exact lex and language — exact-lex, so `<D` "unto" never borrows
+`<D=/` "witness"), no index or stored copy; display only, so `--gloss` does not
+filter DSS. Not rows: tla-hf's
 `gloss` is grammatical (Leipzig labels — `PREP`, `N.m`, `-3sg.m`), and ceipom's
 English `meaning` waits on the equivalence tier's Latin keys reaching the
 token pass. Gloss search *across* lemmas (find every word glossed "king") needs

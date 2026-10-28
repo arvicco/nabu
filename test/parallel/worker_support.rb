@@ -27,9 +27,10 @@ module Nabu
     # Collects counts, the verbatim failure/error/skip text Minitest itself
     # would print, and per-file seconds (for the parent's scheduling).
     class WorkerReporter < Minitest::StatisticsReporter
-      def initialize(path:, class_files:, options: {})
+      def initialize(path:, class_files:, options: {}, run_token: nil)
         super($stdout, options)
         @path = path
+        @run_token = run_token
         @class_files = class_files
         @file_times = Hash.new(0.0)
       end
@@ -43,6 +44,7 @@ module Nabu
       def report
         super
         payload = {
+          "run" => @run_token, # the collector refuses a result stamped by another run
           "count" => count, "assertions" => assertions, "failures" => failures,
           "errors" => errors, "skips" => skips, "warnings" => warnings,
           "seconds" => total_time,
@@ -58,7 +60,7 @@ module Nabu
     # single-process run. Used by worker.rb (a spawned worker) and by the
     # runner's forked children alike.
     module Worker
-      def self.prepare(files:, args:, result_path:, shard: nil)
+      def self.prepare(files:, args:, result_path:, shard: nil, run_token: nil)
         apply_shard(shard) if shard
         class_files = {}
         files.each do |file|
@@ -66,7 +68,7 @@ module Nabu
           require File.expand_path(file)
           (Minitest::Runnable.runnables - before).each { |klass| class_files[klass.name] = file }
         end
-        Minitest.register_plugin(reporter_plugin(result_path, class_files))
+        Minitest.register_plugin(reporter_plugin(result_path, class_files, run_token))
         ARGV.replace(args)
       end
 
@@ -75,10 +77,11 @@ module Nabu
         Minitest::Test.singleton_class.prepend(ShardFilter)
       end
 
-      def self.reporter_plugin(result_path, class_files)
+      def self.reporter_plugin(result_path, class_files, run_token)
         Module.new do
           define_singleton_method(:minitest_plugin_init) do |options|
-            Minitest.reporter << WorkerReporter.new(path: result_path, class_files: class_files, options: options)
+            Minitest.reporter << WorkerReporter.new(path: result_path, class_files: class_files, options: options,
+                                                    run_token: run_token)
           end
         end
       end

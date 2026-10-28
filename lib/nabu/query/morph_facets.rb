@@ -100,6 +100,9 @@ module Nabu
     #   latter two adding mood).
     # - CorA `msd` (ReM, ReN): dot-joined self-describing values decoded by
     #   identity; inflection classes and "*"/"_" placeholders skipped.
+    # - CorA `morph` (REF): the same identity scheme in German spellings
+    #   (Mask/Akk/Präs/Prät/Konj/Komp), MN/MF/FN syncretic genders as
+    #   alternatives; "*", Unr/St/Sw and Unflekt/Flekt skipped.
     # - IMP `msd` (goo300k): the coarse closed tagset of the corpus root's
     #   own fvLib — nominal gender, verbal aspect, adjectival/adverbial
     #   degree.
@@ -285,6 +288,31 @@ module Nabu
         "Pos" => %w[degree pos], "Comp" => %w[degree cmp], "Sup" => %w[degree sup]
       }.freeze
 
+      # CorA morph (REF): the same "."-joined identity scheme in German
+      # spellings — censused over all 190 held CorA-XML files (2,061,753
+      # morph tags, 531 distinct, exactly 28 atoms): * 1,364,628; Sg
+      # 1,246,091; Nom 491,621; Akk 341,573; Pl 333,995; 3 329,379; Dat
+      # 319,479; Mask 292,490; Ind 270,900; Fem 224,291; Präs 212,827; Unr
+      # 179,824; Neut 140,530; Pos 139,452; Gen 103,283; Prät 100,078; St
+      # 88,066; Sw 44,766; 1 41,069; Konj 39,665; MN 39,106; Unflekt
+      # 35,416; 2 31,130; Komp 6,595; Sup 4,375; MF 985; Flekt 159; FN 139.
+      # Per pos: digits on finite verbs + PPER/PRF; Präs/Prät/Ind/Konj only
+      # on *FIN; Pos/Komp/Sup only on ADJ*/AVD. MN/MF/FN are syncretic
+      # gender alternatives (MN on wurm/theil/ort, MF on gewalt/zwiebel, FN
+      # on glied/-nis nouns — the ReF manual sets a gender only where NP
+      # agreement fixes it). Skipped as no clean facet: "*", the inflection
+      # classes Unr/St/Sw, and Unflekt/Flekt (the (un)inflected infinitive).
+      REF_VALUES = {
+        "Mask" => %w[gender masc], "Fem" => %w[gender fem], "Neut" => %w[gender neut],
+        "MN" => ["gender", %w[masc neut]], "MF" => ["gender", %w[masc fem]], "FN" => ["gender", %w[fem neut]],
+        "Nom" => %w[case nom], "Gen" => %w[case gen], "Dat" => %w[case dat], "Akk" => %w[case acc],
+        "Sg" => %w[number sing], "Pl" => %w[number plur],
+        "1" => %w[person 1], "2" => %w[person 2], "3" => %w[person 3],
+        "Präs" => %w[tense pres], "Prät" => %w[tense past],
+        "Ind" => %w[mood ind], "Konj" => %w[mood sub],
+        "Pos" => %w[degree pos], "Komp" => %w[degree cmp], "Sup" => %w[degree sup]
+      }.freeze
+
       # IMP msd (goo300k) — the closed coarse tagset of the corpus root's
       # own fvLib (goo300k.xml): Nc/Np + gender; Vm + Aspect (e perfective,
       # p "progressive" = sl "nedovršni", imperfective; b biaspectual = both
@@ -350,6 +378,7 @@ module Nabu
         ["morpho", :abegg_features, %w[dss].freeze],
         ["morph", :oshb_features, %w[oshb].freeze],
         ["msd", :cora_features, %w[rem ren].freeze],
+        ["morph", :ref_features, %w[ref].freeze],
         ["msd", :imp_features, %w[goo300k].freeze],
         ["msa", :menota_features, %w[menota].freeze],
         ["pos", :coptic_features, %w[coptic-scriptorium].freeze]
@@ -520,6 +549,15 @@ module Nabu
           next if pairs.empty? || pairs.include?(nil) || pairs.map(&:first).uniq.size != 1
 
           add_values(out, pairs.first.first, pairs.map(&:last))
+        end
+      end
+
+      # CorA morph (REF): "."-joined values by identity off REF_VALUES (a
+      # syncretic gender — MN/MF/FN — is one value-alternative list).
+      def ref_features(morph, _token = nil)
+        morph.to_s.split(".").each_with_object({}) do |segment, out|
+          facet, value = REF_VALUES[segment.strip]
+          add_values(out, facet, Array(value)) if facet
         end
       end
 

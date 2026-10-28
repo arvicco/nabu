@@ -199,6 +199,38 @@ class WilkensOuiAdapterTest < Minitest::Test
     assert_includes verb.annotations["labels"], "verb"
   end
 
+  # The book's tradition and script marks, mapped per its own Abkürzungen
+  # (PDF pp. 13–14) into the entry-facet seam: (m) manichäisch, (c)
+  # christlich → tradition; (br) Brāhmī, (r) Runenschrift, (tib)
+  # tibetische Schrift, (p) ʾPhags pa (Schrift) → script.
+  def test_tradition_and_script_marks_ride_as_entry_facets
+    assert_equal ["Manichaean"], entry("amraklug").annotations["tradition"]
+    assert_equal ["Manichaean"], entry("amranmak::amranmak bilig").annotations["tradition"]
+    assert_equal ["Christian"], entry("bnaya d-bnay").annotations["tradition"]
+    assert_equal ["Brāhmī"], entry("amṛta").annotations["script"]
+    assert_equal ["runic"], entry("(a)bınču").annotations["script"]
+    plain = entry("amraksızın")
+    assert_includes plain.annotations["labels"], "adv."
+    refute plain.annotations.key?("tradition"), "a grammar label is no tradition mark"
+    refute plain.annotations.key?("script")
+  end
+
+  def test_the_mark_table_is_the_books_own
+    assert_equal({ "m" => %w[tradition Manichaean], "c" => %w[tradition Christian],
+                   "br" => %w[script Brāhmī], "r" => %w[script runic],
+                   "tib" => %w[script Tibetan], "p" => %w[script ʾPhags-pa] },
+                 Adapter::MARK_FACETS.transform_values(&:to_a))
+  end
+
+  # The census counts every mapped mark and every label left unmapped.
+  def test_the_census_counts_mapped_marks_and_unmapped_labels
+    subject = adapter
+    parsed(subject)
+    notes = subject.discovery_skips("unused").notes.join("\n")
+    assert_match(/entry facets: script Brāhmī 2, runic 5; tradition Christian 1, Manichaean 8/, notes)
+    assert_match(%r{labels left unmapped \(grammar/name labels, no facet\): \d+ across \d+ kinds}, notes)
+  end
+
   def test_variants_fold_on_their_first_form
     assert_equal "amranmaklıg", entry("amranmaklıg ~ amranmak(lıg)").headword_folded
   end

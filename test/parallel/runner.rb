@@ -1,9 +1,11 @@
 # frozen_string_literal: true
 
+require "digest"
 require "etc"
 require "fileutils"
 require "json"
 require "rbconfig"
+require "securerandom"
 require "shellwords"
 require "tmpdir"
 require_relative "plan"
@@ -93,9 +95,49 @@ module Nabu
       end
     end
 
+    # Keys every runner artifact by INVOCATION (P147 lane A). Two concurrent
+    # `rake test` runs in different git worktrees (the parallel-lane setup)
+    # share one $TMPDIR; a foreign run's failures were twice seen merged into
+    # another run's report. The run dir already came from Dir.mktmpdir, but
+    # nothing tied a result FILE to the run that was collecting it: the
+    # worker's result path travels by inherited env (NABU_TEST_RESULT), the
+    # names were bare "job-<index>" (index 0..N in EVERY run), and the
+    # collector merged whatever JSON sat at that path. Now: the token
+    # (<worktree-path digest>-<SecureRandom hex>) names the run dir and every
+    # file in it, rides to the worker as NABU_TEST_RUN, is stamped into the
+    # result, and a result carrying any other token is refused (counted as a
+    # loud crash, never merged). The timings file is written atomically
+    # through a token-named temp, so a concurrent run in the SAME worktree
+    # never reads a torn file.
+    module RunKey
+      def self.token(root:)
+        "#{Digest::SHA256.hexdigest(File.expand_path(root))[0, 12]}-#{SecureRandom.hex(8)}"
+      end
+
+      def self.make_run_dir(token) = Dir.mktmpdir("nabu-test-#{token}-")
+
+      # The parsed result at +path+ iff it was written by THIS run; nil for
+      # absent, torn, or foreign (another invocation's token) files.
+      def self.read_result(path, token:)
+        return nil unless File.exist?(path)
+
+        result = JSON.parse(File.read(path))
+        result["run"] == token ? result : nil
+      rescue JSON::ParserError
+        nil
+      end
+
+      Artifacts = Data.define(:run_dir, :token) do
+        def result(index) = File.join(run_dir, "job-#{index}-#{token}.json")
+        def log(index) = File.join(run_dir, "job-#{index}-#{token}.log")
+        def job_tmp(index) = File.join(run_dir, "job-#{index}-#{token}-tmp")
+      end
+    end
+
     # The parent process: plans jobs, keeps up to +workers+ worker processes
     # alive, renders the merged report, records per-file timings for the next
     # run's scheduling (tmp/ — gitignored, scheduling only, never results).
+    # Every artifact is keyed by the run's token — see RunKey.
     class Runner
       ROOT = File.expand_path("../..", __dir__)
       WORKER = File.join(__dir__, "worker.rb")
@@ -125,6 +167,7 @@ module Nabu
         @workers = workers
         @args = Shellwords.split(testopts)
         @io = io
+        @token = RunKey.token(root: ROOT)
       end
 
       # Returns true when everything passed (the caller maps it to the exit code).
@@ -138,8 +181,9 @@ module Nabu
         @io.puts "# Running:"
         @io.puts
         started = clock
-        run_dir = Dir.mktmpdir("nabu-test-parallel")
-        outcomes = execute(jobs, run_dir)
+        run_dir = RunKey.make_run_dir(@token)
+        @artifacts = RunKey::Artifacts.new(run_dir: run_dir, token: @token)
+        outcomes = execute(jobs)
         @io.puts
         @io.puts
         @io.puts format("Finished in %<s>.6fs (parallel wall time, seed %<seed>d).", s: clock - started, seed: seed)
@@ -157,7 +201,7 @@ module Nabu
 
       private
 
-      def execute(jobs, run_dir)
+      def execute(jobs)
         queue = jobs.each_with_index.to_a
         running = {}
         outcomes = []
@@ -166,14 +210,14 @@ module Nabu
         until queue.empty? && running.empty?
           while running.size < @workers && !queue.empty?
             job, index = queue.shift
-            running[spawn_job(job, index, run_dir)] = [job, index]
+            running[spawn_job(job, index)] = [job, index]
             started_at[index] = clock
           end
           pid, status = Process.wait2
           job, index = running.delete(pid)
           next unless job # not one of ours (defensive; workers are our only children)
 
-          outcome = collect(job, index, status, run_dir)
+          outcome = collect(job, index, status)
           trace(job, started_at[index] - origin, clock - started_at[index])
           @io.print progress_mark(outcome)
           outcomes << [index, outcome]
@@ -188,20 +232,21 @@ module Nabu
       # lib boot; NABU_TEST_SPAWN=1 (or a fork-less platform) spawns fresh
       # interpreters via worker.rb instead. Either way the child is a fresh,
       # small process that loads only its job's test files.
-      def spawn_job(job, index, run_dir)
-        tmp = File.join(run_dir, "job-#{index}-tmp")
+      def spawn_job(job, index)
+        tmp = @artifacts.job_tmp(index)
         FileUtils.mkdir_p(tmp)
         env = {
-          "NABU_TEST_RESULT" => result_path(run_dir, index),
+          "NABU_TEST_RESULT" => @artifacts.result(index),
+          "NABU_TEST_RUN" => @token,
           "NABU_TEST_SHARD" => job.shard&.join("/"),
           "NABU_TEST_JOB" => index.to_s,
           "TMPDIR" => tmp
         }
-        return fork_job(job, env, log_path(run_dir, index)) if self.class.fork?
+        return fork_job(job, env, @artifacts.log(index)) if self.class.fork?
 
         command = [RbConfig.ruby, "-I#{File.join(ROOT, 'lib')}", "-I#{File.join(ROOT, 'test')}", WORKER,
                    *job.files, "--", *@args]
-        Process.spawn(env, *command, chdir: ROOT, out: log_path(run_dir, index), err: %i[child out])
+        Process.spawn(env, *command, chdir: ROOT, out: @artifacts.log(index), err: %i[child out])
       end
 
       def fork_job(job, env, log)
@@ -212,7 +257,7 @@ module Nabu
           $stdout.sync = true
           Dir.chdir(ROOT)
           Worker.prepare(files: job.files, args: @args, result_path: env["NABU_TEST_RESULT"],
-                         shard: env["NABU_TEST_SHARD"])
+                         shard: env["NABU_TEST_SHARD"], run_token: @token)
           # the block's normal end exits the child -> minitest/autorun runs the job
         end
       end
@@ -226,12 +271,9 @@ module Nabu
                                                                        label: job.label)
       end
 
-      def collect(job, index, status, run_dir)
-        path = result_path(run_dir, index)
-        result = File.exist?(path) ? JSON.parse(File.read(path)) : nil
-        Outcome.new(job: job, status: status, result: result, log_path: log_path(run_dir, index))
-      rescue JSON::ParserError
-        Outcome.new(job: job, status: status, result: nil, log_path: log_path(run_dir, index))
+      def collect(job, index, status)
+        Outcome.new(job: job, status: status, result: RunKey.read_result(@artifacts.result(index), token: @token),
+                    log_path: @artifacts.log(index))
       end
 
       def progress_mark(outcome)
@@ -278,11 +320,11 @@ module Nabu
           outcome.result["file_times"].each { |file, seconds| fresh[file] += seconds }
         end
         FileUtils.mkdir_p(File.dirname(TIMINGS))
-        File.write(TIMINGS, JSON.pretty_generate(timings.merge(fresh).slice(*@files).sort.to_h))
+        staged = "#{TIMINGS}.#{@token}.tmp"
+        File.write(staged, JSON.pretty_generate(timings.merge(fresh).slice(*@files).sort.to_h))
+        File.rename(staged, TIMINGS)
       end
 
-      def result_path(run_dir, index) = File.join(run_dir, "job-#{index}.json")
-      def log_path(run_dir, index) = File.join(run_dir, "job-#{index}.log")
       def clock = Process.clock_gettime(Process::CLOCK_MONOTONIC)
 
       def kill(pid)
