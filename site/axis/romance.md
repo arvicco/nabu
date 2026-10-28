@@ -44,10 +44,10 @@ A source wears every desk it serves — these twenty answer this desk. Holdings 
 | `openmgh` | texts | attribution | wired · manual | 153 docs / 36,143 passages |
 | `osta` | texts | nc | wired · manual | 740 docs / 5,177 passages |
 | `salom` | texts | attribution | wired · manual | 1 docs / 10,685 passages |
-| `theatre-classique` | texts | nc | not yet wired | nothing held yet |
+| `theatre-classique` | texts | nc | wired · manual | 1,939 docs / 1,601,085 passages |
 | `ud` | treebank | nc | wired · manual | 83 docs / 329,980 passages |
 
-**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 28 October 2026)</span>: `lat` 11,813 · `roa-opt` 1,682 · `spa` 1,216 · `cat` 967 · `osp` 684 · `la-vul` 233 · `fro` 222 · `por` 127 · `arg` 49 · `eu` 15 … and 29 more (`nabu axis romance` lists all).
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 28 October 2026)</span>: `lat` 11,813 · `fra` 1,945 · `roa-opt` 1,682 · `spa` 1,216 · `cat` 967 · `osp` 684 · `la-vul` 233 · `fro` 222 · `por` 127 · `arg` 49 … and 29 more (`nabu axis romance` lists all).
 
 ## The desk's instruments
 

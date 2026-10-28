@@ -4608,7 +4608,11 @@ pna:   # 02-sources row 311
   adopted: "2026-10-28"
   kind: module   # person authority — zero document rows, the cbdb/dprr shape
   axes: [cuneiform]
-  wired: false   # until the first real sync is verified
+  wired: true    # first sync 2026-10-28 on census (17,387 persons ·
+                   # 25,164 links · 4,188 texts; 149,045 co-occurrence
+                   # edges skipped by rule); cards eyeballed
+                   # (Aššūr-bāni-apli_1: 352 texts, 344 held;
+                   # Hundāru (Ahundāra)_2 resolves by bare name).
   sync_policy: manual
   # PNA — "A Social Network of the Prosopography of the Neo-Assyrian
   # Empire" (Jauhiainen & Alstola, Helsinki; JOHD 8:8, 2022): the persons
@@ -5800,11 +5804,15 @@ th-wikisource:   # P120-3, 02-sources row 264
   # 3:1,265 · 4:196 (+0:3, 2:1). Publisher (ผู้เผยแพร่=) verbatim. Texts
   # PD; transcription layer CC BY-SA 4.0.
 
-theatre-classique:   # 02-sources row 311
+theatre-classique:   # 02-sources row 312
   adapter: Nabu::Adapters::TheatreClassique
   adopted: "2026-10-28"
   axes: [romance]
-  wired: false   # until the first real sync is verified
+  wired: true    # first sync 2026-10-28 exactly on census (1,939 docs /
+                   # 1,601,085 passages / 1 quarantine — the declared
+                   # Latin-1 file; mirror main @d6ed03d8); passages
+                   # eyeballed (Montchrétien's David, 1601 Rouen, dated
+                   # + placed + nc on the card).
   sync_policy: manual
   # Théâtre Classique (Paul Fièvre, theatre-classique.fr): French plays
   # 1550s–1930s in the site's own pre-P5 TEI (the theatre-classique-tei
@@ -6765,10 +6773,11 @@ vakk:
   adapter: Nabu::Adapters::Vakk
   adopted: "2026-10-21"
   axes: [baltic]
-  wired: false   # the crawl is sliced: ~13,000 paced requests (~4–5 h at
-                 # 1 req/s) over about eleven `bin/nabu sync vakk` runs of
-                 # SLICE 1,200 (~25 min each), the corpus texts first and the
-                 # 2,856 court protocols after; flip at the completed crawl.
+  wired: true    # crawl COMPLETED 2026-10-28 (3,052/3,052 texts held,
+                 # ledger empty); first full parse the same day exactly on
+                 # census — 3,052 discovered / 0 skipped-by-rule / 0
+                 # errors, 148,875 passages indexed; passages eyeballed
+                 # (a 1651 sermon, dated + nc on the card).
   sync_policy: manual
   # VAKK — Vana kirjakeele korpus, the Corpus of Old Written Estonian
   # (University of Tartu, vakk.ut.ee): every surviving Estonian text of

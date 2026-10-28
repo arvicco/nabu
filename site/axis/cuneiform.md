@@ -26,7 +26,7 @@ A source wears every desk it serves — these seventeen answer this desk. Holdin
 | `etcsl` | texts | nc | wired · frozen | 775 docs / 42,577 passages |
 | `oracc` | tablets | open | wired · manual | 118,367 docs / 1,800,218 passages / 211,040 entries |
 | `osl` | feature module | open | wired · manual | nothing held yet |
-| `pna` | feature module | attribution | not yet wired | nothing held yet |
+| `pna` | feature module | attribution | wired · manual | nothing held yet |
 | `rsti` | texts | nc | wired · manual | 5,075 docs / 740 passages |
 | `seal` | texts | research_private | wired · manual | 408 docs / 14,953 passages |
 | `tlhdig` | tablets | attribution | wired · manual | 23,486 docs / 402,195 passages |
