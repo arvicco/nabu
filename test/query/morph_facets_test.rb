@@ -177,7 +177,7 @@ module Query
     # ("morph", "msd", "analyses", "msa" each name DIFFERENT tagsets in
     # other sources), so a scoped row decodes only its own sources' tokens.
     def test_decoder_table_is_explicit_and_ordered
-      assert_equal %w[morphology feats postag analyses vt morpho morph msd msd msa pos],
+      assert_equal %w[morphology feats postag analyses vt morpho morph msd morph msd msa pos],
                    MF::DECODERS.map(&:first)
       MF::DECODERS.each do |_key, method, sources|
         assert MF.respond_to?(method), "#{method} is a module function"
@@ -402,6 +402,41 @@ module Query
       assert_equal({ "person" => "1", "number" => "plur" },
                    MF.features({ "pos" => "PPER<PPER", "msd" => "1.Pl._.Dat-Akk" }, source: "ren"))
       assert_equal "sup", MF.features({ "msd" => "Sup.Neut.Dat.Sg.*" }, source: "ren")["degree"]
+    end
+
+    # -- CorA morph (REF) ---------------------------------------------------------
+
+    # Real ReF tokens (test/fixtures/ref, plus deposit-censused tags for the
+    # syncretic genders). German spellings (Mask, Akk, Präs, Prät, Konj,
+    # Komp); MN/MF/FN are gender alternatives; "*", the inflection classes
+    # (Unr/St/Sw) and Unflekt/Flekt (infinitives) are skipped.
+    def test_cora_ref_finite_verb_nominal_and_adjective
+      assert_equal({ "person" => "3", "number" => "sing", "tense" => "pres", "mood" => "ind" },
+                   MF.features({ "pos" => "VAFIN", "morph" => "3.Sg.Präs.Ind.Unr" }, source: "ref"))
+      assert_equal({ "person" => "3", "number" => "sing", "tense" => "pres", "mood" => "sub" },
+                   MF.features({ "pos" => "VVFIN", "morph" => "3.Sg.Präs.Konj.Sw" }, source: "ref"))
+      assert_equal({ "person" => "3", "number" => "sing", "tense" => "past" },
+                   MF.features({ "pos" => "VAFIN", "morph" => "3.Sg.Prät.*.Unr" }, source: "ref"))
+      assert_equal({ "gender" => "masc", "case" => "acc", "number" => "sing" },
+                   MF.features({ "pos" => "NA", "morph" => "Mask.Akk.Sg" }, source: "ref"))
+      assert_equal({ "degree" => "sup", "gender" => "masc", "case" => "nom", "number" => "sing" },
+                   MF.features({ "pos" => "ADJA", "morph" => "Sup.Mask.Nom.Sg" }, source: "ref"))
+      assert_equal({ "degree" => "cmp" }, MF.features({ "pos" => "ADJD", "morph" => "Komp" }, source: "ref"))
+      assert_equal({ "number" => "sing", "case" => "nom" },
+                   MF.features({ "pos" => "PPER", "morph" => "*.Sg.*.Nom" }, source: "ref"))
+      assert_empty MF.features({ "pos" => "VVINF", "morph" => "Unflekt" }, source: "ref")
+      assert_empty MF.features({ "pos" => "APPR", "morph" => "*" }, source: "ref")
+    end
+
+    def test_cora_ref_syncretic_genders
+      wurm = { "lemma" => "wurm", "pos" => "NA", "morph" => "MN.Akk.Sg" }
+      assert_equal({ "case" => "acc", "number" => "sing" }, MF.features(wurm, source: "ref"))
+      assert MF.match?(wurm, MF.parse("gender=masc,case=acc"), source: "ref")
+      assert MF.match?(wurm, MF.parse("gender=neut"), source: "ref")
+      refute MF.match?(wurm, MF.parse("gender=fem"), source: "ref")
+      assert MF.match?({ "lemma" => "gewalt", "morph" => "MF.Akk.Sg" }, MF.parse("gender=fem"), source: "ref")
+      assert MF.match?({ "lemma" => "glied", "morph" => "FN.Nom.Sg" }, MF.parse("gender=neut"), source: "ref")
+      assert_empty MF.features({ "morph" => "Mask.Akk.Sg" }, source: "rem"), "REF's morph key is REF-scoped"
     end
 
     # -- IMP msd (goo300k) -------------------------------------------------------

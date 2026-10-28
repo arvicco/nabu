@@ -489,7 +489,7 @@ module Nabu
                                 "sub…), all required. E.g. \"case=dat,number=pl\". UD treebanks " \
                                 "match on feats; PROIEL/TOROT positional tags, GLAUx's AGDT " \
                                 "postags, Diorisis analyses, BHSA/DSS (ETCBC/Abegg) features, " \
-                                "OSHB morph codes, CorA msd (ReM/ReN), IMP msd (goo300k), " \
+                                "OSHB morph codes, CorA msd (ReM/ReN) and morph (REF), IMP msd (goo300k), " \
                                 "Menota msa and Coptic Scriptorium pos tags (polarity, prontype, " \
                                 "definite, verbform) are decoded to the same names (Hebrew/Aramaic add " \
                                 "state, stem, conjugation: e.g. \"stem=piel,conjugation=wayq\"); " \
