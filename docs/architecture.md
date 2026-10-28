@@ -1494,8 +1494,18 @@ chain of such runs joined across at most one damaged, lost or intruded
 token on each side, verified in both texts — reported, never scored).
 Like its predecessors it sits outside the links-stamp closure, reachable
 only through the bench; the fixture pin carries the on-state, equal to
-the off-state (no fixture line yields a run). Recall on the live gold
-sets: not yet measured.
+the off-state (no fixture line yields a run). Measured on the live gold
+sets (2026-10-28, 24 runs, both states): the gain is real exactly where
+order information is otherwise absent — at gram size 1, recall@1 rises
+0.544 → 0.574 on edh-edr (+2.9 pp, and +1.8–2.6 pp at every k) and
+0.232 → 0.240 on tm-same-text (+0.8–1.1 pp across k) — while at the
+default gram size 4 every set is flat to marginally negative (edh-edr
+−0.3 pp @1, suttacentral −0.4 to −0.9 pp, kitab unchanged) and the
+fuzzy composition is noise. Cost at gram 1 is ~10–12× the off-state
+probe time (the candidate-text reads dominate). VERDICT: admitted as an
+off-default switch, the fuzzy tier's shape — worth turning on for
+small-gram searches over short epigraphy, never at the default gram
+size; sidecars under db/bench/contiguity/.
 
 ## 14. The timeline — when and where a document is from (P15-2)
 
