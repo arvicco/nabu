@@ -92,8 +92,6 @@ dcs.rb:
   reads: 1
 dcs_lexicon_lane.rb:
   reads: 3
-ddbdp_parser.rb:
-  reads: 1
 derom_xml_parser.rb:
   reads: 1
 dharma_base.rb:
