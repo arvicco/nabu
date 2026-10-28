@@ -99,6 +99,7 @@ class FacetMapTest < Minitest::Test
                    "borrowed" => "borrowed_status" },
                  map.entry_fields_for("wold"))
     assert_equal({ "concept" => "concept" }, map.entry_fields_for("tls"))
+    assert_equal({ "tradition" => "tradition", "script" => "script" }, map.entry_fields_for("wilkens-oui"))
   end
 
   def test_shipped_config_projects_sillok_subjects_and_itkc_genres_at_passage_grain
