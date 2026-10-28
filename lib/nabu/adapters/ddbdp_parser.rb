@@ -251,7 +251,7 @@ module Nabu
     #   language — disagreement is a cataloguing error, surfaced not smoothed.
     # - Malformed XML, no edition div, <lb> without @n, textpart without @n →
     #   ParseError.
-    class DdbdpParser
+    class DdbdpParser < StreamingTeiParser
       # DDbDP tags languages with ISO 639-1 "la"; Nabu uses ISO 639-3 "lat"
       # (conventions.md §4). Script subtags survive the mapping (la-Grek →
       # lat-Grek). "grc" is already 639-3 and passes through.
@@ -539,6 +539,7 @@ module Nabu
       # minting, restart blocks — is identical between the two corpora;
       # only the identity idno and the urn namespace differ.
       def initialize(idno_type: "ddb-hybrid", urn_namespace: "ddbdp")
+        super()
         @idno_type = idno_type
         @urn_namespace = urn_namespace
       end
@@ -555,28 +556,12 @@ module Nabu
 
       private
 
-      def resolve_canonical_path(source, canonical_path)
-        return canonical_path if canonical_path
-        return source if source.is_a?(String)
-        return source.path if source.respond_to?(:path) && source.path
-
-        raise ArgumentError, "canonical_path: is required when parsing from an IO without a #path"
-      end
-
       def extract_lines(source, path:, urn:, language:)
-        with_io(source) do |io|
-          Extraction.new(
-            reader: Nokogiri::XML::Reader(io, path), path: path, urn: urn, language: language,
-            idno_type: @idno_type, urn_namespace: @urn_namespace
-          ).call
-        end
-      rescue Nokogiri::XML::SyntaxError => e
-        raise ParseError, "#{path}: malformed XML: #{e.message}"
+        extract(source, path: path, urn: urn, language: language,
+                        idno_type: @idno_type, urn_namespace: @urn_namespace)
       end
 
-      def with_io(source, &)
-        source.is_a?(String) ? File.open(source, "r", &) : yield(source)
-      end
+      def extraction_class = Extraction
 
       def build_document(lines, urn:, language:, title:, path:, metadata: {})
         document = Document.new(urn: urn, language: language, title: title, canonical_path: path,
@@ -609,22 +594,16 @@ module Nabu
       # ddb-hybrid idno; body phase reacts only inside div[@type="edition"],
       # where it maintains the textpart path, the keep/drop state and the
       # current line buffer (see the policy in the file header).
-      class Extraction
-        READER = Nokogiri::XML::Reader
-        TEXT_NODE_TYPES = [
-          READER::TYPE_TEXT, READER::TYPE_CDATA,
-          READER::TYPE_WHITESPACE, READER::TYPE_SIGNIFICANT_WHITESPACE
-        ].freeze
+      class Extraction < StreamingTeiParser::Walker
         # Subtrees that are never reading text (see file header). <gap> is
         # handled separately: marker first, then its children drop too;
         # <del> is handled separately too — kept, rendered in ⟦…⟧ (owner ruling 2026-08-10).
         DROPPED_ELEMENTS = %w[rdg orig note figure].freeze
-        private_constant :READER, :TEXT_NODE_TYPES, :DROPPED_ELEMENTS
+        private_constant :DROPPED_ELEMENTS
 
         def initialize(reader:, path:, urn:, language:, idno_type: "ddb-hybrid",
                        urn_namespace: "ddbdp")
-          @reader = reader
-          @path = path
+          super(reader: reader, path: path)
           @urn = urn
           @language = language
           @idno_type = idno_type
@@ -658,14 +637,6 @@ module Nabu
         end
 
         private
-
-        def process(node)
-          case node.node_type
-          when READER::TYPE_ELEMENT then start_element(node)
-          when READER::TYPE_END_ELEMENT then end_element(node)
-          when *TEXT_NODE_TYPES then text_node(node)
-          end
-        end
 
         def start_element(node)
           return if dropping?
@@ -776,10 +747,6 @@ module Nabu
           graphemes = value.gsub(/[[:space:]]/, "").grapheme_clusters.size
           @current[:supplied] += graphemes unless @supplied_depths.empty?
           @current[:unclear] += graphemes unless @unclear_depths.empty?
-        end
-
-        def dropping?
-          !@drop_depth.nil?
         end
 
         def in_edition?
@@ -984,10 +951,6 @@ module Nabu
             @textparts.pop
             @block = 1 # a textpart is its own line-numbering universe
           end
-        end
-
-        def local_name(node)
-          node.name.split(":").last
         end
       end
       private_constant :Extraction
