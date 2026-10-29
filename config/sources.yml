@@ -2847,8 +2847,8 @@ itant:
   # tm: reference edges. RE-SYNC WATCH (journaled): the Venetic_/Faliscan_
   # dirs are README-only ("available once the revision process is
   # completed") — a later owner-fired sync picks them up; nothing promised.
-  # Lexicon_ItAnt (OntoLex-lemon TTL sibling repo) is v2, journaled — the
-  # first RDF dictionary-format decision is owner-gated (2026-07-18).
+  # Lexicon_ItAnt (the OntoLex-lemon TTL sibling repo) ships as its own
+  # dictionary source, lexicon-itant (02-sources row 314).
   sync_policy: manual
   # P29-2: ita + eng translation divs ride as -ita/-eng sibling documents
   # where records carry prose (336 each upstream; the parser's own census
@@ -3258,6 +3258,27 @@ lexica:
   # the FIRST dictionary-shaped source (content_kind :dictionary: entries,
   # not passages; architecture §11). Upstream still gets occasional edits:
   # re-syncable, but not on a live schedule.
+  sync_policy: manual
+
+lexicon-itant:   # 02-sources row 314
+  adapter: Nabu::Adapters::LexiconItant
+  adopted: "2026-10-29"
+  axes: [italic]
+  wired: false   # first sync pending: bin/nabu enable lexicon-itant && bin/nabu sync
+                 # lexicon-itant (git clone ~6 MB; parse ~1 s). EXPECT 16 dictionary
+                 # docs → 809 entries (osc 419 · xve 85 · xum 82 · xfa 75 · pgn 31 ·
+                 # xcg 27 · spx 23 · umc 17 · ett 16 · xvo 10 · ims 9 · xvs 8 ·
+                 # sbv 3 · snt 2 · xhr 1 · xca 1), 0 errored, 6 skipped by rule
+                 # (the lat/grc/PIE/PIT/PUM auxiliary lexicons + the standalone SKOS
+                 # file); eyeball nabu define meddiss / mego / apolo, then flip.
+  # Lexicon ItAnt (github.com/DigItAnt/Lexicon_ItAnt; DigItAnt, PRIN 2017,
+  # CNR-ILC + Università di Firenze) — the OntoLex-Lemon lexicon of the
+  # languages of ancient Italy, the Corpus ItAnt (itant) sibling. One
+  # dictionary slug per language (itant-lexicon-<code>); the Latin/Greek
+  # comparanda and the PIE/Proto-Italic etyma ride the entries as typed
+  # reflexes. LICENSE: README verbatim "Lexicon_ItAnt  is licensed under
+  # CC-BY-NC-SA" (no version, no LICENSE file; verified 2026-10-29) → nc.
+  # Dormant since 2024-10 → manual.
   sync_policy: manual
 
 lexlep:
