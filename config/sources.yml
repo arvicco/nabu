@@ -2925,7 +2925,9 @@ jaschke-1881:   # P150-A, 02-sources row 314
   adapter: Nabu::Adapters::Jaschke1881
   adopted: "2026-10-29"
   axes: [tibetan]
-  wired: false   # until the first real sync is verified
+  wired: true    # first sync 2026-10-29 on census (696 docs / 6 binding
+                   # leaves skipped / 706 images reconciled); p1 + leaf3
+                   # eyeballed.
   sync_policy: manual
   # Jäschke's Tibetan-English Dictionary (London 1881) as the archive.org
   # scan tibetanenglishdi00jsuoft (Robarts/Toronto copy, complete, marked
@@ -3264,7 +3266,9 @@ lexicon-itant:   # 02-sources row 315
   adapter: Nabu::Adapters::LexiconItant
   adopted: "2026-10-29"
   axes: [italic]
-  wired: false   # first sync pending: bin/nabu enable lexicon-itant && bin/nabu sync
+  wired: true    # first sync 2026-10-29 on census (809 entries / 16
+                   # lexicons / 6 skipped-by-rule = the 1,301 lime:entry
+                   # count); meddíss eyeballed with its PIE etyma.
                  # lexicon-itant (git clone ~6 MB; parse ~1 s). EXPECT 16 dictionary
                  # docs → 809 entries (osc 419 · xve 85 · xum 82 · xfa 75 · pgn 31 ·
                  # xcg 27 · spx 23 · umc 17 · ett 16 · xvo 10 · ims 9 · xvs 8 ·
@@ -3531,7 +3535,9 @@ lzh-collection:   # 02-sources row 316
   adapter: Nabu::Adapters::LzhCollection
   adopted: "2026-10-29"
   axes: [sinitic]
-  wired: false   # first sync pending: bin/nabu enable lzh-collection && bin/nabu sync
+  wired: true    # first sync 2026-10-29 on census (20 docs / 42,303
+                   # passages / 10 kanripo-held files skipped by rule);
+                   # 甌北集 eyeballed with the nk2028 credit riding.
                  # lzh-collection (git clone ~7 MB; parse ~1 s). EXPECT 20 docs /
                  # 42,303 passages (甌北集 9,788 · 沈德潛 6,728 · 鍾惺 4,853 · 陳子龍
                  # 4,036 …), 0 errored, 10 skipped by rule (the works held in kanripo);

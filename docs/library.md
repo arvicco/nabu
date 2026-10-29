@@ -1715,3 +1715,34 @@ Estonian (University of Tartu): the completed crawl's full load,
 earliest Estonian print from 1524 onward. Reconciled exactly against
 upstream's own census. The Baltic desk's Estonian line now runs from
 the Reformation to the national awakening.
+
+## 8aw. The P150 arrivals — Jäschke's dictionary, ancient Italy's lexicon, Ming–Qing poetry, and two million connections
+
+Counts from the first syncs, 2026-10-29:
+
+**`jaschke-1881`** — H. A. Jäschke's *A Tibetan-English Dictionary*
+(London 1881), the Tibetan desk's reference dictionary, as a
+public-domain page-image shelf: 696 leaf documents pinned to the
+University of Toronto scan, every page linked to its archive.org
+reader view. A deterministic converter between Jäschke's
+romanisation and Unicode Tibetan ships beside it — the quality oracle
+for the planned full transcription, already catching the print's own
+misprints against its Corrections page.
+
+**`lexicon-itant`** — the DigItAnt Lexicon of the ancient languages
+of Italy: 809 entries across sixteen languages (Oscan, Umbrian,
+Venetic, Faliscan, South Picene and their neighbours), each with
+attested forms, inscription citations, Buck semantic fields and
+etymological chains up to Proto-Italic and Proto-Indo-European.
+Held non-commercially per the project's README.
+
+**`lzh-collection`** — the nk2028 collection's distinct remainder:
+twenty Ming–Qing poetry collections (42,303 lines, CC0) from Shi
+Kefa to Zhao Yi, chosen by a duplicate census that left the
+collection's ten classics to the kanripo editions already held.
+
+**The Sefaria connection graph.** 622,476 cross-reference edges —
+commentary, targum, quotation, the Masoretic cross-reference
+apparatus — now ride the links layer wherever both ends are held,
+so a verse answers with its commentaries: Jonah 1:1 opens onto
+II Kings, Radak, Abarbanel and the Talmud's retellings.
