@@ -11,3 +11,6 @@ test/fixtures/
 .claude/
 scratchpad/
 *.log
+# The demo slice (rake demo:build → tmp/demo) reaches the demo target
+# through its own named build context, never the plain image.
+tmp/

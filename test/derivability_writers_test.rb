@@ -189,7 +189,14 @@ class DerivabilityWritersTest < Minitest::Test
   # SupplementaryData.zip, README.txt — sha256-pinned, verbatim) and the
   # .pna-fetch.json state pin into canonical/pna/ inside Adapter#fetch —
   # the same law kind.
+  # demo_build writes the demo slice (rake demo:build) into its OWN output
+  # directory (default tmp/demo, gitignored): a copy of config/, a
+  # self-relative nabu.yml, the kept registry-instrument trees, and the
+  # demo-census.json — a SHIPPING artifact outside the three permanent
+  # folders, derived wholesale by re-running the task (the DERIVED law
+  # kind; it never writes the box's own canonical/, db/ or local/).
   WRITER_ALLOWLIST = %w[
+    nabu/demo_build.rb
     nabu/adapters/dprr.rb nabu/adapters/pna.rb
     nabu/adapters/bfm.rb nabu/adapters/ctilc.rb nabu/adapters/etruscan_loans.rb nabu/adapters/ig_cyprus.rb
     nabu/adapters/kitab.rb nabu/adapters/oracc.rb

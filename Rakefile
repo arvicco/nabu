@@ -676,3 +676,32 @@ namespace :builders do
     catalog&.disconnect
   end
 end
+
+# The demo slice (Nabu::DemoBuild): the self-contained, open/attribution-
+# only demo library the OCI image bakes in (Dockerfile `demo` target). The
+# build runs REAL syncs — network, minutes — and is fired per release in
+# CI, never by the suite (test/demo_build_test.rb injects the runner).
+# Knobs: DEMO_OUT (default tmp/demo), DEMO_WORK (default <out>-work, the
+# full canonical fetch kept between runs), DEMO_MAX_MB (size ceiling).
+namespace :demo do
+  desc "Build the demo library slice for the image (REAL syncs, network); DEMO_OUT defaults to tmp/demo"
+  task :build do
+    $LOAD_PATH.unshift(File.expand_path("lib", __dir__))
+    require "nabu"
+    registry = Nabu::SourceRegistry.load(File.join(__dir__, "config", "sources.yml"))
+    census = Nabu::DemoBuild.from_env(ENV, registry: registry).build!
+    puts JSON.pretty_generate(census.except(:files))
+  end
+
+  desc "Print the demo plan and run its license guard (no network)"
+  task :plan do
+    $LOAD_PATH.unshift(File.expand_path("lib", __dir__))
+    require "nabu"
+    registry = Nabu::SourceRegistry.load(File.join(__dir__, "config", "sources.yml"))
+    demo = Nabu::DemoBuild.from_env(ENV, registry: registry)
+    demo.guard!.each do |slug|
+      puts format("%<slug>-20s %<klass>s", slug: slug, klass: registry[slug].manifest.license_class)
+    end
+    puts "license guard: clean -> #{demo.out_dir}"
+  end
+end

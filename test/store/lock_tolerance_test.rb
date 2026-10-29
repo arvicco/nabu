@@ -124,6 +124,24 @@ class LockToleranceTest < Minitest::Test
     assert_equal Nabu::Store::REBUILD_CACHE_KIB, db.fetch("PRAGMA cache_size").single_value
   end
 
+  # The demo slice's shipping seal (Nabu::DemoBuild): WAL folded in, the
+  # file back in rollback mode, no sidecars — a read-only open needs nothing
+  # writable beside it.
+  def test_seal_rollback_journal_folds_the_wal_and_drops_the_sidecars
+    path = db_path("sealed")
+    writer = Nabu::Store.connect(path)
+    writer.create_table(:t) { Integer :n }
+    writer[:t].insert(n: 1)
+    writer.disconnect
+
+    assert_equal "delete", Nabu::Store.seal_rollback_journal!(path)
+    refute File.exist?("#{path}-wal"), "the WAL is folded in and removed"
+    refute File.exist?("#{path}-shm")
+    reader = connect { Nabu::Store.connect(path, readonly: true) }
+    assert_equal 1, reader[:t].count
+    assert_equal "delete", reader.fetch("PRAGMA journal_mode").single_value
+  end
+
   def test_plain_connect_leaves_synchronous_at_the_wal_default
     db = connect { Nabu::Store.connect(db_path("plain")) }
 
