@@ -23,6 +23,7 @@ A source wears every desk it serves — these twelve answer this desk. Holdings 
 | `isicily` | inscriptions | attribution | wired · manual | 6,723 docs / 17,921 passages |
 | `itant` | inscriptions | nc | wired · manual | 1,160 docs / 1,283 passages |
 | `larth-etp` | dictionary | attribution | wired · manual | 1,122 entries |
+| `lexicon-itant` | dictionary | nc | not yet wired | not synced yet |
 | `lexlep` | inscriptions | nc | wired · manual | 494 docs / 570 passages |
 | `lexlep-words` | dictionary | nc | wired · manual | 627 entries |
 | `open-etruscan` | inscriptions | attribution | wired · frozen | 8,047 docs / 8,047 passages |

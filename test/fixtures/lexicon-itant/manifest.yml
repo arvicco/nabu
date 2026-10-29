@@ -1,0 +1,24 @@
+# Nabu fixture manifest (P5-4 "fixture sentinel"). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# Both entries are documented trims of raw files pinned at upstream commit
+# e8fe52a816 — fetched for URL-liveness only on check. adapter_test is
+# null: fresh full copies would false-fail the count assertions.
+source: lexicon-itant
+adapter_test:
+retrieved: 2026-10-29
+files:
+  - path: lexicon_1_0.ttl
+    url: https://raw.githubusercontent.com/DigItAnt/Lexicon_ItAnt/e8fe52a816/lexicon_1_0.ttl
+    refetchable: true
+    whole: false
+    trim: >-
+      block trim (blank-line-separated per-(subject, predicate) blocks kept
+      byte-verbatim): the @prefix header, four ontology-noise specimens, every
+      block of ten entries and their forms/senses/etymologies/links/sources/
+      bibliography, eight lexicon nodes and the Buck concepts reaching kept senses
+  - path: semanticFields_Buck_ItAnt_skos.ttl
+    url: https://raw.githubusercontent.com/DigItAnt/Lexicon_ItAnt/e8fe52a816/semanticFields_Buck_ItAnt_skos.ttl
+    refetchable: true
+    whole: false
+    trim: upstream lines 1-39 (header through the first concept), the rejected-grain specimen

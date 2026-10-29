@@ -1,0 +1,3012 @@
+@prefix : <http://www.lexinfo.net/ontology/3.0/lexinfo#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix ns: <http://www.w3.org/2003/06/sw-vocab-status/ns#> .
+@prefix vartrans: <http://www.w3.org/ns/lemon/vartrans#> .
+@prefix owl2xml: <http://www.w3.org/2006/12/owl2-xml#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix fn: <http://www.w3.org/2005/xpath-functions#> .
+@prefix synsem: <http://www.w3.org/ns/lemon/synsem#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix path: <http://www.ontotext.com/path#> .
+@prefix dct: <http://purl.org/dc/terms/> .
+@prefix xml: <http://www.w3.org/XML/1998/namespace> .
+@prefix lexicog: <http://www.w3.org/ns/lemon/lexicog#> .
+@prefix ontolex: <http://www.w3.org/ns/lemon/ontolex#> .
+@prefix vann: <http://purl.org/vocab/vann/> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix lex: <http://digitant.ilc.cnr.it/data/lexicon#> .
+@prefix rdf4j: <http://rdf4j.org/schema/rdf4j#> .
+@prefix cc: <http://creativecommons.org/ns#> .
+@prefix wgs: <http://www.w3.org/2003/01/geo/wgs84_pos#> .
+@prefix void: <http://rdfs.org/ns/void#> .
+@prefix gn: <http://www.geonames.org/ontology#> .
+@prefix lime: <http://www.w3.org/ns/lemon/lime#> .
+@prefix luc-index: <http://www.ontotext.com/connectors/lucene/instance#> .
+@prefix ety: <http://lari-datasets.ilc.cnr.it/lemonEty#> .
+@prefix lexbib: <http://digitant.ilc.cnr.it/data/lexicon/bibliography#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix sesame: <http://www.openrdf.org/schema/sesame#> .
+@prefix luc: <http://www.ontotext.com/connectors/lucene#> .
+@prefix semiotics: <http://www.ontologydesignpatterns.org/cp/owl/semiotics.owl#> .
+@prefix dc: <http://purl.org/dc/elements/1.1/> .
+
+rdfs:Class a owl:Class .
+
+_:node71 owl:hasValue true .
+
+skos:memberList rdfs:comment """For any resource, every item in the list given as the value of the
+      skos:memberList property is also a value of the skos:member property."""@en .
+
+<http://www.w3.org/ns/lemon/decomp> vann:preferredNamespacePrefix "decomp";
+  owl:versionInfo 1.0 .
+
+lex:deívaí_noun_osc_deias_form a ontolex:Form, owl:NamedIndividual .
+
+lex:deívaí_noun_osc_deívaí_form a ontolex:Form, owl:NamedIndividual .
+
+lex:deívaí_noun_osc_ḍeívas_form a ontolex:Form, owl:NamedIndividual .
+
+lex:deívaí_noun_osc_entry a ontolex:Word, owl:NamedIndividual .
+
+lex:deívaí_noun_osc_sense1 a ontolex:LexicalSense, owl:NamedIndividual .
+
+lex:lexicon_214887 a owl:NamedIndividual, lime:Lexicon .
+
+lex:meddíss_noun_osc_entry a ontolex:Word, owl:NamedIndividual, ontolex:MultiWordExpression,
+    ety:Cognate .
+
+lex:purasiaí_adjective_osc_entry a ontolex:Word, owl:NamedIndividual .
+
+lex:seemuneís_properNoun_osc_entry a ontolex:Word, owl:NamedIndividual, ety:Cognate .
+
+lex:senateís_noun_osc_entry a ontolex:Word, owl:NamedIndividual .
+
+lex:lexicon_222524 a owl:NamedIndividual, lime:Lexicon .
+
+lex:lexicon_345508 a owl:NamedIndividual, lime:Lexicon .
+
+lex:senatus_noun_lat_entry a ontolex:Word, owl:NamedIndividual .
+
+lex:lexicon_551337 a owl:NamedIndividual, lime:Lexicon .
+
+lex:medix_noun_umc_entry a ontolex:Word, owl:NamedIndividual, ety:Cognate .
+
+lex:lexicon_811797 a owl:NamedIndividual, lime:Lexicon .
+
+lex:meddíss_noun_osc_meddis_form a ontolex:Form, owl:NamedIndividual .
+
+lex:meddíss_noun_osc_meddíks_form a ontolex:Form, owl:NamedIndividual .
+
+lex:meddíss_noun_osc_meddís1_form a ontolex:Form, owl:NamedIndividual .
+
+lex:meddíss_noun_osc_meddíss_form a ontolex:Form, owl:NamedIndividual .
+
+lex:meddíss_noun_osc_medikeí_form a ontolex:Form, owl:NamedIndividual .
+
+lex:meddíss_noun_osc_medikeís_form a ontolex:Form, owl:NamedIndividual .
+
+lex:meddíss_noun_osc_medikud_form a ontolex:Form, owl:NamedIndividual .
+
+lex:meddíss_noun_osc_μεδδειξ_form a ontolex:Form, owl:NamedIndividual .
+
+lex:meddíss_noun_osc_sense1 a ontolex:LexicalSense, owl:NamedIndividual .
+
+lex:medix_noun_umc_medix_form a ontolex:Form, owl:NamedIndividual .
+
+lex:medix_noun_umc_sense1 a ontolex:LexicalSense, owl:NamedIndividual .
+
+lex:purasiaí_adjective_osc_purasiaí_form a ontolex:Form, owl:NamedIndividual .
+
+lex:purasiaí_adjective_osc_sense1 a ontolex:LexicalSense, owl:NamedIndividual .
+
+lex:seemuneís_properNoun_osc_seemuneíss_form a ontolex:Form, owl:NamedIndividual .
+
+lex:seemuneís_properNoun_osc_sense1 a ontolex:LexicalSense, owl:NamedIndividual .
+
+lex:senateís_noun_osc_senateis_form a ontolex:Form, owl:NamedIndividual .
+
+lex:senateís_noun_osc_senateís2_form a ontolex:Form, owl:NamedIndividual .
+
+lex:senateís_noun_osc_σενατηις1_form a ontolex:Form, owl:NamedIndividual .
+
+lex:senateís_noun_osc_sense1 a ontolex:LexicalSense, owl:NamedIndividual .
+
+lexbib:deívaí_noun_osc_deias_form_bib21333 a rdf:Description .
+
+lexbib:deívaí_noun_osc_deívaí_form_bib373022 a rdf:Description .
+
+lexbib:deívaí_noun_osc_deívaí_form_bib997399 a rdf:Description .
+
+lexbib:deívaí_noun_osc_ḍeívas_form_bib621322 a rdf:Description .
+
+lexbib:meddíss_noun_osc_meddis_form_bib202608 a rdf:Description .
+
+lexbib:meddíss_noun_osc_meddíks_form_bib550541 a rdf:Description .
+
+lexbib:meddíss_noun_osc_meddíss_form_bib814858 a rdf:Description .
+
+lexbib:meddíss_noun_osc_medikeí_form_bib388374 a rdf:Description .
+
+lexbib:meddíss_noun_osc_medikeís_form_bib151704 a rdf:Description .
+
+lexbib:meddíss_noun_osc_medikud_form_bib240322 a rdf:Description .
+
+lexbib:meddíss_noun_osc_μεδδειξ_form_bib617551 a rdf:Description .
+
+lexbib:medix_noun_umc_medix_form_bib701317 a rdf:Description .
+
+lexbib:purasiaí_adjective_osc_purasiaí_form_bib609743 a rdf:Description .
+
+lexbib:seemuneís_properNoun_osc_seemuneíss_form_bib263108 a rdf:Description .
+
+lexbib:senateís_noun_osc_senateis_form_bib416575 a rdf:Description .
+
+lexbib:senateís_noun_osc_senateís2_form_bib764316 a rdf:Description .
+
+lexbib:senateís_noun_osc_σενατηις1_form_bib181593 a rdf:Description .
+
+lexbib:senateís_noun_osc_σενατηις1_form_bib915178 a rdf:Description .
+
+lex:PIE_518163 a owl:NamedIndividual, ety:Etymon .
+
+lex:PIE_580175 a owl:NamedIndividual, ety:Etymon .
+
+lex:PIE_902411 a owl:NamedIndividual, ety:Etymon .
+
+lex:PIE_980482 a owl:NamedIndividual, ety:Etymon .
+
+lex:PIT_450039 a owl:NamedIndividual, ety:Etymon .
+
+lex:PIT_991448 a owl:NamedIndividual, ety:Etymon .
+
+lex:etymology_211405 a owl:NamedIndividual, ety:Etymology .
+
+lex:etyLink_138863 a owl:NamedIndividual, ety:EtyLink .
+
+lex:etyLink_377473 a owl:NamedIndividual, ety:EtyLink .
+
+lex:etyLink_402846 a owl:NamedIndividual, ety:EtyLink .
+
+lex:etyLink_927012 a owl:NamedIndividual, ety:EtyLink .
+
+lex:etymology_659128 a owl:NamedIndividual, ety:Etymology .
+
+lex:etymology_682956 a owl:NamedIndividual, ety:Etymology .
+
+lex:lexicon_138717 a owl:NamedIndividual, lime:Lexicon .
+
+lex:lexicon_730471 a owl:NamedIndividual, lime:Lexicon .
+
+lexbib:LexO_2023-02-0616_08_07_031 a rdf:Description .
+
+lex:LexO_2023-02-0616_10_06_972 a ety:EtyLink .
+
+lex:LexO_2023-02-0616_10_25_731 a ety:EtyLink .
+
+lexbib:LexO_2023-02-1711_16_50_982 a rdf:Description .
+
+lexbib:LexO_2023-02-1711_17_09_309 a rdf:Description .
+
+lexbib:LexO_2023-02-1712_18_42_035 a rdf:Description .
+
+lexbib:LexO_2023-02-1714_11_22_825 a rdf:Description .
+
+lexbib:LexO_2023-02-1810_39_18_133 a rdf:Description .
+
+lex:LexO_2023-03-2809_08_05_265 a ety:Etymon .
+
+lex:LexO_2023-03-3013_44_13_67 a ontolex:Word, ety:Cognate .
+
+lex:LexO_2023-03-3013_54_20_53 a ontolex:Form .
+
+lex:LexO_2023-03-3013_59_02_597 a ontolex:LexicalSense .
+
+lex:LexO_2023-03-3013_59_30_569 a ety:Etymology .
+
+lex:LexO_2023-03-3014_22_41_53 a ety:EtyLink .
+
+lex:LexO_2023-04-0113_23_50_967 a ety:Etymon .
+
+lex:LexO_2023-04-0314_03_29_497 a ontolex:Form .
+
+lex:LexO_2023-04-1815_07_10_387 a ontolex:Form .
+
+lex:LexO_2023-04-1817_44_39_233 a ontolex:Form .
+
+lex:LexO_2023-04-1817_47_15_866 a ontolex:Form .
+
+lex:LexO_2023-04-1914_27_38_989 a ety:Etymon .
+
+lex:LexO_2023-04-1914_29_10_668 a ety:EtyLink .
+
+lex:LexO_2023-04-2712_45_46_919 a lime:Lexicon .
+
+lex:LexO_2023-04-2713_34_08_678 a ontolex:Word .
+
+lexbib:LexO_2023-04-2713_46_09_865 a rdf:Description .
+
+lex:LexO_2023-04-2713_46_25_549 a ontolex:Form .
+
+lex:LexO_2023-04-2713_48_53_078 a ontolex:Form .
+
+lex:LexO_2023-04-2713_50_22_905 a ontolex:Form .
+
+lex:LexO_2023-04-2713_51_35_242 a ontolex:LexicalSense .
+
+lex:LexO_2023-04-2713_51_57_053 a ety:Etymology .
+
+lex:LexO_2023-04-2713_52_01_41 a ety:EtyLink .
+
+lexbib:LexO_2023-05-0515_38_08_944 a rdf:Description .
+
+lexbib:LexO_2023-05-0515_39_21_943 a rdf:Description .
+
+lexbib:LexO_2023-06-1909_37_03_693 a rdf:Description .
+
+lexbib:LexO_2023-06-1909_37_24_642 a rdf:Description .
+
+lexbib:LexO_2023-06-2911_36_22_834 a rdf:Description .
+
+lexbib:LexO_2023-06-2911_37_27_215 a rdf:Description .
+
+lexbib:LexO_2023-06-2911_41_46_214 a rdf:Description .
+
+lexbib:LexO_2023-06-2911_42_41_835 a rdf:Description .
+
+lexbib:LexO_2023-07-0308_55_19_278 a rdf:Description .
+
+lex:LexO_2023-08-0413_33_51_854 a ontolex:LexicalEntry, ety:Cognate .
+
+lexbib:LexO_2023-08-0413_55_49_127 a rdf:Description .
+
+lex:LexO_2023-08-0413_57_12_514 a ontolex:Form .
+
+lex:LexO_2023-08-0414_15_11_601 a ontolex:Form .
+
+lex:LexO_2023-08-0414_16_21_05 a ontolex:Form .
+
+lex:LexO_2023-08-0414_17_52_076 a ontolex:Form .
+
+lex:LexO_2023-08-0414_20_03_943 a ontolex:Form .
+
+lex:LexO_2023-08-0414_22_31_479 a ontolex:LexicalSense .
+
+lex:LexO_2023-08-0414_22_41_82 a ety:Etymology .
+
+lex:LexO_2023-08-0414_22_46_648 a ety:EtyLink .
+
+lex:LexO_2023-08-0414_23_01_227 a ety:EtyLink .
+
+lexbib:LexO_2023-08-0414_30_00_241 a rdf:Description .
+
+lex:LexO_2023-08-0914_24_42_487 a ontolex:Form .
+
+lexbib:LexO_2023-08-0914_26_23_806 a rdf:Description .
+
+lexbib:LexO_2023-08-0914_26_56_411 a rdf:Description .
+
+lexbib:LexO_2023-08-0914_27_59_319 a rdf:Description .
+
+lex:LexO_2023-08-1014_52_38_581 a ontolex:Form .
+
+lexbib:LexO_2023-08-1014_53_28_116 a rdf:Description .
+
+lex:LexO_2023-09-1320_29_51_035 a ontolex:Form .
+
+lex:LexO_2023-09-1913_54_20_745 a ontolex:Form .
+
+lexbib:LexO_2023-09-2013_37_34_097 a rdf:Description .
+
+lex:LexO_2023-09-2607_57_15_389 a ontolex:Form .
+
+lexbib:LexO_2023-09-2607_58_44_19 a rdf:Description .
+
+lex:LexO_2023-09-2720_24_40_649 a ontolex:Form .
+
+lexbib:LexO_2023-09-2814_36_26_175 a rdf:Description .
+
+lex:LexO_2023-10-0908_50_24_184 a ontolex:LexicalConcept .
+
+lex:LexO_2023-10-2714_16_28_806 a ontolex:LexicalConcept .
+
+lex:LexO_2023-10-3013_55_41_612 a ontolex:LexicalConcept .
+
+lex:LexO_2023-11-0214_11_48_787 a ontolex:LexicalConcept .
+
+lex:LexO_2023-11-2409_42_30_091 a ontolex:Form .
+
+lexbib:LexO_2023-11-2716_44_40_821 a rdf:Description .
+
+lex:LexO_2023-11-2716_44_46_66 a ety:Etymology .
+
+lex:LexO_2023-11-2716_44_49_584 a ety:EtyLink .
+
+lex:LexO_2023-11-2716_44_51_883 a ety:EtyLink .
+
+lexbib:LexO_2023-12-0115_18_05_229 a rdf:Description .
+
+lex:LexO_2023-12-3119_10_08_016 a ontolex:Form .
+
+lex:LexO_2023-12-3119_11_42_061 a ontolex:Form .
+
+lex:LexO_2023-12-3119_13_18_419 a ontolex:Form .
+
+lexbib:LexO_2024-06-2512_50_49_698 a rdf:Description .
+
+lex:LexO_2024-06-2516_57_30_554 a ety:Etymology .
+
+lex:LexO_2024-06-2516_57_34_037 a ety:EtyLink .
+
+lex:LexO_2024-06-2516_59_56_709 a ontolex:Form .
+
+lex:LexO_2024-08-1214_13_40_064 a ontolex:Form .
+
+lex:LexO_2024-10-1407_03_10_339 a ontolex:LexicalEntry .
+
+lex:LexO_2023-10-0908_50_24_184 owl:sameAs <https://lrc.la.utexas.edu/lex/semantic/category/PW> .
+
+lex:LexO_2023-10-2714_16_28_806 owl:sameAs <https://lrc.la.utexas.edu/lex/semantic/category/RB> .
+
+lex:LexO_2023-10-3013_55_41_612 owl:sameAs <https://lrc.la.utexas.edu/lex/semantic/category/LJ> .
+
+lex:LexO_2023-11-0214_11_48_787 owl:sameAs <https://lrc.la.utexas.edu/lex/semantic/category/SO> .
+
+lex:deívaí_noun_osc_entry rdfs:label "deívaí"@osc .
+
+lex:meddíss_noun_osc_entry rdfs:label "meddíss"@osc .
+
+lex:purasiaí_adjective_osc_entry rdfs:label "purasiaí"@osc .
+
+lex:seemuneís_properNoun_osc_entry rdfs:label "seemuṇẹị́[s"@osc .
+
+lex:senateís_noun_osc_entry rdfs:label "senateís"@osc .
+
+lex:senatus_noun_lat_entry rdfs:label "senātus"@lat .
+
+lex:medix_noun_umc_entry rdfs:label "medix"@umc .
+
+lexbib:meddíss_noun_osc_medikud_form_bib240322 rdfs:label "n. 17 [" .
+
+lexbib:seemuneís_properNoun_osc_seemuneíss_form_bib263108 rdfs:label "p. 376 [" .
+
+lexbib:senateís_noun_osc_senateís2_form_bib764316 rdfs:label "pp. 288-289[" .
+
+lex:PIE_518163 rdfs:label "*pəh2u̯r̥/ph2u̯n̥"@pie .
+
+lex:PIE_580175 rdfs:label "*med-es"@pie .
+
+lex:PIE_902411 rdfs:label "*dik-"@pie .
+
+lex:PIE_980482 rdfs:label "*deiu̯o-/-ā"@pie .
+
+lex:PIT_450039 rdfs:label "*deiu̯o-/-ā"@pit .
+
+lex:PIT_991448 rdfs:label "*pūr-āsio"@pit .
+
+lex:etymology_211405 rdfs:label "Etymology of: deívaí" .
+
+lex:etymology_659128 rdfs:label "Etymology of: meddíss" .
+
+lex:etymology_682956 rdfs:label "Etymology of: purasiaí" .
+
+lex:LexO_2023-03-2809_08_05_265 rdfs:label "Ἀπόλλων"@grc .
+
+lex:LexO_2023-03-3013_44_13_67 rdfs:label "med"@xfa .
+
+lex:LexO_2023-03-3013_59_30_569 rdfs:label "Etymology of: med" .
+
+lex:LexO_2023-04-0113_23_50_967 rdfs:label "*mē"@pit .
+
+lex:LexO_2023-04-1914_27_38_989 rdfs:label "*h1me"@pie .
+
+lex:LexO_2023-04-2713_34_08_678 rdfs:label "apolo"@xfa .
+
+lexbib:LexO_2023-04-2713_46_09_865 rdfs:label "202." .
+
+lex:LexO_2023-04-2713_51_57_053 rdfs:label "Etymology of: apolo" .
+
+lexbib:LexO_2023-05-0515_38_08_944 rdfs:label "148-150, 190-191." .
+
+lexbib:LexO_2023-05-0515_39_21_943 rdfs:label "367-368." .
+
+lex:LexO_2023-08-0413_33_51_854 rdfs:label "mego"@xve .
+
+lexbib:LexO_2023-08-0413_55_49_127 rdfs:label "367-368." .
+
+lex:LexO_2023-08-0414_22_41_82 rdfs:label "Etymology of: mego" .
+
+lexbib:LexO_2023-08-0414_30_00_241 rdfs:label "140-141. " .
+
+lex:LexO_2023-11-2716_44_46_66 rdfs:label "Etymology of: medix" .
+
+lex:LexO_2024-06-2516_57_30_554 rdfs:label "Etymology of: senateís" .
+
+lex:LexO_2024-06-2516_57_34_037 rdfs:label "@senatus" .
+
+lex:LexO_2024-10-1407_03_10_339 rdfs:label "LexO_2024-10-1407_03_10_339" .
+
+lex:senatus_noun_lat_entry rdfs:seeAlso <http://lila-erc.eu/data/id/lemma/124309> .
+
+lex:LexO_2023-10-0908_50_24_184 rdfs:seeAlso <https://lrc.la.utexas.edu/lex/semantic/category/PW> .
+
+lexbib:deívaí_noun_osc_deias_form_bib21333 dct:contributor "Mattiocco" .
+
+lexbib:deívaí_noun_osc_deívaí_form_bib373022 dct:contributor "Janda" .
+
+lexbib:deívaí_noun_osc_deívaí_form_bib997399 dct:contributor "Del Tutto Palma" .
+
+lexbib:deívaí_noun_osc_ḍeívas_form_bib621322 dct:contributor "Giordano, Casale" .
+
+lexbib:meddíss_noun_osc_meddis_form_bib202608 dct:contributor "Del Tutto Palma" .
+
+lexbib:meddíss_noun_osc_meddíks_form_bib550541 dct:contributor "Scotto di Freca" .
+
+lexbib:meddíss_noun_osc_meddíss_form_bib814858 dct:contributor "Campanile" .
+
+lexbib:meddíss_noun_osc_medikeí_form_bib388374 dct:contributor "Marchese" .
+
+lexbib:meddíss_noun_osc_medikeís_form_bib151704 dct:contributor "Poccetti" .
+
+lexbib:meddíss_noun_osc_medikud_form_bib240322 dct:contributor "Franchi De Bellis" .
+
+lexbib:meddíss_noun_osc_μεδδειξ_form_bib617551 dct:contributor "Crawford" .
+
+lexbib:medix_noun_umc_medix_form_bib701317 dct:contributor "Mosci Sassi" .
+
+lexbib:purasiaí_adjective_osc_purasiaí_form_bib609743 dct:contributor "Del Tutto Palma" .
+
+lexbib:seemuneís_properNoun_osc_seemuneíss_form_bib263108 dct:contributor "Marchese" .
+
+lexbib:senateís_noun_osc_senateis_form_bib416575 dct:contributor "Del Tutto Palma" .
+
+lexbib:senateís_noun_osc_senateís2_form_bib764316 dct:contributor "Prosdocimi" .
+
+lexbib:senateís_noun_osc_σενατηις1_form_bib181593 dct:contributor "Marchese" .
+
+lexbib:senateís_noun_osc_σενατηις1_form_bib915178 dct:contributor "Lejeune" .
+
+lexbib:LexO_2023-02-0616_08_07_031 dct:contributor "Untermann J." .
+
+lexbib:LexO_2023-02-1711_16_50_982 dct:contributor "Untermann J." .
+
+lexbib:LexO_2023-02-1711_17_09_309 dct:contributor "Untermann J." .
+
+lexbib:LexO_2023-02-1712_18_42_035 dct:contributor "Untermann J." .
+
+lexbib:LexO_2023-02-1714_11_22_825 dct:contributor "Untermann J." .
+
+lexbib:LexO_2023-02-1810_39_18_133 dct:contributor "Untermann J." .
+
+lexbib:LexO_2023-04-2713_46_09_865 dct:contributor "Bakkum Gabriël C. L. M." .
+
+lexbib:LexO_2023-05-0515_38_08_944 dct:contributor "Bakkum Gabriël C. L. M." .
+
+lexbib:LexO_2023-05-0515_39_21_943 dct:contributor "de Vaan Michiel" .
+
+lexbib:LexO_2023-06-1909_37_03_693 dct:contributor "Matteini Chiari Maurizio" .
+
+lexbib:LexO_2023-06-1909_37_24_642 dct:contributor "Calderini Alberto" .
+
+lexbib:LexO_2023-06-2911_36_22_834 dct:contributor "Prosdocimi Aldo Luigi" .
+
+lexbib:LexO_2023-06-2911_37_27_215 dct:contributor "Campanile Enrico" .
+
+lexbib:LexO_2023-06-2911_41_46_214 dct:contributor "Prosdocimi Aldo Luigi" .
+
+lexbib:LexO_2023-06-2911_42_41_835 dct:contributor "Marchese Maria Pia" .
+
+lexbib:LexO_2023-07-0308_55_19_278 dct:contributor "Marchese Maria Pia" .
+
+lexbib:LexO_2023-08-0413_55_49_127 dct:contributor "de Vaan Michiel" .
+
+lexbib:LexO_2023-08-0414_30_00_241 dct:contributor "Prosdocimi Aldo Luigi" .
+
+lexbib:LexO_2023-08-0914_26_23_806 dct:contributor "Lejeune Michel" .
+
+lexbib:LexO_2023-08-0914_26_56_411 dct:contributor "La Regina Adriano" .
+
+lexbib:LexO_2023-08-0914_27_59_319 dct:contributor "Prosdocimi Aldo Luigi" .
+
+lexbib:LexO_2023-08-1014_53_28_116 dct:contributor "Franchi De Bellis Annalisa" .
+
+lexbib:LexO_2023-09-2013_37_34_097 dct:contributor "Antonini Rosalba" .
+
+lexbib:LexO_2023-09-2607_58_44_19 dct:contributor "Antonini Rosalba" .
+
+lexbib:LexO_2023-09-2814_36_26_175 dct:contributor "Antonini Rosalba" .
+
+lexbib:LexO_2023-11-2716_44_40_821 dct:contributor "Untermann J." .
+
+lexbib:LexO_2023-12-0115_18_05_229 dct:contributor "Untermann J." .
+
+lexbib:LexO_2024-06-2512_50_49_698 dct:contributor "Untermann J." .
+
+lex:deívaí_noun_osc_deias_form dct:creator "imported" .
+
+lex:deívaí_noun_osc_deívaí_form dct:creator "imported" .
+
+lex:deívaí_noun_osc_ḍeívas_form dct:creator "imported" .
+
+lex:deívaí_noun_osc_entry dct:creator "imported" .
+
+lex:deívaí_noun_osc_sense1 dct:creator "imported" .
+
+lex:meddíss_noun_osc_entry dct:creator "imported" .
+
+lex:purasiaí_adjective_osc_entry dct:creator "imported" .
+
+lex:seemuneís_properNoun_osc_entry dct:creator "imported" .
+
+lex:senateís_noun_osc_entry dct:creator "imported" .
+
+lex:lexicon_222524 dct:creator "VQ" .
+
+lex:senatus_noun_lat_entry dct:creator "imported" .
+
+lex:lexicon_551337 dct:creator "Middei" .
+
+lex:medix_noun_umc_entry dct:creator "imported" .
+
+lex:lexicon_811797 dct:creator "Middei" .
+
+lex:meddíss_noun_osc_meddis_form dct:creator "imported" .
+
+lex:meddíss_noun_osc_meddíks_form dct:creator "imported" .
+
+lex:meddíss_noun_osc_meddís1_form dct:creator "imported" .
+
+lex:meddíss_noun_osc_meddíss_form dct:creator "imported" .
+
+lex:meddíss_noun_osc_medikeí_form dct:creator "imported" .
+
+lex:meddíss_noun_osc_medikeís_form dct:creator "imported" .
+
+lex:meddíss_noun_osc_medikud_form dct:creator "imported" .
+
+lex:meddíss_noun_osc_μεδδειξ_form dct:creator "imported" .
+
+lex:meddíss_noun_osc_sense1 dct:creator "imported" .
+
+lex:medix_noun_umc_medix_form dct:creator "imported" .
+
+lex:medix_noun_umc_sense1 dct:creator "imported" .
+
+lex:purasiaí_adjective_osc_purasiaí_form dct:creator "imported" .
+
+lex:purasiaí_adjective_osc_sense1 dct:creator "imported" .
+
+lex:seemuneís_properNoun_osc_seemuneíss_form dct:creator "imported" .
+
+lex:seemuneís_properNoun_osc_sense1 dct:creator "imported" .
+
+lex:senateís_noun_osc_senateis_form dct:creator "imported" .
+
+lex:senateís_noun_osc_senateís2_form dct:creator "imported" .
+
+lex:senateís_noun_osc_σενατηις1_form dct:creator "imported" .
+
+lex:senateís_noun_osc_sense1 dct:creator "imported" .
+
+lexbib:deívaí_noun_osc_deias_form_bib21333 dct:creator "imported" .
+
+lexbib:deívaí_noun_osc_deívaí_form_bib373022 dct:creator "imported" .
+
+lexbib:deívaí_noun_osc_deívaí_form_bib997399 dct:creator "imported" .
+
+lexbib:deívaí_noun_osc_ḍeívas_form_bib621322 dct:creator "imported" .
+
+lexbib:meddíss_noun_osc_meddis_form_bib202608 dct:creator "imported" .
+
+lexbib:meddíss_noun_osc_meddíks_form_bib550541 dct:creator "imported" .
+
+lexbib:meddíss_noun_osc_meddíss_form_bib814858 dct:creator "imported" .
+
+lexbib:meddíss_noun_osc_medikeí_form_bib388374 dct:creator "imported" .
+
+lexbib:meddíss_noun_osc_medikeís_form_bib151704 dct:creator "imported" .
+
+lexbib:meddíss_noun_osc_medikud_form_bib240322 dct:creator "imported" .
+
+lexbib:meddíss_noun_osc_μεδδειξ_form_bib617551 dct:creator "imported" .
+
+lexbib:medix_noun_umc_medix_form_bib701317 dct:creator "imported" .
+
+lexbib:purasiaí_adjective_osc_purasiaí_form_bib609743 dct:creator "imported" .
+
+lexbib:seemuneís_properNoun_osc_seemuneíss_form_bib263108 dct:creator "imported" .
+
+lexbib:senateís_noun_osc_senateis_form_bib416575 dct:creator "imported" .
+
+lexbib:senateís_noun_osc_senateís2_form_bib764316 dct:creator "imported" .
+
+lexbib:senateís_noun_osc_σενατηις1_form_bib181593 dct:creator "imported" .
+
+lexbib:senateís_noun_osc_σενατηις1_form_bib915178 dct:creator "imported" .
+
+lex:PIE_518163 dct:creator "imported" .
+
+lex:PIE_580175 dct:creator "imported" .
+
+lex:PIE_902411 dct:creator "imported" .
+
+lex:PIE_980482 dct:creator "imported" .
+
+lex:PIT_450039 dct:creator "imported" .
+
+lex:PIT_991448 dct:creator "imported" .
+
+lex:etymology_211405 dct:creator "imported" .
+
+lex:etyLink_138863 dct:creator "imported" .
+
+lex:etyLink_377473 dct:creator "imported" .
+
+lex:etyLink_402846 dct:creator "imported" .
+
+lex:etyLink_927012 dct:creator "imported" .
+
+lex:etymology_659128 dct:creator "imported" .
+
+lex:etymology_682956 dct:creator "imported" .
+
+lex:lexicon_138717 dct:creator "imported" .
+
+lex:lexicon_730471 dct:creator "imported" .
+
+lexbib:LexO_2023-02-0616_08_07_031 dct:creator "mzinzi" .
+
+lex:LexO_2023-02-0616_10_06_972 dct:creator "mzinzi" .
+
+lex:LexO_2023-02-0616_10_25_731 dct:creator "mzinzi" .
+
+lexbib:LexO_2023-02-1711_16_50_982 dct:creator "mzinzi" .
+
+lexbib:LexO_2023-02-1711_17_09_309 dct:creator "mzinzi" .
+
+lexbib:LexO_2023-02-1712_18_42_035 dct:creator "mzinzi" .
+
+lexbib:LexO_2023-02-1714_11_22_825 dct:creator "mzinzi" .
+
+lexbib:LexO_2023-02-1810_39_18_133 dct:creator "mzinzi" .
+
+lex:LexO_2023-03-2809_08_05_265 dct:creator "luca" .
+
+lex:LexO_2023-03-3013_44_13_67 dct:creator "greta" .
+
+lex:LexO_2023-03-3013_54_20_53 dct:creator "greta" .
+
+lex:LexO_2023-03-3013_59_02_597 dct:creator "greta" .
+
+lex:LexO_2023-03-3013_59_30_569 dct:creator "greta" .
+
+lex:LexO_2023-03-3014_22_41_53 dct:creator "greta" .
+
+lex:LexO_2023-04-0113_23_50_967 dct:creator "greta" .
+
+lex:LexO_2023-04-0314_03_29_497 dct:creator "greta" .
+
+lex:LexO_2023-04-1815_07_10_387 dct:creator "mzinzi" .
+
+lex:LexO_2023-04-1817_44_39_233 dct:creator "ctoscano" .
+
+lex:LexO_2023-04-1817_47_15_866 dct:creator "ctoscano" .
+
+lex:LexO_2023-04-1914_27_38_989 dct:creator "greta" .
+
+lex:LexO_2023-04-1914_29_10_668 dct:creator "greta" .
+
+lex:LexO_2023-04-2712_45_46_919 dct:creator "greta" .
+
+lex:LexO_2023-04-2713_34_08_678 dct:creator "greta" .
+
+lexbib:LexO_2023-04-2713_46_09_865 dct:creator "greta" .
+
+lex:LexO_2023-04-2713_46_25_549 dct:creator "greta" .
+
+lex:LexO_2023-04-2713_48_53_078 dct:creator "greta" .
+
+lex:LexO_2023-04-2713_50_22_905 dct:creator "greta" .
+
+lex:LexO_2023-04-2713_51_35_242 dct:creator "greta" .
+
+lex:LexO_2023-04-2713_51_57_053 dct:creator "greta" .
+
+lex:LexO_2023-04-2713_52_01_41 dct:creator "greta" .
+
+lexbib:LexO_2023-05-0515_38_08_944 dct:creator "greta" .
+
+lexbib:LexO_2023-05-0515_39_21_943 dct:creator "greta" .
+
+lexbib:LexO_2023-06-1909_37_03_693 dct:creator "test" .
+
+lexbib:LexO_2023-06-1909_37_24_642 dct:creator "test" .
+
+lexbib:LexO_2023-06-2911_36_22_834 dct:creator "test" .
+
+lexbib:LexO_2023-06-2911_37_27_215 dct:creator "test" .
+
+lexbib:LexO_2023-06-2911_41_46_214 dct:creator "test" .
+
+lexbib:LexO_2023-06-2911_42_41_835 dct:creator "test" .
+
+lexbib:LexO_2023-07-0308_55_19_278 dct:creator "test" .
+
+lex:LexO_2023-08-0413_33_51_854 dct:creator "greta" .
+
+lexbib:LexO_2023-08-0413_55_49_127 dct:creator "greta" .
+
+lex:LexO_2023-08-0413_57_12_514 dct:creator "greta" .
+
+lex:LexO_2023-08-0414_15_11_601 dct:creator "greta" .
+
+lex:LexO_2023-08-0414_16_21_05 dct:creator "greta" .
+
+lex:LexO_2023-08-0414_17_52_076 dct:creator "greta" .
+
+lex:LexO_2023-08-0414_20_03_943 dct:creator "greta" .
+
+lex:LexO_2023-08-0414_22_31_479 dct:creator "greta" .
+
+lex:LexO_2023-08-0414_22_41_82 dct:creator "greta" .
+
+lex:LexO_2023-08-0414_22_46_648 dct:creator "greta" .
+
+lex:LexO_2023-08-0414_23_01_227 dct:creator "greta" .
+
+lexbib:LexO_2023-08-0414_30_00_241 dct:creator "greta" .
+
+lex:LexO_2023-08-0914_24_42_487 dct:creator "mzinzi" .
+
+lexbib:LexO_2023-08-0914_26_23_806 dct:creator "mzinzi" .
+
+lexbib:LexO_2023-08-0914_26_56_411 dct:creator "mzinzi" .
+
+lexbib:LexO_2023-08-0914_27_59_319 dct:creator "mzinzi" .
+
+lex:LexO_2023-08-1014_52_38_581 dct:creator "test" .
+
+lexbib:LexO_2023-08-1014_53_28_116 dct:creator "test" .
+
+lex:LexO_2023-09-1320_29_51_035 dct:creator "greta" .
+
+lex:LexO_2023-09-1913_54_20_745 dct:creator "mzinzi" .
+
+lexbib:LexO_2023-09-2013_37_34_097 dct:creator "test" .
+
+lex:LexO_2023-09-2607_57_15_389 dct:creator "test" .
+
+lexbib:LexO_2023-09-2607_58_44_19 dct:creator "test" .
+
+lex:LexO_2023-09-2720_24_40_649 dct:creator "fmurano" .
+
+lexbib:LexO_2023-09-2814_36_26_175 dct:creator "test" .
+
+lex:LexO_2023-10-0908_50_24_184 dct:creator "vquochi" .
+
+lex:LexO_2023-10-2714_16_28_806 dct:creator "test" .
+
+lex:LexO_2023-10-3013_55_41_612 dct:creator "test" .
+
+lex:LexO_2023-11-0214_11_48_787 dct:creator "test" .
+
+lex:LexO_2023-11-2409_42_30_091 dct:creator "francescob" .
+
+lexbib:LexO_2023-11-2716_44_40_821 dct:creator "francescob" .
+
+lex:LexO_2023-11-2716_44_46_66 dct:creator "francescob" .
+
+lex:LexO_2023-11-2716_44_49_584 dct:creator "francescob" .
+
+lex:LexO_2023-11-2716_44_51_883 dct:creator "francescob" .
+
+lexbib:LexO_2023-12-0115_18_05_229 dct:creator "mzinzi" .
+
+lex:LexO_2023-12-3119_10_08_016 dct:creator "francescob" .
+
+lex:LexO_2023-12-3119_11_42_061 dct:creator "francescob" .
+
+lex:LexO_2023-12-3119_13_18_419 dct:creator "francescob" .
+
+lexbib:LexO_2024-06-2512_50_49_698 dct:creator "francescob" .
+
+lex:LexO_2024-06-2516_57_30_554 dct:creator "francescob" .
+
+lex:LexO_2024-06-2516_57_34_037 dct:creator "francescob" .
+
+lex:LexO_2024-06-2516_59_56_709 dct:creator "francescob" .
+
+lex:LexO_2024-08-1214_13_40_064 dct:creator "mzinzi" .
+
+lex:LexO_2024-10-1407_03_10_339 dct:creator "luca" .
+
+lex:lexicon_214887 dct:description "An extinct language of southern Italy" .
+
+lex:lexicon_222524 dct:description "The Faliscan language, the extinct language of the ancient Falisci, forms, together with Latin, the group of Latino-Faliscan languages. It seems probable that the dialect lasted on, though being gradually permeated with Latin, until at least 150 BC." .
+
+lex:lexicon_551337 dct:description "marrucino (see also https://iso639-3.sil.org/code/umc)" .
+
+lex:lexicon_811797 dct:description "greco antico" .
+
+lex:lexicon_138717 dct:description "Language for etymology" .
+
+lex:lexicon_730471 dct:description "Language for etymology" .
+
+lex:LexO_2023-04-2712_45_46_919 dct:description "Venetic (see also https://iso639-3.sil.org/code/xve)" .
+
+lex:deívaí_noun_osc_deias_form dct:modified "2023-08-02T12:25:31.654Z" .
+
+lex:deívaí_noun_osc_deívaí_form dct:modified "2024-01-23T15:03:31.620Z" .
+
+lex:deívaí_noun_osc_ḍeívas_form dct:modified "2023-08-02T12:26:57.229Z" .
+
+lex:deívaí_noun_osc_entry dct:modified "2022-07-12T12:11:06.653+02:00" .
+
+lex:deívaí_noun_osc_sense1 dct:modified "2022-07-12T12:11:06.655+02:00" .
+
+lex:meddíss_noun_osc_entry dct:modified "2024-10-12T09:25:50.295Z" .
+
+lex:purasiaí_adjective_osc_entry dct:modified "2022-07-12T12:11:06.577+02:00" .
+
+lex:seemuneís_properNoun_osc_entry dct:modified "2024-07-07T18:18:15.650Z" .
+
+lex:senateís_noun_osc_entry dct:modified "2024-06-25T16:51:54.578Z" .
+
+lex:senatus_noun_lat_entry dct:modified "2024-06-25T17:03:47.965Z" .
+
+lex:medix_noun_umc_entry dct:modified "2023-11-27T16:44:03.058Z" .
+
+lex:meddíss_noun_osc_meddis_form dct:modified "2023-09-25T07:59:03.621Z" .
+
+lex:meddíss_noun_osc_meddíks_form dct:modified "2023-09-25T08:01:48.514Z" .
+
+lex:meddíss_noun_osc_meddís1_form dct:modified "2023-09-25T08:04:54.565Z" .
+
+lex:meddíss_noun_osc_meddíss_form dct:modified "2023-09-25T08:07:43.168Z" .
+
+lex:meddíss_noun_osc_medikeí_form dct:modified "2023-09-25T08:12:11.477Z" .
+
+lex:meddíss_noun_osc_medikeís_form dct:modified "2023-09-25T08:13:41.275Z" .
+
+lex:meddíss_noun_osc_medikud_form dct:modified "2023-12-04T09:46:43.879Z" .
+
+lex:meddíss_noun_osc_μεδδειξ_form dct:modified "2023-09-25T08:15:23.809Z" .
+
+lex:meddíss_noun_osc_sense1 dct:modified "2023-02-06T16:14:58.561Z" .
+
+lex:medix_noun_umc_medix_form dct:modified "2022-07-12T12:11:06.771+02:00" .
+
+lex:medix_noun_umc_sense1 dct:modified "2023-02-06T17:02:04.078Z" .
+
+lex:purasiaí_adjective_osc_purasiaí_form dct:modified "2024-08-28T14:54:03.278Z" .
+
+lex:purasiaí_adjective_osc_sense1 dct:modified "2024-08-28T14:54:51.224Z" .
+
+lex:seemuneís_properNoun_osc_seemuneíss_form dct:modified "2024-06-25T12:51:42.127Z" .
+
+lex:seemuneís_properNoun_osc_sense1 dct:modified "2023-02-20T13:51:41.718Z" .
+
+lex:senateís_noun_osc_senateis_form dct:modified "2023-09-26T08:08:20.282Z" .
+
+lex:senateís_noun_osc_senateís2_form dct:modified "2023-09-26T08:08:28.689Z" .
+
+lex:senateís_noun_osc_σενατηις1_form dct:modified "2023-09-26T08:12:18.016Z" .
+
+lex:senateís_noun_osc_sense1 dct:modified "2024-06-25T16:49:19.876Z" .
+
+lexbib:deívaí_noun_osc_deias_form_bib21333 dct:modified "2022-09-28T13:18:24.083+02:00" .
+
+lexbib:deívaí_noun_osc_deívaí_form_bib373022 dct:modified "2022-09-28T13:18:24.648+02:00" .
+
+lexbib:deívaí_noun_osc_deívaí_form_bib997399 dct:modified "2022-09-28T13:18:25.200+02:00" .
+
+lexbib:deívaí_noun_osc_ḍeívas_form_bib621322 dct:modified "2022-09-28T13:18:25.863+02:00" .
+
+lexbib:meddíss_noun_osc_meddis_form_bib202608 dct:modified "2022-09-28T13:19:59.791+02:00" .
+
+lexbib:meddíss_noun_osc_meddíks_form_bib550541 dct:modified "2022-09-28T13:19:57.324+02:00" .
+
+lexbib:meddíss_noun_osc_meddíss_form_bib814858 dct:modified "2022-09-28T13:20:02.168+02:00" .
+
+lexbib:meddíss_noun_osc_medikeí_form_bib388374 dct:modified "2022-09-28T13:19:58.697+02:00" .
+
+lexbib:meddíss_noun_osc_medikeís_form_bib151704 dct:modified "2022-09-28T13:19:56.772+02:00" .
+
+lexbib:meddíss_noun_osc_medikud_form_bib240322 dct:modified "2022-09-28T13:19:59.252+02:00" .
+
+lexbib:meddíss_noun_osc_μεδδειξ_form_bib617551 dct:modified "2022-09-28T13:20:03.800+02:00" .
+
+lexbib:medix_noun_umc_medix_form_bib701317 dct:modified "2022-09-28T13:21:41.288+02:00" .
+
+lexbib:purasiaí_adjective_osc_purasiaí_form_bib609743 dct:modified "2022-09-28T13:16:24.287+02:00" .
+
+lexbib:seemuneís_properNoun_osc_seemuneíss_form_bib263108 dct:modified "2022-09-28T13:16:36.800+02:00" .
+
+lexbib:senateís_noun_osc_senateis_form_bib416575 dct:modified "2022-09-28T13:19:31.192+02:00" .
+
+lexbib:senateís_noun_osc_senateís2_form_bib764316 dct:modified "2022-09-28T13:19:29.460+02:00" .
+
+lexbib:senateís_noun_osc_σενατηις1_form_bib181593 dct:modified "2022-09-28T13:19:32.275+02:00" .
+
+lexbib:senateís_noun_osc_σενατηις1_form_bib915178 dct:modified "2022-09-28T13:19:32.817+02:00" .
+
+lex:PIE_518163 dct:modified "2022-10-04T07:46:06.717+02:00" .
+
+lex:PIE_580175 dct:modified "2022-10-04T07:46:30.795+02:00" .
+
+lex:PIE_902411 dct:modified "2024-06-22T08:07:18.265Z" .
+
+lex:PIE_980482 dct:modified "2022-10-04T07:46:20.370+02:00" .
+
+lex:PIT_450039 dct:modified "2022-10-04T07:46:20.884+02:00" .
+
+lex:PIT_991448 dct:modified "2022-10-04T07:46:07.355+02:00" .
+
+lex:etymology_211405 dct:modified "2022-10-04T07:46:20.370+02:00" .
+
+lex:etyLink_138863 dct:modified "2022-10-04T07:46:20.884+02:00" .
+
+lex:etyLink_377473 dct:modified "2022-10-04T07:46:20.370+02:00" .
+
+lex:etyLink_402846 dct:modified "2022-10-04T07:46:06.717+02:00" .
+
+lex:etyLink_927012 dct:modified "2022-10-04T07:46:07.355+02:00" .
+
+lex:etymology_659128 dct:modified "2022-10-04T07:46:30.795+02:00" .
+
+lex:etymology_682956 dct:modified "2022-10-04T07:46:06.716+02:00" .
+
+lexbib:LexO_2023-02-0616_08_07_031 dct:modified "2023-02-06T16:08:07.031Z" .
+
+lex:LexO_2023-02-0616_10_06_972 dct:modified "2023-02-06T16:10:19.738Z" .
+
+lex:LexO_2023-02-0616_10_25_731 dct:modified "2023-02-06T16:10:54.696Z" .
+
+lexbib:LexO_2023-02-1711_16_50_982 dct:modified "2023-02-17T11:16:50.982Z" .
+
+lexbib:LexO_2023-02-1711_17_09_309 dct:modified "2023-02-17T11:17:09.309Z" .
+
+lexbib:LexO_2023-02-1712_18_42_035 dct:modified "2023-02-17T12:18:42.035Z" .
+
+lexbib:LexO_2023-02-1714_11_22_825 dct:modified "2023-02-17T14:11:22.825Z" .
+
+lexbib:LexO_2023-02-1810_39_18_133 dct:modified "2023-02-18T10:39:18.133Z" .
+
+lex:LexO_2023-03-2809_08_05_265 dct:modified "2023-06-26T12:29:57.115Z" .
+
+lex:LexO_2023-03-3013_44_13_67 dct:modified "2023-08-04T13:53:25.491Z" .
+
+lex:LexO_2023-03-3013_54_20_53 dct:modified "2023-04-03T14:14:52.512Z" .
+
+lex:LexO_2023-03-3013_59_02_597 dct:modified "2023-03-30T13:59:07.937Z" .
+
+lex:LexO_2023-03-3013_59_30_569 dct:modified "2023-03-30T13:59:30.569Z" .
+
+lex:LexO_2023-03-3014_22_41_53 dct:modified "2023-04-01T13:30:06.566Z" .
+
+lex:LexO_2023-04-0113_23_50_967 dct:modified "2023-05-05T13:58:30.607Z" .
+
+lex:LexO_2023-04-0314_03_29_497 dct:modified "2023-04-03T14:07:06.016Z" .
+
+lex:LexO_2023-04-1815_07_10_387 dct:modified "2023-09-22T15:20:05.423Z" .
+
+lex:LexO_2023-04-1817_44_39_233 dct:modified "2024-03-01T21:55:34.039Z" .
+
+lex:LexO_2023-04-1817_47_15_866 dct:modified "2024-04-08T18:41:55.343Z" .
+
+lex:LexO_2023-04-1914_27_38_989 dct:modified "2023-04-19T14:28:53.636Z" .
+
+lex:LexO_2023-04-1914_29_10_668 dct:modified "2023-04-19T14:29:20.989Z" .
+
+lex:LexO_2023-04-2712_45_46_919 dct:modified "2023-04-27T12:46:41.366Z" .
+
+lex:LexO_2023-04-2713_34_08_678 dct:modified "2024-10-11T22:35:58.873Z" .
+
+lexbib:LexO_2023-04-2713_46_09_865 dct:modified "2023-04-27T13:46:16.574Z" .
+
+lex:LexO_2023-04-2713_46_25_549 dct:modified "2023-04-27T13:47:43.190Z" .
+
+lex:LexO_2023-04-2713_48_53_078 dct:modified "2023-04-27T13:50:16.880Z" .
+
+lex:LexO_2023-04-2713_50_22_905 dct:modified "2023-04-27T13:51:23.733Z" .
+
+lex:LexO_2023-04-2713_51_35_242 dct:modified "2023-04-27T13:51:45.928Z" .
+
+lex:LexO_2023-04-2713_51_57_053 dct:modified "2023-04-27T13:51:57.053Z" .
+
+lex:LexO_2023-04-2713_52_01_41 dct:modified "2023-04-27T13:53:11.679Z" .
+
+lexbib:LexO_2023-05-0515_38_08_944 dct:modified "2023-05-05T15:38:22.287Z" .
+
+lexbib:LexO_2023-05-0515_39_21_943 dct:modified "2023-05-05T15:39:28.879Z" .
+
+lexbib:LexO_2023-06-1909_37_03_693 dct:modified "2023-06-19T09:37:03.693Z" .
+
+lexbib:LexO_2023-06-1909_37_24_642 dct:modified "2023-06-19T09:37:24.642Z" .
+
+lexbib:LexO_2023-06-2911_36_22_834 dct:modified "2023-06-29T11:36:22.834Z" .
+
+lexbib:LexO_2023-06-2911_37_27_215 dct:modified "2023-06-29T11:37:27.215Z" .
+
+lexbib:LexO_2023-06-2911_41_46_214 dct:modified "2023-06-29T11:41:46.214Z" .
+
+lexbib:LexO_2023-06-2911_42_41_835 dct:modified "2023-06-29T11:42:41.835Z" .
+
+lexbib:LexO_2023-07-0308_55_19_278 dct:modified "2023-07-03T08:55:19.278Z" .
+
+lex:LexO_2023-08-0413_33_51_854 dct:modified "2023-08-05T13:06:53.229Z" .
+
+lexbib:LexO_2023-08-0413_55_49_127 dct:modified "2023-08-04T13:56:23.263Z" .
+
+lex:LexO_2023-08-0413_57_12_514 dct:modified "2024-10-03T13:20:03.936Z" .
+
+lex:LexO_2023-08-0414_15_11_601 dct:modified "2023-09-12T07:15:17.122Z" .
+
+lex:LexO_2023-08-0414_16_21_05 dct:modified "2023-08-05T13:07:26.507Z" .
+
+lex:LexO_2023-08-0414_17_52_076 dct:modified "2023-08-05T13:07:34.105Z" .
+
+lex:LexO_2023-08-0414_20_03_943 dct:modified "2023-08-05T13:07:56.976Z" .
+
+lex:LexO_2023-08-0414_22_31_479 dct:modified "2023-08-04T14:22:36.469Z" .
+
+lex:LexO_2023-08-0414_22_41_82 dct:modified "2023-08-04T14:22:41.820Z" .
+
+lex:LexO_2023-08-0414_22_46_648 dct:modified "2023-08-04T14:22:58.695Z" .
+
+lex:LexO_2023-08-0414_23_01_227 dct:modified "2023-08-04T14:23:13.902Z" .
+
+lexbib:LexO_2023-08-0414_30_00_241 dct:modified "2023-08-04T14:30:24.167Z" .
+
+lex:LexO_2023-08-0914_24_42_487 dct:modified "2023-09-26T08:08:13.049Z" .
+
+lexbib:LexO_2023-08-0914_26_23_806 dct:modified "2023-08-09T14:26:23.806Z" .
+
+lexbib:LexO_2023-08-0914_26_56_411 dct:modified "2023-08-09T14:26:56.411Z" .
+
+lexbib:LexO_2023-08-0914_27_59_319 dct:modified "2023-08-09T14:27:59.319Z" .
+
+lex:LexO_2023-08-1014_52_38_581 dct:modified "2023-10-05T13:35:57.208Z" .
+
+lexbib:LexO_2023-08-1014_53_28_116 dct:modified "2023-08-10T14:53:28.116Z" .
+
+lex:LexO_2023-09-1320_29_51_035 dct:modified "2023-09-13T20:31:19.306Z" .
+
+lex:LexO_2023-09-1913_54_20_745 dct:modified "2023-09-28T14:36:30.695Z" .
+
+lexbib:LexO_2023-09-2013_37_34_097 dct:modified "2023-09-20T13:37:34.097Z" .
+
+lex:LexO_2023-09-2607_57_15_389 dct:modified "2024-06-25T17:01:13.167Z" .
+
+lexbib:LexO_2023-09-2607_58_44_19 dct:modified "2023-09-26T07:58:44.190Z" .
+
+lex:LexO_2023-09-2720_24_40_649 dct:modified "2023-12-20T11:34:10.431Z" .
+
+lexbib:LexO_2023-09-2814_36_26_175 dct:modified "2023-09-28T14:36:26.175Z" .
+
+lex:LexO_2023-10-0908_50_24_184 dct:modified "2024-10-12T11:20:57.360Z" .
+
+lex:LexO_2023-10-2714_16_28_806 dct:modified "2024-07-22T10:00:15.467Z" .
+
+lex:LexO_2023-10-3013_55_41_612 dct:modified "2024-07-08T16:18:23.714Z" .
+
+lex:LexO_2023-11-0214_11_48_787 dct:modified "2024-07-22T10:27:16.345Z" .
+
+lex:LexO_2023-11-2409_42_30_091 dct:modified "2023-12-01T15:18:56.461Z" .
+
+lexbib:LexO_2023-11-2716_44_40_821 dct:modified "2023-11-27T16:44:40.821Z" .
+
+lex:LexO_2023-11-2716_44_46_66 dct:modified "2023-11-27T16:44:46.660Z" .
+
+lex:LexO_2023-11-2716_44_49_584 dct:modified "2023-11-27T16:44:57.056Z" .
+
+lex:LexO_2023-11-2716_44_51_883 dct:modified "2023-11-27T16:45:04.833Z" .
+
+lexbib:LexO_2023-12-0115_18_05_229 dct:modified "2023-12-01T15:18:05.229Z" .
+
+lex:LexO_2023-12-3119_10_08_016 dct:modified "2023-12-31T19:11:09.645Z" .
+
+lex:LexO_2023-12-3119_11_42_061 dct:modified "2023-12-31T19:12:54.218Z" .
+
+lex:LexO_2023-12-3119_13_18_419 dct:modified "2024-01-23T14:33:02.794Z" .
+
+lexbib:LexO_2024-06-2512_50_49_698 dct:modified "2024-06-25T12:50:49.698Z" .
+
+lex:LexO_2024-06-2516_57_30_554 dct:modified "2024-06-25T16:57:30.554Z" .
+
+lex:LexO_2024-06-2516_57_34_037 dct:modified "2024-06-25T17:02:58.412Z" .
+
+lex:LexO_2024-06-2516_59_56_709 dct:modified "2024-06-25T17:00:53.418Z" .
+
+lex:LexO_2024-08-1214_13_40_064 dct:modified "2024-08-12T14:20:45.587Z" .
+
+lex:LexO_2024-10-1407_03_10_339 dct:modified "2024-10-14T07:03:10.339Z" .
+
+lexbib:deívaí_noun_osc_deias_form_bib21333 dct:publisher "SXDVEEJS" .
+
+lexbib:deívaí_noun_osc_deívaí_form_bib373022 dct:publisher "KSWKJYGG" .
+
+lexbib:deívaí_noun_osc_deívaí_form_bib997399 dct:publisher "TVXC5YMR" .
+
+lexbib:deívaí_noun_osc_ḍeívas_form_bib621322 dct:publisher "B9PZBA5J" .
+
+lexbib:meddíss_noun_osc_meddis_form_bib202608 dct:publisher "XS69WQ7G" .
+
+lexbib:meddíss_noun_osc_meddíks_form_bib550541 dct:publisher "JYC2JUBJ" .
+
+lexbib:meddíss_noun_osc_meddíss_form_bib814858 dct:publisher "9VM7ADI4" .
+
+lexbib:meddíss_noun_osc_medikeí_form_bib388374 dct:publisher "TMVM6CAZ" .
+
+lexbib:meddíss_noun_osc_medikeís_form_bib151704 dct:publisher "I2R9I2Y2" .
+
+lexbib:meddíss_noun_osc_medikud_form_bib240322 dct:publisher "5IE9AECM" .
+
+lexbib:meddíss_noun_osc_μεδδειξ_form_bib617551 dct:publisher "6AAHNK4L" .
+
+lexbib:medix_noun_umc_medix_form_bib701317 dct:publisher "DZSAUC36" .
+
+lexbib:purasiaí_adjective_osc_purasiaí_form_bib609743 dct:publisher "3U2YK78M" .
+
+lexbib:seemuneís_properNoun_osc_seemuneíss_form_bib263108 dct:publisher "CC4JTQR9" .
+
+lexbib:senateís_noun_osc_senateis_form_bib416575 dct:publisher "XS69WQ7G" .
+
+lexbib:senateís_noun_osc_senateís2_form_bib764316 dct:publisher "GQQ2RLNI" .
+
+lexbib:senateís_noun_osc_σενατηις1_form_bib181593 dct:publisher "8QMEUP2V" .
+
+lexbib:senateís_noun_osc_σενατηις1_form_bib915178 dct:publisher "CISTFV5R" .
+
+lexbib:LexO_2023-02-0616_08_07_031 dct:publisher "Z4XB2N9S" .
+
+lexbib:LexO_2023-02-1711_16_50_982 dct:publisher "Z4XB2N9S" .
+
+lexbib:LexO_2023-02-1711_17_09_309 dct:publisher "Z4XB2N9S" .
+
+lexbib:LexO_2023-02-1712_18_42_035 dct:publisher "Z4XB2N9S" .
+
+lexbib:LexO_2023-02-1714_11_22_825 dct:publisher "Z4XB2N9S" .
+
+lexbib:LexO_2023-02-1810_39_18_133 dct:publisher "Z4XB2N9S" .
+
+lexbib:LexO_2023-04-2713_46_09_865 dct:publisher "84FQ2UI4" .
+
+lexbib:LexO_2023-05-0515_38_08_944 dct:publisher "84FQ2UI4" .
+
+lexbib:LexO_2023-05-0515_39_21_943 dct:publisher "FUVFVWAY" .
+
+lexbib:LexO_2023-06-1909_37_03_693 dct:publisher "WNBNLQHG" .
+
+lexbib:LexO_2023-06-1909_37_24_642 dct:publisher "TJLI6BRE" .
+
+lexbib:LexO_2023-06-2911_36_22_834 dct:publisher "7X6JQUQN" .
+
+lexbib:LexO_2023-06-2911_37_27_215 dct:publisher "9VM7ADI4" .
+
+lexbib:LexO_2023-06-2911_41_46_214 dct:publisher "7X6JQUQN" .
+
+lexbib:LexO_2023-06-2911_42_41_835 dct:publisher "CC4JTQR9" .
+
+lexbib:LexO_2023-07-0308_55_19_278 dct:publisher "TMVM6CAZ" .
+
+lexbib:LexO_2023-08-0413_55_49_127 dct:publisher "FUVFVWAY" .
+
+lexbib:LexO_2023-08-0414_30_00_241 dct:publisher "JQ7H6CNX" .
+
+lexbib:LexO_2023-08-0914_26_23_806 dct:publisher "X5ZN9ZSA" .
+
+lexbib:LexO_2023-08-0914_26_56_411 dct:publisher "P5W8VT7B" .
+
+lexbib:LexO_2023-08-0914_27_59_319 dct:publisher "GQQ2RLNI" .
+
+lexbib:LexO_2023-08-1014_53_28_116 dct:publisher "5IE9AECM" .
+
+lexbib:LexO_2023-09-2013_37_34_097 dct:publisher "SPVL28Y7" .
+
+lexbib:LexO_2023-09-2607_58_44_19 dct:publisher "LRFXVEPR" .
+
+lexbib:LexO_2023-09-2814_36_26_175 dct:publisher "SPVL28Y7" .
+
+lexbib:LexO_2023-11-2716_44_40_821 dct:publisher "Z4XB2N9S" .
+
+lexbib:LexO_2023-12-0115_18_05_229 dct:publisher "Z4XB2N9S" .
+
+lexbib:LexO_2024-06-2512_50_49_698 dct:publisher "Z4XB2N9S" .
+
+lexbib:deívaí_noun_osc_deias_form_bib21333 dct:title "Centri fortificati vestini" .
+
+lexbib:deívaí_noun_osc_deívaí_form_bib373022 dct:title "Die Geburt des Göttlichen Kindes bei den Oskern" .
+
+lexbib:deívaí_noun_osc_deívaí_form_bib997399 dct:title "Tavola di Agnone: l’iter delle interpretazioni : 1848-1993" .
+
+lexbib:deívaí_noun_osc_ḍeívas_form_bib621322 dct:title "Iscrizioni pompeiane inedite" .
+
+lexbib:meddíss_noun_osc_meddis_form_bib202608 dct:title "La Tavola Bantina (sezione osca). Proposte di rilettura" .
+
+lexbib:meddíss_noun_osc_meddíks_form_bib550541 dct:title "Nuove osservazioni sull'iscrizione di punta della Campanella" .
+
+lexbib:meddíss_noun_osc_meddíss_form_bib814858 dct:title "Per l’interpretazione di osco prúffed" .
+
+lexbib:meddíss_noun_osc_medikeí_form_bib388374 dct:title "Il Cippo Abellano: considerazioni linguistiche su un testo normativo italico" .
+
+lexbib:meddíss_noun_osc_medikeís_form_bib151704 dct:title "Osco sereukidima-, sakarakidima" .
+
+lexbib:meddíss_noun_osc_medikud_form_bib240322 dct:title "Le iovile capuane" .
+
+lexbib:meddíss_noun_osc_μεδδειξ_form_bib617551 dct:title "The Oscan inscriptions of Messana" .
+
+lexbib:medix_noun_umc_medix_form_bib701317 dct:title "Peligno" .
+
+lexbib:purasiaí_adjective_osc_purasiaí_form_bib609743 dct:title "La tavola di Agnone nel contesto italico. Atti del Convegno di studio (Agnone 13-15 aprile 1994)" .
+
+lexbib:seemuneís_properNoun_osc_seemuneíss_form_bib263108 dct:title "Sulle nuove (e antiche) iscrizioni di Pietrabbondante" .
+
+lexbib:senateís_noun_osc_senateis_form_bib416575 dct:title "La Tavola Bantina (sezione osca). Proposte di rilettura" .
+
+lexbib:senateís_noun_osc_senateís2_form_bib764316 dct:title "Sulle due nuove iscrizioni da Pietrabbondante" .
+
+lexbib:senateís_noun_osc_σενατηις1_form_bib181593 dct:title "Termini istituzionali italici: osco αναγγινουδ" .
+
+lexbib:senateís_noun_osc_σενατηις1_form_bib915178 dct:title "Mefitis d'apres les dedicaces lucaniennes de Rossano di Vaglio" .
+
+lexbib:LexO_2023-02-0616_08_07_031 dct:title "Wörterbuch des Oskisch-Umbrischen" .
+
+lexbib:LexO_2023-02-1711_16_50_982 dct:title "Wörterbuch des Oskisch-Umbrischen" .
+
+lexbib:LexO_2023-02-1711_17_09_309 dct:title "Wörterbuch des Oskisch-Umbrischen" .
+
+lexbib:LexO_2023-02-1712_18_42_035 dct:title "Wörterbuch des Oskisch-Umbrischen" .
+
+lexbib:LexO_2023-02-1714_11_22_825 dct:title "Wörterbuch des Oskisch-Umbrischen" .
+
+lexbib:LexO_2023-02-1810_39_18_133 dct:title "Wörterbuch des Oskisch-Umbrischen" .
+
+lexbib:LexO_2023-04-2713_46_09_865 dct:title "The Latin Dialect of the Ager Faliscus: 150 Years of Scholarship" .
+
+lexbib:LexO_2023-05-0515_38_08_944 dct:title "The Latin Dialect of the Ager Faliscus: 150 Years of Scholarship" .
+
+lexbib:LexO_2023-05-0515_39_21_943 dct:title "Etymological Dictionary of Latin and the other Italic Languages" .
+
+lexbib:LexO_2023-06-1909_37_03_693 dct:title "Il santuario italico di San Pietro di Cantoni di Sepino" .
+
+lexbib:LexO_2023-06-1909_37_24_642 dct:title "Statuetta di divinità femminile" .
+
+lexbib:LexO_2023-06-2911_36_22_834 dct:title "Il meddix deketasio di Nola e il meddix X di Cuma" .
+
+lexbib:LexO_2023-06-2911_37_27_215 dct:title "Per l’interpretazione di osco prúffed" .
+
+lexbib:LexO_2023-06-2911_41_46_214 dct:title "Il meddix deketasio di Nola e il meddix X di Cuma" .
+
+lexbib:LexO_2023-06-2911_42_41_835 dct:title "Sulle nuove (e antiche) iscrizioni di Pietrabbondante" .
+
+lexbib:LexO_2023-07-0308_55_19_278 dct:title "Il Cippo Abellano: considerazioni linguistiche su un testo normativo italico" .
+
+lexbib:LexO_2023-08-0413_55_49_127 dct:title "Etymological Dictionary of Latin and the other Italic Languages" .
+
+lexbib:LexO_2023-08-0414_30_00_241 dct:title "La lingua venetica" .
+
+lexbib:LexO_2023-08-0914_26_23_806 dct:title "[Sulle due nuove iscrizioni da Pietrabbondante]" .
+
+lexbib:LexO_2023-08-0914_26_56_411 dct:title "Il Sannio" .
+
+lexbib:LexO_2023-08-0914_27_59_319 dct:title "Sulle due nuove iscrizioni da Pietrabbondante" .
+
+lexbib:LexO_2023-08-1014_53_28_116 dct:title "Le iovile capuane" .
+
+lexbib:LexO_2023-09-2013_37_34_097 dct:title "Testi italici nelle collezioni del Frusinate" .
+
+lexbib:LexO_2023-09-2607_58_44_19 dct:title "Italico" .
+
+lexbib:LexO_2023-09-2814_36_26_175 dct:title "Testi italici nelle collezioni del Frusinate" .
+
+lexbib:LexO_2023-11-2716_44_40_821 dct:title "Wörterbuch des Oskisch-Umbrischen" .
+
+lexbib:LexO_2023-12-0115_18_05_229 dct:title "Wörterbuch des Oskisch-Umbrischen" .
+
+lexbib:LexO_2024-06-2512_50_49_698 dct:title "Wörterbuch des Oskisch-Umbrischen" .
+
+lex:deívaí_noun_osc_deias_form :case :genitiveCase .
+
+lex:deívaí_noun_osc_deívaí_form :case :dativeCase .
+
+lex:deívaí_noun_osc_ḍeívas_form :case :genitiveCase .
+
+lex:meddíss_noun_osc_meddis_form :case :nominativeCase .
+
+lex:meddíss_noun_osc_meddíks_form :case :nominativeCase .
+
+lex:meddíss_noun_osc_meddís1_form :case :nominativeCase .
+
+lex:meddíss_noun_osc_meddíss_form :case :nominativeCase .
+
+lex:meddíss_noun_osc_medikeí_form :case :dativeCase .
+
+lex:meddíss_noun_osc_medikeís_form :case :genitiveCase .
+
+lex:meddíss_noun_osc_medikud_form :case :ablativeCase .
+
+lex:meddíss_noun_osc_μεδδειξ_form :case :nominativeCase .
+
+lex:medix_noun_umc_medix_form :case :nominativeCase .
+
+lex:purasiaí_adjective_osc_purasiaí_form :case :dativeCase .
+
+lex:seemuneís_properNoun_osc_seemuneíss_form :case :genitiveCase .
+
+lex:senateís_noun_osc_senateis_form :case :genitiveCase .
+
+lex:senateís_noun_osc_senateís2_form :case :genitiveCase .
+
+lex:senateís_noun_osc_σενατηις1_form :case :genitiveCase .
+
+lex:LexO_2023-03-3013_54_20_53 :case :accusativeCase .
+
+lex:LexO_2023-04-0314_03_29_497 :case :accusativeCase .
+
+lex:LexO_2023-04-1815_07_10_387 :case :ablativeCase .
+
+lex:LexO_2023-04-1817_44_39_233 :case :nominativeCase .
+
+lex:LexO_2023-04-1817_47_15_866 :case :nominativeCase .
+
+lex:LexO_2023-04-2713_46_25_549 :case :nominativeCase .
+
+lex:LexO_2023-04-2713_48_53_078 :case :genitiveCase .
+
+lex:LexO_2023-04-2713_50_22_905 :case :dativeCase .
+
+lex:LexO_2023-08-0413_57_12_514 :case :accusativeCase .
+
+lex:LexO_2023-08-0414_15_11_601 :case :accusativeCase .
+
+lex:LexO_2023-08-0414_16_21_05 :case :accusativeCase .
+
+lex:LexO_2023-08-0414_17_52_076 :case :accusativeCase .
+
+lex:LexO_2023-08-0414_20_03_943 :case :accusativeCase .
+
+lex:LexO_2023-08-0914_24_42_487 :case :genitiveCase .
+
+lex:LexO_2023-08-1014_52_38_581 :case :nominativeCase .
+
+lex:LexO_2023-09-1320_29_51_035 :case :accusativeCase .
+
+lex:LexO_2023-09-1913_54_20_745 :case :dativeCase .
+
+lex:LexO_2023-09-2607_57_15_389 :case :genitiveCase .
+
+lex:LexO_2023-09-2720_24_40_649 :case :nominativeCase .
+
+lex:LexO_2023-11-2409_42_30_091 :case :accusativeCase .
+
+lex:LexO_2023-12-3119_10_08_016 :case :nominativeCase .
+
+lex:LexO_2023-12-3119_11_42_061 :case :ablativeCase .
+
+lex:LexO_2023-12-3119_13_18_419 :case :nominativeCase .
+
+lex:LexO_2024-06-2516_59_56_709 :case :genitiveCase .
+
+lex:LexO_2024-08-1214_13_40_064 :case :accusativeCase .
+
+lex:deívaí_noun_osc_sense1 skos:definition """subst.: dea;
+adj.: divina""" .
+
+lex:meddíss_noun_osc_sense1 skos:definition "magistrate " .
+
+lex:medix_noun_umc_sense1 skos:definition "magistrate" .
+
+lex:purasiaí_adjective_osc_sense1 skos:definition "belonging to the fire" .
+
+lex:seemuneís_properNoun_osc_sense1 skos:definition "Theonym" .
+
+lex:senateís_noun_osc_sense1 skos:definition "senate" .
+
+lex:LexO_2023-03-3013_59_02_597 skos:definition "me" .
+
+lex:LexO_2023-04-2713_51_35_242 skos:definition "theonym" .
+
+lex:LexO_2023-08-0414_22_31_479 skos:definition "me" .
+
+lex:LexO_2023-11-0214_11_48_787 skos:definition "Territorial, social and political divisions; Social relations"@en .
+
+lex:deívaí_noun_osc_deias_form :gender :feminine .
+
+lex:deívaí_noun_osc_deívaí_form :gender :feminine .
+
+lex:deívaí_noun_osc_ḍeívas_form :gender :feminine .
+
+lex:meddíss_noun_osc_meddis_form :gender :masculine .
+
+lex:meddíss_noun_osc_meddíks_form :gender :masculine .
+
+lex:meddíss_noun_osc_meddís1_form :gender :masculine .
+
+lex:meddíss_noun_osc_meddíss_form :gender :masculine .
+
+lex:meddíss_noun_osc_medikeí_form :gender :masculine .
+
+lex:meddíss_noun_osc_medikeís_form :gender :masculine .
+
+lex:meddíss_noun_osc_medikud_form :gender :masculine .
+
+lex:meddíss_noun_osc_μεδδειξ_form :gender :masculine .
+
+lex:medix_noun_umc_medix_form :gender :masculine .
+
+lex:purasiaí_adjective_osc_purasiaí_form :gender :feminine .
+
+lex:seemuneís_properNoun_osc_seemuneíss_form :gender :feminine .
+
+lex:senateís_noun_osc_senateis_form :gender :masculine .
+
+lex:senateís_noun_osc_senateís2_form :gender :masculine .
+
+lex:senateís_noun_osc_σενατηις1_form :gender :masculine .
+
+lex:LexO_2023-04-1815_07_10_387 :gender :masculine .
+
+lex:LexO_2023-04-1817_44_39_233 :gender :masculine .
+
+lex:LexO_2023-04-1817_47_15_866 :gender :masculine .
+
+lex:LexO_2023-04-2713_46_25_549 :gender :masculine .
+
+lex:LexO_2023-04-2713_48_53_078 :gender :masculine .
+
+lex:LexO_2023-04-2713_50_22_905 :gender :masculine .
+
+lex:LexO_2023-08-0914_24_42_487 :gender :masculine .
+
+lex:LexO_2023-08-1014_52_38_581 :gender :masculine .
+
+lex:LexO_2023-09-1913_54_20_745 :gender :feminine .
+
+lex:LexO_2023-09-2607_57_15_389 :gender :masculine .
+
+lex:LexO_2023-09-2720_24_40_649 :gender :masculine .
+
+lex:LexO_2023-11-2409_42_30_091 :gender :masculine .
+
+lex:LexO_2023-12-3119_10_08_016 :gender :masculine .
+
+lex:LexO_2023-12-3119_11_42_061 :gender :masculine .
+
+lex:LexO_2023-12-3119_13_18_419 :gender :masculine .
+
+lex:LexO_2024-06-2516_59_56_709 :gender :masculine .
+
+lex:deívaí_noun_osc_deias_form :number :singular .
+
+lex:deívaí_noun_osc_deívaí_form :number :singular .
+
+lex:deívaí_noun_osc_ḍeívas_form :number :singular .
+
+lex:meddíss_noun_osc_meddis_form :number :singular .
+
+lex:meddíss_noun_osc_meddíks_form :number :plural .
+
+lex:meddíss_noun_osc_meddís1_form :number :singular .
+
+lex:meddíss_noun_osc_meddíss_form :number :singular .
+
+lex:meddíss_noun_osc_medikeí_form :number :singular .
+
+lex:meddíss_noun_osc_medikeís_form :number :singular .
+
+lex:meddíss_noun_osc_medikud_form :number :singular .
+
+lex:meddíss_noun_osc_μεδδειξ_form :number :plural .
+
+lex:medix_noun_umc_medix_form :number :singular .
+
+lex:purasiaí_adjective_osc_purasiaí_form :number :singular .
+
+lex:seemuneís_properNoun_osc_seemuneíss_form :number :singular .
+
+lex:senateís_noun_osc_senateis_form :number :singular .
+
+lex:senateís_noun_osc_senateís2_form :number :singular .
+
+lex:senateís_noun_osc_σενατηις1_form :number :singular .
+
+lex:LexO_2023-03-3013_54_20_53 :number :singular .
+
+lex:LexO_2023-04-0314_03_29_497 :number :singular .
+
+lex:LexO_2023-04-1815_07_10_387 :number :singular .
+
+lex:LexO_2023-04-1817_44_39_233 :number :singular .
+
+lex:LexO_2023-04-1817_47_15_866 :number :singular .
+
+lex:LexO_2023-04-2713_46_25_549 :number :singular .
+
+lex:LexO_2023-04-2713_48_53_078 :number :singular .
+
+lex:LexO_2023-04-2713_50_22_905 :number :singular .
+
+lex:LexO_2023-08-0413_57_12_514 :number :singular .
+
+lex:LexO_2023-08-0414_15_11_601 :number :singular .
+
+lex:LexO_2023-08-0414_16_21_05 :number :singular .
+
+lex:LexO_2023-08-0414_17_52_076 :number :singular .
+
+lex:LexO_2023-08-0414_20_03_943 :number :singular .
+
+lex:LexO_2023-08-0914_24_42_487 :number :singular .
+
+lex:LexO_2023-08-1014_52_38_581 :number :singular .
+
+lex:LexO_2023-09-1320_29_51_035 :number :singular .
+
+lex:LexO_2023-09-1913_54_20_745 :number :singular .
+
+lex:LexO_2023-09-2607_57_15_389 :number :singular .
+
+lex:LexO_2023-09-2720_24_40_649 :number :singular .
+
+lex:LexO_2023-11-2409_42_30_091 :number :singular .
+
+lex:LexO_2023-12-3119_10_08_016 :number :singular .
+
+lex:LexO_2023-12-3119_11_42_061 :number :singular .
+
+lex:LexO_2023-12-3119_13_18_419 :number :singular .
+
+lex:LexO_2024-06-2516_59_56_709 :number :singular .
+
+lex:LexO_2024-08-1214_13_40_064 :number :singular .
+
+lex:deívaí_noun_osc_entry :partOfSpeech :noun .
+
+lex:meddíss_noun_osc_entry :partOfSpeech :noun .
+
+lex:purasiaí_adjective_osc_entry :partOfSpeech :adjective .
+
+lex:seemuneís_properNoun_osc_entry :partOfSpeech :properNoun .
+
+lex:senateís_noun_osc_entry :partOfSpeech :noun .
+
+lex:senatus_noun_lat_entry :partOfSpeech :noun .
+
+lex:medix_noun_umc_entry :partOfSpeech :noun .
+
+lex:LexO_2023-03-2809_08_05_265 :partOfSpeech :properNoun .
+
+lex:LexO_2023-03-3013_44_13_67 :partOfSpeech :personalPronoun .
+
+lex:LexO_2023-04-2713_34_08_678 :partOfSpeech :properNoun .
+
+lex:LexO_2023-08-0413_33_51_854 :partOfSpeech :personalPronoun .
+
+lex:LexO_2023-03-3013_54_20_53 :person :firstPerson .
+
+lex:LexO_2023-04-0314_03_29_497 :person :firstPerson .
+
+lex:deívaí_noun_osc_deias_form :confidence -1 .
+
+lex:deívaí_noun_osc_deívaí_form :confidence -1 .
+
+lex:deívaí_noun_osc_ḍeívas_form :confidence -1 .
+
+lex:deívaí_noun_osc_entry :confidence -1 .
+
+lex:deívaí_noun_osc_sense1 :confidence -1 .
+
+lex:meddíss_noun_osc_entry :confidence -1 .
+
+lex:purasiaí_adjective_osc_entry :confidence -1 .
+
+lex:seemuneís_properNoun_osc_entry :confidence -1 .
+
+lex:senateís_noun_osc_entry :confidence -1 .
+
+lex:senatus_noun_lat_entry :confidence -1 .
+
+lex:medix_noun_umc_entry :confidence -1 .
+
+lex:meddíss_noun_osc_meddis_form :confidence -1 .
+
+lex:meddíss_noun_osc_meddíks_form :confidence -1 .
+
+lex:meddíss_noun_osc_meddís1_form :confidence -1 .
+
+lex:meddíss_noun_osc_meddíss_form :confidence -1 .
+
+lex:meddíss_noun_osc_medikeí_form :confidence -1 .
+
+lex:meddíss_noun_osc_medikeís_form :confidence -1 .
+
+lex:meddíss_noun_osc_medikud_form :confidence -1 .
+
+lex:meddíss_noun_osc_μεδδειξ_form :confidence -1 .
+
+lex:meddíss_noun_osc_sense1 :confidence -1 .
+
+lex:medix_noun_umc_medix_form :confidence -1 .
+
+lex:medix_noun_umc_sense1 :confidence -1 .
+
+lex:purasiaí_adjective_osc_purasiaí_form :confidence -1 .
+
+lex:purasiaí_adjective_osc_sense1 :confidence -1 .
+
+lex:seemuneís_properNoun_osc_seemuneíss_form :confidence -1 .
+
+lex:seemuneís_properNoun_osc_sense1 :confidence -1 .
+
+lex:senateís_noun_osc_senateis_form :confidence -1 .
+
+lex:senateís_noun_osc_senateís2_form :confidence -1 .
+
+lex:senateís_noun_osc_σενατηις1_form :confidence -1 .
+
+lex:senateís_noun_osc_sense1 :confidence -1 .
+
+lex:PIE_518163 :confidence -1 .
+
+lex:PIE_580175 :confidence -1 .
+
+lex:PIE_902411 :confidence -1 .
+
+lex:PIE_980482 :confidence -1 .
+
+lex:PIT_450039 :confidence -1 .
+
+lex:PIT_991448 :confidence -1 .
+
+lex:etymology_211405 :confidence -1 .
+
+lex:etyLink_138863 :confidence -1 .
+
+lex:etyLink_377473 :confidence -1 .
+
+lex:etyLink_402846 :confidence -1 .
+
+lex:etyLink_927012 :confidence -1 .
+
+lex:etymology_659128 :confidence -1 .
+
+lex:etymology_682956 :confidence -1 .
+
+lex:LexO_2023-12-3119_11_42_061 :confidence 0 .
+
+lex:deívaí_noun_osc_entry ontolex:sense lex:deívaí_noun_osc_sense1 .
+
+lex:meddíss_noun_osc_entry ontolex:sense lex:meddíss_noun_osc_sense1 .
+
+lex:purasiaí_adjective_osc_entry ontolex:sense lex:purasiaí_adjective_osc_sense1 .
+
+lex:seemuneís_properNoun_osc_entry ontolex:sense lex:seemuneís_properNoun_osc_sense1 .
+
+lex:senateís_noun_osc_entry ontolex:sense lex:senateís_noun_osc_sense1 .
+
+lex:senatus_noun_lat_entry ontolex:sense lex:senatus_noun_lat_sense1 .
+
+lex:medix_noun_umc_entry ontolex:sense lex:medix_noun_umc_sense1 .
+
+lex:LexO_2023-03-3013_44_13_67 ontolex:sense lex:LexO_2023-03-3013_59_02_597 .
+
+lex:LexO_2023-04-2713_34_08_678 ontolex:sense lex:LexO_2023-04-2713_51_35_242 .
+
+lex:LexO_2023-08-0413_33_51_854 ontolex:sense lex:LexO_2023-08-0414_22_31_479 .
+
+lex:deívaí_noun_osc_entry ontolex:lexicalForm lex:deívaí_noun_osc_deias_form, lex:deívaí_noun_osc_deívaí_form,
+    lex:deívaí_noun_osc_ḍeívas_form, lex:LexO_2023-09-1913_54_20_745 .
+
+lex:meddíss_noun_osc_entry ontolex:lexicalForm lex:meddíss_noun_osc_meddis_form, lex:meddíss_noun_osc_meddíks_form,
+    lex:meddíss_noun_osc_meddís1_form, lex:meddíss_noun_osc_meddíss_form, lex:meddíss_noun_osc_medikeí_form,
+    lex:meddíss_noun_osc_medikeís_form, lex:meddíss_noun_osc_medikud_form, lex:meddíss_noun_osc_μεδδειξ_form,
+    lex:LexO_2023-04-1815_07_10_387, lex:LexO_2023-04-1817_44_39_233, lex:LexO_2023-04-1817_47_15_866,
+    lex:LexO_2023-08-1014_52_38_581, lex:LexO_2023-09-2720_24_40_649, lex:LexO_2023-11-2409_42_30_091,
+    lex:LexO_2023-12-3119_10_08_016, lex:LexO_2023-12-3119_11_42_061, lex:LexO_2023-12-3119_13_18_419 .
+
+lex:purasiaí_adjective_osc_entry ontolex:lexicalForm lex:purasiaí_adjective_osc_purasiaí_form .
+
+lex:seemuneís_properNoun_osc_entry ontolex:lexicalForm lex:seemuneís_properNoun_osc_seemuneíss_form .
+
+lex:senateís_noun_osc_entry ontolex:lexicalForm lex:senateís_noun_osc_senateis_form,
+    lex:senateís_noun_osc_senateís2_form, lex:senateís_noun_osc_σενατηις1_form, lex:LexO_2023-08-0914_24_42_487,
+    lex:LexO_2023-09-2607_57_15_389, lex:LexO_2024-06-2516_59_56_709 .
+
+lex:senatus_noun_lat_entry ontolex:lexicalForm lex:senatus_noun_lat_lemma .
+
+lex:medix_noun_umc_entry ontolex:lexicalForm lex:medix_noun_umc_medix_form .
+
+lex:LexO_2023-03-3013_44_13_67 ontolex:lexicalForm lex:LexO_2023-03-3013_54_20_53,
+    lex:LexO_2023-04-0314_03_29_497 .
+
+lex:LexO_2023-04-2713_34_08_678 ontolex:lexicalForm lex:LexO_2023-04-2713_46_25_549,
+    lex:LexO_2023-04-2713_48_53_078, lex:LexO_2023-04-2713_50_22_905 .
+
+lex:LexO_2023-08-0413_33_51_854 ontolex:lexicalForm lex:LexO_2023-08-0413_57_12_514,
+    lex:LexO_2023-08-0414_15_11_601, lex:LexO_2023-08-0414_16_21_05, lex:LexO_2023-08-0414_17_52_076,
+    lex:LexO_2023-08-0414_20_03_943, lex:LexO_2023-09-1320_29_51_035, lex:LexO_2024-08-1214_13_40_064 .
+
+lex:LexO_2023-10-0908_50_24_184 ontolex:lexicalizedSense lex:purasiaí_adjective_osc_sense1,
+    lex:LexO_2023-10-1511_07_28_824 .
+
+lex:LexO_2023-10-2714_16_28_806 ontolex:lexicalizedSense lex:aasaí_noun_osc_sense1,
+    lex:dadị́katted_verb_osc_sense1, lex:deívaí_noun_osc_sense1, lex:húrz_noun_osc_sense1,
+    lex:kerríiúí_adjective_osc_sense1, lex:pestlúm_noun_osc_sense1, lex:regatureí_adjective_osc_sense1,
+    lex:saahtúm_adjective_osc_sense1, lex:sakarater_verb_osc_sense1, lex:statif_noun_osc_sense1,
+    lex:statús_verb_osc_sense1, lex:tefúrúm_noun_osc_sense1, lex:LexO_2024-01-0120_48_07_516,
+    lex:LexO_2024-01-0120_56_05_526, lex:LexO_2024-01-2408_35_14_432, lex:LexO_2024-01-3114_24_05_448,
+    lex:LexO_2024-03-1009_23_30_989, lex:LexO_2024-03-1022_34_21_607, lex:LexO_2024-03-1115_55_56_583,
+    lex:LexO_2024-04-2310_11_08_81, lex:LexO_2024-04-2707_40_46_625, lex:LexO_2024-04-2910_00_26_888,
+    lex:LexO_2024-05-0322_29_42_606, lex:LexO_2024-06-1109_54_30_417, lex:LexO_2024-06-1210_58_29_697,
+    lex:LexO_2024-06-1313_12_40_475, lex:LexO_2024-06-2209_51_43_407, lex:LexO_2024-06-2212_01_53_087,
+    lex:LexO_2024-06-2220_29_48_35, lex:LexO_2024-06-2315_56_34_54, lex:LexO_2024-06-2416_52_15_947,
+    lex:LexO_2024-06-2417_06_03_41, lex:LexO_2024-07-2209_59_05_147 .
+
+lex:LexO_2023-10-3013_55_41_612 ontolex:lexicalizedSense lex:legú_noun_osc_sense1,
+    lex:senateís_noun_osc_sense1, lex:tanginom_noun_osc_sense1, lex:LexO_2024-04-2317_12_24_768,
+    lex:LexO_2024-05-0311_49_59_614, lex:LexO_2024-06-1308_31_50_324, lex:LexO_2024-06-1308_53_27_0,
+    lex:LexO_2024-06-1410_29_32_497, lex:LexO_2024-06-1710_58_33_202, lex:LexO_2024-06-2015_15_53_741,
+    lex:LexO_2024-06-2208_24_30_855, lex:LexO_2024-06-2208_56_19_24, lex:LexO_2024-06-2209_44_09_139,
+    lex:LexO_2024-06-2316_22_20_565, lex:LexO_2024-06-2316_28_42_836, lex:LexO_2024-06-2316_54_56_637,
+    lex:LexO_2024-06-2517_08_18_433 .
+
+lex:LexO_2023-11-0214_11_48_787 ontolex:lexicalizedSense lex:dekmanniúís_properNoun_osc_sense1,
+    lex:famel_noun_osc_sense1, lex:futír_noun_osc_sense1, lex:genetaí_adjective_osc_sense1,
+    lex:keenzstur_noun_osc_sense1, lex:meddíss_noun_osc_sense1, lex:patanam_noun_osc_sense1,
+    lex:patir_noun_osc_sense1, lex:puklum_noun_osc_sense1, lex:túvtíks_adjective_osc_sense1,
+    lex:verehasiúí_adjective_osc_sense1, lex:vereias_noun_osc_sense1, lex:LexO_2024-03-0915_13_18_303,
+    lex:LexO_2024-03-1110_38_29_48, lex:LexO_2024-03-1110_51_27_555, lex:LexO_2024-04-2315_24_02_228,
+    lex:LexO_2024-04-2617_16_20_896, lex:LexO_2024-05-0311_07_10_633, lex:LexO_2024-05-1108_57_42_705,
+    lex:LexO_2024-05-1211_39_31_364, lex:LexO_2024-05-3013_31_23_055, lex:LexO_2024-06-0505_05_44_798,
+    lex:LexO_2024-06-1308_47_25_716, lex:LexO_2024-06-1314_02_01_119, lex:LexO_2024-06-1710_25_49_1,
+    lex:LexO_2024-06-1809_28_24_882, lex:LexO_2024-06-1916_49_35_786, lex:LexO_2024-06-2316_11_38_258,
+    lex:LexO_2024-07-2210_11_09_156, lex:LexO_2024-07-2210_26_08_76 .
+
+lex:deívaí_noun_osc_deias_form ontolex:writtenRep "deias"@osc .
+
+lex:deívaí_noun_osc_deívaí_form ontolex:writtenRep "deívaí"@osc .
+
+lex:deívaí_noun_osc_ḍeívas_form ontolex:writtenRep "ḍeívas"@osc .
+
+lex:meddíss_noun_osc_meddis_form ontolex:writtenRep "meddis"@osc .
+
+lex:meddíss_noun_osc_meddíks_form ontolex:writtenRep "medd[í]ks"@osc .
+
+lex:meddíss_noun_osc_meddís1_form ontolex:writtenRep "meddís"@osc .
+
+lex:meddíss_noun_osc_meddíss_form ontolex:writtenRep "meddíss"@osc .
+
+lex:meddíss_noun_osc_medikeí_form ontolex:writtenRep "medikeí"@osc .
+
+lex:meddíss_noun_osc_medikeís_form ontolex:writtenRep "medikeís"@osc .
+
+lex:meddíss_noun_osc_medikud_form ontolex:writtenRep "medik(u)d"@osc .
+
+lex:meddíss_noun_osc_μεδδειξ_form ontolex:writtenRep "μεδδειξ "@osc .
+
+lex:medix_noun_umc_medix_form ontolex:writtenRep "medix"@umc .
+
+lex:purasiaí_adjective_osc_purasiaí_form ontolex:writtenRep "purasiaí"@osc .
+
+lex:seemuneís_properNoun_osc_seemuneíss_form ontolex:writtenRep "seemuṇẹị́[s"@osc .
+
+lex:senateís_noun_osc_senateis_form ontolex:writtenRep "sena[teis"@osc .
+
+lex:senateís_noun_osc_senateís2_form ontolex:writtenRep "senateís"@osc .
+
+lex:senateís_noun_osc_σενατηις1_form ontolex:writtenRep "σενατηις"@osc .
+
+lex:LexO_2023-03-3013_54_20_53 ontolex:writtenRep "med"@xfa .
+
+lex:LexO_2023-04-0314_03_29_497 ontolex:writtenRep "met"@xfa .
+
+lex:LexO_2023-04-1815_07_10_387 ontolex:writtenRep "m(edíkúd)"@osc .
+
+lex:LexO_2023-04-1817_44_39_233 ontolex:writtenRep "m(eddís)"@osc .
+
+lex:LexO_2023-04-1817_47_15_866 ontolex:writtenRep "ṃ(eddís)"@osc .
+
+lex:LexO_2023-04-2713_46_25_549 ontolex:writtenRep "apolo"@xfa .
+
+lex:LexO_2023-04-2713_48_53_078 ontolex:writtenRep "apolonos"@xfa .
+
+lex:LexO_2023-04-2713_50_22_905 ontolex:writtenRep "[a]polinei"@xfa .
+
+lex:LexO_2023-08-0413_57_12_514 ontolex:writtenRep "mego"@xve .
+
+lex:LexO_2023-08-0414_15_11_601 ontolex:writtenRep "[m]eg[o"@xve .
+
+lex:LexO_2023-08-0414_16_21_05 ontolex:writtenRep "me[go]"@xve .
+
+lex:LexO_2023-08-0414_17_52_076 ontolex:writtenRep "meg[o]"@xve .
+
+lex:LexO_2023-08-0414_20_03_943 ontolex:writtenRep "nego"@xve .
+
+lex:LexO_2023-08-0914_24_42_487 ontolex:writtenRep "[s]enateís"@osc .
+
+lex:LexO_2023-08-1014_52_38_581 ontolex:writtenRep "medd(ís)"@osc .
+
+lex:LexO_2023-09-1320_29_51_035 ontolex:writtenRep "m]ego"@xve .
+
+lex:LexO_2023-09-1913_54_20_745 ontolex:writtenRep "deiv]ại"@osc .
+
+lex:LexO_2023-09-2607_57_15_389 ontolex:writtenRep "σενα]τηις"@osc .
+
+lex:LexO_2023-09-2720_24_40_649 ontolex:writtenRep "[m(eddís)]"@osc .
+
+lex:LexO_2023-11-2409_42_30_091 ontolex:writtenRep "μεδεκον"@osc .
+
+lex:LexO_2023-12-3119_10_08_016 ontolex:writtenRep "med(dís)"@osc .
+
+lex:LexO_2023-12-3119_11_42_061 ontolex:writtenRep "med(ikud)"@osc .
+
+lex:LexO_2023-12-3119_13_18_419 ontolex:writtenRep "metd(ís)"@osc .
+
+lex:LexO_2024-06-2516_59_56_709 ontolex:writtenRep "senateis"@osc .
+
+lex:LexO_2024-08-1214_13_40_064 ontolex:writtenRep "⌜m⌝ego"@xve .
+
+lex:lexicon_214887 lime:entry lex:aadiieís_properNoun_osc_entry, lex:aasaí_noun_osc_entry,
+    lex:aceneis_noun_osc_entry, lex:akdafed_verb_osc_entry, lex:alttreí_adjective_osc_entry,
+    lex:amanaffed_verb_osc_entry, lex:ammaí_properNoun_osc_entry, lex:anafríss_properNoun_osc_entry,
+    lex:anagtiai_properNoun_osc_entry, lex:anterstataí_properNoun_osc_entry, lex:az_preposition_osc_entry,
+    lex:baíteís_properNoun_osc_entry, lex:búvaianúd_adjective_osc_entry, lex:dadị́katted_verb_osc_entry,
+    lex:dedet_verb_osc_entry, lex:dekitis_properNoun_osc_entry, lex:dekmanniúís_properNoun_osc_entry,
+    lex:detfri_noun_osc_entry, lex:deívaí_noun_osc_entry, lex:diumpaís_properNoun_osc_entry,
+    lex:duunatted_verb_osc_entry, lex:díuveí_properNoun_osc_entry, lex:ekík_adjective_osc_entry,
+    lex:entraí_adjective_osc_entry, lex:essuf_unspecified_osc_entry, lex:evklúí_properNoun_osc_entry,
+    lex:faamat_verb_osc_entry, lex:famel_noun_osc_entry, lex:fangua_noun_osc_entry, lex:fluusasiaís_properNoun_osc_entry,
+    lex:fluusaí_properNoun_osc_entry, lex:futír_noun_osc_entry, lex:genetaí_adjective_osc_entry,
+    lex:herekleís_properNoun_osc_entry, lex:herennis_properNoun_osc_entry, lex:heírens_properNoun_osc_entry,
+    lex:húrz_noun_osc_entry, lex:keenzstur_noun_osc_entry, lex:kerrí_properNoun_osc_entry,
+    lex:kerríiúí_adjective_osc_entry, lex:kúrel_properNoun_osc_entry, lex:kúru_noun_osc_entry,
+    lex:legú_noun_osc_entry, lex:líganakdíkeí_properNoun_osc_entry, lex:maatúís_properNoun_osc_entry,
+    lex:mahiis_properNoun_osc_entry, lex:mais_properNoun_osc_entry, lex:marahis_properNoun_osc_entry,
+    lex:meddíss_noun_osc_entry, lex:metiis_properNoun_osc_entry, lex:mitl_properNoun_osc_entry,
+    lex:niumsis_properNoun_osc_entry, lex:numneís_noun_osc_entry, lex:paciieis_properNoun_osc_entry,
+    lex:pakis_properNoun_osc_entry, lex:patanam_noun_osc_entry, lex:patanaí_properNoun_osc_entry,
+    lex:patir_noun_osc_entry, lex:pernaí_properNoun_osc_entry, lex:pestlúm_noun_osc_entry,
+    lex:pettiur_adjective_osc_entry, lex:pis_adjective_osc_entry, lex:piístíaí_adjective_osc_entry,
+    lex:plavtad_noun_osc_entry, lex:prúfatted_verb_osc_entry, lex:puklum_noun_osc_entry,
+    lex:puplunai_properNoun_osc_entry, lex:purasiaí_adjective_osc_entry, lex:púrtam_noun_osc_entry,
+    lex:pús_unspecified_osc_entry, lex:pústiris_unspecified_osc_entry, lex:pútereípíd_adjective_osc_entry,
+    lex:regatureí_adjective_osc_entry, lex:saahtúm_adjective_osc_entry, lex:safinim_properNoun_osc_entry,
+    lex:sakarater_verb_osc_entry, lex:sattiieís_properNoun_osc_entry, lex:seemuneís_properNoun_osc_entry,
+    lex:seganatted_verb_osc_entry, lex:senateís_noun_osc_entry, lex:statif_noun_osc_entry,
+    lex:statús_verb_osc_entry, lex:staíis_properNoun_osc_entry, lex:staít_verb_osc_entry,
+    lex:suveís_adjective_osc_entry, lex:súm_verb_osc_entry, lex:tanginom_noun_osc_entry,
+    lex:tefúrúm_noun_osc_entry, lex:tiium_adjective_osc_entry, lex:trebis_properNoun_osc_entry,
+    lex:túvtíks_adjective_osc_entry, lex:upsed_verb_osc_entry, lex:verehasiúí_adjective_osc_entry,
+    lex:vereias_noun_osc_entry, lex:vesulliaís_properNoun_osc_entry, lex:vezkeí_properNoun_osc_entry,
+    lex:víkturreí_properNoun_osc_entry, lex:ísídum_adjective_osc_entry, lex:íív_unspecified_osc_entry,
+    lex:LexO_2023-02-2411_55_57_795, lex:LexO_2023-03-0810_49_15_219, lex:LexO_2023-04-0313_25_28_411,
+    lex:LexO_2023-04-1212_19_35_354, lex:LexO_2023-04-1313_02_58_836, lex:LexO_2023-04-1313_30_06_01,
+    lex:LexO_2023-04-1409_55_35_746, lex:LexO_2023-04-1409_58_01_661, lex:LexO_2023-04-1716_15_53_618,
+    lex:LexO_2023-04-1810_19_16_522, lex:LexO_2023-04-1810_45_39_83, lex:LexO_2023-04-1814_35_14_345,
+    lex:LexO_2023-04-1814_48_03_473, lex:LexO_2023-04-1815_32_10_379, lex:LexO_2023-04-1816_43_37_981,
+    lex:LexO_2023-04-1816_53_19_826, lex:LexO_2023-04-1916_00_06_407, lex:LexO_2023-04-1916_17_11_292,
+    lex:LexO_2023-05-0214_27_36_387, lex:LexO_2023-05-3107_54_25_015, lex:LexO_2023-06-2109_33_11_815,
+    lex:LexO_2023-08-0210_02_10_022, lex:LexO_2023-08-0213_03_13_284, lex:LexO_2023-08-0713_01_44_235,
+    lex:LexO_2023-09-2215_57_43_044, lex:LexO_2023-10-0221_10_45_133, lex:LexO_2023-10-0307_45_43_959,
+    lex:LexO_2023-10-0507_43_26_401, lex:LexO_2023-10-0609_59_06_751, lex:LexO_2023-10-1709_05_21_462,
+    lex:LexO_2023-10-1911_31_50_462, lex:LexO_2023-10-2009_11_50_583, lex:LexO_2023-10-2417_51_41_634,
+    lex:LexO_2023-12-0415_50_04_185, lex:LexO_2023-12-0509_26_28_122, lex:LexO_2023-12-0515_16_36_262,
+    lex:LexO_2023-12-0610_29_09_47, lex:LexO_2023-12-3118_21_22_11, lex:LexO_2024-01-0120_44_34_749,
+    lex:LexO_2024-01-1317_51_43_942, lex:LexO_2024-01-1318_32_03_881, lex:LexO_2024-01-1318_40_10_123,
+    lex:LexO_2024-01-1415_28_57_03, lex:LexO_2024-01-2408_15_04_968, lex:LexO_2024-01-2408_44_59_115,
+    lex:LexO_2024-01-2409_04_35_236, lex:LexO_2024-01-3112_17_53_715, lex:LexO_2024-01-3114_02_26_079,
+    lex:LexO_2024-01-3116_52_02_184, lex:LexO_2024-01-3117_07_10_275, lex:LexO_2024-01-3117_24_46_714,
+    lex:LexO_2024-02-0116_07_21_744, lex:LexO_2024-02-0809_23_36_944, lex:LexO_2024-03-0113_00_34_898,
+    lex:LexO_2024-03-0113_57_19_144, lex:LexO_2024-03-0114_23_31_671, lex:LexO_2024-03-0914_22_06_715,
+    lex:LexO_2024-03-0914_33_09_141, lex:LexO_2024-03-0914_57_17_433, lex:LexO_2024-03-0917_07_42_166,
+    lex:LexO_2024-03-0917_25_31_401, lex:LexO_2024-03-0917_54_53_853, lex:LexO_2024-03-0918_09_36_329,
+    lex:LexO_2024-03-0919_55_21_07, lex:LexO_2024-03-0920_41_19_57, lex:LexO_2024-03-0920_48_41_412,
+    lex:LexO_2024-03-0921_00_54_721, lex:LexO_2024-03-1007_12_38_502, lex:LexO_2024-03-1007_20_16_339,
+    lex:LexO_2024-03-1008_45_17_139, lex:LexO_2024-03-1008_51_28_652, lex:LexO_2024-03-1020_53_56_693,
+    lex:LexO_2024-03-1021_00_49_454, lex:LexO_2024-03-1021_14_53_104, lex:LexO_2024-03-1021_46_44_151,
+    lex:LexO_2024-03-1022_12_26_933, lex:LexO_2024-03-1022_26_35_996, lex:LexO_2024-03-1022_40_00_429,
+    lex:LexO_2024-03-1110_33_53_83, lex:LexO_2024-03-1110_44_17_411, lex:LexO_2024-03-1110_53_05_293,
+    lex:LexO_2024-03-1111_10_43_689, lex:LexO_2024-03-1112_38_57_715, lex:LexO_2024-03-1113_11_36_803,
+    lex:LexO_2024-03-1113_39_20_742, lex:LexO_2024-03-1113_57_04_096, lex:LexO_2024-03-1115_42_21_764,
+    lex:LexO_2024-03-1115_51_57_422, lex:LexO_2024-03-2009_57_26_029, lex:LexO_2024-03-2010_55_09_927,
+    lex:LexO_2024-03-2011_04_08_723, lex:LexO_2024-03-2011_58_21_795, lex:LexO_2024-03-2012_03_43_38,
+    lex:LexO_2024-03-2012_38_06_603, lex:LexO_2024-03-2012_54_01_912, lex:LexO_2024-03-2013_00_17_511,
+    lex:LexO_2024-03-2013_38_44_744, lex:LexO_2024-03-2013_50_22_316, lex:LexO_2024-04-0310_06_15_019,
+    lex:LexO_2024-04-0310_32_45_492, lex:LexO_2024-04-0409_23_30_197, lex:LexO_2024-04-0409_33_17_831,
+    lex:LexO_2024-04-0409_38_17_502, lex:LexO_2024-04-0410_31_55_312, lex:LexO_2024-04-0410_36_00_962,
+    lex:LexO_2024-04-0410_56_05_173, lex:LexO_2024-04-0412_31_47_01, lex:LexO_2024-04-0815_25_21_574,
+    lex:LexO_2024-04-0914_11_51_925, lex:LexO_2024-04-0914_29_49_381, lex:LexO_2024-04-0915_44_23_041,
+    lex:LexO_2024-04-1009_29_03_859, lex:LexO_2024-04-1009_43_54_414, lex:LexO_2024-04-1215_17_14_271,
+    lex:LexO_2024-04-1215_25_23_945, lex:LexO_2024-04-1410_22_51_986, lex:LexO_2024-04-1713_52_39_926,
+    lex:LexO_2024-04-1720_23_46_507, lex:LexO_2024-04-2309_55_07_801, lex:LexO_2024-04-2310_32_43_297,
+    lex:LexO_2024-04-2315_02_04_314, lex:LexO_2024-04-2315_14_17_11, lex:LexO_2024-04-2315_21_14_1,
+    lex:LexO_2024-04-2316_40_01_887, lex:LexO_2024-04-2316_53_48_411, lex:LexO_2024-04-2410_19_30_087,
+    lex:LexO_2024-04-2410_26_26_225, lex:LexO_2024-04-2410_30_06_585, lex:LexO_2024-04-2410_49_23_039,
+    lex:LexO_2024-04-2414_24_32_136, lex:LexO_2024-04-2616_45_08_042, lex:LexO_2024-04-2617_17_09_118,
+    lex:LexO_2024-04-2617_23_35_246, lex:LexO_2024-04-2617_30_57_426, lex:LexO_2024-04-2621_43_35_616,
+    lex:LexO_2024-04-2621_54_09_927, lex:LexO_2024-04-2706_56_31_458, lex:LexO_2024-04-2707_00_59_594,
+    lex:LexO_2024-04-2707_37_29_271, lex:LexO_2024-04-2714_09_13_9, lex:LexO_2024-04-2714_25_16_796,
+    lex:LexO_2024-04-2715_08_45_503, lex:LexO_2024-04-2715_18_10_18, lex:LexO_2024-04-2715_49_46_232,
+    lex:LexO_2024-04-2907_41_10_525, lex:LexO_2024-04-2909_23_02_35, lex:LexO_2024-04-2909_37_48_919,
+    lex:LexO_2024-04-2909_45_31_864, lex:LexO_2024-04-2910_26_19_031, lex:LexO_2024-04-2910_45_32_741,
+    lex:LexO_2024-04-2910_57_38_235, lex:LexO_2024-04-2911_13_56_391, lex:LexO_2024-04-2911_17_12_129,
+    lex:LexO_2024-04-2911_29_48_9, lex:LexO_2024-04-2911_34_43_897, lex:LexO_2024-04-2911_42_24_396,
+    lex:LexO_2024-05-0310_50_20_907, lex:LexO_2024-05-0310_56_40_565, lex:LexO_2024-05-0311_09_43_841,
+    lex:LexO_2024-05-0311_22_23_843, lex:LexO_2024-05-0311_42_59_616, lex:LexO_2024-05-0311_56_43_222,
+    lex:LexO_2024-05-0313_09_49_869, lex:LexO_2024-05-0313_26_23_64, lex:LexO_2024-05-0313_49_18_661,
+    lex:LexO_2024-05-0314_15_42_47, lex:LexO_2024-05-0318_28_41_3, lex:LexO_2024-05-0320_18_45_161,
+    lex:LexO_2024-05-0323_03_42_313, lex:LexO_2024-05-0323_22_12_568, lex:LexO_2024-05-0323_29_49_195,
+    lex:LexO_2024-05-0323_33_57_998, lex:LexO_2024-05-0906_09_36_346, lex:LexO_2024-05-0906_13_02_423,
+    lex:LexO_2024-05-0906_37_36_217, lex:LexO_2024-05-0920_46_34_491, lex:LexO_2024-05-0920_52_17_395,
+    lex:LexO_2024-05-0920_58_35_97, lex:LexO_2024-05-1108_35_10_295, lex:LexO_2024-05-1115_22_45_679,
+    lex:LexO_2024-05-1115_28_11_099, lex:LexO_2024-05-1115_42_03_157, lex:LexO_2024-05-1116_39_09_386,
+    lex:LexO_2024-05-1118_18_16_379, lex:LexO_2024-05-1211_28_01_056, lex:LexO_2024-05-1215_18_37_387,
+    lex:LexO_2024-05-1309_06_22_445, lex:LexO_2024-05-1916_12_58_88, lex:LexO_2024-05-1916_29_34_548,
+    lex:LexO_2024-05-3013_26_21_03, lex:LexO_2024-05-3013_49_10_978, lex:LexO_2024-06-0216_32_50_898,
+    lex:LexO_2024-06-0216_46_02_372, lex:LexO_2024-06-0217_36_40_344, lex:LexO_2024-06-0219_43_04_089,
+    lex:LexO_2024-06-0220_12_34_826, lex:LexO_2024-06-0220_30_54_97, lex:LexO_2024-06-0420_22_15_65,
+    lex:LexO_2024-06-0420_52_13_836, lex:LexO_2024-06-0421_10_15_583, lex:LexO_2024-06-0421_15_10_915,
+    lex:LexO_2024-06-0421_21_32_891, lex:LexO_2024-06-0421_45_18_984, lex:LexO_2024-06-0505_03_06_249,
+    lex:LexO_2024-06-0505_10_16_508, lex:LexO_2024-06-1014_05_10_125, lex:LexO_2024-06-1014_11_58_449,
+    lex:LexO_2024-06-1020_10_54_945, lex:LexO_2024-06-1108_43_59_53, lex:LexO_2024-06-1109_45_59_976,
+    lex:LexO_2024-06-1111_03_08_465, lex:LexO_2024-06-1112_59_27_045, lex:LexO_2024-06-1113_13_50_113,
+    lex:LexO_2024-06-1114_41_18_546, lex:LexO_2024-06-1114_55_08_098, lex:LexO_2024-06-1115_24_22_215,
+    lex:LexO_2024-06-1115_58_03_517, lex:LexO_2024-06-1117_04_26_465, lex:LexO_2024-06-1209_29_08_549,
+    lex:LexO_2024-06-1209_38_57_792, lex:LexO_2024-06-1209_56_18_674, lex:LexO_2024-06-1210_06_08_331,
+    lex:LexO_2024-06-1210_20_02_047, lex:LexO_2024-06-1210_44_35_157, lex:LexO_2024-06-1211_03_17_701,
+    lex:LexO_2024-06-1213_02_23_476, lex:LexO_2024-06-1213_14_33_433, lex:LexO_2024-06-1213_21_50_214,
+    lex:LexO_2024-06-1213_36_18_309, lex:LexO_2024-06-1213_47_03_878, lex:LexO_2024-06-1305_23_33_327,
+    lex:LexO_2024-06-1305_47_12_398, lex:LexO_2024-06-1308_40_50_3, lex:LexO_2024-06-1308_41_18_534,
+    lex:LexO_2024-06-1308_50_17_93, lex:LexO_2024-06-1312_49_49_855, lex:LexO_2024-06-1312_58_33_96,
+    lex:LexO_2024-06-1313_22_25_906, lex:LexO_2024-06-1313_40_30_557, lex:LexO_2024-06-1404_44_53_843,
+    lex:LexO_2024-06-1405_35_56_945, lex:LexO_2024-06-1405_59_18_392, lex:LexO_2024-06-1410_12_35_265,
+    lex:LexO_2024-06-1411_02_31_714, lex:LexO_2024-06-1411_51_07_287, lex:LexO_2024-06-1710_07_06_061,
+    lex:LexO_2024-06-1710_48_07_024, lex:LexO_2024-06-1711_51_17_073, lex:LexO_2024-06-1713_23_45_203,
+    lex:LexO_2024-06-1714_01_43_697, lex:LexO_2024-06-1809_50_00_128, lex:LexO_2024-06-1915_25_57_451,
+    lex:LexO_2024-06-1915_43_46_224, lex:LexO_2024-06-1916_21_52_441, lex:LexO_2024-06-1916_50_16_183,
+    lex:LexO_2024-06-1917_29_57_161, lex:LexO_2024-06-2015_13_06_428, lex:LexO_2024-06-2015_18_55_9,
+    lex:LexO_2024-06-2015_35_51_625, lex:LexO_2024-06-2016_20_44_311, lex:LexO_2024-06-2020_57_23_126,
+    lex:LexO_2024-06-2021_02_33_258, lex:LexO_2024-06-2108_09_42_034, lex:LexO_2024-06-2108_43_09_207,
+    lex:LexO_2024-06-2108_46_52_629, lex:LexO_2024-06-2108_48_32_895, lex:LexO_2024-06-2109_16_38_388,
+    lex:LexO_2024-06-2112_02_14_184, lex:LexO_2024-06-2113_36_40_739, lex:LexO_2024-06-2207_13_41_023,
+    lex:LexO_2024-06-2207_49_47_368, lex:LexO_2024-06-2208_25_28_339, lex:LexO_2024-06-2208_59_22_014,
+    lex:LexO_2024-06-2209_49_59_442, lex:LexO_2024-06-2210_11_23_339, lex:LexO_2024-06-2211_55_52_893,
+    lex:LexO_2024-06-2212_07_13_949, lex:LexO_2024-06-2213_42_19_64, lex:LexO_2024-06-2214_04_05_493,
+    lex:LexO_2024-06-2220_27_12_146, lex:LexO_2024-06-2220_31_13_534, lex:LexO_2024-06-2220_37_21_741,
+    lex:LexO_2024-06-2220_42_01_942, lex:LexO_2024-06-2310_12_09_361, lex:LexO_2024-06-2310_19_19_225,
+    lex:LexO_2024-06-2310_41_46_845, lex:LexO_2024-06-2313_34_38_103, lex:LexO_2024-06-2313_41_35_228,
+    lex:LexO_2024-06-2314_00_22_407, lex:LexO_2024-06-2314_25_08_362, lex:LexO_2024-06-2314_47_54_113,
+    lex:LexO_2024-06-2315_52_36_508, lex:LexO_2024-06-2315_54_57_473, lex:LexO_2024-06-2316_15_13_315,
+    lex:LexO_2024-06-2316_25_31_621, lex:LexO_2024-06-2316_38_23_856, lex:LexO_2024-06-2416_49_42_355,
+    lex:LexO_2024-06-2417_04_28_622, lex:LexO_2024-06-2417_13_56_518, lex:LexO_2024-06-2418_04_45_887,
+    lex:LexO_2024-06-2513_17_48_673, lex:LexO_2024-06-2517_04_34_803, lex:LexO_2024-06-2618_01_33_677,
+    lex:LexO_2024-07-1619_40_03_841, lex:LexO_2024-07-2419_44_02_093, lex:LexO_2024-07-2419_56_30_327,
+    lex:LexO_2024-07-2420_11_09_694, lex:LexO_2024-07-3019_28_54_215, lex:LexO_2024-07-3019_33_50_262,
+    lex:LexO_2024-08-2114_54_42_189, lex:LexO_2024-08-2615_04_11_158, lex:LexO_2024-08-2709_30_30_812,
+    lex:LexO_2024-08-2915_06_46_073, lex:LexO_2024-09-0618_19_41_915, lex:LexO_2024-09-0618_22_42_817,
+    lex:LexO_2024-09-0618_52_37_41, lex:LexO_2024-09-0816_29_37_143, lex:LexO_2024-09-0917_58_50_902,
+    lex:LexO_2024-10-0909_04_26_256, lex:LexO_2024-10-1120_26_19_473 .
+
+lex:lexicon_222524 lime:entry lex:ekupetaris_noun_xfa_entry, lex:LexO_2023-03-2808_21_00_073,
+    lex:LexO_2023-03-2808_27_01_322, lex:LexO_2023-03-3013_44_13_67, lex:LexO_2023-03-3112_31_22_277,
+    lex:LexO_2023-04-0112_37_53_569, lex:LexO_2023-04-0112_59_58_622, lex:LexO_2023-04-0208_35_34_471,
+    lex:LexO_2023-04-0208_42_24_5, lex:LexO_2023-04-0209_09_06_794, lex:LexO_2023-04-0209_50_26_275,
+    lex:LexO_2023-04-0312_40_10_484, lex:LexO_2023-04-0314_19_33_091, lex:LexO_2023-04-0315_06_06_575,
+    lex:LexO_2023-04-0315_56_24_535, lex:LexO_2023-04-0712_03_37_491, lex:LexO_2023-04-0715_02_07_159,
+    lex:LexO_2023-04-1109_04_53_741, lex:LexO_2023-04-1109_52_45_573, lex:LexO_2023-04-1111_08_01_506,
+    lex:LexO_2023-04-1208_35_14_791, lex:LexO_2023-04-1209_09_14_325, lex:LexO_2023-04-1209_29_31_621,
+    lex:LexO_2023-04-1309_53_35_988, lex:LexO_2023-04-1310_22_05_417, lex:LexO_2023-04-1708_49_01_223,
+    lex:LexO_2023-04-1714_26_24_285, lex:LexO_2023-04-1715_28_14_106, lex:LexO_2023-04-1715_53_08_613,
+    lex:LexO_2023-04-1808_09_35_488, lex:LexO_2023-04-1809_41_56_411, lex:LexO_2023-04-1914_02_10_268,
+    lex:LexO_2023-04-2013_53_58_496, lex:LexO_2023-04-2014_15_40_895, lex:LexO_2023-04-2616_58_45_72,
+    lex:LexO_2023-04-2618_06_49_713, lex:LexO_2023-04-2618_13_00_202, lex:LexO_2023-04-2712_09_19_118,
+    lex:LexO_2023-04-2712_26_29_466, lex:LexO_2023-04-2713_34_08_678, lex:LexO_2023-04-2813_20_03_393,
+    lex:LexO_2023-04-2813_45_49_244, lex:LexO_2023-04-2813_59_24_08, lex:LexO_2023-04-3009_04_22_904,
+    lex:LexO_2023-04-3009_28_40_231, lex:LexO_2023-04-3009_38_48_344, lex:LexO_2023-04-3011_16_51_148,
+    lex:LexO_2023-04-3011_36_57_469, lex:LexO_2023-05-0208_52_39_365, lex:LexO_2023-05-0209_06_40_68,
+    lex:LexO_2023-05-0209_31_25_634, lex:LexO_2023-05-0212_20_09_639, lex:LexO_2023-05-0213_07_57_698,
+    lex:LexO_2023-05-0214_26_45_199, lex:LexO_2023-05-0313_58_34_91, lex:LexO_2023-05-0314_07_08_468,
+    lex:LexO_2023-05-0409_15_13_363, lex:LexO_2023-05-0409_46_35_802, lex:LexO_2023-05-0409_58_26_944,
+    lex:LexO_2023-05-0513_15_15_869, lex:LexO_2023-05-1012_59_32_849, lex:LexO_2023-07-2809_28_28_54,
+    lex:LexO_2023-07-2809_38_28_878, lex:LexO_2023-07-2809_40_10_269, lex:LexO_2023-07-2810_25_35_22,
+    lex:LexO_2023-07-2810_35_34_895, lex:LexO_2023-07-2811_31_35_331, lex:LexO_2023-08-0110_40_18_22,
+    lex:LexO_2023-08-0113_50_29_407, lex:LexO_2023-08-0113_58_48_406, lex:LexO_2023-08-0116_30_05_839,
+    lex:LexO_2023-08-0208_48_11_988, lex:LexO_2023-08-0210_00_21_182, lex:LexO_2023-08-0212_39_51_709,
+    lex:LexO_2024-10-0808_09_13_556 .
+
+lex:lexicon_345508 lime:entry lex:adius_properNoun_lat_entry, lex:ara_noun_lat_entry,
+    lex:abs_preposition_lat_entry, lex:annus_noun_lat_entry, lex:alter_adjective_lat_entry,
+    lex:betius_properNoun_lat_entry, lex:betuus_properNoun_lat_entry, lex:cerēs_properNoun_lat_entry,
+    lex:corelius_properNoun_lat_entry, lex:dēdicāre_verb_lat_entry, lex:decitius_properNoun_lat_entry,
+    lex:decumānus_noun_lat_entry, lex:deus_noun_lat_entry, lex:dīvus-a-um_noun_lat_entry,
+    lex:lumpa_noun_lat_entry, lex:iuppiter_properNoun_lat_entry, lex:dīvus_adjective_lat_entry,
+    lex:hīc_adjective_lat_entry, lex:famulus_noun_lat_entry, lex:flōra_properNoun_lat_entry,
+    lex:hercules_properNoun_lat_entry, lex:herennius_properNoun_lat_entry, lex:herennus_properNoun_lat_entry,
+    lex:hortus_noun_lat_entry, lex:idem_adjective_lat_entry, lex:quattuor_adjective_osc_entry,
+    lex:maius1_properNoun_lat_entry, lex:maius2_properNoun_lat_entry, lex:maraeus_properNoun_lat_entry,
+    lex:matuta_adjective_lat_entry, lex:mettius_properNoun_lat_entry, lex:mitilius_properNoun_lat_entry,
+    lex:numerius_properNoun_lat_entry, lex:opus_noun_lat_entry, lex:pacius_properNoun_lat_entry,
+    lex:panda_properNoun_lat_entry, lex:plautus_adjective_lat_entry, lex:porta_noun_lat_entry,
+    lex:posterus_unspecified_lat_entry, lex:probāre_verb_lat_entry, lex:qui_unspecified_lat_entry,
+    lex:quis_adjective_lat_entry, lex:sacrāre_verb_lat_entry, lex:samnium_properNoun_lat_entry,
+    lex:sattius_properNoun_lat_entry, lex:senatus_noun_lat_entry, lex:sisto_verb_lat_entry,
+    lex:staius_properNoun_lat_entry, lex:stāre_verb_lat_entry, lex:sum_verb_lat_entry,
+    lex:sēmō_properNoun_lat_entry, lex:tongēre_verb_lat_entry, lex:trebius_properNoun_lat_entry,
+    lex:uterque_adjective_lat_entry, lex:vesulliaeus_properNoun_lat_entry, lex:nomen_noun_lat_entry,
+    lex:LexO_2023-01-2615_02_45_0, lex:LexO_2023-02-1714_40_58_32, lex:LexO_2023-03-2808_32_23_508,
+    lex:LexO_2023-04-1815_44_50_251, lex:LexO_2023-04-1914_26_44_422, lex:LexO_2023-04-1916_10_50_495,
+    lex:LexO_2023-04-1916_13_59_507, lex:LexO_2023-04-1916_19_04_664, lex:LexO_2023-04-1916_20_40_935,
+    lex:LexO_2023-06-2110_26_25_487, lex:LexO_2023-06-2110_27_18_892, lex:LexO_2023-08-0215_27_33_893,
+    lex:LexO_2023-08-0713_00_52_472, lex:LexO_2023-09-2215_58_57_02, lex:LexO_2023-10-0610_02_25_37,
+    lex:LexO_2023-10-1321_42_46_224, lex:LexO_2023-10-1321_54_30_415, lex:LexO_2023-10-1322_07_27_334,
+    lex:LexO_2023-10-1322_13_33_087, lex:LexO_2023-10-1322_23_46_627, lex:LexO_2023-10-2114_09_27_387,
+    lex:LexO_2023-12-0415_38_07_956, lex:LexO_2023-12-0415_45_44_446, lex:LexO_2023-12-0509_31_11_477,
+    lex:LexO_2023-12-0514_46_06_357, lex:LexO_2023-12-0610_22_49_125, lex:LexO_2024-01-0115_44_44_327,
+    lex:LexO_2024-01-1210_15_49_098, lex:LexO_2024-01-1315_31_04_045, lex:LexO_2024-01-1318_07_37_068,
+    lex:LexO_2024-01-1318_27_31_982, lex:LexO_2024-01-1415_39_10_555, lex:LexO_2024-01-1415_53_14_0,
+    lex:LexO_2024-01-1417_22_32_427, lex:LexO_2024-01-1417_42_56_462, lex:LexO_2024-01-3113_23_07_656,
+    lex:LexO_2024-01-3116_44_11_092, lex:LexO_2024-01-3117_35_16_065, lex:LexO_2024-02-0717_09_28_468,
+    lex:LexO_2024-02-0809_42_36_957, lex:LexO_2024-03-0113_41_16_052, lex:LexO_2024-03-0114_27_19_085,
+    lex:LexO_2024-03-0914_47_17_082, lex:LexO_2024-03-0915_01_17_505, lex:LexO_2024-03-0918_05_16_085,
+    lex:LexO_2024-03-0918_19_03_895, lex:LexO_2024-03-0920_17_18_096, lex:LexO_2024-03-0920_50_43_487,
+    lex:LexO_2024-03-1007_05_20_007, lex:LexO_2024-03-1008_40_14_377, lex:LexO_2024-03-1020_58_05_193,
+    lex:LexO_2024-03-1021_17_42_05, lex:LexO_2024-03-1021_56_57_336, lex:LexO_2024-03-1022_22_38_576,
+    lex:LexO_2024-03-1111_03_10_639, lex:LexO_2024-03-1111_13_38_969, lex:LexO_2024-03-1112_46_28_321,
+    lex:LexO_2024-03-1113_49_22_164, lex:LexO_2024-03-2010_47_36_267, lex:LexO_2024-03-2012_41_55_796,
+    lex:LexO_2024-03-2012_42_48_023, lex:LexO_2024-03-2012_58_40_434, lex:LexO_2024-03-2015_04_48_297,
+    lex:LexO_2024-04-0310_15_16_799, lex:LexO_2024-04-0310_41_30_063, lex:LexO_2024-04-1215_27_32_268,
+    lex:LexO_2024-04-1215_33_17_449, lex:LexO_2024-04-1410_26_48_479, lex:LexO_2024-04-2316_38_11_327,
+    lex:LexO_2024-04-2317_14_34_535, lex:LexO_2024-04-2409_44_04_89, lex:LexO_2024-04-2411_05_12_35,
+    lex:LexO_2024-04-2707_33_39_352, lex:LexO_2024-04-2715_12_28_259, lex:LexO_2024-04-2715_20_11_389,
+    lex:LexO_2024-04-2907_50_20_765, lex:LexO_2024-04-2910_53_22_514, lex:LexO_2024-04-2910_54_06_305,
+    lex:LexO_2024-04-2911_33_29_208, lex:LexO_2024-04-2911_40_31_915, lex:LexO_2024-05-0311_35_09_387,
+    lex:LexO_2024-05-0323_28_40_451, lex:LexO_2024-05-0920_56_39_719, lex:LexO_2024-05-1108_29_23_683,
+    lex:LexO_2024-05-1115_24_37_811, lex:LexO_2024-05-1115_52_42_933, lex:LexO_2024-05-1117_09_22_548,
+    lex:LexO_2024-05-1211_31_13_059, lex:LexO_2024-05-1215_17_22_446, lex:LexO_2024-05-1911_03_04_603,
+    lex:LexO_2024-05-1916_26_06_834, lex:LexO_2024-05-3013_32_21_995, lex:LexO_2024-06-0214_58_10_576,
+    lex:LexO_2024-06-0216_56_58_795, lex:LexO_2024-06-0313_36_03_009, lex:LexO_2024-06-1113_02_20_845,
+    lex:LexO_2024-06-2314_55_31_068, lex:LexO_2024-06-2315_59_46_203, lex:LexO_2024-06-2417_42_32_649,
+    lex:LexO_2024-07-1619_57_11_288, lex:LexO_2024-07-2420_02_41_33 .
+
+lex:lexicon_551337 lime:entry lex:cerria_adjective_umc_entry, lex:ecan_adjective_umc_entry,
+    lex:medix_noun_umc_entry, lex:patres_noun_umc_entry, lex:LexO_2023-02-2016_00_15_095,
+    lex:LexO_2023-04-1709_36_16_625, lex:LexO_2023-10-1711_06_08_291, lex:LexO_2023-10-2107_59_06_708,
+    lex:LexO_2023-12-0620_41_52_437, lex:LexO_2024-04-0412_35_18_783, lex:LexO_2024-04-2310_14_23_776,
+    lex:LexO_2024-05-0320_13_31_083, lex:LexO_2024-05-0321_49_09_718, lex:LexO_2024-06-0217_06_24_583,
+    lex:LexO_2024-06-1809_40_43_549, lex:LexO_2024-06-2015_17_07_429, lex:LexO_2024-06-2417_29_56_801 .
+
+lex:lexicon_811797 lime:entry lex:εὖκλος_properNoun_grc_entry, lex:ἡρακλῆς_properNoun_grc_entry,
+    lex:πότερος_adjective_grc_entry, lex:LexO_2023-03-2809_08_05_265, lex:LexO_2023-03-3012_40_05_339,
+    lex:LexO_2023-03-3013_04_45_385, lex:LexO_2024-01-3113_30_30_645, lex:LexO_2024-03-1007_05_58_335,
+    lex:LexO_2024-03-1008_34_44_268, lex:LexO_2024-03-1021_57_26_577, lex:LexO_2024-04-2317_15_27_467,
+    lex:LexO_2024-04-2715_20_37_356, lex:LexO_2024-04-2716_01_46_58, lex:LexO_2024-04-2911_22_03_61,
+    lex:LexO_2024-06-1113_02_57_007, lex:LexO_2024-06-1116_00_47_942, lex:LexO_2024-06-1209_40_19_688,
+    lex:LexO_2024-06-1210_59_04_9, lex:LexO_2024-06-1406_00_54_361, lex:LexO_2024-06-2015_23_10_189,
+    lex:LexO_2024-06-2210_01_13_998, lex:LexO_2024-10-1020_14_35_784 .
+
+lex:lexicon_138717 lime:entry lex:PIE_126930, lex:PIE_162081, lex:PIE_162745, lex:PIE_170211,
+    lex:PIE_180161, lex:PIE_195598, lex:PIE_214867, lex:PIE_233295, lex:PIE_251760, lex:PIE_269978,
+    lex:PIE_289928, lex:PIE_293059, lex:PIE_302930, lex:PIE_358015, lex:PIE_37937, lex:PIE_439336,
+    lex:PIE_440707, lex:PIE_444004, lex:PIE_445216, lex:PIE_469211, lex:PIE_48355, lex:PIE_495580,
+    lex:PIE_513213, lex:PIE_516361, lex:PIE_518163, lex:PIE_527236, lex:PIE_54023, lex:PIE_540413,
+    lex:PIE_580175, lex:PIE_580333, lex:PIE_58998, lex:PIE_625097, lex:PIE_632373, lex:PIE_632510,
+    lex:PIE_635849, lex:PIE_64855, lex:PIE_664412, lex:PIE_68399, lex:PIE_688741, lex:PIE_691058,
+    lex:PIE_730391, lex:PIE_757146, lex:PIE_809665, lex:PIE_902411, lex:PIE_903004, lex:PIE_905717,
+    lex:PIE_907510, lex:PIE_936678, lex:PIE_946897, lex:PIE_947678, lex:PIE_951517, lex:PIE_977941,
+    lex:PIE_980482, lex:PIE_997128, lex:LexO_2023-03-2808_56_17_646, lex:LexO_2023-04-0113_17_52_288,
+    lex:LexO_2023-04-0213_35_48_561, lex:LexO_2023-04-1711_12_42_945, lex:LexO_2023-04-1714_42_55_326,
+    lex:LexO_2023-04-1914_27_38_989, lex:LexO_2023-04-2712_58_54_135, lex:LexO_2023-04-2814_10_52_097,
+    lex:LexO_2023-05-0209_49_22_729, lex:LexO_2023-05-0213_00_02_183, lex:LexO_2023-05-0213_27_34_826,
+    lex:LexO_2023-07-2811_22_13_958, lex:LexO_2023-08-0307_28_13_64, lex:LexO_2023-08-0607_39_59_13,
+    lex:LexO_2023-08-0713_08_37_952, lex:LexO_2023-08-0713_25_12_868, lex:LexO_2023-10-0515_08_56_743,
+    lex:LexO_2023-10-1511_01_11_005, lex:LexO_2023-10-1511_05_54_646, lex:LexO_2023-10-1709_42_16_563,
+    lex:LexO_2023-10-1717_45_14_14, lex:LexO_2023-10-1717_53_39_824, lex:LexO_2023-11-1009_35_31_884,
+    lex:LexO_2023-12-0515_37_28_138, lex:LexO_2023-12-0609_59_49_486, lex:LexO_2024-01-1316_38_00_264,
+    lex:LexO_2024-01-2408_37_05_715, lex:LexO_2024-01-2409_08_47_352, lex:LexO_2024-03-0113_34_03_07,
+    lex:LexO_2024-03-0114_25_34_927, lex:LexO_2024-03-0914_41_42_803, lex:LexO_2024-03-0915_12_05_497,
+    lex:LexO_2024-03-1009_30_10_708, lex:LexO_2024-03-1021_07_20_322, lex:LexO_2024-03-1021_07_57_587,
+    lex:LexO_2024-03-1111_01_07_697, lex:LexO_2024-04-0412_27_24_821, lex:LexO_2024-04-2314_15_34_544,
+    lex:LexO_2024-04-2315_11_19_976, lex:LexO_2024-04-2315_19_48_14, lex:LexO_2024-04-2317_13_11_589,
+    lex:LexO_2024-04-2706_58_18_308, lex:LexO_2024-04-2707_34_19_345, lex:LexO_2024-04-2714_23_35_367,
+    lex:LexO_2024-04-2715_04_00_232, lex:LexO_2024-04-2715_22_39_816, lex:LexO_2024-04-2715_48_25_175,
+    lex:LexO_2024-04-2716_02_13_056, lex:LexO_2024-04-2716_03_08_846, lex:LexO_2024-04-2907_49_29_865,
+    lex:LexO_2024-04-2910_52_26_354, lex:LexO_2024-04-2911_21_26_857, lex:LexO_2024-04-2911_32_13_098,
+    lex:LexO_2024-04-2911_37_30_153, lex:LexO_2024-04-2911_46_38_688, lex:LexO_2024-05-0311_32_43_004,
+    lex:LexO_2024-05-0311_53_24_389, lex:LexO_2024-05-0313_42_04_598, lex:LexO_2024-05-0323_32_29_543,
+    lex:LexO_2024-05-0906_12_06_01, lex:LexO_2024-05-0906_46_59_999, lex:LexO_2024-05-1117_06_15_499,
+    lex:LexO_2024-05-1215_15_30_191, lex:LexO_2024-05-1916_33_53_807, lex:LexO_2024-06-0214_55_03_755,
+    lex:LexO_2024-06-0216_52_55_012, lex:LexO_2024-06-0421_06_58_77, lex:LexO_2024-06-0421_19_45_274,
+    lex:LexO_2024-06-0505_06_51_227, lex:LexO_2024-06-1019_49_06_28, lex:LexO_2024-06-1109_55_26_947,
+    lex:LexO_2024-06-1114_42_44_755, lex:LexO_2024-06-1115_18_52_814, lex:LexO_2024-06-1116_53_31_012,
+    lex:LexO_2024-06-1209_35_45_742, lex:LexO_2024-06-1210_18_07_746, lex:LexO_2024-06-1213_34_53_046,
+    lex:LexO_2024-06-1213_42_28_957, lex:LexO_2024-06-1305_18_13_54, lex:LexO_2024-06-1313_13_39_391,
+    lex:LexO_2024-06-1313_28_53_331, lex:LexO_2024-06-1405_55_33_353, lex:LexO_2024-06-1711_50_09_749,
+    lex:LexO_2024-06-1711_59_41_592, lex:LexO_2024-06-1811_05_51_396, lex:LexO_2024-06-1915_42_33_572,
+    lex:LexO_2024-06-1916_09_13_96, lex:LexO_2024-06-2020_49_55_541, lex:LexO_2024-06-2021_00_03_143,
+    lex:LexO_2024-06-2021_22_35_741, lex:LexO_2024-06-2108_46_56_624, lex:LexO_2024-06-2210_41_43_694,
+    lex:LexO_2024-06-2219_58_10_306, lex:LexO_2024-06-2310_28_48_917, lex:LexO_2024-06-2417_27_46_372,
+    lex:LexO_2024-06-2513_21_58_91, lex:LexO_2024-06-2516_53_59_103, lex:LexO_2024-06-2517_08_50_311,
+    lex:LexO_2024-06-2618_06_06_56, lex:LexO_2024-07-1619_48_42_816, lex:LexO_2024-07-2420_01_15_395,
+    lex:LexO_2024-09-0816_41_37_913, lex:LexO_2024-10-0509_04_15_331, lex:LexO_2024-10-0509_43_31_494,
+    lex:LexO_2024-10-0912_50_53_749, lex:LexO_2024-10-1020_17_48_726, lex:LexO_2024-10-1408_41_24_022,
+    lex:LexO_2024-10-1408_41_43_618, lex:LexO_2024-10-1410_20_56_625, lex:LexO_2024-10-1410_49_18_525;
+  lime:linguisticCatalog "https://www.lexinfo.net/ontologies/3.0/lexinfo";
+  lime:language "PIE" .
+
+lex:lexicon_730471 lime:entry lex:PIT_105607, lex:PIT_15669, lex:PIT_159900, lex:PIT_163335,
+    lex:PIT_175972, lex:PIT_254339, lex:PIT_263996, lex:PIT_269603, lex:PIT_287042, lex:PIT_298331,
+    lex:PIT_379869, lex:PIT_384422, lex:PIT_410275, lex:PIT_423087, lex:PIT_450039, lex:PIT_520110,
+    lex:PIT_536913, lex:PIT_5488, lex:PIT_563589, lex:PIT_590622, lex:PIT_591442, lex:PIT_598746,
+    lex:PIT_60081, lex:PIT_615958, lex:PIT_631197, lex:PIT_655176, lex:PIT_660295, lex:PIT_67580,
+    lex:PIT_711787, lex:PIT_737939, lex:PIT_740006, lex:PIT_74112, lex:PIT_748592, lex:PIT_795159,
+    lex:PIT_79583, lex:PIT_901017, lex:PIT_909014, lex:PIT_939308, lex:PIT_959588, lex:PIT_959750,
+    lex:PIT_968048, lex:PIT_989274, lex:PIT_991448, lex:LexO_2023-03-2808_51_53_852, lex:LexO_2023-04-0113_23_50_967,
+    lex:LexO_2023-04-0212_31_30_921, lex:LexO_2023-04-0313_07_13_626, lex:LexO_2023-04-1711_12_12_605,
+    lex:LexO_2023-04-1714_43_19_097, lex:LexO_2023-04-1808_53_11_712, lex:LexO_2023-04-2814_09_27_972,
+    lex:LexO_2023-04-3013_36_06_267, lex:LexO_2023-05-0209_13_51_04, lex:LexO_2023-05-0209_48_32_363,
+    lex:LexO_2023-05-0212_59_12_464, lex:LexO_2023-05-0213_26_28_177, lex:LexO_2023-05-0214_37_04_257,
+    lex:LexO_2023-07-2811_20_04_921, lex:LexO_2023-08-0212_31_04_618, lex:LexO_2023-08-0307_26_11_002,
+    lex:LexO_2023-08-0607_38_46_156, lex:LexO_2023-08-0713_08_11_421, lex:LexO_2023-08-0816_39_55_777,
+    lex:LexO_2023-10-0515_26_37_318, lex:LexO_2023-10-1709_53_51_146, lex:LexO_2023-11-2415_49_45_57,
+    lex:LexO_2023-11-2615_12_39_303, lex:LexO_2023-11-2615_14_33_715, lex:LexO_2023-11-2615_15_13_512,
+    lex:LexO_2023-12-0518_03_55_176, lex:LexO_2024-01-1316_32_15_924, lex:LexO_2024-01-2408_36_17_877,
+    lex:LexO_2024-01-2408_48_59_161, lex:LexO_2024-01-3114_25_31_919, lex:LexO_2024-01-3117_03_36_057,
+    lex:LexO_2024-03-1007_28_59_048, lex:LexO_2024-03-1022_34_39_972, lex:LexO_2024-03-1022_49_43_334,
+    lex:LexO_2024-03-2010_10_03_612, lex:LexO_2024-04-0409_27_26_307, lex:LexO_2024-04-2315_10_27_167,
+    lex:LexO_2024-04-2410_00_18_854, lex:LexO_2024-04-2410_22_46_136, lex:LexO_2024-04-2622_02_37_968,
+    lex:LexO_2024-04-2622_03_08_409, lex:LexO_2024-04-2714_23_58_189, lex:LexO_2024-04-2715_04_56_938,
+    lex:LexO_2024-04-2715_05_30_5, lex:LexO_2024-04-2910_39_37_506, lex:LexO_2024-05-0311_18_11_992,
+    lex:LexO_2024-05-0311_19_53_299, lex:LexO_2024-05-0313_16_54_932, lex:LexO_2024-05-0314_18_58_88,
+    lex:LexO_2024-05-0319_32_23_185, lex:LexO_2024-05-0322_32_47_059, lex:LexO_2024-05-0323_15_10_993,
+    lex:LexO_2024-05-0323_37_17_522, lex:LexO_2024-05-0906_23_39_954, lex:LexO_2024-05-0906_42_50_781,
+    lex:LexO_2024-05-0920_54_54_878, lex:LexO_2024-05-1115_19_32_215, lex:LexO_2024-05-1115_26_27_243,
+    lex:LexO_2024-05-1115_40_01_877, lex:LexO_2024-05-1115_58_10_074, lex:LexO_2024-05-1116_02_31_1,
+    lex:LexO_2024-05-1117_04_43_098, lex:LexO_2024-06-0220_28_25_506, lex:LexO_2024-06-0220_35_52_161,
+    lex:LexO_2024-06-0420_45_57_585, lex:LexO_2024-06-0421_06_37_893, lex:LexO_2024-06-0421_19_03_988,
+    lex:LexO_2024-06-0421_52_48_25, lex:LexO_2024-06-0505_19_36_991, lex:LexO_2024-06-1014_10_31_442,
+    lex:LexO_2024-06-1108_43_06_021, lex:LexO_2024-06-1108_55_42_308, lex:LexO_2024-06-1112_16_03_003,
+    lex:LexO_2024-06-1114_43_05_894, lex:LexO_2024-06-1115_47_44_993, lex:LexO_2024-06-1116_22_34_194,
+    lex:LexO_2024-06-1116_56_09_897, lex:LexO_2024-06-1117_17_06_447, lex:LexO_2024-06-1213_00_31_967,
+    lex:LexO_2024-06-1213_20_26_176, lex:LexO_2024-06-1305_41_14_861, lex:LexO_2024-06-1312_54_05_035,
+    lex:LexO_2024-06-1411_46_46_213, lex:LexO_2024-06-1710_28_57_141, lex:LexO_2024-06-1711_49_08_295,
+    lex:LexO_2024-06-1713_39_59_314, lex:LexO_2024-06-1810_55_23_677, lex:LexO_2024-06-2108_16_06_613,
+    lex:LexO_2024-06-2108_47_13_123, lex:LexO_2024-06-2109_00_09_734, lex:LexO_2024-06-2109_24_55_162,
+    lex:LexO_2024-06-2208_16_52_372, lex:LexO_2024-06-2212_06_24_343, lex:LexO_2024-06-2213_39_35_516,
+    lex:LexO_2024-06-2213_48_41_277, lex:LexO_2024-06-2313_19_24_648, lex:LexO_2024-06-2313_27_48_128,
+    lex:LexO_2024-06-2313_58_57_669, lex:LexO_2024-06-2314_23_51_916, lex:LexO_2024-06-2316_11_48_027,
+    lex:LexO_2024-06-2316_23_05_137, lex:LexO_2024-06-2517_09_53_618, lex:LexO_2024-06-2618_06_54_824,
+    lex:LexO_2024-10-1411_13_55_778;
+  lime:linguisticCatalog "https://www.lexinfo.net/ontologies/3.0/lexinfo";
+  lime:language "PIT" .
+
+lex:LexO_2023-04-2712_45_46_919 lime:entry lex:LexO_2023-04-2712_39_47_257, lex:LexO_2023-07-2811_04_40_827,
+    lex:LexO_2023-08-0413_33_51_854, lex:LexO_2023-08-0414_53_38_767, lex:LexO_2023-08-0509_15_07_712,
+    lex:LexO_2023-08-0607_47_41_116, lex:LexO_2023-08-0608_06_30_506, lex:LexO_2023-08-0709_34_08_354,
+    lex:LexO_2023-08-0712_47_14_141, lex:LexO_2023-08-0713_11_03_529, lex:LexO_2023-08-0814_42_10_002,
+    lex:LexO_2023-08-0815_25_16_679, lex:LexO_2023-08-0815_55_54_38, lex:LexO_2023-08-0816_01_59_998,
+    lex:LexO_2023-08-0819_11_32_299, lex:LexO_2023-08-0819_57_48_421, lex:LexO_2023-08-0910_49_43_751,
+    lex:LexO_2023-09-1108_10_17_811, lex:LexO_2023-09-1114_24_10_805, lex:LexO_2023-09-1114_31_34_39,
+    lex:LexO_2023-09-1114_35_36_184, lex:LexO_2023-09-1115_21_07_371, lex:LexO_2023-09-1115_38_24_974,
+    lex:LexO_2023-09-1115_41_51_926, lex:LexO_2023-09-1119_45_25_842, lex:LexO_2023-09-1120_09_04_945,
+    lex:LexO_2023-09-1207_15_50_647, lex:LexO_2023-09-1219_09_17_224, lex:LexO_2023-09-1219_18_21_721,
+    lex:LexO_2023-09-1309_41_02_74, lex:LexO_2023-09-1309_50_32_6, lex:LexO_2023-09-1310_29_18_263,
+    lex:LexO_2023-09-1312_50_46_464, lex:LexO_2023-09-1312_59_17_963, lex:LexO_2023-09-1313_21_53_479,
+    lex:LexO_2023-09-1314_19_18_44, lex:LexO_2023-09-1314_25_34_064, lex:LexO_2023-09-1314_35_47_78,
+    lex:LexO_2023-09-1314_46_24_758, lex:LexO_2023-09-1314_52_40_592, lex:LexO_2023-09-1409_41_33_33,
+    lex:LexO_2023-09-1410_37_50_844, lex:LexO_2023-09-1516_30_27_963, lex:LexO_2023-09-1516_40_53_618,
+    lex:LexO_2023-09-1516_45_13_661, lex:LexO_2023-09-1516_49_05_333, lex:LexO_2024-07-0113_19_40_433,
+    lex:LexO_2024-08-1214_24_29_343, lex:LexO_2024-08-1215_38_26_656, lex:LexO_2024-08-1215_52_20_016,
+    lex:LexO_2024-08-1216_03_34_461, lex:LexO_2024-10-0508_51_29_525, lex:LexO_2024-10-0509_14_29_713,
+    lex:LexO_2024-10-0509_40_15_988, lex:LexO_2024-10-0711_31_19_296, lex:LexO_2024-10-0711_50_26_517,
+    lex:LexO_2024-10-0712_05_37_986, lex:LexO_2024-10-0712_28_53_613, lex:LexO_2024-10-0816_39_43_095,
+    lex:LexO_2024-10-0816_46_51_808, lex:LexO_2024-10-0817_02_02_528, lex:LexO_2024-10-0907_54_33_514,
+    lex:LexO_2024-10-0908_29_36_781, lex:LexO_2024-10-0908_48_04_436, lex:LexO_2024-10-0909_09_43_859,
+    lex:LexO_2024-10-0909_15_03_271, lex:LexO_2024-10-0910_08_50_97, lex:LexO_2024-10-0910_16_10_523,
+    lex:LexO_2024-10-0910_18_46_68, lex:LexO_2024-10-0910_29_01_529, lex:LexO_2024-10-0910_33_15_11,
+    lex:LexO_2024-10-0910_42_00_284, lex:LexO_2024-10-0911_03_31_438, lex:LexO_2024-10-0911_19_38_281,
+    lex:LexO_2024-10-0911_24_17_949, lex:LexO_2024-10-0911_57_13_24, lex:LexO_2024-10-0912_17_21_68,
+    lex:LexO_2024-10-0912_29_30_398, lex:LexO_2024-10-0912_36_08_357, lex:LexO_2024-10-0912_38_04_231,
+    lex:LexO_2024-10-0912_41_41_882, lex:LexO_2024-10-0913_03_37_63, lex:LexO_2024-10-1020_10_11_988,
+    lex:LexO_2024-10-1020_12_32_046, lex:LexO_2024-10-1020_17_00_598;
+  lime:linguisticCatalog <http://www.lexinfo.net/ontologies/3.0/lexinfo>;
+  lime:language "xve" .
+
+lex:lexicon_214887 lime:linguisticCatalog "https://www.lexinfo.net/ontologies/3.0/lexinfo";
+  lime:language "osc" .
+
+lex:lexicon_222524 lime:linguisticCatalog "https://www.lexinfo.net/ontologies/3.0/lexinfo";
+  lime:language "xfa" .
+
+lex:lexicon_345508 lime:linguisticCatalog "https://www.lexinfo.net/ontologies/3.0/lexinfo";
+  lime:language "lat" .
+
+lex:lexicon_551337 lime:linguisticCatalog "https://www.lexinfo.net/ontologies/3.0/lexinfo";
+  lime:language "umc" .
+
+lex:lexicon_811797 lime:linguisticCatalog "https://www.lexinfo.net/ontologies/3.0/lexinfo";
+  lime:language "grc" .
+
+lex:deívaí_noun_osc_entry ety:cognate lex:deue_noun_xvo_entry, lex:dīvus-a-um_noun_lat_entry .
+
+lex:meddíss_noun_osc_entry ety:cognate lex:medix_noun_umc_entry, lex:medis_noun_ims_entry,
+    lex:medix2_noun_pgn_entry, lex:medix3_noun_xvo_entry .
+
+lex:purasiaí_adjective_osc_entry ety:cognate lex:pir_noun_xum_entry .
+
+lex:seemuneís_properNoun_osc_entry ety:cognate lex:sēmō_properNoun_lat_entry, lex:semunu_properNoun_pgn_entry .
+
+lex:medix_noun_umc_entry ety:cognate lex:meddíss_noun_osc_entry, lex:medis_noun_ims_entry,
+    lex:medix2_noun_pgn_entry, lex:medix3_noun_xvo_entry .
+
+lex:LexO_2023-03-3013_44_13_67 ety:cognate lex:LexO_2023-08-0413_33_51_854 .
+
+lex:LexO_2023-04-2713_34_08_678 ety:cognate <http://lila-erc.eu/data/id/lemma/20104> .
+
+lex:LexO_2023-08-0413_33_51_854 ety:cognate lex:LexO_2023-03-3013_44_13_67 .
+
+lex:etyLink_138863 ety:etyLinkType "inheritance";
+  ety:etySource lex:PIT_450039 .
+
+lex:etyLink_377473 ety:etyLinkType "inheritance" .
+
+lex:etyLink_402846 ety:etyLinkType "inheritance" .
+
+lex:etyLink_927012 ety:etyLinkType "inheritance" .
+
+lex:LexO_2023-02-0616_10_06_972 ety:etyLinkType "inheritance" .
+
+lex:LexO_2023-02-0616_10_25_731 ety:etyLinkType "inheritance" .
+
+lex:LexO_2023-03-3014_22_41_53 ety:etyLinkType "inheritance" .
+
+lex:LexO_2023-04-1914_29_10_668 ety:etyLinkType "inheritance" .
+
+lex:LexO_2023-04-2713_52_01_41 ety:etyLinkType "borrowing" .
+
+lex:LexO_2023-08-0414_22_46_648 ety:etyLinkType "inheritance" .
+
+lex:LexO_2023-08-0414_23_01_227 ety:etyLinkType "inheritance" .
+
+lex:LexO_2023-11-2716_44_49_584 ety:etyLinkType "inheritance" .
+
+lex:LexO_2023-11-2716_44_51_883 ety:etyLinkType "inheritance" .
+
+lex:LexO_2024-06-2516_57_34_037 ety:etyLinkType "borrowing" .
+
+lex:etyLink_377473 ety:etySource lex:PIE_980482;
+  ety:etyTarget lex:deívaí_noun_osc_entry .
+
+lex:etyLink_402846 ety:etySource lex:PIE_518163;
+  ety:etyTarget lex:purasiaí_adjective_osc_entry .
+
+lex:etyLink_927012 ety:etySource lex:PIT_991448;
+  ety:etyTarget lex:purasiaí_adjective_osc_entry .
+
+lex:LexO_2023-02-0616_10_06_972 ety:etySource lex:PIE_580175;
+  ety:etyTarget lex:meddíss_noun_osc_entry .
+
+lex:LexO_2023-02-0616_10_25_731 ety:etySource lex:PIE_902411;
+  ety:etyTarget lex:meddíss_noun_osc_entry .
+
+lex:LexO_2023-03-3014_22_41_53 ety:etySource lex:LexO_2023-04-0113_23_50_967;
+  ety:etyTarget lex:LexO_2023-03-3013_44_13_67 .
+
+lex:LexO_2023-04-1914_29_10_668 ety:etySource lex:LexO_2023-04-1914_27_38_989;
+  ety:etyTarget lex:LexO_2023-03-3013_44_13_67 .
+
+lex:LexO_2023-04-2713_52_01_41 ety:etySource lex:LexO_2023-03-2809_08_05_265;
+  ety:etyTarget lex:LexO_2023-04-2713_34_08_678 .
+
+lex:LexO_2023-08-0414_22_46_648 ety:etySource lex:LexO_2023-04-0113_23_50_967;
+  ety:etyTarget lex:LexO_2023-08-0413_33_51_854 .
+
+lex:LexO_2023-08-0414_23_01_227 ety:etySource lex:LexO_2023-04-1914_27_38_989;
+  ety:etyTarget lex:LexO_2023-08-0413_33_51_854 .
+
+lex:LexO_2023-11-2716_44_49_584 ety:etySource lex:PIE_580175;
+  ety:etyTarget lex:medix_noun_umc_entry .
+
+lex:LexO_2023-11-2716_44_51_883 ety:etySource lex:PIE_902411;
+  ety:etyTarget lex:medix_noun_umc_entry .
+
+lex:LexO_2024-06-2516_57_34_037 ety:etySource lex:senatus_noun_lat_entry;
+  ety:etyTarget lex:senateís_noun_osc_entry .
+
+lex:etyLink_138863 ety:etyTarget lex:deívaí_noun_osc_entry .
+
+lex:deívaí_noun_osc_entry ety:etymology lex:etymology_211405 .
+
+lex:meddíss_noun_osc_entry ety:etymology lex:etymology_659128 .
+
+lex:purasiaí_adjective_osc_entry ety:etymology lex:etymology_682956 .
+
+lex:senateís_noun_osc_entry ety:etymology lex:LexO_2024-06-2516_57_30_554 .
+
+lex:senatus_noun_lat_entry ety:etymology lex:LexO_2024-06-2516_54_56_562 .
+
+lex:medix_noun_umc_entry ety:etymology lex:LexO_2023-11-2716_44_46_66 .
+
+lex:LexO_2023-03-3013_44_13_67 ety:etymology lex:LexO_2023-03-3013_59_30_569 .
+
+lex:LexO_2023-04-2713_34_08_678 ety:etymology lex:LexO_2023-04-2713_51_57_053 .
+
+lex:LexO_2023-08-0413_33_51_854 ety:etymology lex:LexO_2023-08-0414_22_41_82 .
+
+lex:etymology_211405 ety:hasEtyLink lex:etyLink_138863, lex:etyLink_377473 .
+
+lex:etymology_659128 ety:hasEtyLink lex:LexO_2023-02-0616_10_06_972, lex:LexO_2023-02-0616_10_25_731 .
+
+lex:etymology_682956 ety:hasEtyLink lex:etyLink_402846, lex:etyLink_927012 .
+
+lex:LexO_2023-03-3013_59_30_569 ety:hasEtyLink lex:LexO_2023-03-3014_22_41_53, lex:LexO_2023-04-1914_29_10_668 .
+
+lex:LexO_2023-04-2713_51_57_053 ety:hasEtyLink lex:LexO_2023-04-2713_52_01_41 .
+
+lex:LexO_2023-08-0414_22_41_82 ety:hasEtyLink lex:LexO_2023-08-0414_22_46_648, lex:LexO_2023-08-0414_23_01_227 .
+
+lex:LexO_2023-11-2716_44_46_66 ety:hasEtyLink lex:LexO_2023-11-2716_44_49_584, lex:LexO_2023-11-2716_44_51_883 .
+
+lex:LexO_2024-06-2516_57_30_554 ety:hasEtyLink lex:LexO_2024-06-2516_57_34_037 .
+
+lex:deívaí_noun_osc_deias_form dct:created "2022-07-12T12:11:06.654+02:00" .
+
+lex:deívaí_noun_osc_deívaí_form dct:created "2022-07-12T12:11:06.654+02:00" .
+
+lex:deívaí_noun_osc_ḍeívas_form dct:created "2022-07-12T12:11:06.655+02:00" .
+
+lex:deívaí_noun_osc_entry dct:created "2022-07-12T12:11:06.653+02:00" .
+
+lex:deívaí_noun_osc_sense1 dct:created "2022-07-12T12:11:06.655+02:00" .
+
+lex:meddíss_noun_osc_entry dct:created "2022-07-12T12:11:06.708+02:00" .
+
+lex:purasiaí_adjective_osc_entry dct:created "2022-07-12T12:11:06.577+02:00" .
+
+lex:seemuneís_properNoun_osc_entry dct:created "2022-07-12T12:11:06.585+02:00" .
+
+lex:senateís_noun_osc_entry dct:created "2022-07-12T12:11:06.692+02:00" .
+
+lex:senatus_noun_lat_entry dct:created "2022-07-12T12:11:06.563+02:00" .
+
+lex:medix_noun_umc_entry dct:created "2022-07-12T12:11:06.563+02:00" .
+
+lex:meddíss_noun_osc_meddis_form dct:created "2022-07-12T12:11:06.711+02:00" .
+
+lex:meddíss_noun_osc_meddíks_form dct:created "2022-07-12T12:11:06.709+02:00" .
+
+lex:meddíss_noun_osc_meddís1_form dct:created "2022-07-12T12:11:06.709+02:00" .
+
+lex:meddíss_noun_osc_meddíss_form dct:created "2022-07-12T12:11:06.711+02:00" .
+
+lex:meddíss_noun_osc_medikeí_form dct:created "2022-07-12T12:11:06.710+02:00" .
+
+lex:meddíss_noun_osc_medikeís_form dct:created "2022-07-12T12:11:06.709+02:00" .
+
+lex:meddíss_noun_osc_medikud_form dct:created "2022-07-12T12:11:06.710+02:00" .
+
+lex:meddíss_noun_osc_μεδδειξ_form dct:created "2022-07-12T12:11:06.712+02:00" .
+
+lex:meddíss_noun_osc_sense1 dct:created "2022-07-12T12:11:06.712+02:00" .
+
+lex:medix_noun_umc_medix_form dct:created "2022-07-12T12:11:06.771+02:00" .
+
+lex:medix_noun_umc_sense1 dct:created "2022-07-12T12:11:06.771+02:00" .
+
+lex:purasiaí_adjective_osc_purasiaí_form dct:created "2022-07-12T12:11:06.577+02:00" .
+
+lex:purasiaí_adjective_osc_sense1 dct:created "2022-07-12T12:11:06.577+02:00" .
+
+lex:seemuneís_properNoun_osc_seemuneíss_form dct:created "2022-07-12T12:11:06.586+02:00" .
+
+lex:seemuneís_properNoun_osc_sense1 dct:created "2022-07-12T12:11:06.586+02:00" .
+
+lex:senateís_noun_osc_senateis_form dct:created "2022-07-12T12:11:06.692+02:00" .
+
+lex:senateís_noun_osc_senateís2_form dct:created "2022-07-12T12:11:06.692+02:00" .
+
+lex:senateís_noun_osc_σενατηις1_form dct:created "2022-07-12T12:11:06.692+02:00" .
+
+lex:senateís_noun_osc_sense1 dct:created "2022-07-12T12:11:06.693+02:00" .
+
+lexbib:deívaí_noun_osc_deias_form_bib21333 dct:created "2022-09-28T13:18:24.083+02:00" .
+
+lexbib:deívaí_noun_osc_deívaí_form_bib373022 dct:created "2022-09-28T13:18:24.648+02:00" .
+
+lexbib:deívaí_noun_osc_deívaí_form_bib997399 dct:created "2022-09-28T13:18:25.200+02:00" .
+
+lexbib:deívaí_noun_osc_ḍeívas_form_bib621322 dct:created "2022-09-28T13:18:25.863+02:00" .
+
+lexbib:meddíss_noun_osc_meddis_form_bib202608 dct:created "2022-09-28T13:19:59.791+02:00" .
+
+lexbib:meddíss_noun_osc_meddíks_form_bib550541 dct:created "2022-09-28T13:19:57.324+02:00" .
+
+lexbib:meddíss_noun_osc_meddíss_form_bib814858 dct:created "2022-09-28T13:20:02.168+02:00" .
+
+lexbib:meddíss_noun_osc_medikeí_form_bib388374 dct:created "2022-09-28T13:19:58.697+02:00" .
+
+lexbib:meddíss_noun_osc_medikeís_form_bib151704 dct:created "2022-09-28T13:19:56.772+02:00" .
+
+lexbib:meddíss_noun_osc_medikud_form_bib240322 dct:created "2022-09-28T13:19:59.252+02:00" .
+
+lexbib:meddíss_noun_osc_μεδδειξ_form_bib617551 dct:created "2022-09-28T13:20:03.800+02:00" .
+
+lexbib:medix_noun_umc_medix_form_bib701317 dct:created "2022-09-28T13:21:41.288+02:00" .
+
+lexbib:purasiaí_adjective_osc_purasiaí_form_bib609743 dct:created "2022-09-28T13:16:24.287+02:00" .
+
+lexbib:seemuneís_properNoun_osc_seemuneíss_form_bib263108 dct:created "2022-09-28T13:16:36.800+02:00" .
+
+lexbib:senateís_noun_osc_senateis_form_bib416575 dct:created "2022-09-28T13:19:31.192+02:00" .
+
+lexbib:senateís_noun_osc_senateís2_form_bib764316 dct:created "2022-09-28T13:19:29.460+02:00" .
+
+lexbib:senateís_noun_osc_σενατηις1_form_bib181593 dct:created "2022-09-28T13:19:32.275+02:00" .
+
+lexbib:senateís_noun_osc_σενατηις1_form_bib915178 dct:created "2022-09-28T13:19:32.817+02:00" .
+
+lex:PIE_518163 dct:created "2022-10-04T07:46:06.717+02:00" .
+
+lex:PIE_580175 dct:created "2022-10-04T07:46:30.795+02:00" .
+
+lex:PIE_902411 dct:created "2022-10-04T07:46:30.796+02:00" .
+
+lex:PIE_980482 dct:created "2022-10-04T07:46:20.370+02:00" .
+
+lex:PIT_450039 dct:created "2022-10-04T07:46:20.884+02:00" .
+
+lex:PIT_991448 dct:created "2022-10-04T07:46:07.355+02:00" .
+
+lex:etymology_211405 dct:created "2022-10-04T07:46:20.370+02:00" .
+
+lex:etyLink_138863 dct:created "2022-10-04T07:46:20.884+02:00" .
+
+lex:etyLink_377473 dct:created "2022-10-04T07:46:20.370+02:00" .
+
+lex:etyLink_402846 dct:created "2022-10-04T07:46:06.717+02:00" .
+
+lex:etyLink_927012 dct:created "2022-10-04T07:46:07.355+02:00" .
+
+lex:etymology_659128 dct:created "2022-10-04T07:46:30.795+02:00" .
+
+lex:etymology_682956 dct:created "2022-10-04T07:46:06.716+02:00" .
+
+lexbib:LexO_2023-02-0616_08_07_031 dct:created "2023-02-06T16:08:07.031Z" .
+
+lex:LexO_2023-02-0616_10_06_972 dct:created "2023-02-06T16:10:06.972Z" .
+
+lex:LexO_2023-02-0616_10_25_731 dct:created "2023-02-06T16:10:25.731Z" .
+
+lexbib:LexO_2023-02-1711_16_50_982 dct:created "2023-02-17T11:16:50.982Z" .
+
+lexbib:LexO_2023-02-1711_17_09_309 dct:created "2023-02-17T11:17:09.309Z" .
+
+lexbib:LexO_2023-02-1712_18_42_035 dct:created "2023-02-17T12:18:42.035Z" .
+
+lexbib:LexO_2023-02-1714_11_22_825 dct:created "2023-02-17T14:11:22.825Z" .
+
+lexbib:LexO_2023-02-1810_39_18_133 dct:created "2023-02-18T10:39:18.133Z" .
+
+lex:LexO_2023-03-2809_08_05_265 dct:created "2023-03-28T09:08:05.265Z" .
+
+lex:LexO_2023-03-3013_44_13_67 dct:created "2023-03-30T13:44:13.670Z" .
+
+lex:LexO_2023-03-3013_54_20_53 dct:created "2023-03-30T13:54:20.530Z" .
+
+lex:LexO_2023-03-3013_59_02_597 dct:created "2023-03-30T13:59:02.597Z" .
+
+lex:LexO_2023-03-3013_59_30_569 dct:created "2023-03-30T13:59:30.569Z" .
+
+lex:LexO_2023-03-3014_22_41_53 dct:created "2023-03-30T14:22:41.530Z" .
+
+lex:LexO_2023-04-0113_23_50_967 dct:created "2023-04-01T13:23:50.967Z" .
+
+lex:LexO_2023-04-0314_03_29_497 dct:created "2023-04-03T14:03:29.497Z" .
+
+lex:LexO_2023-04-1815_07_10_387 dct:created "2023-04-18T15:07:10.387Z" .
+
+lex:LexO_2023-04-1817_44_39_233 dct:created "2023-04-18T17:44:39.233Z" .
+
+lex:LexO_2023-04-1817_47_15_866 dct:created "2023-04-18T17:47:15.866Z" .
+
+lex:LexO_2023-04-1914_27_38_989 dct:created "2023-04-19T14:27:38.989Z" .
+
+lex:LexO_2023-04-1914_29_10_668 dct:created "2023-04-19T14:29:10.668Z" .
+
+lex:LexO_2023-04-2712_45_46_919 dct:created "2023-04-27T12:45:46.919Z" .
+
+lex:LexO_2023-04-2713_34_08_678 dct:created "2023-04-27T13:34:08.678Z" .
+
+lexbib:LexO_2023-04-2713_46_09_865 dct:created "2023-04-27T13:46:09.865Z" .
+
+lex:LexO_2023-04-2713_46_25_549 dct:created "2023-04-27T13:46:25.549Z" .
+
+lex:LexO_2023-04-2713_48_53_078 dct:created "2023-04-27T13:48:53.078Z" .
+
+lex:LexO_2023-04-2713_50_22_905 dct:created "2023-04-27T13:50:22.905Z" .
+
+lex:LexO_2023-04-2713_51_35_242 dct:created "2023-04-27T13:51:35.242Z" .
+
+lex:LexO_2023-04-2713_51_57_053 dct:created "2023-04-27T13:51:57.053Z" .
+
+lex:LexO_2023-04-2713_52_01_41 dct:created "2023-04-27T13:52:01.410Z" .
+
+lexbib:LexO_2023-05-0515_38_08_944 dct:created "2023-05-05T15:38:08.944Z" .
+
+lexbib:LexO_2023-05-0515_39_21_943 dct:created "2023-05-05T15:39:21.943Z" .
+
+lexbib:LexO_2023-06-1909_37_03_693 dct:created "2023-06-19T09:37:03.693Z" .
+
+lexbib:LexO_2023-06-1909_37_24_642 dct:created "2023-06-19T09:37:24.642Z" .
+
+lexbib:LexO_2023-06-2911_36_22_834 dct:created "2023-06-29T11:36:22.834Z" .
+
+lexbib:LexO_2023-06-2911_37_27_215 dct:created "2023-06-29T11:37:27.215Z" .
+
+lexbib:LexO_2023-06-2911_41_46_214 dct:created "2023-06-29T11:41:46.214Z" .
+
+lexbib:LexO_2023-06-2911_42_41_835 dct:created "2023-06-29T11:42:41.835Z" .
+
+lexbib:LexO_2023-07-0308_55_19_278 dct:created "2023-07-03T08:55:19.278Z" .
+
+lex:LexO_2023-08-0413_33_51_854 dct:created "2023-08-04T13:33:51.854Z" .
+
+lexbib:LexO_2023-08-0413_55_49_127 dct:created "2023-08-04T13:55:49.127Z" .
+
+lex:LexO_2023-08-0413_57_12_514 dct:created "2023-08-04T13:57:12.514Z" .
+
+lex:LexO_2023-08-0414_15_11_601 dct:created "2023-08-04T14:15:11.601Z" .
+
+lex:LexO_2023-08-0414_16_21_05 dct:created "2023-08-04T14:16:21.050Z" .
+
+lex:LexO_2023-08-0414_17_52_076 dct:created "2023-08-04T14:17:52.076Z" .
+
+lex:LexO_2023-08-0414_20_03_943 dct:created "2023-08-04T14:20:03.943Z" .
+
+lex:LexO_2023-08-0414_22_31_479 dct:created "2023-08-04T14:22:31.479Z" .
+
+lex:LexO_2023-08-0414_22_41_82 dct:created "2023-08-04T14:22:41.820Z" .
+
+lex:LexO_2023-08-0414_22_46_648 dct:created "2023-08-04T14:22:46.648Z" .
+
+lex:LexO_2023-08-0414_23_01_227 dct:created "2023-08-04T14:23:01.227Z" .
+
+lexbib:LexO_2023-08-0414_30_00_241 dct:created "2023-08-04T14:30:00.241Z" .
+
+lex:LexO_2023-08-0914_24_42_487 dct:created "2023-08-09T14:24:42.487Z" .
+
+lexbib:LexO_2023-08-0914_26_23_806 dct:created "2023-08-09T14:26:23.806Z" .
+
+lexbib:LexO_2023-08-0914_26_56_411 dct:created "2023-08-09T14:26:56.411Z" .
+
+lexbib:LexO_2023-08-0914_27_59_319 dct:created "2023-08-09T14:27:59.319Z" .
+
+lex:LexO_2023-08-1014_52_38_581 dct:created "2023-08-10T14:52:38.581Z" .
+
+lexbib:LexO_2023-08-1014_53_28_116 dct:created "2023-08-10T14:53:28.116Z" .
+
+lex:LexO_2023-09-1320_29_51_035 dct:created "2023-09-13T20:29:51.035Z" .
+
+lex:LexO_2023-09-1913_54_20_745 dct:created "2023-09-19T13:54:20.745Z" .
+
+lexbib:LexO_2023-09-2013_37_34_097 dct:created "2023-09-20T13:37:34.097Z" .
+
+lex:LexO_2023-09-2607_57_15_389 dct:created "2023-09-26T07:57:15.389Z" .
+
+lexbib:LexO_2023-09-2607_58_44_19 dct:created "2023-09-26T07:58:44.190Z" .
+
+lex:LexO_2023-09-2720_24_40_649 dct:created "2023-09-27T20:24:40.649Z" .
+
+lexbib:LexO_2023-09-2814_36_26_175 dct:created "2023-09-28T14:36:26.175Z" .
+
+lex:LexO_2023-10-0908_50_24_184 dct:created "2023-10-09T08:50:24.184Z" .
+
+lex:LexO_2023-10-2714_16_28_806 dct:created "2023-10-27T14:16:28.806Z" .
+
+lex:LexO_2023-10-3013_55_41_612 dct:created "2023-10-30T13:55:41.612Z" .
+
+lex:LexO_2023-11-0214_11_48_787 dct:created "2023-11-02T14:11:48.787Z" .
+
+lex:LexO_2023-11-2409_42_30_091 dct:created "2023-11-24T09:42:30.091Z" .
+
+lexbib:LexO_2023-11-2716_44_40_821 dct:created "2023-11-27T16:44:40.821Z" .
+
+lex:LexO_2023-11-2716_44_46_66 dct:created "2023-11-27T16:44:46.660Z" .
+
+lex:LexO_2023-11-2716_44_49_584 dct:created "2023-11-27T16:44:49.584Z" .
+
+lex:LexO_2023-11-2716_44_51_883 dct:created "2023-11-27T16:44:51.883Z" .
+
+lexbib:LexO_2023-12-0115_18_05_229 dct:created "2023-12-01T15:18:05.229Z" .
+
+lex:LexO_2023-12-3119_10_08_016 dct:created "2023-12-31T19:10:08.016Z" .
+
+lex:LexO_2023-12-3119_11_42_061 dct:created "2023-12-31T19:11:42.061Z" .
+
+lex:LexO_2023-12-3119_13_18_419 dct:created "2023-12-31T19:13:18.419Z" .
+
+lexbib:LexO_2024-06-2512_50_49_698 dct:created "2024-06-25T12:50:49.698Z" .
+
+lex:LexO_2024-06-2516_57_30_554 dct:created "2024-06-25T16:57:30.554Z" .
+
+lex:LexO_2024-06-2516_57_34_037 dct:created "2024-06-25T16:57:34.037Z" .
+
+lex:LexO_2024-06-2516_59_56_709 dct:created "2024-06-25T16:59:56.709Z" .
+
+lex:LexO_2024-08-1214_13_40_064 dct:created "2024-08-12T14:13:40.064Z" .
+
+lex:LexO_2024-10-1407_03_10_339 dct:created "2024-10-14T07:03:10.339Z" .
+
+lex:deívaí_noun_osc_entry ns:term_status "working" .
+
+lex:meddíss_noun_osc_entry ns:term_status "working" .
+
+lex:purasiaí_adjective_osc_entry ns:term_status "working" .
+
+lex:seemuneís_properNoun_osc_entry ns:term_status "working" .
+
+lex:senateís_noun_osc_entry ns:term_status "working" .
+
+lex:senatus_noun_lat_entry ns:term_status "working" .
+
+lex:medix_noun_umc_entry ns:term_status "working" .
+
+lex:PIE_518163 ns:term_status "working" .
+
+lex:PIE_580175 ns:term_status "working" .
+
+lex:PIE_902411 ns:term_status "working" .
+
+lex:PIE_980482 ns:term_status "working" .
+
+lex:PIT_450039 ns:term_status "working" .
+
+lex:PIT_991448 ns:term_status "working" .
+
+lex:LexO_2023-03-2809_08_05_265 ns:term_status "working" .
+
+lex:LexO_2023-03-3013_44_13_67 ns:term_status "working" .
+
+lex:LexO_2023-04-0113_23_50_967 ns:term_status "working" .
+
+lex:LexO_2023-04-1914_27_38_989 ns:term_status "working" .
+
+lex:LexO_2023-04-2713_34_08_678 ns:term_status "working" .
+
+lex:LexO_2023-08-0413_33_51_854 ns:term_status "working" .
+
+lex:LexO_2024-10-1407_03_10_339 ns:term_status "working" .
+
+lex:deívaí_noun_osc_deias_form skos:note "" .
+
+lex:deívaí_noun_osc_deívaí_form skos:note "<div>comment: de&#237;va&#237; geneta&#237; <br></div><div>hasAttestation: ItAnt_Oscan_1 A, l. 15; B l. 18, </div>" .
+
+lex:deívaí_noun_osc_ḍeívas_form skos:note "" .
+
+lex:meddíss_noun_osc_entry skos:note "" .
+
+lex:senateís_noun_osc_entry skos:note "" .
+
+lex:meddíss_noun_osc_meddis_form skos:note "" .
+
+lex:meddíss_noun_osc_meddíks_form skos:note "" .
+
+lex:meddíss_noun_osc_meddís1_form skos:note "" .
+
+lex:meddíss_noun_osc_meddíss_form skos:note "" .
+
+lex:meddíss_noun_osc_medikeí_form skos:note "" .
+
+lex:meddíss_noun_osc_medikeís_form skos:note "" .
+
+lex:meddíss_noun_osc_medikud_form skos:note "" .
+
+lex:meddíss_noun_osc_μεδδειξ_form skos:note "" .
+
+lex:medix_noun_umc_medix_form skos:note """hasAttestation: MV 3
+"""@en .
+
+lex:purasiaí_adjective_osc_purasiaí_form skos:note """comment: aasaí purasiaí
+hasAttestation: ItAnt_OScan_1 A, l.16; B, l. 19
+"""@en .
+
+lex:seemuneís_properNoun_osc_seemuneíss_form skos:note "" .
+
+lex:senateís_noun_osc_senateis_form skos:note "" .
+
+lex:senateís_noun_osc_senateís2_form skos:note "" .
+
+lex:senateís_noun_osc_σενατηις1_form skos:note "" .
+
+lex:LexO_2023-03-3013_54_20_53 skos:note "hasAttestation: ItAnt_Faliscan_2 (Fal_2_l_2_w_2).<div>See also: Bakkum 1.</div>" .
+
+lex:LexO_2023-04-0314_03_29_497 skos:note "hasAttestation:&#160;<span>Bakkum 470.</span>" .
+
+lex:LexO_2023-04-1815_07_10_387 skos:note "" .
+
+lex:LexO_2023-04-1817_44_39_233 skos:note "hasAttestation: ItAnt_Oscan_20<br>" .
+
+lex:LexO_2023-04-1817_47_15_866 skos:note "hasAttestation: ItAnt_Oscan_11" .
+
+lex:LexO_2023-04-2713_46_25_549 skos:note "hasAttestation: Bakkum 63." .
+
+lex:LexO_2023-04-2713_48_53_078 skos:note "hasAttestation: ItAnt_Faliscan_3 (Fal_3_l_1_w_1)." .
+
+lex:LexO_2023-04-2713_50_22_905 skos:note "hasAttestation: Bakkum 219.&#160;" .
+
+lex:LexO_2023-08-0413_33_51_854 skos:note "" .
+
+lex:LexO_2023-08-0413_57_12_514 skos:note "<div>ItAnt_Venetic_16 (Ven_16_l_1_w_1), ItAnt_Venetic_26 (Ven_26_l_1_w_1), ItAnt_Venetic_27, ItAnt_Venetic_34, ItAnt_Venetic_35, ItAnt_Venetic_37, ItAnt_Venetic_40, ItAnt_Venetic_42, ItAnt_Venetic_46, ItAnt_Venetic_47 (Ven_47_l_1_w_1, Ven_47_l_2_w_1).</div><div><br></div><div>see also: LV Es 48, 64, 65, 71, 72, 73, 75.&#160;</div><div>There could be other attestations.&#160;</div>" .
+
+lex:LexO_2023-08-0414_15_11_601 skos:note "hasAttestation: ItAnt_Venetic_4 (Ven_4_l_6_w_1).<div>see also: LV Es 70.&#160;<div>There could be other attestations.&#160;</div></div>" .
+
+lex:LexO_2023-08-0414_16_21_05 skos:note "hasAttestation: LV Es 63.<div>There could be other attestations.</div>" .
+
+lex:LexO_2023-08-0414_17_52_076 skos:note "hasAttestation: LV Es 74.<div>There could be other attestations.&#160;</div>" .
+
+lex:LexO_2023-08-0414_20_03_943 skos:note "hasAttestation: LV Es 50.<div>There could be other attestations.</div>" .
+
+lexbib:LexO_2023-08-0414_30_00_241 skos:note "vol. II" .
+
+lex:LexO_2023-08-0914_24_42_487 skos:note "" .
+
+lex:LexO_2023-08-1014_52_38_581 skos:note "" .
+
+lex:LexO_2023-09-1320_29_51_035 skos:note "hasAttetstation: ItAnt_Venetic_17 (Ven_17_l_1_w_1).<div>There could be other attestations.&#160;</div>" .
+
+lex:LexO_2023-09-1913_54_20_745 skos:note "<div><div><br></div></div>" .
+
+lex:LexO_2023-09-2607_57_15_389 skos:note "" .
+
+lex:LexO_2023-09-2720_24_40_649 skos:note "hasAttestation: ItAnt_Oscan_11" .
+
+lex:LexO_2023-10-2714_16_28_806 skos:note "In Buck's paper:&#160;<span>Religion and Superstition</span>"@en .
+
+lex:LexO_2023-10-3013_55_41_612 skos:note "In Buck's paper: Law<br>The order is reversed in Buck's paper: <br>first General Law and then Special Law<br>"@en .
+
+lex:LexO_2023-11-0214_11_48_787 skos:note "In Buck's Paper:&#160;Territorial, social and political divisions; Social relations"@en .
+
+lex:LexO_2023-12-3119_10_08_016 skos:note "ST Po 5-7" .
+
+lex:LexO_2023-12-3119_11_42_061 skos:note "Uncertain: med(ikud) or med(ikid)<div>ST Cp 35</div>" .
+
+lex:LexO_2023-12-3119_13_18_419 skos:note "hasAttestation: ItAnt_Oscan_22<br>" .
+
+lex:LexO_2024-06-2516_59_56_709 skos:note "ST Lu 1,3" .
+
+lex:LexO_2024-08-1214_13_40_064 skos:note "hasAttestation: ItAnt_Venetic_29<br>" .
+
+lex:deívaí_noun_osc_entry <https://www.prin-italia-antica.unifi.it#stemType> """subst- ā stem
+adj. -o-/-ā-""" .
+
+lex:meddíss_noun_osc_entry <https://www.prin-italia-antica.unifi.it#stemType> "cons." .
+
+lex:purasiaí_adjective_osc_entry <https://www.prin-italia-antica.unifi.it#stemType>
+    "-i̯o/-i̯ā" .
+
+lex:seemuneís_properNoun_osc_entry <https://www.prin-italia-antica.unifi.it#stemType>
+    "cons." .
+
+lex:senateís_noun_osc_entry <https://www.prin-italia-antica.unifi.it#stemType> "-o" .
+
+lex:medix_noun_umc_entry <https://www.prin-italia-antica.unifi.it#stemType> "cons." .
+
+lex:LexO_2023-04-2713_34_08_678 <https://www.prin-italia-antica.unifi.it#stemType>
+    "consonant-stem" .
+
+lex:lexicon_214887 dct:language "osc" .
+
+lex:lexicon_222524 dct:language "xfa" .
+
+lex:lexicon_345508 dct:language "lat" .
+
+lex:lexicon_551337 dct:language <http://lexvo.org/id/iso639-3/umc> .
+
+lex:lexicon_811797 dct:language "grc" .
+
+lex:lexicon_138717 dct:language "PIE" .
+
+lex:lexicon_730471 dct:language "PIT" .
+
+lex:deívaí_noun_osc_deias_form dct:references lexbib:deívaí_noun_osc_deias_form_bib21333 .
+
+lex:deívaí_noun_osc_deívaí_form dct:references lexbib:deívaí_noun_osc_deívaí_form_bib373022,
+    lexbib:deívaí_noun_osc_deívaí_form_bib997399, lexbib:LexO_2023-06-1909_37_03_693,
+    lexbib:LexO_2023-06-1909_37_24_642, lexbib:LexO_2023-09-2013_37_34_097 .
+
+lex:deívaí_noun_osc_ḍeívas_form dct:references lexbib:deívaí_noun_osc_ḍeívas_form_bib621322 .
+
+lex:deívaí_noun_osc_entry dct:references lexbib:LexO_2023-02-1711_16_50_982, lexbib:LexO_2023-02-1711_17_09_309 .
+
+lex:meddíss_noun_osc_entry dct:references lexbib:LexO_2023-02-0616_08_07_031, lexbib:LexO_2023-02-1712_18_42_035 .
+
+lex:purasiaí_adjective_osc_entry dct:references lexbib:LexO_2023-02-1714_11_22_825 .
+
+lex:seemuneís_properNoun_osc_entry dct:references lexbib:LexO_2024-06-2512_50_49_698 .
+
+lex:senateís_noun_osc_entry dct:references lexbib:LexO_2023-02-1810_39_18_133 .
+
+lex:medix_noun_umc_entry dct:references lexbib:LexO_2023-11-2716_44_40_821 .
+
+lex:meddíss_noun_osc_meddis_form dct:references lexbib:meddíss_noun_osc_meddis_form_bib202608 .
+
+lex:meddíss_noun_osc_meddíks_form dct:references lexbib:meddíss_noun_osc_meddíks_form_bib550541 .
+
+lex:meddíss_noun_osc_meddís1_form dct:references lexbib:LexO_2023-06-2911_41_46_214,
+    lexbib:LexO_2023-06-2911_42_41_835 .
+
+lex:meddíss_noun_osc_meddíss_form dct:references lexbib:meddíss_noun_osc_meddíss_form_bib814858,
+    lexbib:LexO_2023-06-2911_36_22_834, lexbib:LexO_2023-06-2911_37_27_215 .
+
+lex:meddíss_noun_osc_medikeí_form dct:references lexbib:meddíss_noun_osc_medikeí_form_bib388374 .
+
+lex:meddíss_noun_osc_medikeís_form dct:references lexbib:meddíss_noun_osc_medikeís_form_bib151704 .
+
+lex:meddíss_noun_osc_medikud_form dct:references lexbib:meddíss_noun_osc_medikud_form_bib240322 .
+
+lex:meddíss_noun_osc_μεδδειξ_form dct:references lexbib:meddíss_noun_osc_μεδδειξ_form_bib617551 .
+
+lex:medix_noun_umc_medix_form dct:references lexbib:medix_noun_umc_medix_form_bib701317 .
+
+lex:purasiaí_adjective_osc_purasiaí_form dct:references lexbib:purasiaí_adjective_osc_purasiaí_form_bib609743 .
+
+lex:seemuneís_properNoun_osc_seemuneíss_form dct:references lexbib:seemuneís_properNoun_osc_seemuneíss_form_bib263108 .
+
+lex:senateís_noun_osc_senateis_form dct:references lexbib:senateís_noun_osc_senateis_form_bib416575 .
+
+lex:senateís_noun_osc_senateís2_form dct:references lexbib:senateís_noun_osc_senateís2_form_bib764316,
+    lexbib:LexO_2023-07-0308_55_19_278 .
+
+lex:senateís_noun_osc_σενατηις1_form dct:references lexbib:senateís_noun_osc_σενατηις1_form_bib181593,
+    lexbib:senateís_noun_osc_σενατηις1_form_bib915178 .
+
+lex:etymology_211405 dct:references lexbib:etymology_211405_bib709935 .
+
+lex:etymology_682956 dct:references lexbib:etymology_682956_bib154387 .
+
+lex:LexO_2023-03-3013_44_13_67 dct:references lexbib:LexO_2023-05-0515_38_08_944,
+    lexbib:LexO_2023-05-0515_39_21_943 .
+
+lex:LexO_2023-04-2713_34_08_678 dct:references lexbib:LexO_2023-04-2713_46_09_865 .
+
+lex:LexO_2023-08-0413_33_51_854 dct:references lexbib:LexO_2023-08-0413_55_49_127,
+    lexbib:LexO_2023-08-0414_30_00_241 .
+
+lex:LexO_2023-08-0914_24_42_487 dct:references lexbib:LexO_2023-08-0914_26_23_806,
+    lexbib:LexO_2023-08-0914_26_56_411, lexbib:LexO_2023-08-0914_27_59_319 .
+
+lex:LexO_2023-08-1014_52_38_581 dct:references lexbib:LexO_2023-08-1014_53_28_116 .
+
+lex:LexO_2023-09-1913_54_20_745 dct:references lexbib:LexO_2023-09-2814_36_26_175 .
+
+lex:LexO_2023-09-2607_57_15_389 dct:references lexbib:LexO_2023-09-2607_58_44_19 .
+
+lex:LexO_2023-11-2409_42_30_091 dct:references lexbib:LexO_2023-12-0115_18_05_229 .
+
+lexbib:deívaí_noun_osc_deias_form_bib21333 dct:date "1986" .
+
+lexbib:deívaí_noun_osc_deívaí_form_bib373022 dct:date "1999" .
+
+lexbib:deívaí_noun_osc_deívaí_form_bib997399 dct:date "1996" .
+
+lexbib:deívaí_noun_osc_ḍeívas_form_bib621322 dct:date "1990" .
+
+lexbib:meddíss_noun_osc_meddis_form_bib202608 dct:date "1983" .
+
+lexbib:meddíss_noun_osc_meddíks_form_bib550541 dct:date "2001" .
+
+lexbib:meddíss_noun_osc_meddíss_form_bib814858 dct:date "1995 [1996]" .
+
+lexbib:meddíss_noun_osc_medikeí_form_bib388374 dct:date "2020" .
+
+lexbib:meddíss_noun_osc_medikeís_form_bib151704 dct:date "2002" .
+
+lexbib:meddíss_noun_osc_medikud_form_bib240322 dct:date "1981" .
+
+lexbib:meddíss_noun_osc_μεδδειξ_form_bib617551 dct:date "2006" .
+
+lexbib:medix_noun_umc_medix_form_bib701317 dct:date "1974 [1975]" .
+
+lexbib:purasiaí_adjective_osc_purasiaí_form_bib609743 dct:date "1996" .
+
+lexbib:seemuneís_properNoun_osc_seemuneíss_form_bib263108 dct:date "1974 [1975]" .
+
+lexbib:senateís_noun_osc_senateis_form_bib416575 dct:date "1983" .
+
+lexbib:senateís_noun_osc_senateís2_form_bib764316 dct:date "1976 [1977]" .
+
+lexbib:senateís_noun_osc_σενατηις1_form_bib181593 dct:date "2009" .
+
+lexbib:senateís_noun_osc_σενατηις1_form_bib915178 dct:date "1990" .
+
+lexbib:LexO_2023-02-0616_08_07_031 dct:date "2000" .
+
+lexbib:LexO_2023-02-1711_16_50_982 dct:date "2000" .
+
+lexbib:LexO_2023-02-1711_17_09_309 dct:date "2000" .
+
+lexbib:LexO_2023-02-1712_18_42_035 dct:date "2000" .
+
+lexbib:LexO_2023-02-1714_11_22_825 dct:date "2000" .
+
+lexbib:LexO_2023-02-1810_39_18_133 dct:date "2000" .
+
+lexbib:LexO_2023-04-2713_46_09_865 dct:date "2009" .
+
+lexbib:LexO_2023-05-0515_38_08_944 dct:date "2009" .
+
+lexbib:LexO_2023-05-0515_39_21_943 dct:date "2008" .
+
+lexbib:LexO_2023-06-1909_37_03_693 dct:date "2000" .
+
+lexbib:LexO_2023-06-1909_37_24_642 dct:date "2004" .
+
+lexbib:LexO_2023-06-2911_36_22_834 dct:date "1980" .
+
+lexbib:LexO_2023-06-2911_37_27_215 dct:date "1995 [1996]" .
+
+lexbib:LexO_2023-06-2911_41_46_214 dct:date "1980" .
+
+lexbib:LexO_2023-06-2911_42_41_835 dct:date "1974 [1975]" .
+
+lexbib:LexO_2023-07-0308_55_19_278 dct:date "2020" .
+
+lexbib:LexO_2023-08-0413_55_49_127 dct:date "2008" .
+
+lexbib:LexO_2023-08-0414_30_00_241 dct:date "1967" .
+
+lexbib:LexO_2023-08-0914_26_23_806 dct:date "1976 [1977]" .
+
+lexbib:LexO_2023-08-0914_26_56_411 dct:date "1976" .
+
+lexbib:LexO_2023-08-0914_27_59_319 dct:date "1976 [1977]" .
+
+lexbib:LexO_2023-08-1014_53_28_116 dct:date "1981" .
+
+lexbib:LexO_2023-09-2013_37_34_097 dct:date "2008" .
+
+lexbib:LexO_2023-09-2607_58_44_19 dct:date "1981" .
+
+lexbib:LexO_2023-09-2814_36_26_175 dct:date "2008" .
+
+lexbib:LexO_2023-11-2716_44_40_821 dct:date "2000" .
+
+lexbib:LexO_2023-12-0115_18_05_229 dct:date "2000" .
+
+lexbib:LexO_2024-06-2512_50_49_698 dct:date "2000" .
+
+lex:etymology_211405 <https://www.lexinfo.net/ontology/3.0/lexinfo#confidence> 1 .
+
+lex:etymology_659128 <https://www.lexinfo.net/ontology/3.0/lexinfo#confidence> 1 .
+
+lex:etymology_682956 <https://www.lexinfo.net/ontology/3.0/lexinfo#confidence> 1 .
+
+lex:LexO_2023-10-0908_50_24_184 skos:prefLabel "Physical World"@en .
+
+lex:LexO_2023-10-2714_16_28_806 skos:prefLabel "Religion & Beliefs"@en .
+
+lex:LexO_2023-10-3013_55_41_612 skos:prefLabel "Law & Judgment"@en .
+
+lex:LexO_2023-11-0214_11_48_787 skos:prefLabel "Social Relations"@en .
+
+lexbib:LexO_2023-05-0515_39_21_943 dct:identifier "https://brill.com/view/title/12612" .
+
+lexbib:LexO_2023-06-2911_36_22_834 dct:identifier "https://www.studietruschi.org/wp-content/uploads/2021/08/SE48_21.pdf" .
+
+lexbib:LexO_2023-06-2911_37_27_215 dct:identifier "https://www.studietruschi.org/wp-content/uploads/2021/06/SE61_13.pdf" .
+
+lexbib:LexO_2023-06-2911_41_46_214 dct:identifier "https://www.studietruschi.org/wp-content/uploads/2021/08/SE48_21.pdf" .
+
+lexbib:LexO_2023-06-2911_42_41_835 dct:identifier "https://www.studietruschi.org/wp-content/uploads/2021/06/SE42_12.pdf" .
+
+lexbib:LexO_2023-08-0413_55_49_127 dct:identifier "https://brill.com/view/title/12612" .
+
+lexbib:LexO_2023-08-0914_26_23_806 dct:identifier "https://www.studietruschi.org/wp-content/uploads/2021/06/SE44_13.pdf" .
+
+lexbib:LexO_2023-08-0914_26_56_411 dct:identifier "https://www.inasaroma.org/wp-content/uploads/A.-La-Regina-Il-Sannio-Hellenismus-in-Mittelitalien.pdf" .
+
+lexbib:LexO_2023-08-0914_27_59_319 dct:identifier "https://www.studietruschi.org/wp-content/uploads/2021/06/SE44_13.pdf" .
+
+lexbib:LexO_2023-09-2607_58_44_19 dct:identifier "https://www.studietruschi.org/wp-content/uploads/2021/07/SE49_16.pdf#page=15" .
+
+lex:LexO_2023-10-0908_50_24_184 skos:narrower lex:LexO_2024-03-2215_27_18_766 .

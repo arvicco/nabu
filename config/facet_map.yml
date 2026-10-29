@@ -653,6 +653,12 @@ sources:
     entry_fields:
       concept: concept        # the concept's English name, ref = its uuid (= the tls-concepts
       #                         entry id the word→concept crossref resolves to)
+  lexicon-itant:              # census 2026-10-29 (lexicon_1_0.ttl, 809 entries)
+    entry_fields:
+      pos: word_class         # lexinfo partOfSpeech local name: properNoun 311 · noun 204 ·
+      #                         verb 100 · adjective 78 · preposition 23 … (17 entries carry none)
+      semantic_field: semantic_field  # the Buck (1949) concepts lexicalizing the entry's senses:
+      #                         187 entries, 33 fields — Religion & Beliefs 33 · Social Relations 30 …
   wilkens-oui:                # the book's own tradition/script marks (Abkürzungen, PDF pp. 13–14),
     entry_fields:             # mapped by WilkensOui::MARK_FACETS; Buddhist terms go unmarked upstream
       tradition: tradition    # (m) manichäisch → Manichaean 611 · (c) christlich → Christian 119

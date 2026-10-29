@@ -107,7 +107,7 @@ Continental Celtic epigraphy (RIIG, Lexicon Leponticum and its word shelf), ogha
 
 The Sabellic, Etruscan, Venetic and Raetic epigraphic shelves (CEIPoM, ItAnt, the Etruscan editions, TIR), Lepontic at the Celtic border, I.Sicily's island mix, and the Sabellic-to-Latin loan lane.
 
-**Members** (12): `burman-concordance`, `ceipom`, `etruscan-loans`, `isicily`, `itant`, `larth-etp`, `lexlep`, `lexlep-words`, `open-etruscan`, `sabellic-loans`, `tir`, `wiktionary-recon`
+**Members** (13): `burman-concordance`, `ceipom`, `etruscan-loans`, `isicily`, `itant`, `larth-etp`, `lexicon-itant`, `lexlep`, `lexlep-words`, `open-etruscan`, `sabellic-loans`, `tir`, `wiktionary-recon`
 
 ### etym
 
