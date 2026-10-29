@@ -345,7 +345,8 @@ class PosturesTest < Minitest::Test
                  "theatre-classique ADDED — identity fra (the fr anchor through the held codemap " \
                  "row; fr carries no stages, declared coarse): 160→161; " \
                  "jaschke-1881 ADDED P150 — identity eng (the reference-shelf posture: a " \
-                 "dictionary ABOUT Tibetan, object_language xct in metadata): 161→162"
+                 "dictionary ABOUT Tibetan, object_language xct in metadata): 161→162; " \
+                 "lzh-collection ADDED — codemap lzh → zho/lit (the kanripo precedent): 162→163"
     # The epigraphic-belt registry package (merged + canonical-synced
     # 2026-10-18, the add-then-retire shape within one phase) retires both
     # P130 pendings, and the ociana-script rule + the ig-cyprus override
@@ -378,6 +379,7 @@ class PosturesTest < Minitest::Test
     # theatre-classique joins identity (fra → fr, no fr stages): 121→122.
     # jaschke-1881 joins identity (eng prose, the reference-shelf
     # posture; object_language xct in metadata): 122→123.
-    assert_equal({ "dates" => 21, "codemap" => 17, "identity" => 123, "pending" => 1 }, by_posture)
+    # lzh-collection joins codemap (lzh → zho/lit, the kanripo precedent): 17→18.
+    assert_equal({ "dates" => 21, "codemap" => 18, "identity" => 123, "pending" => 1 }, by_posture)
   end
 end

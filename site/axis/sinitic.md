@@ -26,6 +26,7 @@ A source wears every desk it serves — these twenty-two answer this desk. Holdi
 | `hdic` | dictionary | attribution | wired · manual | 96,414 entries |
 | `kanripo` | texts | attribution | wired · manual | 5,123 docs / 4,571,403 passages |
 | `kr-gaiji` | feature module | attribution | wired · manual | nothing held yet |
+| `lzh-collection` | texts | open | not yet wired | not synced yet |
 | `menggu-ziyun` | dictionary | attribution | wired · manual | 9,446 entries |
 | `obimd` | texts | attribution | wired · manual | 10,077 docs / 21,941 passages |
 | `qieyun-restored` | dictionary | attribution | wired · manual | 11,158 entries |

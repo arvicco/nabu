@@ -3527,6 +3527,28 @@ lotsawa-house:   # 02-sources row 283
   # restricted: true. EXPECTED FIRST SYNC (sample-estimated, the gate
   # reconciles): ~1,380 bo + ~1,380 en + ~3,000 other-language documents.
 
+lzh-collection:   # 02-sources row 315
+  adapter: Nabu::Adapters::LzhCollection
+  adopted: "2026-10-29"
+  axes: [sinitic]
+  wired: false   # first sync pending: bin/nabu enable lzh-collection && bin/nabu sync
+                 # lzh-collection (git clone ~7 MB; parse ~1 s). EXPECT 20 docs /
+                 # 42,303 passages (甌北集 9,788 · 沈德潛 6,728 · 鍾惺 4,853 · 陳子龍
+                 # 4,036 …), 0 errored, 10 skipped by rule (the works held in kanripo);
+                 # eyeball nabu show urn:nabu:lzh-collection:甌北集:3 and 5 random
+                 # lines, then flip.
+  # nk2028's Classical Chinese Collection (github.com/nk2028/lzh-collection):
+  # 30 plain-text Literary Chinese works. DEDUPE CENSUS (2026-10-29, titles +
+  # 12 content samples per file against canonical kanripo / zh-wikisource /
+  # ccl / classical-modern / cbeta): the nine Masters 白文 texts and 李夢陽's
+  # 空同集 are held in kanripo (8–12/12 samples) → skipped by rule; the
+  # twenty Ming–Qing poetry-collection files (19 poets) are held nowhere
+  # (0–1/12) → the adapter's whole scope. LICENSE: in-repo LICENSE = the CC0
+  # 1.0 Universal legal code, GitHub field CC0-1.0 (verified 2026-10-29) →
+  # open. Provenance: no print edition is named for any text. Dormant since
+  # 2023-02 → manual.
+  sync_policy: manual
+
 madurai:   # P122-3, 02-sources row 268
   adapter: Nabu::Adapters::Madurai
   adopted: "2026-10-12"
