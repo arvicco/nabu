@@ -76,6 +76,23 @@ module Nabu
     # counted (madurai-html). Dating: the asset carries none (the works
     # list has no date column; the footers date the e-text, never the
     # work). Places: none.
+    #
+    # == The OCR label (metadata text_nature, per file)
+    #
+    # Most e-texts are hand-keyed ("Etext Preparation (input,
+    # proof-reading)"); the later ones say in their header's
+    # acknowledgements that they were made by OCR AND then corrected
+    # ("generated using Google OCR online tool and subsequent
+    # proof-reading", "subsequently corrected for any OCR errors",
+    # "subsequently edited by …"). A header naming OCR together with a
+    # correction is stamped text_nature "corrected-ocr" — the
+    # non-excluding label (`export passages --exclude-ocr` keeps it). An
+    # OCR mention WITHOUT a stated correction is "ocr-origin" (the origin
+    # is declared, the correction status is not — never upgraded by
+    # guess, never downgraded to "uncorrected" either; also non-excluding).
+    # Hand-keyed files carry no label. Census 2026-10-29 over canonical:
+    # 181 of 755 held files name OCR — 180 with their correction claim,
+    # one (pmuni0752: "generated using Google OCR online tool.") without.
     class Madurai < Nabu::Adapter
       SLUG = "madurai"
       HOST = "https://www.projectmadurai.org/"
@@ -116,6 +133,17 @@ module Nabu
       )
 
       def self.manifest = MANIFEST
+
+      OCR_CLAIM = /\bOCR\b/
+      CORRECTION_CLAIM = /proof-?reading|correct|edited/i
+
+      # The header's own OCR statement → text_nature (class note).
+      def self.text_nature(header)
+        header = header.to_s
+        return nil unless header.match?(OCR_CLAIM)
+
+        header.match?(CORRECTION_CLAIM) ? "corrected-ocr" : "ocr-origin"
+      end
 
       def self.classical_genre?(genre)
         genre = genre.to_s.strip
@@ -177,7 +205,7 @@ module Nabu
           title: Array(meta["titles"]).join(" / ").then { |t| t.empty? ? etext.html_title || name : t },
           metadata: meta.merge(
             "html_title" => etext.html_title, "pm_header" => etext.header, "pm_footer" => etext.footer,
-            "non_tamil_lines" => etext.non_tamil_lines
+            "non_tamil_lines" => etext.non_tamil_lines, "text_nature" => self.class.text_nature(etext.header)
           ).reject { |_, value| value.nil? || value == "" }
         )
         etext.lines.each_with_index do |line, index|
