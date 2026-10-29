@@ -9,6 +9,14 @@ module Nabu
     # the facet name "sense", each value an id, its ref the dcs-senses
     # shelf entry's urn (Store::PassageFacetBuilder's token lane).
     #
+    # The UD Sanskrit-Vedic treebank (source ud) rides the same rule — a
+    # DECLARED INFERENCE: its WordSem ids are read as dcs-senses ids
+    # because they share Hellwig's provenance and MISC format and every one
+    # of its 2,759 distinct ids resolves in the bank (census 2026-10-29),
+    # though upstream never states the id spaces are shared. The one
+    # facet_map.yml line under ud carries the evidence; deleting it
+    # reverses the link at the next builders:refresh.
+    #
     # TERM is a sense id (or a comma-joined list), else a sense NAME matched
     # case-insensitively against the shelf headwords (LIKE wildcards
     # honoured: circum%); --gloss widens a name to a substring of the gloss.
@@ -40,7 +48,7 @@ module Nabu
       MIGRATION_HINT = "this catalog predates the passage facet surface (migration 045) — the next sync " \
                        "or nabu rebuild migrates it, then `bundle exec rake builders:refresh` builds it"
       REFRESH_HINT = "run `bundle exec rake builders:refresh` (or the next nabu rebuild) — it needs a " \
-                     "synced source whose tokens carry senses (dcs)"
+                     "synced source whose tokens carry senses (dcs, ud)"
 
       def initialize(catalog:, facet_map:)
         @catalog = catalog
