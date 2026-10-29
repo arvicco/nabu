@@ -91,7 +91,7 @@ class LzhCollectionTest < Minitest::Test
     entry = registry["lzh-collection"]
     refute_nil entry
     assert_equal Nabu::Adapters::LzhCollection, entry.adapter_class
-    refute entry.wired
+    assert entry.wired, "wired 2026-10-29: first sync verified on census (20 docs / 42,303 lines)"
     assert_equal "manual", entry.sync_policy
   end
 

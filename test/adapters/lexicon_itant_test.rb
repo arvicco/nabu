@@ -205,7 +205,7 @@ class LexiconItantTest < Minitest::Test
     entry = registry["lexicon-itant"]
     refute_nil entry, "config/sources.yml must register lexicon-itant"
     assert_equal Nabu::Adapters::LexiconItant, entry.adapter_class
-    refute entry.wired, "wired: false until the first real sync is verified"
+    assert entry.wired, "wired 2026-10-29: first sync verified on census (809 entries / 16 lexicons)"
     assert_equal "manual", entry.sync_policy
   end
 
