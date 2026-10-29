@@ -1,0 +1,35 @@
+# Nabu fixture manifest (P5-4 "fixture sentinel"). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# Entries are raw files pinned at upstream commit dda274b — whole or
+# documented line trims. adapter_test is null: fresh full copies would
+# false-fail the count assertions.
+source: lzh-collection
+adapter_test:
+retrieved: 2026-10-29
+files:
+  - path: data/1_史可法詩集.txt
+    url: https://raw.githubusercontent.com/nk2028/lzh-collection/dda274b7269234981b543b0c2b4f1df6981fa947/data/1_史可法詩集.txt
+    refetchable: true
+    whole: true
+    trim: none
+  - path: data/1_甌北集.txt
+    url: https://raw.githubusercontent.com/nk2028/lzh-collection/dda274b7269234981b543b0c2b4f1df6981fa947/data/1_甌北集.txt
+    refetchable: true
+    whole: false
+    trim: upstream lines 1-7 of 14,631, byte-verbatim
+  - path: data/2_夏完淳詩集.txt
+    url: https://raw.githubusercontent.com/nk2028/lzh-collection/dda274b7269234981b543b0c2b4f1df6981fa947/data/2_夏完淳詩集.txt
+    refetchable: true
+    whole: false
+    trim: upstream lines 1-12 and 101-103 of 1,231, byte-verbatim
+  - path: data/老子白文.txt
+    url: https://raw.githubusercontent.com/nk2028/lzh-collection/dda274b7269234981b543b0c2b4f1df6981fa947/data/老子白文.txt
+    refetchable: true
+    whole: false
+    trim: upstream lines 1-6 (the rejected-grain specimen), byte-verbatim
+  - path: data/2_李夢陽詩集.txt
+    url: https://raw.githubusercontent.com/nk2028/lzh-collection/dda274b7269234981b543b0c2b4f1df6981fa947/data/2_李夢陽詩集.txt
+    refetchable: true
+    whole: false
+    trim: upstream lines 1-5 (the rejected-grain specimen), byte-verbatim

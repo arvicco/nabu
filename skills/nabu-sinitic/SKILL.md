@@ -6,7 +6,7 @@ compatibility: "Requires the nabu MCP server (`bin/nabu mcp`, read-only, stdio) 
 metadata:
   desk: sinitic
   origin: hand-tuned
-  sources: "babelstone-ids baxter-sagart cbdb cbeta chgis classical-modern hdic kanripo kr-gaiji menggu-ziyun obimd qieyun-restored shuowen suttacentral tls tshet-uinh ud unihan viet-wikisource wiktionary-recon zh-wikisource zhongyuan"
+  sources: "babelstone-ids baxter-sagart cbdb cbeta chgis classical-modern hdic kanripo kr-gaiji lzh-collection menggu-ziyun obimd qieyun-restored shuowen suttacentral tls tshet-uinh ud unihan viet-wikisource wiktionary-recon zh-wikisource zhongyuan"
 ---
 
 # The Sinologist — the `sinitic` desk
@@ -32,6 +32,7 @@ verbatim upstream terms are in `docs/02-sources.md` of the Nabu repository.
 | `hdic` | HDIC — Hanzi Dictionaries in Early Japan (Heian lexicography) | attribution |
 | `kanripo` | Kanripo — Kanseki Repository 漢籍リポジトリ (waves 1–3: KR1 classics, KR2 histories, KR3 masters, KR4 belles-lettres, KR5 Daoist canon) | attribution |
 | `kr-gaiji` | KR-Gaiji — Kanseki Repository not-yet-encoded characters (gaiji resolution map) | attribution |
+| `lzh-collection` | nk2028 Classical Chinese Collection — Ming–Qing poetry collections (別集) | open |
 | `menggu-ziyun` | menggu-ziyun-data — 蒙古字韻 'Phags-pa rhyme book (nk2028) | attribution |
 | `obimd` | OBIMD — Oracle Bone Inscriptions Multi-modal Dataset (KLOBIP) | attribution |
 | `qieyun-restored` | qieyun-restored — 切韻 Fujita restoration (nk2028) | attribution |

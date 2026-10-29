@@ -20,11 +20,11 @@ A source wears every desk it serves — these 36 answer this desk. Holdings are 
 | `ceipom` | inscriptions | attribution | wired · frozen | 3,871 docs / 5,303 passages |
 | `damos` | texts | nc | wired · manual | 5,890 docs / 14,421 passages |
 | `dharma-campa` | texts | attribution | wired · auto | 122 docs / 2,740 passages |
-| `dharma-deccan` | texts | attribution | wired · auto | 1,695 docs / 27,983 passages |
-| `dharma-khmer` | texts | attribution | wired · auto | 1,302 docs / 53,825 passages |
+| `dharma-deccan` | texts | attribution | wired · auto | 1,702 docs / 28,295 passages |
+| `dharma-khmer` | texts | attribution | wired · auto | 1,326 docs / 54,635 passages |
 | `dharma-nusantara` | texts | attribution | wired · auto | 291 docs / 5,898 passages |
 | `dharma-pyu` | texts | attribution | wired · auto | 145 docs / 629 passages |
-| `dharma-tamil` | texts | attribution | wired · auto | 1,267 docs / 17,993 passages |
+| `dharma-tamil` | texts | attribution | wired · auto | 1,276 docs / 18,161 passages |
 | `edh` | inscriptions | attribution | wired · frozen | 81,881 docs / 406,306 passages |
 | `edr` | inscriptions | attribution | wired · manual | 115,590 docs / 596,064 passages |
 | `elephantine` | papyri & ostraca | attribution | wired · manual | 15,539 docs / 69,350 passages |
@@ -41,7 +41,7 @@ A source wears every desk it serves — these 36 answer this desk. Holdings are 
 | `ociana` | inscriptions | research_private | wired · frozen | 36,794 docs / 36,794 passages |
 | `ogham` | inscriptions | nc | wired · manual | 873 docs / 1,053 passages |
 | `open-etruscan` | inscriptions | attribution | wired · frozen | 8,047 docs / 8,047 passages |
-| `papyri-ddbdp` | papyri | attribution | wired · auto | 72,321 docs / 1,124,708 passages |
+| `papyri-ddbdp` | papyri | attribution | wired · auto | 72,327 docs / 1,125,166 passages |
 | `pleiades` | feature module | attribution | wired · manual | nothing held yet |
 | `riig` | inscriptions | attribution | wired · manual | 495 docs / 1,357 passages |
 | `rundata` | inscriptions | odbl | wired · manual | 30,647 docs / 30,645 passages |
@@ -54,7 +54,7 @@ A source wears every desk it serves — these 36 answer this desk. Holdings are 
 | `trismegistos-geo` | feature module | attribution | wired · manual | nothing held yet |
 | `ucd` | feature module | open | wired · manual | nothing held yet |
 
-**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 29 October 2026)</span>: `lat` 195,110 · `grc` 76,760 · `xna` 36,758 · `eng` 22,328 · `hit` 21,209 · `non` 20,442 · `tam-Latn` 10,697 · `ett` 6,259 · `gmy` 5,890 · `tel-Latn` 5,103 … and 91 more (`nabu axis epigraphy` lists all).
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 29 October 2026)</span>: `lat` 195,110 · `grc` 76,766 · `xna` 36,758 · `eng` 22,328 · `hit` 21,209 · `non` 20,442 · `tam-Latn` 10,706 · `ett` 6,259 · `gmy` 5,890 · `tel-Latn` 5,103 … and 92 more (`nabu axis epigraphy` lists all).
 
 ## The desk's instruments
 

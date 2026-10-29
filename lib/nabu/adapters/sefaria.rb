@@ -2,6 +2,8 @@
 
 require "json"
 
+require_relative "../sefaria_links"
+
 module Nabu
   module Adapters
     # Sefaria — the Targum shelf (P30-3) + the Rabbinic text core (P46-1)
@@ -116,6 +118,16 @@ module Nabu
     # to a tempdir spool, never in memory). The index rides in canonical so
     # the scope is reproducible; attic + mass-deletion breaker as
     # everywhere. The fetch pin is the index body's sha256.
+    #
+    # == The links layer (P150; Nabu::SefariaLinks)
+    #
+    # The index's special_files list also names the connection graph,
+    # links/links0.csv … links16.csv (≈680 MB, ≈5.07M rows). The fetch takes
+    # those shards (.links_special? — the links_by_book* aggregates,
+    # schemas/, table_of_contents.json and misc/ stay in the bucket) under
+    # the same pinned/atticked contract; discovery never reads them (it
+    # globs json/), and the reference producer derives held∩held
+    # kind=reference edges from them after every sync and rebuild.
     #
     # == Identity (FROZEN minting)
     #
@@ -423,6 +435,20 @@ module Nabu
         )]
       end
 
+      # P150: the Sefaria connection graph re-derives into the links journal
+      # after every sync (Nabu::SefariaLinks — the shards fetch rides this
+      # source, never a new one).
+      def self.reference_edges? = true
+
+      def self.reference_producer(catalog:, journal:)
+        Nabu::SefariaLinks.new(catalog: catalog, journal: journal)
+      end
+
+      # The special-file selector: the numbered edge shards only.
+      def self.links_special?(entry)
+        entry["path"].to_s.match?(%r{\Alinks/links\d+\.csv\z})
+      end
+
       # The shelf whose scope covers these categories (nil = off-shelf).
       # bavli/bavli-minor share a prefix and split on the division pattern,
       # so first-match is unambiguous. +title+ (P59-5): a TITLE-scoped
@@ -486,7 +512,8 @@ module Nabu
       def fetch(workdir, progress: nil, force: false)
         result = SefariaFetch.sync!(
           index_url: index_url, dir: workdir, attic_dir: File.join(workdir, ATTIC_DIRNAME),
-          select: self.class.method(:shelf_entry?), progress: progress,
+          select: self.class.method(:shelf_entry?), select_special: self.class.method(:links_special?),
+          progress: progress,
           guard: ->(doomed) { guard_mass_deletion!(workdir, doomed, force: force) }
         )
         Nabu::FetchReport.new(sha: result.sha, fetched_at: Time.now, notes: fetch_notes(result))

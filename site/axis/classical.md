@@ -33,13 +33,13 @@ A source wears every desk it serves — these twenty-one answer this desk. Holdi
 | `openmgh` | texts | attribution | wired · manual | 153 docs / 36,143 passages |
 | `pedecerto` | feature module | nc | wired · manual | nothing held yet |
 | `perseus-greek` | texts | attribution | wired · auto | 1,419 docs / 394,706 passages |
-| `perseus-latin` | texts | attribution | wired · auto | 560 docs / 403,319 passages |
+| `perseus-latin` | texts | attribution | wired · auto | 568 docs / 405,989 passages |
 | `proiel` | treebank | nc | wired · frozen | 12 docs / 51,321 passages |
 | `sigla` | inscriptions | nc | wired · manual | 787 docs / 3,097 passages |
 | `ud` | treebank | nc | wired · manual | 83 docs / 329,980 passages |
 | `vulgate` | texts | open | wired · manual | 73 docs / 35,809 passages |
 
-**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 29 October 2026)</span>: `grc` 120,785 · `lat` 58,693 · `gmy` 5,890 · `eng` 874 · `lab` 787 · `grc-Latn` 510 · `deu` 225 · `ecy-Latn` 22 · `gmh` 11 · `orv` 9 … and 24 more (`nabu axis classical` lists all).
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 29 October 2026)</span>: `grc` 120,785 · `lat` 58,697 · `gmy` 5,890 · `eng` 878 · `lab` 787 · `grc-Latn` 510 · `deu` 225 · `ecy-Latn` 22 · `gmh` 11 · `orv` 9 … and 24 more (`nabu axis classical` lists all).
 
 ## The desk's instruments
 

@@ -1,0 +1,39 @@
+@prefix : <http://digitant.ilc.cnr.it/data/semField#> .
+@prefix dct: <http://purl.org/dc/elements/1.1/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xml: <http://www.w3.org/XML/1998/namespace> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix dct: <http://purl.org/dc/terms/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix ontolex: <http://www.w3.org/ns/lemon/ontolex#> .
+@base <http://digitant.ilc.cnr.it/data/semField> .
+
+<http://digitant.ilc.cnr.it/data/semField> rdf:type owl:Ontology ,
+										   skos:ConceptScheme    ;
+                            owl:imports <http://www.w3.org/2004/02/skos/core> ,
+                                        <http://www.w3.org/ns/lemon/ontolex> 
+							rdfs:comment "List of concepts of semantic fields used to classify Indo-European words in Buck, Carl Darling. 1949. A dictionary of selected synonyms in the principal Indo-European languages. University of Chicago Press, Chicago. The semantic fields are also defined as ontolex:LexicalConcept" ;
+							skos:prefLabel "ItAnt Semantic Fields according to Buck (1949)"@en ;
+							rdfs:label  "ItAnt Semantic Fields according to Buck (1949)"@en ;
+							dcterms:issued "2024-10-14"^^xsd:dateTime ;
+							dcterms:title	"ItAnt Concept Scheme of Buck's Semantic Fields for Indo-European languages"   .
+
+
+###  http://digitant.ilc.cnr.it/data/semField#LexO_2023-04-1914_16_59_618
+:LexO_2023-04-1914_16_59_618 rdf:type owl:NamedIndividual .
+
+
+###  http://digitant.ilc.cnr.it/data/semField#LexO_2023-10-0908_50_24_184
+:LexO_2023-10-0908_50_24_184 rdf:type owl:NamedIndividual ,
+                                      ontolex:LexicalConcept ; 
+ 									skos:Concept   ;
+                             owl:sameAs <https://lrc.la.utexas.edu/lex/semantic/category/PW> ;
+                             ontolex:lexicalizedSense :LexO_2023-10-1511_07_28_824 ,
+                                                      :purasiaí_adjective_osc_sense1 ;
+                             dct:created "2023-10-09T08:50:24.184Z" ;
+                             dct:creator  "vquochi", <https://orcid.org/0000-0002-1321-5444>  ;
+                             dct:modified "2024-07-22T10:05:59.212Z" ;
+                             skos:prefLabel "Physical World"@en .

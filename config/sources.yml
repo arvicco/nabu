@@ -2847,8 +2847,8 @@ itant:
   # tm: reference edges. RE-SYNC WATCH (journaled): the Venetic_/Faliscan_
   # dirs are README-only ("available once the revision process is
   # completed") — a later owner-fired sync picks them up; nothing promised.
-  # Lexicon_ItAnt (OntoLex-lemon TTL sibling repo) is v2, journaled — the
-  # first RDF dictionary-format decision is owner-gated (2026-07-18).
+  # Lexicon_ItAnt (the OntoLex-lemon TTL sibling repo) ships as its own
+  # dictionary source, lexicon-itant (02-sources row 315).
   sync_policy: manual
   # P29-2: ita + eng translation divs ride as -ita/-eng sibling documents
   # where records carry prose (336 each upstream; the parser's own census
@@ -2920,6 +2920,24 @@ ja-wikisource:   # P109-1
   # (action=expandtemplates, content-sha-pinned) — so only the 29
   # {{versions}} disambiguation pages skip by rule. Texts PD;
   # transcription layer CC BY-SA 4.0.
+
+jaschke-1881:   # P150-A, 02-sources row 314
+  adapter: Nabu::Adapters::Jaschke1881
+  adopted: "2026-10-29"
+  axes: [tibetan]
+  wired: true    # first sync 2026-10-29 on census (696 docs / 6 binding
+                   # leaves skipped / 706 images reconciled); p1 + leaf3
+                   # eyeballed.
+  sync_policy: manual
+  # Jäschke's Tibetan-English Dictionary (London 1881) as the archive.org
+  # scan tibetanenglishdi00jsuoft (Robarts/Toronto copy, complete, marked
+  # NOT_IN_COPYRIGHT; Jäschke †1883). Two files pinned to files.xml sha1s:
+  # the PDF (80,960,908 bytes, 702 pages) and the page map. One
+  # metadata-only document per printed leaf (text_layer none — the ABBYY
+  # OCR is deliberately not taken); print p. N = leaf N+26. EXPECTED FIRST
+  # SYNC: 696 docs / 0 passages (front matter 24, dictionary pp. 1–608,
+  # vocabulary pp. 609–668, corrections pp. 669–671, colophon) + 6 binding
+  # leaves skipped by rule; ~81 MB download.
 
 jv-wikisource:   # P140, 02-sources row 285
   adapter: Nabu::Adapters::JvWikisource
@@ -3244,6 +3262,29 @@ lexica:
   # re-syncable, but not on a live schedule.
   sync_policy: manual
 
+lexicon-itant:   # 02-sources row 315
+  adapter: Nabu::Adapters::LexiconItant
+  adopted: "2026-10-29"
+  axes: [italic]
+  wired: true    # first sync 2026-10-29 on census (809 entries / 16
+                   # lexicons / 6 skipped-by-rule = the 1,301 lime:entry
+                   # count); meddíss eyeballed with its PIE etyma.
+                 # lexicon-itant (git clone ~6 MB; parse ~1 s). EXPECT 16 dictionary
+                 # docs → 809 entries (osc 419 · xve 85 · xum 82 · xfa 75 · pgn 31 ·
+                 # xcg 27 · spx 23 · umc 17 · ett 16 · xvo 10 · ims 9 · xvs 8 ·
+                 # sbv 3 · snt 2 · xhr 1 · xca 1), 0 errored, 6 skipped by rule
+                 # (the lat/grc/PIE/PIT/PUM auxiliary lexicons + the standalone SKOS
+                 # file); eyeball nabu define meddiss / mego / apolo, then flip.
+  # Lexicon ItAnt (github.com/DigItAnt/Lexicon_ItAnt; DigItAnt, PRIN 2017,
+  # CNR-ILC + Università di Firenze) — the OntoLex-Lemon lexicon of the
+  # languages of ancient Italy, the Corpus ItAnt (itant) sibling. One
+  # dictionary slug per language (itant-lexicon-<code>); the Latin/Greek
+  # comparanda and the PIE/Proto-Italic etyma ride the entries as typed
+  # reflexes. LICENSE: README verbatim "Lexicon_ItAnt  is licensed under
+  # CC-BY-NC-SA" (no version, no LICENSE file; verified 2026-10-29) → nc.
+  # Dormant since 2024-10 → manual.
+  sync_policy: manual
+
 lexlep:
   adapter: Nabu::Adapters::Lexlep
   adopted: "2026-07-18"
@@ -3489,6 +3530,30 @@ lotsawa-house:   # 02-sources row 283
   # catalog/, skipped by rule). Restricted-practice texts carry
   # restricted: true. EXPECTED FIRST SYNC (sample-estimated, the gate
   # reconciles): ~1,380 bo + ~1,380 en + ~3,000 other-language documents.
+
+lzh-collection:   # 02-sources row 316
+  adapter: Nabu::Adapters::LzhCollection
+  adopted: "2026-10-29"
+  axes: [sinitic]
+  wired: true    # first sync 2026-10-29 on census (20 docs / 42,303
+                   # passages / 10 kanripo-held files skipped by rule);
+                   # 甌北集 eyeballed with the nk2028 credit riding.
+                 # lzh-collection (git clone ~7 MB; parse ~1 s). EXPECT 20 docs /
+                 # 42,303 passages (甌北集 9,788 · 沈德潛 6,728 · 鍾惺 4,853 · 陳子龍
+                 # 4,036 …), 0 errored, 10 skipped by rule (the works held in kanripo);
+                 # eyeball nabu show urn:nabu:lzh-collection:甌北集:3 and 5 random
+                 # lines, then flip.
+  # nk2028's Classical Chinese Collection (github.com/nk2028/lzh-collection):
+  # 30 plain-text Literary Chinese works. DEDUPE CENSUS (2026-10-29, titles +
+  # 12 content samples per file against canonical kanripo / zh-wikisource /
+  # ccl / classical-modern / cbeta): the nine Masters 白文 texts and 李夢陽's
+  # 空同集 are held in kanripo (8–12/12 samples) → skipped by rule; the
+  # twenty Ming–Qing poetry-collection files (19 poets) are held nowhere
+  # (0–1/12) → the adapter's whole scope. LICENSE: in-repo LICENSE = the CC0
+  # 1.0 Universal legal code, GitHub field CC0-1.0 (verified 2026-10-29) →
+  # open. Provenance: no print edition is named for any text. Dormant since
+  # 2023-02 → manual.
+  sync_policy: manual
 
 madurai:   # P122-3, 02-sources row 268
   adapter: Nabu::Adapters::Madurai
@@ -5142,6 +5207,15 @@ sefaria:
                    # Eyeball urn:nabu:sefaria:minchat-shai-on-jonah:he:
                    # minchat-shai:1.1.1, a tur:he:onyourway passage, and a
                    # zohar-chadash:he:zohar-chadash passage (arc).
+                   # P150 adds the LINKS LAYER to the same sync: the index's
+                   # special files links/links0..16.csv (≈680 MB, 5,069,488
+                   # rows; the links_by_book* aggregates stay in the bucket)
+                   # → Nabu::SefariaLinks, kind=reference edges between held
+                   # passages (Tanakh refs → the oshb verse). Expected at the
+                   # 2026-10-02 generation against the current catalog:
+                   # 622,476 edges from 625,102 both-sides-held rows; the
+                   # 4,444,269 rows with an unheld side are censused on the
+                   # run row. Eyeball `nabu links urn:nabu:oshb:jonah:1.1`.
   # Sefaria — Targum shelf (P30-3) + RABBINIC WAVE 1 (P46-1) + MIDRASH
   # WAVE 2 (P55-3). Upstream
   # restructured: the git repo is a monthly books.json index (19,705 version

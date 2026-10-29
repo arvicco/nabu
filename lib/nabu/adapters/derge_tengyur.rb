@@ -15,9 +15,8 @@ module Nabu
     # is PINNED to that HEAD and aborts loudly on drift (owner re-pin).
     # Known upstream quirks the family handles: UTF-8 BOM on every volume
     # file (the README claims none), `#` peydurma note anchors, `[X]` error
-    # candidates, and volume 213 (dkar chag) carrying no markers at all —
-    # its text rides the last open document, like any unmarked volume
-    # continuation.
+    # candidates.
+    #
     #
     # LICENSE (recorded honestly): README §License VERBATIM — "This work is
     # a mechanical reproduction of a Public domain work, and as such is
@@ -44,6 +43,17 @@ module Nabu
 
       def self.manifest
         MANIFEST
+      end
+
+      # Volume 213 is the DKAR CHAG — the Tengyur's catalog volume. It
+      # carries no {D} markers, so unhandled it rode the last open Toh text
+      # as an unmarked continuation (toh4464 swelled to volumes [212, 213],
+      # its passages almost entirely catalog prose). The Kangyur precedent
+      # (vol 103): an INDEX volume, excluded from scanning and censused
+      # loud in discovery_skips. Minting the dkar chag as a first-class
+      # document of its own is a future identity decision.
+      def self.index_volume_numbers
+        [213]
       end
     end
   end

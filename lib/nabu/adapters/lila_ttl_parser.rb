@@ -25,10 +25,19 @@ module Nabu
     #   - blank-node property lists in OBJECT position (BrillEDL's
     #     canonicalForm), minted as stable _:bN ids with inner triples.
     #
-    # NOT in the census, therefore NOT parsed — triple-quoted strings,
-    # collections (), bare numeric/boolean literals, @base, blank-node
-    # subjects: any of them fails LOUDLY as Nabu::ParseError with a line
-    # number, never a silent skip (the coptic-tt unknown-span precedent).
+    # Widened for the third consumer, Lexicon_ItAnt's lexicon_1_0.ttl
+    # (5.2 MB GraphDB export, censused 2026-10-29): Unicode letters/marks
+    # inside prefixed local names (lex:meddíss_noun_osc_μεδδειξ_form —
+    # Turtle's PN_LOCAL admits them), triple-quoted """…""" literals (286
+    # — multi-line sense definitions and the bundled SKOS/OWL comments),
+    # and bare numeric/boolean literals in OBJECT position (the bundled
+    # OWL axioms: owl:hasValue true, owl:versionInfo 1.0), read as their
+    # lexical form like any other literal.
+    #
+    # NOT in the census, therefore NOT parsed — collections (), @base,
+    # '-quoted strings: any of them fails LOUDLY as Nabu::ParseError with
+    # a line number, never a silent skip (the coptic-tt unknown-span
+    # precedent).
     class LilaTtlParser
       RDF_TYPE = "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
 
@@ -69,7 +78,12 @@ module Nabu
 
       # Local names may contain dots but not end with one ("liv_etymologies:1 ."
       # must leave the statement terminator alone).
-      PNAME = /([A-Za-z][\w.-]*)?:((?:[\w%-]|\.(?=[\w.%-]))*)/
+      # Local-name characters: Unicode letters, marks and digits besides
+      # '_', '%', '-' (PN_LOCAL, minus the escapes no census has met).
+      PNAME = /([A-Za-z][\w.-]*)?:((?:[\p{L}\p{M}\p{N}_%-]|\.(?=[\p{L}\p{M}\p{N}_.%-]))*)/
+      # A bare numeric or boolean object; a trailing '.' is the statement
+      # terminator unless a digit follows it.
+      BARE_LITERAL = /(?:true|false|[-+]?(?:\d+(?:\.\d+)?|\.\d+)(?:[eE][-+]?\d+)?)(?=[\s;,\]]|\.(?!\d)|\z)/
       ESCAPES = { '"' => '"', "\\" => "\\", "n" => "\n", "t" => "\t", "r" => "\r" }.freeze
 
       def statements(text)
@@ -139,6 +153,8 @@ module Nabu
           parse_blank_node(out)
         elsif @scanner.check(/"/)
           parse_literal
+        elsif @scanner.scan(BARE_LITERAL)
+          [@scanner[0], :literal]
         else
           parse_term
         end
@@ -154,7 +170,8 @@ module Nabu
       end
 
       def parse_literal
-        fail!("malformed literal") unless @scanner.scan(/"((?:[^"\\]|\\.)*)"/m)
+        long = /"""((?:[^"\\]|\\.|"(?!""))*)"""/m
+        fail!("malformed literal") unless @scanner.scan(long) || @scanner.scan(/"((?:[^"\\]|\\.)*)"/m)
         value = unescape(@scanner[1])
         skip_ws
         if @scanner.scan("^^") # datatype annotation: consume, keep lexical value

@@ -211,3 +211,33 @@ Whole-file sha256:
 360ebc0be72897233cab0b319f5d89147484c5a4d69b33d62f429b639f3e913b  Tur (OnYourWay) — original, before trim
 c86e5c9d3a068dfee03b6654bf2b41e604c5d8b2282870c4bf7ab97ef348dfbe  Zohar Chadash — original, before trim
 ```
+
+## P150 — the connection graph (`links/`, retrieved 2026-10-29)
+
+The 2026-10-02 index's `special_files` list names the bucket's link
+dataset beside the texts. **Delivery grains upstream serves under
+`links/`:** (a) **17 edge shards** `links/links0.csv … links16.csv`
+(680 MB, 5,069,488 rows; columns `Citation 1, Citation 2, Conection Type
+[sic], Text 1, Text 2, Category 1, Category 2`) — the grain the links
+producer takes; (b) **two aggregate files** `links_by_book.csv` /
+`links_by_book_without_commentary.csv` (book-pair link COUNTS — `Text 1,
+Text 2, Link Count`) — a REJECTED grain (not edges; never fetched,
+never read; one specimen pinned below). The rest of `special_files`
+(`schemas/`, `table_of_contents.json`, `misc/topic_graph.csv`,
+`last_export.txt`) is out of the links scope.
+
+Each shard below is the upstream file trimmed to its header + the rows
+listed — every row byte-verbatim (cut by exact line from the full
+shard), chosen to exercise the resolver against the fixture texts:
+
+| shard | rows | exercises |
+|---|---|---|
+| `links0.csv` | 4 | unheld-title sides (the Dictionary of the Talmud, Arakhin, Amos, Exodus), a range ref (`Exodus 1:1-6:1`), the default-node bare cite (`Ruth Rabbah 1:1`), the Petichta node (`Ruth Rabbah, Petichta 1`) |
+| `links6.csv` | 1 | `Genesis 1:3` ↔ `Zohar Chadash, Bereshit 1` — Tanakh → the oshb Masoretic verse; complex-title node; section-level ref → first passage |
+| `links9.csv` | 2 | `commentary` (Jonah 1:1 ↔ Minchat Shai on Jonah 1:1:1); an untyped row with an unheld side (Joel) |
+| `links10.csv` | 2 | Leviticus ↔ Sifrei Zuta 5:2:1 (the fixture's first passage); Kiryat Sefer (unheld commentary) ↔ Mishneh Torah, Virgin Maiden 3:1 |
+| `links12.csv` | 2 | `mesorat hashas` Mishnah Tamid ↔ Tamid daf refs, one a range (`27a:2-3`) — the original-language hub (Kaufmann before Kulp) |
+| `links14.csv` | 3 | `targum` Obadiah ↔ Targum Jonathan on Obadiah ×2; `quotation_auto_tanakh` Proverbs ↔ Siddur Sefard (unheld) |
+| `links15.csv` | 2 | Ruth 1:1 ↔ Ruth Rabbah, Petichta 1 (held) and Petichta 3 (a held title's segment the trimmed fixture lacks) |
+| `links16.csv` | 3 | an intra-document Bavli cross-reference; `Tamid 26` (a daf without its amud — not a held citation); Tur, Orach Chayim 1:1 ↔ 241:1 (complex title, trimmed tail) |
+| `links_by_book.csv` | 3 | the REJECTED aggregate grain (header + first 3 rows) — never read |
