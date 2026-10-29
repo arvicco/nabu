@@ -148,11 +148,11 @@ module Adapters
       assert_equal "theatre-classique-tei", manifest.parser_family
     end
 
-    def test_registry_row_is_unwired_and_manual
+    def test_registry_row_is_wired_and_manual
       registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources.yml", __dir__))
       entry = registry["theatre-classique"]
       refute_nil entry
-      refute entry.wired, "wired: false until the first real sync is verified"
+      assert entry.wired, "wired 2026-10-28: first sync verified on census (1,939 docs)"
       assert_equal "manual", entry.sync_policy
     end
 

@@ -33,7 +33,7 @@ class PnaTest < Minitest::Test
     entry = registry["pna"]
     refute_nil entry
     assert entry.feature_module?
-    refute entry.wired, "wired: false until the first real sync is verified"
+    assert entry.wired, "wired 2026-10-28: first sync verified on census (17,387 persons)"
     adapter = Pna.new
     assert_empty adapter.discover(".").to_a
     ref = Nabu::DocumentRef.new(source_id: "pna", id: "urn:nabu:pna:x", path: ".", metadata: {})
