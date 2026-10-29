@@ -28,7 +28,7 @@ module Adapters
 
     def test_volume_number_comes_from_the_filename_prefix
       assert_equal([1, 2, 100, 103], kangyur_paths.map { |p| parser.volume_number(p) })
-      assert_equal([1, 212], tengyur_paths.map { |p| parser.volume_number(p) })
+      assert_equal([1, 212, 213], tengyur_paths.map { |p| parser.volume_number(p) })
     end
 
     def test_volume_number_is_nil_for_a_non_volume_filename

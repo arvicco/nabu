@@ -61,6 +61,23 @@ module Adapters
       assert numbers.all? { |n| n >= 1109 }, "every fixture Tengyur Toh number sits above the Kangyur range"
     end
 
+    # Volume 213 is the DKAR CHAG — the Tengyur's catalog volume, carrying
+    # no {D} markers at all. Unhandled, it rode the last open Toh text
+    # (live: toh4464 swelled to volumes [212, 213], 6,958 of its 7,124
+    # passages being catalog prose). The Kangyur precedent (vol 103):
+    # declared an INDEX volume, excluded from scanning, censused loud.
+    def test_the_dkar_chag_index_volume_is_excluded_and_censused
+      assert_equal [213], Nabu::Adapters::DergeTengyur.index_volume_numbers
+      document = parse_urn("urn:nabu:derge-tengyur:toh4453")
+      assert_equal [212], document.metadata["volumes"],
+                   "the dkar chag must not ride the last open Toh text"
+      refute(document.any? { |p| p.text.include?("ཨཱཤྩརྻོདདྷཝདྷནེནྡུ") },
+             "no catalog prose (213 [1a.1]) inside a Toh document")
+      skips = conformance_adapter.discovery_skips(FIXTURES)
+      assert(skips.notes.any? { |note| note.include?("index volume") && note.include?("213_") },
+             "the excluded dkar chag is censused loud, never silently dropped")
+    end
+
     # -- parse: BOM + first passage -------------------------------------------
 
     def test_the_bom_is_stripped_and_the_first_passage_cites_folio_one_b
