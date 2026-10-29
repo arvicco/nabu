@@ -69,6 +69,22 @@ module Nabu
     # word value: the token keeps its place with no "form" key (the
     # bhsa/dss empty-form precedent).
     #
+    # == The OCR label (metadata text_nature "ocr-origin", every book)
+    #
+    # The evidence the held tree carries (docs/about.md, Provenance):
+    # "The electronic text in the source directory has been obtained by
+    # OCR from the printed edition" (Leiden 1987, the syrocr program
+    # written for the purpose) — and NOTHING about correction: no
+    # proofreading or correction statement in about.md, and the tf/0.2
+    # feature headers name only encoders and SEDRA. So neither house OCR
+    # label fits: "corrected-ocr" would claim a correction upstream never
+    # states, "uncorrected-ocr" would claim its absence (and drop a
+    # curated research text from `export passages --exclude-ocr`).
+    # Stamped "ocr-origin" — OCR origin declared, correction status
+    # unstated — a non-excluding label (decision 2026-10-29; re-read at
+    # the next natural re-parse if upstream ever documents its correction
+    # pass).
+    #
     # == Census (verified against otype.tf at the pin, 2026-07-19)
     #
     # 426,835 words / 65 books / 1,269 chapters / 31,341 verses.
@@ -79,6 +95,9 @@ module Nabu
       SPARSE_PATHS = ["tf/0.2", "docs/about.md"].freeze
 
       TF_DIR = File.join("tf", "0.2").freeze
+
+      # OCR origin declared, correction unstated (class note).
+      TEXT_NATURE = "ocr-origin"
 
       MANIFEST = Nabu::SourceManifest.new(
         id: "peshitta",
@@ -151,7 +170,7 @@ module Nabu
         verses = corpus.verses_of(node)
         raise ParseError, "#{corpus.dir}: book #{book} (node #{node}) has no verses" if verses.empty?
 
-        metadata = { "book" => book }
+        metadata = { "book" => book, "text_nature" => TEXT_NATURE }
         book_en = corpus.book_en(node)
         metadata["book_en"] = book_en if book_en
         witness = corpus.witness(node)

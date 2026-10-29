@@ -290,6 +290,21 @@ module Nabu
       db.fetch("PRAGMA journal_mode = wal").single_value
     end
 
+    # Seal the SQLite file at +path+ for read-only SHIPPING (the demo slice,
+    # Nabu::DemoBuild): fold the WAL into the main file and switch the
+    # persistent journal mode back to rollback (DELETE), so the file opens
+    # read-only with no -wal/-shm sidecars — on a read-only image layer a
+    # WAL-mode file cannot even be opened without a writable -shm. Uses a
+    # raw connect (Store.connect would flip WAL straight back on). The next
+    # read-write Store.connect re-arms WAL as usual. Returns the new mode.
+    def seal_rollback_journal!(path)
+      db = Sequel.connect(sqlite_url(path), timeout: BUSY_TIMEOUT_MS)
+      db.run("PRAGMA wal_checkpoint(TRUNCATE)")
+      db.fetch("PRAGMA journal_mode = delete").single_value
+    ensure
+      db&.disconnect
+    end
+
     # Refresh +db+'s query-planner statistics with a BOUNDED ANALYZE (class
     # doc / ops §10, P42-4): PRAGMA analysis_limit caps per-index sampling so
     # the pass stays bounded on a huge table, then ANALYZE rewrites

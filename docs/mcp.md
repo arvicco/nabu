@@ -33,6 +33,33 @@ corpus. What you register today is what that surface promises.
   (`nabu rebuild` deletes and recreates the catalog), is picked up without
   restarting the server. Missing/rebuilding/busy corpus states come back as
   ordinary, informative tool responses, never crashes.
+- **Optional streamable HTTP** (`nabu mcp --http`): the same tools, the same
+  read-only openers and license etiquette, over the MCP streamable-HTTP
+  transport — POST one JSON-RPC message to `/mcp`, get one JSON response
+  (notifications answer 202). `initialize` mints an `Mcp-Session-Id` header
+  every later request echoes; `DELETE /mcp` ends the session. `PORT` sets the
+  port (default 8080), `NABU_MCP_HOST` the bind address (default
+  `127.0.0.1`), `NABU_MCP_ALLOWED_ORIGINS` extra browser origins (loopback
+  origins always pass; others get 403). Deliberately omitted: the GET SSE
+  stream (405 — the server never initiates messages), SSE responses and
+  resumability, authorization, TLS (terminate in front). The exact subset is
+  the class comment of `Nabu::MCP::HttpTransport`. A by-hand check:
+
+  ```
+  PORT=8081 bin/nabu mcp --http &
+  curl -si http://127.0.0.1:8081/mcp -H 'Content-Type: application/json' \
+    -d '{"jsonrpc":"2.0","id":1,"method":"initialize","params":{"protocolVersion":"2025-11-25"}}'
+  # then repeat with -H "Mcp-Session-Id: <the header above>" for tools/list, tools/call
+  ```
+- **A demo library for images** (`rake demo:build`, `Nabu::DemoBuild`):
+  syncs a small open/attribution-only starter set (SBLGNT, Vulgate, World
+  English Bible, OSHB, LSJ + Lewis & Short, plus the core instruments) into
+  a self-contained directory (default `tmp/demo`) and refuses — before any
+  network, and again on the built catalog — to bake anything non-servable.
+  Point the server at it with `NABU_ROOT=<dir>
+  NABU_CONFIG=<dir>/config/nabu.yml`; `demo-census.json` inside records what
+  was baked and its size. `rake demo:plan` prints the plan and runs the
+  guard offline. The Dockerfile's `demo` target bakes a prebuilt slice in.
 
 ---
 

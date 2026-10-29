@@ -552,6 +552,15 @@ MCP client — and rehearses the eventual `nabu.ac` read-only endpoint
 decision: the field moves fast, we keep control; the conformant core is
 ~150 lines).
 
+- **Second transport** (`mcp/http_transport.rb` + `mcp/http_server.rb`,
+  `bin/nabu mcp --http`): the MCP streamable-HTTP transport for hosted /
+  container deployments — POST `/mcp` → one `application/json` response
+  (notifications 202), sessions via `Mcp-Session-Id` (one `Server` per
+  session over the SAME tool layer, so read-only and license behaviour are
+  identical to stdio), Origin validation, GET 405 (no server-initiated
+  stream). Stdlib `TCPServer`, one request per connection; the subset and
+  its omissions are in the `HttpTransport` class comment. Stdio stays the
+  default.
 - **Protocol** (`mcp/server.rb`): JSON-RPC 2.0 over stdio per MCP spec
   revision **2025-11-25** (pinned as `Server::PROTOCOL_VERSION`; researched
   2026-07 against the spec and the Claude Code 2.1.x client). Framing is
@@ -2628,8 +2637,16 @@ one `ExportCLI` command, against the contract stated in `lib/nabu/export.rb`
   row carries cell population, sampled count and the inverse-inclusion
   weight. `--exclude-ocr` reads the one machine-readable OCR marker the
   catalog carries — document metadata `text_nature` machine-ocr /
-  uncorrected-ocr, stamped only by the scan-shelf adapters — and
-  `--exclude-source` covers OCR-derived sources that carry no flag.
+  uncorrected-ocr, stamped by the scan-shelf adapters and openiti; the
+  non-excluding labels corrected-ocr (madurai, eltec-srp: upstream states
+  the correction) and ocr-origin (peshitta: OCR origin, correction
+  unstated) ride through — and `--exclude-source` covers OCR-derived
+  sources that carry no flag. `--exclude-unproofread` reads the
+  ProofreadPage levels the wikisource adapters already record (no stamp
+  of its own): a document whose metadata `proofread.lowest_text_level`
+  is 1 ("Not proofread") drops whole; on the per-page sources
+  (ban-wikisource, passage annotation `quality`) a level-1 page drops
+  alone; text without ProofreadPage data rides.
 
 Streaming is keyset paging (urn for documents, id for links) with one
 batched read per page per concern, so memory is constant at library scale;

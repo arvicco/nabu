@@ -64,11 +64,30 @@ module Nabu
     # metadata_json text_nature in OCR_NATURES, the label the scan-shelf
     # adapters (IaScanShelf: slavistics-pd, africa-pd, archiv-slav-phil;
     # ndl-kotenseki; mdz-protestant) stamp on every document, and openiti on
-    # the versions its metadata TSV flags uncorrected_OCR. It is the
-    # ONLY machine-readable OCR marker in the catalog: other OCR-origin text
-    # (corrected or not) says so only in free-text notes, if at all — so
-    # --exclude-source SLUG,... is the explicit complement, and the
-    # manifest echoes both.
+    # the versions its metadata TSV flags uncorrected_OCR. Two further
+    # text_nature labels are deliberately NON-excluding: "corrected-ocr"
+    # (OCR the upstream states it corrected — madurai, eltec-srp, per
+    # document where the header says so) and "ocr-origin" (OCR origin
+    # declared, correction unstated — peshitta, madurai's one such file):
+    # both ride through --exclude-ocr. Other OCR-derived text carries no
+    # label at all, so --exclude-source SLUG,... is the explicit
+    # complement, and the manifest echoes both.
+    #
+    # == Proofreading exclusion: the ProofreadPage levels already held
+    #
+    # --exclude-unproofread reads the ProofreadPage quality the wikisource
+    # adapters record (export semantics only — no stamp of its own):
+    # - document grain: metadata_json proofread.lowest_text_level (the
+    #   IndexedWikisource family — the lowest level among the Page: pages
+    #   the rendering transcluded that hold text). A document whose lowest
+    #   level is 1, "Not proofread", is dropped whole: some of its text was
+    #   never proofread, and the held data cannot say which passage.
+    # - passage grain: passages.annotations_json quality on the sources in
+    #   PAGE_QUALITY_SOURCES, whose passage IS one Page: page carrying its
+    #   own level (ban-wikisource) — a level-1 page is dropped alone.
+    # Levels 2–4 (problematic, proofread, validated) and text with no
+    # ProofreadPage data at all ride through; the manifest notes count
+    # what was dropped.
     #
     # Memory is the reservoirs (k urns per cell, text fetched only for the
     # winners); the scan is one keyset pass over the scoped passages.
@@ -82,8 +101,14 @@ module Nabu
       STRATA = %w[language century script source].freeze
       # const: the documented default cell quota (class note), not a corpus claim
       DEFAULT_PER_CELL = 100
-      # The text_nature labels that declare OCR (class note).
+      # The text_nature labels --exclude-ocr drops (class note); corrected-ocr
+      # and ocr-origin are the labels it keeps.
       OCR_NATURES = %w[machine-ocr uncorrected-ocr].freeze
+      # ProofreadPage level 1 — "Not proofread" (class note).
+      UNPROOFREAD_LEVEL = 1
+      # Sources whose passage annotation "quality" is that page's own
+      # ProofreadPage level (class note).
+      PAGE_QUALITY_SOURCES = %w[ban-wikisource].freeze
       # const: keyset page — one batched axis read per page, well under SQLite's variable cap
       PAGE_SIZE = 1_000
 
@@ -109,7 +134,7 @@ module Nabu
       Pick = Data.define(:rank, :urn, :values)
 
       def initialize(catalog:, strata:, per_cell: nil, proportional: nil, seed: 0, sources: nil, langs: nil,
-                     exclude_sources: nil, exclude_ocr: false, page_size: PAGE_SIZE)
+                     exclude_sources: nil, exclude_ocr: false, exclude_unproofread: false, page_size: PAGE_SIZE)
         @catalog = catalog
         @strata = presence(strata) || []
         @per_cell = per_cell
@@ -119,6 +144,7 @@ module Nabu
         @langs = presence(langs)
         @exclude_sources = presence(exclude_sources)
         @exclude_ocr = exclude_ocr
+        @exclude_unproofread = exclude_unproofread
         @page_size = page_size
         validate!
         @per_cell ||= DEFAULT_PER_CELL unless @proportional
@@ -131,7 +157,7 @@ module Nabu
         { "strata" => @strata, "allocation" => @proportional ? "proportional" : "per_cell",
           "per_cell" => @per_cell, "proportional" => @proportional, "seed" => @seed, "source" => @sources,
           "language" => @langs, "exclude_source" => @exclude_sources, "exclude_ocr" => @exclude_ocr,
-          "withdrawn" => "excluded" }
+          "exclude_unproofread" => @exclude_unproofread, "withdrawn" => "excluded" }
       end
 
       attr_reader :notes
@@ -217,6 +243,7 @@ module Nabu
           if @langs
         dataset = dataset.where(license_expr => license_classes) if license_classes
         dataset = dataset.where(not_ocr) if @exclude_ocr
+        dataset = dataset.where(proofread_document).where(proofread_page) if @exclude_unproofread
         dataset.order(passages[:urn])
                .select(passages[:urn].as(:urn), passages[:document_id].as(:document_id),
                        language_expr.as(:language), Sequel[:sources][:slug].as(:source),
@@ -228,6 +255,25 @@ module Nabu
       def text_nature = Sequel.function(:json_extract, Sequel[:documents][:metadata_json], "$.text_nature")
 
       def not_ocr = Sequel.|({ text_nature => nil }, Sequel.~(text_nature => OCR_NATURES))
+
+      def lowest_text_level
+        Sequel.function(:json_extract, Sequel[:documents][:metadata_json], "$.proofread.lowest_text_level")
+      end
+
+      # NULL-safe (coalesced): a page with no recorded level must not turn
+      # the negated test NULL and vanish.
+      def page_quality
+        Sequel.function(:coalesce, Sequel.function(:json_extract, Sequel[:passages][:annotations_json], "$.quality"),
+                        -1)
+      end
+
+      def proofread_document = Sequel.|({ lowest_text_level => nil }, Sequel.~(lowest_text_level => UNPROOFREAD_LEVEL))
+
+      def unproofread_page
+        Sequel.&({ Sequel[:sources][:slug] => PAGE_QUALITY_SOURCES }, { page_quality => UNPROOFREAD_LEVEL })
+      end
+
+      def proofread_page = Sequel.~(unproofread_page)
 
       def century_needed? = @strata.include?("century")
 
@@ -284,6 +330,35 @@ module Nabu
       def record_notes(counts, license_classes, sampled)
         @notes = { "population" => counts.values.sum, "cells" => counts.size, "sampled" => sampled }
         @notes["ocr_documents_excluded"] = ocr_documents(license_classes) if @exclude_ocr
+        return unless @exclude_unproofread
+
+        @notes["unproofread_documents_excluded"] = unproofread_documents(license_classes)
+        @notes["unproofread_pages_excluded"] = unproofread_pages(license_classes)
+      end
+
+      def unproofread_documents(license_classes)
+        documents = Sequel[:documents]
+        dataset = @catalog[:documents].join(:sources, id: documents[:source_id])
+                                      .where(documents[:withdrawn] => false, lowest_text_level => UNPROOFREAD_LEVEL)
+        note_scope(dataset, license_classes).count
+      end
+
+      # Level-1 pages on the page-grain sources, outside documents already
+      # dropped whole.
+      def unproofread_pages(license_classes)
+        dataset = @catalog[:passages].join(:documents, id: Sequel[:passages][:document_id])
+                                     .join(:sources, id: Sequel[:documents][:source_id])
+                                     .where(Sequel[:passages][:withdrawn] => false,
+                                            Sequel[:documents][:withdrawn] => false)
+                                     .where(unproofread_page).where(proofread_document)
+        note_scope(dataset, license_classes).count
+      end
+
+      def note_scope(dataset, license_classes)
+        dataset = dataset.where(Sequel[:sources][:slug] => @sources) if @sources
+        dataset = dataset.exclude(Sequel[:sources][:slug] => @exclude_sources) if @exclude_sources
+        dataset = dataset.where(license_expr => license_classes) if license_classes
+        dataset
       end
 
       def ocr_documents(license_classes)

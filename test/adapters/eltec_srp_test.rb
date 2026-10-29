@@ -74,6 +74,23 @@ module Adapters
       assert_includes meta["responsibility"], { "resp" => "Кодирање за ELTeC", "name" => "Цветана Крстев" }
     end
 
+    def test_a_header_declaring_ocr_and_correction_stamps_corrected_ocr
+      assert_equal "corrected-ocr", doc("srp18590").metadata["text_nature"],
+                   "respStmt <resp>OCR и корекција текста</resp> — the header's own claim"
+    end
+
+    def test_a_header_without_the_ocr_claim_carries_no_text_nature
+      Dir.mktmpdir do |dir|
+        FileUtils.mkdir_p(File.join(dir, "level1"))
+        source = File.read(File.join(FIXTURES, "level1", "SRP18520_BogobojA_DvaIdola.xml"))
+        # The retyped variant six upstream headers carry instead (e.g. SRP19012).
+        File.write(File.join(dir, "level1", "a.xml"),
+                   source.sub("OCR и корекција текста", "Прекуцавање и корекција текста"))
+        adapter = conformance_adapter
+        refute adapter.parse(adapter.discover(dir).first).metadata.key?("text_nature")
+      end
+    end
+
     def test_latin_script_text_is_marked
       assert_equal "Latn", doc("srp19180").metadata["script"]
       assert_equal "Zagreb", doc("srp19180").metadata["place"]

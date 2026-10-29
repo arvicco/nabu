@@ -156,108 +156,151 @@ module Nabu
       User-scope, Claude Desktop, the tool reference, the license/attribution
       stance, and an example transcript are in docs/mcp.md.
 
+      --http serves the SAME tools over the MCP streamable-HTTP transport
+      instead (POST JSON-RPC to /mcp; JSON responses, sessions via the
+      Mcp-Session-Id header; no server-initiated SSE stream — see
+      Nabu::MCP::HttpTransport for the exact subset). PORT sets the port
+      (default 8080), NABU_MCP_HOST the bind address (default 127.0.0.1;
+      a container sets 0.0.0.0), NABU_MCP_ALLOWED_ORIGINS extra browser
+      origins (loopback origins always pass). Runs until SIGINT/SIGTERM.
+
       Examples:
         nabu mcp                       # a client spawns this; speaks JSON-RPC on stdio
         nabu mcp --log /tmp/nabu-mcp.log   # tee diagnostics to a file (stdout stays clean)
+        PORT=8081 nabu mcp --http      # streamable HTTP on http://127.0.0.1:8081/mcp
     HELP
     option :log, type: :string, banner: "FILE",
                  desc: "Append diagnostics to FILE instead of stderr (stdout is the protocol channel)"
+    option :http, type: :boolean, default: false,
+                  desc: "Serve the MCP streamable-HTTP transport on POST /mcp instead of stdio " \
+                        "(port from PORT, default #{Nabu::MCP::HttpServer::DEFAULT_PORT}; bind address " \
+                        "from NABU_MCP_HOST, default #{Nabu::MCP::HttpServer::DEFAULT_HOST})"
     def mcp
       config = Nabu::Config.load
       log = mcp_log(options[:log])
-      registry = Nabu::SourceRegistry.load(config.sources_path)
-      # Lazy, memoizing, read-only openers (Nabu::ReadonlyOpener — a
-      # later sweep extracted the P8-2 plumbing): resolved on every tool call, so a
-      # corpus that appears or is rebuilt mid-session is picked up without
-      # a restart; nil when the file is absent (Tools renders the graceful
-      # "no corpus" / "rebuilding" states). The watchdog below vacates
-      # stale handles on IDLE sessions too — the P93 incident: a deleted
-      # pre-rebuild catalog's 118 GB stayed pinned for days because the
-      # per-call re-stat never ran without a call.
-      openers = {
-        catalog: Nabu::ReadonlyOpener.new(config.catalog_path) do
-          Nabu::Store.connect(config.catalog_path, readonly: true)
-        end,
-        fulltext: Nabu::ReadonlyOpener.new(config.fulltext_path) do
-          Nabu::Store.connect_fulltext(config.fulltext_path, readonly: true)
-        end,
-        # The history ledger, read-only (P14-12): nabu_status surfaces the
-        # cached upstream-drift verdicts from source_probes. MCP reads the raw
-        # dataset (no model binding) and NEVER probes upstreams live.
-        ledger: Nabu::ReadonlyOpener.new(config.history_path) do
-          Nabu::Store.connect(config.history_path, readonly: true)
-        end,
-        # The links journal, read-only (P16-1): nabu_links reads batch-mined
-        # edges. Absent file = no batch has run (a graceful state).
-        # The mined-layers store rides the same handle (Store::LinkLayers).
-        links: Nabu::ReadonlyOpener.new(config.links_path, config.mined_links_path) do
-          Nabu::Store::LinkLayers.open_readonly(config)
-        end,
-        # The vector store, read-only (P93-5): nabu_search's similar_to.
-        # Absent file = never embedded (the honest-note state).
-        vectors: Nabu::ReadonlyOpener.new(config.vectors_path) do
-          Nabu::Store.connect(config.vectors_path, readonly: true)
-        end
-      }
-      Nabu::ReadonlyOpener.watch(openers.values)
-      tools = Nabu::MCP::Tools.new(
-        catalog: openers[:catalog].to_proc,
-        fulltext: openers[:fulltext].to_proc,
-        ledger: openers[:ledger].to_proc,
-        links: openers[:links].to_proc,
-        vectors: openers[:vectors].to_proc,
-        # Static config, loaded once — a malformed registry fails HERE, loudly,
-        # not mid-conversation.
-        alignments: Nabu::AlignmentRegistry.load(config.alignments_path),
-        # The source registry (P23-3b): authoritative for enablement, so
-        # nabu_status renders a sources.yml flip immediately (the db row only
-        # mirrors it at the source's next sync).
-        registry: registry,
-        # The enabled-slug set (P44-r3b): nabu_status's sources array defaults
-        # to this box's enabled sources, matching the CLI list/status default.
-        enabled_slugs: mcp_enabled_slugs(config, registry),
-        # The Pleiades gazetteer (P44-3): :auto = feature-detect lazily per
-        # call (nabu_place, nabu_show findspot) — the derived catalog place
-        # index when a sync/rebuild has built it (P45-6, instant), else the
-        # canonical dump; an unsynced box degrades exactly like the CLI,
-        # never crashes.
-        pleiades: :auto,
-        # The Oracc Sign List (P53-2): :auto = feature-detect canonical/osl
-        # lazily per call (nabu_signs); an unsynced box notes the sync hint,
-        # every other tool byte-identical (the lane-off rule).
-        sign_list: :auto,
-        # The sign-card seams (P68-3, nabu_char): same lazy feature-detect
-        # posture — CDLI readings ride canonical/osl/00etc, the Egyptian
-        # spine canonical/unikemet.
-        readings: :auto, hieroglyphs: :auto,
-        # Tibetan word segmentation (P54-2): :auto = feature-detect
-        # canonical/nabu-data lazily inside Query::Show (nothing loads
-        # unless nabu_show is asked for a segmented render); an unsynced
-        # box answers the flag with the sync-hint note.
-        tibetan_words: :auto,
-        # The nabu-lects module (P57-4): :auto = feature-detect
-        # canonical/nabu-lects lazily per call (nabu_search's `lect`
-        # filter); an unsynced box answers `lect` with an InvalidArguments
-        # naming the module, every other tool byte-identical.
-        lects: :auto,
-        # The lect-provenance gloss seams (P81 U-5): static config, loaded
-        # once — the rules' tier: words and the override rows' tier: map,
-        # joined against each shown document's facet basis.
-        lect_rules: Nabu::LectRules.load(config.lect_facet_rules_paths),
-        lect_override_tiers: Nabu::Lects.override_tiers(config.lect_overrides_paths),
-        # The facet map (static, loaded once): the token-sense rules behind
-        # nabu_search's `sense` desk and nabu_show's `senses` flag.
-        facet_map: Nabu::FacetMap.load_default(config: config),
-        # The reference-scan anchors (static, loaded once): nabu_define /
-        # nabu_show citations of configured print works point at the scan.
-        scan_anchors: Nabu::Query::ScanAnchors.load_default(config: config)
-      )
-      $stdout.sync = true
+      tools = mcp_tools(config)
       install_mcp_signal_traps
+      return serve_mcp_http(tools, log) if options[:http]
+
+      $stdout.sync = true
       # stdout carries protocol only; every diagnostic goes to the log IO.
       Nabu::MCP::Server.new(tools: tools, log: log).run($stdin, $stdout)
     ensure
       log.close if log && !log.equal?($stderr)
+    end
+
+    no_commands do
+      # The read-only tool layer every MCP transport serves — ONE builder, so
+      # stdio and HTTP cannot drift apart (same openers, same watchdog, same
+      # license etiquette).
+      def mcp_tools(config)
+        registry = Nabu::SourceRegistry.load(config.sources_path)
+        # Lazy, memoizing, read-only openers (Nabu::ReadonlyOpener — a
+        # later sweep extracted the P8-2 plumbing): resolved on every tool call, so a
+        # corpus that appears or is rebuilt mid-session is picked up without
+        # a restart; nil when the file is absent (Tools renders the graceful
+        # "no corpus" / "rebuilding" states). The watchdog below vacates
+        # stale handles on IDLE sessions too — the P93 incident: a deleted
+        # pre-rebuild catalog's 118 GB stayed pinned for days because the
+        # per-call re-stat never ran without a call.
+        openers = {
+          catalog: Nabu::ReadonlyOpener.new(config.catalog_path) do
+            Nabu::Store.connect(config.catalog_path, readonly: true)
+          end,
+          fulltext: Nabu::ReadonlyOpener.new(config.fulltext_path) do
+            Nabu::Store.connect_fulltext(config.fulltext_path, readonly: true)
+          end,
+          # The history ledger, read-only (P14-12): nabu_status surfaces the
+          # cached upstream-drift verdicts from source_probes. MCP reads the raw
+          # dataset (no model binding) and NEVER probes upstreams live.
+          ledger: Nabu::ReadonlyOpener.new(config.history_path) do
+            Nabu::Store.connect(config.history_path, readonly: true)
+          end,
+          # The links journal, read-only (P16-1): nabu_links reads batch-mined
+          # edges. Absent file = no batch has run (a graceful state).
+          # The mined-layers store rides the same handle (Store::LinkLayers).
+          links: Nabu::ReadonlyOpener.new(config.links_path, config.mined_links_path) do
+            Nabu::Store::LinkLayers.open_readonly(config)
+          end,
+          # The vector store, read-only (P93-5): nabu_search's similar_to.
+          # Absent file = never embedded (the honest-note state).
+          vectors: Nabu::ReadonlyOpener.new(config.vectors_path) do
+            Nabu::Store.connect(config.vectors_path, readonly: true)
+          end
+        }
+        Nabu::ReadonlyOpener.watch(openers.values)
+        Nabu::MCP::Tools.new(
+          catalog: openers[:catalog].to_proc,
+          fulltext: openers[:fulltext].to_proc,
+          ledger: openers[:ledger].to_proc,
+          links: openers[:links].to_proc,
+          vectors: openers[:vectors].to_proc,
+          # Static config, loaded once — a malformed registry fails HERE, loudly,
+          # not mid-conversation.
+          alignments: Nabu::AlignmentRegistry.load(config.alignments_path),
+          # The source registry (P23-3b): authoritative for enablement, so
+          # nabu_status renders a sources.yml flip immediately (the db row only
+          # mirrors it at the source's next sync).
+          registry: registry,
+          # The enabled-slug set (P44-r3b): nabu_status's sources array defaults
+          # to this box's enabled sources, matching the CLI list/status default.
+          enabled_slugs: mcp_enabled_slugs(config, registry),
+          # The Pleiades gazetteer (P44-3): :auto = feature-detect lazily per
+          # call (nabu_place, nabu_show findspot) — the derived catalog place
+          # index when a sync/rebuild has built it (P45-6, instant), else the
+          # canonical dump; an unsynced box degrades exactly like the CLI,
+          # never crashes.
+          pleiades: :auto,
+          # The Oracc Sign List (P53-2): :auto = feature-detect canonical/osl
+          # lazily per call (nabu_signs); an unsynced box notes the sync hint,
+          # every other tool byte-identical (the lane-off rule).
+          sign_list: :auto,
+          # The sign-card seams (P68-3, nabu_char): same lazy feature-detect
+          # posture — CDLI readings ride canonical/osl/00etc, the Egyptian
+          # spine canonical/unikemet.
+          readings: :auto, hieroglyphs: :auto,
+          # Tibetan word segmentation (P54-2): :auto = feature-detect
+          # canonical/nabu-data lazily inside Query::Show (nothing loads
+          # unless nabu_show is asked for a segmented render); an unsynced
+          # box answers the flag with the sync-hint note.
+          tibetan_words: :auto,
+          # The nabu-lects module (P57-4): :auto = feature-detect
+          # canonical/nabu-lects lazily per call (nabu_search's `lect`
+          # filter); an unsynced box answers `lect` with an InvalidArguments
+          # naming the module, every other tool byte-identical.
+          lects: :auto,
+          # The lect-provenance gloss seams (P81 U-5): static config, loaded
+          # once — the rules' tier: words and the override rows' tier: map,
+          # joined against each shown document's facet basis.
+          lect_rules: Nabu::LectRules.load(config.lect_facet_rules_paths),
+          lect_override_tiers: Nabu::Lects.override_tiers(config.lect_overrides_paths),
+          # The facet map (static, loaded once): the token-sense rules behind
+          # nabu_search's `sense` desk and nabu_show's `senses` flag.
+          facet_map: Nabu::FacetMap.load_default(config: config),
+          # The reference-scan anchors (static, loaded once): nabu_define /
+          # nabu_show citations of configured print works point at the scan.
+          scan_anchors: Nabu::Query::ScanAnchors.load_default(config: config)
+        )
+      end
+
+      # `nabu mcp --http`: the streamable-HTTP transport (HttpTransport has
+      # the spec subset). One Server per session, all over the same tools.
+      def serve_mcp_http(tools, log)
+        host = Nabu::MCP::HttpServer.host_from(ENV)
+        port = Nabu::MCP::HttpServer.port_from(ENV)
+        transport = Nabu::MCP::HttpTransport.new(
+          server_factory: -> { Nabu::MCP::Server.new(tools: tools, log: log) },
+          allowed_origins: Nabu::MCP::HttpServer.allowed_origins_from(ENV), log: log
+        )
+        listener = Nabu::MCP::HttpServer.listen(host: host, port: port)
+        log.puts("nabu-mcp: streamable HTTP on http://#{host}:#{listener.local_address.ip_port}" \
+                 "#{Nabu::MCP::HttpTransport::ENDPOINT}")
+        Nabu::MCP::HttpServer.new(transport: transport, log: log).run(listener)
+      rescue Nabu::Error, SystemCallError => e
+        raise Thor::Error, "mcp --http: #{e.message}"
+      ensure
+        listener&.close
+      end
     end
 
     desc "backup", "Snapshot the permanent set (canonical/, config/, local/, .docs/) — never the derived dbs"
