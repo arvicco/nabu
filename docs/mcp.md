@@ -51,6 +51,15 @@ corpus. What you register today is what that surface promises.
     -d '{"jsonrpc":"2.0","id":1,"method":"initialize","params":{"protocolVersion":"2025-11-25"}}'
   # then repeat with -H "Mcp-Session-Id: <the header above>" for tools/list, tools/call
   ```
+- **A demo library for images** (`rake demo:build`, `Nabu::DemoBuild`):
+  syncs a small open/attribution-only starter set (SBLGNT, Vulgate, World
+  English Bible, OSHB, LSJ + Lewis & Short, plus the core instruments) into
+  a self-contained directory (default `tmp/demo`) and refuses — before any
+  network, and again on the built catalog — to bake anything non-servable.
+  Point the server at it with `NABU_ROOT=<dir>
+  NABU_CONFIG=<dir>/config/nabu.yml`; `demo-census.json` inside records what
+  was baked and its size. `rake demo:plan` prints the plan and runs the
+  guard offline. The Dockerfile's `demo` target bakes a prebuilt slice in.
 
 ---
 
