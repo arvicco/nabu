@@ -552,6 +552,15 @@ MCP client — and rehearses the eventual `nabu.ac` read-only endpoint
 decision: the field moves fast, we keep control; the conformant core is
 ~150 lines).
 
+- **Second transport** (`mcp/http_transport.rb` + `mcp/http_server.rb`,
+  `bin/nabu mcp --http`): the MCP streamable-HTTP transport for hosted /
+  container deployments — POST `/mcp` → one `application/json` response
+  (notifications 202), sessions via `Mcp-Session-Id` (one `Server` per
+  session over the SAME tool layer, so read-only and license behaviour are
+  identical to stdio), Origin validation, GET 405 (no server-initiated
+  stream). Stdlib `TCPServer`, one request per connection; the subset and
+  its omissions are in the `HttpTransport` class comment. Stdio stays the
+  default.
 - **Protocol** (`mcp/server.rb`): JSON-RPC 2.0 over stdio per MCP spec
   revision **2025-11-25** (pinned as `Server::PROTOCOL_VERSION`; researched
   2026-07 against the spec and the Claude Code 2.1.x client). Framing is
