@@ -62,6 +62,17 @@ module Nabu
     # sampling keys as "eltec". Script: the root xml:lang (sr = Cyrillic,
     # sr-Latn = Latin) as metadata "script".
     #
+    # == The OCR label (metadata text_nature, per document)
+    #
+    # 94 of the 100 level-1 headers carry a respStmt
+    # "<resp>OCR и корекција текста</resp>" (OCR and text correction —
+    # censused 2026-10-29); those documents are stamped text_nature
+    # "corrected-ocr", the non-excluding label (`export passages
+    # --exclude-ocr` keeps it). The other six name scanning plus
+    # retyping ("Прекуцавање и корекција текста") or no text step at
+    # all, and carry no label — honestly absent, never inferred from the
+    # collection's general description.
+    #
     # == License
     #
     # README "Licence", verbatim: "All texts included in this collection
@@ -76,6 +87,8 @@ module Nabu
       TEXT_DIR = "level1"
       LANGUAGE = "srp"
       URN_PREFIX = "urn:nabu:eltec-srp:"
+      # The respStmt step that declares OCR + correction (class note).
+      OCR_CORRECTION_RESP = "OCR и корекција текста"
 
       # const: the life+70 boundary as of 1 January 2026 — advance each January, not a corpus claim
       AUTHOR_DEATH_CUTOFF = 1955
@@ -182,8 +195,14 @@ module Nabu
           "digital_source" => presence(header.digital_source&.to_h),
           "responsibility" => presence(header.responsibility),
           "eltec" => presence(header.text_desc),
-          "licence" => header.licence
+          "licence" => header.licence,
+          "text_nature" => text_nature(header)
         }.compact
+      end
+
+      # The header's own "OCR и корекција текста" step → corrected-ocr (class note).
+      def text_nature(header)
+        "corrected-ocr" if header.responsibility.any? { |entry| entry["resp"] == OCR_CORRECTION_RESP }
       end
 
       # The firstEdition's typed years as an envelope; else ELTeC's

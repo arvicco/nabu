@@ -612,6 +612,13 @@ sources:
       #                         same axis name as the document facet (the itkc precedent)
       author: author          # coptic-bohairic meta::author, newdoc-scoped (Paul the apostle ·
       #                         Mena of Pshati · Palladius · "N/A"/"unknown" — upstream's claims)
+    # DECLARED INFERENCE (ruled 2026-10-29): sanskrit-vedic's WordSem ids are read as DCS
+    # sense-bank ids. Upstream never states the id spaces are shared; the evidence is
+    # Hellwig's shared provenance, the identical MISC format, and the census of canonical/ud
+    # 2026-10-29 — 14,246 WordSem tokens, all in sanskrit-vedic (no other treebank carries
+    # the key), 2,759 distinct ids, every one held by the dcs-senses shelf. Reversal = delete
+    # the one line below (the next builders:refresh drops ud's sense pairs).
+    token_fields: { WordSem: { facet: sense, shelf: dcs-senses } }
   lotsawa-house:              # sample census of canonical/lotsawa-house 2026-10-22 (354 of 6,388
     fields: #                   pages, 40 per language): every sampled page carries its topic
       #                         tags, ~2.5 per page, one label per /topics/ slug

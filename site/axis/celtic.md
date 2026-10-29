@@ -15,7 +15,7 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 A source wears every desk it serves — these eleven answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
-| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 28 October 2026)</span> |
+| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 29 October 2026)</span> |
 |---|---|---|---|---|
 | `br-wikisource` | texts | attribution | wired · manual | 3,155 docs / 137,115 passages |
 | `corph` | texts | attribution | wired · manual | 76 docs / 17,942 passages |
@@ -29,7 +29,7 @@ A source wears every desk it serves — these eleven answer this desk. Holdings 
 | `ud` | treebank | nc | wired · manual | 83 docs / 329,980 passages |
 | `wiktionary-recon` | dictionary | attribution | wired · manual | 376,415 entries |
 
-**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 28 October 2026)</span>: `zho` 327,296 · `cy` 89,386 · `xcl` 8,544 · `sga` 6,838 · `gem-pro` 5,749 · `gmw-pro` 5,578 · `sla-pro` 5,461 · `bre` 3,155 · `mnc` 2,577 · `txb` 2,484 … and 61 more (`nabu axis celtic` lists all).
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 29 October 2026)</span>: `zho` 327,296 · `cy` 89,386 · `xcl` 8,544 · `sga` 6,838 · `gem-pro` 5,749 · `gmw-pro` 5,578 · `sla-pro` 5,461 · `bre` 3,155 · `mnc` 2,577 · `txb` 2,484 … and 61 more (`nabu axis celtic` lists all).
 
 ## The desk's instruments
 

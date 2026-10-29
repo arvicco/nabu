@@ -150,6 +150,13 @@ module Adapters
 
     # -- idempotency ----------------------------------------------------------
 
+    def test_every_book_carries_the_ocr_origin_text_nature
+      docs = conformance_adapter.discover(FIXTURES).map { |ref| conformance_adapter.parse(ref) }
+      assert_equal ["ocr-origin"], docs.map { |d| d.metadata["text_nature"] }.uniq,
+                   "about.md: obtained by OCR (syrocr) from the printed edition; correction unstated"
+      refute_includes Nabu::Export::PassageSample::OCR_NATURES, "ocr-origin"
+    end
+
     def test_double_load_is_idempotent
       catalog = store_test_db
       source = peshitta_source

@@ -130,6 +130,41 @@ class MaduraiTest < Minitest::Test
     assert_equal ["விளம்பிநாகனார்"], meta["authors"]
   end
 
+  # -- the OCR label (text_nature) ----------------------------------------------------
+
+  # Verbatim header sentences from canonical/madurai (pmuni0743 and the
+  # census variants): every OCR-mentioning header also states the correction.
+  OCR_PROOFREAD = "The e-text has been generated using Google OCR online tool and subsequent proof-reading."
+
+  def test_an_ocr_header_with_a_correction_claim_is_corrected_ocr
+    nature = ->(header) { Nabu::Adapters::Madurai.text_nature(header) }
+    assert_equal "corrected-ocr", nature.call(OCR_PROOFREAD)
+    assert_equal "corrected-ocr", nature.call("The raw text file was generated using Google OCR and the text was " \
+                                              "subsequently corrected for any OCR errors.")
+    assert_equal "corrected-ocr", nature.call("This e-text has been generated using Google OCR and subsequently " \
+                                              "edited by K.Kalyanasundaram.")
+    assert_nil nature.call("Etext Preparation (input, proof-reading): Ms. Sarala Sandirasegarane"),
+               "hand-keyed input is not OCR"
+    assert_equal "ocr-origin", nature.call("The e-text has been generated using Google OCR online tool."),
+                 "pmuni0752: OCR without a stated correction is not claimed corrected"
+  end
+
+  def test_hand_keyed_fixtures_carry_no_text_nature
+    refute adapter.parse(ref_for(NANMANI)).metadata.key?("text_nature")
+  end
+
+  def test_an_ocr_proofread_header_stamps_the_document
+    require_fixtures!
+    Dir.mktmpdir do |dir|
+      FileUtils.cp_r(File.join(FIXTURES, "."), dir)
+      path = File.join(dir, "pm_etexts", "utf8", "pmuni0047.html")
+      html = File.read(path)
+      File.write(path, html.sub("Our Sincere thanks go to", "#{OCR_PROOFREAD}<br>\nOur Sincere thanks go to"))
+      ref = adapter.discover(dir).find { |r| r.id == NANMANI }
+      assert_equal "corrected-ocr", adapter.parse(ref).metadata["text_nature"]
+    end
+  end
+
   def test_a_multi_title_file_joins_its_catalog_titles
     document = adapter.parse(ref_for(AUVAIYAR))
     assert_equal "ஆத்திசூடி / கொன்றை வேந்தன் / நல்வழி / மூதுரை", document.title
