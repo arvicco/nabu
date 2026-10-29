@@ -2848,7 +2848,7 @@ itant:
   # dirs are README-only ("available once the revision process is
   # completed") — a later owner-fired sync picks them up; nothing promised.
   # Lexicon_ItAnt (the OntoLex-lemon TTL sibling repo) ships as its own
-  # dictionary source, lexicon-itant (02-sources row 314).
+  # dictionary source, lexicon-itant (02-sources row 315).
   sync_policy: manual
   # P29-2: ita + eng translation divs ride as -ita/-eng sibling documents
   # where records carry prose (336 each upstream; the parser's own census
@@ -3260,7 +3260,7 @@ lexica:
   # re-syncable, but not on a live schedule.
   sync_policy: manual
 
-lexicon-itant:   # 02-sources row 314
+lexicon-itant:   # 02-sources row 315
   adapter: Nabu::Adapters::LexiconItant
   adopted: "2026-10-29"
   axes: [italic]
@@ -3527,7 +3527,7 @@ lotsawa-house:   # 02-sources row 283
   # restricted: true. EXPECTED FIRST SYNC (sample-estimated, the gate
   # reconciles): ~1,380 bo + ~1,380 en + ~3,000 other-language documents.
 
-lzh-collection:   # 02-sources row 315
+lzh-collection:   # 02-sources row 316
   adapter: Nabu::Adapters::LzhCollection
   adopted: "2026-10-29"
   axes: [sinitic]
