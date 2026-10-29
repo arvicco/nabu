@@ -64,11 +64,14 @@ module Nabu
     # metadata_json text_nature in OCR_NATURES, the label the scan-shelf
     # adapters (IaScanShelf: slavistics-pd, africa-pd, archiv-slav-phil;
     # ndl-kotenseki; mdz-protestant) stamp on every document, and openiti on
-    # the versions its metadata TSV flags uncorrected_OCR. It is the
-    # ONLY machine-readable OCR marker in the catalog: other OCR-origin text
-    # (corrected or not) says so only in free-text notes, if at all — so
-    # --exclude-source SLUG,... is the explicit complement, and the
-    # manifest echoes both.
+    # the versions its metadata TSV flags uncorrected_OCR. Two further
+    # text_nature labels are deliberately NON-excluding: "corrected-ocr"
+    # (OCR the upstream states it corrected — madurai, eltec-srp, per
+    # document where the header says so) and "ocr-origin" (OCR origin
+    # declared, correction unstated — peshitta, madurai's one such file):
+    # both ride through --exclude-ocr. Other OCR-derived text carries no
+    # label at all, so --exclude-source SLUG,... is the explicit
+    # complement, and the manifest echoes both.
     #
     # Memory is the reservoirs (k urns per cell, text fetched only for the
     # winners); the scan is one keyset pass over the scoped passages.
@@ -82,7 +85,8 @@ module Nabu
       STRATA = %w[language century script source].freeze
       # const: the documented default cell quota (class note), not a corpus claim
       DEFAULT_PER_CELL = 100
-      # The text_nature labels that declare OCR (class note).
+      # The text_nature labels --exclude-ocr drops (class note); corrected-ocr
+      # and ocr-origin are the labels it keeps.
       OCR_NATURES = %w[machine-ocr uncorrected-ocr].freeze
       # const: keyset page — one batched axis read per page, well under SQLite's variable cap
       PAGE_SIZE = 1_000

@@ -2628,8 +2628,11 @@ one `ExportCLI` command, against the contract stated in `lib/nabu/export.rb`
   row carries cell population, sampled count and the inverse-inclusion
   weight. `--exclude-ocr` reads the one machine-readable OCR marker the
   catalog carries — document metadata `text_nature` machine-ocr /
-  uncorrected-ocr, stamped only by the scan-shelf adapters — and
-  `--exclude-source` covers OCR-derived sources that carry no flag.
+  uncorrected-ocr, stamped by the scan-shelf adapters and openiti; the
+  non-excluding labels corrected-ocr (madurai, eltec-srp: upstream states
+  the correction) and ocr-origin (peshitta: OCR origin, correction
+  unstated) ride through — and `--exclude-source` covers OCR-derived
+  sources that carry no flag.
 
 Streaming is keyset paging (urn for documents, id for links) with one
 batched read per page per concern, so memory is constant at library scale;

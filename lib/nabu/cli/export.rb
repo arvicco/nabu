@@ -114,9 +114,10 @@ module Nabu
       weight (population / sampled) to restore population estimates. The
       draw ranks passages by sha256(seed:urn): the same --seed over the same
       library draws the same urns. --exclude-ocr drops documents flagged as
-      OCR text (metadata text_nature machine-ocr / uncorrected-ocr — the only
-      machine-readable OCR flag the catalog carries); --exclude-source drops
-      any further sources you know to be OCR-derived. Rows: urn,
+      OCR text (metadata text_nature machine-ocr / uncorrected-ocr) and KEEPS
+      the corrected-ocr / ocr-origin labels (OCR corrected upstream, or of
+      unstated correction); --exclude-source drops any further sources you
+      know to be OCR-derived. Rows: urn,
       document_urn, source, language, century, script, stratum,
       cell_population, cell_sampled, weight, license_class, text.
 

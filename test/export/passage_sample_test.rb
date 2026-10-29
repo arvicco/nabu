@@ -124,6 +124,18 @@ module Export
       assert_equal %w[alpha scan], rows.map { |row| row["source"] }.uniq
     end
 
+    def test_exclude_ocr_keeps_corrected_and_ocr_origin_text
+      document(@alpha, "urn:a:corr", language: "lat", text: LATIN, passages: 2,
+                                     metadata: { "text_nature" => "corrected-ocr" })
+      document(@alpha, "urn:a:orig", language: "lat", text: LATIN, passages: 1,
+                                     metadata: { "text_nature" => "ocr-origin" })
+      document(@scan, "urn:s:raw", language: "lat", text: LATIN, passages: 1,
+                                   metadata: { "text_nature" => "machine-ocr" })
+      table, rows, = sample(strata: %w[source], exclude_ocr: true)
+      assert_equal %w[urn:a:corr urn:a:orig], rows.map { |row| row["document_urn"] }.uniq.sort
+      assert_equal 1, table.notes.fetch("ocr_documents_excluded")
+    end
+
     def test_refusals_name_the_fix
       error = assert_raises(Nabu::Export::Error) { Nabu::Export::PassageSample.new(catalog: @catalog, strata: %w[era]) }
       assert_match(/unknown stratum "era".*language, century, script, source/, error.message)
