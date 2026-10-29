@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 require "test_helper"
+require "tmpdir"
+require "fileutils"
 
 module Query
   # Nabu::Query::Senses (`nabu sense TERM`): passages — and the tokens in
@@ -155,6 +157,59 @@ module Query
     def only(items)
       assert_equal 1, items.size, items.inspect
       items.first
+    end
+  end
+
+  # The UD Sanskrit-Vedic treebank's WordSem tokens resolve in the SAME
+  # dcs-senses shelf — the declared inference (facet_map.yml's ud
+  # token_fields line; Query::Senses class note). Real fixtures end to end:
+  # the head-50 Vedic sample through the UD adapter, the dcs-senses shelf
+  # through the DCS lookup lane, the pairs under the SHIPPED facet map.
+  # The fixture token indrāya cites WordSem=42973, held as "Indra".
+  class SensesVedicTest < Minitest::Test
+    include StoreTestDB
+
+    UD_FIXTURES = Nabu::TestSupport.fixtures("ud")
+    DCS_FIXTURES = Nabu::TestSupport.fixtures("dcs")
+
+    def setup
+      @catalog = class_template_db do |db|
+        Dir.mktmpdir("nabu-ud-vedic") do |dir|
+          FileUtils.cp_r(File.join(UD_FIXTURES, "sanskrit-vedic"), dir)
+          ud = Nabu::Store::Source.create(slug: "ud", name: "UD", adapter_class: "Nabu::Adapters::UniversalDependencies",
+                                          license_class: "nc")
+          Nabu::Store::Loader.new(db: db, source: ud, ledger: nil)
+                             .load_from(Nabu::Adapters::UniversalDependencies.new, workdir: dir)
+        end
+        dcs = Nabu::Store::Source.create(slug: "dcs", name: "DCS", adapter_class: "Nabu::Adapters::Dcs",
+                                         license_class: "attribution")
+        Nabu::Store::DictionaryLoader.new(db: db, source: dcs)
+                                     .load_from(Nabu::Adapters::DcsLexiconLane.new, workdir: DCS_FIXTURES)
+        Nabu::Store::PassageFacetBuilder.rebuild!(catalog: db, facet_map: SensesTest.facet_map)
+      end
+    end
+
+    def senses = Nabu::Query::Senses.new(catalog: @catalog, facet_map: SensesTest.facet_map)
+
+    def test_the_shipped_map_links_ud_wordsem_to_the_dcs_bank
+      rule = SensesTest.facet_map.token_fields_for("ud").fetch("WordSem")
+      assert_equal %w[sense dcs-senses], [rule.facet, rule.shelf]
+    end
+
+    def test_a_vedic_token_sense_resolves_in_the_dcs_shelf
+      result = senses.run("Indra")
+      indra = result.senses.first
+      assert_equal %w[42973 Indra dcs-senses], [indra.id, indra.headword, indra.shelf]
+      assert_equal "urn:nabu:dict:dcs-senses:42973", indra.urn
+      assert_equal 1, result.passage_total
+      hit = result.hits.first
+      assert_equal "ud", hit.source
+      assert_equal([%w[indrāya indra 42973]], hit.tokens.map { |token| [token.form, token.lemma, *token.ids] })
+    end
+
+    def test_census_counts_the_vedic_senses_under_ud
+      assert_equal %w[ud], senses.census.map(&:source)
+      assert_equal 15, senses.census.first.senses, "the head-50 sample cites 15 distinct ids"
     end
   end
 end
