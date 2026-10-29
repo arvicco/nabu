@@ -69,8 +69,9 @@ module Nabu
     # BOOKS table: hbo throughout, except the Mesha Stele, which is Moabite
     # (obm — no nabu-lects anchor yet; the lect posture is pending on it).
     # The Deir ʿAlla text's language is CONTESTED (Aramaic, Canaanite, or
-    # a dialect of its own) — upstream's Hebrew claim rides as hbo until
-    # that classification is ruled. Pirqe Avot and Shirata are Rabbinic
+    # a dialect of its own) — it rides the registry's qda local-use
+    # anchor, which carries the dispute without settling it; upstream's
+    # Hebrew processing claim stays as metadata. Pirqe Avot and Shirata are Rabbinic
     # Hebrew (the heb:rab stage exists; its rule waits with the pending
     # package); 1QS/1QM/1QHa stay bare hbo (the dss precedent).
     #
@@ -150,10 +151,12 @@ module Nabu
         "Arad" => { slug: "arad", title: "Arad ostraca", language: "hbo",
                     place: { "ancient" => "Tel Arad", "pleiades" => "87764825" } },
         "Balaam" => { slug: "balaam", title: "The Deir ʿAlla plaster text (the Balaam inscription)",
-                      language: "hbo", place: { "ancient" => "Tell Deir ʿAlla" },
+                      language: "qda", place: { "ancient" => "Tell Deir ʿAlla" },
                       language_basis: "CONTESTED: the Deir ʿAlla dialect is read as Aramaic, as " \
-                                      "Canaanite, or as a Transjordanian dialect of its own; the ETCBC " \
-                                      "encodes it in its Hebrew morphology and that claim rides" },
+                                      "Canaanite, or as a Transjordanian dialect of its own — the " \
+                                      "registry's qda local-use anchor carries the dispute; the ETCBC " \
+                                      "encodes the text in its Hebrew morphology and that claim rides " \
+                                      "as metadata" },
         "Ketef_Hinnom" => { slug: "ketef-hinnom", title: "Ketef Hinnom silver amulets", language: "hbo",
                             place: { "ancient" => "Ketef Hinnom", "pleiades" => "252614720" } },
         "Lachish" => { slug: "lachish", title: "Lachish letters", language: "hbo",

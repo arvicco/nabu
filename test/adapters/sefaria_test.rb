@@ -658,6 +658,31 @@ class SefariaTest < Minitest::Test
     end
   end
 
+  # P150: the connection-graph shards ride the SAME fetch (the index's
+  # special_files); the aggregate links_by_book* files and the rest of the
+  # special list stay in the bucket, and discovery never reads links/.
+  def test_fetch_lands_the_link_shards_beside_the_shelf
+    Dir.mktmpdir do |workdir|
+      base = "https://bucket.example.org/sefaria-export"
+      specials = %w[links/links0.csv links/links_by_book.csv table_of_contents.json].map do |path|
+        { "path" => path, "url" => "#{base}/#{path}", "size" => 1 }
+      end
+      index = JSON.generate("base_url" => base, "special_files" => specials, "books" => [])
+      stub_request(:get, "https://index.example.org/books.json").to_return(status: 200, body: index)
+      shard = File.read(File.join(FIXTURES, "links", "links14.csv"))
+      stub_request(:get, "#{base}/links/links0.csv").to_return(status: 200, body: shard)
+
+      adapter = conformance_adapter
+      adapter.define_singleton_method(:index_url) { "https://index.example.org/books.json" }
+      adapter.fetch(workdir)
+
+      assert_equal shard, File.read(File.join(workdir, "links", "links0.csv"))
+      assert_not_requested :get, "#{base}/links/links_by_book.csv"
+      assert_not_requested :get, "#{base}/table_of_contents.json"
+      assert_empty adapter.discover(workdir).to_a, "the links shards are never documents"
+    end
+  end
+
   def test_fetch_failure_wraps_as_fetch_error
     Dir.mktmpdir do |workdir|
       stub_request(:get, "https://index.example.org/books.json").to_return(status: 500)

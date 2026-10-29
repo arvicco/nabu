@@ -3,9 +3,9 @@
 as_of: 29 October 2026
 classes:
 - head: literary
-  documents: 701286
-  documents_display: '701,286'
-  sources: 30
+  documents: 701306
+  documents_display: '701,306'
+  sources: 31
 - head: administrative
   documents: 489119
   documents_display: '489,119'
@@ -19,9 +19,9 @@ classes:
   documents_display: '114,916'
   sources: 11
 - head: legal
-  documents: 40165
-  documents_display: '40,165'
-  sources: 22
+  documents: 40581
+  documents_display: '40,581'
+  sources: 23
 - head: letter
   documents: 34760
   documents_display: '34,760'
@@ -31,9 +31,9 @@ classes:
   documents_display: '30,135'
   sources: 5
 - head: scripture
-  documents: 23298
-  documents_display: '23,298'
-  sources: 25
+  documents: 23837
+  documents_display: '23,837'
+  sources: 26
 - head: dedicatory
   documents: 22922
   documents_display: '22,922'
@@ -43,13 +43,13 @@ classes:
   documents_display: '21,062'
   sources: 14
 - head: lexical
-  documents: 16739
-  documents_display: '16,739'
-  sources: 14
+  documents: 17435
+  documents_display: '17,435'
+  sources: 15
 - head: ritual
-  documents: 14069
-  documents_display: '14,069'
-  sources: 8
+  documents: 14157
+  documents_display: '14,157'
+  sources: 9
 - head: scholarly
   documents: 13315
   documents_display: '13,315'
@@ -91,13 +91,13 @@ classes:
   documents_display: '2,322'
   sources: 3
 - head: exegesis
-  documents: 1267
-  documents_display: '1,267'
-  sources: 9
-unclassified_sources: 130
+  documents: 2194
+  documents_display: '2,194'
+  sources: 10
+unclassified_sources: 129
 unknown_documents: 47058
 unknown_documents_display: '47,058'
-unmapped_documents: 11441
-unmapped_documents_display: '11,441'
-unclassified_documents: 490679
-unclassified_documents_display: '490,679'
+unmapped_documents: 11442
+unmapped_documents_display: '11,442'
+unclassified_documents: 488766
+unclassified_documents_display: '488,766'

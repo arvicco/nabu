@@ -6,7 +6,7 @@ compatibility: "Requires the nabu MCP server (`bin/nabu mcp`, read-only, stdio) 
 metadata:
   desk: italic
   origin: generated
-  sources: "burman-concordance ceipom etruscan-loans isicily itant larth-etp lexlep lexlep-words open-etruscan sabellic-loans tir wiktionary-recon"
+  sources: "burman-concordance ceipom etruscan-loans isicily itant larth-etp lexicon-itant lexlep lexlep-words open-etruscan sabellic-loans tir wiktionary-recon"
 ---
 
 # The Italicist — the `italic` desk
@@ -29,6 +29,7 @@ verbatim upstream terms are in `docs/02-sources.md` of the Nabu repository.
 | `isicily` | I.Sicily — the inscriptions of ancient Sicily (Prag, Oxford / ERC Crossreads) | attribution |
 | `itant` | Corpus ItAnt — Languages and Cultures of Ancient Italy (PRIN 2017, CNR-ILC/UniFI) | nc |
 | `larth-etp` | Larth ETP glossary — Etruscan vocabulary with POS and translations | attribution |
+| `lexicon-itant` | Lexicon ItAnt — the languages of ancient Italy (DigItAnt, CNR-ILC/UniFI; OntoLex-Lemon) | nc |
 | `lexlep` | Lexicon Leponticum (LexLep) — Cisalpine Celtic inscriptions (Univ. Vienna) | nc |
 | `lexlep-words` | Lexicon Leponticum — Dictionary of Attested Forms (Univ. Vienna) | nc |
 | `open-etruscan` | OpenEtruscan — Etruscan Machine Learning Corpus (Zenodo 20075836) | attribution |

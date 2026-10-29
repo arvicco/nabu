@@ -34,7 +34,7 @@ A source wears every desk it serves — these sixteen answer this desk. Holdings
 | `ud` | treebank | nc | wired · manual | 83 docs / 329,980 passages |
 | `vulgate` | texts | open | wired · manual | 73 docs / 35,809 passages |
 
-**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 29 October 2026)</span>: `hbo` 30,728 · `gez` 3,803 · `eng` 1,132 · `syc` 697 · `cop` 505 · `arc` 364 · `lat` 84 · `grc` 36 · `amh` 22 · `orv` 9 … and 21 more (`nabu axis biblical` lists all).
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 29 October 2026)</span>: `hbo` 30,727 · `gez` 3,803 · `eng` 1,132 · `syc` 697 · `cop` 505 · `arc` 364 · `lat` 84 · `grc` 36 · `amh` 22 · `orv` 9 … and 22 more (`nabu axis biblical` lists all).
 
 ## The desk's instruments
 

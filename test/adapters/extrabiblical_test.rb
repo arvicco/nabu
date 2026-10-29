@@ -161,6 +161,11 @@ module Adapters
         assert_equal "hbo", document.language
         assert_nil document.metadata["language_basis"], "upstream's Hebrew claim stands as-is"
       end
+      # Balaam is not in the fixture slice (3 books); the table row is
+      # asserted directly and the gate's live re-parse proves the parse.
+      balaam_row = Nabu::Adapters::Extrabiblical::BOOKS.fetch("Balaam")
+      assert_equal "qda", balaam_row[:language], "the Deir ʿAlla anchor carries the contested dialect"
+      assert_match(/contested/i, balaam_row[:language_basis])
     end
 
     def test_a_non_hebrew_language_value_is_a_parse_error_never_a_guess

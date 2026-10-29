@@ -601,9 +601,10 @@ sources:
     # stage, 2026-10-27), so the Mesha Stele's obm resolves to its anchor directly,
     # and the extrabiblical-book rule in config/lect_facet_rules.yml stages the six
     # Iron Age inscriptional books hbo:epi and the two rabbinic works heb:rab.
-    # Deliberately bare there: the Deir ʿAlla text (Balaam) rides upstream's hbo
-    # claim — its language is CONTESTED (Aramaic / Canaanite / a dialect of its
-    # own) and waits on its own registry node; the three Qumran scrolls stay bare
+    # The Deir ʿAlla text (Balaam) rides the qda local-use anchor (registry
+    # package merged 2026-10-29) — the Aramaic/Canaanite/own-dialect dispute
+    # lives in the anchor's note, deliberately unsettled; upstream's Hebrew
+    # processing claim stays as metadata. The three Qumran scrolls stay bare
     # hbo by the dss precedent.
     dating: {posture: dated, note: "the asset carries no date field; each of the 13 books
         bands through its attributed era in config/work_eras.yml (handbook consensus,
@@ -1502,6 +1503,19 @@ sources:
         coarse — the print's place, not the author's; <set> (the fictional setting) is
         never a place claim"}
     script: {posture: implied}
+  lzh-collection:
+    # kind machine-postured — kind_map.yml source_kind literary/poetry (the
+    # adapter's scope is the twenty poetry-collection files only).
+    lect: {posture: codemap, note: lzh → zho/lit (the kanripo precedent — Ming–Qing
+        literary Chinese verse)}
+    dating: {posture: pending, note: "no date field ships; candidate: the poet's own era
+        through config/work_eras.yml keyed on metadata work (19 Ming–Qing poets, each a
+        well-dated literatus — 王九思 1468–1551 … 吳汝綸 1840–1903), composition class via
+        MetadataDates :work_era — awaiting the cited per-poet rows; 甌北集's juan headings
+        carry sexagenary year ranges (起丙寅至戊辰) without a reign anchor, never minted"}
+    places: {posture: unplaced}
+    script: {posture: implied, note: "Han script implied by lzh; the CJK compatibility
+        ideographs fold to their unified forms at NFC"}
   elektire:   # P117-2
     # kind machine-postured since 2026-10-18 — the genre fold in
     # kind_map.yml (the portal's 23 knjizevna_vrsta term slugs onto
@@ -1533,6 +1547,17 @@ sources:
         Unbound Bible text) — nothing to mine"}
     script: {posture: qualified, note: "Latin TRANSLITERATION of the Cyrillic original
         (Rs1Bible = Unbound Bible's 'Danicic Karadzic Latin'); ijekavian spelling kept"}
+  jaschke-1881:   # P150-A
+    # kind: machine-postured — kind_map.yml source_kind lexical (a dictionary).
+    lect: {posture: identity, note: "the reference-shelf posture (africa-pd, slavistics-pd): eng,
+        the language of the dictionary's prose — a bilingual dictionary ABOUT Tibetan, never a
+        Tibetan lect claim; the object language rides metadata object_language xct (Classical
+        Tibetan, a real anchor), its 'prevailing dialects' coverage declared coarse"}
+    dating: {posture: dated, note: "the 1881 London edition year on every page — :structured lane"}
+    places: {posture: unplaced, note: "the imprint (London) rides metadata 'imprint' — the
+        printing place, not a text place"}
+    script: {posture: implied, note: "scan pages, no text layer taken (text_layer none): Latin-script
+        English with Tibetan-script headwords, each also given in Jäschke's romanisation"}
   slavistics-pd:
     # kind: machine-postured — kind_map.yml source_kind scholarly (the
     # whole source IS scholarship; per-work genre rides the genre facet).

@@ -63,9 +63,10 @@ module Nabu
     # and returns truthy for in-scope versions; +guard+, when given, receives
     # the absolute live-tree paths this sync would delete — BEFORE any tree
     # mutation — and may raise (Nabu::SyncAborted) to abort.
-    def self.sync!(index_url:, dir:, attic_dir:, select:, http: default_http, progress: nil, guard: nil)
+    def self.sync!(index_url:, dir:, attic_dir:, select:, select_special: nil, http: default_http,
+                   progress: nil, guard: nil)
       fetch = new(index_url: index_url, dir: dir, attic_dir: attic_dir,
-                  select: select, http: http, progress: progress)
+                  select: select, select_special: select_special, http: http, progress: progress)
       fetch.prepare!
       guard&.call(fetch.doomed_paths)
       fetch.complete!
@@ -73,11 +74,13 @@ module Nabu
                  not_modified: fetch.not_modified?, downloaded: fetch.downloaded)
     end
 
-    def initialize(index_url:, dir:, attic_dir:, select:, http: self.class.default_http, progress: nil)
+    def initialize(index_url:, dir:, attic_dir:, select:, select_special: nil, http: self.class.default_http,
+                   progress: nil)
       @index_url = index_url
       @dir = dir
       @attic_dir = attic_dir
       @select = select
+      @select_special = select_special
       @http = http
       @progress = progress
       @selected = {}
@@ -106,7 +109,8 @@ module Nabu
       @index_body = response.body.to_s.b
       @index_last_modified = response.headers["last-modified"]
       @sha = Digest::SHA256.hexdigest(@index_body)
-      @selected = selected_relpaths(parse_index(@index_body))
+      index = parse_index(@index_body)
+      @selected = selected_relpaths(index).merge(selected_special_relpaths(index))
       @doomed_relpaths = live_relpaths - @selected.keys - [INDEX_FILE]
     end
 
@@ -148,6 +152,36 @@ module Nabu
         rel = relpath!(entry, base)
         map[rel] = "#{base}/#{rel}" # raw key; #encode makes the one wire form
       end
+    end
+
+    # The index's special_files list (P150: links/links*.csv — the
+    # connection graph — beside schemas/, table_of_contents.json …): each
+    # entry names its bucket-relative "path" and full "url". Only what the
+    # caller's +select_special+ picks is fetched (none without one), under
+    # the same contract as version files — pinned, atticked when it leaves
+    # the index, loud when its url strays outside base_url.
+    def selected_special_relpaths(index)
+      return {} unless @select_special
+
+      base = index["base_url"]
+      Array(index["special_files"]).each_with_object({}) do |entry, map|
+        next unless entry.is_a?(Hash) && @select_special.call(entry)
+
+        rel = special_relpath!(entry, base)
+        map[rel] = "#{base}/#{rel}"
+      end
+    end
+
+    def special_relpath!(entry, base)
+      rel, url = entry.values_at("path", "url")
+      unless rel.is_a?(String) && url == "#{base}/#{rel}"
+        raise Error, "#{@index_url}: special file #{rel.inspect} has url #{url.inspect} outside base_url #{base}"
+      end
+      if rel.empty? || rel.start_with?("/") || rel.split("/").include?("..")
+        raise Error, "#{@index_url}: unsafe special-file path #{rel.inspect}"
+      end
+
+      rel
     end
 
     # The raw bucket key (upstream's exact bytes — the on-disk relpath).

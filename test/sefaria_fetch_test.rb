@@ -269,4 +269,67 @@ class SefariaFetchTest < Minitest::Test
     stub_request(:get, INDEX_URL).to_return(status: 500)
     assert_raises(Nabu::SefariaFetch::Error) { sync! }
   end
+
+  # -- special files (the links graph rides the index's special_files list) --
+
+  LINKS_REL = "links/links0.csv"
+
+  def special(path) = { "path" => path, "url" => "#{BASE}/#{path}", "size" => 10 }
+
+  def stub_index_with_specials(entries, specials, last_modified: LAST_MODIFIED)
+    body = JSON.generate({ "generated_at" => "2026-10-02T06:06:29Z", "base_url" => BASE,
+                           "special_files" => specials, "books" => entries })
+    stub_request(:get, INDEX_URL)
+      .to_return(status: 200, body: body, headers: { "Last-Modified" => last_modified })
+  end
+
+  def sync_with_specials!(select_special:, guard: nil)
+    Nabu::SefariaFetch.sync!(index_url: INDEX_URL, dir: @dir, attic_dir: @attic,
+                             select: ->(e) { e["categories"].include?("Targum") },
+                             select_special: select_special, guard: guard)
+  end
+
+  def test_selected_special_files_land_at_their_bucket_path_and_are_pinned
+    specials = [special(LINKS_REL), special("links/links_by_book.csv"), special("table_of_contents.json")]
+    stub_index_with_specials([entry(OBADIAH_REL)], specials)
+    stub_file(OBADIAH_ENC, "obadiah-bytes")
+    stub_file("#{BASE}/#{LINKS_REL}", "links-bytes")
+
+    result = sync_with_specials!(select_special: ->(f) { f["path"].match?(%r{\Alinks/links\d+\.csv\z}) })
+    assert_equal "links-bytes", File.read(File.join(@dir, LINKS_REL))
+    assert_equal 2, result.downloaded
+    assert_not_requested :get, "#{BASE}/links/links_by_book.csv"
+    assert_not_requested :get, "#{BASE}/table_of_contents.json"
+    state = JSON.parse(File.read(File.join(@dir, Nabu::SefariaFetch::STATE_FILE)))
+    assert_equal Digest::SHA256.hexdigest("links-bytes"), state.dig("files", LINKS_REL, "sha256")
+  end
+
+  def test_without_a_special_selector_no_special_file_is_requested
+    stub_index_with_specials([entry(OBADIAH_REL)], [special(LINKS_REL)])
+    stub_file(OBADIAH_ENC, "obadiah-bytes")
+    sync!
+    assert_not_requested :get, "#{BASE}/#{LINKS_REL}"
+  end
+
+  def test_a_special_file_leaving_the_index_is_atticked_like_any_other
+    stub_index_with_specials([entry(OBADIAH_REL)], [special(LINKS_REL)])
+    stub_file(OBADIAH_ENC, "obadiah-bytes")
+    stub_file("#{BASE}/#{LINKS_REL}", "links-bytes")
+    selector = ->(f) { f["path"].start_with?("links/") }
+    sync_with_specials!(select_special: selector)
+
+    stub_index_with_specials([entry(OBADIAH_REL)], [], last_modified: "Mon, 02 Nov 2026 06:00:00 GMT")
+    stub_request(:get, OBADIAH_ENC).to_return(status: 304)
+    seen = nil
+    result = sync_with_specials!(select_special: selector, guard: ->(doomed) { seen = doomed })
+    assert_equal [File.join(@dir, LINKS_REL)], seen
+    assert_equal [LINKS_REL], result.atticked
+    assert_equal "links-bytes", File.read(File.join(@attic, LINKS_REL))
+  end
+
+  def test_a_selected_special_file_outside_the_bucket_base_raises
+    rogue = { "path" => LINKS_REL, "url" => "https://elsewhere.example.net/links0.csv" }
+    stub_index_with_specials([], [rogue])
+    assert_raises(Nabu::SefariaFetch::Error) { sync_with_specials!(select_special: ->(_f) { true }) }
+  end
 end

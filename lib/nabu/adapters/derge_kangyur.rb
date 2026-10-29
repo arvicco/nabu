@@ -51,9 +51,9 @@ module Nabu
       # citations in the listing prose (each dharani title the catalog
       # mentions), not text starts; scanning them minted phantom
       # documents, collided the gzungs urns with vol 088's real tantras,
-      # and appended the dkar chag's pages to the preceding text. The
-      # Tengyur's dkar chag (vol 213) carries NO markers and needs no
-      # entry here. Minting the dkar chag as a first-class document of
+      # and appended the dkar chag's pages to the preceding text. (The
+      # Tengyur's marker-less dkar chag, vol 213, is excluded the same
+      # way on DergeTengyur.) Minting the dkar chag as a first-class document of
       # its own is a future identity decision, not a scan artifact.
       def self.index_volume_numbers
         [103]

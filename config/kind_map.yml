@@ -792,6 +792,9 @@ sources:
   slavistics-pd:
     source_kind: scholarly   # the PD Slavistics reference shelf — grammars,
     #                          etymological dictionaries, Academy monographs
+  jaschke-1881:
+    source_kind: lexical     # P150-A: Jäschke's Tibetan-English dictionary — words about
+    #                          words, every page (front matter and corrections included)
   africa-pd:
     source_kind: scholarly   # P124-1: the PD African-languages reference shelf — grammars,
     #                          text editions, a reader, a proverb collection
@@ -862,7 +865,14 @@ sources:
     #   the singletons "Conte", "Poème", "Apologie" are the site's own labels on
     #   pieces it encodes as spoken scenes). The raw label rides metadata
     #   "genre" verbatim; no finer drama sub-kind exists in the house taxonomy
-  aozora:             # NDC codes ("NDC 913", children's "NDC K913", multi "NDC 913 914")
+  lzh-collection:            # census 2026-10-29: the 20 accepted files
+    source_kind: literary/poetry
+    #   (the loop's call, the whole-source shape): the adapter's scope is the
+    #   Ming–Qing 別集 — every accepted file is a poet's collected verse (詩集,
+    #   詩鈔, 詩選, 詩詞集; 甌北集 and 渼陂集 are verse throughout, the latter
+    #   opening with one 賦). The prefaces and the ci of the 詩詞集 ride inside
+    #   their collections; the Masters prose texts are skipped by rule
+  aozora:           # NDC codes ("NDC 913", children's "NDC K913", multi "NDC 913 914")
     metadata: ndc
     regex_map:
       '\bK?9\d1\b': literary/poetry              # 911 ×1,355 + K911 ×172 …

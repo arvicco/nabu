@@ -31,9 +31,12 @@ Theksum Choling's annotated faithful copy of the Derge Tengyur edition.
   NFD-by-convention, and Tibetan precomposed characters are
   composition-excluded, so `Normalize.nfc` deterministically decomposes it
   to U+0F71 U+0F74 — the NFC-determinism regression rides this line.
-- Volume 213 (dkar chag, the catalog) carries no markers at all upstream:
-  its text rides the last open document, exactly like any other unmarked
-  volume continuation.
+- Volume 213 (dkar chag, the catalog) carries no `{D}` markers at all
+  upstream (only `{archaic,modern}` pairs) and — alone among the volume
+  files — NO BOM. Unhandled, its text rode the last open document as an
+  unmarked continuation; the adapter declares it an INDEX volume (the
+  Kangyur vol 103 precedent): excluded from scanning, censused loud in
+  `discovery_skips` notes.
 
 ## Files (trims are 1-based inclusive line ranges of the upstream file)
 
@@ -44,6 +47,11 @@ Theksum Choling's annotated faithful copy of the Derge Tengyur edition.
 - `text/212_སྣ་ཚོགས།_པོ.txt` — lines 1–12, 1100–1106, 2012–2020,
   3800–3806. Covers: BOM, `{D4452}` (line 3 here), `{D4453}` (line 16),
   a suggestion pair (line 24), the `[པུཥྦཱུ]` error candidate (line 32).
+- `text/213_དཀར་ཆག.txt` — lines 1–12, 7405, 7961–7963 of the 7,963-line
+  original (retrieved from the pinned commit's tree, 2026-10-29). Covers:
+  the marker-less, BOM-less opening, a `{མངས,མང}` archaic pair (line 13
+  here), the volume's closing colophon lines. The rejected grain: it must
+  mint nothing and must not extend toh4453 into volume 213.
 
 Trimmed-corpus documents: toh1109, toh1110, toh1113 (spanning both volume
 files — the multi-volume ref rule), toh4452, toh4453.

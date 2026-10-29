@@ -373,6 +373,11 @@ sources:
       genre: genre            # the site's <genre> verbatim (Comédie 750 · Tragédie 334 ·
       #                         Proverbe 139 …, 80 labels); kind_map declares the whole
       #                         source literary/drama
+  lzh-collection:             # 20 poetry-collection files, 19 poets (census 2026-10-29)
+    fields:
+      author: author          # the poet — from the file name, or the adapter's table for
+      #                         甌北集 (趙翼) and 雙硯齋詩鈔 (鄧廷楨)
+      work: work              # the collection title (file stem less the batch prefix)
   # -- header-mined by the adapter (a re-parse lands the fields first)
   gretil:                     # 784 files
     fields:
@@ -653,6 +658,12 @@ sources:
     entry_fields:
       concept: concept        # the concept's English name, ref = its uuid (= the tls-concepts
       #                         entry id the word→concept crossref resolves to)
+  lexicon-itant:              # census 2026-10-29 (lexicon_1_0.ttl, 809 entries)
+    entry_fields:
+      pos: word_class         # lexinfo partOfSpeech local name: properNoun 311 · noun 204 ·
+      #                         verb 100 · adjective 78 · preposition 23 … (17 entries carry none)
+      semantic_field: semantic_field  # the Buck (1949) concepts lexicalizing the entry's senses:
+      #                         187 entries, 33 fields — Religion & Beliefs 33 · Social Relations 30 …
   wilkens-oui:                # the book's own tradition/script marks (Abkürzungen, PDF pp. 13–14),
     entry_fields:             # mapped by WilkensOui::MARK_FACETS; Buddhist terms go unmarked upstream
       tradition: tradition    # (m) manichäisch → Manichaean 611 · (c) christlich → Christian 119
