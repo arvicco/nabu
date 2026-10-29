@@ -15,7 +15,7 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 A source wears every desk it serves — these 30 answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
-| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 28 October 2026)</span> |
+| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 29 October 2026)</span> |
 |---|---|---|---|---|
 | `dacon` | texts | attribution | wired · manual | 4 docs / 977 passages |
 | `dcs` | treebank | attribution | wired · auto | 15,900 docs / 769,373 passages / 300,763 entries |
@@ -48,7 +48,7 @@ A source wears every desk it serves — these 30 answer this desk. Holdings are 
 | `wiktionary-ta` | dictionary | attribution | wired · manual | 13,855 entries |
 | `wiktionary-te` | dictionary | attribution | wired · manual | 23,325 entries |
 
-**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 28 October 2026)</span>: `san` 511,638 · `tel` 23,875 · `tam-Latn` 18,527 · `tam` 14,610 · `mal` 11,505 · `pli` 7,573 · `tel-Latn` 5,103 · `eng` 4,790 · `kan-Latn` 3,844 · `kan` 2,741 … and 55 more (`nabu axis indic` lists all).
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 29 October 2026)</span>: `san` 511,638 · `tel` 23,875 · `tam-Latn` 18,527 · `tam` 14,610 · `mal` 11,505 · `pli` 7,573 · `tel-Latn` 5,103 · `eng` 4,790 · `kan-Latn` 3,844 · `kan` 2,741 … and 55 more (`nabu axis indic` lists all).
 
 ## The desk's instruments
 
