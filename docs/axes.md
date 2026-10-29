@@ -235,7 +235,7 @@ Epigraphy-first, opening on the DHARMA corpora: the Old Khmer inscriptions (the 
 
 Literary and classical Chinese with its reconstruction instruments: Kanripo and CBETA, TLS, Baxter-Sagart and the Qieyun-system database, Unihan, the Heian hanzi dictionaries, the UD lzh treebanks, SuttaCentral's Agamas, the kaikki zh extract riding wiktionary-recon — since P78-5, the Đại Việt classical shelf (the sinographic cosmopolis reaching Vietnam, as sillok reaches Korea) — and, since P96, the desk's instruments: the CHGIS historical gazetteer (TGAZ placenames, 221 BCE–1911) and the CBDB prosopography artifact (~658k persons, held for the persons-layer ruling).
 
-**Members** (22): `babelstone-ids`, `baxter-sagart`, `cbdb`, `cbeta`, `chgis`, `classical-modern`, `hdic`, `kanripo`, `kr-gaiji`, `menggu-ziyun`, `obimd`, `qieyun-restored`, `shuowen`, `suttacentral`, `tls`, `tshet-uinh`, `ud`, `unihan`, `viet-wikisource`, `wiktionary-recon`, `zh-wikisource`, `zhongyuan`
+**Members** (23): `babelstone-ids`, `baxter-sagart`, `cbdb`, `cbeta`, `chgis`, `classical-modern`, `hdic`, `kanripo`, `kr-gaiji`, `lzh-collection`, `menggu-ziyun`, `obimd`, `qieyun-restored`, `shuowen`, `suttacentral`, `tls`, `tshet-uinh`, `ud`, `unihan`, `viet-wikisource`, `wiktionary-recon`, `zh-wikisource`, `zhongyuan`
 
 ### japonic
 

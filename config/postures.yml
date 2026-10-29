@@ -1503,6 +1503,19 @@ sources:
         coarse — the print's place, not the author's; <set> (the fictional setting) is
         never a place claim"}
     script: {posture: implied}
+  lzh-collection:
+    # kind machine-postured — kind_map.yml source_kind literary/poetry (the
+    # adapter's scope is the twenty poetry-collection files only).
+    lect: {posture: codemap, note: lzh → zho/lit (the kanripo precedent — Ming–Qing
+        literary Chinese verse)}
+    dating: {posture: pending, note: "no date field ships; candidate: the poet's own era
+        through config/work_eras.yml keyed on metadata work (19 Ming–Qing poets, each a
+        well-dated literatus — 王九思 1468–1551 … 吳汝綸 1840–1903), composition class via
+        MetadataDates :work_era — awaiting the cited per-poet rows; 甌北集's juan headings
+        carry sexagenary year ranges (起丙寅至戊辰) without a reign anchor, never minted"}
+    places: {posture: unplaced}
+    script: {posture: implied, note: "Han script implied by lzh; the CJK compatibility
+        ideographs fold to their unified forms at NFC"}
   elektire:   # P117-2
     # kind machine-postured since 2026-10-18 — the genre fold in
     # kind_map.yml (the portal's 23 knjizevna_vrsta term slugs onto
