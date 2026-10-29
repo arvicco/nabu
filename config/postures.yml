@@ -601,9 +601,10 @@ sources:
     # stage, 2026-10-27), so the Mesha Stele's obm resolves to its anchor directly,
     # and the extrabiblical-book rule in config/lect_facet_rules.yml stages the six
     # Iron Age inscriptional books hbo:epi and the two rabbinic works heb:rab.
-    # Deliberately bare there: the Deir ʿAlla text (Balaam) rides upstream's hbo
-    # claim — its language is CONTESTED (Aramaic / Canaanite / a dialect of its
-    # own) and waits on its own registry node; the three Qumran scrolls stay bare
+    # The Deir ʿAlla text (Balaam) rides the qda local-use anchor (registry
+    # package merged 2026-10-29) — the Aramaic/Canaanite/own-dialect dispute
+    # lives in the anchor's note, deliberately unsettled; upstream's Hebrew
+    # processing claim stays as metadata. The three Qumran scrolls stay bare
     # hbo by the dss precedent.
     dating: {posture: dated, note: "the asset carries no date field; each of the 13 books
         bands through its attributed era in config/work_eras.yml (handbook consensus,
