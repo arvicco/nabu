@@ -117,7 +117,11 @@ module Nabu
       OCR text (metadata text_nature machine-ocr / uncorrected-ocr) and KEEPS
       the corrected-ocr / ocr-origin labels (OCR corrected upstream, or of
       unstated correction); --exclude-source drops any further sources you
-      know to be OCR-derived. Rows: urn,
+      know to be OCR-derived. --exclude-unproofread drops Wikisource text at
+      ProofreadPage level 1 ("Not proofread"): a document whose lowest
+      transcluded page level is 1 drops whole, a per-page source
+      (ban-wikisource) drops just its level-1 pages; text with no
+      ProofreadPage data is untouched. Rows: urn,
       document_urn, source, language, century, script, stratum,
       cell_population, cell_sampled, weight, license_class, text.
 
@@ -128,6 +132,7 @@ module Nabu
         nabu export --format jsonl --lang chu | jq '.annotations' | head
         nabu export passages --stratum language,century,script --format csv
         nabu export passages --stratum language,century --per-cell 50 --exclude-ocr --seed 7 --format jsonl
+        nabu export passages --stratum source --exclude-unproofread --format csv
         nabu export passages --stratum language --proportional 5000 --license-class open,attribution --format csv
 
       Use cases: feed a corpus slice to external NLP tooling; a license-clean
@@ -154,6 +159,8 @@ module Nabu
                           desc: "With --stratum: TOTAL passages split across cells by population share"
     option :seed, type: :numeric, banner: "N", desc: "With --stratum: the draw's seed (default 0)"
     option :exclude_ocr, type: :boolean, desc: "With --stratum: drop documents flagged as OCR text"
+    option :exclude_unproofread, type: :boolean,
+                                 desc: "With --stratum: drop Wikisource text at ProofreadPage level 1 (not proofread)"
     option :exclude_source, type: :string, banner: "SLUG[,SLUG...]", desc: "With --stratum: drop these sources"
     option :out, type: :string, banner: "DIR", desc: "With --stratum: output directory (default: exports/)"
     option :license_class, type: :string, banner: "CLASS[,CLASS...]",
@@ -389,7 +396,8 @@ module Nabu
     end
 
     # The stream's flags that only mean something with --stratum.
-    STRATUM_ONLY = %i[per_cell proportional seed exclude_ocr exclude_source out license_class].freeze
+    STRATUM_ONLY = %i[per_cell proportional seed exclude_ocr exclude_unproofread exclude_source out
+                      license_class].freeze
     private_constant :STRATUM_ONLY
 
     private
@@ -404,7 +412,7 @@ module Nabu
             catalog: catalog, strata: list(options[:stratum]), per_cell: options[:per_cell],
             proportional: options[:proportional], seed: options[:seed] || 0, sources: list(options[:source]),
             langs: list(options[:lang]), exclude_sources: list(options[:exclude_source]),
-            exclude_ocr: options[:exclude_ocr] || false
+            exclude_ocr: options[:exclude_ocr] || false, exclude_unproofread: options[:exclude_unproofread] || false
           )
           report(writer.write(table))
         end

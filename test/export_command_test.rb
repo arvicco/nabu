@@ -148,6 +148,15 @@ class ExportCommandTest < Minitest::Test
       assert_equal(%w[1 1], table.map { |row| row["cell_sampled"] })
       manifest = YAML.safe_load_file(File.join(config.exports_dir, "passage_sample.manifest.yml"))
       assert_equal 0, manifest.dig("notes", "ocr_documents_excluded")
+      argv = %w[export passages --stratum language --format csv --exclude-unproofread]
+      _out, err, status = with_config(config) { run_cli(argv) }
+      assert_nil status, err
+      manifest = YAML.safe_load_file(File.join(config.exports_dir, "passage_sample.manifest.yml"))
+      assert manifest.dig("filters", "exclude_unproofread")
+      assert_equal 0, manifest.dig("notes", "unproofread_documents_excluded")
+      _out, err, status = with_config(config) { run_cli(%w[export passages --format plain --exclude-unproofread]) }
+      assert_equal 1, status
+      assert_match(/--exclude-unproofread needs --stratum/, err)
       _out, err, status = with_config(config) { run_cli(%w[export passages --format plain --per-cell 3]) }
       assert_equal 1, status
       assert_match(/--per-cell needs --stratum/, err)
@@ -167,6 +176,7 @@ class ExportCommandTest < Minitest::Test
     out, _err, _status = run_cli(%w[export passages --help])
     assert_match(/--stratum language,century,script/, out)
     assert_match(/--exclude-ocr/, out)
+    assert_match(/--exclude-unproofread/, out)
   end
 
   private
