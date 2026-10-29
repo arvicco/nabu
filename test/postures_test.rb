@@ -179,7 +179,7 @@ class PosturesTest < Minitest::Test
   def test_the_lect_migration_kept_the_p59_4_census
     lect = postures.declarations.select { |d| d.layer == "lect" }
     by_posture = lect.group_by(&:posture).transform_values(&:size)
-    assert_equal 162, lect.size,
+    assert_equal 163, lect.size,
                  "the P59-4 declarations survive the move (61 at migration; itant retired P61-3," \
                  "oracc retired P62-2, etcsl/ccmh/freising/coptic-scriptorium retired P64-6, " \
                  "titus-avestan retired P66-1, osta+fornsvenska retired P77-r8, achemenet " \
