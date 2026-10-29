@@ -1534,6 +1534,17 @@ sources:
         Unbound Bible text) — nothing to mine"}
     script: {posture: qualified, note: "Latin TRANSLITERATION of the Cyrillic original
         (Rs1Bible = Unbound Bible's 'Danicic Karadzic Latin'); ijekavian spelling kept"}
+  jaschke-1881:   # P150-A
+    # kind: machine-postured — kind_map.yml source_kind lexical (a dictionary).
+    lect: {posture: identity, note: "the reference-shelf posture (africa-pd, slavistics-pd): eng,
+        the language of the dictionary's prose — a bilingual dictionary ABOUT Tibetan, never a
+        Tibetan lect claim; the object language rides metadata object_language xct (Classical
+        Tibetan, a real anchor), its 'prevailing dialects' coverage declared coarse"}
+    dating: {posture: dated, note: "the 1881 London edition year on every page — :structured lane"}
+    places: {posture: unplaced, note: "the imprint (London) rides metadata 'imprint' — the
+        printing place, not a text place"}
+    script: {posture: implied, note: "scan pages, no text layer taken (text_layer none): Latin-script
+        English with Tibetan-script headwords, each also given in Jäschke's romanisation"}
   slavistics-pd:
     # kind: machine-postured — kind_map.yml source_kind scholarly (the
     # whole source IS scholarship; per-work genre rides the genre facet).

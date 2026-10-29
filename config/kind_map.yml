@@ -792,6 +792,9 @@ sources:
   slavistics-pd:
     source_kind: scholarly   # the PD Slavistics reference shelf — grammars,
     #                          etymological dictionaries, Academy monographs
+  jaschke-1881:
+    source_kind: lexical     # P150-A: Jäschke's Tibetan-English dictionary — words about
+    #                          words, every page (front matter and corrections included)
   africa-pd:
     source_kind: scholarly   # P124-1: the PD African-languages reference shelf — grammars,
     #                          text editions, a reader, a proverb collection

@@ -21,7 +21,7 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 ## The shelves
 
-A source wears every desk it serves — these thirteen answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
+A source wears every desk it serves — these fourteen answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
 | Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 29 October 2026)</span> |
 |---|---|---|---|---|
@@ -29,6 +29,7 @@ A source wears every desk it serves — these thirteen answer this desk. Holding
 | `derge-kangyur` | texts | open | wired · manual | 1,198 docs / 458,972 passages |
 | `derge-tengyur` | texts | open | wired · manual | 3,362 docs / 897,142 passages |
 | `e84000` | texts | nc | wired · manual | 388 docs / 124,223 passages / 56,794 entries |
+| `jaschke-1881` | texts | open | not yet wired | not synced yet |
 | `lotsawa-house` | texts | nc | wired · manual | 6,388 docs / 413,067 passages |
 | `monlam-lexicon` | dictionary | attribution | wired · manual | 449,829 entries |
 | `mvp` | dictionary | open | wired · manual | 9,379 entries |

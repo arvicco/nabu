@@ -2921,6 +2921,22 @@ ja-wikisource:   # P109-1
   # {{versions}} disambiguation pages skip by rule. Texts PD;
   # transcription layer CC BY-SA 4.0.
 
+jaschke-1881:   # P150-A, 02-sources row 314
+  adapter: Nabu::Adapters::Jaschke1881
+  adopted: "2026-10-29"
+  axes: [tibetan]
+  wired: false   # until the first real sync is verified
+  sync_policy: manual
+  # Jäschke's Tibetan-English Dictionary (London 1881) as the archive.org
+  # scan tibetanenglishdi00jsuoft (Robarts/Toronto copy, complete, marked
+  # NOT_IN_COPYRIGHT; Jäschke †1883). Two files pinned to files.xml sha1s:
+  # the PDF (80,960,908 bytes, 702 pages) and the page map. One
+  # metadata-only document per printed leaf (text_layer none — the ABBYY
+  # OCR is deliberately not taken); print p. N = leaf N+26. EXPECTED FIRST
+  # SYNC: 696 docs / 0 passages (front matter 24, dictionary pp. 1–608,
+  # vocabulary pp. 609–668, corrections pp. 669–671, colophon) + 6 binding
+  # leaves skipped by rule; ~81 MB download.
+
 jv-wikisource:   # P140, 02-sources row 285
   adapter: Nabu::Adapters::JvWikisource
   adopted: "2026-10-21"
