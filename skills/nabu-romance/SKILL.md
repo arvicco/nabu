@@ -6,7 +6,7 @@ compatibility: "Requires the nabu MCP server (`bin/nabu mcp`, read-only, stdio) 
 metadata:
   desk: romance
   origin: generated
-  sources: "aranese bdcamoes bfm bim-sahcoba cantigas corpus-corporum croala ctilc cv-sardinian derom digiliblt disco lo-congres meloniromance memis openmgh osta salom ud"
+  sources: "aranese bdcamoes bfm bim-sahcoba cantigas corpus-corporum croala ctilc cv-sardinian derom digiliblt disco lo-congres meloniromance memis openmgh osta salom theatre-classique ud"
 ---
 
 # The Romanist — the `romance` desk
@@ -41,6 +41,7 @@ verbatim upstream terms are in `docs/02-sources.md` of the Nabu repository.
 | `openmgh` | openMGH — Monumenta Germaniae Historica editions (MGH / BSB, digital MGH) | attribution |
 | `osta` | OSTA — Old Spanish Textual Archive (Hispanic Seminary of Medieval Studies) | nc |
 | `salom` | Şalom Ladino articles text corpus (Col·lectivaT / Sephardic Center of Istanbul) | attribution |
+| `theatre-classique` | Théâtre Classique — Paul Fièvre's TEI corpus of French plays | nc |
 | `ud` | Universal Dependencies — ancient treebanks | nc |
 <!-- nabu:skill-sources:end -->
 

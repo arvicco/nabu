@@ -1687,3 +1687,31 @@ research terms (the corpus owner's release permission, published in
 the INT catalogue 2026-10-23). The Germanic desk's twentieth member
 closes the continental West Germanic gap: Old Dutch, Old Saxon
 ancestry and now Old Frisian sit beside Old English and Old Norse.
+
+## 8av. The P148 arrivals — Neo-Assyrian persons, the French stage, Old Written Estonian
+
+Counts from the first syncs, 2026-10-28:
+
+**`pna`** — the Prosopography of the Neo-Assyrian Empire as a person
+authority (Jauhiainen & Alstola's network dataset, University of
+Helsinki, from Radner & Baker eds.): 17,387 persons under PNA's own
+disambiguated names, with name language, gender, reign era,
+profession, place and origin, and 25,164 person-text attestations —
+17,789 of them resolving to tablets the library holds (2,273 of the
+2,275 State Archives of Assyria texts), so `nabu person` walks from
+Assurbanipal to the letters that name him. CC BY-SA 3.0.
+
+**`theatre-classique`** — Paul Fièvre's Théâtre Classique: 1,939
+French plays in their printed editions, 1550s–1930s — Corneille,
+Molière, Racine and the whole repertoire around them, with front
+matter, cast lists and Gallica permalinks; 1,601,085 passages, every
+play dated (title-page year or the site's period band) and 889
+placed by imprint city. Fetched from DraCor's public mirror; held
+non-commercially per the files' own CC BY-NC-SA marks.
+
+**`vakk`** — Vana kirjakeele korpus, the Corpus of Old Written
+Estonian (University of Tartu): the completed crawl's full load,
+3,052 texts / 148,875 passages — sermons, court protocols, and the
+earliest Estonian print from 1524 onward. Reconciled exactly against
+upstream's own census. The Baltic desk's Estonian line now runs from
+the Reformation to the national awakening.

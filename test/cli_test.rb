@@ -3835,6 +3835,25 @@ class CLITest < Minitest::Test
     end
   end
 
+  # Thor passes an unknown flag through as a positional, so a typo like
+  # --fetch-onli (or --help after a slug) would otherwise fire the REAL
+  # slugs under the wrong options and merely count the flag as a failed
+  # source. Option-shaped slugs refuse loudly before anything syncs.
+  def test_sync_refuses_option_shaped_slugs_before_syncing
+    with_quickstart_env("alpha" => "QuickstartFetchAdapter") do |config|
+      with_starter_sources(%w[alpha]) do
+        _out, err, status = with_config(config) { run_cli(%w[sync alpha --fetch-onli]) }
+        assert_equal 1, status
+        assert_match(/not an option sync knows/, err)
+        assert_match(/--fetch-onli/, err)
+
+        _out2, err2, status2 = with_config(config) { run_cli(%w[sync alpha --help]) }
+        assert_equal 1, status2
+        assert_match(/nabu help sync/, err2)
+      end
+    end
+  end
+
   # P44-r3c: quickstart ENABLES its set (additively, stderr-announced)
   # before syncing — a fresh box's profile is written explicitly.
   def test_quickstart_enables_the_starter_set_additively

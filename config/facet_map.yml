@@ -367,6 +367,12 @@ sources:
       author: author          # 63 authors ("Атанацковић, Богобој")
       author_refs: author_id  # ["viaf:8970679", "wikidata:Q833421"], array
       title_refs: work_id     # 94 docs — Wikidata WORK ids ("wikidata:Q109336066")
+  theatre-classique:          # 1,940 plays (census on the mirror, 2026-10-28 — not yet synced)
+    fields:
+      author: author          # the first textual author ("MOLIERE, Jean-Baptiste Poquelin dit")
+      genre: genre            # the site's <genre> verbatim (Comédie 750 · Tragédie 334 ·
+      #                         Proverbe 139 …, 80 labels); kind_map declares the whole
+      #                         source literary/drama
   # -- header-mined by the adapter (a re-parse lands the fields first)
   gretil:                     # 784 files
     fields:

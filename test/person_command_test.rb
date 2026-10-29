@@ -123,6 +123,30 @@ class PersonCommandTest < Minitest::Test
     end
   end
 
+  # The PNA card: upstream's attributes on one line, then the person's
+  # texts — a held one with the document it resolved to, an unheld one as
+  # the bare citation (the real Ahu-ṭāba_1 / Hundāru rows,
+  # test/fixtures/pna).
+  def test_person_card_prints_attributes_and_texts
+    with_person_env do |config|
+      catalog = Nabu::Store.connect(config.catalog_path)
+      cdli = catalog[:sources].insert(slug: "cdli", name: "CDLI", adapter_class: "T", license_class: "open")
+      catalog[:documents].insert(source_id: cdli, urn: "urn:nabu:cdli:p335326", title: "ADD 0382",
+                                 content_sha256: "x", revision: 1, withdrawn: false)
+      Dir.mktmpdir do |workdir|
+        PnaFixtureZips.pack!(Nabu::TestSupport.fixtures("pna"), workdir)
+        Nabu::PnaPersons::Producer.new(catalog: catalog).run("pna", workdir: workdir)
+      end
+      catalog.disconnect
+      out, err, status = with_config(config) { run_cli(%w[person pna:Ahu-ṭāba_1]) }
+      assert_nil status, err
+      assert_match(/^Ahu-ṭāba  pna:Ahu-ṭāba_1$/, out)
+      assert_match(/  name language: Akkadian · gender: masc · era: 721-705 Sargon II \(721–705 BCE\) · /, out)
+      assert_match(/ · profession: Owners of property$/, out)
+      assert_match(/  texts: 2 \(1 held\) — ADD 382 → urn:nabu:cdli:p335326 · SAA 6 10$/, out)
+    end
+  end
+
   private
 
   def with_person_env

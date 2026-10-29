@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require "nokogiri"
+require "stringio"
 
 module Nabu
   module Adapters
@@ -62,7 +63,7 @@ module Nabu
     #
     # Nokogiri::XML::Reader over the entity-resolved string: the largest
     # document (Holm D 4) runs ~25 MB and the house DOM threshold is 5 MB.
-    class MenotaTeiParser
+    class MenotaTeiParser < StreamingTeiParser
       TEI_NS = "http://www.tei-c.org/ns/1.0"
       MENOTA_NS = "http://www.menota.org/ns/1.0"
 
@@ -109,7 +110,9 @@ module Nabu
       # nil) onto a license_override class or nil — the adapter owns the
       # policy, the parser the capture.
       def parse(path, urn:, entities:, language_fallback:, license_mapper: nil)
-        extraction = extract(path, entities)
+        # The Reader runs over the entity-resolved text, not the file, so
+        # it enters the skeleton's IO seam as an in-memory IO.
+        extraction = extract(StringIO.new(resolved_source(path, entities)), path: path)
         language = extraction.main_lang || extraction.lang_usage || language_fallback
         build_document(extraction, urn: urn, language: language, path: path,
                                    license_override: license_mapper&.call(extraction.metadata["license"]))
@@ -117,12 +120,7 @@ module Nabu
 
       private
 
-      def extract(path, entities)
-        source = resolved_source(path, entities)
-        Extraction.new(reader: Nokogiri::XML::Reader(source, path), path: path).call
-      rescue Nokogiri::XML::SyntaxError => e
-        raise ParseError, "#{path}: malformed XML: #{e.message}"
-      end
+      def extraction_class = Extraction
 
       # Strip the DOCTYPE — after honoring its INTERNAL SUBSET: local
       # <!ENTITY> declarations are upstream's own data (Codex Wormianus
@@ -235,12 +233,7 @@ module Nabu
       # The single-pass Reader state machine: a header phase captures
       # provenance, a body phase tracks pb/cb/lb milestones and assembles
       # multi-level tokens.
-      class Extraction
-        READER = Nokogiri::XML::Reader
-        TEXT_NODE_TYPES = [
-          READER::TYPE_TEXT, READER::TYPE_CDATA,
-          READER::TYPE_WHITESPACE, READER::TYPE_SIGNIFICANT_WHITESPACE
-        ].freeze
+      class Extraction < StreamingTeiParser::Walker
         TOKEN_ELEMENTS = %w[w pc punct].freeze
         MILESTONES = %w[pb cb lb].freeze
         # Subtrees suppressed from a BARE token's reading text (the
@@ -251,8 +244,7 @@ module Nabu
         # rides the token record under its own key instead. Level-bearing
         # tokens are untouched — the 83 loaded documents stay bit-stable.
         EXTRA_ELEMENTS = %w[note corr am].freeze
-        private_constant :READER, :TEXT_NODE_TYPES, :TOKEN_ELEMENTS, :MILESTONES,
-                         :EXTRA_ELEMENTS
+        private_constant :TOKEN_ELEMENTS, :MILESTONES, :EXTRA_ELEMENTS
 
         Result = Data.define(:lines, :title, :main_lang, :lang_usage, :metadata)
 
@@ -262,8 +254,7 @@ module Nabu
         AutoLine = Data.define(:seq)
 
         def initialize(reader:, path:)
-          @reader = reader
-          @path = path
+          super
           @seen_body = false
           @in_body = false
           @page = nil
@@ -299,14 +290,6 @@ module Nabu
         end
 
         private
-
-        def process(node)
-          case node.node_type
-          when READER::TYPE_ELEMENT then start_element(node)
-          when READER::TYPE_END_ELEMENT then end_element(node)
-          when *TEXT_NODE_TYPES then text_node(node)
-          end
-        end
 
         # -- dispatch ---------------------------------------------------------
 
@@ -818,18 +801,11 @@ module Nabu
           node.namespace_uri.nil? || node.namespace_uri == MenotaTeiParser::MENOTA_NS
         end
 
+        # The Walker's flatten plus NFC (header values reach metadata as-is).
         def flatten(value)
           return nil if value.nil?
 
           presence(Normalize.nfc(value.gsub(/[[:space:]]+/, " ").strip))
-        end
-
-        def presence(value)
-          value if value && !value.empty?
-        end
-
-        def local_name(node)
-          node.name.split(":").last
         end
       end
       private_constant :Extraction

@@ -65,6 +65,20 @@ module Query
       assert_raises(Nabu::Query::Person::Error) { person("cbdb:1762") }
     end
 
+    # PNA's ids are its disambiguated labels verbatim: apostrophes (the
+    # aleph), parenthesized variants, broken-name brackets, "or" readings.
+    def test_a_pna_label_ref_resolves_whatever_upstream_spelled
+      labels = ["'Idru_1", "Hundāru (Ahundāra)_2", "Ki[...]_2", "Ṣirānû or Ṣērānû_1"]
+      persons = labels.map do |label|
+        Nabu::Store::PersonIndex::Person.new(
+          authority: "pna", person_id: label, name: label.sub(/_\d+\z/, ""), name_han: nil, birth_year: nil,
+          death_year: nil, index_year: nil, dynasty: nil, dynasty_han: nil, female: false, name_keys: []
+        )
+      end
+      Nabu::Store::PersonIndex.derive!(@catalog, authority: "pna", persons: persons)
+      labels.each { |label| assert_equal [label], person("pna:#{label}").cards.map(&:person_id) }
+    end
+
     def test_the_value_list_is_capped_and_says_so
       (Nabu::Query::Person::MENTION_VALUES + 2).times { |i| doc_with(@oracc, { "author" => "Anonymous #{i}" }) }
       result = person("Anonymous")

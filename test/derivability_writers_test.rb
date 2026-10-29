@@ -185,8 +185,12 @@ class DerivabilityWritersTest < Minitest::Test
   # dprr writes its two SPARQL answers (persons.json, dates.json) and the
   # .dprr-fetch.json state pin into canonical/dprr/ inside Adapter#fetch —
   # the cbdb law kind (the fetched asset, verbatim).
+  # pna writes the Zenodo v3 record's three files (Networks.zip,
+  # SupplementaryData.zip, README.txt — sha256-pinned, verbatim) and the
+  # .pna-fetch.json state pin into canonical/pna/ inside Adapter#fetch —
+  # the same law kind.
   WRITER_ALLOWLIST = %w[
-    nabu/adapters/dprr.rb
+    nabu/adapters/dprr.rb nabu/adapters/pna.rb
     nabu/adapters/bfm.rb nabu/adapters/ctilc.rb nabu/adapters/etruscan_loans.rb nabu/adapters/ig_cyprus.rb
     nabu/adapters/kitab.rb nabu/adapters/oracc.rb
     nabu/adapters/riig.rb nabu/adapters/rundata.rb

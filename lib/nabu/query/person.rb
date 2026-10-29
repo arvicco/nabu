@@ -32,8 +32,11 @@ module Nabu
       # ("kokubunken:藤原定家" — any letter or digit, not only ASCII),
       # NIKH's per source ("sillok:M_0006771", "goryeosa:p094190") or
       # through the markup's shared namespace ("nikh:p094190" — every
-      # NIKH slice holding it).
-      REF_PATTERN = %r{\A([a-z][a-z0-9-]*):([\p{L}\p{N}][\p{L}\p{N}/._-]*)\z}
+      # NIKH slice holding it), PNA's disambiguated labels verbatim
+      # ("pna:'Idru_1", "pna:Hundāru (Ahundāra)_2", "pna:Ki[...]_2" — the
+      # aleph as ' or ’, variant parentheses, break brackets, spaces): past
+      # its first character an id runs to the end, colons excepted.
+      REF_PATTERN = /\A([a-z][a-z0-9-]*):([\p{L}\p{N}'’\[][^:]*)\z/
 
       # Census (held catalog, 2026-10-22) of the person-shaped document
       # facets, rows: author 168,926 (35,836 values, ~60 sources) · ruler

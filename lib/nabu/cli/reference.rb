@@ -149,14 +149,16 @@ module Nabu
       Latin inscription persons, one card per attestation — the ref names
       the inscription), the Elephantine ancient persons, the Aozora Bunko
       author/translator index (1,335 persons), the kokubunken waka-poet
-      personographies (266) and DPRR's Roman Republican elite (~4.9k,
-      from Broughton/Rüpke/Zmeskal). Input is an authority ref (cbdb:1762,
-      edh:HD000001/3, aozora:001257, kokubunken:紀貫之, dprr:1) or a name — hanzi,
+      personographies (266), DPRR's Roman Republican elite (~4.9k,
+      from Broughton/Rüpke/Zmeskal) and PNA's Neo-Assyrian persons (~17.4k,
+      each with its texts — the held ones resolved to their documents).
+      Input is an authority ref (cbdb:1762, edh:HD000001/3, aozora:001257,
+      kokubunken:紀貫之, dprr:1, pna:Bēl-ibni_18) or a name — hanzi,
       pinyin, courtesy/studio names, kana readings, romaji, a Roman name
       as inscribed or in the nominative all key through the shared fold;
       matching is exact under the fold, never fuzzy; homonyms print
       several cards (cbdb first, then edh, elephantine, aozora, kokubunken,
-      dprr, the NIKH authorities).
+      dprr, pna, the NIKH authorities).
 
       A name also lists its CATALOGUE MENTIONS: the person-shaped document
       facets (oracc/cdli ruler, ancient_author, recipient, eponym; the
@@ -463,6 +465,36 @@ module Nabu
         # links into other prosopographies (Trismegistos, VIAF, EDH's
         # romans1by1/Wikidata/PIR), verbatim.
         say "  refs: #{card.refs}" unless card.refs.to_s.strip.empty?
+        print_person_attributes(card.attributes)
+        print_person_texts(card.texts)
+      end
+
+      # Migration 052's attribute lane: the authority's own fields, one
+      # line (PNA: name language, gender, era with its BCE years, profession,
+      # place, origin).
+      def print_person_attributes(attributes)
+        return if attributes.nil? || attributes.empty?
+
+        era_years = [attributes["era_start"], attributes["era_end"]].compact.map(&:abs)
+        parts = attributes.except("era_start", "era_end").map do |key, value|
+          value = "#{value} (#{era_years.join('–')} BCE)" if key == "era" && !era_years.empty?
+          "#{key.tr('_', ' ')}: #{value}"
+        end
+        say "  #{parts.join(' · ')}"
+      end
+
+      # The texts lane: how many, how many HELD, then the first few — a
+      # held one with the document it resolved to (10 shown: a render
+      # bound, not a corpus claim).
+      def print_person_texts(texts, shown_max: 10)
+        return if texts.nil? || texts.empty?
+
+        held = texts.count(&:urn)
+        shown = texts.first(shown_max).map do |text|
+          text.urn ? "#{text.publication} → #{text.urn}" : text.publication
+        end
+        more = texts.size > shown_max ? " · … #{texts.size - shown_max} more" : ""
+        say "  texts: #{texts.size} (#{held} held) — #{shown.join(' · ')}#{more}"
       end
 
       # `nabu person mine SOURCE [AUTHORITY]` (P97-2; widened beyond Han):

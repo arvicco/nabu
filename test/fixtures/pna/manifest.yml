@@ -1,0 +1,32 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+source: pna
+adapter_test: test/adapters/pna_test.rb
+retrieved: 2026-10-28
+files:
+  - path: README.txt
+    url: https://zenodo.org/api/records/6220409/files/README.txt/content
+    whole: true
+  - path: Networks/NodeList.csv
+    url: https://zenodo.org/api/records/6220409/files/Networks.zip/content (member Networks/NodeList.csv)
+    whole: false
+    trim: header + 8 of 17,387 person rows, verbatim
+  - path: Networks/biModal.csv
+    url: https://zenodo.org/api/records/6220409/files/Networks.zip/content (member Networks/biModal.csv)
+    whole: false
+    trim: header + all 11 links of the 8 kept persons (of 25,164), verbatim
+  - path: Networks/EdgeList.csv
+    url: https://zenodo.org/api/records/6220409/files/Networks.zip/content (member Networks/EdgeList.csv)
+    whole: false
+    trim: header + 3 of 149,045 edges touching the kept persons (rejected-grain specimen), verbatim
+  - path: Networks/EdgeList_NrOfCooccurrences.csv
+    url: https://zenodo.org/api/records/6220409/files/Networks.zip/content (member Networks/EdgeList_NrOfCooccurrences.csv)
+    whole: false
+    trim: header + the same 3 edges, count-weighted (rejected-grain specimen), verbatim
+  - path: SupplementaryData/Lists/oraccConcordances
+    url: https://zenodo.org/api/records/6220409/files/SupplementaryData.zip/content (member SupplementaryData/Lists/oraccConcordances)
+    whole: false
+    trim: the 3 of 36,006 rows naming the kept persons' publications, verbatim
+  - path: SupplementaryData/Lists/personMetadata
+    url: https://zenodo.org/api/records/6220409/files/SupplementaryData.zip/content (member SupplementaryData/Lists/personMetadata)
+    whole: true

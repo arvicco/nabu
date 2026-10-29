@@ -27,6 +27,7 @@ class DerivabilityManifestTest < Minitest::Test
         document_facets documents enrichments entry_facet_values entry_facets hiero_postings kind_stats language_curve
         language_mix language_names language_records lect_stats lemma_rollup passage_facet_values
         passage_entities passage_entity_names passage_facets passages person_index person_index_names
+        person_index_texts
         place_crosswalk place_index
         place_index_names provenance sign_concordances source_records source_stats
         source_stats_languages sources urn_notes
