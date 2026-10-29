@@ -1474,6 +1474,39 @@ It stays a bench-only module outside the links-stamp closure (no
 persisted scope re-mines); the fixture pin carries the on-state, equal
 to the off-state by construction (no fixture gram reaches df 10).
 
+**The third borrowing — the contiguity bonus** (`Query::ContiguityBonus`,
+`ParallelsContiguous` and its fuzzy/hub compositions, bench knobs
+`CONTIGUITY=off|on` and `CONTIGUITY_WEIGHT=<W>`). The exact tier scores a
+bag of shared grams, so a candidate holding two anchor grams as ONE
+continuous phrase ties one holding them scattered. Anchor gram i
+CONTINUES its predecessor when both are matched and the candidate's stored
+search form holds the anchor's (gram_size + 1)-token phrase at i−1
+verbatim (verified on the candidate side — two phrase hits prove
+presence, never adjacency); each continuing gram earns W × its own 1/df
+on top, so score' = score + W·Σ 1/df(continuing grams): linear in the
+run's rarity mass, contiguous strictly above scattered at equal count and
+rarity, bounded by (1 + W)·score, nothing manufactured from common grams.
+W defaults to 1; W = 0 reports the figures with scoring byte-identical
+to the exact engine's. Every hit carries two figures, in anchor tokens,
+never conflated: `longest_run` (the longest anchor phrase the candidate
+holds verbatim through matched grams) and `bridged_span` (the longest
+chain of such runs joined across at most one damaged, lost or intruded
+token on each side, verified in both texts — reported, never scored).
+Like its predecessors it sits outside the links-stamp closure, reachable
+only through the bench; the fixture pin carries the on-state, equal to
+the off-state (no fixture line yields a run). Measured on the live gold
+sets (2026-10-28, 24 runs, both states): the gain is real exactly where
+order information is otherwise absent — at gram size 1, recall@1 rises
+0.544 → 0.574 on edh-edr (+2.9 pp, and +1.8–2.6 pp at every k) and
+0.232 → 0.240 on tm-same-text (+0.8–1.1 pp across k) — while at the
+default gram size 4 every set is flat to marginally negative (edh-edr
+−0.3 pp @1, suttacentral −0.4 to −0.9 pp, kitab unchanged) and the
+fuzzy composition is noise. Cost at gram 1 is ~10–12× the off-state
+probe time (the candidate-text reads dominate). VERDICT: admitted as an
+off-default switch, the fuzzy tier's shape — worth turning on for
+small-gram searches over short epigraphy, never at the default gram
+size; sidecars under db/bench/contiguity/.
+
 ## 14. The timeline — when and where a document is from (P15-2)
 
 The historical linguist and documentary historian ask "only 2nd-century
@@ -2081,6 +2114,20 @@ and never enters person_index (the oracc_catalogue stance); the lookup is
 a prefix range per facet over the existing (facet, value) index, kept at
 a word boundary — no new table, no derivation step, nothing for rebuild
 to replay.
+
+**Attestations and attributes on a person (migration 052).** An authority
+whose persons are defined by their texts (PNA, `Nabu::PnaPersons`) fills
+two optional lanes of its slice: `person_index_texts` — each person's
+texts in the authority's order, the publication as cited plus the urn of
+the HELD document the derivation's crosswalk resolved (NULL = a bare
+citation) — and `person_index.attributes_json`, the authority's own
+per-person fields verbatim. Both are derived wholesale with the slice.
+Because PNA's crosswalk reads the catalog's held oracc/cdli documents, its
+producer declares `reads_sources`, and an incremental rebuild re-derives
+the slice whenever one of those sources is dirty (a full rebuild replays
+the person index after every source has loaded). A plain sync of oracc or
+cdli does not re-resolve the links — they wait for the next pna sync or
+rebuild.
 
 **Read surface.** Every reader opens the links UNION (`Store::LinkLayers`):
 the journal with the mined store ATTACHed read-only and two temp views

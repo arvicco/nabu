@@ -268,6 +268,34 @@ module Ops
       fulltext&.disconnect
     end
 
+    def test_the_contiguity_bonus_is_a_named_switchable_knob
+      fulltext = Nabu::Store.connect_fulltext("sqlite::memory:")
+      off = Bench.options_from_env("GOLD" => "edh-edr")
+      refute off.contiguity, "the contiguity bonus is off unless asked for"
+      plain = Bench.producer_for(off, catalog: @catalog, fulltext: fulltext, links: @links)
+      assert_equal Nabu::Query::Parallels, plain.engine_class, "switch off: today's engine, untouched"
+      assert_equal({ "contiguity" => nil, "contiguity_weight" => nil },
+                   plain.params.slice("contiguity", "contiguity_weight"))
+      on = Bench.options_from_env("GOLD" => "edh-edr", "CONTIGUITY" => "on")
+      engine = Bench.producer_for(on, catalog: @catalog, fulltext: fulltext, links: @links)
+      assert_equal Nabu::Query::ParallelsContiguous, engine.engine_class
+      assert_equal({ "contiguity" => "on", "contiguity_weight" => 1.0 },
+                   engine.params.slice("contiguity", "contiguity_weight"), "the sidecar records the weight that ran")
+      swept = Bench.options_from_env("GOLD" => "edh-edr", "CONTIGUITY" => "on", "CONTIGUITY_WEIGHT" => "0.25",
+                                     "FUZZY" => "fallback", "HUB" => "on")
+      all = Bench.producer_for(swept, catalog: @catalog, fulltext: fulltext, links: @links)
+      assert_equal Nabu::Query::ParallelsFuzzyHubContiguous, all.engine_class
+      assert_equal({ "contiguity" => "on", "contiguity_weight" => 0.25, "fuzzy" => "fallback", "hub" => "on" },
+                   all.params.slice("contiguity", "contiguity_weight", "fuzzy", "hub"))
+      assert_equal Nabu::Query::ParallelsFuzzyHub,
+                   Bench.producer_for(Bench.options_from_env("GOLD" => "edh-edr", "FUZZY" => "fallback", "HUB" => "on"),
+                                      catalog: @catalog, fulltext: fulltext, links: @links).engine_class
+      assert_raises(Bench::Error) { Bench.options_from_env("GOLD" => "edh-edr", "CONTIGUITY" => "yes") }
+      assert_raises(Bench::Error) { Bench.options_from_env("GOLD" => "edh-edr", "CONTIGUITY_WEIGHT" => "heavy") }
+    ensure
+      fulltext&.disconnect
+    end
+
     # -- the pinned baseline: the real engine over real edh/edr editions -------
 
     # The trimmed-real fixture editions are SHORT (one- to three-token
@@ -298,6 +326,15 @@ module Ops
     # gram reaches a df of ten (two editions per stone), so there is no
     # hub mass to demote and the answer is the exact engine's.
     HUB_PIN = { 4 => { 1 => [0, 6], 5 => [0, 6] }, 1 => { 1 => [2, 6], 5 => [2, 6] } }.freeze
+
+    # The contiguity bonus (Query::ContiguityBonus) at its default weight
+    # over the same editions, at both pinned gram sizes — pinned
+    # 2026-10-28 beside the off-state. It moves NOTHING here: at gram size
+    # 4 the one- to three-token lines yield no gram (no run to reward);
+    # at gram size 1 each found partner shares ONE token ("uicimus"), and
+    # a run needs two — the bonus re-orders near-ties among multi-token
+    # matches, it cannot reach a pair the exact tier never scores.
+    CONTIGUITY_PIN = { 4 => { 1 => [0, 6], 5 => [0, 6] }, 1 => { 1 => [2, 6], 5 => [2, 6] } }.freeze
 
     def test_engine_baseline_over_the_edh_edr_fixture_editions
       fulltext = load_edh_edr_fixture_editions
@@ -337,6 +374,20 @@ module Ops
       end
       assert_equal HUB_PIN, measured, "hub demotion's recall over the fixture editions moved — re-measure"
       assert_equal BASELINE, HUB_PIN, "no fixture gram is a hub: the on-state is the off-state"
+    ensure
+      fulltext&.disconnect
+    end
+
+    def test_contiguity_bonus_over_the_edh_edr_fixture_editions
+      fulltext = load_edh_edr_fixture_editions
+      gold = bench.gold_set(Bench.recipe("edh-edr"))
+      measured = CONTIGUITY_PIN.keys.to_h do |gram_size|
+        producer = Bench::EngineProducer.new(catalog: @catalog, fulltext: fulltext, gram_size: gram_size,
+                                             contiguity: true)
+        report = bench.run(gold: gold, producer: producer, ks: [1, 5], sample: nil)
+        [gram_size, report.rows.to_h { |row| [row[:k], row.values_at(:found, :gold)] }]
+      end
+      assert_equal CONTIGUITY_PIN, measured, "the bonus's recall over the fixture editions moved — re-measure"
     ensure
       fulltext&.disconnect
     end

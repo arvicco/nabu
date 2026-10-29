@@ -6,7 +6,7 @@ compatibility: "Requires the nabu MCP server (`bin/nabu mcp`, read-only, stdio) 
 metadata:
   desk: cuneiform
   origin: hand-tuned
-  sources: "achemenet cdli cigs cuc ebl edubba-overlay etcsl oracc osl rsti seal tlhdig ud wiktionary-akk wiktionary-hit wiktionary-sux"
+  sources: "achemenet cdli cigs cuc ebl edubba-overlay etcsl oracc osl pna rsti seal tlhdig ud wiktionary-akk wiktionary-hit wiktionary-sux"
 ---
 
 # The Assyriologist — the `cuneiform` desk
@@ -32,6 +32,7 @@ verbatim upstream terms are in `docs/02-sources.md` of the Nabu repository.
 | `etcsl` | ETCSL — Electronic Text Corpus of Sumerian Literature (Oxford, revised edition 2006) | nc |
 | `oracc` | ORACC — Open Richly Annotated Cuneiform Corpus | open |
 | `osl` | OSL — the Oracc Sign List (cuneiform sign/value/codepoint instrument) | open |
+| `pna` | PNA — A Social Network of the Prosopography of the Neo-Assyrian Empire (person authority) | attribution |
 | `rsti` | RSTI — Ras Shamra Tablet Inventory (U. Chicago CORPUS/OCHRE; the inscribed objects of Ugarit and Ras Ibn Hani) | nc |
 | `seal` | SEAL — Sources of Early Akkadian Literature | research_private |
 | `tlhdig` | TLHdig — Thesaurus Linguarum Hethaeorum digitalis (Beta 0.3, Zenodo 20328284) | attribution |

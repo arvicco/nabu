@@ -1485,6 +1485,23 @@ sources:
         Нови Сад, Беч, Пешта, Zagreb …) on 85/96 texts; declared coarse"}
     script: {posture: mixed, note: "Cyrillic (94) + Latin (2: Јанковић 1918, Ћоровић 1919) —
         metadata script per document from the root xml:lang"}
+  theatre-classique:
+    # kind machine-postured — kind_map.yml source_kind literary/drama (the
+    # whole source is a theatre corpus; the site's genre label rides beside).
+    lect: {posture: identity, note: "fra → the fr anchor (codemap fra: fr), declared
+        coarse: the plays run from the 1550s to the 1930s — classical (17th-c.) French at
+        the core, the 18th–19th-c. repertoire after it; fr carries no stages and none is
+        claimed. The dozen medieval and 16th-c. pieces (farces, mystères, Roswitha) are
+        modernized or translated texts, not Old/Middle French originals — fro/frm would
+        misstate them"}
+    dating: {posture: dated, note: "the transcribed print's title-page year (docDate@value,
+        1,933 of 1,940 — class edition), else the site's periode decade band (class
+        composition); the first performance rides metadata premiere — :structured lane"}
+    places: {posture: named, note: "the imprint city from the title-page imprint (À PARIS,
+        chez … → Paris; Amsterdam, Liège, Rouen, La Haye …) on 889 of 1,939 plays, declared
+        coarse — the print's place, not the author's; <set> (the fictional setting) is
+        never a place claim"}
+    script: {posture: implied}
   elektire:   # P117-2
     # kind machine-postured since 2026-10-18 — the genre fold in
     # kind_map.yml (the portal's 23 knjizevna_vrsta term slugs onto

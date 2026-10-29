@@ -76,6 +76,15 @@ module Nabu
                           "Example: --review script/review-sync-claude. Single-source sync only."
     option :verbose, type: :boolean, default: false, desc: Nabu::Ops::StageGuide::OPTION_DESC
     def sync(*slugs)
+      # Thor hands unknown flags through as positional args, so a typo
+      # (--fetch-onli) or a trailing --help would fire the REAL slugs
+      # under the wrong options and count the flag as a failed source.
+      # Refuse option-shaped tokens before touching anything.
+      option_shaped = slugs.select { |s| s.start_with?("-") }
+      unless option_shaped.empty?
+        raise Thor::Error, "sync: #{option_shaped.join(', ')} is not an option sync knows " \
+                           "and not a source slug — see `nabu help sync`"
+      end
       # --redownload refusals up front (P44-i1): contradictory with
       # --parse-only (nothing to re-download if we skip fetch), and
       # per-source by design (a wipe is an explicit, named decision).

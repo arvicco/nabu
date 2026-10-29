@@ -4603,6 +4603,31 @@ pleiades:
   # dump is large + version-pinned; the Zenodo URL-pin stays optional).
   sync_policy: manual
 
+pna:   # 02-sources row 311
+  adapter: Nabu::Adapters::Pna
+  adopted: "2026-10-28"
+  kind: module   # person authority — zero document rows, the cbdb/dprr shape
+  axes: [cuneiform]
+  wired: true    # first sync 2026-10-28 on census (17,387 persons ·
+                   # 25,164 links · 4,188 texts; 149,045 co-occurrence
+                   # edges skipped by rule); cards eyeballed
+                   # (Aššūr-bāni-apli_1: 352 texts, 344 held;
+                   # Hundāru (Ahundāra)_2 resolves by bare name).
+  sync_policy: manual
+  # PNA — "A Social Network of the Prosopography of the Neo-Assyrian
+  # Empire" (Jauhiainen & Alstola, Helsinki; JOHD 8:8, 2022): the persons
+  # of the Prosopography of the Neo-Assyrian Empire (Radner & Baker eds.)
+  # with their attestations. Zenodo record 6220409 = version 3 of concept
+  # 10.5281/zenodo.5862904; three files fetched verbatim behind hard
+  # sha256 pins (immutable — a new version is an owner re-pin). LICENSE:
+  # README.txt verbatim "These files are licensed under a Creative Commons
+  # Attribution-ShareAlike 3.0 Unported License." (the record field agrees,
+  # cc-by-sa-3.0; read 2026-10-28) → attribution. EXPECTED FIRST SYNC
+  # (~8 MB, seconds): 17,387 persons + 25,164 person-text links → a
+  # 17,387-row "pna" person-index slice; the crosswalk resolves 17,789
+  # links (3,084 of 4,188 texts) onto held oracc/cdli documents. The
+  # 149,045 co-occurrence edges are skipped by rule (no relation lane).
+
 prague-bible-1488:   # P116-1
   adapter: Nabu::Adapters::PragueBible1488
   adopted: "2026-10-10"
@@ -5779,6 +5804,28 @@ th-wikisource:   # P120-3, 02-sources row 264
   # 3:1,265 · 4:196 (+0:3, 2:1). Publisher (ผู้เผยแพร่=) verbatim. Texts
   # PD; transcription layer CC BY-SA 4.0.
 
+theatre-classique:   # 02-sources row 312
+  adapter: Nabu::Adapters::TheatreClassique
+  adopted: "2026-10-28"
+  axes: [romance]
+  wired: true    # first sync 2026-10-28 exactly on census (1,939 docs /
+                   # 1,601,085 passages / 1 quarantine — the declared
+                   # Latin-1 file; mirror main @d6ed03d8); passages
+                   # eyeballed (Montchrétien's David, 1601 Rouen, dated
+                   # + placed + nc on the card).
+  sync_policy: manual
+  # Théâtre Classique (Paul Fièvre, theatre-classique.fr): French plays
+  # 1550s–1930s in the site's own pre-P5 TEI (the theatre-classique-tei
+  # family), fetched from DraCor's verbatim mirror
+  # github.com/dracor-org/theatre-classique (sparse xml/ + README.md) —
+  # the site's robots.txt disallows /pages/documents/, so the site itself
+  # is never fetched. Per-file <rights> CC BY-NC-SA + the site's rights
+  # page (free non-commercial reuse, source credited) → nc. EXPECTED
+  # FIRST SYNC (census 2026-10-28, mirror main @d6ed03d8): 1,939 docs /
+  # 1,601,085 passages, 0 rule-skips (life+70 cutoff 1955; latest
+  # textual death 1951), 1 quarantined (CORNEILLET_LAODICE.xml — declared
+  # ISO-8859-1, Latin-1 bytes; the UTF-8 belt refuses it). Clone ≈ 61 MB.
+
 tibetan-verbs:
   adapter: Nabu::Adapters::TibetanVerbs
   adopted: "2026-07-28"
@@ -6726,10 +6773,11 @@ vakk:
   adapter: Nabu::Adapters::Vakk
   adopted: "2026-10-21"
   axes: [baltic]
-  wired: false   # the crawl is sliced: ~13,000 paced requests (~4–5 h at
-                 # 1 req/s) over about eleven `bin/nabu sync vakk` runs of
-                 # SLICE 1,200 (~25 min each), the corpus texts first and the
-                 # 2,856 court protocols after; flip at the completed crawl.
+  wired: true    # crawl COMPLETED 2026-10-28 (3,052/3,052 texts held,
+                 # ledger empty); first full parse the same day exactly on
+                 # census — 3,052 discovered / 0 skipped-by-rule / 0
+                 # errors, 148,875 passages indexed; passages eyeballed
+                 # (a 1651 sermon, dated + nc on the card).
   sync_policy: manual
   # VAKK — Vana kirjakeele korpus, the Corpus of Old Written Estonian
   # (University of Tartu, vakk.ut.ee): every surviving Estonian text of

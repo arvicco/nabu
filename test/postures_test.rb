@@ -179,7 +179,7 @@ class PosturesTest < Minitest::Test
   def test_the_lect_migration_kept_the_p59_4_census
     lect = postures.declarations.select { |d| d.layer == "lect" }
     by_posture = lect.group_by(&:posture).transform_values(&:size)
-    assert_equal 160, lect.size,
+    assert_equal 161, lect.size,
                  "the P59-4 declarations survive the move (61 at migration; itant retired P61-3," \
                  "oracc retired P62-2, etcsl/ccmh/freising/coptic-scriptorium retired P64-6, " \
                  "titus-avestan retired P66-1, osta+fornsvenska retired P77-r8, achemenet " \
@@ -341,7 +341,9 @@ class PosturesTest < Minitest::Test
                  "the same package's sinh script row RETIRES tipitaka-lk — the pli → pli~sinh " \
                  "override claims the Pāli's Sinhala surface (the shadowing rule): 161→160; " \
                  "menotec RETIRES — the menotec-treebank facet rule places the six Norwegian " \
-                 "codices on no:old and the Codex Regius on isl:old (the shadowing rule): 161→160"
+                 "codices on no:old and the Codex Regius on isl:old (the shadowing rule): 161→160; " \
+                 "theatre-classique ADDED — identity fra (the fr anchor through the held codemap " \
+                 "row; fr carries no stages, declared coarse): 160→161"
     # The epigraphic-belt registry package (merged + canonical-synced
     # 2026-10-18, the add-then-retire shape within one phase) retires both
     # P130 pendings, and the ociana-script rule + the ig-cyprus override
@@ -371,6 +373,7 @@ class PosturesTest < Minitest::Test
     # identity 123→122. tipitaka-lk retires (the pli~sinh override
     # machine-postures it): identity 122→121. menotec retires (the
     # menotec-treebank rule machine-postures it): identity 122→121.
-    assert_equal({ "dates" => 21, "codemap" => 17, "identity" => 121, "pending" => 1 }, by_posture)
+    # theatre-classique joins identity (fra → fr, no fr stages): 121→122.
+    assert_equal({ "dates" => 21, "codemap" => 17, "identity" => 122, "pending" => 1 }, by_posture)
   end
 end
