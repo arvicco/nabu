@@ -157,4 +157,45 @@ class LilaTtlParserTest < Minitest::Test
   def test_unknown_prefix_raises_parse_error
     assert_raises(Nabu::ParseError) { statements("nope:s nope:p nope:o .") }
   end
+
+  # --- the Lexicon_ItAnt widening (census of lexicon_1_0.ttl, 2026-10-29) ---
+
+  def test_prefixed_local_names_take_unicode_letters_and_marks
+    # Lexicon_ItAnt local names carry the Oscan/Greek headwords verbatim
+    # (lex:aadiieís_properNoun_osc_entry, lex:meddíss_noun_osc_μεδδειξ_form,
+    # combining dots in dadị́katted_verb_osc_entry) — Turtle's PN_LOCAL
+    # admits them; the ASCII-only \w reader stopped at the first accent.
+    triples = statements(<<~TTL)
+      @prefix lex: <http://digitant.ilc.cnr.it/data/lexicon#> .
+      @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+      lex:aadiieís_properNoun_osc_entry rdfs:seeAlso lex:meddíss_noun_osc_μεδδειξ_form, lex:dadị́katted_verb_osc_entry .
+    TTL
+    assert_equal "http://digitant.ilc.cnr.it/data/lexicon#aadiieís_properNoun_osc_entry", triples.first.subject
+    assert_equal ["http://digitant.ilc.cnr.it/data/lexicon#meddíss_noun_osc_μεδδειξ_form",
+                  "http://digitant.ilc.cnr.it/data/lexicon#dadị́katted_verb_osc_entry"], triples.map(&:object)
+  end
+
+  def test_triple_quoted_literals_keep_newlines_and_inner_quotes
+    triples = statements(<<~TTL)
+      @prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+      @prefix ex: <http://example.org/> .
+      ex:sense skos:definition """subst.: dea;
+      "the goddess" (dat.)"""@it .
+    TTL
+    assert_equal "subst.: dea;\n\"the goddess\" (dat.)", triples.first.object
+    assert_equal :literal, triples.first.kind
+  end
+
+  def test_bare_boolean_and_numeric_literals_read_as_their_lexical_form
+    # The export carries the OWL ontology axioms beside the data:
+    # `_:node71 owl:hasValue true .`, `owl:versionInfo 1.0 .`.
+    triples = statements(<<~TTL)
+      @prefix owl: <http://www.w3.org/2002/07/owl#> .
+      _:node71 owl:hasValue true .
+      <http://example.org/onto> owl:versionInfo 1.0 ;
+        owl:cardinality 2, -3, 4.5e1 .
+    TTL
+    assert_equal ["true", "1.0", "2", "-3", "4.5e1"], triples.map(&:object)
+    assert(triples.all? { |t| t.kind == :literal })
+  end
 end
