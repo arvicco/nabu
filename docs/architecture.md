@@ -2632,7 +2632,12 @@ one `ExportCLI` command, against the contract stated in `lib/nabu/export.rb`
   non-excluding labels corrected-ocr (madurai, eltec-srp: upstream states
   the correction) and ocr-origin (peshitta: OCR origin, correction
   unstated) ride through — and `--exclude-source` covers OCR-derived
-  sources that carry no flag.
+  sources that carry no flag. `--exclude-unproofread` reads the
+  ProofreadPage levels the wikisource adapters already record (no stamp
+  of its own): a document whose metadata `proofread.lowest_text_level`
+  is 1 ("Not proofread") drops whole; on the per-page sources
+  (ban-wikisource, passage annotation `quality`) a level-1 page drops
+  alone; text without ProofreadPage data rides.
 
 Streaming is keyset paging (urn for documents, id for links) with one
 batched read per page per concern, so memory is constant at library scale;
