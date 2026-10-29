@@ -25,8 +25,8 @@ module Nabu
     # document is a metadata-only scan page ("text_layer" => "none", the
     # local-library/ogham marker) — catalogued, citable by printed page,
     # and queued for transcription as an enrichment (the print gives every
-    # headword twice, script and romanisation — the transcription's own
-    # cross-check).
+    # headword twice, script and romanisation; Nabu::Jaschke is that
+    # transcription's cross-check oracle).
     #
     # == Documents: one per printed leaf
     #
