@@ -136,3 +136,40 @@ files:
     url: https://storage.googleapis.com/sefaria-export/json/Liturgy/Piyutim/Shalom%20Aleichem/Hebrew/Shalom%20Alechem.json
     whole: true
     trim: none (complete file, copied whole 2026-10-21; CC-BY-SA hbo -> attribution override, the liturgy shelf, Piyutim subshelf)
+  # P150: the connection graph (links/ special files of the 2026-10-02 index generation)
+  - path: links/links0.csv
+    url: https://storage.googleapis.com/sefaria-export/links/links0.csv
+    whole: false
+    trim: header + 4 verbatim upstream rows (retrieved 2026-10-29; see README.md P150 table)
+  - path: links/links6.csv
+    url: https://storage.googleapis.com/sefaria-export/links/links6.csv
+    whole: false
+    trim: header + 1 verbatim upstream rows (retrieved 2026-10-29; see README.md P150 table)
+  - path: links/links9.csv
+    url: https://storage.googleapis.com/sefaria-export/links/links9.csv
+    whole: false
+    trim: header + 2 verbatim upstream rows (retrieved 2026-10-29; see README.md P150 table)
+  - path: links/links10.csv
+    url: https://storage.googleapis.com/sefaria-export/links/links10.csv
+    whole: false
+    trim: header + 2 verbatim upstream rows (retrieved 2026-10-29; see README.md P150 table)
+  - path: links/links12.csv
+    url: https://storage.googleapis.com/sefaria-export/links/links12.csv
+    whole: false
+    trim: header + 2 verbatim upstream rows (retrieved 2026-10-29; see README.md P150 table)
+  - path: links/links14.csv
+    url: https://storage.googleapis.com/sefaria-export/links/links14.csv
+    whole: false
+    trim: header + 3 verbatim upstream rows (retrieved 2026-10-29; see README.md P150 table)
+  - path: links/links15.csv
+    url: https://storage.googleapis.com/sefaria-export/links/links15.csv
+    whole: false
+    trim: header + 2 verbatim upstream rows (retrieved 2026-10-29; see README.md P150 table)
+  - path: links/links16.csv
+    url: https://storage.googleapis.com/sefaria-export/links/links16.csv
+    whole: false
+    trim: header + 3 verbatim upstream rows (retrieved 2026-10-29; see README.md P150 table)
+  - path: links/links_by_book.csv
+    url: https://storage.googleapis.com/sefaria-export/links/links_by_book.csv
+    whole: false
+    trim: header + 3 verbatim upstream rows (retrieved 2026-10-29; see README.md P150 table)

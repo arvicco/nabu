@@ -5142,6 +5142,15 @@ sefaria:
                    # Eyeball urn:nabu:sefaria:minchat-shai-on-jonah:he:
                    # minchat-shai:1.1.1, a tur:he:onyourway passage, and a
                    # zohar-chadash:he:zohar-chadash passage (arc).
+                   # P150 adds the LINKS LAYER to the same sync: the index's
+                   # special files links/links0..16.csv (≈680 MB, 5,069,488
+                   # rows; the links_by_book* aggregates stay in the bucket)
+                   # → Nabu::SefariaLinks, kind=reference edges between held
+                   # passages (Tanakh refs → the oshb verse). Expected at the
+                   # 2026-10-02 generation against the current catalog:
+                   # 622,476 edges from 625,102 both-sides-held rows; the
+                   # 4,444,269 rows with an unheld side are censused on the
+                   # run row. Eyeball `nabu links urn:nabu:oshb:jonah:1.1`.
   # Sefaria — Targum shelf (P30-3) + RABBINIC WAVE 1 (P46-1) + MIDRASH
   # WAVE 2 (P55-3). Upstream
   # restructured: the git repo is a monthly books.json index (19,705 version
