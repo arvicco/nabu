@@ -1353,7 +1353,8 @@ morph decoder and the CoNLL-U features joined, the Sahidic psalter in
 the psalms alignment hub, print-dictionary citations (BDB, the Wb)
 resolving to the held reference scans, and the reference shelf itself
 grown by the public-domain scan batches (ANE, Hebrew, Egyptian,
-Ossetic, Baltic).
+Ossetic, Baltic, Semitic, Celtic — the last bringing Zeuss/Ebel's
+Grammatica Celtica and Holder's Alt-celtischer Sprachschatz Bd. II).
 
 ## 8i. The local shelves — canonical memory (architecture §16)
 

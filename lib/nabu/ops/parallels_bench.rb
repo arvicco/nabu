@@ -5,6 +5,7 @@ require "json"
 require_relative "../errors"
 require_relative "../query/parallels_hub"
 require_relative "../query/parallels_contiguity"
+require_relative "../query/parallels_novelty"
 
 module Nabu
   module Ops
@@ -181,10 +182,13 @@ module Nabu
       # HUB_DF (an absolute hub cutoff overriding the corpus-relative one),
       # CONTIGUITY (off | on — the contiguity bonus, Query::ContiguityBonus;
       # off by default) and CONTIGUITY_WEIGHT (its bonus weight W, default
-      # 1.0; 0 = figures only, scoring unchanged); OUT names the sidecar
-      # (default under db/bench/).
+      # 1.0; 0 = figures only, scoring unchanged), NOVELTY (off | on —
+      # novelty weighting, Query::NoveltyWeighting; off by default) and
+      # NOVELTY_WEIGHT (its demotion weight W, default 1.0; 0 = scoring
+      # unchanged); OUT names the sidecar (default under db/bench/).
       Options = Data.define(:gold, :producer, :ks, :sample, :seed, :profile, :gram_size, :lang, :min_score,
-                            :max_anchors, :fuzzy, :hub, :hub_df, :contiguity, :contiguity_weight, :out)
+                            :max_anchors, :fuzzy, :hub, :hub_df, :contiguity, :contiguity_weight,
+                            :novelty, :novelty_weight, :out)
 
       def self.options_from_env(env)
         gold = env.fetch("GOLD") { raise Error, "GOLD=<#{RECIPES.keys.join('|')}|census> is required" }
@@ -205,7 +209,9 @@ module Nabu
                     fuzzy: fuzzy_scope(env.fetch("FUZZY", "off")), hub: hub_switch(env.fetch("HUB", "off")),
                     hub_df: env["HUB_DF"]&.then { |v| Integer(v, 10) },
                     contiguity: switch("CONTIGUITY", env.fetch("CONTIGUITY", "off")),
-                    contiguity_weight: env["CONTIGUITY_WEIGHT"]&.then { |v| Float(v) }, out: env["OUT"])
+                    contiguity_weight: env["CONTIGUITY_WEIGHT"]&.then { |v| Float(v) },
+                    novelty: switch("NOVELTY", env.fetch("NOVELTY", "off")),
+                    novelty_weight: env["NOVELTY_WEIGHT"]&.then { |v| Float(v) }, out: env["OUT"])
       rescue ArgumentError => e
         raise Error, "bench:parallels: #{e.message}"
       end
@@ -244,7 +250,8 @@ module Nabu
                            stop_tokens: profile&.stop_tokens, candidate_pool: profile&.candidate_pool,
                            min_score: options.min_score || profile&.min_score, profile: options.profile,
                            fuzzy: options.fuzzy, hub: options.hub, hub_df: options.hub_df,
-                           contiguity: options.contiguity, contiguity_weight: options.contiguity_weight)
+                           contiguity: options.contiguity, contiguity_weight: options.contiguity_weight,
+                           novelty: options.novelty, novelty_weight: options.novelty_weight)
       end
 
       # The honest table.
@@ -411,30 +418,43 @@ module Nabu
       # +hub+ (true = on) adds hub demotion (Query::HubDemotion) at the
       # corpus-relative cutoff, or at +hub_df+ when given; +contiguity+
       # (true = on) adds the contiguity bonus (Query::ContiguityBonus) at
-      # weight +contiguity_weight+ (nil = its default). Every switch off is
-      # the plain Query::Parallels engine.
+      # weight +contiguity_weight+ (nil = its default); +novelty+ (true =
+      # on) adds novelty weighting (Query::NoveltyWeighting) at weight
+      # +novelty_weight+ (nil = its default), acting last. Every switch off
+      # is the plain Query::Parallels engine.
       class EngineProducer
-        # [fuzzy?, hub?, contiguity?] → the engine class carrying them.
+        # [fuzzy?, hub?, contiguity?, novelty?] → the engine class carrying them.
         ENGINES = {
-          [false, false, false] => Nabu::Query::Parallels,
-          [true, false, false] => Nabu::Query::ParallelsFuzzy,
-          [false, true, false] => Nabu::Query::ParallelsHub,
-          [true, true, false] => Nabu::Query::ParallelsFuzzyHub,
-          [false, false, true] => Nabu::Query::ParallelsContiguous,
-          [true, false, true] => Nabu::Query::ParallelsFuzzyContiguous,
-          [false, true, true] => Nabu::Query::ParallelsHubContiguous,
-          [true, true, true] => Nabu::Query::ParallelsFuzzyHubContiguous
+          [false, false, false, false] => Nabu::Query::Parallels,
+          [true, false, false, false] => Nabu::Query::ParallelsFuzzy,
+          [false, true, false, false] => Nabu::Query::ParallelsHub,
+          [true, true, false, false] => Nabu::Query::ParallelsFuzzyHub,
+          [false, false, true, false] => Nabu::Query::ParallelsContiguous,
+          [true, false, true, false] => Nabu::Query::ParallelsFuzzyContiguous,
+          [false, true, true, false] => Nabu::Query::ParallelsHubContiguous,
+          [true, true, true, false] => Nabu::Query::ParallelsFuzzyHubContiguous,
+          [false, false, false, true] => Nabu::Query::ParallelsNovel,
+          [true, false, false, true] => Nabu::Query::ParallelsFuzzyNovel,
+          [false, true, false, true] => Nabu::Query::ParallelsHubNovel,
+          [true, true, false, true] => Nabu::Query::ParallelsFuzzyHubNovel,
+          [false, false, true, true] => Nabu::Query::ParallelsContiguousNovel,
+          [true, false, true, true] => Nabu::Query::ParallelsFuzzyContiguousNovel,
+          [false, true, true, true] => Nabu::Query::ParallelsHubContiguousNovel,
+          [true, true, true, true] => Nabu::Query::ParallelsFuzzyHubContiguousNovel
         }.freeze
 
         def initialize(catalog:, fulltext:, max_anchors: DEFAULT_MAX_ANCHORS, lang: nil, gram_size: nil,
                        stop_tokens: nil, candidate_pool: nil, min_score: nil, profile: nil, fuzzy: nil,
-                       hub: false, hub_df: nil, contiguity: false, contiguity_weight: nil)
+                       hub: false, hub_df: nil, contiguity: false, contiguity_weight: nil, novelty: false,
+                       novelty_weight: nil)
           @catalog = catalog
           @fuzzy = fuzzy
           @hub = hub
           @hub_df = hub ? hub_df : nil
           @contiguity = contiguity
           @contiguity_weight = contiguity ? contiguity_weight || Nabu::Query::ContiguityBonus::CONTIGUITY_WEIGHT : nil
+          @novelty = novelty
+          @novelty_weight = novelty ? novelty_weight || Nabu::Query::NoveltyWeighting::NOVELTY_WEIGHT : nil
           @engine = build_engine(catalog, fulltext)
           @max_anchors = max_anchors
           @knobs = { lang: lang, gram_size: gram_size || Nabu::Query::Parallels::GRAM_SIZE,
@@ -454,7 +474,8 @@ module Nabu
             "stop_tokens" => @knobs[:stop_tokens]&.size, "candidate_pool" => @knobs[:candidate_pool],
             "min_score" => @min_score, "fuzzy" => @fuzzy&.to_s, "hub" => (@hub ? "on" : nil),
             "hub_df" => @hub_df, "contiguity" => (@contiguity ? "on" : nil),
-            "contiguity_weight" => @contiguity_weight,
+            "contiguity_weight" => @contiguity_weight, "novelty" => (@novelty ? "on" : nil),
+            "novelty_weight" => @novelty_weight,
             "aggregation" => "sum of per-anchor document scores" }
         end
 
@@ -480,7 +501,9 @@ module Nabu
           base[:scope] = @fuzzy if @fuzzy
           base[:hub_df] = @hub_df if @hub
           base[:contiguity_weight] = @contiguity_weight if @contiguity
-          ENGINES.fetch([!@fuzzy.nil?, @hub ? true : false, @contiguity ? true : false]).new(**base)
+          base[:novelty_weight] = @novelty_weight if @novelty
+          switches = [!@fuzzy.nil?, @hub ? true : false, @contiguity ? true : false, @novelty ? true : false]
+          ENGINES.fetch(switches).new(**base)
         end
 
         def anchor_passages(document_urn)
