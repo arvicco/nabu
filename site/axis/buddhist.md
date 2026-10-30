@@ -15,7 +15,7 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 A source wears every desk it serves — these ten answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
-| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 29 October 2026)</span> |
+| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 30 October 2026)</span> |
 |---|---|---|---|---|
 | `cbeta` | texts | nc | wired · manual | 4,323 docs / 10,867,827 passages |
 | `derge-kangyur` | texts | open | wired · manual | 1,198 docs / 458,972 passages |
@@ -30,7 +30,7 @@ A source wears every desk it serves — these ten answer this desk. Holdings are
 
 Private research materials under personal grants are not listed.
 
-**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 29 October 2026)</span>: `xct` 63,707 · `san` 9,379 · `pli` 7,573 · `eng` 7,150 · `lzh` 4,533 · `san-Latn` 817 · `fra` 624 · `en` 389 · `spa` 333 · `cmn` 279 … and 11 more (`nabu axis buddhist` lists all).
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 30 October 2026)</span>: `xct` 63,707 · `san` 9,379 · `pli` 7,573 · `eng` 7,150 · `lzh` 4,533 · `san-Latn` 817 · `fra` 624 · `en` 389 · `spa` 333 · `cmn` 279 … and 11 more (`nabu axis buddhist` lists all).
 
 ## The desk's instruments
 

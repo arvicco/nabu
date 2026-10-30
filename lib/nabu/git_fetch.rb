@@ -235,16 +235,26 @@ module Nabu
 
     # Fetch exactly the pinned ref — or, unpinned, the branch the clone
     # tracks — so FETCH_HEAD is a single unambiguous ref for both the diff
-    # and the merge.
+    # and the merge. Submodules are NEVER recursed (--recurse-submodules=no
+    # overrides git's on-demand default and any box config): adapters treat
+    # a gitlink as an empty dir, and an upstream submodule whose gitlink
+    # commit was never pushed failed a whole sync (tamilex, 2026-10-29,
+    # "Could not access submodule 'lib'"). Clones need no flag — `git clone`
+    # recurses only when asked.
     def git_fetch
       target = @ref || Shell.run("git", "-C", @dir, "rev-parse", "--abbrev-ref", "HEAD").strip
       unless @progress
-        Shell.run("git", "-C", @dir, "fetch", "--quiet", "origin", target)
+        Shell.run("git", "-C", @dir, "fetch", "--quiet", NO_SUBMODULES, "origin", target)
         return
       end
       @progress.call("Pulling #{@repo_url}…\n")
-      Shell.stream("git", "-C", @dir, "fetch", "--progress", "origin", target) { |line| @progress.call(line) }
+      Shell.stream("git", "-C", @dir, "fetch", "--progress", NO_SUBMODULES, "origin", target) do |line|
+        @progress.call(line)
+      end
     end
+
+    NO_SUBMODULES = "--recurse-submodules=no"
+    private_constant :NO_SUBMODULES
 
     # Files the merge would delete: status D between HEAD and FETCH_HEAD.
     # --find-renames is explicit so a rename always reports as R (not D+A)

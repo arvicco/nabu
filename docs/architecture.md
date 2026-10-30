@@ -1516,6 +1516,38 @@ off-default switch, the fuzzy tier's shape — worth turning on for
 small-gram searches over short epigraphy, never at the default gram
 size; sidecars under db/bench/contiguity/.
 
+**The fourth borrowing — novelty weighting** (`Query::NoveltyWeighting`,
+`ParallelsNovel` and its seven compositions, bench knobs
+`NOVELTY=off|on` and `NOVELTY_WEIGHT=<W>`). 1/df weighs every gram of
+equal corpus rarity alike, whether the anchor says it once or its own
+document repeats it passage after passage (a framing narrative, a
+refrain). Novelty discounts the second kind: with s(g) the number of
+OTHER passages of the anchor's document holding gram g, the gram weighs
+(1/df)·1/(1 + W·s) — unchanged at s = 0, demoted (never dropped) as the
+document repeats it, anchor-relative (a formula pervasive only in other
+documents is left to 1/df and hub demotion). It needs no index: every
+scored gram's probe rows are complete (a gram at the df cap is dropped
+unscored) and carry catalog passage ids, and the anchor document's
+passage ids are one read on the (document_id, sequence) index prefix,
+cached per document. Composed with the other tiers it acts last, as the
+candidate's novelty ratio (novel share of its exact rarity mass)
+multiplying the final score; a candidate holding no self-recurrent gram
+is untouched. W defaults to 1; W = 0 scores byte-identically (pinned).
+Bench-only, outside the links-stamp closure; the fixture pin carries the
+on-state, equal to the off-state (the epigraphic editions repeat no
+scored gram within a document). Measured 2026-10-30 on all five live
+gold sets (±novelty at W ∈ {0.5, 1, 3} on suttacentral, W = 1
+elsewhere; sidecars under db/bench/novelty/): **never a gain.**
+Suttacentral — the set the technique was built for — LOSES at every k
+and every W, monotonically in W (recall@15 micro .3937 off → .3923 /
+.3893 / .3834; hit@15 .718 → .694): the framing formulas it demotes
+evidently carry the curated-parallel signal rather than obscuring it.
+kitab-books and cdli-composite lose a hair (194→192, 619→618 found
+@15), kitab-passages and edh-edr are byte-identical (s ≈ 0 shapes),
+and the hub composition loses too (809→797 @15). Verdict: NOT
+admitted — novelty stays a bench-only switch like hub demotion, kept
+for future gold sets whose formulas are noise rather than signal.
+
 ## 14. The timeline — when and where a document is from (P15-2)
 
 The historical linguist and documentary historian ask "only 2nd-century
