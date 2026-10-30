@@ -102,6 +102,45 @@ class GitFetchTest < Minitest::Test
     assert_empty result.atticked
   end
 
+  # --- submodules: never recursed ----------------------------------------------
+  # The house never wants submodules: adapters treat a gitlink as an empty
+  # dir. git's default fetch.recurseSubmodules=on-demand once failed a whole
+  # sync (tamilex, 2026-10-29) because upstream added a submodule whose
+  # gitlink commit was never pushed ("Could not access submodule 'lib'").
+  # Every fetch must pass --recurse-submodules=no, on BOTH the quiet and the
+  # progress path, so no config default (or a box-local override) can recurse.
+  # The live failure needs a GitHub-side unreachable gitlink that a local
+  # fixture cannot fake (git only recurses into submodules it can reach), so
+  # the argv spy is the regression proof; the repo test pins the outcome.
+
+  def test_pull_survives_an_upstream_submodule_with_an_unreachable_gitlink
+    make_repo("alpha.txt" => "alpha v1\n")
+    sync!
+    # The worst-case box config: recursion forced on in the working repo.
+    git(@dir, "config", "fetch.recurseSubmodules", "true")
+    add_unreachable_submodule_upstream("lib")
+
+    result = sync!
+
+    assert_equal head(@upstream), result.sha
+    refute_path_exists File.join(@dir, "lib", "README.md"), "a gitlink stays an empty dir"
+  end
+
+  def test_every_fetch_invocation_refuses_submodule_recursion
+    make_repo("alpha.txt" => "alpha v1\n")
+    sync!
+    commit_upstream("alpha.txt" => "alpha v2\n")
+
+    fetches = record_fetch_argvs { sync! }
+    commit_upstream("alpha.txt" => "alpha v3\n")
+    fetches += record_fetch_argvs { sync!(progress: ->(_line) {}) }
+
+    assert_equal 2, fetches.size, "one quiet and one progress fetch"
+    fetches.each do |argv|
+      assert_includes argv, "--recurse-submodules=no", "fetch must never recurse: #{argv.join(' ')}"
+    end
+  end
+
   # --- the guard hook ---------------------------------------------------------
 
   def test_guard_receives_absolute_doomed_paths_before_any_tree_change
@@ -377,6 +416,38 @@ class GitFetchTest < Minitest::Test
     write_files(@upstream, files)
     git(@upstream, "add", ".")
     commit(@upstream, "update")
+  end
+
+  # Upstream gains a submodule at +path+ whose gitlink names a commit the
+  # submodule repo does not carry (the never-pushed-commit shape).
+  def add_unreachable_submodule_upstream(path)
+    sub = File.join(@root, "sub")
+    FileUtils.mkdir_p(sub)
+    git(sub, "init", "-q")
+    git(sub, "-c", "user.email=t@t", "-c", "user.name=t", "commit", "-q", "--allow-empty", "-m", "seed")
+    File.write(File.join(@upstream, ".gitmodules"), "[submodule \"#{path}\"]\n\tpath = #{path}\n\turl = #{sub}\n")
+    git(@upstream, "add", ".gitmodules")
+    git(@upstream, "update-index", "--add", "--cacheinfo", "160000,#{'1' * 40},#{path}")
+    commit(@upstream, "add submodule #{path}")
+  end
+
+  # The argv of every `git … fetch …` GitFetch issues inside the block
+  # (Shell.run and Shell.stream both spied; the real call still runs).
+  # Hand-rolled define/yield/restore — minitest 6 ships no minitest/mock.
+  def record_fetch_argvs
+    seen = []
+    singleton = Nabu::Shell.singleton_class
+    originals = %i[run stream].to_h { |name| [name, Nabu::Shell.method(name)] }
+    originals.each do |name, original|
+      singleton.define_method(name) do |*argv, &blk|
+        seen << argv if argv.first == "git" && argv.include?("fetch")
+        original.call(*argv, &blk)
+      end
+    end
+    yield
+    seen
+  ensure
+    originals&.each { |name, original| singleton.define_method(name, original) }
   end
 
   def delete_upstream(relpath)
