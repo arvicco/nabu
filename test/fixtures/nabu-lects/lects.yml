@@ -747,6 +747,28 @@ anchors:
            'obm' is the ISO 639-3 code"
     # no stages — one monument does not stage
 
+  qda:
+    name: Deir ʿAlla
+    band: [-850, -750]
+    band_note: "the plaster text's archaeological horizon (late Iron
+                IIA–IIB, conventionally c. 800 BCE)"
+    parent: sem
+    note: "LOCAL-USE code (the qpc discipline — no ISO code exists, and
+           Glottolog's deir1238 is retired with no forwarding languoid):
+           the language of the Deir ʿAlla plaster inscription (the Balaam
+           son of Beor text, Jordan Valley). Its place WITHIN Northwest
+           Semitic is a live scholarly dispute the registry deliberately
+           does not settle: Hoftijzer & van der Kooij 1976 read it as
+           Aramaic; Hackett 1984 as South-Canaanite-leaning; Huehnergard
+           as its own NWS branch; Beyer as 'South Gileadite'. The parent
+           edge states only the uncontested level (Semitic — Northwest
+           Semitic by all parties); the contested branch below it is left
+           open (the xna/dmn state-the-dispute discipline). Corpus: the
+           ETCBC extrabiblical plaster text, whose upstream labels every
+           word Hebrew as a processing convenience — that claim retires
+           onto this anchor"
+    # no stages — one inscription does not stage
+
   xna:
     name: Ancient North Arabian
     glottocode: anci1245
@@ -1989,6 +2011,227 @@ anchors:
            closing xum's ride-the-nearest-lane note for this one
            dialect. Attested almost entirely through Latin authors'
            glosses (Varro, Festus), not a running-text corpus"
+
+  xfa:
+    name: Faliscan
+    glottocode: fali1291
+    parent: itc
+    band: [-700, -150]
+    band_note: "conventional epigraphic span, approximate — the Ceres
+                inscription (7th/6th c. BCE) to the Latinization of the
+                ager Faliscus after Falerii's fall (241 BCE); the 8th-c.
+                'Palaeo-Faliscan' symposiastic group the ItAnt team
+                proposes sits outside it"
+    note: "Latino-Faliscan: closest to Latin, more distantly to the
+           Sabellic languages. Whether an autonomous language or a Latin
+           dialect is debated — Bakkum 2009 edits the corpus as 'the
+           Latin dialect of the Ager Faliscus', Glottolog sets a
+           Latino-Faliscan node, the ItAnt team keeps the question open;
+           no Latino-Faliscan node exists here, so the registry claims
+           only the itc edge (lat itself sits under itc:pro). Some 300
+           inscriptions, mostly funerary, from the Ager Faliscus (over
+           half from Falerii Veteres, others from Falerii Novi), in a
+           local alphabet of South Etruscan origin, mostly sinistrorse;
+           conventionally Early / Middle / Late (Neo-)Faliscan, the last
+           from 241 BCE. 'xfa' is the ISO 639-3 code. Consumer:
+           lexicon-itant (75 entries, censused 2026-10-29)"
+
+  xve:
+    name: Venetic
+    glottocode: vene1257
+    parent: ine
+    band: [-600, -50]
+    band_note: "conventional epigraphic span, approximate — the 6th to
+                the 1st c. BCE (Marinetti 2020), closing with the
+                Veneto-Latin transitional texts"
+    note: "Indo-European of NE Italy; its relation to Italic is a LIVE
+           dispute the registry does not settle. Italic membership is the
+           current majority view (Marinetti 2020; the ItAnt team;
+           Glottolog files it directly under Italic), its position
+           against Latin and Sabellic left open; Hamp 1954 argued a
+           Latino-Faliscan affinity, Meiser 2017 an Italo-Venetic group
+           beside Proto-Italic, Schrijver 2016 an Italo-Venetic
+           sub-branch of Italo-Celtic, and others an independent IE
+           branch. The parent edge therefore states only the uncontested
+           level (ine), the qda/xna discipline; a settled Italic reading
+           would re-parent it to itc. Standard grammars: Pellegrini &
+           Prosdocimi 1967, Lejeune 1974. Corpus: over 500 inscriptions
+           (older handbooks: 300+), plus ~200 fragments and ~50
+           Veneto-Latin texts — votive bronzes from the Reitia sanctuary
+           at Este, funerary stelae and urns from Este and Padua, the
+           Lagole (Cadore) deposits, outliers in Friuli, Carinthia and
+           Slovenia — in local Etruscan-derived alphabets with the
+           distinctive syllabic punctuation, later in Latin letters.
+           'xve' is the ISO 639-3 code. Consumer: lexicon-itant (85
+           entries, censused 2026-10-29)"
+
+  spx:
+    name: South Picene
+    glottocode: sout2618
+    parent: itc
+    band: [-600, -300]
+    band_note: "the epigraphic span, approximate — the mid-6th-c.
+                Capestrano warrior to the 4th-c. BCE stelae"
+    note: "Sabellic, the earliest-attested Sabellic language; its place
+           WITHIN Sabellic is open — a third branch beside Oscan and
+           Umbrian, or one end of a Sabellic dialect continuum; Glottolog
+           groups it with Sabine and Pre-Samnite as 'Old Sabellic'. No
+           Sabellic node exists here, so the edge is itc, the
+           osc/xum/sbv shape. NOT the North Picene of the Novilara stele
+           (unclassified, a different language). About twenty
+           inscriptions (21–23 by count; Marinetti 1985 the standard
+           edition and sigla), mostly funerary stelae and cippi from
+           Picenum and the ager Praetuttiorum (the Capestrano warrior's
+           base the best known), in the South Picene ('Sabine')
+           alphabet shared with the archaic Sabine fragments. 'spx' is
+           the ISO 639-3 code. Consumer: lexicon-itant (23 entries,
+           censused 2026-10-29)"
+
+  pgn:
+    name: Paelignian
+    glottocode: pael1234
+    parent: itc
+    band: [-200, -1]
+    band_note: "the epigraphic horizon, approximate — the 2nd–1st c. BCE
+                Latin-alphabet inscriptions"
+    note: "Sabellic, one of the 'minor' central dialects; usually set
+           with the Oscan group (Glottolog files it under Oscan) though
+           it shares features with Umbrian — the grouping of the minor
+           dialects is not agreed (Stuart-Smith 2004), so the edge is
+           itc, the osc/xum/sbv shape. About sixty short inscriptions,
+           mostly epitaphs, from Corfinium, Sulmo and Superaequum, in a
+           local variety of the Latin alphabet; the Herentas epitaph of
+           Corfinium the best known. 'pgn' is the ISO 639-3 code.
+           Consumer: lexicon-itant (31 entries, censused 2026-10-29)"
+
+  umc:
+    name: Marrucinian
+    glottocode: marr1267
+    parent: itc
+    band: [-300, -100]
+    band_note: "the epigraphic horizon, approximate — the mid-3rd-c.
+                BCE Rapino bronze and the later short texts"
+    note: "Sabellic minor dialect of the Marrucini (around Teate,
+           Chieti), commonly placed with Paelignian in the Oscan group
+           (Glottolog files it under Oscan; the minor-dialect grouping
+           is not agreed, hence the itc edge). A handful of
+           inscriptions, all short save the Aes Rapinum (the Rapino
+           bronze, ~35 words, a sacral regulation of the 'touta
+           marouca'; lost in the Second World War, known from the
+           earlier editions). 'umc' is the ISO 639-3 code. Consumer:
+           lexicon-itant (17 entries, censused 2026-10-29)"
+
+  ims:
+    name: Marsian
+    glottocode: mars1253
+    parent: itc
+    band: [-300, -150]
+    band_note: "the epigraphic horizon, approximate — the votive texts'
+                letter-forms (middle Republic)"
+    note: "Sabellic minor dialect of the Fucine basin (Marsica),
+           usually considered an Umbrian variety (the ItAnt team;
+           Glottolog files it under Umbrian) and heavily Latinized —
+           where Marsian ends and local Latin begins is itself argued;
+           the edge stays itc, the osc/xum/sbv shape. About nine short
+           votive inscriptions (Conway 1897's count) from Ortona dei
+           Marsi, Marruvium, Lecce nei Marsi, Trasacco and Luco dei Marsi
+           (the lost Fucine bronze to Angitia), plus glosses and
+           Latin-form names. 'ims' is the ISO 639-3 code. Consumer:
+           lexicon-itant (9 entries, censused 2026-10-29)"
+
+  xvs:
+    name: Vestinian
+    glottocode: vest1239
+    parent: itc
+    band: [-250, -100]
+    band_note: "the epigraphic horizon, approximate — the mid-3rd-c.
+                BCE Navelli dedication to the later texts"
+    note: "Sabellic minor dialect of the Vestini (the Aterno valley,
+           Abruzzo); commonly set near Oscan (Glottolog files it under
+           Oscan), but the minor-dialect grouping is not agreed
+           (Stuart-Smith 2004), hence the itc edge. Very thinly attested:
+           a few short inscriptions, the best known the Navelli
+           dedication to Hercules (CIL I² 394, 't. vetio duno didet
+           herclo iovio'). 'xvs' is the ISO 639-3 code. Consumer:
+           lexicon-itant (8 entries, censused 2026-10-29)"
+
+  xvo:
+    name: Volscian
+    glottocode: vols1237
+    parent: itc
+    band: [-300, -250]
+    band_note: "the Velitrae bronze's dating (early 3rd c. BCE),
+                approximate"
+    note: "Sabellic, of the Volsci of southern Latium, usually considered
+           an Umbrian variety (Glottolog files it under Umbrian; the text
+           shows close parallels to the Iguvine Tables) — and the
+           identity is fragile: it rests on one inscription, the
+           Velitrae (Velletri) bronze to Declunus, which recent work
+           reads simply as Umbrian (the ItAnt team), so 'Volscian' may
+           name an ethnonym more than a distinct language; the edge
+           stays itc, the osc/xum/sbv shape. Effectively a
+           single-monument language. 'xvo' is the ISO 639-3 code.
+           Consumer: lexicon-itant (10 entries, censused 2026-10-29)"
+    # no stages — one inscription does not stage
+
+  xhr:
+    name: Hernican
+    glottocode: hemi1234
+    parent: itc
+    note: "Sabellic, of the Hernici around Anagnia (southern Latium);
+           Glottolog files it under Oscan, but the attestation is too
+           thin to place it within Sabellic, hence the itc edge. A couple
+           of inscriptions only, the oldest the archaic text from the
+           Anagnia sanctuary (He 2; Colonna 1990, Gatti 1993, discussed
+           by Rix 1998). No band: too few, individually dated texts to
+           state an attestation window with confidence (bands are minted
+           lazily). Glottolog's id for it is the irregular 'hemi1234'.
+           'xhr' is the ISO 639-3 code. Consumer: lexicon-itant (1
+           entry, censused 2026-10-29)"
+
+  qps:
+    name: Pre-Samnite
+    glottocode: pres1240
+    parent: itc
+    band: [-600, -400]
+    band_note: "the epigraphic horizon, approximate — the 6th–5th c.
+                BCE Campanian texts"
+    note: "LOCAL-USE code (the qpc/qda discipline): ISO 639-3 assigns no
+           code to Pre-Samnite, and the consuming lexicon's own tag 'snt'
+           is not an ISO 639-3 assignment (unassigned and never retired,
+           verified 2026-10-30) — a squatted code from the managed range
+           could later be assigned to another language, so it is NOT
+           adopted. The archaic Sabellic of Campania before the Samnite
+           (Oscan) arrival: archaic features Oscan lost, but too scant to
+           fix its relation to Oscan or the other Sabellic languages
+           (Wallace; Piwowarczyk 2011); Glottolog groups it with South
+           Picene and Sabine as 'Old Sabellic'. Edge itc, the
+           osc/xum/sbv shape. A few short inscriptions — the Nuceria
+           bucchero jug ('bruties esum', 6th c.), the Capua 'Niumsis
+           Tanunis' text (Adiego), and the disputed Tortora cippus that
+           Calabrese 2021 reads as Pre-Samnite and the ItAnt team files
+           as 'Oenotrian'. Consumer: lexicon-itant (2 entries tagged
+           snt, censused 2026-10-29)"
+
+  qcp:
+    name: Capenate
+    parent: itc
+    note: "LOCAL-USE code (the qpc/qda discipline): neither ISO 639-3 nor
+           Glottolog carries Capenate, and the consuming lexicon's own
+           tag 'xca' is not an ISO 639-3 assignment (unassigned and never
+           retired, verified 2026-10-30; Chorasmian is xco) — NOT
+           adopted. The language of the inscriptions of the ager Capenas
+           (Capena, east of Soracte), between the Faliscan, Etruscan and
+           Sabine areas. The ItAnt team classes it as Sabellic — beside
+           South Picene and Sabine, sharing their alphabet, strongly
+           influenced by its neighbours — while the line against
+           Faliscan is drawn find by find (Bakkum 2009 files a Capena
+           find as Faliscan; Rigobianco 2020 questions the attribution).
+           Both readings sit under Italic, so itc is the uncontested
+           edge. A small corpus of short texts; no band — the group's
+           dating is not settled enough to state one, and no glottocode
+           exists. Consumer: lexicon-itant (1 entry tagged xca, censused
+           2026-10-29)"
 
   ett:
     name: Etruscan

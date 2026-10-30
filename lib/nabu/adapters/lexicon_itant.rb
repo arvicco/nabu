@@ -85,8 +85,10 @@ module Nabu
       SKOS_FILE = %r{\AsemanticFields_[^/]*\.ttl\z}
 
       # The accepted ancient-Italy lexicons: lime:language → display name.
-      # Codes are upstream's verbatim (xca Capenate and snt Pre-Samnite are
-      # upstream's own tags, unverified against ISO 639-3).
+      # Codes are upstream's verbatim. xca (Capenate) and snt (Pre-Samnite)
+      # are UNASSIGNED in ISO 639-3 — stored as-is, resolved to the
+      # registry's local-use qcp/qps anchors by config/lect_overrides.yml
+      # (the 2026-10-30 Italic minor-languages mint).
       LANGUAGES = {
         "osc" => "Oscan", "xum" => "Umbrian", "sbv" => "Sabine", "pgn" => "Paelignian",
         "umc" => "Marrucinian", "ims" => "Marsian", "xvs" => "Vestinian", "xvo" => "Volscian",
