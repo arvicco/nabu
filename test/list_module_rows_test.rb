@@ -103,7 +103,7 @@ class ListModuleRowsTest < Minitest::Test
     with_rig do |config|
       out, _err, status = with_config(config) { run_cli(["list"]) }
       assert_nil status
-      assert_match(/^nabu-lects\s+272 anchors · 147 stages · 31 varieties · 191 codemap rows  license=attribution$/,
+      assert_match(/^nabu-lects\s+284 anchors · 147 stages · 31 varieties · 191 codemap rows  license=attribution$/,
                    out)
       assert_match(/^nabu-places\s+module @ 0123456789ab  license=attribution$/, out)
       assert_match(/^lex\s+dicts=2 entries=2  langs=ine-pro,sla-pro  license=attribution$/, out)
@@ -117,7 +117,7 @@ class ListModuleRowsTest < Minitest::Test
   def test_list_cards_per_kind
     with_rig do |config|
       out, = with_config(config) { run_cli(%w[list nabu-lects]) }
-      assert_match(/^  272 anchors · 147 stages · 31 varieties · 191 codemap rows$/, out)
+      assert_match(/^  284 anchors · 147 stages · 31 varieties · 191 codemap rows$/, out)
       out, = with_config(config) { run_cli(%w[list nabu-places]) }
       assert_match(/^  module @ 0123456789ab$/, out)
       out, = with_config(config) { run_cli(%w[list lex]) }
@@ -130,9 +130,9 @@ class ListModuleRowsTest < Minitest::Test
   def test_status_detail_and_long_carry_the_module_census
     with_rig do |config|
       out, = with_config(config) { run_cli(%w[status nabu-lects]) }
-      assert_match(/holds:\s+272 anchors · 147 stages · 31 varieties · 191 codemap rows/, out)
+      assert_match(/holds:\s+284 anchors · 147 stages · 31 varieties · 191 codemap rows/, out)
       out, = with_config(config) { run_cli(%w[status --long]) }
-      assert_match(/nabu-lects\s+-\s+module\s+up=module\s+272 anchors/, out)
+      assert_match(/nabu-lects\s+-\s+module\s+up=module\s+284 anchors/, out)
       assert_match(/nabu-places\s+-\s+module\s+up=module\s+module @ 0123456789ab/, out)
     end
   end

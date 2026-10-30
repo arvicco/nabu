@@ -1,0 +1,21 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.arvicco/nabu-demo",
+  "title": "Nabu",
+  "description": "Ancient-text research library as an MCP server: search, concordance, dictionaries, alignment and intertext tools over a baked open demo slice (104,585 passages; Greek NT, Hebrew Bible and more). The full multi-million-passage library is a local build from the same open-source repo.",
+  "version": "1.0.0",
+  "repository": {
+    "url": "https://github.com/arvicco/nabu",
+    "source": "github"
+  },
+  "websiteUrl": "https://arvicco.github.io/nabu/mcp/",
+  "packages": [
+    {
+      "registryType": "oci",
+      "identifier": "ghcr.io/arvicco/nabu-demo:1.0.0",
+      "transport": {
+        "type": "stdio"
+      }
+    }
+  ]
+}

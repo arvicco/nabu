@@ -7,6 +7,18 @@ already small (340 + 40 lines) and the module's read seam
 full codemap to be exercised honestly (a trimmed slice would hide
 referential-integrity gaps the drift guard exists to catch).
 
+- **Retrieved 2026-10-30 (third cut)** — the Italic minor-languages
+  package: eleven anchors (xfa Faliscan, xve Venetic, spx South
+  Picene, pgn Paelignian, umc Marrucinian, ims Marsian, xvs
+  Vestinian, xvo Volscian, xhr Hernican, and the local-use qps
+  Pre-Samnite / qcp Capenate for upstream tags unassigned in ISO
+  639-3); no codemap rows (the ISO anchors resolve by identity).
+  Copied verbatim from canonical/nabu-lects (commit `47b4193`,
+  `main`). `lects.yml` 206,002 B, sha256
+  `2aae4dbdb2d4ef58e170bc5366283d63cb404fd457604d1c091fee93035bbcb3`;
+  `codemap.yml` 10,059 B, unchanged by the mint, sha256
+  `747472d66bd881629b54d61b629a5867399ec682338b2a303bedd678beef8356`.
+
 - **Retrieved 2026-10-27 (second cut)** — the South Asia / Greek-dialect
   package: the ta:old and ta:mid (Old / Middle Tamil), te:old (Old
   Telugu) and mr:old (Old Marathi) stages; the pmh (Maharastri
