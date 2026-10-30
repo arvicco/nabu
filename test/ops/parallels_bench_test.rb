@@ -296,6 +296,43 @@ module Ops
       fulltext&.disconnect
     end
 
+    def test_novelty_weighting_is_a_named_switchable_knob
+      fulltext = Nabu::Store.connect_fulltext("sqlite::memory:")
+      off = Bench.options_from_env("GOLD" => "suttacentral")
+      refute off.novelty, "novelty weighting is off unless asked for"
+      plain = Bench.producer_for(off, catalog: @catalog, fulltext: fulltext, links: @links)
+      assert_equal Nabu::Query::Parallels, plain.engine_class, "switch off: today's engine, untouched"
+      assert_equal({ "novelty" => nil, "novelty_weight" => nil }, plain.params.slice("novelty", "novelty_weight"))
+      on = Bench.options_from_env("GOLD" => "suttacentral", "NOVELTY" => "on")
+      engine = Bench.producer_for(on, catalog: @catalog, fulltext: fulltext, links: @links)
+      assert_equal Nabu::Query::ParallelsNovel, engine.engine_class
+      assert_equal({ "novelty" => "on", "novelty_weight" => 1.0 }, engine.params.slice("novelty", "novelty_weight"),
+                   "the sidecar records the weight that ran")
+      swept = Bench.options_from_env("GOLD" => "suttacentral", "NOVELTY" => "on", "NOVELTY_WEIGHT" => "0.5",
+                                     "FUZZY" => "fallback", "HUB" => "on", "CONTIGUITY" => "on")
+      all = Bench.producer_for(swept, catalog: @catalog, fulltext: fulltext, links: @links)
+      assert_equal Nabu::Query::ParallelsFuzzyHubContiguousNovel, all.engine_class
+      assert_equal({ "novelty" => "on", "novelty_weight" => 0.5, "contiguity" => "on" },
+                   all.params.slice("novelty", "novelty_weight", "contiguity"))
+      assert_raises(Bench::Error) { Bench.options_from_env("GOLD" => "suttacentral", "NOVELTY" => "yes") }
+      assert_raises(Bench::Error) { Bench.options_from_env("GOLD" => "suttacentral", "NOVELTY_WEIGHT" => "big") }
+    ensure
+      fulltext&.disconnect
+    end
+
+    def test_every_switch_combination_names_its_engine
+      classes = Bench::EngineProducer::ENGINES
+      assert_equal 16, classes.size
+      assert_equal 16, classes.values.uniq.size, "one distinct engine per switch combination"
+      classes.each do |(fuzzy, hub, contiguity, novelty), klass|
+        ancestors = klass.ancestors
+        assert_equal fuzzy, ancestors.include?(Nabu::Query::ParallelsFuzzy), klass.name
+        assert_equal hub, ancestors.include?(Nabu::Query::HubDemotion), klass.name
+        assert_equal contiguity, ancestors.include?(Nabu::Query::ContiguityBonus), klass.name
+        assert_equal novelty, ancestors.include?(Nabu::Query::NoveltyWeighting), klass.name
+      end
+    end
+
     # -- the pinned baseline: the real engine over real edh/edr editions -------
 
     # The trimmed-real fixture editions are SHORT (one- to three-token
@@ -335,6 +372,13 @@ module Ops
     # a run needs two — the bonus re-orders near-ties among multi-token
     # matches, it cannot reach a pair the exact tier never scores.
     CONTIGUITY_PIN = { 4 => { 1 => [0, 6], 5 => [0, 6] }, 1 => { 1 => [2, 6], 5 => [2, 6] } }.freeze
+
+    # Novelty weighting (Query::NoveltyWeighting) at its default weight
+    # over the same editions — pinned 2026-10-30 beside the off-state,
+    # and equal to it: the short epigraphic editions repeat no scored gram
+    # inside their own documents, so there is no intra-work formula to
+    # discount (the technique's target is formulaic prose — suttacentral).
+    NOVELTY_PIN = { 4 => { 1 => [0, 6], 5 => [0, 6] }, 1 => { 1 => [2, 6], 5 => [2, 6] } }.freeze
 
     def test_engine_baseline_over_the_edh_edr_fixture_editions
       fulltext = load_edh_edr_fixture_editions
@@ -388,6 +432,20 @@ module Ops
         [gram_size, report.rows.to_h { |row| [row[:k], row.values_at(:found, :gold)] }]
       end
       assert_equal CONTIGUITY_PIN, measured, "the bonus's recall over the fixture editions moved — re-measure"
+    ensure
+      fulltext&.disconnect
+    end
+
+    def test_novelty_weighting_over_the_edh_edr_fixture_editions
+      fulltext = load_edh_edr_fixture_editions
+      gold = bench.gold_set(Bench.recipe("edh-edr"))
+      measured = NOVELTY_PIN.keys.to_h do |gram_size|
+        producer = Bench::EngineProducer.new(catalog: @catalog, fulltext: fulltext, gram_size: gram_size,
+                                             novelty: true)
+        report = bench.run(gold: gold, producer: producer, ks: [1, 5], sample: nil)
+        [gram_size, report.rows.to_h { |row| [row[:k], row.values_at(:found, :gold)] }]
+      end
+      assert_equal NOVELTY_PIN, measured, "novelty's recall over the fixture editions moved — re-measure"
     ensure
       fulltext&.disconnect
     end
