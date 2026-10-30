@@ -48,6 +48,15 @@ RUN test -f /demo/demo-census.json || \
     { echo "not a finished demo slice: run rake demo:build, pass --build-context demo-slice=tmp/demo" >&2; exit 1; }
 # The two variables that point the server at the slice (Nabu::DemoBuild).
 ENV NABU_ROOT=/demo NABU_CONFIG=/demo/config/nabu.yml
+# OCI labels: source links the GHCR package to the repo; the
+# io.modelcontextprotocol.server.name label is how the official MCP
+# Registry verifies ownership of an OCI package (it must equal the
+# server name in server.json). Licenses states the CODE license; the
+# baked data carries per-source open licenses, see /demo/demo-census.json.
+LABEL org.opencontainers.image.source="https://github.com/arvicco/nabu" \
+      org.opencontainers.image.description="Nabu demo: an ancient-text research library slice behind an MCP server (stdio + streamable HTTP). Code MIT; baked data per-source open licenses (demo-census.json). Full library is a local build." \
+      org.opencontainers.image.licenses="MIT" \
+      io.modelcontextprotocol.server.name="io.github.arvicco/nabu-demo"
 CMD ["bin/nabu", "mcp"]
 
 # The default target stays last: `docker build .` builds the plain image.
