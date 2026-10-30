@@ -221,3 +221,13 @@ sources:
     # redaction history). The si translation siblings stay bare si:
     # Sinhala in Sinhala script is the language's own default.
     pli: { lect: "pli~sinh", tier: certain }
+  lexicon-itant:
+    # Upstream tags its Pre-Samnite and Capenate lexicons snt and xca —
+    # both UNASSIGNED in ISO 639-3 (xca's nearest assigned neighbour,
+    # Chorasmian, is xco). The registry deliberately does not adopt
+    # unassigned codes (the no-squatting rule); the 2026-10-30 Italic
+    # minor-languages mint carries them as local-use anchors instead.
+    # These rows transcribe upstream's own language naming onto those
+    # nodes — parse-time work, the 2026-10-18 generalization.
+    snt: { lect: "qps", tier: certain }
+    xca: { lect: "qcp", tier: certain }
