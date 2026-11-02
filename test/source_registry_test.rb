@@ -1143,7 +1143,8 @@ class SourceRegistryTest < Minitest::Test
     assert_includes registry["oracc"].axes, "iranian", "ORACC's ario = Old Persian Achaemenid trilinguals"
     assert_includes registry["cdli"].axes, "iranian", "CDLI catalogs Old Persian (peo) Achaemenid trilinguals"
     assert_includes registry["oracc"].axes, "cuneiform", "still whole-source on the tablet desk"
-    assert_equal %w[cdli iedc oracc perseus-farsilit shkz skjaervo-khotanese], registry.public_axis_members("iranian"),
+    assert_equal %w[cdli iedc oracc perseus-farsilit shkz skjaervo-khotanese wiktionary-fa],
+                 registry.public_axis_members("iranian"),
                  "the public iranian shelves, in registry order (the blocked Avesta is not advertised)"
     assert_equal %w[titus-avestan titus-bactrian titus-khotanese titus-manichaica titus-pahlavi
                     titus-sogdian], registry.blocked_axis_members("iranian"),

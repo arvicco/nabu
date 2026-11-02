@@ -32,6 +32,7 @@ A source wears every desk it serves — these six answer this desk. Holdings are
 | `perseus-farsilit` | texts | attribution | wired · manual | 2 docs / 17,637 passages |
 | `shkz` | texts | open | wired · manual | 3 docs / 153 passages |
 | `skjaervo-khotanese` | texts | open | wired · manual | 2,357 docs / 14,574 passages |
+| `wiktionary-fa` | dictionary | attribution | not yet wired | not synced yet |
 
 Private research materials under personal grants are not listed.
 

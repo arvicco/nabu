@@ -187,7 +187,7 @@ The Egyptian-Coptic continuum: the TLA corpora and word list (tla-hf, aes, aed),
 
 The Iranian-language lane, Zoroastrian canon at its heart: the TITUS Avesta (Old Iranian liturgy — grant-gated private research, not a public holding) and the Old Persian of the Achaemenid royal inscriptions, which ride the ORACC and CDLI cuneiform shelves whole — their trilinguals' Old Persian column the desk's shared lane with the tablet world — classical Persian literature (Hafez's Divan with its aligned English, perseus-farsilit) — and, since P107, the Middle Iranian east: Skjærvø's British Library Khotanese editions, the Invisible East catalog's Khotanese/Sogdian/Bactrian/Judeo-Persian documents, and the trilingual ŠKZ inscription with its Parthian and Middle Persian columns.
 
-**Members** (6): `cdli`, `iedc`, `oracc`, `perseus-farsilit`, `shkz`, `skjaervo-khotanese`
+**Members** (7): `cdli`, `iedc`, `oracc`, `perseus-farsilit`, `shkz`, `skjaervo-khotanese`, `wiktionary-fa`
 
 ### indic
 

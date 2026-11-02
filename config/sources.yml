@@ -7118,6 +7118,25 @@ wiktionary-dv:   # 02-sources row 288
   # lang_code dv), CC BY-SA + GFDL → attribution, FileFetch.
   sync_policy: manual
 
+wiktionary-fa:   # 02-sources row 320
+  adapter: Nabu::Adapters::WiktionaryFa
+  adopted: "2026-11-02"
+  axes: [iranian]
+  wired: false   # first sync: bin/nabu enable wiktionary-fa && bin/nabu sync wiktionary-fa
+                 # (one ~96 MB JSONL GET). EXPECT 1 dictionary doc → 20,350 entries /
+                 # 47,431 reflex rows, 0 non-NFC (the 2026-10-30 extract's census);
+                 # eyeball nabu define دل ("heart", ← Middle Persian 𐭣𐭩𐭫), then flip.
+  # The kaikki Persian extraction (20,350 records / "17651 distinct
+  # words" / 28,272 senses, census 2026-11-02): the library's first New
+  # Persian dictionary — an etymon layer through Middle Persian (746 pal)
+  # and Old Persian (276 peo) to Proto-Iranian (935 ira-pro), the Arabic
+  # donor lane (2,532 ar), descendants into Ottoman, Hindustani, Armenian.
+  # Language fas (→ fa through the held codemap alias). The
+  # wiktionary-akk mold on the shared WiktionaryKaikki base: per-language
+  # JSONL (deprecated upstream — fallback = filter the full extract by
+  # lang_code fa), CC BY-SA + GFDL → attribution, FileFetch.
+  sync_policy: manual
+
 wiktionary-hit:
   adapter: Nabu::Adapters::WiktionaryHit
   adopted: "2026-09-13"
