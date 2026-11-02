@@ -674,6 +674,10 @@ sources:
     entry_fields:
       concept: concept        # the concept's English name, ref = its uuid (= the tls-concepts
       #                         entry id the word→concept crossref resolves to)
+  fsv-lexica:                 # census 2026-11-02 over the three Karp LMF files (51,811 entries)
+    entry_fields:
+      pos: word_class         # Karp partOfSpeech tags verbatim: nn 27,605 · vb 9,291 · av 5,599 ·
+      #                         ab 2,226 · nl 117 · pp 135 · kn 75 · pn 74 … (6,825 entries carry none)
   lexicon-itant:              # census 2026-10-29 (lexicon_1_0.ttl, 809 entries)
     entry_fields:
       pos: word_class         # lexinfo partOfSpeech local name: properNoun 311 · noun 204 ·
