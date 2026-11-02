@@ -22,11 +22,12 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 ## The shelves
 
-A source wears every desk it serves — these six answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
+A source wears every desk it serves — these seven answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
 | Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 2 November 2026)</span> |
 |---|---|---|---|---|
 | `cdli` | tablet catalog | attribution | wired · manual | 353,156 docs / 2,186,961 passages |
+| `ganjoor` | texts | attribution | not yet wired | not synced yet |
 | `iedc` | texts | open | wired · manual | 1,316 docs / 5,493 passages |
 | `oracc` | tablets | open | wired · manual | 118,367 docs / 1,800,218 passages / 211,040 entries |
 | `perseus-farsilit` | texts | attribution | wired · manual | 2 docs / 17,637 passages |

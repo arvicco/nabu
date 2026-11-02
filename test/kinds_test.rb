@@ -449,6 +449,17 @@ class KindsTest < Minitest::Test
     assert_empty shipped.normalize("ppchy", "Vernacular"), "a register label, reviewed — never unmapped noise"
   end
 
+  # P153: Ganjoor's section labels — the divan's FORM sections fold, work
+  # and chapter titles stay uncovered (vocabulary: open).
+  def test_shipped_ganjoor_folds_the_form_sections
+    shipped = shipped_kinds
+    assert_equal %w[form], shipped.metadata_for("ganjoor")
+    assert_equal ["literary/poetry/lyric"], shipped.normalize("ganjoor", "غزلیات")
+    assert_equal ["literary/poetry"], shipped.normalize("ganjoor", "رباعیات")
+    assert_equal ["literary/poetry"], shipped.normalize("ganjoor", "قصاید"), "never praise by default"
+    assert_empty shipped.normalize("ganjoor", "دفتر اول"), "a work/chapter title mints nothing"
+  end
+
   # P104-1: the ETCSL composition-number taxonomy (c.0–c.6) folds through
   # a frozen prefix map — the Sumerian literary canon's first genre view.
   def test_shipped_etcsl_folds_the_composition_number_blocks

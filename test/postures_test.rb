@@ -179,7 +179,7 @@ class PosturesTest < Minitest::Test
   def test_the_lect_migration_kept_the_p59_4_census
     lect = postures.declarations.select { |d| d.layer == "lect" }
     by_posture = lect.group_by(&:posture).transform_values(&:size)
-    assert_equal 165, lect.size,
+    assert_equal 166, lect.size,
                  "the P59-4 declarations survive the move (61 at migration; itant retired P61-3," \
                  "oracc retired P62-2, etcsl/ccmh/freising/coptic-scriptorium retired P64-6, " \
                  "titus-avestan retired P66-1, osta+fornsvenska retired P77-r8, achemenet " \
@@ -350,7 +350,9 @@ class PosturesTest < Minitest::Test
                  "ppchy ADDED P152 — PENDING on a yi (Yiddish) anchor (nothing Yiddish exists in " \
                  "nabu-lects; the West/East dialect facet waits on the mint): 163→164; " \
                  "cgpg ADDED P153 — dates (the per-volume century labels band 25 of 33 volumes " \
-                 "into grc:byz): 164→165"
+                 "into grc:byz): 164→165; " \
+                 "ganjoor ADDED P153 — identity fas (codemap → the bare fa anchor; the registry " \
+                 "holds no Persian stages) + ara for the Arabic sections: 165→166"
     # The epigraphic-belt registry package (merged + canonical-synced
     # 2026-10-18, the add-then-retire shape within one phase) retires both
     # P130 pendings, and the ociana-script rule + the ig-cyprus override
@@ -385,7 +387,8 @@ class PosturesTest < Minitest::Test
     # posture; object_language xct in metadata): 122→123.
     # lzh-collection joins codemap (lzh → zho/lit, the kanripo precedent): 17→18.
     # ppchy joins as pending on a yi anchor mint: 1→2 (lasla, ppchy).
-    # cgpg joins dates (century labels → the grc:byz band): 21→22.
-    assert_equal({ "dates" => 22, "codemap" => 18, "identity" => 123, "pending" => 2 }, by_posture)
+    # cgpg joins dates (century labels → the grc:byz band): 21→22;
+    # ganjoor joins identity (fas → fa, no Persian stages; ara sections): 123→124.
+    assert_equal({ "dates" => 22, "codemap" => 18, "identity" => 124, "pending" => 2 }, by_posture)
   end
 end

@@ -86,9 +86,12 @@ line 78,652 · -1 paragraph 86,067 · 5 comment 1,710.
 3. **Poems without text → skipped by rule.** 4 classical poems have no verse
    rows; 6 more carry only blank or comment rows: **10 poems**.
 
-Accepted: **212 poets, 126,165 documents, 1,453,356 passages** (couplets
-1,367,700-odd; the rest prose paragraphs, band couplets and unpaired
-hemistichs). Reconciliation: 126,165 + 5,178 + 9,144 + 10 = **140,497** =
+Accepted: **212 poets, 126,165 documents, 1,453,355 passages** — 1,367,781
+couplets (unpaired hemistichs among them), 78,483 prose paragraphs, 7,090
+band couplets and 1 single line; 648 documents carry editorial comments;
+152 sit under Arabic-labelled sections. Five rows in the whole release hold
+only a no-break space, a ZWNJ or a control byte: blank, like empty rows.
+Reconciliation: 126,165 + 5,178 + 9,144 + 10 = **140,497** =
 the release's own `poem` row count; the endpoint's 243 records = 212
 accepted + 28 modern + 3 absent from the release.
 

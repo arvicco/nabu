@@ -1079,7 +1079,11 @@ Khotanese manuscripts (2,357 / 14,574; open), `shkz` — the trilingual
 Kaʿba-ye Zartošt inscription, aligned (3 / 153; open), `iedc` — the
 Invisible East documentary corpus (1,316 / 5,493; open),
 `perseus-farsilit` — Hafez's Divan with its aligned English (2 /
-17,637).
+17,637), and `ganjoor` — the classical cone of the Ganjoor Persian
+poetry library, 212 poets from Rudaki to the Qajar divans, one document
+per poem and one passage per couplet, dated by each poet's life
+(adapter ready, first sync pending: 126,165 poems expected;
+attribution, by the site operator's grant).
 
 **Anatolian and cuneiform.** `hittite-glossed` — glossed Hittite texts
 with German translation (7,099 / 72,507; open), `aclt` — the Annotated
