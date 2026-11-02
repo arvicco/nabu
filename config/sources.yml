@@ -2329,7 +2329,7 @@ eng-web:
   # a live schedule.
   sync_policy: manual
 
-etcbc-syriac:   # P153, 02-sources row 321
+etcbc-syriac:   # P153, 02-sources row 329
   adapter: Nabu::Adapters::EtcbcSyriac
   adopted: "2026-11-02"
   axes: [biblical, syriac]
@@ -2360,7 +2360,7 @@ etcbc-syriac:   # P153, 02-sources row 321
   # the repository and is NOT followed — the ETCBC directorate stated by
   # email 2026-10-15 that all ETCBC data is CC BY-NC.
 
-etcbc-targum:   # P153, 02-sources row 320
+etcbc-targum:   # P153, 02-sources row 328
   adapter: Nabu::Adapters::EtcbcTargum
   adopted: "2026-11-02"
   axes: [biblical, hebrew]
@@ -2770,7 +2770,7 @@ helipad:
   # new version is an owner re-pin decision → manual.
   sync_policy: manual
 
-hexapla:   # P153, 02-sources row 323
+hexapla:   # P153, 02-sources row 331
   adapter: Nabu::Adapters::Hexapla
   adopted: "2026-11-02"
   axes: [biblical, hebrew]
@@ -6891,7 +6891,7 @@ tshet-uinh:
   # zhongyuan-data's journal note CLOSED P88-R3 (2026-08-29): the
   # zho:oman stage + owner GO built it as the `zhongyuan` source below.
 
-typikon-bible:   # P153, 02-sources row 322
+typikon-bible:   # P153, 02-sources row 330
   adapter: Nabu::Adapters::TypikonBible
   adopted: "2026-11-02"
   axes: [biblical, romance]
