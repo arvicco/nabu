@@ -1074,6 +1074,95 @@
    "txt_url": "https://storage.googleapis.com/sefaria-export/txt/Liturgy/Haggadah/Commentary/Barukh%20SheAmar%20on%20Pesach%20Haggadah/English/Rabbi%20Mark%20B%20Greenspan.txt",
    "cltk_full_url": "https://storage.googleapis.com/sefaria-export/cltk-full/Liturgy/Haggadah/Commentary/Barukh%20SheAmar%20on%20Pesach%20Haggadah/English/Rabbi%20Mark%20B%20Greenspan.json",
    "cltk_flat_url": "https://storage.googleapis.com/sefaria-export/cltk-flat/Liturgy/Haggadah/Commentary/Barukh%20SheAmar%20on%20Pesach%20Haggadah/English/Rabbi%20Mark%20B%20Greenspan.json"
+  },
+  {
+   "title": "Ben Sira",
+   "language": "Hebrew",
+   "versionTitle": "Ben Sira, David Kahana ed. -- Wikisource ",
+   "categories": [
+    "Second Temple",
+    "Apocrypha"
+   ],
+   "json_url": "https://storage.googleapis.com/sefaria-export/json/Second%20Temple/Apocrypha/Ben%20Sira/Hebrew/Ben%20Sira%2C%20David%20Kahana%20ed.%20--%20Wikisource%20.json",
+   "txt_url": "https://storage.googleapis.com/sefaria-export/txt/Second%20Temple/Apocrypha/Ben%20Sira/Hebrew/Ben%20Sira%2C%20David%20Kahana%20ed.%20--%20Wikisource%20.txt",
+   "cltk_full_url": "https://storage.googleapis.com/sefaria-export/cltk-full/Second%20Temple/Apocrypha/Ben%20Sira/Hebrew/Ben%20Sira%2C%20David%20Kahana%20ed.%20--%20Wikisource%20.json",
+   "cltk_flat_url": "https://storage.googleapis.com/sefaria-export/cltk-flat/Second%20Temple/Apocrypha/Ben%20Sira/Hebrew/Ben%20Sira%2C%20David%20Kahana%20ed.%20--%20Wikisource%20.json"
+  },
+  {
+   "title": "Ben Sira",
+   "language": "English",
+   "versionTitle": "BST",
+   "categories": [
+    "Second Temple",
+    "Apocrypha"
+   ],
+   "json_url": "https://storage.googleapis.com/sefaria-export/json/Second%20Temple/Apocrypha/Ben%20Sira/English/BST.json",
+   "txt_url": "https://storage.googleapis.com/sefaria-export/txt/Second%20Temple/Apocrypha/Ben%20Sira/English/BST.txt",
+   "cltk_full_url": "https://storage.googleapis.com/sefaria-export/cltk-full/Second%20Temple/Apocrypha/Ben%20Sira/English/BST.json",
+   "cltk_flat_url": "https://storage.googleapis.com/sefaria-export/cltk-flat/Second%20Temple/Apocrypha/Ben%20Sira/English/BST.json"
+  },
+  {
+   "title": "Megillat Ta'anit",
+   "language": "Hebrew",
+   "versionTitle": "Warsaw, 1874",
+   "categories": [
+    "Second Temple"
+   ],
+   "json_url": "https://storage.googleapis.com/sefaria-export/json/Second%20Temple/Megillat%20Ta%27anit/Hebrew/Warsaw%2C%201874.json",
+   "txt_url": "https://storage.googleapis.com/sefaria-export/txt/Second%20Temple/Megillat%20Ta%27anit/Hebrew/Warsaw%2C%201874.txt",
+   "cltk_full_url": "https://storage.googleapis.com/sefaria-export/cltk-full/Second%20Temple/Megillat%20Ta%27anit/Hebrew/Warsaw%2C%201874.json",
+   "cltk_flat_url": "https://storage.googleapis.com/sefaria-export/cltk-flat/Second%20Temple/Megillat%20Ta%27anit/Hebrew/Warsaw%2C%201874.json"
+  },
+  {
+   "title": "Megillat Ta'anit",
+   "language": "English",
+   "versionTitle": "Rabbi Mike Feuer, Jerusalem Anthology",
+   "categories": [
+    "Second Temple"
+   ],
+   "json_url": "https://storage.googleapis.com/sefaria-export/json/Second%20Temple/Megillat%20Ta%27anit/English/Rabbi%20Mike%20Feuer%2C%20Jerusalem%20Anthology.json",
+   "txt_url": "https://storage.googleapis.com/sefaria-export/txt/Second%20Temple/Megillat%20Ta%27anit/English/Rabbi%20Mike%20Feuer%2C%20Jerusalem%20Anthology.txt",
+   "cltk_full_url": "https://storage.googleapis.com/sefaria-export/cltk-full/Second%20Temple/Megillat%20Ta%27anit/English/Rabbi%20Mike%20Feuer%2C%20Jerusalem%20Anthology.json",
+   "cltk_flat_url": "https://storage.googleapis.com/sefaria-export/cltk-flat/Second%20Temple/Megillat%20Ta%27anit/English/Rabbi%20Mike%20Feuer%2C%20Jerusalem%20Anthology.json"
+  },
+  {
+   "title": "Ben Sira",
+   "language": "Hebrew",
+   "versionTitle": "merged",
+   "categories": [
+    "Second Temple",
+    "Apocrypha"
+   ],
+   "json_url": "https://storage.googleapis.com/sefaria-export/json/Second%20Temple/Apocrypha/Ben%20Sira/Hebrew/merged.json",
+   "txt_url": "https://storage.googleapis.com/sefaria-export/txt/Second%20Temple/Apocrypha/Ben%20Sira/Hebrew/merged.txt",
+   "cltk_full_url": "https://storage.googleapis.com/sefaria-export/cltk-full/Second%20Temple/Apocrypha/Ben%20Sira/Hebrew/merged.json",
+   "cltk_flat_url": "https://storage.googleapis.com/sefaria-export/cltk-flat/Second%20Temple/Apocrypha/Ben%20Sira/Hebrew/merged.json"
+  },
+  {
+   "title": "Book of Jubilees",
+   "language": "Hebrew",
+   "versionTitle": "Wikisource 2019",
+   "categories": [
+    "Second Temple",
+    "Apocrypha"
+   ],
+   "json_url": "https://storage.googleapis.com/sefaria-export/json/Second%20Temple/Apocrypha/Book%20of%20Jubilees/Hebrew/Wikisource%202019.json",
+   "txt_url": "https://storage.googleapis.com/sefaria-export/txt/Second%20Temple/Apocrypha/Book%20of%20Jubilees/Hebrew/Wikisource%202019.txt",
+   "cltk_full_url": "https://storage.googleapis.com/sefaria-export/cltk-full/Second%20Temple/Apocrypha/Book%20of%20Jubilees/Hebrew/Wikisource%202019.json",
+   "cltk_flat_url": "https://storage.googleapis.com/sefaria-export/cltk-flat/Second%20Temple/Apocrypha/Book%20of%20Jubilees/Hebrew/Wikisource%202019.json"
+  },
+  {
+   "title": "On Abraham",
+   "language": "English",
+   "versionTitle": "Loeb Classical Library, Harvard University Press, 1935",
+   "categories": [
+    "Second Temple",
+    "Philo"
+   ],
+   "json_url": "https://storage.googleapis.com/sefaria-export/json/Second%20Temple/Philo/On%20Abraham/English/Loeb%20Classical%20Library%2C%20Harvard%20University%20Press%2C%201935.json",
+   "txt_url": "https://storage.googleapis.com/sefaria-export/txt/Second%20Temple/Philo/On%20Abraham/English/Loeb%20Classical%20Library%2C%20Harvard%20University%20Press%2C%201935.txt",
+   "cltk_full_url": "https://storage.googleapis.com/sefaria-export/cltk-full/Second%20Temple/Philo/On%20Abraham/English/Loeb%20Classical%20Library%2C%20Harvard%20University%20Press%2C%201935.json",
+   "cltk_flat_url": "https://storage.googleapis.com/sefaria-export/cltk-flat/Second%20Temple/Philo/On%20Abraham/English/Loeb%20Classical%20Library%2C%20Harvard%20University%20Press%2C%201935.json"
   }
  ]
 }

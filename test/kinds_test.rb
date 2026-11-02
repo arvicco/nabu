@@ -427,6 +427,18 @@ class KindsTest < Minitest::Test
     assert_equal ["school"], shipped.normalize("classical-modern", "三字经")
   end
 
+  # P152: the sefaria Second Temple shelf — Ben Sira files under
+  # "Second Temple -- Apocrypha" (deuterocanon, the ruled prefix), while
+  # Megillat Ta'anit's bare "Second Temple" path is the Hasmonean feast-day
+  # chronicle and folds exactly, ahead of the prefix.
+  def test_shipped_sefaria_second_temple_folds
+    shipped = shipped_kinds
+    assert_equal ["scripture"], shipped.normalize("sefaria", "Second Temple -- Apocrypha")
+    assert_equal ["historiography/chronicle"], shipped.normalize("sefaria", "Second Temple")
+    assert_equal ["exegesis"], shipped.normalize("sefaria", "Tanakh -- Rishonim on Tanakh -- Rashi -- Torah"),
+                 "the exact map never shadows the prefix ladder"
+  end
+
   # P104-1: the ETCSL composition-number taxonomy (c.0–c.6) folds through
   # a frozen prefix map — the Sumerian literary canon's first genre view.
   def test_shipped_etcsl_folds_the_composition_number_blocks
