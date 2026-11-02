@@ -273,6 +273,34 @@ module Query
       assert_equal "a sacrificing or offering", out[%w[aberth cym]]
     end
 
+    def seed_hebrew_lexicon_shelf
+      oshb = Nabu::Store::Source.create(
+        slug: "hebrew-lexicon", name: "OSHB Hebrew Lexicon", adapter_class: "Nabu::Adapters::HebrewLexicon",
+        license: "CC BY 4.0", license_class: "attribution"
+      )
+      Nabu::Store::DictionaryLoader.new(db: @catalog, source: oshb)
+                                   .load_from(Nabu::Adapters::HebrewLexicon.new,
+                                              workdir: Nabu::TestSupport.fixtures("hebrew-lexicon"))
+    end
+
+    # The OSHB shelves register hbo (the majority) but carry the Aramaic
+    # parts too; each Aramaic entry records its own language, so an arc
+    # lookup reaches exactly the Aramaic entries — never the Hebrew ones.
+    def test_aramaic_lookups_reach_the_aramaic_entries_of_the_hbo_shelves
+      seed_hebrew_lexicon_shelf
+      arc = define("אֲבַד", lang: "arc")
+      assert_equal %w[urn:nabu:dict:bdb:xa.ab.aa urn:nabu:dict:hebrew-lexicon:7], arc.map(&:urn),
+                   "the BDB outline and the Strong shelf both carry Aramaic 'abad"
+      assert_includes define("אֲבַד", lang: "hbo").map(&:urn), "urn:nabu:dict:bdb:xa.ab.aa",
+                      "the hbo shelf still answers its whole content"
+      aramaic_keys = @catalog[:dictionary_entries].exclude(annotations_json: nil).select_map(:headword_folded)
+      hebrew = @catalog[:dictionary_entries].where(annotations_json: nil).exclude(headword_folded: aramaic_keys).first
+      assert_empty define(hebrew.fetch(:headword), lang: "arc"), "a Hebrew entry never answers an arc lookup"
+      jegar = @catalog[:dictionary_entries].where(entry_id: "3026a").first
+      out = Nabu::Query::Define.new(catalog: @catalog).glosses([[jegar.fetch(:headword), "arc"]])
+      assert_equal "heap", out[[jegar.fetch(:headword), "arc"]]
+    end
+
     # -- the Sanskrit shelf (P17-4): MW → GRETIL resolution ----------------------
 
     def seed_mw_shelf

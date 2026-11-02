@@ -7,14 +7,20 @@ module Nabu
   module Query
     # The one dictionary-language filter every dictionary-keyed lookup
     # shares (P153) — define's --lang, the passage-keyed gloss batch, the
-    # lemma profile's dictionary hop, list's entry pages. The fold is
+    # lemma profile's dictionary hop, list's entry pages. Two folds, both
     # query-side (stored codes stay whatever the adapter minted):
     #
-    # Spelling: the code expands through .codes, the symmetric closure
+    # 1. Spelling: the code expands through .codes, the symmetric closure
     #    of Languages.code_variants — GPC stores Welsh "cy" while the held
     #    Welsh text keys "wel" (eebo-tcp) and "cym" (cy-wikisource);
     #    before the fold a Welsh-keyed lookup never reached the
     #    89,386-entry shelf.
+    # 2. Grain: the store keys ONE language per dictionary, but a shelf can
+    #    carry entries of a second language (the OSHB lexicon's BDB and
+    #    augmented-Strong shelves register hbo and hold 852 + 710 Aramaic
+    #    entries). Such an entry records its own language as the
+    #    annotation "language", and the filter matches it too — so arc
+    #    reaches exactly the Aramaic entries, never the Hebrew ones.
     #
     # Lives in query/ on purpose: the fold is read-side only, so it stays
     # out of the shared derivation core (lib/nabu/languages.rb is in the
@@ -40,8 +46,19 @@ module Nabu
 
       # The WHERE expression for +lang+ over a dataset joining
       # dictionary_entries to dictionaries.
-      def filter(_catalog, lang)
-        { Sequel[:dictionaries][:language] => codes(lang) }
+      def filter(catalog, lang)
+        wanted = codes(lang)
+        shelf = { Sequel[:dictionaries][:language] => wanted }
+        return shelf unless annotations_column?(catalog)
+
+        entry = Sequel.function(:json_extract, Sequel[:dictionary_entries][:annotations_json], "$.language")
+        Sequel.|(shelf, { entry => wanted })
+      end
+
+      def annotations_column?(catalog)
+        catalog.schema(:dictionary_entries).any? { |name, _| name == :annotations_json }
+      rescue Sequel::Error
+        false
       end
     end
   end

@@ -77,6 +77,15 @@ module Nabu
     class OshbLexiconParser
       LANGUAGE_BY_PART = { "heb" => "hbo", "arc" => "arc" }.freeze
 
+      # The language both shelves register (the majority, 8,589 of 9,299
+      # aug entries, 23 of 46 BDB parts). The store keys one language per
+      # dictionary, so an entry whose own part language departs from it
+      # records that claim as the annotation "language" (P153) — the key
+      # Query::DictionaryLanguage reads, so an arc lookup reaches exactly
+      # the Aramaic entries. Majority entries carry none (their stored
+      # content hash is unchanged).
+      SHELF_LANGUAGE = "hbo"
+
       HEAD_SKIP = %w[sense status].freeze
       private_constant :HEAD_SKIP
 
@@ -149,7 +158,8 @@ module Nabu
           headword_folded: Nabu::Normalize.search_form(headword(li, id: id), language: entry.fetch(:language)),
           gloss: optional_text(li.at_xpath("def")),
           body: strong_body(id, index_entry: li, strong: strong),
-          crossrefs: xref_crossrefs(li.at_xpath("xref"))
+          crossrefs: xref_crossrefs(li.at_xpath("xref")),
+          annotations: language_annotation(entry.fetch(:language))
         )
       end
 
@@ -208,8 +218,13 @@ module Nabu
           headword_folded: Nabu::Normalize.search_form(headword(entry, id: id), language: language),
           gloss: optional_text(entry.at_xpath(".//def")),
           body: bdb_body(entry),
-          citations: bdb_citations(entry)
+          citations: bdb_citations(entry),
+          annotations: language_annotation(language)
         )
+      end
+
+      def language_annotation(language)
+        language == SHELF_LANGUAGE ? {} : { "language" => language }
       end
 
       def bdb_body(entry)

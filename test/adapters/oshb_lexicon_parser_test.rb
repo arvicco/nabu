@@ -229,6 +229,18 @@ class OshbLexiconParserTest < Minitest::Test
     assert_equal "אֲבַד", e.headword
   end
 
+  # P153: the store keys ONE language per dictionary (both shelves register
+  # hbo), so an entry whose own language departs from the shelf's records
+  # it as an annotation — upstream's part xml:lang claim, persisted — which
+  # the define lookup reads to answer arc. Hebrew entries carry none, so
+  # their stored content hash is untouched.
+  def test_aramaic_entries_record_their_language_as_an_annotation
+    (bdb + strongs).each do |entry|
+      expected = entry.language == "arc" ? { "language" => "arc" } : {}
+      assert_equal expected, entry.annotations, entry.entry_id
+    end
+  end
+
   def test_cross_reference_entries_without_defs_have_nil_gloss
     e = bdb_entry("a.aa.ab")
     assert_nil e.gloss
