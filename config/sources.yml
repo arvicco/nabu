@@ -1064,7 +1064,7 @@ cldf-spine:
   # oldn1244; the WOLD donor map therefore keys on languoid NAMES.
   sync_policy: manual
 
-cleasby-vigfusson:   # 02-sources row 321
+cleasby-vigfusson:   # P153, 02-sources row 322
   adapter: Nabu::Adapters::CleasbyVigfusson
   adopted: "2026-11-02"
   axes: [germanic]
@@ -7134,7 +7134,7 @@ wiktionary-dv:   # 02-sources row 288
   # lang_code dv), CC BY-SA + GFDL → attribution, FileFetch.
   sync_policy: manual
 
-wiktionary-fa:   # 02-sources row 320
+wiktionary-fa:   # P153, 02-sources row 321
   adapter: Nabu::Adapters::WiktionaryFa
   adopted: "2026-11-02"
   axes: [iranian]
@@ -7433,7 +7433,7 @@ zhongyuan:   # P88-R3, 02-sources row 186; the row-99 un-park (zho:oman + owner 
   # including only Zhongyuan Yinyun itself") — re-syncs owner-fired.
   sync_policy: manual
 
-zoega:   # 02-sources row 322
+zoega:   # P153, 02-sources row 323
   adapter: Nabu::Adapters::Zoega
   adopted: "2026-11-02"
   axes: [germanic]
