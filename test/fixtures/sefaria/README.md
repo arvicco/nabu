@@ -241,3 +241,52 @@ shard), chosen to exercise the resolver against the fixture texts:
 | `links15.csv` | 2 | Ruth 1:1 ↔ Ruth Rabbah, Petichta 1 (held) and Petichta 3 (a held title's segment the trimmed fixture lacks) |
 | `links16.csv` | 3 | an intra-document Bavli cross-reference; `Tamid 26` (a daf without its amud — not a held citation); Tur, Orach Chayim 1:1 ↔ 241:1 (complex title, trimmed tail) |
 | `links_by_book.csv` | 3 | the REJECTED aggregate grain (header + first 3 rows) — never read |
+
+## P152 — the Second Temple shelf (retrieved 2026-11-02)
+
+Census against the held **2026-10-02 index generation**: the `Second
+Temple` head files 106 named versions (merged siblings excluded) over
+Apocrypha, Josephus, Philo and one bare-category title. The shelf takes
+the two works whose Hebrew/Aramaic text is an ancient witness rather
+than a modern retroversion, by EXACT title: **Ben Sira** (5 named
+versions) and **Megillat Ta'anit** (5). Everything else in the category
+(Judith, Tobit, Susanna, the Maccabees, Wisdom, Jubilees, the Testaments,
+Aristeas, Psalms 151/154, Megillat Antiochus, Philo, Josephus) is a
+modern Hebrew translation of a Greek/Ge'ez/Syriac original or an English
+translation of one — out deliberately (a later title-level call).
+
+Licence reality, full GET of all ten files (2026-11-02): Ben Sira — he
+Kahana/Wikisource **CC-BY-SA**, he Cambridge 1899 (Schechter–Taylor)
+**Public Domain** (a 2-leaf stub), en Cambridge 1899 **Public Domain**,
+en SCT **CC0**, en BST **"unknown"**; Megillat Ta'anit — he Warsaw 1874
+**Public Domain**, en Feuer **CC-BY**, en SCT **CC0**, en Zeitlin
+**"unknown"**, en YU Torah miTzion **"unknown"**. Every string is inside
+`LICENSE_CLASSES` or the non-grant set → the expected first sync adds
+**7 documents** (3 unknowns skipped by rule); passages per full file:
+Ben Sira he Kahana 1,016 · he Cambridge 2 · en Cambridge 445 · en SCT
+326; Megillat Ta'anit he Warsaw 79 · en Feuer 6 · en SCT 11 → **1,885**.
+
+Trims follow the house rule (metadata keys byte-identical, only `text`
+sliced, `json.dumps(indent=4, ensure_ascii=False)` round-trip verified
+byte-identical on each untouched file first).
+
+| fixture | whole? | exercises |
+|---|---|---|
+| `json/Second Temple/Apocrypha/Ben Sira/Hebrew/Ben Sira, David Kahana ed. -- Wikisource .json` | TRIM | the **second-temple** shelf: **CC-BY-SA** → `attribution`, `hbo` (Kahana's vocalized Hebrew Ben Sira); NB upstream's TRAILING SPACE in the versionTitle and filename; `Chapter/Verse` → `1.1`; Apocrypha subshelf; trimmed to chapters 1–2 → 51 passages (original sha256 `7e016967…`, 134 KB) |
+| `json/Second Temple/Apocrypha/Ben Sira/English/BST.json` | whole (891 B) | the shelf's **rejected-licence specimen**: `"license": "unknown"` (a one-verse Bible-site scrape) → skipped by rule, censused |
+| `json/Second Temple/Megillat Ta'anit/Hebrew/Warsaw, 1874.json` | TRIM | **Public Domain** (open), `hbo`; the month-keyed schema (`Nisan` … `Adar`) → `nisan.1`; the Aramaic scroll lemmata (bold) interleave the Hebrew scholion — the shelf rides hbo, declared coarse; categories `[Second Temple]` only → no subshelf facet; Nisan + Iyar sliced to 4 leaves each, the other ten months emptied → 8 passages (original sha256 `816c2990…`, 56 KB) |
+| `json/Second Temple/Megillat Ta'anit/English/Rabbi Mike Feuer, Jerusalem Anthology.json` | whole (5,734 B) | **CC-BY** → `attribution`, `eng`; leading empty leaves are honest lacunae (first passage `iyar.5`); 6 passages |
+
+`books.json` gained 7 entry blocks (indent=1, verbatim from the 2026-10-02
+generation): the four fixture files and three census negatives — the Ben
+Sira Hebrew merged sibling, the Book of Jubilees (Wikisource 2019 — a
+modern Hebrew retroversion, off the allowlist) and Philo's On Abraham.
+
+Whole-file sha256:
+
+```
+109ddd796f0fa857512ae7622b5f22643911868a1328b8bb1a184d99d90446b2  Ben Sira (BST, license unknown)
+24fc0be6efe55ce3e2f0aaf32e5b78b0e20acbb9621142c6d470c73b5719dbe0  Megillat Ta'anit (Feuer)
+7e016967cee407dfe842c0268ae4d705b755e244c33d513516aa293c868376e6  Ben Sira (Kahana) — original, before trim
+816c29908252005804a07671f9bf537e2eac1406d0a5c7d0f19f7e3ede13ad77  Megillat Ta'anit (Warsaw 1874) — original, before trim
+```

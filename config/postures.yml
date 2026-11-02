@@ -589,9 +589,10 @@ sources:
         via MetadataDates :structured; '?' and the undated pseudo-inscription stay
         honestly undated; in-text dates ride raw as text_dates"}
     places: {posture: named, note: "the origPlace verbatim on 50 of 51 — 'Iustinopolis
-        (Koper)' 48, 'Piran' 2; the pseudo-inscription records none. Settlement,
-        repository and found/observed provenance are present locations, metadata only;
-        no gazetteer refs"}
+        (Koper)' 48, 'Piran' 2; the pseudo-inscription records none. The found
+        provenance (15 — the building/street in town where the stone was found) projects
+        as the findspot facet; settlement, repository and the observed provenance are
+        present locations, metadata only; no gazetteer refs"}
     script: {posture: implied}
   extrabiblical:
     # kind machine-postured — kind_map.yml folds the 13 books over metadata
@@ -1516,6 +1517,27 @@ sources:
     places: {posture: unplaced}
     script: {posture: implied, note: "Han script implied by lzh; the CJK compatibility
         ideographs fold to their unified forms at NFC"}
+  ppchy:   # P152
+    # kind machine-postured — the ppchy fold in kind_map.yml over the sources
+    # page's Genre (Letter/Verse/Prose; Vernacular reviewed as a register label).
+    lect: {posture: pending, note: "candidate: a yi (Yiddish) anchor in nabu-lects — NOTHING
+        Yiddish exists in the registry (no yi/yid node, no codemap alias) — parent gmw, with
+        the corpus's own West/East division as dialect varieties (the facet value
+        dialect = West Yiddish 12 · East Yiddish 49 · East and West Yiddish 1 · Probably West
+        Yiddish 1) and Old/Middle/Modern stages if the mint's research supports banding
+        (Weinreich's periodization); the dialect facet rule follows the mint"}
+    dating: {posture: dated, note: "all 63 texts: the sources page's Date — a year, Approx. YYYY
+        (the year, qualifier raw), Between A and B, 19xx (the century), the court testimony's
+        c1413–1686 range (its items carry their own c-years in passage annotations); a file
+        without a record falls back to its own name's year (:structured)"}
+    places: {posture: named, note: "17 of 63: the dialect localization when it names a town or
+        region (Cracow 7 · Regensburg 2 · Volina 2 · Prague · Lublin · Lvov · Vilna · Holland ·
+        Northern Germany) — a dialect localization standing in for the place of writing/print;
+        the adjectival areas (Moravian, Bohemian, Polish, Lithuanian) ride the region facet only,
+        declared"}
+    script: {posture: qualified, note: "ROMANIZED: upstream transliterates the Hebrew-script
+        originals \"more or less according to the YIVO system\" (Hebrew words without
+        diacritics); every passage is Latin-script yi, never a Hebrew-script witness"}
   elektire:   # P117-2
     # kind machine-postured since 2026-10-18 — the genre fold in
     # kind_map.yml (the portal's 23 knjizevna_vrsta term slugs onto
@@ -1547,6 +1569,25 @@ sources:
         Unbound Bible text) — nothing to mine"}
     script: {posture: qualified, note: "Latin TRANSLITERATION of the Cyrillic original
         (Rs1Bible = Unbound Bible's 'Danicic Karadzic Latin'); ijekavian spelling kept"}
+  elizabeth-bible:   # P152
+    # kind: machine-postured — kind_map.yml source_kind scripture (the
+    # whole-source Bible precedent: vulgate/eng-web/vuk-danicic).
+    # lect: machine-postured — the whole-source chu → chu:ncs override in
+    # config/lect_overrides.yml (the registry's New Church Slavonic node
+    # names this Bible). The held text is a RENDERING, declared the
+    # bg-wikisource way: metadata "rendering" = "modernized civil-script
+    # spelling" + "base_edition" = upstream's distribution_about verbatim
+    # ("features modernized spelling") on every document — the language
+    # claim is the Elizabethan text's, the spelling is the rendering's.
+    dating: {posture: dated, note: "the edition year the translation title states — 1757,
+        date_class edition (MetadataDates :structured), the print the electronic text renders;
+        the modernized-spelling rendering itself carries no date (distribution_version_date
+        2011-08-17 is the SWORD module's)"}
+    places: {posture: unplaced, note: "the asset names no imprint (a getBible JSON of the
+        rusbible.ru OSIS edition) — nothing to mine"}
+    script: {posture: qualified, note: "civil-script Cyrillic in MODERNIZED spelling — not the
+        1757 print's Church Cyrillic (no titla, no accents, no ѣ/і/ѵ/ѳ/ѡ/ѧ in the file);
+        metadata script Cyrl + orthography modernized + rendering on every document"}
   jaschke-1881:   # P150-A
     # kind: machine-postured — kind_map.yml source_kind lexical (a dictionary).
     lect: {posture: identity, note: "the reference-shelf posture (africa-pd, slavistics-pd): eng,

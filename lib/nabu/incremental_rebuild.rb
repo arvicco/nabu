@@ -575,6 +575,10 @@ module Nabu
       # P122-1: the armed silver-date lane re-projects behind the timeline.
       progress&.stage("silver dates")
       Store::SilverDates.replay!(catalog: db, shelf: DateShelf.present(@config))
+      # P152: the armed silver-meter lane re-projects behind the gold
+      # meter producers (replay_enrichments ran before the builders).
+      progress&.stage("silver meter")
+      Store::SilverMeter.replay!(catalog: db, shelf: MeterShelf.present(@config))
       # The timeline rebuild just dropped every document_axes row, the
       # nabu-places registry matches included — re-project them here like
       # the full path does, or they stay silently absent until the next

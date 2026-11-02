@@ -1,0 +1,49 @@
+# Docker MCP Toolkit custom catalog — one entry, the Nabu demo image.
+# Import (Docker Desktop's MCP Toolkit CLI):
+#   docker mcp catalog create nabu --from-legacy-catalog https://arvicco.github.io/nabu/docker-mcp-catalog.yaml
+# (older CLIs: docker mcp catalog import https://arvicco.github.io/nabu/docker-mcp-catalog.yaml)
+# then enable it: docker mcp server enable nabu
+version: 3
+name: nabu
+displayName: Nabu
+registry:
+  nabu:
+    title: Nabu
+    description: >-
+      Ancient-text research library over MCP (read-only): full-text and
+      lemma search, concordance, dictionaries, parallel-witness alignment,
+      etymology and intertext tools. The image bakes an open demo library
+      slice; the full library is a local build from the same repo. Code MIT;
+      the baked data carries per-source open licenses, listed in
+      /demo/demo-census.json inside the image.
+    type: server
+    dateAdded: "2026-11-02T00:00:00Z"
+    image: ghcr.io/arvicco/nabu-demo:latest
+    readme: https://github.com/arvicco/nabu/blob/main/docs/mcp.md
+    source: https://github.com/arvicco/nabu
+    upstream: https://github.com/arvicco/nabu
+    icon: https://arvicco.github.io/nabu/apple-touch-icon.png
+    tools:
+      - name: nabu_search
+      - name: nabu_show
+      - name: nabu_concord
+      - name: nabu_align
+      - name: nabu_define
+      - name: nabu_etym
+      - name: nabu_parallels
+      - name: nabu_cognates
+      - name: nabu_links
+      - name: nabu_char
+      - name: nabu_place
+      - name: nabu_signs
+      - name: nabu_clarify
+      - name: nabu_status
+    metadata:
+      category: search
+      tags:
+        - search
+        - data
+        - ancient-texts
+        - dictionaries
+      license: MIT
+      owner: arvicco

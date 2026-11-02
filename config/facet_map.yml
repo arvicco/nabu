@@ -108,6 +108,14 @@ sources:
       material: material      # 5,890 docs, 3 values (clay 5,888 · ivory 1 · stone 1) — the
       #                         writing support, a physical-object facet under the cdli/rundata
       #                         name; never a kind (the object facet already says tablet/label)
+  memis:                      # census 2026-11-02 (the v1.0 MEMIS.xml): 51 inscriptions
+    fields:
+      material: material      # 50 with a <material> (white limestone "Beli apnenec" the bulk ·
+      #                         Istrian stone · Proconnesian marble · one "Platno", canvas) —
+      #                         verbatim Slovene, the physical-object facet (damos/rundata name)
+      findspot: findspot      # 15 with a found-provenance: the building/street inside the
+      #                         origPlace town where the stone was found ("Levji grad",
+      #                         "Calle Sant'Antonio"); the town-level place stays the origPlace
   glaux:                      # census: 1,421 works
     fields:
       dialect: dialect        # 1,176 docs, 7 values (Attic/Koine 416 · Attic 322 · Koine 214 …)
@@ -673,3 +681,13 @@ sources:
   extrabiblical:             # census 2026-10-22: 13 books, one document each; the
     fields:                   # BOOKS-table name verbatim (Arad, Mesa, Pirqe, …) — the
       book: book              # same key work_eras.yml and kind_map.yml fold over
+  ppchy:                      # census 2026-11-02: 63 texts, the sources page's record on ALL —
+    fields: #                   dialect = the classification head (East Yiddish 49 · West
+      dialect: dialect        # Yiddish 12 · East and West Yiddish 1 (the court testimony) ·
+      #                         "Probably West Yiddish (Erika Timm, pers. comm.)" 1) — the
+      #                         seam a Yiddish lect rule reads once the registry mints yi;
+      dialect_localization: region  # the localization after the comma, verbatim (Cracow 7 ·
+      #                         Regensburg 2 · Volina 2 · Moravian · Bohemian · Polish ·
+      #                         Lithuanian · Prague · Lublin · Lvov · Vilna · Holland · Northern
+      #                         Germany · "halb-deytshish"; 22 texts — 17 of them places)
+      genre: genre            # Prose 44 · Verse 12 · Vernacular 4 · Letter 3 (kind_map folds)

@@ -44,7 +44,8 @@ class LexlepWordsTest < Minitest::Test
 
   def test_discover_yields_one_ref_per_word_page_with_stable_ids
     refs = adapter.discover(FIXTURES).to_a
-    assert_equal ["lexlep-words:a?", "lexlep-words:acisius", "lexlep-words:aes"], refs.map(&:id)
+    assert_equal %w[a? acisius aes aesia esopnos kasios tati tekialui].map { |t| "lexlep-words:#{t}" },
+                 refs.map(&:id)
     refs.each { |ref| assert_equal "lexlep-words", ref.source_id }
     assert_equal refs.map(&:id), adapter.discover(FIXTURES).map(&:id),
                  "ids are stable across independent discoveries"
@@ -107,17 +108,83 @@ class LexlepWordsTest < Minitest::Test
   def test_loading_the_fixture_twice_is_idempotent_with_stable_urns
     db, loader = loader_setup
     first = loader.load_from(adapter, workdir: FIXTURES)
-    assert_equal 3, first.added
+    assert_equal 8, first.added
     assert_equal 0, first.errored
+    citations = db[:dictionary_citations].count
 
     second = loader.load_from(adapter, workdir: FIXTURES)
     assert_equal 0, second.added
-    assert_equal 3, second.skipped
-    assert_equal 3, db[:dictionary_entries].count
+    assert_equal 8, second.skipped
+    assert_equal 8, db[:dictionary_entries].count
     assert_equal [1], db[:dictionary_entries].select_map(:revision).uniq
+    assert_equal citations, db[:dictionary_citations].count, "the AcS citation rows are stable across loads"
 
     aes = db[:dictionary_entries].where(entry_id: "aes").first
     assert_equal "urn:nabu:dict:lexlep-words:aes", aes[:urn]
+  end
+
+  # --- Holder "AcS" citations (Q280a) -----------------------------------------
+
+  def citation_labels(title)
+    ref = adapter.discover(FIXTURES).find { |candidate| candidate.id == "lexlep-words:#{title}" }
+    adapter.parse(ref).first.citations.map(&:label)
+  end
+
+  # Holder's Alt-celtischer Sprachschatz, cited in the Commentary prose as
+  # "{{bib|AcS}} <vol>: <col>". One citation per cited locus — a locus
+  # list ("I: 282, 832 f.") mints each column under the running volume, a
+  # range anchors at its first column; the label is the scan-anchor key
+  # ("AcS I: 282", roman volume upper-cased).
+  def test_acs_locus_lists_mint_one_citation_per_column_under_the_running_volume
+    assert_equal ["AcS I: 282", "AcS I: 832"], citation_labels("kasios")
+    assert_equal ["AcS I: 1247", "AcS II: 1779", "AcS II: 1788"], citation_labels("tekialui"),
+                 "a volume switch inside the list carries over to the bare columns after it"
+  end
+
+  # Upstream's spelling variance: the colon-less "I 53" with a bold-wrapped
+  # second locus ('''III 516'''), and a lower-case volume ("ii: 1751").
+  def test_acs_variant_spellings_normalize
+    assert_equal ["AcS I: 53", "AcS III: 516"], citation_labels("aesia")
+    assert_equal ["AcS II: 1723", "AcS II: 1751"], citation_labels("tati")
+  end
+
+  # "AcS: 1489 f." names no volume — the citation stands (its label says
+  # so) but no volume is guessed, so no scan anchor claims it.
+  def test_a_volumeless_acs_citation_mints_without_a_guessed_volume
+    assert_equal ["AcS: 1489"], citation_labels("esopnos")
+  end
+
+  def test_the_acs_citation_keeps_the_cited_locus_verbatim
+    ref = adapter.discover(FIXTURES).find { |candidate| candidate.id == "lexlep-words:tekialui" }
+    citation = adapter.parse(ref).first.citations.first
+    assert_equal "AcS I: 1247–1250", citation.urn_raw
+    assert_nil citation.cts_work
+    assert_equal "I: 1247", citation.citation
+  end
+
+  def test_pages_without_acs_carry_no_citations
+    %w[aes acisius].each { |title| assert_empty citation_labels(title), title }
+  end
+
+  # The define bridge end to end: the mined label resolves through the
+  # shipped config/scan_anchors.yml column row to the Bd. II scan leaf.
+  def test_acs_citations_resolve_to_the_holder_scan_leaf
+    db, loader = loader_setup
+    loader.load_from(adapter, workdir: FIXTURES)
+    library = Nabu::Store::Source.create(slug: "local-library", name: "Library",
+                                         adapter_class: "Nabu::Adapters::LocalLibrary",
+                                         license_class: "research_private")
+    item = "urn:nabu:local-library:dictionaries:bub-gb-62g9aaaayaaj"
+    doc = Nabu::Store::Document.create(source_id: library.id, urn: item, title: "Holder II", language: "deu",
+                                       content_sha256: "x", revision: 1, withdrawn: false)
+    Nabu::Store::Passage.create(document_id: doc.id, urn: "#{item}:p1007", sequence: 1007, language: "deu",
+                                text: "1779", text_normalized: "1779", content_sha256: "x", revision: 1)
+    table = Nabu::Query::ScanAnchors.load(File.expand_path("../../config/scan_anchors.yml", __dir__))
+    result = Nabu::Query::Define.new(catalog: db, lects: nil, scan_anchors: table)
+                                .by_urn("urn:nabu:dict:lexlep-words:tekialui")
+    scans = result.citations.to_h { |citation| [citation.label, citation.scan] }
+    assert_equal [:anchored, "#{item}:p1007"], [scans["AcS II: 1779"].status, scans["AcS II: 1779"].urn]
+    assert_equal :unconfigured, scans["AcS I: 1247"].status, "Bd. I has no scan on the shelf yet"
   end
 
   # --- fetch (WebMock; Word category only) ----------------------------------

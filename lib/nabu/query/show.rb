@@ -78,8 +78,16 @@ module Nabu
       # A meter enrichment attached to a passage (P44-7): the metrical code
       # ("H" hexameter, "P" pentameter, …), the dactyl/spondee foot +pattern+,
       # and +producer+ (the enrichments row's model — "pedecerto"). nil when the
-      # passage carries no scansion (every ordinary passage).
-      Meter = Data.define(:meter, :pattern, :producer)
+      # passage carries no scansion (every ordinary passage). +grade+ is
+      # "silver" for the scansion lane's machine rows (P152, model
+      # "nabu-scan") and nil for held gold — every render labels it.
+      Meter = Data.define(:meter, :pattern, :producer, :grade) do
+        def initialize(grade: nil, **rest)
+          super
+        end
+
+        def silver? = grade == "silver"
+      end
 
       # One line of a document listing: a passage's urn and text, in sequence
       # (+annotations+ for the display layer's edition context, P27-1).
@@ -378,7 +386,9 @@ module Nabu
 
       # The passage's meter enrichment (P44-7), or nil when it carries none —
       # the seam proving a consumer reads the enrichments layer. One row per
-      # passage per producer; the first (by id) is rendered. Degrades to nil on
+      # passage per producer; GOLD outranks silver (P152 — a machine
+      # scansion never displaces a held one), then the first by id is
+      # rendered. Degrades to nil on
       # a catalog predating the enrichments table or on unreadable payload JSON,
       # never crashes (the facets_for/timeline_for stance).
       def meter_for(passage_id)
@@ -386,13 +396,14 @@ module Nabu
 
         row = @catalog[:enrichments]
               .where(passage_id: passage_id, kind: "meter")
-              .order(:id)
+              .order(Sequel.case([[{ model: Store::SilverMeter::MODEL }, 1]], 0), :id)
               .select(:model, :payload_json)
               .first
         return nil if row.nil?
 
         payload = JSON.parse(row[:payload_json].to_s)
-        Meter.new(meter: payload["meter"], pattern: payload["pattern"], producer: row[:model])
+        Meter.new(meter: payload["meter"], pattern: payload["pattern"], producer: row[:model],
+                  grade: payload["grade"])
       rescue JSON::ParserError
         nil
       end

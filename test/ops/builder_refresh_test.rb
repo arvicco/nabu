@@ -167,6 +167,35 @@ class BuilderRefreshTest < Minitest::Test
     end
   end
 
+  # P152: an ARMED silver-meter shelf re-projects in the builder pass
+  # (idempotently); an unarmed one stays out of the meter layer.
+  def test_refresh_replays_the_armed_silver_meter_lane
+    source = Nabu::Store::Source.create(slug: "v", name: "V", adapter_class: "X", license: "x",
+                                        license_class: "open", upstream_url: "x", enabled: true)
+    doc = Nabu::Store::Document.create(source_id: source.id, urn: "urn:nabu:v:1", language: "lat",
+                                       canonical_path: "x", content_sha256: "3" * 64)
+    Nabu::Store::Passage.create(document_id: doc.id, urn: "urn:nabu:v:1:1", sequence: 0, language: "lat",
+                                text: "arma", text_normalized: "arma", content_sha256: "s1", revision: 1,
+                                withdrawn: false)
+    Dir.mktmpdir do |dir|
+      config = hybrid_config(dir)
+      shelf = Nabu::MeterShelf.new(dir: config.source_workdir(Nabu::MeterShelf::SLUG))
+      shelf.append_batch!(records: [Nabu::MeterShelf::Record.new(
+        kind: "passage", urn: "urn:nabu:v:1:1", language: "lat", content_sha256: "s1", status: "scanned",
+        meter: "hexameter", feet: "DDSSD", quantities: "-uu-uu-----uu--", word_pattern: "x", basis: "unique",
+        scanner: "nabu-scan", scanner_version: "nabu-scan/1"
+      )])
+      silver = -> { @catalog[:enrichments].where(model: Nabu::Store::SilverMeter::MODEL).count }
+
+      Nabu::Ops::BuilderRefresh.run(catalog: @catalog, config: config)
+      assert_equal 0, silver.call, "an unarmed shelf never reaches the meter layer"
+
+      shelf.arm!
+      2.times { Nabu::Ops::BuilderRefresh.run(catalog: @catalog, config: config) }
+      assert_equal 1, silver.call, "the armed lane projects once, idempotently"
+    end
+  end
+
   # The AES ← AED title join rides the refresh beside the derge titles
   # (a cross-source post-load pass: f(canonical/aed + loaded aes rows)).
   def test_refresh_titles_aes_documents_from_the_aed_headers

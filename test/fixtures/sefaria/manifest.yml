@@ -173,3 +173,21 @@ files:
     url: https://storage.googleapis.com/sefaria-export/links/links_by_book.csv
     whole: false
     trim: header + 3 verbatim upstream rows (retrieved 2026-10-29; see README.md P150 table)
+  # P152 — the Second Temple shelf (Ben Sira + Megillat Ta'anit), retrieved
+  # 2026-11-02 from the bucket (the 2026-10-02 index generation's json_url).
+  - path: json/Second Temple/Apocrypha/Ben Sira/Hebrew/Ben Sira, David Kahana ed. -- Wikisource .json
+    url: https://storage.googleapis.com/sefaria-export/json/Second%20Temple/Apocrypha/Ben%20Sira/Hebrew/Ben%20Sira%2C%20David%20Kahana%20ed.%20--%20Wikisource%20.json
+    whole: false
+    trim: text sliced to chapters 1-2 (51 non-empty verses); metadata keys byte-identical (original sha256 7e016967..., 134 KB; see README.md P152 table)
+  - path: json/Second Temple/Apocrypha/Ben Sira/English/BST.json
+    url: https://storage.googleapis.com/sefaria-export/json/Second%20Temple/Apocrypha/Ben%20Sira/English/BST.json
+    whole: true
+    trim: none (complete file, copied whole; license "unknown" -> rule skip)
+  - path: json/Second Temple/Megillat Ta'anit/Hebrew/Warsaw, 1874.json
+    url: https://storage.googleapis.com/sefaria-export/json/Second%20Temple/Megillat%20Ta%27anit/Hebrew/Warsaw%2C%201874.json
+    whole: false
+    trim: Nisan + Iyar sliced to their first 4 leaves, the other ten month nodes emptied; metadata keys byte-identical (original sha256 816c2990..., 56 KB; see README.md P152 table)
+  - path: json/Second Temple/Megillat Ta'anit/English/Rabbi Mike Feuer, Jerusalem Anthology.json
+    url: https://storage.googleapis.com/sefaria-export/json/Second%20Temple/Megillat%20Ta%27anit/English/Rabbi%20Mike%20Feuer%2C%20Jerusalem%20Anthology.json
+    whole: true
+    trim: none (complete file, copied whole; CC-BY -> attribution)

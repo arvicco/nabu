@@ -243,9 +243,9 @@ class RebuildTest < Minitest::Test
     reporter = Nabu::ProgressReporter.new(on_stage: ->(label, _eta) { stages << label })
     rebuilder.run(progress: reporter)
 
-    assert_equal ["corpus", "honkoku ndl catalog", "timeline", "silver dates", "place apply", "facets", "kind axis",
-                  "passage facets", "entity index", "entry facets", "hiero postings", "sign concordances",
-                  "lect journal",
+    assert_equal ["corpus", "honkoku ndl catalog", "timeline", "silver dates", "silver meter", "place apply",
+                  "facets", "kind axis", "passage facets", "entity index", "entry facets", "hiero postings",
+                  "sign concordances", "lect journal",
                   "lect facets", "dictionary stats", "derge titles", "aes titles", "artifact scripts",
                   "source stats", "fulltext index", "lemma rollups", "links", "analyze"],
                  stages
@@ -443,6 +443,38 @@ class RebuildTest < Minitest::Test
       refute_nil row, "the armed shelf re-projects into the rebuilt catalog"
       assert_equal [-750, -650], [row[:not_before], row[:not_after]]
       assert_equal "urn:nabu:test_adapter:one", db[:documents].where(id: row[:document_id]).get(:urn)
+    end
+  end
+
+  # P152: the silver-meter lane survives `nabu rebuild` — an armed
+  # local-meter shelf re-projects into the fresh catalog's enrichments
+  # (re-resolving urns to the re-minted passage ids); unarmed, never.
+  def test_rebuild_replays_the_armed_silver_meter_shelf
+    write_sources(<<~YAML)
+      corpus:
+        adapter: TestAdapter
+        wired: true
+    YAML
+    write_canonical("corpus", "one.txt" => ILIAD, "two.txt" => ODYSSEY)
+    rebuilder.run
+    urn, sha = with_db { |db| db[:passages].order(:id).get(%i[urn content_sha256]) }
+    shelf = Nabu::MeterShelf.new(dir: Nabu::MeterShelf.dir(config))
+    shelf.append_batch!(records: [Nabu::MeterShelf::Record.new(
+      kind: "passage", urn: urn, language: "grc", content_sha256: sha, status: "scanned", meter: "hexameter",
+      feet: "DDDDD", quantities: "-uu-uu-uu-uu-uu--", word_pattern: "-uu -uu", basis: "unique",
+      scanner: "nabu-scan", scanner_version: "nabu-scan/1"
+    )])
+
+    rebuilder.run
+    with_db { |db| assert_equal 0, db[:enrichments].where(model: "nabu-scan").count }
+
+    shelf.arm!
+    rebuilder.run
+    with_db do |db|
+      row = db[:enrichments].where(model: "nabu-scan").first
+      refute_nil row, "the armed shelf re-projects into the rebuilt catalog"
+      assert_equal urn, db[:passages].where(id: row[:passage_id]).get(:urn)
+      assert_equal "silver", JSON.parse(row[:payload_json])["grade"]
     end
   end
 

@@ -141,6 +141,8 @@ module Nabu
           "elektire" => :structured, # P117-2: the portal's century of origin as an
           #                            envelope (composition class)
           "elephantine" => :structured,
+          "elizabeth-bible" => :structured, # P152: the edition year its translation title states
+          #                                   (1757, class edition) — the rendering is undated
           "eltec-srp" => :structured, # P117-2: the firstEdition's typed years, place
           #                             = its pubPlace (publication place)
           "extrabiblical" => :work_era, # each ETCBC book's attributed era (config/work_eras.yml,
@@ -167,6 +169,9 @@ module Nabu
           #                             centuries (the syllabary's era); place = origPlace
           "itant" => :structured,
           "itkc" => :structured,
+          "jaschke-1881" => :structured, # P152: the 1881 London edition year on every page
+          #                                (the reference-shelf mold; the imprint rides
+          #                                "imprint" — the printing place, no place claim)
           "ja-wikisource" => :header_year_or_era_band, # the page {{header}} year= (the work's
           #                                               own year, composition class) else the
           #                                               era-category band (precision era)
@@ -206,6 +211,9 @@ module Nabu
           "perseus-greek" => :edition_year_text,
           "perseus-latin" => :edition_year_text,
           "pl-wikisource" => :era_band_key,
+          "ppchy" => :structured, # P152: each text's sources-page Date (a year, Approx., Between,
+          #                         19xx, the court testimony's range); place = the dialect's
+          #                         town/region localization (Regensburg, Cracow, Prague …)
           "prague-bible-1488" => :structured,
           "prilit" => :year_range,
           "ref" => :structured,

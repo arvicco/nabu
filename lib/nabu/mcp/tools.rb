@@ -332,7 +332,8 @@ module Nabu
         "CLI `nabu define` is unbounded), and the entry's citations: where the cited work is " \
         "in the local catalog the citation carries a resolved passage urn (open it with " \
         "nabu_show); otherwise resolved_urn is null and the display text stands. A PRINT " \
-        "citation of a reference work (a BDB page, a Wb volume/page/line) may carry `scan`: " \
+        "citation of a reference work (a BDB page, a Wb volume/page/line, a Holder AcS " \
+        "volume/column) may carry `scan`: " \
         "status (anchored/held/uncalibrated/out_of_range/not_held/unconfigured), urn (the " \
         "held scan's page passage or document — null when not held), leaf, pointer. Entries " \
         "may carry `crossrefs` — pointers to other entries, usually of the same dictionary, " \
@@ -2113,7 +2114,8 @@ module Nabu
 
       def scan_payload(anchor)
         { status: anchor.status.to_s, work: anchor.work, volume: anchor.volume, page: anchor.page,
-          line: anchor.line, leaf: anchor.leaf, item: anchor.item, urn: anchor.urn, pointer: anchor.pointer }
+          column: anchor.column, line: anchor.line, leaf: anchor.leaf, item: anchor.item, urn: anchor.urn,
+          pointer: anchor.pointer }
       end
 
       # -- etym internals -----------------------------------------------------------
@@ -2689,8 +2691,11 @@ module Nabu
       def meter_field(result)
         return {} unless result.respond_to?(:meter) && result.meter
 
-        { meter: { meter: result.meter.meter, pattern: result.meter.pattern,
-                   producer: result.meter.producer } }
+        field = { meter: result.meter.meter, pattern: result.meter.pattern, producer: result.meter.producer }
+        # P152: the scansion lane's machine rows carry their grade; gold
+        # rows keep the frozen three-key shape byte-identical.
+        field[:grade] = result.meter.grade if result.meter.grade
+        { meter: field }
       end
 
       # The findspot facts (P44-3, mirroring the CLI's P44-2 findspot line):

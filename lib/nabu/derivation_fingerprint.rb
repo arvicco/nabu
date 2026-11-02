@@ -108,10 +108,14 @@ module Nabu
     # edit re-runs the kind axis, never a parse. The OSL sign concordances
     # join them too: a whole-table projection of canonical/osl run in
     # both rebuild flavors' builder passes and the osl post-sync hook,
-    # never per-source rows.
+    # never per-source rows. P152: the silver-meter projection joins on
+    # the silver-date footing — a whole-lane re-projection from the
+    # local-meter shelf in every builder pass (plus the gold-moved and
+    # text-moved sync hooks), with the shelf reader whose parse rules
+    # shape its rows.
     BUILDER_FILES = %w[
       store/timeline_builder.rb store/facet_builder.rb store/lemma_rollup.rb
-      store/silver_dates.rb date_shelf.rb store/passage_facet_builder.rb
+      store/silver_dates.rb date_shelf.rb store/silver_meter.rb meter_shelf.rb store/passage_facet_builder.rb
       store/entry_facet_builder.rb store/entity_index.rb
       kinds.rb store/kind_builder.rb store/sign_concordances.rb
     ].freeze
@@ -160,8 +164,13 @@ module Nabu
     # catalog and links journal and writes files under exports/, with its
     # own purity scan in the same test. The CLI's area files (cli/, carved
     # out of cli.rb) are out on cli.rb's own footing: the operator surface
-    # drives derivation but is not derivation code.
-    EXCLUDED_DIRS = (%w[adapters mcp query health ops data_build export cli] + BUILDER_DIRS).freeze
+    # drives derivation but is not derivation code. The scansion lane
+    # (P152: scansion/ + scansion.rb, and its campaign meter_scan.rb) is
+    # out on the mined-layers footing: a HEAVY producer run only by `nabu
+    # scan-meter --run`, writing the local-meter shelf, never a db/ row —
+    # what reaches db/ is the shelf's projection (store/silver_meter.rb,
+    # a builder file above), which reads shelf records, not scanner code.
+    EXCLUDED_DIRS = (%w[adapters mcp query health ops data_build export cli scansion] + BUILDER_DIRS).freeze
     EXCLUDED_FILES = (BUILDER_FILES + INDEX_FILES + %w[
       store/fts_structure.rb
       cli.rb display.rb status_report.rb progress_reporter.rb version.rb
@@ -169,6 +178,7 @@ module Nabu
       batch_cognates.rb batch_formulas.rb batch_parallels.rb
       link_stamps.rb store/source_content_identity.rb
       mined_layers.rb store/mined_links.rb store/link_layers.rb links_mine_commands.rb
+      scansion.rb meter_scan.rb
       suttacentral_parallels.rb library_references.rb corph_dil_references.rb
       ccl_etymologies.rb
       git_fetch.rb zip_fetch.rb file_fetch.rb lfs_fetch.rb wiki_fetch.rb
