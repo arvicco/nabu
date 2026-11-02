@@ -1574,12 +1574,11 @@ sources:
   ppchy:   # P152
     # kind machine-postured — the ppchy fold in kind_map.yml over the sources
     # page's Genre (Letter/Verse/Prose; Vernacular reviewed as a register label).
-    lect: {posture: pending, note: "candidate: a yi (Yiddish) anchor in nabu-lects — NOTHING
-        Yiddish exists in the registry (no yi/yid node, no codemap alias) — parent gmw, with
-        the corpus's own West/East division as dialect varieties (the facet value
-        dialect = West Yiddish 12 · East Yiddish 49 · East and West Yiddish 1 · Probably West
-        Yiddish 1) and Old/Middle/Modern stages if the mint's research supports banding
-        (Weinreich's periodization); the dialect facet rule follows the mint"}
+    # lect machine-postured since 2026-11-02 — the yi → yi~latn override
+    # (config/lect_overrides.yml; the romanized surface) and the
+    # ppchy-dialect-west/east compose rules (config/lect_facet_rules.yml;
+    # the Dialect head onto yi/west, yi/east over the date-banded stages).
+    # The P152 pending retired at the registry mint, the shadowing rule.
     dating: {posture: dated, note: "all 63 texts: the sources page's Date — a year, Approx. YYYY
         (the year, qualifier raw), Between A and B, 19xx (the century), the court testimony's
         c1413–1686 range (its items carry their own c-years in passage annotations); a file
@@ -1670,11 +1669,10 @@ sources:
         Secunda is Hebrew in Greek letters (hbo-Grek)"}
   typikon-bible:   # P153
     # kind: machine-postured — kind_map.yml source_kind scripture.
-    lect: {posture: pending, note: "candidate: a nabu-lects Romanian package — a ro anchor (Eastern
-        Romance, parent roa; ISO 639-1 ro / 639-3 ron, rum alias), an Old Romanian stage for the
-        Cyrillic-script literary language of the 16th–18th c. (the 1688 Bucharest Bible is its
-        canonical monument) and the cyrl script row's ro use. Nothing Romanian exists in the
-        registry today; the passages ride bare ron-Cyrl until the mint lands"}
+    # lect machine-postured since 2026-11-02 — the whole-source ron-Cyrl →
+    # ro:old~cyrl override (config/lect_overrides.yml; the mint's own
+    # prescribed row). The P153 pending retired at the registry mint, the
+    # shadowing rule.
     dating: {posture: dated, note: "the edition year the dump records for ro-1688 (1688),
         date_class edition (MetadataDates :structured) — the print the project typeset"}
     places: {posture: unplaced, note: "the dump's edition record names no imprint (Bucharest is the

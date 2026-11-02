@@ -685,7 +685,7 @@ sources:
     fields: #                   dialect = the classification head (East Yiddish 49 · West
       dialect: dialect        # Yiddish 12 · East and West Yiddish 1 (the court testimony) ·
       #                         "Probably West Yiddish (Erika Timm, pers. comm.)" 1) — the
-      #                         seam a Yiddish lect rule reads once the registry mints yi;
+      #                         seam the ppchy-dialect compose rules read (P154);
       dialect_localization: region  # the localization after the comma, verbatim (Cracow 7 ·
       #                         Regensburg 2 · Volina 2 · Moravian · Bohemian · Polish ·
       #                         Lithuanian · Prague · Lublin · Lvov · Vilna · Holland · Northern

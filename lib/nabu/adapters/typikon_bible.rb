@@ -54,7 +54,8 @@ module Nabu
     # Text = the record's content, NFC at the boundary (the 1688 text ships
     # combining marks in non-canonical order on 33,484 of 36,312 verses;
     # ron is not NFC-exempt). Language ron-Cyrl (Romanian, Cyrillic
-    # script); the registry carries no Romanian node yet (lect pending).
+    # script); config/lect_overrides.yml resolves it to ro:old~cyrl (the
+    # 2026-11-02 registry mint's Old Romanian stage, band [1521, 1780]).
     # Date: the edition year the dump records (1688), date_class edition.
     #
     # == License drift guard
