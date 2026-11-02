@@ -163,6 +163,11 @@ class DerivabilityWritersTest < Minitest::Test
   # listing records.json and each text record's <record id>/<file>.txt,
   # tmp+rename, never deleting) inside Adapter#fetch — the same crawl
   # law kind.
+  # hf_rows_fetch writes canonical/<slug>/<release>/ (the regrouped
+  # text-column volume files, the revision-pinned card sidecars,
+  # tmp+rename; attic copies + its .hf-rows-fetch.json ledger; the
+  # .rows-staging/ page cache it clears on completion) inside
+  # Adapter#fetch — the same crawl law kind.
   # the riig crawl law kind. The vakk adapter writes canonical/vakk/
   # (the text list under map/, tmp+rename, and the crawled reading/info
   # pages as texts/<kood>/*.html.gz, gzip tmp+rename, plus its
@@ -221,7 +226,7 @@ class DerivabilityWritersTest < Minitest::Test
     nabu/kanripo_fetch.rb nabu/lfs_fetch.rb nabu/local_fetch.rb
     nabu/menota_fetch.rb
     nabu/manual_drop.rb nabu/ochre_fetch.rb nabu/otdo_fetch.rb
-    nabu/lotsawa_fetch.rb
+    nabu/lotsawa_fetch.rb nabu/hf_rows_fetch.rb
     nabu/poma_fetch.rb nabu/bu_ajami_fetch.rb
     nabu/seal_fetch.rb
     nabu/sefaria_fetch.rb nabu/titus_fetch.rb nabu/url_download.rb

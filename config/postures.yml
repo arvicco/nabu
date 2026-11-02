@@ -543,6 +543,22 @@ sources:
     dating: {posture: undatable}
     places: {posture: unplaced}
     script: {posture: implied}
+  bdrc-transcriptions:   # P153
+    kind: {posture: unclassified, note: "the releases ship no genre/kind field — only the
+        collection (ACIP Sungbum = collected works, Palri Parkhang = Nyingma collected works and
+        gter ma, Berkeley = manuscripts) rides metadata; the BDRC version record's work type
+        is the candidate join"}
+    lect: {posture: identity, note: "xct (the derge/lotsawa precedent): Classical Tibetan
+        collected works, Buddhist and Bon, declared coarse — no finer Tibetan stage to claim"}
+    dating: {posture: pending, note: "the rows carry no date; candidate: the BDRC version id on
+        every volume (metadata bdrc_version, MW…, with its purl.bdrc.io link) → the BDRC work's
+        author life dates / the print's publication date — a BDRC-record join, not held"}
+    places: {posture: pending, note: "the rows carry no place; candidate: the same BDRC version
+        record (printery / publication place of the woodblock or manuscript), not held"}
+    script: {posture: implied, note: "Tibetan script; the per-page style rides annotations —
+        script (uchen = dbu can, ume = dbu med) and, in the Palri and Berkeley releases, script_4
+        (danyig_pedri, druma, gyuyig_tsugdri, multi-script); technology (woodblock / manuscript /
+        modern) per page"}
   derge-tengyur:
     lect: {posture: identity, note: xct}
     dating: {posture: undatable}

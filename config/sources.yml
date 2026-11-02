@@ -436,6 +436,31 @@ bdcamoes:
   license_watch: https://portulanclarin.net/repository/browse/bdcamoes-corpus-collection-of-portuguese-literary-documents-from-the-digital-library-of-camoes-ip-part-i/52f2b16412c411ea8a1302420a000005407eb504ccc045a4a0582ab53dfd43fd/
   sync_policy: manual
 
+bdrc-transcriptions:   # P153, 02-sources row 320
+  adapter: Nabu::Adapters::BdrcTranscriptions
+  adopted: "2026-11-02"
+  axes: [tibetan, buddhist]
+  wired: false   # first sync is the gate's: bin/nabu enable bdrc-transcriptions,
+                 # then bin/nabu sync bdrc-transcriptions — a PACED rows-API crawl
+                 # (~1,000 requests of 100 rows, ~0.3 GB of text, NO images;
+                 # the API answers bursts with 429s, so ≈1.5–2.5 h, resumable at
+                 # the page grain; progress every 2,000 rows). EXPECT berkeley 19
+                 # docs / 8,866 passages + palri-parkhang 23 / 11,133 (census
+                 # 2026-11-02) + acip-sungbum ≈1,118 / 79,572 (the card) ≈ 1,160
+                 # docs / 99,571 passages, 6 card files skipped by rule. Eyeball
+                 # nabu show urn:nabu:bdrc-transcriptions:palri-parkhang:VE1605_MA:16050001
+                 # (the Chos 'byung bstan pa'i nyi ma title page) and 5 random,
+                 # probe nabu search with ཆོས་འབྱུང་བསྟན་པའི་ཉི་མ, then flip.
+  # BDRC's CC0 Tibetan page-aligned transcription releases on Hugging
+  # Face (ACIP Sungbum via the Asian Legacy Library; Palri Parkhang;
+  # UC Berkeley), TEXT columns only through Nabu::HfRowsFetch — the 17.5 GB
+  # of embedded page images are never requested. Document = etext volume
+  # (VE…), passage = page (scan-file stem). Cards: "License: CC0-1.0 …
+  # Attribution requested (not required)" (verified 2026-11-02) → open.
+  # Revision-pinned releases that may still move (the cards carry a DRAFT
+  # marker) → manual.
+  sync_policy: manual
+
 betamasaheft-works:   # P46-2, 02-sources row 123
   adapter: Nabu::Adapters::BetamasaheftWorks
   adopted: "2026-07-26"
@@ -2704,6 +2729,7 @@ guaman-poma:   # P117-5, 02-sources row 255
   # 2026-10-13): "You are welcome to use the transcribed text for your
   # projects." A second digitisation (jpeg) exists in their Digital
   # Collections (object852735) — images only, recorded as reference.
+
 hdic:
   adapter: Nabu::Adapters::Hdic
   adopted: "2026-07-19"
