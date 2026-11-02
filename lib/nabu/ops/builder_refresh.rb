@@ -31,6 +31,9 @@ module Nabu
         # P122-1: the armed silver-date lane re-projects behind the timeline.
         progress&.stage("silver dates")
         Store::SilverDates.replay!(catalog: catalog, shelf: DateShelf.present(config))
+        # P152: the armed silver-meter lane re-projects (never over gold).
+        progress&.stage("silver meter")
+        Store::SilverMeter.replay!(catalog: catalog, shelf: MeterShelf.present(config))
         # The timeline rebuild drops EVERY axis row, this lane included —
         # before 2026-10-13 only a full rebuild restored it (the refresh
         # served script-axis queries without the artifact-script rows).

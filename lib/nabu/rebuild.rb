@@ -210,6 +210,11 @@ module Nabu
       # --project`); db/ stays f(canonical, config, local).
       progress&.stage("silver dates")
       Store::SilverDates.replay!(catalog: db, shelf: DateShelf.present(@config))
+      # P152: the armed silver-meter lane re-projects from the local-meter
+      # shelf into the enrichments table the gold producers just re-derived
+      # (it skips every gold-covered passage, so it must follow them).
+      progress&.stage("silver meter")
+      Store::SilverMeter.replay!(catalog: db, shelf: MeterShelf.present(@config))
       # P63-7: the nabu-places registry projection re-runs AFTER the lanes
       # rebuilt document_axes (NULL-only, adapter-asserted wins) — db/ stays
       # a pure function of canonical/ incl. the registry under it. A missing
