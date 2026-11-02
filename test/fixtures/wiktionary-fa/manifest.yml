@@ -1,0 +1,12 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+source: wiktionary-fa
+adapter_test: test/adapters/wiktionary_fa_test.rb
+retrieved: 2026-11-02
+files:
+  - path: kaikki.org-dictionary-Persian.jsonl
+    url: https://kaikki.org/dictionary/Persian/kaikki.org-dictionary-Persian.jsonl
+    whole: false
+    trim: >-
+      the 3 complete JSONL lines with word in {کتاب, دل, شاه} (first record
+      each), byte-verbatim in upstream order, of 20,350 lines
