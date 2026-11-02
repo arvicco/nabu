@@ -8,7 +8,7 @@ module Nabu
   module Adapters
     # Sefaria — the Targum shelf (P30-3) + the Rabbinic text core (P46-1)
     # + the midrash shelves (P55-3, P59-5) + the commentaries/halakhah/
-    # Zohar/liturgy wave (P140).
+    # Zohar/liturgy wave (P140) + the Second Temple shelf (P152).
     # Sefaria-Export was RESTRUCTURED upstream: the git repo is a
     # lightweight monthly index (books.json, 19,705 version entries / 6,456
     # titles at the pinned 2026-07-02 generation) and the texts live in a
@@ -109,6 +109,23 @@ module Nabu
     #
     # Commentary/Rishonim/Acharonim/Guides subtrees are out of every
     # earlier shelf's category scope by rule.
+    #
+    # == The Second Temple shelf (P152; census 2026-11-02 against the
+    #    2026-10-02 index)
+    #
+    # The `Second Temple` head files 106 named versions (Apocrypha,
+    # Josephus, Philo, one bare-category title). The `second-temple` shelf
+    # takes, by EXACT title, the two works whose Hebrew/Aramaic text is an
+    # ancient witness: Ben Sira (Kahana's Wikisource text CC-BY-SA, the
+    # Schechter–Taylor Cambridge 1899 Hebrew + English PD, SCT CC0; the BST
+    # English says "unknown") and Megillat Ta'anit (Warsaw 1874 PD, Feuer
+    # CC-BY, SCT CC0; the Zeitlin and YU English say "unknown"). A full parse
+    # of the ten files: 7 documents / 1,885 passages, 3 rule skips. The rest
+    # of the category is modern Hebrew retroversion or translation of
+    # Greek/Ge'ez/Syriac originals — out deliberately. LANGUAGE: he→hbo;
+    # Megillat Ta'anit's Aramaic scroll lemmata interleave its Hebrew
+    # scholion leaf by leaf and ride hbo with it (declared coarseness — the
+    # Zohar Chadash stance inverted: the Hebrew is the bulk).
     #
     # == fetch (the P30-3 index-driven shape, Nabu::SefariaFetch)
     #
@@ -394,6 +411,15 @@ module Nabu
         # on …" modern commentary volumes are EXCLUDED_TITLES.
         Shelf.new(id: "liturgy", prefix: ["Liturgy"], division_index: 2, division: /\A\z/,
                   languages: { "he" => "hbo", "en" => "eng" }, ruled_by: :actual_language,
+                  urn_axis: true, fetch_versions: nil),
+        # THE P152 SECOND TEMPLE SHELF (class note): the two Second Temple
+        # works whose Hebrew/Aramaic text is an ancient witness, by EXACT
+        # title. The rest of the category is modern Hebrew retroversion or
+        # translation of Greek/Ge'ez originals (Judith, Tobit, Maccabees,
+        # Wisdom, Jubilees, Philo, Josephus …) — out deliberately.
+        Shelf.new(id: "second-temple", prefix: ["Second Temple"], division_index: nil, division: nil,
+                  titles: ["Ben Sira", "Megillat Ta'anit"].freeze,
+                  languages: { "he" => "hbo", "en" => "eng" }, ruled_by: :actual_language,
                   urn_axis: true, fetch_versions: nil)
       ].freeze
 
@@ -409,7 +435,7 @@ module Nabu
         id: "sefaria",
         name: "Sefaria — Targum shelf + Rabbinic core (Mishnah, Bavli, Minor Tractates, Yerushalmi, " \
               "Tosefta) + Midrash (Rabbah, halakhic midrashim, Aggadah) + medieval Bible commentaries, " \
-              "Mishneh Torah, Shulchan Arukh, Tur, Zohar and liturgy",
+              "Mishneh Torah, Shulchan Arukh, Tur, Zohar and liturgy + Ben Sira and Megillat Ta'anit",
         license: "Per NAMED version, machine-readable \"license\" field in each version file (the index " \
                  "carries none): PD (both spellings)/CC0 -> open, CC-BY/CC-BY-SA -> attribution override, " \
                  "CC-BY-NC(-SA) -> nc override (the Davidson lane; never redistributed); \"unknown\"/absent -> " \

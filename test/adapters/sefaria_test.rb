@@ -38,6 +38,13 @@ class SefariaTest < Minitest::Test
     "zohar" => "urn:nabu:sefaria:zohar-chadash:he:zohar-chadash",
     "liturgy" => "urn:nabu:sefaria:shalom-aleichem:he:shalom-alechem"
   }.freeze
+  # The P152 Second Temple shelf (title-allowlisted: Ben Sira + Megillat Ta'anit).
+  SECOND_TEMPLE_URNS = {
+    "ben-sira" => "urn:nabu:sefaria:ben-sira:he:ben-sira-david-kahana-ed-wikisource",
+    "megillat-he" => "urn:nabu:sefaria:megillat-ta-anit:he:warsaw-1874",
+    "megillat-en" => "urn:nabu:sefaria:megillat-ta-anit:en:rabbi-mike-feuer-jerusalem-anthology"
+  }.freeze
+  BEN_SIRA_BST_FIXTURE = File.join(FIXTURES, "json/Second Temple/Apocrypha/Ben Sira/English/BST.json")
   TUR_UNKNOWN_FIXTURE = File.join(FIXTURES, "json/Halakhah/Tur/Tur/Hebrew/rp.json")
   ESTHER_TE_FIXTURE = File.join(FIXTURES, "json/Midrash/Aggadah/Midrash Rabbah/Esther Rabbah/Hebrew/" \
                                           "Midrash Rabbah -- TE.json")
@@ -77,7 +84,8 @@ class SefariaTest < Minitest::Test
       urn:nabu:sefaria:tanna-debei-eliyahu-zuta:en:sefaria-community-translation
       #{SIFREI_ZUTA_URN}
       #{TOSEFTA_URN}
-    ] + WAVE_URNS.values).sort, urns, "23 licensed named versions; merged, unlicensed and excluded titles never mint"
+    ] + WAVE_URNS.values + SECOND_TEMPLE_URNS.values).sort, urns,
+                 "26 licensed named versions; merged, unlicensed and excluded titles never mint"
   end
 
   # --- the Targum regression (P46-1: URNs FROZEN — the wave must not re-mint) -
@@ -316,7 +324,10 @@ class SefariaTest < Minitest::Test
                    WAVE_URNS["shulchan-arukh"] => 7,
                    WAVE_URNS["tur"] => 3,
                    WAVE_URNS["zohar"] => 4,
-                   WAVE_URNS["liturgy"] => 4
+                   WAVE_URNS["liturgy"] => 4,
+                   SECOND_TEMPLE_URNS["ben-sira"] => 51,
+                   SECOND_TEMPLE_URNS["megillat-he"] => 8,
+                   SECOND_TEMPLE_URNS["megillat-en"] => 6
                  }, counts)
   end
 
@@ -531,12 +542,63 @@ class SefariaTest < Minitest::Test
     assert_empty(refs.select { |r| r.path == TUR_UNKNOWN_FIXTURE })
   end
 
+  # --- the P152 Second Temple shelf: Ben Sira + Megillat Ta'anit ---------------
+
+  def test_second_temple_shelf_is_title_allowlisted
+    select = Nabu::Adapters::Sefaria.method(:shelf_entry?)
+    base = { "language" => "Hebrew", "versionTitle" => "Any Named Edition", "json_url" => "https://b/x.json" }
+    { "Ben Sira" => ["Second Temple", "Apocrypha"], "Megillat Ta'anit" => ["Second Temple"] }.each do |title, cats|
+      assert select.call(base.merge("title" => title, "categories" => cats)), "#{title} is on the allowlist"
+      assert_equal "second-temple", Nabu::Adapters::Sefaria.shelf_for(cats, title: title).id
+    end
+    [["Book of Jubilees", ["Second Temple", "Apocrypha"]],
+     ["The Wisdom of Solomon", ["Second Temple", "Apocrypha"]],
+     ["The War of the Jews", ["Second Temple", "Josephus"]],
+     ["On Abraham", ["Second Temple", "Philo"]]].each do |title, cats|
+      refute select.call(base.merge("title" => title, "categories" => cats)),
+             "#{title}: a modern Hebrew retroversion or translation of a Greek/Ge'ez work — off the allowlist"
+    end
+    refute select.call(base.merge("title" => "Ben Sira", "categories" => ["Second Temple", "Apocrypha"],
+                                  "versionTitle" => "merged")), "merged files are never fetched"
+  end
+
+  def test_second_temple_language_rulings_citations_and_facets
+    ben_sira = conformance_adapter.parse(ref(SECOND_TEMPLE_URNS["ben-sira"]))
+    assert_equal "hbo", ben_sira.language, "the Hebrew Ben Sira (Kahana's reconstruction of the Genizah/Masada text)"
+    assert_equal "attribution", ben_sira.license_override, "the Wikisource edition is CC-BY-SA"
+    assert_equal "#{SECOND_TEMPLE_URNS['ben-sira']}:1.1", ben_sira.first.urn, "Chapter.Verse"
+    assert_equal({ "shelf" => "second-temple", "subshelf" => { "value" => "apocrypha", "raw" => "Apocrypha" } },
+                 ben_sira.metadata["facets"])
+    assert_equal "Second Temple -- Apocrypha", ben_sira.metadata["genre"]
+
+    megillat = conformance_adapter.parse(ref(SECOND_TEMPLE_URNS["megillat-he"]))
+    assert_equal "hbo", megillat.language,
+                 "the Hebrew scholion is the bulk; the Aramaic scroll lemmata ride hbo (declared coarseness)"
+    assert_nil megillat.license_override, "the Warsaw 1874 print is Public Domain — the open source class"
+    assert_equal "#{SECOND_TEMPLE_URNS['megillat-he']}:nisan.1", megillat.first.urn,
+                 "the month-keyed schema cites its node (Nisan … Adar)"
+    assert_equal({ "shelf" => "second-temple" }, megillat.metadata["facets"], "categories = [Second Temple] only")
+
+    feuer = conformance_adapter.parse(ref(SECOND_TEMPLE_URNS["megillat-en"]))
+    assert_equal "eng", feuer.language
+    assert_equal "attribution", feuer.license_override, "CC-BY"
+    assert_equal "#{SECOND_TEMPLE_URNS['megillat-en']}:iyar.5", feuer.first.urn,
+                 "the translation's leading empty leaves are honest lacunae"
+  end
+
+  def test_a_second_temple_file_with_unknown_license_is_censused_never_ingested
+    assert_equal "unknown", JSON.parse(File.read(BEN_SIRA_BST_FIXTURE))["license"],
+                 "the BST English Ben Sira (a one-verse RSV scrape) carries no grant"
+    assert_empty(refs.select { |r| r.path == BEN_SIRA_BST_FIXTURE })
+  end
+
   # --- discovery census (P11-7) ----------------------------------------------
 
   def test_discovery_skips_census_the_gate
     skips = conformance_adapter.discovery_skips(FIXTURES)
-    assert_equal 6, skips.skipped_by_rule,
-                 "1 merged + 1 absent-license + 3 unknown-license (Lenihan, Esther TE, Tur rp) + 1 excluded title"
+    assert_equal 7, skips.skipped_by_rule,
+                 "1 merged + 1 absent-license + 4 unknown-license (Lenihan, Esther TE, Tur rp, Ben Sira BST) " \
+                 "+ 1 excluded title"
     assert_predicate skips, :clean?
   end
 
@@ -603,14 +665,15 @@ class SefariaTest < Minitest::Test
     selected = index.fetch("books").select { |e| Nabu::Adapters::Sefaria.shelf_entry?(e) }
     grouped = selected.group_by { |e| e["categories"].first }.transform_values(&:size)
     assert_equal({ "Tanakh" => 11, "Mishnah" => 7, "Talmud" => 12, "Tosefta" => 2, "Midrash" => 16,
-                   "Halakhah" => 4, "Kabbalah" => 1, "Liturgy" => 1 },
+                   "Halakhah" => 4, "Kabbalah" => 1, "Liturgy" => 1, "Second Temple" => 4 },
                  grouped)
     rejected = index.fetch("books").reject { |e| Nabu::Adapters::Sefaria.shelf_entry?(e) }
-    assert_equal 23, rejected.size,
-                 "16 earlier negatives + the wave's 7: a Tur merged sibling, Peri Megadim (a commentary " \
+    assert_equal 26, rejected.size,
+                 "16 earlier negatives + the P140 wave's 7: a Tur merged sibling, Peri Megadim (a commentary " \
                  "filed flat beside the Shulchan Arukh), Sulam on Zohar (off the Zohar allowlist), Rabbi " \
                  "Sacks on Siddur (excluded title), and one entry from each excluded Commentary subtree " \
-                 "(Mishneh Torah, Tur, Haggadah)"
+                 "(Mishneh Torah, Tur, Haggadah) + the P152 shelf's 3: a Ben Sira merged sibling, the " \
+                 "Book of Jubilees (a modern Hebrew retroversion — off the allowlist) and Philo's On Abraham"
     assert_includes rejected.map { |e| e["versionTitle"] }, "Venice Edition",
                     "license-unknown Yerushalmi editions are not even fetched — not named"
     assert_includes rejected.map { |e| e["title"] }, "Introductions to the Babylonian Talmud",

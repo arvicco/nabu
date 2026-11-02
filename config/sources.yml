@@ -5238,6 +5238,13 @@ sefaria:
                    # 622,476 edges from 625,102 both-sides-held rows; the
                    # 4,444,269 rows with an unheld side are censused on the
                    # run row. Eyeball `nabu links urn:nabu:oshb:jonah:1.1`.
+                   # P152 adds the SECOND TEMPLE shelf (Ben Sira + Megillat
+                   # Ta'anit, title-allowlisted): +10 named files (≈0.4 MB)
+                   # → expected EXACTLY +7 documents / +1,885 passages, +3
+                   # rule skips (BST, Zeitlin and YU English say "unknown").
+                   # Eyeball urn:nabu:sefaria:ben-sira:he:ben-sira-david-
+                   # kahana-ed-wikisource:1.1 and urn:nabu:sefaria:megillat-
+                   # ta-anit:he:warsaw-1874:nisan.2.
   # Sefaria — Targum shelf (P30-3) + RABBINIC WAVE 1 (P46-1) + MIDRASH
   # WAVE 2 (P55-3). Upstream
   # restructured: the git repo is a monthly books.json index (19,705 version

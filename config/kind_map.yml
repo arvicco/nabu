@@ -508,6 +508,10 @@ sources:
   sefaria:            # genre = the DEEP category path, " -- "-joined at parse ("Tanakh --
     metadata: genre   # Rishonim on Tanakh -- Rashi -- Torah"); first-hit prefix rules, so the
     #                   deeper exceptions precede their head. Counts are the head-only census.
+    map:              # exact paths answer before the prefix ladder
+      "Second Temple": historiography/chronicle  # P152 — the bare path is Megillat Ta'anit alone
+      #   (the Hasmonean feast-day calendar + its scholion: a chronicle of commemorated
+      #   victories); Ben Sira's "Second Temple -- Apocrypha" keeps the ruled prefix below
     prefix_map:
       "Tanakh -- Rishonim on Tanakh": exegesis   # 536 — the medieval Bible commentaries (Rashi,
       #   Ibn Ezra, Ramban, Radak …): commentary ON scripture, filed under the Tanakh head
