@@ -1102,6 +1102,15 @@ automatically; no per-release action.
    Atom feed (`/feed.xml`) carries it to aggregators on the same deploy.
 6. **DOI badge** (first release only, after Zenodo mints): copy the
    concept-DOI badge into README and the site About page.
+7. **Demo image, RELEASE-SYNCED ONLY (owner ruling 2026-11-02):** the
+   public demo image (ghcr.io/arvicco/nabu-demo) is re-published only
+   as part of a release — never per phase gate. The GitHub release in
+   step 4 triggers `.github/workflows/demo-release.yml` (multi-arch
+   build + push + two-arch smoke + registry publish) and that is the
+   normal path; `rake demo:publish` is the local fallback, and like
+   every owner-run operation it must be ONE command that carries its
+   own preflight checks — handing the owner a sequence of setup
+   incantations around it is a defect (same ruling).
 
 Between releases, phase gates that don't tag still add a News entry
 (MAINTENANCE.md gate duty) — the News section tracks phases; releases are
