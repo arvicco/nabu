@@ -4715,19 +4715,6 @@ pna:   # 02-sources row 311
   # links (3,084 of 4,188 texts) onto held oracc/cdli documents. The
   # 149,045 co-occurrence edges are skipped by rule (no relation lane).
 
-prague-bible-1488:   # P116-1
-  adapter: Nabu::Adapters::PragueBible1488
-  adopted: "2026-10-10"
-  axes: [slavic]
-  wired: true    # First sync verified 2026-10-10: 31 docs / 2,939 GT lines.
-  sync_policy: manual
-  # The HTR Winter School 2024 Medieval Czech ground truth over the
-  # Prague Bible (1488; ÖNB Ink 13.C.5) — Zenodo 10.5281/zenodo.14524858,
-  # cc-by-4.0 on the record (the deposited CITATION.cff says CC-BY-SA-4.0;
-  # both attribution-class). One zip: 31 PAGE-XML GT pages, Old Czech,
-  # semi-diplomatic; document = page, passage = TextLine (page-xml family),
-  # abbreviation expansions as annotations.
-
 ppchy:   # P152, 02-sources row 317
   adapter: Nabu::Adapters::Ppchy
   adopted: "2026-11-02"
@@ -4755,6 +4742,19 @@ ppchy:   # P152, 02-sources row 317
   # LICENSE.rst: CC BY-NC-SA 4.0 (verified 2026-11-02) → nc. Living
   # repository (weekly annotation corrections) → manual.
   sync_policy: manual
+
+prague-bible-1488:   # P116-1
+  adapter: Nabu::Adapters::PragueBible1488
+  adopted: "2026-10-10"
+  axes: [slavic]
+  wired: true    # First sync verified 2026-10-10: 31 docs / 2,939 GT lines.
+  sync_policy: manual
+  # The HTR Winter School 2024 Medieval Czech ground truth over the
+  # Prague Bible (1488; ÖNB Ink 13.C.5) — Zenodo 10.5281/zenodo.14524858,
+  # cc-by-4.0 on the record (the deposited CITATION.cff says CC-BY-SA-4.0;
+  # both attribution-class). One zip: 31 PAGE-XML GT pages, Old Czech,
+  # semi-diplomatic; document = page, passage = TextLine (page-xml family),
+  # abbreviation expansions as annotations.
 
 prakrit-texts:   # P118-3
   adapter: Nabu::Adapters::PrakritTexts
