@@ -233,6 +233,9 @@ module Nabu
       stage :silver_dates, "silver dates",
             "Re-projects the owner-armed model date estimates from the local dates shelf as silver-grade " \
             "dates, ranked below any upstream date (the timeline pass just dropped them)."
+      stage :silver_meter, "silver meter",
+            "Re-projects the owner-armed machine scansions from the local meter shelf into the meter layer as " \
+            "silver rows — never over a gold-scanned line, never over a text that moved since its scan."
       stage :place_apply, "place apply",
             "Fills place references from the nabu-places registry's matched decisions on documents that carry " \
             "none from upstream — feeding --place and the place desk."

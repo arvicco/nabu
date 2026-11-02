@@ -442,6 +442,10 @@ module Nabu
       # (or withdrawn some) — re-project the silver-date lane wholesale (a
       # shelf-sized pass; an unarmed or absent shelf touches nothing).
       Store::SilverDates.replay!(catalog: @db, shelf: DateShelf.present(@config))
+      # P152: a re-parse that moved a passage's text stales its silver
+      # scansion — drop those rows now (the shelf keeps the record; the
+      # next --run re-scans it, the next projection counts it stale).
+      Store::SilverMeter.drop_stale!(catalog: @db, slug: entry.slug)
     end
 
     # P106-1: the dictionary-group census follows every dictionary-bearing
@@ -596,8 +600,12 @@ module Nabu
     def refresh_enrichments(entry)
       return nil unless entry.adapter_class.enrichment_producer?
 
-      entry.adapter_class.enrichment_producer(catalog: @db)
-           .run(entry.slug, workdir: workdir_for(entry.slug))
+      result = entry.adapter_class.enrichment_producer(catalog: @db)
+                    .run(entry.slug, workdir: workdir_for(entry.slug))
+      # P152: the gold meter layer just moved — re-project an armed
+      # silver-meter shelf so silver never sits on a newly gold line.
+      Store::SilverMeter.replay!(catalog: @db, shelf: MeterShelf.present(@config))
+      result
     end
 
     # P45-6: after a place_index_producer? source syncs, re-derive the catalog
