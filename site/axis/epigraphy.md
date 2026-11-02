@@ -13,7 +13,7 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 ## The shelves
 
-A source wears every desk it serves — these 36 answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
+A source wears every desk it serves — these 38 answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
 | Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 2 November 2026)</span> |
 |---|---|---|---|---|
@@ -42,9 +42,11 @@ A source wears every desk it serves — these 36 answer this desk. Holdings are 
 | `ogham` | inscriptions | nc | wired · manual | 873 docs / 1,053 passages |
 | `open-etruscan` | inscriptions | attribution | wired · frozen | 8,047 docs / 8,047 passages |
 | `papyri-ddbdp` | papyri | attribution | wired · auto | 72,327 docs / 1,125,166 passages |
+| `paramara` | texts | attribution | not yet wired | not synced yet |
 | `pleiades` | feature module | attribution | wired · manual | nothing held yet |
 | `riig` | inscriptions | attribution | wired · manual | 495 docs / 1,357 passages |
 | `rundata` | inscriptions | odbl | wired · manual | 30,647 docs / 30,645 passages |
+| `runesdb` | texts | attribution | not yet wired | not synced yet |
 | `siddham` | texts | attribution | wired · manual | 427 docs / 6,334 passages |
 | `sigla` | inscriptions | nc | wired · manual | 787 docs / 3,097 passages |
 | `sii-clean` | texts | attribution | wired · auto | 18,495 docs / 314,915 passages |

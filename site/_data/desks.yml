@@ -11,16 +11,16 @@
 - slug: epigraphy
   persona: The Papyrologist-Epigraphist
   blurb: reads what survives on stone, sherd, papyrus and tablet, lacunae and all
-  members: 36
+  members: 38
 - slug: slavic
   persona: The Slavicist
   blurb: Cyril and Methodius to the damaskini, canon to vernacular
-  members: 36
+  members: 37
 - slug: germanic
   persona: The Germanicist
   blurb: Gothic and Old English to the Norse sagas and the runestones, the word-hoard
     of all three branches
-  members: 23
+  members: 24
 - slug: celtic
   persona: The Celticist
   blurb: from Lepontic stones to the Old Irish glossators
@@ -69,11 +69,11 @@
   persona: The Iranologist
   blurb: the Avesta to the Achaemenid inscriptions, Old Iranian liturgy toward Middle
     Persian
-  members: 7
+  members: 8
 - slug: indic
   persona: The Indologist
   blurb: Veda to sastra, the Sanskrit library and its instruments
-  members: 30
+  members: 31
 - slug: buddhist
   persona: The Buddhologist
   blurb: the dharma across the Pali, Sanskrit, Chinese and Tibetan canons
