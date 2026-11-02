@@ -141,6 +141,8 @@ module Nabu
           "elektire" => :structured, # P117-2: the portal's century of origin as an
           #                            envelope (composition class)
           "elephantine" => :structured,
+          "elizabeth-bible" => :structured, # P152: the edition year its translation title states
+          #                                   (1757, class edition) — the rendering is undated
           "eltec-srp" => :structured, # P117-2: the firstEdition's typed years, place
           #                             = its pubPlace (publication place)
           "extrabiblical" => :work_era, # each ETCBC book's attributed era (config/work_eras.yml,
