@@ -247,6 +247,32 @@ module Query
       assert_equal "a thing", out[%w[þing ang]]
     end
 
+    # -- the dictionary-keying folds (P153) ------------------------------------
+
+    def seed_gpc_shelf
+      gpc = Nabu::Store::Source.create(
+        slug: "gpc", name: "Geiriadur Prifysgol Cymru", adapter_class: "Nabu::Adapters::Gpc",
+        license: "CC BY 4.0", license_class: "attribution"
+      )
+      Nabu::Store::DictionaryLoader.new(db: @catalog, source: gpc)
+                                   .load_from(Nabu::Adapters::Gpc.new,
+                                              workdir: Nabu::TestSupport.fixtures("gpc"))
+    end
+
+    # GPC registers Welsh under the two-letter tag "cy"; the held Welsh
+    # text keys "wel" (eebo-tcp) and "cym" (cy-wikisource). Every spelling
+    # must reach the shelf — on the --lang filter AND the passage-keyed
+    # gloss batch (the lemma-search integration hands the PASSAGE code).
+    def test_welsh_lookups_reach_gpc_from_every_spelling
+      seed_gpc_shelf
+      %w[cy cym wel].each do |code|
+        assert_equal ["aberth"], define("aberth", lang: code).map(&:headword), "--lang #{code}"
+      end
+      out = Nabu::Query::Define.new(catalog: @catalog).glosses([%w[aberth wel], %w[aberth cym]])
+      assert_equal "a sacrificing or offering", out[%w[aberth wel]]
+      assert_equal "a sacrificing or offering", out[%w[aberth cym]]
+    end
+
     # -- the Sanskrit shelf (P17-4): MW → GRETIL resolution ----------------------
 
     def seed_mw_shelf
