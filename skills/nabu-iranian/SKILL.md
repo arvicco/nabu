@@ -6,7 +6,7 @@ compatibility: "Requires the nabu MCP server (`bin/nabu mcp`, read-only, stdio) 
 metadata:
   desk: iranian
   origin: generated
-  sources: "cdli iedc oracc perseus-farsilit shkz skjaervo-khotanese"
+  sources: "cdli ganjoor iedc oracc perseus-farsilit shkz skjaervo-khotanese wiktionary-fa"
 ---
 
 # The Iranologist — the `iranian` desk
@@ -24,11 +24,13 @@ verbatim upstream terms are in `docs/02-sources.md` of the Nabu repository.
 | Source | Upstream | License class |
 | --- | --- | --- |
 | `cdli` | CDLI — Cuneiform Digital Library Initiative (2023-10 bulk-dump snapshot) | attribution |
+| `ganjoor` | Ganjoor — the Persian poetry library (classical poets) | attribution |
 | `iedc` | Invisible East Digital Corpus (Oxford) — documentary Islamicate East | open |
 | `oracc` | ORACC — Open Richly Annotated Cuneiform Corpus | open |
 | `perseus-farsilit` | Perseus Digital Library — canonical Persian literature (Hafez) | attribution |
 | `shkz` | ŠKZ — the trilingual Kaʿba-ye Zartošt inscription (aligned) | open |
 | `skjaervo-khotanese` | Skjaervø — Khotanese Manuscripts from Chinese Turkestan (BL records) | open |
+| `wiktionary-fa` | Wiktionary Persian — kaikki.org machine-readable extract | attribution |
 <!-- nabu:skill-sources:end -->
 
 ## What the shelves hold

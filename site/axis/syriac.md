@@ -17,11 +17,11 @@ A source wears every desk it serves — these three answer this desk. Holdings a
 
 | Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 2 November 2026)</span> |
 |---|---|---|---|---|
-| `etcbc-syriac` | texts | nc | not yet wired | not synced yet |
+| `etcbc-syriac` | texts | nc | wired · manual | 31 docs / 18,132 passages |
 | `peshitta` | texts | nc | wired · manual | 65 docs / 31,341 passages |
 | `syriac-corpus` | texts | attribution | wired · manual | 632 docs / 134,726 passages |
 
-**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 2 November 2026)</span>: `syc` 697.
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 2 November 2026)</span>: `syc` 728.
 
 ## The desk's instruments
 

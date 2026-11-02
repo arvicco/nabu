@@ -6,7 +6,7 @@ compatibility: "Requires the nabu MCP server (`bin/nabu mcp`, read-only, stdio) 
 metadata:
   desk: hebrew
   origin: hand-tuned
-  sources: "bhsa bridging dss elephantine extrabiblical hebrew-lexicon iip oshb sdbh sefaria ud"
+  sources: "bhsa bridging dss elephantine etcbc-targum extrabiblical hebrew-lexicon hexapla iip oshb sdbh sefaria ud"
 ---
 
 # The Hebraist — the `hebrew` desk
@@ -27,8 +27,10 @@ verbatim upstream terms are in `docs/02-sources.md` of the Nabu repository.
 | `bridging` | ETCBC bridging — OSHB↔BHSA word-level crosswalk (Text-Fabric tf/2021 module) | attribution |
 | `dss` | DSS — Dead Sea Scrolls (Abegg/ETCBC, Text-Fabric tf/2.0) | nc |
 | `elephantine` | Elephantine — the Berlin ERC papyri and ostraca database | attribution |
+| `etcbc-targum` | ETCBC Targum Corpus — Jewish Aramaic Pentateuch targums (Text-Fabric tf/0.1) | nc |
 | `extrabiblical` | ETCBC extrabiblical — Non-Masoretic texts related to the Hebrew Bible (Text-Fabric tf/0.2) | nc |
 | `hebrew-lexicon` | OSHB Hebrew Lexicon — augmented Strong's + BDB outline (openscriptures) | attribution |
+| `hexapla` | Göttingen Hexapla Database (NAWG) — 2 Samuel and the Psalms (Text-Fabric tf/0.1) | nc |
 | `iip` | Inscriptions of Israel/Palestine (Brown University) | nc |
 | `oshb` | Open Scriptures Hebrew Bible (Westminster Leningrad Codex + OSHM morphology) | open |
 | `sdbh` | UBS Dictionary of Biblical Hebrew (Semantic Dictionary of Biblical Hebrew) | attribution |

@@ -26,7 +26,7 @@ A source wears every desk it serves — these fifteen answer this desk. Holdings
 |---|---|---|---|---|
 | `aozora` | texts | open | wired · manual | 17,121 docs / 2,983,332 passages |
 | `edrdg` | dictionary | attribution | wired · manual | 231,322 entries |
-| `haga-jinmei` | dictionary | open | not yet wired | not synced yet |
+| `haga-jinmei` | dictionary | open | wired · manual | 54,558 entries |
 | `hdic` | dictionary | attribution | wired · manual | 96,414 entries |
 | `honkoku` | texts | attribution | wired · manual | 6,092 docs / 129,458 passages |
 | `ja-wikisource` | texts | attribution | wired · manual | 838 docs / 88,745 passages |
@@ -40,7 +40,7 @@ A source wears every desk it serves — these fifteen answer this desk. Holdings
 | `unihan` | dictionary | open | wired · manual | 102,998 entries |
 | `wiktionary-recon` | dictionary | attribution | wired · manual | 376,415 entries |
 
-**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 2 November 2026)</span>: `zho` 430,294 · `jpn` 338,905 · `lzh` 63,807 · `ojp` 11,413 · `xcl` 8,541 · `sga` 6,688 · `gem-pro` 5,749 · `gmw-pro` 5,578 · `sla-pro` 5,461 · `mnc` 2,577 … and 17 more (`nabu axis japonic` lists all).
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 2 November 2026)</span>: `zho` 430,294 · `jpn` 393,463 · `lzh` 63,807 · `ojp` 11,413 · `xcl` 8,541 · `sga` 6,688 · `gem-pro` 5,749 · `gmw-pro` 5,578 · `sla-pro` 5,461 · `mnc` 2,577 … and 17 more (`nabu axis japonic` lists all).
 
 ## The desk's instruments
 

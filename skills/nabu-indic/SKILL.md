@@ -6,7 +6,7 @@ compatibility: "Requires the nabu MCP server (`bin/nabu mcp`, read-only, stdio) 
 metadata:
   desk: indic
   origin: hand-tuned
-  sources: "dacon dcs dharma-deccan dharma-mdt dharma-tamil gretil gretil-legacy gu-wikisource kannada-texts madurai mw nabu-data prakrit-texts sarit shabados siddham sii-clean suttacentral tamilex te-wikisource tipitaka-lk ud vedaweb wiktionary-dv wiktionary-kn wiktionary-ml wiktionary-pra wiktionary-si wiktionary-ta wiktionary-te"
+  sources: "dacon dcs dharma-deccan dharma-mdt dharma-tamil gretil gretil-legacy gu-wikisource kannada-texts madurai mw nabu-data paramara prakrit-texts sarit shabados siddham sii-clean suttacentral tamilex te-wikisource tipitaka-lk ud vedaweb wiktionary-dv wiktionary-kn wiktionary-ml wiktionary-pra wiktionary-si wiktionary-ta wiktionary-te"
 ---
 
 # The Indologist — the `indic` desk
@@ -35,6 +35,7 @@ verbatim upstream terms are in `docs/02-sources.md` of the Nabu repository.
 | `madurai` | Project Madurai — classical Tamil e-texts | attribution |
 | `mw` | Monier-Williams — A Sanskrit-English Dictionary (Cologne CDSL) | nc |
 | `nabu-data` | nabu-data — Nabu's own published datasets, consumed back (form→lemma instrument) | attribution |
+| `paramara` | Paramāra epigraphy — the Siddham network's Zenodo community (PennGlobal PMR texts) | attribution |
 | `prakrit-texts` | Prakrit Digital Texts Project — Prakrit literature in TEI (A. Ollett) | attribution |
 | `sarit` | SARIT — Search and Retrieval of Indic Texts (scholarly TEI editions) | attribution |
 | `shabados` | Shabad OS — Gurbāṇī and Panthic texts (Gurmukhī primary text) | open |

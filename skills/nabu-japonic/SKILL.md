@@ -6,7 +6,7 @@ compatibility: "Requires the nabu MCP server (`bin/nabu mcp`, read-only, stdio) 
 metadata:
   desk: japonic
   origin: generated
-  sources: "aozora edrdg hdic honkoku ja-wikisource kokubunken kouigenji kradfile ndl-kotenseki nrct oncoj oncoj-lexicon unihan wiktionary-recon"
+  sources: "aozora edrdg haga-jinmei hdic honkoku ja-wikisource kokubunken kouigenji kradfile ndl-kotenseki nrct oncoj oncoj-lexicon unihan wiktionary-recon"
 ---
 
 # The Japanologist — the `japonic` desk
@@ -25,6 +25,7 @@ verbatim upstream terms are in `docs/02-sources.md` of the Nabu repository.
 | --- | --- | --- |
 | `aozora` | Aozora Bunko 青空文庫 — Japanese public-domain library (ruby-annotated text) | open |
 | `edrdg` | EDRDG — KANJIDIC2 + JMdict (Electronic Dictionary Research and Development Group) | attribution |
+| `haga-jinmei` | Haga Jinmei Dictionary Dataset (芳賀矢一『日本人名辞典』1914; NIHU) | open |
 | `hdic` | HDIC — Hanzi Dictionaries in Early Japan (Heian lexicography) | attribution |
 | `honkoku` | みんなで翻刻 honkoku-data — citizen transcriptions of premodern Japanese documents | attribution |
 | `ja-wikisource` | Japanese Wikisource — the premodern era cone (飛鳥–江戸) | attribution |

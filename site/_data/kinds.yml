@@ -3,17 +3,17 @@
 as_of: 2 November 2026
 classes:
 - head: literary
-  documents: 701392
-  documents_display: '701,392'
-  sources: 32
+  documents: 796444
+  documents_display: '796,444'
+  sources: 35
 - head: administrative
   documents: 489119
   documents_display: '489,119'
   sources: 16
 - head: historiography
-  documents: 357119
-  documents_display: '357,119'
-  sources: 26
+  documents: 357121
+  documents_display: '357,121'
+  sources: 27
 - head: funerary
   documents: 114916
   documents_display: '114,916'
@@ -31,9 +31,9 @@ classes:
   documents_display: '30,135'
   sources: 5
 - head: scripture
-  documents: 23917
-  documents_display: '23,917'
-  sources: 27
+  documents: 24085
+  documents_display: '24,085'
+  sources: 31
 - head: dedicatory
   documents: 22922
   documents_display: '22,922'
@@ -63,9 +63,9 @@ classes:
   documents_display: '11,422'
   sources: 5
 - head: hymn-prayer
-  documents: 10450
-  documents_display: '10,450'
-  sources: 17
+  documents: 10451
+  documents_display: '10,451'
+  sources: 18
 - head: building
   documents: 8021
   documents_display: '8,021'
@@ -75,9 +75,9 @@ classes:
   documents_display: '5,278'
   sources: 7
 - head: sermon
-  documents: 5191
-  documents_display: '5,191'
-  sources: 4
+  documents: 5192
+  documents_display: '5,192'
+  sources: 5
 - head: magic
   documents: 3328
   documents_display: '3,328'
@@ -94,10 +94,10 @@ classes:
   documents: 2200
   documents_display: '2,200'
   sources: 10
-unclassified_sources: 129
+unclassified_sources: 134
 unknown_documents: 47058
 unknown_documents_display: '47,058'
 unmapped_documents: 11443
 unmapped_documents_display: '11,443'
-unclassified_documents: 488787
-unclassified_documents_display: '488,787'
+unclassified_documents: 521855
+unclassified_documents_display: '521,855'
