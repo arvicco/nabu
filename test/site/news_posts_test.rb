@@ -23,4 +23,41 @@ class NewsPostsTest < Minitest::Test
                  "future-dated posts are SILENTLY INVISIBLE on the Jekyll site — " \
                  "re-date to a past time: #{offenders.join(', ')}"
   end
+
+  CITATION = File.expand_path("../../CITATION.cff", __dir__)
+
+  # The release-announcement guard (the release rail, docs/ops.md §12:
+  # the news post rides the same change as the version bump). The moment
+  # CITATION.cff names a version, some post's TITLE must announce it as
+  # vX.Y.Z — a body-only mention ("since v1.7.0" in a later post) never
+  # counts, or the next release could hide behind it. So a branch that
+  # bumps `version:` goes red until its announcement is written, which is
+  # exactly when the omission is still cheap to fix.
+  def test_the_cited_version_has_an_announcement_post
+    version = File.read(CITATION)[/^version:\s*"?(\d+\.\d+\.\d+)"?\s*$/, 1]
+    refute_nil version, "CITATION.cff carries no X.Y.Z `version:` line"
+
+    tag = announcement_tag(version)
+    announcing = Dir.glob(File.join(POSTS_DIR, "*.md")).select do |path|
+      front = File.read(path)[/\A---\n.*?\n---/m].to_s
+      front[/^title:\s*(.+)$/, 1].to_s.match?(tag)
+    end
+    assert announcing.any?,
+           "CITATION.cff says v#{version} but no news post title announces it — " \
+           "write the release post under site/news/_posts/ in the same change as the bump"
+  end
+
+  def test_the_announcement_tag_does_not_match_a_longer_version
+    tag = announcement_tag("1.7.0")
+    assert_match tag, "v1.7.0 — the entity wave"
+    refute_match tag, "v1.7.01 — a typo"
+    refute_match tag, "v1.7.0.1 — a patch"
+    refute_match tag, "nabu-data v11.7.0"
+  end
+
+  private
+
+  def announcement_tag(version)
+    /(?<![\w.])v#{Regexp.escape(version)}(?![\w.]*\d)/
+  end
 end
