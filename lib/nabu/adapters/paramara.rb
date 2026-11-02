@@ -150,7 +150,7 @@ module Nabu
       end
 
       def parse(document_ref)
-        parsed = parse_text(File.read(document_ref.path, encoding: Encoding::UTF_8), document_ref.path)
+        parsed = parse_text(SourceRead.utf8_file(document_ref.path, label: "paramara"), document_ref.path)
         build_document(parsed, document_ref)
       rescue Nabu::ValidationError => e
         raise ParseError, "#{document_ref.path}: #{e.message}"
@@ -164,7 +164,7 @@ module Nabu
         _ = force
         records = fetch_listing
         FileUtils.mkdir_p(workdir)
-        File.write(File.join(workdir, LISTING), JSON.pretty_generate(records))
+        atomic_write(File.join(workdir, LISTING), JSON.pretty_generate(records))
         fetched = records.count { |record| downloaded_text?(workdir, record, progress) }
         FetchReport.new(sha: Digest::SHA256.hexdigest(JSON.generate(records)), fetched_at: Time.now,
                         notes: "#{records.size} records listed; #{fetched} text files downloaded")
@@ -202,10 +202,17 @@ module Nabu
         progress&.call("paramara: #{record['id']}/#{key}")
         escaped = URI.encode_www_form_component(key).gsub("+", "%20")
         body = get("#{API}/records/#{record['id']}/files/#{escaped}/content")
-        FileUtils.mkdir_p(File.dirname(dest))
-        File.binwrite(dest, body)
+        atomic_write(dest, body)
         pause
         true
+      end
+
+      # tmp + rename: an interrupted fetch never leaves a torn file.
+      def atomic_write(path, content)
+        FileUtils.mkdir_p(File.dirname(path))
+        tmp = "#{path}.tmp"
+        File.binwrite(tmp, content)
+        File.rename(tmp, path)
       end
 
       def md5_matches?(path, checksum)
@@ -225,7 +232,7 @@ module Nabu
 
       def listing(workdir)
         path = File.join(workdir, LISTING)
-        File.exist?(path) ? JSON.parse(File.read(path)) : []
+        File.exist?(path) ? JSON.parse(SourceRead.utf8_file(path, label: "paramara")) : []
       end
 
       # [record, path] for each listed text record whose file is present.
@@ -239,7 +246,7 @@ module Nabu
       end
 
       def epidoc_hybrid?(path)
-        head = File.read(path, 4096).to_s.force_encoding(Encoding::UTF_8).scrub
+        head = SourceRead.utf8_file(path, label: "paramara")[0, 4096]
         head.start_with?("SIDDHAM:") || head.include?("<TEI ")
       end
 

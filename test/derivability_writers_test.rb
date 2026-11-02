@@ -159,6 +159,10 @@ class DerivabilityWritersTest < Minitest::Test
   # pages/<lang>/, the listing pages under catalog/<lang>/, tmp+rename;
   # attic copies + its .lotsawa-fetch.json ledger) inside Adapter#fetch —
   # the otdo_fetch crawl law kind.
+  # The paramara adapter writes canonical/paramara/ (the community
+  # listing records.json and each text record's <record id>/<file>.txt,
+  # tmp+rename, never deleting) inside Adapter#fetch — the same crawl
+  # law kind.
   # the riig crawl law kind. The vakk adapter writes canonical/vakk/
   # (the text list under map/, tmp+rename, and the crawled reading/info
   # pages as texts/<kood>/*.html.gz, gzip tmp+rename, plus its
@@ -208,7 +212,7 @@ class DerivabilityWritersTest < Minitest::Test
     nabu/adapters/jaschke_1881.rb
     nabu/adapters/bfm.rb nabu/adapters/ctilc.rb nabu/adapters/etruscan_loans.rb nabu/adapters/ig_cyprus.rb
     nabu/adapters/kitab.rb nabu/adapters/oracc.rb
-    nabu/adapters/riig.rb nabu/adapters/rundata.rb
+    nabu/adapters/riig.rb nabu/adapters/rundata.rb nabu/adapters/paramara.rb
     nabu/adapters/sabellic_loans.rb nabu/adapters/trismegistos.rb
     nabu/cantigas_fetch.rb nabu/cme_fetch.rb
     nabu/corpus_corporum_fetch.rb nabu/eebo_tcp_fetch.rb
