@@ -204,7 +204,7 @@ The Sanskrit, Prakrit and Pali lane: GRETIL and SARIT, the DCS treebank, Monier-
 
 Cross-cutting by design: SuttaCentral, CBETA, SARIT, and GRETIL whole — membership is whole-source, so GRETIL rides here although only part of its shelf is Buddhist — and, since P48, the Derge Kangyur and Tengyur: the fourth canon leg.
 
-**Members** (10): `cbeta`, `derge-kangyur`, `derge-tengyur`, `e84000`, `gretil`, `lotsawa-house`, `mvp`, `sarit`, `suttacentral`, `tipitaka-lk`
+**Members** (11): `bdrc-transcriptions`, `cbeta`, `derge-kangyur`, `derge-tengyur`, `e84000`, `gretil`, `lotsawa-house`, `mvp`, `sarit`, `suttacentral`, `tipitaka-lk`
 
 ### tibetan
 
@@ -212,7 +212,7 @@ Cross-cutting by design: SuttaCentral, CBETA, SARIT, and GRETIL whole — member
 
 The Tibetan desk opens with the canon whole: the Public-Domain Digital Derge Kangyur and Tengyur (Esukhia's exact-representation of the woodblocks, Toh numbers as the crosswalk key), 84000's English translation layer, OTDO's Old Tibetan documents, and the gold-annotation lane (SOAS POS, the Annals and Chronicle); the lexicon shelves join as their packets land.
 
-**Members** (14): `actib`, `derge-kangyur`, `derge-tengyur`, `e84000`, `jaschke-1881`, `lotsawa-house`, `monlam-lexicon`, `mvp`, `nabu-data`, `old-tibetan`, `otdo`, `soas-tibetan`, `tibetan-verbs`, `wiktionary-bo`
+**Members** (15): `actib`, `bdrc-transcriptions`, `derge-kangyur`, `derge-tengyur`, `e84000`, `jaschke-1881`, `lotsawa-house`, `monlam-lexicon`, `mvp`, `nabu-data`, `old-tibetan`, `otdo`, `soas-tibetan`, `tibetan-verbs`, `wiktionary-bo`
 
 ### korean
 

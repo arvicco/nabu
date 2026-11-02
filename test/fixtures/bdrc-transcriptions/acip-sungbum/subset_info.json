@@ -1,0 +1,12 @@
+{
+  "description": "ACIP_Sungbum — Tibetan OCR page images + transcriptions (BDRC).",
+  "creation_date": "2026-09-01T11:31:42.719897+00:00",
+  "author": "Buddhist Digital Resource Center",
+  "nb_images": 79572,
+  "parquet_total_size": 13574126790,
+  "image_format": "image_bytes",
+  "extra_fields": [],
+  "data_files": {
+    "train": "data/train-*.parquet"
+  }
+}

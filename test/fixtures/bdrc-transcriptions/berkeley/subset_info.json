@@ -1,0 +1,14 @@
+{
+  "description": "Kurt — Tibetan OCR page images + transcriptions (BDRC).",
+  "creation_date": "2026-08-18T12:19:42.873338+00:00",
+  "author": "Buddhist Digital Resource Center",
+  "nb_images": 8866,
+  "parquet_total_size": 2014308230,
+  "image_format": "image_bytes",
+  "extra_fields": [
+    "script_4"
+  ],
+  "data_files": {
+    "train": "data/train-*.parquet"
+  }
+}
