@@ -12,8 +12,12 @@ added at every phase gate (the same pass that re-syncs the rest of this
 site from the repository documentation). Subscribe by
 [Atom feed]({{ '/feed.xml' | relative_url }}).
 
+{% assign by_year = site.posts | group_by_exp: "p", "p.date | date: '%Y'" %}
+{% for year in by_year %}
+## {{ year.name }}
+
 <ul class="news-list">
-{% for post in site.posts %}
+{% for post in year.items %}
   <li>
     <span class="entry-date">{{ post.date | date: "%-d %B %Y" }}</span>
     <a href="{{ post.url | relative_url }}">{{ post.title }}</a>
@@ -21,3 +25,4 @@ site from the repository documentation). Subscribe by
   </li>
 {% endfor %}
 </ul>
+{% endfor %}
