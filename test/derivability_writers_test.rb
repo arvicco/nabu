@@ -168,6 +168,10 @@ class DerivabilityWritersTest < Minitest::Test
   # tmp+rename; attic copies + its .hf-rows-fetch.json ledger; the
   # .rows-staging/ page cache it clears on completion) inside
   # Adapter#fetch — the same crawl law kind.
+  # zip_range_fetch writes the SELECTED members of a remote zip (read by
+  # HTTP Range, CRC-checked, tmp+rename), attic copies and its
+  # .zip-range-fetch.json pin into canonical/<slug>/<unit>/ inside
+  # Adapter#fetch — the zip_fetch law kind (the fetched asset, verbatim).
   # the riig crawl law kind. The vakk adapter writes canonical/vakk/
   # (the text list under map/, tmp+rename, and the crawled reading/info
   # pages as texts/<kood>/*.html.gz, gzip tmp+rename, plus its
@@ -226,7 +230,7 @@ class DerivabilityWritersTest < Minitest::Test
     nabu/kanripo_fetch.rb nabu/lfs_fetch.rb nabu/local_fetch.rb
     nabu/menota_fetch.rb
     nabu/manual_drop.rb nabu/ochre_fetch.rb nabu/otdo_fetch.rb
-    nabu/lotsawa_fetch.rb nabu/hf_rows_fetch.rb
+    nabu/lotsawa_fetch.rb nabu/hf_rows_fetch.rb nabu/zip_range_fetch.rb
     nabu/poma_fetch.rb nabu/bu_ajami_fetch.rb
     nabu/seal_fetch.rb
     nabu/sefaria_fetch.rb nabu/titus_fetch.rb nabu/url_download.rb
