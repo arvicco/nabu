@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "芳賀人名辞典のCSV行をJSONオブジェクトで表した構造",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "entry_no",
+    "source_page",
+    "name_yomi_katakana",
+    "full_name",
+    "entry_heading",
+    "description"
+  ],
+  "properties": {
+    "entry_no": {"type": "string", "pattern": "^[0-9]{6}$"},
+    "source_page": {"type": "string"},
+    "name_yomi_katakana": {"type": "string"},
+    "full_name": {"type": "string"},
+    "entry_heading": {"type": "string"},
+    "description": {"type": "string"}
+  }
+}

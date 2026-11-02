@@ -20,12 +20,13 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 ## The shelves
 
-A source wears every desk it serves — these fourteen answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
+A source wears every desk it serves — these fifteen answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
 | Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 2 November 2026)</span> |
 |---|---|---|---|---|
 | `aozora` | texts | open | wired · manual | 17,121 docs / 2,983,332 passages |
 | `edrdg` | dictionary | attribution | wired · manual | 231,322 entries |
+| `haga-jinmei` | dictionary | open | not yet wired | nothing held yet |
 | `hdic` | dictionary | attribution | wired · manual | 96,414 entries |
 | `honkoku` | texts | attribution | wired · manual | 6,092 docs / 129,458 passages |
 | `ja-wikisource` | texts | attribution | wired · manual | 838 docs / 88,745 passages |
