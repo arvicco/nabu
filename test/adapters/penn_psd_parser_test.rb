@@ -217,6 +217,91 @@ class PennPsdParserTest < Minitest::Test
     end
   end
 
+  # --- the PPCHE conventions profile (P152, the PPCHY fixture) ---------------
+  #
+  # The Penn historical corpora of English/Yiddish (PPCHE, PPCHY) share the
+  # bracketing but not HeliPaD's leaf atoms: no fused lemma (hyphens are
+  # part of the word — dovid-noyekhn), split words marked with "@",
+  # Hebrew-component glosses as word^gloss, "!" encoded %EXCL%, IDs
+  # "FILE,PAGE.N", and CODE-only marker blocks with no ID at all.
+
+  PPCHY_DATA = File.join(Nabu::TestSupport.fixtures("ppchy"), "data")
+  LETTER = File.join(PPCHY_DATA, "1478w-letter-regensburg.psd")
+  GRINE = File.join(PPCHY_DATA, "1910e-grine-felder.psd")
+  COURT = File.join(PPCHY_DATA, "1xxxx-court-testimony.psd")
+
+  def ppche(path, **)
+    parser.parse(path, urn: "urn:nabu:ppchy:x", language: "yi", conventions: :ppche, **)
+  end
+
+  def test_ppche_code_only_marker_blocks_mint_no_passage
+    letter = ppche(LETTER)
+    assert_equal 10, letter.size, "12 blocks: <BEGIN_…> and <P_156> are ID-less CODE markers"
+    assert_equal "urn:nabu:ppchy:x:156.3", letter.first.urn, "the ID tail after the comma"
+    assert_equal "1478W-LETTER-REGENSBURG,156.3", letter.first.annotations.fetch("id")
+    assert_equal 2, letter.first.sequence, "markers keep their ordinals (the PROIEL convention)"
+  end
+
+  def test_ppche_text_and_tokens_keep_hyphenated_words_whole
+    first = ppche(LETTER).first
+    assert_equal "liebe froyndin, du liebe kron, ikh kasven dir fil,", first.text
+    tokens = first.annotations.fetch("tokens")
+    assert_equal({ "form" => "froyndin", "pos" => "N" }, tokens[1], "no lemma is invented")
+    assert_equal({ "code" => "{TEXT:di}" }, tokens.find { |t| t.key?("code") })
+    stage = ppche(GRINE).first
+    assert_includes stage.text, "bay dovid-noyekhn, onheyb friling.",
+                    "hyphenated names stay one word — the HeliPaD last-hyphen split would invent a lemma"
+  end
+
+  def test_ppche_split_words_rejoin_at_the_at_sign
+    stage = ppche(GRINE).first
+    assert_includes stage.text, "oyfn yishev", "(P oyf@) (D @n) rejoin as the one written word"
+    assert_includes stage.text, "baym tsoym"
+    forms = stage.annotations.fetch("tokens").filter_map { |t| t["form"] }
+    assert_equal %w[oyf@ @n], forms.values_at(3, 4), "tokens keep the split forms verbatim"
+  end
+
+  def test_ppche_glosses_ride_the_token_and_never_render
+    host = ppche(LETTER).find { |p| p.urn.end_with?(":156.10") }
+    assert_equal "host vol h yomem.", host.text, "*2s* never renders; h^the / yomem^UNKNOWN drop the glosses"
+    hebrew = host.annotations.fetch("tokens").select { |t| t["pos"] == "H" }
+    assert_equal [{ "form" => "h", "pos" => "H", "gloss" => "the" },
+                  { "form" => "yomem", "pos" => "H", "gloss" => "UNKNOWN" }], hebrew
+    question = ppche(COURT).find { |p| p.urn.end_with?(":2_c1413_w.8") }
+    assert_equal "vos shreybstu", question.text, "the *T*-1 trace drops; shreybs@ @tu rejoin"
+  end
+
+  def test_ppche_exclamation_points_decode
+    with_psd("( (INTJP (INTJ oy) (PUNC %EXCL%))\n  (ID X,1.1))\n") do |path|
+      assert_equal "oy!", ppche(path).first.text, "upstream's Unix-safe %EXCL% is a literal !"
+    end
+  end
+
+  def test_ppche_a_page_less_id_mints_its_bare_ordinal
+    with_psd("( (FRAG (N shtub))\n  (ID 1704E-ELLUSH,.2))\n") do |path|
+      assert_equal "urn:nabu:ppchy:x:2", ppche(path).first.urn, "\"FILE,.2\" — no page, the ordinal alone"
+    end
+  end
+
+  def test_ppche_a_content_block_without_an_id_still_raises
+    with_psd("( (IP-MAT (NP-SBJ (PRO ikh)) (VBF kum)))\n") do |path|
+      assert_raises(Nabu::ParseError) { ppche(path) }
+    end
+  end
+
+  def test_ppche_document_metadata_license_and_passage_annotations_pass_through
+    document = ppche(COURT, metadata: { "genre" => "Vernacular" }, license_override: "nc",
+                            annotate: ->(id) { { "item" => id[/,(\d+)_/, 1] } })
+    assert_equal({ "genre" => "Vernacular" }, document.metadata)
+    assert_equal "nc", document.license_override
+    assert_equal "1", document.first.annotations.fetch("item")
+    assert_equal 16, document.size
+  end
+
+  def test_an_unknown_conventions_profile_is_an_argument_error
+    assert_raises(ArgumentError) { parser.parse(FIXTURE, urn: URN, language: "osx", conventions: :ycoe) }
+  end
+
   private
 
   def with_psd(content)
