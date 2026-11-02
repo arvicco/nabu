@@ -149,6 +149,9 @@ module Nabu
           #                                   (1757, class edition) — the rendering is undated
           "eltec-srp" => :structured, # P117-2: the firstEdition's typed years, place
           #                             = its pubPlace (publication place)
+          "etcbc-targum" => :place_only, # P153: the Genizah texts' findspot ("Cairo Genizah");
+          #                                no date field upstream (edition years ride
+          #                                base_edition, never a date)
           "extrabiblical" => :work_era, # each ETCBC book's attributed era (config/work_eras.yml,
           #                               keyed on metadata "book"); place = the find-site hash
           #                               (ancient name + Pleiades id) the adapter's table carries

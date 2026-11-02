@@ -1606,6 +1606,23 @@ sources:
     script: {posture: qualified, note: "civil-script Cyrillic in MODERNIZED spelling — not the
         1757 print's Church Cyrillic (no titla, no accents, no ѣ/і/ѵ/ѳ/ѡ/ѧ in the file);
         metadata script Cyrl + orthography modernized + rendering on every document"}
+  etcbc-targum:   # P153
+    # kind: machine-postured — kind_map.yml source_kind scripture.
+    # lect: machine-postured — the whole-source arc → arc:mid/jud override in
+    # config/lect_overrides.yml (upstream's "Jewish Aramaic Pentateuch").
+    dating: {posture: pending, note: "candidate: config/work_eras.yml rows keyed on metadata
+        collection (Onqelos and Pseudo-Jonathan redaction eras; the Palestinian targums'
+        composition date is contested and would ride as a declared-undated row). The asset
+        carries no date feature; the README's base-edition years (Clark 1984, Klein 1980 /
+        1992, Sperber 1959) ride metadata base_edition verbatim and are modern edition
+        dates, never the text's — not projected to the timeline"}
+    places: {posture: named, note: "the Cairo Genizah findspot on the 39 Genizah texts
+        (metadata place, upstream's own collection name; MetadataDates :place_only); the
+        other eight texts carry no place in the asset (shelfmarks ride metadata shelfmark —
+        a repository, never a place claim)"}
+    script: {posture: implied, note: "Hebrew square script; Tiberian pointing where the
+        edition vocalizes (Onqelos, some Genizah fragments), consonantal elsewhere — the
+        cons_utf8 / voc_utf8 lanes ride every token"}
   jaschke-1881:   # P150-A
     # kind: machine-postured — kind_map.yml source_kind lexical (a dictionary).
     lect: {posture: identity, note: "the reference-shelf posture (africa-pd, slavistics-pd): eng,
