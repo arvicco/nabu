@@ -146,6 +146,29 @@ anchors:
     name: French
     parent: frm
 
+  ro:
+    name: Romanian
+    parent: roa
+    glottocode: roma1327
+    note: "Daco-Romanian, the largest Eastern Romance language (the Eastern
+           Romance split — Aromanian rup, Megleno-Romanian ruq,
+           Istro-Romanian ruo — stays prose; no sibling minted until a
+           consumer holds one). Written in Cyrillic from the first dated
+           text (Neacșu's letter, Câmpulung 1521) until the official switch
+           to the Latin alphabet (Wallachia/Moldavia 1860–1862), with mixed
+           transitional alphabets in the 1830s–50s. Consumer: the 1688
+           Bucharest Bible (Biblia de la București), Romanian Cyrillic"
+    stages:
+      old: {name: Old Romanian, band: [1521, 1780], ord: 10,
+            band_note: "the old literary period, from the first dated text
+              (1521) to the conventional close at the Transylvanian
+              School's Elementa linguae daco-romanae (1780); approximate",
+            note: "the Cyrillic-written literary language of the church
+              prints — Coresi's Brașov books (1559–1581), the Palia de la
+              Orăștie (1582), the Noul Testament de la Bălgrad (1648), the
+              Biblia de la București (1688), Dosoftei's Psaltirea în
+              versuri (1673)"}
+
   pro:
     name: Old Occitan
     band: [null, 1500]
@@ -442,6 +465,65 @@ anchors:
                           gmh's ISO band stops ~1500, so ENHG texts ride
                           the de anchor; band per the Bochum reference
                           corpus (ReF) it was minted for"}
+
+  yi:
+    name: Yiddish
+    parent: gmh
+    stages:
+      old: {name: Old Yiddish, band: [1250, 1500], ord: 10,
+            band_note: "Weinreich's periodization (1973; Eng. 2008),
+                        approximate; his Earliest Yiddish (before 1250)
+                        is known only from glosses and names and is not
+                        minted",
+            note: "the Worms Maḥzor blessing (1272/73), the Cambridge
+                   Codex (1382: Dukus Horant and the biblical epics),
+                   the oldest letters (Regensburg 1478)"}
+      mid: {name: Middle Yiddish, band: [1500, 1700], ord: 20,
+            band_note: "Weinreich's periodization, approximate",
+            note: "the age of print (Cracow, Prague, Venice, Amsterdam):
+                   Elia Levita's Bovo-bukh (composed 1507, printed 1541),
+                   the Tsene-rene (c. 1600), the Mayse-bukh (1602), the
+                   historical songs; a supraregional literary norm
+                   still West-based"}
+      mod: {name: Modern Yiddish, band: [1700, null], ord: 30,
+            band_note: "Weinreich's periodization, approximate — banded so
+                        date staging covers the 18th–20th-c. texts (the
+                        jpn:mod reasoning)",
+            note: "Glikl's memoirs (1691–1719) stand at the seam; the
+                   literary centre moves east — Hasidic tales (Nakhman of
+                   Bratslav), the Haskalah, the classic writers, the
+                   YIVO standard (1936). Western Yiddish dies out as a
+                   vernacular in the 18th–19th c."}
+    varieties:
+      west: {name: Western Yiddish, kind: dialect, iso: yih,
+             note: "the Yiddish of the German lands, Alsace, Switzerland,
+                    Holland, Bohemia-Moravia (Glottolog west2361; dialect
+                    groups Northwestern, Midwestern, Southwestern, plus
+                    the Czech/Moravian transitional zone)"}
+      east: {name: Eastern Yiddish, kind: dialect, iso: ydd,
+             note: "the Yiddish of the Slavic and Baltic lands (Glottolog
+                    east2295): Northeastern ('Lithuanian'), Mideastern
+                    ('Polish'), Southeastern ('Ukrainian'); the base of
+                    the modern standard"}
+    note: "ISO 639-1 (639-2 yid aliases here; the 639-3 member codes ydd
+           and yih map onto the varieties). The Germanic language of
+           Ashkenazi Jewry, a fusion language (Weinreich) — a German
+           determinant from the Middle High German period with
+           Hebrew-Aramaic, Romance (Loez) and, in the east, Slavic
+           components, written in Hebrew script. The gmh edge is the
+           mainstream reading (Wiktionary: ancestor gmh, family High
+           German; Glottolog files the two Yiddishes inside its High
+           German dialect tree, Eastern under East Middle German,
+           Western under East Franconian). Its point of origin is
+           DISPUTED and not settled here: the Rhineland ('Loter') thesis
+           (Weinreich), the Danube / Bavarian-Austrian case (King;
+           Manaster Ramer), East Middle German (Beider 2015); Wexler's
+           Slavic-relexification thesis (1991, 2002) is a minority
+           position that would deny the Germanic descent outright.
+           Glottolog has no single Yiddish languoid, so no glottocode is
+           stated. Consumers: the Penn Parsed Corpus of Historical
+           Yiddish (63 texts, 1478–1959, romanized YIVO-style — yi~latn;
+           dialect-tagged West 12 / East 49)"
 
   osx:
     name: Old Saxon
@@ -1853,13 +1935,16 @@ anchors:
       pro: {name: Proto-Mongolic, mode: reconstructed, ord: 5, wikt: xgn-pro,
             note: "Corpus: starling-monget (2,174 etymologies, EDAL's
                    Mongolic branch base)"}
-    note: "ISO 639-5. Family node; Classical Mongolian (cmg) stays
-           unminted — the survey found NO open machine-readable
-           corpus (censused 2026-09-28)"
+    note: "ISO 639-5. Family node. The written languages (cmg, xwo)
+           were minted 2026-11-02 for their dictionary and scan-shelf
+           consumers; an open Classical Mongolian running-text corpus is
+           still not found (censused 2026-09-28, re-confirmed
+           2026-11-02)"
 
   xng:
     name: Middle Mongol
     parent: xgn
+    glottocode: midd1351
     band: [1200, 1600]
     band_note: "the Secret History era through the late
                 Sino-Mongolian glossaries, approximate"
@@ -1869,6 +1954,55 @@ anchors:
            altaica.ru romanized Secret History (use granted by the
            site's maintainer by email, 2026-09-27) + the zh.wikisource
            transcription (queued) (censused 2026-09-28)"
+
+  cmg:
+    name: Classical Mongolian
+    parent: xng
+    band: [1600, 1946]
+    band_note: "the classical written norm, approximate: from the
+                Buddhist translation movement of c. 1600 (Ligdan Khan's
+                Kanjur, 1628–29) to the Cyrillic reform of the Mongolian
+                People's Republic (decreed 1941, in force 1946); the
+                Uyghur-script tradition continues in Inner Mongolia as a
+                modern written norm, not this stage"
+    note: "Written (literary) Mongolian in the Uyghur-derived vertical
+           script — the pan-Mongol written language of the Buddhist
+           canon, the Qing chancery and the chronicles (Altan Tobči,
+           Erdeni-yin Tobči). Descends from the written Middle Mongol of
+           the 13th–16th c. ('pre-classical', the Yisüngge stone c. 1225
+           onward), hence the xng edge; its spelling is conservative,
+           preserving forms older than any spoken Mongolic of its time
+           (Janhunen 2003; Poppe 1954), so it represents no single
+           spoken dialect. Wiktionary files cmg under Central Mongolic
+           (xgn-cen), Glottolog has no languoid for it (none stated).
+           No ISO 639-1 code; consumers' modern codes (mon, khk) do not
+           mean this lect by default — a collection whose mon-Latn is
+           the classical language overrides per collection. Consumers:
+           the DILA Pentaglot Buddhist-term dictionary (1,071 entries,
+           romanized), the PD scan shelf's Kowalewski (1844–49) and
+           Schmidt (1831)"
+
+  xwo:
+    name: Written Oirat
+    parent: xng
+    band: [1648, null]
+    band_note: "from Zaya Pandita's Clear Script (todo bičig, 1648); open
+                — Kalmykia left it for Cyrillic in 1924 (definitively
+                1938), but the Xinjiang Oirats still write it"
+    note: "the literary language of the Oirats and Kalmyks, written in
+           the Clear Script — Zaya Pandita's 1648 reform of the
+           Uyghur-Mongol script, fitted to Oirat (Western Mongolic)
+           phonology and spelling much closer to speech than Classical
+           Mongolian. Its literature is Buddhist translation (the Golden
+           Light sutra and the canon translations of Zaya Pandita's
+           school), chronicles, law codes and letters. Glottolog sets
+           spoken Oirat inside its Mongolian node (kalm1243); the edge
+           follows the spoken Oirat lineage to xng, while the literary
+           model it reformed — Classical Mongolian — stays prose (the
+           single-parent rule). No glottocode for the written language;
+           Wiktionary files xwo under Central Mongolic. Consumers: the PD
+           scan shelf's Pozdneev Kalmyk dictionary (1911) and Jülg's
+           Kalmyk tales (1866)"
 
   tuw:
     name: Tungusic
@@ -2728,6 +2862,76 @@ anchors:
            editions (its K-numbering runs to the present); held romanized
            (khm-Latn) there, Khmer script (khmr) natively"
 
+  mkh-vie:
+    name: Vietic
+    kind: family
+    parent: aav
+    glottocode: viet1250
+    stages:
+      pro: {name: Proto-Vietic, mode: reconstructed, ord: 5, wikt: mkh-vie-pro,
+            note: "Ferlus's reconstruction (1996 onward), refined by Sidwell
+                   & Alves; sesquisyllabic, pre-tonal — the tones arise
+                   later from final laryngeals and initial voicing
+                   (Haudricourt 1954)"}
+    note: "the Austroasiatic branch of Vietnamese, Mường and the small
+           Vietic languages of the Annamite range (Thavưng, Arem, Chứt,
+           Pọng …). Wiktionary's code mkh-vie sits under its Mon-Khmer
+           family (mkh, also an ISO 639-5 code), but Mon-Khmer is not a
+           clade on current classification (Sidwell 2009; Glottolog lists
+           Austroasiatic flat), so the edge goes straight to aav. The
+           Viet-Muong sub-node (Glottolog viet1251 — Vietnamese with
+           Mường) stays prose"
+
+  vi:
+    name: Vietnamese
+    parent: mkh-vie
+    glottocode: viet1252
+    stages:
+      old: {name: Old (Ancient) Vietnamese, band: [1000, 1500], ord: 10,
+            band_note: "the conventional grid (Maspero 1912; Nguyễn Tài
+                        Cẩn 1995): from the Việt–Mường split near
+                        the end of the 1st millennium CE to c. 1500;
+                        approximate, boundaries vary by school",
+            note: "known through Chinese-character transcription: Chen Fu's
+                   Annan jishi glossary (c. 1293), the Ming Annanguo yiyu
+                   (15th c.), early Buddhist Nôm (the Phật thuyết đại báo
+                   phụ mẫu ân trọng kinh, dated 12th c. by some, later by
+                   others), Nôm names on Lý–Trần steles, and the first
+                   literary Nôm — Nguyễn Trãi's Quốc âm thi tập (15th c.,
+                   extant only in much later copies). The initial
+                   clusters and sesquisyllables Middle Vietnamese still
+                   shows are not yet resolved"}
+      mid: {name: Middle Vietnamese, band: [1500, 1850], ord: 20, wikt: mkh-mvi,
+            band_note: "16th to mid-19th c., approximate; schools differ on
+                        the close (mid- vs end-19th c.). Wiktionary's
+                        mkh-mvi names the same rung",
+            note: "the language the Jesuits romanized: de Rhodes's
+                   Dictionarium Annamiticum Lusitanum et Latinum (1651) is
+                   the anchoring witness, with its bl-/tl-/ml- clusters;
+                   Pigneau de Behaine's dictionary (1773, printed by Taberd
+                   1838). The great Nôm verse literature sits here and at
+                   the close: Chinh phụ ngâm (Đoàn Thị Điểm or Phan Huy
+                   Ích's Nôm version, 18th c.), Hồ Xuân Hương, Nguyễn Du's
+                   Truyện Kiều (early 19th c.)"}
+    note: "ISO 639-1 (639-3 vie aliases here). Vietic, Viet-Muong;
+           Austroasiatic by descent with a massive Chinese overlay — the
+           Sino-Vietnamese (Hán-Việt) reading layer from Late Middle
+           Chinese, plus older loan strata. Three written vehicles:
+           Literary Sinitic (Hán văn), which is Chinese and NOT this
+           anchor (it is zho/lit — lzh — however Vietnamese its author);
+           chữ Nôm, the vernacular Han-derived script, from Lý–Trần
+           names (12th–13th c.) to the early 20th c. (held text is
+           vi~hani — ISO 15924 has no Nôm code, Unicode encodes Nôm in
+           the CJK blocks); and quốc ngữ, the Jesuit romanization of the
+           17th c., made the official script under French rule (the
+           civil examinations ended 1919). Modern Vietnamese (from the
+           19th c.) is the bare anchor's open end — the ta precedent: a
+           Nôm text is staged by its date, not by its script. Consumers:
+           the kaikki Vietnamese extract (45,519 words; 11,850 Han/Nôm
+           character senses with nom- and Hán-Việt readings); the Nôm
+           verse corpora are licence-gated (the vi.wikisource Nôm cone
+           and the community Nôm transcriptions are parked)"
+
   map:
     name: Austronesian
     kind: family
@@ -2871,6 +3075,306 @@ anchors:
            the DHARMA Old Sundanese texts held as osn. Stages unminted (the
            consumer dates at the print grain)"
 
+  # ── The Pacific wing (2026-11-02) ──────────────────────────────────────
+  # Twelve Oceanic and western-Pacific leaves for the PD mission-print and
+  # Bible corpora (eBible's USFM Bibles, the archive.org mission-press
+  # shelf) and the parked rongorongo and Rotuman threads, with the family
+  # spine they need under poz. ISO 639-5 stops at pqe (Eastern
+  # Malayo-Polynesian, verified against the LOC 639-5 list 2026-11-02):
+  # Oceanic, Central Pacific, Polynesian and Micronesian carry no ISO
+  # code, so those nodes take Wiktionary's family codes (poz-oce …), the
+  # ine-bsl / dra-sou practice. The two-letter ISO 639-1 codes are the
+  # anchors where they exist (mi sm to ty fj ch); codemap aliases the
+  # 639-2/3 spellings. Intermediate clades below the minted nodes
+  # (Tongic, Samoic, Tahitic, Marquesic, Chuukic-Pohnpeic) stay prose.
+
+  pqe:
+    name: Eastern Malayo-Polynesian
+    kind: family
+    parent: poz
+    glottocode: east2712
+    stages:
+      pro: {name: Proto-Eastern Malayo-Polynesian, mode: reconstructed, ord: 5,
+            wikt: pqe-pro}
+    note: "ISO 639-5 pqe. Blust's (1978) subgroup joining South
+           Halmahera–West New Guinea and Oceanic; Glottolog sets it
+           directly under Malayo-Polynesian. Blust's larger
+           Central-Eastern Malayo-Polynesian node (Wiktionary poz-cet,
+           which parents pqe there) is contested — Donohue & Grimes 2008
+           reject it — so the edge reads through to poz and CEMP stays
+           prose. Minted as the spine of the Pacific wing; no corpus
+           consumes it directly"
+
+  poz-oce:
+    name: Oceanic
+    kind: family
+    parent: pqe
+    glottocode: ocea1241
+    stages:
+      pro: {name: Proto-Oceanic, mode: reconstructed, ord: 5, wikt: poz-oce-pro,
+            note: "the best-reconstructed Austronesian interstage: Ross,
+                   Pawley & Osmond, The Lexicon of Proto Oceanic (1998–2016);
+                   the speech of the Lapita horizon of the Bismarck
+                   Archipelago (late 2nd millennium BCE) on the usual
+                   archaeological correlation"}
+    note: "the Austronesian languages of Melanesia (bar some of western
+           New Guinea), Micronesia (bar Chamorro, Palauan and Yapese's
+           disputed case) and Polynesia — some 500 languages (Lynch,
+           Ross & Crowley 2002). No ISO 639-5 code; Wiktionary poz-oce.
+           Wiktionary's intermediate Central-Eastern Oceanic (poz-occ,
+           parenting both Micronesian and Central Pacific) is a
+           Pawley-style grouping not universally accepted; Glottolog sets
+           both directly under Oceanic, as does this registry"
+
+  poz-pcc:
+    name: Central Pacific
+    kind: family
+    parent: poz-oce
+    glottocode: cent2060
+    stages:
+      pro: {name: Proto-Central Pacific, mode: reconstructed, ord: 5,
+            wikt: poz-pcc-pro}
+    note: "Fijian, Rotuman and Polynesian (Pawley 1972; Geraghty 1983).
+           A linkage, not a clean tree node — Glottolog's 'Central Pacific
+           linkage': the subgroup arose by diversification of a dialect
+           chain across Fiji, so internal edges cross-cut. Geraghty's
+           Tokalau Fijian (Eastern Fijian + Polynesian against Western
+           Fijian + Rotuman) is Glottolog's next level down; it stays
+           prose here, and fj, rtm and poz-pol all parent this node"
+
+  poz-pol:
+    name: Polynesian
+    kind: family
+    parent: poz-pcc
+    glottocode: poly1242
+    stages:
+      pro: {name: Proto-Polynesian, mode: reconstructed, ord: 5, wikt: poz-pol-pro,
+            note: "the POLLEX tradition (Biggs; Greenhill & Clark 2011's
+                   POLLEX-Online: 5,724 reconstructions over 67 languages);
+                   the speech of the Tonga–Samoa homeland after the
+                   Lapita settlement of West Polynesia (c. 800 BCE)"}
+    note: "the textbook subgroup (Pawley 1966; Green 1966; Marck 2000):
+           a primary split into Tongic (Tongan, Niuean — unminted as a
+           node, to parents here) and Nuclear Polynesian (poz-pnp).
+           Wiktionary poz-pol; no ISO 639-5 code"
+
+  poz-pnp:
+    name: Nuclear Polynesian
+    kind: family
+    parent: poz-pol
+    glottocode: nucl1485
+    stages:
+      pro: {name: Proto-Nuclear Polynesian, mode: reconstructed, ord: 5,
+            wikt: poz-pnp-pro}
+    note: "Pawley 1966: everything Polynesian but Tongic — the
+           Samoic-Outlier languages (Samoan, Tokelauan, Tuvaluan, the
+           Polynesian Outliers of Melanesia and Micronesia) and East
+           Polynesian. The Samoic-Outlier grouping is weaker than East
+           Polynesian (Glottolog's Ellicean and Northern Outlier nodes
+           re-cut it); sm parents here directly for that reason"
+
+  poz-pep:
+    name: East Polynesian
+    kind: family
+    parent: poz-pnp
+    glottocode: east2449
+    stages:
+      pro: {name: Proto-Eastern Polynesian, mode: reconstructed, ord: 5,
+            wikt: poz-pep-pro}
+    note: "Green 1966: Rapa Nui as the first offshoot, then Central
+           Eastern Polynesian splitting into Marquesic (Marquesan,
+           Hawaiian, Mangarevan) and Tahitic (Tahitian, the Cook Islands
+           languages, Māori); the settlement of the eastern Pacific
+           (Hawaiʻi, Aotearoa, Rapa Nui) after c. 1000 CE on the current
+           radiocarbon chronology. Marquesic and Tahitic are themselves
+           debated in detail (Marck 2000; Walworth 2014 on Marquesic) and
+           stay prose; Wiktionary poz-pep parents its leaves here too"
+
+  poz-mic:
+    name: Micronesian
+    kind: family
+    parent: poz-oce
+    glottocode: micr1243
+    stages:
+      pro: {name: Proto-Micronesian, mode: reconstructed, ord: 5, wikt: poz-mic-pro,
+            note: "Bender et al. 2003 (Proto-Micronesian reconstructions,
+                   Oceanic Linguistics 42); Jackson 1983"}
+    note: "the Oceanic languages of the Carolines, Marshalls, Kiribati
+           and Kosrae (Nuclear Micronesian) — NOT the geographic
+           Micronesia: Chamorro and Palauan are separate
+           Malayo-Polynesian branches, and Yapese's Oceanic placement is
+           disputed. Kosraean is the first split (Bender et al. 2003);
+           Nauruan's inclusion is debated (Glottolog pairs it with
+           Kosraean). Wiktionary sets the node under Central-Eastern
+           Oceanic (poz-occ); this registry under Oceanic (see poz-oce)"
+
+  mi:
+    name: Māori
+    parent: poz-pep
+    glottocode: maor1246
+    note: "ISO 639-1 (639-3 mri aliases here). East Polynesian, Tahitic
+           (Glottolog: Maoric, with the Cook Islands languages close
+           kin); the language of Aotearoa New Zealand. Written from the
+           missions: Kendall's A korao no New Zealand (1815, the first
+           Māori book) and the Lee–Kendall Grammar (Cambridge, 1820,
+           worked out with Hongi Hika and Waikato), which fixed the
+           orthography; the CMS press at Paihia (Colenso, 1835), the NT
+           (1837) and the Bible (1868); Williams's dictionary (1844,
+           1852); Grey's Ko nga moteatea (1853); the Māori-language
+           newspapers (niupepa, 1842–1933). Early prints write w for wh
+           and carry no macrons — period orthography, not error.
+           Consumers: the archive.org mission-print shelf (Grey 1853,
+           Kendall 1815, the 1841 Kawenata Hou and 1868 Paipera Tapu),
+           the niupepa corpus (asked)"
+
+  haw:
+    name: Hawaiian
+    parent: poz-pep
+    glottocode: hawa1245
+    note: "East Polynesian, Marquesic (with Marquesan and Mangarevan;
+           Glottolog's 'East Polynesian Proximal'). No ISO 639-1 code.
+           Written from the ABCFM mission (arrived 1820): the first
+           printing 1822, the alphabet fixed in 1826 (five vowels and h k
+           l m n p w), Ka Baibala Hemolele (1839; revised 1868), and a
+           native-language newspaper press from 1834 (Ka Lama Hawaii).
+           The ʻokina and kahakō of the modern Pukui–Elbert spelling are
+           20th-c.; period prints lack both, an honest period orthography.
+           Consumers: eBible haw1868 (31,102 verses, the 1868 revision
+           in its own spelling), the 1837 hymnal on the mission-print
+           shelf; the WOLD Hawaiian vocabulary shelf already rides the
+           bare code"
+
+  sm:
+    name: Samoan
+    parent: poz-pnp
+    glottocode: samo1305
+    note: "ISO 639-1 (639-3 smo aliases here). Nuclear Polynesian,
+           Samoic (Glottolog: Ellicean > Samoan-Tokelauan; the
+           Samoic-Outlier grouping is debated, so the edge stops at
+           poz-pnp). The LMS mission from 1830 (John Williams); O le
+           Feagaiga Fou (NT, 1849) and O le Tusi Paia (Bible; the 1887
+           revision is the shelf's print); Pratt's grammar and dictionary
+           (1862). Consumers: the archive.org mission-print shelf"
+
+  to:
+    name: Tongan
+    parent: poz-pol
+    glottocode: tong1325
+    note: "ISO 639-1 (639-3 ton aliases here). Tongic — with Niuean, the
+           branch that splits first from the rest of Polynesian (Pawley
+           1966); the Tongic node is unminted (Wiktionary poz-ton), the
+           edge reads to poz-pol. Wesleyan mission from 1826 (John
+           Thomas), its press from 1831; the 1862 Bible and Moulton's
+           1884 revision. Consumers: the archive.org mission-print shelf
+           (both Bibles); the modern Revised West text is out of period"
+
+  ty:
+    name: Tahitian
+    parent: poz-pep
+    glottocode: tahi1242
+    note: "ISO 639-1 (639-3 tah aliases here). East Polynesian, Tahitic
+           (Glottolog: Tahitian-Austral). The LMS mission from 1797 (the
+           Duff); Nott's Bible (completed 1835, printed 1838) and its
+           revisions; the Code Pomaré (1819). Tahitian was the mission
+           lingua franca of eastern Polynesia, which is why its loans
+           saturate Rapa Nui and Cook Islands texts. Consumers: the
+           archive.org mission-print shelf (the 1847 Bible, Te Faufaa
+           Api 1853 — the OCR's Cyrillic confusables fold at the
+           consumer's boundary)"
+
+  fj:
+    name: Fijian
+    parent: poz-pcc
+    glottocode: fiji1243
+    note: "ISO 639-1 (639-3 fij aliases here). Standard Fijian, on the
+           Bauan (Eastern Fijian) dialect; Central Pacific (Glottolog:
+           Tokalau Fijian > Eastern Fijian, i.e. nearer Polynesian than
+           Western Fijian is — Geraghty 1983; the edge stays at the
+           linkage). The Wesleyan missionaries Cross and Cargill (Lakeba,
+           1835) devised the orthography that still holds (c = /ð/, q =
+           /ŋɡ/, g = /ŋ/, b and d prenasalized); Hazlewood's dictionary
+           (1850). Consumers: the 1853 New Testament on the archive.org
+           mission-print shelf"
+
+  rar:
+    name: Rarotongan (Cook Islands Māori)
+    parent: poz-pep
+    glottocode: raro1241
+    note: "East Polynesian, Tahitic — Glottolog's 'Southern Cook Island
+           Maori'. No ISO 639-1 code. The LMS mission from 1823 (Papeiha,
+           then Williams and Buzacott), its orthography modelled on the
+           Tahitian mission's; the complete Bible, Biblia Tapu Ra (1851).
+           Consumers: that 1851 Bible on the archive.org mission-print
+           shelf"
+
+  rap:
+    name: Rapa Nui
+    parent: poz-pep
+    glottocode: rapa1244
+    note: "East Polynesian — the first offshoot (Green 1966; Glottolog's
+           Far East Polynesian). No ISO 639-1 code. Documented only from
+           the 1860s mission (Eyraud 1864) after the slave raids and
+           epidemics, and since then heavily Tahitianized. The rongorongo
+           tablets (some 25 objects) are undeciphered — that they write
+           Rapa Nui is the default assumption, not a demonstrated fact,
+           and a consumer filing them under rap makes that claim
+           (ISO 15924 Roro, unencoded in Unicode). Minted ahead of the
+           consumer: the CEIPP rongorongo code streams are asked, no
+           open running text exists"
+
+  rtm:
+    name: Rotuman
+    parent: poz-pcc
+    glottocode: rotu1241
+    note: "Central Pacific, its exact place disputed: Geraghty 1983 pairs
+           it with Western Fijian; Glottolog leaves it directly under the
+           linkage, as does this registry. Its lexicon carries
+           Polynesian loan strata (Biggs 1965) and its morphology the
+           well-known metathesizing phase alternation. No ISO 639-1
+           code. Churchward, Rotuman Grammar and Dictionary (1940) is
+           the standard description. Minted ahead of a consumer: the
+           Pacific survey found no open machine-readable premodern
+           Rotuman text (2026-11-02)"
+
+  ch:
+    name: Chamorro
+    parent: poz
+    glottocode: cham1312
+    note: "ISO 639-1 (639-3 cha aliases here). A Malayo-Polynesian
+           language of the Marianas OUTSIDE Oceanic and outside
+           Micronesian despite its geography — with Palauan, one of the
+           western-Pacific primary branches of Malayo-Polynesian (Blust;
+           Glottolog places it directly under MP); a closer link to the
+           Philippine languages has been proposed but is unsettled.
+           Spanish contact since the Jesuit mission of San Vitores (1668,
+           whose Lingua Mariana is the first grammar) re-shaped the
+           lexicon. Consumers: eBible cha1908 (the American Bible
+           Society's 1908 Gospels, Acts and Psalms)"
+
+  kos:
+    name: Kosraean
+    parent: poz-mic
+    glottocode: kosr1238
+    note: "Micronesian — the first split from the rest of Nuclear
+           Micronesian (Bender et al. 2003; Glottolog's Kosraean-Nauruan
+           pairing is the contested alternative). No ISO 639-1 code.
+           Written from the ABCFM mission (Benjamin Snow, 1852); Lee's
+           Kusaiean Reference Grammar (1975). Consumers: eBible kos1928
+           (Elizabeth Baldwin's Bible, 22,988 OT + 7,958 NT verses —
+           its editorial book introductions are separable apparatus)"
+
+  pon:
+    name: Pohnpeian
+    parent: poz-mic
+    glottocode: pohn1238
+    note: "Micronesian, Chuukic-Pohnpeic > Pohnpeic (with Mokilese and
+           Pingelapese; the intermediate nodes stay prose). No ISO 639-1
+           code. Written from the ABCFM mission (Gulick and Sturges,
+           1852); Rehg's Ponapean Reference Grammar (1981) and the 1970s
+           orthography standardization. Consumers: eBible pon1922 (the
+           old translation in its old alphabet — the respelled
+           new-alphabet text is out of scope as a modernization)"
+
   sit:
     name: Sino-Tibetan
     kind: family
@@ -2900,6 +3404,44 @@ anchors:
            (≤ BE 2473 / 1930 CE by the edition rule). Corpus:
            th-wikisource (92 chronicle parts / 11,006 pages)"
 
+  za:
+    name: Zhuang
+    parent: tai
+    note: "ISO 639-1 (639-2/3 zha aliases here) — a MACROLANGUAGE, and one
+           that cross-cuts the genealogy: ISO splits it into sixteen
+           member codes (zyb Yongbei, the standard's base, zch, zgb, zhd,
+           zyn …), and on Li Fang-Kuei's Tai grid (1977) the northern
+           varieties are Northern Tai while the southern ones are Central
+           Tai, nearer Tày and Nùng than to Northern Zhuang. 'Zhuang' is
+           an ethnic and administrative unit (Guangxi), not a clade, so
+           the edge stops at tai; Glottolog files the zha code on its
+           Northern Daic node (nort3180), the northern half only, so no
+           glottocode crosswalk is stated. Written in Sawndip (古壮字,
+           'raw characters'), a vernacular Han-derived script — the
+           Tang stele at Shanglin (682 CE) is the usual first witness —
+           carrying folk song, the Buluotuo scriptures and ritual texts
+           in manuscript, never standardized (Holm 2013 maps its
+           variation); held text is za~hani. The Latin standard
+           (Sawcuengh, 1957, revised 1982) is modern. Consumers: the
+           kaikki Zhuang extract (2,981 words, 815 entries with 3,659
+           Sawndip forms) and the Unihan kZhuang readings (2,472, from
+           the 1989 古壮字字典)"
+
+  tyz:
+    name: Tày
+    parent: tai
+    glottocode: tayy1238
+    note: "Central Tai on Li Fang-Kuei's grid (1977), a continuum with
+           Nùng and Southern Zhuang across the Sino-Vietnamese border
+           (Cao Bằng, Lạng Sơn); Glottolog's Wenma-Southwestern Tai
+           placement and Pittayaporn's (2009) re-cut of Tai subgrouping
+           differ, so the edge stops at tai. No ISO 639-1 code. Written
+           in Nôm Tày, a Han-derived script on the Vietnamese Nôm model,
+           for the then ritual repertoire and lượn song — manuscript
+           literature mostly of the 18th–19th c.; the Latin orthography
+           is 20th-c. Consumers: the kaikki Tày extract (1,203 words, 150
+           Nôm Tày character senses)"
+
   tbq:
     name: Tibeto-Burman
     kind: family
@@ -2925,6 +3467,32 @@ anchors:
            Burmese (mya). Attested from the Myazedi inscription (1112/1113
            CE) through the Bagan period. The Bagan stone inscriptions are
            the corpus, held in Myanmar-script Unicode with transliteration"
+
+  txg:
+    name: Tangut
+    parent: tbq
+    glottocode: tang1334
+    band: [1036, 1502]
+    band_note: "from the script's promulgation under Li Yuanhao (1036)
+                to the last dated texts, the Baoding dhāraṇī pillars
+                (1502); the Xi Xia state itself spans 1038–1227"
+    note: "the language of the Xi Xia (Western Xia) state, extinct; no
+           ISO 639-1 code. Sino-Tibetan, its subgrouping a live question:
+           traditionally Qiangic (Sun Hongkai; Matisoff), argued West
+           Gyalrongic beside Horpa/Stau by Lai, Gong, Gates & Jacques
+           2020 (Glottolog follows: Tangut-Chamdoic; Wiktionary parents
+           it to Horpa) — Qiangic itself is not a secure clade, so the
+           edge states only tbq, the pyx/obr practice. Known almost
+           wholly from the Khara-Khoto library (Kozlov 1908–09, now
+           IOM RAS St Petersburg): Buddhist translations, law (the
+           Tiansheng code), and the native lexica — the Wenhai rhyme
+           dictionary, the Homophones, and the Tangut–Chinese Pearl in
+           the Palm (1190), the key to decipherment (Nevsky; Sofronov
+           1968; Gong Hwang-cherng's reconstruction). Held in the Tangut
+           script (txg~tang) and in romanized reconstructions
+           (txg~latn). Consumers: UD Tangut-MiCA (the Lotus and
+           Avataṃsaka sūtras, glossed) and the Digital Wenhai (3,085
+           rhyme-dictionary records)"
 
   # ── The comparative-etymology wing ──────────────────────────────────
   # Anchors forced by the StarLing etymological shelves (the Tower of
@@ -4154,6 +4722,11 @@ scripts:
   glag: {name: Glagolitic,                           iso15924: Glag}
   armn: {name: Armenian,                             iso15924: Armn}
   hant: {name: Han (Traditional variant),            iso15924: Hant}
+  hani: {name: "Han (Hanzi, Kanji, Hanja)",          iso15924: Hani,
+         note: "the generic Han code, for the vernacular Han-derived
+                scripts ISO 15924 does not separate — Vietnamese chữ Nôm
+                (vi~hani) and Zhuang Sawndip (za~hani) — whose characters
+                Unicode encodes in the CJK Unified blocks beside Chinese"}
   jpan: {name: Japanese (Han + Hiragana + Katakana), iso15924: Jpan}
   phnx: {name: Phoenician,                           iso15924: Phnx}
   runr: {name: Runic,                                iso15924: Runr}
@@ -4173,3 +4746,10 @@ scripts:
   linb: {name: Linear B,                             iso15924: Linb}
   cprt: {name: Cypriot syllabary,                    iso15924: Cprt}
   sinh: {name: Sinhala,                              iso15924: Sinh}
+  mong: {name: Mongolian,                            iso15924: Mong,
+         note: "the Uyghur-derived vertical script family as ISO 15924
+                and Unicode unify it: Classical Mongolian, Zaya Pandita's
+                Clear Script (xwo) and Manchu (mnc) all ride Mong"}
+  tang: {name: Tangut,                               iso15924: Tang,
+         note: "the Xi Xia logographic script (promulgated 1036), some
+                6,000 characters; Unicode-encoded since 9.0"}
