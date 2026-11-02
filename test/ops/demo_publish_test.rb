@@ -5,6 +5,7 @@ require "tmpdir"
 require "fileutils"
 require "json"
 require "yaml"
+require "stringio"
 require "nabu/ops/demo_publish"
 
 module Ops
@@ -122,6 +123,119 @@ module Ops
       steps = workflow.dig("jobs", "image-smoke", "steps").filter_map { |step| step["run"] }.join("\n")
       assert_match(/docker pull/, steps)
       assert_match(%r{script/demo-smoke}, steps)
+    end
+
+    # -- preflight: the owner's ONE command carries its own checks --------------
+
+    def docker_config(auths: {}, helpers: nil)
+      JSON.generate({ "auths" => auths }.tap { |c| c["credHelpers"] = helpers if helpers })
+    end
+
+    def test_ghcr_auth_is_read_from_the_docker_config
+      assert P::Preflight.authed?(config: docker_config(auths: { "ghcr.io" => {} }))
+      assert P::Preflight.authed?(config: docker_config(auths: { "https://ghcr.io" => {} }))
+      assert P::Preflight.authed?(config: docker_config(helpers: { "ghcr.io" => "osxkeychain" }))
+      refute P::Preflight.authed?(config: docker_config(auths: { "https://index.docker.io/v1/" => {} }))
+      refute P::Preflight.authed?(config: nil)
+      refute P::Preflight.authed?(config: "not json")
+    end
+
+    BUILDX_DOCKER_ONLY = <<~LS
+      NAME/NODE     DRIVER/ENDPOINT   STATUS    BUILDKIT   PLATFORMS
+      default*      docker
+       \\_ default   \\_ default       running   v0.17.0    linux/arm64
+    LS
+
+    BUILDX_CONTAINER_CURRENT = <<~LS
+      NAME/NODE       DRIVER/ENDPOINT     STATUS    BUILDKIT   PLATFORMS
+      multi*          docker-container
+       \\_ multi0     \\_ desktop-linux   running   v0.17.0    linux/arm64, linux/amd64
+      default         docker
+       \\_ default    \\_ default         running   v0.17.0    linux/arm64
+    LS
+
+    BUILDX_NABU_EXISTS = <<~LS
+      NAME/NODE          DRIVER/ENDPOINT     STATUS     BUILDKIT   PLATFORMS
+      default*           docker
+       \\_ default       \\_ default         running    v0.17.0    linux/arm64
+      nabu-demo          docker-container
+       \\_ nabu-demo0    \\_ desktop-linux   inactive
+    LS
+
+    def test_builder_choice_is_nil_when_the_current_builder_is_docker_container
+      assert_nil P::Preflight.builder_choice(BUILDX_CONTAINER_CURRENT),
+                 "a current docker-container builder already emits multi-platform"
+    end
+
+    def test_builder_choice_reuses_an_existing_nabu_demo_builder
+      assert_equal P::Preflight::BUILDER_NAME, P::Preflight.builder_choice(BUILDX_NABU_EXISTS)
+    end
+
+    def test_builder_choice_asks_for_a_create_on_a_classic_docker_only_box
+      assert_equal :create, P::Preflight.builder_choice(BUILDX_DOCKER_ONLY),
+                   "the plain docker driver on Apple Silicon is what produced an arm64-only public image"
+    end
+
+    def test_ensure_logs_in_and_creates_the_builder_only_when_needed
+      calls = []
+      builder = P::Preflight.ensure!(config: docker_config,
+                                     login: -> { calls << :login },
+                                     buildx_ls: -> { BUILDX_DOCKER_ONLY },
+                                     create: ->(name) { calls << [:create, name] },
+                                     log: StringIO.new)
+
+      assert_equal P::Preflight::BUILDER_NAME, builder
+      assert_equal [:login, [:create, P::Preflight::BUILDER_NAME]], calls
+    end
+
+    def test_ensure_is_a_no_op_when_authed_with_a_capable_builder
+      calls = []
+      builder = P::Preflight.ensure!(config: docker_config(auths: { "ghcr.io" => {} }),
+                                     login: -> { calls << :login },
+                                     buildx_ls: -> { BUILDX_CONTAINER_CURRENT },
+                                     create: ->(name) { calls << [:create, name] },
+                                     log: StringIO.new)
+
+      assert_nil builder
+      assert_empty calls
+    end
+
+    # -- post-push verification: the tags must be real multi-arch indexes ------
+
+    def index_json(archs)
+      JSON.generate("mediaType" => "application/vnd.oci.image.index.v1+json",
+                    "manifests" => archs.map { |a| { "platform" => { "architecture" => a } } })
+    end
+
+    def test_verify_index_accepts_a_two_arch_index_and_ignores_attestation_manifests
+      archs = P.verify_index!(index_json(%w[amd64 arm64 unknown]), image: "img:tag")
+
+      assert_equal %w[amd64 arm64], archs
+    end
+
+    def test_verify_index_rejects_a_single_arch_index
+      error = assert_raises(P::SmokeFailed) { P.verify_index!(index_json(%w[arm64]), image: "img:tag") }
+      assert_match(/img:tag/, error.message)
+      assert_match(/amd64/, error.message)
+    end
+
+    def test_verify_index_rejects_a_plain_single_platform_manifest
+      raw = JSON.generate("mediaType" => "application/vnd.oci.image.manifest.v1+json", "config" => {})
+      assert_raises(P::SmokeFailed) { P.verify_index!(raw, image: "img:tag") }
+    end
+
+    def test_verify_pushed_inspects_the_version_tag_and_latest
+      with_project do |root, _slice|
+        seen = []
+        images = P.verify_pushed!(root: root, log: StringIO.new,
+                                  inspector: lambda { |image|
+                                    seen << image
+                                    index_json(%w[amd64 arm64])
+                                  })
+
+        assert_equal ["#{P::IMAGE}:1.2.3", "#{P::IMAGE}:latest"], seen
+        assert_equal seen, images
+      end
     end
 
     # -- smoke: initialize FIRST, then tools/list, then one real call -----------

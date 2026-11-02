@@ -709,14 +709,16 @@ namespace :demo do
   # The LOCAL half of the image rail (Nabu::Ops::DemoPublish): the slice
   # needs this box's full library, so GitHub-hosted CI never builds the
   # image — this task does, multi-arch, tagged :<server.json version> and
-  # :latest, pushed to GHCR (needs `docker login ghcr.io` with a
-  # write:packages token, and a buildx builder that can emit multi-platform
-  # images — Docker Desktop's containerd image store, or
-  # `docker buildx create --use`). Then it pulls the pushed tag back and
-  # runs the MCP smoke. The registry entry rides .github/workflows/demo-release.yml.
+  # :latest, pushed to GHCR. It is SELF-CONTAINED: ghcr auth is probed
+  # (and `docker login ghcr.io` run inline if missing), a multi-platform
+  # buildx builder is found or created, the push is verified to be a real
+  # amd64+arm64 index on BOTH tags, and the pushed image is smoked — one
+  # command, no setup steps around it. Runs at RELEASE moments only (ops
+  # §12 step 7); .github/workflows/demo-release.yml is the normal path.
   # Knobs: DEMO_OUT (the slice, default tmp/demo), DEMO_PLATFORMS
-  # (comma list, default linux/amd64,linux/arm64), DEMO_BUILDER.
-  desc "Build + push the demo image (:<server.json version> + :latest, multi-arch) from DEMO_OUT, then smoke it"
+  # (comma list, default linux/amd64,linux/arm64), DEMO_BUILDER (overrides
+  # the preflight's builder choice).
+  desc "Build + push + verify + smoke the demo image (self-contained: auth, builder, multi-arch check inside)"
   task :publish do
     require_relative "lib/nabu/ops/demo_publish"
     publish = Nabu::Ops::DemoPublish
@@ -724,13 +726,25 @@ namespace :demo do
     platforms = ENV.fetch("DEMO_PLATFORMS", "").split(",").map(&:strip).reject(&:empty?)
     options = { root: __dir__, slice: slice }
     options[:platforms] = platforms unless platforms.empty?
-    builder = ENV.fetch("DEMO_BUILDER", "").strip
-    options[:builder] = builder unless builder.empty?
+    builder = ENV.fetch("DEMO_BUILDER", "").strip.then { |v| v.empty? ? publish::Preflight.ensure! : v }
+    options[:builder] = builder if builder
     puts "$ #{publish.publish_argv(**options).join(' ')}"
     publish.publish!(**options)
+    publish.verify_pushed!(root: __dir__)
     image = "#{publish::IMAGE}:#{publish.version(root: __dir__)}"
     result = publish::Smoke.run!(image: image, docker_args: ["--pull=always"])
-    puts "pushed + smoked #{image} — #{result.server}, #{result.tools.size} tools"
+    puts "pushed, verified + smoked #{image} — #{result.server}, #{result.tools.size} tools"
+  end
+
+  # The MCP Registry listing as ONE command: installs mcp-publisher if
+  # missing (brew), device-flow login, publish server.json. The release
+  # workflow's github-oidc publish is the normal path; this is the local
+  # fallback for the same act.
+  desc "Publish server.json to the MCP Registry (self-contained: install, device-flow login, publish)"
+  task :register do
+    sh "command -v mcp-publisher >/dev/null 2>&1 || brew install mcp-publisher"
+    sh "mcp-publisher login github"
+    sh "mcp-publisher publish ./server.json"
   end
 
   # The MCP stdio smoke on its own (initialize → tools/list → nabu_status).
