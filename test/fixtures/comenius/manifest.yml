@@ -1,0 +1,24 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# LINDAT bitstream content URLs are stable raw GETs, so every entry is
+# refetchable and byte-diffable.
+source: comenius
+adapter_test:
+retrieved: 2026-11-02
+files:
+  - path: 1-6288/06_DJAK_03_Pres_Bozi.xml
+    url: https://lindat.mff.cuni.cz/repository/server/api/core/bitstreams/5695f6cd-95fd-443b-b9bb-2a2d5ebe934b/content
+    refetchable: true
+    whole: true
+    trim: none
+  - path: 1-6283/02_DJAK_03_Listove.xml
+    url: https://lindat.mff.cuni.cz/repository/server/api/core/bitstreams/7c75478a-f1ae-42e7-9c67-319c3fc03c28/content
+    refetchable: true
+    whole: true
+    trim: none
+  - path: 1-6285/09_DJAK_03_Bazuine.xml
+    url: https://lindat.mff.cuni.cz/repository/server/api/core/bitstreams/74a305ab-c0df-4a64-a23c-6e95f2a133b3/content
+    refetchable: true
+    whole: true
+    trim: none

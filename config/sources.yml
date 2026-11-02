@@ -1137,6 +1137,30 @@ cme:
   # (May 2026): refresh = delete stale canonical files, re-sync.
   sync_policy: manual
 
+comenius:   # P153
+  adapter: Nabu::Adapters::Comenius
+  adopted: "2026-11-02"
+  axes: [slavic]
+  wired: false   # bin/nabu enable comenius && bin/nabu sync comenius — twelve
+                 # LINDAT bitstreams (≈2.8 MB total), one per item, each
+                 # into canonical/comenius/<handle suffix>/. EXPECT 12 docs /
+                 # 1,384 passages (cs 1,261 · nl 107 · lat 16), 0 errored,
+                 # 0 skipped — census of the 2026-10-22 deposits, 2026-11-02.
+                 # Eyeball nabu show urn:nabu:comenius:pres-bozi:2 ("Má
+                 # důvěrně laskavá paní,"), urn:nabu:comenius:bazuine:1 and 5
+                 # random; probe nabu search "laskavá paní"; then flip.
+  # Comenius — Komenský's Czech devotional writings 1619–1660 (Truchlivý
+  # I–IV, Listové do nebe, Přemyšlování, Nedobytedlný hrad, Pres boží,
+  # O sirobě, Centrum securitatis, Kšaft) + the Dutch Bazuine des genaden
+  # jaar (1632), TEI-encoded by T. Havelka (Filosofický ústav AV ČR) on
+  # the DJAK 3 critical text (Praha 1978), deposited on LINDAT 2026-10-22
+  # as twelve items. Passage = body p/head; the apparatus (lem/rdg), the
+  # footnote glosses and the marginalia ride annotations; the 1978
+  # editors' back matter is rejected. LICENSE: CC BY 4.0 on every item
+  # (dc.rights verbatim, verified 2026-11-02) → attribution. Frozen
+  # deposits → manual.
+  sync_policy: manual
+
 coptic-scriptorium:
   adapter: Nabu::Adapters::CopticScriptorium
   adopted: "2026-07-13"

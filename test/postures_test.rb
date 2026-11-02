@@ -179,7 +179,7 @@ class PosturesTest < Minitest::Test
   def test_the_lect_migration_kept_the_p59_4_census
     lect = postures.declarations.select { |d| d.layer == "lect" }
     by_posture = lect.group_by(&:posture).transform_values(&:size)
-    assert_equal 166, lect.size,
+    assert_equal 167, lect.size,
                  "the P59-4 declarations survive the move (61 at migration; itant retired P61-3," \
                  "oracc retired P62-2, etcsl/ccmh/freising/coptic-scriptorium retired P64-6, " \
                  "titus-avestan retired P66-1, osta+fornsvenska retired P77-r8, achemenet " \
@@ -352,7 +352,9 @@ class PosturesTest < Minitest::Test
                  "cgpg ADDED P153 — dates (the per-volume century labels band 25 of 33 volumes " \
                  "into grc:byz): 164→165; " \
                  "ganjoor ADDED P153 — identity fas (codemap → the bare fa anchor; the registry " \
-                 "holds no Persian stages) + ara for the Arabic sections: 165→166"
+                 "holds no Persian stages) + ara for the Arabic sections: 165→166; " \
+                 "comenius ADDED P153 — dates (cs stages to cs:mid by the 1619–1660 title-page " \
+                 "dates; the Dutch Bazuine bare nl): 166→167"
     # The epigraphic-belt registry package (merged + canonical-synced
     # 2026-10-18, the add-then-retire shape within one phase) retires both
     # P130 pendings, and the ociana-script rule + the ig-cyprus override
@@ -388,7 +390,8 @@ class PosturesTest < Minitest::Test
     # lzh-collection joins codemap (lzh → zho/lit, the kanripo precedent): 17→18.
     # ppchy joins as pending on a yi anchor mint: 1→2 (lasla, ppchy).
     # cgpg joins dates (century labels → the grc:byz band): 21→22;
-    # ganjoor joins identity (fas → fa, no Persian stages; ara sections): 123→124.
-    assert_equal({ "dates" => 22, "codemap" => 18, "identity" => 124, "pending" => 2 }, by_posture)
+    # ganjoor joins identity (fas → fa, no Persian stages; ara sections): 123→124;
+    # comenius joins dates (cs → cs:mid by its title-page dates): 22→23.
+    assert_equal({ "dates" => 23, "codemap" => 18, "identity" => 124, "pending" => 2 }, by_posture)
   end
 end
