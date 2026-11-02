@@ -86,15 +86,16 @@ works:
     unit: column
     volumes:
       # Bd. I (A–H, 1896, cols. 1–2064) — the Bayerische Staatsbibliothek
-      # copy bsb10931773 (1,058 images). Calibrated 2026-11-02 from the
+      # copy bsb10931773 (1,058 images, fetched page-by-page over the
+      # public IIIF Image API and stitched; on the dictionaries shelf,
+      # nc per the rights statement). Calibrated 2026-11-02 from the
       # BSB IIIF manifest's own image labels ("1 (0019)" … "2063 (1052)":
       # 18 front leaves, two unnumbered leaves at images 209–210, six back
       # leaves; no column missing) and read off the images at leaves
-      # 100/208/211/1052 (cols. 163/379/381/2063). item stays null until
-      # the scan is on the shelf (the leaves are the BSB image numbers, the
-      # whole-volume PDF's page numbers).
+      # 100/208/211/1052 (cols. 163/379/381/2063). The leaves are the BSB
+      # image numbers = the whole-volume PDF's page numbers.
       "I":
-        item: null
+        item: urn:nabu:local-library:dictionaries:bsb10931773
         leaf_offset: 18
         breaks:
           - { from_column: 381, leaf_offset: 20 }
