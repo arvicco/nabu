@@ -44,7 +44,7 @@ module Nabu
     # following 3 closes; an unpaired hemistich stands as a one-hemistich
     # unit. A 4 is its own line unit, a -1 its own prose unit. Comments
     # are collected apart (the adapter carries them as document metadata);
-    # blank rows (628 in the classical cone) are counted and dropped — a
+    # blank rows (empty, or holding only a no-break space, ZWNJ or control byte) are counted and dropped — a
     # missing hemistich is an honest absence. Any other position code is
     # upstream drift: ParseError, never a guess.
     #
@@ -57,6 +57,13 @@ module Nabu
 
       # Which opener a closer completes.
       CLOSES = { 1 => 0, 3 => 2 }.freeze
+
+      # A row is text only if it carries a visible character: rows holding
+      # nothing but a no-break space, a ZWNJ or a control byte (5 in the
+      # whole release — poems 51262, 78294, 88157, 105811, 501256) are
+      # blank, exactly like empty ones.
+      VISIBLE = /[^\p{Z}\p{C}]/
+      EDGE_SPACE = /\A[\s\p{Z}]+|[\s\p{Z}]+\z/
 
       Poet = Data.define(:id, :name, :cat_id, :description)
       Cat = Data.define(:id, :poet_id, :text, :parent_id, :url)
@@ -127,14 +134,19 @@ module Nabu
         cat && poets[cat.poet_id]
       end
 
-      # Poem ids carrying at least one non-blank, non-comment row — ONE
-      # aggregate query, so discovery can honor the empty-poem rule
-      # without reading content.
+      # Poem ids carrying at least one visible, non-comment row — one
+      # streamed pass (~2 s over the whole release), so discovery honors
+      # the empty-poem rule with the same VISIBLE test the grouping uses.
       def poem_ids_with_text
-        @poem_ids_with_text ||= query(
-          "SELECT poem_id FROM verse WHERE position <> 5 AND TRIM(COALESCE(text, '')) <> '' " \
-          "GROUP BY poem_id"
-        ).to_set(&:first)
+        @poem_ids_with_text ||= begin
+          ids = Set.new
+          @db.execute("SELECT poem_id, text FROM verse WHERE position <> 5") do |poem_id, text|
+            ids << poem_id if !ids.include?(poem_id) && text.to_s.match?(VISIBLE)
+          end
+          ids
+        rescue SQLite3::Exception => e
+          raise Nabu::ParseError, "#{path}: #{e.message}"
+        end
       end
 
       def record(poem_id)
@@ -143,36 +155,42 @@ module Nabu
       end
 
       # The pure grouping rule (class note) over [vorder, position, text]
-      # rows in vorder.
+      # rows in vorder. Pairing is POSITIONAL: a blank row still holds its
+      # slot (a blank left hemistich closes its couplet, a blank right one
+      # opens the next), then blank lines drop and a unit left with no
+      # line vanishes.
       def self.group(rows, label: "poem")
         units = []
         comments = []
         blanks = 0
-        open = nil # [position, Unit-fields] of a couplet awaiting its closer
+        open = nil # [position, unit] of a couplet awaiting its closer
         rows.each do |vorder, position, text|
           raise Nabu::ParseError, "#{label}: unknown verse position #{position.inspect}" unless
             POSITIONS.key?(position)
 
-          stripped = text.to_s.strip
+          stripped = text.to_s.gsub(EDGE_SPACE, "")
+          visible = stripped.match?(VISIBLE)
           if position == 5
-            comments << stripped unless stripped.empty?
+            comments << stripped if visible
             next
           end
-          if stripped.empty?
-            blanks += 1
-            next
-          end
+          blanks += 1 unless visible
+          line = visible ? [[stripped, vorder]] : []
           if CLOSES.key?(position) && open && open[0] == CLOSES[position]
-            open[1][:lines] << stripped
-            open[1][:vorders] << vorder
+            open[1][:lines].concat(line)
             open = nil
             next
           end
-          unit = { form: form_for(position), lines: [stripped], vorders: [vorder] }
+          unit = { form: form_for(position), lines: line }
           units << unit
           open = [0, 2].include?(position) ? [position, unit] : nil
         end
-        Record.new(units: units.map { |u| Unit.new(**u) }, comments: comments, blank_rows: blanks)
+        Record.new(units: units.reject { |u| u[:lines].empty? }.map { |u| unit_for(u) },
+                   comments: comments, blank_rows: blanks)
+      end
+
+      def self.unit_for(fields)
+        Unit.new(form: fields[:form], lines: fields[:lines].map(&:first), vorders: fields[:lines].map(&:last))
       end
 
       def self.form_for(position)
