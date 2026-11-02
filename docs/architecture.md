@@ -970,7 +970,12 @@ optional `line`, and `volume` for multi-volume works), the shelf item
 `leaf_offset` calibration: printed page N sits on PDF page N + k, the
 library adapter's `<item>:p<N+k>` passage. Volumes route by the cited
 volume string; two volumes bound in one PDF share an item with their own
-offsets. Resolution is query-time and read-only (one memoized document
+offsets. A `breaks` list (`from_page` → offset) shifts the offset
+mid-volume (bound-in inserts, rescanned runs). A column-numbered work
+(`unit: column` — Holder's `AcS II: 1779`, two printed columns per page,
+mined from lexlep-words' commentary prose) captures `column` instead:
+printed column C sits on leaf ceil(C/2) + k, its breaks keyed
+`from_column`. Resolution is query-time and read-only (one memoized document
 probe per item, one passage probe per citation — the desk law), stores
 nothing, and degrades by status rather than error: anchored (the page
 passage), held (document + leaf — a scan without a text layer),

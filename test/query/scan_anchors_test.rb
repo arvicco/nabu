@@ -193,6 +193,88 @@ module Query
       assert_equal "bdb", shipped.match("BDB p. 135").work
     end
 
+    # -- column mode (unit: column — two numbered columns per printed page) ---
+
+    COL_ITEM = "urn:nabu:local-library:dictionaries:col"
+
+    # Constructed: columns 1–2 sit on leaf 1 + 7 = 8; a rescanned run from
+    # column 147 shifts the offset to +27.
+    def column_doc
+      { "works" => { "c" => { "title" => "Columned", "pattern" => '\AC (?<volume>I{1,3}): (?<column>\d+)\z',
+                              "unit" => "column",
+                              "volumes" => { "II" => { "item" => COL_ITEM, "leaf_offset" => 7,
+                                                       "breaks" => [{ "from_column" => 147,
+                                                                      "leaf_offset" => 27 }] } } } } }
+    end
+
+    def test_column_match_carries_the_column_not_a_page
+      match = table(column_doc).match("C II: 1779")
+      assert_equal ["c", "II", 1779, nil], [match.work, match.volume, match.column, match.page]
+      assert_nil table(column_doc).match("C II: 0"), "column 0 is no locus"
+    end
+
+    def test_column_leaf_is_the_printed_page_index_plus_the_offset
+      volume = table(column_doc).work("c").volumes["II"]
+      assert_equal [8, 8, 9], [1, 2, 3].map { |col| volume.leaf_for(col) },
+                   "columns 2k-1 and 2k share one leaf: ceil(col/2) + k"
+      assert_equal 80, volume.leaf_for(145), "col 145 rides the base offset: 73 + 7"
+      assert_equal 101, volume.leaf_for(147), "col 147 rides the break: 74 + 27"
+      assert_equal 101, volume.leaf_for(148)
+    end
+
+    def test_column_anchor_resolves_and_words_the_column
+      shelve(COL_ITEM, leaves: [101])
+      resolver = table(column_doc).resolver(@catalog)
+      anchor = resolver.anchor("C II: 148")
+      assert_equal [:anchored, 101, "#{COL_ITEM}:p101", 148, nil],
+                   [anchor.status, anchor.leaf, anchor.urn, anchor.column, anchor.page]
+
+      doc = column_doc
+      doc["works"]["c"]["volumes"]["II"] = { "item" => COL_ITEM, "leaf_offset" => nil }
+      uncalibrated = table(doc).resolver(@catalog).anchor("C II: 148")
+      assert_equal :uncalibrated, uncalibrated.status
+      assert_match(/printed col\. 148/, uncalibrated.pointer)
+    end
+
+    def test_column_mode_config_errors
+      wrong_capture = column_doc
+      wrong_capture["works"]["c"]["pattern"] = '\AC (?<volume>I{1,3}): (?<page>\d+)\z'
+      assert_match(/column/, assert_raises(Nabu::Query::ScanAnchors::ConfigError) { table(wrong_capture) }.message)
+
+      both = column_doc
+      both["works"]["c"]["pattern"] = '\AC (?<volume>I{1,3}): (?<column>\d+) p\. (?<page>\d+)\z'
+      assert_raises(Nabu::Query::ScanAnchors::ConfigError) { table(both) }
+
+      page_breaks = column_doc
+      page_breaks["works"]["c"]["volumes"]["II"]["breaks"] = [{ "from_page" => 147, "leaf_offset" => 27 }]
+      assert_match(/from_column/, assert_raises(Nabu::Query::ScanAnchors::ConfigError) { table(page_breaks) }.message)
+
+      bad_unit = column_doc
+      bad_unit["works"]["c"]["unit"] = "folio"
+      assert_raises(Nabu::Query::ScanAnchors::ConfigError) { table(bad_unit) }
+    end
+
+    # The shipped Holder rows, calibrated against the held scans: Bd. II
+    # (the Google scan, OCR column heads read leaf by leaf, rescanned
+    # duplicate runs included) and Bd. I (the BSB copy's own image labels,
+    # leaves read off the images). Every pin below is a leaf whose text
+    # carries that printed column.
+    def test_the_shipped_holder_rows_land_on_the_verified_leaves
+      shipped = Nabu::Query::ScanAnchors.load(File.join(Nabu::Config::PROJECT_ROOT, "config", "scan_anchors.yml"))
+      two = shipped.work("acs").volumes["II"]
+      { 1 => 8, 5 => 10, 27 => 23, 145 => 82, 147 => 101, 1155 => 669, 1157 => 670, 1159 => 659,
+        1517 => 852, 1779 => 1007, 1788 => 1011, 2013 => 1148, 2015 => 1158, 2017 => 1159,
+        2019 => 1149, 2025 => 1152 }.each do |col, leaf|
+        assert_equal leaf, two.leaf_for(col), "Bd. II col. #{col}"
+      end
+      one = shipped.work("acs").volumes["I"]
+      { 1 => 19, 163 => 100, 379 => 208, 381 => 211, 2063 => 1052 }.each do |col, leaf|
+        assert_equal leaf, one.leaf_for(col), "Bd. I col. #{col}"
+      end
+      match = shipped.match("AcS II: 1779")
+      assert_equal ["acs", "II", 1779], [match.work, match.volume, match.column]
+    end
+
     def test_load_default_is_nil_when_the_file_is_absent
       Dir.mktmpdir do |dir|
         config = Nabu::Config.new(canonical_dir: dir, db_dir: dir, sources_path: File.join(dir, "s.yml"),
