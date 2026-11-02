@@ -55,6 +55,19 @@ module Nabu
         Sequel.|(shelf, { entry => wanted })
       end
 
+      # Whether +lang+ can answer on this catalog at all: its folded set
+      # names a shelf language, or some entry carries it as its annotation
+      # language. The entry probe runs only on the would-be-reject path, so
+      # the common case stays set-membership.
+      def held?(catalog, lang, shelf_languages)
+        wanted = codes(lang)
+        return true if wanted.intersect?(shelf_languages)
+        return false unless annotations_column?(catalog)
+
+        entry = Sequel.function(:json_extract, Sequel[:dictionary_entries][:annotations_json], "$.language")
+        !catalog[:dictionary_entries].where(entry => wanted).first.nil?
+      end
+
       def annotations_column?(catalog)
         catalog.schema(:dictionary_entries).any? { |name, _| name == :annotations_json }
       rescue Sequel::Error
