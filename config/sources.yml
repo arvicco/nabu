@@ -2594,6 +2594,24 @@ freising:
   # the terms before enabling):
   # license_watch: https://nl.ijs.si/e-zrc/bs/
 
+fsv-lexica:   # P154, 02-sources row 342
+  adapter: Nabu::Adapters::FsvLexica
+  adopted: "2026-11-02"
+  axes: [germanic]
+  wired: false   # first sync: bin/nabu enable fsv-lexica && bin/nabu sync fsv-lexica
+                 # (three LMF GETs, ~48 MB total). EXPECT 3 dictionary docs → 22,572
+                 # soederwall + 19,172 soederwall-supp + 10,067 schlyter = 51,811 entries,
+                 # 0 errored (each exactly its resource page's "Ingångar"); eyeball
+                 # nabu define avisning (Schlyter "anvisning, hänvisning"), then flip.
+  # Språkbanken's three Old Swedish dictionaries (Söderwall 1884–1918,
+  # its supplement 1925–1973, Schlyter's law glossary 1877) as three
+  # shelves of one source, for the held fornsvenska corpus. Karp LMF
+  # (new family spraakbanken-lmf); entry id = the lemgram (shared across
+  # the three books), headword = the lemgram baseform (the keyed
+  # writtenForm carries head-line noise). CC-BY-4.0 per resource page →
+  # attribution. Language sv, lect sv:old via config/lect_overrides.yml.
+  sync_policy: manual
+
 gams-zrcalo:   # 02-sources row 244
   adapter: Nabu::Adapters::GamsZrcalo
   adopted: "2026-10-11"

@@ -230,6 +230,15 @@ sources:
     # nodes — parse-time work, the 2026-10-18 generalization.
     snt: { lect: "qps", tier: certain }
     xca: { lect: "qcp", tier: certain }
+  fsv-lexica:
+    # Söderwall's Ordbok öfver svenska medeltids-språket (+ its
+    # supplement) and Schlyter's glossary to the medieval laws are by
+    # title and scope dictionaries of medieval Swedish — the registry's
+    # sv:old stage (nabu-lects PR #4, the node the held fornsvenska
+    # corpus resolves to). The shelves store sv (the held text's own
+    # tag) so the dictionary-language filter meets fornsvenska; this row
+    # transcribes the books' own definition onto the existing node.
+    sv: { lect: "sv:old", tier: certain }
   elizabeth-bible:
     # The Elizabeth Bible IS the text the registry's chu:ncs node names
     # as fixing the post-Nikonian Synodal standard ("fixed in the

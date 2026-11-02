@@ -1879,7 +1879,6 @@ Pohnpeian New Testament and Psalms in the old alphabet (28 / 10,415;
 open) — registered but not yet wired.
 
 ## 8ba. The Sixth Council Tipiṭaka with its subcommentaries, and the Ming examination records (P154)
-## 8bb. The P154 arrivals — the Suda in English, the HMML manuscript catalogue
 
 Expected counts from the fixture-time censuses (the gate's first syncs
 confirm them):
@@ -1905,6 +1904,8 @@ each dated by its reign year and linked to its scan on Wikimedia
 Commons. Machine-read and uncorrected (labeled on every record; check
 the scan before citing); the dataset's machine translations are not
 taken (CC0).
+## 8bb. The P154 arrivals — the Suda in English, the HMML manuscript catalogue
+
 **`suda-translations`** — the Suda On Line: the complete collaborative
 English translation of the Suda, the 10th-century Byzantine
 lexicon-encyclopedia, 31,341 entries in 27 Adler-letter documents, each
@@ -1920,3 +1921,12 @@ that hold their books — shelf marks, dates, places of origin, scripts,
 contents, authors and genres — with 11,196 incipits in Syriac, Ge'ez,
 Amharic, Garshuni and Arabic as searchable text (CC BY 4.0, the weekly
 dataset).
+## 8bc. The P154 dictionary wave
+
+**`fsv-lexica`** — Språkbanken's three Old Swedish dictionaries for the
+fornsvenska corpus: K.F. Söderwall's *Ordbok öfver svenska
+medeltids-språket* (1884–1918; 22,572 entries) and its supplement
+(1925–1973; 19,172), and C.J. Schlyter's glossary to the medieval laws
+(1877; 10,067) — Swedish-language articles with the books' citations,
+keyed by hand at Språkbanken, every entry under its lemgram so the
+three books meet on one key (CC BY 4.0).
