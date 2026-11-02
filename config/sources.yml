@@ -6864,6 +6864,36 @@ tshet-uinh:
   # zhongyuan-data's journal note CLOSED P88-R3 (2026-08-29): the
   # zho:oman stage + owner GO built it as the `zhongyuan` source below.
 
+typikon-bible:   # P153, 02-sources row 322
+  adapter: Nabu::Adapters::TypikonBible
+  adopted: "2026-11-02"
+  axes: [biblical, romance]
+  wired: false   # first real sync pending:
+                 # bin/nabu enable typikon-bible, then bin/nabu sync typikon-bible
+                 # (four FileFetch GETs from typikon.info/dump/2026-09-21/:
+                 # manifest.json, bible-editions, bible-books, the 2.9 MB
+                 # bible-verses-ro-1688). EXPECT 79 docs / 36,312 passages,
+                 # 0 errored, 0 skipped (census 2026-11-02): Psalms 2,556 ·
+                 # Sirach 1,533 · Genesis 1,533 · Jeremiah 1,359 … Obadiah 21.
+                 # Eyeball nabu show urn:nabu:typikon-bible:ro-1688:bytie:1.1 and
+                 # :ioilya:4.6 (canon_ref ioilya.3.6), 5 random verses, probe
+                 # nabu search with a 1688 string (Дм҃нзе́ꙋ), then flip.
+  sync_policy: manual
+  # The Bible layer of the typikon.info "Уставные чтения" dump (Zenodo
+  # 10.5281/zenodo.22883965), EDITION-GATED: admitted is ro-1688, the 1688
+  # Bucharest Bible in Romanian Cyrillic, typeset by the project from scans
+  # of the print. Document = edition × book, passage = verse in the
+  # edition's own numbering, the Slavonic canonical address (canonRef) on
+  # every verse. LICENSE: manifest.json bible layer CC-BY-4.0; rationale
+  # verbatim "Румынскую кириллицу 1688 и китайский Новый Завет 1910
+  # набирали мы — они под лицензией слоя" → attribution. Held for a ruling
+  # (not fetched): cs-eliz (Elizabeth Bible 1751, Church Cyrillic) and
+  # ka-mcxeta (Mtskheta Old Georgian Bible) — the dump marks both PD while
+  # stating the digitizers declared no terms, and its own layer rationale
+  # says the Church Slavonic digitization stays out of the dump. The
+  # numbering concordance (342,568 rows, CC BY 4.0) is an instrument, not
+  # fetched; it is the candidate alignment-remap feed.
+
 ucd:
   adapter: Nabu::Adapters::Ucd
   adopted: "2026-08-28"

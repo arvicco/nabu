@@ -7,7 +7,7 @@
 - slug: romance
   persona: The Romanist
   blurb: the Latin-to-vernacular continuum, charter Latin to Roland to the troubadours
-  members: 20
+  members: 21
 - slug: epigraphy
   persona: The Papyrologist-Epigraphist
   blurb: reads what survives on stone, sherd, papyrus and tablet, lacunae and all
@@ -36,7 +36,7 @@
 - slug: biblical
   persona: The Biblical scholar
   blurb: one text across Hebrew, Greek, Latin, Syriac, Coptic and English witnesses
-  members: 19
+  members: 20
 - slug: hebrew
   persona: The Hebraist
   blurb: Masoretic vowels, Qumran consonants, the Aramaic of the Targums

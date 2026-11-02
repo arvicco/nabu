@@ -1112,6 +1112,11 @@ the Countries, Ephrem's Prose Refutation against Mani and Sermon on
 Nineveh and Jonah, Pseudo-Methodius and three apocalypses (31 books /
 18,132 verses; nc) — are registered but not yet wired.
 
+**Romanian.** `typikon-bible` — the 1688 Bucharest Bible, the first complete
+Romanian Bible, in the Cyrillic alphabet of the print, each verse tied to
+its place in the Church Slavonic canon (79 books / 36,312 verses;
+attribution) — registered but not yet wired.
+
 **Celtic.** `gpc` — the open subset of Geiriadur Prifysgol Cymru
 (89,386 entries).
 

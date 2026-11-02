@@ -828,6 +828,8 @@ sources:
     source_kind: scripture
   etcbc-targum:
     source_kind: scripture   # P153: the Pentateuch targums — every text is a Bible translation
+  typikon-bible:
+    source_kind: scripture   # P153: whole Bible editions (the 1688 Bucharest Bible)
   etcbc-syriac:        # P153 census 2026-11-02: 31 books (tf/0.92 book nodes), one document each
     metadata: book     # upstream's book name verbatim — each book IS one known work, so the
     #                    fold is the parse-time call per book (the extrabiblical shape)
