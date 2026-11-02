@@ -50,7 +50,10 @@ this project has already observed such drift, the doc says so.
   design, so the boundary stays legible.
 - **The owner's own shelves.** `local/shelves/` intake (the library,
   dossiers, notes) goes through `nabu ingest` / `nabu note`; that
-  workflow is documented in `docs/library.md` §Ingest, not here.
+  workflow is documented in `docs/library.md` §Ingest, not here — but
+  the acquisition facts of a specific public-domain reference scan
+  (item, license field, leaf count, checksums) are replayable human
+  steps and do get a doc (below).
 
 ## The documents
 
@@ -90,6 +93,13 @@ Sources whose adapter is built but awaits the owner's first sync
   (13th-c. Early Middle Dutch, .fromdb, gold lemma+POS; P84-7).
 - [corpus-oudfries.md](corpus-oudfries.md) — INT/IvdNT Corpus Oudfries
   (Old Frisian text witnesses c. 1200–1550, TEI, lemma+POS+gloss).
+
+Public-domain reference scans filed onto the library shelf through
+`nabu ingest` (no adapter; the doc pins the item, its license field,
+its leaf count and checksums, and the exact ingest command):
+
+- [steingass-1892.md](steingass-1892.md) — Steingass, *A Comprehensive
+  Persian-English Dictionary* (1892), the archive.org PD-marked scan.
 
 Acquisition overview (spans several corpora; the per-source cards above
 are authoritative for the three built adapters):
