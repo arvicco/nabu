@@ -589,9 +589,10 @@ sources:
         via MetadataDates :structured; '?' and the undated pseudo-inscription stay
         honestly undated; in-text dates ride raw as text_dates"}
     places: {posture: named, note: "the origPlace verbatim on 50 of 51 — 'Iustinopolis
-        (Koper)' 48, 'Piran' 2; the pseudo-inscription records none. Settlement,
-        repository and found/observed provenance are present locations, metadata only;
-        no gazetteer refs"}
+        (Koper)' 48, 'Piran' 2; the pseudo-inscription records none. The found
+        provenance (15 — the building/street in town where the stone was found) projects
+        as the findspot facet; settlement, repository and the observed provenance are
+        present locations, metadata only; no gazetteer refs"}
     script: {posture: implied}
   extrabiblical:
     # kind machine-postured — kind_map.yml folds the 13 books over metadata

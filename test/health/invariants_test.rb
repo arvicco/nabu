@@ -659,9 +659,10 @@ class InvariantsTest < Minitest::Test
 
   def test_unmined_axis_metadata_skips_false_friend_compounds
     seed_lane_doc("rawore6", "urn:nabu:rawore6:x1",
-                  '{"website":"https://x","timestamp":"2026","original_title":"T"}')
+                  '{"website":"https://x","timestamp":"2026","original_title":"T",' \
+                  '"placeholder_transcriptions":1}')
     assert_nil global_finding(:unmined_axis_metadata),
-               "website/timestamp/original_* are machinery and titles, not axis ore"
+               "website/timestamp/original_*/placeholder_* are machinery, titles and counts, not axis ore"
   end
 
   def test_unmined_axis_metadata_traces_transformed_values
