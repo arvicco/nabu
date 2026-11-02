@@ -332,6 +332,35 @@ module Nabu
       # The default citation-root acceptance: original-language editions.
       DIVISION_TYPES = ["edition"].freeze
 
+      # == refsDecl scoping (P154) — which cRefPatterns are the citation scheme
+      #
+      # A CapiTainS header may carry several refsDecls, and only the CTS one
+      # declares how THIS document is cited. The Patristic Text Archive
+      # ships three more beside it — xml:id "biblical" / "pta" / "perseus",
+      # cross-reference resolvers whose replacementPatterns are URLs
+      # (https://www.bibelwissenschaft.de/bibelstelle/$2$3,$4/$1) and whose
+      # four-group biblical matchPattern out-ranked the real one-group
+      # section scheme, refusing every PTA edition ("cannot determine leaf
+      # element from replacementPattern …"). So a cRefPattern counts when
+      #
+      #   1. it sits in refsDecl[@n='CTS'] — the scheme the CapiTainS
+      #      guidelines name; or
+      #   2. FALLBACK, for headers that do not label (first1k's split/ tree,
+      #      two perseus-greek tlg0007 files) or label otherwise (Perseus'
+      #      legacy n="NTS" twin beside the CTS decl — 7 perseus-latin
+      #      phi0690 translations): its replacementPattern is an in-document
+      #      #xpath(...) — a citation scheme by shape, wherever it sits.
+      #
+      # What the rule drops is exactly a non-CTS pattern that resolves
+      # OUTSIDE the document. Census 2026-11-02 over every tree this parser
+      # reads (canonical first1k-greek, perseus-greek/-latin/-anglit/
+      # -farsilit): ZERO such patterns — so every existing scheme, and with
+      # it every urn and passage, is byte-identical by construction; the
+      # 2,062 dropped patterns are all PTA's.
+      def self.citation_pattern?(refs_decl_n:, replacement:)
+        refs_decl_n == "CTS" || replacement.to_s.lstrip.start_with?("#xpath(")
+      end
+
       # Parse one edition file into a Nabu::Document with ordered Passages at
       # the lowest citation level. Raises Nabu::ParseError on malformed XML,
       # missing/empty CTS refsDecl, urn mismatch, or zero citable passages.
@@ -506,6 +535,7 @@ module Nabu
             record_pattern(node)
           elsif name == "refsDecl"
             @refs_decls_seen = (@refs_decls_seen || 0) + 1
+            @refs_decl_n = node.attribute("n") unless node.empty_element?
           elsif name == "refState"
             (@ref_states ||= []) << node.attribute("unit")
           elsif name == "div" && @division_types.include?(node.attribute("type"))
@@ -523,6 +553,8 @@ module Nabu
           name = local_name(node)
           if @capture
             captured_end(node, name)
+          elsif name == "refsDecl"
+            @refs_decl_n = nil
           elsif @structural
             # END_ELEMENT only fires for non-empty elements — exactly the ones
             # structural_start pushed a frame for.
@@ -543,6 +575,9 @@ module Nabu
         # -- header: refsDecl -------------------------------------------------
 
         def record_pattern(node)
+          return unless EpidocParser.citation_pattern?(refs_decl_n: @refs_decl_n,
+                                                       replacement: node.attribute("replacementPattern"))
+
           match = node.attribute("matchPattern")
           @patterns << CRefPattern.new(
             unit: node.attribute("n"),
