@@ -88,6 +88,9 @@ module Nabu
           "aozora" => :structured, # the index's 初出 first publication (class composition),
           #                          else the 底本 first-edition year (class edition)
           "archiv-slav-phil" => :structured, # each volume's title-page year
+          "baley-manuscripts" => :structured, # P153: each manuscript find's conventional era
+          #                                   (radiocarbon / burial terminus; an edition inherits its
+          #                                   manuscript's); place = the excavated findspot when provenanced
           "bdcamoes" => :structured,
           "bfm" => :iso_keys,
           "bg-wikisource" => :structured,

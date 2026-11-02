@@ -13,11 +13,12 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 ## The shelves
 
-A source wears every desk it serves — these twenty-three answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
+A source wears every desk it serves — these twenty-four answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
 | Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 2 November 2026)</span> |
 |---|---|---|---|---|
 | `babelstone-ids` | dictionary | open | wired · manual | 97,680 entries |
+| `baley-manuscripts` | texts | attribution | not yet wired | nothing held yet |
 | `baxter-sagart` | dictionary | attribution | wired · manual | 9,918 entries |
 | `cbdb` | feature module | nc | wired · manual | nothing held yet |
 | `cbeta` | texts | nc | wired · manual | 4,323 docs / 10,867,827 passages |

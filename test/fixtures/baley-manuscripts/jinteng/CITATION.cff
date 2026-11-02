@@ -1,0 +1,19 @@
+cff-version: 1.2.0
+message: "If you use this dataset, please cite the archived dataset."
+type: dataset
+title: "Jinteng 金縢: A Character-Level Alignment Dataset of the Received Shangshu and Tsinghua Manuscript"
+version: 1.0.0
+date-released: "2026-11-01"
+authors:
+  - family-names: Baley
+    given-names: Julien
+    orcid: "https://orcid.org/0000-0003-1056-6211"
+    affiliation:
+      - "School of Languages, Cultures, and Linguistics, SOAS University of London, UK"
+abstract: >-
+  A character-level alignment of the received Jinteng in the Shangshu with the
+  Tsinghua University manuscript, including IDS transcriptions, graph
+  alignments, source and image mappings, reviewed manuscript crops, JSON
+  Schemas, and a static viewer. Project-authored material is CC BY 4.0;
+  manuscript images are distributed under separate permissions documented in
+  witness-images/RIGHTS.md.

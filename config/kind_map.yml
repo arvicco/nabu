@@ -697,6 +697,25 @@ sources:
     source_kind: scripture
   # -- whole-source canon declarations (P100-4; the cbeta/okhc precedent:
   # the source IS a canon or a dynastic record — one ruled line each) ---
+  baley-manuscripts:   # census 2026-11-02: 19 witnesses over 9 deposits, one work each
+    metadata: work     # the deposit's dataset_id — each deposit IS one known work, so the
+    #                    fold is the parse-time call per work (the extrabiblical mold)
+    map:
+      "shijing": literary/poetry     # the Odes: the Anda and Fuyang Shijing witnesses
+      "aisong": literary/poetry      # 哀誦, an Anda lament-poem (the Chu verse tradition)
+      "shaner": literary             # 善而, an Anda text in four-graph lines — declared COARSE:
+      #   the deposit says no more than the poem unit type its schema gives every text
+      "shentudi": literary/narrative # 申徒狄見周公 — the anecdote of Shentu Di's audience with
+      #   the Duke of Zhou
+      "laozi": literary/wisdom       # the Laozi (Guodian A/B/C, Beida) — gnomic philosophical verse
+      "lunyu": literary/wisdom       # the Analects witnesses (Dingxian, Jeongbaekdong, Anda's
+      #   仲尼曰): sayings and dialogues of Confucius
+      "caomozhizhen": literary/wisdom  # 曹沫之陳 — Cao Mo's dialogue with Duke Zhuang of Lu on
+      #   government and warfare (the Masters' dialogue form)
+      "jinteng": historiography      # 金縢 — a Shangshu chapter: the Duke of Zhou's prayer and
+      #   the metal-bound coffer, a 書 narrative of the early Zhou court
+      "jigong": historiography       # 祭公 — the Yizhoushu chapter: Duke Ji's deathbed
+      #   admonition to King Mu, a 書 court record
   obimd:               # census 2026-10-21: 10,077 Heji/Huadong rubbings
     # Shang oracle-bone inscriptions are royal and princely divination by
     # construction — charge, prognostication, verification, with the
