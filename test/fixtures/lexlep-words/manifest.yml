@@ -45,3 +45,43 @@ files:
     copied: 2026-07-18
     whole: false
     trim: envelope our shape; wikitext byte-verbatim from slots.main
+  - path: pages/Word/aesia.json
+    refetchable: false
+    provenance: api-envelope
+    reason: WikiFetch envelope around the api.php revisions response; upstream serves current revids, not this snapshot
+    upstream: https://lexlep.univie.ac.at/api.php
+    copied: 2026-11-02
+    whole: false
+    trim: envelope our shape; wikitext byte-verbatim from slots.main (copied from the box canonical/ fetch)
+  - path: pages/Word/esopnos.json
+    refetchable: false
+    provenance: api-envelope
+    reason: WikiFetch envelope around the api.php revisions response; upstream serves current revids, not this snapshot
+    upstream: https://lexlep.univie.ac.at/api.php
+    copied: 2026-11-02
+    whole: false
+    trim: envelope our shape; wikitext byte-verbatim from slots.main (copied from the box canonical/ fetch)
+  - path: pages/Word/kasios.json
+    refetchable: false
+    provenance: api-envelope
+    reason: WikiFetch envelope around the api.php revisions response; upstream serves current revids, not this snapshot
+    upstream: https://lexlep.univie.ac.at/api.php
+    copied: 2026-11-02
+    whole: false
+    trim: envelope our shape; wikitext byte-verbatim from slots.main (copied from the box canonical/ fetch)
+  - path: pages/Word/tati.json
+    refetchable: false
+    provenance: api-envelope
+    reason: WikiFetch envelope around the api.php revisions response; upstream serves current revids, not this snapshot
+    upstream: https://lexlep.univie.ac.at/api.php
+    copied: 2026-11-02
+    whole: false
+    trim: envelope our shape; wikitext byte-verbatim from slots.main (copied from the box canonical/ fetch)
+  - path: pages/Word/tekialui.json
+    refetchable: false
+    provenance: api-envelope
+    reason: WikiFetch envelope around the api.php revisions response; upstream serves current revids, not this snapshot
+    upstream: https://lexlep.univie.ac.at/api.php
+    copied: 2026-11-02
+    whole: false
+    trim: envelope our shape; wikitext byte-verbatim from slots.main (copied from the box canonical/ fetch)
