@@ -681,3 +681,13 @@ sources:
   extrabiblical:             # census 2026-10-22: 13 books, one document each; the
     fields:                   # BOOKS-table name verbatim (Arad, Mesa, Pirqe, …) — the
       book: book              # same key work_eras.yml and kind_map.yml fold over
+  ppchy:                      # census 2026-11-02: 63 texts, the sources page's record on ALL —
+    fields: #                   dialect = the classification head (East Yiddish 49 · West
+      dialect: dialect        # Yiddish 12 · East and West Yiddish 1 (the court testimony) ·
+      #                         "Probably West Yiddish (Erika Timm, pers. comm.)" 1) — the
+      #                         seam a Yiddish lect rule reads once the registry mints yi;
+      dialect_localization: region  # the localization after the comma, verbatim (Cracow 7 ·
+      #                         Regensburg 2 · Volina 2 · Moravian · Bohemian · Polish ·
+      #                         Lithuanian · Prague · Lublin · Lvov · Vilna · Holland · Northern
+      #                         Germany · "halb-deytshish"; 22 texts — 17 of them places)
+      genre: genre            # Prose 44 · Verse 12 · Vernacular 4 · Letter 3 (kind_map folds)

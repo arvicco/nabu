@@ -1517,6 +1517,27 @@ sources:
     places: {posture: unplaced}
     script: {posture: implied, note: "Han script implied by lzh; the CJK compatibility
         ideographs fold to their unified forms at NFC"}
+  ppchy:   # P152
+    # kind machine-postured — the ppchy fold in kind_map.yml over the sources
+    # page's Genre (Letter/Verse/Prose; Vernacular reviewed as a register label).
+    lect: {posture: pending, note: "candidate: a yi (Yiddish) anchor in nabu-lects — NOTHING
+        Yiddish exists in the registry (no yi/yid node, no codemap alias) — parent gmw, with
+        the corpus's own West/East division as dialect varieties (the facet value
+        dialect = West Yiddish 12 · East Yiddish 49 · East and West Yiddish 1 · Probably West
+        Yiddish 1) and Old/Middle/Modern stages if the mint's research supports banding
+        (Weinreich's periodization); the dialect facet rule follows the mint"}
+    dating: {posture: dated, note: "all 63 texts: the sources page's Date — a year, Approx. YYYY
+        (the year, qualifier raw), Between A and B, 19xx (the century), the court testimony's
+        c1413–1686 range (its items carry their own c-years in passage annotations); a file
+        without a record falls back to its own name's year (:structured)"}
+    places: {posture: named, note: "17 of 63: the dialect localization when it names a town or
+        region (Cracow 7 · Regensburg 2 · Volina 2 · Prague · Lublin · Lvov · Vilna · Holland ·
+        Northern Germany) — a dialect localization standing in for the place of writing/print;
+        the adjectival areas (Moravian, Bohemian, Polish, Lithuanian) ride the region facet only,
+        declared"}
+    script: {posture: qualified, note: "ROMANIZED: upstream transliterates the Hebrew-script
+        originals \"more or less according to the YIVO system\" (Hebrew words without
+        diacritics); every passage is Latin-script yi, never a Hebrew-script witness"}
   elektire:   # P117-2
     # kind machine-postured since 2026-10-18 — the genre fold in
     # kind_map.yml (the portal's 23 knjizevna_vrsta term slugs onto

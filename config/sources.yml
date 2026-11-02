@@ -4728,6 +4728,34 @@ prague-bible-1488:   # P116-1
   # semi-diplomatic; document = page, passage = TextLine (page-xml family),
   # abbreviation expansions as annotations.
 
+ppchy:   # P152, 02-sources row 317
+  adapter: Nabu::Adapters::Ppchy
+  adopted: "2026-11-02"
+  axes: [germanic]
+  wired: false   # first sync is the gate's: bin/nabu enable ppchy, then
+                 # bin/nabu sync ppchy (a sparse git clone ≈ 5 MB of data/ +
+                 # the sources page; parse ≈ 2 s). EXPECT 63 docs / 17,861
+                 # passages, 0 errored, 1 skipped by rule (upstream's
+                 # data/.DS_Store) — census of main @404082bf 2026-11-02;
+                 # upstream corrects annotation weekly, so a later head may
+                 # move the passage count by a handful. Eyeball
+                 # nabu show urn:nabu:ppchy:1478w-letter-regensburg:156.3
+                 # (the oldest dated Yiddish letter, Regensburg 1478),
+                 # urn:nabu:ppchy:1xxxx-court-testimony:1_c1413_w.3 (item
+                 # date/dialect annotations) and 5 random, then flip.
+  # PPCHY — the Penn Parsed Corpus of Historical Yiddish (Beatrice
+  # Santorini 2021, v1.0; github.com/beatrice57/penn-parsed-corpus-of-
+  # historical-yiddish): ≈206K words of Yiddish 1478–1959, romanized
+  # (YIVO-style) and hand-parsed in the Penn historical-corpora scheme.
+  # penn-psd family, :ppche profile (no fused lemma; @-split words; Hebrew
+  # ^glosses; ID-less CODE marker blocks). Sparse GitFetch over data/ +
+  # doc/sources/ + LICENSE.rst + README.rst; the page-image PDFs, the
+  # annotation manual and other/ studies are rejected grains. Per-text
+  # Date/Dialect/Genre mined from doc/sources/yiddish-sources-contents.html.
+  # LICENSE.rst: CC BY-NC-SA 4.0 (verified 2026-11-02) → nc. Living
+  # repository (weekly annotation corrections) → manual.
+  sync_policy: manual
+
 prakrit-texts:   # P118-3
   adapter: Nabu::Adapters::PrakritTexts
   adopted: "2026-10-11"

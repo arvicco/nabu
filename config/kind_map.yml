@@ -878,6 +878,22 @@ sources:
     #   詩鈔, 詩選, 詩詞集; 甌北集 and 渼陂集 are verse throughout, the latter
     #   opening with one 賦). The prefaces and the ci of the 詩詞集 ride inside
     #   their collections; the Masters prose texts are skipped by rule
+  ppchy:                     # census 2026-11-02: 63 texts, the sources page's Genre on ALL
+    metadata: genre          # (Prose 44 · Verse 12 · Vernacular 4 · Letter 3; the one
+    #                          "Prose (preface), verse (main text)" record resolves per file
+    #                          at parse). Upstream's label is a FORM, not a genre:
+    map:
+      "Letter": letter                   # 3 — the Regensburg 1478 letter, the 1588 Cracow and
+      #   1619 Prague letter collections
+      "Verse": literary/poetry           # 12 — Bovo-bukh, the historical songs and laments
+      #   (1648 kine, 1666 messiah …), the Purim and Poznań verse
+      "Prose": literary                  # 44 — declared COARSE: the form spans prefaces,
+      #   Bible and midrash renderings, muser, chronicles, memoirs (Glikl) and the 20th-c.
+      #   scholarly prose and grammars; the bare literary head says no more than "prose"
+    deliberate:
+      "Vernacular": "a register label (speech-near Yiddish), not a genre — the court
+        testimony, the 1798 Amsterdam diskurs, Grine felder (a play) and Royte
+        pomerantsen (folk jokes); 4 texts, reviewed"
   aozora:           # NDC codes ("NDC 913", children's "NDC K913", multi "NDC 913 914")
     metadata: ndc
     regex_map:
