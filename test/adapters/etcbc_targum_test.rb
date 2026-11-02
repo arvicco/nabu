@@ -33,11 +33,11 @@ module Adapters
 
     # -- registry / manifest --------------------------------------------------
 
-    def test_registry_resolves_etcbc_targum_unwired_until_first_real_sync
+    def test_registry_resolves_etcbc_targum_wired_on_its_first_sync_evidence
       registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources.yml", __dir__))
       entry = registry["etcbc-targum"]
       refute_nil entry, "etcbc-targum must be registered in config/sources.yml"
-      refute entry.wired, "wired: false until the first real sync is verified"
+      assert entry.wired, "wired on the first-sync evidence (landed exactly on census, 2026-11-02)"
       assert_equal "manual", entry.sync_policy
       assert_equal "etcbc-targum", entry.adapter_class.manifest.id
     end
