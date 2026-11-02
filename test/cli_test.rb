@@ -918,9 +918,15 @@ class CLITest < Minitest::Test
   # card — a legacy code whose bare ISO assignment names a DIFFERENT
   # language (onw: Old Nubian to ISO, Old Norwegian in the one menota
   # file carrying it) must never stand unglossed on a count surface.
+  # The shipped menota row retired 2026-11-02 (the adapter corrects the
+  # raw code at parse), so the case is staged in the test's own copy of
+  # the overrides file — the gloss is the feature under test.
   def test_language_card_glosses_a_per_source_override_reading
     with_lect_ladder_corpus do |config, db|
       db.disconnect
+      File.open(config.lect_overrides_path, "a") do |file|
+        file.puts("  menota:\n    onw: { lect: \"no:old\", tier: certain }")
+      end
       with_config(config) do
         out, _err, status = run_cli(%w[language onw])
         assert_nil status, "an override-glossed code is never an unknown-code miss"

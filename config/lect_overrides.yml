@@ -138,18 +138,13 @@ sources:
   # definitionally Aranese (the card's own description).
   aranese:
     oci: { lect: "oc/aranes", tier: certain }
-  # Owner ruling 2026-08-24: Menota's onw is the Handbook's own
-  # DEPRECATED legacy code for Old Norwegian (ch. 14 prescribes nor +
-  # dating instead); the one file carrying it glosses itself "Old
-  # Norwegian", doc dated 1260-70 — inside no:old's band. NEVER a
-  # codemap row: ISO 639-3 assigns onw to Old Nubian; this is
-  # per-collection knowledge by definition. Since 2026-11-02 the menota
-  # adapter also corrects the RAW code at parse (onw → nor, upstream's
-  # code kept in metadata language_raw), so raw per-language rollups stop
-  # counting the codex as Old Nubian; this row stays as the routing for
-  # any catalog state parsed before that fix.
-  menota:
-    onw: { lect: "no:old", tier: certain }
+  # menota: the onw → no:old row (owner ruling 2026-08-24 — Menota's
+  # deprecated legacy code for Old Norwegian, ISO's Old Nubian) RETIRED
+  # 2026-11-02: the adapter corrects the RAW code at parse (onw → nor,
+  # upstream's code kept in metadata language_raw) and the live catalog's
+  # menota holdings carry no onw after the P153 re-parse (dan 2 · isl 53 ·
+  # non 1 · nor 31 · swe 4), so the routing had nothing left to route.
+  # The menota-dan rule still machine-postures the source.
   # P110 (the P108 add-then-retire completed; jpn:emj minted in the
   # p108-japonic-stages nabu-lects release, in canonical since P108's
   # sister sync): 校異源氏物語 IS the Heian classical stage — Genji,

@@ -101,6 +101,14 @@ class LectsDriftTest < Minitest::Test
     refute_nil lects.lect("ro:old~cyrl")
   end
 
+  # The menota onw → no:old routing retired 2026-11-02: the adapter
+  # corrects the raw code at parse (onw → nor, language_raw keeps
+  # upstream's), and the live catalog's menota holdings carry no onw after
+  # the P153 re-parse. A source-scoped onw now means what ISO says.
+  def test_menota_no_longer_reroutes_onw
+    assert_equal "onw", lects.resolve("onw", source: "menota")
+  end
+
   private
 
   def seed_documents
