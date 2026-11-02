@@ -503,6 +503,7 @@ language_notes(id, lang_code, kind[name|family|context|…], body, source,
 **The shipped model-driven lanes (P84-1, P93-4).** Two local-model lanes landed after this section was first designed, and both settled the bridge question the same way: ONE Python subprocess per campaign inside an owner-bootstrapped venv (`rake tools:stanza[<lang>]` / `rake tools:embed`), spoken to over a line protocol through `Shell.duplex` — no HTTP sidecar, no per-call spawning, Ruby stays the orchestrator, and the suite drives a fake worker over the identical protocol.
 
 - **Silver lemmatization** (`nabu lemma-enrich`, P84-1; [lemma-enrichment.md](lemma-enrichment.md)): a Stanza tagger fills the passages no gold annotation covers, wave 1 Latin only. Its output is an ACQUISITION — JSONL shards on the `local-lemmas` shelf through `Nabu::LemmaShelf` (§16) — projected into `passage_lemmas` as tier `silver` only on request (`--index`/`--index-only`), never by a rebuild.
+- **Silver scansion** (`nabu scan-meter`, P152; §16 shelf eight): a rule-based syllabifier + quantitative scanner (`Nabu::Scansion`, no model, no lexicon) for Greek and Latin dactylic verse — hexameter and elegiac pentameter only — over the lines no gold meter covers. Its verdicts are HEAVY-derived under the cost law — JSONL shards on the `local-meter` shelf through `Nabu::MeterShelf` — and reach the meter layer (`enrichments`, kind `meter`, model `nabu-scan`, payload grade `silver`) only through the owner-armed projection, which then replays in every builder pass. Validated against the held pedecerto/hypotactic gold (§16).
 - **Semantic embeddings** (`nabu embed`, P93-4; [embed.md](embed.md)): `multilingual-e5-base` run locally over the `embed_index: true` literary core into `db/vectors.sqlite3` — the expensive-derived store whose lifecycle §5 describes (keyed `(model, urn)` + text sha, rebuild-proof, delta-only). Same-language retrieval only; the gloss-vector half of the original design was not built.
 
 **Still design-stage — not yet built** (no `nabu enrich`, no `EnrichmentRunner`; paid model output, when it lands, is an ACQUISITION under the derivability law — a local shelf through a sanctioned gateway, §5's Phase-8 note):
@@ -2271,7 +2272,9 @@ driven by `nabu note`; for the local-lemmas shelf it is
 `Nabu::LemmaShelf` (P84-1), driven by `nabu lemma-enrich`; for the
 local-dates shelf it is `Nabu::DateShelf` (P122-1), driven by `nabu
 silver-dates --import`; for the local-model-output shelf it is
-`Nabu::ModelShelf`, driven only through `Nabu::ModelCall`.
+`Nabu::ModelShelf`, driven only through `Nabu::ModelCall`; for the
+local-meter shelf it is `Nabu::MeterShelf` (P152), driven by `nabu
+scan-meter --run`.
 Everything else stays read-only on the shelves.
 
 **Shelf one: `local/shelves/local-language/`** — one Markdown + YAML
@@ -2550,6 +2553,100 @@ backend (and any gem or HTTP decision it carries) is the first
 producer's own change. Like local-dates, the shelf is not a registered
 `kind: shelf` source; a lane's derived product (a projection, an index)
 is a separate owner-armed step over it, the silver-dates mold.
+
+**Shelf eight: `local/shelves/local-meter/` (P152)** — the silver-lemma
+mold at PASSAGE grain for metre: the scansion lane's machine verdicts on
+Greek and Latin dactylic verse. `Nabu::Scansion` syllabifies a line and
+assigns each syllable only the quantity the text licenses — position (x z
+ζ ξ ψ double; Latin intervocalic consonantal i double), diphthongs, the
+Greek long/short letters, the marks that fix a dichronon (circumflex, iota
+subscript, macron/breve) and the accent laws (antepenult acute or penult
+circumflex ⇒ short final; acute on a long penult ⇒ long final), Latin
+vocalis ante vocalem (minus proper names and closed exception lists),
+elision (Latin applied; Greek already written); muta cum liquida and epic
+correption are anceps, and so is every open syllable the rules cannot
+know. A line SCANS only when exactly one of the 32 hexameter / 4
+pentameter templates fits (the pentameter's central diaeresis is hard);
+a tie goes first to the hexameter LAWS (fifth-foot dactyl, a main
+caesura), then — Latin only — to the textbook final-syllable DEFAULTS
+(-o -i -u -as -es -os long, -e -us -t -r short), and the record names
+which (`basis` unique / laws / defaults). Anything left — no fit, a tie,
+a foreign script, a passage too long to be a line — is UNSCANNED with its
+reason, never guessed. `nabu scan-meter --run [--lang] [--source]
+[--urn]` (`Nabu::MeterScan`) walks the scope's live lat/grc documents and
+admits a DOCUMENT as verse only when at least half its passages scan (the
+first 50 all failing end it early) — so an accidental hexameter in prose
+never reaches the shelf — and lands through the gateway one record per
+passage (urn, the passage's `content_sha256` at scan time, the verdict,
+scanner + version, generated_at) or one gate record per non-verse
+document, in numbered shards (tmp+validate+rename). Resumable and
+delta-only: a passage whose latest record carries the current scanner
+version and its current sha is done. **Why a shelf (the cost law,
+measured 2026-11-02):** the scanner runs ~13,300 lines/s, but the full
+pass reads the catalog's ~6.8M lat/grc passages across ~284k documents;
+two read-only samples of the campaign's per-document work (400 and 3,000
+random documents, no shelf writes) extrapolate to 23 and 6 minutes — the
+spread is page-cache temperature on a 121 GB catalog. That straddles the
+law's ~15-minute line rather than clearing it, so time alone does not
+decide; the lane is homed as heavy-derived anyway because (a) it is the
+silver mold — machine output whose projection is the OWNER's gate (the
+2026-08-29 silver-lemma ruling), which a rebuild stage could not honor;
+(b) a cold-cache full read of the Greek/Latin corpus is exactly the stage
+the rule "the rebuild pipeline never inherits a new hour-class stage"
+guards against; and (c) homing the scanner outside db/ keeps scanner-rule
+edits out of every derivation digest (`scansion/`, `scansion.rb`,
+`meter_scan.rb` are excluded from the shared core on the mined-layers
+footing; only the projection is builder code). If the owner rules it
+cheap instead, the campaign can become a builder-pass stage unchanged.
+The derived product is CATALOG-side: `Store::SilverMeter` projects the
+latest scanned record per live passage into `enrichments` (kind `meter`,
+model `nabu-scan`; payload `grade: "silver"`, the basis, the scanner
+version and the scanned sha, in each language's gold vocabulary — Latin
+pedecerto codes `H`/`P` + "DSDS" / "DS-|DD-", Greek hypotactic names +
+the word-grouped `-uu --` pattern — so `search --meter` reaches both)
+and SKIPS every passage carrying any gold meter row (never over gold) and
+every record whose sha no longer matches the held text (stale). The
+projection is the owner's gate: `scan-meter --project` arms the shelf
+(`.projection-armed.json`) and projects; from then on the lane replays
+wholesale in every builder pass — full and incremental rebuild,
+builders:refresh — behind the gold producers, and a sync re-projects
+after a gold meter producer moves and drops rows whose text a re-parse
+moved; `--retract` disarms and drops, keeping the shelf. The flag rides
+every surface: `show` prints "(nabu-scan, silver — machine scansion)",
+`nabu_show` adds `grade: "silver"` (gold keeps its three-key shape),
+`search --meter` names the producer "(silver)", and gold outranks silver
+wherever one row is picked. Staleness is visible: the bare `scan-meter`
+census and `nabu health` (`silver_meter_layer`: info when current, soft
+when an older scanner version produced records or a sampled scanned text
+moved, naming the owner-fired re-run) report the shelf's age and drift.
+Like local-dates, the shelf is not a registered `kind: shelf` source; its
+integrity rides the gateway's validate-on-read.
+
+**Validation against the held gold (2026-11-02, `nabu scan-meter
+--validate`, nabu-scan/1).** The scanner was run over every passage the
+held meter gold covers — 148,218 dactylic lines (pedecerto Latin H/P,
+hypotactic Greek), reading the HELD Perseus text, so edition differences
+from the gold's own text count against it — with feet compared line by
+line (hexameter feet 1-5, the pentameter's first hemiepes) and the meter
+the scanner's own finding. The rules were developed on a DECLARED dev
+slice (Aeneid 1, Amores 1, Iliad 1 — 1,778 lines) and never tuned on the
+held-out rest. Held-out, agreement over ALL gold lines (unscanned counts
+as a miss) / coverage / precision over scanned lines: Latin hexameter
+87.7% / 93.4% / 93.9% (102,389 lines); Latin pentameter 90.7% / 95.8% /
+94.7% (16,864); Greek hexameter 94.6% / 95.5% / 99.1% (27,021); Greek
+pentameter 93.4% / 94.0% / 99.4% (166). On the dev slice: Latin
+hexameter 88.0 / 92.3 / 95.4, Latin pentameter 95.8 / 97.7 / 98.1, Greek
+hexameter 95.3 / 95.3 / 100.0 — within two points of held-out except the
+Latin pentameter (Amores 1), which runs five points above it: the dev
+slice flatters the elegiac rules somewhat, and the held-out number is the
+one to quote. Per basis, Latin
+precision is unique 94.2%, laws 94.8%, defaults 91.7% — the defaults tier
+is the weakest and says so on every record. Greek syllable quantities
+agree with hypotactic on 99.9% of 384,234 compared syllables. The misses
+are the documented blind spots: synizesis and Greek proper-name
+quantities (most Greek no-fits), and in Latin the open syllables of
+native words whose natural length only a lexicon could supply (the
+ambiguous residue) plus edition variants.
 
 **What this does not change.** The ledger keeps runs/pins/probes/revisions;
 the links journal keeps batch edges; `nabu language`'s command surface is
