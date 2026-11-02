@@ -664,7 +664,7 @@ are the owner-verified first syncs of 2026-07-22.
 | **Category** | Old Norwegian treebanks and the Poetic Edda; the Old Saxon *Heliand*; the Middle High German reference corpus; the Scandinavian runic corpus |
 | **Languages** | Old Norse (`non`), Old Saxon (`osx`), Middle High German (`gmh`), Proto-Norse (`gmq-pro` — the Wiktionary proto-code convention; ISO has none), and Old Icelandic (`is`, IcePaHC via the `ud` row — live since the owner's same-day `sync ud`: 44,029 passages, 812K gold rows) |
 | **Size** | `menotec`: **7 treebanks / 20,308 sentences** (Poetic Edda / Codex Regius, the Homily Book, King's Mirror, Landslov, Óláfs saga, Pamphilus, Strengleikar) — gold PROIEL-scheme morphology + syntax, served through the INESS session API. `helipad`: **1 document / 3,549 tree blocks** — the *Heliand* (MS C) with gold form-lemma pairs on every token, Penn-bracketing parsed, metre and codicology preserved. `rem`: **406 texts / 355,449 manuscript lines** of gold-annotated MHG (1050–1350) — `gmh` lands as the corpus's **third-largest gold-lemma pool (2.10M rows)** on day one. The 46 first-sync quarantines (all one class: duplicate folio.line refs in two-column codices and entry-wise restarts) were recovered the same day by the P40-r1 citation fix (`5ra.1` column refs + the `:b2` positional disambiguator). `rundata`: **30,643 lane-documents / 30,641 passages** — ~6,800 runic inscriptions in up to five text lanes each (transliteration primary; Old West Norse and runic-Swedish normalisations; English and Swedish translations); zero runic Unicode upstream — the scholarly transliteration IS the text, damage notation stored verbatim |
-| **Licenses** | menotec CC BY-NC-SA → `nc`; helipad CC BY → `attribution`; rem CC BY-SA → `attribution`; rundata ODbL + DbCL → the new `odbl` class (D40-c) |
+| **Licenses** | menotec CC BY-NC-SA → `nc`; helipad CC BY → `attribution`; rem CC BY-SA → `attribution`; rundata ODbL + DbCL → the new `odbl` class (D40-c). Beside it since P153: **`runesdb`** — the Göttingen RuneS project's glyph-level TEI, 613 finds / 1,611 glyph-sequence passages, every rune read stroke by stroke, runica manuscripta included (CC BY-SA 4.0 → `attribution`) |
 
 **Research uses:** the three Germanic branches on one desk — `align` the
 Gothic and West-Saxon gospels beside the *Heliand* tradition, walk
@@ -1079,11 +1079,14 @@ Khotanese manuscripts (2,357 / 14,574; open), `shkz` — the trilingual
 Kaʿba-ye Zartošt inscription, aligned (3 / 153; open), `iedc` — the
 Invisible East documentary corpus (1,316 / 5,493; open),
 `perseus-farsilit` — Hafez's Divan with its aligned English (2 /
-17,637), and `ganjoor` — the classical cone of the Ganjoor Persian
+17,637), `ganjoor` — the classical cone of the Ganjoor Persian
 poetry library, 212 poets from Rudaki to the Qajar divans, one document
 per poem and one passage per couplet, dated by each poet's life
-(adapter ready, first sync pending: 126,165 poems expected;
-attribution, by the site operator's grant).
+(126,165 / 1,453,355; attribution, by the site operator's grant), and
+`wiktionary-fa` — English Wiktionary's Persian lexicon as the
+kaikki.org extract, the library's first New Persian dictionary
+(20,350 entries with etymologies reaching Middle and Old Persian;
+attribution).
 
 **Anatolian and cuneiform.** `hittite-glossed` — glossed Hittite texts
 with German translation (7,099 / 72,507; open), `aclt` — the Annotated
@@ -1158,7 +1161,9 @@ classical Tamil with the per-word gold wordsplit layer (7,830 /
 and `prakrit-texts` — Andrew Ollett's editions, the library's first
 individually-named Prakrit (16 / 16,151 and 22 / 27,124; CC BY-SA) ·
 `siddham` — the Gupta-era inscriptions with regnal years converted
-(427 / 6,334; CC BY-SA) · `shabados` — the Gurmukhī scriptural canon
+(427 / 6,334; CC BY-SA) · `paramara` — the Paramāra dynasty's
+inscriptions from the Siddham network's Zenodo community, VS/Śaka
+years converted and findspots named (114 / 2,373; CC BY) · `shabados` — the Gurmukhī scriptural canon
 at line grain (127 / 141,264; public domain).
 
 **The scan-indexed cones.** `ban-wikisource` — the Balinese lontars,
@@ -1835,3 +1840,15 @@ numbers and its alignment to the received text (CC BY 4.0).
 the Meiji biographical dictionary: 54,558 entries on Japanese persons
 from antiquity to the Meiji era, full entry text, readings and page
 references (CC0).
+
+**`comenius`** — the LINDAT TEI editions of Jan Amos Komenský's
+devotional and consolatory works, twelve texts from the 1978 critical
+edition with the prints' readings and margin notes carried as
+annotations (12 / 1,384; CC BY 4.0).
+
+**`cleasby-vigfusson`** and **`zoega`** — the Old Norse dictionary
+pair: Cleasby–Vigfusson's *An Icelandic-English Dictionary* (1874;
+35,207 entries) and Zoëga's *A Concise Dictionary of Old Icelandic*
+(1910; 29,951 entries), both from Sampo Silvennoinen's JSON editions
+(MIT; the texts public domain) — the Norse shelf's first dictionary
+layer.
