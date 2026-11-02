@@ -201,9 +201,10 @@ module Nabu
       unless facets.empty?
         @shelf_summary += "; entry facets #{facets.map { |name, pattern| "#{name}=#{pattern}" }.join(', ')}"
       end
-      if options[:lang] && !Nabu::Languages.code_variants(options[:lang]).intersect?(shelf_langs)
-        raise Thor::Error, "define: --lang must be a language on the live shelf " \
-                           "(#{shelf_langs.join(', ')})"
+      if options[:lang] && !Nabu::Query::DictionaryLanguage.held?(catalog, options[:lang], shelf_langs)
+        raise Thor::Error, "define: --lang must name a language the shelf can answer " \
+                           "(#{shelf_langs.join(', ')}; spelling variants and entry-level " \
+                           "languages fold)"
       end
 
       fulltext = open_fulltext(config)

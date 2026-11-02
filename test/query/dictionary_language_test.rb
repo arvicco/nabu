@@ -26,5 +26,24 @@ module Query
     def test_code_variants_stays_one_directional_for_passage_filters
       assert_equal %w[cym wel], Nabu::Languages.code_variants("wel").sort
     end
+
+    # The define gate must accept every spelling the filter can answer —
+    # before this, `--lang wel` and `--lang arc` were rejected at
+    # validation while the filter itself would have found their entries.
+    def test_held_accepts_a_spelling_variant_of_a_shelf_language
+      db = Sequel.sqlite
+      db.create_table(:dictionary_entries) { String :annotations_json }
+      assert Nabu::Query::DictionaryLanguage.held?(db, "wel", ["cy"])
+      assert Nabu::Query::DictionaryLanguage.held?(db, "cym", ["cy"])
+      refute Nabu::Query::DictionaryLanguage.held?(db, "arc", ["cy"])
+    end
+
+    def test_held_accepts_an_annotation_level_language
+      db = Sequel.sqlite
+      db.create_table(:dictionary_entries) { String :annotations_json }
+      db[:dictionary_entries].insert(annotations_json: JSON.generate("language" => "arc"))
+      assert Nabu::Query::DictionaryLanguage.held?(db, "arc", ["hbo"])
+      refute Nabu::Query::DictionaryLanguage.held?(db, "syc", ["hbo"])
+    end
   end
 end
