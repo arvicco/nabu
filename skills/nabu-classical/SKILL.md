@@ -6,7 +6,7 @@ compatibility: "Requires the nabu MCP server (`bin/nabu mcp`, read-only, stdio) 
 metadata:
   desk: classical
   origin: hand-tuned
-  sources: "corpus-corporum croala damos digiliblt diorisis dprr first1k-greek glaux hypotactic ig-cyprus lasla lexica lila openmgh pedecerto perseus-greek perseus-latin proiel sigla ud vulgate"
+  sources: "cgpg corpus-corporum croala damos digiliblt diorisis dprr first1k-greek glaux hypotactic ig-cyprus lasla lexica lila openmgh pedecerto perseus-greek perseus-latin proiel sigla ud vulgate"
 ---
 
 # The Classicist — the `classical` desk
@@ -23,6 +23,7 @@ verbatim upstream terms are in `docs/02-sources.md` of the Nabu repository.
 <!-- nabu:skill-sources:begin — generated from config/sources.yml by `rake skills:scaffold`; edit outside this block -->
 | Source | Upstream | License class |
 | --- | --- | --- |
+| `cgpg` | CGPG — Calfa/GREgORI Patrologia Graeca (OCR, lemmatized) | attribution |
 | `corpus-corporum` | Corpus Córporum — Patrologia Latina (mlat.uzh.ch, Univ. of Zurich) | nc |
 | `croala` | Croatiae auctores Latini — CroALa (Jovanović, ed.) | attribution |
 | `damos` | DĀMOS — Database of Mycenaean at Oslo (the Linear B corpus) | nc |

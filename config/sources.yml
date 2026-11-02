@@ -365,6 +365,32 @@ babelstone-ids:
   # FileFetch from babelstone.co.uk; actively maintained, low cadence.
   sync_policy: manual
 
+baley-manuscripts:   # P153, 02-sources row 334
+  adapter: Nabu::Adapters::BaleyManuscripts
+  adopted: "2026-11-02"
+  axes: [sinitic]
+  cjk_index: true   # the CJK bigram substring lane (the okhc/kanripo shelves)
+  wired: true   # first sync 2026-11-02 exactly on census (19 docs / 4,626 passages, 0 errored, 13 rule skips); aisong eyeballed
+                 # bin/nabu sync baley-manuscripts — nine Zenodo zips read by HTTP
+                 # Range (≈ 20 MB of text members of 2 GB; the image crops never
+                 # transferred; ≈ 1–3 min). EXPECT 19 docs / 4,626 passages, 13
+                 # received-text witnesses skipped by rule — census of all nine
+                 # deposits 2026-11-02. Eyeball nabu show
+                 # urn:nabu:baley-manuscripts:jinteng:tsinghua:1.1.1 (the Tsinghua
+                 # Jinteng's opening, slips + Shangshu alignment in annotations) and
+                 # 5 random, probe nabu search 武王既克, then flip.
+  # Julien Baley's (SOAS) excavated-manuscript alignment series (Zenodo,
+  # 2026-09-26 → 11-01): graph-level transcriptions of the Anda, Shanghai
+  # Museum, Tsinghua, Peking University, Guodian, Fuyang, Dingxian and
+  # Jeongbaekdong slips (Odes, Laozi, Analects, Jinteng, Jigong, Cao Mo zhi
+  # zhen, the Anda poems), aligned to received texts and edited readings.
+  # Document = manuscript or edition witness, passage = transcribed line;
+  # received-text witnesses (held via kanripo) skipped by rule. Records +
+  # LICENSE.md: CC BY 4.0 project-authored data (images under separate
+  # permissions, never taken; verified 2026-11-02) → attribution. Zenodo
+  # versions are immutable; a new version is a new record → manual.
+  sync_policy: manual
+
 ban-wikisource:   # P120-2, 02-sources row 262
   adapter: Nabu::Adapters::BanWikisource
   adopted: "2026-10-12"
@@ -434,6 +460,32 @@ bdcamoes:
   # drifts from CC-BY. Part II is a different grant (MS NC-NoReD-ND
   # 2.0) and is deliberately NOT ingested.
   license_watch: https://portulanclarin.net/repository/browse/bdcamoes-corpus-collection-of-portuguese-literary-documents-from-the-digital-library-of-camoes-ip-part-i/52f2b16412c411ea8a1302420a000005407eb504ccc045a4a0582ab53dfd43fd/
+  sync_policy: manual
+
+bdrc-transcriptions:   # P153, 02-sources row 332
+  adapter: Nabu::Adapters::BdrcTranscriptions
+  adopted: "2026-11-02"
+  axes: [tibetan, buddhist]
+  wired: true   # first sync 2026-11-02 exactly on census (1,160 docs / 99,571 passages, 0 errored); VE1ALS00002N eyeballed
+                 # then bin/nabu sync bdrc-transcriptions — a PACED rows-API crawl
+                 # (~1,000 requests of 100 rows, ~0.3 GB of text, NO images;
+                 # the API answers bursts with 429s — the census crawl took ≈75 min,
+                 # the paced fetch ≈1.5–2 h; resumable at
+                 # the page grain; progress every 2,000 rows). EXPECT berkeley 19
+                 # docs / 8,866 passages + palri-parkhang 23 / 11,133 (census
+                 # 2026-11-02) + acip-sungbum 1,118 / 79,572 (census, = the card) = 1,160
+                 # docs / 99,571 passages, 6 card files skipped by rule. Eyeball
+                 # nabu show urn:nabu:bdrc-transcriptions:palri-parkhang:VE1605_MA:16050001
+                 # (the Chos 'byung bstan pa'i nyi ma title page) and 5 random,
+                 # probe nabu search with ཆོས་འབྱུང་བསྟན་པའི་ཉི་མ, then flip.
+  # BDRC's CC0 Tibetan page-aligned transcription releases on Hugging
+  # Face (ACIP Sungbum via the Asian Legacy Library; Palri Parkhang;
+  # UC Berkeley), TEXT columns only through Nabu::HfRowsFetch — the 17.5 GB
+  # of embedded page images are never requested. Document = etext volume
+  # (VE…), passage = page (scan-file stem). Cards: "License: CC0-1.0 …
+  # Attribution requested (not required)" (verified 2026-11-02) → open.
+  # Revision-pinned releases that may still move (the cards carry a DRAFT
+  # marker) → manual.
   sync_policy: manual
 
 betamasaheft-works:   # P46-2, 02-sources row 123
@@ -956,6 +1008,34 @@ ceipom:
   sync_policy: frozen
   lemma_tier: equivalence
 
+cgpg:   # P153, 02-sources row 320
+  adapter: Nabu::Adapters::Cgpg
+  adopted: "2026-11-02"
+  axes: [classical]
+  wired: true   # first sync 2026-11-02 exactly on census (33 docs / 18,701 passages, 0 errored); pg153:p37 eyeballed; FTS συμβασιλεύων green
+                 # bin/nabu sync cgpg (one 103 MB Zenodo GET, sha256-pinned;
+                 # 718 MB unpacked). EXPECT 33 docs / 18,701 passages,
+                 # 0 errored, 0 skipped (census 2026-11-02 through the
+                 # adapter over the whole unpack: 6,779,355 tokens, 6,770,076
+                 # lemmatized; ~70 s parse). Eyeball nabu show
+                 # urn:nabu:cgpg:pg153:p37 (Cantacuzene, "Ὁ τοίνυν βασιλεὺς
+                 # οὐτοσὶ Μιχαὴλ") and 5 random pages; probe nabu search
+                 # "συμβασιλεύων"; then flip.
+  sync_policy: manual
+  # CGPG — Calfa GREgORI Patrologia Graeca (J.-M. Auwers, UCLouvain;
+  # GREgORI; Calfa): the OCR of 33 Migne PG volumes, Greek column only,
+  # with automatic lemma + POS, as Sketch Engine verticals (Zenodo
+  # 19915273, license field cc-by-4.0 → attribution). The middle/late
+  # Byzantine core the library lacked — Photius, Leo VI, Theophanes
+  # Continuatus, Constantine VII, Cedrenus/Skylitzes/Psellus, Theophylact,
+  # Zonaras, Choniates, Gregoras, Palamas, Cantacuzene, Doukas, Glykas —
+  # plus eleven patristic volumes. Document = VOLUME (no work markup
+  # upstream; carving to works is a later packet), passage = PDF page.
+  # Witness overlap, not duplication: PG 67 Socrates/Sozomen and PG 134
+  # Zonaras Annales sit beside held First1K editions of other prints.
+  # Uncorrected OCR (declared per document) + machine lemmas:
+  lemma_tier: silver
+
 chgis:   # P96-1
   adapter: Nabu::Adapters::Chgis
   adopted: "2026-09-04"
@@ -1036,6 +1116,22 @@ cldf-spine:
   # oldn1244; the WOLD donor map therefore keys on languoid NAMES.
   sync_policy: manual
 
+cleasby-vigfusson:   # P153, 02-sources row 322
+  adapter: Nabu::Adapters::CleasbyVigfusson
+  adopted: "2026-11-02"
+  axes: [germanic]
+  wired: true   # first sync 2026-11-02 exactly on census (35,207 entries, 0 errored, 1 rule skip); define abbadis green
+                 # (git clone, ~12 MB). EXPECT 1 dictionary doc → 35,207 non entries,
+                 # 0 errored, 1 skipped by rule (the no-markup twin); eyeball
+                 # nabu define abbadis ("abbess"), then flip.
+  # Cleasby & Vigfusson, An Icelandic-English Dictionary (1874), the
+  # stscoundrel JSON edition (MIT; the text PD by age → attribution, the
+  # house MIT precedent). The first Old Norse dictionary shelf, for the
+  # held West Norse text (menota, menotec, rundata, UD Icelandic).
+  # Language non, declared coarse (the book's object is Old Icelandic).
+  # Family definitions-json; 7 homograph words numbered word:n.
+  sync_policy: manual
+
 clics:
   adapter: Nabu::Adapters::Clics
   adopted: "2026-07-26"
@@ -1091,6 +1187,30 @@ cme:
   # open; credit appreciated-not-insisted, carried on the manifest credit
   # seam anyway. Upstream moves in rare wholesale normalization waves
   # (May 2026): refresh = delete stale canonical files, re-sync.
+  sync_policy: manual
+
+comenius:   # P153, 02-sources row 326
+  adapter: Nabu::Adapters::Comenius
+  adopted: "2026-11-02"
+  axes: [slavic]
+  wired: true   # first sync 2026-11-02 exactly on census (12 docs / 1,384 passages, 0 errored); pres-bozi eyeballed; FTS green
+                 # LINDAT bitstreams (≈2.8 MB total), one per item, each
+                 # into canonical/comenius/<handle suffix>/. EXPECT 12 docs /
+                 # 1,384 passages (cs 1,261 · nl 107 · lat 16), 0 errored,
+                 # 0 skipped — census of the 2026-10-22 deposits, 2026-11-02.
+                 # Eyeball nabu show urn:nabu:comenius:pres-bozi:2 ("Má
+                 # důvěrně laskavá paní,"), urn:nabu:comenius:bazuine:1 and 5
+                 # random; probe nabu search "laskavá paní"; then flip.
+  # Comenius — Komenský's Czech devotional writings 1619–1660 (Truchlivý
+  # I–IV, Listové do nebe, Přemyšlování, Nedobytedlný hrad, Pres boží,
+  # O sirobě, Centrum securitatis, Kšaft) + the Dutch Bazuine des genaden
+  # jaar (1632), TEI-encoded by T. Havelka (Filosofický ústav AV ČR) on
+  # the DJAK 3 critical text (Praha 1978), deposited on LINDAT 2026-10-22
+  # as twelve items. Passage = body p/head; the apparatus (lem/rdg), the
+  # footnote glosses and the marginalia ride annotations; the 1978
+  # editors' back matter is rejected. LICENSE: CC BY 4.0 on every item
+  # (dc.rights verbatim, verified 2026-11-02) → attribution. Frozen
+  # deposits → manual.
   sync_policy: manual
 
 coptic-scriptorium:
@@ -2261,6 +2381,67 @@ eng-web:
   # a live schedule.
   sync_policy: manual
 
+etcbc-syriac:   # P153, 02-sources row 329
+  adapter: Nabu::Adapters::EtcbcSyriac
+  adopted: "2026-11-02"
+  axes: [biblical, syriac]
+  wired: true   # first sync 2026-11-02 exactly on census (31 docs / 18,132 passages, 0 errored); 1 Kings 1.1 eyeballed
+                 # bin/nabu enable etcbc-syriac, then bin/nabu sync etcbc-syriac
+                 # (sparse GitFetch cone tf/0.92 + README.md + LICENSE, 35
+                 # feature files ≈ 32 MB). EXPECT 31 docs / 18,132 passages,
+                 # 0 errored, 0 skipped (census 2026-11-02 at master 0b6ded2b =
+                 # tag v0.92): Genesis 1,533 · Jeremiah 1,366 · Numbers 1,289 ·
+                 # Ezekiel 1,271 · Sirach 1,261 … OrManA/B 16 each. Eyeball
+                 # nabu show urn:nabu:etcbc-syriac:jonah:1.1 (= peshitta jon:1.1
+                 # text) and urn:nabu:etcbc-syriac:deuteronomy:14.16 (a
+                 # discontiguous verse), 5 random verses, probe nabu search
+                 # with a Pseudo-Methodius string, then flip.
+  sync_policy: manual
+  # The ETCBC Syriac Corpus (ETCBC + CACCHT; github.com/ETCBC/syriac, Zenodo
+  # 10.5281/zenodo.23525343 v0.92): morphologically parsed Classical Syriac
+  # — 18 Peshitta books + the EpBar/OrMan A/B pairs, the Syrohexapla Psalms
+  # 1–32, the Psalms of Solomon, the Book of the Laws of the Countries,
+  # Ephrem (Prose Refutation against Mani; Sermon on Nineveh and Jonah),
+  # Pseudo-Methodius, the Apocalypses of Pseudo-Ezra, Daniel and Baruch.
+  # Document = book, passage = verse; syc NFC at the boundary; every
+  # word-grain morphology feature on the tokens. Overlaps `peshitta` on
+  # the Peshitta books (same Leiden text, there without morphology).
+  # LICENSE — class nc DELIBERATELY: README "Attribution-NonCommercial 4.0
+  # International (CC BY-NC 4.0)" + LICENSE (the CC BY-NC 4.0 legal code);
+  # the Zenodo record's license field says cc-by-4.0, which conflicts with
+  # the repository and is NOT followed — the ETCBC directorate stated by
+  # email 2026-10-15 that all ETCBC data is CC BY-NC.
+
+etcbc-targum:   # P153, 02-sources row 328
+  adapter: Nabu::Adapters::EtcbcTargum
+  adopted: "2026-11-02"
+  axes: [biblical, hebrew]
+  wired: true   # first sync 2026-11-02 exactly on census (47 docs / 25,430 passages, 0 errored); Genizah Exod 21.1 eyeballed
+                 # bin/nabu enable etcbc-targum, then bin/nabu sync etcbc-targum
+                 # (sparse GitFetch cone tf/0.1 + README.md + LICENSE.md,
+                 # 46 feature files ≈ 280 MB; the 77 MB definition.tf is in the
+                 # cone but never read). EXPECT 47 docs / 25,430 passages,
+                 # 0 errored, 0 skipped (census 2026-11-02 at main 15f97ab4 =
+                 # tag v1.0.0 for tf/0.1; 25,447 verse records less 17
+                 # omission-dot records named in omitted_verses):
+                 # Onqelos 5,852 · Neofiti full 5,835 · Neofiti base 5,827 ·
+                 # Pseudo-Jonathan 5,823 · FT-V 920 · FT-P 594 · the 39 Genizah
+                 # texts 568 · FT-N 7 · FT-PA 4. Full parse ≈ 95 s.
+                 # Eyeball nabu show urn:nabu:etcbc-targum:neofiti_full:genesis.1.1
+                 # and 5 random verses, probe nabu search with a Neofiti string
+                 # (ממריה דייי), then flip.
+  sync_policy: manual
+  # The ETCBC Targum Corpus (S. P. Swire; github.com/ETCBC/targum, Zenodo
+  # 10.5281/zenodo.23785216 v1.0.0): Pseudo-Jonathan, the Fragment Targums
+  # P/V/N, 39 Cairo Genizah texts, Neofiti 1 under two editorial views
+  # (full text with variants / raw base text) and Onqelos, as Text-Fabric
+  # tf/0.1 with word-level gold lemmas, glosses and morphology. Document =
+  # text node (one witness under one view), passage = verse; text = the
+  # corpus's own line_utf8 verse rendering byte-verbatim (arc, NFC-exempt).
+  # LICENSE: README badge "License: CC BY-NC 4.0", LICENSE.md the CC BY-NC
+  # 4.0 legal code, every feature header "@license=Attribution-NonCommercial
+  # 4.0 International" → class nc.
+
 etcsl:
   adapter: Nabu::Adapters::Etcsl
   adopted: "2026-07-19"
@@ -2376,6 +2557,35 @@ gams-zrcalo:   # 02-sources row 244
   # TEI datastream (509 KB), one document; passage per chapter head/p;
   # the witness reading (sic kept, corrections/notes as annotations).
   # Latin-script transliteration of the Glagolitic, declared.
+
+ganjoor:   # P153, 02-sources row 324
+  adapter: Nabu::Adapters::Ganjoor
+  adopted: "2026-11-02"
+  axes: [iranian]
+  wired: true   # first sync 2026-11-02 exactly on census (126,165 docs / 1,453,355 passages, 0 errored, 14,332 rule skips); hafez:2130 eyeballed, dated+placed
+                 # (unpacks a 344 MB ganjoor.s3db) + the 112 KB poets list.
+                 # EXPECT 126,165 docs / 1,453,355 passages, 0 errored, 14,332
+                 # skipped by rule (5,178 unpublished-poet poems · 9,144 modern
+                 # tail · 10 text-less) — census of release 1405-07-03,
+                 # 2026-11-02. Eyeball nabu show urn:nabu:ganjoor:hafez:2130:1
+                 # (the first ghazal, Arabic opening hemistich),
+                 # urn:nabu:ganjoor:saadi:41334 (Golestan prose + verse),
+                 # urn:nabu:ganjoor:moulavi:2996 (band couplets) and 5 random;
+                 # probe nabu search with a Hafez hemistich; then flip.
+  # Ganjoor (ganjoor.net) — the Persian poetry library, from the desktop
+  # release's one-file SQLite (github.com/ganjoor/desktop v3.1). The
+  # CLASSICAL CONE: published poets who died before 1324 AH (1906 CE) —
+  # 212 poets; the modern tail and the 41 unpublished release poets are
+  # counted rule skips. Document = poem (urn:nabu:ganjoor:<poet>:<poem
+  # id>), passage = couplet (band couplets, lines and prose paragraphs
+  # too). The site's poets list rides beside the database (dates, death
+  # places + coordinates, the publication rule). LICENSE attribution:
+  # permission granted by the site operator by email, 2026-11-02
+  # ("Redistribution of ganjoor contents is permitted and ganjoor data is
+  # free to reuse"); Ganjoor credited as the digitizer. Overlap: the 113
+  # held openiti PDL texts came from Ganjoor (2015); 102 of them belong to
+  # 44 poets inside this cone — separate witnesses, separate urns.
+  sync_policy: manual
 
 glaux:
   adapter: Nabu::Adapters::Glaux
@@ -2546,6 +2756,26 @@ guaman-poma:   # P117-5, 02-sources row 255
   # 2026-10-13): "You are welcome to use the transcribed text for your
   # projects." A second digitisation (jpeg) exists in their Digital
   # Collections (object852735) — images only, recorded as reference.
+
+haga-jinmei:   # P153, 02-sources row 333
+  adapter: Nabu::Adapters::HagaJinmei
+  adopted: "2026-11-02"
+  axes: [japonic]
+  wired: true   # first sync 2026-11-02 exactly on census (54,558 entries, 0 errored)
+                 # bin/nabu sync haga-jinmei (one 2.4 MB Zenodo zip, sha256-pinned;
+                 # parse ≈ 5 s). EXPECT 1 dictionary document / 54,558 jpn
+                 # entries, 8,556 `see` crossrefs, 11 deposit files skipped by
+                 # rule — census of v0.1.0 2026-11-02. Eyeball nabu define 靄崖
+                 # and the multi-person 式佐（岸沢）, then flip.
+  # 芳賀矢一編『日本人名辞典』(大倉書店, 1914) as the NIHU Haga Jinmei
+  # Dictionary Dataset (Zenodo 23804456, v0.1.0): one entry per printed
+  # entry, the heading as headword, the full text as body; reading, full
+  # name and page ride annotations; bare ⇒ entries are see-references by
+  # reading. Deposit LICENSE: CC0 1.0 (NIHU waiver; verified 2026-11-02)
+  # → open. Zenodo versions are immutable → manual (a new version is an
+  # owner re-pin).
+  sync_policy: manual
+
 hdic:
   adapter: Nabu::Adapters::Hdic
   adopted: "2026-07-19"
@@ -2611,6 +2841,33 @@ helipad:
   # sha256-pinned in the adapter — the deposit is versioned-immutable, a
   # new version is an owner re-pin decision → manual.
   sync_policy: manual
+
+hexapla:   # P153, 02-sources row 331
+  adapter: Nabu::Adapters::Hexapla
+  adopted: "2026-11-02"
+  axes: [biblical, hebrew]
+  wired: true   # first sync 2026-11-02 exactly on census (19 docs / 16,302 passages, 0 errored, 2 rule skips); Aquila 2 Sam 1.1 eyeballed
+                 # bin/nabu enable hexapla, then bin/nabu sync hexapla (sparse
+                 # GitFetch cone tf/0.1 + docs/about.md + docs/transcription.md +
+                 # LICENSE, 17 feature files ≈ 8 MB; the raw source/ JSON stays
+                 # out). EXPECT 19 docs / 16,302 passages, 0 errored, 2 skipped
+                 # by rule (the Notes column) — census 2026-11-02 at main
+                 # 02bf17c3. Eyeball nabu show urn:nabu:hexapla:aquila:psalms:45.1
+                 # and urn:nabu:hexapla:secunda:psalms:45.1, 5 random verses,
+                 # probe nabu search with an Aquila string (νικοποιῷ), then flip.
+  sync_policy: manual
+  # The Göttingen Hexapla Database (NAWG, API v3) in Text-Fabric (R. Taylor,
+  # github.com/rdtaylorjr/hexapla tf/0.1): 2 Samuel and the Psalms, column
+  # by column — LXX edition, Field's Ο′, MT, Secunda, Aquila, Symmachus,
+  # Origen's Septuagint, Quinta, Sexta, Theodotion, "the others", Field's
+  # Latin (the Notes column skipped by rule). Document = column × book,
+  # passage = verse in Greek numbering; placeholder-only verses omitted and
+  # named. LICENSE (first-hand): every API response "license": {"label":
+  # "CC BY-NC-SA 4.0"} with the copyright "Die Editio critica maior des
+  # griechischen Psalters. Niedersächsische Akademie der Wissenschaften zu
+  # Göttingen." (checked live on a 2 Samuel passage, so the grant covers
+  # the Hexapla data beyond the Psalter); NAWG imprint: the research data
+  # "werden unter CC BY-NC-SA 4.0 veröffentlicht" → class nc.
 
 hittite-glossed:   # P109-3
   adapter: Nabu::Adapters::HittiteGlossed
@@ -4543,6 +4800,33 @@ papyri-ddbdp:
   siblings: ["-trans-[0-9A-Za-z.-]+"]
   sibling_namespaces: [ddbdp, dclp]
 
+paramara:   # P153, 02-sources row 327
+  adapter: Nabu::Adapters::Paramara
+  adopted: "2026-11-02"
+  axes: [indic, epigraphy]
+  wired: true   # first sync 2026-11-02 exactly on census (114 docs / 2,373 passages, 0 errored, 39 rule skips); pmr203 eyeballed; FTS vyomakeśo green
+                 # Zenodo community listing (7 pages of 25) + 115 text files
+                 # at 1 req/s ≈ 2–3 min. EXPECT 114 docs / 2,373 passages,
+                 # 0 errored, 39 skipped by rule (38 image/PDF/file-less
+                 # records + the IN060027 EpiDoc hybrid) — census of the
+                 # 153-record community 2026-11-02 (114 + 39 = 153). Eyeball
+                 # nabu show urn:nabu:paramara:pmr203:1 ("[saṃ]vat 1351 śāke
+                 # 1[21]6 || svasti śrīkī-"), urn:nabu:paramara:pmr47:s1 and
+                 # 5 random; probe nabu search "vyomakeśo"; then flip.
+  # Paramāra epigraphy — the Siddham network's Zenodo community
+  # `paramara`: the inscriptions of the Paramāras of Mālava and their
+  # neighbours after Trivedi's CII VII, one record per inscription
+  # (PennGlobal PMR###), plain text: a Key: value header (Period,
+  # Location, Dynasty, King, Language, Script, Metres, Gist, reference),
+  # the line-numbered IAST edition, footnotes. Passage = inscription
+  # line. The community grows (24 records in the 2026-09/10 window) —
+  # re-syncs pick up new records; nothing is ever deleted. LICENSE: each
+  # record's license field, cc-by-4.0 on all 114 text records (verified
+  # 2026-11-02) → attribution; a text record under any other license
+  # parses restricted. The siddham sibling (the Gupta-age EpiDoc
+  # deposit) holds none of these.
+  sync_policy: manual
+
 pedecerto:
   adapter: Nabu::Adapters::Pedecerto
   adopted: "2026-07-24"
@@ -5031,6 +5315,33 @@ rundata:
   # artifact URL; a new hash lands BESIDE the old file (never-delete),
   # .rundata-fetch.json points at the current one. Live upstream
   # (artifact Last-Modified 2026-07-12) → re-syncs owner-fired.
+
+runesdb:   # P153, 02-sources row 325
+  adapter: Nabu::Adapters::Runesdb
+  adopted: "2026-11-02"
+  axes: [germanic, epigraphy]
+  wired: true   # first sync 2026-11-02 exactly on census (613 docs / 1,611 passages, 0 errored, 110 rule skips); Aarhus stone 1100 eyeballed; FTS þigsla green
+                 # 9.8 MB zip off Zenodo (runes_tei.zip, record 21788307),
+                 # parse ≈ 2 s. EXPECT 613 docs / 1,611 passages, 0 errored,
+                 # 110 skipped by rule (untransliterated finds) — census of
+                 # the v1.0.0 zip 2026-11-02 (613 + 110 = the zip's 723
+                 # files). Eyeball nabu show urn:nabu:runesdb:629 (Hackness,
+                 # "?rmcd"), urn:nabu:runesdb:1100 (Aarhus stone 1, "ʀ:þigsla:")
+                 # and 5 random; probe nabu search "þigsla"; then flip.
+  # RuneS-DB — the runic inscription database of the Göttingen Academy
+  # project "Runic writing in the Germanic languages" (RuneS), Zenodo
+  # deposit v1.0.0 (2026-08-01): one TEI file per find (Scandinavian,
+  # continental, Anglo-Saxon and Frisian epigraphy + runica manuscripta),
+  # passage = a glyph sequence, text = the glyph transliterations verbatim.
+  # Language gem (no claim in the TEI; the runesdb-siglum lect rule reads
+  # the siglum family). The per-find LIDO records (dates, places,
+  # transcription, translation — runesdb.de/lido/<id>) are NOT fetched;
+  # their harvest is the follow-up. LICENSE: the record's cc-by-sa-4.0 +
+  # every file's availability statement (verified 2026-11-02) →
+  # attribution. Overlap with rundata (the Scandinavian stones) is a
+  # catalog-side crosswalk via the siglum, never a dedupe. Frozen
+  # versioned deposit → manual.
+  sync_policy: manual
 
 sabellic-loans:
   adapter: Nabu::Adapters::SabellicLoans
@@ -6652,6 +6963,36 @@ tshet-uinh:
   # zhongyuan-data's journal note CLOSED P88-R3 (2026-08-29): the
   # zho:oman stage + owner GO built it as the `zhongyuan` source below.
 
+typikon-bible:   # P153, 02-sources row 330
+  adapter: Nabu::Adapters::TypikonBible
+  adopted: "2026-11-02"
+  axes: [biblical, romance]
+  wired: true   # first sync 2026-11-02 exactly on census (79 docs / 36,312 passages, 0 errored); Gen 1.1 Romanian Cyrillic eyeballed
+                 # bin/nabu enable typikon-bible, then bin/nabu sync typikon-bible
+                 # (four FileFetch GETs from typikon.info/dump/2026-09-21/:
+                 # manifest.json, bible-editions, bible-books, the 2.9 MB
+                 # bible-verses-ro-1688). EXPECT 79 docs / 36,312 passages,
+                 # 0 errored, 0 skipped (census 2026-11-02): Psalms 2,556 ·
+                 # Sirach 1,533 · Genesis 1,533 · Jeremiah 1,359 … Obadiah 21.
+                 # Eyeball nabu show urn:nabu:typikon-bible:ro-1688:bytie:1.1 and
+                 # :ioilya:4.6 (canon_ref ioilya.3.6), 5 random verses, probe
+                 # nabu search with a 1688 string (Дм҃нзе́ꙋ), then flip.
+  sync_policy: manual
+  # The Bible layer of the typikon.info "Уставные чтения" dump (Zenodo
+  # 10.5281/zenodo.22883965), EDITION-GATED: admitted is ro-1688, the 1688
+  # Bucharest Bible in Romanian Cyrillic, typeset by the project from scans
+  # of the print. Document = edition × book, passage = verse in the
+  # edition's own numbering, the Slavonic canonical address (canonRef) on
+  # every verse. LICENSE: manifest.json bible layer CC-BY-4.0; rationale
+  # verbatim "Румынскую кириллицу 1688 и китайский Новый Завет 1910
+  # набирали мы — они под лицензией слоя" → attribution. Held for a ruling
+  # (not fetched): cs-eliz (Elizabeth Bible 1751, Church Cyrillic) and
+  # ka-mcxeta (Mtskheta Old Georgian Bible) — the dump marks both PD while
+  # stating the digitizers declared no terms, and its own layer rationale
+  # says the Church Slavonic digitization stays out of the dump. The
+  # numbering concordance (342,568 rows, CC BY 4.0) is an instrument, not
+  # fetched; it is the candidate alignment-remap feed.
+
 ucd:
   adapter: Nabu::Adapters::Ucd
   adopted: "2026-08-28"
@@ -7090,6 +7431,25 @@ wiktionary-dv:   # 02-sources row 288
   # lang_code dv), CC BY-SA + GFDL → attribution, FileFetch.
   sync_policy: manual
 
+wiktionary-fa:   # P153, 02-sources row 321
+  adapter: Nabu::Adapters::WiktionaryFa
+  adopted: "2026-11-02"
+  axes: [iranian]
+  wired: true   # first sync 2026-11-02 exactly on census (20,350 entries, 0 errored); define دل → heart green
+                 # (one ~96 MB JSONL GET). EXPECT 1 dictionary doc → 20,350 entries /
+                 # 47,431 reflex rows, 0 non-NFC (the 2026-10-30 extract's census);
+                 # eyeball nabu define دل ("heart", ← Middle Persian 𐭣𐭩𐭫), then flip.
+  # The kaikki Persian extraction (20,350 records / "17651 distinct
+  # words" / 28,272 senses, census 2026-11-02): the library's first New
+  # Persian dictionary — an etymon layer through Middle Persian (746 pal)
+  # and Old Persian (276 peo) to Proto-Iranian (935 ira-pro), the Arabic
+  # donor lane (2,532 ar), descendants into Ottoman, Hindustani, Armenian.
+  # Language fas (→ fa through the held codemap alias). The
+  # wiktionary-akk mold on the shared WiktionaryKaikki base: per-language
+  # JSONL (deprecated upstream — fallback = filter the full extract by
+  # lang_code fa), CC BY-SA + GFDL → attribution, FileFetch.
+  sync_policy: manual
+
 wiktionary-hit:
   adapter: Nabu::Adapters::WiktionaryHit
   adopted: "2026-09-13"
@@ -7368,4 +7728,18 @@ zhongyuan:   # P88-R3, 02-sources row 186; the row-99 un-park (zho:oman + owner 
   # Dictionary slug `zhongyuan`. EXPECTED FIRST SYNC (~350 KB clone):
   # 5,877 zho entries. The README says the series may grow ("now
   # including only Zhongyuan Yinyun itself") — re-syncs owner-fired.
+  sync_policy: manual
+
+zoega:   # P153, 02-sources row 323
+  adapter: Nabu::Adapters::Zoega
+  adopted: "2026-11-02"
+  axes: [germanic]
+  wired: true   # first sync 2026-11-02 exactly on census (29,951 entries, 0 errored, 1 rule skip); define abbadis green
+                 # ~5 MB). EXPECT 1 dictionary doc → 29,951 non entries, 0 errored,
+                 # 1 skipped by rule (the no-markup twin); eyeball nabu define abbadis
+                 # ("abbess", beside the cleasby-vigfusson entry), then flip.
+  # Zoëga, A Concise Dictionary of Old Icelandic (1910), the stscoundrel
+  # JSON edition (MIT; the text PD → attribution). Beside
+  # cleasby-vigfusson, deliberately unmerged (two witnesses, one fold).
+  # Language non, declared coarse. Family definitions-json.
   sync_policy: manual

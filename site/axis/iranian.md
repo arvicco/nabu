@@ -22,20 +22,22 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 ## The shelves
 
-A source wears every desk it serves — these six answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
+A source wears every desk it serves — these eight answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
 | Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 2 November 2026)</span> |
 |---|---|---|---|---|
 | `cdli` | tablet catalog | attribution | wired · manual | 353,156 docs / 2,186,961 passages |
+| `ganjoor` | texts | attribution | wired · manual | 126,165 docs / 1,453,355 passages |
 | `iedc` | texts | open | wired · manual | 1,316 docs / 5,493 passages |
 | `oracc` | tablets | open | wired · manual | 118,367 docs / 1,800,218 passages / 211,040 entries |
 | `perseus-farsilit` | texts | attribution | wired · manual | 2 docs / 17,637 passages |
 | `shkz` | texts | open | wired · manual | 3 docs / 153 passages |
 | `skjaervo-khotanese` | texts | open | wired · manual | 2,357 docs / 14,574 passages |
+| `wiktionary-fa` | dictionary | attribution | wired · manual | 20,350 entries |
 
 Private research materials under personal grants are not listed.
 
-**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 2 November 2026)</span>: `sux` 264,506 · `akk` 153,945 · `und` 74,258 · `qpn` 70,329 · `akk-x-stdbab` 24,517 · `akk-x-neoass` 18,750 · `eng` 15,418 · `hit` 14,678 · `qpc` 8,931 · `xeb` 6,844 … and 43 more (`nabu axis iranian` lists all).
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 2 November 2026)</span>: `sux` 264,506 · `akk` 153,945 · `fas` 146,364 · `und` 74,258 · `qpn` 70,329 · `akk-x-stdbab` 24,517 · `akk-x-neoass` 18,750 · `eng` 15,418 · `hit` 14,678 · `qpc` 8,931 … and 43 more (`nabu axis iranian` lists all).
 
 ## The desk's instruments
 

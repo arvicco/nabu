@@ -13,13 +13,14 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 ## The shelves
 
-A source wears every desk it serves — these 36 answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
+A source wears every desk it serves — these 37 answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
 | Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 2 November 2026)</span> |
 |---|---|---|---|---|
 | `archiv-slav-phil` | texts | open | wired · manual | 33 docs / 22,348 passages |
 | `bg-wikisource` | texts | attribution | wired · manual | 26 docs / 220 passages |
 | `ccmh` | texts | attribution | wired · manual | 19 docs / 28,786 passages |
+| `comenius` | texts | attribution | wired · manual | 12 docs / 1,384 passages |
 | `cs-wikisource` | texts | attribution | wired · manual | 330 docs / 4,748 passages |
 | `damaskini` | texts | attribution | wired · manual | 46 docs / 12,072 passages |
 | `elektire` | texts | open | wired · manual | 205 docs / 375,300 passages |
@@ -54,7 +55,7 @@ A source wears every desk it serves — these 36 answer this desk. Holdings are 
 | `vuk-danicic` | texts | open | wired · manual | 66 docs / 31,102 passages |
 | `wiktionary-cu` | dictionary | attribution | wired · manual | 4,615 entries |
 
-**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 2 November 2026)</span>: `sl` 142,013 · `be` 35,159 · `pol` 6,942 · `chu` 4,760 · `srp` 4,636 · `pl` 2,091 · `hrv` 1,730 · `orv` 1,026 · `mkd` 836 · `ces` 331 … and 32 more (`nabu axis slavic` lists all).
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 2 November 2026)</span>: `sl` 142,013 · `be` 35,159 · `pol` 6,942 · `chu` 4,760 · `srp` 4,636 · `pl` 2,091 · `hrv` 1,730 · `orv` 1,026 · `mkd` 836 · `ces` 331 … and 33 more (`nabu axis slavic` lists all).
 
 ## The desk's instruments
 

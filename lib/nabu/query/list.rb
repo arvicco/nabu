@@ -5,6 +5,7 @@ require "json"
 require_relative "../normalize"
 require_relative "../timeline"
 require_relative "catalog_join"
+require_relative "dictionary_language"
 
 module Nabu
   module Query
@@ -251,7 +252,7 @@ module Nabu
                   .join(:dictionaries, id: Sequel[:dictionary_entries][:dictionary_id])
                   .where(Sequel[:dictionaries][:source_id] => source.fetch(:id),
                          Sequel[:dictionary_entries][:withdrawn] => false)
-        dataset = dataset.where(Sequel[:dictionaries][:language] => Nabu::Languages.code_variants(lang)) if lang
+        dataset = dataset.where(DictionaryLanguage.filter(@catalog, lang)) if lang
         dataset = dataset.where(prefix_expr(prefix)) if prefix
         dataset = dataset.order(Sequel[:dictionaries][:slug], Sequel[:dictionary_entries][:entry_id])
         page(dataset, limit) { |row| build_entry_row(row) }

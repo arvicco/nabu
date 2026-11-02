@@ -84,6 +84,110 @@ module Nabu
         argv
       end
 
+      # After the push, both tags must inspect as REAL multi-arch indexes —
+      # a single-platform manifest is exactly the failure that shipped an
+      # arm64-only public image. Returns the verified image refs.
+      def self.verify_pushed!(root:, inspector: nil, log: $stderr)
+        inspector ||= ->(image) { Nabu::Shell.run("docker", "buildx", "imagetools", "inspect", "--raw", image) }
+        [version(root: root), "latest"].map do |tag|
+          image = "#{IMAGE}:#{tag}"
+          archs = verify_index!(inspector.call(image), image: image)
+          log.puts "verified #{image}: #{archs.join('+')}"
+          image
+        end
+      end
+
+      # The raw manifest must be an index covering every requested platform
+      # (attestation manifests report architecture "unknown" and are ignored).
+      def self.verify_index!(raw_manifest, image:, platforms: PLATFORMS)
+        data = JSON.parse(raw_manifest)
+        archs = Array(data["manifests"]).filter_map { |m| m.dig("platform", "architecture") }.uniq - ["unknown"]
+        missing = platforms.map { |p| p.split("/").last } - archs
+        return archs if missing.empty?
+
+        shape = archs.empty? ? "a single-platform manifest, not an index" : "an index of #{archs.join('+')} only"
+        raise SmokeFailed, "#{image} pushed WITHOUT #{missing.join('+')} (#{shape}) — " \
+                           "the builder did not emit multi-arch; re-run rake demo:publish"
+      rescue JSON::ParserError => e
+        raise SmokeFailed, "#{image}: manifest inspect returned non-JSON (#{e.message[0, 80]})"
+      end
+
+      # The preflight that makes `rake demo:publish` the owner's WHOLE act:
+      # ghcr auth and a multi-platform builder are checked (and supplied)
+      # inside the task, never handed over as setup incantations.
+      module Preflight
+        BUILDER_NAME = "nabu-demo"
+
+        # ghcr.io credentials, read the way docker resolves them: an auths
+        # entry (present even when a credsStore holds the secret) or a
+        # per-registry credential helper.
+        def self.authed?(config: default_config)
+          return false unless config
+
+          data = JSON.parse(config)
+          return true if data.fetch("auths", {}).keys.any? { |key| key.include?("ghcr.io") }
+
+          data.fetch("credHelpers", {}).key?("ghcr.io")
+        rescue JSON::ParserError
+          false
+        end
+
+        def self.default_config
+          path = File.join(ENV.fetch("DOCKER_CONFIG", File.join(Dir.home, ".docker")), "config.json")
+          File.file?(path) ? File.read(path) : nil
+        end
+
+        # Reads `docker buildx ls`: an existing BUILDER_NAME wins; a current
+        # docker-container builder needs nothing (nil); the classic docker
+        # driver alone (what produced the arm64-only image) asks for :create.
+        def self.builder_choice(ls_output)
+          builders = ls_output.lines.drop(1).filter_map do |line|
+            next if line.start_with?(" ") || line.lstrip.start_with?("\\_")
+
+            name, driver = line.split(/\s+/).first(2)
+            next unless name
+
+            { name: name.delete_suffix("*"), driver: driver.to_s, current: name.end_with?("*") }
+          end
+          return BUILDER_NAME if builders.any? { |row| row[:name] == BUILDER_NAME }
+          return nil if builders.find { |row| row[:current] }&.fetch(:driver) == "docker-container"
+
+          :create
+        end
+
+        # Ensure auth + a capable builder; returns the --builder name to pass
+        # (nil when the current builder already suffices).
+        def self.ensure!(config: default_config, log: $stderr,
+                         login: method(:default_login), buildx_ls: method(:default_ls), create: method(:default_create))
+          unless authed?(config: config)
+            log.puts "ghcr.io credentials not found — running `docker login ghcr.io` " \
+                     "(username: your GitHub login; password: a token with write:packages)"
+            login.call
+          end
+          case (choice = builder_choice(buildx_ls.call))
+          when :create
+            log.puts "no multi-platform buildx builder — creating docker-container builder #{BUILDER_NAME}"
+            create.call(BUILDER_NAME)
+            BUILDER_NAME
+          else
+            choice
+          end
+        end
+
+        def self.default_login
+          Kernel.system("docker", "login", "ghcr.io") || raise(Refused, "docker login ghcr.io failed")
+        end
+        private_class_method :default_login
+
+        def self.default_ls = Nabu::Shell.run("docker", "buildx", "ls")
+        private_class_method :default_ls
+
+        def self.default_create(name)
+          Nabu::Shell.run("docker", "buildx", "create", "--name", name, "--driver", "docker-container", "--bootstrap")
+        end
+        private_class_method :default_create
+      end
+
       # The MCP stdio smoke against a docker image.
       module Smoke
         PROTOCOL_VERSION = "2025-11-25" # Nabu::Mcp::Server::PROTOCOL_VERSION (not loaded here)

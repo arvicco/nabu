@@ -20,7 +20,7 @@ the Honkoku citizen transcriptions) fourth, Latin (`lat` 3.60M) fifth,
 Ancient Greek (`grc` 3.19M) sixth, and Sumerian (`sux` 3.04M) seventh.
 Below them the seven-figure floor has widened: Korean-tradition
 holdings (`ko` 1.48M via OKHC), Classical Tibetan (`xct` 1.45M — the
-Derge canon), Middle English (`enm` 1.36M), Persian (`fas` 1.35M),
+Derge canon), Middle English (`enm` 1.36M), Persian (`fas` 2.80M),
 modern Mandarin (`cmn` 1.30M — the modern side of the classical–modern
 parallel corpus, now past the million line), Tamil (`tam` 1.21M),
 German (`de` 1.18M — the DTA print era whole), and Akkadian (`akk`
@@ -185,7 +185,7 @@ module if used), the old `-pro`-suffix string test, the old bracket names.
 | `xeb` | Eblaite | The eBL/Ebla East-Semitic lexical material from the cuneiform fragment shelves (0.05M passages). |
 | `arc` | Aramaic / Targumic | The Sefaria Targum shelf, DSS Aramaic, and cuneiform-shelf traces — now 0.31M passages, gold-lemmatized where the Targums carry it. |
 | `ara` | Arabic | **The library's largest language (33,294,039 passages, loaded 2026-07-22)** — the OpenITI corpus: hadith, history and biography, law, falsafa, the dīwāns; unannotated (no gold lemmas — full-text and the AH timeline are the instruments), cross-searchable with Persian under the Arabic-script fold; beside it DiCCAS (P95), disaster accounts excerpted from ten classical sources with catastrophe terminology tagged. |
-| `fas` | Persian | The Persian shelf of OpenITI (1.35M passages — Ḥāfiẓ, Niẓāmī, ʿAṭṭār, Ibn Sīnā) plus, since P95, Hafez's Divan as a proper CTS edition with its aligned English (perseus-farsilit, 17,637 seg-grain passages); folded to the same Arabic-script skeleton as ara (ی/ي, ک/ك), either keyboard finds either language. |
+| `fas` | Persian | 2.80M passages: the Ganjoor classical poetry library (212 poets, 1.45M couplets — Rudaki to the Qajar divans, by the digitizer's grant) beside the Persian shelf of OpenITI (1.35M passages — Ḥāfiẓ, Niẓāmī, ʿAṭṭār, Ibn Sīnā) and, since P95, Hafez's Divan as a proper CTS edition with its aligned English (perseus-farsilit, 17,637 seg-grain passages); folded to the same Arabic-script skeleton as ara (ی/ي, ک/ك), either keyboard finds either language. |
 | `chu` | Old Church Slavonic | The OCS canon: Codex Marianus, Suprasliensis, and the four CCMH gospel manuscripts (incl. Assemanianus and Savvina kniga). |
 | `orv` | Old East Slavic (incl. Middle Russian, Ruthenian) | Birchbark letters, chronicles, Avvakum, and the prosta mova chancery texts, 1025–1700. |
 | `ojp` | Old Japanese | The Oxford-NINJAL Corpus of Old Japanese (ONCOJ) — gold-morphology Man'yōshū-era verse, gold-lemma language #23 (123,002 rows). |

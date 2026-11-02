@@ -2,6 +2,7 @@
 
 require_relative "../normalize"
 require_relative "../languages"
+require_relative "dictionary_language"
 require_relative "../timeline"
 
 module Nabu
@@ -129,7 +130,7 @@ module Nabu
              .join(:dictionaries, id: Sequel[:dictionary_entries][:dictionary_id])
              .where(Sequel[:dictionary_entries][:headword_folded] => keys,
                     Sequel[:dictionary_entries][:withdrawn] => false)
-        ds = ds.where(Sequel[:dictionaries][:language] => Nabu::Languages.code_variants(language)) if language
+        ds = ds.where(DictionaryLanguage.filter(@catalog, language)) if language
         ds.order(Sequel[:dictionaries][:slug], Sequel[:dictionary_entries][:entry_id])
           .limit(DICTIONARY_LIMIT)
           .select(Sequel[:dictionaries][:slug], Sequel[:dictionary_entries][:urn],

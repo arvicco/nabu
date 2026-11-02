@@ -1,0 +1,30 @@
+# Nabu fixture manifest (P5-4 "fixture sentinel"). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# adapter_test is null: the three volume files are documented TRIMS (whole
+# PDF pages cut out of 5–25 MB members of PG.zip); the zip members are not
+# raw-GETtable, so they are not refetchable. The rejected-grain specimen is
+# a trim of a raw GitHub file (fetched for liveness only).
+source: cgpg
+adapter_test: null
+retrieved: "2026-11-02"
+files:
+  - path: PG101_tagged_text.vert
+    refetchable: false
+    reason: a member of the Zenodo PG.zip archive (record 19915273), not a raw-GET file
+    whole: false
+    trim: PDF page 14 only (the volume's first page), every line of its <w> blocks verbatim, CRLF kept
+  - path: PG008_tagged_text.txt
+    refetchable: false
+    reason: a member of the Zenodo PG.zip archive (record 19915273), not a raw-GET file
+    whole: false
+    trim: PDF pages 57 and 343 (the ∅ / empty-form page and the #NOM? page), verbatim, CRLF kept
+  - path: PG153_tagged_text.vert
+    refetchable: false
+    reason: a member of the Zenodo PG.zip archive (record 19915273), not a raw-GET file
+    whole: false
+    trim: PDF page 37 only (the volume's first page), verbatim, CRLF kept
+  - path: rejected-grains/PG101_text.txt
+    url: https://raw.githubusercontent.com/calfa-co/Patrologia-Graeca/main/PG101/PG101_text.txt
+    whole: false
+    trim: the first 53 lines (the $0=101 $8=14 page block)

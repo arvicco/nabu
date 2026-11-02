@@ -697,6 +697,25 @@ sources:
     source_kind: scripture
   # -- whole-source canon declarations (P100-4; the cbeta/okhc precedent:
   # the source IS a canon or a dynastic record — one ruled line each) ---
+  baley-manuscripts:   # census 2026-11-02: 19 witnesses over 9 deposits, one work each
+    metadata: work     # the deposit's dataset_id — each deposit IS one known work, so the
+    #                    fold is the parse-time call per work (the extrabiblical mold)
+    map:
+      "shijing": literary/poetry     # the Odes: the Anda and Fuyang Shijing witnesses
+      "aisong": literary/poetry      # 哀誦, an Anda lament-poem (the Chu verse tradition)
+      "shaner": literary             # 善而, an Anda text in four-graph lines — declared COARSE:
+      #   the deposit says no more than the poem unit type its schema gives every text
+      "shentudi": literary/narrative # 申徒狄見周公 — the anecdote of Shentu Di's audience with
+      #   the Duke of Zhou
+      "laozi": literary/wisdom       # the Laozi (Guodian A/B/C, Beida) — gnomic philosophical verse
+      "lunyu": literary/wisdom       # the Analects witnesses (Dingxian, Jeongbaekdong, Anda's
+      #   仲尼曰): sayings and dialogues of Confucius
+      "caomozhizhen": literary/wisdom  # 曹沫之陳 — Cao Mo's dialogue with Duke Zhuang of Lu on
+      #   government and warfare (the Masters' dialogue form)
+      "jinteng": historiography      # 金縢 — a Shangshu chapter: the Duke of Zhou's prayer and
+      #   the metal-bound coffer, a 書 narrative of the early Zhou court
+      "jigong": historiography       # 祭公 — the Yizhoushu chapter: Duke Ji's deathbed
+      #   admonition to King Mu, a 書 court record
   obimd:               # census 2026-10-21: 10,077 Heji/Huadong rubbings
     # Shang oracle-bone inscriptions are royal and princely divination by
     # construction — charge, prognostication, verification, with the
@@ -826,6 +845,52 @@ sources:
     source_kind: scripture
   peshitta:
     source_kind: scripture
+  etcbc-targum:
+    source_kind: scripture   # P153: the Pentateuch targums — every text is a Bible translation
+  typikon-bible:
+    source_kind: scripture   # P153: whole Bible editions (the 1688 Bucharest Bible)
+  hexapla:
+    source_kind: scripture   # P153: the Hexapla's columns — the Bible in Hebrew and its Greek versions
+  etcbc-syriac:        # P153 census 2026-11-02: 31 books (tf/0.92 book nodes), one document each
+    metadata: book     # upstream's book name verbatim — each book IS one known work, so the
+    #                    fold is the parse-time call per book (the extrabiblical shape)
+    map:
+      # -- the Peshitta books (README's own "Peshitta" list + the two A/B pairs) --
+      "Genesis": scripture
+      "Exodus": scripture
+      "Leviticus": scripture
+      "Numbers": scripture
+      "Deuteronomy": scripture
+      "Joshua": scripture
+      "Judges": scripture
+      "Psalms": scripture
+      "1_Kings": scripture
+      "2_Kings": scripture
+      "Jeremiah": scripture
+      "Ezekiel": scripture
+      "Jonah": scripture
+      "Zechariah": scripture
+      "Daniel": scripture
+      "Sir": scripture
+      "3Esr": scripture
+      "4Esr": scripture
+      "EpBarA": scripture       # the Epistle of Baruch — a Peshitta book (peshitta's EpBar)
+      "EpBarB": scripture
+      "OrManA": scripture       # the Prayer of Manasseh — a Peshitta book (peshitta's OrM)
+      "OrManB": scripture
+      "PsH": scripture          # the Syrohexapla: Paul of Tella's Syriac of the Hexaplaric LXX
+      # -- the further texts ---------------------------------------------------
+      "PsS": hymn-prayer/hymn   # the Psalms of Solomon: eighteen pseudepigraphal psalms
+      "BLC": literary/wisdom/dialogue  # Bardaisan's school: a dialogue on fate and freedom
+      "Eprx": literary/essay    # Ephrem's prose polemic against Mani — a treatise of refutation
+      "ESNJ": sermon/homily     # Ephrem's metrical homily (memra) on Nineveh and Jonah
+    deliberate:
+      "ApBar": "an apocalypse (2 Baruch): revelatory visions with a review of history — no class
+        holds the genre without forcing (the 1QM precedent)"
+      "ApDn": "an apocalypse (the Syriac Apocalypse of Daniel) — as ApBar"
+      "PsE": "an apocalypse (Pseudo-Ezra) — as ApBar"
+      "PsM": "an apocalypse (Pseudo-Methodius, the late-7th-century historical apocalypse) — as
+        ApBar"
   titus-avestan:
     source_kind: scripture   # the Avesta
   e84000:
@@ -894,6 +959,42 @@ sources:
       "Vernacular": "a register label (speech-near Yiddish), not a genre — the court
         testimony, the 1798 Amsterdam diskurs, Grine felder (a play) and Royte
         pomerantsen (folk jokes); 4 texts, reviewed"
+  ganjoor:                   # census 2026-11-02 over the classical cone (126,165 poems): the
+    metadata: form           # poem's own section label (the leaf cat — 999 distinct values).
+    vocabulary: open         # Upstream mixes FORM sections (the divan's غزلیات / رباعیات /
+    #                          قصاید …) with work and chapter titles (دفتر اول, گلستان's باب,
+    #                          شاهنامه's stories): only the form labels are ruled; a work or
+    #                          chapter title mints nothing (uncovered, never guessed). Counts =
+    #                          poems carrying the label.
+    map:
+      "غزلیات": literary/poetry/lyric            # 57,140 — ghazals, the lyric form par excellence
+      "غزلیّات": literary/poetry/lyric           # 282 — the same label, vocalized
+      "غزلیات ناتمام": literary/poetry/lyric     # 1,138 — unfinished ghazals
+      "غزلیات بخش دوم": literary/poetry/lyric    # 147 — the ghazals, part two
+      "ابیات برگزیده از غزلیات": literary/poetry/lyric  # 768 — couplets selected from ghazals
+      "رباعیات": literary/poetry                 # 16,083 — quatrains (rubāʿiyyāt): the epigram
+      #   form spans the mystical, the hedonist and the gnomic — the bare poetry class
+      "رباعیها": literary/poetry                 # 127 — quatrains (variant label)
+      "رباعیات نقل شده از ابوسعید از دیگر شاعران": literary/poetry  # 724 — quatrains
+      #   ascribed to Abu Saʿid that upstream traces to other poets
+      "دوبیتی‌ها": literary/poetry               # 966 — do-bayti quatrains (Bābā Ṭāher's form)
+      "چهاربیتی‌ها": literary/poetry             # 211 — four-couplet pieces
+      "قصاید": literary/poetry                   # 5,996 — qasidas: panegyric, but also
+      #   religious, elegiac and didactic — the bare poetry class, never praise by default
+      "قصاید و قطعات": literary/poetry           # 597 — qasidas and occasional pieces
+      "قطعات": literary/poetry                   # 4,302 — qeṭʿa (occasional/epigrammatic pieces)
+      "مقطعات": literary/poetry                  # 1,536 — the same form (Arabic plural)
+      "غزلیات، قصاید و قطعات": literary/poetry    # 272 — a mixed divan section
+      "تک‌بیتهای برگزیده": literary/poetry       # 1,542 — selected single couplets
+      "مفردات": literary/poetry                  # 681 — single couplets (mofradāt)
+      "ابیات پراکنده": literary/poetry           # 782 — scattered couplets (fragments)
+      "مطالع": literary/poetry                   # 549 — opening couplets (maṭāleʿ)
+      "مثنویات": literary/poetry                 # 520 — short masnavis (rhymed-couplet poems)
+      "ترکیبات": literary/poetry                 # 232 — tarkib-band strophic poems
+      "ترجیعات": literary/poetry                 # 158 — tarjiʿ-band strophic poems
+      "مسمطات": literary/poetry                  # 155 — mosammaṭ strophic poems
+      "ماده تاریخ": literary/poetry              # 126 — chronograms (verse whose letters
+      #   sum to a date)
   aozora:           # NDC codes ("NDC 913", children's "NDC K913", multi "NDC 913 914")
     metadata: ndc
     regex_map:

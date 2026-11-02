@@ -49,9 +49,11 @@ module Nabu
     # Store-grain honesty: the dictionaries table keys ONE language per
     # dictionary; both shelves register hbo (the majority — 8,589 of 9,299
     # aug entries, 23 of 46 BDB parts). Per-entry hbo/arc is preserved on
-    # the domain entries (and the fold is identical for both), but
-    # `define --lang arc` filters at the dictionary grain and will surface
-    # these shelves under hbo — recorded in 02-sources, not papered over.
+    # the domain entries (and the fold is identical for both), and each
+    # Aramaic entry records its language as the annotation "language"
+    # (P153), which Query::DictionaryLanguage reads — so `define --lang arc`
+    # and an arc-keyed gloss lookup reach exactly the 852 BDB + 710 Strong
+    # Aramaic entries (census over canonical 2026-11-02), never the Hebrew.
     #
     # == Upstream / license
     #
@@ -90,7 +92,7 @@ module Nabu
       }.freeze
 
       # Both shelves register the majority object language (class note).
-      LANGUAGE = "hbo"
+      LANGUAGE = OshbLexiconParser::SHELF_LANGUAGE
 
       def self.manifest
         MANIFEST

@@ -1,0 +1,1605 @@
+{
+  "schema_version": "1.2",
+  "mappings": [
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 1},
+      "source_location": {"pdf_page": 86, "strip": "1", "item": 1}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 2},
+      "source_location": {"pdf_page": 86, "strip": "1", "item": 2}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 3},
+      "source_location": {"pdf_page": 86, "strip": "1", "item": 3}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 4},
+      "source_location": {"pdf_page": 86, "strip": "1", "item": 4}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 5},
+      "source_location": {"pdf_page": 86, "strip": "1", "item": 5}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 6},
+      "source_location": {"pdf_page": 86, "strip": "1", "item": 6}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 7},
+      "source_location": {"pdf_page": 86, "strip": "1", "item": 7}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 8},
+      "source_location": {"pdf_page": 86, "strip": "1", "item": 8}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 9},
+      "source_location": {"pdf_page": 86, "strip": "1", "item": 9}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 10},
+      "source_location": {"pdf_page": 86, "strip": "1", "item": 10}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 11},
+      "source_location": {"pdf_page": 86, "strip": "1", "item": 11}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 12},
+      "source_location": {"pdf_page": 86, "strip": "1", "item": 12}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 13},
+      "source_location": {"pdf_page": 86, "strip": "1", "item": 13}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 14},
+      "source_location": {"pdf_page": 86, "strip": "1", "item": 14}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 15},
+      "source_location": {"pdf_page": 86, "strip": "1", "item": 15}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 16},
+      "source_location": {"pdf_page": 86, "strip": "1", "item": 16}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 17},
+      "source_location": {"pdf_page": 86, "strip": "1", "item": 17}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 18},
+      "source_location": {"pdf_page": 86, "strip": "1", "item": 18}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 19},
+      "source_location": {"pdf_page": 86, "strip": "1", "item": 19}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 20},
+      "source_location": {"pdf_page": 86, "strip": "1", "item": 20}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 21},
+      "source_location": {"pdf_page": 86, "strip": "1", "item": 21}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 22},
+      "source_location": {"pdf_page": 86, "strip": "1", "item": 22}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 23},
+      "source_location": {"pdf_page": 86, "strip": "1", "item": 23}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 24},
+      "source_location": {"pdf_page": 86, "strip": "1", "item": 24}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 25},
+      "source_location": {"pdf_page": 86, "strip": "1", "item": 25}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 26},
+      "source_location": {"pdf_page": 86, "strip": "1", "item": 26}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 27},
+      "source_location": {"pdf_page": 86, "strip": "1", "item": 27}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 28},
+      "source_location": {"pdf_page": 86, "strip": "1", "item": 28}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 29},
+      "source_location": {"pdf_page": 86, "strip": "1", "item": 29}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 30},
+      "source_location": {"pdf_page": 86, "strip": "1", "item": 30}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 31},
+      "source_location": {"pdf_page": 86, "strip": "2", "item": 1}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 32},
+      "source_location": {"pdf_page": 86, "strip": "2", "item": 2}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 33},
+      "source_location": {"pdf_page": 86, "strip": "2", "item": 3}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 34},
+      "source_location": {"pdf_page": 86, "strip": "2", "item": 4}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 35},
+      "source_location": {"pdf_page": 86, "strip": "2", "item": 5}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 36},
+      "source_location": {"pdf_page": 86, "strip": "2", "item": 6}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 37},
+      "source_location": {"pdf_page": 86, "strip": "2", "item": 7}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 38},
+      "source_location": {"pdf_page": 86, "strip": "2", "item": 8}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 39},
+      "source_location": {"pdf_page": 86, "strip": "2", "item": 9}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 40},
+      "source_location": {"pdf_page": 86, "strip": "2", "item": 10}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 41},
+      "source_location": {"pdf_page": 86, "strip": "2", "item": 11}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 42},
+      "source_location": {"pdf_page": 86, "strip": "2", "item": 12}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 43},
+      "source_location": {"pdf_page": 86, "strip": "2", "item": 13}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 44},
+      "source_location": {"pdf_page": 86, "strip": "2", "item": 14}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 45},
+      "source_location": {"pdf_page": 86, "strip": "2", "item": 15}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 46},
+      "source_location": {"pdf_page": 86, "strip": "2", "item": 16}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 47},
+      "source_location": {"pdf_page": 86, "strip": "2", "item": 17}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 48},
+      "source_location": {"pdf_page": 86, "strip": "2", "item": 18}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 49},
+      "source_location": {"pdf_page": 86, "strip": "2", "item": 20}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 50},
+      "source_location": {"pdf_page": 86, "strip": "2", "item": 21}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 51},
+      "source_location": {"pdf_page": 86, "strip": "2", "item": 22}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 52},
+      "source_location": {"pdf_page": 86, "strip": "2", "item": 23}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 53},
+      "source_location": {"pdf_page": 86, "strip": "2", "item": 24}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 54},
+      "source_location": {"pdf_page": 86, "strip": "2", "item": 25}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 55},
+      "source_location": {"pdf_page": 86, "strip": "2", "item": 26}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 56},
+      "source_location": {"pdf_page": 86, "strip": "2", "item": 27}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 57},
+      "source_location": {"pdf_page": 86, "strip": "2", "item": 28}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 58},
+      "source_location": {"pdf_page": 86, "strip": "2", "item": 29}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 59},
+      "source_location": {"pdf_page": 86, "strip": "2", "item": 30}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 60},
+      "source_location": {"pdf_page": 87, "strip": "3", "item": 1}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 61},
+      "source_location": {"pdf_page": 87, "strip": "3", "item": 2}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 62},
+      "source_location": {"pdf_page": 87, "strip": "3", "item": 3}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 63},
+      "source_location": {"pdf_page": 87, "strip": "3", "item": 4}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 64},
+      "source_location": {"pdf_page": 87, "strip": "3", "item": 5}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 65},
+      "source_location": {"pdf_page": 87, "strip": "3", "item": 6}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 66},
+      "source_location": {"pdf_page": 87, "strip": "3", "item": 7}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 67},
+      "source_location": {"pdf_page": 87, "strip": "3", "item": 8}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 68},
+      "source_location": {"pdf_page": 87, "strip": "3", "item": 9}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 69},
+      "source_location": {"pdf_page": 87, "strip": "3", "item": 10}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 70},
+      "source_location": {"pdf_page": 87, "strip": "3", "item": 12}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 71},
+      "source_location": {"pdf_page": 87, "strip": "3", "item": 13}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 72},
+      "source_location": {"pdf_page": 87, "strip": "3", "item": 14}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 73},
+      "source_location": {"pdf_page": 87, "strip": "3", "item": 15}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 74},
+      "source_location": {"pdf_page": 87, "strip": "3", "item": 16}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 75},
+      "source_location": {"pdf_page": 87, "strip": "3", "item": 17}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 76},
+      "source_location": {"pdf_page": 87, "strip": "3", "item": 18}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 77},
+      "source_location": {"pdf_page": 87, "strip": "3", "item": 19}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 78},
+      "source_location": {"pdf_page": 87, "strip": "3", "item": 20}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 79},
+      "source_location": {"pdf_page": 87, "strip": "3", "item": 21}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 80},
+      "source_location": {"pdf_page": 87, "strip": "3", "item": 22}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 81},
+      "source_location": {"pdf_page": 87, "strip": "3", "item": 23}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 82},
+      "source_location": {"pdf_page": 87, "strip": "3", "item": 24}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 83},
+      "source_location": {"pdf_page": 87, "strip": "3", "item": 25}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 84},
+      "source_location": {"pdf_page": 87, "strip": "3", "item": 27}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 85},
+      "source_location": {"pdf_page": 87, "strip": "3", "item": 28}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 86},
+      "source_location": {"pdf_page": 87, "strip": "3", "item": 29}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 87},
+      "source_location": {"pdf_page": 87, "strip": "3", "item": 30}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 88},
+      "source_location": {"pdf_page": 87, "strip": "3", "item": 31}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 89},
+      "source_location": {"pdf_page": 87, "strip": "3", "item": 32}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 90},
+      "source_location": {"pdf_page": 87, "strip": "4", "item": 1}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 91},
+      "source_location": {"pdf_page": 87, "strip": "4", "item": 2}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 92},
+      "source_location": {"pdf_page": 87, "strip": "4", "item": 3}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 93},
+      "source_location": {"pdf_page": 87, "strip": "4", "item": 4}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 94},
+      "source_location": {"pdf_page": 87, "strip": "4", "item": 6}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 95},
+      "source_location": {"pdf_page": 87, "strip": "4", "item": 7}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 96},
+      "source_location": {"pdf_page": 87, "strip": "4", "item": 8}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 97},
+      "source_location": {"pdf_page": 87, "strip": "4", "item": 9}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 98},
+      "source_location": {"pdf_page": 87, "strip": "4", "item": 10}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 99},
+      "source_location": {"pdf_page": 87, "strip": "4", "item": 11}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 100},
+      "source_location": {"pdf_page": 87, "strip": "4", "item": 12}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 101},
+      "source_location": {"pdf_page": 87, "strip": "4", "item": 14}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 102},
+      "source_location": {"pdf_page": 87, "strip": "4", "item": 15}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 103},
+      "source_location": {"pdf_page": 87, "strip": "4", "item": 16}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 104},
+      "source_location": {"pdf_page": 87, "strip": "4", "item": 17}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 105},
+      "source_location": {"pdf_page": 87, "strip": "4", "item": 18}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 106},
+      "source_location": {"pdf_page": 87, "strip": "4", "item": 19}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 107},
+      "source_location": {"pdf_page": 87, "strip": "4", "item": 20}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 108},
+      "source_location": {"pdf_page": 87, "strip": "4", "item": 21}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 109},
+      "source_location": {"pdf_page": 87, "strip": "4", "item": 22}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 110},
+      "source_location": {"pdf_page": 87, "strip": "4", "item": 23}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 111},
+      "source_location": {"pdf_page": 87, "strip": "4", "item": 24}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 112},
+      "source_location": {"pdf_page": 87, "strip": "4", "item": 25}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 113},
+      "source_location": {"pdf_page": 87, "strip": "4", "item": 26}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 114},
+      "source_location": {"pdf_page": 87, "strip": "4", "item": 27}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 115},
+      "source_location": {"pdf_page": 87, "strip": "4", "item": 28}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 116},
+      "source_location": {"pdf_page": 87, "strip": "4", "item": 29}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 117},
+      "source_location": {"pdf_page": 87, "strip": "4", "item": 30}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 118},
+      "source_location": {"pdf_page": 87, "strip": "4", "item": 31}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 119},
+      "source_location": {"pdf_page": 88, "strip": "5", "item": 1}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 120},
+      "source_location": {"pdf_page": 88, "strip": "5", "item": 2}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 121},
+      "source_location": {"pdf_page": 88, "strip": "5", "item": 3}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 122},
+      "source_location": {"pdf_page": 88, "strip": "5", "item": 4}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 123},
+      "source_location": {"pdf_page": 88, "strip": "5", "item": 6}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 124},
+      "source_location": {"pdf_page": 88, "strip": "5", "item": 7}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 125},
+      "source_location": {"pdf_page": 88, "strip": "5", "item": 8}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 126},
+      "source_location": {"pdf_page": 88, "strip": "5", "item": 9}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 128},
+      "source_location": {"pdf_page": 88, "strip": "5", "item": 10}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 129},
+      "source_location": {"pdf_page": 88, "strip": "5", "item": 11}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 130},
+      "source_location": {"pdf_page": 88, "strip": "5", "item": 12}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 131},
+      "source_location": {"pdf_page": 88, "strip": "5", "item": 13}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 132},
+      "source_location": {"pdf_page": 88, "strip": "5", "item": 14}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 133},
+      "source_location": {"pdf_page": 88, "strip": "5", "item": 15}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 134},
+      "source_location": {"pdf_page": 88, "strip": "5", "item": 16}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 135},
+      "source_location": {"pdf_page": 88, "strip": "5", "item": 17}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 136},
+      "source_location": {"pdf_page": 88, "strip": "5", "item": 18}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 137},
+      "source_location": {"pdf_page": 88, "strip": "5", "item": 19}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 138},
+      "source_location": {"pdf_page": 88, "strip": "5", "item": 20}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 139},
+      "source_location": {"pdf_page": 88, "strip": "5", "item": 21}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 140},
+      "source_location": {"pdf_page": 88, "strip": "5", "item": 22}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 141},
+      "source_location": {"pdf_page": 88, "strip": "5", "item": 23}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 142},
+      "source_location": {"pdf_page": 88, "strip": "5", "item": 24}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 143},
+      "source_location": {"pdf_page": 88, "strip": "5", "item": 25}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 144},
+      "source_location": {"pdf_page": 88, "strip": "5", "item": 27}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 145},
+      "source_location": {"pdf_page": 88, "strip": "5", "item": 28}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 146},
+      "source_location": {"pdf_page": 88, "strip": "5", "item": 29}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 147},
+      "source_location": {"pdf_page": 88, "strip": "5", "item": 30}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 148},
+      "source_location": {"pdf_page": 88, "strip": "5", "item": 31}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 149},
+      "source_location": {"pdf_page": 88, "strip": "6", "item": 1}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 150},
+      "source_location": {"pdf_page": 88, "strip": "6", "item": 2}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 151},
+      "source_location": {"pdf_page": 88, "strip": "6", "item": 3}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 152},
+      "source_location": {"pdf_page": 88, "strip": "6", "item": 4}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 153},
+      "source_location": {"pdf_page": 88, "strip": "6", "item": 5}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 154},
+      "source_location": {"pdf_page": 88, "strip": "6", "item": 6}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 155},
+      "source_location": {"pdf_page": 88, "strip": "6", "item": 7}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 156},
+      "source_location": {"pdf_page": 88, "strip": "6", "item": 8}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 157},
+      "source_location": {"pdf_page": 88, "strip": "6", "item": 9}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 158},
+      "source_location": {"pdf_page": 88, "strip": "6", "item": 11}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 159},
+      "source_location": {"pdf_page": 88, "strip": "6", "item": 12}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 160},
+      "source_location": {"pdf_page": 88, "strip": "6", "item": 13}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 161},
+      "source_location": {"pdf_page": 88, "strip": "6", "item": 14}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 162},
+      "source_location": {"pdf_page": 88, "strip": "6", "item": 15}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 163},
+      "source_location": {"pdf_page": 88, "strip": "6", "item": 17}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 164},
+      "source_location": {"pdf_page": 88, "strip": "6", "item": 18}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 165},
+      "source_location": {"pdf_page": 88, "strip": "6", "item": 19}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 166},
+      "source_location": {"pdf_page": 88, "strip": "6", "item": 20}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 167},
+      "source_location": {"pdf_page": 88, "strip": "6", "item": 21}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 168},
+      "source_location": {"pdf_page": 88, "strip": "6", "item": 22}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 169},
+      "source_location": {"pdf_page": 88, "strip": "6", "item": 23}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 170},
+      "source_location": {"pdf_page": 88, "strip": "6", "item": 24}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 171},
+      "source_location": {"pdf_page": 88, "strip": "6", "item": 25}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 172},
+      "source_location": {"pdf_page": 88, "strip": "6", "item": 27}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 173},
+      "source_location": {"pdf_page": 88, "strip": "6", "item": 28}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 174},
+      "source_location": {"pdf_page": 88, "strip": "6", "item": 29}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 175},
+      "source_location": {"pdf_page": 88, "strip": "6", "item": 30}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 176},
+      "source_location": {"pdf_page": 88, "strip": "6", "item": 31}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 177},
+      "source_location": {"pdf_page": 88, "strip": "6", "item": 33}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 178},
+      "source_location": {"pdf_page": 88, "strip": "6", "item": 34}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 179},
+      "source_location": {"pdf_page": 88, "strip": "6", "item": 35}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 180},
+      "source_location": {"pdf_page": 89, "strip": "7", "item": 1}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 181},
+      "source_location": {"pdf_page": 89, "strip": "7", "item": 2}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 182},
+      "source_location": {"pdf_page": 89, "strip": "7", "item": 3}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 183},
+      "source_location": {"pdf_page": 89, "strip": "7", "item": 4}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 184},
+      "source_location": {"pdf_page": 89, "strip": "7", "item": 5}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 185},
+      "source_location": {"pdf_page": 89, "strip": "7", "item": 6}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 186},
+      "source_location": {"pdf_page": 89, "strip": "7", "item": 7}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 187},
+      "source_location": {"pdf_page": 89, "strip": "7", "item": 8}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 188},
+      "source_location": {"pdf_page": 89, "strip": "7", "item": 9}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 189},
+      "source_location": {"pdf_page": 89, "strip": "7", "item": 10}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 190},
+      "source_location": {"pdf_page": 89, "strip": "7", "item": 11}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 191},
+      "source_location": {"pdf_page": 89, "strip": "7", "item": 12}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 192},
+      "source_location": {"pdf_page": 89, "strip": "7", "item": 13}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 193},
+      "source_location": {"pdf_page": 89, "strip": "7", "item": 14}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 194},
+      "source_location": {"pdf_page": 89, "strip": "7", "item": 15}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 195},
+      "source_location": {"pdf_page": 89, "strip": "7", "item": 16}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 196},
+      "source_location": {"pdf_page": 89, "strip": "7", "item": 17}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 197},
+      "source_location": {"pdf_page": 89, "strip": "7", "item": 18}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 198},
+      "source_location": {"pdf_page": 89, "strip": "7", "item": 19}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 199},
+      "source_location": {"pdf_page": 89, "strip": "7", "item": 20}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 200},
+      "source_location": {"pdf_page": 89, "strip": "7", "item": 21}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 201},
+      "source_location": {"pdf_page": 89, "strip": "7", "item": 22}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 202},
+      "source_location": {"pdf_page": 89, "strip": "7", "item": 23}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 203},
+      "source_location": {"pdf_page": 89, "strip": "7", "item": 25}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 204},
+      "source_location": {"pdf_page": 89, "strip": "7", "item": 26}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 205},
+      "source_location": {"pdf_page": 89, "strip": "7", "item": 27}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 206},
+      "source_location": {"pdf_page": 89, "strip": "7", "item": 28}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 207},
+      "source_location": {"pdf_page": 89, "strip": "7", "item": 29}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 208},
+      "source_location": {"pdf_page": 89, "strip": "7", "item": 30}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 209},
+      "source_location": {"pdf_page": 89, "strip": "7", "item": 31}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 210},
+      "source_location": {"pdf_page": 89, "strip": "7", "item": 32}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 211},
+      "source_location": {"pdf_page": 89, "strip": "7", "item": 33}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 216},
+      "source_location": {"pdf_page": 89, "strip": "8", "item": 1}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 217},
+      "source_location": {"pdf_page": 89, "strip": "8", "item": 2}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 218},
+      "source_location": {"pdf_page": 89, "strip": "8", "item": 3}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 219},
+      "source_location": {"pdf_page": 89, "strip": "8", "item": 4}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 220},
+      "source_location": {"pdf_page": 89, "strip": "8", "item": 5}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 221},
+      "source_location": {"pdf_page": 89, "strip": "8", "item": 6}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 1, "graph": 222},
+      "source_location": {"pdf_page": 89, "strip": "8", "item": 7}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 2, "graph": 1},
+      "source_location": {"pdf_page": 89, "strip": "8", "item": 8}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 2, "graph": 2},
+      "source_location": {"pdf_page": 89, "strip": "8", "item": 9}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 2, "graph": 3},
+      "source_location": {"pdf_page": 89, "strip": "8", "item": 10}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 2, "graph": 4},
+      "source_location": {"pdf_page": 89, "strip": "8", "item": 11}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 2, "graph": 5},
+      "source_location": {"pdf_page": 89, "strip": "8", "item": 12}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 2, "graph": 6},
+      "source_location": {"pdf_page": 89, "strip": "8", "item": 13}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 2, "graph": 7},
+      "source_location": {"pdf_page": 89, "strip": "8", "item": 14}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 2, "graph": 8},
+      "source_location": {"pdf_page": 89, "strip": "8", "item": 15}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 2, "graph": 9},
+      "source_location": {"pdf_page": 89, "strip": "8", "item": 16}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 2, "graph": 10},
+      "source_location": {"pdf_page": 89, "strip": "8", "item": 17}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 2, "graph": 11},
+      "source_location": {"pdf_page": 89, "strip": "8", "item": 18}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 2, "graph": 12},
+      "source_location": {"pdf_page": 89, "strip": "8", "item": 19}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 2, "graph": 13},
+      "source_location": {"pdf_page": 89, "strip": "8", "item": 20}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 2, "graph": 14},
+      "source_location": {"pdf_page": 89, "strip": "8", "item": 22}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 2, "graph": 15},
+      "source_location": {"pdf_page": 89, "strip": "8", "item": 23}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 2, "graph": 16},
+      "source_location": {"pdf_page": 89, "strip": "8", "item": 24}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 2, "graph": 17},
+      "source_location": {"pdf_page": 89, "strip": "8", "item": 25}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 2, "graph": 18},
+      "source_location": {"pdf_page": 89, "strip": "8", "item": 26}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 2, "graph": 19},
+      "source_location": {"pdf_page": 89, "strip": "8", "item": 27}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 2, "graph": 20},
+      "source_location": {"pdf_page": 90, "strip": "9", "item": 1}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 2, "graph": 21},
+      "source_location": {"pdf_page": 90, "strip": "9", "item": 2}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 2, "graph": 22},
+      "source_location": {"pdf_page": 90, "strip": "9", "item": 3}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 2, "graph": 23},
+      "source_location": {"pdf_page": 90, "strip": "9", "item": 4}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 2, "graph": 24},
+      "source_location": {"pdf_page": 90, "strip": "9", "item": 5}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 2, "graph": 25},
+      "source_location": {"pdf_page": 90, "strip": "9", "item": 6}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 2, "graph": 26},
+      "source_location": {"pdf_page": 90, "strip": "9", "item": 7}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 2, "graph": 27},
+      "source_location": {"pdf_page": 90, "strip": "9", "item": 8}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 2, "graph": 28},
+      "source_location": {"pdf_page": 90, "strip": "9", "item": 9}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 2, "graph": 29},
+      "source_location": {"pdf_page": 90, "strip": "9", "item": 10}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 2, "graph": 30},
+      "source_location": {"pdf_page": 90, "strip": "9", "item": 11}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 2, "graph": 31},
+      "source_location": {"pdf_page": 90, "strip": "9", "item": 13}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 2, "graph": 32},
+      "source_location": {"pdf_page": 90, "strip": "9", "item": 14}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 2, "graph": 33},
+      "source_location": {"pdf_page": 90, "strip": "9", "item": 15}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 2, "graph": 34},
+      "source_location": {"pdf_page": 90, "strip": "9", "item": 17}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 2, "graph": 35},
+      "source_location": {"pdf_page": 90, "strip": "9", "item": 18}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 2, "graph": 36},
+      "source_location": {"pdf_page": 90, "strip": "9", "item": 19}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 2, "graph": 37},
+      "source_location": {"pdf_page": 90, "strip": "9", "item": 20}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 2, "graph": 38},
+      "source_location": {"pdf_page": 90, "strip": "9", "item": 21}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 2, "graph": 39},
+      "source_location": {"pdf_page": 90, "strip": "9", "item": 22}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 2, "graph": 40},
+      "source_location": {"pdf_page": 90, "strip": "9", "item": 23}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 2, "graph": 41},
+      "source_location": {"pdf_page": 90, "strip": "9", "item": 24}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 2, "graph": 42},
+      "source_location": {"pdf_page": 90, "strip": "9", "item": 25}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 2, "graph": 43},
+      "source_location": {"pdf_page": 90, "strip": "9", "item": 26}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 2, "graph": 44},
+      "source_location": {"pdf_page": 90, "strip": "9", "item": 27}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 2, "graph": 45},
+      "source_location": {"pdf_page": 90, "strip": "9", "item": 28}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 2, "graph": 46},
+      "source_location": {"pdf_page": 90, "strip": "9", "item": 29}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 2, "graph": 47},
+      "source_location": {"pdf_page": 90, "strip": "9", "item": 30}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 2, "graph": 48},
+      "source_location": {"pdf_page": 90, "strip": "9", "item": 31}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 2, "graph": 49},
+      "source_location": {"pdf_page": 90, "strip": "9", "item": 32}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 2, "graph": 54},
+      "source_location": {"pdf_page": 90, "strip": "10", "item": 1}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 2, "graph": 55},
+      "source_location": {"pdf_page": 90, "strip": "10", "item": 3}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 2, "graph": 57},
+      "source_location": {"pdf_page": 90, "strip": "10", "item": 4}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 2, "graph": 58},
+      "source_location": {"pdf_page": 90, "strip": "10", "item": 6}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 2, "graph": 59},
+      "source_location": {"pdf_page": 90, "strip": "10", "item": 7}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 2, "graph": 60},
+      "source_location": {"pdf_page": 90, "strip": "10", "item": 8}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 2, "graph": 61},
+      "source_location": {"pdf_page": 90, "strip": "10", "item": 9}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 2, "graph": 62},
+      "source_location": {"pdf_page": 90, "strip": "10", "item": 10}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 2, "graph": 63},
+      "source_location": {"pdf_page": 90, "strip": "10", "item": 11}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 2, "graph": 64},
+      "source_location": {"pdf_page": 90, "strip": "10", "item": 13}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 2, "graph": 65},
+      "source_location": {"pdf_page": 90, "strip": "10", "item": 14}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 2, "graph": 66},
+      "source_location": {"pdf_page": 90, "strip": "10", "item": 15}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 2, "graph": 67},
+      "source_location": {"pdf_page": 90, "strip": "10", "item": 16}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 2, "graph": 68},
+      "source_location": {"pdf_page": 90, "strip": "10", "item": 17}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 2, "graph": 69},
+      "source_location": {"pdf_page": 90, "strip": "10", "item": 18}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 2, "graph": 70},
+      "source_location": {"pdf_page": 90, "strip": "10", "item": 19}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 2, "graph": 71},
+      "source_location": {"pdf_page": 90, "strip": "10", "item": 20}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 2, "graph": 72},
+      "source_location": {"pdf_page": 90, "strip": "10", "item": 21}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 2, "graph": 73},
+      "source_location": {"pdf_page": 90, "strip": "10", "item": 22}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 2, "graph": 74},
+      "source_location": {"pdf_page": 90, "strip": "10", "item": 23}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 2, "graph": 75},
+      "source_location": {"pdf_page": 90, "strip": "10", "item": 24}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 2, "graph": 76},
+      "source_location": {"pdf_page": 90, "strip": "10", "item": 25}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 2, "graph": 77},
+      "source_location": {"pdf_page": 90, "strip": "10", "item": 26}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 2, "graph": 78},
+      "source_location": {"pdf_page": 90, "strip": "10", "item": 27}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 2, "graph": 79},
+      "source_location": {"pdf_page": 90, "strip": "10", "item": 28}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 2, "graph": 80},
+      "source_location": {"pdf_page": 90, "strip": "10", "item": 29}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 2, "graph": 81},
+      "source_location": {"pdf_page": 90, "strip": "10", "item": 30}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 2, "graph": 82},
+      "source_location": {"pdf_page": 90, "strip": "10", "item": 31}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 2, "graph": 83},
+      "source_location": {"pdf_page": 91, "strip": "11", "item": 1}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 2, "graph": 84},
+      "source_location": {"pdf_page": 91, "strip": "11", "item": 2}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 2, "graph": 85},
+      "source_location": {"pdf_page": 91, "strip": "11", "item": 3}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 2, "graph": 86},
+      "source_location": {"pdf_page": 91, "strip": "11", "item": 4}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 2, "graph": 87},
+      "source_location": {"pdf_page": 91, "strip": "11", "item": 5}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 2, "graph": 88},
+      "source_location": {"pdf_page": 91, "strip": "11", "item": 6}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 2, "graph": 89},
+      "source_location": {"pdf_page": 91, "strip": "11", "item": 7}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 2, "graph": 90},
+      "source_location": {"pdf_page": 91, "strip": "11", "item": 8}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 2, "graph": 91},
+      "source_location": {"pdf_page": 91, "strip": "11", "item": 9}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 2, "graph": 92},
+      "source_location": {"pdf_page": 91, "strip": "11", "item": 10}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 2, "graph": 93},
+      "source_location": {"pdf_page": 91, "strip": "11", "item": 11}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 2, "graph": 94},
+      "source_location": {"pdf_page": 91, "strip": "11", "item": 13}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 2, "graph": 95},
+      "source_location": {"pdf_page": 91, "strip": "11", "item": 14}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 2, "graph": 96},
+      "source_location": {"pdf_page": 91, "strip": "11", "item": 15}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 2, "graph": 97},
+      "source_location": {"pdf_page": 91, "strip": "11", "item": 16}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 2, "graph": 98},
+      "source_location": {"pdf_page": 91, "strip": "11", "item": 17}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 2, "graph": 99},
+      "source_location": {"pdf_page": 91, "strip": "11", "item": 18}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 2, "graph": 100},
+      "source_location": {"pdf_page": 91, "strip": "11", "item": 19}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 2, "graph": 101},
+      "source_location": {"pdf_page": 91, "strip": "11", "item": 20}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 2, "graph": 102},
+      "source_location": {"pdf_page": 91, "strip": "11", "item": 21}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 2, "graph": 103},
+      "source_location": {"pdf_page": 91, "strip": "11", "item": 22}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 2, "graph": 104},
+      "source_location": {"pdf_page": 91, "strip": "11", "item": 23}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 2, "graph": 105},
+      "source_location": {"pdf_page": 91, "strip": "11", "item": 24}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 2, "graph": 106},
+      "source_location": {"pdf_page": 91, "strip": "11", "item": 26}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 2, "graph": 107},
+      "source_location": {"pdf_page": 91, "strip": "11", "item": 27}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 2, "graph": 108},
+      "source_location": {"pdf_page": 91, "strip": "11", "item": 28}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 2, "graph": 109},
+      "source_location": {"pdf_page": 91, "strip": "11", "item": 29}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 2, "graph": 110},
+      "source_location": {"pdf_page": 91, "strip": "11", "item": 30}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 2, "graph": 111},
+      "source_location": {"pdf_page": 91, "strip": "11", "item": 31}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 2, "graph": 112},
+      "source_location": {"pdf_page": 91, "strip": "11", "item": 32}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 2, "graph": 114},
+      "source_location": {"pdf_page": 91, "strip": "12", "item": 3}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 2, "graph": 115},
+      "source_location": {"pdf_page": 91, "strip": "12", "item": 4}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 2, "graph": 116},
+      "source_location": {"pdf_page": 91, "strip": "12", "item": 5}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 2, "graph": 117},
+      "source_location": {"pdf_page": 91, "strip": "12", "item": 6}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 2, "graph": 118},
+      "source_location": {"pdf_page": 91, "strip": "12", "item": 7}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 2, "graph": 119},
+      "source_location": {"pdf_page": 91, "strip": "12", "item": 8}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 2, "graph": 120},
+      "source_location": {"pdf_page": 91, "strip": "12", "item": 9}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 2, "graph": 121},
+      "source_location": {"pdf_page": 91, "strip": "12", "item": 10}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 2, "graph": 122},
+      "source_location": {"pdf_page": 91, "strip": "12", "item": 11}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 2, "graph": 123},
+      "source_location": {"pdf_page": 91, "strip": "12", "item": 12}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 2, "graph": 124},
+      "source_location": {"pdf_page": 91, "strip": "12", "item": 13}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 2, "graph": 125},
+      "source_location": {"pdf_page": 91, "strip": "12", "item": 14}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 2, "graph": 126},
+      "source_location": {"pdf_page": 91, "strip": "12", "item": 15}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 2, "graph": 127},
+      "source_location": {"pdf_page": 91, "strip": "12", "item": 16}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 2, "graph": 128},
+      "source_location": {"pdf_page": 91, "strip": "12", "item": 17}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 2, "graph": 129},
+      "source_location": {"pdf_page": 91, "strip": "12", "item": 18}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 2, "graph": 130},
+      "source_location": {"pdf_page": 91, "strip": "12", "item": 19}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 2, "graph": 131},
+      "source_location": {"pdf_page": 91, "strip": "12", "item": 20}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 2, "graph": 132},
+      "source_location": {"pdf_page": 91, "strip": "12", "item": 21}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 2, "graph": 133},
+      "source_location": {"pdf_page": 91, "strip": "12", "item": 22}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 2, "graph": 134},
+      "source_location": {"pdf_page": 91, "strip": "12", "item": 23}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 2, "graph": 135},
+      "source_location": {"pdf_page": 91, "strip": "12", "item": 24}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 2, "graph": 136},
+      "source_location": {"pdf_page": 91, "strip": "12", "item": 25}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 2, "graph": 137},
+      "source_location": {"pdf_page": 91, "strip": "12", "item": 26}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 3, "graph": 1},
+      "source_location": {"pdf_page": 91, "strip": "12", "item": 28}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 3, "graph": 2},
+      "source_location": {"pdf_page": 91, "strip": "12", "item": 29}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 3, "graph": 3},
+      "source_location": {"pdf_page": 91, "strip": "12", "item": 30}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 3, "graph": 4},
+      "source_location": {"pdf_page": 91, "strip": "12", "item": 31}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 3, "graph": 5},
+      "source_location": {"pdf_page": 91, "strip": "12", "item": 32}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 3, "graph": 6},
+      "source_location": {"pdf_page": 92, "strip": "13", "item": 1}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 3, "graph": 7},
+      "source_location": {"pdf_page": 92, "strip": "13", "item": 2}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 3, "graph": 8},
+      "source_location": {"pdf_page": 92, "strip": "13", "item": 3}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 3, "graph": 9},
+      "source_location": {"pdf_page": 92, "strip": "13", "item": 4}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 3, "graph": 10},
+      "source_location": {"pdf_page": 92, "strip": "13", "item": 5}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 3, "graph": 11},
+      "source_location": {"pdf_page": 92, "strip": "13", "item": 6}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 3, "graph": 12},
+      "source_location": {"pdf_page": 92, "strip": "13", "item": 7}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 3, "graph": 13},
+      "source_location": {"pdf_page": 92, "strip": "13", "item": 8}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 3, "graph": 14},
+      "source_location": {"pdf_page": 92, "strip": "13", "item": 9}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 3, "graph": 15},
+      "source_location": {"pdf_page": 92, "strip": "13", "item": 10}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 3, "graph": 16},
+      "source_location": {"pdf_page": 92, "strip": "13", "item": 12}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 3, "graph": 17},
+      "source_location": {"pdf_page": 92, "strip": "13", "item": 13}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 3, "graph": 18},
+      "source_location": {"pdf_page": 92, "strip": "13", "item": 14}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 3, "graph": 19},
+      "source_location": {"pdf_page": 92, "strip": "13", "item": 15}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 3, "graph": 21},
+      "source_location": {"pdf_page": 92, "strip": "13", "item": 17}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 3, "graph": 22},
+      "source_location": {"pdf_page": 92, "strip": "13", "item": 18}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 3, "graph": 23},
+      "source_location": {"pdf_page": 92, "strip": "13", "item": 19}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 3, "graph": 24},
+      "source_location": {"pdf_page": 92, "strip": "13", "item": 20}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 3, "graph": 25},
+      "source_location": {"pdf_page": 92, "strip": "13", "item": 21}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 3, "graph": 26},
+      "source_location": {"pdf_page": 92, "strip": "13", "item": 22}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 3, "graph": 27},
+      "source_location": {"pdf_page": 92, "strip": "13", "item": 23}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 3, "graph": 28},
+      "source_location": {"pdf_page": 92, "strip": "13", "item": 24}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 3, "graph": 29},
+      "source_location": {"pdf_page": 92, "strip": "13", "item": 25}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 3, "graph": 30},
+      "source_location": {"pdf_page": 92, "strip": "13", "item": 26}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 3, "graph": 31},
+      "source_location": {"pdf_page": 92, "strip": "13", "item": 28}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 3, "graph": 32},
+      "source_location": {"pdf_page": 92, "strip": "13", "item": 29}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 3, "graph": 33},
+      "source_location": {"pdf_page": 92, "strip": "13", "item": 30}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 3, "graph": 34},
+      "source_location": {"pdf_page": 92, "strip": "13", "item": 31}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 3, "graph": 35},
+      "source_location": {"pdf_page": 92, "strip": "13", "item": 32}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 3, "graph": 36},
+      "source_location": {"pdf_page": 92, "strip": "14", "item": 1}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 3, "graph": 37},
+      "source_location": {"pdf_page": 92, "strip": "14", "item": 2}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 3, "graph": 38},
+      "source_location": {"pdf_page": 92, "strip": "14", "item": 3}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 4, "graph": 1},
+      "source_location": {"pdf_page": 95, "strip": "14v", "item": 2}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 4, "graph": 2},
+      "source_location": {"pdf_page": 95, "strip": "14v", "item": 3}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 4, "graph": 3},
+      "source_location": {"pdf_page": 95, "strip": "14v", "item": 4}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 4, "graph": 4},
+      "source_location": {"pdf_page": 95, "strip": "14v", "item": 5}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 4, "graph": 5},
+      "source_location": {"pdf_page": 95, "strip": "14v", "item": 6}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 4, "graph": 6},
+      "source_location": {"pdf_page": 95, "strip": "14v", "item": 7}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 4, "graph": 7},
+      "source_location": {"pdf_page": 95, "strip": "14v", "item": 8}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 4, "graph": 8},
+      "source_location": {"pdf_page": 95, "strip": "14v", "item": 9}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 4, "graph": 9},
+      "source_location": {"pdf_page": 95, "strip": "14v", "item": 10}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 4, "graph": 10},
+      "source_location": {"pdf_page": 95, "strip": "14v", "item": 11}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 4, "graph": 11},
+      "source_location": {"pdf_page": 95, "strip": "14v", "item": 12}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 4, "graph": 12},
+      "source_location": {"pdf_page": 95, "strip": "14v", "item": 13}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 4, "graph": 13},
+      "source_location": {"pdf_page": 95, "strip": "14v", "item": 14}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 2, "graph": 113},
+      "source_location": {"pdf_page": 91, "strip": "12", "item": 1}
+    },
+    {
+      "transcription_position": {"unit": 1, "paragraph": 4, "graph": 14},
+      "source_location": {"pdf_page": 95, "strip": "14v", "item": 15}
+    }
+  ]
+}

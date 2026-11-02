@@ -449,6 +449,30 @@ class KindsTest < Minitest::Test
     assert_empty shipped.normalize("ppchy", "Vernacular"), "a register label, reviewed — never unmapped noise"
   end
 
+  # P153: Ganjoor's section labels — the divan's FORM sections fold, work
+  # and chapter titles stay uncovered (vocabulary: open).
+  def test_shipped_ganjoor_folds_the_form_sections
+    shipped = shipped_kinds
+    assert_equal %w[form], shipped.metadata_for("ganjoor")
+    assert_equal ["literary/poetry/lyric"], shipped.normalize("ganjoor", "غزلیات")
+    assert_equal ["literary/poetry"], shipped.normalize("ganjoor", "رباعیات")
+    assert_equal ["literary/poetry"], shipped.normalize("ganjoor", "قصاید"), "never praise by default"
+    assert_empty shipped.normalize("ganjoor", "دفتر اول"), "a work/chapter title mints nothing"
+  end
+
+  # P153: the Baley deposits — one known work per deposit, folded per work.
+  def test_shipped_baley_manuscripts_folds_each_deposit_work
+    shipped = shipped_kinds
+    assert_equal %w[work], shipped.metadata_for("baley-manuscripts")
+    assert_equal ["literary/poetry"], shipped.normalize("baley-manuscripts", "shijing")
+    assert_equal ["literary/wisdom"], shipped.normalize("baley-manuscripts", "laozi")
+    assert_equal ["historiography"], shipped.normalize("baley-manuscripts", "jinteng")
+    assert_equal ["literary"], shipped.normalize("baley-manuscripts", "shaner"), "declared coarse"
+    Nabu::Adapters::BaleyManuscripts::DEPOSITS.each_key do |work|
+      refute_empty shipped.normalize("baley-manuscripts", work), "#{work}: every deposit folds"
+    end
+  end
+
   # P104-1: the ETCSL composition-number taxonomy (c.0–c.6) folds through
   # a frozen prefix map — the Sumerian literary canon's first genre view.
   def test_shipped_etcsl_folds_the_composition_number_blocks

@@ -88,6 +88,9 @@ module Nabu
           "aozora" => :structured, # the index's 初出 first publication (class composition),
           #                          else the 底本 first-edition year (class edition)
           "archiv-slav-phil" => :structured, # each volume's title-page year
+          "baley-manuscripts" => :structured, # P153: each manuscript find's conventional era
+          #                                   (radiocarbon / burial terminus; an edition inherits its
+          #                                   manuscript's); place = the excavated findspot when provenanced
           "bdcamoes" => :structured,
           "bfm" => :iso_keys,
           "bg-wikisource" => :structured,
@@ -101,9 +104,13 @@ module Nabu
           #                            place = the manuscript's Provenance
           "cbeta" => :dynasty_band,
           "ccmh" => :bounds_keys,
+          "cgpg" => :structured, # P153: upstream's per-volume Dates label as a century envelope
+          #                        (class composition); Pre-Nicaean volumes carry none
           "classical-modern" => :work_era, # the work's attributed era (config/work_eras.yml,
           #                                  keyed on metadata "book"), composition class
           "cme" => :edition_year_text,
+          "comenius" => :structured, # P153: the title page's docDate @when (one year), its
+          #                            printed wording raw ("LÉTA PÁNĚ MDCXIX")
           "corpus-corporum" => :structured,
           "corpus-gysseling" => :bounds_keys,
           "corpus-oudfries" => :bounds_keys, # the WITNESS span (manuscript_year_*); the composition
@@ -145,6 +152,9 @@ module Nabu
           #                                   (1757, class edition) — the rendering is undated
           "eltec-srp" => :structured, # P117-2: the firstEdition's typed years, place
           #                             = its pubPlace (publication place)
+          "etcbc-targum" => :place_only, # P153: the Genizah texts' findspot ("Cairo Genizah");
+          #                                no date field upstream (edition years ride
+          #                                base_edition, never a date)
           "extrabiblical" => :work_era, # each ETCBC book's attributed era (config/work_eras.yml,
           #                               keyed on metadata "book"); place = the find-site hash
           #                               (ancient name + Pleiades id) the adapter's table carries
@@ -154,6 +164,9 @@ module Nabu
           #                            (Kos: 972–1039, artifact class) on the transcription
           #                            layers; the modern translation siblings stay undated
           "gams-zrcalo" => :structured,
+          "ganjoor" => :structured, # P153: the poet's life from the site's poets list (lunar-Hijri
+          #                           birth..death → CE), class composition; place = the poet's
+          #                           death place toponym (name + coordinates)
           "glaux" => :signed_bounds_keys,
           "gretil-legacy" => :work_era, # the work's attributed era (config/work_eras.yml,
           #                               keyed on metadata "work" = the GRETIL file stem)
@@ -189,6 +202,8 @@ module Nabu
           #                         a day date, "1581/2", "2. pol. 15. stol."); place =
           #                         the origPlace ("Iustinopolis (Koper)", "Piran")
           "menota" => :structured,
+          "paramara" => :structured, # P153: the Period field's leading era-typed year
+          #                            (config/eras.yml VS/Śaka); place = the Location findspot
           "mk-wikisource" => :structured,
           "ms-wikisource" => :structured, # P120-3: the manuscript's stated date (header
           #                                 year= / Index Year=; "abad ke-N" a century)
@@ -261,6 +276,8 @@ module Nabu
           "titus-sogdian" => :place_only, # the page findspot (one site every line resolves to)
           "titus-tocharian-a" => :place_only,
           "titus-tocharian-b" => :place_only, # the A family's findspot mining
+          "typikon-bible" => :structured, # P153: the edition year the dump records (1688, class
+          #                                 edition) — no place claim
           "uk-wikisource" => :era_band_key,
           "vakk" => :structured, # the text list's year ("1535", "1485-1495"); the court
           #                        protocols place at their Vald (the sitting commune)

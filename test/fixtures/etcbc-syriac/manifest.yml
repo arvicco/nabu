@@ -1,0 +1,155 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# otype.tf and otext.tf are byte-verbatim WHOLES (drift there is real
+# drift); every other file is a documented TRIM of a larger upstream
+# feature file (whole: false — fetched for URL-liveness only, never
+# byte-compared). adapter_test is null: the adapter test asserts
+# slice-level counts, which untrimmed upstream files would false-fail.
+# Re-trim per the README table after any refresh. Pinned upstream commit:
+# 0b6ded2b369c7d81589a98c92325290e24b20af6 (master = tag v0.92,
+# retrieved 2026-11-02).
+source: etcbc-syriac
+adapter_test:
+retrieved: 2026-11-02
+files:
+  - path: tf/0.92/book.tf
+    url: https://raw.githubusercontent.com/ETCBC/syriac/master/tf/0.92/book.tf
+    whole: false
+    trim: slice the fixture's kept nodes, gap-anchored (419 B -> 271 B)
+  - path: tf/0.92/chapter.tf
+    url: https://raw.githubusercontent.com/ETCBC/syriac/master/tf/0.92/chapter.tf
+    whole: false
+    trim: slice the fixture's kept nodes, gap-anchored (2404 B -> 292 B)
+  - path: tf/0.92/emf.tf
+    url: https://raw.githubusercontent.com/ETCBC/syriac/master/tf/0.92/emf.tf
+    whole: false
+    trim: slice the fixture's kept nodes, gap-anchored (467778 B -> 5988 B)
+  - path: tf/0.92/g_cons.tf
+    url: https://raw.githubusercontent.com/ETCBC/syriac/master/tf/0.92/g_cons.tf
+    whole: false
+    trim: slice the fixture's kept nodes, gap-anchored (1525982 B -> 15670 B)
+  - path: tf/0.92/g_cons_utf8.tf
+    url: https://raw.githubusercontent.com/ETCBC/syriac/master/tf/0.92/g_cons_utf8.tf
+    whole: false
+    trim: slice the fixture's kept nodes, gap-anchored (2648509 B -> 26855 B)
+  - path: tf/0.92/g_emf.tf
+    url: https://raw.githubusercontent.com/ETCBC/syriac/master/tf/0.92/g_emf.tf
+    whole: false
+    trim: slice the fixture's kept nodes, gap-anchored (467773 B -> 5975 B)
+  - path: tf/0.92/g_lex.tf
+    url: https://raw.githubusercontent.com/ETCBC/syriac/master/tf/0.92/g_lex.tf
+    whole: false
+    trim: slice the fixture's kept nodes, gap-anchored (1357988 B -> 13927 B)
+  - path: tf/0.92/g_nme.tf
+    url: https://raw.githubusercontent.com/ETCBC/syriac/master/tf/0.92/g_nme.tf
+    whole: false
+    trim: slice the fixture's kept nodes, gap-anchored (455260 B -> 3574 B)
+  - path: tf/0.92/g_pfm.tf
+    url: https://raw.githubusercontent.com/ETCBC/syriac/master/tf/0.92/g_pfm.tf
+    whole: false
+    trim: slice the fixture's kept nodes, gap-anchored (429372 B -> 2345 B)
+  - path: tf/0.92/g_pfx.tf
+    url: https://raw.githubusercontent.com/ETCBC/syriac/master/tf/0.92/g_pfx.tf
+    whole: false
+    trim: slice the fixture's kept nodes, gap-anchored (417153 B -> 850 B)
+  - path: tf/0.92/g_vbe.tf
+    url: https://raw.githubusercontent.com/ETCBC/syriac/master/tf/0.92/g_vbe.tf
+    whole: false
+    trim: slice the fixture's kept nodes, gap-anchored (432257 B -> 2044 B)
+  - path: tf/0.92/g_vbs.tf
+    url: https://raw.githubusercontent.com/ETCBC/syriac/master/tf/0.92/g_vbs.tf
+    whole: false
+    trim: slice the fixture's kept nodes, gap-anchored (411514 B -> 531 B)
+  - path: tf/0.92/g_word.tf
+    url: https://raw.githubusercontent.com/ETCBC/syriac/master/tf/0.92/g_word.tf
+    whole: false
+    trim: slice the fixture's kept nodes, gap-anchored (1579951 B -> 16238 B)
+  - path: tf/0.92/gloss.tf
+    url: https://raw.githubusercontent.com/ETCBC/syriac/master/tf/0.92/gloss.tf
+    whole: false
+    trim: slice the fixture's kept nodes, gap-anchored (5642244 B -> 60139 B)
+  - path: tf/0.92/gn.tf
+    url: https://raw.githubusercontent.com/ETCBC/syriac/master/tf/0.92/gn.tf
+    whole: false
+    trim: slice the fixture's kept nodes, gap-anchored (1491189 B -> 15457 B)
+  - path: tf/0.92/lex.tf
+    url: https://raw.githubusercontent.com/ETCBC/syriac/master/tf/0.92/lex.tf
+    whole: false
+    trim: slice the fixture's kept nodes, gap-anchored (1399665 B -> 14174 B)
+  - path: tf/0.92/ls.tf
+    url: https://raw.githubusercontent.com/ETCBC/syriac/master/tf/0.92/ls.tf
+    whole: false
+    trim: slice the fixture's kept nodes, gap-anchored (1455212 B -> 14074 B)
+  - path: tf/0.92/nme.tf
+    url: https://raw.githubusercontent.com/ETCBC/syriac/master/tf/0.92/nme.tf
+    whole: false
+    trim: slice the fixture's kept nodes, gap-anchored (471873 B -> 4306 B)
+  - path: tf/0.92/nu.tf
+    url: https://raw.githubusercontent.com/ETCBC/syriac/master/tf/0.92/nu.tf
+    whole: false
+    trim: slice the fixture's kept nodes, gap-anchored (1613901 B -> 16884 B)
+  - path: tf/0.92/oslots.tf
+    url: https://raw.githubusercontent.com/ETCBC/syriac/master/tf/0.92/oslots.tf
+    whole: false
+    trim: slice the fixture's kept nodes, gap-anchored (255105 B -> 3287 B)
+  - path: tf/0.92/otext.tf
+    url: https://raw.githubusercontent.com/ETCBC/syriac/master/tf/0.92/otext.tf
+    whole: true
+    trim:
+  - path: tf/0.92/otype.tf
+    url: https://raw.githubusercontent.com/ETCBC/syriac/master/tf/0.92/otype.tf
+    whole: true
+    trim:
+  - path: tf/0.92/pfm.tf
+    url: https://raw.githubusercontent.com/ETCBC/syriac/master/tf/0.92/pfm.tf
+    whole: false
+    trim: slice the fixture's kept nodes, gap-anchored (430941 B -> 2363 B)
+  - path: tf/0.92/pfx.tf
+    url: https://raw.githubusercontent.com/ETCBC/syriac/master/tf/0.92/pfx.tf
+    whole: false
+    trim: slice the fixture's kept nodes, gap-anchored (420988 B -> 904 B)
+  - path: tf/0.92/ps.tf
+    url: https://raw.githubusercontent.com/ETCBC/syriac/master/tf/0.92/ps.tf
+    whole: false
+    trim: slice the fixture's kept nodes, gap-anchored (1177392 B -> 12618 B)
+  - path: tf/0.92/sp.tf
+    url: https://raw.githubusercontent.com/ETCBC/syriac/master/tf/0.92/sp.tf
+    whole: false
+    trim: slice the fixture's kept nodes, gap-anchored (2036812 B -> 20780 B)
+  - path: tf/0.92/st.tf
+    url: https://raw.githubusercontent.com/ETCBC/syriac/master/tf/0.92/st.tf
+    whole: false
+    trim: slice the fixture's kept nodes, gap-anchored (1502848 B -> 15435 B)
+  - path: tf/0.92/trailer.tf
+    url: https://raw.githubusercontent.com/ETCBC/syriac/master/tf/0.92/trailer.tf
+    whole: false
+    trim: slice the fixture's kept nodes, gap-anchored (1390727 B -> 14671 B)
+  - path: tf/0.92/vbe.tf
+    url: https://raw.githubusercontent.com/ETCBC/syriac/master/tf/0.92/vbe.tf
+    whole: false
+    trim: slice the fixture's kept nodes, gap-anchored (437803 B -> 2067 B)
+  - path: tf/0.92/vbs.tf
+    url: https://raw.githubusercontent.com/ETCBC/syriac/master/tf/0.92/vbs.tf
+    whole: false
+    trim: slice the fixture's kept nodes, gap-anchored (414478 B -> 814 B)
+  - path: tf/0.92/verse.tf
+    url: https://raw.githubusercontent.com/ETCBC/syriac/master/tf/0.92/verse.tf
+    whole: false
+    trim: slice the fixture's kept nodes, gap-anchored (48905 B -> 664 B)
+  - path: tf/0.92/vo.tf
+    url: https://raw.githubusercontent.com/ETCBC/syriac/master/tf/0.92/vo.tf
+    whole: false
+    trim: slice the fixture's kept nodes, gap-anchored (656901 B -> 7112 B)
+  - path: tf/0.92/vpm.tf
+    url: https://raw.githubusercontent.com/ETCBC/syriac/master/tf/0.92/vpm.tf
+    whole: false
+    trim: slice the fixture's kept nodes, gap-anchored (113411 B -> 1315 B)
+  - path: tf/0.92/vs.tf
+    url: https://raw.githubusercontent.com/ETCBC/syriac/master/tf/0.92/vs.tf
+    whole: false
+    trim: slice the fixture's kept nodes, gap-anchored (593053 B -> 6470 B)
+  - path: tf/0.92/vt.tf
+    url: https://raw.githubusercontent.com/ETCBC/syriac/master/tf/0.92/vt.tf
+    whole: false
+    trim: slice the fixture's kept nodes, gap-anchored (630384 B -> 6852 B)

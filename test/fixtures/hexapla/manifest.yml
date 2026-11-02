@@ -1,0 +1,82 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# otype.tf and otext.tf are byte-verbatim WHOLES (drift there is real
+# drift); every other file is a documented TRIM of a larger upstream
+# feature file (whole: false — fetched for URL-liveness only, never
+# byte-compared). adapter_test is null: the adapter test asserts
+# slice-level counts, which untrimmed upstream files would false-fail.
+# Re-trim per the README table after any refresh. Pinned upstream commit:
+# 02bf17c3fe0520112cf42c5a11d62c0808aea08c (main, retrieved 2026-11-02).
+source: hexapla
+adapter_test:
+retrieved: 2026-11-02
+files:
+  - path: tf/0.1/alt.tf
+    url: https://raw.githubusercontent.com/rdtaylorjr/hexapla/main/tf/0.1/alt.tf
+    whole: false
+    trim: slice the fixture's kept nodes, gap-anchored (2911 B -> 907 B)
+  - path: tf/0.1/book.tf
+    url: https://raw.githubusercontent.com/rdtaylorjr/hexapla/main/tf/0.1/book.tf
+    whole: false
+    trim: slice the fixture's kept nodes, gap-anchored (1089 B -> 1086 B)
+  - path: tf/0.1/book@en.tf
+    url: https://raw.githubusercontent.com/rdtaylorjr/hexapla/main/tf/0.1/book@en.tf
+    whole: false
+    trim: slice the fixture's kept nodes, gap-anchored (1121 B -> 1119 B)
+  - path: tf/0.1/chapter.tf
+    url: https://raw.githubusercontent.com/rdtaylorjr/hexapla/main/tf/0.1/chapter.tf
+    whole: false
+    trim: slice the fixture's kept nodes, gap-anchored (6114 B -> 1139 B)
+  - path: tf/0.1/id.tf
+    url: https://raw.githubusercontent.com/rdtaylorjr/hexapla/main/tf/0.1/id.tf
+    whole: false
+    trim: slice the fixture's kept nodes, gap-anchored (2399346 B -> 25876 B)
+  - path: tf/0.1/languageISO.tf
+    url: https://raw.githubusercontent.com/rdtaylorjr/hexapla/main/tf/0.1/languageISO.tf
+    whole: false
+    trim: slice the fixture's kept nodes, gap-anchored (713210 B -> 8883 B)
+  - path: tf/0.1/oslots.tf
+    url: https://raw.githubusercontent.com/rdtaylorjr/hexapla/main/tf/0.1/oslots.tf
+    whole: false
+    trim: slice the fixture's kept nodes, gap-anchored (1790832 B -> 19977 B)
+  - path: tf/0.1/otext.tf
+    url: https://raw.githubusercontent.com/rdtaylorjr/hexapla/main/tf/0.1/otext.tf
+    whole: true
+    trim:
+  - path: tf/0.1/otype.tf
+    url: https://raw.githubusercontent.com/rdtaylorjr/hexapla/main/tf/0.1/otype.tf
+    whole: true
+    trim:
+  - path: tf/0.1/prefix.tf
+    url: https://raw.githubusercontent.com/rdtaylorjr/hexapla/main/tf/0.1/prefix.tf
+    whole: false
+    trim: slice the fixture's kept nodes, gap-anchored (1602 B -> 926 B)
+  - path: tf/0.1/rank.tf
+    url: https://raw.githubusercontent.com/rdtaylorjr/hexapla/main/tf/0.1/rank.tf
+    whole: false
+    trim: slice the fixture's kept nodes, gap-anchored (339415 B -> 4495 B)
+  - path: tf/0.1/reading.tf
+    url: https://raw.githubusercontent.com/rdtaylorjr/hexapla/main/tf/0.1/reading.tf
+    whole: false
+    trim: slice the fixture's kept nodes, gap-anchored (264620 B -> 3614 B)
+  - path: tf/0.1/siglum.tf
+    url: https://raw.githubusercontent.com/rdtaylorjr/hexapla/main/tf/0.1/siglum.tf
+    whole: false
+    trim: slice the fixture's kept nodes, gap-anchored (156753 B -> 3585 B)
+  - path: tf/0.1/stichos.tf
+    url: https://raw.githubusercontent.com/rdtaylorjr/hexapla/main/tf/0.1/stichos.tf
+    whole: false
+    trim: slice the fixture's kept nodes, gap-anchored (76337 B -> 1791 B)
+  - path: tf/0.1/text.tf
+    url: https://raw.githubusercontent.com/rdtaylorjr/hexapla/main/tf/0.1/text.tf
+    whole: false
+    trim: slice the fixture's kept nodes, gap-anchored (2080417 B -> 26464 B)
+  - path: tf/0.1/trailer.tf
+    url: https://raw.githubusercontent.com/rdtaylorjr/hexapla/main/tf/0.1/trailer.tf
+    whole: false
+    trim: slice the fixture's kept nodes, gap-anchored (365843 B -> 5069 B)
+  - path: tf/0.1/verse.tf
+    url: https://raw.githubusercontent.com/rdtaylorjr/hexapla/main/tf/0.1/verse.tf
+    whole: false
+    trim: slice the fixture's kept nodes, gap-anchored (46764 B -> 1454 B)

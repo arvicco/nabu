@@ -1,0 +1,25 @@
+cff-version: 1.2.0
+message: "If you use this dataset, please cite the archived dataset."
+type: dataset
+title: "Digital Āisòng 哀誦: A Character-Level Parallel Dataset of the Anda 安大簡 Manuscript and Its Editorial Interpretation"
+version: 1.0.0
+date-released: 2026-09-26
+authors:
+  - family-names: Baley
+    given-names: Julien
+    orcid: "https://orcid.org/0000-0003-1056-6211"
+    affiliation: "School of Languages, Cultures, and Linguistics, SOAS University of London, UK"
+  - family-names: Yīng
+    given-names: Jīnqí
+    alias: 應金琦
+    orcid: "https://orcid.org/0000-0002-6154-0620"
+    affiliation: "Trinity Centre for Asian Studies, Trinity College Dublin, Ireland"
+abstract: >-
+  Digital Āisòng 哀誦 is a character-level parallel dataset aligning the Chen
+  Qi (陳琦) editorial text with the Anda (安大簡) manuscript witness. It
+  provides graph-level Ideographic Description Sequence (IDS) transcriptions,
+  line- and character-level alignments, source and image mappings, reviewed
+  manuscript images, JSON Schemas, validation tools, and a static browser
+  viewer. Project-authored data, software, and documentation are licensed CC
+  BY 4.0; manuscript images are distributed under separate permissions
+  documented in witness-images/RIGHTS.md.

@@ -117,6 +117,20 @@ manuscript) with the manuscript's own `ed="ms"` milestones:
   every word (`me:level="facs dipl norm"`) with 28 bare
   `<pc xml:id>.</pc>` — bare punctuation in a three-level document.
 
+## texts/ — the legacy-language-code trim
+
+- `texts/TuebUB-Me-II-2.xml` — DOCUMENTED TRIM (756,674 B → 15,874 B),
+  cut 2026-11-02 from the canonical sync. The Tübingen Fragment of the
+  Frostathing Law, c. 1260–70, three levels. The archive's ONE file whose
+  msItem declares `<textLang mainLang="onw"/>` — Menota's deprecated
+  legacy code for Old Norwegian, which ISO 639-3 assigns to Old Nubian —
+  while its own langUsage says `<language ident="nor">Old
+  Norwegian</language>` and its `<text xml:lang="nor">`. Its licence
+  target cites the BY-SA deed over `https` (the others `http`). Trim:
+  the first 385 lines byte-intact (teiHeader + facsimile + body through
+  ms lines 1r.0–1r.1), then a synthetic
+  `</p></div></div></body></text></TEI>` tail.
+
 ## menota-entities.txt — the MUFI entity table
 
 https://www.menota.org/menota-entities.txt, WHOLE (156,805 B, version of

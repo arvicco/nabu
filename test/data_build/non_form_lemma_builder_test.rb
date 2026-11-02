@@ -20,11 +20,13 @@ require "json"
 # Count sums equal the tokens attesting that level.
 #
 # Every expectation below is counted from the real menota fixtures
-# (test/fixtures/menota — 13 documents): 1,317 lemmatized words in the
-# Old West Norse documents (isl 783, nor 534) → 1,915 distinct tuples
-# (facs 619, dipl 762, norm 534) over 424 lemmas; per-level token counts
-# facs 993, dipl 1,317 (every lemmatized fixture word has a dipl
-# reading), norm 1,025. 135 lemma-less words and 209 punctuation tokens
+# (test/fixtures/menota — 13 texts): 1,332 lemmatized words in the
+# Old West Norse documents (isl 783, nor 549 — incl. the 15 of the TübUB
+# Me II 2 trim, whose deprecated onw header code the adapter reads as
+# nor) → 1,958 distinct tuples (facs 634, dipl 776, norm 548) over 431
+# lemmas; per-level token counts facs 1,008, dipl 1,332 (every
+# lemmatized fixture word has a dipl reading), norm 1,040. 135
+# lemma-less words and 210 punctuation tokens
 # mint nothing. Holm A 80 (Old Swedish, swe) is OUT of scope — Glottolog
 # files Old Swedish/Old Danish under Swedish/Danish, not Old Norse — and
 # is censused.
@@ -37,11 +39,11 @@ class DataBuildNonFormLemmaBuilderTest < Minitest::Test
   FORM_PRIMARY_KEY = %w[Level Form Lemma Msa].freeze
   LEMMA_COLUMNS = %w[ID Language_ID Lemma Count].freeze
 
-  LEMMATIZED_TOKENS = 1_317
-  DISTINCT_TUPLES = 1_915
-  DISTINCT_LEMMAS = 424
-  LEVEL_TOKENS = { "facs" => 993, "dipl" => 1_317, "norm" => 1_025 }.freeze
-  LEVEL_ROWS = { "facs" => 619, "dipl" => 762, "norm" => 534 }.freeze
+  LEMMATIZED_TOKENS = 1_332
+  DISTINCT_TUPLES = 1_958
+  DISTINCT_LEMMAS = 431
+  LEVEL_TOKENS = { "facs" => 1_008, "dipl" => 1_332, "norm" => 1_040 }.freeze
+  LEVEL_ROWS = { "facs" => 634, "dipl" => 776, "norm" => 548 }.freeze
 
   # -- rig -------------------------------------------------------------------
 
@@ -209,7 +211,7 @@ class DataBuildNonFormLemmaBuilderTest < Minitest::Test
       assert_equal(LEMMATIZED_TOKENS, table.sum { |row| Integer(row["Count"]) },
                    "a token counts once in the sidecar, however many levels it attests")
       assert_equal "78", find_row(table, "Lemma" => "ok")["Count"]
-      assert_equal "57", find_row(table, "Lemma" => "vera")["Count"]
+      assert_equal "58", find_row(table, "Lemma" => "vera")["Count"]
     end
   end
 
@@ -232,9 +234,9 @@ class DataBuildNonFormLemmaBuilderTest < Minitest::Test
       eval = census(out_dir)
       assert_equal LEMMATIZED_TOKENS, eval["lemmatized_tokens_counted"]
       assert_equal LEVEL_TOKENS, eval["level_tokens"]
-      assert_equal({ "isl" => 783, "nor" => 534 }, eval["tokens_by_document_language"])
+      assert_equal({ "isl" => 783, "nor" => 549 }, eval["tokens_by_document_language"])
       assert_equal 135, eval["lemma_less_words_excluded"]
-      assert_equal 209, eval["punctuation_tokens_skipped"]
+      assert_equal 210, eval["punctuation_tokens_skipped"]
       assert_equal({ "swe" => 1 }, eval["out_of_scope_documents_by_language"],
                    "Holm A 80 (Old Swedish) is outside Old Norse and censused")
       assert_equal({}, eval["license_excluded_documents"])

@@ -6,7 +6,7 @@ compatibility: "Requires the nabu MCP server (`bin/nabu mcp`, read-only, stdio) 
 metadata:
   desk: buddhist
   origin: generated
-  sources: "cbeta derge-kangyur derge-tengyur e84000 gretil lotsawa-house mvp sarit suttacentral tipitaka-lk"
+  sources: "bdrc-transcriptions cbeta derge-kangyur derge-tengyur e84000 gretil lotsawa-house mvp sarit suttacentral tipitaka-lk"
 ---
 
 # The Buddhologist — the `buddhist` desk
@@ -23,6 +23,7 @@ verbatim upstream terms are in `docs/02-sources.md` of the Nabu repository.
 <!-- nabu:skill-sources:begin — generated from config/sources.yml by `rake skills:scaffold`; edit outside this block -->
 | Source | Upstream | License class |
 | --- | --- | --- |
+| `bdrc-transcriptions` | BDRC Tibetan transcriptions (ACIP Sungbum, Palri Parkhang, Berkeley) | open |
 | `cbeta` | CBETA — Chinese Buddhist Electronic Text Archive | nc |
 | `derge-kangyur` | Digital Derge Kangyur (Esukhia/Barom proofreading of the UVA-SOAS 2013 eKangyur) | open |
 | `derge-tengyur` | Digital Derge Tengyur (Esukhia/Barom Theksum Choling faithful copy of the Derge edition) | open |

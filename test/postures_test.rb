@@ -179,7 +179,7 @@ class PosturesTest < Minitest::Test
   def test_the_lect_migration_kept_the_p59_4_census
     lect = postures.declarations.select { |d| d.layer == "lect" }
     by_posture = lect.group_by(&:posture).transform_values(&:size)
-    assert_equal 164, lect.size,
+    assert_equal 173, lect.size,
                  "the P59-4 declarations survive the move (61 at migration; itant retired P61-3," \
                  "oracc retired P62-2, etcsl/ccmh/freising/coptic-scriptorium retired P64-6, " \
                  "titus-avestan retired P66-1, osta+fornsvenska retired P77-r8, achemenet " \
@@ -348,7 +348,24 @@ class PosturesTest < Minitest::Test
                  "dictionary ABOUT Tibetan, object_language xct in metadata): 161→162; " \
                  "lzh-collection ADDED — codemap lzh → zho/lit (the kanripo precedent): 162→163; " \
                  "ppchy ADDED P152 — PENDING on a yi (Yiddish) anchor (nothing Yiddish exists in " \
-                 "nabu-lects; the West/East dialect facet waits on the mint): 163→164"
+                 "nabu-lects; the West/East dialect facet waits on the mint): 163→164; " \
+                 "cgpg ADDED P153 — dates (the per-volume century labels band 25 of 33 volumes " \
+                 "into grc:byz): 164→165; " \
+                 "ganjoor ADDED P153 — identity fas (codemap → the bare fa anchor; the registry " \
+                 "holds no Persian stages) + ara for the Arabic sections: 165→166; " \
+                 "comenius ADDED P153 — dates (cs stages to cs:mid by the 1619–1660 title-page " \
+                 "dates; the Dutch Bazuine bare nl): 166→167; " \
+                 "paramara ADDED P153 — identity san (the siddham posture, declared coarse): 167→168; " \
+                 "etcbc-syriac ADDED P153 — identity syc (the peshitta posture; etcbc-targum is " \
+                 "machine-postured by its arc → arc:mid/jud override, no declaration): 168→169; " \
+                 "typikon-bible ADDED P153 — PENDING on a nabu-lects Romanian package (a ro anchor + " \
+                 "an Old Romanian stage; nothing Romanian exists in the registry): 169→170; " \
+                 "hexapla ADDED P153 — identity per column (grc/hbo/lat, the Secunda hbo-Grek): " \
+                 "170→171; " \
+                 "bdrc-transcriptions ADDED P153 — identity xct (the derge/lotsawa precedent, " \
+                 "declared coarse): 171→172; " \
+                 "baley-manuscripts ADDED P153 — codemap och → zho:old (the obimd precedent; the " \
+                 "Western Han witnesses declared coarse): 172→173"
     # The epigraphic-belt registry package (merged + canonical-synced
     # 2026-10-18, the add-then-retire shape within one phase) retires both
     # P130 pendings, and the ociana-script rule + the ig-cyprus override
@@ -383,6 +400,15 @@ class PosturesTest < Minitest::Test
     # posture; object_language xct in metadata): 122→123.
     # lzh-collection joins codemap (lzh → zho/lit, the kanripo precedent): 17→18.
     # ppchy joins as pending on a yi anchor mint: 1→2 (lasla, ppchy).
-    assert_equal({ "dates" => 21, "codemap" => 18, "identity" => 123, "pending" => 2 }, by_posture)
+    # cgpg joins dates (century labels → the grc:byz band): 21→22;
+    # ganjoor joins identity (fas → fa, no Persian stages; ara sections): 123→124;
+    # comenius joins dates (cs → cs:mid by its title-page dates): 22→23;
+    # paramara joins identity (san, the siddham posture): 124→125;
+    # etcbc-syriac joins identity (syc, the peshitta posture): 125→126;
+    # typikon-bible joins pending on a Romanian registry mint: 2→3.
+    # hexapla joins identity (per-column grc/hbo/lat): 126→127;
+    # bdrc-transcriptions joins identity (xct, declared coarse): 127→128;
+    # baley-manuscripts joins codemap (och → zho:old, the obimd precedent): 18→19.
+    assert_equal({ "dates" => 23, "codemap" => 19, "identity" => 128, "pending" => 3 }, by_posture)
   end
 end

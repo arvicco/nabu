@@ -195,3 +195,16 @@ files:
       the <!--no parallel--> comment-only rdgs — closed with the file's
       own tag shapes. The apparatus-suppression regression fixture:
       witness readings annotate, never enter the text.
+  - path: texts/TuebUB-Me-II-2.xml
+    refetchable: false
+    provenance: korpuskel-api
+    whole: false
+    reason: >-
+      The data field of rest?command=download-document&corpus=menota&
+      document-id=TuebUB-Me-II-2; session-gated as above.
+    trim: >-
+      The legacy-code fixture (756,674 B → 15,874 B): the canonical file's
+      first 385 lines byte-intact — the full teiHeader (msItem textLang
+      mainLang="onw" beside langUsage ident="nor") + facsimile + body
+      through ms lines 1r.0–1r.1 — then a synthetic
+      </p></div></div></body></text></TEI> tail.

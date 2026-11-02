@@ -261,6 +261,26 @@ sources:
     script: {posture: qualified, note: "the text is upstream's REFERENCE MODERN CHARACTER per
         oracle-bone glyph UID (a lookup surrogate, not a decipherment claim); □ = lost
         position, ⬚ = no encoded glyph; the platform UIDs ride passage annotations"}
+  baley-manuscripts:   # P153
+    # kind machine-postured — the baley-manuscripts fold in kind_map.yml over the
+    # deposit (work) key.
+    lect: {posture: codemap, note: "och → zho:old (the codemap row, the obimd precedent):
+        Warring States Chu and Western Han manuscript Chinese, declared coarse — the
+        Dingxian (before 55 BCE) and Jeongbaekdong (c. 45 BCE) Analects sit just past the
+        stage's conventional -100 band end; no finer Old Chinese stage is minted"}
+    dating: {posture: dated, note: "all 19 witnesses: the COLLECTIONS table in the adapter —
+        each manuscript find's conventional era (Tsinghua radiocarbon c. 305 BCE, the Chu
+        finds before 278 BCE, the Han tombs' burial termini 165/55/c. 45 BCE, Beida mid-Western
+        Han); an edited reading (Chen Qi, Qiū Ruìfēng) inherits its manuscript's era
+        (:structured); approximate, declared — not upstream metadata"}
+    places: {posture: named, note: "the excavated findspots (Guodian tomb 1, Shuanggudui
+        tomb 1 Fuyang, Bajiaolang tomb 40 Dingxian, Jeongbaekdong tomb 364 Pyongyang: 6 of 19
+        witnesses); the Anda, Shanghai Museum, Tsinghua and Peking University slips were
+        acquired, unprovenanced — no place claimed, declared"}
+    script: {posture: qualified, note: "Han script in the editors' strict transcription:
+        uncoded graphs as braced IDS sequences ({⿱尔坦}) kept verbatim, one graph each;
+        □/〼 lacunae and the 𖿣 iteration mark one position each; the physical slip numbers
+        ride passage annotations (strips)"}
   cbeta:
     lect: {posture: codemap, note: "lzh → zho/lit for T/X/K/J; the N canon (漢譯南傳大藏經,
         the Yuan Heng Temple 1990–98 Chinese translation of the Pāli Tipiṭaka via the
@@ -390,8 +410,10 @@ sources:
     # nor/dan/swe ride the universal codemap; isl/non are identity
     # anchors; the menota-dan rule stages the two Scanian docs (dates
     # unparsed upstream); the onw override reads Menota's deprecated
-    # legacy code (ISO Old Nubian collision — never a codemap row);
-    # nor stages into no:old via lect infer-dates off real origDates
+    # legacy code (ISO Old Nubian collision — never a codemap row), and
+    # since 2026-11-02 the adapter corrects that raw code to nor at
+    # parse (language_raw keeps onw; the doc's 1260-70 date sits in
+    # no:old's band); nor stages into no:old via lect infer-dates off real origDates
     # (25/27 contained; two boundary straddlers honestly bare).
     dating: {posture: dated, note: "P82-1: the msDesc origDate's own
         notBefore/notAfter attributes via MetadataDates :structured, raw
@@ -409,6 +431,22 @@ sources:
     dating: {posture: undatable}
     places: {posture: unplaced}
     script: {posture: implied}
+  comenius:   # P153
+    kind: {posture: unclassified, note: "devotional and consolatory treatises (Truchlivý, Pres
+        boží, Centrum securitatis, the Kšaft) — no typed genre field in the TEI, and no house
+        class fits devotional prose (sermon is preached, scripture canonical); a class for it
+        would be a taxonomy change, so the source stays unclassified"}
+    lect: {posture: dates, note: "cs on 11 works stages to cs:mid [1500, 1775] by the title-page
+        dates 1619–1660 (date-band inference); the Dutch Bazuine rides bare nl (no Dutch stage
+        exists), the Latin prefaces bare lat"}
+    dating: {posture: dated, note: "all 12: the title page's docDate @when (one-year envelope,
+        :structured), its printed wording raw (\"LÉTA PÁNĚ MDCXIX\"); Truchlivý III's @when 1650
+        beside a printed 1651, both kept"}
+    places: {posture: unplaced, note: "no typed place in the headers; the few imprint places
+        (\"V Amsterodámě\") sit inside the title-page date prose, declared unmined"}
+    script: {posture: implied, note: "Latin-script Czech in the DJAK edition's MODERNIZED
+        transcription (the 1978 editorial norm), not the prints' orthography; the print
+        spellings survive only in the apparatus readings"}
   cme:
     kind: {posture: unclassified}
     lect:
@@ -525,6 +563,22 @@ sources:
     dating: {posture: undatable}
     places: {posture: unplaced}
     script: {posture: implied}
+  bdrc-transcriptions:   # P153
+    kind: {posture: unclassified, note: "the releases ship no genre/kind field — only the
+        collection (ACIP Sungbum = collected works, Palri Parkhang = Nyingma collected works and
+        gter ma, Berkeley = manuscripts) rides metadata; the BDRC version record's work type
+        is the candidate join"}
+    lect: {posture: identity, note: "xct (the derge/lotsawa precedent): Classical Tibetan
+        collected works, Buddhist and Bon, declared coarse — no finer Tibetan stage to claim"}
+    dating: {posture: pending, note: "the rows carry no date; candidate: the BDRC version id on
+        every volume (metadata bdrc_version, MW…, with its purl.bdrc.io link) → the BDRC work's
+        author life dates / the print's publication date — a BDRC-record join, not held"}
+    places: {posture: pending, note: "the rows carry no place; candidate: the same BDRC version
+        record (printery / publication place of the woodblock or manuscript), not held"}
+    script: {posture: implied, note: "Tibetan script; the per-page style rides annotations —
+        script (uchen = dbu can, ume = dbu med) and, in the Palri and Berkeley releases, script_4
+        (danyig_pedri, druma, gyuyig_tsugdri, multi-script); technology (woodblock / manuscript /
+        modern) per page"}
   derge-tengyur:
     lect: {posture: identity, note: xct}
     dating: {posture: undatable}
@@ -1588,6 +1642,63 @@ sources:
     script: {posture: qualified, note: "civil-script Cyrillic in MODERNIZED spelling — not the
         1757 print's Church Cyrillic (no titla, no accents, no ѣ/і/ѵ/ѳ/ѡ/ѧ in the file);
         metadata script Cyrl + orthography modernized + rendering on every document"}
+  etcbc-syriac:   # P153
+    # kind: machine-postured — kind_map.yml folds the 31 books over metadata
+    # book (the Peshitta + Syrohexapla books scripture; the four apocalypses
+    # declared deliberate).
+    lect: {posture: identity, note: "syc IS Classical Syriac — every text, the Peshitta to
+        Pseudo-Methodius (the peshitta / syriac-corpus posture)"}
+    dating: {posture: pending, note: "candidate: config/work_eras.yml rows keyed on metadata
+        book for the nine non-Peshitta works (the Book of the Laws of the Countries, Ephrem,
+        Pseudo-Methodius, the apocalypses — handbook composition eras), the Peshitta books as
+        declared-undated rows (the peshitta precedent). The asset carries no date feature"}
+    places: {posture: unplaced, note: "no place feature in tf/0.92 — nothing to mine"}
+    script: {posture: implied, note: "Estrangela consonantal text (g_cons_utf8), unpointed; the
+        ETCBC transliteration with the pointing marks rides the token as g_word"}
+  hexapla:   # P153
+    # kind: machine-postured — kind_map.yml source_kind scripture.
+    lect: {posture: identity, note: "per column, upstream's own languageISO onto real anchors — grc
+        (the LXX edition, Field's Ο′, Aquila, Symmachus, Origen, Quinta, Sexta, Theodotion, and 'the
+        others', which upstream leaves uncoded), hbo (the MT; the Secunda as hbo-Grek — upstream
+        heb-Grek), lat (Field's Latin). No Koine stage is claimed: declared coarse"}
+    dating: {posture: pending, note: "candidate: config/work_eras.yml rows keyed on metadata column —
+        the versions' attributed eras (Aquila c. 130 CE, Symmachus late 2nd c., Theodotion,
+        Origen's Hexapla c. 230–245 CE; the LXX and MT columns as declared-undated rows). The
+        asset carries no date feature"}
+    places: {posture: unplaced, note: "no place feature in tf/0.1 — nothing to mine"}
+    script: {posture: mixed, note: "Greek, Hebrew square script (pointed MT) and Latin columns; the
+        Secunda is Hebrew in Greek letters (hbo-Grek)"}
+  typikon-bible:   # P153
+    # kind: machine-postured — kind_map.yml source_kind scripture.
+    lect: {posture: pending, note: "candidate: a nabu-lects Romanian package — a ro anchor (Eastern
+        Romance, parent roa; ISO 639-1 ro / 639-3 ron, rum alias), an Old Romanian stage for the
+        Cyrillic-script literary language of the 16th–18th c. (the 1688 Bucharest Bible is its
+        canonical monument) and the cyrl script row's ro use. Nothing Romanian exists in the
+        registry today; the passages ride bare ron-Cyrl until the mint lands"}
+    dating: {posture: dated, note: "the edition year the dump records for ro-1688 (1688),
+        date_class edition (MetadataDates :structured) — the print the project typeset"}
+    places: {posture: unplaced, note: "the dump's edition record names no imprint (Bucharest is the
+        print's place, but the asset does not say so) — nothing to mine"}
+    script: {posture: qualified, note: "Romanian in the Cyrillic alphabet of the 1688 print —
+        titla, accents and the transitional letters (ꙟ, ᲅ, ѫ, џ) kept as typeset; language tag
+        ron-Cyrl"}
+  etcbc-targum:   # P153
+    # kind: machine-postured — kind_map.yml source_kind scripture.
+    # lect: machine-postured — the whole-source arc → arc:mid/jud override in
+    # config/lect_overrides.yml (upstream's "Jewish Aramaic Pentateuch").
+    dating: {posture: pending, note: "candidate: config/work_eras.yml rows keyed on metadata
+        collection (Onqelos and Pseudo-Jonathan redaction eras; the Palestinian targums'
+        composition date is contested and would ride as a declared-undated row). The asset
+        carries no date feature; the README's base-edition years (Clark 1984, Klein 1980 /
+        1992, Sperber 1959) ride metadata base_edition verbatim and are modern edition
+        dates, never the text's — not projected to the timeline"}
+    places: {posture: named, note: "the Cairo Genizah findspot on the 39 Genizah texts
+        (metadata place, upstream's own collection name; MetadataDates :place_only); the
+        other eight texts carry no place in the asset (shelfmarks ride metadata shelfmark —
+        a repository, never a place claim)"}
+    script: {posture: implied, note: "Hebrew square script; Tiberian pointing where the
+        edition vocalizes (Onqelos, some Genizah fragments), consonantal elsewhere — the
+        cons_utf8 / voc_utf8 lanes ride every token"}
   jaschke-1881:   # P150-A
     # kind: machine-postured — kind_map.yml source_kind lexical (a dictionary).
     lect: {posture: identity, note: "the reference-shelf posture (africa-pd, slavistics-pd): eng,
@@ -1690,6 +1801,22 @@ sources:
         :signed_bounds_keys — composition-class rows (date_class
         'composition')"}
     places: {posture: unplaced}
+    script: {posture: implied}
+  cgpg:   # P153
+    lect: {posture: dates, note: "the date-band inference stages the volumes from upstream's own
+        per-volume century labels: the 25 volumes labeled 5th–15th century fall inside grc:byz
+        [330, 1453]; the two 4th-century volumes (Eusebius, Epiphanius) span the koi/byz
+        boundary and stay bare grc, as do the 6 undated Pre-Nicaean volumes. No facet rule:
+        a label map would only repeat the band"}
+    kind: {posture: unclassified, note: "upstream carries no genre label — a volume mixes
+        exegesis, homiletics, historiography and law (PG 107: Leo VI's homilies, Tactica and
+        Novels); kind waits on the work carving"}
+    dating: {posture: dated, note: "the per-volume Dates label of upstream's Works and Authors
+        table, transcribed (VOLUMES) → a century envelope, date_class composition (MetadataDates
+        :structured; 27 of 33 volumes — the 6 Pre-Nicaean name no century). Transcribed, not
+        corrected: PG 87.1 (Procopius of Gaza, c. 465–528) carries upstream's 7th century"}
+    places: {posture: unplaced, note: "the deposit names no place — no imprint, no provenance,
+        no place field in the table"}
     script: {posture: implied}
   corpus-corporum:
     kind: {posture: unclassified}
@@ -2491,6 +2618,26 @@ sources:
         Witenberga, Lublani, Tubingae) — printer and brackets stripped"}
     script: {posture: implied, note: "Latin type, MDZ's uncorrected OCR layer (text_nature
         machine-ocr); the Urach Glagolitic/Cyrillic prints are OUT (OCR noise), declared"}
+  ganjoor:   # P153
+    # kind machine-postured — the ganjoor fold in kind_map.yml over the poem's own
+    # section label (the divan's form sections; work/chapter titles uncovered, open).
+    lect: {posture: identity, note: "fas IS Persian (codemap → the bare fa anchor) — the
+        registry holds no Persian stages yet, so the bare code is the honest claim for the
+        whole classical cone (Rudaki to the Qajar poets, d. before 1324 AH); poems under a
+        section the label names Arabic carry ara (152 at the census), bare; the few Turkic,
+        Kurdish, Gilaki and fahlavi sections stay fas, declared coarse (their labels ride
+        section_path)"}
+    dating: {posture: dated, note: "every document: the poet's life from the site's poets
+        list (lunar-Hijri birth..death → CE, the house tabular conversion), class
+        composition — upstream's own validBirthDate/validDeathDate=false marks c. in raw;
+        one inconsistent record (birth after death) keeps only the death bound
+        (:structured)"}
+    places: {posture: named, note: "the poet's DEATH place from the poets list, name + WGS84
+        pair (the iedc toponym-list shape) — where the poet worked, the openiti died/resided
+        stance; poets whose record gives no death place stay unplaced; birth places ride
+        metadata as biography"}
+    script: {posture: implied, note: "Perso-Arabic script implied by fas/ara; text NFC at the
+        boundary (upstream's vocalized Arabic carries non-NFC mark order)"}
   gams-zrcalo:   # 02-sources row 244
     kind: {posture: unclassified, note: "one devotional work (the Speculum humanae
         salvationis); no class field in the TEI"}
@@ -2549,6 +2696,23 @@ sources:
         verbatim + the findspot provenance's settlement/nome refs (minted tm:/pleiades:), the
         composed provenance only when no findspot is given"}
     script: {posture: qualified}
+  paramara:   # P153
+    kind: {posture: unclassified, note: "the Text field describes FORM (\"Prose and Metrical in 12
+        verses\"); the object type (copper-plate charter, pillar, image inscription) lives in
+        the record titles' free prose — a title-vocabulary fold is a recorded future look (the
+        siddham shape)"}
+    lect: {posture: identity, note: "san on all 114 (the Language field: Sanskrit, \"with local
+        dialect\" ×2, and PMR84's \"Gauḍī\" — the poetic style of a Sanskrit praśasti, not a
+        language; raw in language_raw); the bare san anchor is the claim, declared coarse (the
+        siddham posture)"}
+    dating: {posture: partial, note: "92 of 114: the Period field's leading era-typed year (VS /
+        Vikrama → −57, Śaka → +78, config/eras.yml) as a one-year envelope, raw kept; CE-range,
+        \"Undated\" and \"Unclear\" periods ride raw only; a two-date Period (\"VS 1148 and
+        1127\") mints its leading year, declared"}
+    places: {posture: named, note: "112 of 114: the Location field's findspot verbatim (place);
+        values naming a museum or \"now …\" are the present repository and ride location only"}
+    script: {posture: qualified, note: "the text is Trivedi's IAST TRANSLITERATION of Nāgarī
+        originals (Script: Nagari on every record) — never a Devanagari witness"}
   perseus-anglit:   # P95-4
     kind: {posture: pending, note: "candidate: TEI textClass ingestion (unruled)"}
     lect: {posture: identity, note: "ang IS Old English (the aspr mold);
@@ -2600,6 +2764,25 @@ sources:
         30,647 rows, 0 undated (the P40-6 exclusion reversed)"}
     places: {posture: named}
     script: {posture: implied}
+  runesdb:   # P153
+    kind: {posture: unclassified, note: "the TEI's only genre-shaped field (msContents summary)
+        reads \"Runische Inschrift\" on all 723 files — no typed genre; the object type (stone,
+        comb, brooch) lives in the unfetched LIDO records"}
+    # lect: machine-postured by the runesdb-siglum facet rule — raw gem on
+    # every find (the TEI carries no language); the rule stages the
+    # unambiguous corpus families off the Hauptsigle family (OE-* → ang,
+    # the KJ older-futhark numbering → gmq:run, the bare Scandinavian
+    # regional sigla → gmq); pre-OE/Frisian blends, SG, the unglossed
+    # regional families and the runica-manuscripta shelfmarks stay bare
+    # gem, declared.
+    dating: {posture: undatable, note: "the TEI zip carries no date; dating lives in the
+        per-find LIDO records (runesdb.de/lido/<id>, earliestDate/latestDate), not fetched —
+        their harvest is the follow-up that dates the finds"}
+    places: {posture: unplaced, note: "the TEI zip carries no place; the LIDO records hold
+        find place + repository with coordinates, not fetched (the follow-up)"}
+    script: {posture: qualified, note: "the text is upstream's Latin-letter TRANSLITERATION of
+        the runes (runological sigla ':' '*' '[...]' '?' and bind-rune '^' verbatim) — never a
+        runic-Unicode witness; the glyph records carry rune names and formal types"}
   sblgnt:
     dating: {posture: undatable}
     places: {posture: unplaced}

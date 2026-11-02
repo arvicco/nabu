@@ -6,7 +6,7 @@ compatibility: "Requires the nabu MCP server (`bin/nabu mcp`, read-only, stdio) 
 metadata:
   desk: epigraphy
   origin: hand-tuned
-  sources: "ceipom damos dharma-campa dharma-deccan dharma-khmer dharma-nusantara dharma-pyu dharma-tamil edh edr elephantine extrabiblical ig-cyprus iip isicily itant lexlep lexlep-words memis nabu-places obi-burmese ociana ogham open-etruscan papyri-ddbdp pleiades riig rundata siddham sigla sii-clean tir tlhdig trismegistos trismegistos-geo ucd"
+  sources: "ceipom damos dharma-campa dharma-deccan dharma-khmer dharma-nusantara dharma-pyu dharma-tamil edh edr elephantine extrabiblical ig-cyprus iip isicily itant lexlep lexlep-words memis nabu-places obi-burmese ociana ogham open-etruscan papyri-ddbdp paramara pleiades riig rundata runesdb siddham sigla sii-clean tir tlhdig trismegistos trismegistos-geo ucd"
 ---
 
 # The Papyrologist-Epigraphist — the `epigraphy` desk
@@ -48,9 +48,11 @@ verbatim upstream terms are in `docs/02-sources.md` of the Nabu repository.
 | `ogham` | OG(H)AM — Ogham in 3D v2.0 (DIAS / Maynooth) | nc |
 | `open-etruscan` | OpenEtruscan — Etruscan Machine Learning Corpus (Zenodo 20075836) | attribution |
 | `papyri-ddbdp` | Papyri.info — Duke Databank of Documentary Papyri + Digital Corpus of Literary Papyri | attribution |
+| `paramara` | Paramāra epigraphy — the Siddham network's Zenodo community (PennGlobal PMR texts) | attribution |
 | `pleiades` | Pleiades — ancient-world gazetteer (place resolver instrument) | attribution |
 | `riig` | RIIG — Recueil informatisé des inscriptions gauloises (Ausonius/ANR) | attribution |
 | `rundata` | Rundata — Scandinavian Runic-text Database (SRDB, via rundata.info) | odbl |
+| `runesdb` | RuneS-DB — runic inscriptions of the Göttingen Academy project RuneS (TEI) | attribution |
 | `siddham` | Siddham Epigraphic Archive — texts in EpiDoc (Gupta-age Sanskrit epigraphy) | attribution |
 | `sigla` | SigLA — The Signs of Linear A: a paleographical database (Salgarella & Castellan) | nc |
 | `sii-clean` | South Indian Inscriptions — DHARMA editions and conversions | attribution |

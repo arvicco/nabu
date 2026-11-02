@@ -26,12 +26,13 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 ## The shelves
 
-A source wears every desk it serves — these twenty-one answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
+A source wears every desk it serves — these twenty-four answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
 | Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 2 November 2026)</span> |
 |---|---|---|---|---|
 | `aspr` | texts | attribution | wired · manual | 349 docs / 30,550 passages |
 | `bosworth-toller` | dictionary | attribution | wired · manual | 62,815 entries |
+| `cleasby-vigfusson` | dictionary | attribution | wired · manual | 35,207 entries |
 | `cme` | texts | open | wired · manual | 297 docs / 1,355,279 passages |
 | `corpus-gysseling` | texts | research_private | wired · manual | 2,226 docs / 207,793 passages |
 | `corpus-oudfries` | texts | research_private | wired · manual | 177 docs / 14,136 passages |
@@ -50,9 +51,11 @@ A source wears every desk it serves — these twenty-one answer this desk. Holdi
 | `rem` | texts | attribution | wired · manual | 406 docs / 355,449 passages |
 | `ren` | texts | attribution | wired · manual | 235 docs / 297,504 passages |
 | `rundata` | inscriptions | odbl | wired · manual | 30,647 docs / 30,645 passages |
+| `runesdb` | texts | attribution | wired · manual | 613 docs / 1,611 passages |
 | `ud` | treebank | nc | wired · manual | 83 docs / 329,980 passages |
+| `zoega` | dictionary | attribution | wired · manual | 29,951 entries |
 
-**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 2 November 2026)</span>: `ang` 63,170 · `en` 59,433 · `non` 20,449 · `eng` 6,814 · `de` 5,668 · `swe` 3,397 · `dum` 2,226 · `lat` 532 · `gmh` 406 · `enm` 297 … and 50 more (`nabu axis germanic` lists all).
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 2 November 2026)</span>: `non` 85,607 · `ang` 63,170 · `en` 59,433 · `eng` 6,814 · `de` 5,668 · `swe` 3,397 · `dum` 2,226 · `gem` 613 · `lat` 532 · `gmh` 406 … and 50 more (`nabu axis germanic` lists all).
 
 ## The desk's instruments
 
