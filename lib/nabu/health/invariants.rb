@@ -139,6 +139,7 @@ module Nabu
           *place_ref_findings,
           registry_orphan_names,
           *mined_layer_findings,
+          silver_meter_layer,
           *index_segment_pressure,
           stale_open_runs
         ].compact
@@ -165,6 +166,12 @@ module Nabu
       # const: edges sampled per mined layer for the orphan census — a
       # sample, not a census claim; 200 indexed probes keep it low-ms
       MINED_ORPHAN_SAMPLE = 200
+
+      # const: shelf records whose scanned text is re-checked against the
+      # live catalog per health run — bounded like the mined-layer orphan
+      # sample (the full census is `nabu scan-meter --project`'s stale
+      # count); 2,000 urn lookups cost well under a second.
+      SILVER_METER_SAMPLE = 2_000
 
       # Dossier-shelf content kind => its derived catalog table (P19-1 the
       # language shelf, P24-0 the source shelf).
@@ -1338,6 +1345,47 @@ module Nabu
           known.merge(@catalog[:dictionary_entries].where(urn: rest).select_map(:urn))
         end
         [pairs.count { |from, to| !known.include?(from) || !known.include?(to) }, pairs.size]
+      end
+
+      # P152 (the cost law): the heavy local-meter shelf's age and
+      # staleness — scanner code newer than the shelf's records, or held
+      # texts that moved since their scan (sampled). Info when current;
+      # soft when stale, naming the owner-fired re-run. nil without a shelf.
+      def silver_meter_layer
+        dir = @workdir_resolver.call(MeterShelf::SLUG)
+        return nil unless dir && Dir.exist?(dir)
+
+        shelf = MeterShelf.new(dir: dir)
+        census = MeterShelf::Census.of(shelf)
+        return nil if census.newest.nil?
+
+        moved, sampled = silver_meter_moved(shelf)
+        days = ((@now - Time.parse(census.newest)) / 86_400).floor
+        notes = []
+        notes << "STALE: #{census.old_code} line(s) scanned by an older scanner than #{Scansion::VERSION}" if
+          census.old_code.positive?
+        notes << "STALE: #{moved} of #{sampled} sampled scanned texts moved since their scan" if moved.positive?
+        stale = !notes.empty?
+        notes << "current against the catalog" unless stale
+        Finding.new(
+          kind: :silver_meter_layer, severity: stale ? :soft : :info,
+          message: "silver meter shelf: #{census.scanned} scanned line(s), newest #{census.newest[0, 10]} " \
+                   "(#{days} day#{'s' unless days == 1} ago), #{shelf.armed? ? 'armed' : 'not armed'} — " \
+                   "#{notes.join('; ')}#{' — `nabu scan-meter --run` re-scans (owner-fired)' if stale}"
+        )
+      rescue MeterShelf::FormatError => e
+        Finding.new(kind: :silver_meter_layer, severity: :anomaly,
+                    message: "silver meter shelf unreadable: #{e.message}")
+      end
+
+      # [moved, sampled]: scanned shelf records whose passage sha no longer
+      # matches the live (or any) catalog row.
+      def silver_meter_moved(shelf)
+        sample = shelf.latest_by_urn.values.select { |r| r.passage? && r.scanned? }.first(SILVER_METER_SAMPLE)
+        return [0, 0] if sample.empty? || !@catalog.table_exists?(:passages)
+
+        live = @catalog[:passages].where(urn: sample.map(&:urn), withdrawn: false).select_hash(:urn, :content_sha256)
+        [sample.count { |r| live[r.urn] != r.content_sha256 }, sample.size]
       end
 
       # Heavy runs the one-time move has not taken yet.

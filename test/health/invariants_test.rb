@@ -1049,6 +1049,52 @@ class InvariantsTest < Minitest::Test
     end
   end
 
+  # -- the silver meter shelf (P152, the cost law) ----------------------------
+
+  def meter_invariants(root, now: @now)
+    Nabu::Health::Invariants.new(registry: nil, catalog: @db, fulltext: @fulltext, ledger: @ledger, now: now,
+                                 workdir_resolver: ->(slug) { File.join(root, slug) })
+  end
+
+  def shelve_scans(root, *shas, version: Nabu::Scansion::VERSION, at: Time.now)
+    records = shas.each_with_index.map do |sha, i|
+      Nabu::MeterShelf::Record.new(kind: "passage", urn: "urn:l:d:#{i + 1}", language: "lat", content_sha256: sha,
+                                   status: "scanned", meter: "hexameter", feet: "DDSSD",
+                                   quantities: "-uu-uu-----uu--", word_pattern: "x", basis: "unique",
+                                   scanner: "nabu-scan", scanner_version: version)
+    end
+    Nabu::MeterShelf.new(dir: File.join(root, "local-meter")).append_batch!(records: records, now: at)
+  end
+
+  def test_a_current_silver_meter_shelf_is_an_info_line_with_its_age
+    seed_latin
+    Dir.mktmpdir do |root|
+      shelve_scans(root, "x", "x", at: Time.now)
+      finding = meter_invariants(root, now: Time.now + (2 * 86_400)).global.find { |f| f.kind == :silver_meter_layer }
+      assert_equal :info, finding.severity
+      assert_match(/silver meter shelf: 2 scanned line\(s\), newest .* \(2 days ago\), not armed — current/,
+                   finding.message)
+    end
+  end
+
+  def test_a_stale_silver_meter_shelf_is_soft_and_names_the_rerun
+    seed_latin
+    Dir.mktmpdir do |root|
+      shelve_scans(root, "x", "moved", version: "nabu-scan/0")
+      finding = meter_invariants(root).global.find { |f| f.kind == :silver_meter_layer }
+      assert_equal :soft, finding.severity
+      assert_match(/STALE: 2 line\(s\) scanned by an older scanner/, finding.message)
+      assert_match(/STALE: 1 of 2 sampled scanned texts moved since their scan/, finding.message)
+      assert_match(/`nabu scan-meter --run` re-scans \(owner-fired\)\z/, finding.message)
+    end
+  end
+
+  def test_no_meter_shelf_no_finding
+    Dir.mktmpdir do |root|
+      assert_nil(meter_invariants(root).global.find { |f| f.kind == :silver_meter_layer })
+    end
+  end
+
   def test_a_migrated_layer_without_a_catalog_identity_says_so_honestly
     seed_latin
     Dir.mktmpdir do |root|

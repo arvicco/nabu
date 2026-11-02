@@ -1635,7 +1635,8 @@ module Nabu
 
         pattern = meter.pattern.to_s.strip
         code = [meter.meter.to_s.strip, pattern].reject(&:empty?).join(" ")
-        say "  meter: #{code} (#{meter.producer})"
+        # P152: a silver row says so — machine scansion, never gold
+        say "  meter: #{code} (#{meter.producer}#{', silver — machine scansion' if meter.silver?})"
       end
 
       # P44-2: the findspot line — shown only when the document's parse-

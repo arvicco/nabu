@@ -848,7 +848,8 @@ module Nabu
             "#{meter ? "meter '#{meter}'" : "meter pattern '#{pattern}'"} matches no meter " \
               "enrichment — known meters: #{known_meters.join(', ')}"
           else
-            "meter: #{models.join('/')} enrichments"
+            # P152: the scansion lane's rows are machine (silver) — named so
+            "meter: #{models.map { |m| Store::SilverMeter.silver?(m) ? "#{m} (silver)" : m }.join('/')} enrichments"
           end
       end
 
