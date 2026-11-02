@@ -1,0 +1,21 @@
+{
+  "status": "approved_for_publication",
+  "creator": "National Institutes for the Humanities",
+  "license": "CC0-1.0",
+  "version": "0.1.0",
+  "record_count": 54558,
+  "redirect_like_count": 8559,
+  "blank_full_name_count": 2,
+  "blank_description_count": 3,
+  "fields": [
+    "entry_no",
+    "source_page",
+    "name_yomi_katakana",
+    "full_name",
+    "entry_heading",
+    "description"
+  ],
+  "source_sha256": "adc9462fbb8e1d0b7a978dde13060747e7e68277b7be24ce8680841f33d12c3f",
+  "output_file": "haga_jinmei_records.csv",
+  "output_sha256": "6b742c0298a56186459981008931a8079e5b5ef0f6044e384b77d858083d073e"
+}

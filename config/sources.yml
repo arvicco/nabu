@@ -2730,6 +2730,25 @@ guaman-poma:   # P117-5, 02-sources row 255
   # projects." A second digitisation (jpeg) exists in their Digital
   # Collections (object852735) — images only, recorded as reference.
 
+haga-jinmei:   # P153, 02-sources row 321
+  adapter: Nabu::Adapters::HagaJinmei
+  adopted: "2026-11-02"
+  axes: [japonic]
+  wired: false   # first sync is the gate's: bin/nabu enable haga-jinmei, then
+                 # bin/nabu sync haga-jinmei (one 2.4 MB Zenodo zip, sha256-pinned;
+                 # parse ≈ 5 s). EXPECT 1 dictionary document / 54,558 jpn
+                 # entries, 8,556 `see` crossrefs, 11 deposit files skipped by
+                 # rule — census of v0.1.0 2026-11-02. Eyeball nabu define 靄崖
+                 # and the multi-person 式佐（岸沢）, then flip.
+  # 芳賀矢一編『日本人名辞典』(大倉書店, 1914) as the NIHU Haga Jinmei
+  # Dictionary Dataset (Zenodo 23804456, v0.1.0): one entry per printed
+  # entry, the heading as headword, the full text as body; reading, full
+  # name and page ride annotations; bare ⇒ entries are see-references by
+  # reading. Deposit LICENSE: CC0 1.0 (NIHU waiver; verified 2026-11-02)
+  # → open. Zenodo versions are immutable → manual (a new version is an
+  # owner re-pin).
+  sync_policy: manual
+
 hdic:
   adapter: Nabu::Adapters::Hdic
   adopted: "2026-07-19"
