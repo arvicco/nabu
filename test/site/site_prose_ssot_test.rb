@@ -170,6 +170,28 @@ module Site
       end
     end
 
+    # The landing page's recency is GENERATED, never hand-written (the
+    # November 2026 site review: a hand narrative of "the newest wings"
+    # lagged the real newest additions by weeks, refreshable only by a
+    # rewrite). The block reads the latest news posts through Liquid, so
+    # the existing per-gate news duty keeps it current with no new duty —
+    # and a hand-written recency phrase may not come back beside it.
+    HAND_RECENCY = [/\bnewest wings?\b/i, /\bmost recent(?:ly)? (?:wave|addition)s?\b/i,
+                    /\bthe latest (?:wave|additions?)\b/i].freeze
+
+    def test_the_landing_page_recency_renders_from_the_news_posts
+      home = page("index")
+      assert_match(/\{%-?\s*for post in site\.posts limit:\s*3\s*-?%\}/, home,
+                   "site/index.md must render its recent-additions block from site.posts (limit: 3)")
+      %w[post.date post.url post.title post.description].each do |field|
+        assert_includes home, field, "the recent-additions block must render #{field}"
+      end
+      HAND_RECENCY.each do |phrase|
+        refute_match phrase, home, "site/index.md hand-writes recency (#{phrase.source}) — the " \
+                                   "generated recent-additions block is the only recency on the page"
+      end
+    end
+
     # Internal phase/packet codes on the published site (the November 2026
     # site review found "since P96", "(P41-3)", "P78-5", "the P41-g census"
     # on the deployed /axis/ pages — meaningless to a reader and exactly the

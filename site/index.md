@@ -73,14 +73,7 @@ tablets of the late fourth millennium BCE to Meiji-era Japanese.
 **{{ name1 }} is the largest language on the shelves
 ({{ top1.millions }} million passages)**, ahead of {{ name2 }}
 ({{ top2.millions }} million) and {{ name3 }} ({{ top3.millions }}
-million). The newest wings are the South Asian shelves — the DHARMA
-epigraphy estates, the TAMILEX critical editions with the only
-per-word gold layer for Old Tamil, the printed *South Indian
-Inscriptions* volumes, the Gurmukhī canon — and the complete West
-Tocharian corpus retrieved through TITUS's members' gate, beside a
-new research bench of license-manifest exports, lemma attestation
-curves and text-reuse instruments; each wave is told, dated, on the
-[News]({{ '/news/' | relative_url }}) page. Beneath every shelf runs the
+million). Beneath every shelf runs the
 **lect layer**: historical-stage ladders, stage-aware search, and honest
 reconstruction display through the
 [nabu-lects](https://arvicco.github.io/nabu-lects) registry.
@@ -96,6 +89,21 @@ and carry the date on which they were read.
 A survey of the collections is given on [The Library]({{ '/library/' | relative_url }})
 page; the full attribution and licensing record is on
 [Sources]({{ '/sources/' | relative_url }}).
+
+## Recently on the shelves
+
+The latest entries from the [News]({{ '/news/' | relative_url }}) page,
+where every wave is told and dated:
+
+<ul class="news-list">
+{%- for post in site.posts limit: 3 %}
+  <li>
+    <span class="entry-date">{{ post.date | date: "%-d %B %Y" }}</span>
+    <a href="{{ post.url | relative_url }}">{{ post.title }}</a>
+    {%- if post.description %} — {{ post.description | strip_newlines | strip }}{% endif %}
+  </li>
+{%- endfor %}
+</ul>
 
 ## A single verse, many witnesses
 
