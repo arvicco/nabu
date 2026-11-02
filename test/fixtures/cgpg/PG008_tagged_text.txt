@@ -1,0 +1,1504 @@
+<doc id="PG 8 - AI processed">
+<w id="PDF Page 57, Line 1 - word id 7583">
+σθῷ	σθω	σθός	σθος	N+Com
+</w>
+<w id="PDF Page 57, Line 1 - word id 7584">
+χρυσὸς	χρυσος	χρυσός	χρυσος	N+Com
+</w>
+<w id="PDF Page 57, Line 1 - word id 7585">
+ἐν	εν	ἐν	εν	I+Prep
+</w>
+<w id="PDF Page 57, Line 1 - word id 7586">
+χερσὶ	χερσι	χείρ	χειρ	N+Com
+</w>
+<w id="PDF Page 57, Line 1 - word id 7587">
+φανεὶς,	φανεις	φαίνω	φαινω	V
+</w>
+<w id="PDF Page 57, Line 2 - word id 7588">
+ἄνδο´	ανδο´	ἄνδον	ανδον	N+Com
+</w>
+<w id="PDF Page 57, Line 2 - word id 7589">
+ἑκ	εκ	ἑκ	εκ	I+Neg
+</w>
+<w id="PDF Page 57, Line 2 - word id 7590">
+θανάτόυ	θανατου	θάνατος	θανατος	N+Com
+</w>
+<w id="PDF Page 57, Line 2 - word id 7591">
+κομίσαι	κομισαι	κομίζω	κομιζω	V
+</w>
+<w id="PDF Page 57, Line 3 - word id 7592">
+ἧδη	ηδη	Ἥδομαι (–ω)	ηδομαι	N+Ant
+</w>
+<w id="PDF Page 57, Line 3 - word id 7593">
+ἐαλωκότα,	εαλωκοτα	ἐλίσκομαι	ελισκομαι	V
+</w>
+<w id="PDF Page 57, Line 3 - word id 7594">
+Χερσι	χερσι	χείρ	χειρ	N+Com
+</w>
+<w id="PDF Page 57, Line 4 - word id 7595">
+δ´	δ´	δέ	δε	I+Part
+</w>
+<w id="PDF Page 57, Line 4 - word id 7596">
+ἄρα	αρα	ἄρα	αρα	I+Part
+</w>
+<w id="PDF Page 57, Line 4 - word id 7597">
+Κρονίων	κρονιων	Κρονίων	κρονιων	N+Ant
+</w>
+<w id="PDF Page 57, Line 5 - word id 7598">
+ῥίψας	ριψας	ῥίπτω	ριπτω	V
+</w>
+<w id="PDF Page 57, Line 5 - word id 7599">
+	∅	∅	∅	∅
+</w>
+<w id="PDF Page 57, Line 5 - word id 7600">
+δι´	δι´	διά	δια	I+Prep
+</w>
+<w id="PDF Page 57, Line 5 - word id 7601">
+ἀμφοῖν,	αμφοιν	ἄμφω	αμφω	PRO+Ind
+</w>
+<w id="PDF Page 57, Line 5 - word id 7602">
+ἀμπνοὰς	αμπνοας	ἀναπνοή	αναπνοη	N+Com
+</w>
+<w id="PDF Page 57, Line 6 - word id 7603">
+στέρνων	στερνων	στέρνον	στερνον	N+Com
+</w>
+<w id="PDF Page 57, Line 6 - word id 7604">
+καθειλεν	καθειλεν	καθαιρέω	καθαιρεω	V
+</w>
+<w id="PDF Page 57, Line 7 - word id 7605">
+ὼκέως·	ωκεως	ἕκος	εκος	N+Com
+</w>
+<w id="PDF Page 57, Line 7 - word id 7606">
+αἴθων	αιθων	Αἴθως	αιθως	N+Top
+</w>
+<w id="PDF Page 57, Line 7 - word id 7607">
+δὲ	δε	δέ	δε	I+Part
+</w>
+<w id="PDF Page 57, Line 7 - word id 7608">
+κεραυνὸς	κεραυνος	κεραυνός	κεραυνος	A
+</w>
+<w id="PDF Page 57, Line 8 - word id 7609">
+ἐνέσκηψε	ενεσκηψε	ἐνσκήπτω	ενσκηπτω	V
+</w>
+<w id="PDF Page 57, Line 8 - word id 7610">
+μόρον.	μορον	μόρος (μοῖρα)	μορος	N+Com
+</w>
+<w id="PDF Page 57, Line 9 - word id 7611">
+Καὶ	και	καί	και	I+Part
+</w>
+<w id="PDF Page 57, Line 9 - word id 7612">
+Εὐριπίδης	ευριπιδης	Εὐριπίδης	ευριπιδης	N+Ant
+</w>
+<w id="PDF Page 57, Line 10 - word id 7613">
+Ζεὺς	ζευς	Ζεύς	ζευς	N+Ant
+</w>
+<w id="PDF Page 57, Line 10 - word id 7614">
+γὰρ,	γαρ	γάρ	γαρ	I+Part
+</w>
+<w id="PDF Page 57, Line 10 - word id 7615">
+κατακτὰς	κατακτας	κατακτή	κατακτη	A
+</w>
+<w id="PDF Page 57, Line 10 - word id 7616">
+παῖδα	παιδα	παῖς	παις	N+Com
+</w>
+<w id="PDF Page 57, Line 10 - word id 7617">
+τὸν	τον	ὁ	ο	DET
+</w>
+<w id="PDF Page 57, Line 10 - word id 7618">
+ἐμὸν,	εμον	ἐμός	εμος	PRO+Pos1s
+</w>
+<w id="PDF Page 57, Line 10 - word id 7619">
+αἴτιος,	αιτιος	αἴτιος	αιτιος	A
+</w>
+<w id="PDF Page 57, Line 11 - word id 7620">
+Ἀσκληπιὸν,	ασκληπιον	Ἀσκληπιός	ασκληπιος	N+Ant
+</w>
+<w id="PDF Page 57, Line 11 - word id 7621">
+στέρνοισιν	στερνοισιν	στέρνον	στερνον	N+Com
+</w>
+<w id="PDF Page 57, Line 11 - word id 7622">
+ἐμβαλὼν	εμβαλων	ἐμβάλλω	εμβαλλω	V
+</w>
+<w id="PDF Page 57, Line 11 - word id 7623">
+φλρνα.	φλρνα	φρέξ	φρεξ	N+Com
+</w>
+<w id="PDF Page 57, Line 12 - word id 7624">
+Οὗτος	ουτος	οὗτος	ουτος	PRO+Dem
+</w>
+<w id="PDF Page 57, Line 12 - word id 7625">
+μὲν	μεν	μέν	μεν	I+Part
+</w>
+<w id="PDF Page 57, Line 12 - word id 7626">
+οὖν	ουν	οὖν	ουν	I+Part
+</w>
+<w id="PDF Page 57, Line 12 - word id 7627">
+κεῖται	κειται	κεῖμαι	κειμαι	V
+</w>
+<w id="PDF Page 57, Line 12 - word id 7628">
+κεραυνωθεὶς	κεραυνωθεις	κεραυνόω	κεραυνοω	V
+</w>
+<w id="PDF Page 57, Line 12 - word id 7629">
+ἐν	εν	ἐν	εν	I+Prep
+</w>
+<w id="PDF Page 57, Line 12 - word id 7630">
+τοῖς	τοις	ὁ	ο	DET
+</w>
+<w id="PDF Page 57, Line 12 - word id 7631">
+Κυνοσούοι.	κυνοσουοι	κυνοσουστός	κυνοσουστος	V
+</w>
+<w id="PDF Page 57, Line 13 - word id 7632">
+δος	δος	Δίδωμι	διδωμι	N+Ant
+</w>
+<w id="PDF Page 57, Line 13 - word id 7633">
+ὁρίοις.	οριοις	ὅριον	οριον	N+Com
+</w>
+<w id="PDF Page 57, Line 13 - word id 7634">
+Φιλόχορος	φιλοχορος	Φιλόχορος	φιλοχορος	N+Ant
+</w>
+<w id="PDF Page 57, Line 13 - word id 7635">
+δέ,	δε	δέ	δε	I+Part
+</w>
+<w id="PDF Page 57, Line 13 - word id 7636">
+ἐν	εν	ἐν	εν	I+Prep
+</w>
+<w id="PDF Page 57, Line 13 - word id 7637">
+Τήνῳ	τηνω	τῆνος	τηνος	N+Com
+</w>
+<w id="PDF Page 57, Line 13 - word id 7638">
+Ποσειδῶνά	ποσειδωνα	Ποσειδῶν	ποσειδων	N+Ant
+</w>
+<w id="PDF Page 57, Line 13 - word id 7639">
+φησι	φησι	φημί	φημι	V
+</w>
+<w id="PDF Page 57, Line 14 - word id 7640">
+τιμᾶσθαι	τιμασθαι	τιμάω	τιμαω	V
+</w>
+<w id="PDF Page 57, Line 14 - word id 7641">
+ἰατρόν·	ιατρον	ἰατρός	ιατρος	N+Com
+</w>
+<w id="PDF Page 57, Line 14 - word id 7642">
+Κρόνον	κρονον	Κρόνος	κρονος	N+Ant
+</w>
+<w id="PDF Page 57, Line 14 - word id 7643">
+δὲ	δε	δέ	δε	I+Part
+</w>
+<w id="PDF Page 57, Line 14 - word id 7644">
+ἐπικεῖσθαι	επικεισθαι	ἐπίκειμαι	επικειμαι	V
+</w>
+<w id="PDF Page 57, Line 14 - word id 7645">
+Σικελία,	σικελια	Σικελία	σικελια	N+Top
+</w>
+<w id="PDF Page 57, Line 15 - word id 7646">
+καὶ	και	καί	και	I+Part
+</w>
+<w id="PDF Page 57, Line 15 - word id 7647">
+ἐνταῦθα	ενταυθα	ἐνταῦθα	ενταυθα	I+Adv
+</w>
+<w id="PDF Page 57, Line 15 - word id 7648">
+αὐτὸν	αυτον	αὐτός	αυτος	PRO+Dem
+</w>
+<w id="PDF Page 57, Line 15 - word id 7649">
+τετάφθαι.	τεταφθαι	θάπτω	θαπτω	V
+</w>
+<w id="PDF Page 57, Line 15 - word id 7650">
+Πατροκλῆς	πατροκλης	Πατροκλέης	πατροκλεης	N+Ant
+</w>
+<w id="PDF Page 57, Line 15 - word id 7651">
+τε	τε	τε	τε	I+Part
+</w>
+<w id="PDF Page 57, Line 16 - word id 7652">
+ὁ	ο	ὁ	ο	DET
+</w>
+<w id="PDF Page 57, Line 16 - word id 7653">
+Θούριος,	θουριος	θούριος	θουριος	A
+</w>
+<w id="PDF Page 57, Line 16 - word id 7654">
+καὶ	και	καί	και	I+Part
+</w>
+<w id="PDF Page 57, Line 16 - word id 7655">
+Σοφοκλῆς	σοφοκλης	Σοφοκλέης	σοφοκλεης	N+Ant
+</w>
+<w id="PDF Page 57, Line 16 - word id 7656">
+ὁ	ο	ὁ	ο	DET
+</w>
+<w id="PDF Page 57, Line 16 - word id 7657">
+νεώτερος	νεωτερος	νέος	νεος	A
+</w>
+<w id="PDF Page 57, Line 16 - word id 7658">
+ἐν	εν	ἐν	εν	I+Prep
+</w>
+<w id="PDF Page 57, Line 16 - word id 7659">
+τρισὶ	τρισι	τρεῖς	τρεις	NUM+Car
+</w>
+<w id="PDF Page 57, Line 16 - word id 7660">
+τραγῳ-	τραγω-	τράγος	τραγος	N+Com
+</w>
+<w id="PDF Page 57, Line 17 - word id 7661">
+»	∅	∅	∅	∅
+</w>
+<w id="PDF Page 57, Line 17 - word id 7662">
+δίαις,	διαις	Δίαις	διαις	N+Ant
+</w>
+<w id="PDF Page 57, Line 17 - word id 7663">
+ἱστορείτων	ιστορειτων	ἱστορέω	ιστορεω	V
+</w>
+<w id="PDF Page 57, Line 17 - word id 7664">
+τὼ	τω	ὁ	ο	DET
+</w>
+<w id="PDF Page 57, Line 17 - word id 7665">
+Διοσκούρω	διοσκουρω	διόσκουροι	διοσκουροι	V
+</w>
+<w id="PDF Page 57, Line 17 - word id 7666">
+πέρι·	περι	περί	περι	I+Prep
+</w>
+<w id="PDF Page 57, Line 17 - word id 7667">
+ἀνθρώπω	ανθρωπω	ἄνθρωπος	ανθρωπος	N+Com
+</w>
+<w id="PDF Page 57, Line 18 - word id 7668">
+τινὲ	τινε	τις	τις	PRO+Ind
+</w>
+<w id="PDF Page 57, Line 18 - word id 7669">
+τούτω	τουτω	οὗτος	ουτος	PRO+Dem
+</w>
+<w id="PDF Page 57, Line 18 - word id 7670">
+τὼ	τω	ὁ	ο	DET
+</w>
+<w id="PDF Page 57, Line 18 - word id 7671">
+Διοσκούρω	διοσκουρω	διόσκουροι	διοσκουροι	V
+</w>
+<w id="PDF Page 57, Line 18 - word id 7672">
+ἐπικήρω	επικηρω	ἐπίκηρος	επικηρος	V
+</w>
+<w id="PDF Page 57, Line 18 - word id 7673">
+γενέσθην,	γενεσθην	γίγνομαι	γιγνομαι	V
+</w>
+<w id="PDF Page 57, Line 18 - word id 7674">
+εἴ	ει	εἰ	ει	I+Conj
+</w>
+<w id="PDF Page 57, Line 18 - word id 7675">
+τῷ,	τω	ὁ	ο	DET
+</w>
+<w id="PDF Page 57, Line 19 - word id 7676">
+ἱκανὸς	ικανος	ἱκανός	ικανος	A
+</w>
+<w id="PDF Page 57, Line 19 - word id 7677">
+πιστώσασθαι	πιστωσασθαι	πιστόω	πιστοω	V
+</w>
+<w id="PDF Page 57, Line 19 - word id 7678">
+Ὁμηρος	ομηρος	ὅμηρος	ομηρος	A
+</w>
+<w id="PDF Page 57, Line 19 - word id 7679">
+δ	δ	δέ	δε	I+Part
+</w>
+<w id="PDF Page 57, Line 19 - word id 7680">
+τὸ	το	ὁ	ο	DET
+</w>
+<w id="PDF Page 57, Line 19 - word id 7681">
+λελεγμένον·	λελεγμενον	λέγω	λεγω	V
+</w>
+<w id="PDF Page 57, Line 20 - word id 7682">
+τοὺς	τους	ὁ	ο	DET
+</w>
+<w id="PDF Page 57, Line 20 - word id 7683">
+δ´	δ´	δέ	δε	I+Part
+</w>
+<w id="PDF Page 57, Line 20 - word id 7684">
+ἣδη	ηδη	Ἥδομαι (–ω)	ηδομαι	N+Ant
+</w>
+<w id="PDF Page 57, Line 20 - word id 7685">
+κατέχεν	κατεχεν	κατέχω	κατεχω	V
+</w>
+<w id="PDF Page 57, Line 20 - word id 7686">
+φυσίζοος	φυσιζοος	φυσίζομαι (–ω)	φυσιζομαι	A
+</w>
+<w id="PDF Page 57, Line 20 - word id 7687">
+αἶα,	αια	αἶα	αια	N+Com
+</w>
+<w id="PDF Page 57, Line 21 - word id 7688">
+Ἐν	εν	ἐν	εν	I+Prep
+</w>
+<w id="PDF Page 57, Line 21 - word id 7689">
+Αακεδαίμονι	αακεδαιμονι	Αὐδαίμων	αυδαιμων	N+Top
+</w>
+<w id="PDF Page 57, Line 21 - word id 7690">
+αὖθι,	αυθι	αὖ	αυ	I+Adv
+</w>
+<w id="PDF Page 57, Line 21 - word id 7691">
+φίλῃ	φιλη	φίλος	φιλος	A
+</w>
+<w id="PDF Page 57, Line 21 - word id 7692">
+ἐνὶ	ενι	ἐν	εν	I+Prep
+</w>
+<w id="PDF Page 57, Line 21 - word id 7693">
+πατρίδι	πατριδι	πατρίς	πατρις	N+Com
+</w>
+<w id="PDF Page 57, Line 21 - word id 7694">
+γαίῃ	γαιη	γαῖα	γαια	V
+</w>
+<w id="PDF Page 57, Line 22 - word id 7695">
+Προσίτω	προσιτω	πρόσειμι (εἶμι)	προσειμι	V
+</w>
+<w id="PDF Page 57, Line 22 - word id 7696">
+δὲ	δε	δέ	δε	I+Part
+</w>
+<w id="PDF Page 57, Line 22 - word id 7697">
+καὶ	και	καί	και	I+Part
+</w>
+<w id="PDF Page 57, Line 22 - word id 7698">
+ὁ	ο	ὁ	ο	DET
+</w>
+<w id="PDF Page 57, Line 22 - word id 7699">
+τὰ	τα	ὁ	ο	DET
+</w>
+<w id="PDF Page 57, Line 22 - word id 7700">
+Κυπριακὰ	κυπριακα	κυπριακός	κυπριακος	A
+</w>
+<w id="PDF Page 57, Line 22 - word id 7701">
+ποιήματα	ποιηματα	ποίημα	ποιημα	N+Com
+</w>
+<w id="PDF Page 57, Line 22 - word id 7702">
+γράψα·	γραψα	γράφω	γραφω	V
+</w>
+<w id="PDF Page 57, Line 23 - word id 7703">
+Κάστωρ	καστωρ	κάστωρ	καστωρ	N+Com+eLat
+</w>
+<w id="PDF Page 57, Line 23 - word id 7704">
+μέν	μεν	μέν	μεν	I+Part
+</w>
+<w id="PDF Page 57, Line 23 - word id 7705">
+θνητὸς,	θνητος	θνητός	θνητος	A
+</w>
+<w id="PDF Page 57, Line 23 - word id 7706">
+θανάτου	θανατου	θάνατος	θανατος	N+Com
+</w>
+<w id="PDF Page 57, Line 23 - word id 7707">
+δὲ	δε	δέ	δε	I+Part
+</w>
+<w id="PDF Page 57, Line 23 - word id 7708">
+οἱ	οι	ὁ	ο	DET
+</w>
+<w id="PDF Page 57, Line 23 - word id 7709">
+αἷσα	αισα	αἷς	αις	V
+</w>
+<w id="PDF Page 57, Line 24 - word id 7710">
+[ππρωται·	ππρωται	πρωτίσταμι	πρωτισταμι	V
+</w>
+<w id="PDF Page 57, Line 25 - word id 7711">
+Δὐτὰρ	δυταρ	δατάρ	δαταρ	I+Prep
+</w>
+<w id="PDF Page 57, Line 25 - word id 7712">
+ὅ	ο	ὅς ἥ ὅ	ος	PRO+Rel
+</w>
+<w id="PDF Page 57, Line 25 - word id 7713">
+γ´	γ´	γε	γε	I+Part
+</w>
+<w id="PDF Page 57, Line 25 - word id 7714">
+ἀθάνατος	αθανατος	ἀθάνατος	αθανατος	A
+</w>
+<w id="PDF Page 57, Line 25 - word id 7715">
+Πολυδεύκης,	πολυδευκης	Πολυδεύκης	πολυδευκης	N+Ant
+</w>
+<w id="PDF Page 57, Line 25 - word id 7716">
+ὅζος	οζος	ὅζος	οζος	N+Com
+</w>
+<w id="PDF Page 57, Line 25 - word id 7717">
+Ἄρηρς.	αρηρς	Ἄρηρς	αρηρς	N+Ant
+</w>
+<w id="PDF Page 57, Line 26 - word id 7718">
+Τοῦτο	τουτο	οὗτος	ουτος	PRO+Dem
+</w>
+<w id="PDF Page 57, Line 26 - word id 7719">
+μὲν	μεν	μέν	μεν	I+Part
+</w>
+<w id="PDF Page 57, Line 26 - word id 7720">
+ποιητικὼς	ποιητικως	ποιητικός	ποιητικος	V
+</w>
+<w id="PDF Page 57, Line 26 - word id 7721">
+ἐψεύσατο·	εψευσατο	ψεύδω	ψευδω	V
+</w>
+<w id="PDF Page 57, Line 26 - word id 7722">
+Ὃμηρος	ομηρος	Ὅμηρος	ομηρος	N+Ant
+</w>
+<w id="PDF Page 57, Line 26 - word id 7723">
+δὲ,	δε	δέ	δε	I+Part
+</w>
+<w id="PDF Page 57, Line 26 - word id 7724">
+ἀξιοπιστότερος	αξιοπιστοτερος	ἀξιόπιστος	αξιοπιστος	A
+</w>
+<w id="PDF Page 57, Line 27 - word id 7725">
+αὐτοῦ,	αυτου	αὐτός	αυτος	PRO+Dem
+</w>
+<w id="PDF Page 57, Line 27 - word id 7726">
+εἰπὼν	ειπων	λέγω	λεγω	V
+</w>
+<w id="PDF Page 57, Line 27 - word id 7727">
+περὶ	περι	περί	περι	I+Prep
+</w>
+<w id="PDF Page 57, Line 27 - word id 7728">
+ἀμφοῖν	αμφοιν	ἄμφω	αμφω	PRO+Ind
+</w>
+<w id="PDF Page 57, Line 27 - word id 7729">
+τοῖν	τοιν	ὁ	ο	DET
+</w>
+<w id="PDF Page 57, Line 27 - word id 7730">
+Διοσκούροιν·	διοσκουροιν	Διόσκουροι	διοσκουροι	N+Ant
+</w>
+<w id="PDF Page 57, Line 28 - word id 7731">
+πρὸς	προς	πρός	προς	I+Prep
+</w>
+<w id="PDF Page 57, Line 28 - word id 7732">
+δὲ,	δε	δέ	δε	I+Part
+</w>
+<w id="PDF Page 57, Line 28 - word id 7733">
+καὶ	και	καί	και	I+Part
+</w>
+<w id="PDF Page 57, Line 28 - word id 7734">
+τὸν	τον	ὁ	ο	DET
+</w>
+<w id="PDF Page 57, Line 28 - word id 7735">
+Ἡρακλέα	ηρακλεα	Ἡρακλέης	ηρακλεης	N+Ant
+</w>
+<w id="PDF Page 57, Line 28 - word id 7736">
+εἴδωλον	ειδωλον	εἴδωλον	ειδωλον	N+Com
+</w>
+<w id="PDF Page 57, Line 28 - word id 7737">
+ἐλέγξας·	ελεγξας	ἐλέγχω	ελεγχω	V
+</w>
+<w id="PDF Page 57, Line 29 - word id 7738">
+Φῶτα	φωτα	φῶς	φως	N+Com
+</w>
+<w id="PDF Page 57, Line 29 - word id 7739">
+γὰρ	γαρ	γάρ	γαρ	I+Part
+</w>
+<w id="PDF Page 57, Line 29 - word id 7740">
+Ἐρακλέα,	ερακλεα	Ἐρακλέης	ερακλεης	N+Ant
+</w>
+<w id="PDF Page 57, Line 29 - word id 7741">
+μεγάλων	μεγαλων	μέγας	μεγας	A
+</w>
+<w id="PDF Page 57, Line 29 - word id 7742">
+ἐπιίστορα	επιιστορα	ἐπίστωρ	επιστωρ	A
+</w>
+<w id="PDF Page 57, Line 30 - word id 7743">
+[ἔργων.	εργων	ἔργον	εργον	N+Com
+</w>
+<w id="PDF Page 57, Line 31 - word id 7744">
+Ἡρακλέα	ηρακλεα	Ἡρακλέης	ηρακλεης	N+Ant
+</w>
+<w id="PDF Page 57, Line 31 - word id 7745">
+οὖν	ουν	οὖν	ουν	I+Part
+</w>
+<w id="PDF Page 57, Line 31 - word id 7746">
+καὶ	και	καί	και	I+Part
+</w>
+<w id="PDF Page 57, Line 31 - word id 7747">
+αὐτὸς	αυτος	αὐτός	αυτος	PRO+Dem
+</w>
+<w id="PDF Page 57, Line 31 - word id 7748">
+Ὃμηρος	ομηρος	Ὅμηρος	ομηρος	N+Ant
+</w>
+<w id="PDF Page 57, Line 31 - word id 7749">
+θνητὸν	θνητον	θνητός	θνητος	A
+</w>
+<w id="PDF Page 57, Line 31 - word id 7750">
+οἷδεν	οιδεν	ὅδος	οδος	PRO+Ind
+</w>
+<w id="PDF Page 57, Line 31 - word id 7751">
+ἄνθρωπον.	ανθρωπον	ἄνθρωπος	ανθρωπος	N+Com
+</w>
+<w id="PDF Page 57, Line 32 - word id 7752">
+Ἰερώνυμος	ιερωνυμος	ἰερώνυμος	ιερωνυμος	A
+</w>
+<w id="PDF Page 57, Line 32 - word id 7753">
+δὲ	δε	δέ	δε	I+Part
+</w>
+<w id="PDF Page 57, Line 32 - word id 7754">
+ὁ	ο	ὁ	ο	DET
+</w>
+<w id="PDF Page 57, Line 32 - word id 7755">
+φιλόσοφος	φιλοσοφος	φιλόσοφος	φιλοσοφος	A
+</w>
+<w id="PDF Page 57, Line 32 - word id 7756">
+καὶ	και	καί	και	I+Part
+</w>
+<w id="PDF Page 57, Line 32 - word id 7757">
+τὴν	την	ὁ	ο	DET
+</w>
+<w id="PDF Page 57, Line 32 - word id 7758">
+σχέσιν	σχεσιν	σχέσις	σχεσις	N+Com
+</w>
+<w id="PDF Page 57, Line 32 - word id 7759">
+αὐτοῦ	αυτου	αὐτός	αυτος	PRO+Dem
+</w>
+<w id="PDF Page 343, Line 1 - word id 81581">
+οργίζετε	οργιζετε	οργίζω	οργιζω	V
+</w>
+<w id="PDF Page 343, Line 1 - word id 81582">
+τὰ	τα	ὁ	ο	DET
+</w>
+<w id="PDF Page 343, Line 1 - word id 81583">
+τέκνα	τεκνα	τέκνον	τεκνον	N+Com
+</w>
+<w id="PDF Page 343, Line 1 - word id 81584">
+ὑμῶν,	υμων	ὑμεῖς	υμεις	PRO+Per2p
+</w>
+<w id="PDF Page 343, Line 1 - word id 81585">
+ἀλλ´	αλλ´	ἀλλά	αλλα	I+Part
+</w>
+<w id="PDF Page 343, Line 1 - word id 81586">
+ἐκτρέφετι	εκτρεφετι	ἐκτρέφω	εκτρεφω	V
+</w>
+<w id="PDF Page 343, Line 1 - word id 81587">
+αὐτὶ	αυτι	αὐτί	αυτι	PRO+Dem
+</w>
+<w id="PDF Page 343, Line 1 - word id 81588">
+ἐν	εν	ἐν	εν	I+Prep
+</w>
+<w id="PDF Page 343, Line 2 - word id 81589">
+παιδείᾳ	παιδεια	παιδεία	παιδεια	N+Com
+</w>
+<w id="PDF Page 343, Line 2 - word id 81590">
+καὶ	και	καί	και	I+Part
+</w>
+<w id="PDF Page 343, Line 2 - word id 81591">
+νουθεσίᾳ	νουθεσια	νουθεσία	νουθεσια	N+Com
+</w>
+<w id="PDF Page 343, Line 2 - word id 81592">
+Κυρίου.	κυριου	κύριος (ὁ)	κυριος	N+Com
+</w>
+<w id="PDF Page 343, Line 2 - word id 81593">
+Οἱ	οι	ὁ	ο	DET
+</w>
+<w id="PDF Page 343, Line 2 - word id 81594">
+δοῦλοι,	δουλοι	δοῦλος	δουλος	N+Com
+</w>
+<w id="PDF Page 343, Line 2 - word id 81595">
+ὑπακούετε	υπακουετε	ὑπακούω	υπακουω	V
+</w>
+<w id="PDF Page 343, Line 3 - word id 81596">
+τοῖς	τοις	ὁ	ο	DET
+</w>
+<w id="PDF Page 343, Line 3 - word id 81597">
+κατὰ	κατα	κατά	κατα	I+Prep
+</w>
+<w id="PDF Page 343, Line 3 - word id 81598">
+σάρκα	σαρκα	σάρξ	σαρξ	N+Com
+</w>
+<w id="PDF Page 343, Line 3 - word id 81599">
+κυρίοις	κυριοις	κύριος α ον	κυριος	N+Com
+</w>
+<w id="PDF Page 343, Line 3 - word id 81600">
+μετὰ	μετα	μετά	μετα	I+Prep
+</w>
+<w id="PDF Page 343, Line 3 - word id 81601">
+φόβου	φοβου	φόβος	φοβος	N+Com
+</w>
+<w id="PDF Page 343, Line 3 - word id 81602">
+καὶ	και	καί	και	I+Part
+</w>
+<w id="PDF Page 343, Line 3 - word id 81603">
+τρόμου,	τρομου	τρόμος	τρομος	N+Com
+</w>
+<w id="PDF Page 343, Line 3 - word id 81604">
+ἐν	εν	ἐν	εν	I+Prep
+</w>
+<w id="PDF Page 343, Line 4 - word id 81605">
+ἀπλότητι	απλοτητι	ἀπλότης	απλοτης	N+Com
+</w>
+<w id="PDF Page 343, Line 4 - word id 81606">
+τῆς	της	ὁ	ο	DET
+</w>
+<w id="PDF Page 343, Line 4 - word id 81607">
+καρδίας	καρδιας	καρδία	καρδια	N+Com
+</w>
+<w id="PDF Page 343, Line 4 - word id 81608">
+ὑμῶν,	υμων	ὑμεῖς	υμεις	PRO+Per2p
+</w>
+<w id="PDF Page 343, Line 4 - word id 81609">
+ὡς	ως	ὡς (ὅς)	ως	I+Conj
+</w>
+<w id="PDF Page 343, Line 4 - word id 81610">
+τῷ	τω	ὁ	ο	DET
+</w>
+<w id="PDF Page 343, Line 4 - word id 81611">
+λριστῷ,	λριστω	Λιστός	λιστος	N+Ant
+</w>
+<w id="PDF Page 343, Line 4 - word id 81612">
+ἐκ	εκ	ἐκ	εκ	I+Prep
+</w>
+<w id="PDF Page 343, Line 4 - word id 81613">
+ψνχῆς	ψνχης	ψιχνή	ψιχνη	N+Com
+</w>
+<w id="PDF Page 343, Line 5 - word id 81614">
+μετ´	μετ´	μετά	μετα	I+Prep
+</w>
+<w id="PDF Page 343, Line 5 - word id 81615">
+εὐνοίας	ευνοιας	εὔνοια	ευνοια	N+Com
+</w>
+<w id="PDF Page 343, Line 5 - word id 81616">
+δουλεύοντες.	δουλευοντες	δουλεύω	δουλευω	V
+</w>
+<w id="PDF Page 343, Line 5 - word id 81617">
+Καὶ	και	καί	και	I+Part
+</w>
+<w id="PDF Page 343, Line 5 - word id 81618">
+οἱ	οι	ὁ	ο	DET
+</w>
+<w id="PDF Page 343, Line 5 - word id 81619">
+κύριοι,	κυριοι	κύριος α ον	κυριος	A
+</w>
+<w id="PDF Page 343, Line 6 - word id 81620">
+εὐποιεῖτε	ευποιειτε	εὐποιέω	ευποιεω	V
+</w>
+<w id="PDF Page 343, Line 6 - word id 81621">
+τοὺς	τους	ὁ	ο	DET
+</w>
+<w id="PDF Page 343, Line 6 - word id 81622">
+οἰκέτας	οικετας	οἰκέτης	οικετης	N+Com
+</w>
+<w id="PDF Page 343, Line 6 - word id 81623">
+ὑμῶν,	υμων	ὑμεῖς	υμεις	PRO+Per2p
+</w>
+<w id="PDF Page 343, Line 6 - word id 81624">
+ἀνιέντες	ανιεντες	ἀνίημι	ανιημι	V
+</w>
+<w id="PDF Page 343, Line 6 - word id 81625">
+τὴν	την	ὁ	ο	DET
+</w>
+<w id="PDF Page 343, Line 6 - word id 81626">
+ἀπειλήν·	απειλην	ἀπειλή	απειλη	N+Com
+</w>
+<w id="PDF Page 343, Line 7 - word id 81627">
+εἰδότες	ειδοτες	οἶδα	οιδα	V
+</w>
+<w id="PDF Page 343, Line 7 - word id 81628">
+ὅτι	οτι	ὅτι	οτι	I+Conj
+</w>
+<w id="PDF Page 343, Line 7 - word id 81629">
+καὶ	και	καί	και	I+Part
+</w>
+<w id="PDF Page 343, Line 7 - word id 81630">
+αὐτῶν	αυτων	αὐτός	αυτος	PRO+Dem
+</w>
+<w id="PDF Page 343, Line 7 - word id 81631">
+καὶ	και	καί	και	I+Part
+</w>
+<w id="PDF Page 343, Line 7 - word id 81632">
+ὑμῶν	υμων	ὑμεῖς	υμεις	PRO+Per2p
+</w>
+<w id="PDF Page 343, Line 7 - word id 81633">
+ὁ	ο	ὁ	ο	DET
+</w>
+<w id="PDF Page 343, Line 7 - word id 81634">
+Κύριός	κυριος	κύριος (ὁ)	κυριος	N+Com
+</w>
+<w id="PDF Page 343, Line 7 - word id 81635">
+ἐστιν	εστιν	εἰμί	ειμι	V
+</w>
+<w id="PDF Page 343, Line 7 - word id 81636">
+ἐν	εν	ἐν	εν	I+Prep
+</w>
+<w id="PDF Page 343, Line 7 - word id 81637">
+οὑ	ου	οὗ	ου	I+Neg
+</w>
+<w id="PDF Page 343, Line 8 - word id 81638">
+ρανοῖς,	ρανοις	ρᾴννοι	ραννοι	N+Com
+</w>
+<w id="PDF Page 343, Line 8 - word id 81639">
+καὶ	και	καί	και	I+Part
+</w>
+<w id="PDF Page 343, Line 8 - word id 81640">
+προσωποληψία	προσωποληψια	προσωποληψία	προσωποληψια	N+Com
+</w>
+<w id="PDF Page 343, Line 8 - word id 81641">
+οὐκ	ουκ	οὐ	ου	I+Neg
+</w>
+<w id="PDF Page 343, Line 8 - word id 81642">
+ἔστιν.»	εστιν	εἰμί	ειμι	V
+</w>
+<w id="PDF Page 343, Line 8 - word id 81643">
+#NOM?
+<w id="PDF Page 343, Line 8 - word id 81644">
+ἦ	η	ἦ	η	I+Part
+</w>
+<w id="PDF Page 343, Line 9 - word id 81645">
+μεν	μεν	μέν	μεν	I+Part
+</w>
+<w id="PDF Page 343, Line 9 - word id 81646">
+πνεύματι,	πνευματι	πνεῦμα	πνευμα	N+Com
+</w>
+<w id="PDF Page 343, Line 9 - word id 81647">
+πνεύματι	πνευματι	πνεῦμα	πνευμα	N+Com
+</w>
+<w id="PDF Page 343, Line 9 - word id 81648">
+καὶ	και	καί	και	I+Part
+</w>
+<w id="PDF Page 343, Line 9 - word id 81649">
+στοιχῶμεν.	στοιχωμεν	στοιχέω	στοιχεω	V
+</w>
+<w id="PDF Page 343, Line 9 - word id 81650">
+Μὴ	μη	μή	μη	I+Neg
+</w>
+<w id="PDF Page 343, Line 9 - word id 81651">
+μκώμεθα	μκωμεθα	μάκτω	μακτω	V
+</w>
+<w id="PDF Page 343, Line 10 - word id 81652">
+κενόδοξοι,	κενοδοξοι	κενόδοξος	κενοδοξος	A
+</w>
+<w id="PDF Page 343, Line 10 - word id 81653">
+ἀλλήλους	αλληλους	ἀλλήλων	αλληλων	PRO+Rec
+</w>
+<w id="PDF Page 343, Line 10 - word id 81654">
+προκαλούμενοι,	προκαλουμενοι	προκαλέω	προκαλεω	V
+</w>
+<w id="PDF Page 343, Line 10 - word id 81655">
+ἀλλή	αλλη	ἀλλή	αλλη	PRO+Ind
+</w>
+<w id="PDF Page 343, Line 11 - word id 81656">
+λοις	λοις	λέων	λεων	V
+</w>
+<w id="PDF Page 343, Line 11 - word id 81657">
+φθονοῦντες·	φθονουντες	φθονέω	φθονεω	V
+</w>
+<w id="PDF Page 343, Line 11 - word id 81658">
+ἀλλήλων	αλληλων	ἀλλήλων	αλληλων	PRO+Rec
+</w>
+<w id="PDF Page 343, Line 11 - word id 81659">
+τὰ	τα	ὁ	ο	DET
+</w>
+<w id="PDF Page 343, Line 11 - word id 81660">
+βάρη	βαρη	βάρος	βαρος	N+Com
+</w>
+<w id="PDF Page 343, Line 11 - word id 81661">
+βαστάζετε,	βασταζετε	βαστάζω	βασταζω	V
+</w>
+<w id="PDF Page 343, Line 11 - word id 81662">
+κθὶ	κθι	καθί	καθι	I+Adv
+</w>
+<w id="PDF Page 343, Line 12 - word id 81663">
+οὕτως	ουτως	οὕτως	ουτως	I+Adv
+</w>
+<w id="PDF Page 343, Line 12 - word id 81664">
+ἀναπληρώσατε	αναπληρωσατε	ἀναπληρόω	αναπληροω	V
+</w>
+<w id="PDF Page 343, Line 12 - word id 81665">
+τὸν	τον	ὁ	ο	DET
+</w>
+<w id="PDF Page 343, Line 12 - word id 81666">
+νόμον	νομον	νόμος	νομος	N+Com
+</w>
+<w id="PDF Page 343, Line 12 - word id 81667">
+τοῦ	του	ὁ	ο	DET
+</w>
+<w id="PDF Page 343, Line 12 - word id 81668">
+Χριστοῦ	χριστου	Χριστός	χριστος	N+Ant
+</w>
+<w id="PDF Page 343, Line 12 - word id 81669">
+Μὴ	μη	μή	μη	I+Neg
+</w>
+<w id="PDF Page 343, Line 13 - word id 81670">
+πλανᾶσθε·	πλανασθε	πλανάω	πλαναω	V
+</w>
+<w id="PDF Page 343, Line 13 - word id 81671">
+Θεὸς	θεος	θεός	θεος	N+Com
+</w>
+<w id="PDF Page 343, Line 13 - word id 81672">
+οὐ	ου	οὐ	ου	I+Neg
+</w>
+<w id="PDF Page 343, Line 13 - word id 81673">
+μυκτηρίζεται.	μυκτηριζεται	μυκτηρίζω	μυκτηριζω	V
+</w>
+<w id="PDF Page 343, Line 13 - word id 81674">
+Τὸ	το	ὁ	ο	DET
+</w>
+<w id="PDF Page 343, Line 13 - word id 81675">
+καλὸν	καλον	καλός	καλος	A
+</w>
+<w id="PDF Page 343, Line 13 - word id 81676">
+ποιοῦρτες,	ποιουρτες	ποιοῦρτα	ποιουρτα	A
+</w>
+<w id="PDF Page 343, Line 14 - word id 81677">
+μὴ	μη	μή	μη	I+Neg
+</w>
+<w id="PDF Page 343, Line 14 - word id 81678">
+ἐκκακῶμεν·	εκκακωμεν	ἐκκακέω	εκκακεω	V
+</w>
+<w id="PDF Page 343, Line 14 - word id 81679">
+καιρῷ	καιρω	καιρός	καιρος	N+Com
+</w>
+<w id="PDF Page 343, Line 14 - word id 81680">
+γὰρ	γαρ	γάρ	γαρ	I+Part
+</w>
+<w id="PDF Page 343, Line 14 - word id 81681">
+ἰδίῳ	ιδιω	ἴδιος	ιδιος	A
+</w>
+<w id="PDF Page 343, Line 14 - word id 81682">
+θερίσομεν,	θερισομεν	θερίζω	θεριζω	V
+</w>
+<w id="PDF Page 343, Line 15 - word id 81683">
+μὴ	μη	μή	μη	I+Neg
+</w>
+<w id="PDF Page 343, Line 15 - word id 81684">
+ἐκλυόμενοι.	εκλυομενοι	ἐκλύω	εκλυω	V
+</w>
+<w id="PDF Page 343, Line 15 - word id 81685">
+Εἰρηνεύετε	ειρηνευετε	εἰρηνεύω	ειρηνευω	V
+</w>
+<w id="PDF Page 343, Line 15 - word id 81686">
+ἐν	εν	ἐν	εν	I+Prep
+</w>
+<w id="PDF Page 343, Line 15 - word id 81687">
+ἑαυτοῖς.	εαυτοις	ἑαυτοῦ	εαυτου	PRO+Ref3s
+</w>
+<w id="PDF Page 343, Line 15 - word id 81688">
+Παρακαλοῦμεν	παρακαλουμεν	παρακαλέω	παρακαλεω	V
+</w>
+<w id="PDF Page 343, Line 16 - word id 81689">
+δὲ	δε	δέ	δε	I+Part
+</w>
+<w id="PDF Page 343, Line 16 - word id 81690">
+ὑμᾶς,	υμας	ὑμεῖς	υμεις	PRO+Per2p
+</w>
+<w id="PDF Page 343, Line 16 - word id 81691">
+ἀδελφοί·	αδελφοι	ἀδελφός	αδελφος	N+Com
+</w>
+<w id="PDF Page 343, Line 16 - word id 81692">
+νουθετεῖτε	νουθετειτε	νουθετέω	νουθετεω	V
+</w>
+<w id="PDF Page 343, Line 16 - word id 81693">
+τοὺς	τους	ὁ	ο	DET
+</w>
+<w id="PDF Page 343, Line 16 - word id 81694">
+ἀτάκτους·	ατακτους	ἄτακτος	ατακτος	A
+</w>
+<w id="PDF Page 343, Line 17 - word id 81695">
+παραμυθεῖσθε	παραμυθεισθε	παραμυθέομαι	παραμυθεομαι	V
+</w>
+<w id="PDF Page 343, Line 17 - word id 81696">
+τοὺς	τους	ὁ	ο	DET
+</w>
+<w id="PDF Page 343, Line 17 - word id 81697">
+ὀλιγοψύχους·	ολιγοψυχους	ὀλιγόψυχος	ολιγοψυχος	A
+</w>
+<w id="PDF Page 343, Line 17 - word id 81698">
+ἀντέεσθε	αντεεσθε	ἀντίμα	αντιμα	V
+</w>
+<w id="PDF Page 343, Line 17 - word id 81699">
+τον	τον	ὁ	ο	DET
+</w>
+<w id="PDF Page 343, Line 18 - word id 81700">
+ἀσθενῶν·	ασθενων	ἀσθενής	ασθενης	V
+</w>
+<w id="PDF Page 343, Line 18 - word id 81701">
+μακροθυμεῖτε	μακροθυμειτε	μακροθυμέω	μακροθυμεω	V
+</w>
+<w id="PDF Page 343, Line 18 - word id 81702">
+πρὸς	προς	πρός	προς	I+Prep
+</w>
+<w id="PDF Page 343, Line 18 - word id 81703">
+πάντας·	παντας	πᾶς	πας	A
+</w>
+<w id="PDF Page 343, Line 18 - word id 81704">
+ὀράτε	ορατε	Ὀράτης	ορατης	N+Ant
+</w>
+<w id="PDF Page 343, Line 18 - word id 81705">
+μὴ	μη	μή	μη	I+Neg
+</w>
+<w id="PDF Page 343, Line 19 - word id 81706">
+τις	τις	τις	τις	PRO+Ind
+</w>
+<w id="PDF Page 343, Line 19 - word id 81707">
+κακὸν	κακον	κακός	κακος	A
+</w>
+<w id="PDF Page 343, Line 19 - word id 81708">
+ἀντὶ	αντι	ἀντί	αντι	I+Prep
+</w>
+<w id="PDF Page 343, Line 19 - word id 81709">
+κακοῦ	κακου	κακός	κακος	A
+</w>
+<w id="PDF Page 343, Line 19 - word id 81710">
+τινὶ	τινι	τις	τις	PRO+Ind
+</w>
+<w id="PDF Page 343, Line 19 - word id 81711">
+ἀποδῷ.	αποδω	ἀποδίδωμι	αποδιδωμι	V
+</w>
+<w id="PDF Page 343, Line 19 - word id 81712">
+Τὸ	το	ὁ	ο	DET
+</w>
+<w id="PDF Page 343, Line 19 - word id 81713">
+Πνεῦμα	πνευμα	πνεῦμα	πνευμα	N+Com
+</w>
+<w id="PDF Page 343, Line 19 - word id 81714">
+μὴ	μη	μή	μη	I+Neg
+</w>
+<w id="PDF Page 343, Line 20 - word id 81715">
+Κσβέννυτε·	κσβεννυτε	κβέννευμος	κβεννευμος	V
+</w>
+<w id="PDF Page 343, Line 20 - word id 81716">
+προφητείας	προφητειας	προφητεία	προφητεια	N+Com
+</w>
+<w id="PDF Page 343, Line 20 - word id 81717">
+μὴ	μη	μή	μη	I+Neg
+</w>
+<w id="PDF Page 343, Line 20 - word id 81718">
+ἐξουθενεῖτε.	εξουθενειτε	ἐξουδενέω	εξουδενεω	V
+</w>
+<w id="PDF Page 343, Line 20 - word id 81719">
+Πάντα	παντα	πᾶς	πας	A
+</w>
+<w id="PDF Page 343, Line 20 - word id 81720">
+δὲ	δε	δέ	δε	I+Part
+</w>
+<w id="PDF Page 343, Line 21 - word id 81721">
+δοκιμάζετε·	δοκιμαζετε	δοκιμάζω	δοκιμαζω	V
+</w>
+<w id="PDF Page 343, Line 21 - word id 81722">
+καὶ	και	καί	και	I+Part
+</w>
+<w id="PDF Page 343, Line 21 - word id 81723">
+τὸ	το	ὁ	ο	DET
+</w>
+<w id="PDF Page 343, Line 21 - word id 81724">
+καλὸν	καλον	καλός	καλος	A
+</w>
+<w id="PDF Page 343, Line 21 - word id 81725">
+κατέχετε·	κατεχετε	κατέχω	κατεχω	V
+</w>
+<w id="PDF Page 343, Line 21 - word id 81726">
+ἀπὸ	απο	ἀπό	απο	I+Prep
+</w>
+<w id="PDF Page 343, Line 21 - word id 81727">
+πανὸς	πανος	Πάν	παν	N+Ant
+</w>
+<w id="PDF Page 343, Line 22 - word id 81728">
+εἴδους	ειδους	εἶδος	ειδος	N+Com
+</w>
+<w id="PDF Page 343, Line 22 - word id 81729">
+πονηροῦ	πονηρου	πονηρός	πονηρος	A
+</w>
+<w id="PDF Page 343, Line 22 - word id 81730">
+ἀπέχεσθε·	απεχεσθε	ἀπέχω	απεχω	V
+</w>
+<w id="PDF Page 343, Line 22 - word id 81731">
+τῇ	τη	ὁ	ο	DET
+</w>
+<w id="PDF Page 343, Line 22 - word id 81732">
+προσευχῇ	προσευχη	προσευχή	προσευχη	N+Com
+</w>
+<w id="PDF Page 343, Line 22 - word id 81733">
+προσκαρτιρεῖτε,	προσκαρτιρειτε	προσκαρτρείω	προσκαρτρειω	V
+</w>
+<w id="PDF Page 343, Line 23 - word id 81734">
+γρηγοροῦντες	γρηγορουντες	γρηγορέω	γρηγορεω	V
+</w>
+<w id="PDF Page 343, Line 23 - word id 81735">
+ἐν	εν	ἐν	εν	I+Prep
+</w>
+<w id="PDF Page 343, Line 23 - word id 81736">
+αὐτῇ,	αυτη	αὐτός	αυτος	PRO+Dem
+</w>
+<w id="PDF Page 343, Line 23 - word id 81737">
+ἐν	εν	ἐν	εν	I+Prep
+</w>
+<w id="PDF Page 343, Line 23 - word id 81738">
+εὐχαριστίᾳ·	ευχαριστια	εὐχαριστία	ευχαριστια	N+Com
+</w>
+<w id="PDF Page 343, Line 23 - word id 81739">
+ἐν	εν	ἐν	εν	I+Prep
+</w>
+<w id="PDF Page 343, Line 23 - word id 81740">
+οφίᾳ	οφια	ὁφία	οφια	N+Com
+</w>
+<w id="PDF Page 343, Line 24 - word id 81741">
+περιπατεῖτε	περιπατειτε	περιπατέω	περιπατεω	V
+</w>
+<w id="PDF Page 343, Line 24 - word id 81742">
+πρὸς	προς	πρός	προς	I+Prep
+</w>
+<w id="PDF Page 343, Line 24 - word id 81743">
+τοὺς	τους	ὁ	ο	DET
+</w>
+<w id="PDF Page 343, Line 24 - word id 81744">
+ἔξω,	εξω	ἔξω	εξω	I+AdvPr
+</w>
+<w id="PDF Page 343, Line 24 - word id 81745">
+τὸν	τον	ὁ	ο	DET
+</w>
+<w id="PDF Page 343, Line 24 - word id 81746">
+καιρὸν	καιρον	καιρός	καιρος	N+Com
+</w>
+<w id="PDF Page 343, Line 24 - word id 81747">
+ἐξαγοραζόμενοι.	εξαγοραζομενοι	ἐξαγοράζω	εξαγοραζω	V
+</w>
+<w id="PDF Page 343, Line 25 - word id 81748">
+Ὁ	ο	ὁ	ο	DET
+</w>
+<w id="PDF Page 343, Line 25 - word id 81749">
+λόγος	λογος	λόγος	λογος	N+Com
+</w>
+<w id="PDF Page 343, Line 25 - word id 81750">
+ὑμῶν	υμων	ὑμεῖς	υμεις	PRO+Per2p
+</w>
+<w id="PDF Page 343, Line 25 - word id 81751">
+πάντοτε	παντοτε	πάντοτε	παντοτε	I+Adv
+</w>
+<w id="PDF Page 343, Line 25 - word id 81752">
+ἐν	εν	ἐν	εν	I+Prep
+</w>
+<w id="PDF Page 343, Line 25 - word id 81753">
+χάριτι,	χαριτι	χάρις	χαρις	N+Com
+</w>
+<w id="PDF Page 343, Line 25 - word id 81754">
+ὅλατι	ολατι	ὅλας	ολας	A
+</w>
+<w id="PDF Page 343, Line 26 - word id 81755">
+ἠρτυμένος,	ηρτυμενος	ἀρτύω	αρτυω	V
+</w>
+<w id="PDF Page 343, Line 26 - word id 81756">
+εἰδέναι	ειδεναι	οἶδα	οιδα	V
+</w>
+<w id="PDF Page 343, Line 26 - word id 81757">
+πῶς	πως	πῶς	πως	I+Adv
+</w>
+<w id="PDF Page 343, Line 26 - word id 81758">
+δεῖ	δει	δέω (δεήσω)	δεω	V
+</w>
+<w id="PDF Page 343, Line 26 - word id 81759">
+ὑμᾶς	υμας	ὑμεῖς	υμεις	PRO+Per2p
+</w>
+<w id="PDF Page 343, Line 26 - word id 81760">
+ἑνὶ	ενι	εἷς	εις	NUM+Car
+</w>
+<w id="PDF Page 343, Line 26 - word id 81761">
+ἑκάστῳ	εκαστω	ἕκαστος	εκαστος	PRO+Ind
+</w>
+<w id="PDF Page 343, Line 26 - word id 81762">
+ἀπονρίνεσθαι.	απονρινεσθαι	ἀπονίρνομαι	απονιρνομαι	V
+</w>
+<w id="PDF Page 343, Line 27 - word id 81763">
+Ἐντρέφεσθε	εντρεφεσθε	ἐντρέφω	εντρεφω	V
+</w>
+<w id="PDF Page 343, Line 27 - word id 81764">
+τοῖς	τοις	ὁ	ο	DET
+</w>
+<w id="PDF Page 343, Line 27 - word id 81765">
+λόγοις	λογοις	λόγος	λογος	N+Com
+</w>
+<w id="PDF Page 343, Line 27 - word id 81766">
+τῆς	της	ὁ	ο	DET
+</w>
+<w id="PDF Page 343, Line 27 - word id 81767">
+πίστεως,	πιστεως	πίστις	πιστις	N+Com
+</w>
+<w id="PDF Page 343, Line 27 - word id 81768">
+Γμνάζεσθε	γμναζεσθε	γνάζω	γναζω	V
+</w>
+<w id="PDF Page 343, Line 28 - word id 81769">
+πρὸς	προς	πρός	προς	I+Prep
+</w>
+<w id="PDF Page 343, Line 28 - word id 81770">
+εὐσέβειαν·	ευσεβειαν	εὐσέβεια	ευσεβεια	N+Com
+</w>
+<w id="PDF Page 343, Line 28 - word id 81771">
+ἡ	η	ὁ	ο	DET
+</w>
+<w id="PDF Page 343, Line 28 - word id 81772">
+γὰρ	γαρ	γάρ	γαρ	I+Part
+</w>
+<w id="PDF Page 343, Line 28 - word id 81773">
+σωματικὴ	σωματικη	σωματικός	σωματικος	A
+</w>
+<w id="PDF Page 343, Line 28 - word id 81774">
+γυμνασία	γυμνασια	γυμνασία	γυμνασια	N+Com
+</w>
+<w id="PDF Page 343, Line 29 - word id 81775">
+πρὸς	προς	πρός	προς	I+Prep
+</w>
+<w id="PDF Page 343, Line 29 - word id 81776">
+ὀλίγον	ολιγον	ὀλίγος	ολιγος	A
+</w>
+<w id="PDF Page 343, Line 29 - word id 81777">
+ἐστὶν	εστιν	εἰμί	ειμι	V
+</w>
+<w id="PDF Page 343, Line 29 - word id 81778">
+ὡφέλιμος·	ωφελιμος	ὠφέλιμος	ωφελιμος	A
+</w>
+<w id="PDF Page 343, Line 29 - word id 81779">
+ἡ	η	ὁ	ο	DET
+</w>
+<w id="PDF Page 343, Line 29 - word id 81780">
+δὲ	δε	δέ	δε	I+Part
+</w>
+<w id="PDF Page 343, Line 29 - word id 81781">
+εὐσέβεια	ευσεβεια	εὐσέβεια	ευσεβεια	N+Com
+</w>
+<w id="PDF Page 343, Line 29 - word id 81782">
+πρὸς	προς	πρός	προς	I+Prep
+</w>
+<w id="PDF Page 343, Line 30 - word id 81783">
+πάντα	παντα	πᾶς	πας	A
+</w>
+<w id="PDF Page 343, Line 30 - word id 81784">
+ὡφέλιμός	ωφελιμος	ὠφέλιμος	ωφελιμος	A
+</w>
+<w id="PDF Page 343, Line 30 - word id 81785">
+ἐστιν,	εστιν	εἰμί	ειμι	V
+</w>
+<w id="PDF Page 343, Line 30 - word id 81786">
+ἐπαγγελίαν	επαγγελιαν	ἐπαγγελία	επαγγελια	N+Com
+</w>
+<w id="PDF Page 343, Line 30 - word id 81787">
+ἔχουσα	εχουσα	ἔχω	εχω	V
+</w>
+<w id="PDF Page 343, Line 30 - word id 81788">
+τῆς	της	ὁ	ο	DET
+</w>
+<w id="PDF Page 343, Line 31 - word id 81789">
+ζωῆς	ζωης	ζωή	ζωη	N+Com
+</w>
+<w id="PDF Page 343, Line 31 - word id 81790">
+τῆς	της	ὁ	ο	DET
+</w>
+<w id="PDF Page 343, Line 31 - word id 81791">
+νῦν	νυν	νῦν	νυν	I+Adv
+</w>
+<w id="PDF Page 343, Line 31 - word id 81792">
+καὶ	και	καί	και	I+Part
+</w>
+<w id="PDF Page 343, Line 31 - word id 81793">
+τῆς	της	ὁ	ο	DET
+</w>
+<w id="PDF Page 343, Line 31 - word id 81794">
+μελλούσης.	μελλουσης	μέλλω	μελλω	V
+</w>
+<w id="PDF Page 343, Line 31 - word id 81795">
+Οἱ	οι	ὁ	ο	DET
+</w>
+<w id="PDF Page 343, Line 31 - word id 81796">
+πιστοὺς	πιστους	πιστός (πείθω)	πιστος	A
+</w>
+<w id="PDF Page 343, Line 31 - word id 81797">
+ἔχοιτε	εχοιτε	ἔχω	εχω	V
+</w>
+<w id="PDF Page 343, Line 32 - word id 81798">
+δεσπότας	δεσποτας	δεσπότης	δεσποτης	N+Com
+</w>
+<w id="PDF Page 343, Line 32 - word id 81799">
+μὴ	μη	μή	μη	I+Neg
+</w>
+<w id="PDF Page 343, Line 32 - word id 81800">
+καταφρονείτωσαν,	καταφρονειτωσαν	καταφρονέω	καταφρονεω	V
+</w>
+<w id="PDF Page 343, Line 32 - word id 81801">
+ὅτι·	οτι	ὅτι	οτι	I+Conj
+</w>
+<w id="PDF Page 343, Line 32 - word id 81802">
+ἀδελφοί	αδελφοι	ἀδελφός	αδελφος	N+Com
+</w>
+<w id="PDF Page 343, Line 32 - word id 81803">
+εἰιν·	ειιν	εἰμί	ειμι	V
+</w>
+<w id="PDF Page 343, Line 33 - word id 81804">
+ἀλλὰ	αλλα	ἀλλά	αλλα	I+Part
+</w>
+<w id="PDF Page 343, Line 33 - word id 81805">
+μᾶλλον	μαλλον	μάλα	μαλα	I+Adv
+</w>
+<w id="PDF Page 343, Line 33 - word id 81806">
+δουλευέτωσαν,	δουλευετωσαν	δουλεύω	δουλευω	V
+</w>
+<w id="PDF Page 343, Line 33 - word id 81807">
+ὅτι	οτι	ὅτι	οτι	I+Conj
+</w>
+<w id="PDF Page 343, Line 33 - word id 81808">
+πιστοί	πιστοι	πιστός (πείθω)	πιστος	A
+</w>
+<w id="PDF Page 343, Line 33 - word id 81809">
+εἰσιν.	εισιν	εἰμί	ειμι	V
+</w>
+<w id="PDF Page 343, Line 33 - word id 81810">
+Ὁ	ο	ὁ	ο	DET
+</w>
+<w id="PDF Page 343, Line 33 - word id 81811">
+μεταδιδοὺς	μεταδιδους	μεταδίδωμι	μεταδιδωμι	V
+</w>
+<w id="PDF Page 343, Line 34 - word id 81812">
+ἔστω	εστω	εἰμί	ειμι	V
+</w>
+<w id="PDF Page 343, Line 34 - word id 81813">
+ἐν	εν	ἐν	εν	I+Prep
+</w>
+<w id="PDF Page 343, Line 34 - word id 81814">
+ἀπλότητι·	απλοτητι	ἀπλότης	απλοτης	N+Com
+</w>
+<w id="PDF Page 343, Line 34 - word id 81815">
+ὁ	ο	ὁ	ο	DET
+</w>
+<w id="PDF Page 343, Line 34 - word id 81816">
+προῖστάμενος	προισταμενος	προΐστημι	προιστημι	V
+</w>
+<w id="PDF Page 343, Line 34 - word id 81817">
+ἐν	εν	ἐν	εν	I+Prep
+</w>
+<w id="PDF Page 343, Line 35 - word id 81818">
+σπουδῇ·	σπουδη	σπουδή	σπουδη	N+Com
+</w>
+<w id="PDF Page 343, Line 35 - word id 81819">
+ὁ	ο	ὁ	ο	DET
+</w>
+<w id="PDF Page 343, Line 35 - word id 81820">
+ἐλεῶν	ελεων	ἐλεέω	ελεεω	V
+</w>
+<w id="PDF Page 343, Line 35 - word id 81821">
+ἐν	εν	ἐν	εν	I+Prep
+</w>
+<w id="PDF Page 343, Line 35 - word id 81822">
+ἰλαρότητι·	ιλαροτητι	ἰλαρότης	ιλαροτης	N+Com
+</w>
+<w id="PDF Page 343, Line 35 - word id 81823">
+ἡ	η	ὁ	ο	DET
+</w>
+<w id="PDF Page 343, Line 35 - word id 81824">
+ἀγάπη	αγαπη	ἀγάπη	αγαπη	N+Com
+</w>
+<w id="PDF Page 343, Line 35 - word id 81825">
+ἀνυπόκριτος·	ανυποκριτος	ἀνυπόκριτος	ανυποκριτος	A
+</w>
+<w id="PDF Page 343, Line 36 - word id 81826">
+ἀποστυγοῦντες	αποστυγουντες	ἀποστυγέω	αποστυγεω	V
+</w>
+<w id="PDF Page 343, Line 36 - word id 81827">
+τὸ	το	ὁ	ο	DET
+</w>
+<w id="PDF Page 343, Line 36 - word id 81828">
+πονηρὸν,	πονηρον	πονηρός	πονηρος	A
+</w>
+<w id="PDF Page 343, Line 36 - word id 81829">
+κολλώμενοι	κολλωμενοι	κολλάω	κολλαω	V
+</w>
+<w id="PDF Page 343, Line 36 - word id 81830">
+τῷ	τω	ὁ	ο	DET
+</w>
+<w id="PDF Page 343, Line 36 - word id 81831">
+ἀγαθῷ	αγαθω	ἀγαθός	αγαθος	A
+</w>
+<w id="PDF Page 343, Line 37 - word id 81832">
+τῇ	τη	ὁ	ο	DET
+</w>
+<w id="PDF Page 343, Line 37 - word id 81833">
+φιλαδελφίᾳ	φιλαδελφια	φιλαδελφία	φιλαδελφια	N+Com
+</w>
+<w id="PDF Page 343, Line 37 - word id 81834">
+εἰς	εις	εἰς	εις	I+Prep
+</w>
+<w id="PDF Page 343, Line 37 - word id 81835">
+ἀλλήλους	αλληλους	ἀλλήλων	αλληλων	PRO+Rec
+</w>
+<w id="PDF Page 343, Line 37 - word id 81836">
+φιλόστοργοι,	φιλοστοργοι	φιλόστοργος	φιλοστοργος	A
+</w>
+<w id="PDF Page 343, Line 37 - word id 81837">
+τῇ	τη	ὁ	ο	DET
+</w>
+<w id="PDF Page 343, Line 37 - word id 81838">
+τμῆ	τμη	τμῆς	τμης	PRO+Per1p
+</w>
+<w id="PDF Page 343, Line 38 - word id 81839">
+ἀλλήλους	αλληλους	ἀλλήλων	αλληλων	PRO+Rec
+</w>
+<w id="PDF Page 343, Line 38 - word id 81840">
+προηγούμενοι,	προηγουμενοι	προηγέομαι	προηγεομαι	V
+</w>
+<w id="PDF Page 343, Line 38 - word id 81841">
+τῇ	τη	ὁ	ο	DET
+</w>
+<w id="PDF Page 343, Line 38 - word id 81842">
+σπουδῇ	σπουδη	σπουδή	σπουδη	N+Com
+</w>
+<w id="PDF Page 343, Line 38 - word id 81843">
+μὴ	μη	μή	μη	I+Neg
+</w>
+<w id="PDF Page 343, Line 38 - word id 81844">
+ὀκνηροί,	οκνηροι	ὀκνηρός	οκνηρος	A
+</w>
+<w id="PDF Page 343, Line 38 - word id 81845">
+τῷ	τω	ὁ	ο	DET
+</w>
+<w id="PDF Page 343, Line 39 - word id 81846">
+πνεύματι	πνευματι	πνεῦμα	πνευμα	N+Com
+</w>
+<w id="PDF Page 343, Line 39 - word id 81847">
+ζέοντες,	ζεοντες	ζέω	ζεω	V
+</w>
+<w id="PDF Page 343, Line 39 - word id 81848">
+τῷ	τω	ὁ	ο	DET
+</w>
+<w id="PDF Page 343, Line 39 - word id 81849">
+Κυρίῳ	κυριω	κύριος (ὁ)	κυριος	N+Com
+</w>
+<w id="PDF Page 343, Line 39 - word id 81850">
+δουλεύοντες,	δουλευοντες	δουλεύω	δουλευω	V
+</w>
+<w id="PDF Page 343, Line 39 - word id 81851">
+τῇ	τη	ὁ	ο	DET
+</w>
+<w id="PDF Page 343, Line 39 - word id 81852">
+ἐλπίῶ	ελπιω	ἐλπίζω	ελπιζω	V
+</w>
+<w id="PDF Page 343, Line 40 - word id 81853">
+χαίροντες,	χαιροντες	χαίρω	χαιρω	V
+</w>
+<w id="PDF Page 343, Line 40 - word id 81854">
+τῇ	τη	ὁ	ο	DET
+</w>
+<w id="PDF Page 343, Line 40 - word id 81855">
+θλίψει	θλιψει	θλῖψις	θλιψις	N+Com
+</w>
+<w id="PDF Page 343, Line 40 - word id 81856">
+ὑπομένοντες,	υπομενοντες	ὑπομένω	υπομενω	V
+</w>
+<w id="PDF Page 343, Line 40 - word id 81857">
+τῇ	τη	ὁ	ο	DET
+</w>
+<w id="PDF Page 343, Line 40 - word id 81858">
+προσευγῇ	προσευγη	προσευγή	προσευγη	N+Com
+</w>
+<w id="PDF Page 343, Line 41 - word id 81859">
+προσκαρτεροῦντες,	προσκαρτερουντες	προσκαρτερέω	προσκαρτερεω	V
+</w>
+<w id="PDF Page 343, Line 41 - word id 81860">
+τὴν	την	ὁ	ο	DET
+</w>
+<w id="PDF Page 343, Line 41 - word id 81861">
+φιλοξενίαν	φιλοξενιαν	φιλοξενία	φιλοξενια	N+Com
+</w>
+<w id="PDF Page 343, Line 41 - word id 81862">
+διώκοιτες,	διωκοιτες	διώκω	διωκω	A
+</w>
+<w id="PDF Page 343, Line 42 - word id 81863">
+ταῖς	ταις	ὁ	ο	DET
+</w>
+<w id="PDF Page 343, Line 42 - word id 81864">
+χρείαις	χρειαις	χρεία	χρεια	N+Com
+</w>
+<w id="PDF Page 343, Line 42 - word id 81865">
+τῶν	των	ὁ	ο	DET
+</w>
+<w id="PDF Page 343, Line 42 - word id 81866">
+ἀγίων	αγιων	ἄγιος	αγιος	N+Com
+</w>
+<w id="PDF Page 343, Line 42 - word id 81867">
+κοινωνοῦντες.»	κοινωνουντες	κοινωνέω	κοινωνεω	V
+</w>
+<w id="PDF Page 343, Line 42 - word id 81868">
+Ὀλίγα	ολιγα	ὀλίγος	ολιγος	A
+</w>
+<w id="PDF Page 343, Line 42 - word id 81869">
+ταῦτα	ταυτα	οὗτος	ουτος	PRO+Dem
+</w>
+<w id="PDF Page 343, Line 43 - word id 81870">
+ἐκ	εκ	ἐκ	εκ	I+Prep
+</w>
+<w id="PDF Page 343, Line 43 - word id 81871">
+πολλῶν.	πολλων	πολύς	πολυς	A
+</w>
+<w id="PDF Page 343, Line 43 - word id 81872">
+δείγματος	δειγματος	δεῖγμα	δειγμα	N+Com
+</w>
+<w id="PDF Page 343, Line 43 - word id 81873">
+χάριν,	χαριν	χάρις	χαρις	N+Com
+</w>
+<w id="PDF Page 343, Line 43 - word id 81874">
+ἀπ´	απ´	ἀπό	απο	I+Prep
+</w>
+<w id="PDF Page 343, Line 43 - word id 81875">
+αὐτῶν	αυτων	αὐτός	αυτος	PRO+Dem
+</w>
+<w id="PDF Page 343, Line 43 - word id 81876">
+διεξελθων	διεξελθων	διεξέρχομαι	διεξερχομαι	V
+</w>
+<w id="PDF Page 343, Line 44 - word id 81877">
+τῶν	των	ὁ	ο	DET
+</w>
+<w id="PDF Page 343, Line 44 - word id 81878">
+θείων	θειων	θεῖος α ον	θειος	A
+</w>
+<w id="PDF Page 343, Line 44 - word id 81879">
+Γραφῶν	γραφων	γραφή	γραφη	N+Com
+</w>
+<w id="PDF Page 343, Line 44 - word id 81880">
+ὁ	ο	ὁ	ο	DET
+</w>
+<w id="PDF Page 343, Line 44 - word id 81881">
+Παιδαγωγὸς,	παιδαγωγος	παιδαγωγός	παιδαγωγος	A
+</w>
+<w id="PDF Page 343, Line 44 - word id 81882">
+τοῖς	τοις	ὁ	ο	DET
+</w>
+<w id="PDF Page 343, Line 44 - word id 81883">
+αὐτοῦ	αυτου	αὐτός	αυτος	PRO+Dem
+</w>
+<w id="PDF Page 343, Line 44 - word id 81884">
+παρατίθεται	παρατιθεται	παρατίθημι	παρατιθημι	V
+</w>
+<w id="PDF Page 343, Line 45 - word id 81885">
+παισὶν,	παισιν	παῖς	παις	N+Com
+</w>
+<w id="PDF Page 343, Line 45 - word id 81886">
+δι´	δι´	διά	δια	I+Prep
+</w>
+<w id="PDF Page 343, Line 45 - word id 81887">
+ὧν,	ων	ὅς ἥ ὅ	ος	PRO+Rel
+</w>
+<w id="PDF Page 343, Line 45 - word id 81888">
+ὡς	ως	ὡς (ὅς)	ως	I+Conj
+</w>
+<w id="PDF Page 343, Line 45 - word id 81889">
+ἔπος	επος	ἔπος	επος	N+Com
+</w>
+<w id="PDF Page 343, Line 45 - word id 81890">
+εἰπεῖν,	ειπειν	λέγω	λεγω	V
+</w>
+<w id="PDF Page 343, Line 45 - word id 81891">
+ἄρὸην	αροην	ἄροη	αροη	V
+</w>
+<w id="PDF Page 343, Line 46 - word id 81892">
+ἐκκόπτεται	εκκοπτεται	ἐκκόπτω	εκκοπτω	V
+</w>
+<w id="PDF Page 343, Line 46 - word id 81893">
+κακία,	κακια	κακία	κακια	N+Com
+</w>
+<w id="PDF Page 343, Line 46 - word id 81894">
+καὶ	και	καί	και	I+Part
+</w>
+<w id="PDF Page 343, Line 46 - word id 81895">
+περιγράφεται	περιγραφεται	περιγράφω	περιγραφω	V
+</w>
+<w id="PDF Page 343, Line 46 - word id 81896">
+ἀδικία.	αδικια	ἀδικία	αδικια	N+Com
+</w>
+<w id="PDF Page 343, Line 46 - word id 81897">
+Μυρίαι	μυριαι	μυρίος	μυριος	A
+</w>
+<w id="PDF Page 343, Line 47 - word id 81898">
+δὲ	δε	δέ	δε	I+Part
+</w>
+<w id="PDF Page 343, Line 47 - word id 81899">
+ὅσαι	οσαι	ὅσος	οσος	PRO+Rel
+</w>
+<w id="PDF Page 343, Line 47 - word id 81900">
+ὑποθῆκαι,	υποθηκαι	ὑποθήκη	υποθηκη	N+Com
+</w>
+<w id="PDF Page 343, Line 47 - word id 81901">
+εἰς	εις	εἰς	εις	I+Prep
+</w>
+<w id="PDF Page 343, Line 47 - word id 81902">
+πρόσωπα	προσωπα	πρόσωπον	προσωπον	N+Com
+</w>
+<w id="PDF Page 343, Line 47 - word id 81903">
+ἐκλεκτὰ	εκλεκτα	ἐκλεκτός	εκλεκτος	A
+</w>
+<w id="PDF Page 343, Line 47 - word id 81904">
+διατείνουσαι,	διατεινουσαι	διατείνω	διατεινω	V
+</w>
+</doc>
