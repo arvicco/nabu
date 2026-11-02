@@ -1,0 +1,29 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+# MCP stdio smoke against the demo image (Nabu::Ops::DemoPublish::Smoke):
+# initialize, notifications/initialized, tools/list, one nabu_status call.
+# Dependency-free (stdlib + lib/nabu/ops/demo_publish.rb), so the release
+# workflow runs it on a bare runner Ruby with no bundle.
+#
+#   script/demo-smoke [IMAGE] [-- DOCKER_RUN_ARGS...]
+#   script/demo-smoke ghcr.io/arvicco/nabu-demo:1.0.0 -- --memory=512m
+#
+# Exit 0 on a correct answer, 1 (with the reason on stderr) otherwise.
+
+require_relative "../lib/nabu/ops/demo_publish"
+
+args = ARGV.dup
+split = args.index("--")
+docker_args = split ? args.slice!(split..)[1..] : []
+image = args.first || "#{Nabu::Ops::DemoPublish::IMAGE}:latest"
+
+begin
+  result = Nabu::Ops::DemoPublish::Smoke.run!(image: image, docker_args: docker_args)
+  puts "ok #{image} — #{result.server}, protocol #{result.protocol}, #{result.tools.size} tools"
+  puts "tools: #{result.tools.join(' ')}"
+  puts result.status_text.lines.first(5).join
+rescue Nabu::Error => e
+  warn "demo smoke FAILED for #{image}: #{e.message}"
+  exit 1
+end

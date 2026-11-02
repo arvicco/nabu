@@ -679,8 +679,9 @@ end
 
 # The demo slice (Nabu::DemoBuild): the self-contained, open/attribution-
 # only demo library the OCI image bakes in (Dockerfile `demo` target). The
-# build runs REAL syncs — network, minutes — and is fired per release in
-# CI, never by the suite (test/demo_build_test.rb injects the runner).
+# build runs REAL syncs — network, minutes — and is fired per release on
+# this box (it needs the full library; GitHub-hosted CI cannot build it),
+# never by the suite (test/demo_build_test.rb injects the runner).
 # Knobs: DEMO_OUT (default tmp/demo), DEMO_WORK (default <out>-work, the
 # full canonical fetch kept between runs), DEMO_MAX_MB (size ceiling).
 namespace :demo do
@@ -703,5 +704,44 @@ namespace :demo do
       puts format("%<slug>-20s %<klass>s", slug: slug, klass: registry[slug].manifest.license_class)
     end
     puts "license guard: clean -> #{demo.out_dir}"
+  end
+
+  # The LOCAL half of the image rail (Nabu::Ops::DemoPublish): the slice
+  # needs this box's full library, so GitHub-hosted CI never builds the
+  # image — this task does, multi-arch, tagged :<server.json version> and
+  # :latest, pushed to GHCR (needs `docker login ghcr.io` with a
+  # write:packages token, and a buildx builder that can emit multi-platform
+  # images — Docker Desktop's containerd image store, or
+  # `docker buildx create --use`). Then it pulls the pushed tag back and
+  # runs the MCP smoke. The registry entry rides .github/workflows/demo-release.yml.
+  # Knobs: DEMO_OUT (the slice, default tmp/demo), DEMO_PLATFORMS
+  # (comma list, default linux/amd64,linux/arm64), DEMO_BUILDER.
+  desc "Build + push the demo image (:<server.json version> + :latest, multi-arch) from DEMO_OUT, then smoke it"
+  task :publish do
+    require_relative "lib/nabu/ops/demo_publish"
+    publish = Nabu::Ops::DemoPublish
+    slice = File.expand_path(ENV.fetch("DEMO_OUT", "").strip.then { |v| v.empty? ? "tmp/demo" : v }, __dir__)
+    platforms = ENV.fetch("DEMO_PLATFORMS", "").split(",").map(&:strip).reject(&:empty?)
+    options = { root: __dir__, slice: slice }
+    options[:platforms] = platforms unless platforms.empty?
+    builder = ENV.fetch("DEMO_BUILDER", "").strip
+    options[:builder] = builder unless builder.empty?
+    puts "$ #{publish.publish_argv(**options).join(' ')}"
+    publish.publish!(**options)
+    image = "#{publish::IMAGE}:#{publish.version(root: __dir__)}"
+    result = publish::Smoke.run!(image: image, docker_args: ["--pull=always"])
+    puts "pushed + smoked #{image} — #{result.server}, #{result.tools.size} tools"
+  end
+
+  # The MCP stdio smoke on its own (initialize → tools/list → nabu_status).
+  # IMAGE defaults to the public :latest; DEMO_SMOKE_ARGS adds docker run
+  # flags (e.g. "--memory=512m --pull=always").
+  desc "MCP stdio smoke against the demo image (IMAGE, default ghcr.io/arvicco/nabu-demo:latest)"
+  task :smoke do
+    require_relative "lib/nabu/ops/demo_publish"
+    smoke = Nabu::Ops::DemoPublish::Smoke
+    image = ENV.fetch("IMAGE", "").strip.then { |v| v.empty? ? "#{Nabu::Ops::DemoPublish::IMAGE}:latest" : v }
+    result = smoke.run!(image: image, docker_args: ENV.fetch("DEMO_SMOKE_ARGS", "").split)
+    puts "ok #{image} — #{result.server}, protocol #{result.protocol}, #{result.tools.size} tools"
   end
 end
