@@ -211,6 +211,9 @@ module Nabu
           "perseus-greek" => :edition_year_text,
           "perseus-latin" => :edition_year_text,
           "pl-wikisource" => :era_band_key,
+          "ppchy" => :structured, # P152: each text's sources-page Date (a year, Approx., Between,
+          #                         19xx, the court testimony's range); place = the dialect's
+          #                         town/region localization (Regensburg, Cracow, Prague …)
           "prague-bible-1488" => :structured,
           "prilit" => :year_range,
           "ref" => :structured,

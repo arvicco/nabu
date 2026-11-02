@@ -439,6 +439,16 @@ class KindsTest < Minitest::Test
                  "the exact map never shadows the prefix ladder"
   end
 
+  # P152: PPCHY's sources-page Genre — upstream's own four-way form label.
+  def test_shipped_ppchy_folds_the_sources_page_genre
+    shipped = shipped_kinds
+    assert_equal %w[genre], shipped.metadata_for("ppchy")
+    assert_equal ["letter"], shipped.normalize("ppchy", "Letter")
+    assert_equal ["literary/poetry"], shipped.normalize("ppchy", "Verse")
+    assert_equal ["literary"], shipped.normalize("ppchy", "Prose"), "a form label — the bare head, declared coarse"
+    assert_empty shipped.normalize("ppchy", "Vernacular"), "a register label, reviewed — never unmapped noise"
+  end
+
   # P104-1: the ETCSL composition-number taxonomy (c.0–c.6) folds through
   # a frozen prefix map — the Sumerian literary canon's first genre view.
   def test_shipped_etcsl_folds_the_composition_number_blocks
