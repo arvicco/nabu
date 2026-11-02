@@ -13,7 +13,7 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 ## The shelves
 
-A source wears every desk it serves — these eleven answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
+A source wears every desk it serves — these thirteen answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
 | Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 2 November 2026)</span> |
 |---|---|---|---|---|
@@ -21,15 +21,17 @@ A source wears every desk it serves — these eleven answer this desk. Holdings 
 | `bridging` | crosswalk module | attribution | wired · manual | nothing held yet |
 | `dss` | texts | nc | wired · auto | 1,001 docs / 52,895 passages |
 | `elephantine` | papyri & ostraca | attribution | wired · manual | 15,539 docs / 69,350 passages |
+| `etcbc-targum` | texts | nc | wired · manual | 47 docs / 25,430 passages |
 | `extrabiblical` | texts | nc | wired · manual | 13 docs / 1,800 passages |
 | `hebrew-lexicon` | dictionary | attribution | wired · manual | 21,144 entries |
+| `hexapla` | texts | nc | wired · manual | 19 docs / 16,302 passages |
 | `iip` | inscriptions | nc | wired · manual | 5,499 docs / 17,823 passages |
 | `oshb` | texts | open | wired · manual | 39 docs / 23,213 passages |
 | `sdbh` | dictionary | attribution | wired · manual | 7,932 entries |
 | `sefaria` | texts | open | wired · manual | 1,983 docs / 1,073,004 passages |
 | `ud` | treebank | nc | wired · manual | 83 docs / 329,980 passages |
 
-**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 2 November 2026)</span>: `hbo` 30,737 · `grc` 6,297 · `eng` 5,912 · `arc` 3,334 · `egy` 3,050 · `egy-Egyd` 1,424 · `ara` 962 · `cop` 456 · `heb` 408 · `lat` 317 … and 29 more (`nabu axis hebrew` lists all).
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 2 November 2026)</span>: `hbo` 30,739 · `grc` 6,312 · `eng` 5,912 · `arc` 3,381 · `egy` 3,050 · `egy-Egyd` 1,424 · `ara` 962 · `cop` 456 · `heb` 408 · `lat` 318 … and 30 more (`nabu axis hebrew` lists all).
 
 ## The desk's instruments
 

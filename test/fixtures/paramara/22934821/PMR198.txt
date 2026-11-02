@@ -1,0 +1,181 @@
+PennGlobal: PMR198
+Period: VS 1148 and 1127
+Location: Rājpur
+King: Raṇadhavala
+Dynasty: Paramāra
+Language: Sanskrit
+Script: Nagari
+Text:  Prose and Metrical in 12 verses
+Metres: Verses 1-2, 4-5, 9-10 Anuṣṭubh; vv. 3, 7, 11 Vasantatilakā; v.6 Indravajrā; v.8 Śālinī; v.12
+	    Puṣpitāgrā
+Gist: Records the donation of the village Madudahā by the subordinate prince. 
+	Grant was issued by  Raṇadhavaia after bathing at the confluence of the Rēva and the Kapilā, 
+	for the spiritual benefist of his parents and himself.
+Published reference: Trivedi (1989), no. 198.
+
+
+
+Text{1}
+	    
+
+First Plate
+
+1. siddham{2} || svasti jayobhyudayaśca | jayati vyomakeśoso(sau) yaḥ sa[rggā]ya vi(bi)bha-
+2. rtti tāṃ(tām) | aiṃdavīṃ si(śi)rasā lekhā(khāṃ) jagadvī(dbī)jāṃkurākṛtiṃ(tim) ||1|| tanvaṃ[tu] va[ḥ*]
+   sāsaneḥ{3} kalyāṇama-
+3. nisaṃ(śaṃ) jaṭāḥ | kalpāntasamayoddāmataḍidvalayapiṃgalāḥ ||2|| śrīmahā[rā]yāḥ{4} saga(ma)-
+4. starājāvalīmālālaṃkṛtaparamabhaṭṭārakamahārājādhirājaparamesva(śva)ra-
+5. śrīsiṃdhurājadevapādānū(nu)dhyātaparamabhaṭṭārakamahārājādhirājaparamesva(śva)-
+6. raśrībhojadevapādānudhyātaparamabhaṭṭārakamahārājādhirājaparamesva(śva)ra-
+7. śrīudayādityadevapādānū(nu)dhyātaparamabhaṭṭārakamahārājādhirājaparamesva(śva){5}-
+8. raśrīmannaravarmmadevaḥ kuśalī | tatpādapadmaprasādāvāptapūrṇṇapathakasya ca-
+9. tvāriṃśasahasrādhipatyaṃ{6} -samastaprarā(śa)stopetasamādhima(ga)tapaṃcamahāśavda(bdā)laṃ-
+10. kāravirājamānamahāmaṃḍalesva(śva)raśrīraṇadhavaladevaḥ pūrṇṇapathakāntaḥpāti-
+11. pāṇoṇīsārddhasa(śa)tatrayaprativa(ba)ddhapaścimāyāṃ madhumatīsaptasa(śa)tabhogī asmi-
+12. nneva pratijāgaraṇake dakṣiṇapathake svabhuktau mahudakāgrāma āṃta{7}stavā [grā]-
+13. mayoḥ samastadaṃḍanāyakādhi[ṣṭhāsi]kakaraṇapuru[ṣa]sa(śa)yyāpāla[draṃ]gavariṣṭa(ṣṭha)kapra{8}-
+14. bhṛtisāmastaniryuktapuruṣa[vrā(brā)hmaṇo]ttarān{9} pratinivāsi viṣai(yi)kapaṭṭakila-
+
+Second Plate: First Side
+
+15. [janapadā]dīn samādisa(śa)tyastu vaḥ{10} saṃviditaṃ | yathā asmābhiḥ śrīamaresva(śva)ratī-
+16. rthasthitaiḥ śrīvikramakālā[da*]ṣṭacatvāriṃsati(śatya)dhikaikādaśasa(śa)tasaṃvatsasa(rā)nta[rggata]-
+17. pauṣavadipaṃcadasyāṃ(śyāṃ) saṃvatū(t) 1148 pauṣa vadi 15 saṃjātasūryagrahaṇaparvvaṇi parvva- 
+18. kālamāśritya śrī[ma]drevākapilānadyoḥ{11} saṃgamamāsadya snā[tvā] dhautavāsasī pari-
+19. dhāya jagataḥ patiṃ umāpatiṃ{12} saṃpūjya tilāhutīrjjātavedasi hutvā paṃcaśrotirabhi{13}-
+20. dhāya pūrṇṇāhutiṃ hutvā kapilaṃ (lāṃ)gāṃ triḥpradakṣiṇīkṛtya saṃpūjya ca saṃsārasyāsāratāṃ pa-
+21. ri[jñāya] tathāhi | vātābhravibhramamidaṃ vasudhādhipatyamānu[pāta]mātramadhuro viṣayo-
+22. pabhogaḥ | prāṇāstṛṇāya(gra)jalaviṃ(biṃ)dusamā narāṇāṃ dharmmaḥ sakhā paramaho paraloka-
+23. mānai(yāne) ||3|| api ca | bhramatsaṃsāracakrāgradhārādhārāmimāṃ śriyaṃ(yam) | prāpya ye na dadu | teṣāṃ{14} pa-
+24. ścātā(ttā)paḥ [pa*]raṃ phalaṃ(lam) ||4|| iti jagato vikasva(naśva)rasvarūpamākalayyadṛṣṭaphalamaṃgīkṛtya caṃ-
+25. dā(drā)rkkārṇṇavakṣitisamakālaṃ{15} | yāvatparayā bhaktyā lāḍānvaye paṃcauramahāsthāna-
+26. vinirggatakauṃninyagaugāya{16} | kauṃninyavasiṣṭhamaitrāvaruṇu(ṇa)tripravarāya saṇīśa-{17}
+27. svādhyāya(yi)ne tripāṭi(ṭhi) | pavaṇāhapautrāya tripāṭi(ṭhi) | vāvaṇaputrāya{18}nāyakamādhala(va?)-
+28. devasa(śa)rmmaṇe vrā(brā)hnaṇāya uparilikhitamahudahā[grā]ma āṃtarastavāmnāmayo{19} sa-
+29. vṛkṣamālākulacatuḥ(tuṣ)kaṃkaṭaviśuddhaḥ khanyākaranidhinikṣepasahita ārāma[vā]-
+
+Second Plate: Second Side
+
+30. ṭikāmalake[tyādi]{20} kasamastādāyatalādyādisarvvādāyairupeta[śca]raṇauprakṣā-
+31. lya mātāpitro[rātma]naśca puṇyayaso(śo)'[bhivṛddha]ye{21} sā(śā)sanaṃ kṛtvodakapūrvva-
+32. katvanena(katvena) pradattaḥ | satahavaṃ(tta)ri{22}tyadhikaikādaśaśatasaṃvatsarāṃtarggatacaitraśu-
+33. di navamyāṃ mahākṣapaṭalā[kutnā]ryaśrījaye bhāṃḍāgārai(re) niva(ba)ddhā(ddhaḥ){23}| punama(rma)yākṣa-
+34. ṭala[sā(śā)]sanaṃ kārayitvā āmā(gā?)misu(śu)ddhaḥ [nṛ]patiparijānīya{24} śrīmahārājādhirā-
+35. jaśrīmannaravarmmadevapādān | vijñāpya suniścitya punastadādeśāt [grā]ma-
+36. dvau dattaḥ{25} | [tatatrotpadya]mānabhāgabhogādikarahiraṇyādi[kaṃ] devavrā(brā)hyaṇabhu-
+37. ktivarjjamājñāśravaṇavidheyau(yai)rbhūtvā bhavadbhiramuṣmai tathaitadīyaputrapautrapra-
+38. pautrādisaṃtānāya sarvvā(rvvaṃ) samupanetavyaṃ(vyam) | sānā(mā)nyaṃ caitatpuṇyaphalaṃ vu(bu)dhvā'
+39. smadvaṃsa(śa)jairanyairapi bhāvibhoktṛbhirasmatpradattadharmmā(rmma)dāyoya[ma]numa(maṃ)tavyo(vyaḥ)
+40. pālanīyaśca || uktaṃ caitat | va(ba)hubhirvvasudhā bhuktā rājabhiḥ sagarādibhiḥ |
+41. yasya yasya yadā bhūmistasya tasya tadā phalaṃ(lam) ||5|| yānīha dattāni purā nareṃdrairdā-
+42. nāni dharmmārthayaśaskarāṇi | nirmmālyavāntipratimāni tāni ko nāma śā(sā)-
+43. dhuḥ punarādadīta ||[6||*] asmatkulakramamu[dā]{26}ramudāharadbhi[ranyai]śca dānamidamabhya-
+44. numodanīyaṃ(yam) | lakṣmyāstaḍitsalilavudvu(budbu)dacaṃcalāyā dānaṃ phlaṃ parayaśaḥpari-
+
+Third Plate
+
+45. pālanaṃ ca ||7|| sarvvānetānbhāvinaḥ pārthiveṃdrāṃ{27}bhūyo bhūyo yācate rāmabha-
+46. draḥ | sāmānyoyaṃ dharmmaseturnṛpāṇāṃ kāle kāle pālanīyo bhavadbhiḥ ||8|| svadattāṃ pa-
+47. radattāṃ vā yo haretu(ta) vasuṃdharāṃ(rām) | ṣaṣṭivarṣasahasrāṇi viṣṭhāyāṃ yā(jā)yate kṛmiḥ ||9||
+48. svadattāṃ paradattāṃ vā yo'nupālayate mahīṃ(hīm) | ṣaṣṭivarṣasahasā(srā)ṇi sve(sva)rggaloke
+49. mahīyate ||10|| madvaṃrā(śa)jāḥ paramahīṣa(pa)tivaṃśajā vā pāpādapeta[ma]naso bhuvi bhā-
+50. ki(vi)[bhū]pāḥ | ye pālayaṃti mama dhamma(rmma)mahaṃ nu mepāṃ(teṣāṃ) pādāraviṃdayugalaṃ si(śi)rasā na
+51. māmi ||11|| iti kamaladalāṃvuviṃ(buviṃ)dulaulāṃ śriyamanuciṃtya manuṣyajīvitaṃ ca |
+52. sakalani(mi)damudāhṛtaṃ ca vu(bu)dhvā na hi purupaiḥ(ṣaiḥ) parakīrnna(rtta)yo pilopyā iti |{28}
+53. saṃvat 1177 caitra śudi 9 gurau | dū.{29} puro[hi]taśrīvāmanasvāmi |{30} rāja-
+54. putrakumārapālau | maṃgalaṃ mahāśrī[ḥ*] ||
+55. ra śrīḥ [||?] so | saṃ || [nṛ] rā | 6 śa[ṭapā ?] 3 [||?]
+56. sva[ha]stoyaṃ{31} mahārājādhirājaparamesva(śva)raśrīmannaravarmmadevasya ||{32}
+
+----------------------------------------------------------------------
+
+{1} From the original plates.
+{2} Expressed by a symbol.
+{3} Read smarārāteḥ, as the other charters of the house. The first of these akṣaras is omitted; the forms of 
+	the second and the third are changed by a redundant horizontal stroke in each; and the consonant of 
+	the fourth is engraved as n.
+{4} Read mahārāja-.
+{5} Sandhi between the first two akṣaras in this line, as also in some instances below, is not observed.
+{6} The anusvāra is redundant. The hyphen is used by me to denote the end of one title. The preceding
+	sya is not necessary in the samāsa.
+{7} The reading is uncertain. Probably to be restored as ante (near its end), or antar-(inside it).
+{8} The same as Drāṅgikā, i.e., the officer in charge of a town, for which cf. the Ūnā inscription, Ep. Ind.,
+	Vol. IX, pp.4f. Also see C. I. I., Vol. III, p. 169, n. 6. Or, with the supply of u at the beginning,
+	Udraṅga variṣṭha, i.e., an officer who collected levy. Cf. C. I. I., Vol. III, p.97, and n.
+{9} The letters in the brackets have left only traces. The use of the initial i in viṣaika that follows is 
+	noteworthy, instead of yi.
+{10} The sign of visarga, which can be seen only on the original, was inserted later on. The daṇḍa that
+	 follows is redundant. 
+{11} The bracketed akṣara is formed as Yaṁ.
+{12} Read patimumā-. A redundant daṇḍa is engraved after pū that follows.
+{13} Probably what is intended is śāntis. The five śāntis, to propitiate the grahas, pitṛs, bhūtas, devās,
+	 and bhahman.
+{14} Read dadusteṣāṃ.
+{15} The daṇḍa in this and the following lines are redundant. 
+{16} Read kauṇḍinya.
+{17} The daṇḍa is engraved as a pṛṣṭha mātrā of the following latter. This śākhā is not known to me.
+	 Probably Vājasaneyī is intended (?).
+{18} The correct form of the first of the names is Pavanāha; and of the second, Vāmana. The consonant
+	 of the first akṣara of the latter name can also be read as c.
+{19} Read -māṃtaratavāgrāmayoḥ, but the meaning of āntara is not clear in this reading. Probably what is 
+	 intended is "in the neighbourhood", or "another".
+{20} Both the bracketed akṣaras are engraved only in parts.
+{21} The three akṣaras in the brackets show uncouth forms.
+{22} That is, 77, mentioned here in Prakrit. For the Prakritism in the expression, cf. bayāsa (Sans. duāchat-
+	 vāriṁśat) in the Kamauli plates of V. S. 1190, in Ep. Ind., Vol. IV, pp. 111-112.
+{23} Originally, a daṇḍa, with an attempt to change it to the sign of visarga. Nibaddha means registered.
+	 Cf. Ep. Ind., Vol. XIX, p. 18, 1. 16. The reading of the two preceding letters in the brackets is not
+	 certain.
+{24} The sense of this and the preceding word is not clear to me. The reading of the first two of these
+	 akṣaras is also uncertain.
+{25} This is grammatically incorrect. Read grāmau dvau dattau or grāmadvaya dattaṃ. Obviously, the same
+	 villages which were donated previously. The daṇḍa in the preceding line is redundant.
+{26} The akṣara in the brackets is written above the line, in smaller form.
+{27} Read pārthivendrān.
+{28} Read vilopyāḥ ||12|| iti |
+{29} This is a contraction of Dūtaka. The consonant of hi that follows is engraved as d.
+{30} Delete the daṇḍa, that read both the names as one word.
+{31} The syllable in the brackets, which was originally omitted, is engraved just above the preceding letter,
+	 and it also appears to have been rubbed off. 
+{32} The preceding line is in bigger letter and engraved as separate from the main body, as we find also 
+	 in No. 51, above. Two of the letters in the line, viz., na and rā may perhaps be explained as the 
+	 initial akṣaras of nṛvarmmaṇaḥ rājñaḥ. The first of the akṣaras in the line, i. e., ra, is also found in 
+	 No. 38, 1. 14.
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

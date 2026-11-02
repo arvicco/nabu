@@ -1,0 +1,37 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# manifest.json is byte-verbatim WHOLE (license drift there is real
+# drift). The .jsonl.gz files carry byte-verbatim JSON lines of the dump
+# files, trimmed by book and RE-GZIPPED (whole: false — the gzip bytes
+# differ from upstream's even where every line is kept, as in
+# bible-editions). adapter_test is null: the adapter test asserts
+# slice-level counts. Dump version pinned: 2026-09-21 (retrieved 2026-11-02).
+source: typikon-bible
+adapter_test:
+retrieved: 2026-11-02
+files:
+  - path: manifest/manifest.json
+    url: https://typikon.info/dump/2026-09-21/manifest.json
+    whole: true
+    trim:
+  - path: bible-editions/bible-editions.jsonl.gz
+    url: https://typikon.info/dump/2026-09-21/bible/bible-editions.jsonl.gz
+    whole: false
+    trim: all 11 lines kept, re-gzipped
+  - path: bible-books/bible-books.jsonl.gz
+    url: https://typikon.info/dump/2026-09-21/bible/bible-books.jsonl.gz
+    whole: false
+    trim: the 4 book records the verse slices use (754 -> 4 lines), re-gzipped
+  - path: bible-verses-ro-1688/bible-verses-ro-1688.jsonl.gz
+    url: https://typikon.info/dump/2026-09-21/bible/bible-verses-ro-1688.jsonl.gz
+    whole: false
+    trim: Joel + Obadiah + the Song of the Three Youths (36312 -> 161 lines), re-gzipped
+  - path: bible-verses-ro-1914/bible-verses-ro-1914.jsonl.gz
+    url: https://typikon.info/dump/2026-09-21/bible/bible-verses-ro-1914.jsonl.gz
+    whole: false
+    trim: the rejected-edition specimen — Obadiah (36341 -> 21 lines), re-gzipped
+  - path: bible-concordance/bible-concordance.jsonl.gz
+    url: https://typikon.info/dump/2026-09-21/bible/bible-concordance.jsonl.gz
+    whole: false
+    trim: the rejected-instrument specimen — ro-1688 Obadiah rows (342568 -> 21 lines), re-gzipped

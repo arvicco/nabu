@@ -143,7 +143,11 @@ sources:
   # dating instead); the one file carrying it glosses itself "Old
   # Norwegian", doc dated 1260-70 — inside no:old's band. NEVER a
   # codemap row: ISO 639-3 assigns onw to Old Nubian; this is
-  # per-collection knowledge by definition.
+  # per-collection knowledge by definition. Since 2026-11-02 the menota
+  # adapter also corrects the RAW code at parse (onw → nor, upstream's
+  # code kept in metadata language_raw), so raw per-language rollups stop
+  # counting the codex as Old Nubian; this row stays as the routing for
+  # any catalog state parsed before that fix.
   menota:
     onw: { lect: "no:old", tier: certain }
   # P110 (the P108 add-then-retire completed; jpn:emj minted in the
@@ -243,3 +247,18 @@ sources:
     # rendering rides document metadata (rendering / orthography), not the
     # lect. Tier certain: one edition, the stage's own founding text.
     chu: { lect: "chu:ncs", tier: certain }
+  etcbc-targum:
+    # Every text of the ETCBC Targum Corpus IS a Jewish Aramaic targum of
+    # the Pentateuch (upstream's own title: "Graph Datasets of the Jewish
+    # Aramaic Pentateuch") — the registry's Jewish (Targumic) sociolect of
+    # Middle Aramaic, arc:mid/jud, the node the sefaria targum shelves
+    # already resolve to (the sefaria-arc-subshelf rule, Onkelos /
+    # Jonathan / Jerusalem alike). The adapter codes the whole corpus bare
+    # arc (the bhsa/sefaria stance — byte-verbatim pointing); this row
+    # transcribes upstream's own self-description onto the existing node —
+    # parse-time work, the 2026-10-18 generalization. The finer Palestinian
+    # (Neofiti, Fragment and Genizah targums → jpa) vs literary (Onqelos)
+    # split is deliberately NOT drawn here: the house targum precedent
+    # files Targum Jerusalem under arc:mid/jud too, and re-filing would be
+    # a classification change.
+    arc: { lect: "arc:mid/jud", tier: certain }

@@ -29,7 +29,8 @@ module Nabu
     #
     # Each file names its own language — textLang @mainLang, with langUsage
     # <language @ident> as the header fallback and the archive-level `non`
-    # as the last resort. The codes ride VERBATIM (isl/nor/swe/dan/non) and
+    # as the last resort. The codes ride VERBATIM (isl/nor/swe/dan/non —
+    # save the one deprecated legacy code LANGUAGE_MAP corrects) and
     # the value also rides as the `language` document facet the future lect
     # rule keys on; the lect posture is pending on that rule
     # (config/postures.yml — nor/dan have no registry nodes yet).
@@ -58,6 +59,17 @@ module Nabu
 
       # The header-ladder last resort (the archive's own language).
       LANGUAGE_FALLBACK = "non"
+
+      # Header codes ruled wrong at the RAW layer. onw is Menota's own
+      # DEPRECATED legacy code for Old Norwegian (Handbook ch. 14
+      # prescribes nor + dating); ISO 639-3 assigns onw to OLD NUBIAN, so
+      # the verbatim code filed the archive's one carrier (TübUB Me II 2,
+      # the Frostathing Law, c. 1260-70) under Old Nubian in every raw
+      # per-language rollup. The file itself settles the target: its
+      # langUsage reads <language ident="nor">Old Norwegian</language>
+      # and its <text xml:lang="nor">, beside the msItem's stray
+      # mainLang="onw". Upstream's code rides metadata language_raw.
+      LANGUAGE_MAP = { "onw" => "nor" }.freeze
 
       URN_PREFIX = "urn:nabu:menota:"
 
@@ -132,6 +144,7 @@ module Nabu
           urn: document_ref.id,
           entities: entities_for(document_ref.path),
           language_fallback: LANGUAGE_FALLBACK,
+          language_map: LANGUAGE_MAP,
           license_mapper: self.class.method(:license_override_for)
         )
       rescue Nabu::ValidationError => e

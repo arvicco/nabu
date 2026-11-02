@@ -13,7 +13,7 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 ## The shelves
 
-A source wears every desk it serves — these 30 answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
+A source wears every desk it serves — these 31 answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
 | Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 2 November 2026)</span> |
 |---|---|---|---|---|
@@ -29,6 +29,7 @@ A source wears every desk it serves — these 30 answer this desk. Holdings are 
 | `madurai` | texts | attribution | wired · manual | 755 docs / 1,214,683 passages |
 | `mw` | dictionary | nc | wired · manual | 193,890 entries |
 | `nabu-data` | feature module | attribution | wired · manual | nothing held yet |
+| `paramara` | texts | attribution | wired · manual | 114 docs / 2,373 passages |
 | `prakrit-texts` | texts | attribution | wired · auto | 22 docs / 27,124 passages |
 | `sarit` | texts | attribution | wired · manual | 78 docs / 345,601 passages |
 | `shabados` | texts | open | wired · auto | 127 docs / 141,264 passages |
@@ -48,7 +49,7 @@ A source wears every desk it serves — these 30 answer this desk. Holdings are 
 | `wiktionary-ta` | dictionary | attribution | wired · manual | 13,855 entries |
 | `wiktionary-te` | dictionary | attribution | wired · manual | 23,325 entries |
 
-**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 2 November 2026)</span>: `san` 511,638 · `tel` 23,875 · `tam-Latn` 18,586 · `tam` 14,610 · `mal` 11,505 · `pli` 7,573 · `tel-Latn` 5,103 · `eng` 4,794 · `kan-Latn` 3,850 · `kan` 2,741 … and 55 more (`nabu axis indic` lists all).
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 2 November 2026)</span>: `san` 511,752 · `tel` 23,875 · `tam-Latn` 18,586 · `tam` 14,610 · `mal` 11,505 · `pli` 7,573 · `tel-Latn` 5,103 · `eng` 4,794 · `kan-Latn` 3,850 · `kan` 2,741 … and 55 more (`nabu axis indic` lists all).
 
 ## The desk's instruments
 

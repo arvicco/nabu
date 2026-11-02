@@ -1,0 +1,80 @@
+# Nabu fixture manifest (P5-4 "fixture sentinel"). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# Every file is a member of ONE Zenodo zip (no per-file URL), so every
+# entry is refetchable: false; the zip's sha256 pin lives on the adapter.
+source: haga-jinmei
+adapter_test:
+retrieved: '2026-11-02'
+files:
+- path: CHANGELOG.md
+  whole: true
+  trim: none
+  refetchable: false
+  reason: a member of the Zenodo v0.1.0 zip (https://zenodo.org/api/records/23804456/files/NIHU-jp/haga-jinmei-dataset-v0.1.0.zip/content,
+    sha256 410c05fa…deec), under its top directory NIHU-jp-haga-jinmei-dataset-c89044f/
+    — no per-file raw URL
+- path: CITATION.cff
+  whole: true
+  trim: none
+  refetchable: false
+  reason: a member of the Zenodo v0.1.0 zip (https://zenodo.org/api/records/23804456/files/NIHU-jp/haga-jinmei-dataset-v0.1.0.zip/content,
+    sha256 410c05fa…deec), under its top directory NIHU-jp-haga-jinmei-dataset-c89044f/
+    — no per-file raw URL
+- path: DATA_DICTIONARY.md
+  whole: true
+  trim: none
+  refetchable: false
+  reason: a member of the Zenodo v0.1.0 zip (https://zenodo.org/api/records/23804456/files/NIHU-jp/haga-jinmei-dataset-v0.1.0.zip/content,
+    sha256 410c05fa…deec), under its top directory NIHU-jp-haga-jinmei-dataset-c89044f/
+    — no per-file raw URL
+- path: LICENSE
+  whole: true
+  trim: none
+  refetchable: false
+  reason: a member of the Zenodo v0.1.0 zip (https://zenodo.org/api/records/23804456/files/NIHU-jp/haga-jinmei-dataset-v0.1.0.zip/content,
+    sha256 410c05fa…deec), under its top directory NIHU-jp-haga-jinmei-dataset-c89044f/
+    — no per-file raw URL
+- path: MULTI_PERSON_ENTRIES.md
+  whole: true
+  trim: none
+  refetchable: false
+  reason: a member of the Zenodo v0.1.0 zip (https://zenodo.org/api/records/23804456/files/NIHU-jp/haga-jinmei-dataset-v0.1.0.zip/content,
+    sha256 410c05fa…deec), under its top directory NIHU-jp-haga-jinmei-dataset-c89044f/
+    — no per-file raw URL
+- path: RIGHTS.md
+  whole: true
+  trim: none
+  refetchable: false
+  reason: a member of the Zenodo v0.1.0 zip (https://zenodo.org/api/records/23804456/files/NIHU-jp/haga-jinmei-dataset-v0.1.0.zip/content,
+    sha256 410c05fa…deec), under its top directory NIHU-jp-haga-jinmei-dataset-c89044f/
+    — no per-file raw URL
+- path: data/README.md
+  whole: true
+  trim: none
+  refetchable: false
+  reason: a member of the Zenodo v0.1.0 zip (https://zenodo.org/api/records/23804456/files/NIHU-jp/haga-jinmei-dataset-v0.1.0.zip/content,
+    sha256 410c05fa…deec), under its top directory NIHU-jp-haga-jinmei-dataset-c89044f/
+    — no per-file raw URL
+- path: data/haga_jinmei_records.csv
+  whole: false
+  trim: header + 7 of 54,558 rows (000001 000002 000005 000357 002562 017048 035816),
+    each line byte-identical
+  refetchable: false
+  reason: a member of the Zenodo v0.1.0 zip (https://zenodo.org/api/records/23804456/files/NIHU-jp/haga-jinmei-dataset-v0.1.0.zip/content,
+    sha256 410c05fa…deec), under its top directory NIHU-jp-haga-jinmei-dataset-c89044f/
+    — no per-file raw URL
+- path: data/release_manifest.json
+  whole: true
+  trim: none
+  refetchable: false
+  reason: a member of the Zenodo v0.1.0 zip (https://zenodo.org/api/records/23804456/files/NIHU-jp/haga-jinmei-dataset-v0.1.0.zip/content,
+    sha256 410c05fa…deec), under its top directory NIHU-jp-haga-jinmei-dataset-c89044f/
+    — no per-file raw URL
+- path: schema/public_record.schema.json
+  whole: true
+  trim: none
+  refetchable: false
+  reason: a member of the Zenodo v0.1.0 zip (https://zenodo.org/api/records/23804456/files/NIHU-jp/haga-jinmei-dataset-v0.1.0.zip/content,
+    sha256 410c05fa…deec), under its top directory NIHU-jp-haga-jinmei-dataset-c89044f/
+    — no per-file raw URL

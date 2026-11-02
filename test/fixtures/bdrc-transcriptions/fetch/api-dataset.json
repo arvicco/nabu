@@ -1,0 +1,65 @@
+{
+  "_id": "6a8450cdb6bd056ff8ca77e6",
+  "id": "BDRC/berkeley-transcriptions",
+  "author": "BDRC",
+  "sha": "ed7b6318146f00b48c01f5f15b7425ad3269489f",
+  "lastModified": "2026-08-18T13:10:34.000Z",
+  "private": false,
+  "gated": false,
+  "disabled": false,
+  "cardData": {
+    "license": "cc0-1.0",
+    "task_categories": [
+      "image-to-text"
+    ],
+    "language": [
+      "bo"
+    ],
+    "tags": [
+      "ocr",
+      "tibetan",
+      "manuscript",
+      "dbu-med",
+      "bon"
+    ],
+    "pretty_name": "Tibetan OCR — Berkeley (dbu-med manuscripts)",
+    "size_categories": [
+      "1K<n<10K"
+    ],
+    "configs": [
+      {
+        "config_name": "default",
+        "data_files": [
+          {
+            "split": "train",
+            "path": "data/train-*.parquet"
+          }
+        ]
+      }
+    ]
+  },
+  "siblings": [
+    {
+      "rfilename": ".gitattributes"
+    },
+    {
+      "rfilename": "README.md"
+    },
+    {
+      "rfilename": "data/train-00000-of-00004.parquet"
+    },
+    {
+      "rfilename": "data/train-00001-of-00004.parquet"
+    },
+    {
+      "rfilename": "data/train-00002-of-00004.parquet"
+    },
+    {
+      "rfilename": "data/train-00003-of-00004.parquet"
+    },
+    {
+      "rfilename": "subset_info.json"
+    }
+  ],
+  "createdAt": "2026-08-18T12:32:13.000Z"
+}

@@ -184,7 +184,27 @@ class LexlepWordsTest < Minitest::Test
                                 .by_urn("urn:nabu:dict:lexlep-words:tekialui")
     scans = result.citations.to_h { |citation| [citation.label, citation.scan] }
     assert_equal [:anchored, "#{item}:p1007"], [scans["AcS II: 1779"].status, scans["AcS II: 1779"].urn]
-    assert_equal :unconfigured, scans["AcS I: 1247"].status, "Bd. I has no scan on the shelf yet"
+    assert_equal :not_held, scans["AcS I: 1247"].status,
+                 "Bd. I is configured (the BSB scan landed on the owner's shelf) but this catalog does not hold it"
+  end
+
+  def test_acs_volume_one_resolves_when_its_scan_is_held
+    db, loader = loader_setup
+    loader.load_from(adapter, workdir: FIXTURES)
+    library = Nabu::Store::Source.create(slug: "local-library", name: "Local library",
+                                         adapter_class: "Nabu::Adapters::LocalLibrary",
+                                         license_class: "research_private")
+    item = "urn:nabu:local-library:dictionaries:bsb10931773"
+    doc = Nabu::Store::Document.create(source_id: library.id, urn: item, title: "Holder I", language: "deu",
+                                       content_sha256: "x", revision: 1, withdrawn: false)
+    # col 1247 → leaf ceil(1247/2) + 20 (the from_column 381 break) = 644
+    Nabu::Store::Passage.create(document_id: doc.id, urn: "#{item}:p644", sequence: 644, language: "deu",
+                                text: "1247", text_normalized: "1247", content_sha256: "x", revision: 1)
+    table = Nabu::Query::ScanAnchors.load(File.expand_path("../../config/scan_anchors.yml", __dir__))
+    result = Nabu::Query::Define.new(catalog: db, lects: nil, scan_anchors: table)
+                                .by_urn("urn:nabu:dict:lexlep-words:tekialui")
+    scans = result.citations.to_h { |citation| [citation.label, citation.scan] }
+    assert_equal [:anchored, "#{item}:p644"], [scans["AcS I: 1247"].status, scans["AcS I: 1247"].urn]
   end
 
   # --- fetch (WebMock; Word category only) ----------------------------------

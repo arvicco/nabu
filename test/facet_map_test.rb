@@ -320,6 +320,12 @@ class FacetMapTest < Minitest::Test
                  map.fields_for("ppchy"))
   end
 
+  # P153: Ganjoor's poet / work / form section path.
+  def test_shipped_config_projects_the_ganjoor_section_path
+    map = Nabu::FacetMap.load(File.join(Nabu::Config::PROJECT_ROOT, "config", "facet_map.yml"))
+    assert_equal({ "poet" => "author", "work" => "work", "form" => "form" }, map.fields_for("ganjoor"))
+  end
+
   def test_shipped_config_loads
     path = File.join(Nabu::Config::PROJECT_ROOT, "config", "facet_map.yml")
     map = Nabu::FacetMap.load(path)

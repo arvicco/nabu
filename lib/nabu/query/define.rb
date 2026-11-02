@@ -3,6 +3,7 @@
 require_relative "../normalize"
 require_relative "../lects"
 require_relative "lect_filter"
+require_relative "dictionary_language"
 require_relative "reflex_views"
 require_relative "etymon_ascent"
 require_relative "scan_anchors"
@@ -276,7 +277,7 @@ module Nabu
                          Sequel[:dictionary_entries][:withdrawn] => false)
         dataset = dataset.where(recon_shelf_expr) if recon_only
         dataset = dataset.where(lect_shelf_expr(lect)) if lect
-        dataset = dataset.where(Sequel[:dictionaries][:language] => Nabu::Languages.code_variants(lang)) if lang
+        dataset = dataset.where(DictionaryLanguage.filter(@catalog, lang)) if lang
         (facets || {}).each { |facet, pattern| dataset = dataset.where(entry_facet_in(facet, pattern)) }
         dataset = dataset.order(Sequel[:dictionaries][:slug], Sequel[:dictionary_entries][:entry_id])
         # limit: nil = every matching shelf (P34-r2 — the CLI fetches all and
@@ -369,8 +370,8 @@ module Nabu
         @catalog[:dictionary_entries]
           .join(:dictionaries, id: Sequel[:dictionary_entries][:dictionary_id])
           .where(Sequel[:dictionary_entries][:headword_folded] => folded_keys,
-                 Sequel[:dictionary_entries][:withdrawn] => false,
-                 Sequel[:dictionaries][:language] => language)
+                 Sequel[:dictionary_entries][:withdrawn] => false)
+          .where(DictionaryLanguage.filter(@catalog, language))
           .exclude(Sequel[:dictionary_entries][:gloss] => nil)
           .order(Sequel[:dictionaries][:slug], Sequel[:dictionary_entries][:entry_id])
           .select(Sequel[:dictionary_entries][:headword_folded], Sequel[:dictionary_entries][:gloss])

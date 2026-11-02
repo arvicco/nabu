@@ -1,0 +1,139 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# otype.tf and otext.tf are byte-verbatim WHOLES (drift there is real
+# drift); every other file is a documented TRIM of a larger upstream
+# feature file (whole: false — fetched for URL-liveness only, never
+# byte-compared). adapter_test is null: the adapter test asserts
+# slice-level counts, which untrimmed upstream files would false-fail.
+# Re-trim per the README table after any refresh. Pinned upstream commit:
+# 15f97ab469feeae12ccbd5b02acbb02d9ba37126 (main, retrieved 2026-11-02;
+# tf/0.1 identical at tag v1.0.0).
+source: etcbc-targum
+adapter_test:
+retrieved: 2026-11-02
+files:
+  - path: tf/0.1/book.tf
+    url: https://raw.githubusercontent.com/ETCBC/targum/main/tf/0.1/book.tf
+    whole: false
+    trim: slice the fixture's kept nodes, gap-anchored (1218 B -> 591 B)
+  - path: tf/0.1/chapter.tf
+    url: https://raw.githubusercontent.com/ETCBC/targum/main/tf/0.1/chapter.tf
+    whole: false
+    trim: slice the fixture's kept nodes, gap-anchored (3845 B -> 568 B)
+  - path: tf/0.1/cons.tf
+    url: https://raw.githubusercontent.com/ETCBC/targum/main/tf/0.1/cons.tf
+    whole: false
+    trim: slice the fixture's kept nodes, gap-anchored (2626042 B -> 11010 B)
+  - path: tf/0.1/cons_utf8.tf
+    url: https://raw.githubusercontent.com/ETCBC/targum/main/tf/0.1/cons_utf8.tf
+    whole: false
+    trim: slice the fixture's kept nodes, gap-anchored (4707452 B -> 19172 B)
+  - path: tf/0.1/gloss.tf
+    url: https://raw.githubusercontent.com/ETCBC/targum/main/tf/0.1/gloss.tf
+    whole: false
+    trim: slice the fixture's kept nodes, gap-anchored (18602156 B -> 89258 B)
+  - path: tf/0.1/gn.tf
+    url: https://raw.githubusercontent.com/ETCBC/targum/main/tf/0.1/gn.tf
+    whole: false
+    trim: slice the fixture's kept nodes, gap-anchored (58750 B -> 614 B)
+  - path: tf/0.1/lex.tf
+    url: https://raw.githubusercontent.com/ETCBC/targum/main/tf/0.1/lex.tf
+    whole: false
+    trim: slice the fixture's kept nodes, gap-anchored (2632131 B -> 11781 B)
+  - path: tf/0.1/lex0.tf
+    url: https://raw.githubusercontent.com/ETCBC/targum/main/tf/0.1/lex0.tf
+    whole: false
+    trim: slice the fixture's kept nodes, gap-anchored (2318969 B -> 10510 B)
+  - path: tf/0.1/lex_utf8.tf
+    url: https://raw.githubusercontent.com/ETCBC/targum/main/tf/0.1/lex_utf8.tf
+    whole: false
+    trim: slice the fixture's kept nodes, gap-anchored (4061664 B -> 17621 B)
+  - path: tf/0.1/line.tf
+    url: https://raw.githubusercontent.com/ETCBC/targum/main/tf/0.1/line.tf
+    whole: false
+    trim: slice the fixture's kept nodes, gap-anchored (2553812 B -> 10518 B)
+  - path: tf/0.1/line_utf8.tf
+    url: https://raw.githubusercontent.com/ETCBC/targum/main/tf/0.1/line_utf8.tf
+    whole: false
+    trim: slice the fixture's kept nodes, gap-anchored (4772456 B -> 18812 B)
+  - path: tf/0.1/manuscript.tf
+    url: https://raw.githubusercontent.com/ETCBC/targum/main/tf/0.1/manuscript.tf
+    whole: false
+    trim: slice the fixture's kept nodes, gap-anchored (1887 B -> 648 B)
+  - path: tf/0.1/nu.tf
+    url: https://raw.githubusercontent.com/ETCBC/targum/main/tf/0.1/nu.tf
+    whole: false
+    trim: slice the fixture's kept nodes, gap-anchored (1499240 B -> 6842 B)
+  - path: tf/0.1/oslots.tf
+    url: https://raw.githubusercontent.com/ETCBC/targum/main/tf/0.1/oslots.tf
+    whole: false
+    trim: slice the fixture's kept nodes, gap-anchored (9575355 B -> 25204 B)
+  - path: tf/0.1/otext.tf
+    url: https://raw.githubusercontent.com/ETCBC/targum/main/tf/0.1/otext.tf
+    whole: true
+    trim:
+  - path: tf/0.1/otype.tf
+    url: https://raw.githubusercontent.com/ETCBC/targum/main/tf/0.1/otype.tf
+    whole: true
+    trim:
+  - path: tf/0.1/part.tf
+    url: https://raw.githubusercontent.com/ETCBC/targum/main/tf/0.1/part.tf
+    whole: false
+    trim: slice the fixture's kept nodes, gap-anchored (1249813 B -> 5934 B)
+  - path: tf/0.1/reading.tf
+    url: https://raw.githubusercontent.com/ETCBC/targum/main/tf/0.1/reading.tf
+    whole: false
+    trim: slice the fixture's kept nodes, gap-anchored (923362 B -> 5047 B)
+  - path: tf/0.1/root.tf
+    url: https://raw.githubusercontent.com/ETCBC/targum/main/tf/0.1/root.tf
+    whole: false
+    trim: slice the fixture's kept nodes, gap-anchored (2230294 B -> 10099 B)
+  - path: tf/0.1/source.tf
+    url: https://raw.githubusercontent.com/ETCBC/targum/main/tf/0.1/source.tf
+    whole: false
+    trim: slice the fixture's kept nodes, gap-anchored (3136045 B -> 13983 B)
+  - path: tf/0.1/sp.tf
+    url: https://raw.githubusercontent.com/ETCBC/targum/main/tf/0.1/sp.tf
+    whole: false
+    trim: slice the fixture's kept nodes, gap-anchored (3150557 B -> 13856 B)
+  - path: tf/0.1/st.tf
+    url: https://raw.githubusercontent.com/ETCBC/targum/main/tf/0.1/st.tf
+    whole: false
+    trim: slice the fixture's kept nodes, gap-anchored (3468352 B -> 15864 B)
+  - path: tf/0.1/text.tf
+    url: https://raw.githubusercontent.com/ETCBC/targum/main/tf/0.1/text.tf
+    whole: false
+    trim: slice the fixture's kept nodes, gap-anchored (1874 B -> 635 B)
+  - path: tf/0.1/trailer.tf
+    url: https://raw.githubusercontent.com/ETCBC/targum/main/tf/0.1/trailer.tf
+    whole: false
+    trim: slice the fixture's kept nodes, gap-anchored (1048110 B -> 8673 B)
+  - path: tf/0.1/type.tf
+    url: https://raw.githubusercontent.com/ETCBC/targum/main/tf/0.1/type.tf
+    whole: false
+    trim: slice the fixture's kept nodes, gap-anchored (875548 B -> 5710 B)
+  - path: tf/0.1/uid.tf
+    url: https://raw.githubusercontent.com/ETCBC/targum/main/tf/0.1/uid.tf
+    whole: false
+    trim: slice the fixture's kept nodes, gap-anchored (16333016 B -> 73167 B)
+  - path: tf/0.1/verse.tf
+    url: https://raw.githubusercontent.com/ETCBC/targum/main/tf/0.1/verse.tf
+    whole: false
+    trim: slice the fixture's kept nodes, gap-anchored (69515 B -> 821 B)
+  - path: tf/0.1/view.tf
+    url: https://raw.githubusercontent.com/ETCBC/targum/main/tf/0.1/view.tf
+    whole: false
+    trim: slice the fixture's kept nodes, gap-anchored (990 B -> 608 B)
+  - path: tf/0.1/voc.tf
+    url: https://raw.githubusercontent.com/ETCBC/targum/main/tf/0.1/voc.tf
+    whole: false
+    trim: slice the fixture's kept nodes, gap-anchored (2796446 B -> 10980 B)
+  - path: tf/0.1/voc_utf8.tf
+    url: https://raw.githubusercontent.com/ETCBC/targum/main/tf/0.1/voc_utf8.tf
+    whole: false
+    trim: slice the fixture's kept nodes, gap-anchored (5050091 B -> 19211 B)
+  - path: tf/0.1/vs.tf
+    url: https://raw.githubusercontent.com/ETCBC/targum/main/tf/0.1/vs.tf
+    whole: false
+    trim: slice the fixture's kept nodes, gap-anchored (849173 B -> 4214 B)

@@ -51,8 +51,11 @@ class MenotaTest < Minitest::Test
 
   # P88-B1: +AM36 (the apparatus fixture — flaw 1 of the 2026-08-30 owner review).
   AM36 = "urn:nabu:menota:am-36-fol"
+  # The legacy-code trim: the archive's one file declaring Menota's
+  # deprecated `onw` (ISO 639-3: Old Nubian) for an Old Norwegian codex.
+  FROSTA = "urn:nabu:menota:tuebub-me-ii-2"
   ALL_URNS = [KONUNGS, LAXDAELA, WORMIANUS, HOMILIES, ELIS, PAMPH, BONBOK, STJORN,
-              STRENG, FRAG243, FRAG55B, AM36].sort.freeze
+              STRENG, FRAG243, FRAG55B, AM36, FROSTA].sort.freeze
 
   def conformance_adapter = Nabu::Adapters::Menota.new
 
@@ -76,7 +79,7 @@ class MenotaTest < Minitest::Test
   end
 
   def test_discover_never_yields_the_entity_table_or_catalogue_envelopes
-    assert_equal 12, adapter.discover(workdir).map(&:id).size,
+    assert_equal 13, adapter.discover(workdir).map(&:id).size,
                  "menota-entities.txt and catalogue/*.json are not documents"
   end
 
@@ -194,6 +197,24 @@ class MenotaTest < Minitest::Test
                  adapter.parse(ref_for(BONBOK)).metadata["date"])
   end
 
+  # TübUB Me II 2 (the Frostathing Law) says <textLang mainLang="onw"/>
+  # while its own langUsage (<language ident="nor">Old Norwegian</language>)
+  # and <text xml:lang="nor"> say nor. onw is Menota's deprecated legacy
+  # code; ISO 639-3 assigns it to Old Nubian, so the raw code would file
+  # the codex under Old Nubian in every raw per-language rollup. The
+  # adapter maps it to nor at parse; upstream's code rides language_raw.
+  def test_the_deprecated_onw_legacy_code_reads_as_old_norwegian
+    document = adapter.parse(ref_for(FROSTA))
+    assert_equal "nor", document.language, "never Old Nubian (ISO onw)"
+    assert(document.passages.all? { |passage| passage.language == "nor" })
+    assert_equal "onw", document.metadata["language_raw"], "upstream's code kept verbatim"
+    assert_equal "nor", document.metadata.dig("facets", "language", "value")
+  end
+
+  def test_an_unremapped_code_carries_no_language_raw
+    refute adapter.parse(ref_for(KONUNGS)).metadata.key?("language_raw")
+  end
+
   def test_menota_is_registered_for_the_structured_metadata_dates_shape
     assert_equal :structured, Nabu::Store::TimelineBuilder::MetadataDates::SHAPES["menota"]
   end
@@ -205,7 +226,9 @@ class MenotaTest < Minitest::Test
       document = adapter.parse(ref)
       assert_equal "attribution", document.license_override,
                    "#{ref.id}: <licence> CC-BY-SA 4.0 in the header maps explicitly"
-      assert_equal "http://creativecommons.org/licenses/by-sa/4.0/",
+      # Upstream reality: headers cite the deed over http (most) or https
+      # (TübUB Me II 2) — the same deed either way.
+      assert_match %r{\Ahttps?://creativecommons\.org/licenses/by-sa/4\.0/\z},
                    document.metadata["license_url"]
     end
   end
@@ -531,17 +554,18 @@ class MenotaTest < Minitest::Test
     db = store_test_db
     source = create_source(db)
     first = Nabu::Store::Loader.new(db: db, source: source).load_from(adapter, workdir: workdir)
-    assert_equal 12, first.added # P88-B1: +AM-36-fol
+    assert_equal 13, first.added # P88-B1: +AM-36-fol; +TübUB Me II 2 (the onw trim)
     assert_equal 0, first.errored
-    assert_equal 239, db[:passages].count,
+    assert_equal 241, db[:passages].count,
                  "51 + 48 + 21 manuscript lines + the P82-r1 trims (3 + 2 + 1 + 4 + 8) " \
                  "+ the mixed-level trims (7 + 39 + 53); +1 at P91-2 — the page-cited AM-36 " \
-                 "auto-numbers its two lem lines (owner-ruled 2026-08-30, option A)"
+                 "auto-numbers its two lem lines (owner-ruled 2026-08-30, option A); " \
+                 "+2 — the TübUB Me II 2 trim's lines 1r.0 and 1r.1"
 
     second = Nabu::Store::Loader.new(db: db, source: source).load_from(adapter, workdir: workdir)
     assert_equal 0, second.errored
-    assert_equal 12, second.skipped, "a byte-identical reload skips every document"
-    assert_equal 239, db[:passages].count
+    assert_equal 13, second.skipped, "a byte-identical reload skips every document"
+    assert_equal 241, db[:passages].count
     assert_equal [1], db[:passages].distinct.select_map(:revision)
   ensure
     db&.disconnect

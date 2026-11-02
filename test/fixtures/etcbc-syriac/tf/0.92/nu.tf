@@ -1,0 +1,2514 @@
+@node
+@compiler=Martijn Naaijer
+@description=Number of a word
+@name=ETCBC Syriac Corpus
+@source=ETCBC Syriac Corpus
+@valueType=str
+@version=0.92
+@writtenBy=Text-Fabric
+@dateWritten=2026-10-19T13:14:30+00:00Z
+
+114170	pl
+pl
+114173	sg
+sg
+pl
+114177	pl
+114180	pl
+pl
+sg
+pl
+pl
+114186	sg
+114189	sg
+sg
+sg
+114193	sg
+sg
+sg
+114198	sg
+sg
+sg
+sg
+sg
+114204	sg
+114206	sg
+sg
+sg
+sg
+114211	sg
+pl
+pl
+114216	pl
+sg
+114219	pl
+sg
+114222	sg
+114224	sg
+sg
+114227	pl
+sg
+114230	sg
+114232	sg
+114234	sg
+114236	sg
+114238	sg
+114240	sg
+114242	sg
+114244	sg
+114246	sg
+114248	sg
+sg
+sg
+114252	sg
+sg
+sg
+114256	sg
+114258	du
+114260	sg
+sg
+pl
+pl
+114266	pl
+114268	pl
+114270	pl
+114273	pl
+114275	pl
+pl
+pl
+pl
+pl
+sg
+114282	sg
+114284	sg
+114286	pl
+114288	pl
+pl
+114291	pl
+pl
+pl
+114295	pl
+114297	sg
+114299	sg
+sg
+sg
+114304	sg
+sg
+sg
+114308	pl
+114310	sg
+pl
+114313	pl
+114316	pl
+pl
+114319	pl
+114321	pl
+pl
+114324	sg
+114326	sg
+114328	pl
+sg
+114331	sg
+114333	sg
+pl
+114336	pl
+pl
+114339	sg
+114342	sg
+114344	sg
+pl
+114347	pl
+114349	pl
+sg
+sg
+114353	pl
+114355	sg
+sg
+114358	sg
+pl
+114361	pl
+114363	pl
+114365	pl
+sg
+114368	sg
+114370	sg
+114372	pl
+pl
+114375	sg
+114377	sg
+114379	pl
+pl
+114382	sg
+114384	sg
+pl
+114387	sg
+114389	sg
+114391	sg
+114393	sg
+114395	sg
+114397	sg
+114399	pl
+pl
+114402	sg
+sg
+114405	sg
+114407	sg
+sg
+sg
+114411	sg
+sg
+sg
+sg
+114416	pl
+114418	pl
+114420	sg
+sg
+114423	sg
+pl
+114427	pl
+sg
+114430	sg
+114434	sg
+114437	sg
+sg
+sg
+sg
+sg
+sg
+114444	sg
+sg
+114447	sg
+114450	sg
+sg
+sg
+114454	sg
+sg
+sg
+114458	sg
+sg
+114461	sg
+114463	sg
+sg
+114466	pl
+sg
+sg
+sg
+114471	sg
+pl
+114474	sg
+sg
+sg
+114478	sg
+114480	sg
+sg
+sg
+sg
+sg
+114486	sg
+114488	sg
+114491	sg
+sg
+114494	pl
+114496	sg
+sg
+114500	sg
+sg
+114504	sg
+sg
+114507	pl
+114509	pl
+sg
+114513	sg
+sg
+114516	sg
+114519	sg
+sg
+sg
+sg
+sg
+pl
+pl
+114528	sg
+sg
+114531	sg
+sg
+114535	sg
+sg
+114539	sg
+114542	sg
+sg
+114545	sg
+sg
+114548	sg
+sg
+sg
+sg
+114554	sg
+sg
+114559	sg
+sg
+sg
+sg
+sg
+sg
+sg
+114567	sg
+114569	sg
+sg
+114572	sg
+sg
+114575	sg
+114577	sg
+114579	sg
+sg
+sg
+sg
+114584	sg
+114586	sg
+sg
+114589	sg
+sg
+sg
+114593	pl
+114596	sg
+114599	sg
+114602	sg
+114605	sg
+114607	sg
+114609	sg
+sg
+sg
+114613	sg
+114615	sg
+sg
+sg
+sg
+114620	sg
+sg
+114623	sg
+sg
+114626	pl
+114629	sg
+sg
+114632	sg
+sg
+114637	sg
+114639	sg
+sg
+114642	sg
+114644	sg
+114648	sg
+pl
+sg
+sg
+sg
+sg
+114655	sg
+sg
+114658	sg
+sg
+sg
+114662	sg
+sg
+114665	sg
+sg
+114669	sg
+114671	sg
+sg
+114674	sg
+114676	sg
+114678	sg
+114680	sg
+114682	sg
+114684	sg
+114686	sg
+114689	sg
+sg
+114692	pl
+114694	pl
+114696	sg
+sg
+sg
+sg
+sg
+114702	sg
+sg
+sg
+114706	pl
+sg
+114709	sg
+274057	sg
+sg
+sg
+274061	sg
+274063	sg
+sg
+sg
+274068	sg
+sg
+274071	sg
+sg
+sg
+274075	sg
+274077	sg
+274080	sg
+sg
+pl
+pl
+sg
+274086	sg
+sg
+274091	sg
+274093	sg
+sg
+274096	sg
+274098	sg
+274100	sg
+sg
+274103	sg
+274105	sg
+274107	sg
+sg
+274110	sg
+274112	sg
+274116	pl
+274118	sg
+274122	sg
+sg
+274125	sg
+sg
+sg
+sg
+274130	sg
+274132	sg
+sg
+sg
+274136	sg
+274138	sg
+sg
+sg
+274144	pl
+pl
+274147	pl
+sg
+274150	sg
+sg
+274153	pl
+pl
+274156	sg
+274158	sg
+274160	pl
+274162	pl
+sg
+274165	sg
+274167	sg
+274169	sg
+sg
+274172	sg
+274174	sg
+274176	sg
+274178	sg
+sg
+pl
+274182	sg
+274184	sg
+274186	sg
+sg
+sg
+sg
+274191	sg
+sg
+274194	sg
+pl
+sg
+274199	sg
+274201	pl
+sg
+274204	sg
+sg
+pl
+pl
+pl
+274210	pl
+sg
+sg
+274215	sg
+274217	pl
+274219	pl
+pl
+274222	sg
+sg
+sg
+274226	sg
+274228	pl
+274230	sg
+sg
+pl
+sg
+sg
+274237	sg
+274239	pl
+274241	sg
+sg
+sg
+274247	sg
+274249	sg
+sg
+sg
+sg
+274255	sg
+sg
+sg
+sg
+274260	pl
+sg
+sg
+sg
+274266	sg
+sg
+274269	pl
+sg
+sg
+274273	sg
+sg
+274276	sg
+274278	pl
+pl
+pl
+sg
+sg
+274284	pl
+274286	sg
+274288	sg
+274291	pl
+pl
+pl
+274296	sg
+sg
+sg
+274301	sg
+pl
+pl
+274305	sg
+274307	pl
+274309	sg
+274311	sg
+sg
+274314	pl
+274317	sg
+274319	sg
+274321	sg
+274323	pl
+sg
+274326	pl
+sg
+pl
+sg
+274331	pl
+sg
+274334	sg
+274336	sg
+sg
+274339	pl
+274342	sg
+sg
+274345	sg
+sg
+sg
+274349	sg
+sg
+sg
+274353	pl
+274355	pl
+pl
+pl
+274359	pl
+274361	sg
+274364	pl
+274367	sg
+sg
+sg
+274371	sg
+274373	pl
+274375	pl
+274377	sg
+274379	pl
+274381	sg
+274383	pl
+274385	sg
+sg
+274388	sg
+sg
+274392	sg
+274394	pl
+sg
+sg
+274399	sg
+sg
+sg
+274405	sg
+sg
+sg
+sg
+274410	pl
+sg
+274413	sg
+274415	pl
+sg
+274418	sg
+274420	sg
+sg
+274423	pl
+sg
+274426	pl
+pl
+pl
+sg
+sg
+274432	sg
+sg
+274435	pl
+pl
+274438	sg
+274440	pl
+pl
+274443	sg
+sg
+sg
+sg
+274448	sg
+sg
+274451	sg
+274453	sg
+sg
+274456	pl
+sg
+274459	sg
+sg
+pl
+274463	sg
+pl
+274466	sg
+sg
+sg
+sg
+sg
+sg
+274473	pl
+sg
+274476	sg
+274478	sg
+sg
+274481	sg
+274483	sg
+sg
+274486	sg
+sg
+274489	sg
+sg
+274492	sg
+sg
+274495	sg
+274497	sg
+sg
+274500	sg
+sg
+274503	sg
+274505	sg
+sg
+274508	sg
+274510	sg
+sg
+sg
+sg
+pl
+pl
+sg
+274518	pl
+sg
+274521	sg
+pl
+sg
+274525	sg
+274527	sg
+274529	sg
+pl
+sg
+274533	sg
+sg
+274537	sg
+sg
+sg
+pl
+sg
+pl
+274545	sg
+274547	sg
+sg
+sg
+274552	sg
+sg
+274555	sg
+sg
+sg
+sg
+274561	sg
+pl
+274564	pl
+sg
+274567	sg
+sg
+pl
+sg
+274572	pl
+sg
+274575	sg
+274577	sg
+pl
+sg
+274581	sg
+sg
+sg
+sg
+274586	sg
+sg
+sg
+274590	sg
+sg
+274593	sg
+pl
+sg
+sg
+sg
+274599	sg
+sg
+sg
+sg
+274604	pl
+pl
+pl
+sg
+sg
+pl
+sg
+274613	sg
+274615	sg
+sg
+274618	sg
+274620	sg
+274622	sg
+sg
+sg
+274626	sg
+274628	sg
+sg
+274631	sg
+274633	sg
+sg
+274636	sg
+274638	sg
+274640	sg
+sg
+sg
+274644	sg
+274646	sg
+274648	du
+pl
+274652	sg
+sg
+274655	sg
+sg
+sg
+274659	sg
+274661	sg
+sg
+274664	sg
+sg
+274667	sg
+274669	sg
+sg
+274672	sg
+274674	sg
+274676	sg
+sg
+274679	sg
+274681	sg
+sg
+sg
+sg
+274686	sg
+sg
+sg
+pl
+274691	sg
+sg
+274696	sg
+sg
+sg
+sg
+274701	sg
+274703	sg
+274706	pl
+pl
+sg
+sg
+274711	pl
+pl
+sg
+274715	sg
+274717	sg
+274719	pl
+sg
+274722	pl
+sg
+274725	pl
+pl
+274730	pl
+pl
+274733	sg
+sg
+274736	sg
+274738	sg
+274740	sg
+274742	sg
+sg
+274745	sg
+sg
+sg
+274749	sg
+274751	sg
+sg
+274754	sg
+274756	sg
+274758	sg
+274760	sg
+274762	sg
+274764	sg
+274766	sg
+274769	pl
+sg
+pl
+sg
+274774	sg
+274776	sg
+274778	sg
+274780	pl
+sg
+274784	pl
+274787	pl
+pl
+274791	pl
+sg
+pl
+sg
+274796	sg
+274798	pl
+sg
+274801	sg
+274803	sg
+274805	sg
+sg
+274808	sg
+sg
+sg
+274813	sg
+274815	sg
+274817	pl
+sg
+274820	sg
+274822	sg
+sg
+274825	sg
+274827	pl
+274829	sg
+274831	pl
+sg
+274834	sg
+sg
+274838	pl
+274840	sg
+sg
+pl
+pl
+274845	pl
+274847	pl
+pl
+pl
+274851	sg
+274853	pl
+sg
+274856	sg
+sg
+274860	sg
+pl
+274863	sg
+274865	sg
+sg
+sg
+274869	sg
+274871	sg
+sg
+274874	sg
+sg
+sg
+274878	sg
+274880	sg
+274882	sg
+sg
+sg
+sg
+274887	sg
+274889	sg
+sg
+274893	sg
+sg
+sg
+sg
+274898	sg
+274900	sg
+sg
+sg
+274905	sg
+sg
+sg
+274909	sg
+274911	sg
+sg
+sg
+274915	sg
+sg
+sg
+274919	sg
+sg
+sg
+274923	sg
+sg
+sg
+sg
+sg
+274929	sg
+274932	sg
+274934	sg
+274937	sg
+274943	sg
+274945	sg
+sg
+sg
+sg
+274950	sg
+274952	sg
+sg
+274955	sg
+274957	sg
+274959	sg
+274961	sg
+274963	pl
+sg
+274966	sg
+274968	sg
+274970	sg
+sg
+274974	sg
+pl
+sg
+274978	sg
+274980	sg
+274982	sg
+274984	sg
+274986	sg
+274988	sg
+sg
+sg
+274992	sg
+274994	sg
+274996	sg
+274998	sg
+275000	sg
+275002	sg
+275004	sg
+sg
+275007	sg
+sg
+275010	sg
+275012	sg
+275014	sg
+sg
+275017	sg
+sg
+275020	sg
+275022	sg
+275024	sg
+sg
+sg
+275029	sg
+sg
+sg
+sg
+sg
+275035	sg
+275037	pl
+sg
+275040	sg
+sg
+275043	sg
+275045	sg
+275047	sg
+sg
+275052	sg
+sg
+sg
+sg
+sg
+275058	sg
+275060	sg
+275062	sg
+sg
+275065	sg
+275067	sg
+sg
+275070	sg
+sg
+275073	sg
+275075	sg
+275077	sg
+sg
+275080	sg
+sg
+275083	sg
+sg
+275086	pl
+sg
+sg
+275091	sg
+sg
+275094	sg
+275098	sg
+sg
+sg
+275102	pl
+275104	sg
+sg
+sg
+275108	sg
+sg
+sg
+275112	sg
+275114	sg
+275116	sg
+275118	sg
+sg
+sg
+sg
+275123	sg
+275126	sg
+sg
+275129	sg
+sg
+sg
+sg
+275134	sg
+275136	sg
+275139	sg
+275141	sg
+275144	sg
+sg
+275147	sg
+sg
+sg
+sg
+275152	sg
+sg
+sg
+sg
+sg
+275159	sg
+275161	sg
+sg
+sg
+275165	sg
+275167	sg
+sg
+275170	du
+sg
+pl
+pl
+sg
+275177	pl
+sg
+sg
+pl
+275182	sg
+pl
+275185	sg
+275187	sg
+341711	sg
+341713	sg
+sg
+sg
+341717	pl
+pl
+sg
+sg
+341722	sg
+341725	sg
+341728	sg
+341731	sg
+pl
+sg
+sg
+341736	sg
+pl
+341739	sg
+341741	sg
+sg
+sg
+pl
+sg
+341747	sg
+sg
+341750	sg
+sg
+341753	sg
+341755	sg
+sg
+sg
+341759	sg
+sg
+341762	sg
+sg
+341765	sg
+sg
+sg
+341769	sg
+sg
+341772	sg
+sg
+sg
+341776	sg
+341778	sg
+sg
+sg
+341784	sg
+sg
+sg
+341788	sg
+sg
+341792	sg
+sg
+sg
+341796	sg
+sg
+sg
+sg
+341801	sg
+sg
+341805	pl
+341808	sg
+341813	sg
+sg
+pl
+pl
+341818	pl
+sg
+341822	sg
+sg
+sg
+sg
+sg
+341828	sg
+341830	sg
+sg
+341833	sg
+sg
+341836	pl
+pl
+341839	pl
+sg
+sg
+sg
+341844	sg
+341846	sg
+sg
+sg
+sg
+341851	pl
+341853	pl
+341855	pl
+pl
+341859	sg
+341861	pl
+sg
+sg
+sg
+341868	pl
+pl
+341871	pl
+sg
+341874	sg
+sg
+341877	pl
+341879	sg
+341881	pl
+sg
+sg
+341887	sg
+341890	sg
+341893	sg
+pl
+341898	pl
+341900	sg
+341903	sg
+sg
+341906	sg
+341908	sg
+sg
+341912	sg
+341914	sg
+341916	sg
+pl
+pl
+sg
+341922	sg
+341924	sg
+sg
+341927	sg
+pl
+sg
+341931	sg
+341933	pl
+sg
+341936	sg
+sg
+341939	sg
+sg
+341944	sg
+sg
+sg
+sg
+341950	sg
+sg
+341953	sg
+sg
+341956	sg
+341958	pl
+341960	sg
+341964	sg
+sg
+sg
+341968	sg
+341972	sg
+sg
+341975	sg
+pl
+sg
+341979	sg
+341981	sg
+sg
+sg
+341985	pl
+341987	sg
+341989	sg
+341991	pl
+sg
+341995	sg
+pl
+pl
+sg
+342000	sg
+342002	sg
+sg
+342005	sg
+pl
+342008	sg
+sg
+342011	sg
+342013	sg
+sg
+pl
+sg
+342018	sg
+sg
+pl
+sg
+342023	sg
+sg
+342026	sg
+sg
+sg
+sg
+sg
+342034	sg
+sg
+pl
+sg
+sg
+sg
+pl
+sg
+sg
+342044	sg
+sg
+342048	sg
+sg
+342051	pl
+sg
+342056	sg
+sg
+342059	sg
+342062	sg
+342064	sg
+pl
+sg
+342069	sg
+sg
+342072	sg
+sg
+342075	pl
+sg
+342078	sg
+sg
+sg
+342082	sg
+342084	pl
+342087	sg
+sg
+sg
+sg
+sg
+342095	sg
+sg
+sg
+sg
+342100	sg
+342102	sg
+342104	pl
+sg
+342107	sg
+sg
+sg
+342111	sg
+sg
+342115	sg
+pl
+pl
+342119	pl
+sg
+342124	sg
+pl
+sg
+pl
+sg
+342130	pl
+342133	sg
+pl
+342136	sg
+342139	sg
+pl
+sg
+342143	sg
+sg
+342146	pl
+sg
+342149	sg
+342151	sg
+342153	pl
+342155	pl
+sg
+342158	sg
+342160	sg
+342162	sg
+342164	sg
+342166	sg
+342168	sg
+sg
+342171	sg
+342173	sg
+sg
+342177	sg
+342179	sg
+sg
+sg
+sg
+sg
+sg
+342186	pl
+pl
+342189	sg
+342192	sg
+342195	sg
+342198	sg
+sg
+sg
+pl
+pl
+sg
+342205	sg
+pl
+342208	sg
+342210	sg
+sg
+sg
+pl
+sg
+342216	sg
+sg
+342219	sg
+342221	sg
+342223	sg
+sg
+342227	sg
+342229	sg
+342231	sg
+sg
+342234	sg
+342236	sg
+sg
+342239	sg
+sg
+342242	sg
+sg
+sg
+342246	sg
+342248	sg
+sg
+342251	sg
+sg
+342256	sg
+342258	sg
+sg
+342261	sg
+sg
+342265	sg
+342268	sg
+sg
+342271	sg
+342273	sg
+342276	pl
+342278	sg
+sg
+342283	sg
+sg
+342286	sg
+sg
+sg
+sg
+342291	sg
+sg
+sg
+sg
+sg
+342297	sg
+sg
+342300	sg
+sg
+342304	pl
+342306	pl
+sg
+sg
+342310	sg
+342312	sg
+342314	sg
+sg
+sg
+sg
+342319	sg
+342321	pl
+342323	pl
+342325	sg
+342328	sg
+342330	pl
+sg
+sg
+sg
+342335	sg
+342337	pl
+sg
+342340	sg
+sg
+342343	pl
+342345	sg
+sg
+342348	pl
+342350	sg
+342353	sg
+342356	sg
+pl
+342360	pl
+342362	sg
+342365	sg
+sg
+342368	sg
+342370	sg
+sg
+342374	sg
+sg
+342377	sg
+342379	sg
+sg
+342382	sg
+pl
+pl
+sg
+sg
+pl
+pl
+sg
+342391	pl
+sg
+342395	sg
+sg
+sg
+342399	sg
+342401	sg
+sg
+sg
+342405	pl
+342407	sg
+342409	pl
+sg
+342412	sg
+sg
+sg
+sg
+342418	sg
+342422	sg
+342424	pl
+342426	sg
+342431	sg
+sg
+342434	sg
+342436	sg
+sg
+sg
+342441	pl
+sg
+342444	pl
+sg
+pl
+342448	sg
+sg
+342452	sg
+342454	sg
+342456	sg
+342459	sg
+sg
+342462	sg
+sg
+342465	sg
+342467	sg
+pl
+sg
+sg
+342473	sg
+sg
+sg
+342478	sg
+pl
+sg
+342482	sg
+sg
+sg
+pl
+sg
+342488	sg
+sg
+342491	sg
+sg
+342494	sg
+sg
+sg
+342498	sg
+sg
+sg
+342503	pl
+sg
+sg
+sg
+sg
+342510	sg
+sg
+342513	sg
+sg
+342516	sg
+sg
+342519	sg
+sg
+sg
+342523	sg
+342526	sg
+sg
+342529	pl
+sg
+342534	sg
+sg
+342537	sg
+342539	sg
+pl
+sg
+342544	sg
+sg
+342547	pl
+sg
+342550	sg
+342553	sg
+sg
+sg
+342557	pl
+342559	pl
+342562	sg
+sg
+sg
+sg
+sg
+sg
+sg
+342572	sg
+sg
+sg
+sg
+342577	sg
+342579	sg
+342581	sg
+sg
+342584	sg
+sg
+342587	sg
+sg
+342590	sg
+sg
+342593	sg
+pl
+pl
+342597	pl
+sg
+342602	sg
+sg
+pl
+sg
+pl
+sg
+342609	pl
+342612	sg
+sg
+sg
+342616	sg
+342618	sg
+342620	sg
+342623	sg
+pl
+398800	sg
+sg
+sg
+sg
+sg
+398806	sg
+sg
+398809	sg
+398811	sg
+398813	sg
+sg
+398816	sg
+sg
+398819	sg
+398821	sg
+398823	sg
+398825	pl
+398828	sg
+pl
+398831	sg
+398833	sg
+sg
+sg
+sg
+sg
+sg
+sg
+398841	sg
+398843	sg
+398845	pl
+pl
+398848	sg
+sg
+398851	sg
+398853	sg
+sg
+398856	sg
+398858	sg
+398860	sg
+398862	sg
+pl
+398865	pl
+398867	sg
+sg
+sg
+398874	sg
+398876	sg
+398878	sg
+sg
+sg
+398882	sg
+398884	sg
+sg
+sg
+398888	sg
+sg
+398891	sg
+398893	sg
+398895	sg
+398898	sg
+sg
+sg
+sg
+sg
+398904	sg
+398906	sg
+398908	sg
+398910	sg
+pl
+398913	pl
+sg
+sg
+398918	pl
+sg
+sg
+sg
+sg
+398924	sg
+398926	sg
+398928	sg
+398930	sg
+pl
+398933	pl
+398937	sg
+pl
+398940	sg
+398942	sg
+398944	sg
+398946	pl
+398948	pl
+398950	pl
+398954	pl
+pl
+sg
+398958	pl
+398960	sg
+sg
+398963	sg
+sg
+398966	sg
+398968	sg
+sg
+398972	sg
+398975	sg
+sg
+398978	pl
+398980	sg
+du
+sg
+pl
+398985	sg
+sg
+398988	sg
+398990	sg
+398992	sg
+sg
+pl
+398996	pl
+398998	pl
+399000	sg
+399002	sg
+sg
+sg
+pl
+399008	sg
+sg
+399011	sg
+pl
+399014	sg
+sg
+399017	sg
+sg
+399020	sg
+399022	sg
+399024	pl
+399026	sg
+399028	du
+sg
+pl
+399033	sg
+sg
+399036	sg
+pl
+pl
+399040	sg
+sg
+sg
+399044	sg
+sg
+sg
+sg
+399049	sg
+sg
+sg
+399053	sg
+399055	sg
+sg
+sg
+399059	sg
+sg
+sg
+399066	sg
+sg
+399069	sg
+399071	sg
+pl
+pl
+399075	pl
+399077	sg
+399079	sg
+sg
+399082	sg
+399085	sg
+sg
+sg
+sg
+sg
+399091	sg
+399093	sg
+sg
+du
+pl
+399098	sg
+sg
+399101	sg
+sg
+399104	sg
+sg
+399107	sg
+sg
+399111	pl
+sg
+399114	sg
+sg
+sg
+399118	sg
+399120	sg
+sg
+399123	sg
+399126	du
+pl
+sg
+sg
+399131	sg
+sg
+399134	pl
+399136	sg
+399138	sg
+sg
+399141	sg
+sg
+399144	sg
+sg
+sg
+399148	sg
+399150	sg
+399152	sg
+sg
+399155	sg
+sg
+399158	sg
+399160	sg
+399162	sg
+399164	sg
+sg
+399167	sg
+399169	pl
+399171	pl
+399173	pl
+399175	sg
+sg
+399178	pl
+sg
+pl
+pl
+sg
+pl
+399185	pl
+399187	sg
+sg
+sg
+pl
+399192	pl
+399194	sg
+399196	sg
+399198	pl
+sg
+pl
+399202	pl
+399204	sg
+sg
+sg
+399209	sg
+pl
+pl
+399213	sg
+399215	pl
+399217	sg
+399219	sg
+399221	sg
+sg
+399224	pl
+399226	sg
+399229	sg
+sg
+sg
+399233	sg
+399235	du
+pl
+sg
+399239	sg
+399241	sg
+399243	sg
+399245	sg
+sg
+sg
+sg
+399250	sg
+399252	sg
+399254	sg
+399256	sg
+sg
+399259	sg
+399261	sg
+sg
+sg
+399265	sg
+399267	sg
+sg
+sg
+sg
+399272	sg
+399274	sg
+399276	sg
+sg
+399279	pl
+pl
+399283	sg
+pl
+pl
+399289	sg
+399291	sg
+sg
+sg
+399295	sg
+399297	sg
+399299	sg
+399301	sg
+399303	sg
+sg
+399307	sg
+sg
+sg
+399311	sg
+399313	sg
+399315	pl
+pl
+399319	sg
+sg
+sg
+sg
+399324	pl
+399326	sg
+pl
+sg
+399330	sg
+399332	sg
+399334	sg
+399336	sg
+pl
+sg
+sg
+399341	sg
+sg
+399346	sg
+sg
+399351	sg
+sg
+399355	sg
+sg
+sg
+399359	sg
+399361	sg
+399363	pl
+sg
+sg
+399367	sg
+sg
+399370	sg
+sg
+399373	sg
+399375	sg
+399377	sg
+399380	sg
+sg
+399383	sg
+sg
+sg
+399388	sg
+399390	sg
+399392	sg
+399394	pl
+sg
+sg
+sg
+sg
+399400	sg
+399402	sg
+399404	sg
+pl
+pl
+399408	pl
+399410	pl
+399413	pl
+pl
+399416	sg
+sg
+sg
+sg
+du
+pl
+399423	sg
+sg
+sg
+sg
+399428	sg
+pl
+399431	sg
+sg
+399434	sg
+399436	sg
+399438	sg
+399440	sg
+sg
+sg
+pl
+sg
+399446	sg
+sg
+399449	sg
+sg
+399452	sg
+sg
+sg
+sg
+399457	sg
+399460	pl
+pl
+399463	sg
+399465	sg
+399467	sg
+399469	sg
+sg
+sg
+399473	sg
+sg
+399476	sg
+sg
+sg
+399480	pl
+399483	pl
+399485	pl
+pl
+399488	sg
+399490	sg
+sg
+399493	sg
+399495	sg
+sg
+399498	sg
+sg
+sg
+399502	sg
+399504	sg
+399506	sg
+pl
+pl
+399510	sg
+pl
+399513	pl
+399515	pl
+sg
+399519	sg
+sg
+sg
+sg
+399524	pl
+399526	sg
+pl
+399529	sg
+399531	pl
+399533	sg
+sg
+399536	sg
+sg
+399539	sg
+399541	sg
+sg
+399544	sg
+sg
+399547	sg
+399549	pl
+pl
+399552	sg
+pl
+399555	sg
+399557	sg
+pl
+399560	sg
+399562	sg
+399566	pl
+sg
+399569	sg
+399571	pl
+399573	pl
+399575	sg
+sg
+399578	sg
+399580	sg
+399582	sg
+sg
+sg
+399586	sg
+399588	sg
+399590	sg
+399593	sg
+sg
+399596	sg
+399598	sg
+sg
+399601	sg
+399603	sg
+399607	du
+pl
+399610	sg
+399612	sg
+pl
+399615	sg
+399617	sg
+pl
+sg
+399621	sg
+sg
+399624	sg
+sg
+399627	sg
+sg
+pl
+sg
+399632	sg
+399634	du
+pl
+sg
+399639	sg
+sg
+399642	sg
+399644	sg
+399646	sg
+399648	pl
+pl
+399651	pl
+sg
+399655	sg
+pl
+pl
+399659	sg
+399661	sg
+sg
+399664	pl
+399666	sg
+pl
+399669	sg
+399671	sg
+399674	sg
+sg
+pl
+sg
+399679	pl
+399681	sg
+sg
+pl
+399685	sg
+pl
+sg
+399689	sg
+399691	sg
+pl
+399695	pl
+399698	sg
+399701	sg
+pl
+399706	sg
+pl
+399710	pl
+sg
+pl
+399714	sg
+sg
+sg
+399718	sg
+399720	pl
+399722	pl
+399724	pl
+399726	sg
+sg
+399729	pl
+sg
+399733	pl
+399735	pl
+399738	pl
+399741	pl
+399743	sg
+399745	sg
+399747	pl
+399749	sg
+399751	sg
+sg
+sg
+399755	sg
+399757	sg
+399759	sg
+sg
+399762	sg
+399764	sg
+sg
+sg
+399768	sg
+399771	sg
+399773	sg
+399775	sg
+399777	sg
+pl
+399780	sg
+399782	sg
+399785	pl
+399787	sg
+399789	sg
+sg
+399792	sg
+399794	sg
+sg
+399798	pl
+sg
+399802	sg
+399804	sg
+399807	sg
+sg
+399810	sg
+sg
+399815	sg
+399818	sg
+sg
+sg
+sg
+399825	pl
+sg
+399828	sg
+sg
+sg
+399832	sg
+sg
+sg
+sg
+399837	sg
+sg
+399840	sg
+sg
+sg
+399844	sg
+399846	sg
+399848	sg
+sg
+sg
+399852	pl
+pl
+sg
+399856	sg
+pl
+sg
+399860	pl
+sg
+399864	pl
+sg
+pl
+pl
+399869	pl
+pl
+sg
+399873	sg
+399875	pl
+399877	pl
+399880	sg
+sg
+399883	sg
+399885	sg
+399887	pl
+sg
+399890	sg
+sg
+sg
+399894	sg
+399896	sg
+sg
+pl
+sg
+399901	sg
+399903	sg
+sg
+sg
+399907	sg
+399909	sg
+399911	sg
+sg
+sg
+399916	pl
+399918	pl
+399921	sg
+399923	sg
+399925	sg
+sg
+399928	sg
+399932	pl
+pl
+sg
+sg
+399937	sg
+399939	pl
+399941	pl
+pl
+pl
+399945	pl
+pl
+399948	sg
+399950	sg
+399953	sg
+399955	sg
+399957	sg
+399961	sg
+sg
+399964	sg
+pl
+399967	sg
+sg
+399970	sg
+399972	sg
+sg
+pl
+399976	pl
+pl
+pl
+399981	sg
+sg
+pl
+399985	sg
+sg
+399989	sg
+399991	sg
+sg
+sg
+sg
+sg
+sg
+sg
+sg
+sg
+400001	sg
+400003	sg
+sg
+400006	sg
+sg
+400009	sg
+400011	sg
+400013	sg
+sg
+400016	sg
+400018	sg
+sg
+400021	sg
+400023	sg
+pl
+400026	sg
+sg
+sg
+400030	pl
+400032	sg
+sg
+sg
+400036	pl
+sg
+pl
+400040	sg
+pl
+400043	sg
+pl
+sg
+sg
+sg
+sg
+400050	sg
+sg
+400053	sg
+400055	sg
+400058	sg
+400060	sg
+sg
+400063	sg
+sg
+400066	sg
+sg
+400071	pl
+sg
+400074	sg
+sg
+400079	pl
+400082	pl
+400084	pl
+400086	sg
+sg
+400090	sg
+sg
+400094	sg
+400096	sg
+400099	pl
+pl
+400103	sg
+pl
+pl
+sg
+400108	pl
+400110	sg
+sg
+400113	sg
+400115	pl
+400117	sg
+pl
+pl
+400121	du
+pl
+400124	sg
+sg
+400127	sg
+400129	pl
+400131	pl
+400133	pl
+sg
+pl
+400137	pl
+sg
+400140	pl
+400142	pl
+400144	pl
+400147	pl
+400149	sg
+sg
+sg
+400153	sg
+sg
+400157	sg
+sg
+400160	pl
+400162	sg
+sg
+sg
+400166	sg
+pl
+400170	sg
+400175	pl
+pl
+pl
+400179	sg
+sg
+sg
+sg
+400186	sg
+sg
+sg
+sg
+400191	sg
+400193	sg
+400195	sg
+400197	sg
+400199	sg
+400201	sg
+400203	sg
+400206	sg
+sg
+sg
+400210	sg
+sg
+sg
+400214	sg
+400216	sg
+sg
+400219	sg
+400221	sg
+400224	sg
+400226	sg
+400228	sg
+sg
+pl
+400232	sg
+400234	sg
+sg
+400237	pl
+pl
+pl
+400241	pl
+400243	sg
+400245	sg
+sg
+400248	sg
+sg
+400251	sg
+400253	sg
+sg
+400257	sg
+pl
+400260	pl
+pl
+400264	sg
+pl
+400267	sg
+400269	sg
+sg
+sg
+400273	sg
+sg
+sg
+400277	sg
+400279	sg
+sg
+400282	sg
+sg
+400285	sg
+sg
+400288	sg
+sg
+sg
+400292	sg
+sg
+sg
+400296	sg
+sg
+sg
+sg
+400301	sg
+pl
+400304	sg
+sg
+400307	sg
+sg
+sg
+400311	sg
+400313	pl
+400316	sg
+sg

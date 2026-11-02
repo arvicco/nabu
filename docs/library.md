@@ -664,7 +664,7 @@ are the owner-verified first syncs of 2026-07-22.
 | **Category** | Old Norwegian treebanks and the Poetic Edda; the Old Saxon *Heliand*; the Middle High German reference corpus; the Scandinavian runic corpus |
 | **Languages** | Old Norse (`non`), Old Saxon (`osx`), Middle High German (`gmh`), Proto-Norse (`gmq-pro` — the Wiktionary proto-code convention; ISO has none), and Old Icelandic (`is`, IcePaHC via the `ud` row — live since the owner's same-day `sync ud`: 44,029 passages, 812K gold rows) |
 | **Size** | `menotec`: **7 treebanks / 20,308 sentences** (Poetic Edda / Codex Regius, the Homily Book, King's Mirror, Landslov, Óláfs saga, Pamphilus, Strengleikar) — gold PROIEL-scheme morphology + syntax, served through the INESS session API. `helipad`: **1 document / 3,549 tree blocks** — the *Heliand* (MS C) with gold form-lemma pairs on every token, Penn-bracketing parsed, metre and codicology preserved. `rem`: **406 texts / 355,449 manuscript lines** of gold-annotated MHG (1050–1350) — `gmh` lands as the corpus's **third-largest gold-lemma pool (2.10M rows)** on day one. The 46 first-sync quarantines (all one class: duplicate folio.line refs in two-column codices and entry-wise restarts) were recovered the same day by the P40-r1 citation fix (`5ra.1` column refs + the `:b2` positional disambiguator). `rundata`: **30,643 lane-documents / 30,641 passages** — ~6,800 runic inscriptions in up to five text lanes each (transliteration primary; Old West Norse and runic-Swedish normalisations; English and Swedish translations); zero runic Unicode upstream — the scholarly transliteration IS the text, damage notation stored verbatim |
-| **Licenses** | menotec CC BY-NC-SA → `nc`; helipad CC BY → `attribution`; rem CC BY-SA → `attribution`; rundata ODbL + DbCL → the new `odbl` class (D40-c) |
+| **Licenses** | menotec CC BY-NC-SA → `nc`; helipad CC BY → `attribution`; rem CC BY-SA → `attribution`; rundata ODbL + DbCL → the new `odbl` class (D40-c). Beside it since P153: **`runesdb`** — the Göttingen RuneS project's glyph-level TEI, 613 finds / 1,611 glyph-sequence passages, every rune read stroke by stroke, runica manuscripta included (CC BY-SA 4.0 → `attribution`) |
 
 **Research uses:** the three Germanic branches on one desk — `align` the
 Gothic and West-Saxon gospels beside the *Heliand* tradition, walk
@@ -994,6 +994,15 @@ Old Dutch word material 475–1200, gold (89 / 5,745; `research_private`)
 (5,478 / 729,090; attribution) · `perseus-anglit` — Klaeber's Beowulf
 with its aligned English (2 / 86; attribution).
 
+**Byzantine Greek.** `cgpg` — the Calfa/GREgORI Patrologia Graeca: 33
+Migne volumes in uncorrected OCR with machine lemmas (silver), the
+library's first middle and late Byzantine shelf — Photius, Leo VI,
+Theophanes Continuatus, Constantine Porphyrogenitus, Cedrenus and
+Skylitzes, Psellus, Theophylact of Ohrid, Zonaras, Choniates, Gregoras,
+Palamas, Cantacuzene, Doukas, Glykas — beside eleven patristic volumes;
+one document per volume, one passage per page (attribution) — is
+registered but not yet wired.
+
 **Slavic.** The Slovenian line: `kdsp` — longer narrative prose
 1836–1918 (262 / 290,394), `prilit` — the oldest narrative prose
 (43 / 8,526), `sl-wikisource` — the Slovene Wikisource's year-dated
@@ -1070,7 +1079,14 @@ Khotanese manuscripts (2,357 / 14,574; open), `shkz` — the trilingual
 Kaʿba-ye Zartošt inscription, aligned (3 / 153; open), `iedc` — the
 Invisible East documentary corpus (1,316 / 5,493; open),
 `perseus-farsilit` — Hafez's Divan with its aligned English (2 /
-17,637).
+17,637), `ganjoor` — the classical cone of the Ganjoor Persian
+poetry library, 212 poets from Rudaki to the Qajar divans, one document
+per poem and one passage per couplet, dated by each poet's life
+(126,165 / 1,453,355; attribution, by the site operator's grant), and
+`wiktionary-fa` — English Wiktionary's Persian lexicon as the
+kaikki.org extract, the library's first New Persian dictionary
+(20,350 entries with etymologies reaching Middle and Old Persian;
+attribution).
 
 **Anatolian and cuneiform.** `hittite-glossed` — glossed Hittite texts
 with German translation (7,099 / 72,507; open), `aclt` — the Annotated
@@ -1087,6 +1103,28 @@ the Secret History of the Mongols (1 / 3,523).
 **Arabic.** `diccas` — the Disaster Corpus in Classical Arabic Sources
 (10 / 879; nc); instruments `kitab-reuse` (the KITAB text-reuse
 statistics; nc) and `althurayya` (the al-Ṯurayyā gazetteer — places.md).
+
+**Aramaic and Syriac.** `etcbc-targum` — the ETCBC Targum Corpus, the Jewish Aramaic
+Pentateuch targums with word-level gold lemmas, glosses and morphology:
+Neofiti 1 in its Aramaic (base text and full text with variants),
+Pseudo-Jonathan, the Fragment Targums, 39 Cairo Genizah fragments and
+Onqelos (47 texts / 25,430 verses; nc) — and `etcbc-syriac` — the ETCBC
+Syriac Corpus, morphologically parsed Classical Syriac: Peshitta books,
+the Syrohexapla Psalms, the Psalms of Solomon, the Book of the Laws of
+the Countries, Ephrem's Prose Refutation against Mani and Sermon on
+Nineveh and Jonah, Pseudo-Methodius and three apocalypses (31 books /
+18,132 verses; nc) — are registered but not yet wired.
+
+**The Hexapla.** `hexapla` — the Göttingen Hexapla Database for 2 Samuel
+and the Psalms: the LXX, the MT, the Secunda, Aquila, Symmachus,
+Theodotion, Quinta, Sexta and Field's columns, every reading with its
+witnesses (19 column books / 16,302 verses; nc) — registered but not yet
+wired.
+
+**Romanian.** `typikon-bible` — the 1688 Bucharest Bible, the first complete
+Romanian Bible, in the Cyrillic alphabet of the print, each verse tied to
+its place in the Church Slavonic canon (79 books / 36,312 verses;
+attribution) — registered but not yet wired.
 
 **Celtic.** `gpc` — the open subset of Geiriadur Prifysgol Cymru
 (89,386 entries).
@@ -1123,7 +1161,9 @@ classical Tamil with the per-word gold wordsplit layer (7,830 /
 and `prakrit-texts` — Andrew Ollett's editions, the library's first
 individually-named Prakrit (16 / 16,151 and 22 / 27,124; CC BY-SA) ·
 `siddham` — the Gupta-era inscriptions with regnal years converted
-(427 / 6,334; CC BY-SA) · `shabados` — the Gurmukhī scriptural canon
+(427 / 6,334; CC BY-SA) · `paramara` — the Paramāra dynasty's
+inscriptions from the Siddham network's Zenodo community, VS/Śaka
+years converted and findspots named (114 / 2,373; CC BY) · `shabados` — the Gurmukhī scriptural canon
 at line grain (127 / 141,264; public domain).
 
 **The scan-indexed cones.** `ban-wikisource` — the Balinese lontars,
@@ -1774,3 +1814,41 @@ its Warsaw 1874 print with the Hebrew scholion, and two English
 renderings: +7 documents / 1,885 passages. The category's modern Hebrew
 retroversions of Greek works (Judith, Maccabees, Wisdom, Jubilees,
 Philo, Josephus) stay out by design.
+
+## 8ay. The P153 East-Asian slice — Tibetan collected works, bamboo-slip manuscripts, a Japanese biographical dictionary
+
+Expected counts from the fixture-time censuses (the gate's first syncs
+confirm them):
+
+**`bdrc-transcriptions`** — BDRC's page-aligned Tibetan etexts (CC0):
+the Asian Classics Input Project's *Sungbum* transcriptions of 119
+collected works (gsung 'bum, 79,572 woodblock-print pages), Palri
+Parkhang's Nyingma collected works and gter ma (11,133 manuscript
+pages) and the UC Berkeley dbu med transcriptions (8,866 pages) —
+about 1,160 etext volumes / 99,571 pages, each page cited by its BDRC
+scan. Text only: the page images stay with BDRC.
+
+**`baley-manuscripts`** — the library's first Warring States and Han
+manuscripts: Julien Baley's graph-level transcriptions of the Anhui
+University, Shanghai Museum, Tsinghua, Peking University, Guodian,
+Fuyang, Dingxian and Jeongbaekdong slips — the Odes, the Laozi, the
+Analects, the Jinteng and Jigong chapters, Cao Mo zhi zhen and the
+Anda poems: 19 witnesses / 4,626 lines, every line carrying its slip
+numbers and its alignment to the received text (CC BY 4.0).
+
+**`haga-jinmei`** — 芳賀矢一『日本人名辞典』(1914), the NIHU dataset of
+the Meiji biographical dictionary: 54,558 entries on Japanese persons
+from antiquity to the Meiji era, full entry text, readings and page
+references (CC0).
+
+**`comenius`** — the LINDAT TEI editions of Jan Amos Komenský's
+devotional and consolatory works, twelve texts from the 1978 critical
+edition with the prints' readings and margin notes carried as
+annotations (12 / 1,384; CC BY 4.0).
+
+**`cleasby-vigfusson`** and **`zoega`** — the Old Norse dictionary
+pair: Cleasby–Vigfusson's *An Icelandic-English Dictionary* (1874;
+35,207 entries) and Zoëga's *A Concise Dictionary of Old Icelandic*
+(1910; 29,951 entries), both from Sampo Silvennoinen's JSON editions
+(MIT; the texts public domain) — the Norse shelf's first dictionary
+layer.

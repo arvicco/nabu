@@ -1,0 +1,112 @@
+PennGlobal: PMR47
+Period: VS 1267 phālguṇa vadi 10
+Location: Pipliānagar
+Dynasty: Paramāra
+King: Arjunavarman
+Language: Sanskrit
+Script: Nagari
+Text: Prose and Metrical in 23 verses
+Metres: Vv. 1-19, 21-22 Anuṣṭubh(śloka); v.20 Vasantatilakā; v.23 Puṣpitāgrā
+Gist: Donation of an entire village
+Published reference: Trivedi (1978), no. 47.
+
+
+Text{1}
+
+oṃ{2} namaḥ puruṣārthacūḍāmaṇaye dharmmāya ||
+pratibiṃbatayā bhūmeḥ kṛtvā sākṣātpratigrahaṃ{3} |
+jagadāhlādayan diśyād dbijeṃdro{4} maṅgalāni vaḥ ||1||
+jīyātparaśurāmosau kṣatraiḥ kṣuṇyā{5} rāṇāhataiḥ |
+saṃdhyārkabiṃbameyorvī dāturyyasyaiti tāmratāṃ{6} ||2||
+yena maṃdodarībāṣpavāribhiḥ śamito mṛdhe |
+prāṇeśvarīviyogāgniḥ sa rāmaḥ śreyase'stu vaḥ{7} ||3||
+bhīmenāpi dhṛtau mūrddhani yatpādau sa yudhiṣṭhiraḥ |
+vaṃśādyeneṃdunā jīyātsvatulya iva nirmitaḥ ||4||
+paramārakulottaṃsaḥ kaṃsajinmahimā nṛpaḥ |
+śrībhojadeva ityāsīdāsīmakrāṃtabhūtalaḥ ||5||
+yadyaśaścaṃdrikodeti{8} digutsaṃgataraṃgite |
+dviṣannṛpayaśaḥpuṃjapuṃḍarīkairnimīlitaṃ{9} ||6||
+tatobhūdadayādityo nityotsahaikakautukī |
+asādhāraṇavīraśrīraśrīheturvirodhināṃ{10} ||7||
+mahākalahakalpāṃte yasyoddāmabhirāśugaiḥ |
+kati nonmūlitāstuṃgā bhūbhṛtaḥ kaṭakolvaṇāḥ{11} ||8||
+tasmādbhinnadviṣanmarmā naravarmā narādhipaḥ |
+dharmābhyuddharaṇe dhīmānabhūtsīmā mahībhujāṃ{12} ||9||
+pratima(pra ?)bhātaṃ viprebhyo dattairgrāmapadaiḥ svayaṃ{13} |
+anekapadatāṃ ninye dharmo yenaikapādapi ||10||
+tasyājani yaśovarmā putraḥ kṣatriyaśekharaḥ |
+tasmādajayavarmābhūjjayaśrīviśrutaḥ sutaḥ ||11||
+tatsūnurvīramūrdhanyo dhanyotpattirajāyata |
+gurjaroche(cche)danirbaṃdhī viṃdhyavarmā mahābhujaḥ ||12||
+dhārayoddhṛtayā sārddhaṃ dadhāti sma tridhāratāṃ{14} |
+sāṃyugīnasya yasyāsistrātuṃ lokatrayīmiva ||13||
+tasyāmuṣyāyaṇaḥ putraḥ sutrāmaśrīrathāśiṣat |
+bhūpaḥ subhaṭavarmeti dharme tiṣṭhanmahītalaṃ{15} ||14||
+yasya jvalati digjetuḥ pratāpastapanadyuteḥ |
+dāvāgnisumanā{16}'dyāpi garjangurjarapattane ||15||
+devabhūyaṃ gate tasminnaṃdano'rjunabhūpatiḥ |
+doṣnā(ṣṇā ) dhatte'dhunā dhābhī(?){17}balayaṃ balayaṃ yathā ||16||
+vā(bā)lalīlāhave yasya jayasiṃhe palāyite |
+dikyā(kpā)lahāsavyājena yaśo dikṣu vijṛmbhitaṃ{18} ||17||
+kāvyagāṃdharvasarvasvanidhinā yena sāṃprataṃ{19} |
+bhārāvataraṇaṃ devyāścakre pustakavīṇayoḥ ||18||
+tena trividhavīreṇa{20} tridhā pallavitaṃ yaśaḥ |
+dhavalatvaṃ dadhustrīṇi jagaṃti kathamanyathā ||19||
+
+sa eva naranāyakaḥ sarvābhyudayi śakapurapratijāgaraṇake piḍiviḍigrāme samastarājapuruṣān brāhmaṇottarān prati-
+nivāsipaṭṭakilajanapadādīṃśca bodhayatyastu vaḥ saṃviditaṃ yathā maṃḍapadurgāvasthitairasmābhiḥ saptaṣaṣṭyadhikadvādaśaśatasaṃvatsare
+phālguṇe(ne) 1237{21} śukladaśamyāmabhiṣekaparvaṇi snātvā bhagavataṃ bhavānīpatimabhyarcya saṃsārasyāsāratāṃ dṛṣṭvā
+tathāhi |
+
+vātābhravibhramamidaṃ vasudhādhipatyamāpātamātramadhuro viṣayopabhogaḥ | prāṇāstṛṇāgrajalabindusamā narāṇāṃ dharmaḥ sakhā paramaho
+paralokayāne ||20||
+
+iti sarvaṃ vimṛśyādṛṣṭaphalamaṃgīkṛtya muktāvasusthānavinirgatāya vājasaneyaśākhādhyāyine kāśyapagotrāya kāśyapa{22}vatsāranaidhruvatripravarāya
+śravamāvikadelavasāvikadelaṇamaprapautrāya{23} paṃḍitasomadevapautrāya paṃḍitajaitrasiṃhaputrāya purohitagoviṃdaśarmaṇe brāhmaṇāya samastopi grāmaścatuḥ-
+(ṣ)kaṃkaṭaviśuddhaḥ savṛkṣampa(mā)lākulaḥ sahiraṇyabhāgabhogaḥ sopaskaraḥ{24} sarvadāyasametaḥ savinikṣepo{25} mātāpitrorātmanaśca
+puṇyayaśo'bhivṛddhaye caṃdrārkārṇavakṣitisamakālaṃ yāvatparayā bhaktyā śāsanenodakapūrvvaṃ pradattaḥ tanmatvā tannivāsipaṭṭakilajanapadairya-
+thādīyamāna(naṃ) bhāgabhogahiraṇyādikaṃ devabrāhmaṇabhuktivarjamājñāśravaṇavidheyairbhūtvā sarvamamuṣmai dātavyaṃ{26} | sāmānyaṃ
+caitatpuṇyaphalaṃ budhvā(ddhvā)'smadvaṃśajairanyairapi bhāvibhoktṛbhirasmatpradattadharmādāyo'yamanumaṃtavyaḥ pālanīyaśca | uktaṃ ca |
+va(ba)hubhirvasudhā bhuktā rājabhiḥ | sama(ga)rādibhiḥ | yasya yasya yadā bhūmistasya tasya tadā phalaṃ(lam)
+||21|| svadattāṃ paradattāṃ vā yo hareta vasuṃdharāṃ(rām) | sa viṣṭhāyāṃ kri(kṛ)mirbhūtvā pitṛbhiḥ saha
+majjati ||22|| iti kamaladalāṃbubiṃdulolāṃ śriyamanuciṃtya manuṣyajīvitaṃ ca |
+sakalamidamudāhṛtaṃ ca budhvā(ddhvā) na hi puruṣaiḥ parakīrttayo vilopyāḥ ||23||
+saṃvat 1237{27} phālguṇa(na)śuddha 10 gurau racitamidaṃ mahāpaṃḍitaśrībilhaṇasaṃmatena rājaguruṇā madanena ||
+
+--------------------------
+{1} As transcribed by L. Wilkinson in J.A.S.B., Vol.V, pp.378-79. He did not give the text line by line.
+{2} Probably denoted by a symbol, as usual.
+{3} Read -haṃ. In biṃba that precedes and in all the other instances in this record, the consonant v for b
+	seems to have been used in the original.
+{4} This word here means dvija-rāja, i.e., the moon and the idea implied is as the moon takes (the sun's
+	rays) for giving away (reflecting them), so the Brāhmaṇas also.
+{5} Read kṣuṇṇā.
+{6} Read -tām. The word mēyā is used to mean "worth comparing (with the rising or setting Sun)".
+{7} Wilkinson, and following him, Hall, misunderstood this verse, which means that Rāma, who in the battle,
+	allayed the fire (pang) of separation from the beloved (Sītā) with the water in the form of Maṇḍodarī's
+	tears, may be for your welfare.
+{8} Read -dyote, as in the following two grants, which are exact copies of this.
+{9} Read -taṃ.
+{10} Read -nām. For the sense of the second quarter of this verse, see n.2 on p.162.
+{11} Here, the words bhūbhṛt and kaṭaka are used in double sense, the first of these to denote a king and a 
+	 mountain, and the second, an army and a ridge.
+{12} Read -jāṃ.
+{13} Read -yaṃ.
+{14} Read -tāṃ. This implies the two blades of his sword, with the capital town Dhārā. For the transla-
+	 tion of this verse, see Ind. Ant., Vol.XIX, p.346, n.
+{15} Read -laṃ.
+{16} This is evidently wrong. Read chajhanā, as in the other grants of the King.
+{17} Read -dhātrī as in No.49 (v.16), which is its copy.
+{18} Read -taṃ.
+{19} Read -taṃ.
+{20} The expression trividha vīra signifies dharma vīra, dāna vīra and yuddha vīra.
+{21} In view of the date being clearly mentioned here in words, this should be corrected to 1267.
+{22} Read kāśyapāvatsāra-.
+{23} As in the following grant, read avasathikadelhapra-.
+{24} Read soparikaraḥ.
+{25} Read sanidhinikṣepo-.
+{26} Read -vyaṃ.
+{27} See n. on the correction of the date on the preceding page.
+
+
+

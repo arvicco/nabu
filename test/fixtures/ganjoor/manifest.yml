@@ -1,0 +1,28 @@
+# Nabu fixture manifest (P5-4 "fixture sentinel"). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# adapter_test is null: both files are documented TRIMS (the 344 MB release
+# database cut to eleven poems; the 243-poet endpoint cut to seven records) —
+# the adapter test's counts would false-fail against fresh full copies.
+source: ganjoor
+adapter_test: null
+retrieved: "2026-11-02"
+files:
+  - path: ganjoor.s3db
+    refetchable: false
+    provenance: local-trim
+    reason: >-
+      schema-preserving 11-poem trim of the 360,688,640-byte ganjoor.s3db
+      inside the release zip (sha256 of the zip
+      cfd74499d8397b197d67433d1a92d7676a3fb09057e5eaf85dd42ec8c6878802) — the
+      full DDL incl. indexes copied, poem/verse rows filtered by poem id, the
+      cat chains and poet rows those poems reach, gver whole; a raw GET returns
+      the 120 MB zip, never this slice
+    upstream: https://github.com/ganjoor/desktop/releases/download/v3.1/ganjoor-db-14050703.zip
+    copied: "2026-11-02"
+    whole: false
+    trim: 140,497 poems -> 11 (8 accepted + 3 rejected-by-rule specimens)
+  - path: api/poets.json
+    url: https://api.ganjoor.net/api/ganjoor/poets
+    whole: false
+    trim: the endpoint's JSON array cut to the seven records with ids 2, 5, 7, 12, 22, 35, 242 (records verbatim)

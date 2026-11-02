@@ -1,0 +1,87 @@
+# Nabu fixture manifest (P5-4 "fixture sentinel"). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# The volume files are assembled from rows-API pages (no raw URL); the
+# dataset cards and subset_info.json are raw Hub files.
+source: bdrc-transcriptions
+adapter_test:
+retrieved: '2026-11-02'
+files:
+- path: acip-sungbum/README.md
+  url: https://huggingface.co/datasets/BDRC/ALL-BDRC-alignments/resolve/main/README.md
+  whole: true
+  trim: none
+- path: acip-sungbum/VE1ALS05274I.jsonl
+  whole: false
+  trim: the volume's first 3 pages in scan-file order, rows as the rows API serves
+    them minus the image cell
+  refetchable: false
+  reason: assembled from datasets-server /rows pages of BDRC/ALL-BDRC-alignments (rows
+    shuffled across volumes) — no single raw URL
+- path: acip-sungbum/subset_info.json
+  url: https://huggingface.co/datasets/BDRC/ALL-BDRC-alignments/resolve/main/subset_info.json
+  whole: true
+  trim: none
+- path: berkeley/README.md
+  url: https://huggingface.co/datasets/BDRC/berkeley-transcriptions/resolve/main/README.md
+  whole: true
+  trim: none
+- path: berkeley/VE2115_MA.jsonl
+  whole: false
+  trim: the volume's first 3 pages in scan-file order, rows as the rows API serves
+    them minus the image cell
+  refetchable: false
+  reason: assembled from datasets-server /rows pages of BDRC/berkeley-transcriptions
+    (rows shuffled across volumes) — no single raw URL
+- path: berkeley/VE4PD1489_MA.jsonl
+  whole: false
+  trim: the volume's first 3 pages in scan-file order, rows as the rows API serves
+    them minus the image cell
+  refetchable: false
+  reason: assembled from datasets-server /rows pages of BDRC/berkeley-transcriptions
+    (rows shuffled across volumes) — no single raw URL
+- path: berkeley/subset_info.json
+  url: https://huggingface.co/datasets/BDRC/berkeley-transcriptions/resolve/main/subset_info.json
+  whole: true
+  trim: none
+- path: fetch/README.md
+  url: https://huggingface.co/datasets/BDRC/berkeley-transcriptions/resolve/main/README.md
+  whole: true
+  trim: none
+- path: fetch/api-dataset.json
+  whole: false
+  trim: the dataset API record trimmed to its identity fields
+  refetchable: false
+  reason: a datasets-server / Hub API JSON response for BDRC/berkeley-transcriptions,
+    trimmed for the HfRowsFetch test
+- path: fetch/rows-offset-0.json
+  whole: false
+  trim: a real 3-row page; num_rows_total 8,866 → 6, signed image query strings trimmed
+  refetchable: false
+  reason: a datasets-server / Hub API JSON response for BDRC/berkeley-transcriptions,
+    trimmed for the HfRowsFetch test
+- path: fetch/rows-offset-3.json
+  whole: false
+  trim: a real 3-row page; num_rows_total 8,866 → 6, signed image query strings trimmed
+  refetchable: false
+  reason: a datasets-server / Hub API JSON response for BDRC/berkeley-transcriptions,
+    trimmed for the HfRowsFetch test
+- path: fetch/subset_info.json
+  url: https://huggingface.co/datasets/BDRC/berkeley-transcriptions/resolve/main/subset_info.json
+  whole: true
+  trim: none
+- path: palri-parkhang/README.md
+  url: https://huggingface.co/datasets/BDRC/palri-parkhang-transcriptions/resolve/main/README.md
+  whole: true
+  trim: none
+- path: palri-parkhang/VE1605_MA.jsonl
+  whole: false
+  trim: the volume's first 3 pages in scan-file order, rows as the rows API serves
+    them minus the image cell
+  refetchable: false
+  reason: assembled from datasets-server /rows pages of BDRC/palri-parkhang-transcriptions
+    (rows shuffled across volumes) — no single raw URL
+- path: palri-parkhang/subset_info.json
+  url: https://huggingface.co/datasets/BDRC/palri-parkhang-transcriptions/resolve/main/subset_info.json
+  whole: true
+  trim: none

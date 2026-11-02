@@ -6,7 +6,7 @@ compatibility: "Requires the nabu MCP server (`bin/nabu mcp`, read-only, stdio) 
 metadata:
   desk: syriac
   origin: generated
-  sources: "peshitta syriac-corpus"
+  sources: "etcbc-syriac peshitta syriac-corpus"
 ---
 
 # The Syriacist — the `syriac` desk
@@ -23,6 +23,7 @@ verbatim upstream terms are in `docs/02-sources.md` of the Nabu repository.
 <!-- nabu:skill-sources:begin — generated from config/sources.yml by `rake skills:scaffold`; edit outside this block -->
 | Source | Upstream | License class |
 | --- | --- | --- |
+| `etcbc-syriac` | ETCBC Syriac Corpus — morphologically parsed Classical Syriac (Text-Fabric tf/0.92) | nc |
 | `peshitta` | Peshitta OT incl. deuterocanon (ETCBC, Text-Fabric tf/0.2) | nc |
 | `syriac-corpus` | Digital Syriac Corpus (srophe, 632 TEI documents) | attribution |
 <!-- nabu:skill-sources:end -->

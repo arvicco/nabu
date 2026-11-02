@@ -1143,7 +1143,8 @@ class SourceRegistryTest < Minitest::Test
     assert_includes registry["oracc"].axes, "iranian", "ORACC's ario = Old Persian Achaemenid trilinguals"
     assert_includes registry["cdli"].axes, "iranian", "CDLI catalogs Old Persian (peo) Achaemenid trilinguals"
     assert_includes registry["oracc"].axes, "cuneiform", "still whole-source on the tablet desk"
-    assert_equal %w[cdli iedc oracc perseus-farsilit shkz skjaervo-khotanese], registry.public_axis_members("iranian"),
+    assert_equal %w[cdli ganjoor iedc oracc perseus-farsilit shkz skjaervo-khotanese wiktionary-fa],
+                 registry.public_axis_members("iranian"),
                  "the public iranian shelves, in registry order (the blocked Avesta is not advertised)"
     assert_equal %w[titus-avestan titus-bactrian titus-khotanese titus-manichaica titus-pahlavi
                     titus-sogdian], registry.blocked_axis_members("iranian"),
@@ -1156,8 +1157,8 @@ class SourceRegistryTest < Minitest::Test
     assert_equal %w[etym iranian buddhist], registry["titus-khotanese"].axes
     assert_equal %w[titus-khotanese titus-tocharian-a titus-tocharian-b], registry.blocked_axis_members("buddhist"),
                  "the grant-gated TITUS Buddhist corpora ride buddhist, excluded from the public listing"
-    assert_equal %w[cbeta derge-kangyur derge-tengyur e84000 gretil lotsawa-house mvp sarit suttacentral
-                    tipitaka-lk],
+    assert_equal %w[bdrc-transcriptions cbeta derge-kangyur derge-tengyur e84000 gretil lotsawa-house mvp sarit
+                    suttacentral tipitaka-lk],
                  registry.public_axis_members("buddhist").sort
   end
 

@@ -1,0 +1,113 @@
+SIDDHAM: IN060027
+PennGlobal: PMR14
+Period: Vikrama year 1091
+Location: City Palace, Dhār, now British Museum no. 1919,1224.1
+Dynasty: Paramāra
+King: Bhoja
+Language: Sanskrit verse Śārdūlavikrīḍita with prose colophon
+Script: Nāgarī
+Gist: Dedication of a Jain image of Ambikā 
+Published reference: Trivedi, no. 14
+
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="tei-epidoc.rng" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<?xml-model href="tei-epidoc.rng" schematypens="http://purl.oclc.org/dsdl/schematron"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:space="preserve" xml:lang="en">
+    <teiHeader>
+        <fileDesc>
+            <titleStmt>
+                <title xml:lang="eng-Latn">Inscription of Bhoja on a standing figure of Ambikā</title>
+            </titleStmt>
+            <publicationStmt>
+                <authority/>
+                <idno type="filename">IN060027</idno>
+            </publicationStmt>
+            <sourceDesc>
+                <msDesc>
+                    <msIdentifier>
+                        <repository>empty</repository>
+                    </msIdentifier>
+                </msDesc>
+            </sourceDesc>
+        </fileDesc>
+    </teiHeader>
+    <text>
+        <body>
+            <div type="edition" xml:lang="san-Latn">
+                <pb n="1verso"/>
+                <p>
+                    <lb/>Working transcription in EpiDoc.
+                    <lb/> 
+                    <lb/> DIPLOMATIC:
+                    <pb n="1verso"/>
+                    <lb n="1"/>auṃ | srīmadbhojanareṃdracaṃdranagarīvidyādharīḥrmmadhīḥ sosānāma s(u?)sa(?)saṇā khalu sukhaprasthāpanā-
+                    <lb n="2"/>yāpsarāḥ vāgdevī prathamavidhāya jananī pasā jinānātrayīm ambā nityaphalādikāṃ vararuciḥ maratti sabhā ni-
+                    <lb n="3"/>rmmame iti subhaṃ || sūtradhāra sahirasutamaṇathaleṇa ghaṭitaṃ || vi(jñ)ānika sivadevena likhitam iti |
+                    <lb n="4"/>saṃvat 100 91
+                    <lb/> 
+                    <lb/> CRITICAL (the metre is Śārdūlavikrīḍita):
+                    <lb/>
+                    <lb/> śrīmad-bhoja-nareṃdra-caṃdranagarī-<caesura/>vidyādharīḥ [*dha]rmmadhīḥ[*|]
+                    <lb/> sosā nāma s[*uśā?]sanā khalu sukha<caesura/>prasthāpanā yāpsarāḥ[*||]
+                    <lb/> vāgdevī[*ṃ] prathama[*ṃ] vidhāya jananī[*ṃ]<caesura/>pas[*c*]āj jinānā[*ṃ] trayīm[*|]
+                    <lb/> ambā[*ṃ] nitya-phalādikāṃ vararuci[*ṃ]<caesura/> m[*ū]rtti[*ṃ] ś[*u]bhā[*ṃ] nirmmame[*||]
+                    <lb/> 
+                    <lb/> Colophon (Prose):
+                    <lb/> iti śubhaṃ ||
+                    <lb/> sūtradhāra-sahira-sutamaṇathaleṇa ghaṭitaṃ ||
+                    <lb/> vi[*jñ]ānika śivadevena likhitam iti |[*|]
+                    <lb/> saṃvat 100 91 [*||]
+                </p>
+            </div>
+        </body>
+    </text>
+</TEI>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+

@@ -1,0 +1,14 @@
+{
+  "description": "PalriParkhang — Tibetan OCR page images + transcriptions (BDRC).",
+  "creation_date": "2026-08-18T12:20:55.042125+00:00",
+  "author": "Buddhist Digital Resource Center",
+  "nb_images": 11133,
+  "parquet_total_size": 1917959548,
+  "image_format": "image_bytes",
+  "extra_fields": [
+    "script_4"
+  ],
+  "data_files": {
+    "train": "data/train-*.parquet"
+  }
+}

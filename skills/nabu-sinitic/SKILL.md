@@ -6,7 +6,7 @@ compatibility: "Requires the nabu MCP server (`bin/nabu mcp`, read-only, stdio) 
 metadata:
   desk: sinitic
   origin: hand-tuned
-  sources: "babelstone-ids baxter-sagart cbdb cbeta chgis classical-modern hdic kanripo kr-gaiji lzh-collection menggu-ziyun obimd qieyun-restored shuowen suttacentral tls tshet-uinh ud unihan viet-wikisource wiktionary-recon zh-wikisource zhongyuan"
+  sources: "babelstone-ids baley-manuscripts baxter-sagart cbdb cbeta chgis classical-modern hdic kanripo kr-gaiji lzh-collection menggu-ziyun obimd qieyun-restored shuowen suttacentral tls tshet-uinh ud unihan viet-wikisource wiktionary-recon zh-wikisource zhongyuan"
 ---
 
 # The Sinologist — the `sinitic` desk
@@ -24,6 +24,7 @@ verbatim upstream terms are in `docs/02-sources.md` of the Nabu repository.
 | Source | Upstream | License class |
 | --- | --- | --- |
 | `babelstone-ids` | BabelStone IDS — Ideographic Description Sequences for CJK Ideographs (Andrew West) | open |
+| `baley-manuscripts` | Baley excavated-manuscript alignments (Warring States and Han bamboo slips) | attribution |
 | `baxter-sagart` | Baxter-Sagart Old Chinese reconstruction (2015-10-13 TSV, yawnoc dump) | attribution |
 | `cbdb` | CBDB — China Biographical Database (prosopography instrument) | nc |
 | `cbeta` | CBETA — Chinese Buddhist Electronic Text Archive | nc |

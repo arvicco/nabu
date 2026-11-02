@@ -691,3 +691,10 @@ sources:
       #                         Lithuanian · Prague · Lublin · Lvov · Vilna · Holland · Northern
       #                         Germany · "halb-deytshish"; 22 texts — 17 of them places)
       genre: genre            # Prose 44 · Verse 12 · Vernacular 4 · Letter 3 (kind_map folds)
+  ganjoor:                    # census 2026-11-02 over the classical cone: 126,165 poems, all
+    fields: #                   three fields on every document
+      poet: author            # 212 poets, Ganjoor's own short names (حافظ · سعدی · مولانا …)
+      work: work              # the first section under the poet (دیوان اشعار 63,790 · دیوان شمس
+      #                         5,270 · مختارنامه · شاهنامه · گلستان …)
+      form: form              # the poem's own section label, 999 values (غزلیات 57,140 ·
+      #                         رباعیات 16,083 · قصاید 5,996 …) — the kind_map fold reads it

@@ -1,0 +1,4315 @@
+{
+  "schema_version": "1.2",
+  "alignments": [
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 1,
+        "graph": 1
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 1,
+        "graph": 1
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 1,
+        "graph": 2
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 1,
+        "graph": 2
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 2,
+        "graph": 1
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 1,
+        "graph": 3
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 2,
+        "graph": 2
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 1,
+        "graph": 4
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 2,
+        "graph": 3
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 1,
+        "graph": 5
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 2,
+        "graph": 4
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 1,
+        "graph": 6
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 2,
+        "graph": 5
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 1,
+        "graph": 7
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 2,
+        "graph": 6
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 1,
+        "graph": 8
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 2,
+        "graph": 7
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 1,
+        "graph": 11
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 2,
+        "graph": 8
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 1,
+        "graph": 12
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 2,
+        "graph": 9
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 1,
+        "graph": 9
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 2,
+        "graph": 10
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 1,
+        "graph": 10
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 2,
+        "graph": 11
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 1,
+        "graph": 13
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 2,
+        "graph": 12
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 1,
+        "graph": 14
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 2,
+        "graph": 13
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 1,
+        "graph": 18
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 2,
+        "graph": 14
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 1,
+        "graph": 19
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 2,
+        "graph": 15
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 1,
+        "graph": 20
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 2,
+        "graph": 16
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 1,
+        "graph": 21
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 2,
+        "graph": 17
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 1,
+        "graph": 22
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 2,
+        "graph": 18
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 1,
+        "graph": 23
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 2,
+        "graph": 19
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 1,
+        "graph": 24
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 2,
+        "graph": 20
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 1,
+        "graph": 25
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 2,
+        "graph": 21
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 1,
+        "graph": 26
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 2,
+        "graph": 22
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 1,
+        "graph": 27
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 2,
+        "graph": 23
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 1,
+        "graph": 28
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 2,
+        "graph": 24
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 1,
+        "graph": 29
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 2,
+        "graph": 25
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 1,
+        "graph": 30
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 2,
+        "graph": 26
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 1,
+        "graph": 31
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 2,
+        "graph": 27
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 1,
+        "graph": 32
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 2,
+        "graph": 28
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 1,
+        "graph": 33
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 2,
+        "graph": 29
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 1,
+        "graph": 34
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 2,
+        "graph": 30
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 1,
+        "graph": 36
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 2,
+        "graph": 31
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 1,
+        "graph": 37
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 2,
+        "graph": 36
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 1,
+        "graph": 38
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 2,
+        "graph": 37
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 1,
+        "graph": 39
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 2,
+        "graph": 38
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 1,
+        "graph": 40
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 2,
+        "graph": 39
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 1,
+        "graph": 41
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 2,
+        "graph": 40
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 1,
+        "graph": 42
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 2,
+        "graph": 41
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 1,
+        "graph": 43
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 2,
+        "graph": 42
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 1,
+        "graph": 45
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 2,
+        "graph": 43
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 1,
+        "graph": 46
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 2,
+        "graph": 44
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 1,
+        "graph": 47
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 2,
+        "graph": 45
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 1,
+        "graph": 48
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 2,
+        "graph": 48
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 1,
+        "graph": 49
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 2,
+        "graph": 49
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 1,
+        "graph": 50
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 2,
+        "graph": 50
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 1,
+        "graph": 51
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 2,
+        "graph": 51
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 1,
+        "graph": 52
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 2,
+        "graph": 52
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 1,
+        "graph": 55
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 2,
+        "graph": 53
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 1,
+        "graph": 54
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 2,
+        "graph": 54
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 1,
+        "graph": 53
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 2,
+        "graph": 55
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 1,
+        "graph": 56
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 2,
+        "graph": 57
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 1,
+        "graph": 61
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 2,
+        "graph": 58
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 1,
+        "graph": 62
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 2,
+        "graph": 59
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 1,
+        "graph": 63
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 3,
+        "graph": 1
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 1,
+        "graph": 57
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 3,
+        "graph": 2
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 1,
+        "graph": 58
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 3,
+        "graph": 3
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 1,
+        "graph": 59
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 3,
+        "graph": 4
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 1,
+        "graph": 60
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 3,
+        "graph": 5
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 1,
+        "graph": 64
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 3,
+        "graph": 7
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 1,
+        "graph": 65
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 3,
+        "graph": 8
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 1,
+        "graph": 66
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 3,
+        "graph": 9
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 1,
+        "graph": 67
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 3,
+        "graph": 10
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 1,
+        "graph": 68
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 3,
+        "graph": 11
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 1,
+        "graph": 70
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 3,
+        "graph": 12
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 1,
+        "graph": 71
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 3,
+        "graph": 13
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 1,
+        "graph": 72
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 3,
+        "graph": 14
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 1,
+        "graph": 73
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 3,
+        "graph": 20
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 1,
+        "graph": 77
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 3,
+        "graph": 21
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 1,
+        "graph": 78
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 3,
+        "graph": 22
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 1,
+        "graph": 79
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 3,
+        "graph": 23
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 1,
+        "graph": 80
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 3,
+        "graph": 24
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 1,
+        "graph": 81
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 3,
+        "graph": 25
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 1,
+        "graph": 82
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 3,
+        "graph": 26
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 1,
+        "graph": 83
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 3,
+        "graph": 28
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 1,
+        "graph": 92
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 3,
+        "graph": 30
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 1,
+        "graph": 88
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 3,
+        "graph": 33
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 1,
+        "graph": 94
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 3,
+        "graph": 34
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 1,
+        "graph": 95
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 3,
+        "graph": 35
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 1,
+        "graph": 96
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 3,
+        "graph": 36
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 1,
+        "graph": 97
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 3,
+        "graph": 37
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 1,
+        "graph": 98
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 3,
+        "graph": 38
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 1,
+        "graph": 99
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 3,
+        "graph": 39
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 1,
+        "graph": 100
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 3,
+        "graph": 40
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 1,
+        "graph": 101
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 3,
+        "graph": 41
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 1,
+        "graph": 102
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 3,
+        "graph": 42
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 1,
+        "graph": 103
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 3,
+        "graph": 43
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 1,
+        "graph": 104
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 3,
+        "graph": 44
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 1,
+        "graph": 105
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 3,
+        "graph": 45
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 1,
+        "graph": 106
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 3,
+        "graph": 62
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 1,
+        "graph": 107
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 3,
+        "graph": 63
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 1,
+        "graph": 108
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 3,
+        "graph": 64
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 1,
+        "graph": 109
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 3,
+        "graph": 65
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 1,
+        "graph": 110
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 3,
+        "graph": 66
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 1,
+        "graph": 111
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 3,
+        "graph": 67
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 1,
+        "graph": 112
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 3,
+        "graph": 68
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 1,
+        "graph": 113
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 3,
+        "graph": 69
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 1,
+        "graph": 114
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 3,
+        "graph": 72
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 1,
+        "graph": 116
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 3,
+        "graph": 73
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 1,
+        "graph": 117
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 3,
+        "graph": 74
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 1,
+        "graph": 118
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 3,
+        "graph": 75
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 1,
+        "graph": 119
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 3,
+        "graph": 76
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 1,
+        "graph": 120
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 3,
+        "graph": 77
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 1,
+        "graph": 121
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 3,
+        "graph": 78
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 1,
+        "graph": 122
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 3,
+        "graph": 111
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 1,
+        "graph": 133
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 3,
+        "graph": 113
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 1,
+        "graph": 136
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 3,
+        "graph": 114
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 1,
+        "graph": 135
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 3,
+        "graph": 115
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 1,
+        "graph": 137
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 3,
+        "graph": 116
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 1,
+        "graph": 138
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 3,
+        "graph": 117
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 1,
+        "graph": 139
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 3,
+        "graph": 118
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 1,
+        "graph": 140
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 3,
+        "graph": 119
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 1,
+        "graph": 141
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 3,
+        "graph": 120
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 1,
+        "graph": 142
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 3,
+        "graph": 121
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 1,
+        "graph": 143
+      }
+    ],
+    [
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 1,
+        "graph": 123
+      },
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 3,
+        "graph": 125
+      }
+    ],
+    [
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 1,
+        "graph": 125
+      },
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 3,
+        "graph": 127
+      }
+    ],
+    [
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 1,
+        "graph": 126
+      },
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 3,
+        "graph": 128
+      },
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 3,
+        "graph": 129
+      }
+    ],
+    [
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 1,
+        "graph": 128
+      },
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 3,
+        "graph": 130
+      }
+    ],
+    [
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 1,
+        "graph": 129
+      },
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 3,
+        "graph": 131
+      }
+    ],
+    [
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 1,
+        "graph": 130
+      },
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 3,
+        "graph": 132
+      }
+    ],
+    [
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 1,
+        "graph": 131
+      },
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 3,
+        "graph": 133
+      }
+    ],
+    [
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 1,
+        "graph": 132
+      },
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 3,
+        "graph": 134
+      }
+    ],
+    [
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 1,
+        "graph": 145
+      },
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 5,
+        "graph": 1
+      }
+    ],
+    [
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 1,
+        "graph": 146
+      },
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 5,
+        "graph": 3
+      }
+    ],
+    [
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 1,
+        "graph": 147
+      },
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 5,
+        "graph": 4
+      }
+    ],
+    [
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 1,
+        "graph": 158
+      },
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 5,
+        "graph": 6
+      }
+    ],
+    [
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 1,
+        "graph": 159
+      },
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 5,
+        "graph": 7
+      }
+    ],
+    [
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 1,
+        "graph": 160
+      },
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 5,
+        "graph": 8
+      }
+    ],
+    [
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 1,
+        "graph": 161
+      },
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 5,
+        "graph": 9
+      }
+    ],
+    [
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 1,
+        "graph": 162
+      },
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 5,
+        "graph": 10
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 6,
+        "graph": 5
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 1,
+        "graph": 183
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 6,
+        "graph": 6
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 1,
+        "graph": 184
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 6,
+        "graph": 7
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 1,
+        "graph": 185
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 6,
+        "graph": 8
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 1,
+        "graph": 186
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 6,
+        "graph": 9
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 1,
+        "graph": 187
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 6,
+        "graph": 10
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 1,
+        "graph": 189
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 6,
+        "graph": 11
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 1,
+        "graph": 190
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 6,
+        "graph": 12
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 1,
+        "graph": 191
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 6,
+        "graph": 13
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 1,
+        "graph": 192
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 6,
+        "graph": 14
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 1,
+        "graph": 193
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 6,
+        "graph": 15
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 1,
+        "graph": 194
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 6,
+        "graph": 16
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 1,
+        "graph": 195
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 6,
+        "graph": 17
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 1,
+        "graph": 196
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 6,
+        "graph": 18
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 1,
+        "graph": 197
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 6,
+        "graph": 19
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 1,
+        "graph": 198
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 6,
+        "graph": 20
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 1,
+        "graph": 199
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 6,
+        "graph": 21
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 1,
+        "graph": 200
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 6,
+        "graph": 22
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 1,
+        "graph": 201
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 6,
+        "graph": 23
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 1,
+        "graph": 202
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 6,
+        "graph": 24
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 1,
+        "graph": 203
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 6,
+        "graph": 25
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 1,
+        "graph": 204
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 6,
+        "graph": 26
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 1,
+        "graph": 205
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 6,
+        "graph": 27
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 1,
+        "graph": 206
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 6,
+        "graph": 28
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 1,
+        "graph": 207
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 6,
+        "graph": 29
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 1,
+        "graph": 208
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 6,
+        "graph": 30
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 1,
+        "graph": 209
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 6,
+        "graph": 31
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 1,
+        "graph": 210
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 6,
+        "graph": 32
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 1,
+        "graph": 211
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 6,
+        "graph": 36
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 1,
+        "graph": 216
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 6,
+        "graph": 37
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 1,
+        "graph": 217
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 6,
+        "graph": 38
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 1,
+        "graph": 218
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 6,
+        "graph": 40
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 1,
+        "graph": 221
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 6,
+        "graph": 41
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 1,
+        "graph": 222
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 6,
+        "graph": 42
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 2,
+        "graph": 1
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 6,
+        "graph": 43
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 2,
+        "graph": 2
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 6,
+        "graph": 44
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 2,
+        "graph": 3
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 6,
+        "graph": 45
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 2,
+        "graph": 4
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 6,
+        "graph": 46
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 2,
+        "graph": 5
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 6,
+        "graph": 47
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 2,
+        "graph": 6
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 6,
+        "graph": 49
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 2,
+        "graph": 7
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 6,
+        "graph": 50
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 2,
+        "graph": 8
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 6,
+        "graph": 51
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 2,
+        "graph": 10
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 6,
+        "graph": 52
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 2,
+        "graph": 11
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 6,
+        "graph": 53
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 2,
+        "graph": 12
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 6,
+        "graph": 54
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 2,
+        "graph": 13
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 6,
+        "graph": 55
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 2,
+        "graph": 15
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 6,
+        "graph": 56
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 2,
+        "graph": 16
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 6,
+        "graph": 58
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 2,
+        "graph": 19
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 6,
+        "graph": 60
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 2,
+        "graph": 17
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 6,
+        "graph": 61
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 2,
+        "graph": 18
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 6,
+        "graph": 64
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 2,
+        "graph": 20
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 6,
+        "graph": 65
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 2,
+        "graph": 21
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 6,
+        "graph": 66
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 2,
+        "graph": 22
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 6,
+        "graph": 67
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 2,
+        "graph": 23
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 6,
+        "graph": 68
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 2,
+        "graph": 24
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 6,
+        "graph": 69
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 2,
+        "graph": 25
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 6,
+        "graph": 71
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 2,
+        "graph": 26
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 6,
+        "graph": 72
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 2,
+        "graph": 27
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 7,
+        "graph": 1
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 2,
+        "graph": 31
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 7,
+        "graph": 2
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 2,
+        "graph": 32
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 7,
+        "graph": 3
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 2,
+        "graph": 33
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 7,
+        "graph": 4
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 2,
+        "graph": 34
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 7,
+        "graph": 5
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 2,
+        "graph": 35
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 7,
+        "graph": 6
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 2,
+        "graph": 36
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 7,
+        "graph": 8
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 2,
+        "graph": 40
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 7,
+        "graph": 10
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 2,
+        "graph": 39
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 7,
+        "graph": 11
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 2,
+        "graph": 38
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 7,
+        "graph": 12
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 2,
+        "graph": 41
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 7,
+        "graph": 13
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 2,
+        "graph": 42
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 7,
+        "graph": 14
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 2,
+        "graph": 43
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 7,
+        "graph": 15
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 2,
+        "graph": 44
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 7,
+        "graph": 16
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 2,
+        "graph": 45
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 7,
+        "graph": 17
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 2,
+        "graph": 46
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 7,
+        "graph": 18
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 2,
+        "graph": 47
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 7,
+        "graph": 19
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 2,
+        "graph": 48
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 7,
+        "graph": 20
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 2,
+        "graph": 49
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 7,
+        "graph": 26
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 2,
+        "graph": 55
+      },
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 7,
+        "graph": 25
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 7,
+        "graph": 28
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 2,
+        "graph": 54
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 7,
+        "graph": 29
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 2,
+        "graph": 58
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 7,
+        "graph": 30
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 2,
+        "graph": 59
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 7,
+        "graph": 31
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 2,
+        "graph": 60
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 7,
+        "graph": 32
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 2,
+        "graph": 61
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 7,
+        "graph": 33
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 2,
+        "graph": 62
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 7,
+        "graph": 34
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 2,
+        "graph": 63
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 7,
+        "graph": 36
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 2,
+        "graph": 65
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 7,
+        "graph": 37
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 2,
+        "graph": 66
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 7,
+        "graph": 38
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 2,
+        "graph": 67
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 7,
+        "graph": 39
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 2,
+        "graph": 69
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 7,
+        "graph": 40
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 2,
+        "graph": 70
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 7,
+        "graph": 41
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 2,
+        "graph": 71
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 7,
+        "graph": 42
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 2,
+        "graph": 72
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 7,
+        "graph": 43
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 2,
+        "graph": 73
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 7,
+        "graph": 44
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 2,
+        "graph": 75
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 7,
+        "graph": 45
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 2,
+        "graph": 76
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 7,
+        "graph": 46
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 2,
+        "graph": 77
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 7,
+        "graph": 47
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 2,
+        "graph": 78
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 7,
+        "graph": 48
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 2,
+        "graph": 79
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 7,
+        "graph": 52
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 2,
+        "graph": 80
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 7,
+        "graph": 54
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 2,
+        "graph": 81
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 7,
+        "graph": 59
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 2,
+        "graph": 82
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 7,
+        "graph": 60
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 2,
+        "graph": 83
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 7,
+        "graph": 62
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 2,
+        "graph": 85
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 7,
+        "graph": 63
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 2,
+        "graph": 86
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 7,
+        "graph": 64
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 2,
+        "graph": 87
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 7,
+        "graph": 65
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 2,
+        "graph": 88
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 7,
+        "graph": 66
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 2,
+        "graph": 89
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 7,
+        "graph": 67
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 2,
+        "graph": 90
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 7,
+        "graph": 68
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 2,
+        "graph": 91
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 7,
+        "graph": 69
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 2,
+        "graph": 92
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 7,
+        "graph": 70
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 2,
+        "graph": 93
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 8,
+        "graph": 1
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 2,
+        "graph": 94
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 8,
+        "graph": 2
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 2,
+        "graph": 95
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 8,
+        "graph": 3
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 2,
+        "graph": 96
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 8,
+        "graph": 4
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 2,
+        "graph": 97
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 8,
+        "graph": 5
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 2,
+        "graph": 98
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 8,
+        "graph": 6
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 2,
+        "graph": 99
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 8,
+        "graph": 11
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 2,
+        "graph": 100
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 8,
+        "graph": 12
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 2,
+        "graph": 101
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 8,
+        "graph": 13
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 2,
+        "graph": 102
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 8,
+        "graph": 14
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 2,
+        "graph": 103
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 8,
+        "graph": 15
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 2,
+        "graph": 104
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 8,
+        "graph": 16
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 2,
+        "graph": 105
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 8,
+        "graph": 17
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 2,
+        "graph": 106
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 8,
+        "graph": 18
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 2,
+        "graph": 107
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 8,
+        "graph": 19
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 2,
+        "graph": 108
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 8,
+        "graph": 20
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 2,
+        "graph": 109
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 8,
+        "graph": 21
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 2,
+        "graph": 111
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 8,
+        "graph": 22
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 2,
+        "graph": 112
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 8,
+        "graph": 23
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 2,
+        "graph": 113
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 8,
+        "graph": 24
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 2,
+        "graph": 114
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 8,
+        "graph": 25
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 2,
+        "graph": 116
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 8,
+        "graph": 26
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 2,
+        "graph": 117
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 8,
+        "graph": 27
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 2,
+        "graph": 118
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 8,
+        "graph": 28
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 2,
+        "graph": 119
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 8,
+        "graph": 29
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 2,
+        "graph": 120
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 8,
+        "graph": 31
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 2,
+        "graph": 121
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 8,
+        "graph": 33
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 2,
+        "graph": 122
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 8,
+        "graph": 34
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 2,
+        "graph": 123
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 8,
+        "graph": 35
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 2,
+        "graph": 124
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 8,
+        "graph": 36
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 2,
+        "graph": 125
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 8,
+        "graph": 37
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 2,
+        "graph": 126
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 8,
+        "graph": 38
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 2,
+        "graph": 127
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 8,
+        "graph": 39
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 2,
+        "graph": 128
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 8,
+        "graph": 40
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 2,
+        "graph": 129
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 8,
+        "graph": 41
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 2,
+        "graph": 131
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 8,
+        "graph": 42
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 2,
+        "graph": 132
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 8,
+        "graph": 43
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 2,
+        "graph": 133
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 8,
+        "graph": 44
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 2,
+        "graph": 134
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 8,
+        "graph": 45
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 2,
+        "graph": 135
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 8,
+        "graph": 46
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 2,
+        "graph": 136
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 8,
+        "graph": 47
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 2,
+        "graph": 137
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 8,
+        "graph": 48
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 3,
+        "graph": 1
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 8,
+        "graph": 49
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 3,
+        "graph": 3
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 8,
+        "graph": 50
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 3,
+        "graph": 7
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 8,
+        "graph": 51
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 3,
+        "graph": 10
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 8,
+        "graph": 54
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 3,
+        "graph": 11
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 8,
+        "graph": 55
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 3,
+        "graph": 12
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 8,
+        "graph": 56
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 3,
+        "graph": 13
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 8,
+        "graph": 59
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 3,
+        "graph": 15
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 8,
+        "graph": 60
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 3,
+        "graph": 22
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 8,
+        "graph": 61
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 3,
+        "graph": 23
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 8,
+        "graph": 62
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 3,
+        "graph": 24
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 8,
+        "graph": 63
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 3,
+        "graph": 25
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 8,
+        "graph": 64
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 3,
+        "graph": 26
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 8,
+        "graph": 65
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 3,
+        "graph": 16
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 8,
+        "graph": 66
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 3,
+        "graph": 17
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 8,
+        "graph": 67
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 3,
+        "graph": 18
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 8,
+        "graph": 68
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 3,
+        "graph": 19
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 8,
+        "graph": 69
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 3,
+        "graph": 21
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 8,
+        "graph": 70
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 3,
+        "graph": 27
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 8,
+        "graph": 71
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 3,
+        "graph": 28
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 8,
+        "graph": 73
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 3,
+        "graph": 29
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 8,
+        "graph": 74
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 3,
+        "graph": 30
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 8,
+        "graph": 75
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 3,
+        "graph": 31
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 8,
+        "graph": 76
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 3,
+        "graph": 36
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 8,
+        "graph": 77
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 3,
+        "graph": 37
+      }
+    ],
+    [
+      {
+        "witness": "shangshu",
+        "unit": 1,
+        "paragraph": 8,
+        "graph": 78
+      },
+      {
+        "witness": "tsinghua",
+        "unit": 1,
+        "paragraph": 3,
+        "graph": 38
+      }
+    ]
+  ]
+}

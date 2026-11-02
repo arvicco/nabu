@@ -6,7 +6,7 @@ compatibility: "Requires the nabu MCP server (`bin/nabu mcp`, read-only, stdio) 
 metadata:
   desk: germanic
   origin: generated
-  sources: "aspr bosworth-toller cme corpus-gysseling corpus-oudfries corpus-oudnederlands dta eebo-tcp fornsvenska helipad iswoc menota menotec perseus-anglit ppchy proiel ref rem ren rundata ud"
+  sources: "aspr bosworth-toller cleasby-vigfusson cme corpus-gysseling corpus-oudfries corpus-oudnederlands dta eebo-tcp fornsvenska helipad iswoc menota menotec perseus-anglit ppchy proiel ref rem ren rundata runesdb ud zoega"
 ---
 
 # The Germanicist — the `germanic` desk
@@ -25,6 +25,7 @@ verbatim upstream terms are in `docs/02-sources.md` of the Nabu repository.
 | --- | --- | --- |
 | `aspr` | ASPR — The Anglo-Saxon Poetic Records (Krapp & Dobbie; OTA 3009) | attribution |
 | `bosworth-toller` | Bosworth-Toller — An Anglo-Saxon Dictionary (LINDAT dump) | attribution |
+| `cleasby-vigfusson` | Cleasby-Vigfusson, An Icelandic-English Dictionary (1874) — stscoundrel JSON edition | attribution |
 | `cme` | Corpus of Middle English Prose and Verse (Middle English Compendium, Univ. of Michigan) | open |
 | `corpus-gysseling` | Corpus Gysseling — 13th-c. Early Middle Dutch, lemma+POS (INT/IvdNT) | research_private |
 | `corpus-oudfries` | Corpus Oudfries — Old Frisian text witnesses c. 1200–1550, lemma+POS (INT/IvdNT) | research_private |
@@ -43,7 +44,9 @@ verbatim upstream terms are in `docs/02-sources.md` of the Nabu repository.
 | `rem` | ReM — Referenzkorpus Mittelhochdeutsch (1050–1350), v2.1 | attribution |
 | `ren` | ReN — Referenzkorpus Mittelniederdeutsch/Niederrheinisch (1200–1650), v1.1 | attribution |
 | `rundata` | Rundata — Scandinavian Runic-text Database (SRDB, via rundata.info) | odbl |
+| `runesdb` | RuneS-DB — runic inscriptions of the Göttingen Academy project RuneS (TEI) | attribution |
 | `ud` | Universal Dependencies — ancient treebanks | nc |
+| `zoega` | Zoëga, A Concise Dictionary of Old Icelandic (1910) — stscoundrel JSON edition | attribution |
 <!-- nabu:skill-sources:end -->
 
 ## What the shelves hold
