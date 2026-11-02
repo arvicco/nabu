@@ -73,3 +73,65 @@ works:
         breaks:
           - { from_page: 241, leaf_offset: 12 }
       "5": { item: null, leaf_offset: null }
+
+  # Holder, Alt-celtischer Sprachschatz (1896–1913) — a COLUMN-numbered work
+  # (unit: column: two printed columns per page, column C on leaf
+  # ceil(C/2) + leaf_offset; breaks key on from_column). The lexlep-words
+  # shelf mines its body-prose "AcS <vol>: <col>" citations, labeled
+  # "AcS II: 1779" (volume as an upper-case roman numeral, the first column
+  # of a range).
+  acs:
+    title: Holder, Alt-celtischer Sprachschatz
+    pattern: '\AAcS (?<volume>I{1,3}): (?<column>\d+)\z'
+    unit: column
+    volumes:
+      # Bd. I (A–H, 1896, cols. 1–2064) — the Bayerische Staatsbibliothek
+      # copy bsb10931773 (1,058 images). Calibrated 2026-11-02 from the
+      # BSB IIIF manifest's own image labels ("1 (0019)" … "2063 (1052)":
+      # 18 front leaves, two unnumbered leaves at images 209–210, six back
+      # leaves; no column missing) and read off the images at leaves
+      # 100/208/211/1052 (cols. 163/379/381/2063). item stays null until
+      # the scan is on the shelf (the leaves are the BSB image numbers, the
+      # whole-volume PDF's page numbers).
+      "I":
+        item: null
+        leaf_offset: 18
+        breaks:
+          - { from_column: 381, leaf_offset: 20 }
+      # Bd. II (I–T, 1904, cols. 1–2026) — the Google scan of the Princeton
+      # copy on the dictionaries shelf. Calibrated 2026-11-02 from the
+      # scan's OCR column heads read leaf by leaf (913 of 1,013 odd columns
+      # confirmed by the head on the mapped leaf; the rest OCR-unreadable
+      # or misread heads, a sample inspected by hand). The scan carries
+      # rescanned duplicate runs, so the offset steps (and twice steps
+      # back): each break is the first column a later run supplies. The
+      # columns the first pass lost (1155–1158, 2015–2018) sit in the
+      # rescans at leaves 669–670 and 1158–1159 — the volume is complete.
+      "II":
+        item: urn:nabu:local-library:dictionaries:bub-gb-62g9aaaayaaj
+        leaf_offset: 7
+        breaks:
+          - { from_column: 27, leaf_offset: 9 }
+          - { from_column: 147, leaf_offset: 27 }
+          - { from_column: 455, leaf_offset: 29 }
+          - { from_column: 463, leaf_offset: 31 }
+          - { from_column: 587, leaf_offset: 33 }
+          - { from_column: 613, leaf_offset: 35 }
+          - { from_column: 615, leaf_offset: 37 }
+          - { from_column: 723, leaf_offset: 51 }
+          - { from_column: 739, leaf_offset: 53 }
+          - { from_column: 743, leaf_offset: 65 }
+          - { from_column: 835, leaf_offset: 79 }
+          - { from_column: 955, leaf_offset: 81 }
+          - { from_column: 1155, leaf_offset: 91 }
+          - { from_column: 1159, leaf_offset: 79 }
+          - { from_column: 1179, leaf_offset: 91 }
+          - { from_column: 1187, leaf_offset: 93 }
+          - { from_column: 1619, leaf_offset: 95 }
+          - { from_column: 1667, leaf_offset: 117 }
+          - { from_column: 1855, leaf_offset: 127 }
+          - { from_column: 1979, leaf_offset: 141 }
+          - { from_column: 2015, leaf_offset: 150 }
+          - { from_column: 2019, leaf_offset: 139 }
+      # Bd. III (Nachträge, 1907–1913) — no scan held.
+      "III": { item: null, leaf_offset: null }
