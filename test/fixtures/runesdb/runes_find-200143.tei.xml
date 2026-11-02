@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xmlns:runes="https://www.runesdb.de/tei-extension">
+    <teiHeader>
+        <fileDesc>
+            <titleStmt>
+                <title>Inschrift: AM 623 4to, 12r (AM 623 4to, 12r)</title>
+                <respStmt>
+                    <resp>Digitale Erfassung</resp>
+                    <orgName>RuneSDB.de</orgName>
+                </respStmt>
+            </titleStmt>
+            <publicationStmt>
+                <p>Digital Edition</p>
+                <availability status="restricted">
+                    <p xml:lang="de">CC BY-SA 4.0 - Namensnennung-Share Alike 4.0 International</p>
+                    <p xml:lang="en">CC BY-SA 4.0 - Attribution-ShareAlike 4.0 International</p>
+                    <ref target="https://creativecommons.org/licenses/by-sa/4.0/">https://creativecommons.org/licenses/by-sa/4.0/</ref>
+                </availability>
+                <publisher>
+                    <orgName xml:lang="de">Niedersächsische Akademie der Wissenschaften zu Göttingen, Projekt Runische Schriftlichkeit in den germanischen Sprachen (RuneS)</orgName>
+                    <orgName xml:lang="en">Göttingen Academy of Sciences and Humanities in Lower Saxony, Project Runic writing in the Germanic languages (RuneS)</orgName>
+                </publisher>
+            </publicationStmt>
+            <revisionDesc>
+                <change when="2026-08-01T00:00:00">
+                    <desc xml:lang="de">Metadaten erfasst und digital dokumentiert</desc>
+                    <desc xml:lang="en">Metadata recorded and digitally documented</desc>
+                </change>
+            </revisionDesc>
+            <sourceDesc>
+                <msDesc>
+                    <msIdentifier>
+                        <idno>200143</idno>
+                        <altIdentifier>
+                            <idno type="hauptsigle">AM 623 4to, 12r</idno>
+                        </altIdentifier>
+                    </msIdentifier>
+                    <msContents>
+                        <summary>Runische Inschrift</summary>
+                    </msContents>
+                    <acquisition>
+                        <name xml:lang="de">Runische Schriftlichkeit in den germanischen Sprachen (RuneS)</name>
+                        <name xml:lang="en">Runic writing in the Germanic languages (RuneS)</name>
+                        <p xml:lang="de">Niedersächsische Akademie der Wissenschaften zu Göttingen</p>
+                        <p xml:lang="en">Göttingen Academy of Sciences and Humanities in Lower Saxony</p>
+                        <ref target="http://d-nb.info/gnd/16268620-1">GND Identifier</ref>
+                    </acquisition>
+                </msDesc>
+                <relatedItem type="otherForm" subtype="archaeological">
+                    <ref target="https://www.runesdb.de/lido/200143" mimeType="application/xml">
+                        LIDO-XML: Archäologische Merkmale
+                    </ref>
+                </relatedItem>
+            </sourceDesc>
+        </fileDesc>
+    </teiHeader>
+    <text>
+        <body>
+                <div type="side" n="A" xml:id="side-A">
+                            <ab type="sequence"
+                                n="1"
+                                xml:id="seq-A-1"
+                                runes:samstavsRunor="false"
+                                runes:autopsyDate=""
+                                runes:readingDir="ltr"
+                                runes:impaired="false"
+                                runes:borderLines="false"
+                                runes:layout-de="gerade "
+                                runes:layout-en="straight"
+                                runes:layoutSpecial-de=""
+                                runes:layoutSpecial-en=""
+                                runes:relationObject-de="-"
+                                runes:relationObject-en="-"
+                                runes:technique-de=""
+                                runes:technique-en=""
+                                runes:variantWritingDir-de="keine Variation "
+                                runes:variantWritingDir-en="no variation"
+                                runes:variantWidth-de="keine Variation "
+                                runes:variantWidth-en="no variation"
+                                runes:variantHeight-de="keine Variation "
+                                runes:variantHeight-en="no variation"
+                                runes:variantForm-de="keine Variation "
+                                runes:variantForm-en="no variation"
+                                runes:variantTechnique-de="keine Variation "
+                                runes:variantTechnique-en="no variation"
+                                facs="https://www.runesdb.de/image-service/15123/full/max/0/default.jpg">
+                                    <g xml:id="g-11011"
+                                       n="1"
+                                       runes:glyphId="97"
+                                       runes:graphTypeUncertain="false"
+                                       runes:formsetyF-de="-" runes:formsetyF-en="-"
+                                       runes:diacriticon="false"
+                                       runes:readingDir="ltr"
+                                       runes:inverted="false"
+                                       runes:majuscule="false"
+                                       runes:branchVariance-de="-"
+                                       runes:branchVariance-en="-"
+                                       runes:signTilted-de="keine " runes:signTilted-en="none"
+                                       runes:signWidth-de="normal " runes:signWidth-en="normal "
+                                       runes:impairedObjForm="false"
+                                       runes:impairedObjFrag="false"
+                                       runes:impairedSurface="false"
+                                       runes:impairedAdjacentSign="false"
+                                       runes:impairedAbrasion="false"
+                                       runes:impairedPrecarving="false"
+                                       runes:impairedCorrection="false"
+                                       runes:compositionRecognizable="false"
+                                       runes:separationSign="false"
+                                       runes:logographicRune="false"
+                                       resp="#11011"
+                                       facs="/image-service/15123/646,1583,55,81/max/0/default.jpg"
+                                       runes:boundingBoxX="646" runes:boundingBoxY="1583" runes:boundingBoxWidth="55" runes:boundingBoxHeight="81">
+                                            <seg type="transliteration" subtype="main" xml:lang="de">m</seg>
+                                            <seg type="transliteration" subtype="main" xml:lang="en">m</seg>
+                                            <seg type="runeName" subtype="primary" xml:lang="de">
+                                                mannaz, man, mað(u)r
+                                            </seg>
+                                            <seg type="runeName" subtype="primary" xml:lang="en">
+                                                mannaz, man, mað(u)r
+                                            </seg>
+                                                <seg type="runeName" subtype="secondary" xml:lang="de">man, mað(u)r</seg>
+                                                <seg type="runeName" subtype="secondary" xml:lang="en">man, mað(u)r</seg>
+                                            <seg type="elements" n="3">
+                                                    <seg type="element"
+                                                         xml:id="elem-38205"
+                                                         n="1"
+                                                         runes:elementType="Stab (Stave)"
+                                                         runes:form-de="gerade"
+                                                         runes:form-en="straight"
+                                                         runes:productionOrder="1"
+                                                         runes:impaired="false"
+                                                         runes:extentFrom="top"
+                                                         runes:extentTo="4"
+                                                         runes:p1px="676,868" runes:p1py="1583,3" runes:p1nx="75,7701" runes:p1ny="11,2995"
+                                                         runes:p2px="681,602" runes:p2py="1663,77" runes:p2nx="75,3049" runes:p2ny="92,2779"
+                                                         >
+                                                            <seg type="course" xml:lang="de">senkrecht</seg>
+                                                            <seg type="course" xml:lang="en">vertical</seg>
+                                                            <seg type="techniqueDesign" xml:lang="de">Auftakt/Coda </seg>
+                                                            <seg type="techniqueDesign" xml:lang="en">opening/coda</seg>
+                                                    </seg>
+                                                    <seg type="element"
+                                                         xml:id="elem-38206"
+                                                         n="1"
+                                                         runes:elementType="Haken (Hook)"
+                                                         runes:form-de="gerundet"
+                                                         runes:form-en="rounded"
+                                                         runes:productionOrder="2"
+                                                         runes:impaired="false"
+                                                         runes:extentFrom="top"
+                                                         runes:extentTo="middle"
+                                                         runes:p1px="700,535" runes:p1py="1583,3" runes:p1nx="99,4339" runes:p1ny="12,8324"
+                                                         runes:p2px="679,235" runes:p2py="1628,27" runes:p2nx="75,2317" runes:p2ny="56,5341"
+                                                         runes:p3px="646,102" runes:p3py="1588,04" runes:p3nx="44,7012" runes:p3ny="14,0522">
+                                                            <seg type="formalExpression" xml:lang="de">normal </seg>
+                                                            <seg type="formalExpression" xml:lang="en">normal </seg>
+                                                            <seg type="techniqueDesign" xml:lang="de">durchgezogen </seg>
+                                                            <seg type="techniqueDesign" xml:lang="en">through line</seg>
+                                                    </seg>
+                                                    <seg type="element"
+                                                         xml:id="elem-38207"
+                                                         n="1"
+                                                         runes:elementType="treffpunkt"
+                                                         runes:intersectionPlace-de="mittig" runes:intersectionPlace-en="middle"
+                                                         runes:intersectionPlaceTip="false"
+                                                         runes:intersectionPlaceFrame="false"
+                                                         runes:p1px="679,235" runes:p1py="1618,8" runes:p1nx="75,8432" runes:p1ny="47,0433"
+                                                         >
+                                                            <seg type="intersectionType" xml:lang="de">überschneidend </seg>
+                                                            <seg type="intersectionType" xml:lang="en">crossing</seg>
+                                                    </seg>
+                                            </seg>
+                                    </g>
+                            </ab>
+                </div>
+        </body>
+    </text>
+</TEI>

@@ -1,0 +1,51 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# ZIP-EXTRACT PROVENANCE. Zenodo serves the archive as ONE zip
+# (runes_tei.zip, record 21788307); no raw per-file URLs exist, so every
+# entry is refetchable: false. Re-acquiring = re-download the zip and
+# re-apply the README trims.
+source: runesdb
+adapter_test:
+retrieved: 2026-11-02
+files:
+  - path: runes_find-200143.tei.xml
+    refetchable: false
+    provenance: zip-extract
+    reason: extracted from runes_tei.zip (Zenodo 21788307) — no raw per-file URL exists
+    upstream: https://zenodo.org/records/21788307/files/runes_tei.zip
+    copied: 2026-11-02
+    whole: true
+    trim: none
+  - path: runes_find-629.tei.xml
+    refetchable: false
+    provenance: zip-extract
+    reason: extracted from runes_tei.zip (Zenodo 21788307) — no raw per-file URL exists
+    upstream: https://zenodo.org/records/21788307/files/runes_tei.zip
+    copied: 2026-11-02
+    whole: true
+    trim: none
+  - path: runes_find-720.tei.xml
+    refetchable: false
+    provenance: zip-extract
+    reason: extracted from runes_tei.zip (Zenodo 21788307) — no raw per-file URL exists
+    upstream: https://zenodo.org/records/21788307/files/runes_tei.zip
+    copied: 2026-11-02
+    whole: true
+    trim: none
+  - path: runes_find-9982.tei.xml
+    refetchable: false
+    provenance: zip-extract
+    reason: extracted from runes_tei.zip (Zenodo 21788307) — no raw per-file URL exists
+    upstream: https://zenodo.org/records/21788307/files/runes_tei.zip
+    copied: 2026-11-02
+    whole: false
+    trim: first 481 lines byte-intact (header + three side divs) + synthetic </body></text></TEI> tail; 604,770 B -> 37,706 B
+  - path: runes_find-166.tei.xml
+    refetchable: false
+    provenance: zip-extract
+    reason: extracted from runes_tei.zip (Zenodo 21788307) — no raw per-file URL exists; the rejected-grain specimen
+    upstream: https://zenodo.org/records/21788307/files/runes_tei.zip
+    copied: 2026-11-02
+    whole: true
+    trim: none
