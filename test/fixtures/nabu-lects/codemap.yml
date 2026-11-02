@@ -23,6 +23,8 @@ map:
   ita:     it
   eng:     en
   fra:     fr
+  ron:     ro
+  rum:     ro
   fas:     fa
   oci:     oc
   gle:     ga
@@ -69,6 +71,25 @@ map:
   ger:     de   # the 639-2/B bibliographic spelling (deu is the /T twin)
   nor:     "no" # the macrolanguage alias, claiming nothing historical (quoted: YAML 1.1 reads bare no as false)
   dan:     da
+  # The Pacific wing (2026-11-02): the 639-2/3 spellings of the newly
+  # anchored two-letter codes. haw, rar, rap, rtm, kos and pon carry no
+  # 639-1 code — they are their own anchors, identity.
+  mri:     mi
+  smo:     sm
+  ton:     to
+  tah:     ty
+  fij:     fj
+  cha:     ch
+  # The Vietnamese and Zhuang anchors (2026-11-02). zha is the Zhuang
+  # macrolanguage itself; its sixteen member codes stay identity (none is
+  # anchored — see za's note).
+  vie:     vi
+  zha:     za
+  # Yiddish (2026-11-02): yid is the 639-2 macrolanguage code; the two
+  # 639-3 members ARE the two dialect varieties by ISO's own definition.
+  yid:     yi
+  ydd:     yi/east
+  yih:     yi/west
 
   # The suite mirrored: where the registry anchored the 639-2/3 code, a
   # collection spelling the same language in 639-1 means exactly that
@@ -129,6 +150,10 @@ map:
   och:     zho:old
   ltc:     zho:mid
   lzh:     zho/lit
+
+  # Wiktionary's Middle Vietnamese (a full language code there, ancestor
+  # of vi) onto the vi stage it names
+  mkh-mvi: vi:mid
 
   # The ORACC Akkadian dialect suite (2026-09-27): ORACC's published
   # akk-x-* period/dialect codes onto the standing akk grid — universal
@@ -238,6 +263,14 @@ map:
   qfa-chk-pro: qfa-chk:pro
   itl-pro:     itl:pro
   qfa-yen-pro: qfa-yen:pro
+  pqe-pro:     pqe:pro
+  poz-oce-pro: poz-oce:pro
+  poz-pcc-pro: poz-pcc:pro
+  poz-pol-pro: poz-pol:pro
+  poz-pnp-pro: poz-pnp:pro
+  poz-pep-pro: poz-pep:pro
+  poz-mic-pro: poz-mic:pro
+  mkh-vie-pro: mkh-vie:pro
 
   # The script-suffix suite (P61): BCP-47-style tags whose script subtag
   # is used per the standard's own semantics -- it describes the CONTENT.
