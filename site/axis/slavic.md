@@ -15,7 +15,7 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 A source wears every desk it serves — these 36 answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
-| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 30 October 2026)</span> |
+| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 2 November 2026)</span> |
 |---|---|---|---|---|
 | `archiv-slav-phil` | texts | open | wired · manual | 33 docs / 22,348 passages |
 | `bg-wikisource` | texts | attribution | wired · manual | 26 docs / 220 passages |
@@ -23,7 +23,7 @@ A source wears every desk it serves — these 36 answer this desk. Holdings are 
 | `cs-wikisource` | texts | attribution | wired · manual | 330 docs / 4,748 passages |
 | `damaskini` | texts | attribution | wired · manual | 46 docs / 12,072 passages |
 | `elektire` | texts | open | wired · manual | 205 docs / 375,300 passages |
-| `elizabeth-bible` | texts | open | not yet wired | not synced yet |
+| `elizabeth-bible` | texts | open | wired · manual | 76 docs / 36,000 passages |
 | `eltec-srp` | texts | attribution | wired · manual | 96 docs / 150,794 passages |
 | `freising` | texts | research_private | wired · manual | 27 docs / 2,037 passages |
 | `gams-zrcalo` | texts | attribution | wired · manual | 1 docs / 199 passages |
@@ -54,7 +54,7 @@ A source wears every desk it serves — these 36 answer this desk. Holdings are 
 | `vuk-danicic` | texts | open | wired · manual | 66 docs / 31,102 passages |
 | `wiktionary-cu` | dictionary | attribution | wired · manual | 4,615 entries |
 
-**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 30 October 2026)</span>: `sl` 142,013 · `be` 35,159 · `pol` 6,942 · `chu` 4,684 · `srp` 4,636 · `pl` 2,091 · `hrv` 1,730 · `orv` 1,026 · `mkd` 836 · `ces` 331 … and 32 more (`nabu axis slavic` lists all).
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 2 November 2026)</span>: `sl` 142,013 · `be` 35,159 · `pol` 6,942 · `chu` 4,760 · `srp` 4,636 · `pl` 2,091 · `hrv` 1,730 · `orv` 1,026 · `mkd` 836 · `ces` 331 … and 32 more (`nabu axis slavic` lists all).
 
 ## The desk's instruments
 
