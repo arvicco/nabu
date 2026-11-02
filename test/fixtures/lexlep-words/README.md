@@ -18,3 +18,14 @@ the maintainer's reply by email, C. Salomon, 2026-07-20).
     `{{m|akis-}}{{m|-i̯us|i̯us}}` morphemic analysis.
   - `a?` — marker-bearing title kept verbatim (`?` → `%3F` filename),
     language=unknown → `und`, `sortform` param present.
+- Added **2026-11-02** (copied byte-verbatim from the box's own
+  `canonical/lexlep-words/` fetch, same envelope) for the Holder
+  "AcS <vol>: <col>" citation mining — the Commentary spellings upstream
+  actually uses:
+  - `kasios` — a locus list under one volume ("AcS I: 282, 832 f.").
+  - `tekialui` — a range plus a volume switch inside the list
+    ("AcS I: 1247–1250, II: 1779 f., 1788 f.").
+  - `aesia` — the colon-less "AcS I 53" and a bold-wrapped second locus
+    ("'''III 516'''").
+  - `tati` — a lower-case volume ("AcS ii: 1751") beside "AcS II: 1723".
+  - `esopnos` — the one volume-less citation ("AcS: 1489 f.").
