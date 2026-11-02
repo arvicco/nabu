@@ -1064,6 +1064,22 @@ cldf-spine:
   # oldn1244; the WOLD donor map therefore keys on languoid NAMES.
   sync_policy: manual
 
+cleasby-vigfusson:   # 02-sources row 321
+  adapter: Nabu::Adapters::CleasbyVigfusson
+  adopted: "2026-11-02"
+  axes: [germanic]
+  wired: false   # first sync: bin/nabu enable cleasby-vigfusson && bin/nabu sync cleasby-vigfusson
+                 # (git clone, ~12 MB). EXPECT 1 dictionary doc → 35,207 non entries,
+                 # 0 errored, 1 skipped by rule (the no-markup twin); eyeball
+                 # nabu define abbadis ("abbess"), then flip.
+  # Cleasby & Vigfusson, An Icelandic-English Dictionary (1874), the
+  # stscoundrel JSON edition (MIT; the text PD by age → attribution, the
+  # house MIT precedent). The first Old Norse dictionary shelf, for the
+  # held West Norse text (menota, menotec, rundata, UD Icelandic).
+  # Language non, declared coarse (the book's object is Old Icelandic).
+  # Family definitions-json; 7 homograph words numbered word:n.
+  sync_policy: manual
+
 clics:
   adapter: Nabu::Adapters::Clics
   adopted: "2026-07-26"
@@ -7415,4 +7431,18 @@ zhongyuan:   # P88-R3, 02-sources row 186; the row-99 un-park (zho:oman + owner 
   # Dictionary slug `zhongyuan`. EXPECTED FIRST SYNC (~350 KB clone):
   # 5,877 zho entries. The README says the series may grow ("now
   # including only Zhongyuan Yinyun itself") — re-syncs owner-fired.
+  sync_policy: manual
+
+zoega:   # 02-sources row 322
+  adapter: Nabu::Adapters::Zoega
+  adopted: "2026-11-02"
+  axes: [germanic]
+  wired: false   # first sync: bin/nabu enable zoega && bin/nabu sync zoega (git clone,
+                 # ~5 MB). EXPECT 1 dictionary doc → 29,951 non entries, 0 errored,
+                 # 1 skipped by rule (the no-markup twin); eyeball nabu define abbadis
+                 # ("abbess", beside the cleasby-vigfusson entry), then flip.
+  # Zoëga, A Concise Dictionary of Old Icelandic (1910), the stscoundrel
+  # JSON edition (MIT; the text PD → attribution). Beside
+  # cleasby-vigfusson, deliberately unmerged (two witnesses, one fold).
+  # Language non, declared coarse. Family definitions-json.
   sync_policy: manual
