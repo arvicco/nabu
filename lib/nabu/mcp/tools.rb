@@ -2691,8 +2691,11 @@ module Nabu
       def meter_field(result)
         return {} unless result.respond_to?(:meter) && result.meter
 
-        { meter: { meter: result.meter.meter, pattern: result.meter.pattern,
-                   producer: result.meter.producer } }
+        field = { meter: result.meter.meter, pattern: result.meter.pattern, producer: result.meter.producer }
+        # P152: the scansion lane's machine rows carry their grade; gold
+        # rows keep the frozen three-key shape byte-identical.
+        field[:grade] = result.meter.grade if result.meter.grade
+        { meter: field }
       end
 
       # The findspot facts (P44-3, mirroring the CLI's P44-2 findspot line):

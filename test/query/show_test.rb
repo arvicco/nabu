@@ -538,13 +538,31 @@ module Query
     # The consumer seam: a passage carrying a pedecerto scansion reports it; an
     # ordinary passage reports nil (the CLI's meter line is absent byte-for-byte).
 
-    def attach_meter(urn, meter:, pattern:)
+    def attach_meter(urn, meter:, pattern:, model: "pedecerto", grade: nil)
       passage = Nabu::Store::Passage.first(urn: urn)
+      payload = { "meter" => meter, "pattern" => pattern, "words" => [] }
+      payload["grade"] = grade if grade
       @catalog[:enrichments].insert(
-        passage_id: passage.id, kind: "meter", model: "pedecerto",
+        passage_id: passage.id, kind: "meter", model: model,
         model_version: "pedecerto-scansions/1", at: Time.now,
-        payload_json: JSON.generate("meter" => meter, "pattern" => pattern, "words" => [])
+        payload_json: JSON.generate(payload)
       )
+    end
+
+    # P152: a silver (machine) scansion never displaces held gold, and
+    # alone it reports its grade for every render to label.
+    def test_gold_meter_outranks_a_silver_row_inserted_first
+      load_document("1", [%w[1 μῆνιν], %w[2 ἄειδε]])
+      attach_meter("urn:d:1:1", meter: "H", pattern: "SSSS", model: "nabu-scan", grade: "silver")
+      attach_meter("urn:d:1:1", meter: "H", pattern: "DSDS")
+      attach_meter("urn:d:1:2", meter: "H", pattern: "DDDD", model: "nabu-scan", grade: "silver")
+
+      gold = show("urn:d:1:1").meter
+      assert_equal %w[pedecerto DSDS], [gold.producer, gold.pattern]
+      refute_predicate gold, :silver?
+      silver = show("urn:d:1:2").meter
+      assert_predicate silver, :silver?
+      assert_equal "nabu-scan", silver.producer
     end
 
     def test_passage_with_a_meter_enrichment_reports_it
