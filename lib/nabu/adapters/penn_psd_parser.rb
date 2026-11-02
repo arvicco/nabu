@@ -103,6 +103,32 @@ module Nabu
     #   separator (absent in YCOE: "pos" is then the whole tag).
     # - Document grain: adapters decide file-vs-corpus grain; the parser
     #   parses ONE file into ONE document.
+    #
+    # == The conventions profiles (+conventions:+)
+    #
+    # The leaf atoms differ across the school, so the family carries named
+    # profiles instead of guessing per file:
+    #
+    # - :helipad (the default — byte-frozen for HeliPaD): fused form-lemma
+    #   atoms, every block carries an (ID …), the "<id_prefix>." tail.
+    # - :ppche (P152 — the Penn Parsed Corpora of Historical English and
+    #   their Yiddish sibling PPCHY, per the PPCHE annotation guidelines):
+    #   - atoms are forms only — hyphens are part of the word
+    #     (dovid-noyekhn), never a lemma split;
+    #   - a split orthographic word carries "@" at the split site ("oyf@"
+    #     + "@n" → surface "oyfn"); tokens keep the forms verbatim;
+    #   - word^gloss (the Hebrew-component glosses: h^the, yomem^UNKNOWN)
+    #     → token form + "gloss", the surface renders the word alone;
+    #   - "%EXCL%" is upstream's Unix-safe "!" — decoded on the surface;
+    #   - IDs are "FILE,PAGE.N": the urn tail is the part after the first
+    #     comma, a page-less ID's leading "." dropped ("…,.2" → "2");
+    #   - ID-less blocks whose content is CODE leaves only (<P_156>,
+    #     <BEGIN_…>) are page/file markers — they mint no passage and keep
+    #     their ordinal; an ID-less block with real content still raises.
+    #
+    # +metadata:+ / +license_override:+ pass through to the Document;
+    # +annotate:+ (a callable, verbatim ID → Hash) merges adapter-derived
+    # passage annotations (PPCHY's per-item court-testimony dates).
     class PennPsdParser
       # Penn null elements: *…* (optionally trace-indexed), bare *, or 0.
       EMPTY_CATEGORY = /\A(?:\*[^\s()]*|0)\z/
@@ -110,16 +136,23 @@ module Nabu
       # punctuation forms censused in HeliPaD; opening quotes would need a
       # family extension, noted rather than guessed).
       NO_SPACE_BEFORE = /\A[,.;:!?]+\z/
+      CONVENTIONS = %i[helipad ppche].freeze
       private_constant :EMPTY_CATEGORY, :NO_SPACE_BEFORE
 
       # Same signature family as EpidocParser/ConlluParser/ProielParser#parse.
-      def parse(source, urn:, language:, title: nil, canonical_path: nil, id_prefix: nil)
+      def parse(source, urn:, language:, title: nil, canonical_path: nil, id_prefix: nil,
+                conventions: :helipad, metadata: {}, license_override: nil, annotate: nil)
+        raise ArgumentError, "unknown conventions #{conventions.inspect}" unless CONVENTIONS.include?(conventions)
+
         path = resolve_canonical_path(source, canonical_path)
         blocks = read_blocks(source, path)
         raise ParseError, "#{path}: no tree blocks found" if blocks.empty?
 
-        build_document(blocks, urn: urn, language: language, title: title,
-                               path: path, id_prefix: id_prefix)
+        @conventions = conventions
+        @annotate = annotate
+        document = Document.new(urn: urn, language: language, title: title, canonical_path: path,
+                                metadata: metadata, license_override: license_override)
+        build_document(blocks, document: document, path: path, id_prefix: id_prefix)
       end
 
       private
@@ -141,14 +174,15 @@ module Nabu
         PsdReader.new(Normalize.nfc(content), path).blocks
       end
 
-      def build_document(blocks, urn:, language:, title:, path:, id_prefix:)
-        document = Document.new(urn: urn, language: language, title: title, canonical_path: path)
+      def build_document(blocks, document:, path:, id_prefix:)
         blocks.each_with_index do |block, sequence|
-          sentence = PsdExtraction.new(block, path: path, ordinal: sequence + 1).call
+          next if @conventions == :ppche && marker_block?(block)
+
+          sentence = PsdExtraction.new(block, path: path, ordinal: sequence + 1, conventions: @conventions).call
           next if sentence.text.empty? # a tree of only CODE markers/empties has no surface
 
-          document << passage(sentence, urn: urn, language: language,
-                                        sequence: sequence, id_prefix: id_prefix, block: block)
+          document << passage(sentence, document: document, sequence: sequence, id_prefix: id_prefix,
+                                        block: block)
         end
         raise ParseError, "#{path}: every tree block was surface-empty" if document.empty?
 
@@ -157,21 +191,30 @@ module Nabu
         raise ParseError, "#{path}: #{e.message}"
       end
 
-      def passage(sentence, urn:, language:, sequence:, id_prefix:, block:)
+      # :ppche page/file markers: no (ID …) and nothing but CODE leaves.
+      def marker_block?(block)
+        block.all? { |node| node.is_a?(Array) && node.size == 2 && node[0] == "CODE" && node[1].is_a?(String) }
+      end
+
+      def passage(sentence, document:, sequence:, id_prefix:, block:)
+        annotations = { "tokens" => sentence.tokens, "id" => sentence.id, "tree" => serialize(block) }
+        annotations = annotations.merge(@annotate.call(sentence.id).compact) if @annotate
         Passage.new(
-          urn: "#{urn}:#{urn_tail(sentence.id, id_prefix)}",
-          language: language,
+          urn: "#{document.urn}:#{urn_tail(sentence.id, id_prefix)}",
+          language: document.language,
           text: sentence.text,
-          annotations: { "tokens" => sentence.tokens, "id" => sentence.id,
-                         "tree" => serialize(block) },
+          annotations: annotations,
           sequence: sequence
         )
       end
 
       # The HeliPaD-shaped convenience: "OSHeliandC.1.1-5" minus its text
       # prefix is the citation tail scholars use. Anything else stays the
-      # verbatim ID (uniqueness is the conformance suite's check).
+      # verbatim ID (uniqueness is the conformance suite's check). :ppche
+      # IDs are "FILE,PAGE.N" — the tail after the first comma.
       def urn_tail(id, id_prefix)
+        return id.split(",", 2).last.delete_prefix(".") if @conventions == :ppche && id.include?(",")
+
         prefix = id_prefix && "#{id_prefix}."
         prefix && id.start_with?(prefix) ? id.delete_prefix(prefix) : id
       end
@@ -238,12 +281,16 @@ module Nabu
       # then a depth-first walk of the content collecting the tokens lane
       # and surface text.
       class PsdExtraction
-        def initialize(block, path:, ordinal:)
+        EXCL = "%EXCL%"
+
+        def initialize(block, path:, ordinal:, conventions: :helipad)
           @block = block
           @path = path
           @ordinal = ordinal
+          @ppche = conventions == :ppche
           @tokens = []
           @text = +""
+          @join_next = false
         end
 
         def call
@@ -296,11 +343,37 @@ module Nabu
             @tokens << { "code" => atom[/\A<(.*)>\z/, 1] || atom }
           elsif atom.match?(EMPTY_CATEGORY)
             @tokens << { "tag" => label, "empty" => atom }
+          elsif @ppche
+            token = ppche_token(label, atom)
+            append_ppche_surface(token.fetch("form"))
+            @tokens << token
           else
             token = token_hash(label, atom)
             append_surface(token.fetch("form"))
             @tokens << token
           end
+        end
+
+        # :ppche atoms are forms (no lemma); word^gloss splits on the first
+        # caret; the tag keeps the family's pos^morph split.
+        def ppche_token(label, atom)
+          form, gloss = atom.split("^", 2)
+          caret = label.index("^")
+          token = { "form" => form, "pos" => caret ? label[0...caret] : label }
+          token["morph"] = label[(caret + 1)..] if caret
+          token["gloss"] = gloss if gloss
+          token
+        end
+
+        # The "@" split sites rejoin; %EXCL% decodes (class notes).
+        def append_ppche_surface(form)
+          glue = @join_next || form.start_with?("@")
+          @join_next = form.length > 1 && form.end_with?("@")
+          surface = form == EXCL ? "!" : form.delete_prefix("@").delete_suffix("@")
+          return if surface.empty?
+
+          @text << " " unless @text.empty? || glue || surface.match?(NO_SPACE_BEFORE)
+          @text << surface
         end
 
         # form-lemma on the LAST hyphen; tag = pos^morph on the FIRST caret

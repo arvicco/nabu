@@ -26,9 +26,9 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 ## The shelves
 
-A source wears every desk it serves — these twenty answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
+A source wears every desk it serves — these twenty-one answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
-| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 30 October 2026)</span> |
+| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 2 November 2026)</span> |
 |---|---|---|---|---|
 | `aspr` | texts | attribution | wired · manual | 349 docs / 30,550 passages |
 | `bosworth-toller` | dictionary | attribution | wired · manual | 62,815 entries |
@@ -44,6 +44,7 @@ A source wears every desk it serves — these twenty answer this desk. Holdings 
 | `menota` | texts | attribution | wired · manual | 91 docs / 229,501 passages |
 | `menotec` | texts | nc | wired · manual | 7 docs / 20,308 passages |
 | `perseus-anglit` | texts | attribution | wired · manual | 2 docs / 86 passages |
+| `ppchy` | treebank | nc | wired · manual | 63 docs / 17,861 passages |
 | `proiel` | treebank | nc | wired · frozen | 12 docs / 51,321 passages |
 | `ref` | texts | attribution | wired · manual | 190 docs / 447,115 passages |
 | `rem` | texts | attribution | wired · manual | 406 docs / 355,449 passages |
@@ -51,7 +52,7 @@ A source wears every desk it serves — these twenty answer this desk. Holdings 
 | `rundata` | inscriptions | odbl | wired · manual | 30,647 docs / 30,645 passages |
 | `ud` | treebank | nc | wired · manual | 83 docs / 329,980 passages |
 
-**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 30 October 2026)</span>: `ang` 63,170 · `en` 59,433 · `non` 20,449 · `eng` 6,814 · `de` 5,668 · `swe` 3,397 · `dum` 2,226 · `lat` 532 · `gmh` 406 · `enm` 297 … and 49 more (`nabu axis germanic` lists all).
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 2 November 2026)</span>: `ang` 63,170 · `en` 59,433 · `non` 20,449 · `eng` 6,814 · `de` 5,668 · `swe` 3,397 · `dum` 2,226 · `lat` 532 · `gmh` 406 · `enm` 297 … and 50 more (`nabu axis germanic` lists all).
 
 ## The desk's instruments
 

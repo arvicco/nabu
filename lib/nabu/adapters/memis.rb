@@ -64,8 +64,13 @@ module Nabu
     # as text_dates, never converted — inscription 50's text says MCCCXXX
     # while its origDate says 1430; both are kept, neither corrected.
     # Places: <origPlace> verbatim ("Iustinopolis (Koper)", "Piran") is
-    # the place claim; settlement/repository/provenance (found/observed)
-    # are present locations, metadata only. Kind: the Slovene heading
+    # the place claim; settlement/repository and the observed provenance
+    # are present locations, metadata only. The found provenance — where
+    # the stone was found, a building or street inside the origPlace town
+    # ("Levji grad", "Calle Sant'Antonio") — rides as "findspot", and the
+    # stone's <material> verbatim ("Beli apnenec"); both project as facets
+    # (config/facet_map.yml), the town-level place claim staying the
+    # origPlace (no gazetteer grain for a building). Kind: the Slovene heading
     # ("Napis za …", "Posvetilo …") and the objectType ride as facets,
     # folded in config/kind_map.yml.
     #
@@ -323,6 +328,7 @@ module Nabu
           "date" => orig_date && date_for(orig_date),
           "text_dates" => text_dates(div),
           "provenance" => provenance(ms),
+          "findspot" => field(ms, ".//t:provenance[@type='found']"),
           "bibliography" => bibliography(ms),
           "translation_sl" => translation(div),
           "placeholder_transcriptions" => placeholders.zero? ? nil : placeholders,

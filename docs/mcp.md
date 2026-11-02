@@ -60,6 +60,21 @@ corpus. What you register today is what that surface promises.
   NABU_CONFIG=<dir>/config/nabu.yml`; `demo-census.json` inside records what
   was baked and its size. `rake demo:plan` prints the plan and runs the
   guard offline. The Dockerfile's `demo` target bakes a prebuilt slice in.
+- **Publishing the demo image** (`Nabu::Ops::DemoPublish`): the slice needs
+  the maintainer's full library, so the image is built and pushed locally —
+  `rake demo:publish` runs one multi-arch (amd64 + arm64) `docker buildx
+  build --target demo --push` tagged `:<server.json version>` and `:latest`,
+  refusing an unfinished slice or a `server.json` whose OCI identifier does
+  not match its version, then pulls the tag back and smokes it.
+  `rake demo:smoke` (or the dependency-free `script/demo-smoke IMAGE --
+  DOCKER_ARGS`) speaks MCP to an image over stdio: initialize,
+  `notifications/initialized`, `tools/list`, one `nabu_status` call. The
+  release workflow (`.github/workflows/demo-release.yml`, release or manual
+  dispatch only) smokes the public image on amd64 and arm64 runners and
+  publishes `server.json` to the MCP Registry with GitHub OIDC.
+  One-click installs and hosted deploys (`render.yaml`, Koyeb, Docker's MCP
+  Toolkit catalog `site/docker-mcp-catalog.yaml`) are on the site's
+  [MCP page](https://arvicco.github.io/nabu/mcp/).
 
 ---
 

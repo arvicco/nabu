@@ -6,7 +6,7 @@ compatibility: "Requires the nabu MCP server (`bin/nabu mcp`, read-only, stdio) 
 metadata:
   desk: biblical
   origin: hand-tuned
-  sources: "betamasaheft-works bhsa bridging coptic-scriptorium dss eng-web extrabiblical hebrew-lexicon oshb peshitta sblgnt sdbh sefaria syriac-corpus ud vulgate"
+  sources: "betamasaheft-works bhsa bridging coptic-scriptorium dss elizabeth-bible eng-web extrabiblical hebrew-lexicon oshb peshitta sblgnt sdbh sefaria syriac-corpus ud vulgate"
 ---
 
 # The Biblical scholar — the `biblical` desk
@@ -28,6 +28,7 @@ verbatim upstream terms are in `docs/02-sources.md` of the Nabu repository.
 | `bridging` | ETCBC bridging — OSHB↔BHSA word-level crosswalk (Text-Fabric tf/2021 module) | attribution |
 | `coptic-scriptorium` | Coptic Scriptorium corpora (release v6.3.0) | nc |
 | `dss` | DSS — Dead Sea Scrolls (Abegg/ETCBC, Text-Fabric tf/2.0) | nc |
+| `elizabeth-bible` | The Elizabeth Bible (1757) in Church Slavonic — modernized-spelling rendering, via getBible | open |
 | `eng-web` | World English Bible (eBible.org, via open-bibles) | open |
 | `extrabiblical` | ETCBC extrabiblical — Non-Masoretic texts related to the Hebrew Bible (Text-Fabric tf/0.2) | nc |
 | `hebrew-lexicon` | OSHB Hebrew Lexicon — augmented Strong's + BDB outline (openscriptures) | attribution |
@@ -35,7 +36,7 @@ verbatim upstream terms are in `docs/02-sources.md` of the Nabu repository.
 | `peshitta` | Peshitta OT incl. deuterocanon (ETCBC, Text-Fabric tf/0.2) | nc |
 | `sblgnt` | SBL Greek New Testament (SBLGNT) | attribution |
 | `sdbh` | UBS Dictionary of Biblical Hebrew (Semantic Dictionary of Biblical Hebrew) | attribution |
-| `sefaria` | Sefaria — Targum shelf + Rabbinic core (Mishnah, Bavli, Minor Tractates, Yerushalmi, Tosefta) + Midrash (Rabbah, halakhic midrashim, Aggadah) + medieval Bible commentaries, Mishneh Torah, Shulchan Arukh, Tur, Zohar and liturgy | open |
+| `sefaria` | Sefaria — Targum shelf + Rabbinic core (Mishnah, Bavli, Minor Tractates, Yerushalmi, Tosefta) + Midrash (Rabbah, halakhic midrashim, Aggadah) + medieval Bible commentaries, Mishneh Torah, Shulchan Arukh, Tur, Zohar and liturgy + Ben Sira and Megillat Ta'anit | open |
 | `syriac-corpus` | Digital Syriac Corpus (srophe, 632 TEI documents) | attribution |
 | `ud` | Universal Dependencies — ancient treebanks | nc |
 | `vulgate` | Biblia Sacra Vulgata Clementina (Tweedale/eBible.org, via open-bibles) | open |

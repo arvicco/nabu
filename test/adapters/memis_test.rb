@@ -145,6 +145,23 @@ module Adapters
       assert_equal "Koper", doc(1).metadata["settlement"]
     end
 
+    # The aggressive-mining drain (P152): the found-provenance — where the
+    # stone was found, a building or street inside the origPlace town
+    # ("Levji grad" in Koper; "Šmarje, župnijska cerkev") — rides as the
+    # findspot, and the stone's material verbatim; both project through
+    # config/facet_map.yml. The observed provenance is the present holding
+    # (a museum, a square) and never becomes a findspot.
+    def test_the_found_provenance_is_the_findspot_and_material_projects
+      assert_equal "Levji grad", doc(2).metadata["findspot"]
+      observed_only = documents.find do |d|
+        d.metadata["provenance"]&.key?("observed") && !d.metadata["provenance"].key?("found")
+      end
+      refute_nil observed_only, "the fixture carries an observed-only inscription"
+      assert_nil observed_only.metadata["findspot"], "a present location is not a findspot"
+      map = Nabu::FacetMap.load(File.join(Nabu::Config::PROJECT_ROOT, "config", "facet_map.yml"))
+      assert_equal({ "material" => "material", "findspot" => "findspot" }, map.fields_for("memis"))
+    end
+
     def test_titles_object_and_the_heading_facet
       assert_equal "Morosinijeva plošča", doc(2).title
       meta = doc(2).metadata

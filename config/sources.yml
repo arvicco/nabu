@@ -2208,6 +2208,28 @@ elephantine:   # P47-1, 02-sources row 131
   # future links-layer bonus, no edge producer in this packet).
   sync_policy: manual
 
+elizabeth-bible:   # P152, 02-sources row 317
+  adapter: Nabu::Adapters::ElizabethBible
+  adopted: "2026-11-02"
+  axes: [slavic, biblical]
+  wired: true   # first sync 2026-11-02 exactly on census (76 docs / 36,000 passages, 0 errored); Gen 1.1 / Ps 22.1 (Greek numbering) / John 1.1 eyeballed; FTS probe green
+                 # then bin/nabu sync elizabeth-bible (one 23.7 MB JSON GET).
+                 # EXPECT 76 docs / 36,000 passages, 0 errored, 0 skipped
+                 # (census 2026-11-02, Last-Modified 2026-09-12): Psalms 2,529
+                 # (151 psalms) · Genesis 1,533 · Sirach 1,523 · Jeremiah 1,364;
+                 # eyeball nabu show urn:nabu:elizabeth-bible:gen:1.1 and 5
+                 # random verses, then flip.
+  sync_policy: manual
+  # The Elizabeth Bible (1757 edition) in Church Slavonic — getBible's
+  # csielizabeth (api.getbible.net/v2/csielizabeth.json; the rusbible.ru
+  # OSIS electronic edition, = CrossWire SWORD cslelizabeth 1.5.2), one
+  # whole-translation JSON file → the getbible-json family (one document
+  # per book, verse passages). A modernized-spelling CIVIL-SCRIPT
+  # RENDERING (distribution_about: "features modernized spelling") —
+  # declared per document (metadata rendering), never the print's
+  # orthography. All 76 books incl. the 10 deuterocanonical (Synodal
+  # versification). distribution_license "Public Domain" → open.
+
 eltec-srp:   # P117-2, 02-sources row 246
   adapter: Nabu::Adapters::EltecSrp
   adopted: "2026-10-11"
@@ -4693,6 +4715,34 @@ pna:   # 02-sources row 311
   # links (3,084 of 4,188 texts) onto held oracc/cdli documents. The
   # 149,045 co-occurrence edges are skipped by rule (no relation lane).
 
+ppchy:   # P152, 02-sources row 318
+  adapter: Nabu::Adapters::Ppchy
+  adopted: "2026-11-02"
+  axes: [germanic]
+  wired: true   # first sync 2026-11-02 exactly on census (63 docs / 17,861 passages, 1 rule skip); the 1478 Regensburg letter + a court-testimony ?-URN eyeballed; FTS probe green
+                 # bin/nabu sync ppchy (a sparse git clone ≈ 5 MB of data/ +
+                 # the sources page; parse ≈ 2 s). EXPECT 63 docs / 17,861
+                 # passages, 0 errored, 1 skipped by rule (upstream's
+                 # data/.DS_Store) — census of main @404082bf 2026-11-02;
+                 # upstream corrects annotation weekly, so a later head may
+                 # move the passage count by a handful. Eyeball
+                 # nabu show urn:nabu:ppchy:1478w-letter-regensburg:156.3
+                 # (the oldest dated Yiddish letter, Regensburg 1478),
+                 # urn:nabu:ppchy:1xxxx-court-testimony:1_c1413_w.3 (item
+                 # date/dialect annotations) and 5 random, then flip.
+  # PPCHY — the Penn Parsed Corpus of Historical Yiddish (Beatrice
+  # Santorini 2021, v1.0; github.com/beatrice57/penn-parsed-corpus-of-
+  # historical-yiddish): ≈206K words of Yiddish 1478–1959, romanized
+  # (YIVO-style) and hand-parsed in the Penn historical-corpora scheme.
+  # penn-psd family, :ppche profile (no fused lemma; @-split words; Hebrew
+  # ^glosses; ID-less CODE marker blocks). Sparse GitFetch over data/ +
+  # doc/sources/ + LICENSE.rst + README.rst; the page-image PDFs, the
+  # annotation manual and other/ studies are rejected grains. Per-text
+  # Date/Dialect/Genre mined from doc/sources/yiddish-sources-contents.html.
+  # LICENSE.rst: CC BY-NC-SA 4.0 (verified 2026-11-02) → nc. Living
+  # repository (weekly annotation corrections) → manual.
+  sync_policy: manual
+
 prague-bible-1488:   # P116-1
   adapter: Nabu::Adapters::PragueBible1488
   adopted: "2026-10-10"
@@ -5216,6 +5266,13 @@ sefaria:
                    # 622,476 edges from 625,102 both-sides-held rows; the
                    # 4,444,269 rows with an unheld side are censused on the
                    # run row. Eyeball `nabu links urn:nabu:oshb:jonah:1.1`.
+                   # P152 adds the SECOND TEMPLE shelf (Ben Sira + Megillat
+                   # Ta'anit, title-allowlisted): +10 named files (≈0.4 MB)
+                   # → expected EXACTLY +7 documents / +1,885 passages, +3
+                   # rule skips (BST, Zeitlin and YU English say "unknown").
+                   # Eyeball urn:nabu:sefaria:ben-sira:he:ben-sira-david-
+                   # kahana-ed-wikisource:1.1 and urn:nabu:sefaria:megillat-
+                   # ta-anit:he:warsaw-1874:nisan.2.
   # Sefaria — Targum shelf (P30-3) + RABBINIC WAVE 1 (P46-1) + MIDRASH
   # WAVE 2 (P55-3). Upstream
   # restructured: the git repo is a monthly books.json index (19,705 version

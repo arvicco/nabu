@@ -231,3 +231,15 @@ sources:
     # nodes — parse-time work, the 2026-10-18 generalization.
     snt: { lect: "qps", tier: certain }
     xca: { lect: "qcp", tier: certain }
+  elizabeth-bible:
+    # The Elizabeth Bible IS the text the registry's chu:ncs node names
+    # as fixing the post-Nikonian Synodal standard ("fixed in the
+    # Elizabethan Bible (1751)"); getBible codes the whole edition bare cu
+    # (→ chu). This row transcribes that identity onto the existing node —
+    # parse-time work, the 2026-10-18 generalization. The held text is a
+    # modernized-SPELLING rendering (civil script, no titla, no ѣ/і/ѵ):
+    # spelling is an orthographic layer the node deliberately does not
+    # diagnose ("a period label, not an orthographic diagnosis"), so the
+    # rendering rides document metadata (rendering / orthography), not the
+    # lect. Tier certain: one edition, the stage's own founding text.
+    chu: { lect: "chu:ncs", tier: certain }

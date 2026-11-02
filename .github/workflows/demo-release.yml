@@ -1,0 +1,107 @@
+name: Demo release
+
+# The CI half of the demo-image distribution rail. The image itself is
+# built and pushed LOCALLY (`bundle exec rake demo:publish`): it bakes the
+# demo slice, and building the slice needs the maintainer's full library,
+# which a GitHub-hosted runner never has. What CI can do, it does here:
+#
+#   image-smoke       anonymous pull of the public image + an MCP stdio
+#                     smoke (initialize -> tools/list -> nabu_status), on
+#                     both amd64 and arm64 runners
+#   registry-publish  publish ./server.json to the official MCP Registry
+#                     (GitHub OIDC; skipped when that version is already
+#                     listed — the registry refuses re-publishing a version)
+#
+# Never runs on push or pull_request: only on a published release, or by
+# hand (workflow_dispatch), where `jobs` picks one half alone.
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+    inputs:
+      jobs:
+        description: "Which jobs to run"
+        type: choice
+        options: [all, registry-publish, image-smoke]
+        default: all
+      image:
+        description: "Image the smoke pulls"
+        type: string
+        default: ghcr.io/arvicco/nabu-demo:latest
+
+permissions:
+  contents: read
+
+concurrency:
+  group: demo-release
+  cancel-in-progress: false
+
+jobs:
+  image-smoke:
+    if: github.event_name == 'release' || inputs.jobs == 'all' || inputs.jobs == 'image-smoke'
+    strategy:
+      fail-fast: false
+      matrix:
+        runner: [ubuntu-latest, ubuntu-24.04-arm]
+    runs-on: ${{ matrix.runner }}
+    env:
+      IMAGE: ${{ inputs.image || 'ghcr.io/arvicco/nabu-demo:latest' }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      # Bare Ruby, no bundle: script/demo-smoke loads only the stdlib and
+      # lib/nabu/ops/demo_publish.rb.
+      - uses: ruby/setup-ruby@de492cf36cbab201753d720ce4f4e336cd688c94 # v1.336.0
+        with:
+          ruby-version: "3.3"
+      - name: Pull the public image (anonymous)
+        run: docker pull "$IMAGE"
+      - name: MCP stdio smoke
+        run: ruby script/demo-smoke "$IMAGE" -- --memory=512m
+
+  registry-publish:
+    if: github.event_name == 'release' || inputs.jobs == 'all' || inputs.jobs == 'registry-publish'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write # mcp-publisher login github-oidc
+    env:
+      MCP_PUBLISHER_VERSION: "1.8.7"
+      # sha256 of mcp-publisher_linux_amd64.tar.gz, from that release's
+      # registry_<version>_checksums.txt.
+      MCP_PUBLISHER_SHA256: "00b21004149a4ce66f0782508ae4a2bce67d1bea395a8da0bd8028159fb59579"
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Read server.json
+        id: server
+        run: |
+          echo "name=$(jq -r .name server.json)" >> "$GITHUB_OUTPUT"
+          echo "version=$(jq -r .version server.json)" >> "$GITHUB_OUTPUT"
+          echo "identifier=$(jq -r '.packages[] | select(.registryType == "oci") | .identifier' server.json)" >> "$GITHUB_OUTPUT"
+      - name: Skip if this version is already listed
+        id: listed
+        env:
+          NAME: ${{ steps.server.outputs.name }}
+          VERSION: ${{ steps.server.outputs.version }}
+        run: |
+          encoded=$(jq -rn --arg n "$NAME" '$n | @uri')
+          code=$(curl -s -o /dev/null -w '%{http_code}' \
+            "https://registry.modelcontextprotocol.io/v0.1/servers/${encoded}/versions/${VERSION}")
+          echo "registry answered $code for $NAME $VERSION"
+          if [ "$code" = "200" ]; then echo "listed=true" >> "$GITHUB_OUTPUT"; else echo "listed=false" >> "$GITHUB_OUTPUT"; fi
+      - name: The OCI package server.json names must be public
+        if: steps.listed.outputs.listed == 'false'
+        run: docker manifest inspect "${{ steps.server.outputs.identifier }}" > /dev/null
+      - name: Install mcp-publisher
+        if: steps.listed.outputs.listed == 'false'
+        run: |
+          curl -fsSL -o mcp-publisher.tar.gz \
+            "https://github.com/modelcontextprotocol/registry/releases/download/v${MCP_PUBLISHER_VERSION}/mcp-publisher_linux_amd64.tar.gz"
+          echo "${MCP_PUBLISHER_SHA256}  mcp-publisher.tar.gz" | sha256sum -c -
+          tar xzf mcp-publisher.tar.gz mcp-publisher
+          ./mcp-publisher --help > /dev/null
+      - name: Log in (GitHub OIDC)
+        if: steps.listed.outputs.listed == 'false'
+        run: ./mcp-publisher login github-oidc
+      - name: Publish server.json
+        if: steps.listed.outputs.listed == 'false'
+        run: ./mcp-publisher publish ./server.json

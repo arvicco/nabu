@@ -1,0 +1,25 @@
+# Nabu fixture manifest (P5-4 "fixture sentinel"). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# adapter_test is null: csielizabeth.json is a documented TRIM of the 23.7 MB
+# whole-translation file — the adapter test's per-book counts would
+# false-fail against a fresh full copy.
+source: elizabeth-bible
+adapter_test: null
+retrieved: "2026-11-02"
+files:
+  - path: csielizabeth.json
+    url: https://api.getbible.net/v2/csielizabeth.json
+    whole: false
+    trim: >-
+      the whole-translation envelope with 4 of 76 books at book boundaries
+      (Genesis cut to chapter 1; Prayer of Manasses, Jonah, 2 John whole),
+      re-serialized with the serializer that reproduces upstream byte for byte
+  - path: rejected-grains/32.json
+    url: https://api.getbible.net/v2/csielizabeth/32.json
+    whole: true
+    trim: none
+  - path: rejected-grains/32/2.json
+    url: https://api.getbible.net/v2/csielizabeth/32/2.json
+    whole: true
+    trim: none

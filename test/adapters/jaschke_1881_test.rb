@@ -106,6 +106,13 @@ module Adapters
       end
     end
 
+    # The 1881 edition year rides every page's "date" hash; the timeline
+    # lane projects it only through the MetadataDates roster (the health
+    # timeline_lane_drift finding until registered).
+    def test_the_metadata_dates_lane_is_registered
+      assert_equal :structured, Nabu::Store::TimelineBuilder::MetadataDates::SHAPES["jaschke-1881"]
+    end
+
     def test_license_is_open_public_domain
       assert_equal "open", KLASS.manifest.license_class
       assert_includes KLASS.manifest.license, "NOT_IN_COPYRIGHT"

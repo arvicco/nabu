@@ -283,6 +283,49 @@ nt:
         3JOHN: urn:nabu:coptic-scriptorium:nt.3john.bohairic
         JUDE: urn:nabu:coptic-scriptorium:nt.jude.bohairic
         REV: urn:nabu:coptic-scriptorium:nt.rev.bohairic
+    # P152: the Elizabeth Bible (getBible csielizabeth, open) — the
+    # Synodal CHURCH SLAVONIC NT, a modernized-spelling civil-script
+    # rendering of the 1757 edition, beside the four CCMH OCS codices: the
+    # liturgical text the OCS canon became. All 27 books. Versification
+    # census (2026-11-02, the file's chapter verse sets vs the held
+    # witnesses, read-only): WEB's exact verse sets on 23 of 27 books
+    # (LUKE 23/24, ACTS 24/28, 2COR 11/13, 3JOHN 0/1 the residue), sblgnt's
+    # on 19; the residuals are chapter-end one-verse differences the held
+    # witnesses already carry against each other. The Synodal Romans
+    # doxology sits at 14.24-26 — exactly where the held WEB has it (same
+    # text, read back); the Vulgate's sits at 16.25-27, which this witness
+    # never cites, so no number pairs two different verses.
+    # "Not synced" until the first `nabu sync elizabeth-bible`.
+    - label: Elizabeth Bible (Church Slavonic)
+      extractor: cts-verse
+      documents:
+        MATT: urn:nabu:elizabeth-bible:matt
+        MARK: urn:nabu:elizabeth-bible:mark
+        LUKE: urn:nabu:elizabeth-bible:luke
+        JOHN: urn:nabu:elizabeth-bible:john
+        ACTS: urn:nabu:elizabeth-bible:acts
+        ROM: urn:nabu:elizabeth-bible:rom
+        1COR: urn:nabu:elizabeth-bible:1cor
+        2COR: urn:nabu:elizabeth-bible:2cor
+        GAL: urn:nabu:elizabeth-bible:gal
+        EPH: urn:nabu:elizabeth-bible:eph
+        PHIL: urn:nabu:elizabeth-bible:phil
+        COL: urn:nabu:elizabeth-bible:col
+        1THESS: urn:nabu:elizabeth-bible:1thess
+        2THESS: urn:nabu:elizabeth-bible:2thess
+        1TIM: urn:nabu:elizabeth-bible:1tim
+        2TIM: urn:nabu:elizabeth-bible:2tim
+        TIT: urn:nabu:elizabeth-bible:titus
+        PHILEM: urn:nabu:elizabeth-bible:phlm
+        HEB: urn:nabu:elizabeth-bible:heb
+        JAS: urn:nabu:elizabeth-bible:jas
+        1PET: urn:nabu:elizabeth-bible:1pet
+        2PET: urn:nabu:elizabeth-bible:2pet
+        1JOHN: urn:nabu:elizabeth-bible:1john
+        2JOHN: urn:nabu:elizabeth-bible:2john
+        3JOHN: urn:nabu:elizabeth-bible:3john
+        JUDE: urn:nabu:elizabeth-bible:jude
+        REV: urn:nabu:elizabeth-bible:rev
 
 # P11-5: the Old Testament work — Septuagint (Swete, already in the catalog
 # under first1k-greek's tlg0527) beside the Clementine Vulgate's OT books.
@@ -724,6 +767,91 @@ ot:
         MAL: urn:nabu:coptic-scriptorium:ot.mal.bohairic_ed    # 4 chapters (Greek)
         ISA: urn:nabu:coptic-scriptorium:ot.isa.bohairic_ed
         EZK: urn:nabu:coptic-scriptorium:ot.ezek.bohairic_ed
+    # P152: the Elizabeth Bible's OT (getBible csielizabeth, open) — the ot
+    # hub's CHURCH SLAVONIC leg, a modernized-spelling rendering of the 1757
+    # edition, Synodal versification. Spot-check read-only against the held
+    # catalog, 2026-11-02: per book, the file's chapter verse sets vs every
+    # held witness, then verse content at the split points.
+    #
+    # It cites the GREEK/VULGATE scheme wherever the MT splits, so it
+    # aligns directly, no remap: JON 2.1 is the fish verse, JOL has 3
+    # chapters and MAL 4, DEU 13.1 is the prophet, HOS 2.1 "say to your
+    # brothers", ISA 9.6 the child, ZEC 2.1 the measuring line.
+    #
+    # ALIGNED (37 books). Best-matching held witness, exact chapters:
+    #   GEN 50/50 WEB   EXO 36/40 Vg    LEV 25/27 Vg   NUM 34/36 Vg
+    #   DEU 34/34 Vg    JOS 21/24 MT    JDG 20/21      RUT 4/4
+    #   1SA 31/31 Vg    2SA 24/24 Vg    2KI 25/25 Vg   1CH 27/29 Vg
+    #   2CH 36/36 Vg    EST 9/10 MT     TOB 11/14 LXX  JDT 14/16 LXX
+    #   JOB 39/42       SNG 7/8 Vg      WIS 16/19 Vg   ISA 65/66 Vg
+    #   LAM 5/5         BAR 5/5 LXX     EZK 47/48 Vg   HOS 14/14 LXX
+    #   JOL 3/3         AMO 9/9         OBA 1/1        JON 4/4
+    #   MIC 7/7 LXX     NAM 3/3 Vg      HAB 3/3        ZEP 3/3 Vg
+    #   HAG 2/2 LXX     ZEC 14/14 Vg    MAL 4/4        1MA 13/16 LXX
+    #   2MA 13/15 Vg
+    # Residuals are one-verse chapter-end differences. Where the file
+    # follows one tradition against the other (EST without the Greek
+    # additions, as the MT; TOB/JDT the Greek recension, against the
+    # Vulgate's), the divergence is one the hub's witnesses already carry
+    # against each other, never a new one.
+    #
+    # HELD OUT, with evidence:
+    #   - 1KI, JER, PRO: the MT chapter order (Swete exact on 4/22, 17/52,
+    #     4/31) — the OSHB holdout rule.
+    #   - DAN: the Vulgate's verse sets on 13 of 14 chapters (the Greek
+    #     additions inline at 3.24-90, as Theodotion and the Vulgate), but
+    #     Bel (ch. 14) opens one verse earlier — 14.1 is Astyages' death,
+    #     the Vulgate's 13.65 — so DAN 14 refs pair neighbouring verses
+    #     from 14.1; the registry's remap is witness-global, so the book
+    #     holds out.
+    #   - 1ES: Swete exact on 3/9, chapters 1-2 off by 3 and 6 verses.
+    #   - SIR: Swete exact on 5/51, Vulgate 26/51 — the verse numbering
+    #     drifts through the book.
+    #   - LJE: a 1.N citation never co-aligns with Swete's flat
+    #     single-chapter refs.
+    #   - PrMan, Ezra, Neh, Eccl: no work token (the house rule).
+    # The psalter is in the psalms work below. "Not synced" until the first
+    # `nabu sync elizabeth-bible`.
+    - label: Elizabeth Bible (Church Slavonic)
+      extractor: cts-verse
+      documents:
+        GEN: urn:nabu:elizabeth-bible:gen
+        EXO: urn:nabu:elizabeth-bible:exod
+        LEV: urn:nabu:elizabeth-bible:lev
+        NUM: urn:nabu:elizabeth-bible:num
+        DEU: urn:nabu:elizabeth-bible:deut
+        JOS: urn:nabu:elizabeth-bible:josh
+        JDG: urn:nabu:elizabeth-bible:judg
+        RUT: urn:nabu:elizabeth-bible:ruth
+        1SA: urn:nabu:elizabeth-bible:1sam
+        2SA: urn:nabu:elizabeth-bible:2sam
+        2KI: urn:nabu:elizabeth-bible:2kgs   # 1KI held out (MT order)
+        1CH: urn:nabu:elizabeth-bible:1chr
+        2CH: urn:nabu:elizabeth-bible:2chr
+        EST: urn:nabu:elizabeth-bible:esth
+        TOB: urn:nabu:elizabeth-bible:tob
+        JDT: urn:nabu:elizabeth-bible:jdt
+        JOB: urn:nabu:elizabeth-bible:job
+        SNG: urn:nabu:elizabeth-bible:song
+        WIS: urn:nabu:elizabeth-bible:wis
+        ISA: urn:nabu:elizabeth-bible:isa
+        LAM: urn:nabu:elizabeth-bible:lam
+        BAR: urn:nabu:elizabeth-bible:bar
+        EZK: urn:nabu:elizabeth-bible:ezek
+        HOS: urn:nabu:elizabeth-bible:hos
+        JOL: urn:nabu:elizabeth-bible:joel    # 3 chapters (Greek)
+        AMO: urn:nabu:elizabeth-bible:amos
+        OBA: urn:nabu:elizabeth-bible:obad
+        JON: urn:nabu:elizabeth-bible:jonah   # 2.1 = the fish verse (Greek)
+        MIC: urn:nabu:elizabeth-bible:mic
+        NAM: urn:nabu:elizabeth-bible:nah
+        HAB: urn:nabu:elizabeth-bible:hab
+        ZEP: urn:nabu:elizabeth-bible:zeph
+        HAG: urn:nabu:elizabeth-bible:hag
+        ZEC: urn:nabu:elizabeth-bible:zech
+        MAL: urn:nabu:elizabeth-bible:mal     # 4 chapters (Greek)
+        1MA: urn:nabu:elizabeth-bible:1macc
+        2MA: urn:nabu:elizabeth-bible:2macc
 
 # P13-5: the Psalms work — the one book where the versification divergence
 # BITES, faced head-on (the P11-8 OT WEB witness dodged it by omitting Psalms).
@@ -893,3 +1021,18 @@ psalms:
       extractor: cts-verse
       documents:
         PSA: urn:nabu:coptic-scriptorium:ot.pss.coptot  # Greek numbering
+    # P152: the Elizabeth Bible psalter (getBible csielizabeth, open) — the
+    # Church Slavonic psalter of the Synodal tradition, GREEK-numbered, so
+    # it aligns directly, no remap. Spot-check read-only against the held
+    # catalog, 2026-11-02: 151 psalms incl. Ps 151 ("Мал бех в братии
+    # моей", Swete's 151.1); Swete's exact verse set on 135 of 151, the
+    # Sahidic's on 146, the Vulgate's on 140; Ps 22.1 is the shepherd
+    # verse, Ps 9 (39 verses) the LXX join, Ps 50.3 "Помилуй мя, Боже" with
+    # the superscription counted as 50.1-2 (Swete's 50.3 too). Of the 16
+    # residual psalms, 14 differ from Swete by one verse (the titulus edge
+    # the P13-5 note discloses); Ps 118 (176 vs Swete's held 166) and
+    # Ps 129 (6 vs 3, Swete running verses together) are Swete's gaps.
+    - label: Elizabeth Bible (Church Slavonic)
+      extractor: cts-verse
+      documents:
+        PSA: urn:nabu:elizabeth-bible:ps  # Greek numbering

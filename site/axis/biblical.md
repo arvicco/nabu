@@ -13,15 +13,16 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 ## The shelves
 
-A source wears every desk it serves — these sixteen answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
+A source wears every desk it serves — these seventeen answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
-| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 30 October 2026)</span> |
+| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 2 November 2026)</span> |
 |---|---|---|---|---|
 | `betamasaheft-works` | texts | attribution | wired · auto | 3,825 docs / 66,940 passages |
 | `bhsa` | texts | nc | wired · manual | 39 docs / 23,213 passages |
 | `bridging` | crosswalk module | attribution | wired · manual | nothing held yet |
 | `coptic-scriptorium` | texts | nc | wired · auto | 502 docs / 74,778 passages |
 | `dss` | texts | nc | wired · auto | 1,001 docs / 52,895 passages |
+| `elizabeth-bible` | texts | open | wired · manual | 76 docs / 36,000 passages |
 | `eng-web` | texts | open | wired · manual | 84 docs / 37,624 passages |
 | `extrabiblical` | texts | nc | wired · manual | 13 docs / 1,800 passages |
 | `hebrew-lexicon` | dictionary | attribution | wired · manual | 21,144 entries |
@@ -29,12 +30,12 @@ A source wears every desk it serves — these sixteen answer this desk. Holdings
 | `peshitta` | texts | nc | wired · manual | 65 docs / 31,341 passages |
 | `sblgnt` | texts | attribution | wired · manual | 27 docs / 7,939 passages |
 | `sdbh` | dictionary | attribution | wired · manual | 7,932 entries |
-| `sefaria` | texts | open | wired · manual | 1,970 docs / 1,066,001 passages |
+| `sefaria` | texts | open | wired · manual | 1,983 docs / 1,073,004 passages |
 | `syriac-corpus` | texts | attribution | wired · manual | 632 docs / 134,726 passages |
 | `ud` | treebank | nc | wired · manual | 83 docs / 329,980 passages |
 | `vulgate` | texts | open | wired · manual | 73 docs / 35,809 passages |
 
-**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 30 October 2026)</span>: `hbo` 30,727 · `gez` 3,803 · `eng` 1,132 · `syc` 697 · `cop` 505 · `arc` 364 · `lat` 84 · `grc` 36 · `amh` 22 · `orv` 9 … and 22 more (`nabu axis biblical` lists all).
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 2 November 2026)</span>: `hbo` 30,737 · `gez` 3,803 · `eng` 1,135 · `syc` 697 · `cop` 505 · `arc` 364 · `lat` 84 · `chu` 76 · `grc` 36 · `amh` 22 … and 23 more (`nabu axis biblical` lists all).
 
 ## The desk's instruments
 

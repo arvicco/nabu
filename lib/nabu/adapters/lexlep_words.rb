@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require "json"
+require "strscan"
 
 require_relative "wiki_template_parser"
 require_relative "lexlep"
@@ -49,6 +50,30 @@ module Nabu
         ["type_word", nil], ["stem_class", "stem class"], ["number", nil],
         ["case", nil], ["gender", nil], ["field_semantic", "semantic field"]
       ].freeze
+
+      # Holder's Alt-celtischer Sprachschatz ({{bib|AcS}}, scrubbed to
+      # "AcS") cited in the Commentary prose as "AcS <vol>: <col>" — the
+      # print-column anchors the define desk bridges to the held scans
+      # (config/scan_anchors.yml, unit: column). Census 2026-11-02: 74
+      # {{bib|AcS}} references on 60 Word pages → 81 citations (I 37 ·
+      # II 37 · III 6 · one volume-less). Upstream's spellings: the
+      # canonical "AcS II: 1440 f.", ranges ("I: 1267–1270"), locus lists
+      # under a running volume ("I: 282, 832 f.", "I: 1247–1250, II: 1779
+      # f., 1788 f."), a colon-less "I 53", a dot "II. 665", a lower-case
+      # "ii: 1751", a bold-wrapped locus ("'III 516'" once scrubbed), and
+      # one volume-less "AcS: 1489 f." (minted as cited — no volume is
+      # guessed, so no scan anchor claims it). One citation per cited
+      # column (urn_raw the locus as cited under its volume, label the
+      # anchor key "AcS II: 1779"); a range anchors at its first column.
+      ACS = /\bAcS\b/
+      ACS_LOCUS = /
+        \s*'*
+        (?:(?<volume>[IVXivx]{1,4})(?=[\s:.])\.?\s*)?   # roman volume, any case
+        :?\s*'*
+        (?<locus>(?<column>\d{1,4})(?:\s*[–-]\s*\d{1,4})?(?:\s+ff?\.)?)
+        '*
+      /x
+      ACS_NEXT = /,\s*/
 
       MANIFEST = Nabu::SourceManifest.new(
         id: "lexlep-words",
@@ -151,8 +176,39 @@ module Nabu
         Nabu::DictionaryEntry.new(
           entry_id: headword, key_raw: headword, language: language,
           headword: headword, headword_folded: folded(headword, language),
-          gloss: gloss(params), body: body(headword, wikitext, params)
+          gloss: gloss(params), body: body(headword, wikitext, params),
+          citations: acs_citations(commentary(wikitext))
         )
+      end
+
+      # The Holder "AcS" citations of the Commentary (see the constants).
+      # The scanner reads a locus after each "AcS", then keeps reading
+      # ", <locus>" continuations under the running volume.
+      def acs_citations(text)
+        return [] if text.nil?
+
+        scanner = StringScanner.new(text)
+        citations = []
+        while scanner.skip_until(ACS)
+          volume = nil
+          while scanner.scan(ACS_LOCUS)
+            volume = scanner[:volume].upcase if scanner[:volume]
+            citations << acs_citation(volume, scanner[:column], scanner[:locus])
+            checkpoint = scanner.pos
+            next if scanner.skip(ACS_NEXT) && scanner.check(ACS_LOCUS)
+
+            scanner.pos = checkpoint
+            break
+          end
+        end
+        citations.uniq(&:urn_raw)
+      end
+
+      def acs_citation(volume, column, locus)
+        prefix = volume ? "AcS #{volume}:" : "AcS:"
+        Nabu::DictionaryCitation.new(urn_raw: Nabu::Normalize.nfc("#{prefix} #{locus}"), cts_work: nil,
+                                     citation: volume ? "#{volume}: #{column}" : column,
+                                     label: "#{prefix} #{column}")
       end
 
       def entry_language(params)

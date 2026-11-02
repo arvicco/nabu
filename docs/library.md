@@ -1023,8 +1023,9 @@ Belarusian dictionary (35,159 entries; open), and two public-domain
 scholarship shelves of uncorrected OCR, `slavistics-pd` — Miklosich,
 Berneker, Leskien, Vondrák, Jagić (21 / 5,833) and `archiv-slav-phil`
 — the *Archiv für slavische Philologie* vols. 1–35 (33 / 22,348).
-`korba` — the KorBa 17th–18th-century Polish subcorpus — is registered
-but not yet wired.
+`korba` — the KorBa 17th–18th-century Polish subcorpus — and
+`elizabeth-bible` — the Synodal Church Slavonic Bible of 1757, 76 books
+in a modernized-spelling rendering — are registered but not yet wired.
 
 **Sinitic.** `classical-modern` — the classical↔modern Chinese parallel
 corpus (14,608 / 1,944,934; the `cmn` lane of languages.md),
@@ -1747,3 +1748,29 @@ commentary, targum, quotation, the Masoretic cross-reference
 apparatus — now ride the links layer wherever both ends are held,
 so a verse answers with its commentaries: Jonah 1:1 opens onto
 II Kings, Radak, Abarbanel and the Talmud's retellings.
+
+## 8ax. The P152 arrivals — historical Yiddish, and Ben Sira beside the Mishnah
+
+Expected counts from the fixture-time censuses (the gate's first syncs
+confirm them):
+
+**`ppchy`** — the Penn Parsed Corpus of Historical Yiddish (Beatrice
+Santorini, 2021): 63 texts / 17,861 hand-parsed sentences, about
+206,000 words of Yiddish from the oldest dated letter (Regensburg,
+1478) through Elia Levita's Bovo-bukh, the Cracow and Prague prints,
+the Tsenerene, Glikl's memoirs, the laments for the Khmelnitski
+massacres, the court testimony preserved in the responsa (c. 1413–1686,
+each item dated), Nakhman of Bratslav and Joseph Perl, to Hirshbeyn's
+*Grine felder*, Olsvanger's folk jokes and the YIVO grammarians. Every
+sentence carries its constituency tree; every text is dated, the West
+and East Yiddish division rides as a facet. Romanized (YIVO-style), not
+Hebrew script; held non-commercially (CC BY-NC-SA 4.0). The Germanic
+desk's first Yiddish.
+
+**`sefaria` — the Second Temple shelf.** Ben Sira in Kahana's Hebrew
+text and the Schechter–Taylor Cambridge edition (1899) with their
+English, and Megillat Ta'anit — the Hasmonean scroll of feast days in
+its Warsaw 1874 print with the Hebrew scholion, and two English
+renderings: +7 documents / 1,885 passages. The category's modern Hebrew
+retroversions of Greek works (Judith, Maccabees, Wisdom, Jubilees,
+Philo, Josephus) stay out by design.

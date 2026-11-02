@@ -83,7 +83,7 @@ Documentary corpora at the artifact grain: papyri, the Latin/Greek and Levantine
 
 Old Church Slavonic and its daughters: the OCS/Old Russian treebanks, the gospel and monument corpora, Freising, the Slovenian historical lane with PriLit's earliest narrative prose (1643–1866), Balkan damaskini, and the Church Slavonic dictionary shelves.
 
-**Members** (35): `archiv-slav-phil`, `bg-wikisource`, `ccmh`, `cs-wikisource`, `damaskini`, `elektire`, `eltec-srp`, `freising`, `gams-zrcalo`, `goo300k`, `hr-wikisource`, `imp`, `kdsp`, `korba`, `litopys`, `mdz-protestant`, `mk-wikisource`, `pl-wikisource`, `prague-bible-1488`, `prilit`, `proiel`, `ru-wikisource`, `scat`, `scripta-bulgarica`, `senie`, `sl-lexica`, `sl-wikisource`, `slavistics-pd`, `slouniki-nasovic`, `sr-wikisource`, `torot`, `ud`, `uk-wikisource`, `vuk-danicic`, `wiktionary-cu`
+**Members** (36): `archiv-slav-phil`, `bg-wikisource`, `ccmh`, `cs-wikisource`, `damaskini`, `elektire`, `elizabeth-bible`, `eltec-srp`, `freising`, `gams-zrcalo`, `goo300k`, `hr-wikisource`, `imp`, `kdsp`, `korba`, `litopys`, `mdz-protestant`, `mk-wikisource`, `pl-wikisource`, `prague-bible-1488`, `prilit`, `proiel`, `ru-wikisource`, `scat`, `scripta-bulgarica`, `senie`, `sl-lexica`, `sl-wikisource`, `slavistics-pd`, `slouniki-nasovic`, `sr-wikisource`, `torot`, `ud`, `uk-wikisource`, `vuk-danicic`, `wiktionary-cu`
 
 ### germanic
 
@@ -91,7 +91,7 @@ Old Church Slavonic and its daughters: the OCS/Old Russian treebanks, the gospel
 
 Gothic on the proiel/ud treebanks beside the West and North Germanic branches: Old English verse (ASPR) and prose (ISWOC) with Bosworth-Toller, Old Icelandic (IcePaHC via ud), Old Norwegian and the Poetic Edda (Menotec), the Medieval Nordic manuscript archive (Menota), the Corpus of Middle English (CME), early-modern English at scale (EEBO-TCP), Beowulf again in Klaeber's edition with its aligned English (perseus-anglit), the Old Saxon Heliand (HeliPaD), Middle High German manuscripts (ReM), Middle Low German and Low Rhenish (ReN), the German print era whole (DTA, 1473–1969), and the runic inscriptions (Rundata, dual-tagged epigraphy).
 
-**Members** (20): `aspr`, `bosworth-toller`, `cme`, `corpus-gysseling`, `corpus-oudfries`, `corpus-oudnederlands`, `dta`, `eebo-tcp`, `fornsvenska`, `helipad`, `iswoc`, `menota`, `menotec`, `perseus-anglit`, `proiel`, `ref`, `rem`, `ren`, `rundata`, `ud`
+**Members** (21): `aspr`, `bosworth-toller`, `cme`, `corpus-gysseling`, `corpus-oudfries`, `corpus-oudnederlands`, `dta`, `eebo-tcp`, `fornsvenska`, `helipad`, `iswoc`, `menota`, `menotec`, `perseus-anglit`, `ppchy`, `proiel`, `ref`, `rem`, `ren`, `rundata`, `ud`
 
 ### celtic
 
@@ -123,7 +123,7 @@ The reconstruction shelves: the kaikki proto-extracts, IE-CoR cognacy, LIV, the 
 
 The cross-language scripture hat: the Masoretic shelves and the Scrolls, the Greek NT, Vulgate and WEB, Peshitta and the Syriac corpus, Coptic Scriptorium, the Targums, and the OSHB-BHSA bridging module. The hebrew and syriac language desks coexist with this hat by design.
 
-**Members** (16): `betamasaheft-works`, `bhsa`, `bridging`, `coptic-scriptorium`, `dss`, `eng-web`, `extrabiblical`, `hebrew-lexicon`, `oshb`, `peshitta`, `sblgnt`, `sdbh`, `sefaria`, `syriac-corpus`, `ud`, `vulgate`
+**Members** (17): `betamasaheft-works`, `bhsa`, `bridging`, `coptic-scriptorium`, `dss`, `elizabeth-bible`, `eng-web`, `extrabiblical`, `hebrew-lexicon`, `oshb`, `peshitta`, `sblgnt`, `sdbh`, `sefaria`, `syriac-corpus`, `ud`, `vulgate`
 
 ### hebrew
 

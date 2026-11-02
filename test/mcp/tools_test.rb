@@ -1110,6 +1110,22 @@ module MCP
       refute plain.key?("meter"), "an unscanned passage must not emit a meter key"
     end
 
+    # P152: a silver (machine) scansion carries its grade; gold keeps the
+    # three-key shape (above).
+    def test_show_passage_names_a_silver_scansion_grade
+      seed_corpus
+      passage_id = @catalog[:passages].where(urn: "#{@grc.urn}:1.2").get(:id)
+      @catalog[:enrichments].insert(
+        passage_id: passage_id, kind: "meter", model: "nabu-scan",
+        payload_json: JSON.generate({ "meter" => "dactylic hexameter", "pattern" => "-uu --", "grade" => "silver" }),
+        at: Time.utc(2026, 11, 2)
+      )
+
+      meter = payload(call("nabu_show", { "urn" => "#{@grc.urn}:1.2" })).fetch("meter")
+      assert_equal({ "meter" => "dactylic hexameter", "pattern" => "-uu --", "producer" => "nabu-scan",
+                     "grade" => "silver" }, meter)
+    end
+
     # P59-3: the resolved lect rides the passage envelope — merged only
     # when the document carries a materialized lect facet row ("no row
     # means identity"), so every bare-code payload stays byte-identical.

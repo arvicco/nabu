@@ -24,7 +24,7 @@ class ModuleCensusTest < Minitest::Test
   def test_lects_census_counts_the_registry_from_strings
     census = Nabu::Lects.census(lects_yaml: File.read(File.join(FIXTURES, "lects.yml")),
                                 codemap_yaml: File.read(File.join(FIXTURES, "codemap.yml")))
-    assert_equal 284, census.anchors
+    assert_equal Nabu::TestSupport::RegistryCensus::ANCHORS, census.anchors
     assert_equal 147, census.stages
     assert_equal 31, census.varieties
     assert_equal 191, census.codemap
@@ -33,7 +33,10 @@ class ModuleCensusTest < Minitest::Test
   def test_the_nabu_lects_hook_reads_both_files
     counts = Nabu::ModuleCensus.at_dir(Nabu::Adapters::NabuLects, FIXTURES)
     pairs = counts.map { |count| [count.label, count.count] }
-    assert_equal [["anchors", 284], ["stages", 147], ["varieties", 31], ["codemap rows", 191]], pairs
+    census = Nabu::TestSupport::RegistryCensus
+    assert_equal [["anchors", census::ANCHORS], ["stages", census::STAGES],
+                  ["varieties", census::VARIETIES], ["codemap rows", census::CODEMAP_ROWS]],
+                 pairs
   end
 
   def test_a_census_less_module_reports_nil_never_fake_zeros
@@ -75,8 +78,8 @@ class ModuleCensusTest < Minitest::Test
     assert_equal before, delta.before
     assert_equal after, delta.after
     assert_equal ["lects.yml"], delta.changed
-    assert_equal 285, delta.census.first.count
-    assert_equal 284, delta.previous_census.first.count
+    assert_equal Nabu::TestSupport::RegistryCensus::ANCHORS + 1, delta.census.first.count
+    assert_equal Nabu::TestSupport::RegistryCensus::ANCHORS, delta.previous_census.first.count
     assert delta.moved?
   end
 
@@ -90,7 +93,7 @@ class ModuleCensusTest < Minitest::Test
     refute delta.moved?
     assert_nil delta.changed
     assert_nil delta.previous_census
-    assert_equal 284, delta.census.first.count
+    assert_equal Nabu::TestSupport::RegistryCensus::ANCHORS, delta.census.first.count
   end
 
   def test_head_reads_only_a_repo_of_its_own

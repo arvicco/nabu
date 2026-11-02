@@ -81,6 +81,29 @@ registration — is the site's
 **[Quickstart](https://arvicco.github.io/nabu/quickstart/)** page
 (kept in-repo as [docs/quickstart.md](docs/quickstart.md)).
 
+## Run the demo
+
+No clone, no sync: the public `ghcr.io/arvicco/nabu-demo` image bakes an
+open demo slice of the library (Greek New Testament, Hebrew Bible, Latin
+Vulgate, World English Bible, LSJ and Lewis & Short — sources and
+per-source licenses in `/demo/demo-census.json` inside the image) behind
+the read-only MCP server. The full library is a local build (Quickstart
+above).
+
+```
+docker run -i --rm ghcr.io/arvicco/nabu-demo                      # MCP over stdio
+claude mcp add nabu -- docker run -i --rm ghcr.io/arvicco/nabu-demo   # Claude Code
+```
+
+[![Install in VS Code](https://img.shields.io/badge/VS_Code-Install_Nabu_demo-0098FF?logo=visualstudiocode&logoColor=white)](https://vscode.dev/redirect/mcp/install?name=nabu&config=%7B%22command%22%3A%22docker%22%2C%22args%22%3A%5B%22run%22%2C%22-i%22%2C%22--rm%22%2C%22ghcr.io%2Farvicco%2Fnabu-demo%22%5D%7D)
+[![Add to Cursor](https://img.shields.io/badge/Cursor-Add_Nabu_demo-000000?logo=cursor&logoColor=white)](https://cursor.com/install-mcp?name=nabu&config=eyJjb21tYW5kIjoiZG9ja2VyIiwiYXJncyI6WyJydW4iLCItaSIsIi0tcm0iLCJnaGNyLmlvL2FydmljY28vbmFidS1kZW1vIl19)
+
+(GitHub strips custom-scheme links, so the badges go through the editors'
+https redirects to `vscode:mcp/install?…` and
+`cursor://anysphere.cursor-deeplink/mcp/install?…`.) Docker Desktop's MCP
+Toolkit, hosted deploy buttons (Render, Koyeb) and the HTTP mode are on
+the site's [MCP page](https://arvicco.github.io/nabu/mcp/).
+
 ## Show me
 
 Real commands, real output, pasted from live runs on 2026-07-11/12 (trims

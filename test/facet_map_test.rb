@@ -312,6 +312,14 @@ class FacetMapTest < Minitest::Test
                    "genre" => "genre" }, map.fields_for("corpus-oudfries"))
   end
 
+  # P152: PPCHY's sources-page dialect classification (East / West / …) and
+  # its town/region localization — the seam a Yiddish lect rule will read.
+  def test_shipped_config_projects_the_ppchy_dialect_record
+    map = Nabu::FacetMap.load(File.join(Nabu::Config::PROJECT_ROOT, "config", "facet_map.yml"))
+    assert_equal({ "dialect" => "dialect", "dialect_localization" => "region", "genre" => "genre" },
+                 map.fields_for("ppchy"))
+  end
+
   def test_shipped_config_loads
     path = File.join(Nabu::Config::PROJECT_ROOT, "config", "facet_map.yml")
     map = Nabu::FacetMap.load(path)

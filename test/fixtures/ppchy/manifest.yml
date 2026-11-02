@@ -1,0 +1,56 @@
+# Nabu fixture manifest (P5-4 "fixture sentinel"). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# Entries are raw files pinned at upstream commit 404082bf — whole, or
+# documented trims at tree/record boundaries (every kept byte verbatim).
+# adapter_test is null: fresh full copies would false-fail the count
+# assertions.
+source: ppchy
+adapter_test:
+retrieved: 2026-11-02
+files:
+  - path: data/1478w-letter-regensburg.psd
+    url: https://raw.githubusercontent.com/beatrice57/penn-parsed-corpus-of-historical-yiddish/404082bfd935958878a687be990c6254ce01d149/data/1478w-letter-regensburg.psd
+    refetchable: true
+    whole: true
+    trim: none
+  - path: data/1620e-lev-tov-1-preface.psd
+    url: https://raw.githubusercontent.com/beatrice57/penn-parsed-corpus-of-historical-yiddish/404082bfd935958878a687be990c6254ce01d149/data/1620e-lev-tov-1-preface.psd
+    refetchable: true
+    whole: false
+    trim: the first 12 top-level forms (2 CODE markers + 10 sentence trees), byte-verbatim
+  - path: data/1910e-grine-felder.psd
+    url: https://raw.githubusercontent.com/beatrice57/penn-parsed-corpus-of-historical-yiddish/404082bfd935958878a687be990c6254ce01d149/data/1910e-grine-felder.psd
+    refetchable: true
+    whole: false
+    trim: the first 14 top-level forms (2 CODE markers + 12 sentence trees), byte-verbatim
+  - path: data/1xxxx-court-testimony.psd
+    url: https://raw.githubusercontent.com/beatrice57/penn-parsed-corpus-of-historical-yiddish/404082bfd935958878a687be990c6254ce01d149/data/1xxxx-court-testimony.psd
+    refetchable: true
+    whole: false
+    trim: upstream lines 1-70 (items 1-4), 945-973 (items 27-28) and 1387-1428 (item 37), byte-verbatim
+  - path: doc/sources/yiddish-sources-contents.html
+    url: https://raw.githubusercontent.com/beatrice57/penn-parsed-corpus-of-historical-yiddish/404082bfd935958878a687be990c6254ce01d149/doc/sources/yiddish-sources-contents.html
+    refetchable: true
+    whole: false
+    trim: the page head + the catalogs table + the records of the four fixture texts (lev-tov-1's shared record whole), byte-verbatim
+  - path: doc/pdf-images/1819e-khasid.pdf
+    url: https://raw.githubusercontent.com/beatrice57/penn-parsed-corpus-of-historical-yiddish/404082bfd935958878a687be990c6254ce01d149/doc/pdf-images/1819e-khasid.pdf
+    refetchable: true
+    whole: true
+    trim: none (the rejected page-image grain specimen)
+  - path: doc/annotation-yiddish/index.html
+    url: https://raw.githubusercontent.com/beatrice57/penn-parsed-corpus-of-historical-yiddish/404082bfd935958878a687be990c6254ce01d149/doc/annotation-yiddish/index.html
+    refetchable: true
+    whole: true
+    trim: none (the rejected annotation-manual grain specimen)
+  - path: LICENSE.rst
+    url: https://raw.githubusercontent.com/beatrice57/penn-parsed-corpus-of-historical-yiddish/404082bfd935958878a687be990c6254ce01d149/LICENSE.rst
+    refetchable: true
+    whole: true
+    trim: none
+  - path: README.rst
+    url: https://raw.githubusercontent.com/beatrice57/penn-parsed-corpus-of-historical-yiddish/404082bfd935958878a687be990c6254ce01d149/README.rst
+    refetchable: true
+    whole: true
+    trim: none
