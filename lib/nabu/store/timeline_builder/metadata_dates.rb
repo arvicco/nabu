@@ -167,6 +167,9 @@ module Nabu
           #                             centuries (the syllabary's era); place = origPlace
           "itant" => :structured,
           "itkc" => :structured,
+          "jaschke-1881" => :structured, # P152: the 1881 London edition year on every page
+          #                                (the reference-shelf mold; the imprint rides
+          #                                "imprint" — the printing place, no place claim)
           "ja-wikisource" => :header_year_or_era_band, # the page {{header}} year= (the work's
           #                                               own year, composition class) else the
           #                                               era-category band (precision era)
