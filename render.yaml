@@ -1,0 +1,17 @@
+# Render Blueprint for the hosted Nabu demo (the "Deploy to Render" button
+# on https://arvicco.github.io/nabu/mcp/). It runs the PREBUILT public demo
+# image — the demo library slice is baked in, nothing is built on Render —
+# as a streamable-HTTP MCP endpoint at https://<service>.onrender.com/mcp.
+# Render injects PORT; the server reads it (default 8080) and binds
+# 0.0.0.0 inside the image. The image answers comfortably within the free
+# plan's 512 MB (about 185 MiB resident after search/align/define calls).
+# autoDeploy is off: a new :latest is picked up by a manual redeploy only.
+services:
+  - type: web
+    name: nabu-demo
+    runtime: image
+    image:
+      url: ghcr.io/arvicco/nabu-demo:latest
+    plan: free
+    autoDeploy: false
+    dockerCommand: bin/nabu mcp --http
