@@ -7,7 +7,7 @@ description: >-
 
 > The Buddhologist — the dharma across the Pali, Sanskrit, Chinese and Tibetan canons.
 
-Cross-cutting by design: SuttaCentral, CBETA, SARIT, and GRETIL whole — membership is whole-source, so GRETIL rides here although only part of its shelf is Buddhist — and, since P48, the Derge Kangyur and Tengyur: the fourth canon leg.
+Cross-cutting by design: SuttaCentral, CBETA, SARIT, and GRETIL whole — membership is whole-source, so GRETIL rides here although only part of its shelf is Buddhist — and the Derge Kangyur and Tengyur: the fourth canon leg.
 
 New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the library in minutes.
 

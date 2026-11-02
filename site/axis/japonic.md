@@ -7,7 +7,7 @@ description: >-
 
 > The Japanologist — Old Japanese song to the Sino-Japanese dictionary tradition.
 
-The Japanese lane, premodern-first since P108: Genji in Ikeda's critical edition at manuscript-line grain, the Kokinshū and two Man'yōshū witnesses in NIJL's TEI, the みんなで翻刻 crowd-transcription mass, and the NRCT historical gazetteer — beside the ONCOJ corpus and lexicon, EDRDG's dictionaries, HDIC and Unihan shared with the Sinologist, and the kaikki ojp extract riding wiktionary-recon.
+The Japanese lane, premodern-first: Genji in Ikeda's critical edition at manuscript-line grain, the Kokinshū and two Man'yōshū witnesses in NIJL's TEI, the みんなで翻刻 crowd-transcription mass, and the NRCT historical gazetteer — beside the ONCOJ corpus and lexicon, EDRDG's dictionaries, HDIC and Unihan shared with the Sinologist, and the kaikki ojp extract riding wiktionary-recon.
 
 The desk spans two eras of Japanese. Old Japanese (ojp) is live
 through ONCOJ and its lexicon; the modern lane is **Aozora Bunko**
@@ -49,7 +49,7 @@ A source wears every desk it serves — these fifteen answer this desk. Holdings
   kun/on readings and the Jōyō/JLPT/frequency lines), HDIC and Unihan
   shared with the Sinologist, KRADFILE's radical-component index, and the
   kaikki ojp extract on `wiktionary-recon`.
-- **The kyūjitai↔shinjitai reform fold (P38-4 + P38-r1):** modern (`jpn`)
+- **The kyūjitai↔shinjitai reform fold:** modern (`jpn`)
   search folds old-form, new-form and merged spellings onto one skeleton —
   matching modern reading habits, onto the SAME skeleton the Sinologist's
   Han fold uses, so Aozora and kanripo meet. Two lanes: the held Unihan

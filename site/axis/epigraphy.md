@@ -76,7 +76,7 @@ A source wears every desk it serves — these 38 answer this desk. Holdings are 
   `--from/--to`, `--century` and `--place` scope
   the stones and sherds by when and where. EDH's genre facets
   (`--type/--province/--material`) live.
-- **The gazetteer (P44–P46):** `nabu place NAME` resolves a findspot
+- **The gazetteer:** `nabu place NAME` resolves a findspot
   against the Pleiades gazetteer (42,404 places in a derived index —
   millisecond lookups) and counts this library's holdings found there;
   an inscription's `nabu show` names its findspot with the Pleiades id.
