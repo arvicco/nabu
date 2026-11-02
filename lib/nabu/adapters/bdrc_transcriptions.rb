@@ -67,9 +67,11 @@ module Nabu
     # Reconciliation (full text-column census 2026-11-02, parsed through
     # this adapter): berkeley 8,866 rows = the card → 19 volumes / 14
     # instances; palri-parkhang 11,133 rows = the card → 23 volumes / 6
-    # instances; 0 unkeyed, 0 blank, scan stems unique per volume (42
-    # documents / 19,999 passages). acip-sungbum reconciles at the first
-    # sync against its card (79,572 pages; 1,118 transcription volumes).
+    # instances; acip-sungbum 79,572 rows = the card → 1,118 volumes = its
+    # 1,118 transcription volumes (1:1 with instances; 119 BDRC versions);
+    # 0 unkeyed, 0 blank, scan stems unique per volume (1,160
+    # documents / 99,571 passages; parse ≈ 2 min serial). Census crawl:
+    # ≈ 75 min sequential through the API's 429/5xx back-offs.
     # Upstream defect, kept verbatim (canonical means canonical): 15 Palri
     # pages (12 in VE2491_MA, 3 in VE2119_MA) carry པ where the tsheg
     # belongs.

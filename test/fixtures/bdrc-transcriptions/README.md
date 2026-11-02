@@ -56,5 +56,6 @@ API record (trimmed to its identity fields) and the card files.
 - palri-parkhang: 11,133 rows = the card → 23 volumes / 6 instances,
   0 blank. Upstream defect: 15 pages (12 in VE2491_MA, 3 in VE2119_MA)
   carry པ where the tsheg belongs (ཅེསཔགསུངསཔམོདཔ…) — kept verbatim.
-- acip-sungbum: 79,572 rows per the card (232 image volumes, 1,118
-  transcription volumes) — reconciled at the first sync.
+- acip-sungbum: 79,572 rows = the card → 1,118 volumes = its 1,118
+  transcription volumes (one instance each; 119 BDRC versions), 0 blank.
+- all three parsed through the adapter: 1,160 documents / 99,571 passages.
