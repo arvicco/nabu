@@ -582,7 +582,7 @@ class SyncRunnerTest < Minitest::Test
     cloned = runner.sync("nabu-lects").module_delta
     assert_nil cloned.before, "a fresh clone has no prior ref"
     assert_equal lects_git(upstream, "rev-parse", "HEAD"), cloned.after
-    assert_equal 284, cloned.census.first.count
+    assert_equal Nabu::TestSupport::RegistryCensus::ANCHORS, cloned.census.first.count
 
     old_head = lects_git(upstream, "rev-parse", "HEAD")
     path = File.join(upstream, "lects.yml")
@@ -595,7 +595,8 @@ class SyncRunnerTest < Minitest::Test
     assert_equal old_head, delta.before
     assert_equal lects_git(upstream, "rev-parse", "HEAD"), delta.after
     assert_equal ["lects.yml"], delta.changed
-    assert_equal [285, 284], [delta.census.first.count, delta.previous_census.first.count]
+    assert_equal [Nabu::TestSupport::RegistryCensus::ANCHORS + 1, Nabu::TestSupport::RegistryCensus::ANCHORS],
+                 [delta.census.first.count, delta.previous_census.first.count]
     assert_equal 0, moved.load_report.added, "the load (and so the run row) is untouched"
 
     unchanged = runner.sync("nabu-lects").module_delta
