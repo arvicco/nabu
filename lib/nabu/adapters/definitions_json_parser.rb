@@ -3,6 +3,7 @@
 require "json"
 require "cgi"
 require_relative "../normalize"
+require_relative "source_read"
 
 module Nabu
   module Adapters
@@ -55,7 +56,7 @@ module Nabu
       private
 
       def load(path)
-        data = JSON.parse(File.read(path, encoding: "UTF-8"))
+        data = JSON.parse(SourceRead.utf8_file(path, label: "definitions-json"))
         raise Nabu::ParseError, "definitions-json: #{path}: top level is not an array" unless data.is_a?(Array)
 
         data
