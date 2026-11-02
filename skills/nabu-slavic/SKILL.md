@@ -6,7 +6,7 @@ compatibility: "Requires the nabu MCP server (`bin/nabu mcp`, read-only, stdio) 
 metadata:
   desk: slavic
   origin: generated
-  sources: "archiv-slav-phil bg-wikisource ccmh cs-wikisource damaskini elektire eltec-srp freising gams-zrcalo goo300k hr-wikisource imp kdsp korba litopys mdz-protestant mk-wikisource pl-wikisource prague-bible-1488 prilit proiel ru-wikisource scat scripta-bulgarica senie sl-lexica sl-wikisource slavistics-pd slouniki-nasovic sr-wikisource torot ud uk-wikisource vuk-danicic wiktionary-cu"
+  sources: "archiv-slav-phil bg-wikisource ccmh cs-wikisource damaskini elektire elizabeth-bible eltec-srp freising gams-zrcalo goo300k hr-wikisource imp kdsp korba litopys mdz-protestant mk-wikisource pl-wikisource prague-bible-1488 prilit proiel ru-wikisource scat scripta-bulgarica senie sl-lexica sl-wikisource slavistics-pd slouniki-nasovic sr-wikisource torot ud uk-wikisource vuk-danicic wiktionary-cu"
 ---
 
 # The Slavicist — the `slavic` desk
@@ -29,6 +29,7 @@ verbatim upstream terms are in `docs/02-sources.md` of the Nabu repository.
 | `cs-wikisource` | Czech Wikisource — censused premodern works (Dalimil · Bible kralická · Komenský · Harant) | attribution |
 | `damaskini` | Damaskini — Annotated Corpus of Pre-Standardized Balkan Slavic Literature 1.1 (CLARIN.SI) | attribution |
 | `elektire` | eLektire — the Croatian school canon (CARNET / Bulaja naklada) | open |
+| `elizabeth-bible` | The Elizabeth Bible (1757) in Church Slavonic — modernized-spelling rendering, via getBible | open |
 | `eltec-srp` | ELTeC-srp — the Serbian novel collection of the European Literary Text Collection | attribution |
 | `freising` | Freising Manuscripts / Brižinski spomeniki (eZISS, ZRC SAZU) | research_private |
 | `gams-zrcalo` | Zrcalo člověčaskago spasenja (1445) — GAMS digital edition (Kramarić & Schneider, Graz) | attribution |

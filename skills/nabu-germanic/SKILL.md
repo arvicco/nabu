@@ -6,7 +6,7 @@ compatibility: "Requires the nabu MCP server (`bin/nabu mcp`, read-only, stdio) 
 metadata:
   desk: germanic
   origin: generated
-  sources: "aspr bosworth-toller cme corpus-gysseling corpus-oudfries corpus-oudnederlands dta eebo-tcp fornsvenska helipad iswoc menota menotec perseus-anglit proiel ref rem ren rundata ud"
+  sources: "aspr bosworth-toller cme corpus-gysseling corpus-oudfries corpus-oudnederlands dta eebo-tcp fornsvenska helipad iswoc menota menotec perseus-anglit ppchy proiel ref rem ren rundata ud"
 ---
 
 # The Germanicist — the `germanic` desk
@@ -37,6 +37,7 @@ verbatim upstream terms are in `docs/02-sources.md` of the Nabu repository.
 | `menota` | Menota — the Medieval Nordic Text Archive (clarino.uib.no) | attribution |
 | `menotec` | Menotec — Old Norwegian treebanks + the Poetic Edda (Codex Regius), PROIEL scheme | nc |
 | `perseus-anglit` | Perseus Digital Library — canonical Old English literature (Beowulf) | attribution |
+| `ppchy` | PPCHY — Penn Parsed Corpus of Historical Yiddish (Santorini) | nc |
 | `proiel` | PROIEL Treebank | nc |
 | `ref` | ReF — Referenzkorpus Frühneuhochdeutsch (1350–1650), v1.0.2 | attribution |
 | `rem` | ReM — Referenzkorpus Mittelhochdeutsch (1050–1350), v2.1 | attribution |

@@ -2212,7 +2212,7 @@ elizabeth-bible:   # P152, 02-sources row 317
   adapter: Nabu::Adapters::ElizabethBible
   adopted: "2026-11-02"
   axes: [slavic, biblical]
-  wired: false   # awaiting the first real sync: bin/nabu enable elizabeth-bible,
+  wired: true   # first sync 2026-11-02 exactly on census (76 docs / 36,000 passages, 0 errored); Gen 1.1 / Ps 22.1 (Greek numbering) / John 1.1 eyeballed; FTS probe green
                  # then bin/nabu sync elizabeth-bible (one 23.7 MB JSON GET).
                  # EXPECT 76 docs / 36,000 passages, 0 errored, 0 skipped
                  # (census 2026-11-02, Last-Modified 2026-09-12): Psalms 2,529
@@ -4715,11 +4715,11 @@ pna:   # 02-sources row 311
   # links (3,084 of 4,188 texts) onto held oracc/cdli documents. The
   # 149,045 co-occurrence edges are skipped by rule (no relation lane).
 
-ppchy:   # P152, 02-sources row 317
+ppchy:   # P152, 02-sources row 318
   adapter: Nabu::Adapters::Ppchy
   adopted: "2026-11-02"
   axes: [germanic]
-  wired: false   # first sync is the gate's: bin/nabu enable ppchy, then
+  wired: true   # first sync 2026-11-02 exactly on census (63 docs / 17,861 passages, 1 rule skip); the 1478 Regensburg letter + a court-testimony ?-URN eyeballed; FTS probe green
                  # bin/nabu sync ppchy (a sparse git clone ≈ 5 MB of data/ +
                  # the sources page; parse ≈ 2 s). EXPECT 63 docs / 17,861
                  # passages, 0 errored, 1 skipped by rule (upstream's
