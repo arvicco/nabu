@@ -2638,6 +2638,25 @@ sources:
         30,647 rows, 0 undated (the P40-6 exclusion reversed)"}
     places: {posture: named}
     script: {posture: implied}
+  runesdb:   # P153
+    kind: {posture: unclassified, note: "the TEI's only genre-shaped field (msContents summary)
+        reads \"Runische Inschrift\" on all 723 files — no typed genre; the object type (stone,
+        comb, brooch) lives in the unfetched LIDO records"}
+    # lect: machine-postured by the runesdb-siglum facet rule — raw gem on
+    # every find (the TEI carries no language); the rule stages the
+    # unambiguous corpus families off the Hauptsigle family (OE-* → ang,
+    # the KJ older-futhark numbering → gmq:run, the bare Scandinavian
+    # regional sigla → gmq); pre-OE/Frisian blends, SG, the unglossed
+    # regional families and the runica-manuscripta shelfmarks stay bare
+    # gem, declared.
+    dating: {posture: undatable, note: "the TEI zip carries no date; dating lives in the
+        per-find LIDO records (runesdb.de/lido/<id>, earliestDate/latestDate), not fetched —
+        their harvest is the follow-up that dates the finds"}
+    places: {posture: unplaced, note: "the TEI zip carries no place; the LIDO records hold
+        find place + repository with coordinates, not fetched (the follow-up)"}
+    script: {posture: qualified, note: "the text is upstream's Latin-letter TRANSLITERATION of
+        the runes (runological sigla ':' '*' '[...]' '?' and bind-rune '^' verbatim) — never a
+        runic-Unicode witness; the glyph records carry rune names and formal types"}
   sblgnt:
     dating: {posture: undatable}
     places: {posture: unplaced}

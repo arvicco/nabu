@@ -1,0 +1,1213 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xmlns:runes="https://www.runesdb.de/tei-extension">
+    <teiHeader>
+        <fileDesc>
+            <titleStmt>
+                <title>Inschrift: Stein von Hackness (OE-GB-30)</title>
+                <respStmt>
+                    <resp>Digitale Erfassung</resp>
+                    <orgName>RuneSDB.de</orgName>
+                </respStmt>
+            </titleStmt>
+            <publicationStmt>
+                <p>Digital Edition</p>
+                <availability status="restricted">
+                    <p xml:lang="de">CC BY-SA 4.0 - Namensnennung-Share Alike 4.0 International</p>
+                    <p xml:lang="en">CC BY-SA 4.0 - Attribution-ShareAlike 4.0 International</p>
+                    <ref target="https://creativecommons.org/licenses/by-sa/4.0/">https://creativecommons.org/licenses/by-sa/4.0/</ref>
+                </availability>
+                <publisher>
+                    <orgName xml:lang="de">Niedersächsische Akademie der Wissenschaften zu Göttingen, Projekt Runische Schriftlichkeit in den germanischen Sprachen (RuneS)</orgName>
+                    <orgName xml:lang="en">Göttingen Academy of Sciences and Humanities in Lower Saxony, Project Runic writing in the Germanic languages (RuneS)</orgName>
+                </publisher>
+            </publicationStmt>
+            <revisionDesc>
+                <change when="2026-08-01T00:00:00">
+                    <desc xml:lang="de">Metadaten erfasst und digital dokumentiert</desc>
+                    <desc xml:lang="en">Metadata recorded and digitally documented</desc>
+                </change>
+            </revisionDesc>
+            <sourceDesc>
+                <msDesc>
+                    <msIdentifier>
+                        <idno>629</idno>
+                        <altIdentifier>
+                            <idno type="hauptsigle">OE-GB-30</idno>
+                        </altIdentifier>
+                    </msIdentifier>
+                    <msContents>
+                        <summary>Runische Inschrift</summary>
+                    </msContents>
+                    <acquisition>
+                        <name xml:lang="de">Runische Schriftlichkeit in den germanischen Sprachen (RuneS)</name>
+                        <name xml:lang="en">Runic writing in the Germanic languages (RuneS)</name>
+                        <p xml:lang="de">Niedersächsische Akademie der Wissenschaften zu Göttingen</p>
+                        <p xml:lang="en">Göttingen Academy of Sciences and Humanities in Lower Saxony</p>
+                        <ref target="http://d-nb.info/gnd/16268620-1">GND Identifier</ref>
+                    </acquisition>
+                </msDesc>
+                <relatedItem type="otherForm" subtype="archaeological">
+                    <ref target="https://www.runesdb.de/lido/629" mimeType="application/xml">
+                        LIDO-XML: Archäologische Merkmale
+                    </ref>
+                </relatedItem>
+            </sourceDesc>
+        </fileDesc>
+    </teiHeader>
+    <text>
+        <body>
+                <div type="side" n="A" xml:id="side-A">
+                            <ab type="sequence"
+                                n="1"
+                                xml:id="seq-A-1"
+                                runes:samstavsRunor="false"
+                                runes:autopsyDate=""
+                                runes:readingDir="ltr"
+                                runes:impaired="false"
+                                runes:borderLines="false"
+                                runes:layout-de="gerade "
+                                runes:layout-en="straight"
+                                runes:layoutSpecial-de=""
+                                runes:layoutSpecial-en=""
+                                runes:relationObject-de="-"
+                                runes:relationObject-en="-"
+                                runes:technique-de="geritzt "
+                                runes:technique-en="cut"
+                                runes:variantWritingDir-de="keine Variation "
+                                runes:variantWritingDir-en="no variation"
+                                runes:variantWidth-de="keine Variation "
+                                runes:variantWidth-en="no variation"
+                                runes:variantHeight-de="keine Variation "
+                                runes:variantHeight-en="no variation"
+                                runes:variantForm-de="keine Variation "
+                                runes:variantForm-en="no variation"
+                                runes:variantTechnique-de="keine Variation "
+                                runes:variantTechnique-en="no variation"
+                                facs="https://www.runesdb.de/image-service/2731/full/max/0/default.jpg">
+                                    <g xml:id="g-3773"
+                                       n="1"
+                                       runes:glyphId="22"
+                                       runes:graphTypeUncertain="false"
+                                       runes:formsetyF-de="-" runes:formsetyF-en="-"
+                                       runes:diacriticon="false"
+                                       runes:readingDir="ltr"
+                                       runes:inverted="false"
+                                       runes:majuscule="false"
+                                       runes:branchVariance-de="-"
+                                       runes:branchVariance-en="-"
+                                       runes:signTilted-de="keine " runes:signTilted-en="none"
+                                       runes:signWidth-de="normal " runes:signWidth-en="normal "
+                                       runes:impairedObjForm="false"
+                                       runes:impairedObjFrag="false"
+                                       runes:impairedSurface="true"
+                                       runes:impairedAdjacentSign="false"
+                                       runes:impairedAbrasion="false"
+                                       runes:impairedPrecarving="false"
+                                       runes:impairedCorrection="false"
+                                       runes:compositionRecognizable="true"
+                                       runes:separationSign="true"
+                                       runes:logographicRune="false"
+                                       resp="#3773"
+                                       facs="/image-service/2731/1357,343,157,194/max/0/default.jpg"
+                                       runes:boundingBoxX="1357" runes:boundingBoxY="343" runes:boundingBoxWidth="157" runes:boundingBoxHeight="194">
+                                            <seg type="transliteration" subtype="main" xml:lang="de">?</seg>
+                                            <seg type="transliteration" subtype="main" xml:lang="en">?</seg>
+                                            <seg type="runeName" subtype="primary" xml:lang="de">
+                                                -
+                                            </seg>
+                                            <seg type="runeName" subtype="primary" xml:lang="en">
+                                                -
+                                            </seg>
+                                            <seg type="elements" n="3">
+                                                    <seg type="element"
+                                                         xml:id="elem-13277"
+                                                         n="1"
+                                                         runes:elementType="Stab (Stave)"
+                                                         runes:form-de="gerade"
+                                                         runes:form-en="straight"
+                                                         runes:productionOrder="1"
+                                                         runes:impaired="false"
+                                                         runes:extentFrom="top"
+                                                         runes:extentTo="4"
+                                                         runes:p1px="1442,56" runes:p1py="343,527" runes:p1nx="131,701" runes:p1ny="13,3"
+                                                         runes:p2px="1442,56" runes:p2py="537,512" runes:p2nx="139,651" runes:p2ny="207,766"
+                                                         >
+                                                            <seg type="course" xml:lang="de">senkrecht</seg>
+                                                            <seg type="course" xml:lang="en">vertical</seg>
+                                                            <seg type="techniqueTool" xml:lang="de">gemeißelt </seg>
+                                                            <seg type="techniqueTool" xml:lang="en">chiselled</seg>
+                                                            <seg type="techniqueDesign" xml:lang="de">durchgezogen </seg>
+                                                            <seg type="techniqueDesign" xml:lang="en">through line</seg>
+                                                            <seg type="segment" xml:lang="de">einteilig</seg>
+                                                            <seg type="segment" xml:lang="en">mono-partite</seg>
+                                                    </seg>
+                                                    <seg type="element"
+                                                         xml:id="elem-13278"
+                                                         n="2"
+                                                         runes:elementType="Zweig (Twig)"
+                                                         runes:form-de="gerade"
+                                                         runes:form-en="straight"
+                                                         runes:productionOrder="2"
+                                                         runes:impaired="false"
+                                                         runes:extentFrom="middle"
+                                                         runes:extentTo="middle"
+                                                         runes:p1px="1357,69" runes:p1py="439,417" runes:p1nx="50,568" runes:p1ny="105,84"
+                                                         runes:p2px="1514,2" runes:p2py="433,907" runes:p2nx="207,211" runes:p2ny="106,933"
+                                                         >
+                                                            <seg type="course" xml:lang="de">waagerecht</seg>
+                                                            <seg type="course" xml:lang="en">horizontal</seg>
+                                                            <seg type="techniqueTool" xml:lang="de">gemeißelt </seg>
+                                                            <seg type="techniqueTool" xml:lang="en">chiselled</seg>
+                                                            <seg type="techniqueDesign" xml:lang="de">durchgezogen </seg>
+                                                            <seg type="techniqueDesign" xml:lang="en">through line</seg>
+                                                            <seg type="segment" xml:lang="de">einteilig</seg>
+                                                            <seg type="segment" xml:lang="en">mono-partite</seg>
+                                                    </seg>
+                                                    <seg type="element"
+                                                         xml:id="elem-13279"
+                                                         n="1"
+                                                         runes:elementType="treffpunkt"
+                                                         runes:intersectionPlace-de="mittig" runes:intersectionPlace-en="middle"
+                                                         runes:intersectionPlaceTip="false"
+                                                         runes:intersectionPlaceFrame="false"
+                                                         runes:p1px="1445,86" runes:p1py="435,009" runes:p1nx="138,764" runes:p1ny="105,148"
+                                                         >
+                                                            <seg type="intersectionType" xml:lang="de">überschneidend </seg>
+                                                            <seg type="intersectionType" xml:lang="en">crossing</seg>
+                                                    </seg>
+                                            </seg>
+                                    </g>
+                                    <g xml:id="g-3774"
+                                       n="2"
+                                       runes:glyphId="122"
+                                       runes:graphTypeUncertain="true"
+                                       runes:formsetyF-de="-" runes:formsetyF-en="-"
+                                       runes:diacriticon="false"
+                                       runes:readingDir="ltr"
+                                       runes:inverted="false"
+                                       runes:majuscule="false"
+                                       runes:branchVariance-de="-"
+                                       runes:branchVariance-en="-"
+                                       runes:signWidth-de="normal " runes:signWidth-en="normal "
+                                       runes:impairedObjForm="false"
+                                       runes:impairedObjFrag="false"
+                                       runes:impairedSurface="true"
+                                       runes:impairedAdjacentSign="false"
+                                       runes:impairedAbrasion="false"
+                                       runes:impairedPrecarving="false"
+                                       runes:impairedCorrection="false"
+                                       runes:compositionRecognizable="false"
+                                       runes:separationSign="false"
+                                       runes:logographicRune="false"
+                                       resp="#3774"
+                                       facs="/image-service/2731/1546,348,125,184/max/0/default.jpg"
+                                       runes:boundingBoxX="1546" runes:boundingBoxY="348" runes:boundingBoxWidth="125" runes:boundingBoxHeight="184">
+                                            <seg type="transliteration" subtype="main" xml:lang="de">r</seg>
+                                            <seg type="transliteration" subtype="main" xml:lang="en">r</seg>
+                                            <seg type="runeName" subtype="primary" xml:lang="de">
+                                                raidō, rād, rāt, ræið/ reið
+                                            </seg>
+                                            <seg type="runeName" subtype="primary" xml:lang="en">
+                                                raidō, rād, rāt, ræið/ reið
+                                            </seg>
+                                            <seg type="elements" n="6">
+                                                    <seg type="element"
+                                                         xml:id="elem-41207"
+                                                         n="2"
+                                                         runes:elementType="treffpunkt"
+                                                         runes:intersectionPlaceTip="false"
+                                                         runes:intersectionPlaceFrame="false"
+                                                         runes:p1px="1554,7310791015625" runes:p1py="435,9765625" runes:p1nx="247,3166961669922" runes:p1ny="97,06012725830078"
+                                                         >
+                                                            <seg type="intersectionType" xml:lang="de">frei </seg>
+                                                            <seg type="intersectionType" xml:lang="en">without contact</seg>
+                                                    </seg>
+                                                    <seg type="element"
+                                                         xml:id="elem-13280"
+                                                         n="1"
+                                                         runes:elementType="Stab (Stave)"
+                                                         runes:form-de="gerade"
+                                                         runes:form-en="straight"
+                                                         runes:productionOrder="1"
+                                                         runes:impaired="false"
+                                                         runes:extentFrom="1"
+                                                         runes:extentTo="bottom"
+                                                         runes:p1px="1549,2484130859375" runes:p1py="348,3955078125" runes:p1nx="238,16107177734375" runes:p1ny="9,01962661743164"
+                                                         runes:p2px="1552,64892578125" runes:p2py="531,83544921875" runes:p2nx="249,23561096191406" runes:p2ny="193,07652282714844"
+                                                         >
+                                                            <seg type="course" xml:lang="de">senkrecht</seg>
+                                                            <seg type="course" xml:lang="en">vertical</seg>
+                                                            <seg type="techniqueTool" xml:lang="de">gemeißelt </seg>
+                                                            <seg type="techniqueTool" xml:lang="en">chiselled</seg>
+                                                            <seg type="techniqueDesign" xml:lang="de">durchgezogen </seg>
+                                                            <seg type="techniqueDesign" xml:lang="en">through line</seg>
+                                                            <seg type="segment" xml:lang="de">einteilig</seg>
+                                                            <seg type="segment" xml:lang="en">mono-partite</seg>
+                                                    </seg>
+                                                    <seg type="element"
+                                                         xml:id="elem-13281"
+                                                         n="1"
+                                                         runes:elementType="Haken (Hook)"
+                                                         runes:form-de="eckig: lang-kurz"
+                                                         runes:form-en="angled: long-short"
+                                                         runes:productionOrder="2"
+                                                         runes:impaired="false"
+                                                         runes:extentFrom="1"
+                                                         runes:extentTo="2"
+                                                         runes:p1px="1549,2996826171875" runes:p1py="349,5800476074219" runes:p1nx="238,261962890625" runes:p1ny="10,209402084350586"
+                                                         runes:p2px="1626,5673828125" runes:p2py="405,8967590332031" runes:p2nx="318,0653991699219" runes:p2ny="69,9722900390625"
+                                                         runes:p3px="1564,7310791015625" runes:p3py="432,9765625" runes:p3nx="257,21490478515625" runes:p3ny="94,47967529296875">
+                                                            <seg type="formalExpression" xml:lang="de">normal </seg>
+                                                            <seg type="formalExpression" xml:lang="en">normal </seg>
+                                                            <seg type="techniqueTool" xml:lang="de">gemeißelt </seg>
+                                                            <seg type="techniqueTool" xml:lang="en">chiselled</seg>
+                                                            <seg type="techniqueDesign" xml:lang="de">durchgezogen </seg>
+                                                            <seg type="techniqueDesign" xml:lang="en">through line</seg>
+                                                    </seg>
+                                                    <seg type="element"
+                                                         xml:id="elem-13282"
+                                                         n="1"
+                                                         runes:elementType="Zweig (Twig)"
+                                                         runes:form-de="geschwungen"
+                                                         runes:form-en="curved"
+                                                         runes:productionOrder="3"
+                                                         runes:impaired="false"
+                                                         runes:extentFrom="middle"
+                                                         runes:extentTo="bottom"
+                                                         runes:p1px="1595,0274658203125" runes:p1py="433,4700012207031" runes:p1nx="287,6033630371094" runes:p1ny="96,26884460449219"
+                                                         runes:p2px="1670,6409912109375" runes:p2py="517,8151245117188" runes:p2nx="366,9200439453125" runes:p2ny="184,0615234375"
+                                                         >
+                                                            <seg type="course" xml:lang="de">wechselnd</seg>
+                                                            <seg type="course" xml:lang="en">alternating</seg>
+                                                            <seg type="formalExpression" xml:lang="de">stark profiliert </seg>
+                                                            <seg type="formalExpression" xml:lang="en">strong profile</seg>
+                                                            <seg type="techniqueTool" xml:lang="de">gemeißelt </seg>
+                                                            <seg type="techniqueTool" xml:lang="en">chiselled</seg>
+                                                            <seg type="techniqueDesign" xml:lang="de">durchgezogen </seg>
+                                                            <seg type="techniqueDesign" xml:lang="en">through line</seg>
+                                                            <seg type="segment" xml:lang="de">mehrteilig (2)</seg>
+                                                            <seg type="segment" xml:lang="en">multi-partite (2)</seg>
+                                                    </seg>
+                                                    <seg type="element"
+                                                         xml:id="elem-13283"
+                                                         n="1"
+                                                         runes:elementType="treffpunkt"
+                                                         runes:intersectionPlace-de="1" runes:intersectionPlace-en="1"
+                                                         runes:intersectionPlaceTip="true"
+                                                         runes:intersectionPlaceFrame="false"
+                                                         runes:p1px="1546,54638671875" runes:p1py="353,0021667480469" runes:p1nx="235,64517211914062" runes:p1ny="13,522682189941406"
+                                                         >
+                                                            <seg type="intersectionType" xml:lang="de">berührend </seg>
+                                                            <seg type="intersectionType" xml:lang="en">with contact</seg>
+                                                    </seg>
+                                                    <seg type="element"
+                                                         xml:id="elem-13284"
+                                                         n="3"
+                                                         runes:elementType="treffpunkt"
+                                                         runes:intersectionPlace-de="mittig" runes:intersectionPlace-en="middle"
+                                                         runes:intersectionPlaceTip="false"
+                                                         runes:intersectionPlaceFrame="false"
+                                                         runes:p1px="1585,7310791015625" runes:p1py="425,9765625" runes:p1nx="277,971923828125" runes:p1ny="88,35893249511719"
+                                                         >
+                                                            <seg type="intersectionType" xml:lang="de">berührend </seg>
+                                                            <seg type="intersectionType" xml:lang="en">with contact</seg>
+                                                    </seg>
+                                            </seg>
+                                    </g>
+                                    <g xml:id="g-3775"
+                                       n="3"
+                                       runes:glyphId="68"
+                                       runes:graphTypeUncertain="false"
+                                       runes:formsetyF-de="-" runes:formsetyF-en="-"
+                                       runes:diacriticon="false"
+                                       runes:readingDir="ltr"
+                                       runes:inverted="false"
+                                       runes:majuscule="false"
+                                       runes:branchVariance-de="-"
+                                       runes:branchVariance-en="-"
+                                       runes:signTilted-de="keine " runes:signTilted-en="none"
+                                       runes:signWidth-de="breit " runes:signWidth-en="broad"
+                                       runes:impairedObjForm="false"
+                                       runes:impairedObjFrag="false"
+                                       runes:impairedSurface="true"
+                                       runes:impairedAdjacentSign="false"
+                                       runes:impairedAbrasion="false"
+                                       runes:impairedPrecarving="false"
+                                       runes:impairedCorrection="false"
+                                       runes:compositionRecognizable="true"
+                                       runes:separationSign="false"
+                                       runes:logographicRune="false"
+                                       resp="#3775"
+                                       facs="/image-service/2731/1755,331,142,185/max/0/default.jpg"
+                                       runes:boundingBoxX="1755" runes:boundingBoxY="331" runes:boundingBoxWidth="142" runes:boundingBoxHeight="185">
+                                            <seg type="transliteration" subtype="main" xml:lang="de">m</seg>
+                                            <seg type="transliteration" subtype="main" xml:lang="en">m</seg>
+                                            <seg type="runeName" subtype="primary" xml:lang="de">
+                                                mannaz, man, mað(u)r
+                                            </seg>
+                                            <seg type="runeName" subtype="primary" xml:lang="en">
+                                                mannaz, man, mað(u)r
+                                            </seg>
+                                                <seg type="runeName" subtype="secondary" xml:lang="de">mannaz, man</seg>
+                                                <seg type="runeName" subtype="secondary" xml:lang="en">mannaz, man</seg>
+                                            <seg type="elements" n="9">
+                                                    <seg type="element"
+                                                         xml:id="elem-13285"
+                                                         n="1"
+                                                         runes:elementType="Stab (Stave)"
+                                                         runes:form-de="gerade"
+                                                         runes:form-en="straight"
+                                                         runes:productionOrder="1"
+                                                         runes:impaired="false"
+                                                         runes:extentFrom="1"
+                                                         runes:extentTo="bottom"
+                                                         runes:p1px="1756,65" runes:p1py="338,574" runes:p1nx="445,643" runes:p1ny="8,03451"
+                                                         runes:p2px="1764,2" runes:p2py="515,041" runes:p2nx="460,583" runes:p2ny="185,277"
+                                                         >
+                                                            <seg type="course" xml:lang="de">fallend</seg>
+                                                            <seg type="course" xml:lang="en">descending</seg>
+                                                            <seg type="techniqueTool" xml:lang="de">gemeißelt </seg>
+                                                            <seg type="techniqueTool" xml:lang="en">chiselled</seg>
+                                                            <seg type="techniqueDesign" xml:lang="de">durchgezogen </seg>
+                                                            <seg type="techniqueDesign" xml:lang="en">through line</seg>
+                                                            <seg type="segment" xml:lang="de">einteilig</seg>
+                                                            <seg type="segment" xml:lang="en">mono-partite</seg>
+                                                    </seg>
+                                                    <seg type="element"
+                                                         xml:id="elem-13286"
+                                                         n="2"
+                                                         runes:elementType="Stab (Stave)"
+                                                         runes:form-de="gerade"
+                                                         runes:form-en="straight"
+                                                         runes:productionOrder="2"
+                                                         runes:impaired="false"
+                                                         runes:extentFrom="1"
+                                                         runes:extentTo="4"
+                                                         runes:p1px="1879,33" runes:p1py="331,969" runes:p1nx="568,334" runes:p1ny="6,65336"
+                                                         runes:p2px="1897,26" runes:p2py="512,21" runes:p2nx="593,836" runes:p2ny="188,124"
+                                                         >
+                                                            <seg type="course" xml:lang="de">fallend</seg>
+                                                            <seg type="course" xml:lang="en">descending</seg>
+                                                            <seg type="techniqueTool" xml:lang="de">gemeißelt </seg>
+                                                            <seg type="techniqueTool" xml:lang="en">chiselled</seg>
+                                                            <seg type="techniqueDesign" xml:lang="de">durchgezogen </seg>
+                                                            <seg type="techniqueDesign" xml:lang="en">through line</seg>
+                                                            <seg type="segment" xml:lang="de">einteilig</seg>
+                                                            <seg type="segment" xml:lang="en">mono-partite</seg>
+                                                    </seg>
+                                                    <seg type="element"
+                                                         xml:id="elem-13287"
+                                                         n="1"
+                                                         runes:elementType="Zweig (Twig)"
+                                                         runes:form-de="gerade"
+                                                         runes:form-en="straight"
+                                                         runes:productionOrder="3"
+                                                         runes:impaired="false"
+                                                         runes:extentFrom="1"
+                                                         runes:extentTo="3"
+                                                         runes:p1px="1885,93" runes:p1py="453,702" runes:p1nx="580,041" runes:p1ny="128,982"
+                                                         runes:p2px="1755,71" runes:p2py="339,518" runes:p2nx="444,737" runes:p2ny="8,94028"
+                                                         >
+                                                            <seg type="course" xml:lang="de">fallend</seg>
+                                                            <seg type="course" xml:lang="en">descending</seg>
+                                                            <seg type="techniqueTool" xml:lang="de">geritzt </seg>
+                                                            <seg type="techniqueTool" xml:lang="en">cut</seg>
+                                                            <seg type="techniqueDesign" xml:lang="de">durchgezogen </seg>
+                                                            <seg type="techniqueDesign" xml:lang="en">through line</seg>
+                                                            <seg type="segment" xml:lang="de">einteilig</seg>
+                                                            <seg type="segment" xml:lang="en">mono-partite</seg>
+                                                    </seg>
+                                                    <seg type="element"
+                                                         xml:id="elem-13288"
+                                                         n="2"
+                                                         runes:elementType="Zweig (Twig)"
+                                                         runes:form-de="gerade"
+                                                         runes:form-en="straight"
+                                                         runes:productionOrder="4"
+                                                         runes:impaired="false"
+                                                         runes:extentFrom="1"
+                                                         runes:extentTo="3"
+                                                         runes:p1px="1878,39" runes:p1py="331,025" runes:p1nx="567,348" runes:p1ny="5,66695"
+                                                         runes:p2px="1764,2" runes:p2py="453,702" runes:p2nx="458,02" runes:p2ny="123,781"
+                                                         >
+                                                            <seg type="course" xml:lang="de">steigend</seg>
+                                                            <seg type="course" xml:lang="en">ascending</seg>
+                                                            <seg type="techniqueTool" xml:lang="de">gemeißelt </seg>
+                                                            <seg type="techniqueTool" xml:lang="en">chiselled</seg>
+                                                            <seg type="techniqueDesign" xml:lang="de">durchgezogen </seg>
+                                                            <seg type="techniqueDesign" xml:lang="en">through line</seg>
+                                                            <seg type="segment" xml:lang="de">einteilig</seg>
+                                                            <seg type="segment" xml:lang="en">mono-partite</seg>
+                                                    </seg>
+                                                    <seg type="element"
+                                                         xml:id="elem-13289"
+                                                         n="1"
+                                                         runes:elementType="treffpunkt"
+                                                         runes:intersectionPlace-de="oben" runes:intersectionPlace-en="top"
+                                                         runes:intersectionPlaceTip="true"
+                                                         runes:intersectionPlaceFrame="false"
+                                                         runes:p1px="1755,71" runes:p1py="342,349" runes:p1nx="444,855" runes:p1ny="11,7786"
+                                                         >
+                                                            <seg type="intersectionType" xml:lang="de">berührend </seg>
+                                                            <seg type="intersectionType" xml:lang="en">with contact</seg>
+                                                    </seg>
+                                                    <seg type="element"
+                                                         xml:id="elem-13290"
+                                                         n="2"
+                                                         runes:elementType="treffpunkt"
+                                                         runes:intersectionPlace-de="-" runes:intersectionPlace-en="-"
+                                                         runes:intersectionPlaceTip="false"
+                                                         runes:intersectionPlaceFrame="false"
+                                                         runes:p1px="1763,26" runes:p1py="449,927" runes:p1nx="456,917" runes:p1ny="119,956"
+                                                         >
+                                                            <seg type="intersectionType" xml:lang="de">berührend </seg>
+                                                            <seg type="intersectionType" xml:lang="en">with contact</seg>
+                                                    </seg>
+                                                    <seg type="element"
+                                                         xml:id="elem-13291"
+                                                         n="3"
+                                                         runes:elementType="treffpunkt"
+                                                         runes:intersectionPlace-de="2" runes:intersectionPlace-en="2"
+                                                         runes:intersectionPlaceTip="false"
+                                                         runes:intersectionPlaceFrame="false"
+                                                         runes:p1px="1816,1" runes:p1py="398,026" runes:p1nx="507,718" runes:p1ny="70,1786"
+                                                         >
+                                                            <seg type="intersectionType" xml:lang="de">überschneidend </seg>
+                                                            <seg type="intersectionType" xml:lang="en">crossing</seg>
+                                                    </seg>
+                                                    <seg type="element"
+                                                         xml:id="elem-13292"
+                                                         n="4"
+                                                         runes:elementType="treffpunkt"
+                                                         runes:intersectionPlace-de="1" runes:intersectionPlace-en="1"
+                                                         runes:intersectionPlaceTip="true"
+                                                         runes:intersectionPlaceFrame="false"
+                                                         runes:p1px="1881,22" runes:p1py="332,913" runes:p1nx="570,265" runes:p1ny="7,68012"
+                                                         >
+                                                            <seg type="intersectionType" xml:lang="de">berührend </seg>
+                                                            <seg type="intersectionType" xml:lang="en">with contact</seg>
+                                                    </seg>
+                                                    <seg type="element"
+                                                         xml:id="elem-13293"
+                                                         n="5"
+                                                         runes:elementType="treffpunkt"
+                                                         runes:intersectionPlace-de="3" runes:intersectionPlace-en="3"
+                                                         runes:intersectionPlaceTip="false"
+                                                         runes:intersectionPlaceFrame="false"
+                                                         runes:p1px="1887,82" runes:p1py="454,646" runes:p1nx="581,972" runes:p1ny="130,009"
+                                                         >
+                                                            <seg type="intersectionType" xml:lang="de">berührend </seg>
+                                                            <seg type="intersectionType" xml:lang="en">with contact</seg>
+                                                    </seg>
+                                            </seg>
+                                    </g>
+                                    <g xml:id="g-3776"
+                                       n="4"
+                                       runes:glyphId="143"
+                                       runes:graphTypeUncertain="false"
+                                       runes:formsetyF-de="-" runes:formsetyF-en="-"
+                                       runes:diacriticon="false"
+                                       runes:readingDir="ltr"
+                                       runes:inverted="false"
+                                       runes:majuscule="false"
+                                       runes:branchVariance-de="-"
+                                       runes:branchVariance-en="-"
+                                       runes:signTilted-de="keine " runes:signTilted-en="none"
+                                       runes:signWidth-de="normal " runes:signWidth-en="normal "
+                                       runes:impairedObjForm="false"
+                                       runes:impairedObjFrag="true"
+                                       runes:impairedSurface="false"
+                                       runes:impairedAdjacentSign="false"
+                                       runes:impairedAbrasion="false"
+                                       runes:impairedPrecarving="false"
+                                       runes:impairedCorrection="false"
+                                       runes:compositionRecognizable="true"
+                                       runes:separationSign="false"
+                                       runes:logographicRune="false"
+                                       resp="#3776"
+                                       facs="/image-service/2731/1935,330,79,187/max/0/default.jpg"
+                                       runes:boundingBoxX="1935" runes:boundingBoxY="330" runes:boundingBoxWidth="79" runes:boundingBoxHeight="187">
+                                            <seg type="transliteration" subtype="main" xml:lang="de">c</seg>
+                                            <seg type="transliteration" subtype="main" xml:lang="en">c</seg>
+                                            <seg type="runeName" subtype="primary" xml:lang="de">
+                                                -
+                                            </seg>
+                                            <seg type="runeName" subtype="primary" xml:lang="en">
+                                                -
+                                            </seg>
+                                            <seg type="elements" n="3">
+                                                    <seg type="element"
+                                                         xml:id="elem-13294"
+                                                         n="1"
+                                                         runes:elementType="Stab (Stave)"
+                                                         runes:form-de="gerade"
+                                                         runes:form-en="straight"
+                                                         runes:productionOrder="1"
+                                                         runes:impaired="false"
+                                                         runes:extentFrom="1"
+                                                         runes:extentTo="4"
+                                                         runes:p1px="1935,95" runes:p1py="330,081" runes:p1nx="625,009" runes:p1ny="7,18031"
+                                                         runes:p2px="1943,5" runes:p2py="516,928" runes:p2nx="640,382" runes:p2ny="194,83"
+                                                         >
+                                                            <seg type="course" xml:lang="de">fallend</seg>
+                                                            <seg type="course" xml:lang="en">descending</seg>
+                                                            <seg type="techniqueTool" xml:lang="de">gemeißelt </seg>
+                                                            <seg type="techniqueTool" xml:lang="en">chiselled</seg>
+                                                            <seg type="techniqueDesign" xml:lang="de">durchgezogen </seg>
+                                                            <seg type="techniqueDesign" xml:lang="en">through line</seg>
+                                                            <seg type="segment" xml:lang="de">einteilig</seg>
+                                                            <seg type="segment" xml:lang="en">mono-partite</seg>
+                                                    </seg>
+                                                    <seg type="element"
+                                                         xml:id="elem-13295"
+                                                         n="1"
+                                                         runes:elementType="Zweig (Twig)"
+                                                         runes:form-de="gerundet"
+                                                         runes:form-en="rounded"
+                                                         runes:productionOrder="2"
+                                                         runes:impaired="false"
+                                                         runes:extentFrom="2"
+                                                         runes:extentTo="4"
+                                                         runes:p1px="1938,78" runes:p1py="396,138" runes:p1nx="630,606" runes:p1ny="73,5279"
+                                                         runes:p2px="2014,27" runes:p2py="507,491" runes:p2nx="710,93" runes:p2ny="188,393"
+                                                         >
+                                                            <seg type="course" xml:lang="de">fallend</seg>
+                                                            <seg type="course" xml:lang="en">descending</seg>
+                                                            <seg type="formalExpression" xml:lang="de">normal </seg>
+                                                            <seg type="formalExpression" xml:lang="en">normal </seg>
+                                                            <seg type="techniqueTool" xml:lang="de">gemeißelt </seg>
+                                                            <seg type="techniqueTool" xml:lang="en">chiselled</seg>
+                                                            <seg type="techniqueDesign" xml:lang="de">durchgezogen </seg>
+                                                            <seg type="techniqueDesign" xml:lang="en">through line</seg>
+                                                            <seg type="segment" xml:lang="de">einteilig</seg>
+                                                            <seg type="segment" xml:lang="en">mono-partite</seg>
+                                                    </seg>
+                                                    <seg type="element"
+                                                         xml:id="elem-13296"
+                                                         n="1"
+                                                         runes:elementType="treffpunkt"
+                                                         runes:intersectionPlace-de="2" runes:intersectionPlace-en="2"
+                                                         runes:intersectionPlaceTip="false"
+                                                         runes:intersectionPlaceFrame="false"
+                                                         runes:p1px="1939,72" runes:p1py="395,195" runes:p1nx="631,513" runes:p1ny="72,6221"
+                                                         >
+                                                            <seg type="intersectionType" xml:lang="de">berührend </seg>
+                                                            <seg type="intersectionType" xml:lang="en">with contact</seg>
+                                                    </seg>
+                                            </seg>
+                                    </g>
+                                    <g xml:id="g-3777"
+                                       n="5"
+                                       runes:glyphId="69"
+                                       runes:graphTypeUncertain="true"
+                                       runes:formsetyF-de="-" runes:formsetyF-en="-"
+                                       runes:diacriticon="false"
+                                       runes:readingDir="ltr"
+                                       runes:inverted="false"
+                                       runes:majuscule="false"
+                                       runes:branchVariance-de="-"
+                                       runes:branchVariance-en="-"
+                                       runes:signTilted-de="keine " runes:signTilted-en="none"
+                                       runes:signWidth-de="normal " runes:signWidth-en="normal "
+                                       runes:impairedObjForm="false"
+                                       runes:impairedObjFrag="false"
+                                       runes:impairedSurface="true"
+                                       runes:impairedAdjacentSign="false"
+                                       runes:impairedAbrasion="false"
+                                       runes:impairedPrecarving="false"
+                                       runes:impairedCorrection="false"
+                                       runes:compositionRecognizable="false"
+                                       runes:separationSign="false"
+                                       runes:logographicRune="false"
+                                       resp="#3777"
+                                       facs="/image-service/2731/2051,318,106,194/max/0/default.jpg"
+                                       runes:boundingBoxX="2051" runes:boundingBoxY="318" runes:boundingBoxWidth="106" runes:boundingBoxHeight="194">
+                                            <seg type="transliteration" subtype="main" xml:lang="de">d</seg>
+                                            <seg type="transliteration" subtype="main" xml:lang="en">d</seg>
+                                            <seg type="runeName" subtype="primary" xml:lang="de">
+                                                dagaz, dæġ
+                                            </seg>
+                                            <seg type="runeName" subtype="primary" xml:lang="en">
+                                                dagaz, dæġ
+                                            </seg>
+                                            <seg type="elements" n="9">
+                                                    <seg type="element"
+                                                         xml:id="elem-13297"
+                                                         n="1"
+                                                         runes:elementType="Stab (Stave)"
+                                                         runes:form-de="gerade"
+                                                         runes:form-en="straight"
+                                                         runes:productionOrder="1"
+                                                         runes:impaired="false"
+                                                         runes:extentFrom="top"
+                                                         runes:extentTo="4"
+                                                         runes:p1px="2051,6" runes:p1py="329,092" runes:p1nx="740,895" runes:p1ny="11,1295"
+                                                         runes:p2px="2059,17" runes:p2py="511,525" runes:p2nx="756,105" runes:p2ny="194,355"
+                                                         >
+                                                            <seg type="course" xml:lang="de">fallend</seg>
+                                                            <seg type="course" xml:lang="en">descending</seg>
+                                                            <seg type="techniqueTool" xml:lang="de">gemeißelt </seg>
+                                                            <seg type="techniqueTool" xml:lang="en">chiselled</seg>
+                                                            <seg type="techniqueDesign" xml:lang="de">durchgezogen </seg>
+                                                            <seg type="techniqueDesign" xml:lang="en">through line</seg>
+                                                            <seg type="segment" xml:lang="de">einteilig</seg>
+                                                            <seg type="segment" xml:lang="en">mono-partite</seg>
+                                                    </seg>
+                                                    <seg type="element"
+                                                         xml:id="elem-13298"
+                                                         n="2"
+                                                         runes:elementType="Stab (Stave)"
+                                                         runes:form-de="gerade"
+                                                         runes:form-en="straight"
+                                                         runes:productionOrder="2"
+                                                         runes:impaired="false"
+                                                         runes:extentFrom="1"
+                                                         runes:extentTo="4"
+                                                         runes:p1px="2143,96" runes:p1py="318,494" runes:p1nx="833,022" runes:p1ny="4,45028"
+                                                         runes:p2px="2157,58" runes:p2py="500,927" runes:p2nx="854,302" runes:p2ny="187,934"
+                                                         >
+                                                            <seg type="course" xml:lang="de">fallend</seg>
+                                                            <seg type="course" xml:lang="en">descending</seg>
+                                                            <seg type="techniqueTool" xml:lang="de">gemeißelt </seg>
+                                                            <seg type="techniqueTool" xml:lang="en">chiselled</seg>
+                                                            <seg type="techniqueDesign" xml:lang="de">durchgezogen </seg>
+                                                            <seg type="techniqueDesign" xml:lang="en">through line</seg>
+                                                            <seg type="segment" xml:lang="de">einteilig</seg>
+                                                            <seg type="segment" xml:lang="en">mono-partite</seg>
+                                                    </seg>
+                                                    <seg type="element"
+                                                         xml:id="elem-13299"
+                                                         n="1"
+                                                         runes:elementType="Punkt (Dot)"
+                                                         runes:form-de="Punkt"
+                                                         runes:form-en="dot"
+                                                         runes:productionOrder="3"
+                                                         runes:impaired="false"
+                                                         runes:extentFrom="2"
+                                                         runes:extentTo="-"
+                                                         runes:p1px="2096,27" runes:p1py="382,837" runes:p1nx="787,908" runes:p1ny="66,9216"
+                                                         >
+                                                            <seg type="formalExpression" xml:lang="de">normal </seg>
+                                                            <seg type="formalExpression" xml:lang="en">normal </seg>
+                                                            <seg type="techniqueTool" xml:lang="de">gemeißelt </seg>
+                                                            <seg type="techniqueTool" xml:lang="en">chiselled</seg>
+                                                            <seg type="techniqueDesign" xml:lang="de">durchgezogen </seg>
+                                                            <seg type="techniqueDesign" xml:lang="en">through line</seg>
+                                                            <seg type="segment" xml:lang="de">einteilig</seg>
+                                                            <seg type="segment" xml:lang="en">mono-partite</seg>
+                                                            <seg type="pointExtent" n="top"/>
+                                                    </seg>
+                                                    <seg type="element"
+                                                         xml:id="elem-13300"
+                                                         n="1"
+                                                         runes:elementType="Zweig (Twig)"
+                                                         runes:form-de="gerade"
+                                                         runes:form-en="straight"
+                                                         runes:productionOrder="4"
+                                                         runes:impaired="false"
+                                                         runes:extentFrom="middle"
+                                                         runes:extentTo="bottom"
+                                                         runes:p1px="2056,15" runes:p1py="429,013" runes:p1nx="749,622" runes:p1ny="111,502"
+                                                         runes:p2px="2152,28" runes:p2py="459,293" runes:p2nx="847,251" runes:p2ny="145,967"
+                                                         >
+                                                            <seg type="course" xml:lang="de">fallend</seg>
+                                                            <seg type="course" xml:lang="en">descending</seg>
+                                                            <seg type="techniqueTool" xml:lang="de">geritzt </seg>
+                                                            <seg type="techniqueTool" xml:lang="en">cut</seg>
+                                                            <seg type="techniqueDesign" xml:lang="de">durchgezogen </seg>
+                                                            <seg type="techniqueDesign" xml:lang="en">through line</seg>
+                                                            <seg type="segment" xml:lang="de">einteilig</seg>
+                                                            <seg type="segment" xml:lang="en">mono-partite</seg>
+                                                    </seg>
+                                                    <seg type="element"
+                                                         xml:id="elem-13301"
+                                                         n="2"
+                                                         runes:elementType="Zweig (Twig)"
+                                                         runes:form-de="gerade"
+                                                         runes:form-en="straight"
+                                                         runes:productionOrder="5"
+                                                         runes:impaired="false"
+                                                         runes:extentFrom="-"
+                                                         runes:extentTo="bottom"
+                                                         runes:p1px="2149,42" runes:p1py="415,325" runes:p1nx="842,55" runes:p1ny="101,764"
+                                                         runes:p2px="2095,51" runes:p2py="461,564" runes:p2nx="790,438" runes:p2ny="145,818"
+                                                         >
+                                                            <seg type="course" xml:lang="de">steigend</seg>
+                                                            <seg type="course" xml:lang="en">ascending</seg>
+                                                            <seg type="techniqueTool" xml:lang="de">geritzt </seg>
+                                                            <seg type="techniqueTool" xml:lang="en">cut</seg>
+                                                            <seg type="techniqueDesign" xml:lang="de">durchgezogen </seg>
+                                                            <seg type="techniqueDesign" xml:lang="en">through line</seg>
+                                                            <seg type="segment" xml:lang="de">einteilig</seg>
+                                                            <seg type="segment" xml:lang="en">mono-partite</seg>
+                                                    </seg>
+                                                    <seg type="element"
+                                                         xml:id="elem-13302"
+                                                         n="1"
+                                                         runes:elementType="treffpunkt"
+                                                         runes:intersectionPlace-de="-" runes:intersectionPlace-en="-"
+                                                         runes:intersectionPlaceTip="false"
+                                                         runes:intersectionPlaceFrame="false"
+                                                         runes:p1px="2056,03" runes:p1py="429,042" runes:p1nx="749,51" runes:p1ny="111,525"
+                                                         >
+                                                            <seg type="intersectionType" xml:lang="de">berührend </seg>
+                                                            <seg type="intersectionType" xml:lang="en">with contact</seg>
+                                                    </seg>
+                                                    <seg type="element"
+                                                         xml:id="elem-13303"
+                                                         n="2"
+                                                         runes:elementType="treffpunkt"
+                                                         runes:intersectionPlace-de="3" runes:intersectionPlace-en="3"
+                                                         runes:intersectionPlaceTip="false"
+                                                         runes:intersectionPlaceFrame="false"
+                                                         runes:p1px="2112,36" runes:p1py="446,552" runes:p1nx="806,702" runes:p1ny="131,488"
+                                                         >
+                                                            <seg type="intersectionType" xml:lang="de">überschneidend </seg>
+                                                            <seg type="intersectionType" xml:lang="en">crossing</seg>
+                                                    </seg>
+                                                    <seg type="element"
+                                                         xml:id="elem-13304"
+                                                         n="3"
+                                                         runes:elementType="treffpunkt"
+                                                         runes:intersectionPlace-de="-" runes:intersectionPlace-en="-"
+                                                         runes:intersectionPlaceTip="false"
+                                                         runes:intersectionPlaceFrame="false"
+                                                         runes:p1px="2149,72" runes:p1py="414,741" runes:p1nx="842,818" runes:p1ny="101,191"
+                                                         >
+                                                            <seg type="intersectionType" xml:lang="de">berührend </seg>
+                                                            <seg type="intersectionType" xml:lang="en">with contact</seg>
+                                                    </seg>
+                                                    <seg type="element"
+                                                         xml:id="elem-13305"
+                                                         n="4"
+                                                         runes:elementType="treffpunkt"
+                                                         runes:intersectionPlace-de="unten" runes:intersectionPlace-en="bottom"
+                                                         runes:intersectionPlaceTip="false"
+                                                         runes:intersectionPlaceFrame="false"
+                                                         runes:p1px="2152,93" runes:p1py="459,686" runes:p1nx="847,914" runes:p1ny="146,388"
+                                                         >
+                                                            <seg type="intersectionType" xml:lang="de">berührend </seg>
+                                                            <seg type="intersectionType" xml:lang="en">with contact</seg>
+                                                    </seg>
+                                            </seg>
+                                    </g>
+                            </ab>
+                            <ab type="sequence"
+                                n="2"
+                                xml:id="seq-A-2"
+                                runes:samstavsRunor="false"
+                                runes:autopsyDate=""
+                                runes:readingDir="ltr"
+                                runes:impaired="false"
+                                runes:borderLines="false"
+                                runes:layout-de="gerade "
+                                runes:layout-en="straight"
+                                runes:layoutSpecial-de=""
+                                runes:layoutSpecial-en=""
+                                runes:relationObject-de="-"
+                                runes:relationObject-en="-"
+                                runes:technique-de="geritzt "
+                                runes:technique-en="cut"
+                                runes:variantWritingDir-de="keine Variation "
+                                runes:variantWritingDir-en="no variation"
+                                runes:variantWidth-de="unsystematische Variation "
+                                runes:variantWidth-en="unsystematic variation"
+                                runes:variantHeight-de="keine Variation "
+                                runes:variantHeight-en="no variation"
+                                runes:variantForm-de="keine Variation "
+                                runes:variantForm-en="no variation"
+                                runes:variantTechnique-de="keine Variation "
+                                runes:variantTechnique-en="no variation"
+                                facs="https://www.runesdb.de/image-service/2731/full/max/0/default.jpg">
+                                    <g xml:id="g-11911"
+                                       n="1"
+                                       runes:glyphId=""
+                                       runes:graphTypeUncertain="true"
+                                       runes:diacriticon="false"
+                                       runes:readingDir="ltr"
+                                       runes:inverted="false"
+                                       runes:majuscule="false"
+                                       runes:branchVariance-de=""
+                                       runes:branchVariance-en=""
+                                       runes:impairedObjForm="false"
+                                       runes:impairedObjFrag="false"
+                                       runes:impairedSurface="true"
+                                       runes:impairedAdjacentSign="false"
+                                       runes:impairedAbrasion="false"
+                                       runes:impairedPrecarving="false"
+                                       runes:impairedCorrection="false"
+                                       runes:compositionRecognizable="false"
+                                       runes:separationSign="false"
+                                       runes:logographicRune="false"
+                                       resp="#11911"
+                                       facs="/image-service/2731/full/max/0/default.jpg"
+                                       >
+                                            <seg type="transliteration" subtype="main" xml:lang="de">[...]</seg>
+                                            <seg type="transliteration" subtype="main" xml:lang="en">[...]</seg>
+                                            <seg type="runeName" subtype="primary" xml:lang="de">
+                                                -
+                                            </seg>
+                                            <seg type="runeName" subtype="primary" xml:lang="en">
+                                                -
+                                            </seg>
+                                    </g>
+                                    <g xml:id="g-3778"
+                                       n="2"
+                                       runes:glyphId="128"
+                                       runes:graphTypeUncertain="true"
+                                       runes:formsetyF-de="-" runes:formsetyF-en="-"
+                                       runes:diacriticon="false"
+                                       runes:readingDir="ltr"
+                                       runes:inverted="false"
+                                       runes:majuscule="false"
+                                       runes:branchVariance-de="-"
+                                       runes:branchVariance-en="-"
+                                       runes:signTilted-de="keine " runes:signTilted-en="none"
+                                       runes:signWidth-de="breit " runes:signWidth-en="broad"
+                                       runes:impairedObjForm="false"
+                                       runes:impairedObjFrag="false"
+                                       runes:impairedSurface="true"
+                                       runes:impairedAdjacentSign="false"
+                                       runes:impairedAbrasion="false"
+                                       runes:impairedPrecarving="false"
+                                       runes:impairedCorrection="false"
+                                       runes:compositionRecognizable="true"
+                                       runes:separationSign="false"
+                                       runes:logographicRune="false"
+                                       resp="#3778"
+                                       facs="/image-service/2731/1517,548,117,210/max/0/default.jpg"
+                                       runes:boundingBoxX="1517" runes:boundingBoxY="548" runes:boundingBoxWidth="117" runes:boundingBoxHeight="210">
+                                            <seg type="transliteration" subtype="main" xml:lang="de">œ</seg>
+                                            <seg type="transliteration" subtype="main" xml:lang="en">œ</seg>
+                                            <seg type="runeName" subtype="primary" xml:lang="de">
+                                                ōþalan/ōþilan, ēþel/ œþel/œþil
+                                            </seg>
+                                            <seg type="runeName" subtype="primary" xml:lang="en">
+                                                ōþalan/ōþilan, ēþel/ œþel/œþil
+                                            </seg>
+                                            <seg type="elements" n="6">
+                                                    <seg type="element"
+                                                         xml:id="elem-13306"
+                                                         n="1"
+                                                         runes:elementType="Zweig (Twig)"
+                                                         runes:form-de="gerade"
+                                                         runes:form-en="straight"
+                                                         runes:productionOrder="1"
+                                                         runes:impaired="false"
+                                                         runes:extentFrom="middle"
+                                                         runes:extentTo="4"
+                                                         runes:p1px="1517,65" runes:p1py="632,912" runes:p1nx="-2,37985" runes:p1ny="85,424"
+                                                         runes:p2px="1608,39" runes:p2py="757,922" runes:p2nx="0,0" runes:p2ny="0,0"
+                                                         >
+                                                            <seg type="course" xml:lang="de">fallend</seg>
+                                                            <seg type="course" xml:lang="en">descending</seg>
+                                                            <seg type="techniqueTool" xml:lang="de">gemeißelt </seg>
+                                                            <seg type="techniqueTool" xml:lang="en">chiselled</seg>
+                                                            <seg type="techniqueDesign" xml:lang="de">durchgezogen </seg>
+                                                            <seg type="techniqueDesign" xml:lang="en">through line</seg>
+                                                            <seg type="segment" xml:lang="de">einteilig</seg>
+                                                            <seg type="segment" xml:lang="en">mono-partite</seg>
+                                                    </seg>
+                                                    <seg type="element"
+                                                         xml:id="elem-13307"
+                                                         n="2"
+                                                         runes:elementType="Zweig (Twig)"
+                                                         runes:form-de="gerade"
+                                                         runes:form-en="straight"
+                                                         runes:productionOrder="2"
+                                                         runes:impaired="false"
+                                                         runes:extentFrom="2"
+                                                         runes:extentTo="4"
+                                                         runes:p1px="1634,02" runes:p1py="625,404" runes:p1nx="116,016" runes:p1ny="78,5538"
+                                                         runes:p2px="1522,35" runes:p2py="750,22" runes:p2nx="2,6697" runes:p2ny="202,427"
+                                                         >
+                                                            <seg type="course" xml:lang="de">steigend</seg>
+                                                            <seg type="course" xml:lang="en">ascending</seg>
+                                                            <seg type="techniqueTool" xml:lang="de">gemeißelt </seg>
+                                                            <seg type="techniqueTool" xml:lang="en">chiselled</seg>
+                                                            <seg type="techniqueDesign" xml:lang="de">durchgezogen </seg>
+                                                            <seg type="techniqueDesign" xml:lang="en">through line</seg>
+                                                            <seg type="segment" xml:lang="de">einteilig</seg>
+                                                            <seg type="segment" xml:lang="en">mono-partite</seg>
+                                                    </seg>
+                                                    <seg type="element"
+                                                         xml:id="elem-13308"
+                                                         n="1"
+                                                         runes:elementType="Haken (Hook)"
+                                                         runes:form-de="eckig"
+                                                         runes:form-en="angled"
+                                                         runes:productionOrder="3"
+                                                         runes:impaired="false"
+                                                         runes:extentFrom="2"
+                                                         runes:extentTo="1"
+                                                         runes:p1px="1631,21" runes:p1py="622,589" runes:p1nx="113,243" runes:p1ny="75,7445"
+                                                         runes:p2px="1565,52" runes:p2py="548,45" runes:p2nx="48,6529" runes:p2ny="1,79144"
+                                                         runes:p3px="1519,53" runes:p3py="626,343" runes:p3nx="1,60637" runes:p3ny="79,163">
+                                                            <seg type="formalExpression" xml:lang="de">normal </seg>
+                                                            <seg type="formalExpression" xml:lang="en">normal </seg>
+                                                            <seg type="techniqueTool" xml:lang="de">gemeißelt </seg>
+                                                            <seg type="techniqueTool" xml:lang="en">chiselled</seg>
+                                                            <seg type="techniqueDesign" xml:lang="de">durchgezogen </seg>
+                                                            <seg type="techniqueDesign" xml:lang="en">through line</seg>
+                                                    </seg>
+                                                    <seg type="element"
+                                                         xml:id="elem-13309"
+                                                         n="1"
+                                                         runes:elementType="treffpunkt"
+                                                         runes:intersectionPlace-de="-" runes:intersectionPlace-en="-"
+                                                         runes:intersectionPlaceTip="true"
+                                                         runes:intersectionPlaceFrame="false"
+                                                         runes:p1px="1517,98" runes:p1py="629,795" runes:p1nx="0,0127662" runes:p1ny="82,5933"
+                                                         >
+                                                            <seg type="intersectionType" xml:lang="de">berührend </seg>
+                                                            <seg type="intersectionType" xml:lang="en">with contact</seg>
+                                                    </seg>
+                                                    <seg type="element"
+                                                         xml:id="elem-13310"
+                                                         n="2"
+                                                         runes:elementType="treffpunkt"
+                                                         runes:intersectionPlace-de="unten" runes:intersectionPlace-en="bottom"
+                                                         runes:intersectionPlaceTip="false"
+                                                         runes:intersectionPlaceFrame="false"
+                                                         runes:p1px="1569,9" runes:p1py="698,661" runes:p1nx="50,9109" runes:p1ny="151,261"
+                                                         >
+                                                            <seg type="intersectionType" xml:lang="de">überschneidend </seg>
+                                                            <seg type="intersectionType" xml:lang="en">crossing</seg>
+                                                    </seg>
+                                                    <seg type="element"
+                                                         xml:id="elem-13311"
+                                                         n="3"
+                                                         runes:elementType="treffpunkt"
+                                                         runes:intersectionPlace-de="2" runes:intersectionPlace-en="2"
+                                                         runes:intersectionPlaceTip="true"
+                                                         runes:intersectionPlaceFrame="false"
+                                                         runes:p1px="1632,94" runes:p1py="624,497" runes:p1nx="114,945" runes:p1ny="77,6483"
+                                                         >
+                                                            <seg type="intersectionType" xml:lang="de">berührend </seg>
+                                                            <seg type="intersectionType" xml:lang="en">with contact</seg>
+                                                    </seg>
+                                            </seg>
+                                    </g>
+                                    <g xml:id="g-3779"
+                                       n="3"
+                                       runes:glyphId="165"
+                                       runes:graphTypeUncertain="false"
+                                       runes:formsetyF-de="-" runes:formsetyF-en="-"
+                                       runes:diacriticon="false"
+                                       runes:readingDir="ltr"
+                                       runes:inverted="false"
+                                       runes:majuscule="false"
+                                       runes:branchVariance-de="-"
+                                       runes:branchVariance-en="-"
+                                       runes:signTilted-de="keine " runes:signTilted-en="none"
+                                       runes:signWidth-de="schmal " runes:signWidth-en="narrow"
+                                       runes:impairedObjForm="false"
+                                       runes:impairedObjFrag="true"
+                                       runes:impairedSurface="true"
+                                       runes:impairedAdjacentSign="false"
+                                       runes:impairedAbrasion="false"
+                                       runes:impairedPrecarving="false"
+                                       runes:impairedCorrection="false"
+                                       runes:compositionRecognizable="false"
+                                       runes:separationSign="false"
+                                       runes:logographicRune="false"
+                                       resp="#3779"
+                                       facs="/image-service/2731/1697,618,75,141/max/0/default.jpg"
+                                       runes:boundingBoxX="1697" runes:boundingBoxY="618" runes:boundingBoxWidth="75" runes:boundingBoxHeight="141">
+                                            <seg type="transliteration" subtype="main" xml:lang="de">n</seg>
+                                            <seg type="transliteration" subtype="main" xml:lang="en">n</seg>
+                                            <seg type="runeName" subtype="primary" xml:lang="de">
+                                                naudiz, nied, naut, nauð(r)
+                                            </seg>
+                                            <seg type="runeName" subtype="primary" xml:lang="en">
+                                                naudiz, nied, naut, nauð(r)
+                                            </seg>
+                                            <seg type="elements" n="3">
+                                                    <seg type="element"
+                                                         xml:id="elem-13312"
+                                                         n="1"
+                                                         runes:elementType="Zweig (Twig)"
+                                                         runes:form-de="gerade"
+                                                         runes:form-en="straight"
+                                                         runes:productionOrder="1"
+                                                         runes:impaired="false"
+                                                         runes:extentFrom="2"
+                                                         runes:extentTo="4"
+                                                         runes:p1px="1730,94" runes:p1py="618,14" runes:p1nx="212,954" runes:p1ny="71,601"
+                                                         runes:p2px="1735,18" runes:p2py="759,051" runes:p2nx="215,198" runes:p2ny="211,817"
+                                                         >
+                                                            <seg type="course" xml:lang="de">senkrecht</seg>
+                                                            <seg type="course" xml:lang="en">vertical</seg>
+                                                            <seg type="techniqueTool" xml:lang="de">gemeißelt </seg>
+                                                            <seg type="techniqueTool" xml:lang="en">chiselled</seg>
+                                                            <seg type="techniqueDesign" xml:lang="de">durchgezogen </seg>
+                                                            <seg type="techniqueDesign" xml:lang="en">through line</seg>
+                                                            <seg type="segment" xml:lang="de">einteilig</seg>
+                                                            <seg type="segment" xml:lang="en">mono-partite</seg>
+                                                    </seg>
+                                                    <seg type="element"
+                                                         xml:id="elem-13313"
+                                                         n="2"
+                                                         runes:elementType="Zweig (Twig)"
+                                                         runes:form-de="gerade"
+                                                         runes:form-en="straight"
+                                                         runes:productionOrder="2"
+                                                         runes:impaired="false"
+                                                         runes:extentFrom="3"
+                                                         runes:extentTo="bottom"
+                                                         runes:p1px="1771,73" runes:p1py="733,624" runes:p1nx="252,078" runes:p1ny="186,62"
+                                                         runes:p2px="1697,04" runes:p2py="683,298" runes:p2nx="178,159" runes:p2ny="136,336"
+                                                         >
+                                                            <seg type="course" xml:lang="de">fallend</seg>
+                                                            <seg type="course" xml:lang="en">descending</seg>
+                                                            <seg type="techniqueTool" xml:lang="de">gemeißelt </seg>
+                                                            <seg type="techniqueTool" xml:lang="en">chiselled</seg>
+                                                            <seg type="techniqueDesign" xml:lang="de">durchgezogen </seg>
+                                                            <seg type="techniqueDesign" xml:lang="en">through line</seg>
+                                                            <seg type="segment" xml:lang="de">einteilig</seg>
+                                                            <seg type="segment" xml:lang="en">mono-partite</seg>
+                                                    </seg>
+                                                    <seg type="element"
+                                                         xml:id="elem-13314"
+                                                         n="1"
+                                                         runes:elementType="treffpunkt"
+                                                         runes:intersectionPlace-de="unten" runes:intersectionPlace-en="bottom"
+                                                         runes:intersectionPlaceTip="false"
+                                                         runes:intersectionPlaceFrame="false"
+                                                         runes:p1px="1733,59" runes:p1py="708,196" runes:p1nx="214,328" runes:p1ny="161,212"
+                                                         >
+                                                            <seg type="intersectionType" xml:lang="de">überschneidend </seg>
+                                                            <seg type="intersectionType" xml:lang="en">crossing</seg>
+                                                    </seg>
+                                            </seg>
+                                    </g>
+                                    <g xml:id="g-11912"
+                                       n="4"
+                                       runes:glyphId=""
+                                       runes:graphTypeUncertain="true"
+                                       runes:diacriticon="false"
+                                       runes:readingDir="ltr"
+                                       runes:inverted="false"
+                                       runes:majuscule="false"
+                                       runes:branchVariance-de=""
+                                       runes:branchVariance-en=""
+                                       runes:impairedObjForm="false"
+                                       runes:impairedObjFrag="false"
+                                       runes:impairedSurface="true"
+                                       runes:impairedAdjacentSign="false"
+                                       runes:impairedAbrasion="false"
+                                       runes:impairedPrecarving="false"
+                                       runes:impairedCorrection="false"
+                                       runes:compositionRecognizable="false"
+                                       runes:separationSign="false"
+                                       runes:logographicRune="false"
+                                       resp="#11912"
+                                       facs="/image-service/2731/full/max/0/default.jpg"
+                                       >
+                                            <seg type="transliteration" subtype="main" xml:lang="de">[...]</seg>
+                                            <seg type="transliteration" subtype="main" xml:lang="en">[...]</seg>
+                                            <seg type="runeName" subtype="primary" xml:lang="de">
+                                                -
+                                            </seg>
+                                            <seg type="runeName" subtype="primary" xml:lang="en">
+                                                -
+                                            </seg>
+                                    </g>
+                                    <g xml:id="g-3809"
+                                       n="5"
+                                       runes:glyphId="10"
+                                       runes:graphTypeUncertain="false"
+                                       runes:formsetyF-de="-" runes:formsetyF-en="-"
+                                       runes:diacriticon="false"
+                                       runes:readingDir="ltr"
+                                       runes:inverted="false"
+                                       runes:majuscule="false"
+                                       runes:branchVariance-de="-"
+                                       runes:branchVariance-en="-"
+                                       runes:signTilted-de="keine " runes:signTilted-en="none"
+                                       runes:signWidth-de="breit " runes:signWidth-en="broad"
+                                       runes:impairedObjForm="false"
+                                       runes:impairedObjFrag="true"
+                                       runes:impairedSurface="true"
+                                       runes:impairedAdjacentSign="false"
+                                       runes:impairedAbrasion="false"
+                                       runes:impairedPrecarving="false"
+                                       runes:impairedCorrection="false"
+                                       runes:compositionRecognizable="false"
+                                       runes:separationSign="false"
+                                       runes:logographicRune="false"
+                                       resp="#3809"
+                                       facs="/image-service/2731/1968,616,186,137/max/0/default.jpg"
+                                       runes:boundingBoxX="1968" runes:boundingBoxY="616" runes:boundingBoxWidth="186" runes:boundingBoxHeight="137">
+                                            <seg type="transliteration" subtype="main" xml:lang="de">g</seg>
+                                            <seg type="transliteration" subtype="main" xml:lang="en">g</seg>
+                                            <seg type="runeName" subtype="primary" xml:lang="de">
+                                                gebō, ġ(i)efu
+                                            </seg>
+                                            <seg type="runeName" subtype="primary" xml:lang="en">
+                                                gebō, ġ(i)efu
+                                            </seg>
+                                            <seg type="elements" n="3">
+                                                    <seg type="element"
+                                                         xml:id="elem-13402"
+                                                         n="1"
+                                                         runes:elementType="Zweig (Twig)"
+                                                         runes:form-de="gerade"
+                                                         runes:form-en="straight"
+                                                         runes:productionOrder="1"
+                                                         runes:impaired="false"
+                                                         runes:extentFrom="2"
+                                                         runes:extentTo="4"
+                                                         runes:p1px="2133,51" runes:p1py="616,843" runes:p1nx="614,583" runes:p1ny="72,388"
+                                                         runes:p2px="1969,26" runes:p2py="753,443" runes:p2nx="449,657" runes:p2ny="208,58"
+                                                         >
+                                                            <seg type="course" xml:lang="de">steigend</seg>
+                                                            <seg type="course" xml:lang="en">ascending</seg>
+                                                            <seg type="techniqueTool" xml:lang="de">gemeißelt </seg>
+                                                            <seg type="techniqueTool" xml:lang="en">chiselled</seg>
+                                                            <seg type="techniqueDesign" xml:lang="de">durchgezogen </seg>
+                                                            <seg type="techniqueDesign" xml:lang="en">through line</seg>
+                                                            <seg type="segment" xml:lang="de">einteilig</seg>
+                                                            <seg type="segment" xml:lang="en">mono-partite</seg>
+                                                    </seg>
+                                                    <seg type="element"
+                                                         xml:id="elem-13403"
+                                                         n="2"
+                                                         runes:elementType="Zweig (Twig)"
+                                                         runes:form-de="gerade"
+                                                         runes:form-en="straight"
+                                                         runes:productionOrder="2"
+                                                         runes:impaired="false"
+                                                         runes:extentFrom="2"
+                                                         runes:extentTo="4"
+                                                         runes:p1px="1968,42" runes:p1py="616,843" runes:p1nx="449,726" runes:p1ny="71,9554"
+                                                         runes:p2px="2153,63" runes:p2py="749,253" runes:p2nx="633,788" runes:p2ny="204,872"
+                                                         >
+                                                            <seg type="course" xml:lang="de">fallend</seg>
+                                                            <seg type="course" xml:lang="en">descending</seg>
+                                                            <seg type="techniqueTool" xml:lang="de">gemeißelt </seg>
+                                                            <seg type="techniqueTool" xml:lang="en">chiselled</seg>
+                                                            <seg type="techniqueDesign" xml:lang="de">durchgezogen </seg>
+                                                            <seg type="techniqueDesign" xml:lang="en">through line</seg>
+                                                            <seg type="segment" xml:lang="de">einteilig</seg>
+                                                            <seg type="segment" xml:lang="en">mono-partite</seg>
+                                                    </seg>
+                                                    <seg type="element"
+                                                         xml:id="elem-13404"
+                                                         n="1"
+                                                         runes:elementType="treffpunkt"
+                                                         runes:intersectionPlace-de="3" runes:intersectionPlace-en="3"
+                                                         runes:intersectionPlaceTip="false"
+                                                         runes:intersectionPlaceFrame="false"
+                                                         runes:p1px="2056,41" runes:p1py="680,534" runes:p1nx="537,171" runes:p1ny="135,887"
+                                                         >
+                                                            <seg type="intersectionType" xml:lang="de">überschneidend </seg>
+                                                            <seg type="intersectionType" xml:lang="en">crossing</seg>
+                                                    </seg>
+                                            </seg>
+                                    </g>
+                            </ab>
+                </div>
+        </body>
+    </text>
+</TEI>

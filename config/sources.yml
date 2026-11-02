@@ -5105,6 +5105,33 @@ rundata:
   # .rundata-fetch.json points at the current one. Live upstream
   # (artifact Last-Modified 2026-07-12) → re-syncs owner-fired.
 
+runesdb:   # P153
+  adapter: Nabu::Adapters::Runesdb
+  adopted: "2026-11-02"
+  axes: [germanic, epigraphy]
+  wired: false   # bin/nabu enable runesdb && bin/nabu sync runesdb — one
+                 # 9.8 MB zip off Zenodo (runes_tei.zip, record 21788307),
+                 # parse ≈ 2 s. EXPECT 613 docs / 1,611 passages, 0 errored,
+                 # 110 skipped by rule (untransliterated finds) — census of
+                 # the v1.0.0 zip 2026-11-02 (613 + 110 = the zip's 723
+                 # files). Eyeball nabu show urn:nabu:runesdb:629 (Hackness,
+                 # "?rmcd"), urn:nabu:runesdb:1100 (Aarhus stone 1, "ʀ:þigsla:")
+                 # and 5 random; probe nabu search "þigsla"; then flip.
+  # RuneS-DB — the runic inscription database of the Göttingen Academy
+  # project "Runic writing in the Germanic languages" (RuneS), Zenodo
+  # deposit v1.0.0 (2026-08-01): one TEI file per find (Scandinavian,
+  # continental, Anglo-Saxon and Frisian epigraphy + runica manuscripta),
+  # passage = a glyph sequence, text = the glyph transliterations verbatim.
+  # Language gem (no claim in the TEI; the runesdb-siglum lect rule reads
+  # the siglum family). The per-find LIDO records (dates, places,
+  # transcription, translation — runesdb.de/lido/<id>) are NOT fetched;
+  # their harvest is the follow-up. LICENSE: the record's cc-by-sa-4.0 +
+  # every file's availability statement (verified 2026-11-02) →
+  # attribution. Overlap with rundata (the Scandinavian stones) is a
+  # catalog-side crosswalk via the siglum, never a dedupe. Frozen
+  # versioned deposit → manual.
+  sync_policy: manual
+
 sabellic-loans:
   adapter: Nabu::Adapters::SabellicLoans
   adopted: "2026-07-18"

@@ -537,3 +537,49 @@ rules:
     match_prefix: "Aeolic"
     variety: aeo
     onto: ["grc:hom", "grc:cla", "grc:koi", "grc:byz"]
+
+  # ── RuneS-DB (P153): the TEI carries no language, so every find rides
+  # the family claim gem; upstream's Hauptsigle family (the siglum before
+  # its running number — the adapter's siglum_family facet) names the
+  # runic CORPUS each find is filed under, and three corpus families are
+  # unambiguous: the OE-* sigla (OE-GB-30 the Hackness stone; GB/F/I/D =
+  # the country of the find) are RuneS's Old English corpus → ang; the
+  # "KJ" sigla are the Krause–Jankuhn numbering of the older-futhark
+  # inscriptions (N KJ38, Bo KJ…, Ög KJ…) → gmq:run, the attested runic
+  # Proto-Norse stage; the bare Scandinavian regional sigla (the Danish
+  # DR-style regions MJy/NJy/SJy/Sj/Fyn/Sk/Bh, the Swedish provinces
+  # U/Sö/Ög/Vg/Vr/G, Norway N) are North Germanic finds of any period →
+  # the gmq family, period-unbanded (the finds carry no date in the TEI).
+  # Deliberately unmapped: the pre-OE and Frisian blends (PreOE-GB,
+  # PreOFris/EROFris-NL — the Anglo-Frisian boundary is the corpus's own
+  # open question), the South Germanic SG sigla, the regional families
+  # this reading cannot gloss with certainty (SkL, Syd, Hal, Bl, Sl, SH,
+  # Uk, E…), and every runica-manuscripta shelfmark (the manuscript's
+  # language is not the runes'). Those stay bare gem.
+  - id: runesdb-siglum
+    tier: certain
+    sources: [runesdb]
+    code: gem
+    facet: siglum_family
+    map:
+      "OE-GB": "ang"
+      "OE-F": "ang"
+      "OE-I": "ang"
+      "OE-D": "ang"
+      "N KJ": "gmq:run"
+      "Bo KJ": "gmq:run"
+      "Ög KJ": "gmq:run"
+      "N": "gmq"
+      "MJy": "gmq"
+      "NJy": "gmq"
+      "SJy": "gmq"
+      "Sj": "gmq"
+      "Fyn": "gmq"
+      "Sk": "gmq"
+      "Bh": "gmq"
+      "U": "gmq"
+      "Sö": "gmq"
+      "Ög": "gmq"
+      "Vg": "gmq"
+      "Vr": "gmq"
+      "G": "gmq"
