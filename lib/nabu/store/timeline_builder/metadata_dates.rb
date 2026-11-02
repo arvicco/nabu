@@ -273,6 +273,8 @@ module Nabu
           "titus-sogdian" => :place_only, # the page findspot (one site every line resolves to)
           "titus-tocharian-a" => :place_only,
           "titus-tocharian-b" => :place_only, # the A family's findspot mining
+          "typikon-bible" => :structured, # P153: the edition year the dump records (1688, class
+          #                                 edition) — no place claim
           "uk-wikisource" => :era_band_key,
           "vakk" => :structured, # the text list's year ("1535", "1485-1495"); the court
           #                        protocols place at their Vald (the sitting commune)

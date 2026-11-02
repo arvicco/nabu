@@ -67,7 +67,7 @@ The Greco-Roman literary lane: the Perseus canons and First1KGreek, Diorisis, LS
 
 The Latin-to-vernacular continuum: CroALa's medieval and neo-Latin opens the desk; late-antique prose, the MGH critical editions, and the Old French treebanks and texts join as their shelves land.
 
-**Members** (20): `aranese`, `bdcamoes`, `bfm`, `bim-sahcoba`, `cantigas`, `corpus-corporum`, `croala`, `ctilc`, `cv-sardinian`, `derom`, `digiliblt`, `disco`, `lo-congres`, `meloniromance`, `memis`, `openmgh`, `osta`, `salom`, `theatre-classique`, `ud`
+**Members** (21): `aranese`, `bdcamoes`, `bfm`, `bim-sahcoba`, `cantigas`, `corpus-corporum`, `croala`, `ctilc`, `cv-sardinian`, `derom`, `digiliblt`, `disco`, `lo-congres`, `meloniromance`, `memis`, `openmgh`, `osta`, `salom`, `theatre-classique`, `typikon-bible`, `ud`
 
 ### epigraphy
 
@@ -123,7 +123,7 @@ The reconstruction shelves: the kaikki proto-extracts, IE-CoR cognacy, LIV, the 
 
 The cross-language scripture hat: the Masoretic shelves and the Scrolls, the Greek NT, Vulgate and WEB, Peshitta and the Syriac corpus, Coptic Scriptorium, the Targums, and the OSHB-BHSA bridging module. The hebrew and syriac language desks coexist with this hat by design.
 
-**Members** (19): `betamasaheft-works`, `bhsa`, `bridging`, `coptic-scriptorium`, `dss`, `elizabeth-bible`, `eng-web`, `etcbc-syriac`, `etcbc-targum`, `extrabiblical`, `hebrew-lexicon`, `oshb`, `peshitta`, `sblgnt`, `sdbh`, `sefaria`, `syriac-corpus`, `ud`, `vulgate`
+**Members** (20): `betamasaheft-works`, `bhsa`, `bridging`, `coptic-scriptorium`, `dss`, `elizabeth-bible`, `eng-web`, `etcbc-syriac`, `etcbc-targum`, `extrabiblical`, `hebrew-lexicon`, `oshb`, `peshitta`, `sblgnt`, `sdbh`, `sefaria`, `syriac-corpus`, `typikon-bible`, `ud`, `vulgate`
 
 ### hebrew
 

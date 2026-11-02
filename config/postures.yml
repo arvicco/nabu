@@ -1619,6 +1619,20 @@ sources:
     places: {posture: unplaced, note: "no place feature in tf/0.92 — nothing to mine"}
     script: {posture: implied, note: "Estrangela consonantal text (g_cons_utf8), unpointed; the
         ETCBC transliteration with the pointing marks rides the token as g_word"}
+  typikon-bible:   # P153
+    # kind: machine-postured — kind_map.yml source_kind scripture.
+    lect: {posture: pending, note: "candidate: a nabu-lects Romanian package — a ro anchor (Eastern
+        Romance, parent roa; ISO 639-1 ro / 639-3 ron, rum alias), an Old Romanian stage for the
+        Cyrillic-script literary language of the 16th–18th c. (the 1688 Bucharest Bible is its
+        canonical monument) and the cyrl script row's ro use. Nothing Romanian exists in the
+        registry today; the passages ride bare ron-Cyrl until the mint lands"}
+    dating: {posture: dated, note: "the edition year the dump records for ro-1688 (1688),
+        date_class edition (MetadataDates :structured) — the print the project typeset"}
+    places: {posture: unplaced, note: "the dump's edition record names no imprint (Bucharest is the
+        print's place, but the asset does not say so) — nothing to mine"}
+    script: {posture: qualified, note: "Romanian in the Cyrillic alphabet of the 1688 print —
+        titla, accents and the transitional letters (ꙟ, ᲅ, ѫ, џ) kept as typeset; language tag
+        ron-Cyrl"}
   etcbc-targum:   # P153
     # kind: machine-postured — kind_map.yml source_kind scripture.
     # lect: machine-postured — the whole-source arc → arc:mid/jud override in
