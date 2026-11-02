@@ -1,0 +1,31 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# The text files are stable raw GETs (Zenodo file content URLs); the
+# listing is an assembled trim of the paged community API (not one URL).
+source: paramara
+adapter_test:
+retrieved: 2026-11-02
+files:
+  - path: records.json
+    refetchable: false
+    provenance: zenodo-api
+    reason: six real record objects assembled from the paged community listing — no single URL serves this subset
+    whole: false
+    trim: six of the 153 record objects, verbatim, sorted by id
+  - path: 22938192/PMR203.txt
+    url: https://zenodo.org/api/records/22938192/files/PMR203.txt/content
+    whole: true
+    trim: none
+  - path: 22934821/PMR198.txt
+    url: https://zenodo.org/api/records/22934821/files/PMR198.txt/content
+    whole: true
+    trim: none
+  - path: 19562560/PMR47.txt
+    url: https://zenodo.org/api/records/19562560/files/PMR47.txt/content
+    whole: true
+    trim: none
+  - path: 18416373/IN060027.txt
+    url: https://zenodo.org/api/records/18416373/files/IN060027.txt/content
+    whole: true
+    trim: none

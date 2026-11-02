@@ -1,0 +1,59 @@
+PennGlobal: PMR203
+Period: VS 1351 śaka 1216
+Location: Būdhērā
+King: Gaṇapati
+Language: Sanskrit
+Script: Nagari
+Text: Prose 
+Gist: The first half refers to the ruler Gaṇapati. 
+	The second half of the inscription introduces Pradgān Raviha of Jatuhaṭṭa,
+ 	his son MudhaIsIha and the latter's two sons, Harirāja and Ayarāja, 
+ 	both of whom lost their lives in battle fighting an unnamed enemy.  
+	The Pillar was erected in memory of their death.
+Published reference: Trivedi (1989), no. 203.
+
+
+Text{1}
+
+1. [saṃ]vat 1351 śāke{2} 1[21]6 || svasti śrīkī-
+2. rttidugre(rge) samastarāja(jā)valīsamalaṃkṛtapa[rmaṃ(rama)]-
+3. [bha]ṭārka(ṭṭāraka)[paḍi]maraja{3} [śrīga]ṇapatimahāpradhāna-
+4. deuva . . {4}vyāpā[raṃ] karoti | jauhaṭṭipradhāna{5}-
+5. ravija[patnī]dinasutamudhaisīha{6} pu-
+6. [tra]ha[ri]rājajairā[ju]dauhatu{7} | laghuputratri[dhau]
+7. . . . . {8}ndi[supu]tre[ṇa] [ja]marāyaṇa{9} ni[ve]hede[yaṃ(yam)]{10} ||
+
+----------------------------------------
+
+{1} From plate facing p.165 in Ep. Ind., Vol. XXXIII.
+{2} The consonant of the penultimate sibilant is palatal and not dental, as used in samasta in the next
+	line.
+{3} Read paramarāja.
+{4} The two akṣaras which are lost here may have been mudrā, as suggested by Sircar.
+{5} As read by Sircar, according to whom, the first of these words is the Sanskrit Jatuhaṭṭīya. But all
+	the letters here are mutilated, and the last two appear as sāta.
+{6} All these letters are either mutilated or lost, and are given here as tentatively read by Sircar.
+{7} Reading uncertain.
+{8} Four syllables are lost here.
+{9} Probably we have to read yēṇa, to be restored to Yamarājēna.
+{10} As read by Sircar, who amended them to niravāhit ēyam. But some of the letters are misformed
+	 and some others are lost.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

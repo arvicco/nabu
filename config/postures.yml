@@ -2603,6 +2603,23 @@ sources:
         verbatim + the findspot provenance's settlement/nome refs (minted tm:/pleiades:), the
         composed provenance only when no findspot is given"}
     script: {posture: qualified}
+  paramara:   # P153
+    kind: {posture: unclassified, note: "the Text field describes FORM (\"Prose and Metrical in 12
+        verses\"); the object type (copper-plate charter, pillar, image inscription) lives in
+        the record titles' free prose — a title-vocabulary fold is a recorded future look (the
+        siddham shape)"}
+    lect: {posture: identity, note: "san on all 114 (the Language field: Sanskrit, \"with local
+        dialect\" ×2, and PMR84's \"Gauḍī\" — the poetic style of a Sanskrit praśasti, not a
+        language; raw in language_raw); the bare san anchor is the claim, declared coarse (the
+        siddham posture)"}
+    dating: {posture: partial, note: "92 of 114: the Period field's leading era-typed year (VS /
+        Vikrama → −57, Śaka → +78, config/eras.yml) as a one-year envelope, raw kept; CE-range,
+        \"Undated\" and \"Unclear\" periods ride raw only; a two-date Period (\"VS 1148 and
+        1127\") mints its leading year, declared"}
+    places: {posture: named, note: "112 of 114: the Location field's findspot verbatim (place);
+        values naming a museum or \"now …\" are the present repository and ride location only"}
+    script: {posture: qualified, note: "the text is Trivedi's IAST TRANSLITERATION of Nāgarī
+        originals (Script: Nagari on every record) — never a Devanagari witness"}
   perseus-anglit:   # P95-4
     kind: {posture: pending, note: "candidate: TEI textClass ingestion (unruled)"}
     lect: {posture: identity, note: "ang IS Old English (the aspr mold);
