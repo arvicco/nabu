@@ -32,7 +32,7 @@ verbatim upstream terms are in `docs/02-sources.md` of the Nabu repository.
 | `iip` | Inscriptions of Israel/Palestine (Brown University) | nc |
 | `oshb` | Open Scriptures Hebrew Bible (Westminster Leningrad Codex + OSHM morphology) | open |
 | `sdbh` | UBS Dictionary of Biblical Hebrew (Semantic Dictionary of Biblical Hebrew) | attribution |
-| `sefaria` | Sefaria — Targum shelf + Rabbinic core (Mishnah, Bavli, Minor Tractates, Yerushalmi, Tosefta) + Midrash (Rabbah, halakhic midrashim, Aggadah) + medieval Bible commentaries, Mishneh Torah, Shulchan Arukh, Tur, Zohar and liturgy | open |
+| `sefaria` | Sefaria — Targum shelf + Rabbinic core (Mishnah, Bavli, Minor Tractates, Yerushalmi, Tosefta) + Midrash (Rabbah, halakhic midrashim, Aggadah) + medieval Bible commentaries, Mishneh Torah, Shulchan Arukh, Tur, Zohar and liturgy + Ben Sira and Megillat Ta'anit | open |
 | `ud` | Universal Dependencies — ancient treebanks | nc |
 <!-- nabu:skill-sources:end -->
 
