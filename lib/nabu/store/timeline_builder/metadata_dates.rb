@@ -106,6 +106,8 @@ module Nabu
           "classical-modern" => :work_era, # the work's attributed era (config/work_eras.yml,
           #                                  keyed on metadata "book"), composition class
           "cme" => :edition_year_text,
+          "comenius" => :structured, # P153: the title page's docDate @when (one year), its
+          #                            printed wording raw ("LÉTA PÁNĚ MDCXIX")
           "corpus-corporum" => :structured,
           "corpus-gysseling" => :bounds_keys,
           "corpus-oudfries" => :bounds_keys, # the WITNESS span (manuscript_year_*); the composition

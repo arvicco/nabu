@@ -411,6 +411,22 @@ sources:
     dating: {posture: undatable}
     places: {posture: unplaced}
     script: {posture: implied}
+  comenius:   # P153
+    kind: {posture: unclassified, note: "devotional and consolatory treatises (Truchlivý, Pres
+        boží, Centrum securitatis, the Kšaft) — no typed genre field in the TEI, and no house
+        class fits devotional prose (sermon is preached, scripture canonical); a class for it
+        would be a taxonomy change, so the source stays unclassified"}
+    lect: {posture: dates, note: "cs on 11 works stages to cs:mid [1500, 1775] by the title-page
+        dates 1619–1660 (date-band inference); the Dutch Bazuine rides bare nl (no Dutch stage
+        exists), the Latin prefaces bare lat"}
+    dating: {posture: dated, note: "all 12: the title page's docDate @when (one-year envelope,
+        :structured), its printed wording raw (\"LÉTA PÁNĚ MDCXIX\"); Truchlivý III's @when 1650
+        beside a printed 1651, both kept"}
+    places: {posture: unplaced, note: "no typed place in the headers; the few imprint places
+        (\"V Amsterodámě\") sit inside the title-page date prose, declared unmined"}
+    script: {posture: implied, note: "Latin-script Czech in the DJAK edition's MODERNIZED
+        transcription (the 1978 editorial norm), not the prints' orthography; the print
+        spellings survive only in the apparatus readings"}
   cme:
     kind: {posture: unclassified}
     lect:
