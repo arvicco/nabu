@@ -81,6 +81,18 @@ class GanjoorSqliteParserTest < Minitest::Test
     assert_equal 1, record.blank_rows
   end
 
+  # The release's invisible-only rows (regression, the real codepoints):
+  # poem 105811 vorder 5 is a lone U+00A0, poem 51262 vorder 104 a lone
+  # ZWNJ (U+200C), poem 501256 vorder 93 a lone U+001D.
+  def test_invisible_only_rows_are_blank
+    rows = [[1, 0, "a"], [2, 1, " "], [3, 0, "‌"], [4, 1, "b"], [5, 4, "\u001d"], [6, 5, "‌"],
+            [7, 0, " c "]]
+    record = Parser.group(rows)
+    assert_equal [%w[a], %w[b], %w[c]], record.units.map(&:lines), "edge no-break spaces strip too"
+    assert_equal 3, record.blank_rows
+    assert_empty record.comments
+  end
+
   def test_unknown_position_is_a_parse_error
     error = assert_raises(Nabu::ParseError) { Parser.group([[1, 9, "x"]], label: "poem 1") }
     assert_match(/unknown verse position 9/, error.message)
