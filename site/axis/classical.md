@@ -52,7 +52,7 @@ A source wears every desk it serves — these twenty-two answer this desk. Holdi
 - **Alignment works:** `nt` (Greek NT, Vulgate, SBLGNT) and — through the
   LXX and the Vulgate — `ot` and `psalms`. The Classicist owns both
   LXX-side witnesses.
-- **The meter layer (P44–P45):** 167,732 scanned verse lines ride the
+- **The meter layer:** 167,732 scanned verse lines ride the
   catalog as enrichments — Latin from Pedecerto's scansions, Greek from
   Hypotactic — so `search --meter H` filters hits to hexameters (codes:
   H hexameter, D distich, and the scanner's full repertoire), and a

@@ -130,7 +130,7 @@ The Ethiopic (Gǝʿǝz) desk in the Oriental-Christian neighborhood: the Beta ma
 
 > The Arabist — the Islamicate library whole, Quran and hadith to falsafa and adab.
 
-The OpenITI lane: premodern Arabic and Persian literature at corpus scale — Quran and hadith, history and biography, law and falsafa, the dīwāns and adab — with the Persian shelf (Ḥāfiẓ, Ibn Sīnā) riding the same Arabic-script fold that makes ara/fas cross-searchable (P41-3) — and DiCCAS, disaster accounts excerpted from ten classical sources with catastrophe terminology tagged — and, since P96, the KITAB text-reuse instrument: upstream-computed reuse edges joining the held OpenITI books pairwise on the intertext desk.
+The OpenITI lane: premodern Arabic and Persian literature at corpus scale — Quran and hadith, history and biography, law and falsafa, the dīwāns and adab — with the Persian shelf (Ḥāfiẓ, Ibn Sīnā) riding the same Arabic-script fold that makes ara/fas cross-searchable — and DiCCAS, disaster accounts excerpted from ten classical sources with catastrophe terminology tagged — and the KITAB text-reuse instrument: upstream-computed reuse edges joining the held OpenITI books pairwise on the intertext desk.
 
 [Open the arabic desk]({{ '/axis/arabic/' | relative_url }})
 
@@ -162,7 +162,7 @@ The Egyptian-Coptic continuum: the TLA corpora and word list (tla-hf, aes, aed),
 
 > The Iranologist — the Avesta to the Achaemenid inscriptions, Old Iranian liturgy toward Middle Persian.
 
-The Iranian-language lane, Zoroastrian canon at its heart: the TITUS Avesta (Old Iranian liturgy — grant-gated private research, not a public holding) and the Old Persian of the Achaemenid royal inscriptions, which ride the ORACC and CDLI cuneiform shelves whole — their trilinguals' Old Persian column the desk's shared lane with the tablet world — classical Persian literature (Hafez's Divan with its aligned English, perseus-farsilit) — and, since P107, the Middle Iranian east: Skjærvø's British Library Khotanese editions, the Invisible East catalog's Khotanese/Sogdian/Bactrian/Judeo-Persian documents, and the trilingual ŠKZ inscription with its Parthian and Middle Persian columns.
+The Iranian-language lane, Zoroastrian canon at its heart: the TITUS Avesta (Old Iranian liturgy — grant-gated private research, not a public holding) and the Old Persian of the Achaemenid royal inscriptions, which ride the ORACC and CDLI cuneiform shelves whole — their trilinguals' Old Persian column the desk's shared lane with the tablet world — classical Persian literature (Hafez's Divan with its aligned English, perseus-farsilit) — and the Middle Iranian east: Skjærvø's British Library Khotanese editions, the Invisible East catalog's Khotanese/Sogdian/Bactrian/Judeo-Persian documents, and the trilingual ŠKZ inscription with its Parthian and Middle Persian columns.
 
 [Open the iranian desk]({{ '/axis/iranian/' | relative_url }})
 
@@ -178,7 +178,7 @@ The Sanskrit, Prakrit and Pali lane: GRETIL and SARIT, the DCS treebank, Monier-
 
 > The Buddhologist — the dharma across the Pali, Sanskrit, Chinese and Tibetan canons.
 
-Cross-cutting by design: SuttaCentral, CBETA, SARIT, and GRETIL whole — membership is whole-source, so GRETIL rides here although only part of its shelf is Buddhist — and, since P48, the Derge Kangyur and Tengyur: the fourth canon leg.
+Cross-cutting by design: SuttaCentral, CBETA, SARIT, and GRETIL whole — membership is whole-source, so GRETIL rides here although only part of its shelf is Buddhist — and the Derge Kangyur and Tengyur: the fourth canon leg.
 
 [Open the buddhist desk]({{ '/axis/buddhist/' | relative_url }})
 
@@ -194,7 +194,7 @@ The Tibetan desk opens with the canon whole: the Public-Domain Digital Derge Kan
 
 > The Koreanist — the hanmun state record and the first hangul vernacular.
 
-The Korean desk opens on the dynastic record itself: the Veritable Records of Joseon (sillok) in the original hanmun via NIKH's open XML dumps, joined by the Goryeosa family on the same DTD (the pre-Joseon dynastic history, its chronological digest, and the state council's daily register), with the Seungjeongwon ilgi and the ITKC classics to follow, and the Middle Korean Wikisource shelf as the vernacular leg. Since P91-1 the OKHC historical slice widens the desk beyond the state record: the Samguk sagi (the oldest Korean history), the Ilseongnok, the ITKC munjip mass, and the AKS/Kyujanggak/NHM old-literature shelves, each record carrying its own PD-vs-nc label.
+The Korean desk opens on the dynastic record itself: the Veritable Records of Joseon (sillok) in the original hanmun via NIKH's open XML dumps, joined by the Goryeosa family on the same DTD (the pre-Joseon dynastic history, its chronological digest, and the state council's daily register), with the Seungjeongwon ilgi and the ITKC classics to follow, and the Middle Korean Wikisource shelf as the vernacular leg. The OKHC historical slice widens the desk beyond the state record: the Samguk sagi (the oldest Korean history), the Ilseongnok, the ITKC munjip mass, and the AKS/Kyujanggak/NHM old-literature shelves, each record carrying its own PD-vs-nc label.
 
 [Open the korean desk]({{ '/axis/korean/' | relative_url }})
 
@@ -210,7 +210,7 @@ Epigraphy-first, opening on the DHARMA corpora: the Old Khmer inscriptions (the 
 
 > The Sinologist — the classical Chinese written world and its phonological deep past.
 
-Literary and classical Chinese with its reconstruction instruments: Kanripo and CBETA, TLS, Baxter-Sagart and the Qieyun-system database, Unihan, the Heian hanzi dictionaries, the UD lzh treebanks, SuttaCentral's Agamas, the kaikki zh extract riding wiktionary-recon — since P78-5, the Đại Việt classical shelf (the sinographic cosmopolis reaching Vietnam, as sillok reaches Korea) — and, since P96, the desk's instruments: the CHGIS historical gazetteer (TGAZ placenames, 221 BCE–1911) and the CBDB prosopography artifact (~658k persons, held for the persons-layer ruling).
+Literary and classical Chinese with its reconstruction instruments: Kanripo and CBETA, TLS, Baxter-Sagart and the Qieyun-system database, Unihan, the Heian hanzi dictionaries, the UD lzh treebanks, SuttaCentral's Agamas, the kaikki zh extract riding wiktionary-recon — the Đại Việt classical shelf (the sinographic cosmopolis reaching Vietnam, as sillok reaches Korea) — and the desk's instruments: the CHGIS historical gazetteer (TGAZ placenames, 221 BCE–1911) and the CBDB prosopography artifact (~658k persons, held for the persons-layer ruling).
 
 [Open the sinitic desk]({{ '/axis/sinitic/' | relative_url }})
 
@@ -218,7 +218,7 @@ Literary and classical Chinese with its reconstruction instruments: Kanripo and 
 
 > The Japanologist — Old Japanese song to the Sino-Japanese dictionary tradition.
 
-The Japanese lane, premodern-first since P108: Genji in Ikeda's critical edition at manuscript-line grain, the Kokinshū and two Man'yōshū witnesses in NIJL's TEI, the みんなで翻刻 crowd-transcription mass, and the NRCT historical gazetteer — beside the ONCOJ corpus and lexicon, EDRDG's dictionaries, HDIC and Unihan shared with the Sinologist, and the kaikki ojp extract riding wiktionary-recon.
+The Japanese lane, premodern-first: Genji in Ikeda's critical edition at manuscript-line grain, the Kokinshū and two Man'yōshū witnesses in NIJL's TEI, the みんなで翻刻 crowd-transcription mass, and the NRCT historical gazetteer — beside the ONCOJ corpus and lexicon, EDRDG's dictionaries, HDIC and Unihan shared with the Sinologist, and the kaikki ojp extract riding wiktionary-recon.
 
 [Open the japonic desk]({{ '/axis/japonic/' | relative_url }})
 

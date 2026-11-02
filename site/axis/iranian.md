@@ -7,7 +7,7 @@ description: >-
 
 > The Iranologist — the Avesta to the Achaemenid inscriptions, Old Iranian liturgy toward Middle Persian.
 
-The Iranian-language lane, Zoroastrian canon at its heart: the TITUS Avesta (Old Iranian liturgy — grant-gated private research, not a public holding) and the Old Persian of the Achaemenid royal inscriptions, which ride the ORACC and CDLI cuneiform shelves whole — their trilinguals' Old Persian column the desk's shared lane with the tablet world — classical Persian literature (Hafez's Divan with its aligned English, perseus-farsilit) — and, since P107, the Middle Iranian east: Skjærvø's British Library Khotanese editions, the Invisible East catalog's Khotanese/Sogdian/Bactrian/Judeo-Persian documents, and the trilingual ŠKZ inscription with its Parthian and Middle Persian columns.
+The Iranian-language lane, Zoroastrian canon at its heart: the TITUS Avesta (Old Iranian liturgy — grant-gated private research, not a public holding) and the Old Persian of the Achaemenid royal inscriptions, which ride the ORACC and CDLI cuneiform shelves whole — their trilinguals' Old Persian column the desk's shared lane with the tablet world — classical Persian literature (Hafez's Divan with its aligned English, perseus-farsilit) — and the Middle Iranian east: Skjærvø's British Library Khotanese editions, the Invisible East catalog's Khotanese/Sogdian/Bactrian/Judeo-Persian documents, and the trilingual ŠKZ inscription with its Parthian and Middle Persian columns.
 
 The desk's heart, the **Avesta** (TITUS, `titus-avestan`), is grant-gated
 PRIVATE research material — served locally under the owner's personal grant
@@ -74,7 +74,7 @@ This desk's own surfaces:
 ```
 nabu show urn:nabu:titus-avestan:avest001:Y.0.1.a  # the frauuarāne creed (Y 0.1 a), the Avesta rendered with its verbatim TITUS credit line
 nabu search mazda --lang ave          # Ahura Mazda across the Avestan lane (mazdaiiasnō, mazdā̊)
-nabu show urn:nabu:titus-avestan:avest020:Y.19.1  # a citation prefix opens into every passage below it (Y.19.1.a, .b …) — the P44 show
+nabu show urn:nabu:titus-avestan:avest020:Y.19.1  # a citation prefix opens into every passage below it (Y.19.1.a, .b …)
 ```
 
 

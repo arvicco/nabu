@@ -7,7 +7,7 @@ description: >-
 
 > The Sinologist — the classical Chinese written world and its phonological deep past.
 
-Literary and classical Chinese with its reconstruction instruments: Kanripo and CBETA, TLS, Baxter-Sagart and the Qieyun-system database, Unihan, the Heian hanzi dictionaries, the UD lzh treebanks, SuttaCentral's Agamas, the kaikki zh extract riding wiktionary-recon — since P78-5, the Đại Việt classical shelf (the sinographic cosmopolis reaching Vietnam, as sillok reaches Korea) — and, since P96, the desk's instruments: the CHGIS historical gazetteer (TGAZ placenames, 221 BCE–1911) and the CBDB prosopography artifact (~658k persons, held for the persons-layer ruling).
+Literary and classical Chinese with its reconstruction instruments: Kanripo and CBETA, TLS, Baxter-Sagart and the Qieyun-system database, Unihan, the Heian hanzi dictionaries, the UD lzh treebanks, SuttaCentral's Agamas, the kaikki zh extract riding wiktionary-recon — the Đại Việt classical shelf (the sinographic cosmopolis reaching Vietnam, as sillok reaches Korea) — and the desk's instruments: the CHGIS historical gazetteer (TGAZ placenames, 221 BCE–1911) and the CBDB prosopography artifact (~658k persons, held for the persons-layer ruling).
 
 New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the library in minutes.
 

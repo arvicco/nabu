@@ -78,7 +78,7 @@ classical:
     - **Alignment works:** `nt` (Greek NT, Vulgate, SBLGNT) and — through the
       LXX and the Vulgate — `ot` and `psalms`. The Classicist owns both
       LXX-side witnesses.
-    - **The meter layer (P44–P45):** 167,732 scanned verse lines ride the
+    - **The meter layer:** 167,732 scanned verse lines ride the
       catalog as enrichments — Latin from Pedecerto's scansions, Greek from
       Hypotactic — so `search --meter H` filters hits to hexameters (codes:
       H hexameter, D distich, and the scanner's full repertoire), and a
@@ -146,7 +146,7 @@ epigraphy:
       `--from/--to`, `--century` and `--place` scope
       the stones and sherds by when and where. EDH's genre facets
       (`--type/--province/--material`) live.
-    - **The gazetteer (P44–P46):** `nabu place NAME` resolves a findspot
+    - **The gazetteer:** `nabu place NAME` resolves a findspot
       against the Pleiades gazetteer (42,404 places in a derived index —
       millisecond lookups) and counts this library's holdings found there;
       an inscription's `nabu show` names its findspot with the Pleiades id.
@@ -488,7 +488,7 @@ arabic:
       morphology or lemma layer, so `--lemma`, `vocab` and `formulas` do not
       apply to this desk; its instruments are **full-text search** across the
       whole Islamicate shelf and the **timeline**.
-    - **The ara/fas Arabic-script fold (P41-3):** one search skeleton across
+    - **The ara/fas Arabic-script fold:** one search skeleton across
       the ی/ي and ک/ك keyboard split, maqsura, taa marbuta, tashkeel, tatweel
       and ZWNJ — so a query typed on either keyboard reaches the stored form
       whichever keyboard wrote it. Search-side only; the stored bytes stay
@@ -509,7 +509,7 @@ arabic:
     - cmd: 'nabu search الله --lang ara'
       note: Allāh across the Arabic hadith, dīwān and falsafa shelves
     - cmd: 'nabu search دانی --lang fas'
-      note: the cross-keyboard ی/ي fold (P41-3) — an Arabic-yeh query (U+064A) still finds Ḥāfiẓ's farsi-yeh دانی (U+06CC)
+      note: the cross-keyboard ی/ي fold — an Arabic-yeh query (U+064A) still finds Ḥāfiẓ's farsi-yeh دانی (U+06CC)
     - cmd: 'nabu search --from 1300 --to 1400 --axis arabic'
       note: term-less browse of the 14th-c.-CE shelf on the AH death-year timeline (live-verified 23 July 2026)
   display: |
@@ -525,7 +525,7 @@ arabic:
       and a real text view for that). Font: `font-noto-naskh-arabic` — naskh
       stays legible at terminal sizes; a dedicated iTerm2 reading profile with
       it boosted a few points is the workable setup (docs/display.md §2).
-    - **Nothing to strip, and no `--display translit`.** The P41-g census
+    - **Nothing to strip, and no `--display translit`.** A census of the held corpus
       found consonantal standard-block text only (no tashkeel), so `default`,
       `plain` and `full` render the same bytes (isolates aside); and Arabic
       romanization is deliberately not built — the standards conflict and
@@ -635,7 +635,7 @@ iranian:
     - cmd: 'nabu search mazda --lang ave'
       note: Ahura Mazda across the Avestan lane (mazdaiiasnō, mazdā̊)
     - cmd: 'nabu show urn:nabu:titus-avestan:avest020:Y.19.1'
-      note: a citation prefix opens into every passage below it (Y.19.1.a, .b …) — the P44 show
+      note: a citation prefix opens into every passage below it (Y.19.1.a, .b …)
   display: |
     - **Avestan (ave):** the TITUS Avesta is a scholarly Latin transliteration with
       combining diacritics (ā̊, ϑ, ṣ̌, t̰, ə) — no dedicated font is needed; any
@@ -769,7 +769,7 @@ japonic:
       kun/on readings and the Jōyō/JLPT/frequency lines), HDIC and Unihan
       shared with the Sinologist, KRADFILE's radical-component index, and the
       kaikki ojp extract on `wiktionary-recon`.
-    - **The kyūjitai↔shinjitai reform fold (P38-4 + P38-r1):** modern (`jpn`)
+    - **The kyūjitai↔shinjitai reform fold:** modern (`jpn`)
       search folds old-form, new-form and merged spellings onto one skeleton —
       matching modern reading habits, onto the SAME skeleton the Sinologist's
       Han fold uses, so Aozora and kanripo meet. Two lanes: the held Unihan
