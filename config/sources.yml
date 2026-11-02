@@ -370,7 +370,7 @@ baley-manuscripts:   # P153, 02-sources row 334
   adopted: "2026-11-02"
   axes: [sinitic]
   cjk_index: true   # the CJK bigram substring lane (the okhc/kanripo shelves)
-  wired: false   # first sync is the gate's: bin/nabu enable baley-manuscripts, then
+  wired: true   # first sync 2026-11-02 exactly on census (19 docs / 4,626 passages, 0 errored, 13 rule skips); aisong eyeballed
                  # bin/nabu sync baley-manuscripts — nine Zenodo zips read by HTTP
                  # Range (≈ 20 MB of text members of 2 GB; the image crops never
                  # transferred; ≈ 1–3 min). EXPECT 19 docs / 4,626 passages, 13
@@ -466,7 +466,7 @@ bdrc-transcriptions:   # P153, 02-sources row 332
   adapter: Nabu::Adapters::BdrcTranscriptions
   adopted: "2026-11-02"
   axes: [tibetan, buddhist]
-  wired: false   # first sync is the gate's: bin/nabu enable bdrc-transcriptions,
+  wired: true   # first sync 2026-11-02 exactly on census (1,160 docs / 99,571 passages, 0 errored); VE1ALS00002N eyeballed
                  # then bin/nabu sync bdrc-transcriptions — a PACED rows-API crawl
                  # (~1,000 requests of 100 rows, ~0.3 GB of text, NO images;
                  # the API answers bursts with 429s — the census crawl took ≈75 min,
@@ -1012,7 +1012,7 @@ cgpg:   # P153, 02-sources row 320
   adapter: Nabu::Adapters::Cgpg
   adopted: "2026-11-02"
   axes: [classical]
-  wired: false   # awaiting the first real sync: bin/nabu enable cgpg, then
+  wired: true   # first sync 2026-11-02 exactly on census (33 docs / 18,701 passages, 0 errored); pg153:p37 eyeballed; FTS συμβασιλεύων green
                  # bin/nabu sync cgpg (one 103 MB Zenodo GET, sha256-pinned;
                  # 718 MB unpacked). EXPECT 33 docs / 18,701 passages,
                  # 0 errored, 0 skipped (census 2026-11-02 through the
@@ -1120,7 +1120,7 @@ cleasby-vigfusson:   # P153, 02-sources row 322
   adapter: Nabu::Adapters::CleasbyVigfusson
   adopted: "2026-11-02"
   axes: [germanic]
-  wired: false   # first sync: bin/nabu enable cleasby-vigfusson && bin/nabu sync cleasby-vigfusson
+  wired: true   # first sync 2026-11-02 exactly on census (35,207 entries, 0 errored, 1 rule skip); define abbadis green
                  # (git clone, ~12 MB). EXPECT 1 dictionary doc → 35,207 non entries,
                  # 0 errored, 1 skipped by rule (the no-markup twin); eyeball
                  # nabu define abbadis ("abbess"), then flip.
@@ -1193,7 +1193,7 @@ comenius:   # P153, 02-sources row 326
   adapter: Nabu::Adapters::Comenius
   adopted: "2026-11-02"
   axes: [slavic]
-  wired: false   # bin/nabu enable comenius && bin/nabu sync comenius — twelve
+  wired: true   # first sync 2026-11-02 exactly on census (12 docs / 1,384 passages, 0 errored); pres-bozi eyeballed; FTS green
                  # LINDAT bitstreams (≈2.8 MB total), one per item, each
                  # into canonical/comenius/<handle suffix>/. EXPECT 12 docs /
                  # 1,384 passages (cs 1,261 · nl 107 · lat 16), 0 errored,
@@ -2385,7 +2385,7 @@ etcbc-syriac:   # P153, 02-sources row 329
   adapter: Nabu::Adapters::EtcbcSyriac
   adopted: "2026-11-02"
   axes: [biblical, syriac]
-  wired: false   # first real sync pending:
+  wired: true   # first sync 2026-11-02 exactly on census (31 docs / 18,132 passages, 0 errored); 1 Kings 1.1 eyeballed
                  # bin/nabu enable etcbc-syriac, then bin/nabu sync etcbc-syriac
                  # (sparse GitFetch cone tf/0.92 + README.md + LICENSE, 35
                  # feature files ≈ 32 MB). EXPECT 31 docs / 18,132 passages,
@@ -2416,7 +2416,7 @@ etcbc-targum:   # P153, 02-sources row 328
   adapter: Nabu::Adapters::EtcbcTargum
   adopted: "2026-11-02"
   axes: [biblical, hebrew]
-  wired: false   # first real sync pending:
+  wired: true   # first sync 2026-11-02 exactly on census (47 docs / 25,430 passages, 0 errored); Genizah Exod 21.1 eyeballed
                  # bin/nabu enable etcbc-targum, then bin/nabu sync etcbc-targum
                  # (sparse GitFetch cone tf/0.1 + README.md + LICENSE.md,
                  # 46 feature files ≈ 280 MB; the 77 MB definition.tf is in the
@@ -2562,7 +2562,7 @@ ganjoor:   # P153, 02-sources row 324
   adapter: Nabu::Adapters::Ganjoor
   adopted: "2026-11-02"
   axes: [iranian]
-  wired: false   # bin/nabu sync ganjoor — downloads the pinned 120 MB release zip
+  wired: true   # first sync 2026-11-02 exactly on census (126,165 docs / 1,453,355 passages, 0 errored, 14,332 rule skips); hafez:2130 eyeballed, dated+placed
                  # (unpacks a 344 MB ganjoor.s3db) + the 112 KB poets list.
                  # EXPECT 126,165 docs / 1,453,355 passages, 0 errored, 14,332
                  # skipped by rule (5,178 unpublished-poet poems · 9,144 modern
@@ -2761,7 +2761,7 @@ haga-jinmei:   # P153, 02-sources row 333
   adapter: Nabu::Adapters::HagaJinmei
   adopted: "2026-11-02"
   axes: [japonic]
-  wired: false   # first sync is the gate's: bin/nabu enable haga-jinmei, then
+  wired: true   # first sync 2026-11-02 exactly on census (54,558 entries, 0 errored)
                  # bin/nabu sync haga-jinmei (one 2.4 MB Zenodo zip, sha256-pinned;
                  # parse ≈ 5 s). EXPECT 1 dictionary document / 54,558 jpn
                  # entries, 8,556 `see` crossrefs, 11 deposit files skipped by
@@ -2846,7 +2846,7 @@ hexapla:   # P153, 02-sources row 331
   adapter: Nabu::Adapters::Hexapla
   adopted: "2026-11-02"
   axes: [biblical, hebrew]
-  wired: false   # first real sync pending:
+  wired: true   # first sync 2026-11-02 exactly on census (19 docs / 16,302 passages, 0 errored, 2 rule skips); Aquila 2 Sam 1.1 eyeballed
                  # bin/nabu enable hexapla, then bin/nabu sync hexapla (sparse
                  # GitFetch cone tf/0.1 + docs/about.md + docs/transcription.md +
                  # LICENSE, 17 feature files ≈ 8 MB; the raw source/ JSON stays
@@ -4804,7 +4804,7 @@ paramara:   # P153, 02-sources row 327
   adapter: Nabu::Adapters::Paramara
   adopted: "2026-11-02"
   axes: [indic, epigraphy]
-  wired: false   # bin/nabu enable paramara && bin/nabu sync paramara — the
+  wired: true   # first sync 2026-11-02 exactly on census (114 docs / 2,373 passages, 0 errored, 39 rule skips); pmr203 eyeballed; FTS vyomakeśo green
                  # Zenodo community listing (7 pages of 25) + 115 text files
                  # at 1 req/s ≈ 2–3 min. EXPECT 114 docs / 2,373 passages,
                  # 0 errored, 39 skipped by rule (38 image/PDF/file-less
@@ -5320,7 +5320,7 @@ runesdb:   # P153, 02-sources row 325
   adapter: Nabu::Adapters::Runesdb
   adopted: "2026-11-02"
   axes: [germanic, epigraphy]
-  wired: false   # bin/nabu enable runesdb && bin/nabu sync runesdb — one
+  wired: true   # first sync 2026-11-02 exactly on census (613 docs / 1,611 passages, 0 errored, 110 rule skips); Aarhus stone 1100 eyeballed; FTS þigsla green
                  # 9.8 MB zip off Zenodo (runes_tei.zip, record 21788307),
                  # parse ≈ 2 s. EXPECT 613 docs / 1,611 passages, 0 errored,
                  # 110 skipped by rule (untransliterated finds) — census of
@@ -6967,7 +6967,7 @@ typikon-bible:   # P153, 02-sources row 330
   adapter: Nabu::Adapters::TypikonBible
   adopted: "2026-11-02"
   axes: [biblical, romance]
-  wired: false   # first real sync pending:
+  wired: true   # first sync 2026-11-02 exactly on census (79 docs / 36,312 passages, 0 errored); Gen 1.1 Romanian Cyrillic eyeballed
                  # bin/nabu enable typikon-bible, then bin/nabu sync typikon-bible
                  # (four FileFetch GETs from typikon.info/dump/2026-09-21/:
                  # manifest.json, bible-editions, bible-books, the 2.9 MB
@@ -7435,7 +7435,7 @@ wiktionary-fa:   # P153, 02-sources row 321
   adapter: Nabu::Adapters::WiktionaryFa
   adopted: "2026-11-02"
   axes: [iranian]
-  wired: false   # first sync: bin/nabu enable wiktionary-fa && bin/nabu sync wiktionary-fa
+  wired: true   # first sync 2026-11-02 exactly on census (20,350 entries, 0 errored); define دل → heart green
                  # (one ~96 MB JSONL GET). EXPECT 1 dictionary doc → 20,350 entries /
                  # 47,431 reflex rows, 0 non-NFC (the 2026-10-30 extract's census);
                  # eyeball nabu define دل ("heart", ← Middle Persian 𐭣𐭩𐭫), then flip.
@@ -7734,7 +7734,7 @@ zoega:   # P153, 02-sources row 323
   adapter: Nabu::Adapters::Zoega
   adopted: "2026-11-02"
   axes: [germanic]
-  wired: false   # first sync: bin/nabu enable zoega && bin/nabu sync zoega (git clone,
+  wired: true   # first sync 2026-11-02 exactly on census (29,951 entries, 0 errored, 1 rule skip); define abbadis green
                  # ~5 MB). EXPECT 1 dictionary doc → 29,951 non entries, 0 errored,
                  # 1 skipped by rule (the no-markup twin); eyeball nabu define abbadis
                  # ("abbess", beside the cleasby-vigfusson entry), then flip.
