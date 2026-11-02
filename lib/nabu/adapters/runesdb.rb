@@ -163,7 +163,7 @@ module Nabu
       end
 
       def parse(document_ref)
-        xml = Nokogiri::XML(File.read(document_ref.path, encoding: Encoding::UTF_8))
+        xml = Nokogiri::XML(SourceRead.utf8_file(document_ref.path, label: "runesdb"))
         raise ParseError, "#{document_ref.path}: not a RuneS-DB TEI find" if xml.at_xpath("/t:TEI", NS).nil?
 
         build_document(xml, document_ref)
@@ -195,7 +195,7 @@ module Nabu
       end
 
       def transliterated?(path)
-        File.read(path, encoding: Encoding::UTF_8).match?(TRANSLITERATED)
+        SourceRead.utf8_file(path, label: "runesdb").match?(TRANSLITERATED)
       end
 
       def build_document(xml, document_ref)

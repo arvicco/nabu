@@ -128,7 +128,7 @@ module Nabu
       end
 
       def parse(document_ref)
-        xml = Nokogiri::XML(File.read(document_ref.path, encoding: Encoding::UTF_8), &:strict)
+        xml = Nokogiri::XML(SourceRead.utf8_file(document_ref.path, label: "comenius"), &:strict)
         root = xml.at_xpath("/t:TEI", NS) or raise ParseError, "#{document_ref.path}: not a TEI file"
         build_document(xml, root, document_ref)
       rescue Nokogiri::XML::SyntaxError => e
