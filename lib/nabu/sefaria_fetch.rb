@@ -52,7 +52,7 @@ module Nabu
     # What one completed sync did: the index sha256 (the pin), the relative
     # paths newly copied into the attic, whether the index said 304, and how
     # many version files actually moved bytes (the rest were per-file 304s).
-    Result = Data.define(:sha, :atticked, :not_modified, :downloaded)
+    Result = Data.define(:sha, :atticked, :not_modified, :downloaded, :gone)
 
     # The shared cert-hardened Faraday connection (ZipFetch's, by reference).
     def self.default_http
@@ -71,7 +71,8 @@ module Nabu
       guard&.call(fetch.doomed_paths)
       fetch.complete!
       Result.new(sha: fetch.sha, atticked: fetch.atticked,
-                 not_modified: fetch.not_modified?, downloaded: fetch.downloaded)
+                 not_modified: fetch.not_modified?, downloaded: fetch.downloaded,
+                 gone: fetch.gone)
     end
 
     def initialize(index_url:, dir:, attic_dir:, select:, select_special: nil, http: self.class.default_http,
@@ -87,10 +88,11 @@ module Nabu
       @doomed_relpaths = []
       @atticked = []
       @downloaded = 0
+      @gone = []
       @not_modified = false
     end
 
-    attr_reader :atticked, :sha, :downloaded
+    attr_reader :atticked, :sha, :downloaded, :gone
 
     def not_modified?
       @not_modified
@@ -230,6 +232,17 @@ module Nabu
         response = get(encode(url), conditional: file_conditional_headers(rel, pins))
         next if response.status == 304
 
+        if response.status == 404
+          # Index drift: upstream's own books.json still lists a file the
+          # bucket no longer serves. One ghost must not take the whole
+          # fetch down; it is recorded loudly, never staged, and a held
+          # copy in the tree outlives it (canonical is not deleted by a
+          # 404 — the attic rule's spirit).
+          @gone << rel
+          @progress&.call("index drift: #{rel} 404s upstream — recorded, fetch continues\n")
+          next
+        end
+
         body = response.body.to_s.b
         spooled = File.join(spool, staged.size.to_s)
         File.binwrite(spooled, body)
@@ -272,7 +285,7 @@ module Nabu
     def get(url, conditional:)
       @progress&.call("Downloading #{url}…\n")
       response, = RedirectFollow.get(url, http: @http, error: Error,
-                                          headers: conditional, accept: [200, 304])
+                                          headers: conditional, accept: [200, 304, 404])
       response
     end
 

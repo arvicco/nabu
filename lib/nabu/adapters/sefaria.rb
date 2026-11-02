@@ -557,6 +557,11 @@ module Nabu
 
       def fetch_notes(result)
         notes = ["#{result.downloaded} file(s) downloaded"]
+        unless result.gone.empty?
+          notes << "INDEX DRIFT: #{result.gone.size} index-listed file(s) 404 upstream " \
+                   "(#{result.gone.first(3).join(', ')}#{', …' if result.gone.size > 3}) — " \
+                   "held copies kept; heals when upstream's index catches up"
+        end
         notes << attic_notes(result.atticked) unless result.atticked.empty?
         notes.join("; ")
       end
