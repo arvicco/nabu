@@ -2507,6 +2507,26 @@ sources:
         Witenberga, Lublani, Tubingae) — printer and brackets stripped"}
     script: {posture: implied, note: "Latin type, MDZ's uncorrected OCR layer (text_nature
         machine-ocr); the Urach Glagolitic/Cyrillic prints are OUT (OCR noise), declared"}
+  ganjoor:   # P153
+    # kind machine-postured — the ganjoor fold in kind_map.yml over the poem's own
+    # section label (the divan's form sections; work/chapter titles uncovered, open).
+    lect: {posture: identity, note: "fas IS Persian (codemap → the bare fa anchor) — the
+        registry holds no Persian stages yet, so the bare code is the honest claim for the
+        whole classical cone (Rudaki to the Qajar poets, d. before 1324 AH); poems under a
+        section the label names Arabic carry ara (152 at the census), bare; the few Turkic,
+        Kurdish, Gilaki and fahlavi sections stay fas, declared coarse (their labels ride
+        section_path)"}
+    dating: {posture: dated, note: "every document: the poet's life from the site's poets
+        list (lunar-Hijri birth..death → CE, the house tabular conversion), class
+        composition — upstream's own validBirthDate/validDeathDate=false marks c. in raw;
+        one inconsistent record (birth after death) keeps only the death bound
+        (:structured)"}
+    places: {posture: named, note: "the poet's DEATH place from the poets list, name + WGS84
+        pair (the iedc toponym-list shape) — where the poet worked, the openiti died/resided
+        stance; poets whose record gives no death place stay unplaced; birth places ride
+        metadata as biography"}
+    script: {posture: implied, note: "Perso-Arabic script implied by fas/ara; text NFC at the
+        boundary (upstream's vocalized Arabic carries non-NFC mark order)"}
   gams-zrcalo:   # 02-sources row 244
     kind: {posture: unclassified, note: "one devotional work (the Speculum humanae
         salvationis); no class field in the TEI"}

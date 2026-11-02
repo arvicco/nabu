@@ -2421,6 +2421,35 @@ gams-zrcalo:   # 02-sources row 244
   # the witness reading (sic kept, corrections/notes as annotations).
   # Latin-script transliteration of the Glagolitic, declared.
 
+ganjoor:   # P153, 02-sources row 324
+  adapter: Nabu::Adapters::Ganjoor
+  adopted: "2026-11-02"
+  axes: [iranian]
+  wired: false   # bin/nabu sync ganjoor — downloads the pinned 120 MB release zip
+                 # (unpacks a 344 MB ganjoor.s3db) + the 112 KB poets list.
+                 # EXPECT 126,165 docs / 1,453,355 passages, 0 errored, 14,332
+                 # skipped by rule (5,178 unpublished-poet poems · 9,144 modern
+                 # tail · 10 text-less) — census of release 1405-07-03,
+                 # 2026-11-02. Eyeball nabu show urn:nabu:ganjoor:hafez:2130:1
+                 # (the first ghazal, Arabic opening hemistich),
+                 # urn:nabu:ganjoor:saadi:41334 (Golestan prose + verse),
+                 # urn:nabu:ganjoor:moulavi:2996 (band couplets) and 5 random;
+                 # probe nabu search with a Hafez hemistich; then flip.
+  # Ganjoor (ganjoor.net) — the Persian poetry library, from the desktop
+  # release's one-file SQLite (github.com/ganjoor/desktop v3.1). The
+  # CLASSICAL CONE: published poets who died before 1324 AH (1906 CE) —
+  # 212 poets; the modern tail and the 41 unpublished release poets are
+  # counted rule skips. Document = poem (urn:nabu:ganjoor:<poet>:<poem
+  # id>), passage = couplet (band couplets, lines and prose paragraphs
+  # too). The site's poets list rides beside the database (dates, death
+  # places + coordinates, the publication rule). LICENSE attribution:
+  # permission granted by the site operator by email, 2026-11-02
+  # ("Redistribution of ganjoor contents is permitted and ganjoor data is
+  # free to reuse"); Ganjoor credited as the digitizer. Overlap: the 113
+  # held openiti PDL texts came from Ganjoor (2015); 102 of them belong to
+  # 44 poets inside this cone — separate witnesses, separate urns.
+  sync_policy: manual
+
 glaux:
   adapter: Nabu::Adapters::Glaux
   adopted: "2026-07-24"

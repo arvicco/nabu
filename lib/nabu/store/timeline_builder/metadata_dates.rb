@@ -156,6 +156,9 @@ module Nabu
           #                            (Kos: 972–1039, artifact class) on the transcription
           #                            layers; the modern translation siblings stay undated
           "gams-zrcalo" => :structured,
+          "ganjoor" => :structured, # P153: the poet's life from the site's poets list (lunar-Hijri
+          #                           birth..death → CE), class composition; place = the poet's
+          #                           death place toponym (name + coordinates)
           "glaux" => :signed_bounds_keys,
           "gretil-legacy" => :work_era, # the work's attributed era (config/work_eras.yml,
           #                               keyed on metadata "work" = the GRETIL file stem)
