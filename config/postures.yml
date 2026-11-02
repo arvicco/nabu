@@ -261,6 +261,26 @@ sources:
     script: {posture: qualified, note: "the text is upstream's REFERENCE MODERN CHARACTER per
         oracle-bone glyph UID (a lookup surrogate, not a decipherment claim); □ = lost
         position, ⬚ = no encoded glyph; the platform UIDs ride passage annotations"}
+  baley-manuscripts:   # P153
+    # kind machine-postured — the baley-manuscripts fold in kind_map.yml over the
+    # deposit (work) key.
+    lect: {posture: codemap, note: "och → zho:old (the codemap row, the obimd precedent):
+        Warring States Chu and Western Han manuscript Chinese, declared coarse — the
+        Dingxian (before 55 BCE) and Jeongbaekdong (c. 45 BCE) Analects sit just past the
+        stage's conventional -100 band end; no finer Old Chinese stage is minted"}
+    dating: {posture: dated, note: "all 19 witnesses: the COLLECTIONS table in the adapter —
+        each manuscript find's conventional era (Tsinghua radiocarbon c. 305 BCE, the Chu
+        finds before 278 BCE, the Han tombs' burial termini 165/55/c. 45 BCE, Beida mid-Western
+        Han); an edited reading (Chen Qi, Qiū Ruìfēng) inherits its manuscript's era
+        (:structured); approximate, declared — not upstream metadata"}
+    places: {posture: named, note: "the excavated findspots (Guodian tomb 1, Shuanggudui
+        tomb 1 Fuyang, Bajiaolang tomb 40 Dingxian, Jeongbaekdong tomb 364 Pyongyang: 6 of 19
+        witnesses); the Anda, Shanghai Museum, Tsinghua and Peking University slips were
+        acquired, unprovenanced — no place claimed, declared"}
+    script: {posture: qualified, note: "Han script in the editors' strict transcription:
+        uncoded graphs as braced IDS sequences ({⿱尔坦}) kept verbatim, one graph each;
+        □/〼 lacunae and the 𖿣 iteration mark one position each; the physical slip numbers
+        ride passage annotations (strips)"}
   cbeta:
     lect: {posture: codemap, note: "lzh → zho/lit for T/X/K/J; the N canon (漢譯南傳大藏經,
         the Yuan Heng Temple 1990–98 Chinese translation of the Pāli Tipiṭaka via the

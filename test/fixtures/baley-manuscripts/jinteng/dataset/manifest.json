@@ -1,0 +1,35 @@
+{
+  "schema_version": "1.2",
+  "dataset_id": "jinteng",
+  "alignment": "alignment.json",
+  "witnesses": [
+    {
+      "id": "shangshu",
+      "label": "傳本《尚書·金縢》"
+    },
+    {
+      "id": "tsinghua",
+      "label": "清華簡壹《金縢》",
+      "media": {
+        "strip_heading": "plain"
+      }
+    }
+  ],
+  "viewer": {
+    "alignment_anchor": "shangshu",
+    "include_unaligned_witnesses": [],
+    "images_below": true
+  },
+  "report": {
+    "witness_order": [
+      "shangshu",
+      "tsinghua"
+    ],
+    "labels": {
+      "tsinghua": "清華簡壹《金縢》",
+      "shangshu": "傳本《尚書·金縢》"
+    }
+  },
+  "title": "Jinteng 金縢",
+  "description": "Character-level alignment of the received Jinteng in the Shangshu with the Tsinghua manuscript."
+}

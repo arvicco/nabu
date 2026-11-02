@@ -1,0 +1,35 @@
+{
+  "schema_version": "1.2",
+  "dataset_id": "aisong",
+  "title": "哀誦",
+  "description": "Alignment of the Chenqi editorial text with the Anda manuscript witness of 哀誦.",
+  "alignment": "alignment.json",
+  "witnesses": [
+    {
+      "id": "chenqi",
+      "label": "陳琦"
+    },
+    {
+      "id": "anda",
+      "label": "安大簡",
+      "media": {
+        "strip_heading": "plain"
+      }
+    }
+  ],
+  "viewer": {
+    "alignment_anchor": "chenqi",
+    "include_unaligned_witnesses": [],
+    "images_below": true
+  },
+  "report": {
+    "witness_order": [
+      "chenqi",
+      "anda"
+    ],
+    "labels": {
+      "anda": "安大簡",
+      "chenqi": "陳琦"
+    }
+  }
+}

@@ -365,6 +365,32 @@ babelstone-ids:
   # FileFetch from babelstone.co.uk; actively maintained, low cadence.
   sync_policy: manual
 
+baley-manuscripts:   # P153, 02-sources row 322
+  adapter: Nabu::Adapters::BaleyManuscripts
+  adopted: "2026-11-02"
+  axes: [sinitic]
+  cjk_index: true   # the CJK bigram substring lane (the okhc/kanripo shelves)
+  wired: false   # first sync is the gate's: bin/nabu enable baley-manuscripts, then
+                 # bin/nabu sync baley-manuscripts — nine Zenodo zips read by HTTP
+                 # Range (≈ 20 MB of text members of 2 GB; the image crops never
+                 # transferred; ≈ 1–3 min). EXPECT 19 docs / 4,626 passages, 13
+                 # received-text witnesses skipped by rule — census of all nine
+                 # deposits 2026-11-02. Eyeball nabu show
+                 # urn:nabu:baley-manuscripts:jinteng:tsinghua:1.1.1 (the Tsinghua
+                 # Jinteng's opening, slips + Shangshu alignment in annotations) and
+                 # 5 random, probe nabu search 武王既克, then flip.
+  # Julien Baley's (SOAS) excavated-manuscript alignment series (Zenodo,
+  # 2026-09-26 → 11-01): graph-level transcriptions of the Anda, Shanghai
+  # Museum, Tsinghua, Peking University, Guodian, Fuyang, Dingxian and
+  # Jeongbaekdong slips (Odes, Laozi, Analects, Jinteng, Jigong, Cao Mo zhi
+  # zhen, the Anda poems), aligned to received texts and edited readings.
+  # Document = manuscript or edition witness, passage = transcribed line;
+  # received-text witnesses (held via kanripo) skipped by rule. Records +
+  # LICENSE.md: CC BY 4.0 project-authored data (images under separate
+  # permissions, never taken; verified 2026-11-02) → attribution. Zenodo
+  # versions are immutable; a new version is a new record → manual.
+  sync_policy: manual
+
 ban-wikisource:   # P120-2, 02-sources row 262
   adapter: Nabu::Adapters::BanWikisource
   adopted: "2026-10-12"

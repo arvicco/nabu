@@ -1,0 +1,135 @@
+# Nabu fixture manifest (P5-4 "fixture sentinel"). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# Every file is a member of a Zenodo deposit zip (no per-file URL), so
+# every entry is refetchable: false; the members are byte-identical.
+source: baley-manuscripts
+adapter_test:
+retrieved: '2026-11-02'
+files:
+- path: aisong/CITATION.cff
+  whole: true
+  trim: none
+  refetchable: false
+  reason: a member of the Zenodo zip https://zenodo.org/api/records/22983015/files/aisong-alignment-dataset-1.0.0.zip/content
+    (read by HTTP Range) — no per-file raw URL
+- path: aisong/LICENSE.md
+  whole: true
+  trim: none
+  refetchable: false
+  reason: a member of the Zenodo zip https://zenodo.org/api/records/22983015/files/aisong-alignment-dataset-1.0.0.zip/content
+    (read by HTTP Range) — no per-file raw URL
+- path: aisong/README.md
+  whole: true
+  trim: none
+  refetchable: false
+  reason: a member of the Zenodo zip https://zenodo.org/api/records/22983015/files/aisong-alignment-dataset-1.0.0.zip/content
+    (read by HTTP Range) — no per-file raw URL
+- path: aisong/dataset/alignment.json
+  whole: true
+  trim: none
+  refetchable: false
+  reason: a member of the Zenodo zip https://zenodo.org/api/records/22983015/files/aisong-alignment-dataset-1.0.0.zip/content
+    (read by HTTP Range) — no per-file raw URL
+- path: aisong/dataset/anda/source_mapping.json
+  whole: true
+  trim: none
+  refetchable: false
+  reason: a member of the Zenodo zip https://zenodo.org/api/records/22983015/files/aisong-alignment-dataset-1.0.0.zip/content
+    (read by HTTP Range) — no per-file raw URL
+- path: aisong/dataset/anda/transcription.json
+  whole: true
+  trim: none
+  refetchable: false
+  reason: a member of the Zenodo zip https://zenodo.org/api/records/22983015/files/aisong-alignment-dataset-1.0.0.zip/content
+    (read by HTTP Range) — no per-file raw URL
+- path: aisong/dataset/chenqi/transcription.json
+  whole: true
+  trim: none
+  refetchable: false
+  reason: a member of the Zenodo zip https://zenodo.org/api/records/22983015/files/aisong-alignment-dataset-1.0.0.zip/content
+    (read by HTTP Range) — no per-file raw URL
+- path: aisong/dataset/manifest.json
+  whole: true
+  trim: none
+  refetchable: false
+  reason: a member of the Zenodo zip https://zenodo.org/api/records/22983015/files/aisong-alignment-dataset-1.0.0.zip/content
+    (read by HTTP Range) — no per-file raw URL
+- path: aisong/docs/data-dictionary.md
+  whole: true
+  trim: none
+  refetchable: false
+  reason: a member of the Zenodo zip https://zenodo.org/api/records/22983015/files/aisong-alignment-dataset-1.0.0.zip/content
+    (read by HTTP Range) — no per-file raw URL
+- path: aisong/witness-images/RIGHTS.md
+  whole: true
+  trim: none
+  refetchable: false
+  reason: a member of the Zenodo zip https://zenodo.org/api/records/22983015/files/aisong-alignment-dataset-1.0.0.zip/content
+    (read by HTTP Range) — no per-file raw URL
+- path: fetch/jinteng-subset.zip
+  whole: false
+  trim: eleven real members of the deposit zip repacked with zip(1)
+  refetchable: false
+  reason: a repacked subset of https://zenodo.org/api/records/23870159/files/jinteng-alignment-dataset-1.0.0.zip/content
+    — no upstream file of its own
+- path: jinteng/CITATION.cff
+  whole: true
+  trim: none
+  refetchable: false
+  reason: a member of the Zenodo zip https://zenodo.org/api/records/23870159/files/jinteng-alignment-dataset-1.0.0.zip/content
+    (read by HTTP Range) — no per-file raw URL
+- path: jinteng/LICENSE.md
+  whole: true
+  trim: none
+  refetchable: false
+  reason: a member of the Zenodo zip https://zenodo.org/api/records/23870159/files/jinteng-alignment-dataset-1.0.0.zip/content
+    (read by HTTP Range) — no per-file raw URL
+- path: jinteng/README.md
+  whole: true
+  trim: none
+  refetchable: false
+  reason: a member of the Zenodo zip https://zenodo.org/api/records/23870159/files/jinteng-alignment-dataset-1.0.0.zip/content
+    (read by HTTP Range) — no per-file raw URL
+- path: jinteng/dataset/alignment.json
+  whole: true
+  trim: none
+  refetchable: false
+  reason: a member of the Zenodo zip https://zenodo.org/api/records/23870159/files/jinteng-alignment-dataset-1.0.0.zip/content
+    (read by HTTP Range) — no per-file raw URL
+- path: jinteng/dataset/manifest.json
+  whole: true
+  trim: none
+  refetchable: false
+  reason: a member of the Zenodo zip https://zenodo.org/api/records/23870159/files/jinteng-alignment-dataset-1.0.0.zip/content
+    (read by HTTP Range) — no per-file raw URL
+- path: jinteng/dataset/shangshu/transcription.json
+  whole: true
+  trim: none
+  refetchable: false
+  reason: a member of the Zenodo zip https://zenodo.org/api/records/23870159/files/jinteng-alignment-dataset-1.0.0.zip/content
+    (read by HTTP Range) — no per-file raw URL
+- path: jinteng/dataset/tsinghua/source_mapping.json
+  whole: true
+  trim: none
+  refetchable: false
+  reason: a member of the Zenodo zip https://zenodo.org/api/records/23870159/files/jinteng-alignment-dataset-1.0.0.zip/content
+    (read by HTTP Range) — no per-file raw URL
+- path: jinteng/dataset/tsinghua/transcription.json
+  whole: true
+  trim: none
+  refetchable: false
+  reason: a member of the Zenodo zip https://zenodo.org/api/records/23870159/files/jinteng-alignment-dataset-1.0.0.zip/content
+    (read by HTTP Range) — no per-file raw URL
+- path: jinteng/docs/data-dictionary.md
+  whole: true
+  trim: none
+  refetchable: false
+  reason: a member of the Zenodo zip https://zenodo.org/api/records/23870159/files/jinteng-alignment-dataset-1.0.0.zip/content
+    (read by HTTP Range) — no per-file raw URL
+- path: jinteng/witness-images/RIGHTS.md
+  whole: true
+  trim: none
+  refetchable: false
+  reason: a member of the Zenodo zip https://zenodo.org/api/records/23870159/files/jinteng-alignment-dataset-1.0.0.zip/content
+    (read by HTTP Range) — no per-file raw URL
