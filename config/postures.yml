@@ -1548,6 +1548,25 @@ sources:
         Unbound Bible text) — nothing to mine"}
     script: {posture: qualified, note: "Latin TRANSLITERATION of the Cyrillic original
         (Rs1Bible = Unbound Bible's 'Danicic Karadzic Latin'); ijekavian spelling kept"}
+  elizabeth-bible:   # P152
+    # kind: machine-postured — kind_map.yml source_kind scripture (the
+    # whole-source Bible precedent: vulgate/eng-web/vuk-danicic).
+    # lect: machine-postured — the whole-source chu → chu:ncs override in
+    # config/lect_overrides.yml (the registry's New Church Slavonic node
+    # names this Bible). The held text is a RENDERING, declared the
+    # bg-wikisource way: metadata "rendering" = "modernized civil-script
+    # spelling" + "base_edition" = upstream's distribution_about verbatim
+    # ("features modernized spelling") on every document — the language
+    # claim is the Elizabethan text's, the spelling is the rendering's.
+    dating: {posture: dated, note: "the edition year the translation title states — 1757,
+        date_class edition (MetadataDates :structured), the print the electronic text renders;
+        the modernized-spelling rendering itself carries no date (distribution_version_date
+        2011-08-17 is the SWORD module's)"}
+    places: {posture: unplaced, note: "the asset names no imprint (a getBible JSON of the
+        rusbible.ru OSIS edition) — nothing to mine"}
+    script: {posture: qualified, note: "civil-script Cyrillic in MODERNIZED spelling — not the
+        1757 print's Church Cyrillic (no titla, no accents, no ѣ/і/ѵ/ѳ/ѡ/ѧ in the file);
+        metadata script Cyrl + orthography modernized + rendering on every document"}
   jaschke-1881:   # P150-A
     # kind: machine-postured — kind_map.yml source_kind lexical (a dictionary).
     lect: {posture: identity, note: "the reference-shelf posture (africa-pd, slavistics-pd): eng,

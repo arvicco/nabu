@@ -250,12 +250,14 @@ class AlignmentRegistryTest < Minitest::Test
                  "the five-way NT flagship (P11-3) is the shipped proof"
     assert_equal ["wscp", "sblgnt", "vulgate (Clementine)", "WEB (English)",
                   "CCMH Assemanianus", "CCMH Marianus", "CCMH Savvina", "CCMH Zographensis",
-                  "sahidica NT (Sahidic Coptic)", "bohairic NT (Bohairic Coptic)"],
+                  "sahidica NT (Sahidic Coptic)", "bohairic NT (Bohairic Coptic)",
+                  "Elizabeth Bible (Church Slavonic)"],
                  work.witnesses.drop(5).map(&:label),
                  "P12-1 adds the OE Mark witness (ISWOC wscp); P11-5 the SBLGNT and " \
                  "Vulgate NT witnesses; P11-8 the WEB English witness; P14-2 the four " \
                  "CCMH Old Church Slavonic gospel manuscripts; P17-1 the two Coptic " \
-                 "NT witnesses (#14 sahidica nc, #15 bohairic attribution)"
+                 "NT witnesses (#14 sahidica nc, #15 bohairic attribution); P152 the " \
+                 "Synodal Church Slavonic NT"
     assert_equal "urn:nabu:proiel:wscp", work.witnesses[5].document_urn,
                  "the P12-1 OE Gospel of Mark rides the shared urn:nabu:proiel: namespace"
     assert_includes work.witnesses[6].document_urns, "urn:nabu:sblgnt:mark"
@@ -293,11 +295,11 @@ class AlignmentRegistryTest < Minitest::Test
     assert_equal ["LXX (Swete, First1K)", "vulgate (Clementine)", "OSHB (WLC, Masoretic)",
                   "BHSA (ETCBC, Masoretic)", "WEB (English)",
                   "Targum (Onkelos/Jonathan/Writings)", "Peshitta (Syriac, ETCBC)",
-                  "Bohairic OT (Coptic Scriptorium)"], labels,
+                  "Bohairic OT (Coptic Scriptorium)", "Elizabeth Bible (Church Slavonic)"], labels,
                  "P26-3 adds the Masoretic witness, P30-4 the second MT leg (BHSA), P30-3 " \
                  "the Aramaic Targum leg, P31-4 the Syriac Peshitta leg, P145 the Bohairic " \
-                 "Coptic leg — align GEN 1.1 spans MT/MT2/LXX/Vulgate/English/Targum/" \
-                 "Peshitta/Bohairic"
+                 "Coptic leg, P152 the Church Slavonic leg — align GEN 1.1 spans MT/MT2/LXX/" \
+                 "Vulgate/English/Targum/Peshitta/Bohairic/Slavonic"
     lxx = work.witnesses.first
     assert_equal "GEN", lxx.book_for("urn:cts:greekLit:tlg0527.tlg001.1st1K-grc1")
     assert_equal "PSA", lxx.book_for("urn:cts:greekLit:tlg0527.tlg027.1st1K-grc1")
@@ -399,7 +401,8 @@ class AlignmentRegistryTest < Minitest::Test
     refute_nil work, "config/alignments.yml must register the psalms work (P13-5)"
     assert_equal ["LXX (Swete, First1K)", "vulgate (Clementine)", "WEB (English)",
                   "OSHB (WLC, Masoretic)", "BHSA (ETCBC, Masoretic)", "Targum (Psalms)",
-                  "Peshitta (Syriac, ETCBC)", "Sahidic psalter (CoptOT, Coptic Scriptorium)"],
+                  "Peshitta (Syriac, ETCBC)", "Sahidic psalter (CoptOT, Coptic Scriptorium)",
+                  "Elizabeth Bible (Church Slavonic)"],
                  work.witnesses.map(&:label),
                  "P26-3 adds the MT psalter, P30-4 the BHSA psalter (same remap), P30-3 the " \
                  "Psalms Targum, P31-4 the Peshitta psalter (same remap again); the OE Paris " \
@@ -482,8 +485,45 @@ class AlignmentRegistryTest < Minitest::Test
     assert_nil bohairic.numbering, "Greek/Vulgate-scheme numbering IS the work vocabulary"
     expected = BOHAIRIC_OT_BOOKS.to_h { |token, tail| ["urn:nabu:coptic-scriptorium:ot.#{tail}.bohairic_ed", token] }
     assert_equal expected, bohairic.documents
-    assert_equal "Peshitta (Syriac, ETCBC)", work.witnesses[-2].label, "the Bohairic column closes the ot work"
-    assert_equal "Bohairic OT (Coptic Scriptorium)", work.witnesses.last.label
+    assert_equal "Peshitta (Syriac, ETCBC)", work.witnesses[-3].label, "the Bohairic column follows the Peshitta"
+    assert_equal "Bohairic OT (Coptic Scriptorium)", work.witnesses[-2].label
+  end
+
+  # The Elizabeth Bible (P152, getBible csielizabeth) joins all three works.
+  # Synodal versification cites the Greek/Vulgate scheme where the MT
+  # splits (Jonah 2.1 the fish verse, Joel 3 and Malachi 4 chapters, Greek
+  # psalm numbering), so no witness carries a remap. The spot-check
+  # (2026-11-02, read-only against the held catalog) held out the MT-order
+  # books (1KI, JER, PRO), DAN (Bel opens a verse early), 1ES and SIR
+  # (verse drift), LJE (Swete's flat refs); PrMan/Ezra/Neh/Eccl carry no token.
+  ELIZABETH_OT_TOKENS = %w[GEN EXO LEV NUM DEU JOS JDG RUT 1SA 2SA 2KI 1CH 2CH EST TOB JDT JOB SNG
+                           WIS ISA LAM BAR EZK HOS JOL AMO OBA JON MIC NAM HAB ZEP HAG ZEC MAL 1MA 2MA].freeze
+
+  def test_shipped_registry_carries_the_elizabeth_bible_in_all_three_works
+    path = File.join(Nabu::Config::PROJECT_ROOT, "config", "alignments.yml")
+    registry = Nabu::AlignmentRegistry.load(path)
+    label = "Elizabeth Bible (Church Slavonic)"
+    nt, ot, psalms = %w[nt ot psalms].map { |id| registry.work(id).witnesses.find { |w| w.label == label } }
+    [nt, ot, psalms].each do |witness|
+      refute_nil witness
+      assert_equal "cts-verse", witness.extractor
+      assert_nil witness.numbering, "Greek/Vulgate-scheme numbering IS the work vocabulary"
+    end
+    assert_equal 27, nt.document_urns.size
+    assert_equal "ROM", nt.book_for("urn:nabu:elizabeth-bible:rom")
+    assert_equal ELIZABETH_OT_TOKENS.sort, ot.documents.values.sort
+    assert_equal "JON", ot.book_for("urn:nabu:elizabeth-bible:jonah")
+    assert_equal "PSA", psalms.book_for("urn:nabu:elizabeth-bible:ps")
+    assert_equal label, registry.work("ot").witnesses.last.label, "the Slavonic column closes the ot work"
+  end
+
+  def test_elizabeth_bible_holdouts_stay_out_of_the_hub
+    path = File.join(Nabu::Config::PROJECT_ROOT, "config", "alignments.yml")
+    registry = Nabu::AlignmentRegistry.load(path)
+    %w[1kgs jer prov dan 1esd sir epjer prman ezra neh eccl].each do |tail|
+      urn = "urn:nabu:elizabeth-bible:#{tail}"
+      assert_nil(registry.works.find { |work| work.witness_for(urn) }, "#{tail} stays out of the hub")
+    end
   end
 
   def test_bohairic_ot_holdouts_stay_out_of_the_hub

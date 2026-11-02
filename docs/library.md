@@ -1023,8 +1023,9 @@ Belarusian dictionary (35,159 entries; open), and two public-domain
 scholarship shelves of uncorrected OCR, `slavistics-pd` — Miklosich,
 Berneker, Leskien, Vondrák, Jagić (21 / 5,833) and `archiv-slav-phil`
 — the *Archiv für slavische Philologie* vols. 1–35 (33 / 22,348).
-`korba` — the KorBa 17th–18th-century Polish subcorpus — is registered
-but not yet wired.
+`korba` — the KorBa 17th–18th-century Polish subcorpus — and
+`elizabeth-bible` — the Synodal Church Slavonic Bible of 1757, 76 books
+in a modernized-spelling rendering — are registered but not yet wired.
 
 **Sinitic.** `classical-modern` — the classical↔modern Chinese parallel
 corpus (14,608 / 1,944,934; the `cmn` lane of languages.md),

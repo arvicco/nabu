@@ -2208,6 +2208,28 @@ elephantine:   # P47-1, 02-sources row 131
   # future links-layer bonus, no edge producer in this packet).
   sync_policy: manual
 
+elizabeth-bible:   # P152, 02-sources row 317
+  adapter: Nabu::Adapters::ElizabethBible
+  adopted: "2026-11-02"
+  axes: [slavic, biblical]
+  wired: false   # awaiting the first real sync: bin/nabu enable elizabeth-bible,
+                 # then bin/nabu sync elizabeth-bible (one 23.7 MB JSON GET).
+                 # EXPECT 76 docs / 36,000 passages, 0 errored, 0 skipped
+                 # (census 2026-11-02, Last-Modified 2026-09-12): Psalms 2,529
+                 # (151 psalms) · Genesis 1,533 · Sirach 1,523 · Jeremiah 1,364;
+                 # eyeball nabu show urn:nabu:elizabeth-bible:gen:1.1 and 5
+                 # random verses, then flip.
+  sync_policy: manual
+  # The Elizabeth Bible (1757 edition) in Church Slavonic — getBible's
+  # csielizabeth (api.getbible.net/v2/csielizabeth.json; the rusbible.ru
+  # OSIS electronic edition, = CrossWire SWORD cslelizabeth 1.5.2), one
+  # whole-translation JSON file → the getbible-json family (one document
+  # per book, verse passages). A modernized-spelling CIVIL-SCRIPT
+  # RENDERING (distribution_about: "features modernized spelling") —
+  # declared per document (metadata rendering), never the print's
+  # orthography. All 76 books incl. the 10 deuterocanonical (Synodal
+  # versification). distribution_license "Public Domain" → open.
+
 eltec-srp:   # P117-2, 02-sources row 246
   adapter: Nabu::Adapters::EltecSrp
   adopted: "2026-10-11"
