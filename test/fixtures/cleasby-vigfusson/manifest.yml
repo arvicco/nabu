@@ -1,0 +1,19 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+source: cleasby-vigfusson
+adapter_test: test/adapters/cleasby_vigfusson_test.rb
+retrieved: 2026-11-02
+files:
+  - path: json/cleasby-vigfusson.json
+    url: https://raw.githubusercontent.com/stscoundrel/cleasby-vigfusson-dictionary/master/json/cleasby-vigfusson.json
+    whole: false
+    trim: >-
+      the 4 records at array positions 1, 10106, 27973, 27974 (abbadís,
+      Gýmir, stefja, stefja), byte-verbatim objects in upstream order, of
+      35,207
+  - path: json/cleasby-vigfusson-no-markup.json
+    url: https://raw.githubusercontent.com/stscoundrel/cleasby-vigfusson-dictionary/master/json/cleasby-vigfusson-no-markup.json
+    whole: false
+    trim: >-
+      the record at array position 1 (abbadís), byte-verbatim, of 35,207 —
+      the rejected grain's specimen
