@@ -1,0 +1,829 @@
+[
+  {
+    "created": "2017-04-04T06:31:08.687782+00:00",
+    "modified": "2024-08-03T11:57:23.519957+00:00",
+    "id": 447273,
+    "conceptrecid": "794523",
+    "doi": "10.5281/zenodo.447273",
+    "conceptdoi": "10.5281/zenodo.794523",
+    "doi_url": "https://doi.org/10.5281/zenodo.447273",
+    "metadata": {
+      "title": "Bhagdei जामगढ़-भगदेई (District Raisen, Madhya Pradesh). Rock inscription dated saṃvat 1253.",
+      "doi": "10.5281/zenodo.447273",
+      "publication_date": "2017-04-04",
+      "description": "<p>Bhagdei भगदेई (District Raisen, Madhya Pradesh). Rock inscription to the east of the village, near feet engraved on natural rock face, sometimes identified as <a href=\"https://doi.org/10.5281/zenodo.494366\">Viṣṇupada or जामवंतजी के चरणों</a>, likely dated saṃvat 1253 (<em>circa</em>&nbsp;CE 1196-97), as documented 2008&nbsp;&copy; Directorate of Archaeology, Museums and Archives, Madhya Pradesh.</p>\n\n<p><strong>Coordinates: &nbsp;</strong><a href=\"http://wikimapia.org/#lang=en&amp;lat=23.107622&amp;lon=78.258684&amp;z=17&amp;m=bs&amp;show=/36620884/%E0%A4%AD%E0%A4%97%E0%A4%A6%E0%A5%87%E0%A4%88-Bhagdei-Pillar\">23&deg;6&#39;29&quot;N&nbsp;78&deg;15&#39;18&quot;E</a></p>\n\n<p><strong>Survey of India</strong>:&nbsp;<a href=\"https://doi.org/10.5281/zenodo.1433778\">Sheet 55I8 1973 1st Edition</a></p>\n\n<p>Selected bibliography:</p>\n\n<ul>\n\t<li>unpublished (2023)</li>\n</ul>\n\n<p>&nbsp;</p>",
+      "access_right": "open",
+      "creators": [
+        {
+          "name": "Directorate of Archaeology, Museums and Archives, Madhya Pradesh",
+          "affiliation": null
+        }
+      ],
+      "contributors": [
+        {
+          "name": "Willis, M.",
+          "affiliation": "ERC",
+          "type": "DataCollector",
+          "orcid": "0000-0002-3143-2207"
+        },
+        {
+          "name": "Directorate of Archaeology, Museums and Archives, Madhya Pradesh",
+          "affiliation": null,
+          "type": "RightsHolder"
+        }
+      ],
+      "keywords": [
+        "भगदेई",
+        "IN060008",
+        "Paramaras -- History.",
+        "Inscriptions, Sanskrit -- India.",
+        "Inscriptions -- India, North.",
+        "IN060008"
+      ],
+      "related_identifiers": [
+        {
+          "identifier": "10.5281/zenodo.494366",
+          "relation": "hasPart",
+          "scheme": "doi"
+        }
+      ],
+      "resource_type": {
+        "title": "Physical object",
+        "type": "physicalobject"
+      },
+      "license": {
+        "id": "cc-by-nc-nd-4.0"
+      },
+      "grants": [
+        {
+          "code": "609823",
+          "internal_id": "10.13039/501100000780::609823",
+          "funder": {
+            "name": "European Commission",
+            "doi": "10.13039/501100000780",
+            "acronym": "EC"
+          },
+          "title": "Beyond Boundaries: Religion, Region, Language and the State",
+          "acronym": "ASIA",
+          "program": "FP7-IDEAS-ERC",
+          "url": "https://cordis.europa.eu/projects/609823"
+        }
+      ],
+      "communities": [
+        {
+          "id": "narmada"
+        },
+        {
+          "id": "paramara"
+        },
+        {
+          "id": "siddhamassets"
+        },
+        {
+          "id": "siddham"
+        },
+        {
+          "id": "eu"
+        }
+      ],
+      "relations": {
+        "version": [
+          {
+            "index": 0,
+            "is_last": true,
+            "parent": {
+              "pid_type": "recid",
+              "pid_value": "794523"
+            }
+          }
+        ]
+      },
+      "notes": "Possible date saṃvat 1253 vesāṣa sudi 7 sanau."
+    },
+    "title": "Bhagdei जामगढ़-भगदेई (District Raisen, Madhya Pradesh). Rock inscription dated saṃvat 1253.",
+    "links": {
+      "self": "https://zenodo.org/api/records/447273",
+      "self_html": "https://zenodo.org/records/447273",
+      "preview_html": "https://zenodo.org/records/447273?preview=1",
+      "doi": "https://doi.org/10.5281/zenodo.447273",
+      "self_doi": "https://doi.org/10.5281/zenodo.447273",
+      "self_doi_html": "https://zenodo.org/doi/10.5281/zenodo.447273",
+      "reserve_doi": "https://zenodo.org/api/records/447273/draft/pids/doi",
+      "parent": "https://zenodo.org/api/records/794523",
+      "parent_html": "https://zenodo.org/records/794523",
+      "parent_doi": "https://doi.org/10.5281/zenodo.794523",
+      "parent_doi_html": "https://zenodo.org/doi/10.5281/zenodo.794523",
+      "self_iiif_manifest": "https://zenodo.org/api/iiif/record:447273/manifest",
+      "self_iiif_sequence": "https://zenodo.org/api/iiif/record:447273/sequence/default",
+      "files": "https://zenodo.org/api/records/447273/files",
+      "media_files": "https://zenodo.org/api/records/447273/media-files",
+      "thumbnails": {
+        "10": "https://zenodo.org/api/iiif/record:447273:Bhagdei%20rock%20inscription.jpg/full/%5E10,/0/default.jpg",
+        "50": "https://zenodo.org/api/iiif/record:447273:Bhagdei%20rock%20inscription.jpg/full/%5E50,/0/default.jpg",
+        "100": "https://zenodo.org/api/iiif/record:447273:Bhagdei%20rock%20inscription.jpg/full/%5E100,/0/default.jpg",
+        "250": "https://zenodo.org/api/iiif/record:447273:Bhagdei%20rock%20inscription.jpg/full/%5E250,/0/default.jpg",
+        "750": "https://zenodo.org/api/iiif/record:447273:Bhagdei%20rock%20inscription.jpg/full/%5E750,/0/default.jpg",
+        "1200": "https://zenodo.org/api/iiif/record:447273:Bhagdei%20rock%20inscription.jpg/full/%5E1200,/0/default.jpg"
+      },
+      "latest": "https://zenodo.org/api/records/447273/versions/latest",
+      "latest_html": "https://zenodo.org/records/447273/latest",
+      "versions": "https://zenodo.org/api/records/447273/versions",
+      "draft": "https://zenodo.org/api/records/447273/draft",
+      "access_links": "https://zenodo.org/api/records/447273/access/links",
+      "access_grants": "https://zenodo.org/api/records/447273/access/grants",
+      "access_users": "https://zenodo.org/api/records/447273/access/users",
+      "access_request": "https://zenodo.org/api/records/447273/access/request",
+      "access": "https://zenodo.org/api/records/447273/access",
+      "communities": "https://zenodo.org/api/records/447273/communities",
+      "communities-suggestions": "https://zenodo.org/api/records/447273/communities-suggestions",
+      "request_deletion": "https://zenodo.org/api/records/447273/request-deletion",
+      "file_modification": "https://zenodo.org/api/records/447273/file-modification",
+      "quota_increase": "https://zenodo.org/api/records/447273/quota-increase",
+      "requests": "https://zenodo.org/api/records/447273/requests"
+    },
+    "updated": "2024-08-03T11:57:23.519957+00:00",
+    "recid": "447273",
+    "revision": 19,
+    "files": [
+      {
+        "id": "8241e681-51d4-4bf9-a546-1eda0a4a8730",
+        "key": "Bhagdei rock inscription.jpg",
+        "size": 3024570,
+        "checksum": "md5:706290c53515094423f1b42862ccc0c3",
+        "links": {
+          "self": "https://zenodo.org/api/records/447273/files/Bhagdei%20rock%20inscription.jpg/content"
+        }
+      }
+    ],
+    "swh": null,
+    "owners": [
+      {
+        "id": "29568"
+      }
+    ],
+    "status": "published",
+    "stats": {
+      "downloads": 43,
+      "unique_downloads": 41,
+      "views": 172,
+      "unique_views": 166,
+      "version_downloads": 43,
+      "version_unique_downloads": 41,
+      "version_unique_views": 166,
+      "version_views": 172
+    },
+    "state": "done",
+    "submitted": true
+  },
+  {
+    "created": "2023-07-27T13:07:01.894711+00:00",
+    "modified": "2024-07-11T15:43:59.147946+00:00",
+    "id": 8189595,
+    "conceptrecid": "8189594",
+    "doi": "10.5281/zenodo.8189595",
+    "conceptdoi": "10.5281/zenodo.8189594",
+    "doi_url": "https://doi.org/10.5281/zenodo.8189595",
+    "metadata": {
+      "title": "परमार्स अभिलेख",
+      "doi": "10.5281/zenodo.8189595",
+      "publication_date": "1979-07-27",
+      "description": "<p>अमरचंद मित्तल, परमार्स अभिलेख (अहमदाबाद, १९७९)</p>\n\n<ul>\n\t<li><a href=\"https://catalog.lib.uchicago.edu/vufind/Alphabrowse/Home?source=topic&amp;from=Inscriptions%2C+Sanskrit--India.\">Inscriptions, Sanskrit -- India.</a></li>\n\t<li><a href=\"https://catalog.lib.uchicago.edu/vufind/Search/Results?lookfor=Inscriptions%2C+Sanskrit.&amp;type=Subject\">Inscriptions, Sanskrit.</a></li>\n\t<li><a href=\"https://catalog.lib.uchicago.edu/vufind/Search/Results?lookfor=Paramaras.&amp;type=Subject\">Paramaras.</a></li>\n\t<li><a href=\"https://catalog.lib.uchicago.edu/vufind/Alphabrowse/Home?source=topic&amp;from=India--History--324+B.C.-1000+A.D.--Sources\">India -- History -- 324 B.C.-1000 A.D. -- Sources</a></li>\n\t<li><a href=\"https://catalog.lib.uchicago.edu/vufind/Alphabrowse/Home?source=topic&amp;from=India--History--1000-1526--Sources.\">India -- History -- 1000-1526 -- Sources</a></li>\n</ul>",
+      "access_right": "restricted",
+      "creators": [
+        {
+          "name": "मित्तल, अमरचंद",
+          "affiliation": null
+        }
+      ],
+      "keywords": [
+        "Inscriptions, Sanskrit -- India.",
+        "Paramaras."
+      ],
+      "resource_type": {
+        "title": "Book",
+        "type": "publication",
+        "subtype": "book"
+      },
+      "communities": [
+        {
+          "id": "siddhamassets"
+        },
+        {
+          "id": "paramara"
+        }
+      ],
+      "relations": {
+        "version": [
+          {
+            "index": 0,
+            "is_last": true,
+            "parent": {
+              "pid_type": "recid",
+              "pid_value": "8189594"
+            }
+          }
+        ]
+      }
+    },
+    "title": "परमार्स अभिलेख",
+    "links": {
+      "self": "https://zenodo.org/api/records/8189595",
+      "self_html": "https://zenodo.org/records/8189595",
+      "preview_html": "https://zenodo.org/records/8189595?preview=1",
+      "doi": "https://doi.org/10.5281/zenodo.8189595",
+      "self_doi": "https://doi.org/10.5281/zenodo.8189595",
+      "self_doi_html": "https://zenodo.org/doi/10.5281/zenodo.8189595",
+      "reserve_doi": "https://zenodo.org/api/records/8189595/draft/pids/doi",
+      "parent": "https://zenodo.org/api/records/8189594",
+      "parent_html": "https://zenodo.org/records/8189594",
+      "parent_doi": "https://doi.org/10.5281/zenodo.8189594",
+      "parent_doi_html": "https://zenodo.org/doi/10.5281/zenodo.8189594",
+      "self_iiif_manifest": "https://zenodo.org/api/iiif/record:8189595/manifest",
+      "self_iiif_sequence": "https://zenodo.org/api/iiif/record:8189595/sequence/default",
+      "files": "https://zenodo.org/api/records/8189595/files",
+      "media_files": "https://zenodo.org/api/records/8189595/media-files",
+      "latest": "https://zenodo.org/api/records/8189595/versions/latest",
+      "latest_html": "https://zenodo.org/records/8189595/latest",
+      "versions": "https://zenodo.org/api/records/8189595/versions",
+      "draft": "https://zenodo.org/api/records/8189595/draft",
+      "access_links": "https://zenodo.org/api/records/8189595/access/links",
+      "access_grants": "https://zenodo.org/api/records/8189595/access/grants",
+      "access_users": "https://zenodo.org/api/records/8189595/access/users",
+      "access_request": "https://zenodo.org/api/records/8189595/access/request",
+      "access": "https://zenodo.org/api/records/8189595/access",
+      "communities": "https://zenodo.org/api/records/8189595/communities",
+      "communities-suggestions": "https://zenodo.org/api/records/8189595/communities-suggestions",
+      "request_deletion": "https://zenodo.org/api/records/8189595/request-deletion",
+      "file_modification": "https://zenodo.org/api/records/8189595/file-modification",
+      "quota_increase": "https://zenodo.org/api/records/8189595/quota-increase",
+      "requests": "https://zenodo.org/api/records/8189595/requests"
+    },
+    "updated": "2024-07-11T15:43:59.147946+00:00",
+    "recid": "8189595",
+    "revision": 6,
+    "files": [],
+    "swh": null,
+    "owners": [
+      {
+        "id": "73812"
+      }
+    ],
+    "status": "published",
+    "stats": {
+      "downloads": 4,
+      "unique_downloads": 2,
+      "views": 67,
+      "unique_views": 63,
+      "version_downloads": 4,
+      "version_unique_downloads": 2,
+      "version_unique_views": 63,
+      "version_views": 67
+    },
+    "state": "done",
+    "submitted": true
+  },
+  {
+    "created": "2026-01-29T14:32:52.379120+00:00",
+    "modified": "2026-08-04T11:25:52.115289+00:00",
+    "id": 18416373,
+    "conceptrecid": "8192216",
+    "doi": "10.5281/zenodo.18416373",
+    "conceptdoi": "10.5281/zenodo.8192216",
+    "doi_url": "https://doi.org/10.5281/zenodo.18416373",
+    "metadata": {
+      "title": "• धार Dhār (District Dhār, Madhya Pradesh). Inscription of the time of Bhoja on an image of the Jain goddess Ambikā dated saṃvat 1091, diplomatic and critical editions, version 5.0 (TEI XML).",
+      "doi": "10.5281/zenodo.18416373",
+      "publication_date": "2026-01-29",
+      "description": "<p>धार Dhār (District Dhār, Madhya Pradesh). Inscription of the time of Bhoja on an&nbsp;<a href=\"https://doi.org/10.5281/zenodo.8189712\">image</a> of the Jain goddess Ambikā dated saṃvat 1091, diplomatic and critical editions, version 5.0 (TEI XML).</p>",
+      "access_right": "open",
+      "creators": [
+        {
+          "name": "Willis, M.",
+          "affiliation": null,
+          "orcid": "0000-0002-3143-2207"
+        }
+      ],
+      "keywords": [
+        "PMR14",
+        "PennGlobal",
+        "IN060027",
+        "OB060027",
+        "धार"
+      ],
+      "related_identifiers": [
+        {
+          "identifier": "10.1017/S1356186326101709",
+          "relation": "isPublishedIn",
+          "resource_type": "publication-article",
+          "scheme": "doi"
+        }
+      ],
+      "resource_type": {
+        "title": "Dataset",
+        "type": "dataset"
+      },
+      "license": {
+        "id": "cc-by-4.0"
+      },
+      "communities": [
+        {
+          "id": "paramara"
+        },
+        {
+          "id": "siddhamassets"
+        }
+      ],
+      "relations": {
+        "version": [
+          {
+            "index": 4,
+            "is_last": true,
+            "parent": {
+              "pid_type": "recid",
+              "pid_value": "8192216"
+            }
+          }
+        ]
+      },
+      "notes": "<p>SIDDHAM <a href=\"https://siddham.network/inscription/in060027/\">IN060027</a></p>\n<p>&nbsp;</p>"
+    },
+    "title": "• धार Dhār (District Dhār, Madhya Pradesh). Inscription of the time of Bhoja on an image of the Jain goddess Ambikā dated saṃvat 1091, diplomatic and critical editions, version 5.0 (TEI XML).",
+    "links": {
+      "self": "https://zenodo.org/api/records/18416373",
+      "self_html": "https://zenodo.org/records/18416373",
+      "preview_html": "https://zenodo.org/records/18416373?preview=1",
+      "doi": "https://doi.org/10.5281/zenodo.18416373",
+      "self_doi": "https://doi.org/10.5281/zenodo.18416373",
+      "self_doi_html": "https://zenodo.org/doi/10.5281/zenodo.18416373",
+      "reserve_doi": "https://zenodo.org/api/records/18416373/draft/pids/doi",
+      "parent": "https://zenodo.org/api/records/8192216",
+      "parent_html": "https://zenodo.org/records/8192216",
+      "parent_doi": "https://doi.org/10.5281/zenodo.8192216",
+      "parent_doi_html": "https://zenodo.org/doi/10.5281/zenodo.8192216",
+      "self_iiif_manifest": "https://zenodo.org/api/iiif/record:18416373/manifest",
+      "self_iiif_sequence": "https://zenodo.org/api/iiif/record:18416373/sequence/default",
+      "files": "https://zenodo.org/api/records/18416373/files",
+      "media_files": "https://zenodo.org/api/records/18416373/media-files",
+      "latest": "https://zenodo.org/api/records/18416373/versions/latest",
+      "latest_html": "https://zenodo.org/records/18416373/latest",
+      "versions": "https://zenodo.org/api/records/18416373/versions",
+      "draft": "https://zenodo.org/api/records/18416373/draft",
+      "access_links": "https://zenodo.org/api/records/18416373/access/links",
+      "access_grants": "https://zenodo.org/api/records/18416373/access/grants",
+      "access_users": "https://zenodo.org/api/records/18416373/access/users",
+      "access_request": "https://zenodo.org/api/records/18416373/access/request",
+      "access": "https://zenodo.org/api/records/18416373/access",
+      "communities": "https://zenodo.org/api/records/18416373/communities",
+      "communities-suggestions": "https://zenodo.org/api/records/18416373/communities-suggestions",
+      "request_deletion": "https://zenodo.org/api/records/18416373/request-deletion",
+      "file_modification": "https://zenodo.org/api/records/18416373/file-modification",
+      "quota_increase": "https://zenodo.org/api/records/18416373/quota-increase",
+      "requests": "https://zenodo.org/api/records/18416373/requests"
+    },
+    "updated": "2026-08-04T11:25:52.115289+00:00",
+    "recid": "18416373",
+    "revision": 6,
+    "files": [
+      {
+        "id": "141ab801-06b6-4633-887d-332db42a7192",
+        "key": "IN060027.txt",
+        "size": 3069,
+        "checksum": "md5:5418ebea5268f607f1e298a1c6daf833",
+        "links": {
+          "self": "https://zenodo.org/api/records/18416373/files/IN060027.txt/content"
+        }
+      }
+    ],
+    "swh": null,
+    "owners": [
+      {
+        "id": "73812"
+      }
+    ],
+    "status": "published",
+    "stats": {
+      "downloads": 176,
+      "unique_downloads": 174,
+      "views": 891,
+      "unique_views": 842,
+      "version_downloads": 45,
+      "version_unique_downloads": 45,
+      "version_unique_views": 223,
+      "version_views": 233
+    },
+    "state": "done",
+    "submitted": true
+  },
+  {
+    "created": "2026-04-14T03:59:36.911328+00:00",
+    "modified": "2026-04-14T03:59:37.095819+00:00",
+    "id": 19562560,
+    "conceptrecid": "19562559",
+    "doi": "10.5281/zenodo.19562560",
+    "conceptdoi": "10.5281/zenodo.19562559",
+    "doi_url": "https://doi.org/10.5281/zenodo.19562560",
+    "metadata": {
+      "title": "शुजालपुर Shujalpur(Madhya Pradesh).Pipliānagar Copper Plate Inscription of Arjunavarman",
+      "doi": "10.5281/zenodo.19562560",
+      "publication_date": "2026-04-14",
+      "description": "<p>शुजालपुर Shujalpur(Madhya Pradesh).Pipliānagar Copper Plate Inscription of Arjunavarman</p>",
+      "access_right": "open",
+      "creators": [
+        {
+          "name": "K Babu, Athira",
+          "affiliation": null,
+          "orcid": "0009-0007-5830-7485"
+        }
+      ],
+      "contributors": [
+        {
+          "name": "Ali, Daud",
+          "affiliation": "University of Pennsylvania",
+          "type": "ProjectLeader",
+          "orcid": "0009-0004-8566-8890"
+        },
+        {
+          "name": "Willis, Michael",
+          "affiliation": "Fondation Max van Berchem",
+          "type": "DataManager",
+          "orcid": "0000-0002-3143-2207"
+        }
+      ],
+      "keywords": [
+        "PMR47",
+        "PennGlobal",
+        "Inscriptions--Paramāra",
+        "Arjunavarman",
+        "Medieval history",
+        "Literature, Medieval/history",
+        "South Asian People",
+        "South Asian People/history"
+      ],
+      "language": "san",
+      "resource_type": {
+        "title": "Dataset",
+        "type": "dataset"
+      },
+      "license": {
+        "id": "cc-by-4.0"
+      },
+      "communities": [
+        {
+          "id": "paramara"
+        }
+      ],
+      "relations": {
+        "version": [
+          {
+            "index": 0,
+            "is_last": true,
+            "parent": {
+              "pid_type": "recid",
+              "pid_value": "19562559"
+            }
+          }
+        ]
+      }
+    },
+    "title": "शुजालपुर Shujalpur(Madhya Pradesh).Pipliānagar Copper Plate Inscription of Arjunavarman",
+    "links": {
+      "self": "https://zenodo.org/api/records/19562560",
+      "self_html": "https://zenodo.org/records/19562560",
+      "preview_html": "https://zenodo.org/records/19562560?preview=1",
+      "doi": "https://doi.org/10.5281/zenodo.19562560",
+      "self_doi": "https://doi.org/10.5281/zenodo.19562560",
+      "self_doi_html": "https://zenodo.org/doi/10.5281/zenodo.19562560",
+      "reserve_doi": "https://zenodo.org/api/records/19562560/draft/pids/doi",
+      "parent": "https://zenodo.org/api/records/19562559",
+      "parent_html": "https://zenodo.org/records/19562559",
+      "parent_doi": "https://doi.org/10.5281/zenodo.19562559",
+      "parent_doi_html": "https://zenodo.org/doi/10.5281/zenodo.19562559",
+      "self_iiif_manifest": "https://zenodo.org/api/iiif/record:19562560/manifest",
+      "self_iiif_sequence": "https://zenodo.org/api/iiif/record:19562560/sequence/default",
+      "files": "https://zenodo.org/api/records/19562560/files",
+      "media_files": "https://zenodo.org/api/records/19562560/media-files",
+      "latest": "https://zenodo.org/api/records/19562560/versions/latest",
+      "latest_html": "https://zenodo.org/records/19562560/latest",
+      "versions": "https://zenodo.org/api/records/19562560/versions",
+      "draft": "https://zenodo.org/api/records/19562560/draft",
+      "access_links": "https://zenodo.org/api/records/19562560/access/links",
+      "access_grants": "https://zenodo.org/api/records/19562560/access/grants",
+      "access_users": "https://zenodo.org/api/records/19562560/access/users",
+      "access_request": "https://zenodo.org/api/records/19562560/access/request",
+      "access": "https://zenodo.org/api/records/19562560/access",
+      "communities": "https://zenodo.org/api/records/19562560/communities",
+      "communities-suggestions": "https://zenodo.org/api/records/19562560/communities-suggestions",
+      "request_deletion": "https://zenodo.org/api/records/19562560/request-deletion",
+      "file_modification": "https://zenodo.org/api/records/19562560/file-modification",
+      "quota_increase": "https://zenodo.org/api/records/19562560/quota-increase",
+      "requests": "https://zenodo.org/api/records/19562560/requests"
+    },
+    "updated": "2026-04-14T03:59:37.095819+00:00",
+    "recid": "19562560",
+    "revision": 4,
+    "files": [
+      {
+        "id": "15864762-b509-4118-b5b0-15623483cd84",
+        "key": "PMR47.txt",
+        "size": 7035,
+        "checksum": "md5:355d64238584e788e6d9fbbc4dfc8ff9",
+        "links": {
+          "self": "https://zenodo.org/api/records/19562560/files/PMR47.txt/content"
+        }
+      }
+    ],
+    "swh": null,
+    "owners": [
+      {
+        "id": "586529"
+      }
+    ],
+    "status": "published",
+    "stats": {
+      "downloads": 72,
+      "unique_downloads": 61,
+      "views": 74,
+      "unique_views": 73,
+      "version_downloads": 72,
+      "version_unique_downloads": 61,
+      "version_unique_views": 73,
+      "version_views": 74
+    },
+    "state": "done",
+    "submitted": true
+  },
+  {
+    "created": "2026-09-24T09:44:34.039147+00:00",
+    "modified": "2026-09-24T09:44:34.238268+00:00",
+    "id": 22934821,
+    "conceptrecid": "22934820",
+    "doi": "10.5281/zenodo.22934821",
+    "conceptdoi": "10.5281/zenodo.22934820",
+    "doi_url": "https://doi.org/10.5281/zenodo.22934821",
+    "metadata": {
+      "title": "राजपुर Rajpur (Madhya Pradesh ). Rājpur Copper Plate Charter of the Paramāra Raṇadhavala",
+      "doi": "10.5281/zenodo.22934821",
+      "publication_date": "2026-09-24",
+      "description": "<p>राजपुर Rajpur (Madhya Pradesh ). Rājpur Copper Plate Charter of the Paramāra Raṇadhavala</p>",
+      "access_right": "open",
+      "creators": [
+        {
+          "name": "K Babu, Athira",
+          "affiliation": "Sree Sankaracharya University of Sanskrit",
+          "orcid": "0009-0007-5830-7485"
+        }
+      ],
+      "contributors": [
+        {
+          "name": "Willis, Michael",
+          "affiliation": "Fondation Max van Berchem",
+          "type": "DataManager",
+          "orcid": "0000-0002-3143-2207"
+        },
+        {
+          "name": "Ali, Daud",
+          "affiliation": "University of Pennsylvania",
+          "type": "ProjectLeader",
+          "orcid": "0009-0004-8566-8890"
+        }
+      ],
+      "keywords": [
+        "PMR198",
+        "PennGlobal",
+        "Inscriptions--Paramāra",
+        "Medieval history",
+        "South Asian People",
+        "Literature, Medieval/history",
+        "South Asian People/history"
+      ],
+      "language": "san",
+      "resource_type": {
+        "title": "Dataset",
+        "type": "dataset"
+      },
+      "license": {
+        "id": "cc-by-4.0"
+      },
+      "communities": [
+        {
+          "id": "paramara"
+        }
+      ],
+      "relations": {
+        "version": [
+          {
+            "index": 0,
+            "is_last": true,
+            "parent": {
+              "pid_type": "recid",
+              "pid_value": "22934820"
+            }
+          }
+        ]
+      }
+    },
+    "title": "राजपुर Rajpur (Madhya Pradesh ). Rājpur Copper Plate Charter of the Paramāra Raṇadhavala",
+    "links": {
+      "self": "https://zenodo.org/api/records/22934821",
+      "self_html": "https://zenodo.org/records/22934821",
+      "preview_html": "https://zenodo.org/records/22934821?preview=1",
+      "doi": "https://doi.org/10.5281/zenodo.22934821",
+      "self_doi": "https://doi.org/10.5281/zenodo.22934821",
+      "self_doi_html": "https://zenodo.org/doi/10.5281/zenodo.22934821",
+      "reserve_doi": "https://zenodo.org/api/records/22934821/draft/pids/doi",
+      "parent": "https://zenodo.org/api/records/22934820",
+      "parent_html": "https://zenodo.org/records/22934820",
+      "parent_doi": "https://doi.org/10.5281/zenodo.22934820",
+      "parent_doi_html": "https://zenodo.org/doi/10.5281/zenodo.22934820",
+      "self_iiif_manifest": "https://zenodo.org/api/iiif/record:22934821/manifest",
+      "self_iiif_sequence": "https://zenodo.org/api/iiif/record:22934821/sequence/default",
+      "files": "https://zenodo.org/api/records/22934821/files",
+      "media_files": "https://zenodo.org/api/records/22934821/media-files",
+      "latest": "https://zenodo.org/api/records/22934821/versions/latest",
+      "latest_html": "https://zenodo.org/records/22934821/latest",
+      "versions": "https://zenodo.org/api/records/22934821/versions",
+      "draft": "https://zenodo.org/api/records/22934821/draft",
+      "access_links": "https://zenodo.org/api/records/22934821/access/links",
+      "access_grants": "https://zenodo.org/api/records/22934821/access/grants",
+      "access_users": "https://zenodo.org/api/records/22934821/access/users",
+      "access_request": "https://zenodo.org/api/records/22934821/access/request",
+      "access": "https://zenodo.org/api/records/22934821/access",
+      "communities": "https://zenodo.org/api/records/22934821/communities",
+      "communities-suggestions": "https://zenodo.org/api/records/22934821/communities-suggestions",
+      "request_deletion": "https://zenodo.org/api/records/22934821/request-deletion",
+      "file_modification": "https://zenodo.org/api/records/22934821/file-modification",
+      "quota_increase": "https://zenodo.org/api/records/22934821/quota-increase",
+      "requests": "https://zenodo.org/api/records/22934821/requests"
+    },
+    "updated": "2026-09-24T09:44:34.238268+00:00",
+    "recid": "22934821",
+    "revision": 4,
+    "files": [
+      {
+        "id": "83dd16b2-2f11-4042-aef2-1258ec3789df",
+        "key": "PMR198.txt",
+        "size": 10813,
+        "checksum": "md5:47d852859acd881386b381270ca440ec",
+        "links": {
+          "self": "https://zenodo.org/api/records/22934821/files/PMR198.txt/content"
+        }
+      }
+    ],
+    "swh": null,
+    "owners": [
+      {
+        "id": "586529"
+      }
+    ],
+    "status": "published",
+    "stats": {
+      "downloads": 5,
+      "unique_downloads": 5,
+      "views": 31,
+      "unique_views": 31,
+      "version_downloads": 5,
+      "version_unique_downloads": 5,
+      "version_unique_views": 31,
+      "version_views": 31
+    },
+    "state": "done",
+    "submitted": true
+  },
+  {
+    "created": "2026-09-24T11:33:32.112172+00:00",
+    "modified": "2026-09-25T06:11:55.374696+00:00",
+    "id": 22938192,
+    "conceptrecid": "22938191",
+    "doi": "10.5281/zenodo.22938192",
+    "conceptdoi": "10.5281/zenodo.22938191",
+    "doi_url": "https://doi.org/10.5281/zenodo.22938192",
+    "metadata": {
+      "title": "Būdhērā Pillar Inscription of the Time of Gaṇapati",
+      "doi": "10.5281/zenodo.22938192",
+      "publication_date": "2026-09-24",
+      "description": "<p>Būdhērā Pillar Inscription of the Time of Gaṇapati</p>",
+      "access_right": "open",
+      "creators": [
+        {
+          "name": "K Babu, Athira",
+          "affiliation": "Sree Sankaracharya University of Sanskrit",
+          "orcid": "0009-0007-5830-7485"
+        }
+      ],
+      "contributors": [
+        {
+          "name": "Willis, Michael",
+          "affiliation": "Fondation Max van Berchem",
+          "type": "DataManager",
+          "orcid": "0000-0002-3143-2207"
+        },
+        {
+          "name": "Ali, Daud",
+          "affiliation": "University of Pennsylvania",
+          "type": "ProjectLeader",
+          "orcid": "0009-0004-8566-8890"
+        }
+      ],
+      "keywords": [
+        "PMR203",
+        "PennGlobal",
+        "Inscriptions--Paramāra",
+        "Medieval history",
+        "Literature, Medieval/history",
+        "South Asian People",
+        "South Asian People/history"
+      ],
+      "language": "san",
+      "resource_type": {
+        "title": "Dataset",
+        "type": "dataset"
+      },
+      "license": {
+        "id": "cc-by-4.0"
+      },
+      "communities": [
+        {
+          "id": "paramara"
+        }
+      ],
+      "relations": {
+        "version": [
+          {
+            "index": 0,
+            "is_last": true,
+            "parent": {
+              "pid_type": "recid",
+              "pid_value": "22938191"
+            }
+          }
+        ]
+      }
+    },
+    "title": "Būdhērā Pillar Inscription of the Time of Gaṇapati",
+    "links": {
+      "self": "https://zenodo.org/api/records/22938192",
+      "self_html": "https://zenodo.org/records/22938192",
+      "preview_html": "https://zenodo.org/records/22938192?preview=1",
+      "doi": "https://doi.org/10.5281/zenodo.22938192",
+      "self_doi": "https://doi.org/10.5281/zenodo.22938192",
+      "self_doi_html": "https://zenodo.org/doi/10.5281/zenodo.22938192",
+      "reserve_doi": "https://zenodo.org/api/records/22938192/draft/pids/doi",
+      "parent": "https://zenodo.org/api/records/22938191",
+      "parent_html": "https://zenodo.org/records/22938191",
+      "parent_doi": "https://doi.org/10.5281/zenodo.22938191",
+      "parent_doi_html": "https://zenodo.org/doi/10.5281/zenodo.22938191",
+      "self_iiif_manifest": "https://zenodo.org/api/iiif/record:22938192/manifest",
+      "self_iiif_sequence": "https://zenodo.org/api/iiif/record:22938192/sequence/default",
+      "files": "https://zenodo.org/api/records/22938192/files",
+      "media_files": "https://zenodo.org/api/records/22938192/media-files",
+      "latest": "https://zenodo.org/api/records/22938192/versions/latest",
+      "latest_html": "https://zenodo.org/records/22938192/latest",
+      "versions": "https://zenodo.org/api/records/22938192/versions",
+      "draft": "https://zenodo.org/api/records/22938192/draft",
+      "access_links": "https://zenodo.org/api/records/22938192/access/links",
+      "access_grants": "https://zenodo.org/api/records/22938192/access/grants",
+      "access_users": "https://zenodo.org/api/records/22938192/access/users",
+      "access_request": "https://zenodo.org/api/records/22938192/access/request",
+      "access": "https://zenodo.org/api/records/22938192/access",
+      "communities": "https://zenodo.org/api/records/22938192/communities",
+      "communities-suggestions": "https://zenodo.org/api/records/22938192/communities-suggestions",
+      "request_deletion": "https://zenodo.org/api/records/22938192/request-deletion",
+      "file_modification": "https://zenodo.org/api/records/22938192/file-modification",
+      "quota_increase": "https://zenodo.org/api/records/22938192/quota-increase",
+      "requests": "https://zenodo.org/api/records/22938192/requests"
+    },
+    "updated": "2026-09-25T06:11:55.374696+00:00",
+    "recid": "22938192",
+    "revision": 6,
+    "files": [
+      {
+        "id": "bdb0b54d-d2ab-4fee-89d3-bf0f04c9caaf",
+        "key": "PMR203.txt",
+        "size": 1851,
+        "checksum": "md5:1c5f8e53406ee3b66c138e3542a59e9a",
+        "links": {
+          "self": "https://zenodo.org/api/records/22938192/files/PMR203.txt/content"
+        }
+      }
+    ],
+    "swh": null,
+    "owners": [
+      {
+        "id": "586529"
+      }
+    ],
+    "status": "published",
+    "stats": {
+      "downloads": 7,
+      "unique_downloads": 7,
+      "views": 77,
+      "unique_views": 52,
+      "version_downloads": 7,
+      "version_unique_downloads": 7,
+      "version_unique_views": 52,
+      "version_views": 77
+    },
+    "state": "done",
+    "submitted": true
+  }
+]

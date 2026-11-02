@@ -4640,6 +4640,33 @@ papyri-ddbdp:
   siblings: ["-trans-[0-9A-Za-z.-]+"]
   sibling_namespaces: [ddbdp, dclp]
 
+paramara:   # P153
+  adapter: Nabu::Adapters::Paramara
+  adopted: "2026-11-02"
+  axes: [indic, epigraphy]
+  wired: false   # bin/nabu enable paramara && bin/nabu sync paramara — the
+                 # Zenodo community listing (7 pages of 25) + 115 text files
+                 # at 1 req/s ≈ 2–3 min. EXPECT 114 docs / 2,373 passages,
+                 # 0 errored, 39 skipped by rule (38 image/PDF/file-less
+                 # records + the IN060027 EpiDoc hybrid) — census of the
+                 # 153-record community 2026-11-02 (114 + 39 = 153). Eyeball
+                 # nabu show urn:nabu:paramara:pmr203:1 ("[saṃ]vat 1351 śāke
+                 # 1[21]6 || svasti śrīkī-"), urn:nabu:paramara:pmr47:s1 and
+                 # 5 random; probe nabu search "vyomakeśo"; then flip.
+  # Paramāra epigraphy — the Siddham network's Zenodo community
+  # `paramara`: the inscriptions of the Paramāras of Mālava and their
+  # neighbours after Trivedi's CII VII, one record per inscription
+  # (PennGlobal PMR###), plain text: a Key: value header (Period,
+  # Location, Dynasty, King, Language, Script, Metres, Gist, reference),
+  # the line-numbered IAST edition, footnotes. Passage = inscription
+  # line. The community grows (24 records in the 2026-09/10 window) —
+  # re-syncs pick up new records; nothing is ever deleted. LICENSE: each
+  # record's license field, cc-by-4.0 on all 114 text records (verified
+  # 2026-11-02) → attribution; a text record under any other license
+  # parses restricted. The siddham sibling (the Gupta-age EpiDoc
+  # deposit) holds none of these.
+  sync_policy: manual
+
 pedecerto:
   adapter: Nabu::Adapters::Pedecerto
   adopted: "2026-07-24"

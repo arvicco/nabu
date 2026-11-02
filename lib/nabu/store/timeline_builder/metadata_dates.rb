@@ -196,6 +196,8 @@ module Nabu
           #                         a day date, "1581/2", "2. pol. 15. stol."); place =
           #                         the origPlace ("Iustinopolis (Koper)", "Piran")
           "menota" => :structured,
+          "paramara" => :structured, # P153: the Period field's leading era-typed year
+          #                            (config/eras.yml VS/Śaka); place = the Location findspot
           "mk-wikisource" => :structured,
           "ms-wikisource" => :structured, # P120-3: the manuscript's stated date (header
           #                                 year= / Index Year=; "abad ke-N" a century)
