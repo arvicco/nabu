@@ -36,7 +36,7 @@
 - slug: biblical
   persona: The Biblical scholar
   blurb: one text across Hebrew, Greek, Latin, Syriac, Coptic and English witnesses
-  members: 18
+  members: 19
 - slug: hebrew
   persona: The Hebraist
   blurb: Masoretic vowels, Qumran consonants, the Aramaic of the Targums
@@ -44,7 +44,7 @@
 - slug: syriac
   persona: The Syriacist
   blurb: the Peshitta and the estrangela bookshelf
-  members: 2
+  members: 3
 - slug: ethiopic
   persona: The Ethiopicist
   blurb: 'Aksum to the scriptoria: Enoch, Jubilees, and the Geʿez Bible'

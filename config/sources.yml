@@ -2329,6 +2329,37 @@ eng-web:
   # a live schedule.
   sync_policy: manual
 
+etcbc-syriac:   # P153, 02-sources row 321
+  adapter: Nabu::Adapters::EtcbcSyriac
+  adopted: "2026-11-02"
+  axes: [biblical, syriac]
+  wired: false   # first real sync pending:
+                 # bin/nabu enable etcbc-syriac, then bin/nabu sync etcbc-syriac
+                 # (sparse GitFetch cone tf/0.92 + README.md + LICENSE, 35
+                 # feature files ≈ 32 MB). EXPECT 31 docs / 18,132 passages,
+                 # 0 errored, 0 skipped (census 2026-11-02 at master 0b6ded2b =
+                 # tag v0.92): Genesis 1,533 · Jeremiah 1,366 · Numbers 1,289 ·
+                 # Ezekiel 1,271 · Sirach 1,261 … OrManA/B 16 each. Eyeball
+                 # nabu show urn:nabu:etcbc-syriac:jonah:1.1 (= peshitta jon:1.1
+                 # text) and urn:nabu:etcbc-syriac:deuteronomy:14.16 (a
+                 # discontiguous verse), 5 random verses, probe nabu search
+                 # with a Pseudo-Methodius string, then flip.
+  sync_policy: manual
+  # The ETCBC Syriac Corpus (ETCBC + CACCHT; github.com/ETCBC/syriac, Zenodo
+  # 10.5281/zenodo.23525343 v0.92): morphologically parsed Classical Syriac
+  # — 18 Peshitta books + the EpBar/OrMan A/B pairs, the Syrohexapla Psalms
+  # 1–32, the Psalms of Solomon, the Book of the Laws of the Countries,
+  # Ephrem (Prose Refutation against Mani; Sermon on Nineveh and Jonah),
+  # Pseudo-Methodius, the Apocalypses of Pseudo-Ezra, Daniel and Baruch.
+  # Document = book, passage = verse; syc NFC at the boundary; every
+  # word-grain morphology feature on the tokens. Overlaps `peshitta` on
+  # the Peshitta books (same Leiden text, there without morphology).
+  # LICENSE — class nc DELIBERATELY: README "Attribution-NonCommercial 4.0
+  # International (CC BY-NC 4.0)" + LICENSE (the CC BY-NC 4.0 legal code);
+  # the Zenodo record's license field says cc-by-4.0, which conflicts with
+  # the repository and is NOT followed — the ETCBC directorate stated by
+  # email 2026-10-15 that all ETCBC data is CC BY-NC.
+
 etcbc-targum:   # P153, 02-sources row 320
   adapter: Nabu::Adapters::EtcbcTargum
   adopted: "2026-11-02"

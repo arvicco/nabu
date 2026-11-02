@@ -179,7 +179,7 @@ class PosturesTest < Minitest::Test
   def test_the_lect_migration_kept_the_p59_4_census
     lect = postures.declarations.select { |d| d.layer == "lect" }
     by_posture = lect.group_by(&:posture).transform_values(&:size)
-    assert_equal 168, lect.size,
+    assert_equal 169, lect.size,
                  "the P59-4 declarations survive the move (61 at migration; itant retired P61-3," \
                  "oracc retired P62-2, etcsl/ccmh/freising/coptic-scriptorium retired P64-6, " \
                  "titus-avestan retired P66-1, osta+fornsvenska retired P77-r8, achemenet " \
@@ -355,7 +355,9 @@ class PosturesTest < Minitest::Test
                  "holds no Persian stages) + ara for the Arabic sections: 165→166; " \
                  "comenius ADDED P153 — dates (cs stages to cs:mid by the 1619–1660 title-page " \
                  "dates; the Dutch Bazuine bare nl): 166→167; " \
-                 "paramara ADDED P153 — identity san (the siddham posture, declared coarse): 167→168"
+                 "paramara ADDED P153 — identity san (the siddham posture, declared coarse): 167→168; " \
+                 "etcbc-syriac ADDED P153 — identity syc (the peshitta posture; etcbc-targum is " \
+                 "machine-postured by its arc → arc:mid/jud override, no declaration): 168→169"
     # The epigraphic-belt registry package (merged + canonical-synced
     # 2026-10-18, the add-then-retire shape within one phase) retires both
     # P130 pendings, and the ociana-script rule + the ig-cyprus override
@@ -393,7 +395,8 @@ class PosturesTest < Minitest::Test
     # cgpg joins dates (century labels → the grc:byz band): 21→22;
     # ganjoor joins identity (fas → fa, no Persian stages; ara sections): 123→124;
     # comenius joins dates (cs → cs:mid by its title-page dates): 22→23;
-    # paramara joins identity (san, the siddham posture): 124→125.
-    assert_equal({ "dates" => 23, "codemap" => 18, "identity" => 125, "pending" => 2 }, by_posture)
+    # paramara joins identity (san, the siddham posture): 124→125;
+    # etcbc-syriac joins identity (syc, the peshitta posture): 125→126.
+    assert_equal({ "dates" => 23, "codemap" => 18, "identity" => 126, "pending" => 2 }, by_posture)
   end
 end

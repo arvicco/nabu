@@ -1101,11 +1101,16 @@ the Secret History of the Mongols (1 / 3,523).
 (10 / 879; nc); instruments `kitab-reuse` (the KITAB text-reuse
 statistics; nc) and `althurayya` (the al-Ṯurayyā gazetteer — places.md).
 
-**Aramaic.** `etcbc-targum` — the ETCBC Targum Corpus, the Jewish Aramaic
+**Aramaic and Syriac.** `etcbc-targum` — the ETCBC Targum Corpus, the Jewish Aramaic
 Pentateuch targums with word-level gold lemmas, glosses and morphology:
 Neofiti 1 in its Aramaic (base text and full text with variants),
 Pseudo-Jonathan, the Fragment Targums, 39 Cairo Genizah fragments and
-Onqelos (47 texts / 25,430 verses; nc) — registered but not yet wired.
+Onqelos (47 texts / 25,430 verses; nc) — and `etcbc-syriac` — the ETCBC
+Syriac Corpus, morphologically parsed Classical Syriac: Peshitta books,
+the Syrohexapla Psalms, the Psalms of Solomon, the Book of the Laws of
+the Countries, Ephrem's Prose Refutation against Mani and Sermon on
+Nineveh and Jonah, Pseudo-Methodius and three apocalypses (31 books /
+18,132 verses; nc) — are registered but not yet wired.
 
 **Celtic.** `gpc` — the open subset of Geiriadur Prifysgol Cymru
 (89,386 entries).
