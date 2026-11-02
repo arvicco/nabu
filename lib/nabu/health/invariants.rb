@@ -203,9 +203,11 @@ module Nabu
       # (timestamps, web addresses) and the "original_*" title/text family
       # ("origin" is a place word; "original" is not).
       # "foreign" (an inline foreign-language span — korba/ticha/the CTS
-      # editions' passage annotations) ends with "reign".
+      # editions' passage annotations) ends with "reign". "placeholder"
+      # (memis's count of unfilled transcription placeholders) starts with
+      # "place".
       MINING_FALSE_FRIENDS = %w[timestamp timestamps timezone website websites original originals
-                                classname foreign].freeze
+                                classname foreign placeholder placeholders].freeze
 
       # Fetch bookkeeping — keys whose FIRST token marks them as
       # machinery, never ore.

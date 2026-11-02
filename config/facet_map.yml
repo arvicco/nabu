@@ -108,6 +108,14 @@ sources:
       material: material      # 5,890 docs, 3 values (clay 5,888 · ivory 1 · stone 1) — the
       #                         writing support, a physical-object facet under the cdli/rundata
       #                         name; never a kind (the object facet already says tablet/label)
+  memis:                      # census 2026-11-02 (the v1.0 MEMIS.xml): 51 inscriptions
+    fields:
+      material: material      # 50 with a <material> (white limestone "Beli apnenec" the bulk ·
+      #                         Istrian stone · Proconnesian marble · one "Platno", canvas) —
+      #                         verbatim Slovene, the physical-object facet (damos/rundata name)
+      findspot: findspot      # 15 with a found-provenance: the building/street inside the
+      #                         origPlace town where the stone was found ("Levji grad",
+      #                         "Calle Sant'Antonio"); the town-level place stays the origPlace
   glaux:                      # census: 1,421 works
     fields:
       dialect: dialect        # 1,176 docs, 7 values (Attic/Koine 416 · Attic 322 · Koine 214 …)
