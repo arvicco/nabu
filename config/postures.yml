@@ -1691,6 +1691,22 @@ sources:
         'composition')"}
     places: {posture: unplaced}
     script: {posture: implied}
+  cgpg:   # P153
+    lect: {posture: dates, note: "the date-band inference stages the volumes from upstream's own
+        per-volume century labels: the 25 volumes labeled 5th–15th century fall inside grc:byz
+        [330, 1453]; the two 4th-century volumes (Eusebius, Epiphanius) span the koi/byz
+        boundary and stay bare grc, as do the 6 undated Pre-Nicaean volumes. No facet rule:
+        a label map would only repeat the band"}
+    kind: {posture: unclassified, note: "upstream carries no genre label — a volume mixes
+        exegesis, homiletics, historiography and law (PG 107: Leo VI's homilies, Tactica and
+        Novels); kind waits on the work carving"}
+    dating: {posture: dated, note: "the per-volume Dates label of upstream's Works and Authors
+        table, transcribed (VOLUMES) → a century envelope, date_class composition (MetadataDates
+        :structured; 27 of 33 volumes — the 6 Pre-Nicaean name no century). Transcribed, not
+        corrected: PG 87.1 (Procopius of Gaza, c. 465–528) carries upstream's 7th century"}
+    places: {posture: unplaced, note: "the deposit names no place — no imprint, no provenance,
+        no place field in the table"}
+    script: {posture: implied}
   corpus-corporum:
     kind: {posture: unclassified}
     lect:

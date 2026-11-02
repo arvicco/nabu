@@ -101,6 +101,8 @@ module Nabu
           #                            place = the manuscript's Provenance
           "cbeta" => :dynasty_band,
           "ccmh" => :bounds_keys,
+          "cgpg" => :structured, # P153: upstream's per-volume Dates label as a century envelope
+          #                        (class composition); Pre-Nicaean volumes carry none
           "classical-modern" => :work_era, # the work's attributed era (config/work_eras.yml,
           #                                  keyed on metadata "book"), composition class
           "cme" => :edition_year_text,

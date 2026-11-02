@@ -956,6 +956,34 @@ ceipom:
   sync_policy: frozen
   lemma_tier: equivalence
 
+cgpg:   # P153, 02-sources row 320
+  adapter: Nabu::Adapters::Cgpg
+  adopted: "2026-11-02"
+  axes: [classical]
+  wired: false   # awaiting the first real sync: bin/nabu enable cgpg, then
+                 # bin/nabu sync cgpg (one 103 MB Zenodo GET, sha256-pinned;
+                 # 718 MB unpacked). EXPECT 33 docs / 18,701 passages,
+                 # 0 errored, 0 skipped (census 2026-11-02 through the
+                 # adapter over the whole unpack: 6,779,355 tokens, 6,770,076
+                 # lemmatized; ~70 s parse). Eyeball nabu show
+                 # urn:nabu:cgpg:pg153:p37 (Cantacuzene, "Ὁ τοίνυν βασιλεὺς
+                 # οὐτοσὶ Μιχαὴλ") and 5 random pages; probe nabu search
+                 # "συμβασιλεύων"; then flip.
+  sync_policy: manual
+  # CGPG — Calfa GREgORI Patrologia Graeca (J.-M. Auwers, UCLouvain;
+  # GREgORI; Calfa): the OCR of 33 Migne PG volumes, Greek column only,
+  # with automatic lemma + POS, as Sketch Engine verticals (Zenodo
+  # 19915273, license field cc-by-4.0 → attribution). The middle/late
+  # Byzantine core the library lacked — Photius, Leo VI, Theophanes
+  # Continuatus, Constantine VII, Cedrenus/Skylitzes/Psellus, Theophylact,
+  # Zonaras, Choniates, Gregoras, Palamas, Cantacuzene, Doukas, Glykas —
+  # plus eleven patristic volumes. Document = VOLUME (no work markup
+  # upstream; carving to works is a later packet), passage = PDF page.
+  # Witness overlap, not duplication: PG 67 Socrates/Sozomen and PG 134
+  # Zonaras Annales sit beside held First1K editions of other prints.
+  # Uncorrected OCR (declared per document) + machine lemmas:
+  lemma_tier: silver
+
 chgis:   # P96-1
   adapter: Nabu::Adapters::Chgis
   adopted: "2026-09-04"

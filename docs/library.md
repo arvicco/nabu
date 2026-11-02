@@ -994,6 +994,15 @@ Old Dutch word material 475–1200, gold (89 / 5,745; `research_private`)
 (5,478 / 729,090; attribution) · `perseus-anglit` — Klaeber's Beowulf
 with its aligned English (2 / 86; attribution).
 
+**Byzantine Greek.** `cgpg` — the Calfa/GREgORI Patrologia Graeca: 33
+Migne volumes in uncorrected OCR with machine lemmas (silver), the
+library's first middle and late Byzantine shelf — Photius, Leo VI,
+Theophanes Continuatus, Constantine Porphyrogenitus, Cedrenus and
+Skylitzes, Psellus, Theophylact of Ohrid, Zonaras, Choniates, Gregoras,
+Palamas, Cantacuzene, Doukas, Glykas — beside eleven patristic volumes;
+one document per volume, one passage per page (attribution) — is
+registered but not yet wired.
+
 **Slavic.** The Slovenian line: `kdsp` — longer narrative prose
 1836–1918 (262 / 290,394), `prilit` — the oldest narrative prose
 (43 / 8,526), `sl-wikisource` — the Slovene Wikisource's year-dated
