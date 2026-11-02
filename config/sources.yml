@@ -469,10 +469,11 @@ bdrc-transcriptions:   # P153, 02-sources row 320
   wired: false   # first sync is the gate's: bin/nabu enable bdrc-transcriptions,
                  # then bin/nabu sync bdrc-transcriptions — a PACED rows-API crawl
                  # (~1,000 requests of 100 rows, ~0.3 GB of text, NO images;
-                 # the API answers bursts with 429s, so ≈1.5–2.5 h, resumable at
+                 # the API answers bursts with 429s — the census crawl took ≈75 min,
+                 # the paced fetch ≈1.5–2 h; resumable at
                  # the page grain; progress every 2,000 rows). EXPECT berkeley 19
                  # docs / 8,866 passages + palri-parkhang 23 / 11,133 (census
-                 # 2026-11-02) + acip-sungbum ≈1,118 / 79,572 (the card) ≈ 1,160
+                 # 2026-11-02) + acip-sungbum 1,118 / 79,572 (census, = the card) = 1,160
                  # docs / 99,571 passages, 6 card files skipped by rule. Eyeball
                  # nabu show urn:nabu:bdrc-transcriptions:palri-parkhang:VE1605_MA:16050001
                  # (the Chos 'byung bstan pa'i nyi ma title page) and 5 random,
