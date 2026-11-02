@@ -65,6 +65,35 @@ class SefariaFetchTest < Minitest::Test
                              select: select, guard: guard)
   end
 
+  def test_an_index_listed_file_that_404s_is_recorded_gone_and_does_not_abort
+    stub_index([entry(OBADIAH_REL), entry(TAJ_REL)])
+    stub_file(OBADIAH_ENC, "obadiah-bytes")
+    stub_request(:get, TAJ_ENC).to_return(status: 404)
+
+    result = sync!
+    assert_equal "obadiah-bytes", File.read(File.join(@dir, OBADIAH_REL)),
+                 "the drifted entry never takes the rest of the fetch down"
+    refute File.exist?(File.join(@dir, TAJ_REL))
+    assert_equal [TAJ_REL], result.gone,
+                 "index drift is reported loudly, never swallowed"
+    assert_equal 1, result.downloaded
+  end
+
+  def test_a_held_file_that_404s_on_refetch_is_kept_and_recorded_gone
+    stub_index([entry(OBADIAH_REL), entry(TAJ_REL)])
+    stub_file(OBADIAH_ENC, "obadiah-bytes")
+    stub_file(TAJ_ENC, "taj-bytes")
+    sync!
+
+    stub_index([entry(OBADIAH_REL), entry(TAJ_REL)], last_modified: "Sat, 02 Aug 2026 07:03:07 GMT")
+    stub_request(:get, OBADIAH_ENC).to_return(status: 304)
+    stub_request(:get, TAJ_ENC).to_return(status: 404)
+    result = sync!
+    assert_equal "taj-bytes", File.read(File.join(@dir, TAJ_REL)),
+                 "a held copy outlives upstream's drift — canonical is not deleted by a 404"
+    assert_equal [TAJ_REL], result.gone
+  end
+
   def test_fresh_sync_lands_index_and_selected_files_at_bucket_relative_paths
     stub_index([entry(OBADIAH_REL), entry(TAJ_REL)])
     stub_file(OBADIAH_ENC, "obadiah-bytes")
