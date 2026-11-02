@@ -19,11 +19,11 @@ A source wears every desk it serves — these five answer this desk. Holdings ar
 |---|---|---|---|---|
 | `local-language` | language dossiers | open | wired · manual | 656 dossiers |
 | `local-lemmas` | silver lemmas | open | wired · manual | 32,626,999 lemma rows |
-| `local-library` | texts | research_private | wired · manual | 137 docs / 37,084 passages |
+| `local-library` | texts | research_private | wired · manual | 145 docs / 37,084 passages |
 | `local-notes` | owner notes | open | wired · manual | 2 notes |
-| `local-source` | source records | open | wired · manual | 294 dossiers |
+| `local-source` | source records | open | wired · manual | 311 dossiers |
 
-**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 2 November 2026)</span>: `eng` 27 · `phn` 16 · `egy` 11 · `arc` 8 · `osc` 8 · `sga` 7 · `akk` 4 · `cel` 4 · `lav` 4 · `peo` 4 … and 31 more (`nabu axis local` lists all).
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 2 November 2026)</span>: `eng` 27 · `phn` 16 · `egy` 11 · `arc` 8 · `osc` 8 · `orv` 7 · `sga` 7 · `cel` 5 · `akk` 4 · `lav` 4 … and 32 more (`nabu axis local` lists all).
 
 ## The desk's instruments
 

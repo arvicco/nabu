@@ -26,7 +26,7 @@ A source wears every desk it serves — these fifteen answer this desk. Holdings
 |---|---|---|---|---|
 | `aozora` | texts | open | wired · manual | 17,121 docs / 2,983,332 passages |
 | `edrdg` | dictionary | attribution | wired · manual | 231,322 entries |
-| `haga-jinmei` | dictionary | open | not yet wired | nothing held yet |
+| `haga-jinmei` | dictionary | open | not yet wired | not synced yet |
 | `hdic` | dictionary | attribution | wired · manual | 96,414 entries |
 | `honkoku` | texts | attribution | wired · manual | 6,092 docs / 129,458 passages |
 | `ja-wikisource` | texts | attribution | wired · manual | 838 docs / 88,745 passages |
