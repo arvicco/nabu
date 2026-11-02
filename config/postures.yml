@@ -390,8 +390,10 @@ sources:
     # nor/dan/swe ride the universal codemap; isl/non are identity
     # anchors; the menota-dan rule stages the two Scanian docs (dates
     # unparsed upstream); the onw override reads Menota's deprecated
-    # legacy code (ISO Old Nubian collision — never a codemap row);
-    # nor stages into no:old via lect infer-dates off real origDates
+    # legacy code (ISO Old Nubian collision — never a codemap row), and
+    # since 2026-11-02 the adapter corrects that raw code to nor at
+    # parse (language_raw keeps onw; the doc's 1260-70 date sits in
+    # no:old's band); nor stages into no:old via lect infer-dates off real origDates
     # (25/27 contained; two boundary straddlers honestly bare).
     dating: {posture: dated, note: "P82-1: the msDesc origDate's own
         notBefore/notAfter attributes via MetadataDates :structured, raw

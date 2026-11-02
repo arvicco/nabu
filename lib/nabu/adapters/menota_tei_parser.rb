@@ -108,12 +108,18 @@ module Nabu
       # the header carries neither textLang @mainLang nor a langUsage
       # ident. +license_mapper+ maps the captured licence statement (or
       # nil) onto a license_override class or nil — the adapter owns the
-      # policy, the parser the capture.
-      def parse(path, urn:, entities:, language_fallback:, license_mapper: nil)
+      # policy, the parser the capture. +language_map+ (raw header code =>
+      # house code) corrects a header code the adapter has ruled wrong;
+      # a remapped document keeps upstream's code verbatim in
+      # metadata["language_raw"] and its language facet carries the
+      # corrected value.
+      def parse(path, urn:, entities:, language_fallback:, license_mapper: nil, language_map: {})
         # The Reader runs over the entity-resolved text, not the file, so
         # it enters the skeleton's IO seam as an in-memory IO.
         extraction = extract(StringIO.new(resolved_source(path, entities)), path: path)
-        language = extraction.main_lang || extraction.lang_usage || language_fallback
+        raw = extraction.main_lang || extraction.lang_usage
+        language = language_map.fetch(raw, raw) || language_fallback
+        extraction = remap_language(extraction, raw: raw, language: language) if language_map.key?(raw)
         build_document(extraction, urn: urn, language: language, path: path,
                                    license_override: license_mapper&.call(extraction.metadata["license"]))
       end
@@ -205,6 +211,12 @@ module Nabu
       # a numeric character reference, never as raw markup.
       def xml_safe(value)
         value.gsub(/[&<>]/) { |char| "&##{char.ord};" }
+      end
+
+      def remap_language(extraction, raw:, language:)
+        metadata = extraction.metadata.merge("language_raw" => raw,
+                                             "facets" => { "language" => { "value" => language } })
+        extraction.with(metadata: metadata)
       end
 
       def build_document(extraction, urn:, language:, path:, license_override:)

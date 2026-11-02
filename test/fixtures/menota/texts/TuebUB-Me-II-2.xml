@@ -1,0 +1,391 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="https://www.menota.org/menotaP5.rng" " schematypens="http://relaxng.org/ns/structure/1.0"?>
+<!DOCTYPE TEI [<!ENTITY % Menota_entities SYSTEM 'https://www.menota.org/menota-entities.txt'> %Menota_entities; ]>
+
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xmlns:me="http://www.menota.org/ns/1.0">
+  <teiHeader xml:lang="eng">
+    <fileDesc>
+      <titleStmt>
+        <title>The Tübingen Fragment of Frostathing Law</title>
+        <editor>Fabian Schwabe and Hilkea Blomeyer with contributions of Stephanie
+          Bauer, Jan Einax, Julia Hahn, Katharina Karner, Mark Obrembalski and
+          Alexander Steinborn</editor>
+      </titleStmt>
+      <editionStmt>
+        <edition n="1.0">Version 1.0, <date when="2025-10-08">October 8th
+          2025</date>.</edition>
+        <respStmt>
+          <resp>Supervison</resp>
+          <resp>Final correction</resp>
+          <resp>Lemmatisation</resp>
+          <persName role="editor" xml:id="fs">
+            <forename>Fabian</forename>
+            <surname>Schwabe</surname>
+          </persName>
+        </respStmt>
+        <respStmt>
+          <resp>Final correction</resp>
+          <resp>Transcription of primary source</resp>
+          <resp>Conversion to XML</resp>
+          <resp>Lemmatisation</resp>
+          <persName role="editor">
+            <forename>Hilkea</forename>
+            <surname>Blomeyer</surname>
+          </persName>
+        </respStmt>
+        <respStmt>
+          <resp>Transcription of parts of the primary source</resp>
+          <resp>Conversion to XML</resp>
+          <resp>Lemmatisation</resp>
+          <persName role="contributer">
+            <forename>Stephanie</forename>
+            <surname>Bauer</surname>
+          </persName>
+          <persName role="contributer">
+            <forename>Jan</forename>
+            <surname>Einax</surname>
+          </persName>
+          <persName role="contributer">
+            <forename>Julia</forename>
+            <surname>Hahn</surname>
+          </persName>
+          <name role="contributer">
+            <persName>
+              <forename>Katharina</forename>
+              <surname>Karner</surname>
+            </persName>
+          </name>
+          <persName role="contributer">
+            <forename>Mark</forename>
+            <surname>Obrembalski</surname>
+          </persName>
+          <persName role="contributer">
+            <forename>Alexander</forename>
+            <surname>Steinborn</surname>
+          </persName>
+        </respStmt>
+      </editionStmt>
+      <extent n="2180">2180 words</extent>
+
+      <publicationStmt>
+        <distributor>Medieval Nordic Text Archive</distributor>
+        <idno type="Menota">TübUB Me II 2</idno>
+        <date when="2025-10-08">October 8th 2025</date>
+        <availability status="free">
+          <licence target="https://creativecommons.org/licenses/by-sa/4.0/">CC-BY-SA
+            4.0</licence>
+        </availability>
+      </publicationStmt>
+      <sourceDesc>
+        <bibl facs="yes">Photographic facsimiles by Tübingen University Library. The
+          photographs are also hosted on <ref
+            target="https://opendigi.ub.uni-tuebingen.de/opendigi/MeII2">OpenDigi
+            (DigiTue)</ref>.</bibl>
+        <msDesc>
+          <msIdentifier>
+            <country key="D">Germany</country>
+            <settlement>Tübingen</settlement>
+            <repository>Universitätsbibliothek</repository>
+            <idno>Me II 2</idno>
+            <msName>The Tübingen Fragment of Frostathing Law</msName>
+          </msIdentifier>
+          <msContents>
+            <msItem n="1">
+              <locus from="1r" to="3v"/>
+              <title type="main"/>
+              <title type="abbreviated"/>
+              <textLang mainLang="onw"/>
+            </msItem>
+          </msContents>
+          <physDesc>
+            <objectDesc form="codex">
+              <supportDesc>
+                <support>
+                  <p>3 vellum leaves; 300 mm (height) by 190 mm (width, 230mm fol. 2
+                    and 3).</p>
+                  <p>There is a lacuna on fol. 2.</p>
+                  <p>80 mm of the right edge on fol. 3 were cut off. 50 mm were taken
+                    off the top of Fol. 2 and 3. were cut which led to missing text.
+                    One piece, 40mm to 185mm, was taken from fol. 3 and added to the
+                    bottom of fol. 1.</p>
+                  <p>Sievers reattached the missing part that was glued to fol. 1, to
+                    fol. 3. </p>
+                  <p> Fol. 2 and 3 are missing roughly four lines at the top with
+                    fol. 3 missing seven additional lines at the bottom, around 95 mm
+                    (length). The missing lines on fol. 3 can be partly reconstructed
+                    as there are bits of the lines visible. It is unclear which part
+                    is missing at the top of fol. 2.</p>
+                </support>
+                <foliation>
+                  <p>The manuscript is not paginated. The paragraph titles and column
+                    titles are added on the site in red ink. In some cases, the
+                    paragraph titles are separated on two lines at the side</p>
+                  <p>Initials in black ink were added on fol. 1r. On the other pages,
+                    space is left out for the initials to be added at a later
+                    stage.</p>
+                  <p>Writing mistakes were corrected, in some cases, the scribe added
+                    the correction above or crossed out the wrong word. Accents were
+                    added on some words, either indicating the syllable or
+                    stress.</p>
+                  <p>The book number is written in red ink on fol. 1. The paragraph
+                    numbers are written in red ink at the side on fol. 1.
+                    Additionally, there is a fading script visible on the bottom of
+                    fol. 1v, presumably written in a different hand at a later stage
+                    (possibly maria aere, aeve, hearts).</p>
+                </foliation>
+              </supportDesc>
+            </objectDesc>
+          </physDesc>
+          <history>
+            <origin>
+              <p>Written in <origPlace>Norway</origPlace>
+                <origDate notBefore="1260" notAfter="1270">c. 1260-70</origDate>.</p>
+            </origin>
+          </history>
+          <additional>
+            <adminInfo>
+              <availability>
+                <licence target="https://creativecommons.org/licenses/by/4.0/">CC-BY
+                  4.0</licence>
+              </availability>
+            </adminInfo>
+            <listBibl>
+              <bibl xml:id="sievers1886">Verzeichniss der Doctoren welche die
+                philosophische Facultät der Königlich Württembergischen Eberhard
+                Karls Universität in Tübingen im decanatsjahre 1885-1886 ernannt hat,
+                beigefügt ist eine Abhandlung <ref
+                  target="https://archive.org/details/bub_gb_mWMJAAAAQAAJ">Tübinger
+                  Bruchstücke der älteren Frostuthingslog</ref>, Tübingen
+                1886.</bibl>
+              <bibl xml:id="ngl-1387">Rudol Keyser &amp; P. A. Munch (eds.), <ref
+                  target="https://openlibrary.org/books/OL23321882M/Norges_gamle_Love_indtil_1387"
+                  >Norges gamle Love indtil 1387</ref>, Förste Bind, Norges love
+                ældre end Kong Magnus Haakonssöns Regjerings-Tiltrædelse i 1263,
+                Christiania 1846.</bibl>
+            </listBibl>
+          </additional>
+        </msDesc>
+      </sourceDesc>
+    </fileDesc>
+    <encodingDesc>
+      <projectDesc>
+        <p>This manuscript text has been encoded according to the standard set out in
+            <ref target="https://www.menota.org/HB3_index.xml">The Menota handbook
+            3.0</ref>.</p>
+      </projectDesc>
+      <editorialDecl>
+        <correction status="high">
+          <p>This text has been proofread thoroughly by the editors, Fabian Schwabe
+            and Hilkea Blomeyer.</p>
+          <p>The transcription and the supplied text passages base itself on <bibl
+              corresp="#sievers1886">Eduard Sievers' transcription</bibl>. It is
+            supplemented by <bibl corresp="#ngl-1387">Keyser &amp; Munch's
+              edition</bibl>.</p>
+        </correction>
+        <normalization me:level="facs dipl norm">
+          <p>This text has been encoded on three levels: facsimile, diplomatic and
+            normalised.</p>
+        </normalization>
+        <interpretation me:lemmatized="completely" me:morphAnalyzed="completely">
+          <p>The complete text has been lemmatised and morphologically analysed
+            according to the rules specified in ch. 8 of the Menota Handbook, v.
+            3.0.</p>
+        </interpretation>
+      </editorialDecl>
+    </encodingDesc>
+    <profileDesc>
+      <langUsage>
+        <language ident="nor">Old Norwegian</language>
+      </langUsage>
+    </profileDesc>
+    <revisionDesc>
+      <change>
+        <date when="2025-12-09">9 Dec. 2025</date>
+        <name>
+          <persName>Robert Kristof Paulsen</persName>
+          <affiliation>Universitetet i Bergen: Universitetsbiblioteket</affiliation>
+        </name>
+        <p n="1">Changed XML schema reference to Menota's online rng-schema.</p>
+        <p n="2">Removed unused language codes.</p>
+      </change>
+    </revisionDesc>
+  </teiHeader>
+
+  <facsimile>
+    <surfaceGrp>
+      <surface xml:id="fol-1r">
+        <graphic url="http://idb.ub.uni-tuebingen.de/diglit/MeII2/0001">
+          <desc>UB Tübingen Me II 2, 1r</desc>
+        </graphic>
+      </surface>
+      <surface xml:id="fol-1v">
+        <graphic url="http://idb.ub.uni-tuebingen.de/diglit/MeII2/0002">
+          <desc>UB Tübingen Me II 2, 1v</desc>
+        </graphic>
+      </surface>
+    </surfaceGrp>
+    <surfaceGrp>
+      <surface xml:id="fol-2r">
+        <graphic url="http://idb.ub.uni-tuebingen.de/diglit/MeII2/0003">
+          <desc>UB Tübingen Me II 2, 2r</desc>
+        </graphic>
+      </surface>
+      <surface xml:id="fol-2v">
+        <graphic url="http://idb.ub.uni-tuebingen.de/diglit/MeII2/0004">
+          <desc>UB Tübingen Me II 2, 2v</desc>
+        </graphic>
+      </surface>
+    </surfaceGrp>
+    <surfaceGrp>
+      <surface xml:id="fol-3r">
+        <graphic url="http://idb.ub.uni-tuebingen.de/diglit/MeII2/0005">
+          <desc>UB Tübingen Me II 2, 3r</desc>
+        </graphic>
+      </surface>
+      <surface xml:id="fol-3v">
+        <graphic url="http://idb.ub.uni-tuebingen.de/diglit/MeII2/0006">
+          <desc>UB Tübingen Me II 2, 3v</desc>
+        </graphic>
+      </surface>
+    </surfaceGrp>
+  </facsimile>
+  <text xml:id="UB-Tue-Me-II-2" xml:lang="nor" n="Frostathing Law">
+    <body>
+      <div type="book" ana="2">
+        <gap quantity="3" unit="section" reason="lost"/>
+        <pb ed="ms" n="1r" facs="#fol-1r"/>
+        <lb ed="ms" n="0"/>
+        <div type="section" ana="4">
+          <ab>
+            <hi rend="red">
+              <add place="margin">
+                <w type="roman" lemma="fyrstr" me:msa="xNO gF nS cN">
+                  <choice>
+                    <me:facs>·ı·</me:facs>
+                    <me:dipl>.i.</me:dipl>
+                    <me:norm>I.</me:norm>
+                  </choice>
+                </w>
+                <w lemma="bók" me:msa="xNC gF nS cN sI">
+                  <choice>
+                    <me:facs>Boc</me:facs>
+                    <me:dipl>Boc</me:dipl>
+                    <me:norm>Bók</me:norm>
+                  </choice>
+                </w>
+                <w type="roman" lemma="fimm" me:msa="xNA">
+                  <choice>
+                    <me:facs>·v</me:facs>
+                    <me:dipl>.v</me:dipl>
+                    <me:norm>V</me:norm>
+                  </choice>
+                </w>
+              </add>
+            </hi>
+          </ab>
+          <lb ed="ms" n="1"/>
+          <p>
+            <w lemma="hverr" me:msa="xPQ gM nS cN">
+              <choice>
+                <me:facs><c type="initial" rend="black 2-lines"
+                  >&hrdes;</c>&vins;érr</me:facs>
+                <me:dipl>Hverr</me:dipl>
+                <me:norm>Hverr</me:norm>
+              </choice>
+            </w>
+            <w lemma="maðr" me:msa="xNC gM nS cN sI">
+              <choice>
+                <me:facs>ma<hi rend="elongata">ð</hi>r</me:facs>
+                <me:dipl>maðr</me:dipl>
+                <me:norm>maðr</me:norm>
+              </choice>
+            </w>
+            <w lemma="skulu" me:msa="xVB iPP fF tPT p3 nS mIN vA">
+              <choice>
+                <me:facs><hi rend="elongata">ſ</hi>ca<hi rend="elongata"
+                  >l</hi></me:facs>
+                <me:dipl>scal</me:dipl>
+                <me:norm>skal</me:norm>
+              </choice>
+            </w>
+            <w lemma="kristinn" me:msa="xAJ rP gM nS cN sI">
+              <choice>
+                <me:facs>c<am>&inodotsup;</am>ſ&trot;ín</me:facs>
+                <me:dipl>c<ex>ri</ex>stín</me:dipl>
+                <me:norm>kristinn</me:norm>
+              </choice>
+            </w>
+            <w lemma="vera" me:msa="xVB iST fI vA">
+              <choice>
+                <me:facs>&vins;ér&aclose;</me:facs>
+                <me:dipl>véra</me:dipl>
+                <me:norm>vera</me:norm>
+              </choice>
+            </w>
+            <seg type="nb">
+              <w lemma="í" me:msa="xAP yD">
+                <choice>
+                  <me:facs>í</me:facs>
+                  <me:dipl>í</me:dipl>
+                  <me:norm>i</me:norm>
+                </choice>
+              </w>
+              <w lemma="konungsveldi" me:msa="xNC gN nS cD sI">
+                <choice>
+                  <me:facs>conon&gopen;<hi rend="elongata">ſ</hi> &vins;ǽ<hi
+                      rend="elongata">ll&drot;</hi>ı</me:facs>
+                  <me:dipl>conongs vǽlldi</me:dipl>
+                  <me:norm>konungsveldi</me:norm>
+                </choice>
+              </w>
+            </seg>
+            <w lemma="sjá" me:msa="xDD gN nS cD">
+              <choice>
+                <me:facs><hi rend="elongata">þ</hi>ǽ<hi rend="elongata"
+                  >ſſ</hi>o</me:facs>
+                <me:dipl>þǽsso</me:dipl>
+                <me:norm>þessu</me:norm>
+              </choice>
+            </w>
+            <pc>
+              <choice>
+                <me:facs>·</me:facs>
+                <me:dipl>.</me:dipl>
+                <me:norm>.</me:norm>
+              </choice>
+            </pc>
+            <w lemma="ala" me:msa="xVB iST fI vA">
+              <choice>
+                <me:facs><hi rend="elongata">al</hi>a</me:facs>
+                <me:dipl>ala</me:dipl>
+                <me:norm>Ala</me:norm>
+              </choice>
+            </w>
+            <w lemma="mega" me:msa="xVB iPP fF tPS p3 nS mIN vA">
+              <choice>
+                <me:facs>&munc;&combacute;a</me:facs>
+                <me:dipl>ma</me:dipl>
+                <me:norm>má</me:norm>
+              </choice>
+            </w>
+            <w lemma="heiðinn" me:msa="xAJ rP gM nS cA sI">
+              <choice>
+                <me:facs><hi rend="elongata">&hrdes;</hi>æı<hi rend="elongata"
+                    >&drot;</hi>ı<am>&combmacr;</am>n</me:facs>
+                <me:dipl>hæiðin<ex>n</ex></me:dipl>
+                <me:norm>heiðinn</me:norm>
+              </choice>
+            </w>
+            <w lemma="maðr" me:msa="xNC gM nS cA sI">
+              <choice>
+                <me:facs>ma<am>&combmacr;</am>n</me:facs>
+                <me:dipl>ma<ex>n</ex>n</me:dipl>
+                <me:norm>mann</me:norm>
+              </choice>
+            </w>
+          </p>
+        </div>
+      </div>
+    </body>
+  </text>
+</TEI>
