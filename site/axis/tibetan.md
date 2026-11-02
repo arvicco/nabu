@@ -26,7 +26,7 @@ A source wears every desk it serves — these fifteen answer this desk. Holdings
 | Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 2 November 2026)</span> |
 |---|---|---|---|---|
 | `actib` | feature module | attribution | wired · manual | nothing held yet |
-| `bdrc-transcriptions` | texts | open | not yet wired | nothing held yet |
+| `bdrc-transcriptions` | texts | open | wired · manual | 1,160 docs / 99,571 passages |
 | `derge-kangyur` | texts | open | wired · manual | 1,198 docs / 458,972 passages |
 | `derge-tengyur` | texts | open | wired · manual | 3,362 docs / 890,184 passages |
 | `e84000` | texts | nc | wired · manual | 388 docs / 124,223 passages / 56,794 entries |
@@ -41,7 +41,7 @@ A source wears every desk it serves — these fifteen answer this desk. Holdings
 | `tibetan-verbs` | dictionary | open | wired · manual | 2,491 entries |
 | `wiktionary-bo` | dictionary | attribution | wired · manual | 3,651 entries |
 
-**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 2 November 2026)</span>: `bod` 455,971 · `xct` 63,710 · `san` 9,379 · `eng` 3,053 · `fra` 624 · `otb` 410 · `en` 388 · `spa` 333 · `deu` 277 · `cmn` 196 … and 4 more (`nabu axis tibetan` lists all).
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 2 November 2026)</span>: `bod` 455,971 · `xct` 64,870 · `san` 9,379 · `eng` 3,053 · `fra` 624 · `otb` 410 · `en` 388 · `spa` 333 · `deu` 277 · `cmn` 196 … and 4 more (`nabu axis tibetan` lists all).
 
 ## The desk's instruments
 

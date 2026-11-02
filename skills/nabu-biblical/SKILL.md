@@ -6,7 +6,7 @@ compatibility: "Requires the nabu MCP server (`bin/nabu mcp`, read-only, stdio) 
 metadata:
   desk: biblical
   origin: hand-tuned
-  sources: "betamasaheft-works bhsa bridging coptic-scriptorium dss elizabeth-bible eng-web extrabiblical hebrew-lexicon oshb peshitta sblgnt sdbh sefaria syriac-corpus ud vulgate"
+  sources: "betamasaheft-works bhsa bridging coptic-scriptorium dss elizabeth-bible eng-web etcbc-syriac etcbc-targum extrabiblical hebrew-lexicon hexapla oshb peshitta sblgnt sdbh sefaria syriac-corpus typikon-bible ud vulgate"
 ---
 
 # The Biblical scholar — the `biblical` desk
@@ -30,14 +30,18 @@ verbatim upstream terms are in `docs/02-sources.md` of the Nabu repository.
 | `dss` | DSS — Dead Sea Scrolls (Abegg/ETCBC, Text-Fabric tf/2.0) | nc |
 | `elizabeth-bible` | The Elizabeth Bible (1757) in Church Slavonic — modernized-spelling rendering, via getBible | open |
 | `eng-web` | World English Bible (eBible.org, via open-bibles) | open |
+| `etcbc-syriac` | ETCBC Syriac Corpus — morphologically parsed Classical Syriac (Text-Fabric tf/0.92) | nc |
+| `etcbc-targum` | ETCBC Targum Corpus — Jewish Aramaic Pentateuch targums (Text-Fabric tf/0.1) | nc |
 | `extrabiblical` | ETCBC extrabiblical — Non-Masoretic texts related to the Hebrew Bible (Text-Fabric tf/0.2) | nc |
 | `hebrew-lexicon` | OSHB Hebrew Lexicon — augmented Strong's + BDB outline (openscriptures) | attribution |
+| `hexapla` | Göttingen Hexapla Database (NAWG) — 2 Samuel and the Psalms (Text-Fabric tf/0.1) | nc |
 | `oshb` | Open Scriptures Hebrew Bible (Westminster Leningrad Codex + OSHM morphology) | open |
 | `peshitta` | Peshitta OT incl. deuterocanon (ETCBC, Text-Fabric tf/0.2) | nc |
 | `sblgnt` | SBL Greek New Testament (SBLGNT) | attribution |
 | `sdbh` | UBS Dictionary of Biblical Hebrew (Semantic Dictionary of Biblical Hebrew) | attribution |
 | `sefaria` | Sefaria — Targum shelf + Rabbinic core (Mishnah, Bavli, Minor Tractates, Yerushalmi, Tosefta) + Midrash (Rabbah, halakhic midrashim, Aggadah) + medieval Bible commentaries, Mishneh Torah, Shulchan Arukh, Tur, Zohar and liturgy + Ben Sira and Megillat Ta'anit | open |
 | `syriac-corpus` | Digital Syriac Corpus (srophe, 632 TEI documents) | attribution |
+| `typikon-bible` | typikon.info Bible layer — the 1688 Bucharest Bible in Romanian Cyrillic (dump 2026-09-21) | attribution |
 | `ud` | Universal Dependencies — ancient treebanks | nc |
 | `vulgate` | Biblia Sacra Vulgata Clementina (Tweedale/eBible.org, via open-bibles) | open |
 <!-- nabu:skill-sources:end -->

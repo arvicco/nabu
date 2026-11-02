@@ -18,7 +18,7 @@ A source wears every desk it serves — these twenty-four answer this desk. Hold
 | Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 2 November 2026)</span> |
 |---|---|---|---|---|
 | `babelstone-ids` | dictionary | open | wired · manual | 97,680 entries |
-| `baley-manuscripts` | texts | attribution | not yet wired | not synced yet |
+| `baley-manuscripts` | texts | attribution | wired · manual | 19 docs / 4,626 passages |
 | `baxter-sagart` | dictionary | attribution | wired · manual | 9,918 entries |
 | `cbdb` | feature module | nc | wired · manual | nothing held yet |
 | `cbeta` | texts | nc | wired · manual | 4,323 docs / 10,867,827 passages |
@@ -42,7 +42,7 @@ A source wears every desk it serves — these twenty-four answer this desk. Hold
 | `zh-wikisource` | texts | attribution | wired · manual | 1,238 docs / 71,547 passages |
 | `zhongyuan` | dictionary | open | wired · manual | 5,877 entries |
 
-**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 2 November 2026)</span>: `zho` 543,313 · `lzh` 93,126 · `ltc` 58,680 · `och` 38,215 · `jpn` 32,607 · `xcl` 8,544 · `cmn` 7,387 · `pli` 7,288 · `sga` 6,691 · `gem-pro` 5,749 … and 42 more (`nabu axis sinitic` lists all).
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 2 November 2026)</span>: `zho` 543,313 · `lzh` 93,126 · `ltc` 58,680 · `och` 38,234 · `jpn` 32,607 · `xcl` 8,544 · `cmn` 7,387 · `pli` 7,288 · `sga` 6,691 · `gem-pro` 5,749 … and 42 more (`nabu axis sinitic` lists all).
 
 ## The desk's instruments
 
