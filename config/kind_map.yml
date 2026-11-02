@@ -828,6 +828,46 @@ sources:
     source_kind: scripture
   etcbc-targum:
     source_kind: scripture   # P153: the Pentateuch targums — every text is a Bible translation
+  etcbc-syriac:        # P153 census 2026-11-02: 31 books (tf/0.92 book nodes), one document each
+    metadata: book     # upstream's book name verbatim — each book IS one known work, so the
+    #                    fold is the parse-time call per book (the extrabiblical shape)
+    map:
+      # -- the Peshitta books (README's own "Peshitta" list + the two A/B pairs) --
+      "Genesis": scripture
+      "Exodus": scripture
+      "Leviticus": scripture
+      "Numbers": scripture
+      "Deuteronomy": scripture
+      "Joshua": scripture
+      "Judges": scripture
+      "Psalms": scripture
+      "1_Kings": scripture
+      "2_Kings": scripture
+      "Jeremiah": scripture
+      "Ezekiel": scripture
+      "Jonah": scripture
+      "Zechariah": scripture
+      "Daniel": scripture
+      "Sir": scripture
+      "3Esr": scripture
+      "4Esr": scripture
+      "EpBarA": scripture       # the Epistle of Baruch — a Peshitta book (peshitta's EpBar)
+      "EpBarB": scripture
+      "OrManA": scripture       # the Prayer of Manasseh — a Peshitta book (peshitta's OrM)
+      "OrManB": scripture
+      "PsH": scripture          # the Syrohexapla: Paul of Tella's Syriac of the Hexaplaric LXX
+      # -- the further texts ---------------------------------------------------
+      "PsS": hymn-prayer/hymn   # the Psalms of Solomon: eighteen pseudepigraphal psalms
+      "BLC": literary/wisdom/dialogue  # Bardaisan's school: a dialogue on fate and freedom
+      "Eprx": literary/essay    # Ephrem's prose polemic against Mani — a treatise of refutation
+      "ESNJ": sermon/homily     # Ephrem's metrical homily (memra) on Nineveh and Jonah
+    deliberate:
+      "ApBar": "an apocalypse (2 Baruch): revelatory visions with a review of history — no class
+        holds the genre without forcing (the 1QM precedent)"
+      "ApDn": "an apocalypse (the Syriac Apocalypse of Daniel) — as ApBar"
+      "PsE": "an apocalypse (Pseudo-Ezra) — as ApBar"
+      "PsM": "an apocalypse (Pseudo-Methodius, the late-7th-century historical apocalypse) — as
+        ApBar"
   titus-avestan:
     source_kind: scripture   # the Avesta
   e84000:

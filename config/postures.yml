@@ -1606,6 +1606,19 @@ sources:
     script: {posture: qualified, note: "civil-script Cyrillic in MODERNIZED spelling — not the
         1757 print's Church Cyrillic (no titla, no accents, no ѣ/і/ѵ/ѳ/ѡ/ѧ in the file);
         metadata script Cyrl + orthography modernized + rendering on every document"}
+  etcbc-syriac:   # P153
+    # kind: machine-postured — kind_map.yml folds the 31 books over metadata
+    # book (the Peshitta + Syrohexapla books scripture; the four apocalypses
+    # declared deliberate).
+    lect: {posture: identity, note: "syc IS Classical Syriac — every text, the Peshitta to
+        Pseudo-Methodius (the peshitta / syriac-corpus posture)"}
+    dating: {posture: pending, note: "candidate: config/work_eras.yml rows keyed on metadata
+        book for the nine non-Peshitta works (the Book of the Laws of the Countries, Ephrem,
+        Pseudo-Methodius, the apocalypses — handbook composition eras), the Peshitta books as
+        declared-undated rows (the peshitta precedent). The asset carries no date feature"}
+    places: {posture: unplaced, note: "no place feature in tf/0.92 — nothing to mine"}
+    script: {posture: implied, note: "Estrangela consonantal text (g_cons_utf8), unpointed; the
+        ETCBC transliteration with the pointing marks rides the token as g_word"}
   etcbc-targum:   # P153
     # kind: machine-postured — kind_map.yml source_kind scripture.
     # lect: machine-postured — the whole-source arc → arc:mid/jud override in
