@@ -1137,7 +1137,7 @@ cme:
   # (May 2026): refresh = delete stale canonical files, re-sync.
   sync_policy: manual
 
-comenius:   # P153
+comenius:   # P153, 02-sources row 326
   adapter: Nabu::Adapters::Comenius
   adopted: "2026-11-02"
   axes: [slavic]
@@ -4640,7 +4640,7 @@ papyri-ddbdp:
   siblings: ["-trans-[0-9A-Za-z.-]+"]
   sibling_namespaces: [ddbdp, dclp]
 
-paramara:   # P153
+paramara:   # P153, 02-sources row 327
   adapter: Nabu::Adapters::Paramara
   adopted: "2026-11-02"
   axes: [indic, epigraphy]
@@ -5156,7 +5156,7 @@ rundata:
   # .rundata-fetch.json points at the current one. Live upstream
   # (artifact Last-Modified 2026-07-12) → re-syncs owner-fired.
 
-runesdb:   # P153
+runesdb:   # P153, 02-sources row 325
   adapter: Nabu::Adapters::Runesdb
   adopted: "2026-11-02"
   axes: [germanic, epigraphy]
