@@ -262,3 +262,27 @@ sources:
     # files Targum Jerusalem under arc:mid/jud too, and re-filing would be
     # a classification change.
     arc: { lect: "arc:mid/jud", tier: certain }
+  ppchy:
+    # The Penn Parsed Corpus of Historical Yiddish holds its texts
+    # ROMANIZED ("more or less according to the YIVO system" — upstream's
+    # transliteration note), never in the Hebrew script of the originals:
+    # the surface-script claim (the D60-b ~script axis, the papyri
+    # egy~latn shape) lands here as yi~latn on the yi anchor the
+    # 2026-11-02 registry mint created. No stage is claimed at source
+    # grain — the corpus runs 1478–1959 — so date-band inference stages
+    # each text onto yi:old/mid/mod from its own sources-page Date, and
+    # the ppchy-dialect compose rules refine those stages onto yi/west and
+    # yi/east (config/lect_facet_rules.yml). Tier certain: upstream's own
+    # statement of its transliteration.
+    yi: { lect: "yi~latn", tier: certain }
+  typikon-bible:
+    # The 1688 Bucharest Bible (Biblia de la București) is the monument
+    # the registry's ro:old note names — the Cyrillic church-print literary
+    # language, band [1521, 1780] — and the edition is dated 1688, inside
+    # the band. The mint's own consumer note prescribes exactly this row:
+    # the stage, in the Cyrillic of the print (the ~cyrl surface the
+    # adapter's ron-Cyrl tag states). Transcription of the edition's own
+    # identity onto the existing node — parse-time work, the 2026-10-18
+    # generalization. Tier certain: one dated edition, the stage's own
+    # exemplar.
+    ron-Cyrl: { lect: "ro:old~cyrl", tier: certain }

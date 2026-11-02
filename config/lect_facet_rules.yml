@@ -556,6 +556,44 @@ rules:
   # this reading cannot gloss with certainty (SkL, Syd, Hal, Bl, Sl, SH,
   # Uk, E…), and every runica-manuscripta shelfmark (the manuscript's
   # language is not the runes'). Those stay bare gem.
+  # ── PPCHY (P154): the sources page's Dialect head (the adapter's dialect
+  # facet) names each text's Yiddish — "West Yiddish" 12, "East Yiddish"
+  # 49 (census 2026-11-02) — onto the yi/west and yi/east varieties the
+  # 2026-11-02 registry mint created (iso yih / ydd). The glaux compose
+  # shape, not a map: the stage is the text's own Date through date-band
+  # inference (yi:old [1250,1500], yi:mid [1500,1700], yi:mod [1700,open])
+  # and the dialect refines it in place (1478w-… → yi:old/west); a map
+  # rule would pre-empt the band and trade the stage for a bare yi/west.
+  # Census against the held sources page: 60 of the 61 one-sided texts
+  # compose (East 18 mid + 31 mod; West 1 old + 6 mid + 4 mod); Glikl's
+  # memoirs (1691–1719) straddle the 1700 seam, carry no stage row and
+  # stay yi~latn. Deliberately unrefined: "East and West Yiddish" (the
+  # court testimony — its items carry their own e/w letters in passage
+  # annotations) and "Probably West Yiddish (Erika Timm, pers. comm.)"
+  # (a hedge, never the claim). The prefixes are the full heads, so
+  # "East and West…" never matches "East Yiddish". Transcription of
+  # upstream's own labels onto existing registry nodes (the header's
+  # rule). The rederive runs map rules, then date-band inference, then
+  # compose rules (Store::LectJournal), so the stage rows exist first.
+  - id: ppchy-dialect-west
+    tier: certain
+    kind: compose
+    sources: [ppchy]
+    code: yi
+    facet: dialect
+    match_prefix: "West Yiddish"
+    variety: west
+    onto: ["yi:old", "yi:mid", "yi:mod"]
+  - id: ppchy-dialect-east
+    tier: certain
+    kind: compose
+    sources: [ppchy]
+    code: yi
+    facet: dialect
+    match_prefix: "East Yiddish"
+    variety: east
+    onto: ["yi:old", "yi:mid", "yi:mod"]
+
   - id: runesdb-siglum
     tier: certain
     sources: [runesdb]

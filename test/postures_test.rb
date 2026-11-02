@@ -179,7 +179,7 @@ class PosturesTest < Minitest::Test
   def test_the_lect_migration_kept_the_p59_4_census
     lect = postures.declarations.select { |d| d.layer == "lect" }
     by_posture = lect.group_by(&:posture).transform_values(&:size)
-    assert_equal 174, lect.size,
+    assert_equal 172, lect.size,
                  "the P59-4 declarations survive the move (61 at migration; itant retired P61-3," \
                  "oracc retired P62-2, etcsl/ccmh/freising/coptic-scriptorium retired P64-6, " \
                  "titus-avestan retired P66-1, osta+fornsvenska retired P77-r8, achemenet " \
@@ -367,7 +367,11 @@ class PosturesTest < Minitest::Test
                  "baley-manuscripts ADDED P153 — codemap och → zho:old (the obimd precedent; the " \
                  "Western Han witnesses declared coarse): 172→173; " \
                  "aio ADDED P154 — dates (the Greek docs band by the page Date field into " \
-                 "grc:cla/grc:koi; the -en translations bare eng): 173→174"
+                 "grc:cla/grc:koi; the -en translations bare eng): 173→174; " \
+                 "the Pacific/Vietnamese–Tai/Mongolic/Tangut/Yiddish + Romanian registry mint " \
+                 "(merged + canonical-synced 2026-11-02) RETIRES ppchy (the yi → yi~latn override " \
+                 "and the ppchy-dialect compose rules) and typikon-bible (the ron-Cyrl → " \
+                 "ro:old~cyrl override) — the add-then-retire shape, the shadowing rule: 174→172"
     # The epigraphic-belt registry package (merged + canonical-synced
     # 2026-10-18, the add-then-retire shape within one phase) retires both
     # P130 pendings, and the ociana-script rule + the ig-cyprus override
@@ -412,6 +416,8 @@ class PosturesTest < Minitest::Test
     # bdrc-transcriptions joins identity (xct, declared coarse): 127→128;
     # baley-manuscripts joins codemap (och → zho:old, the obimd precedent): 18→19.
     # aio joins dates (the page Date field → grc:cla/grc:koi; eng translations bare): 23→24.
-    assert_equal({ "dates" => 24, "codemap" => 19, "identity" => 128, "pending" => 3 }, by_posture)
+    # The 2026-11-02 registry mint retires ppchy and typikon-bible to their
+    # overrides (+ the ppchy-dialect compose rules): pending 3→1 (lasla alone).
+    assert_equal({ "dates" => 24, "codemap" => 19, "identity" => 128, "pending" => 1 }, by_posture)
   end
 end
