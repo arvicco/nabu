@@ -1619,6 +1619,19 @@ sources:
     places: {posture: unplaced, note: "no place feature in tf/0.92 — nothing to mine"}
     script: {posture: implied, note: "Estrangela consonantal text (g_cons_utf8), unpointed; the
         ETCBC transliteration with the pointing marks rides the token as g_word"}
+  hexapla:   # P153
+    # kind: machine-postured — kind_map.yml source_kind scripture.
+    lect: {posture: identity, note: "per column, upstream's own languageISO onto real anchors — grc
+        (the LXX edition, Field's Ο′, Aquila, Symmachus, Origen, Quinta, Sexta, Theodotion, and 'the
+        others', which upstream leaves uncoded), hbo (the MT; the Secunda as hbo-Grek — upstream
+        heb-Grek), lat (Field's Latin). No Koine stage is claimed: declared coarse"}
+    dating: {posture: pending, note: "candidate: config/work_eras.yml rows keyed on metadata column —
+        the versions' attributed eras (Aquila c. 130 CE, Symmachus late 2nd c., Theodotion,
+        Origen's Hexapla c. 230–245 CE; the LXX and MT columns as declared-undated rows). The
+        asset carries no date feature"}
+    places: {posture: unplaced, note: "no place feature in tf/0.1 — nothing to mine"}
+    script: {posture: mixed, note: "Greek, Hebrew square script (pointed MT) and Latin columns; the
+        Secunda is Hebrew in Greek letters (hbo-Grek)"}
   typikon-bible:   # P153
     # kind: machine-postured — kind_map.yml source_kind scripture.
     lect: {posture: pending, note: "candidate: a nabu-lects Romanian package — a ro anchor (Eastern

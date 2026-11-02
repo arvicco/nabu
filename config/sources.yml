@@ -2770,6 +2770,33 @@ helipad:
   # new version is an owner re-pin decision → manual.
   sync_policy: manual
 
+hexapla:   # P153, 02-sources row 323
+  adapter: Nabu::Adapters::Hexapla
+  adopted: "2026-11-02"
+  axes: [biblical, hebrew]
+  wired: false   # first real sync pending:
+                 # bin/nabu enable hexapla, then bin/nabu sync hexapla (sparse
+                 # GitFetch cone tf/0.1 + docs/about.md + docs/transcription.md +
+                 # LICENSE, 17 feature files ≈ 8 MB; the raw source/ JSON stays
+                 # out). EXPECT 19 docs / 16,302 passages, 0 errored, 2 skipped
+                 # by rule (the Notes column) — census 2026-11-02 at main
+                 # 02bf17c3. Eyeball nabu show urn:nabu:hexapla:aquila:psalms:45.1
+                 # and urn:nabu:hexapla:secunda:psalms:45.1, 5 random verses,
+                 # probe nabu search with an Aquila string (νικοποιῷ), then flip.
+  sync_policy: manual
+  # The Göttingen Hexapla Database (NAWG, API v3) in Text-Fabric (R. Taylor,
+  # github.com/rdtaylorjr/hexapla tf/0.1): 2 Samuel and the Psalms, column
+  # by column — LXX edition, Field's Ο′, MT, Secunda, Aquila, Symmachus,
+  # Origen's Septuagint, Quinta, Sexta, Theodotion, "the others", Field's
+  # Latin (the Notes column skipped by rule). Document = column × book,
+  # passage = verse in Greek numbering; placeholder-only verses omitted and
+  # named. LICENSE (first-hand): every API response "license": {"label":
+  # "CC BY-NC-SA 4.0"} with the copyright "Die Editio critica maior des
+  # griechischen Psalters. Niedersächsische Akademie der Wissenschaften zu
+  # Göttingen." (checked live on a 2 Samuel passage, so the grant covers
+  # the Hexapla data beyond the Psalter); NAWG imprint: the research data
+  # "werden unter CC BY-NC-SA 4.0 veröffentlicht" → class nc.
+
 hittite-glossed:   # P109-3
   adapter: Nabu::Adapters::HittiteGlossed
   adopted: "2026-09-29"

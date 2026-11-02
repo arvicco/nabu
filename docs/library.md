@@ -1112,6 +1112,12 @@ the Countries, Ephrem's Prose Refutation against Mani and Sermon on
 Nineveh and Jonah, Pseudo-Methodius and three apocalypses (31 books /
 18,132 verses; nc) — are registered but not yet wired.
 
+**The Hexapla.** `hexapla` — the Göttingen Hexapla Database for 2 Samuel
+and the Psalms: the LXX, the MT, the Secunda, Aquila, Symmachus,
+Theodotion, Quinta, Sexta and Field's columns, every reading with its
+witnesses (19 column books / 16,302 verses; nc) — registered but not yet
+wired.
+
 **Romanian.** `typikon-bible` — the 1688 Bucharest Bible, the first complete
 Romanian Bible, in the Cyrillic alphabet of the print, each verse tied to
 its place in the Church Slavonic canon (79 books / 36,312 verses;

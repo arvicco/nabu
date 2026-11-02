@@ -179,7 +179,7 @@ class PosturesTest < Minitest::Test
   def test_the_lect_migration_kept_the_p59_4_census
     lect = postures.declarations.select { |d| d.layer == "lect" }
     by_posture = lect.group_by(&:posture).transform_values(&:size)
-    assert_equal 170, lect.size,
+    assert_equal 171, lect.size,
                  "the P59-4 declarations survive the move (61 at migration; itant retired P61-3," \
                  "oracc retired P62-2, etcsl/ccmh/freising/coptic-scriptorium retired P64-6, " \
                  "titus-avestan retired P66-1, osta+fornsvenska retired P77-r8, achemenet " \
@@ -359,7 +359,9 @@ class PosturesTest < Minitest::Test
                  "etcbc-syriac ADDED P153 — identity syc (the peshitta posture; etcbc-targum is " \
                  "machine-postured by its arc → arc:mid/jud override, no declaration): 168→169; " \
                  "typikon-bible ADDED P153 — PENDING on a nabu-lects Romanian package (a ro anchor + " \
-                 "an Old Romanian stage; nothing Romanian exists in the registry): 169→170"
+                 "an Old Romanian stage; nothing Romanian exists in the registry): 169→170; " \
+                 "hexapla ADDED P153 — identity per column (grc/hbo/lat, the Secunda hbo-Grek): " \
+                 "170→171"
     # The epigraphic-belt registry package (merged + canonical-synced
     # 2026-10-18, the add-then-retire shape within one phase) retires both
     # P130 pendings, and the ociana-script rule + the ig-cyprus override
@@ -400,6 +402,7 @@ class PosturesTest < Minitest::Test
     # paramara joins identity (san, the siddham posture): 124→125;
     # etcbc-syriac joins identity (syc, the peshitta posture): 125→126;
     # typikon-bible joins pending on a Romanian registry mint: 2→3.
-    assert_equal({ "dates" => 23, "codemap" => 18, "identity" => 126, "pending" => 3 }, by_posture)
+    # hexapla joins identity (per-column grc/hbo/lat): 126→127.
+    assert_equal({ "dates" => 23, "codemap" => 18, "identity" => 127, "pending" => 3 }, by_posture)
   end
 end
