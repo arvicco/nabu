@@ -2329,6 +2329,36 @@ eng-web:
   # a live schedule.
   sync_policy: manual
 
+etcbc-targum:   # P153, 02-sources row 320
+  adapter: Nabu::Adapters::EtcbcTargum
+  adopted: "2026-11-02"
+  axes: [biblical, hebrew]
+  wired: false   # first real sync pending:
+                 # bin/nabu enable etcbc-targum, then bin/nabu sync etcbc-targum
+                 # (sparse GitFetch cone tf/0.1 + README.md + LICENSE.md,
+                 # 46 feature files ≈ 280 MB; the 77 MB definition.tf is in the
+                 # cone but never read). EXPECT 47 docs / 25,430 passages,
+                 # 0 errored, 0 skipped (census 2026-11-02 at main 15f97ab4 =
+                 # tag v1.0.0 for tf/0.1; 25,447 verse records less 17
+                 # omission-dot records named in omitted_verses):
+                 # Onqelos 5,852 · Neofiti full 5,835 · Neofiti base 5,827 ·
+                 # Pseudo-Jonathan 5,823 · FT-V 920 · FT-P 594 · the 39 Genizah
+                 # texts 568 · FT-N 7 · FT-PA 4. Full parse ≈ 95 s.
+                 # Eyeball nabu show urn:nabu:etcbc-targum:neofiti_full:genesis.1.1
+                 # and 5 random verses, probe nabu search with a Neofiti string
+                 # (ממריה דייי), then flip.
+  sync_policy: manual
+  # The ETCBC Targum Corpus (S. P. Swire; github.com/ETCBC/targum, Zenodo
+  # 10.5281/zenodo.23785216 v1.0.0): Pseudo-Jonathan, the Fragment Targums
+  # P/V/N, 39 Cairo Genizah texts, Neofiti 1 under two editorial views
+  # (full text with variants / raw base text) and Onqelos, as Text-Fabric
+  # tf/0.1 with word-level gold lemmas, glosses and morphology. Document =
+  # text node (one witness under one view), passage = verse; text = the
+  # corpus's own line_utf8 verse rendering byte-verbatim (arc, NFC-exempt).
+  # LICENSE: README badge "License: CC BY-NC 4.0", LICENSE.md the CC BY-NC
+  # 4.0 legal code, every feature header "@license=Attribution-NonCommercial
+  # 4.0 International" → class nc.
+
 etcsl:
   adapter: Nabu::Adapters::Etcsl
   adopted: "2026-07-19"

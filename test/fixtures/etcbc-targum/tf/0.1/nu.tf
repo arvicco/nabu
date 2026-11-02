@@ -1,0 +1,855 @@
+@node
+@compiler=S.P. Swire
+@converters=S.P. Swire
+@description=Number (nominal only, partial)
+@institute=ETCBC (Eep Talstra Centre for Bible and Computer)
+@license=Attribution-NonCommercial 4.0 International
+@licenseUrl=https://creativecommons.org/licenses/by-nc/4.0/deed.en
+@name=ETCBC Targum Corpus
+@source=ETCBC Targum Corpus
+@sourceFormat=XML
+@valueType=str
+@version=0.1
+@xmlVersion=2026-10-28
+@writtenBy=Text-Fabric
+@dateWritten=2026-10-29T00:51:18+00:00Z
+
+475	pl
+477	pl
+pl
+480	sg
+482	sg
+sg
+sg
+488	sg
+sg
+492	sg
+sg
+sg
+499	pl
+pl
+502	pl
+pl
+pl
+506	pl
+509	pl
+512	sg
+sg
+517	pl
+519	pl
+pl
+pl
+523	pl
+526	pl
+529	pl
+531	sg
+535	sg
+538	sg
+sg
+sg
+186765	pl
+186769	sg
+186776	sg
+186778	sg
+pl
+186782	sg
+186792	sg
+sg
+186800	sg
+186802	sg
+sg
+186805	sg
+186807	sg
+186811	sg
+186813	sg
+186815	sg
+186817	sg
+186824	sg
+186827	sg
+186829	pl
+186832	pl
+sg
+sg
+186839	sg
+186842	pl
+sg
+186845	sg
+186850	pl
+186855	pl
+186864	sg
+186872	sg
+186881	sg
+186884	sg
+186887	sg
+186889	sg
+186892	pl
+pl
+186895	pl
+pl
+186900	sg
+186907	sg
+186911	sg
+186914	sg
+pl
+186918	sg
+sg
+186922	sg
+sg
+sg
+186927	sg
+pl
+pl
+186934	sg
+197048	sg
+197051	sg
+sg
+197054	sg
+sg
+pl
+197060	sg
+197062	sg
+197065	pl
+pl
+sg
+197075	pl
+197077	pl
+pl
+pl
+197082	sg
+sg
+197089	pl
+sg
+sg
+197095	sg
+197098	sg
+sg
+197102	sg
+sg
+197107	sg
+pl
+197116	sg
+sg
+197122	sg
+197139	sg
+197143	sg
+pl
+197151	sg
+197154	sg
+sg
+197159	sg
+sg
+197162	sg
+197164	sg
+pl
+197170	sg
+197172	sg
+sg
+197178	pl
+197180	pl
+pl
+197185	pl
+197187	pl
+pl
+197191	sg
+197193	sg
+sg
+197197	sg
+sg
+sg
+sg
+197205	sg
+197207	sg
+197209	sg
+197211	sg
+197213	sg
+197217	sg
+197219	sg
+197221	sg
+197223	sg
+197225	sg
+sg
+197228	sg
+sg
+sg
+sg
+197237	pl
+197245	sg
+197247	sg
+sg
+197252	sg
+197254	sg
+197256	sg
+sg
+197260	pl
+197262	sg
+197264	sg
+197267	sg
+sg
+sg
+197274	sg
+sg
+197278	sg
+pl
+197281	pl
+197284	sg
+197286	sg
+sg
+197289	pl
+197291	sg
+sg
+197298	sg
+197301	pl
+pl
+197304	sg
+197306	sg
+197310	pl
+pl
+197320	pl
+sg
+pl
+pl
+197336	pl
+197339	sg
+197342	sg
+197347	sg
+pl
+197352	pl
+pl
+197373	sg
+197399	sg
+197401	sg
+197403	pl
+197405	sg
+sg
+197409	sg
+197411	pl
+pl
+197414	sg
+sg
+197420	sg
+197423	pl
+200218	sg
+200220	sg
+200225	sg
+sg
+pl
+200229	sg
+200231	sg
+pl
+200237	sg
+pl
+200240	sg
+200243	sg
+sg
+200249	pl
+200252	pl
+200255	pl
+sg
+sg
+sg
+200260	pl
+200263	pl
+pl
+200267	pl
+200269	sg
+200275	sg
+200277	sg
+200285	sg
+200287	sg
+200294	sg
+200296	sg
+200299	sg
+200301	sg
+200307	pl
+pl
+pl
+200311	sg
+200315	sg
+sg
+200327	pl
+200330	sg
+sg
+200340	sg
+200344	sg
+200353	sg
+200356	pl
+pl
+200366	sg
+200372	sg
+sg
+sg
+200379	sg
+200382	sg
+200386	sg
+200391	sg
+sg
+200395	sg
+200401	sg
+sg
+200405	sg
+200412	sg
+200416	pl
+200422	sg
+200424	sg
+sg
+200435	sg
+pl
+200449	sg
+200451	sg
+200456	sg
+sg
+sg
+200462	sg
+200465	sg
+200469	sg
+pl
+200472	sg
+200478	sg
+200482	sg
+200496	pl
+200498	pl
+200502	sg
+200513	sg
+200520	sg
+200523	sg
+200534	sg
+200541	pl
+200543	sg
+200545	sg
+sg
+sg
+200549	sg
+200561	sg
+200566	sg
+200570	sg
+200580	sg
+sg
+200594	sg
+sg
+200597	sg
+200602	pl
+200604	pl
+pl
+200608	sg
+sg
+200614	sg
+200620	sg
+sg
+200624	sg
+200631	sg
+sg
+sg
+200639	sg
+200643	sg
+sg
+sg
+200650	sg
+200652	pl
+200655	sg
+200664	sg
+sg
+200673	sg
+200675	sg
+200677	sg
+200680	sg
+200684	sg
+sg
+sg
+200690	pl
+200693	sg
+200695	pl
+200700	sg
+200702	pl
+pl
+pl
+200718	pl
+pl
+200729	sg
+200733	sg
+sg
+200741	sg
+sg
+200750	sg
+sg
+sg
+pl
+sg
+200757	sg
+200760	sg
+200768	sg
+200772	sg
+200779	sg
+sg
+pl
+sg
+200784	sg
+200797	sg
+200800	pl
+200804	sg
+200806	sg
+sg
+200819	sg
+200823	sg
+200827	sg
+200837	sg
+sg
+pl
+pl
+200848	sg
+sg
+200855	sg
+sg
+200860	sg
+200866	sg
+200868	sg
+200871	sg
+200873	sg
+sg
+sg
+200878	sg
+200880	sg
+200883	pl
+200891	sg
+sg
+200894	sg
+200897	sg
+200899	pl
+200901	sg
+sg
+200904	sg
+sg
+sg
+200908	sg
+200917	sg
+200919	sg
+pl
+200924	pl
+200926	sg
+200942	sg
+200949	sg
+sg
+200956	sg
+sg
+200963	sg
+200965	sg
+200979	sg
+sg
+pl
+204989	sg
+pl
+pl
+pl
+204994	sg
+204996	sg
+pl
+205000	sg
+205004	sg
+sg
+sg
+205011	sg
+205013	sg
+205016	sg
+sg
+205019	sg
+sg
+205025	sg
+205029	sg
+sg
+205038	sg
+205040	sg
+205043	sg
+sg
+205047	sg
+205053	sg
+sg
+pl
+205057	sg
+205061	sg
+205066	pl
+205068	sg
+205070	sg
+pl
+205074	sg
+205080	sg
+205082	sg
+pl
+205086	sg
+205095	sg
+205097	sg
+205110	sg
+205112	sg
+205116	sg
+205120	sg
+pl
+sg
+205128	sg
+sg
+205131	sg
+205135	pl
+205137	pl
+sg
+205140	pl
+205143	sg
+205145	sg
+205147	sg
+205153	sg
+205155	sg
+205162	sg
+sg
+205171	sg
+sg
+sg
+205175	sg
+205179	sg
+205183	sg
+pl
+205186	sg
+sg
+205189	sg
+sg
+205202	sg
+205204	sg
+205206	sg
+205210	sg
+205214	sg
+205225	sg
+pl
+pl
+pl
+sg
+205231	sg
+205240	sg
+sg
+205247	sg
+205250	sg
+205252	sg
+205254	sg
+205257	sg
+205260	pl
+pl
+205263	pl
+205265	sg
+205267	sg
+sg
+205276	sg
+sg
+205281	sg
+205283	sg
+sg
+205292	sg
+205295	sg
+sg
+205298	sg
+sg
+205301	sg
+sg
+205308	sg
+205313	sg
+205315	sg
+205320	sg
+205323	pl
+205329	sg
+205333	sg
+pl
+sg
+205340	sg
+sg
+205343	sg
+205353	sg
+205355	sg
+205363	sg
+205373	sg
+205375	sg
+sg
+205380	sg
+205389	sg
+sg
+sg
+205393	pl
+sg
+205397	sg
+sg
+205400	pl
+205405	sg
+205413	sg
+205417	sg
+205421	sg
+sg
+sg
+sg
+sg
+205427	sg
+205430	sg
+pl
+205433	sg
+sg
+205437	sg
+205439	pl
+205442	sg
+sg
+205445	pl
+sg
+205452	sg
+205460	sg
+sg
+sg
+sg
+205465	sg
+205471	sg
+205473	sg
+205475	pl
+205478	sg
+205485	sg
+205489	sg
+205491	sg
+205496	sg
+205499	sg
+205501	sg
+205506	sg
+205508	sg
+sg
+205516	sg
+205518	pl
+205520	sg
+205522	sg
+205525	sg
+205530	sg
+205536	sg
+sg
+205540	sg
+205544	sg
+205548	sg
+205551	sg
+205553	sg
+sg
+205557	sg
+pl
+sg
+205561	sg
+205570	sg
+339250	sg
+pl
+pl
+pl
+pl
+339256	sg
+339258	sg
+pl
+339262	sg
+339266	sg
+sg
+sg
+sg
+339274	sg
+339276	sg
+339279	sg
+sg
+339282	sg
+sg
+339290	sg
+sg
+339293	sg
+sg
+339299	sg
+sg
+339304	sg
+sg
+sg
+339314	sg
+339316	sg
+339321	sg
+sg
+339325	sg
+sg
+339332	sg
+sg
+pl
+339336	sg
+339341	sg
+339346	pl
+339348	sg
+339350	sg
+pl
+sg
+339355	sg
+339361	sg
+339363	sg
+pl
+sg
+339368	sg
+339377	sg
+339379	sg
+339392	sg
+339394	sg
+339398	sg
+339402	sg
+pl
+sg
+pl
+339407	sg
+339413	sg
+sg
+339416	sg
+339420	pl
+sg
+339423	pl
+339425	sg
+pl
+339429	sg
+339431	sg
+sg
+339434	sg
+339440	sg
+339442	sg
+339449	sg
+sg
+339458	sg
+sg
+sg
+sg
+339463	sg
+339467	sg
+339471	sg
+pl
+339474	sg
+sg
+339477	pl
+339479	sg
+339481	sg
+sg
+339498	sg
+339500	sg
+339502	sg
+339506	sg
+339512	sg
+339523	sg
+pl
+pl
+pl
+sg
+339529	sg
+339538	sg
+sg
+339545	sg
+339548	sg
+339550	sg
+339552	sg
+339555	sg
+339558	pl
+pl
+339561	pl
+339563	sg
+339565	sg
+sg
+339574	sg
+sg
+339579	sg
+339581	sg
+sg
+339590	sg
+339593	sg
+sg
+339596	sg
+sg
+339599	sg
+sg
+339606	sg
+339611	sg
+339613	sg
+339616	sg
+339620	sg
+339625	sg
+339630	sg
+339635	pl
+339641	sg
+339644	sg
+339648	sg
+339653	sg
+pl
+sg
+339660	sg
+sg
+339663	sg
+339675	sg
+339677	sg
+339685	sg
+339695	sg
+339697	sg
+sg
+339700	sg
+339707	sg
+339711	sg
+sg
+sg
+339722	sg
+sg
+sg
+sg
+339727	pl
+sg
+339731	sg
+sg
+339734	pl
+339739	sg
+339747	sg
+339753	sg
+339757	sg
+sg
+sg
+sg
+sg
+339763	sg
+339766	sg
+339770	sg
+pl
+339773	sg
+sg
+339777	sg
+339779	pl
+339782	sg
+sg
+339785	pl
+sg
+339792	sg
+sg
+sg
+339802	sg
+339805	sg
+339808	sg
+sg
+sg
+sg
+339813	sg
+339819	sg
+339821	sg
+339823	pl
+339826	sg
+339835	sg
+339839	sg
+339841	sg
+339846	sg
+339849	sg
+339851	sg
+339856	sg
+339858	sg
+sg
+339867	sg
+339869	pl
+339871	sg
+339873	sg
+339876	sg
+339879	sg
+339882	sg
+339888	sg
+sg
+339892	sg
+339896	sg
+339900	sg
+339903	sg
+339905	sg
+sg
+339909	sg
+pl
+sg
+339913	sg
+339922	sg
