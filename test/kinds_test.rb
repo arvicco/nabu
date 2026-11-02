@@ -460,7 +460,6 @@ class KindsTest < Minitest::Test
     assert_empty shipped.normalize("ganjoor", "دفتر اول"), "a work/chapter title mints nothing"
   end
 
-
   # P153: the Baley deposits — one known work per deposit, folded per work.
   def test_shipped_baley_manuscripts_folds_each_deposit_work
     shipped = shipped_kinds
