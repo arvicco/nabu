@@ -1809,3 +1809,29 @@ its Warsaw 1874 print with the Hebrew scholion, and two English
 renderings: +7 documents / 1,885 passages. The category's modern Hebrew
 retroversions of Greek works (Judith, Maccabees, Wisdom, Jubilees,
 Philo, Josephus) stay out by design.
+
+## 8ay. The P153 East-Asian slice — Tibetan collected works, bamboo-slip manuscripts, a Japanese biographical dictionary
+
+Expected counts from the fixture-time censuses (the gate's first syncs
+confirm them):
+
+**`bdrc-transcriptions`** — BDRC's page-aligned Tibetan etexts (CC0):
+the Asian Classics Input Project's *Sungbum* transcriptions of 119
+collected works (gsung 'bum, 79,572 woodblock-print pages), Palri
+Parkhang's Nyingma collected works and gter ma (11,133 manuscript
+pages) and the UC Berkeley dbu med transcriptions (8,866 pages) —
+about 1,160 etext volumes / 99,571 pages, each page cited by its BDRC
+scan. Text only: the page images stay with BDRC.
+
+**`baley-manuscripts`** — the library's first Warring States and Han
+manuscripts: Julien Baley's graph-level transcriptions of the Anhui
+University, Shanghai Museum, Tsinghua, Peking University, Guodian,
+Fuyang, Dingxian and Jeongbaekdong slips — the Odes, the Laozi, the
+Analects, the Jinteng and Jigong chapters, Cao Mo zhi zhen and the
+Anda poems: 19 witnesses / 4,626 lines, every line carrying its slip
+numbers and its alignment to the received text (CC BY 4.0).
+
+**`haga-jinmei`** — 芳賀矢一『日本人名辞典』(1914), the NIHU dataset of
+the Meiji biographical dictionary: 54,558 entries on Japanese persons
+from antiquity to the Meiji era, full entry text, readings and page
+references (CC0).
