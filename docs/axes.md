@@ -123,7 +123,7 @@ The reconstruction shelves: the kaikki proto-extracts, IE-CoR cognacy, LIV, the 
 
 The cross-language scripture hat: the Masoretic shelves and the Scrolls, the Greek NT, Vulgate and WEB, Peshitta and the Syriac corpus, Coptic Scriptorium, the Targums, and the OSHB-BHSA bridging module. The hebrew and syriac language desks coexist with this hat by design.
 
-**Members** (20): `betamasaheft-works`, `bhsa`, `bridging`, `coptic-scriptorium`, `dss`, `elizabeth-bible`, `eng-web`, `etcbc-syriac`, `etcbc-targum`, `extrabiblical`, `hebrew-lexicon`, `oshb`, `peshitta`, `sblgnt`, `sdbh`, `sefaria`, `syriac-corpus`, `typikon-bible`, `ud`, `vulgate`
+**Members** (21): `betamasaheft-works`, `bhsa`, `bridging`, `coptic-scriptorium`, `dss`, `elizabeth-bible`, `eng-web`, `etcbc-syriac`, `etcbc-targum`, `extrabiblical`, `hebrew-lexicon`, `hexapla`, `oshb`, `peshitta`, `sblgnt`, `sdbh`, `sefaria`, `syriac-corpus`, `typikon-bible`, `ud`, `vulgate`
 
 ### hebrew
 
@@ -131,7 +131,7 @@ The cross-language scripture hat: the Masoretic shelves and the Scrolls, the Gre
 
 The Hebrew-and-Aramaic language desk beside the cross-language biblical hat: OSHB, BHSA, DSS, SDBH and the lexicon shelf, the Sefaria Targums, the bridging crosswalk, and IIP's inscriptions of Israel/Palestine.
 
-**Members** (12): `bhsa`, `bridging`, `dss`, `elephantine`, `etcbc-targum`, `extrabiblical`, `hebrew-lexicon`, `iip`, `oshb`, `sdbh`, `sefaria`, `ud`
+**Members** (13): `bhsa`, `bridging`, `dss`, `elephantine`, `etcbc-targum`, `extrabiblical`, `hebrew-lexicon`, `hexapla`, `iip`, `oshb`, `sdbh`, `sefaria`, `ud`
 
 ### syriac
 
