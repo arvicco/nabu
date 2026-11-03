@@ -236,6 +236,9 @@ module Nabu
           #                         town/region localization (Regensburg, Cracow, Prague …)
           "prague-bible-1488" => :structured,
           "prilit" => :year_range,
+          "pta" => :structured, # P154: the work's dct:created span (class composition); the
+          #                       catalog's unfilled 0030–0800 default mints none; place =
+          #                       the work's dct:spatial Pleiades id
           "ref" => :structured,
           "rem" => :structured,
           "ren" => :structured,

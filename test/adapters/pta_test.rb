@@ -135,4 +135,82 @@ class PtaTest < Minitest::Test
     assert_includes text, "Τοῦτο γὰρ καὶ ὁ λόγος ὑμῖν ἐπαγγέλλεται"
     refute_includes text, "παραλείπωμεν"
   end
+
+  # --- the catalog mining (__cts__.xml dct:* and identifiers) ----------------------
+
+  def test_composition_date_from_dct_created
+    assert_equal({ "not_before" => 401, "not_after" => 404, "raw" => "0401–0404", "class" => "composition" },
+                 parsed(CAINI_CRIT).metadata["date"])
+    assert_equal 475, parsed(CYZICENUS).metadata.dig("date", "not_before")
+  end
+
+  def test_the_unfilled_default_span_mints_no_date
+    metadata = parsed(ARIUS_DOK).metadata
+
+    assert_nil metadata["date"]
+    assert_equal "0030–0800", metadata["created_raw"]
+  end
+
+  def test_pleiades_place_from_dct_spatial
+    assert_equal({ "pleiades" => "511189", "ref" => "https://pleiades.stoa.org/places/511189" },
+                 parsed(CYZICENUS).metadata["place"])
+    assert_nil parsed(ARIUS_DOK).metadata["place"] # the XXXXX placeholder
+  end
+
+  def test_genre_from_dct_type_joins_head_and_sub
+    assert_equal "Paraenetic|Sermon", parsed(CAINI_CRIT).metadata["genre"]
+    assert_equal "Historiography|Church History", parsed(CYZICENUS).metadata["genre"]
+    assert_equal "Genre missing", parsed(ARIUS_DOK).metadata["genre"]
+  end
+
+  def test_cpg_and_the_other_identifiers
+    metadata = parsed(CYZICENUS).metadata
+
+    assert_equal "6034", metadata["cpg"]
+    assert_equal({ "PTA" => "pta0036.pta001", "TLG" => "tlg2768.tlg001", "CPG" => "6034",
+                   "Pinakes-Oeuvre" => "6823", "GND" => "4715555-3" }, metadata["identifiers"])
+    assert_nil parsed(ARIUS_DOK).metadata["cpg"]
+  end
+
+  def test_edition_metadata_names_the_printed_edition
+    crit = parsed(CAINI_CRIT).metadata
+    savile = parsed(CAINI_SAVILE).metadata
+
+    assert_equal "Severian of Gabala", crit["author"]
+    assert_equal "pta0001", crit["cts_textgroup"]
+    assert_equal "pta0001.pta024", crit["cts_work"]
+    assert_match(/\AKarl-Heinz Uthemann/, crit["edition"])
+    assert_equal "1994", crit["edition_year"]
+    assert_match(/\AHenry Savile \(ed\.\)/, savile["edition"])
+    assert_equal "1612", savile["edition_year"]
+  end
+
+  def test_edition_status_from_the_header_keywords
+    assert_equal "pre-critical-edition", parsed(PAENITENTIA).metadata["edition_status"]
+  end
+
+  # --- the axes the mined fields feed ------------------------------------------
+
+  def test_the_dating_lane_reads_the_structured_composition_span
+    shapes = Nabu::Store::TimelineBuilder::MetadataDates
+
+    assert_equal :structured, shapes::SHAPES.fetch("pta")
+    assert_equal [401, 404, "0401–0404", nil, "composition"], shapes.structured(parsed(CAINI_CRIT).metadata)
+  end
+
+  def test_the_places_lane_mints_the_pleiades_ref
+    claim = Nabu::Store::TimelineBuilder::MetadataDates.place_claim(parsed(CYZICENUS).metadata)
+
+    assert_equal "pleiades:511189", claim[1]
+  end
+
+  def test_the_kind_map_folds_every_label_and_declares_the_missing_slot
+    root = File.expand_path("../../config", __dir__)
+    kinds = Nabu::Kinds.load(classes_path: File.join(root, "kind_classes.yml"),
+                             map_path: File.join(root, "kind_map.yml"))
+
+    assert_equal %w[literary/wisdom sermon], kinds.fold("pta", "Paraenetic|Sermon").paths.sort
+    assert_equal %w[historiography], kinds.fold("pta", "Historiography|Church History").paths.uniq
+    assert_empty kinds.fold("pta", "Genre missing").paths
+  end
 end
