@@ -8,12 +8,19 @@ Zenodo 10.5281/zenodo.22883965, DOI of the corpus 10.5281/zenodo.22883964).
   `https://typikon.info/dump/2026-09-21/<path>` (paths in manifest.yml).
 - **Layout:** mirrors the workdir the adapter fetches — each file in its own
   subdir (`manifest/manifest.json`, `bible-editions/…`, `bible-books/…`,
-  `bible-verses-ro-1688/…`), the FileFetch state + attic per subdir.
+  `bible-verses-ro-1688/…`, `bible-verses-cs-eliz/…`,
+  `bible-verses-ka-mcxeta/…`), the FileFetch state + attic per subdir.
 - **Trim recipe:** `manifest.json` byte-verbatim WHOLE. Every `.jsonl.gz`
   keeps byte-verbatim JSON lines of the upstream file, selected by book,
   and is re-gzipped (mtime 0): `bible-editions` all 11 lines;
-  `bible-books` the 4 book records the slices use; `bible-verses-ro-1688`
-  Joel (73), Obadiah (21) and the Song of the Three Youths (67).
+  `bible-books` the 8 book records the slices use; `bible-verses-ro-1688`
+  Joel (73), Obadiah (21) and the Song of the Three Youths (67);
+  `bible-verses-cs-eliz` Obadiah (21) and 1 Peter (105 — 1:10 carries the
+  file's one non-NFC combining sequence); `bible-verses-ka-mcxeta` Obadiah
+  (21, an Old Testament book) and Philemon (23, a New Testament book — the
+  two testaments carry different witness dates). The cs-eliz and
+  ka-mcxeta slices were cut 2026-11-03 from the dump files fetched that
+  day (sha256 equal to manifest.json's: 6c269a1e… and e4c1cd6d…).
 
 ## Upstream delivery grains
 
@@ -23,7 +30,8 @@ saints, places, accents …; CC BY 4.0), **bible** (16 files) and
 **temples** (1 file, ODbL). This source reads only the bible layer:
 `bible-editions` and `bible-books` (tables: edition records with their
 mapping rules, book records with the canonical id), and the **verse files
-of admitted editions** — one document per (edition, book), one passage
+of admitted editions** (ro-1688, cs-eliz, ka-mcxeta) — one document per
+(edition, book), one passage
 per verse record. Rejected inside the bible layer, each **skipped by rule**
 when present in the workdir and pinned here as a specimen:
 
@@ -43,6 +51,11 @@ this source.
   reconciliation), native (chapter, verse) unique per book; 2,870 verses
   carry a canonical address different from their own; 33,484 ship
   non-NFC combining order.
+- cs-eliz (read 2026-11-03): **36,961 verses / 77 books** (manifest
+  `records` 36,961), every canonRef its own address, one non-NFC verse;
+  Exod 36:9–39:23 absent (printed unnumbered, per the file note).
+- ka-mcxeta (read 2026-11-03): **32,425 verses / 73 books** (manifest
+  `records` 32,425), canonRef identity, no Maccabees.
 - The concordance: 342,568 rows over eleven editions — ro-1914 36,341 ·
   la-vulgata 37,149 · zh-1910 7,538 · cv-ipb 36,735 · cv-ipb-cu 36,735 ·
   grc-lxx-pat 37,805 · ro-1688 36,312 · cs-eliz 36,961 · cs-old-rite 8,803 ·
@@ -56,4 +69,10 @@ Bible layer `"license": {"id": "CC-BY-4.0", …}`; rationale: "Румынску�
 лицензией слоя."; the ro-1688 file note: "Оцифровка выполнена в проекте по
 сканам издания." → source class `attribution`. The ro-1914 specimen is CC
 BY-SA 4.0 (its own file license: "Вычитанный людьми текст Викитеки");
-the concordance rides the layer's CC BY 4.0.
+the concordance rides the layer's CC BY 4.0. The cs-eliz and ka-mcxeta
+files carry their own `"license": {"id": "PD", "name": "Общественное
+достояние (Public Domain Mark 1.0)", …}`, each noting the digitizer
+declared no terms, while the layer rationale says "Церковнославянский и
+латинский остаются вне выгрузки: их оцифровки чужие и разрешения на
+распространение не дают"; admitted under the PD marking, owner-ruled
+2026-11-03.
