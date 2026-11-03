@@ -1906,3 +1906,12 @@ lexicon-encyclopedia, 31,341 entries in 27 Adler-letter documents, each
 with its notes, bibliography, keywords and the names of its translator
 and vetters (CC BY-NC-SA). Every entry keeps its Adler number, the key
 to the held First1K Greek.
+
+**`hmml-reading-room`** — the Hill Museum & Manuscript Library's
+Reading Room catalogue, its Syriac and Ethiopic cataloguing: 18,892
+manuscripts and prints from the churches and monasteries of Iraq,
+Turkey, Lebanon, Syria, India and Ethiopia and the European libraries
+that hold their books — shelf marks, dates, places of origin, scripts,
+contents, authors and genres — with 11,196 incipits in Syriac, Ge'ez,
+Amharic, Garshuni and Arabic as searchable text (CC BY 4.0, the weekly
+dataset).

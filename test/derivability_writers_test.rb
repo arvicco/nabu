@@ -218,8 +218,14 @@ class DerivabilityWritersTest < Minitest::Test
   # demo-census.json — a SHIPPING artifact outside the three permanent
   # folders, derived wholesale by re-running the task (the DERIVED law
   # kind; it never writes the box's own canonical/, db/ or local/).
+  # hmml_reading_room (P154) cuts its declared materialization, scope/
+  # (records.jsonl + census.json, staged in a temp dir and moved in
+  # whole), from the FileFetch-held weekly zip into
+  # canonical/hmml-reading-room/ inside Adapter#fetch — the aclt
+  # extraction law kind (a pure function of the held zip + code).
   WRITER_ALLOWLIST = %w[
     nabu/demo_build.rb
+    nabu/adapters/hmml_reading_room.rb
     nabu/adapters/dprr.rb nabu/adapters/pna.rb
     nabu/adapters/jaschke_1881.rb
     nabu/adapters/bfm.rb nabu/adapters/ctilc.rb nabu/adapters/etruscan_loans.rb nabu/adapters/ig_cyprus.rb

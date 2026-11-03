@@ -1,0 +1,10 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+source: hmml-reading-room
+adapter_test: test/adapters/hmml_reading_room_test.rb
+retrieved: 2026-11-02
+files:
+  - path: dataset/vhmml_rr_fulldata.zip
+    url: https://www.vhmml.org/datasets/vhmml_rr_fulldata.zip
+    whole: false
+    trim: the one member cut to its real first line, six real record lines and its real last line, byte-verbatim, re-zipped (README recipe)
