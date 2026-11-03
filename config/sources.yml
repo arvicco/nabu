@@ -7677,6 +7677,25 @@ wiktionary-akk:
   # owner-fired.
   sync_policy: manual
 
+wiktionary-ar:   # P155, 02-sources row 372
+  adapter: Nabu::Adapters::WiktionaryAr
+  adopted: "2026-11-03"
+  axes: [arabic]
+  wired: false   # flips at the first sync's verification
+  # The kaikki Arabic extraction (868 MB / 233,417 records / "177029
+  # distinct words"): the library's first general Arabic dictionary —
+  # Proto-Semitic, Aramaic, Akkadian and Syriac etymons, descendants into
+  # Ottoman Turkish, Persian, Urdu, Swahili, Maltese. Language ara. ONE
+  # parse rule beyond the wiktionary-fa mold: glossless records (the
+  # inflected-form stubs, ~84% of the file) skip by rule, censused in
+  # discovery_skips. EXPECTED first sync, sample-extrapolated (twenty 2 MB
+  # byte ranges, fixture README): ≈37,400 glossed entries (s.e. ≈8,800;
+  # the earlier full-file census gives 233,417 − 196,443 glossless =
+  # 36,974) — the exact count verifies at first sync. Per-language JSONL
+  # (deprecated upstream — fallback = filter the full extract by
+  # lang_code ar), CC BY-SA + GFDL → attribution, FileFetch.
+  sync_policy: manual
+
 wiktionary-arc:   # P154, 02-sources row 352
   adapter: Nabu::Adapters::WiktionaryArc
   adopted: "2026-11-02"
