@@ -48,7 +48,7 @@ A source wears every desk it serves — these twelve answer this desk. Holdings 
 
 ## Working the celtic desk
 
-The generic axis surfaces — every desk answers to these, in working
+The generic desk surfaces — every desk answers to these, in working
 order (enable once, sync, then query):
 
 ```

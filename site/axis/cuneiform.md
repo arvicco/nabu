@@ -52,7 +52,7 @@ A source wears every desk it serves — these seventeen answer this desk. Holdin
 
 ## Working the cuneiform desk
 
-The generic axis surfaces — every desk answers to these, in working
+The generic desk surfaces — every desk answers to these, in working
 order (enable once, sync, then query):
 
 ```

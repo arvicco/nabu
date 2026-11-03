@@ -196,6 +196,22 @@ module Ops
       end
     end
 
+    # One reader-facing name (owner front-door ruling, 2026-11-03): the
+    # pages say "desk"; the CLI's own word "axis" survives only in commands,
+    # URLs and one parenthetical on the index.
+    def test_reader_facing_prose_names_the_concept_desk
+      with_generator_env do |out|
+        index = File.read(File.join(out, "index.md"))
+        assert_includes index, "title: Research desks"
+        assert_includes index, "(the CLI calls them axes)"
+        assert_includes index, "A desk is **not a folder**"
+        refute_includes index, "research axes"
+        page = File.read(File.join(out, "alpha.md"))
+        assert_includes page, "The generic desk surfaces"
+        refute_match(/generic axis surfaces|axis-specific/, page)
+      end
+    end
+
     def test_languages_line_says_nothing_held_for_an_empty_desk
       with_generator_env do |out|
         page = File.read(File.join(out, "empty.md"))

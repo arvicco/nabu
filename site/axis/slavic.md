@@ -73,7 +73,7 @@ A source wears every desk it serves — these 38 answer this desk. Holdings are 
 
 ## Working the slavic desk
 
-The generic axis surfaces — every desk answers to these, in working
+The generic desk surfaces — every desk answers to these, in working
 order (enable once, sync, then query):
 
 ```

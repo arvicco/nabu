@@ -51,7 +51,7 @@ Private research materials under personal grants are not listed.
 
 ## Working the italic desk
 
-The generic axis surfaces — every desk answers to these, in working
+The generic desk surfaces — every desk answers to these, in working
 order (enable once, sync, then query):
 
 ```
