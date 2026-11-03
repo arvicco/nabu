@@ -139,7 +139,7 @@ The Hebrew-and-Aramaic language desk beside the cross-language biblical hat: OSH
 
 The Syriac language desk: the ETCBC Peshitta and the Digital Syriac Corpus, riding beside the biblical hat by design.
 
-**Members** (3): `etcbc-syriac`, `peshitta`, `syriac-corpus`
+**Members** (4): `etcbc-syriac`, `hmml-reading-room`, `peshitta`, `syriac-corpus`
 
 ### ethiopic
 
@@ -147,7 +147,7 @@ The Syriac language desk: the ETCBC Peshitta and the Digital Syriac Corpus, ridi
 
 The Ethiopic (Gǝʿǝz) desk in the Oriental-Christian neighborhood: the Beta maṣāḥǝft transcriptions (the Geʿez Bible, 1 Enoch, Jubilees, the Kebra nagast, royal chronicles), Dillmann's Lexicon, and the TraCES analyzed corpus with its Aksumite inscriptions — riding beside the biblical hat by design.
 
-**Members** (3): `betamasaheft-works`, `dillmann`, `traces`
+**Members** (4): `betamasaheft-works`, `dillmann`, `hmml-reading-room`, `traces`
 
 ### arabic
 

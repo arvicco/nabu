@@ -2934,6 +2934,39 @@ hittite-glossed:   # P109-3
   # manuscript line, aligned translit/gloss/German token layers as
   # annotations; the cth facet joins the TLHdig surface.
 
+hmml-reading-room:   # P154, 02-sources row 340
+  adapter: Nabu::Adapters::HmmlReadingRoom
+  adopted: "2026-11-02"
+  axes: [syriac, ethiopic]
+  wired: false   # until the first real sync is verified
+                 # bin/nabu sync hmml-reading-room — one 50 MB zip GET
+                 # (the weekly generation; regenerated Sundays 01:00 CT),
+                 # then the slice cut (unzip + stream 757 MB, ≈ 10 s) and the
+                 # parse (≈ 15 s). EXPECT (the 2026-11-01 generation's
+                 # census) 18,892 docs / 11,196 passages, 0 quarantined;
+                 # 13,670 metadata-only documents; 196 incipits skipped by
+                 # rule (named per document); 245,098 discovery rule-skips
+                 # (245,097 records outside the slice + 1 empty record).
+                 # A later generation moves these counts a little. Eyeball
+                 # nabu show urn:nabu:hmml-reading-room:77409 (two Ge'ez
+                 # chronicles, Frankfurt) and urn:nabu:hmml-reading-room:56720
+                 # (Garshuni lives, Montserrat) and 5 random, probe nabu
+                 # search with a Ge'ez incipit (በስመ ፡ አብ), then flip.
+  sync_policy: manual
+  # vHMML Reading Room (Hill Museum & Manuscript Library): the full
+  # Reading Room dataset (263,989 records, vHMML Schema JSON), regenerated
+  # weekly at one URL (stated by HMML by email, 2026-11-02; no OAI or bulk
+  # API). The fetch pins what it took: the zip's sha256 + Last-Modified in
+  # dataset/.file-fetch.json, repeated in scope/census.json beside the
+  # slice counts. Slice: Syriac/Ethiopic writing system or Syriac/Ge'ez/
+  # Amharic items — 18,892 records; the rest is a later slice, counted.
+  # Document = catalogue record (parts, items, repository, dates, origin,
+  # genres in metadata); passage = an item's incipit (syc / gez / amh /
+  # ara-Syrc Garshuni / ara). LICENSE (data portal + vhmml.org/terms, read
+  # 2026-11-02): "The manuscript metadata in vHMML Reading Room is available
+  # for reuse under ... (CC BY 4.0)" → attribution; images never taken.
+  # Weekly regeneration = the drift channel → re-syncs are owner-fired.
+
 honkoku:   # P108-5
   adapter: Nabu::Adapters::Honkoku
   adopted: "2026-09-29"
@@ -6170,7 +6203,7 @@ su-wikisource:   # P140, 02-sources row 286
   # · sun-Java 21 · osn 1), 1 Dutch introduction measured out. Texts PD;
   # transcription layer CC BY-SA 4.0.
 
-suda-translations:   # P154, 02-sources row 335
+suda-translations:   # P154, 02-sources row 339
   adapter: Nabu::Adapters::SudaTranslations
   adopted: "2026-11-02"
   axes: [classical]

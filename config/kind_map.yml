@@ -1193,7 +1193,59 @@ sources:
       "grammar": lexical/grammar
       "medicine": scholarly/medicine
       "astrology": divination/astrology
-  bu-ajami:           # census: 80 docs, 2026-10-14 — upstream's own form labels;
+  hmml-reading-room:  # census 2026-11-02 over the Syriac + Ethiopic slice (18,892 records, 2,502
+    # without a genre): the catalogue's own genre terms (Getty AAT labels, 87 distinct), several
+    # per record, riding the genre facet. `vocabulary: open`: the long tail (Fragments, Notebooks,
+    # Compendiums, Catechisms, Apologetic writings, Calendars …) mints nothing and counts as
+    # uncovered. The rules cover the head of the census, each with its count.
+    facet: genre
+    vocabulary: open
+    map:
+      "Liturgical books (Eastern Christian)": ritual/liturgy   # 8,627
+      "Liturgical texts": ritual/liturgy         # 345
+      "Missals": ritual/liturgy                  # 423
+      "Lectionaries": ritual/liturgy             # 561 — readings ordered for the rite
+      "Antiphonaries": ritual/liturgy            # 292
+      "Rituals": ritual/liturgy                  # 519 — the sacramental rites
+      "Books of hours": ritual/liturgy           # 225
+      "Evangeliaries": ritual/liturgy            # 114 — Gospel pericopes for the liturgy
+      "Epistolaries": ritual/liturgy             # 39 — AAT: the liturgical book of Epistle readings
+      "Bibles": scripture                        # 1,394
+      "Gospels": scripture                       # 616
+      "Psalters": scripture                      # 1,295 — the Psalms as a book
+      "Apocrypha": scripture                     # 53 — the Ben Sira "Apocrypha" precedent
+      "Hagiographies": historiography            # 1,577 — the scat fold: lives go to historiography
+      #                                            by the ruled biography precedent
+      "Biographies": historiography              # 27
+      "Historical works": historiography         # 287
+      "Prayers": hymn-prayer/prayer              # 1,163
+      "Prayer books": hymn-prayer/prayer         # 549
+      "Hymns": hymn-prayer/hymn                  # 1,115
+      "Hymnals": hymn-prayer/hymn                # 59
+      "Poems": literary/poetry                   # 889
+      "Plays": literary/drama                    # 16
+      "Fables": literary/narrative               # 13
+      "Dialogues": literary/wisdom               # 37 — the dialogue sub's head
+      "Sermons": sermon                          # 740
+      "Homiliaries": sermon/homily               # 464
+      "Commentaries": exegesis                   # 590 — in this slice, commentaries on scripture
+      #                                            and the Fathers
+      "Grammars": lexical/grammar                # 376
+      "Dictionaries": lexical                    # 325 — bare: Syriac/Arabic lexica, no sub fits whole
+      "Correspondence": letter                   # 140
+      "Legal works": legal                       # 78
+      "Legal documents": legal                   # 14
+      "Canon law": legal/law                     # 65
+      "Synodicons": legal/law                    # 32 — collections of synodal canons
+      "Church records": administrative/register  # 66
+      "Account books": administrative/account    # 12
+      "Inventories": administrative/list         # 7
+      "Scientific works": scholarly              # 126
+      "Mathematical works": scholarly/mathematics   # 76
+      "Medical works": scholarly/medicine        # 51
+      "Magic scrolls": magic/amulet              # 54 — the Ethiopian protective (healing) scrolls
+      "Magical texts": magic                     # 29
+  bu-ajami:          # census: 80 docs, 2026-10-14 — upstream's own form labels;
     facet: genre      # the identity-grade fold (poetry means poetry)
     map:
       "Poetry": literary/poetry                  # 44

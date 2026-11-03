@@ -1724,6 +1724,28 @@ sources:
     script: {posture: qualified, note: "Romanian in the Cyrillic alphabet of the 1688 print —
         titla, accents and the transitional letters (ꙟ, ᲅ, ѫ, џ) kept as typeset; language tag
         ron-Cyrl"}
+  hmml-reading-room:   # P154
+    # kind: machine-postured — the hmml-reading-room genre fold in kind_map.yml (open vocabulary).
+    lect: {posture: identity, note: "per-incipit tags on held nodes from the cataloguer's item
+        language — syc (Syriac), gez (Ge'ez), amh (Amharic), ara (Arabic) and ara-Syrc (Arabic
+        Garshuni, Arabic in Syriac script; ara through the ar codemap row). Declared coarse: the
+        cataloguer's language is the claim (an item catalogued Syriac whose incipit reads as
+        Garshuni stays syc); Neo-Aramaic, Turkish/Kurdish Garshuni and the rest skip by rule
+        (196 incipits, named per document) until the registry holds them"}
+    dating: {posture: pending, note: "candidate: register hmml-reading-room => :structured in
+        Store::TimelineBuilder::MetadataDates::SHAPES — every document already carries the
+        catalogue's own envelope as metadata date {not_before, not_after, raw} (min beginDate ..
+        max endDate over the parts, century label raw; 18,001 of 18,892 records in the
+        2026-11-01 generation), artifact class. Held back only because the registration is a
+        builder-file edit (the lane is adapters-only); the precise year/month/day and the
+        native-era date (e.g. '2025 AG') ride each part verbatim"}
+    places: {posture: pending, note: "candidate: the same :structured registration reads the
+        metadata place — the part's city of origin, else its country of origin (4,448 records),
+        the writing place as catalogued, names verbatim; the holding repository (city, country,
+        LC/VIAF authority URIs) rides metadata and is never taken for the origin"}
+    script: {posture: mixed, note: "Syriac script (Serṭā, Madnḥāyā, ʼEsṭrangelā — the part's
+        script field verbatim), Ethiopic Fidäl, Arabic Naskh for the Arabic items; Garshuni is
+        tagged ara-Syrc"}
   suda-translations:   # P154
     # kind: machine-postured — kind_map.yml source_kind lexical.
     lect: {posture: identity, note: "bare en — the Suda On Line's modern English translations
