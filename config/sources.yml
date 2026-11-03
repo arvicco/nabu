@@ -7257,7 +7257,10 @@ typikon-bible:   # P153, 02-sources row 330
   adapter: Nabu::Adapters::TypikonBible
   adopted: "2026-11-02"
   axes: [biblical, romance, slavic]
-  wired: true   # first sync 2026-11-02 exactly on census (79 docs / 36,312 passages, 0 errored); Gen 1.1 Romanian Cyrillic eyeballed
+  wired: true   # first sync 2026-11-02 exactly on census (79 docs / 36,312 passages); widened sync
+                # verified 2026-11-04: 229 docs / 105,698 passages (cs-eliz 77/36,961 + ka-mcxeta
+                # 73/32,425, 0 errored), Gen 1.1 eyeballed in Romanian Cyrillic, Church Cyrillic
+                # (titla and accents verbatim) and Old Georgian
                  # 2026-11-03 widening (cs-eliz + ka-mcxeta, owner-ruled): the next
                  # sync adds two FileFetch GETs (bible-verses-cs-eliz 2.8 MB,
                  # bible-verses-ka-mcxeta 2.3 MB; sha256 verified against
@@ -7693,7 +7696,7 @@ wiktionary-ar:   # P155, 02-sources row 372
   adapter: Nabu::Adapters::WiktionaryAr
   adopted: "2026-11-03"
   axes: [arabic]
-  wired: false   # flips at the first sync's verification
+  wired: true   # first sync verified 2026-11-04: 36,974 glossed entries (196,443 glossless skipped by rule — exactly the full-file census)
   # The kaikki Arabic extraction (868 MB / 233,417 records / "177029
   # distinct words"): the library's first general Arabic dictionary —
   # Proto-Semitic, Aramaic, Akkadian and Syriac etymons, descendants into
