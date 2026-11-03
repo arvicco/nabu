@@ -1112,7 +1112,12 @@ automatically; no per-release action.
    normal path; `rake demo:publish` is the local fallback, and like
    every owner-run operation it must be ONE command that carries its
    own preflight checks — handing the owner a sequence of setup
-   incantations around it is a defect (same ruling).
+   incantations around it is a defect (same ruling). The deploy
+   surfaces pin the RELEASED tag, never `:latest`: a `server.json`
+   version bump also moves the image tag in `render.yaml` and
+   `site/docker-mcp-catalog.yaml`, and `rake site:data` re-projects
+   `site/_data/mcp.yml` (the MCP page's commands and buttons) —
+   `test/site/site_data_test.rb` fails until all four agree.
 
 Between releases, phase gates that don't tag still add a News entry
 (MAINTENANCE.md gate duty) — the News section tracks phases; releases are
