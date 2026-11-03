@@ -179,7 +179,7 @@ class PosturesTest < Minitest::Test
   def test_the_lect_migration_kept_the_p59_4_census
     lect = postures.declarations.select { |d| d.layer == "lect" }
     by_posture = lect.group_by(&:posture).transform_values(&:size)
-    assert_equal 179, lect.size,
+    assert_equal 181, lect.size,
                  "the P59-4 declarations survive the move (61 at migration; itant retired P61-3," \
                  "oracc retired P62-2, etcsl/ccmh/freising/coptic-scriptorium retired P64-6, " \
                  "titus-avestan retired P66-1, osta+fornsvenska retired P77-r8, achemenet " \
@@ -382,7 +382,9 @@ class PosturesTest < Minitest::Test
                  "declared coarse): 176→177; " \
                  "pta ADDED P154 — dates (the per-work dct:created spans band the patristic editions " \
                  "into grc:koi / grc:byz, the cgpg shape): 177→178; grand-tour ADDED P155 — identity de " \
-                 "(1652–1702 German, past de:early's 1650 — the dta precedent keeps it bare): 178→179"
+                 "(1652–1702 German, past de:early's 1650 — the dta precedent keeps it bare): 178→179; " \
+                 "evans-tcp + ecco-tcp ADDED P155 — identity en (the eebo-tcp posture; en:early " \
+                 "date-bands the pre-1700 Evans prints, the late-modern re-pin follows its mint): 179→181"
     # The epigraphic-belt registry package (merged + canonical-synced
     # 2026-10-18, the add-then-retire shape within one phase) retires both
     # P130 pendings, and the ociana-script rule + the ig-cyprus override
@@ -436,6 +438,7 @@ class PosturesTest < Minitest::Test
     # hmml-reading-room joins identity (per-incipit syc/gez/amh/ara/ara-Syrc): 130→131.
     # pta joins dates (the dct:created spans → grc:koi/grc:byz, the cgpg shape): 24→25.
     # grand-tour joins identity (de, post-1650 German stays bare): 131→132.
-    assert_equal({ "dates" => 25, "codemap" => 21, "identity" => 132, "pending" => 1 }, by_posture)
+    # evans-tcp + ecco-tcp join identity (en, the eebo-tcp posture): 132→134.
+    assert_equal({ "dates" => 25, "codemap" => 21, "identity" => 134, "pending" => 1 }, by_posture)
   end
 end

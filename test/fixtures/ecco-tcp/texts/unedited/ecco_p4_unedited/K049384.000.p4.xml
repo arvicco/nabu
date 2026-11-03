@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?xml-stylesheet type="text/css" href="http://www.textcreationpartnership.org/docs/code/pfs.css"?>
+<!DOCTYPE ETS SYSTEM "http://www.textcreationpartnership.org/docs/code/eebo2prf.xml.dtd">
+<ETS>
+<HEADER><FILEDESC><TITLESTMT><TITLE TYPE="245" I2="4">The tears of Scotland:</TITLE><AUTHOR>Smollett, Tobias George, 1721-1771.</AUTHOR></TITLESTMT>
+
+<EXTENT>Approx. 3 KB of encoded text transcribed from 4 page images.</EXTENT><PUBLICATIONSTMT><PUBPLACE>Ann Arbor, MI ; Oxford (UK) :</PUBPLACE><PUBLISHER>Text Creation Partnership,</PUBLISHER><DATE>2006</DATE><IDNO TYPE="DLPS">004833168</IDNO><IDNO TYPE="ESTC">T55393</IDNO><IDNO TYPE="DocNo">CW112908801</IDNO><IDNO TYPE="TCP">K049384.000</IDNO>
+<IDNO TYPE="GaleDocNo">CW3312908801</IDNO><IDNO TYPE="ContentSet">ECLL</IDNO><IDNO TYPE="ImageSetID">0483000400</IDNO><AVAILABILITY><P>To the extent possible under law, the Text Creation Partnership has waived all copyright and related or neighboring rights to this keyboarded and encoded edition of the work described above, according to the terms of the CC0 1.0 Public Domain Dedication (http://creativecommons.org/publicdomain/zero/1.0/). This waiver does not extend to any page images or other supplementary files associated with this work, which may be protected by copyright or other license restrictions. Please go to http://www.textcreationpartnership.org/ for more information.</P></AVAILABILITY></PUBLICATIONSTMT><SOURCEDESC><BIBLFULL><TITLESTMT><TITLE TYPE="245" I2="4">The tears of Scotland:</TITLE><AUTHOR>Smollett, Tobias George, 1721-1771.</AUTHOR></TITLESTMT>
+
+<EXTENT>4p. ; 8⁰.</EXTENT><PUBLICATIONSTMT><PUBPLACE>[Edinburgh?,</PUBPLACE><DATE>1746?]</DATE></PUBLICATIONSTMT><NOTESSTMT><NOTE>Anonymous. By Tobias George Smollett.</NOTE><NOTE>Drop-head title.</NOTE><NOTE>In verse.</NOTE><NOTE>Foxon dates this work 1746/1750.</NOTE><NOTE>Reproduction of original from the British Library.</NOTE><NOTE>Foxon, S535</NOTE><NOTE>English Short Title Catalog, ESTC T55393.</NOTE><NOTE>Electronic data. Farmington Hills, Mich. : Thomson Gale, 2003. Page image (PNG). Digitized image of the microfilm version produced in Woodbridge, CT by Research Publications, 1982-2002 (later known as Primary Source Microfilm, an imprint of the Gale Group).</NOTE></NOTESSTMT>
+
+</BIBLFULL></SOURCEDESC></FILEDESC><ENCODINGDESC><PROJECTDESC><P>Header originally created with script ecco-header.xsl on 2006-04-22. Revised by script ecco_revise_headers.pl on 2023-10-20. Processing information added by script ecco_insertprocess.pl on 2023-10-22.</P></PROJECTDESC><EDITORIALDECL N="4"><P>This electronic text file was keyed from page images and partially proofread for accuracy. Character capture and encoding have been done following the guidelines of the ECCO Text Creation Partnership, which correspond roughly to the recommendations found in Level 4 of the TEI in Libraries Guidelines. Digital page images are linked to the text file.</P><P>Issued variously as SGML (TCP schema; ASCII text with mnemonic sdata character entities); displayable XML (TCP schema; characters represented either as UTF-8 Unicode or text strings within braces); or lossless XML (TEI P5, characters represented either as UTF-8 Unicode or TEI g elements).</P><P>Keying and markup guidelines available at TCP web site (http://www.textcreationpartnership.org/docs/)</P></EDITORIALDECL></ENCODINGDESC><PROFILEDESC><LANGUSAGE ID="eng"><LANGUAGE>eng</LANGUAGE></LANGUSAGE></PROFILEDESC><REVISIONDESC>
+<CHANGE><DATE>2005-12</DATE><RESPSTMT><RESP>TCP</RESP></RESPSTMT><ITEM>Assigned for keying and markup to Aptara</ITEM></CHANGE>
+<CHANGE><DATE>2005-12</DATE><RESPSTMT><RESP>Aptara</RESP></RESPSTMT><ITEM>Keyed and coded from Gale page images</ITEM></CHANGE>
+<CHANGE><DATE>2006-10</DATE><RESPSTMT><RESP>Automated batch process</RESP></RESPSTMT><ITEM>Sampled, proofread, and rejected</ITEM></CHANGE>
+<CHANGE><DATE>2007-07</DATE><RESPSTMT><RESP>Aptara</RESP></RESPSTMT><ITEM>Resubmitted text keyed and coded from Gale page images</ITEM></CHANGE></REVISIONDESC></HEADER>
+
+<EEBO>
+<IDG S="marc" R="OX" ID="K049384.000">
+<STC T="C">T055393</STC>
+<BIBNO T="docno">CW3312908801</BIBNO>
+<VID>0483000400</VID>
+</IDG>
+<TEXT LANG="eng">
+<BODY>
+<DIV1 TYPE="unspec">
+<PB N="1" REF="1"/>
+<HEAD>THE
+TEARS
+OF
+SCOTLAND.</HEAD>
+<LG N="1">
+<L>MOURN, hapless <HI>Caledonia,</HI> mourn</L>
+<L>Thy banished Peace, thy Laurel torn!</L>
+<L>Thy Sons, for Valour long renown'd,</L>
+<L>Ly slaughter'd on their native Ground!</L>
+<L>Thy hospitable Roofs no more</L>
+<L>Invite the Stranger to the Door;</L>
+<L>In smoky Ruins sunk they ly,</L>
+<L>The Monuments of Cruelty!</L>
+</LG>
+<LG N="2">
+<PB N="2" REF="2" MS="y"/>
+<HEAD>II.</HEAD>
+<L>The wretched Owner sees afar</L>
+<L>His All become the Prey of War,</L>
+<L>Bethinks him of his Babes and Wife,</L>
+<L>Then smites his Breast, and curses Life!</L>
+<L>Thy Swains are famish'd on the Rocks</L>
+<L>Where late they fed their wanton Flocks!</L>
+<L>Thy ravish'd Virgins shriek in vain,</L>
+<L>Thine Infants perish on the Plain!</L>
+</LG>
+<LG N="3">
+<HEAD>III.</HEAD>
+<L>What boots it, that, in ev'ry Clime,</L>
+<L>Through the wide-spreading Waste of Time,</L>
+<L>Thy martial Glory, crown'd with Praise,</L>
+<L>Still shone with undiminished Blaze?</L>
+<L>Thy tow'ring Spirit now is broke,</L>
+<L>Thy Neck is bended to the Yoke!</L>
+<L>What foreign Arms could never quell,</L>
+<L>By civil Rage and Rancour fell!</L>
+</LG>
+<LG N="4">
+<PB N="3" REF="3"/>
+<HEAD>IV.</HEAD>
+<L>The rural Pipe, and merry Lay,</L>
+<L>No more shall chear the happy Day;</L>
+<L>No social Scenes of gay Delight</L>
+<L>Beguile the dreary Winter Night!</L>
+<L>No Strains but those of Sorrow flow,</L>
+<L>And nought be heard but Sounds of Woe!</L>
+<L>While the pale Phantoms of the Slain</L>
+<L>Glide nightly o'er the silent Plain!</L>
+</LG>
+<LG N="5">
+<HEAD>V.</HEAD>
+<L>O baleful Cause! O fatal Morn,</L>
+<L>Accurs'd to Ages yet unborn!</L>
+<L>The Sons against their Fathers stood!</L>
+<L>The Parent shed his Children's Blood!</L>
+<L>Yet, when the Rage of Battle ceas'd;</L>
+<L>The Victor's Soul was not appeas'd;</L>
+<L>The Naked and Forlorn must feel</L>
+<L>Devouring Flames and murd'ring Steel!</L>
+</LG>
+<LG N="6">
+<PB N="4" REF="4"/>
+<HEAD>VI.</HEAD>
+<L>The pious Mother, doom'd to Death,</L>
+<L>Forsaken wanders o'er the Heath,</L>
+<L>The bleak Wind whistles o'er her Head,</L>
+<L>Her helpless Orphans cry for Bread;</L>
+<L>Bereft of Shelter, Food and Friend,</L>
+<L>She views the Shades of Night descend,</L>
+<L>And, stretch'd beneath inclement Skies,</L>
+<L>Weeps o'er her tender Babes, and dies!</L>
+</LG>
+<LG N="7">
+<HEAD>VII.</HEAD>
+<L>While the warm Blood bedews my Veins,</L>
+<L>And unimpair'd Remembrance reigns,</L>
+<L>Resentment of my Country's Fate</L>
+<L>Within my filial Breast shall beat;</L>
+<L>In Spite of her insulting Foe,</L>
+<L>My sympathizing Verse shall flow.</L>
+<L>Mourn, hapless <HI>Caledonia,</HI> mourn</L>
+<L>Thy banish'd Peace, thy Laurel torn!</L>
+</LG>
+<TRAILER>FINIS.</TRAILER>
+</DIV1>
+</BODY>
+</TEXT>
+</EEBO>
+</ETS>

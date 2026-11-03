@@ -334,6 +334,18 @@ sources:
       #                         (never parsed apart). Leading heads: Great Britain 16,205 ·
       #                         Broadsides 5,446 · Sermons, English 4,317 · Bible 4,087 ·
       #                         Church of England 2,712 · Ballads, English 1,779
+  evans-tcp:                  # the eebo-tcp header shape (same TCP MARC-to-TEI transform)
+    fields:
+      author: author          # the same ESTC-style headings ("Hammon, Jupiter, 1711-ca. 1800."),
+      #                         projected as-is
+      subjects: subject       # LCSH verbatim, on 4,832 of 5,012 files (census 2026-11-03) — "Broadsides.", "Poems -- 1760.", "Carriers'
+      #                         addresses -- 1786.", "Trials (Treason) -- Maryland -- Frederick."
+  ecco-tcp:                   # the eebo-tcp header shape (same TCP MARC-to-TEI transform)
+    fields:
+      author: author          # ESTC-style headings ("Gray, Thomas, 1716-1771."), projected as-is
+      subjects: subject       # LCSH verbatim where present — only 29 of 3,101 files carry
+      #                         TEXTCLASS headings (census 2026-11-03); the Gale ContentSet
+      #                         module is ECCO's genre signal (config/kind_map.yml)
   dta:                        # 5,478 docs, all with both
     fields:
       author: author          # 1,407 authors ("Chamisso, Adelbert von")

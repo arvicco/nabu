@@ -528,6 +528,66 @@ sources:
         town as the declared-uncertain claim (\"London?\", the cataloguer's
         trailing ? — never the raw \"[London?] printed\" prose)"}
     script: {posture: implied}
+  evans-tcp:
+    lect:
+      posture: identity
+      note: "en IS the claim and it is true today: 5,011 of 5,012 files
+        declare LANGUSAGE eng (census 2026-11-03), mapped through the
+        codemap's eng→en alias onto the en anchor; the one \"pau\" (Mackenzie's
+        English novel N14218) is a cataloguing slip the adapter's
+        LANGUAGE_ERRATA reads as en. The registry's only English stage, en:early [1500, 1700], covers just the
+        seventeenth-century prints (the 1639–1700 Evans texts, mostly in the
+        unedited class) — those stage by DATE-BAND INFERENCE over the imprint
+        envelopes with no rule (the eebo-tcp precedent); the 1700–1800 bulk
+        stays honestly bare en. The late-modern English stage is being
+        minted in the sister registry; the date-band re-pin follows that
+        mint once it reaches canonical/nabu-lects — no Nabu-side rule waits
+        on it"
+    dating:
+      posture: dated
+      note: "the BIBLFULL imprint year via MetadataDates :structured —
+        EeboTcp's censused molds plus the later-print molds (\"in the year
+        1693.\", \"1792. Price 8d.\", single-year statements, spaced ranges);
+        census 2026-11-03 over all 5,012 files: 4,867 bounded (97.1%), the 145
+        left raw-only ?/ca.-marked or a pair the molds decline (bounds never
+        invented). The print
+        IS the document (composition≈print for this corpus). The
+        evans_pub_dates.txt PUBDATE is the TCP's release year — machinery,
+        never projected"
+    places: {posture: named, note: "the imprint PUBPLACE is the print's own
+        production place (the eebo-tcp stance): projected via PLACE_KEYS,
+        parse-time bare town through EeboImprintPlace (a town or the ?-marked
+        conjecture, on its own key, on 4,997 of 5,012). Declared
+        coarseness: the cataloguer's \"[United States :\" (an unknown
+        American press) rides as the country, and dash-bracketed
+        \"--New-York--\" imprints read no town; the TCP's own Ann Arbor
+        pub_place stays lineage (Invariants::MINING_EXEMPT)"}
+    script: {posture: implied}
+  ecco-tcp:
+    lect:
+      posture: identity
+      note: "en IS the claim and it is true today: 3,099 of 3,101 files
+        declare LANGUSAGE eng (census 2026-11-03), mapped eng→en; one fre and
+        one wel ride their MARC codes verbatim. The registry's English stage
+        en:early [1500, 1700] ends where ECCO begins, so the corpus stays
+        honestly bare en; the late-modern English stage is being minted in
+        the sister registry, and the date-band re-pin follows that mint once
+        it reaches canonical/nabu-lects (date-band inference over the
+        imprint envelopes, no rule)"
+    dating:
+      posture: dated
+      note: "the BIBLFULL imprint year via MetadataDates :structured —
+        EeboTcp's censused molds plus the later-print molds; census
+        2026-11-03 over all 3,101 files: 2,950 bounded (95.1%), 150 left
+        raw-only (?-marked, or a pair the molds decline), one with no imprint
+        date at all (bounds never invented). The print IS the
+        document"
+    places: {posture: named, note: "the imprint PUBPLACE is the print's own
+        production place (the eebo-tcp stance), projected via PLACE_KEYS with
+        the parse-time bare town (EeboImprintPlace: a town or conjecture on all
+        3,101 — London 2,543 · Dublin 201 · Edinburgh 107 …); the TCP's own Ann Arbor / Oxford
+        pub_place stays lineage (Invariants::MINING_EXEMPT)"}
+    script: {posture: implied}
   iswoc:
     kind: {posture: unclassified}
     lect: {posture: identity, note: ang/fro — both stage-coded}

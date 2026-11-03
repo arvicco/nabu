@@ -2153,6 +2153,29 @@ ebl:
   sync_policy: manual   # versioned DOI is frozen; refresh = owner-fired retrieve-all, then a deliberate re-pin
   lemma_tier: silver
 
+ecco-tcp:   # 02-sources row 371
+  adapter: Nabu::Adapters::EccoTcp
+  adopted: "2026-11-03"
+  axes: [germanic]   # the eebo-tcp precedent (the English line rides germanic)
+  classes: [released, unedited]  # both of upstream's P4 zips; the class rides each
+                     # document's metadata (tcp_class) — narrowing is an edit here
+  wired: false       # until the first real sync is verified
+  # ECCO-TCP: the Text Creation Partnership's keyed selection from
+  # Eighteenth Century Collections Online — English books of 1700–1800,
+  # on the eebo-tcp shape (tcp-xml P4 family; Nabu::Adapters::TcpBoxFetch
+  # over the TCP's own ECCO Box folder: p4/ecco_p4_released.zip 2,473
+  # texts + ecco_p4_unedited.zip 628, census 2026-11-03 — the P3 SGML and
+  # Oxford P5 folders carry the same texts and are never walked). Identity
+  # = filename stem = IDG@ID (K041165.000; 0 mismatches ×3,101). Language
+  # per document from LANGUSAGE (eng → en; one fre, one wel ride verbatim).
+  # Dating: the BIBLFULL imprint year (EeboTcp's molds + the later-print
+  # molds). The Gale subject module (ContentSet) folds onto the kind axis.
+  # LICENSE: the per-file CC0 1.0 waiver (censused ×3,101) → open; the
+  # 2026-08-20 grant additionally covers the TCP files. Expected first sync
+  # 3,101 docs / 2,697,714 passages (parse census 2026-11-03 over the real
+  # zips), 0 errored; ≈243 MB zipped.
+  sync_policy: manual
+
 edh:
   adapter: Nabu::Adapters::Edh
   adopted: "2026-07-13"
@@ -2561,6 +2584,29 @@ etruscan-loans:   # 02-sources row 307
   # row. CC BY-SA + GFDL → attribution. No upstream fetch: en.wiktionary
   # is cited provenance, re-curation is a repo change.
   sync_policy: frozen
+
+evans-tcp:   # 02-sources row 370
+  adapter: Nabu::Adapters::EvansTcp
+  adopted: "2026-11-03"
+  axes: [germanic]   # the eebo-tcp precedent (the English line rides germanic)
+  classes: [released, unedited]  # both of upstream's P4 classes; the class rides each
+                     # document's metadata (tcp_class) — narrowing is an edit here
+  wired: false       # until the first real sync is verified
+  # Evans-TCP: the Text Creation Partnership's keyed edition of Early
+  # American Imprints, Series I (Evans, 1639–1800), on the eebo-tcp shape
+  # (tcp-xml P4 family; Nabu::Adapters::TcpBoxFetch over the TCP's own
+  # Evans Box folder: P4_XML_TCP/{N0,N1,N2,N3}.zip 4,864 released texts +
+  # unedited.zip 148, census 2026-11-03 from the zips' central
+  # directories; the TCP's own 4,977-id evans_pub_dates.txt = the released
+  # + 113 of the unedited, its residue the 35 ids of evnsdat_unfinished.sgm).
+  # Identity = filename stem = IDG@ID (N31062; 0 mismatches ×5,012). Language eng → en. Dating: the BIBLFULL imprint year
+  # (EeboTcp's molds + the later-print molds); the pub_dates list's
+  # PUBDATE is the TCP release year — machinery, never projected. The
+  # Evans/Shipton numbers ride metadata bibliography_refs. LICENSE: the
+  # per-file CC0 1.0 waiver (censused ×5,012) → open. Expected first sync
+  # 5,012 docs / 1,724,124 passages (parse census 2026-11-03 over the real
+  # zips), 0 errored; ≈234 MB zipped.
+  sync_policy: manual
 
 extrabiblical:   # 02-sources row 306
   adapter: Nabu::Adapters::Extrabiblical
