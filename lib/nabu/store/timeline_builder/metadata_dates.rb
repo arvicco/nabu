@@ -284,6 +284,12 @@ module Nabu
           "theatre-classique" => :structured, # the transcribed edition's title-page year (class
           #                                     edition), else the site's periode band
           #                                     (composition); place = the imprint city
+          "tianyige" => :structured, # P154: the record's reign era + year through the
+          #                            eras.yml nianhao rows (a one-year envelope, class
+          #                            composition on the hash; upstream's western_year
+          #                            agrees on all 312); place = the provincial
+          #                            record's province (順天府 …) — metropolitan and
+          #                            palace records carry no place key by design
           "ticha" => :structured,
           "titus-bactrian" => :structured,
           "titus-manichaica" => :place_only,
