@@ -1,0 +1,834 @@
+{
+ "pali": [
+  {
+   "file": "01Vin01",
+   "work": "Pārājikapāḷi",
+   "mb": 1.9,
+   "key": "pali-unicode/01Vin01.pdf",
+   "group": "Vinaya — Samantapāsādikā + subcommentaries"
+  },
+  {
+   "file": "02Vin02",
+   "work": "Pācittiyapāḷi",
+   "mb": 3.5,
+   "key": "pali-unicode/02Vin02.pdf",
+   "group": "Vinaya — Samantapāsādikā + subcommentaries"
+  },
+  {
+   "file": "03Vin03",
+   "work": "Mahāvaggapāḷi",
+   "mb": 8.1,
+   "key": "pali-unicode/03Vin03.pdf",
+   "group": "Vinaya — Samantapāsādikā + subcommentaries"
+  },
+  {
+   "file": "04Vin04",
+   "work": "Cūḷavaggapāḷi",
+   "mb": 3.1,
+   "key": "pali-unicode/04Vin04.pdf",
+   "group": "Vinaya — Samantapāsādikā + subcommentaries"
+  },
+  {
+   "file": "05Vin05",
+   "work": "Parivārapāḷi",
+   "mb": 3.1,
+   "key": "pali-unicode/05Vin05.pdf",
+   "group": "Vinaya — Samantapāsādikā + subcommentaries"
+  },
+  {
+   "file": "06Di01",
+   "work": "Sīlakkhandhavaggapāḷi",
+   "mb": 1.4,
+   "key": "pali-unicode/06Di01.pdf",
+   "group": "Dīgha Sīlakkhandhavagga — Sumaṅgalavilāsinī"
+  },
+  {
+   "file": "07Di02",
+   "work": "Mahāvaggapāḷi",
+   "mb": 1.8,
+   "key": "pali-unicode/07Di02.pdf",
+   "group": "Dīgha Mahāvagga"
+  },
+  {
+   "file": "08Di03",
+   "work": "Pāthikavaggapāḷi",
+   "mb": 1.4,
+   "key": "pali-unicode/08Di03.pdf",
+   "group": "Dīgha Pāthikavagga"
+  },
+  {
+   "file": "09Ma01",
+   "work": "Mūlapaṇṇāsapāḷi",
+   "mb": 2.0,
+   "key": "pali-unicode/09Ma01.pdf",
+   "group": "Majjhima Mūlapaṇṇāsa — Papañcasūdanī"
+  },
+  {
+   "file": "10Ma02",
+   "work": "Majjhimapaṇṇāsapāḷi",
+   "mb": 2.2,
+   "key": "pali-unicode/10Ma02.pdf",
+   "group": "Majjhima Majjhimapaṇṇāsa"
+  },
+  {
+   "file": "11Ma03",
+   "work": "Uparipaṇṇāsapāḷi",
+   "mb": 1.8,
+   "key": "pali-unicode/11Ma03.pdf",
+   "group": "Majjhima Uparipaṇṇāsa"
+  },
+  {
+   "file": "12Sam01",
+   "work": "Sagāthāvagga Nidānavaggasaṁyuttapāḷi",
+   "mb": 4.0,
+   "key": "pali-unicode/12Sam01.pdf",
+   "group": "Saṁyutta — Sāratthappakāsinī"
+  },
+  {
+   "file": "13Sam02",
+   "work": "Khandhavagga Saḷāyatanavaggasaṁyuttapāḷi",
+   "mb": 3.1,
+   "key": "pali-unicode/13Sam02.pdf",
+   "group": "Saṁyutta — Sāratthappakāsinī"
+  },
+  {
+   "file": "14Sam03",
+   "work": "Mahāvaggasaṁyuttapāḷi",
+   "mb": 1.4,
+   "key": "pali-unicode/14Sam03.pdf",
+   "group": "Saṁyutta — Sāratthappakāsinī"
+  },
+  {
+   "file": "15An01",
+   "work": "Ekaka Duka Tika Catukkanipātapāḷi",
+   "mb": 4.2,
+   "key": "pali-unicode/15An01.pdf",
+   "group": "Aṅguttara — Manorathapūraṇī"
+  },
+  {
+   "file": "16An02",
+   "work": "Pañcaka Chakka Sattakanipātapāḷi",
+   "mb": 3.3,
+   "key": "pali-unicode/16An02.pdf",
+   "group": "Aṅguttara — Manorathapūraṇī"
+  },
+  {
+   "file": "17An03",
+   "work": "Aṭṭhaka Navaka Dasaka Ekādasakanipātapāḷi",
+   "mb": 3.5,
+   "key": "pali-unicode/17An03.pdf",
+   "group": "Aṅguttara — Manorathapūraṇī"
+  },
+  {
+   "file": "18Khu01",
+   "work": "Khuddakapāṭha Dhammapada Udāna Itivuttaka Suttanipātapāḷi",
+   "mb": 5.7,
+   "key": "pali-unicode/18Khu01.pdf",
+   "group": "Khuddaka: Khuddakapāṭha-Dhammapada-Udāna-Itivuttaka-Suttanipāta"
+  },
+  {
+   "file": "19Khu02",
+   "work": "Vimānavatthu Petavatthu Theragāthātherīgāthāpāḷi",
+   "mb": 7.2,
+   "key": "pali-unicode/19Khu02.pdf",
+   "group": "Khuddaka: Vimāna-Peta-Thera-Therīgāthā"
+  },
+  {
+   "file": "20Khu03",
+   "work": "Apadānapāḷi (Paṭhamo bhāgo)",
+   "mb": 6.6,
+   "key": "pali-unicode/20Khu03.pdf",
+   "group": "Khuddaka: Apadāna I"
+  },
+  {
+   "file": "21Khu04",
+   "work": "Apadānapāḷi Buddhavaṁsapāḷi Cariyāpiṭakapāḷi (Dutiyo bhāgo)",
+   "mb": 6.4,
+   "key": "pali-unicode/21Khu04.pdf",
+   "group": "Khuddaka: Apadāna II + Buddhavaṁsa + Cariyāpiṭaka"
+  },
+  {
+   "file": "22Khu05",
+   "work": "Jātakapāḷi (Paṭhamo bhāgo)",
+   "mb": 6.9,
+   "key": "pali-unicode/22Khu05.pdf",
+   "group": "Khuddaka: Jātaka I"
+  },
+  {
+   "file": "23Khu06",
+   "work": "Jātakapāḷi (Dutiyo bhāgo)",
+   "mb": 6.0,
+   "key": "pali-unicode/23Khu06.pdf",
+   "group": "Khuddaka: Jātaka II"
+  },
+  {
+   "file": "24Khu07",
+   "work": "Mahāniddesapāḷi",
+   "mb": 3.3,
+   "key": "pali-unicode/24Khu07.pdf",
+   "group": "Khuddaka: Mahāniddesa"
+  },
+  {
+   "file": "25Khu08",
+   "work": "Cūḷaniddesapāḷi",
+   "mb": 2.3,
+   "key": "pali-unicode/25Khu08.pdf",
+   "group": "Khuddaka: Cūḷaniddesa"
+  },
+  {
+   "file": "26Khu09",
+   "work": "Paṭisambhidāmaggapāḷi",
+   "mb": 2.3,
+   "key": "pali-unicode/26Khu09.pdf",
+   "group": "Khuddaka: Paṭisambhidāmagga — Saddhammappakāsinī"
+  },
+  {
+   "file": "27Khu10",
+   "work": "Netti Peṭakopadesapāḷi",
+   "mb": 1.7,
+   "key": "pali-unicode/27Khu10.pdf",
+   "group": "Khuddaka: Netti-Peṭakopadesa"
+  },
+  {
+   "file": "28Khu11",
+   "work": "Milindapañhapāḷi",
+   "mb": 2.9,
+   "key": "pali-unicode/28Khu11.pdf",
+   "group": "Khuddaka: Milindapañha"
+  },
+  {
+   "file": "29Abhi01",
+   "work": "Dhammasaṅgaṇīpāḷi",
+   "mb": 1.9,
+   "key": "pali-unicode/29Abhi01.pdf",
+   "group": "Abhidhamma: Dhammasaṅgaṇī — Aṭṭhasālinī"
+  },
+  {
+   "file": "30Abhi02",
+   "work": "Vibhaṅgapāḷi",
+   "mb": 2.4,
+   "key": "pali-unicode/30Abhi02.pdf",
+   "group": "Abhidhamma: Vibhaṅga — Sammohavinodanī"
+  },
+  {
+   "file": "31Abhi03",
+   "work": "Dhātukathā Puggalapaññattipāḷi",
+   "mb": 1.2,
+   "key": "pali-unicode/31Abhi03.pdf",
+   "group": "Abhidhamma: Dhātukathā…Paṭṭhāna — Pañcapakaraṇa-aṭṭhakathā"
+  },
+  {
+   "file": "32Abhi04",
+   "work": "Kathāvatthupāḷi",
+   "mb": 2.9,
+   "key": "pali-unicode/32Abhi04.pdf",
+   "group": "Abhidhamma: Dhātukathā…Paṭṭhāna — Pañcapakaraṇa-aṭṭhakathā"
+  },
+  {
+   "file": "33Abhi05",
+   "work": "Yamakapāḷi (Paṭhamo bhāgo)",
+   "mb": 1.6,
+   "key": "pali-unicode/33Abhi05.pdf",
+   "group": "Abhidhamma: Dhātukathā…Paṭṭhāna — Pañcapakaraṇa-aṭṭhakathā"
+  },
+  {
+   "file": "34Abhi06",
+   "work": "Yamakapāḷi (Dutiyo bhāgo)",
+   "mb": 1.5,
+   "key": "pali-unicode/34Abhi06.pdf",
+   "group": "Abhidhamma: Dhātukathā…Paṭṭhāna — Pañcapakaraṇa-aṭṭhakathā"
+  },
+  {
+   "file": "35Abhi07",
+   "work": "Yamakapāḷi (Tatiyo bhāgo)",
+   "mb": 1.7,
+   "key": "pali-unicode/35Abhi07.pdf",
+   "group": "Abhidhamma: Dhātukathā…Paṭṭhāna — Pañcapakaraṇa-aṭṭhakathā"
+  },
+  {
+   "file": "36Abhi08",
+   "work": "Paṭṭhānapāḷi (Paṭhamo bhāgo)",
+   "mb": 3.3,
+   "key": "pali-unicode/36Abhi08.pdf",
+   "group": "Abhidhamma: Dhātukathā…Paṭṭhāna — Pañcapakaraṇa-aṭṭhakathā"
+  },
+  {
+   "file": "37Abhi09",
+   "work": "Paṭṭhānapāḷi (Dutiyo bhāgo)",
+   "mb": 3.2,
+   "key": "pali-unicode/37Abhi09.pdf",
+   "group": "Abhidhamma: Dhātukathā…Paṭṭhāna — Pañcapakaraṇa-aṭṭhakathā"
+  },
+  {
+   "file": "38Abhi10",
+   "work": "Paṭṭhānapāḷi (Tatiyo bhāgo)",
+   "mb": 3.7,
+   "key": "pali-unicode/38Abhi10.pdf",
+   "group": "Abhidhamma: Dhātukathā…Paṭṭhāna — Pañcapakaraṇa-aṭṭhakathā"
+  },
+  {
+   "file": "39Abhi11",
+   "work": "Paṭṭhānapāḷi (Catuttho bhāgo)",
+   "mb": 4.3,
+   "key": "pali-unicode/39Abhi11.pdf",
+   "group": "Abhidhamma: Dhātukathā…Paṭṭhāna — Pañcapakaraṇa-aṭṭhakathā"
+  },
+  {
+   "file": "40Abhi12",
+   "work": "Paṭṭhānapāḷi (Pañcamo bhāgo)",
+   "mb": 2.7,
+   "key": "pali-unicode/40Abhi12.pdf",
+   "group": "Abhidhamma: Dhātukathā…Paṭṭhāna — Pañcapakaraṇa-aṭṭhakathā"
+  }
+ ],
+ "atthakatha": [
+  {
+   "file": "01VinA01",
+   "work": "Pārājikakaṇḍa-aṭṭhakathā (Paṭhamo bhāgo)",
+   "mb": 2.3,
+   "key": "atthakatha-unicode/01VinA01.pdf",
+   "group": "Vinaya — Samantapāsādikā + subcommentaries"
+  },
+  {
+   "file": "02VinA02",
+   "work": "Pārājikakaṇḍa-aṭṭhakathā (Dutiyo bhāgo)",
+   "mb": 2.2,
+   "key": "atthakatha-unicode/02VinA02.pdf",
+   "group": "Vinaya — Samantapāsādikā + subcommentaries"
+  },
+  {
+   "file": "03VinA03",
+   "work": "Pācityādi-aṭṭhakathā",
+   "mb": 3.1,
+   "key": "atthakatha-unicode/03VinA03.pdf",
+   "group": "Vinaya — Samantapāsādikā + subcommentaries"
+  },
+  {
+   "file": "04VinA04",
+   "work": "Cūḷavaggādi-aṭṭhakathā",
+   "mb": 1.8,
+   "key": "atthakatha-unicode/04VinA04.pdf",
+   "group": "Vinaya — Samantapāsādikā + subcommentaries"
+  },
+  {
+   "file": "05Kankha",
+   "work": "Kaṅkhāvitaraṇī-aṭṭhakathā",
+   "mb": 3.2,
+   "key": "atthakatha-unicode/05Kankha.pdf",
+   "group": "Vinaya — Samantapāsādikā + subcommentaries"
+  },
+  {
+   "file": "06VinSg06",
+   "work": "Vinayasaṅgahaṭṭhakathā",
+   "mb": 1.9,
+   "key": "atthakatha-unicode/06VinSg06.pdf",
+   "group": "Vinaya — Samantapāsādikā + subcommentaries"
+  },
+  {
+   "file": "07DiA01",
+   "work": "Sīlakkhandhavaggaṭṭhakathā",
+   "mb": 3.3,
+   "key": "atthakatha-unicode/07DiA01.pdf",
+   "group": "Dīgha Sīlakkhandhavagga — Sumaṅgalavilāsinī"
+  },
+  {
+   "file": "08DiA02",
+   "work": "Mahāvaggaṭṭhakathā",
+   "mb": 2.0,
+   "key": "atthakatha-unicode/08DiA02.pdf",
+   "group": "Dīgha Mahāvagga"
+  },
+  {
+   "file": "09DiA03",
+   "work": "Pāthikavaggaṭṭhakathā",
+   "mb": 2.0,
+   "key": "atthakatha-unicode/09DiA03.pdf",
+   "group": "Dīgha Pāthikavagga"
+  },
+  {
+   "file": "10MaA01",
+   "work": "Mūlapaṇṇāsaṭṭhakathā (Paṭhamo bhāgo)",
+   "mb": 2.4,
+   "key": "atthakatha-unicode/10MaA01.pdf",
+   "group": "Majjhima Mūlapaṇṇāsa — Papañcasūdanī"
+  },
+  {
+   "file": "11MaA02",
+   "work": "Mūlapaṇṇāsaṭṭhakathā (Dutiyo bhāgo)",
+   "mb": 2.4,
+   "key": "atthakatha-unicode/11MaA02.pdf",
+   "group": "Majjhima Mūlapaṇṇāsa — Papañcasūdanī"
+  },
+  {
+   "file": "12MaA03",
+   "work": "Majjhimapaṇṇāsaṭṭhakathā",
+   "mb": 2.6,
+   "key": "atthakatha-unicode/12MaA03.pdf",
+   "group": "Majjhima Majjhimapaṇṇāsa"
+  },
+  {
+   "file": "13MaA04",
+   "work": "Uparipaṇṇāsaṭṭhakathā",
+   "mb": 1.9,
+   "key": "atthakatha-unicode/13MaA04.pdf",
+   "group": "Majjhima Uparipaṇṇāsa"
+  },
+  {
+   "file": "14SamA01",
+   "work": "Saṁyuttaṭṭhakathā (Paṭhamo bhāgo)",
+   "mb": 2.7,
+   "key": "atthakatha-unicode/14SamA01.pdf",
+   "group": "Saṁyutta — Sāratthappakāsinī"
+  },
+  {
+   "file": "15SamA02",
+   "work": "Saṁyuttaṭṭhakathā (Dutiyo bhāgo)",
+   "mb": 2.6,
+   "key": "atthakatha-unicode/15SamA02.pdf",
+   "group": "Saṁyutta — Sāratthappakāsinī"
+  },
+  {
+   "file": "16SamA03",
+   "work": "Saṁyuttaṭṭhakathā (Tatiyo bhāgo)",
+   "mb": 3.1,
+   "key": "atthakatha-unicode/16SamA03.pdf",
+   "group": "Saṁyutta — Sāratthappakāsinī"
+  },
+  {
+   "file": "17AnA01",
+   "work": "Aṅguttaraṭṭhakathā (Paṭhamo bhāgo)",
+   "mb": 2.7,
+   "key": "atthakatha-unicode/17AnA01.pdf",
+   "group": "Aṅguttara — Manorathapūraṇī"
+  },
+  {
+   "file": "18AnA02",
+   "work": "Aṅguttaraṭṭhakathā (Dutiyo bhāgo)",
+   "mb": 4.1,
+   "key": "atthakatha-unicode/18AnA02.pdf",
+   "group": "Aṅguttara — Manorathapūraṇī"
+  },
+  {
+   "file": "19AnA03",
+   "work": "Aṅguttaraṭṭhakathā (Tatiyo bhāgo)",
+   "mb": 4.2,
+   "key": "atthakatha-unicode/19AnA03.pdf",
+   "group": "Aṅguttara — Manorathapūraṇī"
+  },
+  {
+   "file": "20KhuA01",
+   "work": "Khuddakapāṭhaṭṭhakathā",
+   "mb": 1.8,
+   "key": "atthakatha-unicode/20KhuA01.pdf",
+   "group": "Khuddaka: Khuddakapāṭha-Dhammapada-Udāna-Itivuttaka-Suttanipāta"
+  },
+  {
+   "file": "21KhuA02",
+   "work": "Dhammapadaṭṭhakathā (Paṭhamo bhāgo)",
+   "mb": 2.9,
+   "key": "atthakatha-unicode/21KhuA02.pdf",
+   "group": "Khuddaka: Khuddakapāṭha-Dhammapada-Udāna-Itivuttaka-Suttanipāta"
+  },
+  {
+   "file": "22KhuA03",
+   "work": "Dhammapadaṭṭhakathā (Dutiyo bhāgo)",
+   "mb": 3.7,
+   "key": "atthakatha-unicode/22KhuA03.pdf",
+   "group": "Khuddaka: Khuddakapāṭha-Dhammapada-Udāna-Itivuttaka-Suttanipāta"
+  },
+  {
+   "file": "23KhuA04",
+   "work": "Udānaṭṭhakathā",
+   "mb": 3.2,
+   "key": "atthakatha-unicode/23KhuA04.pdf",
+   "group": "Khuddaka: Khuddakapāṭha-Dhammapada-Udāna-Itivuttaka-Suttanipāta"
+  },
+  {
+   "file": "24KhuA05",
+   "work": "Itivuttakaṭṭhakathā",
+   "mb": 3.1,
+   "key": "atthakatha-unicode/24KhuA05.pdf",
+   "group": "Khuddaka: Khuddakapāṭha-Dhammapada-Udāna-Itivuttaka-Suttanipāta"
+  },
+  {
+   "file": "25KhuA06",
+   "work": "Suttanipātaṭṭhakathā (Paṭhamo bhāgo)",
+   "mb": 2.5,
+   "key": "atthakatha-unicode/25KhuA06.pdf",
+   "group": "Khuddaka: Khuddakapāṭha-Dhammapada-Udāna-Itivuttaka-Suttanipāta"
+  },
+  {
+   "file": "26KhuA07",
+   "work": "Suttanipātaṭṭhakathā (Dutiyo bhāgo)",
+   "mb": 3.4,
+   "key": "atthakatha-unicode/26KhuA07.pdf",
+   "group": "Khuddaka: Khuddakapāṭha-Dhammapada-Udāna-Itivuttaka-Suttanipāta"
+  },
+  {
+   "file": "27KhuA08",
+   "work": "Vimānavatthu-aṭṭhakathā",
+   "mb": 4.2,
+   "key": "atthakatha-unicode/27KhuA08.pdf",
+   "group": "Khuddaka: Vimāna-Peta-Thera-Therīgāthā"
+  },
+  {
+   "file": "28KhuA09",
+   "work": "Petavatthu-aṭṭhakathā",
+   "mb": 3.5,
+   "key": "atthakatha-unicode/28KhuA09.pdf",
+   "group": "Khuddaka: Vimāna-Peta-Thera-Therīgāthā"
+  },
+  {
+   "file": "29KhuA10",
+   "work": "Theragāthā-aṭṭhakathā (Paṭhamo bhāgo)",
+   "mb": 5.9,
+   "key": "atthakatha-unicode/29KhuA10.pdf",
+   "group": "Khuddaka: Vimāna-Peta-Thera-Therīgāthā"
+  },
+  {
+   "file": "30KhuA11",
+   "work": "Theragāthā-aṭṭhakathā (Dutiyo bhāgo)",
+   "mb": 6.1,
+   "key": "atthakatha-unicode/30KhuA11.pdf",
+   "group": "Khuddaka: Vimāna-Peta-Thera-Therīgāthā"
+  },
+  {
+   "file": "31KhuA12",
+   "work": "Therīgāthā-aṭṭhakathā",
+   "mb": 3.8,
+   "key": "atthakatha-unicode/31KhuA12.pdf",
+   "group": "Khuddaka: Vimāna-Peta-Thera-Therīgāthā"
+  },
+  {
+   "file": "32KhuA13",
+   "work": "Apadānaṭṭhakathā (Paṭhamo bhāgo)",
+   "mb": 3.3,
+   "key": "atthakatha-unicode/32KhuA13.pdf",
+   "group": "Khuddaka: Apadāna I"
+  },
+  {
+   "file": "33KhuA14",
+   "work": "Apadānaṭṭhakathā (Dutiyo bhāgo)",
+   "mb": 2.8,
+   "key": "atthakatha-unicode/33KhuA14.pdf",
+   "group": "Khuddaka: Apadāna II + Buddhavaṁsa + Cariyāpiṭaka"
+  },
+  {
+   "file": "34KhuA15",
+   "work": "Buddhavaṁsaṭṭhakathā",
+   "mb": 4.1,
+   "key": "atthakatha-unicode/34KhuA15.pdf",
+   "group": "Khuddaka: Apadāna II + Buddhavaṁsa + Cariyāpiṭaka"
+  },
+  {
+   "file": "35KhuA16",
+   "work": "Cariyāpiṭakaṭṭhakathā",
+   "mb": 2.6,
+   "key": "atthakatha-unicode/35KhuA16.pdf",
+   "group": "Khuddaka: Apadāna II + Buddhavaṁsa + Cariyāpiṭaka"
+  },
+  {
+   "file": "36KhuA17",
+   "work": "Jātakaṭṭhakathā (Paṭhamo bhāgo)",
+   "mb": 4.0,
+   "key": "atthakatha-unicode/36KhuA17.pdf",
+   "group": "Khuddaka: Jātaka I"
+  },
+  {
+   "file": "37KhuA18",
+   "work": "Jātakaṭṭhakathā (Dutiyo bhāgo)",
+   "mb": 3.5,
+   "key": "atthakatha-unicode/37KhuA18.pdf",
+   "group": "Khuddaka: Jātaka I"
+  },
+  {
+   "file": "38KhuA19",
+   "work": "Jātakaṭṭhakathā (Tatiyo bhāgo)",
+   "mb": 4.8,
+   "key": "atthakatha-unicode/38KhuA19.pdf",
+   "group": "Khuddaka: Jātaka I"
+  },
+  {
+   "file": "39KhuA20",
+   "work": "Jātakaṭṭhakathā (Catuttho bhāgo)",
+   "mb": 5.1,
+   "key": "atthakatha-unicode/39KhuA20.pdf",
+   "group": "Khuddaka: Jātaka I"
+  },
+  {
+   "file": "40KhuA21",
+   "work": "Jātakaṭṭhakathā (Pañcamo bhāgo)",
+   "mb": 5.9,
+   "key": "atthakatha-unicode/40KhuA21.pdf",
+   "group": "Khuddaka: Jātaka II"
+  },
+  {
+   "file": "41KhuA22",
+   "work": "Jātakaṭṭhakathā (Chaṭṭho bhāgo)",
+   "mb": 3.3,
+   "key": "atthakatha-unicode/41KhuA22.pdf",
+   "group": "Khuddaka: Jātaka II"
+  },
+  {
+   "file": "42KhuA23",
+   "work": "Jātakaṭṭhakathā (Sattamo bhāgo)",
+   "mb": 5.0,
+   "key": "atthakatha-unicode/42KhuA23.pdf",
+   "group": "Khuddaka: Jātaka II"
+  },
+  {
+   "file": "43KhuA24",
+   "work": "Mahāniddesaṭṭhakathā",
+   "mb": 4.0,
+   "key": "atthakatha-unicode/43KhuA24.pdf",
+   "group": "Khuddaka: Mahāniddesa"
+  },
+  {
+   "file": "44KhuA25",
+   "work": "Cūḷaniddesaṭṭhakathā",
+   "mb": 1.4,
+   "key": "atthakatha-unicode/44KhuA25.pdf",
+   "group": "Khuddaka: Cūḷaniddesa"
+  },
+  {
+   "file": "45KhuA26",
+   "work": "Netti-aṭṭhakathā",
+   "mb": 1.5,
+   "key": "atthakatha-unicode/45KhuA26.pdf",
+   "group": "Khuddaka: Netti-Peṭakopadesa"
+  },
+  {
+   "file": "46KhuA27",
+   "work": "Paṭisambhidāmaggaṭṭhakathā (Paṭhamo bhāgo)",
+   "mb": 2.6,
+   "key": "atthakatha-unicode/46KhuA27.pdf",
+   "group": "Khuddaka: Paṭisambhidāmagga — Saddhammappakāsinī"
+  },
+  {
+   "file": "47KhuA28",
+   "work": "Paṭisambhidāmaggaṭṭhakathā (Dutiyo bhāgo)",
+   "mb": 2.8,
+   "key": "atthakatha-unicode/47KhuA28.pdf",
+   "group": "Khuddaka: Paṭisambhidāmagga — Saddhammappakāsinī"
+  },
+  {
+   "file": "48AbhiA01",
+   "work": "Aṭṭhasālinī-aṭṭhakathā",
+   "mb": 3.6,
+   "key": "atthakatha-unicode/48AbhiA01.pdf",
+   "group": "Abhidhamma: Dhammasaṅgaṇī — Aṭṭhasālinī"
+  },
+  {
+   "file": "49AbhiA02",
+   "work": "Sammohavinodanī-aṭṭhakathā",
+   "mb": 2.6,
+   "key": "atthakatha-unicode/49AbhiA02.pdf",
+   "group": "Abhidhamma: Vibhaṅga — Sammohavinodanī"
+  },
+  {
+   "file": "50AbhiA03",
+   "work": "Pañcapakaraṇa-aṭṭhakathā",
+   "mb": 3.0,
+   "key": "atthakatha-unicode/50AbhiA03.pdf",
+   "group": "Abhidhamma: Dhātukathā…Paṭṭhāna — Pañcapakaraṇa-aṭṭhakathā"
+  },
+  {
+   "file": "51Vism01",
+   "work": "Visuddhimaggo (Paṭhamo bhāgo)",
+   "mb": 2.5,
+   "key": "atthakatha-unicode/51Vism01.pdf",
+   "group": "Visuddhimagga (common to all three piṭakas)"
+  },
+  {
+   "file": "52Vism02",
+   "work": "Visuddhimaggo (Dutiyo bhāgo)",
+   "mb": 2.4,
+   "key": "atthakatha-unicode/52Vism02.pdf",
+   "group": "Visuddhimagga (common to all three piṭakas)"
+  }
+ ],
+ "tika": [
+  {
+   "file": "01ViT01",
+   "work": "Sāratthadīpanīṭīkā (Paṭhamo bhāgo)",
+   "mb": 2.8,
+   "key": "tika-unicode/01ViT01.pdf",
+   "group": "Vinaya — Samantapāsādikā + subcommentaries"
+  },
+  {
+   "file": "02ViT02",
+   "work": "Sāratthadīpanīṭīkā (Dutiyo bhāgo)",
+   "mb": 3.1,
+   "key": "tika-unicode/02ViT02.pdf",
+   "group": "Vinaya — Samantapāsādikā + subcommentaries"
+  },
+  {
+   "file": "03ViT03",
+   "work": "Sāratthadīpanīṭīkā (Tatiyo bhāgo)",
+   "mb": 3.8,
+   "key": "tika-unicode/03ViT03.pdf",
+   "group": "Vinaya — Samantapāsādikā + subcommentaries"
+  },
+  {
+   "file": "04ViT04",
+   "work": "Vimativinodanīṭīkā (Paṭhamo bhāgo)",
+   "mb": 2.4,
+   "key": "tika-unicode/04ViT04.pdf",
+   "group": "Vinaya — Samantapāsādikā + subcommentaries"
+  },
+  {
+   "file": "05ViT05",
+   "work": "Vimativinodanīṭīkā (Dutiyo bhāgo)",
+   "mb": 2.6,
+   "key": "tika-unicode/05ViT05.pdf",
+   "group": "Vinaya — Samantapāsādikā + subcommentaries"
+  },
+  {
+   "file": "06ViT06",
+   "work": "Vajirabuddhiṭīkā",
+   "mb": 4.2,
+   "key": "tika-unicode/06ViT06.pdf",
+   "group": "Vinaya — Samantapāsādikā + subcommentaries"
+  },
+  {
+   "file": "07ViT07",
+   "work": "Kaṅkhāvitaraṇīpurāṇaṭīkā",
+   "mb": 3.3,
+   "key": "tika-unicode/07ViT07.pdf",
+   "group": "Vinaya — Samantapāsādikā + subcommentaries"
+  },
+  {
+   "file": "08DiT01",
+   "work": "Sīlakkhandhavaggaṭīkā",
+   "mb": 2.4,
+   "key": "tika-unicode/08DiT01.pdf",
+   "group": "Dīgha Sīlakkhandhavagga — Sumaṅgalavilāsinī"
+  },
+  {
+   "file": "09DiT02",
+   "work": "Sīlakkhandhavagga-abhinavaṭīkā (Paṭhamo bhāgo)",
+   "mb": 2.6,
+   "key": "tika-unicode/09DiT02.pdf",
+   "group": "Dīgha Sīlakkhandhavagga — Sumaṅgalavilāsinī"
+  },
+  {
+   "file": "10DiT03",
+   "work": "Sīlakkhandhavagga-abhinavaṭīkā (Dutiyo bhāgo)",
+   "mb": 2.5,
+   "key": "tika-unicode/10DiT03.pdf",
+   "group": "Dīgha Sīlakkhandhavagga — Sumaṅgalavilāsinī"
+  },
+  {
+   "file": "11DiT04",
+   "work": "Mahāvaggaṭīkā",
+   "mb": 2.3,
+   "key": "tika-unicode/11DiT04.pdf",
+   "group": "Dīgha Mahāvagga"
+  },
+  {
+   "file": "12DiT05",
+   "work": "Pāthikavaggaṭīkā",
+   "mb": 1.5,
+   "key": "tika-unicode/12DiT05.pdf",
+   "group": "Dīgha Pāthikavagga"
+  },
+  {
+   "file": "13MaT01",
+   "work": "Mūlapaṇṇāsaṭīkā (Paṭhamo bhāgo)",
+   "mb": 2.2,
+   "key": "tika-unicode/13MaT01.pdf",
+   "group": "Majjhima Mūlapaṇṇāsa — Papañcasūdanī"
+  },
+  {
+   "file": "14MaT02",
+   "work": "Mūlapaṇṇāsaṭīkā (Dutiyo bhāgo)",
+   "mb": 2.1,
+   "key": "tika-unicode/14MaT02.pdf",
+   "group": "Majjhima Mūlapaṇṇāsa — Papañcasūdanī"
+  },
+  {
+   "file": "15MaT03",
+   "work": "Uparipaṇṇāsaṭīkā",
+   "mb": 2.5,
+   "key": "tika-unicode/15MaT03.pdf",
+   "group": "Majjhima Majjhimapaṇṇāsa"
+  },
+  {
+   "file": "16SaT01",
+   "work": "Saṁyuttaṭīkā (Paṭhamo bhāgo)",
+   "mb": 2.6,
+   "key": "tika-unicode/16SaT01.pdf",
+   "group": "Saṁyutta — Sāratthappakāsinī"
+  },
+  {
+   "file": "17SaT02",
+   "work": "Saṁyuttaṭīkā (Dutiyo bhāgo)",
+   "mb": 4.2,
+   "key": "tika-unicode/17SaT02.pdf",
+   "group": "Saṁyutta — Sāratthappakāsinī"
+  },
+  {
+   "file": "18AnT01",
+   "work": "Aṅguttaraṭīkā (Paṭhamo bhāgo)",
+   "mb": 1.1,
+   "key": "tika-unicode/18AnT01.pdf",
+   "group": "Aṅguttara — Manorathapūraṇī"
+  },
+  {
+   "file": "19AnT02",
+   "work": "Aṅguttaraṭīkā (Dutiyo bhāgo)",
+   "mb": 2.7,
+   "key": "tika-unicode/19AnT02.pdf",
+   "group": "Aṅguttara — Manorathapūraṇī"
+  },
+  {
+   "file": "20AnT03",
+   "work": "Aṅguttaraṭīkā (Tatiyo bhāgo)",
+   "mb": 2.6,
+   "key": "tika-unicode/20AnT03.pdf",
+   "group": "Aṅguttara — Manorathapūraṇī"
+  },
+  {
+   "file": "21KhuT01",
+   "work": "Nettiṭīkā",
+   "mb": 2.6,
+   "key": "tika-unicode/21KhuT01.pdf",
+   "group": "Khuddaka: Netti-Peṭakopadesa"
+  },
+  {
+   "file": "22AbhiT01",
+   "work": "Dhammasaṅgaṇīmūlaṭīkā",
+   "mb": 2.4,
+   "key": "tika-unicode/22AbhiT01.pdf",
+   "group": "Abhidhamma: Dhammasaṅgaṇī — Aṭṭhasālinī"
+  },
+  {
+   "file": "23AbhiT02",
+   "work": "Vibhaṅgamūlaṭīkā",
+   "mb": 2.9,
+   "key": "tika-unicode/23AbhiT02.pdf",
+   "group": "Abhidhamma: Vibhaṅga — Sammohavinodanī"
+  },
+  {
+   "file": "24AbhiT03",
+   "work": "Pañcapakaraṇamūlaṭīkā",
+   "mb": 3.8,
+   "key": "tika-unicode/24AbhiT03.pdf",
+   "group": "Abhidhamma: Dhātukathā…Paṭṭhāna — Pañcapakaraṇa-aṭṭhakathā"
+  },
+  {
+   "file": "25VsmT01",
+   "work": "Visuddhimaggamahāṭīkā (Paṭhamo bhāgo)",
+   "mb": 3.3,
+   "key": "tika-unicode/25VsmT01.pdf",
+   "group": "Visuddhimagga (common to all three piṭakas)"
+  },
+  {
+   "file": "26VsmT02",
+   "work": "Visuddhimaggamahāṭīkā (Dutiyo bhāgo)",
+   "mb": 2.8,
+   "key": "tika-unicode/26VsmT02.pdf",
+   "group": "Visuddhimagga (common to all three piṭakas)"
+  }
+ ]
+}

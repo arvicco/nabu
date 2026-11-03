@@ -284,6 +284,13 @@ sources:
       "atta": exegesis                           # the CST aṭṭhakathā — commentary ON the canon
       #   (the kanripo 'grel pa / sefaria Rishonim precedent); upstream also files the
       #   Visuddhimagga (anya-vm*) here, Buddhaghosa's commentarial summa — kept with it
+  osbct:              # upstream's own layer split (data/concordance.json, census 2026-11-02, 118 volumes)
+    facet: layer
+    map:
+      "canon": scripture                         # 40 volumes — the Tipiṭaka
+      "commentary": exegesis                     # 52 — the aṭṭhakathā (upstream files the
+      #   Visuddhimagga and the Kaṅkhāvitaraṇī / Vinayasaṅgaha here too; the tipitaka-lk atta fold)
+      "subcommentary": exegesis                  # 26 — the ṭīkā, commentary on the commentaries
   tlhdig:             # Laroche CTH ranges ARE the genres (23,486 docs)
     facet: cth
     range_map:

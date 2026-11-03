@@ -431,6 +431,21 @@ sources:
     dating: {posture: undatable}
     places: {posture: unplaced}
     script: {posture: implied}
+  osbct:   # P154
+    # kind machine-postured: config/kind_map.yml folds upstream's own layer
+    # (canon → scripture; commentary, subcommentary → exegesis).
+    lect: {posture: identity, note: "bare pli in roman script — the suttacentral posture (the
+        romanised Sixth Council edition, Latin-script Pāḷi with the edition's ṁ); the canon, its
+        aṭṭhakathā and ṭīkā are one language at source grain, the layer facet carries the split"}
+    dating: {posture: undatable, note: "the volume and paragraph JSON carry no date field of
+        any kind (census 2026-11-02: key, n, n_to, printed, pdf_page, book, vagga, sutta, id,
+        covers, peyyala, text); the 2001/2008 print dates are the edition's provenance, and the
+        composition eras of canon, commentaries and subcommentaries are scholarship, not this
+        asset's data"}
+    places: {posture: unplaced, note: "no place field upstream; Yangon is the publisher's seat,
+        not the texts' origin"}
+    script: {posture: implied, note: "Latin-script Pāḷi (a–z + ā ī ū ṁ ṅ ñ ṇ ṭ ḍ ḷ, upstream's
+        own census), the bare pli default — like suttacentral, unlike tipitaka-lk's Sinhala"}
   comenius:   # P153
     kind: {posture: unclassified, note: "devotional and consolatory treatises (Truchlivý, Pres
         boží, Centrum securitatis, the Kšaft) — no typed genre field in the TEI, and no house
