@@ -1976,10 +1976,7 @@ dpd:   # P154, 02-sources row 367
   adapter: Nabu::Adapters::Dpd
   adopted: "2026-11-02"
   axes: [indic, buddhist]
-  wired: false   # first sync: bin/nabu enable dpd && bin/nabu sync dpd
-                 # (one ~4.3 MB zip GET → dpd.txt 23 MB). EXPECT 1 dictionary doc →
-                 # 89,763 pli entries, 0 errored (the v0.4.20261026 release's census);
-                 # eyeball nabu define akakkasa ("smooth"), then flip.
+  wired: true   # first sync verified 2026-11-03: 1 dictionary doc / 89,763 entries
   # The Digital Pāḷi Dictionary (Bodhirasa Bhikkhu), the dpd-db release's
   # plain-text headword export, for the held Pāḷi canon (suttacentral,
   # tipitaka-lk) — the library's first Pāḷi dictionary: meaning, grammar,
@@ -2104,12 +2101,7 @@ ebible-pacific:   # P154, 02-sources row 336
   adapter: Nabu::Adapters::EbiblePacific
   adopted: "2026-11-02"
   axes: [biblical]
-  wired: false   # until the first real sync is verified. EXPECT 100 docs /
-                 # 48,762 passages (haw1868 66 / 31,102 · cha 6 / 7,245 ·
-                 # pon 28 / 10,415), 0 quarantined, 12 skipped by rule (the
-                 # 4 non-book files per zip); three zips, ~2 MB, seconds.
-                 # Eyeball nabu show urn:nabu:ebible-pacific:haw1868-jhn:1.1
-                 # ("I KINOHI ka Logou …") and probe nabu search "Logou".
+  wired: true   # first sync verified 2026-11-03: 100 docs / 48,762 passages, 15 rule skips
   # eBible.org's public-domain Pacific Bibles as USFM (the usfm family):
   # Hawaiian 1868 revision (haw), the ABS Chamorro Gospels/Acts/Psalms
   # (cha, sword cha1908), the Pohnpeian NT + Psalms in the old alphabet
@@ -2614,11 +2606,7 @@ fsv-lexica:   # P154, 02-sources row 342
   adapter: Nabu::Adapters::FsvLexica
   adopted: "2026-11-02"
   axes: [germanic]
-  wired: false   # first sync: bin/nabu enable fsv-lexica && bin/nabu sync fsv-lexica
-                 # (three LMF GETs, ~48 MB total). EXPECT 3 dictionary docs → 22,572
-                 # soederwall + 19,172 soederwall-supp + 10,067 schlyter = 51,811 entries,
-                 # 0 errored (each exactly its resource page's "Ingångar"); eyeball
-                 # nabu define avisning (Schlyter "anvisning, hänvisning"), then flip.
+  wired: true   # first sync verified 2026-11-03: 3 dictionary docs / 51,811 entries
   # Språkbanken's three Old Swedish dictionaries (Söderwall 1884–1918,
   # its supplement 1925–1973, Schlyter's law glossary 1877) as three
   # shelves of one source, for the held fornsvenska corpus. Karp LMF
@@ -2972,20 +2960,7 @@ hmml-reading-room:   # P154, 02-sources row 340
   adapter: Nabu::Adapters::HmmlReadingRoom
   adopted: "2026-11-02"
   axes: [syriac, ethiopic]
-  wired: false   # until the first real sync is verified
-                 # bin/nabu sync hmml-reading-room — one 50 MB zip GET
-                 # (the weekly generation; regenerated Sundays 01:00 CT),
-                 # then the slice cut (unzip + stream 757 MB, ≈ 10 s) and the
-                 # parse (≈ 15 s). EXPECT (the 2026-11-01 generation's
-                 # census) 18,892 docs / 11,196 passages, 0 quarantined;
-                 # 13,670 metadata-only documents; 196 incipits skipped by
-                 # rule (named per document); 245,098 discovery rule-skips
-                 # (245,097 records outside the slice + 1 empty record).
-                 # A later generation moves these counts a little. Eyeball
-                 # nabu show urn:nabu:hmml-reading-room:77409 (two Ge'ez
-                 # chronicles, Frankfurt) and urn:nabu:hmml-reading-room:56720
-                 # (Garshuni lives, Montserrat) and 5 random, probe nabu
-                 # search with a Ge'ez incipit (በስመ ፡ አብ), then flip.
+  wired: true   # first sync verified 2026-11-03: 18,892 docs / 11,196 passages, 245,098 outside the slice
   sync_policy: manual
   # vHMML Reading Room (Hill Museum & Manuscript Library): the full
   # Reading Room dataset (263,989 records, vHMML Schema JSON), regenerated
@@ -3761,11 +3736,7 @@ littre:   # P154, 02-sources row 343
   adapter: Nabu::Adapters::Littre
   adopted: "2026-11-02"
   axes: [romance]
-  wired: false   # first sync: bin/nabu enable littre && bin/nabu sync littre
-                 # (git clone, ~87 MB). EXPECT 26 dictionary docs (one per letter) →
-                 # 78,483 entries on one shelf, 0 errored, 3 skipped by rule (preface,
-                 # causerie, test sample); parse ~2.5 min. Eyeball nabu define baal
-                 # ("Grande divinité des Assyriens…"), then flip.
+  wired: true   # first sync verified 2026-11-03: 26 dictionary docs / 78,483 entries, 3 rule skips
   # Littré's Dictionnaire de la langue française (1863–1877) in the
   # oeuvres/littre TEI P5 (XMLittré v1.3 lineage), for the held French
   # text (theatre-classique's 17th-century stage; the HISTORIQUE sections
@@ -4004,11 +3975,7 @@ mahan-kosh:   # P154, 02-sources row 344
   adapter: Nabu::Adapters::MahanKosh
   adopted: "2026-11-02"
   axes: [indic]
-  wired: false   # first sync: bin/nabu enable mahan-kosh && bin/nabu sync mahan-kosh
-                 # (two raw GETs, ~40 MB). EXPECT 1 dictionary doc → 64,218 pan entries
-                 # (3,932 excluded grid rows skipped; 60,196 with the Gurmukhi body,
-                 # 4,022 locator-only), 0 errored; eyeball nabu define ਉਸਟ (the camel /
-                 # lip article, vol. 1 p. 37), then flip.
+  wired: true   # first sync verified 2026-11-03: 1 dictionary doc / 64,218 entries
   # Bhai Kahan Singh Nabha's Gurushabad Ratnakar Mahan Kosh (1930), the
   # Sikh encyclopedic dictionary of the Gurbani vocabulary, for the held
   # shabados Gurbani text. The Sikhi.io JSON packaging (CC BY 4.0; the
@@ -4808,18 +4775,7 @@ osbct:   # P154, 02-sources row 337
   adapter: Nabu::Adapters::Osbct
   adopted: "2026-11-02"
   axes: [indic, buddhist]
-  wired: false   # bin/nabu enable osbct, then bin/nabu sync osbct — ONE Zenodo zip
-                 # (463 MB) read by HTTP Range: 245 members ≈ 27 MB transferred,
-                 # 132 MB on disk (the search index, lookup stores, reader side
-                 # maps and working files never transferred; ≈ 1–3 min fetch,
-                 # parse of 118 volumes / 75M chars a few minutes). EXPECT 118
-                 # docs / 89,512 passages, 0 errored, 4 site-metadata files
-                 # skipped by rule (census 2026-11-02 over the whole v2.11.0
-                 # unpack: canon 40 / 49,453 · commentary 52 / 29,206 ·
-                 # subcommentary 26 / 10,853). Eyeball nabu show
-                 # urn:nabu:osbct:08Di03:0 (Pāthikasutta §1, "Evaṁ me sutaṁ",
-                 # the Syā/Ka readings in apparatus) and 5 random, probe nabu
-                 # search Pāthikaputto, then flip.
+  wired: true   # first sync verified 2026-11-03: 118 docs / 89,512 passages, 4 rule skips
   sync_policy: frozen   # an immutable Zenodo version; a new release = an owner re-pin
   # The Sixth Buddhist Council Tipiṭaka Unicode corpus (IEBH / BTHAR;
   # Zenodo 23541744 v2.11.0): the Chaṭṭha Saṅgāyana canon WITH its
@@ -5283,15 +5239,7 @@ pta:   # P154, 02-sources row 341
   adopted: "2026-11-03"
   axes: [classical]
   siblings: cts
-  wired: false   # bin/nabu enable pta && bin/nabu sync pta (git clone of
-                 # PatristicTextArchive/pta_data, ~674 MB with analyzed/).
-                 # EXPECT 113 docs / 8,778 passages, 0 errored, 423 skipped
-                 # by rule (19 unlicensed, 153 manuscript transcriptions, 32
-                 # Bibex, 134 other-language, 58 Rahlfs LXX, 27 SBLGNT) —
-                 # census at 524eb976 through the adapter, ~40 s parse.
-                 # Eyeball nabu show urn:cts:pta:pta0001.pta002.pta-grc1:1
-                 # ("Πάντοτε μὲν ὁ θεῖος ἀπόστολος") and 5 random passages;
-                 # probe nabu search "οὐρανίῳ κέχρηται γλώττῃ"; then flip.
+  wired: true   # first sync verified 2026-11-03: 113 docs / 8,778 passages, 423 rule skips
   sync_policy: manual
   # PTA — the Patristic Text Archive (BBAW): CapiTainS TEI editions of early
   # Christian Greek authors (the Perseus layout; a Perseus subclass). The
@@ -6303,18 +6251,7 @@ suda-translations:   # P154, 02-sources row 339
   adapter: Nabu::Adapters::SudaTranslations
   adopted: "2026-11-02"
   axes: [classical]
-  wired: false   # until the first real sync is verified
-                 # ManualDrop: copy the banked export into
-                 # incoming/suda-translations/solEntries.zip, then
-                 # bin/nabu sync suda-translations (one 91 MB zip, read in
-                 # place; ≈ 20 s parse). EXPECT 27 docs / 31,341 passages,
-                 # 0 quarantined; 2 entries skipped inside their letters
-                 # (epsilon/4079, tau/1316 — no-match pages) + 28 discovery
-                 # rule-skips (27 index pages + omicrioniota/8) — census of
-                 # the full export 2026-11-02. Eyeball nabu show
-                 # urn:nabu:suda-translations:nu:27 (Naxos: translation,
-                 # notes, translator + vetting history) and 5 random, probe
-                 # nabu search "Naxian stone", then flip.
+  wired: true   # first sync verified 2026-11-03: 27 docs / 31,341 passages, 28 rule skips
   sync_policy: manual
   # Suda On Line: the collaborative English translation of the Suda,
   # entry by entry, with notes, bibliography, keywords and the full
@@ -6515,16 +6452,7 @@ tianyige:   # P154, 02-sources row 338
   adopted: "2026-11-02"
   axes: [sinitic]
   cjk_index: true   # the CJK bigram substring lane (the kanripo / okhc shelves)
-  wired: false   # bin/nabu enable tianyige, then bin/nabu sync tianyige — ONE Zenodo zip
-                 # (97 MB) read by HTTP Range: 315 members ≈ 58 MB transferred,
-                 # 198 MB on disk (documents/, text/, tables/ and the viewer
-                 # never transferred; ≈ 1–2 min fetch, ~35 s parse). EXPECT 312
-                 # docs / 38,711 passages, 0 errored, 0 skipped (census through
-                 # the adapter over the whole v1.0 unpack 2026-11-02; 1,750 blank
-                 # pages skip by rule inside their documents, counted). Eyeball
-                 # nabu show urn:nabu:tianyige:0006944:p1 (洪武四年會試錄's
-                 # 會試紀錄題辭, dated 1371) and 5 random, probe nabu search
-                 # 會試紀錄題辭, then flip.
+  wired: true   # first sync verified 2026-11-03: 312 docs / 38,711 passages, 1,750 blank pages rule-skipped in parse
   sync_policy: frozen   # an immutable Zenodo version; a new release = an owner re-pin
   # The Tianyige Ming examination records (Joshua Snider; Zenodo 23817595
   # v1.0): uncorrected vision-model transcription of the Tianyi Pavilion
@@ -7660,10 +7588,7 @@ wiktionary-arc:   # P154, 02-sources row 352
   adapter: Nabu::Adapters::WiktionaryArc
   adopted: "2026-11-02"
   axes: [hebrew]
-  wired: false   # first sync: bin/nabu enable wiktionary-arc && bin/nabu sync wiktionary-arc
-                 # (one ~4 MB JSONL GET). EXPECT 1 dictionary doc → 2,396 entries /
-                 # 3,080 reflex rows, 0 non-NFC (the 2026-10-30 extract's census);
-                 # eyeball nabu define עבר ("to pass over, to cross over"), then flip.
+  wired: true   # first sync verified 2026-11-03: 2,396 entries
   # The kaikki Aramaic extraction (2,396 records / "2072 distinct words",
   # census 2026-11-02): a first dedicated Aramaic dictionary (the held
   # BDB/OSHB shelves carry Biblical Aramaic only inside Hebrew lexica):
@@ -7698,10 +7623,7 @@ wiktionary-br:   # P154, 02-sources row 353
   adapter: Nabu::Adapters::WiktionaryBr
   adopted: "2026-11-02"
   axes: [celtic]
-  wired: false   # first sync: bin/nabu enable wiktionary-br && bin/nabu sync wiktionary-br
-                 # (one ~4 MB JSONL GET). EXPECT 1 dictionary doc → 2,336 entries /
-                 # 1,688 reflex rows, 0 non-NFC (the 2026-10-30 extract's census);
-                 # eyeball nabu define verb ("verb"), then flip.
+  wired: true   # first sync verified 2026-11-03: 2,336 entries
   # The kaikki Breton extraction (2,336 records / "2245 distinct words",
   # census 2026-11-02): the library's first Breton dictionary, with Middle
   # Breton (230 xbm) and Old Breton (158 obt) etymons and the Proto-Celtic
@@ -7715,10 +7637,7 @@ wiktionary-ca:   # P154, 02-sources row 362
   adapter: Nabu::Adapters::WiktionaryCa
   adopted: "2026-11-02"
   axes: [romance]
-  wired: false   # first sync: bin/nabu enable wiktionary-ca && bin/nabu sync wiktionary-ca
-                 # (one ~247 MB JSONL GET). EXPECT 1 dictionary doc → 198,685 entries /
-                 # 18,209 reflex rows, 0 non-NFC (the 2026-10-30 extract's census);
-                 # eyeball nabu define gratis ("free, for free"), then flip.
+  wired: true   # first sync verified 2026-11-03: 198,685 entries
   # The kaikki Catalan extraction (198,685 records / "189801 distinct
   # words", census 2026-11-02): the library's first Catalan dictionary —
   # modern headwords (most of them inflected-form entries pointing to their
@@ -7740,10 +7659,7 @@ wiktionary-dum:   # P154, 02-sources row 354
   adapter: Nabu::Adapters::WiktionaryDum
   adopted: "2026-11-02"
   axes: [germanic]
-  wired: false   # first sync: bin/nabu enable wiktionary-dum && bin/nabu sync wiktionary-dum
-                 # (one ~6 MB JSONL GET). EXPECT 1 dictionary doc → 2,342 entries /
-                 # 10,572 reflex rows, 0 non-NFC (the 2026-10-30 extract's census);
-                 # eyeball nabu define raven ("raven"), then flip.
+  wired: true   # first sync verified 2026-11-03: 2,342 entries
   # The kaikki Middle Dutch extraction (2,342 records / "2031 distinct
   # words", census 2026-11-02): the library's first Middle Dutch dictionary:
   # Old Dutch (1,301 odt) and Proto-Germanic etymons, descendants into
@@ -7773,10 +7689,7 @@ wiktionary-enm:   # P154, 02-sources row 345
   adapter: Nabu::Adapters::WiktionaryEnm
   adopted: "2026-11-02"
   axes: [germanic]
-  wired: false   # first sync: bin/nabu enable wiktionary-enm && bin/nabu sync wiktionary-enm
-                 # (one ~72 MB JSONL GET). EXPECT 1 dictionary doc → 56,687 entries /
-                 # 40,589 reflex rows, 0 non-NFC (the 2026-10-30 extract's census);
-                 # eyeball nabu define cat ("cat (feline)"), then flip.
+  wired: true   # first sync verified 2026-11-03: 56,687 entries
   # The kaikki Middle English extraction (56,687 records / "49377 distinct
   # words", census 2026-11-02): the library's first Middle English
   # dictionary: senses for 49,377 words and an etymon layer back through Old
@@ -7791,10 +7704,7 @@ wiktionary-et:   # P154, 02-sources row 364
   adapter: Nabu::Adapters::WiktionaryEt
   adopted: "2026-11-02"
   axes: [baltic]
-  wired: false   # first sync: bin/nabu enable wiktionary-et && bin/nabu sync wiktionary-et
-                 # (one ~56 MB JSONL GET). EXPECT 1 dictionary doc → 13,549 entries /
-                 # 4,095 reflex rows, 0 non-NFC (the 2026-10-30 extract's census);
-                 # eyeball nabu define aam ("a large barrel"), then flip.
+  wired: true   # first sync verified 2026-11-03: 13,549 entries
   # The kaikki Estonian extraction (13,549 records / "12657 distinct words",
   # census 2026-11-02): the library's first Estonian dictionary:
   # Proto-Finnic (1,532) and Proto-Uralic (138) etymons beside the German
@@ -7828,10 +7738,7 @@ wiktionary-frm:   # P154, 02-sources row 349
   adapter: Nabu::Adapters::WiktionaryFrm
   adopted: "2026-11-02"
   axes: [romance]
-  wired: false   # first sync: bin/nabu enable wiktionary-frm && bin/nabu sync wiktionary-frm
-                 # (one ~13 MB JSONL GET). EXPECT 1 dictionary doc → 4,956 entries /
-                 # 9,141 reflex rows, 0 non-NFC (the 2026-10-30 extract's census);
-                 # eyeball nabu define livre ("book"), then flip.
+  wired: true   # first sync verified 2026-11-03: 4,956 entries
   # The kaikki Middle French extraction (4,956 records / "4714 distinct
   # words", census 2026-11-02): the library's first Middle French
   # dictionary, chained to Old French (1,597 fro etymons) and Latin (1,043).
@@ -7845,10 +7752,7 @@ wiktionary-fro:   # P154, 02-sources row 348
   adapter: Nabu::Adapters::WiktionaryFro
   adopted: "2026-11-02"
   axes: [romance]
-  wired: false   # first sync: bin/nabu enable wiktionary-fro && bin/nabu sync wiktionary-fro
-                 # (one ~37 MB JSONL GET). EXPECT 1 dictionary doc → 9,280 entries /
-                 # 46,722 reflex rows, 0 non-NFC (the 2026-10-30 extract's census);
-                 # eyeball nabu define livre ("livre (medieval French equivalent of a monetary pound)"), then flip.
+  wired: true   # first sync verified 2026-11-03: 9,280 entries
   # The kaikki Old French extraction (9,280 records / "8690 distinct words",
   # census 2026-11-02): the library's first Old French dictionary: Latin
   # etymons (2,621 la, 518 la-vul) and Frankish donors (253 frk), and dense
@@ -7863,10 +7767,7 @@ wiktionary-gmh:   # P154, 02-sources row 355
   adapter: Nabu::Adapters::WiktionaryGmh
   adopted: "2026-11-02"
   axes: [germanic]
-  wired: false   # first sync: bin/nabu enable wiktionary-gmh && bin/nabu sync wiktionary-gmh
-                 # (one ~10 MB JSONL GET). EXPECT 1 dictionary doc → 2,142 entries /
-                 # 7,041 reflex rows, 0 non-NFC (the 2026-10-30 extract's census);
-                 # eyeball nabu define name ("name"), then flip.
+  wired: true   # first sync verified 2026-11-03: 2,142 entries
   # The kaikki Middle High German extraction (2,142 records / "1958 distinct
   # words", census 2026-11-02): the library's first Middle High German
   # dictionary, with Old High German (460 goh) etymons and descendants into
@@ -7880,10 +7781,7 @@ wiktionary-gmq-osw:   # P154, 02-sources row 357
   adapter: Nabu::Adapters::WiktionaryGmqOsw
   adopted: "2026-11-02"
   axes: [germanic]
-  wired: false   # first sync: bin/nabu enable wiktionary-gmq-osw && bin/nabu sync wiktionary-gmq-osw
-                 # (one ~9 MB JSONL GET). EXPECT 1 dictionary doc → 1,440 entries /
-                 # 2,904 reflex rows, 0 non-NFC (the 2026-10-30 extract's census);
-                 # eyeball nabu define fa ("to seize, take"), then flip.
+  wired: true   # first sync verified 2026-11-03: 1,440 entries
   # The kaikki Old Swedish extraction (1,440 records / "1404 distinct
   # words", census 2026-11-02): an English-glossed Old Swedish shelf beside
   # the Swedish-language fsv-lexica: Old Norse (871) and Proto-Germanic
@@ -7897,10 +7795,7 @@ wiktionary-got:   # P154, 02-sources row 347
   adapter: Nabu::Adapters::WiktionaryGot
   adopted: "2026-11-02"
   axes: [germanic]
-  wired: false   # first sync: bin/nabu enable wiktionary-got && bin/nabu sync wiktionary-got
-                 # (one ~47 MB JSONL GET). EXPECT 1 dictionary doc → 23,034 entries /
-                 # 3,946 reflex rows, 0 non-NFC (the 2026-10-30 extract's census);
-                 # eyeball nabu define 𐌼𐌰𐌸𐌰 ("maggot (larva that eats decomposing organic matter)"), then flip.
+  wired: true   # first sync verified 2026-11-03: 23,034 entries
   # The kaikki Gothic extraction (23,034 records / "22781 distinct words",
   # census 2026-11-02): the library's first Gothic dictionary: 23,034
   # entries (Gothic-script headwords, many of them inflected-form entries
@@ -7947,10 +7842,7 @@ wiktionary-ko:   # P154, 02-sources row 363
   adapter: Nabu::Adapters::WiktionaryKo
   adopted: "2026-11-02"
   axes: [korean]
-  wired: false   # first sync: bin/nabu enable wiktionary-ko && bin/nabu sync wiktionary-ko
-                 # (one ~208 MB JSONL GET). EXPECT 1 dictionary doc → 64,457 entries /
-                 # 5,881 reflex rows, 0 non-NFC (the 2026-10-30 extract's census);
-                 # eyeball nabu define OK ("good"), then flip.
+  wired: true   # first sync verified 2026-11-03: 64,457 entries
   # The kaikki Korean extraction (64,457 records / "57810 distinct words",
   # census 2026-11-02): the library's first Korean dictionary: modern hangul
   # headwords, Sino-Korean words with their hanja, and Middle Korean (183
@@ -7980,10 +7872,7 @@ wiktionary-non:   # P154, 02-sources row 346
   adapter: Nabu::Adapters::WiktionaryNon
   adopted: "2026-11-02"
   axes: [germanic]
-  wired: false   # first sync: bin/nabu enable wiktionary-non && bin/nabu sync wiktionary-non
-                 # (one ~39 MB JSONL GET). EXPECT 1 dictionary doc → 11,403 entries /
-                 # 38,535 reflex rows, 0 non-NFC (the 2026-10-30 extract's census);
-                 # eyeball nabu define en ("but"), then flip.
+  wired: true   # first sync verified 2026-11-03: 11,403 entries
   # The kaikki Old Norse extraction (11,403 records / "10103 distinct
   # words", census 2026-11-02): a third Old Norse shelf beside
   # Cleasby-Vigfusson and Zoëga, its weight in the descendant trees (38,535
@@ -7998,10 +7887,7 @@ wiktionary-oc:   # P154, 02-sources row 366
   adapter: Nabu::Adapters::WiktionaryOc
   adopted: "2026-11-02"
   axes: [romance]
-  wired: false   # first sync: bin/nabu enable wiktionary-oc && bin/nabu sync wiktionary-oc
-                 # (one ~32 MB JSONL GET). EXPECT 1 dictionary doc → 7,521 entries /
-                 # 3,383 reflex rows, 0 non-NFC (the 2026-10-30 extract's census);
-                 # eyeball nabu define gratuit ("free, free of charge"), then flip.
+  wired: true   # first sync verified 2026-11-03: 7,521 entries
   # The kaikki Occitan extraction (7,521 records / "7175 distinct words",
   # census 2026-11-02): the library's first Occitan dictionary: Latin
   # (1,714) and Old Occitan (495 pro) etymons. Language oci. The
@@ -8014,10 +7900,7 @@ wiktionary-ofs:   # P154, 02-sources row 359
   adapter: Nabu::Adapters::WiktionaryOfs
   adopted: "2026-11-02"
   axes: [germanic]
-  wired: false   # first sync: bin/nabu enable wiktionary-ofs && bin/nabu sync wiktionary-ofs
-                 # (one ~1 MB JSONL GET). EXPECT 1 dictionary doc → 654 entries /
-                 # 1,846 reflex rows, 0 non-NFC (the 2026-10-30 extract's census);
-                 # eyeball nabu define fa ("to catch"), then flip.
+  wired: true   # first sync verified 2026-11-03: 654 entries
   # The kaikki Old Frisian extraction (654 records / "610 distinct words",
   # census 2026-11-02): the library's first Old Frisian dictionary:
   # Proto-West-Germanic (304) and Proto-Germanic (207) etymons, descendants
@@ -8031,10 +7914,7 @@ wiktionary-okm:   # P154, 02-sources row 360
   adapter: Nabu::Adapters::WiktionaryOkm
   adopted: "2026-11-02"
   axes: [korean]
-  wired: false   # first sync: bin/nabu enable wiktionary-okm && bin/nabu sync wiktionary-okm
-                 # (one ~2 MB JSONL GET). EXPECT 1 dictionary doc → 1,033 entries /
-                 # 1,249 reflex rows, 0 non-NFC (the 2026-10-30 extract's census);
-                 # eyeball nabu define 오다 ("to come"), then flip.
+  wired: true   # first sync verified 2026-11-03: 1,033 entries
   # The kaikki Middle Korean extraction (1,033 records / "965 distinct
   # words", census 2026-11-02): the library's first Middle Korean
   # dictionary: hangul headwords with Old Korean (71 oko) etymons and
@@ -8048,10 +7928,7 @@ wiktionary-osp:   # P154, 02-sources row 356
   adapter: Nabu::Adapters::WiktionaryOsp
   adopted: "2026-11-02"
   axes: [romance]
-  wired: false   # first sync: bin/nabu enable wiktionary-osp && bin/nabu sync wiktionary-osp
-                 # (one ~4 MB JSONL GET). EXPECT 1 dictionary doc → 1,501 entries /
-                 # 3,518 reflex rows, 0 non-NFC (the 2026-10-30 extract's census);
-                 # eyeball nabu define pie ("foot"), then flip.
+  wired: true   # first sync verified 2026-11-03: 1,501 entries
   # The kaikki Old Spanish extraction (1,501 records / "1429 distinct
   # words", census 2026-11-02): the library's first Old Spanish dictionary:
   # Latin (640) and Arabic (36) etymons, descendants into Spanish and
@@ -8065,10 +7942,7 @@ wiktionary-pa:   # P154, 02-sources row 365
   adapter: Nabu::Adapters::WiktionaryPa
   adopted: "2026-11-02"
   axes: [indic]
-  wired: false   # first sync: bin/nabu enable wiktionary-pa && bin/nabu sync wiktionary-pa
-                 # (one ~38 MB JSONL GET). EXPECT 1 dictionary doc → 10,749 entries /
-                 # 6,165 reflex rows, 0 non-NFC (the 2026-10-30 extract's census);
-                 # eyeball nabu define زبان ("tongue"), then flip.
+  wired: true   # first sync verified 2026-11-03: 10,749 entries
   # The kaikki Punjabi extraction (10,749 records / "9533 distinct words",
   # census 2026-11-02): an English-glossed Punjabi shelf beside the
   # Punjabi-language mahan-kosh: Sanskrit (2,192), Classical Persian
@@ -8099,10 +7973,7 @@ wiktionary-pro:   # P154, 02-sources row 358
   adapter: Nabu::Adapters::WiktionaryPro
   adopted: "2026-11-02"
   axes: [romance]
-  wired: false   # first sync: bin/nabu enable wiktionary-pro && bin/nabu sync wiktionary-pro
-                 # (one ~1 MB JSONL GET). EXPECT 1 dictionary doc → 695 entries /
-                 # 2,004 reflex rows, 0 non-NFC (the 2026-10-30 extract's census);
-                 # eyeball nabu define ab ("with"), then flip.
+  wired: true   # first sync verified 2026-11-03: 695 entries
   # The kaikki Old Occitan extraction (695 records / "675 distinct words",
   # census 2026-11-02): the library's first Old Occitan (Old Provençal)
   # dictionary: Latin etymons (398) and descendants into Occitan and
@@ -8175,10 +8046,7 @@ wiktionary-sco:   # P154, 02-sources row 350
   adapter: Nabu::Adapters::WiktionarySco
   adopted: "2026-11-02"
   axes: [germanic]
-  wired: false   # first sync: bin/nabu enable wiktionary-sco && bin/nabu sync wiktionary-sco
-                 # (one ~8 MB JSONL GET). EXPECT 1 dictionary doc → 6,042 entries /
-                 # 3,602 reflex rows, 0 non-NFC (the 2026-10-30 extract's census);
-                 # eyeball nabu define frei ("free"), then flip.
+  wired: true   # first sync verified 2026-11-03: 6,042 entries
   # The kaikki Scots extraction (6,042 records / "5127 distinct words",
   # census 2026-11-02): the library's first Scots dictionary: etymons
   # through Middle English (888), Old English (750) and Old Norse (196).
@@ -8192,10 +8060,7 @@ wiktionary-sh:   # P154, 02-sources row 361
   adapter: Nabu::Adapters::WiktionarySh
   adopted: "2026-11-02"
   axes: [slavic]
-  wired: false   # first sync: bin/nabu enable wiktionary-sh && bin/nabu sync wiktionary-sh
-                 # (one ~386 MB JSONL GET). EXPECT 1 dictionary doc → 70,466 entries /
-                 # 18,632 reflex rows, 0 non-NFC (the 2026-10-30 extract's census);
-                 # eyeball nabu define august ("August"), then flip.
+  wired: true   # first sync verified 2026-11-03: 70,466 entries
   # The kaikki Serbo-Croatian extraction (70,466 records / "66998 distinct
   # words", census 2026-11-02): the library's first Serbo-Croatian
   # dictionary, Latin and Cyrillic headwords both: Proto-Slavic (7,327),
@@ -8240,10 +8105,7 @@ wiktionary-syc:   # P154, 02-sources row 351
   adapter: Nabu::Adapters::WiktionarySyc
   adopted: "2026-11-02"
   axes: [syriac]
-  wired: false   # first sync: bin/nabu enable wiktionary-syc && bin/nabu sync wiktionary-syc
-                 # (one ~15 MB JSONL GET). EXPECT 1 dictionary doc → 3,911 entries /
-                 # 4,315 reflex rows, 0 non-NFC (the 2026-10-30 extract's census);
-                 # eyeball nabu define ܟܠܒܐ ("wild, mad"), then flip.
+  wired: true   # first sync verified 2026-11-03: 3,911 entries
   # The kaikki Classical Syriac extraction (3,911 records / "2761 distinct
   # words", census 2026-11-02): the library's first Syriac dictionary:
   # Syriac-script headwords with Akkadian (222), Greek (165), Proto-Semitic
