@@ -1724,6 +1724,18 @@ sources:
     script: {posture: qualified, note: "Romanian in the Cyrillic alphabet of the 1688 print —
         titla, accents and the transitional letters (ꙟ, ᲅ, ѫ, џ) kept as typeset; language tag
         ron-Cyrl"}
+  suda-translations:   # P154
+    # kind: machine-postured — kind_map.yml source_kind lexical.
+    lect: {posture: identity, note: "bare en — the Suda On Line's modern English translations
+        (1998 onward); the Greek they translate rides each passage's greek_original annotation
+        and is held as its own witness (First1K tlg9010), never claimed here"}
+    dating: {posture: undatable, note: "the asset's dates are the translation's own contribution
+        history (translated_at + every vetting stamp, 1998–2025, on every passage) — not a text
+        date; the Suda's late-10th-century compilation is the Greek witness's claim, and the
+        translation siblings mint nothing (the kanripo classical-modern stance)"}
+    places: {posture: unplaced, note: "no place-of-text field; place names inside entries are
+        subject matter (keywords 'geography'), not the text's provenance"}
+    script: {posture: implied}
   etcbc-targum:   # P153
     # kind: machine-postured — kind_map.yml source_kind scripture.
     # lect: machine-postured — the whole-source arc → arc:mid/jud override in
