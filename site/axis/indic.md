@@ -21,7 +21,7 @@ A source wears every desk it serves — these 35 answer this desk. Holdings are 
 | `dcs` | treebank | attribution | wired · auto | 15,900 docs / 769,373 passages / 300,763 entries |
 | `dharma-deccan` | texts | attribution | wired · auto | 1,702 docs / 28,295 passages |
 | `dharma-mdt` | texts | attribution | wired · auto | 734 docs |
-| `dharma-tamil` | texts | attribution | wired · auto | 1,276 docs / 18,161 passages |
+| `dharma-tamil` | texts | attribution | wired · auto | 1,275 docs / 18,133 passages |
 | `dpd` | dictionary | nc | wired · manual | 89,763 entries |
 | `gretil` | texts | nc | wired · manual | 780 docs / 713,718 passages |
 | `gretil-legacy` | texts | nc | wired · manual | 22 docs / 83,383 passages |
@@ -39,7 +39,7 @@ A source wears every desk it serves — these 35 answer this desk. Holdings are 
 | `siddham` | texts | attribution | wired · manual | 427 docs / 6,334 passages |
 | `sii-clean` | texts | attribution | wired · auto | 18,495 docs / 314,915 passages |
 | `suttacentral` | texts | open | wired · auto | 12,397 docs / 699,511 passages |
-| `tamilex` | texts | nc | wired · auto | 7,880 docs / 15,230 passages |
+| `tamilex` | texts | nc | wired · auto | 7,878 docs / 15,228 passages |
 | `te-wikisource` | texts | attribution | wired · manual | 453 docs / 208,794 passages |
 | `tipitaka-lk` | texts | research_private | wired · auto | 563 docs / 456,967 passages |
 | `ud` | treebank | nc | wired · manual | 83 docs / 329,980 passages |
@@ -53,7 +53,7 @@ A source wears every desk it serves — these 35 answer this desk. Holdings are 
 | `wiktionary-ta` | dictionary | attribution | wired · manual | 13,855 entries |
 | `wiktionary-te` | dictionary | attribution | wired · manual | 23,325 entries |
 
-**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 3 November 2026)</span>: `san` 511,752 · `pli` 97,454 · `pan` 75,061 · `tel` 23,875 · `tam-Latn` 18,586 · `tam` 14,610 · `mal` 11,505 · `tel-Latn` 5,103 · `eng` 4,794 · `kan-Latn` 3,850 … and 32 more (`nabu axis indic` lists all).
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 3 November 2026)</span>: `san` 511,752 · `pli` 97,454 · `pan` 75,061 · `tel` 23,875 · `tam-Latn` 18,583 · `tam` 14,610 · `mal` 11,505 · `tel-Latn` 5,103 · `eng` 4,794 · `kan-Latn` 3,850 … and 32 more (`nabu axis indic` lists all).
 
 **Carried in by multilingual packs** (`ud` — whole-source members whose other languages ride along, as of 3 November 2026): `lat` 11 · `grc` 9 · `orv` 9 · `ota` 5 · `cop` 3 … and 18 more (`nabu axis indic` lists all).
 
