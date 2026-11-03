@@ -129,7 +129,13 @@ module Nabu
     # Every slug the build will sync: the core group + the demo set, closed
     # over `requires:` (what `nabu sync` would pull in on a fresh box).
     def plan
-      @registry.requires_closure(@registry.core_members + @slugs)
+      self.class.plan_for(registry: @registry, slugs: @slugs)
+    end
+
+    # The same plan without a build instance (the site's demo license
+    # table, Nabu::Ops::SiteData#mcp, projects it).
+    def self.plan_for(registry:, slugs: DEMO_SOURCES.map(&:slug))
+      registry.requires_closure(registry.core_members + slugs)
     end
 
     # Layer 1 — refuse before touching the network. Returns the plan.
