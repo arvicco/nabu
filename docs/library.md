@@ -1946,6 +1946,12 @@ and every entry with its volume and page in the 1930 print — the
 dictionary for the shabados Gurbani shelf (the 1930 text public domain,
 the packaging CC BY 4.0).
 
+**`dpd`** — the Digital Pāḷi Dictionary (Bodhirasa Bhikkhu and
+contributors): 89,763 Pāḷi headwords of the canon and commentaries,
+each with its meaning, grammar, root, construction and Sanskrit
+parallel — the dictionary for the suttacentral and tipitaka-lk Pāḷi
+shelves (non-commercial, CC BY-NC-SA 4.0).
+
 **Twenty-two Wiktionary extracts** (kaikki.org; CC BY-SA + GFDL) give
 the held languages without a dictionary their first English-glossed
 shelf, each with its etymology chains and descendant trees. Historical:

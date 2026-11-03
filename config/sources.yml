@@ -1972,6 +1972,22 @@ disco:
   wired: true    # P77 first sync owner-verified (1,215 docs), flipped 2026-08-18 (owner: "wire on all recent sources")
   sync_policy: manual
 
+dpd:   # P154, 02-sources row 367
+  adapter: Nabu::Adapters::Dpd
+  adopted: "2026-11-02"
+  axes: [indic, buddhist]
+  wired: false   # first sync: bin/nabu enable dpd && bin/nabu sync dpd
+                 # (one ~4.3 MB zip GET → dpd.txt 23 MB). EXPECT 1 dictionary doc →
+                 # 89,763 pli entries, 0 errored (the v0.4.20261026 release's census);
+                 # eyeball nabu define akakkasa ("smooth"), then flip.
+  # The Digital Pāḷi Dictionary (Bodhirasa Bhikkhu), the dpd-db release's
+  # plain-text headword export, for the held Pāḷi canon (suttacentral,
+  # tipitaka-lk) — the library's first Pāḷi dictionary: meaning, grammar,
+  # root (37,132), construction and the Sanskrit parallel per headword.
+  # New family dpd-txt; entry id = the DPD id. CC BY-NC-SA 4.0 (LICENSE)
+  # → nc (MCP-excluded by class). Latest-release URL, ZipFetch.
+  sync_policy: manual
+
 dprr:   # 02-sources row 310
   adapter: Nabu::Adapters::Dprr
   adopted: "2026-10-27"

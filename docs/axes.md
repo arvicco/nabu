@@ -196,7 +196,7 @@ The Iranian-language lane, Zoroastrian canon at its heart: the TITUS Avesta (Old
 
 The Sanskrit, Prakrit and Pali lane: GRETIL and SARIT, the DCS treebank, Monier-Williams, the Vedic UD treebank, and SuttaCentral's canon.
 
-**Members** (34): `dacon`, `dcs`, `dharma-deccan`, `dharma-mdt`, `dharma-tamil`, `gretil`, `gretil-legacy`, `gu-wikisource`, `kannada-texts`, `madurai`, `mahan-kosh`, `mw`, `nabu-data`, `osbct`, `paramara`, `prakrit-texts`, `sarit`, `shabados`, `siddham`, `sii-clean`, `suttacentral`, `tamilex`, `te-wikisource`, `tipitaka-lk`, `ud`, `vedaweb`, `wiktionary-dv`, `wiktionary-kn`, `wiktionary-ml`, `wiktionary-pa`, `wiktionary-pra`, `wiktionary-si`, `wiktionary-ta`, `wiktionary-te`
+**Members** (35): `dacon`, `dcs`, `dharma-deccan`, `dharma-mdt`, `dharma-tamil`, `dpd`, `gretil`, `gretil-legacy`, `gu-wikisource`, `kannada-texts`, `madurai`, `mahan-kosh`, `mw`, `nabu-data`, `osbct`, `paramara`, `prakrit-texts`, `sarit`, `shabados`, `siddham`, `sii-clean`, `suttacentral`, `tamilex`, `te-wikisource`, `tipitaka-lk`, `ud`, `vedaweb`, `wiktionary-dv`, `wiktionary-kn`, `wiktionary-ml`, `wiktionary-pa`, `wiktionary-pra`, `wiktionary-si`, `wiktionary-ta`, `wiktionary-te`
 
 ### buddhist
 
@@ -204,7 +204,7 @@ The Sanskrit, Prakrit and Pali lane: GRETIL and SARIT, the DCS treebank, Monier-
 
 Cross-cutting by design: SuttaCentral, CBETA, SARIT, and GRETIL whole — membership is whole-source, so GRETIL rides here although only part of its shelf is Buddhist — and the Derge Kangyur and Tengyur: the fourth canon leg.
 
-**Members** (12): `bdrc-transcriptions`, `cbeta`, `derge-kangyur`, `derge-tengyur`, `e84000`, `gretil`, `lotsawa-house`, `mvp`, `osbct`, `sarit`, `suttacentral`, `tipitaka-lk`
+**Members** (13): `bdrc-transcriptions`, `cbeta`, `derge-kangyur`, `derge-tengyur`, `dpd`, `e84000`, `gretil`, `lotsawa-house`, `mvp`, `osbct`, `sarit`, `suttacentral`, `tipitaka-lk`
 
 ### tibetan
 

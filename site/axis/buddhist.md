@@ -21,6 +21,7 @@ A source wears every desk it serves — these twelve answer this desk. Holdings 
 | `cbeta` | texts | nc | wired · manual | 4,323 docs / 10,867,827 passages |
 | `derge-kangyur` | texts | open | wired · manual | 1,198 docs / 458,972 passages |
 | `derge-tengyur` | texts | open | wired · manual | 3,362 docs / 890,184 passages |
+| `dpd` | dictionary | attribution | not yet wired | not synced yet |
 | `e84000` | texts | nc | wired · manual | 388 docs / 124,223 passages / 56,794 entries |
 | `gretil` | texts | nc | wired · manual | 780 docs / 713,718 passages |
 | `lotsawa-house` | texts | nc | wired · manual | 6,388 docs / 413,067 passages |
