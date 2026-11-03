@@ -1808,14 +1808,23 @@ sources:
     # lect machine-postured since 2026-11-02 — the whole-source ron-Cyrl →
     # ro:old~cyrl override (config/lect_overrides.yml; the mint's own
     # prescribed row). The P153 pending retired at the registry mint, the
-    # shadowing rule.
-    dating: {posture: dated, note: "the edition year the dump records for ro-1688 (1688),
-        date_class edition (MetadataDates :structured) — the print the project typeset"}
-    places: {posture: unplaced, note: "the dump's edition record names no imprint (Bucharest is the
-        print's place, but the asset does not say so) — nothing to mine"}
-    script: {posture: qualified, note: "Romanian in the Cyrillic alphabet of the 1688 print —
-        titla, accents and the transitional letters (ꙟ, ᲅ, ѫ, џ) kept as typeset; language tag
-        ron-Cyrl"}
+    # shadowing rule. The 2026-11-03 widening (cs-eliz, ka-mcxeta) stays
+    # machine-postured: cs-eliz rides the source's chu → chu:ncs override
+    # row (the elizabeth-bible mold), ka-mcxeta is tagged oge — the Old
+    # Georgian anchor by identity, from the edition's own title.
+    dating: {posture: dated, note: "the edition year the dump records — ro-1688 1688, cs-eliz 1751 —
+        date_class edition (MetadataDates :structured); ka-mcxeta's record has no year, so its books
+        carry the dates the dump's file attribution states: the OT the Mtskheta manuscript's
+        XVII–XVIII c. (1601–1800, class-less witness date), the NT the Athonite translation's XI c.
+        (1001–1100, class composition)"}
+    places: {posture: unplaced, note: "the dump's edition records name no imprint (Bucharest is the
+        1688 print's place, but the asset does not say so; 'Мцхетская рукопись' names a manuscript,
+        not a place of writing) — nothing to mine"}
+    script: {posture: mixed, note: "per edition: Romanian in the Cyrillic alphabet of the 1688
+        print (titla, accents, ꙟ, ᲅ, ѫ, џ kept; tag ron-Cyrl); Church Slavonic in full Church
+        Cyrillic print orthography (titla, accents, ѣ/і/ѵ/ѳ/ѡ — the un-modernized witness beside
+        elizabeth-bible's civil-script rendering); Old Georgian transcribed in Mkhedruli with the
+        archaic letters (ჲ) kept"}
   hmml-reading-room:   # P154
     # kind: machine-postured — the hmml-reading-room genre fold in kind_map.yml (open vocabulary).
     lect: {posture: identity, note: "per-incipit tags on held nodes from the cataloguer's item

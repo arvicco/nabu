@@ -880,7 +880,8 @@ sources:
   etcbc-targum:
     source_kind: scripture   # P153: the Pentateuch targums — every text is a Bible translation
   typikon-bible:
-    source_kind: scripture   # P153: whole Bible editions (the 1688 Bucharest Bible)
+    source_kind: scripture   # P153: whole Bible editions (the 1688 Bucharest Bible; since 2026-11-03
+    #                          also the Elizabeth Bible and the Old Georgian Bible — every document a Bible book)
   suda-translations:
     source_kind: lexical     # P154: the Suda is a lexicon-encyclopedia — every passage translates one
     #                          alphabetical entry (headword + gloss/article); the house's lexical head,
