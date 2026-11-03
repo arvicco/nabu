@@ -1862,3 +1862,13 @@ pair: Cleasby–Vigfusson's *An Icelandic-English Dictionary* (1874;
 (1910; 29,951 entries), both from Sampo Silvennoinen's JSON editions
 (MIT; the texts public domain) — the Norse shelf's first dictionary
 layer.
+
+## 8az. The Pacific opening (P154)
+
+**`ebible-pacific`** — the library's first Oceanic and Micronesian
+running text: eBible.org's public-domain Pacific Bibles as USFM —
+*Ka Baibala Hemolele*, the Hawaiian Bible in its 1868 revision and its
+own period spelling (66 books / 31,102 verses), the American Bible
+Society's Chamorro Gospels, Acts and Psalms (6 / 7,245), and the
+Pohnpeian New Testament and Psalms in the old alphabet (28 / 10,415;
+open) — registered but not yet wired.
