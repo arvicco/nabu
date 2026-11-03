@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.tei-c.org/ns/1.0 http://diglib.hab.de/rules/schema/tei/P5/v2.8.0/tei-p5-transcr.xsd"
+      xmlns="http://www.tei-c.org/ns/1.0" xmlns:xi="http://www.w3.org/2001/XInclude" xml:id="grand_tour.cod_guelf_149_14_extrav" n="Cod. Guelf. 149.14 Extrav.">
+      <teiHeader>
+         <fileDesc>
+            <titleStmt>
+               <title type="main">Herzog Heinrich Ferdinand von Braunschweig-Wolfenbüttel: Heinrich Ferdinand u. Ernst Herz. zu Braunschw. u. Luneb. Reise-Journal in Jtalien u. Franckreich.<lb/>(Cod. Guelf. 149.14 Extrav.)</title>
+            </titleStmt>
+            <publicationStmt>
+               <p/>
+            </publicationStmt>
+            <sourceDesc>
+               <bibl>
+                  Herzog Heinrich Ferdinand von Braunschweig-Wolfenbüttel: Heinrich Ferdinand u. Ernst Herz. zu Braunschw. u. Luneb. Reise-Journal in Jtalien u. Franckreich. Herzog August Bibliothek, Signatur: Cod. Guelf. 149.14 Extrav.
+               </bibl>
+               <listWit><!-- Schachtelung gibt Textabhängigkeiten an: H ist das Original, h1 und h3 Abschriften des Originals, h2 Abschrift von h1.-->
+                  <witness xml:id="H">
+                     <bibl>Wolfenbüttel, HAB, Cod. Guelf. 149.14 Extrav.</bibl>
+                     <ptr target="http://diglib.hab.de/mss/149-14-extrav/facsimile.xml"/>
+                     <listWit>
+                        <witness xml:id="h1">
+                           <bibl>Wolfenbüttel, HAB, Cod. Guelf. 256.1 Extrav.</bibl>
+                           <ptr target="http://diglib.hab.de/mss/256-1-extrav/facsimile.xml"/>
+                           <listWit>
+                              <witness xml:id="h2">
+                                 <bibl>Wolfenbüttel, Niedersächsisches Landesarchiv, 1 Alt 20 Nr. 94</bibl>
+                                 <ptr target="http://diglib.hab.de/mss/ed000434/facsimile.xml"/>
+                              </witness>
+                           </listWit>
+                        </witness>
+                        <witness xml:id="h3">
+                           <bibl>Wolfenbüttel, Niedersächsisches Landesarchiv, 95 Alt Nr. 44, fol. 24r-106v</bibl>
+                           <ptr target="http://diglib.hab.de/mss/ed000435/facsimile.xml"/>
+                        </witness>
+                     </listWit>
+                  </witness>
+               </listWit>
+               <xi:include href="../register/listPlace_grand_tour.xml" xpointer="element(place)"/>
+               <xi:include href="../register/listPerson_grand_tour.xml" xpointer="element(person)"/>
+               <xi:include href="../register/listOrg_grand_tour.xml" xpointer="element(org)"/>
+            </sourceDesc>
+         </fileDesc>
+      </teiHeader>
+      <xi:include href="http://diglib.hab.de/mss/149-14-extrav/facsimile.xml" xpointer="element(ptr2images_mss_149-14-extrav)"/>   
+   <text>
+      <body>
+         <div type="chapter" n="0">
+         <pb facs="#mss_149-14-extrav_00001"/>
+         <pb facs="#mss_149-14-extrav_00002"/>
+         <pb facs="#mss_149-14-extrav_00003"/>
+         <p>
+            <app>
+               <lem wit="H">
+                  <lb/><handShift/>Heinrich Ferdinand u. Ernst
+                  <lb/>Herz. Zu Braunschw. u. Luneb.
+                  <lb/>Reise=Journal in Jtalien u. Franckreich.
+               </lem>
+               <rdg wit="h1" n="Ir">
+                  <lb/>Herrn Heinrich Ferdinand, und
+                  <lb/>Herrn Ernst gebruder
+                  <lb/>Hertzoge zu BraunsuLunebe. Bevern
+                  <lb/>Reiße beschreibung
+               </rdg>
+               <rdg wit="h2" n="1r">
+                  <lb/>Herrn Heinrich Ferdinand
+                  <lb/>und Herrn Ernst Gebrüdere
+                  <lb/>Hertzoge zu Braunschweig-<w lemma="Lüneburg">Lüne:
+                     <lb/>burg</w>-Bevern, Reise=
+                  <lb/>Beschreibung
+               </rdg>
+               <rdg wit="h3" n="24r">
+                  <lb/>Jtineraire
+                  <lb/>De Leurs Altesses Serenissimes
+                  <lb/>Ces Ducs F. A. <add place="below"><handShift/>muß wohl heißen <lb/>Heinrich Ferdinand</add> <handShift/>et E. F. Ducs p.
+                  <lb/>commence le 21 Mars 1701
+                  <lb/>et fini le 1 7br 1702.
+                  <lb/>
+                  <lb/>Les voyages sont beaux, mais bon coeur, bon argent.
+                  <lb/>Il faut, quand on en eut revenir tout content.                     
+               </rdg>
+            </app>
+            <lb/>
+            <lb/>
+            <lb/>
+            <lb/>
+            <lb/>
+            <lb/>
+            <lb/>
+            <lb/>
+            <lb/>
+            <lb/>
+            <app>
+               <lem wit="H">
+                  <hi rend="right"><lb/><handShift scribe="hf"/>Henrich Ferdinand hzBuL
+                  <lb/>Anno 1701 d.</hi>
+               </lem>
+               <rdg wit="h1" n="Ir">
+                  Henrich Ferdinand hzBvL.
+                  <lb/>Anno 1701 d.
+               </rdg>
+               <rdg wit="h2" n="1r">
+                  Heinrich Ferdinand
+                  <lb/>HzBuL
+                  <lb/>Anno 1701. den
+               </rdg>
+               <rdg wit="h3" n="24r"/>
+            </app>               
+         </p>
+         <pb facs="#mss_149-14-extrav_00004"/>
+         </div>       
+         <div type="chapter" n="1">            
+            <pb facs="#mss_149-14-extrav_00005"/>
+            <p>
+               <lb/><hi rend="center">Anno 1701. J. N. D. <hi rend="underline">Martius</hi></hi>
+               </p><p><lb/>D. <date when="1701-03-21">21. Martii</date> Reiseten Bruder Ernst und Jch <app><lem wit="H">von</lem><rdg wit="h3" n="25r">aus</rdg></app>
+               <lb/>Wolffenbüttel über Gandersheim, nach Bevern <subst><del>woselbst</del><add place="above"><app><lem wit="H">alwo</lem><rdg wit="h3" n="25r">wo</rdg></app> wir d. <date when="1701-03-23">23.</date> arrivirten</add></subst> <note type="contemporary" place="margin_right">10 M.</note>
+               <lb/><subst><del>wir</del><add place="above">auch daselbst</add></subst> biß d. <date when="1701-03-31">31. Martii</date> verharreten. Von dar traten
+               <lb/>Wir in Gottes Nahmen unsere völlige Reise an, gingen
+               </p>
+            <p>
+               <lb/>d. <date when="1701-03-31">31. Martii</date>, über <hi rend="underline">Fürstenberg</hi>, passirten die Weser <note type="contemporary" place="margin_left">2 M.</note>
+               <lb/>zu Harstelle (welches Paderbornisch) und arrivirten 
+               <lb/>zu <hi rend="underline">Drengelburg</hi>, welches ein Heßen Caßelische<del>s</del> Stadt <note type="contemporary" place="margin_right">2 M.</note>
+               
+               <lb/>und Amt ist. <note type="contemporary" place="margin_right"><hi rend="underline">Drengelburg</hi></note>
+               </p><p><lb/>D. <date when="1701-04-01">1. April</date> Passirten wir zween dörffer, Carlsdorf <note type="contemporary" place="margin_right"><hi rend="underline">Aprilis</hi></note>
+               <lb/>und Fridrichsdorff, welche die frantzösischen refugies
+               <lb/>gebauet, und kamen des abends incognito zu <hi rend="underline">Cassel</hi> <note type="contemporary" place="margin_right">4 M.</note>
+               <lb/>an, nahmen unser quartier in Ellenbergers haus, harte <note type="contemporary" place="margin_right"><hi rend="underline">Cassel</hi></note>
+               <lb/>am Schloße. Des andern morgens wurden wir
+               <lb/>durch Printz Wilhelm auffs Schlos geholet.
+               <lb/>Daselbst Besahen wir die so genandte <app><lem wit="H">Aue</lem><rdg wit="h1" n="2">Aur</rdg><rdg wit="h2" n="2r">Aur</rdg><rdg wit="h3" n="25r">Aue</rdg></app>, alwo
+               <lb/>das Thier haus, die Reit Bahn, und nachgehends
+               <lb/>das Zeughaus, welches ein zimlich großes Gebäude,
+               <lb/>und in 4 Bodens einer über den andern bestehet, wovon
+               <lb/>der öberste mit victualien angefüllet, die andern
+               <lb/>3 aber seind voller Kriegs instrumenten und deren
+               <lb/>zugehör. Es seind darinnen 171 Stücke, und über
+               <lb/>60 mortiers. Die feldt artillerie davon bestehet in
+               <lb/>36 Stücken. Es befand sich auch daselbst
+               <lb/>eine Wage, womit ein Mensch 150 Centner
+               <lb/>(das Centner zu 108 ℔) heben konte, dergleichen
+            <pb facs="#mss_149-14-extrav_00006"/>
+            
+               <lb/><hi rend="center"><hi rend="underline">Aprilis</hi></hi>
+               <lb/>Keine als zu Dresden sein soll. Man zeigete uns auch drey
+               <lb/>Schwerdter, davon das erste <subst><del>unser</del><add place="above">Mein</add></subst> H. Grosvater seel. <w lemma="mütterlicherseiten">mütter:
+               <lb/>licherseiten</w> Landgraff Friedrich von <add place="above">Hessen</add> Eschwege, in der
+               <lb/>Schlacht bey Wolffenbüttel 1646, geführet, und mit
+               <lb/>denselbigen 21 menschen selbst erleget, wie solches die
+               <lb/>auff diesem Schwerdt stehende schrifft andeutet. Das
+               <lb/>andere ist das Schwerdt, womit der Duc d'Alba viele
+               <lb/>menschen grausahmlich hat hinrichten Laßen, wie <w lemma="gleichfals">gleich:
+               <lb/>fals</w> solches aus dem darauff stehenden Lateinischen vers
+               <lb/>zu sehen. Was das dritte Schwerdt eigentlich vor ein
+               <lb/>Schwerdt gewesen, kan man nicht wißen, man kan
+               <lb/>aus der darauff gestandenen Schrifft nichtes leßen, als
+               <lb/>Pompejus; man hat dieses Schwerdt aber in Eroberung
+               <lb/>der Stadt Prag bekommen. Jn der Haubt
+               <lb/>Kirche besahen wie das Landgräffliche begräbniß.
+               <lb/>Hinter dem Altar, war das Epitaphium zu sehen,
+               <lb/>welches Landgraff Wilhelmus Sapiens seinem H.
+               <lb/>Vattern dem Philippo Magnanimo auffrichten
+               <lb/>Laßen. Nach diesem Besahen wir das
+               <lb/>so genandte Neue Haus, welches vor allerhand
+               <lb/>Sciencen gebauet. Daselbst seind Kammern, vor
+               <lb/>die Mahlerey, Optique, Mechanique, Mathematique
+               <lb/>und oben <subst><del>war</del><add place="above">ist</add></subst> eine Anathomie Kammer, wie <add place="above">ferners</add> auch 
+               <lb/>eine Dreh Kammer um in selbigen Helffenbein zu
+               <lb/>drehen. Das Gebaude ist sehr fein gebauet 1698.
+               <lb/>Oben ist eine Kuppel worinnen das observatorium
+               <lb/>zu finden. <add place="inline">F</add> <add place="below">NB</add><note type="annotation">Nachträglich eingefügte Verweise auf eine Textpassage auf der gegenüberligenden Seite, die in allen drei Abschriften an dieser Stelle eingefügt wurde.</note> Jn selbigem Hause besahen wir auch            
+            <pb facs="#mss_149-14-extrav_00007"/>            
+               <lb/><hi rend="center"><hi rend="underline">Aprilis</hi></hi>
+               <lb/>das modell, und nach mittages selbst<add place="inline">en</add> <subst><del>das original vom</del><add place="above">den sogenandten</add></subst>
+               <lb/>Weissenstein, welches ein Lust haus des H. Landgraffen
+               <lb/>werden soll davon aber noch wenig fertig. Dem modell
+               <lb/>nach wird es ein sehr Kostbahres haus werden. Es ligt
+               <lb/>auff einem Hohen berg, und es sieht einer Grotte ähnlich,
+               <lb/>es werden auch daßelbst viele Cascaden angeleget
+               <lb/>werden. Dieses Haus ist 2 Kleine stunden von Cassel. <add place="margin_right">NB.</add>
+               <lb/><add place="above">F</add><note type="annotation">Korrespondierendes Verweiszeichen zur vorherigen Seite.</note> Jn d<subst><del>em obgedachten</del><add place="inline">iesem</add></subst> Neuen haus waren <add place="above">auch</add> sehr schöne
+               <lb/>Brenn Spiegel zu sehen, wovon der eine 1000 Reichs
+               <lb/>Thaler gekostet; diesen brenn spiegel hat der H.
+               <lb/>Landgraff vor dem wegen seiner curiositäten, <w lemma="berühmten">berühm:
+               <lb/>ten</w> Sächsischen Cavalier H. von Schirmhausen
+               <lb/>bekommen. In eben der Kammer alwo wir diesen
+               <lb/>Spiegel sahen, war ein Elephanten Zahn womit
+               <lb/>Hertzog Anton Ulrichs Gnad. den H. Landgraffen
+               <lb/>beschencket. Der Landgraft aber hat <del>ein</del> selbigem ein
+               <lb/>Hellffenbeinen Crucifix verehret, welches Er selbst gedrehet
+               <lb/>und ein großes Kunststück sein soll.
+               </p><p><lb/>D. <date when="1701-04-05">5. April</date> Nach dem wir uns zu Cassell wohl <w lemma="divertiret">diver:
+               <lb/>tiret</w>, reiseten wir gar content von selbigem hoffe, als
+               <lb/>woselbst uns viel Ehre wiederfahren, und giengen über <note type="contemporary" place="margin_right">Die erste
+                  <lb/>post
+                  <lb/>3te halb m.
+                  <lb/>bis Fritzlar 1
+                  <lb/>stund seind
+                  <lb/>3 M.
+                  <lb/>3 M. die 2. post
+                  <lb/>3 M. die 3. post
+                  <lb/><hi rend="center"><hi rend="underline">Marburg</hi></hi>
+               </note>
+               <lb/><hi rend="underline">Wercklen</hi>, vor die Maintzische Stadt Fritzlar vorbey.
+               <lb/>In dieser gegend soll das beste Land von Heßen seÿn. Des
+               <lb/>Abends kamen wir biß <hi rend="underline">Gilserberg</hi>, welches nur ein Hoff.
+               </p><p><lb/>D. <date when="1701-04-06">6.</date> Wurden wir zu <hi rend="underline">Marburg</hi> auff ordre des H. <w lemma="Landgraffen">Land:
+               <lb/>graffen</w> tractiret. Jn der Elisabeth Kirche siehet man
+               <lb/>der Elisabeth grab, wo herum viele Edelgesteine zu sehen.            
+
+<!-- fixture trim: the file continues upstream -->
+</p></div></body></text></TEI>

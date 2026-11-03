@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="grand_tour_digital.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<?xml-model href="grand_tour_digital.rng" type="application/xml" schematypens="http://purl.oclc.org/dsdl/schematron"?>
+<TEI
+   xmlns="http://www.tei-c.org/ns/1.0" xmlns:xi="http://www.w3.org/2001/XInclude" xml:id="grand_tour.cod_guelf_221_extrav" n="Cod. Guelf. 221 Extrav.">
+   <teiHeader>
+      <fileDesc>
+         <titleStmt>
+            <title type="main">Christian August von Schleswig-Holstein-Norburg: Reisetagebuch (Cod. Guelf. 221 Extrav.)</title>
+            <respStmt>
+               <resp>transkribiert mit Hilfe von <ref target="https://www.transkribus.org/">Transkribus</ref> von</resp>
+               <persName>
+                  <forename>Angela</forename>
+                  <surname>Göbel</surname>
+               </persName>
+            </respStmt>
+            <respStmt>
+               <resp>konvertiert und nachkodiert gemäß TEI-P5 mit Hilfe von <ref target="https://claude.ai">Claude Sonnet 5</ref> von</resp>
+               <persName>
+                  <forename>Maximilian</forename>
+                  <surname>Görmar</surname>
+               </persName>
+            </respStmt>
+            <respStmt>
+               <resp>Entitäten annotiert mit Hilfe von <ref target="https://claude.ai">Claude Sonnet 5</ref> und <ref target="https://spacy.io/">spaCy</ref> und mit Registern verknüpft von</resp>
+               <persName>
+                  <forename>Maximilian</forename>
+                  <surname>Görmar</surname>
+               </persName>
+               <persName>
+                  <forename>Angela</forename>
+                  <surname>Göbel</surname>
+               </persName>
+            </respStmt>
+         </titleStmt>
+         <publicationStmt>
+            <p>Christian August von Schleswig-Holstein-Norburg (1639–1687) </p>
+         </publicationStmt>
+         <sourceDesc>
+            <bibl>
+               Reisetagebuch und Chronik Christian August von Schleswig-Holstein-Norburg. Herzog August Bibliothek, Signatur: Cod. Guelf. 221 Extrav.
+            </bibl>
+            <xi:include href="../register/listPlace_grand_tour.xml" xpointer="element(place)"/>
+            <xi:include href="../register/listPerson_grand_tour.xml" xpointer="element(person)"/>
+            <xi:include href="../register/listOrg_grand_tour.xml" xpointer="element(org)"/>
+         </sourceDesc>
+      </fileDesc>
+   </teiHeader>
+   <xi:include href="http://diglib.hab.de/mss/221-extrav/facsimile.xml" xpointer="element(ptr2images_mss_221-extrav)"/>
+   <text>
+      <body>
+         <div type="volume">
+            <pb facs="#mss_221-extrav_00001"/>
+            <pb facs="#mss_221-extrav_00002"/>
+            <pb facs="#mss_221-extrav_00003"/>
+            <pb facs="#mss_221-extrav_00004"/>
+            <pb facs="#mss_221-extrav_00005"/>
+            <pb facs="#mss_221-extrav_00006"/>
+            <pb facs="#mss_221-extrav_00007"/>
+            <p>
+               <lb/><note type="contemporary"  place="margin_right"><choice><abbr>Aō.</abbr><expan>Anno</expan></choice> 1664</note>Nach dehm wir 8 tage zu wasser gewesen als in den
+               <lb/>dritten tage vor anker auf der <rs type="place" ref="#">Teims</rs> v. die ubrigen in der See v. <rs type="place" ref="#">Texel</rs> vorbey
+               <lb/>seind wir <del>den</del> Am <date when="1664-05-28">Pfingst Sonnabend</date> des Morgens Klock
+               <lb/>5 ungefehr bey das <rs type="place" ref="#">heilige Land</rs> komen von da auf die<note type="contemporary"  place="margin_right">Es beweist Guil.
+                     <lb/>Tooker SS. Th.
+                     <lb/>D. das die kröpfe
+                     <lb/>zu heiln 300 Jahr
+                     <lb/>hernach auch die <w lemma="Könige">Kö
+                        <lb/>nige</w> in <rs type="place" ref="#frankreich_koenigreich">Frankreich</rs>,
+                     <lb/>dehrn Clodowich der
+                     <lb/>erste war, aus <rs type="place" ref="#"><w lemma="England">En
+                           <lb/>gland</w></rs> gebracht
+                     <lb/>worden, woselbst
+                     <lb/>die Könige 600
+                     <lb/>Jahr solche von <w lemma="Natur">Na
+                        <lb/>tur</w> <w lemma="eingepflanzete">eingepflan
+                           <lb/>zete</w> <w lemma="genesunghen">genesungh
+                              <lb/>en</w> ausserlich <w lemma="getrieben">ge
+                                 <lb/>trieben</w>, v. mit
+                     <lb/>lob gesungen v. <w lemma="Ceremonien">Ce
+                     <lb/>remonien</w> verichtet
+                     <lb/>zu sehen in seinem
+                     <lb/>Charismate sine
+                     <lb/>dono Sanationis
+                  <lb/>c. 6.<!--<note type="annotation" resp="mg">Die ganze Randnotiz ist durch einen senkrechten Strich durchgestrichen.</note>--><note type="footnote" resp="mg">Vgl. <ref target="https://archive.org/details/b30330324/page/84/mode/2up">William Tooker:  	
+                        Charisma Sive Donvm Sanationis. Sev Explicatio totius quæstionis de mirabilium Sanitatum Gratia [...], London 1597, S. 84f.</ref></note></note>
+               <lb/><rs type="place" ref="#">Elbe</rs> mit glücklichen Winde, die <rs type="place" ref="#">Hamburger</rs> schantze <del>Stade </del>
+               <lb/><rs type="place" ref="#">Gluckstad</rs> vndt andern örthen vorbey Klocke 3 nachmittags
+               <lb/><del><supplied reason="invisible">z</supplied>ur Har</del> angelanget zu <hi rend="underline"><rs type="place" ref="#">Hamburg</rs></hi> logirt in der Harburger
+               <lb/>Herberge bei <rs type="person" ref="#">Hans Hertogh</rs> die pest grasiret die gantzen
+               <lb/>Zeit so wir dagewesen. War den <date when="1664-05-28">28 May. 1664</date>.
+               <lb/>Ich habe in wehrenter Zeit daß ich da gewesen im wirtshaus kennen
+               <lb/>lernen einen von adel <rs type="person" ref="#">Godfrid Stetsch</rs>, it. Hauptman <rs type="person" ref="#"><w lemma="Fridrich">Frid
+                     <lb/>rich</w></rs> helt sich zu <rs type="place" ref="#">Zell</rs> auf v. durch leute, welche eine Zeit
+               <lb/>lange zu <rs type="place" ref="#">Cassel</rs> gedient, noch <rs type="person" ref="#">H. Oberst Andres</rs> undt
+               <lb/>andre mehr, auch ist <rs type="person" ref="#">M. Holsten</rs> zu mir von <rs type="place" ref="#">Gluckstad</rs>
+               <lb/>kommen, it. <rs type="person" ref="#">H. Rudolf Fridrich</rs> mit <rs type="person" ref="#">M. Gentsch</rs>
+               <lb/>worauf <rs type="person" ref="#">Hans Strese</rs> zu zwey verschiedenen mahlen nach
+               <lb/><rs type="place" ref="#">Barse</rs> mit Hirse gereist u. neuen Hafer abgefodert
+               <lb/>welche <del>nebenst der obligation auf 30 000 rthl. it.
+                  <lb/><supplied reason="invisible">d</supplied>en Vortrag von <choice><abbr>Aō</abbr><expan>Anno</expan></choice> 519 mit gesamte brudern v. <w lemma="schwestern">schwe
+                  <lb/><supplied reason="invisible">st</supplied>ern</w> auch den letzten von <choice><abbr>Aō</abbr><expan>Anno</expan></choice> 62 mit Hl. Hans Bei
+                  <lb/><unclear reason="invisible">...</unclear>islaf, bey die <rs type="person" ref="#">Heinrich</rs> u. <rs type="person" ref="#">Hans Pompen</rs> mich gesetzet</del>
+               <lb/>mit dem Unflath der stad ist ein feine ordre nemlich das
+               <lb/>jeder burger Jährlich ein gewisses giebt v. ist zu ieglichs Captein
+               <lb/>schaft ein Fuhrman bestelt der auch wol bißeeile 2 od. 3
+               <lb/>hat nach dem sein anspan es leiden wil, wird dann bezahlt
+               <lb/>v. muß alle woche einmahl in sein quartir herumbfahrn
+               <lb/>jeder haus bringet sein mist auf den wagn u. wird also aus
+               <lb/>der stad geschaffet.
+            </p>
+            <pb facs="#mss_221-extrav_00008"/>
+            
+            <p>
+               <lb/>Es haben mich gepuzt <rs type="person" ref="#">Zacharias</rs>, <del>hernach Meister Jacob in der grossen D<unclear reason="invisible">...</unclear></del>
+               <lb/><note type="contemporary"  place="margin_left">ist todt</note><del>Straße in der Newen stad</del> welcher auch sonst ein guter Wundartzt
+               <lb/>Mit die <rs type="person" ref="#">Pompen</rs> habe ich die rechnungh geschloßen. <rs type="person" ref="#">Rudolf</rs> ist
+               <lb/>umb <date when="1664-06-24">Johanni</date> bey mir kommen der knecht ungefehr ein monath
+               <lb/>vor <date when="1664-09-29">Michaeli</date> der Page 14 tage vor <date when="1664-09-29">Michaeli</date>.
+            </p>
+            <p>
+               <lb/>Freytags den <date when="1664-09-09">9. Sept.</date> bin ich von <rs type="place" ref="#">Hamburg</rs> abgereiset eine meile
+               <lb/>von da ist königl. wacht macht etwas jesper den durchziehenden wegen
+               <lb/>die Pest man komt aber endtlich durch, <hi rend="underline"><rs type="place" ref="#">Pinnenberg</rs></hi> war 2 m
+               <lb/>ist ein schlecht pflecken dabey ligt ein schlos etwas mitn wal umbgeben
+               <lb/><rs type="person" ref="#">Eberstein</rs> logirt da war er dieser örther, diese Grafschaft v.
+               <lb/>der Verstorbene <rs type="person" ref="#">Graf Ranzow</rs> hat ein guth theil daran an
+               <lb/>sich gekauftet.
+            </p>
+            <p>
+               <lb/>Den <date when="1664-09-10">10. Sonnab.</date> <hi rend="underline"><rs type="place" ref="#">Vtersen</rs></hi>, da ein flecken v. Junfern Stift sollen
+               <lb/>ihro 16 drein sein. <rs type="person" ref="#">Gösche von Bugwald</rs> ist ihr Probst. Es war
+               <lb/>eben da einer so bei <rs type="person" ref="#">Baron Bydahl</rs> im Stift Brehmen für <w lemma="Amtman">Amt
+               <lb/>man</w> gedient heist <rs type="person" ref="#">Holtman</rs> mehrt Französisch undt Spanische
+               <lb/>eine Kaufmanns Dochter aus <rs type="place" ref="#">Hamburg</rs>.
+            </p>
+            <p>
+               <lb/>Den <date when="1664-09-12">12. Montags</date> kahm der Page mit <rs type="person" ref="#">Rudolph</rs> von <rs type="place" ref="#">Hanse</rs>.
+            </p>
+            <p>
+               <lb/>Den <date when="1664-09-13">13.</date> habe ich den <del>revers von die <rs type="person" ref="#">Pompen</rs> wegen die</del> Brandenb.
+               <lb/><del>obligation erhalten</del>.
+               <lb/><del><rs type="person" ref="#">H. Rudolph Fridrich</rs> hat bei sich die meß v. Artillerie Jnstrumente
+                  <lb/>auch die globi, v. das dänische lowbuch auf teutsch geschrieben
+                  <lb/><rs type="person" ref="#">M. Holsten</rs> das Silberne becken, wofür ich ihm noch 21 rthl. wegen
+                  <lb/>das pferd schüödig, vnsern</del>
+            </p>
+            <p>
+               <lb/>Den <date when="1664-09-18">18. Sept.</date> Sont. nachmittag nach <hi rend="underline"><rs type="place" ref="#">Pinnenberg</rs></hi>. 1. m.
+               <lb/><hi rend="underline"><rs type="place" ref="#">Blanquenese</rs></hi>. 2. über die <rs type="place" ref="#">Elbe</rs> 1 kl. m. durchn <hi rend="underline"><rs type="place" ref="#">Krantz</rs></hi> durch
+               <lb/><hi rend="underline"><rs type="place" ref="#">Buxdehude</rs></hi> Schwedisch in Brunnen 1 &#189; Alten kloster im kruge
+               <lb/>vor der stad.
+            </p>
+            <p>
+               <lb/><hi rend="underline"><rs type="place" ref="#">Hantorf</rs></hi> 3 m. <hi rend="underline"><rs type="place" ref="#">Soltow</rs></hi>. 3. vorals sonst zusammen von 7 gewehret
+               <lb/><hi rend="underline"><rs type="place" ref="#">Bergen</rs></hi>. 3. <hi rend="underline"><rs type="place" ref="#">Celle. 3</rs></hi>. mit der kutschen eingeholet die <rs type="person" ref="#">Fürstin</rs> Dorthe
+               <lb/>mein schwester als da hat ein sol. teatro von <rs type="person" ref="#">H. Ernst Gunter</rs> bey sich
+               <lb/>it mein schwester <rs type="person" ref="#">Luise</rs>, der Hl. war 2 m. von da zog danach nachen
+               <lb/><rs type="place" ref="#">Hertzberge</rs>, die pest war etwas in der <rs type="place" ref="#">Neustad</rs>.
+            </p>
+            <pb facs="#mss_221-extrav_00009"/>
+            <p>
+               <lb/>Den <date when="1664-09-27">27. Dingst.</date> <hi rend="underline"><rs type="place" ref="#">Wisnhusen</rs></hi> ist der <rs type="person" ref="#">Fürstin</rs> Hauß. 1. <hi rend="underline"><rs type="place" ref="#">Menersen</rs></hi>
+               <lb/>3. m. <del>V</del> <hi rend="underline"><rs type="place" ref="#braunschweig">Braunswig</rs></hi> 3. m.
+            </p>
+            <p>
+               <lb/><del>Den</del>
+            </p>
+            <p>
+               <lb/>Den <date when="1664-09-29">29. Donnerst. Michaeli</date> nach <rs type="place" ref="#wolfenbuettel">Wolffenb.</rs> v. wider zu rücke
+               <lb/>nach <rs type="place" ref="#braunschweig">Braunschweig</rs>. <hi rend="underline"><rs type="place" ref="#wolfenbuettel">Wolffenbuttel</rs></hi>. 1. <hi rend="underline"><rs type="place" ref="#">Hedwigsberg</rs></hi>. 1.
+               <lb/>Da ist gestern die Kich ein geweiht worden, v. des Cammerdieners
+               <lb/>Hochzeit gemacht auch ein Mor getauft. <rs type="person" ref="#">Landgraf von Homburg</rs>.
+               <lb/>mit den Höltzern bein war auch da die <rs type="person" ref="#">Hertzogin von Mecklenburg</rs>
+               <lb/>Die <rs type="person" ref="#">Fürstin von Wolfenbuttel</rs>, <rs type="person" ref="#">H. Anton Ulrich</rs> waren schwester
+               <lb/><rs type="person" ref="#">H. Rudolf August</rs> sein Gemahlin Jhre schwester v. bruder.
+            </p>
+            <p>
+               <lb/>Den <date when="1664-10-01">1. Octobr.</date> <hi rend="underline"><rs type="place" ref="#helmstedt">Helmsted</rs></hi>. 4. m. <hi rend="underline"><rs type="place" ref="#">Wenzelingen</rs></hi> 1. m. der <rs type="person" ref="#"><w lemma="Landgraf">Land
+                     <lb/>graf</w></rs> &#189; m. entgegen kommen, seine Gemahlin eine Bochin
+               <lb/>hat 2 opresten nach einander gehabt, es war da des Vatters
+               <lb/>von <rs type="place" ref="#">Sonderb.</rs> Gen. leute. sel. tochter so er mit des Landgrafs <w lemma="schwester">schwe
+                  <lb/>ster</w> geheirathet. <rs type="place" ref="#">Homburg</rs> ist ein altheil von <rs type="place" ref="#darmstadt">Darmstadt</rs> auch
+               <lb/>ein Landgrafisch Freulein von <rs type="place" ref="#homburg">Homburg</rs>. Das Haus v. guther sind
+               <lb/>den <rs type="person" ref="#">Graf Königswirt</rs> gekauft v. fallen dem Hause
+               <lb/><rs type="place" ref="#">Hessen</rs> zu wan er ehe stürbe als die <unclear reason="illegible">G</unclear>emahlin, das schlos
+               <lb/>ist fein meublirt aber noch nicht alle dieseiten verneuet. Die
+               <lb/>Gemahlin verlor eine probe von 6000 rthl. es wurd eben
+               <lb/><rs type="person" ref="#">M. Kolhans</rs> geheimen rathes Hochzeit mit der Cammer <w lemma="Junfer">Jun
+               <lb/>fer</w>, it. ein ungemeinen kopf, v. schißen 2 tage nach einander it.
+               <lb/>ein Carousel mit belly einander gewesen ihr aus fahrt wird
+               <lb/>gewiesen zum wenigsten muß man 3 belle anbringen, nicht zu
+               <lb/>nahe auch nicht zu weit nur als schenke reiten in einen sanften
+               <lb/>galop keinen bugel hat band oder sonsten was fallen lassen
+               <lb/>v. verlieren, nicht warfen wen man von einander zuwurde
+               <lb/>die Carriere schindet.
+            </p>
+            <p>
+               <lb/><hi rend="underline"><rs type="place" ref="#helmstedt">Helmsted</rs></hi>, <hi rend="underline"><rs type="place" ref="#">KönigsLutter</rs></hi>. da Königs Lotarij bildnis aus
+               <lb/>stein aufm grabe um zerbrochen, eine treppe darauf zu reiten
+               <lb/>dero bechung wird da zubrauen aus dem bach
+               <lb/><rs type="place" ref="#wolfenbuettel">Wolfenbuttel</rs> 5. m.
+            </p>
+            <p>
+               <lb/><hi rend="underline"><rs type="place" ref="#">Salzthal</rs></hi> &#189; gehort meinem <rs type="person" ref="#">schwager</rs> Meyerhof <unclear reason="illegible">Kurfert</unclear> da
+               <lb/><rs type="place" ref="#hamburg">Hammburgs</rs> Stadthalter war des Mittags zur taffel wieder nach
+               <lb/><rs type="place" ref="#wolfenbuettel">Wolfenbuttel</rs>.
+            </p>
+            <pb facs="#mss_221-extrav_00010"/>            
+            <p>
+               <lb/>Worgewitz dahier kommen.
+            </p>
+            <p>
+               <lb/><hi rend="underline">Jnnershagen.</hi> 2 m. <hi rend="underline">Gandersheim</hi> 5. m. Leutnamptsche
+               <lb/>bei der dechantin <add place="inline">die <rs type="person" ref="#">Aptissin von Solms. Lich.</rs> elteste <w lemma="Canonissin">Canoni<lb/>ssin</w> Reingrefin</add> <add place="margin_left">2. Canonissen <lb/>von Solms <lb/>3. von <w lemma="Leiningen">Leinin<lb/>gen</w></add>
+            </p>
+            <p>
+               <lb/><hi rend="underline">Goslar</hi>. 4. m. Gose. ocker Ahneht. da Spirit. victril aus
+               <lb/>die Historie von Keys. Otto in den Wege v. hernach den schuster
+               <lb/>Schonwig 1 &#189;. <hi rend="underline">Osterwik</hi> ein was herumb nach Brauische
+               <lb/><note type="contemporary" place="margin_left">8 Dumhern einer
+                  <lb/>davon Senior
+               </note>zu 1 &#189;. 3. <hi rend="underline">Halberstad</hi> Cantzeler Gen besizt den Petersberg
+               <lb/>die dumhern haben des Churfl. 4ten theil ausgekauft mit
+               <lb/>80 000 rthl.
+            </p>
+            <p>
+               <lb/>2. m. <hi rend="underline">Lindlenberg</hi> die Eglissis ist ein Pfaltz gräfin Probstei
+               <lb/>Landgräfin von Darmstad Vechantin freul. von Plötzbo
+               <lb/>Canonissin gräfin von Schwartzberg.
+            </p>
+            <p>
+               <lb/><hi rend="underline">Ballestede</hi> 1. st. v. fleck. das Schlos auf berge was <w lemma="abgelegen">abgele
+               <lb/>gen</w> frl. Angelica. fürst victor. v. die fr. Mutter da
+            </p>
+            <p>
+               <lb/><hi rend="underline">Aschersleben</hi> 2. m. Halberstedisch <del>2. m.</del> <hi rend="underline">Plotzko</hi>. 2. m.
+               <lb/>Fürst lebericht, Fürst Emanuel <del>werden theilen</del> die <w lemma="Gemahlin">Ge
+               <lb/>mahlin</w> eine Grefin von Stolberg 3 frl. schwestern
+               <lb/>vber die Sale. 4. m. <hi rend="underline">Cothen</hi> der Fürst da, sel. Eleon. Anne
+               <lb/>lische. die Gemahlin von Hetscherode da ein force
+               <lb/><unclear>Jahr</unclear> der Fürst von Dessau nebenst Graf von Donau
+               <lb/>da. Bar. T<unclear>erx</unclear> von Rellitz durl. geschossen
+            </p>
+            <p>
+               <lb/><hi rend="underline">Acken</hi>. 2 m. über die Elbe, den von Hal Admin. was
+               <lb/>verkauft muß 3. Sonnen schau da ligen was aber gleich
+               <lb/>nach Hamburg gelifert hat es nicht notig.
+            </p>
+            <p>
+               <lb/><hi rend="underline">Zerbst</hi> Cammerjunfer hochzeit die von Plotzbo dar
+               <lb/>da ein teich ausfischen
+            </p>
+            <p>
+               <lb/><hi rend="underline">Muhlingen</hi> 1 &#189;. m. gehort zu grafschaf Barbi welches
+               <lb/>auf der ander seit der Elbe, das haus liget an der Nutte
+               <lb/><hi rend="underline">Görtsch</hi>. 4. m. <hi rend="underline">Brandenburg</hi> an der Hanel. 4. m.
+               <lb/><hi rend="underline">Neuen Alsleben</hi>. 3. m. <hi rend="underline">Spando</hi>. 3.
+            </p>
+            <p>
+               <lb/><hi rend="underline">Berlin. 2. m.</hi> den 28. octob. Freyt. mit der kutsche <w lemma="aufgeholet">aufge
+               <lb/>holet</w>
+            </p>
+
+<!-- fixture trim: the file continues upstream -->
+</div></body></text></TEI>

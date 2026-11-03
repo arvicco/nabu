@@ -1573,6 +1573,38 @@ sources:
         coarse — the print's place, not the author's; <set> (the fictional setting) is
         never a place claim"}
     script: {posture: implied}
+  emmo:   # P155
+    # lect machine-postured — config/lect_overrides.yml en → en:early;
+    # kind machine-postured — kind_map.yml metadata document_type.
+    dating: {posture: dated, note: "all 100: the catalogue's msDesc/history/origin@when (ISO year,
+        year-month or day; 1552–1697) → a one-year envelope, class composition; the
+        cataloguer's wording (circa / old-style 1622/1623 / ?) rides as raw"}
+    places: {posture: named, note: "the writing place = the first placeName inside the letter's
+        own dateline (46 of 100 documents), in EMMO's regularized form (Oxoniensis → Oxford);
+        EMMO names carry no gazetteer refs. Every other placeName/name rides the page as a
+        mention (passage facets place/person), never an origin claim; the catalogue titles'
+        'from X, Place,' strings are not parsed (persons' styles and places share the commas)"}
+    script: {posture: implied, note: "Latin script as written — the thorn rides as EMMO
+        encodes it (<g ref='#thorn'>th</g>), the scribal metamarks are not reading text"}
+  grand-tour:   # P155
+    # kind machine-postured — kind_map.yml source_kind literary/diary/travelogue.
+    lect: {posture: identity, note: "de IS German — four journals written 1652–1702, past
+        de:early's [1350, 1650] band, so the code stays honestly bare (the dta precedent:
+        post-1650 German is unstaged). No file carries xml:lang; the French and Latin
+        quotations, inscriptions and one French copy's variants are unmarked upstream —
+        deliberately coarse, the whole document rides de"}
+    dating: {posture: dated, note: "the diary's own <date when> entries in the reading text (never
+        the editors' notes) → first-to-last-year envelope, class composition (1652–1659,
+        1664–1670, 1689, 1701–1702); each page carries its dates"}
+    places: {posture: unplaced, note: "the journals are ITINERARIES — no single origin place is
+        claimed (the diccas precedent). Every <rs type=place> rides its page as {value, ref}
+        through the deposit's register (GeoNames / GND / Wikidata URLs verbatim — the passage
+        facet place), the resolved names as the document's places_mentioned; Wagener's dated
+        itinerary sidecar (149 stops, 141 with GeoNames id + coordinates) rides 267.1's
+        metadata only — no per-stop axis row exists for a moving traveller. Upstream NER is
+        uneven and counted (entity_mentions): 149.14 has none, 221 links few"}
+    script: {posture: implied, note: "Latin script as transcribed — the edition normalizes long s
+        to round s and unifies line-end hyphens; abbreviation signs are kept as characters"}
   tianyige:   # P154
     # kind machine-postured — kind_map.yml source_kind administrative/register.
     # The machine punctuation + English translation are DECLINED (the

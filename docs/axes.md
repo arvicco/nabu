@@ -91,7 +91,7 @@ Old Church Slavonic and its daughters: the OCS/Old Russian treebanks, the gospel
 
 Gothic on the proiel/ud treebanks beside the West and North Germanic branches: Old English verse (ASPR) and prose (ISWOC) with Bosworth-Toller, Old Icelandic (IcePaHC via ud), Old Norwegian and the Poetic Edda (Menotec), the Medieval Nordic manuscript archive (Menota), the Corpus of Middle English (CME), early-modern English at scale (EEBO-TCP), Beowulf again in Klaeber's edition with its aligned English (perseus-anglit), the Old Saxon Heliand (HeliPaD), Middle High German manuscripts (ReM), Middle Low German and Low Rhenish (ReN), the German print era whole (DTA, 1473–1969), and the runic inscriptions (Rundata, dual-tagged epigraphy).
 
-**Members** (33): `aspr`, `bosworth-toller`, `cleasby-vigfusson`, `cme`, `corpus-gysseling`, `corpus-oudfries`, `corpus-oudnederlands`, `dta`, `eebo-tcp`, `fornsvenska`, `fsv-lexica`, `helipad`, `iswoc`, `menota`, `menotec`, `perseus-anglit`, `ppchy`, `proiel`, `ref`, `rem`, `ren`, `rundata`, `runesdb`, `ud`, `wiktionary-dum`, `wiktionary-enm`, `wiktionary-gmh`, `wiktionary-gmq-osw`, `wiktionary-got`, `wiktionary-non`, `wiktionary-ofs`, `wiktionary-sco`, `zoega`
+**Members** (35): `aspr`, `bosworth-toller`, `cleasby-vigfusson`, `cme`, `corpus-gysseling`, `corpus-oudfries`, `corpus-oudnederlands`, `dta`, `eebo-tcp`, `emmo`, `fornsvenska`, `fsv-lexica`, `grand-tour`, `helipad`, `iswoc`, `menota`, `menotec`, `perseus-anglit`, `ppchy`, `proiel`, `ref`, `rem`, `ren`, `rundata`, `runesdb`, `ud`, `wiktionary-dum`, `wiktionary-enm`, `wiktionary-gmh`, `wiktionary-gmq-osw`, `wiktionary-got`, `wiktionary-non`, `wiktionary-ofs`, `wiktionary-sco`, `zoega`
 
 ### celtic
 

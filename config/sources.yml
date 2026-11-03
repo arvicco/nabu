@@ -2422,6 +2422,28 @@ eltec-srp:   # P117-2, 02-sources row 246
   # → expected first sync 96 docs / 150,794 passages (census 2026-10-11).
   # srpELTeC-ijk is NOT fetched: no license statement anywhere upstream.
 
+emmo:   # P155, 02-sources row 368
+  adapter: Nabu::Adapters::Emmo
+  adopted: "2026-11-03"
+  axes: [germanic]
+  wired: false   # bin/nabu enable emmo, then bin/nabu sync emmo — ONE zip (2.9 MB,
+                 # emmo.folger.edu/zip/emmo.zip; seconds). EXPECT 100 docs / 196
+                 # passages, 0 errored, 1 skipped by rule (emmo.xsl) + the
+                 # fetcher's .zip-fetch.json pin (census through the adapter over
+                 # the 2026-05-31 zip, 2026-11-03). Eyeball nabu show
+                 # urn:nabu:emmo:La13:1r (Yeldard Alvey to Walter Bagot, Oxford
+                 # 1620) and urn:nabu:emmo:Lb526:1r (Donne to Sir George More,
+                 # 1602), probe nabu search "daunceinge schoole", then flip.
+  sync_policy: manual   # the zip is rebuilt in place (no versioned release)
+  # Early Modern Manuscripts Online (Folger Shakespeare Library): 100
+  # word-tokenized TEI P5 transcriptions of English manuscripts, 1552–1697
+  # — the Bagot family letters of Blithfield, the More family of Loseley
+  # (John Donne's letters of 1602 among them), Bacon-Townshend, Ferrers,
+  # Rich, Cavendish-Talbot papers. CC BY-SA 4.0 in every file's licence →
+  # attribution (images excluded, never fetched). Document = file,
+  # passage = page; text = the original spelling with expansions, upstream's
+  # regularized spelling as the "regularized" annotation (the ticha seam).
+
 eng-web:
   adapter: Nabu::Adapters::EngWeb
   adopted: "2026-07-10"
@@ -2749,6 +2771,29 @@ gpc:   # P97-3
   # ManualDrop acquisition (docs/manual/gpc.md) — the subset arrives by
   # email; upstream announced a future site publication of the same
   # artifact. Dictionary-shaped (content_kind :dictionary, cy).
+
+grand-tour:   # P155, 02-sources row 369
+  adapter: Nabu::Adapters::GrandTour
+  adopted: "2026-11-03"
+  axes: [germanic]
+  wired: false   # bin/nabu enable grand-tour, then bin/nabu sync grand-tour — ONE Zenodo
+                 # zip (1.6 MB) read by HTTP Range: 32 files kept, the shipped .git/
+                 # (94 files) never read; seconds. EXPECT 4 docs / 515 passages, 0
+                 # errored, 28 skipped by rule + the .zip-range-fetch.json pin
+                 # (census through the adapter over the whole unpack 2026-11-03).
+                 # Eyeball nabu show urn:nabu:grand-tour:cod_guelf_89_blank:90r
+                 # (Ludwig Rudolf leaves Wolfenbüttel, 9 January 1689) and 5
+                 # random, probe nabu search "Gottorff", then flip.
+  sync_policy: frozen   # an immutable Zenodo version; a new release = an owner re-pin
+  # Grand Tour digital (Herzog August Bibliothek Wolfenbüttel, ed. Göbel /
+  # Görmar; Zenodo 23055358, 2026-09-30): four early-modern German travel
+  # journals in HAB manuscripts, 1652–1702 — Wagener the journeyman
+  # apothecary, Christian August of Schleswig-Holstein-Norburg, Duke
+  # Ludwig Rudolf's Scandinavian journey, the Bevern dukes in Italy and
+  # France. Transkribus HTR hand-corrected; NER persons/places/orgs linked
+  # through the deposit's registers to GND/GeoNames/Wikidata. CC BY-SA 4.0
+  # (LICENSE + record) → attribution. Document = journal, passage = page;
+  # the 20 editorial introductions and the registers are not documents.
 
 gretil:
   adapter: Nabu::Adapters::Gretil
