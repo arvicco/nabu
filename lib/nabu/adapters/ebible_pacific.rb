@@ -35,7 +35,8 @@ module Nabu
     # text in other formats, not fetched. Reconciliation: 66 + 6 + 28 =
     # 100 books / 48,762 verses = eBible's own catalog counts
     # (translations.csv OT+NT verses: 23,145+7,957 · 2,461+4,784 ·
-    # 2,460+7,955), plus 4 rule-skipped files per zip — no residue.
+    # 2,460+7,955), plus 4 rule-skipped files per zip and the fetcher's
+    # own .zip-fetch.json state pin per tree — no residue.
     #
     # == Refused (the survey's other Pacific eBible rows)
     #
@@ -151,7 +152,9 @@ module Nabu
           entries(workdir, id).each do |name|
             next if BOOK_FILE.match?(name)
 
-            if NON_BOOK_FILES.match?(name)
+            if name == Nabu::ZipFetch::STATE_FILE
+              notes << "#{id}/#{name}: the fetcher's own state pin — not upstream content"
+            elsif NON_BOOK_FILES.match?(name)
               notes << "#{id}/#{name}: the zip's rights page / stylesheet / signing material — not scripture"
             else
               unrecognized << "#{id}/#{name}: unrecognized file in the translation zip"

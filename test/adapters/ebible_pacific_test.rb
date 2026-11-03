@@ -93,6 +93,18 @@ module Adapters
       assert(skips.notes.any? { |n| n.include?("haw1868/keys.asc") })
     end
 
+    def test_the_fetchers_own_state_pin_skips_by_rule
+      Dir.mktmpdir do |dir|
+        FileUtils.mkdir_p(File.join(dir, "pon"))
+        FileUtils.cp(File.join(FIXTURES, "pon", "69-2JNpon.usfm"), File.join(dir, "pon"))
+        File.write(File.join(dir, "pon", Nabu::ZipFetch::STATE_FILE), "{}")
+        skips = conformance_adapter.discovery_skips(dir)
+        assert_equal 1, skips.skipped_by_rule
+        assert_equal 0, skips.unrecognized
+        assert(skips.notes.any? { |n| n.include?(Nabu::ZipFetch::STATE_FILE) })
+      end
+    end
+
     def test_an_unknown_usfm_name_is_unrecognized_never_a_document
       Dir.mktmpdir do |dir|
         FileUtils.mkdir_p(File.join(dir, "pon"))
