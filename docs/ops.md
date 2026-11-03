@@ -427,7 +427,7 @@ Notes:
   wake — launchd fires a `StartCalendarInterval` job once on the next
   opportunity, it does not queue every missed slot.
 - Times are local. Keep the nightly job comfortably before the weekly one if you
-  ever put both on the same night.
+  ever put both on the same day.
 - `ProcessType: Background` (set in every template) tells the scheduler these are
   low-priority; they won't fight foreground work for CPU/IO.
 

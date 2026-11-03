@@ -1,6 +1,6 @@
 ---
 title: "The hidden layers: apparatus, morphology, and the wordlists in the attic"
-date: 2026-10-06 19:50:00 +0000
+date: 2026-10-06 00:00:00 +0000
 description: >-
   A wrap-up phase that parsed what was already on the shelves: the
   Pali canon's variant apparatus and concordances, full morphology

@@ -1,6 +1,6 @@
 ---
 title: "Places become decisions — the third dimension lights up"
-date: 2026-08-09 15:45:00 +0000
+date: 2026-08-09 00:00:00 +0000
 description: >-
   Two phases of the places program land: the gazetteers of the ancient
   world held locally under one namespaced index, a sister registry that

@@ -1,6 +1,6 @@
 ---
 title: "The commons wave: Wikisource, the Diet Library, and the Luwian corpus"
-date: 2026-10-01 07:17:00 +0000
+date: 2026-10-01 00:00:00 +0000
 description: >-
   Two Wikisource cones and the National Diet Library's classical OCR
   mass open the East Asian commons lane; the Annotated Corpus of

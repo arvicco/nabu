@@ -1,6 +1,6 @@
 ---
 title: "The biggest single day — fifteen new sources, from Ganjoor to the Patrologia Graeca"
-date: 2026-11-02 10:15:00 +0000
+date: 2026-11-02 00:00:00 +0000
 description: >-
   Two development windows in one day: the demo image went multi-arch
   with its release rail, a silver scansion lane and the Elizabeth
@@ -18,8 +18,8 @@ November 2026), up 1.7 million passages in a day.
 
 **The classical Persian library, whole.** The operator of
 [Ganjoor](https://ganjoor.net), the Persian poetry reference site,
-granted reuse of its data this morning, and by evening its classical
-cone was on the shelves: **212 poets / 126,165 poems / 1,453,355
+granted reuse of its data the day of the ask, and within hours its
+classical cone was on the shelves: **212 poets / 126,165 poems / 1,453,355
 couplet-passages**, from Rudaki and Ferdowsi through Nezami, ʿAṭṭār,
 Rumi, Saʿdi and Hafez to the Qajar divans, every poem dated by its
 poet's life and most placed. Beside it landed the library's first New

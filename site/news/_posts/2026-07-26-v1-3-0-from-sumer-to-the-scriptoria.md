@@ -1,6 +1,6 @@
 ---
 title: "v1.3.0 — from Sumer to the scriptoria"
-date: 2026-07-26 16:30:00 +0000
+date: 2026-07-26 00:00:00 +0000
 description: >-
   The v1.3.0 release: four phases since v1.2.0 — the Islamicate
   library, the meter layer and the place index, the Romance

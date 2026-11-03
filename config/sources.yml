@@ -2242,7 +2242,7 @@ edrdg:
   # page → attribution). SCALE/CHURN HONESTY: upstream REBUILDS BOTH FILES
   # NIGHTLY (verified Last-Modified 2026-07-19 03:30 GMT, in-file build
   # stamps 2026-07-19) — sync_policy manual means each owner-fired sync
-  # adopts THAT NIGHT'S build and every re-sync WILL rewrite canonical;
+  # adopts the LATEST NIGHTLY build and every re-sync WILL rewrite canonical;
   # the per-dictionary .file-fetch.json pins + in-file build stamps
   # (<date_of_creation>, "JMdict created:") date what canonical holds.
   # ~218k jmdict entries make this the largest dictionary shelf after a

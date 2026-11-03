@@ -85,7 +85,7 @@ the library resembles this passage?" mid-discussion.
 
 The consequence of the delta design: the **first** run is the priced
 build — the literary core is about 4.9 million passages across 17
-sources, roughly a 20-hour overnight-and-a-day run on this hardware
+sources, roughly a 20-hour run on this hardware
 (`caffeinate -i bin/nabu embed` keeps the machine awake for it). Every
 **later** run is seconds to minutes, catching up only what a sync
 added or revised. And because fingerprints are keyed to the passage's

@@ -1,6 +1,6 @@
 ---
 title: "The engine phase: rebuilds measured, stamped, and made incremental"
-date: 2026-07-20 22:00:00 +0000
+date: 2026-07-20 00:00:00 +0000
 description: >-
   Phase 36 gives the derived layer its instruments: a stage profiler in
   every rebuild, derivation stamps that let unchanged sources skip

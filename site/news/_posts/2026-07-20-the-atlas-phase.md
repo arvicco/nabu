@@ -1,6 +1,6 @@
 ---
 title: "The atlas phase: research axes, personas, and honest surfaces"
-date: 2026-07-20 18:00:00 +0000
+date: 2026-07-20 00:00:00 +0000
 description: >-
   Phase 35 stops widening and maps: eighteen research axes with their
   personas over the eighty-source registry, axis-aware listing and
