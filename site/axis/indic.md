@@ -27,6 +27,7 @@ A source wears every desk it serves — these 32 answer this desk. Holdings are 
 | `gu-wikisource` | texts | attribution | wired · manual | 207 docs / 1,462 passages |
 | `kannada-texts` | texts | attribution | wired · auto | 16 docs / 16,151 passages |
 | `madurai` | texts | attribution | wired · manual | 755 docs / 1,214,683 passages |
+| `mahan-kosh` | dictionary | attribution | not yet wired | not synced yet |
 | `mw` | dictionary | nc | wired · manual | 193,890 entries |
 | `nabu-data` | feature module | attribution | wired · manual | nothing held yet |
 | `osbct` | texts | nc | not yet wired | nothing held yet |

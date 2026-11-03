@@ -1937,3 +1937,11 @@ pronunciation, citations from the 17th-century canon the
 theatre-classique stage holds, and the HISTORIQUE sections that quote
 Old and Middle French century by century — each article tagged with the
 earliest century Littré quotes it from (CC BY-SA).
+
+**`mahan-kosh`** — Bhai Kahan Singh Nabha's *Gurushabad Ratnakar Mahan
+Kosh* (1930), the Sikh encyclopedic dictionary of the Gurbani
+vocabulary, in its original Punjabi: 64,218 entries, 60,196 with the
+full Gurmukhi article (its quotations, etymologies and cross-references)
+and every entry with its volume and page in the 1930 print — the
+dictionary for the shabados Gurbani shelf (the 1930 text public domain,
+the packaging CC BY 4.0).
