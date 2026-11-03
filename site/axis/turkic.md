@@ -9,6 +9,12 @@ description: >-
 
 The Turkic historical lane, opening on ATMO's Jarring-collection Turki manuscripts (line-by-line TEI, Perso-Arabic with transliteration) and the kaikki Old Turkic / Old Uyghur / Chagatai extracts — the Wilkens Old Uyghur dictionary and the runiform inscriptions joining as their packets and asks land.
 
+ATMO's manuscripts are Eastern Turki of the eighteenth to twentieth
+centuries — Perso-Arabic text with a full Latin transliteration on every
+line, marginalia served with their provenance marked — beside the Old
+Turkic treebank, the Wiktionary extracts for Old Turkic, Old Uyghur and
+Chagatai, and the West Old Turkic loanword dictionary.
+
 New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the library in minutes.
 
 ## The shelves
