@@ -445,20 +445,18 @@ sinh:
 hani:
   name: Han (Hanzi, Kanji, Hanja)
   context: >-
-    The generic Han code, kept for the vernacular writing systems built
-    out of Chinese characters that ISO 15924 does not separate: the
-    Vietnamese chữ Nôm (in use from roughly the 13th c. to the early
-    20th, beside Literary Sinitic) and the Zhuang Sawndip ("raw
-    characters") of the Tai-speaking south, both mixing borrowed Chinese
-    characters, read for sound or sense, with characters of their own
-    coinage. Unicode encodes those characters in the CJK Unified
-    Ideograph blocks beside Chinese, so the code names a usage, not a
-    separate set of bytes.
+    The Chinese characters as one writing system, whatever the language
+    they write: Chinese itself, Japanese kanji, Korean hanja, and the
+    vernacular scripts built from them that ISO 15924 does not separate —
+    the Vietnamese chữ Nôm, used from about the 13th c. to the early 20th
+    beside Literary Sinitic, and the Zhuang Sawndip of the Tai-speaking
+    south, both mixing borrowed characters, read for sound or sense, with
+    characters of their own coinage. Unicode encodes all of them in the
+    CJK Unified Ideograph blocks.
   desk: >-
-    A ~hani claim (vi~hani, za~hani) is a collection-grain statement
-    about Nôm or Sawndip writing; byte-level checks classify the same
+    A ~hani claim (vi~hani, za~hani) is a shelf-level statement
+    about Nôm or Sawndip writing; byte-level checks file the same
     characters as Han under the hant row.
-
 mong:
   name: Mongolian
   context: >-
