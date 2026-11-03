@@ -17,10 +17,15 @@ module Nabu
     #                   `nabu rebuild` runs FROM THIS CHECKOUT is refused —
     #                   the run stamps derivation fingerprints from the bytes
     #                   on disk hours after it loaded its code, so a mid-run
-    #                   commit stales (or falsifies) every stamp it mints.
-    #   commit-msg  (c) AI-attribution footers and internal workflow ids
-    #                   in the message (the public-surface hygiene rule's
-    #                   commit half — the suite can only guard the tree).
+    #                   commit stales (or falsifies) every stamp it mints;
+    #               (d) the committer-timezone guard: a non-UTC offset
+    #                   stamps the committer's timezone into public history
+    #                   (owner rule 2026-11-03) — refused with the TZ=UTC
+    #                   fix line.
+    #   commit-msg  (c) AI-attribution footers, internal workflow ids and
+    #                   time-of-day narrative in the message (the
+    #                   public-surface hygiene rule's commit half — the
+    #                   suite can only guard the tree).
     #
     # Each refusal prints WHY and the override (git's own --no-verify).
     # The scripts live tracked under script/git-hooks/; the installer
@@ -68,6 +73,25 @@ module Nabu
       # The numero sign, built from its codepoint: a literal one would trip
       # the tracked-file hygiene guard this list mirrors.
       NUMERO = 0x2116.chr(Encoding::UTF_8)
+
+      # A word fragment, so this file never matches its own temporal
+      # patterns (the NUMERO trick again).
+      NIGHT = "night"
+
+      # Time-of-day narrative reveals the clock behind the work (owner
+      # rule 2026-11-03, minted on a live news-page leak): public text —
+      # commit messages included — carries DATES, never day-parts. The
+      # tracked-file half lives in test/public_hygiene_test.rb; the
+      # commit-timestamp half is the pre-commit timezone guard below.
+      TEMPORAL = [
+        [Regexp.new("\\bover#{NIGHT}\\b", Regexp::IGNORECASE),
+         "time-of-day narrative (dates are the finest public grain)"],
+        [Regexp.new("\\b(?:this|same|that|by|one|a single) (?:morning|evening|afternoon|#{NIGHT})\\b",
+                    Regexp::IGNORECASE),
+         "time-of-day narrative (dates are the finest public grain)"],
+        [Regexp.new("\\bto#{NIGHT}\\b|\\blast #{NIGHT}\\b", Regexp::IGNORECASE),
+         "time-of-day narrative (dates are the finest public grain)"]
+      ].freeze
 
       # Internal workflow ids and correspondence machinery — the same
       # classes test/public_hygiene_test.rb forbids in tracked files,
@@ -175,16 +199,39 @@ module Nabu
       def message_offenses(message)
         body = message.split(SCISSORS, 2).first.to_s
         lines = body.each_line.map(&:chomp).reject { |line| line.start_with?("#") }
-        (ATTRIBUTION + WORKFLOW_IDS).each_with_object([]) do |(pattern, reason), offenses|
+        (ATTRIBUTION + WORKFLOW_IDS + TEMPORAL).each_with_object([]) do |(pattern, reason), offenses|
           hit = lines.find { |line| line.match?(pattern) }
           offenses << "#{reason}: #{hit.strip[0, 72]}" if hit
         end
       end
 
+      # Commit timestamps are public history: a non-zero offset stamps
+      # the committer's timezone — and with it the working clock — onto
+      # every commit forever (owner rule 2026-11-03). House commits
+      # stamp UTC; the fix is one env var, printed runbook-style.
+      def timezone_offense(utc_offset)
+        return nil if utc_offset.zero?
+
+        sign = utc_offset.negative? ? "-" : "+"
+        hhmm = format("%<h>02d%<m>02d", h: utc_offset.abs / 3600, m: (utc_offset.abs % 3600) / 60)
+        <<~MSG
+          pre-commit: REFUSED — this commit would stamp the local timezone (#{sign}#{hhmm}) into public history.
+            Why: commit timestamps are public; the offset names the committer's timezone
+            and the hour maps the working day. House commits stamp UTC.
+            Fix: TZ=UTC git commit …   (or `export TZ=UTC` for the session).
+            #{OVERRIDE}
+        MSG
+      end
+
       # -- the hook entry points (exit codes) ---------------------------------
 
       def pre_commit(err: $stderr, git: method(:git), process_table: method(:ps_output),
-                     cwd_of: method(:process_cwd))
+                     cwd_of: method(:process_cwd), utc_offset: Time.now.utc_offset)
+        tz = timezone_offense(utc_offset)
+        if tz
+          err.puts tz
+          return 1
+        end
         toplevel = git.call("rev-parse", "--show-toplevel").strip
         diff = git.call("diff", "--cached", "--no-color", "--no-ext-diff", "-U0", "--diff-filter=ACMR")
         markers = conflict_markers(diff)

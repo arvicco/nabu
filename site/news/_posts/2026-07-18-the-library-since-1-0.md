@@ -1,6 +1,6 @@
 ---
 title: "The library since 1.0: a Slavic push, a Celtic axis, and canonical memory"
-date: 2026-07-18 09:00:00 +0000
+date: 2026-07-18 00:00:00 +0000
 description: >-
   Six phases after v1.0.0: Vasmer and the StarLing bases, the Slovenian
   historical dictionaries, the damaskini corpus, a whole Celtic axis with

@@ -1,6 +1,6 @@
 ---
 title: "v1.5.0 — and the registry gets a version of its own"
-date: 2026-08-23 09:00:00 +0000
+date: 2026-08-23 00:00:00 +0000
 description: >-
   The release that closes the arc: nearly a million documents, 73.6
   million passages, and time as a first-class axis — every source's

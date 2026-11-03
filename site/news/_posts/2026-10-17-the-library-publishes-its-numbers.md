@@ -1,6 +1,6 @@
 ---
 title: "The library publishes its numbers"
-date: 2026-10-17 18:00:00 +0200
+date: 2026-10-17 00:00:00 +0000
 description: >-
   nabu-data v1.4.0: eight new public datasets — diachronic frequency
   tables for 32 ancient and premodern languages, a million-row

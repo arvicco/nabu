@@ -1,6 +1,6 @@
 ---
 title: "The fourth canon: Tibet takes the twenty-third desk"
-date: 2026-07-28 11:00:00 +0000
+date: 2026-07-28 00:00:00 +0000
 description: >-
   Phase 48 lands the complete Derge Kangyur and Tengyur, 84000's
   English layer folio-paired with the Tibetan, the Old Tibetan

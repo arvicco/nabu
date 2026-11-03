@@ -1,6 +1,6 @@
 ---
 title: "The reference shelf, and a hieroglyph census"
-date: 2026-09-25 06:00:00 +0000
+date: 2026-09-25 00:00:00 +0000
 description: >-
   The library's reference shelf gains the classic Italic corpus
   editions and grammars, Cleasby-Vigfusson, and the Rasenna journal —

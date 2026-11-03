@@ -839,7 +839,7 @@ The `korean` axis minted whole: the Joseon historiographical canon in
 the original literary Chinese (hanmun), the founding hangul epic, the
 open slice of the Korean classics database, and Vietnam's classical
 shelf on the sinitic axis. The eight registry rows still ride `wired:
-false` — seven landed their owner-fired first syncs overnight
+false` — seven landed their owner-fired first syncs
 2026-08-18/19 and await the owner's verification flips; the counts
 below are those first syncs; all eight are wired (2026-08-19, owner-verified).
 
@@ -962,7 +962,7 @@ EEBO door open.
 | | |
 |---|---|
 | **Category** | Everything printed in England, 1473–1700, that the Text Creation Partnership hand-keyed — the early-modern English corpus, and the library's million-crossing wave |
-| **Languages** | Early Modern English (`en`, staged `en:early` over nabu-lects v1.2.0 — 20,981 docs by imprint-date inference), with the corpus's own minority lanes riding verbatim: Latin 381 (28 → `lat:ren`), Welsh 59, Scots 27, French, Dutch — `en` at 24,857 docs becomes a top-tier code overnight |
+| **Languages** | Early Modern English (`en`, staged `en:early` over nabu-lects v1.2.0 — 20,981 docs by imprint-date inference), with the corpus's own minority lanes riding verbatim: Latin 381 (28 → `lat:ren`), Welsh 59, Scots 27, French, Dutch — `en` at 24,857 docs becomes a top-tier code at a stroke |
 | **Size** | `eebo-tcp`: **25,368 docs / 14,716,728 passages** (wave 1 = Phase I, owner-ruled 2026-08-26; Phase II's 34,958 stays a one-line follow-on) — Milton, Raleigh's farewell broadside, Bacon, Donne, sermons, petitions, civil-war tracts, folios; per-document imprint dating (21,435 dated); over the shared `tcp-xml` family (built P82 for CME, proven here at 25k scale: one quarantine in the wave, diagnosed to 20 orphaned combining macrons and recovered same-day) |
 | **Licenses** | uniform per-file CC0 1.0 dedication (censused) + the 2026-08-20 grant → `open` |
 

@@ -1,6 +1,6 @@
 ---
 title: "The machinery phase: quickstart, language cards, invariants"
-date: 2026-07-14 09:00:00 +0000
+date: 2026-07-14 00:00:00 +0000
 description: >-
   Phase 18 (PR #22): nabu quickstart, language cards for an 803-code
   universe, three comparativist adapters, and a postcondition checker.

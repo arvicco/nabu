@@ -1,6 +1,6 @@
 ---
 title: "The Ancient Near East phase: Hittite at scale, the CDLI catalog, and a seven-legged Bible"
-date: 2026-07-19 18:00:00 +0000
+date: 2026-07-19 00:00:00 +0000
 description: >-
   Phase 31 brings the cuneiform world beyond ORACC: the TLHdig Hittite
   corpus, the CDLI's 353,156-artifact universal catalog, the eBL

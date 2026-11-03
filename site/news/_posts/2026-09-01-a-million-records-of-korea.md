@@ -1,6 +1,6 @@
 ---
 title: "A million records of Korea — the library doubles in a day"
-date: 2026-09-01 11:30:00 +0000
+date: 2026-09-01 00:00:00 +0000
 description: >-
   The historical slice of the Open Korean Historical Corpus lands:
   1,198,779 records — the Samguk sagi of 1145, the Ilseongnok court

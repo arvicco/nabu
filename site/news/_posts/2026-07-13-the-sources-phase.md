@@ -1,6 +1,6 @@
 ---
 title: "The sources phase: Coptic, inscriptions, Monier-Williams"
-date: 2026-07-13 18:00:00 +0000
+date: 2026-07-13 00:00:00 +0000
 description: >-
   Phase 17 (PR #21): four adapters in one day — Coptic Scriptorium, the
   Epigraphic Database Heidelberg, Monier-Williams, and four proto shelves.

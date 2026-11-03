@@ -1,6 +1,6 @@
 ---
 title: "The granted doors — the sagas and the Gawain-poet arrive"
-date: 2026-08-26 14:00:00 +0000
+date: 2026-08-26 00:00:00 +0000
 description: >-
   Two doors opened by correspondence now stand as shelves: the
   Menota archive's 91 medieval Nordic manuscripts — Laxdæla saga,

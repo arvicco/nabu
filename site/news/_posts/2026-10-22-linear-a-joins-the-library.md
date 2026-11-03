@@ -1,6 +1,6 @@
 ---
 title: "Linear A joins the library"
-date: 2026-10-22 12:50:00 +0000
+date: 2026-10-22 00:00:00 +0000
 description: >-
   The undeciphered script of Minoan Crete arrives sign by sign, the
   first real Old Uyghur dictionary lands as 49,619 entries segmented

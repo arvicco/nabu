@@ -1,6 +1,6 @@
 ---
 title: "The Iguvine Tables — and a hundred million passages"
-date: 2026-08-31 21:00:00 +0000
+date: 2026-08-31 00:00:00 +0000
 description: >-
   The seven bronze tables of Iguvium — the longest ritual text to
   survive from pre-Roman Italy, and the corpus of the Umbrian

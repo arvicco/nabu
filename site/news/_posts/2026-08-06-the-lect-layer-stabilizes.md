@@ -1,6 +1,6 @@
 ---
 title: "The lect layer stabilizes — and becomes part of the core"
-date: 2026-08-06 10:30:00 +0000
+date: 2026-08-06 00:00:00 +0000
 description: >-
   The phase after load-bearing is housekeeping with teeth: the
   reversed-interval defect cluster that fed the date inference bogus

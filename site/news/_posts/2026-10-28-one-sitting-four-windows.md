@@ -1,6 +1,6 @@
 ---
-title: "One evening, four windows — from the Sinhala Tipiṭaka to Old Frisian"
-date: 2026-10-28 00:30:00 +0000
+title: "One sitting, four windows — from the Sinhala Tipiṭaka to Old Frisian"
+date: 2026-10-28 00:00:00 +0000
 description: >-
   Four development windows in one sitting: the complete Pali canon in
   its Sinhala tradition, the Buddhist translator's dictionary bridging
@@ -10,7 +10,7 @@ description: >-
   million Early New High German morphology tags opened to search.
 ---
 
-After a quiet week the library ran four windows in one evening, and
+After a quiet week the library ran four windows in one sitting, and
 the shelves show it: **{{ site.data.census.documents_display }}
 documents / {{ site.data.census.passages_display }} passages** across
 {{ site.data.census.live_sources }} live sources (as of

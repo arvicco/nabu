@@ -118,6 +118,9 @@ module Ops
     OWNER = "OWNER"
     MAIL = "email"
     DRAFT = "draft"
+    NIGHT = "night"
+    MORNING = "morning"
+    EVENING = "evening"
 
     def leaks
       ["Co-Authored-By: Claude Opus <noreply@anthropic.com>",
@@ -137,6 +140,42 @@ module Ops
       end
     end
 
+    # Time-of-day narrative reveals the clock behind the work (owner rule
+    # 2026-11-03); dates are the finest public grain. Specimens composed
+    # so this file never matches the patterns it pins.
+    def temporal_leaks
+      ["thirty-two sources wired in one #{NIGHT}",
+       "an over#{NIGHT} window landed the wave",
+       "merged by #{EVENING}, wired the next day",
+       "the grant arrived this #{MORNING}",
+       "wired the batch last #{NIGHT}"]
+    end
+
+    def test_time_of_day_narrative_is_refused
+      temporal_leaks.each do |leak|
+        refute_empty H.message_offenses("Add the widget\n\n#{leak}\n"), "must refuse #{leak.inspect}"
+      end
+    end
+
+    def test_date_grain_language_passes
+      message = "Wire the second wave\n\nAll syncs landed the same day; the census is dated 2026-11-03.\n"
+      assert_empty H.message_offenses(message)
+    end
+
+    # -- (d) the committer-timezone guard ----------------------------------------
+
+    def test_a_non_utc_offset_is_refused_with_the_fix_line
+      offense = H.timezone_offense(3600)
+      assert_match(/\+0100/, offense)
+      assert_match(/TZ=UTC/, offense)
+      assert_match(/--no-verify/, offense)
+      assert_match(/-0530/, H.timezone_offense(-19_800))
+    end
+
+    def test_utc_passes_the_timezone_guard
+      assert_nil H.timezone_offense(0)
+    end
+
     def test_a_plain_technical_message_passes
       message = "Mine kaikki etymology templates into typed reflex rows\n\n" \
                 "The P133 lane (docs/architecture.md section 10) keeps Q-shaped words like Quran.\n"
@@ -151,9 +190,11 @@ module Ops
 
     # -- the installer + the real hooks end to end --------------------------------
 
-    def git!(dir, *)
-      out, err, status = Open3.capture3("git", "-C", dir, "-c", "user.name=t", "-c", "user.email=t@example.org",
-                                        "-c", "commit.gpgsign=false", *)
+    # TZ pinned to UTC by default — the house committer-timezone rule the
+    # pre-commit hook now enforces; the refusal e2e passes its own zone.
+    def git!(dir, *, zone: "UTC")
+      out, err, status = Open3.capture3({ "TZ" => zone }, "git", "-C", dir, "-c", "user.name=t",
+                                        "-c", "user.email=t@example.org", "-c", "commit.gpgsign=false", *)
       [status.success?, out + err]
     end
 
@@ -235,6 +276,19 @@ module Ops
         elapsed = Process.clock_gettime(Process::CLOCK_MONOTONIC) - started
         assert ok, out
         assert_operator elapsed, :<, 5, "both hooks together stay cheap (budget <1s; slack for a loaded box)"
+      end
+    end
+
+    def test_the_installed_hooks_refuse_a_local_timezone_commit
+      with_repo do |repo|
+        H::Installer.new(root: repo, out: StringIO.new).install!
+        File.write(File.join(repo, "a.md"), "one\n")
+        git!(repo, "add", "-A")
+        ok, out = git!(repo, "commit", "-q", "-m", "Add a", zone: "Europe/Vienna")
+        refute ok, "a non-UTC commit must refuse (it stamps the zone into public history)"
+        assert_match(/TZ=UTC/, out)
+        ok, out = git!(repo, "commit", "-q", "-m", "Add a")
+        assert ok, out
       end
     end
 

@@ -1,6 +1,6 @@
 ---
 title: "The Southeast Asia desk — and the first Old Mon text anywhere"
-date: 2026-09-02 08:00:00 +0000
+date: 2026-09-02 00:00:00 +0000
 description: >-
   The library's 25th desk opens whole in one phase: the DHARMA
   epigraphic corpora (Old Khmer, Campā, Nusantara, Pyu), the kakawin

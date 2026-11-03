@@ -1,6 +1,6 @@
 ---
 title: "The Sino axis opens: Classical Chinese, the Chinese Āgamas, and the Man'yōšū"
-date: 2026-07-20 01:00:00 +0000
+date: 2026-07-20 00:00:00 +0000
 description: >-
   Phase 32 opens the Far Eastern axis: gold-annotated Classical Chinese,
   the Literary Chinese Āgamas beside their Pali parallels, the complete

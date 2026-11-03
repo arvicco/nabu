@@ -1,6 +1,6 @@
 ---
 title: "The grant harvest and the research bench"
-date: 2026-10-13 09:00:00 +0200
+date: 2026-10-13 00:00:00 +0000
 description: >-
   Three phases in one arc: the whole Tocharian B corpus arrives
   through the members' gate, TAMILEX brings the only per-word gold

@@ -1,6 +1,6 @@
 ---
 title: "The library as of today"
-date: 2026-07-14 12:00:00 +0000
+date: 2026-07-14 00:00:00 +0000
 description: >-
   An inaugural stock-taking: 170,684 documents, 4.27 million passages,
   fifteen gold-lemma languages, and the tool families that read them.

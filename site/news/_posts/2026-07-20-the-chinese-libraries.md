@@ -1,6 +1,6 @@
 ---
 title: "The Chinese libraries: Kanripo, the Taishō canon, and a concept lexicon"
-date: 2026-07-20 12:00:00 +0000
+date: 2026-07-20 00:00:00 +0000
 description: >-
   Phase 33 gives the Sino axis its bookshelf: the Kanseki Repository's
   classics, histories, masters and literature; CBETA's Taishō and

@@ -1,12 +1,12 @@
 ---
 title: "The search phase: six dragons, a 51-gigabyte diet, and an attic"
-date: 2026-09-03 11:00:00 +0000
+date: 2026-09-03 00:00:00 +0000
 description: >-
   One phase, all of it about finding things: exact Han-character
   search over the 23-million-pair CJK index, a full-text engine
   rebuilt to half its size with answers unchanged, a search view for
   everything the library ever withdrew — and the semantic-search
-  machinery built end to end, awaiting its first overnight build.
+  machinery built end to end, awaiting its first scheduled build.
 ---
 
 The library's newest phase was spent entirely on **search** — four
@@ -50,7 +50,7 @@ through the MCP server — answers "where else does the library say
 this?" with ranked, banded, honestly-labelled neighbors:
 cross-edition witnesses, drifting quotations, paraphrases. The whole
 pipeline runs on this machine; no text leaves the box. The first
-store build is a scheduled overnight run — and the lane will get the
+store build is a scheduled long batch run — and the lane will get the
 announcement it deserves, with live walk-throughs, once its vectors
 actually exist. Nothing on this site is pasted from imagination.
 
