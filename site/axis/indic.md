@@ -22,16 +22,16 @@ A source wears every desk it serves — these 35 answer this desk. Holdings are 
 | `dharma-deccan` | texts | attribution | wired · auto | 1,702 docs / 28,295 passages |
 | `dharma-mdt` | texts | attribution | wired · auto | 734 docs |
 | `dharma-tamil` | texts | attribution | wired · auto | 1,276 docs / 18,161 passages |
-| `dpd` | dictionary | nc | not yet wired | not synced yet |
+| `dpd` | dictionary | nc | wired · manual | 89,763 entries |
 | `gretil` | texts | nc | wired · manual | 780 docs / 713,718 passages |
 | `gretil-legacy` | texts | nc | wired · manual | 22 docs / 83,383 passages |
 | `gu-wikisource` | texts | attribution | wired · manual | 207 docs / 1,462 passages |
 | `kannada-texts` | texts | attribution | wired · auto | 16 docs / 16,151 passages |
 | `madurai` | texts | attribution | wired · manual | 755 docs / 1,214,683 passages |
-| `mahan-kosh` | dictionary | attribution | not yet wired | not synced yet |
+| `mahan-kosh` | dictionary | attribution | wired · manual | 64,218 entries |
 | `mw` | dictionary | nc | wired · manual | 193,890 entries |
 | `nabu-data` | feature module | attribution | wired · manual | nothing held yet |
-| `osbct` | texts | nc | not yet wired | not synced yet |
+| `osbct` | texts | nc | wired · frozen | 118 docs / 89,512 passages |
 | `paramara` | texts | attribution | wired · manual | 114 docs / 2,373 passages |
 | `prakrit-texts` | texts | attribution | wired · auto | 22 docs / 27,124 passages |
 | `sarit` | texts | attribution | wired · manual | 78 docs / 345,601 passages |
@@ -47,13 +47,13 @@ A source wears every desk it serves — these 35 answer this desk. Holdings are 
 | `wiktionary-dv` | dictionary | attribution | wired · manual | 2,047 entries |
 | `wiktionary-kn` | dictionary | attribution | wired · manual | 2,741 entries |
 | `wiktionary-ml` | dictionary | attribution | wired · manual | 11,505 entries |
-| `wiktionary-pa` | dictionary | attribution | not yet wired | not synced yet |
+| `wiktionary-pa` | dictionary | attribution | wired · manual | 10,749 entries |
 | `wiktionary-pra` | dictionary | attribution | wired · manual | 2,712 entries |
 | `wiktionary-si` | dictionary | attribution | wired · manual | 1,281 entries |
 | `wiktionary-ta` | dictionary | attribution | wired · manual | 13,855 entries |
 | `wiktionary-te` | dictionary | attribution | wired · manual | 23,325 entries |
 
-**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 3 November 2026)</span>: `san` 511,752 · `tel` 23,875 · `tam-Latn` 18,586 · `tam` 14,610 · `mal` 11,505 · `pli` 7,573 · `tel-Latn` 5,103 · `eng` 4,794 · `kan-Latn` 3,850 · `kan` 2,741 … and 32 more (`nabu axis indic` lists all).
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 3 November 2026)</span>: `san` 511,752 · `pli` 97,454 · `pan` 75,061 · `tel` 23,875 · `tam-Latn` 18,586 · `tam` 14,610 · `mal` 11,505 · `tel-Latn` 5,103 · `eng` 4,794 · `kan-Latn` 3,850 … and 32 more (`nabu axis indic` lists all).
 
 **Carried in by multilingual packs** (`ud` — whole-source members whose other languages ride along, as of 3 November 2026): `lat` 11 · `grc` 9 · `orv` 9 · `ota` 5 · `cop` 3 … and 18 more (`nabu axis indic` lists all).
 

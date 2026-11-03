@@ -40,7 +40,7 @@ A source wears every desk it serves — these 33 answer this desk. Holdings are 
 | `dta` | texts | attribution | wired · manual | 5,478 docs / 729,090 passages |
 | `eebo-tcp` | texts | open | wired · manual | 60,325 docs / 25,065,921 passages |
 | `fornsvenska` | texts | attribution | wired · manual | 155 docs / 170,872 passages |
-| `fsv-lexica` | dictionary | attribution | not yet wired | not synced yet |
+| `fsv-lexica` | dictionary | attribution | wired · manual | 51,811 entries |
 | `helipad` | treebank | attribution | wired · manual | 1 docs / 3,549 passages |
 | `iswoc` | texts | nc | wired · frozen | 5 docs / 2,536 passages |
 | `menota` | texts | attribution | wired · manual | 91 docs / 229,501 passages |
@@ -54,17 +54,17 @@ A source wears every desk it serves — these 33 answer this desk. Holdings are 
 | `rundata` | inscriptions | odbl | wired · manual | 30,647 docs / 30,645 passages |
 | `runesdb` | texts | attribution | wired · manual | 613 docs / 1,611 passages |
 | `ud` | treebank | nc | wired · manual | 83 docs / 329,980 passages |
-| `wiktionary-dum` | dictionary | attribution | not yet wired | not synced yet |
-| `wiktionary-enm` | dictionary | attribution | not yet wired | not synced yet |
-| `wiktionary-gmh` | dictionary | attribution | not yet wired | not synced yet |
-| `wiktionary-gmq-osw` | dictionary | attribution | not yet wired | not synced yet |
-| `wiktionary-got` | dictionary | attribution | not yet wired | not synced yet |
-| `wiktionary-non` | dictionary | attribution | not yet wired | not synced yet |
-| `wiktionary-ofs` | dictionary | attribution | not yet wired | not synced yet |
-| `wiktionary-sco` | dictionary | attribution | not yet wired | not synced yet |
+| `wiktionary-dum` | dictionary | attribution | wired · manual | 2,342 entries |
+| `wiktionary-enm` | dictionary | attribution | wired · manual | 56,687 entries |
+| `wiktionary-gmh` | dictionary | attribution | wired · manual | 2,142 entries |
+| `wiktionary-gmq-osw` | dictionary | attribution | wired · manual | 1,440 entries |
+| `wiktionary-got` | dictionary | attribution | wired · manual | 23,034 entries |
+| `wiktionary-non` | dictionary | attribution | wired · manual | 11,403 entries |
+| `wiktionary-ofs` | dictionary | attribution | wired · manual | 654 entries |
+| `wiktionary-sco` | dictionary | attribution | wired · manual | 6,042 entries |
 | `zoega` | dictionary | attribution | wired · manual | 29,951 entries |
 
-**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 3 November 2026)</span>: `non` 85,607 · `ang` 63,170 · `en` 59,433 · `eng` 6,814 · `de` 5,668 · `swe` 3,397 · `dum` 2,226 · `gem` 613 · `lat` 532 · `gmh` 406 … and 32 more (`nabu axis germanic` lists all).
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 3 November 2026)</span>: `non` 97,010 · `ang` 63,170 · `en` 59,433 · `enm` 56,984 · `sv` 53,406 · `got` 23,038 · `eng` 6,814 · `sco` 6,081 · `de` 5,668 · `dum` 4,568 … and 32 more (`nabu axis germanic` lists all).
 
 **Carried in by multilingual packs** (`ud` — whole-source members whose other languages ride along, as of 3 November 2026): `orv` 9 · `ota` 5 · `lzh` 4 · `cop` 3 · `egy` 3 … and 13 more (`nabu axis germanic` lists all).
 
