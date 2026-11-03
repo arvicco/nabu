@@ -4700,7 +4700,7 @@ oracc:
   # open/CC0).
   translations: true
 
-osbct:   # P154, 02-sources row 335
+osbct:   # P154, 02-sources row 337
   adapter: Nabu::Adapters::Osbct
   adopted: "2026-11-02"
   axes: [indic, buddhist]
@@ -6351,6 +6351,33 @@ theatre-classique:   # 02-sources row 312
   # 1,601,085 passages, 0 rule-skips (life+70 cutoff 1955; latest
   # textual death 1951), 1 quarantined (CORNEILLET_LAODICE.xml — declared
   # ISO-8859-1, Latin-1 bytes; the UTF-8 belt refuses it). Clone ≈ 61 MB.
+
+tianyige:   # P154, 02-sources row 338
+  adapter: Nabu::Adapters::Tianyige
+  adopted: "2026-11-02"
+  axes: [sinitic]
+  cjk_index: true   # the CJK bigram substring lane (the kanripo / okhc shelves)
+  wired: false   # bin/nabu enable tianyige, then bin/nabu sync tianyige — ONE Zenodo zip
+                 # (97 MB) read by HTTP Range: 315 members ≈ 58 MB transferred,
+                 # 198 MB on disk (documents/, text/, tables/ and the viewer
+                 # never transferred; ≈ 1–2 min fetch, ~35 s parse). EXPECT 312
+                 # docs / 38,711 passages, 0 errored, 0 skipped (census through
+                 # the adapter over the whole v1.0 unpack 2026-11-02; 1,750 blank
+                 # pages skip by rule inside their documents, counted). Eyeball
+                 # nabu show urn:nabu:tianyige:0006944:p1 (洪武四年會試錄's
+                 # 會試紀錄題辭, dated 1371) and 5 random, probe nabu search
+                 # 會試紀錄題辭, then flip.
+  sync_policy: frozen   # an immutable Zenodo version; a new release = an owner re-pin
+  # The Tianyige Ming examination records (Joshua Snider; Zenodo 23817595
+  # v1.0): uncorrected vision-model transcription of the Tianyi Pavilion
+  # Museum's 312 printed 科舉錄 (236 provincial, 37 metropolitan, 39
+  # palace; 1371–1684), ~10M characters. README verbatim "The
+  # transcriptions and metadata are released under CC0 1.0" → open.
+  # Document = record, passage = page image; text_nature uncorrected-ocr
+  # on every document (no lemma layer, so no lemma_tier). The machine
+  # punctuation, the machine English translation and the second OCR
+  # reading are DECLINED (the Honkoku precedent) and never surface. Dates
+  # from the reign era + year via config/eras.yml's nianhao rows.
 
 tibetan-verbs:
   adapter: Nabu::Adapters::TibetanVerbs

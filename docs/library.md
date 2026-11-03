@@ -1889,3 +1889,13 @@ Mahāsaṅgīti and tipitaka.lk's Buddha Jayanthi edition, and a second of
 the commentaries beside tipitaka.lk's CST text. Held non-commercially:
 the edition's own notice permits free, non-commercial distribution
 (the deposit's derived data are CC BY 4.0).
+
+**`tianyige`** — the Tianyi Pavilion's Ming examination records
+(天一閣藏明代科舉錄): 312 printed records of the provincial, metropolitan
+and palace examinations, 1371–1684 — the examiners, the questions of
+the three sessions, the rosters of graduates and the model essays with
+their examiners' comments — 312 documents / 38,711 page transcriptions,
+each dated by its reign year and linked to its scan on Wikimedia
+Commons. Machine-read and uncorrected (labeled on every record; check
+the scan before citing); the dataset's machine translations are not
+taken (CC0).

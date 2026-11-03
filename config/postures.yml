@@ -1573,6 +1573,21 @@ sources:
         coarse — the print's place, not the author's; <set> (the fictional setting) is
         never a place claim"}
     script: {posture: implied}
+  tianyige:   # P154
+    # kind machine-postured — kind_map.yml source_kind administrative/register.
+    # The machine punctuation + English translation are DECLINED (the
+    # Honkoku precedent): zero translation documents by design.
+    lect: {posture: codemap, note: lzh → zho/lit (the kanripo precedent — Ming official
+        literary Chinese; the one 1684 Qing record rides the same code)}
+    dating: {posture: dated, note: "all 312: the record's reign era + year (volumes.tsv
+        reign_era/reign_year, 洪武4 …) through config/eras.yml's dynasty-keyed nianhao rows → a
+        one-year envelope, class composition; upstream's own western_year agrees on all 312
+        (census 2026-11-02), a disagreement is flagged date_conflict"}
+    places: {posture: named, note: "the 236 provincial records name their province (順天, 應天,
+        浙江 … + the English form) → the document place; metropolitan and palace records name
+        none (the capital is implied, never minted). No gazetteer join is held"}
+    script: {posture: implied, note: "traditional Han characters as printed, with the caveat that
+        the OCR models sometimes modernize variant forms (扵 → 於) — declared on every document"}
   lzh-collection:
     # kind machine-postured — kind_map.yml source_kind literary/poetry (the
     # adapter's scope is the twenty poetry-collection files only).

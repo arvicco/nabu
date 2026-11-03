@@ -1,0 +1,26 @@
+cff-version: 1.2.0
+message: "If you use this dataset, please cite it as below."
+type: dataset
+title: "Tianyige Ming Examination Records: Full Text and English Translation"
+abstract: >-
+  Machine transcription, punctuation and English translation of 312 printed records of the
+  Ming civil-service examinations (1371-1684) digitized by the Tianyi Pavilion Museum
+  (天一閣博物院): 40,461 page images, about 9.9 million characters. Each record is also split
+  into documents (prefaces, officials, 12,921 questions, 49,378 graduates, and 7,348 model
+  answers with the examiners' comments).
+authors:
+  - family-names: Snider
+    given-names: Joshua
+    orcid: "https://orcid.org/0009-0004-2574-250X"
+version: "1.0"
+date-released: 2026-10-29
+license: CC0-1.0
+repository-code: "https://github.com/jsnider3/tianyige-ming-exam-records"
+keywords:
+  - Ming dynasty
+  - civil-service examination
+  - keju
+  - 科舉
+  - classical Chinese
+  - OCR
+  - digital humanities
