@@ -13,10 +13,11 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 ## The shelves
 
-A source wears every desk it serves — these 38 answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
+A source wears every desk it serves — these 39 answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
-| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 2 November 2026)</span> |
+| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 3 November 2026)</span> |
 |---|---|---|---|---|
+| `aio` | inscriptions | attribution | not yet wired | nothing held yet |
 | `ceipom` | inscriptions | attribution | wired · frozen | 3,871 docs / 5,303 passages |
 | `damos` | texts | nc | wired · manual | 5,890 docs / 14,421 passages |
 | `dharma-campa` | texts | attribution | wired · auto | 122 docs / 2,740 passages |
@@ -56,7 +57,7 @@ A source wears every desk it serves — these 38 answer this desk. Holdings are 
 | `trismegistos-geo` | feature module | attribution | wired · manual | nothing held yet |
 | `ucd` | feature module | open | wired · manual | nothing held yet |
 
-**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 2 November 2026)</span>: `lat` 195,110 · `grc` 76,766 · `xna` 36,758 · `eng` 22,328 · `hit` 21,209 · `non` 20,442 · `tam-Latn` 10,706 · `ett` 6,259 · `gmy` 5,890 · `tel-Latn` 5,103 … and 94 more (`nabu axis epigraphy` lists all).
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 3 November 2026)</span>: `lat` 195,110 · `grc` 76,766 · `xna` 36,758 · `eng` 22,328 · `hit` 21,209 · `non` 20,442 · `tam-Latn` 10,706 · `ett` 6,259 · `gmy` 5,890 · `tel-Latn` 5,103 … and 94 more (`nabu axis epigraphy` lists all).
 
 ## The desk's instruments
 
@@ -76,7 +77,7 @@ A source wears every desk it serves — these 38 answer this desk. Holdings are 
   `--from/--to`, `--century` and `--place` scope
   the stones and sherds by when and where. EDH's genre facets
   (`--type/--province/--material`) live.
-- **The gazetteer (P44–P46):** `nabu place NAME` resolves a findspot
+- **The gazetteer:** `nabu place NAME` resolves a findspot
   against the Pleiades gazetteer (42,404 places in a derived index —
   millisecond lookups) and counts this library's holdings found there;
   an inscription's `nabu show` names its findspot with the Pleiades id.

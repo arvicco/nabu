@@ -3,28 +3,28 @@
 - slug: classical
   persona: The Classicist
   blurb: Greek and Latin letters read whole, Homer to the late grammarians
-  members: 22
+  members: 25
 - slug: romance
   persona: The Romanist
   blurb: the Latin-to-vernacular continuum, charter Latin to Roland to the troubadours
-  members: 21
+  members: 28
 - slug: epigraphy
   persona: The Papyrologist-Epigraphist
   blurb: reads what survives on stone, sherd, papyrus and tablet, lacunae and all
-  members: 38
+  members: 39
 - slug: slavic
   persona: The Slavicist
   blurb: Cyril and Methodius to the damaskini, canon to vernacular
-  members: 37
+  members: 38
 - slug: germanic
   persona: The Germanicist
   blurb: Gothic and Old English to the Norse sagas and the runestones, the word-hoard
     of all three branches
-  members: 24
+  members: 33
 - slug: celtic
   persona: The Celticist
   blurb: from Lepontic stones to the Old Irish glossators
-  members: 11
+  members: 12
 - slug: italic
   persona: The Italicist
   blurb: the languages of pre-Roman Italy, Oscan to Etruscan to Raetic
@@ -36,19 +36,19 @@
 - slug: biblical
   persona: The Biblical scholar
   blurb: one text across Hebrew, Greek, Latin, Syriac, Coptic and English witnesses
-  members: 21
+  members: 22
 - slug: hebrew
   persona: The Hebraist
   blurb: Masoretic vowels, Qumran consonants, the Aramaic of the Targums
-  members: 13
+  members: 14
 - slug: syriac
   persona: The Syriacist
   blurb: the Peshitta and the estrangela bookshelf
-  members: 3
+  members: 5
 - slug: ethiopic
   persona: The Ethiopicist
   blurb: 'Aksum to the scriptoria: Enoch, Jubilees, and the Geʿez Bible'
-  members: 3
+  members: 4
 - slug: arabic
   persona: The Arabist
   blurb: the Islamicate library whole, Quran and hadith to falsafa and adab
@@ -73,11 +73,11 @@
 - slug: indic
   persona: The Indologist
   blurb: Veda to sastra, the Sanskrit library and its instruments
-  members: 31
+  members: 35
 - slug: buddhist
   persona: The Buddhologist
   blurb: the dharma across the Pali, Sanskrit, Chinese and Tibetan canons
-  members: 11
+  members: 13
 - slug: tibetan
   persona: The Tibetologist
   blurb: the Land of Snows from Dunhuang documents to the complete Derge canon
@@ -85,7 +85,7 @@
 - slug: korean
   persona: The Koreanist
   blurb: the hanmun state record and the first hangul vernacular
-  members: 9
+  members: 11
 - slug: sea
   persona: The Southeast Asianist
   blurb: 'the Indic cosmopolis at its eastern edge: Sanskrit charters beside the vernaculars
@@ -94,7 +94,7 @@
 - slug: sinitic
   persona: The Sinologist
   blurb: the classical Chinese written world and its phonological deep past
-  members: 24
+  members: 25
 - slug: japonic
   persona: The Japanologist
   blurb: Old Japanese song to the Sino-Japanese dictionary tradition
@@ -121,7 +121,7 @@
 - slug: baltic
   persona: The Balticist
   blurb: the Lutheran-print littoral, Mancelius' Latvian to Agricola's Finnish
-  members: 3
+  members: 4
 - slug: local
   persona: The Librarian
   blurb: 'the owner''s own shelves: dossiers, library, notes, and the sources'' own

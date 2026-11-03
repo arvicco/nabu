@@ -16,6 +16,29 @@
 split: ["|", ";"]     # elephantine pipes, cdli/oracc semicolons
 strip: ["?", "(?)"]   # cataloguer uncertainty (edh "epitaph?", cdli "Administrative ?", HGV "Quittung (?)")
 sources:
+  aio:                # P154 — the page's Inscription type, folded to its HEADS at parse time
+    #                   (AioRecordParser.type_heads: "Decree (Council/People)" → Decree,
+    #                   "Statue base, Metrical (elegaic couplets)" → Statue base + Metrical).
+    #                   Counts = the 80-page sample census 2026-11-02; the full vocabulary
+    #                   lands with the first sync (`nabu kind census --unmapped aio`).
+    facet: genre
+    map:
+      "Decree": legal/law                        # 33 — the house decree fold (isicily/iip)
+      "Dedication": dedicatory                   # 30 — choregic/private/ephebic/emperor…
+      "Funerary": funerary                       # 5
+      "Boundary marker": boundary                # 2 — horoi
+      "List of names": administrative/list       # 2 — prytany/ephebic name lists
+      "Statue base": honorific                   # 2 — the honorific statue's inscribed base
+      "Metrical": literary/poetry                # 2 — the verse claim rides beside its head
+      "Law": legal/law                           # 2
+      "Building contract": legal/contract        # 1
+      "Sacrificial Calendar": ritual/festival    # 1 — the cult calendar of sacrifices
+      "Cult regulation": ritual                  # 1 — sacred law: how the cult is run
+      "Account": administrative/account          # 1
+      "Building inscription": building           # 1
+      "Milestone": boundary/milestone            # 1
+      "Graffito": mark/graffito                  # 1 ("Graffito?" — the global ? strip)
+      "Topos-inscription": mark/ownership        # 1 — a reserved-place mark (the edh seat fold)
   cdli:               # 288,629 docs — the largest vocabulary by rows
     facet: genre
     map:
@@ -261,6 +284,13 @@ sources:
       "atta": exegesis                           # the CST aṭṭhakathā — commentary ON the canon
       #   (the kanripo 'grel pa / sefaria Rishonim precedent); upstream also files the
       #   Visuddhimagga (anya-vm*) here, Buddhaghosa's commentarial summa — kept with it
+  osbct:              # upstream's own layer split (data/concordance.json, census 2026-11-02, 118 volumes)
+    facet: layer
+    map:
+      "canon": scripture                         # 40 volumes — the Tipiṭaka
+      "commentary": exegesis                     # 52 — the aṭṭhakathā (upstream files the
+      #   Visuddhimagga and the Kaṅkhāvitaraṇī / Vinayasaṅgaha here too; the tipitaka-lk atta fold)
+      "subcommentary": exegesis                  # 26 — the ṭīkā, commentary on the commentaries
   tlhdig:             # Laroche CTH ranges ARE the genres (23,486 docs)
     facet: cth
     range_map:
@@ -835,6 +865,8 @@ sources:
     source_kind: scripture
   vuk-danicic:
     source_kind: scripture   # P117-2: the Vuk–Daničić Serbian Bible
+  ebible-pacific:
+    source_kind: scripture   # P154: the eBible Pacific Bibles — every document a Bible book
   elizabeth-bible:
     source_kind: scripture   # P152: the Elizabeth Bible, the whole source is the Bible
   sblgnt:
@@ -849,6 +881,10 @@ sources:
     source_kind: scripture   # P153: the Pentateuch targums — every text is a Bible translation
   typikon-bible:
     source_kind: scripture   # P153: whole Bible editions (the 1688 Bucharest Bible)
+  suda-translations:
+    source_kind: lexical     # P154: the Suda is a lexicon-encyclopedia — every passage translates one
+    #                          alphabetical entry (headword + gloss/article); the house's lexical head,
+    #                          bare (its subs are sign/word lists, glossaries, grammars — none fits whole)
   hexapla:
     source_kind: scripture   # P153: the Hexapla's columns — the Bible in Hebrew and its Greek versions
   etcbc-syriac:        # P153 census 2026-11-02: 31 books (tf/0.92 book nodes), one document each
@@ -907,6 +943,10 @@ sources:
     #   fold to historiography by the ruled biography precedent (elephantine "biography",
     #   the eebo "-- Biography" and aozora NDC 289 folds) — a hagiography sub would be a
     #   taxonomy change, not this mapping's call
+  tianyige:                  # the Ming examination records (科舉錄): each record is the
+    source_kind: administrative/register   # official register of one session — examiners,
+    #   questions, the graduates' roster, model answers; register is the closest ruled class
+    #   (no examination class exists; minting one would be a taxonomy change)
   sillok:                    # the okhc dynastic-record family
     source_kind: historiography/annals
   sjw:
@@ -1153,7 +1193,59 @@ sources:
       "grammar": lexical/grammar
       "medicine": scholarly/medicine
       "astrology": divination/astrology
-  bu-ajami:           # census: 80 docs, 2026-10-14 — upstream's own form labels;
+  hmml-reading-room:  # census 2026-11-02 over the Syriac + Ethiopic slice (18,892 records, 2,502
+    # without a genre): the catalogue's own genre terms (Getty AAT labels, 87 distinct), several
+    # per record, riding the genre facet. `vocabulary: open`: the long tail (Fragments, Notebooks,
+    # Compendiums, Catechisms, Apologetic writings, Calendars …) mints nothing and counts as
+    # uncovered. The rules cover the head of the census, each with its count.
+    facet: genre
+    vocabulary: open
+    map:
+      "Liturgical books (Eastern Christian)": ritual/liturgy   # 8,627
+      "Liturgical texts": ritual/liturgy         # 345
+      "Missals": ritual/liturgy                  # 423
+      "Lectionaries": ritual/liturgy             # 561 — readings ordered for the rite
+      "Antiphonaries": ritual/liturgy            # 292
+      "Rituals": ritual/liturgy                  # 519 — the sacramental rites
+      "Books of hours": ritual/liturgy           # 225
+      "Evangeliaries": ritual/liturgy            # 114 — Gospel pericopes for the liturgy
+      "Epistolaries": ritual/liturgy             # 39 — AAT: the liturgical book of Epistle readings
+      "Bibles": scripture                        # 1,394
+      "Gospels": scripture                       # 616
+      "Psalters": scripture                      # 1,295 — the Psalms as a book
+      "Apocrypha": scripture                     # 53 — the Ben Sira "Apocrypha" precedent
+      "Hagiographies": historiography            # 1,577 — the scat fold: lives go to historiography
+      #                                            by the ruled biography precedent
+      "Biographies": historiography              # 27
+      "Historical works": historiography         # 287
+      "Prayers": hymn-prayer/prayer              # 1,163
+      "Prayer books": hymn-prayer/prayer         # 549
+      "Hymns": hymn-prayer/hymn                  # 1,115
+      "Hymnals": hymn-prayer/hymn                # 59
+      "Poems": literary/poetry                   # 889
+      "Plays": literary/drama                    # 16
+      "Fables": literary/narrative               # 13
+      "Dialogues": literary/wisdom               # 37 — the dialogue sub's head
+      "Sermons": sermon                          # 740
+      "Homiliaries": sermon/homily               # 464
+      "Commentaries": exegesis                   # 590 — in this slice, commentaries on scripture
+      #                                            and the Fathers
+      "Grammars": lexical/grammar                # 376
+      "Dictionaries": lexical                    # 325 — bare: Syriac/Arabic lexica, no sub fits whole
+      "Correspondence": letter                   # 140
+      "Legal works": legal                       # 78
+      "Legal documents": legal                   # 14
+      "Canon law": legal/law                     # 65
+      "Synodicons": legal/law                    # 32 — collections of synodal canons
+      "Church records": administrative/register  # 66
+      "Account books": administrative/account    # 12
+      "Inventories": administrative/list         # 7
+      "Scientific works": scholarly              # 126
+      "Mathematical works": scholarly/mathematics   # 76
+      "Medical works": scholarly/medicine        # 51
+      "Magic scrolls": magic/amulet              # 54 — the Ethiopian protective (healing) scrolls
+      "Magical texts": magic                     # 29
+  bu-ajami:          # census: 80 docs, 2026-10-14 — upstream's own form labels;
     facet: genre      # the identity-grade fold (poetry means poetry)
     map:
       "Poetry": literary/poetry                  # 44
@@ -1770,3 +1862,28 @@ sources:
       #   153 — lives (the elephantine "biography" fold)
       # -- funerary
       '\A(?!.*History and criticism)Epitaphs\b': funerary/epitaph  # 16 — epitaph collections
+  pta:                # census 2026-11-02: the work __cts__.xml dct:type labels of the 105
+    metadata: genre   # non-Bible works carrying Greek — the comphistsem text-type head + sub,
+    #                   "|"-joined at parse ("Paraenetic|Sermon"); each fragment folds alone
+    map:
+      "Paraenetic": literary/wisdom              # 66 — moral exhortation, the edification
+      #   fold (the dwds Erbauungsliteratur / sefaria Musar precedent); 63 pair it with Sermon
+      "Sermon": sermon                           # 63 — Severian's and the Pseudo-Chrysostom
+      #   homilies (upstream says sermon; the homily sub is not its claim)
+      "Theological": scholarly                   # 9 — theological scholarship (the Theologie fold)
+      "Dogmatic Treatise": scholarly             # 4 — Athanasius' doctrinal treatises
+      "Polemics": scholarly                      # 3 — anti-Arian controversy treatises
+      "Bible Exegesis: Old Testament": exegesis  # 2
+      "Scholarly": scholarly                     # 4 — the head over Commentary
+      "Commentary": exegesis                     # 4 — every one a biblical commentary (Psalms,
+      #   Isaiah, Daniel, the Pauline fragments)
+      "Quaestiones": exegesis                    # 1 — De sabbatis et circumcisione, a
+      #   question-and-answer reading of biblical law
+      "Historiography": historiography           # 3
+      "Church History": historiography           # 2
+      "Church history": historiography           # 1 — upstream's lower-case spelling of the same
+      "Official letter": letter/official         # 1 — the Epistula synodalis
+      "Märtyrervita/Wundersammlung": historiography  # 1 — the Vita Cononis; lives fold to
+      #   historiography by the ruled biography precedent (the scat fold)
+    deliberate:
+      "Genre missing": "the catalog's unfilled genre slot (18 works), not a claim"

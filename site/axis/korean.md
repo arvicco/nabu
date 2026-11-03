@@ -7,15 +7,15 @@ description: >-
 
 > The Koreanist — the hanmun state record and the first hangul vernacular.
 
-The Korean desk opens on the dynastic record itself: the Veritable Records of Joseon (sillok) in the original hanmun via NIKH's open XML dumps, joined by the Goryeosa family on the same DTD (the pre-Joseon dynastic history, its chronological digest, and the state council's daily register), with the Seungjeongwon ilgi and the ITKC classics to follow, and the Middle Korean Wikisource shelf as the vernacular leg. Since P91-1 the OKHC historical slice widens the desk beyond the state record: the Samguk sagi (the oldest Korean history), the Ilseongnok, the ITKC munjip mass, and the AKS/Kyujanggak/NHM old-literature shelves, each record carrying its own PD-vs-nc label.
+The Korean desk opens on the dynastic record itself: the Veritable Records of Joseon (sillok) in the original hanmun via NIKH's open XML dumps, joined by the Goryeosa family on the same DTD (the pre-Joseon dynastic history, its chronological digest, and the state council's daily register), with the Seungjeongwon ilgi and the ITKC classics to follow, and the Middle Korean Wikisource shelf as the vernacular leg. The OKHC historical slice widens the desk beyond the state record: the Samguk sagi (the oldest Korean history), the Ilseongnok, the ITKC munjip mass, and the AKS/Kyujanggak/NHM old-literature shelves, each record carrying its own PD-vs-nc label.
 
 New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the library in minutes.
 
 ## The shelves
 
-A source wears every desk it serves — these nine answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
+A source wears every desk it serves — these eleven answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
-| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 2 November 2026)</span> |
+| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 3 November 2026)</span> |
 |---|---|---|---|---|
 | `bibyeonsa` | texts | attribution | wired · manual | 273 docs / 93,528 passages |
 | `goryeosa` | texts | attribution | wired · manual | 138 docs / 31,207 passages |
@@ -26,8 +26,10 @@ A source wears every desk it serves — these nine answer this desk. Holdings ar
 | `okhc` | texts | nc | wired · manual | 1,198,779 docs / 3,542,662 passages |
 | `sillok` | texts | attribution | wired · manual | 743 docs / 414,321 passages |
 | `sjw` | texts | attribution | wired · manual | 297 docs / 1,896,858 passages |
+| `wiktionary-ko` | dictionary | attribution | wired · manual | 64,457 entries |
+| `wiktionary-okm` | dictionary | attribution | wired · manual | 1,033 entries |
 
-**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 2 November 2026)</span>: `lzh` 1,121,896 · `ko` 58,366 · `jpn` 17,997 · `en` 2,735 · `fra` 25 · `okm` 6.
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 3 November 2026)</span>: `lzh` 1,121,896 · `ko` 122,823 · `jpn` 17,997 · `en` 2,735 · `okm` 1,039 · `fra` 25.
 
 ## The desk's instruments
 

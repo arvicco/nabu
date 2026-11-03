@@ -1,0 +1,26 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+source: fsv-lexica
+adapter_test: test/adapters/fsv_lexica_test.rb
+retrieved: 2026-11-02
+files:
+  - path: soederwall/soederwall.xml
+    url: https://svn.spraakbanken.gu.se/sb-arkiv/pub/lmf/soederwall/soederwall.xml
+    whole: false
+    trim: >-
+      the 3 LexicalEntry blocks with lemgram fsvm--a..nn.1,
+      fsvm--aterlösilse..nn.1, fsvm--avisning..nn.1, byte-verbatim in
+      upstream order inside the file's own head and tail, of 22,572
+  - path: soederwall-supp/soederwall-supp.xml
+    url: https://svn.spraakbanken.gu.se/sb-arkiv/pub/lmf/soederwall-supp/soederwall-supp.xml
+    whole: false
+    trim: >-
+      the 2 LexicalEntry blocks with lemgram fsvm--alkali..e.1,
+      fsvm--argha..e.1, byte-verbatim in upstream order, of 19,172
+  - path: schlyter/schlyter.xml
+    url: https://svn.spraakbanken.gu.se/sb-arkiv/pub/lmf/schlyter/schlyter.xml
+    whole: false
+    trim: >-
+      the 3 LexicalEntry blocks with lemgram fsvm--a..nn.1,
+      fsvm--avisning..nn.1, fsvm--hemuls__eþer..nn.1, byte-verbatim in
+      upstream order, of 10,067

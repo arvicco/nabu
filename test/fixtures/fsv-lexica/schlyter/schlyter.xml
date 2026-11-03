@@ -1,0 +1,60 @@
+<LexicalResource dtdVersion="16">
+  <GlobalInformation>
+   <feat att="languageCoding" val="ISO 639-3" />
+ </GlobalInformation>
+ <Lexicon>
+   <feat att="language" val="swe" />
+  <LexicalEntry>
+    <Lemma>
+     <FormRepresentation>
+      <feat att="partOfSpeech" val="nn" />
+     <feat att="lemgram" val="fsvm--a..nn.1" />
+     <feat att="gram" val="f." />
+     <feat att="writtenForm" val="a" />
+    </FormRepresentation>
+   </Lemma>
+   <WordForm>
+     <feat att="gram" val="pl." />
+    <feat att="NC?PNI" val="ær VG. * dat. aum)," />
+   </WordForm>
+   <Sense id="schlyter--a..1">
+     <Definition>
+      <feat att="text" val=" å.  VG. *  U. *  SM. *  VM. * ME. B. 26: 4. Jfr. Oter, Sunnæn, Almænnigs a." />
+    </Definition>
+   </Sense>
+  </LexicalEntry>
+  <LexicalEntry>
+    <Lemma>
+     <FormRepresentation>
+      <feat att="partOfSpeech" val="nn" />
+     <feat att="lemgram" val="fsvm--avisning..nn.1" />
+     <feat att="gram" val="f." />
+     <feat att="writtenForm" val="avisning" />
+    </FormRepresentation>
+   </Lemma>
+   <WordForm>
+     <feat att="variant" val="( af visning )" />
+   </WordForm>
+   <Sense id="schlyter--avisning..1">
+     <Definition>
+      <feat att="text" val=" anvisning, hänvisning. gripa til a., ær æi a. ltil, gifva köparen anvisning på annan jord än den, på hvilken säljaren bor; har säljaren ej sådan jord att anvisa,  U. * VM. II. J. 13: l2. ær a. ltil, haver han fulla a., æn æi ær a. ltil, haver (n. lhan) æi a. til, om den som gjort odlingen kan (l. lej kan) gifva anvisning på något annat till uppodling tjenligt ställe, U. V. 21: 1;  SM. * VM. I. B. l10: 1; II. B. l21. ligger full a. ater firi sum han ryþia ma, om en fullt motsvarande lägenhet til odling ligger obegagnad och kan anvisas,  SM. * haver (n. han) a. giort þem, ær æi a. til, har han anvisat åt dem (som ej vilja deltaga i byggningen) ett annat tjenligt qvarnställe; finne ej sådant ställe att anvisa,  SM. * haver han a., kan han gifva anvisning på annat (till humlegård) tjenligt ställe,  VM. *" />
+    </Definition>
+   </Sense>
+  </LexicalEntry>
+  <LexicalEntry>
+    <Lemma>
+     <FormRepresentation>
+      <feat att="partOfSpeech" val="nn" />
+     <feat att="lemgram" val="fsvm--hemuls__eþer..nn.1" />
+     <feat att="gram" val="m." />
+     <feat att="writtenForm" val="hemuls eþer" />
+    </FormRepresentation>
+   </Lemma>
+   <Sense id="schlyter--hemuls__eþer..1">
+     <Definition>
+      <feat att="text" val=" led, hvarigenom säl- jaren bestyrker den skedda föryt- ringen och försvarar köparens rätt. biþia han (n. þæn sum aværkaþe) sea -eþ at sær (n. hemuls manninum), bed- ja åverkaren (n. då han påstått egan- derätt till jorden) emottaga sådan ed af hemuslmannen till försvar för ine- hafvaren som köpt jorden af honom, ÖG.*" />
+    </Definition>
+   </Sense>
+  </LexicalEntry>
+ </Lexicon>
+</LexicalResource>

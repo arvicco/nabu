@@ -43,6 +43,19 @@ module Nabu
       # house render-cap rule, P48-r3).
       LANGUAGES_ITEMS = 10
 
+      # Pack-spillover codes shown in the labelled tail before its own
+      # "… and N more" (the tail is context, not the desk's headline).
+      SPILLOVER_ITEMS = 5
+
+      # One desk's live language holdings: +list+ is every [code, count]
+      # over the desk's public members (holdings descending); +proper+ the
+      # codes some NON-multilingual member holds; +packs+ the desk's
+      # multilingual (whole-source pack) members.
+      DeskLanguages = Data.define(:list, :proper, :packs) do
+        def desk_proper = list.select { |pair| proper.include?(pair.first) }
+        def spillover = list.reject { |pair| proper.include?(pair.first) }
+      end
+
       # +fulltext_path+ (P105-5a) feeds the lemma shelf's holdings cell
       # (tier-silver rows live in the fulltext db); nil or absent file
       # degrades that one cell to "nothing held yet", honestly.
@@ -115,12 +128,22 @@ module Nabu
                                   .census.to_h { |row| [row.slug, row] }
         info = Nabu::Query::LanguageInfo.new(catalog: catalog)
         holdings = @axes.each_axis.to_h do |axis|
-          [axis.name, info.language_holdings_for(@registry.public_axis_members(axis.name))]
+          [axis.name, desk_languages(info, @registry.public_axis_members(axis.name))]
         end
         [census, holdings]
       ensure
         fulltext&.disconnect
         catalog&.disconnect
+      end
+
+      # Desk-proper vs pack spillover: a code is desk-proper when some
+      # member that is NOT a multilingual pack (the registry's
+      # `multilingual: true` marker) holds it; the rest arrive only with a
+      # whole-source pack's other languages.
+      def desk_languages(info, members)
+        packs = members.select { |slug| @registry.multilingual?(slug) }
+        proper = info.language_holdings_for(members - packs).map(&:first)
+        DeskLanguages.new(list: info.language_holdings_for(members), proper: proper.to_set, packs: packs)
       end
 
       # ---- page rendering -------------------------------------------------
@@ -202,6 +225,8 @@ module Nabu
 
           #{quickstart_pointer}## The #{desk_count_word} desks
 
+          #{jump_line}
+
           #{index_entries}
 
           ---
@@ -211,6 +236,12 @@ module Nabu
           registry by the suite — it can never silently drift from the sources it
           documents.
         PAGE
+      end
+
+      # One in-page anchor per desk, registry order — kramdown's auto-ids
+      # for the `### <name>` headings below are the bare names.
+      def jump_line
+        "Jump to a desk: #{@axes.each_axis.map { |axis| "[#{axis.name}](##{axis.name})" }.join(' · ')}"
       end
 
       def index_entries
@@ -330,27 +361,47 @@ module Nabu
         parts.empty? ? "nothing held yet" : parts.join(" / ")
       end
 
-      # The desk's language codes (P48-r3): the same live-derived list the
-      # `nabu axis` card prints — one merged doc-or-entry count per code
-      # over the desk's public members, holdings descending, dated like the
-      # holdings cells (never pinned; it drifts by design). The counts keep
-      # a multilingual pack's spillover honest. A catalog-less checkout and
-      # a nothing-synced desk each say so (the holdings-cell precedent).
+      # The desk's language codes (P48-r3): one merged doc-or-entry count
+      # per code over the desk's public members, holdings descending, dated
+      # like the holdings cells (never pinned; it drifts by design). The
+      # desk's OWN languages lead; codes that arrive only with a
+      # multilingual pack's whole-source membership follow in a separate,
+      # labelled, still-counted tail (the November 2026 site review: the
+      # Celtic desk's line opened on the kaikki extracts' Chinese). A
+      # catalog-less checkout and a nothing-synced desk each say so (the
+      # holdings-cell precedent).
       def languages_block(axis, holdings)
-        "**Languages on this desk** #{languages_cell(axis, holdings)}\n\n"
+        desk = holdings&.fetch(axis.name, nil)
+        "**Languages on this desk** #{languages_cell(axis, holdings, desk)}\n\n#{spillover_block(axis, desk)}"
       end
 
-      def languages_cell(axis, holdings)
+      def languages_cell(axis, holdings, desk)
         return "— not built in this checkout." if holdings.nil?
+        return "— nothing held yet." if desk.nil? || desk.list.empty?
 
-        list = holdings.fetch(axis.name) { [] }
-        return "— nothing held yet." if list.empty?
+        proper = desk.desk_proper
+        return "— none beyond the multilingual packs below." if proper.empty?
 
-        shown = list.first(LANGUAGES_ITEMS).map { |code, count| "`#{code}` #{commas(count)}" }
+        "<span title=\"read live from the catalog\">(live doc-or-entry counts as of " \
+          "#{as_of_human})</span>: #{capped_codes(axis, proper, LANGUAGES_ITEMS)}."
+      end
+
+      # Empty unless pack-only codes exist; then one labelled paragraph
+      # naming the packs, capped like the line above it.
+      def spillover_block(axis, desk)
+        spill = desk ? desk.spillover : []
+        return "" if spill.empty?
+
+        packs = desk.packs.map { |slug| "`#{slug}`" }.join(", ")
+        "**Carried in by multilingual packs** (#{packs} — whole-source members whose other " \
+          "languages ride along, as of #{as_of_human}): #{capped_codes(axis, spill, SPILLOVER_ITEMS)}.\n\n"
+      end
+
+      def capped_codes(axis, list, cap)
+        shown = list.first(cap).map { |code, count| "`#{code}` #{commas(count)}" }
         hidden = list.size - shown.size
         tail = hidden.positive? ? " … and #{hidden} more (`nabu axis #{axis.name}` lists all)" : ""
-        "<span title=\"read live from the catalog\">(live doc-or-entry counts as of " \
-          "#{as_of_human})</span>: #{shown.join(' · ')}#{tail}."
+        "#{shown.join(' · ')}#{tail}"
       end
 
       def instruments_block(axis)

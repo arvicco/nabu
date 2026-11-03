@@ -138,18 +138,13 @@ sources:
   # definitionally Aranese (the card's own description).
   aranese:
     oci: { lect: "oc/aranes", tier: certain }
-  # Owner ruling 2026-08-24: Menota's onw is the Handbook's own
-  # DEPRECATED legacy code for Old Norwegian (ch. 14 prescribes nor +
-  # dating instead); the one file carrying it glosses itself "Old
-  # Norwegian", doc dated 1260-70 — inside no:old's band. NEVER a
-  # codemap row: ISO 639-3 assigns onw to Old Nubian; this is
-  # per-collection knowledge by definition. Since 2026-11-02 the menota
-  # adapter also corrects the RAW code at parse (onw → nor, upstream's
-  # code kept in metadata language_raw), so raw per-language rollups stop
-  # counting the codex as Old Nubian; this row stays as the routing for
-  # any catalog state parsed before that fix.
-  menota:
-    onw: { lect: "no:old", tier: certain }
+  # menota: the onw → no:old row (owner ruling 2026-08-24 — Menota's
+  # deprecated legacy code for Old Norwegian, ISO's Old Nubian) RETIRED
+  # 2026-11-02: the adapter corrects the RAW code at parse (onw → nor,
+  # upstream's code kept in metadata language_raw) and the live catalog's
+  # menota holdings carry no onw after the P153 re-parse (dan 2 · isl 53 ·
+  # non 1 · nor 31 · swe 4), so the routing had nothing left to route.
+  # The menota-dan rule still machine-postures the source.
   # P110 (the P108 add-then-retire completed; jpn:emj minted in the
   # p108-japonic-stages nabu-lects release, in canonical since P108's
   # sister sync): 校異源氏物語 IS the Heian classical stage — Genji,
@@ -235,6 +230,21 @@ sources:
     # nodes — parse-time work, the 2026-10-18 generalization.
     snt: { lect: "qps", tier: certain }
     xca: { lect: "qcp", tier: certain }
+  fsv-lexica:
+    # Söderwall's Ordbok öfver svenska medeltids-språket (+ its
+    # supplement) and Schlyter's glossary to the medieval laws are by
+    # title and scope dictionaries of medieval Swedish — the registry's
+    # sv:old stage (nabu-lects PR #4, the node the held fornsvenska
+    # corpus resolves to). The shelves store sv (the held text's own
+    # tag) so the dictionary-language filter meets fornsvenska; this row
+    # transcribes the books' own definition onto the existing node.
+    sv: { lect: "sv:old", tier: certain }
+  wiktionary-gmq-osw:
+    # Wiktionary's Old Swedish (gmq-osw, no ISO code; the codemap's own
+    # gmq-osw → sv:old row) stored under the held fornsvenska tag sv so
+    # the dictionary-language filter meets the text; this row restores
+    # the stage the upstream code names.
+    sv: { lect: "sv:old", tier: certain }
   elizabeth-bible:
     # The Elizabeth Bible IS the text the registry's chu:ncs node names
     # as fixing the post-Nikonian Synodal standard ("fixed in the
@@ -262,3 +272,27 @@ sources:
     # files Targum Jerusalem under arc:mid/jud too, and re-filing would be
     # a classification change.
     arc: { lect: "arc:mid/jud", tier: certain }
+  ppchy:
+    # The Penn Parsed Corpus of Historical Yiddish holds its texts
+    # ROMANIZED ("more or less according to the YIVO system" — upstream's
+    # transliteration note), never in the Hebrew script of the originals:
+    # the surface-script claim (the D60-b ~script axis, the papyri
+    # egy~latn shape) lands here as yi~latn on the yi anchor the
+    # 2026-11-02 registry mint created. No stage is claimed at source
+    # grain — the corpus runs 1478–1959 — so date-band inference stages
+    # each text onto yi:old/mid/mod from its own sources-page Date, and
+    # the ppchy-dialect compose rules refine those stages onto yi/west and
+    # yi/east (config/lect_facet_rules.yml). Tier certain: upstream's own
+    # statement of its transliteration.
+    yi: { lect: "yi~latn", tier: certain }
+  typikon-bible:
+    # The 1688 Bucharest Bible (Biblia de la București) is the monument
+    # the registry's ro:old note names — the Cyrillic church-print literary
+    # language, band [1521, 1780] — and the edition is dated 1688, inside
+    # the band. The mint's own consumer note prescribes exactly this row:
+    # the stage, in the Cyrillic of the print (the ~cyrl surface the
+    # adapter's ron-Cyrl tag states). Transcription of the edition's own
+    # identity onto the existing node — parse-time work, the 2026-10-18
+    # generalization. Tier certain: one dated edition, the stage's own
+    # exemplar.
+    ron-Cyrl: { lect: "ro:old~cyrl", tier: certain }

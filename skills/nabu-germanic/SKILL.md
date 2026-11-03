@@ -6,7 +6,7 @@ compatibility: "Requires the nabu MCP server (`bin/nabu mcp`, read-only, stdio) 
 metadata:
   desk: germanic
   origin: generated
-  sources: "aspr bosworth-toller cleasby-vigfusson cme corpus-gysseling corpus-oudfries corpus-oudnederlands dta eebo-tcp fornsvenska helipad iswoc menota menotec perseus-anglit ppchy proiel ref rem ren rundata runesdb ud zoega"
+  sources: "aspr bosworth-toller cleasby-vigfusson cme corpus-gysseling corpus-oudfries corpus-oudnederlands dta eebo-tcp fornsvenska fsv-lexica helipad iswoc menota menotec perseus-anglit ppchy proiel ref rem ren rundata runesdb ud wiktionary-dum wiktionary-enm wiktionary-gmh wiktionary-gmq-osw wiktionary-got wiktionary-non wiktionary-ofs wiktionary-sco zoega"
 ---
 
 # The Germanicist — the `germanic` desk
@@ -33,6 +33,7 @@ verbatim upstream terms are in `docs/02-sources.md` of the Nabu repository.
 | `dta` | Deutsches Textarchiv (BBAW) | attribution |
 | `eebo-tcp` | EEBO-TCP — Early English Books Online, Text Creation Partnership (Phases I–II) | open |
 | `fornsvenska` | Fornsvenska textbanken — Old Swedish laws, prose and verse (Språkbanken Text) | attribution |
+| `fsv-lexica` | Språkbanken Old Swedish dictionaries — Söderwall, Söderwall supplement, Schlyter (Karp LMF) | attribution |
 | `helipad` | HeliPaD — the Heliand Parsed Database (Walkden; Zenodo 4395040, v0.9) | attribution |
 | `iswoc` | ISWOC Treebank — Old English texts | nc |
 | `menota` | Menota — the Medieval Nordic Text Archive (clarino.uib.no) | attribution |
@@ -46,6 +47,14 @@ verbatim upstream terms are in `docs/02-sources.md` of the Nabu repository.
 | `rundata` | Rundata — Scandinavian Runic-text Database (SRDB, via rundata.info) | odbl |
 | `runesdb` | RuneS-DB — runic inscriptions of the Göttingen Academy project RuneS (TEI) | attribution |
 | `ud` | Universal Dependencies — ancient treebanks | nc |
+| `wiktionary-dum` | Wiktionary Middle Dutch — kaikki.org machine-readable extract | attribution |
+| `wiktionary-enm` | Wiktionary Middle English — kaikki.org machine-readable extract | attribution |
+| `wiktionary-gmh` | Wiktionary Middle High German — kaikki.org machine-readable extract | attribution |
+| `wiktionary-gmq-osw` | Wiktionary Old Swedish — kaikki.org machine-readable extract | attribution |
+| `wiktionary-got` | Wiktionary Gothic — kaikki.org machine-readable extract | attribution |
+| `wiktionary-non` | Wiktionary Old Norse — kaikki.org machine-readable extract | attribution |
+| `wiktionary-ofs` | Wiktionary Old Frisian — kaikki.org machine-readable extract | attribution |
+| `wiktionary-sco` | Wiktionary Scots — kaikki.org machine-readable extract | attribution |
 | `zoega` | Zoëga, A Concise Dictionary of Old Icelandic (1910) — stscoundrel JSON edition | attribution |
 <!-- nabu:skill-sources:end -->
 

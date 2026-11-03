@@ -1,0 +1,75 @@
+# Nabu fixture manifest (P5-4 "fixture sentinel"). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# Every file is a member of ONE Zenodo zip (no per-file URL), so every
+# entry is refetchable: false; the zip directory's sha256 pin lives on the adapter.
+source: tianyige
+adapter_test:
+retrieved: '2026-11-02'
+files:
+- path: CITATION.cff
+  whole: true
+  trim: none
+  refetchable: false
+  reason: a member of the Zenodo zip (https://zenodo.org/api/records/23817595/files/tianyige-ming-exam-records-v1.0.zip/content, md5 9276b951…c2e8), under its top directory tianyige-ming-exam-records-v1.0/
+    — no per-file raw URL
+- path: documents/0006944.jsonl
+  whole: false
+  trim: a documented cut (README.md)
+  refetchable: false
+  reason: a member of the Zenodo zip (https://zenodo.org/api/records/23817595/files/tianyige-ming-exam-records-v1.0.zip/content, md5 9276b951…c2e8), under its top directory tianyige-ming-exam-records-v1.0/
+    — no per-file raw URL
+- path: graduates.tsv
+  whole: false
+  trim: a documented cut (README.md)
+  refetchable: false
+  reason: a member of the Zenodo zip (https://zenodo.org/api/records/23817595/files/tianyige-ming-exam-records-v1.0.zip/content, md5 9276b951…c2e8), under its top directory tianyige-ming-exam-records-v1.0/
+    — no per-file raw URL
+- path: index.html
+  whole: true
+  trim: none
+  refetchable: false
+  reason: a member of the Zenodo zip (https://zenodo.org/api/records/23817595/files/tianyige-ming-exam-records-v1.0.zip/content, md5 9276b951…c2e8), under its top directory tianyige-ming-exam-records-v1.0/
+    — no per-file raw URL
+- path: pages/0000538.jsonl
+  whole: false
+  trim: a documented cut (README.md)
+  refetchable: false
+  reason: a member of the Zenodo zip (https://zenodo.org/api/records/23817595/files/tianyige-ming-exam-records-v1.0.zip/content, md5 9276b951…c2e8), under its top directory tianyige-ming-exam-records-v1.0/
+    — no per-file raw URL
+- path: pages/0006944.jsonl
+  whole: false
+  trim: a documented cut (README.md)
+  refetchable: false
+  reason: a member of the Zenodo zip (https://zenodo.org/api/records/23817595/files/tianyige-ming-exam-records-v1.0.zip/content, md5 9276b951…c2e8), under its top directory tianyige-ming-exam-records-v1.0/
+    — no per-file raw URL
+- path: pages/0007858.jsonl
+  whole: false
+  trim: a documented cut (README.md)
+  refetchable: false
+  reason: a member of the Zenodo zip (https://zenodo.org/api/records/23817595/files/tianyige-ming-exam-records-v1.0.zip/content, md5 9276b951…c2e8), under its top directory tianyige-ming-exam-records-v1.0/
+    — no per-file raw URL
+- path: questions.tsv
+  whole: false
+  trim: a documented cut (README.md)
+  refetchable: false
+  reason: a member of the Zenodo zip (https://zenodo.org/api/records/23817595/files/tianyige-ming-exam-records-v1.0.zip/content, md5 9276b951…c2e8), under its top directory tianyige-ming-exam-records-v1.0/
+    — no per-file raw URL
+- path: tables/questions.jsonl
+  whole: false
+  trim: a documented cut (README.md)
+  refetchable: false
+  reason: a member of the Zenodo zip (https://zenodo.org/api/records/23817595/files/tianyige-ming-exam-records-v1.0.zip/content, md5 9276b951…c2e8), under its top directory tianyige-ming-exam-records-v1.0/
+    — no per-file raw URL
+- path: text/1371_洪武四年會試錄_0006944.txt
+  whole: false
+  trim: a documented cut (README.md)
+  refetchable: false
+  reason: a member of the Zenodo zip (https://zenodo.org/api/records/23817595/files/tianyige-ming-exam-records-v1.0.zip/content, md5 9276b951…c2e8), under its top directory tianyige-ming-exam-records-v1.0/
+    — no per-file raw URL
+- path: volumes.tsv
+  whole: false
+  trim: a documented cut (README.md)
+  refetchable: false
+  reason: a member of the Zenodo zip (https://zenodo.org/api/records/23817595/files/tianyige-ming-exam-records-v1.0.zip/content, md5 9276b951…c2e8), under its top directory tianyige-ming-exam-records-v1.0/
+    — no per-file raw URL

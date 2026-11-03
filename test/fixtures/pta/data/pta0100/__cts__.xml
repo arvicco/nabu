@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ti:textgroup
+  xmlns:ti="http://chs.harvard.edu/xmlns/cts"
+  xmlns:cpt="http://purl.org/capitains/ns/1.0#"
+  xmlns:gnd="http://d-nb.info/standards/elementset/gnd#" 
+  xmlns:wd="http://www.wikidata.org/ontology#"
+  urn="urn:cts:pta:pta0100">
+  <ti:groupname xml:lang="eng">Dokumente zur Geschichte des arianischen Streites (Athanasius Werke III)</ti:groupname>
+  <ti:groupname xml:lang="deu">Dokumente zur Geschichte des arianischen Streites (Athanasius Werke III)</ti:groupname>
+  <ti:groupname xml:lang="ita">Dokumente zur Geschichte des arianischen Streites (Athanasius Werke III)</ti:groupname>
+  <ti:groupname xml:lang="fra">Dokumente zur Geschichte des arianischen Streites (Athanasius Werke III)</ti:groupname>
+</ti:textgroup>

@@ -7,7 +7,7 @@ description: >-
 
 > The Arabist — the Islamicate library whole, Quran and hadith to falsafa and adab.
 
-The OpenITI lane: premodern Arabic and Persian literature at corpus scale — Quran and hadith, history and biography, law and falsafa, the dīwāns and adab — with the Persian shelf (Ḥāfiẓ, Ibn Sīnā) riding the same Arabic-script fold that makes ara/fas cross-searchable (P41-3) — and DiCCAS, disaster accounts excerpted from ten classical sources with catastrophe terminology tagged — and, since P96, the KITAB text-reuse instrument: upstream-computed reuse edges joining the held OpenITI books pairwise on the intertext desk.
+The OpenITI lane: premodern Arabic and Persian literature at corpus scale — Quran and hadith, history and biography, law and falsafa, the dīwāns and adab — with the Persian shelf (Ḥāfiẓ, Ibn Sīnā) riding the same Arabic-script fold that makes ara/fas cross-searchable — and DiCCAS, disaster accounts excerpted from ten classical sources with catastrophe terminology tagged — and the KITAB text-reuse instrument: upstream-computed reuse edges joining the held OpenITI books pairwise on the intertext desk.
 
 The premodern Islamicate library is LIVE: OpenITI's ~9,079 primary
 texts (~1.12 B words, the 2026 release zip md5-pinned into canonical)
@@ -21,7 +21,7 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 A source wears every desk it serves — these six answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
-| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 2 November 2026)</span> |
+| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 3 November 2026)</span> |
 |---|---|---|---|---|
 | `althurayya` | feature module | attribution | wired · manual | nothing held yet |
 | `diccas` | texts | nc | wired · manual | 10 docs / 879 passages |
@@ -30,7 +30,7 @@ A source wears every desk it serves — these six answer this desk. Holdings are
 | `ociana` | inscriptions | research_private | wired · frozen | 36,794 docs / 36,794 passages |
 | `openiti` | texts | nc | wired · manual | 9,079 docs / 34,631,499 passages |
 
-**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 2 November 2026)</span>: `xna` 36,758 · `ara` 8,738 · `fas` 351 · `grc` 22 · `inm` 8 · `arc` 4 · `lat` 1 · `xsa` 1.
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 3 November 2026)</span>: `xna` 36,758 · `ara` 8,738 · `fas` 351 · `grc` 22 · `inm` 8 · `arc` 4 · `lat` 1 · `xsa` 1.
 
 ## The desk's instruments
 
@@ -38,7 +38,7 @@ A source wears every desk it serves — these six answer this desk. Holdings are
   morphology or lemma layer, so `--lemma`, `vocab` and `formulas` do not
   apply to this desk; its instruments are **full-text search** across the
   whole Islamicate shelf and the **timeline**.
-- **The ara/fas Arabic-script fold (P41-3):** one search skeleton across
+- **The ara/fas Arabic-script fold:** one search skeleton across
   the ی/ي and ک/ك keyboard split, maqsura, taa marbuta, tashkeel, tatweel
   and ZWNJ — so a query typed on either keyboard reaches the stored form
   whichever keyboard wrote it. Search-side only; the stored bytes stay
@@ -72,7 +72,7 @@ This desk's own surfaces:
 ```
 nabu show urn:nabu:openiti:0792Hafiz.Muntasab.PDL00074-per1  # Ḥāfiẓ's Muntasab — Persian verse in the %~% hemistich notation
 nabu search الله --lang ara           # Allāh across the Arabic hadith, dīwān and falsafa shelves
-nabu search دانی --lang fas           # the cross-keyboard ی/ي fold (P41-3) — an Arabic-yeh query (U+064A) still finds Ḥāfiẓ's farsi-yeh دانی (U+06CC)
+nabu search دانی --lang fas           # the cross-keyboard ی/ي fold — an Arabic-yeh query (U+064A) still finds Ḥāfiẓ's farsi-yeh دانی (U+06CC)
 nabu search --from 1300 --to 1400 --axis arabic  # term-less browse of the 14th-c.-CE shelf on the AH death-year timeline (live-verified 23 July 2026)
 ```
 
@@ -97,7 +97,7 @@ With the [MCP server]({{ '/tools/#ask-your-model' | relative_url }}) connected, 
   and a real text view for that). Font: `font-noto-naskh-arabic` — naskh
   stays legible at terminal sizes; a dedicated iTerm2 reading profile with
   it boosted a few points is the workable setup (docs/display.md §2).
-- **Nothing to strip, and no `--display translit`.** The P41-g census
+- **Nothing to strip, and no `--display translit`.** A census of the held corpus
   found consonantal standard-block text only (no tashkeel), so `default`,
   `plain` and `full` render the same bytes (isolates aside); and Arabic
   romanization is deliberately not built — the standards conflict and

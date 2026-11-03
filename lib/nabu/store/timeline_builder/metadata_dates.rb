@@ -85,6 +85,9 @@ module Nabu
           #                               stated span, else the corpus band; archive findspots
           "africa-pd" => :structured, # P124-1: each work's edition year (the slavistics-pd
           #                             mold); the imprint rides "imprint" — no place claim
+          "aio" => :structured, # P154: the inscription page's Date field (archon years, ranges,
+          #                       centuries — AioDate); place = the Pleiades-linked Original
+          #                       location/Findspot. Greek docs only row (translations never do)
           "aozora" => :structured, # the index's 初出 first publication (class composition),
           #                          else the 底本 first-edition year (class edition)
           "archiv-slav-phil" => :structured, # each volume's title-page year
@@ -142,6 +145,8 @@ module Nabu
           "diorisis" => :signed_year_key,
           "disco" => :author_century_band,
           "dta" => :year_range,
+          "ebible-pacific" => :structured, # P154: each translation's edition year as eBible records
+          #                                  it (1868 / 1908 / 1922, class edition) — no place claim
           "ebl" => :period_label,
           "edr" => :structured,
           "eebo-tcp" => :structured,
@@ -173,6 +178,12 @@ module Nabu
           "gu-wikisource" => :edition_year_text, # P120-3: the scan Index's verbatim
           #                                         વર્ષ= print year (date_class edition)
           "guaman-poma" => :structured,
+          "hmml-reading-room" => :structured, # P154: the catalogue's own envelope (min beginDate ..
+          #                                     max endDate over the parts, century label raw;
+          #                                     18,001 of 18,892 records, 2026-11-01 generation),
+          #                                     artifact class; place = the part's city of origin,
+          #                                     else its country (4,448 records) — the holding
+          #                                     repository is never taken for the origin
           "honkoku" => :ndl_catalog_date, # the NDL catalog record the HonkokuNdlCatalog join
           #                                  writes for NDL-held materials (出版日 envelope),
           #                                  else the label's nengō "date" (parse time)
@@ -231,6 +242,9 @@ module Nabu
           #                         town/region localization (Regensburg, Cracow, Prague …)
           "prague-bible-1488" => :structured,
           "prilit" => :year_range,
+          "pta" => :structured, # P154: the work's dct:created span (class composition); the
+          #                       catalog's unfilled 0030–0800 default mints none; place =
+          #                       the work's dct:spatial Pleiades id
           "ref" => :structured,
           "rem" => :structured,
           "ren" => :structured,
@@ -270,6 +284,12 @@ module Nabu
           "theatre-classique" => :structured, # the transcribed edition's title-page year (class
           #                                     edition), else the site's periode band
           #                                     (composition); place = the imprint city
+          "tianyige" => :structured, # P154: the record's reign era + year through the
+          #                            eras.yml nianhao rows (a one-year envelope, class
+          #                            composition on the hash; upstream's western_year
+          #                            agrees on all 312); place = the provincial
+          #                            record's province (順天府 …) — metropolitan and
+          #                            palace records carry no place key by design
           "ticha" => :structured,
           "titus-bactrian" => :structured,
           "titus-manichaica" => :place_only,

@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><?oxygen RNGSchema="littre.rng" type="xml"?>
+<?xml-stylesheet type="text/xsl" href="../transform/littre_html.xsl"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:id="littre_b">
+<teiHeader>
+<fileDesc>
+<titleStmt>
+<title>Littré, Dictionnaire de la Langue Française</title>
+</titleStmt>
+<publicationStmt>
+<date>2011</date>
+<idno>http://javacrim.svn.sourceforge.net/svnroot/javacrim/littre/xml/b.xml</idno>
+<publisher>http://javacrim.sourceforge.net/</publisher>
+<availability status="restricted">
+<p> Licence Creative Commons : <ref target="http://creativecommons.org/licenses/by-sa/2.0/fr/">Paternité – Partage des Conditions Initiales à l'Identique – 2.0 France</ref></p>
+<p> Cette ressource électronique structurée est protégée en France par le code de la propriété intellectuelle sur les bases de données (L341-1). En adoptant une licence CreativeCommons by-sa, les contributeurs de ce travail souhaitent que la ressource soit librement diffusée, notamment pour la recherche. La clause « Partage des Conditions Initiales à l'Identique » invite les contributeurs futurs à rendre leurs améliorations publiques, par exemple en rejoignant le projet libre <ref target="https://sourceforge.net/projects/javacrim/">Javacrim</ref>.</p>
+</availability>
+</publicationStmt>
+<sourceDesc>
+<bibl><ref target="http://francois.gannaz.free.fr/Littre/">XMLittré v1.3</ref></bibl>
+<bibl>Littré, Dictionnaire de la Langue Française</bibl>
+</sourceDesc>
+</fileDesc>
+</teiHeader>
+<text>
+<body>
+<entry xml:id="b">
+<form>
+<orth>B</orth>
+<pron>bé</pron>
+<gram>s. m.</gram>
+</form>
+<sense>
+<dictScrap>Seconde lettre de l'alphabet. Un <oVar>B</oVar> majuscule ; un petit <oVar>B</oVar>.</dictScrap>
+<sense>
+<dictScrap>Familièrement. Être marqué au <oVar>b</oVar>, être borgne, bossu, boiteux, etc.</dictScrap>
+</sense>
+<sense>
+<dictScrap>Ne savoir ni A ni <oVar>B</oVar>, être fort ignorant.</dictScrap>
+</sense>
+<sense>
+<dictScrap>Ne parler que par <oVar>B</oVar> et par F, employer fréquemment des jurements grossiers.</dictScrap>
+<cit>
+<quote>Les <oVar>B</oVar>, les F voltigeaient sur son bec ; Les jeunes sœurs crurent qu'il parlait grec</quote>
+<bibl>
+<author>GRESSET</author>
+<biblScope>Vert-Vert, IV</biblScope>
+</bibl>
+</cit>
+</sense>
+<sense>
+<dictScrap><oVar>B</oVar> marque le lundi dans le calendrier de l'ancien rituel.</dictScrap>
+</sense>
+</sense>
+<note type="HIST.">
+<label>XIIIe s.</label>
+<cit>
+<quote>Je ne puis bien nommer sans <oVar>B</oVar> ; Par <oVar>B</oVar> commencent li bien fait ; Ne jà sans <oVar>B</oVar> n'erent bien fait</quote>
+<bibl>
+<biblScope>Senefiance de l'A, B, C, édit. JUBINAL, t. II, 276</biblScope>
+</bibl>
+</cit>
+<label>XVe s.</label>
+<cit>
+<quote>Je ne cognois ne <oVar>B</oVar> ne R ; Mais je sçai bien qu'en celle terre N'avera paix, ne ou pays, Se le poovoir des flours de lys Ne vient la chose refourmer</quote>
+<bibl>
+<author>FROISS.</author>
+<biblScope>Pastourelle.</biblScope>
+</bibl>
+</cit>
+</note>
+<etym>Le b latin, grec bêta, du phénicien ou hébreu beth.</etym>
+</entry>
+<entry xml:id="baal">
+<form>
+<orth>BAAL</orth>
+<pron>ba-al</pron>
+<gram>s. m.</gram>
+</form>
+<sense>
+<dictScrap>Grande divinité des Assyriens, que les Grecs assimilaient à leur Jupiter.</dictScrap>
+<cit>
+<quote>Qui peut vous inspirer une haine si forte ? Est-ce que de <oVar>Baal</oVar> le zèle vous transporte ? Pour moi, vous le savez, descendu d'Ismaël, je ne sers ni <oVar>Baal</oVar> ni le Dieu d'Israël</quote>
+<bibl>
+<author>RAC.</author>
+<biblScope>Ath. III, 3</biblScope>
+</bibl>
+</cit>
+<sense>
+<dictScrap>En style biblique, <oVar>Baal</oVar> est le nom collectif des dieux des païens.</dictScrap>
+</sense>
+</sense>
+<etym>Mot assyrien et hébreu qui signifie seigneur.</etym>
+</entry>
+</body>
+</text>
+</TEI>

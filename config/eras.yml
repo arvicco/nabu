@@ -1606,3 +1606,197 @@ eras:
     offset: 2018
     width: 0
     source: Japanese era list (元号一覧), start 2019
+  # ── Chinese reign periods (nianhao 年號): Ming + early Qing (P154) ──────
+  #
+  # The Ming reign periods 洪武 (1368) → 崇禎 (1628–1644) and the first two
+  # Qing ones (順治, 康熙 — the Tianyige examination records reach 1684),
+  # for upstreams that TYPE a year by its reign period (a reign_era field
+  # beside the reign_year: tianyige). Keys are DYNASTY-PREFIXED (明弘治,
+  # 清康熙): the bare names collide with nengō rows (弘治 is also the
+  # Japanese era of 1555), and the resolve index is one flat namespace —
+  # the caller composes dynasty + era, never a bare-name guess. Aliases
+  # carry the dynasty-prefixed pinyin only, for the same reason.
+  #
+  # CONVENTIONS (declared, never silent):
+  # - start = the Western year the period's first year (元年) mostly
+  #   coincides with; era year n converts as CE = start + (n − 1). Ming
+  #   periods open on the new year after accession (踰年改元), so 洪熙 and
+  #   泰昌 hold a single numbered year.
+  # - width 0, single-valued like the nengō rows: the lunisolar year's
+  #   January–February tail is the accepted residual.
+  # - max_year: the period's last numbered year.
+  # - parse: false — never read out of prose (Nabu::Eras#nengo_years reads
+  #   only the nengo family; these rows answer resolve + to_ce).
+  # Source: the standard reign-period table (e.g. E. Wilkinson, Chinese
+  # History: A New Manual, the Ming and Qing reign-period tables).
+  明洪武:
+    family: nianhao
+    label: Ming Hongwu (明洪武)
+    offset: 1367
+    width: 0
+    max_year: 31
+    parse: false
+    aliases: [Ming Hongwu]
+    source: Chinese reign-period table (年號), Ming Hongwu 1368–1398
+  明建文:
+    family: nianhao
+    label: Ming Jianwen (明建文)
+    offset: 1398
+    width: 0
+    max_year: 4
+    parse: false
+    aliases: [Ming Jianwen]
+    source: Chinese reign-period table (年號), Ming Jianwen 1399–1402
+  明永樂:
+    family: nianhao
+    label: Ming Yongle (明永樂)
+    offset: 1402
+    width: 0
+    max_year: 22
+    parse: false
+    aliases: [Ming Yongle]
+    source: Chinese reign-period table (年號), Ming Yongle 1403–1424
+  明洪熙:
+    family: nianhao
+    label: Ming Hongxi (明洪熙)
+    offset: 1424
+    width: 0
+    max_year: 1
+    parse: false
+    aliases: [Ming Hongxi]
+    source: Chinese reign-period table (年號), Ming Hongxi 1425–1425
+  明宣德:
+    family: nianhao
+    label: Ming Xuande (明宣德)
+    offset: 1425
+    width: 0
+    max_year: 10
+    parse: false
+    aliases: [Ming Xuande]
+    source: Chinese reign-period table (年號), Ming Xuande 1426–1435
+  明正統:
+    family: nianhao
+    label: Ming Zhengtong (明正統)
+    offset: 1435
+    width: 0
+    max_year: 14
+    parse: false
+    aliases: [Ming Zhengtong]
+    source: Chinese reign-period table (年號), Ming Zhengtong 1436–1449
+  明景泰:
+    family: nianhao
+    label: Ming Jingtai (明景泰)
+    offset: 1449
+    width: 0
+    max_year: 8
+    parse: false
+    aliases: [Ming Jingtai]
+    source: Chinese reign-period table (年號), Ming Jingtai 1450–1457
+  明天順:
+    family: nianhao
+    label: Ming Tianshun (明天順)
+    offset: 1456
+    width: 0
+    max_year: 8
+    parse: false
+    aliases: [Ming Tianshun]
+    source: Chinese reign-period table (年號), Ming Tianshun 1457–1464
+  明成化:
+    family: nianhao
+    label: Ming Chenghua (明成化)
+    offset: 1464
+    width: 0
+    max_year: 23
+    parse: false
+    aliases: [Ming Chenghua]
+    source: Chinese reign-period table (年號), Ming Chenghua 1465–1487
+  明弘治:
+    family: nianhao
+    label: Ming Hongzhi (明弘治)
+    offset: 1487
+    width: 0
+    max_year: 18
+    parse: false
+    aliases: [Ming Hongzhi]
+    source: Chinese reign-period table (年號), Ming Hongzhi 1488–1505
+  明正德:
+    family: nianhao
+    label: Ming Zhengde (明正德)
+    offset: 1505
+    width: 0
+    max_year: 16
+    parse: false
+    aliases: [Ming Zhengde]
+    source: Chinese reign-period table (年號), Ming Zhengde 1506–1521
+  明嘉靖:
+    family: nianhao
+    label: Ming Jiajing (明嘉靖)
+    offset: 1521
+    width: 0
+    max_year: 45
+    parse: false
+    aliases: [Ming Jiajing]
+    source: Chinese reign-period table (年號), Ming Jiajing 1522–1566
+  明隆慶:
+    family: nianhao
+    label: Ming Longqing (明隆慶)
+    offset: 1566
+    width: 0
+    max_year: 6
+    parse: false
+    aliases: [Ming Longqing]
+    source: Chinese reign-period table (年號), Ming Longqing 1567–1572
+  明萬曆:
+    family: nianhao
+    label: Ming Wanli (明萬曆)
+    offset: 1572
+    width: 0
+    max_year: 48
+    parse: false
+    aliases: [Ming Wanli]
+    source: Chinese reign-period table (年號), Ming Wanli 1573–1620
+  明泰昌:
+    family: nianhao
+    label: Ming Taichang (明泰昌)
+    offset: 1619
+    width: 0
+    max_year: 1
+    parse: false
+    aliases: [Ming Taichang]
+    source: Chinese reign-period table (年號), Ming Taichang 1620–1620
+  明天啓:
+    family: nianhao
+    label: Ming Tianqi (明天啓)
+    offset: 1620
+    width: 0
+    max_year: 7
+    parse: false
+    aliases: [Ming Tianqi]
+    source: Chinese reign-period table (年號), Ming Tianqi 1621–1627
+  明崇禎:
+    family: nianhao
+    label: Ming Chongzhen (明崇禎)
+    offset: 1627
+    width: 0
+    max_year: 17
+    parse: false
+    aliases: [Ming Chongzhen]
+    source: Chinese reign-period table (年號), Ming Chongzhen 1628–1644
+  清順治:
+    family: nianhao
+    label: Qing Shunzhi (清順治)
+    offset: 1643
+    width: 0
+    max_year: 18
+    parse: false
+    aliases: [Qing Shunzhi]
+    source: Chinese reign-period table (年號), Qing Shunzhi 1644–1661
+  清康熙:
+    family: nianhao
+    label: Qing Kangxi (清康熙)
+    offset: 1661
+    width: 0
+    max_year: 61
+    parse: false
+    aliases: [Qing Kangxi]
+    source: Chinese reign-period table (年號), Qing Kangxi 1662–1722

@@ -1,0 +1,12 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+source: wiktionary-got
+adapter_test: test/adapters/wiktionary_got_test.rb
+retrieved: 2026-11-02
+files:
+  - path: kaikki.org-dictionary-Gothic.jsonl
+    url: https://kaikki.org/dictionary/Gothic/kaikki.org-dictionary-Gothic.jsonl
+    whole: false
+    trim: >-
+      the 2 complete JSONL lines with word in {𐌼𐌰𐌸𐌰, 𐌺𐌰𐍄𐌹𐌻𐍃},
+      byte-verbatim in upstream order, of 23,034 lines

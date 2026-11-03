@@ -179,7 +179,7 @@ class PosturesTest < Minitest::Test
   def test_the_lect_migration_kept_the_p59_4_census
     lect = postures.declarations.select { |d| d.layer == "lect" }
     by_posture = lect.group_by(&:posture).transform_values(&:size)
-    assert_equal 173, lect.size,
+    assert_equal 178, lect.size,
                  "the P59-4 declarations survive the move (61 at migration; itant retired P61-3," \
                  "oracc retired P62-2, etcsl/ccmh/freising/coptic-scriptorium retired P64-6, " \
                  "titus-avestan retired P66-1, osta+fornsvenska retired P77-r8, achemenet " \
@@ -365,7 +365,23 @@ class PosturesTest < Minitest::Test
                  "bdrc-transcriptions ADDED P153 — identity xct (the derge/lotsawa precedent, " \
                  "declared coarse): 171→172; " \
                  "baley-manuscripts ADDED P153 — codemap och → zho:old (the obimd precedent; the " \
-                 "Western Han witnesses declared coarse): 172→173"
+                 "Western Han witnesses declared coarse): 172→173; " \
+                 "aio ADDED P154 — dates (the Greek docs band by the page Date field into " \
+                 "grc:cla/grc:koi; the -en translations bare eng): 173→174; " \
+                 "the Pacific/Vietnamese–Tai/Mongolic/Tangut/Yiddish + Romanian registry mint " \
+                 "(merged + canonical-synced 2026-11-02) RETIRES ppchy (the yi → yi~latn override " \
+                 "and the ppchy-dialect compose rules) and typikon-bible (the ron-Cyrl → " \
+                 "ro:old~cyrl override) — the add-then-retire shape, the shadowing rule: 174→172; " \
+                 "ebible-pacific ADDED P154 — codemap (cha → ch; haw/pon identity on the mint's " \
+                 "anchors): 172→173; " \
+                 "osbct ADDED P154 — identity pli (the suttacentral posture, roman-script Pāḷi): 173→174; " \
+                 "tianyige ADDED P154 — codemap lzh → zho/lit (the kanripo precedent): 174→175; " \
+                 "suda-translations ADDED P154 — identity en (the SOL's modern English " \
+                 "translations; the Greek is the First1K witness's claim): 175→176; " \
+                 "hmml-reading-room ADDED P154 — identity (syc/gez/amh/ara/ara-Syrc per incipit, " \
+                 "declared coarse): 176→177; " \
+                 "pta ADDED P154 — dates (the per-work dct:created spans band the patristic editions " \
+                 "into grc:koi / grc:byz, the cgpg shape): 177→178"
     # The epigraphic-belt registry package (merged + canonical-synced
     # 2026-10-18, the add-then-retire shape within one phase) retires both
     # P130 pendings, and the ociana-script rule + the ig-cyprus override
@@ -409,6 +425,15 @@ class PosturesTest < Minitest::Test
     # hexapla joins identity (per-column grc/hbo/lat): 126→127;
     # bdrc-transcriptions joins identity (xct, declared coarse): 127→128;
     # baley-manuscripts joins codemap (och → zho:old, the obimd precedent): 18→19.
-    assert_equal({ "dates" => 23, "codemap" => 19, "identity" => 128, "pending" => 3 }, by_posture)
+    # aio joins dates (the page Date field → grc:cla/grc:koi; eng translations bare): 23→24.
+    # The 2026-11-02 registry mint retires ppchy and typikon-bible to their
+    # overrides (+ the ppchy-dialect compose rules): pending 3→1 (lasla alone).
+    # ebible-pacific joins codemap (cha → ch; haw/pon identity): 19→20.
+    # osbct joins identity (pli, the suttacentral posture): 128→129.
+    # tianyige joins codemap (lzh → zho/lit, the kanripo precedent): 20→21.
+    # suda-translations joins identity (en, the SOL's English translations): 129→130.
+    # hmml-reading-room joins identity (per-incipit syc/gez/amh/ara/ara-Syrc): 130→131.
+    # pta joins dates (the dct:created spans → grc:koi/grc:byz, the cgpg shape): 24→25.
+    assert_equal({ "dates" => 25, "codemap" => 21, "identity" => 131, "pending" => 1 }, by_posture)
   end
 end

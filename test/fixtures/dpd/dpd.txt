@@ -1,0 +1,26 @@
+a 1.1, letter. (gram) letter a; 1st letter of the alphabet; guttural vowel ✔
+  IPA: /ə/
+  Grammar: letter, masc
+  Sanskrit: a
+  ID: 1
+
+akakkasa, adj. smooth; tender; not harsh; not rough ✔
+  IPA: /əkəkkəs̪ə/
+  Grammar: adj, from na kakkasa, neg
+  Construction: na > a + kakkasa
+  Compound: kammadhāraya (na + kakkasa)
+  Antonym: kakkasa, sakakkasa
+  Synonym: aniṭṭhurī
+  Notes: PED suggests ku + √kar + ta
+  Sanskrit: akarkaśa (na + karkaśa)
+  ID: 7
+
+akakkasaṅga, adj. with smooth and pure limbs ✘
+  IPA: /əkəkkəs̪əŋgə/
+  ID: 72479
+
+ṃa, cs. (gram) ṃ-a; conjugational sign of group 2 rudhādigaṇa verbs ◑
+  IPA: /̃ə/
+  Grammar: cs, masc
+  Sanskrit: ṃa
+  ID: 71509

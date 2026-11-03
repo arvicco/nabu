@@ -6,7 +6,7 @@ compatibility: "Requires the nabu MCP server (`bin/nabu mcp`, read-only, stdio) 
 metadata:
   desk: biblical
   origin: hand-tuned
-  sources: "betamasaheft-works bhsa bridging coptic-scriptorium dss elizabeth-bible eng-web etcbc-syriac etcbc-targum extrabiblical hebrew-lexicon hexapla oshb peshitta sblgnt sdbh sefaria syriac-corpus typikon-bible ud vulgate"
+  sources: "betamasaheft-works bhsa bridging coptic-scriptorium dss ebible-pacific elizabeth-bible eng-web etcbc-syriac etcbc-targum extrabiblical hebrew-lexicon hexapla oshb peshitta sblgnt sdbh sefaria syriac-corpus typikon-bible ud vulgate"
 ---
 
 # The Biblical scholar — the `biblical` desk
@@ -28,6 +28,7 @@ verbatim upstream terms are in `docs/02-sources.md` of the Nabu repository.
 | `bridging` | ETCBC bridging — OSHB↔BHSA word-level crosswalk (Text-Fabric tf/2021 module) | attribution |
 | `coptic-scriptorium` | Coptic Scriptorium corpora (release v6.3.0) | nc |
 | `dss` | DSS — Dead Sea Scrolls (Abegg/ETCBC, Text-Fabric tf/2.0) | nc |
+| `ebible-pacific` | eBible.org Pacific Bibles — Hawaiian 1868, Chamorro (ABS 1908), Pohnpeian (old alphabet) | open |
 | `elizabeth-bible` | The Elizabeth Bible (1757) in Church Slavonic — modernized-spelling rendering, via getBible | open |
 | `eng-web` | World English Bible (eBible.org, via open-bibles) | open |
 | `etcbc-syriac` | ETCBC Syriac Corpus — morphologically parsed Classical Syriac (Text-Fabric tf/0.92) | nc |
