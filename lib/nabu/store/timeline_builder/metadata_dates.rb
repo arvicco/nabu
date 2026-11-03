@@ -178,6 +178,12 @@ module Nabu
           "gu-wikisource" => :edition_year_text, # P120-3: the scan Index's verbatim
           #                                         વર્ષ= print year (date_class edition)
           "guaman-poma" => :structured,
+          "hmml-reading-room" => :structured, # P154: the catalogue's own envelope (min beginDate ..
+          #                                     max endDate over the parts, century label raw;
+          #                                     18,001 of 18,892 records, 2026-11-01 generation),
+          #                                     artifact class; place = the part's city of origin,
+          #                                     else its country (4,448 records) — the holding
+          #                                     repository is never taken for the origin
           "honkoku" => :ndl_catalog_date, # the NDL catalog record the HonkokuNdlCatalog join
           #                                  writes for NDL-held materials (出版日 envelope),
           #                                  else the label's nengō "date" (parse time)
