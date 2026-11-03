@@ -221,13 +221,14 @@ module Ops
       with_repo do |repo|
         out = StringIO.new
         states = H::Installer.new(root: repo, out: out).install!
-        assert_equal({ "pre-commit" => :installed, "commit-msg" => :installed }, states)
+        assert_equal({ "pre-commit" => :installed, "pre-merge-commit" => :installed,
+                       "commit-msg" => :installed }, states)
         link = File.join(repo, ".git", "hooks", "pre-commit")
         assert File.symlink?(link)
         assert_equal File.join(File.realpath(repo), H::SCRIPT_DIR, "pre-commit"), File.realpath(link)
 
         again = H::Installer.new(root: repo, out: out).install!
-        assert_equal(%i[present present], again.values)
+        assert_equal(%i[present present present], again.values)
         assert(H::Installer.new(root: repo, out: out).status.values.all? { |s| s.start_with?("installed") })
       end
     end
@@ -288,6 +289,31 @@ module Ops
         refute ok, "a non-UTC commit must refuse (it stamps the zone into public history)"
         assert_match(/TZ=UTC/, out)
         ok, out = git!(repo, "commit", "-q", "-m", "Add a")
+        assert ok, out
+      end
+    end
+
+    # git fires pre-merge-commit, not pre-commit, for a `git merge` —
+    # without the extra hook a merge bypasses every pre-commit guard
+    # (caught live on the first lane pick after the timezone guard).
+    def test_a_merge_commit_passes_the_same_guards
+      with_repo do |repo|
+        H::Installer.new(root: repo, out: StringIO.new).install!
+        File.write(File.join(repo, "a.md"), "one\n")
+        git!(repo, "add", "-A")
+        git!(repo, "commit", "-q", "-m", "Seed")
+        git!(repo, "checkout", "-q", "-b", "lane")
+        File.write(File.join(repo, "b.md"), "two\n")
+        git!(repo, "add", "-A")
+        git!(repo, "commit", "-q", "-m", "Lane work")
+        git!(repo, "checkout", "-q", "main")
+        ok, out = git!(repo, "merge", "--no-ff", "--no-edit", "lane", zone: "Europe/Vienna")
+        refute ok, "a non-UTC merge commit must refuse like any commit"
+        assert_match(/TZ=UTC/, out)
+        # The refusal holds the merge staged (MERGE_HEAD); concluding it
+        # in UTC is the documented fix and goes through pre-commit.
+        assert File.exist?(File.join(repo, ".git", "MERGE_HEAD"))
+        ok, out = git!(repo, "commit", "-q", "--no-edit")
         assert ok, out
       end
     end
