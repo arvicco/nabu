@@ -6,7 +6,7 @@ compatibility: "Requires the nabu MCP server (`bin/nabu mcp`, read-only, stdio) 
 metadata:
   desk: celtic
   origin: generated
-  sources: "br-wikisource corph cy-wikisource gpc lexlep lexlep-words ogham riig stgall-priscian ud wiktionary-recon"
+  sources: "br-wikisource corph cy-wikisource gpc lexlep lexlep-words ogham riig stgall-priscian ud wiktionary-br wiktionary-recon"
 ---
 
 # The Celticist — the `celtic` desk
@@ -33,6 +33,7 @@ verbatim upstream terms are in `docs/02-sources.md` of the Nabu repository.
 | `riig` | RIIG — Recueil informatisé des inscriptions gauloises (Ausonius/ANR) | attribution |
 | `stgall-priscian` | St Gall Priscian Glosses (St Gallen, Stiftsbibliothek 904) — digital edition v2.1 | attribution |
 | `ud` | Universal Dependencies — ancient treebanks | nc |
+| `wiktionary-br` | Wiktionary Breton — kaikki.org machine-readable extract | attribution |
 | `wiktionary-recon` | Wiktionary reconstructions + attested Celtic, Italic, Etruscan, Old Japanese and Chinese — kaikki.org machine-readable extracts (Proto-Slavic, PIE, Proto-Germanic, Proto-Balto-Slavic, Proto-West Germanic, Proto-Italic, Proto-Indo-Iranian; Old Irish, Middle Irish, Middle Welsh, Umbrian, Etruscan, Chinese) | attribution |
 <!-- nabu:skill-sources:end -->
 

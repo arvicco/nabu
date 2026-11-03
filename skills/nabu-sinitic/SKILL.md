@@ -6,7 +6,7 @@ compatibility: "Requires the nabu MCP server (`bin/nabu mcp`, read-only, stdio) 
 metadata:
   desk: sinitic
   origin: hand-tuned
-  sources: "babelstone-ids baley-manuscripts baxter-sagart cbdb cbeta chgis classical-modern hdic kanripo kr-gaiji lzh-collection menggu-ziyun obimd qieyun-restored shuowen suttacentral tls tshet-uinh ud unihan viet-wikisource wiktionary-recon zh-wikisource zhongyuan"
+  sources: "babelstone-ids baley-manuscripts baxter-sagart cbdb cbeta chgis classical-modern hdic kanripo kr-gaiji lzh-collection menggu-ziyun obimd qieyun-restored shuowen suttacentral tianyige tls tshet-uinh ud unihan viet-wikisource wiktionary-recon zh-wikisource zhongyuan"
 ---
 
 # The Sinologist — the `sinitic` desk
@@ -39,6 +39,7 @@ verbatim upstream terms are in `docs/02-sources.md` of the Nabu repository.
 | `qieyun-restored` | qieyun-restored — 切韻 Fujita restoration (nk2028) | attribution |
 | `shuowen` | 說文解字 Shuowen Jiezi — the shuowen.org data repo | attribution |
 | `suttacentral` | SuttaCentral — bilara-data segmented canon (Pali Tipiṭaka + Chinese Āgamas + aligned English) | open |
+| `tianyige` | Tianyige Ming examination records (天一閣藏明代科舉錄) — machine transcription | open |
 | `tls` | TLS — Thesaurus Linguae Sericae (tls-kr/tls-data: concepts + words) | attribution |
 | `tshet-uinh` | tshet-uinh-data — 廣韻 critical edition (nk2028 Qieyun-system database) | open |
 | `ud` | Universal Dependencies — ancient treebanks | nc |

@@ -6,7 +6,7 @@ compatibility: "Requires the nabu MCP server (`bin/nabu mcp`, read-only, stdio) 
 metadata:
   desk: buddhist
   origin: generated
-  sources: "bdrc-transcriptions cbeta derge-kangyur derge-tengyur e84000 gretil lotsawa-house mvp sarit suttacentral tipitaka-lk"
+  sources: "bdrc-transcriptions cbeta derge-kangyur derge-tengyur dpd e84000 gretil lotsawa-house mvp osbct sarit suttacentral tipitaka-lk"
 ---
 
 # The Buddhologist — the `buddhist` desk
@@ -27,10 +27,12 @@ verbatim upstream terms are in `docs/02-sources.md` of the Nabu repository.
 | `cbeta` | CBETA — Chinese Buddhist Electronic Text Archive | nc |
 | `derge-kangyur` | Digital Derge Kangyur (Esukhia/Barom proofreading of the UVA-SOAS 2013 eKangyur) | open |
 | `derge-tengyur` | Digital Derge Tengyur (Esukhia/Barom Theksum Choling faithful copy of the Derge edition) | open |
+| `dpd` | Digital Pāḷi Dictionary — dpd-db release text export | nc |
 | `e84000` | 84000 — Translating the Words of the Buddha (English Kangyur translations) | nc |
 | `gretil` | GRETIL — Göttingen Register of Electronic Texts in Indian Languages (TEI corpus) | nc |
 | `lotsawa-house` | Lotsawa House — Tibetan Buddhist texts and translations | nc |
 | `mvp` | Mahāvyutpatti — Sanskrit–Tibetan–Chinese glossary (DILA TEI edition) | open |
+| `osbct` | Sixth Buddhist Council Tipiṭaka (Chaṭṭhasaṅgītipiṭaka) — Unicode corpus (IEBH / BTHAR) | nc |
 | `sarit` | SARIT — Search and Retrieval of Indic Texts (scholarly TEI editions) | attribution |
 | `suttacentral` | SuttaCentral — bilara-data segmented canon (Pali Tipiṭaka + Chinese Āgamas + aligned English) | open |
 | `tipitaka-lk` | tipitaka.lk — Buddha Jayanthi Tripiṭaka and aṭṭhakathā, Pāli and Sinhala (Path Nirvana) | research_private |

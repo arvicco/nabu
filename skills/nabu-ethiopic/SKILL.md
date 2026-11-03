@@ -6,7 +6,7 @@ compatibility: "Requires the nabu MCP server (`bin/nabu mcp`, read-only, stdio) 
 metadata:
   desk: ethiopic
   origin: generated
-  sources: "betamasaheft-works dillmann traces"
+  sources: "betamasaheft-works dillmann hmml-reading-room traces"
 ---
 
 # The Ethiopicist — the `ethiopic` desk
@@ -25,6 +25,7 @@ verbatim upstream terms are in `docs/02-sources.md` of the Nabu repository.
 | --- | --- | --- |
 | `betamasaheft-works` | Beta maṣāḥǝft Works — Ethiopic literature (Hiob-Ludolf-Zentrum, Hamburg) | attribution |
 | `dillmann` | Dillmann, Lexicon linguae aethiopicae (TraCES/Beta maṣāḥǝft digitization) | nc |
+| `hmml-reading-room` | vHMML Reading Room — the Syriac and Ethiopic manuscript catalogue | attribution |
 | `traces` | TraCES — TEI-Ling analyzed Gǝʿǝz corpus (ERC 338756, Hamburg) | nc |
 <!-- nabu:skill-sources:end -->
 

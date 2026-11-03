@@ -6,7 +6,7 @@ compatibility: "Requires the nabu MCP server (`bin/nabu mcp`, read-only, stdio) 
 metadata:
   desk: indic
   origin: hand-tuned
-  sources: "dacon dcs dharma-deccan dharma-mdt dharma-tamil gretil gretil-legacy gu-wikisource kannada-texts madurai mw nabu-data paramara prakrit-texts sarit shabados siddham sii-clean suttacentral tamilex te-wikisource tipitaka-lk ud vedaweb wiktionary-dv wiktionary-kn wiktionary-ml wiktionary-pra wiktionary-si wiktionary-ta wiktionary-te"
+  sources: "dacon dcs dharma-deccan dharma-mdt dharma-tamil dpd gretil gretil-legacy gu-wikisource kannada-texts madurai mahan-kosh mw nabu-data osbct paramara prakrit-texts sarit shabados siddham sii-clean suttacentral tamilex te-wikisource tipitaka-lk ud vedaweb wiktionary-dv wiktionary-kn wiktionary-ml wiktionary-pa wiktionary-pra wiktionary-si wiktionary-ta wiktionary-te"
 ---
 
 # The Indologist — the `indic` desk
@@ -28,13 +28,16 @@ verbatim upstream terms are in `docs/02-sources.md` of the Nabu repository.
 | `dharma-deccan` | DHARMA Task Force B — South Asian inscriptions (Deccan, Āndhra, Karnataka, Odisha, Bengal, Gujarat) | attribution |
 | `dharma-mdt` | DHARMA text metadata (mdt-texts) — dating and typology rows for the DHARMA inscription corpora | attribution |
 | `dharma-tamil` | DHARMA Tamil-country epigraphy (Task Force A) | attribution |
+| `dpd` | Digital Pāḷi Dictionary — dpd-db release text export | nc |
 | `gretil` | GRETIL — Göttingen Register of Electronic Texts in Indian Languages (TEI corpus) | nc |
 | `gretil-legacy` | GRETIL legacy e-texts — Prakrit, New Indo-Aryan and Dravidian collections | nc |
 | `gu-wikisource` | Gujarati Wikisource — the bhakti cone (Narsinh Mehta · Mirabai · Dayaram · Akho · Premanand; Bruhat Kavyadohan) | attribution |
 | `kannada-texts` | Kannada Digital Texts Project — Old and Middle Kannada classics in TEI (A. Ollett) | attribution |
 | `madurai` | Project Madurai — classical Tamil e-texts | attribution |
+| `mahan-kosh` | Mahan Kosh (Bhai Kahan Singh Nabha, 1930) — the Gurmukhi text, Sikhi.io JSON packaging | attribution |
 | `mw` | Monier-Williams — A Sanskrit-English Dictionary (Cologne CDSL) | nc |
 | `nabu-data` | nabu-data — Nabu's own published datasets, consumed back (form→lemma instrument) | attribution |
+| `osbct` | Sixth Buddhist Council Tipiṭaka (Chaṭṭhasaṅgītipiṭaka) — Unicode corpus (IEBH / BTHAR) | nc |
 | `paramara` | Paramāra epigraphy — the Siddham network's Zenodo community (PennGlobal PMR texts) | attribution |
 | `prakrit-texts` | Prakrit Digital Texts Project — Prakrit literature in TEI (A. Ollett) | attribution |
 | `sarit` | SARIT — Search and Retrieval of Indic Texts (scholarly TEI editions) | attribution |
@@ -50,6 +53,7 @@ verbatim upstream terms are in `docs/02-sources.md` of the Nabu repository.
 | `wiktionary-dv` | Wiktionary Dhivehi — kaikki.org machine-readable extract | attribution |
 | `wiktionary-kn` | Wiktionary Kannada — kaikki.org machine-readable extract | attribution |
 | `wiktionary-ml` | Wiktionary Malayalam — kaikki.org machine-readable extract | attribution |
+| `wiktionary-pa` | Wiktionary Punjabi — kaikki.org machine-readable extract | attribution |
 | `wiktionary-pra` | Wiktionary Prakrit — kaikki.org machine-readable extract | attribution |
 | `wiktionary-si` | Wiktionary Sinhala — kaikki.org machine-readable extract | attribution |
 | `wiktionary-ta` | Wiktionary Tamil — kaikki.org machine-readable extract | attribution |

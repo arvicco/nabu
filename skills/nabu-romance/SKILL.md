@@ -6,7 +6,7 @@ compatibility: "Requires the nabu MCP server (`bin/nabu mcp`, read-only, stdio) 
 metadata:
   desk: romance
   origin: generated
-  sources: "aranese bdcamoes bfm bim-sahcoba cantigas corpus-corporum croala ctilc cv-sardinian derom digiliblt disco lo-congres meloniromance memis openmgh osta salom theatre-classique typikon-bible ud"
+  sources: "aranese bdcamoes bfm bim-sahcoba cantigas corpus-corporum croala ctilc cv-sardinian derom digiliblt disco littre lo-congres meloniromance memis openmgh osta salom theatre-classique typikon-bible ud wiktionary-ca wiktionary-frm wiktionary-fro wiktionary-oc wiktionary-osp wiktionary-pro"
 ---
 
 # The Romanist — the `romance` desk
@@ -35,6 +35,7 @@ verbatim upstream terms are in `docs/02-sources.md` of the Nabu repository.
 | `derom` | DÉRom — Dictionnaire Étymologique Roman (ATILF/Ortolang) | nc |
 | `digiliblt` | digilibLT — Biblioteca digitale di testi latini tardoantichi (CIRCSE CoNLL-U) | attribution |
 | `disco` | DISCO — Diachronic Spanish Sonnet Corpus (Ruiz Fabo et al., v5.0) | attribution |
+| `littre` | Littré, Dictionnaire de la langue française (1863–1877) — oeuvres/littre TEI | attribution |
 | `lo-congres` | Lo Congrès Occitan news corpus (six dialects, French-aligned) | attribution |
 | `meloniromance` | Meloni et al. 2021 Romance cognate sets (lexibank/meloniromance CLDF) | attribution |
 | `memis` | MEMIS — Epigraphic corpus of Medieval and Early Modern inscriptions in Slovenia 1.0 (Pobežin, ZRC SAZU) | attribution |
@@ -44,6 +45,12 @@ verbatim upstream terms are in `docs/02-sources.md` of the Nabu repository.
 | `theatre-classique` | Théâtre Classique — Paul Fièvre's TEI corpus of French plays | nc |
 | `typikon-bible` | typikon.info Bible layer — the 1688 Bucharest Bible in Romanian Cyrillic (dump 2026-09-21) | attribution |
 | `ud` | Universal Dependencies — ancient treebanks | nc |
+| `wiktionary-ca` | Wiktionary Catalan — kaikki.org machine-readable extract | attribution |
+| `wiktionary-frm` | Wiktionary Middle French — kaikki.org machine-readable extract | attribution |
+| `wiktionary-fro` | Wiktionary Old French — kaikki.org machine-readable extract | attribution |
+| `wiktionary-oc` | Wiktionary Occitan — kaikki.org machine-readable extract | attribution |
+| `wiktionary-osp` | Wiktionary Old Spanish — kaikki.org machine-readable extract | attribution |
+| `wiktionary-pro` | Wiktionary Old Occitan — kaikki.org machine-readable extract | attribution |
 <!-- nabu:skill-sources:end -->
 
 ## What the shelves hold
