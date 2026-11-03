@@ -1139,7 +1139,13 @@ wired.
 **Romanian.** `typikon-bible` — the 1688 Bucharest Bible, the first complete
 Romanian Bible, in the Cyrillic alphabet of the print, each verse tied to
 its place in the Church Slavonic canon (79 books / 36,312 verses;
-attribution) — registered but not yet wired.
+attribution). The same shelf admits two more witnesses of the dump,
+awaiting their first sync: the Elizabeth Bible of 1751 in its Church
+Cyrillic print orthography — the un-modernized companion of
+`elizabeth-bible` (77 books / 36,961 verses) — and the Bible in Old
+Georgian, the Old Testament after the Mtskheta manuscript and the New in
+the Athonite translation of Euthymius and George (73 books / 32,425
+verses).
 
 **Celtic.** `gpc` — the open subset of Geiriadur Prifysgol Cymru
 (89,386 entries).
