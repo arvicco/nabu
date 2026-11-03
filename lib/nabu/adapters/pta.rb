@@ -268,7 +268,85 @@ module Nabu
             year: clean_text(edition.at_xpath("cpt:structured-metadata/dct:dateCopyrighted", DCT)&.text)
           }]
         end
-        { editions: editions }
+        meta = doc.at_xpath("/ti:work/cpt:structured-metadata", DCT)
+        texts = ->(xpath) { meta ? meta.xpath(xpath, DCT).filter_map { |node| clean_text(node.text) } : [] }
+        { editions: editions, created: texts.call("dct:created").first, spatial: texts.call("dct:spatial").first,
+          types: texts.call("dct:type"), identifiers: texts.call("dc:identifier") }
+      end
+
+      # == The catalog mining (the aggressive-mining policy)
+      #
+      # The work __cts__.xml's cpt:structured-metadata, census over the 185
+      # works carrying Greek (2026-11-02):
+      #
+      # - dct:created "0401–0404" (105 works; 80 carry a bare "–") → metadata
+      #   "date" {not_before, not_after, raw, class composition} — the
+      #   archive's dating of the WORK, MetadataDates :structured. The span
+      #   "0030–0800" (18 works, all with "Genre missing" and/or the XXXXX
+      #   place) is the catalog's unfilled default — the archive's whole
+      #   period, not a claim: it mints no date and rides "created_raw".
+      # - dct:spatial "https://pleiades.stoa.org/places/<id>" (84 works) →
+      #   metadata "place" {"pleiades", "ref"}: the place the archive
+      #   attaches to the work (Pleiades ids, all in the held gazetteer).
+      #   The "…/places/XXXXX" placeholder and the empty value mint nothing.
+      # - dct:type, the comphistsem text-type head + sub ("Paraenetic",
+      #   "Sermon") → metadata "genre" joined "|" (the kind map's split),
+      #   folded in config/kind_map.yml; "Genre missing" rides verbatim
+      #   and folds to nothing (a declared non-claim).
+      # - dc:identifier "SCHEME:id" (PTA 185, TLG 145, CPG 94, Pinakes 93,
+      #   Aldama 45, BHG 27, GND 19 …) → metadata "identifiers"
+      #   {scheme => id}, with "cpg" and "tlg" lifted beside it.
+      #
+      # The edition's own __cts__ record adds "edition" (the printed
+      # edition, verbatim) and "edition_year" (dct:dateCopyrighted); the
+      # teiHeader adds "edition_status" (the editionstatus keyword:
+      # critical-edition / critical-edition-no-app / pre-critical-edition …).
+      PLACEHOLDER_SPANS = ["0030–0800"].freeze
+      SPAN = /\A(?<from>\d{1,4})\s*[–-]\s*(?<to>\d{1,4})\z/
+      PLEIADES = %r{\Ahttps?://pleiades\.stoa\.org/places/(?<id>\d+)\z}
+      private_constant :PLACEHOLDER_SPANS, :SPAN, :PLEIADES
+
+      def edition_metadata(document_ref)
+        base = super
+        work = work_cts(File.dirname(document_ref.path)) || {}
+        edition = work.fetch(:editions, {}).fetch(document_ref.id, {})
+        identifiers = (work[:identifiers] || []).filter_map do |value|
+          scheme, id = value.split(":", 2)
+          [scheme, id] unless id.nil? || id.strip.empty?
+        end.to_h
+        genre = (work[:types] || []).join("|")
+        base.merge(
+          "date" => created_date(work[:created]),
+          "created_raw" => (work[:created] if PLACEHOLDER_SPANS.include?(work[:created])),
+          "place" => pleiades_place(work[:spatial]),
+          "genre" => (genre unless genre.empty?),
+          "identifiers" => (identifiers unless identifiers.empty?),
+          "cpg" => identifiers["CPG"], "tlg" => identifiers["TLG"],
+          "edition" => edition[:description], "edition_year" => edition[:year],
+          "edition_status" => edition_status(document_ref.path)
+        ).compact
+      end
+
+      def created_date(raw)
+        return nil if raw.nil? || PLACEHOLDER_SPANS.include?(raw)
+
+        span = SPAN.match(raw) or return nil
+        from = Integer(span[:from], 10)
+        to = Integer(span[:to], 10)
+        { "not_before" => [from, to].min, "not_after" => [from, to].max, "raw" => raw, "class" => "composition" }
+      end
+
+      def pleiades_place(uri)
+        match = PLEIADES.match(uri.to_s) or return nil
+
+        { "pleiades" => match[:id], "ref" => uri }
+      end
+
+      def edition_status(path)
+        slice = header_slice(path) or return nil
+
+        keywords = slice[%r{<keywords\s+scheme="#editionstatus">(.*?)</keywords>}m, 1]
+        keywords && clean_text(keywords[%r{<term>([^<]+)</term>}, 1])
       end
     end
   end

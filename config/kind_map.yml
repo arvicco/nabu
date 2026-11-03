@@ -1862,3 +1862,28 @@ sources:
       #   153 — lives (the elephantine "biography" fold)
       # -- funerary
       '\A(?!.*History and criticism)Epitaphs\b': funerary/epitaph  # 16 — epitaph collections
+  pta:                # census 2026-11-02: the work __cts__.xml dct:type labels of the 105
+    metadata: genre   # non-Bible works carrying Greek — the comphistsem text-type head + sub,
+    #                   "|"-joined at parse ("Paraenetic|Sermon"); each fragment folds alone
+    map:
+      "Paraenetic": literary/wisdom              # 66 — moral exhortation, the edification
+      #   fold (the dwds Erbauungsliteratur / sefaria Musar precedent); 63 pair it with Sermon
+      "Sermon": sermon                           # 63 — Severian's and the Pseudo-Chrysostom
+      #   homilies (upstream says sermon; the homily sub is not its claim)
+      "Theological": scholarly                   # 9 — theological scholarship (the Theologie fold)
+      "Dogmatic Treatise": scholarly             # 4 — Athanasius' doctrinal treatises
+      "Polemics": scholarly                      # 3 — anti-Arian controversy treatises
+      "Bible Exegesis: Old Testament": exegesis  # 2
+      "Scholarly": scholarly                     # 4 — the head over Commentary
+      "Commentary": exegesis                     # 4 — every one a biblical commentary (Psalms,
+      #   Isaiah, Daniel, the Pauline fragments)
+      "Quaestiones": exegesis                    # 1 — De sabbatis et circumcisione, a
+      #   question-and-answer reading of biblical law
+      "Historiography": historiography           # 3
+      "Church History": historiography           # 2
+      "Church history": historiography           # 1 — upstream's lower-case spelling of the same
+      "Official letter": letter/official         # 1 — the Epistula synodalis
+      "Märtyrervita/Wundersammlung": historiography  # 1 — the Vita Cononis; lives fold to
+      #   historiography by the ruled biography precedent (the scat fold)
+    deliberate:
+      "Genre missing": "the catalog's unfilled genre slot (18 works), not a claim"

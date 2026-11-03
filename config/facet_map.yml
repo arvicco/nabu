@@ -442,6 +442,14 @@ sources:
       work: work
       cts_textgroup: author_id
       cts_work: work_id
+  pta:                        # 113 grc editions (census over the 524eb976 clone, 2026-11-02)
+    fields:
+      author: author          # the textgroup groupname (Severian of Gabala 64 · Athanasius …)
+      work: work
+      genre: genre            # the dct:type labels, "|"-joined ("Paraenetic|Sermon");
+      #                         config/kind_map.yml folds them onto the house kinds
+      cts_textgroup: author_id  # "pta0001"
+      cts_work: work_id       # "pta0001.pta024"
   # -- The passage grain: passage_fields project passages.annotations_json
   #    keys into the passage facet tables (Store::PassageFacetBuilder) —
   #    the facet lane for claims upstream makes per ARTICLE, not per
