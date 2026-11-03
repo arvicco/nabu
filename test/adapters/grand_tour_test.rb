@@ -133,12 +133,12 @@ module Adapters
       assert_equal "de", lects.resolve("de", source: "grand-tour"), "1652–1702 lies past de:early's 1650"
     end
 
-    def test_registry_row_is_unwired_and_frozen
+    def test_registry_row_is_wired_and_frozen
       registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources.yml", __dir__))
       entry = registry["grand-tour"]
       refute_nil entry
       assert_equal Nabu::Adapters::GrandTour, entry.adapter_class
-      refute entry.wired, "the first sync is the live round's"
+      assert entry.wired, "first sync verified 2026-11-03 (4 docs / 515 passages)"
       assert_equal "frozen", entry.sync_policy
     end
 
