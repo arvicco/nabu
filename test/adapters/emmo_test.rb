@@ -130,12 +130,12 @@ module Adapters
       assert_equal "en:early", lects.resolve("en", source: "emmo"), "every catalogue date sits in [1500, 1700]"
     end
 
-    def test_registry_row_is_unwired_and_manual
+    def test_registry_row_is_wired_and_manual
       registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources.yml", __dir__))
       entry = registry["emmo"]
       refute_nil entry
       assert_equal Nabu::Adapters::Emmo, entry.adapter_class
-      refute entry.wired, "the first sync is the live round's"
+      assert entry.wired, "first sync verified 2026-11-03 (100 docs / 196 passages)"
       assert_equal "manual", entry.sync_policy
     end
 

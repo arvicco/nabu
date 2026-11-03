@@ -2159,7 +2159,7 @@ ecco-tcp:   # 02-sources row 371
   axes: [germanic]   # the eebo-tcp precedent (the English line rides germanic)
   classes: [released, unedited]  # both of upstream's P4 zips; the class rides each
                      # document's metadata (tcp_class) — narrowing is an edit here
-  wired: false       # until the first real sync is verified
+  wired: true   # first sync verified 2026-11-03: 3,101 docs / 2,697,714 passages, 0 skips
   # ECCO-TCP: the Text Creation Partnership's keyed selection from
   # Eighteenth Century Collections Online — English books of 1700–1800,
   # on the eebo-tcp shape (tcp-xml P4 family; Nabu::Adapters::TcpBoxFetch
@@ -2449,7 +2449,7 @@ emmo:   # P155, 02-sources row 368
   adapter: Nabu::Adapters::Emmo
   adopted: "2026-11-03"
   axes: [germanic]
-  wired: false   # bin/nabu enable emmo, then bin/nabu sync emmo — ONE zip (2.9 MB,
+  wired: true   # first sync verified 2026-11-03: 100 docs / 196 passages, 2 rule skips
                  # emmo.folger.edu/zip/emmo.zip; seconds). EXPECT 100 docs / 196
                  # passages, 0 errored, 1 skipped by rule (emmo.xsl) + the
                  # fetcher's .zip-fetch.json pin (census through the adapter over
@@ -2591,7 +2591,7 @@ evans-tcp:   # 02-sources row 370
   axes: [germanic]   # the eebo-tcp precedent (the English line rides germanic)
   classes: [released, unedited]  # both of upstream's P4 classes; the class rides each
                      # document's metadata (tcp_class) — narrowing is an edit here
-  wired: false       # until the first real sync is verified
+  wired: true   # first sync verified 2026-11-03: 5,012 docs / 1,724,124 passages, 0 skips
   # Evans-TCP: the Text Creation Partnership's keyed edition of Early
   # American Imprints, Series I (Evans, 1639–1800), on the eebo-tcp shape
   # (tcp-xml P4 family; Nabu::Adapters::TcpBoxFetch over the TCP's own
@@ -2822,7 +2822,7 @@ grand-tour:   # P155, 02-sources row 369
   adapter: Nabu::Adapters::GrandTour
   adopted: "2026-11-03"
   axes: [germanic]
-  wired: false   # bin/nabu enable grand-tour, then bin/nabu sync grand-tour — ONE Zenodo
+  wired: true   # first sync verified 2026-11-03: 4 docs / 515 passages, 29 rule skips
                  # zip (1.6 MB) read by HTTP Range: 32 files kept, the shipped .git/
                  # (94 files) never read; seconds. EXPECT 4 docs / 515 passages, 0
                  # errored, 28 skipped by rule + the .zip-range-fetch.json pin
