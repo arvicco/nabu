@@ -1,0 +1,33 @@
+# Nabu fixture manifest (P5-4 "fixture sentinel"). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# Every file is a member of ONE zip (no per-file URL is published), so every
+# entry is refetchable: false.
+source: emmo
+adapter_test:
+retrieved: '2026-11-03'
+files:
+- path: La13.xml
+  whole: true
+  trim: none
+  refetchable: false
+  reason: a member of https://emmo.folger.edu/zip/emmo.zip (md5 8ffbed97…3683), under its top directory emmo/
+    — no per-file raw URL
+- path: Lb543.xml
+  whole: true
+  trim: none
+  refetchable: false
+  reason: a member of https://emmo.folger.edu/zip/emmo.zip (md5 8ffbed97…3683), under its top directory emmo/
+    — no per-file raw URL
+- path: Xd451-187.xml
+  whole: true
+  trim: none
+  refetchable: false
+  reason: a member of https://emmo.folger.edu/zip/emmo.zip (md5 8ffbed97…3683), under its top directory emmo/
+    — no per-file raw URL
+- path: emmo.xsl
+  whole: true
+  trim: none
+  refetchable: false
+  reason: a member of https://emmo.folger.edu/zip/emmo.zip (md5 8ffbed97…3683), under its top directory emmo/
+    — no per-file raw URL

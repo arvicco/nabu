@@ -1970,3 +1970,11 @@ the Serbian and Croatian shelves alike), `wiktionary-ca` (Catalan,
 198,685), `wiktionary-ko` (Korean, 64,457), `wiktionary-et` (Estonian,
 13,549), `wiktionary-pa` (Punjabi, 10,749) and `wiktionary-oc`
 (Occitan, 7,521).
+
+**`emmo`** — Early Modern Manuscripts Online (Folger Shakespeare
+Library): 100 English manuscripts of 1552–1697 transcribed word by word
+— the letters of the Bagot family of Blithfield and the More family of
+Loseley (John Donne's letters of 1602 about his secret marriage among
+them), with other family papers, depositions, orders and a receipt —
+each page in its original spelling, with the project's regularized
+spelling beside it (CC BY-SA 4.0).

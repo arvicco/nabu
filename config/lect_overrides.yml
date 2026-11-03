@@ -166,6 +166,14 @@ sources:
   # whole edition bare cs. Tier certain: one dated print, inside the band.
   prague-bible-1488:
     cs: { lect: "cs:old", tier: certain }
+  # P155: EMMO's 100 manuscripts declare textLang "eng" every one, and every
+  # catalogue date (origin@when, 1552–1697 — census 2026-11-03) sits inside
+  # en:early's [1500, 1700] band: the whole collection IS Early Modern
+  # English. A per-collection fact: upstream codes it bare eng. Tier certain:
+  # dated manuscripts, all inside the band. The inline Latin <foreign> spans
+  # ride page annotations, never the document code.
+  emmo:
+    en: { lect: "en:early", tier: certain }
   ticha:
     # The colonial Valley Zapotec corpus (Córdova 1578 through the Valley
     # notarial record to 1832): every holding falls inside the zap:col band

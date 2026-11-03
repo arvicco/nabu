@@ -1573,6 +1573,19 @@ sources:
         coarse — the print's place, not the author's; <set> (the fictional setting) is
         never a place claim"}
     script: {posture: implied}
+  emmo:   # P155
+    # lect machine-postured — config/lect_overrides.yml en → en:early;
+    # kind machine-postured — kind_map.yml metadata document_type.
+    dating: {posture: dated, note: "all 100: the catalogue's msDesc/history/origin@when (ISO year,
+        year-month or day; 1552–1697) → a one-year envelope, class composition; the
+        cataloguer's wording (circa / old-style 1622/1623 / ?) rides as raw"}
+    places: {posture: named, note: "the writing place = the first placeName inside the letter's
+        own dateline (46 of 100 documents), in EMMO's regularized form (Oxoniensis → Oxford);
+        EMMO names carry no gazetteer refs. Every other placeName/name rides the page as a
+        mention (passage facets place/person), never an origin claim; the catalogue titles'
+        'from X, Place,' strings are not parsed (persons' styles and places share the commas)"}
+    script: {posture: implied, note: "Latin script as written — the thorn rides as EMMO
+        encodes it (<g ref='#thorn'>th</g>), the scribal metamarks are not reading text"}
   tianyige:   # P154
     # kind machine-postured — kind_map.yml source_kind administrative/register.
     # The machine punctuation + English translation are DECLINED (the
