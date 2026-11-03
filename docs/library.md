@@ -1945,3 +1945,22 @@ full Gurmukhi article (its quotations, etymologies and cross-references)
 and every entry with its volume and page in the 1930 print — the
 dictionary for the shabados Gurbani shelf (the 1930 text public domain,
 the packaging CC BY 4.0).
+
+**Twenty-two Wiktionary extracts** (kaikki.org; CC BY-SA + GFDL) give
+the held languages without a dictionary their first English-glossed
+shelf, each with its etymology chains and descendant trees. Historical:
+`wiktionary-enm` (Middle English, 56,687 entries), `wiktionary-non`
+(Old Norse, 11,403), `wiktionary-got` (Gothic, 23,034),
+`wiktionary-fro` (Old French, 9,280), `wiktionary-frm` (Middle
+French, 4,956), `wiktionary-sco` (Scots, 6,042), `wiktionary-syc`
+(Classical Syriac, 3,911), `wiktionary-arc` (Aramaic, 2,396),
+`wiktionary-br` (Breton, 2,336), `wiktionary-dum` (Middle Dutch,
+2,342), `wiktionary-gmh` (Middle High German, 2,142), `wiktionary-osp`
+(Old Spanish, 1,501), `wiktionary-gmq-osw` (Old Swedish, 1,440),
+`wiktionary-pro` (Old Occitan, 695), `wiktionary-ofs` (Old Frisian,
+654) and `wiktionary-okm` (Middle Korean, 1,033). Modern, for the held
+languages' later text: `wiktionary-sh` (Serbo-Croatian, 70,466 — for
+the Serbian and Croatian shelves alike), `wiktionary-ca` (Catalan,
+198,685), `wiktionary-ko` (Korean, 64,457), `wiktionary-et` (Estonian,
+13,549), `wiktionary-pa` (Punjabi, 10,749) and `wiktionary-oc`
+(Occitan, 7,521).

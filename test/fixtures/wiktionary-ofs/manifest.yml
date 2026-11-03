@@ -1,0 +1,12 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+source: wiktionary-ofs
+adapter_test: test/adapters/wiktionary_ofs_test.rb
+retrieved: 2026-11-02
+files:
+  - path: kaikki.org-dictionary-OldFrisian.jsonl
+    url: https://kaikki.org/dictionary/Old%20Frisian/kaikki.org-dictionary-OldFrisian.jsonl
+    whole: false
+    trim: >-
+      the 2 complete JSONL lines with word in {fa, on},
+      byte-verbatim in upstream order, of 654 lines

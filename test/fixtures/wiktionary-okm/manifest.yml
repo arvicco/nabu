@@ -1,0 +1,12 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+source: wiktionary-okm
+adapter_test: test/adapters/wiktionary_okm_test.rb
+retrieved: 2026-11-02
+files:
+  - path: kaikki.org-dictionary-MiddleKorean.jsonl
+    url: https://kaikki.org/dictionary/Middle%20Korean/kaikki.org-dictionary-MiddleKorean.jsonl
+    whole: false
+    trim: >-
+      the 2 complete JSONL lines with word in {오다, 고기},
+      byte-verbatim in upstream order, of 1,033 lines

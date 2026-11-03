@@ -1,0 +1,12 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+source: wiktionary-arc
+adapter_test: test/adapters/wiktionary_arc_test.rb
+retrieved: 2026-11-02
+files:
+  - path: kaikki.org-dictionary-Aramaic.jsonl
+    url: https://kaikki.org/dictionary/Aramaic/kaikki.org-dictionary-Aramaic.jsonl
+    whole: false
+    trim: >-
+      the 2 complete JSONL lines with word in {עבר, מרים},
+      byte-verbatim in upstream order, of 2,396 lines

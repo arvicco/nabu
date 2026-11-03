@@ -7,7 +7,7 @@
 - slug: romance
   persona: The Romanist
   blurb: the Latin-to-vernacular continuum, charter Latin to Roland to the troubadours
-  members: 22
+  members: 28
 - slug: epigraphy
   persona: The Papyrologist-Epigraphist
   blurb: reads what survives on stone, sherd, papyrus and tablet, lacunae and all
@@ -15,16 +15,16 @@
 - slug: slavic
   persona: The Slavicist
   blurb: Cyril and Methodius to the damaskini, canon to vernacular
-  members: 37
+  members: 38
 - slug: germanic
   persona: The Germanicist
   blurb: Gothic and Old English to the Norse sagas and the runestones, the word-hoard
     of all three branches
-  members: 25
+  members: 33
 - slug: celtic
   persona: The Celticist
   blurb: from Lepontic stones to the Old Irish glossators
-  members: 11
+  members: 12
 - slug: italic
   persona: The Italicist
   blurb: the languages of pre-Roman Italy, Oscan to Etruscan to Raetic
@@ -40,11 +40,11 @@
 - slug: hebrew
   persona: The Hebraist
   blurb: Masoretic vowels, Qumran consonants, the Aramaic of the Targums
-  members: 13
+  members: 14
 - slug: syriac
   persona: The Syriacist
   blurb: the Peshitta and the estrangela bookshelf
-  members: 3
+  members: 4
 - slug: ethiopic
   persona: The Ethiopicist
   blurb: 'Aksum to the scriptoria: Enoch, Jubilees, and the Geʿez Bible'
@@ -73,7 +73,7 @@
 - slug: indic
   persona: The Indologist
   blurb: Veda to sastra, the Sanskrit library and its instruments
-  members: 32
+  members: 33
 - slug: buddhist
   persona: The Buddhologist
   blurb: the dharma across the Pali, Sanskrit, Chinese and Tibetan canons
@@ -85,7 +85,7 @@
 - slug: korean
   persona: The Koreanist
   blurb: the hanmun state record and the first hangul vernacular
-  members: 9
+  members: 11
 - slug: sea
   persona: The Southeast Asianist
   blurb: 'the Indic cosmopolis at its eastern edge: Sanskrit charters beside the vernaculars
@@ -121,7 +121,7 @@
 - slug: baltic
   persona: The Balticist
   blurb: the Lutheran-print littoral, Mancelius' Latvian to Agricola's Finnish
-  members: 3
+  members: 4
 - slug: local
   persona: The Librarian
   blurb: 'the owner''s own shelves: dossiers, library, notes, and the sources'' own

@@ -22,7 +22,7 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 ## The shelves
 
-A source wears every desk it serves — these twenty-two answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
+A source wears every desk it serves — these 28 answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
 | Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 2 November 2026)</span> |
 |---|---|---|---|---|
@@ -48,6 +48,12 @@ A source wears every desk it serves — these twenty-two answer this desk. Holdi
 | `theatre-classique` | texts | nc | wired · manual | 1,939 docs / 1,601,085 passages |
 | `typikon-bible` | texts | attribution | wired · manual | 79 docs / 36,312 passages |
 | `ud` | treebank | nc | wired · manual | 83 docs / 329,980 passages |
+| `wiktionary-ca` | dictionary | attribution | not yet wired | not synced yet |
+| `wiktionary-frm` | dictionary | attribution | not yet wired | not synced yet |
+| `wiktionary-fro` | dictionary | attribution | not yet wired | not synced yet |
+| `wiktionary-oc` | dictionary | attribution | not yet wired | not synced yet |
+| `wiktionary-osp` | dictionary | attribution | not yet wired | not synced yet |
+| `wiktionary-pro` | dictionary | attribution | not yet wired | not synced yet |
 
 **Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 2 November 2026)</span>: `lat` 11,813 · `fra` 1,945 · `roa-opt` 1,682 · `spa` 1,216 · `cat` 967 · `osp` 684 · `la-vul` 233 · `fro` 222 · `por` 127 · `ron-Cyrl` 79 … and 30 more (`nabu axis romance` lists all).
 
