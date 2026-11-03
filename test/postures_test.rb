@@ -179,7 +179,7 @@ class PosturesTest < Minitest::Test
   def test_the_lect_migration_kept_the_p59_4_census
     lect = postures.declarations.select { |d| d.layer == "lect" }
     by_posture = lect.group_by(&:posture).transform_values(&:size)
-    assert_equal 173, lect.size,
+    assert_equal 174, lect.size,
                  "the P59-4 declarations survive the move (61 at migration; itant retired P61-3," \
                  "oracc retired P62-2, etcsl/ccmh/freising/coptic-scriptorium retired P64-6, " \
                  "titus-avestan retired P66-1, osta+fornsvenska retired P77-r8, achemenet " \
@@ -365,7 +365,9 @@ class PosturesTest < Minitest::Test
                  "bdrc-transcriptions ADDED P153 — identity xct (the derge/lotsawa precedent, " \
                  "declared coarse): 171→172; " \
                  "baley-manuscripts ADDED P153 — codemap och → zho:old (the obimd precedent; the " \
-                 "Western Han witnesses declared coarse): 172→173"
+                 "Western Han witnesses declared coarse): 172→173; " \
+                 "aio ADDED P154 — dates (the Greek docs band by the page Date field into " \
+                 "grc:cla/grc:koi; the -en translations bare eng): 173→174"
     # The epigraphic-belt registry package (merged + canonical-synced
     # 2026-10-18, the add-then-retire shape within one phase) retires both
     # P130 pendings, and the ociana-script rule + the ig-cyprus override
@@ -409,6 +411,7 @@ class PosturesTest < Minitest::Test
     # hexapla joins identity (per-column grc/hbo/lat): 126→127;
     # bdrc-transcriptions joins identity (xct, declared coarse): 127→128;
     # baley-manuscripts joins codemap (och → zho:old, the obimd precedent): 18→19.
-    assert_equal({ "dates" => 23, "codemap" => 19, "identity" => 128, "pending" => 3 }, by_posture)
+    # aio joins dates (the page Date field → grc:cla/grc:koi; eng translations bare): 23→24.
+    assert_equal({ "dates" => 24, "codemap" => 19, "identity" => 128, "pending" => 3 }, by_posture)
   end
 end

@@ -86,7 +86,10 @@ class DerivabilityWritersTest < Minitest::Test
   # law kind. seal_fetch (P89-3) writes canonical/seal/texts/
   # (tmp+rename) + the search-index sidecars + attic copies + its state
   # ledger inside Adapter#fetch — the cantigas_fetch law kind, its
-  # fourth crawl sibling. korp_fetch (vks, 2026-10-21) writes
+  # fourth crawl sibling. aio_fetch (P154) writes canonical/aio/records/
+  # (JSON + page pairs, tmp+rename) + the listing sidecars + attic copies
+  # + its .aio-fetch.json ledger inside Adapter#fetch — the seal_fetch law
+  # kind, its REST-listing sibling. korp_fetch (vks, 2026-10-21) writes
   # canonical/vks/texts/<CORPUS>/*.jsonl (a .korp-staging tree swapped in
   # whole) + attic copies + its .korp-fetch.json ledger inside
   # Adapter#fetch — the iness_fetch law kind (an API harvest, sha-pinned
@@ -232,7 +235,7 @@ class DerivabilityWritersTest < Minitest::Test
     nabu/manual_drop.rb nabu/ochre_fetch.rb nabu/otdo_fetch.rb
     nabu/lotsawa_fetch.rb nabu/hf_rows_fetch.rb nabu/zip_range_fetch.rb
     nabu/poma_fetch.rb nabu/bu_ajami_fetch.rb
-    nabu/seal_fetch.rb
+    nabu/seal_fetch.rb nabu/aio_fetch.rb
     nabu/sefaria_fetch.rb nabu/titus_fetch.rb nabu/url_download.rb
     nabu/litopys_fetch.rb
     nabu/wiki_fetch.rb nabu/zip_fetch.rb

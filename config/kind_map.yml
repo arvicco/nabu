@@ -16,6 +16,29 @@
 split: ["|", ";"]     # elephantine pipes, cdli/oracc semicolons
 strip: ["?", "(?)"]   # cataloguer uncertainty (edh "epitaph?", cdli "Administrative ?", HGV "Quittung (?)")
 sources:
+  aio:                # P154 — the page's Inscription type, folded to its HEADS at parse time
+    #                   (AioRecordParser.type_heads: "Decree (Council/People)" → Decree,
+    #                   "Statue base, Metrical (elegaic couplets)" → Statue base + Metrical).
+    #                   Counts = the 80-page sample census 2026-11-02; the full vocabulary
+    #                   lands with the first sync (`nabu kind census --unmapped aio`).
+    facet: genre
+    map:
+      "Decree": legal/law                        # 33 — the house decree fold (isicily/iip)
+      "Dedication": dedicatory                   # 30 — choregic/private/ephebic/emperor…
+      "Funerary": funerary                       # 5
+      "Boundary marker": boundary                # 2 — horoi
+      "List of names": administrative/list       # 2 — prytany/ephebic name lists
+      "Statue base": honorific                   # 2 — the honorific statue's inscribed base
+      "Metrical": literary/poetry                # 2 — the verse claim rides beside its head
+      "Law": legal/law                           # 2
+      "Building contract": legal/contract        # 1
+      "Sacrificial Calendar": ritual/festival    # 1 — the cult calendar of sacrifices
+      "Cult regulation": ritual                  # 1 — sacred law: how the cult is run
+      "Account": administrative/account          # 1
+      "Building inscription": building           # 1
+      "Milestone": boundary/milestone            # 1
+      "Graffito": mark/graffito                  # 1 ("Graffito?" — the global ? strip)
+      "Topos-inscription": mark/ownership        # 1 — a reserved-place mark (the edh seat fold)
   cdli:               # 288,629 docs — the largest vocabulary by rows
     facet: genre
     map:

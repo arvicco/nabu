@@ -85,6 +85,9 @@ module Nabu
           #                               stated span, else the corpus band; archive findspots
           "africa-pd" => :structured, # P124-1: each work's edition year (the slavistics-pd
           #                             mold); the imprint rides "imprint" — no place claim
+          "aio" => :structured, # P154: the inscription page's Date field (archon years, ranges,
+          #                       centuries — AioDate); place = the Pleiades-linked Original
+          #                       location/Findspot. Greek docs only row (translations never do)
           "aozora" => :structured, # the index's 初出 first publication (class composition),
           #                          else the 底本 first-edition year (class edition)
           "archiv-slav-phil" => :structured, # each volume's title-page year

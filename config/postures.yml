@@ -1818,6 +1818,28 @@ sources:
     places: {posture: unplaced, note: "the deposit names no place — no imprint, no provenance,
         no place field in the table"}
     script: {posture: implied}
+  aio:   # P154
+    # Two document layers per record (Adapters::AioRecordParser): the -en
+    # translation (every record; kind translation → never rows on the
+    # timeline or places — the house translation rule) and AIO's own Greek
+    # edition (the AIO/AIUK records only). The record's date/place/genre
+    # ride the PRIMARY doc: the Greek where present, else the translation.
+    lect: {posture: dates, note: "the Greek docs stage by the date band from the page's own Date
+        field (grc:cla ≤ -300, grc:koi after); the -en translations are bare eng (identity).
+        DELIBERATELY not refined to the Attic variety (grc/att): AIO is Attic by subject, not
+        by every findspot — Delphi (FD III), Delos, Epidauros (IG IV²), Priene and Sardis
+        records ride beside the Attic stones, so a whole-source /att refine would over-claim;
+        a findspot-gated refine is the candidate (judgment-grade, flagged, not minted)"}
+    dating: {posture: partial, note: "the page's Date field through AioDate (archon years
+        352/1 BC → -352..-351, ranges, decades, centuries with the house halves, or-envelopes;
+        71 of 74 distinct sampled values parse — open-ended 'Before …' / '… or later' prose
+        rides raw only). Rows only from the Greek-bearing records: a translation-only
+        record's date sits in its metadata but the timeline excludes translation siblings"}
+    places: {posture: linked, note: "place = the first Original-location/Findspot field
+        that names a place AND links Pleiades (else the first that names one); the Pleiades id
+        rides place.pleiades; translation-line placeName refs ride passage annotations.
+        'Unknown' findspots place nothing. Same translation-row caveat as dating"}
+    script: {posture: implied}
   corpus-corporum:
     kind: {posture: unclassified}
     lect:
