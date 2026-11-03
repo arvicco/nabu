@@ -67,7 +67,7 @@ The Greco-Roman literary lane: the Perseus canons and First1KGreek, Diorisis, LS
 
 The Latin-to-vernacular continuum: CroALa's medieval and neo-Latin opens the desk; late-antique prose, the MGH critical editions, and the Old French treebanks and texts join as their shelves land.
 
-**Members** (22): `aranese`, `bdcamoes`, `bfm`, `bim-sahcoba`, `cantigas`, `corpus-corporum`, `croala`, `ctilc`, `cv-sardinian`, `derom`, `digiliblt`, `disco`, `littre`, `lo-congres`, `meloniromance`, `memis`, `openmgh`, `osta`, `salom`, `theatre-classique`, `typikon-bible`, `ud`
+**Members** (28): `aranese`, `bdcamoes`, `bfm`, `bim-sahcoba`, `cantigas`, `corpus-corporum`, `croala`, `ctilc`, `cv-sardinian`, `derom`, `digiliblt`, `disco`, `littre`, `lo-congres`, `meloniromance`, `memis`, `openmgh`, `osta`, `salom`, `theatre-classique`, `typikon-bible`, `ud`, `wiktionary-ca`, `wiktionary-frm`, `wiktionary-fro`, `wiktionary-oc`, `wiktionary-osp`, `wiktionary-pro`
 
 ### epigraphy
 
@@ -83,7 +83,7 @@ Documentary corpora at the artifact grain: papyri, the Latin/Greek and Levantine
 
 Old Church Slavonic and its daughters: the OCS/Old Russian treebanks, the gospel and monument corpora, Freising, the Slovenian historical lane with PriLit's earliest narrative prose (1643–1866), Balkan damaskini, and the Church Slavonic dictionary shelves.
 
-**Members** (37): `archiv-slav-phil`, `bg-wikisource`, `ccmh`, `comenius`, `cs-wikisource`, `damaskini`, `elektire`, `elizabeth-bible`, `eltec-srp`, `freising`, `gams-zrcalo`, `goo300k`, `hr-wikisource`, `imp`, `kdsp`, `korba`, `litopys`, `mdz-protestant`, `mk-wikisource`, `pl-wikisource`, `prague-bible-1488`, `prilit`, `proiel`, `ru-wikisource`, `scat`, `scripta-bulgarica`, `senie`, `sl-lexica`, `sl-wikisource`, `slavistics-pd`, `slouniki-nasovic`, `sr-wikisource`, `torot`, `ud`, `uk-wikisource`, `vuk-danicic`, `wiktionary-cu`
+**Members** (38): `archiv-slav-phil`, `bg-wikisource`, `ccmh`, `comenius`, `cs-wikisource`, `damaskini`, `elektire`, `elizabeth-bible`, `eltec-srp`, `freising`, `gams-zrcalo`, `goo300k`, `hr-wikisource`, `imp`, `kdsp`, `korba`, `litopys`, `mdz-protestant`, `mk-wikisource`, `pl-wikisource`, `prague-bible-1488`, `prilit`, `proiel`, `ru-wikisource`, `scat`, `scripta-bulgarica`, `senie`, `sl-lexica`, `sl-wikisource`, `slavistics-pd`, `slouniki-nasovic`, `sr-wikisource`, `torot`, `ud`, `uk-wikisource`, `vuk-danicic`, `wiktionary-cu`, `wiktionary-sh`
 
 ### germanic
 
@@ -91,7 +91,7 @@ Old Church Slavonic and its daughters: the OCS/Old Russian treebanks, the gospel
 
 Gothic on the proiel/ud treebanks beside the West and North Germanic branches: Old English verse (ASPR) and prose (ISWOC) with Bosworth-Toller, Old Icelandic (IcePaHC via ud), Old Norwegian and the Poetic Edda (Menotec), the Medieval Nordic manuscript archive (Menota), the Corpus of Middle English (CME), early-modern English at scale (EEBO-TCP), Beowulf again in Klaeber's edition with its aligned English (perseus-anglit), the Old Saxon Heliand (HeliPaD), Middle High German manuscripts (ReM), Middle Low German and Low Rhenish (ReN), the German print era whole (DTA, 1473–1969), and the runic inscriptions (Rundata, dual-tagged epigraphy).
 
-**Members** (25): `aspr`, `bosworth-toller`, `cleasby-vigfusson`, `cme`, `corpus-gysseling`, `corpus-oudfries`, `corpus-oudnederlands`, `dta`, `eebo-tcp`, `fornsvenska`, `fsv-lexica`, `helipad`, `iswoc`, `menota`, `menotec`, `perseus-anglit`, `ppchy`, `proiel`, `ref`, `rem`, `ren`, `rundata`, `runesdb`, `ud`, `zoega`
+**Members** (33): `aspr`, `bosworth-toller`, `cleasby-vigfusson`, `cme`, `corpus-gysseling`, `corpus-oudfries`, `corpus-oudnederlands`, `dta`, `eebo-tcp`, `fornsvenska`, `fsv-lexica`, `helipad`, `iswoc`, `menota`, `menotec`, `perseus-anglit`, `ppchy`, `proiel`, `ref`, `rem`, `ren`, `rundata`, `runesdb`, `ud`, `wiktionary-dum`, `wiktionary-enm`, `wiktionary-gmh`, `wiktionary-gmq-osw`, `wiktionary-got`, `wiktionary-non`, `wiktionary-ofs`, `wiktionary-sco`, `zoega`
 
 ### celtic
 
@@ -99,7 +99,7 @@ Gothic on the proiel/ud treebanks beside the West and North Germanic branches: O
 
 Continental Celtic epigraphy (RIIG, Lexicon Leponticum and its word shelf), ogham Primitive Irish, CorPH's Early Irish, the St Gall Priscian glosses in Latin and Old Irish, the UD Old Irish treebanks, the kaikki attested-Celtic extracts riding wiktionary-recon, and the GPC open subset as the Welsh dictionary shelf.
 
-**Members** (11): `br-wikisource`, `corph`, `cy-wikisource`, `gpc`, `lexlep`, `lexlep-words`, `ogham`, `riig`, `stgall-priscian`, `ud`, `wiktionary-recon`
+**Members** (12): `br-wikisource`, `corph`, `cy-wikisource`, `gpc`, `lexlep`, `lexlep-words`, `ogham`, `riig`, `stgall-priscian`, `ud`, `wiktionary-br`, `wiktionary-recon`
 
 ### italic
 
@@ -131,7 +131,7 @@ The cross-language scripture hat: the Masoretic shelves and the Scrolls, the Gre
 
 The Hebrew-and-Aramaic language desk beside the cross-language biblical hat: OSHB, BHSA, DSS, SDBH and the lexicon shelf, the Sefaria Targums, the bridging crosswalk, and IIP's inscriptions of Israel/Palestine.
 
-**Members** (13): `bhsa`, `bridging`, `dss`, `elephantine`, `etcbc-targum`, `extrabiblical`, `hebrew-lexicon`, `hexapla`, `iip`, `oshb`, `sdbh`, `sefaria`, `ud`
+**Members** (14): `bhsa`, `bridging`, `dss`, `elephantine`, `etcbc-targum`, `extrabiblical`, `hebrew-lexicon`, `hexapla`, `iip`, `oshb`, `sdbh`, `sefaria`, `ud`, `wiktionary-arc`
 
 ### syriac
 
@@ -139,7 +139,7 @@ The Hebrew-and-Aramaic language desk beside the cross-language biblical hat: OSH
 
 The Syriac language desk: the ETCBC Peshitta and the Digital Syriac Corpus, riding beside the biblical hat by design.
 
-**Members** (4): `etcbc-syriac`, `hmml-reading-room`, `peshitta`, `syriac-corpus`
+**Members** (5): `etcbc-syriac`, `hmml-reading-room`, `peshitta`, `syriac-corpus`, `wiktionary-syc`
 
 ### ethiopic
 
@@ -196,7 +196,7 @@ The Iranian-language lane, Zoroastrian canon at its heart: the TITUS Avesta (Old
 
 The Sanskrit, Prakrit and Pali lane: GRETIL and SARIT, the DCS treebank, Monier-Williams, the Vedic UD treebank, and SuttaCentral's canon.
 
-**Members** (33): `dacon`, `dcs`, `dharma-deccan`, `dharma-mdt`, `dharma-tamil`, `gretil`, `gretil-legacy`, `gu-wikisource`, `kannada-texts`, `madurai`, `mahan-kosh`, `mw`, `nabu-data`, `osbct`, `paramara`, `prakrit-texts`, `sarit`, `shabados`, `siddham`, `sii-clean`, `suttacentral`, `tamilex`, `te-wikisource`, `tipitaka-lk`, `ud`, `vedaweb`, `wiktionary-dv`, `wiktionary-kn`, `wiktionary-ml`, `wiktionary-pra`, `wiktionary-si`, `wiktionary-ta`, `wiktionary-te`
+**Members** (34): `dacon`, `dcs`, `dharma-deccan`, `dharma-mdt`, `dharma-tamil`, `gretil`, `gretil-legacy`, `gu-wikisource`, `kannada-texts`, `madurai`, `mahan-kosh`, `mw`, `nabu-data`, `osbct`, `paramara`, `prakrit-texts`, `sarit`, `shabados`, `siddham`, `sii-clean`, `suttacentral`, `tamilex`, `te-wikisource`, `tipitaka-lk`, `ud`, `vedaweb`, `wiktionary-dv`, `wiktionary-kn`, `wiktionary-ml`, `wiktionary-pa`, `wiktionary-pra`, `wiktionary-si`, `wiktionary-ta`, `wiktionary-te`
 
 ### buddhist
 
@@ -220,7 +220,7 @@ The Tibetan desk opens with the canon whole: the Public-Domain Digital Derge Kan
 
 The Korean desk opens on the dynastic record itself: the Veritable Records of Joseon (sillok) in the original hanmun via NIKH's open XML dumps, joined by the Goryeosa family on the same DTD (the pre-Joseon dynastic history, its chronological digest, and the state council's daily register), with the Seungjeongwon ilgi and the ITKC classics to follow, and the Middle Korean Wikisource shelf as the vernacular leg. The OKHC historical slice widens the desk beyond the state record: the Samguk sagi (the oldest Korean history), the Ilseongnok, the ITKC munjip mass, and the AKS/Kyujanggak/NHM old-literature shelves, each record carrying its own PD-vs-nc label.
 
-**Members** (9): `bibyeonsa`, `goryeosa`, `goryeosa-jeoryo`, `itkc`, `itkc-catalog`, `ko-wikisource-mk`, `okhc`, `sillok`, `sjw`
+**Members** (11): `bibyeonsa`, `goryeosa`, `goryeosa-jeoryo`, `itkc`, `itkc-catalog`, `ko-wikisource-mk`, `okhc`, `sillok`, `sjw`, `wiktionary-ko`, `wiktionary-okm`
 
 ### sea
 
@@ -284,7 +284,7 @@ Africa beyond the Egyptian and Ethiopic desks: the NEH Ajami collection's Hausa,
 
 The early vernaculars of the eastern Baltic shore, where the Reformation and the Counter-Reformation first put Baltic and Finnic languages into print: SENIE's Old Latvian (1507–1800 — the catechisms, Mancelius, Glück's Bible, the manuscript dictionaries), with the Old Literary Finnish and the Old Lithuanian, Old Prussian and Old Estonian shelves joining as their packets land.
 
-**Members** (3): `senie`, `vakk`, `vks`
+**Members** (4): `senie`, `vakk`, `vks`, `wiktionary-et`
 
 ### local
 

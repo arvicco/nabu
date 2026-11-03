@@ -26,7 +26,7 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 ## The shelves
 
-A source wears every desk it serves — these twenty-five answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
+A source wears every desk it serves — these 33 answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
 | Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 2 November 2026)</span> |
 |---|---|---|---|---|
@@ -54,6 +54,14 @@ A source wears every desk it serves — these twenty-five answer this desk. Hold
 | `rundata` | inscriptions | odbl | wired · manual | 30,647 docs / 30,645 passages |
 | `runesdb` | texts | attribution | wired · manual | 613 docs / 1,611 passages |
 | `ud` | treebank | nc | wired · manual | 83 docs / 329,980 passages |
+| `wiktionary-dum` | dictionary | attribution | not yet wired | not synced yet |
+| `wiktionary-enm` | dictionary | attribution | not yet wired | not synced yet |
+| `wiktionary-gmh` | dictionary | attribution | not yet wired | not synced yet |
+| `wiktionary-gmq-osw` | dictionary | attribution | not yet wired | not synced yet |
+| `wiktionary-got` | dictionary | attribution | not yet wired | not synced yet |
+| `wiktionary-non` | dictionary | attribution | not yet wired | not synced yet |
+| `wiktionary-ofs` | dictionary | attribution | not yet wired | not synced yet |
+| `wiktionary-sco` | dictionary | attribution | not yet wired | not synced yet |
 | `zoega` | dictionary | attribution | wired · manual | 29,951 entries |
 
 **Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 2 November 2026)</span>: `non` 85,607 · `ang` 63,170 · `en` 59,433 · `eng` 6,814 · `de` 5,668 · `swe` 3,397 · `dum` 2,226 · `gem` 613 · `lat` 532 · `gmh` 406 … and 50 more (`nabu axis germanic` lists all).

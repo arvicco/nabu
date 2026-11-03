@@ -1,0 +1,12 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+source: wiktionary-gmh
+adapter_test: test/adapters/wiktionary_gmh_test.rb
+retrieved: 2026-11-02
+files:
+  - path: kaikki.org-dictionary-MiddleHighGerman.jsonl
+    url: https://kaikki.org/dictionary/Middle%20High%20German/kaikki.org-dictionary-MiddleHighGerman.jsonl
+    whole: false
+    trim: >-
+      the 2 complete JSONL lines with word in {name, winter},
+      byte-verbatim in upstream order, of 2,142 lines

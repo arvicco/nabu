@@ -1,0 +1,12 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+source: wiktionary-frm
+adapter_test: test/adapters/wiktionary_frm_test.rb
+retrieved: 2026-11-02
+files:
+  - path: kaikki.org-dictionary-MiddleFrench.jsonl
+    url: https://kaikki.org/dictionary/Middle%20French/kaikki.org-dictionary-MiddleFrench.jsonl
+    whole: false
+    trim: >-
+      the 2 complete JSONL lines with word in {livre, chien},
+      byte-verbatim in upstream order, of 4,956 lines

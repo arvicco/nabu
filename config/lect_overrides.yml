@@ -239,6 +239,12 @@ sources:
     # tag) so the dictionary-language filter meets fornsvenska; this row
     # transcribes the books' own definition onto the existing node.
     sv: { lect: "sv:old", tier: certain }
+  wiktionary-gmq-osw:
+    # Wiktionary's Old Swedish (gmq-osw, no ISO code; the codemap's own
+    # gmq-osw → sv:old row) stored under the held fornsvenska tag sv so
+    # the dictionary-language filter meets the text; this row restores
+    # the stage the upstream code names.
+    sv: { lect: "sv:old", tier: certain }
   elizabeth-bible:
     # The Elizabeth Bible IS the text the registry's chu:ncs node names
     # as fixing the post-Nikonian Synodal standard ("fixed in the
