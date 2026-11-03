@@ -939,6 +939,10 @@ sources:
     #   fold to historiography by the ruled biography precedent (elephantine "biography",
     #   the eebo "-- Biography" and aozora NDC 289 folds) — a hagiography sub would be a
     #   taxonomy change, not this mapping's call
+  tianyige:                  # the Ming examination records (科舉錄): each record is the
+    source_kind: administrative/register   # official register of one session — examiners,
+    #   questions, the graduates' roster, model answers; register is the closest ruled class
+    #   (no examination class exists; minting one would be a taxonomy change)
   sillok:                    # the okhc dynastic-record family
     source_kind: historiography/annals
   sjw:
