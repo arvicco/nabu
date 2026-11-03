@@ -7,10 +7,12 @@ description: >-
 ---
 
 {% assign census = site.data.census -%}
+{% assign sizes = site.data.sources -%}
+{% assign src = site.data.sources.sources -%}
 Nabu is operated from the command line and lives entirely under its own
 directory — plain files plus SQLite, no services. Initializing your own
-library takes five steps; the starter shelf below was measured at about
-**690 MB on disk** and a few minutes of syncing on the reference machine
+library takes five steps; the starter shelf below measures
+**{{ sizes.disk.starter_display }} on disk** ({{ sizes.as_of }}) and took a few minutes of syncing on the reference machine
 (2026-07-13).
 
 ## Prerequisites
@@ -18,10 +20,10 @@ library takes five steps; the starter shelf below was measured at about
 - **Ruby 3.3 or newer** and **git**. macOS (Apple Silicon) is the
   development platform; nothing in the core is known to be Mac-specific,
   but no other platform is exercised.
-- **Disk**: about 1 GB for the starter shelf (canonical files plus the
-  derived databases). The full library currently occupies roughly
-  117 GB canonical + 159 GB of derived databases on the reference
-  machine (measured 2026-10-11; OpenITI, ORACC and EEBO-TCP dominate the
+- **Disk**: {{ sizes.disk.starter_display }} of canonical files for the starter shelf, plus its
+  derived databases. The full library currently occupies roughly
+  {{ sizes.disk.canonical_display }} canonical + {{ sizes.disk.derived_display }} of derived databases on the reference
+  machine (measured {{ sizes.as_of }}; OpenITI, ORACC and the NDL classical stacks dominate the
   canonical side) — growth is entirely at your discretion, shelf by
   shelf.
 
@@ -56,14 +58,14 @@ hundred KB total, pre-enabled by nature; `bin/nabu sync core` re-runs
 just that sweep any time) — then the four curated starter sources, each
 through its normal fetch → load → index path, and ends by printing the
 first three commands to try. The starter set, with sizes measured from
-the live canonical tree on 2026-07-13:
+the live canonical tree on {{ sizes.as_of }}:
 
 | Source | What it is | On disk |
 |---|---|---|
-| `sblgnt` | SBL Greek New Testament (CC BY) | 11 MB |
-| `proiel` | PROIEL treebank — the NT in Greek, Latin, Gothic, Armenian, and Old Church Slavonic, with gold lemma and morphology annotations (non-commercial research license) | 173 MB |
-| `iswoc` | ISWOC treebank — the West-Saxon gospels, Old English (non-commercial research license) | 30 MB |
-| `lexica` | LSJ and Lewis &amp; Short, the dictionary shelf (CC BY-SA) | 479 MB |
+| `sblgnt` | SBL Greek New Testament (CC BY) | {{ src.sblgnt.canonical_display }} |
+| `proiel` | PROIEL treebank — the NT in Greek, Latin, Gothic, Armenian, and Old Church Slavonic, with gold lemma and morphology annotations (non-commercial research license) | {{ src.proiel.canonical_display }} |
+| `iswoc` | ISWOC treebank — the West-Saxon gospels, Old English (non-commercial research license) | {{ src.iswoc.canonical_display }} |
+| `lexica` | LSJ and Lewis &amp; Short, the dictionary shelf (CC BY-SA) | {{ src.lexica.canonical_display }} |
 
 On the reference machine the four first syncs took roughly three minutes
 of fetch-and-load combined (the `lexica` clone dominates at about two
@@ -136,16 +138,16 @@ clients, the tool reference, and the quoting etiquette are in
 Each further shelf is one `nabu enable <source>` (or `enable <axis>` for a whole desk) followed by its `sync`; `bin/nabu sync --all` re-syncs
 every enabled live-policy source in one pass. The full menu is
 `config/sources.yml`; real on-disk sizes for the larger shelves, measured
-2026-10-11:
+{{ sizes.as_of }}:
 
 | Sync | Unlocks | Canonical size |
 |---|---|---|
-| `bin/nabu sync vulgate` + `sync eng-web` | the Clementine Latin and English witnesses for `align`, Old Testament included | 357 MB each |
-| `bin/nabu sync perseus-greek` | the Greek canon with aligned English translations | 919 MB |
-| `bin/nabu sync perseus-latin` | the Latin classics | 280 MB |
-| `bin/nabu sync gretil` | 780 Sanskrit editions | 303 MB |
-| `bin/nabu sync papyri-ddbdp` | 64k documentary papyri | 4.8 GB |
-| `bin/nabu sync oracc` | 118k cuneiform documents, translations and the Oracc CC0 project pack (Urartian among them) included | 16 GB |
+| `bin/nabu sync vulgate` + `sync eng-web` | the Clementine Latin and English witnesses for `align`, Old Testament included | {{ src.vulgate.canonical_display }} + {{ src["eng-web"].canonical_display }} |
+| `bin/nabu sync perseus-greek` | the Greek canon with aligned English translations | {{ src["perseus-greek"].canonical_display }} |
+| `bin/nabu sync perseus-latin` | the Latin classics | {{ src["perseus-latin"].canonical_display }} |
+| `bin/nabu sync gretil` | 780 Sanskrit editions | {{ src.gretil.canonical_display }} |
+| `bin/nabu sync papyri-ddbdp` | 64k documentary papyri | {{ src["papyri-ddbdp"].canonical_display }} |
+| `bin/nabu sync oracc` | 118k cuneiform documents, translations and the Oracc CC0 project pack (Urartian among them) included | {{ src.oracc.canonical_display }} |
 
 What each shelf is good for is surveyed on [The Library]({{ '/library/' | relative_url }});
 every text keeps its upstream license, recorded per document — the classes
