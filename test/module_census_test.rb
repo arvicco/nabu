@@ -25,9 +25,9 @@ class ModuleCensusTest < Minitest::Test
     census = Nabu::Lects.census(lects_yaml: File.read(File.join(FIXTURES, "lects.yml")),
                                 codemap_yaml: File.read(File.join(FIXTURES, "codemap.yml")))
     assert_equal Nabu::TestSupport::RegistryCensus::ANCHORS, census.anchors
-    assert_equal 147, census.stages
-    assert_equal 31, census.varieties
-    assert_equal 191, census.codemap
+    assert_equal Nabu::TestSupport::RegistryCensus::STAGES, census.stages
+    assert_equal Nabu::TestSupport::RegistryCensus::VARIETIES, census.varieties
+    assert_equal Nabu::TestSupport::RegistryCensus::CODEMAP_ROWS, census.codemap
   end
 
   def test_the_nabu_lects_hook_reads_both_files

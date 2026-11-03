@@ -50,7 +50,9 @@ module Nabu
       "lina" => /\p{Linear_A}/,
       "linb" => /\p{Linear_B}/,
       "cprt" => /\p{Cypriot}/,
-      "sinh" => /\p{Sinhala}/
+      "sinh" => /\p{Sinhala}/,
+      "mong" => /\p{Mongolian}/,
+      "tang" => /\p{Tangut}/
     }.freeze
 
     # Registry scripts a byte check CANNOT mirror, with the reason stated —
@@ -63,7 +65,10 @@ module Nabu
       "jpan" => "a COMPOSITE surface (Han + Hiragana + Katakana): its Han " \
                 "characters byte-classify as hant, and the kana scripts are not " \
                 "separate registry claims — a ~jpan surface is asserted at the " \
-                "collection grain, not per byte"
+                "collection grain, not per byte",
+      "hani" => "the generic Han code for Nôm and Sawndip: the same CJK Unified " \
+                "characters byte-classify as hant, so a second \\p{Han} row would " \
+                "double-count — a ~hani surface is asserted at the collection grain"
     }.freeze
 
     # {tag => char count} over +text+, script-bearing characters only.
