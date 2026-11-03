@@ -261,7 +261,7 @@ module Nabu
       private_constant :DCT
 
       def read_work_cts(path)
-        doc = Nokogiri::XML(File.read(path))
+        doc = Nokogiri::XML(SourceRead.utf8_file(path, label: "pta work catalog"))
         editions = doc.xpath("/ti:work/ti:edition", DCT).to_h do |edition|
           [edition["urn"], {
             description: clean_text(edition.at_xpath("ti:description", DCT)&.text),

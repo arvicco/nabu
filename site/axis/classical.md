@@ -37,6 +37,7 @@ A source wears every desk it serves — these twenty-three answer this desk. Hol
 | `perseus-greek` | texts | attribution | wired · auto | 1,419 docs / 394,706 passages |
 | `perseus-latin` | texts | attribution | wired · auto | 568 docs / 405,989 passages |
 | `proiel` | treebank | nc | wired · frozen | 12 docs / 51,321 passages |
+| `pta` | texts | attribution | not yet wired | not synced yet |
 | `sigla` | inscriptions | nc | wired · manual | 787 docs / 3,097 passages |
 | `ud` | treebank | nc | wired · manual | 83 docs / 329,980 passages |
 | `vulgate` | texts | open | wired · manual | 73 docs / 35,809 passages |
