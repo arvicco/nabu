@@ -39,7 +39,11 @@ module Nabu
     # git client might launch can parse: a hook runs on every commit and
     # must cost well under a second.
     module GitHooks
-      HOOKS = %w[pre-commit commit-msg].freeze
+      # pre-merge-commit runs the pre-commit checks on merge commits —
+      # git does NOT fire pre-commit for a `git merge`, so without it a
+      # merge bypasses the marker scan, the rebuild hold and the
+      # timezone guard (caught live on the first post-guard lane pick).
+      HOOKS = %w[pre-commit pre-merge-commit commit-msg].freeze
       SCRIPT_DIR = File.join("script", "git-hooks")
 
       OVERRIDE = "override deliberately: git commit --no-verify"
