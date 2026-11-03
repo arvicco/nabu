@@ -441,3 +441,51 @@ sinh:
     translation directly in the Unicode Sinhala block (the Buddha
     Jayanti print convention), so that Pāli claims pli~sinh while the
     library's romanized Pāli shelves claim ~latn.
+
+hani:
+  name: Han (Hanzi, Kanji, Hanja)
+  context: >-
+    The generic Han code, kept for the vernacular writing systems built
+    out of Chinese characters that ISO 15924 does not separate: the
+    Vietnamese chữ Nôm (in use from roughly the 13th c. to the early
+    20th, beside Literary Sinitic) and the Zhuang Sawndip ("raw
+    characters") of the Tai-speaking south, both mixing borrowed Chinese
+    characters, read for sound or sense, with characters of their own
+    coinage. Unicode encodes those characters in the CJK Unified
+    Ideograph blocks beside Chinese, so the code names a usage, not a
+    separate set of bytes.
+  desk: >-
+    A ~hani claim (vi~hani, za~hani) is a collection-grain statement
+    about Nôm or Sawndip writing; byte-level checks classify the same
+    characters as Han under the hant row.
+
+mong:
+  name: Mongolian
+  context: >-
+    The vertical, top-to-bottom script family descended from the Old
+    Uyghur alphabet: Classical (Uyghur-script) Mongolian from the 13th c.,
+    the Clear Script (Todo bichig) that Zaya Pandita devised for Oirat in
+    1648, and the Manchu adaptation of 1599/1632 — all unified by ISO
+    15924 and Unicode under one code, with positional letterforms and
+    variation selectors resolving the shapes. Unicode encodes it since
+    3.0.
+  desk: >-
+    Classical Mongolian and Written Oirat (cmg, xwo) and Manchu ride the
+    Unicode Mongolian block when a shelf holds them in script; the
+    Pentaglot and scan shelves carry their own transliteration
+    conventions where they romanize.
+
+tang:
+  name: Tangut
+  context: >-
+    The logographic script of the Xi Xia state, promulgated in 1036 and
+    attributed to Yeli Renrong: some 6,000 characters built on Chinese
+    models but wholly distinct from them, written until the early 16th
+    c. (the Baoding dharani pillars of 1502). Known from the Khara-Khoto
+    finds (Kozlov, 1908–09), it was deciphered through bilingual
+    glossaries such as the Pearl in the Palm (1190); Unicode encodes it
+    since 9.0.
+  desk: >-
+    Tangut text is held in the Unicode Tangut block where the source
+    carries it; character readings follow the reconstruction the source
+    names.
