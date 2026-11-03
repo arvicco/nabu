@@ -5207,7 +5207,7 @@ proiel:
   # file; the terms live in the README):
   # license_watch: https://raw.githubusercontent.com/proiel/proiel-treebank/master/README.md
 
-pta:   # P154, 02-sources row 335 (provisional)
+pta:   # P154, 02-sources row 341
   adapter: Nabu::Adapters::Pta
   adopted: "2026-11-03"
   axes: [classical]
