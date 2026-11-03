@@ -61,7 +61,7 @@ A source wears every desk it serves — these twenty-five answer this desk. Hold
 
 ## Working the sinitic desk
 
-The generic axis surfaces — every desk answers to these, in working
+The generic desk surfaces — every desk answers to these, in working
 order (enable once, sync, then query):
 
 ```

@@ -176,7 +176,7 @@ module Nabu
 
           ## Working the #{axis.name} desk
 
-          The generic axis surfaces — every desk answers to these, in working
+          The generic desk surfaces — every desk answers to these, in working
           order (enable once, sync, then query):
 
           ```
@@ -196,7 +196,7 @@ module Nabu
       def render_index
         <<~PAGE
           ---
-          title: Research axes
+          title: Research desks
           permalink: /axis/
           description: >-
             The #{desk_count_word} research desks of the Nabu library — tags over the
@@ -207,10 +207,11 @@ module Nabu
           The library is one flat list of corpora (the shelf map is
           [The Library]({{ '/library/' | relative_url }}); the code-per-language
           table is [Languages]({{ '/languages/' | relative_url }})). This page is
-          the other view of the same sources: the **research axes** — the owner's
-          scholarly desks, each a hat a reader puts on to work one tradition.
+          the other view of the same sources: the **research desks**
+          (the CLI calls them axes) — scholarly hats, each worn to work one
+          tradition.
 
-          An axis is **not a folder**. It is a **tag** over the source list, and a
+          A desk is **not a folder**. It is a **tag** over the source list, and a
           source wears every tag it serves — the Vulgate sits at the Classicist's
           desk for its Latin and at the Biblical scholar's for its scripture; the
           UD treebanks answer to nine desks at once. Multi-membership is the point,
@@ -406,7 +407,7 @@ module Nabu
 
       def instruments_block(axis)
         text = fragment(axis.name)["instruments"]
-        return "No axis-specific instruments curated yet — the generic surfaces above apply." unless text
+        return "No desk-specific instruments curated yet — the generic surfaces above apply." unless text
 
         text.strip
       end

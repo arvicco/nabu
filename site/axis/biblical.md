@@ -58,7 +58,7 @@ A source wears every desk it serves — these twenty-two answer this desk. Holdi
 
 ## Working the biblical desk
 
-The generic axis surfaces — every desk answers to these, in working
+The generic desk surfaces — every desk answers to these, in working
 order (enable once, sync, then query):
 
 ```

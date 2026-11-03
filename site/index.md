@@ -53,7 +53,7 @@ terminal setup for one tradition. Find yours:
 
 Each desk is a reader's-eye view of the same collection; the full directory,
 with every desk's member shelves and recipes, is
-[Research axes]({{ '/axis/' | relative_url }}).
+[Research desks]({{ '/axis/' | relative_url }}).
 
 ## The holdings, in brief
 

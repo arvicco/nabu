@@ -26,11 +26,11 @@ A source wears every desk it serves — these four answer this desk. Holdings ar
 
 ## The desk's instruments
 
-No axis-specific instruments curated yet — the generic surfaces above apply.
+No desk-specific instruments curated yet — the generic surfaces above apply.
 
 ## Working the baltic desk
 
-The generic axis surfaces — every desk answers to these, in working
+The generic desk surfaces — every desk answers to these, in working
 order (enable once, sync, then query):
 
 ```

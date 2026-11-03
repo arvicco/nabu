@@ -38,7 +38,7 @@ A source wears every desk it serves — these five answer this desk. Holdings ar
 
 ## Working the hittite desk
 
-The generic axis surfaces — every desk answers to these, in working
+The generic desk surfaces — every desk answers to these, in working
 order (enable once, sync, then query):
 
 ```
