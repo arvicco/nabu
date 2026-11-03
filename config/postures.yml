@@ -1878,6 +1878,20 @@ sources:
         'composition')"}
     places: {posture: unplaced}
     script: {posture: implied}
+  pta:   # P154
+    lect: {posture: dates, note: "the date-band inference stages the editions from the archive's
+        own per-work dct:created spans (composition class): Severian's homilies (401–404) and
+        Athanasius' treatises fall inside grc:byz [330, 1453]; Hippolytus, Hermas and Origen
+        (100–235) inside grc:koi [-300, 330]; spans crossing 330 and the works whose span is
+        upstream's unfilled 0030–0800 default stay bare grc. No facet rule: a label map would
+        only repeat the band"}
+    dating: {posture: pending, note: "candidate: the work __cts__.xml dct:created span (composition
+        class) — mined in the catalog-mining change that follows the adapter"}
+    places: {posture: pending, note: "candidate: the work __cts__.xml dct:spatial Pleiades URI —
+        mined in the catalog-mining change that follows the adapter"}
+    kind: {posture: pending, note: "candidate: the work __cts__.xml dct:type text-type labels
+        through config/kind_map.yml"}
+    script: {posture: implied}
   cgpg:   # P153
     lect: {posture: dates, note: "the date-band inference stages the volumes from upstream's own
         per-volume century labels: the 25 volumes labeled 5th–15th century fall inside grc:byz

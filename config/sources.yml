@@ -5207,6 +5207,31 @@ proiel:
   # file; the terms live in the README):
   # license_watch: https://raw.githubusercontent.com/proiel/proiel-treebank/master/README.md
 
+pta:   # P154, 02-sources row 335 (provisional)
+  adapter: Nabu::Adapters::Pta
+  adopted: "2026-11-03"
+  axes: [classical]
+  siblings: cts
+  wired: false   # bin/nabu enable pta && bin/nabu sync pta (git clone of
+                 # PatristicTextArchive/pta_data, ~674 MB with analyzed/).
+                 # EXPECT 113 docs / 8,778 passages, 0 errored, 423 skipped
+                 # by rule (19 unlicensed, 153 manuscript transcriptions, 32
+                 # Bibex, 134 other-language, 58 Rahlfs LXX, 27 SBLGNT) —
+                 # census at 524eb976 through the adapter, ~40 s parse.
+                 # Eyeball nabu show urn:cts:pta:pta0001.pta002.pta-grc1:1
+                 # ("Πάντοτε μὲν ὁ θεῖος ἀπόστολος") and 5 random passages;
+                 # probe nabu search "οὐρανίῳ κέχρηται γλώττῃ"; then flip.
+  sync_policy: manual
+  # PTA — the Patristic Text Archive (BBAW): CapiTainS TEI editions of early
+  # Christian Greek authors (the Perseus layout; a Perseus subclass). The
+  # Greek editions only, every edition of a work (PTA's versions are
+  # distinct printed editions). LICENCE PER DOCUMENT: each file's own
+  # teiHeader <licence> — by-sa/by → attribution, by-nc(-sa) →
+  # license_override nc, no licence → never ingested; an unknown target
+  # stops discovery. Rahlfs LXX (row 44) and SBLGNT (held) skip by rule.
+  # Witness overlap, not duplication: some works also sit in first1k-greek
+  # or cgpg's Migne volumes in other prints.
+
 qieyun-restored:   # P88-A2, 02-sources row 182
   adapter: Nabu::Adapters::QieyunRestored
   adopted: "2026-08-29"
