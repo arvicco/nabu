@@ -6170,6 +6170,35 @@ su-wikisource:   # P140, 02-sources row 286
   # · sun-Java 21 · osn 1), 1 Dutch introduction measured out. Texts PD;
   # transcription layer CC BY-SA 4.0.
 
+suda-translations:   # P154, 02-sources row 335
+  adapter: Nabu::Adapters::SudaTranslations
+  adopted: "2026-11-02"
+  axes: [classical]
+  wired: false   # until the first real sync is verified
+                 # ManualDrop: copy the banked export into
+                 # incoming/suda-translations/solEntries.zip, then
+                 # bin/nabu sync suda-translations (one 91 MB zip, read in
+                 # place; ≈ 20 s parse). EXPECT 27 docs / 31,341 passages,
+                 # 0 quarantined; 2 entries skipped inside their letters
+                 # (epsilon/4079, tau/1316 — no-match pages) + 28 discovery
+                 # rule-skips (27 index pages + omicrioniota/8) — census of
+                 # the full export 2026-11-02. Eyeball nabu show
+                 # urn:nabu:suda-translations:nu:27 (Naxos: translation,
+                 # notes, translator + vetting history) and 5 random, probe
+                 # nabu search "Naxian stone", then flip.
+  sync_policy: manual
+  # Suda On Line: the collaborative English translation of the Suda,
+  # entry by entry, with notes, bibliography, keywords and the full
+  # translator/vetter history. Banked export: the SOL's maintainer's own
+  # solEntries.zip (31,371 saved CGI answers, 2025-07-24), supplied by
+  # email 2026-11-02 for this use; the zip is the canonical asset
+  # (ManualDrop, docs/manual/suda-translations.md). Document = Adler
+  # letter (27), passage = entry keyed by Adler number; each passage of
+  # the 17 letters the First1K Greek carries holds a first1k_candidate
+  # join key (26,041 of 31,341). LICENSE: the SOL home + rights pages
+  # (read 2026-11-02): CC BY-NC-SA 1.0 over "all our entries, including
+  # translations and annotations" → nc.
+
 suttacentral:
   adapter: Nabu::Adapters::Suttacentral
   adopted: "2026-07-18"

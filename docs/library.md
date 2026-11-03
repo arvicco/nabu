@@ -1874,6 +1874,7 @@ Pohnpeian New Testament and Psalms in the old alphabet (28 / 10,415;
 open) — registered but not yet wired.
 
 ## 8ba. The Sixth Council Tipiṭaka with its subcommentaries, and the Ming examination records (P154)
+## 8bb. The P154 arrivals — the Suda in English, the HMML manuscript catalogue
 
 Expected counts from the fixture-time censuses (the gate's first syncs
 confirm them):
@@ -1899,3 +1900,9 @@ each dated by its reign year and linked to its scan on Wikimedia
 Commons. Machine-read and uncorrected (labeled on every record; check
 the scan before citing); the dataset's machine translations are not
 taken (CC0).
+**`suda-translations`** — the Suda On Line: the complete collaborative
+English translation of the Suda, the 10th-century Byzantine
+lexicon-encyclopedia, 31,341 entries in 27 Adler-letter documents, each
+with its notes, bibliography, keywords and the names of its translator
+and vetters (CC BY-NC-SA). Every entry keeps its Adler number, the key
+to the held First1K Greek.

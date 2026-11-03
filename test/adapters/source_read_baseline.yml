@@ -391,6 +391,10 @@ starling_dbf_parser.rb:
   byteslices: 4
 streaming_tei_parser.rb:
   reads: 1
+# P154: the one binary read of the held zip (the belt has no binary reader;
+# every member's text goes through SourceRead.utf8).
+suda_translations.rb:
+  reads: 1
 suttacentral.rb:
   reads: 1
 tamilex_tei_parser.rb:
