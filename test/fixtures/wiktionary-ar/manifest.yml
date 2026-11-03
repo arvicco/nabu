@@ -1,0 +1,13 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+source: wiktionary-ar
+adapter_test: test/adapters/wiktionary_ar_test.rb
+retrieved: 2026-11-03
+files:
+  - path: kaikki.org-dictionary-Arabic.jsonl
+    url: https://kaikki.org/dictionary/Arabic/kaikki.org-dictionary-Arabic.jsonl
+    whole: false
+    trim: >-
+      5 complete JSONL lines (أنا pron, أنا verb, أدبي verb, حساسية adj,
+      لبد noun), byte-verbatim in upstream order, from twenty 2 MB
+      byte-range reads of the 868,082,330-byte file (README)
