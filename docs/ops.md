@@ -1074,7 +1074,7 @@ automatically; no per-release action.
 1. **Green gate first.** `rake test && rake lint` exit 0 on the release
    commit; the phase-gate pull request body is written (it is the
    release-notes source of record — until 2026-08-02 the gate's worklog
-   line served, see docs/history/).
+   line served — a retired early-era record).
 2. **CITATION.cff**: set `version:` to `X.Y.Z` and `date-released:` to
    today; bump `Nabu::VERSION` (lib/nabu/version.rb) to the same string —
    it feeds provenance `code_version` stamps and fetch User-Agents;

@@ -1,37 +1,22 @@
-# docs/history — the frozen early record
+# docs/history — the early record, retired
 
-Two large files from Nabu's first two months live here. Both are
-**frozen**: kept verbatim, never updated, and not a description of how the
-project works today.
+Two large files from Nabu's first two months — the flat packet backlog
+(frozen 2026-07-23, after P43) and the completion worklog (frozen
+2026-08-02, at the P55 gate) — lived here verbatim until 2026-11-03.
+They were working records, not documentation: per-packet state, design
+notes, and process narration from the era before the coordination moved
+to per-phase boards kept outside the public tree, with the **phase-gate
+pull request** as the public record of each phase.
 
-| File | Frozen | What it is |
-|---|---|---|
-| [`backlog.md`](backlog.md) | 2026-07-23 | The flat packet backlog that coordinated the dev loop from Phase 0 (the scaffold, 2026-07-03) through P43 — every packet with its tier, status, dependencies, Goal and Acceptance text, plus the phase plan blocks and design notes written beside them. |
-| [`worklog.md`](worklog.md) | 2026-08-02 | The completion journal: one line per finished packet or gate (date · packet · commit · notes), newest first, ending at the P55 gate and the synchronized Nabu v1.4.0 / nabu-data v1.0.0 release. |
+On 2026-11-03 both files were retired from the public tree (they are
+preserved privately): internal working records belong off the public
+surface, whatever their age.
 
-## Why frozen
+What remains true for readers of the code:
 
-In the loop's first weeks the backlog file was the entire coordination
-state: a session picked the next `ready` packet, implemented it, flipped
-its status, and appended a worklog line. As phases grew to dozens of
-packets with parallel agents, riders, and owner rulings, the one flat file
-became the bottleneck (and passed 700 KB). The coordination moved to a
-per-phase board — a plan document per phase, a work queue, and a decision
-register — kept outside the public tree, with the **phase-gate pull
-request** as the public record of each phase. The backlog stopped receiving
-packets after P43; the worklog's last line records the P55 gate.
-
-The files moved from `docs/` to `docs/history/` on 2026-10-11 so the
-`docs/` folder lists the living documentation first. Their contents are
-unchanged apart from a frozen-record banner at the top of each.
-
-## Reading them
-
-- Figures, paths, and statuses are as of the day each line was written;
-  many have since changed (sources were added, commands renamed, numbers
-  grew by an order of magnitude). Check the living docs —
-  [`../README.md`](../README.md) is the index — before relying on any claim.
-- Packet ids (`P12-3`, `P42-6`, …) are still cited in code comments as
-  design provenance; search these files for the id to find the original
-  Goal/Acceptance text.
-- The current process is [`../dev-loop.md`](../dev-loop.md).
+- Packet ids (`P12-3`, `P42-6`, …) cited in code comments as design
+  provenance refer to entries in that retired backlog — they date and
+  name the design decision, and the adapter or test beside the comment
+  carries the decision's substance.
+- The current process is [`dev-loop.md`](../dev-loop.md); the living
+  documentation index is [`README.md`](../README.md).

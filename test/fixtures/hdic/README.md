@@ -1,7 +1,7 @@
 # HDIC fixtures (P32-4 — Hanzi Dictionaries in Early Japan)
 
 Real upstream samples of the **HDIC project** databases (CLAUDE.md fixture
-rules; docs/history/backlog.md P32-4). Every kept row is **byte-verbatim** upstream
+rules; the early backlog's P32-4). Every kept row is **byte-verbatim** upstream
 data under the full `#` comment headers (provenance, credits, the per-file
 license grant); only the row SET was trimmed.
 

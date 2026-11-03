@@ -35,7 +35,7 @@ Ruby CLI application, modular adapter core, file-based canonical layer, SQLite d
 ```
 nabu/
 ├── CLAUDE.md
-├── docs/                        # this doc set (index: docs/README.md; frozen early record: docs/history/)
+├── docs/                        # this doc set (index: docs/README.md)
 ├── bin/nabu                   # Thor entrypoint
 ├── lib/nabu/
 │   ├── adapter.rb               # base class + contract
