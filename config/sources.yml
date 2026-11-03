@@ -3741,6 +3741,25 @@ litopys:   # P117, 02-sources row 252
   # EXPECTED FIRST SYNC: 41 docs / 964 passages (938 columns, 26 split
   # across pages) + 3 dictionaries / 923 entries (688 + 174 + 61).
 
+littre:   # P154, 02-sources row 343
+  adapter: Nabu::Adapters::Littre
+  adopted: "2026-11-02"
+  axes: [romance]
+  wired: false   # first sync: bin/nabu enable littre && bin/nabu sync littre
+                 # (git clone, ~87 MB). EXPECT 26 dictionary docs (one per letter) →
+                 # 78,483 entries on one shelf, 0 errored, 3 skipped by rule (preface,
+                 # causerie, test sample); parse ~2.5 min. Eyeball nabu define baal
+                 # ("Grande divinité des Assyriens…"), then flip.
+  # Littré's Dictionnaire de la langue française (1863–1877) in the
+  # oeuvres/littre TEI P5 (XMLittré v1.3 lineage), for the held French
+  # text (theatre-classique's 17th-century stage; the HISTORIQUE sections
+  # quote Old and Middle French). New family littre-tei; entry id = the
+  # article's xml:id (2 in-file repeats numbered, 4 off-letter articles
+  # @-suffixed); gram → word_class, first HISTORIQUE century →
+  # first_attested entry facets. CC BY-SA 2.0 FR per teiHeader →
+  # attribution. Language fra, bare.
+  sync_policy: manual
+
 liv:
   adapter: Nabu::Adapters::Liv
   adopted: "2026-07-14"

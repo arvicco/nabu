@@ -1,0 +1,38 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+source: littre
+adapter_test: test/adapters/littre_test.rb
+retrieved: 2026-11-02
+files:
+  - path: xml/a.xml
+    url: https://raw.githubusercontent.com/oeuvres/littre/master/xml/a.xml
+    whole: false
+    trim: the article able.2 (an entryFree), byte-verbatim inside the file's own header and tail
+  - path: xml/b.xml
+    url: https://raw.githubusercontent.com/oeuvres/littre/master/xml/b.xml
+    whole: false
+    trim: the articles b and baal, byte-verbatim in upstream order inside the file's own header and tail
+  - path: xml/g.xml
+    url: https://raw.githubusercontent.com/oeuvres/littre/master/xml/g.xml
+    whole: false
+    trim: both articles with xml:id gommeux (main + supplement), byte-verbatim in upstream order
+  - path: xml/i.xml
+    url: https://raw.githubusercontent.com/oeuvres/littre/master/xml/i.xml
+    whole: false
+    trim: the article ignoramment, byte-verbatim
+  - path: xml/s.xml
+    url: https://raw.githubusercontent.com/oeuvres/littre/master/xml/s.xml
+    whole: false
+    trim: the articles salleran and ignoramment (the off-letter repeat), byte-verbatim in upstream order
+  - path: xml/preface.html
+    url: https://raw.githubusercontent.com/oeuvres/littre/master/xml/preface.html
+    whole: false
+    trim: lines 1-22 (head through the first paragraph), re-closed — the rejected grain's specimen
+  - path: xml/causerie.html
+    url: https://raw.githubusercontent.com/oeuvres/littre/master/xml/causerie.html
+    whole: false
+    trim: lines 1-11 (head through the first paragraph), re-closed — the rejected grain's specimen
+  - path: xml/test.tei
+    url: https://raw.githubusercontent.com/oeuvres/littre/master/xml/test.tei
+    whole: false
+    trim: lines 1-69 (header and first article), re-closed — the rejected grain's specimen

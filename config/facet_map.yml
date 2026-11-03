@@ -678,6 +678,13 @@ sources:
     entry_fields:
       pos: word_class         # Karp partOfSpeech tags verbatim: nn 27,605 · vb 9,291 · av 5,599 ·
       #                         ab 2,226 · nl 117 · pp 135 · kn 75 · pn 74 … (6,825 entries carry none)
+  littre:                     # census 2026-11-02 over xml/a.xml … z.xml (78,483 articles)
+    entry_fields:
+      pos: word_class         # the printed gram verbatim: s. m. 25,277 · s. f. 19,701 · adj. 14,680 ·
+      #                         v. a. 5,720 · adv. 1,932 · part. passé. 1,929 … (76,634 carry one)
+      first_attested: first_attested  # the HISTORIQUE's first century label, normalized: XVIe s. 8,603 ·
+      #                         XIIIe 3,779 · XIVe 2,719 · XIIe 2,609 · XVe 2,279 · XIe 1,368 · Xe 123 ·
+      #                         IXe 56 · XVIIe 2 · VIIIe 1 (21,539 articles) — Littré's own earliest quote
   lexicon-itant:              # census 2026-10-29 (lexicon_1_0.ttl, 809 entries)
     entry_fields:
       pos: word_class         # lexinfo partOfSpeech local name: properNoun 311 · noun 204 ·
