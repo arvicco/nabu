@@ -1,0 +1,63 @@
+# Nabu fixture manifest (P5-4 "fixture sentinel"). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# ECCO-TCP ships as zips from the TCP's public Box folder — there is NO
+# per-text upstream URL, so the corpus texts and the rejected-grain
+# specimens are refetchable: false (members of the real zips named
+# below); the zip fixtures are subset re-zips of those same members; the
+# listing pages are documented trims of the real Box postStreamData pages.
+# The DTD is a whole byte-identical file. adapter_test is null — the
+# source-specific test pins urns/counts/snippets a refetch would
+# false-fail.
+source: ecco-tcp
+adapter_test:
+retrieved: 2026-11-03
+files:
+  - path: texts/released/ecco_p4_released/K041165.000.p4.xml
+    refetchable: false
+    provenance: zip-member
+    reason: whole real member of p4/ecco_p4_released.zip (Box file_id
+      1342307248765); no per-text upstream URL exists — the corpus ships as zips only
+  - path: texts/released/ecco_p4_released/K021105.000.p4.xml
+    refetchable: false
+    provenance: zip-member
+    reason: whole real member of p4/ecco_p4_released.zip (Box file_id 1342307248765)
+  - path: texts/unedited/ecco_p4_unedited/K049384.000.p4.xml
+    refetchable: false
+    provenance: zip-member
+    reason: whole real member of p4/ecco_p4_unedited.zip (Box file_id 1342302030804)
+  - path: texts/released/ecco_p4_released/K041165.000.p5.xml
+    refetchable: false
+    provenance: zip-member
+    reason: rejected-grain specimen — whole real member of p5/ecco_p5_released.zip
+      (Box file_id 1342313973295, read by HTTP Range), the Oxford P5 copy of K041165.000
+  - path: texts/released/ecco_p4_released/K041165.000.sgm
+    refetchable: false
+    provenance: zip-member
+    reason: rejected-grain specimen — whole real member of p3/ecco_p3_released.zip
+      (Box file_id 1342299706810, read by HTTP Range), the P3 SGML copy of K041165.000
+  - path: fetch/ecco_p4_released.zip
+    refetchable: false
+    provenance: subset-rezip
+    reason: re-zip of the real K041165.000 + K021105.000 members preserving the
+      real flat layout (the real zip is 173 MB / 2,473 members)
+  - path: fetch/ecco_p4_unedited.zip
+    refetchable: false
+    provenance: subset-rezip
+    reason: re-zip of the real K049384.000 member preserving the real flat
+      layout (the real zip is 70 MB / 628 members)
+  - path: fetch/root.html
+    refetchable: false
+    provenance: trimmed-listing
+    reason: the real Box shared-folder page's server-side postStreamData JSON
+      (real folder/file ids) with items pruned to the fixture subset, each
+      reduced to the fields the fetch reads, and page chrome reduced to a shell
+  - path: fetch/p4.html
+    refetchable: false
+    provenance: trimmed-listing
+    reason: same trim of the real p4 folder page; zip itemSize values set to
+      the fixture zips' sizes
+  - path: fetch/eebo2prf.xml.dtd
+    url: https://app.box.com/index.php?rm=box_v2_download_shared_file&shared_name=6jbuf443i145f97c4t56z3garu3u2j09&file_id=f_1342323752640
+    whole: true
+    trim: none

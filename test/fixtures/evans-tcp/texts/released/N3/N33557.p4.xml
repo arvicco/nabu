@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?xml-stylesheet type="text/css" href="http://www.textcreationpartnership.org/docs/code/pfs.css"?>
+<!DOCTYPE ETS SYSTEM "http://www.textcreationpartnership.org/docs/code/eebo2prf.xml.dtd">
+<ETS>
+
+<HEADER><FILEDESC><TITLESTMT><TITLE TYPE="245" I2="0">Sentence of death for high treason. At a special Court of Oyer and Terminer and Goal Delivery, held at Frederick Town, in the month of July, 1781. ...</TITLE><AUTHOR>Maryland. Court of Oyer and Terminer and Goal Delivery (Frederick County).</AUTHOR></TITLESTMT><EXTENT>Approx. 3 KB of XML-encoded text transcribed from 2 1-bit group-IV TIFF page images.</EXTENT><PUBLICATIONSTMT><PUBPLACE>Ann Arbor, MI :</PUBPLACE><PUBLISHER>Text Creation Partnership,</PUBLISHER><DATE>2009-04.</DATE><IDNO TYPE="DLPS">N33557</IDNO>
+<IDNO TYPE="tcp">N33557</IDNO>
+
+<IDNO TYPE="stc">Shipton 43990</IDNO>
+
+<IDNO TYPE="notis">APW0548</IDNO>
+
+<IDNO TYPE="image set">43990</IDNO>
+
+<IDNO TYPE="evans citation">99006244</IDNO>
+<AVAILABILITY><P>To the extent possible under law, the Text Creation Partnership has waived all copyright and related or neighboring rights to this keyboarded and encoded edition of the work described above, according to the terms of the CC0 1.0 Public Domain Dedication (http://creativecommons.org/publicdomain/zero/1.0/). This waiver does not extend to any page images or other supplementary files associated with this work, which may be protected by copyright or other license restrictions. Please go to http://www.textcreationpartnership.org/ for more information.</P></AVAILABILITY></PUBLICATIONSTMT><SERIESSTMT><TITLE>Early American Imprints, 1639-1800 ; no. 43990.</TITLE></SERIESSTMT><NOTESSTMT><NOTE>(Evans-TCP ; no. N33557)</NOTE><NOTE>Transcribed from: (Readex Archive of Americana ; Early American Imprints, series I ; image set 43990)</NOTE><NOTE>Images scanned from Readex microprint and microform: (Early American imprints. First series ; no. 43990)</NOTE></NOTESSTMT><SOURCEDESC><BIBLFULL><TITLESTMT><TITLE TYPE="245" I2="0">Sentence of death for high treason. At a special Court of Oyer and Terminer and Goal Delivery, held at Frederick Town, in the month of July, 1781. ...</TITLE><AUTHOR>Maryland. Court of Oyer and Terminer and Goal Delivery (Frederick County).</AUTHOR></TITLESTMT><EXTENT>1 sheet ([1] p.)   </EXTENT><PUBLICATIONSTMT>
+<PUBPLACE>[Frederick, Md.? :</PUBPLACE>
+<PUBLISHER>Printed by Matthias Bartgis?,</PUBLISHER>
+<DATE>1781]</DATE>
+</PUBLICATIONSTMT><NOTESSTMT><NOTE>Describing the conviction and judgement passed against Peter Sueman, Nicolaus Andrews, Jost Blecher, John George Grafes, Adam Graves, Henry Schell, and Caspar Fritchie.</NOTE><NOTE>In English and German.</NOTE><NOTE>Although Bristol ascribes this to the press of Melchior Steiner of Philadelphia, the broadside was more likely printed at Frederick, Md., by the German-American printer, Matthias Bartgis.</NOTE></NOTESSTMT></BIBLFULL></SOURCEDESC></FILEDESC><ENCODINGDESC><PROJECTDESC><P>Header created with script marcschema2evansutf.xsl on 2014-07-29.</P></PROJECTDESC><EDITORIALDECL N="4"><P>Manually keyed and coded text linked to page images in accordance with level 4 of the TEI in Libraries guidelines.</P><P>Issued variously as SGML (TCP schema; ASCII text with mnemonic sdata character entities); displayable XML (TCP schema; characters represented either as UTF-8 Unicode or text strings within braces); or lossless XML (TEI P5, characters represented either as UTF-8 Unicode or TEI elements).</P><P>Keying and markup guidelines available at TCP web site (http://www.textcreationpartnership.org/docs/)</P></EDITORIALDECL></ENCODINGDESC><PROFILEDESC><LANGUSAGE ID="eng"><LANGUAGE>eng</LANGUAGE></LANGUSAGE><TEXTCLASS><KEYWORDS><TERM>Treason --  Maryland.</TERM><TERM>Crime --  Maryland.</TERM><TERM>Executions and executioners --  Maryland --  Frederick.</TERM><TERM>Trials (Treason) --  Maryland --  Frederick.</TERM><TERM>Criminals --  Maryland.</TERM><TERM>United States --  History --  Revolution, 1775-1783.</TERM><TERM>Broadsides.</TERM></KEYWORDS></TEXTCLASS></PROFILEDESC><REVISIONDESC><CHANGE><DATE>2008-03</DATE><RESPSTMT><RESP>TCP</RESP></RESPSTMT><ITEM>Assigned for keying and markup</ITEM></CHANGE><CHANGE><DATE>2008-04</DATE><RESPSTMT><RESP>SPi Global (Manila)</RESP></RESPSTMT><ITEM>Keyed and coded from Readex/Newsbank page images</ITEM></CHANGE><CHANGE><DATE>2008-06</DATE><RESPSTMT><RESP>Olivia Bottum</RESP></RESPSTMT><ITEM>Sampled and proofread</ITEM></CHANGE><CHANGE><DATE>2008-06</DATE><RESPSTMT><RESP>Olivia Bottum</RESP></RESPSTMT><ITEM>Text and markup reviewed and edited</ITEM></CHANGE><CHANGE><DATE>2008-09</DATE><RESPSTMT><RESP>pfs.</RESP></RESPSTMT><ITEM>Batch review (QC) and XML conversion</ITEM></CHANGE></REVISIONDESC></HEADER>
+<EEBO>
+<IDG S="marc" R="UM" ID="N33557">
+<STC T="E">43990</STC>
+<BIBNO T="aas">99006244</BIBNO>
+<VID></VID>
+</IDG>
+<TEXT LANG="eng ger">
+<BODY>
+<DIV1 TYPE="document">
+<PB REF="043990_0000_101DC469082AAED8"/>
+<PB REF="043990_0001_101DC439DEE74528"/>
+<HEAD>SENTENCE of Death for High Treason.</HEAD>
+<DIV2 LANG="eng" TYPE="version">
+<P>AT a special Court of Oyer and Terminer and Goal Delivery, held at Frederick Town, in the Month of July, 1781.</P>
+<P>Peter Sueman, Nicolaus Andrews, Jost Blecher, John George Grafes, Adam Graves, Henry Schell, and Caspar Fritchie; some of them Residents of Washington, the others of Frederick County, were indicted for High Treason, and convicted.</P>
+<P>The Judge of the said Court, the Honourable Alexander Contee Hanson, <ABBR>Esq</ABBR> pronounced the Judgment following against them seve∣rally, on the 25th of July, 1781.</P>
+<P>That they be carried to the Jail, of Frederick County, that they be drawn from thence, to the Gallows of Frederick Town, and be hanged thereon, that they be cut down on the Earth alive, that their Entrails be taken out, and burnt, while they are yet alive, that their heads be cut off, that their bodies be divided into four Parts, and that their Quarters be placed where his Excellency the Governor shall direct and appoint.</P>
+</DIV2>
+<DIV2 LANG="ger" TYPE="version">
+<P>Das Todes-Urtheil derjenigen die des Hoch Verraths schuldig befunden.</P>
+<P>In einem Blut Gericht, und Erledigung des Gefängnisses, welches in Frederichs-Taun, in Maryland, im Julius 1781 gehalten werden,</P>
+<P>Wurden die folgenden Männer, nämlich Peter Schumann, Nicolaus Andreas, Jost Blecher, Johann
+Georg Graff, Adam Graff, Henrich Schell, und Caspar Fritscht, des Hoch-Verraths beschuldiget, und nach einem Verhör dessen gültig befunden. Einige da∣von waren wohnhaft in Waschington, und die andern in Friederich Caunty.</P>
+<P>Worauf der Richter von dem besagten Gerichte, der Achtbare Alexander Contee Han∣son, Esquire, das folgende Todes Urtheil über einen jeden ins besondere, den 25sten Ju∣lius 1781 ertheilte, nämlich</P>
+<P>Dass sie in das Gefängniss von Friderich Caunty geführt werden sollen, und von dan∣nen in dem Galgen von Friederich Caunty ges<GAP DESC="illegible" REASON="indecipherable" EXTENT="4 letters" DISP="••••"/>t, daran gehenckt, und alsbald <GAP DESC="illegible" REASON="indecipherable" EXTENT="4 letters" DISP="••••"/>er herunter geschnitten werden sollen, ehe sie noch todt sind, sie sollen geöfnet, und ihre Ein∣geweide heraus genommen, und verbrant werden, weil sie noch lebendig sind, der Kopf soll ihnen abgeschlagen, und ihr Körper geviertheilt werden, und ein jedes Viert el davon soll an dem Plaz aufgesteckt werden, welchen seine Excellenz, der Gouverner, dazu bestimmen wird.</P>
+</DIV2>
+</DIV1>
+</BODY>
+</TEXT>
+</EEBO>
+</ETS>
+
