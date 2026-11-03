@@ -27,10 +27,10 @@ A source wears every desk it serves — these four answer this desk. Holdings ar
 |---|---|---|---|---|
 | `betamasaheft-works` | texts | attribution | wired · auto | 3,825 docs / 66,940 passages |
 | `dillmann` | dictionary | nc | wired · manual | 13,727 entries |
-| `hmml-reading-room` | texts | attribution | not yet wired | not synced yet |
+| `hmml-reading-room` | texts | attribution | wired · manual | 18,892 docs / 11,196 passages |
 | `traces` | texts | nc | wired · manual | 15 docs / 75,436 passages |
 
-**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 3 November 2026)</span>: `gez` 17,545 · `amh` 22.
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 3 November 2026)</span>: `gez` 24,490 · `syc` 8,212 · `ara-Syrc` 2,595 · `ara` 797 · `amh` 365.
 
 ## The desk's instruments
 

@@ -26,10 +26,10 @@ A source wears every desk it serves — these eleven answer this desk. Holdings 
 | `okhc` | texts | nc | wired · manual | 1,198,779 docs / 3,542,662 passages |
 | `sillok` | texts | attribution | wired · manual | 743 docs / 414,321 passages |
 | `sjw` | texts | attribution | wired · manual | 297 docs / 1,896,858 passages |
-| `wiktionary-ko` | dictionary | attribution | not yet wired | not synced yet |
-| `wiktionary-okm` | dictionary | attribution | not yet wired | not synced yet |
+| `wiktionary-ko` | dictionary | attribution | wired · manual | 64,457 entries |
+| `wiktionary-okm` | dictionary | attribution | wired · manual | 1,033 entries |
 
-**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 3 November 2026)</span>: `lzh` 1,121,896 · `ko` 58,366 · `jpn` 17,997 · `en` 2,735 · `fra` 25 · `okm` 6.
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 3 November 2026)</span>: `lzh` 1,121,896 · `ko` 122,823 · `jpn` 17,997 · `en` 2,735 · `okm` 1,039 · `fra` 25.
 
 ## The desk's instruments
 

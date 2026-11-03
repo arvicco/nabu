@@ -30,9 +30,9 @@ A source wears every desk it serves — these fourteen answer this desk. Holding
 | `sdbh` | dictionary | attribution | wired · manual | 7,932 entries |
 | `sefaria` | texts | open | wired · manual | 1,983 docs / 1,073,004 passages |
 | `ud` | treebank | nc | wired · manual | 83 docs / 329,980 passages |
-| `wiktionary-arc` | dictionary | attribution | not yet wired | not synced yet |
+| `wiktionary-arc` | dictionary | attribution | wired · manual | 2,396 entries |
 
-**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 3 November 2026)</span>: `hbo` 30,739 · `grc` 6,312 · `eng` 5,912 · `arc` 3,381 · `egy` 3,050 · `egy-Egyd` 1,424 · `ara` 962 · `cop` 456 · `heb` 408 · `lat` 318 … and 11 more (`nabu axis hebrew` lists all).
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 3 November 2026)</span>: `hbo` 30,739 · `grc` 6,312 · `eng` 5,912 · `arc` 5,777 · `egy` 3,050 · `egy-Egyd` 1,424 · `ara` 962 · `cop` 456 · `heb` 408 · `lat` 318 … and 11 more (`nabu axis hebrew` lists all).
 
 **Carried in by multilingual packs** (`ud` — whole-source members whose other languages ride along, as of 3 November 2026): `orv` 9 · `ota` 5 · `lzh` 4 · `frm` 3 · `fro` 3 … and 14 more (`nabu axis hebrew` lists all).
 

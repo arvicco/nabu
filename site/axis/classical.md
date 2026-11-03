@@ -37,13 +37,13 @@ A source wears every desk it serves — these twenty-five answer this desk. Hold
 | `perseus-greek` | texts | attribution | wired · auto | 1,419 docs / 394,706 passages |
 | `perseus-latin` | texts | attribution | wired · auto | 568 docs / 405,989 passages |
 | `proiel` | treebank | nc | wired · frozen | 12 docs / 51,321 passages |
-| `pta` | texts | attribution | not yet wired | not synced yet |
+| `pta` | texts | attribution | wired · manual | 113 docs / 8,778 passages |
 | `sigla` | inscriptions | nc | wired · manual | 787 docs / 3,097 passages |
-| `suda-translations` | texts | nc | not yet wired | not synced yet |
+| `suda-translations` | texts | nc | wired · manual | 27 docs / 31,341 passages |
 | `ud` | treebank | nc | wired · manual | 83 docs / 329,980 passages |
 | `vulgate` | texts | open | wired · manual | 73 docs / 35,809 passages |
 
-**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 3 November 2026)</span>: `grc` 120,818 · `lat` 58,697 · `gmy` 5,890 · `eng` 878 · `lab` 787 · `grc-Latn` 510 · `deu` 225 · `ecy-Latn` 22 · `gmh` 11 · `cop` 4 … and 4 more (`nabu axis classical` lists all).
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 3 November 2026)</span>: `grc` 120,931 · `lat` 58,697 · `gmy` 5,890 · `eng` 878 · `lab` 787 · `grc-Latn` 510 · `deu` 225 · `en` 27 · `ecy-Latn` 22 · `gmh` 11 … and 5 more (`nabu axis classical` lists all).
 
 **Carried in by multilingual packs** (`ud` — whole-source members whose other languages ride along, as of 3 November 2026): `orv` 9 · `ota` 5 · `lzh` 4 · `egy` 3 · `frm` 3 … and 15 more (`nabu axis classical` lists all).
 
