@@ -1,0 +1,796 @@
+{
+ "source": "concordanciatextos.pdf",
+ "provenance": "hand-verified against the printed concordance; volume numbers confirmed against file ordering",
+ "groups": [
+  {
+   "group": "vinaya",
+   "relation": "cluster",
+   "work": "Vinaya — Samantapāsādikā + subcommentaries",
+   "canon": {
+    "vols": [
+     1,
+     2,
+     3,
+     4,
+     5
+    ],
+    "files": [
+     "01Vin01",
+     "02Vin02",
+     "03Vin03",
+     "04Vin04",
+     "05Vin05"
+    ]
+   },
+   "commentary": {
+    "vols": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6
+    ],
+    "files": [
+     "01VinA01",
+     "02VinA02",
+     "03VinA03",
+     "04VinA04",
+     "05Kankha",
+     "06VinSg06"
+    ]
+   },
+   "subcommentary": {
+    "vols": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7
+    ],
+    "files": [
+     "01ViT01",
+     "02ViT02",
+     "03ViT03",
+     "04ViT04",
+     "05ViT05",
+     "06ViT06",
+     "07ViT07"
+    ]
+   },
+   "note": "Samantapāsādikā (comm 1-4) commentates the whole Vinaya canon collectively; Kaṅkhāvitaraṇī (5) is on the Pātimokkha, Vinayasaṅgaha (6) a digest. Volume-precise links need section anchoring."
+  },
+  {
+   "group": "dn-sila",
+   "relation": "1:1",
+   "work": "Dīgha Sīlakkhandhavagga — Sumaṅgalavilāsinī",
+   "canon": {
+    "vols": [
+     6
+    ],
+    "files": [
+     "06Di01"
+    ]
+   },
+   "commentary": {
+    "vols": [
+     7
+    ],
+    "files": [
+     "07DiA01"
+    ]
+   },
+   "subcommentary": {
+    "vols": [
+     8,
+     9,
+     10
+    ],
+    "files": [
+     "08DiT01",
+     "09DiT02",
+     "10DiT03"
+    ]
+   },
+   "note": ""
+  },
+  {
+   "group": "dn-maha",
+   "relation": "1:1",
+   "work": "Dīgha Mahāvagga",
+   "canon": {
+    "vols": [
+     7
+    ],
+    "files": [
+     "07Di02"
+    ]
+   },
+   "commentary": {
+    "vols": [
+     8
+    ],
+    "files": [
+     "08DiA02"
+    ]
+   },
+   "subcommentary": {
+    "vols": [
+     11
+    ],
+    "files": [
+     "11DiT04"
+    ]
+   },
+   "note": ""
+  },
+  {
+   "group": "dn-pathika",
+   "relation": "1:1",
+   "work": "Dīgha Pāthikavagga",
+   "canon": {
+    "vols": [
+     8
+    ],
+    "files": [
+     "08Di03"
+    ]
+   },
+   "commentary": {
+    "vols": [
+     9
+    ],
+    "files": [
+     "09DiA03"
+    ]
+   },
+   "subcommentary": {
+    "vols": [
+     12
+    ],
+    "files": [
+     "12DiT05"
+    ]
+   },
+   "note": ""
+  },
+  {
+   "group": "mn-mula",
+   "relation": "1:1",
+   "work": "Majjhima Mūlapaṇṇāsa — Papañcasūdanī",
+   "canon": {
+    "vols": [
+     9
+    ],
+    "files": [
+     "09Ma01"
+    ]
+   },
+   "commentary": {
+    "vols": [
+     10,
+     11
+    ],
+    "files": [
+     "10MaA01",
+     "11MaA02"
+    ]
+   },
+   "subcommentary": {
+    "vols": [
+     13,
+     14
+    ],
+    "files": [
+     "13MaT01",
+     "14MaT02"
+    ]
+   },
+   "note": ""
+  },
+  {
+   "group": "mn-majjhima",
+   "relation": "1:1",
+   "work": "Majjhima Majjhimapaṇṇāsa",
+   "canon": {
+    "vols": [
+     10
+    ],
+    "files": [
+     "10Ma02"
+    ]
+   },
+   "commentary": {
+    "vols": [
+     12
+    ],
+    "files": [
+     "12MaA03"
+    ]
+   },
+   "subcommentary": {
+    "vols": [
+     15
+    ],
+    "files": [
+     "15MaT03"
+    ]
+   },
+   "note": "sub vol 15 shared with Uparipaṇṇāsa"
+  },
+  {
+   "group": "mn-upari",
+   "relation": "1:1",
+   "work": "Majjhima Uparipaṇṇāsa",
+   "canon": {
+    "vols": [
+     11
+    ],
+    "files": [
+     "11Ma03"
+    ]
+   },
+   "commentary": {
+    "vols": [
+     13
+    ],
+    "files": [
+     "13MaA04"
+    ]
+   },
+   "subcommentary": {
+    "vols": [
+     15
+    ],
+    "files": [
+     "15MaT03"
+    ]
+   },
+   "note": "sub vol 15 shared with Majjhimapaṇṇāsa"
+  },
+  {
+   "group": "sn",
+   "relation": "cluster",
+   "work": "Saṁyutta — Sāratthappakāsinī",
+   "canon": {
+    "vols": [
+     12,
+     13,
+     14
+    ],
+    "files": [
+     "12Sam01",
+     "13Sam02",
+     "14Sam03"
+    ]
+   },
+   "commentary": {
+    "vols": [
+     14,
+     15,
+     16
+    ],
+    "files": [
+     "14SamA01",
+     "15SamA02",
+     "16SamA03"
+    ]
+   },
+   "subcommentary": {
+    "vols": [
+     16,
+     17
+    ],
+    "files": [
+     "16SaT01",
+     "17SaT02"
+    ]
+   },
+   "note": "3 canon / 3 comm / 2 sub; subcommentary collective."
+  },
+  {
+   "group": "an",
+   "relation": "cluster",
+   "work": "Aṅguttara — Manorathapūraṇī",
+   "canon": {
+    "vols": [
+     15,
+     16,
+     17
+    ],
+    "files": [
+     "15An01",
+     "16An02",
+     "17An03"
+    ]
+   },
+   "commentary": {
+    "vols": [
+     17,
+     18,
+     19
+    ],
+    "files": [
+     "17AnA01",
+     "18AnA02",
+     "19AnA03"
+    ]
+   },
+   "subcommentary": {
+    "vols": [
+     18,
+     19,
+     20
+    ],
+    "files": [
+     "18AnT01",
+     "19AnT02",
+     "20AnT03"
+    ]
+   },
+   "note": "canon 15 → comm 17,18; 16-17 → comm 19; sub roughly per-third."
+  },
+  {
+   "group": "khu-1",
+   "relation": "many",
+   "work": "Khuddaka: Khuddakapāṭha-Dhammapada-Udāna-Itivuttaka-Suttanipāta",
+   "canon": {
+    "vols": [
+     18
+    ],
+    "files": [
+     "18Khu01"
+    ]
+   },
+   "commentary": {
+    "vols": [
+     20,
+     21,
+     22,
+     23,
+     24,
+     25,
+     26
+    ],
+    "files": [
+     "20KhuA01",
+     "21KhuA02",
+     "22KhuA03",
+     "23KhuA04",
+     "24KhuA05",
+     "25KhuA06",
+     "26KhuA07"
+    ]
+   },
+   "subcommentary": {
+    "vols": [],
+    "files": []
+   },
+   "note": "one canon volume → seven commentary volumes"
+  },
+  {
+   "group": "khu-2",
+   "relation": "many",
+   "work": "Khuddaka: Vimāna-Peta-Thera-Therīgāthā",
+   "canon": {
+    "vols": [
+     19
+    ],
+    "files": [
+     "19Khu02"
+    ]
+   },
+   "commentary": {
+    "vols": [
+     27,
+     28,
+     29,
+     30,
+     31
+    ],
+    "files": [
+     "27KhuA08",
+     "28KhuA09",
+     "29KhuA10",
+     "30KhuA11",
+     "31KhuA12"
+    ]
+   },
+   "subcommentary": {
+    "vols": [],
+    "files": []
+   },
+   "note": ""
+  },
+  {
+   "group": "khu-apadana1",
+   "relation": "1:1",
+   "work": "Khuddaka: Apadāna I",
+   "canon": {
+    "vols": [
+     20
+    ],
+    "files": [
+     "20Khu03"
+    ]
+   },
+   "commentary": {
+    "vols": [
+     32
+    ],
+    "files": [
+     "32KhuA13"
+    ]
+   },
+   "subcommentary": {
+    "vols": [],
+    "files": []
+   },
+   "note": ""
+  },
+  {
+   "group": "khu-apadana2",
+   "relation": "many",
+   "work": "Khuddaka: Apadāna II + Buddhavaṁsa + Cariyāpiṭaka",
+   "canon": {
+    "vols": [
+     21
+    ],
+    "files": [
+     "21Khu04"
+    ]
+   },
+   "commentary": {
+    "vols": [
+     33,
+     34,
+     35
+    ],
+    "files": [
+     "33KhuA14",
+     "34KhuA15",
+     "35KhuA16"
+    ]
+   },
+   "subcommentary": {
+    "vols": [],
+    "files": []
+   },
+   "note": ""
+  },
+  {
+   "group": "khu-jataka1",
+   "relation": "many",
+   "work": "Khuddaka: Jātaka I",
+   "canon": {
+    "vols": [
+     22
+    ],
+    "files": [
+     "22Khu05"
+    ]
+   },
+   "commentary": {
+    "vols": [
+     36,
+     37,
+     38,
+     39
+    ],
+    "files": [
+     "36KhuA17",
+     "37KhuA18",
+     "38KhuA19",
+     "39KhuA20"
+    ]
+   },
+   "subcommentary": {
+    "vols": [],
+    "files": []
+   },
+   "note": ""
+  },
+  {
+   "group": "khu-jataka2",
+   "relation": "many",
+   "work": "Khuddaka: Jātaka II",
+   "canon": {
+    "vols": [
+     23
+    ],
+    "files": [
+     "23Khu06"
+    ]
+   },
+   "commentary": {
+    "vols": [
+     40,
+     41,
+     42
+    ],
+    "files": [
+     "40KhuA21",
+     "41KhuA22",
+     "42KhuA23"
+    ]
+   },
+   "subcommentary": {
+    "vols": [],
+    "files": []
+   },
+   "note": ""
+  },
+  {
+   "group": "khu-mahaniddesa",
+   "relation": "1:1",
+   "work": "Khuddaka: Mahāniddesa",
+   "canon": {
+    "vols": [
+     24
+    ],
+    "files": [
+     "24Khu07"
+    ]
+   },
+   "commentary": {
+    "vols": [
+     43
+    ],
+    "files": [
+     "43KhuA24"
+    ]
+   },
+   "subcommentary": {
+    "vols": [],
+    "files": []
+   },
+   "note": ""
+  },
+  {
+   "group": "khu-culaniddesa",
+   "relation": "1:1",
+   "work": "Khuddaka: Cūḷaniddesa",
+   "canon": {
+    "vols": [
+     25
+    ],
+    "files": [
+     "25Khu08"
+    ]
+   },
+   "commentary": {
+    "vols": [
+     44
+    ],
+    "files": [
+     "44KhuA25"
+    ]
+   },
+   "subcommentary": {
+    "vols": [],
+    "files": []
+   },
+   "note": ""
+  },
+  {
+   "group": "khu-patisambhida",
+   "relation": "1:1",
+   "work": "Khuddaka: Paṭisambhidāmagga — Saddhammappakāsinī",
+   "canon": {
+    "vols": [
+     26
+    ],
+    "files": [
+     "26Khu09"
+    ]
+   },
+   "commentary": {
+    "vols": [
+     46,
+     47
+    ],
+    "files": [
+     "46KhuA27",
+     "47KhuA28"
+    ]
+   },
+   "subcommentary": {
+    "vols": [],
+    "files": []
+   },
+   "note": ""
+  },
+  {
+   "group": "khu-netti",
+   "relation": "1:1",
+   "work": "Khuddaka: Netti-Peṭakopadesa",
+   "canon": {
+    "vols": [
+     27
+    ],
+    "files": [
+     "27Khu10"
+    ]
+   },
+   "commentary": {
+    "vols": [
+     45
+    ],
+    "files": [
+     "45KhuA26"
+    ]
+   },
+   "subcommentary": {
+    "vols": [
+     21
+    ],
+    "files": [
+     "21KhuT01"
+    ]
+   },
+   "note": "commentary vol 45 out of sequence"
+  },
+  {
+   "group": "khu-milinda",
+   "relation": "none",
+   "work": "Khuddaka: Milindapañha",
+   "canon": {
+    "vols": [
+     28
+    ],
+    "files": [
+     "28Khu11"
+    ]
+   },
+   "commentary": {
+    "vols": [],
+    "files": []
+   },
+   "subcommentary": {
+    "vols": [],
+    "files": []
+   },
+   "note": "no commentary and no subcommentary in the edition"
+  },
+  {
+   "group": "abhi-dhs",
+   "relation": "1:1",
+   "work": "Abhidhamma: Dhammasaṅgaṇī — Aṭṭhasālinī",
+   "canon": {
+    "vols": [
+     29
+    ],
+    "files": [
+     "29Abhi01"
+    ]
+   },
+   "commentary": {
+    "vols": [
+     48
+    ],
+    "files": [
+     "48AbhiA01"
+    ]
+   },
+   "subcommentary": {
+    "vols": [
+     22
+    ],
+    "files": [
+     "22AbhiT01"
+    ]
+   },
+   "note": ""
+  },
+  {
+   "group": "abhi-vbh",
+   "relation": "1:1",
+   "work": "Abhidhamma: Vibhaṅga — Sammohavinodanī",
+   "canon": {
+    "vols": [
+     30
+    ],
+    "files": [
+     "30Abhi02"
+    ]
+   },
+   "commentary": {
+    "vols": [
+     49
+    ],
+    "files": [
+     "49AbhiA02"
+    ]
+   },
+   "subcommentary": {
+    "vols": [
+     23
+    ],
+    "files": [
+     "23AbhiT02"
+    ]
+   },
+   "note": ""
+  },
+  {
+   "group": "abhi-panca",
+   "relation": "shared",
+   "work": "Abhidhamma: Dhātukathā…Paṭṭhāna — Pañcapakaraṇa-aṭṭhakathā",
+   "canon": {
+    "vols": [
+     31,
+     32,
+     33,
+     34,
+     35,
+     36,
+     37,
+     38,
+     39,
+     40
+    ],
+    "files": [
+     "31Abhi03",
+     "32Abhi04",
+     "33Abhi05",
+     "34Abhi06",
+     "35Abhi07",
+     "36Abhi08",
+     "37Abhi09",
+     "38Abhi10",
+     "39Abhi11",
+     "40Abhi12"
+    ]
+   },
+   "commentary": {
+    "vols": [
+     50
+    ],
+    "files": [
+     "50AbhiA03"
+    ]
+   },
+   "subcommentary": {
+    "vols": [
+     24
+    ],
+    "files": [
+     "24AbhiT03"
+    ]
+   },
+   "note": "ten canon volumes (Dhātukathā, Puggalapaññatti, Kathāvatthu, Yamaka I-III, Paṭṭhāna I-V) share ONE commentary (50) and one subcommentary (24)"
+  },
+  {
+   "group": "visuddhimagga",
+   "relation": "standalone",
+   "work": "Visuddhimagga (common to all three piṭakas)",
+   "canon": {
+    "vols": [],
+    "files": []
+   },
+   "commentary": {
+    "vols": [
+     51,
+     52
+    ],
+    "files": [
+     "51Vism01",
+     "52Vism02"
+    ]
+   },
+   "subcommentary": {
+    "vols": [
+     25,
+     26
+    ],
+    "files": [
+     "25VsmT01",
+     "26VsmT02"
+    ]
+   },
+   "note": "a standalone treatise, not a commentary on any canon volume"
+  }
+ ]
+}

@@ -4700,6 +4700,40 @@ oracc:
   # open/CC0).
   translations: true
 
+osbct:   # P154, 02-sources row 335
+  adapter: Nabu::Adapters::Osbct
+  adopted: "2026-11-02"
+  axes: [indic, buddhist]
+  wired: false   # bin/nabu enable osbct, then bin/nabu sync osbct — ONE Zenodo zip
+                 # (463 MB) read by HTTP Range: 245 members ≈ 27 MB transferred,
+                 # 132 MB on disk (the search index, lookup stores, reader side
+                 # maps and working files never transferred; ≈ 1–3 min fetch,
+                 # parse of 118 volumes / 75M chars a few minutes). EXPECT 118
+                 # docs / 89,512 passages, 0 errored, 4 site-metadata files
+                 # skipped by rule (census 2026-11-02 over the whole v2.11.0
+                 # unpack: canon 40 / 49,453 · commentary 52 / 29,206 ·
+                 # subcommentary 26 / 10,853). Eyeball nabu show
+                 # urn:nabu:osbct:08Di03:0 (Pāthikasutta §1, "Evaṁ me sutaṁ",
+                 # the Syā/Ka readings in apparatus) and 5 random, probe nabu
+                 # search Pāthikaputto, then flip.
+  sync_policy: frozen   # an immutable Zenodo version; a new release = an owner re-pin
+  # The Sixth Buddhist Council Tipiṭaka Unicode corpus (IEBH / BTHAR;
+  # Zenodo 23541744 v2.11.0): the Chaṭṭha Saṅgāyana canon WITH its
+  # Aṭṭhakathā and Ṭīkā, converted from the Ministry of Religious Affairs,
+  # Yangon romanised edition (2008, from the Myanmar edition of 2001) —
+  # NOT VRI's CST digital edition (the record says so). Document = volume,
+  # passage = paragraph; the printed apparatus (variant readings with
+  # sigla, cross-references) rides each paragraph. License: the record's
+  # field is cc-by-4.0, but the deposit's LICENSE.md grants CC BY 4.0 over
+  # its DERIVED data only; the Pāḷi text it redistributes "on [the
+  # edition's] terms" — the Ministry edition's notice permitting
+  # duplication "for free, non-commercial distribution" (README: "It is
+  # not public domain") → class nc. Unverified: the Ministry's notice
+  # itself (the deposit omits the source PDFs) and the edition's rights
+  # position; commercial reuse is referred by the deposit to the
+  # publisher. Overlap census (adapter header): a witness beside
+  # suttacentral and tipitaka-lk, not a duplicate; the Ṭīkā layer is new.
+
 oshb:
   adapter: Nabu::Adapters::Oshb
   adopted: "2026-07-18"

@@ -1,0 +1,62 @@
+{
+ "0": [
+  {
+   "n": 1,
+   "text": "Anuppiyaṁ nāma (Syā)",
+   "variants": [
+    {
+     "reading": "Anuppiyaṁ nāma",
+     "sigla": [
+      "Syā"
+     ]
+    }
+   ],
+   "xrefs": []
+  },
+  {
+   "n": 2,
+   "text": "Anupiyaṁ (Ka)",
+   "variants": [
+    {
+     "reading": "Anupiyaṁ",
+     "sigla": [
+      "Ka"
+     ]
+    }
+   ],
+   "xrefs": []
+  }
+ ],
+ "2": [
+  {
+   "n": 1,
+   "text": "Yāvañca (Sī, Syā, I)",
+   "variants": [
+    {
+     "reading": "Yāvañca",
+     "sigla": [
+      "Sī",
+      "Syā",
+      "I"
+     ]
+    }
+   ],
+   "xrefs": []
+  }
+ ],
+ "4": [
+  {
+   "n": 1,
+   "text": "Paññāpetīti (I)",
+   "variants": [
+    {
+     "reading": "Paññāpetīti",
+     "sigla": [
+      "I"
+     ]
+    }
+   ],
+   "xrefs": []
+  }
+ ]
+}

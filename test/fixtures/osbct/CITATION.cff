@@ -1,0 +1,297 @@
+cff-version: 1.2.0
+title: "Sixth Buddhist Council Tipiṭaka (Chaṭṭhasaṅgītipiṭaka) — Unicode corpus"
+message: "If you use this corpus, please cite it using these metadata."
+type: dataset
+abstract: >-
+  A searchable, cross-referenced Unicode corpus of the Sixth Buddhist Council recension of the
+  Pāḷi Tipiṭaka with its Aṭṭhakathā (commentaries) and Ṭīkā (subcommentaries), 118 volumes and
+  89,512 paragraphs, converted from the legacy-font edition published by the Ministry of
+  Religious Affairs, Yangon. Includes structural extraction anchored to the printed page,
+  54,036 variant readings and 27,153 cross-references transcribed from the printed footnote
+  apparatus, and cross-layer paragraph linking.
+authors:
+  - name: "Instituto de Estudios Buddhistas Hispano (IEBH)"
+  - name: "Buddhismo Theravāda Hispano A.R. (BTHAR)"
+keywords:
+  - Pāḷi
+  - Tipiṭaka
+  - Theravāda
+  - Aṭṭhakathā
+  - Ṭīkā
+  - Chaṭṭhasaṅgīti
+  - digital humanities
+url: "https://buddha-dhamma.net"
+repository-code: "https://github.com/bthar-mx/OSBCT"
+license: CC-BY-4.0
+version: "2.11.0"
+date-released: "2026-10-21"
+# 2026-10-21, v2.11.0: no text changed — the reader's word pane, and plain-text
+# pages.  Corpus figures identical to 2.10.1.  Word pane: the Abhidhāna tab from
+# IEBH's edition (abhidhana.buddha-dhamma.net), first; links into the IEBH
+# glossary of grammatical terms and the Saddanīti roots (site/reader/
+# gram-index.json); DPD entries by headword, the clicked form marked in DPD's
+# own declension table; the clicked word also selected (⌘C, Padakosa ⌃⌥P); a
+# sandhi line for the 363,254 corpus forms with no DPD headword (IEBH solver
+# readings for 33,030, else DPD's split labelled as DPD's, unverified); and a
+# Sandhi button running the IEBH solver — gramaticas.buddha-dhamma.net's engine
+# copied unmodified (site/reader/sandhi-solver.js, _panel/build_solver.py) —
+# on the clicked word.  The sandhi data and the solver's lexicon sit in the
+# evaluation store, stores/lookup_eval/, because both were built with DPD.
+# Also: the Dīghanikāya as 34 plain HTML sutta pages with commentary links
+# (site/t/dn/), robots.txt, sitemaps, descriptions and canonicals, and
+# pipeline/retitle_pdfs.py.  Minor: new reader features, the 2.9.0/2.10.0
+# precedent.  Three-file checklist bumped together, tag cut LAST.
+# 2026-09-09, v2.10.1: ONE WORD of the text changes, and the fault is the
+# printed edition's own — the first such applied to the served text.  25KhuA06
+# printed p. 58 prints "hoti. A yaṁ tāvetthapadato" with a space inside Ayaṁ
+# at a line end; the original text layer has the gap too, so this is a
+# misprint of the edition, not of the conversion.  Reported by the reader,
+# verified at the printed page first, recorded as E078 with the printed
+# reading preserved and the emendation attributed, and applied at the
+# reader's decision by pipeline/apply_text_errata.py from the register:
+# corpus paragraph, verse store, page-break map (re-derived: Δ-1, two later
+# breaks moved by one), search index and postings, three frequency counters
+# (stores on R2: r2_upload.sh + WLV 20260909a).  Nothing else moved.  Patch,
+# not minor: the 2.7.1 precedent.  Three-file checklist bumped together, tag
+# cut LAST.
+# 2026-09-06, v2.10.0: no text changed — A PHRASE IS CONSECUTIVE WORDS.  A phrase
+# had been counted as a substring of the paragraph text: `tassa bhagavato`
+# inside *etassa bhagavato* (63 paragraphs), and *dhammā”ti* refused for
+# `dhammā ti` because the edition closes the quotative up against its word.
+# Now consecutive tokens, each word as the single-word search matches it;
+# every phrase result line names the rule.  Counts move both ways (437/318
+# for tassa bhagavato, was 527/379); pipeline/measure_phrase_semantics.py
+# computes both rules.  A position store was measured and NOT built.  Also:
+# the sweep reads one n-gram shard (tg/) instead of the 12.5 MB key list, and
+# the section names one shard (tn/) instead of the 1.09 MB names.json; the
+# largest file a search fetches is 514 KB, gated.  Every new check_search.js
+# assertion failed on the previous build first.  Three-file checklist bumped
+# together, tag cut LAST.
+# 2026-09-05, v2.9.0: no text changed — search matches diacritics EXACTLY, and
+# stops downloading the canon.  Every search key had been folded (tassā stored
+# as tassa), so a search for either word counted both — 36,644 against the
+# 4,322 that are tassā; 34,134 folded keys (5.3%) were merging printed forms.
+# The index now stores the printed tokens; folding is the "Ignore diacritics"
+# switch, off by default, and every result line names its mode.  The search
+# no longer fetches per-volume files (117 of them, ~40 MB, for one common
+# word): postings shards + text chunks, 2.3 MB for the same search, one
+# implementation (site/searchcore.js) for both pages, pipeline/perf_search.js
+# as the performance gate with the before and after recorded.  Dictionary
+# panel: six round trips -> four, and the R2 origin is now edge-cached.
+# check_search.js was made to FAIL on the previous build first.  Three-file
+# checklist bumped together, tag cut LAST.
+# 2026-08-31: the AUTHOR NAME was wrong, and had been wrong in every deposit.
+# This file, `.zenodo.json`, the README and `LICENSE.md` all named "Buddhismo
+# Theravāda México-Hispano AR".  The entity recognised by SEGOB (Secretaría de
+# Gobernación) as an Asociación Religiosa is "Buddhismo Theravāda Hispano
+# A.R." — without México — and that is the name under which the GitHub
+# organisation `bthar-mx` is held.  Corrected in all four files.
+# NO VERSION BUMP and no tag: the text, the corpus figures and every DOI are
+# untouched, so the three-file checklist does not apply here.
+# !!! THE TWELVE EXISTING ZENODO RECORDS STILL CARRY THE OLD NAME.  Only
+# `.zenodo.json` reaches a deposit, and only deposits minted after this commit.
+# v1.0.0 through v2.8.0 credit an entity under a name it is not registered
+# under; each can be corrected in place on the record, which does not affect
+# its DOI (as was done for v2.4.0, see the note below).
+# 2026-08-31: THE README CLAIMED THE PĀḶI TEXT WAS PUBLIC DOMAIN.  It is not.
+# `LICENSE.md` has always stated the position correctly — the edition's notice
+# permits duplication for free, NON-COMMERCIAL distribution — and the README
+# contradicted both that file and its own next sentence.  The same overstated
+# claim was live on the site (`site/about.html`, ab_source2, both languages)
+# and is corrected there too.  The corpus figures and DOIs are unaffected.
+# 2026-08-16, v2.8.0: no text changed — the niggahita becomes the reader's
+# choice.  The reader and the search page gain a toggle between the edition's
+# ṁ and the modern ṃ.  Display-only and bijective: the stored corpus carries
+# the edition's ṁ exclusively (verified — no ṃ in any served volume,
+# apparatus, link or index file), so the swap runs over the screen, never the
+# data, and switching back restores the display byte-exact.  Search matched
+# both conventions already; the dictionary panel folds a clicked or typed
+# word back to the edition's form before lookup.  Two same-day corrections
+# are in the release and stated rather than hidden: the toggle's own tooltip
+# was being rewritten by the very transform it explains (marked exempt), and
+# the first exemption froze the button's label (the marker moved off the
+# button).  Regression suite _niggtest.js, 24 cases, runs the shipped code.
+# Three-file checklist bumped together, tag cut LAST.
+# 2026-08-09, v2.7.1: ONE WORD of the text changes, and it is the first time
+# since v2.3.0 that any reading has moved — 25VsmT01 `pathavīkasiṇādivaḍḍhanī`
+# becomes `…vaḍḍhane`, settled by the reader against the printed page, one
+# character for one character, so pbreak re-derived BYTE-EQUAL and the corpus
+# figures in the abstract stand unchanged.  The rest completes what v2.7.0 left
+# open: 41 register entries confirmed (49 of 68), eleven wrong suggestions
+# corrected with their superseded readings kept, and NINE review-sheet sites
+# WITHDRAWN — the PDFs read correctly at every one and the corrupt forms lived
+# only in a gitignored snapshot three weeks stale.  Three-file checklist bumped
+# together, tag cut LAST.
+# 2026-08-09, v2.7.0: no text changed — the errata register under scrutiny.
+# E021 resolved AGAINST both guesses: the printed x at 10Ma02 p.247 is the
+# edition's own position siglum (paired with the + below it, one unnumbered
+# foot-note); nothing applied, two superseded suggestions recorded in the
+# entry.  The glyph review sheet (pipeline/build_glyph_review.py) renders
+# all 50 unresolved census-glyph sites beside their printed pages; the
+# reader's verdicts on 49 are recorded in _review/ — 37 confirm readings the
+# served text already carries, 12 await per-row application.  The siglum
+# measure (pipeline/measure_sigla.py): 1,427 of 2,535 symbol-marked
+# paragraphs carry no apparatus entry at all.  Three-file checklist bumped
+# together, tag cut LAST.
+# 2026-08-08, v2.6.0: no text changed — 118 volumes, 89,512 paragraphs,
+# RE-COUNTED and exact.  The release is the reader and the search again:
+# layer-ordered results, the bucketed term index, the dictionary panel's
+# gear, the DPD refresh (2026-07-28) with its family tables working for the
+# first time, and the version said on every page.  All three checklist
+# files bumped together, tag cut LAST.
+# 2026-08-08, v2.5.0: no text changed in this release either.  The paragraph
+# figure was RE-COUNTED by the method below and reproduces exactly: 118 volumes,
+# 89,512 paragraphs.  Variants and cross-references are re-stated as at v2.4.0.
+# (For the record: counting the `variants`/`xrefs` entries of the apparatus maps
+# today gives 55,241 and 34,048 — each exactly ONE more than the figures the
+# v2.3.0 note already records as not reproducible by that method.  The
+# discrepancy predates this release and is stated, not resolved.)
+# The release is the reader and the search: the printed footnote apparatus
+# reaches the page, and both search UIs answer multi-word, phrase and wildcard
+# queries.  Both metadata files bumped together, tag cut LAST, as below.
+# !!! BUMPING THIS FILE ALONE DOES NOTHING TO THE DEPOSIT. `.zenodo.json` EXISTS
+# IN THE REPOSITORY ROOT, AND WHEN IT DOES, ZENODO IGNORES THIS FILE ENTIRELY --
+# not "prefers", ignores. Zenodo's own documentation says so.
+#
+# So the release checklist is BOTH files, every time — and since 2026-08-09
+# a THIRD, because the site now says its version on every page:
+#     .zenodo.json  -> "version", and the "New in x.y.z" paragraph of "description"
+#     CITATION.cff  -> "version", "date-released", and the new DOI once minted
+#     site/i18n.js  -> window.OSBCT_VERSION (painted into every .sitever element)
+#
+# Found on 2026-08-07 with the v2.4.0 tag not yet cut: this file had been bumped
+# to 2.4.0 and `.zenodo.json` still said 2.3.0, so the deposit would have been
+# minted describing the previous release while this file described the current
+# one. That is the THIRD time this project's citation metadata has been a
+# release behind -- see the two notes below -- and the first time the cause was
+# that the wrong file was being maintained.
+#
+# !!! AND IT WAS CAUGHT TOO LATE. The v2.4.0 tag had already been cut at the
+# commit before the fix, so the DEPOSITED tarball declares 2.3.0 in
+# `.zenodo.json` while declaring 2.4.0 here. The Zenodo record's metadata was
+# corrected in place (which does not affect the DOI); the archived files could
+# not be. Recorded, not hidden: `docs/DEPOSIT_ERRATA.md`.
+#
+# The ordering that would have prevented it: CUT THE TAG LAST, after every
+# metadata file is committed and pushed -- not between two of them.
+# 2026-08-07, v2.4.0: the corpus figures in the abstract are DELIBERATELY
+# unchanged. No text changed in that release -- it moved the dictionary stores
+# out of site/ to a bucket and gave the reader a fallback to the copy inside
+# this deposit. 118 volumes, 89,512 paragraphs, 54,036 variants and 27,153
+# cross-references are the same numbers, re-stated rather than re-counted, and
+# that is the correct treatment: a citation of v2.3.0 and a citation of v2.4.0
+# name the same text.
+# !!! THIS FILE WAS A RELEASE BEHIND.  It declared 2.1.0 while the repository was
+# tagged v2.2.0 (2026-08-02), so every citation named a superseded version — the
+# same failure the DOI note below records, one field over.  Bumping `version`
+# and `date-released` is part of tagging, not an afterthought.
+#
+# THE FIGURES ABOVE ARE COUNTED, NOT CARRIED FORWARD.  Method, so they can be
+# re-derived: paragraphs are the `paragraphs` arrays of the 118 `site/<VOL>.json`;
+# variants and cross-references are the `variants` and `xrefs` entries of the
+# per-volume maps in `site/reader/apparatus/`.  The previous deposit described
+# 86,365 paragraphs, 55,240 variants and 34,047 cross-references; the paragraph
+# figure moved because four Khuddaka commentaries were re-segmented, and the
+# other two could not be reproduced by this method and are stated as measured
+# rather than repeated.
+# THE CONCEPT DOI, which always resolves to the newest deposited version.
+# It used to name 10.5281/zenodo.21495339 — the version DOI of v1.0.0, dated
+# 22 July — while this file declared version 2.0.0, so every citation sent the
+# reader to a superseded archive.
+doi: "10.5281/zenodo.21495338"
+identifiers:
+  - type: doi
+    value: "10.5281/zenodo.21495338"
+    description: "Zenodo concept DOI — all versions; resolves to the latest"
+  # !!! EVERY DEPOSIT IS LISTED HERE, and the list is now complete.  v2.2.0 was
+  # missing from this file for four days -- not because it was never deposited,
+  # but because nothing added the line.  It exists: 10.5281/zenodo.21760727.
+  # Checked against the Zenodo record's own Versions panel, 2026-08-06, which is
+  # also where the concept DOI above was confirmed as `Cite all versions`.
+  # Minted 2026-09-06 and READ FROM THE RECORD (zenodo.org/records/22527597),
+  # not guessed: version 2.10.0, publication date 2026-09-06, the "New in
+  # 2.10.0" paragraph present at minting — the phrase rule (consecutive
+  # words), the tg/ and tn/ shards, no text changed; deposit
+  # bthar-mx/OSBCT-v2.10.0.zip, 451 MB (the 890 tn/ files are the growth).
+  # SEVENTH CONSECUTIVE DEPOSIT to arrive describing itself correctly.  No
+  # in-place correction needed.
+  - type: doi
+    value: "10.5281/zenodo.22527597"
+    description: "Zenodo archive of v2.10.0 (6 September 2026)"
+  # Minted 2026-09-05 (Zenodo stamps it 2026-09-06 — its clock is UTC and the
+  # release was published late in the evening in Mexico; that is not an error
+  # to correct) and READ FROM THE RECORD (zenodo.org/records/22421817), not
+  # guessed: version 2.9.0, the "New in 2.9.0" paragraph present at minting —
+  # exact diacritics and the postings-shard search, no text changed, deposit
+  # bthar-mx/OSBCT-v2.9.0.zip, 398.7 MB (the first deposit under the
+  # organisation's name).  SIXTH CONSECUTIVE DEPOSIT to arrive describing
+  # itself correctly.  No in-place correction needed.
+  - type: doi
+    value: "10.5281/zenodo.22421817"
+    description: "Zenodo archive of v2.9.0 (5 September 2026)"
+  # Minted 2026-08-16 and READ FROM THE RECORD (zenodo.org/records/21967270),
+  # not guessed: "Published August 16, 2026 | Version 2.8.0", with the "New in
+  # 2.8.0" paragraph on the record at minting — the niggahita toggle release,
+  # no text changed, deposit admin-iebh/OSBCT-v2.8.0.zip, 358.3 MB.  FIFTH
+  # CONSECUTIVE DEPOSIT to arrive describing itself correctly.  No in-place
+  # correction needed.
+  - type: doi
+    value: "10.5281/zenodo.21967270"
+    description: "Zenodo archive of v2.8.0 (16 August 2026)"
+  # Minted 2026-08-09 and READ FROM THE RECORD (zenodo.org/records/21864177),
+  # not guessed: "Published August 9, 2026 | Version 2.7.1", with the "New in
+  # 2.7.1" paragraph on the record at minting — including the sentence that
+  # states the ONE moved word first.  FOURTH CONSECUTIVE DEPOSIT to arrive
+  # describing itself correctly, and the first of them to describe a release
+  # in which the text actually changed.  No in-place correction needed.
+  - type: doi
+    value: "10.5281/zenodo.21864177"
+    description: "Zenodo archive of v2.7.1 (9 August 2026)"
+  # Minted 2026-08-09 and READ FROM THE RECORD ITSELF (zenodo.org/records/21863987),
+  # not guessed: "Published August 9, 2026 | Version 2.7.0", with the "New in
+  # 2.7.0" paragraph already on the record at minting.  THIRD CONSECUTIVE
+  # DEPOSIT TO ARRIVE DESCRIBING ITSELF CORRECTLY — the three-file checklist
+  # and tag-cut-last ordering, now routine.  No in-place correction needed.
+  - type: doi
+    value: "10.5281/zenodo.21863987"
+    description: "Zenodo archive of v2.7.0 (9 August 2026)"
+  # Minted 2026-08-08, provided by the reader from the record
+  # (doi.org/10.5281/zenodo.21855790).  Second consecutive deposit to arrive
+  # describing itself correctly — the three-file checklist and tag-cut-last
+  # ordering, now routine.
+  - type: doi
+    value: "10.5281/zenodo.21855790"
+    description: "Zenodo archive of v2.6.0 (8 August 2026)"
+  # Minted 2026-08-08, read from the record itself (zenodo.org/records/21853330),
+  # not guessed.  FIRST DEPOSIT TO ARRIVE DESCRIBING ITSELF CORRECTLY: version
+  # 2.5.0 and the "New in 2.5.0" paragraph were on the record at minting,
+  # because both metadata files were committed and pushed BEFORE the tag was
+  # cut — the ordering the v2.4.0 erratum prescribed, followed for the first
+  # time.  No in-place correction was needed.
+  - type: doi
+    value: "10.5281/zenodo.21853330"
+    description: "Zenodo archive of v2.5.0 (8 August 2026)"
+  # Minted 2026-08-07 and taken from the record's own Versions panel, not
+  # guessed. Zenodo listed it as "Version 2.3.0" on arrival, which is the
+  # erratum in docs/DEPOSIT_ERRATA.md showing through: the deposited
+  # `.zenodo.json` said 2.3.0 because the tag was cut before the fix. The
+  # record's metadata was corrected in place afterwards; the DOI below is
+  # unaffected by that edit and is the citable identifier for v2.4.0.
+  - type: doi
+    value: "10.5281/zenodo.21840816"
+    description: "Zenodo archive of v2.4.0 (7 August 2026)"
+  - type: doi
+    value: "10.5281/zenodo.21826574"
+    description: "Zenodo archive of v2.3.0 (6 August 2026)"
+  - type: doi
+    value: "10.5281/zenodo.21760727"
+    description: "Zenodo archive of v2.2.0 (2 August 2026)"
+  - type: doi
+    value: "10.5281/zenodo.21727002"
+    description: "Zenodo archive of v2.1.0 (31 July 2026)"
+  - type: doi
+    value: "10.5281/zenodo.21708525"
+    description: "Zenodo archive of v2.0.0 (30 July 2026)"
+  - type: doi
+    value: "10.5281/zenodo.21495339"
+    description: "Zenodo archive of v1.0.0 (22 July 2026)"

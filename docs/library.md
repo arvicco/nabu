@@ -1872,3 +1872,20 @@ own period spelling (66 books / 31,102 verses), the American Bible
 Society's Chamorro Gospels, Acts and Psalms (6 / 7,245), and the
 Pohnpeian New Testament and Psalms in the old alphabet (28 / 10,415;
 open) — registered but not yet wired.
+
+## 8ba. The Sixth Council Tipiṭaka with its subcommentaries, and the Ming examination records (P154)
+
+Expected counts from the fixture-time censuses (the gate's first syncs
+confirm them):
+
+**`osbct`** — the Sixth Buddhist Council (Chaṭṭha Saṅgāyana) Tipiṭaka
+in the romanised edition of the Ministry of Religious Affairs, Yangon
+(2008, from the Myanmar edition of 2001), as IEBH / BTHAR's Unicode
+corpus: the canon, its aṭṭhakathā and — new to the library — its
+ṭīkā, 118 volumes / 89,512 paragraphs, every paragraph carrying the
+printed apparatus (variant readings with their witness sigla, and
+cross-references). A third witness of the canon beside SuttaCentral's
+Mahāsaṅgīti and tipitaka.lk's Buddha Jayanthi edition, and a second of
+the commentaries beside tipitaka.lk's CST text. Held non-commercially:
+the edition's own notice permits free, non-commercial distribution
+(the deposit's derived data are CC BY 4.0).
