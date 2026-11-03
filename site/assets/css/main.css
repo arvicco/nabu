@@ -9,6 +9,29 @@
   --accent-dark: #5c2419;
   --code-bg: #f1ede3;
   --aside-bg: #f4f1e8;
+  --zebra: rgba(217, 210, 194, 0.15);   /* even table rows: --rule, faint */
+  color-scheme: light;
+}
+
+/* Dark scheme: lamplight on clay. A warm umber ground (fired clay after
+   dusk), parchment-toned ink, ember links. Every surface reads its colors
+   from the tokens above, so this block is the whole dark palette.
+   Contrast on the ground: ink 13.2:1, muted 6.7:1, links 7.7:1, hover
+   10.7:1 (WCAG AA body text needs 4.5:1). In this scheme --accent-dark
+   is the emphatic link state, so it runs brighter, not darker. */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --paper: #1c1713;
+    --ink: #e9ddc6;
+    --muted: #ab9d86;
+    --rule: #40352b;
+    --accent: #e39a68;      /* ember */
+    --accent-dark: #f4bf8c; /* ember, flaring */
+    --code-bg: #26201a;
+    --aside-bg: #241e18;
+    --zebra: rgba(64, 53, 43, 0.35);
+    color-scheme: dark;
+  }
 }
 
 html {
@@ -242,7 +265,7 @@ th {
 }
 
 tbody tr:nth-child(even) {
-  background: rgba(217, 210, 194, 0.15);
+  background: var(--zebra);
 }
 
 /* ---- Footer ---- */
