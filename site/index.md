@@ -6,6 +6,17 @@ description: >-
   local, searchable, citable library, with a read-only interface for AI tools.
 ---
 
+**A library of the ancient world that lives on your own computer.** Nabu
+downloads freely licensed ancient texts — Homer, the Bible, cuneiform
+tablets, the Chinese classics and far more — and lets you search them all
+at once, offline. It is made for scholars, students and anyone who reads
+old languages: look up a word such as μῆνις, the first word of the *Iliad*,
+and every passage that uses it comes back with an exact citation and the
+license it is held under.
+
+**Try it:** the [Quickstart]({{ '/quickstart/' | relative_url }}) takes you
+from download to your first search in about ten minutes.
+
 Nabu is a piece of personal research infrastructure that gathers the world's
 openly licensed digital corpora of antiquity — Homer and the Greek canon, the
 Latin classics, the documentary papyri of Egypt, the Latin inscriptions of
