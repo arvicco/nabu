@@ -3984,6 +3984,24 @@ madurai:   # P122-3, 02-sources row 268
   # → 755 docs / 1,214,683 line passages, 0 quarantined; 10,294 non-Tamil
   # lines counted, not minted (parse census ~70 s).
 
+mahan-kosh:   # P154, 02-sources row 344
+  adapter: Nabu::Adapters::MahanKosh
+  adopted: "2026-11-02"
+  axes: [indic]
+  wired: false   # first sync: bin/nabu enable mahan-kosh && bin/nabu sync mahan-kosh
+                 # (two raw GETs, ~40 MB). EXPECT 1 dictionary doc → 64,218 pan entries
+                 # (3,932 excluded grid rows skipped; 60,196 with the Gurmukhi body,
+                 # 4,022 locator-only), 0 errored; eyeball nabu define ਉਸਟ (the camel /
+                 # lip article, vol. 1 p. 37), then flip.
+  # Bhai Kahan Singh Nabha's Gurushabad Ratnakar Mahan Kosh (1930), the
+  # Sikh encyclopedic dictionary of the Gurbani vocabulary, for the held
+  # shabados Gurbani text. The Sikhi.io JSON packaging (CC BY 4.0; the
+  # 1930 text PD) — the GURMUKHI LANE ONLY: the Patiala-edition English
+  # (rights not shown) and the 25 machine-translated columns are never
+  # fetched. New family mahan-kosh-json; entry id = the grid id
+  # (vol-page-seq). Language pan.
+  sync_policy: manual
+
 mdz-protestant:   # 02-sources row 243
   adapter: Nabu::Adapters::MdzProtestant
   adopted: "2026-10-11"

@@ -1,0 +1,47 @@
+{
+ "count": 68150,
+ "entries": [
+  {
+   "id": "1-2-0",
+   "hw": "ਗੁਰੁਸ਼ਬਦਰਤਨਾਕਰ",
+   "tr": null,
+   "vol": 1,
+   "page": 2,
+   "sources": [
+    "Mahan Kosh — Bhai Kahan Singh Nabha (English tr., Punjabi University Patiala), Vol 1 p.2"
+   ],
+   "excluded": true,
+   "exclude_reason": "frontmatter_page_final"
+  },
+  {
+   "id": "1-37-0",
+   "hw": "ਉ",
+   "tr": "[u]",
+   "vol": 1,
+   "page": 37,
+   "sources": [
+    "Mahan Kosh — Bhai Kahan Singh Nabha (English tr., Punjabi University Patiala), Vol 1 p.37"
+   ]
+  },
+  {
+   "id": "1-37-13",
+   "hw": "ਉਸਟਰੂ ਨੇਨ",
+   "tr": "[ustəru nen]",
+   "vol": 1,
+   "page": 37,
+   "sources": [
+    "Mahan Kosh — Bhai Kahan Singh Nabha (English tr., Punjabi University Patiala), Vol 1 p.37"
+   ]
+  },
+  {
+   "id": "1-37-21",
+   "hw": "ਉਸਤ੍ਰ ਖਾਨ",
+   "tr": "[usət xvan]",
+   "vol": 1,
+   "page": 37,
+   "sources": [
+    "Mahan Kosh — Bhai Kahan Singh Nabha (English tr., Punjabi University Patiala), Vol 1 p.37"
+   ]
+  }
+ ]
+}
