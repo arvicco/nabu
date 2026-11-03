@@ -30,6 +30,8 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 ## The 30 desks
 
+Jump to a desk: [classical](#classical) · [romance](#romance) · [epigraphy](#epigraphy) · [slavic](#slavic) · [germanic](#germanic) · [celtic](#celtic) · [italic](#italic) · [etym](#etym) · [biblical](#biblical) · [hebrew](#hebrew) · [syriac](#syriac) · [ethiopic](#ethiopic) · [arabic](#arabic) · [hittite](#hittite) · [cuneiform](#cuneiform) · [egyptian](#egyptian) · [iranian](#iranian) · [indic](#indic) · [buddhist](#buddhist) · [tibetan](#tibetan) · [korean](#korean) · [sea](#sea) · [sinitic](#sinitic) · [japonic](#japonic) · [turkic](#turkic) · [mongolic](#mongolic) · [americas](#americas) · [africa](#africa) · [baltic](#baltic) · [local](#local)
+
 ### classical
 
 > The Classicist — Greek and Latin letters read whole, Homer to the late grammarians.
