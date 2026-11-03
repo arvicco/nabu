@@ -1001,7 +1001,12 @@ Theophanes Continuatus, Constantine Porphyrogenitus, Cedrenus and
 Skylitzes, Psellus, Theophylact of Ohrid, Zonaras, Choniates, Gregoras,
 Palamas, Cantacuzene, Doukas, Glykas — beside eleven patristic volumes;
 one document per volume, one passage per page (attribution) — is
-registered but not yet wired.
+registered but not yet wired. `pta` — the Patristic Text Archive (BBAW):
+open Greek editions of the early Christian authors, Severian of Gabala's
+homilies to Athanasius, Eusebius, Origen and the Arian-controversy
+documents, critical apparatus kept out of the text, each work dated and
+placed from the archive's own catalog (licensed per file: attribution,
+one CC BY-NC-SA edition) — is registered but not yet wired.
 
 **Attic epigraphy.** `aio` — Attic Inscriptions Online (British School
 at Athens, ed. Stephen Lambert): English translations of the

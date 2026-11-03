@@ -179,7 +179,7 @@ class PosturesTest < Minitest::Test
   def test_the_lect_migration_kept_the_p59_4_census
     lect = postures.declarations.select { |d| d.layer == "lect" }
     by_posture = lect.group_by(&:posture).transform_values(&:size)
-    assert_equal 177, lect.size,
+    assert_equal 178, lect.size,
                  "the P59-4 declarations survive the move (61 at migration; itant retired P61-3," \
                  "oracc retired P62-2, etcsl/ccmh/freising/coptic-scriptorium retired P64-6, " \
                  "titus-avestan retired P66-1, osta+fornsvenska retired P77-r8, achemenet " \
@@ -379,7 +379,9 @@ class PosturesTest < Minitest::Test
                  "suda-translations ADDED P154 — identity en (the SOL's modern English " \
                  "translations; the Greek is the First1K witness's claim): 175→176; " \
                  "hmml-reading-room ADDED P154 — identity (syc/gez/amh/ara/ara-Syrc per incipit, " \
-                 "declared coarse): 176→177"
+                 "declared coarse): 176→177; " \
+                 "pta ADDED P154 — dates (the per-work dct:created spans band the patristic editions " \
+                 "into grc:koi / grc:byz, the cgpg shape): 177→178"
     # The epigraphic-belt registry package (merged + canonical-synced
     # 2026-10-18, the add-then-retire shape within one phase) retires both
     # P130 pendings, and the ociana-script rule + the ig-cyprus override
@@ -431,6 +433,7 @@ class PosturesTest < Minitest::Test
     # tianyige joins codemap (lzh → zho/lit, the kanripo precedent): 20→21.
     # suda-translations joins identity (en, the SOL's English translations): 129→130.
     # hmml-reading-room joins identity (per-incipit syc/gez/amh/ara/ara-Syrc): 130→131.
-    assert_equal({ "dates" => 24, "codemap" => 21, "identity" => 131, "pending" => 1 }, by_posture)
+    # pta joins dates (the dct:created spans → grc:koi/grc:byz, the cgpg shape): 24→25.
+    assert_equal({ "dates" => 25, "codemap" => 21, "identity" => 131, "pending" => 1 }, by_posture)
   end
 end
