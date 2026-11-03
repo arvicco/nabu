@@ -1003,6 +1003,16 @@ Palamas, Cantacuzene, Doukas, Glykas — beside eleven patristic volumes;
 one document per volume, one passage per page (attribution) — is
 registered but not yet wired.
 
+**Attic epigraphy.** `aio` — Attic Inscriptions Online (British School
+at Athens, ed. Stephen Lambert): English translations of the
+inscriptions of Attica — decrees of the Council and People and of the
+demes, laws, dedications, funerary monuments, accounts, ephebic and
+prytany lists — line by line, with the translators' footnotes, AIO's own
+Greek editions for the AIO and AIUK records, the page's date and
+Pleiades-linked findspot, and every record's IG/SEG concordance; the
+library's first Attic epigraphy (CC BY-SA 3.0, attribution) — is
+registered but not yet wired.
+
 **Slavic.** The Slovenian line: `kdsp` — longer narrative prose
 1836–1918 (262 / 290,394), `prilit` — the oldest narrative prose
 (43 / 8,526), `sl-wikisource` — the Slovene Wikisource's year-dated

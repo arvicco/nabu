@@ -232,6 +232,38 @@ africa-pd:   # P124-1, 02-sources row 271
   # Velten's Swahili reader claims sw. Public domain (authors †1882–1935,
   # prints 1854–1913). EXPECTED FIRST SYNC (census 2026-10-13, every pair
   # fetched and parsed): 10 docs / 3,536 passages, ~2.3 MB.
+aio:   # P154, 02-sources row 335 (provisional)
+  adapter: Nabu::Adapters::Aio
+  adopted: "2026-11-02"
+  axes: [classical, epigraphy]
+  wired: false   # awaiting the first sync — bin/nabu sync aio (OWNER-SCHEDULED:
+                 # ~35 listing GETs + 2 GETs per inscription ≈ 6,970 requests at
+                 # 0.5 s ≈ 1–1.5 h, resumable at the file grain). EXPECT the
+                 # listing's own count (3,466 at 2026-11-02) of record pairs
+                 # under records/, 2 sidecars per 100 → 35 listing pages skipped
+                 # by rule; 3,466 -en translation docs + one Greek doc per
+                 # AIO/AIUK-edited record (share measured at the sync: 7 of an
+                 # 18-record sample biased toward AIO/AIUK keys); passages ≈ one
+                 # per inscribed line. Eyeball nabu show urn:nabu:aio:2586-en
+                 # ("Gods." / "In the archonship of Nikomachos (341/0)…") and
+                 # urn:nabu:aio:2103 (Greek, "ἐπὶ ἄρχοντος Κλαυδίου Ἡρακλεί")
+                 # plus 5 random records; probe nabu search "Halaians"; then flip.
+  sync_policy: manual
+  # AIO — Attic Inscriptions Online (British School at Athens; ed. Stephen
+  # Lambert): English translations of the inscriptions of Attica, with AIO's
+  # own Greek editions for the AIO/AIUK papers. CC BY-SA 3.0 — the CC badge
+  # on every inscription page (translation AND Greek view), first-hand
+  # 2026-11-02 → attribution. Fetched through upstream's own REST API
+  # (/api/ Swagger: list_all_inscriptions + per-inscription JSON with Base64
+  # EpiDoc) plus the inscription page (Date, Monument/Inscription type,
+  # Original location, Findspot, footnotes — fields the API omits). Images
+  # never fetched. Document = record layer: urn:nabu:aio:<n>-en (translation,
+  # kind translation, translation_of the base urn) always; urn:nabu:aio:<n>
+  # (the Greek) where AIO publishes its own text. The record's date/place/
+  # genre ride the primary doc (the Greek, else the translation — whose
+  # axes never row on the timeline, the house translation rule: declared in
+  # the postures).
+
 altaica-shm:   # P107-7
   adapter: Nabu::Adapters::AltaicaShm
   adopted: "2026-09-28"
