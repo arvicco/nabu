@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+   xsi:schemaLocation="http://www.tei-c.org/ns/1.0 http://diglib.hab.de/rules/schema/tei/P5/v2.8.0/tei-p5-transcr.xsd" xml:id="grand_tour.cod_guelf_89_blank" n="Cod. Guelf. 89 Blank.">
+   <teiHeader>
+      <fileDesc>
+         <titleStmt>
+            <title type="main">Herzog Ludwig Rudolf von Braunschweig-Wolfenbüttel: Dänische und Schwedische reyse so von mir getahn worden in dem Jahre 1689 angefangen den 9. Jan. meineß alters in 18 Jahre. <lb/>(Cod. Guelf. 89 Blank.)</title>
+         </titleStmt>
+         <publicationStmt>
+            <p/>
+         </publicationStmt>
+         <sourceDesc>
+            <bibl>
+               Herzog Ludwig Rudolf von Braunschweig-Wolfenbüttel: Dänische und Schwedische reyse so von mir getahn worden in dem Jahre 1689 angefangen den 9. Jan. meineß alters in 18 Jahre. Herzog August Bibliothek, Signatur: Cod. Guelf. 89 Blank., fol. 90r-101r
+            </bibl>                
+            <xi:include href="../register/listPlace_grand_tour.xml" xpointer="element(place)"/>
+            <xi:include href="../register/listPerson_grand_tour.xml" xpointer="element(person)"/>
+            <xi:include href="../register/listOrg_grand_tour.xml" xpointer="element(org)"/>
+         </sourceDesc>
+      </fileDesc>
+   </teiHeader>   
+   <text>
+      <body>
+         <div type="volume">
+            <pb facs="#mss_89-blank_00181" n="90r"/>
+            <head>
+               <lb/><rs type="place" ref="#daenemark_koenigreich">Dänische</rs> und <rs type="place" ref="#schweden_koenigreich">Schwedische</rs>
+               <lb/>reyse <del>bet</del> so von <rs type="place" ref="#wolfenbuettel">hier</rs>
+               <lb/>getahn worden in dem
+               <lb/><date when="1689">Jahre 1689.</date> angefangen
+               <lb/>d. <date when="1689-01-09">9. Jan.</date> meineß alters in 18. Jahren.
+            </head>
+            <p>
+               <lb/>Wir traten unsere reyse d. <date when="1689-01-09">9 Jan:</date>
+               <lb/>an und kamen den ersten Tag bis
+               <lb/><rs type="place" ref="#braunschweig">Braunschweig</rs>. Die Suite <del>vor</del> bestund in
+               <lb/>6. Personen <add place="above">als</add> wie folget
+               <lb/>M<hi rend="superscript">r</hi>. <rs type="person" ref="#imhoff_rudolph_christian">d'Imhoff</rs>. wie Hoffmeister.
+               <lb/>M<hi rend="superscript">r</hi>. <rs type="person" ref="#jettebrock_rudolph_friedrich">Jettebrock</rs>. wie Volontair.
+               <lb/>M<hi rend="superscript">r</hi>. <rs type="person" ref="#behm_heinrich_julius">Böhme</rs>. wie Secretarius.
+               <lb/><rs type="person" ref="#karl_friedrich">Carl Friderich</rs>. wie Cammerdiener.
+               <lb/><rs type="person" ref="#campen_ludolf">von Campen</rs>. wie page.
+               <lb/><rs type="person" ref="#heinrich_1">Heinrich</rs>. wie Laquei.
+            </p>
+            <p>
+               <lb/><subst><del>D</del><add place="inline">N</add></subst>achdeme<note type="annotation" resp="mg">"D" durch Überschreiben zu "N" verbessert.</note> wir nun zwischen <rs type="place" ref="#braunschweig">Braunschweig</rs>
+               <lb/>und <rs type="place" ref="#hamburg">Hamburg</rs> 3. Tage zu gebracht, kamen
+               <lb/>wir d. <date when="1689-01-12">12. hujus.</date> aldar an. Wir <w lemma="Logierten">Lo-
+               <lb/>gierten</w> bey einem Kaufmann mit nahmen
+               <lb/><rs type="person" ref="#bolstein_anon_1">Bolstein</rs>.
+            </p>
+            <p>
+               <lb/>Die wenige Zeit so wir aldar verblieben,
+               <lb/>verpassirten wir in besehung der aldar
+               <lb/>sich befindender raritäten. Als nehmlich der
+               <lb/>Dom welcher wohl sehens würdig ist.
+               <lb/><unclear reason="illegible">D</unclear>ie Seulen so darinnen sich befinden
+               <lb/>sind alle von porphir. Wir waren
+               <lb/>noch in <rs type="person" ref="#koenig_samuel">Königß</rs> Buchladen so <del>sich do</del>
+               <lb/>in demselben ist. Hernach der hafen
+               <lb/>und daß zucht und Sp<unclear reason="eccentric_ductus">e</unclear>inhauß.
+            </p>
+            <p>
+               <lb/><unclear reason="illegible">Den</unclear> <date when="1689-01-15">15. dito</date>. reiseten wir wiederum
+               <lb/>ab und kamen d. <date when="1689-01-16">16.</date> nach <rs type="place" ref="#ploen">Plöen</rs> an
+               <lb/>alwo <subst><del>ich</del><add place="above">wir</add></subst> bis d. <date when="1689-01-19">19.</date> stille lagen.
+            </p>
+            <p>
+               <lb/><unclear reason="illegible">Von</unclear> dar reiseten wir noch <w lemma="denselbigen">denselbi-
+                  <lb/>gen</w> Tag nach dem <rs type="place" ref="#kiel">Kiel</rs> woselbst
+               <lb/>Eben der so genante umschlag gehalten
+               <lb/>wurd.
+               <pb facs="#mss_89-blank_00182" n="90v"/>
+               <lb/>Alhier bekamen wir die ersten
+               <lb/>offenen Köhrwagen.
+            </p>
+            <p>
+               <lb/>D. <date when="1689-01-20">20.</date> arrivirten wir zu <rs type="place" ref="#rendsburg">Rensburg</rs>.
+            </p>
+            <p>
+               <lb/>D. <date when="1689-01-21">21.</date> hielten wir daß mittages
+               <lb/>mahl in <rs type="place" ref="#gottorf">Gottorff</rs>. Den abend davon
+               <lb/>kamen wir nach <rs type="place" ref="#flensburg">Flensburg</rs>.
+            </p>
+            <p>
+               <lb/>Daß schloß zu <rs type="place" ref="#gottorf">Gottorff</rs> ist wohl
+               <lb/>sehens würdig, wie auch der garten,
+               <lb/>in welchen wir unter andren <w lemma="raritäten">raritä-
+               <lb/>ten</w> einen großen Globen sahen, welcher
+               <lb/>von waßer vor demmahl ist getrieben
+               <lb/>worden, der innen raum ist so groß
+               <lb/>daß 12. personen bey der Taffel gemächlich
+               <lb/>darin sitzen können. Es wird auf
+               <lb/>48. Tausend rht. wehrt geschätzet.
+               <lb/>Der Meister so ihn verfertiget heist
+               <lb/><rs type="person" ref="#boesch_andreas">Andreas Busch</rs> bürtig von <rs type="place" ref="#limburg_lahn">Limburg</rs>.<note type="footnote" resp="mg">Zum Gottorfer Riesenglobus vgl. auch den <ref target="http://selbstzeugnisse.hab.de/grand_tour/cod_guelf_267_1_extrav#1657-01-20">Eintrag zum 20. Januar 1657 im Reisetagebuch des Apothekergesellen Wagener</ref>. </note>
+               <lb/>Die Amalien Burg so der prinzeßin
+               <lb/><rs type="person" ref="#braunschweig-wolfenbuettel_sophia_amalia">Sophia Ammalia</rs> ist zu ehren erbauet
+               <lb/>ist auch sehr schön. Wie auch die
+               <lb/>Orangerie so in 200. baumen bestehet.
+            </p>
+            <p>
+               <lb/>D. <date when="1689-01-22">22.</date> zu mittage zum Kohlstein.
+               <lb/>Daß <del>aben</del> nachtlager hielten wir zu
+               <lb/><rs type="place" ref="#kolding">Coldingen</rs>. Nachdem wir von <rs type="place" ref="#hadersleben">Hadersleben</rs>
+               <lb/>frische Pferde genommen.
+            </p>
+            <p>
+               <lb/>D. <date when="1689-01-23">23.</date> passirten wir den <rs type="place" ref="#kleiner_belt">kleinen
+               <lb/>Belt</rs> mit nachen bey <rs type="place" ref="#middelfart">mittelfahrt</rs>, alwo
+               <lb/>wir auch ein Früstück zu unß nahmen
+               <lb/>und von dar bis nach der Stadt <rs type="place" ref="#odense"><w lemma="Odensee">Oden-
+               <lb/>see</w></rs> fuhren alwo wir die nacht <w lemma="verblieben">ver-
+               <lb/>blieben</w>.
+            </p>
+            <p>
+               <lb/>D. <date when="1689-01-24">24.</date> reiseten wir um 4. Uhr des
+               <lb/>morgens von dar ab, und kamen gegen
+            <pb facs="#mss_89-blank_00183" n="91r"/>
+               <lb/><unclear reason="illegible">5</unclear> uhr zu <rs type="place" ref="#nyborg">Nieborg</rs> an. Alwo wir frü-
+               <lb/>stückten und hernachmahls bis an den
+               <lb/><rs type="place" ref="#grosser_belt">großen Belt</rs> mit wagen kamen, welchen
+               <lb/>wir bey hellem Sonnenschein und gutem
+               <lb/>winde passirten. Zu <rs type="place" ref="#korsor">Corsör</rs> nahmen wir
+               <lb/>frisch <unclear>forgesphan</unclear> und fuhren den abend
+               <lb/>noch hin bis nach <rs type="place" ref="#slagelse">Sclagel</rs>.
+            </p>
+            <p>
+               <lb/>D. <date when="1689-01-25">25.</date> <choice><sic>hegten</sic><corr>legten</corr></choice> wir ab zu mittage
+               <lb/>zu <rs type="place" ref="#ringsted"><unclear reason="illegible">R</unclear>instelt</rs> daß nachtquartier nahmen
+               <lb/>wir zu <rs type="place" ref="#roskilde">Rotschild</rs>. alwo wir der Könige
+               <lb/>Begräbnüße besahen.
+            </p>
+            <p>
+               <lb/>Unter andern schönen gräbern waren
+               <lb/>denckwürdig zusehen. <rs type="person" ref="#daenemark_friedrich_ii">Fridirici II.</rs> Grab.
+               <lb/><del>wel</del> an welchen alle seine tahten <w lemma="zusehen">zuse-
+               <lb/>hen</w> waren in Stein sehr künstlich <w lemma="außgehauen">auß-
+               <lb/>gehauen</w>. Er ligt oben auf ganz <w lemma="geharnischt">gehar-
+               <lb/>nischt</w> zum Füßen stehen die Wörter, 
+               <lb/><ref type="biblical" cRef="Is_26,19">Esaia am 26.</ref>
+               <lb/><hi rend="center"><cit><quote>Vivent mortui tui, etc.</quote></cit>
+               <lb/>Zur linken.
+               <lb/><cit><quote>Meine Hoffnung zu Gott alleine.</quote></cit>
+               <lb/><cit><quote>Treu ist Wilbrett.</quote></cit>
+               <lb/>Zum haupte war die grab-
+               <lb/>schrift zulesen mit güldenen
+               <lb/>buchstaben.
+               <lb/><cit><quote><rs type="person" ref="#daenemark_friedrich_ii">Frid. II. Rex Daniæ et Nor-
+               <lb/>wegiæ.</rs></quote></cit></hi>
+            </p>
+            <p>
+               <lb/>Die andern Könige so dar begraben
+               <lb/>sind, sind
+               <lb/><rs type="person" ref="#daenemark_christian_iii">Christ. III.</rs>
+               <lb/><rs type="person" ref="#daenemark_friedrich_iii">Frid. III.</rs>
+               <lb/><rs type="person" ref="#daenemark_christian_1">Christ V.</rs>
+               <lb/><rs type="person" ref="#roskilde_wilhelm">Wilhelmus Episc. L&#x0153;hund.</rs>
+               <lb/>cojugio <rs type="person" ref="#daenemark_margaretha_i">Margareta</rs>.
+               <lb/><rs type="person" ref="#daenemark_harald">Haraldus</rs> defundator ecclesiæ.
+            </p>
+            <pb facs="#mss_89-blank_00184" n="91v" />
+            <p>
+               <lb/>D. <date when="1689-01-26">26.</date> Sind wir zu <rs type="place" ref="#kopenhagen">Coppenhagen</rs>
+               <lb/>glücklich arriviret. logierten in der ersten <unclear reason="illegible">n<ex>acht</ex></unclear>
+               <lb/>in der Cronenburg. Hernach aber nahmen wir <add place="below">ein eigen <unclear>haus</unclear>.</add>
+               <lb/>D. <date when="1689-01-27">2<subst><del>6</del><add place="inline">7</add></subst>.</date><note type="annotation" resp="mg">"6" durch Überschreiben zu "7" verbessert.</note> habe ich meine audience bey
+               <lb/>dem <rs type="person" ref="#daenemark_christian_v">König</rs>, der <rs type="person" ref="#daenemark_charlotte_amalie">Königen</rs>, und <rs type="person" ref="#daenemark_sophia_hedwig #daenemark_christiane_charlotte"><w lemma="Printzessin">Printzes-
+                  <lb/>sin</w></rs><note type="footnote" resp="mg">In seiner 1690 begonnenen Autobiographie schreibt Ludwig Rudolph, er habe beide Prinzessinnen getroffen. Vgl. <ref target="http://diglib.hab.de/mss/217a-blank/start.htm?image=00057">Cod. Guelf. 217a Blank., S. 53</ref>.</note> wie auch bey den <rs type="person" ref="#daenemark_friedrich_iv #daenemark_christian_2 #daenemark_karl">3. Printzen</rs>
+               <lb/>gehabt. Den abend darauf bin ich
+               <lb/>zu hofe an der Taffel geblieben.
+            </p>
+            <p>
+               <lb/>D. <date when="1689-01-28">28.</date> wurde ein Ball gehalten
+               <lb/>in der Stadt bey dem <rs type="person" ref="#juul_anon_1">Major <unclear>Ju</unclear>l</rs>.
+            </p>
+            <p>
+               <lb/>D. <date when="1689-01-29">29.</date> war ich zu Gaste bey
+               <lb/><rs type="person" ref="#gyldenlove_ulrich_friedrich">Güldenlöve</rs>.
+            </p>
+            <p>
+               <lb/>D. <date when="1689-01-30">30.</date> bey <rs type="person" ref="#reventlow_conrad">Rebenclau</rs> den abend
+               <lb/><subst><del>D. 3</del><add type="inline">Darauf</add></subst><note type="annotation" resp="mg">"D. 3" durch Überschreiben zu "Darauf" verbessert.</note> wurde wieder ein Ball
+               <lb/>gehalten <del>bey dem</del> in seinem Hause
+            </p>
+            <p>
+               <lb/>D. <date when="1689-01-31">31.</date> nahm ich meinen abschiedt zu
+               <lb/>hoffe. Es wurde denselben abend
+               <lb/>aldar getantzet.
+            </p>
+            <p>
+               <lb/>Was sonsten in <rs type="place" ref="#kopenhagen">Coppenhagen</rs> sehens
+               <lb/>wehrt ist, ist daß Arsenal, der hafen.
+               <lb/>die Rosenburg und Amalien burg, der
+               <lb/>runde Turm welchen <rs type="person" ref="#daenemark_christian_iii">Christ. III.</rs> erbauen 
+               <lb/>laßen <add place="margin-left">und die Kunstkammer.</add>, die Crone und der Tron. Es wurde
+               <lb/>unß gezeiget von, <rs type="person" ref="#knuth_adam_levin">Adam von Knott</rs> Königlichen <add place="below">OberKammer Junkern</add>
+            </p>
+            <p>
+               <lb/><note type="contemporary" place="margin-left">Febr.</note>D. <date when="1689-02-01">1. Febr.</date> reiseten wir von <rs type="place" ref="#kopenhagen"><w lemma="Coppenhagen">Coppen-
+               <lb/>hagen</w></rs> hinweg, und kamen den ersten
+               <lb/>Tag bis <rs type="place" ref="#frederiksborg_schloss">Fridrichsburg</rs>. Alwo wir daß
+               <lb/>schloß besahen. Welches wohl wehrt ist
+               <lb/>gesehen zu werden. Absonderlich daß
+               <lb/>Appartement welches mit lautern <w lemma="Portraiten">Portrai-
+               <lb/>ten</w> von Königen ist angefüllet, vnd
+               <lb/>fänget sich die re<subst><del>h</del><add place="inline">y</add></subst>he<note type="annotation" resp="mg">"h" durch Überschreiben zu "y" verbessert.</note> von <rs type="person" ref="#daenemark_christian_i">Christ. 1.</rs>
+               <lb/>bis auf den jitzigen <rs type="person" ref="#daenemark_christian_v">Christ. V.</rs>
+               <lb/>welcher mit seinen <rs type="person" ref="#daenemark_friedrich_iv #daenemark_christian_2 #daenemark_karl">3. ältesten Printzen</rs>
+
+<!-- fixture trim: the file continues upstream -->
+</p></div></body></text></TEI>
