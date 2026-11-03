@@ -245,6 +245,18 @@ sources:
       #                         GAL is Brockelmann's multi-axis scheme (genre + period +
       #                         region keywords), never split by guess — hence its own
       #                         facet, not genre (the subject facet keeps the kind rule)
+  emmo:                       # P155 — census 2026-11-03 through the adapter, all 100 files
+    fields:
+      author: author          # msItem/author, 99 docs ("Bagot, Walter" · "Donne, John" …)
+      collection: collection  # the family papers (Bagot of Blithfield 55 · More of Loseley 22 ·
+      #                         Bacon-Townshend 7 · Ferrers 6 · Rattray · Rich · Cavendish-Talbot)
+      genre: genre            # the header's keywords term (Letters 49 · Family Papers 12 ·
+      #                         Certificate 2 · Receipt 1 · Legal 1; 35 docs carry none)
+      places_mentioned: place_mentioned  # the placeName mentions, regularized (84 docs) —
+      #                         places the letters NAME, never the writing place
+    passage_fields:
+      places: place           # per page: the regularized <placeName> mentions (137 pages)
+      persons: person         # per page: the regularized <name> mentions (182 pages)
   diccas:                     # 10 books (one document each)
     fields:
       disaster_types: disaster  # the catastrophe <term>s' own English translation labels,

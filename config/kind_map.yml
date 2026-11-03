@@ -943,6 +943,23 @@ sources:
     #   fold to historiography by the ruled biography precedent (elephantine "biography",
     #   the eebo "-- Biography" and aozora NDC 289 folds) — a hagiography sub would be a
     #   taxonomy change, not this mapping's call
+  emmo:                      # P155 — the catalogue title's head noun (Adapters::Emmo.document_type),
+    metadata: document_type  # census 2026-11-03 over all 100 files
+    map:
+      "Letter": letter                       # 89 — family and business letters; private vs
+      #   official is not stated by the catalogue, so the bare head (deliberately coarse)
+      "Deposition": legal/court              # 2 — sworn statements taken before a justice
+      "Examination": legal/court             # 2 — Nathaniel Bacon's examinations as JP
+      "Certificate": legal/court             # 1 — a gaoler's certificate to the justices of
+      #   the peace concerning prisoners of the Queen's Bench
+      "Certificate of recusancy": legal/court  # 1 — a minister's return to the recusancy
+      #   commissioners (the court-process paperwork of the penal laws)
+      "Order": legal/law                     # 1 — the recusancy commission's order to the
+      #   high constables: an instrument of authority, not correspondence
+      "Copy of an order": legal/law          # 1 — the Privy Council's order (a copy)
+      "Warrant": legal/law                   # 1 — the Privy Council's warrant
+      "Legal opinion": legal                 # 1 — counsel's opinion with its reply
+      "Receipt": administrative/receipt      # 1 — Donne's receipt for £100
   tianyige:                  # the Ming examination records (科舉錄): each record is the
     source_kind: administrative/register   # official register of one session — examiners,
     #   questions, the graduates' roster, model answers; register is the closest ruled class
