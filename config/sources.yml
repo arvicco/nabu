@@ -2084,7 +2084,7 @@ e84000:   # P48-2, 02-sources row 133
   # files - 11 duplicate losers), chunk-grain passages; 3,926 stub +
   # 11 duplicate skips censused. Upstream actively publishes -> manual.
 
-ebible-pacific:   # P154, 02-sources row 335
+ebible-pacific:   # P154, 02-sources row 336
   adapter: Nabu::Adapters::EbiblePacific
   adopted: "2026-11-02"
   axes: [biblical]
