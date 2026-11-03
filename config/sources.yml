@@ -7256,8 +7256,17 @@ tshet-uinh:
 typikon-bible:   # P153, 02-sources row 330
   adapter: Nabu::Adapters::TypikonBible
   adopted: "2026-11-02"
-  axes: [biblical, romance]
+  axes: [biblical, romance, slavic]
   wired: true   # first sync 2026-11-02 exactly on census (79 docs / 36,312 passages, 0 errored); Gen 1.1 Romanian Cyrillic eyeballed
+                 # 2026-11-03 widening (cs-eliz + ka-mcxeta, owner-ruled): the next
+                 # sync adds two FileFetch GETs (bible-verses-cs-eliz 2.8 MB,
+                 # bible-verses-ka-mcxeta 2.3 MB; sha256 verified against
+                 # manifest.json 2026-11-03). EXPECT 229 docs / 105,698
+                 # passages, 0 errored, 0 skipped: ro-1688 79 /
+                 # 36,312 · cs-eliz 77 / 36,961 · ka-mcxeta 73 / 32,425.
+                 # Eyeball urn:nabu:typikon-bible:cs-eliz:bytie:1.1 (Въ нача́лѣ
+                 # сотворѝ бг҃ъ), :ka-mcxeta:bytie:1.1 (დასაბამად ქმნნა ღმერთმან),
+                 # probe nabu search with сотворѝ and ქმნნა.
                  # bin/nabu enable typikon-bible, then bin/nabu sync typikon-bible
                  # (four FileFetch GETs from typikon.info/dump/2026-09-21/:
                  # manifest.json, bible-editions, bible-books, the 2.9 MB
@@ -7275,11 +7284,14 @@ typikon-bible:   # P153, 02-sources row 330
   # edition's own numbering, the Slavonic canonical address (canonRef) on
   # every verse. LICENSE: manifest.json bible layer CC-BY-4.0; rationale
   # verbatim "Румынскую кириллицу 1688 и китайский Новый Завет 1910
-  # набирали мы — они под лицензией слоя" → attribution. Held for a ruling
-  # (not fetched): cs-eliz (Elizabeth Bible 1751, Church Cyrillic) and
-  # ka-mcxeta (Mtskheta Old Georgian Bible) — the dump marks both PD while
-  # stating the digitizers declared no terms, and its own layer rationale
-  # says the Church Slavonic digitization stays out of the dump. The
+  # набирали мы — они под лицензией слоя" → attribution. Admitted since
+  # 2026-11-03 (owner-ruled, under the files' own PD marking): cs-eliz
+  # (Elizabeth Bible 1751, Church Cyrillic; lect chu:ncs) and ka-mcxeta
+  # (the Old Georgian Bible — OT after the Mtskheta manuscript, NT the
+  # Athonite translation; lect oge) — the dump marks both PD while stating
+  # the digitizers declared no terms, and its own layer rationale says the
+  # Church Slavonic digitization stays out of the dump: the contradiction
+  # is recorded in the adapter's class comment. The
   # numbering concordance (342,568 rows, CC BY 4.0) is an instrument, not
   # fetched; it is the candidate alignment-remap feed.
 

@@ -6,7 +6,7 @@ compatibility: "Requires the nabu MCP server (`bin/nabu mcp`, read-only, stdio) 
 metadata:
   desk: slavic
   origin: generated
-  sources: "archiv-slav-phil bg-wikisource ccmh comenius cs-wikisource damaskini elektire elizabeth-bible eltec-srp freising gams-zrcalo goo300k hr-wikisource imp kdsp korba litopys mdz-protestant mk-wikisource pl-wikisource prague-bible-1488 prilit proiel ru-wikisource scat scripta-bulgarica senie sl-lexica sl-wikisource slavistics-pd slouniki-nasovic sr-wikisource torot ud uk-wikisource vuk-danicic wiktionary-cu wiktionary-sh"
+  sources: "archiv-slav-phil bg-wikisource ccmh comenius cs-wikisource damaskini elektire elizabeth-bible eltec-srp freising gams-zrcalo goo300k hr-wikisource imp kdsp korba litopys mdz-protestant mk-wikisource pl-wikisource prague-bible-1488 prilit proiel ru-wikisource scat scripta-bulgarica senie sl-lexica sl-wikisource slavistics-pd slouniki-nasovic sr-wikisource torot typikon-bible ud uk-wikisource vuk-danicic wiktionary-cu wiktionary-sh"
 ---
 
 # The Slavicist — the `slavic` desk
@@ -56,6 +56,7 @@ verbatim upstream terms are in `docs/02-sources.md` of the Nabu repository.
 | `slouniki-nasovic` | Насовіч — Словарь бѣлорусскаго нарѣчія (1870), Slouniki digitization | open |
 | `sr-wikisource` | Serbian Wikisource — the oral-tradition cone (епске песме · Ерлангенски рукопис · Vuk) | attribution |
 | `torot` | TOROT — Tromsø Old Russian and OCS Treebank | nc |
+| `typikon-bible` | typikon.info Bible layer — the 1688 Bucharest Bible, the Elizabeth Bible in Church Cyrillic and the Old Georgian Bible (dump 2026-09-21) | attribution |
 | `ud` | Universal Dependencies — ancient treebanks | nc |
 | `uk-wikisource` | Ukrainian Wikisource — the chronicles (Літописи, edition-filtered) | attribution |
 | `vuk-danicic` | The Vuk–Daničić Serbian Bible (NT 1847, OT 1865) — ijekavian text, via Rs1Bible USFM | open |

@@ -101,6 +101,15 @@ class LectsDriftTest < Minitest::Test
     refute_nil lects.lect("ro:old~cyrl")
   end
 
+  # The 2026-11-03 widening: the dump's Elizabeth Bible is the chu:ncs
+  # node's own founding text (the elizabeth-bible row's mold), and the
+  # Georgian witness is Old Georgian by its own title — the oge anchor.
+  def test_typikon_bible_second_witnesses_claim_ncs_and_old_georgian
+    assert_equal "chu:ncs", lects.resolve("chu", source: "typikon-bible")
+    assert_equal "oge", lects.resolve("oge", source: "typikon-bible")
+    refute_nil lects.lect("oge")
+  end
+
   # The menota onw → no:old routing retired 2026-11-02: the adapter
   # corrects the raw code at parse (onw → nor, language_raw keeps
   # upstream's), and the live catalog's menota holdings carry no onw after
