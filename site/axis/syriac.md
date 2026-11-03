@@ -13,16 +13,17 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 ## The shelves
 
-A source wears every desk it serves — these four answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
+A source wears every desk it serves — these five answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
-| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 2 November 2026)</span> |
+| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 3 November 2026)</span> |
 |---|---|---|---|---|
 | `etcbc-syriac` | texts | nc | wired · manual | 31 docs / 18,132 passages |
+| `hmml-reading-room` | texts | attribution | not yet wired | not synced yet |
 | `peshitta` | texts | nc | wired · manual | 65 docs / 31,341 passages |
 | `syriac-corpus` | texts | attribution | wired · manual | 632 docs / 134,726 passages |
 | `wiktionary-syc` | dictionary | attribution | not yet wired | not synced yet |
 
-**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 2 November 2026)</span>: `syc` 728.
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 3 November 2026)</span>: `syc` 728.
 
 ## The desk's instruments
 

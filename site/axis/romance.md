@@ -24,7 +24,7 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 A source wears every desk it serves — these 28 answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
-| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 2 November 2026)</span> |
+| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 3 November 2026)</span> |
 |---|---|---|---|---|
 | `aranese` | texts | attribution | wired · manual | 2 docs / 839,816 passages |
 | `bdcamoes` | texts | attribution | wired · manual | 127 docs / 69,812 passages |
@@ -55,7 +55,9 @@ A source wears every desk it serves — these 28 answer this desk. Holdings are 
 | `wiktionary-osp` | dictionary | attribution | not yet wired | not synced yet |
 | `wiktionary-pro` | dictionary | attribution | not yet wired | not synced yet |
 
-**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 2 November 2026)</span>: `lat` 11,813 · `fra` 1,945 · `roa-opt` 1,682 · `spa` 1,216 · `cat` 967 · `osp` 684 · `la-vul` 233 · `fro` 222 · `por` 127 · `ron-Cyrl` 79 … and 30 more (`nabu axis romance` lists all).
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 3 November 2026)</span>: `lat` 11,813 · `fra` 1,945 · `roa-opt` 1,682 · `spa` 1,216 · `cat` 967 · `osp` 684 · `la-vul` 233 · `fro` 222 · `por` 127 · `ron-Cyrl` 79 … and 7 more (`nabu axis romance` lists all).
+
+**Carried in by multilingual packs** (`ud` — whole-source members whose other languages ride along, as of 3 November 2026): `grc` 9 · `orv` 9 · `ota` 5 · `lzh` 4 · `cop` 3 … and 18 more (`nabu axis romance` lists all).
 
 ## The desk's instruments
 
