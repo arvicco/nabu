@@ -100,6 +100,13 @@ class TianyigeTest < Minitest::Test
     assert_equal "Sichuan", kangxi.metadata["province_en"]
   end
 
+  def test_the_reign_date_and_province_ride_the_structured_lane
+    dates = Nabu::Store::TimelineBuilder::MetadataDates
+    assert_equal :structured, dates::SHAPES["tianyige"]
+    refute_includes dates::COMPOSITION, "tianyige",
+                    "the date hash carries its own composition class"
+  end
+
   def test_one_passage_per_non_blank_page_cited_by_page
     doc = document(KANGXI)
     assert_equal ["#{KANGXI}:p12", "#{KANGXI}:p15"], doc.map(&:urn)
