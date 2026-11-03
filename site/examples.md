@@ -13,7 +13,7 @@ Worked walk-throughs, one per discipline, using real commands and output
 from live runs between July and September 2026 (each section notes its
 date where it matters). Nothing below is a mock-up; trims are marked
 with ellipses. Each discipline is also a **research desk** — one of the
-{{ census.desks }} [research axes]({{ '/axis/' | relative_url }}), where that
+{{ census.desks }} [desks]({{ '/axis/' | relative_url }}), where that
 desk's shelves, instruments, CLI recipes and terminal setup live on one page.
 
 ## For the classicist
@@ -354,7 +354,7 @@ citations to live passages in the catalog (see
 
 *The [Egyptian desk]({{ '/axis/egyptian/' | relative_url }}).*
 
-Three millennia of Egyptian arrived on 18 July 2026 as one axis: the
+Three millennia of Egyptian arrived on 18 July 2026 as one desk: the
 TLA/BBAW sentence corpus with gold lemmatization, its dictionary keyed by
 the same lemma ids, the only bulk demotic dataset in existence, and the
 Coptic lexicon with a crosswalk that walks a word across the whole span.
@@ -527,7 +527,7 @@ license classes, and lect filters above.
 ## If your field is not here
 
 These walk-throughs sample the disciplines the library serves; they are not
-the whole of it. The desk index at [Research axes]({{ '/axis/' | relative_url }})
+the whole of it. The desk index at [Research desks]({{ '/axis/' | relative_url }})
 covers all {{ census.desks }} — the Indologist, the Koreanist, the
 Tibetologist, the Iranologist, the Turkologist, the Mongolist and the
 Americanist among those with no walk-through above — each with its own

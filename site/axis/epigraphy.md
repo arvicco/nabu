@@ -84,7 +84,7 @@ A source wears every desk it serves — these 39 answer this desk. Holdings are 
 
 ## Working the epigraphy desk
 
-The generic axis surfaces — every desk answers to these, in working
+The generic desk surfaces — every desk answers to these, in working
 order (enable once, sync, then query):
 
 ```

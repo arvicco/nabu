@@ -174,7 +174,7 @@ Requests go straight to a prepared issue form:
 
 - [Request a source](https://github.com/arvicco/nabu/issues/new?template=request-a-source.md)
   — upstream name and URL, the license as far as known (quoted verbatim),
-  which reader or axis it serves, size if known.
+  which reader or desk it serves, size if known.
 - [Request a feature](https://github.com/arvicco/nabu/issues/new?template=feature-request.md)
   — the scholarly task first: what question can you not ask today.
 - [Report a wrong reading](https://github.com/arvicco/nabu/issues/new?template=wrong-reading.md)

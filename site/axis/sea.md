@@ -9,6 +9,14 @@ description: >-
 
 Epigraphy-first, opening on the DHARMA corpora: the Old Khmer inscriptions (the Cœdès K-numbers), the Campā corpus, the Nusantara charters (Old Malay, Old Javanese, Old Sundanese), the Pyu corpus, and the Bagan Old Burmese inscriptions — with the kakawin critical editions as the literary wing and the Old Javanese Wordnet as its glossary, joining as their packets land.
 
+Beside the stone record stand the manuscript shelves: Balinese
+Wikisource's **palm-leaf lontars**, transcribed manuscript-direct in
+Balinese script (usada healing texts, geguritan verse, the Basa Kawi
+works); the **Jawi-script Malay manuscripts** of the Leiden and British
+Library collections (the Hikayat Aceh, the Sejarah Melayu); and the
+**Thai Collected Chronicles** (Prachum Phongsawadan) in their pre-1930
+printings, Buddhist-era years converted.
+
 New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the library in minutes.
 
 ## The shelves
@@ -34,11 +42,11 @@ A source wears every desk it serves — these twelve answer this desk. Holdings 
 
 ## The desk's instruments
 
-No axis-specific instruments curated yet — the generic surfaces above apply.
+No desk-specific instruments curated yet — the generic surfaces above apply.
 
 ## Working the sea desk
 
-The generic axis surfaces — every desk answers to these, in working
+The generic desk surfaces — every desk answers to these, in working
 order (enable once, sync, then query):
 
 ```
