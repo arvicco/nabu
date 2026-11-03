@@ -6,7 +6,7 @@ compatibility: "Requires the nabu MCP server (`bin/nabu mcp`, read-only, stdio) 
 metadata:
   desk: slavic
   origin: generated
-  sources: "archiv-slav-phil bg-wikisource ccmh comenius cs-wikisource damaskini elektire elizabeth-bible eltec-srp freising gams-zrcalo goo300k hr-wikisource imp kdsp korba litopys mdz-protestant mk-wikisource pl-wikisource prague-bible-1488 prilit proiel ru-wikisource scat scripta-bulgarica senie sl-lexica sl-wikisource slavistics-pd slouniki-nasovic sr-wikisource torot ud uk-wikisource vuk-danicic wiktionary-cu"
+  sources: "archiv-slav-phil bg-wikisource ccmh comenius cs-wikisource damaskini elektire elizabeth-bible eltec-srp freising gams-zrcalo goo300k hr-wikisource imp kdsp korba litopys mdz-protestant mk-wikisource pl-wikisource prague-bible-1488 prilit proiel ru-wikisource scat scripta-bulgarica senie sl-lexica sl-wikisource slavistics-pd slouniki-nasovic sr-wikisource torot ud uk-wikisource vuk-danicic wiktionary-cu wiktionary-sh"
 ---
 
 # The Slavicist — the `slavic` desk
@@ -60,6 +60,7 @@ verbatim upstream terms are in `docs/02-sources.md` of the Nabu repository.
 | `uk-wikisource` | Ukrainian Wikisource — the chronicles (Літописи, edition-filtered) | attribution |
 | `vuk-danicic` | The Vuk–Daničić Serbian Bible (NT 1847, OT 1865) — ijekavian text, via Rs1Bible USFM | open |
 | `wiktionary-cu` | Wiktionary OCS — kaikki.org machine-readable extract | attribution |
+| `wiktionary-sh` | Wiktionary Serbo-Croatian — kaikki.org machine-readable extract | attribution |
 <!-- nabu:skill-sources:end -->
 
 ## What the shelves hold
