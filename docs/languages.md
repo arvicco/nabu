@@ -1,10 +1,10 @@
 # Languages of the library
 
-**As of 2026-10-22** (~117.5M live passages across the 286-row
+**As of 2026-11-03** (~121.7M live passages across the 344-row
 registry; live inventory: every code below appears in the catalog, the
 lemma index, or the reference shelf). This page explains the code
 system once, then lists the significant codes with one sentence each
-(the corpus now carries 250 document language codes; the long tail of
+(the corpus now carries 273 document language codes; the long tail of
 single-inscription script variants is folded into grouped rows).
 Figures quoted inside individual rows are dated where they were
 measured; the headline figures are held to `site/_data/census.yml` by
@@ -30,7 +30,7 @@ measured 2026-10-11.
 
 **The desk reference is a command (P18-4), and languages are now
 file-backed (P19-1):** `nabu language CODE` explains any code this page
-covers AND the **1,400-code** etymology universe the `etym`
+covers AND the **1,671-code** etymology universe the `etym`
 cognate lists surface (`gkm`, `zle-ort`, `zlw-opl`…) — name, family,
 curated context, live holdings, and (since 2026-07-28) the related
 research axes: an `axes:` line naming the desks whose shelves hold the
