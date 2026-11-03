@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.tei-c.org/ns/1.0 http://diglib.hab.de/rules/schema/tei/P5/v2.8.0/tei-p5-transcr.xsd"
+    xmlns="http://www.tei-c.org/ns/1.0" xmlns:xi="http://www.w3.org/2001/XInclude" xml:id="grand_tour.cod_guelf_267_1_extrav" n="Cod. Guelf. 267.1 Extrav.">
+   <teiHeader>
+      <fileDesc>
+         <titleStmt>
+            <title type="main">[Johannes Wagener]: Reisetagebuch eines wandernden Apothekergesellen <lb/>(Cod. Guelf. 267.1 Extrav.)</title>
+         </titleStmt>
+         <publicationStmt>
+            <p/>
+         </publicationStmt>
+         <sourceDesc>
+            <bibl>
+               [Johannes Wagener]: Reisetagebuch eines wandernden Apothekergesellen. Herzog August Bibliothek, Signatur: Cod. Guelf. 267.1 Extrav.
+            </bibl>                
+            <xi:include href="../register/listPlace_grand_tour.xml" xpointer="element(place)"/>
+            <xi:include href="../register/listPerson_grand_tour.xml" xpointer="element(person)"/>
+            <xi:include href="../register/listOrg_grand_tour.xml" xpointer="element(org)"/>
+         </sourceDesc>
+      </fileDesc>
+   </teiHeader>
+   <xi:include href="http://diglib.hab.de/mss/267-1-extrav/facsimile.xml" xpointer="element(ptr2images_mss_267-1-extrav)"/>
+    <text>
+        <body>
+            <div type="volume">
+                <div type="chapter" n="0">
+                    <pb facs="#mss_267-1-extrav_00001"/>
+                    <pb facs="#mss_267-1-extrav_00002"/>
+                    <pb facs="#mss_267-1-extrav_00003"/>
+                    <pb facs="#mss_267-1-extrav_00004"/>
+                    <pb facs="#mss_267-1-extrav_00005"/>
+                    <table rows="6" cols="2">
+                        <row role="label">
+                            <cell></cell>
+                            <cell role="label"><supplied>Meilen</supplied></cell>
+                        </row>
+                        <row role="data">
+                            <cell role="data">Von <rs type="place" ref="#wolfenbuettel">Wolffenbuttel</rs> biß <rs type="place" ref="#frankfurt_main">Franckfurt</rs></cell>
+                            <cell role="data">38</cell>
+                        </row>
+                        <row>
+                            <cell role="data">von <rs type="place" ref="#frankfurt_main">Franckfurt</rs> biß <rs type="place" ref="#strassburg">Straßburg</rs></cell>
+                            <cell role="data">28</cell>
+                        </row>
+                        <row>
+                            <cell role="data">von <rs type="place" ref="#strassburg">Straßburg</rs> biß <rs type="place" ref="#basel">Basel</rs></cell>
+                            <cell role="data">15</cell>
+                        </row>
+                        <row>
+                            <cell role="data">von <rs type="place" ref="#basel">Basel</rs> biß <rs type="place" ref="#lyon">Lyon</rs></cell>
+                            <cell role="data">36</cell>
+                        </row>
+                        <row>
+                            <cell role="data">von <rs type="place" ref="#lyon">Lyon</rs> biß <rs type="place" ref="#roanne">Roan</rs></cell>
+                            <cell role="data">12</cell>
+                        </row>
+                        <row>
+                            <cell role="data">von <rs type="place" ref="#roanne">Roan</rs> biß <rs type="place" ref="#orleans">Orleans</rs></cell>
+                            <cell role="data">71</cell>
+                        </row>
+                    </table>
+                    <pb facs="#mss_267-1-extrav_00006"/>
+                    <pb facs="#mss_267-1-extrav_00007"/>
+                </div>
+                <div type="chapter" n="1">
+                    <head>
+                        <hi rend="center"><hi rend="underline">Tout avec Dieu.</hi></hi>                        
+                    </head>
+                    <p>
+                        <lb/>Kurtze verzeichnung meiner geringen Reise
+                        <lb/>angefangen A<hi rend="superscript">o</hi> 1652.
+                    </p>
+                    <p>
+                        <lb/>Den <date when="1652-03-24">24 Martij huius Anni</date> mich von <hi rend="underline"><rs type="place" ref="#meldorf">Meledorff</rs>
+                        <lb/>in <rs type="place" ref="#dithmarschen">Dittmarschen</rs></hi> weg: vnd auff die reise begeben
+                        <lb/>vnd erwehnten tag mit <rs type="person" ref="#bolle_johann"><hi rend="underline">Johann Bolle</hi>n</rs> <w lemma="barbirergesellen">barbirer:
+                          <lb/>gesellen</w> auff meine vaterstadt <rs type="place" ref="#itzehoe"><hi rend="underline">Itzehoa</hi></rs> in <rs type="place" ref="#holstein_herzogtum"><w lemma="Holstein">Hol:
+                        <lb/>stein</w></rs> gefahren von den lieben <rs type="person" ref="#wagener_familie">Meinigen</rs> abschied
+                        <lb/>zunehmen, woselbsten Jch biß auf den <date when="1652-04-03">3 April</date>
+                        <lb/>geblieben, vnd erwehnten tag alß aufm Sonnabend
+                        <lb/>vor Dominica Judica zu mittage nach gethanen
+                        <lb/>abschied von den lieben <rs type="person" ref="#wagener_familie">Meinigen</rs> gefahren auf
+                        <lb/><rs type="place" ref="#kellinghusen"><hi rend="underline">Kellinghusen</hi></rs> ein gar großes vnd schönes dörff
+                        <lb/>daselbsten nacht geblieben vnd folgenden tag
+                        <lb/>alß den <date when="1652-04-04">4 April</date> durch einen Marckfleckken
+                        <lb/><rs type="place" ref="#bramstedt"><hi rend="underline">Bramstede</hi></rs> woselbsten <rs type="person" ref="#daenemark_christian_iv">Christiani quarti
+                        <lb/>gewesenen Könicgs zu Dennemarcks</rs> Concubinen
+                        <lb/><rs type="person" ref="#kruse_vibeke">Fraw Wiebeken</rs> Residentz, welches Ihr der <rs type="person" ref="#daenemark_christian_iv">König</rs>
+                        <lb/>gantz new hat erbawen laßen, forthan auff
+                        <lb/>das Stedtlein <rs type="place" ref="#segeberg"><hi rend="underline">Segeberg</hi></rs> gereiset, alhie ist ein
+                        <lb/>schloß welches gar fast von den <rs type="place" ref="#schweden_koenigreich">Schweden</rs> 1644
+                        <lb/>abgebrand, auf den gar hohen kalckberg, an
+                        <lb/>welchen täglich viele menschen arbeiten, auch der
+                        <lb/>beste kalck darvon gebrand wird, vnd
+                        <lb/>Zu <rs type="place" ref="#strukdorf">Struckdorff</rs> nacht geblieben, den <date when="1652-04-05">5 <choice><expan>huius</expan><abbr>hui&#42863;</abbr></choice></date>
+                        <pb facs="#mss_267-1-extrav_00008"/>
+                        <lb/>Jn die Kaÿserliche Freÿ Reichsstadt <rs type="place" ref="#luebeck"><hi rend="underline">Lubeck</hi></rs>
+                        <lb/>angelanget, vnd mich am Klingenberg in Guldn
+                        <lb/>Apfel ein logiret, diese stadt ist eine von den
+                        <lb/>4 Fornembsten Reichsstadt so da auch Vota zur
+                        <lb/>Kaijserlichen Wahl geben mueßen alhie seind
+                        <lb/>2 apothecken alß die Raths apothecke, worinn
+                        <lb/>H. <rs type="person" ref="#mueth_christian">Christian Mueth</rs> Rathsapothecker, vnd die andre
+                        <lb/>H. <rs type="person" ref="#rock_anon_1">Rocks</rs> apothecke, die vornembsten kirchen
+                        <lb/>alhie ist St. Marien kirch vnd der thuemb auff
+                        <lb/>welchen jeder Kirch 2 Thuermer, in der Marien
+                        <lb/>kirch siehet man hinter Altar ein gar kunstlich
+                        <lb/>großes Vhr welches daß <del>tag</del> Jahr monat tage
+                        <lb/>stunden minuten auch die Regierung der planetn
+                        <lb/>an zeiget, vmb diesen altar hervmb siehet man
+                        <lb/>gar kunstlich in steinen gehawn vnd geschnitze
+                        <lb/>arbeit, Jnnsonderheit welches gar schön wie
+                        <lb/>unser <rs type="person" ref="#jesus_christus">Seeligmacher</rs> daß abendmahl mit seinen
+                        <lb/><rs type="person" ref="#apostel">Jungern</rs> gehalten. Auch ward mir von dem
+                        <lb/>kirchen knecht eine kleine winde gezeiget, <w lemma="welches">wel:
+                        <lb/>ches</w> an der Maur daneben im zugesperten <w lemma="schrancken">schran:
+                        <lb/>cken</w> worinen ein Polnischer zebel, vnd referirte
+                        <lb/>mir daß ein <rs type="person" ref="#bruskow_nikolaus">Polnischer Edelman</rs> vor vieln Jahrn
+                        <lb/>mit gezeigten zebel einen <rs type="person" ref="#oldenborch_bernhard">bürgermeistern</rs> in
+                        <lb/>die kirche nieder gemacht, welcher aber bald <w lemma="ergriffen">er:
+                        <lb/>griffen</w>, vnd mit gedachter Winde Jhm die <w lemma="Därme">Där
+                        <lb/>me</w> auß dem leibe gewunden worden.
+                        <lb/><add place="bottom">NB. auf dem rath hause zusehen 2 löwen, so vor diesem alda vors altes
+                        <lb/>beij <choice><expan>der</expan><abbr>&#x221;</abbr></choice> stadt gefang aufm  <unclear>Mithin</unclear> stehet am rath:hause <cit><quote><ref type="classical" cRef="Verg_Aen_6,620">discite <choice><expan>justitiam</expan><abbr>justiti&#257;</abbr></choice> moniti
+                        <lb/>et <choice><expan>non</expan><abbr>&#333;</abbr></choice> temnite divos.</ref></quote></cit></add>
+                       <pb facs="#mss_267-1-extrav_00009"/>
+                       <lb/>In den thuemb ward mir gezeiget die Maur
+                       <lb/>worinnen vor vielen Jahren ein guete quantität
+                       <lb/>Gold gefunden, welches die Catholischen wie die
+                       <lb/><rs type="place" ref="#luebeck">stadt</rs> lutherisch geworden in gedachter Maur <w lemma="vermewret">vermew:
+                       <lb/>ret</w> hatten. Den <date when="1652-04-06">6 dito</date> bin Jch wieder in das
+                       <lb/>Nonnen kloster bey St. Johan gegangen, da dan eine
+                       <lb/>Nonne J. <rs type="person" ref="#katharina">Catharina</rs> mir die gelegenheit des klosters
+                       <lb/>alß Jhre kirche den Schönen garten, Jhre zellen, auch
+                       <lb/>den Eßsaal gezeiget. Den <date when="1652-04-08">8 Dieses</date> meine Sachen
+                       <lb/>in Schiffern <rs type="person" ref="#doehling_johann">Johan Döhlings</rs> schiff gebracht, vnd
+                       <lb/>nach <rs type="place" ref="#travemuende"><hi rend="underline">Tramunde</hi></rs> (eine feine festung vnd Städtlein
+                       <lb/>an der <rs type="place" ref="#ostsee">See</rs> ligend vnd der Stadt <rs type="place" ref="#luebeck">Lübeck</rs> zu <w lemma="gehörig">gehö:
+                       <lb/>rig</w>) mich begeben vnd am selbigen orth wegen
+                       <lb/>contrarien windes 6 tages bleiben <subst><del>b</del><add place="inline">M</add></subst>ueßen.
+                       <lb/>außen vor der <rs type="place" ref="#travemuende">stadt</rs> an der <rs type="place" ref="#ostsee">See</rs> ist ein hochauf
+                       <lb/>gemaurerter thurm, welcher die laterne oder
+                       <lb/>leuchte genand wird, maßen allen abend
+                       <lb/>oben auf den thurm 8 wachslichter vor die
+                       <lb/>großen fenster gesetzet, welche den fahrenden <w lemma="schifleuten">schifleu:
+                       <lb/>ten</w> in die <rs type="place" ref="#ostsee">See</rs> auf etliche Meil leuchten.
+                       <lb/>Wie Jch alhie so lang warten mueste aufm Wind
+                       <lb/>bin ich mit ander aufs waßer bißweilen spatzirn
+                       <lb/>gefahrn, da wir eins tages vnd vber die <rs type="place" ref="#trave_river"><hi rend="underline">trawe</hi></rs>
+                       <lb/>(dan also wird der hafen vnd fluß genand so nach
+                       <lb/>der stadt <rs type="place" ref="#luebeck">Lubeck</rs> hinauf gehet) ins <rs type="place" ref="#mecklenburg_herzogtum">Mecklenburgis:
+                       <lb/>gebiete</rs> vber setzen ließen, kamen wir in ein Dorff
+                       <lb/><choice><corr>welches</corr><sic>welßes</sic></choice> <rs type="place" ref="#dassow">Deßaw</rs> genand ward, woselbsten so
+
+<!-- fixture trim: the file continues upstream -->
+</p></div></div></body></text></TEI>

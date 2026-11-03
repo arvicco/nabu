@@ -1978,3 +1978,11 @@ Loseley (John Donne's letters of 1602 about his secret marriage among
 them), with other family papers, depositions, orders and a receipt —
 each page in its original spelling, with the project's regularized
 spelling beside it (CC BY-SA 4.0).
+
+**`grand-tour`** — Grand Tour digital (Herzog August Bibliothek
+Wolfenbüttel): four German travel journals of 1652–1702 edited from the
+manuscripts — a journeyman apothecary's wanderings, Christian August of
+Schleswig-Holstein-Norburg's diary, Duke Ludwig Rudolf's Danish and
+Swedish journey, the Bevern dukes in Italy and France — page by page,
+with the places and persons they name linked to GeoNames and the GND
+(CC BY-SA 4.0).

@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.tei-c.org/ns/1.0 http://diglib.hab.de/rules/schema/tei/P5/v2.8.0/tei-p5-transcr.xsd" xml:id="edition_grand_tour">
+    <teiHeader>
+        <fileDesc>
+            <titleStmt>
+                <title>Grand Tour Digital - Digitale Edition frühneuzeitlicher Selbstzeugnisse von Bildungsreisen</title>
+                <respStmt>
+                    <resp>Herausgegeben und bearbeitet von</resp>
+                    <persName>
+                        <forename>Angela</forename>
+                        <surname>Göbel</surname>                        
+                    </persName>
+                    <persName>
+                        <forename>Maximilian</forename>
+                        <surname>Görmar</surname>                        
+                    </persName>
+                </respStmt>                
+                <respStmt>
+                    <resp>Technische Umsetzung</resp>
+                    <persName>
+                        <forename>Maximilian</forename>
+                        <surname>Görmar</surname>
+                    </persName>
+                </respStmt> 
+                <funder>Deutsche Forschungsgemeinschaft</funder>                
+                <principal>Herzog August Bibliothek Wolfenbüttel</principal>                
+            </titleStmt>
+            <publicationStmt>                
+                <publisher>
+                    <name type="org">Herzog August Bibliothek Wolfenbüttel</name>
+<!--                    <ptr target="http://www.hab.de"/>-->
+                </publisher>            
+                <date type="digitised" when="2022">2022-2025</date>
+                <pubPlace>Wolfenbüttel</pubPlace>
+                <distributor>Herzog August Bibliothek Wolfenbüttel</distributor>
+                <availability status="free">
+                    <licence target="https://creativecommons.org/licenses/by-sa/4.0/">CC-BY-SA 4.0</licence>
+                </availability>                
+            </publicationStmt>
+            <sourceDesc>
+                <bibl>N. N. Wagener: Tout Avec Dieu. Kurtze verzeichung meiner geringen Reise angefangen Anno 1652. Herzog August Bibliothek, Signatur: Cod. Guelf. 267.1 Extrav.</bibl>
+            </sourceDesc>            
+        </fileDesc>
+        <revisionDesc>
+            <list>
+                <item>work in progress</item>
+            </list>
+        </revisionDesc>
+    </teiHeader>
+    <text>
+        <group>
+            <head>Wagener, 1652-1659</head>
+            <xi:include href="../introduction/introduction_cod_guelf_267_1_extrav.xml"/>
+            <xi:include href="cod_guelf_267_1_extrav.xml"/>
+        </group>  
+        <group>
+            <head>Ludwig Rudolf, 1689</head>
+            <xi:include href="../introduction/introduction_cod_guelf_89_blank.xml"/>
+            <xi:include href="cod_guelf_89_blank.xml"/>
+        </group> 
+        <group>
+            <head>Heinrich Ferdinand und Ernst Ferdinand, 1701/02 (in Bearbeitung)</head>
+            <xi:include href="../introduction/introduction_cod_guelf_149_14_extrav.xml"/>
+            <xi:include href="cod_guelf_149_14_extrav.xml"/>
+        </group>
+        <group>
+            <head>Christian August, 1664-1669 (in Bearbeitung)</head>
+            <xi:include href="../introduction/introduction_cod_guelf_221_extrav.xml"/>
+            <xi:include href="cod_guelf_221_extrav.xml"/>
+        </group>
+        <group>
+            <head>Weitere digitalisierte Texte (Kurzbeschreibungen und Digitalisate)</head>
+            <xi:include href="../introduction/introduction_cod_guelf_28_9_aug_4.xml"/>
+            <xi:include href="../introduction/introduction_cod_guelf_37_14_aug_2f.xml"/>
+            <xi:include href="../introduction/introduction_cod_guelf_40_1_aug_2f.xml"/>
+            <xi:include href="../introduction/introduction_cod_guelf_77_1_aug_2f.xml"/>
+            <xi:include href="../introduction/introduction_cod_guelf_16_extrav.xml"/>
+            <xi:include href="../introduction/introduction_cod_guelf_62_3b_extrav.xml"/>
+            <xi:include href="../introduction/introduction_cod_guelf_127_1_extrav.xml"/>
+            <xi:include href="../introduction/introduction_cod_guelf_130_16_extrav.xml"/>
+            <xi:include href="../introduction/introduction_cod_guelf_135_6_extrav.xml"/>
+            <xi:include href="../introduction/introduction_cod_guelf_139_4_extrav.xml"/>
+            <xi:include href="../introduction/introduction_cod_guelf_239_13_extrav.xml"/>
+            <xi:include href="../introduction/introduction_cod_guelf_253_1_extrav.xml"/>
+            <xi:include href="../introduction/introduction_cod_guelf_257_3_extrav.xml"/>
+            <xi:include href="../introduction/introduction_cod_guelf_289_1_extrav.xml"/>
+        </group>
+    </text>
+</TEI>

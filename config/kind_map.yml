@@ -960,6 +960,9 @@ sources:
       "Warrant": legal/law                   # 1 — the Privy Council's warrant
       "Legal opinion": legal                 # 1 — counsel's opinion with its reply
       "Receipt": administrative/receipt      # 1 — Donne's receipt for £100
+  grand-tour:                # P155 — the four journals are day-by-day travel diaries (Reisetagebuch,
+    source_kind: literary/diary/travelogue   # Reise-Journal, "Kurtze verzeichnung meiner
+    #   geringen Reise"): the ruled travelogue sub, one whole-source line
   tianyige:                  # the Ming examination records (科舉錄): each record is the
     source_kind: administrative/register   # official register of one session — examiners,
     #   questions, the graduates' roster, model answers; register is the closest ruled class
