@@ -2,24 +2,31 @@
 title: Quickstart
 permalink: /quickstart/
 description: >-
-  From a fresh clone to the first aligned verse in minutes: prerequisites,
+  From a fresh clone to the first aligned verse in about ten minutes: prerequisites,
   the starter shelf, the first three commands, and how to grow the library.
 ---
 
 {% assign census = site.data.census -%}
 Nabu is operated from the command line and lives entirely under its own
 directory — plain files plus SQLite, no services. Initializing your own
-library takes five steps; the starter shelf below was measured at about
-**690 MB on disk** and a few minutes of syncing on the reference machine
-(2026-07-13).
+library takes five steps. The few house terms the output uses (shelf,
+core group, license class…) are defined in a short glossary at step 3,
+beside the first output that prints them.
 
-## Prerequisites
+## Before you start
 
-- **Ruby 3.3 or newer** and **git**. macOS (Apple Silicon) is the
-  development platform; nothing in the core is known to be Mac-specific,
-  but no other platform is exercised.
-- **Disk**: about 1 GB for the starter shelf (canonical files plus the
-  derived databases). The full library currently occupies roughly
+- **Tested platform: macOS on Apple Silicon only.** It is the one platform
+  Nabu is developed and exercised on. Nothing in the core is known to be
+  Mac-specific, so Linux may well work, but it is untested — as is Windows.
+- **You need Ruby 3.3 or newer and git.** Check with `ruby -v`; if Ruby is
+  missing or older, follow the official
+  [Ruby installation guide](https://www.ruby-lang.org/en/documentation/installation/).
+- **Budget up to ten minutes and about 1 GB of disk** for the whole
+  quickstart path below. The four starter sources were measured at about
+  **690 MB on disk** on the reference machine (2026-07-13); the databases
+  derived from them make up the rest. Most of the time is download, and
+  the dictionary source dominates it.
+- **Room to grow**: the full library currently occupies roughly
   117 GB canonical + 159 GB of derived databases on the reference
   machine (measured 2026-10-11; OpenITI, ORACC and EEBO-TCP dominate the
   canonical side) — growth is entirely at your discretion, shelf by
@@ -48,11 +55,40 @@ faraday, plus test tooling). Configuration is optional: every key in
 bin/nabu quickstart
 ```
 
-This first syncs the **core group** automatically — the registry
-instruments the library itself depends on
+**The words the output uses**, in six lines:
+
+- **source** — one upstream collection (a corpus, a treebank, a
+  dictionary) as Nabu fetches it, named by a short slug such as `sblgnt`.
+- **shelf** — a source as it sits in your library once synced: its
+  fetched files plus the databases derived from them. The *starter shelf*
+  is the four sources this step syncs.
+- **passage** — the smallest citable unit of a text (a verse, a line, a
+  treebank sentence), each with a stable `urn:nabu:…` address that
+  `bin/nabu show` opens.
+- **core group** — the small reference registries (languages and places)
+  every library depends on; always synced first, automatically.
+- **desk** (the CLI says **axis**) — a scholarly grouping of sources by
+  field, from the Classicist's to the Assyriologist's.
+- **license class** — the upstream license reduced to one label, carried
+  by every passage and printed beside every result. The labels:
+
+| Class | Meaning |
+|---|---|
+| `open` | public domain or CC0 — no restrictions |
+| `attribution` | CC BY / CC BY-SA class — redistributable with credit |
+| `odbl` | open data under the Open Database License — attribution and share-alike on the database |
+| `nc` | non-commercial (CC BY-NC-SA class) — fine for private research, never redistributed by the tooling |
+| `research_private` | personal research only; hidden from AI clients unless they opt in per call |
+| `restricted` | an unfamiliar upstream license, held back until a human has read it |
+
+The full terms, source by source, are on
+[Sources]({{ '/sources/' | relative_url }}).
+
+The command first syncs the **core group**
 ([nabu-lects](https://arvicco.github.io/nabu-lects),
-[nabu-places](https://arvicco.github.io/nabu-places), CIGS: a few
-hundred KB total, pre-enabled by nature; `bin/nabu sync core` re-runs
+[nabu-places](https://arvicco.github.io/nabu-places), and CIGS, the
+cuneiform site index: a few hundred KB total, always enabled;
+`bin/nabu sync core` re-runs
 just that sweep any time) — then the four curated starter sources, each
 through its normal fetch → load → index path, and ends by printing the
 first three commands to try. The starter set, with sizes measured from
@@ -65,10 +101,9 @@ the live canonical tree on 2026-07-13:
 | `iswoc` | ISWOC treebank — the West-Saxon gospels, Old English (non-commercial research license) | 30 MB |
 | `lexica` | LSJ and Lewis &amp; Short, the dictionary shelf (CC BY-SA) | 479 MB |
 
-On the reference machine the four first syncs took roughly three minutes
-of fetch-and-load combined (the `lexica` clone dominates at about two
-minutes; `sblgnt` takes seconds); allow up to ten minutes on an ordinary
-connection, including the per-source index rebuilds. The command is
+The whole step fits the ten-minute budget above, per-source index builds
+included; the `lexica` download dominates, while `sblgnt` takes seconds,
+so a slow connection stretches the fetches and little else. The command is
 idempotent — re-running it is an ordinary re-sync — and one source's
 failure never stops the rest: failures are reported at the end.
 `bin/nabu quickstart --dry-run` prints the set without syncing anything.
@@ -80,8 +115,14 @@ The starter shelf lights the library's three signature surfaces.
 **One verse across seven witnesses.** `bin/nabu align "MARK 2.3"` renders
 the same verse in Greek (twice — PROIEL and SBLGNT), Latin, Gothic,
 Classical Armenian, Old Church Slavonic, and Old English, each with its
-license label. From a live run (2026-07-11, on the reference box, whose
-fuller library attests further witnesses beyond the starter seven):
+license class.
+
+The sample below is not a quickstart run. It was captured on 2026-07-11
+from the maintainer's full library, which holds more witnesses of this
+verse than the quickstart corpus — hence its "13 of 13". On a fresh
+quickstart library the same command shows the seven starter witnesses;
+the other six (the English WEB, the Clementine Vulgate, and four further
+Old Church Slavonic manuscripts) arrive as you grow the library.
 
 ```
 $ bin/nabu align "MARK 2.3"
