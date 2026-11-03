@@ -32,7 +32,10 @@ At **every phase gate**, alongside the README/library.md truthfulness pass
       site refresh").
    2. **Regenerate the SSOT from the live catalog**: `bundle exec rake
       site:refresh` (= `site:data` — recomputes `census.yml` + `desks.yml`
-      + `dates.yml` against the live catalog, stamped today, and renders
+      + `dates.yml` against the live catalog, stamped today, projects
+      `mcp.yml` — the MCP page's tool list, pinned demo tag and demo
+      license table — from the server's tool registry, `server.json` and
+      the demo plan, and renders
       `site/llms.txt` — the agent entry file — from those SSOT files — then
       `site:axes`). This is the ONLY number-entry step; the prose pages
       update themselves because they read the data.
