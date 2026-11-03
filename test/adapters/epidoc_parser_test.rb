@@ -692,6 +692,82 @@ class EpidocParserTest < Minitest::Test
     parse_hh13.passages.each { |passage| assert_equal({}, passage.annotations) }
   end
 
+  # --- refsDecl scoping (P154) -------------------------------------------------
+  # The Patristic Text Archive's header carries the CTS refsDecl plus three
+  # cross-reference resolvers (biblical / pta / perseus) whose patterns are
+  # URLs; the biblical one's four capture groups used to out-rank the real
+  # one-group section scheme and refuse the edition.
+
+  PTA_PATH = File.expand_path("../fixtures/pta/data/pta0001/pta002/pta0001.pta002.pta-grc1.xml", __dir__)
+  PTA_URN = "urn:cts:pta:pta0001.pta002.pta-grc1"
+
+  def test_pta_edition_reads_only_the_cts_refsdecl_and_cites_by_section
+    header = File.read(PTA_PATH)
+
+    assert_includes header, "bibelwissenschaft.de/bibelstelle" # the resolver decl is really there
+    doc = parser.parse(PTA_PATH, urn: PTA_URN, language: "grc")
+
+    assert_equal %W[#{PTA_URN}:1 #{PTA_URN}:2], doc.passages.map(&:urn)
+    assert doc.passages.first.text.start_with?("Πάντοτε μὲν ὁ θεῖος ἀπόστολος")
+  end
+
+  def test_unlabelled_refsdecl_with_an_xpath_pattern_still_counts
+    # The fallback: a header whose CTS decl lost its @n (first1k's split/
+    # tree, perseus tlg0007 shape) still cites by its in-document xpath.
+    xml = File.read(HH13_PATH).sub('<refsDecl n="CTS">', "<refsDecl>")
+
+    refute_equal File.read(HH13_PATH), xml # surgery sanity check
+    with_tempfile(xml) do |path|
+      unlabelled = parser.parse(path, urn: HH13_URN, language: "grc").passages
+
+      assert_equal(parse_hh13.passages.map { |p| [p.urn, p.text] }, unlabelled.map { |p| [p.urn, p.text] })
+    end
+  end
+
+  def test_non_cts_url_resolver_patterns_never_join_the_scheme
+    assert Nabu::Adapters::EpidocParser.citation_pattern?(refs_decl_n: "CTS", replacement: "https://x/$1")
+    assert Nabu::Adapters::EpidocParser.citation_pattern?(
+      refs_decl_n: "NTS", replacement: "#xpath(/tei:TEI/tei:text/tei:body/tei:div/tei:div[@n='$1'])"
+    )
+    assert Nabu::Adapters::EpidocParser.citation_pattern?(
+      refs_decl_n: nil, replacement: "#xpath(/tei:TEI/tei:text/tei:body/tei:div/tei:l[@n='$1'])"
+    )
+    refute Nabu::Adapters::EpidocParser.citation_pattern?(
+      refs_decl_n: nil, replacement: "https://www.bibelwissenschaft.de/bibelstelle/$2$3,$4/$1"
+    )
+    refute Nabu::Adapters::EpidocParser.citation_pattern?(refs_decl_n: nil, replacement: nil)
+  end
+
+  # --- apparatus (P154) -----------------------------------------------------------
+  # A PTA critical edition (Uthemann's Ps.-Chrysostom In Noe) inlines its
+  # apparatus: <app><lem source="#Uthemann">ὑμῖν</lem><rdg wit="#V">ἡμῖν</rdg></app>.
+
+  PTA_APP_PATH = File.expand_path("../fixtures/pta/data/pta0001/pta036/pta0001.pta036.pta-grc1.xml", __dir__)
+  PTA_APP_URN = "urn:cts:pta:pta0001.pta036.pta-grc1"
+  PTA_APPARATUS = %w[rdg rdgGrp witDetail del].freeze
+
+  def test_apparatus_readings_leave_the_text_and_the_lemma_stays
+    first = parser.parse(PTA_APP_PATH, urn: PTA_APP_URN, language: "grc", apparatus: PTA_APPARATUS).passages.first
+
+    assert_includes first.text, "Τοῦτο γὰρ καὶ ὁ λόγος ὑμῖν ἐπαγγέλλεται"
+    assert_includes first.text, "ἵνα μὴ τῇ τοῦ καιροῦ βραχύτητι δουλεύοντες παραλίπωμεν τῶν νοημάτων"
+    refute_includes first.text, "παραλείπωμεν"
+  end
+
+  def test_without_apparatus_the_default_parse_keeps_every_reading
+    # The default is the pre-P154 extraction: mixed content concatenated.
+    first = parser.parse(PTA_APP_PATH, urn: PTA_APP_URN, language: "grc").passages.first
+
+    assert_includes first.text, "ὑμῖν ἡμῖν ἐπαγγέλλεται"
+  end
+
+  def test_apparatus_spans_reach_no_inline_layer
+    passages = parser.parse(PTA_APP_PATH, urn: PTA_APP_URN, language: "grc", apparatus: PTA_APPARATUS).passages
+    texts = passages.flat_map { |p| p.annotations.values.flatten.map { |record| record["text"] } }
+
+    refute(texts.any? { |text| text.include?("παραλείπωμεν") })
+  end
+
   # --- Streaming proof --------------------------------------------------------
 
   def test_implementation_streams_and_never_builds_a_full_document_dom

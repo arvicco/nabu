@@ -170,6 +170,93 @@ module Site
       end
     end
 
+    # The landing page's recency is GENERATED, never hand-written (the
+    # November 2026 site review: a hand narrative of "the newest wings"
+    # lagged the real newest additions by weeks, refreshable only by a
+    # rewrite). The block reads the latest news posts through Liquid, so
+    # the existing per-gate news duty keeps it current with no new duty —
+    # and a hand-written recency phrase may not come back beside it.
+    HAND_RECENCY = [/\bnewest wings?\b/i, /\bmost recent(?:ly)? (?:wave|addition)s?\b/i,
+                    /\bthe latest (?:wave|additions?)\b/i].freeze
+
+    def test_the_landing_page_recency_renders_from_the_news_posts
+      home = page("index")
+      assert_match(/\{%-?\s*for post in site\.posts limit:\s*3\s*-?%\}/, home,
+                   "site/index.md must render its recent-additions block from site.posts (limit: 3)")
+      %w[post.date post.url post.title post.description].each do |field|
+        assert_includes home, field, "the recent-additions block must render #{field}"
+      end
+      HAND_RECENCY.each do |phrase|
+        refute_match phrase, home, "site/index.md hand-writes recency (#{phrase.source}) — the " \
+                                   "generated recent-additions block is the only recency on the page"
+      end
+    end
+
+    # Internal phase/packet codes on the published site (the November 2026
+    # site review found "since P96", "(P41-3)", "P78-5", "the P41-g census"
+    # on the deployed /axis/ pages — meaningless to a reader and exactly the
+    # workflow-id class public hygiene bans). The guard bites on the
+    # WORKFLOW SHAPES only, never on a bare P-number: this library's own
+    # domain cites P-numbers legitimately — the New Testament papyri (P52,
+    # P66, P75), CDLI/ORACC tablet ids (P224395) and TEI P5.
+    PHASE_CODE_SHAPES = [
+      /\b[Ss]ince P\d+\b/,                                  # "since P96"
+      /\bP\d+-(?:\d|[a-z])\w*\b/,                           # "P41-3", "P41-g", "P38-r1", "P105-5a"
+      /\bthe P\d+ (?:\S+ )?(?:wave|census|pack|refresh|show|survey|gate|phase|mint)\b/i # "the P46 CC0 pack"
+    ].freeze
+
+    def test_phase_code_shapes_bite_on_leaks_and_spare_scholarly_tokens
+      ["since P96, the KITAB", "Since P91-1 the OKHC", "(P41-3)", "P78-5", "the P41-g census",
+       "(P38-4 + P38-r1)", "the P46 CC0 pack"].each do |leak|
+        assert PHASE_CODE_SHAPES.any? { |shape| leak.match?(shape) }, "the guard must catch #{leak.inspect}"
+      end
+      ["P52, the Rylands fragment", "Bodmer P66 and P75", "(P46)", "TEI P5", "P224395:o.1-o.3",
+       "urn:nabu:oracc:saao-saa01:P224395"].each do |scholarly|
+        refute PHASE_CODE_SHAPES.any? { |shape| scholarly.match?(shape) },
+               "#{scholarly.inspect} is a scholarly token, not a workflow id — the guard must spare it"
+      end
+    end
+
+    # Scanned: every published page (Jekyll's MAINTENANCE.md exclusion
+    # and the build/vendor trees aside), the rendered VALUES of the
+    # site's YAML sources (comments never reach a page), and the axis
+    # registry prose the /axis/ generator projects verbatim.
+    def test_published_surfaces_carry_no_internal_phase_codes
+      offenders = []
+      Dir.glob(File.join(SITE, "**", "*.{md,html,txt}")).each do |path|
+        next if path.include?("/vendor/") || path.include?("/_site/") || path.end_with?("/MAINTENANCE.md")
+
+        phase_code_hits(File.read(path)).each { |hit| offenders << "#{path.delete_prefix(SITE)}: #{hit}" }
+      end
+      Dir.glob(File.join(SITE, "{_data,axis}", "*.yml")).each do |path|
+        yaml_strings(YAML.safe_load_file(path)).each do |text|
+          phase_code_hits(text).each { |hit| offenders << "#{path.delete_prefix(SITE)}: #{hit}" }
+        end
+      end
+      registry = Nabu::SourceRegistry.load(File.join(ROOT, "config", "sources.yml"))
+      registry.axes.each_axis do |axis|
+        phase_code_hits("#{axis.persona} #{axis.desc}").each do |hit|
+          offenders << "config/axes.yml #{axis.name}: #{hit}"
+        end
+      end
+      assert_empty offenders,
+                   "internal phase codes on a published surface — state the content (or a date) " \
+                   "instead:\n  #{offenders.join("\n  ")}"
+    end
+
+    def phase_code_hits(text)
+      PHASE_CODE_SHAPES.flat_map { |shape| text.scan(shape) }.map { |hit| Array(hit).first.inspect }
+    end
+
+    def yaml_strings(node)
+      case node
+      when String then [node]
+      when Hash then node.flat_map { |key, value| yaml_strings(key) + yaml_strings(value) }
+      when Array then node.flat_map { |value| yaml_strings(value) }
+      else []
+      end
+    end
+
     def test_pure_headline_pages_do_not_hardcode_million_scale_totals
       STRICT_PAGES.each do |name|
         prose = page(name).gsub(/```.*?```/m, "") # code blocks show illustrative CLI output

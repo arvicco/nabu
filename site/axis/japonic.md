@@ -7,7 +7,7 @@ description: >-
 
 > The Japanologist — Old Japanese song to the Sino-Japanese dictionary tradition.
 
-The Japanese lane, premodern-first since P108: Genji in Ikeda's critical edition at manuscript-line grain, the Kokinshū and two Man'yōshū witnesses in NIJL's TEI, the みんなで翻刻 crowd-transcription mass, and the NRCT historical gazetteer — beside the ONCOJ corpus and lexicon, EDRDG's dictionaries, HDIC and Unihan shared with the Sinologist, and the kaikki ojp extract riding wiktionary-recon.
+The Japanese lane, premodern-first: Genji in Ikeda's critical edition at manuscript-line grain, the Kokinshū and two Man'yōshū witnesses in NIJL's TEI, the みんなで翻刻 crowd-transcription mass, and the NRCT historical gazetteer — beside the ONCOJ corpus and lexicon, EDRDG's dictionaries, HDIC and Unihan shared with the Sinologist, and the kaikki ojp extract riding wiktionary-recon.
 
 The desk spans two eras of Japanese. Old Japanese (ojp) is live
 through ONCOJ and its lexicon; the modern lane is **Aozora Bunko**
@@ -22,7 +22,7 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 A source wears every desk it serves — these fifteen answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
-| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 2 November 2026)</span> |
+| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 3 November 2026)</span> |
 |---|---|---|---|---|
 | `aozora` | texts | open | wired · manual | 17,121 docs / 2,983,332 passages |
 | `edrdg` | dictionary | attribution | wired · manual | 231,322 entries |
@@ -40,7 +40,9 @@ A source wears every desk it serves — these fifteen answer this desk. Holdings
 | `unihan` | dictionary | open | wired · manual | 102,998 entries |
 | `wiktionary-recon` | dictionary | attribution | wired · manual | 376,415 entries |
 
-**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 2 November 2026)</span>: `zho` 430,294 · `jpn` 393,463 · `lzh` 63,807 · `ojp` 11,413 · `xcl` 8,541 · `sga` 6,688 · `gem-pro` 5,749 · `gmw-pro` 5,578 · `sla-pro` 5,461 · `mnc` 2,577 … and 17 more (`nabu axis japonic` lists all).
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 3 November 2026)</span>: `zho` 430,294 · `jpn` 393,463 · `lzh` 63,807 · `ojp` 11,413.
+
+**Carried in by multilingual packs** (`wiktionary-recon` — whole-source members whose other languages ride along, as of 3 November 2026): `xcl` 8,541 · `sga` 6,688 · `gem-pro` 5,749 · `gmw-pro` 5,578 · `sla-pro` 5,461 … and 18 more (`nabu axis japonic` lists all).
 
 ## The desk's instruments
 
@@ -49,7 +51,7 @@ A source wears every desk it serves — these fifteen answer this desk. Holdings
   kun/on readings and the Jōyō/JLPT/frequency lines), HDIC and Unihan
   shared with the Sinologist, KRADFILE's radical-component index, and the
   kaikki ojp extract on `wiktionary-recon`.
-- **The kyūjitai↔shinjitai reform fold (P38-4 + P38-r1):** modern (`jpn`)
+- **The kyūjitai↔shinjitai reform fold:** modern (`jpn`)
   search folds old-form, new-form and merged spellings onto one skeleton —
   matching modern reading habits, onto the SAME skeleton the Sinologist's
   Han fold uses, so Aozora and kanripo meet. Two lanes: the held Unihan

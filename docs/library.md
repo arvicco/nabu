@@ -1001,6 +1001,21 @@ Theophanes Continuatus, Constantine Porphyrogenitus, Cedrenus and
 Skylitzes, Psellus, Theophylact of Ohrid, Zonaras, Choniates, Gregoras,
 Palamas, Cantacuzene, Doukas, Glykas — beside eleven patristic volumes;
 one document per volume, one passage per page (attribution) — is
+registered but not yet wired. `pta` — the Patristic Text Archive (BBAW):
+open Greek editions of the early Christian authors, Severian of Gabala's
+homilies to Athanasius, Eusebius, Origen and the Arian-controversy
+documents, critical apparatus kept out of the text, each work dated and
+placed from the archive's own catalog (licensed per file: attribution,
+one CC BY-NC-SA edition) — is registered but not yet wired.
+
+**Attic epigraphy.** `aio` — Attic Inscriptions Online (British School
+at Athens, ed. Stephen Lambert): English translations of the
+inscriptions of Attica — decrees of the Council and People and of the
+demes, laws, dedications, funerary monuments, accounts, ephebic and
+prytany lists — line by line, with the translators' footnotes, AIO's own
+Greek editions for the AIO and AIUK records, the page's date and
+Pleiades-linked findspot, and every record's IG/SEG concordance; the
+library's first Attic epigraphy (CC BY-SA 3.0, attribution) — is
 registered but not yet wired.
 
 **Slavic.** The Slovenian line: `kdsp` — longer narrative prose
@@ -1852,3 +1867,106 @@ pair: Cleasby–Vigfusson's *An Icelandic-English Dictionary* (1874;
 (1910; 29,951 entries), both from Sampo Silvennoinen's JSON editions
 (MIT; the texts public domain) — the Norse shelf's first dictionary
 layer.
+
+## 8az. The Pacific opening (P154)
+
+**`ebible-pacific`** — the library's first Oceanic and Micronesian
+running text: eBible.org's public-domain Pacific Bibles as USFM —
+*Ka Baibala Hemolele*, the Hawaiian Bible in its 1868 revision and its
+own period spelling (66 books / 31,102 verses), the American Bible
+Society's Chamorro Gospels, Acts and Psalms (6 / 7,245), and the
+Pohnpeian New Testament and Psalms in the old alphabet (28 / 10,415;
+open) — registered but not yet wired.
+
+## 8ba. The Sixth Council Tipiṭaka with its subcommentaries, and the Ming examination records (P154)
+
+Expected counts from the fixture-time censuses (the gate's first syncs
+confirm them):
+
+**`osbct`** — the Sixth Buddhist Council (Chaṭṭha Saṅgāyana) Tipiṭaka
+in the romanised edition of the Ministry of Religious Affairs, Yangon
+(2008, from the Myanmar edition of 2001), as IEBH / BTHAR's Unicode
+corpus: the canon, its aṭṭhakathā and — new to the library — its
+ṭīkā, 118 volumes / 89,512 paragraphs, every paragraph carrying the
+printed apparatus (variant readings with their witness sigla, and
+cross-references). A third witness of the canon beside SuttaCentral's
+Mahāsaṅgīti and tipitaka.lk's Buddha Jayanthi edition, and a second of
+the commentaries beside tipitaka.lk's CST text. Held non-commercially:
+the edition's own notice permits free, non-commercial distribution
+(the deposit's derived data are CC BY 4.0).
+
+**`tianyige`** — the Tianyi Pavilion's Ming examination records
+(天一閣藏明代科舉錄): 312 printed records of the provincial, metropolitan
+and palace examinations, 1371–1684 — the examiners, the questions of
+the three sessions, the rosters of graduates and the model essays with
+their examiners' comments — 312 documents / 38,711 page transcriptions,
+each dated by its reign year and linked to its scan on Wikimedia
+Commons. Machine-read and uncorrected (labeled on every record; check
+the scan before citing); the dataset's machine translations are not
+taken (CC0).
+## 8bb. The P154 arrivals — the Suda in English, the HMML manuscript catalogue
+
+**`suda-translations`** — the Suda On Line: the complete collaborative
+English translation of the Suda, the 10th-century Byzantine
+lexicon-encyclopedia, 31,341 entries in 27 Adler-letter documents, each
+with its notes, bibliography, keywords and the names of its translator
+and vetters (CC BY-NC-SA). Every entry keeps its Adler number, the key
+to the held First1K Greek.
+
+**`hmml-reading-room`** — the Hill Museum & Manuscript Library's
+Reading Room catalogue, its Syriac and Ethiopic cataloguing: 18,892
+manuscripts and prints from the churches and monasteries of Iraq,
+Turkey, Lebanon, Syria, India and Ethiopia and the European libraries
+that hold their books — shelf marks, dates, places of origin, scripts,
+contents, authors and genres — with 11,196 incipits in Syriac, Ge'ez,
+Amharic, Garshuni and Arabic as searchable text (CC BY 4.0, the weekly
+dataset).
+## 8bc. The P154 dictionary wave
+
+**`fsv-lexica`** — Språkbanken's three Old Swedish dictionaries for the
+fornsvenska corpus: K.F. Söderwall's *Ordbok öfver svenska
+medeltids-språket* (1884–1918; 22,572 entries) and its supplement
+(1925–1973; 19,172), and C.J. Schlyter's glossary to the medieval laws
+(1877; 10,067) — Swedish-language articles with the books' citations,
+keyed by hand at Språkbanken, every entry under its lemgram so the
+three books meet on one key (CC BY 4.0).
+
+**`littre`** — Émile Littré's *Dictionnaire de la langue française*
+(1863–1877; 78,483 articles) in the oeuvres/littre TEI: definitions,
+pronunciation, citations from the 17th-century canon the
+theatre-classique stage holds, and the HISTORIQUE sections that quote
+Old and Middle French century by century — each article tagged with the
+earliest century Littré quotes it from (CC BY-SA).
+
+**`mahan-kosh`** — Bhai Kahan Singh Nabha's *Gurushabad Ratnakar Mahan
+Kosh* (1930), the Sikh encyclopedic dictionary of the Gurbani
+vocabulary, in its original Punjabi: 64,218 entries, 60,196 with the
+full Gurmukhi article (its quotations, etymologies and cross-references)
+and every entry with its volume and page in the 1930 print — the
+dictionary for the shabados Gurbani shelf (the 1930 text public domain,
+the packaging CC BY 4.0).
+
+**`dpd`** — the Digital Pāḷi Dictionary (Bodhirasa Bhikkhu and
+contributors): 89,763 Pāḷi headwords of the canon and commentaries,
+each with its meaning, grammar, root, construction and Sanskrit
+parallel — the dictionary for the suttacentral and tipitaka-lk Pāḷi
+shelves (non-commercial, CC BY-NC-SA 4.0).
+
+**Twenty-two Wiktionary extracts** (kaikki.org; CC BY-SA + GFDL) give
+the held languages without a dictionary their first English-glossed
+shelf, each with its etymology chains and descendant trees. Historical:
+`wiktionary-enm` (Middle English, 56,687 entries), `wiktionary-non`
+(Old Norse, 11,403), `wiktionary-got` (Gothic, 23,034),
+`wiktionary-fro` (Old French, 9,280), `wiktionary-frm` (Middle
+French, 4,956), `wiktionary-sco` (Scots, 6,042), `wiktionary-syc`
+(Classical Syriac, 3,911), `wiktionary-arc` (Aramaic, 2,396),
+`wiktionary-br` (Breton, 2,336), `wiktionary-dum` (Middle Dutch,
+2,342), `wiktionary-gmh` (Middle High German, 2,142), `wiktionary-osp`
+(Old Spanish, 1,501), `wiktionary-gmq-osw` (Old Swedish, 1,440),
+`wiktionary-pro` (Old Occitan, 695), `wiktionary-ofs` (Old Frisian,
+654) and `wiktionary-okm` (Middle Korean, 1,033). Modern, for the held
+languages' later text: `wiktionary-sh` (Serbo-Croatian, 70,466 — for
+the Serbian and Croatian shelves alike), `wiktionary-ca` (Catalan,
+198,685), `wiktionary-ko` (Korean, 64,457), `wiktionary-et` (Estonian,
+13,549), `wiktionary-pa` (Punjabi, 10,749) and `wiktionary-oc`
+(Occitan, 7,521).

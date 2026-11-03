@@ -1,0 +1,560 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="https://raw.githubusercontent.com/PatristicTextArchive/Schema/master/tei-pta.rng" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xmlns:telota="http://www.telota.de" xml:lang="en" telota:doctype="edition">
+   <teiHeader>
+      <fileDesc>
+         <titleStmt>
+            <title>In illud: in principium erat verbum</title>
+            <author>
+               <persName key="pta0001">Severianus
+						Gabalensis</persName>
+            </author>
+            <editor>
+               <persName xml:id="AvS">Annette von
+						Stockhausen</persName>
+               <roleName>Editor</roleName>
+               <orgName>Berlin-Brandenburgische Akademie der
+						Wissenschaften</orgName>
+            </editor>
+            <respStmt>
+               <persName xml:id="CP">Carmen Prüfer</persName>
+               <resp>Encoding of persons and places</resp>
+            </respStmt>
+         </titleStmt>
+         <editionStmt>
+            <p>New digital critical edition.</p>
+         </editionStmt>
+         <publicationStmt>
+            <authority>Berlin-Brandenburgische Akademie der
+					Wissenschaften</authority>
+            <distributor>Patristic Text Archive</distributor>
+            <availability>
+               <licence target="https://creativecommons.org/licenses/by-sa/4.0/">Available under a Creative Commons
+						Attribution ShareAlike 4.0 International
+						License</licence>
+            </availability>
+            <date>2018</date>
+            <idno type="PTA">pta0001.pta026</idno>
+            <idno type="TLG">tlg4139.tlg016</idno>
+            <idno type="CPG">4210</idno>
+            <idno type="BHG"/>
+            <idno type="Aldama">549</idno>
+            <idno type="Pinakes-Oeuvre">7957</idno>
+         </publicationStmt>
+         <sourceDesc>
+            <listWit>
+               <listWit xml:id="a">
+                  <head>Ursprüngliche Fassung (<abbr type="siglum">a</abbr>)</head>
+                  <witness xml:id="Ac" corresp="pta0001.pta026.pta-MsAc.xml">
+                     <abbr type="siglum">Ac</abbr>
+                     <name key="PTAMS00007">Atheniensis 212</name>,
+							<origDate>s. 10</origDate>, <locus>f.
+							11r–15r</locus>
+                  </witness>
+                  <witness xml:id="Ad" corresp="pta0001.pta026.pta-MsAd.xml">
+                     <abbr type="siglum">Ad</abbr>
+                     <name key="PTAMS00023">Atheniensis 455</name>,
+							<origDate>s. 13</origDate>, <locus>p.
+							100–105</locus>
+                  </witness>
+                  <witness xml:id="Be" corresp="pta0001.pta026.pta-MsBe.xml">
+                     <abbr type="siglum">Be</abbr>
+                     <name key="PTAMS00046">Berolinensis Phillipps
+							1438 (34)</name>, <origDate>s.
+							17</origDate>, <locus>f. 35r–39v</locus>
+                  </witness>
+                  <witness xml:id="Bs" corresp="pta0001.pta026.pta-MsBs.xml">
+                     <abbr type="siglum">Bs</abbr>
+                     <name key="PTAMS00042">Basiliensis F. III.
+							1a</name>, <origDate>s. 16</origDate>,
+							<locus>f. 1r–5r</locus>
+                  </witness>
+                  <witness xml:id="Ga" corresp="pta0001.pta026.pta-MsGa.xml">
+                     <abbr type="siglum">Ga</abbr>
+                     <name key="PTAMS00330">Parisinus gr.
+							750</name>, <origDate>s. 10</origDate>,
+							<locus>f. 124r–129r</locus>
+                  </witness>
+                  <witness xml:id="Gb" corresp="pta0001.pta026.pta-MsGb.xml">
+                     <abbr type="siglum">Gb</abbr>
+                     <name key="PTAMS00347">Parisinus gr.
+							779</name>, <origDate>s. 10</origDate>,
+							<locus>f. 261v–269v</locus>
+                  </witness>
+                  <witness xml:id="La" corresp="pta0001.pta026.pta-MsLa.xml">
+                     <abbr type="siglum">La</abbr>
+                     <name key="PTAMS00195">Londinensis Arundel
+							542</name>, <origDate>s. 10</origDate>,
+							<locus>f. 1r–2v, 9r–10v, 15r–16r</locus>
+                  </witness>
+                  <witness xml:id="Mb" corresp="pta0001.pta026.pta-MsMb.xml">
+                     <abbr type="siglum">Mb</abbr>
+                     <name key="PTAMS00232">Mosquensis Sinod. gr.
+							127 (Vlad. 161)</name>, <origDate>s.
+							10</origDate>, <locus>f. 202r–209r</locus>
+                  </witness>
+                  <witness xml:id="Mc" corresp="pta0001.pta026.pta-MsMc.xml">
+                     <abbr type="siglum">Mc</abbr>
+                     <name key="PTAMS00233">Mosquensis Sinod. gr.
+							128 (Vlad. 159)</name>, <origDate>s.
+							9</origDate>, <locus>f. 12v–16v</locus>
+                  </witness>
+                  <witness xml:id="Ob" corresp="pta0001.pta026.pta-MsOb.xml">
+                     <abbr type="siglum">Ob</abbr>
+                     <name key="PTAMS00279">Oxoniensis Auct. T. 3.
+							4 (Misc. 221)</name>, <origDate>s.
+							16</origDate>, <locus>f. 285r–289v</locus>
+                  </witness>
+                  <witness xml:id="Od" corresp="pta0001.pta026.pta-MsOd.xml">
+                     <abbr type="siglum">Od</abbr>
+                     <name key="PTAMS00290">Oxoniensis Canon. gr.
+							99</name>, <origDate>s. 16</origDate>,
+							<locus>f. 110r–114v (letzte Seite im
+							Digitalisat fehlt)</locus>
+                  </witness>
+                  <witness xml:id="Sn" corresp="pta0001.pta026.pta-MsSn.xml">
+                     <abbr type="siglum">Sn</abbr>
+                     <name key="PTAMS00146">Athous Stavronikita 32
+							(Lambros 897)</name>, <origDate>s.
+							11</origDate>, <locus>f. 112r–116v</locus>
+                  </witness>
+               </listWit>
+               <listWit xml:id="b">
+                  <head>Stilistisch überarbeitete Fassung (<abbr type="siglum">b</abbr>)</head>
+                  <listWit xml:id="I">
+                     <head>Gruppe I (<abbr type="siglum">I</abbr>)</head>
+                     <witness xml:id="Oc" corresp="pta0001.pta026.pta-MsOc.xml">
+                        <abbr type="siglum">Oc</abbr>
+                        <name key="PTAMS00309">Oxoniensis New College
+									82</name>, <origDate>s. 11–12</origDate>,
+								<locus>f. 59v–65r</locus>
+                     </witness>
+                     <witness xml:id="Ph" corresp="pta0001.pta026.pta-MsPh.xml">
+                        <abbr type="siglum">Ph</abbr>
+                        <name key="PTAMS00387">Philadelphiensis Lewis
+									E 156</name>, <origDate>s. 11</origDate>,
+								<locus>f. 30r–33r</locus>
+                     </witness>
+                     <witness xml:id="Ve" corresp="pta0001.pta026.pta-MsVe.xml">
+                        <abbr type="siglum">Ve</abbr>
+                        <name key="PTAMS00473">Vaticanus gr.
+									566</name>, <origDate>s. 11</origDate>,
+								<locus>f. 132r–137r</locus>
+                     </witness>
+                  </listWit>
+                  <listWit xml:id="II">
+                     <head>Gruppe II (<abbr type="siglum">II</abbr>)</head>
+                     <witness xml:id="Oa" corresp="pta0001.pta026.pta-MsOa.xml">
+                        <abbr type="siglum">Oa</abbr>
+                        <name key="PTAMS00289">Oxoniensis Baroccianus
+								241</name>, <origDate>s. 14</origDate>,
+							<locus>f. 141r–145v (alt:
+								152r–156v)</locus>
+                     </witness>
+                     <witness xml:id="Kb" corresp="pta0001.pta026.pta-MsKb.xml">
+                        <abbr type="siglum">Kb</abbr>
+                        <name key="PTAMS00113">Athous Karakallou 5
+								(Lambros 1518)</name>, <origDate>s.
+									13</origDate>, <locus>f. 237r–240v</locus>
+                     </witness>
+                     <witness xml:id="Gc" corresp="pta0001.pta026.pta-MsGc.xml">
+                        <abbr type="siglum">Gc</abbr>
+                        <name key="PTAMS00362">Parisinus gr.
+								1186</name>, <origDate>a. 1306</origDate>,
+							<locus>160r–164r</locus>
+                     </witness>
+                  </listWit>
+               </listWit>
+            </listWit>
+            <!-- armenisch: Lehmann hom. IX, endet mit ἀλλὰ ταῦτα μὲν εἰς τοσοῦτον· und hat daran anschließend Kap. 11 von CPG 4185-->
+            <listBibl>
+               <head>Frühere Editionen</head>
+               <bibl facs="https://www.digitale-sammlungen.de/de/view/bsb11228008?page=11" xml:id="EdRom">
+                  <title>Τοῦ ἐν ἁγίοις πατρὸς ἡμῶν Ἰωάννου τοῦ
+							Χρυσοστόμου ὁμιλίαι δέκα διάφοροι,
+							ἐξαιρετοί τε,καὶ πάνυ ὀφελεῖς</title>
+                  <pubPlace>Rom</pubPlace>
+                  <publisher>Franciscus Zanettus</publisher>
+                  <biblScope unit="page" from="1" to="12">1–12</biblScope>
+                  <date when="1581">1581</date>
+               </bibl>
+               <bibl facs="https://www.digitale-sammlungen.de/view/bsb10870413?page=761" xml:id="Savile">
+                  <title>Τοῦ ἐν ἁγίοις πατρὸς ἡμῶν Ἰωάννου τοῦ
+							Χρυσοστόμου τῶν εὑρισκομένων</title>
+                  <title type="volume">τόμος πέμπτος</title>
+                  <editor role="editor">
+                     <surname>Savile</surname>
+                     <forename>Henry</forename>
+                  </editor>
+                  <pubPlace>Eton</pubPlace>
+                  <biblScope unit="page" from="747" to="752">747–752</biblScope>
+                  <date when="1612">1612</date>
+                  <!--Ex edit. Rom. emend. ex Ms. Ox. -->
+               </bibl>
+               <bibl facs="http://data.onb.ac.at/rep/102B26AA" xml:id="Fronton">
+                  <title>Sancti Patris nostri Ioannis
+							Chrysostomi Arch. Constantinopolitani De
+							diversis utriusque Testamenti locis
+							Sermones LXXIII.</title>
+                  <title type="volume">Tomus Sextus</title>
+                  <editor role="editor">
+                     <surname>Fronto</surname>
+                     <forename>Ducaeus</forename>
+                  </editor>
+                  <pubPlace>Paris</pubPlace>
+                  <biblScope unit="page" from="235" to="244">235–244</biblScope>
+                  <date when="1624">1624</date>
+               </bibl>
+               <bibl facs="https://www.digitale-sammlungen.de/de/view/bsb10497978?page=437" xml:id="Montfaucon">
+                  <title>Τοῦ ἐν ἁγίοις πατρὸς ἡμῶν Ἰωάννου τοῦ
+							Χρυσοστόμου τὰ εὑρισκόμενα πάντα. Sancti
+							Patris nostri Ioannis Chrysostomi Arch.
+							Constantinopolitani Opera Omnia</title>
+                  <title type="volume">Tomus Duodecimus</title>
+                  <editor role="editor">
+                     <surname>Bernard</surname>
+                     <forename>de Montfaucon</forename>
+                  </editor>
+                  <pubPlace>Paris</pubPlace>
+                  <biblScope unit="page" from="415" to="422">415–422</biblScope>
+                  <date when="1735">1735</date>
+                  <!-- Collata cum Codice Regio 1958-->
+               </bibl>
+               <listBibl>
+                  <head>Nachdruck der Edition Montfaucons</head>
+                  <bibl facs="https://www.digitale-sammlungen.de/de/view/bsb10800790?page=520,521" xml:id="PG" corresp="pta0001.pta026.pta-grc1.xml">
+                     <title>Patrologia graeca</title>
+                     <title type="volume">63</title>
+                     <editor role="editor">
+                        <surname>Migne</surname>
+                        <forename>Jean-Paul</forename>
+                     </editor>
+                     <pubPlace>Paris</pubPlace>
+                     <biblScope unit="page" from="543" to="550">543-550</biblScope>
+                     <date when="1862">1862</date>
+                  </bibl>
+               </listBibl>
+            </listBibl>
+         </sourceDesc>
+      </fileDesc>
+      <encodingDesc>
+         <refsDecl n="CTS">
+            <cRefPattern n="section" matchPattern="(.+)" replacementPattern="#xpath(/tei:TEI/tei:text/tei:body/tei:div[@type='edition']/tei:div[@n='$1'])"/>
+         </refsDecl>
+         <refsDecl xml:id="biblical">
+            <cRefPattern matchPattern="(.+):(.+):([0-9]+):([0-9]+)[\-\.]*[0-9]*" replacementPattern="https://www.bibelwissenschaft.de/bibelstelle/$2$3,$4/$1">
+               <p>Noted are references to a biblical book,
+						chapter, verse, sc. LXX:Gn:1:1; also possible:
+						LXX:Gn:1:1-3 for a sequence of verses or
+						LXX:Gn:1:1.3 for two verses not following each
+						other.</p>
+               <p>The following abbreviations are used: Gn, Ex,
+						Lv, Num, Dt, Jos, Judg, Rt, 1Sa, 2Sa, 1Ko,
+						2Ko, 1Chr, 2Chr, 3Esr, Esr, Est, Jdt, Tob,
+						1Mak, 2Mak, 3Mak, 4Mak, Ps, Oden, Prov, Eccl,
+						Song, Job, Wis, Sir, PsSal, Hos, Am, Mi, Joel,
+						Ob, Jon, Nah, Hab, Zeph, Hag, Sach, Mal, Is,
+						Jr, Bar, Lam, EpistJer, Hes, Sus, Dn, Bel; Mt,
+						Mk, Lk, Jn, Act, Rom, 1Cor, 2Cor, Gal, Eph,
+						Phil, Col, 1Th, 2Th, 1Tim, 2Tim, Tt, Phm, Heb,
+						Jak, 1P, 2P, 1Jn, 2Jn, 3Jn, Jud, Rev.</p>
+            </cRefPattern>
+            <cRefPattern matchPattern="(.+):(.+):([0-9]+)[\-\.]*[0-9]*" replacementPattern="https://www.bibelwissenschaft.de/bibelstelle/$2$3/$1">
+               <p>Noted are references to a biblical book and
+						chapter, sc. LXX:Gn:1; also possible:
+						LXX:Gn:1-3 for a sequence of chapters or
+						LXX:Gn:1.3 for two chapters not following each
+						other.</p>
+            </cRefPattern>
+            <cRefPattern matchPattern="(.+):(.+)" replacementPattern="https://www.bibelwissenschaft.de/bibelstelle/$2/$1">
+               <p>Noted are references to a biblical book, sc.
+						LXX:Gn.</p>
+            </cRefPattern>
+         </refsDecl>
+         <refsDecl xml:id="pta">
+            <cRefPattern matchPattern="(.+)" replacementPattern="https://pta.bbaw.de/text/$1">
+               <p>References to PTA-CTS-URNs</p>
+            </cRefPattern>
+         </refsDecl>
+         <refsDecl xml:id="perseus">
+            <cRefPattern matchPattern="(.+)" replacementPattern="https://scaife.perseus.org/reader/$1">
+               <p>References to Perseus-CTS-URNs</p>
+            </cRefPattern>
+         </refsDecl>
+         <editorialDecl>
+            <interpretation>
+               <p>
+            This file is encoded according to the guidelines of the Patristic Text Archive (PTA). See <ref target="https://pta.bbaw.de/project/encoding-guidelines">https://pta.bbaw.de/project/encoding-guidelines</ref> and <ref target="https://doi.org/10.5281/zenodo.3737666">https://doi.org/10.5281/zenodo.3737666</ref>.
+          </p>
+               <p xml:id="biblical-quotations" ana="fully-annotated fully-identified">
+            Biblical quotations are fully annotated and fully referenced. References follow the scheme declared <ref target="#biblical">above</ref>.
+          </p>
+               <p xml:id="other-references" ana="fully-annotated fully-identified">
+            Other references are fully annotated and fully referenced. References to texts in the PTA follow the scheme declared <ref target="#pta">above (pta)</ref>, references to texts available in the <ref target="https://scaife.perseus.org/">Perseus Digital Library</ref> follow the scheme declared <ref target="#perseus">above (perseus)</ref>. If the referenced text is not available in either repository, the reference for the referenced text is given in the attribute @source in the form “Authorabbrev_Workabbrev_Location”; ancient Greek authors should be referenced according to the lists of H. G. Liddell/R. Scott/H. S. Jones, A Greek - English Lexicon, Oxford 1968 (9th edition) and G. W. H. Lampe, A Patristic Greek Lexicon, Oxford 1987 (3rd edition), for Latin ones the abbreviations of the Thesaurus Linguae Latinae (cf. Index librorum scriptorum inscriptionum ex quibus exempla afferuntur) should be used, with dots in the abbreviations deleted without replacement.
+          </p>
+               <p xml:id="persons" ana="fully-annotated fully-identified">
+            Persons are fully annotated and fully referenced with IDs according to the <ref target="https://github.com/PatristicTextArchive/tipnr_data">TIPNR - Tyndale Individualised Proper Names with all References</ref> list for biblical persons and IDs of <ref target="https://github.com/PatristicTextArchive/pta_metadata/blob/main/pta_persons.json">PTA persons index</ref> for all other persons.
+          </p>
+               <p xml:id="groups" ana="fully-annotated fully-identified">
+            Groups of persons and organisations are fully annotated and fully referenced with IDs according to the IDs of <ref target="https://github.com/PatristicTextArchive/pta_metadata/blob/main/pta_groups.json">PTA groups index</ref> for all other groups.
+          </p>
+               <p xml:id="places" ana="fully-annotated fully-identified">
+            Places are fully annotated and fully referenced with <ref target="https://pleiades.stoa.org/">Pleiades Gazetteer</ref> IDs.
+          </p>
+               <p xml:id="text-analysis" ana="not-tagged not-analyzed">Words are not tagged and not analyzed.</p>
+            </interpretation>
+            <normalization>
+               <p><!--Usage of capitalisation, ν-ephelkystikon, σ: οὕτως, Iota subscriptum/adscriptum, Trema, Enclitics, apostroph/elisions, number signs, splitting of words, nomina sacra, ...--></p>
+            </normalization>
+            <punctuation>
+               <p><!--Usage (and/or normalisation) of full stop, comma, semicolon, question mark, dash and parenthesis--></p>
+            </punctuation>
+         </editorialDecl>
+         <classDecl>
+            <taxonomy xml:id="comphistsem">
+               <bibl>
+          Text Type Classification by <ref target="https://www.comphistsem.org/46.html">"Computational Historical Semantics</ref>
+               </bibl>
+            </taxonomy>
+            <taxonomy xml:id="editionstatus">
+               <bibl>
+          Patristic Text Archive Status of edition
+        </bibl>
+               <category xml:id="critical-edition">
+                  <catDesc>
+            Critical edition in which the text-critical variants have been encoded.
+          </catDesc>
+               </category>
+               <category xml:id="critical-edition-no-app">
+                  <catDesc>
+            Critical edition in which the text-critical variants have not been encoded, e.g. because it is a retro-digitisation of a printed critical edition and for copyright reasons the apparatus cannot be included in the retro-digitisation.
+          </catDesc>
+               </category>
+               <category xml:id="critical-edition-outdated">
+                  <catDesc>
+              Edition which notes text-critical variants, but does not, for example, comprehensively include the manuscripts.
+            </catDesc>
+               </category>
+               <category xml:id="pre-critical-edition">
+                  <catDesc>
+              Pre-modern editions (e.g. editions in the Patrologia Graeca or Latina)
+            </catDesc>
+               </category>
+            </taxonomy>
+            <taxonomy xml:id="annotationstatus">
+               <bibl>
+          Patristic Text Archive Status of annotation
+        </bibl>
+               <category xml:id="fully-annotated">
+                  <catDesc>
+            All instances of a phenomenon (e.g. biblical quotations, persons, places) are encoded with the respective element.
+          </catDesc>
+               </category>
+               <category xml:id="partially-annotated">
+                  <catDesc>
+            Some instances of a phenomenon (e.g. biblical quotations, persons, places) are encoded with the respective element.
+          </catDesc>
+               </category>
+               <category xml:id="not-annotated">
+                  <catDesc>
+            No instances of a phenomenon (e.g. biblical quotations, persons, places) are encoded with the respective element.
+          </catDesc>
+               </category>
+               <category xml:id="fully-identified">
+                  <catDesc>
+            All encoded instances of a phenomenon (e.g. biblical quotations, persons, places) are identified with the respective norm data.
+          </catDesc>
+               </category>
+               <category xml:id="partially-identified">
+                  <catDesc>
+            Some encoded instances of a phenomenon (e.g. biblical quotations, persons, places) are identified with the respective norm data
+          </catDesc>
+               </category>
+               <category xml:id="not-identified">
+                  <catDesc>
+            No encoded instances of a phenomenon (e.g. biblical quotations, persons, places) are identified with the respective norm data.
+          </catDesc>
+               </category>
+            </taxonomy>
+            <taxonomy xml:id="analysisstatus">
+               <bibl>Patristic Text Archive Status of linguistic analysis</bibl>
+               <category xml:id="automatically-tagged">
+                  <catDesc>Words are automatically tagged.</catDesc>
+               </category>
+               <category xml:id="manually-tagged">
+                  <catDesc>Words are manually tagged.</catDesc>
+               </category>
+               <category xml:id="not-tagged">
+                  <catDesc>Words are not tagged.</catDesc>
+               </category>
+               <category xml:id="automatically-analyzed">
+                  <catDesc>Words are automatically analyzed.</catDesc>
+               </category>
+               <category xml:id="manually-analyzed">
+                  <catDesc>Words are manually analyzed.</catDesc>
+               </category>
+               <category xml:id="not-analyzed">
+                  <catDesc>Words are not analyzed.</catDesc>
+               </category>
+            </taxonomy>
+         </classDecl>
+         <schemaRef key="v3" url="https://raw.githubusercontent.com/PatristicTextArchive/Schema/master/tei-pta.rng"/>
+      </encodingDesc>
+      <profileDesc>
+         <creation>
+            <date notBefore="0401" notAfter="0404"/>
+            <placeName ref="https://pleiades.stoa.org/places/77402394">Constantinopolis</placeName>
+         </creation>
+         <textClass>
+            <keywords scheme="#comphistsem">
+               <term>Paraenetic</term>
+               <term>Sermon</term>
+            </keywords>
+            <keywords scheme="#editionstatus">
+               <term>critical-edition</term>
+            </keywords>
+         </textClass>
+      </profileDesc>
+      <revisionDesc status="draft">
+         <change when="2023-05-22" who="#AvS">
+          Updated file to comply with version 3.0 of <ref target="https://github.com/PatristicTextArchive/Schema">TEI-PTA-Schema</ref>
+         </change>
+         <change when="2021-12-03" who="#AvS">preliminary version
+				of critical edition</change>
+         <change when="2021-05-03" who="#CP">Encoding of persons
+				and places</change>
+         <change when="2019-12-17" who="#AvS"> Updated file to
+				comply with version 1.2 of <ref target="https://github.com/PatristicTextArchive/Schema">TEI-PTA-Schema</ref>
+         </change>
+         <change when="2018-09-19" who="#AvS">Converted to
+				PTA/CapiTainS</change>
+      </revisionDesc>
+   </teiHeader>
+   <text>
+      <body>
+         <div type="edition" xml:lang="grc" n="urn:cts:pta:pta0001.pta026.pta-grcBibex">
+            <head>
+               <pb edRef="#PG" n="543"/>
+               <title>
+                  <app type="witnesses">
+                     <rdg wit="#Ac #Ad #Be #Bs #Ga #Gb #Gc #Kb #La #Mb #Mc #Oa #Ob #Oc #Od #Ph #Sn #Ve">
+                        <witStart/>
+                     </rdg>
+                  </app>
+                  <app type="variants">
+                     <lem resp="#AvS" type="deletion"/>
+                     <rdgGrp>
+                        <rdg wit="#Ac #Bs #La #Oa #Ob #Oc #Od #Ve">τοῦ ἐν ἁγίοις πατρὸς ἡμῶν ἰωάννου
+								ἀρχιεπισκόπου κωνσταντινουπόλεως
+								τοῦ χρυσοστόμου</rdg>
+                        <rdg wit="#Kb">τοῦ ἐν ἁγίοις πατρὸς
+								ἡμῶν ἰωάννου ἀρχιεπισκόπου
+								κωνσταντινουπόλεως τοῦ χρυσοστόμου
+								καὶ οἰκουμενικοῦ μεγάλου
+								φωστῆρος</rdg>
+                        <rdg wit="#Gc #Ph">τοῦ ἐν ἁγίοις
+								πατρὸς ἡμῶν ἰωάννου τοῦ
+								χρυσοστόμου</rdg>
+                     </rdgGrp>
+                     <rdgGrp>
+                        <rdg wit="#Ad #Ga #Gb #Mb #Mc #Sn">τοῦ
+								αὐτοῦ</rdg>
+                        <rdg wit="#Be">τοῦ αὐτοῦ
+								χροσοστόμου</rdg>
+                     </rdgGrp>
+                  </app>
+                  <app type="variants">
+                     <lem resp="#AvS" type="deletion"/>
+                     <rdg wit="#Ac #La #Ob #Oc #Od #Ph">ὁμιλία</rdg>
+                     <rdg wit="#Gc #Kb #Oa">λόγος</rdg>
+                     <rdg wit="#Ad #Be #Ga #Gb #Mb #Mc #Sn #Ve" type="omission"/>
+                  </app> εἰς τὸ <quote>ἐν ἀρχῇ ἦν ὁ λόγος <app type="variants">
+                        <lem wit="#Ac #Ad #Be #Bs #Ga #Gb #Gc #Kb #La #Mb #Mc #Oa #Ob #Od #Sn"/>
+                        <rdg wit="#Oc #Ph" type="addition">καὶ ὁ λόγος ἦν πρὸς τὸν θεὸν καὶ
+								θεὸς ἦν ὁ λόγος</rdg>
+                        <rdg wit="#Ve" type="addition">καὶ
+								θεὸς ἦν ὁ λόγος</rdg>
+                        <rdg source="#PG" type="addition">καὶ
+								τὰ ἑξῆς</rdg>
+                     </app>
+                     <ref decls="#biblical" cRef="NA:Jn:1:1"/>
+                  </quote> καὶ ὅτι <quote>τὸ πνεῦμα ἐρευνᾷ <app type="variants">
+                        <lem wit="#Ac #Ad #Be #Bs #Ga #Gb #La #Mb #Ob #Od #Sn"/>
+                        <rdg wit="#Gc #Kb #Mc #Oa #Oc #Ph #Ve" type="addition">καὶ</rdg>
+                     </app> τὰ βάθη τοῦ θεοῦ<ref decls="#biblical" cRef="NA:1Cor:2:10"/>
+                  </quote>
+                  <app type="variants">
+                     <lem wit="#Ac #Ad #Be #Bs #Ga #Gb #Gc #Kb #La #Mb #Mc #Oa #Ob #Od #Sn #Ve"/>
+                     <rdg wit="#Oc #Ph" type="addition">καὶ
+								περὶ τῶν νεοφωτίστων καὶ κατὰ
+								αἱρετικῶν</rdg>
+                  </app>. <app type="variants">
+                     <lem wit="#Ac #Be #Bs #Ga #Gb #La #Mb #Mc #Oa #Ob #Od #Ph #Sn #Ve"/>
+                     <rdg wit="#Oc">τῆ αὐτῆ ἡμέρα</rdg>
+                     <rdgGrp>
+                        <rdg wit="#Gc">ὁ δὲ λόγος
+								ἀναγινώσκεται τῆ δευτέρα τῆς
+								διακαινησΐμου</rdg>
+                        <rdg wit="#Kb">ἀναγϊνώσκεται ὁ λόγος
+								τῆ δευτρ’ τῆς διακϊνησίμου</rdg>
+                     </rdgGrp>
+                  </app>
+                  <app type="variants">
+                     <lem wit="#Ac #Be #Bs #Ga #Gc #La #Mb #Mc #Oa #Ob #Od #Ph #Sn #Ve"/>
+                     <rdg wit="#Kb">περ εὐα’</rdg>
+                     <rdg wit="#Oc" type="addition">εὐλογεῖτε
+								πατέρι</rdg>
+                     <rdg wit="#Gb" type="addition">κύριε
+								εὐλόγησον</rdg>
+                     <rdg wit="#Ad" type="addition">κύριε</rdg>
+                  </app>
+               </title>
+            </head>
+            <div type="textpart" subtype="section" n="1">
+               <p>Χθὲς ἡμῖν ὁ λόγος εἰς τὴν τοῦ μεγάλου <app type="variants">
+                     <lem wit="#Ac #Ad #Be #Bs #Ga #Gb #Gc #La #Mb #Mc #Oa #Ob #Od #Ph #Sn #Ve">ἀετοῦ θεωρίαν <app type="variants">
+                           <lem wit="#Ac #Ad #Bs #Ga #Gb #Gc #La #Mb #Mc #Oa #Ob #Od #Ph #Sn #Ve">κατέληξεν</lem>
+                           <rdg wit="#Be">ἔληξεν</rdg>
+                        </app>
+                     </lem>
+                     <rdg wit="#Kb" type="omission" cause="homoiarkton"/>
+                  </app>, ἀετοῦ τοῦ <app type="variants">
+                     <rdgGrp>
+                        <lem wit="#Gc #Oa #Ph #Ve">ὄντως</lem>
+                        <rdg wit="#Oc" cause="orthographic">ὄντος</rdg>
+                        <rdg wit="#Kb">ὄρτως</rdg>
+                     </rdgGrp>
+                     <rdg wit="#Ac #Ad #Be #Bs #Ga #Gb #La #Mb #Mc #Ob #Od #Sn" type="omission"/>
+                  </app>
+                  <app type="variants">
+                     <lem wit="#Ac #Ad #Be #Bs #Ga #Gb #Gc #Kb #La #Mb #Mc #Oa #Ob #Od #Ph #Sn">μεγάλου</lem>
+                     <rdg wit="#Ve">ὑψηλοῦ</rdg>
+                  </app>, καὶ πνεύματι τὸν οὐρανὸν <app type="variants">
+                     <lem wit="#Ac #Ad #Be #Bs #Ga #Gb #Gc #Kb #La #Mb #Mc #Oa #Ob #Od #Ph #Ve">
+                        <app type="variants">
+                           <lem wit="#Ac #Ad #Ga #Gb #Gc #Kb #Oa #Ph #Ve">ὑπερβάντος</lem>
+                           <rdg wit="#Be" varSeq="1">ὑπερβάντος</rdg>
+                           <rdg wit="#La" varSeq="1" type="illegible"/>
+                           <rdg wit="#Be #La" type="deletion" varSeq="2"/>
+                           <rdg wit="#Bs #Mb #Mc #Ob #Od" type="omission"/>
+                        </app> καὶ τὰς ὑπερκοσμίους
+								δυνάμεις</lem>
+                     <rdg wit="#Oc #Sn" type="omission" cause="homoiarkton"/>
+                  </app>
+                  <app type="variants">
+                     <rdgGrp>
+                        <lem wit="#Ac #Ad #Gb #Gc #Ph #Ve">ὑπεραναβάντος</lem>
+                        <rdg wit="La" varSeq="2" type="deletion">ὑπερ<gap reason="illegible" quantity="3" unit="character"/>βάντος</rdg>
+                     </rdgGrp>
+                     <rdg wit="#Be #Bs #Ga #Kb #Mb #Mc #Oa #Ob #Oc #Od #Sn">ὑπερβάντος</rdg>
+                  </app>, καὶ <app type="variants">
+                     <lem wit="#Ac #Be #Bs #Gc #Kb #La #Mb #Mc #Oa #Ob #Oc #Od #Ph #Ve">ἀπ’</lem>
+                     <rdg wit="#Ad #Ga #Gb #Sn">ἐπ’</rdg>
+                  </app></p>
+            </div>
+            
+            
+         </div>
+      </body>
+   </text>
+</TEI>

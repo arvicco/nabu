@@ -232,6 +232,38 @@ africa-pd:   # P124-1, 02-sources row 271
   # Velten's Swahili reader claims sw. Public domain (authors †1882–1935,
   # prints 1854–1913). EXPECTED FIRST SYNC (census 2026-10-13, every pair
   # fetched and parsed): 10 docs / 3,536 passages, ~2.3 MB.
+aio:   # P154, 02-sources row 335
+  adapter: Nabu::Adapters::Aio
+  adopted: "2026-11-02"
+  axes: [classical, epigraphy]
+  wired: false   # awaiting the first sync — bin/nabu sync aio (OWNER-SCHEDULED:
+                 # ~35 listing GETs + 2 GETs per inscription ≈ 6,970 requests at
+                 # 0.5 s ≈ 1–1.5 h, resumable at the file grain). EXPECT the
+                 # listing's own count (3,466 at 2026-11-02) of record pairs
+                 # under records/, 2 sidecars per 100 → 35 listing pages skipped
+                 # by rule; 3,466 -en translation docs + one Greek doc per
+                 # AIO/AIUK-edited record (share measured at the sync: 7 of an
+                 # 18-record sample biased toward AIO/AIUK keys); passages ≈ one
+                 # per inscribed line. Eyeball nabu show urn:nabu:aio:2586-en
+                 # ("Gods." / "In the archonship of Nikomachos (341/0)…") and
+                 # urn:nabu:aio:2103 (Greek, "ἐπὶ ἄρχοντος Κλαυδίου Ἡρακλεί")
+                 # plus 5 random records; probe nabu search "Halaians"; then flip.
+  sync_policy: manual
+  # AIO — Attic Inscriptions Online (British School at Athens; ed. Stephen
+  # Lambert): English translations of the inscriptions of Attica, with AIO's
+  # own Greek editions for the AIO/AIUK papers. CC BY-SA 3.0 — the CC badge
+  # on every inscription page (translation AND Greek view), first-hand
+  # 2026-11-02 → attribution. Fetched through upstream's own REST API
+  # (/api/ Swagger: list_all_inscriptions + per-inscription JSON with Base64
+  # EpiDoc) plus the inscription page (Date, Monument/Inscription type,
+  # Original location, Findspot, footnotes — fields the API omits). Images
+  # never fetched. Document = record layer: urn:nabu:aio:<n>-en (translation,
+  # kind translation, translation_of the base urn) always; urn:nabu:aio:<n>
+  # (the Greek) where AIO publishes its own text. The record's date/place/
+  # genre ride the primary doc (the Greek, else the translation — whose
+  # axes never row on the timeline, the house translation rule: declared in
+  # the postures).
+
 altaica-shm:   # P107-7
   adapter: Nabu::Adapters::AltaicaShm
   adopted: "2026-09-28"
@@ -1940,6 +1972,19 @@ disco:
   wired: true    # P77 first sync owner-verified (1,215 docs), flipped 2026-08-18 (owner: "wire on all recent sources")
   sync_policy: manual
 
+dpd:   # P154, 02-sources row 367
+  adapter: Nabu::Adapters::Dpd
+  adopted: "2026-11-02"
+  axes: [indic, buddhist]
+  wired: true   # first sync verified 2026-11-03: 1 dictionary doc / 89,763 entries
+  # The Digital Pāḷi Dictionary (Bodhirasa Bhikkhu), the dpd-db release's
+  # plain-text headword export, for the held Pāḷi canon (suttacentral,
+  # tipitaka-lk) — the library's first Pāḷi dictionary: meaning, grammar,
+  # root (37,132), construction and the Sanskrit parallel per headword.
+  # New family dpd-txt; entry id = the DPD id. CC BY-NC-SA 4.0 (LICENSE)
+  # → nc (MCP-excluded by class). Latest-release URL, ZipFetch.
+  sync_policy: manual
+
 dprr:   # 02-sources row 310
   adapter: Nabu::Adapters::Dprr
   adopted: "2026-10-27"
@@ -2051,6 +2096,19 @@ e84000:   # P48-2, 02-sources row 133
   # of canonical). EXPECTED FIRST SYNC: 388 documents (399 published
   # files - 11 duplicate losers), chunk-grain passages; 3,926 stub +
   # 11 duplicate skips censused. Upstream actively publishes -> manual.
+
+ebible-pacific:   # P154, 02-sources row 336
+  adapter: Nabu::Adapters::EbiblePacific
+  adopted: "2026-11-02"
+  axes: [biblical]
+  wired: true   # first sync verified 2026-11-03: 100 docs / 48,762 passages, 15 rule skips
+  # eBible.org's public-domain Pacific Bibles as USFM (the usfm family):
+  # Hawaiian 1868 revision (haw), the ABS Chamorro Gospels/Acts/Psalms
+  # (cha, sword cha1908), the Pohnpeian NT + Psalms in the old alphabet
+  # (pon, sword pon1922). One document per (translation, book). kos is
+  # refused: its own front matter declares a 1992-onward new translation,
+  # not the 1928 print. Each copyright.htm: "Public Domain" → open.
+  sync_policy: manual
 
 ebl:
   adapter: Nabu::Adapters::Ebl
@@ -2544,6 +2602,20 @@ freising:
   # the terms before enabling):
   # license_watch: https://nl.ijs.si/e-zrc/bs/
 
+fsv-lexica:   # P154, 02-sources row 342
+  adapter: Nabu::Adapters::FsvLexica
+  adopted: "2026-11-02"
+  axes: [germanic]
+  wired: true   # first sync verified 2026-11-03: 3 dictionary docs / 51,811 entries
+  # Språkbanken's three Old Swedish dictionaries (Söderwall 1884–1918,
+  # its supplement 1925–1973, Schlyter's law glossary 1877) as three
+  # shelves of one source, for the held fornsvenska corpus. Karp LMF
+  # (new family spraakbanken-lmf); entry id = the lemgram (shared across
+  # the three books), headword = the lemgram baseform (the keyed
+  # writtenForm carries head-line noise). CC-BY-4.0 per resource page →
+  # attribution. Language sv, lect sv:old via config/lect_overrides.yml.
+  sync_policy: manual
+
 gams-zrcalo:   # 02-sources row 244
   adapter: Nabu::Adapters::GamsZrcalo
   adopted: "2026-10-11"
@@ -2883,6 +2955,26 @@ hittite-glossed:   # P109-3
   # 170,496 glossed word rows; document = text (txtid), passage =
   # manuscript line, aligned translit/gloss/German token layers as
   # annotations; the cth facet joins the TLHdig surface.
+
+hmml-reading-room:   # P154, 02-sources row 340
+  adapter: Nabu::Adapters::HmmlReadingRoom
+  adopted: "2026-11-02"
+  axes: [syriac, ethiopic]
+  wired: true   # first sync verified 2026-11-03: 18,892 docs / 11,196 passages, 245,098 outside the slice
+  sync_policy: manual
+  # vHMML Reading Room (Hill Museum & Manuscript Library): the full
+  # Reading Room dataset (263,989 records, vHMML Schema JSON), regenerated
+  # weekly at one URL (stated by HMML by email, 2026-11-02; no OAI or bulk
+  # API). The fetch pins what it took: the zip's sha256 + Last-Modified in
+  # dataset/.file-fetch.json, repeated in scope/census.json beside the
+  # slice counts. Slice: Syriac/Ethiopic writing system or Syriac/Ge'ez/
+  # Amharic items — 18,892 records; the rest is a later slice, counted.
+  # Document = catalogue record (parts, items, repository, dates, origin,
+  # genres in metadata); passage = an item's incipit (syc / gez / amh /
+  # ara-Syrc Garshuni / ara). LICENSE (data portal + vhmml.org/terms, read
+  # 2026-11-02): "The manuscript metadata in vHMML Reading Room is available
+  # for reuse under ... (CC BY 4.0)" → attribution; images never taken.
+  # Weekly regeneration = the drift channel → re-syncs are owner-fired.
 
 honkoku:   # P108-5
   adapter: Nabu::Adapters::Honkoku
@@ -3640,6 +3732,21 @@ litopys:   # P117, 02-sources row 252
   # EXPECTED FIRST SYNC: 41 docs / 964 passages (938 columns, 26 split
   # across pages) + 3 dictionaries / 923 entries (688 + 174 + 61).
 
+littre:   # P154, 02-sources row 343
+  adapter: Nabu::Adapters::Littre
+  adopted: "2026-11-02"
+  axes: [romance]
+  wired: true   # first sync verified 2026-11-03: 26 dictionary docs / 78,483 entries, 3 rule skips
+  # Littré's Dictionnaire de la langue française (1863–1877) in the
+  # oeuvres/littre TEI P5 (XMLittré v1.3 lineage), for the held French
+  # text (theatre-classique's 17th-century stage; the HISTORIQUE sections
+  # quote Old and Middle French). New family littre-tei; entry id = the
+  # article's xml:id (2 in-file repeats numbered, 4 off-letter articles
+  # @-suffixed); gram → word_class, first HISTORIQUE century →
+  # first_attested entry facets. CC BY-SA 2.0 FR per teiHeader →
+  # attribution. Language fra, bare.
+  sync_policy: manual
+
 liv:
   adapter: Nabu::Adapters::Liv
   adopted: "2026-07-14"
@@ -3863,6 +3970,20 @@ madurai:   # P122-3, 02-sources row 268
   # pmuni073, 0850, 0861-0863 — named in the fetch notes, censused as missing)
   # → 755 docs / 1,214,683 line passages, 0 quarantined; 10,294 non-Tamil
   # lines counted, not minted (parse census ~70 s).
+
+mahan-kosh:   # P154, 02-sources row 344
+  adapter: Nabu::Adapters::MahanKosh
+  adopted: "2026-11-02"
+  axes: [indic]
+  wired: true   # first sync verified 2026-11-03: 1 dictionary doc / 64,218 entries
+  # Bhai Kahan Singh Nabha's Gurushabad Ratnakar Mahan Kosh (1930), the
+  # Sikh encyclopedic dictionary of the Gurbani vocabulary, for the held
+  # shabados Gurbani text. The Sikhi.io JSON packaging (CC BY 4.0; the
+  # 1930 text PD) — the GURMUKHI LANE ONLY: the Patiala-edition English
+  # (rights not shown) and the 25 machine-translated columns are never
+  # fetched. New family mahan-kosh-json; entry id = the grid id
+  # (vol-page-seq). Language pan.
+  sync_policy: manual
 
 mdz-protestant:   # 02-sources row 243
   adapter: Nabu::Adapters::MdzProtestant
@@ -4650,6 +4771,29 @@ oracc:
   # open/CC0).
   translations: true
 
+osbct:   # P154, 02-sources row 337
+  adapter: Nabu::Adapters::Osbct
+  adopted: "2026-11-02"
+  axes: [indic, buddhist]
+  wired: true   # first sync verified 2026-11-03: 118 docs / 89,512 passages, 4 rule skips
+  sync_policy: frozen   # an immutable Zenodo version; a new release = an owner re-pin
+  # The Sixth Buddhist Council Tipiṭaka Unicode corpus (IEBH / BTHAR;
+  # Zenodo 23541744 v2.11.0): the Chaṭṭha Saṅgāyana canon WITH its
+  # Aṭṭhakathā and Ṭīkā, converted from the Ministry of Religious Affairs,
+  # Yangon romanised edition (2008, from the Myanmar edition of 2001) —
+  # NOT VRI's CST digital edition (the record says so). Document = volume,
+  # passage = paragraph; the printed apparatus (variant readings with
+  # sigla, cross-references) rides each paragraph. License: the record's
+  # field is cc-by-4.0, but the deposit's LICENSE.md grants CC BY 4.0 over
+  # its DERIVED data only; the Pāḷi text it redistributes "on [the
+  # edition's] terms" — the Ministry edition's notice permitting
+  # duplication "for free, non-commercial distribution" (README: "It is
+  # not public domain") → class nc. Unverified: the Ministry's notice
+  # itself (the deposit omits the source PDFs) and the edition's rights
+  # position; commercial reuse is referred by the deposit to the
+  # publisher. Overlap census (adapter header): a witness beside
+  # suttacentral and tipitaka-lk, not a duplicate; the Ṭīkā layer is new.
+
 oshb:
   adapter: Nabu::Adapters::Oshb
   adopted: "2026-07-18"
@@ -5089,6 +5233,23 @@ proiel:
   # license_watch candidate (P16-5, owner decision — the repo has no LICENSE
   # file; the terms live in the README):
   # license_watch: https://raw.githubusercontent.com/proiel/proiel-treebank/master/README.md
+
+pta:   # P154, 02-sources row 341
+  adapter: Nabu::Adapters::Pta
+  adopted: "2026-11-03"
+  axes: [classical]
+  siblings: cts
+  wired: true   # first sync verified 2026-11-03: 113 docs / 8,778 passages, 423 rule skips
+  sync_policy: manual
+  # PTA — the Patristic Text Archive (BBAW): CapiTainS TEI editions of early
+  # Christian Greek authors (the Perseus layout; a Perseus subclass). The
+  # Greek editions only, every edition of a work (PTA's versions are
+  # distinct printed editions). LICENCE PER DOCUMENT: each file's own
+  # teiHeader <licence> — by-sa/by → attribution, by-nc(-sa) →
+  # license_override nc, no licence → never ingested; an unknown target
+  # stops discovery. Rahlfs LXX (row 44) and SBLGNT (held) skip by rule.
+  # Witness overlap, not duplication: some works also sit in first1k-greek
+  # or cgpg's Migne volumes in other prints.
 
 qieyun-restored:   # P88-A2, 02-sources row 182
   adapter: Nabu::Adapters::QieyunRestored
@@ -6086,6 +6247,24 @@ su-wikisource:   # P140, 02-sources row 286
   # · sun-Java 21 · osn 1), 1 Dutch introduction measured out. Texts PD;
   # transcription layer CC BY-SA 4.0.
 
+suda-translations:   # P154, 02-sources row 339
+  adapter: Nabu::Adapters::SudaTranslations
+  adopted: "2026-11-02"
+  axes: [classical]
+  wired: true   # first sync verified 2026-11-03: 27 docs / 31,341 passages, 28 rule skips
+  sync_policy: manual
+  # Suda On Line: the collaborative English translation of the Suda,
+  # entry by entry, with notes, bibliography, keywords and the full
+  # translator/vetter history. Banked export: the SOL's maintainer's own
+  # solEntries.zip (31,371 saved CGI answers, 2025-07-24), supplied by
+  # email 2026-11-02 for this use; the zip is the canonical asset
+  # (ManualDrop, docs/manual/suda-translations.md). Document = Adler
+  # letter (27), passage = entry keyed by Adler number; each passage of
+  # the 17 letters the First1K Greek carries holds a first1k_candidate
+  # join key (26,041 of 31,341). LICENSE: the SOL home + rights pages
+  # (read 2026-11-02): CC BY-NC-SA 1.0 over "all our entries, including
+  # translations and annotations" → nc.
+
 suttacentral:
   adapter: Nabu::Adapters::Suttacentral
   adopted: "2026-07-18"
@@ -6267,6 +6446,24 @@ theatre-classique:   # 02-sources row 312
   # 1,601,085 passages, 0 rule-skips (life+70 cutoff 1955; latest
   # textual death 1951), 1 quarantined (CORNEILLET_LAODICE.xml — declared
   # ISO-8859-1, Latin-1 bytes; the UTF-8 belt refuses it). Clone ≈ 61 MB.
+
+tianyige:   # P154, 02-sources row 338
+  adapter: Nabu::Adapters::Tianyige
+  adopted: "2026-11-02"
+  axes: [sinitic]
+  cjk_index: true   # the CJK bigram substring lane (the kanripo / okhc shelves)
+  wired: true   # first sync verified 2026-11-03: 312 docs / 38,711 passages, 1,750 blank pages rule-skipped in parse
+  sync_policy: frozen   # an immutable Zenodo version; a new release = an owner re-pin
+  # The Tianyige Ming examination records (Joshua Snider; Zenodo 23817595
+  # v1.0): uncorrected vision-model transcription of the Tianyi Pavilion
+  # Museum's 312 printed 科舉錄 (236 provincial, 37 metropolitan, 39
+  # palace; 1371–1684), ~10M characters. README verbatim "The
+  # transcriptions and metadata are released under CC0 1.0" → open.
+  # Document = record, passage = page image; text_nature uncorrected-ocr
+  # on every document (no lemma layer, so no lemma_tier). The machine
+  # punctuation, the machine English translation and the second OCR
+  # reading are DECLINED (the Honkoku precedent) and never surface. Dates
+  # from the reign era + year via config/eras.yml's nianhao rows.
 
 tibetan-verbs:
   adapter: Nabu::Adapters::TibetanVerbs
@@ -7387,6 +7584,21 @@ wiktionary-akk:
   # owner-fired.
   sync_policy: manual
 
+wiktionary-arc:   # P154, 02-sources row 352
+  adapter: Nabu::Adapters::WiktionaryArc
+  adopted: "2026-11-02"
+  axes: [hebrew]
+  wired: true   # first sync verified 2026-11-03: 2,396 entries
+  # The kaikki Aramaic extraction (2,396 records / "2072 distinct words",
+  # census 2026-11-02): a first dedicated Aramaic dictionary (the held
+  # BDB/OSHB shelves carry Biblical Aramaic only inside Hebrew lexica):
+  # Proto-Semitic (92), Akkadian (44) and Old Persian (17) etymons,
+  # descendants into Syriac and Neo-Aramaic. Language arc. The wiktionary-fa
+  # mold on the shared WiktionaryKaikki base: per-language JSONL (deprecated
+  # upstream — fallback = filter the full extract by lang_code arc), CC
+  # BY-SA + GFDL → attribution, FileFetch.
+  sync_policy: manual
+
 wiktionary-bo:
   adapter: Nabu::Adapters::WiktionaryBo
   adopted: "2026-07-28"
@@ -7407,12 +7619,54 @@ wiktionary-bo:
   # GFDL statement → attribution.
   sync_policy: manual
 
+wiktionary-br:   # P154, 02-sources row 353
+  adapter: Nabu::Adapters::WiktionaryBr
+  adopted: "2026-11-02"
+  axes: [celtic]
+  wired: true   # first sync verified 2026-11-03: 2,336 entries
+  # The kaikki Breton extraction (2,336 records / "2245 distinct words",
+  # census 2026-11-02): the library's first Breton dictionary, with Middle
+  # Breton (230 xbm) and Old Breton (158 obt) etymons and the Proto-Celtic
+  # and Proto-Brythonic chains (385 / 381). Language bre. The wiktionary-fa
+  # mold on the shared WiktionaryKaikki base: per-language JSONL (deprecated
+  # upstream — fallback = filter the full extract by lang_code br), CC BY-SA
+  # + GFDL → attribution, FileFetch.
+  sync_policy: manual
+
+wiktionary-ca:   # P154, 02-sources row 362
+  adapter: Nabu::Adapters::WiktionaryCa
+  adopted: "2026-11-02"
+  axes: [romance]
+  wired: true   # first sync verified 2026-11-03: 198,685 entries
+  # The kaikki Catalan extraction (198,685 records / "189801 distinct
+  # words", census 2026-11-02): the library's first Catalan dictionary —
+  # modern headwords (most of them inflected-form entries pointing to their
+  # lemma) with Latin (9,012), Greek (1,285) and Old Occitan (829) etymons.
+  # Language cat. The wiktionary-fa mold on the shared WiktionaryKaikki
+  # base: per-language JSONL (deprecated upstream — fallback = filter the
+  # full extract by lang_code ca), CC BY-SA + GFDL → attribution, FileFetch.
+  sync_policy: manual
+
 wiktionary-cu:
   adapter: Nabu::Adapters::WiktionaryCu
   adopted: "2026-07-11"
   axes: [slavic]
   wired: true    # OWNER SIGN-OFF 2026-07-11: synced, 4,615 entries; define
                    # богъ → god with Proto-Slavic chain eyeballed.
+  sync_policy: manual
+
+wiktionary-dum:   # P154, 02-sources row 354
+  adapter: Nabu::Adapters::WiktionaryDum
+  adopted: "2026-11-02"
+  axes: [germanic]
+  wired: true   # first sync verified 2026-11-03: 2,342 entries
+  # The kaikki Middle Dutch extraction (2,342 records / "2031 distinct
+  # words", census 2026-11-02): the library's first Middle Dutch dictionary:
+  # Old Dutch (1,301 odt) and Proto-Germanic etymons, descendants into
+  # Dutch, Afrikaans, Limburgish. Language dum. The wiktionary-fa mold on
+  # the shared WiktionaryKaikki base: per-language JSONL (deprecated
+  # upstream — fallback = filter the full extract by lang_code dum), CC
+  # BY-SA + GFDL → attribution, FileFetch.
   sync_policy: manual
 
 wiktionary-dv:   # 02-sources row 288
@@ -7429,6 +7683,36 @@ wiktionary-dv:   # 02-sources row 288
   # wiktionary-akk mold on the shared WiktionaryKaikki base: per-language
   # JSONL (deprecated upstream — fallback = filter the full extract by
   # lang_code dv), CC BY-SA + GFDL → attribution, FileFetch.
+  sync_policy: manual
+
+wiktionary-enm:   # P154, 02-sources row 345
+  adapter: Nabu::Adapters::WiktionaryEnm
+  adopted: "2026-11-02"
+  axes: [germanic]
+  wired: true   # first sync verified 2026-11-03: 56,687 entries
+  # The kaikki Middle English extraction (56,687 records / "49377 distinct
+  # words", census 2026-11-02): the library's first Middle English
+  # dictionary: senses for 49,377 words and an etymon layer back through Old
+  # English (4,403 ang edges), Proto-Germanic (2,204) and the
+  # Anglo-Norman/Old French donor lane (2,180 fro, 652 xno). Language enm.
+  # The wiktionary-fa mold on the shared WiktionaryKaikki base: per-language
+  # JSONL (deprecated upstream — fallback = filter the full extract by
+  # lang_code enm), CC BY-SA + GFDL → attribution, FileFetch.
+  sync_policy: manual
+
+wiktionary-et:   # P154, 02-sources row 364
+  adapter: Nabu::Adapters::WiktionaryEt
+  adopted: "2026-11-02"
+  axes: [baltic]
+  wired: true   # first sync verified 2026-11-03: 13,549 entries
+  # The kaikki Estonian extraction (13,549 records / "12657 distinct words",
+  # census 2026-11-02): the library's first Estonian dictionary:
+  # Proto-Finnic (1,532) and Proto-Uralic (138) etymons beside the German
+  # and Middle Low German donor lanes (433 de, 226 gml) that shaped the
+  # written language vakk holds. Language et. The wiktionary-fa mold on the
+  # shared WiktionaryKaikki base: per-language JSONL (deprecated upstream —
+  # fallback = filter the full extract by lang_code et), CC BY-SA + GFDL →
+  # attribution, FileFetch.
   sync_policy: manual
 
 wiktionary-fa:   # P153, 02-sources row 321
@@ -7448,6 +7732,78 @@ wiktionary-fa:   # P153, 02-sources row 321
   # wiktionary-akk mold on the shared WiktionaryKaikki base: per-language
   # JSONL (deprecated upstream — fallback = filter the full extract by
   # lang_code fa), CC BY-SA + GFDL → attribution, FileFetch.
+  sync_policy: manual
+
+wiktionary-frm:   # P154, 02-sources row 349
+  adapter: Nabu::Adapters::WiktionaryFrm
+  adopted: "2026-11-02"
+  axes: [romance]
+  wired: true   # first sync verified 2026-11-03: 4,956 entries
+  # The kaikki Middle French extraction (4,956 records / "4714 distinct
+  # words", census 2026-11-02): the library's first Middle French
+  # dictionary, chained to Old French (1,597 fro etymons) and Latin (1,043).
+  # Language frm. The wiktionary-fa mold on the shared WiktionaryKaikki
+  # base: per-language JSONL (deprecated upstream — fallback = filter the
+  # full extract by lang_code frm), CC BY-SA + GFDL → attribution,
+  # FileFetch.
+  sync_policy: manual
+
+wiktionary-fro:   # P154, 02-sources row 348
+  adapter: Nabu::Adapters::WiktionaryFro
+  adopted: "2026-11-02"
+  axes: [romance]
+  wired: true   # first sync verified 2026-11-03: 9,280 entries
+  # The kaikki Old French extraction (9,280 records / "8690 distinct words",
+  # census 2026-11-02): the library's first Old French dictionary: Latin
+  # etymons (2,621 la, 518 la-vul) and Frankish donors (253 frk), and dense
+  # descendant trees into Middle and Modern French, Middle English and
+  # Anglo-Norman (46,722 reflex rows). Language fro. The wiktionary-fa mold
+  # on the shared WiktionaryKaikki base: per-language JSONL (deprecated
+  # upstream — fallback = filter the full extract by lang_code fro), CC
+  # BY-SA + GFDL → attribution, FileFetch.
+  sync_policy: manual
+
+wiktionary-gmh:   # P154, 02-sources row 355
+  adapter: Nabu::Adapters::WiktionaryGmh
+  adopted: "2026-11-02"
+  axes: [germanic]
+  wired: true   # first sync verified 2026-11-03: 2,142 entries
+  # The kaikki Middle High German extraction (2,142 records / "1958 distinct
+  # words", census 2026-11-02): the library's first Middle High German
+  # dictionary, with Old High German (460 goh) etymons and descendants into
+  # German, Alemannic, Bavarian, Cimbrian and Yiddish. Language gmh. The
+  # wiktionary-fa mold on the shared WiktionaryKaikki base: per-language
+  # JSONL (deprecated upstream — fallback = filter the full extract by
+  # lang_code gmh), CC BY-SA + GFDL → attribution, FileFetch.
+  sync_policy: manual
+
+wiktionary-gmq-osw:   # P154, 02-sources row 357
+  adapter: Nabu::Adapters::WiktionaryGmqOsw
+  adopted: "2026-11-02"
+  axes: [germanic]
+  wired: true   # first sync verified 2026-11-03: 1,440 entries
+  # The kaikki Old Swedish extraction (1,440 records / "1404 distinct
+  # words", census 2026-11-02): an English-glossed Old Swedish shelf beside
+  # the Swedish-language fsv-lexica: Old Norse (871) and Proto-Germanic
+  # (791) etymons. Language sv. The wiktionary-fa mold on the shared
+  # WiktionaryKaikki base: per-language JSONL (deprecated upstream —
+  # fallback = filter the full extract by lang_code gmq-osw), CC BY-SA +
+  # GFDL → attribution, FileFetch.
+  sync_policy: manual
+
+wiktionary-got:   # P154, 02-sources row 347
+  adapter: Nabu::Adapters::WiktionaryGot
+  adopted: "2026-11-02"
+  axes: [germanic]
+  wired: true   # first sync verified 2026-11-03: 23,034 entries
+  # The kaikki Gothic extraction (23,034 records / "22781 distinct words",
+  # census 2026-11-02): the library's first Gothic dictionary: 23,034
+  # entries (Gothic-script headwords, many of them inflected-form entries
+  # pointing to their lemma) with Proto-Germanic (1,755) and Greek (166)
+  # etymons. Language got. The wiktionary-fa mold on the shared
+  # WiktionaryKaikki base: per-language JSONL (deprecated upstream —
+  # fallback = filter the full extract by lang_code got), CC BY-SA + GFDL →
+  # attribution, FileFetch.
   sync_policy: manual
 
 wiktionary-hit:
@@ -7482,6 +7838,20 @@ wiktionary-kn:   # 02-sources row 286
   # attribution, FileFetch.
   sync_policy: manual
 
+wiktionary-ko:   # P154, 02-sources row 363
+  adapter: Nabu::Adapters::WiktionaryKo
+  adopted: "2026-11-02"
+  axes: [korean]
+  wired: true   # first sync verified 2026-11-03: 64,457 entries
+  # The kaikki Korean extraction (64,457 records / "57810 distinct words",
+  # census 2026-11-02): the library's first Korean dictionary: modern hangul
+  # headwords, Sino-Korean words with their hanja, and Middle Korean (183
+  # oko) etymons beside the loan lanes. Language ko. The wiktionary-fa mold
+  # on the shared WiktionaryKaikki base: per-language JSONL (deprecated
+  # upstream — fallback = filter the full extract by lang_code ko), CC BY-SA
+  # + GFDL → attribution, FileFetch.
+  sync_policy: manual
+
 wiktionary-ml:   # 02-sources row 285
   adapter: Nabu::Adapters::WiktionaryMl
   adopted: "2026-10-21"
@@ -7496,6 +7866,90 @@ wiktionary-ml:   # 02-sources row 285
   # wiktionary-akk mold on the shared WiktionaryKaikki base: per-language
   # JSONL (deprecated upstream — fallback = filter the full extract by
   # lang_code ml), CC BY-SA + GFDL → attribution, FileFetch.
+  sync_policy: manual
+
+wiktionary-non:   # P154, 02-sources row 346
+  adapter: Nabu::Adapters::WiktionaryNon
+  adopted: "2026-11-02"
+  axes: [germanic]
+  wired: true   # first sync verified 2026-11-03: 11,403 entries
+  # The kaikki Old Norse extraction (11,403 records / "10103 distinct
+  # words", census 2026-11-02): a third Old Norse shelf beside
+  # Cleasby-Vigfusson and Zoëga, its weight in the descendant trees (38,535
+  # reflex rows into Icelandic, Faroese, Norwegian, Swedish, Danish) and the
+  # Proto-Germanic etymons (2,736). Language non. The wiktionary-fa mold on
+  # the shared WiktionaryKaikki base: per-language JSONL (deprecated
+  # upstream — fallback = filter the full extract by lang_code non), CC
+  # BY-SA + GFDL → attribution, FileFetch.
+  sync_policy: manual
+
+wiktionary-oc:   # P154, 02-sources row 366
+  adapter: Nabu::Adapters::WiktionaryOc
+  adopted: "2026-11-02"
+  axes: [romance]
+  wired: true   # first sync verified 2026-11-03: 7,521 entries
+  # The kaikki Occitan extraction (7,521 records / "7175 distinct words",
+  # census 2026-11-02): the library's first Occitan dictionary: Latin
+  # (1,714) and Old Occitan (495 pro) etymons. Language oci. The
+  # wiktionary-fa mold on the shared WiktionaryKaikki base: per-language
+  # JSONL (deprecated upstream — fallback = filter the full extract by
+  # lang_code oc), CC BY-SA + GFDL → attribution, FileFetch.
+  sync_policy: manual
+
+wiktionary-ofs:   # P154, 02-sources row 359
+  adapter: Nabu::Adapters::WiktionaryOfs
+  adopted: "2026-11-02"
+  axes: [germanic]
+  wired: true   # first sync verified 2026-11-03: 654 entries
+  # The kaikki Old Frisian extraction (654 records / "610 distinct words",
+  # census 2026-11-02): the library's first Old Frisian dictionary:
+  # Proto-West-Germanic (304) and Proto-Germanic (207) etymons, descendants
+  # into North, West and Saterland Frisian. Language ofs. The wiktionary-fa
+  # mold on the shared WiktionaryKaikki base: per-language JSONL (deprecated
+  # upstream — fallback = filter the full extract by lang_code ofs), CC
+  # BY-SA + GFDL → attribution, FileFetch.
+  sync_policy: manual
+
+wiktionary-okm:   # P154, 02-sources row 360
+  adapter: Nabu::Adapters::WiktionaryOkm
+  adopted: "2026-11-02"
+  axes: [korean]
+  wired: true   # first sync verified 2026-11-03: 1,033 entries
+  # The kaikki Middle Korean extraction (1,033 records / "965 distinct
+  # words", census 2026-11-02): the library's first Middle Korean
+  # dictionary: hangul headwords with Old Korean (71 oko) etymons and
+  # descendants into Korean and Jeju. Language okm. The wiktionary-fa mold
+  # on the shared WiktionaryKaikki base: per-language JSONL (deprecated
+  # upstream — fallback = filter the full extract by lang_code okm), CC
+  # BY-SA + GFDL → attribution, FileFetch.
+  sync_policy: manual
+
+wiktionary-osp:   # P154, 02-sources row 356
+  adapter: Nabu::Adapters::WiktionaryOsp
+  adopted: "2026-11-02"
+  axes: [romance]
+  wired: true   # first sync verified 2026-11-03: 1,501 entries
+  # The kaikki Old Spanish extraction (1,501 records / "1429 distinct
+  # words", census 2026-11-02): the library's first Old Spanish dictionary:
+  # Latin (640) and Arabic (36) etymons, descendants into Spanish and
+  # Ladino. Language osp. The wiktionary-fa mold on the shared
+  # WiktionaryKaikki base: per-language JSONL (deprecated upstream —
+  # fallback = filter the full extract by lang_code osp), CC BY-SA + GFDL →
+  # attribution, FileFetch.
+  sync_policy: manual
+
+wiktionary-pa:   # P154, 02-sources row 365
+  adapter: Nabu::Adapters::WiktionaryPa
+  adopted: "2026-11-02"
+  axes: [indic]
+  wired: true   # first sync verified 2026-11-03: 10,749 entries
+  # The kaikki Punjabi extraction (10,749 records / "9533 distinct words",
+  # census 2026-11-02): an English-glossed Punjabi shelf beside the
+  # Punjabi-language mahan-kosh: Sanskrit (2,192), Classical Persian
+  # (1,225), Arabic (702) and Prakrit (612) etymons. Language pan. The
+  # wiktionary-fa mold on the shared WiktionaryKaikki base: per-language
+  # JSONL (deprecated upstream — fallback = filter the full extract by
+  # lang_code pa), CC BY-SA + GFDL → attribution, FileFetch.
   sync_policy: manual
 
 wiktionary-pra:   # 02-sources row 287
@@ -7513,6 +7967,20 @@ wiktionary-pra:   # 02-sources row 287
   # shared WiktionaryKaikki base: per-language JSONL (deprecated
   # upstream — fallback = filter the full extract by lang_code pra),
   # CC BY-SA + GFDL → attribution, FileFetch.
+  sync_policy: manual
+
+wiktionary-pro:   # P154, 02-sources row 358
+  adapter: Nabu::Adapters::WiktionaryPro
+  adopted: "2026-11-02"
+  axes: [romance]
+  wired: true   # first sync verified 2026-11-03: 695 entries
+  # The kaikki Old Occitan extraction (695 records / "675 distinct words",
+  # census 2026-11-02): the library's first Old Occitan (Old Provençal)
+  # dictionary: Latin etymons (398) and descendants into Occitan and
+  # Catalan. Language pro. The wiktionary-fa mold on the shared
+  # WiktionaryKaikki base: per-language JSONL (deprecated upstream —
+  # fallback = filter the full extract by lang_code pro), CC BY-SA + GFDL →
+  # attribution, FileFetch.
   sync_policy: manual
 
 wiktionary-recon:
@@ -7574,6 +8042,34 @@ wiktionary-recon:
   # ladder (~11.7k nodes across the four) and the Caucasus loan lanes.
   sync_policy: manual
 
+wiktionary-sco:   # P154, 02-sources row 350
+  adapter: Nabu::Adapters::WiktionarySco
+  adopted: "2026-11-02"
+  axes: [germanic]
+  wired: true   # first sync verified 2026-11-03: 6,042 entries
+  # The kaikki Scots extraction (6,042 records / "5127 distinct words",
+  # census 2026-11-02): the library's first Scots dictionary: etymons
+  # through Middle English (888), Old English (750) and Old Norse (196).
+  # Language sco. The wiktionary-fa mold on the shared WiktionaryKaikki
+  # base: per-language JSONL (deprecated upstream — fallback = filter the
+  # full extract by lang_code sco), CC BY-SA + GFDL → attribution,
+  # FileFetch.
+  sync_policy: manual
+
+wiktionary-sh:   # P154, 02-sources row 361
+  adapter: Nabu::Adapters::WiktionarySh
+  adopted: "2026-11-02"
+  axes: [slavic]
+  wired: true   # first sync verified 2026-11-03: 70,466 entries
+  # The kaikki Serbo-Croatian extraction (70,466 records / "66998 distinct
+  # words", census 2026-11-02): the library's first Serbo-Croatian
+  # dictionary, Latin and Cyrillic headwords both: Proto-Slavic (7,327),
+  # German (1,708) and Ottoman Turkish (1,483) etymons. Language srp. The
+  # wiktionary-fa mold on the shared WiktionaryKaikki base: per-language
+  # JSONL (deprecated upstream — fallback = filter the full extract by
+  # lang_code sh), CC BY-SA + GFDL → attribution, FileFetch.
+  sync_policy: manual
+
 wiktionary-si:   # 02-sources row 289
   adapter: Nabu::Adapters::WiktionarySi
   adopted: "2026-10-21"
@@ -7603,6 +8099,21 @@ wiktionary-sux:
   # → reflexes). The wiktionary-cu mold: per-language JSONL (deprecated
   # upstream — fallback = filter the full extract by lang_code sux),
   # CC BY-SA + GFDL → attribution, FileFetch, re-syncs owner-fired.
+  sync_policy: manual
+
+wiktionary-syc:   # P154, 02-sources row 351
+  adapter: Nabu::Adapters::WiktionarySyc
+  adopted: "2026-11-02"
+  axes: [syriac]
+  wired: true   # first sync verified 2026-11-03: 3,911 entries
+  # The kaikki Classical Syriac extraction (3,911 records / "2761 distinct
+  # words", census 2026-11-02): the library's first Syriac dictionary:
+  # Syriac-script headwords with Akkadian (222), Greek (165), Proto-Semitic
+  # (120) and Aramaic (86) etymons, and loans out into Armenian, Arabic and
+  # Malayalam. Language syc. The wiktionary-fa mold on the shared
+  # WiktionaryKaikki base: per-language JSONL (deprecated upstream —
+  # fallback = filter the full extract by lang_code syc), CC BY-SA + GFDL →
+  # attribution, FileFetch.
   sync_policy: manual
 
 wiktionary-ta:   # 02-sources row 283

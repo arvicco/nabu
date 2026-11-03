@@ -1,0 +1,16 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+source: mahan-kosh
+adapter_test: test/adapters/mahan_kosh_test.rb
+retrieved: 2026-11-02
+files:
+  - path: core/core.json
+    url: https://raw.githubusercontent.com/redroyals/mahan-kosh-multilingual/main/data/entries/core.json
+    whole: false
+    trim: >-
+      the 4 grid rows with id 1-2-0, 1-37-0, 1-37-13, 1-37-21, values
+      verbatim in upstream's layout, of 68,150
+  - path: gurmukhi/gurmukhi.json
+    url: https://raw.githubusercontent.com/redroyals/mahan-kosh-multilingual/main/data/entries/gurmukhi.json
+    whole: false
+    trim: the bodies of 1-37-0 and 1-37-13, values verbatim, of 60,196

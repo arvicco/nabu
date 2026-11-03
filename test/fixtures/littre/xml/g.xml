@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><?oxygen RNGSchema="littre.rng" type="xml"?>
+<?xml-stylesheet type="text/xsl" href="../transform/littre_txt.xsl"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:id="littre_g">
+<teiHeader>
+<fileDesc>
+<titleStmt>
+<title>Littré, Dictionnaire de la Langue Française</title>
+</titleStmt>
+<publicationStmt>
+<date>2011</date>
+<idno>http://javacrim.svn.sourceforge.net/svnroot/javacrim/littre/xml/g.xml</idno>
+<publisher>http://javacrim.sourceforge.net/</publisher>
+<availability status="restricted">
+<p> Licence Creative Commons : <ref target="http://creativecommons.org/licenses/by-sa/2.0/fr/">Paternité – Partage des Conditions Initiales à l'Identique – 2.0 France</ref></p>
+<p> Cette ressource électronique structurée est protégée en France par le code de la propriété intellectuelle sur les bases de données (L341-1). En adoptant une licence CreativeCommons by-sa, les contributeurs de ce travail souhaitent que la ressource soit librement diffusée, notamment pour la recherche. La clause « Partage des Conditions Initiales à l'Identique » invite les contributeurs futurs à rendre leurs améliorations publiques, par exemple en rejoignant le projet libre <ref target="https://sourceforge.net/projects/javacrim/">Javacrim</ref>.</p>
+</availability>
+</publicationStmt>
+<sourceDesc>
+<bibl><ref target="http://francois.gannaz.free.fr/Littre/">XMLittré v1.3</ref></bibl>
+<bibl>Littré, Dictionnaire de la Langue Française</bibl>
+</sourceDesc>
+</fileDesc>
+</teiHeader>
+<text>
+<body>
+<entry xml:id="gommeux">
+<form>
+<orth>GOMMEUX, EUSE</orth>
+<pron>go-meû, meû-z'</pron>
+<gram>adj.</gram>
+</form>
+<sense n="1">
+<dictScrap>Qui jette de la gomme. Les arbres <oVar>gommeux</oVar> abondent dans le Sénégal.</dictScrap>
+<sense>
+<dictScrap>Qui est de la nature de la gomme, qui contient de la gomme. Matière <oVar>gommeuse</oVar>.</dictScrap>
+<cit>
+<quote>On conserve dans les corps <oVar>gommeux</oVar> les essences les plus subtiles et les plus spiritueuses</quote>
+<bibl>
+<author>FÉN.</author>
+<biblScope>Exist. I, 33</biblScope>
+</bibl>
+</cit>
+</sense>
+</sense>
+<sense n="2">
+<dictScrap>Terme de chirurgie. Tumeurs gommeuses, tumeurs d'origine syphilitique, siégeant dans le périoste et ailleurs.</dictScrap>
+</sense>
+<etym>Provenç. gomos ; espagn. gomoso ; ital. gommoso ; du lat. gummosus, de gummi, gomme.</etym>
+<etym>L'origine est incertaine. L'Intermédiaire (n° du 10 mars 1877, col. 154) donne deux conjectures : 1° " Ce mot est sans doute un emprunt fait au vocabulaire des jardiniers ; la gomme est une maladie des arbres fruitiers, dont toute la substance s'épuise à produire une gomme inutile ; ils deviennent stériles et meurent bientôt ; 2° Considérez l'aspect empésé d'un gommeux, qui semble un bonhomme de bois, habillé de carton, et vous connaîtrez l'origine de ce désagréable, mais très juste qualificatif. " La deuxième conjecture est la moins improbable, sans être certaine le moins du monde.</etym>
+</entry>
+<entry ana="supplement" xml:id="gommeux">
+<form>
+<orth>GOMMEUX</orth>
+<pron>go-meû</pron>
+<gram>s. m.</gram>
+</form>
+<sense>
+<cit>
+<quote>Le dernier nom du jeune homme à la mode, de celui qu'on a appelé muscadin, mirliflor, dandy, lion, gandin, petit crevé, etc. N'ai-je pas entendu un jour un beau fils de famille, un <oVar>gommeux</oVar>, un idiot ayant une raie au milieu de la tête comme une femme...</quote>
+<bibl>
+<biblScope>le Petit journal, 6 avr. 1877, feuilleton.</biblScope>
+</bibl>
+</cit>
+</sense>
+</entry>
+</body>
+</text>
+</TEI>

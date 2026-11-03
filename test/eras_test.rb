@@ -14,7 +14,8 @@ class ErasTest < Minitest::Test
 
   def test_the_shipped_table_loads_all_four_indian_eras
     refute_nil eras, "config/eras.yml is ruled repo config"
-    assert_equal %w[gupta_valabhi kollam saka vikrama], eras.keys.reject { |key| eras.family(key) == "nengo" }.sort
+    indian = eras.keys.reject { |key| %w[nengo nianhao].include?(eras.family(key)) }
+    assert_equal %w[gupta_valabhi kollam saka vikrama], indian.sort
   end
 
   def test_saka_is_a_single_offset_plus_seventy_eight
@@ -73,7 +74,7 @@ class ErasTest < Minitest::Test
 
   def test_every_row_declares_its_source
     eras.keys.each do |key| # rubocop:disable Style/HashEachMethods -- Eras#keys is an Array, not a Hash
-      cite = eras.family(key) == "nengo" ? /元号一覧/ : /Sewell/
+      cite = { "nengo" => /元号一覧/, "nianhao" => /年號/ }.fetch(eras.family(key), /Sewell/)
       assert_match(cite, eras.source(key), "#{key}: each row cites its published list")
     end
   end
@@ -136,6 +137,29 @@ class ErasTest < Minitest::Test
                    "eras" => %w[宝暦8 安永9], "basis" => "census" },
                  eras.nengo_date("宝暦8序,安永9刊", basis: "census"))
     assert_nil eras.nengo_date("康熙11", basis: "census"), "an era the table does not hold"
+  end
+
+  # -- The Chinese reign periods (nianhao; P154, tianyige) -----------------
+  # Ming 洪武 → 崇禎 + Qing 順治, 康熙; dynasty-prefixed keys, never read
+  # out of prose.
+
+  def nianhao_keys = eras.keys.select { |key| eras.family(key) == "nianhao" }
+
+  def test_the_nianhao_rows_are_the_ming_sequence_plus_early_qing
+    assert_equal 19, nianhao_keys.size, "17 Ming periods + 順治 + 康熙"
+    assert_equal %w[明洪武 清康熙], [nianhao_keys.first, nianhao_keys.last]
+    assert_equal [1371, 1371], ce("明洪武", 4), "洪武四年會試錄 = 1371"
+    assert_equal [1573, 1573], ce("明萬曆", 1)
+    assert_equal [1644, 1644], ce("明崇禎", 17), "the last Ming year"
+    assert_equal [1684, 1684], ce("清康熙", 23), "康熙二十三年四川鄉試錄"
+  end
+
+  def test_nianhao_keys_never_shadow_the_homonym_nengo
+    assert_equal "弘治", eras.resolve("弘治"), "the bare name stays the Japanese era (1555)"
+    assert_equal [1555, 1555], ce("弘治", 1)
+    assert_equal [1488, 1488], ce("明弘治", 1)
+    assert_equal "明弘治", eras.resolve("Ming Hongzhi")
+    assert_empty scan("明弘治2"), "nianhao rows are never read out of prose"
   end
 
   def ce(era, year)

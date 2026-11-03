@@ -442,6 +442,14 @@ sources:
       work: work
       cts_textgroup: author_id
       cts_work: work_id
+  pta:                        # 113 grc editions (census over the 524eb976 clone, 2026-11-02)
+    fields:
+      author: author          # the textgroup groupname (Severian of Gabala 64 · Athanasius …)
+      work: work
+      genre: genre            # the dct:type labels, "|"-joined ("Paraenetic|Sermon");
+      #                         config/kind_map.yml folds them onto the house kinds
+      cts_textgroup: author_id  # "pta0001"
+      cts_work: work_id       # "pta0001.pta024"
   # -- The passage grain: passage_fields project passages.annotations_json
   #    keys into the passage facet tables (Store::PassageFacetBuilder) —
   #    the facet lane for claims upstream makes per ARTICLE, not per
@@ -666,6 +674,17 @@ sources:
     entry_fields:
       concept: concept        # the concept's English name, ref = its uuid (= the tls-concepts
       #                         entry id the word→concept crossref resolves to)
+  fsv-lexica:                 # census 2026-11-02 over the three Karp LMF files (51,811 entries)
+    entry_fields:
+      pos: word_class         # Karp partOfSpeech tags verbatim: nn 27,605 · vb 9,291 · av 5,599 ·
+      #                         ab 2,226 · nl 117 · pp 135 · kn 75 · pn 74 … (6,825 entries carry none)
+  littre:                     # census 2026-11-02 over xml/a.xml … z.xml (78,483 articles)
+    entry_fields:
+      pos: word_class         # the printed gram verbatim: s. m. 25,277 · s. f. 19,701 · adj. 14,680 ·
+      #                         v. a. 5,720 · adv. 1,932 · part. passé. 1,929 … (76,634 carry one)
+      first_attested: first_attested  # the HISTORIQUE's first century label, normalized: XVIe s. 8,603 ·
+      #                         XIIIe 3,779 · XIVe 2,719 · XIIe 2,609 · XVe 2,279 · XIe 1,368 · Xe 123 ·
+      #                         IXe 56 · XVIIe 2 · VIIIe 1 (21,539 articles) — Littré's own earliest quote
   lexicon-itant:              # census 2026-10-29 (lexicon_1_0.ttl, 809 entries)
     entry_fields:
       pos: word_class         # lexinfo partOfSpeech local name: properNoun 311 · noun 204 ·
@@ -685,7 +704,7 @@ sources:
     fields: #                   dialect = the classification head (East Yiddish 49 · West
       dialect: dialect        # Yiddish 12 · East and West Yiddish 1 (the court testimony) ·
       #                         "Probably West Yiddish (Erika Timm, pers. comm.)" 1) — the
-      #                         seam a Yiddish lect rule reads once the registry mints yi;
+      #                         seam the ppchy-dialect compose rules read (P154);
       dialect_localization: region  # the localization after the comma, verbatim (Cracow 7 ·
       #                         Regensburg 2 · Volina 2 · Moravian · Bohemian · Polish ·
       #                         Lithuanian · Prague · Lublin · Lvov · Vilna · Holland · Northern

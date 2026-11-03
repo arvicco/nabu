@@ -1,0 +1,353 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="https://raw.githubusercontent.com/PatristicTextArchive/Schema/master/tei-pta.rng" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:lang="en">
+   <teiHeader>
+      <fileDesc>
+         <titleStmt>
+            <title xml:lang="la">Historia ecclesiastica</title>
+            <author>
+               <persName key="pta0036">Anonymus Cyzicenus</persName>
+            </author>
+            <respStmt>
+               <persName xml:id="AvS">Annette von Stockhausen</persName>
+               <resp>Conversion of the PDF file to CTS-compliant PTA TEI; added new sectioning.</resp>
+            </respStmt>
+         </titleStmt>
+         <publicationStmt>
+            <authority>Berlin-Brandenburgische Akademie der Wissenschaften</authority>
+            <distributor>Patristic Text Archive</distributor>
+            <availability>
+               <licence target="https://creativecommons.org/licenses/by-nc-sa/3.0/deed.de">Available under a Attribution-NonCommercial-ShareAlike 3.0 Unported</licence>
+            </availability>
+            <date>2019</date>
+            <idno type="PTA">pta0036.pta001</idno>
+            <idno type="TLG">tlg2768.tlg001</idno>
+            <idno type="CPG">6034</idno>
+            <idno type="BHG"/>
+            <idno type="Pinakes-Oeuvre">6823</idno>
+            <idno type="GND">4715555-3</idno>
+         </publicationStmt>
+         <sourceDesc>
+            <listBibl>
+               <biblStruct type="book" xml:id="Hansen2002">
+                  <monogr>
+                     <title level="m">Anonyme Kirchengeschichte (Gelasius Cyzicenus, CPG 6034)</title>
+                     <idno type="ISBN">3-11-017437-5</idno>
+                     <editor>
+                        <forename>Günther Christian</forename>
+                        <surname>Hansen</surname>
+                     </editor>
+                     <imprint>
+                        <pubPlace>Berlin; New York</pubPlace>
+                        <publisher>de Gruyter</publisher>
+                        <date>2002</date>
+                     </imprint>
+                  </monogr>
+                  <series>
+                     <title level="s">Die griechischen christlichen Schriftsteller der ersten Jahrhunderte</title>
+                     <biblScope unit="volume">N.F. 9</biblScope>
+                  </series>
+                  <note>Der hier gebotene Text basiert auf der
+							<ref target="https://nbn-resolving.org/urn:nbn:de:kobv:b4-opus4-27313">deponierten PDF-Datei</ref>, die den griechischen Lesetext ohne Einleitung, Apparate und Register zur Verfügung stellt.</note>
+               </biblStruct>
+            </listBibl>
+         </sourceDesc>
+      </fileDesc>
+      <encodingDesc>
+         <p>The following text is encoded in accordance with PTA standards and with the CTS/CITE Architecture.</p>
+         <refsDecl n="CTS">
+            <cRefPattern n="section" matchPattern="(.+).(.+).(.+)" replacementPattern="#xpath(/tei:TEI/tei:text/tei:body/tei:div/tei:div[@n='$1']/tei:div[@n='$2']//tei:seg[@n='$3'])"/>
+            <cRefPattern n="chapter" matchPattern="(.+).(.+)" replacementPattern="#xpath(/tei:TEI/tei:text/tei:body/tei:div/tei:div[@n='$1']/tei:div[@n='$2'])"/>
+            <cRefPattern n="book" matchPattern="(.+)" replacementPattern="#xpath(/tei:TEI/tei:text/tei:body/tei:div[@type='edition']/tei:div[@n='$1'])"/>
+         </refsDecl>
+         <refsDecl xml:id="biblical">
+            <cRefPattern matchPattern="(.+):(.+):([0-9]+):([0-9]+)[\-\.]*[0-9]*" replacementPattern="https://www.bibelwissenschaft.de/bibelstelle/$2$3,$4/$1">
+               <p>Noted are references to a biblical book, chapter, verse, sc. LXX:Gn:1:1; also possible: LXX:Gn:1:1-3 for a sequence of verses or LXX:Gn:1:1.3 for two verses not following each other.</p>
+               <p>The following abbreviations are used: Gn, Ex, Lv, Num, Dt, Jos, Judg, Rt, 1Sa, 2Sa, 1Ko, 2Ko, 1Chr, 2Chr, 3Esr, Esr, Est, Jdt, Tob, 1Mak, 2Mak, 3Mak, 4Mak, Ps, Oden, Prov, Eccl, Song, Job, Wis, Sir, PsSal, Hos, Am, Mi, Joel, Ob, Jon, Nah, Hab, Zeph, Hag, Sach, Mal, Is, Jr, Bar, Lam, EpistJer, Hes, Sus, Dn, Bel; Mt, Mk, Lk, Jn, Act, Rom, 1Cor, 2Cor, Gal, Eph, Phil, Col, 1Th, 2Th, 1Tim, 2Tim, Tt, Phm, Heb, Jak, 1P, 2P, 1Jn, 2Jn, 3Jn, Jud, Rev.</p>
+            </cRefPattern>
+            <cRefPattern matchPattern="(.+):(.+):([0-9]+)[\-\.]*[0-9]*" replacementPattern="https://www.bibelwissenschaft.de/bibelstelle/$2$3/$1">
+               <p>Noted are references to a biblical book and chapter, sc. LXX:Gn:1; also possible: LXX:Gn:1-3 for a sequence of chapters or LXX:Gn:1.3 for two chapters not following each other.</p>
+            </cRefPattern>
+            <cRefPattern matchPattern="(.+):(.+)" replacementPattern="https://www.bibelwissenschaft.de/bibelstelle/$2/$1">
+               <p>Noted are references to a biblical book, sc. LXX:Gn.</p>
+            </cRefPattern>
+         </refsDecl>
+         <refsDecl xml:id="pta">
+            <cRefPattern matchPattern="(.+)" replacementPattern="https://pta.bbaw.de/text/$1">
+               <p>References to PTA-CTS-URNs</p>
+            </cRefPattern>
+         </refsDecl>
+         <refsDecl xml:id="perseus">
+            <cRefPattern matchPattern="(.+)" replacementPattern="https://scaife.perseus.org/reader/$1">
+               <p>References to Perseus-CTS-URNs</p>
+            </cRefPattern>
+         </refsDecl>
+         <editorialDecl>
+            <interpretation>
+               <p>
+            This file is encoded according to the guidelines of the Patristic Text Archive (PTA). See <ref target="https://pta.bbaw.de/project/encoding-guidelines">https://pta.bbaw.de/project/encoding-guidelines</ref> and <ref target="https://doi.org/10.5281/zenodo.3737666">https://doi.org/10.5281/zenodo.3737666</ref>.
+          </p>
+               <p xml:id="biblical-quotations" ana="not-annotated not-identified">
+            Biblical quotations are not annotated and not referenced. References follow the scheme declared <ref target="#biblical">above</ref>.
+          </p>
+               <p xml:id="other-references" ana="not-annotated not-identified">
+            Other references are not annotated and not referenced. References to texts in the PTA follow the scheme declared <ref target="#pta">above (pta)</ref>, references to texts available in the <ref target="https://scaife.perseus.org/">Perseus Digital Library</ref> follow the scheme declared <ref target="#perseus">above (perseus)</ref>. If the referenced text is not available in either repository, the reference for the referenced text is given in the attribute @source in the form “Authorabbrev_Workabbrev_Location”; ancient Greek authors should be referenced according to the lists of H. G. Liddell/R. Scott/H. S. Jones, A Greek - English Lexicon, Oxford 1968 (9th edition) and G. W. H. Lampe, A Patristic Greek Lexicon, Oxford 1987 (3rd edition), for Latin ones the abbreviations of the Thesaurus Linguae Latinae (cf. Index librorum scriptorum inscriptionum ex quibus exempla afferuntur) should be used, with dots in the abbreviations deleted without replacement.
+          </p>
+               <p xml:id="persons" ana="partially-annotated not-identified">
+            Persons are partially annotated but not referenced with IDs according to the <ref target="https://github.com/PatristicTextArchive/tipnr_data">TIPNR - Tyndale Individualised Proper Names with all References</ref> list for biblical persons and IDs of <ref target="https://github.com/PatristicTextArchive/pta_metadata/blob/main/pta_persons.json">PTA persons index</ref> for all other persons.
+          </p>
+               <p xml:id="groups" ana="partially-annotated fully-identified">
+            Groups of persons and organisations are partially annotated and partially referenced with IDs according to the IDs of <ref target="https://github.com/PatristicTextArchive/pta_metadata/blob/main/pta_groups.json">PTA groups index</ref> for all other groups.
+          </p>
+               <p xml:id="places" ana="partially-annotated not-identified">
+            Places are partially annotated but not referenced with <ref target="https://pleiades.stoa.org/">Pleiades Gazetteer</ref> IDs.
+          </p>
+               <p xml:id="text-analysis" ana="not-tagged not-analyzed">Words are not tagged and not analyzed.</p>
+            </interpretation>
+            <normalization>
+               <p><!--Usage of capitalisation, ν-ephelkystikon, σ: οὕτως, Iota subscriptum/adscriptum, Trema, Enclitics, apostroph/elisions, number signs, splitting of words, nomina sacra, ...--></p>
+            </normalization>
+            <punctuation>
+               <p><!--Usage (and/or normalisation) of full stop, comma, semicolon, question mark, dash and parenthesis--></p>
+            </punctuation>
+         </editorialDecl>
+         <classDecl>
+            <taxonomy xml:id="comphistsem">
+               <bibl>
+          Text Type Classification by <ref target="https://www.comphistsem.org/46.html">"Computational Historical Semantics</ref>
+               </bibl>
+            </taxonomy>
+            <taxonomy xml:id="editionstatus">
+               <bibl>
+          Patristic Text Archive Status of edition
+        </bibl>
+               <category xml:id="critical-edition">
+                  <catDesc>
+            Critical edition in which the text-critical variants have been encoded.
+          </catDesc>
+               </category>
+               <category xml:id="critical-edition-no-app">
+                  <catDesc>
+            Critical edition in which the text-critical variants have not been encoded, e.g. because it is a retro-digitisation of a printed critical edition and for copyright reasons the apparatus cannot be included in the retro-digitisation.
+          </catDesc>
+               </category>
+               <category xml:id="critical-edition-outdated">
+                  <catDesc>
+              Edition which notes text-critical variants, but does not, for example, comprehensively include the manuscripts.
+            </catDesc>
+               </category>
+               <category xml:id="pre-critical-edition">
+                  <catDesc>
+              Pre-modern editions (e.g. editions in the Patrologia Graeca or Latina)
+            </catDesc>
+               </category>
+            </taxonomy>
+            <taxonomy xml:id="annotationstatus">
+               <bibl>
+          Patristic Text Archive Status of annotation
+        </bibl>
+               <category xml:id="fully-annotated">
+                  <catDesc>
+            All instances of a phenomenon (e.g. biblical quotations, persons, places) are encoded with the respective element.
+          </catDesc>
+               </category>
+               <category xml:id="partially-annotated">
+                  <catDesc>
+            Some instances of a phenomenon (e.g. biblical quotations, persons, places) are encoded with the respective element.
+          </catDesc>
+               </category>
+               <category xml:id="not-annotated">
+                  <catDesc>
+            No instances of a phenomenon (e.g. biblical quotations, persons, places) are encoded with the respective element.
+          </catDesc>
+               </category>
+               <category xml:id="fully-identified">
+                  <catDesc>
+            All encoded instances of a phenomenon (e.g. biblical quotations, persons, places) are identified with the respective norm data.
+          </catDesc>
+               </category>
+               <category xml:id="partially-identified">
+                  <catDesc>
+            Some encoded instances of a phenomenon (e.g. biblical quotations, persons, places) are identified with the respective norm data
+          </catDesc>
+               </category>
+               <category xml:id="not-identified">
+                  <catDesc>
+            No encoded instances of a phenomenon (e.g. biblical quotations, persons, places) are identified with the respective norm data.
+          </catDesc>
+               </category>
+            </taxonomy>
+            <taxonomy xml:id="analysisstatus">
+               <bibl>Patristic Text Archive Status of linguistic analysis</bibl>
+               <category xml:id="automatically-tagged">
+                  <catDesc>Words are automatically tagged.</catDesc>
+               </category>
+               <category xml:id="manually-tagged">
+                  <catDesc>Words are manually tagged.</catDesc>
+               </category>
+               <category xml:id="not-tagged">
+                  <catDesc>Words are not tagged.</catDesc>
+               </category>
+               <category xml:id="automatically-analyzed">
+                  <catDesc>Words are automatically analyzed.</catDesc>
+               </category>
+               <category xml:id="manually-analyzed">
+                  <catDesc>Words are manually analyzed.</catDesc>
+               </category>
+               <category xml:id="not-analyzed">
+                  <catDesc>Words are not analyzed.</catDesc>
+               </category>
+            </taxonomy>
+         </classDecl>
+         <schemaRef key="v3" url="https://raw.githubusercontent.com/PatristicTextArchive/Schema/master/tei-pta.rng"/>
+      </encodingDesc>
+      <profileDesc>
+         <creation>
+            <date notBefore="0475" notAfter="0485"/>
+            <placeName ref="https://pleiades.stoa.org/places/511189">Bithynia</placeName>
+         </creation>
+         <textClass>
+            <keywords scheme="#comphistsem">
+               <term>Historiography</term>
+               <term>Church History</term>
+            </keywords>
+            <keywords scheme="#editionstatus">
+               <term>critical-edition-no-app</term>
+            </keywords>
+         </textClass>
+      </profileDesc>
+      <revisionDesc status="draft">
+         <change when="2023-05-22" who="#AvS">
+          Updated file to comply with version 3.0 of <ref target="https://github.com/PatristicTextArchive/Schema">TEI-PTA-Schema</ref>
+         </change>
+         <change when="2021-01-24" who="#AvS">Corrected (OCR-)errors, added annotations of persons, places, quotes (no norm data added yet)</change>
+         <change when="2019-11-14" who="#AvS">Converted to PTA/CapiTainS</change>
+      </revisionDesc>
+   </teiHeader>
+   <text>
+      <body>
+         <div type="edition" xml:lang="grc" n="urn:cts:pta:pta0036.pta001.pta-grc1">
+            <head>
+               <title>Σύνταγμα <orgName>τῆς ἐν Νικαίᾳ ἁγίας συνόδου</orgName>. Περὶ ὧν διημφισβήτησαν πρὸς τοὺς ἁγίους πατέρας οἱ αἱρετικοὶ καὶ ἐκφώνησις τοῦ κρατήσαντος ὀρθοδόξου δόγματος</title>
+            </head>
+            <div type="textpart" subtype="book" n="1">
+               <div type="textpart" subtype="chapter" n="praefatio">
+                  <head>
+                     <title>Προοίμιον περὶ τῶν κατὰ <orgName>τὴν ἐν Νικαίᾳ ἁγίαν σύνοδον</orgName> πραχθέντων</title>
+                  </head>
+                  <p>
+                     <seg type="textpart" subtype="section" n="1">Τὰ κατὰ <orgName>τὴν ἁγίαν καὶ μεγάλην καὶ οἰκουμενικὴν τῶν ἐπισκόπων συναθροισθεῖσαν σύνοδον ἐν τῇ <orgName>Νικαέων</orgName>
+                        </orgName> ἐκ πασῶν, ὡς ἔπος εἰπεῖν, τῶν τοῦ <orgName>Ρωμαίων</orgName> κόσμου ἐπαρχιῶν καὶ <placeName>Περσίδος</placeName>, ἐκ τε τῆς τοῦ θεοῦ χάριτος καὶ θεσπίσματος τοῦ θεοφιλοῦς καὶ εὐσεβοῦς βασιλέως <persName>Κωνσταντίνου</persName> τοῦ ἡμετέρου ὑπὲρ τῆς ἀποστολικῆς καὶ ὀρθοδόξου πίστεως κατὰ τῶν μοχθηρῶν καὶ ἀσεβῶν δογμάτων τοῦ θεομάχου <persName>Ἀρείου</persName>,
+							</seg>
+                     <seg type="textpart" subtype="section" n="2">πάντα τὰ ἐν ἐκείνῃ <orgName>τῇ ἐναρέτῳ καὶ ἁγίᾳ συνόδῳ</orgName> λεχθέντα τε καὶ πραχθέντα καὶ διατυπωθέντα πάλαι τε καὶ πρόπαλαι ἀναγνοὺς ἔτι ἐν τῇ πατρῴᾳ οἰκίᾳ διάγων, εὑρηκὼς αὐτὰ ἐν βίβλῳ ἀρχαιοτάτῃ ἐγγεγραμμένα ἐν μεμβράναις ἅπαντα ἀπαραλείπτως ἐχούσαις, γενομέναις μὲν τοῦ θείου καὶ ἀοιδίμου <persName>Δαλματίου</persName> τοῦ ἀρχιεπισκόπου γενομένου τῆς ἁγίας καὶ καθολικῆς ἐκκλησίας τῆς τῶν <placeName>Κυζικηνῶν</placeName> λαμπρᾶς μητροπόλεως, περιελθούσαις δὲ εἰς τὸν τοῦ ποτε ἡμετέρου οἴκου δεσπότην, λέγω δὴ τὸν κατὰ σάρκα πατέρα ἐμόν, τῆς αὐτῆς ἁγιωτάτης ἐκκλησίας πρεσβυτερίου ἠξιωμένον,
+							</seg>
+                     <seg type="textpart" subtype="section" n="3">
+								ἥτινι ἱερᾷ βίβλῳ ἐντυχὼν καὶ σχολὴν πολλὴν ἐν αὐτῇ ποιησάμενος ἐπὶ μνήμης μὲν φέρειν πάντα οὐχ οἷός τε ἤμην – οὐδὲ γάρ τις ἀνθρώπων τὸ ἄφατον ἐκεῖνο πέλαγος τῶν ἐν αὐτῇ ἐγκειμένων ἐπὶ μνήμης διὰ στόματος φέρειν δυνήσεται –, πλεῖστα δὲ ὅσα ἐπεσημηνάμην,
+							</seg>
+                     <seg type="textpart" subtype="section" n="4">
+								τά τε τῶν ἡμετέρων ἁγίων πατέρων καὶ ἐπισκόπων τῆς τοῦ ὑγιαίνοντος
+								<pb n="2"/>
+								λόγου διδασκαλίας αὐτῶν δόγματα τάς τε πρὸς τοὺς <orgName>Ἀρειομανίτας</orgName> αὐτῶν ἀντιθέσεις καὶ τοὺς κατὰ τῆς ἐκείνων βλασφημίας ἐγγράφους ἐλέγχους, ἧς ἐβλασφήμησαν οἱ μιαροὶ <orgName>Ἀρειομανῖται</orgName> κατὰ τοῦ υἱοῦ τοῦ θεοῦ, οὐ μὴν δὲ ἀλλὰ γὰρ καὶ κατὰ τοῦ ἁγίου πνεύματος,
+							</seg>
+                     <seg type="textpart" subtype="section" n="5">
+								τάς τε τῶν μισθωτῶν <persName>Ἀρείου</persName> τῶν φιλοσόφων πρὸς τοὺς ἐπισκόπους ἀντιρρήσεις, τάς τε τῶν ἡμετέρων πρὸς ἐκείνους διὰ γραφικῶν διδαγμάτων κατὰ τῶν αὐτῶν σοφισμάτων ἐναργεῖς ἐπιλύσεις
+							</seg>
+                     <seg type="textpart" subtype="section" n="6">
+								περί τε τῆς ἀνάρχου καὶ ἀεὶ τῷ θεῷ καὶ πατρὶ συνυπαρχούσης τοῦ υἱοῦ αὐτοῦ καὶ τοῦ ἁγίου πνεύματος προαιωνίου μιᾶς θεότητος περί τε τῆς αὐτοῦ τοῦ υἱοῦ τοῦ θεοῦ, θεοῦ λόγου, ἐπ’ ἐσχάτων τῆς ἡμετέρας ἕνεκα σωτηρίας ἐκ τῆς θεοτόκου παρθένου <persName>Μαρίας</persName> ἀπορρήτου σαρκώσεως, καὶ τῶν τῆς ἐκκλησίας ἀποστολικῶν διατυπώσεων πᾶσαν ἁπλῶς τὴν ἐκεῖσε γεγενημένην πραγματείαν ἐνιστορήσας ἐν τῇ προρρηθείσῃ ἱερᾷ βίβλῳ,
+							</seg>
+                     <seg type="textpart" subtype="section" n="7">
+								πρό τε πάντων τὰς τοῦ πιστοτάτου βασιλέως <persName>Κωνσταντίνου</persName> τοῦ καὶ τῇ συνόδῳ συνεδρεύσαντος θείας καὶ ἀληθῶς ἀποστολικὰς ἐννοίας, ἥσθην εἰς τοσοῦτον τοῖς τῇ βίβλῳ ἐκείνῃ τῇ ἱερᾷ περιεχομένοις, ὥστε εἰπεῖν με πρὸς τὸν κύριον· <quote>ὡς γλυκέα τῷ λάρυγγί μου τὰ λόγιά σου, ὑπὲρ μέλι τῷ στόματί μου</quote>·
+							</seg>
+                     <seg type="textpart" subtype="section" n="8">
+								οὕτως ὑπερηγάσθην ἐν τοῖς ἐκεῖ ἀναγεγραμμένοις περὶ τῆς ἀσπίλου καὶ ἀμωμήτου ὀρθοδόξου καὶ ἀποστολικῆς πίστεως.</seg>
+                  </p>
+                  <p>
+                     <seg type="textpart" subtype="section" n="9">
+								Μετὰ δὲ καιρούς τινας φθάσας ἐνταῦθα, ἐν τῇ τῶν <placeName>Βιθυνῶν</placeName> ἐπαρχίᾳ λέγω, κατ’ εὐδοκίαν τοῦ θεοῦ κινήσεώς τε καὶ συζητήσεως πλείστης ὅσης γεγενημένης ἐπὶ τῆς ἀνταρσίας τοῦ ἀνοσίου <persName>Βασιλίσκου</persName> κατὰ τῆς ἀποστολικῆς καὶ καθολικῆς ἐκκλησίας τοῦ θεοῦ καὶ τῆς ἐν αὐτῇ πολιτευομένης ἀποστολικῆς πίστεως,
+							</seg>
+                     <seg type="textpart" subtype="section" n="10">
+								ὑπεκκαιόντων μάλιστα καὶ κινούντων τὰ βασίλεια τῆς τῶν τοῦ αἱρετικοῦ <persName>Εὐτυχοῦς</persName> ὁμοφρόνων συμμορίας, προβαλλομένων ἡμῖν ὑπούλως τὴν ἐν <placeName>Νικαίᾳ</placeName>, φησίν, ὑπὸ τῶν πατέρων <supplied>
+                           <gap reason="missing"/>
+                        </supplied> κρατεῖν πίστιν·
+							</seg>
+                     <seg type="textpart" subtype="section" n="11">
+								οἱ διηλέγχοντο πρὸς ἡμῶν πολέμιοι ἐκείνης ὑπάρχοντες· οὐ γὰρ ἤδεισαν τί λέγουσιν ἢ περὶ τίνων διαβεβαιοῦνται. προφέροντος γάρ μου τὰ ἐν ἐκείνῃ
+								<pb n="3"/>
+								τῇ ἁγίᾳ χορείᾳ τῶν ὀρθοδόξων τοῦ θεοῦ ἱερέων ἐν πνεύματι ἁγίῳ παρὰ τοῦ κυρίου δι’ αὐτῶν ἐκφωνηθέντα, ἀπεπήδων ἀφ’ ἡμῶν, χείρονα τῶν <persName>Ἀρείου</persName> βλασφημιῶν κατὰ τῶν ἐκεῖσε ὁρισθέντων διὰ γλώττης προφέροντες καὶ ἀναθεματισμὸν ῥίπτοντες κατὰ τῶν ταῦτα οὕτως φρονούντων οἱ ἄθλιοι.
+							</seg>
+                     <seg type="textpart" subtype="section" n="12">
+								διὰ ταῦτα καὶ δι’ ἄλλα πολλὰ κινηθέντα κατὰ τῆς ἁγίας καὶ ὀρθοδόξου πίστεως ἡμῶν τῆς ἀνέκαθεν ἔκ τε τῶν ἁγίων ἀποστόλων καὶ τῶν προρρηθέντων ἁγίων ἡμῶν πατέρων τῶν ἐν τῇ <placeName>Νικαέων</placeName> συνειλεγμένων ἐν τῇ τοῦ θεοῦ ἐκκλησίᾳ τῇ μητρὶ ἡμῶν πολιτευομένης
+							</seg>
+                     <seg type="textpart" subtype="section" n="13">
+								πλείστην ὅσην ἔρευναν ἐποιησάμην πάντῃ τε καὶ πανταχοῦ, τὸ δὴ λεγόμενον, πάντα κάλων κινήσας, ἀνερευνῆσαι τὰ ἐν ἐκείνῃ τῇ ἱερᾷ συνόδῳ πεπραγμένα ὑπὲρ τοῦ τῆς αὐτῆς ἁγίας καὶ ἀποστολικῆς πίστεως ὅρου, ἣν <quote>οὐκ ἀπ’ ἀνθρώπων οὔτε δι’ ἀνθρώπων</quote> ἡ τοῦ θεοῦ ἐκκλησία παρείληφεν, ἀλλ’ ἢ ἀπ’ αὐτοῦ τοῦ πάντων ἡμῶν σωτῆρος καὶ θεοῦ Ἰησοῦ Χριστοῦ τοῦ υἱοῦ τοῦ θεοῦ τοῦ ζῶντος,
+							</seg>
+                     <seg type="textpart" subtype="section" n="14">
+								ὃς μετὰ τὴν τῆς ἐνσάρκου αὐτοῦ παρουσίας οἰκονομίαν, τὸ <quote>μέγα</quote> ἀληθῶς <quote>τῆς εὐσεβείας μυστήριον</quote>, καθὼς γέγραπται, <quote>φανερωθείς τε σαρκὶ</quote> καὶ <quote>ἀγγέλοις ὀφθείς</quote> –
+							</seg>
+                     <seg type="textpart" subtype="section" n="15">
+								οὔτε γὰρ ἀγγέλοις θεατὸς ὁ μονογενὴς κατὰ τὴν τῆς θεότητος οὐσίαν, εἰ μὴ ἐσαρκώθη –, τὰ πάντα πληρώσας τὰ κατὰ τὴν οἰκονομίαν, τό τε ὑπὲρ ἡμῶν ἑκούσιον πάθος καὶ τὴν ταφὴν καὶ τὴν ἀνάστασιν τῇ ἁγίᾳ ἐκείνῃ καὶ ἀναμαρτήτῳ σαρκὶ αὐτοῦ παραχωρήσας, δι’ ἧς τὸ ἡμέτερον ἀπηθανάτισε γένος, ἀναβαίνων εἰς τοὺς οὐρανοὺς ταύτης τῆς ἁγίας καὶ ἀμωμήτου πίστεως τὸν θεῖον καὶ προσκυνητὸν ὅρον δι’ ἑαυτοῦ ἔπηξε καὶ μέγα βροντήσας κατὰ τὸ γεγραμμένον <quote>κύριος ἀνέβη εἰς οὐρανοὺς καὶ ἐβρόντησε</quote>,
+							</seg>
+                     <seg type="textpart" subtype="section" n="16">
+								καὶ ἐν ἑτέρῳ <quote>ἐβρόντησεν ἐξ οὐρανοῦ ὁ κύριος καὶ ὁ ὕψιστος ἔδωκε φωνὴν αὐτοῦ</quote>. καὶ τί ἐβρόντησε, ποίαν δὲ φωνὴν ἔδωκεν ὁ ὕψιστος; <quote>πορευθέντες</quote> φησί, πρὸς τοὺς ἀποστόλους λέγων, <quote>μαθητεύσατε πάντα τὰ ἔθνη, βαπτίζοντες αὐτοὺς εἰς τὸ ὄνομα τοῦ πατρὸς καὶ τοῦ υἱοῦ καὶ τοῦ ἁγίου πνεύματος.</quote>
+                     </seg>
+                     <seg type="textpart" subtype="section" n="17">
+                        <quote>εἰ γὰρ καὶ διὰ φιλανθρωπίαν τὴν ὑμῶν σάρκα ἔμψυχον καὶ ἔννουν ἐκ τῆς πανσέμνου καὶ ἁγίας παρθένου <persName>Μαρίας</persName> προσείληφα, ἀλλ’ ἡ τῆς σαρκὸς πρόσληψις προσθήκην τῇ τοῦ πατρὸς καὶ ἐμοῦ καὶ τοῦ ἁγίου πνεύματος τριάδι οὐκ ἐποίησεν, ἀλλὰ μένει ἡ τριὰς τριάς. πορευθέντες οὖν μαθητεύσατε πάντα τὰ ἔθνη, βαπτίζοντες αὐτοὺς εἰς τὸ ὄνομα τοῦ πατρὸς καὶ τοῦ υἱοῦ καὶ τοῦ ἁγίου πνεύματος.</quote>
+                        <pb n="4"/>
+                     </seg>
+                  </p>
+                  <p>
+                     <seg type="textpart" subtype="section" n="18">
+								Τοῦτον τὸν ἅγιον καὶ προσκυνητὸν ὅρον τῆς ὀρθῆς καὶ ἀμωμήτου πίστεως παρὰ τοῦ κυρίου λαβόντες <orgName>οἱ ἱεροὶ ἀπόστολοι</orgName> πάσῃ τῇ ὑπὸ τὸν οὐρανὸν τοῦ θεοῦ ἐκκλησίᾳ ἐκήρυξαν, ὡς πληρωθῆναι ἐπ’ αὐτοῦ τὸ προφητικὸν λόγιον τὸ φάσκον· <quote>εἰς πᾶσαν τὴν γῆν ἐξῆλθεν ὁ φθόγγος αὐτῶν καὶ εἰς τὰ πέρατα τῆς οἰκουμένης τὰ ῥήματα αὐτῶν</quote>.
+							</seg>
+                     <seg type="textpart" subtype="section" n="19">
+								ὅντινα ὅρον καὶ τὴν προσκυνητὴν ταύτην δωρεὰν τὴν εἰς ἡμᾶς διὰ τῶν θείων ἀποστόλων παρὰ τοῦ υἱοῦ τοῦ θεοῦ δεδομένην μετὰ πλείστους ὅσους καιροὺς παυσαμένου τοῦ κατὰ τῆς ἐκκλησίας τοῦ θεοῦ διωγμοῦ διὰ <persName>Ἀρείου</persName> πάλιν ὁ ἐχθρὸς τῆς ἡμετέρας σωτηρίας κατὰ τῆς αὐτῆς ἁγίας καὶ ἀμωμήτου ὁπλίζεται πίστεως, ξένα τινὰ παρεισφέρων κατὰ τοῦ σωτῆρος βλάσφημα ῥήματα, δι’ ὧν τὴν εἰς πᾶσαν τὴν οἰκουμένην ἐκκλησίαν τοῦ κυρίου ἐτάραξεν.
+							</seg>
+                  </p>
+                  <p>
+                     <seg type="textpart" subtype="section" n="20">
+								Οὗ χάριν καὶ τὴν πολυάνθρωπον ἐκείνην ἐπὶ τὴν τῶν <placeName>Νικαέων</placeName> πόλιν ὁ πιστότατος βασιλεὺς <persName>Κωνσταντῖνος</persName> συνήγαγε σύνοδον, ἧς τὰ πεπραγμένα πάντα προεγνωκώς, ὡς ἀνωτέρω ἔφην, καὶ διερευνησάμενος μόλις ἐδυνήθην εὑρεῖν φανερὰ τῶν ἐκεῖσε ἐσκεμμένων καὶ ἐγγραφέντων παρά τισι διαφόροις φιλομαθέσιν ἀνδράσιν,
+							</seg>
+                     <seg type="textpart" subtype="section" n="21">
+                        <persName>Ἰωάννῃ</persName> μέν τινι πρεσβυτέρῳ ἀνδρὶ παλαιῷ, ἄγαν γραφικῷ, ἐν τετραδίοις παλαιοῖς λίαν, οὐ μὴν ὅλα, καὶ ἐξ ἄλλων δὲ συγγραφέων διαφόρων,
+							</seg>
+                     <seg type="textpart" subtype="section" n="22">
+                        <persName>Εὐσεβίου τοῦ Παμφίλου ἐπισκόπου <placeName>Καισαρείας</placeName>
+                        </persName> καὶ <persName>Ῥουφίνου πρεσβυτέρου <placeName>Ρώμης</placeName>
+                        </persName> τῶν καὶ τῇ ἁγίᾳ ἐκείνῃ κοινωνησάντων συνόδῳ καὶ ἄλλων πλείστων ὅσων.
+							</seg>
+                     <seg type="textpart" subtype="section" n="23">
+								οὐ μὴν τὴν ἀκολουθίαν τῆς ὅλης ἁρμονίας εὗρον κατὰ τὴν ἱερὰν ἐκείνην βίβλον, ἡ προενέτυχον, ὡς ἀνωτέρω μοι εἴρηται – μόνος γὰρ <persName>Εὐσέβιος</persName> ὁ θαυμάσιος ὁ <persName>Παμφίλου</persName> ἀτρεπτὶ τῇ λεωφόρῳ τῆς ἀληθείας ἀπὸ τῆς τοῦ κυρίου παρουσίας ἕως τῶν τοῦ μεγάλου <persName>Κωνσταντίνου</persName> χρόνων διώδευσεν – ἀλλ’ οὐδὲ <supplied>ὡς</supplied> τὰ ὅλα εὑρεῖν ἠδυνήθην.
+							</seg>
+                     <seg type="textpart" subtype="section" n="24">
+								πλὴν ὅσα γνώριμά μοι καὶ τῆς ἀληθείας ἴδια κατὰ τὴν προαναγνωσθεῖσάν μοι βίβλον εὗρον, καὶ ἐξ ἑτέρων ἀναλεξάμενος, ἀναγκαῖον φήθην ἐγγράψαι τῷδε τῷ βιβλίῳ πρὸς ὠφέλειαν κοινὴν καὶ στήριγμα τῶν ἐντευξομένων τῷδε τῷ γράμματι.
+							</seg>
+                  </p>
+                  <p>
+                     <seg type="textpart" subtype="section" n="25">
+								Ἄρξεται δή μοι λοιπὸν ὁ λόγος προοδοποιοῦντός μοι καὶ ποδηγοῦντος τοῦ ἀεὶ ζῶντος θεοῦ λόγου ἀπὸ τῶν χρόνων τῆς βασιλείας τοῦ εὐσεβεστάτου καὶ χριστοφόρου βασιλέως <persName>Κωνσταντίνου</persName> τοῦ καὶ τὴν σύνοδον τῶν
+								<pb n="5"/>
+								ἐπισκόπων ἐν τῇ <placeName>Νικαέων</placeName> συναθροισθῆναι προστάξαντος πόλει.
+							</seg>
+                     <seg type="textpart" subtype="section" n="26">
+								ἐν ἑτέρῳ γάρ, εἰ τῷ θεῷ φίλον, τὰ τῆς γενέσεως αὐτοῦ καὶ τῶν χρόνων τῆς τοῦ πατρὸς αὐτοῦ <persName>Κωνσταντίου</persName> τοῦ θεοφιλεστάτου βασιλείας τὴν διαγωγὴν ἐντάξω συγγράμματι.</seg>
+                  </p>
+               </div>
+               
+               
+               
+               
+               
+               
+               
+               
+               
+               
+               
+               
+            </div>
+            
+            
+         </div>
+      </body>
+   </text>
+</TEI>

@@ -332,11 +332,58 @@ module Nabu
       # The default citation-root acceptance: original-language editions.
       DIVISION_TYPES = ["edition"].freeze
 
+      # == apparatus (P154) — a per-parse list of critical-apparatus elements
+      #
+      # The TODO(app-crit) above, answered for the first source that
+      # exercises it at scale: the Patristic Text Archive's critical
+      # editions inline their apparatus (<app><lem>…</lem><rdg wit>…</rdg>
+      # </app> — 11,760 <rdg> in 18 Greek editions, census 2026-11-02), so
+      # concatenating mixed content would splice every variant into the
+      # running text. The caller names the elements whose whole subtree is
+      # apparatus (PTA: rdg, rdgGrp, witDetail, del); they contribute
+      # nothing — no text, no break space, no inline-layer span (a variant's
+      # names and quotations are the witness's, not the edited text's).
+      # <lem> stays: it IS the edited text. A per-parse parameter like
+      # division_types: the default is empty, so every existing caller's
+      # extraction is byte-identical.
+      NO_APPARATUS = [].freeze
+
+      # == refsDecl scoping (P154) — which cRefPatterns are the citation scheme
+      #
+      # A CapiTainS header may carry several refsDecls, and only the CTS one
+      # declares how THIS document is cited. The Patristic Text Archive
+      # ships three more beside it — xml:id "biblical" / "pta" / "perseus",
+      # cross-reference resolvers whose replacementPatterns are URLs
+      # (https://www.bibelwissenschaft.de/bibelstelle/$2$3,$4/$1) and whose
+      # four-group biblical matchPattern out-ranked the real one-group
+      # section scheme, refusing every PTA edition ("cannot determine leaf
+      # element from replacementPattern …"). So a cRefPattern counts when
+      #
+      #   1. it sits in refsDecl[@n='CTS'] — the scheme the CapiTainS
+      #      guidelines name; or
+      #   2. FALLBACK, for headers that do not label (first1k's split/ tree,
+      #      two perseus-greek tlg0007 files) or label otherwise (Perseus'
+      #      legacy n="NTS" twin beside the CTS decl — 7 perseus-latin
+      #      phi0690 translations): its replacementPattern is an in-document
+      #      #xpath(...) — a citation scheme by shape, wherever it sits.
+      #
+      # What the rule drops is exactly a non-CTS pattern that resolves
+      # OUTSIDE the document. Census 2026-11-02 over every tree this parser
+      # reads (canonical first1k-greek, perseus-greek/-latin/-anglit/
+      # -farsilit): ZERO such patterns — so every existing scheme, and with
+      # it every urn and passage, is byte-identical by construction; the
+      # 2,062 dropped patterns are all PTA's.
+      def self.citation_pattern?(refs_decl_n:, replacement:)
+        refs_decl_n == "CTS" || replacement.to_s.lstrip.start_with?("#xpath(")
+      end
+
       # Parse one edition file into a Nabu::Document with ordered Passages at
       # the lowest citation level. Raises Nabu::ParseError on malformed XML,
       # missing/empty CTS refsDecl, urn mismatch, or zero citable passages.
-      def parse(source, urn:, language:, title: nil, canonical_path: nil, division_types: DIVISION_TYPES)
+      def parse(source, urn:, language:, title: nil, canonical_path: nil, division_types: DIVISION_TYPES,
+                apparatus: NO_APPARATUS)
         path = resolve_canonical_path(source, canonical_path)
+        @apparatus = apparatus
         attempt(source, path: path, urn: urn, language: language, title: title,
                         division_types: division_types, structural: false)
       rescue ParseError => e
@@ -415,7 +462,8 @@ module Nabu
       end
 
       def extract_units(source, path:, urn:, division_types:, structural:)
-        extract(source, path: path, urn: urn, division_types: division_types, structural: structural)
+        extract(source, path: path, urn: urn, division_types: division_types, structural: structural,
+                        apparatus: @apparatus || NO_APPARATUS)
       end
 
       def extraction_class = Extraction
@@ -451,7 +499,7 @@ module Nabu
 
         CRefPattern = Data.define(:unit, :depth, :replacement)
         Scheme = Data.define(:depth, :leaf_element, :unit_names, :deepest_unit)
-        Capture = Struct.new(:citation, :depth, :buffer, :drop_depths, :inline, keyword_init: true)
+        Capture = Struct.new(:citation, :depth, :buffer, :drop_depths, :inline, :mute_depths, keyword_init: true)
         # One xpath step of the structural scheme: element name, axis
         # (:child for /, :desc for //), the citation component it binds
         # ($k → k, nil for structural steps), and literal attribute
@@ -475,9 +523,11 @@ module Nabu
           division_types.map { |type| "div[@type=\"#{type}\"]" }.join(" or ")
         end
 
-        def initialize(reader:, path:, urn:, division_types: DIVISION_TYPES, structural: false)
+        def initialize(reader:, path:, urn:, division_types: DIVISION_TYPES, structural: false,
+                       apparatus: NO_APPARATUS)
           super(reader: reader, path: path)
           @urn = urn
+          @apparatus = apparatus
           @division_types = division_types
           @structural = structural
           @patterns = []
@@ -506,6 +556,7 @@ module Nabu
             record_pattern(node)
           elsif name == "refsDecl"
             @refs_decls_seen = (@refs_decls_seen || 0) + 1
+            @refs_decl_n = node.attribute("n") unless node.empty_element?
           elsif name == "refState"
             (@ref_states ||= []) << node.attribute("unit")
           elsif name == "div" && @division_types.include?(node.attribute("type"))
@@ -523,6 +574,8 @@ module Nabu
           name = local_name(node)
           if @capture
             captured_end(node, name)
+          elsif name == "refsDecl"
+            @refs_decl_n = nil
           elsif @structural
             # END_ELEMENT only fires for non-empty elements — exactly the ones
             # structural_start pushed a frame for.
@@ -535,6 +588,7 @@ module Nabu
 
         def text_node(node)
           return unless @capture
+          return unless @capture.mute_depths.empty?
 
           @capture.inline.text(node.value.to_s)
           @capture.buffer << node.value.to_s if @capture.drop_depths.empty?
@@ -543,6 +597,9 @@ module Nabu
         # -- header: refsDecl -------------------------------------------------
 
         def record_pattern(node)
+          return unless EpidocParser.citation_pattern?(refs_decl_n: @refs_decl_n,
+                                                       replacement: node.attribute("replacementPattern"))
+
           match = node.attribute("matchPattern")
           @patterns << CRefPattern.new(
             unit: node.attribute("n"),
@@ -644,7 +701,7 @@ module Nabu
           citation = components.join(".")
           return if node.empty_element? # nothing to capture; empty unit → skipped
 
-          @capture = Capture.new(citation: citation, depth: node.depth, buffer: +"", drop_depths: [],
+          @capture = Capture.new(citation: citation, depth: node.depth, buffer: +"", drop_depths: [], mute_depths: [],
                                  inline: InlineLayer.new)
         end
 
@@ -814,6 +871,12 @@ module Nabu
         end
 
         def captured_start(node, name)
+          if @apparatus.include?(name)
+            @capture.mute_depths << node.depth unless node.empty_element?
+            return
+          end
+          return unless @capture.mute_depths.empty?
+
           if InlineLayer::TRACKED.include?(name) && !node.empty_element?
             @capture.inline.start(name, depth: node.depth, attributes: InlineLayer.attributes_of(node))
           end
@@ -830,6 +893,8 @@ module Nabu
         def captured_end(node, name)
           if name == leaf_name && node.depth == @capture.depth
             finish_capture
+          elsif !@capture.mute_depths.empty?
+            @capture.mute_depths.pop if @capture.mute_depths.last == node.depth && @apparatus.include?(name)
           else
             @capture.drop_depths.pop if DROPPED_ELEMENTS.include?(name) && @capture.drop_depths.last == node.depth
             @capture.inline.finish(name, depth: node.depth)

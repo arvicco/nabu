@@ -33,6 +33,12 @@ module Ops
             wired: true
             sync_policy: manual
             axes: [alpha]
+          poly:
+            adapter: TestAdapter
+            wired: true
+            sync_policy: manual
+            multilingual: true
+            axes: [alpha]
           local-notes:
             adapter: Nabu::Adapters::LocalNotes
             wired: true
@@ -77,9 +83,25 @@ module Ops
           content_sha256: "x", revision: 1, withdrawn: false
         )
       end
+      seed_pack(catalog)
       seed_local_shelves(catalog, path)
       Nabu::Store::SourceStats.derive!(catalog, note: "test seed")
       catalog.disconnect
+    end
+
+    # The multilingual pack (`multilingual: true`, whole-source member):
+    # five zho documents — more than any desk-proper code holds, the
+    # Celtic-desk shape — plus one l01 document, a code the desk's own
+    # shelf also holds.
+    def seed_pack(catalog)
+      src = catalog[:sources].insert(slug: "poly", name: "Poly", adapter_class: "TestAdapter",
+                                     license_class: "open", enabled: true)
+      ((["zho"] * 5) + ["l01"]).each_with_index do |code, i|
+        catalog[:documents].insert(
+          source_id: src, urn: "urn:nabu:poly:#{code}:#{i}", title: code, language: code,
+          content_sha256: "x", revision: 1, withdrawn: false
+        )
+      end
     end
 
     # P105-5a: the owner-notes and lemma shelves hold their content
@@ -123,12 +145,54 @@ module Ops
         line = page[/^\*\*Languages on this desk\*\* (.+)$/, 1]
         refute_nil line, "the alpha page must carry the languages line"
         assert_includes line, "as of 28 July 2026", "the list is dated (the holdings-cell rule)"
-        assert line.include?("`big` 3 · `l01` 1"), "holdings descending, ties by code — got: #{line}"
+        assert line.include?("`big` 3 · `l01` 2 · `l02` 1"),
+               "holdings descending, ties by code, a shared code merging both members — got: #{line}"
         assert_match(/… and 2 more \(`nabu axis alpha` lists all\)/, line)
         refute_includes line, "l11", "codes past the cap elide"
         # The line sits inside the shelves section, above the instruments.
         assert_operator page.index("**Languages on this desk**"), :>, page.index("## The shelves")
         assert_operator page.index("**Languages on this desk**"), :<, page.index("## The desk's instruments")
+      end
+    end
+
+    # The Celtic-desk lesson (November 2026 site review): whole-source
+    # membership let a multilingual pack's languages outrank the desk's
+    # own ("`zho` 327,296 · `cy` 89,386"). Desk-proper codes — held by a
+    # non-pack member — lead; codes reachable ONLY through a pack ride a
+    # separate, labelled tail naming the packs, still counted.
+    def test_pack_spillover_rides_a_labelled_tail_after_the_desk_proper_languages
+      with_generator_env do |out|
+        page = File.read(File.join(out, "alpha.md"))
+        line = page[/^\*\*Languages on this desk\*\* (.+)$/, 1]
+        refute_includes line, "zho", "a pack-only code never ranks among the desk's own languages"
+        assert_includes line, "`l01` 2", "a code the desk's own shelf holds stays desk-proper, pack docs merged"
+        tail = page[/^\*\*Carried in by multilingual packs\*\* (.+)$/, 1]
+        refute_nil tail, "pack-only languages render as a labelled tail"
+        assert_includes tail, "`poly`", "the tail names the whole-source packs it comes from"
+        assert_includes tail, "`zho` 5", "spillover stays counted — honest, just not leading"
+        refute_includes tail, "l01", "a desk-proper code is never repeated in the tail"
+        assert_operator page.index("**Carried in by"), :>, page.index("**Languages on this desk**")
+        assert_operator page.index("**Carried in by"), :<, page.index("## The desk's instruments")
+      end
+    end
+
+    def test_a_desk_without_packs_carries_no_spillover_tail
+      with_generator_env do |out|
+        refute_includes File.read(File.join(out, "empty.md")), "Carried in by"
+      end
+    end
+
+    # The /axis/ index opens its desk list with a jump line: one in-page
+    # anchor per desk, in registry order, matching kramdown's ids for the
+    # `### <name>` headings below it.
+    def test_index_opens_the_desk_list_with_a_jump_line
+      with_generator_env do |out|
+        index = File.read(File.join(out, "index.md"))
+        jump = index[/^Jump to a desk: (.+)$/, 1]
+        refute_nil jump, "the /axis/ index must carry a jump line"
+        assert_equal ["[alpha](#alpha)", "[empty](#empty)"], jump.split(" · ")
+        assert_operator index.index("Jump to a desk:"), :>, index.index("## The two desks")
+        assert_operator index.index("Jump to a desk:"), :<, index.index("### alpha")
       end
     end
 

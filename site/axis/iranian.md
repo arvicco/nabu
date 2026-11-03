@@ -7,7 +7,7 @@ description: >-
 
 > The Iranologist — the Avesta to the Achaemenid inscriptions, Old Iranian liturgy toward Middle Persian.
 
-The Iranian-language lane, Zoroastrian canon at its heart: the TITUS Avesta (Old Iranian liturgy — grant-gated private research, not a public holding) and the Old Persian of the Achaemenid royal inscriptions, which ride the ORACC and CDLI cuneiform shelves whole — their trilinguals' Old Persian column the desk's shared lane with the tablet world — classical Persian literature (Hafez's Divan with its aligned English, perseus-farsilit) — and, since P107, the Middle Iranian east: Skjærvø's British Library Khotanese editions, the Invisible East catalog's Khotanese/Sogdian/Bactrian/Judeo-Persian documents, and the trilingual ŠKZ inscription with its Parthian and Middle Persian columns.
+The Iranian-language lane, Zoroastrian canon at its heart: the TITUS Avesta (Old Iranian liturgy — grant-gated private research, not a public holding) and the Old Persian of the Achaemenid royal inscriptions, which ride the ORACC and CDLI cuneiform shelves whole — their trilinguals' Old Persian column the desk's shared lane with the tablet world — classical Persian literature (Hafez's Divan with its aligned English, perseus-farsilit) — and the Middle Iranian east: Skjærvø's British Library Khotanese editions, the Invisible East catalog's Khotanese/Sogdian/Bactrian/Judeo-Persian documents, and the trilingual ŠKZ inscription with its Parthian and Middle Persian columns.
 
 The desk's heart, the **Avesta** (TITUS, `titus-avestan`), is grant-gated
 PRIVATE research material — served locally under the owner's personal grant
@@ -24,7 +24,7 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 A source wears every desk it serves — these eight answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
-| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 2 November 2026)</span> |
+| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 3 November 2026)</span> |
 |---|---|---|---|---|
 | `cdli` | tablet catalog | attribution | wired · manual | 353,156 docs / 2,186,961 passages |
 | `ganjoor` | texts | attribution | wired · manual | 126,165 docs / 1,453,355 passages |
@@ -37,7 +37,7 @@ A source wears every desk it serves — these eight answer this desk. Holdings a
 
 Private research materials under personal grants are not listed.
 
-**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 2 November 2026)</span>: `sux` 264,506 · `akk` 153,945 · `fas` 146,364 · `und` 74,258 · `qpn` 70,329 · `akk-x-stdbab` 24,517 · `akk-x-neoass` 18,750 · `eng` 15,418 · `hit` 14,678 · `qpc` 8,931 … and 43 more (`nabu axis iranian` lists all).
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 3 November 2026)</span>: `sux` 264,506 · `akk` 153,945 · `fas` 146,364 · `und` 74,258 · `qpn` 70,329 · `akk-x-stdbab` 24,517 · `akk-x-neoass` 18,750 · `eng` 15,418 · `hit` 14,678 · `qpc` 8,931 … and 43 more (`nabu axis iranian` lists all).
 
 ## The desk's instruments
 
@@ -74,7 +74,7 @@ This desk's own surfaces:
 ```
 nabu show urn:nabu:titus-avestan:avest001:Y.0.1.a  # the frauuarāne creed (Y 0.1 a), the Avesta rendered with its verbatim TITUS credit line
 nabu search mazda --lang ave          # Ahura Mazda across the Avestan lane (mazdaiiasnō, mazdā̊)
-nabu show urn:nabu:titus-avestan:avest020:Y.19.1  # a citation prefix opens into every passage below it (Y.19.1.a, .b …) — the P44 show
+nabu show urn:nabu:titus-avestan:avest020:Y.19.1  # a citation prefix opens into every passage below it (Y.19.1.a, .b …)
 ```
 
 

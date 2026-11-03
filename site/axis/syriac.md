@@ -13,15 +13,17 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 ## The shelves
 
-A source wears every desk it serves — these three answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
+A source wears every desk it serves — these five answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
-| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 2 November 2026)</span> |
+| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 3 November 2026)</span> |
 |---|---|---|---|---|
 | `etcbc-syriac` | texts | nc | wired · manual | 31 docs / 18,132 passages |
+| `hmml-reading-room` | texts | attribution | wired · manual | 18,892 docs / 11,196 passages |
 | `peshitta` | texts | nc | wired · manual | 65 docs / 31,341 passages |
 | `syriac-corpus` | texts | attribution | wired · manual | 632 docs / 134,726 passages |
+| `wiktionary-syc` | dictionary | attribution | wired · manual | 3,911 entries |
 
-**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 2 November 2026)</span>: `syc` 728.
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 3 November 2026)</span>: `syc` 12,851 · `gez` 6,945 · `ara-Syrc` 2,595 · `ara` 797 · `amh` 343.
 
 ## The desk's instruments
 

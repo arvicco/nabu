@@ -7,7 +7,22 @@ already small (340 + 40 lines) and the module's read seam
 full codemap to be exercised honestly (a trimmed slice would hide
 referential-integrity gaps the drift guard exists to catch).
 
-- **Retrieved 2026-10-30 (third cut)** — the Italic minor-languages
+- **Retrieved 2026-11-02 (fourth cut)** — the Pacific,
+  Vietnamese–Tai, Mongolic, Tangut and Yiddish package plus the
+  Romanian package: the Malayo-Polynesian spine (pqe > poz-oce >
+  poz-pcc > poz-pol > poz-pnp > poz-pep, poz-mic) with twelve Pacific
+  leaves (mi, haw, ty, rar, rap, sm, to, fj, rtm, kos, pon, ch); vi
+  with vi:old / vi:mid under the new mkh-vie Vietic family; za and
+  tyz; cmg and xwo under xng; txg; yi with yi:old / yi:mid / yi:mod
+  and the yi/west / yi/east varieties; ro with ro:old; the hani, mong
+  and tang script rows; and the matching codemap aliases (mri/smo/ton/
+  tah/fij/cha, vie, zha, mkh-mvi, yid/ydd/yih, ron/rum, the new proto
+  codes). Copied verbatim from canonical/nabu-lects (commit `631a0b8`,
+  `main`). `lects.yml` 237,128 B, sha256
+  `7afa347ae432917bdb34dc951369095cdecfaba3b3b73e1a9c5c7c5c687b7e60`;
+  `codemap.yml` 11,113 B, sha256
+  `11553878ec4626bfb1126709c807369287ee6d9d7f72658cc2bfc69d22b8fbe0`.
+- Previously retrieved 2026-10-30 (third cut) — the Italic minor-languages
   package: eleven anchors (xfa Faliscan, xve Venetic, spx South
   Picene, pgn Paelignian, umc Marrucinian, ims Marsian, xvs
   Vestinian, xvo Volscian, xhr Hernican, and the local-use qps

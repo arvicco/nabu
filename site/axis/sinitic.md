@@ -7,15 +7,15 @@ description: >-
 
 > The Sinologist — the classical Chinese written world and its phonological deep past.
 
-Literary and classical Chinese with its reconstruction instruments: Kanripo and CBETA, TLS, Baxter-Sagart and the Qieyun-system database, Unihan, the Heian hanzi dictionaries, the UD lzh treebanks, SuttaCentral's Agamas, the kaikki zh extract riding wiktionary-recon — since P78-5, the Đại Việt classical shelf (the sinographic cosmopolis reaching Vietnam, as sillok reaches Korea) — and, since P96, the desk's instruments: the CHGIS historical gazetteer (TGAZ placenames, 221 BCE–1911) and the CBDB prosopography artifact (~658k persons, held for the persons-layer ruling).
+Literary and classical Chinese with its reconstruction instruments: Kanripo and CBETA, TLS, Baxter-Sagart and the Qieyun-system database, Unihan, the Heian hanzi dictionaries, the UD lzh treebanks, SuttaCentral's Agamas, the kaikki zh extract riding wiktionary-recon — the Đại Việt classical shelf (the sinographic cosmopolis reaching Vietnam, as sillok reaches Korea) — and the desk's instruments: the CHGIS historical gazetteer (TGAZ placenames, 221 BCE–1911) and the CBDB prosopography artifact (~658k persons, held for the persons-layer ruling).
 
 New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the library in minutes.
 
 ## The shelves
 
-A source wears every desk it serves — these twenty-four answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
+A source wears every desk it serves — these twenty-five answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
-| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 2 November 2026)</span> |
+| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 3 November 2026)</span> |
 |---|---|---|---|---|
 | `babelstone-ids` | dictionary | open | wired · manual | 97,680 entries |
 | `baley-manuscripts` | texts | attribution | wired · manual | 19 docs / 4,626 passages |
@@ -33,6 +33,7 @@ A source wears every desk it serves — these twenty-four answer this desk. Hold
 | `qieyun-restored` | dictionary | attribution | wired · manual | 11,158 entries |
 | `shuowen` | dictionary | attribution | wired · manual | 11,081 entries |
 | `suttacentral` | texts | open | wired · auto | 12,397 docs / 699,511 passages |
+| `tianyige` | texts | open | wired · frozen | 312 docs / 38,711 passages |
 | `tls` | dictionary | attribution | wired · manual | 23,179 entries |
 | `tshet-uinh` | dictionary | open | wired · manual | 42,563 entries |
 | `ud` | treebank | nc | wired · manual | 83 docs / 329,980 passages |
@@ -42,7 +43,9 @@ A source wears every desk it serves — these twenty-four answer this desk. Hold
 | `zh-wikisource` | texts | attribution | wired · manual | 1,238 docs / 71,547 passages |
 | `zhongyuan` | dictionary | open | wired · manual | 5,877 entries |
 
-**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 2 November 2026)</span>: `zho` 543,313 · `lzh` 93,126 · `ltc` 58,680 · `och` 38,234 · `jpn` 32,607 · `xcl` 8,544 · `cmn` 7,387 · `pli` 7,288 · `sga` 6,691 · `gem-pro` 5,749 … and 42 more (`nabu axis sinitic` lists all).
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 3 November 2026)</span>: `zho` 543,313 · `lzh` 93,438 · `ltc` 58,680 · `och` 38,234 · `jpn` 32,607 · `cmn` 7,387 · `pli` 7,288 · `eng` 4,794 · `pra` 22.
+
+**Carried in by multilingual packs** (`ud`, `wiktionary-recon` — whole-source members whose other languages ride along, as of 3 November 2026): `xcl` 8,544 · `sga` 6,691 · `gem-pro` 5,749 · `gmw-pro` 5,578 · `sla-pro` 5,461 … and 38 more (`nabu axis sinitic` lists all).
 
 ## The desk's instruments
 

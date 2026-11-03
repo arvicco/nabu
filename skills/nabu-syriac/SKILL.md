@@ -6,7 +6,7 @@ compatibility: "Requires the nabu MCP server (`bin/nabu mcp`, read-only, stdio) 
 metadata:
   desk: syriac
   origin: generated
-  sources: "etcbc-syriac peshitta syriac-corpus"
+  sources: "etcbc-syriac hmml-reading-room peshitta syriac-corpus wiktionary-syc"
 ---
 
 # The Syriacist — the `syriac` desk
@@ -24,8 +24,10 @@ verbatim upstream terms are in `docs/02-sources.md` of the Nabu repository.
 | Source | Upstream | License class |
 | --- | --- | --- |
 | `etcbc-syriac` | ETCBC Syriac Corpus — morphologically parsed Classical Syriac (Text-Fabric tf/0.92) | nc |
+| `hmml-reading-room` | vHMML Reading Room — the Syriac and Ethiopic manuscript catalogue | attribution |
 | `peshitta` | Peshitta OT incl. deuterocanon (ETCBC, Text-Fabric tf/0.2) | nc |
 | `syriac-corpus` | Digital Syriac Corpus (srophe, 632 TEI documents) | attribution |
+| `wiktionary-syc` | Wiktionary Classical Syriac — kaikki.org machine-readable extract | attribution |
 <!-- nabu:skill-sources:end -->
 
 ## What the shelves hold

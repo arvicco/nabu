@@ -1,0 +1,50 @@
+<LexicalResource dtdVersion="16">
+  <GlobalInformation>
+   <feat att="languageCoding" val="ISO 639-3" />
+ </GlobalInformation>
+ <Lexicon>
+   <feat att="language" val="swe" />
+  <LexicalEntry>
+    <Lemma>
+     <FormRepresentation>
+      <feat att="partOfSpeech" val="nn" />
+     <feat att="lemgram" val="fsvm--a..nn.1" />
+     <feat att="writtenForm" val="a" />
+    </FormRepresentation>
+   </Lemma>
+   <WordForm>
+     <feat att="writtenForm" val="aa . " />
+    <feat att="gram" val="pl." />
+    <feat att="writtenForm" val="äär MB 1:294, (Cod. B) 543; su 85)," />
+   </WordForm>
+   <Sense id="soederwall--a..1">
+     <Definition>
+      <feat att="text" val="å, mindre älf.   KL 312, 329 .  MB 1:294, (Cod. B) 543.  RK 1:3541 .  &amp;quot; ther war aff blodh badhe ström ok a &amp;quot; Al 3368 .  &amp;quot; mange bäkkia ok sma göra stora aa &amp;quot; GO 37 .  &amp;quot; bätra är stämma bäk en aa &amp;quot; ib 38 .  &amp;quot; thy at en stor flodh iw thäs mindhre wardher, at hon i flere äär äldher bäkkia skifftes &amp;quot; Su 85 . Jfr almännings-, hovodh-, thwär-a." />
+    </Definition>
+   </Sense>
+  </LexicalEntry>
+  <LexicalEntry>
+    <Lemma>
+     <FormRepresentation>
+      <feat att="partOfSpeech" val="nn" />
+     <feat att="lemgram" val="fsvm--aterlösilse..nn.1" />
+     <feat att="writtenForm" val="aterlösilse" />
+    </FormRepresentation>
+   </Lemma>
+  </LexicalEntry>
+  <LexicalEntry>
+    <Lemma>
+     <FormRepresentation>
+      <feat att="partOfSpeech" val="nn" />
+     <feat att="lemgram" val="fsvm--avisning..nn.1" />
+     <feat att="writtenForm" val="avisning . " />
+    </FormRepresentation>
+   </Lemma>
+   <Sense id="soederwall--avisning..1">
+     <Definition>
+      <feat att="text" val=" L." />
+    </Definition>
+   </Sense>
+  </LexicalEntry>
+ </Lexicon>
+</LexicalResource>

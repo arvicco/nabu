@@ -1,0 +1,33 @@
+<LexicalResource dtdVersion="16">
+  <GlobalInformation>
+   <feat att="languageCoding" val="ISO 639-3" />
+ </GlobalInformation>
+ <Lexicon>
+   <feat att="language" val="swe" />
+  <LexicalEntry>
+    <Lemma>
+     <feat att="oldlemma" val="fsvm--*alkali..e.1" />
+    <FormRepresentation>
+      <feat att="lemgram" val="fsvm--alkali..e.1" />
+     <feat att="writtenForm" val="alkali  subst." />
+    </FormRepresentation>
+   </Lemma>
+   <Sense id="soederwall-supp--alkali..1">
+     <Definition>
+      <feat att="text" val="alkali, lutsalt.  &amp;quot; aff swarto asko som är brend aff enne yrth thär kallas kali äller alkali oc pa valsko soda &amp;quot; PMSkr 559 ." />
+    </Definition>
+   </Sense>
+  </LexicalEntry>
+  <LexicalEntry>
+    <Lemma>
+     <FormRepresentation>
+      <feat att="lemgram" val="fsvm--argha..e.1" />
+     <feat att="writtenForm" val="argha  v fördefva försämra. skulum wy ey forda goz . . . sälia . . . ällir nokot aff thy . .. argha skadha ällir forkomma  byh 1 267   1469 ." />
+    </FormRepresentation>
+   </Lemma>
+   <WordForm>
+     <feat att="writtenForm" val="*argha sik , förargas, taga anstöt. swa sker . . . opta ath the haffwa arwodhat j gudz thyänisth j synom vngdom ok agha sik oppa tet ytirsta  MP 5: 158 . - Jfr forargha. " />
+   </WordForm>
+  </LexicalEntry>
+ </Lexicon>
+</LexicalResource>

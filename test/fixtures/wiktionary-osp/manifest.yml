@@ -1,0 +1,12 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+source: wiktionary-osp
+adapter_test: test/adapters/wiktionary_osp_test.rb
+retrieved: 2026-11-02
+files:
+  - path: kaikki.org-dictionary-OldSpanish.jsonl
+    url: https://kaikki.org/dictionary/Old%20Spanish/kaikki.org-dictionary-OldSpanish.jsonl
+    whole: false
+    trim: >-
+      the 2 complete JSONL lines with word in {pie, pez},
+      byte-verbatim in upstream order, of 1,501 lines

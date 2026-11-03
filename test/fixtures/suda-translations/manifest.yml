@@ -1,0 +1,9 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+source: suda-translations
+adapter_test: test/adapters/suda_translations_test.rb
+retrieved: 2026-11-02
+files:
+  - path: solEntries.zip
+    refetchable: false
+    reason: a re-pack of members of the SOL entry export supplied by the SOL's maintainer by email, 2026-11-02 (no per-file URL; CC BY-NC-SA) — entry pages verbatim, the three letter index pages trimmed to the kept entries' rows (README recipe)

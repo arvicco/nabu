@@ -1,0 +1,45 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml.
+#
+# The six record files are byte-identical raw GETs (2026-11-02) of the
+# per-inscription API JSON and inscription page. The two listing pages
+# are documented TRIMS (README): their inscriptions arrays hold only the
+# three fixture rows, count re-set to 3 — a fresh fetch returns the full
+# 100-row page, so adapter_test stays null (the count-based tests would
+# false-fail against the untrimmed listing).
+source: aio
+adapter_test:
+retrieved: 2026-11-02
+files:
+  - path: records/aio-2103.json
+    url: https://www.atticinscriptions.com/inscription/AIUK11/9.json
+    whole: true
+    trim: none (Greek + translation, 175/6 AD)
+  - path: records/aio-2103.html
+    url: https://www.atticinscriptions.com/inscription/AIUK11/9
+    whole: true
+    trim: none
+  - path: records/aio-2586.json
+    url: https://www.atticinscriptions.com/inscription/SEG/46153.json
+    whole: true
+    trim: none (translation only, terms + Pleiades placeName)
+  - path: records/aio-2586.html
+    url: https://www.atticinscriptions.com/inscription/SEG/46153
+    whole: true
+    trim: none
+  - path: records/aio-3869.json
+    url: https://www.atticinscriptions.com/inscription/IGII2/5271.json
+    whole: true
+    trim: none (translation only, persName + rubric-only line)
+  - path: records/aio-3869.html
+    url: https://www.atticinscriptions.com/inscription/IGII2/5271
+    whole: true
+    trim: none
+  - path: list-page-1.json
+    url: https://www.atticinscriptions.com/inscription/list_all_inscriptions.json?page=20
+    whole: false
+    trim: inscriptions reduced to the AIO_2103 (live page 20) and AIO_2586 (live page 24) rows verbatim; count re-set to 3; next re-pointed at page 2
+  - path: list-page-2.json
+    url: https://www.atticinscriptions.com/inscription/list_all_inscriptions.json?page=35
+    whole: false
+    trim: inscriptions reduced to the AIO_3869 row (live last page 35) verbatim; count re-set to 3; previous re-pointed at page 1

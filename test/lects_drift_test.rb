@@ -86,6 +86,29 @@ class LectsDriftTest < Minitest::Test
     assert_equal "si", lects.resolve("si", source: "tipitaka-lk"), "the translation stays bare si"
   end
 
+  # P154 (the 2026-11-02 registry mint): PPCHY's Yiddish is ROMANIZED
+  # (YIVO-style), so the whole-source surface claim is yi~latn — the
+  # date-band stages and the dialect compose rules refine per text.
+  def test_ppchy_yiddish_claims_its_romanized_surface
+    assert_equal "yi~latn", lects.resolve("yi", source: "ppchy")
+    refute_nil lects.lect("yi~latn")
+  end
+
+  # P154: the 1688 Bucharest Bible is the Old Romanian stage's own
+  # monument, in the Cyrillic of its print — the mint's prescribed row.
+  def test_typikon_bible_romanian_claims_old_romanian_in_cyrillic
+    assert_equal "ro:old~cyrl", lects.resolve("ron-Cyrl", source: "typikon-bible")
+    refute_nil lects.lect("ro:old~cyrl")
+  end
+
+  # The menota onw → no:old routing retired 2026-11-02: the adapter
+  # corrects the raw code at parse (onw → nor, language_raw keeps
+  # upstream's), and the live catalog's menota holdings carry no onw after
+  # the P153 re-parse. A source-scoped onw now means what ISO says.
+  def test_menota_no_longer_reroutes_onw
+    assert_equal "onw", lects.resolve("onw", source: "menota")
+  end
+
   private
 
   def seed_documents

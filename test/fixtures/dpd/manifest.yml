@@ -1,0 +1,12 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+source: dpd
+adapter_test: test/adapters/dpd_test.rb
+retrieved: 2026-11-02
+files:
+  - path: dpd.txt
+    url: https://github.com/digitalpalidictionary/dpd-db/releases/download/v0.4.20261026/dpd-txt.zip
+    whole: false
+    trim: >-
+      the 4 blocks with ID 1, 7, 72479, 71509 of the zip's dpd.txt,
+      byte-verbatim in upstream order, of 89,763

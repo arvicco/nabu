@@ -1,0 +1,87 @@
+# Nabu fixture manifest (P5-4 "fixture sentinel"). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# Every file is a member of ONE Zenodo zip (no per-file URL), so every
+# entry is refetchable: false; the zip directory's sha256 pin lives on the adapter.
+source: osbct
+adapter_test:
+retrieved: '2026-11-02'
+files:
+- path: CITATION.cff
+  whole: true
+  trim: none
+  refetchable: false
+  reason: a member of the Zenodo zip (https://zenodo.org/api/records/23541744/files/bthar-mx/OSBCT-v2.11.0.zip/content, md5 8d89920d…2f21), under its top directory bthar-mx-OSBCT-abfd4f7/
+    — no per-file raw URL
+- path: LICENSE.md
+  whole: true
+  trim: none
+  refetchable: false
+  reason: a member of the Zenodo zip (https://zenodo.org/api/records/23541744/files/bthar-mx/OSBCT-v2.11.0.zip/content, md5 8d89920d…2f21), under its top directory bthar-mx-OSBCT-abfd4f7/
+    — no per-file raw URL
+- path: data/concordance.json
+  whole: true
+  trim: none
+  refetchable: false
+  reason: a member of the Zenodo zip (https://zenodo.org/api/records/23541744/files/bthar-mx/OSBCT-v2.11.0.zip/content, md5 8d89920d…2f21), under its top directory bthar-mx-OSBCT-abfd4f7/
+    — no per-file raw URL
+- path: site/08Di03.json
+  whole: false
+  trim: a documented cut (README.md)
+  refetchable: false
+  reason: a member of the Zenodo zip (https://zenodo.org/api/records/23541744/files/bthar-mx/OSBCT-v2.11.0.zip/content, md5 8d89920d…2f21), under its top directory bthar-mx-OSBCT-abfd4f7/
+    — no per-file raw URL
+- path: site/24AbhiT03.json
+  whole: false
+  trim: a documented cut (README.md)
+  refetchable: false
+  reason: a member of the Zenodo zip (https://zenodo.org/api/records/23541744/files/bthar-mx/OSBCT-v2.11.0.zip/content, md5 8d89920d…2f21), under its top directory bthar-mx-OSBCT-abfd4f7/
+    — no per-file raw URL
+- path: site/44KhuA25.json
+  whole: false
+  trim: a documented cut (README.md)
+  refetchable: false
+  reason: a member of the Zenodo zip (https://zenodo.org/api/records/23541744/files/bthar-mx/OSBCT-v2.11.0.zip/content, md5 8d89920d…2f21), under its top directory bthar-mx-OSBCT-abfd4f7/
+    — no per-file raw URL
+- path: site/build.json
+  whole: true
+  trim: none
+  refetchable: false
+  reason: a member of the Zenodo zip (https://zenodo.org/api/records/23541744/files/bthar-mx/OSBCT-v2.11.0.zip/content, md5 8d89920d…2f21), under its top directory bthar-mx-OSBCT-abfd4f7/
+    — no per-file raw URL
+- path: site/concordance.json
+  whole: true
+  trim: none
+  refetchable: false
+  reason: a member of the Zenodo zip (https://zenodo.org/api/records/23541744/files/bthar-mx/OSBCT-v2.11.0.zip/content, md5 8d89920d…2f21), under its top directory bthar-mx-OSBCT-abfd4f7/
+    — no per-file raw URL
+- path: site/downloads.data.json
+  whole: true
+  trim: none
+  refetchable: false
+  reason: a member of the Zenodo zip (https://zenodo.org/api/records/23541744/files/bthar-mx/OSBCT-v2.11.0.zip/content, md5 8d89920d…2f21), under its top directory bthar-mx-OSBCT-abfd4f7/
+    — no per-file raw URL
+- path: site/reader/apparatus/08Di03.appk.json
+  whole: false
+  trim: a documented cut (README.md)
+  refetchable: false
+  reason: a member of the Zenodo zip (https://zenodo.org/api/records/23541744/files/bthar-mx/OSBCT-v2.11.0.zip/content, md5 8d89920d…2f21), under its top directory bthar-mx-OSBCT-abfd4f7/
+    — no per-file raw URL
+- path: site/reader/apparatus/24AbhiT03.appk.json
+  whole: false
+  trim: a documented cut (README.md)
+  refetchable: false
+  reason: a member of the Zenodo zip (https://zenodo.org/api/records/23541744/files/bthar-mx/OSBCT-v2.11.0.zip/content, md5 8d89920d…2f21), under its top directory bthar-mx-OSBCT-abfd4f7/
+    — no per-file raw URL
+- path: site/reader/apparatus/44KhuA25.app.json
+  whole: false
+  trim: a documented cut (README.md)
+  refetchable: false
+  reason: a member of the Zenodo zip (https://zenodo.org/api/records/23541744/files/bthar-mx/OSBCT-v2.11.0.zip/content, md5 8d89920d…2f21), under its top directory bthar-mx-OSBCT-abfd4f7/
+    — no per-file raw URL
+- path: site/reader/apparatus/44KhuA25.appk.json
+  whole: false
+  trim: a documented cut (README.md)
+  refetchable: false
+  reason: a member of the Zenodo zip (https://zenodo.org/api/records/23541744/files/bthar-mx/OSBCT-v2.11.0.zip/content, md5 8d89920d…2f21), under its top directory bthar-mx-OSBCT-abfd4f7/
+    — no per-file raw URL

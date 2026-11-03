@@ -239,7 +239,55 @@ class LectRulesTest < Minitest::Test
     assert_match(%r{akk/zzz|akk:na/zzz}, error.message)
   end
 
+  # P154: PPCHY's sources-page Dialect head refines each text's date-banded
+  # yi stage onto the registry's West/East Yiddish varieties (the glaux
+  # compose shape). The two-sided and the hedged heads stay unrefined.
+  def test_the_ppchy_dialect_rules_compose_west_and_east_onto_the_yi_stages
+    with_ppchy_setup do |catalog, journal|
+      %w[ppchy-dialect-west ppchy-dialect-east].each do |id|
+        rule = compose_rules.find(id) || flunk("the shipped rules file must carry #{id}")
+        assert_equal %w[ppchy], rule.sources
+        assert_equal "yi", rule.code
+        assert_equal %w[yi:old yi:mid yi:mod], rule.onto
+        compose_rules.apply!(rule, catalog: catalog, journal: journal)
+      end
+      lect = ->(urn) { journal[:lect_assignments].first(urn: urn)[:lect_id] }
+      assert_equal "yi:old/west", lect.call("urn:nabu:ppchy:1478w-regensburg")
+      assert_equal "yi:mid/east", lect.call("urn:nabu:ppchy:1600e-magid")
+      assert_equal "yi:mod/east", lect.call("urn:nabu:ppchy:1910e-grine-felder")
+      assert_equal "yi:mid", lect.call("urn:nabu:ppchy:court"),
+                   "East and West Yiddish names no one variety — the stage stays unrefined"
+      assert_equal "yi:mod", lect.call("urn:nabu:ppchy:timm"),
+                   "a hedged 'Probably West Yiddish' is never the West claim"
+    end
+  end
+
   private
+
+  # ppchy docs carrying the facet_map's dialect projection, each with the
+  # date-band stage row the inference would mint.
+  def with_ppchy_setup
+    catalog = Nabu::Store.connect("sqlite::memory:")
+    Nabu::Store.migrate!(catalog)
+    ppchy = catalog[:sources].insert(slug: "ppchy", name: "PPCHY", adapter_class: "X", license_class: "nc")
+    journal = Nabu::Store::LectJournal.connect("sqlite::memory:")
+    Nabu::Store::LectJournal.migrate!(journal)
+    {
+      "1478w-regensburg" => ["West Yiddish", "yi:old"], "1600e-magid" => ["East Yiddish", "yi:mid"],
+      "1910e-grine-felder" => ["East Yiddish", "yi:mod"], "court" => ["East and West Yiddish", "yi:mid"],
+      "timm" => ["Probably West Yiddish (Erika Timm, pers. comm.)", "yi:mod"]
+    }.each do |stem, (dialect, stage)|
+      urn = "urn:nabu:ppchy:#{stem}"
+      doc = catalog[:documents].insert(source_id: ppchy, urn: urn, language: "yi", content_sha256: "x")
+      catalog[:document_facets].insert(document_id: doc, facet: "dialect", value: dialect)
+      Nabu::Store::LectJournal.assign!(journal, urn: urn, code: "yi", lect_id: stage,
+                                                basis: "rule:date-band", note: "seed")
+    end
+    yield catalog, journal
+  ensure
+    journal&.disconnect
+    catalog&.disconnect
+  end
 
   def akk_rules
     @akk_rules ||= Nabu::LectRules.load(RULES_PATH)
