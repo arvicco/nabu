@@ -1622,6 +1622,20 @@ sources:
         Unbound Bible text) — nothing to mine"}
     script: {posture: qualified, note: "Latin TRANSLITERATION of the Cyrillic original
         (Rs1Bible = Unbound Bible's 'Danicic Karadzic Latin'); ijekavian spelling kept"}
+  ebible-pacific:   # P154
+    # kind: machine-postured — kind_map.yml source_kind scripture (the
+    # whole-source Bible precedent: vulgate/eng-web/vuk-danicic).
+    lect: {posture: codemap, note: "cha → ch through the codemap alias the 2026-11-02 registry
+        mint added (the 1908 Chamorro Gospels/Acts/Psalms); haw and pon resolve by identity onto
+        the mint's own anchors (Hawaiian under East Polynesian, Pohnpeian under Micronesian).
+        No stage is claimed — none of the three anchors carries stages; declared coarse"}
+    dating: {posture: dated, note: "each translation's edition year as eBible records it — 1868
+        (the title's '1868 revision'), 1908 and 1922 (the sword-module names cha1908eb /
+        pon1922eb); edition class (MetadataDates :structured), attributed"}
+    places: {posture: unplaced, note: "the zips name no imprint (the 1868 Bible's American Bible
+        Society printing is not stated in the asset) — nothing to mine"}
+    script: {posture: implied, note: "Latin script in each print's period spelling — Hawaiian
+        without ʻokina or kahakō, Pohnpeian in the old j-for-s alphabet; kept as typeset"}
   elizabeth-bible:   # P152
     # kind: machine-postured — kind_map.yml source_kind scripture (the
     # whole-source Bible precedent: vulgate/eng-web/vuk-danicic).

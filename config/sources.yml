@@ -2084,6 +2084,24 @@ e84000:   # P48-2, 02-sources row 133
   # files - 11 duplicate losers), chunk-grain passages; 3,926 stub +
   # 11 duplicate skips censused. Upstream actively publishes -> manual.
 
+ebible-pacific:   # P154, 02-sources row 335
+  adapter: Nabu::Adapters::EbiblePacific
+  adopted: "2026-11-02"
+  axes: [biblical]
+  wired: false   # until the first real sync is verified. EXPECT 100 docs /
+                 # 48,762 passages (haw1868 66 / 31,102 · cha 6 / 7,245 ·
+                 # pon 28 / 10,415), 0 quarantined, 12 skipped by rule (the
+                 # 4 non-book files per zip); three zips, ~2 MB, seconds.
+                 # Eyeball nabu show urn:nabu:ebible-pacific:haw1868-jhn:1.1
+                 # ("I KINOHI ka Logou …") and probe nabu search "Logou".
+  # eBible.org's public-domain Pacific Bibles as USFM (the usfm family):
+  # Hawaiian 1868 revision (haw), the ABS Chamorro Gospels/Acts/Psalms
+  # (cha, sword cha1908), the Pohnpeian NT + Psalms in the old alphabet
+  # (pon, sword pon1922). One document per (translation, book). kos is
+  # refused: its own front matter declares a 1992-onward new translation,
+  # not the 1928 print. Each copyright.htm: "Public Domain" → open.
+  sync_policy: manual
+
 ebl:
   adapter: Nabu::Adapters::Ebl
   adopted: "2026-07-19"

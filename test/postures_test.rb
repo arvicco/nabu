@@ -179,7 +179,7 @@ class PosturesTest < Minitest::Test
   def test_the_lect_migration_kept_the_p59_4_census
     lect = postures.declarations.select { |d| d.layer == "lect" }
     by_posture = lect.group_by(&:posture).transform_values(&:size)
-    assert_equal 172, lect.size,
+    assert_equal 173, lect.size,
                  "the P59-4 declarations survive the move (61 at migration; itant retired P61-3," \
                  "oracc retired P62-2, etcsl/ccmh/freising/coptic-scriptorium retired P64-6, " \
                  "titus-avestan retired P66-1, osta+fornsvenska retired P77-r8, achemenet " \
@@ -371,7 +371,9 @@ class PosturesTest < Minitest::Test
                  "the Pacific/Vietnamese–Tai/Mongolic/Tangut/Yiddish + Romanian registry mint " \
                  "(merged + canonical-synced 2026-11-02) RETIRES ppchy (the yi → yi~latn override " \
                  "and the ppchy-dialect compose rules) and typikon-bible (the ron-Cyrl → " \
-                 "ro:old~cyrl override) — the add-then-retire shape, the shadowing rule: 174→172"
+                 "ro:old~cyrl override) — the add-then-retire shape, the shadowing rule: 174→172; " \
+                 "ebible-pacific ADDED P154 — codemap (cha → ch; haw/pon identity on the mint's " \
+                 "anchors): 172→173"
     # The epigraphic-belt registry package (merged + canonical-synced
     # 2026-10-18, the add-then-retire shape within one phase) retires both
     # P130 pendings, and the ociana-script rule + the ig-cyprus override
@@ -418,6 +420,7 @@ class PosturesTest < Minitest::Test
     # aio joins dates (the page Date field → grc:cla/grc:koi; eng translations bare): 23→24.
     # The 2026-11-02 registry mint retires ppchy and typikon-bible to their
     # overrides (+ the ppchy-dialect compose rules): pending 3→1 (lasla alone).
-    assert_equal({ "dates" => 24, "codemap" => 19, "identity" => 128, "pending" => 1 }, by_posture)
+    # ebible-pacific joins codemap (cha → ch; haw/pon identity): 19→20.
+    assert_equal({ "dates" => 24, "codemap" => 20, "identity" => 128, "pending" => 1 }, by_posture)
   end
 end

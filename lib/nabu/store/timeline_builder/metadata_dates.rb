@@ -145,6 +145,8 @@ module Nabu
           "diorisis" => :signed_year_key,
           "disco" => :author_century_band,
           "dta" => :year_range,
+          "ebible-pacific" => :structured, # P154: each translation's edition year as eBible records
+          #                                  it (1868 / 1908 / 1922, class edition) — no place claim
           "ebl" => :period_label,
           "edr" => :structured,
           "eebo-tcp" => :structured,

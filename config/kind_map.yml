@@ -858,6 +858,8 @@ sources:
     source_kind: scripture
   vuk-danicic:
     source_kind: scripture   # P117-2: the Vuk–Daničić Serbian Bible
+  ebible-pacific:
+    source_kind: scripture   # P154: the eBible Pacific Bibles — every document a Bible book
   elizabeth-bible:
     source_kind: scripture   # P152: the Elizabeth Bible, the whole source is the Bible
   sblgnt:
