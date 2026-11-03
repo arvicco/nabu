@@ -3,25 +3,25 @@
 as_of: 3 November 2026
 classes:
 - head: literary
-  documents: 797465
-  documents_display: '797,465'
-  sources: 37
+  documents: 797606
+  documents_display: '797,606'
+  sources: 38
 - head: administrative
-  documents: 489515
-  documents_display: '489,515'
-  sources: 18
+  documents: 489542
+  documents_display: '489,542'
+  sources: 19
 - head: historiography
-  documents: 358981
-  documents_display: '358,981'
+  documents: 359055
+  documents_display: '359,055'
   sources: 29
 - head: funerary
-  documents: 114916
-  documents_display: '114,916'
-  sources: 11
+  documents: 114925
+  documents_display: '114,925'
+  sources: 12
 - head: legal
-  documents: 40765
-  documents_display: '40,765'
-  sources: 24
+  documents: 41655
+  documents_display: '41,655'
+  sources: 25
 - head: letter
   documents: 34904
   documents_display: '34,904'
@@ -31,28 +31,28 @@ classes:
   documents_display: '30,135'
   sources: 5
 - head: scripture
-  documents: 26985
-  documents_display: '26,985'
+  documents: 27033
+  documents_display: '27,033'
   sources: 34
 - head: ritual
-  documents: 23769
-  documents_display: '23,769'
-  sources: 10
+  documents: 23773
+  documents_display: '23,773'
+  sources: 11
 - head: dedicatory
-  documents: 22922
-  documents_display: '22,922'
-  sources: 9
+  documents: 22944
+  documents_display: '22,944'
+  sources: 10
 - head: divination
   documents: 21062
   documents_display: '21,062'
   sources: 14
 - head: lexical
-  documents: 18156
-  documents_display: '18,156'
+  documents: 18169
+  documents_display: '18,169'
   sources: 17
 - head: scholarly
-  documents: 13553
-  documents_display: '13,553'
+  documents: 13679
+  documents_display: '13,679'
   sources: 20
 - head: hymn-prayer
   documents: 13000
@@ -63,13 +63,13 @@ classes:
   documents_display: '12,290'
   sources: 10
 - head: honorific
-  documents: 11422
-  documents_display: '11,422'
-  sources: 5
-- head: building
-  documents: 8021
-  documents_display: '8,021'
+  documents: 11435
+  documents_display: '11,435'
   sources: 6
+- head: building
+  documents: 8024
+  documents_display: '8,024'
+  sources: 7
 - head: sermon
   documents: 6409
   documents_display: '6,409'
@@ -83,9 +83,9 @@ classes:
   documents_display: '3,411'
   sources: 10
 - head: boundary
-  documents: 2963
-  documents_display: '2,963'
-  sources: 3
+  documents: 2964
+  documents_display: '2,964'
+  sources: 4
 - head: exegesis
   documents: 2876
   documents_display: '2,876'
@@ -97,7 +97,7 @@ classes:
 unclassified_sources: 134
 unknown_documents: 47058
 unknown_documents_display: '47,058'
-unmapped_documents: 11443
-unmapped_documents_display: '11,443'
-unclassified_documents: 524902
-unclassified_documents_display: '524,902'
+unmapped_documents: 12103
+unmapped_documents_display: '12,103'
+unclassified_documents: 538352
+unclassified_documents_display: '538,352'
