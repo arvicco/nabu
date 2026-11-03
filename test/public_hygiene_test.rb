@@ -55,10 +55,11 @@ class PublicHygieneTest < Minitest::Test
      "time-of-day narrative — public surfaces carry dates, never day-parts"]
   ].freeze
 
-  # Living HISTORY files written before the rule, awaiting the owner's
-  # call (scrub-in-place vs untrack) — grandfathered, NOT license to add
-  # more.
-  GRANDFATHERED = %w[docs/history/worklog.md docs/history/backlog.md].freeze
+  # Pre-rule files exempted while awaiting an owner call — EMPTY since
+  # 2026-11-03 (the two early history files untracked into the private
+  # boards by owner ruling; every tracked file now meets the full rule).
+  # NOT license to add entries.
+  GRANDFATHERED = %w[].freeze
 
   # Per-path exemptions, each with its reason. NOT license to add more:
   # a new entry needs a file that genuinely cannot be rewritten.

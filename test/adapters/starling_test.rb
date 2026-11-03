@@ -703,7 +703,7 @@ class StarlingTest < Minitest::Test
     assert_empty entries[2].reflexes, "qɔ: carries the length colon — not a clean citation form"
   end
 
-  # --- the reflex verdict (journaled in docs/history/backlog.md P22-0) ---------------------
+  # --- the reflex verdict (journaled in the early backlog's P22-0) ---------------------
 
   def test_single_language_attested_columns_mint_reflex_rows
     reflexes = parse("starling-piet").entries.to_h { |e| [e.entry_id, e] }["562"].reflexes

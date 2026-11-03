@@ -28,13 +28,13 @@ The loop's job is therefore mostly *dispatch and verify*, not *judge* — which 
 
 ## 3. Work packets and the backlog
 
-The backlog lived at `docs/history/backlog.md` — a flat, human-editable list of packets
+The backlog lived in a flat, human-editable file of packets
 (HISTORICAL through P43: since then the live coordination state moved to the
 gitignored `.docs/` — the per-phase plan doc `.docs/p<N>-plan.md`, the work
 queue `.docs/work-queue.md`, and the decision register
-`.docs/decision-register.md`; `docs/history/backlog.md` (frozen 2026-07-23)
-and `docs/history/worklog.md` (frozen 2026-08-02) stand as the early record —
-see `docs/history/README.md`). The original packet shape, still the shape a
+`.docs/decision-register.md`; the early backlog and worklog records were
+retired from the public tree 2026-11-03 — see `docs/history/README.md`).
+The original packet shape, still the shape a
 phase plan's packets take:
 
 ```markdown
@@ -86,8 +86,7 @@ Each iteration, regardless of execution vehicle (§5):
      a worktree merge); worktree agents deliver code and tracked docs only,
      and route any consideration material through their final report for the
      orchestrator to file under `.docs/`. Loop docs that ARE the public
-     record (architecture, shipped-feature docs, and the frozen early
-     backlog/worklog under `docs/history/`) stay in `docs/`.
+     record (architecture and the shipped-feature docs) stay in `docs/`.
 5. **Commit** on the current phase branch (`phase-N`), imperative message referencing the packet ID. Update the packet's status on the board.
 6. **Escalate on failure**: two failed attempts at a packet → mark `blocked` with a diagnosis, move to the next packet. Never thrash. `blocked` packets are adjudicated by Fable at the next gate (or sooner if everything else is blocked → stop and notify the owner).
 7. **Phase gate** (all phase packets done/blocked): Fable reviews the *entire phase diff* against `docs/architecture.md`, checks the doc is still truthful (updates it if implementation deviated — per CLAUDE.md), resolves blocked packets, **updates `README.md`** — the user-facing document describing the capabilities and commands implemented up to this point (honest about what doesn't work yet; a newcomer reading only the README should know exactly what `bin/nabu` can do today) — then opens a PR `phase-N → main`. **The owner reviews and merges the PR — this is the standing human approval gate.** The gate turn ends by arming the owner's attention alarm (sticky mode — see the global convention in `~/.claude/CLAUDE.md`), as does any blocked state needing guidance. The next phase's packets are elaborated in detail only after the merge.
@@ -245,7 +244,7 @@ is the division of labor.
 1. **Plan approved** with amendments incorporated (§2 only Fable/Opus write code; §6 sandbox-freedom guardrails; §8 plan-gated automated fixture acquisition).
 2. **Push policy:** the loop pushes `phase-N` branches and opens PRs on `arvicco/nabu`; `main` stays owner-merged.
 3. **Stage A attendance:** Phase 0 runs interactively (Fable orchestrating, Opus implementing); `/loop` from Phase 1 onward.
-4. In effect: the phase plan doc (`.docs/p<N>-plan.md`) carries the elaborated packets (`docs/history/backlog.md` carried them through P43), `.claude/settings.json` carries the permission profile, work proceeds on `phase-N` branches — and independent packets dispatch as parallel agents in worktrees off the phase branch (routine practice since P78), with the loop integrating the merges.
+4. In effect: the phase plan doc (`.docs/p<N>-plan.md`) carries the elaborated packets (the early backlog file carried them through P43), `.claude/settings.json` carries the permission profile, work proceeds on `phase-N` branches — and independent packets dispatch as parallel agents in worktrees off the phase branch (routine practice since P78), with the loop integrating the merges.
 
 ### §4 addendum — gate waits don't block the loop (owner, 2026-07-11)
 
