@@ -1930,3 +1930,10 @@ medeltids-språket* (1884–1918; 22,572 entries) and its supplement
 (1877; 10,067) — Swedish-language articles with the books' citations,
 keyed by hand at Språkbanken, every entry under its lemgram so the
 three books meet on one key (CC BY 4.0).
+
+**`littre`** — Émile Littré's *Dictionnaire de la langue française*
+(1863–1877; 78,483 articles) in the oeuvres/littre TEI: definitions,
+pronunciation, citations from the 17th-century canon the
+theatre-classique stage holds, and the HISTORIQUE sections that quote
+Old and Middle French century by century — each article tagged with the
+earliest century Littré quotes it from (CC BY-SA).
