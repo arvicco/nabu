@@ -206,7 +206,7 @@ your own field. `bin/nabu list --axis` prints the shelf census grouped under
 the {{ census.desks }} [research desks]({{ '/axis/' | relative_url }}) — scholarly hats
 over the same sources, from the Classicist to the Assyriologist. Pick the one
 that fits and sync its members in a single command — `bin/nabu sync celtic`,
-or whichever axis is yours — then open its page: each desk carries its own
+or whichever desk is yours — then open its page: each desk carries its own
 member shelves, CLI recipes, search modes, and terminal setup for its scripts.
 
 ```

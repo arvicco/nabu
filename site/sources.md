@@ -68,7 +68,7 @@ column is the live catalog's own count, regenerated at every development
 gate (last read {{ site.data.sources.as_of }}). Each row is linkable by its
 source id — `/sources/#src-oracc`. The same sources grouped by research desk —
 each desk's member shelves, license mix and sync status on one page —
-appear on the [research axes]({{ '/axis/' | relative_url }}).
+appear on the [research desks]({{ '/axis/' | relative_url }}).
 
 {% assign src = site.data.sources.sources -%}
 | Source | Upstream project | Contents | Holdings (live) | License |

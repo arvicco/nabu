@@ -9,6 +9,12 @@ description: >-
 
 The Korean desk opens on the dynastic record itself: the Veritable Records of Joseon (sillok) in the original hanmun via NIKH's open XML dumps, joined by the Goryeosa family on the same DTD (the pre-Joseon dynastic history, its chronological digest, and the state council's daily register), with the Seungjeongwon ilgi and the ITKC classics to follow, and the Middle Korean Wikisource shelf as the vernacular leg. The OKHC historical slice widens the desk beyond the state record: the Samguk sagi (the oldest Korean history), the Ilseongnok, the ITKC munjip mass, and the AKS/Kyujanggak/NHM old-literature shelves, each record carrying its own PD-vs-nc label.
 
+On the shelves beside the sillok: the **Daily Records of the Royal
+Secretariat**, the **Border Defense Command register** and the ITKC's
+classical originals in hanmun (KOGL, free use with credit); the OKHC
+slice (CC BY-NC) dates its records one by one; and the *Yongbi eocheon
+ga* of 1447 opens the Middle Korean vernacular shelf.
+
 New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the library in minutes.
 
 ## The shelves
@@ -33,11 +39,11 @@ A source wears every desk it serves — these eleven answer this desk. Holdings 
 
 ## The desk's instruments
 
-No axis-specific instruments curated yet — the generic surfaces above apply.
+No desk-specific instruments curated yet — the generic surfaces above apply.
 
 ## Working the korean desk
 
-The generic axis surfaces — every desk answers to these, in working
+The generic desk surfaces — every desk answers to these, in working
 order (enable once, sync, then query):
 
 ```
