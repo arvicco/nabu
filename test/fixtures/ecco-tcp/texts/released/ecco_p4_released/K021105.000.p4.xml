@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?xml-stylesheet type="text/css" href="http://www.textcreationpartnership.org/docs/code/pfs.css"?>
+<!DOCTYPE ETS SYSTEM "http://www.textcreationpartnership.org/docs/code/eebo2prf.xml.dtd">
+<ETS>
+<HEADER><FILEDESC><TITLESTMT><TITLE TYPE="245" I2="4">The report of the physicians and surgeons, commanded to assist at the dissecting the body of His late Majesty at Kensington, March the tenth MDCCI/II. From the original delivered to the Right Honourable the Privy Council:</TITLE></TITLESTMT>
+
+<EXTENT>Approx. 5 KB of encoded text transcribed from 6 page images.</EXTENT><PUBLICATIONSTMT><PUBPLACE>Ann Arbor, MI ; Oxford (UK) :</PUBPLACE><PUBLISHER>Text Creation Partnership,</PUBLISHER><DATE>2012 January</DATE><IDNO TYPE="DLPS">004794595</IDNO><IDNO TYPE="ESTC">T1873</IDNO><IDNO TYPE="DocNo">CW107118701</IDNO><IDNO TYPE="TCP">K021105.000</IDNO>
+<IDNO TYPE="GaleDocNo">CW3307118701</IDNO><IDNO TYPE="ContentSet">ECMS</IDNO><IDNO TYPE="ImageSetID">0205300300</IDNO><AVAILABILITY><P>To the extent possible under law, the Text Creation Partnership has waived all copyright and related or neighboring rights to this keyboarded and encoded edition of the work described above, according to the terms of the CC0 1.0 Public Domain Dedication (http://creativecommons.org/publicdomain/zero/1.0/). This waiver does not extend to any page images or other supplementary files associated with this work, which may be protected by copyright or other license restrictions. Please go to http://www.textcreationpartnership.org/ for more information.</P></AVAILABILITY></PUBLICATIONSTMT><SOURCEDESC><BIBLFULL><TITLESTMT><TITLE TYPE="245" I2="4">The report of the physicians and surgeons, commanded to assist at the dissecting the body of His late Majesty at Kensington, March the tenth MDCCI/II. From the original delivered to the Right Honourable the Privy Council:</TITLE></TITLESTMT>
+
+<EXTENT>[2],5,[1]p. ; 4⁰.</EXTENT><PUBLICATIONSTMT><PUBPLACE>London :</PUBPLACE><PUBLISHER>printed for John Nutt,</PUBLISHER><DATE>1702.</DATE></PUBLICATIONSTMT><NOTESSTMT><NOTE>His late Majesty = William III.</NOTE><NOTE>The report drawn up by Sir Thomas Millington, Sir Richard Blackmore and Sir Edward Hannes.</NOTE><NOTE>Reproduction of original from the British Library.</NOTE><NOTE>English Short Title Catalog, ESTC T1873.</NOTE><NOTE>Electronic data. Farmington Hills, Mich. : Thomson Gale, 2003. Page image (PNG). Digitized image of the microfilm version produced in Woodbridge, CT by Research Publications, 1982-2002 (later known as Primary Source Microfilm, an imprint of the Gale Group).</NOTE></NOTESSTMT>
+
+</BIBLFULL></SOURCEDESC></FILEDESC><ENCODINGDESC><PROJECTDESC><P>Header originally created with script ecco-header.xsl on 2006-04-21. Revised by script ecco_revise_headers.pl on 2023-10-20. Processing information added by script ecco_insertprocess.pl on 2023-10-22.</P></PROJECTDESC><EDITORIALDECL N="4"><P>This electronic text file was keyed from page images and partially proofread for accuracy. Character capture and encoding have been done following the guidelines of the ECCO Text Creation Partnership, which correspond roughly to the recommendations found in Level 4 of the TEI in Libraries Guidelines. Digital page images are linked to the text file.</P><P>Issued variously as SGML (TCP schema; ASCII text with mnemonic sdata character entities); displayable XML (TCP schema; characters represented either as UTF-8 Unicode or text strings within braces); or lossless XML (TEI P5, characters represented either as UTF-8 Unicode or TEI g elements).</P><P>Keying and markup guidelines available at TCP web site (http://www.textcreationpartnership.org/docs/)</P></EDITORIALDECL></ENCODINGDESC><PROFILEDESC><LANGUSAGE ID="eng"><LANGUAGE>eng</LANGUAGE></LANGUSAGE></PROFILEDESC><REVISIONDESC>
+<CHANGE><DATE>2011-04</DATE><RESPSTMT><RESP>TCP</RESP></RESPSTMT><ITEM>Assigned for keying and markup to SPi Global</ITEM></CHANGE>
+<CHANGE><DATE>2011-05</DATE><RESPSTMT><RESP>SPi Global</RESP></RESPSTMT><ITEM>Keyed and coded from Gale page images</ITEM></CHANGE>
+<CHANGE><DATE>2011-10</DATE><RESPSTMT><RESP>pfs</RESP></RESPSTMT><ITEM>Sampled, proofread, and accepted</ITEM></CHANGE>
+<CHANGE><DATE>2011-10</DATE><RESPSTMT><RESP>pfs</RESP></RESPSTMT><ITEM>Reviewed and edited text and markup </ITEM></CHANGE>
+<CHANGE><DATE>2011-06</DATE><RESPSTMT><RESP>pfs</RESP></RESPSTMT><ITEM>Performed batch review (QC) and XML conversion</ITEM></CHANGE>
+<CHANGE><DATE>2012-01</DATE><RESPSTMT><RESP>Univ of Michigan Library</RESP></RESPSTMT><ITEM>Hosted online</ITEM></CHANGE></REVISIONDESC></HEADER>
+
+<EEBO>
+<IDG S="marc" R="UM" ID="K021105.000">
+<STC T="C">T001873</STC>
+<BIBNO T="docno">CW3307118701</BIBNO>
+<VID SET="ECMS">0205300300</VID>
+</IDG>
+<TEXT LANG="eng">
+<FRONT>
+<DIV1 TYPE="title page">
+<PB REF="1" MS="y"/>
+<P>THE REPORT OF THE Physicians and Surgeons, Commanded to assist <HI>At the Dissecting the Body of His Late Majesty at Kensington,</HI> March <HI>the Tenth</HI> MDCCI / II</P>
+<P>From the Original delivered to the Right Honorable the Privy Council.</P>
+<P><HI>London</HI> Printed for <HI>John Nutt,</HI> near Stationers-Hall. 1702.</P>
+</DIV1>
+</FRONT>
+<BODY>
+<DIV1 TYPE="report">
+<PB N="1" REF="2"/>
+<HEAD>THE REPORT OF THE <HI>Physicians and Surgeons,</HI> Commanded to assist At the DISSECTING The BODY, <HI>&amp;c.</HI></HEAD>
+<DIV2 REND="italic" TYPE="preamble">
+<P>IT having pleas'd Almighty God to put an end to the Glorious Life of his Late Majesty <HI>King William III.</HI> The Right Honorable the Lord Chamber∣lain issued out his Summons to such Physici∣ans and Surgeons as his Lordship thought
+<PB N="2" REF="3"/>fit, appointing them to meet at <HI>Kensing∣ton,</HI> and there to Examine by Dissection into the State and Condition of the Roy∣al Body. The day after the Dissection, the said Physicians and Surgeons being met together again in order to the forming an account of what they had observed, Sir <HI>Thomas Millington,</HI> Sir <HI>Richard Blackmore</HI> and Doctor <HI>Hannes</HI> were deputed as a Committee to draw vp the Report; which they did accordingly. This <HI>REPORT</HI> was afterwards sign'd by Them, and by the rest of the Physicians and Surgeons, and is as follows.</P>
+</DIV2>
+<DIV2 TYPE="report proper">
+<P N="1">1. <LABEL>Surface of the Body.</LABEL> Upon viewing the <HI>Body,</HI> before Dissection, the following appearances were remarkable.</P>
+<P>The <HI>Body</HI> in general was much e∣maciated.</P>
+<P>Both the <HI>Leggs</HI> up to the Knees
+<PB N="3" REF="4"/>and a little higher, as also the <HI>Right Hand</HI> and <HI>Arm</HI> as far as the Elbow were considerably swell'd.</P>
+<P>There was likewise on the <HI>Left Thigh,</HI> near the Hip, a Bladder full of water, as big as a small Pullets Egg, resembling a Blane.</P>
+<P N="2">2. <LABEL>Belly.</LABEL> Upon opening the <HI>Belly,</HI>
+the <HI>Gutts</HI> were found of a <HI>Livid</HI> Color; and the <HI>Blood</HI> contain'd in their vessels, <HI>Black.</HI></P>
+<P>The <HI>Gutt</HI> called <HI>Ileon</HI> had in some places the marks of a slight <HI>Inflam∣mation.</HI></P>
+<P>The <HI>Stomach, Pancreas, Mesentery, Liver, Gall-bladder, Spleen,</HI> and <HI>Kidneys</HI> were all sound and without fault.</P>
+<P N="3">3. <LABEL>Chest.</LABEL> In the <HI>Thorax,</HI> or <HI>Chest,</HI>
+we ob∣served that the <HI>Right side</HI> of the <HI>Lungs</HI> adher'd to the <HI>Pleura;</HI> and the <HI>Left,</HI> much more: From which, upon separation, there issued forth a quantity of purulent or frothy Serum.</P>
+<PB N="4" REF="5"/>
+<P>The <HI>Upper Lobe</HI> on the <HI>Left</HI> side of the <HI>Lungs,</HI> and the part of the <HI>Pleura</HI> next to it were <HI>Inflamed</HI> to a degree of <HI>Mortification.</HI> AND THIS WE LOOK UPON AS THE IMME∣DIATE CAUSE OF THE KING'S DEATH.</P>
+<P>From the <HI>Ventricles</HI> of the <HI>Heart</HI> and the <HI>Greater Bloodvessels</HI> arising out of them, were taken several large, tough, fleshlike substances of the kind call'd <HI>Polypus.</HI></P>
+<P>The <HI>Heart</HI> it self was of the smal∣ler size; but firm, and strong.</P>
+<P N="4">4. <LABEL>Collar Bone.</LABEL> Upon laying bare the <HI>Right Collar-Bone,</HI> we found it had been broken near the Shoulder; and well set. Some <HI>extravasated Blood</HI> was lodged above and below the <HI>Fracture.</HI></P>
+<P N="5">5. <LABEL>Brain.</LABEL> The <HI>Brain</HI> was perfectly sound and without any sign of distemper.</P>
+<PB N="5" REF="6"/>
+<P N="6">6. <LABEL>Mass of Blood.</LABEL> 'Tis very rare to find a <HI>Body</HI> with so little Blood, as was seen in <HI>This:</HI> there being more found in the <HI>Lungs,</HI> than in <HI>All</HI> the <HI>Parts,</HI> besides, put together.</P>
+<CLOSER><SIGNED><LIST>
+<HEAD>Doctors present.</HEAD>
+<ITEM>Sir <HI>Rich. Blackmore.</HI></ITEM>
+<ITEM>Sir <HI>Theod Colladon.</HI></ITEM>
+<ITEM>Doctor Hannes.</ITEM>
+<ITEM>Doctor Harrel.</ITEM>
+<ITEM>Doctor How.</ITEM>
+<ITEM>Doctor <HI>Hullen.</HI></ITEM>
+<ITEM>Doctor <HI>Laurence.</HI></ITEM>
+<ITEM>Sir <HI>Tho. Millington</HI></ITEM>
+<ITEM>Professor <HI>Bidloo. &amp;c.</HI></ITEM>
+</LIST>
+<LIST>
+<HEAD>Surgeons present.</HEAD>
+<ITEM>Mr. <HI>Bernard.</HI></ITEM>
+<ITEM>Mr. <HI>Cowper.</HI></ITEM>
+<ITEM>Mr. <HI>Gardner.</HI></ITEM>
+<ITEM>Mr. <HI>Ronjat. &amp;c.</HI></ITEM>
+</LIST></SIGNED></CLOSER>
+</DIV2>
+<TRAILER>FINIS</TRAILER>
+</DIV1>
+</BODY>
+</TEXT>
+</EEBO>
+</ETS>
+
