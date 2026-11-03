@@ -1732,16 +1732,15 @@ sources:
         cataloguer's language is the claim (an item catalogued Syriac whose incipit reads as
         Garshuni stays syc); Neo-Aramaic, Turkish/Kurdish Garshuni and the rest skip by rule
         (196 incipits, named per document) until the registry holds them"}
-    dating: {posture: pending, note: "candidate: register hmml-reading-room => :structured in
-        Store::TimelineBuilder::MetadataDates::SHAPES — every document already carries the
-        catalogue's own envelope as metadata date {not_before, not_after, raw} (min beginDate ..
-        max endDate over the parts, century label raw; 18,001 of 18,892 records in the
-        2026-11-01 generation), artifact class. Held back only because the registration is a
-        builder-file edit (the lane is adapters-only); the precise year/month/day and the
-        native-era date (e.g. '2025 AG') ride each part verbatim"}
-    places: {posture: pending, note: "candidate: the same :structured registration reads the
-        metadata place — the part's city of origin, else its country of origin (4,448 records),
-        the writing place as catalogued, names verbatim; the holding repository (city, country,
+    dating: {posture: dated, note: "registered hmml-reading-room => :structured in
+        Store::TimelineBuilder::MetadataDates::SHAPES (pick-time, P154) — the catalogue's own
+        envelope as metadata date {not_before, not_after, raw} (min beginDate .. max endDate
+        over the parts, century label raw; 18,001 of 18,892 records in the 2026-11-01
+        generation), artifact class; the precise year/month/day and the native-era date
+        (e.g. '2025 AG') ride each part verbatim"}
+    places: {posture: named, note: "the same :structured registration reads the metadata
+        place — the part's city of origin, else its country of origin (4,448 records), the
+        writing place as catalogued, names verbatim; the holding repository (city, country,
         LC/VIAF authority URIs) rides metadata and is never taken for the origin"}
     script: {posture: mixed, note: "Syriac script (Serṭā, Madnḥāyā, ʼEsṭrangelā — the part's
         script field verbatim), Ethiopic Fidäl, Arabic Naskh for the Arabic items; Garshuni is
