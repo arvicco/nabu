@@ -1,0 +1,169 @@
+# The shelf map behind the collection table on /library/ (site/library.md):
+# which registered sources each table row sums. HAND-EDITED curation — the
+# counterpart to the GENERATED numbers: `rake site:data` reads this map and
+# writes each shelf's live document/passage totals into site/_data/sources.yml
+# (the `shelves` section), and the table renders them through Liquid, so a
+# growth wave never leaves a row's size stale.
+#
+# Keys are the table rows' anchor ids (/library/#shelf-<key>). Every live
+# source holding documents belongs to exactly one shelf, and every member
+# must be a live public source — test/site/site_data_test.rb fails the suite
+# on an unplaced or unknown slug. Dictionary-only sources (no documents)
+# ride the reference shelf, whose row reads the census entry total instead.
+---
+classical-greek: [perseus-greek]
+post-classical-greek: [first1k-greek, pta, cgpg, hexapla, suda-translations]
+greek-silver: [diorisis, glaux]
+classical-latin: [perseus-latin, lasla]
+latin-romance:
+  - digiliblt
+  - openmgh
+  - croala
+  - corpus-corporum
+  - bfm
+  - theatre-classique
+  - cantigas
+  - osta
+  - disco
+  - bdcamoes
+  - ctilc
+  - aranese
+  - lo-congres
+  - cv-sardinian
+  - salom
+  - typikon-bible
+papyri: [papyri-ddbdp]
+latin-inscriptions: [edh]
+inscriptions-of-italy: [edr]
+celtic: [corph, riig, ogham, stgall-priscian, br-wikisource, cy-wikisource]
+coptic: [coptic-scriptorium]
+sanskrit: [gretil, vedaweb]
+indic-expansion: [sarit, suttacentral, dcs, dacon, gretil-legacy, osbct, tipitaka-lk]
+south-asia:
+  - dharma-tamil
+  - dharma-deccan
+  - dharma-mdt
+  - siddham
+  - paramara
+  - sii-clean
+  - tamilex
+  - madurai
+  - kannada-texts
+  - prakrit-texts
+  - shabados
+  - gu-wikisource
+  - te-wikisource
+treebanks: [proiel, torot, ud, iswoc]
+cuneiform: [oracc]
+ancient-near-east:
+  - tlhdig
+  - hittite-glossed
+  - aclt
+  - cdli
+  - ebl
+  - achemenet
+  - seal
+  - cuc
+  - etcsl
+  - peshitta
+  - syriac-corpus
+  - etcbc-syriac
+  - hmml-reading-room
+  - ociana
+ugarit: [rsti]
+hebrew-aramaic: [oshb, bhsa, dss, extrabiblical, etcbc-targum, sefaria, iip]
+elephantine: [elephantine]
+arabic-persian: [openiti, ganjoor, diccas]
+iranian-silk-road: [iedc, skjaervo-khotanese, shkz, perseus-farsilit]
+turkic-mongolic: [atmo, altaica-shm]
+egyptian: [aes, tla-hf]
+ethiopic: [betamasaheft-works, traces]
+pre-roman-italy: [ceipom, itant, open-etruscan, tir, lexlep, isicily]
+aegean: [damos, sigla, ig-cyprus]
+biblical-editions: [vulgate, sblgnt, eng-web, ebible-pacific]
+old-english: [aspr, perseus-anglit]
+middle-early-modern-english: [cme, eebo-tcp]
+slavic:
+  - ccmh
+  - freising
+  - goo300k
+  - imp
+  - kdsp
+  - prilit
+  - memis
+  - gams-zrcalo
+  - sl-wikisource
+  - mdz-protestant
+  - damaskini
+  - scripta-bulgarica
+  - bg-wikisource
+  - mk-wikisource
+  - ru-wikisource
+  - uk-wikisource
+  - litopys
+  - scat
+  - elizabeth-bible
+  - cs-wikisource
+  - comenius
+  - prague-bible-1488
+  - pl-wikisource
+  - korba
+  - hr-wikisource
+  - elektire
+  - sr-wikisource
+  - eltec-srp
+  - vuk-danicic
+  - slavistics-pd
+  - archiv-slav-phil
+baltic-finnic-basque: [senie, vakk, vks, bim-sahcoba]
+chinese:
+  - kanripo
+  - cbeta
+  - zh-wikisource
+  - classical-modern
+  - lzh-collection
+  - baley-manuscripts
+  - obimd
+  - tianyige
+  - viet-wikisource
+korean: [sillok, sjw, goryeosa, goryeosa-jeoryo, bibyeonsa, itkc, okhc, ko-wikisource-mk]
+tibetan:
+  - derge-kangyur
+  - derge-tengyur
+  - e84000
+  - lotsawa-house
+  - bdrc-transcriptions
+  - otdo
+  - old-tibetan
+  - soas-tibetan
+  - jaschke-1881
+japanese: [aozora, ndl-kotenseki, honkoku, ja-wikisource, kokubunken, kouigenji, oncoj]
+southeast-asia:
+  - dharma-khmer
+  - dharma-campa
+  - dharma-pyu
+  - dharma-nusantara
+  - dharma-javanese-texts
+  - obi-burmese
+  - ban-wikisource
+  - jv-wikisource
+  - su-wikisource
+  - ms-wikisource
+  - th-wikisource
+germanic:
+  - menotec
+  - menota
+  - fornsvenska
+  - helipad
+  - rem
+  - ren
+  - ref
+  - dta
+  - corpus-oudnederlands
+  - corpus-gysseling
+  - corpus-oudfries
+  - ppchy
+  - rundata
+  - runesdb
+africa: [africa-pd, bu-ajami, old-nubian-ud]
+americas: [ticha, guaman-poma]

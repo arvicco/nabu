@@ -18,7 +18,7 @@ A source wears every desk it serves — these five answer this desk. Holdings ar
 | Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 3 November 2026)</span> |
 |---|---|---|---|---|
 | `local-language` | language dossiers | open | wired · manual | 656 dossiers |
-| `local-lemmas` | silver lemmas | open | wired · manual | 35,916,298 lemma rows |
+| `local-lemmas` | silver lemmas | open | wired · manual | 36,155,944 lemma rows |
 | `local-library` | texts | research_private | wired · manual | 159 docs / 44,871 passages |
 | `local-notes` | owner notes | open | wired · manual | 2 notes |
 | `local-source` | source records | open | wired · manual | 344 dossiers |

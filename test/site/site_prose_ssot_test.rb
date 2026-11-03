@@ -15,11 +15,13 @@ module Site
   #
   # SCOPE: the shared, drifting HEADLINE figures — library-wide document /
   # passage / code / source / dictionary / lemma totals and the desk count,
-  # plus their as-of date. Per-source and per-section detail numbers (a
-  # single corpus's counts in a table row, one dictionary's entry count, the
-  # place-program's own census) are page-local facts, out of this guard's
-  # scope; the news archive (site/news/_posts) is a dated historical record
-  # and is exempt from the FIGURE guards — but NOT from the two
+  # plus their as-of date — and, since November 2026, the per-source grain
+  # where pages TABULATE it (the /library/ collection sizes, the /sources/
+  # holdings column, /quickstart/'s disk figures), all rendered from
+  # site/_data/sources.yml. Narrative detail numbers in prose (a dated
+  # first-sync count, one dictionary's entry count, the place-program's own
+  # census) remain page-local facts, out of this guard's scope; the news
+  # archive (site/news/_posts) is a dated historical record and is exempt from the FIGURE guards — but NOT from the two
   # rendering-layer guards below (front-matter Liquid, relative_url),
   # which scan every page including posts.
   class SiteProseSsotTest < Minitest::Test
@@ -65,7 +67,14 @@ module Site
       "45 GB canonical",                # the July 2026 full-library size
       "eldest of four siblings",        # five with Edubba
       "Eighteen further registry rows", # → census.feature_modules
-      "Four further registered sources" # → census.local_shelves
+      "Four further registered sources", # → census.local_shelves
+      # The November 2026 per-source sweep: the library table's hand sizes
+      # had drifted from the page's own prose (Arabic row 9,089 / 34,632,378
+      # vs 9,079 / 34,631,499), and the quickstart disk figures were a
+      # one-off October measurement — both now render from sources.yml.
+      "9,089 / 34,632,378",
+      "117 GB canonical",
+      "159 GB of derived"
     ].freeze
 
     # Pure-headline pages whose only million-scale totals ARE the SSOT
@@ -255,6 +264,63 @@ module Site
       when Array then node.flat_map { |value| yaml_strings(value) }
       else []
       end
+    end
+
+    # -- the per-source grain (site/_data/sources.yml) --------------------------
+
+    # A cell whose figures are all Liquid output: words may sit beside the
+    # tags ("entries"), but no digit is ever typed by hand outside the braces.
+    def liquid_figures_only?(cell) = cell.include?("{{") && !cell.gsub(/\{\{.*?\}\}/, "").match?(/\d/)
+
+    # The markdown table rows that follow +header+ (separator line skipped),
+    # each split into its trimmed cells.
+    def table_rows(body, header)
+      lines = body.lines.drop_while { |line| !line.start_with?(header) }
+      refute_empty lines, "the table headed #{header.inspect} is gone"
+      rows = lines.drop(2).take_while { |line| line.start_with?("|") }
+      rows.map { |line| line.strip.delete_prefix("|").delete_suffix("|").split("|").map(&:strip) }
+    end
+
+    # The library's collection table: every row's size renders from the
+    # generated shelf totals, and every shelf the map names is a linkable
+    # row (/library/#shelf-<id>) — exactly once.
+    def test_library_collection_sizes_render_from_the_sources_data
+      body = page("library")
+      assert_includes body, "site.data.sources", "the collection table must read site.data.sources"
+      shelves = YAML.safe_load_file(File.join(SITE, "_data", "shelf_members.yml")).keys
+      anchors = table_rows(body, "| Collection |").map do |cells|
+        message = "library.md collection row #{cells[0].inspect} hand-types its size #{cells[3].inspect} — " \
+                  "render it from site.data.sources.shelves (or the census, for the reference shelf)"
+        assert liquid_figures_only?(cells[3]), message
+        cells[0][/id="shelf-([a-z0-9-]+)"/, 1].tap do |id|
+          refute_nil id, "library.md collection row #{cells[0].inspect} carries no shelf-<id> anchor"
+        end
+      end
+      assert_equal shelves.sort, (anchors - ["reference"]).sort,
+                   "every shelf in site/_data/shelf_members.yml needs exactly one /library/ table row"
+    end
+
+    # The sources page: every corpus row's holdings render from the
+    # per-source data, and every slug in a row is an anchor (/sources/#src-<slug>).
+    def test_sources_page_holdings_render_from_the_sources_data
+      table_rows(page("sources"), "| Source | Upstream project |").each do |cells|
+        message = "sources.md row #{cells[0][/`[^`]+`/]} hand-types its holdings #{cells[3].inspect} — " \
+                  "render {{ src[\"<slug>\"].holdings }} from site.data.sources"
+        assert liquid_figures_only?(cells[3]), message
+        cells[0].scan(/`([a-z0-9_-]+)`/).flatten.each do |slug|
+          assert_includes cells[0], %(id="src-#{slug}"), "sources.md row for #{slug} needs its src-#{slug} anchor"
+        end
+      end
+    end
+
+    # Quickstart's disk figures are measurements, regenerated by site:data
+    # (du over the canonical tree) — never a typed MB/GB literal in prose.
+    def test_quickstart_disk_figures_render_from_the_sources_data
+      prose = page("quickstart").gsub(/```.*?```/m, "")
+      assert_includes prose, "site.data.sources", "quickstart's sizes must read site.data.sources"
+      hits = prose.scan(/\b\d[\d.,]*\s*[MG]B\b/)
+      assert_empty hits, "site/quickstart.md hand-types disk sizes #{hits.inspect} — render them from " \
+                         "site.data.sources (canonical_display / disk.*)"
     end
 
     def test_pure_headline_pages_do_not_hardcode_million_scale_totals
