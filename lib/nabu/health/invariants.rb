@@ -278,6 +278,14 @@ module Nabu
                                        "early-modern imprint place projects instead",
                         "pub_date" => "the TCP e-text release (\"2014-11 (EEBO-TCP Phase 2).\"), " \
                                       "machinery — the imprint date projects instead" },
+        "ecco-tcp" => { "pub_place" => "the TCP project's own place (Ann Arbor / Oxford), data " \
+                                       "lineage — the eighteenth-century imprint place projects instead",
+                        "pub_date" => "the TCP e-text release (\"2007 January\"), machinery — the " \
+                                      "imprint date projects instead" },
+        "evans-tcp" => { "pub_place" => "the TCP project's own place (Ann Arbor), data lineage — the " \
+                                        "American imprint place projects instead",
+                         "pub_date" => "the TCP e-text release (\"2006-06.\"), machinery — the " \
+                                       "imprint date projects instead" },
         "corpus-corporum" => { "pub_place" => "the Patrologia Latina imprint (Parisiis, on " \
                                               "every doc) — edition lineage, not the patristic " \
                                               "works' origin",

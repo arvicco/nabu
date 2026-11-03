@@ -148,6 +148,7 @@ module Nabu
           "ebible-pacific" => :structured, # P154: each translation's edition year as eBible records
           #                                  it (1868 / 1908 / 1922, class edition) — no place claim
           "ebl" => :period_label,
+          "ecco-tcp" => :structured, # the BIBLFULL imprint envelope (the eebo-tcp lane)
           "edr" => :structured,
           "eebo-tcp" => :structured,
           "elektire" => :structured, # P117-2: the portal's century of origin as an
@@ -160,6 +161,7 @@ module Nabu
           "etcbc-targum" => :place_only, # P153: the Genizah texts' findspot ("Cairo Genizah");
           #                                no date field upstream (edition years ride
           #                                base_edition, never a date)
+          "evans-tcp" => :structured, # the BIBLFULL imprint envelope (the eebo-tcp lane)
           "extrabiblical" => :work_era, # each ETCBC book's attributed era (config/work_eras.yml,
           #                               keyed on metadata "book"); place = the find-site hash
           #                               (ancient name + Pleiades id) the adapter's table carries
@@ -339,6 +341,10 @@ module Nabu
           # no-place conventions (NO_PLACE_SHAPES). The TCP's own pub_place
           # (Ann Arbor) is lineage, exempted.
           "eebo-tcp" => %w[imprint_place imprint_place_conjecture source_pub_place],
+          # The TCP sister collections ride the same imprint stance (the
+          # print IS the document; the parse-time town answers first).
+          "ecco-tcp" => %w[imprint_place imprint_place_conjecture source_pub_place],
+          "evans-tcp" => %w[imprint_place imprint_place_conjecture source_pub_place],
           # P109-4: the ReM header's origin scriptorium ("Vorau",
           # "Siegburg (?)") — uncertainty markers ride verbatim.
           "rem" => "orig_place",

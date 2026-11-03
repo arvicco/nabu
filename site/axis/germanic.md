@@ -26,7 +26,7 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 ## The shelves
 
-A source wears every desk it serves — these 35 answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
+A source wears every desk it serves — these 37 answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
 | Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 3 November 2026)</span> |
 |---|---|---|---|---|
@@ -38,8 +38,10 @@ A source wears every desk it serves — these 35 answer this desk. Holdings are 
 | `corpus-oudfries` | texts | research_private | wired · manual | 177 docs / 14,136 passages |
 | `corpus-oudnederlands` | texts | research_private | wired · manual | 89 docs / 5,745 passages |
 | `dta` | texts | attribution | wired · manual | 5,478 docs / 729,090 passages |
+| `ecco-tcp` | texts | open | not yet wired | nothing held yet |
 | `eebo-tcp` | texts | open | wired · manual | 60,325 docs / 25,065,921 passages |
 | `emmo` | texts | attribution | not yet wired | nothing held yet |
+| `evans-tcp` | texts | open | not yet wired | nothing held yet |
 | `fornsvenska` | texts | attribution | wired · manual | 155 docs / 170,872 passages |
 | `fsv-lexica` | dictionary | attribution | wired · manual | 51,811 entries |
 | `grand-tour` | texts | attribution | not yet wired | nothing held yet |
