@@ -257,6 +257,17 @@ sources:
     passage_fields:
       places: place           # per page: the regularized <placeName> mentions (137 pages)
       persons: person         # per page: the regularized <name> mentions (182 pages)
+  grand-tour:                 # P155 — census 2026-11-03 through the adapter, 4 journals
+    fields:
+      author: author          # the title's "Author:" head (Wagener · Christian August ·
+      #                         Ludwig Rudolf · Heinrich Ferdinand)
+      places_mentioned: place_mentioned  # the register-resolved place names (242 · 34 · 90 · 0)
+      #                         — places the journeys pass, never an origin claim
+    passage_fields:
+      places: place           # per page {value, ref}: the register's name + its GeoNames /
+      #                         GND / Wikidata URL; unlinked surfaces carry no ref
+      persons: person         # per page {value, ref}: GND refs where the register has them
+      orgs: org               # per page {value, ref} (orders, councils)
   diccas:                     # 10 books (one document each)
     fields:
       disaster_types: disaster  # the catastrophe <term>s' own English translation labels,

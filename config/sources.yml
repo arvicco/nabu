@@ -2772,6 +2772,29 @@ gpc:   # P97-3
   # email; upstream announced a future site publication of the same
   # artifact. Dictionary-shaped (content_kind :dictionary, cy).
 
+grand-tour:   # P155, 02-sources row 369
+  adapter: Nabu::Adapters::GrandTour
+  adopted: "2026-11-03"
+  axes: [germanic]
+  wired: false   # bin/nabu enable grand-tour, then bin/nabu sync grand-tour — ONE Zenodo
+                 # zip (1.6 MB) read by HTTP Range: 32 files kept, the shipped .git/
+                 # (94 files) never read; seconds. EXPECT 4 docs / 515 passages, 0
+                 # errored, 28 skipped by rule + the .zip-range-fetch.json pin
+                 # (census through the adapter over the whole unpack 2026-11-03).
+                 # Eyeball nabu show urn:nabu:grand-tour:cod_guelf_89_blank:90r
+                 # (Ludwig Rudolf leaves Wolfenbüttel, 9 January 1689) and 5
+                 # random, probe nabu search "Gottorff", then flip.
+  sync_policy: frozen   # an immutable Zenodo version; a new release = an owner re-pin
+  # Grand Tour digital (Herzog August Bibliothek Wolfenbüttel, ed. Göbel /
+  # Görmar; Zenodo 23055358, 2026-09-30): four early-modern German travel
+  # journals in HAB manuscripts, 1652–1702 — Wagener the journeyman
+  # apothecary, Christian August of Schleswig-Holstein-Norburg, Duke
+  # Ludwig Rudolf's Scandinavian journey, the Bevern dukes in Italy and
+  # France. Transkribus HTR hand-corrected; NER persons/places/orgs linked
+  # through the deposit's registers to GND/GeoNames/Wikidata. CC BY-SA 4.0
+  # (LICENSE + record) → attribution. Document = journal, passage = page;
+  # the 20 editorial introductions and the registers are not documents.
+
 gretil:
   adapter: Nabu::Adapters::Gretil
   adopted: "2026-07-08"
