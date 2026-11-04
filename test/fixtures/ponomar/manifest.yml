@@ -1,0 +1,65 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# Ponomar's delivery unit is the git repo (typiconman/ponomar, master
+# 0af645f); each fixture is one WHOLE upstream file at its upstream path,
+# fetched here by its raw.githubusercontent URL. The repo moves, so files
+# are fetched for URL-liveness only, never byte-compared (whole: false),
+# and the count-based adapter test is not re-run against it
+# (adapter_test: null).
+source: ponomar
+adapter_test:
+retrieved: 2026-11-04
+files:
+  - path: "Ponomar/languages/cu/xml/Services/Command/Bow.xml"
+    url: "https://raw.githubusercontent.com/typiconman/ponomar/0af645f/Ponomar/languages/cu/xml/Services/Command/Bow.xml"
+    whole: false
+    trim: whole upstream file at retrieval (the repo moves)
+  - path: "Ponomar/languages/cu/xml/Services/CommonPrayers/Ending.xml"
+    url: "https://raw.githubusercontent.com/typiconman/ponomar/0af645f/Ponomar/languages/cu/xml/Services/CommonPrayers/Ending.xml"
+    whole: false
+    trim: whole upstream file at retrieval (the repo moves)
+  - path: "Ponomar/languages/cu/xml/Services/CommonPrayers/KONTAKION/FRI5.xml"
+    url: "https://raw.githubusercontent.com/typiconman/ponomar/0af645f/Ponomar/languages/cu/xml/Services/CommonPrayers/KONTAKION/FRI5.xml"
+    whole: false
+    trim: whole upstream file at retrieval (the repo moves)
+  - path: "Ponomar/languages/cu/xml/Services/CommonPrayers/NiceneCreed.xml"
+    url: "https://raw.githubusercontent.com/typiconman/ponomar/0af645f/Ponomar/languages/cu/xml/Services/CommonPrayers/NiceneCreed.xml"
+    whole: false
+    trim: whole upstream file at retrieval (the repo moves)
+  - path: "Ponomar/languages/cu/xml/Services/CommonPrayers/SufferingLord.xml"
+    url: "https://raw.githubusercontent.com/typiconman/ponomar/0af645f/Ponomar/languages/cu/xml/Services/CommonPrayers/SufferingLord.xml"
+    whole: false
+    trim: whole upstream file at retrieval (the repo moves)
+  - path: "Ponomar/languages/cu/xml/Services/CommonPrayers/Template.xml"
+    url: "https://raw.githubusercontent.com/typiconman/ponomar/0af645f/Ponomar/languages/cu/xml/Services/CommonPrayers/Template.xml"
+    whole: false
+    trim: whole upstream file at retrieval (the repo moves)
+  - path: "Ponomar/languages/cu/xml/Services/CommonPrayers/TROPARION/TUES7.xml"
+    url: "https://raw.githubusercontent.com/typiconman/ponomar/0af645f/Ponomar/languages/cu/xml/Services/CommonPrayers/TROPARION/TUES7.xml"
+    whole: false
+    trim: whole upstream file at retrieval (the repo moves)
+  - path: "Ponomar/languages/cu/xml/Services/Octoecheos/Tone 1/Monday.xml"
+    url: "https://raw.githubusercontent.com/typiconman/ponomar/0af645f/Ponomar/languages/cu/xml/Services/Octoecheos/Tone%201/Monday.xml"
+    whole: false
+    trim: whole upstream file at retrieval (the repo moves)
+  - path: "Ponomar/languages/cu/xml/Services/Text/Third1.xml"
+    url: "https://raw.githubusercontent.com/typiconman/ponomar/0af645f/Ponomar/languages/cu/xml/Services/Text/Third1.xml"
+    whole: false
+    trim: whole upstream file at retrieval (the repo moves)
+  - path: "Ponomar/languages/cu/xml/Services/Text/ThirdHour.xml"
+    url: "https://raw.githubusercontent.com/typiconman/ponomar/0af645f/Ponomar/languages/cu/xml/Services/Text/ThirdHour.xml"
+    whole: false
+    trim: whole upstream file at retrieval (the repo moves)
+  - path: "Ponomar/languages/cu/xml/Services/Text/ThirdSource.xml"
+    url: "https://raw.githubusercontent.com/typiconman/ponomar/0af645f/Ponomar/languages/cu/xml/Services/Text/ThirdSource.xml"
+    whole: false
+    trim: whole upstream file at retrieval (the repo moves)
+  - path: "Ponomar/languages/cu/xml/Services/Var/PKath3.xml"
+    url: "https://raw.githubusercontent.com/typiconman/ponomar/0af645f/Ponomar/languages/cu/xml/Services/Var/PKath3.xml"
+    whole: false
+    trim: whole upstream file at retrieval (the repo moves)
+  - path: "Ponomar/languages/cu/xml/Services/Var/STYX61C.xml"
+    url: "https://raw.githubusercontent.com/typiconman/ponomar/0af645f/Ponomar/languages/cu/xml/Services/Var/STYX61C.xml"
+    whole: false
+    trim: whole upstream file at retrieval (the repo moves)

@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require "nokogiri"
+require_relative "source_read"
 
 module Nabu
   module Adapters
@@ -250,7 +251,7 @@ module Nabu
       def accepted?(record) = TEXT_ROOTS.include?(record.root) && classify_text(record).first == :accept
 
       def read_record(path)
-        xml = File.read(path, encoding: "UTF-8").delete_prefix("﻿")
+        xml = SourceRead.utf8_file(path, label: "ponomar").delete_prefix("﻿")
         doc = Nokogiri::XML(xml)
         return nil unless doc.root && doc.errors.none? { |e| e.level >= 2 }
 

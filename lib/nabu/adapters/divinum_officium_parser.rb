@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require_relative "../normalize"
+require_relative "source_read"
 
 module Nabu
   module Adapters
@@ -154,11 +155,7 @@ module Nabu
       private
 
       def lines_of(path)
-        raw = File.binread(path).force_encoding(Encoding::UTF_8)
-        unless raw.valid_encoding?
-          raise Nabu::ParseError, "#{path}: not valid UTF-8 (upstream's deprecated Windows-1252 form?)"
-        end
-
+        raw = SourceRead.utf8_file(path, label: "divinum-officium")
         Nabu::Normalize.nfc(raw.delete_prefix("﻿")).split("\n").map { |line| line.delete_suffix("\r").rstrip }
       end
 

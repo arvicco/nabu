@@ -169,6 +169,10 @@ class DerivabilityWritersTest < Minitest::Test
   # texts/<shelf>/<page>.html service pages, tmp+rename; attic copies +
   # its .glt-fetch.json ledger) inside Adapter#fetch — the same crawl law
   # kind.
+  # cantus_fetch writes canonical/cantus/ (the json-sources manifest, the
+  # paged browse listing, one CSV export per manuscript source, tmp+rename;
+  # attic copies of replaced exports + its .cantus-fetch.json ledger)
+  # inside Adapter#fetch — the same crawl law kind.
   # The paramara adapter writes canonical/paramara/ (the community
   # listing records.json and each text record's <record id>/<file>.txt,
   # tmp+rename, never deleting) inside Adapter#fetch — the same crawl
@@ -246,7 +250,7 @@ class DerivabilityWritersTest < Minitest::Test
     nabu/kanripo_fetch.rb nabu/lfs_fetch.rb nabu/local_fetch.rb
     nabu/menota_fetch.rb
     nabu/manual_drop.rb nabu/ochre_fetch.rb nabu/otdo_fetch.rb
-    nabu/lotsawa_fetch.rb nabu/glt_fetch.rb nabu/hf_rows_fetch.rb nabu/zip_range_fetch.rb
+    nabu/lotsawa_fetch.rb nabu/glt_fetch.rb nabu/cantus_fetch.rb nabu/hf_rows_fetch.rb nabu/zip_range_fetch.rb
     nabu/poma_fetch.rb nabu/bu_ajami_fetch.rb
     nabu/seal_fetch.rb nabu/aio_fetch.rb
     nabu/sefaria_fetch.rb nabu/titus_fetch.rb nabu/url_download.rb
