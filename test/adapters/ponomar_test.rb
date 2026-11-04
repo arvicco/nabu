@@ -145,12 +145,12 @@ module Adapters
       assert_equal "chu:ncs", lects.resolve("chu", source: "ponomar")
     end
 
-    def test_registry_row_is_unwired_and_manual
+    def test_registry_row_is_wired_and_manual
       registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources.yml", __dir__))
       entry = registry["ponomar"]
       refute_nil entry
       assert_equal Nabu::Adapters::Ponomar, entry.adapter_class
-      refute entry.wired, "wired: false until the first real sync is verified"
+      assert entry.wired, "wired after the verified first sync of 2026-11-04 (246 docs / 246 passages, exactly the census)"
       assert_equal "manual", entry.sync_policy
     end
 
