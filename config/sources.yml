@@ -7710,6 +7710,29 @@ vulgate:
   # occasionally updated: re-syncable, not on a live schedule.
   sync_policy: manual
 
+wenhai:   # P156, 02-sources row 378
+  adapter: Nabu::Adapters::Wenhai
+  adopted: "2026-11-04"
+  axes: [sinitic]   # the Wenhai is a rhyme dictionary on the Chinese model (fanqie spelling,
+                    # tone-rhyme order) — the Sinologist's phonology instruments (Baxter-Sagart,
+                    # the Qieyun database) are its comparanda; no Tangut desk exists
+  wired: false   # expect 1 dictionary document → 3,085 txg entries (= the record's count),
+                 # 0 errored, 2 deposit docs skipped by rule; four sha256-pinned Zenodo files
+                 # (~370 KB). Eyeball nabu define 𘀏 (05.131, fanqie 𗈽𗒿) and the restored
+                 # head 𗭹 (83.251 + 84.232), then flip.
+  # The Digital Wenhai v1.1 "Phonology" (Mathieu Beaudouin, Cambridge;
+  # Zenodo 22817676, 2026-09-17): the Wenhai 文海, the native Tangut rhyme
+  # dictionary, as one entry per source position — Unicode Tangut head,
+  # rhyme-system place, Li Fanwen number, TYYJ initial, fanqie-derived
+  # initial/rhyme chain IDs, Gong and Beaudouin reconstructions — joined to
+  # the fanqie statement governing it (02b_fanqie_groups.csv; spellers as
+  # crossrefs). Glossless: v1.1 carries no definitions. LICENSE: Zenodo
+  # field cc-by-4.0 + LICENSE.txt "licensed under the Creative Commons
+  # Attribution 4.0 International Licence (CC BY 4.0)" (verified
+  # 2026-11-04) → attribution. Zenodo versions are immutable → manual (a
+  # new version is an owner re-pin).
+  sync_policy: manual
+
 westoldturkic:   # P108-7
   adapter: Nabu::Adapters::Westoldturkic
   adopted: "2026-09-29"

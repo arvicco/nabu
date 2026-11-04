@@ -1396,6 +1396,21 @@ sources:
         bodies — a dictionary shelf, no document timeline}
     places: {posture: unplaced}
     script: {posture: implied}
+  wenhai:   # P156
+    kind: {posture: unclassified, note: "a dictionary shelf (content_kind dictionary) — the kind
+        axis folds documents only, so a kind_map row would be inert; the Wenhai is a rhyme
+        dictionary (lexical) by its own title"}
+    lect: {posture: identity, note: "txg — the nabu-lects anchor (Tangut, parent tbq, band
+        1036–1502, its note naming the Digital Wenhai as a consumer); the registry holds no
+        Tangut stages, so the bare code is the whole claim"}
+    dating: {posture: undatable, note: "a dictionary shelf — the deposit carries no dates; the
+        work's own era (compiler and date unknown, 'already in existence during the second half
+        of the eleventh century', the deposit README citing Hamada 2024) is a curated-band
+        candidate, declared not faked"}
+    places: {posture: unplaced}
+    script: {posture: implied, note: "Unicode Tangut heads (txg~tang; the tang script row and
+        its ScriptCheck mirror exist); the Gong and Beaudouin reconstructions are romanized
+        readings riding entry bodies, not a second lane"}
   wilkens-oui:
     kind: {posture: unclassified}
     lect: {posture: identity, note: "oui — the nabu-lects anchor (parent otk, band 800–1400);
