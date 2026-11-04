@@ -260,6 +260,9 @@ module Nabu
           "ogham" => :century_prose,
           "okhc" => :year_key,
           "openmgh" => :printed_year_text,
+          "otdo" => :date_text_prose, # the header's free-prose Date ("ca. 797, end of the reign of
+          #                             Khri srong lde brtsan", "780-800?", "post 763") read into
+          #                             an envelope, the prose riding verbatim as the raw
           "papyri-ddbdp" => :structured, # the DCLP literary documents' header origDate
           #                                envelope + findspot (PapyriHeader); the DDbDP
           #                                texts carry no date/place keys — their rows are
@@ -274,10 +277,15 @@ module Nabu
           #                         19xx, the court testimony's range); place = the dialect's
           #                         town/region localization (Regensburg, Cracow, Prague …)
           "prague-bible-1488" => :structured,
+          "prakrit-texts" => :source_edition_year, # the printed edition each TEI follows
+          #                                         (sourceDesc → source_edition.date: Pischel
+          #                                         1880, Jacobi 1962), class edition; its
+          #                                         imprint city is lineage, no place claim
           "prilit" => :year_range,
           "pta" => :structured, # P154: the work's dct:created span (class composition); the
           #                       catalog's unfilled 0030–0800 default mints none; place =
-          #                       the work's dct:spatial Pleiades id
+          #                       the work's dct:spatial Pleiades id. A work without a span
+          #                       falls back to its edition's year (EDITION_FALLBACK)
           "ref" => :structured,
           "rem" => :structured,
           "ren" => :structured,
@@ -499,6 +507,19 @@ module Nabu
           "eebo-tcp" => %w[eebo_phase1_IDs_and_dates.txt EEBO_Phase2_IDs_and_dates.txt].freeze
         }.freeze
 
+        # The mining-law sweep, dates half: sources whose documents carry
+        # an EDITION year beside the shape's own (finer) dating — slug =>
+        # the metadata keys tried in order when the shape mints no bound.
+        # A FALLBACK only, the SIDECAR_DATES stance: a document the shape
+        # dates keeps its own row (one row per document); the fallback row
+        # wears date_class "edition", never the composition class. pta:
+        # the edition's dct:dateCopyrighted year ("edition_year"), else the
+        # TEI sourceDesc print year ("source_date") — 21 of 113 works carry
+        # no composition span (census 2026-11-04).
+        EDITION_FALLBACK = {
+          "pta" => %w[edition_year source_date].freeze
+        }.freeze
+
         # One side of a TCP list date: four characters, digits or "u"
         # (unknown digit — widened to 0 on the lower side, 9 on the upper),
         # an optional "?" (the list's own uncertainty mark; the bounds stay
@@ -613,6 +634,9 @@ module Nabu
              (years = tcp_list_years(list_raw))
             not_before, not_after = years
             raw = list_raw
+          end
+          if not_before.nil? && not_after.nil? && (fallback = edition_fallback(meta, slug))
+            not_before, not_after, raw, precision, own_class = fallback
           end
           not_before, not_after = Timeline.normalize_interval(not_before, not_after, raw: raw) if reorder
           place, place_ref, lat, lon = if shape == :archive_axes
@@ -1115,6 +1139,72 @@ module Nabu
           return [nil, nil, nil] if years.empty?
 
           [years.min, years.max, text.to_s.strip, nil, "edition"]
+        end
+
+        # prakrit-texts: the source edition hash's print year (the Ollett
+        # TEI sourceDesc, metadata source_edition.date), class edition.
+        def source_edition_year(meta)
+          edition = meta["source_edition"]
+          edition.is_a?(Hash) ? edition_years(edition["date"]) : [nil, nil, nil]
+        end
+
+        # The EDITION_FALLBACK tuple for one document, or nil when the
+        # source declares none or no key carries a year.
+        def edition_fallback(meta, slug)
+          Array(EDITION_FALLBACK[slug]).each do |key|
+            tuple = edition_years(meta[key])
+            return tuple unless tuple.first.nil?
+          end
+          nil
+        end
+
+        # otdo: the header's free-prose Date (every distinct live value
+        # censused 2026-11-04 — 28 of 413 documents carry one). Every
+        # 3–4-digit year joins the envelope ("780-800?", "composed 821-822,
+        # erected 823", "suggested dates are 779 or 791"); a decade
+        # ("820s") spans its ten years; a digit-ordinal century ("late
+        # 9th-10th century", "9th c.") bands through the century grammar;
+        # a lone "post N"/"ante N" is ONE open bound — never a guessed
+        # other side. Hedges (ca., ?) ride the verbatim raw, never widen
+        # the bounds; prose without a year ("undatable", "unknown", "?")
+        # mints nothing. Class-less: OTDO dates the manuscript or
+        # inscription itself.
+        PROSE_YEAR = /(?<!\d)(\d{3,4})(s?)(?!\d)/
+        PROSE_CENTURY = /(?:\b(early|mid|late)[- ])?(?<!\d)(\d{1,2})(?:st|nd|rd|th)\b/i
+        PROSE_OPEN_BOUND = /\A(post|ante)\s+(\d{3,4})\z/i
+
+        def date_text_prose(meta)
+          text = meta["date_text"].to_s.strip
+          if (open = PROSE_OPEN_BOUND.match(text))
+            year = Integer(open[2], 10)
+            return open[1].casecmp?("post") ? [year, nil, text] : [nil, year, text]
+          end
+          spans = prose_years(text) + prose_centuries(text)
+          return [nil, nil, nil] if spans.empty?
+
+          [spans.map(&:first).min, spans.map(&:last).max, text]
+        end
+
+        def prose_years(text)
+          text.scan(PROSE_YEAR).map do |digits, decade|
+            year = Integer(digits, 10)
+            decade.empty? ? [year, year] : [year, year + 9]
+          end
+        end
+
+        def prose_centuries(text)
+          text.scan(PROSE_CENTURY).filter_map do |half, digits|
+            n = Integer(digits, 10)
+            next if n.zero?
+
+            base = [(n - 1) * 100, n * 100]
+            case half&.downcase
+            when "early" then [base[0], base[0] + 50]
+            when "late" then [base[0] + 50, base[1]]
+            when "mid" then [base[0] + 25, base[1] - 25]
+            else base
+            end
+          end
         end
 
         # ja-wikisource (P109-1): the adapter's era-category envelope —

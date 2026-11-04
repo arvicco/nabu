@@ -748,6 +748,75 @@ module Store
       assert_equal [2001, 2001, "edition"], m1.values_at(:not_before, :not_after, :date_class)
     end
 
+    # The mining-law sweep, dates half: OTDO's free-prose Date field (every
+    # distinct live value censused 2026-11-04) reads into an envelope —
+    # years, ranges, decades, ordinal centuries, post/ante as one open
+    # bound; hedges ("?", "ca.") ride the raw; prose with no year mints
+    # nothing.
+    def test_metadata_dates_otdo_date_text_prose
+      values = {
+        "a" => "ca. 797, end of the reign of Khri srong lde brtsan",
+        "b" => "780-800?",
+        "c" => "reign of Khri lde srong brtsan (799 ?-815)",
+        "d" => "820s-830s",
+        "e" => "late 9th-10th century.",
+        "f" => "post 763",
+        "g" => "ante 757",
+        "h" => "composed 821-822, erected 823",
+        "i" => "at or near the founding of Bsam yas (suggested dates are 779 or 791)",
+        "j" => "undatable",
+        "k" => "?"
+      }
+      values.each { |id, text| seed_metadata_doc("otdo", "urn:nabu:otdo:#{id}", { "date_text" => text }) }
+      build!
+      expected = { "a" => [797, 797], "b" => [780, 800], "c" => [799, 815], "d" => [820, 839],
+                   "e" => [850, 1000], "f" => [763, nil], "g" => [nil, 757], "h" => [821, 823],
+                   "i" => [779, 791] }
+      expected.each do |id, bounds|
+        row = timeline_for("urn:nabu:otdo:#{id}")
+        assert_equal bounds, [row[:not_before], row[:not_after]], values[id]
+        assert_equal values[id], row[:date_raw], "the prose rides verbatim"
+        assert_nil row[:date_class], "the manuscript/inscription's own dating — artifact class"
+      end
+      assert_nil timeline_for("urn:nabu:otdo:j"), "undatable mints nothing"
+      assert_nil timeline_for("urn:nabu:otdo:k"), "a bare query mark mints nothing"
+    end
+
+    # prakrit-texts: the printed edition each TEI follows (the header's
+    # sourceDesc → metadata source_edition.date: Pischel 1880, Jacobi 1962)
+    # projects as an edition-class date; no edition, no row.
+    def test_metadata_dates_prakrit_source_edition_year
+      seed_metadata_doc("prakrit-texts", "urn:nabu:prakrit-texts:p1",
+                        { "source_edition" => { "date" => "1880", "pub_place" => "Bombay" } })
+      seed_metadata_doc("prakrit-texts", "urn:nabu:prakrit-texts:p2", { "title" => "no edition" })
+      build!
+      p1 = timeline_for("urn:nabu:prakrit-texts:p1")
+      assert_equal [1880, 1880, "edition"], p1.values_at(:not_before, :not_after, :date_class)
+      assert_nil p1[:place_name], "the imprint city is edition lineage, never a place claim"
+      assert_nil timeline_for("urn:nabu:prakrit-texts:p2")
+    end
+
+    # pta: the work's composition span answers first; a work without one
+    # (upstream's unfilled 0030–0800 default, a bare dash) falls back to
+    # the edition it follows — edition_year (dct:dateCopyrighted), else
+    # the TEI sourceDesc source_date — as an edition-class row.
+    def test_metadata_dates_pta_edition_fallback
+      seed_metadata_doc("pta", "urn:nabu:pta:w1",
+                        { "date" => { "not_before" => 401, "not_after" => 404, "raw" => "0401–0404",
+                                      "class" => "composition" },
+                          "edition_year" => "1862", "source_date" => "1862" })
+      seed_metadata_doc("pta", "urn:nabu:pta:w2", { "created_raw" => "0030–0800", "edition_year" => "1934–1935" })
+      seed_metadata_doc("pta", "urn:nabu:pta:w3", { "source_date" => "1842" })
+      build!
+      w1 = timeline_for("urn:nabu:pta:w1")
+      assert_equal [401, 404, "composition"], w1.values_at(:not_before, :not_after, :date_class),
+                   "the composition span outranks the edition"
+      w2 = timeline_for("urn:nabu:pta:w2")
+      assert_equal [1934, 1935, "edition", "1934–1935"], w2.values_at(:not_before, :not_after, :date_class, :date_raw)
+      w3 = timeline_for("urn:nabu:pta:w3")
+      assert_equal [1842, 1842, "edition"], w3.values_at(:not_before, :not_after, :date_class)
+    end
+
     # P109-4: the eebo imprint place — the document IS the early-modern
     # print, so its imprint place is a real place claim, cleaned of the
     # ESTC transcription furniture; sine-loco marks mint nothing.
