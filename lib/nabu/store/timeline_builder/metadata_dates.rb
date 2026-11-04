@@ -92,6 +92,8 @@ module Nabu
           #                       and the translation rows when it carries them (owner-ruled
           #                       2026-11-03: a translation rows when it is the work's only
           #                       held document; TRANSLATION_ROWS below)
+          "analecta-hymnica" => :structured, # each volume's print year, class "edition" (the hymns
+          #                                    are medieval; the imprint rides "imprint" — no place)
           "aozora" => :structured, # the index's 初出 first publication (class composition),
           #                          else the 底本 first-edition year (class edition)
           "archiv-slav-phil" => :structured, # each volume's title-page year

@@ -1,0 +1,80 @@
+{
+ "files": [
+  {
+   "format": "Text PDF",
+   "name": "analectahymnicam13drev_0.pdf",
+   "size": "36983627",
+   "source": "derivative"
+  },
+  {
+   "format": "OCR Page Index",
+   "name": "analectahymnicam13drev_0_hocr_pageindex.json.gz",
+   "size": "7071",
+   "source": "derivative"
+  },
+  {
+   "format": "OCR Search Text",
+   "name": "analectahymnicam13drev_0_hocr_searchtext.txt.gz",
+   "size": "447300",
+   "source": "derivative"
+  }
+ ],
+ "files_count": 23,
+ "metadata": {
+  "addeddate": "2013-05-28 12:26:53",
+  "associated-names": "Blume, Clemens, 1862-1932",
+  "backup_location": "ia905701_14",
+  "bookplateleaf": "0010",
+  "call_number": "SCC #5415",
+  "camera": "Canon EOS 5D Mark II",
+  "collection": [
+   "Princeton",
+   "americana"
+  ],
+  "contributor": "Princeton Theological Seminary Library",
+  "creator": [
+   "Dreves, Guido Maria, 1854-1909",
+   "Blume, Clemens, 1862-1932"
+  ],
+  "date": "1886",
+  "description": [
+   "Texts of hymns chiefly Latin, notes in German",
+   "Some vols. edited by Clemens Blume"
+  ],
+  "external-identifier": "urn:oclc:record:1039522457",
+  "foldoutcount": "0",
+  "identifier": "analectahymnicam13drev_0",
+  "identifier-access": "http://archive.org/details/analectahymnicam13drev_0",
+  "identifier-ark": "ark:/13960/t61567b80",
+  "imagecount": "594",
+  "language": "ger",
+  "mediatype": "texts",
+  "notes": "No table-of-contents pages found.",
+  "ocr": "ABBYY FineReader 8.0",
+  "ocr_converted": "abbyy-to-hocr 1.1.7",
+  "ocr_module_version": "0.0.13",
+  "page-progression": "lr",
+  "page_number_confidence": "84",
+  "page_number_module_version": "1.0.5",
+  "ppi": "500",
+  "publicdate": "2013-05-28 11:20:04",
+  "publisher": "Leipzig : R. Reisland",
+  "repub_seconds": "222",
+  "repub_state": "4",
+  "republisher_date": "20130625142712",
+  "scandate": "20130624183147",
+  "scanfee": "100",
+  "scanner": "scribe1.nj.archive.org",
+  "scanningcenter": "nj",
+  "shiptracking": "Cart238",
+  "sponsor": "Princeton Theological Seminary Library",
+  "sponsordate": "20130630",
+  "subject": [
+   "Hymns, Latin",
+   "Hymns, Latin"
+  ],
+  "title": "Analecta hymnica medii aevi",
+  "updatedate": "2013-05-28 12:26:51",
+  "volume": "v. 1-3"
+ }
+}

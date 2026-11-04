@@ -1,0 +1,87 @@
+{
+ "files": [
+  {
+   "format": "Text PDF",
+   "name": "Analecta Hymnica Medii Aevii. 55. vols/Analecta Hymnica Medii Aevi, Vol. 1.pdf",
+   "size": "13734029",
+   "source": "original"
+  },
+  {
+   "format": "OCR Page Index",
+   "name": "Analecta Hymnica Medii Aevii. 55. vols/Analecta Hymnica Medii Aevi, Vol. 1_hocr_pageindex.json.gz",
+   "size": "2459",
+   "source": "derivative"
+  },
+  {
+   "format": "OCR Search Text",
+   "name": "Analecta Hymnica Medii Aevii. 55. vols/Analecta Hymnica Medii Aevi, Vol. 1_hocr_searchtext.txt.gz",
+   "size": "144555",
+   "source": "derivative"
+  },
+  {
+   "format": "Text PDF",
+   "name": "Analecta Hymnica Medii Aevii. 55. vols/Analecta Hymnica Medii Aevi, Vol. 28.pdf",
+   "size": "37973226",
+   "source": "original"
+  },
+  {
+   "format": "OCR Page Index",
+   "name": "Analecta Hymnica Medii Aevii. 55. vols/Analecta Hymnica Medii Aevi, Vol. 28_hocr_pageindex.json.gz",
+   "size": "6654",
+   "source": "derivative"
+  },
+  {
+   "format": "OCR Search Text",
+   "name": "Analecta Hymnica Medii Aevii. 55. vols/Analecta Hymnica Medii Aevi, Vol. 28_hocr_searchtext.txt.gz",
+   "size": "386669",
+   "source": "derivative"
+  },
+  {
+   "format": "Text PDF",
+   "name": "Analecta Hymnica Medii Aevii. 55. vols/Analecta Hymnica Medii Aevi, Vol. 48.pdf",
+   "size": "21800900",
+   "source": "original"
+  },
+  {
+   "format": "OCR Page Index",
+   "name": "Analecta Hymnica Medii Aevii. 55. vols/Analecta Hymnica Medii Aevi, Vol. 48_hocr_pageindex.json.gz",
+   "size": "4074",
+   "source": "derivative"
+  },
+  {
+   "format": "OCR Search Text",
+   "name": "Analecta Hymnica Medii Aevii. 55. vols/Analecta Hymnica Medii Aevi, Vol. 48_hocr_searchtext.txt.gz",
+   "size": "252949",
+   "source": "derivative"
+  }
+ ],
+ "files_count": 554,
+ "metadata": {
+  "addeddate": "2023-01-30 22:46:53",
+  "collection": [
+   "opensource",
+   "community"
+  ],
+  "curation": "[curator]jscott@archive.org[/curator][date]20251230175137[/date][state]un-dark[/state][comment]Undarked During Discussion[/comment]",
+  "description": "Analecta Hymnica Medii Aevi",
+  "identifier": "analecta-hymnica-medii-aevi",
+  "identifier-access": "http://archive.org/details/analecta-hymnica-medii-aevi",
+  "identifier-ark": "ark:/13960/s2c8z09x4gr",
+  "mediatype": "texts",
+  "noarchivetorrent": "true",
+  "ocr": "tesseract 5.3.0-1-gd3a4",
+  "ocr_autonomous": "true",
+  "ocr_detected_lang": "la",
+  "ocr_detected_lang_conf": "1.0000",
+  "ocr_detected_script": "Latin",
+  "ocr_detected_script_conf": "0.9945",
+  "ocr_module_version": "0.0.18",
+  "ocr_parameters": "-l lat+deu+Latin",
+  "page_number_confidence": "95.17",
+  "ppi": "400",
+  "publicdate": "2023-01-30 22:46:53",
+  "scanner": "Internet Archive HTML5 Uploader 1.7.0",
+  "subject": "Analecta Hymnica Medii Aevi",
+  "title": "Analecta Hymnica Medii Aevi"
+ }
+}
