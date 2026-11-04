@@ -158,6 +158,19 @@ sources:
   # manuscript copy date — the P108-4 posture note).
   kokubunken:
     jpn: { lect: "jpn:emj", tier: certain }
+  # ninjal-textdb's Kirishitan slice is the Jesuit mission press's
+  # romanized Japanese: the Amakusa Feiqe (1592) and Esopo (1593), the
+  # Contemptus Mundi (1596) and the Nippo Jisho headwords (1603) — the
+  # material the registry's own jpn:lmj note names ("the Christian-mission
+  # romanizations (Nippo Jisho 1603 documents its close)"); the 1603 print
+  # sits at the band's conventional edge, which the note itself places
+  # there. The held surface is the original Latin-script romanization (the
+  # kanji-kana layer rides annotations), so the ~latn surface claim lands
+  # here — the ppchy yi~latn shape; no jpn-Latn codemap row exists, and the
+  # adapter codes bare jpn. Tier certain: upstream's own work dates and the
+  # registry note agree.
+  ninjal-textdb:
+    jpn: { lect: "jpn:lmj~latn", tier: certain }
   # P116-1's add-then-retire completed (2026-10-11; the Slavic nabu-lects
   # package minted cs with cs:old [1100, 1500], in canonical): the Prague
   # Bible of 1488 IS Old Czech by every periodization (staročeština to

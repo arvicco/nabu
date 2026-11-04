@@ -1,0 +1,73 @@
+﻿天草版伊曽保物語（ローマ字翻字テキスト）
+
+----------------------------------------------------------------------------------
+凡例
+1.頁移りは原本に従い、原本に付された頁番号をその頁の冒頭において括弧書きで示した。頁番号の記載のない冒頭部は（扉）、（序）とした。
+2.原本の改行に従い改行をし、各行の先頭に行番号を半角数字で入力した。行番号は頁内の通し番号である。
+3.アルファベットは原本の表記どおりのものを使用した。ポルトガル式ローマ字に固有の「à／â／ã」「ô／ŏ／õ」などのアルファベットや、「s／ſ」の区別も再現した。
+4.句読点に相当する記号「,／.／;／:／!／?」は原本で使用されているものを再現した。
+5.原本の文字のつぶれ等により判読が困難な箇所は■で示した。
+6.アルファベット間にスペースがある箇所にはスペースを挿入し、分かち書きがされていることを示した。
+7.単語の途中で改行されることを示す「‐」も翻字対象とした。
+8.本文の欄外に記された柱の語、改頁の際のつなぎ言葉等は翻字対象外とした。
+9.明らかに原本の書き誤りと見られる箇所も修正は加えず、原本どおりに翻字した。
+----------------------------------------------------------------------------------
+
+
+（扉）
+1	ESOPONO
+2	FABVLAS.
+3	Latinuo vaxite Nippon no
+4	cuchito nasu mono nari.
+5	IEVS NO COMPANHIA NO
+6	Collegio Amacuſani voite Superiores no gomen-
+7	qiotoxite coreuo fanni qizamu mono nari.
+8	Goxuxxe yori M.D.L.ⅩⅩⅩⅩⅢ.
+
+（序）
+1	DOCVIVNO FITOYE TAIXI-
+2	TE XOSV.
+3	Sôjite fitoua mimonaqi tauamuregotoniua mi-
+4	miuo catamuqe,xinjitno qeôqeuoba qiquni tai-
+5	cut ſuruni yotte,mimigicaqi cotouo atçume,cono
+6	monogatariuo fanni qizamucoto,tatoyeba jumo-
+7	cuuo aiſuruni cotonarazu;ſonoyuyeua vyeqiniua
+8	yeqinaqi yedafa vouoxito iyedomo,ſono nacani
+9	yoqi mi aruvomotte yedafauo muyôto vomouanu-
+10	ga gotoqu nari.Carugayuyeni Superioresno vôxe
+11	vomotte cono monogatariuo Latinyori Nipponno
+12	cotobani yauarague,iroirono xenzacuno nochi,
+13	fanni firacaruru nari.Core macotoni Nipponno
+14	cotoba qeicono tameni tayorito naru nominarazu,
+15	yoqi michiuo fitoni voxiye cataru tayoritomo na-
+16	rubeqi mono nari.
+
+（409）
+1	ESOPO GA XO-
+2	gaino monogatari riacu.
+3	COREVO MAXIMO PLANVDE
+4	toyŭ fito Gregono cotobayori Latinni fon-
+5	yacu xerarexi mono nari.
+6	EVROPA no vchi Phrigiatoyŭ cunino Tro-
+7	ia toyŭ jŏrino qinpenni Amoniato yŭ ſatoga
+8	vogiaru.Sono ſatoni nauoba Eſopoto yŭ-
+9	te,yguiŏ fuxiguina jintaiga vogiattaga,ſono jidai
+10	Europano tencani cono fitoni maſatte minicui mo-
+11	nomo vorinacattato qicoyeta.Mazzu cŏbeua toga-
+12	ri,manacoua tçubô xicamo dete,fitomino ſaqiua
+13	tairacani,riŏno fôua tare,cubiua yugami,taqe-
+14	ua ficŭ,yocobarini,xeua cugumi,faraua fare,
+15	taredete,cotobaua domoride vogiatta.Corerano
+16	ſugata vomotte minicuicoto tenca busŏde atta goto
+17	qu,chiyeno taqeta monomo cono fitoni narabu co-
+18	toua vorinacatta.
+19	Arutoqi xujin Eſopoga vyeuo vomouaruru yŏ-
+20	ua:cugaino ſabaqi,aruiua naixôno toriatçucai na-
+21	doua icanimo niyŏmajijto miyureba,xemete nônin
+22	no xoſauo naritomo ategauŏzuto vomoi ſadame,
+
+----------------------------------------------------------------------------------
+底本：大英図書館蔵本（Or.59.aa.1)
+翻字担当者：片山久留美、渡辺由貴、金子愛、藤原慧悟、堀麻美、堀川千晶
+更新履歴：
+2019年3月25日公開

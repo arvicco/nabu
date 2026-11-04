@@ -6,7 +6,7 @@ compatibility: "Requires the nabu MCP server (`bin/nabu mcp`, read-only, stdio) 
 metadata:
   desk: buddhist
   origin: generated
-  sources: "bdrc-transcriptions cbeta derge-kangyur derge-tengyur dpd e84000 gretil lotsawa-house mvp osbct sarit suttacentral tipitaka-lk"
+  sources: "bdrc-transcriptions cbeta derge-kangyur derge-tengyur dpd e84000 gretil lotsawa-house mvp osbct ptg sarit suttacentral tipitaka-lk"
 ---
 
 # The Buddhologist — the `buddhist` desk
@@ -33,6 +33,7 @@ verbatim upstream terms are in `docs/02-sources.md` of the Nabu repository.
 | `lotsawa-house` | Lotsawa House — Tibetan Buddhist texts and translations | nc |
 | `mvp` | Mahāvyutpatti — Sanskrit–Tibetan–Chinese glossary (DILA TEI edition) | open |
 | `osbct` | Sixth Buddhist Council Tipiṭaka (Chaṭṭhasaṅgītipiṭaka) — Unicode corpus (IEBH / BTHAR) | nc |
+| `ptg` | Pentaglot Dictionary of Buddhist Terms — Sanskrit–Manchu–Mongolian–Chinese (DILA TEI edition) | attribution |
 | `sarit` | SARIT — Search and Retrieval of Indic Texts (scholarly TEI editions) | attribution |
 | `suttacentral` | SuttaCentral — bilara-data segmented canon (Pali Tipiṭaka + Chinese Āgamas + aligned English) | open |
 | `tipitaka-lk` | tipitaka.lk — Buddha Jayanthi Tripiṭaka and aṭṭhakathā, Pāli and Sinhala (Path Nirvana) | research_private |

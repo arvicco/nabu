@@ -95,6 +95,9 @@ module Nabu
           "aozora" => :structured, # the index's 初出 first publication (class composition),
           #                          else the 底本 first-edition year (class edition)
           "archiv-slav-phil" => :structured, # each volume's title-page year
+          "armepic" => :structured, # each inscription's origDate (when-custom one-year envelope,
+          #                           or the notBefore/notAfter-custom century); place = the
+          #                           origPlace settlement + its own WGS84 point, else the findspot
           "baley-manuscripts" => :structured, # P153: each manuscript find's conventional era
           #                                   (radiocarbon / burial terminus; an edition inherits its
           #                                   manuscript's); place = the excavated findspot when provenanced
@@ -162,6 +165,11 @@ module Nabu
           #                                   (1757, class edition) — the rendering is undated
           "eltec-srp" => :structured, # P117-2: the firstEdition's typed years, place
           #                             = its pubPlace (publication place)
+          "emmo" => :structured, # the Folger catalogue's per-manuscript date (class
+          #                        composition, one-year envelope from partial dates) with
+          #                        the dateline writing place — the adapter minted both
+          #                        from the start, but this registration was missed at the
+          #                        shipping gate, leaving the shelf dark on the timeline
           "etcbc-targum" => :place_only, # P153: the Genizah texts' findspot ("Cairo Genizah");
           #                                no date field upstream (edition years ride
           #                                base_edition, never a date)
@@ -225,6 +233,9 @@ module Nabu
           "ms-wikisource" => :structured, # P120-3: the manuscript's stated date (header
           #                                 year= / Index Year=; "abad ke-N" a century)
           "ndl-kotenseki" => :structured,
+          "ninjal-textdb" => :structured, # each work page's Publication Date (1592/1593/1596,
+          #                                 class edition); place = the title page's imprint
+          #                                 (Collegio Amacuſa → Amakusa) on amhk/amis
           "obi-burmese" => :ce_year_text,
           "ociana" => :script_band, # the record's script TRADITION banded through the ruled
           #                           ANA period_bands rows (precision era); site + region/

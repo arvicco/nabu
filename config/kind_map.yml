@@ -39,6 +39,24 @@ sources:
       "Milestone": boundary/milestone            # 1
       "Graffito": mark/graffito                  # 1 ("Graffito?" — the global ? strip)
       "Topos-inscription": mark/ownership        # 1 — a reserved-place mark (the edh seat fold)
+  armepic:            # the records' keywords/term[@xml:lang=en] (ArmEpiC's inscription-type
+    #                   authority, urn:armepic:ist:*); counts = the full-deposit census
+    #                   2026-11-04 (50 records, a record may carry two terms). NOT folded,
+    #                   left in the unmapped bucket for a ruling: "commemorative" (13) +
+    #                   "commemoration" (1) — the hishatakagrayin memorial inscription,
+    #                   neither funerary nor dedicatory in the house sense; "khachkar
+    #                   erection" (5) — upstream's own note calls it a subtype of
+    #                   construction OR commemoration; "religious-ethical" (1).
+    facet: genre
+    map:
+      "construction": building                   # 22 — church/gavit/bridge building records
+      "construction / building": building        # 2
+      "donation": dedicatory                     # 15 — gifts of land, oxen, revenues to a church
+      "donation / dedication": dedicatory        # 1 — the authority list's own label
+      "dedication": dedicatory                   # 1
+      "epitaph": funerary/epitaph                # 1 — ART0010, a catholicos's tombstone
+      "canonical-legal": legal                   # 1 — ART0046, the villagers' tax exemption
+      #                                            of a zhamatun (beside its construction term)
   cdli:               # 288,629 docs — the largest vocabulary by rows
     facet: genre
     map:
@@ -961,6 +979,15 @@ sources:
       "Warrant": legal/law                   # 1 — the Privy Council's warrant
       "Legal opinion": legal                 # 1 — counsel's opinion with its reply
       "Receipt": administrative/receipt      # 1 — Donne's receipt for £100
+  ninjal-textdb:             # the Kirishitan slice — one work per dataset dir (Adapters::NinjalTextdb)
+    metadata: dataset
+    map:
+      "amhk": literary/narrative/epic   # Feiqe no monogatari — the Heike, the war epic (gunki
+      #   monogatari), retold as a colloquial dialogue for the missionaries' language study
+      "amis": literary/narrative/fable  # Esopo no fabulas — Aesop's fables in Japanese
+      "cmhab": literary/wisdom          # Contemptus Mundi (the Imitatio Christi) — devotional
+      #   instruction in the spiritual life; no devotional class exists, and wisdom ("instruction
+      #   and insight") is the closest ruled head — a devotional sub would be a taxonomy change
   grand-tour:                # P155 — the four journals are day-by-day travel diaries (Reisetagebuch,
     source_kind: literary/diary/travelogue   # Reise-Journal, "Kurtze verzeichnung meiner
     #   geringen Reise"): the ruled travelogue sub, one whole-source line
