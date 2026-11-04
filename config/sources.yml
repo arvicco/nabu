@@ -236,18 +236,21 @@ aio:   # P154, 02-sources row 335
   adapter: Nabu::Adapters::Aio
   adopted: "2026-11-02"
   axes: [classical, epigraphy]
-  wired: false   # awaiting the first sync — bin/nabu sync aio (OWNER-SCHEDULED:
-                 # ~35 listing GETs + 2 GETs per inscription ≈ 6,970 requests at
-                 # 0.5 s ≈ 1–1.5 h, resumable at the file grain). EXPECT the
-                 # listing's own count (3,466 at 2026-11-02) of record pairs
-                 # under records/, 2 sidecars per 100 → 35 listing pages skipped
-                 # by rule; 3,466 -en translation docs + one Greek doc per
-                 # AIO/AIUK-edited record (share measured at the sync: 7 of an
-                 # 18-record sample biased toward AIO/AIUK keys); passages ≈ one
-                 # per inscribed line. Eyeball nabu show urn:nabu:aio:2586-en
-                 # ("Gods." / "In the archonship of Nikomachos (341/0)…") and
-                 # urn:nabu:aio:2103 (Greek, "ἐπὶ ἄρχοντος Κλαυδίου Ἡρακλεί")
-                 # plus 5 random records; probe nabu search "Halaians"; then flip.
+  wired: true    # first sync verified 2026-11-04 (resumable crawl, 3 attempts —
+                 # upstream TCP drops mid-crawl twice, resumed at the file grain):
+                 # 4,002 docs / 67,429 passages / 35 listing pages skipped by
+                 # rule / 11 quarantined. Reconciliation EXACT against the
+                 # listing's advertised count: 3,457 translation docs + 9
+                 # quarantined -en = 3,466 records; 545 Greek docs + 2
+                 # quarantined = 547 AIO/AIUK-edited records. All 11 quarantines
+                 # are upstream's own malformed EpiDoc (tag mismatches, premature
+                 # ends — e.g. <placeName>…</placename> in aio-2801) — parser
+                 # quarantine by design, not a regression. Eyeballed
+                 # urn:nabu:aio:2586-en ("Gods." / "In the archonship of
+                 # Nikomachos (341/0)…"), urn:nabu:aio:2103 (Greek, "ἐπὶ ἄρχοντος
+                 # Κλαυδίου Ἡρακλεί"), 5 random records (both layers, dates,
+                 # Pleiades findspots, facets); FTS probe "Halaians" → 953-en,
+                 # 2588-en, 986-en.
   sync_policy: manual
   # AIO — Attic Inscriptions Online (British School at Athens; ed. Stephen
   # Lambert): English translations of the inscriptions of Attica, with AIO's
