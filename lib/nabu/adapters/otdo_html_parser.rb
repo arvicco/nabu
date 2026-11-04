@@ -71,7 +71,9 @@ module Nabu
     #   "category" ("inscription" for insc_*, else "manuscript") and, for
     #   manuscripts, "pressmark" (the slug de-underscored — "Pt 1287",
     #   "ITJ 0750", OTDO's own sigla). Dating is FREE TEXT ("post 763",
-    #   "9th c.") → date_text, never a structured claim.
+    #   "9th c.") → date_text, never a structured claim at parse time (the
+    #   timeline reads it into an envelope at projection — MetadataDates
+    #   :date_text_prose, the prose riding verbatim as the raw).
     class OtdoHtmlParser
       URN_PREFIX = "urn:nabu:otdo:"
 

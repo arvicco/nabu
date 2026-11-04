@@ -639,7 +639,10 @@ sources:
   otdo:
     kind: {posture: unclassified}
     lect: {posture: identity, note: otb IS Old Tibetan}
-    dating: {posture: undatable}
+    dating: {posture: partial, note: "the header's free-prose Date (\"ca. 797 …\", \"780-800?\",
+        \"post 763\", \"late 9th-10th century\") read into an envelope by MetadataDates
+        :date_text_prose, the prose as raw: 22 of 413 documents (census 2026-11-04); the
+        rest carry no Date or \"undatable\"/\"unknown\""}
     places: {posture: unplaced}
     script: {posture: implied}
   old-tibetan:
@@ -1264,9 +1267,11 @@ sources:
         Prakrit a consumer distinguishes — so pka-Latn resolves on its own node;
         pra-Latn stays deliberately coarse on the collective anchor, san-Latn as
         before"}
-    dating: {posture: undatable, note: "the headers carry modern edition years only
+    dating: {posture: partial, note: "the headers carry modern edition years only
         (source_edition.date — Weber 1881, Bühler 1879 …), never the works'; the README
-        dates nothing — no composition date is minted, declared"}
+        dates nothing — no composition date is minted, declared. The edition years
+        project as date_class edition (MetadataDates :source_edition_year): 18 of 22
+        documents (census 2026-11-04)"}
     places: {posture: unplaced, note: "only the editions' imprint places are named"}
     script: {posture: qualified, note: "ISO-15919 romanization (Dēvanāgarī-printed
         editions); the source script is not carried"}
@@ -2068,7 +2073,8 @@ sources:
     dating: {posture: partial, note: "the work __cts__.xml dct:created span, transcribed → metadata
         date, class composition (MetadataDates :structured): 92 of 113 editions. The 21 others
         carry a bare dash or the catalog's unfilled 0030–0800 default (kept as created_raw,
-        never a date)"}
+        never a date) and fall back to their edition's print year, date_class edition
+        (MetadataDates::EDITION_FALLBACK)"}
     places: {posture: linked, note: "the work __cts__.xml dct:spatial Pleiades URI → place
         {pleiades, ref}: 88 of 113 editions, every id in the held gazetteer; the XXXXX
         placeholder and empty values mint nothing"}

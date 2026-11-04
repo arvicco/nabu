@@ -42,7 +42,10 @@ module TimelineRegistrationGuard
     "dynasty" => %w[dynasty], # dynasty_band
     "dcs_time_slot" => %w[dcs_time_slot], # time_slot_band
     "source_date" => %w[source_date], # edition_year_text
-    "printed_date" => %w[printed_date] # printed_year_text
+    "printed_date" => %w[printed_date], # printed_year_text
+    "date_text" => %w[date_text], # date_text_prose
+    "edition_year" => %w[edition_year], # the EDITION_FALLBACK keys
+    "source_edition" => %w[source_edition] # source_edition_year
   }.freeze
 
   # Sources whose date-shaped metadata is consumed by ANOTHER timeline lane
