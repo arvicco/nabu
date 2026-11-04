@@ -150,8 +150,9 @@ class DivinumOfficiumTest < Minitest::Test
     assert_equal ["ritual/liturgy"], kinds.normalize("divinum-officium", "Martyrologium")
     assert_equal ["scripture"], kinds.normalize("divinum-officium", "Psalmorum")
     assert_equal ["legal/law"], kinds.normalize("divinum-officium", "Regula")
-    assert_equal ["unmapped"], kinds.normalize("divinum-officium", "Necrologium"),
-                 "left in the counted unmapped bucket for a ruling"
+    assert_equal ["administrative/list"], kinds.normalize("divinum-officium", "Necrologium"),
+                 "the necrology is in form a dated obituary register — the content " \
+                 "classifies, not the chapter use (folded 2026-11-04)"
     assert_equal "Sancti", document(AGNES).metadata["book_part"]
   end
 

@@ -183,6 +183,15 @@ sources:
   # the database's definition, not an inference.
   gregobase:
     lat: { lect: "lat/ecc", tier: certain }
+  divinum-officium:
+    # The Roman Rite's liturgical books ARE Ecclesiastical Latin by the
+    # corpus's own definition — the same stageless lat/ecc register claim
+    # the gregobase row makes for the chant repertory (both adopted
+    # 2026-11-04, the liturgy wave): strata from the Vulgate psalter and
+    # patristic lessons through medieval hymnody to twentieth-century
+    # feasts, so no stage is claimed at source grain. Tier certain: a
+    # register transcription of the corpus's identity, not a reading.
+    lat: { lect: "lat/ecc", tier: certain }
   # P116-1's add-then-retire completed (2026-10-11; the Slavic nabu-lects
   # package minted cs with cs:old [1100, 1500], in canonical): the Prague
   # Bible of 1488 IS Old Czech by every periodization (staročeština to
