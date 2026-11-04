@@ -288,11 +288,18 @@ module Nabu
         "ecco-tcp" => { "pub_place" => "the TCP project's own place (Ann Arbor / Oxford), data " \
                                        "lineage — the eighteenth-century imprint place projects instead",
                         "pub_date" => "the TCP e-text release (\"2007 January\"), machinery — the " \
-                                      "imprint date projects instead" },
+                                      "imprint date projects instead",
+                        # The places + genre sweep (live census 2026-11-04: released 2,473 ·
+                        # unedited 628).
+                        "tcp_class" => "the TCP curation status (released/unedited: the file's review " \
+                                       "state) — not a genre; the content_set module folds the kind" },
         "evans-tcp" => { "pub_place" => "the TCP project's own place (Ann Arbor), data lineage — the " \
                                         "American imprint place projects instead",
                          "pub_date" => "the TCP e-text release (\"2006-06.\"), machinery — the " \
-                                       "imprint date projects instead" },
+                                       "imprint date projects instead",
+                         # Live census 2026-11-04: released 4,864 · unedited 148.
+                         "tcp_class" => "the TCP curation status (released/unedited: the file's review " \
+                                        "state) — not a genre; the LCSH subjects fold the kind" },
         "corpus-corporum" => { "pub_place" => "the Patrologia Latina imprint (Parisiis, on " \
                                               "every doc) — edition lineage, not the patristic " \
                                               "works' origin",
@@ -408,7 +415,24 @@ module Nabu
                                      "period_bands.yml row (a recorded future look)" },
         # Live census 2026-10-21: "imprint" on all 8 of the 15 works that
         # carry a place (the adapter's WORKS table); the "place" key projects.
-        "bim-sahcoba" => { "place_role" => "the role qualifier (\"imprint\") of a place, not a place" }
+        "bim-sahcoba" => { "place_role" => "the role qualifier (\"imprint\") of a place, not a place" },
+        # The mining-law sweep, places + genre half (live census
+        # 2026-11-04). The axis row carries no place-role column; each
+        # role below is CONSTANT per source and its meaning is declared
+        # where the place projects (MetadataDates SHAPES comments).
+        "emmo" => { "place_role" => "the role qualifier (\"dateline\") of the letter's writing place — " \
+                                    "constant on all 46 placed docs; the \"place\" key projects" },
+        "ninjal-textdb" => { "place_role" => "the role qualifier (\"imprint\") of the title-page place — " \
+                                             "constant on both placed docs; the \"place\" key projects" },
+        "hmml-reading-room" => { "provenance" => "the codex's ownership/commission prose (waqf notes, " \
+                                                 "\"Note of ownership by … Church, fol. 85v\", multilingual) " \
+                                                 "— custodial history (the gams-zrcalo stance); the one " \
+                                                 "axis-shaped opening, \"Copied in <town>\", projects as " \
+                                                 "the origin when none is structured (COPIED_IN, 38 docs)",
+                                 "genre_uris" => "consumed: each id is the AAT/LoC authority of exactly ONE " \
+                                                 "genre label (70 ids ↔ 70 labels, census 2026-11-04), and " \
+                                                 "the labels fold through kind_map.yml — the id never " \
+                                                 "traces into a row by value" }
       }.freeze
 
       MINING_SAMPLE = 40
