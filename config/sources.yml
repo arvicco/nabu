@@ -877,6 +877,33 @@ cantigas:   # P55-1, 02-sources row 144
   # ~1,680 documents, ~45-50k line passages (fixture mean ~29 lines).
   sync_policy: manual
 
+cantus:   # 02-sources row 380
+  adapter: Nabu::Adapters::Cantus
+  adopted: "2026-11-04"
+  kind: source
+  axes: [romance]   # the Latin-to-vernacular continuum desk (croala/corpus-corporum precedent)
+  wired: false   # awaiting the first real sync
+  sync_policy: manual
+  # Cantus Database (cantusdatabase.org; directed by Debra Lacoste; web
+  # development McGill DDMAL; Digital Analysis of Chant Transmission,
+  # Dalhousie University): inventories of the chants of the Office and Mass
+  # in medieval and early-modern manuscript and printed sources, each record
+  # keyed to its Cantus ID. LICENSE (first-hand 2026-11-04, every page
+  # footer, verbatim): "Creative Commons License" / "This work is licensed
+  # under a Creative Commons Attribution-NonCommercial-ShareAlike 4.0
+  # International License." → https://creativecommons.org/licenses/by-nc-sa/4.0/
+  # → class nc; the /citations/ page's citation form rides the credit line.
+  # ROUTE: GET /json-sources/ (305 sources → {"<id>": {"csv": …}}) + the
+  # segment-4063 Browse Sources pages (4 × 100 rows: siglum, institution,
+  # century, provenance, chant count — "Displaying 1-100 of 305 sources.")
+  # + GET /source/<id>/csv/ per source, paced 1 s (~310 requests). COUNTS
+  # (2026-11-04): 305 sources = the manifest exactly; the listing's chant
+  # column sums to 449,132 records = the exports' rows (15/15 probed).
+  # Document = one full-text chant record (urn:nabu:cantus:<node_id>);
+  # incipit-only records skip by rule. Reconciliation: accepted +
+  # skipped-by-rule = 449,132 (± live edits); a random 12-source sample read
+  # 58.4% full text → on the order of 260k documents (wide band 150k–300k).
+
 cbdb:   # P96-4
   adapter: Nabu::Adapters::Cbdb
   adopted: "2026-09-04"

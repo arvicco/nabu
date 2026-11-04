@@ -39,6 +39,91 @@ sources:
       "Milestone": boundary/milestone            # 1
       "Graffito": mark/graffito                  # 1 ("Graffito?" — the global ? strip)
       "Topos-inscription": mark/ownership        # 1 — a reserved-place mark (the edh seat fold)
+  cantus:             # the chant record's genre — upstream's own abbreviation list
+    #                   (cantusdatabase.org/genres/), the facet value = upstream's genre NAME,
+    #                   the code raw (CantusCsvParser::GENRES). Counts = the 17-source sample
+    #                   census 2026-11-04 (34,269 records); the full spread lands with the first
+    #                   sync. The fold: sung liturgical items (Office and Mass propers and
+    #                   ordinary, their verses, tropes and liturgical-drama elements) are
+    #                   ritual/liturgy — a sung text whose function is the rite; hymns and the
+    #                   strophic cantiones are hymn-prayer/hymn; the spoken orations
+    #                   hymn-prayer/prayer; a psalm or canticle written out is the biblical text
+    #                   itself (scripture). A finer chant sub-grain under ritual is PROPOSED,
+    #                   not minted here.
+    facet: genre
+    map:
+      "Antiphon": ritual/liturgy                 # A 14,319 — the Office's framing chant
+      "Responsory": ritual/liturgy               # R 7,674 — the Matins responsory
+      "Responsory verse": ritual/liturgy         # V 5,946
+      "Versicle": ritual/liturgy                 # W 3,153
+      "Hymn": hymn-prayer/hymn                   # H 1,754 — the strophic Office hymn
+      "Hymn verse": hymn-prayer/hymn             # HV 35 — a hymn strophe
+      "Invitatory antiphon": ritual/liturgy      # I 724
+      "Antiphon verse": ritual/liturgy           # AV 184
+      "Lesson": ritual/liturgy                   # L 78 — a notated reading of the rite
+      "Sequence": ritual/liturgy                 # Sq 3 — the Mass's sung sequence (its
+      #                                            poetry rides the text; the function is liturgical)
+      "Sequence verse": ritual/liturgy
+      "Invitatory psalm": scripture              # IP 49 — Psalm 94 written out (Venite)
+      "Psalm": scripture                         # PS 2 — the psalm text written out
+      "Canticle": scripture                      # Ca — a biblical canticle (Magnificat, Benedictus)
+      "Canticle verse": scripture
+      "Alleluia": ritual/liturgy                 # Al 22 — Mass propers from here down
+      "Alleluia verse": ritual/liturgy
+      "Gradual": ritual/liturgy                  # Gr 13
+      "Gradual verse": ritual/liturgy            # GrV 10
+      "Introit": ritual/liturgy                  # In 5
+      "Introit verse": ritual/liturgy            # InV 7
+      "Versus ad repetendum for the introit": ritual/liturgy
+      "Offertory": ritual/liturgy                # Of 7
+      "Offertory verse": ritual/liturgy          # OfV 1
+      "Communion": ritual/liturgy                # Cm 5
+      "Communion verse": ritual/liturgy          # CmV 1
+      "Versus ad repetendum for the communion": ritual/liturgy
+      "Tract": ritual/liturgy                    # Tc 2
+      "Tract verse": ritual/liturgy              # TcV 4
+      "Ingressa": ritual/liturgy                 # Ig — the Beneventan introit
+      "Kyrie": ritual/liturgy                    # Ky 13 — the Mass ordinary from here down
+      "Gloria": ritual/liturgy                   # Gl 9
+      "Credo": ritual/liturgy                    # Cr 6
+      "Sanctus": ritual/liturgy                  # Sa 14
+      "Agnus dei": ritual/liturgy                # Ag 12
+      "Ite missa est": ritual/liturgy            # Ite 5
+      "Benedicamus domino": ritual/liturgy       # BD 1
+      "Pater noster": ritual/liturgy             # Pn 1 — the Lord's Prayer as SUNG in the Mass
+      "Prefatio": ritual/liturgy                 # Pr 5 — the sung preface
+      "Litany": ritual/liturgy
+      "Litany verse": ritual/liturgy
+      "Preces": ritual/liturgy                   # PRCS — Old Hispanic sung intercessions
+      "Verse for the Preces": ritual/liturgy
+      "Capitulum": ritual/liturgy                # Cap — the Office's short chapter reading
+      "Mass chant": ritual/liturgy               # G — early-index generic Mass code
+      "Verse for a Mass chant": ritual/liturgy   # GV
+      "Mass Ordinary": ritual/liturgy            # MO
+      "Tropus": ritual/liturgy                   # Tp 10 — a trope, sung inside the rite
+      "Prosa": ritual/liturgy                    # Psa 1
+      "Prosula": ritual/liturgy                  # Psl — a texted melisma (a trope)
+      "Troped Agnus dei": ritual/liturgy
+      "Troped Alleluia": ritual/liturgy
+      "Troped Benedicamus domino": ritual/liturgy   # TpBD 2
+      "Troped Communion": ritual/liturgy
+      "Troped Gloria": ritual/liturgy
+      "Troped Introit": ritual/liturgy
+      "Troped Ite missa est": ritual/liturgy
+      "Troped Kyrie": ritual/liturgy
+      "Troped Offertory": ritual/liturgy
+      "Troped Sanctus": ritual/liturgy
+      "Dramatic element": [ritual/liturgy, literary/drama]   # D 3 — liturgical drama: both
+      "Varia": ritual/liturgy                    # Va 2 — upstream's replacement for M
+      "Varia within Holy Week": ritual/liturgy   # VaHW 5
+      "Miscellaneous": ritual/liturgy            # M — Te Deum, Versus in Triduo, prosulae
+      "Collect": hymn-prayer/prayer              # Co — the spoken orations from here down
+      "Oratio / Prayer": hymn-prayer/prayer      # Or
+      "Secret / Oratio secreta": hymn-prayer/prayer   # Sec
+      "Postcommunion": hymn-prayer/prayer        # Pc
+      "Cantio": hymn-prayer/hymn                 # Cn — paraliturgical strophic sacred song
+      "Cantio Verse": hymn-prayer/hymn           # CnV
+      "Unknown, ambiguous, unidentifiable, illegible": unknown   # ? — upstream's own claim
   armepic:            # the records' keywords/term[@xml:lang=en] (ArmEpiC's inscription-type
     #                   authority, urn:armepic:ist:*); counts = the full-deposit census
     #                   2026-11-04 (50 records, a record may carry two terms). The three

@@ -112,6 +112,10 @@ module Nabu
           "bu-ajami" => :structured, # P124-1: a typed source-reference year or a date the item
           #                            page states (authorship eras class "composition");
           #                            place = the manuscript's Provenance
+          "cantus" => :structured, # the manuscript source's curated century labels (Browse
+          #                          Sources /century/ links) as an envelope on every record of
+          #                          it — the witness's copying date (basis "source", no class);
+          #                          place = the source's provenance (orders name no place)
           "cbeta" => :dynasty_band,
           "ccmh" => :bounds_keys,
           "cgpg" => :structured, # P153: upstream's per-volume Dates label as a century envelope

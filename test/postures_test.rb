@@ -179,7 +179,7 @@ class PosturesTest < Minitest::Test
   def test_the_lect_migration_kept_the_p59_4_census
     lect = postures.declarations.select { |d| d.layer == "lect" }
     by_posture = lect.group_by(&:posture).transform_values(&:size)
-    assert_equal 183, lect.size,
+    assert_equal 184, lect.size,
                  "the P59-4 declarations survive the move (61 at migration; itant retired P61-3," \
                  "oracc retired P62-2, etcsl/ccmh/freising/coptic-scriptorium retired P64-6, " \
                  "titus-avestan retired P66-1, osta+fornsvenska retired P77-r8, achemenet " \
@@ -394,7 +394,9 @@ class PosturesTest < Minitest::Test
                  "shadowing rule): 183→182; " \
                  "glt ADDED — PENDING bare grc (a grc → grc:byz approximation override, the " \
                  "lasla shape: Byzantine liturgical Greek with post-Byzantine services in the " \
-                 "same register — a corpus-level reading awaiting a ruling): 182→183"
+                 "same register — a corpus-level reading awaiting a ruling): 182→183; " \
+                 "cantus ADDED — identity lat (the chant inventories' liturgical Latin; lat/ecc and a " \
+                 "witness-date staging are named candidates, declared coarse): 183→184"
     # The epigraphic-belt registry package (merged + canonical-synced
     # 2026-10-18, the add-then-retire shape within one phase) retires both
     # P130 pendings, and the ociana-script rule + the ig-cyprus override
@@ -454,6 +456,7 @@ class PosturesTest < Minitest::Test
     # The 2026-11-04 ruling retires armepic's pending — the xcl override
     # machine-postures it (the shadowing rule): pending 2→1 (lasla alone).
     # glt joins pending (bare grc; the grc:byz approximation override awaits a ruling): 1→2.
-    assert_equal({ "dates" => 25, "codemap" => 21, "identity" => 135, "pending" => 2 }, by_posture)
+    # cantus joins identity (lat, the chant inventories' liturgical Latin): 135→136.
+    assert_equal({ "dates" => 25, "codemap" => 21, "identity" => 136, "pending" => 2 }, by_posture)
   end
 end
