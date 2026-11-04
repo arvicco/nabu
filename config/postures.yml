@@ -1464,6 +1464,19 @@ sources:
     places: {posture: unplaced}
     script: {posture: implied, note: kana-heavy hentaigana-normalized transcription per the
         project's own conventions}
+  ninjal-textdb:
+    # lect: machine-postured — the jpn → jpn:lmj~latn override in
+    # config/lect_overrides.yml; kind: machine-postured — kind_map.yml
+    # metadata dataset.
+    dating: {posture: dated, note: "all 3 documents: each work page's own Publication Date
+        (Feiqe 1592, Esopo 1593, Contemptus Mundi 1596) → a one-year envelope, class edition;
+        the Nippo Jisho lane's 1603 rides its dictionary title (entries carry no dates)"}
+    places: {posture: named, note: "the imprint the title page itself prints — 'Collegio
+        Amacuſa ni voite' → Amakusa (role imprint) on Feiqe and Esopo; the Contemptus Mundi
+        title page names no place, so none is claimed"}
+    script: {posture: qualified, note: "Japanese held in the ORIGINAL Portuguese-style Latin
+        romanization (long ſ, ŏ/ǒ, ã, the [f]/[t] name marks verbatim) — the ~latn surface on
+        the lect; the modern kanji-kana / normalized layers ride line annotations"}
   scat:
     # kind: machine-postured — kind_map.yml source_kind historiography (the
     # corpus is saints' lives). lect: machine-postured by the scat-century

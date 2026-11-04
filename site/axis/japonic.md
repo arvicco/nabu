@@ -20,7 +20,7 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 ## The shelves
 
-A source wears every desk it serves — these fifteen answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
+A source wears every desk it serves — these sixteen answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
 | Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 4 November 2026)</span> |
 |---|---|---|---|---|
@@ -34,6 +34,7 @@ A source wears every desk it serves — these fifteen answer this desk. Holdings
 | `kouigenji` | texts | attribution | wired · manual | 54 docs / 25,065 passages |
 | `kradfile` | dictionary | attribution | wired · manual | 6,355 entries |
 | `ndl-kotenseki` | texts | open | wired · manual | 58,896 docs / 3,291,374 passages |
+| `ninjal-textdb` | texts | attribution | not yet wired | nothing held yet |
 | `nrct` | feature module | attribution | wired · manual | nothing held yet |
 | `oncoj` | annotated corpus | attribution | wired · frozen | 4,991 docs / 33,192 passages |
 | `oncoj-lexicon` | dictionary | attribution | wired · frozen | 5,869 entries |

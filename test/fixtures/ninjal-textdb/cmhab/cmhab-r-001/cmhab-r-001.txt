@@ -1,0 +1,162 @@
+コンテムツス・ムンヂ（HAB所蔵本）　ローマ字翻字テキスト
+Contemptus Mundi [HAB copy]　Transcription of Original Romanization
+
+----------------------------------------------------------------------------------
+凡例
+1. 改ページ・改行・改段は原本に従い、以下のように示した。
+1.1 頁数（3桁）と行数（2桁）は各行の先頭において示した。例えば、「001.01」とは、1頁目の1行目を指す。
+1.2 必要に応じて、角括弧で頁番号を訂正・補給した。例えば、「207」とあるべきなのに原本では「206」となっている頁は「206[=207]」として示し、頁番号の記載のない標題紙や434頁以降はそれぞれ「[*001]」、「[434]」などとして入力した。
+1.3 段組みの場合は、頁番号の後にそれぞれの段を「a」（左）と「b」（右）で表示した。例えば、「[445]a」とは、445頁の1段目（左）を指す。
+1.4 改行・改段箇所は「///」で示した。
+2. 略語を忠実に翻刻した。例えば、「Deꝰ」（Deusの略語、025.05）や、「Aĩa」（Animaの略語、348[=349].10）は、原本のままである。
+3. 大小文字の区別、ハイフン、句読点も忠実に再現した。
+4. 分かち書きは、原本のままである。ただし、句読点の前後にあるスペースは、原文の如何を問わず句読点の後にスペース一つの「. 」、「, 」、「; 」などと統一した。
+5. 明らかに誤植と認めれる箇所や不統一は以下のように修正した。
+5.1 脱字は[...]と角括弧内で補った。例えば、「co」が脱字となっている「yorobiuo」を「yoro[co]biuo」（059.06）と示した。
+5.2 衍字は(...)と丸括弧内で示した。例えば、「ro」という衍字を含む「cocororoto」は「cocoro(ro)to」（418[=419].20）とした。
+5.3 文字の置換が必要となる誤植は、誤字の直後に[=...]と角括弧内で入力した。例えば、「u」を「n」に誤った「nangni」を「nangn[=u]i」（136.16）と示した。
+5.4 大小文字の不統一や上記以外の印刷上の問題を[!]（ママ）で示した。例えば、通例の「Ani-↵ma」の代わりに「ani-↵ma」とある場合には、「a[!]ni-↵ma」とした（043.01–02、「↵」は改行の位置を表す）。
+6. ヘッダー（欄外標題、章番号、ページ番号）とフッター（つなぎ言葉と折丁記号）は省略した。
+
+Transcription rules
+1. Page, column and line breaks are preserved exactly as in the original. They are indicated as follows:
+1.1 Each line of text is preceded by an indication of the page number (3 digits) and line number (2 digits). E.g., “001.01” indicates the first line on the first page.
+1.2 Where necessary, page numbers are corrected or supplied in square brackets: “206[=207]” for page 206 in the original that is supposed to be numbered 207, “[*001]” for the unpaginated title page and “[434]” etc. for the unpaginated pages corresponding to pages 434 and following.
+1.3 Columns are indicated after the page number by the letters “a” (left), and “b” (right). E.g., “[445]a” for the left column on what corresponds to page 445.
+1.4 The beginning of each new page or column is indicated by three slashes: “///”.
+2. Abbreviations are not expanded but transcribed as is. E.g., “Deꝰ” (for “Deus”; 025.05), “Aĩa” (for “Anima”; 348[=349].10).
+3. Capitalization, hyphenation, and punctuation are likewise transcribed as in the original.
+4. Spacing is generally faithfully transcribed. However, before and after punctuation marks spacing is normalized to a single following space (and no preceding space): “. ” (period), “, ” (comma), “; ” (semicolon), etc.
+5. Corrections: To increase legibility, unambiguous misprints and inconsistencies are indicated as follows:
+5.1 Additions are given inside square brackets: [...]. E.g., “yorobiuo” for intended “yorocobiuo” is specified as “yoro[co]biuo” (059.06).
+5.2 Deletions are indicated inside round brackets: (...). E.g., “cocororoto” for intended “cocoroto” as “cocoro(ro)to” (418[=419].20).
+5.3 Misprints requiring substitutions are corrected directly after the letter(s) in question in square brackets: [=...]. E.g., “nangni” for intended “nangui” as “nangn[=u]i” (136.16).
+5.4 Irregular (non-)capitalization or printing issues are followed by an exclamation mark inside square brackets: [!]. E.g., “ani-↵ma” for expected “Ani-↵ma” as “a[!]ni-↵ma” (043.01–02; “↵” marks a line break here).
+6. Headers (including running titles, chapters, and page numbers) and footers (catchwords and signatures) are omitted.
+----------------------------------------------------------------------------------
+
+
+[*001].01	CONTEMPTVS
+[*001].02	mundi jenbu.
+[*001].03	CORE YOVOITOI, IESV CHRIS-
+[*001].04	tono gocǒxeqiuo manabi tatematçu-
+[*001].05	ru michiuo voxiyuru qiǒ.
+[*001].06	NIPPON IESVSNO COMPANHIA
+[*001].07	no Collegio nite Superiores no goguegiuo
+[*001].08	motte coreuo fanni firaqu mono nari.
+[*001].09	Toqini goxuxxeno nenqi. 1596.
+///
+001.01	DOCVIVNO FI-
+001.02	toni taixite xoſu.
+001.03	COno Contemptus mundi Iichiiqi
+001.04	ni voite IESVS no Companhia
+001.05	no Superiores gofocqini yotte La
+001.06	tinno xǒfon yori taxicani fonya
+001.07	cu xi, qeôgǒ dodoni voyõde, jinxiuo yauarague-
+001.08	te motte xini chiribamu. Core Deusno michiuo
+001.09	yuqi, goxǒuo taſucaritaqu vomô fitouo tçumazzu
+001.10	cazu, michibiqu coto mottomo taixet naru gui
+001.11	nareba, tǒmõ Cõpanhiano xito, narabini xezocu
+001.12	no tomogarauo xite yomi yaſucaraximenga tame
+001.13	nari. Xicaruni cono xono vchini voite tocu fu-
+001.14	caqi coto vouoxito iyedomo vaqite tocuuo mo
+001.15	tomentono xiguanuo motte coreuo docuju xen fi
+001.16	to izzureno tocorouo naritomo firaqi miba, ima
+001.17	vaga tameni canyôno cotouariuo xiruſaretarito va
+001.18	qimayezaru coto arubecarazu. Xoxen Deusno
+001.19	facari naqi jenno minamoto nite maximaſu von
+///
+205[=206].01	zu, mata jenninca acuninca corayemajiqi aite
+205[=206].02	catoyǔ cotouo mizu, tada nanitaru goſacuno
+205[=206].03	mono yori qitaru tocorono qizacainaru cotouo
+205[=206].04	mo xabet naqu icafodonitemo are, nanitaru
+205[=206].05	jixetnimo Deusno vonte yori atayetamǒto
+205[=206].06	cocoroyoqu vqetatematçuri, amaßaye vô-
+205[=206].07	qinaru tocuuo yetaruto vomô nari. Sonoyu-
+205[=206].08	yeua nanito vazucanaru cotonitemo are De-
+205[=206].09	usni taixitatematçurite vqe corayuru fodono
+205[=206].10	cotoni ſono gofempô naxito yǔ coto naxi.
+205[=206].11	Carugayuyeni vnuo firacanto vomouaba, cax
+205[=206].12	xenno cacugouo ſubexi. Caxxenno chǔcô
+205[=206].13	uo nuqindezuxite, riunno camuriuo vru co-
+205[=206].14	to arubecarazu. Moxi xinoguigataxito vo-
+205[=206].15	môni voiteua, camuriuo jitai ſuru mono na-
+205[=206].16	ri, camuriuo yetaqu vomôni voiteua, yumiǒ
+205[=206].17	ni tatacai canninuo ſubexi: xinrǒ naquxite
+205[=206].18	cutçuroguini itaru coto canauazu, tatacai na
+205[=206].19	quxite xôriuo yezu. Icani vonaruji vaga
+205[=206].20	vmaretçuqiniua cataqu vomô cotouo vonmi
+205[=206].21	no gocǒriocuuo motte aicanǒ yǒni facarai
+///
+[445]a.01	A
+[445]a.02	Accô. Varucuchi.
+[445]a.03	Acufeqi. Axij cuxe.
+[445]a.04	Acuguiacu. Axǔ ſacaximana
+[445]a.05	coto.
+[445]a.06	Acunen. Axij nen.
+[445]a.07	Acuxin. Axij cocoro.
+[445]a.08	Aigiacu. Aixi tçuqu. i. De-
+[445]a.09	lectação roim.
+[445]a.10	Airen. Auaremi auaremu.
+[445]a.11	Amanai, ǒ. i. Sapere. Sentir
+[445]a.12	doçura.
+[445]a.13	Anacaxico. Camayete.
+[445]a.14	Ancan. Yaſǔ xizzucana.
+[445]a.15	Anchi. Yaſǔ voqu, ſonaye
+[445]a.16	voqu.
+[445]a.17	Ando. Vochi tçuqu, l, co-
+[445]a.18	coroyaſǔ yru.
+[445]a.19	Angiǔ. Yaſǔ ſumu.
+[445]a.20	Angiǔ. Yamino naca.
+[445]a.21	Anguia. Ariqu axi. i. peregri
+[445]a.22	nar.
+[445]a.23	Ayabumu. i. Duuidar.
+[445]a.24	Azamuqu. i. Deſprezar.
+[445]a.25	B
+[445]a.26	Bacutai. Fanafada vouoqi
+[445]a.27	coto.
+[445]a.28	Banbut. yorozzuno mono.
+[445]a.29	Ban. Meſa.
+///
+[445]b.01	Banji. yorozzuno coto.
+[445]b.02	Banſui. Yǔmexi.
+[445]b.03	Batza. Suyeno za.
+[445]b.04	Benjet. Tarǒta xita. i. Elo-
+[445]b.05	quentia.
+[445]b.06	Benji, zuru. Canayuru.
+[445]b.07	Bijacu. Vacai.
+[445]b.08	Bintat. Sunauachi taſſuru.
+[445]b.09	Biǒdô. Tairacani fitoxi.
+[445]b.10	Biǒxit. Yamai.
+[445]b.11	Birei. Itçucuxǔ vruuaxij
+[445]b.12	Biſai. Sucoxǔ foſoi.
+[445]b.13	Bixocu. Vmaqi cuimono.
+[445]b.14	Bodaixin. Youo itô cocoto.
+[445]b.15	Bǒjacu bujin. Sobani fito na-
+[445]b.16	qiga gotoxi. i. Homẽ bar
+[445]b.17	baro.
+[445]b.18	Bǒjen. Monouo vchiuaſu-
+[445]b.19	reta tei.
+[445]b.20	Bǒman. Aqi mitçuru.
+[445]b.21	Bonrio. Tadabitono cocoro.
+[445]b.22	Bǒqiacu. Vaſururu.
+[445]b.23	Bôriacu. Facaricoto.
+[445]b.24	Bôyǔ. Tomo tomo.
+[445]b.25	Bucuſuru. Cǔ. i. Comer.
+[445]b.26	Bugacu. Mai fayaſu.
+[445]b.27	Bugiacu. Aitçuqu.
+[445]b.28	Buicu. Nade fagocumu. i.
+[445]b.29	Mimos.
+
+----------------------------------------------------------------------------------
+底本：ヘルツォーク・アウグスト図書館蔵本（Shelfmark: 57.13 Eth.)
+翻字担当者：オースタカンプ・スヱン、ノイツラ・ゾフィー、宮川創
+更新履歴：
+2023年7月13日公開
+2025年5月1日改訂版公開
+
+Source: Herzog August Bibliothek Wolfenbüttel (Shelfmark: 57.13 Eth.)
+Sven Osterkamp, Sophie Neutzler, So Miyagawa
+Change Log:
+2023-07-13 Open to the public
+2025-05-01 Revised version

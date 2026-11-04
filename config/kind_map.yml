@@ -979,6 +979,15 @@ sources:
       "Warrant": legal/law                   # 1 — the Privy Council's warrant
       "Legal opinion": legal                 # 1 — counsel's opinion with its reply
       "Receipt": administrative/receipt      # 1 — Donne's receipt for £100
+  ninjal-textdb:             # the Kirishitan slice — one work per dataset dir (Adapters::NinjalTextdb)
+    metadata: dataset
+    map:
+      "amhk": literary/narrative/epic   # Feiqe no monogatari — the Heike, the war epic (gunki
+      #   monogatari), retold as a colloquial dialogue for the missionaries' language study
+      "amis": literary/narrative/fable  # Esopo no fabulas — Aesop's fables in Japanese
+      "cmhab": literary/wisdom          # Contemptus Mundi (the Imitatio Christi) — devotional
+      #   instruction in the spiritual life; no devotional class exists, and wisdom ("instruction
+      #   and insight") is the closest ruled head — a devotional sub would be a taxonomy change
   grand-tour:                # P155 — the four journals are day-by-day travel diaries (Reisetagebuch,
     source_kind: literary/diary/travelogue   # Reise-Journal, "Kurtze verzeichnung meiner
     #   geringen Reise"): the ruled travelogue sub, one whole-source line

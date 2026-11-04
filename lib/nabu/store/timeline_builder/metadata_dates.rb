@@ -228,6 +228,9 @@ module Nabu
           "ms-wikisource" => :structured, # P120-3: the manuscript's stated date (header
           #                                 year= / Index Year=; "abad ke-N" a century)
           "ndl-kotenseki" => :structured,
+          "ninjal-textdb" => :structured, # each work page's Publication Date (1592/1593/1596,
+          #                                 class edition); place = the title page's imprint
+          #                                 (Collegio Amacuſa → Amakusa) on amhk/amis
           "obi-burmese" => :ce_year_text,
           "ociana" => :script_band, # the record's script TRADITION banded through the ruled
           #                           ANA period_bands rows (precision era); site + region/

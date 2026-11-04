@@ -1,0 +1,51 @@
+天草版平家物語（ローマ字・漢字仮名翻字対照テキスト）
+
+----------------------------------------------------------------------------------
+凡例
+1.本テキストはローマ字翻字テキストと漢字仮名翻字テキストを対照させたものである。
+2.頁移りは原本に従い、原本に付された頁番号をその頁の冒頭において括弧書きで示した。頁番号の記載のない冒頭部は（扉）、（序１）、（序２）、（序３）とした。
+3.原本の改行に従い改行をし、各行の先頭に行番号を半角数字で入力した。行番号は頁内の通し番号である。
+4.行ごとに、行番号・ローマ字翻字テキスト・漢字仮名翻字テキストの順に並べた。各要素の間にはタブ文字を挿入している。
+5.ローマ字翻字テキスト、漢字仮名翻字テキストの詳細はそれぞれの凡例を参照のこと。
+----------------------------------------------------------------------------------
+
+
+（扉）
+1	NIFONNO	日本の
+2	COTOBA TO	言葉と
+3	Hiſtoria uo narai xiran to	Ｈｉｓｔｏｒｉａを習い知らんと
+4	FOSSVRV FITO NO TAME-	欲する人の為
+5	NI XEVA NI YAVA RAGVETA-	に世話に和らげた
+6	RV FEIQE NO MONOGATARI.	る平家の物語．
+7	IESVS NO COMPANHIA NO	ＩＥＳＶＳのＣＯＭＰＡＮＨＩＡの
+8	Collegio Amacuſa ni voite Superiores no go men-	Ｃｏｌｌｅｇｉｏ天草に於いてＳｕｐｅｒｉｏｒｅｓの御免
+9	qio to xite core uo fan ni qizamu mono nari.	許としてこれを版に刻む物なり．
+10	Go xuxxe yori M.D.L.ⅩⅩⅩⅩⅡ.	御出世よりＭ．Ｄ．Ｌ．ＸＸＸＸⅡ．
+
+（3）
+1	FEIQE-	平家
+2	MONOGATARI.	物語．
+3	Quan daiichi.	巻第一．
+4	DAI ICHI.FEIQE NO XENZO NO	第一．平家の先祖の
+5	qeizzu,mata Tadamori no vye no fomareto,Qi	系図，又忠盛の上の誉と，清
+6	yomori no yxei yeigua no coto.	盛の威勢栄華の事．
+7	MONOGATARI NO NINIV.	物語の人数．
+8	VMANOIO.QIICHIQENGVEO.	右馬の判官．喜一検校．
+9	VManojô.Qẽgueônobŏ,Feiqe no yurai ga qi	右馬の判官．検校の坊，平家の由来が聞
+10	qitai fodoni,ara ara riacu xite vo catari are.	きたい程に，粗々略して御語り有れ．
+11	QIICHI.Yaſui coto de gozaru:vôcata	喜一．易い事で御座る：大方
+12	catari maraxôzu.Mazzu Feiqemonogatari no ca-	語りまらせうず．先づ平家物語の書
+13	qifajime niua vogori uo qiuame,fito uomo fito to	き始めには驕りを極め，人をも人と
+14	vomouanu yŏ naru mono ua yagate forobita to yŭ	思わぬ様なる者は軈て滅びたと言う
+15	xôjeqi ni,[■]Taitŏ,[c]Nippon ni voite vogori uo qiua-	証跡に，大唐，日本に於いて驕りを極
+16	meta fitobito no fateta yŏdai uo catçu mŏxite	めた人々の果てた容態を且つ申して
+17	cara,ſate [t]Rocufara no nhŭdŏ [q]Saqi no Danjŏ dai-	から，扠六波羅の入道先の太政大
+18	jin [f]Qiyomori cô to mŏxita fito no guiôgui no fu-	臣清盛公と申した人の行儀の不
+19	fŏna coto uo noxeta mono de gozaru.Sate ſono	法な事を乗せた物で御座る．扠その
+20	Qiyomori no xenzo ua [f]Quanmu tenvŏ cudai no	清盛の先祖は桓武天皇九代の
+
+----------------------------------------------------------------------------------
+底本：大英図書館蔵本（Or.59.aa.1)
+翻字担当者：片山久留美・渡辺由貴・金子愛・藤原慧悟・堀麻美・堀川千晶
+更新履歴：
+2019年3月25日公開
