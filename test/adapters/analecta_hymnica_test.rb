@@ -123,7 +123,8 @@ module Adapters
       registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources.yml", __dir__))
       entry = registry["analecta-hymnica"]
       refute_nil entry
-      assert entry.wired, "wired after the verified first sync of 2026-11-04 (55 docs / 17,211 passages, exactly the census)"
+      assert entry.wired,
+             "wired after the verified first sync of 2026-11-04 (55 docs / 17,211 passages, exactly the census)"
       assert_equal "manual", entry.sync_policy
       assert_equal %w[classical romance], entry.axes
     end

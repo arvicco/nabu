@@ -31,7 +31,9 @@ module Adapters
       entry = registry["gregobase"]
       refute_nil entry, "config/sources.yml must register gregobase"
       assert_equal ADAPTER, entry.adapter_class
-      assert entry.wired, "wired after the verified first sync of 2026-11-04 (18,422 docs / 20,810 passages, exactly the dump census)"
+      assert entry.wired,
+             "wired after the verified first sync of 2026-11-04 " \
+             "(18,422 docs / 20,810 passages, exactly the dump census)"
       assert_equal "manual", entry.sync_policy
     end
 
