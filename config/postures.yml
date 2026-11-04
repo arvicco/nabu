@@ -614,6 +614,28 @@ sources:
         be a curated overlay, not extraction"}
     places: {posture: unplaced}
     script: {posture: implied}
+  cantus:
+    # One document per full-text chant record (Adapters::CantusCsvParser);
+    # the manuscript source's own fields (Browse Sources listing) join every
+    # record of it. kind is machine-postured by the kind_map rule (genre).
+    lect: {posture: identity, note: "lat — the liturgical Latin of the Office and Mass as each
+        manuscript spells it. DELIBERATELY coarse: two refinements are candidates, not mints —
+        the registry's lat/ecc (Ecclesiastical Latin) register as a whole-source claim, and a
+        source-century date-band staging (lat:med / lat:ren / lat:new) of the WITNESS's spelling;
+        both judgment-grade. A rare vernacular cantio (genre Cn) would ride under lat — none in
+        the 17-source sample"}
+    dating: {posture: partial, note: "the source's curated century labels (Browse Sources
+        /century/ links: '10th century (975-1000)', '13th century (2nd half)', 40 labels) band
+        every record of that source — basis 'source', the witness's copying date, never the
+        chant's composition (no date class: the artifact's own date). 265 of 305 sources carry
+        one (census 2026-11-04); the other 40 mint no date. Each source's free-text date
+        ('Late 15th century') is not fetched — the curated label is the claim"}
+    places: {posture: named, note: "the source's provenance (Browse Sources /provenance/ links —
+        a 214-value vocabulary of towns, abbeys, regions, countries) rides place as named;
+        231 of 305 sources carry one. Three vocabulary values name no place (Dominican,
+        Franciscan, English — CantusSourceIndex::NON_PLACES) and ride metadata provenance
+        only. The holding institution/country is the PRESENT location — metadata only"}
+    script: {posture: implied}
   otdo:
     kind: {posture: unclassified}
     lect: {posture: identity, note: otb IS Old Tibetan}
