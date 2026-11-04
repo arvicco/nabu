@@ -50,6 +50,7 @@ kinds:
   tir: inscriptions
   iip: inscriptions
   aio: inscriptions
+  armepic: inscriptions
   ogham: inscriptions
   rundata: inscriptions
   lexlep: inscriptions
