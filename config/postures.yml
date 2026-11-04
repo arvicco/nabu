@@ -2148,14 +2148,10 @@ sources:
         facet"}
   divinum-officium:
     # kind: machine-postured by the kind_map.yml divinum-officium book_part fold.
-    lect: {posture: pending, note: "bare lat at parse time (the Latin trees carry no language
-        tag beyond the directory). Candidate: a certain-tier lect_overrides row lat → lat/ecc
-        — the registry's stageless Ecclesiastical Latin register (the vulgate row's lat:late/ecc
-        minus the stage): the corpus IS the Roman Rite's liturgical Latin by definition, but
-        its strata run from the Vulgate psalter and patristic lessons through medieval hymns
-        and sequences to twentieth-century feasts and the 1960 rubrics, so no stage can be
-        claimed at source grain. Register assignment without a stage has no precedent in the
-        overrides file, so it waits for a ruling"}
+    # lect declaration retired P157 (2026-11-04, same phase as the add): the
+    # lat → lat/ecc override machine-postures it now (the shadowing rule) —
+    # the stageless-register precedent landed with this same wave's
+    # gregobase row, so the named candidate stopped waiting.
     dating: {posture: undatable, note: "no file carries a date of composition or edition: the
         rubrical years in the conditionals (rubrica 1955 / 1960, Divino Afflatu) name rubrical
         regimes, not texts, and the necrology's 'Anno 1746' years date the deaths it records

@@ -1177,11 +1177,11 @@ sources:
   divinum-officium:          # census 2026-11-04 (full-tree parse at master 85183a9b): 4,003
     metadata: book_part      # documents; book_part = the Latin tree's own top directory
     #                          (the Cist/M/OP use suffix stripped; Psalterium/Psalmorum split
-    #                          out — the psalms themselves). NOT folded, left in the unmapped
-    #                          bucket for a ruling: "Necrologium" (12) — a Cistercian necrology
-    #                          (Altovadum and its confraternity), read at chapter but in form an
-    #                          obituary register: ritual/liturgy or administrative/register?
+    #                          out — the psalms themselves).
     map:
+      "Necrologium": administrative/list  # 12 — the Vyšší Brod (Altovadum) necrology: read at
+      #   chapter, but IN FORM a dated obituary register of names — the content classifies,
+      #   not the use (folded 2026-11-04; the existing list head, no new taxonomy)
       "Sancti": ritual/liturgy           # 1,663 — the proper of the saints, Office + Mass
       "Tempora": ritual/liturgy          # 1,472 — the proper of the season
       "Commune": ritual/liturgy          # 122 — the commons (of apostles, martyrs, virgins …)
