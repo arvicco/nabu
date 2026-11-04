@@ -7,4 +7,4 @@ files:
   - path: dataset/vhmml_rr_fulldata.zip
     url: https://www.vhmml.org/datasets/vhmml_rr_fulldata.zip
     whole: false
-    trim: the one member cut to its real first line, six real record lines and its real last line, byte-verbatim, re-zipped (README recipe)
+    trim: the one member cut to its real first line, fifteen real record lines and its real last line, byte-verbatim, re-zipped (README recipe)

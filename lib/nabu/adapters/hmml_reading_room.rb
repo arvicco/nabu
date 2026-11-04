@@ -47,6 +47,17 @@ module Nabu
     # …:<part>.<item>. The 13,554 records without an incipit are
     # metadata-only documents (text_layer none).
     #
+    # == Dates, places, genres
+    #
+    # The date is the envelope of the parts' begin/end years; the 8
+    # impossible part pairs upstream ships (18891–1913, 1750–150 …) are
+    # repaired from the part's own precise year / centuries band, the
+    # verbatim pair named in the raw (#part_bounds). The place is the
+    # part's city, else country, of origin, else the copying town a
+    # provenance note opens with (COPIED_IN); the rest of provenance is
+    # ownership/commission prose and stays metadata. Genre labels fold
+    # through kind_map.yml; genre_uris carries each label's authority id.
+    #
     # == Languages
     #
     # An incipit's language is its item's first catalogued language that
@@ -96,6 +107,19 @@ module Nabu
       }.freeze
       WRITING_SYSTEM_FALLBACK = { "Syriac" => "syc", "Ethiopic" => "gez" }.freeze
       SCRIPTS = { syriac: /\p{Syriac}/, ethiopic: /\p{Ethiopic}/, arabic: /\p{Arabic}/ }.freeze
+
+      # A year a manuscript catalogue can honestly carry.
+      PLAUSIBLE_YEARS = (-3000..2100)
+
+      # "Copied in Ankawa, fol. 3v" / "Copied in Shaqlāwa" — a provenance
+      # note OPENING with the copying town: capitalized Latin-script
+      # word(s) closed by a comma, semicolon, full stop or the note's end.
+      # Institution and era phrases ("Copied in Dayr al-Kuraym; …",
+      # "Copied in the village of …", "Copied in memory of …") never
+      # match. Census 2026-11-04: 38 of the 61 "Copied in" notes on
+      # records without a structured origin name a town this way (Alqūsh
+      # 15, Kirkuk 9, Ankawa 9, Shaqlāwa 3, Telkepe, Zarwāw).
+      COPIED_IN = /\ACopied in (\p{Lu}[\p{L}\p{M}ʻʼ'-]*(?: \p{Lu}[\p{L}\p{M}ʻʼ'-]*)*)(?=[,;.]|\z)/
 
       def self.manifest = MANIFEST
 
@@ -333,12 +357,12 @@ module Nabu
           "viewable_online" => record["viewableOnline"], "access_restriction" => clean(record["accessRestriction"]),
           "surrogate_format" => clean(record.dig("surrogateFormat", "name")),
           "extents" => Array(record["extents"]).filter_map { |e| clean(e["folioImported"] || e["displayName"]) },
-          "genres" => genres, "genre_uris" => Array(record["genres"]).filter_map { |g| g["uri"] },
+          "genres" => genres, "genre_uris" => Array(record["genres"]).filter_map { |g| clean(g["uri"]) },
           "subjects" => Array(record["subjects"]).filter_map { |s| clean(s["name"]) },
           "notes" => html_text(record["notes"]), "bibliography" => html_text(record["bibliography"]),
           "collation" => html_text(record["collation"]), "provenance" => html_text(record["provenance"]),
           "parts" => parts.map { |p| part_metadata(p) },
-          "date" => date_envelope(parts), "place" => origin(parts),
+          "date" => date_envelope(parts), "place" => origin(parts, html_text(record["provenance"])),
           "skipped_incipits" => (skipped unless skipped.empty?),
           "text_layer" => ("none" if metadata_only),
           "facets" => facets(record, genres)
@@ -398,24 +422,76 @@ module Nabu
       end
 
       # The record's date envelope across its parts (upstream's own
-      # begin/end years; the century label rides raw).
+      # begin/end years; the century label rides raw). A part whose
+      # bounds are impossible is repaired first (#part_bounds) and the
+      # raw names the verbatim bounds it replaced.
       def date_envelope(parts)
-        begins = parts.filter_map { |p| p["beginDate"] }
-        ends = parts.filter_map { |p| p["endDate"] }
+        bounds = parts.map { |p| part_bounds(p) }
+        begins = bounds.filter_map(&:first)
+        ends = bounds.filter_map { |b| b[1] }
         return nil if begins.empty? && ends.empty?
 
-        raw = parts.filter_map { |p| clean(p["centuryImported"]) }.uniq.join("; ")
+        labels = parts.filter_map { |p| clean(p["centuryImported"]) }.uniq
+        repairs = bounds.filter_map { |b| b[2] }.map { |verbatim| "upstream bounds #{verbatim} repaired" }
+        raw = (labels + repairs).join("; ")
         { "not_before" => begins.min, "not_after" => ends.max, "raw" => (raw unless raw.empty?) }.compact
       end
 
+      # One part's [begin, end, verbatim-or-nil]. Upstream's pair passes
+      # untouched unless it is impossible — a year outside PLAUSIBLE_YEARS
+      # (a typed extra digit: 18891, 17000, 16757) or begin > end (a lost
+      # digit or a typo'd bound: 1750–150, 1954–1854). A broken pair is
+      # repaired from the part's OWN evidence: its precise year when that
+      # fits its centuries band, else each bound that fits the band, the
+      # band filling the rest; with no band to judge by, the part dates
+      # nothing. The 2026-11-01 generation holds 8 such parts in 18,892
+      # records (fixture README).
+      def part_bounds(part)
+        from = part["beginDate"]
+        to = part["endDate"]
+        return [from, to, nil] unless broken_bounds?(from, to)
+
+        verbatim = "#{from.inspect}–#{to.inspect}".delete('"')
+        band = century_band(part["centuries"])
+        precise = part["datePreciseYear"]
+        if precise.is_a?(Integer) && PLAUSIBLE_YEARS.cover?(precise) && (band.nil? || band.cover?(precise))
+          return [precise, precise, verbatim]
+        end
+        return [nil, nil, verbatim] unless band
+
+        fits = ->(y) { y.is_a?(Integer) && band.cover?(y) }
+        from = band.begin unless fits.call(from)
+        to = band.end unless fits.call(to)
+        from, to = band.minmax if from > to
+        [from, to, verbatim]
+      end
+
+      def broken_bounds?(from, to)
+        years = [from, to].compact
+        return true unless years.all? { |y| y.is_a?(Integer) && PLAUSIBLE_YEARS.cover?(y) }
+
+        from && to ? from > to : false
+      end
+
+      # Upstream's centuries tags (18 = 1700–1800, its own begin/end
+      # convention for a whole century) → one band over them all.
+      def century_band(centuries)
+        list = Array(centuries).grep(Integer).select(&:positive?)
+        return nil if list.empty?
+
+        ((list.min - 1) * 100)..(list.max * 100)
+      end
+
       # The writing place a part's cataloguer recorded — its city, else
-      # its country. The holding repository is NOT an origin.
-      def origin(parts)
+      # its country; else the copying town the cataloguer wrote only in
+      # the provenance note (COPIED_IN). The holding repository is NOT an
+      # origin.
+      def origin(parts, provenance)
         parts.each do |p|
           place = name_of(p["cityOfOrigin"]) || name_of(p["countryOfOrigin"])
           return place if place
         end
-        nil
+        provenance.to_s[COPIED_IN, 1]
       end
 
       def facets(record, genres)

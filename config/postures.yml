@@ -1911,10 +1911,13 @@ sources:
         envelope as metadata date {not_before, not_after, raw} (min beginDate .. max endDate
         over the parts, century label raw; 18,001 of 18,892 records in the 2026-11-01
         generation), artifact class; the precise year/month/day and the native-era date
-        (e.g. '2025 AG') ride each part verbatim"}
+        (e.g. '2025 AG') ride each part verbatim; the 8 impossible part pairs upstream ships
+        (18891–1913, 1750–150 …) are repaired from the part's precise year / centuries band,
+        the verbatim pair named in the raw"}
     places: {posture: named, note: "the same :structured registration reads the metadata
-        place — the part's city of origin, else its country of origin (4,448 records), the
-        writing place as catalogued, names verbatim; the holding repository (city, country,
+        place — the part's city of origin, else its country of origin (4,448 records), else
+        the copying town a provenance note opens with ('Copied in Alqūsh, fol. 143r'; 38
+        records), the writing place as catalogued, names verbatim; the holding repository (city, country,
         LC/VIAF authority URIs) rides metadata and is never taken for the origin"}
     script: {posture: mixed, note: "Syriac script (Serṭā, Madnḥāyā, ʼEsṭrangelā — the part's
         script field verbatim), Ethiopic Fidäl, Arabic Naskh for the Arabic items; Garshuni is
