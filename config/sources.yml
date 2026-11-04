@@ -2791,6 +2791,30 @@ glaux:
   sync_policy: manual
   lemma_tier: silver
 
+glt:   # 02-sources row 380
+  adapter: Nabu::Adapters::Glt
+  adopted: "2026-11-04"
+  axes: [classical]
+  wired: false   # awaiting the first real sync: the paced crawl (2 index pages + 725
+                 # service pages ≈ 727 GETs at 1 req/s, ≈ 13 min + transfer). EXPECT
+                 # 725 docs (less any listed page upstream 404s — censused in the fetch
+                 # notes, never fatal), 0 errored, 2 skipped by rule (index.html +
+                 # extra.htm, the catalog), 0 unrecognized. Eyeball nabu show
+                 # urn:nabu:glt:sep.sep05:8 (the first sticheron of St Zachariah, tone 4,
+                 # section ΕΝ Τῼ ΕΣΠΕΡΙΝῼ), probe nabu search "Χρῖσμα περικείμενος",
+                 # then flip.
+  sync_policy: manual   # hand-maintained static pages, revised in place (Last-Modified pins)
+  # Greek Orthodox Liturgical Texts (glt.goarch.org, Greek Orthodox
+  # Archdiocese of America; maintained by Fr. Leo Schefe): the Byzantine
+  # service books in Greek — the twelve Menaia, Octoechos, Triodion,
+  # Pentecostarion, Horologion, Euchologion, one page per service. License:
+  # permission by email from the site maintainer, 2026-11-02 (the texts are
+  # in the public domain; "you are welcome to use them"; error reports
+  # invited) → open. Document = service page, passage = page line, rubrics
+  # role-marked from the site's red ink. The weekly-compiled daily services,
+  # the misc/ scripture books and anthology, and every non-HTML rendering
+  # are rejected grains (Adapters::Glt class comment).
+
 goo300k:
   adapter: Nabu::Adapters::Goo300k
   adopted: "2026-07-11"

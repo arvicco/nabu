@@ -165,6 +165,10 @@ class DerivabilityWritersTest < Minitest::Test
   # pages/<lang>/, the listing pages under catalog/<lang>/, tmp+rename;
   # attic copies + its .lotsawa-fetch.json ledger) inside Adapter#fetch —
   # the otdo_fetch crawl law kind.
+  # glt_fetch writes canonical/glt/ (the two index pages, the listed
+  # texts/<shelf>/<page>.html service pages, tmp+rename; attic copies +
+  # its .glt-fetch.json ledger) inside Adapter#fetch — the same crawl law
+  # kind.
   # The paramara adapter writes canonical/paramara/ (the community
   # listing records.json and each text record's <record id>/<file>.txt,
   # tmp+rename, never deleting) inside Adapter#fetch — the same crawl
@@ -242,7 +246,7 @@ class DerivabilityWritersTest < Minitest::Test
     nabu/kanripo_fetch.rb nabu/lfs_fetch.rb nabu/local_fetch.rb
     nabu/menota_fetch.rb
     nabu/manual_drop.rb nabu/ochre_fetch.rb nabu/otdo_fetch.rb
-    nabu/lotsawa_fetch.rb nabu/hf_rows_fetch.rb nabu/zip_range_fetch.rb
+    nabu/lotsawa_fetch.rb nabu/glt_fetch.rb nabu/hf_rows_fetch.rb nabu/zip_range_fetch.rb
     nabu/poma_fetch.rb nabu/bu_ajami_fetch.rb
     nabu/seal_fetch.rb nabu/aio_fetch.rb
     nabu/sefaria_fetch.rb nabu/titus_fetch.rb nabu/url_download.rb

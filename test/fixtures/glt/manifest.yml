@@ -1,0 +1,37 @@
+# Nabu fixture manifest (P5-4 "fixture sentinel"). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# Three files are whole, four documented trims; adapter_test stays null
+# (a count-based adapter test against the untrimmed pages would false-fail).
+source: glt
+adapter_test: null
+retrieved: '2026-11-04'
+files:
+- path: index.html
+  url: https://glt.goarch.org/index.html
+  whole: true
+  trim: none
+- path: extra.htm
+  url: https://glt.goarch.org/extra.htm
+  whole: true
+  trim: none
+- path: texts/Sep/Sep05.html
+  url: https://glt.goarch.org/texts/Sep/Sep05.html
+  whole: true
+  trim: none
+- path: texts/Euch/Baptism.html
+  url: https://glt.goarch.org/texts/Euch/Baptism.html
+  whole: false
+  trim: source lines 1–60 + 254–257 (of 257)
+- path: texts/Sep/14b.html
+  url: https://glt.goarch.org/texts/Sep/14b.html
+  whole: false
+  trim: source lines 1–130 + a </p> + 1519–1529 (of 1529)
+- path: daily/Mon.html
+  url: https://glt.goarch.org/daily/Mon.html
+  whole: false
+  trim: source lines 1–24 + 337–338 (of 338) — the rejected-grain specimen
+- path: misc/Prosomia.html
+  url: https://glt.goarch.org/misc/Prosomia.html
+  whole: false
+  trim: source lines 1–90 + a </p> + 8375–8378 (of 8378) — the rejected-grain specimen
