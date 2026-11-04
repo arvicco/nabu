@@ -13,7 +13,7 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 ## The shelves
 
-A source wears every desk it serves — these 39 answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
+A source wears every desk it serves — these 40 answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
 | Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 4 November 2026)</span> |
 |---|---|---|---|---|
@@ -37,6 +37,7 @@ A source wears every desk it serves — these 39 answer this desk. Holdings are 
 | `mdz-protestant` | texts | open | wired · manual | 6 docs / 1,518 passages |
 | `mk-wikisource` | texts | attribution | wired · manual | 836 docs / 31,114 passages |
 | `pl-wikisource` | texts | attribution | wired · manual | 1,228 docs / 15,823 passages / 5,711 entries |
+| `ponomar` | texts | attribution | wired · manual | 246 docs / 246 passages |
 | `prague-bible-1488` | texts | attribution | wired · manual | 31 docs / 2,939 passages |
 | `prilit` | texts | attribution | wired · manual | 43 docs / 8,526 passages |
 | `proiel` | treebank | nc | wired · frozen | 12 docs / 51,321 passages |
@@ -57,7 +58,7 @@ A source wears every desk it serves — these 39 answer this desk. Holdings are 
 | `wiktionary-cu` | dictionary | attribution | wired · manual | 4,615 entries |
 | `wiktionary-sh` | dictionary | attribution | wired · manual | 70,466 entries |
 
-**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 4 November 2026)</span>: `sl` 142,013 · `srp` 75,102 · `be` 35,159 · `pol` 6,942 · `chu` 4,837 · `pl` 2,091 · `hrv` 1,730 · `orv` 1,026 · `mkd` 836 · `ces` 331 … and 15 more (`nabu axis slavic` lists all).
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 4 November 2026)</span>: `sl` 142,013 · `srp` 75,102 · `be` 35,159 · `pol` 6,942 · `chu` 5,083 · `pl` 2,091 · `hrv` 1,730 · `orv` 1,026 · `mkd` 836 · `ces` 331 … and 15 more (`nabu axis slavic` lists all).
 
 **Carried in by multilingual packs** (`ud` — whole-source members whose other languages ride along, as of 4 November 2026): `ota` 5 · `lzh` 4 · `cop` 3 · `egy` 3 · `frm` 3 … and 14 more (`nabu axis slavic` lists all).
 
