@@ -358,7 +358,10 @@ armepic:   # P156, 02-sources row 377
   adapter: Nabu::Adapters::Armepic
   adopted: "2026-11-04"
   axes: [epigraphy]   # no Caucasus/Armenian desk exists yet
-  wired: false   # adapter + fixtures ready; first real sync pending. EXPECT 50 docs /
+  wired: true    # first sync verified 2026-11-04: 50 docs / 374 passages / 12 authority
+                 # lists skipped by rule, 0 errored — exactly the deposit census (v7).
+                 # Eyeballed urn:nabu:armepic:art0001 (dated 1271, placed Vank, kind
+                 # folded); FTS probe "Կամաւն Աստուծոյ" answers from two stones.
                  # 374 passages (371 lb-keyed lines + 3 lb-less monogram textparts) /
                  # 1,872 word tokens, 12 authority lists skipped by rule, 0 errored
                  # (the fixture-time full-deposit census, 2026-11-04). Reconciliation
@@ -4436,7 +4439,10 @@ ninjal-textdb:   # P156, 02-sources row 379
   adapter: Nabu::Adapters::NinjalTextdb
   adopted: "2026-11-04"
   axes: [japonic]
-  wired: false   # awaiting the first real sync (6 txt ≈ 2.9 MB + the 3.4 MB Nippo zip,
+  wired: true    # first sync verified 2026-11-04: 3 docs / 22,105 passages + 32,878
+                 # nippo-jisho entries, 0 errored — exactly the lane census (20 datasets
+                 # + readme/xlsx skipped by rule). Eyeballed amhk-001:3.9; FTS probe
+                 # "historia uo narai" answers through the long-s fold; define abaqi hits.
                  # paced ~1 req/s; seconds). EXPECT 3 docs / 22,105 line passages
                  # (amhk-001 9,681 · amis-001 2,251 · cmhab-001 10,173), 0 errored,
                  # + 1 dictionary (nippo-jisho) / 32,878 entries; 20 out-of-slice
@@ -5398,7 +5404,10 @@ ptg:   # P156, 02-sources row 376
   # desk's first Manchu and Classical Mongolian dictionary shelves AND a
   # Buddhist-terminology reference.
   axes: [mongolic, buddhist]
-  wired: false   # first sync pending: one ~42 KiB sha-pinned zip GET; expect
+  wired: true    # first sync verified 2026-11-04: 4,276 entries (san 1,070 / mnc 1,068 /
+                 # cmg 1,069 / lzh 1,069), 0 errored — the 1,071 terms minus the one
+                 # comment-only placeholder, exactly the census. define fucihi → p005.2
+                 # with all four columns.
                  # 4,276 entries on four shelves (ptg-san 1,070 · ptg-mnc
                  # 1,068 · ptg-cmg 1,069 · ptg-lzh 1,069); eyeball
                  # `nabu define fucihi --lang mnc`, `define burkhan --lang cmg`.
@@ -7738,7 +7747,9 @@ wenhai:   # P156, 02-sources row 378
   axes: [sinitic]   # the Wenhai is a rhyme dictionary on the Chinese model (fanqie spelling,
                     # tone-rhyme order) — the Sinologist's phonology instruments (Baxter-Sagart,
                     # the Qieyun database) are its comparanda; no Tangut desk exists
-  wired: false   # expect 1 dictionary document → 3,085 txg entries (= the record's count),
+  wired: true    # first sync verified 2026-11-04: 3,085 entries, 2 doc files skipped by
+                 # rule — exactly the record count. define 𘀏 → 05.131 with its fanqie
+                 # chain and both reconstructions.
                  # 0 errored, 2 deposit docs skipped by rule; four sha256-pinned Zenodo files
                  # (~370 KB). Eyeball nabu define 𘀏 (05.131, fanqie 𗈽𗒿) and the restored
                  # head 𗭹 (83.251 + 84.232), then flip.
@@ -8373,7 +8384,8 @@ wiktionary-tyz:   # P156, 02-sources row 375
   adapter: Nabu::Adapters::WiktionaryTyz
   adopted: "2026-11-04"
   axes: [sinitic]
-  wired: false   # flips at the first sync's verification
+  wired: true    # first sync verified 2026-11-04: 1,501 entries / 14 stubs skipped — exact.
+                 # define "ải chải" answers.
   # The kaikki Tày extraction (2,024,890 B / 1,515 records / "1203
   # distinct words", census 2026-11-04): the library's first Tày
   # dictionary — 138 Nôm Tày character records (150 senses, "Nôm form of
@@ -8390,7 +8402,9 @@ wiktionary-vi:   # P156, 02-sources row 373
   adapter: Nabu::Adapters::WiktionaryVi
   adopted: "2026-11-04"
   axes: [sinitic]
-  wired: false   # flips at the first sync's verification
+  wired: true    # first sync verified 2026-11-04: 52,107 entries / 60 empty stubs skipped
+                 # by rule (5,435 glossless kept for readings/forms) — exactly the census.
+                 # define ngựa answers with the mkh-pro etymon chain.
   # The kaikki Vietnamese extraction (83,424,329 B / 52,167 records /
   # "45519 distinct words", census 2026-11-04): the library's first
   # Vietnamese dictionary and its chữ Nôm lexicon — 9,112 Han/Nôm
@@ -8410,7 +8424,8 @@ wiktionary-za:   # P156, 02-sources row 374
   adapter: Nabu::Adapters::WiktionaryZa
   adopted: "2026-11-04"
   axes: [sinitic]
-  wired: false   # flips at the first sync's verification
+  wired: true    # first sync verified 2026-11-04: 3,577 entries / 2 stubs skipped — exact.
+                 # define gvaq answers with the MC 過 loan etymology.
   # The kaikki Zhuang extraction (7,486,225 B / 3,579 records / "2981
   # distinct words", census 2026-11-04): the library's first Zhuang
   # dictionary and its one structured Sawndip lexicon — 813 Sawcuengh
