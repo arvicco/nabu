@@ -77,7 +77,7 @@
 - slug: buddhist
   persona: The Buddhologist
   blurb: the dharma across the Pali, Sanskrit, Chinese and Tibetan canons
-  members: 13
+  members: 14
 - slug: tibetan
   persona: The Tibetologist
   blurb: the Land of Snows from Dunhuang documents to the complete Derge canon
@@ -107,7 +107,7 @@
   persona: The Mongolist
   blurb: the Secret History's empire in its own words, hanzi transcription beside
     romanization
-  members: 2
+  members: 3
 - slug: americas
   persona: The Americanist
   blurb: the colonial record of the indigenous Americas, Zapotec testaments to the

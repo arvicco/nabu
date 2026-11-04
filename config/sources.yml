@@ -5347,6 +5347,32 @@ pta:   # P154, 02-sources row 341
   # Witness overlap, not duplication: some works also sit in first1k-greek
   # or cgpg's Migne volumes in other prints.
 
+ptg:   # P156, 02-sources row 376
+  adapter: Nabu::Adapters::Ptg
+  adopted: "2026-11-04"
+  # Dual-tagged like mvp (language desk + domain): the Mongolic-Tungusic
+  # desk's first Manchu and Classical Mongolian dictionary shelves AND a
+  # Buddhist-terminology reference.
+  axes: [mongolic, buddhist]
+  wired: false   # first sync pending: one ~42 KiB sha-pinned zip GET; expect
+                 # 4,276 entries on four shelves (ptg-san 1,070 · ptg-mnc
+                 # 1,068 · ptg-cmg 1,069 · ptg-lzh 1,069); eyeball
+                 # `nabu define fucihi --lang mnc`, `define burkhan --lang cmg`.
+  sync_policy: manual
+  # The DILA Pentaglot: the Wuyi hebi jiyao 五譯合璧集要 (Raghu Vira's
+  # "Pentaglot Dictionary of Buddhist Terms", Delhi 1961 reprint) in the
+  # DILA / Dharma Drum TEI P5 edition (glossaries.dila.edu.tw/glossaries/
+  # PTG). 1,071 <entry> = 1,070 terms + 1 comment-only placeholder
+  # (p341A.1, skipped by rule) — upstream advertises "1071 terms". Columns
+  # Sanskrit / Manchu / Mongolian / Chinese (Tibetan never digitized); a
+  # mirror dictionary, so each column heads its own shelf: san, mnc, cmg
+  # (the mon-Latn column is Classical Mongolian — the nabu-lects cmg
+  # node's named consumer), lzh. Entry ids = upstream page.item xml:ids.
+  # LICENSE, verbatim from the glossary page: "We believe this text is in
+  # the public domain." + "This digital version is licensed by DILA under
+  # a Creative Commons Attribution-Share Alike 3.0 Taiwan License." →
+  # attribution. Upstream zip frozen (2017-03-20; sha256-pinned).
+
 qieyun-restored:   # P88-A2, 02-sources row 182
   adapter: Nabu::Adapters::QieyunRestored
   adopted: "2026-08-29"
