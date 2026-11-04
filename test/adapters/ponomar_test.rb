@@ -150,7 +150,8 @@ module Adapters
       entry = registry["ponomar"]
       refute_nil entry
       assert_equal Nabu::Adapters::Ponomar, entry.adapter_class
-      assert entry.wired, "wired after the verified first sync of 2026-11-04 (246 docs / 246 passages, exactly the census)"
+      assert entry.wired,
+             "wired after the verified first sync of 2026-11-04 (246 docs / 246 passages, exactly the census)"
       assert_equal "manual", entry.sync_policy
     end
 
