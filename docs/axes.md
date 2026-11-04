@@ -204,7 +204,7 @@ The Sanskrit, Prakrit and Pali lane: GRETIL and SARIT, the DCS treebank, Monier-
 
 Cross-cutting by design: SuttaCentral, CBETA, SARIT, and GRETIL whole — membership is whole-source, so GRETIL rides here although only part of its shelf is Buddhist — and the Derge Kangyur and Tengyur: the fourth canon leg.
 
-**Members** (13): `bdrc-transcriptions`, `cbeta`, `derge-kangyur`, `derge-tengyur`, `dpd`, `e84000`, `gretil`, `lotsawa-house`, `mvp`, `osbct`, `sarit`, `suttacentral`, `tipitaka-lk`
+**Members** (14): `bdrc-transcriptions`, `cbeta`, `derge-kangyur`, `derge-tengyur`, `dpd`, `e84000`, `gretil`, `lotsawa-house`, `mvp`, `osbct`, `ptg`, `sarit`, `suttacentral`, `tipitaka-lk`
 
 ### tibetan
 
@@ -260,7 +260,7 @@ The Turkic historical lane, opening on ATMO's Jarring-collection Turki manuscrip
 
 The Mongolic-Tungusic lane, opening on Street's romanized Secret History via Monumenta Altaica (use granted by the site's maintainer, 2026-09-27) — the kaikki Manchu extract, the zh.wikisource hanzi transmission text and the Manchu corpus asks joining as they land.
 
-**Members** (2): `altaica-shm`, `wiktionary-recon`
+**Members** (3): `altaica-shm`, `ptg`, `wiktionary-recon`
 
 ### americas
 

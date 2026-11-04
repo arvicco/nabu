@@ -13,7 +13,7 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 ## The shelves
 
-A source wears every desk it serves — these thirteen answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
+A source wears every desk it serves — these fourteen answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
 | Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 4 November 2026)</span> |
 |---|---|---|---|---|
@@ -27,6 +27,7 @@ A source wears every desk it serves — these thirteen answer this desk. Holding
 | `lotsawa-house` | texts | nc | wired · manual | 6,388 docs / 413,067 passages |
 | `mvp` | dictionary | open | wired · manual | 9,379 entries |
 | `osbct` | texts | nc | wired · frozen | 118 docs / 89,512 passages |
+| `ptg` | dictionary | attribution | not yet wired | not synced yet |
 | `sarit` | texts | attribution | wired · manual | 78 docs / 345,601 passages |
 | `suttacentral` | texts | open | wired · auto | 12,397 docs / 699,511 passages |
 | `tipitaka-lk` | texts | research_private | wired · auto | 563 docs / 456,967 passages |
