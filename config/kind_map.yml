@@ -2026,3 +2026,16 @@ sources:
       #   historiography by the ruled biography precedent (the scat fold)
     deliberate:
       "Genre missing": "the catalog's unfilled genre slot (18 works), not a claim"
+  ponomar:            # the adapter's service_part (Adapters::Ponomar): TROPARION / KONTAKION for
+    metadata: service_part  # the hymn subtrees, else the top folder; census 2026-11-04 over all 246
+    map:
+      "TROPARION": hymn-prayer/hymn       # 56 — the weekday/Sunday Octoechos troparia (SUN1…SAT8)
+      "KONTAKION": hymn-prayer/hymn       # 61 — the Octoechos kontakia + the Lenten MTTL/WFL/SatL sets
+      "CommonPrayers": ritual/liturgy     # 106 — the fixed ordinary of the Hours: prayers, responses,
+      #   doxologies, deacon/priest/reader exclamations, the Lenten troparia with their verses —
+      #   the service's own text, so the liturgy sub (a per-file prayer/hymn split would need a
+      #   per-text reading upstream does not mark: the HEADER is free text, often absent)
+      "Command": ritual/liturgy           # 14 — the rubric words the assembler sets in red
+      #   ("покло́нъ", "(гла́съ а҃)", "(Сті́хъ а҃)"): instructions for performing the rite
+      "Text": ritual/liturgy              # 9 — the Hours' titles ("Ча́съ тре́тїй") and the Paschal
+      #   Hours rubric

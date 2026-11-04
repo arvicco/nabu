@@ -5289,6 +5289,35 @@ pna:   # 02-sources row 311
   # links (3,084 of 4,188 texts) onto held oracc/cdli documents. The
   # 149,045 co-occurrence edges are skipped by rule (no relation lane).
 
+ponomar:   # 02-sources row 380
+  adapter: Nabu::Adapters::Ponomar
+  adopted: "2026-11-04"
+  axes: [slavic]
+  wired: false   # FIRST SYNC: bin/nabu enable ponomar, then bin/nabu sync ponomar (one
+                 # blobless sparse clone of github.com/typiconman/ponomar, cone
+                 # Ponomar/languages/cu/xml/Services/ + LICENSE + README.md — ~150 KB of
+                 # blobs, seconds). EXPECT 246 docs / 246 passages, 0 errored, 101 skipped
+                 # by rule (56 Octoechos TONE schedules, 28 Var templates, 4 placeholder
+                 # stubs, 3 blank records, 5 orthlib.ru source credits, 5 window
+                 # captions), 0 unrecognized — census through the adapter over master
+                 # 0af645f (2026-08-17), 2026-11-04. Eyeball nabu show
+                 # urn:nabu:ponomar:cu:CommonPrayers.NiceneCreed:1 (Вѣ́рꙋю во є҆ди́наго
+                 # бг҃а) and urn:nabu:ponomar:cu:CommonPrayers.TROPARION.TUES7:1 (Па́мѧть
+                 # првⷣнагѡ съ похвала́ми), probe nabu search вседержи́телѧ, then flip.
+  sync_policy: manual
+  # Ponomar (Aleksandr Andreev and others), the Orthodox liturgics suite:
+  # its Church Slavonic Services tree — the kit the program assembles the
+  # Hours from: fixed prayers and responses, the Octoechos weekday/Sunday
+  # troparia and kontakia, the Lenten troparia, rubric words, service
+  # titles. Document = file, passage = its TEXT. LICENSE: the repo's
+  # LICENSE is the GNU GPL v3; README.md verbatim "Copyright 2006-2018
+  # Aleksandr Andreev and others. Ponomar is free software: you can
+  # redistribute it and/or modify it under the terms of the GNU General
+  # Public License as published by the Free Software Foundation, either
+  # version 3 of the License, or (at your option) any later version." →
+  # attribution (the copyleft class of the CC BY-SA/GFDL holdings: carried
+  # verbatim, license and source named). Lect chu → chu:ncs.
+
 ppchy:   # P152, 02-sources row 318
   adapter: Nabu::Adapters::Ppchy
   adopted: "2026-11-02"
