@@ -22,7 +22,7 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 ## The shelves
 
-A source wears every desk it serves — these 28 answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
+A source wears every desk it serves — these 29 answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
 | Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 4 November 2026)</span> |
 |---|---|---|---|---|
@@ -38,6 +38,7 @@ A source wears every desk it serves — these 28 answer this desk. Holdings are 
 | `derom` | dictionary | nc | wired · manual | 233 entries |
 | `digiliblt` | texts | attribution | wired · manual | 372 docs / 459,451 passages |
 | `disco` | texts | attribution | wired · manual | 1,215 docs / 4,527 passages |
+| `gregobase` | texts | open | not yet wired | nothing held yet |
 | `littre` | dictionary | attribution | wired · manual | 78,483 entries |
 | `lo-congres` | texts | attribution | wired · manual | 12 docs / 10,304 passages |
 | `meloniromance` | cognacy dataset | attribution | wired · manual | 5,419 entries |
