@@ -2039,3 +2039,19 @@ sources:
       #   ("покло́нъ", "(гла́съ а҃)", "(Сті́хъ а҃)"): instructions for performing the rite
       "Text": ritual/liturgy              # 9 — the Hours' titles ("Ча́съ тре́тїй") and the Paschal
       #   Hours rubric
+  glt:                # the service page's shelf (Adapters::Glt::BOOKS — the site's own texts/<shelf>
+    metadata: book    # filing), one fold per book; every page is a service of the Byzantine rite.
+    #                   The house precedent: hmml's "Liturgical books (Eastern Christian)" → ritual/
+    #                   liturgy (8,627). The four hymnographic books are ALSO hymn collections —
+    #                   a [ritual/liturgy, hymn-prayer/hymn] split is a ruling, not taken here.
+    map:
+      "Menaion": ritual/liturgy          # the fixed-feast propers, one service per commemoration:
+      #   stichera, canons, troparia with the rubrics that order them in Vespers and Orthros
+      "Octoechos": ritual/liturgy        # the eight-tone weekly cycle of propers (+ Eothina, Theotokia)
+      "Triodion": ritual/liturgy         # the Lenten-cycle services through Holy Week, readings inside
+      "Pentecostarion": ritual/liturgy   # the Paschal-cycle services, Pascha to All Saints
+      "Horologion": ritual/liturgy       # the ordinary of the offices (Vespers, Compline, the Hours,
+      #   Orthros) and — the site's own filing — the Divine Liturgies, Akathist and Paraklesis
+      "Euchologion": ritual/liturgy      # the sacramental rites: baptism, marriage, unction, funeral
+      "Synekdemos": ritual/liturgy       # the companion shelf: Katabasiai, Megalynaria, the Orthros
+      #   enkolpion — service material, two of the three pages hymn sequences (declared coarse)

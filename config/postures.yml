@@ -3101,3 +3101,23 @@ sources:
     script: {posture: qualified, note: "Church Cyrillic in the printed Synodal service-book
         orthography (titla U+0483 and letter-titla U+2DE0–2DFF, accents, psili, ѿ/ꙋ/ѧ/ѣ/і/ѵ/ѳ/ѡ),
         NFC-composed at the boundary (decomposed и/і + mark on 199 upstream attributes)"}
+  glt:
+    # kind: machine-postured — kind_map.yml metadata book.
+    lect: {posture: pending, note: "candidate: a lect_overrides row grc → grc:byz, tier
+        approximation — the perseus-latin shape: the books' hymnography and euchology are
+        Byzantine liturgical Greek (the liturgies of Basil and Chrysostom, Romanos, Andrew of
+        Crete, John of Damascus, Kosmas, the Studites, Joseph the Hymnographer), but the
+        Menaia also carry post-Byzantine services written in the same received register
+        (St Nektarios †1920, the Agia Skepi and the 28 October doxology among extra.htm's
+        services), so the stage is a corpus-level reading, not the corpus's own definition"}
+    dating: {posture: undatable, note: "received liturgical tradition in a modern editorial
+        form: no page carries a composition or edition date. What the pages DO carry is
+        mined, but none is a dating claim — the Menaion commemoration (month from the
+        shelf, day from the page name → metadata commemoration) is a calendar day, and the
+        hymnographers' names in the rubrics (Ἰωάννου Μοναχοῦ, Ἀνατολίου, Θεοφάνους) ride
+        the rubric passages verbatim, unmapped to floruits"}
+    places: {posture: unplaced, note: "the books name no place of composition or use; the
+        site's publisher (the Archdiocese, New York) is an imprint of the digital edition,
+        not the texts' locus"}
+    script: {posture: implied, note: "polytonic Greek (Grek) throughout; the site's Greek
+        Extended oxia vowels and ano teleia fold to their NFC canonical forms at the boundary"}
