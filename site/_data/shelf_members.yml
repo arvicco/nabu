@@ -35,6 +35,7 @@ latin-romance:
 papyri: [papyri-ddbdp]
 latin-inscriptions: [edh]
 greek-inscriptions: [aio]
+armenian-inscriptions: [armepic]
 inscriptions-of-italy: [edr]
 celtic: [corph, riig, ogham, stgall-priscian, br-wikisource, cy-wikisource]
 coptic: [coptic-scriptorium]
@@ -138,7 +139,7 @@ tibetan:
   - old-tibetan
   - soas-tibetan
   - jaschke-1881
-japanese: [aozora, ndl-kotenseki, honkoku, ja-wikisource, kokubunken, kouigenji, oncoj]
+japanese: [aozora, ndl-kotenseki, honkoku, ja-wikisource, kokubunken, kouigenji, ninjal-textdb, oncoj]
 southeast-asia:
   - dharma-khmer
   - dharma-campa
