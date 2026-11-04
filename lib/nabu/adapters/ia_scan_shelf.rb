@@ -80,9 +80,11 @@ module Nabu
       end
 
       # archive.org file names carry spaces, parentheses and diacritics —
-      # percent-encode every byte outside the unreserved set.
+      # percent-encode every byte outside the unreserved set. A "/" is the
+      # item's own folder separator (a multi-volume upload keeps each
+      # volume under a folder inside the item) and stays literal.
       def self.download_url(identifier, filename)
-        encoded = filename.b.gsub(/[^A-Za-z0-9._~-]/n) { |byte| format("%%%02X", byte.ord) }
+        encoded = filename.b.gsub(%r{[^A-Za-z0-9._~/-]}n) { |byte| format("%%%02X", byte.ord) }
         "#{DOWNLOAD_BASE}#{identifier}/#{encoded}"
       end
 
@@ -176,10 +178,12 @@ module Nabu
       def held?(workdir, item) = item_paths(workdir, item).values.all? { |path| File.file?(path) }
 
       # Both derivatives download BEFORE either is written — an item lands
-      # whole or not at all.
+      # whole or not at all. The file name is taken relative to the item
+      # dir, so a +file+ stem inside an item folder keeps its folder.
       def fetch_item!(workdir, item, progress)
+        item_dir = File.join(workdir, item.identifier)
         bodies = item_paths(workdir, item).transform_values do |path|
-          download(self.class.download_url(item.identifier, File.basename(path)), progress)
+          download(self.class.download_url(item.identifier, path.delete_prefix("#{item_dir}/")), progress)
         end
         bodies.each do |kind, body|
           path = item_paths(workdir, item).fetch(kind)

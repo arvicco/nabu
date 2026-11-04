@@ -1,0 +1,16 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# GregoBase's delivery unit is ONE MySQL dump in the site's code repo; the
+# fixture is a line-verbatim TRIM of it (README.md), so a fresh GET of the
+# raw URL returns the full 17 MB file: fetched for URL-liveness only, never
+# byte-compared (whole: false), and the count-based adapter test is not
+# re-run against it (adapter_test: null).
+source: gregobase
+adapter_test:
+retrieved: 2026-11-04
+files:
+  - path: gregobase_online.sql
+    url: https://raw.githubusercontent.com/gregorio-project/GregoBase/2ebcda3f523f9b19933d59fa32bb4215cd8e7675/gregobase_online.sql
+    whole: false
+    trim: chants 507/8761/13466/14738/17418/18115 (accepted) + 7774/8093/16117/18651 (the rejected row grains; 8093's copyrighted melody redacted to its clef) with their gregobase_chant_sources/chant_tags rows, the 7 referenced books and 1 tag; every non-data line kept (see README.md)

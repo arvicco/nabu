@@ -50,6 +50,19 @@ sources:
   openmgh:
     # MGH medieval critical editions — certain.
     lat: { lect: "lat:med", tier: certain }
+  analecta-hymnica:
+    # The Analecta Hymnica MEDII AEVI define their own scope as the hymnody
+    # of the Middle Ages — the registry's lat:med node (the openmgh shape),
+    # transcribed from the series' title (parse-time work, the 2026-10-18
+    # generalization). Tier APPROXIMATION, not certain: the stage band is
+    # [600, 1350], while Bd. 50–52 (Hymnographi Latini II, Thesauri
+    # hymnologici hymnarium) reach back to Hilary and Ambrose (4th c.) and
+    # the Reimgebete / Psalterien / Cantiones volumes run into the 15th–16th
+    # (lat:ren). The row also keeps date-band inference off the PRINT years
+    # (1886–1922), which would otherwise stage the volumes to lat:new. The
+    # liturgical register (lat/ecc) is not claimed — a refinement for a
+    # ruling, not a transcription.
+    lat: { lect: "lat:med", tier: approximation }
   vulgate:
     # Jerome — certain.
     lat: { lect: "lat:late/ecc", tier: certain }
@@ -171,6 +184,27 @@ sources:
   # registry note agree.
   ninjal-textdb:
     jpn: { lect: "jpn:lmj~latn", tier: certain }
+  # GregoBase is the Gregorian repertory of the Roman rite and its
+  # religious orders (Solesmes, Vatican, Dominican, Cistercian…): its Latin
+  # is the liturgy's own register by definition — the registry's
+  # lat/ecc variety (the vulgate's register, lat:late/ecc). Deliberately
+  # UNSTAGED: the texts span the late-antique psalter and antiphon
+  # tradition, medieval hymns and sequences, and 19th–21st-century
+  # compositions and revisions in one table with no per-chant composition
+  # date (the D57-f mixed-at-source-grain class). The vernacular rows
+  # (eng, vie, pol, grc …) stay bare. Tier certain: the register claim is
+  # the database's definition, not an inference.
+  gregobase:
+    lat: { lect: "lat/ecc", tier: certain }
+  divinum-officium:
+    # The Roman Rite's liturgical books ARE Ecclesiastical Latin by the
+    # corpus's own definition — the same stageless lat/ecc register claim
+    # the gregobase row makes for the chant repertory (both adopted
+    # 2026-11-04, the liturgy wave): strata from the Vulgate psalter and
+    # patristic lessons through medieval hymnody to twentieth-century
+    # feasts, so no stage is claimed at source grain. Tier certain: a
+    # register transcription of the corpus's identity, not a reading.
+    lat: { lect: "lat/ecc", tier: certain }
   # P116-1's add-then-retire completed (2026-10-11; the Slavic nabu-lects
   # package minted cs with cs:old [1100, 1500], in canonical): the Prague
   # Bible of 1488 IS Old Czech by every periodization (staročeština to
@@ -327,4 +361,30 @@ sources:
     # Tier certain: one edition, the stage's own founding text.
     # (ka-mcxeta needs no row: it is tagged oge, the Old Georgian anchor,
     # by its own title "ძველი ქართულით".)
+    chu: { lect: "chu:ncs", tier: certain }
+  armepic:
+    # The Artsakh inscriptions (1183–1998) are written grabar — the
+    # editors' own description: "grabar with Middle Armenian vernacular
+    # features" — and the registry's xcl note anticipates exactly this
+    # continued learned register ("continued as the learned language to
+    # the 19th c."). Ruled 2026-11-04: the corpus pins to xcl; no
+    # date-band staging into axm (a carving date does not reclassify a
+    # conservative written register). Spot-read at execution: the 1998
+    # Berdzor dedication is pure learned grabar (շինեցաք, the զ-
+    # accusative, Աստուծոյ/եղբարց genitives, an Armenian-era date); the
+    # 1918 stone keeps the grabar memorial formula with vernacular
+    # intrusions — the editors' reading holds at corpus grain. Tier
+    # certain: the corpus's own editorial definition.
+    xcl: { lect: "xcl", tier: certain }
+  ponomar:
+    # The Ponomar service texts are the Hours of the Russian Synodal
+    # service books in their printed Church Cyrillic orthography (titla,
+    # accents, psili, ѿ/ꙋ/ѧ/ѣ/ѵ) — the post-Nikonian standard "used since
+    # as the liturgical language of the Russian ... Orthodox churches"
+    # that the registry's chu:ncs node names, its band [1650, 2100] open
+    # at the modern end for exactly this living liturgical use. Upstream
+    # files them under the language folder cu (→ chu); this row
+    # transcribes the corpus's own identity onto the existing node —
+    # parse-time work, the 2026-10-18 generalization. Tier certain: every
+    # file is the modern liturgical text, none a pre-reform witness.
     chu: { lect: "chu:ncs", tier: certain }

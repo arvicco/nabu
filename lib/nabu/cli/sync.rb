@@ -1166,6 +1166,16 @@ module Nabu
         say("  discovery: #{selected} selected · #{skipped} skipped-by-rule · " \
             "#{unrecognized} unrecognized", unrecognized.positive? ? :yellow : nil)
         discovery.notes.each { |note| say("  ! #{note}", :yellow) }
+        # A fetch that lost items (a retried-out mirror, an aborted walk)
+        # says so in its report notes — but those reached only the live
+        # progress spinner, so a piped/logged sync looked clean while an
+        # item was missing (caught 2026-11-04: an IA item lost to a
+        # transient 54/55 walk printed "0 errored"). Surface the report's
+        # own words whenever they carry a miss.
+        fetch_notes = outcome.fetch_report&.notes
+        return unless fetch_notes&.match?(/unreachable|aborted|drift/)
+
+        say("  ! fetch: #{fetch_notes}", :yellow)
       end
 
       def format_sync_outcome(outcome)

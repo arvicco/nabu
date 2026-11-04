@@ -132,6 +132,21 @@ class AdapterConformanceMetaTest < Minitest::Test
     end
   end
 
+  # Every document mints a structured date hash, but test_adapter is in
+  # neither MetadataDates::SHAPES nor the guard's opt-outs — the emmo shape.
+  class DatedUnregisteredAdapter < TestAdapter
+    def parse(document_ref)
+      original = super
+      document = Nabu::Document.new(
+        urn: original.urn, language: original.language, title: original.title,
+        canonical_path: original.canonical_path,
+        metadata: { "date" => { "not_before" => 1600, "not_after" => 1610, "raw" => "1600–1610" } }
+      )
+      original.each { |passage| document << passage }
+      document
+    end
+  end
+
   # self.manifest returns the wrong type entirely.
   class WrongManifestAdapter < TestAdapter
     def self.manifest
@@ -186,6 +201,15 @@ class AdapterConformanceMetaTest < Minitest::Test
     failed = run_marker_conformance(EmptyDocumentAdapter)
     refute failed.passed?, "an UNDECLARED empty document must still fail under the marker-driven hook"
     assert_match(/parsed to zero passages/, failed.failures.first.message)
+  end
+
+  def test_unregistered_date_metadata_fails_the_timeline_registration_assertion
+    assert_fails_conformance DatedUnregisteredAdapter,
+                             :test_conformance_date_metadata_reaches_the_timeline,
+                             /"test_adapter" mints date-shaped metadata \[not_before \(3 docs\), date \(3 docs\)\]/
+    # The undated base adapter passes unregistered: only date-shaped ore needs a lane.
+    assert_passes_conformance TestAdapter, :test_conformance_date_metadata_reaches_the_timeline
+    assert_passes_conformance DatedUnregisteredAdapter, :test_conformance_urns_are_unique_across_the_discover_set
   end
 
   def test_wrong_manifest_type_fails_the_manifest_assertion

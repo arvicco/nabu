@@ -81,6 +81,18 @@ sources:
     entries_display: '0'
     holdings: 1 documents / 3,523 passages
     canonical_display: 1 MB
+  analecta-hymnica:
+    name: Analecta Hymnica Medii Aevi, Bd. 1–55 (Dreves, Blume, Bannister; archive.org
+      scans, uncorrected OCR)
+    license_class: open
+    documents: 55
+    documents_display: '55'
+    passages: 17211
+    passages_display: '17,211'
+    entries: 0
+    entries_display: '0'
+    holdings: 55 documents / 17,211 passages
+    canonical_display: 14 MB
   aozora:
     name: Aozora Bunko 青空文庫 — Japanese public-domain library (ruby-annotated text)
     license_class: open
@@ -341,6 +353,17 @@ sources:
     entries_display: '0'
     holdings: 1,682 documents / 34,162 passages
     canonical_display: 35 MB
+  cantus:
+    name: Cantus Database — inventories of chant in medieval manuscripts
+    license_class: nc
+    documents: 156519
+    documents_display: '156,519'
+    passages: 156519
+    passages_display: '156,519'
+    entries: 0
+    entries_display: '0'
+    holdings: 156,519 documents / 156,519 passages
+    canonical_display: 113 MB
   cbeta:
     name: CBETA — Chinese Buddhist Electronic Text Archive (Taishō, Xuzangjing, Koreana,
       Jiaxing, Nanchuan + the historical canon editions; TEI P5)
@@ -827,6 +850,18 @@ sources:
     entries_display: '0'
     holdings: 1,215 documents / 4,527 passages
     canonical_display: 27 MB
+  divinum-officium:
+    name: Divinum Officium — the Tridentine Latin Office and Mass (Breviarium and
+      Missale Romanum)
+    license_class: open
+    documents: 4003
+    documents_display: '4,003'
+    passages: 26381
+    passages_display: '26,381'
+    entries: 0
+    entries_display: '0'
+    holdings: 4,003 documents / 26,381 passages
+    canonical_display: 36 MB
   dpd:
     name: Digital Pāḷi Dictionary — dpd-db release text export
     license_class: nc
@@ -1180,6 +1215,18 @@ sources:
     entries_display: '0'
     holdings: 1,421 documents / 968,578 passages
     canonical_display: 3.6 GB
+  glt:
+    name: 'GLT — Greek Orthodox Liturgical Texts (glt.goarch.org): the Byzantine service
+      books in Greek'
+    license_class: open
+    documents: 725
+    documents_display: '725'
+    passages: 186442
+    passages_display: '186,442'
+    entries: 0
+    entries_display: '0'
+    holdings: 725 documents / 186,442 passages
+    canonical_display: 45 MB
   goo300k:
     name: goo300k — reference corpus of historical Slovene (CLARIN.SI)
     license_class: attribution
@@ -1236,6 +1283,17 @@ sources:
     entries_display: '0'
     holdings: 4 documents / 515 passages
     canonical_display: 2 MB
+  gregobase:
+    name: GregoBase — a database of Gregorian scores (gregobase.selapa.net)
+    license_class: open
+    documents: 18422
+    documents_display: '18,422'
+    passages: 20810
+    passages_display: '20,810'
+    entries: 0
+    entries_display: '0'
+    holdings: 18,422 documents / 20,810 passages
+    canonical_display: 22 MB
   gretil:
     name: GRETIL — Göttingen Register of Electronic Texts in Indian Languages (TEI
       corpus)
@@ -1894,13 +1952,13 @@ sources:
   ndl-kotenseki:
     name: NDL 次世代デジタルライブラリー — 古典籍 OCR full text (bulk API)
     license_class: open
-    documents: 58896
-    documents_display: '58,896'
-    passages: 3291374
-    passages_display: '3,291,374'
+    documents: 59296
+    documents_display: '59,296'
+    passages: 3298127
+    passages_display: '3,298,127'
     entries: 0
     entries_display: '0'
-    holdings: 58,896 documents / 3,291,374 passages
+    holdings: 59,296 documents / 3,298,127 passages
     canonical_display: 16 GB
   ninjal-textdb:
     name: NINJAL Text Data Sets for Research on the History of Japanese — the Kirishitan
@@ -2205,6 +2263,17 @@ sources:
     entries_display: '5,711'
     holdings: 1,228 documents / 15,823 passages · 5,711 entries
     canonical_display: 34 MB
+  ponomar:
+    name: Ponomar — Church Slavonic service texts (the Hours kit)
+    license_class: attribution
+    documents: 246
+    documents_display: '246'
+    passages: 246
+    passages_display: '246'
+    entries: 0
+    entries_display: '0'
+    holdings: 246 documents / 246 passages
+    canonical_display: 7 MB
   ppchy:
     name: PPCHY — Penn Parsed Corpus of Historical Yiddish (Santorini)
     license_class: nc
@@ -3586,6 +3655,19 @@ shelves:
     passages: 501963
     passages_display: '501,963'
     size_display: 810 / 501,963
+  liturgy-chant:
+    sources:
+    - divinum-officium
+    - gregobase
+    - cantus
+    - analecta-hymnica
+    - glt
+    - ponomar
+    documents: 179970
+    documents_display: '179,970'
+    passages: 407609
+    passages_display: '407,609'
+    size_display: 179,970 / 407,609
   latin-romance:
     sources:
     - digiliblt
@@ -3992,11 +4074,11 @@ shelves:
     - kouigenji
     - ninjal-textdb
     - oncoj
-    documents: 87998
-    documents_display: '87,998'
-    passages: 6574994
-    passages_display: '6,574,994'
-    size_display: 87,998 / 6,574,994
+    documents: 88398
+    documents_display: '88,398'
+    passages: 6581747
+    passages_display: '6,581,747'
+    size_display: 88,398 / 6,581,747
   southeast-asia:
     sources:
     - dharma-khmer
@@ -4058,5 +4140,5 @@ shelves:
     size_display: 1,282 / 7,014
 disk:
   canonical_display: 146 GB
-  derived_display: 188 GB
+  derived_display: 189 GB
   starter_display: 693 MB

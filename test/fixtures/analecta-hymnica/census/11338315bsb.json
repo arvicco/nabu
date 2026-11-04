@@ -1,0 +1,67 @@
+{
+ "files": [
+  {
+   "format": "Image Container PDF",
+   "name": "11338315bsb.pdf",
+   "size": "25447939",
+   "source": "original"
+  },
+  {
+   "format": "OCR Page Index",
+   "name": "11338315bsb_hocr_pageindex.json.gz",
+   "size": "1059",
+   "source": "derivative"
+  },
+  {
+   "format": "OCR Search Text",
+   "name": "11338315bsb_hocr_searchtext.txt.gz",
+   "size": "40040",
+   "source": "derivative"
+  },
+  {
+   "format": "Additional Text PDF",
+   "name": "11338315bsb_text.pdf",
+   "size": "3465292",
+   "source": "derivative"
+  }
+ ],
+ "files_count": 16,
+ "metadata": {
+  "adaptive_ocr": "true",
+  "addeddate": "2026-05-20 13:54:49",
+  "collection": [
+   "german-online-libraries",
+   "booksbylanguage_german",
+   "booksbylanguage"
+  ],
+  "collection_added": [
+   "booksbylanguage_german",
+   "booksbylanguage"
+  ],
+  "creator": "Wetzel, Johann Caspar",
+  "date": "1751",
+  "description": "Gotha : verlegts Christian Mevius 1751.\n\nLocation/Holding institution: \nMünchen, Bayerische Staatsbibliothek -- P.o.germ. 1591 d-1,1/6\n\n",
+  "identifier": "11338315bsb",
+  "identifier-access": "http://archive.org/details/11338315bsb",
+  "identifier-ark": "ark:/13960/s242bm6npwt",
+  "imagecount": "93",
+  "language": "German",
+  "mediatype": "texts",
+  "ocr": "tesseract 5.3.0-6-g76ae",
+  "ocr-additional-languages": "Fraktur",
+  "ocr_detected_lang": "de",
+  "ocr_detected_lang_conf": "1.0000",
+  "ocr_detected_script": "Fraktur",
+  "ocr_detected_script_conf": "1.0000",
+  "ocr_module_version": "0.0.21",
+  "ocr_parameters": "-l deu+Fraktur",
+  "page_number_confidence": "0",
+  "page_number_module_version": "1.0.5",
+  "pdf_degraded": "invalid-jp2-headers",
+  "pdf_module_version": "0.0.25",
+  "ppi": "72",
+  "publicdate": "2026-05-20 13:54:49",
+  "source_url": "https://www.digitale-sammlungen.de/en/view/bsb11338315",
+  "title": "Johann Caspar Wetzels Analecta Hymnica, Das ist: Merckwürdige Nachlesen zur Lieder-Historie. 1,3"
+ }
+}

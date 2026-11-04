@@ -1,0 +1,44 @@
+# Nabu fixture manifest (P5-4 "fixture sentinel"). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# Every entry is a documented trim (whole: false) — adapter_test null.
+source: analecta-hymnica
+adapter_test: null
+retrieved: "2026-11-04"
+files:
+  - path: analectahymnicam01drev/analectahymnicam01drev_hocr_searchtext.txt.gz
+    url: https://archive.org/download/analectahymnicam01drev/analectahymnicam01drev_hocr_searchtext.txt.gz
+    whole: false
+    trim: first 10 hOCR pages (2,706 of 373,249 characters), re-gzipped — README recipe
+  - path: analectahymnicam01drev/analectahymnicam01drev_hocr_pageindex.json.gz
+    url: https://archive.org/download/analectahymnicam01drev/analectahymnicam01drev_hocr_pageindex.json.gz
+    whole: false
+    trim: first 10 of 218 rows, re-gzipped — README recipe
+  - path: hymniineditilitu55drev/hymniineditilitu55drev_hocr_searchtext.txt.gz
+    url: https://archive.org/download/hymniineditilitu55drev/hymniineditilitu55drev_hocr_searchtext.txt.gz
+    whole: false
+    trim: first 22 hOCR pages (28,352 of 1,195,017 characters), re-gzipped — README recipe
+  - path: hymniineditilitu55drev/hymniineditilitu55drev_hocr_pageindex.json.gz
+    url: https://archive.org/download/hymniineditilitu55drev/hymniineditilitu55drev_hocr_pageindex.json.gz
+    whole: false
+    trim: first 22 of 442 rows, re-gzipped — README recipe
+  - path: census/analectahymnicam01drev.json
+    url: https://archive.org/metadata/analectahymnicam01drev
+    whole: false
+    trim: metadata block (operator fields dropped) + PDF/hOCR-pair file entries — README
+  - path: census/analectahymnicam13drev_0.json
+    url: https://archive.org/metadata/analectahymnicam13drev_0
+    whole: false
+    trim: metadata block (operator fields dropped) + PDF/hOCR-pair file entries — README
+  - path: census/analectahymnica01drevuoft.json
+    url: https://archive.org/metadata/analectahymnica01drevuoft
+    whole: false
+    trim: metadata block (operator fields dropped) + PDF file entries — README
+  - path: census/analecta-hymnica-medii-aevi.json
+    url: https://archive.org/metadata/analecta-hymnica-medii-aevi
+    whole: false
+    trim: metadata block (uploader dropped) + the Vol. 1, Vol. 28, Vol. 48 PDF/hOCR-pair entries — README
+  - path: census/11338315bsb.json
+    url: https://archive.org/metadata/11338315bsb
+    whole: false
+    trim: metadata block (uploader dropped) + PDF/hOCR-pair file entries — README

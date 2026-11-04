@@ -2069,3 +2069,57 @@ Han-derived spellings, unencoded characters as ideographic description
 sequences) and Tày (1,501 entries recording Nôm Tày) — the Han-script
 vernacular lexica of the Việt–Tai borderlands (CC BY-SA + GFDL, as
 Wiktionary).
+
+## 8bf. The P157 arrivals — the Latin liturgy and chant wave, with the Greek and Slavic service books
+
+**`divinum-officium`** — Divinum Officium (the Divinum Officium
+Project, after Laszlo Kiss): the traditional, pre-1970 Roman Breviary
+and Missal whole in Latin — 4,003 files of propers of the season and
+the saints, the commons, the Vulgate psalter verse by verse, the
+Ordinary of the Mass, the Roman Martyrology and the Rule of St
+Benedict, from the 1888 Ratisbon breviary through the 1960 rubrics,
+with the Monastic, Cistercian and Dominican uses and the local propers
+of Rome, Bavaria, Brazil and the Netherlands. The texts are public
+domain by the project's own statement; the project's modern-language
+translations are deliberately not held.
+
+**`gregobase`** — GregoBase (the Gregorio community): the shared
+transcription database of Gregorian chant, some eighteen thousand
+chants of the Roman rite — office antiphons and responsories, hymns,
+the Mass propers and ordinary, sequences and litanies — transcribed
+from the Solesmes and Vatican books and medieval witnesses such as the
+Hartker antiphoner, each held as its sung text with the full GABC
+notation beside it and its Cantus ID where upstream records one. CC0;
+the few chants upstream itself flags as copyrighted are left out.
+
+**`cantus`** — the Cantus Database (Dalhousie / McGill DDMAL, dir.
+Debra Lacoste): the long-running inventory of the chants of the
+medieval Latin Office, chant by chant across 305 manuscript and
+printed sources — each record the text as its scribe spelled it,
+with the standardized spelling beside it, its folio, feast, office,
+genre, mode, Volpiano melody and Cantus ID, dated and placed by its
+manuscript. Non-commercial terms; incipit-only records are censused
+and not carried as text.
+
+**`analecta-hymnica`** — the *Analecta Hymnica Medii Aevi* (Dreves,
+Blume and Bannister, Leipzig 1886–1922), the foundational 55-volume
+edition of medieval Latin liturgical poetry — hymns, sequences,
+rhymed offices, tropes and rhymed prayers — as public-domain
+archive.org scans of the Toronto/PIMS copies, one document per volume
+and one passage per page of uncorrected OCR, so the scan should be
+cited rather than quoted.
+
+**`glt`** — the Greek Orthodox Archdiocese of America's liturgical
+texts (glt.goarch.org, compiled and maintained by Fr. Leo Schefe): the
+Byzantine service books in Greek, one page per service — the twelve
+Menaia, the Octoechos, the Triodion and Pentecostarion, the Horologion
+and the Euchologion — in polytonic Greek with the red rubrics kept
+apart from the sung and spoken text, line by line. Public domain by
+the maintainer's own statement, with error reports invited.
+
+**`ponomar`** — Ponomar (Aleksandr Andreev and others): the Hours of
+the Orthodox Church in Synodal Church Slavonic, as the Ponomar
+liturgics suite stores them — the fixed prayers and responses, the
+Creed, the prayers of St Basil and St Ephrem, and the troparia and
+kontakia of the Octoechos week and of Lent, each with its tone, in
+full Church Cyrillic orthography with titla and accents (GPL-3.0).

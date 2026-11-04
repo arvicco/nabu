@@ -59,7 +59,7 @@ registry currently tags to it.
 
 The Greco-Roman literary lane: the Perseus canons and First1KGreek, Diorisis, LSJ and Lewis & Short, the grc/lat treebanks, and the Vulgate wearing its Latin-literature hat beside its scripture one.
 
-**Members** (25): `aio`, `cgpg`, `corpus-corporum`, `croala`, `damos`, `digiliblt`, `diorisis`, `dprr`, `first1k-greek`, `glaux`, `hypotactic`, `ig-cyprus`, `lasla`, `lexica`, `lila`, `openmgh`, `pedecerto`, `perseus-greek`, `perseus-latin`, `proiel`, `pta`, `sigla`, `suda-translations`, `ud`, `vulgate`
+**Members** (27): `aio`, `analecta-hymnica`, `cgpg`, `corpus-corporum`, `croala`, `damos`, `digiliblt`, `diorisis`, `dprr`, `first1k-greek`, `glaux`, `glt`, `hypotactic`, `ig-cyprus`, `lasla`, `lexica`, `lila`, `openmgh`, `pedecerto`, `perseus-greek`, `perseus-latin`, `proiel`, `pta`, `sigla`, `suda-translations`, `ud`, `vulgate`
 
 ### romance
 
@@ -67,7 +67,7 @@ The Greco-Roman literary lane: the Perseus canons and First1KGreek, Diorisis, LS
 
 The Latin-to-vernacular continuum: CroALa's medieval and neo-Latin opens the desk; late-antique prose, the MGH critical editions, and the Old French treebanks and texts join as their shelves land.
 
-**Members** (28): `aranese`, `bdcamoes`, `bfm`, `bim-sahcoba`, `cantigas`, `corpus-corporum`, `croala`, `ctilc`, `cv-sardinian`, `derom`, `digiliblt`, `disco`, `littre`, `lo-congres`, `meloniromance`, `memis`, `openmgh`, `osta`, `salom`, `theatre-classique`, `typikon-bible`, `ud`, `wiktionary-ca`, `wiktionary-frm`, `wiktionary-fro`, `wiktionary-oc`, `wiktionary-osp`, `wiktionary-pro`
+**Members** (32): `analecta-hymnica`, `aranese`, `bdcamoes`, `bfm`, `bim-sahcoba`, `cantigas`, `cantus`, `corpus-corporum`, `croala`, `ctilc`, `cv-sardinian`, `derom`, `digiliblt`, `disco`, `divinum-officium`, `gregobase`, `littre`, `lo-congres`, `meloniromance`, `memis`, `openmgh`, `osta`, `salom`, `theatre-classique`, `typikon-bible`, `ud`, `wiktionary-ca`, `wiktionary-frm`, `wiktionary-fro`, `wiktionary-oc`, `wiktionary-osp`, `wiktionary-pro`
 
 ### epigraphy
 
@@ -83,7 +83,7 @@ Documentary corpora at the artifact grain: papyri, the Latin/Greek and Levantine
 
 Old Church Slavonic and its daughters: the OCS/Old Russian treebanks, the gospel and monument corpora, Freising, the Slovenian historical lane with PriLit's earliest narrative prose (1643–1866), Balkan damaskini, and the Church Slavonic dictionary shelves.
 
-**Members** (39): `archiv-slav-phil`, `bg-wikisource`, `ccmh`, `comenius`, `cs-wikisource`, `damaskini`, `elektire`, `elizabeth-bible`, `eltec-srp`, `freising`, `gams-zrcalo`, `goo300k`, `hr-wikisource`, `imp`, `kdsp`, `korba`, `litopys`, `mdz-protestant`, `mk-wikisource`, `pl-wikisource`, `prague-bible-1488`, `prilit`, `proiel`, `ru-wikisource`, `scat`, `scripta-bulgarica`, `senie`, `sl-lexica`, `sl-wikisource`, `slavistics-pd`, `slouniki-nasovic`, `sr-wikisource`, `torot`, `typikon-bible`, `ud`, `uk-wikisource`, `vuk-danicic`, `wiktionary-cu`, `wiktionary-sh`
+**Members** (40): `archiv-slav-phil`, `bg-wikisource`, `ccmh`, `comenius`, `cs-wikisource`, `damaskini`, `elektire`, `elizabeth-bible`, `eltec-srp`, `freising`, `gams-zrcalo`, `goo300k`, `hr-wikisource`, `imp`, `kdsp`, `korba`, `litopys`, `mdz-protestant`, `mk-wikisource`, `pl-wikisource`, `ponomar`, `prague-bible-1488`, `prilit`, `proiel`, `ru-wikisource`, `scat`, `scripta-bulgarica`, `senie`, `sl-lexica`, `sl-wikisource`, `slavistics-pd`, `slouniki-nasovic`, `sr-wikisource`, `torot`, `typikon-bible`, `ud`, `uk-wikisource`, `vuk-danicic`, `wiktionary-cu`, `wiktionary-sh`
 
 ### germanic
 
