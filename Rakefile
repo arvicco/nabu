@@ -542,11 +542,15 @@ namespace :site do
     fulltext_path = ENV.fetch("NABU_SITE_FULLTEXT", config.fulltext_path)
     abort "site:data needs the live catalog (#{catalog_path})" unless File.exist?(catalog_path)
     abort "site:data needs the fulltext index (#{fulltext_path})" unless File.exist?(fulltext_path)
+    # The canonical tree quickstart's disk figures measure (one du walk);
+    # a worktree run points NABU_SITE_CANONICAL at the main checkout's.
+    canonical_dir = ENV.fetch("NABU_SITE_CANONICAL", config.canonical_dir)
+    abort "site:data needs the canonical tree (#{canonical_dir})" unless File.directory?(canonical_dir)
 
     written = Nabu::Ops::SiteData.new(
       registry: Nabu::SourceRegistry.load(config.sources_path),
       data_dir: File.expand_path("site/_data", __dir__),
-      catalog_path: catalog_path, fulltext_path: fulltext_path
+      catalog_path: catalog_path, fulltext_path: fulltext_path, canonical_dir: canonical_dir
     ).generate!
     # llms.txt renders from the SSOT files just written — never typed.
     written << Nabu::Ops::LlmsTxt.write!(site_dir: File.expand_path("site", __dir__))

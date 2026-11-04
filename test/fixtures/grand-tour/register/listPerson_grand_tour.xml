@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:id="grand_tour.personen">
+    <teiHeader>
+        <fileDesc>
+            <titleStmt>
+                <title>Personenregister</title>
+                <respStmt>
+                    <resp>erstellt und bearbeitet von</resp>
+                    <name>Maximilian Görmar</name>
+                    <name>Angela Göbel</name>
+                </respStmt>
+            </titleStmt>
+            <publicationStmt>
+                <publisher>
+                    <name type="org">Herzog August Bibliothek Wolfenbüttel</name>
+                    <ptr target="https://www.hab.de"/>
+                    <address>
+                        <street>Lessingplatz 1</street>
+                        <name type="city">Wolfenbüttel</name>
+                        <postCode>D-38299</postCode>
+                        <name type="country">Germany</name>
+                    </address>
+                </publisher>
+            </publicationStmt>
+            <sourceDesc>
+                <p/>
+            </sourceDesc>
+        </fileDesc>
+    </teiHeader>
+    <text>
+        <body>
+            <listPerson xml:id="person">                
+                <person xml:id="apostel">
+                    <persName ref="https://d-nb.info/gnd/4002455-6" type="display">Zwölf Apostel (biblische Personen)</persName>
+                    <listBibl>
+                        <bibl>
+                            <ptr type="wibilex" target="https://bibelwissenschaft.de/stichwort/49951/"/>
+                        </bibl>
+                    </listBibl>
+                </person>
+                <person  xml:id="arndt_johann">
+                    <persName ref="https://d-nb.info/gnd/118504134" type="display">Arndt, Johann</persName>
+                </person>
+                <person xml:id="behm_heinrich_julius">
+                    <persName type="display">Behm (Böhme), Heinrich Julius</persName>
+                    <listBibl>
+                        <bibl>
+                            <ptr type="sz2" target="http://selbstzeugnisse.hab.de/sz2/personen#behm_heinrich_julius"/>
+                        </bibl>
+                    </listBibl>
+                </person>
+                <person xml:id="bolle_johann">
+                    <persName type="display">Bollen, Johann</persName>
+                    <note>Um 1652 Barbiergeselle.</note>
+                </person>
+                <person xml:id="bolstein_anon_1">
+                    <persName type="display">Bolstein, N. N.</persName>
+                    <note>Um 1689 Kaufmann in Hamburg.</note>
+                </person>
+                <person xml:id="boesch_andreas">
+                    <persName type="display" ref="https://d-nb.info/gnd/1065246609">Bösch, Andreas</persName>
+                </person>                
+                <person xml:id="braunschweig-wolfenbuettel_sophia_amalia">
+                    <persName type="display" ref="https://d-nb.info/gnd/10431205X">Braunschweig-Wolfenbüttel, Sophia Amalia, Herzogin von</persName>
+                    <persName type="birthName">Schleswig-Holstein-Gottorf, Sophia Amalia, Herzogin von</persName>
+                </person>
+                <person xml:id="bruskow_nikolaus">
+                    <persName type="display">Bruskow, Nikolaus</persName>
+                    <death>1367</death>
+                    <note>Lübecker Patrizier. Er und nicht ein polnischer Edelmann, wie es im Reisebericht Wageners steht, soll 1367 den Lübecker Ratsherren (nicht Bürgermeister!) Bernhard Oldenborch mit einem Schwert getötet haben und dafür hingerichtet worden sein.</note>
+                    <listBibl>
+                        <bibl>Klaus Graf: Ein Lübecker Mord im Jahr 1367 und seine Traditionsbildung, in: Archivalia, 27. März 2017, <ref target="https://archivalia.hypotheses.org/63977">https://archivalia.hypotheses.org/63977</ref></bibl>
+                    </listBibl>
+                </person>
+                <person xml:id="campen_ludolf"><!--vielleicht identisch mit: https://d-nb.info/gnd/1055516948?-->
+                    <persName type="display">Campen, Ludolf von</persName>
+                    <note>Angehöriger des braunschweigischen Adelsgeschlechts; um 1689 Page des Herzogs Ludwig Rudolph von Braunschweig-Wolfenbüttel auf dessen Reise nach Dänemark und Schweden. Zum Vornamen vgl. <ref target="http://diglib.hab.de/mss/217a-blank/start.htm?image=00054">Cod. Guelf. 217a Blank, S. 50</ref>.</note>
+                </person>
+                <person xml:id="daenemark_charlotte_amalie">
+                    <persName ref="https://d-nb.info/gnd/121096246" type="display">Charlotte Amalie, Königin von Dänemark und Norwegen, geb. Landgräfin von Hessen-Kassel</persName>
+                    <persName type="birthName">Hessen-Kassel, Charlotte Amalie, Landgräfin von</persName>
+                    <listBibl>
+                        <bibl>
+                            <ptr type="hb" target="https://www.lagis-hessen.de/pnd/121096246"/>
+                        </bibl>
+                    </listBibl>
+                </person>
+                <person xml:id="daenemark_christian_1">
+                    <persName ref="https://d-nb.info/gnd/11945064X" type="display">Christian (1), Prinz von Dänemark und Norwegen</persName>
+                </person>
+                <person xml:id="daenemark_christian_2">
+                    <persName ref="https://www.wikidata.org/wiki/Q3428532" type="display">Christian (2), Prinz von Dänemark und Norwegen</persName>
+                </person>
+                <person xml:id="daenemark_christian_i">
+                    <persName ref="https://d-nb.info/gnd/12939159X" type="display">Christian I., König von Dänemark, Norwegen und Schweden</persName>
+                </person>
+                <person xml:id="daenemark_christian_iii">
+                    <persName ref="https://d-nb.info/gnd/119217120" type="display">Christian III., König von Dänemark und Norwegen</persName>
+                </person>
+                <person xml:id="daenemark_christian_iv">
+                    <persName ref="https://d-nb.info/gnd/118676059" type="display">Christian IV., König von Dänemark und Norwegen</persName>
+                    <listBibl>
+                        <bibl>
+                            <ptr type="ndb" target="https://www.deutsche-biographie.de/pnd118676059.html#ndbcontent"/>
+                        </bibl>
+                    </listBibl>
+                </person>
+                <person xml:id="daenemark_christian_v">
+                    <persName ref="https://d-nb.info/gnd/119175800" type="display">Christian V., König von Dänemark und Norwegen</persName>
+                </person>
+                <person xml:id="daenemark_christiane_charlotte">
+                    <persName type="display" ref="https://www.wikidata.org/wiki/Q75385346">Christiane Charlotte, Prinzessin von Däenmark und Norwegen</persName>
+                </person>
+                <person xml:id="daenemark_friedrich_ii">
+                    <persName ref="https://d-nb.info/gnd/118703188" type="display">Friedrich II., König von Dänemark und Norwegen</persName>
+                </person>
+                <person xml:id="daenemark_friedrich_iii">
+                    <persName ref="https://d-nb.info/gnd/118693484" type="display">Friedrich III., König von Dänemark und Norwegen</persName>
+                </person>
+                <person xml:id="daenemark_friedrich_iv">
+                    <persName ref="https://d-nb.info/gnd/119546256" type="display">Friedrich IV., König von Dänemark und Norwegen</persName>
+                </person>
+                <person xml:id="daenemark_harald">
+                    <persName type="display" ref="https://d-nb.info/gnd/119127326">Harald (Blauzahn), König von Dänemark</persName>
+                </person>
+                <person xml:id="daenemark_karl">
+                    <persName ref="https://d-nb.info/gnd/1027128939" type="display">Karl, Prinz von Dänemark und Norwegen</persName>
+                </person>
+                <person xml:id="daenemark_margaretha_i">
+                    <persName type="display" ref="https://d-nb.info/gnd/118975927">Margaretha I., Königin von Dänemark, Norwegen und Schweden</persName>
+                </person>
+                <person xml:id="daenemark_sophia_hedwig">
+                    <persName type="display" ref="https://d-nb.info/gnd/1140027247">Sophia Hedwig, Prinzessin von Dänemark und Norwegen</persName>
+                </person>
+                <person xml:id="doehling_johann">
+                    <persName type="display">Döhling, Johann</persName>
+                    <note>Um 1652 Schiffer in Lübeck.</note>
+                </person>                                                     
+                <person xml:id="gyldenlove_ulrich_friedrich">
+                    <persName type="display" ref="https://d-nb.info/gnd/1072605015">Gyldenløve, Ulrich Friedrich</persName>
+                </person>
+                <person xml:id="heinrich_1">
+                    <persName type="display">N. N., Heinrich</persName>
+                    <note>Um 1689 Lakai des Herzogs Ludwig Rudolph von Braunschweig-Wolfenbüttel auf dessen Reise nach Dänemark und Schweden.</note>
+                </person>
+                <person xml:id="imhoff_rudolph_christian">
+                    <persName type="display" ref="http://d-nb.info/gnd/131463896">Imhoff, Rudolph Christian von</persName>
+                    <listBibl>
+                        <bibl>
+                            <ptr type="sz2" target="http://selbstzeugnisse.hab.de/sz2/personen#imhoff_rudolph_christian"/>
+                        </bibl>
+                    </listBibl>
+                </person>
+                <person xml:id="jesus_christus">
+                    <persName ref="https://d-nb.info/gnd/118557513" type="display">Jesus Christus</persName>
+                    <listBibl>
+                        <bibl>
+                            <ptr type="wibilex" target="https://bibelwissenschaft.de/stichwort/51866/"/>
+                        </bibl>
+                    </listBibl>
+                </person>
+                <person xml:id="jettebrock_rudolph_friedrich">
+                    <persName type="display">Jettebrock (Jettebruch), Rudolph Friedrich von</persName>
+                    <listBibl>
+                        <bibl>
+                            <ptr type="sz2" target="http://selbstzeugnisse.hab.de/sz2/personen#jettebrock_rudolph_friedrich"/>
+                        </bibl>
+                    </listBibl>
+                </person>                
+                <person xml:id="juul_anon_1">
+                    <persName type="display">Juul, N. N.</persName>
+                    <note>Vermutlich Angehöriger des dänischen Adelsgeschlechts Juul (oder Juel); um 1689 Major in Kopenhagen.</note>
+                </person>                
+                <person xml:id="karl_friedrich">
+                    <persName type="display">N. N., Karl Friedrich</persName>
+                    <persName>Friedrich, Karl</persName>
+                    <note>Um 1689 Kammerdiener des Herzogs Ludwig Rudolph von Braunschweig-Wolfenbüttel auf dessen Reise nach Dänemark und Schweden.</note>
+                </person>
+                <person xml:id="katharina">
+                    <persName type="display">Katharina</persName>
+                    <note>Um 1652 Nonne im St. Johannskloster in Lübeck.</note>
+                </person>
+                <person xml:id="knuth_adam_levin">
+                    <persName type="display" ref="https://d-nb.info/gnd/1163757071">Knuth, Adam Levin von</persName>
+                </person>
+                <person xml:id="koenig_samuel">
+                    <persName type="display" ref="https://d-nb.info/gnd/1037507088">König, Samuel</persName>
+                </person>
+                <person xml:id="kruse_vibeke">
+                    <persName ref="https://d-nb.info/gnd/133558940" type="display">Kruse, Vibeke</persName>
+                    <listBibl>
+                        <bibl>
+                            <ptr type="dbl" target="https://biografiskleksikon.lex.dk/Vibeke_Kruse"/>
+                        </bibl>
+                    </listBibl>
+                </person>                        
+                <person xml:id="mueth_christian">
+                    <persName type="display">Mueth, Christian</persName>
+                    <note>Um 1652 Ratsapotheker in Lübeck.</note>
+                </person>
+                <person xml:id="oldenborch_bernhard">
+                    <persName ref="https://d-nb.info/gnd/1144991153" type="display">Oldenborch, Bernhard</persName>
+                    <listBibl>
+                        <bibl>Georg Asmussen: Oldenborch, Bernard, in: BioLex Digital. Biographisches Lexikon für Schleswig-Holstein und Lübeck, hg. von der Schleswig-Holsteinischen Landesbibliothek, Kiel/Hamburg 2020, S. 1967f. DOI: <ref target="https://www.doi.org/10.23797/9783529025624">10.23797/9783529025624</ref></bibl>
+                    </listBibl>
+                </person>
+                <person xml:id="reventlow_conrad">
+                    <persName type="display" ref="https://d-nb.info/gnd/139110585">Reventlow, Conrad, Graf von</persName>
+                </person>
+                <person xml:id="rock_anon_1">
+                    <persName type="display">Rock, N. N.</persName>
+                    <note>Um 1652 Apotheker in Lübeck.</note>
+                </person>
+                <person xml:id="roskilde_wilhelm">
+                    <persName type="display" ref="https://www.wikidata.org/wiki/Q9374558">Roskilde, Wilhelm, Bischof von</persName>
+                </person>                                
+                <person xml:id="wagener_familie">
+                    <persName type="display">Wagener, Familie</persName>
+                    <note>Familie des Apothekers Wagener in Itzehoe.</note>
+                </person>                
+            </listPerson>
+        </body>
+    </text>
+</TEI>

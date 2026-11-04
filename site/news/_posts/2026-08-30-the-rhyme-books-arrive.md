@@ -1,6 +1,6 @@
 ---
 title: "The rhyme books arrive — an Old Mandarin desk, and the eastern shelves widen"
-date: 2026-08-30 12:00:00 +0000
+date: 2026-08-30 00:00:00 +0000
 description: >-
   Seven centuries of Chinese phonology land as a connected series of
   rhyme books — the Guangyun and Wang Renxu's Qieyun, Fujita's

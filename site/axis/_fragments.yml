@@ -727,6 +727,12 @@ tibetan:
       (NFD ≡ NFC for Tibetan); no special handling needed beyond the font.
 
 sinitic:
+  blurb: |
+    One search skeleton spans the scripts: traditional, simplified and
+    z-variant spellings fold together, so a modern-script query reaches the
+    traditional-script corpus — and the character instruments meet on the
+    `nabu char` card, a Han character answered across its structure, sound
+    and attestation.
   instruments: |
     - **Literary and classical Chinese with its phonology:** Kanripo (the
       largest single shelf) and CBETA, the UD lzh treebanks, SuttaCentral's
@@ -833,3 +839,29 @@ local:
   display: |
     - Owner-authored Markdown, YAML and PDF — no ancient-script display
       concerns; the terminal default font suffices.
+
+# Library-page split (2026-11-03): desks with no curated slots gain a
+# blurb tightened from the retired /library/ narrative.
+korean:
+  blurb: |
+    On the shelves beside the sillok: the **Daily Records of the Royal
+    Secretariat**, the **Border Defense Command register** and the ITKC's
+    classical originals in hanmun (KOGL, free use with credit); the OKHC
+    slice (CC BY-NC) dates its records one by one; and the *Yongbi eocheon
+    ga* of 1447 opens the Middle Korean vernacular shelf.
+sea:
+  blurb: |
+    Beside the stone record stand the manuscript shelves: Balinese
+    Wikisource's **palm-leaf lontars**, transcribed manuscript-direct in
+    Balinese script (usada healing texts, geguritan verse, the Basa Kawi
+    works); the **Jawi-script Malay manuscripts** of the Leiden and British
+    Library collections (the Hikayat Aceh, the Sejarah Melayu); and the
+    **Thai Collected Chronicles** (Prachum Phongsawadan) in their pre-1930
+    printings, Buddhist-era years converted.
+turkic:
+  blurb: |
+    ATMO's manuscripts are Eastern Turki of the eighteenth to twentieth
+    centuries — Perso-Arabic text with a full Latin transliteration on every
+    line, marginalia served with their provenance marked — beside the Old
+    Turkic treebank, the Wiktionary extracts for Old Turkic, Old Uyghur and
+    Chagatai, and the West Old Turkic loanword dictionary.

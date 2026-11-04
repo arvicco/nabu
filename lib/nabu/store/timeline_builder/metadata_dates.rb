@@ -87,7 +87,11 @@ module Nabu
           #                             mold); the imprint rides "imprint" — no place claim
           "aio" => :structured, # P154: the inscription page's Date field (archon years, ranges,
           #                       centuries — AioDate); place = the Pleiades-linked Original
-          #                       location/Findspot. Greek docs only row (translations never do)
+          #                       location/Findspot. The axis fields ride ONE document per
+          #                       record (the Greek when AIO edits one, else the translation),
+          #                       and the translation rows when it carries them (owner-ruled
+          #                       2026-11-03: a translation rows when it is the work's only
+          #                       held document; TRANSLATION_ROWS below)
           "aozora" => :structured, # the index's 初出 first publication (class composition),
           #                          else the 底本 first-edition year (class edition)
           "archiv-slav-phil" => :structured, # each volume's title-page year
@@ -148,6 +152,7 @@ module Nabu
           "ebible-pacific" => :structured, # P154: each translation's edition year as eBible records
           #                                  it (1868 / 1908 / 1922, class edition) — no place claim
           "ebl" => :period_label,
+          "ecco-tcp" => :structured, # the BIBLFULL imprint envelope (the eebo-tcp lane)
           "edr" => :structured,
           "eebo-tcp" => :structured,
           "elektire" => :structured, # P117-2: the portal's century of origin as an
@@ -160,6 +165,7 @@ module Nabu
           "etcbc-targum" => :place_only, # P153: the Genizah texts' findspot ("Cairo Genizah");
           #                                no date field upstream (edition years ride
           #                                base_edition, never a date)
+          "evans-tcp" => :structured, # the BIBLFULL imprint envelope (the eebo-tcp lane)
           "extrabiblical" => :work_era, # each ETCBC book's attributed era (config/work_eras.yml,
           #                               keyed on metadata "book"); place = the find-site hash
           #                               (ancient name + Pleiades id) the adapter's table carries
@@ -339,6 +345,10 @@ module Nabu
           # no-place conventions (NO_PLACE_SHAPES). The TCP's own pub_place
           # (Ann Arbor) is lineage, exempted.
           "eebo-tcp" => %w[imprint_place imprint_place_conjecture source_pub_place],
+          # The TCP sister collections ride the same imprint stance (the
+          # print IS the document; the parse-time town answers first).
+          "ecco-tcp" => %w[imprint_place imprint_place_conjecture source_pub_place],
+          "evans-tcp" => %w[imprint_place imprint_place_conjecture source_pub_place],
           # P109-4: the ReM header's origin scriptorium ("Vorau",
           # "Siegburg (?)") — uncertainty markers ride verbatim.
           "rem" => "orig_place",
@@ -523,6 +533,16 @@ module Nabu
           [lower, upper]
         end
 
+        # Sources whose translation documents DO row (owner-ruled
+        # 2026-11-03: a translation rows on the timeline when it is the
+        # work's ONLY held document, the date staying upstream's own typed
+        # claim about the object). Opt-in is per source, and only for
+        # parse-time conventions that guarantee the condition — aio puts
+        # the record's axis fields on exactly one document (the Greek when
+        # AIO edits one, else the translation), so a row can never double
+        # an inscription. Every other source keeps the default exclusion.
+        TRANSLATION_ROWS = %w[aio].freeze
+
         def build_source(catalog, slug, canonical_dir: nil)
           shape = SHAPES.fetch(slug)
           source_id = catalog[:sources].where(slug: slug).get(:id)
@@ -531,9 +551,11 @@ module Nabu
           listed = sidecar_dates(slug, canonical_dir)
           inserted = 0
           buffer = []
-          catalog[:documents]
-            .where(source_id: source_id, withdrawn: false)
-            .exclude(Sequel.like(:metadata_json, '%"kind":"translation"%'))
+          docs = catalog[:documents].where(source_id: source_id, withdrawn: false)
+          unless TRANSLATION_ROWS.include?(slug)
+            docs = docs.exclude(Sequel.like(:metadata_json, '%"kind":"translation"%'))
+          end
+          docs
             .select(:id, :metadata_json)
             .order(:id)
             .paged_each do |doc|

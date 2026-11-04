@@ -22,11 +22,19 @@ files:
   - path: bible-books/bible-books.jsonl.gz
     url: https://typikon.info/dump/2026-09-21/bible/bible-books.jsonl.gz
     whole: false
-    trim: the 4 book records the verse slices use (754 -> 4 lines), re-gzipped
+    trim: the 8 book records the verse slices use (754 -> 8 lines), re-gzipped
   - path: bible-verses-ro-1688/bible-verses-ro-1688.jsonl.gz
     url: https://typikon.info/dump/2026-09-21/bible/bible-verses-ro-1688.jsonl.gz
     whole: false
     trim: Joel + Obadiah + the Song of the Three Youths (36312 -> 161 lines), re-gzipped
+  - path: bible-verses-cs-eliz/bible-verses-cs-eliz.jsonl.gz
+    url: https://typikon.info/dump/2026-09-21/bible/bible-verses-cs-eliz.jsonl.gz
+    whole: false
+    trim: Obadiah + 1 Peter (36961 -> 126 lines), re-gzipped; cut 2026-11-03
+  - path: bible-verses-ka-mcxeta/bible-verses-ka-mcxeta.jsonl.gz
+    url: https://typikon.info/dump/2026-09-21/bible/bible-verses-ka-mcxeta.jsonl.gz
+    whole: false
+    trim: Obadiah + Philemon (32425 -> 44 lines), re-gzipped; cut 2026-11-03
   - path: bible-verses-ro-1914/bible-verses-ro-1914.jsonl.gz
     url: https://typikon.info/dump/2026-09-21/bible/bible-verses-ro-1914.jsonl.gz
     whole: false

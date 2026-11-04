@@ -67,7 +67,10 @@ class DerivabilityWritersTest < Minitest::Test
   # canonical/eebo-tcp/texts/<phase>/<stem>/ (per-zip ZipFetch staging
   # + tmp discipline), the ID-list/DTD sidecars (tmp+rename), attic
   # copies and its state ledger inside Adapter#fetch — the
-  # zip_fetch/corpus_corporum law kind at zip grain. lemma_shelf (P84-1)
+  # zip_fetch/corpus_corporum law kind at zip grain; its adapters/
+  # subclass tcp_box_fetch (evans-tcp, ecco-tcp) writes the same set into
+  # canonical/<slug>/texts/<class>/<stem>/ plus its own state ledger —
+  # the same law kind. lemma_shelf (P84-1)
   # is the FIFTH local-shelf gateway: it writes the silver-lemma
   # enricher's non-derivable model output as JSONL shards
   # (tmp+validate+rename) plus its campaign checkpoint under
@@ -233,7 +236,7 @@ class DerivabilityWritersTest < Minitest::Test
     nabu/adapters/riig.rb nabu/adapters/rundata.rb nabu/adapters/paramara.rb
     nabu/adapters/sabellic_loans.rb nabu/adapters/trismegistos.rb
     nabu/cantigas_fetch.rb nabu/cme_fetch.rb
-    nabu/corpus_corporum_fetch.rb nabu/eebo_tcp_fetch.rb
+    nabu/corpus_corporum_fetch.rb nabu/eebo_tcp_fetch.rb nabu/adapters/tcp_box_fetch.rb
     nabu/derom_fetch.rb nabu/elephantine_fetch.rb
     nabu/file_fetch.rb nabu/git_fetch.rb nabu/iness_fetch.rb
     nabu/kanripo_fetch.rb nabu/lfs_fetch.rb nabu/local_fetch.rb

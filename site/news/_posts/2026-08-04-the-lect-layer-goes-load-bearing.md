@@ -1,6 +1,6 @@
 ---
 title: "The lect layer goes load-bearing — 408,884 stage assignments"
-date: 2026-08-04 17:30:00 +0000
+date: 2026-08-04 00:00:00 +0000
 description: >-
   One phase after the nabu-lects registry arrived, the library stops
   merely reading it and starts ruling with it: a rebuild-proof journal

@@ -1,6 +1,6 @@
 ---
 title: "Elephantine: one island, four thousand years"
-date: 2026-07-28 05:30:00 +0000
+date: 2026-07-28 00:00:00 +0000
 description: >-
   Phase 47 crawls the Berlin Elephantine archive — the Judean
   garrison's Imperial Aramaic beside Greek, Demotic, Hieratic and

@@ -42,7 +42,7 @@ verbatim upstream terms are in `docs/02-sources.md` of the Nabu repository.
 | `sdbh` | UBS Dictionary of Biblical Hebrew (Semantic Dictionary of Biblical Hebrew) | attribution |
 | `sefaria` | Sefaria — Targum shelf + Rabbinic core (Mishnah, Bavli, Minor Tractates, Yerushalmi, Tosefta) + Midrash (Rabbah, halakhic midrashim, Aggadah) + medieval Bible commentaries, Mishneh Torah, Shulchan Arukh, Tur, Zohar and liturgy + Ben Sira and Megillat Ta'anit | open |
 | `syriac-corpus` | Digital Syriac Corpus (srophe, 632 TEI documents) | attribution |
-| `typikon-bible` | typikon.info Bible layer — the 1688 Bucharest Bible in Romanian Cyrillic (dump 2026-09-21) | attribution |
+| `typikon-bible` | typikon.info Bible layer — the 1688 Bucharest Bible, the Elizabeth Bible in Church Cyrillic and the Old Georgian Bible (dump 2026-09-21) | attribution |
 | `ud` | Universal Dependencies — ancient treebanks | nc |
 | `vulgate` | Biblia Sacra Vulgata Clementina (Tweedale/eBible.org, via open-bibles) | open |
 <!-- nabu:skill-sources:end -->

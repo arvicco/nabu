@@ -1,6 +1,6 @@
 ---
 title: "The poets of early Akkadian — SEAL joins by grant"
-date: 2026-08-31 09:00:00 +0000
+date: 2026-08-31 00:00:00 +0000
 description: >-
   Sources of Early Akkadian Literature — the edition of record for
   Old Babylonian Gilgamesh and the oldest Akkadian poetry — enters

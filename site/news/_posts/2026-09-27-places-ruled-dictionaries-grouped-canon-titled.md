@@ -1,6 +1,6 @@
 ---
 title: "A place ruled, the dictionaries grouped, and a canon with names"
-date: 2026-09-27 18:30:00 +0000
+date: 2026-09-27 00:00:00 +0000
 description: >-
   The Chinese place-name survey produced its first ruled identity and
   a review board for nine thousand more; the reference shelf's 2.6

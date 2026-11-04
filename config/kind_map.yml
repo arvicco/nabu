@@ -880,7 +880,8 @@ sources:
   etcbc-targum:
     source_kind: scripture   # P153: the Pentateuch targums — every text is a Bible translation
   typikon-bible:
-    source_kind: scripture   # P153: whole Bible editions (the 1688 Bucharest Bible)
+    source_kind: scripture   # P153: whole Bible editions (the 1688 Bucharest Bible; since 2026-11-03
+    #                          also the Elizabeth Bible and the Old Georgian Bible — every document a Bible book)
   suda-translations:
     source_kind: lexical     # P154: the Suda is a lexicon-encyclopedia — every passage translates one
     #                          alphabetical entry (headword + gloss/article); the house's lexical head,
@@ -943,6 +944,26 @@ sources:
     #   fold to historiography by the ruled biography precedent (elephantine "biography",
     #   the eebo "-- Biography" and aozora NDC 289 folds) — a hagiography sub would be a
     #   taxonomy change, not this mapping's call
+  emmo:                      # P155 — the catalogue title's head noun (Adapters::Emmo.document_type),
+    metadata: document_type  # census 2026-11-03 over all 100 files
+    map:
+      "Letter": letter                       # 89 — family and business letters; private vs
+      #   official is not stated by the catalogue, so the bare head (deliberately coarse)
+      "Deposition": legal/court              # 2 — sworn statements taken before a justice
+      "Examination": legal/court             # 2 — Nathaniel Bacon's examinations as JP
+      "Certificate": legal/court             # 1 — a gaoler's certificate to the justices of
+      #   the peace concerning prisoners of the Queen's Bench
+      "Certificate of recusancy": legal/court  # 1 — a minister's return to the recusancy
+      #   commissioners (the court-process paperwork of the penal laws)
+      "Order": legal/law                     # 1 — the recusancy commission's order to the
+      #   high constables: an instrument of authority, not correspondence
+      "Copy of an order": legal/law          # 1 — the Privy Council's order (a copy)
+      "Warrant": legal/law                   # 1 — the Privy Council's warrant
+      "Legal opinion": legal                 # 1 — counsel's opinion with its reply
+      "Receipt": administrative/receipt      # 1 — Donne's receipt for £100
+  grand-tour:                # P155 — the four journals are day-by-day travel diaries (Reisetagebuch,
+    source_kind: literary/diary/travelogue   # Reise-Journal, "Kurtze verzeichnung meiner
+    #   geringen Reise"): the ruled travelogue sub, one whole-source line
   tianyige:                  # the Ming examination records (科舉錄): each record is the
     source_kind: administrative/register   # official register of one session — examiners,
     #   questions, the graduates' roster, model answers; register is the closest ruled class
@@ -1751,6 +1772,27 @@ sources:
       "Sanskrit -- later works -- 20th century": "a period shelf (when written), not a genre claim"
       "Tibetan -- Translation": "a language shelf (the Tibetan rendering of a Buddhist work), not a genre claim"
       "Tibetan": "a language shelf, not a genre claim"
+  ecco-tcp:           # 3,101 docs; the header's Gale subject module, <IDNO TYPE="ContentSet">
+    #                   (metadata content_set, on every file — census 2026-11-03 over both zips).
+    # A module is the subject SHELF the Gale ECCO edition filed the source book on, so
+    # only the modules that ARE one house class fold; the shelves spanning several
+    # classes are declared, never guessed. ECCO's LCSH headings (29 files) are too
+    # thin to fold.
+    metadata: content_set
+    map:
+      "ECLL": literary              # 1,541 — Literature and Language: the poems, plays,
+      #   novels, songs and essays that dominate ECCO-TCP. Declared coarseness: the
+      #   module's language minority (grammars, dictionaries) rides the literary head
+      #   too — the module carries no finer signal to tell them apart
+      "ECMS": scholarly             # 362 — Medicine, Science and Technology: the learned
+      #   disciplines (the bare head; the module does not say which one)
+      "ECLW": legal                 # 28 — Law: statutes, trials, cases and legal treatises
+    deliberate:
+      "ECSS": "Social Sciences (415) — politics, economics, education, trade pamphlets: a subject shelf spanning several house classes, not a genre claim"
+      "ECHG": "History and Geography (322) — histories beside gazetteers and travel accounts: a subject shelf, not a genre claim"
+      "ECRP": "Religion and Philosophy (283) — sermons, tracts, devotions and philosophy together: a subject shelf, not a genre claim"
+      "ECFA": "Fine Arts (96) — music, architecture, painting treatises: a subject shelf, not a genre claim"
+      "ECGR": "General Reference (54) — catalogues, directories, miscellanies: a subject shelf, not a genre claim"
   eebo-tcp:           # 60,325 docs; the LCSH subject facet (config/facet_map.yml subjects → subject)
     # An OPEN vocabulary: TEXTCLASS/KEYWORDS/TERM headings on 57,064 of 60,326
     # canonical files, 34,617 distinct full headings / 12,432 distinct main
@@ -1862,6 +1904,68 @@ sources:
       #   153 — lives (the elephantine "biography" fold)
       # -- funerary
       '\A(?!.*History and criticism)Epitaphs\b': funerary/epitaph  # 16 — epitaph collections
+  evans-tcp:          # 5,012 docs; the LCSH subject facet (config/facet_map.yml subjects → subject)
+    # The same TCP MARC-to-TEI headers as eebo-tcp, so the same OPEN vocabulary and the
+    # same refusals ("-- History and criticism": a book ABOUT a form is no instance of
+    # it). Evans's cataloguing adds what EEBO's lacks: the rare-book GENRE headings
+    # as main headings, dated ("Sermons -- 1760.", "Poems -- 1785.", "Plays -- 1798.") —
+    # the strongest form signal in the corpus. Census 2026-11-03 over all 5,012 files
+    # (4,832 carry headings); counts = docs carrying a matching heading. First wave:
+    # 2,342 docs kinded (census replay of these rules, same date).
+    facet: subject
+    vocabulary: open
+    regex_map:
+      # -- sermon
+      '\A(?!.*History and criticism)(?!Funeral )(?:[A-Z][\w-]*(?: [a-z][\w-]*)* )?[Ss]ermons(?:, [A-Z][a-z]+)?\.?(?: --|\z)': sermon
+      #   1,210 — "Sermons -- 1760." and the occasion genres: Election, Artillery
+      #   election, Execution, Thanksgiving, Fast day, Ordination, Dedication sermons
+      '\A(?!.*History and criticism)Funeral sermons\b': sermon/funeral-sermon  # 213
+      '\A(?!.*History and criticism).* -- Sermons\.?(?: --|\z)': sermon  # 19 — the form subdivision
+      # -- literary
+      '\A(?!.*History and criticism)Poems\b': literary/poetry
+      #   316 — the genre heading ("Poems -- 1785.")
+      '\A(?!.*History and criticism)(?:[A-Z][\w-]*(?: [a-z][\w-]*)* )?[Pp]oetry(?:, [A-Z][a-z]+)?\.?(?: --|\z)': literary/poetry
+      #   5 — "Christian poetry", "American poetry", "Political poetry"
+      '\A(?!.*History and criticism).* -- Poetry\.?(?: --|\z)': literary/poetry  # 154
+      '\A(?!.*History and criticism)(?:Elegies|Acrostics|Songsters|Carriers'' addresses)\b': literary/poetry
+      #   119 — elegies, acrostics, the songster (a pocket song collection) and
+      #   the carrier's New Year verses to a newspaper's customers
+      '\A(?!.*History and criticism)(?:[A-Z][a-z]+ )?[Bb]allads\b': literary/poetry  # 6
+      '\A(?!.*History and criticism)(?:[A-Z][\w-]* )?[Ss]ongs(?:, [A-Z][a-z]+)?\.?(?: --|\z)': literary/poetry  # 47
+      '\A(?!.*History and criticism)Plays\b': literary/drama  # 92 — the genre heading ("Plays -- 1798.")
+      '\A(?!.*History and criticism)[A-Z][a-z]+ drama\b': literary/drama  # 1 — "American drama (Comedy)"
+      '\A(?!.*History and criticism).* -- Drama\.?(?: --|\z)': literary/drama  # 31
+      '\A(?!.*History and criticism)(?:[A-Z][a-z]+ )?[Ss]atires?\b': literary
+      #   52 — "Satires -- 1789." and "Political satire": a mode in verse OR prose,
+      #   so the bare head (the eebo-tcp call)
+      '\A(?!.*History and criticism)(?:Captivity narratives|Memoirs)\b': literary/diary/memoir
+      #   92 — the first-person captivity account and the memoir genre
+      '\A(?!.*History and criticism)Fables\b': literary/narrative/fable  # 1
+      '\A(?!.*History and criticism)Dialogues\b': literary/wisdom/dialogue  # 53
+      '\A(?!.*History and criticism)Proverbs(?! in )\b': literary/wisdom/proverbs  # 1
+      # -- prayer and hymn
+      '\APrayers\.?(?: --(?!.*(?:Law and legislation|History and criticism))|\z)': hymn-prayer/prayer  # 42
+      '\A(?!.*History and criticism)Hymns\b': hymn-prayer/hymn  # 54
+      # -- legal
+      '\A(?!.*History and criticism)(?:(?:Fast day|Thanksgiving Day) )?[Pp]roclamations\b': legal/law
+      #   34 — the governors' and councils' proclamations, the fast- and
+      #   thanksgiving-day ones included (each appoints the day by authority)
+      '\A(?!.*History and criticism)Trials\b': legal/court  # 102 — LCSH's trial-proceedings form
+      '\A(?!.*History and criticism).* -- Treaties\.?(?: --|\z)': legal/treaty  # 46 — treaty texts
+      # -- exegesis, lexical, scholarly
+      '\A(?!.*History and criticism).* -- Commentaries\.?(?: --|\z)': exegesis  # 4
+      '\A(?!.*History and criticism).* -- Grammar\.?(?: --|\z)': lexical/grammar  # 4
+      '\A(?!.*History and criticism).* -- Dictionaries\b': lexical  # 3
+      '\A(?!.*(?:History and criticism|Controversial literature|Humor))(?:Medicine|Surgery|Materia medica|Pharmacy)\b': scholarly/medicine  # 41
+      '\A(?!.*(?:History and criticism|Controversial literature|Humor))(?:Mathematics|Arithmetic|Geometry)\b': scholarly/mathematics  # 3
+      '\A(?!.*(?:History and criticism|Controversial literature|Humor))Astronomy\b': scholarly/astronomy  # 6
+      '\A(?!.*(?:History and criticism|Controversial literature|Humor))Cookery\b': scholarly/recipe  # 6
+      # -- historiography
+      '\A(?!.*History and criticism).* -- Biography\.?(?: --|\z)': historiography  # 30
+    # Left uncovered on purpose (counted, never filed unmapped): Broadsides (a format),
+    # Juvenile literature (an audience), Booksellers' advertisements / Advertisements /
+    # Prospectuses / Subscribers' lists (the book trade's ephemera — a class the taxonomy
+    # does not carry), Fourth of July orations (oratory), Catechisms, Almanacs.
   pta:                # census 2026-11-02: the work __cts__.xml dct:type labels of the 105
     metadata: genre   # non-Bible works carrying Greek — the comphistsem text-type head + sub,
     #                   "|"-joined at parse ("Paraenetic|Sermon"); each fragment folds alone

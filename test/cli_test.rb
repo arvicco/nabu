@@ -2977,9 +2977,7 @@ class CLITest < Minitest::Test
 
   # P49-r4: the desk's gold-lemma language set excludes languages ONLY
   # reachable via multilingual members — the pack's packish/shared gold
-  # stays off the poly line, the dedicated deskmate's anchor stays on —
-  # while the counts-bearing languages: line KEEPS the pack's holdings
-  # (the deliberate asymmetry: counts are the honesty mechanism there).
+  # stays off the poly line, the dedicated deskmate's anchor stays on.
   def test_axis_card_gold_line_excludes_pack_only_languages
     with_axis_pack_corpus do |config|
       out, _err, status = with_config(config) { run_cli(%w[axis poly]) }
@@ -2988,12 +2986,30 @@ class CLITest < Minitest::Test
                    "only the dedicated member's language carries the desk's gold claim")
       refute_match(/gold lemmas:.*(packish|shared)/, out,
                    "pack-only languages stay off the gold line")
-      assert_match(/^  languages: packish 2 · anchor 1 · shared 1$/, out,
-                   "the languages: line keeps pack holdings — counts self-explain")
 
       out, _err, _status = with_config(config) { run_cli(%w[axis mono]) }
       assert_match(/^  gold lemmas: 3 rows across shared /, out,
                    "a dedicated holder keeps its language's full gold claim")
+    end
+  end
+
+  # The desk-proper split (the site's desk pages shipped it first): the
+  # languages: line leads with codes some dedicated member holds, and a
+  # whole-source pack's other languages ride a separate labelled tail
+  # naming the pack — a multilingual member no longer floods the desk's
+  # headline (the Celticist's desk led with zho 327,296 before the split).
+  def test_axis_card_splits_desk_proper_languages_from_pack_spillover
+    with_axis_pack_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[axis poly]) }
+      assert_nil status
+      assert_match(/^  languages: anchor 1$/, out,
+                   "the headline carries only desk-proper codes")
+      assert_match(/^  pack spillover \(pack\): packish 2 · shared 1$/, out,
+                   "pack-only codes ride the labelled tail, counts kept")
+
+      out, _err, _status = with_config(config) { run_cli(%w[axis mono]) }
+      assert_match(/^  languages: shared 2$/, out, "a packless desk is unchanged")
+      refute_match(/pack spillover/, out, "no packs, no tail")
     end
   end
 
@@ -9046,17 +9062,16 @@ class CLITest < Minitest::Test
           desc: "The multilingual pack lane."
       YAML
       sources = File.join(root, "sources.yml")
-      # multilingual: true (P49-r4) makes the cap test double as the
-      # asymmetry proof: the counts-bearing languages: line is UNCHANGED
-      # by the marker (only the count-less attribution surfaces exclude
-      # the pack).
+      # A dedicated (non-pack) member: the cap test pins the render cap on
+      # the desk-proper headline. (It used to double as the old asymmetry
+      # proof via multilingual: true — the desk-proper split retired that:
+      # a pack's codes now ride the labelled spillover tail instead.)
       File.write(sources, <<~YAML)
         pack:
           adapter: TestAdapter
           wired: true
           sync_policy: manual
           axes: [poly]
-          multilingual: true
       YAML
       config = Nabu::Config.new(
         canonical_dir: File.join(root, "canonical"), db_dir: File.join(root, "db"),

@@ -1,6 +1,6 @@
 ---
 title: "Six shelves in a day: the Rabbinic library, Geʿez, and Italy's stones"
-date: 2026-07-26 15:00:00 +0000
+date: 2026-07-26 00:00:00 +0000
 description: >-
   Phase 46 opens the Rabbinic corpus at daf-grain citation, brings the
   first Ethiopic shelf (Enoch and Jubilees, complete only in Geʿez),
@@ -10,9 +10,9 @@ description: >-
 ---
 
 Some phases follow a single thread; this one pulled six at once, and
-all of them held. Planned in the morning from three research scouts,
-dispatched at ratification, merged by evening, synced and wired the
-next day — the library grew from 813 thousand to **947,273 documents
+all of them held. Planned from three research scouts, dispatched at
+ratification, merged the same day, synced and wired the day after —
+the library grew from 813 thousand to **947,273 documents
 / 66.8 million passages** in the process.
 
 **The Rabbinic wave** is the anchor. The Sefaria shelf — until now

@@ -1,6 +1,6 @@
 ---
 title: "The dating pendings close — three gaps, three different causes"
-date: 2026-08-07 14:45:00 +0000
+date: 2026-08-07 00:00:00 +0000
 description: >-
   Wave two of the core-layers plan: the three biggest dating gaps in
   the library close, and each turns out to have a different real cause

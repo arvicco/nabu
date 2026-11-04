@@ -83,7 +83,7 @@ Documentary corpora at the artifact grain: papyri, the Latin/Greek and Levantine
 
 Old Church Slavonic and its daughters: the OCS/Old Russian treebanks, the gospel and monument corpora, Freising, the Slovenian historical lane with PriLit's earliest narrative prose (1643–1866), Balkan damaskini, and the Church Slavonic dictionary shelves.
 
-**Members** (38): `archiv-slav-phil`, `bg-wikisource`, `ccmh`, `comenius`, `cs-wikisource`, `damaskini`, `elektire`, `elizabeth-bible`, `eltec-srp`, `freising`, `gams-zrcalo`, `goo300k`, `hr-wikisource`, `imp`, `kdsp`, `korba`, `litopys`, `mdz-protestant`, `mk-wikisource`, `pl-wikisource`, `prague-bible-1488`, `prilit`, `proiel`, `ru-wikisource`, `scat`, `scripta-bulgarica`, `senie`, `sl-lexica`, `sl-wikisource`, `slavistics-pd`, `slouniki-nasovic`, `sr-wikisource`, `torot`, `ud`, `uk-wikisource`, `vuk-danicic`, `wiktionary-cu`, `wiktionary-sh`
+**Members** (39): `archiv-slav-phil`, `bg-wikisource`, `ccmh`, `comenius`, `cs-wikisource`, `damaskini`, `elektire`, `elizabeth-bible`, `eltec-srp`, `freising`, `gams-zrcalo`, `goo300k`, `hr-wikisource`, `imp`, `kdsp`, `korba`, `litopys`, `mdz-protestant`, `mk-wikisource`, `pl-wikisource`, `prague-bible-1488`, `prilit`, `proiel`, `ru-wikisource`, `scat`, `scripta-bulgarica`, `senie`, `sl-lexica`, `sl-wikisource`, `slavistics-pd`, `slouniki-nasovic`, `sr-wikisource`, `torot`, `typikon-bible`, `ud`, `uk-wikisource`, `vuk-danicic`, `wiktionary-cu`, `wiktionary-sh`
 
 ### germanic
 
@@ -91,7 +91,7 @@ Old Church Slavonic and its daughters: the OCS/Old Russian treebanks, the gospel
 
 Gothic on the proiel/ud treebanks beside the West and North Germanic branches: Old English verse (ASPR) and prose (ISWOC) with Bosworth-Toller, Old Icelandic (IcePaHC via ud), Old Norwegian and the Poetic Edda (Menotec), the Medieval Nordic manuscript archive (Menota), the Corpus of Middle English (CME), early-modern English at scale (EEBO-TCP), Beowulf again in Klaeber's edition with its aligned English (perseus-anglit), the Old Saxon Heliand (HeliPaD), Middle High German manuscripts (ReM), Middle Low German and Low Rhenish (ReN), the German print era whole (DTA, 1473–1969), and the runic inscriptions (Rundata, dual-tagged epigraphy).
 
-**Members** (33): `aspr`, `bosworth-toller`, `cleasby-vigfusson`, `cme`, `corpus-gysseling`, `corpus-oudfries`, `corpus-oudnederlands`, `dta`, `eebo-tcp`, `fornsvenska`, `fsv-lexica`, `helipad`, `iswoc`, `menota`, `menotec`, `perseus-anglit`, `ppchy`, `proiel`, `ref`, `rem`, `ren`, `rundata`, `runesdb`, `ud`, `wiktionary-dum`, `wiktionary-enm`, `wiktionary-gmh`, `wiktionary-gmq-osw`, `wiktionary-got`, `wiktionary-non`, `wiktionary-ofs`, `wiktionary-sco`, `zoega`
+**Members** (37): `aspr`, `bosworth-toller`, `cleasby-vigfusson`, `cme`, `corpus-gysseling`, `corpus-oudfries`, `corpus-oudnederlands`, `dta`, `ecco-tcp`, `eebo-tcp`, `emmo`, `evans-tcp`, `fornsvenska`, `fsv-lexica`, `grand-tour`, `helipad`, `iswoc`, `menota`, `menotec`, `perseus-anglit`, `ppchy`, `proiel`, `ref`, `rem`, `ren`, `rundata`, `runesdb`, `ud`, `wiktionary-dum`, `wiktionary-enm`, `wiktionary-gmh`, `wiktionary-gmq-osw`, `wiktionary-got`, `wiktionary-non`, `wiktionary-ofs`, `wiktionary-sco`, `zoega`
 
 ### celtic
 
@@ -155,7 +155,7 @@ The Ethiopic (Gǝʿǝz) desk in the Oriental-Christian neighborhood: the Beta ma
 
 The OpenITI lane: premodern Arabic and Persian literature at corpus scale — Quran and hadith, history and biography, law and falsafa, the dīwāns and adab — with the Persian shelf (Ḥāfiẓ, Ibn Sīnā) riding the same Arabic-script fold that makes ara/fas cross-searchable — and DiCCAS, disaster accounts excerpted from ten classical sources with catastrophe terminology tagged — and the KITAB text-reuse instrument: upstream-computed reuse edges joining the held OpenITI books pairwise on the intertext desk.
 
-**Members** (6): `althurayya`, `diccas`, `kitab`, `kitab-reuse`, `ociana`, `openiti`
+**Members** (7): `althurayya`, `diccas`, `kitab`, `kitab-reuse`, `ociana`, `openiti`, `wiktionary-ar`
 
 ### hittite
 

@@ -15,15 +15,15 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 A source wears every desk it serves — these five answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
-| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 3 November 2026)</span> |
+| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 4 November 2026)</span> |
 |---|---|---|---|---|
 | `local-language` | language dossiers | open | wired · manual | 656 dossiers |
-| `local-lemmas` | silver lemmas | open | wired · manual | 35,916,298 lemma rows |
+| `local-lemmas` | silver lemmas | open | wired · manual | 36,155,944 lemma rows |
 | `local-library` | texts | research_private | wired · manual | 159 docs / 44,871 passages |
 | `local-notes` | owner notes | open | wired · manual | 2 notes |
-| `local-source` | source records | open | wired · manual | 344 dossiers |
+| `local-source` | source records | open | wired · manual | 349 dossiers |
 
-**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 3 November 2026)</span>: `eng` 27 · `phn` 16 · `egy` 11 · `arc` 8 · `osc` 8 · `orv` 7 · `sga` 7 · `cel` 5 · `akk` 4 · `lav` 4 … and 40 more (`nabu axis local` lists all).
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 4 November 2026)</span>: `eng` 27 · `phn` 16 · `egy` 11 · `arc` 8 · `osc` 8 · `orv` 7 · `sga` 7 · `cel` 5 · `akk` 4 · `lav` 4 … and 40 more (`nabu axis local` lists all).
 
 ## The desk's instruments
 
@@ -36,7 +36,7 @@ A source wears every desk it serves — these five answer this desk. Holdings ar
 
 ## Working the local desk
 
-The generic axis surfaces — every desk answers to these, in working
+The generic desk surfaces — every desk answers to these, in working
 order (enable once, sync, then query):
 
 ```

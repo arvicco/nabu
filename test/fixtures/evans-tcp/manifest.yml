@@ -1,0 +1,68 @@
+# Nabu fixture manifest (P5-4 "fixture sentinel"). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# Evans-TCP ships as zips from the TCP's public Box folder — there is NO
+# per-text upstream URL, so the corpus texts and the rejected-grain
+# specimens are refetchable: false (members of the real zips named
+# below); the zip fixtures are subset re-zips of those same members; the
+# listing pages are documented trims of the real Box postStreamData pages.
+# The DTD is a whole byte-identical file; the id roster is a documented
+# trim. adapter_test is null — the source-specific test pins
+# urns/counts/snippets a refetch would false-fail.
+source: evans-tcp
+adapter_test:
+retrieved: 2026-11-03
+files:
+  - path: texts/released/N3/N31062.p4.xml
+    refetchable: false
+    provenance: zip-member
+    reason: whole real member of P4_XML_TCP/N3.zip (Box file_id 1333765453347);
+      no per-text upstream URL exists — the corpus ships as zips only
+  - path: texts/released/N3/N33557.p4.xml
+    refetchable: false
+    provenance: zip-member
+    reason: whole real member of P4_XML_TCP/N3.zip (Box file_id 1333765453347)
+  - path: texts/unedited/unedited/N00552.p4.xml
+    refetchable: false
+    provenance: zip-member
+    reason: whole real member of P4_XML_TCP/unedited.zip (Box file_id 1333730319881)
+  - path: texts/released/N3/N31062.p5.xml
+    refetchable: false
+    provenance: zip-member
+    reason: rejected-grain specimen — whole real member of P5_XML_OXF/N3.zip
+      (Box file_id 1333739157022), the Oxford P5 copy of N31062
+  - path: texts/released/N3/N31062.sgm
+    refetchable: false
+    provenance: zip-member
+    reason: rejected-grain specimen — whole real member of P3_SGML_TCP/N3.zip
+      (Box file_id 1333760170936), the P3 SGML copy of N31062
+  - path: fetch/N3.zip
+    refetchable: false
+    provenance: subset-rezip
+    reason: re-zip of the real N31062 + N33557 members preserving the real
+      flat layout (the real zip is 6.6 MB / 200 members)
+  - path: fetch/unedited.zip
+    refetchable: false
+    provenance: subset-rezip
+    reason: re-zip of the real N00552 member preserving the real flat layout
+      (the real zip is 5.9 MB / 148 members)
+  - path: fetch/root.html
+    refetchable: false
+    provenance: trimmed-listing
+    reason: the real Box shared-folder page's server-side postStreamData JSON
+      (real folder/file ids) with items pruned to the fixture subset, each
+      reduced to the fields the fetch reads, and page chrome reduced to a shell
+  - path: fetch/p4.html
+    refetchable: false
+    provenance: trimmed-listing
+    reason: same trim of the real P4_XML_TCP folder page; zip itemSize values
+      set to the fixture zips' sizes
+  - path: fetch/eebo2prf.xml.dtd
+    url: https://app.box.com/index.php?rm=box_v2_download_shared_file&shared_name=zj7pzfokxde4glrhebxsavbbxzyr3ogz&file_id=f_1333783953046
+    whole: true
+    trim: none
+  - path: fetch/evans_pub_dates.txt
+    url: https://app.box.com/index.php?rm=box_v2_download_shared_file&shared_name=zj7pzfokxde4glrhebxsavbbxzyr3ogz&file_id=f_1333753679284
+    whole: false
+    trim: first 6 rows of the real 4,977-row roster + the three fixture ids'
+      rows (N00552, N31062, N33557)

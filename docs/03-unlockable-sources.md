@@ -65,7 +65,7 @@ All eight sources are wired. The grants are personal, so every one is grant-gate
 
 ## 9. Institutional affiliation as a master key
 
-A standing option worth naming: many "locked" resources (TLG, Brepols, ProQuest early books) unlock with any university library card. Universities in Ticino/Lombardy (USI, Milan) or alumni associations often extend electronic-resource access to external/associated readers for a small annual fee. One library card ≈ five subscriptions. Worth one afternoon of investigation before paying for anything individually.
+A standing option worth naming: many "locked" resources (TLG, Brepols, ProQuest early books) unlock with any university library card. Universities in Ticino/Lombardy (USI, Milan) or alumni associations often extend electronic-resource access to external/associated readers for a small annual fee. One library card ≈ five subscriptions. Worth a few hours of investigation before paying for anything individually.
 
 ## Priority actions
 

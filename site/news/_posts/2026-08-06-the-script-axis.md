@@ -1,6 +1,6 @@
 ---
 title: "The script axis — what script is this text actually in?"
-date: 2026-08-06 17:30:00 +0000
+date: 2026-08-06 00:00:00 +0000
 description: >-
   The lect identifier gains a fifth axis: ~script claims the writing
   system of the text as held, machine-checkable against the bytes —

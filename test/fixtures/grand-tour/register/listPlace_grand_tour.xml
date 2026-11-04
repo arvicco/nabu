@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0"
+    xml:id="grand_tour.orte">
+    <teiHeader>
+        <fileDesc>
+            <titleStmt>
+                <title>Ortsregister</title>
+                <respStmt>
+                    <resp>erstellt und bearbeitet von </resp>                    
+                    <name>Angela Göbel</name>
+                    <name>Maximilian Görmar</name>
+                </respStmt>
+            </titleStmt>
+            <publicationStmt>
+                <publisher>
+                    <name type="org">Herzog August Bibliothek Wolfenbüttel</name>
+                    <ptr target="https://www.hab.de"/>
+                    <address>
+                        <street>Lessingplatz 1</street>
+                        <name type="city">Wolfenbüttel</name>
+                        <postCode>D-38299</postCode>
+                        <name type="country">Germany</name>
+                    </address>
+                </publisher>
+            </publicationStmt>
+            <sourceDesc>
+                <p></p>
+            </sourceDesc>
+        </fileDesc>
+    </teiHeader>        
+    <text>
+        <body>
+            <listPlace xml:id="place"> 
+                <place xml:id="basel">
+                    <placeName ref="https://www.geonames.org/2661604/basel.html">Basel</placeName>
+                </place>
+                <place xml:id="bramstedt">
+                    <placeName ref="https://www.geonames.org/2953537/bad-bramstedt.html">Bramstedt (Bad Bramstedt)</placeName>
+                </place>
+                <place xml:id="braunschweig">
+                    <placeName ref="https://www.geonames.org/2945024/braunschweig.html">Braunschweig</placeName>
+                </place>
+                <place xml:id="daenemark_koenigreich">
+                    <placeName ref="https://d-nb.info/gnd/4010877-6">Dänemark, Königreich</placeName>
+                    <note>Bereistes Land in <ref target="http://selbstzeugnisse.hab.de/grand_tour/cod_guelf_89_blank">Cod. Guelf. 89 Blank.</ref>, <ref target="http://diglib.hab.de/mss/239-13-extrav/start.htm">Cod. Guelf. 239.13 Extrav.</ref>, <ref target="http://diglib.hab.de/mss/257-3-extrav/start.htm">Cod. Guelf. 257.3 Extrav.</ref></note>
+                </place>
+                <place xml:id="darmstadt">
+                    <placeName ref="https://www.geonames.org/2938913/darmstadt.html">Darmstadt</placeName>
+                </place>
+                <place xml:id="dassow">
+                    <placeName ref="https://www.geonames.org/2938798/dassow.html">Dassow</placeName>
+                </place>
+                <place xml:id="dithmarschen">
+                    <placeName ref="https://d-nb.info/gnd/4012525-7">Dithmarschen</placeName>
+                </place>                
+                <place xml:id="flensburg">
+                    <placeName ref="https://www.geonames.org/2926271/flensburg.html">Flensburg</placeName>
+                </place>
+                <place xml:id="frankfurt_main">
+                    <placeName ref="https://www.geonames.org/2925533/frankfurt-am-main.html">Frankfurt (Main)</placeName>
+                </place>
+                <place xml:id="frankreich_koenigreich">
+                    <placeName ref="https://d-nb.info/gnd/4018145-5">Frankreich, Königreich</placeName>
+                    <note>Bereistes Land in <ref target="http://diglib.hab.de/mss/135-6-extrav/start.htm">Cod. Guelf. 135.6 Extrav.</ref>, <ref target="http://selbstzeugnisse.hab.de/grand_tour/cod_guelf_149_14_extrav">Cod. Guelf. 149.14 Extrav.</ref>, <ref target="http://diglib.hab.de/mss/239-13-extrav/start.htm">Cod. Guelf. 239.13 Extrav.</ref>, <ref target="http://diglib.hab.de/mss/257-3-extrav/start.htm">Cod. Guelf. 257.3 Extrav.</ref>, <ref target="http://selbstzeugnisse.hab.de/grand_tour/cod_guelf_267_1_extrav">Cod. Guelf. 267.1 Extrav.</ref></note>
+                </place>
+                <place xml:id="frederiksborg_schloss">
+                    <placeName ref="https://www.geonames.org/2621938/frederiksborg-slot.html">Frederiksborg, Schloss (Hillerød)</placeName>
+                </place>
+                <place xml:id="gottorf">
+                    <placeName ref="https://www.geonames.org/2918605/gottorf.html">Gottorf</placeName>
+                </place>
+                <place xml:id="grosser_belt">
+                    <placeName ref="https://www.geonames.org/2612449/storebaelt.html">Großer Belt (Storebælt)</placeName>
+                </place>
+                <place xml:id="hadersleben">
+                    <placeName ref="https://www.geonames.org/2620964/haderslev.html">Hadersleben (Haderslev)</placeName>
+                </place>
+                <place xml:id="hamburg">
+                    <placeName ref="https://www.geonames.org/2911298/hamburg.html">Hamburg</placeName>
+                </place>
+                <place xml:id="helmstedt">
+                    <placeName ref="https://www.geonames.org/2906676/helmstedt.html">Helmstedt</placeName>
+                </place>
+                <place xml:id="holstein_herzogtum">
+                    <placeName ref="https://d-nb.info/gnd/112347-6">Holstein, Herzogtum</placeName>
+                </place>
+                <place xml:id="itzehoe">
+                    <placeName ref="https://www.geonames.org/2895569/itzehoe.html">Itzehoe</placeName>
+                </place>
+                <place xml:id="kellinghusen">
+                    <placeName ref="https://www.geonames.org/2891750/kellinghusen.html">Kellinghusen</placeName>
+                </place>                
+                <place xml:id="kiel">
+                    <placeName ref="https://www.geonames.org/2891122/kiel.html">Kiel</placeName>
+                </place>
+                <place xml:id="kleiner_belt">
+                    <placeName ref="https://www.geonames.org/2617724/lillebaelt.html">Kleiner Belt (Lillebælt)</placeName>
+                </place>
+                <place xml:id="kolding">
+                    <placeName ref="https://www.geonames.org/2618528/kolding.html">Kolding</placeName>
+                </place>
+                <place xml:id="kopenhagen">
+                    <placeName ref="https://www.geonames.org/2618425/copenhagen.html">Kopenhagen (København)</placeName>
+                </place>                
+                <place xml:id="korsor">
+                    <placeName ref="https://www.geonames.org/2618361/korsor.html">Korsør</placeName>
+                </place>
+                <place xml:id="limburg_lahn">
+                    <placeName ref="https://www.geonames.org/2877648/limburg-an-der-lahn.html">Limburg an der Lahn</placeName>
+                </place>
+                <place xml:id="luebeck">
+                    <placeName ref="https://www.geonames.org/2875601/luebeck.html">Lübeck</placeName>
+                </place>
+                <place xml:id="lyon">
+                    <placeName ref="https://www.geonames.org/2996944/lyon.html">Lyon</placeName>
+                </place>
+                <place xml:id="mecklenburg_herzogtum">
+                    <placeName ref="https://d-nb.info/gnd/16219083-9">Mecklenburg, Herzogtum</placeName>
+                </place>
+                <place xml:id="meldorf">
+                    <placeName ref="https://www.geonames.org/2872100/meldorf.html">Meldorf</placeName>
+                </place>
+                <place xml:id="middelfart">
+                    <placeName ref="https://www.geonames.org/2616933/middelfart.html">Middelfart</placeName>
+                </place>                
+                <place xml:id="nyborg">
+                    <placeName ref="https://www.geonames.org/2616015/nyborg.html">Nyborg</placeName>
+                </place>
+                <place xml:id="odense">
+                    <placeName ref="https://www.geonames.org/2615876/odense.html">Odense</placeName>
+                </place>                
+                <place xml:id="orleans">
+                    <placeName ref="https://www.geonames.org/2989317/orleans.html">Orléans</placeName>
+                </place>
+                <place xml:id="ostsee">
+                    <placeName ref="https://www.geonames.org/2633321/baltic-sea.html">Ostsee</placeName>
+                </place>                
+                <place xml:id="ploen">
+                    <placeName ref="https://www.geonames.org/2853162/ploen.html">Plön</placeName>
+                </place>
+                <place xml:id="rendsburg">
+                    <placeName ref="https://www.geonames.org/2848245/rendsburg.html">Rendsburg</placeName>
+                </place>
+                <place xml:id="ringsted">
+                    <placeName ref="https://www.geonames.org/2614764/ringsted.html">Ringsted</placeName>
+                </place>
+                <place xml:id="roanne">
+                    <placeName ref="https://www.geonames.org/2983362/roanne.html">Roanne</placeName>
+                </place>   
+                <place xml:id="roskilde">
+                    <placeName ref="https://www.geonames.org/2614481/roskilde.html">Roskilde</placeName>
+                </place>
+                <place xml:id="schweden_koenigreich">
+                    <placeName ref="https://d-nb.info/gnd/4077258-5">Schweden, Königreich</placeName>
+                    <note>Bereistes Land in <ref target="http://diglib.hab.de/mss/62-3-b-extrav/start.htm?image=00167">Cod. Guelf. 62.3.B Extrav.</ref>, <ref target="http://selbstzeugnisse.hab.de/grand_tour/cod_guelf_89_blank">Cod. Guelf. 89 Blank.</ref>, <ref target="http://diglib.hab.de/mss/239-13-extrav/start.htm">Cod. Guelf. 239.13 Extrav.</ref>, <ref target="http://diglib.hab.de/mss/257-3-extrav/start.htm">Cod. Guelf. 257.3 Extrav.</ref></note>
+                </place>
+                <place xml:id="segeberg">
+                    <placeName ref="https://www.geonames.org/2953341/bad-segeberg.html">Segeberg (Bad Segeberg)</placeName>
+                </place>
+                <place xml:id="slagelse">
+                    <placeName ref="https://www.geonames.org/2613460/slagelse.html">Slagelse</placeName>
+                </place>
+                <place xml:id="strassburg">
+                    <placeName ref="https://www.geonames.org/2973783/strasbourg.html">Straßburg (Strasbourg)</placeName>
+                </place>
+                <place xml:id="strukdorf">
+                    <placeName ref="https://www.geonames.org/2825641/strukdorf.html">Strukdorf</placeName>
+                </place>
+                <place xml:id="trave_river">
+                    <placeName ref="https://www.geonames.org/2821483/trave.html">Trave, Fluss</placeName>
+                </place>                
+                <place xml:id="travemuende">
+                    <placeName ref="https://www.geonames.org/2821480/travemuende.html">Travemünde</placeName>
+                </place> 
+                <place xml:id="wolfenbuettel">
+                    <placeName ref="https://www.geonames.org/2806914/wolfenbuettel.html">Wolfenbüttel</placeName>
+                </place>  
+            </listPlace>
+        </body>
+    </text>
+</TEI>

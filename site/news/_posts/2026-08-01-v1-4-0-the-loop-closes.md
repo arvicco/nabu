@@ -1,6 +1,6 @@
 ---
 title: "v1.4.0 + nabu-data v1.0.0 — the loop closes"
-date: 2026-08-01 15:30:00 +0000
+date: 2026-08-01 00:00:00 +0000
 description: >-
   A synchronized double release: Nabu v1.4.0 — the signs desk, the
   Tibetan consumers, the granted sources — and the first tagged

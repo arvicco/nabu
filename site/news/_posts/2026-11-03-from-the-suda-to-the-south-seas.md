@@ -1,8 +1,8 @@
 ---
 title: "From the Suda to the South Seas — seven text sources and twenty-six dictionaries"
-date: 2026-11-03 03:49:00 +0000
+date: 2026-11-03 00:00:00 +0000
 description: >-
-  One overnight window: the complete English Suda, the Hill Museum's
+  One development window: the complete English Suda, the Hill Museum's
   Syriac and Ethiopic manuscript catalogue, the Patristic Text Archive,
   the Sixth Council Pāḷi canon with its printed apparatus, 312 Ming
   examination records, the library's first Oceanic running text — and a
@@ -10,9 +10,9 @@ description: >-
   the Digital Pāḷi Dictionary.
 ---
 
-An overnight development window brings the library to **2,629,265
+A single development window brings the library to **2,629,265
 documents / 121,743,954 passages across 301 live sources** (census
-3 November 2026) — thirty-two sources wired in one night, and the
+3 November 2026) — thirty-two sources wired in one window, and the
 dictionary layer past four million entries (4,203,984).
 
 **Byzantium answers in English.** The complete English translation of

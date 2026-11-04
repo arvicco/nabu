@@ -9,13 +9,21 @@ description: >-
 
 Epigraphy-first, opening on the DHARMA corpora: the Old Khmer inscriptions (the Cœdès K-numbers), the Campā corpus, the Nusantara charters (Old Malay, Old Javanese, Old Sundanese), the Pyu corpus, and the Bagan Old Burmese inscriptions — with the kakawin critical editions as the literary wing and the Old Javanese Wordnet as its glossary, joining as their packets land.
 
+Beside the stone record stand the manuscript shelves: Balinese
+Wikisource's **palm-leaf lontars**, transcribed manuscript-direct in
+Balinese script (usada healing texts, geguritan verse, the Basa Kawi
+works); the **Jawi-script Malay manuscripts** of the Leiden and British
+Library collections (the Hikayat Aceh, the Sejarah Melayu); and the
+**Thai Collected Chronicles** (Prachum Phongsawadan) in their pre-1930
+printings, Buddhist-era years converted.
+
 New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the library in minutes.
 
 ## The shelves
 
 A source wears every desk it serves — these twelve answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
-| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 3 November 2026)</span> |
+| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 4 November 2026)</span> |
 |---|---|---|---|---|
 | `ban-wikisource` | texts | attribution | wired · manual | 1,252 docs / 21,491 passages |
 | `dharma-campa` | texts | attribution | wired · auto | 122 docs / 2,740 passages |
@@ -30,15 +38,15 @@ A source wears every desk it serves — these twelve answer this desk. Holdings 
 | `su-wikisource` | texts | attribution | wired · manual | 78 docs / 8,351 passages |
 | `th-wikisource` | texts | attribution | wired · manual | 92 docs / 11,006 passages |
 
-**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 3 November 2026)</span>: `kaw` 3,633 · `obr` 1,121 · `okz-Latn` 874 · `kaw-Bali` 701 · `ban-Bali` 542 · `san-Latn` 494 · `kaw-Latn` 271 · `pyx-Latn` 124 · `tha` 92 · `ocm-Latn` 75 … and 16 more (`nabu axis sea` lists all).
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 4 November 2026)</span>: `kaw` 3,633 · `obr` 1,121 · `okz-Latn` 874 · `kaw-Bali` 701 · `ban-Bali` 542 · `san-Latn` 494 · `kaw-Latn` 271 · `pyx-Latn` 124 · `tha` 92 · `ocm-Latn` 75 … and 16 more (`nabu axis sea` lists all).
 
 ## The desk's instruments
 
-No axis-specific instruments curated yet — the generic surfaces above apply.
+No desk-specific instruments curated yet — the generic surfaces above apply.
 
 ## Working the sea desk
 
-The generic axis surfaces — every desk answers to these, in working
+The generic desk surfaces — every desk answers to these, in working
 order (enable once, sync, then query):
 
 ```

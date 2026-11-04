@@ -427,7 +427,7 @@ Notes:
   wake — launchd fires a `StartCalendarInterval` job once on the next
   opportunity, it does not queue every missed slot.
 - Times are local. Keep the nightly job comfortably before the weekly one if you
-  ever put both on the same night.
+  ever put both on the same day.
 - `ProcessType: Background` (set in every template) tells the scheduler these are
   low-priority; they won't fight foreground work for CPU/IO.
 
@@ -1074,7 +1074,7 @@ automatically; no per-release action.
 1. **Green gate first.** `rake test && rake lint` exit 0 on the release
    commit; the phase-gate pull request body is written (it is the
    release-notes source of record — until 2026-08-02 the gate's worklog
-   line served, see docs/history/).
+   line served — a retired early-era record).
 2. **CITATION.cff**: set `version:` to `X.Y.Z` and `date-released:` to
    today; bump `Nabu::VERSION` (lib/nabu/version.rb) to the same string —
    it feeds provenance `code_version` stamps and fetch User-Agents;
@@ -1112,7 +1112,12 @@ automatically; no per-release action.
    normal path; `rake demo:publish` is the local fallback, and like
    every owner-run operation it must be ONE command that carries its
    own preflight checks — handing the owner a sequence of setup
-   incantations around it is a defect (same ruling).
+   incantations around it is a defect (same ruling). The deploy
+   surfaces pin the RELEASED tag, never `:latest`: a `server.json`
+   version bump also moves the image tag in `render.yaml` and
+   `site/docker-mcp-catalog.yaml`, and `rake site:data` re-projects
+   `site/_data/mcp.yml` (the MCP page's commands and buttons) —
+   `test/site/site_data_test.rb` fails until all four agree.
 
 Between releases, phase gates that don't tag still add a News entry
 (MAINTENANCE.md gate duty) — the News section tracks phases; releases are

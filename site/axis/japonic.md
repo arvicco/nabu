@@ -22,7 +22,7 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 A source wears every desk it serves — these fifteen answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
-| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 3 November 2026)</span> |
+| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 4 November 2026)</span> |
 |---|---|---|---|---|
 | `aozora` | texts | open | wired · manual | 17,121 docs / 2,983,332 passages |
 | `edrdg` | dictionary | attribution | wired · manual | 231,322 entries |
@@ -33,16 +33,16 @@ A source wears every desk it serves — these fifteen answer this desk. Holdings
 | `kokubunken` | texts | attribution | wired · manual | 3 docs / 1,723 passages |
 | `kouigenji` | texts | attribution | wired · manual | 54 docs / 25,065 passages |
 | `kradfile` | dictionary | attribution | wired · manual | 6,355 entries |
-| `ndl-kotenseki` | texts | open | wired · manual | 44,534 docs / 2,193,831 passages |
+| `ndl-kotenseki` | texts | open | wired · manual | 58,896 docs / 3,291,374 passages |
 | `nrct` | feature module | attribution | wired · manual | nothing held yet |
 | `oncoj` | annotated corpus | attribution | wired · frozen | 4,991 docs / 33,192 passages |
 | `oncoj-lexicon` | dictionary | attribution | wired · frozen | 5,869 entries |
 | `unihan` | dictionary | open | wired · manual | 102,998 entries |
 | `wiktionary-recon` | dictionary | attribution | wired · manual | 376,415 entries |
 
-**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 3 November 2026)</span>: `zho` 430,294 · `jpn` 393,463 · `lzh` 63,807 · `ojp` 11,413.
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 4 November 2026)</span>: `zho` 430,294 · `jpn` 407,825 · `lzh` 63,807 · `ojp` 11,413.
 
-**Carried in by multilingual packs** (`wiktionary-recon` — whole-source members whose other languages ride along, as of 3 November 2026): `xcl` 8,541 · `sga` 6,688 · `gem-pro` 5,749 · `gmw-pro` 5,578 · `sla-pro` 5,461 … and 18 more (`nabu axis japonic` lists all).
+**Carried in by multilingual packs** (`wiktionary-recon` — whole-source members whose other languages ride along, as of 4 November 2026): `xcl` 8,541 · `sga` 6,688 · `gem-pro` 5,749 · `gmw-pro` 5,578 · `sla-pro` 5,461 … and 18 more (`nabu axis japonic` lists all).
 
 ## The desk's instruments
 
@@ -64,7 +64,7 @@ A source wears every desk it serves — these fifteen answer this desk. Holdings
 
 ## Working the japonic desk
 
-The generic axis surfaces — every desk answers to these, in working
+The generic desk surfaces — every desk answers to these, in working
 order (enable once, sync, then query):
 
 ```

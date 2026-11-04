@@ -252,6 +252,31 @@ module Store
                  "a translation sibling never mints its own timeline row"
     end
 
+    # Owner-ruled 2026-11-03: a translation DOES row when it is the work's
+    # only held document. The aio parser guarantees that condition at parse
+    # time (the record's axis fields ride the Greek document when AIO edits
+    # one, ELSE the translation — never both), so aio opts in; the default
+    # exclusion above still governs every other source, and an aio
+    # translation whose record's axis fields rode a Greek sibling simply
+    # carries no date, so it rows nothing.
+    def test_an_opted_in_sources_translation_rows_when_it_carries_the_axis_fields
+      assert_includes Nabu::Store::TimelineBuilder::MetadataDates::TRANSLATION_ROWS, "aio"
+      seed_metadata_doc("aio", "urn:nabu:aio:201-en",
+                        { "kind" => "translation", "translation_of" => "urn:nabu:aio:201",
+                          "date" => { "raw" => "352/1 BC", "not_before" => -352, "not_after" => -351 },
+                          "place" => { "ancient" => "Athens: Akropolis", "pleiades" => "580074" } })
+      seed_metadata_doc("aio", "urn:nabu:aio:202-en",
+                        { "kind" => "translation", "translation_of" => "urn:nabu:aio:202" })
+      summary = build!
+      assert_equal 1, summary.metadata_dates.fetch("aio")
+      row = timeline_for("urn:nabu:aio:201-en")
+      refute_nil row, "the only held document of the inscription carries its date"
+      assert_equal(-352, row[:not_before])
+      assert_equal "Athens: Akropolis", row[:place_name]
+      assert_nil timeline_for("urn:nabu:aio:202-en"),
+                 "a translation whose axis fields rode the Greek sibling rows nothing"
+    end
+
     # P59-0: the projection repairs reversed upstream bounds for the
     # order-defect sources (EDR's "later - earlier" ranges, BFM's swapped
     # ISO attrs) — values verbatim from the 2026-08-04 reversed-interval

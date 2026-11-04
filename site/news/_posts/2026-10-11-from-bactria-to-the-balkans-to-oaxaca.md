@@ -1,6 +1,6 @@
 ---
 title: "From Bactria to the Balkans to Oaxaca"
-date: 2026-10-11 16:30:00 +0200
+date: 2026-10-11 00:00:00 +0000
 description: >-
   Three phases in one arc: the TITUS Middle Iranian shelf completed
   under its personal grants, the Slavic shelves opened end to end —
