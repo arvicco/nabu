@@ -40,13 +40,26 @@ class PublicHygieneTest < Minitest::Test
     # clarification), never the machinery.
     [/unlock registry/i, "internal unlock-registry ids are workflow state"],
     [/\b(?:email|ask|letter)\s+(?:already\s+)?drafted\b/i,
-     "correspondence workflow state never appears on a public surface"]
+     "correspondence workflow state never appears on a public surface"],
+    # Time-of-day narrative reveals the clock behind the work (owner rule
+    # 2026-11-03, minted on a live leak: "wired in one night" on the news
+    # page): public surfaces carry DATES — never day-parts, never the
+    # hour. The same rule pins news-post times to midnight UTC
+    # (news_posts_test) and commit timestamps to UTC (the pre-commit
+    # hook).
+    [/\bovernight\b/i,
+     "time-of-day narrative — public surfaces carry dates, never day-parts"],
+    [/\b(?:this|same|that|by|one|a single) (?:morning|evening|afternoon|night)\b/i,
+     "time-of-day narrative — public surfaces carry dates, never day-parts"],
+    [/\btonight\b|\blast night\b/i,
+     "time-of-day narrative — public surfaces carry dates, never day-parts"]
   ].freeze
 
-  # Living HISTORY files written before the rule, awaiting the owner's
-  # call (scrub-in-place vs untrack) — grandfathered, NOT license to add
-  # more.
-  GRANDFATHERED = %w[docs/history/worklog.md docs/history/backlog.md].freeze
+  # Pre-rule files exempted while awaiting an owner call — EMPTY since
+  # 2026-11-03 (the two early history files untracked into the private
+  # boards by owner ruling; every tracked file now meets the full rule).
+  # NOT license to add entries.
+  GRANDFATHERED = %w[].freeze
 
   # Per-path exemptions, each with its reason. NOT license to add more:
   # a new entry needs a file that genuinely cannot be rewritten.
@@ -130,8 +143,14 @@ class PublicHygieneTest < Minitest::Test
     (ALLOWLIST.keys + GRANDFATHERED).each do |rel|
       assert_includes tracked, rel, "stale hygiene exemption: #{rel} is no longer tracked"
     end
-    ["(№R-51-B, 2026-08-29)", "grant №23", "the Q83 drain", "(P104-1, Q77)", "thread T-12"].each do |leak|
+    ["(№R-51-B, 2026-08-29)", "grant №23", "the Q83 drain", "(P104-1, Q77)", "thread T-12",
+     "wired in one night", "an overnight window", "merged by evening", "granted this morning"].each do |leak|
       assert FORBIDDEN.any? { |pattern, _| leak.match?(pattern) }, "the guard must catch #{leak.inspect}"
+    end
+    ["landed the same day", "within hours of the ask", "the Night Office hours",
+     "One Thousand and One Nights"].each do |fine|
+      refute FORBIDDEN.any? { |pattern, _| fine.match?(pattern) },
+             "date-grain language and quoted content must pass: #{fine.inspect}"
     end
     refute scanned?("test/fixtures/perseus/data/tlg0012.xml"), "upstream fixture bytes stay verbatim"
     assert scanned?("test/fixtures/perseus/README.md"), "our fixture provenance notes are prose"

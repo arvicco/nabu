@@ -1,6 +1,6 @@
 ---
 title: "The efficiency phase: the library rebuilt, and every command flies"
-date: 2026-07-23 16:00:00 +0000
+date: 2026-07-23 00:00:00 +0000
 description: >-
   Phase 42 rebuilds the doubled library from canonical sources in under
   five hours and retires every slow command: status drops from four

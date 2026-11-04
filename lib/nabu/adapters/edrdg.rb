@@ -46,7 +46,7 @@ module Nabu
     # 2026-07-19 03:30 GMT on both, in-file build stamps 2026-07-19,
     # database_version 2026-200). A nightly-churning upstream must not look
     # frozen: sync_policy manual states the honest posture — each
-    # owner-fired sync adopts that night's build, and the per-dictionary
+    # owner-fired sync adopts the latest nightly build, and the per-dictionary
     # .file-fetch.json Last-Modified pins plus the in-file build stamps
     # (kanjidic2 <date_of_creation>, JMdict's "JMdict created:" comment)
     # date what canonical actually holds. Single-file HTTP via

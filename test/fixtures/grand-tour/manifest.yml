@@ -1,0 +1,81 @@
+# Nabu fixture manifest (P5-4 "fixture sentinel"). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# Every file is a member of ONE Zenodo zip (no per-file URL), so every
+# entry is refetchable: false; the zip directory's sha256 pin lives on the adapter.
+source: grand-tour
+adapter_test:
+retrieved: '2026-11-03'
+files:
+- path: LICENSE
+  whole: false
+  trim: the first 3 lines (the licence title)
+  refetchable: false
+  reason: a member of the Zenodo zip (https://zenodo.org/api/records/23055358/files/grand-tour-tei.zip/content, md5 6013b680…3dea), under its top directory grand-tour-tei/
+    — no per-file raw URL
+- path: Reiseberichte/cod_guelf_149_14_extrav.xml
+  whole: false
+  trim: a documented cut (README.md)
+  refetchable: false
+  reason: a member of the Zenodo zip (https://zenodo.org/api/records/23055358/files/grand-tour-tei.zip/content, md5 6013b680…3dea), under its top directory grand-tour-tei/
+    — no per-file raw URL
+- path: Reiseberichte/cod_guelf_221_extrav.xml
+  whole: false
+  trim: a documented cut (README.md)
+  refetchable: false
+  reason: a member of the Zenodo zip (https://zenodo.org/api/records/23055358/files/grand-tour-tei.zip/content, md5 6013b680…3dea), under its top directory grand-tour-tei/
+    — no per-file raw URL
+- path: Reiseberichte/cod_guelf_267_1_extrav.xml
+  whole: false
+  trim: a documented cut (README.md)
+  refetchable: false
+  reason: a member of the Zenodo zip (https://zenodo.org/api/records/23055358/files/grand-tour-tei.zip/content, md5 6013b680…3dea), under its top directory grand-tour-tei/
+    — no per-file raw URL
+- path: Reiseberichte/cod_guelf_89_blank.xml
+  whole: false
+  trim: a documented cut (README.md)
+  refetchable: false
+  reason: a member of the Zenodo zip (https://zenodo.org/api/records/23055358/files/grand-tour-tei.zip/content, md5 6013b680…3dea), under its top directory grand-tour-tei/
+    — no per-file raw URL
+- path: Reiseberichte/index_grand_tour.xml
+  whole: true
+  trim: none
+  refetchable: false
+  reason: a member of the Zenodo zip (https://zenodo.org/api/records/23055358/files/grand-tour-tei.zip/content, md5 6013b680…3dea), under its top directory grand-tour-tei/
+    — no per-file raw URL
+- path: Schema/grand_tour_digital.rng
+  whole: false
+  trim: the first 9 lines, open elements closed
+  refetchable: false
+  reason: a member of the Zenodo zip (https://zenodo.org/api/records/23055358/files/grand-tour-tei.zip/content, md5 6013b680…3dea), under its top directory grand-tour-tei/
+    — no per-file raw URL
+- path: introduction/introduction_cod_guelf_127_1_extrav.xml
+  whole: true
+  trim: none
+  refetchable: false
+  reason: a member of the Zenodo zip (https://zenodo.org/api/records/23055358/files/grand-tour-tei.zip/content, md5 6013b680…3dea), under its top directory grand-tour-tei/
+    — no per-file raw URL
+- path: register/itinerar_wagener.json
+  whole: false
+  trim: the first 3 of 149 rows (re-serialized JSON, values verbatim)
+  refetchable: false
+  reason: a member of the Zenodo zip (https://zenodo.org/api/records/23055358/files/grand-tour-tei.zip/content, md5 6013b680…3dea), under its top directory grand-tour-tei/
+    — no per-file raw URL
+- path: register/listOrg_grand_tour.xml
+  whole: false
+  trim: one org entry kept
+  refetchable: false
+  reason: a member of the Zenodo zip (https://zenodo.org/api/records/23055358/files/grand-tour-tei.zip/content, md5 6013b680…3dea), under its top directory grand-tour-tei/
+    — no per-file raw URL
+- path: register/listPerson_grand_tour.xml
+  whole: false
+  trim: the entries the fixture journals cite
+  refetchable: false
+  reason: a member of the Zenodo zip (https://zenodo.org/api/records/23055358/files/grand-tour-tei.zip/content, md5 6013b680…3dea), under its top directory grand-tour-tei/
+    — no per-file raw URL
+- path: register/listPlace_grand_tour.xml
+  whole: false
+  trim: the entries the fixture journals cite
+  refetchable: false
+  reason: a member of the Zenodo zip (https://zenodo.org/api/records/23055358/files/grand-tour-tei.zip/content, md5 6013b680…3dea), under its top directory grand-tour-tei/
+    — no per-file raw URL

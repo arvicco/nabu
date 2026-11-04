@@ -1,6 +1,6 @@
 ---
 title: "The instruments phase: meter, places, and asking your model"
-date: 2026-07-24 22:30:00 +0000
+date: 2026-07-24 00:00:00 +0000
 description: >-
   Phase 44 builds instruments over the library: a metrical scansion
   layer for Latin and Greek verse, a place desk joined to the Pleiades

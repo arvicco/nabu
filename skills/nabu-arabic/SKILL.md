@@ -6,7 +6,7 @@ compatibility: "Requires the nabu MCP server (`bin/nabu mcp`, read-only, stdio) 
 metadata:
   desk: arabic
   origin: generated
-  sources: "althurayya diccas kitab kitab-reuse ociana openiti"
+  sources: "althurayya diccas kitab kitab-reuse ociana openiti wiktionary-ar"
 ---
 
 # The Arabist — the `arabic` desk
@@ -29,6 +29,7 @@ verbatim upstream terms are in `docs/02-sources.md` of the Nabu repository.
 | `kitab-reuse` | KITAB Text Reuse Data — pairwise statistics (intertext instrument) | nc |
 | `ociana` | OCIANA — Online Corpus of the Inscriptions of Ancient North Arabia | research_private |
 | `openiti` | OpenITI — Open Islamicate Texts Initiative (premodern Arabic + Persian), release 2025.1.9 | nc |
+| `wiktionary-ar` | Wiktionary Arabic — kaikki.org machine-readable extract | attribution |
 <!-- nabu:skill-sources:end -->
 
 ## What the shelves hold

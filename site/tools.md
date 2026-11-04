@@ -500,10 +500,8 @@ peaks in the second century CE.
 
 Everything above is also available *in conversation*: the library ships
 a read-only [MCP server](https://github.com/arvicco/nabu/blob/main/docs/mcp.md)
-(`bin/nabu mcp`) exposing fourteen tools — `nabu_search`, `nabu_show`,
-`nabu_define`, `nabu_etym`, `nabu_links`, `nabu_parallels`,
-`nabu_cognates`, `nabu_align`, `nabu_concord`, `nabu_place`,
-`nabu_char`, `nabu_signs`, `nabu_clarify`, and `nabu_status` — so an AI assistant wired
+(`bin/nabu mcp`) exposing {{ site.data.mcp.tool_count }} tools — {% for tool in site.data.mcp.tools %}{% if forloop.last %}and {% endif %}`{{ tool.name }}`{% unless forloop.last %}, {% endunless %}{% endfor %}
+([what each one does]({{ '/mcp/#the-tools' | relative_url }})) — so an AI assistant wired
 to your library can search, cite, align, and etymologize over it
 mid-discussion. Registration for Claude Code and Claude Desktop is in
 the [server documentation](https://github.com/arvicco/nabu/blob/main/docs/mcp.md);
@@ -618,8 +616,9 @@ $ bin/nabu list corph --documents --limit 10
 ```
 
 **Working by research desk.** The flat source list is also tagged into
-{{ census.desks }} [research axes]({{ '/axis/' | relative_url }}) — the owner's
-scholarly desks (the Classicist, the Assyriologist, the Sinologist…). A
+{{ census.desks }} [research desks]({{ '/axis/' | relative_url }}) (the CLI
+calls them axes) — scholarly hats such as the Classicist, the
+Assyriologist, the Sinologist. A
 source wears every desk it serves, and four surfaces read those tags:
 `nabu enable NAME` puts a desk's shelves in this box's profile (the first-time
 step — `sync` acquires only enabled sources), `nabu list --axis NAME` groups

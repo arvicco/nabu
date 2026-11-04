@@ -43,7 +43,7 @@ verbatim upstream terms are in `docs/02-sources.md` of the Nabu repository.
 | `osta` | OSTA — Old Spanish Textual Archive (Hispanic Seminary of Medieval Studies) | nc |
 | `salom` | Şalom Ladino articles text corpus (Col·lectivaT / Sephardic Center of Istanbul) | attribution |
 | `theatre-classique` | Théâtre Classique — Paul Fièvre's TEI corpus of French plays | nc |
-| `typikon-bible` | typikon.info Bible layer — the 1688 Bucharest Bible in Romanian Cyrillic (dump 2026-09-21) | attribution |
+| `typikon-bible` | typikon.info Bible layer — the 1688 Bucharest Bible, the Elizabeth Bible in Church Cyrillic and the Old Georgian Bible (dump 2026-09-21) | attribution |
 | `ud` | Universal Dependencies — ancient treebanks | nc |
 | `wiktionary-ca` | Wiktionary Catalan — kaikki.org machine-readable extract | attribution |
 | `wiktionary-frm` | Wiktionary Middle French — kaikki.org machine-readable extract | attribution |

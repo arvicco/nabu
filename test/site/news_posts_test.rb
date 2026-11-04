@@ -24,6 +24,24 @@ class NewsPostsTest < Minitest::Test
                  "re-date to a past time: #{offenders.join(', ')}"
   end
 
+  # Post times are public metadata, and any non-midnight time narrates
+  # the clock behind the publish (one legacy post even carried a literal
+  # +0200 offset — the owner's timezone, verbatim). Owner rule
+  # 2026-11-03: every post is dated midnight UTC of its day — the date
+  # is the finest public grain, and a midnight stamp can never trip the
+  # future-dating trap above on its own publish date. Ordering within a
+  # day falls to the filename, which is enough for a news page.
+  def test_every_news_post_time_is_midnight_utc
+    offenders = Dir.glob(File.join(POSTS_DIR, "*.md")).filter_map do |path|
+      front = File.read(path)[/\A---\n.*?\n---/m].to_s
+      date = front[/^date:\s*(.+)$/, 1] or next
+      "#{File.basename(path)} (#{date.strip})" unless date.strip.match?(/\A\d{4}-\d{2}-\d{2} 00:00:00 \+0000\z/)
+    end
+    assert_empty offenders,
+                 "post times narrate the working clock — date every post 'YYYY-MM-DD 00:00:00 +0000': " \
+                 "#{offenders.join(', ')}"
+  end
+
   CITATION = File.expand_path("../../CITATION.cff", __dir__)
 
   # The release-announcement guard (the release rail, docs/ops.md §12:

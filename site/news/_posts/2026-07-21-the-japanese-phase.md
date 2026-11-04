@@ -1,6 +1,6 @@
 ---
 title: "The Japanese phase: Aozora Bunko and the honest-glyph ladder"
-date: 2026-07-21 22:00:00 +0000
+date: 2026-07-21 00:00:00 +0000
 description: >-
   Phase 38 opens the Japanese reading desk — an adapter for Aozora
   Bunko's 17,000-work public-domain library — and replaces the blank

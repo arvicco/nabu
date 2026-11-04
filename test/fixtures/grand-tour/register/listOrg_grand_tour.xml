@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0"
+    xml:id="grand_tour.koerperschaften">
+    <teiHeader>
+        <fileDesc>
+            <titleStmt>
+                <title>Körperschaftsregister</title>
+                <respStmt>
+                    <resp>erstellt und bearbeitet von </resp>                    
+                    <name>Angela Göbel</name>
+                    <name>Maximilian Görmar</name>
+                </respStmt>
+            </titleStmt>
+            <publicationStmt>
+                <publisher>
+                    <name type="org">Herzog August Bibliothek Wolfenbüttel</name>
+                    <ptr target="https://www.hab.de"/>
+                    <address>
+                        <street>Lessingplatz 1</street>
+                        <name type="city">Wolfenbüttel</name>
+                        <postCode>D-38299</postCode>
+                        <name type="country">Germany</name>
+                    </address>
+                </publisher>
+            </publicationStmt>
+            <sourceDesc>
+                <p></p>
+            </sourceDesc>
+        </fileDesc>
+    </teiHeader>        
+    <text>
+        <body>
+            <listOrg xml:id="org">
+                <org xml:id="augustiner">
+                    <orgName ref="https://d-nb.info/gnd/1008455-1">Augustinerorden (Ordo Eremitarum Sancti Patris Augustini)</orgName>
+                </org>                
+            </listOrg>
+        </body>
+    </text>
+</TEI>

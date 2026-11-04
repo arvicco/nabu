@@ -1,6 +1,6 @@
 ---
 title: "v1.7.0 — the entity wave, the variant layers, and the replay engine"
-date: 2026-10-20 16:00:00 +0000
+date: 2026-10-20 00:00:00 +0000
 description: >-
   A month of waves in one release: a cross-tradition person index,
   facets at three grains, the largest dating fill in the library's

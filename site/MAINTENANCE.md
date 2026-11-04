@@ -32,10 +32,23 @@ At **every phase gate**, alongside the README/library.md truthfulness pass
       site refresh").
    2. **Regenerate the SSOT from the live catalog**: `bundle exec rake
       site:refresh` (= `site:data` — recomputes `census.yml` + `desks.yml`
-      + `dates.yml` against the live catalog, stamped today, and renders
+      + `dates.yml` against the live catalog, stamped today, projects
+      `mcp.yml` — the MCP page's tool list, pinned demo tag and demo
+      license table — from the server's tool registry, `server.json` and
+      the demo plan, and renders
       `site/llms.txt` — the agent entry file — from those SSOT files — then
       `site:axes`). This is the ONLY number-entry step; the prose pages
-      update themselves because they read the data.
+      update themselves because they read the data. The same task writes
+      the per-source grain, `sources.yml`: one row per live public source
+      (documents / passages / dictionary entries, license class, a
+      holdings cell for /sources/, the du-measured canonical size), the
+      /library/ collection-table totals summed over the hand-curated shelf
+      map `site/_data/shelf_members.yml`, and the disk totals /quickstart/
+      cites (one `du` walk of the canonical tree; a worktree run points
+      `NABU_SITE_CANONICAL` at the main checkout's tree, beside
+      `NABU_AXES_CATALOG` / `NABU_SITE_FULLTEXT`). A newly wired source that
+      holds documents must join a shelf in that map — the suite fails
+      until it does.
    3. **Commit** the regenerated `site/_data/*.yml`, `site/llms.txt` and
       the axis pages.
 
@@ -44,7 +57,9 @@ At **every phase gate**, alongside the README/library.md truthfulness pass
    desks / dates SHAPE and that index.md reads the data; and
    `test/site/site_prose_ssot_test.rb` fails if any headline page stops
    reading the census SSOT, if any page carries a known-stale headline
-   literal, or if a pure-headline page hardcodes a million-scale total.
+   literal, or if a pure-headline page hardcodes a million-scale total —
+   and, at the per-source grain, if a /library/ collection-table size, a
+   /sources/ holdings cell or a /quickstart/ MB/GB figure is typed by hand.
    `site/llms.txt` is guarded the same way: site_data_test regenerates it
    from the committed census + desks files and fails on any difference (a
    hand edit or a skipped refresh), and site_prose_ssot_test refuses a

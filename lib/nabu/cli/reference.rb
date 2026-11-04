@@ -356,6 +356,10 @@ module Nabu
     # house render-cap rule).
     AXIS_LANGUAGES_ITEMS = 10
 
+    # Pack-spillover codes shown on the card's labelled tail (mirrors the
+    # site desk pages' cap; --long lifts).
+    AXIS_SPILLOVER_ITEMS = 5
+
     # Crosswalk equivalences shown on the place card's "=" line before the
     # "… and N more" tail (P75 C-3, the same house render-cap rule).
     # const: a render cap, not a corpus census
@@ -875,31 +879,49 @@ module Nabu
                   end
           say "    #{slug.ljust(width)}  #{state}  #{axis_member_holdings(by_slug[slug], census: census)}"
         end
-        print_axis_languages(members, info)
+        print_axis_languages(members, info, registry: registry)
         print_axis_gold(members, by_slug, info, registry: registry)
         say "  commands: nabu list --axis #{axis.name} · nabu sync #{axis.name}"
       end
 
       # The desk's held language codes (P48-r3): one merged doc-or-entry
-      # count per code over the member sources, holdings descending. The
-      # counts ARE the honesty mechanism — a multilingual pack's 3-doc
-      # spillover reads as 3 beside a 40K holding, never hidden. No catalog,
-      # no line (the member cells already say "no database"); a desk holding
-      # nothing says so.
-      # P49-r4, the deliberate asymmetry: this line KEEPS multilingual pack
-      # members (the counts self-explain), while the count-less attribution
-      # surfaces (print_language_axes, print_axis_gold) exclude them.
-      def print_axis_languages(members, info)
+      # count per code over the member sources, holdings descending. No
+      # catalog, no line (the member cells already say "no database"); a
+      # desk holding nothing says so.
+      # The desk-proper split (the site's desk pages shipped it first): the
+      # headline carries only codes some NON-pack member holds; a
+      # multilingual pack's other languages ride a separate labelled tail
+      # naming the packs, counts kept (the counts stay the honesty
+      # mechanism — a 3-doc spillover reads as 3; it just no longer
+      # outranks the desk's own languages).
+      def print_axis_languages(members, info, registry:)
         return unless info
 
         holdings = info.language_holdings_for(members)
         return say("  languages: none held yet") if holdings.empty?
 
-        shown = options[:long] ? holdings : holdings.first(AXIS_LANGUAGES_ITEMS)
+        packs = members.select { |slug| registry.multilingual?(slug) }
+        proper_codes = info.language_holdings_for(members - packs).to_set(&:first)
+        proper, spillover = holdings.partition { |code, _count| proper_codes.include?(code) }
+        if proper.empty?
+          say "  languages: none beyond the multilingual packs"
+        else
+          say "  languages: #{capped_language_line(proper, AXIS_LANGUAGES_ITEMS)}"
+        end
+        return if spillover.empty?
+
+        say "  pack spillover (#{packs.join(', ')}): " \
+            "#{capped_language_line(spillover, AXIS_SPILLOVER_ITEMS)}"
+      end
+
+      # One capped "code count · …" line with the honest tail (the house
+      # render-cap rule; --long lifts).
+      def capped_language_line(holdings, cap)
+        shown = options[:long] ? holdings : holdings.first(cap)
         line = shown.map { |code, count| "#{code} #{commas(count)}" }.join(" · ")
         hidden = holdings.size - shown.size
         line += " … and #{hidden} more (--long lists all)" if hidden.positive?
-        say "  languages: #{line}"
+        line
       end
 
       # One member's holdings cell: the census fragments when the source holds

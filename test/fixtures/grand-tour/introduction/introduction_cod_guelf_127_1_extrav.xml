@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.tei-c.org/ns/1.0 http://diglib.hab.de/rules/schema/tei/P5/v2.8.0/tei-p5-transcr.xsd"
+    xmlns="http://www.tei-c.org/ns/1.0" xmlns:xi="http://www.w3.org/2001/XInclude"
+    xml:id="grand_tour.introduction_cod_guelf_127_1_extrav" n="Cod. Guelf. 127.1 Extrav.">
+    <teiHeader type="text">
+        <fileDesc>
+            <titleStmt>
+                <title>Kurzbeschreibung zu Cod. Guelf. 127.1 Extrav.</title>
+                <respStmt>
+                    <resp>verfasst von</resp>
+                    <persName>
+                        <forename>Angela</forename>
+                        <surname>Göbel</surname>
+                    </persName>
+                </respStmt>     
+                <respStmt>
+                    <resp>Umsetzung der Digitalen Edition von</resp>
+                    <persName>
+                        <forename>Maximilian</forename>
+                        <surname>Görmar</surname>
+                    </persName>
+                </respStmt>
+                <funder>Deutsche Forschungsgemeinschaft</funder>                
+                <principal>Herzog August Bibliothek Wolfenbüttel</principal>
+            </titleStmt>            
+            <publicationStmt>
+                <publisher>
+                    <name type="org">Herzog August Bibliothek Wolfenbüttel</name>
+                    <ptr target="http://www.hab.de"/>
+                </publisher>
+                <date type="digitised" when="2023">2023</date>
+                <distributor>Herzog August Bibliothek Wolfenbüttel</distributor>
+                <availability status="restricted">
+                    <p>Herzog August Bibliothek Wolfenbüttel (<ref target="http://diglib.hab.de/?link=012">copyright information</ref>)</p>
+                </availability>
+            </publicationStmt>
+            <sourceDesc>
+                <p></p>  
+            </sourceDesc>            
+        </fileDesc>
+        <revisionDesc>
+            <list>
+                <item>work in progress</item>
+            </list>
+        </revisionDesc>
+    </teiHeader>
+    <text>
+        <body>
+            <div>
+                <head>Kurzbeschreibung zu Cod. Guelf. 127.1 Extrav.: Reisetagebuch eines unbekannten Verfassers, 1679</head>
+                <p>
+                    <hi rend="smaller">
+                        <lb/>Links: <ref target="http://diglib.hab.de/mss/127-1-extrav/start.htm">Digitalisat</ref>, <ref target="http://selbstzeugnisse.hab.de/repertorium/eintrag/127-1-extrav">Selbstzeugnisrepertorium</ref>
+                    </hi>
+                </p>
+                <p>
+                    <lb/>Der Reisebericht aus unbekannter Hand ist in französischer Sprache verfasst und beschreibt die Altertümer und Sehenswürdigkeiten Roms in Form eines Tagebuchs. Es beginnt am 29. Juni 1679. Das Tagebuch wurde komplementiert u. a. mit einer Liste der „Maison nobles de Rome“, einer „Table des familles de Rome“ und einer Liste über „Des tribunaux de Rome“.
+                </p> 
+                <div>
+                    <head>Literatur</head>                    
+                    <listBibl>
+                        <bibl>Wolf-Dieter Otte: Die neueren Handschriften der Gruppe Extravagantes, Bd. 2, Frankfurt a. M. 1987, S. 84.</bibl> 
+                    </listBibl>
+                </div>                
+            </div>
+        </body>
+    </text>
+</TEI>
+

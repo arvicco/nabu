@@ -1,6 +1,6 @@
 ---
 title: "The character desk: the largest shelf gets its instruments"
-date: 2026-07-21 12:00:00 +0000
+date: 2026-07-21 00:00:00 +0000
 description: >-
   Phase 37 equips the Chinese collection: a character card spanning
   four millennia per glyph, structure search by radical and component,

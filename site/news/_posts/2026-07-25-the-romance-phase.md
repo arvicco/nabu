@@ -1,6 +1,6 @@
 ---
 title: "The Romance phase: Latin's daughters take a desk"
-date: 2026-07-25 18:30:00 +0000
+date: 2026-07-25 00:00:00 +0000
 description: >-
   Phase 45 builds the Latin-to-vernacular continuum as a research desk
   of its own: the MGH critical editions, late-antique prose, Old French

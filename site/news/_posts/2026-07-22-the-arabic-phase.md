@@ -1,6 +1,6 @@
 ---
 title: "The Arabic phase: the Islamicate library, staged"
-date: 2026-07-22 16:30:00 +0000
+date: 2026-07-22 00:00:00 +0000
 description: >-
   Phase 41 opens the Arabist's desk on OpenITI — premodern Arabic and
   Persian at corpus scale, the largest single corpus the library has ever
@@ -34,7 +34,7 @@ digits fused to their words.
 The scale is the story. The central metadata index lists **14,107 text
 versions / 2.35 billion words**; the first wave takes the primary
 versions and sets the documentary MSS sub-corpus aside. The sync ran the
-same evening — a ~5.9 GB release archive plus its metadata index, both
+same day — a ~5.9 GB release archive plus its metadata index, both
 md5-pinned before a single tree file was written — and landed **9,079
 documents / 34,631,499 passages** (27 malformed upstream files
 quarantined honestly, 0.3%). **The library more than doubled in a day**,

@@ -1,6 +1,6 @@
 ---
 title: "The library proves it can die — then publishes its layers"
-date: 2026-08-11 21:00:00 +0000
+date: 2026-08-11 00:00:00 +0000
 description: >-
   Three phases in one arc: the derivability law makes everything
   permanent live in three plain-file folders and proves it by an

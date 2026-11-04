@@ -166,6 +166,14 @@ sources:
   # whole edition bare cs. Tier certain: one dated print, inside the band.
   prague-bible-1488:
     cs: { lect: "cs:old", tier: certain }
+  # P155: EMMO's 100 manuscripts declare textLang "eng" every one, and every
+  # catalogue date (origin@when, 1552–1697 — census 2026-11-03) sits inside
+  # en:early's [1500, 1700] band: the whole collection IS Early Modern
+  # English. A per-collection fact: upstream codes it bare eng. Tier certain:
+  # dated manuscripts, all inside the band. The inline Latin <foreign> spans
+  # ride page annotations, never the document code.
+  emmo:
+    en: { lect: "en:early", tier: certain }
   ticha:
     # The colonial Valley Zapotec corpus (Córdova 1578 through the Valley
     # notarial record to 1832): every holding falls inside the zap:col band
@@ -296,3 +304,14 @@ sources:
     # generalization. Tier certain: one dated edition, the stage's own
     # exemplar.
     ron-Cyrl: { lect: "ro:old~cyrl", tier: certain }
+    # cs-eliz (owner-ruled admission 2026-11-03): the Elizabeth Bible in
+    # its Church Cyrillic print orthography — the text the registry's
+    # chu:ncs node names as fixing the post-Nikonian standard ("fixed in
+    # the Elizabethan Bible (1751)"), the edition year 1751 inside the
+    # stage band [1650, 2100]. The elizabeth-bible row's mold: the adapter
+    # tags the edition bare chu (the dump's own language field: cu), and
+    # this row transcribes the edition's identity onto the existing node.
+    # Tier certain: one edition, the stage's own founding text.
+    # (ka-mcxeta needs no row: it is tagged oge, the Old Georgian anchor,
+    # by its own title "ძველი ქართულით".)
+    chu: { lect: "chu:ncs", tier: certain }

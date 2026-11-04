@@ -1,6 +1,6 @@
 ---
 title: "v1.6.0 — four axes, and a public data wave"
-date: 2026-09-18 07:00:00 +0000
+date: 2026-09-18 00:00:00 +0000
 description: >-
   The release that completes the library's fourth document axis and
   sends the layers out into the world: classification across two

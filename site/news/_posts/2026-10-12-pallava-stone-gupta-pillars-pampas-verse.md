@@ -1,6 +1,6 @@
 ---
 title: "Pallava Stone, Gupta Pillars, Pampa's Verse"
-date: 2026-10-12 08:00:00 +0200
+date: 2026-10-12 00:00:00 +0000
 description: >-
   The South Asia opening: the DHARMA project's Tamil-country and
   Deccan epigraphy estates arrive as two sources of nearly three

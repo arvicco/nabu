@@ -15,12 +15,12 @@
 - slug: slavic
   persona: The Slavicist
   blurb: Cyril and Methodius to the damaskini, canon to vernacular
-  members: 38
+  members: 39
 - slug: germanic
   persona: The Germanicist
   blurb: Gothic and Old English to the Norse sagas and the runestones, the word-hoard
     of all three branches
-  members: 33
+  members: 37
 - slug: celtic
   persona: The Celticist
   blurb: from Lepontic stones to the Old Irish glossators
@@ -52,7 +52,7 @@
 - slug: arabic
   persona: The Arabist
   blurb: the Islamicate library whole, Quran and hadith to falsafa and adab
-  members: 6
+  members: 7
 - slug: hittite
   persona: The Hittitologist
   blurb: Anatolia in cuneiform, KBo and KUB by tablet and line

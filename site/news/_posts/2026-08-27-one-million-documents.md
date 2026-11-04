@@ -1,6 +1,6 @@
 ---
 title: "One million documents — the presses of England open the door"
-date: 2026-08-27 10:30:00 +0000
+date: 2026-08-27 00:00:00 +0000
 description: >-
   EEBO-TCP Phase I lands: 25,368 hand-keyed early-modern English
   texts — Milton and Raleigh beside the sermons, broadsides and

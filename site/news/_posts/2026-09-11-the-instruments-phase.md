@@ -1,6 +1,6 @@
 ---
 title: "The instruments phase: the library learns places and people"
-date: 2026-09-11 12:00:00 +0000
+date: 2026-09-11 00:00:00 +0000
 description: >-
   Three research instruments enter the library — a historical-China
   gazetteer, a 658,000-person biographical database, and the KITAB

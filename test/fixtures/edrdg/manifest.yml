@@ -3,7 +3,7 @@
 #
 # Both files are documented TRIMS (whole: false) of NIGHTLY-rebuilt
 # upstream .gz artifacts (build stamps 2026-07-19 recorded in README.md) —
-# a fresh GET returns that night's gzip and can never byte-match a plain
+# a fresh GET returns the latest nightly gzip and can never byte-match a plain
 # trimmed slice, so both URLs are fetched for URL-liveness only. Re-apply
 # the README recipes and RE-RECORD the build stamps after any refresh.
 source: edrdg

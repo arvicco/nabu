@@ -1,6 +1,6 @@
 ---
 title: "The library steps outside — a public demo image, and the languages of ancient Italy"
-date: 2026-10-30 13:50:00 +0000
+date: 2026-10-30 00:00:00 +0000
 description: >-
   Four development windows: a runnable public demo of the library as
   one Docker image, eleven ancient languages of Italy minted into the

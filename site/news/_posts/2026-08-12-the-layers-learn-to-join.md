@@ -1,6 +1,6 @@
 ---
 title: "The layers learn to join"
-date: 2026-08-12 15:00:00 +0000
+date: 2026-08-12 00:00:00 +0000
 description: >-
   The Composition Phase: search becomes identity-aware about places,
   gains writing-system and geo-radius cuts, searches by cuneiform sign,

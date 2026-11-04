@@ -1,6 +1,6 @@
 ---
 title: "v1.1.0: the library triples"
-date: 2026-07-19 19:00:00 +0000
+date: 2026-07-19 00:00:00 +0000
 description: >-
   Six phases promoted to a version: the Indic and Egyptian expansions, the
   Hebrew shelf, pre-Roman Italy and Sicily, and the Ancient Near East —

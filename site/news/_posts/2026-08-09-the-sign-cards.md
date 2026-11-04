@@ -1,6 +1,6 @@
 ---
 title: "One glyph in, everything out — sign cards for Cuneiform and Egyptian"
-date: 2026-08-09 21:10:00 +0000
+date: 2026-08-09 00:00:00 +0000
 description: >-
   nabu char grows beyond the Sinoverse: a cuneiform sign card re-joined
   entirely from data already on the shelf (the Oracc Sign List and the

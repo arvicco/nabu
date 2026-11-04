@@ -1,0 +1,12 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+# Nabu pre-merge-commit hook (installed by `rake tools:hooks` as a
+# symlink to this tracked file): git runs pre-commit only for ordinary
+# commits — a `git merge` commit fires THIS hook instead, and without it
+# a merge bypasses every pre-commit guard (found live: the first lane
+# pick after the timezone guard landed stamped the local offset).
+# Same checks, same rationale: lib/nabu/ops/git_hooks.rb.
+require File.expand_path("../../lib/nabu/ops/git_hooks", __dir__)
+
+exit Nabu::Ops::GitHooks.pre_commit

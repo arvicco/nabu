@@ -1,6 +1,6 @@
 ---
 title: "Fuzzy search and the links graph"
-date: 2026-07-13 09:00:00 +0000
+date: 2026-07-13 00:00:00 +0000
 description: >-
   Phase 16 (PR #20): trigram fuzzy search for damaged texts, and a
   persistent citation graph fed by parallels, formulas, and cognates.
