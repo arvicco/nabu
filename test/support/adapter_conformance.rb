@@ -202,6 +202,21 @@ module AdapterConformance
                  "or shared state makes rebuilds nondeterministic"
   end
 
+  # The timeline-registration guard (TimelineRegistrationGuard): fixture
+  # documents carrying date-shaped metadata must reach the dating axis —
+  # the source registered in MetadataDates::SHAPES, or opted out with the
+  # lane that projects it. Without this, a date-minting adapter ships dark
+  # and nothing fails (emmo, a whole release).
+  def test_conformance_date_metadata_reaches_the_timeline
+    adapter = conformance_adapter
+    metadatas = []
+    each_parsed_document(adapter) do |_ref, document|
+      metadatas << document.metadata if document.respond_to?(:metadata)
+    end
+    message = TimelineRegistrationGuard.violation(adapter.manifest.id, metadatas)
+    assert_nil message, message
+  end
+
   # P104-4: an adapter that declares a secondary dictionary lane
   # (Adapter.dictionary_lane) is conformance-checked for BOTH shapes — the
   # passage checks above stay untouched, and the lane's dictionary output
