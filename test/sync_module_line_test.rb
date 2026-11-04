@@ -130,4 +130,30 @@ class SyncModuleLineTest < Minitest::Test
     assert_equal "nabu-places              unchanged at 222222222222",
                  cli.send(:sync_all_line, "nabu-places", outcome(slug: "nabu-places", delta: same))
   end
+
+  # The 2026-11-04 lesson: an IA scan-shelf walk lost one item to a
+  # retried-out mirror, reported it only on the live progress spinner, and
+  # the piped sync log read "0 errored" while a volume was missing. The
+  # discovery accounting now surfaces the fetch report's own miss words.
+  def test_fetch_notes_carrying_a_miss_surface_in_the_discovery_accounting
+    fetch = Nabu::FetchReport.new(sha: NEW, fetched_at: Time.now,
+                                  notes: "54/55 item(s) held (+54 this sync); " \
+                                         "unreachable, retried next sync: ah37-1901")
+    out_come = Nabu::SyncRunner::Outcome.new(
+      slug: "analecta-hymnica", fetch_report: fetch, load_report: zero_report, breaker: nil,
+      indexed: nil, warnings: [], discovery: Nabu::Adapter::DiscoverySkips.new, module_delta: nil
+    )
+    stdout, = capture_io { cli.send(:print_discovery_accounting, out_come) }
+    assert_includes stdout, "unreachable, retried next sync: ah37-1901"
+  end
+
+  def test_clean_fetch_notes_stay_off_the_discovery_accounting
+    fetch = Nabu::FetchReport.new(sha: NEW, fetched_at: Time.now, notes: "55/55 item(s) held (+1 this sync)")
+    out_come = Nabu::SyncRunner::Outcome.new(
+      slug: "analecta-hymnica", fetch_report: fetch, load_report: zero_report, breaker: nil,
+      indexed: nil, warnings: [], discovery: Nabu::Adapter::DiscoverySkips.new, module_delta: nil
+    )
+    stdout, = capture_io { cli.send(:print_discovery_accounting, out_come) }
+    refute_includes stdout, "fetch:"
+  end
 end
