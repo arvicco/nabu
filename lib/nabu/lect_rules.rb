@@ -174,7 +174,7 @@ module Nabu
       unmatched = Hash.new(0)
       each_compose_candidate(rule, catalog, journal) do |_urn, normalized, row|
         case compose_verdict(rule, row)
-        in :compose then matched[[normalized, "#{row[:lect_id]}/#{rule.variety}"]] += 1
+        in :compose then matched[[normalized, composed_id(row[:lect_id], rule.variety)]] += 1
         in :done then matched[[normalized, row[:lect_id]]] += 1
         in Symbol => reason then unmatched[reason.to_s.tr("_", " ")] += 1
         end
@@ -182,16 +182,17 @@ module Nabu
       CensusReport.new(matched: matched, unmatched: unmatched, assignable: matched.values.sum)
     end
 
-    # Refine in place: lect_id gains "/<variety>", the note gains the
-    # evidence, basis stays the base rule's (class note). Idempotent — an
-    # already-composed row is :done, never re-written.
+    # Refine in place: lect_id gains "/<variety>" (before any ~script
+    # surface — #composed_id), the note gains the evidence, basis stays the
+    # base rule's (class note). Idempotent — an already-composed row is
+    # :done, never re-written.
     def compose_apply(rule, catalog:, journal:)
       assigned = 0
       skipped = 0
       each_compose_candidate(rule, catalog, journal) do |_urn, normalized, row|
         if compose_verdict(rule, row) == :compose
           journal[:lect_assignments].where(id: row[:id]).update(
-            lect_id: "#{row[:lect_id]}/#{rule.variety}",
+            lect_id: composed_id(row[:lect_id], rule.variety),
             note: "#{row[:note]} · +#{rule.variety} (#{basis_for(rule)}): #{normalized}"
           )
           assigned += 1
@@ -202,14 +203,34 @@ module Nabu
       ApplyOutcome.new(assigned: assigned, skipped: skipped)
     end
 
+    # The stage and variety verdicts read the id WITHOUT its script/ortho
+    # surface (a date-band row keeps the override's ~latn: yi:mid~latn is
+    # the yi:mid stage).
     def compose_verdict(rule, row)
       return :no_stage_row if row.nil?
-      return :done if row[:lect_id].end_with?("/#{rule.variety}") &&
-                      rule.onto.include?(row[:lect_id].delete_suffix("/#{rule.variety}"))
+
+      stage_id, = split_surface(row[:lect_id])
+      return :done if stage_id.end_with?("/#{rule.variety}") &&
+                      rule.onto.include?(stage_id.delete_suffix("/#{rule.variety}"))
       return :owner_ruled unless row[:basis].start_with?("rule:")
-      return :stage_outside_onto unless rule.onto.include?(row[:lect_id])
+      return :stage_outside_onto unless rule.onto.include?(stage_id)
 
       :compose
+    end
+
+    # The variety lands in its grammar slot (Lects::ID_PATTERN:
+    # anchor:stage/variety~script@ortho), BEFORE any surface tail —
+    # yi:mid~latn composes to yi:mid/west~latn, never yi:mid~latn/west.
+    def composed_id(lect_id, variety)
+      stage_id, surface = split_surface(lect_id)
+      "#{stage_id}/#{variety}#{surface}"
+    end
+
+    # [stage part, surface tail] — the tail is the ~script/@ortho suffix
+    # ("" when the id carries none).
+    def split_surface(lect_id)
+      at = lect_id.index(/[~@]/) or return [lect_id, ""]
+      [lect_id[0...at], lect_id[at..]]
     end
 
     # One yield per DISTINCT (document, facet-value) candidate: documents of
