@@ -557,8 +557,26 @@ namespace :site do
     puts "site:data wrote #{written.join(', ')}"
   end
 
-  desc "The one gate refresh: site:data + site:axes"
-  task refresh: %i[data axes]
+  # The /sources/ corpus table: one row per live public source (registry
+  # membership) with the hand prose of site/_data/source_notes.yml — a pure
+  # projection, no catalog needed (holdings render from sources.yml at
+  # build). The suite's drift guard fails until it is re-run.
+  desc "Regenerate the /sources/ corpus table (site/_includes/sources_table.md) from the registry + source notes"
+  task :sources do
+    $LOAD_PATH.unshift(File.expand_path("lib", __dir__))
+    require "nabu"
+
+    config = Nabu::Config.load
+    table = Nabu::Ops::SourcesTable.load(registry: Nabu::SourceRegistry.load(config.sources_path),
+                                         site_dir: File.expand_path("site", __dir__))
+    path = table.write!
+    puts "site:sources wrote #{path} — #{table.slugs.size} live public sources, " \
+         "#{table.pending.size} description(s) pending"
+    warn "site:sources: notes for sources not live and public: #{table.orphans.join(', ')}" unless table.orphans.empty?
+  end
+
+  desc "The one gate refresh: site:data + site:axes + site:sources"
+  task refresh: %i[data axes sources]
 end
 
 # The MCP skill pack (docs/mcp.md §8): skills/nabu-<desk>/SKILL.md per
