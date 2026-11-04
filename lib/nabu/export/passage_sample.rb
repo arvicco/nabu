@@ -62,8 +62,8 @@ module Nabu
     #
     # --exclude-ocr drops documents whose metadata declares OCR text —
     # metadata_json text_nature in OCR_NATURES, the label the scan-shelf
-    # adapters (IaScanShelf: slavistics-pd, africa-pd, archiv-slav-phil;
-    # ndl-kotenseki; mdz-protestant) stamp on every document, and openiti on
+    # adapters (IaScanShelf: slavistics-pd, africa-pd, archiv-slav-phil,
+    # analecta-hymnica; ndl-kotenseki; mdz-protestant) stamp on every document, and openiti on
     # the versions its metadata TSV flags uncorrected_OCR. Two further
     # text_nature labels are deliberately NON-excluding: "corrected-ocr"
     # (OCR the upstream states it corrected — madurai, eltec-srp, per
