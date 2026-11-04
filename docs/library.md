@@ -1015,8 +1015,9 @@ demes, laws, dedications, funerary monuments, accounts, ephebic and
 prytany lists — line by line, with the translators' footnotes, AIO's own
 Greek editions for the AIO and AIUK records, the page's date and
 Pleiades-linked findspot, and every record's IG/SEG concordance; the
-library's first Attic epigraphy (CC BY-SA 3.0, attribution) — is
-registered but not yet wired.
+library's first Attic epigraphy (CC BY-SA 3.0, attribution) — wired
+2026-11-04: 4,002 documents / 67,429 passages, the full 3,466-record
+corpus with AIO's own Greek for 547 of them.
 
 **Slavic.** The Slovenian line: `kdsp` — longer narrative prose
 1836–1918 (262 / 290,394), `prilit` — the oldest narrative prose
@@ -1139,13 +1140,13 @@ wired.
 **Romanian.** `typikon-bible` — the 1688 Bucharest Bible, the first complete
 Romanian Bible, in the Cyrillic alphabet of the print, each verse tied to
 its place in the Church Slavonic canon (79 books / 36,312 verses;
-attribution). The same shelf admits two more witnesses of the dump,
-awaiting their first sync: the Elizabeth Bible of 1751 in its Church
+attribution). The same shelf holds two more witnesses of the dump,
+synced 2026-11-04: the Elizabeth Bible of 1751 in its Church
 Cyrillic print orthography — the un-modernized companion of
 `elizabeth-bible` (77 books / 36,961 verses) — and the Bible in Old
 Georgian, the Old Testament after the Mtskheta manuscript and the New in
 the Athonite translation of Euthymius and George (73 books / 32,425
-verses).
+verses); see §8bd.
 
 **Celtic.** `gpc` — the open subset of Geiriadur Prifysgol Cymru
 (89,386 entries).
@@ -1976,6 +1977,38 @@ the Serbian and Croatian shelves alike), `wiktionary-ca` (Catalan,
 198,685), `wiktionary-ko` (Korean, 64,457), `wiktionary-et` (Estonian,
 13,549), `wiktionary-pa` (Punjabi, 10,749) and `wiktionary-oc`
 (Occitan, 7,521).
+
+## 8bd. The P155 arrivals — the TCP's American and eighteenth-century collections, early-modern manuscripts, the Grand Tour, and an Arabic lexicon
+
+**`evans-tcp`** — Early American Imprints, Series I (Evans), as keyed
+by the Text Creation Partnership: 5,012 documents / 1,724,124 passages
+of everything printed in British America 1639–1800 that the TCP
+hand-keyed — Puritan sermons and election-day orations, broadsides,
+almanacs, the Revolutionary pamphlet war, early state papers and the
+first American novels — over the same `tcp-xml` family as `eebo-tcp`
+(§8ak), per-document imprint dating throughout (per-file CC0, open).
+
+**`ecco-tcp`** — the TCP's keyed selection from Eighteenth Century
+Collections Online: 3,101 documents / 2,697,714 passages of
+British print 1700–1800 — Defoe, Swift, Pope, Johnson, Hume, the
+periodical essayists, political economy and sermons — the century that
+completes the TCP ladder between `eebo-tcp`'s 1473–1700 and Evans's
+America (per-file CC0, open).
+
+**`wiktionary-ar`** — the Arabic entries of the English Wiktionary
+(kaikki.org extract): 36,974 glossed entries with etymology chains and
+descendant trees, fully vocalized Arabic-script headwords with their
+romanizations — the Arabic desk's first English-glossed lexicon,
+joining the twenty-two extracts above (CC BY-SA + GFDL).
+
+**`typikon-bible`, widened** — two witnesses join the 1688 Bucharest
+Bible (§8al): the 1751 Elizabeth Bible in full Church Cyrillic
+orthography as printed (77 books, 36,961 passages) and the Georgian
+Bible of the Mtskheta tradition — the Old Testament after the
+17th–18th-century Mtskheta manuscript, the New Testament in the
+11th-century Athonite translation (73 books, 32,425 passages) — every
+verse aligned across the three witnesses and the library's other
+Bibles by canonical address.
 
 **`emmo`** — Early Modern Manuscripts Online (Folger Shakespeare
 Library): 100 English manuscripts of 1552–1697 transcribed word by word

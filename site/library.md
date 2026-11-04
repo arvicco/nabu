@@ -59,6 +59,7 @@ instruments, CLI recipes and terminal setup, are the
 | <span id="shelf-latin-romance"></span>[Latin–Romance continuum](#the-latinromance-continuum) | digilibLT late-antique Latin, openMGH, CroALa, Corpus Córporum's Patrologia; BFM Old French, the Galician-Portuguese cantigas, Old Spanish, Portuguese, Catalan, Occitan, Sardinian and Judeo-Spanish shelves | 2nd c. CE – early modern | {{ shelves["latin-romance"].size_display }} | CC BY / CC BY-SA / NC / written grant |
 | <span id="shelf-papyri"></span>[Documentary papyri](#documentary-papyri) | Papyri.info DDbDP: contracts, letters, tax receipts (Greek, Coptic, Latin, Arabic, Demotic) | c. 300 BCE – 8th c. CE | {{ shelves["papyri"].size_display }} | CC BY |
 | <span id="shelf-latin-inscriptions"></span>[Latin inscriptions](#latin-inscriptions) | Epigraphic Database Heidelberg: epitaphs, dedications, milestones from the whole empire, with genre facets | Republic – Late Antiquity | {{ shelves["latin-inscriptions"].size_display }} | CC BY-SA |
+| <span id="shelf-greek-inscriptions"></span>[Greek inscriptions](#greek-inscriptions) | Attic Inscriptions Online: the inscriptions of Attica in English translation, with AIO's own Greek editions | Archaic – Roman | {{ shelves["greek-inscriptions"].size_display }} | CC BY-SA |
 | <span id="shelf-inscriptions-of-italy"></span>[Inscriptions of Italy](#latin-inscriptions) | Epigraphic Database Roma: the peninsula itself, the geographic complement of Heidelberg's provinces — dated and faceted end to end | Republic – Late Antiquity | {{ shelves["inscriptions-of-italy"].size_display }} | CC BY |
 | <span id="shelf-celtic"></span>[Celtic](#celtic) | CorPH Early Irish (gold-lemmatized), the RIIG Gaulish inscriptions, the Ogham in 3D stones | c. 2nd c. BCE – 10th c. CE | {{ shelves["celtic"].size_display }} | CC BY / MIT (ogham held `nc` pending clarification) |
 | <span id="shelf-coptic"></span>[Coptic](#coptic) | Coptic Scriptorium: the complete Sahidic and Bohairic New Testaments, monastic and patristic prose, gold-lemmatized | c. 3rd – 10th c. CE | {{ shelves["coptic"].size_display }} | CC BY per document (source class `nc`) |
@@ -80,7 +81,7 @@ instruments, CLI recipes and terminal setup, are the
 | <span id="shelf-aegean"></span>[Aegean scripts](#aegean-scripts) | DĀMOS, the Mycenaean Linear B corpus; SigLA, the signs of Linear A; the Cypriot syllabic inscriptions (IG XV 1,1) | 2nd mill. BCE – Hellenistic | {{ shelves["aegean"].size_display }} | CC BY / NC per source |
 | <span id="shelf-biblical-editions"></span>[Biblical editions](#biblical-editions) | Clementine Vulgate, SBL Greek New Testament, World English Bible | — | {{ shelves["biblical-editions"].size_display }} | PD / CC BY |
 | <span id="shelf-old-english"></span>[Old English poetry](#old-english) | The complete Anglo-Saxon Poetic Records: Beowulf, the Exeter Book, Dream of the Rood | c. 700–1150 | {{ shelves["old-english"].size_display }} | CC BY-SA |
-| <span id="shelf-middle-early-modern-english"></span>[Middle and Early Modern English](#middle-and-early-modern-english) | The Corpus of Middle English Prose and Verse; EEBO-TCP, the first printed books in English | c. 1100 – 1700 | {{ shelves["middle-early-modern-english"].size_display }} | PD / CC0 |
+| <span id="shelf-middle-early-modern-english"></span>[Middle and Early Modern English](#middle-and-early-modern-english) | The Corpus of Middle English Prose and Verse; the TCP's EEBO, Evans and ECCO transcriptions — English print on both sides of the Atlantic; the Folger's EMMO manuscripts | c. 1100 – 1800 | {{ shelves["middle-early-modern-english"].size_display }} | PD / CC0 / CC BY-SA |
 | <span id="shelf-slavic"></span>[Slavic](#slavic) | CCMH OCS gospel codices, the Freising Manuscripts, Early Modern Slovenian, the damaskini, Scripta Bulgarica, the Wikisource cones, the Ipatiev chronicle, the 1488 Prague Bible, Protestant prints, the Croatian school canon, the Serbian novel and Bible, the German Slavistics canon | c. 1000 – early 20th c. | {{ shelves["slavic"].size_display }} | CC BY / CC BY-SA / PD / NC (Freising BY-ND) |
 | <span id="shelf-baltic-finnic-basque"></span>[Baltic, Finnic and Basque](#baltic-finnic-and-basque) | SENIE, early written Latvian; VAKK, Old Written Estonian; VKS, Old Literary Finnish; BIM/SAHCOBA, the syntactically annotated historical Basque corpus | 16th – 19th c. CE | {{ shelves["baltic-finnic-basque"].size_display }} | CC BY / NC per source |
 | <span id="shelf-chinese"></span>[Chinese libraries](#the-chinese-libraries) | Kanripo (KR1 classics – KR5 Daoist canon), the CBETA Buddhist canon (Taishō + Xuzangjing), Chinese Wikisource's censused works, the Classical↔Modern parallel corpus, the Đại Việt classical shelf | Zhou – Qing | {{ shelves["chinese"].size_display }} | CC BY-SA / CC BY-NC-SA / MIT |
@@ -159,6 +160,16 @@ bilinguals. The Epigraphic Database Roma (Sapienza, CC BY) covers Italy
 itself. Both are dated and faceted — genre, material, object type, and
 province or region — and Leiden rendering and fragment search apply as on
 the papyri.
+
+## Greek inscriptions
+
+Attic Inscriptions Online (British School at Athens, CC BY-SA): the
+inscriptions of ancient Attica in English translation — decrees of the
+Council and People and of the demes, laws, dedications, funerary
+monuments, accounts, ephebic and prytany lists — line by line with the
+translators' footnotes, AIO's own Greek editions where the project has
+published them, and every record dated, Pleiades-placed and carrying
+its IG/SEG concordance.
 
 ## Celtic
 
@@ -425,17 +436,24 @@ IcePaHC treebank, and Rundata's Scandinavian runic inscriptions with their
 normalisations and translations. West: the Old Saxon *Heliand*, the
 reference corpora of Middle High German (ReM), Middle Low German (ReN) and
 Early New High German (ReF), the Deutsches Textarchiv's German print from
-1473 to 1969, and Old and Early Middle Dutch (held for private research
-only). East: Wulfila's Gothic on the PROIEL treebank. CC BY, CC BY-SA,
-ODbL or non-commercial per source.
+1473 to 1969, the Wolfenbüttel Grand Tour journals — four German travel
+diaries of 1652–1702 edited from the manuscripts — and Old and Early
+Middle Dutch (held for private research only). East: Wulfila's Gothic on
+the PROIEL treebank. CC BY, CC BY-SA, ODbL or non-commercial per source.
 
 ## Middle and Early Modern English
 
 The Corpus of Middle English Prose and Verse (University of Michigan, public
-domain), from Chaucer to the mystery plays, and the EEBO-TCP transcriptions
-of the first printed books in English, 1473 to 1700 (CC0). The
-transcriptions are the Text Creation Partnership's own; no page images are
-held.
+domain), from Chaucer to the mystery plays, and the Text Creation
+Partnership's hand-keyed transcriptions on both sides of the Atlantic:
+EEBO-TCP, the first printed books in English, 1473 to 1700; Evans-TCP,
+everything printed in British America 1639 to 1800 — sermons, broadsides,
+the Revolutionary pamphlet war, the first American novels; and ECCO-TCP,
+the keyed selection from eighteenth-century British print — Defoe, Swift,
+Pope, Johnson, Hume (all CC0; no page images are held). Beside the print,
+the Folger's Early Modern Manuscripts Online: a hundred English manuscripts
+of 1552–1697 transcribed word by word, with regularized spelling as an
+annotation layer (CC BY-SA).
 
 ## Africa
 
