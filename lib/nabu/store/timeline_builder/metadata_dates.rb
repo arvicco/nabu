@@ -170,6 +170,11 @@ module Nabu
           #                        the dateline writing place — the adapter minted both
           #                        from the start, but this registration was missed at the
           #                        shipping gate, leaving the shelf dark on the timeline
+          "grand-tour" => :structured, # each journal's dated-entries envelope (class
+          #                        composition, the diary's own first/last entry dates) —
+          #                        minted from the start but unregistered at its shipping
+          #                        gate (the emmo shape again); caught by the timeline
+          #                        registration guard's first sweep
           "etcbc-targum" => :place_only, # P153: the Genizah texts' findspot ("Cairo Genizah");
           #                                no date field upstream (edition years ride
           #                                base_edition, never a date)

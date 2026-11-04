@@ -77,13 +77,7 @@ module TimelineRegistrationGuard
   # registered — the defect this guard exists for, held visible (and the
   # suite green) until the SHAPES row lands; the ledger test then demands
   # the row's deletion. Never a home for a source that is not a defect.
-  PENDING = {
-    # Wired 2026-11-03 with postures.yml dating: dated (the diary's own
-    # <date when> envelope, class composition) and a structured "date"
-    # hash on every journal — but no SHAPES row and no extractor: the emmo
-    # shape, live.
-    "grand-tour" => "dated journals (structured date hash, posture dated) with no SHAPES row"
-  }.freeze
+  PENDING = {}.freeze
 
   module_function
 
