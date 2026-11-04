@@ -370,6 +370,42 @@ module Nabu
         "skjaervo-khotanese" => { "settlement" => "the holding library's city (London on every " \
                                                   "doc — a PRESENT location)" },
         "ticha" => { "place_role" => "the role qualifier (\"imprint\") of a place, not a place" },
+        # The mining-law sweep, dates half, second pass (live census
+        # 2026-11-04): consumed keys that cannot trace by value, and
+        # date-shaped keys that do not date the text.
+        "tianyige" => { "reign_era" => "consumed: the record's nianhao (洪武, 正德) resolves through the " \
+                                       "eras.yml rows into the projected one-year date and rides its " \
+                                       "raw (\"洪武4 (Ming Hongwu)\") — a two-character era name sits " \
+                                       "below the containment rule's three-character floor",
+                        "reign_year" => "consumed: the regnal year (4, 5, 8) the era table converts into " \
+                                        "the projected CE year — a bare small integer cannot trace by value" },
+        "pta" => { "edition_year" => "consumed: the edition's dct:dateCopyrighted print year projects as " \
+                                     "the edition-class FALLBACK (MetadataDates::EDITION_FALLBACK) on the " \
+                                     "21 of 113 works with no composition span; a composition-dated work " \
+                                     "keeps its composition row (one row per document), so the census " \
+                                     "sample — all composition-dated — never meets it",
+                   "source_date" => "consumed: the TEI sourceDesc print year, the second EDITION_FALLBACK " \
+                                    "key (mostly restating edition_year; where the two differ the " \
+                                    "edition record's own year answers first)" },
+        "ban-wikisource" => { "index_year" => "the Index Year= of the lontar scans is the 2017–2021 " \
+                                              "photography campaign year (the adapter's CAMPAIGN_FLOOR " \
+                                              "rule excludes Indexes whose Year= names a print) — " \
+                                              "digitization lineage, never the manuscript's or an " \
+                                              "edition's date; the wikisource siblings' source_date is a " \
+                                              "print year, a different fact" },
+        "lotsawa-house" => { "translation_year" => "the modern translation's year (2004, 2008), carried " \
+                                                   "only on kind-translation documents — translations " \
+                                                   "never row on the timeline while the Tibetan original " \
+                                                   "is held beside them (2,352 xct pages), the house " \
+                                                   "translation rule" },
+        "aio" => { "updated" => "the AIO web record's last-update stamp (\"1 May 2025\", \"8 Mar 2026\") " \
+                                "— site machinery, never the inscription's date (the page's Date field " \
+                                "projects)" },
+        "paramara" => { "dynasty" => "the issuing dynasty (Paramāra, its Malwa and Candrāvati branches) — " \
+                                     "the corpus's own frame, a polity attribution, not a per-record " \
+                                     "dating claim; the Period field's era-typed year projects. Banding " \
+                                     "the undated records to a dynasty span would need a new ruled " \
+                                     "period_bands.yml row (a recorded future look)" },
         # Live census 2026-10-21: "imprint" on all 8 of the 15 works that
         # carry a place (the adapter's WORKS table); the "place" key projects.
         "bim-sahcoba" => { "place_role" => "the role qualifier (\"imprint\") of a place, not a place" }
@@ -393,7 +429,13 @@ module Nabu
         "prague-bible-1488" => { "region_id" => "the PAGE-XML layout region of the scan " \
                                                 "(\"tr_1\") — a place on the page, not a geography",
                                  "region_type" => "the PAGE-XML region's layout class " \
-                                                  "(\"paragraph\") — page structure, not a place" }
+                                                  "(\"paragraph\") — page structure, not a place" },
+        # The mining-law sweep, dates half (live census 2026-11-04).
+        "divinum-officium" => { "entry_years" => "the necrology day's \"Anno 1746\" years — the death " \
+                                                 "years of the people it commemorates, dates the text " \
+                                                 "MENTIONS, never its own (the papyri-ddbdp " \
+                                                 "mentioned_dates stance); the liturgical text " \
+                                                 "carries no date of composition" }
       }.freeze
 
       private

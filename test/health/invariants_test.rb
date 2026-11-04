@@ -762,6 +762,37 @@ class InvariantsTest < Minitest::Test
     assert_match(/\Aconsumed:/, exempt.dig("cdli", "dates_referenced").to_s)
   end
 
+  # The mining-law sweep, dates half (live census 2026-11-04): the date-
+  # shaped keys that stay unprojected, each declared — consumed keys whose
+  # values cannot trace by value (a two-character era name, a bare regnal
+  # number; pta's edition years projecting only as the fallback the
+  # composition-dated sample never meets), and keys that are not the
+  # text's date (a digitization campaign year, a modern translation's
+  # year, web-record timestamps, a polity, the necrology's death years).
+  def test_dates_sweep_declares_its_consumed_and_non_text_keys
+    exempt = Nabu::Health::Invariants::MINING_EXEMPT
+    { %w[tianyige reign_era] => /\Aconsumed:/, %w[tianyige reign_year] => /\Aconsumed:/,
+      %w[pta edition_year] => /\Aconsumed:/, %w[pta source_date] => /\Aconsumed:/,
+      %w[ban-wikisource index_year] => /photograph/, %w[lotsawa-house translation_year] => /translation/,
+      %w[aio updated] => /record/, %w[paramara dynasty] => /dynasty/ }.each do |(slug, key), reason|
+      assert_match reason, exempt.dig(slug, key).to_s, "#{slug}/#{key}"
+    end
+    assert_match(/death/, Nabu::Health::Invariants::PASSAGE_MINING_EXEMPT.dig("divinum-officium", "entry_years").to_s)
+  end
+
+  # tianyige's era + year are consumed into the projected date (the live
+  # document's metadata and axis row, trimmed): "洪武" is two characters
+  # and "4" one, below the containment rule's floor — declared, not ore.
+  def test_tianyige_reign_keys_are_declared_consumed
+    meta = '{"date":{"class":"composition","not_after":1371,"not_before":1371,"raw":"洪武4 (Ming Hongwu)"},' \
+           '"dynasty":"Ming","exam_level":"palace (殿試)","reign_era":"洪武","reign_year":4,"western_year":1371}'
+    doc_id = seed_lane_doc("tianyige", "urn:nabu:tianyige:t1", meta)
+    @db[:document_axes].insert(document_id: doc_id, not_before: 1371, not_after: 1371,
+                               date_raw: "洪武4 (Ming Hongwu)", date_class: "composition", axis_source: "tianyige")
+    finding = global_finding(:unmined_axis_metadata)
+    refute_match(/tianyige/, finding&.message.to_s, "the reign keys are declared consumed")
+  end
+
   def test_mining_exempt_entries_each_carry_a_reason
     Nabu::Health::Invariants::MINING_EXEMPT.each do |slug, keys|
       assert_kind_of Hash, keys, "#{slug}: exemptions are key => reason"
