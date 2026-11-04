@@ -21,6 +21,8 @@ module Nabu
     #
     #   SourceRead.utf8_file(path, label: "titus-pahlavi", repair: :severed_tags)
     #   SourceRead.utf8(bytes, label: "zip:#{member}")
+    #   SourceRead.utf8_lines(path, label: "hmml-reading-room") { |line| … }
+    #   SourceRead.utf8_member(SourceRead.zip_file(path), entry, label: path)
     #   SourceRead.nfc(text, language: lang)
     #   SourceRead.slice(heap, offset: ptr, length: len, what: "#{path}: var pointer")
     #
@@ -63,6 +65,42 @@ module Nabu
           raise Nabu::ParseError, "#{label} is not valid UTF-8 (beyond the severed-sequence repair)"
         end
         raise Nabu::ParseError, "#{label} is not valid UTF-8"
+      end
+
+      # Stream +path+ line by line — the reader for files too big to slurp
+      # (a multi-hundred-MB JSONL member): each line (terminator kept, the
+      # File.foreach split) is checked as UTF-8 and yielded; the file is
+      # never read whole. Without a block, a lazy Enumerator. An invalid
+      # line is Nabu::ParseError "<label>: <path> line <n> is not valid
+      # UTF-8"; +repair+ as #utf8, per line.
+      def utf8_lines(path, label:, repair: nil)
+        return enum_for(:utf8_lines, path, label: label, repair: repair) unless block_given?
+
+        File.open(path, "rb") do |io|
+          io.each_line.with_index(1) do |line, number|
+            text = line.force_encoding(Encoding::UTF_8)
+            yield text.valid_encoding? ? text : utf8(line, label: "#{label}: #{path} line #{number}", repair: repair)
+          end
+        end
+        nil
+      end
+
+      # Open the ZIP archive at +path+ (a Nabu::ZipReader over its bytes) —
+      # the belt's one binary read. Structural defects stay
+      # Nabu::ZipReader::Error: each caller maps it onto its own contract
+      # (quarantine at parse, a refusal at fetch/drop). Member text comes
+      # out through #utf8_member.
+      def zip_file(path)
+        Nabu::ZipReader.new(File.binread(path))
+      end
+
+      # One member of +zip+ (from #zip_file) as UTF-8 text, through #utf8:
+      # the error label is "<label>: <member name>" (the name's upstream
+      # bytes, read as UTF-8 and scrubbed — names are never decoded beyond
+      # the label).
+      def utf8_member(zip, entry, label:, repair: nil)
+        name = entry.name.b.dup.force_encoding(Encoding::UTF_8).scrub
+        utf8(zip.extract(entry), label: "#{label}: #{name}", repair: repair)
       end
 
       # The severed-sequence rejoin (see SEVERED_SEQUENCE), tagged UTF-8 —
