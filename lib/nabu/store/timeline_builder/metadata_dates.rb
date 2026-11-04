@@ -165,6 +165,11 @@ module Nabu
           #                                   (1757, class edition) — the rendering is undated
           "eltec-srp" => :structured, # P117-2: the firstEdition's typed years, place
           #                             = its pubPlace (publication place)
+          "emmo" => :structured, # the Folger catalogue's per-manuscript date (class
+          #                        composition, one-year envelope from partial dates) with
+          #                        the dateline writing place — the adapter minted both
+          #                        from the start, but this registration was missed at the
+          #                        shipping gate, leaving the shelf dark on the timeline
           "etcbc-targum" => :place_only, # P153: the Genizah texts' findspot ("Cairo Genizah");
           #                                no date field upstream (edition years ride
           #                                base_edition, never a date)
