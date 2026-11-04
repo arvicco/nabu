@@ -1,0 +1,238 @@
+<?xml-model href="https://epidoc.stoa.org/schema/9.7/tei-epidoc.rng"
+            type="application/xml"
+            schematypens="http://relaxng.org/ns/structure/1.0"?>
+<?xml-model href="https://epidoc.stoa.org/schema/9.7/tei-epidoc.rng"
+            type="application/xml"
+            schematypens="http://purl.oclc.org/dsdl/schematron"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:space="preserve" xml:lang="en">
+  <teiHeader>
+    <fileDesc>
+      <titleStmt>
+        <title xml:lang="en">The inscription of Petros, Catholicos of Albania, at Herher, second half of the 17th century.</title>
+        <title xml:lang="hy">Աղվանից Պետրոս կաթողիկոսի վիմագիրը Հերհերում, 17-րդ դարի երկրորդ կես</title>
+        <!-- ===================== -->
+        <!-- Editorial responsibility -->
+        <!-- ===================== -->
+        <respStmt>
+          <resp xml:lang="en">Chief editor</resp>
+          <resp xml:lang="hy">Գլխավոր խմբագիր</resp>
+          <name ref="urn:armepic:editors:ED001">Hamest Tamrazyan</name>
+        </respStmt>
+        <respStmt>
+          <resp xml:lang="en">Editor; epigraphic research; inscriptional data provision</resp>
+          <resp xml:lang="hy">Խմբագիր, էպիգրաֆիկ հետազոտություն, արձանագրությունների տվյալների տրամադրում</resp>
+          <name ref="urn:armepic:editors:ED003">Arsen Harutyunyan</name>
+        </respStmt>
+        <respStmt>
+          <resp xml:lang="en">Data entry</resp>
+          <resp xml:lang="hy">Տվյալների մուտքագրում</resp>
+          <name ref="urn:armepic:editors:ED005">Narine Galstyan</name>
+        </respStmt>
+        <respStmt>
+          <resp xml:lang="en">Technical lead; technical implementation and automation</resp>
+          <resp xml:lang="hy">Տեխնիկական ղեկավար, տեխնիկական իրականացում և ավտոմատացում</resp>
+          <name ref="urn:armepic:editors:ED006">Narek Meloyan</name>
+        </respStmt>
+        <respStmt>
+          <resp xml:lang="en">Funding acquisition</resp>
+          <resp xml:lang="hy">Ֆինանսավորման ապահովում</resp>
+          <name ref="urn:armepic:editors:ED007">Narine Sarvazyan</name>
+        </respStmt>
+        <respStmt>
+          <resp xml:lang="en">Photographic documentation</resp>
+          <resp xml:lang="hy">Լուսանկարչական փաստագրում</resp>
+          <name ref="urn:armepic:editors:C009">Gayane Budaghyan</name>
+        </respStmt>
+        <respStmt>
+          <resp xml:lang="en">Drawing of the inscription</resp>
+          <resp xml:lang="hy">Վիմագրի գրչանկար</resp>
+          <name ref="urn:armepic:bibl:001">Divan hay vimagrut‘yan, Artsakh (Barkhudaryan 1982), 165/572, 1982</name>
+        </respStmt>
+      </titleStmt>
+      <editionStmt>
+        <edition n="7.0">
+          <seg xml:lang="en">Seventh digital edition (2026-10-19)</seg>
+          <seg xml:lang="hy">Յոթերորդ թվային հրատարակություն (2026-10-19)</seg>
+        </edition>
+        <respStmt>
+          <resp xml:lang="en">Responsible for this edition</resp>
+          <resp xml:lang="hy">Հրատարակության պատասխանատու</resp>
+          <name ref="urn:armepic:editors:ED001">Hamest Tamrazyan</name>
+        </respStmt>
+      </editionStmt>
+      <publicationStmt>
+        <authority xml:lang="en">ArtsakhEpiC – Regional Corpus of Armenian Inscriptions from Artsakh, part of the ArmEpiC (Armenian Epigraphic Corpus) hosted by the EPFL Digital Humanities Laboratory (DHLAB)</authority>
+        <authority xml:lang="hy">ԱրցախԷպիԿ (ArtsakhEpiC)՝ հայկական արձանագրությունների տարածաշրջանային հավաքածու, ընդգրկված ՀայԷպիԿ (ArmEpiC) համահայկական թվային կորպուսի մեջ, տեղակայված՝ Լոզանի Ֆեդերալ Պոլիտեխնիկական Ինստիտուտի Թվային Հումանիտար Գիտությունների Լաբորատորիայում (DHLAB)</authority>
+        <idno type="filename">ART0026.xml</idno>
+        <idno type="armepic">urn:armepic:inscription:ART0026</idno>
+        <idno type="URI">https://armenianepigraphy.com/inscriptions/ART0026</idno>
+        <availability>
+          <licence target="https://creativecommons.org/licenses/by-nc/4.0/">CC BY-NC 4.0</licence>
+          <p xml:lang="en">This record may be freely reused for non-commercial research and teaching purposes with proper attribution.</p>
+          <p xml:lang="hy">Այս գրառումը կարելի է ազատորեն օգտագործել ոչ առևտրային հետազոտական և կրթական նպատակներով՝ պատշաճ հղմամբ։</p>
+        </availability>
+      </publicationStmt>
+      <seriesStmt>
+        <title xml:lang="en">ArmEpiC – Armenian Epigraphic Corpus</title>
+        <idno type="URN">urn:armepic:coll:armepic</idno>
+      </seriesStmt>
+      <sourceDesc>
+        <bibl type="origin" xml:lang="en">Born-digital EpiDoc edition in the ArtsakhEpiC sub-corpus.</bibl>
+        <listBibl>
+          <bibl type="dataset" xml:lang="en">
+            <title>ArtsakhEpiC – Corpus of Armenian Inscriptions from Artsakh</title>
+            <idno type="URN">urn:armepic:coll:artsakhepic</idno>
+          </bibl>
+        </listBibl>
+        <msDesc>
+          <msIdentifier>
+            <institution xml:lang="en">St Grigoris church (Սուրբ Գրիգորիսի եկեղեցի)</institution>
+            <idno type="URN">urn:armepic:monument:MON0018</idno>
+          </msIdentifier>
+          <physDesc>
+            <objectDesc>
+              <supportDesc>
+                <support>
+                  <objectType ref="urn:armepic:object:OBJ0003" xml:lang="en">slab</objectType>
+                  <objectType xml:lang="hy">սալաքար</objectType>
+                  <material ref="urn:armepic:material:MAT0003" xml:lang="en">limestone</material>
+                  <material xml:lang="hy">կրաքար</material>
+                  <rs type="technique" ref="urn:armepic:technique:TEC001" xml:lang="en">Carved</rs>
+                  <rs type="technique" xml:lang="hy">փորագիր</rs>
+                </support>
+                <condition>
+                  <term xml:lang="en" ref="urn:armepic:preservation:PS027">fair</term>
+                  <term xml:lang="hy" ref="urn:armepic:preservation:PS027">բավարար</term>
+                </condition>
+              </supportDesc>
+              <layoutDesc>
+                <layout xml:lang="hy" writtenLines="8">Եկեղեցու արևմտյան մուտքի բարավորին</layout>
+                <layout xml:lang="en" writtenLines="8">On the lintel of the church's western entrance.</layout>
+              </layoutDesc>
+            </objectDesc>
+            <handDesc>
+              <handNote xml:id="hand_ART0026" scriptRef="urn:armepic:script:SCR002">
+                <term xml:lang="en">Bolorgits Erkatagir</term>
+                <term xml:lang="hy">Բոլորգիծ երկաթագիր</term>
+              </handNote>
+            </handDesc>
+          </physDesc>
+          <history>
+            <origin>
+              <origPlace>
+                <placeName ref="urn:armepic:artsakh:PLC0023">
+                  <name xml:lang="en">Herher</name>
+                  <name xml:lang="hy">Հերհեր</name>
+                </placeName>
+                <note type="coordinates" subtype="decimal" corresp="urn:armepic:artsakh:PLC0023"><geo>39.70306 46.96361</geo></note>
+                <note type="coordinates" subtype="dms" corresp="urn:armepic:artsakh:PLC0023">39°42′11″N 46°57′49″E</note>
+                <note type="coordinates" subtype="decimal" corresp="urn:armepic:monument:MON0018"><geo>39.71000 46.95682</geo></note>
+                <note type="coordinates" subtype="dms" corresp="urn:armepic:monument:MON0018">39°42′36″N 46°57′25″E</note>
+              </origPlace>
+              <origDate datingMethod="urn:armepic:calendar:gregorian" notBefore-custom="1651" notAfter-custom="1700" precision="medium">second half of the 17th century</origDate>
+            </origin>
+            <provenance type="found">
+              <placeName ref="urn:armepic:monument:MON0018">
+                <name xml:lang="en">St Grigoris church</name>
+                <name xml:lang="hy">Սուրբ Գրիգորիսի եկեղեցի</name>
+              </placeName>
+            </provenance>
+            <provenance type="observed">
+              <placeName ref="urn:armepic:monument:MON0018">
+                <name xml:lang="en">St Grigoris church</name>
+                <name xml:lang="hy">Սուրբ Գրիգորիսի եկեղեցի</name>
+              </placeName>
+            </provenance>
+          </history>
+          <msPart>
+            <msIdentifier>
+              <idno type="URN">urn:armepic:monument:MONPART0035</idno>
+              <objectName xml:lang="hy">Սբ Գրիգորիս եկեղեցի</objectName>
+              <objectName xml:lang="en">St Grigoris Church</objectName>
+            </msIdentifier>
+          </msPart>
+        </msDesc>
+      </sourceDesc>
+    </fileDesc>
+    <encodingDesc>
+        <editorialDecl xml:lang="en">
+          <p>Diplomatic transcription; no silent normalization; ligatures treated as graphic phenomena; abbreviations and omissions encoded explicitly.</p>
+        </editorialDecl>
+      </encodingDesc>
+    <profileDesc>
+      <textClass>
+        <keywords scheme="urn:armepic:authority:inscriptiontype">
+          <term xml:lang="en" ref="urn:armepic:ist:INSCT0002">construction</term>
+          <term xml:lang="hy" ref="urn:armepic:ist:INSCT0002">շինարարական</term>
+        </keywords>
+      </textClass>
+    </profileDesc>
+  </teiHeader>
+  <facsimile>
+    <surface>
+      <graphic url="Fig.26.jpg">
+        <desc xml:lang="en">Photograph by <name ref="urn:armepic:editors:C009">G. Budaghyan</name>, 2022</desc>
+      </graphic>
+    </surface>
+    <surface>
+      <graphic url="Drawing.26.jpeg">
+        <desc xml:lang="en">Drawing from <ref target="urn:armepic:bibl:001">Divan hay vimagrut‘yan, Artsakh (Barkhudaryan 1982)</ref>, 165/572, 1982</desc>
+      </graphic>
+    </surface>
+  </facsimile>
+  <text>
+    <body>
+      <div type="edition" xml:lang="hy">
+        <ab>
+          <lb n="1"/><w lemma="ես" pos="PRON">Ես</w>՝ <persName xml:id="p_ART0026_1"><forename><w lemma="Պետրոս" pos="PROPN">Պետրոս</w></forename></persName> <roleName type="ecclesiasticalOffice"><w lemma="կաթողիկոս" pos="NOUN"><expan ana="urn:armepic:abbrtype:graphic"><abbr>կ</abbr><ex>ա</ex><abbr>թ</abbr><ex>ո</ex><abbr>ղ</abbr><ex>ի</ex><abbr>կ
+          <lb n="2" break="no"/>ոս</abbr></expan></w></roleName>, <w lemma="աշակերտ" pos="NOUN"><expan ana="urn:armepic:abbrtype:graphic"><abbr>աշ</abbr><ex>ա</ex><abbr>կ</abbr><ex>ե</ex><abbr>րտ</abbr></expan></w> <persName xml:id="p_ART0026_2"><forename><w lemma="Ղուկաս" pos="PROPN">Ղուկ
+          <lb n="3" break="no"/>աս</w></forename></persName> <roleName type="ecclesiasticalOffice"><w lemma="վարդապետ" pos="NOUN"><expan ana="urn:armepic:abbrtype:graphic"><abbr>վ</abbr><ex>ա</ex><abbr>րդ</abbr><ex>ա</ex><abbr>պ</abbr><ex>ե</ex><abbr>տին</abbr></expan></w></roleName>, <w lemma="տալ" pos="VERB">ե
+          <lb n="4" break="no"/>տու</w> <w lemma="շինել" pos="VERB">շինել</w> <w lemma="կաթողիկէ" pos="NOUN">Կաթո
+          <lb n="5" break="no"/>ւղիկէս</w> <w lemma="յիշատակ" pos="NOUN"><expan ana="urn:armepic:abbrtype:graphic"><abbr>յ</abbr><ex>ի</ex><abbr>շ</abbr><ex>ա</ex><abbr>տ</abbr><ex>ա</ex><abbr>կ</abbr></expan></w> <w lemma="ես" pos="PRON">ի
+          <lb n="6" break="no"/>նձ</w> <w lemma="եւ" pos="CCONJ">եւ</w> <w lemma="աշակերտ" pos="NOUN"><expan ana="urn:armepic:abbrtype:graphic"><abbr>աշ</abbr><ex>ա</ex><abbr>կ</abbr><ex>ե</ex><abbr>րտին</abbr></expan></w>
+          <lb n="7"/><w lemma="իմ" pos="PRON">իմոյ</w>՝ <persName xml:id="p_ART0026_3"><forename><w lemma="Բարսեղ" pos="PROPN">Բարսեղ</w></forename></persName>
+          <lb n="8"/><roleName type="ecclesiasticalOffice"><w lemma="եպիսկոպոս" pos="NOUN"><expan ana="urn:armepic:abbrtype:graphic"><abbr>եպ</abbr><ex>ի</ex><abbr><hi rend="ligature">սկ</hi></abbr><ex>ո</ex><abbr>պ</abbr><ex>ո</ex><abbr><hi rend="ligature">սի</hi>ն</abbr></expan></w></roleName>. <w lemma="յիշել" pos="VERB"><expan ana="urn:armepic:abbrtype:graphic"><abbr>յիշ</abbr><ex>ե</ex><abbr>ց</abbr><ex>է</ex><abbr>ք</abbr></expan></w> <w lemma="ի" pos="ADP">ի</w> <w lemma="Քրիստոս" pos="PROPN"><expan ana="urn:armepic:abbrtype:graphic"><abbr>Ք</abbr><ex>րիստո</ex><abbr>ս</abbr></expan></w>:
+        </ab>
+        <div type="textpart" subtype="monogram" n="1">
+          <ab><expan><abbr><am><g type="monogram"/></am></abbr><ex>Պետրոս կաթողիկոս</ex></expan></ab>
+        </div>
+        <div type="textpart" subtype="monogram" n="2">
+          <ab><expan><abbr><am><g type="monogram"/></am></abbr><ex>Ղուկաս վարդապետ</ex></expan></ab>
+        </div>
+        <div type="textpart" subtype="monogram" n="3">
+          <ab><expan><abbr><am><g type="monogram"/></am></abbr><ex>Բարսեղ եպիսկոպոս</ex></expan></ab>
+        </div>
+      </div>
+      <div type="translation">
+        <p xml:lang="hy">Ես՝ Պետրոս կաթողիկոսս, Ղուկաս վարդապետի աշակերտը, կառուցել տվեցի Կաթողիկեն (եկեղեցին) ի հիշատակ ինձ և իմ աշակերտ Բարսեղ եպիսկոպոսին, հիշեցեք (մեզ) առ Քրիստոս: Պետրոս կաթողիկոս, Ղուկաս վարդապետ, Բարսեղ եպիսկոպոս:</p>
+      </div>
+      <div type="translation">
+        <p xml:lang="en">I, Petros Catholicos, disciple of Vardapet Ghukas, caused the Katholike (church) to be built in memory of myself and of my disciple Bishop Barsegh. Remember us in your prayers to Christ. Petros Catholicos, Ghukas Vardapet, Barsegh Bishop.</p>
+      </div>
+      <div type="commentary">
+        <p xml:lang="hy">Արձանագիր ուղղանկյունաձև քարն ընդգրկող շրջանակի եզրերը տեղ-տեղ վնասված են, հյուսիսային հատվածում քարը ճեղքված է, մակերեսին առկա են բազմաթիվ քերծվածքներ: Վիմագրի վերջին՝ 8-րդ տողը փորագրվել է ուղղանկյունաձև քարից դուրս՝ բուն բարավորին: Փակագրերը հրատարակել է միայն Սեդրակ Բարխուդարյանը՝ Դիվանում:</p>
+        <p xml:lang="en">The margins of the frame enclosing the rectangular inscribed stone are damaged in several places; the stone is fractured in the northern section, and the surface exhibits numerous abrasions. The final—eighth—line of the epigraph was carved outside the rectangular block, directly onto the lintel itself. The monograms were published only by Sedrak Barkhudaryan, in the Divan (Corpus Inscriptionum Armenicarum).</p>
+      </div>
+      <div type="bibliography">
+        <listBibl>
+          <bibl>
+            <ptr target="urn:armepic:bibl:004"/>
+            <citedRange unit="page">214</citedRange>
+          </bibl>
+          <bibl>
+            <ptr target="urn:armepic:bibl:023"/>
+            <citedRange unit="page">37</citedRange>
+          </bibl>
+          <bibl>
+            <ptr target="urn:armepic:bibl:015"/>
+            <citedRange unit="page">330</citedRange>
+          </bibl>
+          <bibl>
+            <ptr target="urn:armepic:bibl:001"/>
+            <citedRange unit="page">165/572</citedRange>
+          </bibl>
+        </listBibl>
+      </div>
+    </body>
+  </text>
+</TEI>

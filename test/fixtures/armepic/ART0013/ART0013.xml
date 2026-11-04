@@ -1,0 +1,231 @@
+<?xml-model href="https://epidoc.stoa.org/schema/9.7/tei-epidoc.rng"
+            type="application/xml"
+            schematypens="http://relaxng.org/ns/structure/1.0"?>
+<?xml-model href="https://epidoc.stoa.org/schema/9.7/tei-epidoc.rng"
+            type="application/xml"
+            schematypens="http://purl.oclc.org/dsdl/schematron"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:space="preserve" xml:lang="en">
+  <teiHeader>
+    <fileDesc>
+      <titleStmt>
+        <title xml:lang="en">Khachkar erected by Lord Gregory at the Surb Mariam Astvatsatsin (Holy Mother of God) Monastery in Vaguhas, 1196.</title>
+        <title xml:lang="hy">Տեր Գրիգորի կանգնեցրած խաչքարը Վաղուհասի Սբ Տիրամայր վանքում, 1196 թ.</title>
+        <!-- ===================== -->
+        <!-- Editorial responsibility -->
+        <!-- ===================== -->
+        <respStmt>
+          <resp xml:lang="en">Chief editor</resp>
+          <resp xml:lang="hy">Գլխավոր խմբագիր</resp>
+          <name ref="urn:armepic:editors:ED001">Hamest Tamrazyan</name>
+        </respStmt>
+        <respStmt>
+          <resp xml:lang="en">Editor; epigraphic research; inscriptional data provision</resp>
+          <resp xml:lang="hy">Խմբագիր, էպիգրաֆիկ հետազոտություն, արձանագրությունների տվյալների տրամադրում</resp>
+          <name ref="urn:armepic:editors:ED003">Arsen Harutyunyan</name>
+        </respStmt>
+        <respStmt>
+          <resp xml:lang="en">Data entry</resp>
+          <resp xml:lang="hy">Տվյալների մուտքագրում</resp>
+          <name ref="urn:armepic:editors:ED005">Narine Galstyan</name>
+        </respStmt>
+        <respStmt>
+          <resp xml:lang="en">Technical lead; technical implementation and automation</resp>
+          <resp xml:lang="hy">Տեխնիկական ղեկավար, տեխնիկական իրականացում և ավտոմատացում</resp>
+          <name ref="urn:armepic:editors:ED006">Narek Meloyan</name>
+        </respStmt>
+        <respStmt>
+          <resp xml:lang="en">Funding acquisition</resp>
+          <resp xml:lang="hy">Ֆինանսավորման ապահովում</resp>
+          <name ref="urn:armepic:editors:ED007">Narine Sarvazyan</name>
+        </respStmt>
+        <respStmt>
+          <resp xml:lang="en">Photographic documentation</resp>
+          <resp xml:lang="hy">Լուսանկարչական փաստագրում</resp>
+          <name ref="urn:armepic:editors:C005">Tigran Alexanyan</name>
+        </respStmt>
+        <respStmt>
+          <resp xml:lang="en">Drawing of the inscription</resp>
+          <resp xml:lang="hy">Վիմագրի գրչանկար</resp>
+          <name ref="urn:armepic:editors:ED003">Arsen Harutyunyan</name>
+        </respStmt>
+      </titleStmt>
+      <editionStmt>
+        <edition n="7.0">
+          <seg xml:lang="en">Seventh digital edition (2026-10-19)</seg>
+          <seg xml:lang="hy">Յոթերորդ թվային հրատարակություն (2026-10-19)</seg>
+        </edition>
+        <respStmt>
+          <resp xml:lang="en">Responsible for this edition</resp>
+          <resp xml:lang="hy">Հրատարակության պատասխանատու</resp>
+          <name ref="urn:armepic:editors:ED001">Hamest Tamrazyan</name>
+        </respStmt>
+      </editionStmt>
+      <publicationStmt>
+        <authority xml:lang="en">ArtsakhEpiC – Regional Corpus of Armenian Inscriptions from Artsakh, part of the ArmEpiC (Armenian Epigraphic Corpus) hosted by the EPFL Digital Humanities Laboratory (DHLAB)</authority>
+        <authority xml:lang="hy">ԱրցախԷպիԿ (ArtsakhEpiC)՝ հայկական արձանագրությունների տարածաշրջանային հավաքածու, ընդգրկված ՀայԷպիԿ (ArmEpiC) համահայկական թվային կորպուսի մեջ, տեղակայված՝ Լոզանի Ֆեդերալ Պոլիտեխնիկական Ինստիտուտի Թվային Հումանիտար Գիտությունների Լաբորատորիայում (DHLAB)</authority>
+        <idno type="filename">ART0013.xml</idno>
+        <idno type="armepic">urn:armepic:inscription:ART0013</idno>
+        <idno type="URI">https://armenianepigraphy.com/inscriptions/ART0013</idno>
+        <availability>
+          <licence target="https://creativecommons.org/licenses/by-nc/4.0/">CC BY-NC 4.0</licence>
+          <p xml:lang="en">This record may be freely reused for non-commercial research and teaching purposes with proper attribution.</p>
+          <p xml:lang="hy">Այս գրառումը կարելի է ազատորեն օգտագործել ոչ առևտրային հետազոտական և կրթական նպատակներով՝ պատշաճ հղմամբ։</p>
+        </availability>
+      </publicationStmt>
+      <seriesStmt>
+        <title xml:lang="en">ArmEpiC – Armenian Epigraphic Corpus</title>
+        <idno type="URN">urn:armepic:coll:armepic</idno>
+      </seriesStmt>
+      <sourceDesc>
+        <bibl type="origin" xml:lang="en">Born-digital EpiDoc edition in the ArtsakhEpiC sub-corpus.</bibl>
+        <listBibl>
+          <bibl type="dataset" xml:lang="en">
+            <title>ArtsakhEpiC – Corpus of Armenian Inscriptions from Artsakh</title>
+            <idno type="URN">urn:armepic:coll:artsakhepic</idno>
+          </bibl>
+        </listBibl>
+        <msDesc>
+          <msIdentifier>
+            <institution xml:lang="en">Surb Mariam Astvatsatsin church (Սբ Տիրամայր վանական համալիր)</institution>
+            <idno type="URN">urn:armepic:monument:MON0004</idno>
+          </msIdentifier>
+          <physDesc>
+            <objectDesc>
+              <supportDesc>
+                <support>
+                  <objectType ref="urn:armepic:object:OBJ0001" xml:lang="en">khachkar</objectType>
+                  <objectType xml:lang="hy">խաչքար</objectType>
+                  <material ref="urn:armepic:material:MAT0003" xml:lang="en">limestone</material>
+                  <material xml:lang="hy">կրաքար</material>
+                  <rs type="technique" ref="urn:armepic:technique:TEC001" xml:lang="en">Carved</rs>
+                  <rs type="technique" xml:lang="hy">փորագիր</rs>
+                </support>
+                <condition>
+                  <term xml:lang="en" ref="urn:armepic:preservation:PS027">fair</term>
+                  <term xml:lang="hy" ref="urn:armepic:preservation:PS027">բավարար</term>
+                </condition>
+              </supportDesc>
+              <layoutDesc>
+                <layout xml:lang="hy" writtenLines="8">Ագուցված գրատան ձախակողմյան մուտքին կից որմին, արտաքուստ</layout>
+                <layout xml:lang="en" writtenLines="8">On the exterior, embedded in the wall adjacent to the left-hand entrance of the scriptorium.</layout>
+              </layoutDesc>
+            </objectDesc>
+            <handDesc>
+              <handNote xml:id="hand_ART0013" scriptRef="urn:armepic:script:SCR002 urn:armepic:script:SCR003">
+                <term xml:lang="en">Bolorgits Erkatagir</term>
+                <term xml:lang="hy">Բոլորգիծ երկաթագիր</term>
+                <term xml:lang="en">Ughghagits Erkatagir</term>
+                <term xml:lang="hy">Ուղղագիծ երկաթագիր</term>
+              </handNote>
+            </handDesc>
+          </physDesc>
+          <history>
+            <origin>
+              <origPlace>
+                <placeName ref="urn:armepic:artsakh:PLC0006">
+                  <name xml:lang="en">Vaghuhas</name>
+                  <name xml:lang="hy">Վաղուհաս</name>
+                </placeName>
+                <note type="coordinates" subtype="decimal" corresp="urn:armepic:artsakh:PLC0006"><geo>40.11444 46.47972</geo></note>
+                <note type="coordinates" subtype="dms" corresp="urn:armepic:artsakh:PLC0006">40°06′52″N 46°28′47″E</note>
+              </origPlace>
+              <origDate calendar="urn:armepic:calendar:armenian" datingMethod="urn:armepic:calendar:gregorian" when-custom="1196" evidence="internal-date">Armenian year 645 (1196 CE)</origDate>
+            </origin>
+            <provenance type="found">
+              <placeName ref="urn:armepic:monument:MON0004">
+                <name xml:lang="en">Surb Mariam Astvatsatsin church</name>
+                <name xml:lang="hy">Սբ Տիրամայր վանական համալիր</name>
+              </placeName>
+            </provenance>
+            <provenance type="observed">
+              <placeName ref="urn:armepic:monument:MON0004">
+                <name xml:lang="en">Surb Mariam Astvatsatsin church</name>
+                <name xml:lang="hy">Սբ Տիրամայր վանական համալիր</name>
+              </placeName>
+            </provenance>
+          </history>
+          <msPart>
+            <msIdentifier>
+              <idno type="URN">urn:armepic:monument:MONPART0012</idno>
+              <objectName xml:lang="en">Scriptorium</objectName>
+              <objectName xml:lang="hy">Գրատուն</objectName>
+            </msIdentifier>
+          </msPart>
+        </msDesc>
+      </sourceDesc>
+    </fileDesc>
+    <encodingDesc>
+        <editorialDecl xml:lang="en">
+          <p>Diplomatic transcription; no silent normalization; ligatures treated as graphic phenomena; abbreviations and omissions encoded explicitly.</p>
+        </editorialDecl>
+      </encodingDesc>
+    <profileDesc>
+      <textClass>
+        <keywords scheme="urn:armepic:authority:inscriptiontype">
+          <term xml:lang="en" ref="urn:armepic:ist:INSCT0003">commemorative</term>
+          <term xml:lang="hy" ref="urn:armepic:ist:INSCT0003">հիշատակագրային</term>
+        </keywords>
+      </textClass>
+    </profileDesc>
+  </teiHeader>
+  <facsimile>
+    <surface>
+      <graphic url="Fig.13.JPG">
+        <desc xml:lang="en">Photograph by <name ref="urn:armepic:editors:C005">Tigran Alexanyan</name>, 2015</desc>
+      </graphic>
+    </surface>
+    <surface>
+      <graphic url="Drawing.13.jpg">
+        <desc xml:lang="en">Drawing by <name ref="urn:armepic:editors:ED003">Arsen Harutyunyan</name>, 2017</desc>
+      </graphic>
+    </surface>
+  </facsimile>
+  <text>
+    <body>
+      <div type="edition" xml:lang="hy">
+        <div type="textpart" subtype="section" n="1">
+          <div type="textpart" subtype="column" n="1">
+            <ab>
+              <lb n="1"/><w lemma="թիւ" pos="NOUN">Թիւ
+              <lb n="2" break="no"/>ն</w>
+            </ab>
+          </div>
+          <div type="textpart" subtype="column" n="2">
+            <ab>
+              <lb n="1"/><date calendar="urn:armepic:calendar:armenian" datingMethod="urn:armepic:calendar:gregorian" when-custom="1196"><num type="armenian" value="645">ՈԽԵ</num></date>
+              <lb n="2"/><w lemma="լինել" pos="AUX">էր</w>:
+            </ab>
+          </div>
+        </div>
+        <div type="textpart" subtype="section" n="2">
+          <ab>
+            <lb n="1"/><w lemma="ես" pos="PRON">Ես</w>՝ <roleName type="honorific"><w lemma="տէր" pos="NOUN"><expan ana="urn:armepic:abbrtype:honorific"><abbr>Տ</abbr><ex>է</ex><abbr>ր</abbr></expan></w></roleName> <persName xml:id="p_ART0013_1"><forename><w lemma="Գրիգոր" pos="PROPN">Գրիգ
+            <lb n="2" break="no"/>որ</w></forename></persName>, <w lemma="կանգնել" pos="VERB">կանգնեց
+            <lb n="3" break="no"/>ի</w> <w lemma="խաչ" pos="NOUN">զխաչս</w> <w lemma="ի" pos="ADP">ի</w> <w lemma="տապան" pos="NOUN">տ
+            <lb n="4" break="no"/>ապանի</w> <w lemma="հայր" pos="NOUN">հաւ
+            <lb n="5" break="no"/>ր</w> <w lemma="իմ" pos="PRON">իմոյ</w>՝ <persName xml:id="p_ART0013_2"><forename><w lemma="Ստեփանոս" pos="PROPN">Ստեփանո
+            <lb n="6" break="no"/><supplied reason="lost">ս</supplied>ի</w></forename></persName>, <w lemma="աղաւթք" pos="NOUN">յաղաւթս</w> <w lemma="յիշել" pos="VERB">յիշեցէք</w>:
+          </ab>
+        </div>
+      </div>
+      <div type="translation">
+        <p xml:lang="hy">Հայոց 645 թվականն էր (1196): Ես՝ Տեր Գրիգորս, կանգնեցի այս խաչը (խաչքարը) իմ հոր՝ Ստեփանոսի տապանին (գերեզմանաքարին կից), աղոթքներում հիշեցեք (մեզ):</p>
+      </div>
+      <div type="translation">
+        <p xml:lang="en">In the Armenian year 645 (1196), I, Ter Grigor, erected this cross (khachkar) at the tomb of my father, Stepanos. Remember us in your prayers.</p>
+      </div>
+      <div type="commentary">
+        <p xml:lang="hy">Խաչքարի վերին աջ հատվածը կոտրված է: Հորինվածքում ուշագրավ է հյուսածո զարդագոտին, որը երիզում է խաչասալը երեք կողմից: Հիմնախաչն ունի եռաբողբոջ խաչաթևեր, խաչակոթուն, արմավազարդ: Թվականակերտ տառամիավորները տեղ են գտել հորիզոնական խաչաթևերի ստորին մասում, իսկ բուն վիմագիրը՝ խաչակոթունի տակ, որտեղ նաև տողագծվել է:</p>
+        <p xml:lang="en">The upper right portion of the khachkar is broken. Notable in the composition is the interlaced ornamental band that frames the cross-slab on three sides. The main cross features trilobed wings, a pedestal (cross-base), and palmette ornaments. The date-bearing characters are situated at the bottom of the horizontal cross-arms, while the primary lithic inscription is located beneath the pedestal, where the surface was also ruled.</p>
+      </div>
+      <div type="bibliography">
+        <listBibl>
+          <bibl>
+            <ptr target="urn:armepic:bibl:007"/>
+            <citedRange unit="page">408/3</citedRange>
+          </bibl>
+        </listBibl>
+      </div>
+    </body>
+  </text>
+</TEI>

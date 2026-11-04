@@ -354,6 +354,28 @@ archiv-slav-phil:   # 02-sources row 251
   # declared). US public domain (pre-1931); the EU per-article term is
   # not audited — declared in the manifest.
 
+armepic:   # 02-sources row 373
+  adapter: Nabu::Adapters::Armepic
+  adopted: "2026-11-04"
+  axes: [epigraphy]   # no Caucasus/Armenian desk exists yet
+  wired: false   # adapter + fixtures ready; first real sync pending. EXPECT 50 docs /
+                 # 374 passages (371 lb-keyed lines + 3 lb-less monogram textparts) /
+                 # 1,872 word tokens, 12 authority lists skipped by rule, 0 errored
+                 # (the fixture-time full-deposit census, 2026-11-04). Reconciliation
+                 # against upstream's advertised 50 ("fifty … inscriptions
+                 # (ART0001–ART0050)"): to be recorded here at the first sync.
+  sync_policy: manual   # an immutable Zenodo version; a new release = a new record id, owner re-pin
+  # ArmEpiC — the Armenian Epigraphic Corpus, ArtsakhEpiC sub-corpus (EPFL
+  # DHLAB; Zenodo 23501516 = v7, DOI 10.5281/zenodo.23501516): fifty
+  # Armenian inscriptions of Artsakh, 1183–1998, diplomatic TEI/EpiDoc with
+  # word-level lemma + UPOS, Armenian and English translations, dating and
+  # findspots with coordinates. One document per ART<nnnn>.xml, passage =
+  # the inscribed line keyed by its own lb @n. License: the deposit's
+  # LICENSE.txt "Creative Commons Attribution-NonCommercial 4.0
+  # International License (CC BY-NC 4.0)" over all XML; images carved out
+  # and never fetched → license_class nc. Fetch: 65 per-file GETs, one
+  # FileFetch subdir each, md5-pinned to the record's own checksums.
+
 aspr:
   adapter: Nabu::Adapters::Aspr
   adopted: "2026-07-10"

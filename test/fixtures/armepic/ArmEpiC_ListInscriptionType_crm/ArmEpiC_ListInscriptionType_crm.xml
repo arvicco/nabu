@@ -1,0 +1,121 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<?xml-model href="https://epidoc.stoa.org/schema/9.7/tei-epidoc.rng"
+            type="application/xml"
+            schematypens="http://relaxng.org/ns/structure/1.0"?>
+<?xml-model href="https://epidoc.stoa.org/schema/9.7/tei-epidoc.rng"
+            type="application/xml"
+            schematypens="http://purl.oclc.org/dsdl/schematron"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xmlns:crm="http://www.cidoc-crm.org/cidoc-crm/" xml:id="ArmEpiC_ListInscriptions"><teiHeader>
+    <fileDesc>
+      <titleStmt>
+        <title>ArmEpiC – ArmEpiC_ListInscriptions (Authoritative Vocabulary for ArmEpiC)</title>
+        <respStmt>
+          <resp>Compiled by</resp>
+          <persName>ArmEpiC / EPFL Digital Humanities Laboratory (DHLAB)</persName>
+        </respStmt>
+      </titleStmt>
+      <publicationStmt>
+        <authority>ArmEpiC – Armenian Epigraphic Corpus</authority>
+        <publisher>EPFL Digital Humanities Laboratory (DHLAB)</publisher>
+        <pubPlace>Lausanne</pubPlace>
+        <date when="2025">2025</date>
+        <availability>
+          <licence target="https://creativecommons.org/licenses/by-nc/4.0/">CC BY-NC 4.0</licence>
+        </availability>
+        <idno type="urn">urn:armepic:authority:inscriptiontype</idno>
+        <idno type="filename">ArmEpiC_ListInscriptionType_crm.xml</idno>
+      </publicationStmt>
+      <seriesStmt>
+        <title xml:lang="en">ArmEpiC – Armenian Epigraphic Corpus (ecosystem-wide authority file, shared by all ArmEpiC collections)</title>
+        <title xml:lang="hy">ՀայԷպիԿ – հայկական վիմագրական կորպուս (ընդհանուր հեղինակավոր ֆայլ ՀայԷպիԿ-ի բոլոր հավաքածուների համար)</title>
+        <idno type="URN">urn:armepic:coll:armepic</idno>
+      </seriesStmt>
+      <sourceDesc>
+        <p>Shared authority file defining controlled vocabularies for all ArmEpiC subcorpora 
+                    (ArtsakhEpiC, NoratusDiT etc.), harmonized with international standards 
+                    (EAGLE, Getty AAT, CIDOC-CRM, PeriodO) and ready for ingestion into the 
+                    European Cultural Heritage Cloud (CHC) / CIDROM infrastructure.</p>
+      </sourceDesc>
+    </fileDesc>
+  <encodingDesc>
+    <p>Inscription categories are modeled as CIDOC-CRM E55_Type and are intended to be referenced from inscription records via crm:P2_has_type.</p>
+  </encodingDesc>
+    <revisionDesc>
+      <change when="2025-11-25" who="urn:armepic:agent:script">Automatic generation of ArmEpiC authority lists.</change>
+      <change when="2025-11-26" who="urn:armepic:agent:updater_script">Automatic update of ArmEpiC authority lists from DB.</change>
+      <change when="2025-11-26" who="urn:armepic:agent:updater_script">Automatic update of ArmEpiC authority lists from DB.</change>
+      <change when="2025-11-26" who="urn:armepic:agent:updater_script">Automatic update of ArmEpiC authority lists from DB.</change>
+    </revisionDesc>
+  
+  
+</teiHeader>
+  <text>
+    <body>
+      <list xml:id="ListInscriptionType" type="inscriptionType" ana="http://www.cidoc-crm.org/cidoc-crm/E55_Type">
+        <item xml:id="INSCT0001" ana="http://www.cidoc-crm.org/cidoc-crm/E55_Type">
+          <idno type="urn">urn:armepic:ist:INSCT0001</idno>
+          <term xml:lang="hy">նվիրատվական</term>
+          <term xml:lang="en">donation / dedication</term>
+          <note type="examples">
+            <ref target="urn:armepic:inscription:ART0001"/>
+            <ref target="urn:armepic:inscription:ART0002"/>
+            <ref target="urn:armepic:inscription:ART0003"/>
+            <ref target="urn:armepic:inscription:ART0004"/>
+            <ref target="urn:armepic:inscription:ART0005"/>
+            <ref target="urn:armepic:inscription:ART0006"/>
+          </note>
+        </item>
+        
+        <item xml:id="INSCT0002" ana="http://www.cidoc-crm.org/cidoc-crm/E55_Type">
+          <idno type="urn">urn:armepic:ist:INSCT0002</idno>
+          <term xml:lang="hy">շինարարական</term>
+          <term xml:lang="en">construction / building</term>
+          <note type="examples">
+            <ref target="urn:armepic:inscription:ART0007"/>
+            <ref target="urn:armepic:inscription:ART0009"/>
+          </note>
+        </item>
+        
+        <item xml:id="INSCT0003" ana="http://www.cidoc-crm.org/cidoc-crm/E55_Type">
+          <idno type="urn">urn:armepic:ist:INSCT0003</idno>
+          <term xml:lang="hy">հիշատակագրային</term>
+              <term xml:lang="en">commemoration</term>
+          <note type="examples"><ref target="urn:armepic:inscription:ART0008"/>
+              </note>
+        </item>
+        
+        <item xml:id="INSCT0004" ana="http://www.cidoc-crm.org/cidoc-crm/E55_Type">
+          <idno type="urn">urn:armepic:ist:INSCT0004</idno>
+          <term xml:lang="hy">տապանագիր</term>
+          <term xml:lang="en">epitaph</term>
+          <note type="examples">
+            <ref target="urn:armepic:inscription:ART0010"/>
+          </note>
+        </item>
+        
+        <item xml:id="INSCT0005" ana="http://www.cidoc-crm.org/cidoc-crm/E55_Type">
+          <idno type="urn">urn:armepic:ist:INSCT0005</idno>
+          <term xml:lang="hy">կանոնաիրավական</term>
+          <term xml:lang="en">canonica-legal</term></item>
+        <item xml:id="INSCT0006" ana="http://www.cidoc-crm.org/cidoc-crm/E55_Type">
+          <idno type="urn">urn:armepic:ist:INSCT0006</idno>
+          
+          <term xml:lang="hy">կրոնաբարոյախոսական</term>
+          <term xml:lang="en">religious-ethical</term></item>        <item xml:id="INSCT0007" ana="http://www.cidoc-crm.org/cidoc-crm/E55_Type">
+          <idno type="urn">urn:armepic:ist:INSCT0007</idno>
+          <term xml:lang="en">Votive</term>
+        </item>
+        <item xml:id="INSCT0008" ana="http://www.cidoc-crm.org/cidoc-crm/E55_Type">
+          <idno type="urn">urn:armepic:ist:INSCT0008</idno>
+          <term xml:lang="hy">խաչքարի կանգնեցում</term>
+          <term xml:lang="en">Khachkar erection</term>
+          <desc xml:lang="en">This can be a subtype of constriction, commemoration.</desc>
+        </item>
+        <item xml:id="INSCT0009" ana="http://www.cidoc-crm.org/cidoc-crm/E55_Type">
+          <idno type="urn">urn:armepic:ist:INSCT0009</idno>
+          <term xml:lang="hy">բարեմաղթանքային</term>
+        </item>
+        </list>
+    </body>
+  </text>
+</TEI>

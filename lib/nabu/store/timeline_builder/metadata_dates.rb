@@ -95,6 +95,9 @@ module Nabu
           "aozora" => :structured, # the index's 初出 first publication (class composition),
           #                          else the 底本 first-edition year (class edition)
           "archiv-slav-phil" => :structured, # each volume's title-page year
+          "armepic" => :structured, # each inscription's origDate (when-custom one-year envelope,
+          #                           or the notBefore/notAfter-custom century); place = the
+          #                           origPlace settlement + its own WGS84 point, else the findspot
           "baley-manuscripts" => :structured, # P153: each manuscript find's conventional era
           #                                   (radiocarbon / burial terminus; an edition inherits its
           #                                   manuscript's); place = the excavated findspot when provenanced
