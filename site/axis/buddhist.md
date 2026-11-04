@@ -15,7 +15,7 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 A source wears every desk it serves — these thirteen answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
-| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 3 November 2026)</span> |
+| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 4 November 2026)</span> |
 |---|---|---|---|---|
 | `bdrc-transcriptions` | texts | open | wired · manual | 1,160 docs / 99,571 passages |
 | `cbeta` | texts | nc | wired · manual | 4,323 docs / 10,867,827 passages |
@@ -33,9 +33,9 @@ A source wears every desk it serves — these thirteen answer this desk. Holding
 
 Private research materials under personal grants are not listed.
 
-**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 3 November 2026)</span>: `pli` 97,454 · `xct` 64,867 · `san` 9,379 · `eng` 7,150 · `lzh` 4,533 · `san-Latn` 817 · `en` 389 · `cmn` 279 · `si` 278 · `san-Deva` 32 … and 5 more (`nabu axis buddhist` lists all).
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 4 November 2026)</span>: `pli` 97,454 · `xct` 64,867 · `san` 9,379 · `eng` 7,150 · `lzh` 4,533 · `san-Latn` 817 · `en` 389 · `cmn` 279 · `si` 278 · `san-Deva` 32 … and 5 more (`nabu axis buddhist` lists all).
 
-**Carried in by multilingual packs** (`lotsawa-house` — whole-source members whose other languages ride along, as of 3 November 2026): `fra` 624 · `spa` 333 · `deu` 277 · `por` 142 · `ita` 74 … and 1 more (`nabu axis buddhist` lists all).
+**Carried in by multilingual packs** (`lotsawa-house` — whole-source members whose other languages ride along, as of 4 November 2026): `fra` 624 · `spa` 333 · `deu` 277 · `por` 142 · `ita` 74 … and 1 more (`nabu axis buddhist` lists all).
 
 ## The desk's instruments
 

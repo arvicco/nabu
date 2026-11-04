@@ -6,7 +6,7 @@ compatibility: "Requires the nabu MCP server (`bin/nabu mcp`, read-only, stdio) 
 metadata:
   desk: epigraphy
   origin: hand-tuned
-  sources: "ceipom damos dharma-campa dharma-deccan dharma-khmer dharma-nusantara dharma-pyu dharma-tamil edh edr elephantine extrabiblical ig-cyprus iip isicily itant lexlep lexlep-words memis nabu-places obi-burmese ociana ogham open-etruscan papyri-ddbdp paramara pleiades riig rundata runesdb siddham sigla sii-clean tir tlhdig trismegistos trismegistos-geo ucd"
+  sources: "aio ceipom damos dharma-campa dharma-deccan dharma-khmer dharma-nusantara dharma-pyu dharma-tamil edh edr elephantine extrabiblical ig-cyprus iip isicily itant lexlep lexlep-words memis nabu-places obi-burmese ociana ogham open-etruscan papyri-ddbdp paramara pleiades riig rundata runesdb siddham sigla sii-clean tir tlhdig trismegistos trismegistos-geo ucd"
 ---
 
 # The Papyrologist-Epigraphist — the `epigraphy` desk
@@ -23,6 +23,7 @@ verbatim upstream terms are in `docs/02-sources.md` of the Nabu repository.
 <!-- nabu:skill-sources:begin — generated from config/sources.yml by `rake skills:scaffold`; edit outside this block -->
 | Source | Upstream | License class |
 | --- | --- | --- |
+| `aio` | AIO — Attic Inscriptions Online (British School at Athens) | attribution |
 | `ceipom` | CEIPoM — Corpus of the Epigraphy of the Italian Peninsula in the 1st Millennium BCE (Pitts, KU Leuven; Zenodo v1.3) | attribution |
 | `damos` | DĀMOS — Database of Mycenaean at Oslo (the Linear B corpus) | nc |
 | `dharma-campa` | DHARMA Campā inscriptions (Old Cham epigraphy) | attribution |
