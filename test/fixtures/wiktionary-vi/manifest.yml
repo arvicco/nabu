@@ -1,0 +1,13 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+source: wiktionary-vi
+adapter_test: test/adapters/wiktionary_vi_test.rb
+retrieved: 2026-11-04
+files:
+  - path: kaikki.org-dictionary-Vietnamese.jsonl
+    url: https://kaikki.org/dictionary/Vietnamese/kaikki.org-dictionary-Vietnamese.jsonl
+    whole: false
+    trim: >-
+      9 complete JSONL lines (犬 character, 馬 character, 馬 noun, 犭
+      character, toe verb, sung adj, 丂 character, ken adj, chó noun),
+      byte-verbatim in upstream order from the 83,424,329-byte file (README)
