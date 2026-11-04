@@ -19,7 +19,7 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 ## The shelves
 
-A source wears every desk it serves — these twenty-eight answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
+A source wears every desk it serves — these twenty-nine answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
 | Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 4 November 2026)</span> |
 |---|---|---|---|---|
@@ -45,6 +45,7 @@ A source wears every desk it serves — these twenty-eight answer this desk. Hol
 | `ud` | treebank | nc | wired · manual | 83 docs / 329,980 passages |
 | `unihan` | dictionary | open | wired · manual | 102,998 entries |
 | `viet-wikisource` | texts | attribution | wired · manual | 32 docs / 7,674 passages |
+| `wenhai` | dictionary | attribution | not yet wired | not synced yet |
 | `wiktionary-recon` | dictionary | attribution | wired · manual | 376,415 entries |
 | `wiktionary-tyz` | dictionary | attribution | not yet wired | nothing held yet |
 | `wiktionary-vi` | dictionary | attribution | not yet wired | nothing held yet |
