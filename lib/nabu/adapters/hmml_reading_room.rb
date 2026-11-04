@@ -223,7 +223,7 @@ module Nabu
       def cut_slice(member, out_path)
         counts = { "records" => 0, "taken" => 0, "out_of_slice" => 0, "empty_records" => 0 }
         taken = []
-        File.foreach(member) do |line|
+        SourceRead.utf8_lines(member, label: SLUG) do |line|
           body = line.chomp.delete_prefix("[").delete_suffix("]").delete_suffix(",")
           next if body.strip.empty?
 
@@ -236,7 +236,7 @@ module Nabu
         counts["taken"] = taken.size
         File.write(out_path, taken.map { |body| "#{body}\n" }.join)
         counts
-      rescue JSON::ParserError => e
+      rescue JSON::ParserError, Nabu::ParseError => e
         raise Nabu::FetchError, "hmml-reading-room: the dataset member is not one record per line (#{e.message})"
       end
 
