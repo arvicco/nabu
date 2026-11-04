@@ -41,12 +41,11 @@ sources:
       "Topos-inscription": mark/ownership        # 1 — a reserved-place mark (the edh seat fold)
   armepic:            # the records' keywords/term[@xml:lang=en] (ArmEpiC's inscription-type
     #                   authority, urn:armepic:ist:*); counts = the full-deposit census
-    #                   2026-11-04 (50 records, a record may carry two terms). NOT folded,
-    #                   left in the unmapped bucket for a ruling: "commemorative" (13) +
-    #                   "commemoration" (1) — the hishatakagrayin memorial inscription,
-    #                   neither funerary nor dedicatory in the house sense; "khachkar
-    #                   erection" (5) — upstream's own note calls it a subtype of
-    #                   construction OR commemoration; "religious-ethical" (1).
+    #                   2026-11-04 (50 records, a record may carry two terms). The three
+    #                   heads left unmapped at the first sync were ruled 2026-11-04: fold
+    #                   onto existing heads, no new taxonomy heads for a 50-document
+    #                   source; "religious-ethical" (1) stays deliberately unclassified
+    #                   (one record, no honest existing head).
     facet: genre
     map:
       "construction": building                   # 22 — church/gavit/bridge building records
@@ -57,6 +56,15 @@ sources:
       "epitaph": funerary/epitaph                # 1 — ART0010, a catholicos's tombstone
       "canonical-legal": legal                   # 1 — ART0046, the villagers' tax exemption
       #                                            of a zhamatun (beside its construction term)
+      "commemorative": funerary                  # 13 — hishatakagrayin memorial inscriptions;
+      #                                            the ogham precedent (Commemorative →
+      #                                            funerary, "memorial stones"): remembrance
+      #                                            records, the house's memorial head
+      "commemoration": funerary                  # 1 — the authority list's own variant label
+      "khachkar erection": dedicatory/votive     # 5 — a cross-stone erected for the soul of a
+      #                                            named person; upstream's own note ("subtype
+      #                                            of construction, commemoration") folds here
+      #                                            as the votive act, ruled 2026-11-04
   cdli:               # 288,629 docs — the largest vocabulary by rows
     facet: genre
     map:

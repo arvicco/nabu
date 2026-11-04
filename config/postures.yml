@@ -2091,17 +2091,12 @@ sources:
     places: {posture: unplaced}
     script: {posture: implied}
 
-  # ── pending: a real refinement candidate, not yet ruled ────────────────
   armepic:
     # kind: machine-postured by the kind_map.yml armepic genre fold.
-    lect: {posture: pending, note: "bare xcl at parse time: upstream tags the edition only
-        ISO 639-1 hy (40 records; 10 untagged), which carries no stage, and the registry's hy
-        node is MODERN Armenian; the texts are written grabar with Middle Armenian vernacular
-        features. Candidate: date-band staging off the records' own dates (1183–1998) —
-        42 records fall inside the axm band [1100, 1700], 8 are 1725–1998 (ART0010/11/35/36/
-        37/38/39/40: 18th-c. grabar, 19th-c. church inscriptions, a 1918 and a 1998 one —
-        hy or learned grabar?). Judgment-grade (how far a 13th-c. donation is Middle Armenian
-        rather than grabar), so not fired"}
+    # lect declaration retired P157 (ruled 2026-11-04): the armepic xcl
+    # override machine-postures it now (the shadowing rule) — the corpus
+    # pins to grabar/xcl on the editors' own description, no date-band
+    # staging into axm; the spot-read evidence rides the override comment.
     dating: {posture: dated, note: "50/50 via origin/origDate: 41 when-custom (the Armenian-era
         year converted, evidence internal-date) as one-year envelopes, 9 notBefore-custom/
         notAfter-custom palaeographic centuries as bounds; raw/evidence/precision/calendar ride"}

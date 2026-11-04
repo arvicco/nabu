@@ -179,7 +179,7 @@ class PosturesTest < Minitest::Test
   def test_the_lect_migration_kept_the_p59_4_census
     lect = postures.declarations.select { |d| d.layer == "lect" }
     by_posture = lect.group_by(&:posture).transform_values(&:size)
-    assert_equal 183, lect.size,
+    assert_equal 182, lect.size,
                  "the P59-4 declarations survive the move (61 at migration; itant retired P61-3," \
                  "oracc retired P62-2, etcsl/ccmh/freising/coptic-scriptorium retired P64-6, " \
                  "titus-avestan retired P66-1, osta+fornsvenska retired P77-r8, achemenet " \
@@ -388,7 +388,10 @@ class PosturesTest < Minitest::Test
                  "armepic ADDED — PENDING bare xcl (the date-band axm staging of the Artsakh " \
                  "inscriptions is a named candidate awaiting a ruling): 181→182; " \
                  "wenhai ADDED P156 — identity txg (the Tangut rhyme dictionary; a real anchor, " \
-                 "no stages): 182→183"
+                 "no stages): 182→183; " \
+                 "the 2026-11-04 ruling RETIRES armepic — the xcl override pins the corpus to " \
+                 "grabar (the editors' own description; no date-band axm staging; the " \
+                 "shadowing rule): 183→182"
     # The epigraphic-belt registry package (merged + canonical-synced
     # 2026-10-18, the add-then-retire shape within one phase) retires both
     # P130 pendings, and the ociana-script rule + the ig-cyprus override
@@ -445,6 +448,8 @@ class PosturesTest < Minitest::Test
     # evans-tcp + ecco-tcp join identity (en, the eebo-tcp posture): 132→134.
     # armepic joins pending (bare xcl; the date-band axm staging is a named candidate): 1→2.
     # wenhai joins identity (txg, the Tangut rhyme dictionary): 134→135.
-    assert_equal({ "dates" => 25, "codemap" => 21, "identity" => 135, "pending" => 2 }, by_posture)
+    # The 2026-11-04 ruling retires armepic's pending — the xcl override
+    # machine-postures it (the shadowing rule): pending 2→1 (lasla alone).
+    assert_equal({ "dates" => 25, "codemap" => 21, "identity" => 135, "pending" => 1 }, by_posture)
   end
 end
