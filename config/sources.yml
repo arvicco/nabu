@@ -354,7 +354,7 @@ archiv-slav-phil:   # 02-sources row 251
   # declared). US public domain (pre-1931); the EU per-article term is
   # not audited — declared in the manifest.
 
-armepic:   # 02-sources row 373
+armepic:   # P156, 02-sources row 377
   adapter: Nabu::Adapters::Armepic
   adopted: "2026-11-04"
   axes: [epigraphy]   # no Caucasus/Armenian desk exists yet
