@@ -39,6 +39,24 @@ sources:
       "Milestone": boundary/milestone            # 1
       "Graffito": mark/graffito                  # 1 ("Graffito?" — the global ? strip)
       "Topos-inscription": mark/ownership        # 1 — a reserved-place mark (the edh seat fold)
+  armepic:            # the records' keywords/term[@xml:lang=en] (ArmEpiC's inscription-type
+    #                   authority, urn:armepic:ist:*); counts = the full-deposit census
+    #                   2026-11-04 (50 records, a record may carry two terms). NOT folded,
+    #                   left in the unmapped bucket for a ruling: "commemorative" (13) +
+    #                   "commemoration" (1) — the hishatakagrayin memorial inscription,
+    #                   neither funerary nor dedicatory in the house sense; "khachkar
+    #                   erection" (5) — upstream's own note calls it a subtype of
+    #                   construction OR commemoration; "religious-ethical" (1).
+    facet: genre
+    map:
+      "construction": building                   # 22 — church/gavit/bridge building records
+      "construction / building": building        # 2
+      "donation": dedicatory                     # 15 — gifts of land, oxen, revenues to a church
+      "donation / dedication": dedicatory        # 1 — the authority list's own label
+      "dedication": dedicatory                   # 1
+      "epitaph": funerary/epitaph                # 1 — ART0010, a catholicos's tombstone
+      "canonical-legal": legal                   # 1 — ART0046, the villagers' tax exemption
+      #                                            of a zhamatun (beside its construction term)
   cdli:               # 288,629 docs — the largest vocabulary by rows
     facet: genre
     map:

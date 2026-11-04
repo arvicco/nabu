@@ -1,0 +1,37 @@
+ArmEpiC – Armenian Epigraphic Corpus (ArtsakhEpiC Sub-Corpus)
+
+Copyright (c) 2026 Hamest Tamrazyan, Gayane Hovhannisyan, Arsen Harutyunyan,
+Narine Sarvazyan (editors), Emanuela Boros and Narek Meloyan (data curators),
+on behalf of the ArmEpiC project and the EPFL Digital Humanities Laboratory
+(DHLAB).
+
+The texts and data of this work (all TEI/EpiDoc XML files and authority
+files in this deposit) are licensed under the
+
+    Creative Commons Attribution-NonCommercial 4.0 International License
+    (CC BY-NC 4.0)
+
+You are free to:
+  - Share — copy and redistribute the material in any medium or format
+  - Adapt — remix, transform, and build upon the material
+
+Under the following terms:
+  - Attribution — You must give appropriate credit, provide a link to the
+    license, and indicate if changes were made.
+  - NonCommercial — You may not use the material for commercial purposes.
+
+No additional restrictions — You may not apply legal terms or technological
+measures that legally restrict others from doing anything the license
+permits.
+
+Full license text: https://creativecommons.org/licenses/by-nc/4.0/legalcode
+
+Images: the photographs and drawings in this deposit are not covered by
+this licence. Rights remain with the photographers and publications
+credited with each image (see the <facsimile> and <respStmt> of each
+inscription file). They are included for scholarly reference.
+
+Funding: This project has been funded by the National Association for
+Armenian Studies and Research (NAASR), the Knights of Vartan Fund for
+Armenian Studies, and the Swiss National Science Foundation (SNSF, grants
+IZSEZ0_212008 and IZSEZ0_216747).

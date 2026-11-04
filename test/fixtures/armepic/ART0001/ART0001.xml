@@ -1,0 +1,423 @@
+<?xml-model href="https://epidoc.stoa.org/schema/9.7/tei-epidoc.rng"
+            type="application/xml"
+            schematypens="http://relaxng.org/ns/structure/1.0"?>
+<?xml-model href="https://epidoc.stoa.org/schema/9.7/tei-epidoc.rng"
+            type="application/xml"
+            schematypens="http://purl.oclc.org/dsdl/schematron"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:space="preserve" xml:lang="en">
+  <teiHeader>
+    <fileDesc>
+      <titleStmt>
+        <title xml:lang="en">The donative inscription of Ter Hovhannes, Abbot of Gandzasar Monastery, 1271.</title>
+        <title xml:lang="hy">Գանձասարի վանքի առաջնորդ Տեր Հովհաննեսի նվիրատվական վիմագիրը, 1271 թ.</title>
+        
+        
+        <!-- ===================== -->
+        <!-- Editorial responsibility -->
+        <!-- ===================== -->
+        
+        <respStmt>
+          <resp xml:lang="en">General editor</resp>
+          <resp xml:lang="hy">Գլխավոր խմբագիր</resp>
+          <name ref="urn:armepic:editors:ED001">Hamest Tamrazyan</name>
+        </respStmt>
+        
+        <respStmt>
+          <resp xml:lang="en">
+            Translation of texts and terminology; EpiDoc adaptation;
+            validation of terminology and SKOS concepts
+          </resp>
+          <resp xml:lang="hy">
+            Տեքստերի և տերմինաբանության թարգմանություն,
+            EpiDoc-ի ադապտացիա,
+            տերմինաբանության և SKOS հասկացությունների վավերացում
+          </resp>
+          <name ref="urn:armepic:editors:ED002">Gayane Hovhannisyan</name>
+        </respStmt>
+        
+        <respStmt>
+          <resp xml:lang="en">
+            Epigraphic research; inscriptional data provision;
+            photographic documentation
+          </resp>
+          <resp xml:lang="hy">
+            Էպիգրաֆիկ հետազոտություն,
+            արձանագրությունների տվյալների տրամադրում,լեմմատիզացիա,
+            լուսանկարչական փաստագրում
+          </resp>
+          <name ref="urn:armepic:editors:ED003">Arsen Harutyunyan</name>
+        </respStmt>
+        
+        <respStmt>
+          <resp xml:lang="en">Technical implementation and automation</resp>
+          <resp xml:lang="hy">Տեխնիկական իրականացում և ավտոմատացում</resp>
+          <name ref="urn:armepic:editors:ED004">Emanuela Boros</name>
+        </respStmt>
+        
+        <respStmt>
+          <resp xml:lang="en">Technical implementation and automation</resp>
+          <resp xml:lang="hy">Տեխնիկական իրականացում և ավտոմատացում</resp>
+          <name ref="urn:armepic:editors:C003">Emile Cornamusaz</name>
+        </respStmt>
+        <respStmt>
+          <resp xml:lang="en">Photographic documentation</resp>
+          <resp xml:lang="hy">Լուսանկարչական փաստագրում</resp>
+          <name ref="urn:armepic:editors:ED003">Arsen Harutyunyan</name>
+        </respStmt>
+        <respStmt>
+          <resp xml:lang="en">Drawing of the inscription</resp>
+          <resp xml:lang="hy">Վիմագրի գրչանկար</resp>
+          <name ref="urn:armepic:bibl:001">Divan hay vimagrut‘yan, Artsakh (Barkhudaryan 1982), 50/122</name>
+        </respStmt>
+      </titleStmt>
+      
+      <editionStmt>
+        <edition n="7.0">
+          <seg xml:lang="en">Seventh digital edition (2026-10-19)</seg>
+          <seg xml:lang="hy">Յոթերորդ թվային հրատարակություն (2026-10-19)</seg>
+        </edition>
+        <respStmt>
+          <resp xml:lang="en">Responsible for this edition</resp>
+          <resp xml:lang="hy">Հրատարակության պատասխանատու</resp>
+          <name ref="urn:armepic:editors:ED001">Hamest Tamrazyan</name>
+        </respStmt>
+      </editionStmt>
+      <publicationStmt>
+        <authority xml:lang="en">ArtsakhEpiC – Regional Corpus of Armenian Inscriptions from Artsakh, part of the ArmEpiC (Armenian Epigraphic Corpus) hosted by the EPFL Digital Humanities Laboratory (DHLAB)</authority>
+        <authority xml:lang="hy">ԱրցախԷպիԿ (ArtsakhEpiC)՝ հայկական արձանագրությունների տարածաշրջանային հավաքածու, ընդգրկված ՀայԷպիԿ (ArmEpiC) համահայկական թվային կորպուսի մեջ, տեղակայված՝ Լոզանի Ֆեդերալ Պոլիտեխնիկական Ինստիտուտի Թվային Հումանիտար Գիտությունների Լաբորատորիայում (DHLAB)</authority>
+        <idno type="filename">ART0001.xml</idno>
+        <idno type="armepic">urn:armepic:inscription:ART0001</idno>
+        <idno type="URI">https://armenianepigraphy.com/inscriptions/ART0001</idno>
+        <availability>
+          <licence target="https://creativecommons.org/licenses/by-nc/4.0/">CC BY-NC 4.0</licence>
+          <p xml:lang="en">This record may be freely reused for non-commercial research and teaching purposes with proper attribution.</p>
+          <p xml:lang="hy">Այս գրառումը կարելի է ազատորեն օգտագործել ոչ առևտրային հետազոտական և կրթական նպատակներով՝ պատշաճ հղմամբ։</p>
+        </availability>
+      </publicationStmt>
+      <seriesStmt>
+        <title xml:lang="en">ArmEpiC – Armenian Epigraphic Corpus</title>
+        <idno type="URN">urn:armepic:coll:armepic</idno>
+      </seriesStmt>
+      
+      
+      <sourceDesc>
+        <bibl type="origin" xml:lang="en">Born-digital EpiDoc edition in the ArtsakhEpiC sub-corpus.</bibl>
+        
+        <listBibl>
+          <bibl type="dataset" xml:lang="en">
+            <title>ArtsakhEpiC – Corpus of Armenian Inscriptions from Artsakh</title>
+            <idno type="URN">urn:armepic:coll:artsakhepic</idno>
+          </bibl>
+        </listBibl>
+        
+        <msDesc xml:id="ms_Gandzasar_Monastic_complex">
+          <msIdentifier>
+            <institution xml:lang="en">Gandzasar Monastic Complex (Գանձասար վանական համալիր)</institution>
+            <idno type="URN">urn:armepic:monument:MON0002</idno>
+          </msIdentifier>
+          
+          <physDesc>
+            <objectDesc>
+              <supportDesc>
+                <support>
+                  <objectType ref="urn:armepic:object:OBJ0006" xml:lang="en">lintel</objectType>
+                  <objectType xml:lang="hy">բարավոր</objectType>
+                  <material ref="urn:armepic:material:MAT0003" xml:lang="en">limestone</material>
+                  <material xml:lang="hy">կրաքար</material>
+                  <rs type="technique" ref="urn:armepic:technique:TEC001" xml:lang="en">carved</rs>
+                  <rs type="technique" xml:lang="hy">փորագիր</rs>
+                </support>
+                <condition>
+                  <term xml:lang="en" ref="urn:armepic:preservation:PS027">fair</term>
+                  <term xml:lang="hy" ref="urn:armepic:preservation:PS027">բավարար</term>
+                </condition>
+              </supportDesc>
+              <layoutDesc>
+                <layout xml:lang="hy" writtenLines="9">Հյուսիսային մուտքի կիսակամար քարին, արտաքուստ</layout>
+                <layout xml:lang="en" writtenLines="9">On the stone semi-arch of the northern entrance, from the outside</layout>
+              </layoutDesc>
+            </objectDesc>
+            <handDesc>
+              <handNote xml:id="hand_ART0001" scriptRef="urn:armepic:script:SCR002">
+                <term xml:lang="en">Bolorgits Erkatagir</term>
+                <term xml:lang="hy">Բոլորգիծ երկաթագիր</term>
+              </handNote>
+            </handDesc>
+          </physDesc>
+          <history>
+            <origin>
+              <origPlace>
+                <placeName ref="urn:armepic:artsakh:PLC0009">
+                  <name xml:lang="en">Vank</name>
+                  <name xml:lang="hy">Վանք</name>
+                </placeName>
+              </origPlace>
+              <origDate calendar="urn:armepic:calendar:armenian" datingMethod="urn:armepic:calendar:gregorian" when-custom="1271" evidence="internal-date">
+                Հայոց 720 (1271)
+              </origDate>
+              
+            </origin>
+            <provenance type="found">
+              <placeName ref="urn:armepic:monument:MON0002">
+                <name xml:lang="en">Gandzasar monastery</name>
+                <name xml:lang="hy">Գանձասար վանական համալիր</name>
+              </placeName>
+            </provenance>
+            <provenance type="observed">
+              <placeName ref="urn:armepic:monument:MON0002">
+                <name xml:lang="en">Gandzasar monastery</name>
+                <name xml:lang="hy">Գանձասար վանական համալիր</name>
+              </placeName>
+            </provenance>
+          </history>
+
+          <msPart xml:id="ms_Gandzasar_Gavit">
+            <msIdentifier>
+              <idno type="URN">urn:armepic:monument:MONPART0010</idno>
+              <objectName xml:lang="en">Gavit (narthex)</objectName>
+              <objectName xml:lang="hy">գավիթ</objectName>
+            </msIdentifier>
+          </msPart>
+        </msDesc>
+      </sourceDesc>
+    </fileDesc>
+    <encodingDesc>
+        <editorialDecl xml:lang="en">
+          <p>Diplomatic transcription; no silent normalization; ligatures treated as graphic phenomena; abbreviations and omissions encoded explicitly.</p>
+        </editorialDecl>
+      </encodingDesc>
+    <profileDesc>
+      <textClass>
+        <keywords>
+          <term xml:lang="en" ref="urn:armepic:ist:INSCT0001">donation</term>
+          <term xml:lang="hy">նվիրատվական</term>
+        </keywords>
+      </textClass>
+    </profileDesc>
+  </teiHeader>
+  <facsimile>
+    <surface>
+      <graphic url="Fig.%201.JPG">
+        <desc xml:lang="en">Photograph by <name ref="urn:armepic:editors:ED003">Arsen Harutyunyan</name>, 2017</desc>
+        <desc xml:lang="hy">Լուսանկարը՝ Արսեն Հարությունյանի, 2017 թ.</desc>
+      </graphic>
+    </surface>
+    <surface>
+      <graphic url="Drawing.1.jpg">
+        <desc xml:lang="en">Drawing from <ref target="urn:armepic:bibl:001">Divan hay vimagrut‘yan, Artsakh (Barkhudaryan 1982)</ref>, 50/122</desc>
+        <desc xml:lang="hy">Գրչանկարը՝ ԴՀՎ/5, 50/122</desc>
+      </graphic>
+    </surface>
+  </facsimile>
+  <text>
+    <body>
+      <div type="edition">
+        <ab>
+          <lb n="1"/><g type="converter" subtype="vertical-dots" n="2">:</g><w lemma="թիւ" pos="NOUN">Թիւ</w><g type="converter" subtype="vertical-dots" n="2">:</g>
+          
+          <date calendar="urn:armepic:calendar:armenian" datingMethod="urn:armepic:calendar:gregorian" when-custom="1271">
+            <choice>
+              <orig>
+                <num type="armenian" value="720">ՉԻ</num>
+              </orig>
+              <reg>
+                720 (<date calendar="urn:armepic:calendar:gregorian" when="1271">1271</date>) 
+              </reg>
+            </choice>
+          </date>
+          <lb n="2"/>
+          <w lemma="կամաւն" pos="ADV">Կ
+            <hi rend="ligature">ամ</hi>
+            <hi rend="ligature">աւ</hi>
+            <hi rend="ligature" xml:id="lig1">ն</hi>
+          </w>
+          <w lemma="աստուած" pos="NOUN">
+            
+            
+              <expan ana="urn:armepic:abbrtype:honorific">
+                <abbr><hi rend="ligature" xml:id="lig2">Ա</hi></abbr>
+                <ex>ստուծո</ex>
+                <abbr>յ</abbr>
+              </expan>
+            
+          </w>,
+          <join xml:id="j1" result="ligature" target="#lig1 #lig2"/>
+          <w lemma="ես" pos="PRON">ես</w>՝
+          <persName xml:id="p_Yohanes">
+            <forename>
+            <w lemma="Յոհանէս" pos="PROPN">Յոհանէս</w>
+            </forename>
+           </persName>,  
+          <lb n="3"/><w lemma="որդի" pos="NOUN"><hi rend="ligature">որ</hi>
+            դի</w> 
+          <persName xml:id="p_Ivane">
+            <forename>
+            <w lemma="Իւանէ" pos="PROPN">Իւանէի</w>
+            </forename>
+          </persName>
+            ՝<w lemma="առաջնորդ" pos="NOUN">առաջն
+          <hi rend="ligature">որ</hi>
+              դ</w> 
+          <w lemma="սուրբ" pos="ADJ">
+            <expan ana="urn:armepic:abbrtype:honorific">
+              <abbr>Ս</abbr>
+              <ex>ուր</ex>
+              <abbr>բ</abbr>
+            </expan>
+          </w>
+          <w lemma="ուխտ" pos="NOUN">ու
+             <lb n="4" break="no"/>խտիս</w> 
+          <placeName ref="urn:armepic:monument:MON0002">
+          <w lemma="Գանձասար" pos="PROPN"><hi rend="ligature">Գան</hi>
+          ձաս<hi rend="ligature">ար</hi>ա</w>
+          </placeName>
+            ,
+          <w lemma="հրաման" pos="NOUN">հր
+          <hi rend="ligature">ամ</hi>
+          <hi rend="ligature">ան</hi>
+          <hi rend="ligature">աւ</hi>
+            </w> 
+          <w lemma="տեառն" pos="NOUN">
+            
+            <expan ana="urn:armepic:abbrtype:honorific">
+              <abbr>տ</abbr>
+              <ex>եառ</ex>
+              <abbr>ն</abbr>
+            </expan>
+          </w>
+          <placeName ref="#pl_ext_khachen"> 
+          <w lemma="Խաչեն" pos="PROPN">Խաչ
+            <lb n="5" break="no"/>ինո</w>
+          </placeName>
+          ,
+          <persName xml:id="p_Atabek">
+            <forename>
+          <w lemma="Աթաբեկ" pos="PROPN">Աթ
+          <hi rend="ligature">աբ</hi>
+          <hi rend="ligature">եկի</hi>
+               ն</w>
+            </forename>
+          </persName>, 
+          <w lemma="ի" pos="ADP">ի</w>
+          <w lemma="իմ" pos="PRON">յիմ</w> 
+          <w lemma="հալալ" pos="ADJ">հալալ</w>  
+          <w lemma="արդ" pos="NOUN"><hi rend="ligature">ար</hi>
+          դե<hi rend="ligature">ան</hi>ց</w>
+          <w lemma="գնել" pos="VERB">գ<hi rend="ligature">նե</hi>ց
+            <lb n="6" break="no"/>ի</w>
+          <placeName ref="#pl_ext_vardanatagh"> 
+          <w lemma="Վարդանաթաղ" pos="PROPN">զՎ<hi rend="ligature">ար</hi><hi rend="ligature">դան</hi>աթաղս</w>
+          </placeName>, 
+          <w lemma="մի" pos="NUM"><hi rend="ligature">մին</hi></w>
+          <w lemma="չորս" pos="NUM">չ<hi rend="ligature">որ</hi>եց</w>
+          <w lemma="եզ" pos="NOUN">եզ<hi rend="ligature" xml:id="lig3">ն</hi></w>
+          <w lemma="եւ" pos="CCONJ"><hi rend="ligature" xml:id="lig4">ե</hi>
+            ւ</w> 
+          <join xml:id="j2" result="ligature" target="#lig3 #lig4"/>
+          <w lemma="այլ" pos="ADJ">այլ</w>
+          <w lemma="ընծա" pos="NOUN">ընծ
+            <lb n="7" break="no"/>էք</w><w lemma="տալ" pos="VERB">տվի</w> <w lemma="ի" pos="ADP">ի</w>  
+          <w lemma="սուրբ" pos="ADJ">
+            <expan ana="urn:armepic:abbrtype:honorific">
+              <abbr>Ս</abbr>
+              <ex>ուր</ex>
+              <abbr>բ</abbr>
+            </expan>
+          </w>
+          <w lemma="կաթողիկէ" pos="NOUN">Կաթողիկէս</w>
+          .
+          <w lemma="միաբանք" pos="NOUN"><hi rend="ligature">մի</hi>
+          <hi rend="ligature">աբ</hi>
+          <hi rend="ligature">ան</hi>
+            քս</w><w lemma="տալ" pos="VERB">տվին</w> 
+          <persName xml:id="p_Vohan">
+            <forename>
+          <w lemma="Ոհան" pos="PROPN">զՈհ
+          <hi rend="ligature">ան</hi>
+              ու</w>
+            </forename>
+            </persName>, 
+          <persName xml:id="p_Akob">
+            <forename>
+          <w lemma="Ակոբ" pos="PROPN">զ
+                <lb n="8" break="no"/><hi rend="ligature">Ակ</hi>
+          <hi rend="ligature">ոբ</hi>
+                ա</w>
+            </forename>
+          </persName>
+          <w lemma="տաւն" pos="NOUN">տ
+          <hi rend="ligature">աւ</hi>
+                  նն</w><w lemma="ամէն" pos="DET">զ
+          <hi rend="ligature">ամ</hi>
+                    էն</w>  
+          <w lemma="եկեղեցի" pos="NOUN"><hi rend="ligature">եկե</hi>
+          <hi rend="ligature">ղեց</hi>
+          իք
+            <hi rend="ligature" xml:id="lig5">ս</hi></w><w lemma="ես" pos="PRON"><hi rend="ligature" xml:id="lig6">ի</hi>նձ</w> 
+          <join xml:id="j3" result="ligature" target="#lig5 #lig6"/>
+          <w lemma="պատարագ" pos="NOUN"><hi rend="ligature">պա</hi>
+          տ
+          <hi rend="ligature">ար</hi>
+            <hi rend="ligature">ագ</hi></w>
+          . <w lemma="ով" pos="PRON">ով</w>
+          <w lemma="խափանել" pos="VERB">խ
+            <lb n="9" break="no"/><hi rend="ligature">ափան</hi>
+            է</w>,
+          <space quantity="3" unit="character"/>
+          <w lemma="դատել" pos="VERB"><hi rend="ligature">դա</hi>
+            տի</w><w lemma="աստուած" pos="NOUN"> յ
+          
+            <expan ana="urn:armepic:abbrtype:honorific">
+              <abbr>Ա</abbr>
+              <ex>ստուծո</ex>
+              <abbr>յ</abbr>
+            </expan>
+          </w>
+          :
+        </ab>
+      </div>
+      <div type="translation"> 
+        <p xml:lang="hy">Հայոց 720 (1271) թվին, Աստծո կամքով, ես` Հովհաննես, որդի Իվանեի՝ առաջնորդ Գանձասարի Սուրբ ուխտի, Խաչենի տեր Աթաբեկի հրամանով, իմ արդար միջոցներով գնեցի Վարդանաթաղը, չորս եզ և  այլ ընծաներ տվեցի Սուրբ Կաթողիկեիս։ Միաբաններն (ինձ) բոլոր եկեղեցիներում պատարագ տվեցին Հովհաննի և Հակոբի տոնին: Ով խափանի`թող դատվի Աստծուց։</p>
+      </div>
+      <div type="translation"> 
+        <p xml:lang="en">In the year 720 (1271) of the Armenian calendar, by the will of God, I, Hovhannes, son of Ivane, leader of the Holy Order of Gandzasar, by the order of the Atabek, lord of Khachen, bought Vardanatagh with my own means, gave four oxen and other offerings to the Holy Katoghike (cathedral church). The monks (for me) celebrated the liturgy in all the churches on the feast of John and Jacob. Whoever interferes, let him be judged by God.</p>
+      </div>
+      <div type="commentary">
+        <p xml:lang="hy">Փորագրությունը համաչափ է, արված վարպետ գրչի ձեռքով:</p>
+        <p xml:lang="en">The carving is symmetrical and executed by a master scribe.</p> 
+      </div>
+            <div type="bibliography">
+        <listBibl>
+            <bibl>
+                <ptr target="urn:armepic:bibl:002"/>
+                <citedRange unit="page">188-191</citedRange>
+            </bibl>
+            <bibl>
+                <ptr target="urn:armepic:bibl:003"/>
+                <citedRange unit="page">466</citedRange>
+            </bibl>
+            <bibl>
+                <ptr target="urn:armepic:bibl:004"/>
+                <citedRange unit="page">252</citedRange>
+            </bibl>
+            <bibl>
+                <ptr target="urn:armepic:bibl:006"/>
+                <citedRange unit="page">19</citedRange>
+            </bibl>
+            <bibl>
+                <ptr target="urn:armepic:bibl:005"/>
+                <citedRange unit="page">123/78</citedRange>
+            </bibl>
+            <bibl>
+                <ptr target="urn:armepic:bibl:001"/>
+                <citedRange unit="page">50/122</citedRange>
+            </bibl>
+            <bibl>
+                <ptr target="urn:armepic:bibl:021"/>
+                <citedRange unit="page">147-148/խէ</citedRange>
+            </bibl>
+        </listBibl>
+      </div>
+    </body>
+  </text>
+</TEI>
