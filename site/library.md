@@ -60,6 +60,7 @@ instruments, CLI recipes and terminal setup, are the
 | <span id="shelf-papyri"></span>[Documentary papyri](#documentary-papyri) | Papyri.info DDbDP: contracts, letters, tax receipts (Greek, Coptic, Latin, Arabic, Demotic) | c. 300 BCE – 8th c. CE | {{ shelves["papyri"].size_display }} | CC BY |
 | <span id="shelf-latin-inscriptions"></span>[Latin inscriptions](#latin-inscriptions) | Epigraphic Database Heidelberg: epitaphs, dedications, milestones from the whole empire, with genre facets | Republic – Late Antiquity | {{ shelves["latin-inscriptions"].size_display }} | CC BY-SA |
 | <span id="shelf-greek-inscriptions"></span>[Greek inscriptions](#greek-inscriptions) | Attic Inscriptions Online: the inscriptions of Attica in English translation, with AIO's own Greek editions | Archaic – Roman | {{ shelves["greek-inscriptions"].size_display }} | CC BY-SA |
+| <span id="shelf-armenian-inscriptions"></span>[Armenian inscriptions](#armenian-inscriptions) | ArmEpiC: the Artsakh inscriptions — donation records, building texts and khachkars of the monasteries of Khachen, lemmatized and translated | 12th – 20th c. CE | {{ shelves["armenian-inscriptions"].size_display }} | CC BY-NC |
 | <span id="shelf-inscriptions-of-italy"></span>[Inscriptions of Italy](#latin-inscriptions) | Epigraphic Database Roma: the peninsula itself, the geographic complement of Heidelberg's provinces — dated and faceted end to end | Republic – Late Antiquity | {{ shelves["inscriptions-of-italy"].size_display }} | CC BY |
 | <span id="shelf-celtic"></span>[Celtic](#celtic) | CorPH Early Irish (gold-lemmatized), the RIIG Gaulish inscriptions, the Ogham in 3D stones | c. 2nd c. BCE – 10th c. CE | {{ shelves["celtic"].size_display }} | CC BY / MIT (ogham held `nc` pending clarification) |
 | <span id="shelf-coptic"></span>[Coptic](#coptic) | Coptic Scriptorium: the complete Sahidic and Bohairic New Testaments, monastic and patristic prose, gold-lemmatized | c. 3rd – 10th c. CE | {{ shelves["coptic"].size_display }} | CC BY per document (source class `nc`) |
@@ -87,7 +88,7 @@ instruments, CLI recipes and terminal setup, are the
 | <span id="shelf-chinese"></span>[Chinese libraries](#the-chinese-libraries) | Kanripo (KR1 classics – KR5 Daoist canon), the CBETA Buddhist canon (Taishō + Xuzangjing), Chinese Wikisource's censused works, the Classical↔Modern parallel corpus, the Đại Việt classical shelf | Zhou – Qing | {{ shelves["chinese"].size_display }} | CC BY-SA / CC BY-NC-SA / MIT |
 | <span id="shelf-korean"></span>[Korean](#korean) | The Joseon Veritable Records and the Royal Secretariat diaries, the Goryeo histories, the Border Defense Command register, the ITKC classical originals, the Open Korean Historical Corpus, the *Yongbi eocheon ga* | Goryeo – late Joseon | {{ shelves["korean"].size_display }} | KOGL open / CC BY-NC |
 | <span id="shelf-tibetan"></span>[Tibetan](#the-tibetan-canon) | The Derge Kangyur and Tengyur complete, the 84000 English translations, the Old Tibetan documents (OTDO), the SOAS gold-POS corpus | 8th c. – the 18th-c. Derge woodblocks | {{ shelves["tibetan"].size_display }} | PD / CC BY / CC BY-NC-ND (84000) |
-| <span id="shelf-japanese"></span>[Japanese](#the-japanese-reading-desk) | Aozora Bunko, the National Diet Library's classical OCR stacks, Minna de Honkoku, Japanese Wikisource, the NIJL and Genji TEI editions, ONCOJ's gold-morphology Old Japanese | 7th c. – 20th c. CE | {{ shelves["japanese"].size_display }} | open / CC BY / CC BY-SA |
+| <span id="shelf-japanese"></span>[Japanese](#the-japanese-reading-desk) | Aozora Bunko, the National Diet Library's classical OCR stacks, Minna de Honkoku, Japanese Wikisource, the NIJL and Genji TEI editions, ONCOJ's gold-morphology Old Japanese, NINJAL's Jesuit mission-press romanizations | 7th c. – 20th c. CE | {{ shelves["japanese"].size_display }} | open / CC BY / CC BY-SA |
 | <span id="shelf-southeast-asia"></span>[Southeast Asia](#southeast-asia) | The DHARMA epigraphy of Old Khmer, Cham, Pyu and the Nusantara charters, the Old Javanese kakawin library, the Old Burmese inscriptions of Bagan, the Balinese lontar transcriptions, the Jawi-script Malay manuscripts, the Thai Collected Chronicles | c. 5th c. CE – the lontar tradition | {{ shelves["southeast-asia"].size_display }} | CC BY / CC BY-SA / PD |
 | <span id="shelf-germanic"></span>[Germanic](#the-germanic-shelves) | Menotec and Menota Old Norse, Old Swedish, the Old Saxon *Heliand*, ReM, ReN and ReF (Middle High, Middle Low and Early New High German), the Deutsches Textarchiv, Old and Middle Dutch, the Rundata runic corpus | c. 200 – 1969 CE | {{ shelves["germanic"].size_display }} | nc / CC BY / CC BY-SA / ODbL / `research_private` |
 | <span id="shelf-africa"></span>[Africa](#africa) | Boston University's African Ajami Library (Hausa, Mandinka, Fula and Wolof manuscripts in Arabic script), the Old Nubian treebank, a public-domain shelf of nineteenth-century African-language grammars and texts | medieval Nubia – 20th c. | {{ shelves["africa"].size_display }} | PD / NC per source |
@@ -170,6 +171,18 @@ monuments, accounts, ephebic and prytany lists — line by line with the
 translators' footnotes, AIO's own Greek editions where the project has
 published them, and every record dated, Pleiades-placed and carrying
 its IG/SEG concordance.
+
+## Armenian inscriptions
+
+ArmEpiC, the Armenian Epigraphic Corpus (EPFL): the ArtsakhEpiC
+collection — the inscriptions of the monasteries, churches, bridges
+and cross-stones of Artsakh, most from the thirteenth century. Donation
+records of the abbots and princes of Khachen at Gandzasar and Dadivank,
+building texts, khachkars raised for the souls of the dead, and
+memorial lines asking passers-by for their prayers, each stone
+transcribed diplomatically with its letter-numerals as carved, every
+word lemmatized, the findspots mapped and the dates typed. Written
+Classical Armenian (grabar) with Middle Armenian vernacular features.
 
 ## Celtic
 
@@ -415,7 +428,11 @@ annotations and old character forms reachable from modern ones (国 finds 國);
 the National Diet Library's classical books as labelled machine OCR; Minna
 de Honkoku's citizen transcriptions (CC BY-SA); Japanese Wikisource from
 Asuka to Edo; the NIJL TEI *Kokinshū* and *Man'yōshū*; Ikeda Kikan's
-critical *Genji*; and ONCOJ's gold-morphology Old Japanese. From Aozora
+critical *Genji*; ONCOJ's gold-morphology Old Japanese; and NINJAL's
+transcriptions of the Jesuit mission press — the 1592 *Feiqe no
+monogatari*, Aesop of 1593 and the 1596 *Contemptus Mundi*, Late Middle
+Japanese printed in the mission's own phonetic romanization, with the
+1603 *Nippo Jisho* headwords on the reference shelf. From Aozora
 Bunko, only copyright-expired works are taken.
 
 ## Southeast Asia

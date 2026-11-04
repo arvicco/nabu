@@ -1,0 +1,193 @@
+﻿<?oxygen RNGSchema="http://buddhistinformatics.ddbc.edu.tw/glossaries/schemas/ddbc.glossaries.odd.rng" type="xml"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0">
+    <teiHeader>
+        <fileDesc>
+            <titleStmt>
+                <title>Pentaglot Dictionary of Buddhist Terms</title>
+                <respStmt>
+                    <name>Baolian 鄭寶蓮</name>
+                    <resp>Data Input (Sanskrit, Manchu, Chinese)</resp>
+                </respStmt>
+                <respStmt>
+                    <name>Sarnai Narayan</name>
+                    <resp>Data Input (Mongolian)</resp>
+                </respStmt>
+                <respStmt>
+                    <name>Simon Wiles</name>
+                    <resp>Programming, XML</resp>
+                </respStmt>
+                <editor>Marcus Bingenheimer</editor>
+            </titleStmt>
+            <publicationStmt>
+                <p>This file is produced by the Glossaries Team at Dharma Drum Buddhist College, 法鼓佛教學院 (glossaries@ddbc.edu.tw)</p>
+                <p>We believe this text is in the public domain.  This TEI version is licensed by DDBC under a Creative Commons Attribution-Share Alike 2.5 Taiwan License (http://creativecommons.org/licenses/by-sa/2.5/tw/)</p>
+                <p>See http://buddhistinformatics.ddbc.edu.tw/glossaries/ or email glossaries@ddbc.edu.tw for more information.</p>
+            </publicationStmt>
+            <sourceDesc>
+                <p>Raghu Vira (Ed.): Pentaglot Dictionary of Buddhist Terms - In Sanskrit, Tibetan, Manchurian, Mongolian and Chinese. Delhi: 1961.</p>
+                <p>This is a reprint of the Wuyi hebi jiyao 五譯合璧集要. We were not able to trace the provenance of this work.</p>
+            </sourceDesc>
+        </fileDesc>
+        <profileDesc>
+          <langUsage xml:lang="eng-Latn">
+            <language ident="san-Latn">Sanskrit in Latin script (IAST)</language>
+            <language ident="bod-Tibt">Tibetan in Tibetan script</language>
+            <language ident="mnc-Latn">Manchu in Latin script</language>
+            <language ident="mon-Latn">Mongolian in Latin script</language>
+            <language ident="zho-Hant">Chinese in Traditional Han characters</language>
+          </langUsage>
+        </profileDesc>
+    </teiHeader>
+    <text>
+        <body>
+            <div xml:id="han1">
+                <div type="topic">
+                    <entry xml:id="p005.1">
+                        <sense xml:lang="san-Latn">[buddha paryāya - nāmāni]</sense>
+                        <sense xml:lang="bod-Tibt"/>
+                        <sense xml:lang="mnc-Latn">fucihi i gebu</sense>
+                        <sense xml:lang="mon-Latn">burkhan u ner e inu</sense>
+                        <sense xml:lang="zho-Hant">佛通號名</sense>
+                    </entry>
+                    <entry xml:id="p005.2">
+                        <sense xml:lang="san-Latn">buddhaḥ</sense>
+                        <sense xml:lang="bod-Tibt"/>
+                        <sense xml:lang="mnc-Latn">fucihi</sense>
+                        <sense xml:lang="mon-Latn">burkhan</sense>
+                        <sense xml:lang="zho-Hant">佛</sense>
+                    </entry>
+                    <entry xml:id="p005.3">
+                        <sense xml:lang="san-Latn">bhagavān</sense>
+                        <sense xml:lang="bod-Tibt"/>
+                        <sense xml:lang="mnc-Latn">eteme yongkiyafi colgo-roko</sense>
+                        <sense xml:lang="mon-Latn">ilejü tekhün nögchigsen</sense>
+                        <sense xml:lang="zho-Hant">出有壞</sense>
+                    </entry>
+                    <entry xml:id="p006.1">
+                        <sense xml:lang="san-Latn">tathāgataḥ</sense>
+                        <sense xml:lang="bod-Tibt"/>
+                        <sense xml:lang="mnc-Latn">ineku jihe</sense>
+                        <sense xml:lang="mon-Latn">tekhüchilen iregsen</sense>
+                        <sense xml:lang="zho-Hant">如來</sense>
+                    </entry>
+
+                    <entry xml:id="p015.2">
+                        <sense xml:lang="san-Latn">apratipud galaḥ</sense>
+                        <sense xml:lang="bod-Tibt"/>
+                        <sense xml:lang="mnc-Latn">jergi akū budg’ali</sense>
+                        <sense xml:lang="mon-Latn">tengsel ygeï bodgali</sense>
+                        <sense xml:lang="zho-Hant">無上壽者</sense>
+                    </entry>
+
+                </div>
+                <div type="topic">
+                    <entry xml:id="p031.2">
+                        <sense xml:lang="san-Latn">susaṃvṛttaskandhaḥ</sense>
+                        <sense xml:lang="bod-Tibt"/>
+                        <sense xml:lang="mnc-Latn">umesi muheliyengge dabsi</sense>
+                        <sense xml:lang="mon-Latn"></sense>
+                        <sense xml:lang="zho-Hant">兩臂圓滿相</sense>
+                    </entry>
+                </div>
+                <div type="topic">
+                    <entry xml:id="p071.1">
+                        <sense xml:lang="san-Latn">śrīvatsasvastikanandyāvartalalitapāṇipādaḥ</sense>
+                        <sense xml:lang="bod-Tibt"/>
+                        <sense xml:lang="mnc-Latn">gale bethe de horonggo jijun bime hūturingga temgetu enteheme to-ronggo(sic) i yongkiyaha</sense>
+                        <sense xml:lang="mon-Latn">gar khöl inu chag un jirukhai khiged ölzei tu tamag a ber belgedegsen</sense>
+                        <sense xml:lang="zho-Hant">手足胸臆吉祥德相妙好具足</sense>
+                    </entry>
+                </div>
+                <div type="topic">
+                    <entry xml:id="p086.1">
+                        <sense xml:lang="san-Latn">[bodhisattvanāmāni]</sense>
+                        <sense xml:lang="bod-Tibt"/>
+                        <sense xml:lang="mnc-Latn">fusa (BN fusa i) gebu</sense>
+                        <sense xml:lang="mon-Latn">bodisadu iin nere inu</sense>
+                        <sense xml:lang="zho-Hant">菩薩通號名</sense>
+                    </entry>
+                </div>
+                <div type="topic">
+                    <div type="topic">
+                        <entry xml:id="p155.1">
+                            <sense xml:lang="san-Latn">[catvāri smṛtyupasthānāni]</sense>
+                            <sense xml:lang="bod-Tibt"/>
+                            <sense xml:lang="mnc-Latn">gūsin nadan hacin bodi jugūn i nomun dorgi (BN dorgi i)duin jondon be kiceme tebure                                                                                                  gebu</sense>
+                            <sense xml:lang="mon-Latn">bodi züg un guchin dologon nom asa dörben doradakhui üir e agulkhui iin ner e inu</sense>
+                            <sense xml:lang="zho-Hant">三十七助道品內四念處名</sense>
+                        </entry>
+                    </div>
+                    <div type="topic">
+                        <entry xml:id="p166.2">
+                            <sense xml:lang="san-Latn">catvāra ṛddhipādāḥ</sense>
+                            <sense xml:lang="bod-Tibt"/>
+                            <sense xml:lang="mnc-Latn">cihalan i samadi</sense>
+                            <sense xml:lang="mon-Latn">durashikhui iin samadi</sense>
+                            <sense xml:lang="zho-Hant"/>
+                        </entry>
+                    </div>
+                </div>
+                <!-- end bodhi pAks.ika  -->
+                <div type="topic">
+                    <entry xml:id="p192A.">
+                        <sense xml:lang="san-Latn">spraṣṭavyam</sense>
+                        <sense xml:lang="bod-Tibt"/>
+                        <sense xml:lang="mnc-Latn">aligan</sense>
+                        <sense xml:lang="mon-Latn">khürtekhüi</sense>
+                        <sense xml:lang="zho-Hant">觸</sense>
+                    </entry>
+                </div>
+            </div>
+            <!-- Note:  there are no pages 193 through 196 -->
+            <div xml:id="han2">
+                <div type="topic">
+                    <entry xml:id="p209">
+                        <sense xml:lang="san-Latn">śīlamayaṃ puṇyakriyāvastu</sense>
+                        <sense xml:lang="bod-Tibt"/>
+                        <sense xml:lang="mnc-Latn">targacun ci banjinaha hūturi be isabure dursungga</sense>
+                        <sense xml:lang="mon-Latn">shagshabat asa bologsan buyan tu üile iin buda</sense>
+                        <sense xml:lang="zho-Hant">持戒生福</sense>
+                    </entry>
+                </div>
+                <div type="topic">
+                    <entry xml:id="p336.4">
+                        <sense xml:lang="san-Latn">ūruḥ</sense>
+                        <sense xml:lang="bod-Tibt"/>
+                        <sense xml:lang="mnc-Latn"/>
+                        <sense xml:lang="mon-Latn">gui a</sense>
+                        <sense xml:lang="zho-Hant">大腿</sense>
+                    </entry>
+                    <entry xml:id="p338.1">
+                        <sense xml:lang="san-Latn">klomakaḥ</sense>
+                        <sense xml:lang="bod-Tibt"/>
+                        <sense xml:lang="mnc-Latn">ufuku(sic？for ufuhu)</sense>
+                        <sense xml:lang="mon-Latn">ieiushkhi</sense>
+                        <sense xml:lang="zho-Hant">肺</sense>
+                    </entry>
+                    <entry xml:id="p340B.1">
+                        <sense xml:lang="san-Latn">pratyaṅgam</sense>
+                        <sense xml:lang="bod-Tibt"/>
+                        <sense xml:lang="mnc-Latn"/>
+                        <sense xml:lang="mon-Latn">chikhula geshigün</sense>
+                        <sense xml:lang="zho-Hant">小支</sense>
+                    </entry>
+                    <entry xml:id="p341A.1">
+                        <!-- Note: the Manchu index by Dr. C. R. Bawden, included in the 1961 reprint
+                                   used for this digital edition, lists "buyarame gargan" as appearing
+                                   on page 341A.1 - however, we have been unable to trace this page in
+                                   any edition available to us -->
+                    </entry>
+                </div>
+                <div type="topic">
+                    <entry xml:id="p374.4">
+                        <sense xml:lang="san-Latn">svāhā</sense>
+                        <sense xml:lang="bod-Tibt"/>
+                        <sense xml:lang="mnc-Latn">sain toktoho</sense>
+                        <sense xml:lang="mon-Latn">shitügen togtadokhui</sense>
+                        <sense xml:lang="zho-Hant">結文</sense>
+                    </entry>
+                </div>
+            </div>
+        </body>
+    </text>
+</TEI>

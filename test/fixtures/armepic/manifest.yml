@@ -1,0 +1,31 @@
+# Nabu fixture manifest (P5-4 "fixture sentinel"). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# Every file is WHOLE and byte-identical to its file on the immutable
+# Zenodo record 23501516 (the md5 pins in Nabu::Adapters::Armepic::FILES;
+# the adapter test re-checks the three inscriptions), laid out one
+# subdirectory per file exactly as the adapter's fetch lands them.
+source: armepic
+adapter_test: test/adapters/armepic_test.rb
+retrieved: 2026-11-04
+files:
+  - path: ART0001/ART0001.xml
+    url: https://zenodo.org/api/records/23501516/files/ART0001.xml/content
+    refetchable: true
+    whole: true
+  - path: ART0013/ART0013.xml
+    url: https://zenodo.org/api/records/23501516/files/ART0013.xml/content
+    refetchable: true
+    whole: true
+  - path: ART0026/ART0026.xml
+    url: https://zenodo.org/api/records/23501516/files/ART0026.xml/content
+    refetchable: true
+    whole: true
+  - path: ArmEpiC_ListInscriptionType_crm/ArmEpiC_ListInscriptionType_crm.xml
+    url: https://zenodo.org/api/records/23501516/files/ArmEpiC_ListInscriptionType_crm.xml/content
+    refetchable: true
+    whole: true
+  - path: LICENSE/LICENSE.txt
+    url: https://zenodo.org/api/records/23501516/files/LICENSE.txt/content
+    refetchable: true
+    whole: true

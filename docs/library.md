@@ -2025,3 +2025,47 @@ Schleswig-Holstein-Norburg's diary, Duke Ludwig Rudolf's Danish and
 Swedish journey, the Bevern dukes in Italy and France — page by page,
 with the places and persons they name linked to GeoNames and the GND
 (CC BY-SA 4.0).
+
+## 8be. The P156 arrivals — Armenian epigraphy, the Jesuit mission press, the Tangut rhyme dictionary, the Pentaglot, and the Nôm lexica
+
+**`armepic`** — ArmEpiC, the Armenian Epigraphic Corpus (EPFL Digital
+Humanities Laboratory): the ArtsakhEpiC collection, 50 inscriptions /
+374 line passages from the monasteries, churches, bridges and
+cross-stones of Artsakh, 1183–1998 and mostly thirteenth-century —
+donation records of the abbots and princes of Khachen at Gandzasar and
+Dadivank, building texts, khachkars and memorial lines, each stone
+transcribed diplomatically, lemmatized, dated, mapped and translated.
+Written Classical Armenian (grabar) with Middle Armenian vernacular
+features (CC BY-NC 4.0; the photographs are not covered and not held).
+
+**`ninjal-textdb`** — NINJAL's Text Data Sets for the history of
+Japanese, the Kirishitan slice: the Jesuit mission press's *Feiqe no
+monogatari* (1592), *Esopo no fabulas* (1593) and *Contemptus Mundi*
+(1596) as 3 documents / 22,105 line passages in the mission's own
+Portuguese-based romanization — the phonetic record of Late Middle
+Japanese as spoken around 1600 — with NINJAL's kanji-kana layer beside
+every line, and the 1603 *Nippo Jisho*'s 32,878 headwords on the
+dictionary shelf as `nippo-jisho` (all CC BY 4.0).
+
+**`ptg`** — the Pentaglot (*Wuyi hebi jiyao* 五譯合璧集要) in DILA's
+TEI edition: 1,070 Buddhist technical terms in Sanskrit, Manchu,
+Mongolian and Chinese held as four language-headed shelves (`ptg-san`,
+`ptg-mnc`, `ptg-cmg`, `ptg-lzh`, 4,276 entries in all) — the library's
+first Manchu-headed and first Classical Mongolian dictionaries
+(public-domain text, the digital edition CC BY-SA 3.0 TW).
+
+**`wenhai`** — Mathieu Beaudouin's Digital Wenhai (Cambridge): all
+3,085 records of the native Tangut rhyme dictionary in Unicode Tangut
+with their fanqie chains and the Gong and Beaudouin reconstructions —
+the library's first Tangut holding, and the backbone of Tangut
+phonology (CC BY 4.0).
+
+**`wiktionary-vi`**, **`wiktionary-za`**, **`wiktionary-tyz`** — the
+kaikki.org Wiktionary extracts for Vietnamese (52,107 entries, with
+the chữ Nôm layer: 9,112 character records carrying their Nôm and
+Hán-Việt readings, and the Hán-Nôm spellings of ordinary words),
+Zhuang (3,577 entries, the one open structured Sawndip lexicon — 3,659
+Han-derived spellings, unencoded characters as ideographic description
+sequences) and Tày (1,501 entries recording Nôm Tày) — the Han-script
+vernacular lexica of the Việt–Tai borderlands (CC BY-SA + GFDL, as
+Wiktionary).

@@ -75,7 +75,7 @@ The Latin-to-vernacular continuum: CroALa's medieval and neo-Latin opens the des
 
 Documentary corpora at the artifact grain: papyri, the Latin/Greek and Levantine and Sicilian inscription databases, the Continental Celtic, Italic and Tyrsenian editions, ogham stones, Hittite tablets — the shelves where fragment search and findspots earn their keep.
 
-**Members** (39): `aio`, `ceipom`, `damos`, `dharma-campa`, `dharma-deccan`, `dharma-khmer`, `dharma-nusantara`, `dharma-pyu`, `dharma-tamil`, `edh`, `edr`, `elephantine`, `extrabiblical`, `ig-cyprus`, `iip`, `isicily`, `itant`, `lexlep`, `lexlep-words`, `memis`, `nabu-places`, `obi-burmese`, `ociana`, `ogham`, `open-etruscan`, `papyri-ddbdp`, `paramara`, `pleiades`, `riig`, `rundata`, `runesdb`, `siddham`, `sigla`, `sii-clean`, `tir`, `tlhdig`, `trismegistos`, `trismegistos-geo`, `ucd`
+**Members** (40): `aio`, `armepic`, `ceipom`, `damos`, `dharma-campa`, `dharma-deccan`, `dharma-khmer`, `dharma-nusantara`, `dharma-pyu`, `dharma-tamil`, `edh`, `edr`, `elephantine`, `extrabiblical`, `ig-cyprus`, `iip`, `isicily`, `itant`, `lexlep`, `lexlep-words`, `memis`, `nabu-places`, `obi-burmese`, `ociana`, `ogham`, `open-etruscan`, `papyri-ddbdp`, `paramara`, `pleiades`, `riig`, `rundata`, `runesdb`, `siddham`, `sigla`, `sii-clean`, `tir`, `tlhdig`, `trismegistos`, `trismegistos-geo`, `ucd`
 
 ### slavic
 
@@ -204,7 +204,7 @@ The Sanskrit, Prakrit and Pali lane: GRETIL and SARIT, the DCS treebank, Monier-
 
 Cross-cutting by design: SuttaCentral, CBETA, SARIT, and GRETIL whole — membership is whole-source, so GRETIL rides here although only part of its shelf is Buddhist — and the Derge Kangyur and Tengyur: the fourth canon leg.
 
-**Members** (13): `bdrc-transcriptions`, `cbeta`, `derge-kangyur`, `derge-tengyur`, `dpd`, `e84000`, `gretil`, `lotsawa-house`, `mvp`, `osbct`, `sarit`, `suttacentral`, `tipitaka-lk`
+**Members** (14): `bdrc-transcriptions`, `cbeta`, `derge-kangyur`, `derge-tengyur`, `dpd`, `e84000`, `gretil`, `lotsawa-house`, `mvp`, `osbct`, `ptg`, `sarit`, `suttacentral`, `tipitaka-lk`
 
 ### tibetan
 
@@ -236,7 +236,7 @@ Epigraphy-first, opening on the DHARMA corpora: the Old Khmer inscriptions (the 
 
 Literary and classical Chinese with its reconstruction instruments: Kanripo and CBETA, TLS, Baxter-Sagart and the Qieyun-system database, Unihan, the Heian hanzi dictionaries, the UD lzh treebanks, SuttaCentral's Agamas, the kaikki zh extract riding wiktionary-recon — the Đại Việt classical shelf (the sinographic cosmopolis reaching Vietnam, as sillok reaches Korea) — and the desk's instruments: the CHGIS historical gazetteer (TGAZ placenames, 221 BCE–1911) and the CBDB prosopography artifact (~658k persons, held for the persons-layer ruling).
 
-**Members** (25): `babelstone-ids`, `baley-manuscripts`, `baxter-sagart`, `cbdb`, `cbeta`, `chgis`, `classical-modern`, `hdic`, `kanripo`, `kr-gaiji`, `lzh-collection`, `menggu-ziyun`, `obimd`, `qieyun-restored`, `shuowen`, `suttacentral`, `tianyige`, `tls`, `tshet-uinh`, `ud`, `unihan`, `viet-wikisource`, `wiktionary-recon`, `zh-wikisource`, `zhongyuan`
+**Members** (29): `babelstone-ids`, `baley-manuscripts`, `baxter-sagart`, `cbdb`, `cbeta`, `chgis`, `classical-modern`, `hdic`, `kanripo`, `kr-gaiji`, `lzh-collection`, `menggu-ziyun`, `obimd`, `qieyun-restored`, `shuowen`, `suttacentral`, `tianyige`, `tls`, `tshet-uinh`, `ud`, `unihan`, `viet-wikisource`, `wenhai`, `wiktionary-recon`, `wiktionary-tyz`, `wiktionary-vi`, `wiktionary-za`, `zh-wikisource`, `zhongyuan`
 
 ### japonic
 
@@ -244,7 +244,7 @@ Literary and classical Chinese with its reconstruction instruments: Kanripo and 
 
 The Japanese lane, premodern-first: Genji in Ikeda's critical edition at manuscript-line grain, the Kokinshū and two Man'yōshū witnesses in NIJL's TEI, the みんなで翻刻 crowd-transcription mass, and the NRCT historical gazetteer — beside the ONCOJ corpus and lexicon, EDRDG's dictionaries, HDIC and Unihan shared with the Sinologist, and the kaikki ojp extract riding wiktionary-recon.
 
-**Members** (15): `aozora`, `edrdg`, `haga-jinmei`, `hdic`, `honkoku`, `ja-wikisource`, `kokubunken`, `kouigenji`, `kradfile`, `ndl-kotenseki`, `nrct`, `oncoj`, `oncoj-lexicon`, `unihan`, `wiktionary-recon`
+**Members** (16): `aozora`, `edrdg`, `haga-jinmei`, `hdic`, `honkoku`, `ja-wikisource`, `kokubunken`, `kouigenji`, `kradfile`, `ndl-kotenseki`, `ninjal-textdb`, `nrct`, `oncoj`, `oncoj-lexicon`, `unihan`, `wiktionary-recon`
 
 ### turkic
 
@@ -260,7 +260,7 @@ The Turkic historical lane, opening on ATMO's Jarring-collection Turki manuscrip
 
 The Mongolic-Tungusic lane, opening on Street's romanized Secret History via Monumenta Altaica (use granted by the site's maintainer, 2026-09-27) — the kaikki Manchu extract, the zh.wikisource hanzi transmission text and the Manchu corpus asks joining as they land.
 
-**Members** (2): `altaica-shm`, `wiktionary-recon`
+**Members** (3): `altaica-shm`, `ptg`, `wiktionary-recon`
 
 ### americas
 

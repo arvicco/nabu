@@ -1,0 +1,15 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+# The local file name is ASCII; upstream's artifact is
+# kaikki.org-dictionary-Tày.jsonl (README).
+source: wiktionary-tyz
+adapter_test: test/adapters/wiktionary_tyz_test.rb
+retrieved: 2026-11-04
+files:
+  - path: kaikki.org-dictionary-Tay.jsonl
+    url: https://kaikki.org/dictionary/T%C3%A0y/kaikki.org-dictionary-T%C3%A0y.jsonl
+    whole: false
+    trim: >-
+      5 complete JSONL lines (nu noun, 倍 character, xá classifier, nà
+      noun, náo lo̱ particle), byte-verbatim in upstream order from the
+      2,024,890-byte file (README)

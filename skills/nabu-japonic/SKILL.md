@@ -6,7 +6,7 @@ compatibility: "Requires the nabu MCP server (`bin/nabu mcp`, read-only, stdio) 
 metadata:
   desk: japonic
   origin: generated
-  sources: "aozora edrdg haga-jinmei hdic honkoku ja-wikisource kokubunken kouigenji kradfile ndl-kotenseki nrct oncoj oncoj-lexicon unihan wiktionary-recon"
+  sources: "aozora edrdg haga-jinmei hdic honkoku ja-wikisource kokubunken kouigenji kradfile ndl-kotenseki ninjal-textdb nrct oncoj oncoj-lexicon unihan wiktionary-recon"
 ---
 
 # The Japanologist — the `japonic` desk
@@ -33,6 +33,7 @@ verbatim upstream terms are in `docs/02-sources.md` of the Nabu repository.
 | `kouigenji` | 校異源氏物語テキストDB — Ikeda's critical Genji, TEI (デジタル源氏物語) | attribution |
 | `kradfile` | KRADFILE — EDRDG kanji→component decomposition index (Raine, Breen & EDRDG) | attribution |
 | `ndl-kotenseki` | NDL 次世代デジタルライブラリー — 古典籍 OCR full text (bulk API) | open |
+| `ninjal-textdb` | NINJAL Text Data Sets for Research on the History of Japanese — the Kirishitan materials | attribution |
 | `nrct` | NRCT — 日本歴史地名大系 historical placenames (gazetteer instrument) | attribution |
 | `oncoj` | ONCOJ — Oxford-NINJAL Corpus of Old Japanese (release 2021-12-26) | attribution |
 | `oncoj-lexicon` | ONCOJ lexicon — Old Japanese dictionary database (release 2021-12-26) | attribution |

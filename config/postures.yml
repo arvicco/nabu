@@ -1396,6 +1396,21 @@ sources:
         bodies — a dictionary shelf, no document timeline}
     places: {posture: unplaced}
     script: {posture: implied}
+  wenhai:   # P156
+    kind: {posture: unclassified, note: "a dictionary shelf (content_kind dictionary) — the kind
+        axis folds documents only, so a kind_map row would be inert; the Wenhai is a rhyme
+        dictionary (lexical) by its own title"}
+    lect: {posture: identity, note: "txg — the nabu-lects anchor (Tangut, parent tbq, band
+        1036–1502, its note naming the Digital Wenhai as a consumer); the registry holds no
+        Tangut stages, so the bare code is the whole claim"}
+    dating: {posture: undatable, note: "a dictionary shelf — the deposit carries no dates; the
+        work's own era (compiler and date unknown, 'already in existence during the second half
+        of the eleventh century', the deposit README citing Hamada 2024) is a curated-band
+        candidate, declared not faked"}
+    places: {posture: unplaced}
+    script: {posture: implied, note: "Unicode Tangut heads (txg~tang; the tang script row and
+        its ScriptCheck mirror exist); the Gong and Beaudouin reconstructions are romanized
+        readings riding entry bodies, not a second lane"}
   wilkens-oui:
     kind: {posture: unclassified}
     lect: {posture: identity, note: "oui — the nabu-lects anchor (parent otk, band 800–1400);
@@ -1449,6 +1464,19 @@ sources:
     places: {posture: unplaced}
     script: {posture: implied, note: kana-heavy hentaigana-normalized transcription per the
         project's own conventions}
+  ninjal-textdb:
+    # lect: machine-postured — the jpn → jpn:lmj~latn override in
+    # config/lect_overrides.yml; kind: machine-postured — kind_map.yml
+    # metadata dataset.
+    dating: {posture: dated, note: "all 3 documents: each work page's own Publication Date
+        (Feiqe 1592, Esopo 1593, Contemptus Mundi 1596) → a one-year envelope, class edition;
+        the Nippo Jisho lane's 1603 rides its dictionary title (entries carry no dates)"}
+    places: {posture: named, note: "the imprint the title page itself prints — 'Collegio
+        Amacuſa ni voite' → Amakusa (role imprint) on Feiqe and Esopo; the Contemptus Mundi
+        title page names no place, so none is claimed"}
+    script: {posture: qualified, note: "Japanese held in the ORIGINAL Portuguese-style Latin
+        romanization (long ſ, ŏ/ǒ, ã, the [f]/[t] name marks verbatim) — the ~latn surface on
+        the lect; the modern kanji-kana / normalized layers ride line annotations"}
   scat:
     # kind: machine-postured — kind_map.yml source_kind historiography (the
     # corpus is saints' lives). lect: machine-postured by the scat-century
@@ -2064,6 +2092,25 @@ sources:
     script: {posture: implied}
 
   # ── pending: a real refinement candidate, not yet ruled ────────────────
+  armepic:
+    # kind: machine-postured by the kind_map.yml armepic genre fold.
+    lect: {posture: pending, note: "bare xcl at parse time: upstream tags the edition only
+        ISO 639-1 hy (40 records; 10 untagged), which carries no stage, and the registry's hy
+        node is MODERN Armenian; the texts are written grabar with Middle Armenian vernacular
+        features. Candidate: date-band staging off the records' own dates (1183–1998) —
+        42 records fall inside the axm band [1100, 1700], 8 are 1725–1998 (ART0010/11/35/36/
+        37/38/39/40: 18th-c. grabar, 19th-c. church inscriptions, a 1918 and a 1998 one —
+        hy or learned grabar?). Judgment-grade (how far a 13th-c. donation is Middle Armenian
+        rather than grabar), so not fired"}
+    dating: {posture: dated, note: "50/50 via origin/origDate: 41 when-custom (the Armenian-era
+        year converted, evidence internal-date) as one-year envelopes, 9 notBefore-custom/
+        notAfter-custom palaeographic centuries as bounds; raw/evidence/precision/calendar ride"}
+    places: {posture: named, note: "the origPlace settlement (urn:armepic:artsakh:PLC…, 49/50)
+        with its own decimal coordinates where given (41) → place_lat/lon; ART0043 names only its
+        findspot. The armepic place urns join no held gazetteer — ride verbatim (armepic_ref)"}
+    script: {posture: implied, note: "Armenian script (xcl ⇒ Armn); the hand's style in
+        upstream's words (Bolorgits Erkatagir, Ughghagits Erkatagir …) rides the script_style
+        facet"}
   etcsl:
     # kind declaration retired P104-1: the composition-number prefix map
     # in kind_map.yml machine-postures it now (the shadowing rule).

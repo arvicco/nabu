@@ -354,6 +354,31 @@ archiv-slav-phil:   # 02-sources row 251
   # declared). US public domain (pre-1931); the EU per-article term is
   # not audited — declared in the manifest.
 
+armepic:   # P156, 02-sources row 377
+  adapter: Nabu::Adapters::Armepic
+  adopted: "2026-11-04"
+  axes: [epigraphy]   # no Caucasus/Armenian desk exists yet
+  wired: true    # first sync verified 2026-11-04: 50 docs / 374 passages / 12 authority
+                 # lists skipped by rule, 0 errored — exactly the deposit census (v7).
+                 # Eyeballed urn:nabu:armepic:art0001 (dated 1271, placed Vank, kind
+                 # folded); FTS probe "Կամաւն Աստուծոյ" answers from two stones.
+                 # 374 passages (371 lb-keyed lines + 3 lb-less monogram textparts) /
+                 # 1,872 word tokens, 12 authority lists skipped by rule, 0 errored
+                 # (the fixture-time full-deposit census, 2026-11-04). Reconciliation
+                 # against upstream's advertised 50 ("fifty … inscriptions
+                 # (ART0001–ART0050)"): to be recorded here at the first sync.
+  sync_policy: manual   # an immutable Zenodo version; a new release = a new record id, owner re-pin
+  # ArmEpiC — the Armenian Epigraphic Corpus, ArtsakhEpiC sub-corpus (EPFL
+  # DHLAB; Zenodo 23501516 = v7, DOI 10.5281/zenodo.23501516): fifty
+  # Armenian inscriptions of Artsakh, 1183–1998, diplomatic TEI/EpiDoc with
+  # word-level lemma + UPOS, Armenian and English translations, dating and
+  # findspots with coordinates. One document per ART<nnnn>.xml, passage =
+  # the inscribed line keyed by its own lb @n. License: the deposit's
+  # LICENSE.txt "Creative Commons Attribution-NonCommercial 4.0
+  # International License (CC BY-NC 4.0)" over all XML; images carved out
+  # and never fetched → license_class nc. Fetch: 65 per-file GETs, one
+  # FileFetch subdir each, md5-pinned to the record's own checksums.
+
 aspr:
   adapter: Nabu::Adapters::Aspr
   adopted: "2026-07-10"
@@ -4410,6 +4435,31 @@ ndl-kotenseki:   # P109-2
   # OCR-nature label + per-item permalink on every document (both
   # promised in the ask). Language jpn — deliberately coarse, declared.
 
+ninjal-textdb:   # P156, 02-sources row 379
+  adapter: Nabu::Adapters::NinjalTextdb
+  adopted: "2026-11-04"
+  axes: [japonic]
+  wired: true    # first sync verified 2026-11-04: 3 docs / 22,105 passages + 32,878
+                 # nippo-jisho entries, 0 errored — exactly the lane census (20 datasets
+                 # + readme/xlsx skipped by rule). Eyeballed amhk-001:3.9; FTS probe
+                 # "historia uo narai" answers through the long-s fold; define abaqi hits.
+                 # paced ~1 req/s; seconds). EXPECT 3 docs / 22,105 line passages
+                 # (amhk-001 9,681 · amis-001 2,251 · cmhab-001 10,173), 0 errored,
+                 # + 1 dictionary (nippo-jisho) / 32,878 entries; 20 out-of-slice
+                 # datasets + readme + xlsx + 7 state pins skipped by rule (census
+                 # 2026-11-04). Eyeball nabu show urn:nabu:ninjal-textdb:amhk-001:3.9
+                 # (the Feiqe opening, kanji-kana layer beside it), probe nabu search
+                 # "historia uo narai" (the long-ſ fold) and nabu define abaqi, then flip.
+  sync_policy: manual   # static files re-published in place (Last-Modified pins)
+  # NINJAL's Text Data Sets for Research on the History of Japanese — the
+  # Kirishitan slice: the Amakusa Feiqe no monogatari (1592) and Esopo no
+  # fabulas (1593), the HAB Contemptus Mundi (1596), and the Nippo Jisho
+  # (1603) entry-word data as the dictionary lane. CC BY 4.0 on every work
+  # page → attribution. Text = the original romanization (Latin script);
+  # the kanji-kana / normalized layers ride each line as annotations.
+  # Every other dataset dir (Edo share-bon, the dictionaries, the Hawaii
+  # readers) skips by rule — Adapters::NinjalTextdb::DATASETS.
+
 nrct:   # P108-2
   adapter: Nabu::Adapters::Nrct
   adopted: "2026-09-29"
@@ -5346,6 +5396,35 @@ pta:   # P154, 02-sources row 341
   # stops discovery. Rahlfs LXX (row 44) and SBLGNT (held) skip by rule.
   # Witness overlap, not duplication: some works also sit in first1k-greek
   # or cgpg's Migne volumes in other prints.
+
+ptg:   # P156, 02-sources row 376
+  adapter: Nabu::Adapters::Ptg
+  adopted: "2026-11-04"
+  # Dual-tagged like mvp (language desk + domain): the Mongolic-Tungusic
+  # desk's first Manchu and Classical Mongolian dictionary shelves AND a
+  # Buddhist-terminology reference.
+  axes: [mongolic, buddhist]
+  wired: true    # first sync verified 2026-11-04: 4,276 entries (san 1,070 / mnc 1,068 /
+                 # cmg 1,069 / lzh 1,069), 0 errored — the 1,071 terms minus the one
+                 # comment-only placeholder, exactly the census. define fucihi → p005.2
+                 # with all four columns.
+                 # 4,276 entries on four shelves (ptg-san 1,070 · ptg-mnc
+                 # 1,068 · ptg-cmg 1,069 · ptg-lzh 1,069); eyeball
+                 # `nabu define fucihi --lang mnc`, `define burkhan --lang cmg`.
+  sync_policy: manual
+  # The DILA Pentaglot: the Wuyi hebi jiyao 五譯合璧集要 (Raghu Vira's
+  # "Pentaglot Dictionary of Buddhist Terms", Delhi 1961 reprint) in the
+  # DILA / Dharma Drum TEI P5 edition (glossaries.dila.edu.tw/glossaries/
+  # PTG). 1,071 <entry> = 1,070 terms + 1 comment-only placeholder
+  # (p341A.1, skipped by rule) — upstream advertises "1071 terms". Columns
+  # Sanskrit / Manchu / Mongolian / Chinese (Tibetan never digitized); a
+  # mirror dictionary, so each column heads its own shelf: san, mnc, cmg
+  # (the mon-Latn column is Classical Mongolian — the nabu-lects cmg
+  # node's named consumer), lzh. Entry ids = upstream page.item xml:ids.
+  # LICENSE, verbatim from the glossary page: "We believe this text is in
+  # the public domain." + "This digital version is licensed by DILA under
+  # a Creative Commons Attribution-Share Alike 3.0 Taiwan License." →
+  # attribution. Upstream zip frozen (2017-03-20; sha256-pinned).
 
 qieyun-restored:   # P88-A2, 02-sources row 182
   adapter: Nabu::Adapters::QieyunRestored
@@ -7662,6 +7741,31 @@ vulgate:
   # occasionally updated: re-syncable, not on a live schedule.
   sync_policy: manual
 
+wenhai:   # P156, 02-sources row 378
+  adapter: Nabu::Adapters::Wenhai
+  adopted: "2026-11-04"
+  axes: [sinitic]   # the Wenhai is a rhyme dictionary on the Chinese model (fanqie spelling,
+                    # tone-rhyme order) — the Sinologist's phonology instruments (Baxter-Sagart,
+                    # the Qieyun database) are its comparanda; no Tangut desk exists
+  wired: true    # first sync verified 2026-11-04: 3,085 entries, 2 doc files skipped by
+                 # rule — exactly the record count. define 𘀏 → 05.131 with its fanqie
+                 # chain and both reconstructions.
+                 # 0 errored, 2 deposit docs skipped by rule; four sha256-pinned Zenodo files
+                 # (~370 KB). Eyeball nabu define 𘀏 (05.131, fanqie 𗈽𗒿) and the restored
+                 # head 𗭹 (83.251 + 84.232), then flip.
+  # The Digital Wenhai v1.1 "Phonology" (Mathieu Beaudouin, Cambridge;
+  # Zenodo 22817676, 2026-09-17): the Wenhai 文海, the native Tangut rhyme
+  # dictionary, as one entry per source position — Unicode Tangut head,
+  # rhyme-system place, Li Fanwen number, TYYJ initial, fanqie-derived
+  # initial/rhyme chain IDs, Gong and Beaudouin reconstructions — joined to
+  # the fanqie statement governing it (02b_fanqie_groups.csv; spellers as
+  # crossrefs). Glossless: v1.1 carries no definitions. LICENSE: Zenodo
+  # field cc-by-4.0 + LICENSE.txt "licensed under the Creative Commons
+  # Attribution 4.0 International Licence (CC BY 4.0)" (verified
+  # 2026-11-04) → attribution. Zenodo versions are immutable → manual (a
+  # new version is an owner re-pin).
+  sync_policy: manual
+
 westoldturkic:   # P108-7
   adapter: Nabu::Adapters::Westoldturkic
   adopted: "2026-09-29"
@@ -8274,6 +8378,64 @@ wiktionary-te:   # 02-sources row 284
   # alias). The wiktionary-akk mold on the shared WiktionaryKaikki base:
   # per-language JSONL (deprecated upstream — fallback = filter the full
   # extract by lang_code te), CC BY-SA + GFDL → attribution, FileFetch.
+  sync_policy: manual
+
+wiktionary-tyz:   # P156, 02-sources row 375
+  adapter: Nabu::Adapters::WiktionaryTyz
+  adopted: "2026-11-04"
+  axes: [sinitic]
+  wired: true    # first sync verified 2026-11-04: 1,501 entries / 14 stubs skipped — exact.
+                 # define "ải chải" answers.
+  # The kaikki Tày extraction (2,024,890 B / 1,515 records / "1203
+  # distinct words", census 2026-11-04): the library's first Tày
+  # dictionary — 138 Nôm Tày character records (150 senses, "Nôm form of
+  # …") and 100 Nôm Tày spellings on 82 word records, Proto-Tai etymons.
+  # Language tyz (the registry anchor). The WiktionaryScriptShelf base:
+  # the WiktionaryKaikki mold + the script-form layer (body lines + typed
+  # crossrefs) + the empty-stub skip rule (14 skipped). EXPECTED first
+  # sync: 1,501 entries (exact, whole-file census through the adapter).
+  # Per-language JSONL (deprecated upstream — fallback = filter the full
+  # extract by lang_code tyz), CC BY-SA + GFDL → attribution, FileFetch.
+  sync_policy: manual
+
+wiktionary-vi:   # P156, 02-sources row 373
+  adapter: Nabu::Adapters::WiktionaryVi
+  adopted: "2026-11-04"
+  axes: [sinitic]
+  wired: true    # first sync verified 2026-11-04: 52,107 entries / 60 empty stubs skipped
+                 # by rule (5,435 glossless kept for readings/forms) — exactly the census.
+                 # define ngựa answers with the mkh-pro etymon chain.
+  # The kaikki Vietnamese extraction (83,424,329 B / 52,167 records /
+  # "45519 distinct words", census 2026-11-04): the library's first
+  # Vietnamese dictionary and its chữ Nôm lexicon — 9,112 Han/Nôm
+  # character records (11,850 senses) with 11,299 nom-/Hán-Việt reading
+  # relations + 9,698 Hán-Nôm-tagged readings, and 13,537 Hán-Nôm
+  # spellings on word records. Language vi (the registry anchor; vie
+  # aliases). The WiktionaryScriptShelf base: the WiktionaryKaikki mold +
+  # the script-form layer (body lines + typed crossrefs) + the empty-stub
+  # skip rule (60 skipped; the 5,435 glossless records carrying readings
+  # are KEPT). EXPECTED first sync: 52,107 entries (exact, whole-file
+  # census through the adapter). Per-language JSONL (deprecated upstream
+  # — fallback = filter the full extract by lang_code vi), CC BY-SA +
+  # GFDL → attribution, FileFetch.
+  sync_policy: manual
+
+wiktionary-za:   # P156, 02-sources row 374
+  adapter: Nabu::Adapters::WiktionaryZa
+  adopted: "2026-11-04"
+  axes: [sinitic]
+  wired: true    # first sync verified 2026-11-04: 3,577 entries / 2 stubs skipped — exact.
+                 # define gvaq answers with the MC 過 loan etymology.
+  # The kaikki Zhuang extraction (7,486,225 B / 3,579 records / "2981
+  # distinct words", census 2026-11-04): the library's first Zhuang
+  # dictionary and its one structured Sawndip lexicon — 813 Sawcuengh
+  # headwords carrying 3,659 Sawndip spellings (IDS for the unencoded
+  # characters, verbatim). Language za (the registry anchor; zha
+  # aliases; the macrolanguage's member codes stay identity). The
+  # WiktionaryScriptShelf base (see wiktionary-vi); 2 empty stubs
+  # skipped. EXPECTED first sync: 3,577 entries (exact). Per-language
+  # JSONL (deprecated upstream — fallback = filter the full extract by
+  # lang_code za), CC BY-SA + GFDL → attribution, FileFetch.
   sync_policy: manual
 
 wilkens-oui:   # 02-sources row 302

@@ -1,0 +1,26 @@
+# Nabu fixture manifest (P5-4 "fixture sentinel"). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# Every upstream file is served at its own Zenodo per-file URL
+# (record 22817676, v1.1); the sha256 pins live on the adapter. The two
+# CSVs are documented trims, so adapter_test stays null.
+source: wenhai
+adapter_test:
+retrieved: '2026-11-04'
+files:
+- path: 01_wenhai/01_wenhai.csv
+  url: https://zenodo.org/api/records/22817676/files/01_wenhai.csv/content
+  whole: false
+  trim: header + 22 of 3,085 rows, byte-identical lines in upstream order (BOM and CRLF kept)
+- path: 02b_fanqie_groups/02b_fanqie_groups.csv
+  url: https://zenodo.org/api/records/22817676/files/02b_fanqie_groups.csv/content
+  whole: false
+  trim: header + the 8 of 1,507 statements governing the kept rows, byte-identical lines
+- path: README/README.md
+  url: https://zenodo.org/api/records/22817676/files/README.md/content
+  whole: true
+  trim: none
+- path: LICENSE/LICENSE.txt
+  url: https://zenodo.org/api/records/22817676/files/LICENSE.txt/content
+  whole: true
+  trim: none

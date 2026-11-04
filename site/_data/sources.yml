@@ -115,6 +115,17 @@ sources:
     entries_display: '0'
     holdings: 33 documents / 22,348 passages
     canonical_display: 25 MB
+  armepic:
+    name: ArmEpiC — Armenian Epigraphic Corpus, ArtsakhEpiC (EPFL DHLAB)
+    license_class: nc
+    documents: 50
+    documents_display: '50'
+    passages: 374
+    passages_display: '374'
+    entries: 0
+    entries_display: '0'
+    holdings: 50 documents / 374 passages
+    canonical_display: 1 MB
   aspr:
     name: ASPR — The Anglo-Saxon Poetic Records (Krapp & Dobbie; OTA 3009)
     license_class: attribution
@@ -1891,6 +1902,18 @@ sources:
     entries_display: '0'
     holdings: 58,896 documents / 3,291,374 passages
     canonical_display: 16 GB
+  ninjal-textdb:
+    name: NINJAL Text Data Sets for Research on the History of Japanese — the Kirishitan
+      materials
+    license_class: attribution
+    documents: 3
+    documents_display: '3'
+    passages: 22105
+    passages_display: '22,105'
+    entries: 32878
+    entries_display: '32,878'
+    holdings: 3 documents / 22,105 passages · 32,878 entries
+    canonical_display: 9 MB
   obi-burmese:
     name: OBI — Structured Corpus of Old Burmese Stone Inscriptions
     license_class: attribution
@@ -2248,6 +2271,18 @@ sources:
     entries_display: '0'
     holdings: 113 documents / 8,778 passages
     canonical_display: 622 MB
+  ptg:
+    name: Pentaglot Dictionary of Buddhist Terms — Sanskrit–Manchu–Mongolian–Chinese
+      (DILA TEI edition)
+    license_class: attribution
+    documents: 0
+    documents_display: '0'
+    passages: 0
+    passages_display: '0'
+    entries: 4276
+    entries_display: '4,276'
+    holdings: 4,276 entries
+    canonical_display: "<1 MB"
   qieyun-restored:
     name: qieyun-restored — 切韻 Fujita restoration (nk2028)
     license_class: attribution
@@ -2988,6 +3023,18 @@ sources:
     entries_display: '0'
     holdings: 73 documents / 35,809 passages
     canonical_display: 357 MB
+  wenhai:
+    name: 'The Digital Wenhai v1.1: Phonology (Beaudouin 2026) — the Tangut rhyme
+      dictionary 文海'
+    license_class: attribution
+    documents: 0
+    documents_display: '0'
+    passages: 0
+    passages_display: '0'
+    entries: 3085
+    entries_display: '3,085'
+    holdings: 3,085 entries
+    canonical_display: "<1 MB"
   westoldturkic:
     name: West Old Turkic — Turkic loanwords in Hungarian (Róna-Tas & Berta 2011,
       CLDF)
@@ -3410,6 +3457,39 @@ sources:
     entries_display: '23,325'
     holdings: 23,325 entries
     canonical_display: 31 MB
+  wiktionary-tyz:
+    name: Wiktionary Tày — kaikki.org machine-readable extract
+    license_class: attribution
+    documents: 0
+    documents_display: '0'
+    passages: 0
+    passages_display: '0'
+    entries: 1501
+    entries_display: '1,501'
+    holdings: 1,501 entries
+    canonical_display: 2 MB
+  wiktionary-vi:
+    name: Wiktionary Vietnamese — kaikki.org machine-readable extract
+    license_class: attribution
+    documents: 0
+    documents_display: '0'
+    passages: 0
+    passages_display: '0'
+    entries: 52107
+    entries_display: '52,107'
+    holdings: 52,107 entries
+    canonical_display: 80 MB
+  wiktionary-za:
+    name: Wiktionary Zhuang — kaikki.org machine-readable extract
+    license_class: attribution
+    documents: 0
+    documents_display: '0'
+    passages: 0
+    passages_display: '0'
+    entries: 3577
+    entries_display: '3,577'
+    holdings: 3,577 entries
+    canonical_display: 7 MB
   wilkens-oui:
     name: Wilkens — Handwörterbuch des Altuigurischen (Old Uyghur–German–Turkish,
       2021)
@@ -3553,6 +3633,14 @@ shelves:
     passages: 67429
     passages_display: '67,429'
     size_display: 4,002 / 67,429
+  armenian-inscriptions:
+    sources:
+    - armepic
+    documents: 50
+    documents_display: '50'
+    passages: 374
+    passages_display: '374'
+    size_display: 50 / 374
   inscriptions-of-italy:
     sources:
     - edr
@@ -3902,12 +3990,13 @@ shelves:
     - ja-wikisource
     - kokubunken
     - kouigenji
+    - ninjal-textdb
     - oncoj
-    documents: 87995
-    documents_display: '87,995'
-    passages: 6552889
-    passages_display: '6,552,889'
-    size_display: 87,995 / 6,552,889
+    documents: 87998
+    documents_display: '87,998'
+    passages: 6574994
+    passages_display: '6,574,994'
+    size_display: 87,998 / 6,574,994
   southeast-asia:
     sources:
     - dharma-khmer
@@ -3968,6 +4057,6 @@ shelves:
     passages_display: '7,014'
     size_display: 1,282 / 7,014
 disk:
-  canonical_display: 145 GB
+  canonical_display: 146 GB
   derived_display: 188 GB
   starter_display: 693 MB

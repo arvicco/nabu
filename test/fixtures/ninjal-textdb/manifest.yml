@@ -1,0 +1,50 @@
+# Nabu fixture manifest (P5-4 "fixture sentinel"). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# The txt layers are documented TRIMS of upstream's per-file URLs (fetched
+# for liveness only); the nipp files are members of ONE zip (no per-file
+# URL), so refetchable: false. Trimmed entries keep adapter_test null.
+source: ninjal-textdb
+adapter_test: null
+retrieved: '2026-11-04'
+files:
+- path: amhk/amhk-r-001/amhk-r-001.txt
+  url: https://www2.ninjal.ac.jp/textdb_dataset/amhk/txt/amhk-r-001.txt
+  whole: false
+  trim: rules header + pages 扉, 序1–3, 3, 8 + colophon (of 410 pages); BOM and bare-CR endings kept
+- path: amhk/amhk-k-001/amhk-k-001.txt
+  url: https://www2.ninjal.ac.jp/textdb_dataset/amhk/txt/amhk-k-001.txt
+  whole: false
+  trim: rules header + pages 扉, 序1–3, 3, 8 + colophon (of 410 pages)
+- path: amhk/amhk-rk-001/amhk-rk-001.txt
+  url: https://www2.ninjal.ac.jp/textdb_dataset/amhk/txt/amhk-rk-001.txt
+  whole: false
+  trim: rules header + pages 扉, 3 + colophon — the rejected-grain specimen
+- path: amis/amis-r-001/amis-r-001.txt
+  url: https://www2.ninjal.ac.jp/textdb_dataset/amis/txt/amis-r-001.txt
+  whole: false
+  trim: rules header + pages 扉, 序, 409 + colophon (of 96 pages)
+- path: amis/amis-k-001/amis-k-001.txt
+  url: https://www2.ninjal.ac.jp/textdb_dataset/amis/txt/amis-k-001.txt
+  whole: false
+  trim: rules header + pages 扉, 序, 409 + colophon (of 96 pages)
+- path: cmhab/cmhab-r-001/cmhab-r-001.txt
+  url: https://www2.ninjal.ac.jp/textdb_dataset/cmhab/txt/cmhab-r-001.txt
+  whole: false
+  trim: rules header + pages [*001], 001, 205[=206], [445]a, [445]b + colophon (of 476)
+- path: cmhab/cmhab-r-normalized-001/cmhab-r-normalized-001.txt
+  url: https://www2.ninjal.ac.jp/textdb_dataset/cmhab/txt/cmhab-r-normalized-001.txt
+  whole: false
+  trim: rules header + pages [*001], 001, 205[=206] + colophon (the [445] columns are absent upstream)
+- path: nipp/ew-nippo-202510.txt
+  whole: false
+  trim: the header row + 9 of 32,878 rows (CRLF kept)
+  refetchable: false
+  reason: a member of https://www2.ninjal.ac.jp/textdb_dataset/nipp/data/ew-nippo-202510.zip (sha256
+    6bb4f084…0175), under its top directory ew-nippo-202510/ — no per-file raw URL
+- path: nipp/readme_ew-nippo-202510.txt
+  whole: true
+  trim: none
+  refetchable: false
+  reason: a member of https://www2.ninjal.ac.jp/textdb_dataset/nipp/data/ew-nippo-202510.zip (sha256
+    6bb4f084…0175), under its top directory ew-nippo-202510/ — no per-file raw URL
