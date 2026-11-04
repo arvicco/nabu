@@ -22,15 +22,17 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 ## The shelves
 
-A source wears every desk it serves — these 28 answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
+A source wears every desk it serves — these 32 answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
 | Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 4 November 2026)</span> |
 |---|---|---|---|---|
+| `analecta-hymnica` | texts | open | wired · manual | 55 docs / 17,211 passages |
 | `aranese` | texts | attribution | wired · manual | 2 docs / 839,816 passages |
 | `bdcamoes` | texts | attribution | wired · manual | 127 docs / 69,812 passages |
 | `bfm` | texts | attribution | wired · manual | 219 docs / 333,819 passages |
 | `bim-sahcoba` | texts | attribution | wired · manual | 15 docs / 19,361 passages |
 | `cantigas` | texts | attribution | wired · manual | 1,682 docs / 34,162 passages |
+| `cantus` | texts | nc | wired · manual | 156,519 docs / 156,519 passages |
 | `corpus-corporum` | texts | nc | wired · manual | 5,248 docs / 896,770 passages |
 | `croala` | texts | attribution | wired · manual | 570 docs / 309,180 passages |
 | `ctilc` | texts | attribution | wired · manual | 967 docs / 256,685 passages |
@@ -38,6 +40,8 @@ A source wears every desk it serves — these 28 answer this desk. Holdings are 
 | `derom` | dictionary | nc | wired · manual | 233 entries |
 | `digiliblt` | texts | attribution | wired · manual | 372 docs / 459,451 passages |
 | `disco` | texts | attribution | wired · manual | 1,215 docs / 4,527 passages |
+| `divinum-officium` | texts | open | wired · manual | 4,003 docs / 26,381 passages |
+| `gregobase` | texts | open | wired · manual | 18,422 docs / 20,810 passages |
 | `littre` | dictionary | attribution | wired · manual | 78,483 entries |
 | `lo-congres` | texts | attribution | wired · manual | 12 docs / 10,304 passages |
 | `meloniromance` | cognacy dataset | attribution | wired · manual | 5,419 entries |
@@ -55,9 +59,9 @@ A source wears every desk it serves — these 28 answer this desk. Holdings are 
 | `wiktionary-osp` | dictionary | attribution | wired · manual | 1,501 entries |
 | `wiktionary-pro` | dictionary | attribution | wired · manual | 695 entries |
 
-**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 4 November 2026)</span>: `cat` 199,652 · `fra` 80,428 · `lat` 11,813 · `fro` 9,502 · `oci` 7,528 · `frm` 4,959 · `osp` 2,185 · `roa-opt` 1,682 · `spa` 1,216 · `pro` 695 … and 11 more (`nabu axis romance` lists all).
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 4 November 2026)</span>: `cat` 199,652 · `lat` 189,859 · `fra` 80,430 · `fro` 9,502 · `oci` 7,528 · `frm` 4,959 · `osp` 2,185 · `roa-opt` 1,682 · `spa` 1,217 · `eng` 722 … and 19 more (`nabu axis romance` lists all).
 
-**Carried in by multilingual packs** (`ud` — whole-source members whose other languages ride along, as of 4 November 2026): `grc` 9 · `orv` 9 · `ota` 5 · `lzh` 4 · `cop` 3 … and 16 more (`nabu axis romance` lists all).
+**Carried in by multilingual packs** (`ud` — whole-source members whose other languages ride along, as of 4 November 2026): `orv` 9 · `ota` 5 · `lzh` 4 · `cop` 3 · `egy` 3 … and 15 more (`nabu axis romance` lists all).
 
 ## The desk's instruments
 

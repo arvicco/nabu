@@ -745,7 +745,22 @@ sources:
       #                         Lithuanian · Prague · Lublin · Lvov · Vilna · Holland · Northern
       #                         Germany · "halb-deytshish"; 22 texts — 17 of them places)
       genre: genre            # Prose 44 · Verse 12 · Vernacular 4 · Letter 3 (kind_map folds)
-  ganjoor:                    # census 2026-11-02 over the classical cone: 126,165 poems, all
+  divinum-officium:           # census 2026-11-04 (full-tree parse at master 85183a9b): 4,003 docs
+    fields: #                   — all path-mined, plus the [Rank] class
+      book: book              # horas (the Office) 3,057 · missa (the Mass) 946
+      book_part: collection   # Sancti 1,663 · Tempora 1,472 · Martyrologium 367 · Psalmorum 202 ·
+      #                         Regula 125 · Commune 122 · Psalterium 20 · Ordo 14 · Necrologium
+      #                         12 · Appendix 6 (kind_map folds)
+      use: rite               # Roman 2,387 · Dominican 384 · Cistercian 271 · Monastic 215 ·
+      #                         none 746 (the tree's Cist/M/OP
+      #                         suffix; the Psalter/Martyrology/Rule/Necrology/Appendix/Ordo
+      #                         carry none)
+      rank_class: rank        # the unconditioned [Rank] class verbatim (Duplex · Feria ·
+      #                         Semiduplex · Simplex · Duplex I classis …)
+      local_calendar: region  # a proper's local-calendar directory chain verbatim (Urbis ·
+      #                         Bavaria/Passaviensis · Neerlandia/Ultrajectum · Brasilia ·
+      #                         aliquibus locis …); the place lane reads the mapped "place"
+  ganjoor:                   # census 2026-11-02 over the classical cone: 126,165 poems, all
     fields: #                   three fields on every document
       poet: author            # 212 poets, Ganjoor's own short names (حافظ · سعدی · مولانا …)
       work: work              # the first section under the poet (دیوان اشعار 63,790 · دیوان شمس

@@ -3,25 +3,29 @@
 as_of: 4 November 2026
 classes:
 - head: literary
-  documents: 799926
-  documents_display: '799,926'
-  sources: 42
+  documents: 800148
+  documents_display: '800,148'
+  sources: 43
 - head: administrative
-  documents: 489633
-  documents_display: '489,633'
-  sources: 20
+  documents: 489645
+  documents_display: '489,645'
+  sources: 21
 - head: historiography
   documents: 359085
   documents_display: '359,085'
   sources: 30
+- head: ritual
+  documents: 194414
+  documents_display: '194,414'
+  sources: 16
 - head: funerary
-  documents: 115132
-  documents_display: '115,132'
+  documents: 115146
+  documents_display: '115,146'
   sources: 13
 - head: legal
-  documents: 42261
-  documents_display: '42,261'
-  sources: 29
+  documents: 42386
+  documents_display: '42,386'
+  sources: 30
 - head: letter
   documents: 34993
   documents_display: '34,993'
@@ -31,33 +35,29 @@ classes:
   documents_display: '30,135'
   sources: 5
 - head: scripture
-  documents: 27183
-  documents_display: '27,183'
-  sources: 34
+  documents: 27682
+  documents_display: '27,682'
+  sources: 36
 - head: dedicatory
-  documents: 24245
-  documents_display: '24,245'
-  sources: 11
-- head: ritual
-  documents: 23793
-  documents_display: '23,793'
+  documents: 24250
+  documents_display: '24,250'
   sources: 11
 - head: divination
   documents: 21062
   documents_display: '21,062'
   sources: 14
+- head: hymn-prayer
+  documents: 21055
+  documents_display: '21,055'
+  sources: 24
 - head: lexical
   documents: 18176
   documents_display: '18,176'
   sources: 18
 - head: scholarly
-  documents: 14096
-  documents_display: '14,096'
+  documents: 14138
+  documents_display: '14,138'
   sources: 22
-- head: hymn-prayer
-  documents: 13094
-  documents_display: '13,094'
-  sources: 20
 - head: mark
   documents: 12298
   documents_display: '12,298'
@@ -97,7 +97,7 @@ classes:
 unclassified_sources: 134
 unknown_documents: 47058
 unknown_documents_display: '47,058'
-unmapped_documents: 12327
-unmapped_documents_display: '12,327'
-unclassified_documents: 542653
-unclassified_documents_display: '542,653'
+unmapped_documents: 12324
+unmapped_documents_display: '12,324'
+unclassified_documents: 543753
+unclassified_documents_display: '543,753'

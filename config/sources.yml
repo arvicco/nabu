@@ -305,6 +305,32 @@ althurayya:   # 02-sources row 230
   # = the region display label. The nabu-places thurayya: namespace mint
   # rides as a sister PR.
 
+analecta-hymnica:   # 02-sources row 385
+  adapter: Nabu::Adapters::AnalectaHymnica
+  adopted: "2026-11-04"
+  axes: [classical, romance]   # the Latin-continuum precedent (openmgh, corpus-corporum)
+  wired: true    # first sync verified 2026-11-04: 55 docs / 17,211 passages, 0 errored —
+                 # exactly the census, after the walk's resume healed one item lost to a
+                 # retried-out IA mirror on the first pass (the miss-surfacing fix rode this
+                 # phase). Bd. 55 p. 22 probe hits.
+  sync_policy: manual
+  # The Analecta Hymnica Medii Aevi (Leipzig: Reisland, 1886–1922; eds.
+  # G. M. Dreves, C. Blume, H. M. Bannister) — the 55-volume corpus of
+  # medieval Latin hymnody — as the archive.org scan run: one document per
+  # volume, page grain over the hOCR derivative pair (IaScanShelf, the
+  # slavistics-pd / archiv-slav-phil mechanics), UNCORRECTED OCR declared.
+  # Census 2026-11-04: 169 series items on archive.org; ADOPTED the PIMS –
+  # University of Toronto single-volume run, complete Bd. 1–55, every
+  # volume confirmed by its own title page (the 114 others — no hOCR,
+  # multi-volume bundles, further copies, a community folder upload, a
+  # duplicate — reconciled in the adapter). PD evidence: printed 1886–1922
+  # (pre-1931); editors †1909 (Dreves), †1919 (Bannister), †1932 (Blume)
+  # — PD in the EU since 2003; the PIMS items carry no rights field, so the
+  # status rests on those dates. Language lat (German prefaces and
+  # apparatus ride inside, coarse); the date is each volume's print year,
+  # class "edition". EXPECTED FIRST SYNC (census 2026-11-04, every pair
+  # fetched and parsed): 55 docs / 17,211 passages, 14,189,583 bytes of
+  # hOCR derivatives; measured OCR (wordlike) 0.66 (Bd. 54) – 0.89 (Bd. 6).
 aozora:
   adapter: Nabu::Adapters::Aozora
   adopted: "2026-07-21"
@@ -876,6 +902,37 @@ cantigas:   # P55-1, 02-sources row 144
   # the manifest license verbatim + the credit line. EXPECTED FIRST SYNC:
   # ~1,680 documents, ~45-50k line passages (fixture mean ~29 lines).
   sync_policy: manual
+
+cantus:   # 02-sources row 383
+  adapter: Nabu::Adapters::Cantus
+  adopted: "2026-11-04"
+  kind: source
+  axes: [romance]   # the Latin-to-vernacular continuum desk (croala/corpus-corporum precedent)
+  wired: true    # first sync verified 2026-11-04: 156,519 docs (one passage each) +
+                 # 292,613 skipped by rule = 449,132 — EXACTLY the listing's advertised total,
+                 # 305/305 sources fetched, 0 errored, drift empty. 455849 (Alma redemptoris,
+                 # CH-SGs 390) eyeballed with its St. Gall provenance + 975–1000 dating;
+                 # FTS probe hits.
+  sync_policy: manual
+  # Cantus Database (cantusdatabase.org; directed by Debra Lacoste; web
+  # development McGill DDMAL; Digital Analysis of Chant Transmission,
+  # Dalhousie University): inventories of the chants of the Office and Mass
+  # in medieval and early-modern manuscript and printed sources, each record
+  # keyed to its Cantus ID. LICENSE (first-hand 2026-11-04, every page
+  # footer, verbatim): "Creative Commons License" / "This work is licensed
+  # under a Creative Commons Attribution-NonCommercial-ShareAlike 4.0
+  # International License." → https://creativecommons.org/licenses/by-nc-sa/4.0/
+  # → class nc; the /citations/ page's citation form rides the credit line.
+  # ROUTE: GET /json-sources/ (305 sources → {"<id>": {"csv": …}}) + the
+  # segment-4063 Browse Sources pages (4 × 100 rows: siglum, institution,
+  # century, provenance, chant count — "Displaying 1-100 of 305 sources.")
+  # + GET /source/<id>/csv/ per source, paced 1 s (~310 requests). COUNTS
+  # (2026-11-04): 305 sources = the manifest exactly; the listing's chant
+  # column sums to 449,132 records = the exports' rows (15/15 probed).
+  # Document = one full-text chant record (urn:nabu:cantus:<node_id>);
+  # incipit-only records skip by rule. Reconciliation: accepted +
+  # skipped-by-rule = 449,132 (± live edits); a random 12-source sample read
+  # 58.4% full text → on the order of 260k documents (wide band 150k–300k).
 
 cbdb:   # P96-4
   adapter: Nabu::Adapters::Cbdb
@@ -2000,6 +2057,34 @@ disco:
   wired: true    # P77 first sync owner-verified (1,215 docs), flipped 2026-08-18 (owner: "wire on all recent sources")
   sync_policy: manual
 
+divinum-officium:   # 02-sources row 384
+  adapter: Nabu::Adapters::DivinumOfficium
+  adopted: "2026-11-04"
+  axes: [romance]   # the Latin continuum's ecclesiastical register (the croala/corpus-corporum
+                    # precedent); no liturgy desk exists
+  wired: true    # first sync verified 2026-11-04: 4,003 docs / 26,381 passages, 1,023
+                 # skipped by rule (1,021 inclusion stubs + the stray + credits.html), 0
+                 # errored — exactly the full-tree census. The St Agnes antiphon eyeballed
+                 # (horas/Sancti/01-21:Ant_1); FTS probe hits.
+  sync_policy: manual   # upstream commits continually (corrections); owner re-syncs
+  # Divinum Officium (github.com/DivinumOfficium/divinum-officium): the data
+  # files of divinumofficium.com — the Tridentine Roman Breviary and Missal
+  # (1888 Ratisbon base, Divino Afflatu / 1955 / 1960 rubrics; Monastic,
+  # Cistercian, Dominican uses; local propers), the Martyrology, the Rule of
+  # St Benedict. Sparse GitFetch of the two LATIN trees (web/www/horas/Latin,
+  # web/www/missa/Latin) + LICENSE/README + the credits page. One document
+  # per file, passage = [section] (verse for the psalter, day for the
+  # necrology); @-references preserved, never resolved. LICENSE, verbatim:
+  # "MIT License / Copyright (c) 2026 Divinum Officium". Credits page
+  # (web/www/horas/Help/credits.html), verbatim: "The code and data are
+  # freely available to anyone at the Divinum Officium GitHub repository,
+  # and licensed under the MIT License. All liturgical texts within this
+  # site are, to the best of our knowledge, from the public domain. No
+  # special permission is needed to utilize any of our content." → open.
+  # The vernacular translation trees are excluded (the same page credits
+  # them to permission-based and undocumented modern sources; of the Bute
+  # English scans: "apparently copyrighted").
+
 dpd:   # P154, 02-sources row 367
   adapter: Nabu::Adapters::Dpd
   adopted: "2026-11-02"
@@ -2791,6 +2876,26 @@ glaux:
   sync_policy: manual
   lemma_tier: silver
 
+glt:   # 02-sources row 381
+  adapter: Nabu::Adapters::Glt
+  adopted: "2026-11-04"
+  axes: [classical]
+  wired: true    # first sync verified 2026-11-04: 725 docs / 186,442 line passages, the
+                 # 2 catalog pages skipped by rule, 0 errored, 0 upstream 404s — every page
+                 # the census listed. sep05:8 (the Zacharias sticheron) eyeballed verbatim;
+                 # FTS probe hits.
+  sync_policy: manual   # hand-maintained static pages, revised in place (Last-Modified pins)
+  # Greek Orthodox Liturgical Texts (glt.goarch.org, Greek Orthodox
+  # Archdiocese of America; maintained by Fr. Leo Schefe): the Byzantine
+  # service books in Greek — the twelve Menaia, Octoechos, Triodion,
+  # Pentecostarion, Horologion, Euchologion, one page per service. License:
+  # permission by email from the site maintainer, 2026-11-02 (the texts are
+  # in the public domain; "you are welcome to use them"; error reports
+  # invited) → open. Document = service page, passage = page line, rubrics
+  # role-marked from the site's red ink. The weekly-compiled daily services,
+  # the misc/ scripture books and anthology, and every non-HTML rendering
+  # are rejected grains (Adapters::Glt class comment).
+
 goo300k:
   adapter: Nabu::Adapters::Goo300k
   adopted: "2026-07-11"
@@ -2868,6 +2973,29 @@ grand-tour:   # P155, 02-sources row 369
   # through the deposit's registers to GND/GeoNames/Wikidata. CC BY-SA 4.0
   # (LICENSE + record) → attribution. Document = journal, passage = page;
   # the 20 editorial introductions and the registers are not documents.
+
+gregobase:   # 02-sources row 382
+  adapter: Nabu::Adapters::Gregobase
+  adopted: "2026-11-04"
+  axes: [romance]   # the Latin continuum's liturgical side (the corpus-corporum precedent)
+  wired: true    # first sync verified 2026-11-04: 18,422 docs / 20,810 passages, 340
+                 # skipped by rule (332 pre-skips + 8 notation-only), 0 errored — exactly the
+                 # dump census (18,762 rows). Hartker eyeball carries its 990–1000 date;
+                 # fold-aware search hits adjútor.
+  sync_policy: manual   # the dump is re-committed in place, irregularly (17 dumps 2016-01-13
+                        # → 2024-01-05); a new dump is new content under the same statement
+  # GregoBase (gregobase.selapa.net, Olivier Berten et al.): the community-
+  # transcribed Gregorian chant database in GABC (Gregorio) notation, from
+  # upstream's own MySQL export gregobase_online.sql in the site's code repo
+  # github.com/gregorio-project/GregoBase. License, the site's About page
+  # (gregobase.selapa.net/?page_id=2) verbatim: "All chant transcriptions are
+  # released under CC0 (a.k.a. Public Domain) license." (linked to
+  # creativecommons.org/publicdomain/zero/1.0/; checked 2026-11-04) → open.
+  # The 33 rows upstream itself flags copyrighted ("This tune is still under
+  # copyright.", no download offered) are skipped by rule. Document = chant,
+  # passage = score element / verses block; text = the sung text, the raw
+  # GABC rides each passage. Language lat by default, the vernacular rows by
+  # upstream's version field (eng 722, vie 183, grc 21, pol 17 …).
 
 gretil:
   adapter: Nabu::Adapters::Gretil
@@ -5288,6 +5416,27 @@ pna:   # 02-sources row 311
   # 17,387-row "pna" person-index slice; the crosswalk resolves 17,789
   # links (3,084 of 4,188 texts) onto held oracc/cdli documents. The
   # 149,045 co-occurrence edges are skipped by rule (no relation lane).
+
+ponomar:   # 02-sources row 380
+  adapter: Nabu::Adapters::Ponomar
+  adopted: "2026-11-04"
+  axes: [slavic]
+  wired: true    # first sync verified 2026-11-04: 246 docs / 246 passages, 101 skipped
+                 # by rule, 0 errored — exactly the adapter census (347 files = 246 + 101).
+                 # Creed + TUES7 troparion eyeballed verbatim; scoped FTS hit confirmed.
+  sync_policy: manual
+  # Ponomar (Aleksandr Andreev and others), the Orthodox liturgics suite:
+  # its Church Slavonic Services tree — the kit the program assembles the
+  # Hours from: fixed prayers and responses, the Octoechos weekday/Sunday
+  # troparia and kontakia, the Lenten troparia, rubric words, service
+  # titles. Document = file, passage = its TEXT. LICENSE: the repo's
+  # LICENSE is the GNU GPL v3; README.md verbatim "Copyright 2006-2018
+  # Aleksandr Andreev and others. Ponomar is free software: you can
+  # redistribute it and/or modify it under the terms of the GNU General
+  # Public License as published by the Free Software Foundation, either
+  # version 3 of the License, or (at your option) any later version." →
+  # attribution (the copyleft class of the CC BY-SA/GFDL holdings: carried
+  # verbatim, license and source named). Lect chu → chu:ncs.
 
 ppchy:   # P152, 02-sources row 318
   adapter: Nabu::Adapters::Ppchy

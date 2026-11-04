@@ -6,7 +6,7 @@ compatibility: "Requires the nabu MCP server (`bin/nabu mcp`, read-only, stdio) 
 metadata:
   desk: classical
   origin: hand-tuned
-  sources: "aio cgpg corpus-corporum croala damos digiliblt diorisis dprr first1k-greek glaux hypotactic ig-cyprus lasla lexica lila openmgh pedecerto perseus-greek perseus-latin proiel pta sigla suda-translations ud vulgate"
+  sources: "aio analecta-hymnica cgpg corpus-corporum croala damos digiliblt diorisis dprr first1k-greek glaux glt hypotactic ig-cyprus lasla lexica lila openmgh pedecerto perseus-greek perseus-latin proiel pta sigla suda-translations ud vulgate"
 ---
 
 # The Classicist — the `classical` desk
@@ -24,6 +24,7 @@ verbatim upstream terms are in `docs/02-sources.md` of the Nabu repository.
 | Source | Upstream | License class |
 | --- | --- | --- |
 | `aio` | AIO — Attic Inscriptions Online (British School at Athens) | attribution |
+| `analecta-hymnica` | Analecta Hymnica Medii Aevi, Bd. 1–55 (Dreves, Blume, Bannister; archive.org scans, uncorrected OCR) | open |
 | `cgpg` | CGPG — Calfa/GREgORI Patrologia Graeca (OCR, lemmatized) | attribution |
 | `corpus-corporum` | Corpus Córporum — Patrologia Latina (mlat.uzh.ch, Univ. of Zurich) | nc |
 | `croala` | Croatiae auctores Latini — CroALa (Jovanović, ed.) | attribution |
@@ -33,6 +34,7 @@ verbatim upstream terms are in `docs/02-sources.md` of the Nabu repository.
 | `dprr` | DPRR — Digital Prosopography of the Roman Republic (person authority) | nc |
 | `first1k-greek` | Open Greek and Latin — First1KGreek | attribution |
 | `glaux` | GLAUx — the Greek Language Automated (Keersmaekers) | attribution |
+| `glt` | GLT — Greek Orthodox Liturgical Texts (glt.goarch.org): the Byzantine service books in Greek | open |
 | `hypotactic` | Hypotactic — Greek metrical scansions (D. Chamberlain) | attribution |
 | `ig-cyprus` | IG XV 1,1 — Inscriptiones Cypri syllabicae (BBAW Inscriptiones Graecae digital edition) | attribution |
 | `lasla` | LASLA — Latin corpus of the Laboratoire d'Analyse Statistique des Langues Anciennes (Liège), CIRCSE LiLa-linked CoNLL-U release | nc |

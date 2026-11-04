@@ -92,6 +92,8 @@ module Nabu
           #                       and the translation rows when it carries them (owner-ruled
           #                       2026-11-03: a translation rows when it is the work's only
           #                       held document; TRANSLATION_ROWS below)
+          "analecta-hymnica" => :structured, # each volume's print year, class "edition" (the hymns
+          #                                    are medieval; the imprint rides "imprint" — no place)
           "aozora" => :structured, # the index's 初出 first publication (class composition),
           #                          else the 底本 first-edition year (class edition)
           "archiv-slav-phil" => :structured, # each volume's title-page year
@@ -112,6 +114,10 @@ module Nabu
           "bu-ajami" => :structured, # P124-1: a typed source-reference year or a date the item
           #                            page states (authorship eras class "composition");
           #                            place = the manuscript's Provenance
+          "cantus" => :structured, # the manuscript source's curated century labels (Browse
+          #                          Sources /century/ links) as an envelope on every record of
+          #                          it — the witness's copying date (basis "source", no class);
+          #                          place = the source's provenance (orders name no place)
           "cbeta" => :dynasty_band,
           "ccmh" => :bounds_keys,
           "cgpg" => :structured, # P153: upstream's per-volume Dates label as a century envelope
@@ -151,6 +157,8 @@ module Nabu
           #                          Qurʾān book has no byline and stays undated
           "diorisis" => :signed_year_key,
           "disco" => :author_century_band,
+          "divinum-officium" => :place_only, # no dating (undatable); the local-calendar proper's
+          #                                    jurisdiction (Rome, Passau, Utrecht …) is the "place"
           "dta" => :year_range,
           "ebible-pacific" => :structured, # P154: each translation's edition year as eBible records
           #                                  it (1868 / 1908 / 1922, class edition) — no place claim
@@ -170,6 +178,11 @@ module Nabu
           #                        the dateline writing place — the adapter minted both
           #                        from the start, but this registration was missed at the
           #                        shipping gate, leaving the shelf dark on the timeline
+          "grand-tour" => :structured, # each journal's dated-entries envelope (class
+          #                        composition, the diary's own first/last entry dates) —
+          #                        minted from the start but unregistered at its shipping
+          #                        gate (the emmo shape again); caught by the timeline
+          #                        registration guard's first sweep
           "etcbc-targum" => :place_only, # P153: the Genizah texts' findspot ("Cairo Genizah");
           #                                no date field upstream (edition years ride
           #                                base_edition, never a date)
@@ -187,6 +200,9 @@ module Nabu
           #                           birth..death → CE), class composition; place = the poet's
           #                           death place toponym (name + coordinates)
           "glaux" => :signed_bounds_keys,
+          "gregobase" => :structured, # the chant's source books: a manuscript witness's own
+          #                             period (Hartker c. 990-1000; class-less), else the printed
+          #                             books' years (min..max, class edition); no place claim
           "gretil-legacy" => :work_era, # the work's attributed era (config/work_eras.yml,
           #                               keyed on metadata "work" = the GRETIL file stem)
           "gu-wikisource" => :edition_year_text, # P120-3: the scan Index's verbatim

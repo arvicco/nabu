@@ -614,6 +614,28 @@ sources:
         be a curated overlay, not extraction"}
     places: {posture: unplaced}
     script: {posture: implied}
+  cantus:
+    # One document per full-text chant record (Adapters::CantusCsvParser);
+    # the manuscript source's own fields (Browse Sources listing) join every
+    # record of it. kind is machine-postured by the kind_map rule (genre).
+    lect: {posture: identity, note: "lat — the liturgical Latin of the Office and Mass as each
+        manuscript spells it. DELIBERATELY coarse: two refinements are candidates, not mints —
+        the registry's lat/ecc (Ecclesiastical Latin) register as a whole-source claim, and a
+        source-century date-band staging (lat:med / lat:ren / lat:new) of the WITNESS's spelling;
+        both judgment-grade. A rare vernacular cantio (genre Cn) would ride under lat — none in
+        the 17-source sample"}
+    dating: {posture: partial, note: "the source's curated century labels (Browse Sources
+        /century/ links: '10th century (975-1000)', '13th century (2nd half)', 40 labels) band
+        every record of that source — basis 'source', the witness's copying date, never the
+        chant's composition (no date class: the artifact's own date). 265 of 305 sources carry
+        one (census 2026-11-04); the other 40 mint no date. Each source's free-text date
+        ('Late 15th century') is not fetched — the curated label is the claim"}
+    places: {posture: named, note: "the source's provenance (Browse Sources /provenance/ links —
+        a 214-value vocabulary of towns, abbeys, regions, countries) rides place as named;
+        231 of 305 sources carry one. Three vocabulary values name no place (Dominican,
+        Franciscan, English — CantusSourceIndex::NON_PLACES) and ride metadata provenance
+        only. The holding institution/country is the PRESENT location — metadata only"}
+    script: {posture: implied}
   otdo:
     kind: {posture: unclassified}
     lect: {posture: identity, note: otb IS Old Tibetan}
@@ -1477,6 +1499,24 @@ sources:
     script: {posture: qualified, note: "Japanese held in the ORIGINAL Portuguese-style Latin
         romanization (long ſ, ŏ/ǒ, ã, the [f]/[t] name marks verbatim) — the ~latn surface on
         the lect; the modern kanji-kana / normalized layers ride line annotations"}
+  gregobase:
+    # lect: machine-postured — the lat → lat/ecc override in
+    # config/lect_overrides.yml (vernacular rows bare); kind: machine-postured
+    # — kind_map.yml metadata office_part.
+    dating: {posture: partial, note: "no per-chant composition date exists upstream; the
+        chant's SOURCE BOOKS date it: 52 chants found in a manuscript witness (the Hartker
+        antiphoner Cod. Sang. 390/391, 'around 990-1000'; Cod. Lichtenthal 28, mid 13th c.)
+        take the codex's own period, class-less; 15,179 more take their printed books' years
+        (min..max, class edition — the Graduale/Liber Usualis/Antiphonale the transcription
+        follows, never the chant's age); 3,191 cite no book and carry no date (census
+        2026-11-04)"}
+    places: {posture: unplaced, note: "nothing place-shaped is claimed: a book's editor field
+        names the editing house (Solesmes, Vatican, Westmalle, Dominican), not an imprint,
+        and the codices' description names their present library (custody, not origin) —
+        both ride verbatim in metadata sources"}
+    script: {posture: implied, note: "each chant's language code implies its script (Latin;
+        Greek 20, Khmer 3, Chinese 1); the one Byzantine row is romanized Greek and codes
+        grc-Latn"}
   scat:
     # kind: machine-postured — kind_map.yml source_kind historiography (the
     # corpus is saints' lives). lect: machine-postured by the scat-century
@@ -1939,6 +1979,18 @@ sources:
         — the printing place, not a text place"}
     script: {posture: implied, note: "Latin script prose; Cyrillic quotations are uncorrected
         OCR"}
+  analecta-hymnica:
+    # kind: machine-postured — kind_map.yml source_kind hymn-prayer/hymn.
+    # lect: machine-postured — lect_overrides.yml lat → lat:med (approximation).
+    dating: {posture: dated, note: "each volume's title-page print year (1886–1922), labeled date
+        class 'edition' — the hymns themselves are 4th–16th-century and their per-hymn dating
+        sits in the uncorrected German apparatus, not mined (declared coarse) — :structured lane"}
+    places: {posture: unplaced, note: "the imprint (Leipzig: Reisland) rides metadata 'imprint' —
+        the printing place; the provenance some special titles name (Moissac, Limoges, Bohemia,
+        Spain, Naples, Wessobrunn, Lilienfeld) stays in the title, never a place claim beside a
+        print year"}
+    script: {posture: implied, note: "Latin script (Antiqua) throughout; the occasional music
+        notation is OCR noise"}
   diccas:   # P95-4
     kind: {posture: unclassified}
     lect: {posture: identity, note: "ara IS Arabic — Qurʾān/ḥadīth/chronicle
@@ -2091,17 +2143,12 @@ sources:
     places: {posture: unplaced}
     script: {posture: implied}
 
-  # ── pending: a real refinement candidate, not yet ruled ────────────────
   armepic:
     # kind: machine-postured by the kind_map.yml armepic genre fold.
-    lect: {posture: pending, note: "bare xcl at parse time: upstream tags the edition only
-        ISO 639-1 hy (40 records; 10 untagged), which carries no stage, and the registry's hy
-        node is MODERN Armenian; the texts are written grabar with Middle Armenian vernacular
-        features. Candidate: date-band staging off the records' own dates (1183–1998) —
-        42 records fall inside the axm band [1100, 1700], 8 are 1725–1998 (ART0010/11/35/36/
-        37/38/39/40: 18th-c. grabar, 19th-c. church inscriptions, a 1918 and a 1998 one —
-        hy or learned grabar?). Judgment-grade (how far a 13th-c. donation is Middle Armenian
-        rather than grabar), so not fired"}
+    # lect declaration retired P157 (ruled 2026-11-04): the armepic xcl
+    # override machine-postures it now (the shadowing rule) — the corpus
+    # pins to grabar/xcl on the editors' own description, no date-band
+    # staging into axm; the spot-read evidence rides the override comment.
     dating: {posture: dated, note: "50/50 via origin/origDate: 41 when-custom (the Armenian-era
         year converted, evidence internal-date) as one-year envelopes, 9 notBefore-custom/
         notAfter-custom palaeographic centuries as bounds; raw/evidence/precision/calendar ride"}
@@ -2111,6 +2158,27 @@ sources:
     script: {posture: implied, note: "Armenian script (xcl ⇒ Armn); the hand's style in
         upstream's words (Bolorgits Erkatagir, Ughghagits Erkatagir …) rides the script_style
         facet"}
+  divinum-officium:
+    # kind: machine-postured by the kind_map.yml divinum-officium book_part fold.
+    # lect declaration retired P157 (2026-11-04, same phase as the add): the
+    # lat → lat/ecc override machine-postures it now (the shadowing rule) —
+    # the stageless-register precedent landed with this same wave's
+    # gregobase row, so the named candidate stopped waiting.
+    dating: {posture: undatable, note: "no file carries a date of composition or edition: the
+        rubrical years in the conditionals (rubrica 1955 / 1960, Divino Afflatu) name rubrical
+        regimes, not texts, and the necrology's 'Anno 1746' years date the deaths it records
+        (passage entry_years, never a document date). The edition base (the 1888 Ratisbon
+        Breviarium, the 1943–1962 printings the team collated) is stated once on the credits
+        page for the whole tree — a source-level fact on the dossier, not a per-text claim"}
+    places: {posture: named, note: "the local-calendar directories name the jurisdiction whose
+        proper the file is — Urbis → Rome (116 docs), Bavaria (32) and its dioceses Monacensis
+        → Munich (36), Passaviensis → Passau (29), Ratisbonensis → Regensburg (22),
+        Spirensis → Speyer (15), Brasilia → Brazil (11), Neerlandia → Netherlands (18),
+        Groningen (2), Ultrajectum → Utrecht (29): 310 of 4,003 documents, the place_only
+        lane. The universal Roman, Monastic, Cistercian and Dominican trees name no place
+        (deliberately unplaced — a rite is not a locality); 'aliquibus locis' ('in some
+        places') names none"}
+    script: {posture: implied}
   etcsl:
     # kind declaration retired P104-1: the composition-number prefix map
     # in kind_map.yml machine-postures it now (the shadowing rule).
@@ -3091,3 +3159,38 @@ sources:
     dating: {posture: undatable, note: modern MT-oriented sentence pairs, no dates upstream}
     places: {posture: unplaced}
     script: {posture: implied}
+  ponomar:
+    # lect machine-postured — config/lect_overrides.yml chu → chu:ncs (the
+    # registry's New Church Slavonic (Synodal) stage).
+    # kind machine-postured — kind_map.yml metadata service_part.
+    dating: {posture: undatable, note: "the asset carries no date — no edition year, no imprint; the
+        Hours' source records credit only http://orthlib.ru. The texts are the received Byzantine
+        Hours in the modern Synodal redaction (post-1650s by the chu:ncs band), not datable per
+        text; three headers name a traditional author (the prayers of St Basil the Great ×2 and of
+        St Ephrem the Syrian) — attributions, not dates, kept in the title, never turned into an
+        era here (a work_eras row would be a separate, judgment-grade call)"}
+    places: {posture: unplaced, note: "no place in the asset — liturgical texts of no single
+        origin; the Synodal books' printing place is not stated"}
+    script: {posture: qualified, note: "Church Cyrillic in the printed Synodal service-book
+        orthography (titla U+0483 and letter-titla U+2DE0–2DFF, accents, psili, ѿ/ꙋ/ѧ/ѣ/і/ѵ/ѳ/ѡ),
+        NFC-composed at the boundary (decomposed и/і + mark on 199 upstream attributes)"}
+  glt:
+    # kind: machine-postured — kind_map.yml metadata book.
+    lect: {posture: pending, note: "candidate: a lect_overrides row grc → grc:byz, tier
+        approximation — the perseus-latin shape: the books' hymnography and euchology are
+        Byzantine liturgical Greek (the liturgies of Basil and Chrysostom, Romanos, Andrew of
+        Crete, John of Damascus, Kosmas, the Studites, Joseph the Hymnographer), but the
+        Menaia also carry post-Byzantine services written in the same received register
+        (St Nektarios †1920, the Agia Skepi and the 28 October doxology among extra.htm's
+        services), so the stage is a corpus-level reading, not the corpus's own definition"}
+    dating: {posture: undatable, note: "received liturgical tradition in a modern editorial
+        form: no page carries a composition or edition date. What the pages DO carry is
+        mined, but none is a dating claim — the Menaion commemoration (month from the
+        shelf, day from the page name → metadata commemoration) is a calendar day, and the
+        hymnographers' names in the rubrics (Ἰωάννου Μοναχοῦ, Ἀνατολίου, Θεοφάνους) ride
+        the rubric passages verbatim, unmapped to floruits"}
+    places: {posture: unplaced, note: "the books name no place of composition or use; the
+        site's publisher (the Archdiocese, New York) is an imprint of the digital edition,
+        not the texts' locus"}
+    script: {posture: implied, note: "polytonic Greek (Grek) throughout; the site's Greek
+        Extended oxia vowels and ano teleia fold to their NFC canonical forms at the boundary"}

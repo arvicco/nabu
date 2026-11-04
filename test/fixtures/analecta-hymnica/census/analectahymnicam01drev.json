@@ -1,0 +1,99 @@
+{
+ "files": [
+  {
+   "format": "Text PDF",
+   "name": "analectahymnicam01drev.pdf",
+   "size": "13765927",
+   "source": "derivative"
+  },
+  {
+   "format": "Grayscale PDF",
+   "name": "analectahymnicam01drev_bw.pdf",
+   "size": "11259876",
+   "source": "derivative"
+  },
+  {
+   "format": "OCR Page Index",
+   "name": "analectahymnicam01drev_hocr_pageindex.json.gz",
+   "size": "2554",
+   "source": "derivative"
+  },
+  {
+   "format": "OCR Search Text",
+   "name": "analectahymnicam01drev_hocr_searchtext.txt.gz",
+   "size": "153585",
+   "source": "derivative"
+  }
+ ],
+ "files_count": 25,
+ "metadata": {
+  "addeddate": "2011-06-14 18:47:43",
+  "associated-names": "Dreves, Guido Maria, 1854-1909; Blume, Clemens, 1862-1932; Bannister, Henry Marriott, 1854-1919",
+  "backup_location": "ia903700_27",
+  "call_number": "3590827",
+  "camera": "Canon EOS 5D Mark II",
+  "collection": [
+   "pimslibrary",
+   "toronto",
+   "university_of_toronto"
+  ],
+  "contributor": "PIMS - University of Toronto",
+  "creator": [
+   "Dreves, Guido Maria, 1854-1909",
+   "Blume, Clemens, 1862-1932",
+   "Bannister, Henry Marriott, 1854-1919"
+  ],
+  "date": "1886",
+  "description": [
+   "Vol. 1-23 edited by G.M. Dreves; vol. 24-50, 55 edited by G.M. Dreves and C. Blume; vol. 51-52 edited by C. Blume; vol. 53-54 edited by C. Blume and H.M. Bannister",
+   "Imprint varies",
+   "Texts in Latin; front matter in German",
+   "Includes bibliographical references and indexes",
+   "-",
+   "Full-text digital copy available from the Internet Archive",
+   "27 45"
+  ],
+  "external-identifier": "urn:oclc:record:988864595",
+  "filesxml": "Wed Dec 23 4:16:05 UTC 2020",
+  "foldoutcount": "0",
+  "identifier": "analectahymnicam01drev",
+  "identifier-access": "http://www.archive.org/details/analectahymnicam01drev",
+  "identifier-ark": "ark:/13960/t2k65cd7w",
+  "imagecount": "216",
+  "language": [
+   "ger",
+   "lat"
+  ],
+  "mediatype": "texts",
+  "notes": "loose pages",
+  "oclc-id": "5229680",
+  "ocr_converted": "abbyy-to-hocr 1.1.37",
+  "ocr_module_version": "0.0.21",
+  "openlibrary_edition": "OL24783411M",
+  "openlibrary_work": "OL15874881W",
+  "page-progression": "lr",
+  "page_number_confidence": "33",
+  "page_number_module_version": "1.0.3",
+  "ppi": "400",
+  "publicdate": "2011-06-14 18:47:55",
+  "publisher": "Leipzig : Fues's Verlag (R. Reisland)",
+  "repub_seconds": "1486",
+  "repub_state": "4",
+  "scandate": "20110615024403",
+  "scanfee": "105",
+  "scanner": "scribe4.toronto.archive.org",
+  "scanningcenter": "uoft",
+  "sponsor": "University of Toronto",
+  "sponsordate": "20110630",
+  "subject": [
+   "Catholic Church",
+   "Catholic Church",
+   "Church music",
+   "Hymns, Latin",
+   "Religious poetry, Latin"
+  ],
+  "title": "Analecta hymnica medii aevi",
+  "updatedate": "2011-06-14 18:47:41",
+  "volume": "1"
+ }
+}

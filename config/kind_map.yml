@@ -39,14 +39,98 @@ sources:
       "Milestone": boundary/milestone            # 1
       "Graffito": mark/graffito                  # 1 ("Graffito?" — the global ? strip)
       "Topos-inscription": mark/ownership        # 1 — a reserved-place mark (the edh seat fold)
+  cantus:             # the chant record's genre — upstream's own abbreviation list
+    #                   (cantusdatabase.org/genres/), the facet value = upstream's genre NAME,
+    #                   the code raw (CantusCsvParser::GENRES). Counts = the 17-source sample
+    #                   census 2026-11-04 (34,269 records); the full spread lands with the first
+    #                   sync. The fold: sung liturgical items (Office and Mass propers and
+    #                   ordinary, their verses, tropes and liturgical-drama elements) are
+    #                   ritual/liturgy — a sung text whose function is the rite; hymns and the
+    #                   strophic cantiones are hymn-prayer/hymn; the spoken orations
+    #                   hymn-prayer/prayer; a psalm or canticle written out is the biblical text
+    #                   itself (scripture). A finer chant sub-grain under ritual is PROPOSED,
+    #                   not minted here.
+    facet: genre
+    map:
+      "Antiphon": ritual/liturgy                 # A 14,319 — the Office's framing chant
+      "Responsory": ritual/liturgy               # R 7,674 — the Matins responsory
+      "Responsory verse": ritual/liturgy         # V 5,946
+      "Versicle": ritual/liturgy                 # W 3,153
+      "Hymn": hymn-prayer/hymn                   # H 1,754 — the strophic Office hymn
+      "Hymn verse": hymn-prayer/hymn             # HV 35 — a hymn strophe
+      "Invitatory antiphon": ritual/liturgy      # I 724
+      "Antiphon verse": ritual/liturgy           # AV 184
+      "Lesson": ritual/liturgy                   # L 78 — a notated reading of the rite
+      "Sequence": ritual/liturgy                 # Sq 3 — the Mass's sung sequence (its
+      #                                            poetry rides the text; the function is liturgical)
+      "Sequence verse": ritual/liturgy
+      "Invitatory psalm": scripture              # IP 49 — Psalm 94 written out (Venite)
+      "Psalm": scripture                         # PS 2 — the psalm text written out
+      "Canticle": scripture                      # Ca — a biblical canticle (Magnificat, Benedictus)
+      "Canticle verse": scripture
+      "Alleluia": ritual/liturgy                 # Al 22 — Mass propers from here down
+      "Alleluia verse": ritual/liturgy
+      "Gradual": ritual/liturgy                  # Gr 13
+      "Gradual verse": ritual/liturgy            # GrV 10
+      "Introit": ritual/liturgy                  # In 5
+      "Introit verse": ritual/liturgy            # InV 7
+      "Versus ad repetendum for the introit": ritual/liturgy
+      "Offertory": ritual/liturgy                # Of 7
+      "Offertory verse": ritual/liturgy          # OfV 1
+      "Communion": ritual/liturgy                # Cm 5
+      "Communion verse": ritual/liturgy          # CmV 1
+      "Versus ad repetendum for the communion": ritual/liturgy
+      "Tract": ritual/liturgy                    # Tc 2
+      "Tract verse": ritual/liturgy              # TcV 4
+      "Ingressa": ritual/liturgy                 # Ig — the Beneventan introit
+      "Kyrie": ritual/liturgy                    # Ky 13 — the Mass ordinary from here down
+      "Gloria": ritual/liturgy                   # Gl 9
+      "Credo": ritual/liturgy                    # Cr 6
+      "Sanctus": ritual/liturgy                  # Sa 14
+      "Agnus dei": ritual/liturgy                # Ag 12
+      "Ite missa est": ritual/liturgy            # Ite 5
+      "Benedicamus domino": ritual/liturgy       # BD 1
+      "Pater noster": ritual/liturgy             # Pn 1 — the Lord's Prayer as SUNG in the Mass
+      "Prefatio": ritual/liturgy                 # Pr 5 — the sung preface
+      "Litany": ritual/liturgy
+      "Litany verse": ritual/liturgy
+      "Preces": ritual/liturgy                   # PRCS — Old Hispanic sung intercessions
+      "Verse for the Preces": ritual/liturgy
+      "Capitulum": ritual/liturgy                # Cap — the Office's short chapter reading
+      "Mass chant": ritual/liturgy               # G — early-index generic Mass code
+      "Verse for a Mass chant": ritual/liturgy   # GV
+      "Mass Ordinary": ritual/liturgy            # MO
+      "Tropus": ritual/liturgy                   # Tp 10 — a trope, sung inside the rite
+      "Prosa": ritual/liturgy                    # Psa 1
+      "Prosula": ritual/liturgy                  # Psl — a texted melisma (a trope)
+      "Troped Agnus dei": ritual/liturgy
+      "Troped Alleluia": ritual/liturgy
+      "Troped Benedicamus domino": ritual/liturgy   # TpBD 2
+      "Troped Communion": ritual/liturgy
+      "Troped Gloria": ritual/liturgy
+      "Troped Introit": ritual/liturgy
+      "Troped Ite missa est": ritual/liturgy
+      "Troped Kyrie": ritual/liturgy
+      "Troped Offertory": ritual/liturgy
+      "Troped Sanctus": ritual/liturgy
+      "Dramatic element": [ritual/liturgy, literary/drama]   # D 3 — liturgical drama: both
+      "Varia": ritual/liturgy                    # Va 2 — upstream's replacement for M
+      "Varia within Holy Week": ritual/liturgy   # VaHW 5
+      "Miscellaneous": ritual/liturgy            # M — Te Deum, Versus in Triduo, prosulae
+      "Collect": hymn-prayer/prayer              # Co — the spoken orations from here down
+      "Oratio / Prayer": hymn-prayer/prayer      # Or
+      "Secret / Oratio secreta": hymn-prayer/prayer   # Sec
+      "Postcommunion": hymn-prayer/prayer        # Pc
+      "Cantio": hymn-prayer/hymn                 # Cn — paraliturgical strophic sacred song
+      "Cantio Verse": hymn-prayer/hymn           # CnV
+      "Unknown, ambiguous, unidentifiable, illegible": unknown   # ? — upstream's own claim
   armepic:            # the records' keywords/term[@xml:lang=en] (ArmEpiC's inscription-type
     #                   authority, urn:armepic:ist:*); counts = the full-deposit census
-    #                   2026-11-04 (50 records, a record may carry two terms). NOT folded,
-    #                   left in the unmapped bucket for a ruling: "commemorative" (13) +
-    #                   "commemoration" (1) — the hishatakagrayin memorial inscription,
-    #                   neither funerary nor dedicatory in the house sense; "khachkar
-    #                   erection" (5) — upstream's own note calls it a subtype of
-    #                   construction OR commemoration; "religious-ethical" (1).
+    #                   2026-11-04 (50 records, a record may carry two terms). The three
+    #                   heads left unmapped at the first sync were ruled 2026-11-04: fold
+    #                   onto existing heads, no new taxonomy heads for a 50-document
+    #                   source; "religious-ethical" (1) stays deliberately unclassified
+    #                   (one record, no honest existing head).
     facet: genre
     map:
       "construction": building                   # 22 — church/gavit/bridge building records
@@ -57,6 +141,15 @@ sources:
       "epitaph": funerary/epitaph                # 1 — ART0010, a catholicos's tombstone
       "canonical-legal": legal                   # 1 — ART0046, the villagers' tax exemption
       #                                            of a zhamatun (beside its construction term)
+      "commemorative": funerary                  # 13 — hishatakagrayin memorial inscriptions;
+      #                                            the ogham precedent (Commemorative →
+      #                                            funerary, "memorial stones"): remembrance
+      #                                            records, the house's memorial head
+      "commemoration": funerary                  # 1 — the authority list's own variant label
+      "khachkar erection": dedicatory/votive     # 5 — a cross-stone erected for the soul of a
+      #                                            named person; upstream's own note ("subtype
+      #                                            of construction, commemoration") folds here
+      #                                            as the votive act, ruled 2026-11-04
   cdli:               # 288,629 docs — the largest vocabulary by rows
     facet: genre
     map:
@@ -879,6 +972,12 @@ sources:
     #                                     Priscian Commentary")
   archiv-slav-phil:
     source_kind: scholarly   # Jagić's Archiv für slavische Philologie volumes
+  analecta-hymnica:
+    source_kind: hymn-prayer/hymn   # the Analecta Hymnica: the hymn texts ARE the volumes' body
+    #                                 (the "Hymnals" fold) — hymns, sequences, rhymed offices,
+    #                                 tropes, cantiones; the Reimgebete/Psalterien volumes are
+    #                                 prayer-shaped, carried coarse under the series' own
+    #                                 hymnological frame (per-volume genre rides the facet)
   eng-web:
     source_kind: scripture
   vuk-danicic:
@@ -991,6 +1090,40 @@ sources:
   grand-tour:                # P155 — the four journals are day-by-day travel diaries (Reisetagebuch,
     source_kind: literary/diary/travelogue   # Reise-Journal, "Kurtze verzeichnung meiner
     #   geringen Reise"): the ruled travelogue sub, one whole-source line
+  gregobase:                 # the chant's usage code (gregobase_chants.office-part; labels = the
+    metadata: office_part    #   site's include/txt.php). Every chant is a sung text of the rite,
+    #                          so the liturgical head is the default fold; the strophic poetic
+    #                          forms (hymn, sequence/prosa, rhythmus) fold to hymn by FORM, the
+    #                          litany to prayer. Counts = accepted documents, full-dump census
+    #                          2026-11-04 (37 rows carry no code and mint no kind row).
+    map:
+      "an": ritual/liturgy       # 8,609 Antiphona — office/mass antiphons
+      "re": ritual/liturgy       # 1,822 Responsorium — the great responsories of the office
+      "hy": hymn-prayer/hymn     # 1,661 Hymnus — strophic office hymns
+      "al": ritual/liturgy       # 925 Alleluia — the mass proper's alleluia with its verse
+      "in": ritual/liturgy       # 903 Introitus
+      "co": ritual/liturgy       # 878 Communio
+      "of": ritual/liturgy       # 780 Offertorium
+      "rb": ritual/liturgy       # 621 Responsorium breve — the short office responsory
+      "gr": ritual/liturgy       # 516 Graduale
+      "or": ritual/liturgy       # 324 Toni Communes — the common tones (orations, lessons,
+      #                            psalm tones): the rite's recitation formulas
+      "ky": ritual/liturgy       # 300 Kyriale — the mass ordinary (Kyrie, Gloria, Credo,
+      #                            Sanctus, Agnus Dei, Ite missa est)
+      "va": ritual/liturgy       # 283 Varia — upstream's miscellany bucket; its rows are still
+      #                            chants for the rite (motets, devotional chants, processionals)
+      "tr": ritual/liturgy       # 248 Tractus
+      "ps": ritual/liturgy       # 124 Psalmus — psalms set to their tones for the office: the
+      #                            sung psalm in its liturgical use, not the scripture shelf
+      "se": hymn-prayer/hymn     # 100 Sequentia — rhymed strophic poetry after the alleluia
+      "pr": ritual/liturgy       # 98 Praefationes — the celebrant's sung prefaces
+      "ca": ritual/liturgy       # 80 Canticum — the biblical canticles (Magnificat, Benedictus…)
+      #                            in their tones, the psalm fold's reasoning
+      "su": hymn-prayer/prayer   # 31 Supplicatio — litanies: invocation and petition
+      "pa": hymn-prayer/hymn     # 28 Prosa — the sequence under its other name
+      "tp": ritual/liturgy       # 26 Tropa — tropes: texts interpolated into a chant of the mass
+      "im": ritual/liturgy       # 21 Improperia — the Good Friday reproaches
+      "rh": hymn-prayer/hymn     # 7 Rhythmus — rhythmic (accentual, rhymed) devotional poems
   tianyige:                  # the Ming examination records (科舉錄): each record is the
     source_kind: administrative/register   # official register of one session — examiners,
     #   questions, the graduates' roster, model answers; register is the closest ruled class
@@ -1047,7 +1180,28 @@ sources:
       "Vernacular": "a register label (speech-near Yiddish), not a genre — the court
         testimony, the 1798 Amsterdam diskurs, Grine felder (a play) and Royte
         pomerantsen (folk jokes); 4 texts, reviewed"
-  ganjoor:                   # census 2026-11-02 over the classical cone (126,165 poems): the
+  divinum-officium:          # census 2026-11-04 (full-tree parse at master 85183a9b): 4,003
+    metadata: book_part      # documents; book_part = the Latin tree's own top directory
+    #                          (the Cist/M/OP use suffix stripped; Psalterium/Psalmorum split
+    #                          out — the psalms themselves).
+    map:
+      "Necrologium": administrative/list  # 12 — the Vyšší Brod (Altovadum) necrology: read at
+      #   chapter, but IN FORM a dated obituary register of names — the content classifies,
+      #   not the use (folded 2026-11-04; the existing list head, no new taxonomy)
+      "Sancti": ritual/liturgy           # 1,663 — the proper of the saints, Office + Mass
+      "Tempora": ritual/liturgy          # 1,472 — the proper of the season
+      "Commune": ritual/liturgy          # 122 — the commons (of apostles, martyrs, virgins …)
+      "Psalterium": ritual/liturgy       # 20 — the psalter's liturgical apparatus: invitatories,
+      #                                    hymns, doxologies, the psalm distribution tables
+      "Ordo": ritual/liturgy             # 14 — the Ordinary of the Mass (Roman and the uses)
+      "Appendix": ritual/liturgy         # 6 — the commendation of the soul, grace at meals …
+      "Martyrologium": ritual/liturgy    # 367 — the Roman Martyrology's daily notices, a
+      #                                    liturgical book read in choir at Prime (its content is
+      #                                    hagiographic; no hagiography head exists — proposed)
+      "Psalmorum": scripture             # 202 — the Vulgate psalms and canticles, verse by verse
+      "Regula": legal/law                # 125 — the Rule of St Benedict in its daily portions
+      #                                    (the 1QS precedent: a community's rule is law)
+  ganjoor:                  # census 2026-11-02 over the classical cone (126,165 poems): the
     metadata: form           # poem's own section label (the leaf cat — 999 distinct values).
     vocabulary: open         # Upstream mixes FORM sections (the divan's غزلیات / رباعیات /
     #                          قصاید …) with work and chapter titles (دفتر اول, گلستان's باب,
@@ -2018,3 +2172,32 @@ sources:
       #   historiography by the ruled biography precedent (the scat fold)
     deliberate:
       "Genre missing": "the catalog's unfilled genre slot (18 works), not a claim"
+  ponomar:            # the adapter's service_part (Adapters::Ponomar): TROPARION / KONTAKION for
+    metadata: service_part  # the hymn subtrees, else the top folder; census 2026-11-04 over all 246
+    map:
+      "TROPARION": hymn-prayer/hymn       # 56 — the weekday/Sunday Octoechos troparia (SUN1…SAT8)
+      "KONTAKION": hymn-prayer/hymn       # 61 — the Octoechos kontakia + the Lenten MTTL/WFL/SatL sets
+      "CommonPrayers": ritual/liturgy     # 106 — the fixed ordinary of the Hours: prayers, responses,
+      #   doxologies, deacon/priest/reader exclamations, the Lenten troparia with their verses —
+      #   the service's own text, so the liturgy sub (a per-file prayer/hymn split would need a
+      #   per-text reading upstream does not mark: the HEADER is free text, often absent)
+      "Command": ritual/liturgy           # 14 — the rubric words the assembler sets in red
+      #   ("покло́нъ", "(гла́съ а҃)", "(Сті́хъ а҃)"): instructions for performing the rite
+      "Text": ritual/liturgy              # 9 — the Hours' titles ("Ча́съ тре́тїй") and the Paschal
+      #   Hours rubric
+  glt:                # the service page's shelf (Adapters::Glt::BOOKS — the site's own texts/<shelf>
+    metadata: book    # filing), one fold per book; every page is a service of the Byzantine rite.
+    #                   The house precedent: hmml's "Liturgical books (Eastern Christian)" → ritual/
+    #                   liturgy (8,627). The four hymnographic books are ALSO hymn collections —
+    #                   a [ritual/liturgy, hymn-prayer/hymn] split is a ruling, not taken here.
+    map:
+      "Menaion": ritual/liturgy          # the fixed-feast propers, one service per commemoration:
+      #   stichera, canons, troparia with the rubrics that order them in Vespers and Orthros
+      "Octoechos": ritual/liturgy        # the eight-tone weekly cycle of propers (+ Eothina, Theotokia)
+      "Triodion": ritual/liturgy         # the Lenten-cycle services through Holy Week, readings inside
+      "Pentecostarion": ritual/liturgy   # the Paschal-cycle services, Pascha to All Saints
+      "Horologion": ritual/liturgy       # the ordinary of the offices (Vespers, Compline, the Hours,
+      #   Orthros) and — the site's own filing — the Divine Liturgies, Akathist and Paraklesis
+      "Euchologion": ritual/liturgy      # the sacramental rites: baptism, marriage, unction, funeral
+      "Synekdemos": ritual/liturgy       # the companion shelf: Katabasiai, Megalynaria, the Orthros
+      #   enkolpion — service material, two of the three pages hymn sequences (declared coarse)

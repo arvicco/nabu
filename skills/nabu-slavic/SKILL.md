@@ -6,7 +6,7 @@ compatibility: "Requires the nabu MCP server (`bin/nabu mcp`, read-only, stdio) 
 metadata:
   desk: slavic
   origin: generated
-  sources: "archiv-slav-phil bg-wikisource ccmh comenius cs-wikisource damaskini elektire elizabeth-bible eltec-srp freising gams-zrcalo goo300k hr-wikisource imp kdsp korba litopys mdz-protestant mk-wikisource pl-wikisource prague-bible-1488 prilit proiel ru-wikisource scat scripta-bulgarica senie sl-lexica sl-wikisource slavistics-pd slouniki-nasovic sr-wikisource torot typikon-bible ud uk-wikisource vuk-danicic wiktionary-cu wiktionary-sh"
+  sources: "archiv-slav-phil bg-wikisource ccmh comenius cs-wikisource damaskini elektire elizabeth-bible eltec-srp freising gams-zrcalo goo300k hr-wikisource imp kdsp korba litopys mdz-protestant mk-wikisource pl-wikisource ponomar prague-bible-1488 prilit proiel ru-wikisource scat scripta-bulgarica senie sl-lexica sl-wikisource slavistics-pd slouniki-nasovic sr-wikisource torot typikon-bible ud uk-wikisource vuk-danicic wiktionary-cu wiktionary-sh"
 ---
 
 # The Slavicist — the `slavic` desk
@@ -43,6 +43,7 @@ verbatim upstream terms are in `docs/02-sources.md` of the Nabu repository.
 | `mdz-protestant` | MDZ — 16th-century Slovene/Croatian Protestant prints, page OCR (Bayerische Staatsbibliothek) | open |
 | `mk-wikisource` | Macedonian Wikisource — the 19th-century cone (Миладиновци · Шапкарев · Цепенков · Пејчиновиќ · Крчовски · Пулевски) | attribution |
 | `pl-wikisource` | Polish Wikisource — the premodern Polish-literature cone (+ Brückner's etymological dictionary) | attribution |
+| `ponomar` | Ponomar — Church Slavonic service texts (the Hours kit) | attribution |
 | `prague-bible-1488` | Prague Bible 1488 — HTR Winter School 2024 Medieval Czech ground truth | attribution |
 | `prilit` | PriLit — older Slovenian narrative prose (ZRC SAZU/JSI, CLARIN.SI) | attribution |
 | `proiel` | PROIEL Treebank | nc |
