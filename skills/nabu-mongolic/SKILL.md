@@ -6,7 +6,7 @@ compatibility: "Requires the nabu MCP server (`bin/nabu mcp`, read-only, stdio) 
 metadata:
   desk: mongolic
   origin: generated
-  sources: "altaica-shm wiktionary-recon"
+  sources: "altaica-shm ptg wiktionary-recon"
 ---
 
 # The Mongolist — the `mongolic` desk
@@ -24,6 +24,7 @@ verbatim upstream terms are in `docs/02-sources.md` of the Nabu repository.
 | Source | Upstream | License class |
 | --- | --- | --- |
 | `altaica-shm` | Street's Text of the Secret History of the Mongols (Monumenta Altaica) | attribution |
+| `ptg` | Pentaglot Dictionary of Buddhist Terms — Sanskrit–Manchu–Mongolian–Chinese (DILA TEI edition) | attribution |
 | `wiktionary-recon` | Wiktionary reconstructions + attested Celtic, Italic, Etruscan, Old Japanese and Chinese — kaikki.org machine-readable extracts (Proto-Slavic, PIE, Proto-Germanic, Proto-Balto-Slavic, Proto-West Germanic, Proto-Italic, Proto-Indo-Iranian; Old Irish, Middle Irish, Middle Welsh, Umbrian, Etruscan, Chinese) | attribution |
 <!-- nabu:skill-sources:end -->
 

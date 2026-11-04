@@ -3,9 +3,9 @@
 as_of: 4 November 2026
 classes:
 - head: literary
-  documents: 799923
-  documents_display: '799,923'
-  sources: 41
+  documents: 799926
+  documents_display: '799,926'
+  sources: 42
 - head: administrative
   documents: 489633
   documents_display: '489,633'
@@ -15,13 +15,13 @@ classes:
   documents_display: '359,085'
   sources: 30
 - head: funerary
-  documents: 115131
-  documents_display: '115,131'
-  sources: 12
+  documents: 115132
+  documents_display: '115,132'
+  sources: 13
 - head: legal
-  documents: 42260
-  documents_display: '42,260'
-  sources: 28
+  documents: 42261
+  documents_display: '42,261'
+  sources: 29
 - head: letter
   documents: 34993
   documents_display: '34,993'
@@ -35,9 +35,9 @@ classes:
   documents_display: '27,183'
   sources: 34
 - head: dedicatory
-  documents: 24228
-  documents_display: '24,228'
-  sources: 10
+  documents: 24245
+  documents_display: '24,245'
+  sources: 11
 - head: ritual
   documents: 23793
   documents_display: '23,793'
@@ -67,9 +67,9 @@ classes:
   documents_display: '11,692'
   sources: 6
 - head: building
-  documents: 8037
-  documents_display: '8,037'
-  sources: 7
+  documents: 8061
+  documents_display: '8,061'
+  sources: 8
 - head: sermon
   documents: 7825
   documents_display: '7,825'
@@ -97,7 +97,7 @@ classes:
 unclassified_sources: 134
 unknown_documents: 47058
 unknown_documents_display: '47,058'
-unmapped_documents: 12313
-unmapped_documents_display: '12,313'
+unmapped_documents: 12327
+unmapped_documents_display: '12,327'
 unclassified_documents: 542653
 unclassified_documents_display: '542,653'

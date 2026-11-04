@@ -6,7 +6,7 @@ compatibility: "Requires the nabu MCP server (`bin/nabu mcp`, read-only, stdio) 
 metadata:
   desk: sinitic
   origin: hand-tuned
-  sources: "babelstone-ids baley-manuscripts baxter-sagart cbdb cbeta chgis classical-modern hdic kanripo kr-gaiji lzh-collection menggu-ziyun obimd qieyun-restored shuowen suttacentral tianyige tls tshet-uinh ud unihan viet-wikisource wiktionary-recon zh-wikisource zhongyuan"
+  sources: "babelstone-ids baley-manuscripts baxter-sagart cbdb cbeta chgis classical-modern hdic kanripo kr-gaiji lzh-collection menggu-ziyun obimd qieyun-restored shuowen suttacentral tianyige tls tshet-uinh ud unihan viet-wikisource wenhai wiktionary-recon wiktionary-tyz wiktionary-vi wiktionary-za zh-wikisource zhongyuan"
 ---
 
 # The Sinologist — the `sinitic` desk
@@ -45,7 +45,11 @@ verbatim upstream terms are in `docs/02-sources.md` of the Nabu repository.
 | `ud` | Universal Dependencies — ancient treebanks | nc |
 | `unihan` | Unihan — the Unicode Han Database | open |
 | `viet-wikisource` | Đại Việt classical shelf — 大越史記全書 + chữ Hán showpieces (Wikisource) | attribution |
+| `wenhai` | The Digital Wenhai v1.1: Phonology (Beaudouin 2026) — the Tangut rhyme dictionary 文海 | attribution |
 | `wiktionary-recon` | Wiktionary reconstructions + attested Celtic, Italic, Etruscan, Old Japanese and Chinese — kaikki.org machine-readable extracts (Proto-Slavic, PIE, Proto-Germanic, Proto-Balto-Slavic, Proto-West Germanic, Proto-Italic, Proto-Indo-Iranian; Old Irish, Middle Irish, Middle Welsh, Umbrian, Etruscan, Chinese) | attribution |
+| `wiktionary-tyz` | Wiktionary Tày — kaikki.org machine-readable extract | attribution |
+| `wiktionary-vi` | Wiktionary Vietnamese — kaikki.org machine-readable extract | attribution |
+| `wiktionary-za` | Wiktionary Zhuang — kaikki.org machine-readable extract | attribution |
 | `zh-wikisource` | Chinese Wikisource — censused works (全唐文 · 續資治通鑑 · 元朝秘史) | attribution |
 | `zhongyuan` | zhongyuan-data — 中原音韻 Old Mandarin rhyme book (nk2028) | open |
 <!-- nabu:skill-sources:end -->
