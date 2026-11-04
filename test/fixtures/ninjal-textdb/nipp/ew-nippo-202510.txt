@@ -1,0 +1,10 @@
+整理番号	見出し語ID	見出し語	見出し語（片仮名）	動詞終止形（現代）	原本所在	影印本所在	邦訳本所在	BnF画像	備考	日国ID	日国ID（参考）
+1	001a01	A.	ア		001a	13	7	https://gallica.bnf.fr/ark:/12148/bpt6k852354j/f13.item		200200000000Bt7Xi7n6	
+2	001a02	Aa.	アア		001a	13	7	https://gallica.bnf.fr/ark:/12148/bpt6k852354j/f13.item		200200000b357RKK1qEm	
+3	001a03	Aara.|,ara.	アアラ.|,アラ		001a	13	7	https://gallica.bnf.fr/ark:/12148/bpt6k852354j/f13.item		200200004631IzulFGEL;200200245d81Ten2TA5h	
+6	001a06	Abaqi,u,aita.	アバキ,ク,イタ	アバク	001a	13	7	https://gallica.bnf.fr/ark:/12148/bpt6k852354j/f13.item		2002001ccb47ia0yjgYA	
+28	001c12	Aburamono.	アブラモノ		001c	14	8	https://gallica.bnf.fr/ark:/12148/bpt6k852354j/f14.item	原本ではaburamigaqiの語釈内にある。	2002001e4430K3M8ZzZm	
+168	003c08	Acureô.|,acoriǔ.	アクレゥ.|,アコリュゥ		003c	18	12	https://gallica.bnf.fr/ark:/12148/bpt6k852354j/f18.item	邦訳：acoriǔは「acuriǔの誤り」	2002000dab8bjPcY3tLM;2002000da9c6KdnatQEY	
+364	006b08	Airon.	アイロン		006b	23	18	https://gallica.bnf.fr/ark:/12148/bpt6k852354j/f23.item	邦訳：「Airenの誤植」		20020003f3954ZmP6Q2o
+25992	332a01	ABAqe,uru,eta.	アバケ,クル,ケタ	アバケル	332a	675	7			2002001cced1a76Eja02	
+32878	402d05	Zzuda.	ヅダ		402d	816	845			2002024a79a6cL8Cbo44	

@@ -244,7 +244,7 @@ Literary and classical Chinese with its reconstruction instruments: Kanripo and 
 
 The Japanese lane, premodern-first: Genji in Ikeda's critical edition at manuscript-line grain, the Kokinshū and two Man'yōshū witnesses in NIJL's TEI, the みんなで翻刻 crowd-transcription mass, and the NRCT historical gazetteer — beside the ONCOJ corpus and lexicon, EDRDG's dictionaries, HDIC and Unihan shared with the Sinologist, and the kaikki ojp extract riding wiktionary-recon.
 
-**Members** (15): `aozora`, `edrdg`, `haga-jinmei`, `hdic`, `honkoku`, `ja-wikisource`, `kokubunken`, `kouigenji`, `kradfile`, `ndl-kotenseki`, `nrct`, `oncoj`, `oncoj-lexicon`, `unihan`, `wiktionary-recon`
+**Members** (16): `aozora`, `edrdg`, `haga-jinmei`, `hdic`, `honkoku`, `ja-wikisource`, `kokubunken`, `kouigenji`, `kradfile`, `ndl-kotenseki`, `ninjal-textdb`, `nrct`, `oncoj`, `oncoj-lexicon`, `unihan`, `wiktionary-recon`
 
 ### turkic
 

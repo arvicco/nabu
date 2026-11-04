@@ -1,0 +1,113 @@
+コンテムツス・ムンヂ（HAB所蔵本）　標準化版ローマ字翻字テキスト
+Contemptus Mundi [HAB copy]　Transcription of Normalized Version
+
+----------------------------------------------------------------------------------
+凡例
+1. 改ページ・改行・改段は原本に従い、以下のように示した。
+1.1 頁数（3桁）と行数（2桁）は各行の先頭において示した。例えば、「001.01」とは、1頁目の1行目を指す。
+1.2 必要に応じて、角括弧で頁番号を訂正・補給した。例えば、「207」とあるべきなのに原本では「206」となっている頁は「206[=207]」として示し、頁番号の記載のない標題紙は「[*001]」として入力した。
+1.3 改行・改段箇所は「///」で示した。
+2. 略語を忠実に翻刻した。例えば、「Deꝰ」（Deusの略語、025.05）や、 「Aĩa」（Animaの略語、348[=349].10）は、原本のままである。
+3. 大小文字の区別と句読点は忠実に再現した。
+4. 分かち書きは、原本に見られる通常のアプローチ（文節間では切るが文節内では続ける）に合わせて標準化した。
+4.1 文節内（極端な場合には形態素内）であるにも関わらず空白がある場合は、( )を以て示した。例えば、「voſoreu o」は「voſoreu( )o」（241[=242].03）とした。
+4.2 文節間であるにも拘らず空白がない場合は、[ ]を以て補給した。例えば、原本に見られる「vomôcoto」は「vomô[ ]coto」（070.19）と示した。
+4.3 句読点の前後にあるスペースは、原文の如何を問わず句読点の後にスペース一つの「. 」、「, 」、「; 」などと統一した。
+5. 改行（以下には「↵」で表す）の際に生じたハイフン使用における不一致も、原本に見られるアプローチに合わせて標準化した。
+5.1 文節間であるにも拘らずハイフンがある場合、(-)を以て示した。例えば、原本の「xiruni-↵voiteua」は「xiruni(-)↵voiteua」（432[=433].03–04）のように記した。
+5.2 文節内であるにも拘らずハイフンが省略された場合は、[-]として補った。例えば、原本の「Maria Mag↵dalena」は「Maria Mag[-]↵dalena」（111.01–02）と示した。
+6. 明らかに誤植と認めれる箇所や不統一は以下のように修正した。
+6.1 脱字は[...]と角括弧内で補った。例えば、「co」が脱字となっている「yorobiuo」を「yoro[co]biuo」（059.06）と示した。
+6.2 衍字は(...)と丸括弧内で示した。例えば、「ro」という衍字を含む「cocororoto」は「cocoro(ro)to」（418[=419].20）とした。
+6.3 文字の置換が必要となる誤植は、誤字の直後に[=...]と角括弧内で入力した。例えば、「u」を「n」に誤った「nangni」を「nangn[=u]i」（136.16）と示した。
+6.4 大小文字の不統一や上記以外の印刷上の問題を[!]（ママ）で示した。例えば、通例の「Ani-↵ma」の代わりに「ani-↵ma」とある場合には、「a[!]ni-↵ma」とした（043.01–02）。
+7. 合字は、それを構成する文字の間にアスタリスクを差し入れて、「c*t」、「f*i」、「i*j」、「ſ*ſ」、「s*t」、「ſ*t」、「t*ç」と示した。ただし、そのままでも表示可能な「Æ」と「ß」の場合を除く。合字になっていない場合は「i'j」、「ſ's」、「ſ'ſ」、「s't」、「t'ç」と示した。
+8. 通常のイタリック体に対してローマン体となっている箇所は山括弧<>で囲んだ。ただし、イタリック体の本文中でも一般的である単独のローマン体大文字は除く。
+9. ヘッダー（欄外標題、章番号、ページ番号）とフッター（つなぎ言葉と折丁記号）および「目録」（[434]–[444]）と「言葉の和らげ」（[445]–[459]）は総て省略した。
+
+Transcription rules
+1. Page, column and line breaks are preserved exactly as in the original. They are indicated as follows:
+1.1 Each line of text is preceded by an indication of the page number (3 digits) and line number (2 digits). E.g., “001.01” indicates the first line on the first page.
+1.2 Where necessary, page numbers are corrected or supplied in square brackets: “206[=207]” for page 206 in the original that is supposed to be numbered 207, and “[*001]” for the unpaginated title page.
+1.3 The beginning of each new page or column is indicated by three slashes: “///”.
+2. Abbreviations are not expanded but transcribed as is. E.g., “Deꝰ” (for “Deus”; 025.05), “Aĩa” (for “Anima”; 348[=349].10).
+3. Capitalization and punctuation are transcribed as in the original.
+4. Spacing is normalized to align with the text’s overall approach: spaces are used between but not within constituents.
+4.1 Spaces where none are expected (i.e., within constituents, at times even within morphemes) are marked as “( )”. E.g., “voſoreu o” for intended “voſoreuo” is represented as “voſoreu( )o” (241[=242].03).
+4.2 Conversely, spaces between constituents that are lacking are supplied as “[ ]”. E.g., “vomôcoto” for expected “vomô coto” is rendered as “vomô[ ]coto” (070.19).
+4.3 Spacing before and after punctuation marks is normalized to a single following space (and no preceding space): “. ” (period), “, ” (comma), “; ” (semicolon), etc.
+5. Hyphenation at line breaks (marked here by “↵”) is similarly normalized in alignment with the prevailing approach in the text.
+5.1 When hyphenation exceptionally occurs in between two constituents, the hyphen is marked as “(-)”. E.g., “xiruni-↵voiteua” for expected “xiruni↵voiteua” is given as “xiruni(-)↵voiteua” (432[=433].03–04).
+5.2 Omitted hyphens between two portions of a single constituent are added as “[-]”. E.g., “Maria Mag↵dalena” for expected “Maria Mag-↵dalena” as “Maria Mag[-]↵dalena” (111.01–02).
+6. Corrections: To increase legibility, unambiguous misprints and inconsistencies are indicated as follows:
+6.1 Additions are given inside square brackets: [...]. E.g., “yorobiuo” for intended “yorocobiuo” is specified as “yoro[co]biuo” (059.06).
+6.2 Deletions are indicated inside round brackets: (...). E.g., “cocororoto” for intended “cocoroto” as “cocoro(ro)to” (418[=419].20).
+6.3 Misprints requiring substitutions are corrected directly after the letter(s) in question in square brackets: [=...]. E.g., “nangni” for intended “nangui” as “nangn[=u]i” (136.16).
+6.4 Irregular (non-)capitalization or printing issues are followed by an exclamation mark inside square brackets: [!]. E.g., “ani-↵ma” for expected “Ani-↵ma” as “a[!]ni-↵ma” (043.01–02).
+7. Ligatures are marked by an asterisk between their constituent letters (<c*t>, <f*i>, <i*j>, <ſ*ſ>, <s*t>, <ſ*t>, <t*ç>), unless they are already rendered by a single code-point (<Æ>, <ß>). Their respective non-ligature counterparts are written as <i'j>, <ſ's>, <ſ'ſ>, <s't>, and <t'ç>.
+8. Portions of text rendered in roman type (i.e., upright letterforms; as opposed to italic type, which is predominant in Contemptus mundi) are enclosed in angle brackets <> except for isolated capital letters in roman type.
+9. Headers (including running titles, chapters, and page numbers) and footers (catchwords and signatures), as well as the entire table of contents ([434]–[444]) and glossary ([445]–[459]) are omitted.----------------------------------------------------------------------------------
+
+
+[*001].01	<CONTEMPTVS
+[*001].02	mundi jenbu.
+[*001].03	CORE YOVO[ ]ITOI, IESV CHRIS->
+[*001].04	tono gocǒxeqiuo manabi( )tatemat'çu-
+[*001].05	<ru michiuo voxiyuru qiǒ.>
+[*001].06	<NIPPON IESVSNO COMPANHIA[-]
+[*001].07	no Collegio( )nite Superiores( )no goguegiuo
+[*001].08	motte coreuo fanni f*iraqu mono( )nari.>
+[*001].09	Toqini goxuxxeno nenqi. 1596.
+///
+001.01	<DOCVIVNO FI-
+001.02	toni taixite xoſu.
+001.03	COno Contemptus mundi Iichiiqi[-]
+001.04	ni voite IESVS( )no Companhia[-]
+001.05	no Superiores gofocqini yotte La[-]
+001.06	tinno xǒfon( )yori taxicani fonya[-]
+001.07	cu( )xi, qeôgǒ dodoni voyõde, jinxiuo yauarague-
+001.08	te motte xini chiribamu. Core Deusno michiuo
+001.09	yuqi, goxǒuo taſucaritaqu vomô f*itouo t'çumazzu[-]
+001.10	cazu, michibiqu coto mottomo taixet( )naru gui[-]
+001.11	nareba, tǒmõ Cõpanhiano xito, narabini xezocu[-]
+001.12	no tomogarauo xite yomi( )yaſucaraximenga tame[-]
+001.13	nari. Xicaruni cono xono vchini voite tocu fu-
+001.14	caqi coto vouoxito iyedomo vaqite tocuuo mo[-]
+001.15	tomentono xiguanuo motte coreuo docuju( )xen f*i[-]
+001.16	to izzureno tocorouo( )naritomo f*iraqi( )miba, ima
+001.17	vaga tameni canyôno cotouariuo xiruſaretarito va[-]
+001.18	qimayezaru coto arubecarazu. Xoxen Deusno
+001.19	facari( )naqi jenno minamoto( )nite maximaſu von[-]>
+///
+205[=206].01	zu, mata jenninca acuninca corayemajiqi aite[-]
+205[=206].02	cato[ ]yǔ cotouo mizu, tada nanitaru goſacuno
+205[=206].03	mono( )yori qitaru tocorono qizacainaru cotouo[-]
+205[=206].04	mo xabet naqu icafodonitemo are, nanitaru
+205[=206].05	jixetnimo Deusno vonte( )yori atayetamǒto
+205[=206].06	cocoroyoqu vqetatemat*çuri, amaßaye vô-
+205[=206].07	qinaru tocuuo yetaruto vomô( )nari. Sono[ ]yu-
+205[=206].08	yeua nanito vazucanaru cotonitemo are De-
+205[=206].09	usni taixitatemat*çurite vqe( )corayuru fodono
+205[=206].10	cotoni ſono gofempô naxito yǔ coto naxi.
+205[=206].11	Carugayuyeni vnuo f*iracanto vomouaba, cax[-]
+205[=206].12	xenno cacugouo ſubexi. Caxxenno chǔcô[-]
+205[=206].13	uo nuqindezu[ ]xite, riunno camuriuo vru co-
+205[=206].14	to arubecarazu. Moxi xinoguigataxito vo-
+205[=206].15	môni voiteua, camuriuo jitai( )ſuru mono( )na-
+205[=206].16	ri, camuriuo yetaqu vomôni voiteua, yumiǒ[-]
+205[=206].17	ni tatacai canninuo ſubexi: xinrǒ naqu[ ]xite
+205[=206].18	cut*çuroguini itaru coto canauazu, tatacai na[-]
+205[=206].19	qu[ ]xite xôriuo yezu. Icani vonaruji vaga
+205[=206].20	vmaret*çuqiniua cataqu vomô cotouo vonmi[-]
+205[=206].21	no gocǒriocuuo motte aicanǒ yǒni facarai[-]
+
+----------------------------------------------------------------------------------
+底本：ヘルツォーク・アウグスト図書館蔵本（Shelfmark: 57.13 Eth.)
+翻字担当者：オースタカンプ・スヱン、ノイツラ・ゾフィー
+更新履歴：
+2025年5月1日公開
+
+Source: Herzog August Bibliothek Wolfenbüttel (Shelfmark: 57.13 Eth.)
+Sven Osterkamp, Sophie Neutzler
+Change Log:
+2025-05-01 Open to the public
