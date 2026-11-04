@@ -6,7 +6,9 @@ module Nabu
   # inferable iff:
   #
   #   1. its code resolves to a BARE anchor at source grain (a source-level
-  #      override or codemap stage is already the finer statement);
+  #      override or codemap stage is already the finer statement) — a
+  #      bare anchor with a script surface (yi~latn) qualifies, and the
+  #      surface carries onto the inferred stage (yi:mid~latn);
   #   2. its date interval is CLOSED (both bounds; min not_before /
   #      max not_after over its document_axes rows);
   #   3. the interval is CONTAINED IN EXACTLY ONE of the anchor's attested,
@@ -166,8 +168,14 @@ module Nabu
       end
       return :spans_bands unless containing.size == 1
 
+      # The resolution may carry a script SURFACE the stage leaves open (a
+      # surface-only override: ppchy yi~latn, papyri egy~latn) — it rides
+      # onto the inferred stage (yi:mid~latn), the id the override would
+      # state had it named the stage; dropping it would strip the surface
+      # claim from exactly the dated documents.
+      surface = match[:script] ? "~#{match[:script]}" : ""
       Candidate.new(urn: row[:urn], source: row[:slug], code: row[:language],
-                    lect_id: containing.first.id,
+                    lect_id: "#{containing.first.id}#{surface}",
                     not_before: row[:not_before], not_after: row[:not_after])
     end
 
