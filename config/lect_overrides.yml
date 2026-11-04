@@ -328,3 +328,17 @@ sources:
     # (ka-mcxeta needs no row: it is tagged oge, the Old Georgian anchor,
     # by its own title "ძველი ქართულით".)
     chu: { lect: "chu:ncs", tier: certain }
+  armepic:
+    # The Artsakh inscriptions (1183–1998) are written grabar — the
+    # editors' own description: "grabar with Middle Armenian vernacular
+    # features" — and the registry's xcl note anticipates exactly this
+    # continued learned register ("continued as the learned language to
+    # the 19th c."). Ruled 2026-11-04: the corpus pins to xcl; no
+    # date-band staging into axm (a carving date does not reclassify a
+    # conservative written register). Spot-read at execution: the 1998
+    # Berdzor dedication is pure learned grabar (շինեցաք, the զ-
+    # accusative, Աստուծոյ/եղբարց genitives, an Armenian-era date); the
+    # 1918 stone keeps the grabar memorial formula with vernacular
+    # intrusions — the editors' reading holds at corpus grain. Tier
+    # certain: the corpus's own editorial definition.
+    xcl: { lect: "xcl", tier: certain }
