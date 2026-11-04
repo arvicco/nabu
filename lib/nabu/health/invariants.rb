@@ -193,6 +193,13 @@ module Nabu
       # check subsecond).
       SCRIPT_CHECK_SAMPLE = 12
 
+      # #timeline_lane_drift's serialized-metadata marker of a structured
+      # date bound — ONE reading shared with the suite's timeline-
+      # registration guard (test/support/timeline_registration_guard.rb),
+      # which applies it to every adapter's parsed fixtures so the drift
+      # fails before it ships, not after a sync.
+      DATE_BOUNDS_MARKER = '"not_before"'
+
       # P107: the unmined-ore census's lane vocabularies —
       # axis-shaped key tokens per lane (keys token-split on
       # non-alphanumerics; one shared token flags the key).
@@ -755,7 +762,7 @@ module Nabu
         dark = @catalog[:sources].order(:slug).select_map(%i[id slug]).filter_map do |id, slug|
           has = @catalog[:documents]
                 .where(source_id: id, withdrawn: false)
-                .where(Sequel.like(:metadata_json, '%"not_before"%')).limit(1).count
+                .where(Sequel.like(:metadata_json, "%#{DATE_BOUNDS_MARKER}%")).limit(1).count
           next nil if has.zero?
 
           # P122-1: upstream lanes only — an estimate never lights a dark lane.
