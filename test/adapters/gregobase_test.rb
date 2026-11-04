@@ -26,12 +26,12 @@ module Adapters
 
     # -- registry -------------------------------------------------------------
 
-    def test_registry_row_exists_unwired_with_manual_sync_policy
+    def test_registry_row_exists_wired_with_manual_sync_policy
       registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources.yml", __dir__))
       entry = registry["gregobase"]
       refute_nil entry, "config/sources.yml must register gregobase"
       assert_equal ADAPTER, entry.adapter_class
-      refute entry.wired, "unwired until the first real sync is verified"
+      assert entry.wired, "wired after the verified first sync of 2026-11-04 (18,422 docs / 20,810 passages, exactly the dump census)"
       assert_equal "manual", entry.sync_policy
     end
 

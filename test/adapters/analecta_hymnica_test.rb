@@ -119,11 +119,11 @@ module Adapters
       assert_equal "ia-hocr-text", manifest.parser_family
     end
 
-    def test_registry_row_is_registered_unwired_and_manual
+    def test_registry_row_is_registered_wired_and_manual
       registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources.yml", __dir__))
       entry = registry["analecta-hymnica"]
       refute_nil entry
-      refute entry.wired, "wired: false until the first real sync is verified"
+      assert entry.wired, "wired after the verified first sync of 2026-11-04 (55 docs / 17,211 passages, exactly the census)"
       assert_equal "manual", entry.sync_policy
       assert_equal %w[classical romance], entry.axes
     end
