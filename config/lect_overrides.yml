@@ -342,3 +342,15 @@ sources:
     # intrusions — the editors' reading holds at corpus grain. Tier
     # certain: the corpus's own editorial definition.
     xcl: { lect: "xcl", tier: certain }
+  ponomar:
+    # The Ponomar service texts are the Hours of the Russian Synodal
+    # service books in their printed Church Cyrillic orthography (titla,
+    # accents, psili, ѿ/ꙋ/ѧ/ѣ/ѵ) — the post-Nikonian standard "used since
+    # as the liturgical language of the Russian ... Orthodox churches"
+    # that the registry's chu:ncs node names, its band [1650, 2100] open
+    # at the modern end for exactly this living liturgical use. Upstream
+    # files them under the language folder cu (→ chu); this row
+    # transcribes the corpus's own identity onto the existing node —
+    # parse-time work, the 2026-10-18 generalization. Tier certain: every
+    # file is the modern liturgical text, none a pre-reform witness.
+    chu: { lect: "chu:ncs", tier: certain }

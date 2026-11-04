@@ -3086,3 +3086,18 @@ sources:
     dating: {posture: undatable, note: modern MT-oriented sentence pairs, no dates upstream}
     places: {posture: unplaced}
     script: {posture: implied}
+  ponomar:
+    # lect machine-postured — config/lect_overrides.yml chu → chu:ncs (the
+    # registry's New Church Slavonic (Synodal) stage).
+    # kind machine-postured — kind_map.yml metadata service_part.
+    dating: {posture: undatable, note: "the asset carries no date — no edition year, no imprint; the
+        Hours' source records credit only http://orthlib.ru. The texts are the received Byzantine
+        Hours in the modern Synodal redaction (post-1650s by the chu:ncs band), not datable per
+        text; three headers name a traditional author (the prayers of St Basil the Great ×2 and of
+        St Ephrem the Syrian) — attributions, not dates, kept in the title, never turned into an
+        era here (a work_eras row would be a separate, judgment-grade call)"}
+    places: {posture: unplaced, note: "no place in the asset — liturgical texts of no single
+        origin; the Synodal books' printing place is not stated"}
+    script: {posture: qualified, note: "Church Cyrillic in the printed Synodal service-book
+        orthography (titla U+0483 and letter-titla U+2DE0–2DFF, accents, psili, ѿ/ꙋ/ѧ/ѣ/і/ѵ/ѳ/ѡ),
+        NFC-composed at the boundary (decomposed и/і + mark on 199 upstream attributes)"}
