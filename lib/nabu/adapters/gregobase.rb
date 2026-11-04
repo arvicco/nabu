@@ -157,6 +157,15 @@ module Nabu
         parser_family: "gabc"
       )
 
+      # The chant-identity link layer (Nabu::ChantIdentity): either chant
+      # shelf's sync re-derives the whole gregobase×cantus Cantus-ID join,
+      # pinned to one scope — see the producer's class note.
+      def self.reference_edges? = true
+
+      def self.reference_producer(catalog:, journal:)
+        ChantIdentity.new(catalog: catalog, journal: journal)
+      end
+
       def self.manifest
         MANIFEST
       end
