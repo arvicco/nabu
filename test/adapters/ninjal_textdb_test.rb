@@ -211,12 +211,12 @@ module Adapters
       assert_equal "jpn:lmj~latn", lects.resolve("jpn", source: "ninjal-textdb")
     end
 
-    def test_registry_row_is_unwired_and_manual
+    def test_registry_row_is_wired_and_manual
       registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources.yml", __dir__))
       entry = registry["ninjal-textdb"]
       refute_nil entry
       assert_equal Adapter, entry.adapter_class
-      refute entry.wired, "awaiting the first real sync"
+      assert entry.wired, "wired after the verified first sync (3 docs / 22,105 passages + 32,878 entries)"
       assert_equal "manual", entry.sync_policy
     end
 
