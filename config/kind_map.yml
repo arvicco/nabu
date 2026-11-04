@@ -1174,7 +1174,28 @@ sources:
       "Vernacular": "a register label (speech-near Yiddish), not a genre — the court
         testimony, the 1798 Amsterdam diskurs, Grine felder (a play) and Royte
         pomerantsen (folk jokes); 4 texts, reviewed"
-  ganjoor:                   # census 2026-11-02 over the classical cone (126,165 poems): the
+  divinum-officium:          # census 2026-11-04 (full-tree parse at master 85183a9b): 4,003
+    metadata: book_part      # documents; book_part = the Latin tree's own top directory
+    #                          (the Cist/M/OP use suffix stripped; Psalterium/Psalmorum split
+    #                          out — the psalms themselves). NOT folded, left in the unmapped
+    #                          bucket for a ruling: "Necrologium" (12) — a Cistercian necrology
+    #                          (Altovadum and its confraternity), read at chapter but in form an
+    #                          obituary register: ritual/liturgy or administrative/register?
+    map:
+      "Sancti": ritual/liturgy           # 1,663 — the proper of the saints, Office + Mass
+      "Tempora": ritual/liturgy          # 1,472 — the proper of the season
+      "Commune": ritual/liturgy          # 122 — the commons (of apostles, martyrs, virgins …)
+      "Psalterium": ritual/liturgy       # 20 — the psalter's liturgical apparatus: invitatories,
+      #                                    hymns, doxologies, the psalm distribution tables
+      "Ordo": ritual/liturgy             # 14 — the Ordinary of the Mass (Roman and the uses)
+      "Appendix": ritual/liturgy         # 6 — the commendation of the soul, grace at meals …
+      "Martyrologium": ritual/liturgy    # 367 — the Roman Martyrology's daily notices, a
+      #                                    liturgical book read in choir at Prime (its content is
+      #                                    hagiographic; no hagiography head exists — proposed)
+      "Psalmorum": scripture             # 202 — the Vulgate psalms and canticles, verse by verse
+      "Regula": legal/law                # 125 — the Rule of St Benedict in its daily portions
+      #                                    (the 1QS precedent: a community's rule is law)
+  ganjoor:                  # census 2026-11-02 over the classical cone (126,165 poems): the
     metadata: form           # poem's own section label (the leaf cat — 999 distinct values).
     vocabulary: open         # Upstream mixes FORM sections (the divan's غزلیات / رباعیات /
     #                          قصاید …) with work and chapter titles (دفتر اول, گلستان's باب,

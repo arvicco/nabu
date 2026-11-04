@@ -155,6 +155,8 @@ module Nabu
           #                          Qurʾān book has no byline and stays undated
           "diorisis" => :signed_year_key,
           "disco" => :author_century_band,
+          "divinum-officium" => :place_only, # no dating (undatable); the local-calendar proper's
+          #                                    jurisdiction (Rome, Passau, Utrecht …) is the "place"
           "dta" => :year_range,
           "ebible-pacific" => :structured, # P154: each translation's edition year as eBible records
           #                                  it (1868 / 1908 / 1922, class edition) — no place claim
