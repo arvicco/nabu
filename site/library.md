@@ -57,6 +57,7 @@ instruments, CLI recipes and terminal setup, are the
 | <span id="shelf-greek-silver"></span>[Greek silver layer](#the-greek-silver-layer) | Diorisis and GLAUx: machine-lemmatized second editions of the Greek canon, honestly labelled | Homer – early Byzantium | {{ shelves["greek-silver"].size_display }} | CC BY-SA / mixed per document |
 | <span id="shelf-classical-latin"></span>[Classical Latin](#classical-latin-literature) | Perseus: Vergil, Ovid, Cicero, Livy, Tacitus, with aligned English translations | 3rd c. BCE – Late Antiquity | {{ shelves["classical-latin"].size_display }} | CC BY-SA |
 | <span id="shelf-latin-romance"></span>[Latin–Romance continuum](#the-latinromance-continuum) | digilibLT late-antique Latin, openMGH, CroALa, Corpus Córporum's Patrologia; BFM Old French, the Galician-Portuguese cantigas, Old Spanish, Portuguese, Catalan, Occitan, Sardinian and Judeo-Spanish shelves | 2nd c. CE – early modern | {{ shelves["latin-romance"].size_display }} | CC BY / CC BY-SA / NC / written grant |
+| <span id="shelf-liturgy-chant"></span>[Liturgy and chant](#liturgy-and-chant) | The service books and sung repertory of medieval Christendom: Divinum Officium's traditional Roman Breviary and Missal, GregoBase's Gregorian chant transcriptions, the Cantus Database's manuscript chant inventories, the Analecta Hymnica scans, the Greek Orthodox service books and Ponomar's Church Slavonic Hours | late antiquity – 20th c. | {{ shelves["liturgy-chant"].size_display }} | PD / CC0 / NC / GPL |
 | <span id="shelf-papyri"></span>[Documentary papyri](#documentary-papyri) | Papyri.info DDbDP: contracts, letters, tax receipts (Greek, Coptic, Latin, Arabic, Demotic) | c. 300 BCE – 8th c. CE | {{ shelves["papyri"].size_display }} | CC BY |
 | <span id="shelf-latin-inscriptions"></span>[Latin inscriptions](#latin-inscriptions) | Epigraphic Database Heidelberg: epitaphs, dedications, milestones from the whole empire, with genre facets | Republic – Late Antiquity | {{ shelves["latin-inscriptions"].size_display }} | CC BY-SA |
 | <span id="shelf-greek-inscriptions"></span>[Greek inscriptions](#greek-inscriptions) | Attic Inscriptions Online: the inscriptions of Attica in English translation, with AIO's own Greek editions | Archaic – Roman | {{ shelves["greek-inscriptions"].size_display }} | CC BY-SA |
@@ -142,6 +143,27 @@ cantigas (by written grant), the Old Spanish Textual Archive, Spanish
 sonnets, Portuguese literary works, the public-domain Catalan of CTILC, and
 smaller Occitan, Aranese, Sardinian and Judeo-Spanish shelves — the last
 three modern, labelled where an upstream says its text is synthetic.
+
+## Liturgy and chant
+
+The texts the medieval Church actually sang and prayed, held as one
+cross-language shelf. The Latin side: Divinum Officium's traditional Roman
+Breviary and Missal whole — propers, commons, the Vulgate psalter verse by
+verse, the Martyrology and the Rule of St Benedict, from the 1888 Ratisbon
+breviary through the 1960 rubrics (public-domain texts); GregoBase's
+community-transcribed Gregorian repertory, some eighteen thousand chants
+held as sung text with their GABC notation beside them (CC0); the Cantus
+Database's chant-by-chant inventories of three hundred medieval manuscripts,
+each chant as its scribe spelled it with feast, office, mode and Cantus ID
+(non-commercial); and the Analecta Hymnica, the 55-volume corpus of medieval
+Latin hymnody, as public-domain scans in uncorrected OCR. The Greek side:
+the Greek Orthodox Archdiocese's service books — the Menaia, Octoechos,
+Triodion, Pentecostarion, Horologion and Euchologion — with their red
+rubrics kept apart from the sung text (public domain by the maintainer's own
+statement). The Slavic side: Ponomar's Hours in Synodal Church Slavonic in
+full Church Cyrillic orthography (GPL). The chant shelves share the Cantus
+ID, so the same antiphon can be followed from a St Gall manuscript to its
+modern Solesmes transcription.
 
 ## Documentary papyri
 

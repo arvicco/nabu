@@ -15,6 +15,13 @@ classical-greek: [perseus-greek]
 post-classical-greek: [first1k-greek, pta, cgpg, hexapla, suda-translations]
 greek-silver: [diorisis, glaux]
 classical-latin: [perseus-latin, lasla]
+liturgy-chant:
+  - divinum-officium
+  - gregobase
+  - cantus
+  - analecta-hymnica
+  - glt
+  - ponomar
 latin-romance:
   - digiliblt
   - openmgh
