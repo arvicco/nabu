@@ -6,7 +6,7 @@ compatibility: "Requires the nabu MCP server (`bin/nabu mcp`, read-only, stdio) 
 metadata:
   desk: romance
   origin: generated
-  sources: "aranese bdcamoes bfm bim-sahcoba cantigas corpus-corporum croala ctilc cv-sardinian derom digiliblt disco littre lo-congres meloniromance memis openmgh osta salom theatre-classique typikon-bible ud wiktionary-ca wiktionary-frm wiktionary-fro wiktionary-oc wiktionary-osp wiktionary-pro"
+  sources: "analecta-hymnica aranese bdcamoes bfm bim-sahcoba cantigas cantus corpus-corporum croala ctilc cv-sardinian derom digiliblt disco divinum-officium gregobase littre lo-congres meloniromance memis openmgh osta salom theatre-classique typikon-bible ud wiktionary-ca wiktionary-frm wiktionary-fro wiktionary-oc wiktionary-osp wiktionary-pro"
 ---
 
 # The Romanist — the `romance` desk
@@ -23,11 +23,13 @@ verbatim upstream terms are in `docs/02-sources.md` of the Nabu repository.
 <!-- nabu:skill-sources:begin — generated from config/sources.yml by `rake skills:scaffold`; edit outside this block -->
 | Source | Upstream | License class |
 | --- | --- | --- |
+| `analecta-hymnica` | Analecta Hymnica Medii Aevi, Bd. 1–55 (Dreves, Blume, Bannister; archive.org scans, uncorrected OCR) | open |
 | `aranese` | ES-OC Parallel Corpus — Spanish–Aranese (BSC projecte-aina, WMT24) | attribution |
 | `bdcamoes` | BDCamões — Corpus of Portuguese Literary Documents, Part I (PORTULAN CLARIN) | attribution |
 | `bfm` | Base de français médiéval — BFM2022 (ENS de Lyon / IHRIM) | attribution |
 | `bim-sahcoba` | BIM/SAHCOBA — Syntactically Annotated Historical Corpus in Basque (HiTZ, University of the Basque Country) | attribution |
 | `cantigas` | Cantigas Medievais Galego-Portuguesas (Projeto Littera) | attribution |
+| `cantus` | Cantus Database — inventories of chant in medieval manuscripts | nc |
 | `corpus-corporum` | Corpus Córporum — Patrologia Latina (mlat.uzh.ch, Univ. of Zurich) | nc |
 | `croala` | Croatiae auctores Latini — CroALa (Jovanović, ed.) | attribution |
 | `ctilc` | CTILC public-domain works slice — Corpus Textual Informatitzat de la Llengua Catalana (IEC) | attribution |
@@ -35,6 +37,8 @@ verbatim upstream terms are in `docs/02-sources.md` of the Nabu repository.
 | `derom` | DÉRom — Dictionnaire Étymologique Roman (ATILF/Ortolang) | nc |
 | `digiliblt` | digilibLT — Biblioteca digitale di testi latini tardoantichi (CIRCSE CoNLL-U) | attribution |
 | `disco` | DISCO — Diachronic Spanish Sonnet Corpus (Ruiz Fabo et al., v5.0) | attribution |
+| `divinum-officium` | Divinum Officium — the Tridentine Latin Office and Mass (Breviarium and Missale Romanum) | open |
+| `gregobase` | GregoBase — a database of Gregorian scores (gregobase.selapa.net) | open |
 | `littre` | Littré, Dictionnaire de la langue française (1863–1877) — oeuvres/littre TEI | attribution |
 | `lo-congres` | Lo Congrès Occitan news corpus (six dialects, French-aligned) | attribution |
 | `meloniromance` | Meloni et al. 2021 Romance cognate sets (lexibank/meloniromance CLDF) | attribution |
