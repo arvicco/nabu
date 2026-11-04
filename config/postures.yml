@@ -1477,6 +1477,24 @@ sources:
     script: {posture: qualified, note: "Japanese held in the ORIGINAL Portuguese-style Latin
         romanization (long ſ, ŏ/ǒ, ã, the [f]/[t] name marks verbatim) — the ~latn surface on
         the lect; the modern kanji-kana / normalized layers ride line annotations"}
+  gregobase:
+    # lect: machine-postured — the lat → lat/ecc override in
+    # config/lect_overrides.yml (vernacular rows bare); kind: machine-postured
+    # — kind_map.yml metadata office_part.
+    dating: {posture: partial, note: "no per-chant composition date exists upstream; the
+        chant's SOURCE BOOKS date it: 52 chants found in a manuscript witness (the Hartker
+        antiphoner Cod. Sang. 390/391, 'around 990-1000'; Cod. Lichtenthal 28, mid 13th c.)
+        take the codex's own period, class-less; 15,179 more take their printed books' years
+        (min..max, class edition — the Graduale/Liber Usualis/Antiphonale the transcription
+        follows, never the chant's age); 3,191 cite no book and carry no date (census
+        2026-11-04)"}
+    places: {posture: unplaced, note: "nothing place-shaped is claimed: a book's editor field
+        names the editing house (Solesmes, Vatican, Westmalle, Dominican), not an imprint,
+        and the codices' description names their present library (custody, not origin) —
+        both ride verbatim in metadata sources"}
+    script: {posture: implied, note: "each chant's language code implies its script (Latin;
+        Greek 20, Khmer 3, Chinese 1); the one Byzantine row is romanized Greek and codes
+        grc-Latn"}
   scat:
     # kind: machine-postured — kind_map.yml source_kind historiography (the
     # corpus is saints' lives). lect: machine-postured by the scat-century

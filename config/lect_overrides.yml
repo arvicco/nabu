@@ -171,6 +171,18 @@ sources:
   # registry note agree.
   ninjal-textdb:
     jpn: { lect: "jpn:lmj~latn", tier: certain }
+  # GregoBase is the Gregorian repertory of the Roman rite and its
+  # religious orders (Solesmes, Vatican, Dominican, Cistercian…): its Latin
+  # is the liturgy's own register by definition — the registry's
+  # lat/ecc variety (the vulgate's register, lat:late/ecc). Deliberately
+  # UNSTAGED: the texts span the late-antique psalter and antiphon
+  # tradition, medieval hymns and sequences, and 19th–21st-century
+  # compositions and revisions in one table with no per-chant composition
+  # date (the D57-f mixed-at-source-grain class). The vernacular rows
+  # (eng, vie, pol, grc …) stay bare. Tier certain: the register claim is
+  # the database's definition, not an inference.
+  gregobase:
+    lat: { lect: "lat/ecc", tier: certain }
   # P116-1's add-then-retire completed (2026-10-11; the Slavic nabu-lects
   # package minted cs with cs:old [1100, 1500], in canonical): the Prague
   # Bible of 1488 IS Old Czech by every periodization (staročeština to

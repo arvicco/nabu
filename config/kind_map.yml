@@ -999,6 +999,40 @@ sources:
   grand-tour:                # P155 — the four journals are day-by-day travel diaries (Reisetagebuch,
     source_kind: literary/diary/travelogue   # Reise-Journal, "Kurtze verzeichnung meiner
     #   geringen Reise"): the ruled travelogue sub, one whole-source line
+  gregobase:                 # the chant's usage code (gregobase_chants.office-part; labels = the
+    metadata: office_part    #   site's include/txt.php). Every chant is a sung text of the rite,
+    #                          so the liturgical head is the default fold; the strophic poetic
+    #                          forms (hymn, sequence/prosa, rhythmus) fold to hymn by FORM, the
+    #                          litany to prayer. Counts = accepted documents, full-dump census
+    #                          2026-11-04 (37 rows carry no code and mint no kind row).
+    map:
+      "an": ritual/liturgy       # 8,609 Antiphona — office/mass antiphons
+      "re": ritual/liturgy       # 1,822 Responsorium — the great responsories of the office
+      "hy": hymn-prayer/hymn     # 1,661 Hymnus — strophic office hymns
+      "al": ritual/liturgy       # 925 Alleluia — the mass proper's alleluia with its verse
+      "in": ritual/liturgy       # 903 Introitus
+      "co": ritual/liturgy       # 878 Communio
+      "of": ritual/liturgy       # 780 Offertorium
+      "rb": ritual/liturgy       # 621 Responsorium breve — the short office responsory
+      "gr": ritual/liturgy       # 516 Graduale
+      "or": ritual/liturgy       # 324 Toni Communes — the common tones (orations, lessons,
+      #                            psalm tones): the rite's recitation formulas
+      "ky": ritual/liturgy       # 300 Kyriale — the mass ordinary (Kyrie, Gloria, Credo,
+      #                            Sanctus, Agnus Dei, Ite missa est)
+      "va": ritual/liturgy       # 283 Varia — upstream's miscellany bucket; its rows are still
+      #                            chants for the rite (motets, devotional chants, processionals)
+      "tr": ritual/liturgy       # 248 Tractus
+      "ps": ritual/liturgy       # 124 Psalmus — psalms set to their tones for the office: the
+      #                            sung psalm in its liturgical use, not the scripture shelf
+      "se": hymn-prayer/hymn     # 100 Sequentia — rhymed strophic poetry after the alleluia
+      "pr": ritual/liturgy       # 98 Praefationes — the celebrant's sung prefaces
+      "ca": ritual/liturgy       # 80 Canticum — the biblical canticles (Magnificat, Benedictus…)
+      #                            in their tones, the psalm fold's reasoning
+      "su": hymn-prayer/prayer   # 31 Supplicatio — litanies: invocation and petition
+      "pa": hymn-prayer/hymn     # 28 Prosa — the sequence under its other name
+      "tp": ritual/liturgy       # 26 Tropa — tropes: texts interpolated into a chant of the mass
+      "im": ritual/liturgy       # 21 Improperia — the Good Friday reproaches
+      "rh": hymn-prayer/hymn     # 7 Rhythmus — rhythmic (accentual, rhymed) devotional poems
   tianyige:                  # the Ming examination records (科舉錄): each record is the
     source_kind: administrative/register   # official register of one session — examiners,
     #   questions, the graduates' roster, model answers; register is the closest ruled class

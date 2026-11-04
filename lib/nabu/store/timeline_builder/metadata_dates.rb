@@ -192,6 +192,9 @@ module Nabu
           #                           birth..death → CE), class composition; place = the poet's
           #                           death place toponym (name + coordinates)
           "glaux" => :signed_bounds_keys,
+          "gregobase" => :structured, # the chant's source books: a manuscript witness's own
+          #                             period (Hartker c. 990-1000; class-less), else the printed
+          #                             books' years (min..max, class edition); no place claim
           "gretil-legacy" => :work_era, # the work's attributed era (config/work_eras.yml,
           #                               keyed on metadata "work" = the GRETIL file stem)
           "gu-wikisource" => :edition_year_text, # P120-3: the scan Index's verbatim

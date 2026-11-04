@@ -2893,6 +2893,33 @@ grand-tour:   # P155, 02-sources row 369
   # (LICENSE + record) → attribution. Document = journal, passage = page;
   # the 20 editorial introductions and the registers are not documents.
 
+gregobase:   # 02-sources row 380
+  adapter: Nabu::Adapters::Gregobase
+  adopted: "2026-11-04"
+  axes: [romance]   # the Latin continuum's liturgical side (the corpus-corporum precedent)
+  wired: false   # awaiting the first real sync: one git clone of the site repo (~18 MB,
+                 # the 17 MB dump inside); parse ≈ seconds. EXPECT 18,430 refs discovered
+                 # (332 rows skipped by rule: 33 copyrighted, 276 retired duplicates, 19
+                 # withdrawn, 4 without GABC) → 18,422 docs / 20,810 passages, 8 skipped
+                 # by rule at parse (notation-only scores), 0 errored (census through
+                 # the adapter over the whole dump at 2ebcda3, 2026-11-04). Eyeball
+                 # nabu show urn:nabu:gregobase:14738 (Factus est adiutor, Hartker-dated)
+                 # and 5 random, probe nabu search "adiutor meus Deus meus", then flip.
+  sync_policy: manual   # the dump is re-committed in place, irregularly (17 dumps 2016-01-13
+                        # → 2024-01-05); a new dump is new content under the same statement
+  # GregoBase (gregobase.selapa.net, Olivier Berten et al.): the community-
+  # transcribed Gregorian chant database in GABC (Gregorio) notation, from
+  # upstream's own MySQL export gregobase_online.sql in the site's code repo
+  # github.com/gregorio-project/GregoBase. License, the site's About page
+  # (gregobase.selapa.net/?page_id=2) verbatim: "All chant transcriptions are
+  # released under CC0 (a.k.a. Public Domain) license." (linked to
+  # creativecommons.org/publicdomain/zero/1.0/; checked 2026-11-04) → open.
+  # The 33 rows upstream itself flags copyrighted ("This tune is still under
+  # copyright.", no download offered) are skipped by rule. Document = chant,
+  # passage = score element / verses block; text = the sung text, the raw
+  # GABC rides each passage. Language lat by default, the vernacular rows by
+  # upstream's version field (eng 722, vie 183, grc 21, pol 17 …).
+
 gretil:
   adapter: Nabu::Adapters::Gretil
   adopted: "2026-07-08"
