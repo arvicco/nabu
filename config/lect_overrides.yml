@@ -50,6 +50,19 @@ sources:
   openmgh:
     # MGH medieval critical editions — certain.
     lat: { lect: "lat:med", tier: certain }
+  analecta-hymnica:
+    # The Analecta Hymnica MEDII AEVI define their own scope as the hymnody
+    # of the Middle Ages — the registry's lat:med node (the openmgh shape),
+    # transcribed from the series' title (parse-time work, the 2026-10-18
+    # generalization). Tier APPROXIMATION, not certain: the stage band is
+    # [600, 1350], while Bd. 50–52 (Hymnographi Latini II, Thesauri
+    # hymnologici hymnarium) reach back to Hilary and Ambrose (4th c.) and
+    # the Reimgebete / Psalterien / Cantiones volumes run into the 15th–16th
+    # (lat:ren). The row also keeps date-band inference off the PRINT years
+    # (1886–1922), which would otherwise stage the volumes to lat:new. The
+    # liturgical register (lat/ecc) is not claimed — a refinement for a
+    # ruling, not a transcription.
+    lat: { lect: "lat:med", tier: approximation }
   vulgate:
     # Jerome — certain.
     lat: { lect: "lat:late/ecc", tier: certain }

@@ -1,0 +1,54 @@
+{
+ "files": [
+  {
+   "format": "Text PDF",
+   "name": "analectahymnica01drevuoft.pdf",
+   "size": "12006054",
+   "source": "derivative"
+  }
+ ],
+ "files_count": 14,
+ "metadata": {
+  "addeddate": "2005-01-31 06:18:40",
+  "associated-names": "Catholic Church. Liturgy and ritual",
+  "backup_location": "ia903600_7",
+  "call_number": "ALE-5992",
+  "collection": "toronto",
+  "color": "y",
+  "contributor": "University of Toronto",
+  "creator": "Dreves, Guido Maria, 1854-1909",
+  "date": "1888",
+  "description": "7 v. 21 cm",
+  "filesxml": [
+   "Tue Dec 12 23:30:25 UTC 2006",
+   "Wed Dec 13 2:46:07 UTC 2006",
+   "Wed Dec 13 4:55:55 UTC 2006",
+   "Sat Dec 7 22:54:58 UTC 2019"
+  ],
+  "foldouts": "n",
+  "identifier": "analectahymnica01drevuoft",
+  "identifier-access": "http://www.archive.org/details/analectahymnica01drevuoft",
+  "identifier-ark": "ark:/13960/t09w09t6x",
+  "illustrations": "none",
+  "imagecount": "215",
+  "language": "lat",
+  "licenseurl": "http://creativecommons.org/licenses/publicdomain/",
+  "mediatype": "texts",
+  "openlibrary_edition": "OL23337244M",
+  "openlibrary_work": "OL7720871W",
+  "operator": "mk",
+  "page_height": "8.5",
+  "page_width": "5",
+  "publicdate": "2005-01-31 07:01:37",
+  "publisher": "Leipzig : O. R. Reisland",
+  "scanner": "Kirtas APT 1200 #2",
+  "subject": [
+   "Catholic Church",
+   "Hymns, Latin",
+   "Catholic Church -- Hymns"
+  ],
+  "title": "Hymni inediti. Liturgische Hymnen des Mittelalters",
+  "updater": "unix:items",
+  "volume": "1"
+ }
+}

@@ -972,6 +972,12 @@ sources:
     #                                     Priscian Commentary")
   archiv-slav-phil:
     source_kind: scholarly   # Jagić's Archiv für slavische Philologie volumes
+  analecta-hymnica:
+    source_kind: hymn-prayer/hymn   # the Analecta Hymnica: the hymn texts ARE the volumes' body
+    #                                 (the "Hymnals" fold) — hymns, sequences, rhymed offices,
+    #                                 tropes, cantiones; the Reimgebete/Psalterien volumes are
+    #                                 prayer-shaped, carried coarse under the series' own
+    #                                 hymnological frame (per-volume genre rides the facet)
   eng-web:
     source_kind: scripture
   vuk-danicic:

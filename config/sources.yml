@@ -305,6 +305,29 @@ althurayya:   # 02-sources row 230
   # = the region display label. The nabu-places thurayya: namespace mint
   # rides as a sister PR.
 
+analecta-hymnica:   # 02-sources row 380
+  adapter: Nabu::Adapters::AnalectaHymnica
+  adopted: "2026-11-04"
+  axes: [classical, romance]   # the Latin-continuum precedent (openmgh, corpus-corporum)
+  wired: false   # until the first real sync is verified
+  sync_policy: manual
+  # The Analecta Hymnica Medii Aevi (Leipzig: Reisland, 1886–1922; eds.
+  # G. M. Dreves, C. Blume, H. M. Bannister) — the 55-volume corpus of
+  # medieval Latin hymnody — as the archive.org scan run: one document per
+  # volume, page grain over the hOCR derivative pair (IaScanShelf, the
+  # slavistics-pd / archiv-slav-phil mechanics), UNCORRECTED OCR declared.
+  # Census 2026-11-04: 169 series items on archive.org; ADOPTED the PIMS –
+  # University of Toronto single-volume run, complete Bd. 1–55, every
+  # volume confirmed by its own title page (the 114 others — no hOCR,
+  # multi-volume bundles, further copies, a community folder upload, a
+  # duplicate — reconciled in the adapter). PD evidence: printed 1886–1922
+  # (pre-1931); editors †1909 (Dreves), †1919 (Bannister), †1932 (Blume)
+  # — PD in the EU since 2003; the PIMS items carry no rights field, so the
+  # status rests on those dates. Language lat (German prefaces and
+  # apparatus ride inside, coarse); the date is each volume's print year,
+  # class "edition". EXPECTED FIRST SYNC (census 2026-11-04, every pair
+  # fetched and parsed): 55 docs / 17,211 passages, 14,189,583 bytes of
+  # hOCR derivatives; measured OCR (wordlike) 0.66 (Bd. 54) – 0.89 (Bd. 6).
 aozora:
   adapter: Nabu::Adapters::Aozora
   adopted: "2026-07-21"
