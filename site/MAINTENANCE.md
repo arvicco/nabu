@@ -37,7 +37,7 @@ At **every phase gate**, alongside the README/library.md truthfulness pass
       license table — from the server's tool registry, `server.json` and
       the demo plan, and renders
       `site/llms.txt` — the agent entry file — from those SSOT files — then
-      `site:axes`). This is the ONLY number-entry step; the prose pages
+      `site:axes`, then `site:sources`). This is the ONLY number-entry step; the prose pages
       update themselves because they read the data. The same task writes
       the per-source grain, `sources.yml`: one row per live public source
       (documents / passages / dictionary entries, license class, a
@@ -80,18 +80,26 @@ At **every phase gate**, alongside the README/library.md truthfulness pass
    the guard): quickstart.md's measured on-disk sizes (`du -sh` the live
    canonical dirs when a listed shelf changes materially; keep consistent
    with `bin/nabu quickstart`); places.md's place-program census; the
-   per-source rows on sources.md and the per-section counts on library.md
-   — the last a standing future target (fold those into a generated table
-   the way the headline figures now are).
-2. **New shelves/sources**: a new synced source gets its row/paragraph on
-   library.md + sources.md (upstream link, license, class). A source
-   flipped from pending to live moves out of the "awaiting first
-   synchronization" table.
+   dated first-sync counts in the /sources/ contents cells.
+2. **New shelves/sources**: the /sources/ corpus table is GENERATED —
+   `bundle exec rake site:sources` (ridden by `site:refresh`) writes
+   `site/_includes/sources_table.md`, one row per live public source
+   (registry membership, the same rule as `sources.yml`; blocked holdings
+   never), with the hand prose from `site/_data/source_notes.yml` (keyed
+   by slug: `upstream` / `contents` / `license`, plus `with:` to fold
+   sibling sources into one row). A newly wired source appears at the next
+   refresh with an honest "Description pending." row; write its note to
+   fill it in, then regenerate. `test/site/sources_table_test.rb` fails the
+   suite when the committed table misses a live public source, lists a
+   blocked one, or when a note names a source that is no longer live and
+   public. A new synced source still gets its row/paragraph on
+   library.md by hand.
 3. **New tools/flags**: tools.md gains or amends its subsection, with a
    real command (+ README-sourced output snippet where one exists — never
    invent output).
-4. **License changes** (a license_watch alarm, a class change): sources.md
-   updated immediately, not just at gates — same trigger rule as
+4. **License changes** (a license_watch alarm, a class change): the
+   source's note in `site/_data/source_notes.yml` (then `rake
+   site:sources`) updated immediately, not just at gates — same trigger rule as
    library.md §10 duty 4.
 5. **Dossier drift check** (P24-0): `bundle exec rake site:check` — the
    mechanical rider for duties 1–2 at the source grain: it flags
