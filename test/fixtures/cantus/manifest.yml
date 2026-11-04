@@ -1,0 +1,45 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# The Cantus Database serves one CSV export per manuscript source plus the
+# JSON source manifest and the paged browse listing; the fixtures mirror the
+# fetch layout (Nabu::CantusFetch) with four sources. Live rows change as
+# the inventories are edited, so every file is fetched for URL-liveness
+# only, never byte-compared (whole: false), and the count-based adapter
+# test is not re-run against it (adapter_test: null).
+source: cantus
+adapter_test:
+retrieved: 2026-11-04
+files:
+  - path: json-sources.json
+    url: https://cantusdatabase.org/json-sources/
+    whole: false
+    trim: the 305-entry object cut to the four fixture sources (entries verbatim)
+  - path: sources-page-1.html
+    url: https://cantusdatabase.org/sources/?segment=4063
+    whole: false
+    trim: non-fixture table rows removed, filter option lists emptied, totals edited to the trimmed census (README.md)
+  - path: sources-page-2.html
+    url: https://cantusdatabase.org/sources/?segment=4063&page=2
+    whole: false
+    trim: the same trimming as page 1
+  - path: sources-page-3.html
+    url: https://cantusdatabase.org/sources/?segment=4063&page=3
+    whole: false
+    trim: the same trimming as page 1
+  - path: sources/693666.csv
+    url: https://cantusdatabase.org/source/693666/csv/
+    whole: false
+    trim: whole at retrieval (2 rows) — CDN-Mrb MS Medieval 0209; live edits may grow it
+  - path: sources/1000458.csv
+    url: https://cantusdatabase.org/source/1000458/csv/
+    whole: false
+    trim: whole at retrieval (1 row) — the Halifax private-collection leaf
+  - path: sources/123717.csv
+    url: https://cantusdatabase.org/source/123717/csv/
+    whole: false
+    trim: 25 of 2,192 rows — CH-SGs 390 (Hartker), the first 22 + rows 1779/2113/2183 (the rejected grains)
+  - path: sources/123738.csv
+    url: https://cantusdatabase.org/source/123738/csv/
+    whole: false
+    trim: 14 of 1,320 rows — HR-Dsmbb Badija V, the first 10 incipit-only + rows 134-135/152/1228

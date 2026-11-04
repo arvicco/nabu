@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require "nokogiri"
+require_relative "source_read"
 
 module Nabu
   module Adapters
@@ -55,7 +56,7 @@ module Nabu
       def self.load(workdir)
         dir = File.basename(workdir) == Nabu::Adapter::ATTIC_DIRNAME ? File.dirname(workdir) : workdir
         Dir.glob(File.join(dir, PAGE_GLOB)).each_with_object({}) do |path, index|
-          parse_page(File.read(path, encoding: Encoding::UTF_8)).each { |source| index[source.id] = source }
+          parse_page(SourceRead.utf8_file(path, label: "cantus listing")).each { |source| index[source.id] = source }
         end
       end
 
