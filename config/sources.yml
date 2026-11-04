@@ -2027,6 +2027,36 @@ disco:
   wired: true    # P77 first sync owner-verified (1,215 docs), flipped 2026-08-18 (owner: "wire on all recent sources")
   sync_policy: manual
 
+divinum-officium:   # 02-sources row 380
+  adapter: Nabu::Adapters::DivinumOfficium
+  adopted: "2026-11-04"
+  axes: [romance]   # the Latin continuum's ecclesiastical register (the croala/corpus-corporum
+                    # precedent); no liturgy desk exists
+  wired: false   # adapter + fixtures ready; first real sync pending. EXPECT 4,003 docs /
+                 # 26,381 passages / 0 errored, 1,023 skipped by rule (1,021 inclusion
+                 # stubs + the empty extensionless stray + credits.html), 0 unrecognized —
+                 # the full-tree parse census at master 85183a9b (2026-11-04). Upstream
+                 # advertises no count; the reconciliation is the tree itself: 5,025
+                 # files under horas/Latin + missa/Latin = 4,003 + 1,021 + 1.
+  sync_policy: manual   # upstream commits continually (corrections); owner re-syncs
+  # Divinum Officium (github.com/DivinumOfficium/divinum-officium): the data
+  # files of divinumofficium.com — the Tridentine Roman Breviary and Missal
+  # (1888 Ratisbon base, Divino Afflatu / 1955 / 1960 rubrics; Monastic,
+  # Cistercian, Dominican uses; local propers), the Martyrology, the Rule of
+  # St Benedict. Sparse GitFetch of the two LATIN trees (web/www/horas/Latin,
+  # web/www/missa/Latin) + LICENSE/README + the credits page. One document
+  # per file, passage = [section] (verse for the psalter, day for the
+  # necrology); @-references preserved, never resolved. LICENSE, verbatim:
+  # "MIT License / Copyright (c) 2026 Divinum Officium". Credits page
+  # (web/www/horas/Help/credits.html), verbatim: "The code and data are
+  # freely available to anyone at the Divinum Officium GitHub repository,
+  # and licensed under the MIT License. All liturgical texts within this
+  # site are, to the best of our knowledge, from the public domain. No
+  # special permission is needed to utilize any of our content." → open.
+  # The vernacular translation trees are excluded (the same page credits
+  # them to permission-based and undocumented modern sources; of the Bute
+  # English scans: "apparently copyrighted").
+
 dpd:   # P154, 02-sources row 367
   adapter: Nabu::Adapters::Dpd
   adopted: "2026-11-02"

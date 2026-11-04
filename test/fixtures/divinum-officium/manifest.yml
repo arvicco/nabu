@@ -1,0 +1,89 @@
+# Nabu fixture manifest (P5-4 "fixture sentinel"). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md:
+# raw URLs = github.com/DivinumOfficium/divinum-officium at master
+# 85183a9b1161f4242c9199177b5d6c9dd16be620 (2026-11-04) joined to the checked-in path,
+# which mirrors upstream's own tree.
+source: divinum-officium
+adapter_test: null   # four entries are trims (see README)
+retrieved: 2026-11-04
+files:
+  - path: LICENSE
+    url: https://raw.githubusercontent.com/DivinumOfficium/divinum-officium/85183a9b1161f4242c9199177b5d6c9dd16be620/LICENSE
+    refetchable: true
+    whole: true
+  - path: web/www/horas/English/Sancti/01-21.txt
+    url: https://raw.githubusercontent.com/DivinumOfficium/divinum-officium/85183a9b1161f4242c9199177b5d6c9dd16be620/web/www/horas/English/Sancti/01-21.txt
+    refetchable: true
+    whole: false
+    trim: the [Officium], [Ant 1] and [Oratio] sections (upstream lines 1-10 of 114), byte-verbatim
+  - path: web/www/horas/Help/credits.html
+    url: https://raw.githubusercontent.com/DivinumOfficium/divinum-officium/85183a9b1161f4242c9199177b5d6c9dd16be620/web/www/horas/Help/credits.html
+    refetchable: true
+    whole: true
+  - path: web/www/horas/Latin-Bea/Psalterium/Psalmorum/Psalm123.txt
+    url: https://raw.githubusercontent.com/DivinumOfficium/divinum-officium/85183a9b1161f4242c9199177b5d6c9dd16be620/web/www/horas/Latin-Bea/Psalterium/Psalmorum/Psalm123.txt
+    refetchable: true
+    whole: true
+  - path: web/www/horas/Latin-gabc/Sancti/01-21.txt
+    url: https://raw.githubusercontent.com/DivinumOfficium/divinum-officium/85183a9b1161f4242c9199177b5d6c9dd16be620/web/www/horas/Latin-gabc/Sancti/01-21.txt
+    refetchable: true
+    whole: false
+    trim: the [Ant 1] and [Oratio] sections (upstream lines 1-7 of 94), byte-verbatim
+  - path: web/www/horas/Latin/Commune/C10a.txt
+    url: https://raw.githubusercontent.com/DivinumOfficium/divinum-officium/85183a9b1161f4242c9199177b5d6c9dd16be620/web/www/horas/Latin/Commune/C10a.txt
+    refetchable: true
+    whole: true
+  - path: web/www/horas/Latin/CommuneCist/C10c.txt
+    url: https://raw.githubusercontent.com/DivinumOfficium/divinum-officium/85183a9b1161f4242c9199177b5d6c9dd16be620/web/www/horas/Latin/CommuneCist/C10c.txt
+    refetchable: true
+    whole: true
+  - path: web/www/horas/Latin/Necrologium/Januarius.txt
+    url: https://raw.githubusercontent.com/DivinumOfficium/divinum-officium/85183a9b1161f4242c9199177b5d6c9dd16be620/web/www/horas/Latin/Necrologium/Januarius.txt
+    refetchable: true
+    whole: false
+    trim: the first two days (upstream lines 1-32 of 370), byte-verbatim
+  - path: web/www/horas/Latin/Psalterium/Psalmorum/Psalm1.txt
+    url: https://raw.githubusercontent.com/DivinumOfficium/divinum-officium/85183a9b1161f4242c9199177b5d6c9dd16be620/web/www/horas/Latin/Psalterium/Psalmorum/Psalm1.txt
+    refetchable: true
+    whole: true
+  - path: web/www/horas/Latin/Sancti/01-21.txt
+    url: https://raw.githubusercontent.com/DivinumOfficium/divinum-officium/85183a9b1161f4242c9199177b5d6c9dd16be620/web/www/horas/Latin/Sancti/01-21.txt
+    refetchable: true
+    whole: true
+  - path: web/www/horas/Latin/Sancti/Bavaria/Passaviensis/05-04-Florianus.txt
+    url: https://raw.githubusercontent.com/DivinumOfficium/divinum-officium/85183a9b1161f4242c9199177b5d6c9dd16be620/web/www/horas/Latin/Sancti/Bavaria/Passaviensis/05-04-Florianus.txt
+    refetchable: true
+    whole: true
+  - path: web/www/horas/Latin/Sancti/Brasilia/06-13.txt
+    url: https://raw.githubusercontent.com/DivinumOfficium/divinum-officium/85183a9b1161f4242c9199177b5d6c9dd16be620/web/www/horas/Latin/Sancti/Brasilia/06-13.txt
+    refetchable: true
+    whole: true
+  - path: "web/www/horas/Latin/Sancti/aliquibus locis/09-04-BMVDivPastMatr"
+    url: https://raw.githubusercontent.com/DivinumOfficium/divinum-officium/85183a9b1161f4242c9199177b5d6c9dd16be620/web/www/horas/Latin/Sancti/aliquibus%20locis/09-04-BMVDivPastMatr
+    refetchable: true
+    whole: true
+  - path: web/www/horas/Latin/SanctiM/08-18bmv.txt
+    url: https://raw.githubusercontent.com/DivinumOfficium/divinum-officium/85183a9b1161f4242c9199177b5d6c9dd16be620/web/www/horas/Latin/SanctiM/08-18bmv.txt
+    refetchable: true
+    whole: true
+  - path: web/www/horas/Latin/SanctiM/09-17M.txt
+    url: https://raw.githubusercontent.com/DivinumOfficium/divinum-officium/85183a9b1161f4242c9199177b5d6c9dd16be620/web/www/horas/Latin/SanctiM/09-17M.txt
+    refetchable: true
+    whole: true
+  - path: web/www/horas/Ordinarium/Prima.txt
+    url: https://raw.githubusercontent.com/DivinumOfficium/divinum-officium/85183a9b1161f4242c9199177b5d6c9dd16be620/web/www/horas/Ordinarium/Prima.txt
+    refetchable: true
+    whole: true
+  - path: web/www/missa/Latin/Ordo/Ordo.txt
+    url: https://raw.githubusercontent.com/DivinumOfficium/divinum-officium/85183a9b1161f4242c9199177b5d6c9dd16be620/web/www/missa/Latin/Ordo/Ordo.txt
+    refetchable: true
+    whole: false
+    trim: the preamble + the Incipit, Incensatio and Introitus headings (upstream lines 1-73 of 415), byte-verbatim
+  - path: web/www/missa/Latin/Sancti/01-21.txt
+    url: https://raw.githubusercontent.com/DivinumOfficium/divinum-officium/85183a9b1161f4242c9199177b5d6c9dd16be620/web/www/missa/Latin/Sancti/01-21.txt
+    refetchable: true
+    whole: true
+  - path: web/www/missa/Linguae.txt
+    url: https://raw.githubusercontent.com/DivinumOfficium/divinum-officium/85183a9b1161f4242c9199177b5d6c9dd16be620/web/www/missa/Linguae.txt
+    refetchable: true
+    whole: true

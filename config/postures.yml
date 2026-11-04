@@ -2146,6 +2146,31 @@ sources:
     script: {posture: implied, note: "Armenian script (xcl ⇒ Armn); the hand's style in
         upstream's words (Bolorgits Erkatagir, Ughghagits Erkatagir …) rides the script_style
         facet"}
+  divinum-officium:
+    # kind: machine-postured by the kind_map.yml divinum-officium book_part fold.
+    lect: {posture: pending, note: "bare lat at parse time (the Latin trees carry no language
+        tag beyond the directory). Candidate: a certain-tier lect_overrides row lat → lat/ecc
+        — the registry's stageless Ecclesiastical Latin register (the vulgate row's lat:late/ecc
+        minus the stage): the corpus IS the Roman Rite's liturgical Latin by definition, but
+        its strata run from the Vulgate psalter and patristic lessons through medieval hymns
+        and sequences to twentieth-century feasts and the 1960 rubrics, so no stage can be
+        claimed at source grain. Register assignment without a stage has no precedent in the
+        overrides file, so it waits for a ruling"}
+    dating: {posture: undatable, note: "no file carries a date of composition or edition: the
+        rubrical years in the conditionals (rubrica 1955 / 1960, Divino Afflatu) name rubrical
+        regimes, not texts, and the necrology's 'Anno 1746' years date the deaths it records
+        (passage entry_years, never a document date). The edition base (the 1888 Ratisbon
+        Breviarium, the 1943–1962 printings the team collated) is stated once on the credits
+        page for the whole tree — a source-level fact on the dossier, not a per-text claim"}
+    places: {posture: named, note: "the local-calendar directories name the jurisdiction whose
+        proper the file is — Urbis → Rome (116 docs), Bavaria (32) and its dioceses Monacensis
+        → Munich (36), Passaviensis → Passau (29), Ratisbonensis → Regensburg (22),
+        Spirensis → Speyer (15), Brasilia → Brazil (11), Neerlandia → Netherlands (18),
+        Groningen (2), Ultrajectum → Utrecht (29): 310 of 4,003 documents, the place_only
+        lane. The universal Roman, Monastic, Cistercian and Dominican trees name no place
+        (deliberately unplaced — a rite is not a locality); 'aliquibus locis' ('in some
+        places') names none"}
+    script: {posture: implied}
   etcsl:
     # kind declaration retired P104-1: the composition-number prefix map
     # in kind_map.yml machine-postures it now (the shadowing rule).
