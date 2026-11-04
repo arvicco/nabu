@@ -34,6 +34,7 @@ latin-romance:
   - typikon-bible
 papyri: [papyri-ddbdp]
 latin-inscriptions: [edh]
+greek-inscriptions: [aio]
 inscriptions-of-italy: [edr]
 celtic: [corph, riig, ogham, stgall-priscian, br-wikisource, cy-wikisource]
 coptic: [coptic-scriptorium]
@@ -82,7 +83,7 @@ pre-roman-italy: [ceipom, itant, open-etruscan, tir, lexlep, isicily]
 aegean: [damos, sigla, ig-cyprus]
 biblical-editions: [vulgate, sblgnt, eng-web, ebible-pacific]
 old-english: [aspr, perseus-anglit]
-middle-early-modern-english: [cme, eebo-tcp]
+middle-early-modern-english: [cme, eebo-tcp, evans-tcp, ecco-tcp, emmo]
 slavic:
   - ccmh
   - freising
@@ -165,5 +166,6 @@ germanic:
   - ppchy
   - rundata
   - runesdb
+  - grand-tour
 africa: [africa-pd, bu-ajami, old-nubian-ud]
 americas: [ticha, guaman-poma]
