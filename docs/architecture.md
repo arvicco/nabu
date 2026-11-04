@@ -2216,7 +2216,10 @@ rulings, then map rules, then infer-dates, then compose rules,
 deterministic precedence (compose rules refine a variety onto standing
 stage rows of any rule basis, the date-band one included, so they run
 last — the glaux dialect grid composes onto date-inferred stages) — so the
-file needs no backup. The read side is lazy:
+file needs no backup. A surface-only override (ppchy `yi~latn`, papyri
+`egy~latn`) keeps its script on the date-inferred stage (`yi:mid~latn`),
+and a compose rule slots its variety before that surface, per the id
+grammar (`yi:mid/west~latn`). The read side is lazy:
 `Lects.load_default` feature-detects the journal and hands `resolve` a
 point-lookup overlay, never an eager hash of the full journal.
 
