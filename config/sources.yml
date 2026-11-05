@@ -4643,6 +4643,28 @@ ninjal-textdb:   # P156, 02-sources row 379
   # Every other dataset dir (Edo share-bon, the dictionaries, the Hawaii
   # readers) skips by rule — Adapters::NinjalTextdb::DATASETS.
 
+noscemus:   # P160, 02-sources row 386
+  adapter: Nabu::Adapters::Noscemus
+  adopted: "2026-11-05"
+  axes: [classical, romance]  # the croala/corpus-corporum precedent: the Latin continuum's early-modern side
+  wired: false   # bin/nabu sync noscemus (one 301 MB Zenodo GET, md5-pinned, unpacked
+                 # by bsdtar — 792 MB of text — + the two wiki XML GETs, 4.6 MB).
+                 # EXPECT 1,038 docs / 555,797 region passages, 0 errored, 12
+                 # skipped by rule (empty text) — census through the adapter over
+                 # the whole unpack, 2026-11-05. Eyeball nabu show
+                 # urn:nabu:noscemus:1031760:6 (Bacon's "FRIMNCISOVS / DE VERVLAMIO")
+                 # and 5 random regions; probe nabu search "Instauratio"; then flip.
+  sync_policy: frozen   # two immutable Zenodo records; a new version = an owner re-pin
+  # NOSCEMUS Digital Sourcebook (Zathammer, Universität Innsbruck; Zenodo
+  # 15040256, cc-by-4.0) — the UNCORRECTED Transkribus HTR of 1,050 early-
+  # modern scientific Latin prints (text_nature machine-htr on every
+  # document), joined on the Transkribus id to the Noscemus Wiki backup
+  # (Zenodo 7855322, cc-by-4.0: works + authors XML) for genre, discipline,
+  # authors and fallback dating → attribution. Document = Transkribus
+  # document (one copy), passage = HTR text region; letterless regions (page
+  # numbers, signatures) ride the next passage as marks. A witness beside
+  # eebo-tcp's keyed London prints (Bacon's Instauratio magna 1620).
+
 nrct:   # P108-2
   adapter: Nabu::Adapters::Nrct
   adopted: "2026-09-29"

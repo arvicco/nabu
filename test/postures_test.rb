@@ -179,7 +179,7 @@ class PosturesTest < Minitest::Test
   def test_the_lect_migration_kept_the_p59_4_census
     lect = postures.declarations.select { |d| d.layer == "lect" }
     by_posture = lect.group_by(&:posture).transform_values(&:size)
-    assert_equal 183, lect.size,
+    assert_equal 184, lect.size,
                  "the P59-4 declarations survive the move (61 at migration; itant retired P61-3," \
                  "oracc retired P62-2, etcsl/ccmh/freising/coptic-scriptorium retired P64-6, " \
                  "titus-avestan retired P66-1, osta+fornsvenska retired P77-r8, achemenet " \
@@ -409,7 +409,9 @@ class PosturesTest < Minitest::Test
                  "staging the date band began (the shadowing rule): 182→181; " \
                  "statutes-realm ADDED P160-7 — dates (en stages to en:early / en:late by the " \
                  "acts' session envelopes): 181→182; socinian-letters ADDED P160 — dates (the " \
-                 "six letter languages staged by the sent-date band): 182→183"
+                 "six letter languages staged by the sent-date band): 182→183; noscemus ADDED " \
+                 "P160 — dates (bare lat; date-band inference stages the imprint years onto " \
+                 "lat:ren / lat:new, the memis shape): 183→184"
     # The epigraphic-belt registry package (merged + canonical-synced
     # 2026-10-18, the add-then-retire shape within one phase) retires both
     # P130 pendings, and the ociana-script rule + the ig-cyprus override
@@ -481,6 +483,7 @@ class PosturesTest < Minitest::Test
     # statutes-realm joins dates (the acts' session envelopes → en:early/en:late): 25→26.
     # socinian-letters joins dates (per-document lat/fra/deu/pol/nld/ita staged by
     # the sent-date band — lat:new, de:early/new, pl:mid, fr:cls from 1600): 26→27.
-    assert_equal({ "dates" => 27, "codemap" => 21, "identity" => 135 }, by_posture)
+    # noscemus joins dates (bare lat, staged lat:ren / lat:new by imprint year): 27→28.
+    assert_equal({ "dates" => 28, "codemap" => 21, "identity" => 135 }, by_posture)
   end
 end

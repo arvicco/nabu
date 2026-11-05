@@ -518,6 +518,49 @@ sources:
       "commentary": exegesis                     # 52 — the aṭṭhakathā (upstream files the
       #   Visuddhimagga and the Kaṅkhāvitaraṇī / Vinayasaṅgaha here too; the tipitaka-lk atta fold)
       "subcommentary": exegesis                  # 26 — the ṭīkā, commentary on the commentaries
+  noscemus:           # P160 — the Noscemus Wiki's own Form/Genre list (a CLOSED vocabulary of
+    #                   21 values, split on "," at parse; the facet is the union over a copy's
+    #                   joined wiki works). Counts = value occurrences over the 989 wiki works
+    #                   (census 2026-11-05); the 39 copies with no wiki page carry no genre.
+    #                   The whole corpus is early-modern SCIENTIFIC literature, so the learned
+    #                   prose forms fold to scholarly; the verse and epistolary forms keep their
+    #                   own classes.
+    facet: genre
+    map:
+      "Monograph": scholarly                     # 236 — the learned treatise on one subject
+      "Encyclopedic work": scholarly             # 165 — the comprehensive survey of a field
+      "Historia": scholarly                      # 85 — the descriptive "historia" of natural
+      #   things (historia plantarum, animalium) — natural history, not historiography
+      "Dissertation": scholarly                  # 80 — the academic disputation / thesis
+      "Commentary": scholarly/commentary         # 69 — commentaries on Hippocrates, Euclid,
+      #   Aristotle, Ptolemy: commentary on the scientific classics (exegesis is for scripture)
+      "Compendia": scholarly                     # 57 — the epitome / handbook of a field
+      "Report": scholarly                        # 55 — the observation report (a comet, an
+      #   earthquake, an experiment)
+      "Textbook": scholarly                      # 54 — the teaching treatise (school is for the
+      #   schoolroom's own products, not the books taught from)
+      "Tables and charts": scholarly             # 42 — astronomical tables, ephemerides, charts
+      "Bibliography": scholarly                  # 41 — the learned catalogue of a field's
+      #   literature; no house class for reference works
+      "Review": scholarly                        # 19 — the learned book review (Acta eruditorum)
+      "Didactic poem": literary/poetry           # 77 — the Lucretian/Virgilian verse of science
+      "Panegyric poem": literary/poetry/praise   # 55 — verse in praise of a scientist or a
+      #   discovery
+      "Oration": literary/essay                  # 46 — the academic oration: prose of ideas
+      #   composed for delivery (sermon is preached religious prose)
+      "Dialogue": literary/wisdom/dialogue       # 39 — the dialogue form (the class list
+      #   files the dialogue under wisdom)
+      "Letter": letter                           # 62 — scientific correspondence
+      "Dictionary/Lexicon": lexical              # 41 — nomenclators, medical and botanical
+      #   lexica: words about words
+      "Journal Paper": periodical/journal        # 39 — a paper in (or a volume of) the learned
+      #   journals: Acta eruditorum, the academies' Commentarii
+      "Biography": historiography                # 30 — the scientist's vita: writing the past
+    deliberate:
+      "Other (see description)": "upstream's own catch-all — the wiki's prose description
+        carries the form; no claim to fold"
+      "Translation": "a status, not a form — the translated work's genre rides beside it
+        (Translation, Didactic poem)"
   tlhdig:             # Laroche CTH ranges ARE the genres (23,486 docs)
     facet: cth
     range_map:
