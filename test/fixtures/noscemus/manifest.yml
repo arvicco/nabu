@@ -15,28 +15,28 @@ files:
   reason: a member of the Zenodo zip (https://zenodo.org/api/records/15040256/files/Noscemus_Digital_Sourcebook.zip/content,
     md5 ccd475d9…7b285), under its top directory Noscemus_Digital_Sourcebook/ — no
     per-file raw URL
-- path: 1285855/Hippocrates_&_Denisot,_Gérard_-_Hippocratis_Aphorismis_versibus_Graecis_et_Latini_expositi__Paris_1634_pdf.txt
+- path: 1285855/Hippocrates_&_Denisot,_Gérard_-_Hippocratis_Aphorismis_versibus_Graecis_et_Latini_expositi__Paris_1634_pdf.txt
   whole: false
   trim: the header + the first K regions, verbatim (README.md)
   refetchable: false
   reason: a member of the Zenodo zip (https://zenodo.org/api/records/15040256/files/Noscemus_Digital_Sourcebook.zip/content,
     md5 ccd475d9…7b285), under its top directory Noscemus_Digital_Sourcebook/ — no
     per-file raw URL
-- path: 5314216/Palingènio_Stellato,_Marcello_-_Zodiacus_vitae__Basel_1543.txt
+- path: 5314216/Palingènio_Stellato,_Marcello_-_Zodiacus_vitae__Basel_1543.txt
   whole: false
   trim: the header + the first K regions, verbatim (README.md)
   refetchable: false
   reason: a member of the Zenodo zip (https://zenodo.org/api/records/15040256/files/Noscemus_Digital_Sourcebook.zip/content,
     md5 ccd475d9…7b285), under its top directory Noscemus_Digital_Sourcebook/ — no
     per-file raw URL
-- path: 643448/Oudin,_François_-_Poemata_didascalia__Vol__2__Paris_1749_pdf.txt
+- path: 643448/Oudin,_François_-_Poemata_didascalia__Vol__2__Paris_1749_pdf.txt
   whole: false
   trim: the header + the first K regions, verbatim (README.md)
   refetchable: false
   reason: a member of the Zenodo zip (https://zenodo.org/api/records/15040256/files/Noscemus_Digital_Sourcebook.zip/content,
     md5 ccd475d9…7b285), under its top directory Noscemus_Digital_Sourcebook/ — no
     per-file raw URL
-- path: 736346/Crüger,_Peter_-_Uranodormus_cometicus__Gdańsk_1619_pdf.txt
+- path: 736346/Crüger,_Peter_-_Uranodormus_cometicus__Gdańsk_1619_pdf.txt
   whole: true
   trim: none
   refetchable: false
