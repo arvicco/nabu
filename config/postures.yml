@@ -2957,12 +2957,18 @@ sources:
   ganjoor:   # P153
     # kind machine-postured — the ganjoor fold in kind_map.yml over the poem's own
     # section label (the divan's form sections; work/chapter titles uncovered, open).
-    lect: {posture: identity, note: "fas IS Persian (codemap → the bare fa anchor) — the
-        registry holds no Persian stages yet, so the bare code is the honest claim for the
-        whole classical cone (Rudaki to the Qajar poets, d. before 1324 AH); poems under a
-        section the label names Arabic carry ara (152 at the census), bare; the few Turkic,
-        Kurdish, Gilaki and fahlavi sections stay fas, declared coarse (their labels ride
-        section_path)"}
+    # lect declaration retired 2026-11-05: the ganjoor-poet facet rule
+    # (config/lect_facet_rules.yml) machine-postures the source — retired
+    # under the shadowing rule. The staging it completes: fas resolves to
+    # the bare fa anchor; the date band stages every poem whose poet's life
+    # sits inside one band (fa:early 800–1200, fa:cls 1200–1850 — 105,514
+    # of 126,165 poems, census 2026-11-05) and the rule places six residue
+    # poets whose floruit is unambiguous. The rest stays bare fas, honest
+    # under the fits-one-band rule: the poets whose lives straddle the 1200
+    # edge (Nezami, Attar …) and the Qajar poets across the 1850 close.
+    # Poems under a section the label names Arabic carry ara (152 at the
+    # census), bare; the few Turkic, Kurdish, Gilaki and fahlavi sections
+    # stay fas, declared coarse (their labels ride section_path).
     dating: {posture: dated, note: "every document: the poet's life from the site's poets
         list (lunar-Hijri birth..death → CE, the house tabular conversion), class
         composition — upstream's own validBirthDate/validDeathDate=false marks c. in raw;
