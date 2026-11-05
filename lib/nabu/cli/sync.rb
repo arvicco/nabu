@@ -1172,8 +1172,10 @@ module Nabu
         # item was missing (caught 2026-11-04: an IA item lost to a
         # transient 54/55 walk printed "0 errored"). Surface the report's
         # own words whenever they carry a miss.
-        fetch_notes = outcome.fetch_report&.notes
-        return unless fetch_notes&.match?(/unreachable|aborted|drift/)
+        # A composite fetch (archive + pinned sidecar) reports an ARRAY of
+        # notes — scan and print them joined.
+        fetch_notes = Array(outcome.fetch_report&.notes).join("; ")
+        return unless fetch_notes.match?(/unreachable|aborted|drift/)
 
         say("  ! fetch: #{fetch_notes}", :yellow)
       end
