@@ -190,4 +190,6 @@ shape.
 
 Questions, corrections, and conversation are welcome through
 [GitHub issues](https://github.com/arvicco/nabu/issues). The maintainer is
-Ar Vicco &lt;[arvicco@nabu.ac](mailto:arvicco@nabu.ac)&gt;.
+Ar Vicco &lt;[arvicco@nabu.ac](mailto:arvicco@nabu.ac)&gt; — an independent
+private researcher; [who is behind Nabu]({{ '/about/maintainer/' | relative_url }})
+says more.
