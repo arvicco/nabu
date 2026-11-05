@@ -73,9 +73,9 @@ module Nabu
     #   "<parent id>::<phrase>" ("^3a::a bašlap v tägi"); a recurring key
     #   takes ":<n>" in book order (stable while the pinned PDF is).
     # - headword: the bold (main) or italic (sub) head as printed;
-    #   headword_folded: the generic fold of its FIRST variant (before
-    #   " ~ ") with editorial brackets/marks and hyphens dropped
-    #   (t(ä)ŋri → taŋri; amran- → amran).
+    #   headword_folded: the oui search form (generic fold + ı → i) of its
+    #   FIRST variant (before " ~ "), editorial brackets/marks and hyphens
+    #   dropped (t(ä)ŋri → taŋri; amran- → amran; Adıg → adig).
     # - gloss: the first German sense; body: the printed record, then
     #   the German and Turkish halves on their own lines, then the
     #   printed page ("p. 44, left column" — the citation grain).
@@ -252,7 +252,7 @@ module Nabu
       end
 
       # The search key: the first variant, editorial brackets and marks,
-      # homonym markers and hyphens dropped, then the generic fold.
+      # homonym markers and hyphens dropped, then the oui search form.
       def self.fold(text)
         form = text.to_s.split(/\s+~\s+/).first.to_s
         form = form.gsub(/\^\d+/, "").delete("()[]<>{}*†°?–-")
