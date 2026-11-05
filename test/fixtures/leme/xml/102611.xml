@@ -1,0 +1,369 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE leme [
+<!ENTITY AElig "&#198;">
+<!ENTITY AEligmacron "&#482;">
+<!ENTITY Aacute "&#193;">
+<!ENTITY Abreve "&#258;">
+<!ENTITY Acirc "&#194;">
+<!ENTITY Agrave "&#192;">
+<!ENTITY Alpha "&#913;">
+<!ENTITY Amacron "&#256;">
+<!ENTITY Aring "&#197;">
+<!ENTITY Atilde "&#195;">
+<!ENTITY Auml "&#196;">
+<!ENTITY Beta "&#914;">
+<!ENTITY Ccedil "&#199;">
+<!ENTITY Chi "&#935;">
+<!ENTITY Dagger "&#8225;">
+<!ENTITY Delta "&#916;">
+<!ENTITY ETH "&#208;">
+<!ENTITY Eacute "&#201;">
+<!ENTITY Ebreve "&#276;">
+<!ENTITY Ecedil "&#280;">
+<!ENTITY Ecirc "&#202;">
+<!ENTITY Egrave "&#200;">
+<!ENTITY Emacron "&#274;">
+<!ENTITY Epsilon "&#917;">
+<!ENTITY Eta "&#919;">
+<!ENTITY Euml "&#203;">
+<!ENTITY Gamma "&#915;">
+<!ENTITY Iacute "&#205;">
+<!ENTITY Ibreve "&#300;">
+<!ENTITY Icirc "&#206;">
+<!ENTITY Igrave "&#204;">
+<!ENTITY Imacron "&#298;">
+<!ENTITY Iota "&#921;">
+<!ENTITY Iuml "&#207;">
+<!ENTITY Kappa "&#922;">
+<!ENTITY Lambda "&#923;">
+<!ENTITY Mtilde "M&#771;">
+<!ENTITY Mu "&#924;">
+<!ENTITY Ntilde "&#209;">
+<!ENTITY Nu "&#925;">
+<!ENTITY OElig "&#338;">
+<!ENTITY OEligmacron "&#338;&#772;">
+<!ENTITY Oacute "&#211;">
+<!ENTITY Obreve "&#334;">
+<!ENTITY Ocirc "&#212;">
+<!ENTITY Ograve "&#210;">
+<!ENTITY Omacron "&#332;">
+<!ENTITY Omega "&#937;">
+<!ENTITY Omicron "&#927;">
+<!ENTITY Oslash "&#216;">
+<!ENTITY Otilde "&#213;">
+<!ENTITY Ouml "&#214;">
+<!ENTITY Phi "&#934;">
+<!ENTITY Pi "&#928;">
+<!ENTITY Prime "&#8243;">
+<!ENTITY Psi "&#936;">
+<!ENTITY Rho "&#929;">
+<!ENTITY Rx "&#8478;">
+<!ENTITY Scaron "&#352;">
+<!ENTITY Sigma "&#931;">
+<!ENTITY Stigma "&#x03DA;">
+<!ENTITY THORN "&#222;">
+<!ENTITY Tau "&#932;">
+<!ENTITY Theta "&#920;">
+<!ENTITY Uacute "&#218;">
+<!ENTITY Ubreve "&#364;">
+<!ENTITY Ucirc "&#219;">
+<!ENTITY Ugrave "&#217;">
+<!ENTITY Umacron "&#362;">
+<!ENTITY Upsilon "&#933;">
+<!ENTITY Uuml "&#220;">
+<!ENTITY Vacute "V&#769;">
+<!ENTITY WYN "&#503;">
+<!ENTITY Xi "&#926;">
+<!ENTITY YOGH "&#439;">
+<!ENTITY Yacute "&#221;">
+<!ENTITY Ycirc "&#374;">
+<!ENTITY Ygrave "&#7922;">
+<!ENTITY Ymacron "&#562;">
+<!ENTITY Yuml "&#376;">
+<!ENTITY Zeta "&#918;">
+<!ENTITY aacute "&#225;">
+<!ENTITY abreve "&#259;">
+<!ENTITY acirc "&#226;">
+<!ENTITY acute "&#180;">
+<!ENTITY aelig "&#230;">
+<!ENTITY aeligmacron "&#483;">
+<!ENTITY agrave "&#224;">
+<!ENTITY alpha "&#945;">
+<!ENTITY amacron "&#257;">
+<!ENTITY aring "&#229;">
+<!ENTITY arrow "&#8594;">
+<!ENTITY atilde "&#227;">
+<!ENTITY auml "&#228;">
+<!ENTITY bdquo "&#8222;">
+<!ENTITY beta "&#946;">
+<!ENTITY brvbar "&#166;">
+<!ENTITY bull "&#8226;">
+<!ENTITY bullet "&#149;">
+<!ENTITY ccedil "&#231;">
+<!ENTITY ccirc "&#265;">
+<!ENTITY cedil "&#184;">
+<!ENTITY cent "&#162;">
+<!ENTITY chi "&#967;">
+<!ENTITY circ "&#710;">
+<!ENTITY clubs "&#9827;">
+<!ENTITY copy "&#169;">
+<!ENTITY crarr "&#8629;">
+<!ENTITY curren "&#164;">
+<!ENTITY dagger "&#8224;">
+<!ENTITY darr "&#8595;">
+<!ENTITY deg "&#176;">
+<!ENTITY delta "&#948;">
+<!ENTITY diams "&#9830;">
+<!ENTITY divide "&#247;">
+<!ENTITY dmacron "&#273;">
+<!ENTITY dram "&#658;">
+<!ENTITY eacute "&#233;">
+<!ENTITY ebreve "&#277;">
+<!ENTITY ecedil "&#281;">
+<!ENTITY ecirc "&#234;">
+<!ENTITY egrave "&#232;">
+<!ENTITY emacron "&#275;">
+<!ENTITY emsp "&#8195;">
+<!ENTITY ensp "&#8194;">
+<!ENTITY epsilon "&#949;">
+<!ENTITY epsilontilde "&#949;&#834;">
+<!ENTITY eta "&#951;">
+<!ENTITY eth "&#240;">
+<!ENTITY euml "&#235;">
+<!ENTITY euro "&#8364;">
+<!ENTITY fist "&#9758;">
+<!ENTITY fnof "&#402;">
+<!ENTITY frac12 "&#189;">
+<!ENTITY frac14 "&#188;">
+<!ENTITY frac34 "&#190;">
+<!ENTITY gamma "&#947;">
+<!ENTITY grave "&#96;">
+<!ENTITY harr "&#8596;">
+<!ENTITY hearts "&#9829;">
+<!ENTITY hellip "&#8230;">
+<!ENTITY highcaret "&#136;">
+<!ENTITY iacute "&#237;">
+<!ENTITY ibreve "&#301;">
+<!ENTITY icirc "&#238;">
+<!ENTITY iexcl "&#161;">
+<!ENTITY igrave "&#236;">
+<!ENTITY imacron "&#299;">
+<!ENTITY infin "&#8734;">
+<!ENTITY iota "&#953;">
+<!ENTITY iquest "&#191;">
+<!ENTITY iuml "&#239;">
+<!ENTITY kappa "&#954;">
+<!ENTITY lambda "&#955;">
+<!ENTITY laquo "&#171;">
+<!ENTITY larr "&#8592;">
+<!ENTITY lceil "&#8968;">
+<!ENTITY ldquo "&#8220;">
+<!ENTITY leaf "&#10087;">
+<!ENTITY lfloor "&#8970;">
+<!ENTITY longs "&#383;">
+<!ENTITY loz "&#9674;">
+<!ENTITY lrm "&#8206;">
+<!ENTITY lsaquo "&#8249;">
+<!ENTITY lsquo "&#8216;">
+<!ENTITY macr "&#175;">
+<!ENTITY mdash "&#8212;">
+<!ENTITY micro "&#181;">
+<!ENTITY middot "&#183;">
+<!ENTITY mtilde "m&#771;">
+<!ENTITY mu "&#956;">
+<!ENTITY nbsp "&#160;">
+<!ENTITY ndash "&#8211;">
+<!ENTITY not "&#172;">
+<!ENTITY ntilde "&#241;">
+<!ENTITY nu "&#957;">
+<!ENTITY oacute "&#243;">
+<!ENTITY obreve "&#335;">
+<!ENTITY ocirc "&#244;">
+<!ENTITY oelig "&#339;">
+<!ENTITY oeligmacron "&#339;&#772;">
+<!ENTITY ograve "&#242;">
+<!ENTITY oline "&#8254;">
+<!ENTITY omacron "&#333;">
+<!ENTITY omega "&#969;">
+<!ENTITY omicron "&#959;">
+<!ENTITY ordf "&#170;">
+<!ENTITY ordm "&#186;">
+<!ENTITY oslash "&#248;">
+<!ENTITY otilde "&#245;">
+<!ENTITY ouml "&#246;">
+<!ENTITY ounce "&#8485;">
+<!ENTITY para "&#182;">
+<!ENTITY permil "&#8240;">
+<!ENTITY phi "&#966;">
+<!ENTITY pi "&#960;">
+<!ENTITY piv "&#982;">
+<!ENTITY plusmn "&#177;">
+<!ENTITY pound "&#163;">
+<!ENTITY prime "&#8242;">
+<!ENTITY psi "&#968;">
+<!ENTITY qacute "q&#769;">
+<!ENTITY radic "&#8730;">
+<!ENTITY raquo "&#187;">
+<!ENTITY rarr "&#8594;">
+<!ENTITY rceil "&#8969;">
+<!ENTITY rdquo "&#8221;">
+<!ENTITY reg "&#174;">
+<!ENTITY rfloor "&#8971;">
+<!ENTITY rho "&#961;">
+<!ENTITY rlm "&#8207;">
+<!ENTITY rsaquo "&#8250;">
+<!ENTITY rsquo "&#8217;">
+<!ENTITY rx "&#8478;">
+<!ENTITY sbquo "&#8218;">
+<!ENTITY scaron "&#353;">
+<!ENTITY scruple "&#8456;">
+<!ENTITY sect "&#167;">
+<!ENTITY shlig "&#383;h">
+<!ENTITY shy "&#173;">
+<!ENTITY sigma "&#963;">
+<!ENTITY sigmaf "&#962;">
+<!ENTITY spades "&#9824;">
+<!ENTITY stigma "&#x03DB;">
+<!ENTITY stlig "&#64261;">
+<!ENTITY sup1 "&#185;">
+<!ENTITY sup2 "&#178;">
+<!ENTITY sup3 "&#179;">
+<!ENTITY szlig "&#223;">
+<!ENTITY tau "&#964;">
+<!ENTITY theta "&#952;">
+<!ENTITY thetasym "&#977;">
+<!ENTITY thinsp "&#8201;">
+<!ENTITY thorn "&#254;">
+<!ENTITY tilde "&#732;">
+<!ENTITY times "&#215;">
+<!ENTITY trade "&#8482;">
+<!ENTITY uacute "&#250;">
+<!ENTITY uarr "&#8593;">
+<!ENTITY ubreve "&#365;">
+<!ENTITY ucirc "&#251;">
+<!ENTITY ugrave "&#249;">
+<!ENTITY umacron "&#363;">
+<!ENTITY uml "&#168;">
+<!ENTITY upsih "&#978;">
+<!ENTITY upsilon "&#965;">
+<!ENTITY uuml "&#252;">
+<!ENTITY vacute "v&#769;">
+<!ENTITY wyn "&#447;">
+<!ENTITY xi "&#958;">
+<!ENTITY yacute "&#253;">
+<!ENTITY ycirc "&#375;">
+<!ENTITY yen "&#165;">
+<!ENTITY ygrave "&#7923;">
+<!ENTITY ymacron "&#563;">
+<!ENTITY yogh "&#658;">
+<!ENTITY yuml "&#255;">
+<!ENTITY zeta "&#950;">
+<!ENTITY zwj "&#8205;">
+<!ENTITY zwnj "&#8204;">
+
+]>
+<root><leme no="1393">
+<lemepagenote type="display">
+<term lang="un">
+l e m e . l i b r a r y . u t o r o n t o . c a
+
+W i l l i a m  B a l d w i n 
+
+T h e  C a n t i c l e s  o r  B a l a d e s  o f  S o l o m o n  ( 1 5 4 9 )
+
+s t c  2 7 6 8  
+
+v e r . 1 . 0  ( 2 0 2 3 )
+</term>
+</lemepagenote>
+<pb sig="a1r"/>
+<section type="Title-page">
+<term lang="en">
+&#182; THE CANTICLES
+or Balades of 
+Salomon, phraselyke decla&#173;
+red in Englysh Me&#173;
+tres, by Wil&#173;
+liam Bal&#173;
+dwin.
+
+&#182; Halleluiah.
+</term>
+
+<term lang="en">
+<lemeformat>
+Syng to the lord sum plesaunt song
+Of matter fresh and newe:
+Vnto his Churche it doth belong
+His prayses to renewe.
+</lemeformat>
+</term>
+Psalme. cxviii.
+
+M. D. XLIX.
+</section>
+<pb sig="n3r"/>
+<section type="Glossary">
+<heading>
+<term lang="en">
+&#182; The interpretacion of the 
+Hebrue wurdes.
+</term>
+</heading>
+
+<wordgroup1 type="a" object="A">
+<wordentry type="h"><form lang="het">AMana,</form> <xpln lang="en">signifieth Truth.</xpln></wordentry>
+
+<wordentry type="h"><form lang="het">Ammadaf,</form> <xpln lang="en">signifieth People wel willyng, or 
+vnder tribute.</xpln></wordentry>
+</wordgroup1>
+
+<wordgroup1 type="a" object="B"><alpha>B</alpha>
+<wordentry type="h"><form lang="het">Bather,</form> <xpln lang="en">Diuision, Pride, Trouble.</xpln></wordentry>
+
+<wordentry type="h"><form lang="het">Bathrabim,</form> <xpln lang="en">Gatheryng to gether.</xpln></wordentry>
+
+<wordentry type="h"><form lang="het">Baal hamon,</form> <xpln lang="en">Full of people.</xpln></wordentry>
+</wordgroup1>
+
+<wordgroup1 type="a" object="C"><alpha>C</alpha>
+<wordentry type="h"><form lang="het">Carmel,</form> <xpln lang="en">A circumcised Lambe.</xpln></wordentry>
+</wordgroup1>
+
+<wordgroup1 type="a" object="D"><alpha>D</alpha>
+<wordentry type="h"><form lang="het">Damascus,</form> <xpln lang="en">A field of blud.</xpln></wordentry>
+</wordgroup1>
+
+<wordgroup1 type="a" object="E"><alpha>E</alpha>
+<wordentry type="h"><form lang="het">Engaddi,</form> <xpln lang="en">The iye or fountayne of a Kyd.</xpln></wordentry>
+</wordgroup1>
+
+<wordgroup1 type="a" object="G"><alpha>G</alpha>
+<wordentry type="h"><form lang="het">Gileal,</form> <xpln lang="en">An heap of witnes.</xpln></wordentry>
+</wordgroup1>
+
+<wordgroup1 type="a" object="H"><alpha>H</alpha>
+<wordentry type="h"><form lang="het">Hermon,</form> <xpln lang="en">Cursyng or Accursednes.</xpln></wordentry>
+
+<wordentry type="h"><form lang="het">Hesebon,</form> <xpln lang="en">is the name of a watrie grounde.</xpln></wordentry>
+</wordgroup1>
+
+<wordgroup1 type="a" object="L"><alpha>L</alpha>
+<wordentry type="h"><form lang="het">Libanus,</form> <xpln lang="en">Beautie or Clerenes.</xpln></wordentry>
+</wordgroup1>
+
+<wordgroup1 type="a" object="S"><alpha>S</alpha>
+<wordentry type="h"><form lang="het">Salomon,</form> <xpln lang="en">Peacefull, or a quiet person.</xpln></wordentry>
+
+<wordentry type="h"><form lang="het">Sculamite,</form> <xpln lang="en">A peaceful or glorious woman.</xpln></wordentry>
+
+<wordentry type="h"><form lang="het">Sanir,</form> <xpln lang="en">the name of <term lang="het">Hermon</term>, as the Amorites call it.</xpln></wordentry>
+</wordgroup1>
+</section>
+
+<section type="Closing">
+<term lang="la">Finis.</term>
+</section>
+
+</leme>
+</root>

@@ -3895,6 +3895,27 @@ lasla:
   # → nc (re-read 2026-10-21). Sparse GitFetch cone [conllup, README.md]; the
   # Turtle lanes (texts/, complete_lasla.ttl.gz) never transfer.
 
+leme:   # P160, 02-sources row 392
+  adapter: Nabu::Adapters::Leme
+  adopted: "2026-11-05"
+  axes: [germanic]
+  wired: false   # awaiting the first sync (EXPECTED: 312 discovered → 311 dictionary
+                 # docs / 943,211 entries, 1 quarantined (1807/131265, upstream
+                 # malformed XML), 28 rule skips = 2 XMLs + 26 unnamed bitstreams)
+  # LEME — Lexicons of Early Modern English (ed. Ian Lancashire, University
+  # of Toronto): the LEME-XML texts of 314 dictionaries, glossaries,
+  # spelling lists, herbals and glossed treatises, c. 1475–1755, on TSpace
+  # (collection 1807/99021), walked through the DSpace 7 REST API — the
+  # listing, each item's record, its one named XML bitstream (MD5-checked).
+  # New family leme-xml (LEME's own tagset, not TEI; entities resolved from
+  # a snapshotted table, no DTD ever loaded). One shelf per work,
+  # leme-<handle>; entry id = the word-entry ordinal. CC BY 4.0 per LEME's
+  # Terms of Use and each item's dc.rights → attribution. Headword
+  # language per entry (en 512,005 · ita 167,042 · lat 141,293 · fra …);
+  # English shelves stay bare en (postures: a shelf-grain en:early row
+  # would mislabel the 1700–1755 lexicons).
+  sync_policy: manual
+
 lexica:
   adapter: Nabu::Adapters::Lexica
   adopted: "2026-07-09"

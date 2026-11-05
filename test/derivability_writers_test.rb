@@ -159,7 +159,10 @@ class DerivabilityWritersTest < Minitest::Test
   # canonical/bu-ajami/ (the NEH Ajami item pages under items/ + their
   # transcription PDFs under files/, .part + rename, and its
   # .bu-ajami-fetch.json pin) inside Adapter#fetch — the elektire_fetch
-  # WP-JSON crawl law kind. The damos adapter writes canonical/damos/
+  # WP-JSON crawl law kind. The P160 adapters/leme_fetch writes
+  # canonical/leme/ (the DSpace item records under items/ + each item's
+  # MD5-checked XML under xml/, .part + rename, and its .leme-fetch.json
+  # pin) inside Adapter#fetch — the same crawl law kind. The damos adapter writes canonical/damos/
   # (the POSTed listing under map/ + items/<id>.json, tmp+rename, and
   # its .damos-crawl.json ledger) inside Adapter#fetch — the
   # ndl-kotenseki crawl law kind. The itkc-catalog module writes
@@ -266,7 +269,7 @@ class DerivabilityWritersTest < Minitest::Test
     nabu/menota_fetch.rb
     nabu/manual_drop.rb nabu/ochre_fetch.rb nabu/otdo_fetch.rb
     nabu/lotsawa_fetch.rb nabu/glt_fetch.rb nabu/cantus_fetch.rb nabu/hf_rows_fetch.rb nabu/zip_range_fetch.rb
-    nabu/poma_fetch.rb nabu/bu_ajami_fetch.rb
+    nabu/poma_fetch.rb nabu/bu_ajami_fetch.rb nabu/adapters/leme_fetch.rb
     nabu/seal_fetch.rb nabu/aio_fetch.rb nabu/adapters/runesdb_lido_fetch.rb
     nabu/statutes_realm_fetch.rb
     nabu/sefaria_fetch.rb nabu/titus_fetch.rb nabu/url_download.rb

@@ -47,6 +47,7 @@ A source wears every desk it serves — these 38 answer this desk. Holdings are 
 | `grand-tour` | texts | attribution | wired · frozen | 4 docs / 515 passages |
 | `helipad` | treebank | attribution | wired · manual | 1 docs / 3,549 passages |
 | `iswoc` | texts | nc | wired · frozen | 5 docs / 2,536 passages |
+| `leme` | dictionary | attribution | not yet wired | not synced yet |
 | `menota` | texts | attribution | wired · manual | 91 docs / 229,501 passages |
 | `menotec` | texts | nc | wired · manual | 7 docs / 20,308 passages |
 | `perseus-anglit` | texts | attribution | wired · manual | 2 docs / 86 passages |

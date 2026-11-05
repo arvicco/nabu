@@ -727,6 +727,16 @@ sources:
       first_attested: first_attested  # the HISTORIQUE's first century label, normalized: XVIe s. 8,603 ·
       #                         XIIIe 3,779 · XIVe 2,719 · XIIe 2,609 · XVe 2,279 · XIe 1,368 · Xe 123 ·
       #                         IXe 56 · XVIIe 2 · VIIIe 1 (21,539 articles) — Littré's own earliest quote
+  leme:                       # census 2026-11-05 over the 313 lexicon XMLs (943,525 word-entries)
+    entry_fields:
+      lexicon_year: lexicon_year      # the work's typed year (item dc.date.created, one erratum —
+      #                         Leme::DATE_ERRATA), 1477–1755: every entry carries its lexicon's
+      lexicon_author: author          # the item's dc.contributor.author, "; "-joined verbatim
+      pos: word_class                 # LEME <class type="pos"> verbatim ("A noun.", "v. a.", "prop.")
+      etymon_languages: etymon_language  # LEME codes of <etym lang> / <class type="etymlang" lang>
+      #                         verbatim (la · fr · gk · sx · het · he · ow · nn · ct · it …)
+      register: usage                 # <class type="register"> verbatim ("a term in Heraldry")
+      dialect: dialect                # <class type="dialect"> verbatim ("Langued.", "Nicot.")
   lexicon-itant:              # census 2026-10-29 (lexicon_1_0.ttl, 809 entries)
     entry_fields:
       pos: word_class         # lexinfo partOfSpeech local name: properNoun 311 · noun 204 ·
