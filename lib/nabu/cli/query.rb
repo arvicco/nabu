@@ -108,6 +108,13 @@ module Nabu
       With --lemma, --gloss keeps only attestations whose token gloss
       contains WORD (whole word, case-insensitive) — e.g. BHSA's consonantal
       דבר as "word" vs "speak". Composes with --morph; not with --near.
+      With NO query and no --lemma, --gloss WORD searches the glosses
+      ACROSS lemmas: every word some source glosses WORD (BHSA's Hebrew and
+      Aramaic מלך, achemenet's šarru for "king"), one line per word with its
+      token count and first attestation. Words AND, "phrase", word* prefix;
+      case- and diacritic-insensitive (konig finds König). Composes with
+      --lang/--source/--axis/--license/--limit only; built by the reference
+      rebuild (or `bundle exec rake index:glosses`).
 
       PROXIMITY (A --near B [--window N]): keep only hits where B occurs
       within N words of A in the SAME passage — λόγος near θεός is John 1:1.
@@ -235,6 +242,8 @@ module Nabu
         nabu search --lemma λόγος --morph case=dat,number=pl
                                                    # only the dative-plural λόγοις
         nabu search --lemma דבר --gloss word       # BHSA דבר as "word", not "speak"
+        nabu search --gloss king                   # every word glossed "king", across
+                                                   #   lemmas and sources
         nabu search λόγος --near θεός --window 5    # λόγος within 5 words of θεός
                                                    #   (John 1:1 and its kin)
         nabu search --lemma λέγω --near κύριος      # every inflection of λέγω
@@ -279,7 +288,8 @@ module Nabu
                    desc: "Morphology facets (with --lemma), e.g. case=dat,number=pl"
     option :gloss, type: :string, banner: "WORD",
                    desc: "Token-gloss filter (with --lemma): keep attestations whose upstream gloss " \
-                         "contains WORD (bhsa/aes/achemenet/tlhdig)"
+                         "contains WORD (bhsa/aes/achemenet/tlhdig); alone (no query): every word " \
+                         "glossed WORD, across lemmas"
     option :near, type: :string, banner: "TERM",
                   desc: "Proximity: keep only hits where TERM is within --window words of the query/lemma"
     option :window, type: :numeric, default: Nabu::Query::Proximity::DEFAULT_WINDOW,
@@ -409,6 +419,7 @@ module Nabu
       query = betacode_input(query) if options[:betacode]
       display_mode
       date_basis_filter
+      return gloss_search(options[:gloss]) if options[:gloss] && !options[:lemma] && query.empty?
       return translations_search(query) if options[:translations]
       if (options[:from] || options[:to] || options[:century] || options[:place] || facet_filters ||
           options[:date_basis]) &&
@@ -433,7 +444,8 @@ module Nabu
       end
       if options[:gloss] && (!options[:lemma] || options[:near] || options[:gloss].strip.empty?)
         raise Thor::Error, "search: --gloss WORD filters lemma attestations by upstream's token gloss — " \
-                           "it needs a word and requires --lemma (and does not compose with --near)"
+                           "it needs a word and requires --lemma (and does not compose with --near); " \
+                           "--gloss WORD alone, with no query, searches the glosses across lemmas"
       end
       if options[:exact] && (options[:fuzzy] || options[:near] || options[:lemma] || options[:morph])
         raise Thor::Error, "search: --exact is glyph-literal substring matching over the plain " \
@@ -2789,6 +2801,64 @@ module Nabu
         say "note: #{incomplete}" if incomplete
         covered = scope.map { |slug, passages| "#{slug} #{passages}" }.join(" · ")
         say "translations index covers: #{covered.empty? ? 'no sources' : covered}"
+      end
+
+      # search --gloss WORD with no --lemma and no query: the token-gloss
+      # lane (Query::GlossSearch) — every word upstream glosses WORD,
+      # across lemmas. Same composition set as --translations.
+      def gloss_search(gloss)
+        clash = (translations_incompatible + %i[translations]).select { |key| options[key] }
+        unless clash.empty?
+          raise Thor::Error, "search: --gloss alone searches the token-gloss lane and composes with " \
+                             "--lang/--source/--axis/--license/--limit only (not " \
+                             "#{clash.map { |key| "--#{key.to_s.tr('_', '-')}" }.join(', ')})"
+        end
+        raise Thor::Error, "search: --gloss needs a word, e.g. --gloss king" if gloss.strip.empty?
+
+        validate_license!(options[:license])
+        config = Nabu::Config.load
+        catalog = open_catalog(config)
+        fulltext = open_fulltext(config)
+        raise Thor::Error, "no index — run nabu sync or nabu rebuild" unless catalog && fulltext
+
+        validate_source!(catalog, options[:source])
+        axis_names, axis_slugs = axis_membership(command: "search", config: config)
+        searcher = Nabu::Query::GlossSearch.new(catalog: catalog, fulltext: fulltext)
+        results = searcher.run(gloss, lang: options[:lang], license: options[:license], source: options[:source],
+                                      sources: axis_slugs, limit: options[:limit].to_i)
+        print_gloss_results(results, gloss: gloss.strip, scope: searcher.scope, axis: axis_names,
+                                     incomplete: searcher.incomplete_hint)
+        print_display_footer
+      rescue Nabu::Query::GlossSearch::IndexMissing => e
+        raise Thor::Error, "search: #{e.message}"
+      ensure
+        catalog&.disconnect
+        fulltext&.disconnect
+      end
+
+      # Render gloss hits: one line per WORD (lemma ‘gloss’ [language]
+      # source — counts), its first attestation under it; the drill-down
+      # footer (the lemma-anchored filter lists every attestation), the
+      # credits, and ONE scope line naming what the lane covers.
+      def print_gloss_results(results, gloss:, scope:, axis: nil, incomplete: nil)
+        if results.empty?
+          say "no matches"
+        else
+          results.each do |result|
+            head = result.lemma.empty? ? result.form : result.lemma
+            say "#{head} ‘#{result.gloss}’#{" [#{result.language}]" if result.language} #{result.source} — " \
+                "#{result.tokens} #{result.tokens == 1 ? 'token' : 'tokens'} in " \
+                "#{result.passages} #{result.passages == 1 ? 'passage' : 'passages'}"
+            say "  e.g. #{result.urn}#{" (#{result.form})" unless result.form.empty?}"
+          end
+          say "#{results.size} #{results.size == 1 ? 'word' : 'words'} glossed ‘#{gloss}’ in upstream token " \
+              "glosses (every attestation: nabu search --lemma <lemma> --gloss <word> --source <slug>)" \
+              "#{facet_footer(nil, axis: axis)}"
+          print_search_credits(results)
+        end
+        say "note: #{incomplete}" if incomplete
+        covered = scope.map { |slug, words, _tokens| "#{slug} #{words} words" }.join(" · ")
+        say "gloss index covers: #{covered.empty? ? 'no sources' : covered}"
       end
 
       def fuzzy_search(query)

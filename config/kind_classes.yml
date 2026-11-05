@@ -79,8 +79,13 @@ classes:
     desc: "Addressing the divine: hymns, prayers, laments."
     subs: [hymn, prayer, lament]
   ritual:
-    desc: "How rites are performed: festivals, cult inventories, liturgies."
-    subs: [festival, cult-inventory, liturgy]
+    desc: "How rites are performed: festivals, cult inventories, liturgies; chant is the individual sung piece of the rite."
+    # chant (added with the chant-database folds): the single sung item —
+    # antiphon, responsory, introit, gradual, trope… — as distinct from
+    # liturgy, which keeps the rite's running text and order (offices,
+    # ordines, rubrics). A chant inventory's record is a chant; an office
+    # book's document is liturgy.
+    subs: [festival, cult-inventory, liturgy, chant]
   magic:
     desc: "Operative power in words: incantations, curses, amulets."
     subs: [incantation, curse, amulet]

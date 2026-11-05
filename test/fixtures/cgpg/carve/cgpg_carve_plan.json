@@ -1,0 +1,376 @@
+{
+  "_meta": {
+    "date": "2026-07-31",
+    "derived_from": [],
+    "rank_rule": "a work already served from a better source per the precedence ladder (First1KGreek/Perseus TEI, byzantium.gr manual transcription) is carved to data/corpus_secondary/ with rank secondary, never as a competing primary",
+    "shared_row_rule": "a served row holding a work boundary goes to exactly one work, normally the later work when the row carries its incipit/heading, the earlier work when the following work's text only starts on the next row; each decision is recorded in the work notes",
+    "slug_policy": "works with a TLG id use the slug the source registry / crosswalk already holds for that id (the canon-derived house naming); a canon-gap TLG id (tlg2866.tlg002, empty canon title) gets a curated slug on the sibling-work pattern, the lettered_subedition_slugs.json precedent. Works without any TLG id get author.title slugs under the repo's established author slugs (theophylactus-achridensis, michael-psellus, symeon-thessalonicensis, leo-vi-sapiens, procopius-rhetoric, photius, oecumenius, ...), minting new author slugs only where none exists (tiberianus, quadratus-apologeta, pantaenus, rhodon, basilius-i-macedo, constantinus-siculus, demetrius-cydones, joannes-diaconus-hadrianopolitanus, esaias-cyprius, hilarion-monachus, theodorus-agallianus, josephus-ii-patriarcha, job-monachus, and the anonymous-work authors laudatio-sancti-demetrii, vita-basilii-iunioris, anonymus-de-vita-mohammedis)",
+    "what": "Curated per-volume carve plan for splitting the multi-work CGPG Migne volume dumps (cogPG.*) into per-work corpus files; consumed by scripts/carve_cgpg_volume.py"
+  },
+  "volumes": [
+    {
+      "basis": "cgpg_split_proposals.json PG134 (consistency review: ok)",
+      "date": "2026-07-31",
+      "drop_duplicates": [
+        {
+          "duplicates_of": [
+            [
+              561,
+              562
+            ]
+          ],
+          "loci": [
+            [
+              563,
+              564
+            ]
+          ]
+        }
+      ],
+      "duplicates_note": "cols 563-564 are a rescan of the printed leaf already served as cols 561-562 (similarity 0.92/0.83, verified at carve time); dropped and archived below",
+      "residual_note": "",
+      "residual_ranges": [],
+      "volume": "PG134",
+      "works": [
+        {
+          "author_display": "Joannes Zonaras",
+          "evidence": "Col 31 carries the printed title line ΠΡΟΟΙΜΙΟΝ and the proem incipit, matching Dindorf's edition opening (Εὐστόχως ἄν τις εἴποι ἐπιτωθάζων μοι). Work ends MID-column 568 with book 12's explicit 'Ὁ μὲν οὖν καθ´ ἕνα τρόπων τῶν ἰστορηθέντων βιαίως ἀπέῤῥηξε· τὴν ζωήν.' (death of Maximinus Daia), verbatim match against Dindorf vol. 3 p. 169 (archive.org ioannoutouzonara03zonauoft). Served range holds 230,492 words vs canon 240,589 for the full work (OCR variance). Note: cols 561-562 are duplicated as 563-564 (same printed leaf OCR'd twice, similarity 0.83-0.89).",
+          "incipit_checks": [
+            {
+              "locus": 31,
+              "text": "ΠΡΟΟΙΜΙΟΝ. Αʹ.. Εὐστόχως ἄν τις εἴποι, ἐπιτωθάζων μοι, μεῖζόν σοι τοῦ ἔργου τὸ πάρεργον."
+            }
+          ],
+          "ranges": [
+            [
+              31,
+              567
+            ]
+          ],
+          "rank": "secondary",
+          "secondary_reason": "work is served from the First1KGreek open TEI edition (346,333 Greek tokens vs ~230k in this OCR; open_corpus rank 1 beats migne_cgpg rank 3); this CGPG Migne OCR copy is kept as a secondary witness",
+          "slug": "joannes-zonaras.epitome-historiarum-lib-1-12",
+          "title": "Epitome historiarum (lib. 1-12)",
+          "tlg": "tlg3135.tlg001"
+        },
+        {
+          "author_display": "Joannes Zonaras",
+          "evidence": "Starts MID-column 568 immediately after book 12's explicit; ends early in col 570 at '...ὀκτὼ δ´ ἐπὶ δέκα χρόνους ἐπεβίω οὗτος τῷ λειτουργήματι.' Verbatim match against Dindorf vol. 3 pp. 169-171, where Du Cange's note marks exactly this span (ἐν δὲ τῇ Ῥώμῃ ... λειτουργήματι) as absent from cod. A, added at the end of the regii/Colbertinus, 'suppositicia nec Zonarae esse videntur'. Content: anachronistic episcopal succession lists (Rome down to Gregory the Great, Antioch down to Ephraimius). 622 served words vs canon word_count 648. Served 'Καρκελλῖνον' is OCR for Μαρκελλῖνον.",
+          "incipit_checks": [
+            {
+              "locus": 568,
+              "text": "Ἐν δὲ τῇ Ῥώμῃ τὴς τῶν πιστῶν Ἐκκλησίας προέστη μετὰ Καρκελλῖνον ἐν ἔτεσι δυσὶ τὴν λειτουργίαν ἐκπλήσαντα Εὐσέβιος"
+            }
+          ],
+          "ranges": [
+            [
+              568,
+              569
+            ]
+          ],
+          "slug": "joannes-zonaras.epitome-historiarum-lib-12-clausula-varia-dub",
+          "title": "Epitome historiarum (lib. 12, clausula varia) [Dub.]",
+          "tlg": "tlg3135.tlg003"
+        }
+      ]
+    },
+    {
+      "basis": "cgpg_split_proposals.json PG101 (consistency review: needs-review, minor - resolved here by the explicit locus-293 exclusion). Credited works tlg4040.015/017/018/019/026 are not in the served columns and get no range",
+      "date": "2026-07-31",
+      "residual_loci": [
+        293
+      ],
+      "residual_note": "Residual: two rows of Greek quoted about the patriarch (the Photius volume's prefatory matter) and one two-token shard of a garbled Latin head. 515 tokens, apparatus, stays.",
+      "residual_ranges": [
+        [
+          14,
+          15
+        ]
+      ],
+      "volume": "PG101",
+      "works": [
+        {
+          "author_display": "Photius",
+          "evidence": "Title line at col 44: ΦΩΤΙΟΥ ΠΑΤΡΙΑΡΧΟΥ ΚΩΝΣΤΑΝΤΙΝΟΥΠΟΛΕΩΣ ΠΡΟΣ ΑΜΦΙΛΟΧΙΟΝ ΤΟΝ ΟΣΙΩΤΑΤΟΝ ΜΗΤΡΟΠΟΛΙΤΗΝ ΚΥΖΙΚΟΥ ... ΖΗΤΗΜΑΤΩΝ ΔΙΑΦΟΡΩΝ; ΕΡΩΤΗΣΙΣ Α at col 45 (with subtitle 'Ἀμφιλόχια πρὸς Ἀμφιλόχιον μητροπολίτην Κυζίκου λόγων ἱερῶν συλλογή'); continuous ΕΡΩΤΗΣΙΣ numbering tracked A' (45) → ΤΙΖ (610) → Latin QUAESTIO CCCXXI garbled as ΟΟΣΘΤΙΟ ΟΩΩΧΧΙ at 611; matches standard reference Amphilochia = PG 101, 45-1172. Col 611 ends with the garbled heading of the next quaestio (~CCCXXII); the series' end falls in the unserved gap 612-619. No TLG id: the tlg4040 canon has no Amphilochia/Epistulae work (Laourdas-Westerink not in TLG-E).",
+          "incipit_checks": [
+            {
+              "locus": 44,
+              "text": "Τῆς σπουδῆς σου τὸ γνήσιον δυσωπηθεὶς τὴν σὴν ἀοῆκα πρὸς πέρας ἐλθεῖν, ὡς ἐλπίσας, αἴτησιν·"
+            }
+          ],
+          "notes": "served locus 293 (Latin divider) is excluded to the residual per the consistency review",
+          "ranges": [
+            [
+              44,
+              611
+            ]
+          ],
+          "slug": "photius.amphilochia",
+          "title": "Amphilochia (Migne main series: prooemium + quaestiones I-CCCXXI+, truncated)"
+        }
+      ]
+    },
+    {
+      "basis": "cgpg_zerocredit_identification.json PG123. The prefatory vita/kephalaia blocks (Ps.-Sophronius + Ps.-Dorotheus vitae) are folded into the following gospel commentary as its front matter, the same way the PG118 epistle ranges keep their hypothesis and kephalaia; the identification evidence for each block is kept in the work evidence",
+      "date": "2026-07-31",
+      "residual_note": "",
+      "residual_ranges": [],
+      "volume": "PG123",
+      "works": [
+        {
+          "author_display": "Theophylactus Achridensis",
+          "evidence": "Locus 572: 'ΠΡΟΟΙΜΙΟΩΝ. Ἡ τοῦ ἀγίου Πνεύματος δύναμις...' Locus 573 already expounds Jn 1:1 ('Ἐν ἀρχῇ ἦν ὁ Λόγος'). Final locus 679 ends mid-exposition of John 7:47-52 ('Μὴ καὶ ὑμεῖς πεπλάνησθε;' ... 'Καὶ γνῷ τί ποιεῖ', Nicodemus scene) with no explicit, matching PG123 breaking off at col 1348 and the commentary resuming in PG124 cols 9-317. Migne cols ~1127/1133-1348. || Ps.-Sophronius, Vita Ioannis + Ps.-Dorotheus of Tyre (Synopsis, CPG 3603), Vita Ioannis; plus kephalaia list of John (front matter to the John commentary): Locus 569: 'viΤΑ ΓΟΑΗΝΙῼ [=VITA JOANNIS] ΒΙΟΣ ΤΟΥ ΙΩΑΝΝΟΥ Ἐκ τῶν Σωφρονίου. Ἰωάννης, ὃν Ἰησοῦς πάνυ ἠγάπησεν...' (mentions Patmos, Domitian, Apocalypse). Locus 570: 'ΕΙΟΣ [=ΒΙΟΣ] ΙΒΑΝΝΟΥ ΤΟΥ ΕΥΑΓΓΕΛΙΣΤΟΥ. Ἐκ τῆς [τ]οῦ Δωροθέου μάρτυρος καὶ Τυιρίων ἐπισκόπου συνόψεως', then kephalaia of John through locus 571. Locus 569 = Migne col 1127 (John block start), confirming col = 2*locus - 11.",
+          "incipit_checks": [
+            {
+              "locus": 569,
+              "text": "Ἰωάννης, ὃν Ἰησοῦς πάνυ ἠγάπησεν, υἱὸς Ζεβεδαίου, ἀδελφὸς Ἰακώβου τοῦ ὑπὸ Ἡρώδου μετὰ τὸ πάθος τοῦ Κυριου ἀποκεφαλισθέντος, ἔσχατος πάντων ἔγραψεν Εὐαγγέλιον"
+            },
+            {
+              "locus": 572,
+              "text": "Ἡ τοῦ ἀγίου Πνεύματος δύναμις ἐν ἀσθενείᾳ τελειοῦται, καθὰ γέγραπται, καὶ πιστεύομεν· ἐν ἀσθενείᾳ δὲ οὐ σώματος μόνον, ἀλλὰ δὴ καὶ λόγου καὶ σοφίας ἐν γλώττῃ κειμένης"
+            }
+          ],
+          "ranges": [
+            [
+              569,
+              679
+            ]
+          ],
+          "slug": "theophylactus-achridensis.enarratio-in-evangelium-joannis",
+          "title": "Enarratio in Evangelium Joannis (with prefatory vitae and kephalaia; John 1-7 in PG123, continued in PG124)"
+        }
+      ]
+    },
+    {
+      "basis": "cgpg_zerocredit_identification.json PG124. The John commentary rows continue the work begun in PG123 and are appended to the same corpus file (two-volume delivery of one work, the Cedrenus PG121/PG122 precedent)",
+      "date": "2026-07-31",
+      "residual_note": "Residual: three rows, 99 tokens, and this one genuinely IS the garbled Latin apparatus (ΜΟΝΙΤΟΜ = MONITUM, ΡΗΑΕΑΤΙΟΝΕΘ = PRAEFATIONES read as Greek letter shapes). Stays.",
+      "residual_ranges": [
+        [
+          168,
+          170
+        ]
+      ],
+      "volume": "PG124",
+      "works": [
+        {
+          "append": true,
+          "author_display": "Theophylactus Achridensis",
+          "evidence": "File opens mid-commentary at a kephalaia list then quotes John 7:52 and 8:12 («Μὴ καὶ σὺ ἐκ τῆς Γαλιλαίας εἶ;» ... «Ἐγώ εἰμι τὸ φῶς τοῦ κόσμου»), exactly where PG123's John commentary breaks off. Ends at locus 164 with the closing doxology on John 21:25 (books the world could not contain): '...φωτίσαντι ἡμᾶς ... ᾧ ἡ δόξα εἰς τοὺς αἰῶνας. Ἀμήν.' Locus 164 = col 317, the standard end citation for In Joannem (PG 124:9-317).",
+          "incipit_checks": [
+            {
+              "locus": 10,
+              "text": "ΚΕΦΑΛ. Πʹ. Περὶ τῶν ἐρωτώντων τὸν Ἰησοῦν περὶ τοῦ Πατρὸς αἰτοῦ. Περὶ τοῦ Ἰησοῦ ἐλευθέρωσιν ἐπαγγελλομένου τοῖς ἑπομένοις αὐτῷ."
+            }
+          ],
+          "ranges": [
+            [
+              10,
+              164
+            ]
+          ],
+          "slug": "theophylactus-achridensis.enarratio-in-evangelium-joannis",
+          "title": "Enarratio in Evangelium Joannis (complete across two volumes: PG123 John 1-7 + PG124 John 7:52-21:25)"
+        },
+        {
+          "author_display": "Theophylactus Achridensis",
+          "evidence": "Locus 173 heading: 'ΕΟΦΥΛΑΚΤΟΥ ΛΡΧΙΕΠΙΣΚΟΠΟΥ ΒΟΥΛΓΑΡΙΑΣ ΤΟΥ ΑΓΙΟΥ ΙΙΑΥΛΟΥ ΠΡΟΣ ΡΩΜΛΙΟΥΣ ΕΠΙΣΤΟΛΗΣ ΕΧΗΓΗΣΙΣ ... ΑΥΗΟΘΕΣΙΣ ΤΙΣ ΠΡΟΣ ΡΩΜΑΙΟΥΣ ΕΠΙΣΤΟΑΠΣ' followed by the hypothesis; locus 174 has garbled Latin running head THEOPHYLACTI COMMENTARIUS IN EPISTOLAM AD ROMANOS and ΚΕΦΑΛΑΙΟΝ ΠΡΩΤΟΝ on Rom 1:1 «Παῦλος». Ends mid-locus 285 with the Rom 16 doxology '...συντριβομένων ὑπὸ τοὺς πόδας ἡμῶν ... ᾧ ἡ δόξα εἰς το[ὺς αἰῶνας]' immediately before the 1 Cor title. Locus 173 = col 335, the standard In Rom. start.",
+          "incipit_checks": [
+            {
+              "locus": 173,
+              "text": "Ἡσυνεχὴς ἀνάγνωσις τῶν θείων Γραφῶν, εἰς, τὴν γνῶσιν αὐτῶν ἄγει·"
+            }
+          ],
+          "notes": "shared boundary row 285 (Romans doxology + 1 Cor title) is assigned to the 1 Corinthians work",
+          "ranges": [
+            [
+              173,
+              284
+            ]
+          ],
+          "slug": "theophylactus-achridensis.expositio-in-epistolam-ad-romanos",
+          "title": "Expositio in Epistolam ad Romanos (with prefixed hypothesis)"
+        }
+      ]
+    },
+    {
+      "basis": "cgpg_zerocredit_identification.json PG146. The volume is one continuous work (Historia ecclesiastica books 8-14); the seven per-book entries of the identification become one corpus work with per-book incipit anchors",
+      "date": "2026-07-31",
+      "residual_note": "",
+      "residual_ranges": [],
+      "volume": "PG146",
+      "works": [
+        {
+          "author_display": "Nicephorus Callistus Xanthopulus",
+          "evidence": "First served row (locus 12 = col 9) opens with HE 8.1 'Ἀνακεφαλαίωσις τῶν πρωῤῥηθέντων'; book closes at locus 118 with the era formula 'ἀπὸ δὲ τῆς θείας τοῦ Κυρίου γεννήσεως τριακοσιοστὸν τεσσαρακοστὸν βʹ ἐπεραίνετο' (OCR; loci 12-118). || Nicephorus Callistus Xanthopulus, Historia ecclesiastica, liber IX (sons of Constantine, Constantius II, Athanasius, the synods to 361): Locus 119 (col 223) opens with garbled Latin header ('ΘἽ ΟΑΡΤ Ι.' = LIBER IX CAPUT I) and the book 9 proem; locus 223 carries the explicit close 'ἡ παροῦσα ἐνάτη μοι τῶν ἱστοριῶν ... τριακοσιοστὸν ἑξηκοστὸν ἕβδομον ἐπεραίνετο' (loci 119-223). || Nicephorus Callistus Xanthopulus, Historia ecclesiastica, liber X (Julian the Apostate, Jovian): Locus 224 (col 433) opens with HE 10.1 on Julian; narrative on Jovian runs to locus 299, which ends mid-word ('...εἰς Ταροὸν τὴν τῶν Κιλίκων γενόμενος, ἐκε'); book 10's closing era formula is missing from the OCR at the 299/300 page break (loci 224-299). || Nicephorus Callistus Xanthopulus, Historia ecclesiastica, liber XI (Valentinian I and Valens, monastic history, to 380): Locus 300 (col 585) opens with HE 11.1 on Valentinian; book closes within locus 381 with 'Ὁπηνίκα κόσμου μὲν ἔτος εωαʹ. Ἁπὸ δὲ τῆς θείας τοῦ Κυρίου γεννήσεως τς´ καὶ πʹ ἐπεραίνετο' (year 380; loci 300-381). Missing loci 309, 313, 315 fall inside this book. || Nicephorus Callistus Xanthopulus, Historia ecclesiastica, liber XII (Gratian, Valentinian II, Theodosius I, council of 381): Book 12 starts mid-locus 381 (col ~747) right after book 11's era formula, preceded by garbled Latin header 'ΝΙΩΕΡΗΟΚΙ ΟΑΙΓΙΘΤΙ ΧΑΝΤΗΟΡΟΙΙ' (NICEPHORI CALLISTI XANTHOPULI); closes at locus 467 tail with 'ἡ παραῆσα δωδεκάτη μοι τῶν ἱστοριῶν χρόνον ἐτῶν ὀκτωκαίδεκα ... τέταρτον καὶ τετρακο[σιοστόν]' (year 394/5; loci 381-467). || Nicephorus Callistus Xanthopulus, Historia ecclesiastica, liber XIII (Arcadius and Honorius, John Chrysostom, to 418): 'ΚΕΦΑΛ.' sits at the very end of locus 467 with the chapter title and text opening locus 468 (col 921); HE 13.2 on Chrysostom's upbringing follows at locus 471; closes within locus 535 with era formula 'τετρακο αιρστὸν ὀκτωκαιδέκατον ἐπεραίνετο' (year 418; loci 467-535). || Nicephorus Callistus Xanthopulus, Historia ecclesiastica, liber XIV (Theodosius II, Nestorius, Ephesus, to 450): Book 14 starts mid-locus 535 (col ~1055) after book 13's era formula and the garbled 'ΝΙΟΕΡΗΟΚΙ ΔΑΙΙΙΦΤΙ ΧΑΝΤΗΟΡΟi' header; last served row (locus 644 = col 1273) ends with Theodosius II's death, Marcian's accession, and the explicit close 'ἡ παροῦσα τεσσαρεσκαιδεκάτη μοι τῶν ἱστοριῶν χρόνον ἐτῶν τεσσαράκοντα πρὸς δυσίν ... τετρακοσιοστὸν καὶ ἑξηκοστὸν ἐπεραίνετο' (loci 535-644).",
+          "incipit_checks": [
+            {
+              "locus": 12,
+              "text": "ΚΕΦΑΛ. Αʹ. Ἀνακεφαλαίωσις τῶν πρωῤῥηθέντων καὶ ὧν ἐν τώ παρόντι διαληψόμεθα. λσα μὲν δὴ τῷ ἰσαποστόλω νεγένηται Κωνσταντίνῳ, πρὶν ἐς ἀντίπαλον κριθῆναι μοῖραν Λικινίῳ τῷ δυσσεβεῖ"
+            },
+            {
+              "locus": 119,
+              "text": "ΘἽ ΟΑΡΤ Ι. ΚΕΦΛΛ. Α Προοίμιον τῆς τοῦ τόμου ὃλης ἐκθέσεως· ἔσα ἐντὸς περιέξει. Ὑπὲρ μὲν οὗν τῶν τῇ καθόλου Ἐκκλησίᾳ ἐπισυμβάντων, ἔτι τῷ ζῇν περιόντος τοῦ Κωνσταντίνου, ἀποχρώντως ἡμῖν εἰρῆσθαι δοκεῖ"
+            },
+            {
+              "locus": 224,
+              "text": "ΚΕΦΑΛ. Αʹ. Περὶ βίου καὶ ἀγωγῆς τοῦ παραβάτου Ἰου λιανοῦ · καὶ ὡς Θεοῦ παραχωρήσει βασιλεὺς Ῥομαίων ἀνηγορεύθη. Κωνστάντιος μὲν οὖν τοῦτον ἀπεβίω τὸν τρόπον, οὐκ ἐλαχίστῳ χρώμενος μεταμέλῳ τῇ καινοτομίᾳ τῆς πατρικῆς πίστεως."
+            },
+            {
+              "locus": 300,
+              "text": "ΚΕΦΑΛ. Αʹ. Α γερὶ διαίτης καὶ πολιτείας τοῦ βασιλέως Οὐαλεντινιανοῦ · ἔτι δὲ καὶ περὶ τοῦ ἀδελφοῦ αὐτοῦ Οὐάλεντος. Ἀλλ´ οὕτω μὲν ἀποστάτης ἀνήρηται· οὕτω δὲ καὶ Ἰοβιανὸς ὁ εὐσεβέστατος βασιλεὺς ἐν τοῖς μεθορίοις Γαλατῶν τε καὶ Βιθυνῶν ἐτελεύτα τὸν βίον"
+            },
+            {
+              "locus": 381,
+              "text": "ΚΕΦΑΛ. Αʹ. Περὶ τῆς βασιλείας Γρατιανοῦ καὶ Οὴμλεκτικια νρῦ τεῦ νέου, καὶ ὡς κοινωνὸν τῆς ἀρχῆς καὶ ἐλιρδύσιον τὸν Μέγαν προσίεντρ Λιπόντος δ´ τὔτω τὸν βίον Οὐάλεντος, οἱ βάρβαροι τῷ παρὰ δόξαν ἐπαρθέντες τροπαίῳ, πᾶσαν ἐπῆλθον τὴν Θρᾴκην δῃοῦντες"
+            },
+            {
+              "locus": 468,
+              "text": "Αʹ. Περὶ τῆς βασιλείας Ὁνωρίου καὶ Ἀρκαδίου· Κὡς Ἀρκαδίῳ μέν Ῥουφῖνος παρεδυνάστειεν· Ὁνωρίῳ δέ Στελίχων ἐν ἑσπέρα τὴν αὐτὴν ἐπλήρου τάξιν· καὶ ὅπως τηνικαῦτα κοινὰ καὶ τὰ τῶν ἐκκλησιῶν ἐφέρετο πράγματα. Λαμπρῶς δ´ οὔτω τὴν Ἐκκλησίαν αὐξήσας ὁ μέγιστος Θεοδόσιος, ἐτελεύτα ἐπὶ διαδόχοις δυσὶ τοῖς παισίν"
+            },
+            {
+              "locus": 535,
+              "text": "ΚΕΦΑΛ. Αʹ. μρὶ τῆς βασιλείας τοῦ Νέου Θεοδοσίου· ὀς ὑπὸ ἐπινρόπῳ Ἰσδιγέρδῃ τῷ Περσῶν βασιλεῖ διῳκεῖτο · τὰ δὲ πράγματα διὰ χειρὸς ἦγεν Ἀνθέμιος τὰ πολλὰ Τρωῖλῳ τῷ σοφιστῇ συγγινόμενος. Ἰωάννης μὲν οὖν τὴν γλῶτταν χρυσοῦς τῷ πολλῷ τῶν ὑπὲρ Χριστοῦ ἀγώνων καμάτῳ οἶαπερ χρυσίον"
+            }
+          ],
+          "notes": "book XIII: the bare ΚΕΦΑΛ. marker sits at the very end of row 467; the chapter title and text (the incipit anchor) open row 468",
+          "ranges": [
+            [
+              12,
+              644
+            ]
+          ],
+          "slug": "nicephorus-callistus-xanthopulus.historia-ecclesiastica-lib-8-14",
+          "title": "Historia ecclesiastica, libri VIII-XIV (PG 146; books 1-7 and 15-18 are in PG 145/147, not served)"
+        }
+      ]
+    },
+    {
+      "basis": "cgpg_split_proposals.json PG003 (consistency review: ok as ranges, but the Pachymeres paraphrase entry is flagged \"interwoven, not separable by column range\")",
+      "date": "2026-07-31",
+      "defer_reason": "every work range interleaves Pseudo-Dionysius' text with Georgius Pachymeres' paraphrase chapter by chapter (plus embedded quotations), so a clean split needs passage-level separation, not a column carve; see data/corpus_changes/cogPG.PG003.split-deferred.json",
+      "status": "defer",
+      "volume": "PG003",
+      "works": []
+    },
+    {
+      "basis": "read at the row. Four blocks: two unidentified head blocks, the Choniates Historia, and a tail index. Only the Historia is carved.",
+      "date": "2026-08-07",
+      "residual_note": "13-89 is a set of homilies opening ΛΟΓΟΣ Αʹ and 92-151 a treatise opening ΠΡΟΟΙΜΙΟΝ; the volume's collective label names Isidore of Thessalonica and Joel, but which block is whose is not established here, so neither is carved. 554-558 is a table of contents (Τόμος πρῶτος. Ἐν τῷ πρώτῳ τόμῳ τὸ προοίμιον), not a work.",
+      "residual_ranges": [
+        [
+          13,
+          89
+        ],
+        [
+          92,
+          151
+        ],
+        [
+          554,
+          558
+        ]
+      ],
+      "volume": "PG139",
+      "works": [
+        {
+          "author_display": "Nicetas Choniates",
+          "evidence": "Locus 167 opens the Historia's proem on the usefulness of history. Locus 527 is simply missing from the file, not a work boundary: 528-536 continues the same post-1204 narrative, Baldwin's death and the Frankish and Venetian occupation, and 536 ends mid-narrative. 154,180 tokens here against 159,273 served, a ratio of 0.97.",
+          "incipit_checks": [
+            {
+              "locus": 167,
+              "text": "Αἰ ἱστορίαι δὲ ἄρα κοινωφελίς τι χρῆμα τῷ βίῳ ἐφεύρηται"
+            }
+          ],
+          "ranges": [
+            [
+              167,
+              536
+            ]
+          ],
+          "rank": "secondary",
+          "secondary_reason": "work is served from byzantium.gr's manual transcription, which beats OCR of the same text per the source-precedence tie-break (the precedent is scylitzes-continuatus.continuatio-scylitzae, filed the same way); this Migne witness is kept, not served",
+          "slug": "nicetas-choniates.historia-xronikh-dih-ghsis",
+          "title": "Historia",
+          "tlg": "tlg3094.tlg001"
+        }
+      ]
+    },
+    {
+      "basis": "second pass over what pass 1 left. Pass 1 carved only the Nicetas Choniates Historia; this takes the chronicle at 119-151 out of the residual.",
+      "date": "2026-08-07",
+      "pass": 2,
+      "residual_note": "Two blocks, and what each one IS is settled from its own bytes; who wrote either is not. 13-89 is a set of Marian homilies: ΛΟΓΟΣ Αʹ at 13 εἰς τὴν γέννησιν τῆς ... Θεοτόκου, ΛΟΓΟΣ Γʹ at 43 εἰς τὸν Εὐαγγελισμὸν τῆς ... Θεοτόκου, each closing on a doxology. 92-118 is a dialogue that states its own purpose in a ΠΡΟΟΙΜΙΟΝ at 92: συζήτησις ... περὶ τῆς τοῦ ἁγίου Πνεύματος ἐκπορεύσεως, καὶ λύσις τῆς μέσον ἡμῶν καὶ τῶν Λατίνων ἀμφιβολίας, ὁ δὲ χαρακτὴρ διαλογικός, with ΓΡ./ΛΑΤ. speaker tags through 118, where it closes on Athanasius, Cyril and the Damascene.\n\nNeither is carved, and the reason is specific rather than 'not researched'. scripts/scan_display_heads.py over 13-118 returns ZERO display heads in either script: the only all-caps words surviving in 104 rows are ΛΟΓΟΣ three times, ΠΡΟΟΙΜΙΟΝ once and a ΛΑΤ speaker tag. Migne prints running heads that name the author, as PG151 and PG113 both show, and this OCR dropped every one of them here. So there is no handle in our bytes at all, and the vendored TLG Canon holds no record for either candidate the volume's collective label names, which is why the Joel carve could lean on a word count and these cannot. Attribution needs the PG 139 page images.\n\n554-558 is a table of contents, not a work, and it belongs to neither block: it lists the 25+ τόμοι of a heresiology running from Adam and the Greek mysteries through the councils to a dogma under Manuel, whose text continues beyond this volume.",
+      "residual_ranges": [
+        [
+          13,
+          89
+        ],
+        [
+          92,
+          118
+        ],
+        [
+          554,
+          558
+        ]
+      ],
+      "volume": "PG139",
+      "works": [
+        {
+          "author_display": "Joel",
+          "incipit_checks": [
+            {
+              "locus": 119,
+              "text": "Ἰστέον ὅτι ὁ μὲν Ἀδὰμ ἐπέθηκεν ὀνόματα τοῖς σαῖσιν αὐτοῦ"
+            }
+          ],
+          "ranges": [
+            [
+              119,
+              151
+            ]
+          ],
+          "rank": "primary",
+          "slug": "joel.chronographia-compendiaria",
+          "title": "Chronographia compendiaria",
+          "tlg": "tlg3140.tlg001"
+        }
+      ]
+    },
+    {
+      "basis": "third pass. The two blocks pass 2 left unattributed are settled by reading Migne's running heads off the page scans, which our OCR dropped. Migne's own running head, read off the page scan (Internet Archive item patrologia.graeca.org, file _139.zip, page PNGs). Our loci map to Migne columns as col = 2*locus - 14, pinned on two independent text matches: our locus 27 is column 40 and our locus 75 is column 136, and locus 93 is column 172.",
+      "date": "2026-08-07",
+      "pass": 3,
+      "residual_note": "554-558 is a table of contents listing the 25+ τόμοι of a heresiology running from Adam and the Greek mysteries through the councils to a dogma under Manuel. Its text is not in this volume, so it stays.",
+      "residual_ranges": [
+        [
+          554,
+          558
+        ]
+      ],
+      "volume": "PG139",
+      "works": [
+        {
+          "author_display": "Isidorus Thessalonicensis",
+          "evidence": "77 rows, 24,029 tokens. The running head over these columns reads ISIDORI THESSALONICENSIS, checked at two widely separated points: columns 39-40, whose Greek is verbatim our locus 27 (Πάσαις τοίνυν ψήφοις ἄφθαρτος ἡ πανύμνητος), and columns 135-136, verbatim our locus 75. Column 17-18 carries the per-sermon head SERMO IN NATIVITATEM B. V. MARIAE. The collection is Marian throughout: ΛΟΓΟΣ Αʹ at 13 εἰς τὴν γέννησιν τῆς Θεοτόκου, ΛΟΓΟΣ Βʹ at column 40 εἰς τὴν εἰς τὰ Ἅγια τῶν ἁγίων εἴσοδον, ΛΟΓΟΣ Γʹ at 43 εἰς τὸν Εὐαγγελισμόν, which is where the title comes from; Migne prints no single title over the set. No TLG anchor: the vendored Canon has no record for this Isidore. Migne's own running head, read off the page scan (Internet Archive item patrologia.graeca.org, file _139.zip, page PNGs). Our loci map to Migne columns as col = 2*locus - 14, pinned on two independent text matches: our locus 27 is column 40 and our locus 75 is column 136, and locus 93 is column 172.",
+          "incipit_checks": [
+            {
+              "locus": 13,
+              "text": "Μωσῆς ἐκεῖνος, ᾧ θάλασσα μὲν ὑπεχώρει"
+            }
+          ],
+          "ranges": [
+            [
+              13,
+              89
+            ]
+          ],
+          "rank": "primary",
+          "slug": "isidorus-thessalonicensis.sermones-in-deiparam",
+          "title": "Sermones in Deiparam"
+        }
+      ]
+    }
+  ]
+}

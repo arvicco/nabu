@@ -73,15 +73,16 @@ module Nabu
     #   "<parent id>::<phrase>" ("^3a::a bašlap v tägi"); a recurring key
     #   takes ":<n>" in book order (stable while the pinned PDF is).
     # - headword: the bold (main) or italic (sub) head as printed;
-    #   headword_folded: the generic fold of its FIRST variant (before
-    #   " ~ ") with editorial brackets/marks and hyphens dropped
-    #   (t(ä)ŋri → taŋri; amran- → amran).
+    #   headword_folded: the oui search form (generic fold + ı → i) of its
+    #   FIRST variant (before " ~ "), editorial brackets/marks and hyphens
+    #   dropped (t(ä)ŋri → taŋri; amran- → amran; Adıg → adig).
     # - gloss: the first German sense; body: the printed record, then
     #   the German and Turkish halves on their own lines, then the
     #   printed page ("p. 44, left column" — the citation grain).
     # - annotations: entry_kind (main/sub), homonym, parent, page,
-    #   column, german, turkish, labels (the book's (m) (c) (br) (r)
-    #   (tib) (p) script/tradition marks and grammar labels), shape
+    #   column, german, turkish, etymology (below), labels (the book's
+    #   (m) (c) (br) (r) (tib) (p) script/tradition marks and grammar
+    #   labels), shape
     #   (glossed / cross-reference / note / unsplit), rejected_reading
     #   (the † class: 6,817 records), cross_reference (the → target
     #   text verbatim: 9,592 records), text_layer_loss, and the entry-facet
@@ -110,10 +111,14 @@ module Nabu
     #   see; 1,735 of them id-keyed), 9,020 resolved — the rest name
     #   forms the book files under no unique headword. "→" inside glossed
     #   prose (~2,260 further records) stays body text.
-    # - Not split (yet): the leading etymology chain ("< TochB jñāpake <
-    #   Skt. jñāpaka") rides the head of the German half; the boundary
-    #   is an italic-run signal the segmenter does not yet carry into its
-    #   records — a recorded follow-up, never a regex guess.
+    # - etymology: the loan chain heading the German half ("< TochB
+    #   jñāpake < Skt. jñāpaka"), split off on the italic-run boundary the
+    #   segmenter carries (Nabu::WilkensOui, "Italic runs and the
+    #   etymology chain"); german and gloss then start after it, the body
+    #   keeps the printed record. Whole book (2026-11-05): 4,822 entries
+    #   (4,750 main + 72 sub); 602 records open with a link but no italic
+    #   etymon closes it (a language-only "< Chin.", a final roman
+    #   Sogdian/Syriac form) — German half left whole, counted in the notes.
     #
     # == License
     #
@@ -247,7 +252,7 @@ module Nabu
       end
 
       # The search key: the first variant, editorial brackets and marks,
-      # homonym markers and hyphens dropped, then the generic fold.
+      # homonym markers and hyphens dropped, then the oui search form.
       def self.fold(text)
         form = text.to_s.split(/\s+~\s+/).first.to_s
         form = form.gsub(/\^\d+/, "").delete("()[]<>{}*†°?–-")
@@ -395,6 +400,7 @@ module Nabu
           "column" => record.column.to_s,
           "german" => (record.german if present?(record.german)),
           "turkish" => (record.turkish if present?(record.turkish)),
+          "etymology" => record.etymology,
           "labels" => (record.labels.to_a unless record.labels.empty?),
           "shape" => shape(record),
           "rejected_reading" => (true if record.error),
@@ -478,6 +484,11 @@ module Nabu
         end
         notes << "#{census[:lost]} entr(ies) carry U+FFFD where Chinese characters stood (text-layer loss)" if
           census[:lost].positive?
+        unchained = census[:anomalies][:etymology_without_etymon]
+        if unchained.positive?
+          notes << "#{unchained} record(s) open with an etymology link but no italic etymon closes it " \
+                   "(a language-only \"< Chin.\", a final roman transliteration): German half left whole"
+        end
         notes.concat(label_notes(census[:labels]))
         residue = census[:anomalies].select { |key, _| residue_key?(key) }
         notes << "segmenter residue: #{residue.sort.map { |k, n| "#{k} #{n}" }.join(', ')}" unless residue.empty?

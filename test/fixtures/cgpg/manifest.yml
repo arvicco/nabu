@@ -1,10 +1,11 @@
 # Nabu fixture manifest (P5-4 "fixture sentinel"). Schema documented in
 # test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
 #
-# adapter_test is null: the three volume files are documented TRIMS (whole
-# PDF pages cut out of 5–25 MB members of PG.zip); the zip members are not
-# raw-GETtable, so they are not refetchable. The rejected-grain specimen is
-# a trim of a raw GitHub file (fetched for liveness only).
+# adapter_test is null: the volume files are documented TRIMS (whole OCR
+# lines of a few PDF pages cut out of 5–40 MB members of PG.zip); the zip
+# members are not raw-GETtable, so they are not refetchable. The carve plan
+# is a trim of a raw GitHub file at a tag (fetched for liveness only), as is
+# the rejected-grain specimen.
 source: cgpg
 adapter_test: null
 retrieved: "2026-11-02"
@@ -13,7 +14,32 @@ files:
     refetchable: false
     reason: a member of the Zenodo PG.zip archive (record 19915273), not a raw-GET file
     whole: false
-    trim: PDF page 14 only (the volume's first page), every line of its <w> blocks verbatim, CRLF kept
+    trim: PDF pages 14, 44 and 293 whole, every line of their <w> blocks verbatim, CRLF kept
+  - path: PG123_tagged_text.vert
+    refetchable: false
+    reason: a member of the Zenodo PG.zip archive (record 19915273), not a raw-GET file
+    whole: false
+    trim: PDF page 569, OCR lines 1-8, verbatim, LF kept
+  - path: PG124_tagged_text.vert
+    refetchable: false
+    reason: a member of the Zenodo PG.zip archive (record 19915273), not a raw-GET file
+    whole: false
+    trim: PDF pages 10 (lines 1-6), 168 (lines 1-3), 173 (lines 1-8), verbatim, LF kept
+  - path: PG134_tagged_text.vert
+    refetchable: false
+    reason: a member of the Zenodo PG.zip archive (record 19915273), not a raw-GET file
+    whole: false
+    trim: PDF pages 561 (lines 1-4), 563 (lines 1-4), 568 (lines 1-36), verbatim, CRLF kept
+  - path: PG139_tagged_text.vert
+    refetchable: false
+    reason: a member of the Zenodo PG.zip archive (record 19915273), not a raw-GET file
+    whole: false
+    trim: PDF pages 13 (lines 1-8), 119 (whole), 167 (lines 1-6), 554 (lines 1-6), verbatim, CRLF kept
+  - path: PG003_tagged_text.vert
+    refetchable: false
+    reason: a member of the Zenodo PG.zip archive (record 19915273), not a raw-GET file
+    whole: false
+    trim: PDF page 71, OCR lines 1-4, verbatim, CRLF kept
   - path: PG008_tagged_text.txt
     refetchable: false
     reason: a member of the Zenodo PG.zip archive (record 19915273), not a raw-GET file
@@ -24,6 +50,11 @@ files:
     reason: a member of the Zenodo PG.zip archive (record 19915273), not a raw-GET file
     whole: false
     trim: PDF page 37 only (the volume's first page), verbatim, CRLF kept
+  - path: carve/cgpg_carve_plan.json
+    url: https://raw.githubusercontent.com/open-greek/open-greek-corpus/corpus-2026-10-28.2/data/cgpg_carve_plan.json
+    retrieved: "2026-11-05"
+    whole: false
+    trim: nine of 34 pass entries (PG 134, 101, 123, 124, 146, 3, 139 x3), _meta and kept entries verbatim, works lists filtered to the cut pages; re-serialized
   - path: rejected-grains/PG101_text.txt
     url: https://raw.githubusercontent.com/calfa-co/Patrologia-Graeca/main/PG101/PG101_text.txt
     whole: false

@@ -43,6 +43,19 @@ one of the book's two records the segmenter closes with an empty
 headword, skipped by rule. `wilkens-grains.stext.xml.gz` is its recorded
 stext (same command, same mutool).
 
+`wilkens-fold.pdf` + `wilkens-fold.stext.xml.gz` — a third trim (PDF page
+24, folio 8; same `mutool merge` / `mutool draw -F stext | gzip -9`
+recipe, mutool 1.28.0, cut 2026-11-05) and `kaikki-oui-fold.jsonl` — lines
+389–390 of the kaikki.org Old Uyghur extract, byte-verbatim
+(https://kaikki.org/dictionary/Old%20Uyghur/kaikki.org-dictionary-OldUyghur.jsonl,
+sha256 93b0a2806fe80a147797352bad170519762e51e2d95e70a604a4314e9fbc48ac,
+Last-Modified 2026-10-03; CC BY-SA / GFDL as Wiktionary). Together the
+offending bytes of the oui transliteration fold: Wilkens romanizes the
+back high unrounded vowel with dotless ı (U+0131, `c4 b1`: *Adıg*,
+*adgır*), the kaikki extract's romanizations with ï (U+00EF, `c3 af`:
+*adïġ*, *adġïr*) — one word, two keys, until the oui search fold meets
+them at i.
+
 `wilkens-sample.stext.xml.gz` — the RECORDED `mutool draw -F stext -o -
 wilkens-sample.pdf` output (mutool 1.28.0, 2026-10-22), gzipped, checked in
 so the suite never depends on mutool being installed. Re-cut it with that

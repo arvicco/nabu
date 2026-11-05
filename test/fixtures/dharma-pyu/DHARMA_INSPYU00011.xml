@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="https://raw.githubusercontent.com/erc-dharma/project-documentation/master/schema/latest/DHARMA_Schema.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<?xml-model href="https://raw.githubusercontent.com/erc-dharma/project-documentation/master/schema/latest/DHARMA_Schema.rng" type="application/xml" schematypens="http://purl.oclc.org/dsdl/schematron"?>
+<?xml-model href="https://raw.githubusercontent.com/erc-dharma/project-documentation/master/schema/latest/DHARMA_SQF.sch" type="application/xml" schematypens="http://purl.oclc.org/dsdl/schematron"?>
+<?xml-model href="https://epidoc.stoa.org/schema/latest/tei-epidoc.rng" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<?xml-model href="https://epidoc.stoa.org/schema/latest/tei-epidoc.rng" schematypens="http://purl.oclc.org/dsdl/schematron"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:lang="eng">
+    <teiHeader>
+        <fileDesc>
+            <titleStmt>
+                <title>Stone Stela Near the Tharaba Gate</title>
+                <respStmt>
+                    <resp key="creator">author of digital edition</resp>
+                <persName ref="part:argr"><forename>Arlo</forename><surname>Griffiths</surname></persName><persName ref="part:mami"><forename>Marc</forename><surname>Miyake</surname></persName><persName ref="part:jukw"><forename>Julian Karl</forename><surname>Wheatley</surname></persName></respStmt>
+            <funder>European Research Council (ERC), grant agreement no 809994</funder></titleStmt>
+            <publicationStmt>
+                <authority><ref target="https://dharmalekha.info">DHARMA</ref></authority>
+                <pubPlace><!-- Fill in here the place or places where the encoding has been done --></pubPlace>
+                <idno type="filename">DHARMA_INSPYU00011.xml</idno>
+                <availability><licence target="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</licence></availability>
+                <date from="2019" to="2026">2019-2026</date>
+            </publicationStmt>
+            <sourceDesc><!-- only the handDesc can be filled in at this stage -->
+                <msDesc><!-- //// NB: the msIdentifier had to be added for validation purposes ///. It will be edited later with the metadata spreadsheet -->
+                    <msIdentifier>
+                        <repository>DHARMAbase</repository>
+                        <idno/><!-- don't modify this -->
+                    </msIdentifier>
+                    <msContents><!-- describe the intellectual content of an inscription -->
+                        <summary><!-- //// NOT MANDATORY  ////--></summary> <!-- offers the possibility to give a summary of the inscription's content -->
+                    </msContents>
+                    <physDesc>
+                        <handDesc>
+                            <p><!-- The script name(s) will be inserted here at a later stage from the metadata spreasheet. At this stage, you can mention here in a free-text paragraph any characteristics of the writing observed more than once in this inscription that seem unusual/uncommon or otherwise noteworthy given the general characteristics of the script in question. See EGD 11.2. --></p>
+                            <!-- If you need to identify individual hands (EGD §7.5/) in addition to one or more paragraphs of general palaeographic description, wrap <summary> around the <p> or <p>s above, and, outside <summary>, create <handNote> elements for each hand as follows:
+						<summary><p><p/></summary>
+						<handNote xml:id="Pallava00001_hand1"></handNote>
+						<handNote xml:id="Pallava00001_hand2"></handNote>
+					 -->
+                        </handDesc>
+                    </physDesc>
+                </msDesc>
+            </sourceDesc>
+        </fileDesc>
+        <encodingDesc>
+         <p>Encoded in TEI/EpiDoc according to the <ref target="https://hal.science/halshs-02888186">DHARMA Encoding Guide for Documentary Editions, version 2</ref></p>
+      </encodingDesc>
+        <revisionDesc>
+            <change who="part:mime" when="2026-03-02">Conversion to DHARMA guidelines</change>
+        </revisionDesc>
+    </teiHeader>
+    <text xml:space="preserve">
+      <body>
+			<div type="edition">
+				<div type="textpart" n="A">
+					<ab><!--Transcription here--></ab>
+				</div>
+				<div type="textpart" n="B">
+					<ab><!--Transcription here--></ab>
+				</div>
+			</div>
+			<div type="apparatus">
+				<listApp/>
+			</div>
+			<div type="translation" xml:lang="eng">
+				<p>[Illegible] The reverse of the stone bears another inscription in Chinese.</p>
+			</div>
+			<div type="commentary">
+				<p><!-- commentary --></p>
+			</div>
+			<div type="bibliography">
+				<!--De Beylié 1907a: 83 (n. 1). — ASB 1907, 10; 1910, 21; 1916, 18 (with n. ‡), 20, 55; 1917, 24-5; 1922, 17. — Blagden 1913-14: 127 (6). — Chen Yi-Sein 1960. — PPPB I, 67, 76 n. 38-39.-->
+				<!--[Todo: markup citedRange elements if necessary]-->
+				<p><bibl><ptr target="bib:Beylié1907a"/><citedRange>83 (n. 1)</citedRange></bibl> makes passing reference to this badly effaced inscription, noting that it was bilingual with one side in Chinese. <bibl><ptr target="bib:ASB"/><citedRange>1910: 21</citedRange></bibl> mistakenly identified the non-Chinese side as Mongol rather than Pyu. <bibl><ptr target="bib:ChenYiSein1960_01"/></bibl> identified about 80 characters on the Chinese side, enough to propose that the text was an imperial edict dating from approximately 1297. <bibl><ptr target="bib:Luce1985_01"/><citedRange>I, 67, 75 n. 38-39</citedRange></bibl>, estimates 25 lines for the Pyu face. <bibl><ptr target="bib:SeinWin2016_01"/><citedRange>175-85</citedRange></bibl> is the first attempt to transliterate (in Burmese script) all legible parts of the Pyu face.</p>
+				<listBibl type="primary"><bibl><ptr target="bib:CPI2018_01"/><citedRange unit="item">DHARMA_INSPYU00011</citedRange></bibl></listBibl><listBibl type="secondary">
+					<bibl><ptr target="bib:ASB"/><citedRange>1907, 10</citedRange></bibl>
+					<bibl><ptr target="bib:Blagden1913-1914_01"/><citedRange>127 (6)</citedRange></bibl>
+					<bibl><ptr target="bib:ASB"/><citedRange>1916, 18 (with n. ‡), 20, 55</citedRange></bibl>
+					<bibl><ptr target="bib:ASB"/><citedRange>1917, 24-5</citedRange></bibl>
+					<bibl><ptr target="bib:ASB"/><citedRange>1922, 17</citedRange></bibl>
+				</listBibl>
+			</div>
+		</body>
+  </text>
+</TEI>

@@ -18,6 +18,7 @@ require_relative "../query/parallels_explain"
 require_relative "../query/clarify"
 require_relative "../query/fuzzy"
 require_relative "../query/translation_search"
+require_relative "../query/gloss_search"
 require_relative "../query/senses"
 require_relative "../query/align"
 require_relative "../query/collation"
@@ -496,12 +497,18 @@ module Nabu
                                 "state, stem, conjugation: e.g. \"stem=piel,conjugation=wayq\"); " \
                                 "ORACC has no inflectional morphology so these facets never match it." },
           gloss: { type: "string",
-                   description: "Token-gloss filter, only WITH lemma: keep attestations whose upstream " \
+                   description: "Token-gloss filter WITH lemma: keep attestations whose upstream " \
                                 "token gloss contains this word (whole word, case-insensitive) — " \
                                 "bhsa/achemenet (English), aes/tlhdig (German). E.g. lemma \"דבר\" + " \
                                 "gloss \"word\" splits BHSA's consonantal homograph from \"speak\". " \
                                 "Composes with morph; not with near. Lemma hits from those sources " \
-                                "always carry token_gloss." },
+                                "always carry token_gloss. WITHOUT lemma (and no query): the gloss " \
+                                "lane — every WORD some source glosses this (\"king\" → BHSA מלך, " \
+                                "achemenet šarru, …) across lemmas; words AND, \"phrase\", prefix*, " \
+                                "diacritic-insensitive. Each hit is a word {lemma, form, gloss, " \
+                                "source, language, tokens, passages} with urn = its first " \
+                                "attestation; `coverage` lists the indexed sources. Composes with " \
+                                "lang/license/limit only." },
           near: { type: "string",
                   description: "Proximity: keep only hits where this term occurs within `window` " \
                                "words of query (or lemma) in the SAME passage. FTS5 NEAR over the " \
@@ -643,6 +650,8 @@ module Nabu
                       include_restricted].freeze
       # const: the --translations composition set
       TRANSLATIONS_ARGS = %w[translations query lang license limit include_restricted].freeze
+      # const: the --gloss-alone composition set (gloss with no lemma)
+      GLOSS_ARGS = %w[gloss lang license limit include_restricted].freeze
       # const: the sense desk composition set
       SENSE_ARGS = %w[sense sense_gloss limit include_restricted].freeze
 
@@ -1171,6 +1180,7 @@ module Nabu
         raise InvalidArguments, "sense_gloss applies with sense only" if args["sense_gloss"] == true
         return translations_search(args) if args["translations"] == true
         return fuzzy_search(args) if args["fuzzy"] == true
+        return gloss_search(args) if !args["gloss"].nil? && args["lemma"].nil?
 
         term, mode = search_term(args)
         morph = search_morph(args, mode)
@@ -1319,6 +1329,35 @@ module Nabu
                              searcher.incomplete_hint),
              coverage: searcher.scope.map { |slug, passages| { source: slug, passages: passages } })
       rescue Query::TranslationSearch::IndexMissing => e
+        note(e.message)
+      end
+
+      # The token-gloss lane (the CLI's search --gloss WORD with no query,
+      # Query::GlossSearch): every word upstream glosses WORD, across
+      # lemmas — one hit per word with its first attestation. Desk rule: an
+      # unbuilt lane is the honest build-hint note, never a scan.
+      def gloss_search(args)
+        lane_conflicts!(args, "gloss", GLOSS_ARGS)
+        gloss = string_arg(args, "gloss") or raise InvalidArguments, "gloss needs a word, e.g. king"
+        license = license_arg(args)
+        include_restricted = args["include_restricted"] == true
+        refused = restricted_license_note(license, include_restricted) and return refused
+
+        catalog = resolve(@catalog) or return note(NO_CORPUS_NOTE)
+        limit = clamp(args["limit"], default: SEARCH_DEFAULT_LIMIT, max: SEARCH_MAX_LIMIT)
+        searcher = Query::GlossSearch.new(catalog: catalog, fulltext: resolve(@fulltext))
+        results = searcher.run(gloss, lang: args["lang"], license: license, limit: limit + 1)
+        results = results.reject { |r| EXCLUDED_LICENSE_CLASSES.include?(r.license_class) } unless include_restricted
+        json(matches: results.first(limit).map do |result|
+          { lemma: result.lemma, form: result.form, gloss: result.gloss, source: result.source,
+            language: result.language, tokens: result.tokens, passages: result.passages, urn: result.urn,
+            license_class: result.license_class, document: result.document_title }.merge(credit_field(result))
+        end,
+             note: lane_note(results, limit, "upstream token glosses across lemmas; urn = the word's first " \
+                                             "attestation — every attestation: lemma + gloss",
+                             searcher.incomplete_hint),
+             coverage: searcher.scope.map { |slug, words, tokens| { source: slug, words: words, tokens: tokens } })
+      rescue Query::GlossSearch::IndexMissing => e
         note(e.message)
       end
 

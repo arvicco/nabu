@@ -27,7 +27,11 @@ module Nabu
     # itself (Nabu::ZipReader — nothing is extracted, nothing
     # materialized). A fresher export drops the same way.
     #
-    # == Grains, identity, census (the full export, 2026-11-02)
+    # == Grains, identity, census (the full export, 2026-11-02; refreshed
+    # from the maintainer's 2026-11-04 export — identical file census,
+    # 151 entries across 25 letters carry revised translations, omega and
+    # rho untouched, verified at intake against the export's own
+    # changed-since list)
     #
     # 31,371 files: 31,341 entry pages · 27 letter index pages (skipped
     # by rule) · 2 "no matches" pages (epsilon/4079 — listed in its index

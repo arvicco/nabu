@@ -2087,14 +2087,20 @@ sources:
         per-volume century labels: the 25 volumes labeled 5th–15th century fall inside grc:byz
         [330, 1453]; the two 4th-century volumes (Eusebius, Epiphanius) span the koi/byz
         boundary and stay bare grc, as do the 6 undated Pre-Nicaean volumes. No facet rule:
-        a label map would only repeat the band"}
-    kind: {posture: unclassified, note: "upstream carries no genre label — a volume mixes
-        exegesis, homiletics, historiography and law (PG 107: Leo VI's homilies, Tactica and
-        Novels); kind waits on the work carving"}
+        a label map would only repeat the band. Carved works inherit their volume's band;
+        the dateless residua stay bare grc"}
+    kind: {posture: unclassified, note: "upstream carries no genre label, and neither does the
+        carve plan that splits the volumes into works (slug, title, author, TLG id, page
+        ranges — no genre field). A kind fold over the carved works' titles (commentarius →
+        exegesis, homiliae → sermon, historia → historiography) is curation still to do; the
+        residua are edition apparatus, rescans and uncarved rows, for which the ruled kind
+        list has no class"}
     dating: {posture: dated, note: "the per-volume Dates label of upstream's Works and Authors
         table, transcribed (VOLUMES) → a century envelope, date_class composition (MetadataDates
         :structured; 27 of 33 volumes — the 6 Pre-Nicaean name no century). Transcribed, not
-        corrected: PG 87.1 (Procopius of Gaza, c. 465–528) carries upstream's 7th century"}
+        corrected: PG 87.1 (Procopius of Gaza, c. 465–528) carries upstream's 7th century.
+        A carved work inherits its volume's label (the plan carries no per-work date);
+        a residuum carries none"}
     places: {posture: unplaced, note: "the deposit names no place — no imprint, no provenance,
         no place field in the table"}
     script: {posture: implied}
@@ -2892,10 +2898,9 @@ sources:
     kind: {posture: unclassified, note: "the conllup lane carries no genre field — only the
         filename's author/work/code (mined: author + work facets); a per-work genre table
         would be a curated overlay, not extraction"}
-    lect: {posture: pending, note: "candidate: a lect_overrides row lat → lat:cla,
-        tier approximation — the perseus-latin shape (classical canon, Plautus/Cato
-        refining to lat:arch per document); the corpus spans Plautus to the 2nd c. AD,
-        so the stage is a corpus-level reading, not the corpus's own definition"}
+    # lect machine-postured — config/lect_overrides.yml lat → lat:cla, tier
+    # approximation (the corpus-level classical reading; adopted from the
+    # pending candidate 2026-11-05).
     dating: {posture: pending, note: "candidate: a ruled author-floruit table over the
         24 filename authors (Plautus … Juvenal) as the composition class; the asset
         carries no date field of its own"}
@@ -2958,12 +2963,18 @@ sources:
   ganjoor:   # P153
     # kind machine-postured — the ganjoor fold in kind_map.yml over the poem's own
     # section label (the divan's form sections; work/chapter titles uncovered, open).
-    lect: {posture: identity, note: "fas IS Persian (codemap → the bare fa anchor) — the
-        registry holds no Persian stages yet, so the bare code is the honest claim for the
-        whole classical cone (Rudaki to the Qajar poets, d. before 1324 AH); poems under a
-        section the label names Arabic carry ara (152 at the census), bare; the few Turkic,
-        Kurdish, Gilaki and fahlavi sections stay fas, declared coarse (their labels ride
-        section_path)"}
+    # lect declaration retired 2026-11-05: the ganjoor-poet facet rule
+    # (config/lect_facet_rules.yml) machine-postures the source — retired
+    # under the shadowing rule. The staging it completes: fas resolves to
+    # the bare fa anchor; the date band stages every poem whose poet's life
+    # sits inside one band (fa:early 800–1200, fa:cls 1200–1850 — 105,514
+    # of 126,165 poems, census 2026-11-05) and the rule places six residue
+    # poets whose floruit is unambiguous. The rest stays bare fas, honest
+    # under the fits-one-band rule: the poets whose lives straddle the 1200
+    # edge (Nezami, Attar …) and the Qajar poets across the 1850 close.
+    # Poems under a section the label names Arabic carry ara (152 at the
+    # census), bare; the few Turkic, Kurdish, Gilaki and fahlavi sections
+    # stay fas, declared coarse (their labels ride section_path).
     dating: {posture: dated, note: "every document: the poet's life from the site's poets
         list (lunar-Hijri birth..death → CE, the house tabular conversion), class
         composition — upstream's own validBirthDate/validDeathDate=false marks c. in raw;
@@ -3185,13 +3196,10 @@ sources:
         NFC-composed at the boundary (decomposed и/і + mark on 199 upstream attributes)"}
   glt:
     # kind: machine-postured — kind_map.yml metadata book.
-    lect: {posture: pending, note: "candidate: a lect_overrides row grc → grc:byz, tier
-        approximation — the perseus-latin shape: the books' hymnography and euchology are
-        Byzantine liturgical Greek (the liturgies of Basil and Chrysostom, Romanos, Andrew of
-        Crete, John of Damascus, Kosmas, the Studites, Joseph the Hymnographer), but the
-        Menaia also carry post-Byzantine services written in the same received register
-        (St Nektarios †1920, the Agia Skepi and the 28 October doxology among extra.htm's
-        services), so the stage is a corpus-level reading, not the corpus's own definition"}
+    # lect machine-postured — config/lect_overrides.yml grc → grc:byz, tier
+    # approximation (the corpus-level Byzantine reading; adopted from the
+    # pending candidate 2026-11-05 — the override comment carries the full
+    # reasoning incl. the post-Byzantine Menaia services).
     dating: {posture: undatable, note: "received liturgical tradition in a modern editorial
         form: no page carries a composition or edition date. What the pages DO carry is
         mined, but none is a dating claim — the Menaion commemoration (month from the

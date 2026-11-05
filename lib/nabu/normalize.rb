@@ -228,6 +228,20 @@ module Nabu
     TIBETAN_CASE_FOLD = :downcase.to_proc
     private_constant :TIBETAN_CASE_FOLD
 
+    # oui: the Old Uyghur transliteration fold. Wilkens's Handwörterbuch
+    # (wilkens-oui) romanizes the back high unrounded vowel with Turkish
+    # dotless ı (U+0131, in 15,401 of its 49,619 headwords), the kaikki
+    # extract's romanizations with ï (U+00EF) — one word, two keys
+    # (Adıg / adïġ, yarın / yarïn). ï already falls to the generic mark
+    # strip; ı is a base letter with NO decomposition, so the rule folds it
+    # to i (measured: 51 more of the extract's 879 romanizations then meet
+    # a Wilkens headword, 328 → 379). Keyed oui ONLY: in Turkish and every
+    # other language ı/i are distinct letters. Per-codepoint 1→1 (tr),
+    # fold_with_map-safe; capital İ needs nothing (downcase gives i +
+    # U+0307, a mark the strip takes).
+    OLD_UYGHUR_FOLD = ->(str) { str.tr("ı", "i") }
+    private_constant :OLD_UYGHUR_FOLD
+
     LANGUAGE_FOLDS = {
       "grc" => ->(str) { str.tr("ς", "σ") },
       "lzh" => HAN_FOLD,
@@ -271,7 +285,8 @@ module Nabu
       "egy" => EGYPTIAN_FOLD,
       "xct" => TIBETAN_CASE_FOLD,
       "bod" => TIBETAN_CASE_FOLD,
-      "otb" => TIBETAN_CASE_FOLD
+      "otb" => TIBETAN_CASE_FOLD,
+      "oui" => OLD_UYGHUR_FOLD
     }.freeze
 
     # == Query-side fold scopes (P79-1) — which QUERY scripts a rule may see
@@ -309,7 +324,8 @@ module Nabu
       "itc" => %i[latin], "iir" => %i[latin],
       "egy" => %i[latin],
       "xct" => %i[tibetan latin], "bod" => %i[tibetan latin],
-      "otb" => %i[tibetan latin]
+      "otb" => %i[tibetan latin],
+      "oui" => %i[latin]
     }.freeze
 
     # The script inventory queries classify against: every script a fold

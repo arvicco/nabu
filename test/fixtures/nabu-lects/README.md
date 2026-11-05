@@ -7,7 +7,17 @@ already small (340 + 40 lines) and the module's read seam
 full codemap to be exercised honestly (a trimmed slice would hide
 referential-integrity gaps the drift guard exists to catch).
 
-- **Retrieved 2026-11-02 (fourth cut)** — the Pacific,
+- **Retrieved 2026-11-05 (fifth cut)** — the New Persian staging
+  (fa:early / fa:cls), Middle Georgian (ka:mid), the pt, lad, sco
+  (with sco:old), gd and xeb anchors, en:late, fr:cls, de:new, sv:run,
+  and the codemap rows for the held catalog's unrouted spellings and
+  script surfaces (jpn-Latn among them). Copied verbatim from
+  canonical/nabu-lects (commit `a6547ea`, `main`, 2026-11-04).
+  `lects.yml` 248,456 B, sha256
+  `7307b88d9423b8c0a943f8a79971f7afc14215f3e42e4b609f3893bc9ec10095`;
+  `codemap.yml` 13,216 B, sha256
+  `2e134f2afdd9b9579b02f81401d0a212d8bea70cfd781748abe0af0ab004c35c`.
+- Previously retrieved 2026-11-02 (fourth cut) — the Pacific,
   Vietnamese–Tai, Mongolic, Tangut and Yiddish package plus the
   Romanian package: the Malayo-Polynesian spine (pqe > poz-oce >
   poz-pcc > poz-pol > poz-pnp > poz-pep, poz-mic) with twelve Pacific

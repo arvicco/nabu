@@ -3,6 +3,7 @@
 require "test_helper"
 require "digest"
 require "fileutils"
+require "json"
 require "tmpdir"
 require "zlib"
 
@@ -231,8 +232,55 @@ class WilkensOuiAdapterTest < Minitest::Test
     assert_match(%r{labels left unmapped \(grammar/name labels, no facet\): \d+ across \d+ kinds}, notes)
   end
 
+  # The etymology chain rides its own annotation; the German half and the
+  # gloss lose it, the printed record (body) keeps it.
+  def test_the_etymology_chain_is_its_own_field
+    abasvar = entry("abasvar")
+    assert_equal "< TochA ābhāswar < Skt. ābhāsvara", abasvar.annotations["etymology"]
+    assert_equal "ein Himmel und eine Götterklasse (in der buddh. Kosmologie)", abasvar.gloss
+    assert abasvar.annotations["german"].start_with?("ein Himmel")
+    assert abasvar.body.start_with?("abasvar < TochA ābhāswar < Skt. ābhāsvara ein Himmel")
+    refute entry("^1a").annotations.key?("etymology"), "no chain, no key"
+    refute entry("Biži").annotations.key?("etymology"), "no italic etymon, no split"
+  end
+
+  # Sogdian transliterations are set in roman: such a link joins the chain
+  # only when the next "<" follows it, so the chain still ends on italic
+  # (folio 169, whose Hebrew etymon wrapped into the skipped record).
+  def test_a_roman_link_rides_the_chain_up_to_the_next_link
+    assert_equal "< Sogd. byθlḫm < Syr. bēṯ lḥem", entry("bidilhim").annotations["etymology"]
+  end
+
+  def test_the_census_counts_chain_heads_left_whole
+    subject = adapter
+    parsed(subject)
+    assert_match(/1 record\(s\) open with an etymology link but no italic etymon/,
+                 subject.discovery_skips("unused").notes.join("\n"))
+  end
+
   def test_variants_fold_on_their_first_form
-    assert_equal "amranmaklıg", entry("amranmaklıg ~ amranmak(lıg)").headword_folded
+    assert_equal "amranmaklig", entry("amranmaklıg ~ amranmak(lıg)").headword_folded
+  end
+
+  # The oui transliteration fold on the offending bytes (README): Wilkens
+  # spells Adıg / adgır with dotless ı (U+0131), the kaikki extract's
+  # romanizations write adïġ / adġïr with ï (U+00EF). Both now fold to ONE
+  # key, so a lookup typed either way reaches the Wilkens entry.
+  def test_dotless_i_and_the_kaikki_i_diaeresis_reach_one_key
+    xml = Zlib.gunzip(File.binread(File.join(FIXTURES, "wilkens-fold.stext.xml.gz")))
+    fold = Adapter.new(extract: ->(_path, _pages) { xml }, page_count: ->(_path) { 1 })
+    doc = with_workdir { |dir| fold.parse(fold.discover(dir).first) }
+    romans = File.readlines(File.join(FIXTURES, "kaikki-oui-fold.jsonl")).flat_map do |line|
+      JSON.parse(line)["forms"].select { |f| f["tags"].to_a.include?("romanization") }.map { _1["form"] }
+    end
+    { "^3Adıg" => "adïġ", "adgır ~ (a)dg(ı)r" => "adġïr" }.each do |id, kaikki|
+      wilkens = doc.find { |e| e.entry_id == id } || flunk("no entry #{id.inspect}")
+      assert_includes wilkens.headword.bytes.each_cons(2).to_a, [0xC4, 0xB1], "#{id}: dotless ı as printed"
+      assert_includes romans, kaikki
+      assert_includes Nabu::Normalize.query_forms(kaikki), wilkens.headword_folded, "kaikki's #{kaikki} → #{id}"
+      typed = wilkens.headword.split(" ~ ").first
+      assert_includes Nabu::Normalize.query_forms(typed), wilkens.headword_folded, "Wilkens's own #{typed}"
+    end
   end
 
   def test_lost_chinese_characters_are_carried_and_counted

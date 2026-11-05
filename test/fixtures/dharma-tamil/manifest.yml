@@ -24,3 +24,9 @@ files:
   - path: tfa-pallava-epigraphy/DHARMA_INSPallava00196.xml
     url: https://raw.githubusercontent.com/erc-dharma/tfa-pallava-epigraphy/master/DHARMA_INSPallava00196.xml
     whole: true
+  - path: tfa-pallava-epigraphy/DHARMA_INSPallava00056.xml
+    url: https://raw.githubusercontent.com/erc-dharma/tfa-pallava-epigraphy/master/DHARMA_INSPallava00056.xml
+    whole: true
+  - path: tfa-pallava-epigraphy/DHARMA_INSPallava00026.xml
+    url: https://raw.githubusercontent.com/erc-dharma/tfa-pallava-epigraphy/master/DHARMA_INSPallava00026.xml
+    whole: true

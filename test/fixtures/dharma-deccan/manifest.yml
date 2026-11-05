@@ -36,3 +36,9 @@ files:
     url: https://raw.githubusercontent.com/erc-dharma/tfb-vengicalukya-epigraphy/master/DHARMA_mdt_VengiCalukya_v01%20-%20Text.tsv
     whole: false
     trim: the four header rows + the INSVengiCalukya00001 and 00099 data rows (README recipe)
+  - path: tfb-nandodbhava-epigraphy/DHARMA_INSNandodbhava00001.xml
+    url: https://raw.githubusercontent.com/erc-dharma/tfb-nandodbhava-epigraphy/master/DHARMA_INSNandodbhava00001.xml
+    whole: true
+  - path: tfb-satavahana-epigraphy/satavahana-inscriptions-data_Ollett/Bha13.xml
+    url: https://raw.githubusercontent.com/erc-dharma/tfb-satavahana-epigraphy/master/satavahana-inscriptions-data_Ollett/Bha13.xml
+    whole: true

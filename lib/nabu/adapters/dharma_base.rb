@@ -31,6 +31,24 @@ module Nabu
     # repo's grant/README; these are WORKING repos (files carry maturity
     # codes, drafts get renamed/retired), so the attic/breaker choreography
     # earns its keep. Maturity rides metadata for the desk to surface.
+    #
+    # == Skeletons (rule-skips, never quarantines)
+    #
+    # Upstream's placeholder records (DharmaEpidocParser, "Skeletons") are
+    # a declared grain: discover never yields them and discovery_skips
+    # counts each with SKELETON_NOTE. Quarantine is left to malformed
+    # input. A once-citable record that skeletonizes simply leaves the
+    # parse set and shows as a withdrawal — that lane already carries the
+    # "lost its text" signal. Canonical census 2026-11-05 (discovered =
+    # parsed + quarantined; skips = non-edition + skeleton):
+    #   khmer      1,329 = 1,326 + 3 (two malformed-XML headers, K. 183-1
+    #              and 183-33; "thai-Thai")       skips 0 + 29
+    #   nusantara    308 = 291 + 17 (16 lang-less, "languageb-Latn")
+    #                                             skips 0 + 2
+    #   javanese      96 = 91 + 5 ("und")         skips 0 + 2
+    #   pyu          146 = 145 + 1 (PYU 120)      skips 0 + 16
+    #   campa        122 = 122 + 0                skips 1 + 0
+    # (dharma-tamil and dharma-deccan reconcile in their own notes.)
     class DharmaBase < Nabu::Adapter
       FILE_PREFIX = "DHARMA_"
 
@@ -53,6 +71,8 @@ module Nabu
         return enum_for(:discover, workdir) unless block
 
         edition_paths(workdir).each do |path|
+          next if DharmaEpidocParser.skeleton_file?(path)
+
           stem = File.basename(path, ".xml")
           yield Nabu::DocumentRef.new(
             source_id: self.class::SLUG,
@@ -64,13 +84,19 @@ module Nabu
       end
 
       # Non-edition xml (upstream worklists like campa's BROUILLON-LISTE.xml)
-      # is censused, never silently dropped.
+      # and upstream's skeletons (DharmaEpidocParser, "Skeletons") are
+      # censused, never silently dropped — and a skeleton never quarantines:
+      # quarantine is for malformed input, a placeholder is a declared
+      # grain. A once-citable record that skeletonizes leaves the parse set
+      # and surfaces through the withdrawal lane; nothing more is needed.
       def discovery_skips(workdir)
-        skipped = xml_paths(workdir).reject { |path| edition_file?(path) }
-        Nabu::Adapter::DiscoverySkips.new(
-          skipped_by_rule: skipped.size, unrecognized: 0,
-          notes: skipped.map { |path| "#{File.basename(path)}: not a DHARMA_ edition file" }
-        )
+        notes = xml_paths(workdir).filter_map do |path|
+          reason = if !edition_file?(path) then non_edition_reason(path)
+                   elsif DharmaEpidocParser.skeleton_file?(path) then DharmaEpidocParser::SKELETON_NOTE
+                   end
+          "#{File.basename(path)}: #{reason}" if reason
+        end
+        Nabu::Adapter::DiscoverySkips.new(skipped_by_rule: notes.size, unrecognized: 0, notes: notes)
       end
 
       # Censused upstream tag dirt a subclass maps onto held codes
@@ -143,6 +169,8 @@ module Nabu
       def edition_file?(path)
         File.basename(path).start_with?(FILE_PREFIX)
       end
+
+      def non_edition_reason(_path) = "not a DHARMA_ edition file"
     end
   end
 end

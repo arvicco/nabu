@@ -19,9 +19,24 @@ whole from the synced canonical tree at the HEAD shown; the sixth
 | `tfa-pallava-epigraphy/DHARMA_INSPallava00196.xml` | `1b1b17c4df4990aba2c28101372e669fc9182d10` | Poṟpantal, time of Kampavarman, year 2: a **regnal-only** title (no era year) — converted through config/south_indian_reigns.yml (Kampavarman's accession held as a range → year 2 = 866–877 CE); Tamil prose, CC BY-SA 4.0 |
 | `tfa-tamilnadu-epigraphy/DHARMA_INSTamilNadu01015.xml` | `ab94f9e525e2ce21938e63ac93fd80aa78a4e423` | Tirukkaḷar plate, time of Rājādhirāja, year 31: **no `xml:lang` anywhere** in the edition — the honest quarantine (one of two such files in the corpus) |
 
-License: the first file carries no in-file grant; it is covered by its
-repo's `LICENCE.txt` (Creative Commons Attribution 4.0 International).
-The other five carry `<licence
+## Delivery grains
+
+Upstream serves one TEI file per inscription at each repo root (the
+accepted grain). REJECTED, each skipped by rule (counted in
+`discovery_skips`, never quarantined): upstream's `_template` encoding
+templates and `~DHARMA_` drafts (pinned synthetically in the adapter
+test), and **skeletons** — records committed before their transcription
+("skeleton — no citable text yet (upstream placeholder)"), two real
+specimens added 2026-11-05, copied whole from the synced canonical tree:
+
+| file | what it pins |
+|---|---|
+| `tfa-pallava-epigraphy/DHARMA_INSPallava00056.xml` | commentary + bibliography, **no edition div** |
+| `tfa-pallava-epigraphy/DHARMA_INSPallava00026.xml` | an edition div holding only `<lb n="1"/>...` — the template's dots |
+
+License: the first file and Pallava00056 carry no in-file grant; each
+is covered by its repo's `LICENCE.txt` (Creative Commons Attribution 4.0
+International). The others carry `<licence
 target="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA
 4.0</licence>`. Redistributable here under those terms; credit DHARMA
 (ERC grant no. 809994) and the editors named in each file's respStmt.

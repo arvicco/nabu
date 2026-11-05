@@ -1138,6 +1138,15 @@ cgpg:   # P153, 02-sources row 320
                  # urn:nabu:cgpg:pg153:p37 (Cantacuzene, "Ὁ τοίνυν βασιλεὺς
                  # οὐτοσὶ Μιχαὴλ") and 5 random pages; probe nabu search
                  # "συμβασιλεύων"; then flip.
+                 # WORK GRAIN (2026-11-05): bin/nabu sync cgpg --force (the
+                 # PG.zip GET + the carve plan's one GET into carve/, both
+                 # sha256-pinned; --force because 22 carved volume docs are
+                 # withdrawn for their works, over the 20% breaker). EXPECT
+                 # 232 docs (209 works + 12 residua + 11 volumes) / 18,701
+                 # passages, 0 errored, 10 skipped by rule (empty residua),
+                 # 22 withdrawn; 227/227 incipit checks verified. Eyeball nabu
+                 # show urn:nabu:cgpg:photius.amphilochia:pg101:p44 ("Τῆς
+                 # σπουδῆς σου τὸ γνήσιον") and urn:nabu:cgpg:pg153:p37.
   sync_policy: manual
   # CGPG — Calfa GREgORI Patrologia Graeca (J.-M. Auwers, UCLouvain;
   # GREgORI; Calfa): the OCR of 33 Migne PG volumes, Greek column only,
@@ -1146,8 +1155,10 @@ cgpg:   # P153, 02-sources row 320
   # Byzantine core the library lacked — Photius, Leo VI, Theophanes
   # Continuatus, Constantine VII, Cedrenus/Skylitzes/Psellus, Theophylact,
   # Zonaras, Choniates, Gregoras, Palamas, Cantacuzene, Doukas, Glykas —
-  # plus eleven patristic volumes. Document = VOLUME (no work markup
-  # upstream; carving to works is a later packet), passage = PDF page.
+  # plus eleven patristic volumes. Document = WORK where open-greek-
+  # corpus's carve plan (CC BY 4.0, pinned at tag corpus-2026-10-28.2)
+  # carves the volume (22 volumes → 209 works + their residua), VOLUME
+  # elsewhere (no work markup upstream); passage = PDF page.
   # Witness overlap, not duplication: PG 67 Socrates/Sozomen and PG 134
   # Zonaras Annales sit beside held First1K editions of other prints.
   # Uncorrected OCR (declared per document) + machine lemmas:

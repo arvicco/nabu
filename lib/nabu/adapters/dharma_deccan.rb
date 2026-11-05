@@ -35,6 +35,18 @@ module Nabu
     # collisions); discover still guards it — a later collision keeps the
     # first repo's file (REPOS order) and censuses the rest as skips.
     #
+    # Upstream's SKELETONS (the dharma-epidoc family's placeholder grain —
+    # an edition div holding only its numbered <lb/> scaffold or a lone
+    # gap, or an Ollett record with commentary + bibliography and no
+    # edition div) are rule-skips at discovery, never quarantines; a
+    # once-citable record that skeletonizes leaves the parse set and shows
+    # as a withdrawal. Reconciliation (canonical census 2026-11-05): 1,737
+    # xml files = 1,702 parsed + 9 quarantined + 26 rule-skips (5 non-
+    # edition files; 21 skeletons: Nandodbhava 1–5/7/8, Tuṅga 4–11, EIAD
+    # 128-B, Kanheri 47, Ollett Bha13, KanB2-44/45/47). The quarantines are
+    # true defects only: lang-less EIAD 104/134/159/162 and Kalyāṇa
+    # Cālukya 45, EIAD 129's "unknown-Latn", Ollett Ju10–12's "und".
+    #
     # == Parse (the dharma-epidoc family)
     #
     # The family's DharmaEpidocParser.parse_doc on the DOM this adapter also
@@ -256,6 +268,10 @@ module Nabu
             name = File.basename(path)
             unless edition_file?(name, config)
               skipped << "#{repo}/#{name}: not an edition file"
+              next
+            end
+            if DharmaEpidocParser.skeleton_file?(path)
+              skipped << "#{repo}/#{name}: #{DharmaEpidocParser::SKELETON_NOTE}"
               next
             end
             stem = Nabu::Normalize.nfc(File.basename(path, ".xml"))

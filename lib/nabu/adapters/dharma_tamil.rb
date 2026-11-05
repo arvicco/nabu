@@ -51,9 +51,22 @@ module Nabu
     # SII) is upstream tag dirt over romanized text — aliased to tam-Latn.
     # eng (head/label captions), zho (the Quanzhou bilingual's gap-only
     # Chinese face) and kan-Latn (one SII Kannada signature line inside a
-    # Tamil prose line) occur but never mint. Two TamilNadu editions
-    # carry no xml:lang at all: the corpus is multilingual, so no default
-    # claims them — they quarantine loudly (the nusantara posture).
+    # Tamil prose line) occur but never mint. Three TamilNadu editions
+    # (167, 1014, 1015; census 2026-11-05) carry no xml:lang at all: the
+    # corpus is multilingual, so no default claims them — they quarantine
+    # loudly (the nusantara posture).
+    #
+    # == Skeletons and the reconciliation
+    #
+    # Upstream's placeholder records (the family's "Skeletons" grain: no
+    # edition div, an lb-only scaffold, a lone gap, the template's "...")
+    # are rule-skips at discovery, never quarantines; a once-citable
+    # record that skeletonizes leaves the parse set and shows as a
+    # withdrawal. Canonical census 2026-11-05: 1,310 root xml files =
+    # 1,275 parsed + 3 quarantined (the lang-less three above — the only
+    # true defects) + 32 rule-skips (2 encoding templates, 30 skeletons:
+    # 13 Pallava, 8 TamilNadu, 4 TamilOutsideTN, one each Cempiyaṉ
+    # Mahādevī, Pāṇḍya, SII, Tiruvāvaṭutuṟai, Uttiramērūr).
     #
     # == License
     #
@@ -215,14 +228,6 @@ module Nabu
         end
       end
 
-      def discovery_skips(workdir)
-        skipped = xml_paths(workdir).reject { |path| edition_file?(path) }
-        Nabu::Adapter::DiscoverySkips.new(
-          skipped_by_rule: skipped.size, unrecognized: 0,
-          notes: skipped.map { |path| "#{File.basename(path)}: #{skip_reason(path)}" }
-        )
-      end
-
       def parse(document_ref)
         base = super
         metadata = base.metadata.merge(header_metadata(document_ref.path))
@@ -282,7 +287,7 @@ module Nabu
         File.basename(path, ".xml").end_with?(TEMPLATE_SUFFIX)
       end
 
-      def skip_reason(path)
+      def non_edition_reason(path)
         template?(path) ? "upstream encoding template" : "not a DHARMA_ edition file"
       end
 
