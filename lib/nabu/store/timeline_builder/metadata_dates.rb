@@ -325,6 +325,9 @@ module Nabu
           #                                   statement) on every page; orig_place "Ireland (?)"
           #                                   — upstream's hedge — while St Gallen (the holding
           #                                   library) rides "repository", never a place claim
+          "statutes-realm" => :structured, # P160-7: the act title's reign + session label
+          #                                  (Old Style legal year → [Y, Y+1]) met with vol. 7's
+          #                                  Rot. Parl. regnal citation (StatutesRealmDating)
           "su-wikisource" => :edition_year_text, # P140: the scan Index Year= print year
           #                                         (date_class edition)
           "syriac-corpus" => :when_key,
