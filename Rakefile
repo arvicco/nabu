@@ -463,10 +463,14 @@ end
 # gitignored LOCAL files: a checkout without them — any public clone, a
 # lane worktree — gets an announced skip and exit 0. BOARDS_DIR overrides
 # the location (e.g. a worktree checking the main checkout's boards).
+# The same task runs the GH watch-list staleness guard
+# (Nabu::Ops::WatchListCheck): any still-watched row whose checked date is
+# over a week old fails the task, named; boards without the section skip.
 namespace :boards do
-  desc "Gate check: register 'Next number' headers vs the numbers already minted (stale = exit 1)"
+  desc "Gate check: register 'Next number' headers vs minted numbers + GH watch-list staleness (stale = exit 1)"
   task :check do
     require_relative "lib/nabu/ops/board_check"
+    require_relative "lib/nabu/ops/watch_list_check"
     dir = ENV.fetch("BOARDS_DIR", File.expand_path(".docs", __dir__))
     report = Nabu::Ops::BoardCheck.new(boards_dir: dir).run
     if report.skipped
@@ -474,9 +478,22 @@ namespace :boards do
       next
     end
     report.findings.each { |finding| puts "STALE  #{finding.register}: #{finding.message}" }
-    abort "boards:check — #{report.findings.size} stale register header(s)" unless report.clean?
+
+    watch = Nabu::Ops::WatchListCheck.new(boards_dir: dir).run
+    watch.findings.each { |finding| puts "STALE  watch list #{finding}" }
+
+    failures = []
+    failures << "#{report.findings.size} stale register header(s)" unless report.clean?
+    failures << "#{watch.findings.size} stale GH watch row(s)" unless watch.clean?
+    abort "boards:check — #{failures.join(', ')}" unless failures.empty?
 
     puts "boards:check — #{report.registers.size} register header(s) current: #{report.registers.join(', ')}"
+    if watch.skipped
+      puts "boards:check — no GH watch list section on the boards; watch check skipped"
+    else
+      puts "boards:check — #{watch.rows} GH watch row(s) checked within " \
+           "#{Nabu::Ops::WatchListCheck::MAX_AGE_DAYS} days"
+    end
   end
 end
 
