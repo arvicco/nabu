@@ -179,7 +179,7 @@ class PosturesTest < Minitest::Test
   def test_the_lect_migration_kept_the_p59_4_census
     lect = postures.declarations.select { |d| d.layer == "lect" }
     by_posture = lect.group_by(&:posture).transform_values(&:size)
-    assert_equal 182, lect.size,
+    assert_equal 183, lect.size,
                  "the P59-4 declarations survive the move (61 at migration; itant retired P61-3," \
                  "oracc retired P62-2, etcsl/ccmh/freising/coptic-scriptorium retired P64-6, " \
                  "titus-avestan retired P66-1, osta+fornsvenska retired P77-r8, achemenet " \
@@ -481,6 +481,6 @@ class PosturesTest < Minitest::Test
     # statutes-realm joins dates (the acts' session envelopes → en:early/en:late): 25→26.
     # socinian-letters joins dates (per-document lat/fra/deu/pol/nld/ita staged by
     # the sent-date band — lat:new, de:early/new, pl:mid, fr:cls from 1600): 26→27.
-    assert_equal({ "dates" => 26, "codemap" => 21, "identity" => 135 }, by_posture)
+    assert_equal({ "dates" => 27, "codemap" => 21, "identity" => 135 }, by_posture)
   end
 end
