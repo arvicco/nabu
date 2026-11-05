@@ -39,6 +39,122 @@ sources:
       "Milestone": boundary/milestone            # 1
       "Graffito": mark/graffito                  # 1 ("Graffito?" — the global ? strip)
       "Topos-inscription": mark/ownership        # 1 — a reserved-place mark (the edh seat fold)
+  cgpg:               # P160 — the carved work's Latin title, cut to ONE keyword head at parse
+    #                   time (Adapters::CgpgTitleGenre: the earliest genre noun of the main
+    #                   title; a fragment/excerpt/preface takes the genre of the work it is
+    #                   part of; a keywordless "De <topic>" title is its own head and folds
+    #                   title by title). Upstream and the carve plan carry no genre field —
+    #                   the title IS the label. Five single-genre whole volumes declare their
+    #                   head in Cgpg::VOLUMES (PG 71, 73 Cyril's commentaries; PG 121, 148,
+    #                   153 the histories); mixed or apparatus volumes and the residua make no
+    #                   claim. Counts = documents, the pinned carve plan through the adapter
+    #                   (2026-11-05): 209 works + 5 volumes carry a head; 145 fold, 69 stay
+    #                   unmapped by design (the block after the map).
+    facet: genre
+    map:
+      # -- commentary on scripture and the classics
+      "Expositio in": exegesis                   # 28 — Theophylact's NT + minor-prophet expositions,
+      #                                            Psellus' exposition of the Chaldaean Oracles
+      "Commentarius": exegesis                   # 10 — Commentarii/Commentarius in (Procopius, Photius,
+      #                                            ps.-Oecumenius, ps.-Theophylact Acts, Psellus on the
+      #                                            Timaeus psychogony) + the PG 71/73 Cyril volumes
+      "Fragmenta in": exegesis                   # 10 — catena fragments on a named book (Photius;
+      #                                            Oecumenius, whose served text is the full catena)
+      "Enarratio": exegesis                      # 4 — Theophylact on the four Gospels
+      "Amphilochia": exegesis                    # 2 — Photius' questions, upstream's own volume label
+      #                                            "Exegetica: Quaestiones Amphilochiana"
+      "In": exegesis                             # 2 — the Latin "In <book>" commentary title: Procopius
+      #                                            In Proverbia; Psellus' note on the Poimandres
+      "Scholia": exegesis                        # 1 — Procopius on Kings and Chronicles
+      # -- letters, preaching, verse
+      "Epistulae": letter                        # 14 — letters by form, the two martyr-letters of the
+      #                                            churches of Smyrna and Lyon included (they ARE letters);
+      #                                            synodal-letter fragments fold here too
+      "Homiliae": sermon/homily                  # 2 — Palamas; Leo VI's Orationes (homiliae et panegyrici)
+      "Sermones": sermon                         # 2 — Isidore's Marian sermons; Theophylact's mid-Lent oration
+      "Oratio in praesentationem Deiparae": sermon  # 1 — a feast oration, preached on the Presentation
+      "Carmina": literary/poetry                 # 3 — Leo VI's carmina and Carmen compunctorium; a carmen politicum
+      "Versus": literary/poetry                  # 2
+      "Poemata": literary/poetry                 # 1 — Psellus' poems, the didactic verse synopses included
+      # -- writing the past
+      "Historia": historiography                 # 12 — church and Byzantine histories (Socrates, Sozomen,
+      #                                            Callistus, Choniates, Ducas, Zonaras' Epitome historiarum,
+      #                                            Scylitzes Continuatus) + the PG 121/148/153 volumes
+      "Excerpta": historiography                 # 7 — Constantine VII's Excerpta de legationibus (with its
+      #                                            prooemium): excerpted historians, history by selection
+      "Chronographia": historiography/chronicle  # 3 — the Byzantine chronographia is the chronicle form
+      "Chronicon": historiography/chronicle      # 2 — incl. ps.-Codinus' Chronicon breve (De annis ab orbe condito)
+      "Annales": historiography/chronicle        # 1 — Glycas' world chronicle under its Latin editors' title,
+      #                                            not year-entry annals
+      "Patria": historiography                   # 2 — the Patria of Constantinople: the city's legendary history
+      "Parastaseis": historiography              # 1 — Parastaseis syntomoi chronikai, the same antiquarian strand
+      "Basileiai": historiography                # 1 — Genesius' reigns
+      "De expugnatione Thessalonicae": historiography  # 1 — Cameniates' narrative of the 904 sack
+      # -- rite, oracle
+      "Exapostilaria": ritual/chant              # 1 — Leo VI's resurrection exapostilaria: the troparion sung
+      #                                            at Matins after the canon, an individual sung piece of the
+      #                                            rite (the cantus Office-chant precedent), not a free hymn
+      "Oracula": divination/oracle               # 1 — the Oracles of Leo the Wise
+      # Symeon of Thessalonica's sacramental-liturgical chapters (the great dialogue's
+      # 33-373 and its companion exposition): each sets out HOW a rite is performed and
+      # in what order, with its mystagogy — the late-Byzantine rite's own description,
+      # so ritual/liturgy. exegesis is the commentary on scripture and the classics; a
+      # rite is neither. His Creed expositions and polemic stay unmapped (below).
+      "De sacramentis": ritual/liturgy           # 1
+      "De sancto chrismate": ritual/liturgy      # 1
+      "De sacra liturgia": ritual/liturgy        # 1
+      "De sacro templo et eius consecratione": ritual/liturgy  # 1
+      "De sacris ordinationibus": ritual/liturgy  # 1
+      "De poenitentia": ritual/liturgy           # 1
+      "De honesto et legitimo matrimonio": ritual/liturgy  # 1 — the marriage rite
+      "De sancto oleo": ritual/liturgy           # 1 — the euchelaion
+      "De sacra precatione": ritual/liturgy      # 1 — the divine office
+      "De fine et exsequiarum ordine": ritual/liturgy  # 1 — the funeral order
+      "Expositio de divino templo": ritual/liturgy  # 1 — the church and its rites, explained
+      # -- law and the registers of church and empire
+      "Tomus": legal/law                         # 3 — the Palamite synodal tomoi (1341–1368): conciliar decrees
+      #                                            (the house decree fold)
+      "Novellae": legal/law                      # 2 — the novels of Leo VI and Constantine VII
+      "Delectus": legal/law                      # 1 — Delectus legum compendiarius, a law digest
+      "Notitiae": administrative/list            # 1 — Notitiae episcopatuum: the see register in rank order
+      "Synecdemus": administrative/list          # 1 — Hierocles' table of the provinces and their cities
+      # -- learning, instruction, criticism
+      "Quaestiones naturales": scholarly         # 1 — Quaestionum naturalium solutiones
+      "De omnifaria doctrina": scholarly         # 1 — Psellus' Didaskalia pantodape
+      "De lapidum virtutibus": scholarly         # 1 — the lapidary
+      "De anima celebres opiniones": scholarly   # 1 — philosophical doxography
+      "Quaenam sunt Graecorum opiniones de daemonibus": scholarly  # 1 — doxography likewise
+      "De legum nominibus": lexical/glossary     # 1 — Roman-law terms and Latin legal loanwords
+      "De actionum nominibus": lexical/glossary  # 1 — the names of Attic lawsuits, defined
+      "De locis et nominibus Atticis": lexical/glossary  # 1
+      "Paraenesis": literary/wisdom              # 2 — Basil I's exhortation chapters to Leo: gnomic instruction
+      "Institutio": literary/wisdom              # 1 — Theophylact's Paideia basilike, a mirror of princes
+      "Characteres": literary/essay              # 1 — Psellus' stylistic characters of four Fathers: criticism
+    # -- unmapped by design (69 documents): genre values with no ruled head yet. They
+    #    surface in the unmapped bucket (`nabu kind census --unmapped cgpg`), never
+    #    forced onto a near class. No hagiography, apologetics-polemic, theology,
+    #    rhetoric or court-treatise head is ruled; a taxonomy sitting is queued.
+    #  hagiography and encomium (10): Vita 3 (incl. the Narratio de vita Mohammedis),
+    #    Martyrium 3 (incl. the Historia martyrii), Laudatio 1, Encomium 1, Narratio 1,
+    #    "Narratio de imagine Edessena" 1
+    #  apologetics and polemic (22): Apologia 3, Dialogus 4 (Cum Tryphone; Symeon
+    #    and Nicetas against heresy and the Latins; ps.-Psellus on demons — a form
+    #    word, not literary/wisdom's wisdom dialogue), Adversus 2, Legatio, Cohortatio,
+    #    Refutatio, Confutatio, Antirrhetici, Irrisio, "Ad Autolycum", "Oratio ad
+    #    gentiles", "Oratio ad Graecos", "De monarchia", "De iis quorum Latini
+    #    incusantur", "Logos dialektikos", "De processione Spiritus Sancti ad magnum ducem"
+    #  theological treatises and question-answer (14): Quaestiones 3 (erotapokriseis
+    #    on doctrine — not exegesis proper, not wisdom literature), Confessio,
+    #    "De resurrectione" 2, "Expositio rectae fidei", "Expositio de sacro symbolo",
+    #    "Expositio necessaria de sacri symboli dictionibus", "De essentia et
+    #    operatione Dei", "Λόγοι δύο", "De mortis determinatione", "Responsa ad
+    #    Gabrielem Pentapolitanum", "De sacerdotio"
+    #  bare fragments of lost works (13): Fragmenta 12, Prooemium 1 — the lost
+    #    work's genre is not in the title
+    #  the court, administration and war (7): "De cerimoniis aulae Byzantinae" 2,
+    #    "De officiis", "De administrando imperio", "De thematibus", Tactica,
+    #    "De sepulcris imperatorum quae sunt in templo sanctorum apostolorum"
+    #  secular rhetoric (3): Monodia 2, "Oratio in imperatorem Alexium I Comnenum"
   cantus:             # the chant record's genre — upstream's own abbreviation list
     #                   (cantusdatabase.org/genres/), the facet value = upstream's genre NAME,
     #                   the code raw (CantusCsvParser::GENRES). Counts = the 17-source sample

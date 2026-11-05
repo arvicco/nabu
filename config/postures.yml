@@ -2083,18 +2083,22 @@ sources:
         placeholder and empty values mint nothing"}
     script: {posture: implied}
   cgpg:   # P153
+    # kind is machine-postured by the kind_map rule (genre, P160): upstream and
+    # the carve plan carry no genre field, so the carved work's Latin title is
+    # cut to one keyword head (Adapters::CgpgTitleGenre) and folded — exegesis,
+    # historiography, letter, sermon, ritual/liturgy (Symeon of Thessalonica's
+    # rite chapters), legal/law, poetry, scholarly. Hagiography, apologetics-polemic,
+    # theological treatises, bare fragments, court treatises and secular rhetoric
+    # have no ruled head yet and stay in the unmapped bucket by design. Five
+    # single-genre whole volumes claim their kind (Cyril's commentaries, the
+    # histories); mixed volumes, the deferred PG 3 and every residuum (edition
+    # apparatus, rescans, uncarved rows) make no kind claim.
     lect: {posture: dates, note: "the date-band inference stages the volumes from upstream's own
         per-volume century labels: the 25 volumes labeled 5th–15th century fall inside grc:byz
         [330, 1453]; the two 4th-century volumes (Eusebius, Epiphanius) span the koi/byz
         boundary and stay bare grc, as do the 6 undated Pre-Nicaean volumes. No facet rule:
         a label map would only repeat the band. Carved works inherit their volume's band;
         the dateless residua stay bare grc"}
-    kind: {posture: unclassified, note: "upstream carries no genre label, and neither does the
-        carve plan that splits the volumes into works (slug, title, author, TLG id, page
-        ranges — no genre field). A kind fold over the carved works' titles (commentarius →
-        exegesis, homiliae → sermon, historia → historiography) is curation still to do; the
-        residua are edition apparatus, rescans and uncarved rows, for which the ruled kind
-        list has no class"}
     dating: {posture: dated, note: "the per-volume Dates label of upstream's Works and Authors
         table, transcribed (VOLUMES) → a century envelope, date_class composition (MetadataDates
         :structured; 27 of 33 volumes — the 6 Pre-Nicaean name no century). Transcribed, not

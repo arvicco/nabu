@@ -449,6 +449,64 @@ class KindsTest < Minitest::Test
     assert_empty shipped.normalize("ppchy", "Vernacular"), "a register label, reviewed — never unmapped noise"
   end
 
+  # P160: the cgpg title fold — CgpgTitleGenre's heads (real carve-plan
+  # titles in, the adapter's head out) fold exactly; the heads with no
+  # ruled class stay in the counted unmapped bucket, by design.
+  CGPG_FOLDS = {
+    "Expositio in prophetam Habacuc" => ["exegesis"],
+    "Fragmenta in Lucam (in catenis)" => ["exegesis"],
+    "In Proverbia (catena-epitome, CPG 7432; Procopian authorship of the epitome doubted)" => ["exegesis"],
+    "Amphilochia (Migne main series: prooemium + quaestiones I-CCCXXI+, truncated)" => ["exegesis"],
+    "Commentarius in Psychogoniam Platonicam (on the soul-generation in Plato's Timaeus)" => ["exegesis"],
+    "Epistula ecclesiae Smyrnensis de martyrio sancti Polycarpi" => ["letter"],
+    "Orationes (homiliae et panegyrici) I-XX (collectio Combefis)" => ["sermon/homily"],
+    "Oratio in praesentationem Deiparae" => ["sermon"],
+    "Carmen compunctorium (anacreonticum de extremo iudicio)" => ["literary/poetry"],
+    "Epitome historiarum (lib. 13-18) - only lib. 13-15 in this volume" => ["historiography"],
+    "Excerpta de legationibus" => ["historiography"],
+    "De expugnatione Thessalonicae" => ["historiography"],
+    "De annis ab orbe condito (Chronicon breve, from Adam to 1453)" => ["historiography/chronicle"],
+    "Annales" => ["historiography/chronicle"],
+    "Exapostilaria anastasima (cum theotokiis)" => ["ritual/chant"],
+    "De sacra liturgia (chs. ~78-100 of the dialogue)" => ["ritual/liturgy"],
+    "Oracula (cum vaticinio prosaico appendice)" => ["divination/oracle"],
+    "Tomus synodalis anni 1351" => ["legal/law"],
+    "Novellae constitutiones" => ["legal/law"],
+    "Synecdemus" => ["administrative/list"],
+    "De omnifaria doctrina (Didaskalia pantodape)" => ["scholarly"],
+    "De legum nominibus (glossary of Roman-law terms and Latin legal loanwords)" => ["lexical/glossary"],
+    "Institutio regia (Paideia basilike, ad Constantinum Ducam porphyrogenitum)" => ["literary/wisdom"],
+    "Characteres Gregorii Theologi, Basilii Magni, Chrysostomi et Gregorii Nysseni" => ["literary/essay"]
+  }.freeze
+  CGPG_UNMAPPED = [
+    "Vita Clementis Ohridensis (the long life, BHG 355)",
+    "Historia martyrii XV martyrum Tiberiopolitanorum (BHG 1199)",
+    "Apologia secunda",
+    "Dialogus cum Tryphone",
+    "Expositio rectae fidei",
+    "Quaestiones et responsiones ad orthodoxos",
+    "Fragmenta",
+    "De cerimoniis aulae Byzantinae (lib. 1.1-92)",
+    "Tactica (cum pinace et prooemio)",
+    "Occisorum Thessalonicae monodia"
+  ].freeze
+
+  def test_shipped_cgpg_folds_the_title_heads
+    shipped = shipped_kinds
+    assert_equal "genre", shipped.facet_for("cgpg")
+    CGPG_FOLDS.each do |title, want|
+      assert_equal want, shipped.normalize("cgpg", Nabu::Adapters::CgpgTitleGenre.head(title)), title
+    end
+    CGPG_UNMAPPED.each do |title|
+      assert_equal ["unmapped"], shipped.normalize("cgpg", Nabu::Adapters::CgpgTitleGenre.head(title)),
+                   "#{title}: no ruled head — unmapped by design"
+    end
+    Nabu::Adapters::Cgpg::VOLUMES.each_value do |entry|
+      assert_equal 1, shipped.normalize("cgpg", entry[:genre]).size if entry[:genre]
+      refute_includes shipped.normalize("cgpg", entry[:genre]), "unmapped" if entry[:genre]
+    end
+  end
+
   # P153: Ganjoor's section labels — the divan's FORM sections fold, work
   # and chapter titles stay uncovered (vocabulary: open).
   def test_shipped_ganjoor_folds_the_form_sections
