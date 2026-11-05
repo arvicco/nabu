@@ -291,6 +291,10 @@ module Nabu
           "ren" => :structured,
           "rsti" => :place_only,
           "ru-wikisource" => :era_band_key,
+          "runesdb" => :structured, # P160: the per-find LIDO record's Production event
+          #                           (earliest/latestDate — the artifact's dating); place =
+          #                           the Finding event's find place + its GML point
+          #                           (manuscripts' holding libraries never place)
           "scat" => :structured, # the release catalog's century (the witness's, beside the
           #                        shelfmark) as a century envelope; no place claim
           "seal" => :period_label,

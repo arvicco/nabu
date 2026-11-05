@@ -3118,8 +3118,11 @@ sources:
     script: {posture: implied}
   runesdb:   # P153
     kind: {posture: unclassified, note: "the TEI's only genre-shaped field (msContents summary)
-        reads \"Runische Inschrift\" on all 723 files — no typed genre; the object type (stone,
-        comb, brooch) lives in the unfetched LIDO records"}
+        reads \"Runische Inschrift\" on all 723 files — no typed genre. The LIDO layer (P160)
+        adds the OBJECT type (stone, personal adornment, tool/implement, rune stick, manuscript…)
+        and the find context (burial, settlement, single find) as their own facets — neither is
+        a text genre; a manuscript's classification names its HOST text's class (\"Religious
+        literature and mythology\"), not the runes' — facet only, never folded"}
     # lect: machine-postured by the runesdb-siglum facet rule — raw gem on
     # every find (the TEI carries no language); the rule stages the
     # unambiguous corpus families off the Hauptsigle family (OE-* → ang,
@@ -3127,11 +3130,17 @@ sources:
     # regional sigla → gmq); pre-OE/Frisian blends, SG, the unglossed
     # regional families and the runica-manuscripta shelfmarks stay bare
     # gem, declared.
-    dating: {posture: undatable, note: "the TEI zip carries no date; dating lives in the
-        per-find LIDO records (runesdb.de/lido/<id>, earliestDate/latestDate), not fetched —
-        their harvest is the follow-up that dates the finds"}
-    places: {posture: unplaced, note: "the TEI zip carries no place; the LIDO records hold
-        find place + repository with coordinates, not fetched (the follow-up)"}
+    dating: {posture: dated, note: "P160: the per-find LIDO record's Production event
+        (earliestDate/latestDate, CE years) dates the artifact through the MetadataDates
+        :structured lane — every one of the 27-record census carried it; upstream's 0/0
+        (Kylver, Rö) is its unknown sentinel and mints nothing. The Finding event's date is the
+        DISCOVERY date (find_date, never dating). A find whose LIDO record is not on disk stays
+        undated until the harvest lands it"}
+    places: {posture: named, note: "P160: the LIDO Finding event's find place, verbatim, with
+        its GML point as coordinates (no gazetteer ids upstream — nabu-places matches the name).
+        Declared coarse: a manuscript's finding event names its HOLDING library (a present
+        location) — kept under repository.find_event_place, never placed; the repository (the
+        present holder + its point) stays metadata"}
     script: {posture: qualified, note: "the text is upstream's Latin-letter TRANSLITERATION of
         the runes (runological sigla ':' '*' '[...]' '?' and bind-rune '^' verbatim) — never a
         runic-Unicode witness; the glyph records carry rune names and formal types"}

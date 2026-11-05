@@ -354,6 +354,11 @@ module Nabu
                                           "name a former spot (\"Formerly at Grännarp, Vårkumla " \
                                           "parish.\") as free prose — kept verbatim; " \
                                           "found_location + coordinates project the place" },
+        # P160: the per-find LIDO record's Finding event (sample census 2026-11-05).
+        "runesdb" => { "find_date" => "the DISCOVERY date of the find (\"1835\", \"1840 ca.\", " \
+                                      "\"1848>F\", \"1857+1890\") — when it was found, never the " \
+                                      "inscription's dating (the ociana stance); the Production " \
+                                      "event projects the date" },
         "menota" => { "settlement" => "the holding library's city (a PRESENT location — the " \
                                       "MetadataDates menota note)" },
         "oracc" => { "regnal_dates" => "consumed: OraccDates bands it at reign precision when " \
