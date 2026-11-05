@@ -9,6 +9,12 @@ module Nabu
     # city-states of the Irrawaddy valley (~5th–13th c. CE), romanized.
     # Flat repo layout (editions at the root); no repo-level LICENSE — the
     # per-file <licence> is the whole grant, recorded verbatim.
+    #
+    # Reconciliation (canonical census 2026-11-05): 162 DHARMA_ files =
+    # 145 parsed + 16 skeletons (rule-skips: textparts holding only
+    # <ab><!--Transcription here--></ab>, lone gaps, "?" placeholders) + 1
+    # quarantine — PYU 120, whose numerals sit in a <choice> of bare <num>
+    # alternatives the family walk does not read (real text, so a defect).
     class DharmaPyu < DharmaBase
       SLUG = "dharma-pyu"
       NAME = "DHARMA Corpus of Pyu Inscriptions"

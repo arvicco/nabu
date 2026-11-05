@@ -3,6 +3,7 @@
 require "nokogiri"
 
 require_relative "../normalize"
+require_relative "source_read"
 
 module Nabu
   module Adapters
@@ -99,6 +100,20 @@ module Nabu
     # editions stay quarantined). Anything else — including the real
     # "languageb-Latn" template bug and "und" stubs — quarantines
     # loudly.
+    #
+    # == Skeletons (upstream's placeholder grain)
+    #
+    # The EFEO teams commit a record before its transcription: a
+    # commentary + bibliography file with no edition div, or an edition
+    # div holding only its scaffold — numbered <lb/>s, gaps, an
+    # <ab><!--Transcription here--></ab>, the template's "..." / "?".
+    # #skeleton? names that grain (no readable character survives the
+    # DROP set and the editorial prune; dots, "?", "/" and "…" are
+    # placeholder residue) so the adapters skip it BY RULE at discovery,
+    # never quarantining it. XML that does not parse is never a skeleton
+    # (a truncated file can look empty), and an edition whose real text
+    # mints no unit stays a "no citable text" quarantine — those are
+    # defects.
     module DharmaEpidocParser
       XML_NS = "http://www.w3.org/XML/1998/namespace"
 
@@ -109,8 +124,36 @@ module Nabu
       EDITORIAL_DIVS = %w[commentary translation apparatus bibliography].freeze
       ENTITY_TYPES = { "persName" => "person", "placeName" => "place" }.freeze
       GAP_MARKER = "[…]"
+      SKELETON_NOTE = "skeleton — no citable text yet (upstream placeholder)"
+      PLACEHOLDER_RESIDUE = %r{[[:space:].?/…]}
 
       module_function
+
+      # Is the file at +path+ an upstream skeleton (class note)? Loads its
+      # own DOM — the caller's discover never parses. Bytes that are not
+      # UTF-8 are a defect, never a skeleton: the ref goes on to parse.
+      def skeleton_file?(path)
+        doc = Nokogiri::XML(SourceRead.utf8_file(path, label: "dharma-epidoc skeleton probe"))
+        doc.remove_namespaces!
+        skeleton?(doc)
+      rescue Nabu::ParseError
+        false
+      end
+
+      # +doc+: loaded and namespace-stripped; its edition is pruned in place.
+      def skeleton?(doc)
+        return false if doc.errors.any?(&:fatal?)
+
+        edition = doc.at_xpath('//body//div[@type="edition"]') or return true
+        prune_editorial!(edition)
+        edition.xpath(DROP.map { |name| ".//#{name}" }.join(" | ")).each(&:remove)
+        edition.xpath(".//text()").map(&:text).join.gsub(PLACEHOLDER_RESIDUE, "").empty?
+      end
+
+      def malformed_note(doc)
+        fatal = doc.errors.find(&:fatal?)
+        fatal ? " (malformed XML: #{fatal.message.strip})" : ""
+      end
 
       # Parse one DHARMA edition file. +allowed_languages+ is the adapter's
       # measured code set; +aliases+ maps censused upstream tag dirt onto
@@ -127,7 +170,7 @@ module Nabu
       # the edition's nested editorial divs from +doc+ in place.
       def parse_doc(doc, path:, allowed_languages:, aliases: {}, default_language: nil, names: false)
         edition = doc.at_xpath('//body//div[@type="edition"]') or
-          raise Nabu::ParseError, "#{File.basename(path)}: no edition div"
+          raise Nabu::ParseError, "#{File.basename(path)}: no edition div#{malformed_note(doc)}"
         prune_editorial!(edition)
 
         checker = language_checker(allowed_languages, aliases, path)
