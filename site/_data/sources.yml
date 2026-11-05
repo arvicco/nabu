@@ -425,13 +425,13 @@ sources:
   cgpg:
     name: CGPG — Calfa/GREgORI Patrologia Graeca (OCR, lemmatized)
     license_class: attribution
-    documents: 33
-    documents_display: '33'
+    documents: 232
+    documents_display: '232'
     passages: 18701
     passages_display: '18,701'
     entries: 0
     entries_display: '0'
-    holdings: 33 documents / 18,701 passages
+    holdings: 232 documents / 18,701 passages
     canonical_display: 685 MB
   classical-modern:
     name: Classical-Modern — Classical↔Modern Chinese parallel corpus (NiuTrans)
@@ -3632,11 +3632,11 @@ shelves:
     - cgpg
     - hexapla
     - suda-translations
-    documents: 1345
-    documents_display: '1,345'
+    documents: 1544
+    documents_display: '1,544'
     passages: 335210
     passages_display: '335,210'
-    size_display: 1,345 / 335,210
+    size_display: 1,544 / 335,210
   greek-silver:
     sources:
     - diorisis
@@ -4140,5 +4140,5 @@ shelves:
     size_display: 1,282 / 7,014
 disk:
   canonical_display: 146 GB
-  derived_display: 189 GB
+  derived_display: 190 GB
   starter_display: 693 MB
