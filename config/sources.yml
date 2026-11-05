@@ -6588,6 +6588,32 @@ stationers-register:   # P160, 02-sources row 386
   # Licence: in-file CC BY 4.0 vs the site's "CC-BY-SA" — BY-SA taken →
   # attribution. Document = entry (SRO id), passage = register-text block.
   # Family sro-tei (streamed). Arber/ and OLD Register/ skip by rule.
+statutes-realm:   # P160-7, 02-sources row 388
+  adapter: Nabu::Adapters::StatutesRealm
+  adopted: "2026-11-05"
+  axes: [germanic]
+  wired: false   # READY (fixtures + adapter); flip after the first real sync.
+                 # EXPECT 661 docs (656 acts + 5 vol. 7 private-acts schedules),
+                 # 0 errored; skipped by rule 9 TOC sidecars + 62 rejected rows
+                 # (53 index letters, 5 front matter, 4 engravings) — the 723
+                 # live TOC rows (vol5 311 · vol6 192 · vol7 220, 2026-11-05)
+                 # exactly; ~12–15 min paced crawl (670 GETs at 1 s). Eyeball
+                 # nabu show urn:nabu:statutes-realm:vol5:p1a:s1 (the Lord's Day
+                 # Act 1625, "FORASMUCH as there is nothing more acceptable to
+                 # God"), probe nabu search "Bearebaiting", then flip.
+  sync_policy: manual   # an HTML crawl with no revision stamps
+  # Statutes of the Realm vols 5–7 (1625–1701), John Raithby's Record
+  # Commission edition (1819–1820) on British History Online (IHR,
+  # University of London), double-rekeyed. Every page states "This free
+  # content was digitised by double rekeying. Public Domain." — overriding,
+  # for this series only, the site Terms of use ("Unless otherwise stated …
+  # non-commercial") → open (first-hand 2026-11-05; the conflict recorded in
+  # the adapter class comment). Vols 1–4 are not on BHO (404). Paced HTML
+  # crawl of the three volume TOCs (100 rows/page, rel=next) + the act
+  # pages. Document = act (and vol. 7's private-acts schedules); passage =
+  # the act's section. Dating: the title's reign + session label, met with
+  # vol. 7's Rot. Parl. regnal citation. Overlap: eebo-tcp's contemporary
+  # printed statute collections are a different edition — both kept.
 
 stgall-priscian:
   adapter: Nabu::Adapters::StgallPriscian

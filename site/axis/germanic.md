@@ -58,6 +58,7 @@ A source wears every desk it serves — these 38 answer this desk. Holdings are 
 | `rundata` | inscriptions | odbl | wired · manual | 30,647 docs / 30,645 passages |
 | `runesdb` | texts | attribution | wired · manual | 613 docs / 1,611 passages |
 | `stationers-register` | texts | attribution | not yet wired | not synced yet |
+| `statutes-realm` | texts | open | not yet wired | not synced yet |
 | `ud` | treebank | nc | wired · manual | 83 docs / 329,980 passages |
 | `wiktionary-dum` | dictionary | attribution | wired · manual | 2,342 entries |
 | `wiktionary-enm` | dictionary | attribution | wired · manual | 56,687 entries |

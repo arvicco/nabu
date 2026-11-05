@@ -96,7 +96,11 @@ class DerivabilityWritersTest < Minitest::Test
   # canonical/runesdb/lido/<id>.xml (one LIDO record per find, tmp+rename,
   # never re-fetched once on disk) + its .lido-fetch.json ledger inside
   # Adapter#fetch — the aio_fetch law kind, its per-record sibling (no
-  # listing, never-delete). korp_fetch (vks, 2026-10-21) writes
+  # listing, never-delete). statutes_realm_fetch (P160-7) writes
+  # canonical/statutes-realm/vol<V>/ act pages (tmp+rename) + the toc/
+  # sidecars + attic copies + its .statutes-realm-fetch.json ledger inside
+  # Adapter#fetch — the aio_fetch law kind, its HTML-TOC sibling.
+  # korp_fetch (vks, 2026-10-21) writes
   # canonical/vks/texts/<CORPUS>/*.jsonl (a .korp-staging tree swapped in
   # whole) + attic copies + its .korp-fetch.json ledger inside
   # Adapter#fetch — the iness_fetch law kind (an API harvest, sha-pinned
@@ -264,6 +268,7 @@ class DerivabilityWritersTest < Minitest::Test
     nabu/lotsawa_fetch.rb nabu/glt_fetch.rb nabu/cantus_fetch.rb nabu/hf_rows_fetch.rb nabu/zip_range_fetch.rb
     nabu/poma_fetch.rb nabu/bu_ajami_fetch.rb
     nabu/seal_fetch.rb nabu/aio_fetch.rb nabu/adapters/runesdb_lido_fetch.rb
+    nabu/statutes_realm_fetch.rb
     nabu/sefaria_fetch.rb nabu/titus_fetch.rb nabu/url_download.rb
     nabu/litopys_fetch.rb
     nabu/wiki_fetch.rb nabu/zip_fetch.rb

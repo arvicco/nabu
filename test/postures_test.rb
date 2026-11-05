@@ -179,7 +179,7 @@ class PosturesTest < Minitest::Test
   def test_the_lect_migration_kept_the_p59_4_census
     lect = postures.declarations.select { |d| d.layer == "lect" }
     by_posture = lect.group_by(&:posture).transform_values(&:size)
-    assert_equal 181, lect.size,
+    assert_equal 182, lect.size,
                  "the P59-4 declarations survive the move (61 at migration; itant retired P61-3," \
                  "oracc retired P62-2, etcsl/ccmh/freising/coptic-scriptorium retired P64-6, " \
                  "titus-avestan retired P66-1, osta+fornsvenska retired P77-r8, achemenet " \
@@ -406,7 +406,9 @@ class PosturesTest < Minitest::Test
                  "lat → lat:cla approximation overrides (the perseus-latin shape; the shadowing " \
                  "rule): 184→182; " \
                  "ganjoor RETIRES — the ganjoor-poet facet rule completes the fa:early/fa:cls " \
-                 "staging the date band began (the shadowing rule): 182→181"
+                 "staging the date band began (the shadowing rule): 182→181; " \
+                 "statutes-realm ADDED P160-7 — dates (en stages to en:early / en:late by the " \
+                 "acts' session envelopes): 181→182"
     # The epigraphic-belt registry package (merged + canonical-synced
     # 2026-10-18, the add-then-retire shape within one phase) retires both
     # P130 pendings, and the ociana-script rule + the ig-cyprus override
@@ -475,6 +477,7 @@ class PosturesTest < Minitest::Test
     # first time since the posture law landed.
     # ganjoor retires identity — the ganjoor-poet facet rule machine-postures it
     # (the shadowing rule): 136→135.
-    assert_equal({ "dates" => 25, "codemap" => 21, "identity" => 135 }, by_posture)
+    # statutes-realm joins dates (the acts' session envelopes → en:early/en:late): 25→26.
+    assert_equal({ "dates" => 26, "codemap" => 21, "identity" => 135 }, by_posture)
   end
 end

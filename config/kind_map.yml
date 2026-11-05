@@ -1175,6 +1175,11 @@ sources:
     source_kind: lexical     # P154: the Suda is a lexicon-encyclopedia — every passage translates one
     #                          alphabetical entry (headword + gloss/article); the house's lexical head,
     #                          bare (its subs are sign/word lists, glossaries, grammars — none fits whole)
+  statutes-realm:
+    source_kind: legal/law   # P160-7: every document is an Act of Parliament (656) or the statute
+    #                          roll's schedule of a session's private-act titles (5) — legislation
+    #                          whole; the Petition of Right rides with the acts as the roll does
+    #                          (3 Car. I c. 1), not legal/petition
   hexapla:
     source_kind: scripture   # P153: the Hexapla's columns — the Bible in Hebrew and its Greek versions
   etcbc-syriac:        # P153 census 2026-11-02: 31 books (tf/0.92 book nodes), one document each
