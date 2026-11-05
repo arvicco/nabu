@@ -1,0 +1,535 @@
+{
+  "id" : "df7e4cd6-596e-4fbd-80a7-f792435d4100",
+  "uuid" : "df7e4cd6-596e-4fbd-80a7-f792435d4100",
+  "name" : "Mafteah leshon ha-kodesh That Is The Key of the Holy Tongve: Wherein is conteineid, first The Hebrue Grammar (in a manner) woord for woord out of P. Martinivs. Secondly, A practize upon the first, the twentie fift, and the syxtie eyght Psalmes, according to the rules of the same Grammar. Thirdly, A short Dictionary conteining the Hebrue woords that are found in the Bible with their proper significations. All Englished for the benefit of those that (being ignoraunt in the Latin) are desirous to learn the holy tongue",
+  "handle" : "1807/131265",
+  "metadata" : {
+    "dc.contributor.author" : [ {
+      "value" : "Udall, John",
+      "language" : null,
+      "authority" : null,
+      "confidence" : -1,
+      "place" : 0
+    }, {
+      "value" : "Martinius, Petrus",
+      "language" : null,
+      "authority" : null,
+      "confidence" : -1,
+      "place" : 1
+    } ],
+    "dc.contributor.editor" : [ {
+      "value" : "Lancashire, Ian",
+      "language" : null,
+      "authority" : null,
+      "confidence" : -1,
+      "place" : 0
+    } ],
+    "dc.date.accessioned" : [ {
+      "value" : "2024-02-07T21:42:06Z",
+      "language" : null,
+      "authority" : null,
+      "confidence" : -1,
+      "place" : 0
+    } ],
+    "dc.date.available" : [ {
+      "value" : "2024-02-07T21:42:06Z",
+      "language" : null,
+      "authority" : null,
+      "confidence" : -1,
+      "place" : 0
+    } ],
+    "dc.date.created" : [ {
+      "value" : "1593",
+      "language" : null,
+      "authority" : null,
+      "confidence" : -1,
+      "place" : 0
+    } ],
+    "dc.date.issued" : [ {
+      "value" : "2024",
+      "language" : null,
+      "authority" : null,
+      "confidence" : -1,
+      "place" : 0
+    } ],
+    "dc.description" : [ {
+      "value" : "The LEME Corpus Manual has an editorial introduction, indexes of subjects, proper names, and chronology, a primary bibliography of LEME corpus texts, as well as English language texts not included in the Corpus, a description of the XML encoding and of lemmatization and source analysis tools. The appendix includes lists of language abbreviations and of abbreviations for parts of speech.",
+      "language" : "en_US",
+      "authority" : null,
+      "confidence" : -1,
+      "place" : 0
+    } ],
+    "dc.description.sponsorship" : [ {
+      "value" : "Social Sciences and Humanities Research Council of Canada",
+      "language" : "en_US",
+      "authority" : null,
+      "confidence" : -1,
+      "place" : 0
+    }, {
+      "value" : "Canada Foundation for Innovation",
+      "language" : "en_US",
+      "authority" : null,
+      "confidence" : -1,
+      "place" : 1
+    }, {
+      "value" : "University of Toronto Libraries",
+      "language" : "en_US",
+      "authority" : null,
+      "confidence" : -1,
+      "place" : 2
+    }, {
+      "value" : "University of Toronto Press",
+      "language" : "en_US",
+      "authority" : null,
+      "confidence" : -1,
+      "place" : 3
+    }, {
+      "value" : "Information & Instructional Technology, Faculty of Arts and Science, University of Toronto",
+      "language" : "en_US",
+      "authority" : null,
+      "confidence" : -1,
+      "place" : 4
+    } ],
+    "dc.identifier" : [ {
+      "value" : "STC 17523",
+      "language" : "en_US",
+      "authority" : null,
+      "confidence" : -1,
+      "place" : 0
+    } ],
+    "dc.identifier.citation" : [ {
+      "value" : "Udall, John. \"A Brief Abridgment of the Hebrve Dictionaire, Conteining not onlie the Primitive Words called the Rootes, But also those that are derived from them, together with their proper significations, as neare as could be atteyned unto by the Authour.\" The Key of the Holy Tongue.  Trans. John Udall.  Leyden: Francis Raphelengivs, 1593.  1-174 (dictionary separately paginated)",
+      "language" : "en_US",
+      "authority" : null,
+      "confidence" : -1,
+      "place" : 0
+    } ],
+    "dc.identifier.uri" : [ {
+      "value" : "http://hdl.handle.net/1807/131265",
+      "language" : null,
+      "authority" : null,
+      "confidence" : -1,
+      "place" : 0
+    } ],
+    "dc.language.iso" : [ {
+      "value" : "en",
+      "language" : "en_US",
+      "authority" : null,
+      "confidence" : -1,
+      "place" : 0
+    } ],
+    "dc.publisher" : [ {
+      "value" : "Lexicons of Early Modern English (LEME)",
+      "language" : "en_US",
+      "authority" : null,
+      "confidence" : -1,
+      "place" : 0
+    } ],
+    "dc.relation.uri" : [ {
+      "value" : "https://leme.utoronto.ca",
+      "language" : "en_US",
+      "authority" : null,
+      "confidence" : -1,
+      "place" : 0
+    } ],
+    "dc.rights" : [ {
+      "value" : "Attribution 4.0 International",
+      "language" : "*",
+      "authority" : null,
+      "confidence" : -1,
+      "place" : 0
+    } ],
+    "dc.rights.uri" : [ {
+      "value" : "http://creativecommons.org/licenses/by/4.0/",
+      "language" : "*",
+      "authority" : null,
+      "confidence" : -1,
+      "place" : 0
+    } ],
+    "dc.subject" : [ {
+      "value" : "English language -- Dictionaries, glossaries, vocabularies, etc. -- Early works to 1800. -- Polyglot",
+      "language" : "en_US",
+      "authority" : null,
+      "confidence" : -1,
+      "place" : 0
+    }, {
+      "value" : "Hebrew language -- Dictionaries",
+      "language" : "en_US",
+      "authority" : null,
+      "confidence" : -1,
+      "place" : 1
+    } ],
+    "dc.title" : [ {
+      "value" : "Mafteah leshon ha-kodesh That Is The Key of the Holy Tongve: Wherein is conteineid, first The Hebrue Grammar (in a manner) woord for woord out of P. Martinivs. Secondly, A practize upon the first, the twentie fift, and the syxtie eyght Psalmes, according to the rules of the same Grammar. Thirdly, A short Dictionary conteining the Hebrue woords that are found in the Bible with their proper significations. All Englished for the benefit of those that (being ignoraunt in the Latin) are desirous to learn the holy tongue",
+      "language" : "en_US",
+      "authority" : null,
+      "confidence" : -1,
+      "place" : 0
+    } ],
+    "dc.title.alternative" : [ {
+      "value" : "The Key of the Holy Tongue",
+      "language" : "en_US",
+      "authority" : null,
+      "confidence" : -1,
+      "place" : 0
+    } ],
+    "dc.type" : [ {
+      "value" : "Book",
+      "language" : "en_US",
+      "authority" : null,
+      "confidence" : -1,
+      "place" : 0
+    } ]
+  },
+  "inArchive" : true,
+  "discoverable" : true,
+  "withdrawn" : false,
+  "lastModified" : "2024-02-07T21:42:06.176Z",
+  "entityType" : null,
+  "type" : "item",
+  "_links" : {
+    "accessStatus" : {
+      "href" : "https://utoronto.scholaris.ca/server/api/core/items/df7e4cd6-596e-4fbd-80a7-f792435d4100/accessStatus"
+    },
+    "bundles" : {
+      "href" : "https://utoronto.scholaris.ca/server/api/core/items/df7e4cd6-596e-4fbd-80a7-f792435d4100/bundles"
+    },
+    "identifiers" : {
+      "href" : "https://utoronto.scholaris.ca/server/api/core/items/df7e4cd6-596e-4fbd-80a7-f792435d4100/identifiers"
+    },
+    "mappedCollections" : {
+      "href" : "https://utoronto.scholaris.ca/server/api/core/items/df7e4cd6-596e-4fbd-80a7-f792435d4100/mappedCollections"
+    },
+    "owningCollection" : {
+      "href" : "https://utoronto.scholaris.ca/server/api/core/items/df7e4cd6-596e-4fbd-80a7-f792435d4100/owningCollection"
+    },
+    "relationships" : {
+      "href" : "https://utoronto.scholaris.ca/server/api/core/items/df7e4cd6-596e-4fbd-80a7-f792435d4100/relationships"
+    },
+    "version" : {
+      "href" : "https://utoronto.scholaris.ca/server/api/core/items/df7e4cd6-596e-4fbd-80a7-f792435d4100/version"
+    },
+    "templateItemOf" : {
+      "href" : "https://utoronto.scholaris.ca/server/api/core/items/df7e4cd6-596e-4fbd-80a7-f792435d4100/templateItemOf"
+    },
+    "thumbnail" : {
+      "href" : "https://utoronto.scholaris.ca/server/api/core/items/df7e4cd6-596e-4fbd-80a7-f792435d4100/thumbnail"
+    },
+    "submitter" : {
+      "href" : "https://utoronto.scholaris.ca/server/api/core/items/df7e4cd6-596e-4fbd-80a7-f792435d4100/submitter"
+    },
+    "self" : {
+      "href" : "https://utoronto.scholaris.ca/server/api/core/items/df7e4cd6-596e-4fbd-80a7-f792435d4100"
+    }
+  },
+  "_embedded" : {
+    "bundles" : {
+      "_embedded" : {
+        "bundles" : [ {
+          "uuid" : "959e5cf9-9bfd-4e6d-bfc5-bf7cc29bb3ec",
+          "name" : "ORIGINAL",
+          "handle" : null,
+          "metadata" : {
+            "dc.title" : [ {
+              "value" : "ORIGINAL",
+              "language" : null,
+              "authority" : null,
+              "confidence" : -1,
+              "place" : 0
+            } ]
+          },
+          "type" : "bundle",
+          "_links" : {
+            "item" : {
+              "href" : "https://utoronto.scholaris.ca/server/api/core/bundles/959e5cf9-9bfd-4e6d-bfc5-bf7cc29bb3ec/item"
+            },
+            "bitstreams" : {
+              "href" : "https://utoronto.scholaris.ca/server/api/core/bundles/959e5cf9-9bfd-4e6d-bfc5-bf7cc29bb3ec/bitstreams"
+            },
+            "primaryBitstream" : {
+              "href" : "https://utoronto.scholaris.ca/server/api/core/bundles/959e5cf9-9bfd-4e6d-bfc5-bf7cc29bb3ec/primaryBitstream"
+            },
+            "self" : {
+              "href" : "https://utoronto.scholaris.ca/server/api/core/bundles/959e5cf9-9bfd-4e6d-bfc5-bf7cc29bb3ec"
+            }
+          },
+          "_embedded" : {
+            "bitstreams" : {
+              "_embedded" : {
+                "bitstreams" : [ {
+                  "id" : "4f197da2-1b25-45a2-af68-e7b358392cc0",
+                  "uuid" : "4f197da2-1b25-45a2-af68-e7b358392cc0",
+                  "name" : "207_Udal_HolyTongue_1593_DictionaryOnly.xml",
+                  "handle" : null,
+                  "metadata" : {
+                    "dc.description" : [ {
+                      "value" : "",
+                      "language" : null,
+                      "authority" : null,
+                      "confidence" : -1,
+                      "place" : 0
+                    } ],
+                    "dc.source" : [ {
+                      "value" : "/opt/dspace/upload/207_Udal_HolyTongue_1593_DictionaryOnly.xml",
+                      "language" : null,
+                      "authority" : null,
+                      "confidence" : -1,
+                      "place" : 0
+                    } ],
+                    "dc.title" : [ {
+                      "value" : "207_Udal_HolyTongue_1593_DictionaryOnly.xml",
+                      "language" : null,
+                      "authority" : null,
+                      "confidence" : -1,
+                      "place" : 0
+                    } ]
+                  },
+                  "bundleName" : "ORIGINAL",
+                  "sizeBytes" : 589415,
+                  "checkSum" : {
+                    "checkSumAlgorithm" : "MD5",
+                    "value" : "56fe0c6e22d32506f59e9b3d378a51a0"
+                  },
+                  "sequenceId" : 1,
+                  "type" : "bitstream",
+                  "_links" : {
+                    "content" : {
+                      "href" : "https://utoronto.scholaris.ca/server/api/core/bitstreams/4f197da2-1b25-45a2-af68-e7b358392cc0/content"
+                    },
+                    "bundle" : {
+                      "href" : "https://utoronto.scholaris.ca/server/api/core/bitstreams/4f197da2-1b25-45a2-af68-e7b358392cc0/bundle"
+                    },
+                    "accessStatus" : {
+                      "href" : "https://utoronto.scholaris.ca/server/api/core/bitstreams/4f197da2-1b25-45a2-af68-e7b358392cc0/accessStatus"
+                    },
+                    "format" : {
+                      "href" : "https://utoronto.scholaris.ca/server/api/core/bitstreams/4f197da2-1b25-45a2-af68-e7b358392cc0/format"
+                    },
+                    "thumbnail" : {
+                      "href" : "https://utoronto.scholaris.ca/server/api/core/bitstreams/4f197da2-1b25-45a2-af68-e7b358392cc0/thumbnail"
+                    },
+                    "self" : {
+                      "href" : "https://utoronto.scholaris.ca/server/api/core/bitstreams/4f197da2-1b25-45a2-af68-e7b358392cc0"
+                    }
+                  }
+                } ]
+              },
+              "page" : {
+                "number" : 0,
+                "size" : 20,
+                "totalPages" : 1,
+                "totalElements" : 1
+              },
+              "_links" : {
+                "self" : {
+                  "href" : "https://utoronto.scholaris.ca/server/api/core/bundles/959e5cf9-9bfd-4e6d-bfc5-bf7cc29bb3ec/bitstreams"
+                }
+              }
+            }
+          }
+        }, {
+          "uuid" : "8b7674c6-3cea-4440-b7c3-efe078675322",
+          "name" : "CC-LICENSE",
+          "handle" : null,
+          "metadata" : {
+            "dc.title" : [ {
+              "value" : "CC-LICENSE",
+              "language" : null,
+              "authority" : null,
+              "confidence" : -1,
+              "place" : 0
+            } ]
+          },
+          "type" : "bundle",
+          "_links" : {
+            "item" : {
+              "href" : "https://utoronto.scholaris.ca/server/api/core/bundles/8b7674c6-3cea-4440-b7c3-efe078675322/item"
+            },
+            "bitstreams" : {
+              "href" : "https://utoronto.scholaris.ca/server/api/core/bundles/8b7674c6-3cea-4440-b7c3-efe078675322/bitstreams"
+            },
+            "primaryBitstream" : {
+              "href" : "https://utoronto.scholaris.ca/server/api/core/bundles/8b7674c6-3cea-4440-b7c3-efe078675322/primaryBitstream"
+            },
+            "self" : {
+              "href" : "https://utoronto.scholaris.ca/server/api/core/bundles/8b7674c6-3cea-4440-b7c3-efe078675322"
+            }
+          },
+          "_embedded" : {
+            "bitstreams" : {
+              "_embedded" : {
+                "bitstreams" : [ {
+                  "id" : "bb6b405d-c35d-4d94-ab25-6a8f8148ed28",
+                  "uuid" : "bb6b405d-c35d-4d94-ab25-6a8f8148ed28",
+                  "name" : "license_rdf",
+                  "handle" : null,
+                  "metadata" : {
+                    "dc.source" : [ {
+                      "value" : "org.dspace.license.CreativeCommons",
+                      "language" : null,
+                      "authority" : null,
+                      "confidence" : -1,
+                      "place" : 0
+                    } ],
+                    "dc.title" : [ {
+                      "value" : "license_rdf",
+                      "language" : null,
+                      "authority" : null,
+                      "confidence" : -1,
+                      "place" : 0
+                    } ]
+                  },
+                  "bundleName" : "CC-LICENSE",
+                  "sizeBytes" : 908,
+                  "checkSum" : {
+                    "checkSumAlgorithm" : "MD5",
+                    "value" : "0175ea4a2d4caec4bbcc37e300941108"
+                  },
+                  "sequenceId" : 2,
+                  "type" : "bitstream",
+                  "_links" : {
+                    "content" : {
+                      "href" : "https://utoronto.scholaris.ca/server/api/core/bitstreams/bb6b405d-c35d-4d94-ab25-6a8f8148ed28/content"
+                    },
+                    "bundle" : {
+                      "href" : "https://utoronto.scholaris.ca/server/api/core/bitstreams/bb6b405d-c35d-4d94-ab25-6a8f8148ed28/bundle"
+                    },
+                    "accessStatus" : {
+                      "href" : "https://utoronto.scholaris.ca/server/api/core/bitstreams/bb6b405d-c35d-4d94-ab25-6a8f8148ed28/accessStatus"
+                    },
+                    "format" : {
+                      "href" : "https://utoronto.scholaris.ca/server/api/core/bitstreams/bb6b405d-c35d-4d94-ab25-6a8f8148ed28/format"
+                    },
+                    "thumbnail" : {
+                      "href" : "https://utoronto.scholaris.ca/server/api/core/bitstreams/bb6b405d-c35d-4d94-ab25-6a8f8148ed28/thumbnail"
+                    },
+                    "self" : {
+                      "href" : "https://utoronto.scholaris.ca/server/api/core/bitstreams/bb6b405d-c35d-4d94-ab25-6a8f8148ed28"
+                    }
+                  }
+                } ]
+              },
+              "page" : {
+                "number" : 0,
+                "size" : 20,
+                "totalPages" : 1,
+                "totalElements" : 1
+              },
+              "_links" : {
+                "self" : {
+                  "href" : "https://utoronto.scholaris.ca/server/api/core/bundles/8b7674c6-3cea-4440-b7c3-efe078675322/bitstreams"
+                }
+              }
+            }
+          }
+        }, {
+          "uuid" : "20827752-b777-413f-8ca6-cd3df5ae277f",
+          "name" : "LICENSE",
+          "handle" : null,
+          "metadata" : {
+            "dc.title" : [ {
+              "value" : "LICENSE",
+              "language" : null,
+              "authority" : null,
+              "confidence" : -1,
+              "place" : 0
+            } ]
+          },
+          "type" : "bundle",
+          "_links" : {
+            "item" : {
+              "href" : "https://utoronto.scholaris.ca/server/api/core/bundles/20827752-b777-413f-8ca6-cd3df5ae277f/item"
+            },
+            "bitstreams" : {
+              "href" : "https://utoronto.scholaris.ca/server/api/core/bundles/20827752-b777-413f-8ca6-cd3df5ae277f/bitstreams"
+            },
+            "primaryBitstream" : {
+              "href" : "https://utoronto.scholaris.ca/server/api/core/bundles/20827752-b777-413f-8ca6-cd3df5ae277f/primaryBitstream"
+            },
+            "self" : {
+              "href" : "https://utoronto.scholaris.ca/server/api/core/bundles/20827752-b777-413f-8ca6-cd3df5ae277f"
+            }
+          },
+          "_embedded" : {
+            "bitstreams" : {
+              "_embedded" : {
+                "bitstreams" : [ {
+                  "id" : "42e435bc-fbbd-443e-8160-69c4c244bf6a",
+                  "uuid" : "42e435bc-fbbd-443e-8160-69c4c244bf6a",
+                  "name" : "license.txt",
+                  "handle" : null,
+                  "metadata" : {
+                    "dc.source" : [ {
+                      "value" : "Written by org.dspace.content.LicenseUtils",
+                      "language" : null,
+                      "authority" : null,
+                      "confidence" : -1,
+                      "place" : 0
+                    } ],
+                    "dc.title" : [ {
+                      "value" : "license.txt",
+                      "language" : null,
+                      "authority" : null,
+                      "confidence" : -1,
+                      "place" : 0
+                    } ]
+                  },
+                  "bundleName" : "LICENSE",
+                  "sizeBytes" : 1717,
+                  "checkSum" : {
+                    "checkSumAlgorithm" : "MD5",
+                    "value" : "86639c37a29c3811b4ed913b37caeb2f"
+                  },
+                  "sequenceId" : 3,
+                  "type" : "bitstream",
+                  "_links" : {
+                    "content" : {
+                      "href" : "https://utoronto.scholaris.ca/server/api/core/bitstreams/42e435bc-fbbd-443e-8160-69c4c244bf6a/content"
+                    },
+                    "bundle" : {
+                      "href" : "https://utoronto.scholaris.ca/server/api/core/bitstreams/42e435bc-fbbd-443e-8160-69c4c244bf6a/bundle"
+                    },
+                    "accessStatus" : {
+                      "href" : "https://utoronto.scholaris.ca/server/api/core/bitstreams/42e435bc-fbbd-443e-8160-69c4c244bf6a/accessStatus"
+                    },
+                    "format" : {
+                      "href" : "https://utoronto.scholaris.ca/server/api/core/bitstreams/42e435bc-fbbd-443e-8160-69c4c244bf6a/format"
+                    },
+                    "thumbnail" : {
+                      "href" : "https://utoronto.scholaris.ca/server/api/core/bitstreams/42e435bc-fbbd-443e-8160-69c4c244bf6a/thumbnail"
+                    },
+                    "self" : {
+                      "href" : "https://utoronto.scholaris.ca/server/api/core/bitstreams/42e435bc-fbbd-443e-8160-69c4c244bf6a"
+                    }
+                  }
+                } ]
+              },
+              "page" : {
+                "number" : 0,
+                "size" : 20,
+                "totalPages" : 1,
+                "totalElements" : 1
+              },
+              "_links" : {
+                "self" : {
+                  "href" : "https://utoronto.scholaris.ca/server/api/core/bundles/20827752-b777-413f-8ca6-cd3df5ae277f/bitstreams"
+                }
+              }
+            }
+          }
+        } ]
+      },
+      "page" : {
+        "number" : 0,
+        "size" : 20,
+        "totalPages" : 1,
+        "totalElements" : 3
+      },
+      "_links" : {
+        "self" : {
+          "href" : "https://utoronto.scholaris.ca/server/api/core/items/df7e4cd6-596e-4fbd-80a7-f792435d4100/bundles"
+        }
+      }
+    }
+  }
+}

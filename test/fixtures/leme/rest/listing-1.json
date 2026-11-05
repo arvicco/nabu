@@ -1,0 +1,914 @@
+{
+ "id": null,
+ "scope": "10df91bc-8c9e-4ce1-b291-f02ad5715538",
+ "query": null,
+ "appliedFilters": null,
+ "sort": {
+  "by": "dc.date.accessioned",
+  "order": "ASC"
+ },
+ "configuration": null,
+ "type": "discover",
+ "_links": {
+  "self": {
+   "href": "https://utoronto.scholaris.ca/server/api/discover/search/objects?dsoType=ITEM&scope=10df91bc-8c9e-4ce1-b291-f02ad5715538"
+  }
+ },
+ "_embedded": {
+  "searchResult": {
+   "_embedded": {
+    "objects": [
+     {
+      "hitHighlights": null,
+      "type": "discover",
+      "_links": {
+       "indexableObject": {
+        "href": "https://utoronto.scholaris.ca/server/api/core/items/a5ab45c3-bfef-405b-9d8e-0d156610ce47"
+       }
+      },
+      "_embedded": {
+       "indexableObject": {
+        "id": "a5ab45c3-bfef-405b-9d8e-0d156610ce47",
+        "uuid": "a5ab45c3-bfef-405b-9d8e-0d156610ce47",
+        "name": "THE CANTICLES or Balades of Solomon, phraselyke declared in Englysh Metres",
+        "handle": "1807/102611",
+        "metadata": {
+         "dc.contributor.author": [
+          {
+           "value": "Baldwin, William",
+           "language": null,
+           "authority": null,
+           "confidence": -1,
+           "place": 0
+          }
+         ],
+         "dc.contributor.editor": [
+          {
+           "value": "Lancashire, Ian",
+           "language": null,
+           "authority": null,
+           "confidence": -1,
+           "place": 0
+          }
+         ],
+         "dc.date.accessioned": [
+          {
+           "value": "2020-11-02T19:24:43Z",
+           "language": null,
+           "authority": null,
+           "confidence": -1,
+           "place": 0
+          }
+         ],
+         "dc.date.available": [
+          {
+           "value": "2020-11-02T19:24:43Z",
+           "language": null,
+           "authority": null,
+           "confidence": -1,
+           "place": 0
+          }
+         ],
+         "dc.date.created": [
+          {
+           "value": "1549",
+           "language": null,
+           "authority": null,
+           "confidence": -1,
+           "place": 0
+          }
+         ],
+         "dc.date.issued": [
+          {
+           "value": "2020",
+           "language": null,
+           "authority": null,
+           "confidence": -1,
+           "place": 0
+          }
+         ],
+         "dc.description": [
+          {
+           "value": "The LEME Corpus Manual has an editorial introduction, indexes of subjects, proper names, and chronology, a primary bibliography of LEME corpus texts, as well as English language texts not included in the Corpus, a description of the XML encoding and of lemmatization and source analysis tools. The appendix includes lists of language abbreviations and of abbreviations for parts of speech.",
+           "language": "en_US",
+           "authority": null,
+           "confidence": -1,
+           "place": 0
+          }
+         ],
+         "dc.description.sponsorship": [
+          {
+           "value": "Social Sciences and Humanities Research Council of Canada",
+           "language": "en_US",
+           "authority": null,
+           "confidence": -1,
+           "place": 0
+          },
+          {
+           "value": "Canada Foundation for Innovation",
+           "language": "en_US",
+           "authority": null,
+           "confidence": -1,
+           "place": 1
+          },
+          {
+           "value": "University of Toronto Libraries",
+           "language": "en_US",
+           "authority": null,
+           "confidence": -1,
+           "place": 2
+          },
+          {
+           "value": "University of Toronto Press",
+           "language": "en_US",
+           "authority": null,
+           "confidence": -1,
+           "place": 3
+          },
+          {
+           "value": "Information & Instructional Technology, Faculty of Arts and Science, University of Toronto",
+           "language": "en_US",
+           "authority": null,
+           "confidence": -1,
+           "place": 4
+          }
+         ],
+         "dc.identifier": [
+          {
+           "value": "STC 2768",
+           "language": "en_US",
+           "authority": null,
+           "confidence": -1,
+           "place": 0
+          }
+         ],
+         "dc.identifier.citation": [
+          {
+           "value": "Baldwin, William. \"The interpretacion of the Hebrue wurdes.\" The Canticles or Balades of Solomon. London: William Baldwin for Edwarde Whitchurche, 1549.",
+           "language": "en_US",
+           "authority": null,
+           "confidence": -1,
+           "place": 0
+          }
+         ],
+         "dc.identifier.uri": [
+          {
+           "value": "http://hdl.handle.net/1807/102611",
+           "language": null,
+           "authority": null,
+           "confidence": -1,
+           "place": 0
+          }
+         ],
+         "dc.language.iso": [
+          {
+           "value": "en",
+           "language": "en_US",
+           "authority": null,
+           "confidence": -1,
+           "place": 0
+          }
+         ],
+         "dc.publisher": [
+          {
+           "value": "Lexicons of Early Modern English (LEME)",
+           "language": "en_US",
+           "authority": null,
+           "confidence": -1,
+           "place": 0
+          }
+         ],
+         "dc.relation.uri": [
+          {
+           "value": "https://leme.utoronto.ca",
+           "language": "en_US",
+           "authority": null,
+           "confidence": -1,
+           "place": 0
+          }
+         ],
+         "dc.rights": [
+          {
+           "value": "Attribution 4.0 International",
+           "language": "*",
+           "authority": null,
+           "confidence": -1,
+           "place": 0
+          }
+         ],
+         "dc.rights.uri": [
+          {
+           "value": "http://creativecommons.org/licenses/by/4.0/",
+           "language": "*",
+           "authority": null,
+           "confidence": -1,
+           "place": 0
+          }
+         ],
+         "dc.subject": [
+          {
+           "value": "English language -- Glossaries, vocabularies, etc. -- Early works to 1800.",
+           "language": "en_US",
+           "authority": null,
+           "confidence": -1,
+           "place": 0
+          }
+         ],
+         "dc.title": [
+          {
+           "value": "THE CANTICLES or Balades of Solomon, phraselyke declared in Englysh Metres",
+           "language": "en_US",
+           "authority": null,
+           "confidence": -1,
+           "place": 0
+          }
+         ],
+         "dc.title.alternative": [
+          {
+           "value": "The Canticles or Balades of Salomon",
+           "language": "en_US",
+           "authority": null,
+           "confidence": -1,
+           "place": 0
+          }
+         ],
+         "dc.type": [
+          {
+           "value": "Book",
+           "language": "en_US",
+           "authority": null,
+           "confidence": -1,
+           "place": 0
+          }
+         ]
+        },
+        "inArchive": true,
+        "discoverable": true,
+        "withdrawn": false,
+        "lastModified": "2023-09-28T02:56:06.998Z",
+        "entityType": null,
+        "type": "item",
+        "_links": {
+         "accessStatus": {
+          "href": "https://utoronto.scholaris.ca/server/api/core/items/a5ab45c3-bfef-405b-9d8e-0d156610ce47/accessStatus"
+         },
+         "bundles": {
+          "href": "https://utoronto.scholaris.ca/server/api/core/items/a5ab45c3-bfef-405b-9d8e-0d156610ce47/bundles"
+         },
+         "identifiers": {
+          "href": "https://utoronto.scholaris.ca/server/api/core/items/a5ab45c3-bfef-405b-9d8e-0d156610ce47/identifiers"
+         },
+         "mappedCollections": {
+          "href": "https://utoronto.scholaris.ca/server/api/core/items/a5ab45c3-bfef-405b-9d8e-0d156610ce47/mappedCollections"
+         },
+         "owningCollection": {
+          "href": "https://utoronto.scholaris.ca/server/api/core/items/a5ab45c3-bfef-405b-9d8e-0d156610ce47/owningCollection"
+         },
+         "relationships": {
+          "href": "https://utoronto.scholaris.ca/server/api/core/items/a5ab45c3-bfef-405b-9d8e-0d156610ce47/relationships"
+         },
+         "version": {
+          "href": "https://utoronto.scholaris.ca/server/api/core/items/a5ab45c3-bfef-405b-9d8e-0d156610ce47/version"
+         },
+         "templateItemOf": {
+          "href": "https://utoronto.scholaris.ca/server/api/core/items/a5ab45c3-bfef-405b-9d8e-0d156610ce47/templateItemOf"
+         },
+         "thumbnail": {
+          "href": "https://utoronto.scholaris.ca/server/api/core/items/a5ab45c3-bfef-405b-9d8e-0d156610ce47/thumbnail"
+         },
+         "submitter": {
+          "href": "https://utoronto.scholaris.ca/server/api/core/items/a5ab45c3-bfef-405b-9d8e-0d156610ce47/submitter"
+         },
+         "self": {
+          "href": "https://utoronto.scholaris.ca/server/api/core/items/a5ab45c3-bfef-405b-9d8e-0d156610ce47"
+         }
+        }
+       }
+      }
+     },
+     {
+      "hitHighlights": null,
+      "type": "discover",
+      "_links": {
+       "indexableObject": {
+        "href": "https://utoronto.scholaris.ca/server/api/core/items/2f54cc56-3faf-4cc9-9492-74de5f38a868"
+       }
+      },
+      "_embedded": {
+       "indexableObject": {
+        "id": "2f54cc56-3faf-4cc9-9492-74de5f38a868",
+        "uuid": "2f54cc56-3faf-4cc9-9492-74de5f38a868",
+        "name": "The natural history and antiquities of the county of Surrey. Begun in the year 1673",
+        "handle": "1807/124555",
+        "metadata": {
+         "dc.contributor.author": [
+          {
+           "value": "Aubrey, John",
+           "language": null,
+           "authority": null,
+           "confidence": -1,
+           "place": 0
+          }
+         ],
+         "dc.contributor.editor": [
+          {
+           "value": "Lancashire, Ian",
+           "language": null,
+           "authority": null,
+           "confidence": -1,
+           "place": 0
+          }
+         ],
+         "dc.date.accessioned": [
+          {
+           "value": "2022-09-30T02:52:32Z",
+           "language": null,
+           "authority": null,
+           "confidence": -1,
+           "place": 0
+          }
+         ],
+         "dc.date.available": [
+          {
+           "value": "2022-09-30T02:52:32Z",
+           "language": null,
+           "authority": null,
+           "confidence": -1,
+           "place": 0
+          }
+         ],
+         "dc.date.created": [
+          {
+           "value": "1719",
+           "language": null,
+           "authority": null,
+           "confidence": -1,
+           "place": 0
+          }
+         ],
+         "dc.date.issued": [
+          {
+           "value": "2022",
+           "language": null,
+           "authority": null,
+           "confidence": -1,
+           "place": 0
+          }
+         ],
+         "dc.description": [
+          {
+           "value": "The LEME Corpus Manual has an editorial introduction, indexes of subjects, proper names, and chronology, a primary bibliography of LEME corpus texts, as well as English language texts not included in the Corpus, a description of the XML encoding and of lemmatization and source analysis tools. The appendix includes lists of language abbreviations and of abbreviations for parts of speech.",
+           "language": "en_US",
+           "authority": null,
+           "confidence": -1,
+           "place": 0
+          }
+         ],
+         "dc.description.sponsorship": [
+          {
+           "value": "Social Sciences and Humanities Research Council of Canada",
+           "language": "en_US",
+           "authority": null,
+           "confidence": -1,
+           "place": 0
+          },
+          {
+           "value": "Canada Foundation for Innovation",
+           "language": "en_US",
+           "authority": null,
+           "confidence": -1,
+           "place": 1
+          },
+          {
+           "value": "University of Toronto Libraries",
+           "language": "en_US",
+           "authority": null,
+           "confidence": -1,
+           "place": 2
+          },
+          {
+           "value": "University of Toronto Press",
+           "language": "en_US",
+           "authority": null,
+           "confidence": -1,
+           "place": 3
+          },
+          {
+           "value": "Information & Instructional Technology, Faculty of Arts and Science, University of Toronto",
+           "language": "en_US",
+           "authority": null,
+           "confidence": -1,
+           "place": 4
+          }
+         ],
+         "dc.identifier": [
+          {
+           "value": "ESTC T89094",
+           "language": "en_US",
+           "authority": null,
+           "confidence": -1,
+           "place": 0
+          }
+         ],
+         "dc.identifier.citation": [
+          {
+           "value": "Aubrey, John. \"Some peculiar Words used by the Vulgar in Surrey.\" The Natural History and Antiquities of the County of Surrey. London: E. Curll. 1719. III (of 5 vols.): 402-03.",
+           "language": "en_US",
+           "authority": null,
+           "confidence": -1,
+           "place": 0
+          }
+         ],
+         "dc.identifier.uri": [
+          {
+           "value": "http://hdl.handle.net/1807/124555",
+           "language": null,
+           "authority": null,
+           "confidence": -1,
+           "place": 0
+          }
+         ],
+         "dc.language.iso": [
+          {
+           "value": "en",
+           "language": "en_US",
+           "authority": null,
+           "confidence": -1,
+           "place": 0
+          }
+         ],
+         "dc.publisher": [
+          {
+           "value": "Lexicons of Early Modern English (LEME)",
+           "language": "en_US",
+           "authority": null,
+           "confidence": -1,
+           "place": 0
+          }
+         ],
+         "dc.relation.uri": [
+          {
+           "value": "https://leme.utoronto.ca/",
+           "language": "en_US",
+           "authority": null,
+           "confidence": -1,
+           "place": 0
+          }
+         ],
+         "dc.rights": [
+          {
+           "value": "Attribution 4.0 International",
+           "language": "*",
+           "authority": null,
+           "confidence": -1,
+           "place": 0
+          }
+         ],
+         "dc.rights.uri": [
+          {
+           "value": "http://creativecommons.org/licenses/by/4.0/",
+           "language": "*",
+           "authority": null,
+           "confidence": -1,
+           "place": 0
+          }
+         ],
+         "dc.subject": [
+          {
+           "value": "English language -- Glossaries, vocabularies, etc. -- Early works to 1800.",
+           "language": "en_US",
+           "authority": null,
+           "confidence": -1,
+           "place": 0
+          }
+         ],
+         "dc.title": [
+          {
+           "value": "The natural history and antiquities of the county of Surrey. Begun in the year 1673",
+           "language": "en_US",
+           "authority": null,
+           "confidence": -1,
+           "place": 0
+          }
+         ],
+         "dc.title.alternative": [
+          {
+           "value": "The Natural History and Antiquities of the County of Surrey",
+           "language": "en_US",
+           "authority": null,
+           "confidence": -1,
+           "place": 0
+          }
+         ],
+         "dc.type": [
+          {
+           "value": "Book",
+           "language": "en_US",
+           "authority": null,
+           "confidence": -1,
+           "place": 0
+          }
+         ]
+        },
+        "inArchive": true,
+        "discoverable": true,
+        "withdrawn": false,
+        "lastModified": "2022-09-30T02:52:32.957Z",
+        "entityType": null,
+        "type": "item",
+        "_links": {
+         "accessStatus": {
+          "href": "https://utoronto.scholaris.ca/server/api/core/items/2f54cc56-3faf-4cc9-9492-74de5f38a868/accessStatus"
+         },
+         "bundles": {
+          "href": "https://utoronto.scholaris.ca/server/api/core/items/2f54cc56-3faf-4cc9-9492-74de5f38a868/bundles"
+         },
+         "identifiers": {
+          "href": "https://utoronto.scholaris.ca/server/api/core/items/2f54cc56-3faf-4cc9-9492-74de5f38a868/identifiers"
+         },
+         "mappedCollections": {
+          "href": "https://utoronto.scholaris.ca/server/api/core/items/2f54cc56-3faf-4cc9-9492-74de5f38a868/mappedCollections"
+         },
+         "owningCollection": {
+          "href": "https://utoronto.scholaris.ca/server/api/core/items/2f54cc56-3faf-4cc9-9492-74de5f38a868/owningCollection"
+         },
+         "relationships": {
+          "href": "https://utoronto.scholaris.ca/server/api/core/items/2f54cc56-3faf-4cc9-9492-74de5f38a868/relationships"
+         },
+         "version": {
+          "href": "https://utoronto.scholaris.ca/server/api/core/items/2f54cc56-3faf-4cc9-9492-74de5f38a868/version"
+         },
+         "templateItemOf": {
+          "href": "https://utoronto.scholaris.ca/server/api/core/items/2f54cc56-3faf-4cc9-9492-74de5f38a868/templateItemOf"
+         },
+         "thumbnail": {
+          "href": "https://utoronto.scholaris.ca/server/api/core/items/2f54cc56-3faf-4cc9-9492-74de5f38a868/thumbnail"
+         },
+         "submitter": {
+          "href": "https://utoronto.scholaris.ca/server/api/core/items/2f54cc56-3faf-4cc9-9492-74de5f38a868/submitter"
+         },
+         "self": {
+          "href": "https://utoronto.scholaris.ca/server/api/core/items/2f54cc56-3faf-4cc9-9492-74de5f38a868"
+         }
+        }
+       }
+      }
+     }
+    ]
+   },
+   "page": {
+    "number": 1,
+    "size": 100,
+    "totalPages": 4,
+    "totalElements": 314
+   },
+   "_links": {
+    "next": {
+     "href": "https://utoronto.scholaris.ca/server/api/discover/search/objects?dsoType=ITEM&scope=10df91bc-8c9e-4ce1-b291-f02ad5715538&sort=dc.date.accessioned,ASC&page=2&size=100"
+    },
+    "last": {
+     "href": "https://utoronto.scholaris.ca/server/api/discover/search/objects?dsoType=ITEM&scope=10df91bc-8c9e-4ce1-b291-f02ad5715538&sort=dc.date.accessioned,ASC&page=3&size=100"
+    },
+    "prev": {
+     "href": "https://utoronto.scholaris.ca/server/api/discover/search/objects?dsoType=ITEM&scope=10df91bc-8c9e-4ce1-b291-f02ad5715538&sort=dc.date.accessioned,ASC&page=0&size=100"
+    },
+    "self": {
+     "href": "https://utoronto.scholaris.ca/server/api/discover/search/objects?dsoType=ITEM&scope=10df91bc-8c9e-4ce1-b291-f02ad5715538&sort=dc.date.accessioned,ASC&page=1&size=100"
+    },
+    "first": {
+     "href": "https://utoronto.scholaris.ca/server/api/discover/search/objects?dsoType=ITEM&scope=10df91bc-8c9e-4ce1-b291-f02ad5715538&sort=dc.date.accessioned,ASC&page=0&size=100"
+    }
+   }
+  },
+  "facets": [
+   {
+    "name": "author",
+    "facetType": "text",
+    "facetLimit": 5,
+    "minValue": "'Souza, T.D.",
+    "maxValue": "马, 陈静",
+    "openByDefault": true,
+    "page": {
+     "number": 0,
+     "size": 5
+    },
+    "_links": {
+     "next": {
+      "href": "https://utoronto.scholaris.ca/server/api/discover/facets/author?dsoType=ITEM&scope=10df91bc-8c9e-4ce1-b291-f02ad5715538&page=1&size=5"
+     },
+     "self": {
+      "href": "https://utoronto.scholaris.ca/server/api/discover/facets/author?dsoType=ITEM&scope=10df91bc-8c9e-4ce1-b291-f02ad5715538&size=5"
+     }
+    },
+    "_embedded": {
+     "values": [
+      {
+       "label": "Anonymous",
+       "count": 22,
+       "authorityKey": null,
+       "type": "discover",
+       "_links": {
+        "search": {
+         "href": "https://utoronto.scholaris.ca/server/api/discover/search/objects?dsoType=ITEM&scope=10df91bc-8c9e-4ce1-b291-f02ad5715538&f.author=Anonymous,equals"
+        }
+       }
+      },
+      {
+       "label": "Florio, John",
+       "count": 5,
+       "authorityKey": null,
+       "type": "discover",
+       "_links": {
+        "search": {
+         "href": "https://utoronto.scholaris.ca/server/api/discover/search/objects?dsoType=ITEM&scope=10df91bc-8c9e-4ce1-b291-f02ad5715538&f.author=Florio,%20John,equals"
+        }
+       }
+      },
+      {
+       "label": "Camden, William",
+       "count": 4,
+       "authorityKey": null,
+       "type": "discover",
+       "_links": {
+        "search": {
+         "href": "https://utoronto.scholaris.ca/server/api/discover/search/objects?dsoType=ITEM&scope=10df91bc-8c9e-4ce1-b291-f02ad5715538&f.author=Camden,%20William,equals"
+        }
+       }
+      },
+      {
+       "label": "Cawdrey, Robert",
+       "count": 4,
+       "authorityKey": null,
+       "type": "discover",
+       "_links": {
+        "search": {
+         "href": "https://utoronto.scholaris.ca/server/api/discover/search/objects?dsoType=ITEM&scope=10df91bc-8c9e-4ce1-b291-f02ad5715538&f.author=Cawdrey,%20Robert,equals"
+        }
+       }
+      },
+      {
+       "label": "Cotton, Robert",
+       "count": 4,
+       "authorityKey": null,
+       "type": "discover",
+       "_links": {
+        "search": {
+         "href": "https://utoronto.scholaris.ca/server/api/discover/search/objects?dsoType=ITEM&scope=10df91bc-8c9e-4ce1-b291-f02ad5715538&f.author=Cotton,%20Robert,equals"
+        }
+       }
+      }
+     ]
+    }
+   },
+   {
+    "name": "subject",
+    "facetType": "hierarchical",
+    "facetLimit": 5,
+    "openByDefault": false,
+    "page": {
+     "number": 0,
+     "size": 5
+    },
+    "_links": {
+     "next": {
+      "href": "https://utoronto.scholaris.ca/server/api/discover/facets/subject?dsoType=ITEM&scope=10df91bc-8c9e-4ce1-b291-f02ad5715538&page=1&size=5"
+     },
+     "self": {
+      "href": "https://utoronto.scholaris.ca/server/api/discover/facets/subject?dsoType=ITEM&scope=10df91bc-8c9e-4ce1-b291-f02ad5715538&size=5"
+     }
+    },
+    "_embedded": {
+     "values": [
+      {
+       "label": "English language -- Glossaries, vocabularies, etc. -- Early works to 1800.",
+       "count": 87,
+       "authorityKey": null,
+       "type": "discover",
+       "_links": {
+        "search": {
+         "href": "https://utoronto.scholaris.ca/server/api/discover/search/objects?dsoType=ITEM&scope=10df91bc-8c9e-4ce1-b291-f02ad5715538&f.subject=English%20language%20--%20Glossaries,%20vocabularies,%20etc.%20--%20Early%20works%20to%201800.,equals"
+        }
+       }
+      },
+      {
+       "label": "Dictionaries, English -- Early works to 1800.",
+       "count": 82,
+       "authorityKey": null,
+       "type": "discover",
+       "_links": {
+        "search": {
+         "href": "https://utoronto.scholaris.ca/server/api/discover/search/objects?dsoType=ITEM&scope=10df91bc-8c9e-4ce1-b291-f02ad5715538&f.subject=Dictionaries,%20English%20--%20Early%20works%20to%201800.,equals"
+        }
+       }
+      },
+      {
+       "label": "English language -- Early works to 1800.",
+       "count": 23,
+       "authorityKey": null,
+       "type": "discover",
+       "_links": {
+        "search": {
+         "href": "https://utoronto.scholaris.ca/server/api/discover/search/objects?dsoType=ITEM&scope=10df91bc-8c9e-4ce1-b291-f02ad5715538&f.subject=English%20language%20--%20Early%20works%20to%201800.,equals"
+        }
+       }
+      },
+      {
+       "label": "English language -- Glossaries, vocabularies, etc. -- Early works to 1800. -- Polyglot",
+       "count": 15,
+       "authorityKey": null,
+       "type": "discover",
+       "_links": {
+        "search": {
+         "href": "https://utoronto.scholaris.ca/server/api/discover/search/objects?dsoType=ITEM&scope=10df91bc-8c9e-4ce1-b291-f02ad5715538&f.subject=English%20language%20--%20Glossaries,%20vocabularies,%20etc.%20--%20Early%20works%20to%201800.%20--%20Polyglot,equals"
+        }
+       }
+      },
+      {
+       "label": "English language -- Vocabulary, early works to 1800.",
+       "count": 8,
+       "authorityKey": null,
+       "type": "discover",
+       "_links": {
+        "search": {
+         "href": "https://utoronto.scholaris.ca/server/api/discover/search/objects?dsoType=ITEM&scope=10df91bc-8c9e-4ce1-b291-f02ad5715538&f.subject=English%20language%20--%20Vocabulary,%20early%20works%20to%201800.,equals"
+        }
+       }
+      }
+     ]
+    }
+   },
+   {
+    "name": "dateIssued",
+    "facetType": "date",
+    "facetLimit": 5,
+    "minValue": "0019-05-19",
+    "maxValue": "Oct-94",
+    "openByDefault": false,
+    "page": {
+     "number": 0,
+     "size": 5
+    },
+    "_links": {
+     "self": {
+      "href": "https://utoronto.scholaris.ca/server/api/discover/facets/dateIssued?dsoType=ITEM&scope=10df91bc-8c9e-4ce1-b291-f02ad5715538&size=5"
+     }
+    },
+    "_embedded": {
+     "values": [
+      {
+       "label": "2020 - 2024",
+       "count": 314,
+       "authorityKey": null,
+       "type": "discover",
+       "_links": {
+        "search": {
+         "href": "https://utoronto.scholaris.ca/server/api/discover/search/objects?dsoType=ITEM&scope=10df91bc-8c9e-4ce1-b291-f02ad5715538&f.dateIssued=%5B2020%20TO%202024%5D,equals"
+        }
+       }
+      }
+     ]
+    }
+   },
+   {
+    "name": "has_content_in_original_bundle",
+    "facetType": "standard",
+    "facetLimit": 2,
+    "openByDefault": false,
+    "page": {
+     "number": 0,
+     "size": 2
+    },
+    "_links": {
+     "self": {
+      "href": "https://utoronto.scholaris.ca/server/api/discover/facets/has_content_in_original_bundle?dsoType=ITEM&scope=10df91bc-8c9e-4ce1-b291-f02ad5715538&size=2"
+     }
+    },
+    "_embedded": {
+     "values": [
+      {
+       "label": "true",
+       "count": 314,
+       "authorityKey": null,
+       "type": "discover",
+       "_links": {
+        "search": {
+         "href": "https://utoronto.scholaris.ca/server/api/discover/search/objects?dsoType=ITEM&scope=10df91bc-8c9e-4ce1-b291-f02ad5715538&f.has_content_in_original_bundle=true,equals"
+        }
+       }
+      }
+     ]
+    }
+   },
+   {
+    "name": "itemtype",
+    "facetType": "text",
+    "facetLimit": 10,
+    "openByDefault": false,
+    "page": {
+     "number": 0,
+     "size": 10
+    },
+    "_links": {
+     "self": {
+      "href": "https://utoronto.scholaris.ca/server/api/discover/facets/itemtype?dsoType=ITEM&scope=10df91bc-8c9e-4ce1-b291-f02ad5715538&size=10"
+     }
+    },
+    "_embedded": {
+     "values": [
+      {
+       "label": "Book",
+       "count": 288,
+       "authorityKey": null,
+       "type": "discover",
+       "_links": {
+        "search": {
+         "href": "https://utoronto.scholaris.ca/server/api/discover/search/objects?dsoType=ITEM&scope=10df91bc-8c9e-4ce1-b291-f02ad5715538&f.itemtype=Book,equals"
+        }
+       }
+      },
+      {
+       "label": "Other",
+       "count": 16,
+       "authorityKey": null,
+       "type": "discover",
+       "_links": {
+        "search": {
+         "href": "https://utoronto.scholaris.ca/server/api/discover/search/objects?dsoType=ITEM&scope=10df91bc-8c9e-4ce1-b291-f02ad5715538&f.itemtype=Other,equals"
+        }
+       }
+      },
+      {
+       "label": "Article",
+       "count": 10,
+       "authorityKey": null,
+       "type": "discover",
+       "_links": {
+        "search": {
+         "href": "https://utoronto.scholaris.ca/server/api/discover/search/objects?dsoType=ITEM&scope=10df91bc-8c9e-4ce1-b291-f02ad5715538&f.itemtype=Article,equals"
+        }
+       }
+      }
+     ]
+    }
+   },
+   {
+    "name": "department",
+    "facetType": "text",
+    "facetLimit": 10,
+    "openByDefault": false,
+    "_links": {
+     "self": {
+      "href": "https://utoronto.scholaris.ca/server/api/discover/facets/department?dsoType=ITEM&scope=10df91bc-8c9e-4ce1-b291-f02ad5715538"
+     }
+    },
+    "_embedded": {
+     "values": []
+    }
+   },
+   {
+    "name": "entityType",
+    "facetType": "text",
+    "facetLimit": 5,
+    "openByDefault": false,
+    "_links": {
+     "self": {
+      "href": "https://utoronto.scholaris.ca/server/api/discover/facets/entityType?dsoType=ITEM&scope=10df91bc-8c9e-4ce1-b291-f02ad5715538"
+     }
+    },
+    "_embedded": {
+     "values": []
+    }
+   },
+   {
+    "name": "access_status",
+    "facetType": "text",
+    "facetLimit": 10,
+    "openByDefault": false,
+    "page": {
+     "number": 0,
+     "size": 10
+    },
+    "_links": {
+     "self": {
+      "href": "https://utoronto.scholaris.ca/server/api/discover/facets/access_status?dsoType=ITEM&scope=10df91bc-8c9e-4ce1-b291-f02ad5715538&size=10"
+     }
+    },
+    "_embedded": {
+     "values": [
+      {
+       "label": "open.access",
+       "count": 314,
+       "authorityKey": null,
+       "type": "discover",
+       "_links": {
+        "search": {
+         "href": "https://utoronto.scholaris.ca/server/api/discover/search/objects?dsoType=ITEM&scope=10df91bc-8c9e-4ce1-b291-f02ad5715538&f.access_status=open.access,equals"
+        }
+       }
+      }
+     ]
+    }
+   }
+  ]
+ }
+}

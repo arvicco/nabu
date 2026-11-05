@@ -2124,3 +2124,19 @@ liturgics suite stores them — the fixed prayers and responses, the
 Creed, the prayers of St Basil and St Ephrem, and the troparia and
 kontakia of the Octoechos week and of Lent, each with its tone, in
 full Church Cyrillic orthography with titla and accents (GPL-3.0).
+
+## 8bg. The P160 arrivals — Lexicons of Early Modern English
+
+**`leme`** — LEME, *Lexicons of Early Modern English* (ed. Ian
+Lancashire, University of Toronto): the word-books of English from
+Caxton's day to Johnson's — over three hundred dictionaries,
+hard-word glossaries, spelling lists, herbals, glossed texts and
+antiquarian treatises printed or written c. 1475–1755, from Elyot's
+Latin dictionary, Palsgrave's French grammar and Florio's Italian
+*Worlde of Wordes* to Cawdrey's *Table Alphabeticall*, Cotgrave,
+Minsheu, Blount, Bailey and Johnson's *Dictionary*, with Old English,
+Welsh, Hebrew, dialect and thieves'-cant glossaries among them. Each
+work is its own shelf, every word-entry kept in the print's spelling
+with its explanation, its sub-entries, the language LEME tagged it
+with, the modern OED headwords LEME mapped it to, and the editors'
+notes on OED antedatings (CC BY 4.0).
