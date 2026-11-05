@@ -236,6 +236,9 @@ module Nabu
           #                                 (941, 953, ca. 1042), composition class
           "kdsp" => :structured,
           "korba" => :structured,
+          "korpus16" => :structured, # P160-6: the book header's print year (+ a siglum's
+          #                            "1581-82" span), class edition; place = the imprint
+          #                            place as the portal names it (Tübingen, Ljubljana …)
           "litopys" => :era_band_key,
           "local-library" => :year_key,
           "mdz-protestant" => :structured,

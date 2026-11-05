@@ -2978,6 +2978,18 @@ sources:
         Witenberga, Lublani, Tubingae) — printer and brackets stripped"}
     script: {posture: implied, note: "Latin type, MDZ's uncorrected OCR layer (text_nature
         machine-ocr); the Urach Glagolitic/Cyrillic prints are OUT (OCR noise), declared"}
+  korpus16:   # P160-6, 02-sources row 386
+    # kind machine-postured — the korpus16 fold in kind_map.yml over the siglum
+    # (catechisms/confessions/the church order declared deliberate there).
+    # lect machine-postured — the korpus16 sl → sl:emod override in
+    # lect_overrides.yml (the 1550 band-edge books included).
+    dating: {posture: dated, note: "every book: the page header's print year (\"Tübingen,
+        1555\"; TT 1581-82's siglum widens to 1581–1582), class edition on the :structured lane"}
+    places: {posture: named, note: "the header's imprint place as the portal names it (modern
+        forms: Tübingen, Schwäbisch Hall, Regensburg, Ljubljana, Wittenberg); no gazetteer link"}
+    script: {posture: implied, note: "Latin type as double-keyed (ſ, ß, the m/n tilde kept,
+        most ligatures resolved; # marks illegible spots) — Trubar's spelling and the 1580s
+        bohoričica alike, no per-book orthography claim"}
   ganjoor:   # P153
     # kind machine-postured — the ganjoor fold in kind_map.yml over the poem's own
     # section label (the divan's form sections; work/chapter titles uncovered, open).
