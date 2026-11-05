@@ -231,6 +231,32 @@ class WilkensOuiAdapterTest < Minitest::Test
     assert_match(%r{labels left unmapped \(grammar/name labels, no facet\): \d+ across \d+ kinds}, notes)
   end
 
+  # The etymology chain rides its own annotation; the German half and the
+  # gloss lose it, the printed record (body) keeps it.
+  def test_the_etymology_chain_is_its_own_field
+    abasvar = entry("abasvar")
+    assert_equal "< TochA ābhāswar < Skt. ābhāsvara", abasvar.annotations["etymology"]
+    assert_equal "ein Himmel und eine Götterklasse (in der buddh. Kosmologie)", abasvar.gloss
+    assert abasvar.annotations["german"].start_with?("ein Himmel")
+    assert abasvar.body.start_with?("abasvar < TochA ābhāswar < Skt. ābhāsvara ein Himmel")
+    refute entry("^1a").annotations.key?("etymology"), "no chain, no key"
+    refute entry("Biži").annotations.key?("etymology"), "no italic etymon, no split"
+  end
+
+  # Sogdian transliterations are set in roman: such a link joins the chain
+  # only when the next "<" follows it, so the chain still ends on italic
+  # (folio 169, whose Hebrew etymon wrapped into the skipped record).
+  def test_a_roman_link_rides_the_chain_up_to_the_next_link
+    assert_equal "< Sogd. byθlḫm < Syr. bēṯ lḥem", entry("bidilhim").annotations["etymology"]
+  end
+
+  def test_the_census_counts_chain_heads_left_whole
+    subject = adapter
+    parsed(subject)
+    assert_match(/1 record\(s\) open with an etymology link but no italic etymon/,
+                 subject.discovery_skips("unused").notes.join("\n"))
+  end
+
   def test_variants_fold_on_their_first_form
     assert_equal "amranmaklıg", entry("amranmaklıg ~ amranmak(lıg)").headword_folded
   end
