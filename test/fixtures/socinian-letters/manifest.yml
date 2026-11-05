@@ -1,0 +1,44 @@
+# Nabu fixture manifest (P5-4 "fixture sentinel"). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# The letter files are whole raw GETs from the GitLab project's raw endpoint
+# (byte-identical to the folder-zip members); indices.csv is a documented trim,
+# so adapter_test stays null (a count-based re-run against the full register
+# would not false-fail, but the dir mixes whole and trimmed entries).
+source: socinian-letters
+adapter_test: null
+retrieved: '2026-11-05'
+files:
+- path: data/xml/letters/LETTER_MAIN_ckw_qlm_zdb.xml
+  url: https://gitlab.rlp.net/adwmainz/digicademy/sbw/csv-data-dump/-/raw/main/data/xml/letters/LETTER_MAIN_ckw_qlm_zdb.xml
+  whole: true
+  trim: none
+- path: data/xml/letters/LETTER_MAIN_lfw_qlm_zdb.xml
+  url: https://gitlab.rlp.net/adwmainz/digicademy/sbw/csv-data-dump/-/raw/main/data/xml/letters/LETTER_MAIN_lfw_qlm_zdb.xml
+  whole: true
+  trim: none
+- path: data/xml/letters/LETTER_MAIN_anw_qlm_zdb.xml
+  url: https://gitlab.rlp.net/adwmainz/digicademy/sbw/csv-data-dump/-/raw/main/data/xml/letters/LETTER_MAIN_anw_qlm_zdb.xml
+  whole: true
+  trim: none
+- path: data/xml/letters/LETTER_MAIN_u3w_qlm_zdb.xml
+  url: https://gitlab.rlp.net/adwmainz/digicademy/sbw/csv-data-dump/-/raw/main/data/xml/letters/LETTER_MAIN_u3w_qlm_zdb.xml
+  whole: true
+  trim: none
+- path: data/xml/letters/LETTER_MAIN_ydw_qlm_zdb.xml
+  url: https://gitlab.rlp.net/adwmainz/digicademy/sbw/csv-data-dump/-/raw/main/data/xml/letters/LETTER_MAIN_ydw_qlm_zdb.xml
+  whole: true
+  trim: none
+- path: data/xml/letters/LETTER_MAIN_dq3_2dc_b2b.xml
+  url: https://gitlab.rlp.net/adwmainz/digicademy/sbw/csv-data-dump/-/raw/main/data/xml/letters/LETTER_MAIN_dq3_2dc_b2b.xml
+  whole: true
+  trim: none
+- path: data/xml/letters/LETTER_MAIN_ed_nnl_xb5_r5b.xml
+  url: https://gitlab.rlp.net/adwmainz/digicademy/sbw/csv-data-dump/-/raw/main/data/xml/letters/LETTER_MAIN_ed_nnl_xb5_r5b.xml
+  whole: true
+  trim: none (the rejected metadata-only grain's specimen)
+- path: data/csv/indices.csv
+  url: https://gitlab.rlp.net/adwmainz/digicademy/sbw/csv-data-dump/-/raw/main/data/csv/indices.csv
+  whole: false
+  trim: the header + every row whose sbw_id is a correspDesc persName/placeName key of the fixture
+    letters (56 of 12,029 rows), verbatim, upstream order

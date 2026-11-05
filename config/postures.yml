@@ -3296,3 +3296,29 @@ sources:
     script: {posture: implied, note: "Latin type of the 1640s–50s as Kraken read it (long s,
         u/v and i/j as printed, ligatures, misreadings — text_nature machine-ocr, the first
         page hand-corrected); the hand transcriptions carry no OCR label"}
+  socinian-letters:   # P160
+    # kind machine-postured — kind_map.yml metadata document_type (the #sbw classCode).
+    lect:
+      posture: dates
+      note: "per document the chosen witness's langUsage ident, upstream's own codes (lat
+        1,561 · fra 207 · deu 77 · pol 13 · nld 6 · ita 5 documents; the one German name
+        'Niederländisch' transcribed to nld at parse time); fra/deu/pol/nld/ita reach their
+        anchors through the codemap alias suite. Every letter is dated (1545–1744), so the
+        stage rides date-band inference: lat → lat:new (from 1550) / lat:ren (the 1540s), deu →
+        de:early / de:new, pol → pl:mid, fra → fr:cls from 1600 (pre-1600 French stays bare
+        fr — frm is a different anchor, never inferred across); nl and it carry no stage
+        for the period and stay bare. A block wholly inside one foreign xml:lang span takes
+        that language at passage grain (the Latin versions inside French letters)"
+    dating: {posture: dated, note: "the cover letter's correspAction[sent]/date (@when; @from/@to;
+        @notBefore/@notAfter) → the year envelope, class composition — 1,850 of 1,869 (the 19
+        others state no date); a sent-dateless letter falls back to its received date as a
+        terminus ante quem (not_after only, raw 'received …' — none of today's accepted
+        letters needs it); month/day and the editors' @cert ride raw/cert, never a sub-year
+        bound"}
+    places: {posture: linked, note: "the sending placeName (1,761 of 1,869) joined by its key
+        through upstream's own data/csv/indices.csv register → the register label + its
+        GeoNames URL (1,685 linked; geonames: ref); the receiving place rides
+        place_received(_ref), metadata only. In-text rs type=place mentions ride the
+        passages as places"}
+    script: {posture: implied, note: "Latin script throughout; the Greek (266 foreign grc spans)
+        and Hebrew (9) quotations inside Latin letters ride verbatim in their own scripts"}

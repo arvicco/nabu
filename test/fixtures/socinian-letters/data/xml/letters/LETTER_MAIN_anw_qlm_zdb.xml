@@ -1,0 +1,224 @@
+<teiCorpus xmlns="http://www.tei-c.org/ns/1.0">
+    <teiHeader>
+        <fileDesc>
+            <titleStmt>
+                <title type="main">Stanisław Lubieniecki (Hamburg) an Christiaan Huygens, 16. Februar
+          1667</title>
+                <title type="sub"/>
+                <principal ref="http://d-nb.info/gnd/135995728">Kęstutis Daugirdas</principal>
+                <principal ref="https://orcid.org/0000-0003-1020-507X">Andreas Kuczera</principal>
+                <funder>Deutsche Forschungsgemeinschaft</funder>
+            </titleStmt>
+            <extent>
+                <measure unit="texts" quantity="1"/>
+            </extent>
+            <publicationStmt>
+                <publisher>
+                    <orgName ref="https://www.jalb.de/">Johannes a Lasco Bibliothek</orgName>
+                    <settlement ref="https://sws.geonames.org/2930596">Emden</settlement>
+                </publisher>
+                <publisher>
+                    <orgName ref="https://www.adwmainz.de/">Akademie der Wissenschaften und der Literatur</orgName>
+                    <settlement ref="http://sws.geonames.org/2874225">Mainz</settlement>
+                </publisher>
+                <pubPlace ref="http://sws.geonames.org/2874225">Mainz</pubPlace>
+                <date from="2020">2020–2024</date>
+                <availability>
+                    <licence target="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International (CC-BY 4.0)</licence>
+                </availability>
+            </publicationStmt>
+            <seriesStmt>
+                <title type="main">Die sozinianischen Briefwechsel</title>
+                <title type="sub">Zwischen Theologie, frühmoderner Naturwissenschaft und politischer Korrespondenz</title>
+                <editor ref="http://d-nb.info/gnd/135995728">Kęstutis Daugirdas</editor>
+                <editor ref="https://orcid.org/0000-0003-1020-507X">Andreas Kuczera</editor>
+                <idno>https://gepris.dfg.de/gepris/projekt/324518514</idno>
+                <idno>https://registry.text-plus.org/entity/e4dde8f1-2335-4bc6-aeab-c64c4c163ef4/</idno>
+            </seriesStmt>
+            <notesStmt>
+                <note/>
+            </notesStmt>
+            <sourceDesc>
+                <bibl>„Stanisław Lubieniecki (Hamburg) an Christiaan Huygens, 16. Februar 1667“, in: Zwischen Theologie, frühmoderner Naturwissenschaft und politischer Korrespondenz: Die sozinianischen Briefwechsel, hg. von Kęstutis Daugirdas und Andreas Kuczera unter DH-Mitarbeit von Julian Jarosch, Sebastian Enns und Patrick Toschka. Link zur aktuellen Version dieses Briefes: https://sozinianer.de/id/MAIN_anw_qlm_zdb</bibl>
+            </sourceDesc>
+        </fileDesc>
+        <encodingDesc>
+            <p/>
+        </encodingDesc>
+    </teiHeader>
+    <TEI xml:id="MAIN_anw_qlm_zdb" type="letter" n="cover_letter">
+    <teiHeader>
+        <fileDesc>
+            <titleStmt>
+                <title type="main">Stanisław Lubieniecki (Hamburg) an Christiaan Huygens, 16. Februar
+          1667</title>
+                <principal ref="http://d-nb.info/gnd/135995728">Kęstutis Daugirdas</principal>
+                <principal ref="https://orcid.org/0000-0003-1020-507X">Andreas Kuczera</principal>
+                <funder>Deutsche Forschungsgemeinschaft</funder>
+            </titleStmt>
+            <extent>
+                <measure unit="witnesses" quantity="2"/>
+            </extent>
+            <publicationStmt>
+                <publisher>
+                    <orgName ref="https://www.jalb.de/">Johannes a Lasco Bibliothek</orgName>
+                    <settlement ref="https://sws.geonames.org/2930596">Emden</settlement>
+                </publisher>
+                <publisher>
+                    <orgName ref="https://www.adwmainz.de/">Akademie der Wissenschaften und der Literatur</orgName>
+                    <settlement ref="http://sws.geonames.org/2874225">Mainz</settlement>
+                </publisher>
+                <pubPlace ref="http://sws.geonames.org/2874225">Mainz</pubPlace>
+                <date from="2020">2020–2024</date>
+                <availability>
+                    <licence target="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International (CC-BY 4.0)</licence>
+                </availability>
+                <idno type="uri">https://sozinianer.de/id/MAIN_anw_qlm_zdb</idno>
+            </publicationStmt>
+            <seriesStmt>
+                <title type="main">Die sozinianischen Briefwechsel</title>
+                <title type="sub">Zwischen Theologie, frühmoderner Naturwissenschaft und politischer Korrespondenz</title>
+                <editor ref="http://d-nb.info/gnd/135995728">Kęstutis Daugirdas</editor>
+                <editor ref="https://orcid.org/0000-0003-1020-507X">Andreas Kuczera</editor>
+                <idno>https://gepris.dfg.de/gepris/projekt/324518514</idno>
+                <idno>https://registry.text-plus.org/entity/e4dde8f1-2335-4bc6-aeab-c64c4c163ef4/</idno>
+            </seriesStmt>
+            <sourceDesc>
+                <listWit>
+                    <witness corresp="#anw_qlm_zdb"/>
+                    <witness corresp="#ed_stc_1nf_jzb"/>
+                </listWit>
+            </sourceDesc>
+        </fileDesc>
+        <profileDesc>
+            <correspDesc>
+                <correspAction type="sent">
+                    <persName key="Lubieniecki_Stanislaw">Lubieniecki, Stanisław</persName>
+                    <placeName key="Hamburg">Hamburg</placeName>
+                    <date when="1667-02-16"/>
+                </correspAction>
+                <correspAction type="received">
+                    <persName key="Huygens">Huygens, Christiaan</persName>
+                </correspAction>
+            </correspDesc>
+        </profileDesc>
+    </teiHeader>
+    <TEI xmlns:ns="http://www.telota.de" xmlns:da="http://www.digitale-akademie.de" xml:id="anw_qlm_zdb" n="reference_witness" type="letter">
+  <teiHeader>
+        <fileDesc>
+            <titleStmt>
+                
+                <title type="sub">Manuskript</title>
+            </titleStmt>
+            <publicationStmt>
+                <publisher>
+                    <orgName ref="https://www.jalb.de/">Johannes a Lasco Bibliothek</orgName>
+                    <settlement ref="https://sws.geonames.org/2930596">Emden</settlement>
+                </publisher>
+                <publisher>
+                    <orgName ref="https://www.adwmainz.de/">Akademie der Wissenschaften und der Literatur</orgName>
+                    <settlement ref="http://sws.geonames.org/2874225">Mainz</settlement>
+                </publisher>
+                <pubPlace ref="http://sws.geonames.org/2874225">Mainz</pubPlace>
+                <date from="2020">2020–2024</date>
+                <availability>
+                    <licence target="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International (CC-BY 4.0)</licence>
+                </availability>
+                <idno type="file">Lubieniecki_Stanislaw/Lubieniecki_Verschiedene/keine_Transkription/1667-02-16_Lubieniecki_Huygens_MS.xml</idno>
+            </publicationStmt>
+            <seriesStmt>
+                <title type="main">Die sozinianischen Briefwechsel</title>
+                <title type="sub">Zwischen Theologie, frühmoderner Naturwissenschaft und politischer Korrespondenz</title>
+                <editor ref="http://d-nb.info/gnd/135995728">Kęstutis Daugirdas</editor>
+                <editor ref="https://orcid.org/0000-0003-1020-507X">Andreas Kuczera</editor>
+                <idno>https://gepris.dfg.de/gepris/projekt/324518514</idno>
+                <idno>https://registry.text-plus.org/entity/e4dde8f1-2335-4bc6-aeab-c64c4c163ef4/</idno>
+            </seriesStmt>
+            <sourceDesc>
+                <msDesc rend="manuscript">
+                    <msIdentifier>
+                        <repository>Universiteitsbibliotheek Leiden</repository>
+                        <idno>
+                            <idno type="shelfmark">HUG 45, 2</idno>
+                            <idno type="URLCatalogue"/>
+                            <idno type="URLImages"/>
+                            <idno type="URN"/>
+                        </idno>
+                    </msIdentifier>
+                    
+                </msDesc>
+            </sourceDesc>
+        </fileDesc>
+        <profileDesc>
+            <langUsage>
+                <language ident="lat"/>
+            </langUsage>
+            <textClass>
+                <classCode scheme="http://www.deutschestextarchiv.de/doku/klassifikation#dwds1main">Gebrauchsliteratur</classCode>
+                <classCode scheme="#sbw">Brief</classCode>
+            </textClass>
+            
+        </profileDesc>
+        <revisionDesc>
+            <change when="2018-11-09">Transkription publikationsbereit</change>
+            <change when="2018-06-22">Metadaten publikationsbereit</change>
+            <change when="2022-09-16">Metadaten publikationsbereit</change>
+        </revisionDesc>
+    </teiHeader>
+  <text><body><p/></body></text>
+</TEI>
+    <TEI xml:id="ed_stc_1nf_jzb" corresp="anw_qlm_zdb" type="letter">
+    <teiHeader>
+        <fileDesc>
+            <titleStmt>
+                <title type="sub">Druck</title>
+            </titleStmt>
+            <publicationStmt>
+                <publisher>
+                    <orgName ref="https://www.jalb.de/">Johannes a Lasco Bibliothek</orgName>
+                    <settlement ref="https://sws.geonames.org/2930596">Emden</settlement>
+                </publisher>
+                <publisher>
+                    <orgName ref="https://www.adwmainz.de/">Akademie der Wissenschaften und der Literatur</orgName>
+                    <settlement ref="http://sws.geonames.org/2874225">Mainz</settlement>
+                </publisher>
+                <pubPlace ref="http://sws.geonames.org/2874225">Mainz</pubPlace>
+                <date from="2020">2020–2024</date>
+                <availability>
+                    <licence target="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International (CC-BY 4.0)</licence>
+                </availability>
+                <idno type="file">Lubieniecki_Stanislaw/Lubieniecki_Verschiedene/Publikationsbereite_Transkription/1667-02-16_Lubieniecki_Huygens_TC.xml</idno>
+            </publicationStmt>
+            <seriesStmt>
+                <title type="main">Die sozinianischen Briefwechsel</title>
+                <title type="sub">Zwischen Theologie, frühmoderner Naturwissenschaft und politischer Korrespondenz</title>
+                <editor ref="http://d-nb.info/gnd/135995728">Kęstutis Daugirdas</editor>
+                <editor ref="https://orcid.org/0000-0003-1020-507X">Andreas Kuczera</editor>
+                <idno>https://gepris.dfg.de/gepris/projekt/324518514</idno>
+                <idno>https://registry.text-plus.org/entity/e4dde8f1-2335-4bc6-aeab-c64c4c163ef4/</idno>
+            </seriesStmt>
+            <sourceDesc>
+                <bibl sameAs="zotero-2065617-5UI8LMLI">Theatrum cometicum I<biblScope unit="pages">933.</biblScope>
+                </bibl>
+                <msDesc rend="print">
+                    <msIdentifier/>
+                </msDesc>
+            </sourceDesc>
+        </fileDesc>
+        <profileDesc>
+            <langUsage>
+                <language ident="lat"/>
+            </langUsage>
+            <textClass>
+                <classCode scheme="#sbw">Brief/Briefexzerpt</classCode>
+            </textClass>
+        </profileDesc>
+        <revisionDesc>
+            <change when="2023-11-07">Metadaten publikationsbereit</change>
+            <change when="2024-07-22">Transkription publikationsbereit</change>
+        </revisionDesc>
+    </teiHeader>
+    <text><body><div type="letter"><pb facs="https://archive.org/details/ned-kbn-all-00001420-001/page/n1135/mode/1up" n="933"/> <opener><dateline>Hamburgo Lutetiam Parisiorum die 16. <choice><abbr>Febr.</abbr> <expan>Februarii</expan></choice> 1667.</dateline> <salute/></opener> <p>Cum adhuc in patria ageres, compellaram te literis die 30. <choice><abbr>Octob.</abbr> <expan>Octobris</expan></choice> anno 1665. datis, me, ut id facerem, auctoritate clarissimi Heinsii communis amici studioque boni publici et tua humanitate eximia permovente. Illas literas in tuas manus non pervenisse, quam diuturnum silentium tuum movet suspicionem. Ideo exemplum earum nunc ad te mitto: ad quas responsum, quae tua est humanitas, mihi tandem ad finem vasti operis properanti, dabis. Id nunc tanto magis desidero, quanto plura de praeclaris tuis meritis et studiis cognovi. Atque haec etiam Regem Christianissimum pro ea, qua princeps ille magnanimus viros literatos complectitur et fovet gratia, ut te e patria vocatum liberaliter habeat, permovisse, merito tibi et egregio publico, de quo tam egregie mereris, gratulor, cunctaque feliciter ut tibi cedant, ex animo precor.</p> <p>Id officii, quod tibi nunc praesto, quod a scripta illa epistola huc usque non fecerim, mei assidui, nec leves profecto, labores fecerunt. In colligendis enim nuperorum cometarum observationibus, quas nobis permultas praeclarorum virorum industria, maximo, si unquam ab omni memoria, studio hoc argumentum pertractans, dedit, tum texenda omnium cometarum historia, universalis historiae compendium quoddam datura et comparandis tot auctorum differentibus rationibus, valde fui occupatus. Intervenere et alia negotia, quae mihi continuo vitae tuendae causa expedienda sunt. Habui sane in votis anno proxime decurso opus meum absolvere. Sed ejus moles in duas divisa partes (quarum prior observationes nuperorum cometarum, posterior historiam omnium a diluvio visorum complectitur<hi rendition="#i">:</hi> nisi quod huic additus sit Theatri cometici exitus, sive de significatione eorum) et figurarum aenearum copia, praestare id nondum permisit. Nam et nuper admodum amicorum, qui in me cuncta possunt, precibus tantum dedi, ut omnium cometarum, quorum quidem motus et vel situs historia habetur, figuras historiae eorundem inserere promiserim. Quae res, praesertim cum diurna lux pingendis a mathematico, quem domi meae habeo, figuris impendenda adhuc sit brevior, aliquot mensium moram requirit. Sed spero me brevi juvante Deo has moras et difficultates evasurum huncque laborem meum bono publico, cui profecto eum meque ipsum consecravi, cessurum.</p> <p>Amplissimus et clarissimus Hevelius nondum etiam cometographiam suam nobis dedit, licet in eam toto pectore, qua vir ille incomparabili est solertia incubuerit. Quo in statu controversia quam ei clarissimus Auzutius, quem per te quoque salutatum cupio, versetur, ex te merito cognoscere cupio. Finio epistolam, quam paulo ante conscriptam clarissimo Heinsio, cujus praesentia suavissima intra aliquot dies satiari non possumus, commendo, te vero diu et feliciter valere jubeo.</p></div></body></text>
+</TEI>
+</TEI>
+</teiCorpus>

@@ -408,7 +408,8 @@ class PosturesTest < Minitest::Test
                  "ganjoor RETIRES — the ganjoor-poet facet rule completes the fa:early/fa:cls " \
                  "staging the date band began (the shadowing rule): 182→181; " \
                  "statutes-realm ADDED P160-7 — dates (en stages to en:early / en:late by the " \
-                 "acts' session envelopes): 181→182"
+                 "acts' session envelopes): 181→182; socinian-letters ADDED P160 — dates (the " \
+                 "six letter languages staged by the sent-date band): 182→183"
     # The epigraphic-belt registry package (merged + canonical-synced
     # 2026-10-18, the add-then-retire shape within one phase) retires both
     # P130 pendings, and the ociana-script rule + the ig-cyprus override
@@ -478,6 +479,8 @@ class PosturesTest < Minitest::Test
     # ganjoor retires identity — the ganjoor-poet facet rule machine-postures it
     # (the shadowing rule): 136→135.
     # statutes-realm joins dates (the acts' session envelopes → en:early/en:late): 25→26.
+    # socinian-letters joins dates (per-document lat/fra/deu/pol/nld/ita staged by
+    # the sent-date band — lat:new, de:early/new, pl:mid, fr:cls from 1600): 26→27.
     assert_equal({ "dates" => 26, "codemap" => 21, "identity" => 135 }, by_posture)
   end
 end

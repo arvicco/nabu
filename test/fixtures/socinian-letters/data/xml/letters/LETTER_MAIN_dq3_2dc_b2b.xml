@@ -1,0 +1,484 @@
+<teiCorpus xmlns="http://www.tei-c.org/ns/1.0">
+    <teiHeader>
+        <fileDesc>
+            <titleStmt>
+                <title type="main">Ismaël Boulliau (Paris) an Stanisław Lubieniecki (Hamburg), 30.
+                    März 1663</title>
+                <title type="sub"/>
+                <principal ref="http://d-nb.info/gnd/135995728">Kęstutis Daugirdas</principal>
+                <principal ref="https://orcid.org/0000-0003-1020-507X">Andreas Kuczera</principal>
+                <funder>Deutsche Forschungsgemeinschaft</funder>
+            </titleStmt>
+            <extent>
+                <measure unit="texts" quantity="1"/>
+            </extent>
+            <publicationStmt>
+                <publisher>
+                    <orgName ref="https://www.jalb.de/">Johannes a Lasco Bibliothek</orgName>
+                    <settlement ref="https://sws.geonames.org/2930596">Emden</settlement>
+                </publisher>
+                <publisher>
+                    <orgName ref="https://www.adwmainz.de/">Akademie der Wissenschaften und der Literatur</orgName>
+                    <settlement ref="http://sws.geonames.org/2874225">Mainz</settlement>
+                </publisher>
+                <pubPlace ref="http://sws.geonames.org/2874225">Mainz</pubPlace>
+                <date from="2020">2020–2024</date>
+                <availability>
+                    <licence target="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International (CC-BY 4.0)</licence>
+                </availability>
+            </publicationStmt>
+            <seriesStmt>
+                <title type="main">Die sozinianischen Briefwechsel</title>
+                <title type="sub">Zwischen Theologie, frühmoderner Naturwissenschaft und politischer Korrespondenz</title>
+                <editor ref="http://d-nb.info/gnd/135995728">Kęstutis Daugirdas</editor>
+                <editor ref="https://orcid.org/0000-0003-1020-507X">Andreas Kuczera</editor>
+                <idno>https://gepris.dfg.de/gepris/projekt/324518514</idno>
+                <idno>https://registry.text-plus.org/entity/e4dde8f1-2335-4bc6-aeab-c64c4c163ef4/</idno>
+            </seriesStmt>
+            <notesStmt>
+                <note/>
+            </notesStmt>
+            <sourceDesc>
+                <bibl>„Ismaël Boulliau (Paris) an Stanisław Lubieniecki (Hamburg), 30. März 1663“, in: Zwischen Theologie, frühmoderner Naturwissenschaft und politischer Korrespondenz: Die sozinianischen Briefwechsel, hg. von Kęstutis Daugirdas und Andreas Kuczera unter DH-Mitarbeit von Julian Jarosch, Sebastian Enns und Patrick Toschka. Link zur aktuellen Version dieses Briefes: https://sozinianer.de/id/MAIN_dq3_2dc_b2b</bibl>
+            </sourceDesc>
+        </fileDesc>
+        <encodingDesc>
+            <p/>
+        </encodingDesc>
+    </teiHeader>
+    <standOff>
+        <listPerson>
+            <head>Personen</head>
+            <desc>alle in den hier gesammelten Texten vorkommenden Personen (historische und antike Personen, biblische und mythologische Figuren)</desc>
+            <person xml:id="ed_kpk_yrb_kfb">
+                    
+                    
+                    <persName type="reg">
+                        <name>Alexander VII., Papst</name>
+                    </persName>
+                    <persName type="alt">
+                        <name>Fabio Chigi</name>
+                    </persName>
+                    <birth>1599</birth>
+                    <death>1667</death>
+                    <note>Papst von 1655-1667</note>
+                <idno type="uri">https://www.deutsche-biographie.de/pnd118647989.html</idno>
+                <idno type="uri">https://d-nb.info/gnd/118647989</idno>
+            </person>
+            <person xml:id="ed_h1c_jhj_4kb">
+                    
+                    
+                    <persName type="reg">
+                        <name>Anne-Marie-Louise von Orléans, Hzgn. von Montpensier</name>
+                    </persName>
+                    <persName type="alt">
+                        <name>Anne-Marie-Louise d’Orléans de Montpensier</name>
+                    </persName>
+                    <persName type="alt">
+                        <name>La Grande Mademoiselle</name>
+                    </persName>
+                    <birth>1627</birth>
+                    <death>1693</death>
+                <idno type="uri">https://www.wikidata.org/wiki/Q231832</idno>
+                <idno type="uri">https://d-nb.info/gnd/118835440</idno>
+            </person>
+            <person xml:id="Bidallius">
+                    <persName type="reg">
+                        <name>Bidallius</name>
+                    </persName>
+                    <note>unklar, um wen es sich handelt.</note>
+                </person>
+            <person xml:id="Boulliau">
+                    
+                    
+                    <persName type="reg">
+                        <surname>Boulliau</surname>
+                        <forename>Ismaël</forename>
+                    </persName>
+                    <persName type="alt">
+                        <name>Boullialdus, Ismael</name>
+                    </persName>
+                    <birth>1605</birth>
+                    <death>1694</death>
+                <idno type="uri">https://www.deutsche-biographie.de/pnd119277379.html</idno>
+                <idno type="uri">https://d-nb.info/gnd/119277379</idno>
+            </person>
+            <person xml:id="ed_qdx_lbz_1lb">
+                    
+                    <persName type="reg">
+                        <name>Charles de Blanchefort, Hzg. von Créquy</name>
+                    </persName>
+                    <birth>1624</birth>
+                    <death>1687</death>
+                <idno type="uri">https://d-nb.info/gnd/1014413192</idno>
+            </person>
+            <person xml:id="ed_bcv_ntx_tkb">
+                    
+                    
+                    <persName type="reg">
+                        <name>Christian Ludwig I., Hzg. von Mecklenburg-Schwerin</name>
+                    </persName>
+                    <birth>1623</birth>
+                    <death>1692</death>
+                <idno type="uri">https://www.wikidata.org/wiki/Q473885</idno>
+                <idno type="uri">https://d-nb.info/gnd/101053037</idno>
+            </person>
+            <person xml:id="ed_egg_cvq_tgb">
+                    
+                    <persName type="reg">
+                        <name>Christian V., Kg. von Dänemark und Norwegen</name>
+                    </persName>
+                    <birth>1646</birth>
+                    <death>1699</death>
+                <idno type="uri">https://d-nb.info/gnd/119175800</idno>
+            </person>
+            <person xml:id="ed_vkh_b5x_tkb">
+                    
+                    
+                    <persName type="reg">
+                        <name>Christine Margarethe zu Mecklenburg-Güstrow, Hzgn. zu
+                            Mecklenburg-Schwerin</name>
+                    </persName>
+                    <birth>1615</birth>
+                    <death>1666</death>
+                    <note>Gemahlin von <persName key="ed_odp_hdd_fmb">Herzog Franz Albrecht von
+                            Sachsen-Lauenburg</persName> (1598-1642), dann von <persName key="ed_bcv_ntx_tkb">Herzog Christian Ludwig I. von Mecklenburg
+                            Schwerin</persName> (1650, Scheidung 1653)</note>
+                <idno type="uri">https://www.wikidata.org/wiki/Q18684029</idno>
+                <idno type="uri">https://d-nb.info/gnd/122811429</idno>
+            </person>
+            <person xml:id="Falquet">
+                    <persName type="reg">
+                        <name>Falquet</name>
+                    </persName>
+                </person>
+            <person xml:id="ed_nks_13j_4kb">
+                    
+                    <persName type="reg">
+                        <name>Gaston Jean-Baptiste, Hzg. von Orléans</name>
+                    </persName>
+                    <persName type="alt">
+                        <name>Gaston Jean-Baptiste d’Orléans</name>
+                    </persName>
+                    <birth>1608</birth>
+                    <death>1660</death>
+                <idno type="uri">https://d-nb.info/gnd/119021048</idno>
+            </person>
+            <person xml:id="Beaugency">
+                    <persName type="reg">
+                        <surname>Jardée</surname>
+                        <forename>Anne Marie</forename>
+                    </persName>
+                    <note>unklar, um wen es sich handelt.</note>
+                    
+                </person>
+            <person xml:id="ed_axl_wk5_xdb">
+                    <persName type="reg">
+                        <surname>La Rivière Granier</surname>
+                        <forename>Jacques de</forename>
+                    </persName>
+                    <birth>1587</birth>
+                    <death>1663</death>
+                </person>
+            <person xml:id="Lubieniecki_Stanislaw">
+                    
+                    
+                    <persName type="reg">
+                        <surname>Lubieniecki</surname>
+                        <forename>Stanisław</forename>
+                    </persName>
+                    <birth>1623</birth>
+                    <death>1675</death>
+                <idno type="uri">https://www.deutsche-biographie.de/pnd119357100.html</idno>
+                <idno type="uri">https://d-nb.info/gnd/119357100</idno>
+            </person>
+            <person xml:id="ed_q5k_vhs_52b">
+                    
+                    
+                    <persName type="reg">
+                        <name>Ludwig XIV., Kg. von Frankreich</name>
+                    </persName>
+                    <persName type="alt">
+                        <name>Louis XIV</name>
+                    </persName>
+                    <birth>1638</birth>
+                    <death>1715</death>
+                <idno type="uri">https://www.deutsche-biographie.de/pnd118816829.html</idno>
+                <idno type="uri">https://d-nb.info/gnd/118816829</idno>
+            </person>
+            <person xml:id="Mazarin">
+                    
+                    <persName type="reg">
+                        <surname>Mazarin</surname>
+                        <forename>Jules</forename>
+                    </persName>
+                    <persName type="alt">
+                        <name>Kardinal Mazarin</name>
+                    </persName>
+                    <persName type="alt">
+                        <name>Giulio Mazarini</name>
+                    </persName>
+                    <birth>1602</birth>
+                    <death>1661</death>
+                <idno type="uri">https://d-nb.info/gnd/118579703</idno>
+            </person>
+            <person xml:id="Rasponi">
+                    
+                    <persName type="reg">
+                        <surname>Rasponi</surname>
+                        <forename>Cesare</forename>
+                    </persName>
+                    <persName type="alt">
+                        <name>Rasponius</name>
+                    </persName>
+                    <birth>1615</birth>
+                    <death>1675</death>
+                    <note>Kardinal und päpstlicher Diplomat</note>
+                <idno type="uri">https://d-nb.info/gnd/104113057</idno>
+            </person>
+            <person xml:id="Rautenstein">
+                    
+                    
+                    <persName type="reg">
+                        <surname>Rautenstein</surname>
+                        <forename>Johann Ernst von</forename>
+                    </persName>
+                    <persName subtype="pseudonym" type="alt">
+                        <name>„Grand-ami“ (Korrespondenz mit Schletzer)</name>
+                    </persName>
+                    <persName subtype="pseudonym" type="alt">
+                        <name>„Regensburger Freund“ (Korrespondenz mit den Gerickes)</name>
+                    </persName>
+                    <persName subtype="pseudonym" type="alt">
+                        <name>„communis amicus Ratisbonensis“ (Korrespondez mit Boulliau)</name>
+                    </persName>
+                    <birth>1623</birth>
+                    <death>1666</death>
+                <idno type="uri">https://www.deutsche-biographie.de/pnd124058698.html</idno>
+                <idno type="uri">https://d-nb.info/gnd/124058698</idno>
+            </person>
+        </listPerson>
+        <listPlace>
+            <head>Orte</head>
+            <desc>alle in den hier gesammelten Texten vorkommenden Geografika (Städte, Regionen etc.)</desc>
+            <place xml:id="Casale">
+                    
+                    <placeName type="reg">Casale Monferrato</placeName>
+                    <placeName type="alt">Casalium</placeName>
+                    <placeName type="alt">Monferratus</placeName>
+                <idno type="uri">https://www.geonames.org/3180208</idno>
+            </place>
+            <place xml:id="Italien">
+                    
+                    
+                    <placeName type="reg">Italien</placeName>
+                <idno type="uri">https://d-nb.info/gnd/4027833-5</idno>
+                <idno type="uri">https://www.geonames.org/3175395</idno>
+            </place>
+            <place xml:id="ncx_lgx_12b">
+                    
+                    
+                    <placeName type="reg">Lyon</placeName>
+                    <placeName type="alt">Lugudunum</placeName>
+                <idno type="uri">https://d-nb.info/gnd/4036770-8</idno>
+                <idno type="uri">https://www.geonames.org/2996944</idno>
+            </place>
+            <place xml:id="ed_pfc_31d_kfb">
+                    
+                    <placeName type="reg">Osmanisches Reich</placeName>
+                <idno type="uri">https://d-nb.info/gnd/4075720-1</idno>
+            </place>
+            <place xml:id="Paris">
+                    
+                    
+                    <placeName type="reg">Paris</placeName>
+                <idno type="uri">https://d-nb.info/gnd/4044660-8</idno>
+                <idno type="uri">https://www.geonames.org/2988507</idno>
+            </place>
+            <place xml:id="Polen">
+                    
+                    
+                    <placeName type="reg">Polen</placeName>
+                <idno type="uri">https://d-nb.info/gnd/4046496-9</idno>
+                <idno type="uri">https://www.geonames.org/798544</idno>
+            </place>
+            <place xml:id="ed_unv_py2_dlb">
+                    
+                    <placeName type="reg">Preußen</placeName>
+                    <placeName type="alt">Prussia</placeName>
+                <idno type="uri">https://d-nb.info/gnd/4047194-9</idno>
+            </place>
+            <place xml:id="SaintFargeau">
+                    
+                    <placeName type="reg">Saint Fargeau</placeName>
+                    <placeName type="alt">Sanctus Ferrealis</placeName>
+                <idno type="uri">https://www.geonames.org/2980170</idno>
+            </place>
+            <place xml:id="ed_nqr_bgk_kfb">
+                    <placeName type="reg">Spanien</placeName>
+                </place>
+            <place xml:id="zdx_lgx_12b">
+                    
+                    
+                    <placeName type="reg">Venedig</placeName>
+                <idno type="uri">https://www.geonames.org/3164603</idno>
+                <idno type="uri">https://d-nb.info/gnd/4062501-1</idno>
+            </place>
+        </listPlace>
+        <list n="terms">
+            <head>Sachbegriffe</head>
+            <desc>alle in den hier gesammelten Texten vorkommenden Sachbegriffe (allgemeine Sachbegriffe, Astronomie, Himmelskörper etc.)</desc>
+            <item xml:id="ed_ytl_jnm_k4b">
+                    <label type="reg">Briefwechsel</label>
+                </item>
+            <item xml:id="ed_a3h_hzy_3fb">
+                    <label type="reg">Freundschaft, Freund</label>
+                </item>
+        </list>
+    </standOff>
+    <TEI xml:id="MAIN_dq3_2dc_b2b" type="letter" n="cover_letter">
+    <teiHeader>
+        <fileDesc>
+            <titleStmt>
+                <title type="main">Ismaël Boulliau (Paris) an Stanisław Lubieniecki (Hamburg), 30.
+                    März 1663</title>
+                <principal ref="http://d-nb.info/gnd/135995728">Kęstutis Daugirdas</principal>
+                <principal ref="https://orcid.org/0000-0003-1020-507X">Andreas Kuczera</principal>
+                <funder>Deutsche Forschungsgemeinschaft</funder>
+                <editor>
+                    <persName>Pablo Toribio</persName>
+                </editor>
+            </titleStmt>
+            <extent>
+                <measure unit="witnesses" quantity="1"/>
+            </extent>
+            <publicationStmt>
+                <publisher>
+                    <orgName ref="https://www.jalb.de/">Johannes a Lasco Bibliothek</orgName>
+                    <settlement ref="https://sws.geonames.org/2930596">Emden</settlement>
+                </publisher>
+                <publisher>
+                    <orgName ref="https://www.adwmainz.de/">Akademie der Wissenschaften und der Literatur</orgName>
+                    <settlement ref="http://sws.geonames.org/2874225">Mainz</settlement>
+                </publisher>
+                <pubPlace ref="http://sws.geonames.org/2874225">Mainz</pubPlace>
+                <date from="2020">2020–2024</date>
+                <availability>
+                    <licence target="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International (CC-BY 4.0)</licence>
+                </availability>
+                <idno type="uri">https://sozinianer.de/id/MAIN_dq3_2dc_b2b</idno>
+            </publicationStmt>
+            <seriesStmt>
+                <title type="main">Die sozinianischen Briefwechsel</title>
+                <title type="sub">Zwischen Theologie, frühmoderner Naturwissenschaft und politischer Korrespondenz</title>
+                <editor ref="http://d-nb.info/gnd/135995728">Kęstutis Daugirdas</editor>
+                <editor ref="https://orcid.org/0000-0003-1020-507X">Andreas Kuczera</editor>
+                <idno>https://gepris.dfg.de/gepris/projekt/324518514</idno>
+                <idno>https://registry.text-plus.org/entity/e4dde8f1-2335-4bc6-aeab-c64c4c163ef4/</idno>
+            </seriesStmt>
+            <sourceDesc>
+                <listWit>
+                    <witness corresp="#dq3_2dc_b2b"/>
+                </listWit>
+            </sourceDesc>
+        </fileDesc>
+        <profileDesc>
+            <correspDesc>
+                <correspAction type="sent">
+                    <persName key="Boulliau">Boulliau, Ismaël</persName>
+                    <placeName key="Paris">Paris</placeName>
+                    <date when="1663-03-30"/>
+                </correspAction>
+                <correspAction type="received">
+                    <persName key="Lubieniecki_Stanislaw">Lubieniecki, Stanisław </persName>
+                    <placeName key="Hamburg">Hamburg</placeName>
+                    <date when="1663-04-19"/>
+                </correspAction>
+                <correspContext>
+                    <ref type="prev" target="kcx_qlm_zdb"/>
+                    <ref type="next" target="j2z_qpd_phb"/>
+                </correspContext>
+            </correspDesc>
+            <abstract><p>Boulliau erinnert sich an Lubieniecki und möchte ebenfalls gern in einen Briefwechsel mit ihm eintreten, allerdings nur unter der Bedingung, nicht sofort antworten zu müssen. Darüber hinaus möchte er in einer solchen Korrespondenz politisch-militärische Ereignisse in Europa nur berichtend behandeln ("historice tractanda"). Boulliau dankt Lubieniecki für seine Informationen über <rs type="place" corresp="Polen">Polen</rs> und beklagt die Lage, die von Zwist und Uneinigkeit geprägt sei. Im Gegenzug bietet er einige Informationen über diplomatische Entwicklungen am französischen Hof in Bezug auf <rs corresp="zdx_lgx_12b" type="place">Venedig</rs>, <rs corresp="ed_nqr_bgk_kfb" type="place">Spanien</rs> und die <rs corresp="ed_hc4_byh_tgb" type="subjectIndexTerm">Römische Kurie</rs>. Ferner berichtet er über einige französische Adlige und Heerführer. So erwähnt er u. a. das Werben <rs corresp="ed_egg_cvq_tgb" type="person">des dänischen Kronprinz</rs>en um eine Prinzessin von Orléans. In diesem Zusammenhang stellt Boulliau fest, dass er keine Geheimnisse übermittle, sondern nur aus der Sphäre der Hoföffentlichkeit berichten wolle. Über die erwähnte <rs corresp="Beaugency" type="person">Anne Marie de Beaugency</rs> weiß er nichts mitzuteilen, auch nicht in einem Postskriptum, welches er seinem Brief nach einigen erfolglosen Recherchen hinzugefügt hat; er bittet Lubieniecki um weitere Angaben zu ihrer Person.</p></abstract>
+        </profileDesc>
+    </teiHeader>
+    <TEI xmlns:ns="http://www.telota.de" xmlns:da="http://www.digitale-akademie.de" xml:id="dq3_2dc_b2b" n="reference_witness" type="letter">
+    <teiHeader>
+        <fileDesc>
+            <titleStmt>
+                
+                <title type="sub">Manuskript</title>
+                <editor>
+                    <persName>Pablo Toribio</persName>
+                </editor>
+                <respStmt>
+                    <persName>Maike Sach</persName>
+                    <resp>
+                        <note type="remarkResponsibility">redaktionelle Mitarbeit</note>
+                    </resp>
+                </respStmt>
+            </titleStmt>
+            <publicationStmt>
+                <publisher>
+                    <orgName ref="https://www.jalb.de/">Johannes a Lasco Bibliothek</orgName>
+                    <settlement ref="https://sws.geonames.org/2930596">Emden</settlement>
+                </publisher>
+                <publisher>
+                    <orgName ref="https://www.adwmainz.de/">Akademie der Wissenschaften und der Literatur</orgName>
+                    <settlement ref="http://sws.geonames.org/2874225">Mainz</settlement>
+                </publisher>
+                <pubPlace ref="http://sws.geonames.org/2874225">Mainz</pubPlace>
+                <date from="2020">2020–2024</date>
+                <availability>
+                    <licence target="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International (CC-BY 4.0)</licence>
+                </availability>
+                <idno type="file">Lubieniecki_Stanislaw/Boulliau/Publikationsbereit/1663-03-30_Boulliau_Lubieniecki_Entwurf.xml</idno>
+            </publicationStmt>
+            <seriesStmt>
+                <title type="main">Die sozinianischen Briefwechsel</title>
+                <title type="sub">Zwischen Theologie, frühmoderner Naturwissenschaft und politischer Korrespondenz</title>
+                <editor ref="http://d-nb.info/gnd/135995728">Kęstutis Daugirdas</editor>
+                <editor ref="https://orcid.org/0000-0003-1020-507X">Andreas Kuczera</editor>
+                <idno>https://gepris.dfg.de/gepris/projekt/324518514</idno>
+                <idno>https://registry.text-plus.org/entity/e4dde8f1-2335-4bc6-aeab-c64c4c163ef4/</idno>
+            </seriesStmt>
+            <notesStmt>
+                <note>Der Text ist in zwei Phasen verfasst worden, wie das Postskriptum zeigt.</note>
+            </notesStmt>
+            <sourceDesc>
+                <msDesc rend="concept">
+                    <msIdentifier>
+                        <repository>Bibliothèque nationale de France</repository>
+                        <idno>
+                            <idno type="shelfmark">FR. 13026, f. 254r–255r.</idno>
+                            <idno type="URLCatalogue">https://archivesetmanuscrits.bnf.fr/ark:/12148/cc439488/ca19858553</idno>
+                            <idno type="URLImages">https://gallica.bnf.fr/ark:/12148/btv1b90612192</idno>
+                            <idno type="URN">254r: https://gallica.bnf.fr/ark:/12148/btv1b90612192/f527</idno>
+                            <idno type="URN">254v: https://gallica.bnf.fr/ark:/12148/btv1b90612192/f528</idno>
+                            <idno type="URN">255r: https://gallica.bnf.fr/ark:/12148/btv1b90612192/f529</idno>
+                        </idno>
+                    </msIdentifier>
+                    
+                </msDesc>
+            </sourceDesc>
+        </fileDesc>
+        <profileDesc>
+            <langUsage>
+                <language ident="lat"/>
+            </langUsage>
+            
+            
+        </profileDesc>
+        <revisionDesc>
+            <change when="2023-03-22">Transkription publikationsbereit</change>
+            <change when="2022-10-29">Metadaten publikationsbereit</change>
+            <change when="2022-10-29">Metadaten publikationsbereit</change>
+            <change when="2020-10-22">Tiefenerschließung publikationsbereit</change>
+            <change when="2023-05-23">Tiefenerschließung publikationsbereit</change>
+        </revisionDesc>
+    </teiHeader>
+    
+    <text><body><div type="letter"><opener><salute>Nobilissimo viro <rs corresp="Lubieniecki_Stanislaw" type="person">Stanislao Lubienietzki</rs> de Lubi <del rendition="#s"><gap quantity="3" unit="chars"/></del> <add place="superlinear">enietze</add> <lb/> <rs corresp="Boulliau" type="person">Ismaël Bullialdus</rs> <choice><abbr>S. P. D.</abbr> <expan>salutem plurimam dicit</expan></choice></salute></opener> <p><pb facs="https://gallica.bnf.fr/ark:/12148/btv1b90612192/f527" n="254r"/>Quamvis tot circumstantiis accurate notatis in scripta ad me epistola <del rendition="#s">m</del> ad revocandam <add place="superlinear">in mentem meam</add> tui memoriam, loca et tempora, <del rendition="#s">quibus</del> <add place="superlinear">cum vicissim</add> nobis uterque primum innotuimus, non designasses ac significasses, solum nomen tuum ad id efficiendum sufficiebat. Mihi quippe illud non excidit; <del rendition="#s">illud</del> quod aliquoties in <rs corresp="Polen" type="place">Polonia</rs> et <rs corresp="ed_unv_py2_dlb" type="place">Prussia</rs> praedicatum audivi; et de te etiam illis in locis <del rendition="#ow">sermo <add place="superlinear">3</add> aliquando<add place="superlinear">4</add> inter<add place="superlinear">1</add> confabulandum<add place="superlinear">2</add> incidit<add place="superlinear">5</add></del> <add place="intralinear">inter confabulandum sermo aliquando incidit</add>, <del rendition="#s">et</del> de rerum tuarum ac valetudinis statu <del rendition="#s"><gap quantity="1" unit="chars"/></del> cum se occasio obtulit, curiosius <del rendition="#ow">percunctatus sum</del> <add place="intralinear">sum percunctatus.</add> Neque porro excusationes <del rendition="#s">opu</del> aliquas mihi <del rendition="#s">cui nihil debes</del> cui<del rendition="#s">que</del> nullo nomine es obnoxius, aferre debes: Quod vero ad me scripseris tuae humanitatis ac comitatis erga me testimonium accipio, certumque signum mihi datum existimo. <rs type="term" corresp="ed_ytl_jnm_k4b">Commercium litterarum tecum exercere</rs> valde cuperem; sed saepissime mihi accidit, ut <del rendition="#s"><gap quantity="1" unit="words"/></del> nullius etiam momenti negotia et a studiis, et <add place="superlinear">a</add> literis ad amicos scribendis me avocent. Hac propterea conditione illud inter nos <del rendition="#s">hac conditione</del> institui vellem, ut rescribendi statim nulla necessitas utrique imponeretur, possetque uterque in horas commediores responsa sua <add place="superlinear">uterque</add> differre; Quod sine <choice><abbr>ambor.</abbr> <expan>amborum</expan></choice> detrimento pacisci possumus, cum de pecuniis collybi schedulis a trapezistis reperendis non agatur; neque etiam negotia publica a nobis sint <del rendition="#s"><gap quantity="1" unit="words"/></del> nisi historice tractanda.</p> <p>Gratias tibi maximas habeo de communicatis mecum <del rendition="#s"><gap quantity="2" unit="chars"/></del> <rs corresp="Polen" type="place">Polonici regni</rs> tot gravissimi momenti rebus. Turbatas tam <add place="superlinear">diu</add> videre <add place="superlinear">eas</add> mihi molestissimum est; nec quid boni sperandum sit satis pervidere possum. Tot enim suspicionibus aemulationibusque mutuis animos procerumque omniumque nobilium jactatos agitatosque scio, ut illos sedari placidosque brevi reddi posse vix sit sperandum. Omnium vero pessimum maximeque exitiosum est, quod dissidiis ac discordia laboranti ac tantum non scisso regno <rs corresp="ed_pfc_31d_kfb" type="place">Turcae</rs> aliique hostes ingruant, praedamque sibi paratam jam jam fore barbari illi credant, et ad rapiendam illam se se apparent devorandumque. Discordiam illam <pb facs="https://gallica.bnf.fr/ark:/12148/btv1b90612192/f528" n="254v"/>vicinorum quidam fovent, falsisque rumoribus sparsis animos percellunt, ac seducunt. Cum tibi opportunum <del rendition="#s"><gap quantity="2" unit="chars"/></del> <add place="superlinear">erit ac</add> per otium licebit, nuntiorum qui tibi afferentur participem si feceris <del rendition="#s">obnoxium</del> <add place="superlinear">valde devinctum tibi me</add> quoque <del rendition="#s">valde</del> habebis.</p> <p>Pauca apud nos, qui profunda quiete, firmaque pace fruimus, quibusque sub <rs corresp="ed_q5k_vhs_52b" type="person">rege felicissimo ac potentissimo</rs> prospere ac secundo cursu omnia fluunt, <del rendition="#s">nunc</del> palam nunc geruntur; <add place="superlinear">de</add> arcanis enim et principis secretis consiliis privati non inquirimus. Cursor huc pridie Paschatis rediit, qui ad <rs corresp="ed_kpk_yrb_kfb" type="person">summum <choice><abbr>pontif.</abbr> <expan>pontificem</expan></choice></rs> <del rendition="#s">spon</del> legati <rs corresp="zdx_lgx_12b" type="place">Veneti</rs>, legationisque <rs corresp="ed_nqr_bgk_kfb" type="place">Hispanicae</rs> secretarii sponsionem scripto contentam, qua <rs corresp="ed_q5k_vhs_52b" type="person">Regi <choice><abbr>christianiss.</abbr> <expan>christianissimo</expan></choice></rs> cave<del rendition="#s"><gap quantity="3" unit="chars"/></del> <add place="superlinear">runt</add> <del rendition="#s"><unclear cert="high" reason="covered"/>sanctum</del> illum <del rendition="#s"><gap quantity="2" unit="words"/></del> <add place="superlinear">ipsi</add> satisfacturum, <del rendition="#s"><gap quantity="1" unit="chars"/></del>pertulerat; quod factum, ut <del rendition="#s"><gap quantity="2" unit="chars"/></del> ad componendam controversiam colloquium denuo institueretur. Attulit nuncios cursor, <choice><abbr>summ. pontif.</abbr> <expan><rs corresp="ed_kpk_yrb_kfb" type="person">summum pontificem</rs></expan></choice> praelatum Romanum quendam <rs corresp="Rasponi" type="person">Rasponem</rs> appellatum <del rendition="#s"><unclear cert="high" reason="covered">Lugdunum</unclear></del> cum <del rendition="#s"><unclear cert="high" reason="covered">pac</unclear></del> facultate pacificandae rixae plenaria absque mora <rs corresp="ncx_lgx_12b" type="place">Lugdunum</rs> missurum. Illuc quoque dominus dux <rs corresp="ed_qdx_lbz_1lb" type="person">Crequius</rs>, <del rendition="#s">ceter</del> ut <del rendition="#s">advenientem praelatum</del> temporis compendium faciat, eodem tempore adventurus est. <del rendition="#s">Ill</del> Colloqui ergo illius expectandus erit exitus. Interim vero <rs corresp="ed_q5k_vhs_52b" type="person">rex</rs> aut de successu nondum certus, aut aliud animo consilium volvens, quendam rei militaris peritissimum ad explorandas vias, ac loca <choice><abbr>castror.</abbr> <expan>castrorum</expan></choice> locationis <add place="superlinear">metationi,</add> proxime <rs corresp="Casale" type="place">Casalium</rs> <add place="superlinear">etiam</add> opportuna in <rs corresp="Italien" type="place">Italiam</rs> dimisit. Daniae <del rendition="#s">principem</del> <rs corresp="ed_egg_cvq_tgb" type="person">princeps</rs> <rs corresp="ed_h1c_jhj_4kb" type="person">domicellam Aurelianensem virginem illam principem</rs>, demortui <rs corresp="ed_nks_13j_4kb" type="person">ducis <choice><abbr>Aurelian.</abbr> <expan>Aurelianensis</expan></choice></rs>natu maximam filiarum, ad <choice><abbr>Sti</abbr> <expan>Sancti</expan></choice> Ferreali fanum <rs corresp="SaintFargeau" type="place">(St Fargeau)</rs> ubi illa nunc degit, permittente rege invisit. Plebs illico <rs corresp="Paris" type="place">Parisiensis</rs> connubium inter eos contrahendum esse rumoribus distulit. De <rs corresp="Falquet" type="person">Falqueti</rs> causa brevi agendum a commisariis <del rendition="#s">vulgo fertur</del> <add place="superlinear">et de illius <unclear reason="illegible"><gap quantity="1" unit="words"/></unclear> inquiretur. Cito</add> tamen tantum negotium, valde implicitum <unclear cert="low" reason="illegible">tricis</unclear>, formulisque observandis involutum, expediri nequit.</p> <p>Quod <add place="superlinear">cum</add> domino <choice><sic><rs type="person" corresp="Rautenstein">Rautenstenstenio</rs></sic> <reg><rs corresp="Rautenstein" type="person">Rautenstenio</rs></reg></choice> <rs type="term" corresp="ed_a3h_hzy_3fb">amicitia</rs> tibi intercedat valde laetor. Is enim vir optimus, doctissimus, multarumque rerum peritissimus est. <del rendition="#s"><gap quantity="2" unit="chars"/></del> Primis literis quod de illa <rs corresp="Beaugency" type="person">Anna Maria de Beaugenci</rs>, mihi <choice><abbr>oio</abbr> <expan>omnino</expan></choice> <add place="intralinear">ignota</add> comperero, ad te scribam. <add place="superlinear">#</add> Hanc epistolam ad dominum <rs corresp="Bidallius" type="person">Bidallium</rs> prout monuisti dirigo.</p> <p>Vale Vir <choice><abbr>Illme.</abbr> <expan>Illustrissime</expan></choice> et ad <del rendition="#s"><gap quantity="2" unit="chars"/></del> officia quaecumque tibi exhibenda paratum me <del rendition="#s"><gap quantity="2" unit="chars"/></del> crede.</p> <p><pb facs="https://gallica.bnf.fr/ark:/12148/btv1b90612192/f529" n="255r"/> <note hand="#author" place="right"><foreign xml:lang="fra"><seg type="comment"><orig><add place="right">Testament du Cardinal <rs corresp="Mazarin" type="person">Mazarini</rs></add></orig> <note xml:id="niqm_n3w_wwb">Der Eintrag steht in keinem inhaltlichen Zusammenhang mit dem Briefkonzept, sondern dieses ist auf ein Blatt notiert, auf dem sich jener Eintrag befand.</note></seg></foreign></note> Senem annorum 76. virum <choice><abbr>opt.</abbr> <expan>optimum</expan></choice> dominum <rs corresp="ed_axl_wk5_xdb" type="person">Riverium</rs>, quicum consuetudinem familiaritatemque hic habuisti, nomine tuo salutaui. Is quoque te resalutat. <unclear cert="low" reason="illegible">medicorum</unclear> valetudine nunc utitur, et dysuria subinde laborat.</p> <postscript><p>Die <date when="1663-04-03" calendar="#Gregorian">3. <choice><abbr>April.</abbr> <expan>Aprilis</expan></choice></date> postscriptum. Hancce epistolam die 30. Martii ad dominum <rs corresp="Bidallius" type="person">Bidallium</rs> ferendam <del rendition="#s"><gap quantity="1" unit="words"/></del> dare non potui. Addam itaque pauca <unclear cert="low" reason="illegible">supermarb.</unclear> quam plurimis de illa <rs corresp="Beaugency" type="person">Anna Maria de Beaugenci</rs> sciscitatus sum, <add place="superlinear">qui</add> omnes <del rendition="#s"><gap quantity="3" unit="chars"/></del> quamvis eorum, qui hic <del rendition="#s"><gap quantity="1" unit="words"/></del> aliqua fama clarent nomina probe sciant ecce prorsus ignorant. Si aliqua circunstantia illam denotare poteris aliquid fortasse detegere licebit. Ante paucos dies <del rendition="#s"><gap quantity="1" unit="words"/></del> <rs corresp="ed_bcv_ntx_tkb" type="person">ducum Mekelburgensium</rs> unus <del rendition="#s">huc</del> <rs corresp="Paris" type="place">Lutetiam</rs> <del rendition="#s">huc</del> advenit, dicunt <rs corresp="ed_vkh_b5x_tkb" type="person">uxorem</rs> hic ambire velle. Familiam numerosissimam <del rendition="#s">vestire cogitat</del> <del rendition="#ow"><unclear cert="high" reason="illegible">suisque</unclear></del> suis coloribus gentilitiis <del rendition="#s">ornare</del> vestire et ornare cogitat, vestesque confici jussit.</p></postscript> <closer><dateline><choice><abbr>Scrib.</abbr> <expan>Scribebam</expan></choice> <rs corresp="Paris" type="place"><choice><abbr>Lut. Paris.</abbr> <expan>Lutetiae Parisiorum</expan></choice></rs> die <date when="1663-03-30" calendar="#Gregorian">30. Martii 1663</date>.</dateline></closer></div></body></text>
+</TEI>
+</TEI>
+</teiCorpus>
