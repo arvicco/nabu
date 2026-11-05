@@ -59,6 +59,22 @@ class CgpgVertParserTest < Minitest::Test
     assert_equal "v", document.metadata["k"], "caller metadata merges"
   end
 
+  # The page-level read the work carve composes (a plan work takes a set of
+  # pages out of one volume): every page keyed by its PDF page number, with
+  # the same text and tokens a whole-volume parse mints, and the token
+  # losses censused PER PAGE so a work sums only its own.
+  def test_pages_reads_every_page_with_its_own_loss_census
+    volume = Nabu::Adapters::CgpgVertParser.new.pages(File.join(FIXTURES, "PG008_tagged_text.txt"))
+    assert_equal "PG 8 - AI processed", volume.doc_id
+    assert_equal [57, 343], volume.pages.keys
+    first, last = volume.pages.values_at(57, 343)
+    assert_equal [1, 0], [first.empty_form_tokens, last.empty_form_tokens]
+    assert_equal [0, 1], [first.lost_tokens, last.lost_tokens]
+    whole = parse("PG008_tagged_text.txt").passages
+    assert_equal whole.map(&:text), [first.text, last.text]
+    assert_equal(whole.map { |p| p.annotations["tokens"] }, [first.tokens, last.tokens])
+  end
+
   def test_the_doc_id_rides_metadata
     assert_equal "PG 153 - AI processed", parse("PG153_tagged_text.vert").metadata["doc_id"]
   end
