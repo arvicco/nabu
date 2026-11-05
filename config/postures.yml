@@ -2892,10 +2892,9 @@ sources:
     kind: {posture: unclassified, note: "the conllup lane carries no genre field — only the
         filename's author/work/code (mined: author + work facets); a per-work genre table
         would be a curated overlay, not extraction"}
-    lect: {posture: pending, note: "candidate: a lect_overrides row lat → lat:cla,
-        tier approximation — the perseus-latin shape (classical canon, Plautus/Cato
-        refining to lat:arch per document); the corpus spans Plautus to the 2nd c. AD,
-        so the stage is a corpus-level reading, not the corpus's own definition"}
+    # lect machine-postured — config/lect_overrides.yml lat → lat:cla, tier
+    # approximation (the corpus-level classical reading; adopted from the
+    # pending candidate 2026-11-05).
     dating: {posture: pending, note: "candidate: a ruled author-floruit table over the
         24 filename authors (Plautus … Juvenal) as the composition class; the asset
         carries no date field of its own"}
@@ -3185,13 +3184,10 @@ sources:
         NFC-composed at the boundary (decomposed и/і + mark on 199 upstream attributes)"}
   glt:
     # kind: machine-postured — kind_map.yml metadata book.
-    lect: {posture: pending, note: "candidate: a lect_overrides row grc → grc:byz, tier
-        approximation — the perseus-latin shape: the books' hymnography and euchology are
-        Byzantine liturgical Greek (the liturgies of Basil and Chrysostom, Romanos, Andrew of
-        Crete, John of Damascus, Kosmas, the Studites, Joseph the Hymnographer), but the
-        Menaia also carry post-Byzantine services written in the same received register
-        (St Nektarios †1920, the Agia Skepi and the 28 October doxology among extra.htm's
-        services), so the stage is a corpus-level reading, not the corpus's own definition"}
+    # lect machine-postured — config/lect_overrides.yml grc → grc:byz, tier
+    # approximation (the corpus-level Byzantine reading; adopted from the
+    # pending candidate 2026-11-05 — the override comment carries the full
+    # reasoning incl. the post-Byzantine Menaia services).
     dating: {posture: undatable, note: "received liturgical tradition in a modern editorial
         form: no page carries a composition or edition date. What the pages DO carry is
         mined, but none is a dating claim — the Menaion commemoration (month from the
