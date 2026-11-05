@@ -5830,14 +5830,20 @@ runesdb:   # P153, 02-sources row 325
   # continental, Anglo-Saxon and Frisian epigraphy + runica manuscripta),
   # passage = a glyph sequence, text = the glyph transliterations verbatim.
   # Language gem (no claim in the TEI; the runesdb-siglum lect rule reads
-  # the siglum family). The per-find LIDO records (dates, places,
-  # transcription, translation — runesdb.de/lido/<id>) are NOT fetched;
-  # their harvest is the follow-up. LICENSE: the record's cc-by-sa-4.0 +
-  # every file's availability statement (verified 2026-11-02) →
+  # the siglum family). P160: fetch also harvests the per-find LIDO
+  # records (runesdb.de/lido/<id> → lido/<id>.xml — 613 GETs paced 1 s,
+  # ≈ 11 min first time, resumable, never re-fetched once on disk): the
+  # Production dating, the find place + coordinates, object type / find
+  # context / material facets, the editorial transcription, and the
+  # English translation (-en siblings, below). LICENSE: the record's
+  # cc-by-sa-4.0 + every file's availability statement (verified
+  # 2026-11-02); every LIDO record's recordRights "CC BY-SA 4.0 -
+  # Attribution-ShareAlike 4.0 International" (verified 2026-11-05) →
   # attribution. Overlap with rundata (the Scandinavian stones) is a
-  # catalog-side crosswalk via the siglum, never a dedupe. Frozen
-  # versioned deposit → manual.
+  # catalog-side crosswalk via the siglum (the LIDO sigla list carries
+  # the DR/KJ numbers), never a dedupe. Frozen versioned deposit → manual.
   sync_policy: manual
+  translations: true   # P160: the LIDO English translation as a -en sibling per find
 
 sabellic-loans:
   adapter: Nabu::Adapters::SabellicLoans
