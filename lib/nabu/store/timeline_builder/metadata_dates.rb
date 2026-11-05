@@ -324,6 +324,11 @@ module Nabu
           #                                       day, or the SRO editors' company-year span for
           #                                       the undated early entries) — the artifact basis;
           #                                       placeName mentions only, never a "place" claim
+          "socinian-letters" => :structured, # P160: the cover letter's correspAction[sent]
+          #                                    date (when / from-to / notBefore-notAfter) as a
+          #                                    year envelope, class composition; else the
+          #                                    received date as a terminus ante quem; place
+          #                                    = the sending place + its GeoNames URL (place_ref)
           "stgall-priscian" => :structured, # the manuscript's copying (AD 850–1, upstream's
           #                                   statement) on every page; orig_place "Ireland (?)"
           #                                   — upstream's hedge — while St Gallen (the holding

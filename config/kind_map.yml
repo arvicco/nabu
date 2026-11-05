@@ -2557,3 +2557,28 @@ sources:
     # galant 4 · réfutation 4 · catéchisme 3 · discours prononcé 3 · allégorie 2 ·
     # discours doctrinal 2 · portrait 2 · traité 2 · almanach 1 · caquet 1 · consolation 1 ·
     # délibérations 1 · fait divers 1 · manuel 1 · occasionnel 1 · tract 1
+  socinian-letters:   # P160 — the cover letter's chosen witness's own #sbw classCode
+    metadata: document_type   # (Adapters::SocinianLetters); counts = the 1,869 accepted letters,
+    #                           census through the adapter 2026-11-05 (20 carry no #sbw code and
+    #                           mint no kind row). Attachment types ride metadata "attachments".
+    map:
+      "Brief": letter                            # 1,495 — the letter; private vs official is not
+      #   stated by upstream, so the bare head (deliberately coarse)
+      "Brief/Briefexzerpt": letter               # 291 — a letter edited whole or in excerpt
+      "Briefexzerpt": letter                     # 44 — the letter's excerpt as published (the
+      #   content is the letter; the excerpt is the edition's cut, not a genre)
+      "Brieexzerpt": letter                      # 1 — upstream's typo for Briefexzerpt
+      "Brieffragment": letter                    # 2 — the surviving fragment of a letter
+      "Brief, Beobachtungen": letter             # 1 — a letter carrying its observations
+      "Beobachtungen": scholarly/astronomy       # 6 — the comet correspondence's observation
+      #   reports (positions and times of the 1664/65 comets), sent in the post
+      "Astronomische Beobachtungen": scholarly/astronomy  # 1
+      "Astronomische Beobachtung": scholarly/astronomy    # 1
+      "Nachrichtenbeilage": periodical/newspaper # 2 — the handwritten news enclosure (Zeitung,
+      #   avviso) riding the post: the newspaper in its manuscript form
+      "Bericht": administrative                  # 1 — a report (the dta/ref "Bericht" fold)
+      "Instruktion": administrative              # 1 — an envoy's instruction, an institutional
+      #   paper, not correspondence
+      "Huldigungsgedicht": literary/poetry/praise  # 1 — a homage poem
+    deliberate:
+      "xzerpt": "an excerpt marker (upstream's truncated 'Exzerpt'), not a genre"  # 2

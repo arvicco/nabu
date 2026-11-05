@@ -3769,7 +3769,7 @@ korba:   # P116-1
   # gold token annotations (translit form, modernized orth, lemma, tag);
   # header date/place/region/genre mined.
 
-korpus16:   # P160-6, 02-sources row 386
+korpus16:   # P160-6, 02-sources row 387
   adapter: Nabu::Adapters::Korpus16
   adopted: "2026-11-05"
   axes: [slavic]
@@ -6478,6 +6478,35 @@ soas-tibetan:
   # hard sha256 pin (RELEASE_SHA256, the wold/ren mold; md5 cross-checked
   # against Zenodo's). A future release is a NEW DOI the owner re-pins.
   sync_policy: manual
+
+socinian-letters:   # P160, 02-sources row 390
+  adapter: Nabu::Adapters::SocinianLetters
+  adopted: "2026-11-05"
+  axes: [romance]
+  wired: false   # READY: bin/nabu enable socinian-letters && bin/nabu sync
+                 # socinian-letters (the GitLab letters folder zip, 13 MB, + the
+                 # 1 MB indices.csv; seconds to download, ~15 s to parse). EXPECT
+                 # 1,869 docs / 18,067 passages, 0 errored; 348 metadata-only
+                 # letters + indices.csv + the two fetch state pins skipped by
+                 # rule (census through the adapter over the commit-5d91807 zip,
+                 # 2026-11-05). Eyeball nabu show
+                 # urn:nabu:socinian-letters:MAIN_ckw_qlm_zdb:2 (Rautenstein to
+                 # Lubieniecki, Regensburg 1665) and
+                 # urn:nabu:socinian-letters:MAIN_ydw_qlm_zdb:3 (Fausto Sozzini
+                 # to Krzysztof Morsztyn, 1597), probe nabu search "Luculenta et
+                 # succi plena", then flip.
+  sync_policy: manual   # the folder zip is generated from the main branch (no release)
+  # Die sozinianischen Briefwechsel (AdW Mainz / Johannes a Lasco Bibliothek
+  # Emden, ed. Daugirdas and Kuczera): the correspondence of the Socinians
+  # (the Polish Brethren) and their circle, 1545–1744 — the Sozzinis, Schmalz,
+  # Ruarus, and Stanisław Lubieniecki's comet correspondence of the 1660s.
+  # 2,217 teiCorpus letter files (cover letter + attachments + witnesses).
+  # Per-TEI licences CC BY 4.0 / CC BY-SA 3.0 → attribution, the chosen
+  # witness's own riding each document. Document = cover letter + the
+  # attachments it holds (deduped by TEI id); passage = text block of the
+  # reference witness (else the first transcribed witness); the editors'
+  # German commentary rides each block's "notes". Places/persons joined
+  # through upstream's indices.csv register (GeoNames, GND).
 
 sr-wikisource:   # P116-2, 02-sources row 233
   adapter: Nabu::Adapters::SrWikisource
