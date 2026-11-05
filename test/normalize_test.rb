@@ -296,6 +296,33 @@ class NormalizeTest < Minitest::Test
     assert_equal folded.length, map.length
   end
 
+  # Old Uyghur: Wilkens (2021) romanizes the back high unrounded vowel with
+  # dotless ı (U+0131 — a base letter with NO decomposition, so the generic
+  # fold leaves it), the kaikki extract's romanizations with ï (U+00EF,
+  # which the generic mark strip already takes to i). One word, two keys:
+  # the oui rule folds ı → i. Real headwords from the wilkens-oui fixtures
+  # (folio 8; kaikki lines 389–390, README there).
+  def test_old_uyghur_folds_dotless_i_to_i
+    assert_equal "adig", form("Adıg", "oui")
+    assert_equal form("adïġ", "oui"), form("Adıg", "oui")
+    assert_equal form("adġïr", "oui"), form("adgır", "oui")
+    assert_equal "iduk", form("İduk", "oui"), "capital İ downcases to i + U+0307, a mark the strip takes"
+    folded, map = Nabu::Normalize.fold_with_map("Adıg", language: "oui")
+    assert_equal ["adig", 4], [folded, map.length], "per-codepoint 1→1 — fold_with_map-safe"
+  end
+
+  # Scoped to oui: in Turkish (and every other language) ı and i are
+  # distinct letters, and the stored text is never touched — the fold
+  # shapes the search column only. Query side, a Latin query gains the oui
+  # skeleton beside its generic form (the union is ORed).
+  def test_the_dotless_i_fold_is_scoped_to_old_uyghur
+    assert_equal "kızıl", form("kızıl", "tur")
+    assert_equal "kızıl", form("kızıl", nil)
+    assert_equal "kızıl", form("kızıl", "otk"), "Old Turkic is not folded by this rule"
+    assert_equal %w[kızıl kizil], Nabu::Normalize.query_forms("kızıl")
+    assert_equal ["kizil"], Nabu::Normalize.query_forms("kïzïl"), "ï already folds generically"
+  end
+
   def test_unknown_language_gets_the_generic_fold
     assert_equal "cafe", form("Café", "xx")
   end

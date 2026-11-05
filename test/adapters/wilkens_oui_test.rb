@@ -3,6 +3,7 @@
 require "test_helper"
 require "digest"
 require "fileutils"
+require "json"
 require "tmpdir"
 require "zlib"
 
@@ -258,7 +259,28 @@ class WilkensOuiAdapterTest < Minitest::Test
   end
 
   def test_variants_fold_on_their_first_form
-    assert_equal "amranmaklıg", entry("amranmaklıg ~ amranmak(lıg)").headword_folded
+    assert_equal "amranmaklig", entry("amranmaklıg ~ amranmak(lıg)").headword_folded
+  end
+
+  # The oui transliteration fold on the offending bytes (README): Wilkens
+  # spells Adıg / adgır with dotless ı (U+0131), the kaikki extract's
+  # romanizations write adïġ / adġïr with ï (U+00EF). Both now fold to ONE
+  # key, so a lookup typed either way reaches the Wilkens entry.
+  def test_dotless_i_and_the_kaikki_i_diaeresis_reach_one_key
+    xml = Zlib.gunzip(File.binread(File.join(FIXTURES, "wilkens-fold.stext.xml.gz")))
+    fold = Adapter.new(extract: ->(_path, _pages) { xml }, page_count: ->(_path) { 1 })
+    doc = with_workdir { |dir| fold.parse(fold.discover(dir).first) }
+    romans = File.readlines(File.join(FIXTURES, "kaikki-oui-fold.jsonl")).flat_map do |line|
+      JSON.parse(line)["forms"].select { |f| f["tags"].to_a.include?("romanization") }.map { _1["form"] }
+    end
+    { "^3Adıg" => "adïġ", "adgır ~ (a)dg(ı)r" => "adġïr" }.each do |id, kaikki|
+      wilkens = doc.find { |e| e.entry_id == id } || flunk("no entry #{id.inspect}")
+      assert_includes wilkens.headword.bytes.each_cons(2).to_a, [0xC4, 0xB1], "#{id}: dotless ı as printed"
+      assert_includes romans, kaikki
+      assert_includes Nabu::Normalize.query_forms(kaikki), wilkens.headword_folded, "kaikki's #{kaikki} → #{id}"
+      typed = wilkens.headword.split(" ~ ").first
+      assert_includes Nabu::Normalize.query_forms(typed), wilkens.headword_folded, "Wilkens's own #{typed}"
+    end
   end
 
   def test_lost_chinese_characters_are_carried_and_counted
