@@ -125,7 +125,7 @@ class CantusTest < Minitest::Test
     kinds = Nabu::Kinds.load(classes_path: File.expand_path("../../config/kind_classes.yml", __dir__),
                              map_path: File.expand_path("../../config/kind_map.yml", __dir__))
     assert_equal "genre", kinds.facet_for("cantus")
-    assert_equal ["ritual/liturgy"], kinds.normalize("cantus", "Responsory")
+    assert_equal ["ritual/chant"], kinds.normalize("cantus", "Responsory")
     assert_equal ["hymn-prayer/hymn"], kinds.normalize("cantus", "Hymn")
     unmapped = Nabu::Adapters::CantusCsvParser::GENRES.values.select { |name| kinds.normalize("cantus", name) == ["unmapped"] }
     assert_empty unmapped, "every upstream genre name folds"
