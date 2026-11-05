@@ -101,7 +101,119 @@ class SourceReadTest < Minitest::Test
     assert_raises(Nabu::ParseError) { Nabu::Adapters::SourceRead.slice("abc".b, offset: -1, length: 1, what: "p") }
   end
 
+  # -- zip members -----------------------------------------------------------------
+
+  # The archive read and the member's text ride one entry point each: the
+  # binary read is the belt's (a ZipReader over the bytes), and every member
+  # comes out through #utf8, labelled with the member name.
+  def test_a_zip_member_reads_through_the_belt
+    path = write("held.zip", stored_zip("a/1.html" => "μῆνιν\n", "a/2.html" => "ok"))
+
+    zip = Nabu::Adapters::SourceRead.zip_file(path)
+    entry = zip.entries.find { |e| e.name == "a/1.html".b }
+    text = Nabu::Adapters::SourceRead.utf8_member(zip, entry, label: path)
+
+    assert_equal "μῆνιν\n", text
+    assert_equal Encoding::UTF_8, text.encoding
+  end
+
+  def test_an_invalid_zip_member_is_a_parse_error_naming_the_member
+    path = write("held.zip", stored_zip("a/bad.html" => BROKEN))
+    zip = Nabu::Adapters::SourceRead.zip_file(path)
+
+    error = assert_raises(Nabu::ParseError) do
+      Nabu::Adapters::SourceRead.utf8_member(zip, zip.entries.first, label: "held.zip")
+    end
+    assert_equal "held.zip: a/bad.html is not valid UTF-8", error.message
+  end
+
+  def test_a_zip_member_takes_the_same_opt_in_repair
+    path = write("held.zip", stored_zip("p.htm" => SEVERED))
+    zip = Nabu::Adapters::SourceRead.zip_file(path)
+
+    assert_raises(Nabu::ParseError) { Nabu::Adapters::SourceRead.utf8_member(zip, zip.entries.first, label: "z") }
+    repaired = Nabu::Adapters::SourceRead.utf8_member(zip, zip.entries.first, label: "z", repair: :severed_tags)
+    assert_includes repaired, "</a>̱"
+  end
+
+  # A structurally broken archive stays Nabu::ZipReader::Error: each caller
+  # maps it onto its own contract (quarantine at parse, a complaint at drop).
+  def test_a_non_zip_raises_the_zip_readers_own_error
+    path = write("not.zip", "plain text, no central directory")
+
+    assert_raises(Nabu::ZipReader::Error) { Nabu::Adapters::SourceRead.zip_file(path) }
+  end
+
+  # -- line streaming ----------------------------------------------------------------
+
+  def test_utf8_lines_yields_each_line_checked_with_its_terminator
+    path = write("rows.jsonl", "{\"a\":1}\n{\"b\":\"ἄ\"}\nlast")
+
+    lines = Nabu::Adapters::SourceRead.utf8_lines(path, label: "src").to_a
+
+    assert_equal ["{\"a\":1}\n", "{\"b\":\"ἄ\"}\n", "last"], lines
+    assert(lines.all? { |line| line.encoding == Encoding::UTF_8 })
+  end
+
+  def test_an_invalid_line_is_a_parse_error_naming_file_and_line
+    path = write("rows.jsonl", "ok\n#{BROKEN}\n".b)
+
+    error = assert_raises(Nabu::ParseError) do
+      Nabu::Adapters::SourceRead.utf8_lines(path, label: "src") { |_line| nil }
+    end
+    assert_match(/\Asrc: .*rows\.jsonl line 2 is not valid UTF-8\z/, error.message)
+  end
+
+  # The streamer exists for multi-hundred-MB files: it must hand line one
+  # over BEFORE the rest of the file exists. A FIFO whose writer withholds
+  # line two until line one has been consumed deadlocks any reader that
+  # slurps (it waits for an EOF that never comes) — the timeout catches it.
+  def test_utf8_lines_streams_lazily_and_never_slurps
+    path = File.join(@dir, "stream.jsonl")
+    File.mkfifo(path)
+    gate = Queue.new
+    writer = Thread.new do
+      File.open(path, "w") do |io|
+        io.sync = true
+        io.write("first\n")
+        gate.pop
+        io.write("second\n")
+      end
+    end
+    seen = []
+    Timeout.timeout(5) do
+      Nabu::Adapters::SourceRead.utf8_lines(path, label: "src") do |line|
+        seen << line
+        gate << :go if seen.size == 1
+      end
+    end
+
+    assert_equal %W[first\n second\n], seen
+  ensure
+    writer&.kill
+  end
+
   private
+
+  # A minimal spec-conformant STORED zip (method 0) — the container only;
+  # the member bytes are the test's own specimens.
+  def stored_zip(members)
+    body = +"".b
+    central = +"".b
+    members.each do |name, content|
+      name = name.b
+      content = content.b
+      crc = Zlib.crc32(content)
+      offset = body.bytesize
+      body << ["PK\x03\x04".b, 20, 0, 0, 0, 0, crc, content.bytesize, content.bytesize, name.bytesize, 0]
+              .pack("a4vvvvvVVVvv") << name << content
+      central << ["PK\x01\x02".b, 20, 20, 0, 0, 0, 0, crc, content.bytesize, content.bytesize,
+                  name.bytesize, 0, 0, 0, 0, 0, offset].pack("a4vvvvvvVVVvvvvvVV") << name
+    end
+    eocd = ["PK\x05\x06".b, 0, 0, members.size, members.size, central.bytesize, body.bytesize, 0]
+           .pack("a4vvvvVVv")
+    body + central + eocd
+  end
 
   def write(name, bytes)
     path = File.join(@dir, name)

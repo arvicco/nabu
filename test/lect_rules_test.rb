@@ -262,11 +262,33 @@ class LectRulesTest < Minitest::Test
     end
   end
 
+  # The date-band rows PPCHY actually carries keep the override's ~latn
+  # surface (yi:old~latn). The variety composes onto the STAGE, so it lands
+  # inside the id grammar's slot — anchor:stage/variety~script — and the
+  # surface rides on: yi:old/west~latn. Re-runs are no-ops; the census
+  # names the composed id.
+  def test_a_compose_rule_inserts_its_variety_before_the_script_surface
+    with_ppchy_setup(surface: "~latn") do |catalog, journal|
+      rules = %w[ppchy-dialect-west ppchy-dialect-east].map { |id| compose_rules.find(id) }
+      census = compose_rules.census(rules.first, catalog: catalog, journal: journal)
+      assert_equal 1, census.matched.fetch(["West Yiddish", "yi:old/west~latn"])
+      rules.each { |rule| compose_rules.apply!(rule, catalog: catalog, journal: journal) }
+      lect = ->(urn) { journal[:lect_assignments].first(urn: urn)[:lect_id] }
+      assert_equal "yi:old/west~latn", lect.call("urn:nabu:ppchy:1478w-regensburg")
+      assert_equal "yi:mid/east~latn", lect.call("urn:nabu:ppchy:1600e-magid")
+      assert_equal "yi:mid~latn", lect.call("urn:nabu:ppchy:court")
+      rerun = rules.sum { |rule| compose_rules.apply!(rule, catalog: catalog, journal: journal).assigned }
+      assert_equal 0, rerun, "an already-composed surfaced row is done, never re-composed"
+      assert registry.lect("yi:old/west~latn"),
+             "the composed id is registry-valid"
+    end
+  end
+
   private
 
   # ppchy docs carrying the facet_map's dialect projection, each with the
   # date-band stage row the inference would mint.
-  def with_ppchy_setup
+  def with_ppchy_setup(surface: "")
     catalog = Nabu::Store.connect("sqlite::memory:")
     Nabu::Store.migrate!(catalog)
     ppchy = catalog[:sources].insert(slug: "ppchy", name: "PPCHY", adapter_class: "X", license_class: "nc")
@@ -280,7 +302,7 @@ class LectRulesTest < Minitest::Test
       urn = "urn:nabu:ppchy:#{stem}"
       doc = catalog[:documents].insert(source_id: ppchy, urn: urn, language: "yi", content_sha256: "x")
       catalog[:document_facets].insert(document_id: doc, facet: "dialect", value: dialect)
-      Nabu::Store::LectJournal.assign!(journal, urn: urn, code: "yi", lect_id: stage,
+      Nabu::Store::LectJournal.assign!(journal, urn: urn, code: "yi", lect_id: "#{stage}#{surface}",
                                                 basis: "rule:date-band", note: "seed")
     end
     yield catalog, journal

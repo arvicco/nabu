@@ -639,7 +639,10 @@ sources:
   otdo:
     kind: {posture: unclassified}
     lect: {posture: identity, note: otb IS Old Tibetan}
-    dating: {posture: undatable}
+    dating: {posture: partial, note: "the header's free-prose Date (\"ca. 797 …\", \"780-800?\",
+        \"post 763\", \"late 9th-10th century\") read into an envelope by MetadataDates
+        :date_text_prose, the prose as raw: 22 of 413 documents (census 2026-11-04); the
+        rest carry no Date or \"undatable\"/\"unknown\""}
     places: {posture: unplaced}
     script: {posture: implied}
   old-tibetan:
@@ -1221,12 +1224,12 @@ sources:
         classical literary language from the imperial-era translations to living authors —
         no finer Tibetan stage exists to claim); translation pages eng/deu/spa/fra/ita/nld/
         por/cmn, their inline Tibetan liturgy lines xct, IAST mantra lines san"}
-    dating: {posture: pending, note: "no typed composition date ships; candidates: (1) the
+    dating: {posture: pending, note: "no typed composition date ships; candidate: the
         author's life dates through the BDRC person id every author page carries
         (metadata bdrc_person — a person-dates join, the itkc author-era mold, not held
-        yet); (2) the translator credit's year (metadata translation_year) as the
-        translation documents' own edition-class date; colophon dates sit in free-text
-        footnotes"}
+        yet). The translator credit's year (metadata translation_year) is declared, not
+        mined: translations never row while the Tibetan original is held beside them;
+        colophon dates sit in free-text footnotes"}
     places: {posture: unplaced, note: "no findspot/composition place on the page; place
         names occur only as topics (Samyé Chimpu, Wutai Shan) — mentions, not claims"}
     script: {posture: implied}
@@ -1264,9 +1267,11 @@ sources:
         Prakrit a consumer distinguishes — so pka-Latn resolves on its own node;
         pra-Latn stays deliberately coarse on the collective anchor, san-Latn as
         before"}
-    dating: {posture: undatable, note: "the headers carry modern edition years only
+    dating: {posture: partial, note: "the headers carry modern edition years only
         (source_edition.date — Weber 1881, Bühler 1879 …), never the works'; the README
-        dates nothing — no composition date is minted, declared"}
+        dates nothing — no composition date is minted, declared. The edition years
+        project as date_class edition (MetadataDates :source_edition_year): 18 of 22
+        documents (census 2026-11-04)"}
     places: {posture: unplaced, note: "only the editions' imprint places are named"}
     script: {posture: qualified, note: "ISO-15919 romanization (Dēvanāgarī-printed
         editions); the source script is not carried"}
@@ -1906,10 +1911,13 @@ sources:
         envelope as metadata date {not_before, not_after, raw} (min beginDate .. max endDate
         over the parts, century label raw; 18,001 of 18,892 records in the 2026-11-01
         generation), artifact class; the precise year/month/day and the native-era date
-        (e.g. '2025 AG') ride each part verbatim"}
+        (e.g. '2025 AG') ride each part verbatim; the 8 impossible part pairs upstream ships
+        (18891–1913, 1750–150 …) are repaired from the part's precise year / centuries band,
+        the verbatim pair named in the raw"}
     places: {posture: named, note: "the same :structured registration reads the metadata
-        place — the part's city of origin, else its country of origin (4,448 records), the
-        writing place as catalogued, names verbatim; the holding repository (city, country,
+        place — the part's city of origin, else its country of origin (4,448 records), else
+        the copying town a provenance note opens with ('Copied in Alqūsh, fol. 143r'; 38
+        records), the writing place as catalogued, names verbatim; the holding repository (city, country,
         LC/VIAF authority URIs) rides metadata and is never taken for the origin"}
     script: {posture: mixed, note: "Syriac script (Serṭā, Madnḥāyā, ʼEsṭrangelā — the part's
         script field verbatim), Ethiopic Fidäl, Arabic Naskh for the Arabic items; Garshuni is
@@ -2068,7 +2076,8 @@ sources:
     dating: {posture: partial, note: "the work __cts__.xml dct:created span, transcribed → metadata
         date, class composition (MetadataDates :structured): 92 of 113 editions. The 21 others
         carry a bare dash or the catalog's unfilled 0030–0800 default (kept as created_raw,
-        never a date)"}
+        never a date) and fall back to their edition's print year, date_class edition
+        (MetadataDates::EDITION_FALLBACK)"}
     places: {posture: linked, note: "the work __cts__.xml dct:spatial Pleiades URI → place
         {pleiades, ref}: 88 of 113 editions, every id in the held gazetteer; the XXXXX
         placeholder and empty values mint nothing"}

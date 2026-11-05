@@ -352,6 +352,14 @@ module Nabu
          write(SOURCES_FILE, sources), write(MCP_FILE, mcp)]
       end
 
+      # THE public-listing rule, shared with the /sources/ table generator
+      # (SourcesTable): wired corpus sources only, grant-gated blocked
+      # holdings never — so the holdings data and the table's rows can never
+      # disagree about who is listed.
+      def self.live_public_slugs(registry)
+        registry.each_source.select { |entry| entry.source? && entry.wired && entry.public? }.map(&:slug).sort
+      end
+
       def self.split_persona(persona)
         name, blurb = persona.split(/\s+[—–]\s+/, 2)
         [name.to_s.strip, blurb.to_s.strip.sub(/\.\z/, "")]
@@ -437,9 +445,7 @@ module Nabu
         end
       end
 
-      def live_public_slugs
-        @registry.each_source.select { |entry| entry.source? && entry.wired && entry.public? }.map(&:slug).sort
-      end
+      def live_public_slugs = self.class.live_public_slugs(@registry)
 
       def source_rows(catalog, sizes)
         meta = catalog[:sources].select(:id, :slug, :name, :license_class).to_hash(:slug)

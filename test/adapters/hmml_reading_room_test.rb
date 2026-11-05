@@ -49,14 +49,15 @@ module Adapters
     end
 
     def test_the_slice_takes_syriac_and_ethiopic_records_only
-      assert_equal %W[#{URN}:123348 #{URN}:128042 #{URN}:200191 #{URN}:2419 #{URN}:56720 #{URN}:77409].sort,
-                   conformance_adapter.discover(conformance_workdir).map(&:id).sort
+      ids = [2419, 56_720, 77_409, 123_348, 128_042, 134_100, 136_660, 200_191, 206_358, 207_131, 207_990,
+             507_776, 511_958, 518_049, 539_548]
+      assert_equal ids.map { |id| "#{URN}:#{id}" }, conformance_adapter.discover(conformance_workdir).map(&:id)
     end
 
     def test_census_counts_the_out_of_slice_records_and_the_empty_record
       census = JSON.parse(File.read(File.join(conformance_workdir, "scope", "census.json")))
-      assert_equal 7, census["records"]
-      assert_equal 6, census["taken"]
+      assert_equal 16, census["records"]
+      assert_equal 15, census["taken"]
       assert_equal 1, census["out_of_slice"]
       assert_equal 1, census["empty_records"]
       assert_equal Digest::SHA256.file(ZIP).hexdigest, census["dataset_sha256"]
@@ -129,6 +130,63 @@ module Adapters
       assert_equal({ "not_before" => 1884, "not_after" => 1884 }, d.metadata["date"])
     end
 
+    # The impossible part bounds upstream ships (all six records real,
+    # 2026-11-01 generation; README "What is here"): a 5-digit year, a
+    # lost digit, swapped/typo'd bounds. A broken pair is repaired from
+    # the part's own evidence — its precise year, else the bounds that
+    # fit its centuries band, the band filling the rest — and the raw
+    # names the verbatim upstream bounds it replaced.
+    REPAIRED = {
+      206_358 => [1800, 1913, "18891–1913"], # beginDate 18891 (centuries 19, 20)
+      207_131 => [1700, 1800, "17000–1800"], # beginDate 17000 (century 18)
+      207_990 => [1750, 1900, "1750–150"],   # endDate 150 (centuries 18, 19)
+      507_776 => [1954, 1954, "1954–1854"],  # endDate typo; precise year 1954
+      511_958 => [1684, 1684, "1684–1594"],  # endDate typo; precise 1684 (native 1996 AG)
+      539_548 => [1657, 1657, "16757–1657"]  # beginDate 16757; precise 1657
+    }.freeze
+
+    def test_impossible_part_bounds_are_repaired_from_the_parts_own_evidence
+      REPAIRED.each do |id, (from, to, verbatim)|
+        date = doc(id).metadata["date"]
+        assert_equal [from, to], [date["not_before"], date["not_after"]], "record #{id}"
+        assert_includes date["raw"], "upstream bounds #{verbatim} repaired", "record #{id}"
+      end
+    end
+
+    # 136660's third part ships 1767–767 (precise 767) beside two sound
+    # 1700–1800 parts: the part repairs to 1767–1800, the envelope holds.
+    def test_a_broken_part_beside_sound_parts_repairs_inside_the_envelope
+      date = doc(136_660).metadata["date"]
+      assert_equal [1700, 1800], [date["not_before"], date["not_after"]]
+      assert_includes date["raw"], "upstream bounds 1767–767 repaired"
+      assert_equal 767, doc(136_660).metadata["parts"].last["end_date"], "the part keeps upstream verbatim"
+    end
+
+    def test_every_fixture_envelope_is_ordered_and_plausible
+      documents.filter_map { |d| d.metadata["date"] }.each do |date|
+        assert_operator date["not_before"], :<=, date["not_after"], date.inspect
+        assert(date.values_at("not_before", "not_after").all? { |y| y.between?(-3000, 2100) }, date.inspect)
+      end
+    end
+
+    # The copying place the cataloguer wrote only in the provenance note
+    # ("Copied in Ankawa, fol. 3v"; no structured origin) is the
+    # manuscript's origin; an institution phrase ("Copied in Dayr
+    # al-Kuraym; colophon …") is not a town and mints nothing.
+    def test_provenance_copying_town_is_the_origin_when_none_is_structured
+      assert_equal "Ankawa", doc(134_100).metadata["place"]
+      assert_nil doc(518_049).metadata["place"]
+      assert_match(/\ACopied in Dayr al-Kuraym/, doc(518_049).metadata["provenance"])
+    end
+
+    # Upstream writes "uri": "" for the labels without an authority id;
+    # genre_uris carries the ids only (the labels ride genres).
+    def test_genre_uris_carry_no_empty_members
+      m = doc(134_100).metadata
+      assert_equal ["Liturgical books (Eastern Christian)", "Psalters"], m["genres"]
+      assert_equal ["http://vocab.getty.edu/page/aat/300026477"], m["genre_uris"]
+    end
+
     def test_record_without_incipits_is_metadata_only
       d = doc(2419)
       assert_empty d.passages
@@ -149,7 +207,7 @@ module Adapters
         assert_equal "Sun, 01 Nov 2026 07:05:49 GMT", state["last_modified"]
         census = JSON.parse(File.read(File.join(dir, "scope", "census.json")))
         assert_equal "Sun, 01 Nov 2026 07:05:49 GMT", census["dataset_last_modified"]
-        assert_equal 6, conformance_adapter.discover(dir).count
+        assert_equal 15, conformance_adapter.discover(dir).count
       end
     end
 

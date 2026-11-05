@@ -153,9 +153,9 @@ module Nabu
         "not a readable zip (#{e.message})"
       end
 
-      # The one binary read: the archive's bytes (the belt reads text; the
-      # members are UTF-8-checked through SourceRead.utf8 at extraction).
-      def self.open_zip(path) = Nabu::ZipReader.new(File.binread(path))
+      # The archive through the belt's zip reader (the members are
+      # UTF-8-checked through SourceRead.utf8_member at extraction).
+      def self.open_zip(path) = SourceRead.zip_file(path)
 
       def fetch(workdir, progress: nil, force: false) # rubocop:disable Lint/UnusedMethodArgument
         result = Nabu::ManualDrop.sync!(
@@ -214,7 +214,7 @@ module Nabu
         reader = reader_for(document_ref.path)
         skipped = []
         entries = members.sort_by(&:first).filter_map do |number, entry|
-          html = SourceRead.utf8(reader.extract(entry), label: "#{document_ref.path}: #{entry.name}")
+          html = SourceRead.utf8_member(reader, entry, label: document_ref.path)
           parsed = SolEntryParser.parse(html)
           unless parsed.letter == letter && parsed.number == number
             raise Nabu::ParseError, "#{entry.name}: page says #{parsed.letter},#{parsed.number}"

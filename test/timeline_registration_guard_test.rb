@@ -48,7 +48,10 @@ class TimelineRegistrationGuardTest < Minitest::Test
       { "dynasty" => "後秦" } => "dynasty",
       { "dcs_time_slot" => "3" } => "dcs_time_slot",
       { "source_date" => "1904" } => "source_date",
-      { "printed_date" => "1826" } => "printed_date" }.each do |metadata, family|
+      { "printed_date" => "1826" } => "printed_date",
+      { "date_text" => "780-800?" } => "date_text",
+      { "edition_year" => "1862" } => "edition_year",
+      { "source_edition" => { "date" => "1880" } } => "source_edition" }.each do |metadata, family|
       assert_includes Guard.families(metadata), family, "#{metadata.inspect} is a SHAPES reader's input"
     end
   end

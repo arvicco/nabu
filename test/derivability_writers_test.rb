@@ -234,6 +234,9 @@ class DerivabilityWritersTest < Minitest::Test
   # whole), from the FileFetch-held weekly zip into
   # canonical/hmml-reading-room/ inside Adapter#fetch — the aclt
   # extraction law kind (a pure function of the held zip + code).
+  # sources_table writes the tracked site include
+  # site/_includes/sources_table.md — a pure projection of config/sources.yml
+  # + the hand notes it only reads (the DERIVED law kind, like axis_pages).
   WRITER_ALLOWLIST = %w[
     nabu/demo_build.rb
     nabu/adapters/hmml_reading_room.rb
@@ -280,6 +283,7 @@ class DerivabilityWritersTest < Minitest::Test
     nabu/health/quarantine_baseline.rb nabu/profile.rb
     nabu/health/shed_acceptance.rb
     nabu/ops/axis_pages.rb nabu/ops/site_data.rb nabu/ops/llms_txt.rb
+    nabu/ops/sources_table.rb
     nabu/ops/skill_pack.rb
     nabu/ops/drill.rb
     nabu/data_build/runner.rb nabu/data_build/sources_bib.rb

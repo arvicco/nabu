@@ -1397,9 +1397,17 @@ sources:
       "astrology": divination/astrology
   hmml-reading-room:  # census 2026-11-02 over the Syriac + Ethiopic slice (18,892 records, 2,502
     # without a genre): the catalogue's own genre terms (Getty AAT labels, 87 distinct), several
-    # per record, riding the genre facet. `vocabulary: open`: the long tail (Fragments, Notebooks,
-    # Compendiums, Catechisms, Apologetic writings, Calendars …) mints nothing and counts as
-    # uncovered. The rules cover the head of the census, each with its count.
+    # per record, riding the genre facet. Each genre object pairs its label with an authority id
+    # (metadata genre_uris): 70 labels carry one — 65 AAT (vocab.getty.edu), 3 AAT
+    # legacy-display links, 2 LoC (LCGFT, LCSH) — 17 carry none (8,627 records' "Liturgical books (Eastern Christian)" among them).
+    # Census 2026-11-04: every id names exactly ONE label, so folding the label folds the id;
+    # the AAT ids ride the tail comments below. The tail rules (the mining-law sweep, 2026-11-04)
+    # close the census: every label folds, is declared not-genre (`deliberate:`), or is one of
+    # three NAMED uncovered values — Orations (7, AAT 300026674: the slice mixes lectures,
+    # homilies and drama co-tags; no ruled oratory class), Indexes (4, AAT 300026554: catalogue
+    # checklists and author indexes; no ruled reference class), Hadith (1, no id: scripture vs
+    # exegesis for the canonical tradition is a class-list call). `vocabulary: open` stays so a
+    # later generation's new label counts as uncovered, never noise.
     facet: genre
     vocabulary: open
     map:
@@ -1447,6 +1455,57 @@ sources:
       "Medical works": scholarly/medicine        # 51
       "Magic scrolls": magic/amulet              # 54 — the Ethiopian protective (healing) scrolls
       "Magical texts": magic                     # 29
+      # The tail (census 2026-11-04; count · authority id where upstream gives one).
+      "Apologetic writings": exegesis            # 205 · LCGFT gf2015026027 — defence of the faith,
+      #                                            doctrinal exposition (the ticha catecismo fold)
+      "Catechisms": exegesis                     # 115 · AAT 300026460 — the ticha/bim-sahcoba precedent
+      "Tafsīr": exegesis                         # 1 — Qurʼān commentary
+      "Calendars": ritual/festival               # 139 · AAT 300026741 — "Church calendar": the feast
+      #                                            calendar of the rite
+      "Pontificals": ritual/liturgy              # 4 · AAT 300202602 — the bishop's rites
+      "Processionals": ritual/liturgy            # 3 · AAT 300395571
+      "Martyrologies": ritual/liturgy            # 2 · AAT 300026471 — the Martyrologium precedent
+      "Sacramentaries": ritual/liturgy           # 1 · AAT 300192160
+      "Religious rules and constitutions": legal/law   # 59 — monastic rules ("Rule of the Lebanese
+      #                                            Maronite Order"): an order's governing law, the
+      #                                            Canon law / Synodicons fold
+      "Bulls and briefs (non-papal)": legal/law  # 6 — titled "Decree" (the aio decree fold)
+      "Bulls (papal)": legal/law                 # 3 · AAT 300152044 — the same decree fold
+      "Laws": legal/law                          # 1 · AAT 300027894
+      "Papal documents": legal                   # 1 · LCSH sh85097553 — an instrument of church
+      #                                            authority, form unspecified: the bare head
+      "Indulgences": legal                       # 16 · AAT 300201452 — the grant instrument
+      "Charters": legal                          # 1 · AAT 300027621 — the charter precedent
+      "Petitions": legal/petition                # 2 · AAT 300027219
+      "Trial proceedings": legal/court           # 1
+      "Journals": literary/diary                 # 24 · AAT 300027087 — "Diary for the year 1908" …
+      "Travel literature": literary/diary        # 3 · AAT 300254810 — the travelogue sub's head
+      "Novels": literary/narrative               # 3
+      "Adab literature": literary                # 18 — Arabic belles-lettres (moral tales, stories,
+      #                                            verse): spans several families, the bare head
+      "Satires": literary                        # 1 · AAT 300251297 — the satire precedent
+      "Songs (musical compositions)": hymn-prayer/hymn   # 12 · AAT 300167056 — church and spiritual
+      #                                            songs, co-tagged Hymns on every record
+      "Government records": administrative       # 12 · AAT 300027777 — decrees, reports, accounts mixed
+      "Minutes": administrative/register         # 7 · AAT 300027440
+      "Land surveys": administrative/register    # 2 · AAT 300027257
+      "Land registers": administrative/register  # 1 · AAT 300027247
+      "Rhetorical works": scholarly              # 9 — "Rhetoric", "Science of rhetoric": the discipline
+      "Geographical works": scholarly            # 8 — the Geographie precedent
+      "Research notes": scholarly                # 1 · AAT 300265639
+      "Medical records": scholarly/medicine      # 1 · AAT 300027189 — the one record is a medical treatise
+      "Genealogies": historiography              # 8 · AAT 300027015 — the king-list neighbour
+      "Concordances": lexical                    # 7 · AAT 300026537 — word indexes to scripture
+    deliberate:
+      "Fragments": "physical condition, not a genre — co-tagged with the text's genre (160 · AAT 300117130)"
+      "Notebooks": "a physical format (notes, albums), not a genre (100 · AAT 300264354)"
+      "Compendiums": "a compilation form, not a genre (35 · AAT 300026106)"
+      "Palimpsests": "a physical condition of the support, not a genre (4 · AAT 300028576)"
+      "Scrolls": "a physical format, not a genre (2 · AAT 300028629); Magic scrolls fold above"
+      "Music manuscripts": "a notation format, not a genre (2)"
+      "Commonplace books": "a compilation format, co-tagged with its contents' genres (1 · AAT 300027093)"
+      "Maps": "a non-textual object type (1 · AAT 300028094)"
+      "Drawings": "a non-textual object type (1 · AAT 300033973)"
   bu-ajami:          # census: 80 docs, 2026-10-14 — upstream's own form labels;
     facet: genre      # the identity-grade fold (poetry means poetry)
     map:

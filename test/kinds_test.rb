@@ -815,6 +815,44 @@ class KindsTest < Minitest::Test
     end
   end
 
+  # The hmml genre tail (the mining-law sweep, census 2026-11-04 of the
+  # 18,892-record slice: 87 distinct labels, 70 carrying an AAT/LCGFT
+  # id): every label folds, is declared not-genre, or stays a NAMED
+  # uncovered value — none silent.
+  HMML_TAIL = {
+    "Apologetic writings" => ["exegesis"], "Catechisms" => ["exegesis"], "Tafsīr" => ["exegesis"],
+    "Calendars" => ["ritual/festival"], "Pontificals" => ["ritual/liturgy"],
+    "Processionals" => ["ritual/liturgy"], "Martyrologies" => ["ritual/liturgy"],
+    "Sacramentaries" => ["ritual/liturgy"], "Religious rules and constitutions" => ["legal/law"],
+    "Bulls and briefs (non-papal)" => ["legal/law"], "Bulls (papal)" => ["legal/law"],
+    "Laws" => ["legal/law"], "Papal documents" => ["legal"], "Indulgences" => ["legal"],
+    "Charters" => ["legal"], "Petitions" => ["legal/petition"], "Trial proceedings" => ["legal/court"],
+    "Journals" => ["literary/diary"], "Travel literature" => ["literary/diary"],
+    "Novels" => ["literary/narrative"], "Adab literature" => ["literary"], "Satires" => ["literary"],
+    "Songs (musical compositions)" => ["hymn-prayer/hymn"], "Government records" => ["administrative"],
+    "Minutes" => ["administrative/register"], "Land surveys" => ["administrative/register"],
+    "Land registers" => ["administrative/register"], "Rhetorical works" => ["scholarly"],
+    "Geographical works" => ["scholarly"], "Research notes" => ["scholarly"],
+    "Medical records" => ["scholarly/medicine"], "Genealogies" => ["historiography"],
+    "Concordances" => ["lexical"]
+  }.freeze
+  HMML_NOT_GENRE = ["Fragments", "Notebooks", "Compendiums", "Palimpsests", "Scrolls", "Music manuscripts",
+                    "Commonplace books", "Maps", "Drawings"].freeze
+  HMML_UNCOVERED = %w[Orations Indexes Hadith].freeze
+
+  def test_shipped_hmml_genre_fold_covers_the_whole_census
+    shipped = shipped_kinds
+    HMML_TAIL.each { |label, want| assert_equal want, shipped.normalize("hmml-reading-room", label), label }
+    HMML_NOT_GENRE.each do |label|
+      fold = shipped.fold("hmml-reading-room", label)
+      assert_empty fold.paths, label
+      assert_empty fold.uncovered, "#{label} is a declared not-genre value"
+    end
+    HMML_UNCOVERED.each do |label|
+      assert_equal [label], shipped.fold("hmml-reading-room", label).uncovered, label
+    end
+  end
+
   def shipped_kinds
     Nabu::Kinds.load(
       classes_path: File.expand_path("../config/kind_classes.yml", __dir__),
