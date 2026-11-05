@@ -226,7 +226,7 @@ module Adapters
         refute_includes paths, Nabu::Kinds::UNMAPPED, code
       end
       assert_equal ["hymn-prayer/hymn"], kinds.normalize("gregobase", "hy")
-      assert_equal ["ritual/liturgy"], kinds.normalize("gregobase", "an")
+      assert_equal ["ritual/chant"], kinds.normalize("gregobase", "an")
     end
 
     # -- load: idempotency -----------------------------------------------------------

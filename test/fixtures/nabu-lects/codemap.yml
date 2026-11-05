@@ -67,6 +67,16 @@ map:
   bra-Guru: "bra~guru"
   fas-Guru: "fa~guru"
   msa:     ms
+  wel:     cy   # the 639-2/B bibliographic spelling (cym is the /T twin; eebo-tcp emits it, 351k passages)
+  iri:     ga   # the retired pre-1989 639-2 code for Irish (eebo-tcp, 33k passages)
+  gla:     gd   # 639-2/3 Scottish Gaelic onto the two-letter anchor
+  fre:     fr   # the 639-2/B bibliographic spelling (eebo-tcp, 23k passages)
+  por:     pt   # the 639-2/3 spelling onto the two-letter anchor
+  ae:      ave  # 639-1 Avestan (the ave anchor carries the old/yng stages)
+  cmn:     zho  # Mandarin: the Sinitic spine is the zho anchor — its staged
+                # record (old/mid/oman) ends where Mandarin begins, so the
+                # modern standard is the anchor's open end; held carriers are
+                # modern translations and commentary (classical-modern, cbeta)
   tha:     th
   ger:     de   # the 639-2/B bibliographic spelling (deu is the /T twin)
   nor:     "no" # the macrolanguage alias, claiming nothing historical (quoted: YAML 1.1 reads bare no as false)
@@ -107,6 +117,7 @@ map:
   # Old Swedish / Old Italian / Old Danish (Wiktionary etymology-only codes)
   gmq-osw: sv:old
   roa-oit: it:old
+  fa-cls:  "fa:cls" # Wiktionary's etymology-only Classical Persian code
   gmq-oda: da:old
   olt:     lt:old   # Wiktionary's Old Lithuanian — 188 reflex rows held
   # The South Asian stage suite (2026-10-27): ISO 639-3 codes that name a
@@ -283,6 +294,19 @@ map:
   san-Latn: "san~latn"
   san-Deva: "san~deva"
   ta-Latn:  "ta~latn"
+  tam-Latn: "ta~latn"  # the 639-3 spelling of the same claim (sii-clean, dharma-tamil, tamilex — 172k passages, byte-censused Latin 2026-11-02)
+  kan-Latn: "kn~latn"  # romanized Kannada epigraphy (sii-clean, dharma-deccan, kannada-texts — 100k, byte-censused)
+  tel-Latn: "te~latn"  # romanized Telugu epigraphy (sii-clean, dharma lanes — 90k, byte-censused)
+  mar-Latn: "mr~latn"  # romanized Marathi (sii-clean, gretil-legacy — 28.5k, byte-censused)
+  awa-Latn: "awa~latn" # romanized Awadhi (gretil-legacy — 17.5k, byte-censused)
+  pka-Latn: "pka~latn" # romanized Ardhamagadhi (prakrit-texts, gretil-legacy — 10k, byte-censused)
+  bra-Latn: "bra~latn" # romanized Braj (gretil-legacy — 3.9k, byte-censused)
+  ron-Cyrl: "ro~cyrl"  # Romanian Cyrillic (the 1688 Bucharest Bible — 36.3k, byte-censused)
+  msa-Arab: "ms~arab"  # Malay in Jawi (ms-wikisource — 5.1k, byte-censused)
+  jpn-Latn: "jpn~latn" # romanized Japanese (the Jesuit mission press transcriptions,
+                       # ~22.1k passages whose printed surface IS the Portuguese-based
+                       # romanization — not a transliteration tag; byte-censused at the
+                       # consuming adapter's full-file parse 2026-11-04)
   bra-Deva: "bra~deva"
   awa-Deva: "awa~deva"
   xct-Latn: "xct~latn"

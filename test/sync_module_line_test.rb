@@ -147,6 +147,32 @@ class SyncModuleLineTest < Minitest::Test
     assert_includes stdout, "unreachable, retried next sync: ah37-1901"
   end
 
+  # A composite fetch (two prepared parts, e.g. an archive plus a pinned
+  # sidecar) reports its notes as an ARRAY — the miss scan must read the
+  # joined words, not crash on Array#match? (caught live 2026-11-05 on the
+  # first two-part fetch).
+  def test_array_fetch_notes_carrying_a_miss_surface_without_crashing
+    fetch = Nabu::FetchReport.new(sha: NEW, fetched_at: Time.now,
+                                  notes: ["archive held", "sidecar unreachable, retried next sync"])
+    out_come = Nabu::SyncRunner::Outcome.new(
+      slug: "cgpg", fetch_report: fetch, load_report: zero_report, breaker: nil,
+      indexed: nil, warnings: [], discovery: Nabu::Adapter::DiscoverySkips.new, module_delta: nil
+    )
+    stdout, = capture_io { cli.send(:print_discovery_accounting, out_come) }
+    assert_includes stdout, "sidecar unreachable, retried next sync"
+  end
+
+  def test_clean_array_fetch_notes_stay_off_the_discovery_accounting
+    fetch = Nabu::FetchReport.new(sha: NEW, fetched_at: Time.now,
+                                  notes: ["archive held", "sidecar held"])
+    out_come = Nabu::SyncRunner::Outcome.new(
+      slug: "cgpg", fetch_report: fetch, load_report: zero_report, breaker: nil,
+      indexed: nil, warnings: [], discovery: Nabu::Adapter::DiscoverySkips.new, module_delta: nil
+    )
+    stdout, = capture_io { cli.send(:print_discovery_accounting, out_come) }
+    refute_includes stdout, "fetch:"
+  end
+
   def test_clean_fetch_notes_stay_off_the_discovery_accounting
     fetch = Nabu::FetchReport.new(sha: NEW, fetched_at: Time.now, notes: "55/55 item(s) held (+1 this sync)")
     out_come = Nabu::SyncRunner::Outcome.new(

@@ -47,37 +47,66 @@ module Nabu
     # - a lone "#NOM?" line in place of the token row, its </w> missing (66
     #   deposit-wide) — a spreadsheet formula error upstream that ate the
     #   token: counted as lost_tokens.
+    #
+    # == Two reads
+    #
+    # #parse mints the whole volume as one document (the volume grain);
+    # #pages returns the same pages as values — text, tokens and a PER-PAGE
+    # loss census — for the work carve, which takes a set of pages out of
+    # a volume (Cgpg's carve plan) and must sum only its own losses.
     class CgpgVertParser
       DOC_OPEN = /\A<doc id="([^"]*)">\z/
       TOKEN_OPEN = /\A<w id="PDF Page (\d+), Line (\d+) - word id (\d+)">\z/
       NO_ANALYSIS = "∅"
 
-      def parse(path, urn:, language:, title:, metadata: {})
-        state = read(path)
-        raise ParseError, "#{path}: no tokens" if state[:pages].empty?
+      # One PDF page: its text (tokens space-joined per OCR line, lines
+      # "\n"-joined), its tokens, and the tokens upstream lost on it.
+      Page = Data.define(:number, :text, :tokens, :empty_form_tokens, :lost_tokens)
 
+      # A volume file's pages in file order (page number → Page), and the
+      # whole file's loss totals (a page whose every token was lost has no
+      # Page, but its losses still count here).
+      Volume = Data.define(:doc_id, :pages, :empty_form_tokens, :lost_tokens)
+
+      def parse(path, urn:, language:, title:, metadata: {})
+        volume = pages(path)
         document = Nabu::Document.new(
           urn: urn, language: language, canonical_path: path, title: title,
           metadata: metadata.merge(
-            "doc_id" => state[:doc_id],
-            "empty_form_tokens" => state[:empty],
-            "lost_tokens" => state[:lost]
+            "doc_id" => volume.doc_id,
+            "empty_form_tokens" => volume.empty_form_tokens,
+            "lost_tokens" => volume.lost_tokens
           ).compact
         )
-        state[:pages].each_with_index do |(page, lines), index|
+        volume.pages.each_value.with_index do |page, index|
           document << Nabu::Passage.new(
-            urn: "#{urn}:p#{page}", language: language, sequence: index,
-            text: lines.values.map { |tokens| tokens.map { |t| t["form"] }.join(" ") }.join("\n"),
-            annotations: { "pdf_page" => page, "tokens" => lines.values.flatten }
+            urn: "#{urn}:p#{page.number}", language: language, sequence: index, text: page.text,
+            annotations: { "pdf_page" => page.number, "tokens" => page.tokens }
           )
         end
         document
       end
 
+      # The volume's pages as values; a file with no tokens is a ParseError.
+      def pages(path)
+        state = read(path)
+        raise ParseError, "#{path}: no tokens" if state[:pages].empty?
+
+        pages = state[:pages].to_h do |number, lines|
+          losses = state[:losses].fetch(number, [0, 0])
+          text = lines.values.map { |tokens| tokens.map { |t| t["form"] }.join(" ") }.join("\n")
+          [number, Page.new(number: number, text: text, tokens: lines.values.flatten,
+                            empty_form_tokens: losses[0], lost_tokens: losses[1])]
+        end
+        Volume.new(doc_id: state[:doc_id], pages: pages,
+                   empty_form_tokens: state[:losses].each_value.sum(&:first),
+                   lost_tokens: state[:losses].each_value.sum(&:last))
+      end
+
       private
 
       def read(path)
-        state = { doc_id: nil, pages: {}, empty: 0, lost: 0, position: nil }
+        state = { doc_id: nil, pages: {}, losses: {}, position: nil }
         SourceRead.utf8_file(path, label: "cgpg").each_line(chomp: true) { |line| step(state, line, path) }
         state
       end
@@ -97,10 +126,12 @@ module Nabu
       def token_row(state, line, path)
         columns = line.split("\t", -1)
         raise ParseError, "#{path}: a token row outside any <w> block" if state[:position].nil?
-        return state[:lost] += 1 unless columns.size == 5
-        return state[:empty] += 1 if columns[0].empty?
 
         page, line_no = state[:position]
+        losses = state[:losses][page] ||= [0, 0]
+        return losses[1] += 1 unless columns.size == 5
+        return losses[0] += 1 if columns[0].empty?
+
         lines = state[:pages][page] ||= {}
         (lines[line_no] ||= []) << token(columns, line_no)
       end

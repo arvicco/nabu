@@ -118,6 +118,7 @@ Give **exactly one** of:
   `gloss` word (also only with `lemma`, composing with `morph`, not `near`)
   keeps only attestations whose token gloss contains it — `lemma` "דבר" +
   `gloss` "word" separates BHSA's consonantal homograph from "speak".
+  `gloss` WITHOUT `lemma` (and no `query`) is the gloss lane — see below.
 - `similar_to` — a passage urn: its **semantic** neighbours instead of a text
   search (P93-5), read from the local vector store that `nabu embed` builds
   ([embed.md](embed.md)) — other witnesses of a verse, passages saying the
@@ -185,8 +186,8 @@ required, any facet at document or passage grain, value or ref matched
 case-insensitively with LIKE patterns passing through, at most 8 pairs;
 composes with `kind` (both hold), text search only.
 
-Three further **lanes** replace the ranked text search (contract bump
-2026-10-22 — the CLI flags they mirror, the same query classes, the same
+Further **lanes** replace the ranked text search (contract bump
+2026-10-22, plus the gloss lane 2026-11-05 — the CLI flags they mirror, the same query classes, the same
 composition sets; any other arg is refused naming the clash):
 
 - `fuzzy: true` — `search --fuzzy` (`Query::Fuzzy`): `query` is a literal
@@ -205,6 +206,17 @@ composition sets; any other arg is refused naming the clash):
   lists `{source, passages}` per indexed source. Composes with lang (the
   original's language)/license/limit. An unbuilt lane answers the build hint
   (`rake index:translations`).
+- `gloss` alone (no `lemma`, no `query`; bump 2026-11-05) — `search --gloss
+  WORD` with no query (`Query::GlossSearch`): every WORD some source glosses
+  WORD in its upstream token glosses, across lemmas ("king" → BHSA's Hebrew
+  and Aramaic מלך, achemenet's šarru). Words AND, "phrase", prefix*;
+  case- and diacritic-insensitive. Each hit is a word — `lemma` (empty for
+  a lemma-less token), `form`, `gloss`, `source`, `language`, `tokens`,
+  `passages` — with `urn` = its first attestation and that passage's
+  `license_class`; `coverage` lists `{source, words, tokens}`. The
+  attestations are the lemma-anchored filter (`lemma` + `gloss`). Composes
+  with lang/license/limit. An unbuilt lane answers the build hint
+  (`rake index:glosses`).
 - `sense` — the `nabu sense TERM` desk (`Query::Senses`): a DCS WordSem id
   (or comma-joined ids) or a sense name matched against the sense shelf
   (`sense_gloss: true` also matches inside the gloss). The payload (`type:
@@ -782,7 +794,10 @@ flag; a second 2026-10-22 bump added the MCP tool metadata to every
 `tools/list` entry — a display `title` and an `annotations` object
 `{title, readOnlyHint: true}` (pinned in the same file: every registered
 tool carries both); a third 2026-10-22 bump added nabu_search's `betacode`
-input flag (and its present-only `betacode` echo key). Live MCP servers
+input flag (and its present-only `betacode` echo key); the 2026-11-05
+bump gave nabu_search's existing `gloss` key a second meaning where it
+used to be a usage error — `gloss` without `lemma` is the gloss lane (no
+schema key added, the lemma-anchored filter unchanged). Live MCP servers
 serve the old schema until restarted.
 
 | Capability | CLI surface | MCP tool | Status |

@@ -144,6 +144,39 @@ class DharmaDeccanTest < Minitest::Test
     end
   end
 
+  # -- skeletons: upstream's placeholder grain, a rule-skip --------------------
+
+  SKELETON_NOTE = "skeleton — no citable text yet (upstream placeholder)"
+
+  def test_upstream_skeletons_are_rule_skips_never_quarantined
+    ids = adapter.discover(workdir).map(&:id)
+    refute_includes ids, "urn:nabu:dharma-deccan:INSNandodbhava00001",
+                    "an edition div holding only its numbered <lb/> scaffold never reaches parse"
+    refute_includes ids, "urn:nabu:dharma-deccan:Bha13",
+                    "a bibliography + commentary record with no edition div never reaches parse"
+    skips = adapter.discovery_skips(workdir)
+    assert_equal 2, skips.skipped_by_rule
+    assert_includes skips.notes, "tfb-nandodbhava-epigraphy/DHARMA_INSNandodbhava00001.xml: #{SKELETON_NOTE}"
+    assert_includes skips.notes, "tfb-satavahana-epigraphy/Bha13.xml: #{SKELETON_NOTE}"
+  end
+
+  def test_a_malformed_file_is_never_mistaken_for_a_skeleton
+    Dir.mktmpdir do |dir|
+      ollett = File.join(dir, "tfb-satavahana-epigraphy", "satavahana-inscriptions-data_Ollett")
+      FileUtils.mkdir_p(ollett)
+      real = File.read(File.join(workdir, "tfb-satavahana-epigraphy",
+                                 "satavahana-inscriptions-data_Ollett", "Bha13.xml"))
+      # The real skeleton cut short mid-body: XML that does not parse is a
+      # defect (the quarantine lane), whatever its edition div looks like.
+      File.write(File.join(ollett, "Bha13.xml"), real[0, real.index("<listBibl>")])
+      refs = adapter.discover(dir).to_a
+      assert_equal ["urn:nabu:dharma-deccan:Bha13"], refs.map(&:id)
+      assert_equal 0, adapter.discovery_skips(dir).skipped_by_rule
+      error = assert_raises(Nabu::ParseError) { adapter.parse(refs.first) }
+      assert_match(/malformed XML/, error.message, "the quarantine names the real defect")
+    end
+  end
+
   # -- EIAD: Prakrit prose ----------------------------------------------------
 
   def test_eiad1_is_prakrit_prose_at_line_grain

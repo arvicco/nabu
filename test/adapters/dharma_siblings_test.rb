@@ -125,23 +125,52 @@ class DharmaPyuTest < Minitest::Test
   include AdapterConformance
 
   PYU20 = "urn:nabu:dharma-pyu:INSPYU00020"
+  PYU120 = "urn:nabu:dharma-pyu:INSPYU00120"
 
-  def conformance_adapter = Nabu::Adapters::DharmaPyu.new
+  # PYU 120 quarantines by design (below), so the conformance sweep runs
+  # over the clean edition only.
+  def conformance_adapter
+    adapter = Nabu::Adapters::DharmaPyu.new
+    original = adapter.method(:discover)
+    adapter.define_singleton_method(:discover) do |workdir, &block|
+      return enum_for(:discover, workdir) unless block
+
+      original.call(workdir) { |ref| block.call(ref) if ref.id == PYU20 }
+    end
+    adapter
+  end
 
   def conformance_workdir = Nabu::TestSupport.fixtures("dharma-pyu")
 
   def conformance_expected_source_id = "dharma-pyu"
+
+  def adapter = Nabu::Adapters::DharmaPyu.new
 
   def test_manifest
     assert_equal "dharma-pyu", Nabu::Adapters::DharmaPyu.manifest.id
   end
 
   def test_pyu20_parses_from_the_flat_repo_root
-    adapter = conformance_adapter
     refs = adapter.discover(conformance_workdir).to_a
-    assert_equal [PYU20], refs.map(&:id), "flat layout: editions at the repo root"
+    assert_equal [PYU20, PYU120], refs.map(&:id), "flat layout: editions at the repo root"
     document = adapter.parse(refs.first)
     assert_equal "pyx-Latn", document.language
     refute_empty document.passages
+  end
+
+  def test_an_upstream_skeleton_is_a_rule_skip_never_quarantined
+    refute_includes adapter.discover(conformance_workdir).map(&:id), "urn:nabu:dharma-pyu:INSPYU00011",
+                    "textparts holding only <ab><!--Transcription here--></ab> never reach parse"
+    skips = adapter.discovery_skips(conformance_workdir)
+    assert_equal 1, skips.skipped_by_rule
+    assert_equal ["DHARMA_INSPYU00011.xml: skeleton — no citable text yet (upstream placeholder)"], skips.notes
+  end
+
+  def test_an_edition_with_real_text_but_no_minted_unit_still_quarantines
+    ref = adapter.discover(conformance_workdir).find { |r| r.id == PYU120 } || flunk("no ref #{PYU120}")
+    error = assert_raises(Nabu::ParseError) { adapter.parse(ref) }
+    assert_match(/no citable text/, error.message,
+                 "its numerals sit in a <choice> of bare <num> alternatives the walk does not read — " \
+                 "real text, so a defect for the quarantine lane, never a skeleton")
   end
 end

@@ -37,6 +37,24 @@ name and path, mirroring `canonical/dharma-deccan/<repo>/<path>`:
   TRIMMED: the repo's metadata table cut to its four header rows plus
   the data rows for INSVengiCalukya00001 and 00099 (the date join).
 
+## Delivery grains
+
+Upstream serves one TEI file per inscription (the accepted grain), plus
+two REJECTED grains, each pinned by a real specimen and skipped by rule
+(counted in `discovery_skips`, never quarantined):
+
+- **non-edition files** (encoding templates, `-test` working copies,
+  Ollett's `schemas.xml`) — pinned synthetically in the adapter test;
+- **skeletons** — records committed before their transcription
+  ("skeleton — no citable text yet (upstream placeholder)"). Added
+  2026-11-05, copied whole and unmodified from the synced canonical tree:
+  - `tfb-nandodbhava-epigraphy/DHARMA_INSNandodbhava00001.xml` — an
+    edition div holding only its 39 numbered `<lb/>`s (a root-layout
+    repo);
+  - `tfb-satavahana-epigraphy/satavahana-inscriptions-data_Ollett/Bha13.xml`
+    — Bhājā 13: bibliography + commentary ("not legible"), no edition
+    div.
+
 Recipe: `git clone --depth 1 https://github.com/erc-dharma/<repo>`, copy
 the paths above; the TSV trim keeps lines 1–4 and the rows whose column
 14 ("Identifier of the text") is INSVengiCalukya00001 / 00099.

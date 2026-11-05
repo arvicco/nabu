@@ -9,3 +9,9 @@ files:
   - path: DHARMA_INSPYU00020.xml
     url: https://raw.githubusercontent.com/erc-dharma/tfc-pyu-epigraphy/master/DHARMA_INSPYU00020.xml
     whole: true
+  - path: DHARMA_INSPYU00011.xml
+    url: https://raw.githubusercontent.com/erc-dharma/tfc-pyu-epigraphy/master/DHARMA_INSPYU00011.xml
+    whole: true
+  - path: DHARMA_INSPYU00120.xml
+    url: https://raw.githubusercontent.com/erc-dharma/tfc-pyu-epigraphy/master/DHARMA_INSPYU00120.xml
+    whole: true

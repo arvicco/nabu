@@ -120,9 +120,58 @@ class WilkensOuiTest < Minitest::Test
     assert(glossed.all? { |e| e.german && e.turkish }, "every glossed record carries both halves")
   end
 
+  # The etymology chain at the head of the German half ("< TochA ābhāswar
+  # < Skt. ābhāsvara"): each "<"/"<<" link names its source language in
+  # roman and the etymon in italic — the italic run is the boundary signal
+  # the segmenter carries through its records, so the chain splits off the
+  # German half while the printed record (body, raw) keeps it.
+  def test_the_etymology_chain_splits_off_the_german_half
+    abasvar = entry("abasvar")
+    assert_equal "< TochA ābhāswar < Skt. ābhāsvara", abasvar.etymology
+    assert_equal "ein Himmel und eine Götterklasse (in der buddh. Kosmologie)", abasvar.german
+    assert abasvar.body.start_with?("< TochA ābhāswar < Skt. ābhāsvara ein Himmel"), "the printed record keeps it"
+    abakirti = entry("abakirti")
+    assert_equal ["<< Skt. abhayakῑrti", "n. pr. (ein Guru)"], [abakirti.etymology, abakirti.german]
+  end
+
+  def test_variant_etyma_and_a_chain_wrapping_onto_the_next_line_stay_one_chain
+    abidarim = entry("abidarim")
+    assert_equal "< TochA abhidharm / < TochB abhidhārm ~ abhidārm < Skt. abhidharma", abidarim.etymology
+    assert_equal "der dritte Teil des Tripiṭaka = Scholastik", abidarim.german
+    abicaruk = entry("abičaruk")
+    assert_equal "<< Skt. abhicāruka ~ ābhicāraka", abicaruk.etymology
+    assert_equal "Überwältigung (Titel eines tantrischen Rituals)", abicaruk.german
+  end
+
+  def test_labels_around_the_chain_stay_with_the_gloss
+    amrta = entry("amṛta")
+    assert_equal ["< Skt. amṛta", "(br) Nektar, Ambrosia (Name eines Pulvers)"], [amrta.etymology, amrta.german]
+    bnaya = entry("bnaya d-bnay")
+    assert_equal ["< Syr. bnayā d-bnay", "(c) Söhne der Söhne"], [bnaya.etymology, bnaya.german]
+  end
+
+  def test_an_etymon_reading_in_parentheses_rides_the_chain
+    kun = entry("kün", homonym: 3)
+    assert_equal "< Chin. � kun (Spätmittelchin. khunˊ)", kun.etymology
+    assert_equal "hinterer Palast, Wohnbereich der Frauen", kun.german
+  end
+
+  # No italic etymon, no boundary: the record keeps its German half whole
+  # (counted), never a regex guess at where the language label ends.
+  def test_without_an_italic_etymon_the_german_half_stays_whole
+    bizi = entry("Biži")
+    assert_nil bizi.etymology
+    assert_equal "< Chin. Bestandteil von Personennamen; n. pr. (männlich)", bizi.german
+    assert_equal 1, segmenter.anomalies[:etymology_without_etymon]
+    late = entry("kündülülüg")
+    assert_nil late.etymology, "a chain inside a parenthetical is not the record's head"
+    assert_nil entry("a", homonym: 1).etymology
+    assert_equal 27, entries.count(&:etymology), "every chain-headed record of the sample but Biži"
+  end
+
   def test_output_is_nfc
     entries.each do |e|
-      [e.headword, e.german, e.turkish, e.raw].compact.each do |s|
+      [e.headword, e.german, e.turkish, e.etymology, e.raw].compact.each do |s|
         assert_equal s.unicode_normalize(:nfc), s
       end
     end

@@ -165,10 +165,14 @@ class DharmaKhmerTest < Minitest::Test
     end
   end
 
-  def test_an_edition_with_no_text_quarantines
+  # Upstream's placeholder grain: a rule-skip at discovery, never a
+  # quarantine (quarantine is for malformed input).
+  def test_an_edition_with_no_text_is_a_skeleton_skip
     with_synthetic_edition(lang: "okz-Latn", body: "<p><lb n=\"1\"/></p>") do |dir|
-      ref = adapter.discover(dir).first
-      assert_raises(Nabu::ParseError) { adapter.parse(ref) }
+      assert_empty adapter.discover(dir).to_a
+      skips = adapter.discovery_skips(dir)
+      assert_equal 1, skips.skipped_by_rule
+      assert_match(/skeleton — no citable text yet \(upstream placeholder\)/, skips.notes.join(" "))
     end
   end
 

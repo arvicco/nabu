@@ -284,6 +284,51 @@ class LectRulesTest < Minitest::Test
     end
   end
 
+  # Ganjoor dates every poem by its poet's life (the poets list), and the
+  # date band stages every poet whose life sits inside one fa band. The
+  # poet rule places only the residue whose WORKING life is unambiguous:
+  # a broken record (saeeda), a life starting before the band but a
+  # floruit inside it (hanzale, daye, varavini), and two 12th-c. poets who
+  # outlive the 1200 edge by a year or two (zahir, zahiri). The straddling
+  # poets (Attar, Nezami, …) and everyone else stay with the date band.
+  GANJOOR_POETS = {
+    "سعیدا" => "fa:cls",
+    "حنظلهٔ بادغیسی" => "fa:early",
+    "نجم‌الدین رازی" => "fa:cls",
+    "سعدالدین وراوینی" => "fa:cls",
+    "ظهیر فاریابی" => "fa:early",
+    "ظهیری سمرقندی" => "fa:early"
+  }.freeze
+
+  def test_the_ganjoor_poet_rule_places_the_six_unambiguous_residue_poets
+    rule = akk_rules.find("ganjoor-poet") || flunk("the shipped rules file must carry ganjoor-poet")
+    assert_equal %w[ganjoor], rule.sources
+    assert_equal "fas", rule.code
+    assert_equal "author", rule.facet, "the facet_map projection of metadata poet"
+    assert_equal GANJOOR_POETS, rule.map
+    rule.map.each_value { |target| assert registry.lect(target), "#{target} is a registry stage" }
+  end
+
+  def test_the_ganjoor_poet_rule_leaves_uncovered_poets_to_the_date_band
+    catalog = Nabu::Store.connect("sqlite::memory:")
+    Nabu::Store.migrate!(catalog)
+    ganjoor = catalog[:sources].insert(slug: "ganjoor", name: "Ganjoor", adapter_class: "X",
+                                       license_class: "attribution")
+    { "saeeda:1" => "سعیدا", "zahir:1" => "ظهیر فاریابی", "attar:1" => "عطار", "hafez:1" => "حافظ" }
+      .each do |stem, poet|
+        doc = catalog[:documents].insert(source_id: ganjoor, urn: "urn:nabu:ganjoor:#{stem}", language: "fas",
+                                         content_sha256: "x")
+        catalog[:document_facets].insert(document_id: doc, facet: "author", value: poet)
+      end
+    rule = akk_rules.find("ganjoor-poet") || flunk("the shipped rules file must carry ganjoor-poet")
+    report = akk_rules.census(rule, catalog: catalog)
+    assert_equal({ %w[سعیدا fa:cls] => 1, ["ظهیر فاریابی", "fa:early"] => 1 }, report.matched)
+    assert_equal({ "عطار" => 1, "حافظ" => 1 }, report.unmatched,
+                 "a band-crossing poet (Attar) and a date-banded one (Hafez) are never ruled here")
+  ensure
+    catalog&.disconnect
+  end
+
   private
 
   # ppchy docs carrying the facet_map's dialect projection, each with the

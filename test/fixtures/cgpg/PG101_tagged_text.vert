@@ -1163,4 +1163,445 @@
 <w id="PDF Page 14, Line 52 - word id 388">
 ἀκόλουθον	ακολουθον	ἀκόλουθος	ακολουθος	A
 </w>
+<w id="PDF Page 44, Line 1 - word id 514">
+ΦΩΤΙΟΥ	φωτιου	Φώτιος	φωτιος	N+Ant
+</w>
+<w id="PDF Page 44, Line 2 - word id 515">
+ΠΑ	πα	πῃ	πη	I+Part
+</w>
+<w id="PDF Page 44, Line 2 - word id 516">
+ΤΡΙΑ	τρια	τρεῖς	τρεις	NUM+Car
+</w>
+<w id="PDF Page 44, Line 2 - word id 517">
+ΡΟΥ	ρου	Ὑρός	υρος	N+Ant
+</w>
+<w id="PDF Page 44, Line 2 - word id 518">
+ΚΩΝΣΤΑΝΤΙΝΟΥΠΟΛΕΩΣ	κωνσταντινουπολεως	Κωνσταντινούπολις	κωνσταντινουπολις	N+Top
+</w>
+<w id="PDF Page 44, Line 3 - word id 519">
+ΡΗΟΤΙΙ	ρηοτιι	ὑρητιάτης	υρητιατης	N+Com
+</w>
+<w id="PDF Page 44, Line 4 - word id 520">
+ΡΑΤὲΙΑΗΩΗΣ	ρατειαηωης	παρεταιόω	παρεταιοω	V
+</w>
+<w id="PDF Page 44, Line 4 - word id 521">
+ΟΟΝεΤΑΝΤΙΝΟΡΟΕΙΤΑΝΙ	οονεταντινοροειτανι	οὐοντεροντινοεργιτεν	ουοντεροντινοεργιτεν	A
+</w>
+<w id="PDF Page 44, Line 5 - word id 522">
+ΠΡΩΣ	πρως	πρώς	πρως	I+Adv
+</w>
+<w id="PDF Page 44, Line 5 - word id 523">
+ΑΜΦΙΛΟΧΙΟΝ	αμφιλοχιον	Ἀμφιλόχιος	αμφιλοχιος	N+Top
+</w>
+<w id="PDF Page 44, Line 5 - word id 524">
+ΤΟΝ	τον	ὁ	ο	DET
+</w>
+<w id="PDF Page 44, Line 5 - word id 525">
+ΟΣΙΩΤΑΤΟΝ	οσιωτατον	οἶσιος	οισιος	A
+</w>
+<w id="PDF Page 44, Line 5 - word id 526">
+ΜΗΤ	μητ	μήτη	μητη	I+Part@I+Neg
+</w>
+<w id="PDF Page 44, Line 6 - word id 527">
+ΠΩΛΙΤΗΝ	πωλιτην	πωλίτης	πωλιτης	N+Com
+</w>
+<w id="PDF Page 44, Line 6 - word id 528">
+ΚΥΖΙΚΟΥ	κυζικου	Κύζικος (τοπ)	κυζικος	N+Top
+</w>
+<w id="PDF Page 44, Line 7 - word id 529">
+ΕΝ	εν	ἐν	εν	I+Prep
+</w>
+<w id="PDF Page 44, Line 7 - word id 530">
+ΤΩ	τω	τε	τε	PRO+Ind
+</w>
+<w id="PDF Page 44, Line 7 - word id 531">
+ΚΑΙΡΩΤΩΝ	καιρωτων	καίρωτα	καιρωτα	A
+</w>
+<w id="PDF Page 44, Line 7 - word id 532">
+ΠΕΙΡΑΣΜΩΝ	πειρασμων	πείρασμα	πειρασμα	N+Com
+</w>
+<w id="PDF Page 44, Line 7 - word id 533">
+ΖΗΤΗΜΑΤΩΓ	ζητηματωγ	ζητηματέω	ζητηματεω	V
+</w>
+<w id="PDF Page 44, Line 8 - word id 534">
+ΑΙΑΦΟΡΩΝ	αιαφορων	αἰάφορος	αιαφορος	A
+</w>
+<w id="PDF Page 44, Line 8 - word id 535">
+ΕΙΙΣ	ειις	εἰμί	ειμι	V
+</w>
+<w id="PDF Page 44, Line 8 - word id 536">
+ΑΡΙΩΜΩΝ	αριωμων	Αὐρώμων	αυρωμων	N+Ant
+</w>
+<w id="PDF Page 44, Line 8 - word id 537">
+ΤΡΙΑΚΟΛΝΙΩΝ	τριακολνιων	τριακόλιον	τριακολιον	A
+</w>
+<w id="PDF Page 44, Line 9 - word id 538">
+ΣΥΝΤΕΙΝΟΝΤΩΝ	συντεινοντων	συντείνω	συντεινω	V
+</w>
+<w id="PDF Page 44, Line 9 - word id 539">
+ΕΠΙΛΥΣΙΝ	επιλυσιν	ἐπίλυσις	επιλυσις	V
+</w>
+<w id="PDF Page 44, Line 9 - word id 540">
+ΑΙΤΗΣΑΜΕΝΟΝ.	αιτησαμενον	αἰτέω	αιτεω	V
+</w>
+<w id="PDF Page 44, Line 10 - word id 541">
+Τῆς	της	ὁ	ο	DET
+</w>
+<w id="PDF Page 44, Line 10 - word id 542">
+σπουδῆς	σπουδης	σπουδή	σπουδη	N+Com
+</w>
+<w id="PDF Page 44, Line 10 - word id 543">
+σου	σου	σύ	συ	PRO+Per2s
+</w>
+<w id="PDF Page 44, Line 10 - word id 544">
+τὸ	το	ὁ	ο	DET
+</w>
+<w id="PDF Page 44, Line 10 - word id 545">
+γνήσιον	γνησιον	γνήσιος	γνησιος	A
+</w>
+<w id="PDF Page 44, Line 10 - word id 546">
+δυσωπηθεὶς	δυσωπηθεις	δυσωπέω	δυσωπεω	V
+</w>
+<w id="PDF Page 44, Line 10 - word id 547">
+τὴν	την	ὁ	ο	DET
+</w>
+<w id="PDF Page 44, Line 10 - word id 548">
+σὴν	σην	σός	σος	PRO+Pos2s
+</w>
+<w id="PDF Page 44, Line 11 - word id 549">
+ἀοῆκα	αοηκα	ἀοίημι	αοιημι	V
+</w>
+<w id="PDF Page 44, Line 11 - word id 550">
+πρὸς	προς	πρός	προς	I+Prep
+</w>
+<w id="PDF Page 44, Line 11 - word id 551">
+πέρας	περας	πέρας	περας	N+Com
+</w>
+<w id="PDF Page 44, Line 11 - word id 552">
+ἐλθεῖν,	ελθειν	ἔρχομαι	ερχομαι	V
+</w>
+<w id="PDF Page 44, Line 11 - word id 553">
+ὡς	ως	ὡς (ὅς)	ως	I+Conj
+</w>
+<w id="PDF Page 44, Line 11 - word id 554">
+ἐλπίσας,	ελπισας	ἐλπίζω	ελπιζω	V
+</w>
+<w id="PDF Page 44, Line 11 - word id 555">
+αἴτησιν·	αιτησιν	αἴτησις	αιτησις	N+Com
+</w>
+<w id="PDF Page 44, Line 11 - word id 556">
+καί	και	καί	και	I+Part
+</w>
+<w id="PDF Page 44, Line 12 - word id 557">
+τοι	τοι	τοι	τοι	I+Part
+</w>
+<w id="PDF Page 44, Line 12 - word id 558">
+πολλὰ	πολλα	πολύς	πολυς	A
+</w>
+<w id="PDF Page 44, Line 12 - word id 559">
+ἦν,	ην	εἰμί	ειμι	V
+</w>
+<w id="PDF Page 44, Line 12 - word id 560">
+καὶ	και	καί	και	I+Part
+</w>
+<w id="PDF Page 44, Line 12 - word id 561">
+κράτος	κρατος	κράτος	κρατος	N+Com
+</w>
+<w id="PDF Page 44, Line 12 - word id 562">
+εἶχεν,	ειχεν	ἔχω	εχω	V
+</w>
+<w id="PDF Page 44, Line 12 - word id 563">
+ἃ	α	ὅς ἥ ὅ	ος	PRO+Rel
+</w>
+<w id="PDF Page 44, Line 12 - word id 564">
+τὴν	την	ὁ	ο	DET
+</w>
+<w id="PDF Page 44, Line 12 - word id 565">
+ἐμὴν	εμην	ἐμός	εμος	PRO+Pos1s
+</w>
+<w id="PDF Page 44, Line 12 - word id 566">
+γνώμην	γνωμην	γνώμη	γνωμη	N+Com
+</w>
+<w id="PDF Page 44, Line 13 - word id 567">
+κκεΒεν	κκεβεν	καί@ἐκβείνω	και@εκβεινω	V
+</w>
+<w id="PDF Page 44, Line 13 - word id 568">
+ἀνέστελλεν.	ανεστελλεν	ἀναστέλλω	αναστελλω	V
+</w>
+<w id="PDF Page 44, Line 13 - word id 569">
+Ἔν	εν	ἐν	εν	I+Prep
+</w>
+<w id="PDF Page 44, Line 13 - word id 570">
+μὲν	μεν	μέν	μεν	I+Part
+</w>
+<w id="PDF Page 44, Line 13 - word id 571">
+ὅτι	οτι	ὅτι	οτι	I+Conj
+</w>
+<w id="PDF Page 44, Line 13 - word id 572">
+περ	περ	περ	περ	I+Part
+</w>
+<w id="PDF Page 44, Line 13 - word id 573">
+οὐκ	ουκ	οὐ	ου	I+Neg
+</w>
+<w id="PDF Page 44, Line 13 - word id 574">
+ὁλίγοις	ολιγοις	ὅλιγος	ολιγος	N+Com
+</w>
+<w id="PDF Page 44, Line 13 - word id 575">
+τοῖς	τοις	ὁ	ο	DET
+</w>
+<w id="PDF Page 44, Line 14 - word id 576">
+ποὸ	ποο	πο	πο	I+Adv
+</w>
+<w id="PDF Page 44, Line 14 - word id 577">
+ἡμῶν	ημων	ἡμεῖς	ημεις	PRO+Per1p
+</w>
+<w id="PDF Page 44, Line 14 - word id 578">
+ἰερῶν	ιερων	ἰερός	ιερος	V
+</w>
+<w id="PDF Page 44, Line 14 - word id 579">
+ἀνδρῶν	ανδρων	ἀνήρ	ανηρ	N+Com
+</w>
+<w id="PDF Page 44, Line 14 - word id 580">
+τὰ	τα	ὁ	ο	DET
+</w>
+<w id="PDF Page 44, Line 14 - word id 581">
+πλεῖστα	πλειστα	πλείων	πλειων	A
+</w>
+<w id="PDF Page 44, Line 14 - word id 582">
+τῶν	των	ὁ	ο	DET
+</w>
+<w id="PDF Page 44, Line 14 - word id 583">
+σῶν	σων	σός	σος	PRO+Pos2s
+</w>
+<w id="PDF Page 44, Line 14 - word id 584">
+ἀπορημάτων	απορηματων	ἀπόρημα	απορημα	N+Com
+</w>
+<w id="PDF Page 44, Line 15 - word id 585">
+τῆς	της	ὁ	ο	DET
+</w>
+<w id="PDF Page 44, Line 15 - word id 586">
+δεούσης	δεουσης	δέω (δεήσω)	δεω	V
+</w>
+<w id="PDF Page 44, Line 15 - word id 587">
+διακρίσεως	διακρισεως	διάκρισις	διακρισις	N+Com
+</w>
+<w id="PDF Page 44, Line 15 - word id 588">
+ἔτυχεν.	ετυχεν	τυγχάνω	τυγχανω	V
+</w>
+<w id="PDF Page 44, Line 15 - word id 589">
+Ἔτερον	ετερον	ἔτερος	ετερος	PRO+Ind
+</w>
+<w id="PDF Page 44, Line 15 - word id 590">
+δὲ	δε	δέ	δε	I+Part
+</w>
+<w id="PDF Page 44, Line 16 - word id 591">
+ὅτι	οτι	ὅτι	οτι	I+Conj
+</w>
+<w id="PDF Page 44, Line 16 - word id 592">
+ἡμῖν	ημιν	ἡμεῖς	ημεις	PRO+Per1p
+</w>
+<w id="PDF Page 44, Line 16 - word id 593">
+αὐτοῖς	αυτοις	αὐτός	αυτος	PRO+Dem
+</w>
+<w id="PDF Page 44, Line 16 - word id 594">
+οὐκ	ουκ	οὐ	ου	I+Neg
+</w>
+<w id="PDF Page 44, Line 16 - word id 595">
+ὀλίγα	ολιγα	ὀλίγος	ολιγος	A
+</w>
+<w id="PDF Page 44, Line 16 - word id 596">
+τούτων	τουτων	οὗτος	ουτος	PRO+Dem
+</w>
+<w id="PDF Page 44, Line 16 - word id 597">
+ἀλλαχόθεν	αλλαχοθεν	ἀλλαχόθεν	αλλαχοθεν	I+Adv
+</w>
+<w id="PDF Page 44, Line 16 - word id 598">
+ἐπιλέλυται.	επιλελυται	ἐπιλύω	επιλυω	V
+</w>
+<w id="PDF Page 44, Line 17 - word id 599">
+Οὐ	ου	οὐ	ου	I+Neg
+</w>
+<w id="PDF Page 44, Line 17 - word id 600">
+μὴν	μην	μήν (μέν)	μην	I+Part
+</w>
+<w id="PDF Page 44, Line 17 - word id 601">
+ἀλλὰ	αλλα	ἀλλά	αλλα	I+Part
+</w>
+<w id="PDF Page 44, Line 17 - word id 602">
+καὶ	και	καί	και	I+Part
+</w>
+<w id="PDF Page 44, Line 17 - word id 603">
+ὄχλον	οχλον	ὄχλος	οχλος	N+Com
+</w>
+<w id="PDF Page 44, Line 17 - word id 604">
+τοσοῦτον	τοσουτον	τοσοῦτος	τοσουτος	PRO+Dem
+</w>
+<w id="PDF Page 44, Line 17 - word id 605">
+διελθεῖν	διελθειν	διέρχομαι	διερχομαι	V
+</w>
+<w id="PDF Page 44, Line 17 - word id 606">
+συχνὸν	συχνον	συχνός	συχνος	A
+</w>
+<w id="PDF Page 44, Line 18 - word id 607">
+ἀπαιτεῖ	απαιτει	ἀπαιτέω	απαιτεω	V
+</w>
+<w id="PDF Page 44, Line 18 - word id 608">
+χρόνον·	χρονον	χρόνος	χρονος	N+Com
+</w>
+<w id="PDF Page 44, Line 18 - word id 609">
+καίτοι	καιτοι	καίτοι	καιτοι	I+Part
+</w>
+<w id="PDF Page 44, Line 18 - word id 610">
+τοῦ	του	ὁ	ο	DET
+</w>
+<w id="PDF Page 44, Line 18 - word id 611">
+καιροῦ	καιρου	καιρός	καιρος	N+Com
+</w>
+<w id="PDF Page 44, Line 18 - word id 612">
+συνεσταλμένου	συνεσταλμενου	συστέλλω	συστελλω	V
+</w>
+<w id="PDF Page 44, Line 19 - word id 613">
+κατὰ	κατα	κατά	κατα	I+Prep
+</w>
+<w id="PDF Page 44, Line 19 - word id 614">
+τὴν	την	ὁ	ο	DET
+</w>
+<w id="PDF Page 44, Line 19 - word id 615">
+θείαν	θειαν	θεῖος α ον	θειος	A
+</w>
+<w id="PDF Page 44, Line 19 - word id 616">
+τοῦ	του	ὁ	ο	DET
+</w>
+<w id="PDF Page 44, Line 19 - word id 617">
+Κήρυκος	κηρυκος	κῆρυξ	κηρυξ	N+Com
+</w>
+<w id="PDF Page 44, Line 19 - word id 618">
+φωνὴν,	φωνην	φωνή	φωνη	N+Com
+</w>
+<w id="PDF Page 44, Line 19 - word id 619">
+καὶ	και	καί	και	I+Part
+</w>
+<w id="PDF Page 44, Line 19 - word id 620">
+ὀψὲ	οψε	ὀψέ	οψε	I+Adv
+</w>
+<w id="PDF Page 44, Line 20 - word id 621">
+τυγχάνοντος·	τυγχανοντος	τυγχάνω	τυγχανω	V
+</w>
+<w id="PDF Page 44, Line 20 - word id 622">
+ἡμῖν	ημιν	ἡμεῖς	ημεις	PRO+Per1p
+</w>
+<w id="PDF Page 44, Line 20 - word id 623">
+δὲ	δε	δέ	δε	I+Part
+</w>
+<w id="PDF Page 44, Line 20 - word id 624">
+οὐχὶ	ουχι	οὐ	ου	I+Neg
+</w>
+<w id="PDF Page 44, Line 20 - word id 625">
+τῷ	τω	ὁ	ο	DET
+</w>
+<w id="PDF Page 44, Line 20 - word id 626">
+κοινῷ	κοινω	κοινός	κοινος	A
+</w>
+<w id="PDF Page 44, Line 20 - word id 627">
+λόγῳ	λογω	λόγος	λογος	N+Com
+</w>
+<w id="PDF Page 44, Line 20 - word id 628">
+τοῦ	του	ὁ	ο	DET
+</w>
+<w id="PDF Page 44, Line 20 - word id 629">
+ἀνρωπίνου	ανρωπινου	ἀνρώπινος	ανρωπινος	A
+</w>
+<w id="PDF Page 44, Line 21 - word id 630">
+βίου	βιου	βίος	βιος	N+Com
+</w>
+<w id="PDF Page 44, Line 21 - word id 631">
+μόνον,	μονον	μόνος	μονος	A
+</w>
+<w id="PDF Page 44, Line 21 - word id 632">
+ἀλλά	αλλα	ἀλλά	αλλα	I+Part
+</w>
+<w id="PDF Page 44, Line 21 - word id 633">
+γε	γε	γε	γε	I+Part
+</w>
+<w id="PDF Page 44, Line 21 - word id 634">
+καὶ	και	καί	και	I+Part
+</w>
+<w id="PDF Page 44, Line 21 - word id 635">
+νῦν,	νυν	νῦν	νυν	I+Adv
+</w>
+<w id="PDF Page 44, Line 21 - word id 636">
+καὶ	και	καί	και	I+Part
+</w>
+<w id="PDF Page 44, Line 21 - word id 637">
+τῷ	τω	ὁ	ο	DET
+</w>
+<w id="PDF Page 44, Line 21 - word id 638">
+ἰδιάζοντι	ιδιαζοντι	ἰδιάζω	ιδιαζω	V
+</w>
+<w id="PDF Page 44, Line 22 - word id 639">
+ὁ	ο	ὁ	ο	DET
+</w>
+<w id="PDF Page 44, Line 22 - word id 640">
+καιρὸς,	καιρος	καιρός	καιρος	N+Com
+</w>
+<w id="PDF Page 44, Line 22 - word id 641">
+ὡς	ως	ὡς (ὅς)	ως	I+Conj
+</w>
+<w id="PDF Page 44, Line 22 - word id 642">
+ὁρᾷς,	ορας	ὁράω	οραω	V
+</w>
+<w id="PDF Page 44, Line 22 - word id 643">
+ὑποστέλλεται.	υποστελλεται	ὑποστέλλω	υποστελλω	V
+</w>
+<w id="PDF Page 44, Line 22 - word id 644">
+Πῶς	πως	πῶς	πως	I+Adv
+</w>
+<w id="PDF Page 44, Line 22 - word id 645">
+δ´	δ´	δέ	δε	I+Part
+</w>
+<w id="PDF Page 44, Line 22 - word id 646">
+ἂν	αν	ἄν	αν	I+Part
+</w>
+<w id="PDF Page 44, Line 23 - word id 647">
+πλῆθος	πληθος	πλῆθος	πληθος	N+Com
+</w>
+<w id="PDF Page 44, Line 23 - word id 648">
+ζητημάτων	ζητηματων	ζήτημα	ζητημα	N+Com
+</w>
+<w id="PDF Page 44, Line 23 - word id 649">
+εἰς	εις	εἰς	εις	I+Prep
+</w>
+<w id="PDF Page 44, Line 23 - word id 650">
+τριακοσίων	τριακοσιων	τριακόσιοι	τριακοσιοι	NUM+Car
+</w>
+<w id="PDF Page 44, Line 23 - word id 651">
+συγκεφαλαιούμενον	συγκεφαλαιουμενον	συγκεφαλειόα	συγκεφαλειοα	V
+</w>
+<w id="PDF Page 44, Line 24 - word id 652">
+ἀριθμὸνμέχρι	αριθμονμεχρι	Ἀριμόμνυρχος	αριμομνυρχος	N+Top
+</w>
+<w id="PDF Page 44, Line 24 - word id 653">
+γὰρ	γαρ	γάρ	γαρ	I+Part
+</w>
+<w id="PDF Page 44, Line 24 - word id 654">
+τοσούτου	τοσουτου	τοσοῦτος	τοσουτος	PRO+Dem
+</w>
+<w id="PDF Page 44, Line 24 - word id 655">
+τὸ	το	ὁ	ο	DET
+</w>
+<w id="PDF Page 44, Line 24 - word id 656">
+περὶ	περι	περί	περι	I+Prep
+</w>
+<w id="PDF Page 44, Line 24 - word id 657">
+ταῦτά	ταυτα	οὗτος	ουτος	PRO+Dem
+</w>
+<w id="PDF Page 44, Line 24 - word id 658">
+σου	σου	σύ	συ	PRO+Per2s
+</w>
+<w id="PDF Page 293, Line 1 - word id 96837">
+ΒΙΘΘΕΛΤΑΤΙΟΝΩΟΙΑ	βιθθελτατιονωοια	Βιθλεθροσιαντοῖος	βιθλεθροσιαντοιος	N+Top
+</w>
+<w id="PDF Page 293, Line 1 - word id 96838">
+ΘΤΕΝΑΝΤΙ	θτεναντι	θεσμαντία	θεσμαντια	I+Adv
+</w>
 </doc>

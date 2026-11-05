@@ -115,6 +115,19 @@ class DharmaTamilTest < Minitest::Test
     end
   end
 
+  def test_upstream_skeletons_are_rule_skips_never_quarantined
+    ids = adapter.discover(workdir).map(&:id)
+    refute_includes ids, "urn:nabu:dharma-tamil:INSPallava00056",
+                    "a commentary + bibliography record with no edition div never reaches parse"
+    refute_includes ids, "urn:nabu:dharma-tamil:INSPallava00026",
+                    "an edition div holding only <lb n=\"1\"/>... (the template's dots) never reaches parse"
+    skips = adapter.discovery_skips(workdir)
+    assert_equal 2, skips.skipped_by_rule
+    note = "skeleton — no citable text yet (upstream placeholder)"
+    assert_includes skips.notes, "DHARMA_INSPallava00056.xml: #{note}"
+    assert_includes skips.notes, "DHARMA_INSPallava00026.xml: #{note}"
+  end
+
   # -- the licence-less SII edition: bare "tam", repo-level fallback ----------
 
   def test_licence_less_edition_records_the_repo_level_grant_verbatim

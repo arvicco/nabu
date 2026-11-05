@@ -621,3 +621,47 @@ rules:
       "Vg": "gmq"
       "Vr": "gmq"
       "G": "gmq"
+
+  # ── The Ganjoor poet residue (the author facet = metadata "poet",
+  # Ganjoor's own short names). Every ganjoor poem is dated by its poet's
+  # life (the site's poets list) and the date band already stages every
+  # poet whose life sits inside one fa band — 105,514 of the 126,165 poems
+  # (census 2026-11-05). This rule places only the residue poets whose
+  # WORKING life falls unambiguously inside one band although the life
+  # envelope does not (an open bound, a birth before the band edge, a
+  # death a year or two past it). Tier approximation: a poet name is not a
+  # stage label; the stage is a literary-historical reading of the poet's
+  # floruit, cited per line. The escapes keep upstream's exact bytes (the
+  # hamza above, the zero-width non-joiner).
+  # Deliberately NOT ruled (bare fas, honest under the fits-one-band rule):
+  # the eight poets whose working lives straddle the 1200 edge — نظامی
+  # (Nezami), عطار (Attar), Baba Afzal Kashani, Baha Walad, Seraj Qomri,
+  # Athir Akhsikati, Awhad al-Din Kermani, Kamal al-Din Esmail; and the
+  # Qajar / Bazgasht poets across the 1850 close — whether the fa:cls band
+  # should run to the classical cone's end is a registry-boundary question,
+  # not a per-poet rule. The 152 Arabic-section poems carry ara and are
+  # outside this rule's code.
+  - id: ganjoor-poet
+    tier: approximation
+    sources: [ganjoor]
+    code: fas
+    facet: author
+    map:
+      # Saʿidā: upstream's record is inconsistent (b. 1105 AH after d.
+      # 1077 AH); either reading — 1667 or 1694 CE — falls inside fa:cls.
+      "سعیدا": "fa:cls"
+      # Hanzala of Badghis (d. 219 AH ≈ 834): a Tahirid-era poet (the
+      # dynasty 821–873) — his surviving verse postdates 800.
+      "حنظلهٔ بادغیسی": "fa:early"
+      # Najm al-Din Razi Daya (d. 654 AH ≈ 1256): the Mersad al-Ebad was
+      # written 1221–23; his work is wholly 13th-century.
+      "نجم‌الدین رازی": "fa:cls"
+      # Saʿd al-Din Varavini: the Marzbannameh redaction, c. 1210–25.
+      "سعدالدین وراوینی": "fa:cls"
+      # Zahir Faryabi (d. 598 AH ≈ 1201/02): a 12th-century qasida poet
+      # whose life outlives the 1200 edge by a year — the edge case of
+      # this approximation.
+      "ظهیر فاریابی": "fa:early"
+      # Zahiri Samarqandi (d. 599 AH per the poets list): the Sindbadnameh
+      # is dated c. 1160 — the same edge reasoning.
+      "ظهیری سمرقندی": "fa:early"
