@@ -6548,6 +6548,27 @@ starling:
       starlingdb.org/descrip.php?lan=en#bases (Pokorny, PIET, Vasmer, Germet,
       Baltet, Kartet) verbatim on every serving surface.
 
+stationers-register:   # P160, 02-sources row 386
+  adapter: Nabu::Adapters::StationersRegister
+  adopted: "2026-11-05"
+  axes: [germanic]
+  wired: false   # EXPECT (census through the adapter over the four CURRENT
+                 # registers at 562db001, 2026-11-05): 10,453 docs / 26,047
+                 # passages, 0 errored, 0 skipped; discovery 60 files skipped by
+                 # rule (Arber/ 19, OLD Register 27, schema/stylesheet 4, README +
+                 # change-list PDF 2, .DS_Store 8), 0 unrecognized. Depth-1 clone
+                 # of github.com/gbergel/SRO_data (~250 MB working tree). Eyeball
+                 # nabu show urn:nabu:stationers-register:SRO1 (William pekerynge's
+                 # ballad "a Ryse and wake", 1557) and ...:SRO10453 (John
+                 # Stafford, 1640), probe nabu search "ephemerydes", then flip.
+  sync_policy: manual   # last upstream push 2019-08-27; no release tags
+  # Stationers' Register Online (Bergel & Gadd, CREATe, Glasgow): the copy
+  # entries of the Stationers' Company Registers A–D, 1557–1640, as TEI —
+  # enterer, copy-title, licensers, fee, Master and Wardens per entry.
+  # Licence: in-file CC BY 4.0 vs the site's "CC-BY-SA" — BY-SA taken →
+  # attribution. Document = entry (SRO id), passage = register-text block.
+  # Family sro-tei (streamed). Arber/ and OLD Register/ skip by rule.
+
 stgall-priscian:
   adapter: Nabu::Adapters::StgallPriscian
   adopted: "2026-10-14"

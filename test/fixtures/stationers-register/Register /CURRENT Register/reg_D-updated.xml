@@ -1,0 +1,373 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="sro-transcription.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<?xml-model href="sro-transcription.rng" type="application/xml" schematypens="http://purl.oclc.org/dsdl/schematron"?>
+<?xml-stylesheet type='text/xsl' href='sro-proofing-view.xsl'?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0">
+    <teiHeader>
+        <fileDesc>
+            <titleStmt>
+                <title>Volume 4 of Arber’s transcript
+                   of the Stationers' Register</title>
+                <principal>
+               <persName>Giles Bergel</persName>, <orgName>University of
+                    Oxford</orgName>
+            </principal>
+                <respStmt>
+                    <resp>Co-PI</resp>
+                    <persName>Ian Gadd</persName>
+                    <orgName>Bath Spa University </orgName>
+                </respStmt>
+                <respStmt>
+                    <resp>Proofreading and Transcription Guidelines</resp>
+                    <persName>Pip Willcox</persName>
+                    <orgName>Bodleian Library, University of Oxford</orgName>
+                </respStmt>
+                
+                <respStmt>
+                    <resp>Schema Design, Text Processing, Up-Conversion</resp>
+                    <persName>James Cummings</persName>
+                    <orgName>IT Services, University of Oxford</orgName>
+                </respStmt>
+               <respStmt>
+                  <resp>Editing</resp>
+                  <persName xml:id="BH">Ben Higgins</persName>
+                  <orgName>Lincoln College, University of Oxford</orgName>
+               </respStmt>
+                <respStmt>
+                    <resp>Initial Transcript</resp>
+                    <orgName>Invida Solutions Pvt. Ltd.</orgName>
+                </respStmt>
+                <funder>This transcript was funded by an Oxford University Lyell Fund award</funder>
+            </titleStmt>
+            <publicationStmt>
+                <distributor>
+               <orgName>Bodleian Library, University of Oxford</orgName>
+            </distributor>
+                <availability>
+                    <licence target="http://creativecommons.org/licenses/by/4.0/">Creative Commons
+                        Attribution</licence>
+                </availability>
+               <idno type="Liber">D</idno>
+               <idno type="Register">D</idno>
+               <idno type="Arber">4</idno>
+            </publicationStmt>
+            <sourceDesc>
+                <ab type="source">Transcriptions and encodings made from an electronic facsmile of
+                    Arber, Edward, A Transcript of the Registers of the Company of Stationers
+                    1554-1640 AD, 5 vols, (London: Priv. Print,; 1875-77, &amp; Birmingham,
+                    1875-94), Butler Library, Columbia University in the City of New York, R015.42
+                    L8a http://clio.cul.columbia.edu:7018/vwebv/holdingsInfo?bibId=6177070</ab>
+            </sourceDesc>
+        </fileDesc>
+        <encodingDesc>
+            <projectDesc>
+                <p>Created by the Stationers’ Register Online project
+                    (http://http://digital.humanities.ox.ac.uk/ProjectProfile/Project_page.aspx?pid=307)
+                </p>
+            </projectDesc>
+        </encodingDesc>
+        <revisionDesc>
+           <change when="2018-03-13"> SP01EW post processing not stationer</change>
+           <change when="2018-03-09"> SP01EW post processing stationer/enterer</change>
+           <change when="2018-03-09"> SP01EW post processing notes</change>
+           <change when="2018-03-07"> SP01EW post processing diff/same</change>
+           <change when="2018-03-07"> SP01EW post processing no. of titles/works COMPLETE</change>
+           <change when="2018-03-06"> SP01EW post processing no. of titles/works</change>
+           <change when="2018-03-05"> SP01EW post processing no. of titles/works</change>
+           <change when="2018-03-05"> SP01EW post processing thorns</change>
+           <change when="2018-02-23"> SP01EW SRO10428 final amendments</change>
+           <change when="2018-02-18"> SP01EW SRO10358-SRO10428</change>
+           <change when="2018-02-17"> SP01EW SRO10072-SRO10357</change>
+           <change when="2018-02-16"> SP01EW SRO9901-SRO10071</change>
+           <change when="2018-02-12"> SP01EW SRO9781-SRO9900</change>
+           <change when="2018-02-11"> SP01EW SRO9548-SRO9780</change>
+           <change when="2018-02-10"> SP01EW SRO9265-SRO9547</change>
+           <change when="2018-02-08"> SP01EW SRO8980-SRO9264</change>
+           <change when="2018-02-06"> SP01EW SRO8915-SRO8979</change>
+           <change when="2018-02-04"> SP01EW SRO8718-SRO8914</change>
+           <change when="2018-02-03"> SP01EW SRO8533-SRO8717</change>
+           <change when="2018-02-01"> SP01EW SRO8443-SRO8532</change>
+           <change when="2018-01-30"> SP01EW SRO8235-SRO8442</change>
+           <change when="2018-01-28"> SP01EW SRO8120-SRO8234</change>
+           <change when="2018-01-27"> SP01EW SRO8005-SRO8119</change>
+           <change when="2018-01-26"> SP01EW SRO7852-SRO8003</change>
+           <change when="2018-01-25"> SP01EW SRO7631-SRO7851</change>
+           <change when="2018-01-23"> SP01EW to SRO7630 amendments</change>
+           <change when="2018-01-21"> SP01EW SRO7421-SRO7630</change>
+           <change when="2018-01-20"> SP01EW SRO7328-SRO7420</change>
+           <change when="2018-01-19"> SP01EW SRO7226-SRO7327</change>
+           <change when="2017-12-20"> SRO10399-SRO1    </change>
+           <change when="2017-12-19"> SRO10368-SRO10399</change>
+           <change when="2017-12-18"> SRO10335-SRO10368</change>
+           <change when="2017-12-17"> SRO10310-SRO10335</change>
+           <change when="2017-12-15"> SRO10291-SRO10310</change>
+           <change when="2017-12-14"> SRO10260-SRO10291</change>
+           <change when="2017-12-11"> SRO10237-SRO10260</change>
+           <change when="2017-12-10"> SRO10215-SRO10237</change>
+           <change when="2017-12-09"> SRO10189-SRO10215</change>
+           <change when="2017-12-03"> SRO10156-SRO10189</change>
+           <change when="2017-11-27"> SRO10145-SRO10156</change>
+           <change when="2017-11-26"> SRO10130-SRO10145</change>
+           <change when="2017-11-25"> SRO10120-SRO10130</change>
+           <change when="2017-11-23"> SRO10106-SRO10120</change>
+           <change when="2017-11-22"> SRO10090-SRO10106</change>
+           <change when="2017-11-12"> SRO10071-SRO10090</change>
+           <change when="2017-11-12"> SRO10054-SRO10071</change>
+           <change when="2017-11-11"> SRO10041-SRO10054</change>
+           <change when="2017-11-10"> SRO10025-SRO10041</change>
+           <change when="2017-11-08"> SRO10006-SRO10025</change>
+           <change when="2017-11-07"> SRO9990-SRO10006</change>
+           <change when="2017-11-06"> SRO9957-SRO9990</change>
+           <change when="2017-11-05"> SRO9923-SRO9957</change>
+           <change when="2017-11-01"> SRO9921-SRO9923</change>
+           <change when="2017-10-31"> SRO9917-SRO9921</change>
+           <change when="2017-10-30"> SRO9910-SRO9917</change>
+           <change when="2017-10-28"> SRO9881-SRO9910</change>
+           <change when="2017-10-27"> SRO9856-SRO9881</change>
+           <change when="2017-10-26"> SRO9834-SRO9856</change>
+           <change when="2017-10-25"> SRO9816-SRO9834</change>
+           <change when="2017-10-24"> SRO9794-SRO9816</change>
+           <change when="2017-10-23"> SRO9766-SRO9794</change>
+           <change when="2017-10-21"> SRO9731-SRO9766</change>
+           <change when="2017-10-18"> SRO9713-SRO9730</change>
+           <change when="2017-10-16"> SRO9696-SRO9713</change>
+           <change when="2017-10-15"> SRO9664-SRO9696</change>
+           <change when="2017-10-13"> SRO9646-SRO9664</change>
+           <change when="2017-10-12"> SRO9645-SRO9646</change>
+           <change when="2017-10-11"> SRO9621-SRO9645</change>
+           <change when="2017-10-10"> SRO9594-SRO9621</change>
+           <change when="2017-10-08"> SRO9580-SRO9594</change>
+           <change when="2017-10-04"> SRO9566-SRO9580</change>
+           <change when="2017-10-03"> SRO9535-SRO9566</change>
+           <change when="2017-10-02"> SRO9501-SRO9535</change>
+           <change when="2017-10-01"> SRO9474-SRO9501</change>
+           <change when="2017-09-30"> SRO9436-SRO9474</change>
+           <change when="2017-09-29"> SRO9400-SRO9436</change>
+           <change when="2017-09-28"> SRO9374-SRO9400</change>
+           <change when="2017-09-24"> SRO9369-SRO9374</change>
+           <change when="2017-09-20"> SRO9338-SRO9369</change>
+           <change when="2017-09-16"> SRO9284-SRO9338</change>
+           <change when="2017-09-15"> SRO9278-SRO9284</change>
+           <change when="2017-09-13"> SRO9254-SRO9278</change>
+           <change when="2017-09-12"> SRO9211-SRO9254</change>
+           <change when="2017-09-11"> SRO9168-SRO9211</change>
+           <change when="2017-09-10"> SRO9150-SRO9168</change>
+           <change when="2017-09-08"> SRO9086-SRO9150</change>
+           <change when="2017-09-06"> SRO9035-SRO9086</change>
+           <change when="2017-09-05"> SRO8987-SRO9035</change>
+           <change when="2017-09-04"> SRO8980-SRO8987</change>
+           <change when="2017-09-03"> SRO8974-SRO8980</change>
+           <change when="2017-09-02"> SRO8925-SRO8974</change>
+           <change when="2017-09-01"> SRO8892-SRO8925</change>
+           <change when="2017-08-23"> SRO8886-SRO8892</change>
+           <change when="2017-08-21"> SRO8861-SRO8886</change>
+           <change when="2017-08-14"> SRO8855-SRO8861</change>
+           <change when="2017-08-13"> SRO8850-SRO8855</change>
+           <change when="2017-05-18"> SRO8804-SRO8850</change>
+           <change when="2017-05-17"> SRO8731-SRO8803</change>
+           <change when="2017-05-16"> SRO8639-SRO8730</change>
+           <change when="2017-05-14"> SRO8508-SRO8638</change>
+           <change when="2017-05-13"> SRO8465-SRO8507</change>
+           <change when="2017-05-08"> SRO8436-SRO8464</change>
+           <change when="2017-04-26"> SRO8413-SRO8435</change>
+           <change when="2017-04-25"> SRO8390-SRO8412</change>
+           <change when="2017-04-24"> SRO8330-SRO8389</change>
+           <change when="2017-04-23"> SRO8221-SRO8329</change>
+           <change when="2017-04-19"> SRO8189-SRO8220</change>
+           <change when="2017-04-17"> SRO8139-SRO8188</change>
+           <change when="2017-04-16"> SRO8099-SRO8138</change>
+           <change when="2017-04-13"> SRO8042-SRO8098</change>
+           <change when="2017-04-11"> SRO8013-SRO8041</change>
+           <change when="2017-04-10"> SRO7995-SRO8012</change>
+           <change when="2017-04-07"> SRO7919-SRO7994</change>
+           <change when="2017-04-06"> SRO7836-SRO7918</change>
+           <change when="2017-04-05"> SRO7728-SRO7836</change>
+           <change when="2017-04-04"> SRO7654-SRO7727</change>
+           <change when="2017-04-03"> SRO7601-SRO7653</change>
+           <change when="2017-04-02"> SRO7546-SRO7600</change>
+           <change when="2017-03-30"> SRO7408-SRO7546</change>
+           <change when="2017-03-28"> SRO7356-SRO7407</change>
+           <change when="2017-03-27"> SRO7311-SRO7355</change>
+           <change when="2017-03-23"> SRO7253-SRO7310</change>
+           <change when="2017-03-21"> SRO7238-SRO7252</change>
+           <change when="2017-03-20"> SRO7226-SRO7237</change>
+           <change when="2017-03-19"/>
+           <change when="2017-02-06">Test Run</change>
+           <change when="2017-01-29">
+              Metadata block created by JC; Arber's corrections made by GB
+           </change>
+           <change when="2017-01-16">
+              Material other than copy entries removed by Giles Bergel
+           </change>
+            <change from="2013-06" to="2013-10">Semi-automated changes based on bodleian
+                proofreading made to the SRO data after the initial conversion (and up-conversion of
+                roman numerals, fees, dates, names, etc.) from abbreviated tei-corset schema by
+                James Cummings</change>
+            <change from="2012-12" to="2013-05"> Encoding reviewed, with suggestions made for
+                improvements, a random sample of names checked, and spot-proofed by Pip Willcox.
+                December 2012 - May 2013. </change>
+        </revisionDesc>
+    </teiHeader>
+    
+    <text>
+      <body>
+         <div type="entry" xml:id="SRO8024">
+                  <head rend="left">
+                     <persName n="islipmaster" role="stationer enterer">Master <surname>Islip</surname>
+                     </persName>
+                     <note type="register">
+                  <supplied resp="#BH">[<hi rend="italics">vide</hi>page 324]</supplied>
+               </note>
+               <lb/>
+                     <note resp="#arber">Arber: See III., 207, 223, 225, and 276; also <hi rend="italics">p</hi>. 97.</note>
+                  </head>
+                  <p>Assigned ouer vnto him by <persName n="adamsmistris" role="stationer">mistris <surname>Adams</surname>
+                     </persName> and Consent of a full Court holden this Day all her estate in the booke Called <title>
+                  <persName n="riders" role="non-stationer">
+                        <surname>Riders</surname>
+                     </persName> Dictionary</title> being a sixt parte                     
+                     <seg type="fee" rend="roman-numerals aligned-right"><!--processing: vjd-->
+                        <num type="totalPence" value="6"><!--orig: vjd-->
+                           <num type="pence" value="6">vj<hi rend="superscript">d</hi>
+                           </num>
+                        </num>
+                     </seg>
+                  </p>
+                  <ab type="metadata">
+               <idno type="Liber">D</idno>
+               <idno type="SRONumber">8024</idno>
+               <date type="SortDate" when="1624-11-08"/>
+               <date type="Register" when="1624-11-08">8 November 1624</date>
+               <num type="totalEntryPence" value="6"/>
+               
+               <idno type="RegisterRef">Register D, p. 89</idno>
+               <idno type="ArberRef">IV. 127</idno>
+               <idno type="RegisterID">TSC-1-E-06-03_1620-1645_0098_p89</idno>
+               <num type="works" value="1"/>
+               <note type="status" subtype="annotated"/>
+               <note type="status" subtype="reassigned"/>
+               <persName n="cookeh" role="warden">
+                  <forename>H.</forename>
+                  <surname>Cooke</surname>
+               </persName>
+               <persName n="lownesm" role="warden">
+                  <forename>M.</forename>
+                  <surname>Lownes</surname>
+               </persName>
+               <persName n="lownesh" role="master">
+                  <forename>H.</forename>
+                  <surname>Lownes</surname>
+               </persName>
+               <note type="status" subtype="incomplete"/>
+            </ab>
+               </div>
+         <div type="entry" xml:id="SRO9195">
+                  <head rend="left">
+                     <persName n="lambertthomas" role="stationer enterer">
+                        <forename>Thomas</forename> 
+                        <surname>Lambert</surname>
+               </persName>:<lb/>
+                     <note resp="#arber">Arber: See III. 354; and <hi rend="italics">p</hi>. 227.</note>
+            </head>
+                  
+                  <p>Entred for his Copies 2. ballads called 
+                        <title>
+                  <persName n="cupid" role="non-stationer">Cupid</persName>s Whirligig &amp;c</title> and
+                     
+                        <title>the Welch Infectory of the <choice>
+                     <sic>Coods</sic>
+                     <unclear>
+                        <corr>Goods</corr>
+                     </unclear>
+                  </choice>
+               </title>
+                     
+                     <seg type="fee" subtype="sum" rend="roman-numerals aligned-right"><!--processing: xijd.-->
+                        <num type="totalPence" value="12"><!--orig: xijd.-->
+                           <num type="pence" value="12">xij<hi rend="superscript">d</hi>
+                           </num> . </num>
+                     </seg>
+                  </p>
+                  <ab type="metadata">
+               <idno type="Liber">D</idno>
+               <idno type="SRONumber">9195</idno>
+               <date type="SortDate" when="1633-12-06"/>
+               <date type="Register" when="1633-12-06">6 December 1633</date>
+               <num type="totalEntryPence" value="12"/>
+               
+               <idno type="RegisterRef">Register D, p. 283</idno>
+               <idno type="ArberRef">IV. 309</idno>
+               <idno type="RegisterID">TSC-1-E-06-03_1620-1645_0282_p283</idno>
+               <num type="works" value="2"/>
+               <note type="status" subtype="entered"/>
+               <persName n="weavere" role="warden">
+                  <forename>E.</forename>
+                  <surname>Weaver</surname>
+               </persName>
+               <persName n="aspleyw" role="warden">
+                  <forename>W.</forename>
+                  <surname>Aspley</surname>
+               </persName>
+               <persName n="islipa" role="master">
+                  <forename>A.</forename>
+                  <surname>Islip</surname>
+               </persName>
+               <note type="status" subtype="incomplete"/>
+            </ab>
+               </div>
+         <div type="entry" xml:id="SRO10453">
+                  <head rend="left">
+                     <persName n="staffordjohn" role="stationer enterer">
+                        <forename>John</forename> 
+                  <surname>Stafford</surname>
+                     </persName>
+                  </head>
+                  <p>Entred for his Copie vnder the hands of <persName n="wykesdoctor" role="non-stationer">doctor 
+                     <surname>Wykes</surname>
+               </persName> and <persName n="manmasterwarden" role="stationer">Master <surname>Man</surname> warden</persName> 
+                     a booke called <title>Two sermons vpon these texts (viz<hi rend="superscript">t</hi>.) 
+                     2. Corinthians. 11 <supplied resp="#arber">[chapter]</supplied>. 28. 
+                     Proverbes: 29 <supplied resp="#arber">[chapter]</supplied>. 1. by 
+                     <persName n="fennermaster" role="non-stationer">Master <surname>Fenner</surname>
+                  </persName>
+               </title>
+                     
+                     <seg type="fee" rend="roman-numerals aligned-right"><!--processing: vjd-->
+                        <num type="totalPence" value="6"><!--orig: vjd-->
+                           <num type="pence" value="6">vj<hi rend="superscript">d</hi>
+                           </num>
+                        </num>
+                     </seg>
+                  </p>
+                 
+                  <ab type="metadata">
+               <idno type="Liber">D</idno>
+               <idno type="SRONumber">10453</idno>
+               <date type="SortDate" when="1640-11-03"/>
+               <date type="Register" when="1640-11-03">3 November 1640</date>
+               <num type="totalEntryPence" value="6"/>
+               
+               <idno type="RegisterRef">Register D, p. 498</idno>
+               <idno type="ArberRef">IV. 524</idno>
+               <idno type="RegisterID">TSC-1-E-06-03_1620-1645_0497_p498</idno>
+               <num type="works" value="1"/>
+               <note type="status" subtype="entered"/>
+               <persName n="mans" role="warden">
+                  <forename>S.</forename>
+                  <surname>Man</surname>
+               </persName>
+               <persName n="downest" role="warden">
+                  <forename>T.</forename>
+                  <surname>Downes</surname>
+               </persName>
+               <persName n="aspleyw" role="master">
+                  <forename>W.</forename>
+                  <surname>Aspley</surname>
+               </persName>
+               <note type="status" subtype="incomplete"/>
+            </ab>
+               </div>
+         <!--Warning: This up-converted SRO XML has removed all non-entry markup and data.-->
+      </body>
+   </text>
+</TEI>

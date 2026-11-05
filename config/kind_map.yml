@@ -1194,6 +1194,10 @@ sources:
       "Warrant": legal/law                   # 1 — the Privy Council's warrant
       "Legal opinion": legal                 # 1 — counsel's opinion with its reply
       "Receipt": administrative/receipt      # 1 — Donne's receipt for £100
+  stationers-register:       # P160 — the Stationers' Company's own Registers (Liber A–D, 1557–1640):
+    source_kind: administrative/register   # every document is one copy entry, the Clerk's
+    #   record of a licence to print a copy and its fee — the ruled register sub exactly
+    #   (the copy-titles name ballads, sermons, almanacs …; the ENTRY is the register's)
   ninjal-textdb:             # the Kirishitan slice — one work per dataset dir (Adapters::NinjalTextdb)
     metadata: dataset
     map:

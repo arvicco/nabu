@@ -1,0 +1,301 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="sro-transcription.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<?xml-model href="sro-transcription.rng" type="application/xml" schematypens="http://purl.oclc.org/dsdl/schematron"?>
+<?xml-stylesheet type='text/xsl' href='sro-proofing-view.xsl'?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0">
+    <teiHeader>
+      <fileDesc>
+         <titleStmt>
+            <title>Copy entries in Stationers' Company Liber [Register] C, 4 July 1595 to 11 July 1620</title>
+            <principal>
+               <persName xml:id="GB">Giles Bergel</persName>
+               <orgName>University of Oxford</orgName>
+            </principal>
+            <principal> 
+               <persName xml:id="IG">Ian Gadd</persName>
+               <orgName>Bath Spa University </orgName>
+            </principal>
+            <editor>Giles Bergel</editor>
+            <editor>Ian Gadd</editor>
+            <respStmt>
+               <resp>Schema Design, Text Processing, Up-Conversion (Phase 1 and Phase 2)</resp>
+               <persName xml:id="JC">James Cummings</persName>
+               <orgName notAfter="2017-08">University of Oxford</orgName>
+               <orgName notBefore="2017-09">Newcastle University</orgName>
+            </respStmt>
+            <respStmt>
+               <resp>Volume Editor</resp>
+               <persName xml:id="EM">Eleanor Warmington</persName>
+            </respStmt>
+            <respStmt>
+               <resp>Proofreading and Transcription Guidelines (Phase 1)</resp>
+               <persName>Pip Willcox</persName>
+               <orgName>Bodleian Library, University of Oxford</orgName>
+            </respStmt>
+            <respStmt>
+               <resp>Transcription of Arber (Phase One)</resp>
+               <orgName>Invida Solutions Pvt. Ltd.</orgName>
+            </respStmt>
+            <funder> Phase One (Arber) - University of Oxford JPR Lyell Fund</funder>
+            <funder> Phase Two (Correction and enrichment) CREATe, University of Glasgow; the Bibliographical Society; Bath Spa University</funder>
+          </titleStmt>
+          <publicationStmt>
+            <publisher>Stationers' Register Online <ref target="http://www.stationersregister.online">http://www.stationersregister.online</ref>
+            </publisher>
+            <publisher>The Bibliographical Society <ref target="http://www.bibsoc.org.uk/">http://www.bibsoc.org.uk/</ref>
+            </publisher>
+            <publisher>CREATe, University of Glasgow <ref target="http://www.create.ac.uk/">http://www.create.ac.uk</ref>
+            </publisher>
+            <date when="2017-09-01">1 September 2017</date>
+            <availability>
+               <licence target="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution</licence>
+            </availability>
+             <idno type="DataSourceURI">https://github.com/gbergel/SRO_data/</idno>
+            <idno type="Liber">C</idno>
+            <idno type="Arber">3</idno>
+         </publicationStmt>
+         <sourceDesc>
+            
+            <bibl>
+               Transcriptions and encodings are jointly derived from an electronic facsmile of
+               Arber, <editor>Edward, A</editor> 
+               <title>Transcript of the Registers of the Company of Stationers 1554-1640
+               AD</title>, 5 vols, (London: Priv. Print,; <date>1875-77</date>, &amp; Birmingham, <date>1875-94</date>), Volume 3, copy at Butler
+               Library, Columbia University in the City of New York, R015.42 L8a
+               <ref target="https://clio.columbia.edu/catalog/6177070">https://clio.columbia.edu/catalog/6177070</ref>, and digital images of <bibl>
+                  <title>The Stationers' Company Liber C,</title> Stationers' Company archive Ref no: TSC/1/E/06/02</bibl>
+            </bibl>
+         </sourceDesc>
+      </fileDesc>
+      <encodingDesc>
+         <projectDesc>
+            <p>Created by the Stationers' Register Online project (www.stationersregister.online)
+               Phase One: http://http://digital.humanities.ox.ac.uk/ProjectProfile/Project_page.aspx?pid=307; 
+               Phase Two: http://www.create.ac.uk/blog/2017/02/24/create-support-stationers-register-online-project/
+            </p>
+         </projectDesc>
+      </encodingDesc>
+       <revisionDesc>
+          <change when="2017-09-27" who="#GB">various attribute emendations</change>
+          <change when="2017-09-26" who="#GB">various attribute emendations</change>
+          <change when="2017-09-25" who="#GB">various attribute emendations</change>
+          <change when="2017-08-21" who="#GB">persName emendations</change> 
+	        <change when="2017-08-21" who="#JC">Post-processing up-conversion</change> 
+              <change when="2017-06-26">GB amend re Blayney comments</change>
+           <change when="2017-06-26">GB clean up ffs</change>
+           <change when="2017-06-06">GB clean up ffs</change>
+           <change when="2017-06-06">GB post-processing</change>
+           <change when="2017-05-27">SP01 final amendments</change>
+           <change when="2017-05-21">SP01 SRO7185-SRO7224</change>
+           <change when="2017-05-20">SP01 SRO6915-SRO7184</change>
+           <change when="2017-05-19">SP01 SRO6724-SRO6914</change>
+           <change when="2017-05-14">SP01 SRO6538-SRO6723</change>
+           <change when="2017-05-13">SP01 SRO6252-SRO6537</change>
+           <change when="2017-05-08">SP01 SRO5994-SRO6130</change>
+           <change when="2017-05-07">SP01 SRO5771-SRO5993</change>
+           <change when="2017-05-06">SP01 SRO5643-SRO5770</change>
+           <change when="2017-05-05">SP01 SRO5385-SRO5642</change>
+           <change when="2017-05-01">SP01 SRO5190-SRO5384</change>
+           <change when="2017-04-30">SP01 SRO5049-SRO5189</change>
+           <change when="2017-04-29">SP01 SRO4897-SRO5048</change>
+           <change when="2017-04-27">SP01 SRO4701-SRO4896</change>
+           <change when="2017-04-26">SP01 SRO4547-SRO4700</change>
+           <change when="2017-04-25">SP01 SRO4460-SRO4547</change>
+           <change when="2017-04-23">SP01 SRO4270-SRO4459</change>
+           <change when="2017-04-22">SP01 SRO4129-SRO4269</change>
+           <change when="2017-04-17">SP01 SRO3968-SRO4128</change>
+           <change when="2017-04-14">SP01 SRO3805-SRO3967</change>
+           <change when="2017-04-13">SP01 SRO3635-SRO3804</change>
+           <change when="2017-04-02">FP01 SRO7190-SRO7225</change>
+           <change when="2017-04-01">FP01 SRO6963-SRO7189</change>
+           <change when="2017-03-29">FP01 SRO6780-SRO6962</change>
+           <change when="2017-03-26">FP01 SRO6483-SRO6779</change>
+           <change when="2017-03-25">FP01 SRO6211-SRO6482</change>
+           <change when="2017-03-24">FP01 SRO6052-SRO6210</change>
+           <change when="2017-03-19">FP01 SRO5894-SRO6051</change>
+           <change when="2017-03-18">FP01 SRO5661-SRO5893</change>
+           <change when="2017-03-17">FP01 SRO5470-SRO5660</change>
+           <change when="2017-03-16">FP01 SRO5426-SRO5469</change>
+           <change when="2017-03-14">FP01 SRO5215-SRO5425</change>
+           <change when="2017-03-12">FP01 SRO4967-SRO5214</change>
+           <change when="2017-03-11">FP01 SRO4899-SRO4966</change>
+           <change when="2017-03-09">FP01 SRO4848-SRO4898</change>
+           <change when="2017-03-07">FP01 SRO4801-SRO4847</change>
+           <change when="2017-03-06">FP01 SRO4613-SRO4800</change>
+           <change when="2017-03-05">FP01 SRO4518-SRO4612</change>
+           <change when="2017-03-04">FP01 SRO4303-SRO4517</change>
+           <change when="2017-03-03">FP01 SRO4185-SRO4302</change>
+           <change when="2017-03-01">FP01 SRO4096-SRO4184</change>
+           <change when="2017-02-27">FP01 SRO3949-SRO4095</change>
+           <change when="2017-02-26">FP01 SRO3811-SRO3948</change>
+           <change when="2017-02-25">FP01 SRO3684-SRO3810</change>
+           <change when="2017-02-23">FP01 SRO3635-SRO3683</change>
+           <change when="2017-01-29">
+              Metadata block created by JC; Arber's corrections made by GB
+           </change>
+           <change when="2017-01-16">
+              Material other than copy entries removed by Giles Bergel
+           </change>
+            <change from="2013-06" to="2013-10">Semi-automated changes based on bodleian
+                proofreading made to the SRO data after the initial conversion (and up-conversion of
+                roman numerals, fees, dates, names, etc.) from abbreviated tei-corset schema by
+                James Cummings</change>
+            <change from="2012-12" to="2013-05"> Encoding reviewed, with suggestions made for
+                improvements, a random sample of names checked, and spot-proofed by Pip Willcox.
+                December 2012 - May 2013. </change>
+        </revisionDesc>
+    </teiHeader>
+    
+   <text>
+      <body>
+         <div type="entry" xml:id="SRO4539">
+                  <head rend="left">
+                     <persName n="harrisonjohnjohnharrisonesonofmasterthelder"
+                         role="stationer enterer">
+                        <forename>John</forename> 
+                        <surname>harrison</surname>
+                        son of Master
+                        <persName n="harrisonjohn" role="stationer">
+                           <forename>John</forename> 
+                           <surname>harrison</surname>
+                        </persName>
+                        Th<supplied resp="#arber">[e]</supplied>elder.</persName>
+                  </head>
+                  
+                  <p>Entred for his copie vnder the handes of <persName n="pasfeildmaster" role="non-stationer">master
+                        <surname>pasfeild</surname>
+                     </persName> and the
+                     wardens <title>certen sermons preached by <persName n="tirollraffemaster" role="non-stationer">master
+                        <forename>Raffe</forename> 
+                           <surname>Tiroll</surname>
+                        </persName> 
+                     </title>
+                     
+                     <seg type="fee" rend="roman-numerals aligned-right"><!--processing: vjd-->
+                        <num type="totalPence" value="6"><!--orig: vjd-->
+                           <num type="pence" value="6">vj<hi rend="superscript">d</hi>
+                           </num>
+                        </num>
+                     </seg>
+                  </p>
+                  <p rend="centred">
+                     viz
+                  </p>
+                  
+                     <p> 
+                     <title type="part">one sermon vppon. <hi rend="smallcaps">Matthew.</hi> 23. <supplied resp="#arber">[chapter]</supplied> verse 5.                     
+                        All their woorkes they doo to be seene of men</title>
+                  </p>
+                        <list rend="bracketed-right">
+                           <item>
+                              <title type="part">The charge of the clergie</title>
+                           </item>
+                           <item>And <title type="part">the crowne of christians</title> 2 sermons
+                           </item>
+                        </list>
+                        
+                        
+                    
+                     <p>
+                        <title type="part">A festiuall sermon at pentecost The anointing of
+                        <persName n="christ">
+                           <surname>christ</surname>
+                        </persName> 
+                        or christian ointment. <hi rend="smallcaps">John</hi> 2. 20</title>
+                  </p>
+                     <p>
+                        <title>A festival sermon on the natiuitie of <persName n="christ">
+                           <surname>
+                              christ
+                           </surname>
+                        </persName>
+                     </title>
+                     </p>
+                     <p>1 <title type="part">
+                        <persName n="tymothie">
+                           <forename>
+                              
+                           Tymothie
+                           </forename>
+                        </persName>. 3. 16. And without controuersie great
+                        is the mistery &amp;c</title>
+                  </p>
+                  
+                  <ab type="metadata">
+               <idno type="Liber">C</idno>
+               <idno type="SRONumber">4539</idno>
+               <date type="SortDate" when="1602-05-06"/>
+               <date type="Register" when="1602-05-06">6 May 1602</date>
+                     <num type="totalEntryPence" value="6"/>
+                     
+                     <idno type="RegisterRef">Register C, f.81r</idno>
+                     <idno type="ArberRef">III. 205</idno>
+                     <idno type="RegisterID">TSC-1-E-06-02_1595-1631_0212_f81r</idno>
+                     <num type="works" value="1"/>
+                     <note type="status" subtype="entered"/>
+                     <persName n="setong" role="warden">
+                        <forename>G.</forename>
+                        <surname>Seton</surname>
+                     </persName>
+                     <persName n="barkerr" role="warden">
+                        <forename>R.</forename>
+                        <surname>Barker</surname>
+                     </persName>
+                     <persName n="newberyr" role="master">
+                        <forename>R.</forename>
+                        <surname>Newbery</surname>
+                     </persName>
+                  <note type="status" subtype="incomplete"/>
+            </ab>
+               </div>
+         <div type="entry" xml:id="SRO5992">
+                  <head rend="left">
+                     <persName n="aldeemaster" role="stationer enterer">Master <surname>Aldee</surname>
+                     </persName> /</head>
+                  <p>Entred for his Copy by direccon from <persName n="lownesmasterwarden" role="stationer">master <surname>Lownes</surname>
+                     Warden</persName> vnder
+his handwritinge to be printed when it is translated and further
+lawfully aucthorised, A placurt or proclamacon called, <title>
+                        <foreign>Placcaet van
+                     de Hooghe ende Mogende, heeren Staten generaell der vereenichde Nederlanden Inhendende order, waer near de Jesuijten priestes, ende
+                     Monicken van de Pausselijcke ofte Roomische Religie inde selue landen
+                     kamende hen sullen dragen &amp;c. </foreign>
+                     </title>
+                     
+                     <seg type="fee" rend="roman-numerals aligned-right"><!--processing: vjd-->
+                        <num type="totalPence" value="6"><!--orig: vjd-->
+                           <num type="pence" value="6">vj<hi rend="superscript">d</hi>
+                           </num>
+                        </num>
+                     </seg>
+                  </p>
+                  <ab type="metadata">
+               <idno type="Liber">C</idno>
+               <idno type="SRONumber">5992</idno>
+               <date type="SortDate" when="1612-04-13"/>
+               <date type="Register" when="1612-04-13">13 April 1612</date>
+                     <num type="totalEntryPence" value="6"/>
+                     
+                     <idno type="RegisterRef">Register C, f.218r</idno>
+                     <idno type="ArberRef">III. 481</idno>
+                     <idno type="RegisterID">TSC-1-E-06-02_1595-1631_0488_f218r</idno>
+                     <num type="works" value="1"/>
+                     <note type="status" subtype="entered"/>
+                     <persName n="lownesh" role="warden">
+                        <forename>H.</forename>
+                        <surname>Lownes</surname>
+                     </persName>
+                     <persName n="fieldr" role="warden">
+                        <forename>R.</forename>
+                        <surname>Field</surname>
+                     </persName>
+                     <persName n="nortonj" role="master">
+                        <forename>J.</forename>
+                        <surname>Norton</surname>
+                     </persName>
+                  <note type="status" subtype="incomplete"/>
+            </ab>
+               </div>
+      </body>
+   </text>
+</TEI>
