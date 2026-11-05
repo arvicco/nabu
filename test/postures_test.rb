@@ -411,7 +411,7 @@ class PosturesTest < Minitest::Test
                  "acts' session envelopes): 181→182; socinian-letters ADDED P160 — dates (the " \
                  "six letter languages staged by the sent-date band): 182→183; noscemus ADDED " \
                  "P160 — dates (bare lat; date-band inference stages the imprint years onto " \
-                 "lat:ren / lat:new, the memis shape): 183→184"; " \
+                 "lat:ren / lat:new, the memis shape): 183→184; " \
                  "leme ADDED P160 — identity, per-entry headword languages (English shelves bare en: " \
                  "the shelf-grain ladder cannot date-band, and a source-wide en:early row would " \
                  "mislabel the 1700–1755 lexicons): 184→185"
