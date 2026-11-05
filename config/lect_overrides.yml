@@ -415,3 +415,17 @@ sources:
     # approximation: the corpus spans past the band's core, and the stage
     # is a reading, not the corpus's own definition.
     lat: { lect: "lat:cla", tier: approximation }
+  korpus16:
+    # Korpus 16 IS the Early Modern Slovene print corpus by its own
+    # definition — "Korpus besedil slovenskih protestantskih piscev 16.
+    # stoletja", every book printed 1550–1595 — and the registry's sl:emod
+    # band note names exactly its start ("Trubar's 1550 print through the
+    # pre-standard era"). Date-band inference cannot reach the two 1550
+    # books (TC 1550, TA 1550): 1550 is the shared edge of sl:old [950,
+    # 1550] and sl:emod [1550, 1850], so containment matches both bands
+    # and they would ride bare sl. This row transcribes the corpus's own
+    # identity onto the existing node — parse-time work, the 2026-10-18
+    # generalization. Tier certain: every book is 16th-century Protestant
+    # print (short German/Latin/Italian title blocks ride the same sl code,
+    # declared coarse in the adapter header).
+    sl: { lect: "sl:emod", tier: certain }

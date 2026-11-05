@@ -3769,6 +3769,26 @@ korba:   # P116-1
   # gold token annotations (translit form, modernized orth, lemma, tag);
   # header date/place/region/genre mined.
 
+korpus16:   # P160-6, 02-sources row 386
+  adapter: Nabu::Adapters::Korpus16
+  adopted: "2026-11-05"
+  axes: [slavic]
+  wired: false   # awaiting the first real sync (the ~3.6 h paced crawl)
+  sync_policy: manual
+  # Korpus 16 — the 16th-century Slovene Protestant writers (ZRC SAZU,
+  # ed. Kozma Ahačič; fran.si/korpus16, v1.0 2019): 45 books / 12,945
+  # pages, 1550–1595 — Trubar, Dalmatin, Krelj, Juričič, Tulščak, Trošt
+  # and others. Double-keyed transcription (CyberData India), reviewed
+  # against the prints, TEI-converted; evident misprints kept. Colophon:
+  # CC BY-SA 4.0 verbatim → attribution. No bulk deposit (the promised
+  # CLARIN.SI one never landed; re-checked 2026-11-05) → a paced (1 req/s),
+  # resumable crawl of the reading pages, raw HTML kept (~210 MB).
+  # Document = book, passage = page with text; forme work and margin
+  # notes ride annotations. EXPECTED at the first sync: 45 documents /
+  # ≤ 12,945 page passages (blank pages mint nothing), 3 portal pages
+  # skipped by rule. Overlaps (provenance, never deduped): mdz-protestant
+  # OCR of four prints, sl-wikisource 1584 pages, goo300k/imp DB 1584.
+
 kouigenji:   # P108-3
   adapter: Nabu::Adapters::Kouigenji
   adopted: "2026-09-29"

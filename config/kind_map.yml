@@ -1065,6 +1065,62 @@ sources:
         storage jars and plaster — between letter and dedication, no one class"
       "B_1QM": "an eschatological war rule — battle order, trumpets and standards, priestly
         prayers — no class holds it without forcing"
+  korpus16:            # census 2026-11-05: 45 books (the portal's Bibliography + page-1 headers)
+    metadata: siglum   # upstream's book abbreviation verbatim (TC 1550, DB 1584) — each siglum
+    #                    IS one print, so the fold is the parse-time call per book (the
+    #                    extrabiblical mold). Catechisms and confessions have no house class:
+    #                    declared deliberate below, never forced (the taxonomy question is open).
+    map:
+      "TA 1550": school               # Abecedarium und der klein Catechismus — the first Slovene
+      #                                 primer (alphabet + reading exercise), the catechism inside it
+      "TA 1555": school               # Abecedarivm — the reading primer
+      "TA 1566": school               # Abecedarivm, oli tabliza — the primer's third edition
+      "TE 1555": scripture            # Ta evangeli svetiga Matevsha — Matthew
+      "TT 1557": scripture            # the New Testament, part 1 (the Gospels)
+      "TT 1560": scripture            # the New Testament, part 2
+      "TL 1561": scripture            # Paul's two letters (Romans with its prefaces)
+      "TPs 1566": scripture           # Ta celi psalter Dauidou — the Psalter
+      "TL 1567": scripture            # Paul's letters
+      "DJ 1575": scripture            # Jesus Sirah — Ecclesiasticus (Dalmatin)
+      "DPa 1576": scripture           # Passion — the Passion narrative harmonized from the four Gospels
+      "TT 1577": scripture            # the last part of the New Testament
+      "DB 1578": scripture            # Biblie pervi deil — Genesis-Deuteronomy (Dalmatin)
+      "DPr 1580": scripture           # Salomonove pripvvisti — Proverbs
+      "TT 1581-82": scripture         # Ta celi novi testament — the whole New Testament
+      "DB 1584": scripture            # Biblia — Dalmatin's complete Bible
+      "TPs 1579": hymn-prayer/hymn    # Psalm 1 "with three expositions" — its own German title says
+      #                                 "in Gesangweiß gestelt": the expositions are strophic hymns
+      "*P 1563": hymn-prayer/hymn     # Ene dvhovne peisni — the first Slovene hymnal
+      "TP 1567": hymn-prayer/hymn     # Ena dvhovska peissen svbper Tvrke — a hymn against the Turks
+      "TPs 1567": hymn-prayer/hymn    # Eni psalmi — the hymnal (psalm hymns), catechism appended
+      "TP 1575": hymn-prayer/hymn     # Try duhouske peissni — three hymns
+      "TM 1555": hymn-prayer/prayer   # Ena molitov tih kerszhenikou — the prayer of the persecuted
+      "TkM 1579": hymn-prayer/prayer  # Kerszhanske leipe molitve — Tulščak's prayer book
+      "DM 1584": hymn-prayer/prayer   # Karszanske lepe molitve — Dalmatin's prayer book
+      "TfM 1595": hymn-prayer/prayer  # Lepe karszhanske molitve — Felicijan Trubar's prayer book
+      "TR 1558": sermon/homily        # En regishter … ena postilla — the pericope register + a short postil
+      "KPo 1567": sermon/homily       # Postilla slovenska — Krelj's postil
+      "JPo 1578": sermon/homily       # Postilla — Juričič's postil
+      "TPo 1595": sermon/homily       # Hishna postilla — Trubar's house postil (Luther's)
+      "TtPre 1588": sermon            # Ena lepa inu pridna prediga — Trošt's sermon
+      "DAg 1585": ritual/liturgy      # Agenda — the order of the rites
+    deliberate:
+      "TC 1550": "Catechismus — a catechism (with sermon and hymns); catechesis has no house class"
+      "TC 1555": "Catechismvs — a catechism; catechesis has no house class"
+      "TAr 1562": "Articvli oli deili — the confessions of faith (Augsburg/Württemberg/Saxon) in
+        Slovene; a doctrinal confession has no house class"
+      "TO 1564": "Cerkovna ordninga — the church order: doctrine, rites and church law in one book,
+        between legal and ritual/liturgy"
+      "KB 1566": "Otrozhia biblia — Krelj's children's catechism (not a Bible despite the title)"
+      "TC 1567": "Ta celi catehismvs — a catechism with hymns; catechesis has no house class"
+      "TC 1574": "Ta celi catehismvs — the catechism-hymnal composite"
+      "TC 1575": "Catehismvs sdveima islagama — the catechism with two expositions"
+      "DC 1579": "Ta celi catehismvs — Dalmatin's catechism-hymnal composite"
+      "DC 1580": "Catehismvs — Dalmatin's catechism"
+      "DC 1584": "Ta celi catehismvs, eni psalmi — the catechism-hymnal composite"
+      "DC 1585": "Ta kratki wirtemberski catechismvs — the short Württemberg catechism"
+      "TfC 1595": "Ta celi catehismvs, eni psalmi — the catechism-hymnal composite"
+      "ZK 1595": "Katechismvs doctoria Martina Luthra — Luther's catechism (Znojilšek)"
   vulgate:
     source_kind: scripture
   prague-bible-1488:

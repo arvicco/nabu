@@ -137,7 +137,11 @@ class DerivabilityWritersTest < Minitest::Test
   # same fetch — the ja/zh-wikisource law kind. mdz-protestant
   # writes IIIF manifests + per-page hOCR (tmp+rename) and its
   # .mdz-crawl.json ledger into canonical/mdz-protestant/ inside
-  # Adapter#fetch — the ndl-kotenseki crawl law kind.
+  # Adapter#fetch — the ndl-kotenseki crawl law kind. P160-6's korpus16
+  # writes the fran.si index + portal pages under map/, the raw reading
+  # pages under books/<id>/ (tmp+rename) and its .korpus16-crawl.json
+  # ledger into canonical/korpus16/ inside Adapter#fetch — the same
+  # crawl law kind (the vakk sibling).
   # same fetch — the ja/zh-wikisource law kind. The P117-2
   # elektire_fetch writes canonical/elektire/ (the WP-JSON listing
   # pages under index/ + epub/<slug>.epub books, tmp+rename, and its
@@ -277,7 +281,7 @@ class DerivabilityWritersTest < Minitest::Test
     nabu/adapters/indexed_wikisource.rb
     nabu/adapters/hittite_glossed.rb nabu/adapters/ndl_kotenseki.rb
     nabu/adapters/aclt.rb
-    nabu/adapters/mdz_protestant.rb nabu/adapters/vakk.rb
+    nabu/adapters/mdz_protestant.rb nabu/adapters/vakk.rb nabu/adapters/korpus16.rb
     nabu/adapters/damos.rb nabu/adapters/itkc_catalog.rb
     nabu/adapters/aclt.rb nabu/adapters/ia_scan_shelf.rb
     nabu/language_shelf.rb nabu/lemma_shelf.rb nabu/date_shelf.rb nabu/meter_shelf.rb

@@ -83,7 +83,7 @@ Documentary corpora at the artifact grain: papyri, the Latin/Greek and Levantine
 
 Old Church Slavonic and its daughters: the OCS/Old Russian treebanks, the gospel and monument corpora, Freising, the Slovenian historical lane with PriLit's earliest narrative prose (1643–1866), Balkan damaskini, and the Church Slavonic dictionary shelves.
 
-**Members** (40): `archiv-slav-phil`, `bg-wikisource`, `ccmh`, `comenius`, `cs-wikisource`, `damaskini`, `elektire`, `elizabeth-bible`, `eltec-srp`, `freising`, `gams-zrcalo`, `goo300k`, `hr-wikisource`, `imp`, `kdsp`, `korba`, `litopys`, `mdz-protestant`, `mk-wikisource`, `pl-wikisource`, `ponomar`, `prague-bible-1488`, `prilit`, `proiel`, `ru-wikisource`, `scat`, `scripta-bulgarica`, `senie`, `sl-lexica`, `sl-wikisource`, `slavistics-pd`, `slouniki-nasovic`, `sr-wikisource`, `torot`, `typikon-bible`, `ud`, `uk-wikisource`, `vuk-danicic`, `wiktionary-cu`, `wiktionary-sh`
+**Members** (41): `archiv-slav-phil`, `bg-wikisource`, `ccmh`, `comenius`, `cs-wikisource`, `damaskini`, `elektire`, `elizabeth-bible`, `eltec-srp`, `freising`, `gams-zrcalo`, `goo300k`, `hr-wikisource`, `imp`, `kdsp`, `korba`, `korpus16`, `litopys`, `mdz-protestant`, `mk-wikisource`, `pl-wikisource`, `ponomar`, `prague-bible-1488`, `prilit`, `proiel`, `ru-wikisource`, `scat`, `scripta-bulgarica`, `senie`, `sl-lexica`, `sl-wikisource`, `slavistics-pd`, `slouniki-nasovic`, `sr-wikisource`, `torot`, `typikon-bible`, `ud`, `uk-wikisource`, `vuk-danicic`, `wiktionary-cu`, `wiktionary-sh`
 
 ### germanic
 
