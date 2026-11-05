@@ -1,0 +1,38 @@
+# Nabu fixture manifest (P5-4 "fixture sentinel"). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# Every URL is the raw.githubusercontent path at the pinned master sha
+# 562db00188362aa37db5f3ca202c81138c4908fb; the register files are trims
+# (whole: false), so adapter_test stays null.
+source: stationers-register
+adapter_test:
+retrieved: '2026-11-05'
+files:
+- path: Register /CURRENT Register/reg_A-updated.xml
+  url: https://raw.githubusercontent.com/gbergel/SRO_data/562db00188362aa37db5f3ca202c81138c4908fb/Register%20/CURRENT%20Register/reg_A-updated.xml
+  whole: false
+  trim: prolog + teiHeader whole, entries SRO1 SRO4 SRO8 SRO218 whole, the closing tail from </body>
+- path: Register /CURRENT Register/reg_B-updated.xml
+  url: https://raw.githubusercontent.com/gbergel/SRO_data/562db00188362aa37db5f3ca202c81138c4908fb/Register%20/CURRENT%20Register/reg_B-updated.xml
+  whole: false
+  trim: prolog + teiHeader whole, entries SRO1679 SRO1688 SRO2203 whole, the closing tail from </body>
+- path: Register /CURRENT Register/reg_C-updated.xml
+  url: https://raw.githubusercontent.com/gbergel/SRO_data/562db00188362aa37db5f3ca202c81138c4908fb/Register%20/CURRENT%20Register/reg_C-updated.xml
+  whole: false
+  trim: prolog + teiHeader whole, entries SRO4539 SRO5992 whole, the closing tail from </body>
+- path: Register /CURRENT Register/reg_D-updated.xml
+  url: https://raw.githubusercontent.com/gbergel/SRO_data/562db00188362aa37db5f3ca202c81138c4908fb/Register%20/CURRENT%20Register/reg_D-updated.xml
+  whole: false
+  trim: prolog + teiHeader whole, entries SRO8024 SRO9195 SRO10453 whole, the closing tail from </body>
+- path: Register /CURRENT Register/sro-proofing-view.xsl
+  url: https://raw.githubusercontent.com/gbergel/SRO_data/562db00188362aa37db5f3ca202c81138c4908fb/Register%20/CURRENT%20Register/sro-proofing-view.xsl
+  whole: true
+  trim: none
+- path: Register /OLD Register/reg_A-JC-updates-2017-10-30.xml
+  url: https://raw.githubusercontent.com/gbergel/SRO_data/562db00188362aa37db5f3ca202c81138c4908fb/Register%20/OLD%20Register/reg_A-JC-updates-2017-10-30.xml
+  whole: false
+  trim: prolog + teiHeader whole, entry SRO1 whole, the closing tail from </body>
+- path: Arber/Arber Entries with metadata/arber 1 29-1-2017.xml
+  url: https://raw.githubusercontent.com/gbergel/SRO_data/562db00188362aa37db5f3ca202c81138c4908fb/Arber/Arber%20Entries%20with%20metadata/arber%201%2029-1-2017.xml
+  whole: false
+  trim: the first 134 lines whole (prolog, teiHeader, the first folio div) + the closing tail from </body>

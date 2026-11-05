@@ -314,6 +314,10 @@ module Nabu
           #                                 reprint keeps its first edition's); the imprint
           #                                 rides "imprint", never "place" — no place claim
           "soas-tibetan" => :century_prose,
+          "stationers-register" => :structured, # each copy entry's own Register date (the Clerk's
+          #                                       day, or the SRO editors' company-year span for
+          #                                       the undated early entries) — the artifact basis;
+          #                                       placeName mentions only, never a "place" claim
           "stgall-priscian" => :structured, # the manuscript's copying (AD 850–1, upstream's
           #                                   statement) on every page; orig_place "Ireland (?)"
           #                                   — upstream's hedge — while St Gallen (the holding

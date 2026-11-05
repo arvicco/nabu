@@ -257,6 +257,13 @@ sources:
     passage_fields:
       places: place           # per page: the regularized <placeName> mentions (137 pages)
       persons: person         # per page: the regularized <name> mentions (182 pages)
+  stationers-register:        # P160 — census 2026-11-05 through the adapter, all 10,453 entries
+    fields:
+      register: collection    # Register A 1,391 · B 2,356 · C 3,530 · D 3,176
+      persons_mentioned: person  # SRO's marked names (enterers, licensers, authors), 10,439
+      #                         entries — the officers (Master and Wardens) ride metadata only
+      places_mentioned: place_mentioned  # the <placeName> readings (559 entries) — named,
+      #                         never the entry's origin
   grand-tour:                 # P155 — census 2026-11-03 through the adapter, 4 journals
     fields:
       author: author          # the title's "Author:" head (Wagener · Christian August ·

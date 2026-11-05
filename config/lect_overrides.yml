@@ -221,6 +221,16 @@ sources:
   # ride page annotations, never the document code.
   emmo:
     en: { lect: "en:early", tier: certain }
+  # P160: the Stationers' Register copy entries are the Company Clerk's
+  # English, and every entry's own Register date (SortDate 1557-07-19 …
+  # 1640, census 2026-11-05 over all 10,453) sits inside en:early's
+  # [1500, 1700] band: the whole source IS Early Modern English. A
+  # per-collection fact — upstream marks no language at all; the adapter
+  # codes it en. Tier certain: dated entries, all inside the band. The
+  # Latin formulae and the three unlabelled foreign copy-titles ride
+  # inside it, declared coarse in the adapter.
+  stationers-register:
+    en: { lect: "en:early", tier: certain }
   ticha:
     # The colonial Valley Zapotec corpus (Córdova 1578 through the Valley
     # notarial record to 1832): every holding falls inside the zap:col band

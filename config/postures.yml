@@ -1719,6 +1719,20 @@ sources:
         'from X, Place,' strings are not parsed (persons' styles and places share the commas)"}
     script: {posture: implied, note: "Latin script as written — the thorn rides as EMMO
         encodes it (<g ref='#thorn'>th</g>), the scribal metamarks are not reading text"}
+  stationers-register:   # P160
+    # lect machine-postured — config/lect_overrides.yml en → en:early;
+    # kind machine-postured — kind_map.yml source_kind administrative/register.
+    dating: {posture: dated, note: "all 10,453 entries: the metadata block's Register date — the
+        Clerk's own day (when, 9,111) or, before the Clerk dated entries (to c. 1571), the SRO
+        editors' span between dated neighbours (notBefore/notAfter, 1,342) → year envelope,
+        artifact basis (the entry's own date of record); new-style years as SRO normalizes them;
+        the SortDate (one ISO day on every entry, 1557–1640) rides beside it"}
+    places: {posture: unplaced, note: "no entry states where it was made (every one was entered
+        at Stationers' Hall, London, by the Company's own constitution — asserted nowhere per
+        entry, so deliberately no origin claim). The 1,157 <placeName> tags (559 entries, mostly
+        London) ride as places_mentioned — places the copy-titles and licences name"}
+    script: {posture: implied, note: "Latin script; SRO transliterates thorn and long s to their
+        closest modern equivalents and otherwise keeps the Register's spelling and capitals"}
   grand-tour:   # P155
     # kind machine-postured — kind_map.yml source_kind literary/diary/travelogue.
     lect: {posture: identity, note: "de IS German — four journals written 1652–1702, past
