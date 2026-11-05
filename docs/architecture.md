@@ -2775,10 +2775,11 @@ one `ExportCLI` command, against the contract stated in `lib/nabu/export.rb`
   row carries cell population, sampled count and the inverse-inclusion
   weight. `--exclude-ocr` reads the one machine-readable OCR marker the
   catalog carries — document metadata `text_nature` machine-ocr /
-  uncorrected-ocr, stamped by the scan-shelf adapters and openiti; the
-  non-excluding labels corrected-ocr (madurai, eltec-srp: upstream states
-  the correction) and ocr-origin (peshitta: OCR origin, correction
-  unstated) ride through — and `--exclude-source` covers OCR-derived
+  uncorrected-ocr, stamped by the scan-shelf adapters and openiti, and
+  machine-htr (uncorrected Transkribus HTR: noscemus); the non-excluding
+  labels corrected-ocr (madurai, eltec-srp: upstream states the
+  correction), ocr-origin (peshitta: OCR origin, correction unstated) and
+  htr-corrected (grand-tour) ride through — and `--exclude-source` covers OCR-derived
   sources that carry no flag. `--exclude-unproofread` reads the
   ProofreadPage levels the wikisource adapters already record (no stamp
   of its own): a document whose metadata `proofread.lowest_text_level`
