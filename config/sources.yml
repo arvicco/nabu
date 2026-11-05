@@ -4263,6 +4263,30 @@ mahan-kosh:   # P154, 02-sources row 344
   # (vol-page-seq). Language pan.
   sync_policy: manual
 
+mazarinades:   # P160, 02-sources row 389
+  adapter: Nabu::Adapters::Mazarinades
+  adopted: "2026-11-05"
+  axes: [romance]
+  wired: false   # until the first real sync is verified. EXPECTED (full-tree census at main
+  #               84f319b9, 2026-11-05, every Mazarinades/ file parsed by the adapter): 3,080
+  #               discovered = 3,067 docs / 40,883 page passages + 13 quarantined (malformed
+  #               XML, all MANUAL-suffixed files); 4 skipped by rule (the two working files,
+  #               README.md, the review ledger); unrecognized 0.
+  sync_policy: manual   # upstream last pushed 2025-02-26; owner re-syncs
+  # The Antonomaz corpus (github.com/Antonomaz/Corpus; Projet ANTONOMAZ,
+  # Sorbonne Université): the Fronde pamphlets of 1648–1653 in TEI, one
+  # file per pamphlet, classed by Moreau's Bibliographie des mazarinades
+  # (+ its supplements, Socard, Labadie, the Bibliothèque Mazarine's own
+  # finds). Sparse GitFetch of Mazarinades/ + README.md + the first-page
+  # review ledger (output/reviewed_files.csv); the Doublons (duplicate
+  # exemplars, unreviewed), the JSON exports, the reports and the scripts
+  # stay upstream. Document = pamphlet, passage = printed page. KRAKEN OCR
+  # (text_nature machine-ocr, the first page hand-corrected); 23 hand
+  # transcriptions carry no OCR label. README, verbatim: "Les textes sont
+  # publiés sous la licence CC BY 4.0"; every file's <licence> names CC BY
+  # 4.0 (its availability@status "restricted" is the template default —
+  # the licence element governs) → attribution.
+
 mdz-protestant:   # 02-sources row 243
   adapter: Nabu::Adapters::MdzProtestant
   adopted: "2026-10-11"

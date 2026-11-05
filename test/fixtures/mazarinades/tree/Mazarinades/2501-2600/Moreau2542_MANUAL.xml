@@ -1,0 +1,133 @@
+<?xml version='1.0' encoding='utf-8'?>
+<?xml-model href='https://raw.githubusercontent.com/Antonomaz/ODD/main/Schema/ODD_Antonomaz.rng' type='application/xml' schematypens='http://relaxng.org/ns/structure/1.0'?>
+<?xml-model href='https://raw.githubusercontent.com/Antonomaz/ODD/main/Schema/ODD_Antonomaz.rng' type='application/xml' schematypens='http://purl.oclc.org/dsdl/schematron'?><TEI xmlns="http://www.tei-c.org/ns/1.0" xml:id="Moreau2542_GALL"><teiHeader>
+    <fileDesc>
+      <titleStmt>
+        <title type="main" source="Moreau">La nouvelle courante. A la reine.</title>
+        <title type="sub">Édition Antonomaz</title>
+        <respStmt><resp>Chaîne de traitement</resp><persName role="Project_manager" ref="orcid:0000-0001-9518-1040">Abiven Karine</persName><persName role="Project_manager" ref="orcid:0000-0002-4795-2362">Lejeune Gaël</persName><persName role="OCRisation" ref="orcid:0000-0003-4583-8969">Marie-Sophie Desmarest</persName><persName role="engineer" ref="orcid:0000-0003-4583-8969">Marie-Sophie Desmarest</persName></respStmt></titleStmt>
+      <publicationStmt>
+        <publisher>Projet ANTONOMAZ / Sorbonne Université</publisher>
+        <ref target="https://github.com/Antonomaz" />
+        <date type="file_creation" when="2021-04-20">20 avril 2021</date>
+        <availability status="restricted" n="cc-by">
+          <licence target="https://creativecommons.org/licenses/by/4.0" />
+        </availability>
+      </publicationStmt>
+      <sourceDesc>
+        <bibl>
+          <ref target="https://gallica.bnf.fr/ark:/12148/bpt6k56199901" />
+          <author />
+          <title source="Moreau">Nouvelle (la) courante. A la reine.</title>
+          <pubPlace ref="geonames:2982652" source="Moreau">Rouen</pubPlace>
+          <publisher>
+            <persName>Sans nom</persName>
+          </publisher>
+          <date source="Moreau" when="1649">1649</date>
+          <extent>
+            <measure unit="page" quantity="4" />
+          </extent>
+          <note type="format">in-4</note>
+          <relatedItem source="Mazarine" type="identifier" subtype="none" cert="low" target="none" />
+        </bibl>
+        <msDesc>
+          <msIdentifier>
+            <settlement ref="geonames:2988507">Paris</settlement>
+            <institution>Bibliothèque nationale de France</institution>
+            <repository>Département littérature et art</repository>
+            <idno type="cote">YE-3705</idno>
+          </msIdentifier>
+          <history>
+            <provenance>
+              <stamp>True</stamp>
+            </provenance>
+          </history>
+        </msDesc>
+      </sourceDesc>
+    </fileDesc>
+    <encodingDesc>
+      <projectDesc><p>Cette édition a été réalisée dans le cadre du projet ANTONOMAZ. Son objectif principal est de fournir un texte destiné à l'exploration avec des outils électroniques. De ce fait, ce n'est ni une édition philologique, ni une édition pédagogique ou de redécouverte d'un auteur oublié.</p><p>Les textes encodés dans le cadre du projet ANTONOMAZ sont issus de numérisations de bibliothèques numériques publiques et de Google livres.</p><p>L'édition présentée ici est issue d'une transcription manuelle réalisée par Karine Abiven.</p></projectDesc><editorialDecl>
+        <p />
+      </editorialDecl>
+    </encodingDesc>
+    <profileDesc>
+      <langUsage>
+        <language ident="fra">Document en français</language>
+      </langUsage>
+      <abstract>
+        <p source="Mazarine" />
+        <p source="Moreau">2542. Nouvelle (la) courante. A la reine. Rouen, 1649, 4 pages. Couplets
+          bien tournés.</p>
+        <p source="Antonomaz">
+         
+Datable de février-mars 1649, il s'agit d'une chanson sur une mélodie de danse, la courante, qui a la forme d'un air de cour, plus complexe que d'autres airs utilisés pendant la Fronde (voir la notation dans BnF Ms. f. fr. 12656, p. 31). Il sera renommé plus tard "Poulets et Dindons" ou "Bisques et Dindons" (chansonnier dit de
+          Maurepas, Bnf Ms f.fr. 12656, p. 107). Il avait été utilisé dans des couplets ironiques
+          contre le Parlement, dans le <ref target="https://antonomaz.huma-num.fr/exist/apps/Antonomaz/corpus/Moreau3055_GALL.xml">Recueil général des chansons mazarinistes</ref>de 1649.	Si la première "Courante de 
+     la reine" devait sûrement être entendue comme une prosopopée    
+     satirique de la reine, la présente mazarinade est aussi un     
+     discours adressé, une réponse "à la reine" »".                   
+     </p></abstract>
+      <textClass>
+        <keywords>
+          <term type="form">vers</term>
+          <term type="genre" ref="litterature/chansons.xml">chanson</term>
+          <term type="subject" />
+          <term type="handwritten_note" subtype="no" />
+          <term type="table_of_content" subtype="no" />
+          <term type="illustration" subtype="no" />
+        </keywords>
+      </textClass>
+    </profileDesc>
+    <revisionDesc>
+      <change status="corrected" when="2022-11-23" who="KA" />
+    </revisionDesc>
+  </teiHeader>
+  <text><body><p>
+<l><lb />[p. 3]</l>
+<l><lb />LA NOVVELLE</l>
+<l><lb />COVRANTE</l>
+<l><lb />A LA REINE</l>
+<l><lb />La Reine auec trop d'amour,</l>
+<l><lb />Souffre dans la Cour,</l>
+<l><lb />Cet eſtranger,</l>
+<l><lb />De qui la France enfin veut ſe vanger,</l>
+<l><lb />Et ſi le Prince embraſſe ſa deffence.</l>
+<l><lb />C'eſt par enfance,</l>
+<l><lb />Car on ſcait bien,</l>
+<l><lb />Que tout le monde haït cet Italien,</l>
+<l><lb />Il a trop fait voir ſa rigeur,</l>
+<l><lb />Dans notre langueur,</l>
+<l><lb />Et ce voleur,</l>
+<l><lb />Ne reſpiroit que le commun mal-heur;</l>
+<l><lb />Mais ſi la Reine appuye ſa malice,</l>
+<l><lb />C'eſt injuſtice,</l>
+<l><lb />Car l'on ſcait bien,</l>
+<l><lb />Que le pendart ne vallut iamais rien.</l>
+<l><lb />[p. 4]</l>
+<l><lb />En vain il cherche la faueur,</l>
+<l><lb />De ce grand vainqueur,</l>
+<l><lb />Il n'aura pas,</l>
+<l><lb />Tant de bon-heur que dans d'autres combats,</l>
+<l><lb />Puiſque le Ciel qui prend noſtre deffence,</l>
+<l><lb />Enfin s'offence,</l>
+<l><lb />Et l'on ſςait bien,</l>
+<l><lb />Qu'on ne doit plus voir cet Italien.</l>
+<l><lb />En vain Orleans eſt pour luy.</l>
+<l><lb />C'eſt vn foible appuy,</l>
+<l><lb />Car qui ne ſcait,</l>
+<l><lb />Que ce grand Prince a touſjours peu d'effet,</l>
+<l><lb />Quoy que l'Abbé ſoit touſjours de ſa Ligue,</l>
+<l><lb />En vain il brigue,</l>
+<l><lb />Car l'on ſcait bien,</l>
+<l><lb />Que s'il promet il change en moins de rien,</l>
+<l><lb />Ainſi que ce tiſon d'Enfer,</l>
+<l><lb />Qui croit triompher,</l>
+<l><lb />N'eſpere pas,</l>
+<l><lb />En ces Guerriers qui lui preſtent le bras,</l>
+<l><lb />L'vn eſt enfant, l'autre n'eſt qu'vn volage,</l>
+<l><lb />Pour tout potage,</l>
+<l><lb />Et tous les deux,</l>
+<l><lb />Auec la Reine ont peu de gens pour eux,</l>
+<l><lb />FIN</l>
+
+</p></body></text></TEI>

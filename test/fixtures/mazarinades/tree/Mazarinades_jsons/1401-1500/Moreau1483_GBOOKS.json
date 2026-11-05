@@ -1,0 +1,60 @@
+{
+    "imprimatur": null,
+    "corrector": false,
+    "entête": {
+        "form": "prose",
+        "subject": "Paris (France)",
+        "handwritten_note": false,
+        "table_of_content": false,
+        "illustration": false,
+        "change": {
+            "@status": "corrected",
+            "@when": "2022-03-02",
+            "@who": "AB"
+        },
+        "titre": "Le généreux prince aux Parisiens de mourir pour le\n          service du roi et de ne point souffrir le retour du cardinal Mazarin.",
+        "dates": {
+            "@type": "file_creation",
+            "@when": "2021-11-02",
+            "#text": "2 novembre 2021"
+        },
+        "author": null,
+        "pubDate": {
+            "@source": "Moreau",
+            "@when": "1652",
+            "#text": "1652"
+        },
+        "pubPlace": {
+            "@ref": "geonames:2988507",
+            "@source": "Moreau",
+            "#text": "Paris"
+        },
+        "publisher": {
+            "@ref": "isni:000000007775504X",
+            "@xml:id": "IL_LAngevinNicolas.xml",
+            "persName": {
+                "forename": "Nicolas",
+                "surname": "L'Angevin"
+            }
+        },
+        "nbPages": "7"
+    },
+    "texte": [
+        [
+            "LE",
+            "GENEREVX",
+            "PRINCE",
+            "AVX PARISIENS",
+            "DE",
+            "MOURIR POUR LE SERVICE DV ROY",
+            "&amp; de ne point ſouffrir le retour du Cardinal",
+            "Mazarin.",
+            "A PARIS",
+            "Chez NICOLAS L'ANGEVIN.",
+            "M. DC. LII."
+        ]
+    ],
+    "pages_number": [
+        "1"
+    ]
+}

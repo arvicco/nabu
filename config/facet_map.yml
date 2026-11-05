@@ -774,3 +774,17 @@ sources:
       #                         5,270 · مختارنامه · شاهنامه · گلستان …)
       form: form              # the poem's own section label, 999 values (غزلیات 57,140 ·
       #                         رباعیات 16,083 · قصاید 5,996 …) — the kind_map fold reads it
+  mazarinades:                # census 2026-11-05 over all 3,067 well-formed files (main 84f319b9)
+    fields:
+      genre: genre            # the textClass genre terms, multi-label (lettre 405 · discours
+      #                         adressé 278 · narration 255 · non renseigné 253 · burlesque 250 ·
+      #                         texte officiel 238 …, 141 values; kind_map folds)
+      form: form              # prose 2,470 · vers 724 (+ 3 singletons)
+      collection: collection  # Moreau 2,834 · Moreau supplement 1/2/3 37/55/19 · Labadie 46 ·
+      #                         Bibliothèque Mazarine 43 · Socard 26 · Antonomaz 3
+      digitization: witness   # the file suffix — GBOOKS (Google Books) · MAZ (Mazarinum) ·
+      #                         GALL (Gallica) · MANUAL · BOR/BORD · BIS
+      author: author          # the first bibl author (1,313 files name one: Parlement de Paris,
+      #                         Louis XIV, Condé, Du Bosc de Montandré, Scarron …)
+      printer: printer        # the imprint's printer-bookseller (Nicolas L'Angevin, Pierre
+      #                         Rocolet, Salomon de La Fosse …)

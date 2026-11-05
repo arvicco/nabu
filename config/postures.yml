@@ -3276,3 +3276,23 @@ sources:
         acts NAME (counties, towns, rivers in the local acts) are text, left to the
         place-mining lane"}
     script: {posture: implied}
+  mazarinades:
+    # kind machine-postured — the kind_map.yml mazarinades genre fold (the
+    # oratory/polemic cluster left unmapped: no ruled head).
+    # lect machine-postured — the fra → fr:cls override (config/lect_overrides.yml).
+    dating: {posture: dated, note: "the bibliographic entry's typed dates (Moreau, Mazarine,
+        Labadie, Socard, Carrier's day-precise datings, Antonomaz): the narrowest year
+        envelope, :structured lane — 3,029 of 3,067 dated (census 2026-11-05; 1634–1663,
+        1649 and 1652 at the core); the 'Sans date' pieces date nothing. Every date rides
+        metadata dates whole; Moreau's episode settings (events) are subject dates, never
+        the document's"}
+    places: {posture: named, note: "the imprint pubPlace (Paris · Bordeaux · Orléans · Rouen ·
+        Pontoise · Saint-Germain-en-Laye …) with upstream's GeoNames ref riding place_ref
+        (no geonames gazetteer join is held, so the posture stays named): 2,352 docs
+        named (2,344 with the ref), 715 unplaced ('Sans lieu'); upstream's template
+        stamps Paris's id on five other towns (8 docs: Anvers, Toulouse, Leyde, Bourg,
+        Saint-Germain-en-Laye) — that ref drops, the name rides. The holding library
+        (msDesc settlement) is a present location, metadata only"}
+    script: {posture: implied, note: "Latin type of the 1640s–50s as Kraken read it (long s,
+        u/v and i/j as printed, ligatures, misreadings — text_nature machine-ocr, the first
+        page hand-corrected); the hand transcriptions carry no OCR label"}
