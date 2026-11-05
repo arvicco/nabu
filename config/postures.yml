@@ -446,6 +446,32 @@ sources:
         not the texts' origin"}
     script: {posture: implied, note: "Latin-script Pāḷi (a–z + ā ī ū ṁ ṅ ñ ṇ ṭ ḍ ḷ, upstream's
         own census), the bare pli default — like suttacentral, unlike tipitaka-lk's Sinhala"}
+  noscemus:   # P160
+    # kind machine-postured: config/kind_map.yml folds the Noscemus Wiki's own Form/Genre
+    # (monographs, encyclopedic works, dissertations → scholarly; didactic and panegyric
+    # poems → literary/poetry; letters, orations, dictionaries, journal papers their own).
+    lect: {posture: dates, note: "bare lat at source grain (the deposit's whole claim: early
+        modern scientific Latin); date-band inference over the imprint years stages it — the
+        1479–1549 prints onto lat:ren [1350, 1550], the bulk onto lat:new [1550, —] — no facet
+        rule (a rule would only repeat the band). Declared coarse: ~24 of 1,038 copies are
+        mainly or substantially non-Latin by a function-word census (2026-11-05) — Brisson's
+        Latin–French Ornithologia volumes, the German academy Abhandlungen and Miscellanea
+        Tigurina, Ruf's Trostbüchele, Reuss's polyglot Repertorium, the 1932 Huygens Oeuvres
+        complètes — and ride lat; upstream names no language (Transkribus Language null on
+        1,039)"}
+    dating: {posture: dated, note: "the copy's own imprint year from its Transkribus Title
+        label (\"… London 1620\", ranges \"1675-79\" / \"[1723–1725]\"), MetadataDates
+        :structured, date_basis imprint — the print IS the document; label without a year →
+        the typed Created From/To year (transkribus_created), then the joined wiki work's Year
+        (wiki_year). The wiki's own work-level Year rides raw per joined work. Modern editions
+        date by their print (Huygens 1932, Caius 1912) — the composition era is not claimed"}
+    places: {posture: named, note: "the imprint town from the same Title label (English
+        exonyms — London, Venice, Basel …), the first town for a joint imprint (places lists
+        all: \"Leipzig & Copenhagen\"); \"s. l.\" names none; a printer occasionally stands in
+        the town slot (\"Coulon & Willem\"), declared coarse. No gazetteer join is held"}
+    script: {posture: implied, note: "Latin type; Greek passages in the bilingual prints
+        (Denisot's Hippocrates) ride as transcribed; uncorrected HTR (text_nature
+        machine-htr), some pages mirror-read noise (Palingenio 5314216)"}
   comenius:   # P153
     kind: {posture: unclassified, note: "devotional and consolatory treatises (Truchlivý, Pres
         boží, Centrum securitatis, the Kšaft) — no typed genre field in the TEI, and no house

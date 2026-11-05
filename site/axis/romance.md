@@ -47,6 +47,7 @@ A source wears every desk it serves — these 33 answer this desk. Holdings are 
 | `mazarinades` | texts | attribution | not yet wired | not synced yet |
 | `meloniromance` | cognacy dataset | attribution | wired · manual | 5,419 entries |
 | `memis` | inscriptions | attribution | wired · manual | 51 docs / 473 passages |
+| `noscemus` | texts | attribution | not yet wired | not synced yet |
 | `openmgh` | texts | attribution | wired · manual | 153 docs / 36,143 passages |
 | `osta` | texts | nc | wired · manual | 740 docs / 5,177 passages |
 | `salom` | texts | attribution | wired · manual | 1 docs / 10,685 passages |
