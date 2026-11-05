@@ -2441,3 +2441,119 @@ sources:
       "Euchologion": ritual/liturgy      # the sacramental rites: baptism, marriage, unction, funeral
       "Synekdemos": ritual/liturgy       # the companion shelf: Katabasiai, Megalynaria, the Orthros
       #   enkolpion — service material, two of the three pages hymn sequences (declared coarse)
+  mazarinades:        # census 2026-11-05 over all 3,067 well-formed files at main 84f319b9:
+    facet: genre      # the textClass genre terms (multi-label — 1,312 files carry 2–7, 553
+    #                   none), 141 values, Antonomaz's own French vocabulary. Upstream's
+    #                   form term (prose 2,470 · vers 724) rides beside as metadata form.
+    #                   The folds below are the clear genre claims; the oratory/polemic
+    #                   cluster is LEFT UNMAPPED (listed at the end) — the house taxonomy has
+    #                   no oratory/rhetoric head, and minting one is a taxonomy ruling.
+    map:
+      "lettre": letter                           # 405 — open letters, mock letters, the royal
+      #                                            and princely letters printed as pamphlets
+      "fausse lettre": letter                    # 1 — a forged letter is still in form a letter
+      "narration": literary/narrative            # 255
+      "récit": literary/narrative                # 201
+      "histoire tragique": literary/narrative    # 1
+      "parabole": literary/narrative             # 1
+      "burlesque": literary/poetry               # 250 — the Fronde burlesque is Scarron's verse
+      #                                            mode (octosyllabic "vers burlesques"); 2 + 1 typo
+      "burlesques": literary/poetry              # 1
+      "pseudo-burlesque": literary/poetry        # 2
+      "poésie": literary/poetry                  # 113 (+ the "poésié" typo, 1)
+      "poésié": literary/poetry                  # 1
+      "poésie à forme fixe": literary/poetry     # 34 (+ "poésié à forme fixe" 2)
+      "poésié à forme fixe": literary/poetry     # 2
+      "poésie strophique": literary/poetry       # 1
+      "chanson": literary/poetry                 # 61 — the satirical songs (vaudevilles), lyric verse
+      "triolet": literary/poetry                 # 32 — the fixed forms, each a verse claim:
+      "sonnet": literary/poetry                  # 22
+      "stances": literary/poetry                 # 22
+      "épigramme": literary/poetry               # 13
+      "épitaphe": literary/poetry                # 11 — the mock verse epitaphs of the pamphlet war,
+      #                                            printed, never inscribed (not funerary)
+      "ballade": literary/poetry                 # 10
+      "ode": literary/poetry                     # 9
+      "rondeau": literary/poetry                 # 2
+      "élégie": literary/poetry                  # 2
+      "écho": literary/poetry                    # 2 — the echo poem
+      "complainte": literary/poetry              # 1
+      "dialogue": literary/wisdom/dialogue       # 99 — the political dialogues (paysans, bourgeois,
+      #                                            the dead): the house dialogue sub
+      "entretien": literary/wisdom/dialogue      # 21
+      "entretiens": literary/wisdom/dialogue     # 1
+      "conférence": literary/wisdom/dialogue     # 1
+      "dialogue des morts": literary/wisdom/dialogue  # 1
+      "maximes": literary/wisdom/proverbs        # 7
+      "maxime": literary/wisdom/proverbs         # 3
+      "formes gnomiques": literary/wisdom/proverbs  # 13
+      "proverbe": literary/wisdom/proverbs       # 1
+      "énigme": literary/wisdom/riddle           # 2
+      "texte de forme théâtrale": literary/drama # 3
+      "comédie": literary/drama                  # 1
+      "farce": literary/drama                    # 1
+      "tragi-comédie": literary/drama            # 1
+      "texte officiel": legal/law                # 238 — the printed acts of the crown and the
+      #                                            sovereign courts (declarations, edicts, orders)
+      "déclaration": legal/law                   # 50 — royal declarations (registered law)
+      "ordonnance": legal/law                    # 6
+      "édit": legal/law                          # 2
+      "règlement": legal/law                     # 7
+      "statuts": legal/law                       # 2
+      "arrêt": legal/court                       # 151 — the arrêts of the Parlement (a sovereign
+      #                                            COURT) and the councils: court rulings
+      "arrêts": legal/court                      # 1
+      "jugement": legal/court                    # 1
+      "sentence": legal/court                    # 1
+      "factum": legal/court                      # 16 — a litigant's printed brief
+      "plaidoyer": legal/court                   # 2
+      "procès-verbal": legal/court               # 7 — the official minutes of a proceeding
+      "requête": legal/petition                  # 35
+      "remontrances": legal/petition             # 71 — the Parlement's and the city's formal
+      #                                            remonstrances to the crown
+      "supplique": legal/petition                # 3
+      "supplication": legal/petition             # 1
+      "placet": legal/petition                   # 1
+      "articles": legal/treaty                   # 20 — articles of agreement (the Rueil peace,
+      #                                            the princes' conditions)
+      "registres": administrative/register       # 2
+      "liste": administrative/list               # 36 — lists of names, of the dead, of the
+      #                                            Mazarinists
+      "périodique": periodical                   # 32 — the serial gazettes and courriers of the war
+      "nouvelles": periodical/newspaper          # 59 — news sheets
+      "courrier": periodical/newspaper           # 1
+      "sermon": sermon                           # 4
+      "oraison funèbre": sermon/funeral-sermon   # 2
+      "prière": hymn-prayer/prayer               # 8
+      "cantique": hymn-prayer/hymn               # 1
+      "prophétique": divination/oracle           # 40 (+ the "prohpétique" typo, 1) — the prophecies
+      "prohpétique": divination/oracle           # 1
+      "astrologie": divination/astrology         # 15
+    deliberate:
+      "pamphlet": "a format (the printed occasional piece), not a genre — the dta Flugschrift precedent"  # 103
+      "non renseigné": "upstream's own 'not filled in' — no claim"  # 253
+      "traduction": "a translation marker, not a genre"  # 21
+      "faux": "an authenticity marker (a forgery), not a genre"  # 31
+      "contrefaçon": "an authenticity marker (a counterfeit edition), not a genre"  # 10
+      "parodie": "a mode (parody of another piece), not a genre"  # 17
+      "pastiche": "a mode, not a genre"  # 1
+      "recueil": "a compilation marker, not a genre"  # 15
+      "affiche": "a format (a poster), not a genre"  # 8
+      "placard": "a format (a broadside), not a genre"  # 4
+      "épître dédicatoire": "a paratext component, not the piece's genre"  # 13
+      "épitre dédicatoire": "a paratext component, not the piece's genre"  # 1
+      "dédicace": "a paratext component, not the piece's genre"  # 4
+      "avant-propos": "a paratext component, not the piece's genre"  # 2
+      "avertissement": "a paratext component, not the piece's genre"  # 3
+    # left unmapped (the worklist — no ruled class: an oratory/polemic head is a
+    # taxonomy question): discours adressé 278 (+ "dicours adressé" 1) · satirique 140 ·
+    # rhétorique délibérative 122 (+ "rhérotique délibérative" 1) · réponse 106 ·
+    # prosopopée 78 (+ prosopoée 2, prospopée 1) · relation 69 · harangue 65 · avis 61 ·
+    # lamentation 53 · rhétorique judiciaire 52 · rhétorique épidictique 50 · éloge 42 ·
+    # manifeste 41 (+ maifeste 1) · plainte 26 · apologie 15 · panégyrique 15 ·
+    # justification 11 · regrets 11 · discours 10 · pro et contra 10 · mémoire 9 ·
+    # remerciement 9 · soupirs 8 · anagramme 7 · généalogie 7 · vie 7 · didactique 6 ·
+    # songe 6 · testament 6 · ultima verba 6 · blâme 5 · résolutions 5 · défense 4 ·
+    # galant 4 · réfutation 4 · catéchisme 3 · discours prononcé 3 · allégorie 2 ·
+    # discours doctrinal 2 · portrait 2 · traité 2 · almanach 1 · caquet 1 · consolation 1 ·
+    # délibérations 1 · fait divers 1 · manuel 1 · occasionnel 1 · tract 1

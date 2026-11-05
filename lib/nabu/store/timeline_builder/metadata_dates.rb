@@ -241,6 +241,9 @@ module Nabu
           #                            place as the portal names it (Tübingen, Ljubljana …)
           "litopys" => :era_band_key,
           "local-library" => :year_key,
+          "mazarinades" => :structured, # the bibliographic entry's typed dates (Moreau,
+          #                               Mazarine, Carrier …: the narrowest year envelope);
+          #                               place = the imprint pubPlace + its GeoNames ref
           "mdz-protestant" => :structured,
           "memis" => :structured, # the inscription's typed origDate (Slovene prose: a year,
           #                         a day date, "1581/2", "2. pol. 15. stol."); place =

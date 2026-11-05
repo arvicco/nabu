@@ -1,0 +1,275 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?xml-model href='https://raw.githubusercontent.com/Antonomaz/ODD/main/Schema/ODD_Antonomaz.rng' type='application/xml' schematypens='http://relaxng.org/ns/structure/1.0'?>
+<?xml-model href='https://raw.githubusercontent.com/Antonomaz/ODD/main/Schema/ODD_Antonomaz.rng' type='application/xml' schematypens='http://purl.oclc.org/dsdl/schematron'?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:id="Moreau614_GALL">
+  <teiHeader>
+    <fileDesc>
+      <titleStmt>
+        <title type="main" source="Moreau">Burlesque sur la fuite de Mazarin et la rencontre de
+          madame la duchesse de Longueville, retournant de Stenay à Paris</title>
+        <title type="sub">Édition Antonomaz</title>
+        <respStmt>
+          <resp>Chaîne de traitement</resp>
+          <persName role="XML_Encoding">
+            <affiliation>
+              <roleName type="status">Stagiaire</roleName>
+            </affiliation>
+Roblin Camille					</persName>
+          <persName role="XML_Encoding">
+            <affiliation>
+              <roleName type="status">Stagiaire</roleName>
+            </affiliation>
+Lecha Mélanie					</persName>
+          <persName role="Project_manager" ref="orcid:0000-0001-9518-1040">Abiven Karine</persName>
+          <persName role="Project_manager" ref="orcid:0000-0002-4795-2362">Lejeune Gaël</persName>
+          <persName role="OCRisation" ref="orcid:0000-0002-0007-1664">Tanguy
+            Jean-Baptiste</persName>
+          <persName role="Corrector">
+            <affiliation>
+              <roleName type="status">Vacataire</roleName>
+            </affiliation>
+Hip Amélie					</persName>
+        </respStmt>
+      </titleStmt>
+      <publicationStmt>
+        <publisher>Projet ANTONOMAZ / Sorbonne Université</publisher>
+        <ref target="https://github.com/Antonomaz"/>
+        <date type="file_creation" when="2021-02-10">10 février 2021</date>
+        <date type="correction" when="2021-04-19">19 avril 2021</date>
+        <availability status="restricted" n="cc-by">
+          <licence target="https://creativecommons.org/licenses/by/4.0"/>
+        </availability>
+      </publicationStmt>
+      <sourceDesc>
+        <bibl>
+          <ref target="https://gallica.bnf.fr/ark:/12148/bpt6k5675043p"/>
+          <author/>
+          <title source="Moreau">Burlesque sur la fuite de Mazarin et la rencontre de madame la
+            duchesse de Longueville, retournant de Stenay à Paris</title>
+          <pubPlace ref="geonames:2988507">Paris</pubPlace>
+          <publisher>
+            <persName>Sans nom</persName>
+          </publisher>
+          <date source="Moreau" when="1651">1651</date>
+          <extent>
+            <measure unit="page" quantity="6"/>
+          </extent>
+          <note type="format">in-4</note>
+          <relatedItem source="Mazarine" type="identifier" subtype="none" cert="low" target="none"/>
+        </bibl>
+        <msDesc>
+          <msIdentifier>
+            <settlement ref="geonames:2988507">Paris</settlement>
+            <institution>Bibliothèque nationale de France</institution>
+            <repository>Département Littérature et art</repository>
+            <idno type="cote">YE-2165</idno>
+          </msIdentifier>
+          <history>
+            <provenance>
+              <stamp>False</stamp>
+            </provenance>
+          </history>
+        </msDesc>
+      </sourceDesc>
+    </fileDesc>
+    <encodingDesc>
+      <projectDesc>
+        <p>Cette édition a été réalisée dans le cadre du projet ANTONOMAZ. Son objectif principal
+          est de fournir un texte destiné à l'exploration avec des outils électroniques. De ce fait,
+          ce n'est ni une édition philologique, ni une édition pédagogique ou de redécouverte d'un
+          auteur oublié.</p>
+        <p>Les textes encodés dans le cadre du projet ANTONOMAZ sont issus de numérisations de
+          bibliothèques numériques publiques et de Google livres.</p>
+        <p>L'édition présentée ici est issue d'un processus d'OCRisation réalisé avec Kraken.</p>
+      </projectDesc>
+      <editorialDecl>
+        <p/>
+      </editorialDecl>
+    </encodingDesc>
+    <profileDesc>
+      <langUsage>
+        <language ident="fra">Document en français</language>
+      </langUsage>
+      <abstract>
+        <p source="Mazarine"/>
+        <p source="Moreau">614. Burlesque sur la fuite de Mazarin et la rencontre de madame la
+          duchesse de Longueville, retournant de Stenay à Paris. (S. 1.), 1651 , G pages.</p>
+      </abstract>
+      <textClass>
+        <keywords>
+          <term type="form">vers</term>
+          <term type="genre">poésie</term>
+          <term type="genre" ref="litterature/burlesque.xml">burlesque</term>
+          <term type="genre">satirique</term>
+          <term type="subject"/>
+          <term type="handwritten_note" subtype="no"/>
+          <term type="table_of_content" subtype="no"/>
+          <term type="illustration" subtype="no"/>
+        </keywords>
+      </textClass>
+      <settingDesc>
+        <setting xml:id="evt_Moreau_48" source="Moreau">
+          <p>Arrêt du parlement contre le cardinal Mazarin</p>
+          <date when="1651-03-11">1651-03-11</date>
+        </setting>
+      </settingDesc>
+    </profileDesc>
+    <revisionDesc>
+      <change status="corrected" when="2022-09-16"/>
+    </revisionDesc>
+  </teiHeader>
+  <text>
+    <body>
+      <p>
+        <pb n="1" facs="https://gallica.bnf.fr/ark:/12148/bpt6k5675043p/f2.highres" manual_correction="yes"/>7
+        <lb/>BVRLESQUE
+        <lb/>SVR
+        <lb/>LA FVITTE DE MAZARIN,
+        <lb/>ET LA RENCONTRE
+        <lb/>DE MADAME
+        <lb/>LA DVCHESSE
+        <lb/>DE
+        <lb/>LONGVEVILLE
+        <lb/>Retournant de Stenay à Paris.
+        <lb/>M. DC. LI. <pb n="2" facs="https://gallica.bnf.fr/ark:/12148/bpt6k5675043p/f3.highres"/>
+        <pb n="3" facs="https://gallica.bnf.fr/ark:/12148/bpt6k5675043p/f4.highres"/>
+        <lb/>BVRLESQUE
+        <lb/>SVR
+        <lb/>LA FVITTE DE MAZARIN,
+        <lb/>ET LA RENCONTRE
+        <lb/>DE MADAME
+        <lb/>LA DVCHESSE
+        <lb/>DE
+        <lb/>LONGVEVILLE
+        <lb/>
+        <hi rend="it">Retournant de Stenay à Paris.</hi>
+        <l>
+          <lb/>MAzarin vous auez grand tort</l>
+        <l>
+          <lb/>De vous plaindre de voſtre ſort,</l>
+        <l>
+          <lb/>Vous deuiez ſçauoir qu'vn mortel</l>
+        <l>
+          <lb/>Paſſe tousjours pour criminel</l>
+        <pb n="4" facs="https://gallica.bnf.fr/ark:/12148/bpt6k5675043p/f5.highres"/>
+        <l>
+          <lb/>De choquer la Principauté,</l>
+        <l>
+          <lb/>Eſpece de Diuinité:</l>
+        <l>
+          <lb/>Niobé fille de Tantale,</l>
+        <l>
+          <lb/>Trouua lupiter liberale</l>
+        <l>
+          <lb/>Par la beauté &amp; la richeſſe</l>
+        <l>
+          <lb/>Qu'elle receut de ſa largeſſe,</l>
+        <l>
+          <lb/>Et par vne lignée feconde</l>
+        <l>
+          <lb/>Plus belle que la terre &amp; l'onde</l>
+        <l>
+          <lb/>Ait iamais eſtalé aux yeux</l>
+        <l>
+          <lb/>Des mortels, &amp; meſme des dieux:</l>
+        <l>
+          <lb/>Mais s'en eſtant renduë ingratte,</l>
+        <l>
+          <lb/>Latonne incontinent la matte,</l>
+        <l>
+          <lb/>En puniſſant ſon inſolence,</l>
+        <l>
+          <lb/>Et faiſant bien voir l'impuiſſance</l>
+        <l>
+          <lb/>De Niobé contre les dieux,</l>
+        <l>
+          <lb/>Arma contre elle tous les cieux.</l>
+        <l>
+          <lb/>Donnant à cognoiſtre aux mortels</l>
+        <l>
+          <lb/>Qu'ils ſeroient tousjours criminels</l>
+        <l>
+          <lb/>D'entreprendre contre les dieux,</l>
+        <l>
+          <lb/>Maiſtres de la terre &amp; des cieux.</l>
+        <l>
+          <lb/>Elle fiſt paſſer Lacheron</l>
+        <l>
+          <lb/>A coups des fleſches d'Apolon</l>
+        <l>
+          <lb/>A ſes ſept fils &amp; ſes ſept filles,</l>
+        <l>
+          <lb/>L'ornement de toutes les villes,</l>
+        <fw place="bot-right" type="catch">Pour</fw>
+        <pb n="5" facs="https://gallica.bnf.fr/ark:/12148/bpt6k5675043p/f6.highres"/>
+        <fw place="top-center" type="pageNum">5</fw>
+        <l>
+          <lb/>Pour auoir fait comparaiſon</l>
+        <l>
+          <lb/>De ſa trop belle nourriſſon</l>
+        <l>
+          <lb/>Auec Appollon &amp; Diane,</l>
+        <l>
+          <lb/>Mais c'eſtoit en vſer en Aſne:</l>
+        <l>
+          <lb/>Comme vous pauure Mazarin,</l>
+        <l>
+          <lb/>De Miniſtre venu vn beau Rien,</l>
+        <l>
+          <lb/>Qui bouffy d'aueugle fortune,</l>
+        <l>
+          <lb/>A toute la France importune,</l>
+        <l>
+          <lb/>Vous auez euë l'effronterie,</l>
+        <l>
+          <lb/>Meſlée de voſtre fourberie,</l>
+        <l>
+          <lb/>D'attaquer la Maiſon Royalle,</l>
+        <l>
+          <lb/>Par vne action deſloyalle,</l>
+        <l>
+          <lb/>Mettant ſous la barre &amp; les fers</l>
+        <l>
+          <lb/>Trois Princes de tout l'Vniuers</l>
+        <l>
+          <lb/>Les plus Grands, tant par la naiſſance,</l>
+        <l>
+          <lb/>Que par redoutable puiſſance.</l>
+        <l>
+          <lb/>Mais la voicy, non pas Latonne,</l>
+        <l>
+          <lb/>C'eſt noſtre Deeſſe Bourbonne,</l>
+        <l>
+          <lb/>Qu piquee d'vn iuſte courroux</l>
+        <l>
+          <lb/>De l'affont fait à ſon Eſpoux,</l>
+        <l>
+          <lb/>Et à ſes deux freres germains,</l>
+        <l>
+          <lb/>A formé de ſi hauts deſſeins</l>
+        <l>
+          <lb/>Qu'elle a detroſné Mazarin,</l>
+        <l>
+          <lb/>De Miniſtre change en Rien.</l>
+        <fw place="bot-right" type="sig">B</fw>
+        <pb n="6" facs="https://gallica.bnf.fr/ark:/12148/bpt6k5675043p/f7.highres"/>
+        <fw place="top-center" type="pageNum">6</fw>
+        <l>
+          <lb/>Le voyez-vous qui prend la fuitte</l>
+        <l>
+          <lb/>Auec ſa deteſtable ſuitte,</l>
+        <l>
+          <lb/>Adieu Demon Incarnadin,</l>
+        <note place="margin-left">
+          <lb/>Phoſphorin,
+          <lb/>mot Grec qui
+          <lb/>ſignifie Lu
+          <lb break="no" rend="¬"/>cifer.</note>
+        <l>
+          <lb/>Bruſle à iamais dedans l'enfer</l>
+        <l>
+          <lb/>Auec ton frere Lucifer.</l>
+        <lb/>FIN. </p>
+    </body>
+  </text>
+</TEI>
