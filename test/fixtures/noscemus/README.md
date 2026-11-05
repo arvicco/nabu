@@ -36,8 +36,9 @@ plus the wiki tables under `wiki/<table>/`.
 
 Text files: the header verbatim, then the body's first K regions with
 their exact separators (the leading body newlines kept), one closing
-newline. Names exactly as bsdtar lands them (decomposed accents, as the
-Unicode Path field stores them).
+newline. Names as bsdtar lands them (the Unicode Path field stores decomposed
+accents; checked in NFC — the adapter keys on the directory id, never the
+file name).
 
 - `1031760/` — Bacon, *Instauratio magna*, London 1620 (also keyed in
   eebo-tcp — a different witness): 22 regions → 15 passages + 7 letterless
