@@ -319,6 +319,33 @@ namespace :index do
     catalog&.disconnect
     fulltext&.disconnect
   end
+
+  # The token-gloss lane (`search --gloss WORD` with no query): the
+  # upstream token glosses of the Query::TokenGlosses sources re-derived
+  # standalone over the live catalog — the index:translations shape:
+  # reads only those sources' annotations, writes only the fulltext
+  # token_glosses tables, advances the stage stamp.
+  desc "Re-derive the token-gloss index (search --gloss WORD across lemmas) over the live catalog"
+  task :glosses do
+    $LOAD_PATH.unshift(File.expand_path("lib", __dir__))
+    require "nabu"
+
+    config = Nabu::Config.load
+    catalog = Nabu::Store.connect(config.catalog_path, readonly: true)
+    fulltext = Nabu::Store.connect_fulltext(config.fulltext_path)
+    started = Process.clock_gettime(Process::CLOCK_MONOTONIC)
+    summary = Nabu::Store::GlossIndex.rebuild!(catalog: catalog, fulltext: fulltext, stamp: true)
+    elapsed = Process.clock_gettime(Process::CLOCK_MONOTONIC) - started
+    puts "index:glosses done — #{summary.fetch(:words)} words (#{summary.fetch(:tokens)} tokens) from " \
+         "#{summary.fetch(:sources)} sources in " \
+         "#{Object.new.extend(Nabu::DurationFormat).format_duration(elapsed)}"
+    fulltext[Nabu::Store::GlossIndex::SCOPE_TABLE].order(:slug).each do |row|
+      puts "  #{row.fetch(:slug)}: #{row.fetch(:words)} words, #{row.fetch(:tokens)} tokens"
+    end
+  ensure
+    catalog&.disconnect
+    fulltext&.disconnect
+  end
 end
 
 # The short handle (owner request 2026-07-22). Same task, same attestation

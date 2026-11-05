@@ -196,6 +196,53 @@ module MCP
                    text_of(call("nabu_search", { "query" => "brothers", "translations" => true })))
     end
 
+    # -- the token-gloss lane (gloss with no lemma; bump 2026-11-05) -----------
+    # `gloss` alone (no query, no lemma) was a usage error; it now searches
+    # the glosses ACROSS lemmas (Store::GlossIndex). Additive: no schema key
+    # moves, and gloss WITH lemma keeps its filter contract.
+
+    def seed_glosses(build: true)
+      @catalog = store_test_db
+      @fulltext = Nabu::Store.connect_fulltext("sqlite::memory:")
+      { "bhsa" => Nabu::Adapters::Bhsa, "achemenet" => Nabu::Adapters::Achemenet }.each do |slug, adapter|
+        source = Nabu::Store::Source.create(slug: slug, name: slug, adapter_class: adapter.name,
+                                            license_class: "open")
+        Nabu::Store::Loader.new(db: @catalog, source: source)
+                           .load_from(adapter.new, workdir: Nabu::TestSupport.fixtures(slug), full: true)
+      end
+      Nabu::Store::GlossIndex.rebuild!(catalog: @catalog, fulltext: @fulltext) if build
+    end
+
+    def test_gloss_alone_finds_words_across_lemmas_and_sources
+      seed_glosses
+      body = payload(call("nabu_search", { "gloss" => "king" }))
+      words = body.fetch("matches")
+      assert_includes words.map { |hit| hit.values_at("source", "lemma", "gloss") }, %w[achemenet šarru king]
+      assert_includes words.map { |hit| hit.values_at("source", "language", "lemma") }, %w[bhsa hbo מלך]
+      sarru = words.find { |hit| hit.fetch("lemma") == "šarru" }
+      assert_match(/\Aurn:nabu:achemenet:/, sarru.fetch("urn"), "the first attestation")
+      assert_equal "open", sarru.fetch("license_class")
+      assert_operator sarru.fetch("tokens"), :>=, sarru.fetch("passages")
+      refute_empty sarru.fetch("form")
+      assert_equal(%w[achemenet bhsa], body.fetch("coverage").map { |row| row.fetch("source") })
+      assert_equal(%w[bhsa], payload(call("nabu_search", { "gloss" => "king", "lang" => "arc" }))
+                               .fetch("matches").map { |hit| hit.fetch("source") })
+    end
+
+    def test_gloss_alone_composes_with_lang_license_limit_only
+      seed_glosses
+      error = assert_raises(Nabu::MCP::Tools::InvalidArguments) do
+        call("nabu_search", { "gloss" => "king", "query" => "x" })
+      end
+      assert_match(/gloss composes with .* only \(not query\)/, error.message)
+      assert_empty payload(call("nabu_search", { "gloss" => "zzyzx" })).fetch("matches")
+    end
+
+    def test_gloss_alone_without_the_lane_is_the_build_hint_note
+      seed_glosses(build: false)
+      assert_match(/rake index:glosses/, text_of(call("nabu_search", { "gloss" => "king" })))
+    end
+
     # -- the sense desk + show senses (real dcs fixtures) -----------------------
 
     ANGULA = "urn:nabu:dcs:5:3363:2612"
