@@ -500,6 +500,59 @@ class ZipFetchTest < Minitest::Test
     refute File.exist?(@dir), "a failed unpack never touches the live tree"
   end
 
+  # :zip_bsdtar (the NOSCEMUS Digital Sourcebook, Zenodo 15040256): 183 of
+  # its members carry a CP437 name in the header (no UTF-8 flag) plus the
+  # Info-ZIP Unicode Path extra field (0x7075) holding the real UTF-8 name.
+  # unzip ignores the extra field and dies on APFS (exit 50) — the salvage
+  # reader would then drop every such member; bsdtar (libarchive) honors
+  # the extra field and lands the member under its Unicode name.
+  def unicode_path_zip_body(cp437_name, utf8_name, content)
+    require "zlib"
+    name = cp437_name.b
+    unicode = utf8_name.b
+    extra = [0x7075, 5 + unicode.bytesize, 1, Zlib.crc32(name)].pack("vvCV") + unicode
+    crc = Zlib.crc32(content)
+    local = "PK\x03\x04".b + [20, 0, 0, 0, 0, crc, content.bytesize, content.bytesize,
+                              name.bytesize, extra.bytesize].pack("vvvvvVVVvv") + name + extra + content.b
+    central = "PK\x01\x02".b + [20, 20, 0, 0, 0, 0, crc, content.bytesize, content.bytesize,
+                                name.bytesize, extra.bytesize, 0, 0, 0, 0, 0].pack("vvvvvvVVVvvvvvVV") + name + extra
+    local + central + "PK\x05\x06".b + [0, 0, 1, 1, central.bytesize, local.bytesize, 0].pack("vvvvVVv")
+  end
+
+  def test_zip_bsdtar_lands_a_cp437_member_under_its_unicode_path_name
+    body = unicode_path_zip_body("proj/1285855/Denisot,_G\x82rard.txt", "proj/1285855/Denisot,_Gérard.txt", "text")
+    headers = { "Content-Type" => "application/zip", "Last-Modified" => LAST_MODIFIED }
+    stub_request(:get, URL).to_return(status: 200, body: body, headers: headers)
+    result = Nabu::ZipFetch.sync!(url: URL, dir: @dir, attic_dir: @attic, archive: :zip_bsdtar)
+    names = Dir.children(File.join(@dir, "1285855"))
+    assert_equal 1, names.size
+    assert_equal "Denisot,_Gérard.txt", names.first.unicode_normalize(:nfc), "the 0x7075 name, never the CP437 bytes"
+    assert_equal "text", File.read(File.join(@dir, "1285855", names.first))
+    assert_equal Digest::SHA256.hexdigest(body), result.sha
+  end
+
+  def test_zip_bsdtar_honors_retention_and_304_replay
+    stub_request(:get, URL).to_return(status: 200, body: zip_body({ "a.xml" => "v1", "doomed.xml" => "old" }),
+                                      headers: { "Last-Modified" => LAST_MODIFIED })
+    Nabu::ZipFetch.sync!(url: URL, dir: @dir, attic_dir: @attic, archive: :zip_bsdtar)
+    stub_request(:get, URL).to_return(status: 200, body: zip_body({ "a.xml" => "v2" }),
+                                      headers: { "Last-Modified" => "Sun, 02 Mar 2026 10:00:00 GMT" })
+    result = Nabu::ZipFetch.sync!(url: URL, dir: @dir, attic_dir: @attic, archive: :zip_bsdtar)
+    assert_equal "v2", File.read(File.join(@dir, "a.xml"))
+    assert_equal "old", File.read(File.join(@attic, "doomed.xml")), "the dropped file is atticked"
+    stub_request(:get, URL).to_return(status: 304)
+    assert Nabu::ZipFetch.sync!(url: URL, dir: @dir, attic_dir: @attic, archive: :zip_bsdtar).not_modified
+    assert_equal ["doomed.xml"], result.atticked
+  end
+
+  def test_a_corrupt_zip_under_bsdtar_raises_without_salvage
+    stub_request(:get, URL).to_return(status: 200, body: "not a zip", headers: { "Content-Type" => "application/zip" })
+    assert_raises(Nabu::ZipFetch::Error) do
+      Nabu::ZipFetch.sync!(url: URL, dir: @dir, attic_dir: @attic, archive: :zip_bsdtar)
+    end
+    refute File.exist?(@dir), "a failed unpack never touches the live tree"
+  end
+
   def test_unknown_archive_kind_is_rejected_loudly
     assert_raises(ArgumentError) do
       Nabu::ZipFetch.new(url: URL, dir: @dir, attic_dir: @attic, archive: :seven_zip)
