@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="https://raw.githubusercontent.com/erc-dharma/project-documentation/master/schema/latest/DHARMA_Schema.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<?xml-model href="https://raw.githubusercontent.com/erc-dharma/project-documentation/master/schema/latest/DHARMA_Schema.rng" type="application/xml" schematypens="http://purl.oclc.org/dsdl/schematron"?>
+<?xml-model href="https://raw.githubusercontent.com/erc-dharma/project-documentation/master/schema/latest/DHARMA_SQF.sch" type="application/xml" schematypens="http://purl.oclc.org/dsdl/schematron"?>
+<?xml-model href="https://epidoc.stoa.org/schema/latest/tei-epidoc.rng" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<?xml-model href="https://epidoc.stoa.org/schema/latest/tei-epidoc.rng" schematypens="http://purl.oclc.org/dsdl/schematron"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:lang="eng">
+    <teiHeader>
+        <fileDesc>
+            <titleStmt>
+                <title>Talmul Copper Plate Charter of Devānandadeva year 152</title>
+                <!--Change the title of the file, e.g. Raktamālā grant of the time of Budhagupta, year 159-->
+                <!-- Add your name in the respStmt matching your involvement -->
+                <respStmt>
+                    <resp key="contributor">EpiDoc Encoding</resp>
+                    <!-- Work done in the file, e.g. editor ...-->
+                    <persName ref="part:amwb"><!-- Update the id -->
+                        <forename>Amandine</forename><!-- Fill in your  names — it is possible to use only <name> instead of <foreame> and <surname> -->
+                        <surname>Wattelier-Bricout</surname>
+                    </persName>
+                </respStmt>
+                <respStmt>
+                    <resp key="creator">intellectual authorship of edition</resp>
+                    <!-- This may be the same as the creator of the file -->
+                    <persName ref="part:amwb"><!-- Update the id -->
+                        <forename>Amandine</forename><!-- Fill in the name of the responsible scholar — it possible to use only <name> instead of <foreame> and <surname> -->
+                        <surname>Wattelier-Bricout</surname>
+                    </persName>
+                </respStmt>
+            <funder>European Research Council (ERC), grant agreement no 809994</funder></titleStmt>
+            <publicationStmt>
+                <authority><ref target="https://dharmalekha.info">DHARMA</ref></authority>
+                <pubPlace>Aubervilliers</pubPlace>
+                <idno type="filename">DHARMA_INSNandodbhava00001.xml</idno>
+                <!-- Replace by filename, e.g. Pallava00001 -->
+                <availability><licence target="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</licence></availability>
+                <date from="2019" to="2026">2019-2026</date>
+            </publicationStmt>
+            <sourceDesc><!-- only the handDesc can be filled in at this stage -->
+                <msDesc><!-- //// NB: the msIdentifier had to be added for validation purposes ///. It will be edited later with the metadata spreadsheet -->
+                    <msIdentifier>
+                        <repository>DHARMAbase</repository>
+                        <idno/><!-- don't modify this -->
+                    </msIdentifier>
+                    <msContents><!-- describe the intellectual content of an inscription -->
+                        <summary><!-- //// NOT MANDATORY  ////--></summary> <!-- offers the possibility to give a summary of the inscription's content -->
+                    </msContents>
+                    <physDesc>
+                        <handDesc>
+                            <p><!-- The script name(s) will be inserted here at a later stage from the metadata spreasheet. At this stage, you can mention here in a free-text paragraph any characteristics of the writing observed more than once in this inscription that seem unusual/uncommon or otherwise noteworthy given the general characteristics of the script in question. See EGD 11.2. --></p>
+                            <!-- If you need to identify individual hands (EGD §7.5/) in addition to one or more paragraphs of general palaeographic description, wrap <summary> around the <p> or <p>s above, and, outside <summary>, create <handNote> elements for each hand as follows:
+						<summary><p><p/></summary>
+						<handNote xml:id="Pallava00001_hand1"></handNote>
+						<handNote xml:id="Pallava00001_hand2"></handNote>
+					 -->
+                        </handDesc>
+                    </physDesc>
+                </msDesc>
+            </sourceDesc>
+        </fileDesc>
+        <encodingDesc>
+         <p>Encoded in TEI/EpiDoc according to the <ref target="https://hal.science/halshs-02888186">DHARMA Encoding Guide for Documentary Editions, version 2</ref></p>
+      </encodingDesc>
+        <revisionDesc>
+            <change who="part:amwb" when="2025-01-22">Creation of the file</change>
+            <!-- replace this by a line that has you as @who, that has the @date on which you finished the first basic encoding of the file, and that has the following description of what was finished on that date: "Initial encoding of the file." Then add a <change> entry for each significant change to the file. -->
+        </revisionDesc>
+    </teiHeader>
+    <text xml:space="preserve">
+      <body>
+         <div type="edition" xml:lang="san-Latn"><!-- update the @xml:lang value, see EGD §7.2-->
+            <!--edition encoded as per EGD §§2−7-->
+             <pb n="1r"/>
+             
+              <p>
+                  <lb n="1"/><lb n="2"/><lb n="3"/><lb n="4"/><lb n="5"/><lb n="6"/><lb n="7"/><lb n="8"/><lb n="9"/><lb n="10"/><lb n="11"/><lb n="12"/><lb n="13"/><lb n="14"/><lb n="15"/><lb n="16"/><lb n="17"/><lb n="18"/><lb n="19"/><lb n="20"/><pb n="1v"/><lb n="21"/><lb n="22"/><lb n="23"/><lb n="24"/><lb n="25"/><lb n="26"/><lb n="27"/><lb n="28"/><lb n="29"/><lb n="30"/><lb n="31"/><lb n="32"/><lb n="33"/><lb n="34"/><lb n="35"/><lb n="36"/><lb n="37"/><lb n="38"/><lb n="39"/>
+   
+                  </p>
+         </div>
+         <div type="apparatus">
+           <!--apparatus encoded as per EGD §9.1, basic elements for apparatus below-->
+               <listApp><!-- one <app> for each apparatus entry -->
+                  <app loc="line"><!-- update the value of @loc.-->
+                     <lem><!-- fill in a lemma here --></lem>
+                     <rdg source="bib:Acharya2022_01"><!-- update the @source value, fill in variant reading here --></rdg>
+                  </app>
+               </listApp>
+         </div>
+         <div type="translation">
+ 	<!--translation encoded as per EGD §9.2 -->
+         </div>
+         <div type="commentary">
+            <!--commentary encoded as per section §9.3 -->
+             <p>Bibliographical references : DTC tripathy 6 p 51-53 Acharya 2014 n1 p 398-399 EI 40 part 6 1973 p 239-244</p>
+             <p>39 lines; 13 verses : 9 in the introductory portion (lines 2-19) same as INSNandodbhava00007 and INSNandodbhava00005 and 4 customary verses (lines 33-38).<bibl><ptr target="bib:Acharya2014_01"/><citedRange unit="note">49</citedRange><citedRange unit="page">399</citedRange></bibl>: "An interesting passage in the descripiton of the king Devānandadeva II is found in this record as well as in the other plates of the family is <foreign>śīta-dhātu-maya-godhā-śikharākṛta-lohita-locanāmbara-dhvajaḥ</foreign>. It shows that the banner of the Nanda kings was a piece of cloth with the emblem <foreign>lohita-locana</foreign> having an alligator (<foreign>godhā</foreign>) above, which was made of <foreign>śīta-dhātu</foreign>. The expression <foreign>śīta-dhātu</foreign> usually means "chalk"; but it can be so interpreted as to suggest that the alligator on the banner of the Nanda kings was made of silver (EI 27, p. 237)". On the date, <bibl><ptr target="bib:Acharya2014_01"/><citedRange unit="note">50</citedRange><citedRange unit="page">399</citedRange></bibl>: "Behera is inclined to believe that the grant was issued in the Bhauma year 152 corresponding to CE 888. K.V. Ramesh, the editor of the journal, however, remarked that the passage containing the date, "is incomplete and appears to have been inserted subsequently" (p. 244, note 1). "</p>
+         </div>
+        <div type="bibliography">
+	<!--bibliography encoded as per section §9.4 -->
+           <p>Currently preserved in the Archaeological Museum, Departments of History and Ancient Indian History Culture and Archaeology, Utkal University, Bhubaneswar, see <bibl><ptr target="bib:WattelierBricout2024_01"/></bibl>. Link to the pictures <ref target="https://didomena.ehess.fr/concern/data_sets/kd17d2505">here</ref>.</p>
+        	<listBibl type="primary">
+				<bibl n="A"><ptr target="bib:Acharya2022_01"/><citedRange unit="item">I</citedRange><citedRange unit="page">180-183</citedRange></bibl><!-- one <bibl/> per item of primary bibliography. Every entry mentionned in apparatus  should hava a @n to declare its sigla -->
+			</listBibl>
+           <listBibl type="secondary">
+               <bibl><ptr target="bib:Tripathy2010_01"/><citedRange unit="item">5</citedRange><citedRange unit="page">51-52</citedRange></bibl>
+              <bibl><ptr target="bib:Acharya2014_01"/><citedRange unit="item">1</citedRange><citedRange unit="page">398-399</citedRange></bibl><!-- one <bibl/> per item of secondary bibliography -->
+           </listBibl>
+        </div>
+      </body>
+  </text>
+</TEI>
