@@ -388,3 +388,20 @@ sources:
     # parse-time work, the 2026-10-18 generalization. Tier certain: every
     # file is the modern liturgical text, none a pre-reform witness.
     chu: { lect: "chu:ncs", tier: certain }
+  glt:
+    # The Greek Orthodox service books: the hymnography and euchology are
+    # Byzantine liturgical Greek (the liturgies of Basil and Chrysostom,
+    # Romanos, Andrew of Crete, John of Damascus, Kosmas, the Studites,
+    # Joseph the Hymnographer). The Menaia also carry a few post-Byzantine
+    # services written in the same received register (St Nektarios †1920,
+    # the Agia Skepi services), so the stage is a corpus-level reading —
+    # the perseus-latin shape, tier approximation (render glosses it
+    # "probable"; a per-document refinement can sharpen the moderns later).
+    grc: { lect: "grc:byz", tier: approximation }
+  lasla:
+    # The LASLA classical canon, Plautus to the 2nd c. AD — a corpus-level
+    # classical-Latin reading, exactly the perseus-latin shape (Plautus/
+    # Cato would refine to lat:arch per document if ever wanted). Tier
+    # approximation: the corpus spans past the band's core, and the stage
+    # is a reading, not the corpus's own definition.
+    lat: { lect: "lat:cla", tier: approximation }
