@@ -1000,8 +1000,9 @@ library's first middle and late Byzantine shelf — Photius, Leo VI,
 Theophanes Continuatus, Constantine Porphyrogenitus, Cedrenus and
 Skylitzes, Psellus, Theophylact of Ohrid, Zonaras, Choniates, Gregoras,
 Palamas, Cantacuzene, Doukas, Glykas — beside eleven patristic volumes;
-one document per volume, one passage per page (attribution) — is
-registered but not yet wired. `pta` — the Patristic Text Archive (BBAW):
+carved into its works by open-greek-corpus's curated carve plan where
+the plan reaches (each carved volume's apparatus kept beside them, the
+other volumes whole), one passage per page (attribution). `pta` — the Patristic Text Archive (BBAW):
 open Greek editions of the early Christian authors, Severian of Gabala's
 homilies to Athanasius, Eusebius, Origen and the Arian-controversy
 documents, critical apparatus kept out of the text, each work dated and
