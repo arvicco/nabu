@@ -302,8 +302,11 @@ module Site
 
     # The sources page: every corpus row's holdings render from the
     # per-source data, and every slug in a row is an anchor (/sources/#src-<slug>).
+    # The table itself is generated (Nabu::Ops::SourcesTable) into the
+    # include the page pulls in.
     def test_sources_page_holdings_render_from_the_sources_data
-      table_rows(page("sources"), "| Source | Upstream project |").each do |cells|
+      table = File.read(File.join(SITE, Nabu::Ops::SourcesTable::INCLUDE_FILE))
+      table_rows(table, "| Source | Upstream project |").each do |cells|
         message = "sources.md row #{cells[0][/`[^`]+`/]} hand-types its holdings #{cells[3].inspect} — " \
                   "render {{ src[\"<slug>\"].holdings }} from site.data.sources"
         assert liquid_figures_only?(cells[3]), message

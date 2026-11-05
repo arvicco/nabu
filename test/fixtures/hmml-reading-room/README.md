@@ -14,8 +14,8 @@ member `vhmml_rr_fulldata.json` (757,403,565 bytes, dated 2026-11-01
 The member is a JSON array written one record per line: line 1 opens
 with `[`, every record line ends with `,`, and the last line is an
 EMPTY record `{}]`. The fixture keeps that shape byte-for-byte: the
-real first line (record 2), six real record lines copied whole, and the
-real last line. Re-pack recipe: copy those lines out of the member,
+real first line (record 2), fifteen real record lines copied whole (in
+upstream's id order), and the real last line. Re-pack recipe: copy those lines out of the member,
 then `zip -X vhmml_rr_fulldata.zip vhmml_rr_fulldata.json`.
 
 License (read 2026-11-02, the data-portal page and vhmml.org/terms):
@@ -61,4 +61,17 @@ with no incipit at all + 116 whose every incipit skipped).
   (the Neo-Aramaic incipit skips by rule — no registry claim yet).
 - 200191 — EMML 6555, the Fetḥa nagaśt in Amharic, dated 1884, no
   shelf mark.
+- 134100 — a Syriac psalter whose only origin evidence is the
+  provenance note "Copied in Ankawa, fol. 3v" (no structured origin);
+  its genres pair a label without an authority id (`"uri": ""`) with
+  Psalters (AAT 300026477).
+- 518049 — provenance "Copied in Dayr al-Kuraym; colophon …": an
+  institution phrase, not a town — the copying-town reading skips it.
+- The impossible part bounds upstream ships (added 2026-11-04, same
+  generation; the whole slice holds exactly these seven, plus 207154,
+  a twin of 207131): 136660 (third part 1767–767, precise year 767,
+  beside two sound 1700–1800 parts), 206358 (18891–1913), 207131
+  (17000–1800), 207990 (1750–150), 507776 (1954–1854, precise 1954),
+  511958 (1684–1594, precise 1684, native "1996 AG"), 539548
+  (16757–1657, precise 1657).
 - the trailing `{}` — the rejected empty record.

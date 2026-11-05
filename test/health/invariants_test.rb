@@ -762,6 +762,37 @@ class InvariantsTest < Minitest::Test
     assert_match(/\Aconsumed:/, exempt.dig("cdli", "dates_referenced").to_s)
   end
 
+  # The mining-law sweep, dates half (live census 2026-11-04): the date-
+  # shaped keys that stay unprojected, each declared — consumed keys whose
+  # values cannot trace by value (a two-character era name, a bare regnal
+  # number; pta's edition years projecting only as the fallback the
+  # composition-dated sample never meets), and keys that are not the
+  # text's date (a digitization campaign year, a modern translation's
+  # year, web-record timestamps, a polity, the necrology's death years).
+  def test_dates_sweep_declares_its_consumed_and_non_text_keys
+    exempt = Nabu::Health::Invariants::MINING_EXEMPT
+    { %w[tianyige reign_era] => /\Aconsumed:/, %w[tianyige reign_year] => /\Aconsumed:/,
+      %w[pta edition_year] => /\Aconsumed:/, %w[pta source_date] => /\Aconsumed:/,
+      %w[ban-wikisource index_year] => /photograph/, %w[lotsawa-house translation_year] => /translation/,
+      %w[aio updated] => /record/, %w[paramara dynasty] => /dynasty/ }.each do |(slug, key), reason|
+      assert_match reason, exempt.dig(slug, key).to_s, "#{slug}/#{key}"
+    end
+    assert_match(/death/, Nabu::Health::Invariants::PASSAGE_MINING_EXEMPT.dig("divinum-officium", "entry_years").to_s)
+  end
+
+  # tianyige's era + year are consumed into the projected date (the live
+  # document's metadata and axis row, trimmed): "洪武" is two characters
+  # and "4" one, below the containment rule's floor — declared, not ore.
+  def test_tianyige_reign_keys_are_declared_consumed
+    meta = '{"date":{"class":"composition","not_after":1371,"not_before":1371,"raw":"洪武4 (Ming Hongwu)"},' \
+           '"dynasty":"Ming","exam_level":"palace (殿試)","reign_era":"洪武","reign_year":4,"western_year":1371}'
+    doc_id = seed_lane_doc("tianyige", "urn:nabu:tianyige:t1", meta)
+    @db[:document_axes].insert(document_id: doc_id, not_before: 1371, not_after: 1371,
+                               date_raw: "洪武4 (Ming Hongwu)", date_class: "composition", axis_source: "tianyige")
+    finding = global_finding(:unmined_axis_metadata)
+    refute_match(/tianyige/, finding&.message.to_s, "the reign keys are declared consumed")
+  end
+
   def test_mining_exempt_entries_each_carry_a_reason
     Nabu::Health::Invariants::MINING_EXEMPT.each do |slug, keys|
       assert_kind_of Hash, keys, "#{slug}: exemptions are key => reason"
@@ -823,6 +854,50 @@ class InvariantsTest < Minitest::Test
     finding = global_finding(:unmined_axis_metadata)
     refute_match(/place_role/, finding&.message.to_s, "the imprint qualifier is declared, not ore")
     assert_match(/qualifier/, Nabu::Health::Invariants::MINING_EXEMPT.dig("bim-sahcoba", "place_role").to_s)
+  end
+
+  # The mining-law sweep, places + genre half (live census 2026-11-04).
+  # emmo's "dateline" and ninjal-textdb's "imprint" are constant per-source
+  # role qualifiers beside the "place" key that projects (the ticha /
+  # bim-sahcoba shape); hmml's provenance is ownership prose; its
+  # genre_uris are the AAT/LCGFT ids of the genre LABELS the kind fold
+  # already consumes (one id per label, census-verified); TCP's tcp_class
+  # is curation status, not genre.
+  def test_places_genre_sweep_declares_its_qualifiers_and_non_axis_keys
+    exempt = Nabu::Health::Invariants::MINING_EXEMPT
+    assert_match(/qualifier/, exempt.dig("emmo", "place_role").to_s)
+    assert_match(/qualifier/, exempt.dig("ninjal-textdb", "place_role").to_s)
+    assert_match(/ownership/, exempt.dig("hmml-reading-room", "provenance").to_s)
+    assert_match(/\Aconsumed:/, exempt.dig("hmml-reading-room", "genre_uris").to_s)
+    %w[ecco-tcp evans-tcp].each do |slug|
+      assert_match(/curation status/, exempt.dig(slug, "tcp_class").to_s, slug)
+    end
+  end
+
+  # emmo's dateline qualifier, on a live document's own metadata shape
+  # (urn:nabu:emmo:La13, trimmed to its axis keys — "dateline" on 46 of
+  # the 46 emmo letters that carry a place, census 2026-11-04).
+  def test_emmo_dateline_qualifier_is_not_ore
+    meta = '{"date":{"class":"composition","not_after":1620,"not_before":1620,"raw":"1620 March 27"},' \
+           '"document_type":"Letter","place":"Oxford","place_role":"dateline","shelfmark":"L.a.13"}'
+    doc_id = seed_lane_doc("emmo", "urn:nabu:emmo:La13", meta)
+    @db[:document_axes].insert(document_id: doc_id, not_before: 1620, not_after: 1620,
+                               date_raw: "1620 March 27", place_name: "Oxford", axis_source: "emmo")
+    finding = global_finding(:unmined_axis_metadata)
+    refute_match(/place_role/, finding&.message.to_s, "the dateline qualifier is declared, not ore")
+  end
+
+  # The shipped errata carries pta's Caesarea ref: PTA's TEI writes
+  # https://pleiades.stoa.org/places/67841 for Caesarea (Eusebius,
+  # Hippolytus), an id live Pleiades does not know (json 404,
+  # 2026-11-04) — Caesarea Maritima is 678401 (a lost 0).
+  def test_shipped_errata_records_the_pta_caesarea_slip
+    errata = YAML.safe_load_file(File.expand_path("../../config/place_ref_errata.yml", __dir__))
+    row = errata.dig("pleiades", "67841")
+    refute_nil row, "pleiades:67841 is a verified upstream defect"
+    assert_equal "nonexistent", row["verdict"]
+    assert_equal "678401", row["intended"]
+    assert_equal "pta", row["asserted_by"]
   end
 
   # P61-4: the ~script claim is byte-checkable BY DESIGN (D60-b — the axis

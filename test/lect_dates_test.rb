@@ -124,6 +124,51 @@ class LectDatesTest < Minitest::Test
     end
   end
 
+  # -- the script surface rides through -----------------------------------------
+
+  # A source-grain override that claims only a SURFACE (yi~latn: PPCHY holds
+  # its Yiddish romanized) leaves the stage open, so date-band inference
+  # stages the text — but the row it mints must keep the surface, exactly
+  # as the per-source override states it: yi:mid~latn, never a bare yi:mid
+  # that silently drops the romanization claim for every dated text while
+  # the undated ones keep yi~latn.
+  def test_a_surface_only_override_keeps_its_script_on_the_inferred_stage
+    with_seeded_catalog do |catalog|
+      seed_source(catalog, "ppchy")
+      seed_document(catalog, slug: "ppchy", urn: "urn:t:ppchy:mid", language: "yi",
+                             not_before: 1550, not_after: 1600)
+      seed_document(catalog, slug: "ppchy", urn: "urn:t:ppchy:undated", language: "yi",
+                             not_before: nil, not_after: nil)
+      report = dates.census(catalog: catalog, source: "ppchy")
+      assert_equal([%w[urn:t:ppchy:mid yi:mid~latn]], report.candidates.map { |c| [c.urn, c.lect_id] })
+      assert registry.lect("yi:mid~latn"), "the surfaced stage is a registry-valid id"
+    end
+  end
+
+  # The papyri egy~latn shape: Demotic held as Latin transliteration, dated
+  # inside egy:dem's band — the stage gains the surface the override states.
+  def test_the_papyri_demotic_surface_survives_date_banding
+    with_seeded_catalog do |catalog|
+      seed_document(catalog, slug: "papyri-ddbdp", urn: "urn:t:papyri:dem", language: "egy-Egyd",
+                             not_before: -200, not_after: -100)
+      report = dates.census(catalog: catalog, source: "papyri-ddbdp")
+      assert_equal 1, report.assignable.fetch(["papyri-ddbdp", "egy-Egyd", "egy:dem~latn"])
+    end
+  end
+
+  def test_apply_writes_the_surfaced_row
+    with_seeded_catalog do |catalog|
+      seed_source(catalog, "ppchy")
+      seed_document(catalog, slug: "ppchy", urn: "urn:t:ppchy:old", language: "yi",
+                             not_before: 1300, not_after: 1400)
+      journal = Nabu::Store::LectJournal.connect("sqlite::memory:")
+      Nabu::Store::LectJournal.migrate!(journal)
+      dates.apply!(catalog: catalog, journal: journal, source: "ppchy")
+      assert_equal "yi:old~latn", journal[:lect_assignments].first(urn: "urn:t:ppchy:old")[:lect_id]
+      journal.disconnect
+    end
+  end
+
   # -- apply! -----------------------------------------------------------------
 
   def test_apply_writes_date_band_rows_and_respects_existing_rulings
@@ -237,6 +282,10 @@ class LectDatesTest < Minitest::Test
   end
 
   private
+
+  def seed_source(catalog, slug)
+    catalog[:sources].insert(slug: slug, name: slug, adapter_class: "X", license_class: "open")
+  end
 
   def seed_document(catalog, slug:, urn:, language:, not_before:, not_after:)
     doc = catalog[:documents].insert(
