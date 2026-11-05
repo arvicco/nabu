@@ -521,6 +521,9 @@ module Nabu
         # Store::TranslationIndex): a scoped pass over the registry's
         # sources — same umbrella-stage stance as clarify above.
         TranslationIndex.rebuild!(catalog: catalog, fulltext: fulltext)
+        # The token-gloss lane (Store::GlossIndex): a scoped pass over the
+        # TokenGlosses sources — the same umbrella-stage stance.
+        GlossIndex.rebuild!(catalog: catalog, fulltext: fulltext)
         # P87-3: the reference path stamps every stage at its current
         # derivation version — the incremental path's comparison baseline.
         stamp_stages!(fulltext)
@@ -796,6 +799,10 @@ module Nabu
         # stance). Rides the load's delta when this refresh does.
         TranslationIndex.refresh_source!(catalog: catalog, fulltext: fulltext, slug: slug,
                                          delta: (delta if use_delta))
+        # The token-gloss lane's slice (registry sources only, whole-slice
+        # grain — a word row aggregates across passages; hands-off on a
+        # fulltext predating the lane).
+        GlossIndex.refresh_source!(catalog: catalog, fulltext: fulltext, slug: slug)
         # P112-3: the finish stamp records the catalog state this slice now
         # serves — health's freshness cross-check reads it back.
         live_rows, max_id = source_live_stats(catalog, slug)
@@ -1480,7 +1487,11 @@ module Nabu
         # The translations lane (Store::TranslationIndex): an index
         # stamped before it existed reads stale here, so `--incremental`
         # (or `rake index:translations`) builds it standalone.
-        "translations" => "v1"
+        "translations" => "v1",
+        # The token-gloss lane (Store::GlossIndex): likewise built
+        # standalone by `--incremental` (or `rake index:glosses`) on an
+        # index stamped before it existed.
+        "glosses" => "v1"
       }.freeze
 
       # The stages reconcile_stages! can re-derive standalone against a
@@ -1488,7 +1499,7 @@ module Nabu
       # composite streaming pass; trigram — its scope memory) refuses
       # loudly: a full rebuild is the honest answer there.
       RECONCILABLE_STAGES = %w[char_postings cjk passage_chars sign_coverage alignment reflex clarify
-                               translations].freeze
+                               translations glosses].freeze
 
       def stamp_stages!(fulltext, versions: STAGE_VERSIONS)
         create_stage_stamps_table(fulltext)
@@ -1567,6 +1578,7 @@ module Nabu
           when "reflex" then ReflexRootsIndexer.rebuild!(catalog: catalog, fulltext: fulltext)
           when "clarify" then rebuild_clarify!(catalog: catalog, fulltext: fulltext)
           when "translations" then TranslationIndex.rebuild!(catalog: catalog, fulltext: fulltext)
+          when "glosses" then GlossIndex.rebuild!(catalog: catalog, fulltext: fulltext)
           end
           stamp_stages!(fulltext, versions: { stage => versions.fetch(stage) })
         end
