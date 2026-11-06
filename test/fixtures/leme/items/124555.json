@@ -1,0 +1,523 @@
+{
+  "id" : "2f54cc56-3faf-4cc9-9492-74de5f38a868",
+  "uuid" : "2f54cc56-3faf-4cc9-9492-74de5f38a868",
+  "name" : "The natural history and antiquities of the county of Surrey. Begun in the year 1673",
+  "handle" : "1807/124555",
+  "metadata" : {
+    "dc.contributor.author" : [ {
+      "value" : "Aubrey, John",
+      "language" : null,
+      "authority" : null,
+      "confidence" : -1,
+      "place" : 0
+    } ],
+    "dc.contributor.editor" : [ {
+      "value" : "Lancashire, Ian",
+      "language" : null,
+      "authority" : null,
+      "confidence" : -1,
+      "place" : 0
+    } ],
+    "dc.date.accessioned" : [ {
+      "value" : "2022-09-30T02:52:32Z",
+      "language" : null,
+      "authority" : null,
+      "confidence" : -1,
+      "place" : 0
+    } ],
+    "dc.date.available" : [ {
+      "value" : "2022-09-30T02:52:32Z",
+      "language" : null,
+      "authority" : null,
+      "confidence" : -1,
+      "place" : 0
+    } ],
+    "dc.date.created" : [ {
+      "value" : "1719",
+      "language" : null,
+      "authority" : null,
+      "confidence" : -1,
+      "place" : 0
+    } ],
+    "dc.date.issued" : [ {
+      "value" : "2022",
+      "language" : null,
+      "authority" : null,
+      "confidence" : -1,
+      "place" : 0
+    } ],
+    "dc.description" : [ {
+      "value" : "The LEME Corpus Manual has an editorial introduction, indexes of subjects, proper names, and chronology, a primary bibliography of LEME corpus texts, as well as English language texts not included in the Corpus, a description of the XML encoding and of lemmatization and source analysis tools. The appendix includes lists of language abbreviations and of abbreviations for parts of speech.",
+      "language" : "en_US",
+      "authority" : null,
+      "confidence" : -1,
+      "place" : 0
+    } ],
+    "dc.description.sponsorship" : [ {
+      "value" : "Social Sciences and Humanities Research Council of Canada",
+      "language" : "en_US",
+      "authority" : null,
+      "confidence" : -1,
+      "place" : 0
+    }, {
+      "value" : "Canada Foundation for Innovation",
+      "language" : "en_US",
+      "authority" : null,
+      "confidence" : -1,
+      "place" : 1
+    }, {
+      "value" : "University of Toronto Libraries",
+      "language" : "en_US",
+      "authority" : null,
+      "confidence" : -1,
+      "place" : 2
+    }, {
+      "value" : "University of Toronto Press",
+      "language" : "en_US",
+      "authority" : null,
+      "confidence" : -1,
+      "place" : 3
+    }, {
+      "value" : "Information & Instructional Technology, Faculty of Arts and Science, University of Toronto",
+      "language" : "en_US",
+      "authority" : null,
+      "confidence" : -1,
+      "place" : 4
+    } ],
+    "dc.identifier" : [ {
+      "value" : "ESTC T89094",
+      "language" : "en_US",
+      "authority" : null,
+      "confidence" : -1,
+      "place" : 0
+    } ],
+    "dc.identifier.citation" : [ {
+      "value" : "Aubrey, John. \"Some peculiar Words used by the Vulgar in Surrey.\" The Natural History and Antiquities of the County of Surrey. London: E. Curll. 1719. III (of 5 vols.): 402-03.",
+      "language" : "en_US",
+      "authority" : null,
+      "confidence" : -1,
+      "place" : 0
+    } ],
+    "dc.identifier.uri" : [ {
+      "value" : "http://hdl.handle.net/1807/124555",
+      "language" : null,
+      "authority" : null,
+      "confidence" : -1,
+      "place" : 0
+    } ],
+    "dc.language.iso" : [ {
+      "value" : "en",
+      "language" : "en_US",
+      "authority" : null,
+      "confidence" : -1,
+      "place" : 0
+    } ],
+    "dc.publisher" : [ {
+      "value" : "Lexicons of Early Modern English (LEME)",
+      "language" : "en_US",
+      "authority" : null,
+      "confidence" : -1,
+      "place" : 0
+    } ],
+    "dc.relation.uri" : [ {
+      "value" : "https://leme.utoronto.ca/",
+      "language" : "en_US",
+      "authority" : null,
+      "confidence" : -1,
+      "place" : 0
+    } ],
+    "dc.rights" : [ {
+      "value" : "Attribution 4.0 International",
+      "language" : "*",
+      "authority" : null,
+      "confidence" : -1,
+      "place" : 0
+    } ],
+    "dc.rights.uri" : [ {
+      "value" : "http://creativecommons.org/licenses/by/4.0/",
+      "language" : "*",
+      "authority" : null,
+      "confidence" : -1,
+      "place" : 0
+    } ],
+    "dc.subject" : [ {
+      "value" : "English language -- Glossaries, vocabularies, etc. -- Early works to 1800.",
+      "language" : "en_US",
+      "authority" : null,
+      "confidence" : -1,
+      "place" : 0
+    } ],
+    "dc.title" : [ {
+      "value" : "The natural history and antiquities of the county of Surrey. Begun in the year 1673",
+      "language" : "en_US",
+      "authority" : null,
+      "confidence" : -1,
+      "place" : 0
+    } ],
+    "dc.title.alternative" : [ {
+      "value" : "The Natural History and Antiquities of the County of Surrey",
+      "language" : "en_US",
+      "authority" : null,
+      "confidence" : -1,
+      "place" : 0
+    } ],
+    "dc.type" : [ {
+      "value" : "Book",
+      "language" : "en_US",
+      "authority" : null,
+      "confidence" : -1,
+      "place" : 0
+    } ]
+  },
+  "inArchive" : true,
+  "discoverable" : true,
+  "withdrawn" : false,
+  "lastModified" : "2022-09-30T02:52:32.957Z",
+  "entityType" : null,
+  "type" : "item",
+  "_links" : {
+    "accessStatus" : {
+      "href" : "https://utoronto.scholaris.ca/server/api/core/items/2f54cc56-3faf-4cc9-9492-74de5f38a868/accessStatus"
+    },
+    "bundles" : {
+      "href" : "https://utoronto.scholaris.ca/server/api/core/items/2f54cc56-3faf-4cc9-9492-74de5f38a868/bundles"
+    },
+    "identifiers" : {
+      "href" : "https://utoronto.scholaris.ca/server/api/core/items/2f54cc56-3faf-4cc9-9492-74de5f38a868/identifiers"
+    },
+    "mappedCollections" : {
+      "href" : "https://utoronto.scholaris.ca/server/api/core/items/2f54cc56-3faf-4cc9-9492-74de5f38a868/mappedCollections"
+    },
+    "owningCollection" : {
+      "href" : "https://utoronto.scholaris.ca/server/api/core/items/2f54cc56-3faf-4cc9-9492-74de5f38a868/owningCollection"
+    },
+    "relationships" : {
+      "href" : "https://utoronto.scholaris.ca/server/api/core/items/2f54cc56-3faf-4cc9-9492-74de5f38a868/relationships"
+    },
+    "version" : {
+      "href" : "https://utoronto.scholaris.ca/server/api/core/items/2f54cc56-3faf-4cc9-9492-74de5f38a868/version"
+    },
+    "templateItemOf" : {
+      "href" : "https://utoronto.scholaris.ca/server/api/core/items/2f54cc56-3faf-4cc9-9492-74de5f38a868/templateItemOf"
+    },
+    "thumbnail" : {
+      "href" : "https://utoronto.scholaris.ca/server/api/core/items/2f54cc56-3faf-4cc9-9492-74de5f38a868/thumbnail"
+    },
+    "submitter" : {
+      "href" : "https://utoronto.scholaris.ca/server/api/core/items/2f54cc56-3faf-4cc9-9492-74de5f38a868/submitter"
+    },
+    "self" : {
+      "href" : "https://utoronto.scholaris.ca/server/api/core/items/2f54cc56-3faf-4cc9-9492-74de5f38a868"
+    }
+  },
+  "_embedded" : {
+    "bundles" : {
+      "_embedded" : {
+        "bundles" : [ {
+          "uuid" : "7b40d95b-3274-4052-87ee-2bfbda67e228",
+          "name" : "ORIGINAL",
+          "handle" : null,
+          "metadata" : {
+            "dc.title" : [ {
+              "value" : "ORIGINAL",
+              "language" : null,
+              "authority" : null,
+              "confidence" : -1,
+              "place" : 0
+            } ]
+          },
+          "type" : "bundle",
+          "_links" : {
+            "item" : {
+              "href" : "https://utoronto.scholaris.ca/server/api/core/bundles/7b40d95b-3274-4052-87ee-2bfbda67e228/item"
+            },
+            "bitstreams" : {
+              "href" : "https://utoronto.scholaris.ca/server/api/core/bundles/7b40d95b-3274-4052-87ee-2bfbda67e228/bitstreams"
+            },
+            "primaryBitstream" : {
+              "href" : "https://utoronto.scholaris.ca/server/api/core/bundles/7b40d95b-3274-4052-87ee-2bfbda67e228/primaryBitstream"
+            },
+            "self" : {
+              "href" : "https://utoronto.scholaris.ca/server/api/core/bundles/7b40d95b-3274-4052-87ee-2bfbda67e228"
+            }
+          },
+          "_embedded" : {
+            "bitstreams" : {
+              "_embedded" : {
+                "bitstreams" : [ {
+                  "id" : "b763aeee-c2f7-4c49-84a7-976b2adc514c",
+                  "uuid" : "b763aeee-c2f7-4c49-84a7-976b2adc514c",
+                  "name" : "1376_Aubrey_Natural History and Antiquities_1719_Final.xml",
+                  "handle" : null,
+                  "metadata" : {
+                    "dc.description" : [ {
+                      "value" : "",
+                      "language" : null,
+                      "authority" : null,
+                      "confidence" : -1,
+                      "place" : 0
+                    } ],
+                    "dc.source" : [ {
+                      "value" : "/opt/dspace/upload/1376_Aubrey_Natural History and Antiquities_1719_Final.xml",
+                      "language" : null,
+                      "authority" : null,
+                      "confidence" : -1,
+                      "place" : 0
+                    } ],
+                    "dc.title" : [ {
+                      "value" : "1376_Aubrey_Natural History and Antiquities_1719_Final.xml",
+                      "language" : null,
+                      "authority" : null,
+                      "confidence" : -1,
+                      "place" : 0
+                    } ]
+                  },
+                  "bundleName" : "ORIGINAL",
+                  "sizeBytes" : 7768,
+                  "checkSum" : {
+                    "checkSumAlgorithm" : "MD5",
+                    "value" : "9866262c78aaa035ffc9d9c5429fe862"
+                  },
+                  "sequenceId" : 1,
+                  "type" : "bitstream",
+                  "_links" : {
+                    "content" : {
+                      "href" : "https://utoronto.scholaris.ca/server/api/core/bitstreams/b763aeee-c2f7-4c49-84a7-976b2adc514c/content"
+                    },
+                    "bundle" : {
+                      "href" : "https://utoronto.scholaris.ca/server/api/core/bitstreams/b763aeee-c2f7-4c49-84a7-976b2adc514c/bundle"
+                    },
+                    "accessStatus" : {
+                      "href" : "https://utoronto.scholaris.ca/server/api/core/bitstreams/b763aeee-c2f7-4c49-84a7-976b2adc514c/accessStatus"
+                    },
+                    "format" : {
+                      "href" : "https://utoronto.scholaris.ca/server/api/core/bitstreams/b763aeee-c2f7-4c49-84a7-976b2adc514c/format"
+                    },
+                    "thumbnail" : {
+                      "href" : "https://utoronto.scholaris.ca/server/api/core/bitstreams/b763aeee-c2f7-4c49-84a7-976b2adc514c/thumbnail"
+                    },
+                    "self" : {
+                      "href" : "https://utoronto.scholaris.ca/server/api/core/bitstreams/b763aeee-c2f7-4c49-84a7-976b2adc514c"
+                    }
+                  }
+                } ]
+              },
+              "page" : {
+                "number" : 0,
+                "size" : 20,
+                "totalPages" : 1,
+                "totalElements" : 1
+              },
+              "_links" : {
+                "self" : {
+                  "href" : "https://utoronto.scholaris.ca/server/api/core/bundles/7b40d95b-3274-4052-87ee-2bfbda67e228/bitstreams"
+                }
+              }
+            }
+          }
+        }, {
+          "uuid" : "2f288adc-9a23-4506-bc73-e89391b33969",
+          "name" : "CC-LICENSE",
+          "handle" : null,
+          "metadata" : {
+            "dc.title" : [ {
+              "value" : "CC-LICENSE",
+              "language" : null,
+              "authority" : null,
+              "confidence" : -1,
+              "place" : 0
+            } ]
+          },
+          "type" : "bundle",
+          "_links" : {
+            "item" : {
+              "href" : "https://utoronto.scholaris.ca/server/api/core/bundles/2f288adc-9a23-4506-bc73-e89391b33969/item"
+            },
+            "bitstreams" : {
+              "href" : "https://utoronto.scholaris.ca/server/api/core/bundles/2f288adc-9a23-4506-bc73-e89391b33969/bitstreams"
+            },
+            "primaryBitstream" : {
+              "href" : "https://utoronto.scholaris.ca/server/api/core/bundles/2f288adc-9a23-4506-bc73-e89391b33969/primaryBitstream"
+            },
+            "self" : {
+              "href" : "https://utoronto.scholaris.ca/server/api/core/bundles/2f288adc-9a23-4506-bc73-e89391b33969"
+            }
+          },
+          "_embedded" : {
+            "bitstreams" : {
+              "_embedded" : {
+                "bitstreams" : [ {
+                  "id" : "d0fb2c40-083b-4621-8c58-6de5c0488096",
+                  "uuid" : "d0fb2c40-083b-4621-8c58-6de5c0488096",
+                  "name" : "license_rdf",
+                  "handle" : null,
+                  "metadata" : {
+                    "dc.source" : [ {
+                      "value" : "org.dspace.license.CreativeCommons",
+                      "language" : null,
+                      "authority" : null,
+                      "confidence" : -1,
+                      "place" : 0
+                    } ],
+                    "dc.title" : [ {
+                      "value" : "license_rdf",
+                      "language" : null,
+                      "authority" : null,
+                      "confidence" : -1,
+                      "place" : 0
+                    } ]
+                  },
+                  "bundleName" : "CC-LICENSE",
+                  "sizeBytes" : 908,
+                  "checkSum" : {
+                    "checkSumAlgorithm" : "MD5",
+                    "value" : "0175ea4a2d4caec4bbcc37e300941108"
+                  },
+                  "sequenceId" : 2,
+                  "type" : "bitstream",
+                  "_links" : {
+                    "content" : {
+                      "href" : "https://utoronto.scholaris.ca/server/api/core/bitstreams/d0fb2c40-083b-4621-8c58-6de5c0488096/content"
+                    },
+                    "bundle" : {
+                      "href" : "https://utoronto.scholaris.ca/server/api/core/bitstreams/d0fb2c40-083b-4621-8c58-6de5c0488096/bundle"
+                    },
+                    "accessStatus" : {
+                      "href" : "https://utoronto.scholaris.ca/server/api/core/bitstreams/d0fb2c40-083b-4621-8c58-6de5c0488096/accessStatus"
+                    },
+                    "format" : {
+                      "href" : "https://utoronto.scholaris.ca/server/api/core/bitstreams/d0fb2c40-083b-4621-8c58-6de5c0488096/format"
+                    },
+                    "thumbnail" : {
+                      "href" : "https://utoronto.scholaris.ca/server/api/core/bitstreams/d0fb2c40-083b-4621-8c58-6de5c0488096/thumbnail"
+                    },
+                    "self" : {
+                      "href" : "https://utoronto.scholaris.ca/server/api/core/bitstreams/d0fb2c40-083b-4621-8c58-6de5c0488096"
+                    }
+                  }
+                } ]
+              },
+              "page" : {
+                "number" : 0,
+                "size" : 20,
+                "totalPages" : 1,
+                "totalElements" : 1
+              },
+              "_links" : {
+                "self" : {
+                  "href" : "https://utoronto.scholaris.ca/server/api/core/bundles/2f288adc-9a23-4506-bc73-e89391b33969/bitstreams"
+                }
+              }
+            }
+          }
+        }, {
+          "uuid" : "226bbd5b-9b50-481e-b11b-761a5cc14f06",
+          "name" : "LICENSE",
+          "handle" : null,
+          "metadata" : {
+            "dc.title" : [ {
+              "value" : "LICENSE",
+              "language" : null,
+              "authority" : null,
+              "confidence" : -1,
+              "place" : 0
+            } ]
+          },
+          "type" : "bundle",
+          "_links" : {
+            "item" : {
+              "href" : "https://utoronto.scholaris.ca/server/api/core/bundles/226bbd5b-9b50-481e-b11b-761a5cc14f06/item"
+            },
+            "bitstreams" : {
+              "href" : "https://utoronto.scholaris.ca/server/api/core/bundles/226bbd5b-9b50-481e-b11b-761a5cc14f06/bitstreams"
+            },
+            "primaryBitstream" : {
+              "href" : "https://utoronto.scholaris.ca/server/api/core/bundles/226bbd5b-9b50-481e-b11b-761a5cc14f06/primaryBitstream"
+            },
+            "self" : {
+              "href" : "https://utoronto.scholaris.ca/server/api/core/bundles/226bbd5b-9b50-481e-b11b-761a5cc14f06"
+            }
+          },
+          "_embedded" : {
+            "bitstreams" : {
+              "_embedded" : {
+                "bitstreams" : [ {
+                  "id" : "839ab251-af20-463a-8ec6-0d5c46fc32f3",
+                  "uuid" : "839ab251-af20-463a-8ec6-0d5c46fc32f3",
+                  "name" : "license.txt",
+                  "handle" : null,
+                  "metadata" : {
+                    "dc.source" : [ {
+                      "value" : "Written by org.dspace.content.LicenseUtils",
+                      "language" : null,
+                      "authority" : null,
+                      "confidence" : -1,
+                      "place" : 0
+                    } ],
+                    "dc.title" : [ {
+                      "value" : "license.txt",
+                      "language" : null,
+                      "authority" : null,
+                      "confidence" : -1,
+                      "place" : 0
+                    } ]
+                  },
+                  "bundleName" : "LICENSE",
+                  "sizeBytes" : 1717,
+                  "checkSum" : {
+                    "checkSumAlgorithm" : "MD5",
+                    "value" : "86639c37a29c3811b4ed913b37caeb2f"
+                  },
+                  "sequenceId" : 3,
+                  "type" : "bitstream",
+                  "_links" : {
+                    "content" : {
+                      "href" : "https://utoronto.scholaris.ca/server/api/core/bitstreams/839ab251-af20-463a-8ec6-0d5c46fc32f3/content"
+                    },
+                    "bundle" : {
+                      "href" : "https://utoronto.scholaris.ca/server/api/core/bitstreams/839ab251-af20-463a-8ec6-0d5c46fc32f3/bundle"
+                    },
+                    "accessStatus" : {
+                      "href" : "https://utoronto.scholaris.ca/server/api/core/bitstreams/839ab251-af20-463a-8ec6-0d5c46fc32f3/accessStatus"
+                    },
+                    "format" : {
+                      "href" : "https://utoronto.scholaris.ca/server/api/core/bitstreams/839ab251-af20-463a-8ec6-0d5c46fc32f3/format"
+                    },
+                    "thumbnail" : {
+                      "href" : "https://utoronto.scholaris.ca/server/api/core/bitstreams/839ab251-af20-463a-8ec6-0d5c46fc32f3/thumbnail"
+                    },
+                    "self" : {
+                      "href" : "https://utoronto.scholaris.ca/server/api/core/bitstreams/839ab251-af20-463a-8ec6-0d5c46fc32f3"
+                    }
+                  }
+                } ]
+              },
+              "page" : {
+                "number" : 0,
+                "size" : 20,
+                "totalPages" : 1,
+                "totalElements" : 1
+              },
+              "_links" : {
+                "self" : {
+                  "href" : "https://utoronto.scholaris.ca/server/api/core/bundles/226bbd5b-9b50-481e-b11b-761a5cc14f06/bitstreams"
+                }
+              }
+            }
+          }
+        } ]
+      },
+      "page" : {
+        "number" : 0,
+        "size" : 20,
+        "totalPages" : 1,
+        "totalElements" : 3
+      },
+      "_links" : {
+        "self" : {
+          "href" : "https://utoronto.scholaris.ca/server/api/core/items/2f54cc56-3faf-4cc9-9492-74de5f38a868/bundles"
+        }
+      }
+    }
+  }
+}

@@ -446,6 +446,32 @@ sources:
         not the texts' origin"}
     script: {posture: implied, note: "Latin-script Pāḷi (a–z + ā ī ū ṁ ṅ ñ ṇ ṭ ḍ ḷ, upstream's
         own census), the bare pli default — like suttacentral, unlike tipitaka-lk's Sinhala"}
+  noscemus:   # P160
+    # kind machine-postured: config/kind_map.yml folds the Noscemus Wiki's own Form/Genre
+    # (monographs, encyclopedic works, dissertations → scholarly; didactic and panegyric
+    # poems → literary/poetry; letters, orations, dictionaries, journal papers their own).
+    lect: {posture: dates, note: "bare lat at source grain (the deposit's whole claim: early
+        modern scientific Latin); date-band inference over the imprint years stages it — the
+        1479–1549 prints onto lat:ren [1350, 1550], the bulk onto lat:new [1550, —] — no facet
+        rule (a rule would only repeat the band). Declared coarse: ~24 of 1,038 copies are
+        mainly or substantially non-Latin by a function-word census (2026-11-05) — Brisson's
+        Latin–French Ornithologia volumes, the German academy Abhandlungen and Miscellanea
+        Tigurina, Ruf's Trostbüchele, Reuss's polyglot Repertorium, the 1932 Huygens Oeuvres
+        complètes — and ride lat; upstream names no language (Transkribus Language null on
+        1,039)"}
+    dating: {posture: dated, note: "the copy's own imprint year from its Transkribus Title
+        label (\"… London 1620\", ranges \"1675-79\" / \"[1723–1725]\"), MetadataDates
+        :structured, date_basis imprint — the print IS the document; label without a year →
+        the typed Created From/To year (transkribus_created), then the joined wiki work's Year
+        (wiki_year). The wiki's own work-level Year rides raw per joined work. Modern editions
+        date by their print (Huygens 1932, Caius 1912) — the composition era is not claimed"}
+    places: {posture: named, note: "the imprint town from the same Title label (English
+        exonyms — London, Venice, Basel …), the first town for a joint imprint (places lists
+        all: \"Leipzig & Copenhagen\"); \"s. l.\" names none; a printer occasionally stands in
+        the town slot (\"Coulon & Willem\"), declared coarse. No gazetteer join is held"}
+    script: {posture: implied, note: "Latin type; Greek passages in the bilingual prints
+        (Denisot's Hippocrates) ride as transcribed; uncorrected HTR (text_nature
+        machine-htr), some pages mirror-read noise (Palingenio 5314216)"}
   comenius:   # P153
     kind: {posture: unclassified, note: "devotional and consolatory treatises (Truchlivý, Pres
         boží, Centrum securitatis, the Kšaft) — no typed genre field in the TEI, and no house
@@ -1719,6 +1745,50 @@ sources:
         'from X, Place,' strings are not parsed (persons' styles and places share the commas)"}
     script: {posture: implied, note: "Latin script as written — the thorn rides as EMMO
         encodes it (<g ref='#thorn'>th</g>), the scribal metamarks are not reading text"}
+  stationers-register:   # P160
+    # lect machine-postured — config/lect_overrides.yml en → en:early;
+    # kind machine-postured — kind_map.yml source_kind administrative/register.
+    dating: {posture: dated, note: "all 10,453 entries: the metadata block's Register date — the
+        Clerk's own day (when, 9,111) or, before the Clerk dated entries (to c. 1571), the SRO
+        editors' span between dated neighbours (notBefore/notAfter, 1,342) → year envelope,
+        artifact basis (the entry's own date of record); new-style years as SRO normalizes them;
+        the SortDate (one ISO day on every entry, 1557–1640) rides beside it"}
+    places: {posture: unplaced, note: "no entry states where it was made (every one was entered
+        at Stationers' Hall, London, by the Company's own constitution — asserted nowhere per
+        entry, so deliberately no origin claim). The 1,157 <placeName> tags (559 entries, mostly
+        London) ride as places_mentioned — places the copy-titles and licences name"}
+    script: {posture: implied, note: "Latin script; SRO transliterates thorn and long s to their
+        closest modern equivalents and otherwise keeps the Register's spelling and capitals"}
+  leme:   # P160 — a dictionary source (313 shelves, one per lexical work)
+    kind: {posture: unclassified, note: "a dictionary shelf — the kind axis classifies
+        documents; LEME's own genre spread (dictionaries, hard-word glossaries, spelling
+        lists, herbals, glossed texts, antiquarian essays) lives only in the items'
+        free-text dc.subject headings, not a typed field"}
+    lect:
+      posture: identity
+      note: "per-entry headword language from the <form>'s own LEME @lang (LemeXmlParser::
+        LANGUAGES; lang-less forms read LEME's English default), the shelf taking its
+        entries' majority — en 233 shelves, lat 28, und 16, ita 6, fra 6, enm 5, hbo/grc/ang 3 …
+        English shelves stay bare en DELIBERATELY: the dictionary lect ladder resolves at
+        (shelf language, source) grain only, and a source-wide en → en:early row would
+        mislabel the 1700–1755 lexicons (Johnson, Bailey, Scott-Bailey — 193,037 of the
+        512,005 English entries, census 2026-11-05) as Early Modern English; the
+        per-lexicon year rides every entry (lexicon_year) for a future shelf-grain staging"
+    dating:
+      posture: dated
+      note: "every entry carries its work's typed year (lexicon_year) — the item's
+        dc.date.created, four-digit on 314 of 314 (1477–1755 bar one), the base edition LEME
+        transcribes; one erratum by upstream's own data (1807/139760, the lost Nominale:
+        dc.date.created gives Wright–Wülcker's 1884 edition, LEME's head note 'ca.
+        1475-1500'). Shelf grain only: entries carry no dates of their own beyond the
+        editors' OED antedating notes (editor_notes)"
+    places: {posture: unplaced, note: "the imprint town sits only inside the free-text
+        dc.identifier.citation ('London: Samuel Lee and Benjamin Alsop, 1680.'), declared
+        unmined; the dialect glossaries' county labels ride the dialect / leme_lang
+        annotations, never a place claim"}
+    script: {posture: implied, note: "the print's Latin-script spelling (u/v, i/j, long s
+        normalized per LEME's editorial rules); Greek and Hebrew headwords in their own
+        scripts (Martinez's pointed Hebrew)"}
   grand-tour:   # P155
     # kind machine-postured — kind_map.yml source_kind literary/diary/travelogue.
     lect: {posture: identity, note: "de IS German — four journals written 1652–1702, past
@@ -2083,18 +2153,22 @@ sources:
         placeholder and empty values mint nothing"}
     script: {posture: implied}
   cgpg:   # P153
+    # kind is machine-postured by the kind_map rule (genre, P160): upstream and
+    # the carve plan carry no genre field, so the carved work's Latin title is
+    # cut to one keyword head (Adapters::CgpgTitleGenre) and folded — exegesis,
+    # historiography, letter, sermon, ritual/liturgy (Symeon of Thessalonica's
+    # rite chapters), legal/law, poetry, scholarly. Hagiography, apologetics-polemic,
+    # theological treatises, bare fragments, court treatises and secular rhetoric
+    # have no ruled head yet and stay in the unmapped bucket by design. Five
+    # single-genre whole volumes claim their kind (Cyril's commentaries, the
+    # histories); mixed volumes, the deferred PG 3 and every residuum (edition
+    # apparatus, rescans, uncarved rows) make no kind claim.
     lect: {posture: dates, note: "the date-band inference stages the volumes from upstream's own
         per-volume century labels: the 25 volumes labeled 5th–15th century fall inside grc:byz
         [330, 1453]; the two 4th-century volumes (Eusebius, Epiphanius) span the koi/byz
         boundary and stay bare grc, as do the 6 undated Pre-Nicaean volumes. No facet rule:
         a label map would only repeat the band. Carved works inherit their volume's band;
         the dateless residua stay bare grc"}
-    kind: {posture: unclassified, note: "upstream carries no genre label, and neither does the
-        carve plan that splits the volumes into works (slug, title, author, TLG id, page
-        ranges — no genre field). A kind fold over the carved works' titles (commentarius →
-        exegesis, homiliae → sermon, historia → historiography) is curation still to do; the
-        residua are edition apparatus, rescans and uncarved rows, for which the ruled kind
-        list has no class"}
     dating: {posture: dated, note: "the per-volume Dates label of upstream's Works and Authors
         table, transcribed (VOLUMES) → a century envelope, date_class composition (MetadataDates
         :structured; 27 of 33 volumes — the 6 Pre-Nicaean name no century). Transcribed, not
@@ -2960,6 +3034,18 @@ sources:
         Witenberga, Lublani, Tubingae) — printer and brackets stripped"}
     script: {posture: implied, note: "Latin type, MDZ's uncorrected OCR layer (text_nature
         machine-ocr); the Urach Glagolitic/Cyrillic prints are OUT (OCR noise), declared"}
+  korpus16:   # P160-6, 02-sources row 386
+    # kind machine-postured — the korpus16 fold in kind_map.yml over the siglum
+    # (catechisms/confessions/the church order declared deliberate there).
+    # lect machine-postured — the korpus16 sl → sl:emod override in
+    # lect_overrides.yml (the 1550 band-edge books included).
+    dating: {posture: dated, note: "every book: the page header's print year (\"Tübingen,
+        1555\"; TT 1581-82's siglum widens to 1581–1582), class edition on the :structured lane"}
+    places: {posture: named, note: "the header's imprint place as the portal names it (modern
+        forms: Tübingen, Schwäbisch Hall, Regensburg, Ljubljana, Wittenberg); no gazetteer link"}
+    script: {posture: implied, note: "Latin type as double-keyed (ſ, ß, the m/n tilde kept,
+        most ligatures resolved; # marks illegible spots) — Trubar's spelling and the 1580s
+        bohoričica alike, no per-book orthography claim"}
   ganjoor:   # P153
     # kind machine-postured — the ganjoor fold in kind_map.yml over the poem's own
     # section label (the divan's form sections; work/chapter titles uncovered, open).
@@ -3114,8 +3200,11 @@ sources:
     script: {posture: implied}
   runesdb:   # P153
     kind: {posture: unclassified, note: "the TEI's only genre-shaped field (msContents summary)
-        reads \"Runische Inschrift\" on all 723 files — no typed genre; the object type (stone,
-        comb, brooch) lives in the unfetched LIDO records"}
+        reads \"Runische Inschrift\" on all 723 files — no typed genre. The LIDO layer (P160)
+        adds the OBJECT type (stone, personal adornment, tool/implement, rune stick, manuscript…)
+        and the find context (burial, settlement, single find) as their own facets — neither is
+        a text genre; a manuscript's classification names its HOST text's class (\"Religious
+        literature and mythology\"), not the runes' — facet only, never folded"}
     # lect: machine-postured by the runesdb-siglum facet rule — raw gem on
     # every find (the TEI carries no language); the rule stages the
     # unambiguous corpus families off the Hauptsigle family (OE-* → ang,
@@ -3123,11 +3212,17 @@ sources:
     # regional sigla → gmq); pre-OE/Frisian blends, SG, the unglossed
     # regional families and the runica-manuscripta shelfmarks stay bare
     # gem, declared.
-    dating: {posture: undatable, note: "the TEI zip carries no date; dating lives in the
-        per-find LIDO records (runesdb.de/lido/<id>, earliestDate/latestDate), not fetched —
-        their harvest is the follow-up that dates the finds"}
-    places: {posture: unplaced, note: "the TEI zip carries no place; the LIDO records hold
-        find place + repository with coordinates, not fetched (the follow-up)"}
+    dating: {posture: dated, note: "P160: the per-find LIDO record's Production event
+        (earliestDate/latestDate, CE years) dates the artifact through the MetadataDates
+        :structured lane — every one of the 27-record census carried it; upstream's 0/0
+        (Kylver, Rö) is its unknown sentinel and mints nothing. The Finding event's date is the
+        DISCOVERY date (find_date, never dating). A find whose LIDO record is not on disk stays
+        undated until the harvest lands it"}
+    places: {posture: named, note: "P160: the LIDO Finding event's find place, verbatim, with
+        its GML point as coordinates (no gazetteer ids upstream — nabu-places matches the name).
+        Declared coarse: a manuscript's finding event names its HOLDING library (a present
+        location) — kept under repository.find_event_place, never placed; the repository (the
+        present holder + its point) stays metadata"}
     script: {posture: qualified, note: "the text is upstream's Latin-letter TRANSLITERATION of
         the runes (runological sigla ':' '*' '[...]' '?' and bind-rune '^' verbatim) — never a
         runic-Unicode witness; the glyph records carry rune names and formal types"}
@@ -3211,3 +3306,75 @@ sources:
         not the texts' locus"}
     script: {posture: implied, note: "polytonic Greek (Grek) throughout; the site's Greek
         Extended oxia vowels and ano teleia fold to their NFC canonical forms at the boundary"}
+  statutes-realm:   # P160-7
+    # kind machine-postured — kind_map.yml source_kind legal/law.
+    lect:
+      posture: dates
+      note: "every document is en (the asset marks no language below the page shell's lang=en)
+        and stages by DATE-BAND INFERENCE over the act envelopes, no rule: the 1625–1699
+        sessions sit inside en:early [1500, 1700]; the 21 vol. 7 rows of 1700–1702 (12 & 13
+        and 13 & 14 Will. III) inside en:late [1700, 1900]; envelopes straddling 1700 (the
+        misheaded 1698-9 label) stay honestly bare en. The roll's Latin formulae (the
+        private-act schedules' Item quedam Petitiones …) and any Law French ride inside en
+        passages, deliberately coarse — the asset does not distinguish them"
+    dating:
+      posture: dated
+      note: "all 661: the act title's reign + session label (Raithby's legal-year heading —
+        a single year Y reads [Y, Y+1], a pair its two years; the Long Parliament's 1640
+        session [1640, 1642]), met on vol. 7 with the Rot. Parl. regnal citation (William
+        III's year N from 13 Feb 1689); disagreement widens to both claims, flagged conflict
+        (21 rows) — MetadataDates :structured, StatutesRealmDating. No finer date in the
+        asset (no assent day)"
+    places: {posture: unplaced, note: "the asset carries no per-act place field. The place
+        of enactment is the session's sitting place (Westminster, save the 1625 adjourned
+        sitting and the 1665 plague session at Oxford) — a session→place table would be our
+        claim, not upstream's, so none is minted; deliberately coarse, declared. Places the
+        acts NAME (counties, towns, rivers in the local acts) are text, left to the
+        place-mining lane"}
+    script: {posture: implied}
+  mazarinades:
+    # kind machine-postured — the kind_map.yml mazarinades genre fold (the
+    # oratory/polemic cluster left unmapped: no ruled head).
+    # lect machine-postured — the fra → fr:cls override (config/lect_overrides.yml).
+    dating: {posture: dated, note: "the bibliographic entry's typed dates (Moreau, Mazarine,
+        Labadie, Socard, Carrier's day-precise datings, Antonomaz): the narrowest year
+        envelope, :structured lane — 3,029 of 3,067 dated (census 2026-11-05; 1634–1663,
+        1649 and 1652 at the core); the 'Sans date' pieces date nothing. Every date rides
+        metadata dates whole; Moreau's episode settings (events) are subject dates, never
+        the document's"}
+    places: {posture: named, note: "the imprint pubPlace (Paris · Bordeaux · Orléans · Rouen ·
+        Pontoise · Saint-Germain-en-Laye …) with upstream's GeoNames ref riding place_ref
+        (no geonames gazetteer join is held, so the posture stays named): 2,352 docs
+        named (2,344 with the ref), 715 unplaced ('Sans lieu'); upstream's template
+        stamps Paris's id on five other towns (8 docs: Anvers, Toulouse, Leyde, Bourg,
+        Saint-Germain-en-Laye) — that ref drops, the name rides. The holding library
+        (msDesc settlement) is a present location, metadata only"}
+    script: {posture: implied, note: "Latin type of the 1640s–50s as Kraken read it (long s,
+        u/v and i/j as printed, ligatures, misreadings — text_nature machine-ocr, the first
+        page hand-corrected); the hand transcriptions carry no OCR label"}
+  socinian-letters:   # P160
+    # kind machine-postured — kind_map.yml metadata document_type (the #sbw classCode).
+    lect:
+      posture: dates
+      note: "per document the chosen witness's langUsage ident, upstream's own codes (lat
+        1,561 · fra 207 · deu 77 · pol 13 · nld 6 · ita 5 documents; the one German name
+        'Niederländisch' transcribed to nld at parse time); fra/deu/pol/nld/ita reach their
+        anchors through the codemap alias suite. Every letter is dated (1545–1744), so the
+        stage rides date-band inference: lat → lat:new (from 1550) / lat:ren (the 1540s), deu →
+        de:early / de:new, pol → pl:mid, fra → fr:cls from 1600 (pre-1600 French stays bare
+        fr — frm is a different anchor, never inferred across); nl and it carry no stage
+        for the period and stay bare. A block wholly inside one foreign xml:lang span takes
+        that language at passage grain (the Latin versions inside French letters)"
+    dating: {posture: dated, note: "the cover letter's correspAction[sent]/date (@when; @from/@to;
+        @notBefore/@notAfter) → the year envelope, class composition — 1,850 of 1,869 (the 19
+        others state no date); a sent-dateless letter falls back to its received date as a
+        terminus ante quem (not_after only, raw 'received …' — none of today's accepted
+        letters needs it); month/day and the editors' @cert ride raw/cert, never a sub-year
+        bound"}
+    places: {posture: linked, note: "the sending placeName (1,761 of 1,869) joined by its key
+        through upstream's own data/csv/indices.csv register → the register label + its
+        GeoNames URL (1,685 linked; geonames: ref); the receiving place rides
+        place_received(_ref), metadata only. In-text rs type=place mentions ride the
+        passages as places"}
+    script: {posture: implied, note: "Latin script throughout; the Greek (266 foreign grc spans)
+        and Hebrew (9) quotations inside Latin letters ride verbatim in their own scripts"}

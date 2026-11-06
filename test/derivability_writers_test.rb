@@ -92,7 +92,15 @@ class DerivabilityWritersTest < Minitest::Test
   # fourth crawl sibling. aio_fetch (P154) writes canonical/aio/records/
   # (JSON + page pairs, tmp+rename) + the listing sidecars + attic copies
   # + its .aio-fetch.json ledger inside Adapter#fetch — the seal_fetch law
-  # kind, its REST-listing sibling. korp_fetch (vks, 2026-10-21) writes
+  # kind, its REST-listing sibling. runesdb_lido_fetch (P160) writes
+  # canonical/runesdb/lido/<id>.xml (one LIDO record per find, tmp+rename,
+  # never re-fetched once on disk) + its .lido-fetch.json ledger inside
+  # Adapter#fetch — the aio_fetch law kind, its per-record sibling (no
+  # listing, never-delete). statutes_realm_fetch (P160-7) writes
+  # canonical/statutes-realm/vol<V>/ act pages (tmp+rename) + the toc/
+  # sidecars + attic copies + its .statutes-realm-fetch.json ledger inside
+  # Adapter#fetch — the aio_fetch law kind, its HTML-TOC sibling.
+  # korp_fetch (vks, 2026-10-21) writes
   # canonical/vks/texts/<CORPUS>/*.jsonl (a .korp-staging tree swapped in
   # whole) + attic copies + its .korp-fetch.json ledger inside
   # Adapter#fetch — the iness_fetch law kind (an API harvest, sha-pinned
@@ -133,7 +141,11 @@ class DerivabilityWritersTest < Minitest::Test
   # same fetch — the ja/zh-wikisource law kind. mdz-protestant
   # writes IIIF manifests + per-page hOCR (tmp+rename) and its
   # .mdz-crawl.json ledger into canonical/mdz-protestant/ inside
-  # Adapter#fetch — the ndl-kotenseki crawl law kind.
+  # Adapter#fetch — the ndl-kotenseki crawl law kind. P160-6's korpus16
+  # writes the fran.si index + portal pages under map/, the raw reading
+  # pages under books/<id>/ (tmp+rename) and its .korpus16-crawl.json
+  # ledger into canonical/korpus16/ inside Adapter#fetch — the same
+  # crawl law kind (the vakk sibling).
   # same fetch — the ja/zh-wikisource law kind. The P117-2
   # elektire_fetch writes canonical/elektire/ (the WP-JSON listing
   # pages under index/ + epub/<slug>.epub books, tmp+rename, and its
@@ -147,7 +159,10 @@ class DerivabilityWritersTest < Minitest::Test
   # canonical/bu-ajami/ (the NEH Ajami item pages under items/ + their
   # transcription PDFs under files/, .part + rename, and its
   # .bu-ajami-fetch.json pin) inside Adapter#fetch — the elektire_fetch
-  # WP-JSON crawl law kind. The damos adapter writes canonical/damos/
+  # WP-JSON crawl law kind. The P160 adapters/leme_fetch writes
+  # canonical/leme/ (the DSpace item records under items/ + each item's
+  # MD5-checked XML under xml/, .part + rename, and its .leme-fetch.json
+  # pin) inside Adapter#fetch — the same crawl law kind. The damos adapter writes canonical/damos/
   # (the POSTed listing under map/ + items/<id>.json, tmp+rename, and
   # its .damos-crawl.json ledger) inside Adapter#fetch — the
   # ndl-kotenseki crawl law kind. The itkc-catalog module writes
@@ -254,8 +269,9 @@ class DerivabilityWritersTest < Minitest::Test
     nabu/menota_fetch.rb
     nabu/manual_drop.rb nabu/ochre_fetch.rb nabu/otdo_fetch.rb
     nabu/lotsawa_fetch.rb nabu/glt_fetch.rb nabu/cantus_fetch.rb nabu/hf_rows_fetch.rb nabu/zip_range_fetch.rb
-    nabu/poma_fetch.rb nabu/bu_ajami_fetch.rb
-    nabu/seal_fetch.rb nabu/aio_fetch.rb
+    nabu/poma_fetch.rb nabu/bu_ajami_fetch.rb nabu/adapters/leme_fetch.rb
+    nabu/seal_fetch.rb nabu/aio_fetch.rb nabu/adapters/runesdb_lido_fetch.rb
+    nabu/statutes_realm_fetch.rb
     nabu/sefaria_fetch.rb nabu/titus_fetch.rb nabu/url_download.rb
     nabu/litopys_fetch.rb
     nabu/wiki_fetch.rb nabu/zip_fetch.rb
@@ -273,7 +289,7 @@ class DerivabilityWritersTest < Minitest::Test
     nabu/adapters/indexed_wikisource.rb
     nabu/adapters/hittite_glossed.rb nabu/adapters/ndl_kotenseki.rb
     nabu/adapters/aclt.rb
-    nabu/adapters/mdz_protestant.rb nabu/adapters/vakk.rb
+    nabu/adapters/mdz_protestant.rb nabu/adapters/vakk.rb nabu/adapters/korpus16.rb
     nabu/adapters/damos.rb nabu/adapters/itkc_catalog.rb
     nabu/adapters/aclt.rb nabu/adapters/ia_scan_shelf.rb
     nabu/language_shelf.rb nabu/lemma_shelf.rb nabu/date_shelf.rb nabu/meter_shelf.rb

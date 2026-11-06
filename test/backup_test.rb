@@ -6,8 +6,12 @@ require "fileutils"
 
 # `nabu backup` (P7-2). Backups run rsync through Nabu::Shell against tmp
 # targets — never a real /Volumes mount, never hdiutil. The mount-point guard
-# is exercised two ways: a real same-device tmp target (guard trips) and a
-# stubbed stat function that simulates a genuine mounted volume (guard passes).
+# is exercised against a PINNED device layout, never the runner's: a stat
+# function that puts every path on one boot device (guard trips) and one that
+# adds a mount boundary at the target (guard passes). The real File.stat is
+# never consulted by a guard test — a runner whose $TMPDIR sits on its own
+# device (a separate tmpfs/volume) would otherwise make the tmp target look
+# mounted and flip the refusal tests.
 class BackupTest < Minitest::Test
   def setup
     @root = Dir.mktmpdir("nabu-backup-src")
@@ -152,7 +156,7 @@ class BackupTest < Minitest::Test
   # -- the mount-point guard ------------------------------------------------
 
   def test_guard_refuses_a_same_device_target_without_override
-    error = assert_raises(Nabu::Backup::Error) { backup(allow_unmounted: false).run }
+    error = assert_raises(Nabu::Backup::Error) { backup(allow_unmounted: false, stat: boot_disk_stat).run }
     assert_match(/volume not mounted/i, error.message)
     # Nothing was written — the refusal is up front, before any rsync.
     refute_path_exists File.join(@target, "canonical")
@@ -172,8 +176,17 @@ class BackupTest < Minitest::Test
   end
 
   def test_mount_guard_reports_boot_disk_as_unmounted
-    refute Nabu::Backup::MountGuard.mounted?(@target),
-           "a plain tmp dir is on the boot disk — not a mounted volume"
+    refute Nabu::Backup::MountGuard.mounted?(@target, stat: boot_disk_stat),
+           "a plain dir on the boot disk is not a mounted volume"
+  end
+
+  # The pinned layouts themselves: the boot-disk stat reports one device
+  # everywhere (so the guard ascends to "/"), and the mounted stub differs
+  # ONLY at the named boundary — neither depends on where $TMPDIR lives.
+  def test_pinned_layouts_are_independent_of_the_runner_tmp_device
+    assert_equal "/", Nabu::Backup::MountGuard.mount_point(@target, boot_disk_stat)
+    assert_equal File.realpath(@target),
+                 Nabu::Backup::MountGuard.mount_point(File.join(@target, "nabu"), stub_stat(@target => 4242))
   end
 
   # -- no target ------------------------------------------------------------
@@ -207,6 +220,10 @@ class BackupTest < Minitest::Test
 
   # -- helpers --------------------------------------------------------------
 
+  # The pinned boot device every non-overridden path reports.
+  BOOT_DEV = 1
+  StatStub = Struct.new(:dev)
+
   private
 
   # A Shell stand-in that fails rsync for sections matching a predicate.
@@ -236,14 +253,16 @@ class BackupTest < Minitest::Test
     )
   end
 
+  # The boot-disk layout: every path on one device — the shape a target
+  # under an unmounted /Volumes/<name> (a bare boot-disk dir) presents.
+  def boot_disk_stat = stub_stat({})
+
   # A stat function that overrides .dev for named realpaths (to simulate a
-  # mount boundary), falling back to the real File.stat elsewhere.
+  # mount boundary) and reports the pinned BOOT_DEV everywhere else — never
+  # the real File.stat, whose answer depends on the runner's tmp device.
   def stub_stat(overrides)
     resolved = overrides.transform_keys { |path| File.realpath(path) }
-    lambda do |path|
-      dev = resolved.fetch(File.realpath(path)) { File.stat(path).dev }
-      Struct.new(:dev).new(dev)
-    end
+    ->(path) { StatStub.new(resolved.fetch(File.realpath(path), BOOT_DEV)) }
   end
 
   def write_db_file(name, content)

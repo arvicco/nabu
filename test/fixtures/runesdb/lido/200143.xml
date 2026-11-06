@@ -1,0 +1,309 @@
+
+
+<lido:lido xmlns:lido="http://www.lido-schema.org"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xmlns:skos="http://www.w3.org/2004/02/skos/core#"
+           xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+           xmlns:gml="http://www.opengis.net/gml"
+           xsi:schemaLocation="http://www.lido-schema.org http://www.lido-schema.org/schema/v1.1/lido-v1.1.xsd">
+    <lido:lidoRecID 
+        lido:source="Niedersächsische Akademie der Wissenschaften - Runische Schriftlichkeit in den germanischen Sprachen (RuneS)" 
+        lido:type="http://terminology.lido-schema.org/lido00100">
+        https://www.runesdb.de/find/200143
+    </lido:lidoRecID>    
+    
+<lido:descriptiveMetadata xml:lang="en">
+    <!-- Object Classification -->
+    <lido:objectClassificationWrap>
+        <lido:objectWorkTypeWrap>
+            <lido:objectWorkType>
+                <skos:Concept rdf:about="http://vocab.getty.edu/aat/300011852">
+                    <skos:prefLabel xml:lang="de">Handschrift</skos:prefLabel>
+                    <skos:prefLabel xml:lang="en">manuscript</skos:prefLabel>
+                </skos:Concept>
+            </lido:objectWorkType>
+        </lido:objectWorkTypeWrap>
+        <lido:classificationWrap>
+            <lido:classification lido:type="http://terminology.lido-schema.org/lido00932">
+                <skos:Concept rdf:about="http://vocab.getty.edu/aat/300417817">
+                    <skos:prefLabel xml:lang="de">Religiöse Literatur und Mythologie</skos:prefLabel>
+                    <skos:prefLabel xml:lang="en">Religious literature and mythology</skos:prefLabel>
+                </skos:Concept>
+            </lido:classification>
+        </lido:classificationWrap>
+    </lido:objectClassificationWrap>
+
+    <!-- Object Identification -->
+    <lido:objectIdentificationWrap>
+        <lido:titleWrap>
+            <lido:titleSet lido:type="http://vocab.getty.edu/aat/300417200">
+                <lido:appellationValue xml:lang="de">AM 623 4to, 12r</lido:appellationValue>
+            </lido:titleSet>
+            <lido:titleSet lido:type="http://vocab.getty.edu/aat/300417200">
+                <lido:appellationValue xml:lang="en">AM 623 4to, 12r</lido:appellationValue>
+            </lido:titleSet>
+        </lido:titleWrap>
+
+        <lido:inscriptionsWrap>
+            <lido:inscriptions>
+                <lido:inscriptionTranscription>
+                    {at} m {ſcyldi maɴi licna}
+                </lido:inscriptionTranscription>
+                <lido:inscriptionDescription lido:type="translation">
+                    <lido:descriptiveNoteValue xml:lang="de">m</lido:descriptiveNoteValue>
+                    <lido:descriptiveNoteValue xml:lang="en">m</lido:descriptiveNoteValue>
+                </lido:inscriptionDescription>
+            </lido:inscriptions>
+        </lido:inscriptionsWrap>
+
+        <!-- Repository Wrap -->
+        <lido:repositoryWrap>
+            <lido:repositorySet lido:type="http://terminology.lido-schema.org/lido00475">
+                
+                <lido:repositoryName>
+                    <lido:legalBodyID lido:type="http://terminology.lido-schema.org/lido00099">
+                        http://d-nb.info/gnd/10093941-7
+                    </lido:legalBodyID>
+                    <lido:legalBodyName>
+                        <lido:appellationValue xml:lang="de">Nordisk Forskningsinstitut, Københavns Universitet</lido:appellationValue>
+                        <lido:appellationValue xml:lang="en">Nordisk Forskningsinstitut, Københavns Universitet</lido:appellationValue>
+                    </lido:legalBodyName>
+                </lido:repositoryName>
+                
+                
+                <lido:workID lido:type="http://terminology.lido-schema.org/lido00113">
+                    AM 623 4to, 12r
+                </lido:workID>
+                
+                
+                <lido:repositoryLocation>
+                    
+                    <lido:placeID lido:type="http://terminology.lido-schema.org/lido00099">http://d-nb.info/gnd/10093941-7</lido:placeID>
+                    
+                    <lido:namePlaceSet>
+                        <lido:appellationValue xml:lang="de">Nordisk Forskningsinstitut, Københavns Universitet</lido:appellationValue>
+                        <lido:appellationValue xml:lang="en">Nordisk Forskningsinstitut, Københavns Universitet</lido:appellationValue>
+                    </lido:namePlaceSet>
+                    <lido:gml>
+                        <gml:Point>
+                            <gml:pos>55.66283610806104 12.59259581565857</gml:pos>
+                        </gml:Point>
+                    </lido:gml>
+                </lido:repositoryLocation>
+                
+            </lido:repositorySet>
+        </lido:repositoryWrap>
+
+        
+
+        <!-- Object Measurement -->
+        <lido:objectMeasurementsWrap>
+            <lido:objectMeasurementsSet>
+                <lido:objectMeasurements>
+                    
+                    <lido:measurementsSet>
+                        <lido:measurementType>
+                            <skos:Concept rdf:about="https://www.wikidata.org/entity/Q208826">
+                                <skos:prefLabel xml:lang="en">height</skos:prefLabel>
+                                <skos:prefLabel xml:lang="de">Höhe</skos:prefLabel>
+                            </skos:Concept>
+                        </lido:measurementType>
+                        <lido:measurementUnit>
+                            <skos:Concept rdf:about="https://www.wikidata.org/entity/Q174728">
+                                <skos:prefLabel xml:lang="en">centimetre</skos:prefLabel>
+                                <skos:prefLabel xml:lang="de">Zentimeter</skos:prefLabel>
+                            </skos:Concept>
+                        </lido:measurementUnit>
+                        <lido:measurementValue>16,8</lido:measurementValue>
+                    </lido:measurementsSet>
+                    
+                    
+                    <lido:measurementsSet>
+                        <lido:measurementType>
+                            <skos:Concept rdf:about="https://www.wikidata.org/entity/Q35059">
+                                <skos:prefLabel xml:lang="en">width</skos:prefLabel>
+                                <skos:prefLabel xml:lang="de">Breite</skos:prefLabel>
+                            </skos:Concept>
+                        </lido:measurementType>
+                        <lido:measurementUnit>
+                            <skos:Concept rdf:about="https://www.wikidata.org/entity/Q174728">
+                                <skos:prefLabel xml:lang="en">centimetre</skos:prefLabel>
+                                <skos:prefLabel xml:lang="de">Zentimeter</skos:prefLabel>
+                            </skos:Concept>
+                        </lido:measurementUnit>
+                        <lido:measurementValue>12,4</lido:measurementValue>
+                    </lido:measurementsSet>
+                    
+                    
+                    
+                    <lido:measurementsSet>
+                        <lido:measurementType>
+                            <skos:Concept rdf:about="https://www.wikidata.org/entity/Q1069725">
+                                <skos:prefLabel xml:lang="en">page</skos:prefLabel>
+                                <skos:prefLabel xml:lang="de">Seite</skos:prefLabel>
+                            </skos:Concept>
+                        </lido:measurementType>
+                        <lido:measurementUnit>
+                            <skos:Concept rdf:about="https://www.wikidata.org/entity/Q11563">
+                                <skos:prefLabel xml:lang="en">number</skos:prefLabel>
+                                <skos:prefLabel xml:lang="de">Anzahl</skos:prefLabel>
+                            </skos:Concept>
+                        </lido:measurementUnit>
+                        <lido:measurementValue>31</lido:measurementValue>
+                    </lido:measurementsSet>
+                    
+                </lido:objectMeasurements>
+            </lido:objectMeasurementsSet>
+        </lido:objectMeasurementsWrap>
+    </lido:objectIdentificationWrap>
+
+    <!-- Event Wrap -->
+    <lido:eventWrap>
+        <lido:eventSet>
+            <lido:event>
+                <lido:eventType>
+                    <skos:Concept rdf:about="http://terminology.lido-schema.org/lido00007">
+                        <skos:prefLabel xml:lang="de">Herstellung</skos:prefLabel>
+                        <skos:prefLabel xml:lang="en">Production</skos:prefLabel>
+                    </skos:Concept>
+                </lido:eventType>
+                <lido:eventDate>
+                    <lido:date>
+                        <lido:earliestDate>1325</lido:earliestDate>
+                        <lido:latestDate>1325</lido:latestDate>
+                    </lido:date>
+                </lido:eventDate>
+                <lido:eventMaterialsTech>
+                    <lido:materialsTech>
+                        <lido:termMaterialsTech lido:type="http://terminology.lido-schema.org/lido00132">
+                            <skos:Concept rdf:about="http://vocab.getty.edu/aat/300011851">
+                                <skos:prefLabel xml:lang="de">-</skos:prefLabel>
+                                <skos:prefLabel xml:lang="en">-</skos:prefLabel>
+                            </skos:Concept>
+                        </lido:termMaterialsTech>
+                    </lido:materialsTech>
+                </lido:eventMaterialsTech>
+                
+                
+                <lido:eventMaterialsTech>
+                    <lido:materialsTech>
+                        <lido:termMaterialsTech lido:type="http://terminology.lido-schema.org/lido00131">
+                            <skos:Concept rdf:about="">
+                                <skos:prefLabel xml:lang="de">geritzt </skos:prefLabel>
+                                <skos:prefLabel xml:lang="en">cut</skos:prefLabel>
+                            </skos:Concept>
+                        </lido:termMaterialsTech>
+                    </lido:materialsTech>
+                </lido:eventMaterialsTech>
+                
+                
+            </lido:event>
+        </lido:eventSet>
+        
+        <lido:eventSet>
+            <lido:event>
+                <lido:eventType>
+                    <skos:Concept rdf:about="http://terminology.lido-schema.org/lido00002">
+                        <skos:prefLabel xml:lang="de">Fund (Aktivität)</skos:prefLabel>
+                        <skos:prefLabel xml:lang="en">Finding (Activity)</skos:prefLabel>
+                    </skos:Concept>
+                </lido:eventType>
+                <lido:eventPlace>
+	               <lido:place>
+                         <lido:namePlaceSet>
+                              <lido:appellationValue>Nordisk Forskningsinstitut, Københavns Universitet</lido:appellationValue>
+                         </lido:namePlaceSet>
+                         
+                         <lido:gml>
+                            <gml:Point>
+                                <gml:pos>55.66283611111111 12.592594444444446</gml:pos>
+                            </gml:Point>
+                        </lido:gml>
+                        
+                    </lido:place>
+               </lido:eventPlace>
+            </lido:event>
+        </lido:eventSet>
+        
+    </lido:eventWrap>
+</lido:descriptiveMetadata>
+    
+<lido:administrativeMetadata xml:lang="en">
+    <!-- Record Wrap -->
+    <lido:recordWrap>
+        <lido:recordID lido:type="http://terminology.lido-schema.org/lido00100">200143</lido:recordID>
+        <lido:recordType>
+            <skos:Concept rdf:about="http://terminology.lido-schema.org/lido00141">
+                <skos:prefLabel xml:lang="de">Einzelobjekt (Katalogisierungsebene)</skos:prefLabel>
+                <skos:prefLabel xml:lang="en">Item-level record</skos:prefLabel>
+            </skos:Concept>
+        </lido:recordType>
+        <lido:recordSource>
+            <lido:legalBodyID lido:type="http://terminology.lido-schema.org/lido00099">
+                http://d-nb.info/gnd/16268620-1
+            </lido:legalBodyID>
+            <lido:legalBodyName>
+                <lido:appellationValue xml:lang="de">Niedersächsische Akademie der Wissenschaften zu Göttingen, Projekt Runische Schriftlichkeit in den germanischen Sprachen (RuneS)</lido:appellationValue>
+                <lido:appellationValue xml:lang="en">Göttingen Academy of Sciences and Humanities in Lower Saxony, Project Runic writing in the Germanic languages (RuneS)</lido:appellationValue>
+            </lido:legalBodyName>
+        </lido:recordSource>
+        <!-- Record Rights -->
+        <lido:recordRights>
+            <lido:rightsType>
+                <skos:Concept rdf:about="https://creativecommons.org/licenses/by-sa/4.0/">
+                    <skos:prefLabel xml:lang="de">CC BY-SA 4.0 - Namensnennung-Share Alike 4.0 International</skos:prefLabel>
+                    <skos:prefLabel xml:lang="en">CC BY-SA 4.0 - Attribution-ShareAlike 4.0 International</skos:prefLabel>
+                </skos:Concept>
+            </lido:rightsType>
+            <lido:rightsHolder>
+                <lido:legalBodyID lido:type="http://terminology.lido-schema.org/lido00099">
+                    http://d-nb.info/gnd/16268620-1
+                </lido:legalBodyID>
+                <lido:legalBodyName>
+                    <lido:appellationValue xml:lang="de">Niedersächsische Akademie der Wissenschaften zu Göttingen</lido:appellationValue>
+                    <lido:appellationValue xml:lang="en">Göttingen Academy of Sciences and Humanities in Lower Saxony</lido:appellationValue>
+                </lido:legalBodyName>
+            </lido:rightsHolder>
+        </lido:recordRights>
+        <lido:recordInfoSet>
+            <lido:recordInfoLink xml:lang="de">https://www.runesdb.de/de/find/200143</lido:recordInfoLink>
+            <lido:recordInfoLink xml:lang="en">https://www.runesdb.de/en/find/200143</lido:recordInfoLink>
+        </lido:recordInfoSet>
+    </lido:recordWrap>
+
+    <!-- Resource Wrap -->
+    <lido:resourceWrap>
+    
+    
+        <lido:resourceSet lido:sortorder="1">
+            <lido:resourceRepresentation lido:type="http://terminology.lido-schema.org/lido00464">
+                <lido:linkResource lido:formatResource="image/jpeg">
+                    https://www.runesdb.de/image-service/15123/full/max/0/default.jpg
+                </lido:linkResource>
+            </lido:resourceRepresentation>
+            <lido:resourceType>
+                <skos:Concept rdf:about="http://ddb.vocnet.org/medientyp/mt002">
+                    <skos:prefLabel xml:lang="en">Image</skos:prefLabel>    
+                    <skos:prefLabel xml:lang="de">Bild</skos:prefLabel>
+                </skos:Concept>
+            </lido:resourceType>
+            <lido:rightsResource>
+                <lido:rightsType>
+                    <lido:conceptID lido:type="http://terminology.lido-schema.org/lido00099"></lido:conceptID>
+                    <lido:term>frei</lido:term>
+                </lido:rightsType>
+                <lido:rightsHolder>
+                    <lido:legalBodyID lido:type="http://terminology.lido-schema.org/lido00099">
+                        
+                    </lido:legalBodyID>
+                    <lido:legalBodyName>
+                        <lido:appellationValue xml:lang="de"></lido:appellationValue>
+                    </lido:legalBodyName>
+                </lido:rightsHolder>
+            </lido:rightsResource>
+        </lido:resourceSet>
+    
+    
+    </lido:resourceWrap>
+</lido:administrativeMetadata>
+</lido:lido>

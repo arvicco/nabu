@@ -1,0 +1,155 @@
+<teiCorpus xmlns="http://www.tei-c.org/ns/1.0">
+    <teiHeader>
+        <fileDesc>
+            <titleStmt>
+                <title type="main">Johannes Calvin (Genf) an Lelio Sozzini, 5. Juni 1555</title>
+                <title type="sub"/>
+                <principal ref="http://d-nb.info/gnd/135995728">Kęstutis Daugirdas</principal>
+                <principal ref="https://orcid.org/0000-0003-1020-507X">Andreas Kuczera</principal>
+                <funder>Deutsche Forschungsgemeinschaft</funder>
+            </titleStmt>
+            <extent>
+                <measure unit="texts" quantity="1"/>
+            </extent>
+            <publicationStmt>
+                <publisher>
+                    <orgName ref="https://www.jalb.de/">Johannes a Lasco Bibliothek</orgName>
+                    <settlement ref="https://sws.geonames.org/2930596">Emden</settlement>
+                </publisher>
+                <publisher>
+                    <orgName ref="https://www.adwmainz.de/">Akademie der Wissenschaften und der Literatur</orgName>
+                    <settlement ref="http://sws.geonames.org/2874225">Mainz</settlement>
+                </publisher>
+                <pubPlace ref="http://sws.geonames.org/2874225">Mainz</pubPlace>
+                <date from="2020">2020–2024</date>
+                <availability>
+                    <licence target="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International (CC-BY 4.0)</licence>
+                </availability>
+            </publicationStmt>
+            <seriesStmt>
+                <title type="main">Die sozinianischen Briefwechsel</title>
+                <title type="sub">Zwischen Theologie, frühmoderner Naturwissenschaft und politischer Korrespondenz</title>
+                <editor ref="http://d-nb.info/gnd/135995728">Kęstutis Daugirdas</editor>
+                <editor ref="https://orcid.org/0000-0003-1020-507X">Andreas Kuczera</editor>
+                <idno>https://gepris.dfg.de/gepris/projekt/324518514</idno>
+                <idno>https://registry.text-plus.org/entity/e4dde8f1-2335-4bc6-aeab-c64c4c163ef4/</idno>
+            </seriesStmt>
+            <notesStmt>
+                <note/>
+            </notesStmt>
+            <sourceDesc>
+                <bibl>„Johannes Calvin (Genf) an Lelio Sozzini, 5. Juni 1555“, in: Zwischen Theologie, frühmoderner Naturwissenschaft und politischer Korrespondenz: Die sozinianischen Briefwechsel, hg. von Kęstutis Daugirdas und Andreas Kuczera unter DH-Mitarbeit von Julian Jarosch, Sebastian Enns und Patrick Toschka. Link zur aktuellen Version dieses Briefes: https://sozinianer.de/id/MAIN_ed_nnl_xb5_r5b</bibl>
+            </sourceDesc>
+        </fileDesc>
+        <encodingDesc>
+            <p/>
+        </encodingDesc>
+    </teiHeader>
+    <TEI xml:id="MAIN_ed_nnl_xb5_r5b" type="letter" n="cover_letter">
+    <teiHeader>
+        <fileDesc>
+            <titleStmt>
+                <title type="main">Johannes Calvin (Genf) an Lelio Sozzini, 5. Juni 1555</title>
+                <principal ref="http://d-nb.info/gnd/135995728">Kęstutis Daugirdas</principal>
+                <principal ref="https://orcid.org/0000-0003-1020-507X">Andreas Kuczera</principal>
+                <funder>Deutsche Forschungsgemeinschaft</funder>
+            </titleStmt>
+            <extent>
+                <measure unit="witnesses" quantity="1"/>
+            </extent>
+            <publicationStmt>
+                <publisher>
+                    <orgName ref="https://www.jalb.de/">Johannes a Lasco Bibliothek</orgName>
+                    <settlement ref="https://sws.geonames.org/2930596">Emden</settlement>
+                </publisher>
+                <publisher>
+                    <orgName ref="https://www.adwmainz.de/">Akademie der Wissenschaften und der Literatur</orgName>
+                    <settlement ref="http://sws.geonames.org/2874225">Mainz</settlement>
+                </publisher>
+                <pubPlace ref="http://sws.geonames.org/2874225">Mainz</pubPlace>
+                <date from="2020">2020–2024</date>
+                <availability>
+                    <licence target="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International (CC-BY 4.0)</licence>
+                </availability>
+                <idno type="uri">https://sozinianer.de/id/MAIN_ed_nnl_xb5_r5b</idno>
+            </publicationStmt>
+            <seriesStmt>
+                <title type="main">Die sozinianischen Briefwechsel</title>
+                <title type="sub">Zwischen Theologie, frühmoderner Naturwissenschaft und politischer Korrespondenz</title>
+                <editor ref="http://d-nb.info/gnd/135995728">Kęstutis Daugirdas</editor>
+                <editor ref="https://orcid.org/0000-0003-1020-507X">Andreas Kuczera</editor>
+                <idno>https://gepris.dfg.de/gepris/projekt/324518514</idno>
+                <idno>https://registry.text-plus.org/entity/e4dde8f1-2335-4bc6-aeab-c64c4c163ef4/</idno>
+            </seriesStmt>
+            <sourceDesc>
+                <listWit>
+                    <witness corresp="#ed_nnl_xb5_r5b"/>
+                </listWit>
+            </sourceDesc>
+        </fileDesc>
+        <profileDesc>
+            <correspDesc>
+                <correspAction type="sent">
+                    <persName key="ed_bl2_1xr_dhb">Calvin, Johannes (1509-1564)</persName>
+                    <placeName key="gbx_lgx_12b">Genf</placeName>
+                    <date when="1555-06-05" cert="high"/>
+                </correspAction>
+                <correspAction type="received">
+                    <persName key="ed_vqq_2jg_yqb">Sozzini, Lelio (1525-1562)</persName>
+                </correspAction>
+            </correspDesc>
+        </profileDesc>
+    </teiHeader>
+    <TEI xmlns:ns="http://www.telota.de" xmlns:da="http://www.digitale-akademie.de" xml:id="ed_nnl_xb5_r5b" n="reference_witness" type="letter">
+    <teiHeader>
+        <fileDesc>
+            <titleStmt>
+                
+                <title type="sub"/>
+            </titleStmt>
+            <publicationStmt>
+                <publisher>
+                    <orgName ref="https://www.jalb.de/">Johannes a Lasco Bibliothek</orgName>
+                    <settlement ref="https://sws.geonames.org/2930596">Emden</settlement>
+                </publisher>
+                <publisher>
+                    <orgName ref="https://www.adwmainz.de/">Akademie der Wissenschaften und der Literatur</orgName>
+                    <settlement ref="http://sws.geonames.org/2874225">Mainz</settlement>
+                </publisher>
+                <pubPlace ref="http://sws.geonames.org/2874225">Mainz</pubPlace>
+                <date from="2020">2020–2024</date>
+                <availability>
+                    <licence target="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International (CC-BY 4.0)</licence>
+                </availability>
+                <idno type="file">Sozzini_Lelio/1555-06-05_Calvin_Sozzini.xml</idno>
+            </publicationStmt>
+            <seriesStmt>
+                <title type="main">Die sozinianischen Briefwechsel</title>
+                <title type="sub">Zwischen Theologie, frühmoderner Naturwissenschaft und politischer Korrespondenz</title>
+                <editor ref="http://d-nb.info/gnd/135995728">Kęstutis Daugirdas</editor>
+                <editor ref="https://orcid.org/0000-0003-1020-507X">Andreas Kuczera</editor>
+                <idno>https://gepris.dfg.de/gepris/projekt/324518514</idno>
+                <idno>https://registry.text-plus.org/entity/e4dde8f1-2335-4bc6-aeab-c64c4c163ef4/</idno>
+            </seriesStmt>
+            <sourceDesc>
+                <bibl sameAs="zotero-2065617-LJAM924F">Lelio Sozzini, Opere<biblScope unit="pages">232–239.</biblScope>
+                </bibl>
+            </sourceDesc>
+        </fileDesc>
+        <profileDesc>
+            <langUsage>
+                <language ident="lat"/>
+            </langUsage>
+            <textClass>
+                <classCode scheme="#sbw">Brief/Briefexzerpt</classCode>
+            </textClass>
+            
+        </profileDesc>
+        <revisionDesc>
+            <change when="2022-08-30">Metadaten publikationsbereit</change>
+        </revisionDesc>
+    </teiHeader>
+    <text><body><p/></body></text>
+</TEI>
+</TEI>
+</teiCorpus>

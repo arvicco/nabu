@@ -56,7 +56,7 @@ instruments, CLI recipes and terminal setup, are the
 | <span id="shelf-post-classical-greek"></span>[Post-classical Greek](#post-classical-greek) | First1KGreek: Athenaeus, Philo, church fathers, Swete's Septuagint | 3rd c. BCE – 6th c. CE | {{ shelves["post-classical-greek"].size_display }} | CC BY-SA |
 | <span id="shelf-greek-silver"></span>[Greek silver layer](#the-greek-silver-layer) | Diorisis and GLAUx: machine-lemmatized second editions of the Greek canon, honestly labelled | Homer – early Byzantium | {{ shelves["greek-silver"].size_display }} | CC BY-SA / mixed per document |
 | <span id="shelf-classical-latin"></span>[Classical Latin](#classical-latin-literature) | Perseus: Vergil, Ovid, Cicero, Livy, Tacitus, with aligned English translations | 3rd c. BCE – Late Antiquity | {{ shelves["classical-latin"].size_display }} | CC BY-SA |
-| <span id="shelf-latin-romance"></span>[Latin–Romance continuum](#the-latinromance-continuum) | digilibLT late-antique Latin, openMGH, CroALa, Corpus Córporum's Patrologia; BFM Old French, the Galician-Portuguese cantigas, Old Spanish, Portuguese, Catalan, Occitan, Sardinian and Judeo-Spanish shelves | 2nd c. CE – early modern | {{ shelves["latin-romance"].size_display }} | CC BY / CC BY-SA / NC / written grant |
+| <span id="shelf-latin-romance"></span>[Latin–Romance continuum](#the-latinromance-continuum) | digilibLT late-antique Latin, openMGH, CroALa, Corpus Córporum's Patrologia; BFM Old French, the Galician-Portuguese cantigas, Old Spanish, Portuguese, Catalan, Occitan, Sardinian and Judeo-Spanish shelves; NOSCEMUS's early modern scientific Latin, the Socinian correspondence, the mazarinades of the Fronde | 2nd c. CE – early modern | {{ shelves["latin-romance"].size_display }} | CC BY / CC BY-SA / NC / written grant |
 | <span id="shelf-liturgy-chant"></span>[Liturgy and chant](#liturgy-and-chant) | The service books and sung repertory of medieval Christendom: Divinum Officium's traditional Roman Breviary and Missal, GregoBase's Gregorian chant transcriptions, the Cantus Database's manuscript chant inventories, the Analecta Hymnica scans, the Greek Orthodox service books and Ponomar's Church Slavonic Hours | late antiquity – 20th c. | {{ shelves["liturgy-chant"].size_display }} | PD / CC0 / NC / GPL |
 | <span id="shelf-papyri"></span>[Documentary papyri](#documentary-papyri) | Papyri.info DDbDP: contracts, letters, tax receipts (Greek, Coptic, Latin, Arabic, Demotic) | c. 300 BCE – 8th c. CE | {{ shelves["papyri"].size_display }} | CC BY |
 | <span id="shelf-latin-inscriptions"></span>[Latin inscriptions](#latin-inscriptions) | Epigraphic Database Heidelberg: epitaphs, dedications, milestones from the whole empire, with genre facets | Republic – Late Antiquity | {{ shelves["latin-inscriptions"].size_display }} | CC BY-SA |
@@ -83,8 +83,8 @@ instruments, CLI recipes and terminal setup, are the
 | <span id="shelf-aegean"></span>[Aegean scripts](#aegean-scripts) | DĀMOS, the Mycenaean Linear B corpus; SigLA, the signs of Linear A; the Cypriot syllabic inscriptions (IG XV 1,1) | 2nd mill. BCE – Hellenistic | {{ shelves["aegean"].size_display }} | CC BY / NC per source |
 | <span id="shelf-biblical-editions"></span>[Biblical editions](#biblical-editions) | Clementine Vulgate, SBL Greek New Testament, World English Bible | — | {{ shelves["biblical-editions"].size_display }} | PD / CC BY |
 | <span id="shelf-old-english"></span>[Old English poetry](#old-english) | The complete Anglo-Saxon Poetic Records: Beowulf, the Exeter Book, Dream of the Rood | c. 700–1150 | {{ shelves["old-english"].size_display }} | CC BY-SA |
-| <span id="shelf-middle-early-modern-english"></span>[Middle and Early Modern English](#middle-and-early-modern-english) | The Corpus of Middle English Prose and Verse; the TCP's EEBO, Evans and ECCO transcriptions — English print on both sides of the Atlantic; the Folger's EMMO manuscripts | c. 1100 – 1800 | {{ shelves["middle-early-modern-english"].size_display }} | PD / CC0 / CC BY-SA |
-| <span id="shelf-slavic"></span>[Slavic](#slavic) | CCMH OCS gospel codices, the Freising Manuscripts, Early Modern Slovenian, the damaskini, Scripta Bulgarica, the Wikisource cones, the Ipatiev chronicle, the 1488 Prague Bible, Protestant prints, the Croatian school canon, the Serbian novel and Bible, the German Slavistics canon | c. 1000 – early 20th c. | {{ shelves["slavic"].size_display }} | CC BY / CC BY-SA / PD / NC (Freising BY-ND) |
+| <span id="shelf-middle-early-modern-english"></span>[Middle and Early Modern English](#middle-and-early-modern-english) | The Corpus of Middle English Prose and Verse; the TCP's EEBO, Evans and ECCO transcriptions — English print on both sides of the Atlantic; the Folger's EMMO manuscripts; the Stationers' Register and the Statutes of the Realm | c. 1100 – 1800 | {{ shelves["middle-early-modern-english"].size_display }} | PD / CC0 / CC BY-SA |
+| <span id="shelf-slavic"></span>[Slavic](#slavic) | CCMH OCS gospel codices, the Freising Manuscripts, Early Modern Slovenian with Korpus 16's Protestant prints, the damaskini, Scripta Bulgarica, the Wikisource cones, the Ipatiev chronicle, the 1488 Prague Bible, Protestant prints, the Croatian school canon, the Serbian novel and Bible, the German Slavistics canon | c. 1000 – early 20th c. | {{ shelves["slavic"].size_display }} | CC BY / CC BY-SA / PD / NC (Freising BY-ND) |
 | <span id="shelf-baltic-finnic-basque"></span>[Baltic, Finnic and Basque](#baltic-finnic-and-basque) | SENIE, early written Latvian; VAKK, Old Written Estonian; VKS, Old Literary Finnish; BIM/SAHCOBA, the syntactically annotated historical Basque corpus | 16th – 19th c. CE | {{ shelves["baltic-finnic-basque"].size_display }} | CC BY / NC per source |
 | <span id="shelf-chinese"></span>[Chinese libraries](#the-chinese-libraries) | Kanripo (KR1 classics – KR5 Daoist canon), the CBETA Buddhist canon (Taishō + Xuzangjing), Chinese Wikisource's censused works, the Classical↔Modern parallel corpus, the Đại Việt classical shelf | Zhou – Qing | {{ shelves["chinese"].size_display }} | CC BY-SA / CC BY-NC-SA / MIT |
 | <span id="shelf-korean"></span>[Korean](#korean) | The Joseon Veritable Records and the Royal Secretariat diaries, the Goryeo histories, the Border Defense Command register, the ITKC classical originals, the Open Korean Historical Corpus, the *Yongbi eocheon ga* | Goryeo – late Joseon | {{ shelves["korean"].size_display }} | KOGL open / CC BY-NC |
@@ -94,7 +94,7 @@ instruments, CLI recipes and terminal setup, are the
 | <span id="shelf-germanic"></span>[Germanic](#the-germanic-shelves) | Menotec and Menota Old Norse, Old Swedish, the Old Saxon *Heliand*, ReM, ReN and ReF (Middle High, Middle Low and Early New High German), the Deutsches Textarchiv, Old and Middle Dutch, the Rundata runic corpus | c. 200 – 1969 CE | {{ shelves["germanic"].size_display }} | nc / CC BY / CC BY-SA / ODbL / `research_private` |
 | <span id="shelf-africa"></span>[Africa](#africa) | Boston University's African Ajami Library (Hausa, Mandinka, Fula and Wolof manuscripts in Arabic script), the Old Nubian treebank, a public-domain shelf of nineteenth-century African-language grammars and texts | medieval Nubia – 20th c. | {{ shelves["africa"].size_display }} | PD / NC per source |
 | <span id="shelf-americas"></span>[The Americas](#the-americas) | Ticha's colonial Valley Zapotec, Guaman Poma's *Nueva corónica* | 16th – 18th c. CE | {{ shelves["americas"].size_display }} | PD / CC BY-SA |
-| <span id="shelf-reference"></span>[Reference shelf](#reference-shelf) | LSJ, Lewis &amp; Short, Bosworth-Toller, Monier-Williams, Wiktionary lexica and reconstruction dictionaries, the IE-CoR, LIV, and de Vaan etymological witnesses, the StarLing / Tower of Babel databases, three Slovenian historical dictionaries, Brückner and Nasovič, the Welsh GPC, the Hebrew and Egyptian lexica, the Sino-Japanese desk (Unihan, KANJIDIC2/JMdict, HDIC, the Chinese rime books), the Tibetan rack (Mahāvyutpatti, the Verbs Database, the Monlam headwords), Dillmann's Gǝʿǝz lexicon, DÉRom, CLICS and WOLD | — | {{ census.dictionary_entries_display }} entries | CC BY-SA / CC BY / CC BY-NC-SA / written grant |
+| <span id="shelf-reference"></span>[Reference shelf](#reference-shelf) | LSJ, Lewis &amp; Short, Bosworth-Toller, Monier-Williams, LEME's early modern English word-books, Wiktionary lexica and reconstruction dictionaries, the IE-CoR, LIV, and de Vaan etymological witnesses, the StarLing / Tower of Babel databases, three Slovenian historical dictionaries, Brückner and Nasovič, the Welsh GPC, the Hebrew and Egyptian lexica, the Sino-Japanese desk (Unihan, KANJIDIC2/JMdict, HDIC, the Chinese rime books), the Tibetan rack (Mahāvyutpatti, the Verbs Database, the Monlam headwords), Dillmann's Gǝʿǝz lexicon, DÉRom, CLICS and WOLD | — | {{ census.dictionary_entries_display }} entries | CC BY-SA / CC BY / CC BY-NC-SA / written grant |
 
 ## Classical Greek literature
 
@@ -142,7 +142,15 @@ the Serments de Strasbourg of 842), the complete secular Galician-Portuguese
 cantigas (by written grant), the Old Spanish Textual Archive, Spanish
 sonnets, Portuguese literary works, the public-domain Catalan of CTILC, and
 smaller Occitan, Aranese, Sardinian and Judeo-Spanish shelves — the last
-three modern, labelled where an upstream says its text is synthetic.
+three modern, labelled where an upstream says its text is synthetic. The
+early modern reach: the NOSCEMUS Digital Sourcebook's scientific Latin —
+over a thousand printed books of medicine, astronomy and natural history,
+Kepler and Bacon among them, as uncorrected machine-read text, declared as
+such (CC BY); the Socinian correspondence of the Mainz Academy edition,
+1,869 letters of the Polish Brethren and their circle, 1545–1744, mostly
+Latin (CC BY); and the mazarinades of the Fronde, 3,067 French pamphlets
+of 1648–1653 from the Antonomaz project, classed by Moreau's bibliography
+(CC BY).
 
 ## Liturgy and chant
 
@@ -401,8 +409,10 @@ damaskini (CLARIN.SI, CC BY-SA), Balkan Slavic witnesses with English.
 Beyond them: Wikisource collections from Serbian epic song to the Old East
 Slavic chronicles, each admitted under written public-domain rules;
 Scripta Bulgarica (CC BY-NC-SA); the Ipatiev chronicle; the 1488 Prague
-Bible; the Slovene and Croatian Protestant prints; the Croatian school
-canon; the Serbian ELTeC novels and the Vuk–Daničić Bible; and the German
+Bible; the Slovene and Croatian Protestant prints, now joined by Korpus 16 —
+the whole printed output of the Slovene Reformation, 45 books of 1550–1595
+from Trubar's first Slovene book to Dalmatin's Bible, double-keyed against
+the prints (CC BY-SA); the Croatian school canon; the Serbian ELTeC novels and the Vuk–Daničić Bible; and the German
 Slavistics canon as a reference shelf.
 
 ## Baltic, Finnic and Basque
@@ -492,7 +502,13 @@ the keyed selection from eighteenth-century British print — Defoe, Swift,
 Pope, Johnson, Hume (all CC0; no page images are held). Beside the print,
 the Folger's Early Modern Manuscripts Online: a hundred English manuscripts
 of 1552–1697 transcribed word by word, with regularized spelling as an
-annotation layer (CC BY-SA).
+annotation layer (CC BY-SA). The trade's own ledger stands beside its
+output: the Stationers' Register Online (CREATe, University of Glasgow),
+the copy entries of Registers A–D, 1557–1640 — who proposed to print what,
+licensed by whom, for what fee. And the law the trade worked under:
+Statutes of the Realm, volumes 5–7, the Acts of Parliament 1625–1701 in
+Raithby's Record Commission edition via British History Online, from the
+Petition of Right to the Act of Settlement (public domain, per page).
 
 ## Africa
 
@@ -523,7 +539,11 @@ Wiktionary-derived lexica and reconstruction dictionaries with descendant
 trees, IE-CoR, LIV, de Vaan's Latin, DÉRom's Proto-Romance, and the StarLing
 / Tower of Babel databases (by written grant, each compiler credited).
 Further: three Slovenian historical dictionaries, Brückner's Polish and
-Nasovič's Belarusian, and the typological databases CLICS and WOLD.
+Nasovič's Belarusian, and the typological databases CLICS and WOLD. The
+early modern English word-books arrived whole with LEME (University of
+Toronto, CC BY): over three hundred dictionaries, glossaries and herbals of
+c. 1475–1755, each in the print's own spelling — Elyot, Florio, Cawdrey,
+Cotgrave, Blount, Bailey, Johnson.
 Dictionary citations resolve to live passages where the cited work is held:
 the LSJ entry for μῆνις points at *Iliad* 1.1.
 

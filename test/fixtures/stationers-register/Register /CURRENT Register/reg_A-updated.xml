@@ -1,0 +1,446 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="sro-transcription.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<?xml-model href="sro-transcription.rng" type="application/xml" schematypens="http://purl.oclc.org/dsdl/schematron"?>
+<?xml-stylesheet type='text/xsl' href='sro-proofing-view.xsl'?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0">
+    <teiHeader>
+      <fileDesc>
+         <titleStmt>
+            <title>Copy entries in Stationers' Company Register A, 9 December 1554 to 2 August 1596</title>
+            <principal>
+               <persName xml:id="GB">Giles Bergel</persName>
+               <orgName>University of Oxford</orgName>
+            </principal>
+            <principal> 
+               <persName xml:id="IG">Ian Gadd</persName>
+               <orgName>Bath Spa University </orgName>
+            </principal>
+            <editor>Giles Bergel</editor>
+            <editor>Ian Gadd</editor>
+            <respStmt>
+               <resp>Schema Design, Text Processing, Up-Conversion (Phase 1 and Phase 2)</resp>
+               <persName xml:id="JC">James Cummings</persName>
+               <orgName notAfter="2017-08">University of Oxford</orgName>
+               <orgName notBefore="2017-09">Newcastle University</orgName>
+            </respStmt>
+            <respStmt>
+               <resp>Volume Editor</resp>
+               <persName xml:id="EM">Eleanor Warmington</persName>
+            </respStmt>
+           
+            <respStmt>
+               <resp>Proofreading and Transcription Guidelines (Phase 1)</resp>
+               <persName>Pip Willcox</persName>
+               <orgName>Bodleian Library, University of Oxford</orgName>
+            </respStmt>
+            <respStmt>
+               <resp>Transcription of Arber (Phase One)</resp>
+               <orgName>Invida Solutions Pvt. Ltd.</orgName>
+            </respStmt>
+            <funder> Phase One (Arber) - University of Oxford JPR Lyell Fund</funder>
+            <funder> Phase Two (Correction and enrichment) CREATe, University of Glasgow; the Bibliographical Society; Bath Spa University</funder>
+          </titleStmt>
+          <publicationStmt>
+            <publisher>Stationers' Register Online <ref target="http://www.stationersregister.online">http://www.stationersregister.online</ref>
+            </publisher>
+            <publisher>The Bibliographical Society <ref target="http://www.bibsoc.org.uk/">http://www.bibsoc.org.uk/</ref>
+            </publisher>
+            <publisher>CREATe, University of Glasgow <ref target="http://www.create.ac.uk/">http://www.create.ac.uk</ref>
+            </publisher>
+            <date when="2017-09-01">1 September 2017</date>
+            <availability>
+               <licence target="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution</licence>
+            </availability>
+             <idno type="DataSourceURI">https://github.com/gbergel/SRO_data/</idno>
+            <idno type="Liber">A</idno>
+            <idno type="Arber">1</idno>
+         </publicationStmt>
+         <sourceDesc>
+            <bibl>
+               <title>Stationers' Company Register A</title>
+            </bibl>
+            <bibl>
+               Transcriptions and encodings are jointly derived from an electronic facsmile of
+               Arber, <editor>Edward, A</editor> 
+               <title>Transcript of the Registers of the Company of Stationers 1554-1640
+                  AD</title>, 5 vols, (London: Priv. Print,; <date>1875-77</date>, &amp; Birmingham, <date>1875-94</date>), Volume 1, copy at Butler
+               Library, Columbia University in the City of New York, R015.42 L8a
+               <ref target="https://clio.columbia.edu/catalog/6177070">https://clio.columbia.edu/catalog/61770700</ref>, and digital images of <bibl>
+                  <title>The Stationers' Company Register A,</title>, Stationers' Company archives Ref no: TSC/1/D/02/01</bibl>
+            </bibl>
+         </sourceDesc>
+      </fileDesc>
+      <encodingDesc>
+         <projectDesc>
+            <p>Created by the Stationers' Register Online project (www.stationersregister.online)
+               Phase One: http://http://digital.humanities.ox.ac.uk/ProjectProfile/Project_page.aspx?pid=307; 
+               Phase Two: http://www.create.ac.uk/blog/2017/02/24/create-support-stationers-register-online-project/
+            </p>
+         </projectDesc>
+      </encodingDesc>
+       <revisionDesc>
+          <change when="2017-09-27" who="#GB">various attribute emendations</change>
+          <change when="2017-09-26" who="#GB">various attribute emendations</change>
+          <change when="2017-09-25" who="#GB">various attribute emendations</change>
+          <change when="2017-08-21" who="#GB">persName emendations</change> 
+	        <change when="2017-08-21" who="#JC">Post-processing up-conversion</change> 
+          <change when="2017-06-26">GB amend re Blayney comments</change>
+          <change when="2017-06-26">GB clean up ffs</change>
+          <change when="2017-06-22">GB processing editorial notes</change>
+          <change when="2017-06-07">clean up ffs</change>
+          <change when="2017-05-27">SP01 final amendments</change>
+          <change when="2017-04-12">SP01 SRO853-SRO1264</change>
+          <change when="2017-04-09">SP01 SRO459-SRO852</change>
+          <change when="2017-04-08">SP01 SRO125-SRO458</change>
+          <change when="2017-04-05">SP01 SRO14-SRO124h</change>
+          <change when="2017-04-02">SP01 SRO1-SRO14</change>
+          <change when="2017-02-20">FP01 SRO1132-SRO1264</change>
+          <change when="2017-02-20">FP01 SRO917-SRO1131</change>
+          <change when="2017-02-19">FP01 SRO625-SRO916</change>
+          <change when="2017-02-18">FP01 SRO529-SRO624</change>
+          <change when="2017-02-17">FP01 SRO458-SRO528</change>
+          <change when="2017-02-16">FP01 SRO394-SRO457</change>
+          <change when="2017-02-15">FP01 SRO313-SRO393</change>
+          <change when="2017-02-13">FP01 SRO214-SRO312</change>
+          <change when="2017-02-12">FP01 SRO115-SRO213</change>
+          <change when="2017-02-11">FP01 SRO53-SRO114</change>
+          <change when="2017-02-10">FP01 SRO41-SRO52</change>
+           <change when="2017-02-09">FP01 SRO39-SRO40g</change>
+           <change when="2017-02-08">FP01 SRO6g-SRO38e</change>
+           <change when="2017-02-07">FP01 SRO2e-SRO6g</change>
+           <change when="2017-02-06">FP01 SRO2e</change>
+           <change when="2017-02-02">FP01 SRO2e</change>
+           <change when="2017-02-02">FP01 SRO1 to SRO2d</change>
+           <change when="2017-01-29">
+              Metadata block created by JC; Arber's corrections made by IG
+           </change>
+            <change when="2017-01-22">
+                Material other than copy entries removed by Ian Gadd
+            </change>
+            <change from="2013-06" to="2013-10">Semi-automated changes based on bodleian
+                proofreading made to the SRO data after the initial conversion (and up-conversion of
+                roman numerals, fees, dates, names, etc.) from abbreviated tei-corset schema by
+                James Cummings</change>
+            <change from="2012-12" to="2013-05"> Encoding reviewed, with suggestions made for
+                improvements, a random sample of names checked, and spot-proofed by Pip Willcox.
+                December 2012 - May 2013. </change>
+        </revisionDesc>
+    </teiHeader>
+
+    <text>
+      <body>
+         <div type="entry" xml:id="SRO1">
+                        
+                            <p>To <persName n="pekeryngewilliam" role="stationer enterer">
+                                <forename>William</forename> 
+                        <surname>pekerynge</surname>
+                                </persName> a ballett Called <title>a Ryse and
+                                wake</title> 
+                     <seg type="fee" rend="roman-numerals aligned-right"><!--processing: iiijd-->
+                        <num type="totalPence" value="4"><!--orig: iiijd-->
+                           <num type="pence" value="4">iiij<hi rend="superscript">d</hi> 
+                           </num> 
+                        </num> 
+                     </seg> 
+                            </p>
+                  <ab type="metadata">
+               <idno type="Liber">A</idno>
+               <idno type="SRONumber">1</idno>
+               <date type="SortDate" when="1557-07-19"/>
+               <date type="Register" notBefore="1557-07-19" notAfter="1558-07-09">19 July 1557 - 9 July 1558</date>
+                     <num type="totalEntryPence" value="4"/>
+                     
+                     <idno type="RegisterRef">Register A, f.21v</idno>
+                     <idno type="ArberRef">I. 74</idno>
+                     <idno type="RegisterID">TSC-1-D-02-01_1554-1596_0071_f21v</idno>
+                     <num type="works" value="1"/>
+                     <note type="status" subtype="entered"/>
+                     <persName n="cawoodj" role="warden">
+                        <forename>J.</forename>
+                        <surname>Cawood</surname>
+                     </persName>
+                     <persName n="walleyj" role="warden">
+                        <forename>J.</forename>
+                        <surname>Walley</surname>
+                     </persName>
+                     <persName n="dockwrayt" role="master">
+                        <forename>T.</forename>
+                        <surname>Dockwray</surname>
+                     </persName>
+                  <note type="status" subtype="incomplete"/>
+            </ab>
+                    </div>
+         <div type="entry" xml:id="SRO4">
+                        <p>To <persName n="marshethomas" role="stationer enterer"> 
+                     <forename>Thomas</forename>
+                            <surname>marshe</surname> 
+                  </persName> this boke Called <title>the Rules and Ryghte ample Documentes Towchynge the vse
+                            and practise of the commen almanacke <del>ys</del> which ys caled ephemerydes</title>
+                            <seg type="fee" rend="roman-numerals aligned-right"><!--processing: iiijd-->
+                     <num type="totalPence" value="4"><!--orig: iiijd-->
+                        <num type="pence" value="4">iiij<hi rend="superscript">d</hi> 
+                        </num> 
+                     </num> 
+                  </seg> 
+                        </p>
+               <ab type="metadata">
+               <idno type="Liber">A</idno>
+               <idno type="SRONumber">4</idno>
+               <date type="SortDate" when="1557-07-19"/>
+               <date type="Register" notBefore="1557-07-19" notAfter="1558-07-09">19 July 1557 - 9 July 1558</date>
+                  <num type="totalEntryPence" value="4"/>
+                  
+                  <idno type="RegisterRef">Register A, f.22r</idno>
+                  <idno type="ArberRef">I. 75</idno>
+                  <idno type="RegisterID">TSC-1-D-02-01_1554-1596_0072_f22r</idno>
+                  <num type="works" value="1"/>
+                  <note type="status" subtype="entered"/>
+                  <persName n="cawoodj" role="warden">
+                     <forename>J.</forename>
+                     <surname>Cawood</surname>
+                  </persName>
+                  <persName n="walleyj" role="warden">
+                     <forename>J.</forename>
+                     <surname>Walley</surname>
+                  </persName>
+                  <persName n="dockwrayt" role="master">
+                     <forename>T.</forename>
+                     <surname>Dockwray</surname>
+                  </persName>
+               <note type="status" subtype="incomplete"/>
+            </ab>
+              </div>
+         <div type="entry" xml:id="SRO8">
+                  <p>To  <persName n="wallyejohnmaster" role="stationer enterer"> master 
+                     <forename>John</forename>
+                     <surname>Wallye</surname> 
+                  </persName> and <persName n="toyemistress" role="stationer enterer">mistress <surname>Toye</surname> 
+                  </persName> these ballettes
+                     folowynge that ys to saye</p>
+                  <p rend="bracketed-right italics"> 
+                  <title>Women <supplied resp="#arber">[be]</supplied> beste whan
+                     thay be at Reste</title>
+               </p>
+                  <p rend="aligned-right bracketed-right italics"> 
+                  <title>A mayde that wolde mary with a
+                     servynge man </title>
+               </p>
+                  <p rend="bracketed-right italics"> 
+                  <title>I will have a Wydow yf ever I marye</title>
+               </p>
+                  <p rend="aligned-right bracketed-right italics"> 
+                  <title>Whan Ragynge love</title>
+               </p>
+                  <p rend="bracketed-right italics"> 
+                  <title>The Daye of the lorde ys at hande</title>
+               </p>
+                  <p rend="aligned-right bracketed-right italics"> 
+                  <title>who lyve so mery and make suche
+                     sporte<lb/> as thay that be of the pooreste sorte</title>
+               </p>
+                  <p rend="aligned-right bracketed-right italics"> 
+                  <title>a ballett of <persName n="thomalyn" role="non-stationer">thomalyn</persName>  
+                  </title> 
+               </p>
+                  <p rend="aligned-right bracketed-right italics"> 
+                  <title>betwene a Ryche farmer and
+                     his Dougther</title>
+               </p> 
+                  
+                  <p rend="aligned-right bracketed-right"> 
+                     <title>An Epytaph vpon
+                        the Deathe of <persName n="edwardekyngethesexte" role="non-stationer"> kynge
+                           <forename>Edwarde</forename> the Sexte </persName>
+                     </title> 
+                  </p>
+                  <p rend="bracketed-right">a ballett of <title>the talke betwene
+                     <num type="matchedNumber" value="2" rend="roman-numerals">ij</num> maydes</title> 
+                  </p>
+                  <p rend="aligned-right">a ballet of <title>good wyves</title> 
+                  </p>
+                  <p rend="bracketed-right">
+                  <title>The m<supplied resp="#arber">[o]</supplied>urnynge of <persName n="edwardedukeofbuckynham" role="non-stationer"> 
+                        <forename> Edwarde</forename> Duke of
+                     buckynham</persName> 
+                  </title>
+                  </p>
+                  <p rend="aligned-right bracketed-right">a ballett of <title>the
+                     lover and of the byrde</title> 
+                  </p>
+                  <p rend="bracketed-right italics"> 
+                  <title>Tomorrow shalbe my fathers wake</title>
+               </p>
+                  <p rend="aligned-right bracketed-right">a ballett of <title>a man
+                     that wold be vnmaryed agayne</title> 
+                  </p>
+                  <p rend="bracketed-right italics"> 
+                  <title>of the Ryche man and poore <persName n="lazarus">
+                        lazarus
+                     </persName> 
+                  </title>
+               </p>
+                  <p rend="aligned-right bracketed-right">A ballett of <title>the a
+                     b c of a preste Called <hi rend="smallcaps"> 
+                        <persName n="stourmyheugh" role="non-stationer">
+                           <forename>heugh</forename>
+                           <surname>stourmy</surname>
+                        </persName>
+                     </hi>
+                     &amp;c</title> 
+                  </p>
+                  <p rend="bracketed-right">a ballytt of <title>
+                     <supplied resp="#arber">[?]</supplied>
+                  </title> made by <persName n="baltroppenycholas" role="non-stationer">
+                     <forename>Nycholas</forename> 
+                     <surname>Baltroppe</surname> 
+                  </persName> 
+                  </p>
+                  <p rend="aligned-right bracketed-right italics"> 
+                  <title>The aged mans a b c </title>
+               </p>
+                  <p>a ballett of <title>Wakefylde and <persName n="agrene">agrene</persName>
+                  </title>
+                  <note type="editorial" resp="#GB">possibly a version of the ballad of the Pinder of Wakefield and George a Greene</note> 
+                  </p>
+                  
+                  
+                  <p>A ballett of <title>a mylner</title>.</p>
+                  <p rend="bracketed-right">A ballett <title>god sende me a wyffe
+                     that will Do as I saye</title> 
+                  </p>
+                  <p rend="bracketed-right">A ballett <title>I will no more go to
+                     the ploughe with a nother new ballett annexed to the same </title>
+                  </p>
+                  <p rend="bracketed-right">
+                     A ballett
+                     of <title>admonyssion to leave swerynge</title> 
+                  </p>
+                  <p rend="bracketed-right"> 
+                     <title>A ballett for my solas</title> 
+               </p>
+                  
+                  <p> A ballett <title>in wynters Juste Retorne</title> 
+                  </p>
+                  <p rend="bracketed-right">A ballett <title>yf ever I mary I will
+                     mary a mayde</title> 
+                  </p>
+                  <p rend="bracketed-right">A ballett <title>then and in those
+                     Dayes then I saye then knaves that be now wilbe comme honeste men</title> 
+                  </p>
+                  <p rend="aligned-right"> 
+                     <note resp="#arber">Arber: These are evidently the two
+                        first lines of the ballad:    <lb/>   
+                        Then, and in those
+                        Dayes then I say then<lb/> knaves that be now, wil become honeste
+                        men.</note> 
+                  </p>
+                  <p rend="bracketed-right">A ballet <title>yt was a man in age
+                     truly</title> 
+                  </p>
+                  <p rend="bracketed-right italics">a ballett <title>the Rose ys
+                     frome my garden gonne</title> 
+                  </p>
+                  <p rend="bracketed-right"> 
+                     <num type="matchedNumber" value="2" rend="roman-numerals">ij</num> ballettes <title>yf Care may Cause men crye<lb/> 
+                  </title> 
+                  <title>The sorrowes that Doth
+                        in­crease</title>
+                  </p>
+                  <p rend="aligned-right"> 
+                  <note resp="#register"> for all these as ys before wreten accordynge to the
+                     ordenaunces Recevyd the some of 
+                     
+                     <seg type="fee" subtype="sum" rend="roman-numerals aligned-right"><!--processing: xs-->
+                        <num type="totalPence" value="120"><!--orig: xs-->
+                           <num type="shillingsAsPence" value="120">x<hi rend="superscript">s</hi> 
+                           </num> 
+                        </num> 
+                     </seg> 
+                  </note>
+                  </p>
+                  
+                  <ab type="metadata">
+               <idno type="Liber">A</idno>
+               <idno type="SRONumber">8</idno>
+               <date type="SortDate" when="1557-07-19"/>
+               <date type="Register" notBefore="1557-07-19" notAfter="1558-07-09">19 July 1557 - 9 July 1558</date>
+                  <num type="totalEntryPence" value="120"/>
+                  <note resp="#arber">Arber:  As there are <corr resp="#EW">32</corr>
+                        ballads in this list, and the minimum fee was <num>4d</num>., the exact
+                        amount should have been <num>10s. 4d.</num>; not <num>10s.</num>  
+                  </note>
+                  
+                  <idno type="RegisterRef">Register A, ff.22r-22v</idno>
+                  <idno type="ArberRef">I. 75-I. 76</idno>
+                  <idno type="RegisterID">TSC-1-D-02-01_1554-1596_0072_f22r; TSC-1-D-02-01_1554-1596_0073_f22v </idno>
+                  <num type="works" value="32"/>
+                  <note type="status" subtype="entered"/>
+                  <note type="status" subtype="shared"/>
+                  <persName n="cawoodj" role="warden">
+                     <forename>J.</forename>
+                     <surname>Cawood</surname>
+                  </persName>
+                  <persName n="walleyj" role="warden">
+                     <forename>J.</forename>
+                     <surname>Walley</surname>
+                  </persName>
+                  <persName n="dockwrayt" role="master">
+                     <forename>T.</forename>
+                     <surname>Dockwray</surname>
+                  </persName>
+               <note type="status" subtype="annotated"/>
+               <note type="status" subtype="incomplete"/>
+            </ab>
+               </div>
+         <div type="entry" xml:id="SRO218">
+                          <head rend="left"> 
+                             
+                             
+                             
+                             <note type="register">  
+                           <persName n="aldee" role="stationer enterer">
+                              <surname>
+                                 Aldee
+                              </surname>
+                           </persName>
+                                for <title>
+                              <num type="matchedNumber" value="3" rend="roman-numerals">iij</num> 
+                                   ballettes</title> 
+                                <space>
+                                   <desc>no sum stated</desc>
+                                </space> 
+                                <note resp="#arber">Arber: This is a rough memorandum, subsequently inserted and in another
+                                   handwriting.</note>
+                        </note> 
+                          </head>
+                             
+                             <ab type="metadata">
+               <idno type="Liber">A</idno>
+               <idno type="SRONumber">218</idno>
+               <date type="SortDate" when="1561-07-22"/>
+               <date type="Register" notBefore="1561-07-22" notAfter="1562-07-24">22 July 1561 - 24 July 1562</date>
+                        <num type="totalEntryPence" value="0"/>
+                        
+                        <idno type="RegisterRef">Register A, f.73v</idno>
+                        <idno type="ArberRef">I. 178</idno>
+                        <idno type="RegisterID">TSC-1-D-02-01_1554-1596_0175_f73v</idno>
+                        <num type="works" value="1"/>
+                        <note type="status" subtype="annotated"/>
+                        <note type="status" subtype="incomplete"/>
+                        <persName n="tottler" role="warden">
+                           <forename>R.</forename>
+                           <surname>Tottle</surname>
+                        </persName>
+                        <persName n="seresw" role="warden">
+                           <forename>W.</forename>
+                           <surname>Seres</surname>
+                        </persName>
+                        <persName n="cawoodj" role="master">
+                           <forename>J.</forename>
+                           <surname>Cawood</surname>
+                        </persName>
+                     </ab>
+                       </div>
+      </body>
+   </text>
+</TEI>

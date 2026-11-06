@@ -1,0 +1,250 @@
+<teiCorpus xmlns="http://www.tei-c.org/ns/1.0">
+    <teiHeader>
+        <fileDesc>
+            <titleStmt>
+                <title type="main">Fausto Sozzini (Krakau) an Krzysztof Morsztyn d. Ä., 12. März
+          1597</title>
+                <title type="sub"/>
+                <principal ref="http://d-nb.info/gnd/135995728">Kęstutis Daugirdas</principal>
+                <principal ref="https://orcid.org/0000-0003-1020-507X">Andreas Kuczera</principal>
+                <funder>Deutsche Forschungsgemeinschaft</funder>
+            </titleStmt>
+            <extent>
+                <measure unit="texts" quantity="1"/>
+            </extent>
+            <publicationStmt>
+                <publisher>
+                    <orgName ref="https://www.jalb.de/">Johannes a Lasco Bibliothek</orgName>
+                    <settlement ref="https://sws.geonames.org/2930596">Emden</settlement>
+                </publisher>
+                <publisher>
+                    <orgName ref="https://www.adwmainz.de/">Akademie der Wissenschaften und der Literatur</orgName>
+                    <settlement ref="http://sws.geonames.org/2874225">Mainz</settlement>
+                </publisher>
+                <pubPlace ref="http://sws.geonames.org/2874225">Mainz</pubPlace>
+                <date from="2020">2020–2024</date>
+                <availability>
+                    <licence target="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International (CC-BY 4.0)</licence>
+                </availability>
+            </publicationStmt>
+            <seriesStmt>
+                <title type="main">Die sozinianischen Briefwechsel</title>
+                <title type="sub">Zwischen Theologie, frühmoderner Naturwissenschaft und politischer Korrespondenz</title>
+                <editor ref="http://d-nb.info/gnd/135995728">Kęstutis Daugirdas</editor>
+                <editor ref="https://orcid.org/0000-0003-1020-507X">Andreas Kuczera</editor>
+                <idno>https://gepris.dfg.de/gepris/projekt/324518514</idno>
+                <idno>https://registry.text-plus.org/entity/e4dde8f1-2335-4bc6-aeab-c64c4c163ef4/</idno>
+            </seriesStmt>
+            <notesStmt>
+                <note/>
+            </notesStmt>
+            <sourceDesc>
+                <bibl>„Fausto Sozzini (Krakau) an Krzysztof Morsztyn d. Ä., 12. März 1597“, in: Zwischen Theologie, frühmoderner Naturwissenschaft und politischer Korrespondenz: Die sozinianischen Briefwechsel, hg. von Kęstutis Daugirdas und Andreas Kuczera unter DH-Mitarbeit von Julian Jarosch, Sebastian Enns und Patrick Toschka. Link zur aktuellen Version dieses Briefes: https://sozinianer.de/id/MAIN_ydw_qlm_zdb</bibl>
+            </sourceDesc>
+        </fileDesc>
+        <encodingDesc>
+            <p/>
+        </encodingDesc>
+    </teiHeader>
+    <TEI xml:id="MAIN_ydw_qlm_zdb" type="letter" n="cover_letter">
+    <teiHeader>
+        <fileDesc>
+            <titleStmt>
+                <title type="main">Fausto Sozzini (Krakau) an Krzysztof Morsztyn d. Ä., 12. März
+          1597</title>
+                <principal ref="http://d-nb.info/gnd/135995728">Kęstutis Daugirdas</principal>
+                <principal ref="https://orcid.org/0000-0003-1020-507X">Andreas Kuczera</principal>
+                <funder>Deutsche Forschungsgemeinschaft</funder>
+                <editor>
+                    <persName>Kęstutis Daugirdas</persName>
+                </editor>
+            </titleStmt>
+            <extent>
+                <measure unit="witnesses" quantity="2"/>
+            </extent>
+            <publicationStmt>
+                <publisher>
+                    <orgName ref="https://www.jalb.de/">Johannes a Lasco Bibliothek</orgName>
+                    <settlement ref="https://sws.geonames.org/2930596">Emden</settlement>
+                </publisher>
+                <publisher>
+                    <orgName ref="https://www.adwmainz.de/">Akademie der Wissenschaften und der Literatur</orgName>
+                    <settlement ref="http://sws.geonames.org/2874225">Mainz</settlement>
+                </publisher>
+                <pubPlace ref="http://sws.geonames.org/2874225">Mainz</pubPlace>
+                <date from="2020">2020–2024</date>
+                <availability>
+                    <licence target="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International (CC-BY 4.0)</licence>
+                </availability>
+                <idno type="uri">https://sozinianer.de/id/MAIN_ydw_qlm_zdb</idno>
+            </publicationStmt>
+            <seriesStmt>
+                <title type="main">Die sozinianischen Briefwechsel</title>
+                <title type="sub">Zwischen Theologie, frühmoderner Naturwissenschaft und politischer Korrespondenz</title>
+                <editor ref="http://d-nb.info/gnd/135995728">Kęstutis Daugirdas</editor>
+                <editor ref="https://orcid.org/0000-0003-1020-507X">Andreas Kuczera</editor>
+                <idno>https://gepris.dfg.de/gepris/projekt/324518514</idno>
+                <idno>https://registry.text-plus.org/entity/e4dde8f1-2335-4bc6-aeab-c64c4c163ef4/</idno>
+            </seriesStmt>
+            <sourceDesc>
+                <listWit>
+                    <witness corresp="#ydw_qlm_zdb"/>
+                    <witness corresp="#ydw_qlm_zdb2"/>
+                </listWit>
+            </sourceDesc>
+        </fileDesc>
+        <profileDesc>
+            <correspDesc>
+                <correspAction type="sent">
+                    <persName key="Sozzini_Fausto">Sozzini, Fausto</persName>
+                    <placeName key="Krakau">Krakau</placeName>
+                    <date when="1597-03-12"/>
+                </correspAction>
+                <correspAction type="received">
+                    <persName key="zml_x1x_12b">Morsztyn, Krzysztof d. Ä. (1522-1600)</persName>
+                </correspAction>
+            </correspDesc>
+        </profileDesc>
+    </teiHeader>
+    <TEI xmlns:ns="http://www.telota.de" xmlns:da="http://www.digitale-akademie.de" xml:id="ydw_qlm_zdb" n="reference_witness" type="letter">
+  <teiHeader>
+        <fileDesc>
+            <titleStmt>
+                
+                <title type="sub">Druck</title>
+                <editor>
+                    <persName>Kęstutis Daugirdas</persName>
+                </editor>
+                <respStmt>
+                    <persName>Reinhard Gruhl/Ruediger Niehl</persName>
+                    <resp>
+                        <note type="remarkResponsibility">Mitarbeit</note>
+                    </resp>
+                </respStmt>
+                <funder>Die Transkription dieses Briefes baut auf die Ergebnisse des DFG-Projekts „CAMENA – Digitale Bibliothek lateinischer Texte der Frühen Neuzeit“ (Heidelberg/Mannheim) auf.</funder>
+            </titleStmt>
+            <publicationStmt>
+                <publisher>
+                    <orgName ref="https://www.jalb.de/">Johannes a Lasco Bibliothek</orgName>
+                    <settlement ref="https://sws.geonames.org/2930596">Emden</settlement>
+                </publisher>
+                <publisher>
+                    <orgName ref="https://www.adwmainz.de/">Akademie der Wissenschaften und der Literatur</orgName>
+                    <settlement ref="http://sws.geonames.org/2874225">Mainz</settlement>
+                </publisher>
+                <pubPlace ref="http://sws.geonames.org/2874225">Mainz</pubPlace>
+                <date from="2020">2020–2024</date>
+                <availability>
+                    <licence target="https://creativecommons.org/licenses/by-sa/3.0/">This file is licensed under the terms of the Creative-Commons-License CC BY-SA 3.0</licence>
+                </availability>
+                <idno type="file">Sozzini_Fausto/Transkription_publikationsbereit/1597-03-12_Sozzini_Morsztyn_cam.xml</idno>
+            </publicationStmt>
+            <seriesStmt>
+                <title type="main">Die sozinianischen Briefwechsel</title>
+                <title type="sub">Zwischen Theologie, frühmoderner Naturwissenschaft und politischer Korrespondenz</title>
+                <editor ref="http://d-nb.info/gnd/135995728">Kęstutis Daugirdas</editor>
+                <editor ref="https://orcid.org/0000-0003-1020-507X">Andreas Kuczera</editor>
+                <idno>https://gepris.dfg.de/gepris/projekt/324518514</idno>
+                <idno>https://registry.text-plus.org/entity/e4dde8f1-2335-4bc6-aeab-c64c4c163ef4/</idno>
+            </seriesStmt>
+            <sourceDesc>
+                <bibl sameAs="zotero-2065617-4WBDWUBN">Sozzini, Ad amicos epistolae<biblScope unit="pages">506f.</biblScope>
+                </bibl>
+                <msDesc rend="print">
+                    <msIdentifier>
+                        <repository/>
+                        <idno>
+                            <idno type="shelfmark"/>
+                            <idno type="URLCatalogue"/>
+                            <idno type="URLImages"/>
+                            <idno type="URN"/>
+                        </idno>
+                    </msIdentifier>
+                    
+                </msDesc>
+                <listWit>
+                    <witness>
+                        <bibl sameAs="zotero-2065617-IS47TKXN" type="print">Socyn, Listy II<biblScope unit="pages">198</biblScope>. </bibl>
+                    </witness>
+                </listWit>
+            </sourceDesc>
+        </fileDesc>
+        <profileDesc>
+            <langUsage>
+                <language ident="lat"/>
+            </langUsage>
+            <textClass>
+                <classCode scheme="http://www.deutschestextarchiv.de/doku/klassifikation#dwds1main">Gebrauchsliteratur</classCode>
+                <classCode scheme="#sbw">Brief</classCode>
+            </textClass>
+            
+        </profileDesc>
+        <revisionDesc>
+            <change when="2018-06-22">Metadaten publikationsbereit</change>
+            <change when="2024-11-25">Transkription publikationsbereit</change>
+        </revisionDesc>
+    </teiHeader>
+  <text><body><div type="letter"><pb facs="https://mateo.uni-mannheim.de/cera/sozzini1/jpg/s506.html" n="506"/> <head>Ad eundem epistola V.</head> <opener><salute>Salutem a Deo et Christo etc.</salute></opener> <p>Relegens litteras tuas, ad quas nuper rescripsi animadverti, me nihil respondisse ad id, quod scribis de caussa illa ab ipso Deo allata, quod anima sit in sanguine. Ais enim, te non satis intelligere,<pb facs="https://mateo.uni-mannheim.de/cera/sozzini1/jpg/s507.html" n="507"/> quod asserui, non magis animam esse in sanguine quam in carne mortuae animantis. Neque enim videre potes, quomodo igitur caussa ista potuerit a Deo afferri, cum non de viva, sed mortua animante ibi agatur. Atqui, mi affinis, hoc est, quod mihi volui, Deum sui illius interdicti caussam attulisse, quam, si quis paullo diligentius consideret, agnoscet illam esse aut nullam, aut infirmissimam, id, quod sapientissime nihilominus Deus fecit, ut tum ejus populos ipsumque adeo genus humanum adultius esset factum et exercitatiores haberet sensus ad cognoscendum, quaenam revera sint divina et in perpetuum permansura praecepta, vel ex caussa ista interdicendi esus sanguinis, quae nihil solidi habet, agnosceret interdictum istud non debuisse esse perpetuum, ut pote quod non aliunde pendeat, quam a mera et sola Dei voluntate. Vale, affinis et frater carissime ac praestantissime.</p> <closer><dateline>Cracoviae die 12 Martii 1597.</dateline></closer></div></body></text>
+</TEI>
+    <TEI xml:id="ydw_qlm_zdb2" corresp="ydw_qlm_zdb" type="letter">
+  <teiHeader>
+        <fileDesc>
+            <titleStmt>
+                <title type="sub">Druck</title>
+            </titleStmt>
+            <publicationStmt>
+                <publisher>
+                    <orgName ref="https://www.jalb.de/">Johannes a Lasco Bibliothek</orgName>
+                    <settlement ref="https://sws.geonames.org/2930596">Emden</settlement>
+                </publisher>
+                <publisher>
+                    <orgName ref="https://www.adwmainz.de/">Akademie der Wissenschaften und der Literatur</orgName>
+                    <settlement ref="http://sws.geonames.org/2874225">Mainz</settlement>
+                </publisher>
+                <pubPlace ref="http://sws.geonames.org/2874225">Mainz</pubPlace>
+                <date from="2020">2020–2024</date>
+                <availability>
+                    <licence target="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International (CC-BY 4.0)</licence>
+                </availability>
+                <idno type="file">Sozzini_Fausto/Transkription_publikationsbereit/1597-03-12_Sozzini_Morsztyn_BFP.xml</idno>
+            </publicationStmt>
+            <seriesStmt>
+                <title type="main">Die sozinianischen Briefwechsel</title>
+                <title type="sub">Zwischen Theologie, frühmoderner Naturwissenschaft und politischer Korrespondenz</title>
+                <editor ref="http://d-nb.info/gnd/135995728">Kęstutis Daugirdas</editor>
+                <editor ref="https://orcid.org/0000-0003-1020-507X">Andreas Kuczera</editor>
+                <idno>https://gepris.dfg.de/gepris/projekt/324518514</idno>
+                <idno>https://registry.text-plus.org/entity/e4dde8f1-2335-4bc6-aeab-c64c4c163ef4/</idno>
+            </seriesStmt>
+            <sourceDesc>
+                <bibl sameAs="zotero-2065617-QJUMR256">BFP I, Sp. 458a.</bibl>
+                <msDesc rend="print">
+                    <msIdentifier>
+                        <repository/>
+                        <idno>
+                            <idno type="shelfmark"/>
+                            <idno type="URLCatalogue"/>
+                            <idno type="URLImages"/>
+                            <idno type="URN"/>
+                        </idno>
+                    </msIdentifier>
+                </msDesc>
+            </sourceDesc>
+        </fileDesc>
+        <profileDesc>
+            <langUsage>
+                <language ident="lat"/>
+            </langUsage>
+            <textClass>
+                <classCode scheme="http://www.deutschestextarchiv.de/doku/klassifikation#dwds1main">Gebrauchsliteratur</classCode>
+                <classCode scheme="#sbw">Brief</classCode>
+            </textClass>
+        </profileDesc>
+        <revisionDesc>
+            <change when="2018-06-22">Metadaten publikationsbereit</change>
+        </revisionDesc>
+    </teiHeader>
+  <text><body><p/></body></text>
+</TEI>
+</TEI>
+</teiCorpus>

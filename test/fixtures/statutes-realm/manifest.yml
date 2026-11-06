@@ -1,0 +1,52 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml.
+#
+# Every file is a documented TRIM (README): the page's <main> element kept
+# verbatim inside a minimal document shell (scripts dropped); TOC pages
+# keep only the listed rows; pp255-259 keeps sections s1–s3. A fresh fetch
+# returns the full page, so adapter_test stays null.
+source: statutes-realm
+adapter_test:
+retrieved: 2026-11-05
+files:
+  - path: toc/vol5-page-0.html
+    url: https://www.british-history.ac.uk/statutes-realm/vol5?page=0
+    whole: false
+    trim: main only; rows p1, iii-iv, v-xix, p1a, pp255-259, pp421-422 kept
+  - path: toc/vol5-page-3.html
+    url: https://www.british-history.ac.uk/statutes-realm/vol5?page=3
+    whole: false
+    trim: main only; row pp24-25 (Index F) kept
+  - path: toc/vol7-page-1.html
+    url: https://www.british-history.ac.uk/statutes-realm/vol7?page=1
+    whole: false
+    trim: main only; row p641a kept
+  - path: toc/vol7-page-2.html
+    url: https://www.british-history.ac.uk/statutes-realm/vol7?page=2
+    whole: false
+    trim: main only; rows p750, pp3-5 (Index A) kept
+  - path: vol5/p1a.html
+    url: https://www.british-history.ac.uk/statutes-realm/vol5/p1a
+    whole: false
+    trim: main only
+  - path: vol5/pp255-259.html
+    url: https://www.british-history.ac.uk/statutes-realm/vol5/pp255-259
+    whole: false
+    trim: main only; sections s1-s3 and their three footnotes kept
+  - path: vol5/pp421-422.html
+    url: https://www.british-history.ac.uk/statutes-realm/vol5/pp421-422
+    whole: false
+    trim: main only; sections p1-p3 (page-anchored heads) and their two footnotes
+      kept; retrieved 2026-11-06
+  - path: vol5/p1.html
+    url: https://www.british-history.ac.uk/statutes-realm/vol5/p1
+    whole: false
+    trim: main only (the engraving plate page, a rejected grain)
+  - path: vol7/p641a.html
+    url: https://www.british-history.ac.uk/statutes-realm/vol7/p641a
+    whole: false
+    trim: main only
+  - path: vol7/p750.html
+    url: https://www.british-history.ac.uk/statutes-realm/vol7/p750
+    whole: false
+    trim: main only

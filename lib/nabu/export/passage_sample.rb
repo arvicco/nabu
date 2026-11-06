@@ -64,7 +64,9 @@ module Nabu
     # metadata_json text_nature in OCR_NATURES, the label the scan-shelf
     # adapters (IaScanShelf: slavistics-pd, africa-pd, archiv-slav-phil,
     # analecta-hymnica; ndl-kotenseki; mdz-protestant) stamp on every document, and openiti on
-    # the versions its metadata TSV flags uncorrected_OCR. Two further
+    # the versions its metadata TSV flags uncorrected_OCR — plus "machine-htr", uncorrected
+    # handwritten/print text recognition (noscemus: Transkribus, uncorrected per the record).
+    # "htr-corrected" (grand-tour) is the HTR twin of corrected-ocr and rides through. Two further
     # text_nature labels are deliberately NON-excluding: "corrected-ocr"
     # (OCR the upstream states it corrected — madurai, eltec-srp, per
     # document where the header says so) and "ocr-origin" (OCR origin
@@ -103,7 +105,7 @@ module Nabu
       DEFAULT_PER_CELL = 100
       # The text_nature labels --exclude-ocr drops (class note); corrected-ocr
       # and ocr-origin are the labels it keeps.
-      OCR_NATURES = %w[machine-ocr uncorrected-ocr].freeze
+      OCR_NATURES = %w[machine-ocr uncorrected-ocr machine-htr].freeze
       # ProofreadPage level 1 — "Not proofread" (class note).
       UNPROOFREAD_LEVEL = 1
       # Sources whose passage annotation "quality" is that page's own

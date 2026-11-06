@@ -205,6 +205,23 @@ sources:
     # feasts, so no stage is claimed at source grain. Tier certain: a
     # register transcription of the corpus's identity, not a reading.
     lat: { lect: "lat/ecc", tier: certain }
+  mazarinades:
+    # The mazarinades ARE the pamphlets of the Fronde, 1648–1653, by the
+    # corpus's own definition (Moreau's Bibliographie des mazarinades and
+    # its supplements number them; upstream files them by those numbers):
+    # mid-seventeenth-century printed French, squarely inside fr:cls
+    # [1600, 1789] (nabu-lects PR #43, minted with this corpus named in
+    # its note). Every dated piece agrees — the bibl dates run 1634–1663,
+    # 1649 ×1,413 and 1652 ×941 at the core (census 2026-11-05) — and the
+    # 38 undated ones belong to the same bibliographic scope. Tier certain:
+    # a transcription of the corpus's definition onto an existing stage,
+    # not a reading. The patois pieces upstream labels French (Patois
+    # francilien, the pseudo-Norman pastiche) ride the same row, their
+    # label in metadata language_label; the Latin, Italian, Occitan
+    # (Gascon), Picard, Norman, Dutch and German pieces carry their own
+    # codes and stay bare (date-band inference stages what it can), and a
+    # bilingual piece's second language rides metadata languages.
+    fra: { lect: "fr:cls", tier: certain }
   # P116-1's add-then-retire completed (2026-10-11; the Slavic nabu-lects
   # package minted cs with cs:old [1100, 1500], in canonical): the Prague
   # Bible of 1488 IS Old Czech by every periodization (staročeština to
@@ -220,6 +237,16 @@ sources:
   # dated manuscripts, all inside the band. The inline Latin <foreign> spans
   # ride page annotations, never the document code.
   emmo:
+    en: { lect: "en:early", tier: certain }
+  # P160: the Stationers' Register copy entries are the Company Clerk's
+  # English, and every entry's own Register date (SortDate 1557-07-19 …
+  # 1640, census 2026-11-05 over all 10,453) sits inside en:early's
+  # [1500, 1700] band: the whole source IS Early Modern English. A
+  # per-collection fact — upstream marks no language at all; the adapter
+  # codes it en. Tier certain: dated entries, all inside the band. The
+  # Latin formulae and the three unlabelled foreign copy-titles ride
+  # inside it, declared coarse in the adapter.
+  stationers-register:
     en: { lect: "en:early", tier: certain }
   ticha:
     # The colonial Valley Zapotec corpus (Córdova 1578 through the Valley
@@ -405,3 +432,17 @@ sources:
     # approximation: the corpus spans past the band's core, and the stage
     # is a reading, not the corpus's own definition.
     lat: { lect: "lat:cla", tier: approximation }
+  korpus16:
+    # Korpus 16 IS the Early Modern Slovene print corpus by its own
+    # definition — "Korpus besedil slovenskih protestantskih piscev 16.
+    # stoletja", every book printed 1550–1595 — and the registry's sl:emod
+    # band note names exactly its start ("Trubar's 1550 print through the
+    # pre-standard era"). Date-band inference cannot reach the two 1550
+    # books (TC 1550, TA 1550): 1550 is the shared edge of sl:old [950,
+    # 1550] and sl:emod [1550, 1850], so containment matches both bands
+    # and they would ride bare sl. This row transcribes the corpus's own
+    # identity onto the existing node — parse-time work, the 2026-10-18
+    # generalization. Tier certain: every book is 16th-century Protestant
+    # print (short German/Latin/Italian title blocks ride the same sl code,
+    # declared coarse in the adapter header).
+    sl: { lect: "sl:emod", tier: certain }

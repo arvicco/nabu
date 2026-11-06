@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="sro-transcription.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<?xml-model href="sro-transcription.rng" type="application/xml" schematypens="http://purl.oclc.org/dsdl/schematron"?>
+<?xml-stylesheet type='text/xsl' href='sro-proofing-view.xsl'?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0">
+    <teiHeader>
+      <fileDesc>
+         <titleStmt>
+            <title>Copy entries in Stationers' Company Register A, 9 December 1554 to 2 August 1596</title>
+            <principal>
+               <persName xml:id="GB">Giles Bergel</persName>
+               <orgName>University of Oxford</orgName>
+            </principal>
+            <principal> 
+               <persName xml:id="IG">Ian Gadd</persName>
+               <orgName>Bath Spa University </orgName>
+            </principal>
+            <editor>Giles Bergel</editor>
+            <editor>Ian Gadd</editor>
+            <respStmt>
+               <resp>Schema Design, Text Processing, Up-Conversion (Phase 1 and Phase 2)</resp>
+               <persName xml:id="JC">James Cummings</persName>
+               <orgName notAfter="2017-08">University of Oxford</orgName>
+               <orgName notBefore="2017-09">Newcastle University</orgName>
+            </respStmt>
+            <respStmt>
+               <resp>Volume Editor</resp>
+               <persName xml:id="EM">Eleanor Warmington</persName>
+            </respStmt>
+           
+            <respStmt>
+               <resp>Proofreading and Transcription Guidelines (Phase 1)</resp>
+               <persName>Pip Willcox</persName>
+               <orgName>Bodleian Library, University of Oxford</orgName>
+            </respStmt>
+            <respStmt>
+               <resp>Transcription of Arber (Phase One)</resp>
+               <orgName>Invida Solutions Pvt. Ltd.</orgName>
+            </respStmt>
+            <funder> Phase One (Arber) - University of Oxford JPR Lyell Fund</funder>
+            <funder> Phase Two (Correction and enrichment) CREATe, University of Glasgow; the Bibliographical Society; Bath Spa University</funder>
+          </titleStmt>
+          <publicationStmt>
+            <publisher>Stationers' Register Online <ref target="http://www.stationersregister.online">http://www.stationersregister.online</ref>
+            </publisher>
+            <publisher>The Bibliographical Society <ref target="http://www.bibsoc.org.uk/">http://www.bibsoc.org.uk/</ref>
+            </publisher>
+            <publisher>CREATe, University of Glasgow <ref target="http://www.create.ac.uk/">http://www.create.ac.uk</ref>
+            </publisher>
+            <date when="2017-09-01">1 September 2017</date>
+            <availability>
+               <licence target="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution</licence>
+            </availability>
+             <idno type="DataSourceURI">https://github.com/gbergel/SRO_data/</idno>
+            <idno type="Liber">A</idno>
+            <idno type="Arber">1</idno>
+         </publicationStmt>
+         <sourceDesc>
+            <bibl>
+               <title>Stationers' Company Register A</title>
+            </bibl>
+            <bibl>
+               Transcriptions and encodings are jointly derived from an electronic facsmile of
+               Arber, <editor>Edward, A</editor> 
+               <title>Transcript of the Registers of the Company of Stationers 1554-1640
+                  AD</title>, 5 vols, (London: Priv. Print,; <date>1875-77</date>, &amp; Birmingham, <date>1875-94</date>), Volume 1, copy at Butler
+               Library, Columbia University in the City of New York, R015.42 L8a
+               <ref target="https://clio.columbia.edu/catalog/6177070">https://clio.columbia.edu/catalog/61770700</ref>, and digital images of <bibl>
+                  <title>The Stationers' Company Register A,</title>, Stationers' Company archives Ref no: TSC/1/D/02/01</bibl>
+            </bibl>
+         </sourceDesc>
+      </fileDesc>
+      <encodingDesc>
+         <projectDesc>
+            <p>Created by the Stationers' Register Online project (www.stationersregister.online)
+               Phase One: http://http://digital.humanities.ox.ac.uk/ProjectProfile/Project_page.aspx?pid=307; 
+               Phase Two: http://www.create.ac.uk/blog/2017/02/24/create-support-stationers-register-online-project/
+            </p>
+         </projectDesc>
+      </encodingDesc>
+       <revisionDesc>
+          <change when="2017-09-27" who="#GB">various attribute emendations</change>
+          <change when="2017-09-26" who="#GB">various attribute emendations</change>
+          <change when="2017-09-25" who="#GB">various attribute emendations</change>
+          <change when="2017-08-21" who="#GB">persName emendations</change> 
+	        <change when="2017-08-21" who="#JC">Post-processing up-conversion</change> 
+          <change when="2017-06-26">GB amend re Blayney comments</change>
+          <change when="2017-06-26">GB clean up ffs</change>
+          <change when="2017-06-22">GB processing editorial notes</change>
+          <change when="2017-06-07">clean up ffs</change>
+          <change when="2017-05-27">SP01 final amendments</change>
+          <change when="2017-04-12">SP01 SRO853-SRO1264</change>
+          <change when="2017-04-09">SP01 SRO459-SRO852</change>
+          <change when="2017-04-08">SP01 SRO125-SRO458</change>
+          <change when="2017-04-05">SP01 SRO14-SRO124h</change>
+          <change when="2017-04-02">SP01 SRO1-SRO14</change>
+          <change when="2017-02-20">FP01 SRO1132-SRO1264</change>
+          <change when="2017-02-20">FP01 SRO917-SRO1131</change>
+          <change when="2017-02-19">FP01 SRO625-SRO916</change>
+          <change when="2017-02-18">FP01 SRO529-SRO624</change>
+          <change when="2017-02-17">FP01 SRO458-SRO528</change>
+          <change when="2017-02-16">FP01 SRO394-SRO457</change>
+          <change when="2017-02-15">FP01 SRO313-SRO393</change>
+          <change when="2017-02-13">FP01 SRO214-SRO312</change>
+          <change when="2017-02-12">FP01 SRO115-SRO213</change>
+          <change when="2017-02-11">FP01 SRO53-SRO114</change>
+          <change when="2017-02-10">FP01 SRO41-SRO52</change>
+           <change when="2017-02-09">FP01 SRO39-SRO40g</change>
+           <change when="2017-02-08">FP01 SRO6g-SRO38e</change>
+           <change when="2017-02-07">FP01 SRO2e-SRO6g</change>
+           <change when="2017-02-06">FP01 SRO2e</change>
+           <change when="2017-02-02">FP01 SRO2e</change>
+           <change when="2017-02-02">FP01 SRO1 to SRO2d</change>
+           <change when="2017-01-29">
+              Metadata block created by JC; Arber's corrections made by IG
+           </change>
+            <change when="2017-01-22">
+                Material other than copy entries removed by Ian Gadd
+            </change>
+            <change from="2013-06" to="2013-10">Semi-automated changes based on bodleian
+                proofreading made to the SRO data after the initial conversion (and up-conversion of
+                roman numerals, fees, dates, names, etc.) from abbreviated tei-corset schema by
+                James Cummings</change>
+            <change from="2012-12" to="2013-05"> Encoding reviewed, with suggestions made for
+                improvements, a random sample of names checked, and spot-proofed by Pip Willcox.
+                December 2012 - May 2013. </change>
+        </revisionDesc>
+    </teiHeader>
+
+    <text>
+      <body>
+         <div type="entry" xml:id="SRO1">
+                        
+                            <p>To <persName role="stationer enterer">
+                                <forename>William</forename> 
+                        <surname>pekerynge</surname>
+                                </persName> a ballett Called <title>a Ryse and
+                                wake</title> 
+                     <seg type="fee" rend="roman-numerals aligned-right"><!--processing: iiijd-->
+                        <num type="totalPence" value="4"><!--orig: iiijd-->
+                           <num type="pence" value="4">iiij<hi rend="superscript">d</hi> 
+                           </num> 
+                        </num> 
+                     </seg> 
+                            </p>
+                  <ab type="metadata">
+               <idno type="Liber">A</idno>
+               <idno type="SRONumber">1</idno>
+               <date type="SortDate" when="1557-07-19"/>
+               <date type="Register" notBefore="1557-07-19" notAfter="1558-07-09">19 July 1557 - 9 July 1558</date>
+                     <num type="totalEntryPence" value="4"/>
+                     
+                     <idno type="RegisterRef">Register A, f.21v</idno>
+                     <idno type="ArberRef">I. 74</idno>
+                     <idno type="RegisterID">TSC-1-D-02-01_1554-1596_0071_f21v</idno>
+                     <num type="works" value="1"/>
+                     <note type="status" subtype="entered"/>
+                     <persName role="warden">
+                        <forename>J.</forename>
+                        <surname>Cawood</surname>
+                     </persName>
+                     <persName role="warden">
+                        <forename>J.</forename>
+                        <surname>Walley</surname>
+                     </persName>
+                     <persName role="master">
+                        <forename>T.</forename>
+                        <surname>Dockwray</surname>
+                     </persName>
+                  <note type="status" subtype="incomplete"/>
+            </ab>
+                    </div>
+      </body>
+   </text>
+</TEI>

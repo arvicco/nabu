@@ -3,11 +3,11 @@
 - slug: classical
   persona: The Classicist
   blurb: Greek and Latin letters read whole, Homer to the late grammarians
-  members: 27
+  members: 28
 - slug: romance
   persona: The Romanist
   blurb: the Latin-to-vernacular continuum, charter Latin to Roland to the troubadours
-  members: 32
+  members: 35
 - slug: epigraphy
   persona: The Papyrologist-Epigraphist
   blurb: reads what survives on stone, sherd, papyrus and tablet, lacunae and all
@@ -15,12 +15,12 @@
 - slug: slavic
   persona: The Slavicist
   blurb: Cyril and Methodius to the damaskini, canon to vernacular
-  members: 40
+  members: 41
 - slug: germanic
   persona: The Germanicist
   blurb: Gothic and Old English to the Norse sagas and the runestones, the word-hoard
     of all three branches
-  members: 37
+  members: 40
 - slug: celtic
   persona: The Celticist
   blurb: from Lepontic stones to the Old Irish glossators

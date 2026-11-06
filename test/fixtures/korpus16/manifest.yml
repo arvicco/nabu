@@ -1,0 +1,102 @@
+# Nabu fixture manifest (P5-4 "fixture sentinel"). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# Reading pages and portal pages are whole raw GETs (stored exactly as the
+# adapter stores them); the index is trimmed to five books' tiles (README).
+# adapter_test stays null: the index is a trim.
+source: korpus16
+adapter_test:
+retrieved: "2026-11-05"
+files:
+  - path: map/korpus16.html
+    url: https://fran.si/korpus16
+    whole: false
+    trim: carousel tiles kept for books 9, 25, 39, 43, 58 only (10 of 90 tiles); everything else verbatim
+  - path: map/about-Bibliography.html
+    url: https://fran.si/korpus16/o-portalu?page=Bibliography
+    whole: true
+    trim: none
+  - path: map/about-Colofon.html
+    url: https://fran.si/korpus16/o-portalu?page=Colofon
+    whole: true
+    trim: none
+  - path: map/about-Info.html
+    url: https://fran.si/korpus16/o-portalu?page=Info
+    whole: true
+    trim: none
+  - path: books/9/00001.html
+    url: https://fran.si/korpus16/Knjiga/9/molitev_krscenikov?stran=1
+    whole: true
+    trim: none
+  - path: books/9/00002.html
+    url: https://fran.si/korpus16/Knjiga/9/molitev_krscenikov?stran=2
+    whole: true
+    trim: none
+  - path: books/9/00003.html
+    url: https://fran.si/korpus16/Knjiga/9/molitev_krscenikov?stran=3
+    whole: true
+    trim: none
+  - path: books/9/00004.html
+    url: https://fran.si/korpus16/Knjiga/9/molitev_krscenikov?stran=4
+    whole: true
+    trim: none
+  - path: books/9/00005.html
+    url: https://fran.si/korpus16/Knjiga/9/molitev_krscenikov?stran=5
+    whole: true
+    trim: none
+  - path: books/9/00006.html
+    url: https://fran.si/korpus16/Knjiga/9/molitev_krscenikov?stran=6
+    whole: true
+    trim: none
+  - path: books/9/00007.html
+    url: https://fran.si/korpus16/Knjiga/9/molitev_krscenikov?stran=7
+    whole: true
+    trim: none
+  - path: books/25/00001.html
+    url: https://fran.si/korpus16/Knjiga/25/eni_psalmi?stran=1
+    whole: true
+    trim: none
+  - path: books/39/00001.html
+    url: https://fran.si/korpus16/Knjiga/39/pervi_psalm_shnega_triiemi_islagami?stran=1
+    whole: true
+    trim: none
+  - path: books/39/00002.html
+    url: https://fran.si/korpus16/Knjiga/39/pervi_psalm_shnega_triiemi_islagami?stran=2
+    whole: true
+    trim: none
+  - path: books/39/00003.html
+    url: https://fran.si/korpus16/Knjiga/39/pervi_psalm_shnega_triiemi_islagami?stran=3
+    whole: true
+    trim: none
+  - path: books/39/00004.html
+    url: https://fran.si/korpus16/Knjiga/39/pervi_psalm_shnega_triiemi_islagami?stran=4
+    whole: true
+    trim: none
+  - path: books/39/00005.html
+    url: https://fran.si/korpus16/Knjiga/39/pervi_psalm_shnega_triiemi_islagami?stran=5
+    whole: true
+    trim: none
+  - path: books/39/00006.html
+    url: https://fran.si/korpus16/Knjiga/39/pervi_psalm_shnega_triiemi_islagami?stran=6
+    whole: true
+    trim: none
+  - path: books/39/00007.html
+    url: https://fran.si/korpus16/Knjiga/39/pervi_psalm_shnega_triiemi_islagami?stran=7
+    whole: true
+    trim: none
+  - path: books/39/00008.html
+    url: https://fran.si/korpus16/Knjiga/39/pervi_psalm_shnega_triiemi_islagami?stran=8
+    whole: true
+    trim: none
+  - path: books/43/00001.html
+    url: https://fran.si/korpus16/Knjiga/43/novi_testament?stran=1
+    whole: true
+    trim: none
+  - path: books/58/00001.html
+    url: https://fran.si/korpus16/Knjiga/58/biblia?stran=1
+    whole: true
+    trim: none
+  - path: books/58/00200.html
+    url: https://fran.si/korpus16/Knjiga/58/biblia?stran=200
+    whole: true
+    trim: none

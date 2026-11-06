@@ -1,0 +1,143 @@
+<?xml version='1.0' encoding='utf-8'?>
+<?xml-model href='https://raw.githubusercontent.com/Antonomaz/ODD/main/Schema/ODD_Antonomaz.rng' type='application/xml' schematypens='http://relaxng.org/ns/structure/1.0'?>
+<?xml-model href='https://raw.githubusercontent.com/Antonomaz/ODD/main/Schema/ODD_Antonomaz.rng' type='application/xml' schematypens='http://purl.oclc.org/dsdl/schematron'?><TEI xmlns="http://www.tei-c.org/ns/1.0" xml:id="Moreau1902_GBOOKS"><teiHeader>
+    <fileDesc>
+      <titleStmt>
+        <title type="main" source="Moreau">Lettre de Belleroze à l'abbé de La Rivière.</title>
+        <title type="sub">Édition Antonomaz</title>
+        <respStmt><resp>Chaîne de traitement</resp><persName role="Project_manager" ref="orcid:0000-0001-9518-1040">Abiven Karine</persName><persName role="Project_manager" ref="orcid:0000-0002-4795-2362">Lejeune Gaël</persName><persName role="OCRisation" ref="orcid:0000-0003-4583-8969">Marie-Sophie Desmarest</persName><persName role="engineer" ref="orcid:0000-0003-4583-8969">Marie-Sophie Desmarest</persName></respStmt></titleStmt>
+      <publicationStmt>
+        <publisher>Projet ANTONOMAZ / Sorbonne Université</publisher>
+        <ref target="https://github.com/Antonomaz" />
+        <date type="file_creation" when="2021-06-08">8 juin 2021</date>
+        <availability status="restricted" n="cc-by">
+          <licence target="https://creativecommons.org/licenses/by/4.0" />
+        </availability>
+      </publicationStmt>
+      <sourceDesc>
+        <bibl>
+          <ref target="https://books.google.fr/books?id=sWWJ3l5FOsYC" />
+          <author ref="viaf:1317164721385902340007" role="speaker">
+            <persName>Belle-Roze</persName>
+          </author>
+          <title source="Moreau">Lettre de Belleroze à l'abbé de La Rivière.</title>
+          <pubPlace ref="geonames:2988507" source="Moreau">Paris</pubPlace>
+          <publisher ref="isni:0000000108647130" xml:id="IL_BoudevilleClaude.xml">
+            <persName>
+              <forename>Claude</forename>
+              <surname>Boudeville</surname>
+            </persName>
+          </publisher>
+          <date source="Moreau" when="1649">1649</date>
+          <date source="Antonomaz" when="1649-03-24">datée du 24 mars 1649</date>
+          <extent>
+            <measure unit="page" quantity="8" />
+          </extent>
+          <note type="format">in-4</note>
+          <relatedItem source="Mazarine" type="identifier" subtype="none" cert="low" target="none" />
+        </bibl>
+        <msDesc>
+          <msIdentifier>
+            <settlement ref="geonames:3176959">Florence</settlement>
+            <institution>Bibliothèque nationale centrale de Florence</institution>
+            <repository />
+            <idno type="cote">Sii- u-es E.s, ntne (C) 1649 (R)</idno>
+          </msIdentifier>
+          <history>
+            <provenance>
+              <stamp>True</stamp>
+            </provenance>
+          </history>
+        </msDesc>
+      </sourceDesc>
+    </fileDesc>
+    <encodingDesc>
+      <projectDesc><p>Cette édition a été réalisée dans le cadre du projet ANTONOMAZ. Son objectif principal est de fournir un texte destiné à l'exploration avec des outils électroniques. De ce fait, ce n'est ni une édition philologique, ni une édition pédagogique ou de redécouverte d'un auteur oublié.</p><p>Les textes encodés dans le cadre du projet ANTONOMAZ sont issus de numérisations de bibliothèques numériques publiques et de Google livres.</p><p>L'édition présentée ici est issue d'une transcription manuelle réalisée par Karine Abiven.</p></projectDesc><editorialDecl>
+        <p />
+      </editorialDecl>
+    </encodingDesc>
+    <profileDesc>
+      <langUsage>
+        <language ident="fra">Document en français</language>
+      </langUsage>
+      <abstract>
+        <p source="Mazarine" />
+        <p source="Moreau">1902. Lettre de Belleroze à l'abbé de La Rivière. Paris, Claude
+          Boudeville, 1649,8 pages. Signée Belleroze, comédien d'honneur, et datée de l'hôtel de
+          Bourgogne, le 11 mars. Des jeux de mots, des quolibets, des gaillardises, et pour
+          terminer, une chanson sur la Belleroze qui « Ne gagnant plus rien sur la Seine, Elle
+          trafique sur le Rhin. » Il paraît qu'elle avait été maîtresse de La Rivière. On lisait
+          autrefois sur les affiches de l'hôtel de Bourgogne : « Défense aux soldats d'entrer, à
+          peine de la vie. »</p>
+      <p source="Antonomaz">                               
+     Cette mazarinade fait parler le fameux acteur Bellerose          
+     (1592-1670), qui dirigeait la troupe de l'Hôtel de Bourgogne et  
+     qui s'adresse ici à l'Abbé de La Rivière pour déplorer le      
+     blocus de Paris et la mise à l'arrêt du théâtre. C'est une       
+     manière de répéter la plainte topique dans de nombreuses        
+     mazarinades, en l'associant en attaque ad hominem contre le    
+     favori du Duc d'Orléans la Rivière : la chanson repose en effet  
+     sur l'implicite selon lequel il a été l'amant généreux de la     
+     femme de Bellerose et que la fin de leur liaison aurait tari les 
+     finances des Bellerose.                                         
+      On y lit une « Chanson du Savoyard ». Cette chanson est-elle vraiment de ce fameux chansonnier connu sur le Pont-Neuf ? On ne la trouve pas 
+     dans les recueils avec permission de ce colporteur (1645, 1665), 
+     ce qui n'est pas une preuve en soi. Les chansons imrpimées du    
+     Savoyard sont moins directement politiques et n'emprutent pas    
+     comme ici à la diffamation sexuelle. Peut-être que son          
+     répertoire oral, ici capté par l'imprimé non autorisé, ait été   
+     plus directement politique. Il est plus vraisemblable qu'il ne s'agisse pas d'une 
+     de ses chansons, mais qu'on reprenne juste un de ses airs connus, ou que son nom seul soit pris comme nom de marque, 
+     pour des raisons commerciales.</p></abstract>
+      <textClass>
+        <keywords>
+          <term type="form">prose</term>
+          <term type="genre">fausse lettre</term>
+          <term type="genre" ref="litterature/chansons.xml">chanson</term>
+          <term type="subject" />
+          <term type="handwritten_note" subtype="no" />
+          <term type="table_of_content" subtype="no" />
+          <term type="illustration" subtype="no" />
+        </keywords>
+      </textClass>
+      <settingDesc>
+        <setting xml:id="evt_Moreau_15" source="Moreau">
+          <p>Signature du traité de Ruel</p>
+          <date when="1649-03-11">1649-03-11</date>
+        </setting>
+      </settingDesc>
+    </profileDesc>
+    <revisionDesc>
+      <change status="corrected" when="2022-10-07" who="AB" />
+    </revisionDesc>
+  </teiHeader>
+  <text><body><p>
+<l><lb />[p. 8]</l>
+<l><lb />IE m'eſtonnois entr'autre choſe</l>
+<l><lb />Comment viuoit la Belle-Roze</l>
+<l><lb />Depuis l'exil de Mazarin</l>
+<l><lb />Mais ie me ſuis tiré de peine,</l>
+<l><lb />Ne gaignant plus rien ſur la Seine</l>
+<l><lb />Elle trafique ſur le Rhin.</l>
+<l><lb />Encor eſt-ce vn bon heur pour elle</l>
+<l><lb />Qu'à cinquante ans elle ſoit belle</l>
+<l><lb />Cela luy fait paſſer chemin.</l>
+<l><lb />Car ie tiens pour choſe certaine</l>
+<l><lb />Ne gaignant plus rien ſur la Seine</l>
+<l><lb />Qu'elle trafique ſur le Rhin.</l>
+<l><lb />Sans ſon trauail &amp; ſon ménage</l>
+<l><lb />Son mary qu'vn Grec ombrage</l>
+<l><lb />Seroit mort à faute de pain,</l>
+<l><lb />Mais dès la premiere ſepmaine</l>
+<l><lb />Que rien ne luy vint de la Seine</l>
+<l><lb />Elle trafiqua ſur le Rhin</l>
+<l><lb />Liſez, chantez, mais reſtabliſſez nos ieux, obligez à ce point au moins</l>
+<l><lb />par pitié.</l>
+<l><lb />MONSIEVR,</l>
+<l><lb />Voſtre ſeruiteur à tout faire,</l>
+<l><lb />BELLE-ROZE,</l>
+<l><lb />Comédien d'honneur</l>
+<l><lb />De l'Hoſtel de Bourgogne,</l>
+<l><lb />Le 24 mars 1649.</l>
+.</l>
+</p></body></text></TEI>

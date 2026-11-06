@@ -137,6 +137,19 @@ module Export
       assert_equal 1, table.notes.fetch("ocr_documents_excluded")
     end
 
+    # Uncorrected machine HTR (noscemus: Transkribus, "have not undergone
+    # manual editing or correction") is the OCR class for this flag; the
+    # corrected HTR label (grand-tour's htr-corrected) rides through.
+    def test_exclude_ocr_drops_uncorrected_htr_and_keeps_corrected_htr
+      document(@scan, "urn:s:htr", language: "lat", text: LATIN, passages: 2,
+                                   metadata: { "text_nature" => "machine-htr" })
+      document(@alpha, "urn:a:htrc", language: "lat", text: LATIN, passages: 1,
+                                     metadata: { "text_nature" => "htr-corrected" })
+      table, rows, = sample(strata: %w[source], exclude_ocr: true)
+      assert_equal ["urn:a:htrc"], rows.map { |row| row["document_urn"] }.uniq
+      assert_equal 1, table.notes.fetch("ocr_documents_excluded")
+    end
+
     # The ProofreadPage levels the wikisource adapters already record:
     # IndexedWikisource's document-grain proofread.lowest_text_level and
     # ban-wikisource's per-page passage annotation "quality".

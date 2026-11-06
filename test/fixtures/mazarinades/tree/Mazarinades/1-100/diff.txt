@@ -1,0 +1,20 @@
+<?xml version='1.0' encoding='utf-8'?>				|       <?xml version="1.0" encoding="utf-8"?>
+<?xml-model href='https://raw.githubusercontent.com/Anton		<?xml-model href='https://raw.githubusercontent.com/Anton
+<?xml-model href='https://raw.githubusercontent.com/Anton		<?xml-model href='https://raw.githubusercontent.com/Anton
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:id="Socard38		<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:id="Socard38
+    <teiHeader>							|         <teiHeader>
+        <fileDesc>						|           <fileDesc>
+            <titleStmt>						|             <titleStmt>
+                <title source="Socard" type="main">Factvm       |               <title source="Socard" type="main">Factvm, dv pro
+                    P</title>					|                 P</title>
+                <title type="sub">Édition Antonomaz</tit       |               <title type="sub">Édition Antonomaz</title>
+                <respStmt>					|               <respStmt>
+                    <resp>Chaîne de traitement</resp>		|                 <resp>Chaîne de traitement</resp>
+                    <persName ref="orcid:0000-0001-9518-1       |                 <persName ref="orcid:0000-0001-9518-1040" role=
+                    <persName ref="orcid:0000-0002-4795-2       |                 <persName ref="orcid:0000-0002-4795-2362" role=
+                    <persName ref="orcid:0000-0002-0007-1       |                 <persName ref="orcid:0000-0002-0007-1664" role=
+                        Jean-Baptiste</persName>		|                   Jean-Baptiste</persName>
+                    <persName ref="orcid:0000-0003-0850-8       |                 <persName ref="orcid:0000-0003-0850-8266" role=
+                    <persName ref="orcid:0000-0001-5815-9       |                 <persName ref="orcid:0000-0001-5815-9506" role=
+                </respStmt>					|               </respStmt>
+            </titleStmt>					|             </titleStmt>

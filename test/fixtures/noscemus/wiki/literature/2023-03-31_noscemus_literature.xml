@@ -1,0 +1,88 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.10/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.10/ http://www.mediawiki.org/xml/export-0.10.xsd" version="0.10" xml:lang="en">
+  <siteinfo>
+    <sitename>noscemus</sitename>
+    <dbname>wf_noscemus</dbname>
+    <base>http://wiki.uibk.ac.at/noscemus/Main_Page</base>
+    <generator>MediaWiki 1.27.4</generator>
+    <case>case-sensitive</case>
+    <namespaces>
+      <namespace key="-2" case="case-sensitive">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="case-sensitive" />
+      <namespace key="1" case="case-sensitive">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="case-sensitive">noscemus</namespace>
+      <namespace key="5" case="case-sensitive">noscemus talk</namespace>
+      <namespace key="6" case="case-sensitive">File</namespace>
+      <namespace key="7" case="case-sensitive">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="case-sensitive">Template</namespace>
+      <namespace key="11" case="case-sensitive">Template talk</namespace>
+      <namespace key="12" case="case-sensitive">Help</namespace>
+      <namespace key="13" case="case-sensitive">Help talk</namespace>
+      <namespace key="14" case="case-sensitive">Category</namespace>
+      <namespace key="15" case="case-sensitive">Category talk</namespace>
+      <namespace key="102" case="case-sensitive">Attribut</namespace>
+      <namespace key="103" case="case-sensitive">Attribut Diskussion</namespace>
+      <namespace key="106" case="case-sensitive">Form</namespace>
+      <namespace key="107" case="case-sensitive">Form talk</namespace>
+      <namespace key="108" case="case-sensitive">Konzept</namespace>
+      <namespace key="109" case="case-sensitive">Konzept Diskussion</namespace>
+      <namespace key="170" case="case-sensitive">Filter</namespace>
+      <namespace key="171" case="case-sensitive">Filter Diskussion</namespace>
+      <namespace key="200" case="case-sensitive">UserWiki</namespace>
+      <namespace key="201" case="case-sensitive">UserWiki talk</namespace>
+      <namespace key="202" case="case-sensitive">User profile</namespace>
+      <namespace key="203" case="case-sensitive">User profile talk</namespace>
+      <namespace key="250" case="case-sensitive">Page</namespace>
+      <namespace key="251" case="case-sensitive">Page talk</namespace>
+      <namespace key="252" case="case-sensitive">Index</namespace>
+      <namespace key="253" case="case-sensitive">Index talk</namespace>
+      <namespace key="274" case="case-sensitive">Widget</namespace>
+      <namespace key="275" case="case-sensitive">Widget talk</namespace>
+      <namespace key="300" case="case-sensitive">Poll</namespace>
+      <namespace key="301" case="case-sensitive">Poll talk</namespace>
+      <namespace key="380" case="case-sensitive">ImageAnnotation</namespace>
+      <namespace key="446" case="case-sensitive">Education Program</namespace>
+      <namespace key="447" case="case-sensitive">Education Program talk</namespace>
+      <namespace key="460" case="case-sensitive">Campaign</namespace>
+      <namespace key="461" case="case-sensitive">Campaign talk</namespace>
+      <namespace key="600" case="case-sensitive">UserBox</namespace>
+      <namespace key="601" case="case-sensitive">UserBox talk</namespace>
+      <namespace key="1198" case="case-sensitive">Translations</namespace>
+      <namespace key="1199" case="case-sensitive">Translations talk</namespace>
+      <namespace key="2300" case="case-sensitive">Gadget</namespace>
+      <namespace key="2301" case="case-sensitive">Gadget talk</namespace>
+      <namespace key="2302" case="case-sensitive">Gadget definition</namespace>
+      <namespace key="2303" case="case-sensitive">Gadget definition talk</namespace>
+      <namespace key="2600" case="first-letter">Topic</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>Reiser 2011</title>
+    <ns>0</ns>
+    <id>294</id>
+    <revision>
+      <id>9576</id>
+      <parentid>6753</parentid>
+      <timestamp>2018-11-15T18:40:27Z</timestamp>
+      <contributor>
+        <username>C6411148</username>
+        <id>224</id>
+      </contributor>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text xml:space="preserve" bytes="316">{{Literature
+|Type=Book
+|Title=Mythologie und Alchemie in der Lehrepik des frühen 17. Jahrhunderts. Die &quot;Chryseidos Libri IIII&quot; des Straßburger Dichterarztes Johannes Nicolaus Furichius (1602-1633)
+|Author=Reiser, Thomas
+|Location=Berlin; New York
+|Year=2011
+|Discipline/Content=Alchemy/Chemistry
+}}</text>
+      <sha1>sn8bsztnler2g9qqww51ws01n6vss6h</sha1>
+    </revision>
+  </page>
+</mediawiki>

@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?xml-model href='https://raw.githubusercontent.com/Antonomaz/ODD/main/Schema/ODD_Antonomaz.rng' type='application/xml' schematypens='http://relaxng.org/ns/structure/1.0'?>
+<?xml-model href='https://raw.githubusercontent.com/Antonomaz/ODD/main/Schema/ODD_Antonomaz.rng' type='application/xml' schematypens='http://purl.oclc.org/dsdl/schematron'?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:id="Labadie332_GALL">
+  <teiHeader>
+    <fileDesc>
+      <titleStmt>
+        <title source="Labadie" type="main">SUR l'Amnistie de Bourdeaux</title>
+        <title type="sub">Édition Antonomaz</title>
+        <respStmt>
+          <resp>Chaîne de traitement</resp>
+          <persName ref="orcid:0000-0001-9518-1040" role="Project_manager">Abiven Karine</persName>
+          <persName ref="orcid:0000-0002-4795-2362" role="Project_manager">Lejeune Gaël</persName>
+          <persName ref="orcid:0000-0002-0007-1664" role="OCRisation">Tanguy
+            Jean-Baptiste</persName>
+          <persName ref="orcid:0000-0003-0850-8266" role="engineer">Bartz Alexandre</persName>
+        </respStmt>
+      </titleStmt>
+      <publicationStmt>
+        <publisher>Projet ANTONOMAZ / Sorbonne Université</publisher>
+        <ref target="https://github.com/Antonomaz"/>
+        <date type="file_creation" when="2021-11-02">2 novembre 2021</date>
+        <availability n="cc-by" status="restricted">
+          <licence target="https://creativecommons.org/licenses/by/4.0"/>
+        </availability>
+      </publicationStmt>
+      <sourceDesc>
+        <bibl>
+          <ref target="https://gallica.bnf.fr/ark:/12148/bpt6k54388038"/>
+          <author/>
+          <title source="Labadie">SUR l'Amnistie de Bourdeaux</title>
+          <pubPlace ref="geonames:2988507" source="Labadie">Paris</pubPlace>
+          <publisher xml:id="IL_CramoisySebastien.xml" ref="isni:0000000423421174">
+            <persName>
+              <forename>Sébastien</forename>
+              <surname>Cramoisy</surname>
+            </persName>
+          </publisher>
+          <date source="Labadie" when="1653">1653</date>
+          <date source="Antonomaz" when="1653-08-28">28 août 1653</date>
+          <extent>
+            <measure quantity="1" unit="page"/>
+          </extent>
+          <note type="format" subtype="placard">in-folio</note>
+          <relatedItem source="Mazarine" type="identifier" subtype="none" cert="low" target="none"/>
+        </bibl>
+        <msDesc>
+          <msIdentifier>
+            <settlement ref="geonames:2988507">Paris</settlement>
+            <institution>Bibliothèque nationale de France</institution>
+            <repository>département Littérature et art</repository>
+            <idno type="cote">YE-329</idno>
+          </msIdentifier>
+          <history>
+            <provenance>
+              <stamp>True</stamp>
+            </provenance>
+          </history>
+        </msDesc>
+      </sourceDesc>
+    </fileDesc>
+    <encodingDesc>
+      <projectDesc>
+        <p>Cette édition a été réalisée dans le cadre du projet ANTONOMAZ. Son objectif principal
+          est de fournir un texte destiné à l'exploration avec des outils électroniques. De ce fait,
+          ce n'est ni une édition philologique, ni une édition pédagogique ou de redécouverte d'un
+          auteur oublié.</p>
+        <p>Les textes encodés dans le cadre du projet ANTONOMAZ sont issus de numérisations de
+          bibliothèques numériques publiques et de Google livres.</p>
+        <p>L'édition présentée ici est issue d'un processus d'OCRisation réalisé avec Kraken.</p>
+      </projectDesc>
+      <editorialDecl>
+        <p/>
+      </editorialDecl>
+    </encodingDesc>
+    <profileDesc>
+      <langUsage>
+        <language ident="fra">Document en français</language>
+      </langUsage>
+      <abstract>
+        <p source="Mazarine"/>
+        <p source="Labadie">332. SUR l'Amnistie de Bourdeaux. S. l. n. d., 1 f. in-fol. Enfin la
+          Garonne soubmise De son Prince reçoit la loy, Et plus sage que la Tamise Elle rend hommage
+          à son Roy Et le peuple qui l'environne Suit 1 exemple de la Garonne. L'Espagne au lieu de
+          secourir Selon son dessein ces rebelles Leur a donné les escrouëlles, Que le Roy seul
+          pouvait guarir. C'est le texte complet de cette pièce assez amusante. Bill. Nationale,
+          Inventaire Ye 329. On a écrit au bas de cet exemplaire « Imprimé chez Sebast. Cramoysy, A
+          Paris, le 28. Août 1653. » Cette feuille a pu faire partie d'un recueil de poésies.</p>
+        <p source="Antonomaz">Court poème en octosyllabes.</p>
+      </abstract>
+      <textClass>
+        <keywords>
+          <term type="form">vers</term>
+          <term type="genre">poésie</term>
+          <term type="subject" ref="histoire/ormee.xml">Ormée</term>
+          <term type="subject">Bordeaux</term>
+          <term type="handwritten_note" subtype="yes"/>
+          <term type="table_of_content" subtype="no"/>
+          <term type="illustration" subtype="no"/>
+        </keywords>
+      </textClass>
+    </profileDesc>
+    <revisionDesc>
+      <change status="corrected" when="2022-08-31" who="AB"/>
+    </revisionDesc>
+  </teiHeader>
+  <text>
+    <body>
+      <p>
+        <pb n="1" manual_correction="yes"/>
+        <lb/>SVR
+        <lb/>L'AMNISTIE
+        <lb/>DE BOVRDEAVX.
+        <lb/>accordée le Iulliet 1653. 
+        <lb/>ENFIN la Garone ſoubmiſe
+        <lb/>De ſon Prince recoit la loy,
+        <lb/>Et plus ſage que la Tamiſe
+        <lb/>Elle rend hommage à ſon Roy:
+        <lb/>Et le peuple qui l’enuironne
+        <lb/>Suit l’exemple de la Garone.
+        <lb/>L’Eſpagne au lieu de ſecourir
+        <lb/>Selon ſon deſſein ces rebelles,
+        <lb/>Leur a donné les eſcroüelles
+        <lb/>Que le Roy seul pouuoit guarir.
+        <lb/>Imprimé chez Sebaſt-Cramoyſy
+        <lb/>A Paris le 28. Aouſt. 1653. </p>
+    </body>
+  </text>
+</TEI>

@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?xml-model href='https://raw.githubusercontent.com/Antonomaz/ODD/main/Schema/ODD_Antonomaz.rng' type='application/xml' schematypens='http://relaxng.org/ns/structure/1.0'?>
+<?xml-model href='https://raw.githubusercontent.com/Antonomaz/ODD/main/Schema/ODD_Antonomaz.rng' type='application/xml' schematypens='http://purl.oclc.org/dsdl/schematron'?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:id="Moreau1483_GBOOKS">
+  <teiHeader>
+    <fileDesc>
+      <titleStmt>
+        <title type="main" source="Moreau">Le généreux prince aux Parisiens de mourir pour le
+          service du roi et de ne point souffrir le retour du cardinal Mazarin.</title>
+        <title type="sub">Édition Antonomaz</title>
+        <respStmt>
+          <resp>Chaîne de traitement</resp>
+          <persName ref="orcid:0000-0001-9518-1040" role="Project_manager">Abiven Karine</persName>
+          <persName ref="orcid:0000-0002-4795-2362" role="Project_manager">Lejeune Gaël</persName>
+          <persName ref="orcid:0000-0002-0007-1664" role="OCRisation">Tanguy
+            Jean-Baptiste</persName>
+          <persName ref="orcid:0000-0003-0850-8266" role="engineer">Bartz Alexandre</persName>
+        </respStmt>
+      </titleStmt>
+      <publicationStmt>
+        <publisher>Projet ANTONOMAZ / Sorbonne Université</publisher>
+        <ref target="https://github.com/Antonomaz"/>
+        <date type="file_creation" when="2021-11-02">2 novembre 2021</date>
+        <availability n="cc-by" status="restricted">
+          <licence target="https://creativecommons.org/licenses/by/4.0"/>
+        </availability>
+      </publicationStmt>
+      <sourceDesc>
+        <bibl>
+          <ref target="https://books.google.fr/books?id=VmJCAAAAcAAJ"/>
+          <author/>
+          <title source="Mazarine">Le genereux Prince aux Parisiens, de mourir pour le service du
+            Roy, &amp; de ne point souffrir le retour du cardinal Mazarin.</title>
+          <pubPlace ref="geonames:2988507" source="Moreau">Paris</pubPlace>
+          <publisher ref="isni:000000007775504X" xml:id="IL_LAngevinNicolas.xml">
+            <persName>
+              <forename>Nicolas</forename>
+              <surname>L'Angevin</surname>
+            </persName>
+          </publisher>
+          <date source="Moreau" when="1652">1652</date>
+          <extent>
+            <measure quantity="7" unit="page"/>
+          </extent>
+          <note type="format">in-4</note>
+          <relatedItem source="Mazarine" type="identifier" subtype="BM01144" cert="high" target="https://mazarinades.bibliotheque-mazarine.fr/ark:/61562/bm50042"/>
+        </bibl>
+        <msDesc>
+          <msIdentifier>
+            <settlement ref="geonames:2996944">Lyon</settlement>
+            <institution>Bibliothèque municipale</institution>
+            <repository/>
+            <idno type="cote">310807</idno>
+          </msIdentifier>
+          <history>
+            <provenance>
+              <stamp>True</stamp>
+            </provenance>
+          </history>
+        </msDesc>
+      </sourceDesc>
+    </fileDesc>
+    <encodingDesc>
+      <projectDesc>
+        <p>Cette édition a été réalisée dans le cadre du projet ANTONOMAZ. Son objectif principal
+          est de fournir un texte destiné à l'exploration avec des outils électroniques. De ce fait,
+          ce n'est ni une édition philologique, ni une édition pédagogique ou de redécouverte d'un
+          auteur oublié.</p>
+        <p>Les textes encodés dans le cadre du projet ANTONOMAZ sont issus de numérisations de
+          bibliothèques numériques publiques et de Google livres.</p>
+        <p>L'édition présentée ici est issue d'un processus d'OCRisation réalisé avec Kraken.</p>
+      </projectDesc>
+      <editorialDecl>
+        <p/>
+      </editorialDecl>
+    </encodingDesc>
+    <profileDesc>
+      <langUsage>
+        <language ident="fra">Document en français</language>
+      </langUsage>
+      <abstract>
+        <p source="Mazarine"/>
+        <p source="Moreau">1483. Généreux(le)prince aux Parisiens de mourir(sic) pour le service du
+          roi et de ne point souffrir le retour du cardinal Mazarin. Paris, Nicolas L'Angevin, 1652,
+          7 pages.</p>
+      </abstract>
+      <textClass>
+        <keywords>
+          <term type="form">prose</term>
+          <term type="subject">Paris (France)</term>
+          <term type="handwritten_note" subtype="no"/>
+          <term type="table_of_content" subtype="no"/>
+          <term type="illustration" subtype="no"/>
+        </keywords>
+      </textClass>
+    </profileDesc>
+    <revisionDesc>
+      <change status="corrected" when="2022-03-02" who="AB"/>
+    </revisionDesc>
+  </teiHeader>
+  <text>
+    <body>
+      <p>
+        <pb n="1" manual_correction="yes"/>
+        <lb/>LE
+        <lb/>GENEREVX
+        <lb/>PRINCE
+        <lb/>AVX PARISIENS
+        <lb/>DE
+        <lb/>MOURIR POUR LE SERVICE DV ROY
+        <lb/>&amp; de ne point ſouffrir le retour du Cardinal
+        <lb/>Mazarin.
+        <lb/>A PARIS
+        <lb/>Chez NICOLAS L'ANGEVIN.
+        <lb/>M. DC. LII. <gap/>
+      </p>
+    </body>
+  </text>
+</TEI>

@@ -182,6 +182,37 @@ class CgpgTest < Minitest::Test
     assert_match(/deferred by the carve plan: every work range interleaves/, deferred["carve_note"])
   end
 
+  # The kind fold's facet (CgpgTitleGenre): a carved work's genre head
+  # cut from its plan title, raw = the title itself.
+  def test_a_carved_work_carries_its_title_genre_head
+    {
+      "urn:nabu:cgpg:photius.amphilochia" => "Amphilochia",
+      JOANNIS => "Enarratio",
+      "urn:nabu:cgpg:theophylactus-achridensis.expositio-in-epistolam-ad-romanos" => "Expositio in",
+      "urn:nabu:cgpg:joannes-zonaras.epitome-historiarum-lib-1-12" => "Historia",
+      "urn:nabu:cgpg:isidorus-thessalonicensis.sermones-in-deiparam" => "Sermones",
+      "urn:nabu:cgpg:joel.chronographia-compendiaria" => "Chronographia"
+    }.each do |urn, head|
+      document = parse(urn)
+      assert_equal({ "genre" => { "value" => head, "raw" => document.metadata["work_title"] } },
+                   document.metadata["facets"], urn)
+    end
+  end
+
+  # A single-genre whole volume declares its head in VOLUMES (raw = the
+  # volume's contents label); a mixed or deferred volume and every
+  # residuum make no kind claim.
+  def test_only_single_genre_volumes_claim_a_kind_and_residua_never_do
+    metadata = parse("urn:nabu:cgpg:pg153").metadata
+    assert_equal({ "genre" => { "value" => "Historia", "raw" => metadata["contents"] } }, metadata["facets"])
+    refute parse("urn:nabu:cgpg:pg3").metadata.key?("facets"), "PG 3 interleaves Dionysius and Pachymeres"
+    refute parse("urn:nabu:cgpg:pg8").metadata.key?("facets"), "Clement's Protrepticus, Paedagogus, Stromata"
+    refute parse("urn:nabu:cgpg:pg134-residuum").metadata.key?("facets"), "apparatus is no genre"
+    assert_equal({ "71" => "Commentarius", "73" => "Commentarius", "121" => "Historia", "148" => "Historia",
+                   "153" => "Historia" },
+                 Nabu::Adapters::Cgpg::VOLUMES.select { |_, entry| entry[:genre] }.transform_values { |e| e[:genre] })
+  end
+
   def test_the_pre_nicaean_label_carries_no_date
     metadata = parse("urn:nabu:cgpg:pg8").metadata
     assert_equal "Pre-Nicaean", metadata["period"]
