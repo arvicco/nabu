@@ -71,7 +71,8 @@ module Nabu
                                                progress: progress)
         progress&.stage("dictionary stats")
         dictionary_stats = Store::DictionaryStats.rebuild!(catalog: catalog,
-                                                           lects: Lects.load_default(config: config))
+                                                           lects: Lects.load_default(config: config),
+                                                           shelf_dates: LectShelfDates.load_default(config: config))
         progress&.stage("derge titles")
         derge_titles = E84000DergeTitles.new(catalog: catalog, canonical_dir: canonical_dir).run
         # The AES <- AED title join (same post-load mold, aed headers).

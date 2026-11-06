@@ -21,6 +21,12 @@ class BuilderRefreshTest < Minitest::Test
     # silver-date replay asks for local-dates).
     def source_workdir(slug) = File.join(canonical_dir, "shelves", slug)
     def artifact_scripts_path = File.join(config_dir, "artifact_scripts.yml")
+    # The lect lanes: the registry resolves from canonical_dir/nabu-lects
+    # (absent in most tests — the feature-off posture), the overrides and
+    # the shelf-grain date-band rules from the shipped config.
+    def lect_overrides_paths = [File.join(config_dir, "lect_overrides.yml")]
+    def lect_facet_rules_paths = [File.join(config_dir, "lect_facet_rules.yml")]
+    def lects_journal_path = File.join(canonical_dir, "lects.sqlite3")
   end
 
   # No fulltext file: the lemma rollup honestly stays empty, the
@@ -236,6 +242,26 @@ class BuilderRefreshTest < Minitest::Test
                  @catalog[:document_facets].where(document_id: doc.id,
                                                   facet: "subject").order(:value).select_map(:value)
     assert_equal [1605, 1605], @catalog[:document_axes].where(document_id: doc.id).get(%i[not_before not_after])
+  end
+
+  # The dictionary-group census rides the refresh WITH the shelf grain:
+  # the shipped leme rule stages an English shelf by its lexicon_year
+  # (1604 → en:early) and stamps the provenance on the census row.
+  def test_refresh_stages_dated_dictionary_shelves
+    leme = Nabu::Store::Source.create(slug: "leme", name: "LEME", adapter_class: "X", license: "x",
+                                      license_class: "attribution", upstream_url: "x", enabled: true)
+    cawdrey = Nabu::Store::Dictionary.create(source_id: leme.id, slug: "leme-99467", title: "Cawdrey",
+                                             language: "en")
+    Nabu::Store::DictionaryEntry.create(dictionary_id: cawdrey.id, urn: "urn:nabu:dict:leme-99467:1", entry_id: "1",
+                                        key_raw: "1", headword: "abandon", headword_folded: "abandon", body: "b",
+                                        content_sha256: "x", annotations_json: JSON.generate("lexicon_year" => "1604"))
+    Dir.mktmpdir do |dir|
+      FileUtils.cp_r(Nabu::TestSupport.fixtures("nabu-lects"), File.join(dir, "nabu-lects"))
+      Nabu::Ops::BuilderRefresh.run(catalog: @catalog, config: hybrid_config(dir))
+    end
+    row = @catalog[:dictionary_stats].first(slug: "leme-99467")
+    assert_equal %w[en:early rule:date-band], row.values_at(:lect, :lect_basis)
+    assert_equal "dated 1604..1604 (lexicon_year)", row[:lect_note]
   end
 
   def test_refresh_is_reprojection_not_accretion

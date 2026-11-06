@@ -893,6 +893,29 @@ read it instead of scanning entries (the desk-commands law). Recorded
 v1 limit: one language code per dictionary; mixed dictionaries group
 under their primary.
 
+**The shelf grain of lect staging (`Nabu::LectShelfDates`, migration
+053).** The ladder above resolves at (shelf language, source) grain, so
+one source holding shelves from several centuries cannot be staged by a
+source-wide override (LEME's 1500–1699 and 1702–1755 English lexicons).
+The `dictionary_date_bands:` rules in `config/lect_facet_rules.yml` name
+a source set, the shelf codes a year may stage (opt-in — a dictionary's
+year dates its compiler's own language, never the described language of
+a Latin or Greek dictionary) and the entry annotation carrying the
+shelf's own year. A covered shelf is staged by the DOCUMENT grain's law,
+shared code (`LectDates#infer`): its code resolves to a bare anchor, its
+year values (over live entries) hull into a closed interval, and that
+interval sits inside exactly one attested banded stage. The census row
+then carries the stage as `lect`, `lect_basis` `rule:date-band` and the
+dating as `lect_note`; a covered shelf that cannot stage keeps the bare
+node with the reason declared in `lect_note` (`bare: undated`, `bare:
+outside bands — dated 1477..1477 (lexicon_year)`, a shared band-edge
+year → `bare: spans bands`); uncovered shelves leave both stamp columns
+NULL. Compiled wherever `dictionary_stats` derives (both rebuild
+flavors, `builders:refresh`, the post-sync refresh), never into the lect
+journal — shelves are not documents. `nabu lect stage-dictionaries
+[--source SLUG] [--dry-run]` prints the census and re-derives the
+covered sources' rows on demand.
+
 **Storage: catalog tables, by migration.** Entries are first-class
 derived-from-canonical data with the same idempotency/revision/withdrawal
 semantics as documents — upsert on (dictionary, entry_id), skip on equal
