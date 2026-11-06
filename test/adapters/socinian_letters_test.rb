@@ -14,6 +14,7 @@ module Adapters
   # letter files + a trimmed register (README.md).
   class SocinianLettersTest < Minitest::Test
     include AdapterConformance
+    include StoreTestDB
 
     FIXTURES = Nabu::TestSupport.fixtures("socinian-letters")
     LETTERS = File.join(FIXTURES, "data", "xml", "letters")
@@ -220,6 +221,46 @@ module Adapters
       assert_equal "Küstrin", doc("MAIN_u3w_qlm_zdb").metadata["place"], "the register's label, not the header's"
     end
 
+    # The receiving place projects as its OWN place-only axis row beside
+    # the sent row (axis_source socinian-letters-received — the
+    # oracc-sender precedent: a labeled place class, never merged).
+    def test_the_receiving_place_rides_its_own_axis_row
+      catalog = loaded_catalog
+      rows = Nabu::Store::TimelineBuilder::MetadataDates.refresh_source!(catalog: catalog, slug: "socinian-letters")
+      assert_equal 9, rows, "six sent rows (every fixture letter is dated) + three received rows"
+      ckw = catalog[:documents].where(urn: "#{URN}:MAIN_ckw_qlm_zdb").get(:id)
+      by_source = catalog[:document_axes].where(document_id: ckw).to_hash(:axis_source)
+      assert_equal %w[socinian-letters socinian-letters-received], by_source.keys.sort
+      sent = by_source.fetch("socinian-letters")
+      assert_equal [1665, 1665, "Regensburg"], sent.values_at(:not_before, :not_after, :place_name)
+      received = by_source.fetch("socinian-letters-received")
+      assert_equal [nil, nil, nil, "Hamburg"],
+                   received.values_at(:not_before, :not_after, :date_raw, :place_name)
+      assert_equal ["2911298"], Nabu::PlaceRefs.ids_in(received[:place_ref], "geonames")
+      assert_operator sent[:id], :<, received[:id],
+                      "the sent row leads the id order (the primary-row tiebreak on dateless letters)"
+      assert_equal 3, catalog[:document_axes].where(axis_source: "socinian-letters-received").count
+    end
+
+    def test_the_receiving_place_rows_are_idempotent
+      catalog = loaded_catalog
+      2.times { Nabu::Store::TimelineBuilder::MetadataDates.refresh_source!(catalog: catalog, slug: "socinian-letters") }
+      counts = catalog[:document_axes].group_and_count(:axis_source).to_hash(:axis_source, :count)
+      assert_equal({ "socinian-letters" => 6, "socinian-letters-received" => 3 }, counts)
+    end
+
+    # The place desk's axis lane reaches a letter from either end: Hamburg
+    # (geonames 2911298) is the sending place of two fixture letters and
+    # the receiving place of two more — each document counted once.
+    def test_the_place_desk_reaches_letters_at_both_ends
+      catalog = loaded_catalog
+      Nabu::Store::TimelineBuilder::MetadataDates.refresh_source!(catalog: catalog, slug: "socinian-letters")
+      place = Nabu::Query::Place.new(catalog: catalog)
+      assert_equal [["socinian-letters", 4]], place.run("geonames:2911298").cards.first.axis_holdings
+      assert_equal [["socinian-letters", 1]], place.run("geonames:2673730").cards.first.axis_holdings,
+                   "Stockholm is only ever a receiving place in the fixture"
+    end
+
     def test_correspondents_carry_their_register_identity
       meta = doc("MAIN_ckw_qlm_zdb").metadata
       assert_equal "Rautenstein, Johann Ernst von", meta["author"]
@@ -293,6 +334,14 @@ module Adapters
     end
 
     private
+
+    def loaded_catalog
+      catalog = store_test_db
+      source = Nabu::Store::Source.create(slug: "socinian-letters", name: "Socinian letters",
+                                          adapter_class: ADAPTER.name, license_class: "attribution")
+      Nabu::Store::Loader.new(db: catalog, source: source).load_from(ADAPTER.new, workdir: FIXTURES, full: true)
+      catalog
+    end
 
     # The GitLab folder archive's shape: one top directory
     # csv-data-dump-main-data-xml-letters/ holding data/xml/letters/.

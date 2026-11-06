@@ -3373,8 +3373,9 @@ sources:
         bound"}
     places: {posture: linked, note: "the sending placeName (1,761 of 1,869) joined by its key
         through upstream's own data/csv/indices.csv register → the register label + its
-        GeoNames URL (1,685 linked; geonames: ref); the receiving place rides
-        place_received(_ref), metadata only. In-text rs type=place mentions ride the
-        passages as places"}
+        GeoNames URL (1,685 linked; geonames: ref); the receiving place (place_received +
+        its GeoNames URL, 1,291 letters / 1,260 linked) rides its OWN place-only axis row
+        (axis_source socinian-letters-received) beside the sent row, never merged — the
+        oracc-sender precedent. In-text rs type=place mentions ride the passages as places"}
     script: {posture: implied, note: "Latin script throughout; the Greek (266 foreign grc spans)
         and Hebrew (9) quotations inside Latin letters ride verbatim in their own scripts"}

@@ -332,7 +332,8 @@ module Nabu
           #                                    date (when / from-to / notBefore-notAfter) as a
           #                                    year envelope, class composition; else the
           #                                    received date as a terminus ante quem; place
-          #                                    = the sending place + its GeoNames URL (place_ref)
+          #                                    = the sending place + its GeoNames URL (place_ref);
+          #                                    the receiving place rides its own ROLE_PLACES row
           "stgall-priscian" => :structured, # the manuscript's copying (AD 850–1, upstream's
           #                                   statement) on every page; orig_place "Ireland (?)"
           #                                   — upstream's hedge — while St Gallen (the holding
@@ -448,6 +449,23 @@ module Nabu
           # the two never co-occur, census 2026-10-21).
           "ref" => %w[place text-place]
         }.freeze
+        # Second, role-qualified places (the oracc-sender precedent): a
+        # source whose documents name a place in ANOTHER role beside the
+        # one the main row carries mints it as its OWN place-only row under
+        # a labeled axis_source ("<slug>-<role>"), never merged into the
+        # main row — a place consumer can always tell the roles apart, and
+        # the place desk reaches the document from either place.
+        # socinian-letters: the main row is the SENDING place
+        # (place/place_ref, place_role "sent"); the cover letter's
+        # correspAction[received] place rides place_received + its
+        # register GeoNames URL (1,291 of 1,869 letters, 1,260 with the
+        # URL — census 2026-11-06), verbatim like the sent ref.
+        ROLE_PLACES = {
+          "socinian-letters" => [
+            { axis_source: "socinian-letters-received", name: "place_received", ref: "place_received_ref" }.freeze
+          ].freeze
+        }.freeze
+
         # Keys whose value is a parse-time CONJECTURE reading (the bare
         # town of a ?-marked imprint): it mints as the house's declared-
         # uncertain place claim — the town with the cataloguer's trailing
@@ -566,8 +584,14 @@ module Nabu
         def refresh_source!(catalog:, slug:, canonical_dir: nil)
           return 0 unless SHAPES.key?(slug)
 
-          catalog[:document_axes].where(axis_source: slug).delete
+          catalog[:document_axes].where(axis_source: axis_sources(slug)).delete
           build_source(catalog, slug, canonical_dir: canonical_dir)
+        end
+
+        # Every axis_source value this lane writes for +slug+ — its own and
+        # any ROLE_PLACES label.
+        def axis_sources(slug)
+          [slug, *ROLE_PLACES.fetch(slug, []).map { |role| role[:axis_source] }]
         end
 
         # {id => raw date} from the source's declared list files (absent
@@ -623,6 +647,7 @@ module Nabu
           return 0 if source_id.nil?
 
           listed = sidecar_dates(slug, canonical_dir)
+          roles = ROLE_PLACES.fetch(slug, [])
           inserted = 0
           buffer = []
           docs = catalog[:documents].where(source_id: source_id, withdrawn: false)
@@ -637,9 +662,11 @@ module Nabu
                                          composition: COMPOSITION.include?(slug),
                                          place_key: PLACE_KEYS.fetch(slug, "place"),
                                          listed: listed, slug: slug)
-              next if row.nil?
-
-              buffer << row.merge(axis_source: slug)
+              # The main row inserts first: on a dateless document the
+              # lowest id is the primary row (`nabu show`'s tiebreak), so
+              # the role row never displaces the main place there.
+              buffer << row.merge(axis_source: slug) unless row.nil?
+              buffer.concat(role_place_rows(doc, roles)) unless roles.empty?
               if buffer.size >= BATCH
                 catalog[:document_axes].multi_insert(buffer)
                 inserted += buffer.size
@@ -648,6 +675,26 @@ module Nabu
             end
           catalog[:document_axes].multi_insert(buffer) unless buffer.empty?
           inserted + buffer.size
+        end
+
+        # The ROLE_PLACES rows of one document: a place-only row per role
+        # whose name or ref is present (a no-place sentinel mints nothing;
+        # the ref rides verbatim when it is a URL, the sent-row stance).
+        def role_place_rows(doc, roles)
+          meta = JSON.parse(doc[:metadata_json].to_s)
+          roles.filter_map do |role|
+            name = meta[role[:name]]
+            name = nil if name.nil? || name.to_s.strip.empty? || no_place?(name)
+            ref = meta[role[:ref]].to_s.strip
+            ref = nil unless ref.match?(%r{\Ahttps?://\S+\z})
+            next if name.nil? && ref.nil?
+
+            { document_id: doc[:id], not_before: nil, not_after: nil, date_raw: nil,
+              place_name: name, place_ref: ref, place_lat: nil, place_lon: nil, precision: nil,
+              date_class: nil, axis_source: role[:axis_source] }
+          end
+        rescue JSON::ParserError
+          []
         end
 
         # One document's axis row, or nil when it carries neither a date

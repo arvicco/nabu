@@ -460,14 +460,9 @@ module Nabu
                                             "OCRisation réalisé avec Kraken\") — lineage prose " \
                                             "under an origin-shaped key, not a place; the " \
                                             "pamphlet's pub_place projects" },
-        "socinian-letters" => { "place_received" => "the letter's DESTINATION city — a second, " \
-                                                    "role-qualified place the per-document place " \
-                                                    "lane does not model (the sent place projects " \
-                                                    "as the origin); projecting it is queued, " \
-                                                    "never dropped silently",
-                                "place_received_ref" => "the destination's GeoNames pointer — " \
-                                                        "rides with place_received",
-                                "place_role" => "the role qualifier (\"sent\") of the projected " \
+        # place_received(_ref) project as their own place-only row
+        # (axis_source socinian-letters-received) and trace by value.
+        "socinian-letters" => { "place_role" => "the role qualifier (\"sent\") of the projected " \
                                                 "place — constant machinery (the ninjal stance)",
                                 "dwds_class" => "a single corpus-wide DWDS text-class label " \
                                                 "(\"Gebrauchsliteratur\", 1,525 of 1,869 letters) — " \
