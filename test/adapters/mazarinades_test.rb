@@ -284,7 +284,7 @@ class MazarinadesTest < Minitest::Test
     refute_nil entry, "mazarinades must be registered in config/sources.yml"
     assert_equal Nabu::Adapters::Mazarinades, entry.adapter_class
     assert_equal Nabu::Adapters::Mazarinades.manifest, entry.manifest
-    refute entry.wired, "wired: false until the first real sync is verified"
+    assert entry.wired, "first real sync verified (3,067 docs / 40,883 passages)"
   end
 
   def test_fetch_clones_the_cone_and_the_tree_is_discoverable

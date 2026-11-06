@@ -6,7 +6,7 @@ compatibility: "Requires the nabu MCP server (`bin/nabu mcp`, read-only, stdio) 
 metadata:
   desk: germanic
   origin: generated
-  sources: "aspr bosworth-toller cleasby-vigfusson cme corpus-gysseling corpus-oudfries corpus-oudnederlands dta ecco-tcp eebo-tcp emmo evans-tcp fornsvenska fsv-lexica grand-tour helipad iswoc menota menotec perseus-anglit ppchy proiel ref rem ren rundata runesdb ud wiktionary-dum wiktionary-enm wiktionary-gmh wiktionary-gmq-osw wiktionary-got wiktionary-non wiktionary-ofs wiktionary-sco zoega"
+  sources: "aspr bosworth-toller cleasby-vigfusson cme corpus-gysseling corpus-oudfries corpus-oudnederlands dta ecco-tcp eebo-tcp emmo evans-tcp fornsvenska fsv-lexica grand-tour helipad iswoc leme menota menotec perseus-anglit ppchy proiel ref rem ren rundata runesdb stationers-register statutes-realm ud wiktionary-dum wiktionary-enm wiktionary-gmh wiktionary-gmq-osw wiktionary-got wiktionary-non wiktionary-ofs wiktionary-sco zoega"
 ---
 
 # The Germanicist — the `germanic` desk
@@ -40,6 +40,7 @@ verbatim upstream terms are in `docs/02-sources.md` of the Nabu repository.
 | `grand-tour` | Grand Tour digital — early-modern travel journals (Herzog August Bibliothek Wolfenbüttel) | attribution |
 | `helipad` | HeliPaD — the Heliand Parsed Database (Walkden; Zenodo 4395040, v0.9) | attribution |
 | `iswoc` | ISWOC Treebank — Old English texts | nc |
+| `leme` | LEME — Lexicons of Early Modern English (University of Toronto), the LEME-XML texts on TSpace | attribution |
 | `menota` | Menota — the Medieval Nordic Text Archive (clarino.uib.no) | attribution |
 | `menotec` | Menotec — Old Norwegian treebanks + the Poetic Edda (Codex Regius), PROIEL scheme | nc |
 | `perseus-anglit` | Perseus Digital Library — canonical Old English literature (Beowulf) | attribution |
@@ -50,6 +51,8 @@ verbatim upstream terms are in `docs/02-sources.md` of the Nabu repository.
 | `ren` | ReN — Referenzkorpus Mittelniederdeutsch/Niederrheinisch (1200–1650), v1.1 | attribution |
 | `rundata` | Rundata — Scandinavian Runic-text Database (SRDB, via rundata.info) | odbl |
 | `runesdb` | RuneS-DB — runic inscriptions of the Göttingen Academy project RuneS (TEI) | attribution |
+| `stationers-register` | Stationers' Register Online — the copy entries of Registers A–D, 1557–1640 | attribution |
+| `statutes-realm` | Statutes of the Realm, vols 5–7 (1625–1701; Raithby, via British History Online) | open |
 | `ud` | Universal Dependencies — ancient treebanks | nc |
 | `wiktionary-dum` | Wiktionary Middle Dutch — kaikki.org machine-readable extract | attribution |
 | `wiktionary-enm` | Wiktionary Middle English — kaikki.org machine-readable extract | attribution |

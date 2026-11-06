@@ -6,7 +6,7 @@ compatibility: "Requires the nabu MCP server (`bin/nabu mcp`, read-only, stdio) 
 metadata:
   desk: slavic
   origin: generated
-  sources: "archiv-slav-phil bg-wikisource ccmh comenius cs-wikisource damaskini elektire elizabeth-bible eltec-srp freising gams-zrcalo goo300k hr-wikisource imp kdsp korba litopys mdz-protestant mk-wikisource pl-wikisource ponomar prague-bible-1488 prilit proiel ru-wikisource scat scripta-bulgarica senie sl-lexica sl-wikisource slavistics-pd slouniki-nasovic sr-wikisource torot typikon-bible ud uk-wikisource vuk-danicic wiktionary-cu wiktionary-sh"
+  sources: "archiv-slav-phil bg-wikisource ccmh comenius cs-wikisource damaskini elektire elizabeth-bible eltec-srp freising gams-zrcalo goo300k hr-wikisource imp kdsp korba korpus16 litopys mdz-protestant mk-wikisource pl-wikisource ponomar prague-bible-1488 prilit proiel ru-wikisource scat scripta-bulgarica senie sl-lexica sl-wikisource slavistics-pd slouniki-nasovic sr-wikisource torot typikon-bible ud uk-wikisource vuk-danicic wiktionary-cu wiktionary-sh"
 ---
 
 # The Slavicist — the `slavic` desk
@@ -39,6 +39,7 @@ verbatim upstream terms are in `docs/02-sources.md` of the Nabu repository.
 | `imp` | IMP — digital library and corpus of historical Slovene (CLARIN.SI) | attribution |
 | `kdsp` | KDSP — Corpus of longer narrative Slovenian prose 1836–1918 (ZRC SAZU, CLARIN.SI) | attribution |
 | `korba` | KorBa — manually annotated subcorpus 2.0 (17th–18th-c. Polish, IJP PAN) | attribution |
+| `korpus16` | Korpus 16 — the 16th-century Slovene Protestant writers (ZRC SAZU, fran.si) | attribution |
 | `litopys` | Izbornyk (litopys.org.ua) — the PD-edition subset: the Ipatiev chronicle + glossaries | open |
 | `mdz-protestant` | MDZ — 16th-century Slovene/Croatian Protestant prints, page OCR (Bayerische Staatsbibliothek) | open |
 | `mk-wikisource` | Macedonian Wikisource — the 19th-century cone (Миладиновци · Шапкарев · Цепенков · Пејчиновиќ · Крчовски · Пулевски) | attribution |
