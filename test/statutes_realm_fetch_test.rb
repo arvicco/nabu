@@ -38,7 +38,7 @@ class StatutesRealmFetchTest < Minitest::Test
   end
 
   def stub_pages(missing: [])
-    %w[p1a pp255-259].each do |slug|
+    %w[p1a pp255-259 pp421-422].each do |slug|
       stub = stub_request(:get, "#{HOST}/statutes-realm/vol5/#{slug}")
       if missing.include?(slug)
         stub.to_return(status: 404, body: "")
@@ -78,17 +78,18 @@ class StatutesRealmFetchTest < Minitest::Test
     stub_pages
     result = sync!
     assert_equal 2, result.toc_pages
-    assert_equal 6, result.rows, "every TOC row counted (5 on page 0 + 1 index row)"
-    assert_equal 2, result.accepted, "the two act rows"
-    assert_equal 2, result.fetched
+    assert_equal 7, result.rows, "every TOC row counted (6 on page 0 + 1 index row)"
+    assert_equal 3, result.accepted, "the three act rows"
+    assert_equal 3, result.fetched
     assert File.file?(File.join(@dir, "vol5", "p1a.html"))
     assert File.file?(File.join(@dir, "vol5", "pp255-259.html"))
+    assert File.file?(File.join(@dir, "vol5", "pp421-422.html"))
     refute File.exist?(File.join(@dir, "vol5", "p1.html")), "rejected grains are never fetched"
     assert File.file?(File.join(@dir, "toc", "vol5-page-0.html"))
     assert File.file?(File.join(@dir, "toc", "vol5-page-1.html"))
     state = JSON.parse(File.read(File.join(@dir, Nabu::StatutesRealmFetch::STATE_FILE)))
     assert_equal result.sha, state["sha256"]
-    assert_equal 2, state["accepted"]
+    assert_equal 3, state["accepted"]
   end
 
   def test_a_resync_reuses_pages_on_disk_and_keeps_the_pin
@@ -97,7 +98,7 @@ class StatutesRealmFetchTest < Minitest::Test
     first = sync!
     second = sync!
     assert_equal 0, second.fetched
-    assert_equal 2, second.cached
+    assert_equal 3, second.cached
     assert_equal first.sha, second.sha
   end
 
@@ -115,7 +116,7 @@ class StatutesRealmFetchTest < Minitest::Test
     stub_pages(missing: ["pp255-259"])
     result = sync!
     assert_equal ["vol5/pp255-259"], result.missing
-    assert_equal 1, result.fetched
+    assert_equal 2, result.fetched
   end
 
   def test_a_missing_toc_aborts

@@ -10,12 +10,13 @@ The tree mirrors the fetch layout (`Nabu::StatutesRealmFetch`):
 
 | file | upstream URL | grain |
 |---|---|---|
-| `toc/vol5-page-0.html` | `/statutes-realm/vol5?page=0` | TOC page — rows kept: `p1` (engraving), `iii-iv` (preface), `v-xix` (chronological table), `p1a`, `pp255-259` (acts) |
+| `toc/vol5-page-0.html` | `/statutes-realm/vol5?page=0` | TOC page — rows kept: `p1` (engraving), `iii-iv` (preface), `v-xix` (chronological table), `p1a`, `pp255-259`, `pp421-422` (acts; the last row rides here from the live vol5 TOC's page 1) |
 | `toc/vol5-page-3.html` | `/statutes-realm/vol5?page=3` | TOC page (the volume's last) — row kept: `pp24-25` (Index: F) |
 | `toc/vol7-page-1.html` | `/statutes-realm/vol7?page=1` | TOC page — row kept: `p641a` (act) |
 | `toc/vol7-page-2.html` | `/statutes-realm/vol7?page=2` | TOC page (the volume's last) — rows kept: `p750` (The Private Acts), `pp3-5` (Index: A) |
 | `vol5/p1a.html` | `/statutes-realm/vol5/p1a` | act — Charles I, 1625, the Lord's Day Act (one section, a footnote) |
 | `vol5/pp255-259.html` | `/statutes-realm/vol5/pp255-259` | act — Charles II, 1660, the beer-and-ale excise grant; **trimmed to sections s1–s3** (s1 carries the rate table) and the three footnotes they anchor |
+| `vol5/pp421-422.html` | `/statutes-realm/vol5/pp421-422` | act — Charles II, 1662, the Butter Act; its heads anchor **page-wise** (`h2-p1`, `h3-p2`, …) instead of `hN-sK` — retrieved 2026-11-06 after the live sync quarantined it; **trimmed to sections p1–p3** and the two footnotes they anchor |
 | `vol7/p641a.html` | `/statutes-realm/vol7/p641a` | act — William III, 1700 & 1701, with the rekeyed citation "Rot. Parl. 12 § 13 Gul. III" |
 | `vol7/p750.html` | `/statutes-realm/vol7/p750` | private-acts schedule — the roll's Latin formula + two private-act titles |
 | `vol5/p1.html` | `/statutes-realm/vol5/p1` | engraving plate page — a REJECTED grain's own page, on disk but never minted |

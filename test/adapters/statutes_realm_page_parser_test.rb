@@ -27,8 +27,8 @@ class StatutesRealmPageParserTest < Minitest::Test
 
   def test_toc_rows_carry_slug_title_pages_and_grain
     rows = toc("vol5-page-0.html", 5)
-    assert_equal %w[p1 iii-iv v-xix p1a pp255-259], rows.map(&:slug)
-    assert_equal %i[engraving front_matter front_matter act act], rows.map(&:grain)
+    assert_equal %w[p1 iii-iv v-xix p1a pp255-259 pp421-422], rows.map(&:slug)
+    assert_equal %i[engraving front_matter front_matter act act act], rows.map(&:grain)
     act = rows[3]
     assert_equal 5, act.volume
     assert_equal "1", act.pages
@@ -101,6 +101,18 @@ class StatutesRealmPageParserTest < Minitest::Test
     assert_equal "II. The said Acts to be taken as Public Acts", document.passages.last.annotations["heading"]
     assert_equal [{ "n" => "1", "text" => "interlined on the Roll." }, { "n" => "2", "text" => "unto O." }],
                  document.passages.first.annotations["footnotes"], "a reused note is listed once"
+  end
+
+  def test_page_anchored_heads_mint_distinct_section_ids
+    # Some act pages anchor their heads h2-p1/h3-p2… (page anchors) instead
+    # of hN-sK — found live on vol5/pp421-422 (Charles II, 1662, the Butter
+    # Act), where the -s fallback collapsed every section to :s0 and the
+    # duplicate passage urns quarantined a real act. Upstream's own id is
+    # still the stable key: the urn keeps its full suffix (:sp1, :sp2, …).
+    document = parse("vol5/pp421-422.html")
+    assert_equal(%w[sp1 sp2 sp3], document.passages.map { |passage| passage.urn.split(":").last })
+    assert_match(/\ARecital that great Quantities of Butter are exported/,
+                 document.passages.first.annotations["heading"])
   end
 
   def test_tables_render_one_line_per_row
