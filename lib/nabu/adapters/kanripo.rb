@@ -42,7 +42,11 @@ module Nabu
     # names it — CHANT, WYG, SBCK … in the probe set), and nabu syncs
     # master only. The edition rides document metadata and the verbatim
     # anchors, so a future multi-edition wave can mint edition-qualified
-    # documents WITHOUT touching these urns.
+    # documents WITHOUT touching these urns. Declared edition refs
+    # (config/sources.yml `edition_refs:`, e.g. [SBCK]) are ACQUIRED now —
+    # objects plus a remote-tracking ref per catalog member, master tree
+    # untouched (KanripoFetch, design note item 5) — but discover/parse
+    # still read master only; the edition-qualified mint is future work.
     #
     # == License (the org-level grant, recorded verbatim)
     #
@@ -100,15 +104,22 @@ module Nabu
         [CATALOG_URL]
       end
 
-      attr_reader :classes
+      # An upstream branch name usable verbatim in a refspec (SBCK, WYG …).
+      VALID_EDITION_REF = /\A[A-Za-z0-9_][A-Za-z0-9_.-]*\z/
 
-      def initialize(classes: DEFAULT_CLASSES)
+      attr_reader :classes, :edition_refs
+
+      def initialize(classes: DEFAULT_CLASSES, edition_refs: [])
         super()
         unless classes.is_a?(Array) && !classes.empty? && classes.all? { |c| c.is_a?(String) && c.match?(VALID_CLASS) }
           raise ValidationError, "kanripo classes must be a non-empty list matching KR1–KR6, got #{classes.inspect}"
         end
+        unless edition_refs.is_a?(Array) && edition_refs.all? { |r| r.is_a?(String) && r.match?(VALID_EDITION_REF) }
+          raise ValidationError, "kanripo edition_refs must be a list of branch names, got #{edition_refs.inspect}"
+        end
 
         @classes = classes.uniq
+        @edition_refs = edition_refs.uniq
       end
 
       # One ref per text dir on disk (sorted; the catalog clone, ledger and
@@ -145,7 +156,7 @@ module Nabu
         result = KanripoFetch.sync!(
           catalog_url: catalog_url, repo_base: repo_base,
           dir: workdir, attic_dir: File.join(workdir, ATTIC_DIRNAME),
-          classes: classes, delay: fetch_delay, progress: progress,
+          classes: classes, edition_refs: edition_refs, delay: fetch_delay, progress: progress,
           guard: ->(text_dir, doomed) { guard_text_deletion!(text_dir, doomed, force: force) }
         )
         Nabu::FetchReport.new(sha: result.catalog_sha, fetched_at: Time.now, notes: fetch_notes(result))
@@ -289,6 +300,10 @@ module Nabu
                 "cloned #{result.cloned.size} · refreshed #{result.refreshed.size} · " \
                 "skipped #{result.skipped} · absent #{result.absent.size}"
         notes += " · atticked #{result.atticked.size} upstream-deleted file(s)" unless result.atticked.empty?
+        result.editions.each do |pass|
+          notes += " · edition #{pass.ref}: in-scope #{pass.in_scope} · fetched #{pass.fetched.size} · " \
+                   "absent #{pass.absent.size} · skipped #{pass.skipped} · missing #{pass.missing}"
+        end
         notes
       end
 
