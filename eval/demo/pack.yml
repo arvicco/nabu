@@ -1,0 +1,475 @@
+# The demo eval pack: question -> expected-answer tasks over the FROZEN
+# demo slice the public image bakes in (Nabu::DemoBuild: sblgnt, vulgate,
+# eng-web, oshb, lexica + the core registry modules; 223 documents,
+# 104,585 passages, 168,142 dictionary entries). Every expected answer is
+# a machine check on the tool payload (Nabu::Ops::DemoEval documents the
+# check grammar); nothing is scored by model judgment. The runner
+# (script/demo-eval) replays each task's reference steps against a running
+# server; an agent under evaluation gets only the questions
+# (script/demo-eval --questions) and is graded against `answer`.
+#
+# Ground truth is the slice, not the full library: the batch layers
+# (links, vectors, mined layers) and the sign/hieroglyph modules are not
+# baked, so those tools answer with honest absence notes — the negative
+# tasks pin that honesty. The demo slice is open/attribution material
+# only; every quoted text below is from it.
+schema: nabu.demo-eval/1
+slice:
+  sources: [sblgnt, vulgate, eng-web, oshb, lexica]
+  documents: 223
+  passages: 104585
+  dictionary_entries: 168142
+tasks:
+  # -- status ------------------------------------------------------------------
+  - id: status-totals
+    difficulty: lookup
+    question: >-
+      How many passages, documents and dictionary entries does the demo
+      library hold, and how many of its passages are Aramaic?
+    answer: 104,585 passages in 223 documents, 168,142 dictionary entries; 268 Aramaic (arc) passages.
+    steps:
+      - tool: nabu_status
+        args: {}
+        expect:
+          - {path: totals.passages, equals: 104585}
+          - {path: totals.documents, equals: 223}
+          - {path: totals.dictionary_entries, equals: 168142}
+          - {path: languages.arc, equals: 268}
+          - {path: sources.*.slug, includes: sblgnt}
+
+  # -- search ------------------------------------------------------------------
+  - id: search-latin-phrase
+    difficulty: lookup
+    question: Where does the phrase "in principio erat verbum" occur in the Latin corpus?
+    answer: Exactly once, at urn:nabu:vulgate:jhn:1.1 (Vulgate, John 1:1).
+    steps:
+      - tool: nabu_search
+        args: {query: '"in principio erat verbum"'}
+        expect:
+          - {path: matches.*.urn, includes: "urn:nabu:vulgate:jhn:1.1"}
+          - {path: matches, size: 1}
+
+  - id: search-english-jesus-wept
+    difficulty: lookup
+    question: Which English verse reads "Jesus wept"?
+    answer: urn:nabu:eng-web:jhn:11.35 (World English Bible, John 11:35), the only match.
+    steps:
+      - tool: nabu_search
+        args: {query: '"Jesus wept"', lang: eng}
+        expect:
+          - {path: matches.*.urn, includes: "urn:nabu:eng-web:jhn:11.35"}
+          - {path: matches, size: 1}
+
+  - id: search-hebrew-bereshit
+    difficulty: lookup
+    question: Find the Hebrew verse that begins בראשית ברא ("in the beginning ... created").
+    answer: urn:nabu:oshb:gen:1.1 (OSHB, Genesis 1:1).
+    steps:
+      - tool: nabu_search
+        args: {query: בראשית ברא}
+        expect:
+          - {path: matches.*.urn, includes: "urn:nabu:oshb:gen:1.1"}
+          - {path: matches.*.language, includes: hbo}
+
+  - id: search-aramaic-mene
+    difficulty: lookup
+    question: Where does the Aramaic word מְנֵא (mene) occur?
+    answer: In Daniel 5:25 and 5:26 (urn:nabu:oshb:dan:5.25, urn:nabu:oshb:dan:5.26) — two passages.
+    steps:
+      - tool: nabu_search
+        args: {query: מְנֵא, lang: arc}
+        expect:
+          - {path: matches.*.urn, includes: "urn:nabu:oshb:dan:5.25"}
+          - {path: matches.*.urn, includes: "urn:nabu:oshb:dan:5.26"}
+          - {path: matches, size: 2}
+
+  - id: search-lemma-bara-count
+    difficulty: lookup
+    question: >-
+      In how many Hebrew Bible passages is the verb with Strong's lemma
+      "1254 a" (bara, "create") attested, and is Genesis 1:1 among them?
+    answer: 36 passages; yes, urn:nabu:oshb:gen:1.1 is one.
+    steps:
+      - tool: nabu_search
+        args: {lemma: "1254 a", limit: 50}
+        expect:
+          - {path: matches, size: 36}
+          - {path: note, includes: "36 matches"}
+          - {path: matches.*.urn, includes: "urn:nabu:oshb:gen:1.1"}
+
+  - id: search-lemma-morph-qal
+    difficulty: lookup
+    question: Show a Qal-stem attestation of the lemma "1254 a" with its decoded morphology.
+    answer: e.g. urn:nabu:oshb:deut:4.32, morph person=3|number=sing|gender=masc|stem=qal|conjugation=perf.
+    steps:
+      - tool: nabu_search
+        args: {lemma: "1254 a", morph: stem=qal, limit: 5}
+        expect:
+          - {path: matches, min_size: 1}
+          - {path: matches.*.lemma, includes: "1254 a"}
+          - {path: matches.0.morph, includes: stem=qal}
+
+  - id: search-near-verbum-deum
+    difficulty: lookup
+    question: Which Latin passages have "verbum" within two words of "Deum"?
+    answer: Three — Luke 1:37, John 1:1 and Acts 13:26 in the Vulgate.
+    steps:
+      - tool: nabu_search
+        args: {query: Verbum, near: Deum, window: 2, lang: lat, limit: 10}
+        expect:
+          - {path: matches, size: 3}
+          - {path: matches.*.urn, includes: "urn:nabu:vulgate:jhn:1.1"}
+          - {path: matches.*.urn, includes: "urn:nabu:vulgate:luk:1.37"}
+          - {path: matches.*.urn, includes: "urn:nabu:vulgate:act:13.26"}
+
+  - id: search-betacode-logos
+    difficulty: lookup
+    question: Search the Greek for the Beta Code input lo/gos — what does it decode to, and does John 1:1 match?
+    answer: It decodes to λόγος; urn:nabu:sblgnt:john:1.1 matches.
+    steps:
+      - tool: nabu_search
+        args: {query: lo/gos, betacode: true, limit: 10}
+        expect:
+          - {path: betacode.query, equals: λόγος}
+          - {path: matches.*.urn, includes: "urn:nabu:sblgnt:john:1.1"}
+
+  - id: search-negative-gilgamesh
+    difficulty: negative
+    question: Does the demo corpus mention Gilgamesh?
+    answer: No — the search returns no matches (the slice holds only the Bible witnesses and two lexica).
+    steps:
+      - tool: nabu_search
+        args: {query: Gilgamesh}
+        expect:
+          - {path: matches, size: 0}
+          - {path: note, includes: no matches}
+
+  # -- show --------------------------------------------------------------------
+  - id: show-greek-passage
+    difficulty: lookup
+    question: What is the Greek text of John 11:35 in the SBL Greek New Testament, and under what license class?
+    answer: ἐδάκρυσεν ὁ Ἰησοῦς. — attribution class (source sblgnt).
+    steps:
+      - tool: nabu_show
+        args: {urn: "urn:nabu:sblgnt:john:11.35"}
+        expect:
+          - {path: text, equals: ἐδάκρυσεν ὁ Ἰησοῦς.}
+          - {path: license_class, equals: attribution}
+          - {path: document_urn, equals: "urn:nabu:sblgnt:john"}
+
+  - id: show-range
+    difficulty: lookup
+    question: Read John 1:1-3 in the SBL Greek New Testament.
+    answer: Three passages, urn:nabu:sblgnt:john:1.1 through 1.3, the third beginning "πάντα δι".
+    steps:
+      - tool: nabu_show
+        args: {urn: "urn:nabu:sblgnt:john:1.1-1.3"}
+        expect:
+          - {path: type, equals: range}
+          - {path: passages, size: 3}
+          - {path: passages.*.urn, includes: "urn:nabu:sblgnt:john:1.2"}
+          - {path: passages.2.text, includes: πάντα δι}
+
+  - id: show-document-ruth
+    difficulty: lookup
+    question: How many passages does the Hebrew book of Ruth have in the corpus?
+    answer: 85 passages (urn:nabu:oshb:ruth).
+    steps:
+      - tool: nabu_show
+        args: {urn: "urn:nabu:oshb:ruth", max_passages: 2}
+        expect:
+          - {path: type, equals: document}
+          - {path: title, equals: Ruth}
+          - {path: note, includes: of 85 passages}
+
+  - id: show-negative-missing-verse
+    difficulty: negative
+    question: Show John chapter 99, verse 1 in the Vulgate.
+    answer: There is no such passage — the server answers that the urn is not found.
+    steps:
+      - tool: nabu_show
+        args: {urn: "urn:nabu:vulgate:jhn:99.1"}
+        expect:
+          - {text_includes: "urn not found: urn:nabu:vulgate:jhn:99.1"}
+
+  - id: chain-search-then-show
+    difficulty: chain
+    question: Find the English verse "God so loved the world" and read it in full.
+    answer: urn:nabu:eng-web:jhn:3.16 — "... that whoever believes in him should not perish, but have eternal life."
+    steps:
+      - tool: nabu_search
+        args: {query: '"God so loved the world"', lang: eng}
+        expect:
+          - {path: matches.*.urn, includes: "urn:nabu:eng-web:jhn:3.16"}
+      - tool: nabu_show
+        args: {urn: "${1.matches.0.urn}"}
+        expect:
+          - {path: urn, equals: "urn:nabu:eng-web:jhn:3.16"}
+          - {path: text, includes: have eternal life}
+
+  # -- parallels ---------------------------------------------------------------
+  - id: parallels-synoptic-voice
+    difficulty: lookup
+    question: >-
+      Which other Greek New Testament passages parallel Mark 1:3 ("the voice
+      of one crying in the wilderness")?
+    answer: Luke 3:4 and Matthew 3:3 (strongest), plus John 1:23.
+    steps:
+      - tool: nabu_parallels
+        args: {urn: "urn:nabu:sblgnt:mark:1.3"}
+        expect:
+          - {path: hits.*.urn, includes: "urn:nabu:sblgnt:luke:3.4"}
+          - {path: hits.*.urn, includes: "urn:nabu:sblgnt:matt:3.3"}
+          - {path: hits.*.urn, includes: "urn:nabu:sblgnt:john:1.23"}
+
+  - id: parallels-latin-isaiah
+    difficulty: lookup
+    question: Which Latin passage does the Vulgate's Matthew 1:23 echo, and through what shared phrase?
+    answer: Isaiah 7:14 (urn:nabu:vulgate:isa:7.14), sharing "et pariet filium et".
+    steps:
+      - tool: nabu_parallels
+        args: {urn: "urn:nabu:vulgate:mat:1.23"}
+        expect:
+          - {path: hits.*.urn, includes: "urn:nabu:vulgate:isa:7.14"}
+          - {path: hits.*.evidence, includes: et pariet filium et}
+
+  - id: parallels-explain-score
+    difficulty: lookup
+    question: Explain the score of the Isaiah 7:14 parallel to the Vulgate's Matthew 1:23.
+    answer: Score 0.5 — one shared gram ("et pariet filium et", document frequency 2, weight 0.5); the other grams contribute zero.
+    steps:
+      - tool: nabu_parallels
+        args: {urn: "urn:nabu:vulgate:mat:1.23", explain: true}
+        expect:
+          - {path: hits.0.urn, equals: "urn:nabu:vulgate:isa:7.14"}
+          - {path: hits.0.score, equals: 0.5}
+          - {path: hits.0.explain.*.status, includes: shared}
+          - {path: hits.0.explain.*.status, includes: not_shared}
+
+  - id: parallels-negative-language
+    difficulty: negative
+    question: Are there Latin-language parallels to the Greek Mark 1:3?
+    answer: None — parallels are surface-text matches, so a Latin filter on a Greek anchor returns no hits.
+    steps:
+      - tool: nabu_parallels
+        args: {urn: "urn:nabu:sblgnt:mark:1.3", lang: lat}
+        expect:
+          - {path: hits, size: 0}
+
+  - id: chain-clarify-then-parallels
+    difficulty: chain
+    question: >-
+      Resolve "Matthew 4.4" to a passage and find what it quotes or echoes
+      elsewhere in the English Bible.
+    answer: urn:nabu:eng-web:mat:4.4; its parallels include Luke 4:4 and Deuteronomy 8:3 ("not live by bread").
+    steps:
+      - tool: nabu_clarify
+        args: {query: Matthew 4.4}
+        expect:
+          - {path: resolved_urn, equals: "urn:nabu:eng-web:mat:4.4"}
+      - tool: nabu_parallels
+        args: {urn: "${1.resolved_urn}"}
+        expect:
+          - {path: hits.*.urn, includes: "urn:nabu:eng-web:luk:4.4"}
+          - {path: hits.*.urn, includes: "urn:nabu:eng-web:deu:8.3"}
+          - {path: hits.*.evidence, includes: not live by bread}
+
+  # -- define ------------------------------------------------------------------
+  - id: define-greek-logos
+    difficulty: lookup
+    question: Look up λόγος in the Greek dictionary. Which lexicon answers, and what is the first gloss?
+    answer: LSJ (urn:nabu:dict:lsj:n63772), first gloss "computation, reckoning".
+    steps:
+      - tool: nabu_define
+        args: {lemma: λόγος, lang: grc, limit: 1}
+        expect:
+          - {path: entries.0.urn, equals: "urn:nabu:dict:lsj:n63772"}
+          - {path: entries.0.dictionary, equals: lsj}
+          - {path: entries.0.gloss, includes: "computation, reckoning"}
+
+  - id: define-latin-virtus
+    difficulty: lookup
+    question: What does Lewis & Short give for virtus?
+    answer: Headword virtūs (urn:nabu:dict:lewis-short:n51108), "manliness, manhood ... worth, excellence, virtue".
+    steps:
+      - tool: nabu_define
+        args: {lemma: virtus, lang: lat, limit: 1}
+        expect:
+          - {path: entries.0.urn, equals: "urn:nabu:dict:lewis-short:n51108"}
+          - {path: entries.0.headword, equals: virtūs}
+          - {path: entries.0.body, includes: manliness}
+
+  - id: chain-concord-then-define
+    difficulty: chain
+    question: Find ἀγάπη in context in 1 Corinthians, then define the word.
+    answer: It appears e.g. at 1 Cor 13:13 and 13:4; LSJ (urn:nabu:dict:lsj:n347) glosses it "love".
+    steps:
+      - tool: nabu_concord
+        args: {query: ἀγάπη, width: 20, limit: 5}
+        expect:
+          - {path: rows.*.urn, includes: "urn:nabu:sblgnt:1cor:13.13"}
+          - {path: rows.*.keyword, includes: ἀγάπη}
+      - tool: nabu_define
+        args: {lemma: "${1.rows.0.keyword}", lang: grc, limit: 1}
+        expect:
+          - {path: entries.0.urn, equals: "urn:nabu:dict:lsj:n347"}
+          - {path: entries.0.gloss, includes: love}
+
+  - id: define-negative-nonword
+    difficulty: negative
+    question: Define the word "qwxzzy".
+    answer: No dictionary entry exists; the server says so (and names the shelves it holds) rather than guessing.
+    steps:
+      - tool: nabu_define
+        args: {lemma: qwxzzy}
+        expect:
+          - {text_includes: no dictionary entry}
+
+  # -- concord -----------------------------------------------------------------
+  - id: concord-jesus-wept
+    difficulty: lookup
+    question: Show "Jesus wept" as a keyword-in-context row.
+    answer: One row, urn:nabu:eng-web:jhn:11.35, keyword "Jesus", right context " wept.".
+    steps:
+      - tool: nabu_concord
+        args: {query: '"Jesus wept"', width: 10}
+        expect:
+          - {path: rows, size: 1}
+          - {path: rows.0.urn, equals: "urn:nabu:eng-web:jhn:11.35"}
+          - {path: rows.0.right, includes: wept.}
+
+  # -- align -------------------------------------------------------------------
+  - id: align-mark-2-3
+    difficulty: lookup
+    question: Line up Mark 2:3 across the Greek, Latin and English witnesses.
+    answer: >-
+      sblgnt "καὶ ἔρχονται ... ὑπὸ τεσσάρων", Vulgate "Et venerunt ad eum
+      ferentes paralyticum ...", WEB "Four people came, carrying a paralytic to him."
+    steps:
+      - tool: nabu_align
+        args: {ref: MARK 2.3}
+        expect:
+          - {path: work, equals: nt}
+          - {path: witnesses.*.sentences.*.urn, includes: "urn:nabu:sblgnt:mark:2.3"}
+          - {path: witnesses.*.sentences.*.urn, includes: "urn:nabu:vulgate:mrk:2.3"}
+          - {path: witnesses.*.sentences.*.urn, includes: "urn:nabu:eng-web:mrk:2.3"}
+          - {path: witnesses.*.sentences.*.text, includes: "Four people came, carrying a paralytic to him."}
+
+  - id: align-jonah-range
+    difficulty: lookup
+    question: Align Jonah 1:1-3 across the Old Testament witnesses held.
+    answer: Three refs, each with the Vulgate, OSHB (Hebrew) and WEB witnesses; Jonah 1:1 in OSHB is urn:nabu:oshb:jonah:1.1.
+    steps:
+      - tool: nabu_align
+        args: {ref: JON 1.1-1.3}
+        expect:
+          - {path: work, equals: ot}
+          - {path: total_refs, equals: 3}
+          - {path: refs.0.witnesses.*.sentences.*.urn, includes: "urn:nabu:oshb:jonah:1.1"}
+          - {path: refs.0.witnesses.*.sentences.*.urn, includes: "urn:nabu:vulgate:jon:1.1"}
+
+  # -- cognates ----------------------------------------------------------------
+  - id: cognates-negative-no-treebanks
+    difficulty: negative
+    question: What cognate sets does Luke 14:34 show across its witnesses?
+    answer: None in this slice — the cognate join needs gold-lemmatized treebank witnesses, which the demo does not carry (total 0).
+    steps:
+      - tool: nabu_cognates
+        args: {target: LUKE 14.34}
+        expect:
+          - {path: total, equals: 0}
+          - {path: groups, size: 0}
+
+  # -- etym --------------------------------------------------------------------
+  - id: etym-deus-dictionary-fallback
+    difficulty: lookup
+    question: Walk the etymology of Latin deus.
+    answer: No reconstruction entry covers it here; the walk falls back to Lewis & Short's dĕus ("a god, a deity").
+    steps:
+      - tool: nabu_etym
+        args: {lemma: deus, limit: 1}
+        expect:
+          - {path: entries, size: 0}
+          - {path: dictionary_entries.*.headword, includes: dĕus}
+          - {path: dictionary_entries.0.gloss, includes: a god}
+
+  # -- char / signs ------------------------------------------------------------
+  - id: char-negative-no-sign-list
+    difficulty: negative
+    question: Give the character card for the cuneiform sign SAR.
+    answer: Not available in the demo — the server says sign lookup needs the Oracc Sign List, which the slice does not carry.
+    steps:
+      - tool: nabu_char
+        args: {query: SAR}
+        expect:
+          - {text_includes: Oracc Sign List}
+
+  - id: signs-negative-no-sign-list
+    difficulty: negative
+    question: Resolve the signs of the ATF line "lugal".
+    answer: Not available in the demo — sign resolution needs the Oracc Sign List, which the slice does not carry.
+    steps:
+      - tool: nabu_signs
+        args: {text: lugal}
+        expect:
+          - {text_includes: Oracc Sign List}
+
+  # -- place -------------------------------------------------------------------
+  - id: place-lilybaeum
+    difficulty: lookup
+    question: What is Lilybaeum's Pleiades id, and which Trismegistos place is it equivalent to?
+    answer: Pleiades 462281, equivalent to tm:22315; a settlement.
+    steps:
+      - tool: nabu_place
+        args: {query: Lilybaeum}
+        expect:
+          - {path: cards.0.pleiades_id, equals: "462281"}
+          - {path: cards.0.equivalences, includes: "tm:22315"}
+          - {path: cards.0.place_types, includes: settlement}
+
+  - id: place-negative-modern-name
+    difficulty: negative
+    question: Look up the place titled "Jerusalem" in the gazetteer.
+    answer: No exact-title match in the gazetteer — the server reports the miss as an error rather than guessing.
+    steps:
+      - tool: nabu_place
+        args: {query: Jerusalem}
+        expect:
+          - {is_error: true}
+          - {text_includes: no place titled}
+
+  # -- links -------------------------------------------------------------------
+  - id: links-negative-no-journal
+    difficulty: negative
+    question: What mined links does John 1:1 carry?
+    answer: None — the demo slice has no links journal (batch layers are not baked); nabu_parallels discovers parallels on the fly instead.
+    steps:
+      - tool: nabu_links
+        args: {urn: "urn:nabu:sblgnt:john:1.1"}
+        expect:
+          - {text_includes: no links journal}
+
+  # -- clarify -----------------------------------------------------------------
+  - id: clarify-resolve-joannes
+    difficulty: lookup
+    question: Normalize "Joannes 1.1" to a passage urn. How many passages does that book have?
+    answer: urn:nabu:vulgate:jhn:1.1; the Vulgate's Joannes has 879 passages (1.1 to 21.25).
+    steps:
+      - tool: nabu_clarify
+        args: {query: Joannes 1.1}
+        expect:
+          - {path: resolved_urn, equals: "urn:nabu:vulgate:jhn:1.1"}
+          - {path: structure.passages, equals: 879}
+          - {path: structure.last_citation, equals: "21.25"}
+
+  - id: clarify-negative-ambiguous-genesis
+    difficulty: negative
+    question: Resolve "Genesis" to a single document.
+    answer: It cannot be resolved uniquely — two documents share the title (urn:nabu:eng-web:gen and urn:nabu:vulgate:gen); no silent guess.
+    steps:
+      - tool: nabu_clarify
+        args: {query: Genesis, limit: 5}
+        expect:
+          - {path: resolved_urn, equals: null}
+          - {path: completions.*.key, includes: "urn:nabu:eng-web:gen"}
+          - {path: completions.*.key, includes: "urn:nabu:vulgate:gen"}
