@@ -257,12 +257,12 @@ module Adapters
       assert_equal "fr", lects.resolve("fra", source: "socinian-letters")
     end
 
-    def test_registry_row_is_unwired_and_manual
+    def test_registry_row_is_wired_and_manual
       registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources.yml", __dir__))
       entry = registry["socinian-letters"]
       refute_nil entry
       assert_equal ADAPTER, entry.adapter_class
-      refute entry.wired, "wired: false until the first real sync is verified"
+      assert entry.wired, "first real sync verified (1,869 docs / 18,067 passages)"
       assert_equal "manual", entry.sync_policy
     end
 

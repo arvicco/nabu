@@ -39,6 +39,9 @@ latin-romance:
   - cv-sardinian
   - salom
   - typikon-bible
+  - noscemus
+  - mazarinades
+  - socinian-letters
 papyri: [papyri-ddbdp]
 latin-inscriptions: [edh]
 greek-inscriptions: [aio]
@@ -91,7 +94,7 @@ pre-roman-italy: [ceipom, itant, open-etruscan, tir, lexlep, isicily]
 aegean: [damos, sigla, ig-cyprus]
 biblical-editions: [vulgate, sblgnt, eng-web, ebible-pacific]
 old-english: [aspr, perseus-anglit]
-middle-early-modern-english: [cme, eebo-tcp, evans-tcp, ecco-tcp, emmo]
+middle-early-modern-english: [cme, eebo-tcp, evans-tcp, ecco-tcp, emmo, stationers-register, statutes-realm]
 slavic:
   - ccmh
   - freising
@@ -124,6 +127,7 @@ slavic:
   - vuk-danicic
   - slavistics-pd
   - archiv-slav-phil
+  - korpus16
 baltic-finnic-basque: [senie, vakk, vks, bim-sahcoba]
 chinese:
   - kanripo

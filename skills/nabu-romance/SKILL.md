@@ -6,7 +6,7 @@ compatibility: "Requires the nabu MCP server (`bin/nabu mcp`, read-only, stdio) 
 metadata:
   desk: romance
   origin: generated
-  sources: "analecta-hymnica aranese bdcamoes bfm bim-sahcoba cantigas cantus corpus-corporum croala ctilc cv-sardinian derom digiliblt disco divinum-officium gregobase littre lo-congres meloniromance memis openmgh osta salom theatre-classique typikon-bible ud wiktionary-ca wiktionary-frm wiktionary-fro wiktionary-oc wiktionary-osp wiktionary-pro"
+  sources: "analecta-hymnica aranese bdcamoes bfm bim-sahcoba cantigas cantus corpus-corporum croala ctilc cv-sardinian derom digiliblt disco divinum-officium gregobase littre lo-congres mazarinades meloniromance memis noscemus openmgh osta salom socinian-letters theatre-classique typikon-bible ud wiktionary-ca wiktionary-frm wiktionary-fro wiktionary-oc wiktionary-osp wiktionary-pro"
 ---
 
 # The Romanist — the `romance` desk
@@ -41,11 +41,14 @@ verbatim upstream terms are in `docs/02-sources.md` of the Nabu repository.
 | `gregobase` | GregoBase — a database of Gregorian scores (gregobase.selapa.net) | open |
 | `littre` | Littré, Dictionnaire de la langue française (1863–1877) — oeuvres/littre TEI | attribution |
 | `lo-congres` | Lo Congrès Occitan news corpus (six dialects, French-aligned) | attribution |
+| `mazarinades` | Mazarinades — the Antonomaz corpus of Fronde pamphlets (1648–1653) | attribution |
 | `meloniromance` | Meloni et al. 2021 Romance cognate sets (lexibank/meloniromance CLDF) | attribution |
 | `memis` | MEMIS — Epigraphic corpus of Medieval and Early Modern inscriptions in Slovenia 1.0 (Pobežin, ZRC SAZU) | attribution |
+| `noscemus` | NOSCEMUS Digital Sourcebook — early modern scientific Latin (Transkribus HTR) | attribution |
 | `openmgh` | openMGH — Monumenta Germaniae Historica editions (MGH / BSB, digital MGH) | attribution |
 | `osta` | OSTA — Old Spanish Textual Archive (Hispanic Seminary of Medieval Studies) | nc |
 | `salom` | Şalom Ladino articles text corpus (Col·lectivaT / Sephardic Center of Istanbul) | attribution |
+| `socinian-letters` | Die sozinianischen Briefwechsel — the Socinian correspondence (AdW Mainz) | attribution |
 | `theatre-classique` | Théâtre Classique — Paul Fièvre's TEI corpus of French plays | nc |
 | `typikon-bible` | typikon.info Bible layer — the 1688 Bucharest Bible, the Elizabeth Bible in Church Cyrillic and the Old Georgian Bible (dump 2026-09-21) | attribution |
 | `ud` | Universal Dependencies — ancient treebanks | nc |

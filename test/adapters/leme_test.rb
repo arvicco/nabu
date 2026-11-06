@@ -163,12 +163,12 @@ class LemeTest < Minitest::Test
     assert_equal 3, db[:dictionaries].count
   end
 
-  def test_registry_row_exists_unwired_with_manual_sync_policy
+  def test_registry_row_exists_wired_with_manual_sync_policy
     entry = Nabu::SourceRegistry.load(File.join(Nabu::Config::PROJECT_ROOT, "config", "sources.yml"))["leme"]
     refute_nil entry
     assert_equal ADAPTER, entry.adapter_class
     assert_equal "manual", entry.sync_policy
-    refute entry.wired
+    assert entry.wired, "first real sync verified (311 dictionaries / 943,211 entries)"
   end
 
   def test_the_probe_is_liveness_only_on_the_listing

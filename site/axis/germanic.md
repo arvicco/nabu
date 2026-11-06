@@ -26,9 +26,9 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 ## The shelves
 
-A source wears every desk it serves — these 38 answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
+A source wears every desk it serves — these 40 answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
-| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 5 November 2026)</span> |
+| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 6 November 2026)</span> |
 |---|---|---|---|---|
 | `aspr` | texts | attribution | wired · manual | 349 docs / 30,550 passages |
 | `bosworth-toller` | dictionary | attribution | wired · manual | 62,815 entries |
@@ -47,7 +47,7 @@ A source wears every desk it serves — these 38 answer this desk. Holdings are 
 | `grand-tour` | texts | attribution | wired · frozen | 4 docs / 515 passages |
 | `helipad` | treebank | attribution | wired · manual | 1 docs / 3,549 passages |
 | `iswoc` | texts | nc | wired · frozen | 5 docs / 2,536 passages |
-| `leme` | dictionary | attribution | not yet wired | not synced yet |
+| `leme` | dictionary | attribution | wired · manual | 943,211 entries |
 | `menota` | texts | attribution | wired · manual | 91 docs / 229,501 passages |
 | `menotec` | texts | nc | wired · manual | 7 docs / 20,308 passages |
 | `perseus-anglit` | texts | attribution | wired · manual | 2 docs / 86 passages |
@@ -57,9 +57,9 @@ A source wears every desk it serves — these 38 answer this desk. Holdings are 
 | `rem` | texts | attribution | wired · manual | 406 docs / 355,449 passages |
 | `ren` | texts | attribution | wired · manual | 235 docs / 297,504 passages |
 | `rundata` | inscriptions | odbl | wired · manual | 30,647 docs / 30,645 passages |
-| `runesdb` | texts | attribution | wired · manual | 613 docs / 1,611 passages |
-| `stationers-register` | texts | attribution | not yet wired | not synced yet |
-| `statutes-realm` | texts | open | not yet wired | not synced yet |
+| `runesdb` | texts | attribution | wired · manual | 983 docs / 1,981 passages |
+| `stationers-register` | texts | attribution | wired · manual | 10,453 docs / 26,047 passages |
+| `statutes-realm` | texts | open | wired · manual | 661 docs / 8,053 passages |
 | `ud` | treebank | nc | wired · manual | 83 docs / 329,980 passages |
 | `wiktionary-dum` | dictionary | attribution | wired · manual | 2,342 entries |
 | `wiktionary-enm` | dictionary | attribution | wired · manual | 56,687 entries |
@@ -71,9 +71,9 @@ A source wears every desk it serves — these 38 answer this desk. Holdings are 
 | `wiktionary-sco` | dictionary | attribution | wired · manual | 6,042 entries |
 | `zoega` | dictionary | attribution | wired · manual | 29,951 entries |
 
-**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 5 November 2026)</span>: `non` 97,010 · `en` 67,644 · `ang` 63,170 · `enm` 56,984 · `sv` 53,406 · `got` 23,038 · `eng` 6,814 · `sco` 6,081 · `de` 5,672 · `dum` 4,568 … and 32 more (`nabu axis germanic` lists all).
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 6 November 2026)</span>: `en` 598,766 · `ita` 167,236 · `lat` 138,255 · `non` 97,010 · `ang` 71,142 · `enm` 60,521 · `fra` 59,810 · `sv` 53,406 · `spa` 28,346 · `got` 23,038 … and 39 more (`nabu axis germanic` lists all).
 
-**Carried in by multilingual packs** (`ud` — whole-source members whose other languages ride along, as of 5 November 2026): `orv` 9 · `ota` 5 · `lzh` 4 · `cop` 3 · `egy` 3 … and 13 more (`nabu axis germanic` lists all).
+**Carried in by multilingual packs** (`ud` — whole-source members whose other languages ride along, as of 6 November 2026): `orv` 9 · `ota` 5 · `lzh` 4 · `cop` 3 · `egy` 3 … and 12 more (`nabu axis germanic` lists all).
 
 ## The desk's instruments
 
