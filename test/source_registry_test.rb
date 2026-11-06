@@ -578,6 +578,63 @@ class SourceRegistryTest < Minitest::Test
     assert_equal ["KR1"], adapter.classes
   end
 
+  # -- edition_refs (declared edition branches, acquisition only) ----------
+
+  def test_edition_refs_defaults_nil
+    entry = load_registry(<<~YAML)["fake-src"]
+      fake-src:
+        adapter: SourceRegistryTest::FakeAdapter
+    YAML
+    assert_nil entry.edition_refs
+  end
+
+  def test_edition_refs_parses_a_list_of_strings
+    entry = load_registry(<<~YAML)["kanripo"]
+      kanripo:
+        adapter: Nabu::Adapters::Kanripo
+        edition_refs: [SBCK]
+    YAML
+    assert_equal ["SBCK"], entry.edition_refs
+  end
+
+  def test_malformed_edition_refs_raise_naming_the_slug
+    ["SBCK", "[]", "[1]"].each do |value|
+      error = assert_raises(Nabu::ValidationError) do
+        load_registry(<<~YAML)
+          kanripo:
+            adapter: Nabu::Adapters::Kanripo
+            edition_refs: #{value}
+        YAML
+      end
+      assert_match(/kanripo/, error.message)
+      assert_match(/edition_refs/, error.message)
+    end
+  end
+
+  def test_build_adapter_passes_edition_refs_to_a_supporting_adapter
+    entry = load_registry(<<~YAML)["kanripo"]
+      kanripo:
+        adapter: Nabu::Adapters::Kanripo
+        classes: [KR1]
+        edition_refs: [SBCK]
+    YAML
+
+    adapter = entry.build_adapter
+    assert_equal ["KR1"], adapter.classes
+    assert_equal ["SBCK"], adapter.edition_refs
+  end
+
+  def test_build_adapter_edition_refs_on_an_unsupporting_adapter_raises
+    entry = load_registry(<<~YAML)["fake-src"]
+      fake-src:
+        adapter: SourceRegistryTest::FakeAdapter
+        edition_refs: [SBCK]
+    YAML
+
+    error = assert_raises(Nabu::ValidationError) { entry.build_adapter }
+    assert_match(/edition_refs/, error.message)
+  end
+
   def test_build_adapter_classes_on_an_unsupporting_adapter_raises
     entry = load_registry(<<~YAML)["fake-src"]
       fake-src:

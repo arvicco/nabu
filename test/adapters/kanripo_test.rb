@@ -81,6 +81,15 @@ class KanripoTest < Minitest::Test
                  narrow.discover(FIXTURES).to_a.map(&:id)
   end
 
+  def test_edition_refs_default_to_none_and_are_validated_as_branch_names
+    assert_empty Nabu::Adapters::Kanripo.new.edition_refs
+    assert_equal ["SBCK"], Nabu::Adapters::Kanripo.new(edition_refs: %w[SBCK SBCK]).edition_refs
+    ["", "../x", "a b", "-x", 1].each do |bad|
+      assert_raises(Nabu::ValidationError) { Nabu::Adapters::Kanripo.new(edition_refs: [bad]) }
+    end
+    assert_raises(Nabu::ValidationError) { Nabu::Adapters::Kanripo.new(edition_refs: "SBCK") }
+  end
+
   def test_classes_are_validated_at_construction
     error = assert_raises(Nabu::ValidationError) { Nabu::Adapters::Kanripo.new(classes: ["KR7"]) }
     assert_match(/KR7/, error.message)
@@ -226,6 +235,31 @@ class KanripoTest < Minitest::Test
       assert File.file?(File.join(workdir, "KR1a0170", "KR1a0170_001.txt"))
       refs = adapter.discover(workdir).to_a
       assert_equal ["urn:nabu:kanripo:KR1a0170"], refs.map(&:id)
+      refute_match(/edition/, report.notes, "no declared refs, no edition pass in the notes")
+    end
+  end
+
+  def test_fetch_runs_the_declared_edition_pass_and_reports_its_counts
+    Dir.mktmpdir("nabu-kanripo-fetch") do |root|
+      upstream = File.join(root, "upstream")
+      seed_repo(File.join(upstream, "KR-Catalog"),
+                "KR/KR3a.txt" => fixture_bytes("KR-Catalog/KR/KR3a.txt"),
+                "general/sbck.org" => fixture_bytes("KR-Catalog/general/sbck.org"))
+      text = File.join(upstream, "KR3a0001")
+      seed_repo(text, "KR3a0001_001.txt" => fixture_bytes("KR3a0001/KR3a0001_001.txt"))
+      Nabu::Shell.run("git", "-C", text, "branch", "SBCK")
+      workdir = File.join(root, "work")
+
+      adapter = Nabu::Adapters::Kanripo.new(classes: ["KR3"], edition_refs: ["SBCK"])
+      adapter.define_singleton_method(:catalog_url) { File.join(upstream, "KR-Catalog") }
+      adapter.define_singleton_method(:repo_base) { upstream }
+      adapter.define_singleton_method(:fetch_delay) { 0 }
+
+      report = adapter.fetch(workdir)
+
+      assert_match(/edition SBCK: in-scope 1 · fetched 1 · absent 0 · skipped 0 · missing 0/, report.notes)
+      assert_equal head(text), Nabu::Shell.run("git", "-C", File.join(workdir, "KR3a0001"),
+                                               "rev-parse", "refs/remotes/origin/SBCK").strip
     end
   end
 
