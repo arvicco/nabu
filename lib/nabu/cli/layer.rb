@@ -8,6 +8,8 @@ module Nabu
   # sections, all rendered by LectCLI#suggest, which `nabu lect suggest`
   # keeps aliasing). New layer-wide commands land here, not on LectCLI.
   class LayerCLI < Thor
+    include DurationFormat
+
     namespace "layer"
 
     desc "suggest SLUG", "The core-layers census: lect, dating, places and script postures in one report"
