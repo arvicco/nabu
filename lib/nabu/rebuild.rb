@@ -302,7 +302,8 @@ module Nabu
       # rows, seconds to derive; same feature-detect as the lect facet).
       progress&.stage("dictionary stats")
       profile.measure(scope: RebuildProfile::CORPUS, stage: :dictionary_stats) do
-        Store::DictionaryStats.rebuild!(catalog: db, lects: Nabu::Lects.load_default(config: @config))
+        Store::DictionaryStats.rebuild!(catalog: db, lects: Nabu::Lects.load_default(config: @config),
+                                        shelf_dates: Nabu::LectShelfDates.load_default(config: @config))
       end
       # P106-5: the 84000→Derge title crosswalk — refills the derge
       # shelves' NULL titles from canonical/e84000 headers (seconds;

@@ -275,7 +275,8 @@ module Nabu
         # wholesale (few hundred rows, seconds), so replayed dictionary
         # sources and registry changes both land.
         progress&.stage("dictionary stats")
-        Store::DictionaryStats.rebuild!(catalog: db, lects: Nabu::Lects.load_default(config: @config))
+        Store::DictionaryStats.rebuild!(catalog: db, lects: Nabu::Lects.load_default(config: @config),
+                                        shelf_dates: Nabu::LectShelfDates.load_default(config: @config))
         # P106-5: replayed e84000/derge sources re-mint NULL titles — the
         # crosswalk re-fills in the same breath (seconds, no-op sans tree).
         progress&.stage("derge titles")
