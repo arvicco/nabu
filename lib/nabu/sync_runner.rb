@@ -461,7 +461,8 @@ module Nabu
                                       .where(Sequel[:sources][:slug] => entry.slug).any?
 
       Store::DictionaryStats.refresh_source!(catalog: @db, slug: entry.slug,
-                                             lects: Nabu::Lects.load_default(config: @config))
+                                             lects: Nabu::Lects.load_default(config: @config),
+                                             shelf_dates: Nabu::LectShelfDates.load_default(config: @config))
       # The dictionary-entry facet slice follows the same dictionary-bearing
       # load under the same gate (withdrawals drop pairs; no lane lags a sync).
       Store::EntryFacetBuilder.refresh_source!(catalog: @db, slug: entry.slug,

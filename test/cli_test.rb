@@ -8453,6 +8453,33 @@ class CLITest < Minitest::Test
     end
   end
 
+  def test_lect_stage_dictionaries_dry_run_reports_and_writes_nothing
+    with_lect_shelf_dates_cli_env do |config|
+      out, _err, status = with_config(config) { run_cli(%w[lect stage-dictionaries --dry-run]) }
+      assert_nil status
+      assert_match(/leme\s+en\s+→ en:early\s+1 shelf\s+3 entries/, out)
+      assert_match(/leme\s+en\s+→ en:late\s+1 shelf\s+2 entries/, out)
+      assert_match(/leme\s+en\s+bare \(spans bands\)\s+1 shelf\s+1 entries/, out)
+      assert_match(/dry run — nothing written/, out)
+      db = Nabu::Store.connect(config.catalog_path)
+      assert_equal 0, db[:dictionary_stats].count, "dry-run leaves the census untouched"
+      db.disconnect
+    end
+  end
+
+  def test_lect_stage_dictionaries_restages_the_census_rows
+    with_lect_shelf_dates_cli_env do |config|
+      out, _err, status = with_config(config) { run_cli(%w[lect stage-dictionaries]) }
+      assert_nil status
+      assert_match(/dictionary stats: 3 rows re-derived \(leme\)/, out)
+      db = Nabu::Store.connect(config.catalog_path)
+      rows = db[:dictionary_stats].order(:slug).select_map(%i[slug lect lect_basis])
+      db.disconnect
+      assert_equal [["leme-1604", "en:early", "rule:date-band"], ["leme-1700", "en", nil],
+                    ["leme-1755", "en:late", "rule:date-band"]], rows
+    end
+  end
+
   def test_lect_check_dates_flags_a_contradicted_ruling
     with_lect_dates_cli_env do |config|
       with_config(config) do
@@ -10653,6 +10680,43 @@ class CLITest < Minitest::Test
       [["urn:t:edh:late", 250, 450], ["urn:t:edh:spans", 100, 300]].each do |urn, from, to|
         doc = db[:documents].insert(source_id: edh, urn: urn, language: "lat", content_sha256: "x")
         db[:document_axes].insert(document_id: doc, not_before: from, not_after: to, axis_source: "test")
+      end
+      db.disconnect
+      yield config
+    end
+  end
+
+  # The stage-dictionaries rig: fixture module + a config dir carrying one
+  # dictionary_date_bands rule (leme, en, lexicon_year) + a catalog of
+  # three leme English shelves dated 1604, 1755 and the shared 1700 edge.
+  def with_lect_shelf_dates_cli_env
+    Dir.mktmpdir("nabu-cli-lect-shelf-dates") do |root|
+      dest = File.join(root, "canonical", "nabu-lects")
+      FileUtils.mkdir_p(dest)
+      FileUtils.cp_r(Dir[File.join(Nabu::TestSupport.fixtures("nabu-lects"), "*")], dest)
+      File.write(File.join(root, "sources.yml"), "# empty registry\n")
+      FileUtils.mkdir_p(File.join(root, "config"))
+      File.write(File.join(root, "config", "lect_facet_rules.yml"), <<~YAML)
+        dictionary_date_bands:
+          - id: test-leme-year
+            sources: [leme]
+            codes: [en]
+            field: lexicon_year
+      YAML
+      config = Nabu::Config.new(canonical_dir: File.join(root, "canonical"), db_dir: File.join(root, "db"),
+                                sources_path: File.join(root, "sources.yml"),
+                                config_path: File.join(root, "config", "nabu.yml"))
+      FileUtils.mkdir_p(config.db_dir)
+      db = Nabu::Store.connect(config.catalog_path)
+      Nabu::Store.migrate!(db)
+      leme = db[:sources].insert(slug: "leme", name: "LEME", adapter_class: "X", license_class: "attribution")
+      [["leme-1604", "1604", 3], ["leme-1755", "1755", 2], ["leme-1700", "1700", 1]].each do |slug, year, count|
+        id = db[:dictionaries].insert(source_id: leme, slug: slug, title: slug, language: "en")
+        count.times do |n|
+          db[:dictionary_entries].insert(dictionary_id: id, urn: "urn:nabu:dict:#{slug}:#{n}", entry_id: n.to_s,
+                                         key_raw: "k", headword: "h", headword_folded: "h", body: "b",
+                                         content_sha256: "x", annotations_json: JSON.generate("lexicon_year" => year))
+        end
       end
       db.disconnect
       yield config
