@@ -2166,13 +2166,16 @@ sources:
     lect: {posture: dates, note: "the date-band inference stages the volumes from upstream's own
         per-volume century labels: the 25 volumes labeled 5th–15th century fall inside grc:byz
         [330, 1453]; the two 4th-century volumes (Eusebius, Epiphanius) span the koi/byz
-        boundary and stay bare grc, as do the 6 undated Pre-Nicaean volumes. No facet rule:
+        boundary and stay bare grc, as do the 6 Pre-Nicaean volumes (their open-start
+        envelope is no closed interval, so no stage infers). No facet rule:
         a label map would only repeat the band. Carved works inherit their volume's band;
         the dateless residua stay bare grc"}
     dating: {posture: dated, note: "the per-volume Dates label of upstream's Works and Authors
         table, transcribed (VOLUMES) → a century envelope, date_class composition (MetadataDates
-        :structured; 27 of 33 volumes — the 6 Pre-Nicaean name no century). Transcribed, not
-        corrected: PG 87.1 (Procopius of Gaza, c. 465–528) carries upstream's 7th century.
+        :structured; 27 of 33 volumes); the 6 Pre-Nicaean volumes name no century but a crisp
+        right edge — Nicaea, 325 — and band as an OPEN-START envelope (not_after 325, the label
+        raw). Transcribed, not corrected: PG 87.1 (Procopius of Gaza, c. 465–528) carries
+        upstream's 7th century, PG 3 (ps.-Dionysius, c. 500) upstream's Pre-Nicaean.
         A carved work inherits its volume's label (the plan carries no per-work date);
         a residuum carries none"}
     places: {posture: unplaced, note: "the deposit names no place — no imprint, no provenance,

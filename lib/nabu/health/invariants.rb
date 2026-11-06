@@ -439,15 +439,13 @@ module Nabu
                                                  "the labels fold through kind_map.yml — the id never " \
                                                  "traces into a row by value" },
         # The P160 wave's first-sync mining census (live values sampled
-        # 2026-11-06). The real ore the census surfaced rides the queue
-        # (the Socinian received-places and cgpg's Pre-Nicaean band),
-        # never a silent drop.
+        # 2026-11-06). The real ore the census surfaced (the Socinian
+        # received-places, cgpg's Pre-Nicaean band) now projects.
         "cgpg" => { "period" => "upstream's per-volume Dates label, TRANSCRIBED into the " \
-                                "composition envelope wherever it names a century (27/33 " \
-                                "volumes; date_raw carries the label verbatim) — the " \
-                                "Pre-Nicaean volumes and the carve residua keep the label " \
-                                "with no envelope by design (the dating posture note); " \
-                                "banding Pre-Nicaean itself is queued" },
+                                "composition envelope on every volume (date_raw carries the " \
+                                "label verbatim): a century envelope where it names a " \
+                                "century (27/33), the open-start not_after-325 envelope for " \
+                                "the 6 Pre-Nicaean volumes; residua carry no label" },
         "statutes-realm" => { "originally_published" => "Raithby's edition imprint (\"Great " \
                                                         "Britain Record Commission, s.l, 1819\") — " \
                                                         "edition lineage (the cme/openmgh stance); " \
