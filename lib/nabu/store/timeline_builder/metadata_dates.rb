@@ -121,7 +121,8 @@ module Nabu
           "cbeta" => :dynasty_band,
           "ccmh" => :bounds_keys,
           "cgpg" => :structured, # P153: upstream's per-volume Dates label as a century envelope
-          #                        (class composition); Pre-Nicaean volumes carry none
+          #                        (class composition); Pre-Nicaean volumes an open-start
+          #                        envelope (not_after 325, Nicaea)
           "classical-modern" => :work_era, # the work's attributed era (config/work_eras.yml,
           #                                  keyed on metadata "book"), composition class
           "cme" => :edition_year_text,
