@@ -150,23 +150,47 @@ module Nabu
            .each(&)
     end
 
+    # The document census keeps its historical tally: a date no band
+    # contains counts under spans_bands there (the finer :outside_bands is
+    # the shelf grain's reason — Nabu::LectShelfDates).
     def classify(row)
-      resolved = @registry.resolve(row[:language], source: row[:slug])
-      match = Nabu::Lects.parse_id(resolved)
+      verdict = infer(code: row[:language], source: row[:slug],
+                      not_before: row[:not_before], not_after: row[:not_after])
+      return verdict == :outside_bands ? :spans_bands : verdict if verdict.is_a?(Symbol)
+
+      Candidate.new(urn: row[:urn], source: row[:slug], code: row[:language], lect_id: verdict,
+                    not_before: row[:not_before], not_after: row[:not_after])
+    end
+
+    public
+
+    # The classification core every grain shares (documents here, dictionary
+    # shelves in Nabu::LectShelfDates): one interval for one (code, source)
+    # answers the stage id it is inferable into, or the Symbol reason it is
+    # not — :unresolvable, :already_refined, :open_interval,
+    # :reversed_interval, :no_banded_stages, :spans_bands (no single band
+    # contains it but it touches some — it straddles stages, or a shared
+    # edge year sits in both closed bands), :outside_bands (it touches no
+    # band at all).
+    def infer(code:, source:, not_before:, not_after:)
+      match = Nabu::Lects.parse_id(@registry.resolve(code, source: source))
       return :unresolvable unless match
       return :already_refined if match[:stage] || match[:variety] || match[:ortho]
-      return :open_interval unless row[:not_before] && row[:not_after]
+      return :open_interval unless not_before && not_after
       # A backwards interval (the 2026-08-04 iip find) satisfies containment
       # vacuously — it is a dating defect upstream, never evidence.
-      return :reversed_interval if row[:not_before] > row[:not_after]
+      return :reversed_interval if not_before > not_after
 
       bands = banded_stages(match[:anchor])
       return :no_banded_stages if bands.empty?
 
       containing = bands.select do |stage|
-        band_contains?(stage.band, not_before: row[:not_before], not_after: row[:not_after])
+        band_contains?(stage.band, not_before: not_before, not_after: not_after)
       end
-      return :spans_bands unless containing.size == 1
+      unless containing.size == 1
+        touched = bands.any? { |stage| band_overlaps?(stage.band, not_before: not_before, not_after: not_after) }
+        return touched ? :spans_bands : :outside_bands
+      end
 
       # The resolution may carry a script SURFACE the stage leaves open (a
       # surface-only override: ppchy yi~latn, papyri egy~latn) — it rides
@@ -174,16 +198,22 @@ module Nabu
       # state had it named the stage; dropping it would strip the surface
       # claim from exactly the dated documents.
       surface = match[:script] ? "~#{match[:script]}" : ""
-      Candidate.new(urn: row[:urn], source: row[:slug], code: row[:language],
-                    lect_id: "#{containing.first.id}#{surface}",
-                    not_before: row[:not_before], not_after: row[:not_after])
+      "#{containing.first.id}#{surface}"
     end
+
+    private
 
     # A closed document interval against a possibly open-ended band: a null
     # bound constrains nothing on its side (P84-3). A band with BOTH bounds
     # null never reaches here — banded_stages requires at least one.
     def band_contains?(band, not_before:, not_after:)
       (band[0].nil? || band[0] <= not_before) && (band[1].nil? || not_after <= band[1])
+    end
+
+    # Does the interval touch the band at all? Separates an interval that
+    # straddles stages (spans) from one no stage reaches (outside).
+    def band_overlaps?(band, not_before:, not_after:)
+      (band[0].nil? || not_after >= band[0]) && (band[1].nil? || not_before <= band[1])
     end
 
     # The anchor's attested stages with at least one band bound —
