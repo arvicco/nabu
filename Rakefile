@@ -813,6 +813,21 @@ namespace :demo do
     sh "mcp-publisher publish ./server.json"
   end
 
+  # The demo eval pack (eval/demo/pack.yml) against a running server —
+  # script/demo-eval is the entry point; this task forwards to it.
+  # IMAGE (default :latest over docker stdio), MCP_URL (an HTTP-mode
+  # server) or MCP_COMMAND (a local stdio server) picks the target; ONLY
+  # narrows to comma-separated task ids.
+  desc "Run the demo eval pack against a server (IMAGE | MCP_URL | MCP_COMMAND; ONLY=ids)"
+  task :eval do
+    argv = [RbConfig.ruby, File.join(__dir__, "script", "demo-eval")]
+    { "MCP_URL" => "--url", "MCP_COMMAND" => "--command", "IMAGE" => "--image", "ONLY" => "--only" }.each do |var, flag|
+      value = ENV.fetch(var, "").strip
+      argv += [flag, value] unless value.empty?
+    end
+    sh(*argv)
+  end
+
   # The MCP stdio smoke on its own (initialize → tools/list → nabu_status).
   # IMAGE defaults to the public :latest; DEMO_SMOKE_ARGS adds docker run
   # flags (e.g. "--memory=512m --pull=always").
