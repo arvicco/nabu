@@ -1,0 +1,215 @@
+<?xml version='1.0' encoding='utf-8'?>
+<?xml-model href='https://raw.githubusercontent.com/Antonomaz/ODD/main/Schema/ODD_Antonomaz.rng' type='application/xml' schematypens='http://relaxng.org/ns/structure/1.0'?>
+<?xml-model href='https://raw.githubusercontent.com/Antonomaz/ODD/main/Schema/ODD_Antonomaz.rng' type='application/xml' schematypens='http://purl.oclc.org/dsdl/schematron'?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:id="Moreau1085-i_MAZ">
+  <teiHeader>
+    <fileDesc>
+      <titleStmt>
+        <title type="main" source="Moreau">Dialogue de trois paysans picards, Miché, Guillaume et
+          Cherle, sur les affaires de ce temps.</title>
+        <title type="sub">Édition Antonomaz</title>
+        <respStmt>
+          <resp>Chaîne de traitement</resp>
+          <persName role="Project_manager" ref="orcid:0000-0001-9518-1040">Abiven Karine</persName>
+          <persName role="Project_manager" ref="orcid:0000-0002-4795-2362">Lejeune Gaël</persName>
+          <persName role="OCRisation" ref="orcid:0000-0002-0007-1664">Tanguy
+            Jean-Baptiste</persName>
+          <persName role="engineer" ref="orcid:0000-0003-0850-8266">Bartz Alexandre</persName>
+        </respStmt>
+      </titleStmt>
+      <publicationStmt>
+        <publisher>Projet ANTONOMAZ / Sorbonne Université</publisher>
+        <ref target="https://github.com/Antonomaz" />
+        <date type="file_creation" when="2022-01-31">31 janvier 2022</date>
+        <availability status="restricted" n="cc-by">
+          <licence target="https://creativecommons.org/licenses/by/4.0" />
+        </availability>
+      </publicationStmt>
+      <sourceDesc>
+        <bibl>
+          <ref target="https://mazarinum.bibliotheque-mazarine.fr/ark:/61562/mz18470" />
+          <author />
+          <title source="Mazarine">Dialogue de trois paysans picards, Miché, Guillame, &amp; Cherle.
+            Sur les affaires de ce temps.</title>
+          <pubPlace source="Mazarine">Sans lieu</pubPlace>
+          <publisher>
+            <persName>Sans nom</persName>
+          </publisher>
+          <date source="Mazarine" when="1649">1649</date>
+          <date source="Carrier" notBefore="1649-07-01" notAfter="1649-08-18" when="1649">entre le
+            1er juillet
+            et le 18 août 1649</date>
+          <extent>
+            <measure unit="page" quantity="11" />
+          </extent>
+          <note type="format">in-4</note>
+          <relatedItem source="Mazarine" type="identifier" subtype="BM50275" cert="high"
+            target="https://mazarinades.bibliotheque-mazarine.fr/ark:/61562/bm50275" />
+        </bibl>
+        <msDesc>
+          <msIdentifier>
+            <settlement ref="geonames:2988507">Paris</settlement>
+            <institution>Bibliothèque Mazarine</institution>
+            <repository />
+            <idno type="cote">M10839-1</idno>
+          </msIdentifier>
+          <history>
+            <provenance>
+              <stamp>True</stamp>
+            </provenance>
+          </history>
+        </msDesc>
+      </sourceDesc>
+    </fileDesc>
+    <encodingDesc>
+      <projectDesc>
+        <p>Cette édition a été réalisée dans le cadre du projet ANTONOMAZ. Son objectif principal
+          est de fournir un texte destiné à l'exploration avec des outils électroniques. De ce fait,
+          ce n'est ni une édition philologique, ni une édition pédagogique ou de redécouverte d'un
+          auteur oublié.</p>
+        <p>Les textes encodés dans le cadre du projet ANTONOMAZ sont issus de numérisations de
+          bibliothèques numériques publiques et de Google livres.</p>
+        <p>L'édition présentée ici est issue d'un processus d'OCRisation réalisé avec Kraken.</p>
+      </projectDesc>
+      <editorialDecl>
+        <p />
+      </editorialDecl>
+    </encodingDesc>
+    <profileDesc>
+      <langUsage>
+        <language ident="other">Document en picard</language>
+      </langUsage>
+      <abstract>
+        <p source="Mazarine">2 états du cahier signé A (états A/B) : p. 3, l. 11 "ma" / "men" , l.
+          16 "appris" / "apprins" ; p. 4, l. 2 "nos" / "nous", l. 3 "conté y dit seument" / "couté
+          si dit seulement", l. 5 "conteray" / "couteray", l. 18 "apprins" / "appris". Complété par
+          : "Suitte et second dialogue de trois paysans picards Michel, Guillaume et Charle. Sur les
+          nouvelles de ce temps." (BM01372). D'après Hubert Carrier (Bibliothèque Mazarine, Ms.
+          4682-2, f. 224v), texte paru entre le 1er juillet et le 18 août 1649 (retour du roi, après
+          son second séjour à Compiègne).</p>
+        <p source="Moreau">1085. Dialogue de trois paysans picards , Miché , Guillaume et Cherle,
+          sur les affaires de ce tem$. (S. 1.), 1649. [ L- }_..t.. u vAX. ditint U d Deux pièces,
+          l’une de 11 , et l’autre de 12 pages. C’est du patois picard. Il n’y a que cela à en dire.
+          rñ LJÜ La cour était à Compiègne.</p>
+      </abstract>
+      <textClass>
+        <keywords>
+          <term type="form">prose</term>
+          <term type="genre">dialogue</term>
+          <term type="handwritten_note" subtype="no" />
+          <term type="table_of_content" subtype="no" />
+          <term type="illustration" subtype="no" />
+        </keywords>
+      </textClass>
+    </profileDesc>
+    <revisionDesc>
+      <change status="corrected" when="2022-02-10" who="AB" />
+    </revisionDesc>
+  </teiHeader>
+  <text>
+    <body>
+      <p>
+        <pb manual_correction="yes" vue="9" />
+        <l><lb />DIALOGVE</l>
+        <l><lb />DE TROIS PAYSANS</l>
+        <l><lb />
+        PICARDS</l>
+        <l><lb />Miché, Guillame, &amp; Cherle,</l>
+        <l><lb />Sur les affaires de cee
+        temps.</l>
+        <figure type="decoration" />
+        <l><lb />M. DC. XLIX.</l>
+        <pb vue="10" />
+        <pb vue="11" />
+        <lb />DIALOGVE
+        DE <lb />trois payſans Picards. <lb />MICHEL CHERLE, &amp; <lb />GVILLAVME, ſur les affaires <lb />de
+        ce temps. <lb />Michel venant voir Charle, commence <lb /> en cetfe ſorte. <lb /> Oen iour
+        en boenne ſancté <lb />JZ compere Cherle, <lb />Cberle. <lb />Dieu vo garde ma compere
+        Miché <lb />hé bien que dit on ne ſeaús ouſlen. <lb />icb. <lb />Eti’eſtoi vreno ehy pout
+        apprendre <lb />eque coſe o dit qs o ſſ reint hiee <lb />de Compienne, na tirien appris. <lb />
+        i <lb />¬nan <pb vue="12" />
+        <lb /> 7 <lb rend="¬" break="no" /> 4 <lb />Cherle. <lb />Per me
+        foy compere il hios a coire <lb />rien eonté y dit ſeumen, men Pere ’ay <lb />veus bien des
+        beaux coſes, mais ie vo’ les <lb />conteray demain ie ſuis troptené ennuy, <lb />che
+        pourquoy ie ne uo ſen ſeroy que dire. <lb />mai attendes ie le voy crié́, il nos en <lb
+          rend="¬" break="no" />tretara. <lb /> Miché. <lb />Ie vos en prie compere, ſi neſt poe <lb />
+        empecqueé. <lb />Cherle. <lb />Non non? Guillame, Guillama <lb rend="¬" break="no" />
+        Guillame. <lb />Plaiſt il men pere. <lb />Cherle. <lb />Vincha, di ous va pea ce que tu as <lb />apprins
+        à Compienne. <lb /> Guillame. <pb vue="13" />
+        <lb />, ,,,,,,, <lb
+          rend="¬" break="no" />Guillame. <lb />Per me foy men pere ien y tant veu que ie ne <lb />ſç̧ay
+        ouer per ou ie commencherai. <lb />herle. <lb />Per ou tu vora men fiu. <lb />Guilla me, <lb />le
+        men voy uo dire chan que ie vi quan ien <lb rend="¬" break="no" />tre den Compienne verdi
+        derrin. <lb />¬¬¬ <lb rend="¬" break="no" />iché, <lb />Ché bien foy, o fceront tout omin
+        &amp; bien <lb />que que ché qu’o vit. <lb />Cherle. <lb />Oſen ſeres bien eſtonné, ie vis
+        en entrant de <lb />grands baudets, plus grand deux fois que les <lb /> eſnes de men pere, o
+        diſoit que cheſtoit o Roy <lb />mais per me foy, il no duiroient bien mieux. <lb /> Cherle. <lb
+          rend="¬" break="no" />Et pourquoy Guillame. O nauons rien a ir <lb />porté́ de coſté
+        &amp; dautre comme le Roy enco <lb rend="¬" break="no" />que ce ne ſoit quun efan <lb />
+        uillame, <lb />Il labouroie nos ter, &amp; portroie no ma <lb rend="¬" break="no" />né́e au
+        molin. <lb />Cherle. <lb />Ieoutrit tre à les norrir men fiu. <lb />2 <pb vue="14" />
+        <lb />
+        <lb
+          rend="¬" break="no" />quillame. <lb />Per me foy nouné́ men pere y ne coutroit rien <lb />du
+        tou ſont des betes qui vit de lair y ne ſont <lb />poen comme les noſtre qui mange touiour
+        &amp; <lb />ſi ſon bien matte, ché la ont la gueule freme <lb />auec des batons de fer, il
+        non ouarde meng8 <lb />vremen &amp; ſi il ſont ſi gras quipipe, il eſpau <lb rend="¬"
+          break="no" />trent en verité. <lb />Miche. <lb />Ché qui menge bien de lauine Guillame. <lb />
+        Gusillame. <lb /> Ie vo dy que non ilon la gueule fremée auec <lb />du fer. <lb /> herle. <lb />Ouy
+        mai on loſte quand on leu donne à mier. <lb />Gillame. <lb />Nouné vo diſie on ne loſte
+        poeh ſeulement <lb />quand i vont boire car hela eſt attaqueé par le <lb />ſeurcilles auec
+        de gros cleuds qui entrent iuſ <lb rend="¬" break="no" />ques au cherueau on a ouarde de le
+        tiré́. <lb />Micheé <lb /> Par bieu compere ſi cha eſt einſin attaqué on <lb />na ouarde de
+        le deſo’re. <lb /> Glame. <lb />Ouy chela eſt enſin ie lai bien veu, les cleuds <pb
+          vue="15" />
+        <lb />ſon doir ionne il ont vne teſte groſſe comme <lb />men pau <lb />Cherle. <lb />Eſtoit-ce
+        den le marqué́. <lb /> Guillame. <lb />Non l non cheftoit den les rues; ie crois <lb />qu’on
+        les voloit vendre quer il ly auoit bien <lb />des monſieur apres ie fu en varianche de leu <lb />mander
+        ſi voloient troquer contre meneſne <lb />mais il allois ſi rade que ie ne ſceu. <lb />
+        Cherle. <lb />Tu ne les vi don pu. <lb />Guillame. <lb />Pu du tou mai ie vi autre coſe. Ie
+        vi tant de <lb />monſieur ſur de grand queuaux comme des <lb />rochins, qui menoye de gran
+        quien qui ſeroies <lb />bien propes a ouarde no moiſon, ſi no berqué <lb />en auoit
+        ſeulement deux, iamoy les leu nap <lb rend="¬" break="no" />preucheroye ſen troppé́. <lb />
+        Miché. <lb />heſtoit peut eſtre les quiens du Roy qui ſen <lb /> alloit al cache. <lb />
+        uillame. <lb />I ſe peu bien loire quer ie vis vn petit guercon <lb />qui li reſanoit bien,
+        il etoi enpres vn gros <pb vue="16" />
+        <lb />31 <lb />monſieur habillé de rouge <lb rend="¬"
+          break="no" />Cherle. <lb />Cheſtoit le Cardinahé ſot, che grand ſaint <lb />quo ſa
+        canoniſé a Peri, hela que Dieu le vueil <lb rend="¬" break="no" />le mettre biento en ſen
+        paradis quer auſſi bien <lb />napporti rien de boen en Franche. <lb />Miché. <lb />O limmez
+        bien compere Cherle &amp; ſi o dit <lb />que cheſt ly qui no ruinne. <lb /> Cherle. <lb />Compere
+        che neſt poen queie limme, ſi ié <lb />li ſouhaitte du bien, cheſt que ie noderois ly <lb />ſouhaitte
+        du ma. <lb />Guillame. <lb />Perme foy pour mi ie ne men ſouci ouer. <lb />Cherle. <lb />Tet
+        Guillame ſcais tu bien qui eſt che qui noso <lb />Guillame. <lb />Bien men pere ie me terai,
+        mai portant ien <lb />vorrois bien perlé, quer il merite bien, <lb />Cherle. <lb />Men fiu
+        le temps neſt pas prope achet he; <lb /> Mich́ <pb vue="17" />
+        <lb />3 <lb />Miché. <lb />Non
+        Oompere non, vau mieu ſe taire <lb />que perlet de hla, quer o no pendroit ſi <lb />onos
+        oioit. <lb />Guillame. <lb />2 <lb rend="¬" break="no" />Portant i’ay bien des coſes a dire
+        men <lb />pere iai bien des nouuelles de hlomme la, <lb />ien ſuis gros per me foy i faut
+        que iac <lb rend="¬" break="no" />couque quand ie deuroi eſtre pendu per <lb />menc0 <lb />
+        Cherle. <lb />Tet Guillame encoire vne fois,ſi tu <lb />paupre ie t’infliquerai vne belle
+        brognie. <lb />Miche. <lb /> Hola Comteie ne vous faſeh́ poenie <lb />voſen pris qi
+        npdiſcheputo quequ’au <lb rend="¬" break="no" /> tre coſe. <lb />Cherle <lb />Et bien eſt
+        che la toutche que tu ſçais <lb />E <pb vue="18" />
+        <lb />d <lb />1 <lb /> a tu pu rien veu. <lb />
+        Guillame. <lb />Ouy ouy ien ay coire veu, mais vous en <lb />ſerez bien eſtonné de chechy
+        quer i ſont <lb />admirables. <lb />Cherle. <lb />Et quoy Guillame di vit. <lb /> Guillamé. <lb />
+        Iay veu vn grand tropé de bet aà cornes <lb />qui eſtoie a queua. <lb /> Cherle. <lb />Tu
+        reuemen fiu. <lb />Guillame. <lb />Per me foy non né́ m’en pere ie les ai <lb />bien veu
+        cheſtoit eux qui caſchoie ce <lb />grands chiens que ie vo ſai dit? <lb /> Cherle. <lb /> Ie
+        diſois bien que tu tetrompois, ne <lb />ſcai tu poen bien que cheſtoit des qui¬ <pb vue="19" />
+        <lb />eis
+        de cache que les gens du Roy meno <lb rend="¬" break="no" />ie tu le diſoi ti meſme. <lb />
+        Guillame. <lb />Ah ah vertu chouo ne lentendez mie, <lb />il eſtoie tretous comme des hommes
+        ſi <lb />che neſt qu’il y en auoit grammen qui <lb />auoient de grand cornes o front comme <lb />ſtela
+        de no vaque, ien vi per men erme <lb />qui enauoieplus de dounze, <lb />Cherle. <lb />Eſtoicheen
+        entrant que tu vi cha. <lb />Guillame <lb />Ouy cheſtoit den hel grand rue ou che <lb />femmeſonſur
+        leur feneſtre attendant <lb />Cherle. <lb />Teſtoi coire esbleuis donc, chieſtoit lu <lb />Solé
+        qui te donnoi den lesyeux. <lb /> Gumillame <lb />Per me foy nou foué, quer tou le moi <lb
+          rend="¬" break="no" />de diſoi vla vn cornu, vla vn cornard. <lb />Mithe. <lb />Ha ha
+        iefitend le myſtere ché quo ſa <lb />quouqué auec leu femmes,o le diſoit <lb />bien que
+        cheés Polonois en auoie acco <lb rend="¬" break="no" /> moé. </p>
+    </body>
+  </text>
+</TEI>

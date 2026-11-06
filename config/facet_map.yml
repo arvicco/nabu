@@ -257,6 +257,13 @@ sources:
     passage_fields:
       places: place           # per page: the regularized <placeName> mentions (137 pages)
       persons: person         # per page: the regularized <name> mentions (182 pages)
+  stationers-register:        # P160 — census 2026-11-05 through the adapter, all 10,453 entries
+    fields:
+      register: collection    # Register A 1,391 · B 2,356 · C 3,530 · D 3,176
+      persons_mentioned: person  # SRO's marked names (enterers, licensers, authors), 10,439
+      #                         entries — the officers (Master and Wardens) ride metadata only
+      places_mentioned: place_mentioned  # the <placeName> readings (559 entries) — named,
+      #                         never the entry's origin
   grand-tour:                 # P155 — census 2026-11-03 through the adapter, 4 journals
     fields:
       author: author          # the title's "Author:" head (Wagener · Christian August ·
@@ -720,6 +727,16 @@ sources:
       first_attested: first_attested  # the HISTORIQUE's first century label, normalized: XVIe s. 8,603 ·
       #                         XIIIe 3,779 · XIVe 2,719 · XIIe 2,609 · XVe 2,279 · XIe 1,368 · Xe 123 ·
       #                         IXe 56 · XVIIe 2 · VIIIe 1 (21,539 articles) — Littré's own earliest quote
+  leme:                       # census 2026-11-05 over the 313 lexicon XMLs (943,525 word-entries)
+    entry_fields:
+      lexicon_year: lexicon_year      # the work's typed year (item dc.date.created, one erratum —
+      #                         Leme::DATE_ERRATA), 1477–1755: every entry carries its lexicon's
+      lexicon_author: author          # the item's dc.contributor.author, "; "-joined verbatim
+      pos: word_class                 # LEME <class type="pos"> verbatim ("A noun.", "v. a.", "prop.")
+      etymon_languages: etymon_language  # LEME codes of <etym lang> / <class type="etymlang" lang>
+      #                         verbatim (la · fr · gk · sx · het · he · ow · nn · ct · it …)
+      register: usage                 # <class type="register"> verbatim ("a term in Heraldry")
+      dialect: dialect                # <class type="dialect"> verbatim ("Langued.", "Nicot.")
   lexicon-itant:              # census 2026-10-29 (lexicon_1_0.ttl, 809 entries)
     entry_fields:
       pos: word_class         # lexinfo partOfSpeech local name: properNoun 311 · noun 204 ·
@@ -767,3 +784,17 @@ sources:
       #                         5,270 · مختارنامه · شاهنامه · گلستان …)
       form: form              # the poem's own section label, 999 values (غزلیات 57,140 ·
       #                         رباعیات 16,083 · قصاید 5,996 …) — the kind_map fold reads it
+  mazarinades:                # census 2026-11-05 over all 3,067 well-formed files (main 84f319b9)
+    fields:
+      genre: genre            # the textClass genre terms, multi-label (lettre 405 · discours
+      #                         adressé 278 · narration 255 · non renseigné 253 · burlesque 250 ·
+      #                         texte officiel 238 …, 141 values; kind_map folds)
+      form: form              # prose 2,470 · vers 724 (+ 3 singletons)
+      collection: collection  # Moreau 2,834 · Moreau supplement 1/2/3 37/55/19 · Labadie 46 ·
+      #                         Bibliothèque Mazarine 43 · Socard 26 · Antonomaz 3
+      digitization: witness   # the file suffix — GBOOKS (Google Books) · MAZ (Mazarinum) ·
+      #                         GALL (Gallica) · MANUAL · BOR/BORD · BIS
+      author: author          # the first bibl author (1,313 files name one: Parlement de Paris,
+      #                         Louis XIV, Condé, Du Bosc de Montandré, Scarron …)
+      printer: printer        # the imprint's printer-bookseller (Nicolas L'Angevin, Pierre
+      #                         Rocolet, Salomon de La Fosse …)

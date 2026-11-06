@@ -354,6 +354,11 @@ module Nabu
                                           "name a former spot (\"Formerly at Grännarp, Vårkumla " \
                                           "parish.\") as free prose — kept verbatim; " \
                                           "found_location + coordinates project the place" },
+        # P160: the per-find LIDO record's Finding event (sample census 2026-11-05).
+        "runesdb" => { "find_date" => "the DISCOVERY date of the find (\"1835\", \"1840 ca.\", " \
+                                      "\"1848>F\", \"1857+1890\") — when it was found, never the " \
+                                      "inscription's dating (the ociana stance); the Production " \
+                                      "event projects the date" },
         "menota" => { "settlement" => "the holding library's city (a PRESENT location — the " \
                                       "MetadataDates menota note)" },
         "oracc" => { "regnal_dates" => "consumed: OraccDates bands it at reign precision when " \
@@ -432,7 +437,42 @@ module Nabu
                                  "genre_uris" => "consumed: each id is the AAT/LoC authority of exactly ONE " \
                                                  "genre label (70 ids ↔ 70 labels, census 2026-11-04), and " \
                                                  "the labels fold through kind_map.yml — the id never " \
-                                                 "traces into a row by value" }
+                                                 "traces into a row by value" },
+        # The P160 wave's first-sync mining census (live values sampled
+        # 2026-11-06). The real ore the census surfaced rides the queue
+        # (the Socinian received-places and cgpg's Pre-Nicaean band),
+        # never a silent drop.
+        "cgpg" => { "period" => "upstream's per-volume Dates label, TRANSCRIBED into the " \
+                                "composition envelope wherever it names a century (27/33 " \
+                                "volumes; date_raw carries the label verbatim) — the " \
+                                "Pre-Nicaean volumes and the carve residua keep the label " \
+                                "with no envelope by design (the dating posture note); " \
+                                "banding Pre-Nicaean itself is queued" },
+        "statutes-realm" => { "originally_published" => "Raithby's edition imprint (\"Great " \
+                                                        "Britain Record Commission, s.l, 1819\") — " \
+                                                        "edition lineage (the cme/openmgh stance); " \
+                                                        "the acts' own session dates project" },
+        "noscemus" => { "date_basis" => "the basis qualifier (\"imprint\") of the projected " \
+                                        "date — machinery, never a second date",
+                        "place_basis" => "the basis qualifier (\"imprint\") of the projected " \
+                                         "place — machinery, never a second place" },
+        "mazarinades" => { "text_origin" => "the edition statement's OCR-process note (\"… " \
+                                            "OCRisation réalisé avec Kraken\") — lineage prose " \
+                                            "under an origin-shaped key, not a place; the " \
+                                            "pamphlet's pub_place projects" },
+        "socinian-letters" => { "place_received" => "the letter's DESTINATION city — a second, " \
+                                                    "role-qualified place the per-document place " \
+                                                    "lane does not model (the sent place projects " \
+                                                    "as the origin); projecting it is queued, " \
+                                                    "never dropped silently",
+                                "place_received_ref" => "the destination's GeoNames pointer — " \
+                                                        "rides with place_received",
+                                "place_role" => "the role qualifier (\"sent\") of the projected " \
+                                                "place — constant machinery (the ninjal stance)",
+                                "dwds_class" => "a single corpus-wide DWDS text-class label " \
+                                                "(\"Gebrauchsliteratur\", 1,525 of 1,869 letters) — " \
+                                                "no per-document signal; the kind facet already " \
+                                                "classes the documents" }
       }.freeze
 
       MINING_SAMPLE = 40
@@ -459,7 +499,11 @@ module Nabu
                                                  "years of the people it commemorates, dates the text " \
                                                  "MENTIONS, never its own (the papyri-ddbdp " \
                                                  "mentioned_dates stance); the liturgical text " \
-                                                 "carries no date of composition" }
+                                                 "carries no date of composition" },
+        "cgpg" => { "residuum_class" => "the carve's own residue label (\"apparatus\", rescans, " \
+                                        "uncarved rows) — the apparatus/paratext fold is the " \
+                                        "queued taxonomy sitting's head question, declared " \
+                                        "there rather than ruled ad hoc" }
       }.freeze
 
       private

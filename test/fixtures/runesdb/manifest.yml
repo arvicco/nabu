@@ -49,3 +49,26 @@ files:
     copied: 2026-11-02
     whole: true
     trim: none
+  - path: runes_find-1.tei.xml
+    refetchable: false
+    provenance: zip-extract
+    reason: extracted from runes_tei.zip (Zenodo 21788307) — no raw per-file URL exists; added P160 as the LIDO translation specimen's TEI
+    upstream: https://zenodo.org/records/21788307/files/runes_tei.zip
+    copied: 2026-11-05
+    whole: true
+    trim: none
+  # The per-find LIDO records (P160): raw GETs, 2026-11-05. Every GET restamps
+  # the record's recordMetadataDate (the serving timestamp), so a fresh fetch
+  # can never byte-match — the entries are whole: false (liveness only).
+  - path: lido/1.xml
+    url: https://www.runesdb.de/lido/1
+    whole: false
+    trim: the serving-timestamp recordInfoSet (lido00470, recordMetadataDate) removed; otherwise byte-intact
+  - path: lido/629.xml
+    url: https://www.runesdb.de/lido/629
+    whole: false
+    trim: the serving-timestamp recordInfoSet (lido00470, recordMetadataDate) removed; otherwise byte-intact
+  - path: lido/200143.xml
+    url: https://www.runesdb.de/lido/200143
+    whole: false
+    trim: the serving-timestamp recordInfoSet (lido00470, recordMetadataDate) removed; otherwise byte-intact

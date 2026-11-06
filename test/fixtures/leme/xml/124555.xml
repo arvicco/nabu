@@ -1,0 +1,358 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE leme [
+<!ENTITY AElig ">
+<!ENTITY AEligmacron ">
+<!ENTITY Aacute ">
+<!ENTITY Abreve ">
+<!ENTITY Acirc ">
+<!ENTITY Agrave ">
+<!ENTITY Alpha ">
+<!ENTITY Amacron ">
+<!ENTITY Aring ">
+<!ENTITY Atilde ">
+<!ENTITY Auml ">
+<!ENTITY Beta ">
+<!ENTITY Ccedil ">
+<!ENTITY Chi ">
+<!ENTITY Dagger ">
+<!ENTITY Delta ">
+<!ENTITY ETH ">
+<!ENTITY Eacute ">
+<!ENTITY Ebreve ">
+<!ENTITY Ecedil ">
+<!ENTITY Ecirc ">
+<!ENTITY Egrave ">
+<!ENTITY Emacron ">
+<!ENTITY Epsilon ">
+<!ENTITY Eta ">
+<!ENTITY Euml ">
+<!ENTITY Gamma ">
+<!ENTITY Iacute ">
+<!ENTITY Ibreve ">
+<!ENTITY Icirc ">
+<!ENTITY Igrave ">
+<!ENTITY Imacron ">
+<!ENTITY Iota ">
+<!ENTITY Iuml ">
+<!ENTITY Kappa ">
+<!ENTITY Lambda ">
+<!ENTITY Mtilde ">
+<!ENTITY Mu ">
+<!ENTITY Ntilde ">
+<!ENTITY Nu ">
+<!ENTITY OElig ">
+<!ENTITY OEligmacron ">
+<!ENTITY Oacute ">
+<!ENTITY Obreve ">
+<!ENTITY Ocirc ">
+<!ENTITY Ograve ">
+<!ENTITY Omacron ">
+<!ENTITY Omega ">
+<!ENTITY Omicron ">
+<!ENTITY Oslash ">
+<!ENTITY Otilde ">
+<!ENTITY Ouml ">
+<!ENTITY Phi ">
+<!ENTITY Pi ">
+<!ENTITY Prime ">
+<!ENTITY Psi ">
+<!ENTITY Rho ">
+<!ENTITY Rx ">
+<!ENTITY Scaron ">
+<!ENTITY Sigma ">
+<!ENTITY Stigma ">
+<!ENTITY THORN ">
+<!ENTITY Tau ">
+<!ENTITY Theta ">
+<!ENTITY Uacute ">
+<!ENTITY Ubreve ">
+<!ENTITY Ucirc ">
+<!ENTITY Ugrave ">
+<!ENTITY Umacron ">
+<!ENTITY Upsilon ">
+<!ENTITY Uuml ">
+<!ENTITY Vacute ">
+<!ENTITY WYN ">
+<!ENTITY Xi ">
+<!ENTITY YOGH ">
+<!ENTITY Yacute ">
+<!ENTITY Ycirc ">
+<!ENTITY Ygrave ">
+<!ENTITY Ymacron ">
+<!ENTITY Yuml ">
+<!ENTITY Zeta ">
+<!ENTITY aacute ">
+<!ENTITY abreve ">
+<!ENTITY acirc ">
+<!ENTITY acute ">
+<!ENTITY aelig ">
+<!ENTITY aeligmacron ">
+<!ENTITY agrave ">
+<!ENTITY alpha ">
+<!ENTITY amacron ">
+<!ENTITY aring ">
+<!ENTITY arrow ">
+<!ENTITY atilde ">
+<!ENTITY auml ">
+<!ENTITY bdquo ">
+<!ENTITY beta ">
+<!ENTITY brvbar ">
+<!ENTITY bull ">
+<!ENTITY bullet ">
+<!ENTITY ccedil ">
+<!ENTITY ccirc ">
+<!ENTITY cedil ">
+<!ENTITY cent ">
+<!ENTITY chi ">
+<!ENTITY circ ">
+<!ENTITY clubs ">
+<!ENTITY copy ">
+<!ENTITY crarr ">
+<!ENTITY curren ">
+<!ENTITY dagger ">
+<!ENTITY darr ">
+<!ENTITY deg ">
+<!ENTITY delta ">
+<!ENTITY diams ">
+<!ENTITY divide ">
+<!ENTITY dmacron ">
+<!ENTITY dram ">
+<!ENTITY eacute ">
+<!ENTITY ebreve ">
+<!ENTITY ecedil ">
+<!ENTITY ecirc ">
+<!ENTITY egrave ">
+<!ENTITY emacron ">
+<!ENTITY emsp ">
+<!ENTITY ensp ">
+<!ENTITY epsilon ">
+<!ENTITY epsilontilde ">
+<!ENTITY eta ">
+<!ENTITY eth ">
+<!ENTITY euml ">
+<!ENTITY euro ">
+<!ENTITY fist ">
+<!ENTITY fnof ">
+<!ENTITY frac12 ">
+<!ENTITY frac14 ">
+<!ENTITY frac34 ">
+<!ENTITY gamma ">
+<!ENTITY grave ">
+<!ENTITY harr ">
+<!ENTITY hearts ">
+<!ENTITY hellip ">
+<!ENTITY highcaret ">
+<!ENTITY iacute ">
+<!ENTITY ibreve ">
+<!ENTITY icirc ">
+<!ENTITY iexcl ">
+<!ENTITY igrave ">
+<!ENTITY imacron ">
+<!ENTITY infin ">
+<!ENTITY iota ">
+<!ENTITY iquest ">
+<!ENTITY iuml ">
+<!ENTITY kappa ">
+<!ENTITY lambda ">
+<!ENTITY laquo ">
+<!ENTITY larr ">
+<!ENTITY lceil ">
+<!ENTITY ldquo ">
+<!ENTITY leaf ">
+<!ENTITY lfloor ">
+<!ENTITY longs ">
+<!ENTITY loz ">
+<!ENTITY lrm ">
+<!ENTITY lsaquo ">
+<!ENTITY lsquo ">
+<!ENTITY macr ">
+<!ENTITY mdash ">
+<!ENTITY micro ">
+<!ENTITY middot ">
+<!ENTITY mtilde ">
+<!ENTITY mu ">
+<!ENTITY nbsp ">
+<!ENTITY ndash ">
+<!ENTITY not ">
+<!ENTITY ntilde ">
+<!ENTITY nu ">
+<!ENTITY oacute ">
+<!ENTITY obreve ">
+<!ENTITY ocirc ">
+<!ENTITY oelig ">
+<!ENTITY oeligmacron ">
+<!ENTITY ograve ">
+<!ENTITY oline ">
+<!ENTITY omacron ">
+<!ENTITY omega ">
+<!ENTITY omicron ">
+<!ENTITY ordf ">
+<!ENTITY ordm ">
+<!ENTITY oslash ">
+<!ENTITY otilde ">
+<!ENTITY ouml ">
+<!ENTITY ounce ">
+<!ENTITY para ">
+<!ENTITY permil ">
+<!ENTITY phi ">
+<!ENTITY pi ">
+<!ENTITY piv ">
+<!ENTITY plusmn ">
+<!ENTITY pound ">
+<!ENTITY prime ">
+<!ENTITY psi ">
+<!ENTITY qacute ">
+<!ENTITY radic ">
+<!ENTITY raquo ">
+<!ENTITY rarr ">
+<!ENTITY rceil ">
+<!ENTITY rdquo ">
+<!ENTITY reg ">
+<!ENTITY rfloor ">
+<!ENTITY rho ">
+<!ENTITY rlm ">
+<!ENTITY rsaquo ">
+<!ENTITY rsquo ">
+<!ENTITY rx ">
+<!ENTITY sbquo ">
+<!ENTITY scaron ">
+<!ENTITY scruple ">
+<!ENTITY sect ">
+<!ENTITY shlig ">
+<!ENTITY shy ">
+<!ENTITY sigma ">
+<!ENTITY sigmaf ">
+<!ENTITY spades ">
+<!ENTITY stigma ">
+<!ENTITY stlig ">
+<!ENTITY sup1 ">
+<!ENTITY sup2 ">
+<!ENTITY sup3 ">
+<!ENTITY szlig ">
+<!ENTITY tau ">
+<!ENTITY theta ">
+<!ENTITY thetasym ">
+<!ENTITY thinsp ">
+<!ENTITY thorn ">
+<!ENTITY tilde ">
+<!ENTITY times ">
+<!ENTITY trade ">
+<!ENTITY uacute ">
+<!ENTITY uarr ">
+<!ENTITY ubreve ">
+<!ENTITY ucirc ">
+<!ENTITY ugrave ">
+<!ENTITY umacron ">
+<!ENTITY uml ">
+<!ENTITY upsih ">
+<!ENTITY upsilon ">
+<!ENTITY uuml ">
+<!ENTITY vacute ">
+<!ENTITY wyn ">
+<!ENTITY xi ">
+<!ENTITY yacute ">
+<!ENTITY ycirc ">
+<!ENTITY yen ">
+<!ENTITY ygrave ">
+<!ENTITY ymacron ">
+<!ENTITY yogh ">
+<!ENTITY yuml ">
+<!ENTITY zeta ">
+<!ENTITY zwj ">
+<!ENTITY zwnj ">
+
+]>
+<root>
+
+<leme no="1376">
+<lemepagenote type="display">
+<term lang="un">
+l e m e . l i b r a r y . u t o r o n t o . c a
+
+A u b r e y 
+
+N a t u r a l  H i s t o r y  a n d  A n t i q u i t i e s  ( 1 7 1 9 )
+
+e s t c  t 0 8 9 0 9 4
+
+v e r . 1 . 0  ( 2 0 2 2 )
+</term>
+</lemepagenote>
+
+<pb no="402"/>
+<term lang="en">
+<heading>
+Some peculiar Words used by the Vulgar
+in SURREY.
+</heading>
+</term>
+
+<section type="Appendix">
+<wordgroup1 type="a">
+<wordentry type="h"><form lang="en">Yarrow, yare,</form> <xpln lang="en"> (i.e.) shye.</xpln></wordentry>
+
+<wordentry type="h"><form lang="en">Eve,</form> <xpln lang="en"> (i.e.) modest, or meek.</xpln>
+<lemenote>
+"eve" not found in OED in this sense.
+</lemenote>
+</wordentry>
+
+<wordentry type="h"><form lang="en">Spood,</form> <xpln lang="en"> (i.e.) speed.</xpln></wordentry>
+
+<wordentry type="h"><form lang="en">Nott,</form> <xpln lang="en"> (i.e.) sheere, as sheer cut off.</xpln></wordentry>
+
+<wordentry type="h"><form lang="en">Druxen at Heart,</form> <xpln lang="en"> (i.e.) rotten at Heart.</xpln>
+<lemenote>
+"druxen" not found in OED but likely related to "druxy," a.
+</lemenote>
+</wordentry>
+
+<wordentry type="h"><form lang="en">Stover,</form> <xpln lang="en"> (i.e.) in a Fret, or Rage.</xpln>
+<lemenote>
+"strover" not found in OED in this sense.
+</lemenote>
+</wordentry>
+
+<wordentry type="h"><form lang="en">To foreslowe the Time,</form> <xpln lang="en"> (i.e.) to be re&#173;
+miss, to be backward, and lose an Op&#173;
+portunity.</xpln></wordentry>
+
+<wordentry type="h"><form lang="en">Pre,</form> <xpln lang="en"> (i.e.) a Plank laid a-cross a Chan&#173;
+nel or Gutter to go over, which, in 
+other Countries is called a Bridge.</xpln>
+<lemenote>
+"pre" is possibly a form of "pier," n.
+</lemenote>
+</wordentry>
+
+<wordentry type="h"><form lang="en">Hatch,</form> <xpln lang="en"> (i.e.) a Gate in the Roads;
+and a half Hatch is where a Horse may
+pass, but not a Cart.</xpln></wordentry>
+
+<pb no="403"/>
+
+<wordentry type="h"><form lang="en">Place,</form> <xpln lang="en"> (i.e.) the Manour-House.</xpln></wordentry>
+
+<wordentry type="h"><form lang="en">Gill,</form> <xpln lang="en"> (i.e.) a litter narrow Valley with
+Wood, and a little Rill running in the
+Bottom.</xpln></wordentry>
+</wordgroup1>
+</section>
+
+<section type="Dedication">
+<term lang="en">
+<heading>Mr. AUBREY'S Dedication to his de&#173;
+signed Natural History of WILTSHIRE.
+
+To the Right Honourable THOMAS Earl
+of PEMBROKE and MONTGOMERY,
+Lord HERBERT of CAERDIFFE, one 
+of the Privy-Council to their Majesties,
+President of the Royal Society, &#38;c. 
+
+My singular good Lord.</heading>
+</term>
+</section>
+
+</leme>
+</root>

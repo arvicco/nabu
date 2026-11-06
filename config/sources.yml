@@ -3769,6 +3769,27 @@ korba:   # P116-1
   # gold token annotations (translit form, modernized orth, lemma, tag);
   # header date/place/region/genre mined.
 
+korpus16:   # P160-6, 02-sources row 387
+  adapter: Nabu::Adapters::Korpus16
+  adopted: "2026-11-05"
+  axes: [slavic]
+  wired: true    # first sync verified 2026-11-06: 45 docs / 12,902 page passages,
+                 # 0 errored, 3 front-matter pages skipped by rule (the ~4 h paced crawl)
+  sync_policy: manual
+  # Korpus 16 — the 16th-century Slovene Protestant writers (ZRC SAZU,
+  # ed. Kozma Ahačič; fran.si/korpus16, v1.0 2019): 45 books / 12,945
+  # pages, 1550–1595 — Trubar, Dalmatin, Krelj, Juričič, Tulščak, Trošt
+  # and others. Double-keyed transcription (CyberData India), reviewed
+  # against the prints, TEI-converted; evident misprints kept. Colophon:
+  # CC BY-SA 4.0 verbatim → attribution. No bulk deposit (the promised
+  # CLARIN.SI one never landed; re-checked 2026-11-05) → a paced (1 req/s),
+  # resumable crawl of the reading pages, raw HTML kept (~210 MB).
+  # Document = book, passage = page with text; forme work and margin
+  # notes ride annotations. EXPECTED at the first sync: 45 documents /
+  # ≤ 12,945 page passages (blank pages mint nothing), 3 portal pages
+  # skipped by rule. Overlaps (provenance, never deduped): mdz-protestant
+  # OCR of four prints, sl-wikisource 1584 pages, goo300k/imp DB 1584.
+
 kouigenji:   # P108-3
   adapter: Nabu::Adapters::Kouigenji
   adopted: "2026-09-29"
@@ -3874,6 +3895,27 @@ lasla:
   # Commons Attribution-NonCommercial-ShareAlike 4.0 International License"
   # → nc (re-read 2026-10-21). Sparse GitFetch cone [conllup, README.md]; the
   # Turtle lanes (texts/, complete_lasla.ttl.gz) never transfer.
+
+leme:   # P160, 02-sources row 392
+  adapter: Nabu::Adapters::Leme
+  adopted: "2026-11-05"
+  axes: [germanic]
+  wired: true    # first sync verified 2026-11-06, exactly as censused: 311 dictionary
+                 # docs / 943,211 entries, 1 quarantined (1807/131265, upstream
+                 # malformed XML), 28 rule skips = 2 XMLs + 26 unnamed bitstreams
+  # LEME — Lexicons of Early Modern English (ed. Ian Lancashire, University
+  # of Toronto): the LEME-XML texts of 314 dictionaries, glossaries,
+  # spelling lists, herbals and glossed treatises, c. 1475–1755, on TSpace
+  # (collection 1807/99021), walked through the DSpace 7 REST API — the
+  # listing, each item's record, its one named XML bitstream (MD5-checked).
+  # New family leme-xml (LEME's own tagset, not TEI; entities resolved from
+  # a snapshotted table, no DTD ever loaded). One shelf per work,
+  # leme-<handle>; entry id = the word-entry ordinal. CC BY 4.0 per LEME's
+  # Terms of Use and each item's dc.rights → attribution. Headword
+  # language per entry (en 512,005 · ita 167,042 · lat 141,293 · fra …);
+  # English shelves stay bare en (postures: a shelf-grain en:early row
+  # would mislabel the 1700–1755 lexicons).
+  sync_policy: manual
 
 lexica:
   adapter: Nabu::Adapters::Lexica
@@ -4243,6 +4285,29 @@ mahan-kosh:   # P154, 02-sources row 344
   # (vol-page-seq). Language pan.
   sync_policy: manual
 
+mazarinades:   # P160, 02-sources row 389
+  adapter: Nabu::Adapters::Mazarinades
+  adopted: "2026-11-05"
+  axes: [romance]
+  wired: true    # first sync verified 2026-11-06, exactly as censused at 84f319b9: 3,080
+  #               discovered = 3,067 docs / 40,883 page passages + 13 quarantined (malformed
+  #               XML, all MANUAL-suffixed files); 4 skipped by rule (the two working files,
+  #               README.md, the review ledger).
+  sync_policy: manual   # upstream last pushed 2025-02-26; owner re-syncs
+  # The Antonomaz corpus (github.com/Antonomaz/Corpus; Projet ANTONOMAZ,
+  # Sorbonne Université): the Fronde pamphlets of 1648–1653 in TEI, one
+  # file per pamphlet, classed by Moreau's Bibliographie des mazarinades
+  # (+ its supplements, Socard, Labadie, the Bibliothèque Mazarine's own
+  # finds). Sparse GitFetch of Mazarinades/ + README.md + the first-page
+  # review ledger (output/reviewed_files.csv); the Doublons (duplicate
+  # exemplars, unreviewed), the JSON exports, the reports and the scripts
+  # stay upstream. Document = pamphlet, passage = printed page. KRAKEN OCR
+  # (text_nature machine-ocr, the first page hand-corrected); 23 hand
+  # transcriptions carry no OCR label. README, verbatim: "Les textes sont
+  # publiés sous la licence CC BY 4.0"; every file's <licence> names CC BY
+  # 4.0 (its availability@status "restricted" is the template default —
+  # the licence element governs) → attribution.
+
 mdz-protestant:   # 02-sources row 243
   adapter: Nabu::Adapters::MdzProtestant
   adopted: "2026-10-11"
@@ -4598,6 +4663,24 @@ ninjal-textdb:   # P156, 02-sources row 379
   # the kanji-kana / normalized layers ride each line as annotations.
   # Every other dataset dir (Edo share-bon, the dictionaries, the Hawaii
   # readers) skips by rule — Adapters::NinjalTextdb::DATASETS.
+
+noscemus:   # P160, 02-sources row 386
+  adapter: Nabu::Adapters::Noscemus
+  adopted: "2026-11-05"
+  axes: [classical, romance]  # the croala/corpus-corporum precedent: the Latin continuum's early-modern side
+  wired: true    # first sync verified 2026-11-06, exactly as censused: 1,038 docs /
+                 # 555,797 region passages, 0 errored, 12 skipped by rule (empty
+                 # text); eyeball (1031760:6, Bacon) + search "Instauratio" pass.
+  sync_policy: frozen   # two immutable Zenodo records; a new version = an owner re-pin
+  # NOSCEMUS Digital Sourcebook (Zathammer, Universität Innsbruck; Zenodo
+  # 15040256, cc-by-4.0) — the UNCORRECTED Transkribus HTR of 1,050 early-
+  # modern scientific Latin prints (text_nature machine-htr on every
+  # document), joined on the Transkribus id to the Noscemus Wiki backup
+  # (Zenodo 7855322, cc-by-4.0: works + authors XML) for genre, discipline,
+  # authors and fallback dating → attribution. Document = Transkribus
+  # document (one copy), passage = HTR text region; letterless regions (page
+  # numbers, signatures) ride the next passage as marks. A witness beside
+  # eebo-tcp's keyed London prints (Bacon's Instauratio magna 1620).
 
 nrct:   # P108-2
   adapter: Nabu::Adapters::Nrct
@@ -5830,14 +5913,20 @@ runesdb:   # P153, 02-sources row 325
   # continental, Anglo-Saxon and Frisian epigraphy + runica manuscripta),
   # passage = a glyph sequence, text = the glyph transliterations verbatim.
   # Language gem (no claim in the TEI; the runesdb-siglum lect rule reads
-  # the siglum family). The per-find LIDO records (dates, places,
-  # transcription, translation — runesdb.de/lido/<id>) are NOT fetched;
-  # their harvest is the follow-up. LICENSE: the record's cc-by-sa-4.0 +
-  # every file's availability statement (verified 2026-11-02) →
+  # the siglum family). P160: fetch also harvests the per-find LIDO
+  # records (runesdb.de/lido/<id> → lido/<id>.xml — 613 GETs paced 1 s,
+  # ≈ 11 min first time, resumable, never re-fetched once on disk): the
+  # Production dating, the find place + coordinates, object type / find
+  # context / material facets, the editorial transcription, and the
+  # English translation (-en siblings, below). LICENSE: the record's
+  # cc-by-sa-4.0 + every file's availability statement (verified
+  # 2026-11-02); every LIDO record's recordRights "CC BY-SA 4.0 -
+  # Attribution-ShareAlike 4.0 International" (verified 2026-11-05) →
   # attribution. Overlap with rundata (the Scandinavian stones) is a
-  # catalog-side crosswalk via the siglum, never a dedupe. Frozen
-  # versioned deposit → manual.
+  # catalog-side crosswalk via the siglum (the LIDO sigla list carries
+  # the DR/KJ numbers), never a dedupe. Frozen versioned deposit → manual.
   sync_policy: manual
+  translations: true   # P160: the LIDO English translation as a -en sibling per find
 
 sabellic-loans:
   adapter: Nabu::Adapters::SabellicLoans
@@ -6429,6 +6518,28 @@ soas-tibetan:
   # against Zenodo's). A future release is a NEW DOI the owner re-pins.
   sync_policy: manual
 
+socinian-letters:   # P160, 02-sources row 390
+  adapter: Nabu::Adapters::SocinianLetters
+  adopted: "2026-11-05"
+  axes: [romance]
+  wired: true    # first sync verified 2026-11-06, exactly as censused at 5d91807:
+                 # 1,869 docs / 18,067 passages, 0 errored; 348 metadata-only
+                 # letters + indices.csv + the two fetch state pins skipped by
+                 # rule; eyeball (MAIN_ckw_qlm_zdb:2, Rautenstein to Lubieniecki
+                 # 1665) + search "Luculenta et succi plena" pass.
+  sync_policy: manual   # the folder zip is generated from the main branch (no release)
+  # Die sozinianischen Briefwechsel (AdW Mainz / Johannes a Lasco Bibliothek
+  # Emden, ed. Daugirdas and Kuczera): the correspondence of the Socinians
+  # (the Polish Brethren) and their circle, 1545–1744 — the Sozzinis, Schmalz,
+  # Ruarus, and Stanisław Lubieniecki's comet correspondence of the 1660s.
+  # 2,217 teiCorpus letter files (cover letter + attachments + witnesses).
+  # Per-TEI licences CC BY 4.0 / CC BY-SA 3.0 → attribution, the chosen
+  # witness's own riding each document. Document = cover letter + the
+  # attachments it holds (deduped by TEI id); passage = text block of the
+  # reference witness (else the first transcribed witness); the editors'
+  # German commentary rides each block's "notes". Places/persons joined
+  # through upstream's indices.csv register (GeoNames, GND).
+
 sr-wikisource:   # P116-2, 02-sources row 233
   adapter: Nabu::Adapters::SrWikisource
   adopted: "2026-10-10"
@@ -6541,6 +6652,48 @@ starling:
       promise to credit each base's compilers per
       starlingdb.org/descrip.php?lan=en#bases (Pokorny, PIET, Vasmer, Germet,
       Baltet, Kartet) verbatim on every serving surface.
+
+stationers-register:   # P160, 02-sources row 386
+  adapter: Nabu::Adapters::StationersRegister
+  adopted: "2026-11-05"
+  axes: [germanic]
+  wired: true    # first sync verified 2026-11-06, exactly as censused at 562db001:
+                 # 10,453 docs / 26,047 passages, 0 errored, 60 files skipped by
+                 # rule (Arber/, OLD Register, schema/stylesheet, README +
+                 # change-list, .DS_Store); eyeball (SRO1 "a Ryse and wake" 1557,
+                 # SRO10453 1640) + search "ephemerydes" pass.
+  sync_policy: manual   # last upstream push 2019-08-27; no release tags
+  # Stationers' Register Online (Bergel & Gadd, CREATe, Glasgow): the copy
+  # entries of the Stationers' Company Registers A–D, 1557–1640, as TEI —
+  # enterer, copy-title, licensers, fee, Master and Wardens per entry.
+  # Licence: in-file CC BY 4.0 vs the site's "CC-BY-SA" — BY-SA taken →
+  # attribution. Document = entry (SRO id), passage = register-text block.
+  # Family sro-tei (streamed). Arber/ and OLD Register/ skip by rule.
+statutes-realm:   # P160-7, 02-sources row 388
+  adapter: Nabu::Adapters::StatutesRealm
+  adopted: "2026-11-05"
+  axes: [germanic]
+  wired: true    # first sync verified 2026-11-06: 661 docs (656 acts + 5 vol. 7
+                 # private-acts schedules) / 8,053 passages, 0 errored; skipped by
+                 # rule 9 TOC sidecars + 62 rejected rows (53 index letters, 5
+                 # front matter, 4 engravings) — the 723 live TOC rows exactly.
+                 # The crawl's one quarantine (vol5/pp421-422, page-anchored
+                 # heads colliding on :s0) was a parser defect, fixed + re-parsed
+                 # same day; eyeball (vol5:p1a:s1 "FORASMUCH as there is nothing
+                 # more acceptable to God") + search "Bearebaiting" pass.
+  sync_policy: manual   # an HTML crawl with no revision stamps
+  # Statutes of the Realm vols 5–7 (1625–1701), John Raithby's Record
+  # Commission edition (1819–1820) on British History Online (IHR,
+  # University of London), double-rekeyed. Every page states "This free
+  # content was digitised by double rekeying. Public Domain." — overriding,
+  # for this series only, the site Terms of use ("Unless otherwise stated …
+  # non-commercial") → open (first-hand 2026-11-05; the conflict recorded in
+  # the adapter class comment). Vols 1–4 are not on BHO (404). Paced HTML
+  # crawl of the three volume TOCs (100 rows/page, rel=next) + the act
+  # pages. Document = act (and vol. 7's private-acts schedules); passage =
+  # the act's section. Dating: the title's reign + session label, met with
+  # vol. 7's Rot. Parl. regnal citation. Overlap: eebo-tcp's contemporary
+  # printed statute collections are a different edition — both kept.
 
 stgall-priscian:
   adapter: Nabu::Adapters::StgallPriscian

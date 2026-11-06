@@ -3252,11 +3252,16 @@ class CLITest < Minitest::Test
     end
   end
 
-  # The mount-point guard: a same-device tmp target without --allow-unmounted
-  # is refused loudly (exit 1), and nothing is written.
+  # The mount-point guard: a same-device target without --allow-unmounted
+  # is refused loudly (exit 1), and nothing is written. The device layout is
+  # PINNED (every path on one boot device, through Backup's stat seam) — the
+  # real File.stat would make the verdict hinge on whether the runner's
+  # $TMPDIR sits on its own device.
   def test_backup_refuses_an_unmounted_target
     with_backup_env do |config, target|
-      _out, err, status = with_config(config) { run_cli(["backup", "--to", target]) }
+      _out, err, status = with_config(config) do
+        with_backup_device_layout(->(_path) { Struct.new(:dev).new(1) }) { run_cli(["backup", "--to", target]) }
+      end
 
       assert_equal 1, status
       assert_match(/volume not mounted/i, err)
@@ -10811,6 +10816,17 @@ class CLITest < Minitest::Test
         config_path: File.join(File.dirname(sources), "config", "nabu.yml")
       )
     end
+  end
+
+  # Every Nabu::Backup the CLI builds inside the block gets +stat+ as its
+  # device prober (the constructor's own seam), so the mount-point guard
+  # judges a pinned layout instead of the runner's filesystem.
+  def with_backup_device_layout(stat)
+    original = Nabu::Backup.method(:new)
+    Nabu::Backup.define_singleton_method(:new) { |**kwargs| original.call(**kwargs, stat: stat) }
+    yield
+  ensure
+    Nabu::Backup.singleton_class.send(:remove_method, :new)
   end
 
   # Build a throwaway config whose config_dir is a REAL tmp dir (so the backup's

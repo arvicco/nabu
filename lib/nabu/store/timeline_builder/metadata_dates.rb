@@ -236,8 +236,14 @@ module Nabu
           #                                 (941, 953, ca. 1042), composition class
           "kdsp" => :structured,
           "korba" => :structured,
+          "korpus16" => :structured, # P160-6: the book header's print year (+ a siglum's
+          #                            "1581-82" span), class edition; place = the imprint
+          #                            place as the portal names it (Tübingen, Ljubljana …)
           "litopys" => :era_band_key,
           "local-library" => :year_key,
+          "mazarinades" => :structured, # the bibliographic entry's typed dates (Moreau,
+          #                               Mazarine, Carrier …: the narrowest year envelope);
+          #                               place = the imprint pubPlace + its GeoNames ref
           "mdz-protestant" => :structured,
           "memis" => :structured, # the inscription's typed origDate (Slovene prose: a year,
           #                         a day date, "1581/2", "2. pol. 15. stol."); place =
@@ -252,6 +258,10 @@ module Nabu
           "ninjal-textdb" => :structured, # each work page's Publication Date (1592/1593/1596,
           #                                 class edition); place = the title page's imprint
           #                                 (Collegio Amacuſa → Amakusa) on amhk/amis
+          "noscemus" => :structured, # P160: the copy's imprint year from its Transkribus Title
+          #                            label (the print IS the document), else the typed Created
+          #                            From/To year, else the joined wiki work's Year; place = the
+          #                            imprint's first town
           "obi-burmese" => :ce_year_text,
           "ociana" => :script_band, # the record's script TRADITION banded through the ruled
           #                           ANA period_bands rows (precision era); site + region/
@@ -291,6 +301,10 @@ module Nabu
           "ren" => :structured,
           "rsti" => :place_only,
           "ru-wikisource" => :era_band_key,
+          "runesdb" => :structured, # P160: the per-find LIDO record's Production event
+          #                           (earliest/latestDate — the artifact's dating); place =
+          #                           the Finding event's find place + its GML point
+          #                           (manuscripts' holding libraries never place)
           "scat" => :structured, # the release catalog's century (the witness's, beside the
           #                        shelfmark) as a century envelope; no place claim
           "seal" => :period_label,
@@ -310,10 +324,22 @@ module Nabu
           #                                 reprint keeps its first edition's); the imprint
           #                                 rides "imprint", never "place" — no place claim
           "soas-tibetan" => :century_prose,
+          "stationers-register" => :structured, # each copy entry's own Register date (the Clerk's
+          #                                       day, or the SRO editors' company-year span for
+          #                                       the undated early entries) — the artifact basis;
+          #                                       placeName mentions only, never a "place" claim
+          "socinian-letters" => :structured, # P160: the cover letter's correspAction[sent]
+          #                                    date (when / from-to / notBefore-notAfter) as a
+          #                                    year envelope, class composition; else the
+          #                                    received date as a terminus ante quem; place
+          #                                    = the sending place + its GeoNames URL (place_ref)
           "stgall-priscian" => :structured, # the manuscript's copying (AD 850–1, upstream's
           #                                   statement) on every page; orig_place "Ireland (?)"
           #                                   — upstream's hedge — while St Gallen (the holding
           #                                   library) rides "repository", never a place claim
+          "statutes-realm" => :structured, # P160-7: the act title's reign + session label
+          #                                  (Old Style legal year → [Y, Y+1]) met with vol. 7's
+          #                                  Rot. Parl. regnal citation (StatutesRealmDating)
           "su-wikisource" => :edition_year_text, # P140: the scan Index Year= print year
           #                                         (date_class edition)
           "syriac-corpus" => :when_key,

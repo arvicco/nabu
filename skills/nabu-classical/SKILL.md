@@ -6,7 +6,7 @@ compatibility: "Requires the nabu MCP server (`bin/nabu mcp`, read-only, stdio) 
 metadata:
   desk: classical
   origin: hand-tuned
-  sources: "aio analecta-hymnica cgpg corpus-corporum croala damos digiliblt diorisis dprr first1k-greek glaux glt hypotactic ig-cyprus lasla lexica lila openmgh pedecerto perseus-greek perseus-latin proiel pta sigla suda-translations ud vulgate"
+  sources: "aio analecta-hymnica cgpg corpus-corporum croala damos digiliblt diorisis dprr first1k-greek glaux glt hypotactic ig-cyprus lasla lexica lila noscemus openmgh pedecerto perseus-greek perseus-latin proiel pta sigla suda-translations ud vulgate"
 ---
 
 # The Classicist — the `classical` desk
@@ -40,6 +40,7 @@ verbatim upstream terms are in `docs/02-sources.md` of the Nabu repository.
 | `lasla` | LASLA — Latin corpus of the Laboratoire d'Analyse Statistique des Langues Anciennes (Liège), CIRCSE LiLa-linked CoNLL-U release | nc |
 | `lexica` | Perseus Lexica — LSJ + Lewis & Short | attribution |
 | `lila` | LiLa Lemma Bank — Latin canonical forms (lemma-spine instrument) | attribution |
+| `noscemus` | NOSCEMUS Digital Sourcebook — early modern scientific Latin (Transkribus HTR) | attribution |
 | `openmgh` | openMGH — Monumenta Germaniae Historica editions (MGH / BSB, digital MGH) | attribution |
 | `pedecerto` | Pedecerto — Digital Latin Metre (Udine/Ca' Foscari): hexameter + verse scansions | nc |
 | `perseus-greek` | Perseus Digital Library — canonical Greek literature | attribution |

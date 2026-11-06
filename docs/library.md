@@ -2124,3 +2124,79 @@ liturgics suite stores them — the fixed prayers and responses, the
 Creed, the prayers of St Basil and St Ephrem, and the troparia and
 kontakia of the Octoechos week and of Lent, each with its tone, in
 full Church Cyrillic orthography with titla and accents (GPL-3.0).
+
+## 8bg. The P160 arrivals — the early-modern Europe wave
+
+**`stationers-register`** — the Stationers' Register Online (Giles
+Bergel and Ian Gadd, CREATe, University of Glasgow): the copy entries
+of the Stationers' Company of London, the guild that controlled the
+English book trade from its royal charter of 1557. To secure the right
+to print a work, a member brought it to Stationers' Hall, where the
+Clerk entered it in the Register: the member's name, the title, the
+licensing authority, the fee paid. Registers A to D run here from July
+1557 to 1640 — 10,453 entries covering ballads, sermons, almanacs,
+proclamations, plays, news pamphlets, schoolbooks and translations,
+the fullest record of what the presses of Elizabeth I, James I and
+Charles I proposed to print (CC BY 4.0 / BY-SA per the site).
+
+**`statutes-realm`** — Statutes of the Realm, volumes 5–7 (1625–1701):
+the Acts of the Parliament of England from the accession of Charles I
+to the last full session of William III, in John Raithby's Record
+Commission edition (1819–20), as British History Online serves it,
+double-rekeyed. The Petition of Right, the Long Parliament's acts, the
+Restoration settlement, the Bill of Rights and the Toleration Act, the
+Act of Settlement — 661 documents with Raithby's marginal summaries
+and collation footnotes riding as annotations (Public Domain, per
+page).
+
+**`korpus16`** — Korpus 16 (Inštitut za slovenski jezik Frana Ramovša,
+ZRC SAZU; ed. Kozma Ahačič): the whole printed output of the Slovene
+Reformation — 45 books on nearly 13,000 pages, 1550–1595, in a
+double-keyed transcription reviewed against the prints. Slovene became
+a written, printed language in these books: Trubar's *Catechismus* and
+*Abecedarium* of 1550 were the first Slovene books, and the
+half-century after them brought catechisms, hymnals, Dalmatin's
+complete Bible (1584), Bohorič's grammar and Megiser's dictionary
+(CC BY-SA 4.0).
+
+**`mazarinades`** — the Antonomaz corpus (Projet ANTONOMAZ, Sorbonne
+Université): the pamphlets of the Fronde (1648–1653), the civil wars
+of the Parlement and the princes against the regency of Anne of
+Austria and Cardinal Mazarin. Paris's presses turned out thousands:
+libels and satires against "le Mazarin", open and forged letters,
+burlesque verse in Scarron's manner, dialogues, prophecies, news
+sheets, and the printed acts of the crown and the Parlement — 3,067
+pamphlets here, classed by Moreau's *Bibliographie des mazarinades*
+and its supplements, OCR'd page by page (CC BY 4.0).
+
+**`socinian-letters`** — *Die sozinianischen Briefwechsel* (Akademie
+der Wissenschaften und der Literatur Mainz with the Johannes a Lasco
+Bibliothek Emden): the correspondence of the Socinians — the
+antitrinitarian Polish Brethren of the Ecclesia minor, centred on
+Raków — and their circle across Europe, 1545 to 1744, from the
+Sozzinis' own exchanges to Stanisław Lubieniecki's great comet
+correspondence of the 1660s with Hevelius, Huygens and Oldenburg —
+1,869 transcribed letters, mostly Latin (CC BY 4.0).
+
+**`noscemus`** — the NOSCEMUS Digital Sourcebook (Stefan Zathammer,
+Universität Innsbruck, ERC project NOSCEMUS): the machine-read text of
+over a thousand printed books of early modern science written in
+Latin, from a Venetian medical tract of 1479 onward — medicine,
+astronomy, botany, mathematics, alchemy; Kepler, Bacon, Gessner — in
+every form the learned Latin of the period took. The text is
+uncorrected Transkribus HTR, declared as such on every document
+(CC BY 4.0).
+
+**`leme`** — LEME, *Lexicons of Early Modern English* (ed. Ian
+Lancashire, University of Toronto): the word-books of English from
+Caxton's day to Johnson's — over three hundred dictionaries,
+hard-word glossaries, spelling lists, herbals, glossed texts and
+antiquarian treatises printed or written c. 1475–1755, from Elyot's
+Latin dictionary, Palsgrave's French grammar and Florio's Italian
+*Worlde of Wordes* to Cawdrey's *Table Alphabeticall*, Cotgrave,
+Minsheu, Blount, Bailey and Johnson's *Dictionary*, with Old English,
+Welsh, Hebrew, dialect and thieves'-cant glossaries among them. Each
+work is its own shelf, every word-entry kept in the print's spelling
+with its explanation, its sub-entries, the language LEME tagged it
+with, the modern OED headwords LEME mapped it to, and the editors'
+notes on OED antedatings (CC BY 4.0).

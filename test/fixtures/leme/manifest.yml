@@ -1,0 +1,47 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+source: leme
+adapter_test: test/adapters/leme_test.rb
+retrieved: 2026-11-05
+files:
+  - path: rest/listing-0.json
+    url: https://utoronto.scholaris.ca/server/api/discover/search/objects?scope=10df91bc-8c9e-4ce1-b291-f02ad5715538&dsoType=ITEM&sort=dc.date.accessioned,ASC&page=0&size=100
+    whole: false
+    trim: the page's objects cut to this fixture's items, re-serialized; the page block verbatim
+  - path: rest/listing-1.json
+    url: https://utoronto.scholaris.ca/server/api/discover/search/objects?scope=10df91bc-8c9e-4ce1-b291-f02ad5715538&dsoType=ITEM&sort=dc.date.accessioned,ASC&page=1&size=100
+    whole: false
+    trim: the page's objects cut to this fixture's items, re-serialized; the page block verbatim
+  - path: rest/listing-2.json
+    url: https://utoronto.scholaris.ca/server/api/discover/search/objects?scope=10df91bc-8c9e-4ce1-b291-f02ad5715538&dsoType=ITEM&sort=dc.date.accessioned,ASC&page=2&size=100
+    whole: false
+    trim: the page's objects cut to none (no fixture item on it), re-serialized; the page block verbatim
+  - path: rest/listing-3.json
+    url: https://utoronto.scholaris.ca/server/api/discover/search/objects?scope=10df91bc-8c9e-4ce1-b291-f02ad5715538&dsoType=ITEM&sort=dc.date.accessioned,ASC&page=3&size=100
+    whole: false
+    trim: the page's objects cut to this fixture's items, re-serialized; the page block verbatim
+  - path: items/102105.json
+    url: https://utoronto.scholaris.ca/server/api/core/items/32771ed5-73e7-4c1c-afec-288990f51a5b?embed=bundles/bitstreams
+    whole: true
+  - path: items/102611.json
+    url: https://utoronto.scholaris.ca/server/api/core/items/a5ab45c3-bfef-405b-9d8e-0d156610ce47?embed=bundles/bitstreams
+    whole: true
+  - path: items/124555.json
+    url: https://utoronto.scholaris.ca/server/api/core/items/2f54cc56-3faf-4cc9-9492-74de5f38a868?embed=bundles/bitstreams
+    whole: true
+  - path: items/131265.json
+    url: https://utoronto.scholaris.ca/server/api/core/items/df7e4cd6-596e-4fbd-80a7-f792435d4100?embed=bundles/bitstreams
+    whole: true
+  - path: xml/102105.xml
+    url: https://utoronto.scholaris.ca/server/api/core/bitstreams/2b77742b-6eef-45cc-89a9-c6648c685dcb/content
+    whole: true
+  - path: xml/102611.xml
+    url: https://utoronto.scholaris.ca/server/api/core/bitstreams/58400516-28f2-4b4b-961b-0f742cae49f2/content
+    whole: true
+  - path: xml/124555.xml
+    url: https://utoronto.scholaris.ca/server/api/core/bitstreams/b763aeee-c2f7-4c49-84a7-976b2adc514c/content
+    whole: true
+  - path: xml/131265.xml
+    url: https://utoronto.scholaris.ca/server/api/core/bitstreams/4f197da2-1b25-45a2-af68-e7b358392cc0/content
+    whole: false
+    trim: upstream lines 1-17, 79-107, 632-670, 716-733, 1124-1165, 13523-13534 (CRLF kept) — README

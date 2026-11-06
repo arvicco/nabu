@@ -1,0 +1,175 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.10/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.10/ http://www.mediawiki.org/xml/export-0.10.xsd" version="0.10" xml:lang="en">
+  <siteinfo>
+    <sitename>noscemus</sitename>
+    <dbname>wf_noscemus</dbname>
+    <base>http://wiki.uibk.ac.at/noscemus/Main_Page</base>
+    <generator>MediaWiki 1.27.4</generator>
+    <case>case-sensitive</case>
+    <namespaces>
+      <namespace key="-2" case="case-sensitive">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="case-sensitive" />
+      <namespace key="1" case="case-sensitive">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="case-sensitive">noscemus</namespace>
+      <namespace key="5" case="case-sensitive">noscemus talk</namespace>
+      <namespace key="6" case="case-sensitive">File</namespace>
+      <namespace key="7" case="case-sensitive">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="case-sensitive">Template</namespace>
+      <namespace key="11" case="case-sensitive">Template talk</namespace>
+      <namespace key="12" case="case-sensitive">Help</namespace>
+      <namespace key="13" case="case-sensitive">Help talk</namespace>
+      <namespace key="14" case="case-sensitive">Category</namespace>
+      <namespace key="15" case="case-sensitive">Category talk</namespace>
+      <namespace key="102" case="case-sensitive">Attribut</namespace>
+      <namespace key="103" case="case-sensitive">Attribut Diskussion</namespace>
+      <namespace key="106" case="case-sensitive">Form</namespace>
+      <namespace key="107" case="case-sensitive">Form talk</namespace>
+      <namespace key="108" case="case-sensitive">Konzept</namespace>
+      <namespace key="109" case="case-sensitive">Konzept Diskussion</namespace>
+      <namespace key="170" case="case-sensitive">Filter</namespace>
+      <namespace key="171" case="case-sensitive">Filter Diskussion</namespace>
+      <namespace key="200" case="case-sensitive">UserWiki</namespace>
+      <namespace key="201" case="case-sensitive">UserWiki talk</namespace>
+      <namespace key="202" case="case-sensitive">User profile</namespace>
+      <namespace key="203" case="case-sensitive">User profile talk</namespace>
+      <namespace key="250" case="case-sensitive">Page</namespace>
+      <namespace key="251" case="case-sensitive">Page talk</namespace>
+      <namespace key="252" case="case-sensitive">Index</namespace>
+      <namespace key="253" case="case-sensitive">Index talk</namespace>
+      <namespace key="274" case="case-sensitive">Widget</namespace>
+      <namespace key="275" case="case-sensitive">Widget talk</namespace>
+      <namespace key="300" case="case-sensitive">Poll</namespace>
+      <namespace key="301" case="case-sensitive">Poll talk</namespace>
+      <namespace key="380" case="case-sensitive">ImageAnnotation</namespace>
+      <namespace key="446" case="case-sensitive">Education Program</namespace>
+      <namespace key="447" case="case-sensitive">Education Program talk</namespace>
+      <namespace key="460" case="case-sensitive">Campaign</namespace>
+      <namespace key="461" case="case-sensitive">Campaign talk</namespace>
+      <namespace key="600" case="case-sensitive">UserBox</namespace>
+      <namespace key="601" case="case-sensitive">UserBox talk</namespace>
+      <namespace key="1198" case="case-sensitive">Translations</namespace>
+      <namespace key="1199" case="case-sensitive">Translations talk</namespace>
+      <namespace key="2300" case="case-sensitive">Gadget</namespace>
+      <namespace key="2301" case="case-sensitive">Gadget talk</namespace>
+      <namespace key="2302" case="case-sensitive">Gadget definition</namespace>
+      <namespace key="2303" case="case-sensitive">Gadget definition talk</namespace>
+      <namespace key="2600" case="first-letter">Topic</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>Noceti, Carlo</title>
+    <ns>0</ns>
+    <id>571</id>
+    <revision>
+      <id>1036</id>
+      <timestamp>2018-01-22T15:56:46Z</timestamp>
+      <contributor>
+        <username>C6411135</username>
+        <id>220</id>
+      </contributor>
+      <comment>Die Seite wurde neu angelegt: „{{Authors |Year of birth=1694 |Year of death=1759 |Link to GND=http://d-nb.info/gnd/133696154 }}“</comment>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text xml:space="preserve" bytes="96">{{Authors
+|Year of birth=1694
+|Year of death=1759
+|Link to GND=http://d-nb.info/gnd/133696154
+}}</text>
+      <sha1>om77knqb437drezy5ufm6hvgr5mzj0d</sha1>
+    </revision>
+  </page>
+  <page>
+    <title>Bacon, Francis</title>
+    <ns>0</ns>
+    <id>682</id>
+    <revision>
+      <id>1216</id>
+      <timestamp>2018-01-23T13:23:04Z</timestamp>
+      <contributor>
+        <username>C6411135</username>
+        <id>220</id>
+      </contributor>
+      <comment>Die Seite wurde neu angelegt: „{{Authors |Year of birth=1561 |Year of death=1626 |Link to GND=http://d-nb.info/gnd/118505696 }}“</comment>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text xml:space="preserve" bytes="96">{{Authors
+|Year of birth=1561
+|Year of death=1626
+|Link to GND=http://d-nb.info/gnd/118505696
+}}</text>
+      <sha1>lrxoc634ys82kcqpngyppcng621sqvj</sha1>
+    </revision>
+  </page>
+  <page>
+    <title>Oudin, François</title>
+    <ns>0</ns>
+    <id>821</id>
+    <revision>
+      <id>1768</id>
+      <timestamp>2018-01-30T08:52:44Z</timestamp>
+      <contributor>
+        <username>C6411153</username>
+        <id>227</id>
+      </contributor>
+      <comment>Die Seite wurde neu angelegt: „{{Authors |Year of birth=1673 |Year of death=1752 |Link to GND=http://d-nb.info/gnd/132730324 }}“</comment>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text xml:space="preserve" bytes="96">{{Authors
+|Year of birth=1673
+|Year of death=1752
+|Link to GND=http://d-nb.info/gnd/132730324
+}}</text>
+      <sha1>tax80lvbest0chmkwe12enxvnkt46yn</sha1>
+    </revision>
+  </page>
+  <page>
+    <title>Hippocrates</title>
+    <ns>0</ns>
+    <id>1219</id>
+    <revision>
+      <id>4182</id>
+      <timestamp>2018-04-12T12:52:21Z</timestamp>
+      <contributor>
+        <username>C6411055</username>
+        <id>223</id>
+      </contributor>
+      <comment>Die Seite wurde neu angelegt: „{{Authors |Year of birth=c. 460 BC |Year of death=c. 370 BC |Link to GND=http://d-nb.info/gnd/11855140X }}“</comment>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text xml:space="preserve" bytes="106">{{Authors
+|Year of birth=c. 460 BC
+|Year of death=c. 370 BC
+|Link to GND=http://d-nb.info/gnd/11855140X
+}}</text>
+      <sha1>ens58yhmssi4hrsdk73fyf8argeg124</sha1>
+    </revision>
+  </page>
+  <page>
+    <title>Denisot, Gérard</title>
+    <ns>0</ns>
+    <id>9987</id>
+    <revision>
+      <id>39624</id>
+      <parentid>39623</parentid>
+      <timestamp>2022-10-19T07:03:55Z</timestamp>
+      <contributor>
+        <username>C60522</username>
+        <id>287</id>
+      </contributor>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text xml:space="preserve" bytes="618">{{Authors
+|Year of birth=1520
+|Year of death=1595
+|Link to GND=https://d-nb.info/gnd/1032658983
+|Biographical data=Physician of the French kings Charles IX, Henry III, and Henry IV. Docteur régent de la faculté de médecine de l’Université de Paris.
+|Other sources=[https://books.google.at/books?id=0gywlf4I5m0C&amp;pg=PA90&amp;lpg=PA90&amp;dq=%22G%C3%A9rard+Denisot%22&amp;source=bl&amp;ots=0o01Ebns_I&amp;sig=ACfU3U3INOgHYaykx82UsOXW_GOrYOS8yQ&amp;hl=de&amp;sa=X&amp;ved=2ahUKEwiVwuTj2-v6AhWg_rsIHWNGCgY4ChDoAXoECB8QAw#v=onepage&amp;q=%22G%C3%A9rard%20Denisot%22&amp;f=false Biographie universelle ancienne et moderne, tome onzième, Paris 1814, p. 90]
+}}</text>
+      <sha1>ets1pnkwo4di6fmlmgx70kqkzg1a3v9</sha1>
+    </revision>
+  </page>
+</mediawiki>

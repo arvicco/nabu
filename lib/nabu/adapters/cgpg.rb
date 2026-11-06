@@ -2,6 +2,7 @@
 
 require_relative "cgpg_vert_parser"
 require_relative "cgpg_carve_plan"
+require_relative "cgpg_title_genre"
 require_relative "../zip_fetch"
 require_relative "../file_fetch"
 
@@ -57,6 +58,20 @@ module Nabu
     #   two Delectus back-matter rows). A residuum carries no date (the
     #   volume's era label dates its works, not Migne's apparatus) and no
     #   kind claim (no apparatus class exists on the ruled kind list).
+    #
+    # == Kind (the title fold)
+    #
+    # Neither upstream nor the plan carries a genre field, so a work's
+    # genre is read off its plan title: CgpgTitleGenre cuts ONE keyword
+    # head ("Expositio in", "Historia", "Epistulae", or a keywordless
+    # "De <topic>" title whole) into facets.genre (raw = the title), and
+    # config/kind_map.yml's cgpg section folds the heads — or leaves them
+    # unmapped where no ruled class fits (hagiography, apologetics, …).
+    # A whole volume claims a kind only when it is single-genre and says
+    # so in its contents label (VOLUMES genre: PG 71, 73 Cyril's
+    # commentaries; PG 121, 148, 153 the histories); a mixed volume
+    # (PG 8, 9, 16.3, 42), PG 21's apologetic Praeparatio (no ruled head),
+    # the deferred PG 3 and every residuum make none.
     # - Incipit soft verification: each plan incipit_check whose page the
     #   box holds must carry the quoted opening (CgpgCarvePlan's folded-word
     #   score); a miss quarantines the work (ParseError) — the ranges are
@@ -196,9 +211,9 @@ module Nabu
         "71" => { period: "5th century",
                   contents: "Cyril of Alexandria (vol. 4): Commentaries on Hosea, Joel, Amos, Jonah, Abdiah, " \
                             "Micaiah, Nahum, Habakuk, Haggai, etc.",
-                  words: 210_957 },
+                  words: 210_957, genre: "Commentarius" },
         "73" => { period: "5th century", contents: "Cyril of Alexandria (vol. 6): Commentary on John",
-                  words: 191_303 },
+                  words: 191_303, genre: "Commentarius" },
         "87.1" => { period: "7th century",
                     contents: "Procopius of Gaza (vol. 1), Vetus Testamentum commentaries", words: 151_167 },
         "101" => { period: "9th century",
@@ -227,7 +242,7 @@ module Nabu
                              "Commentary on the Catholic letters",
                    words: 208_448 },
         "121" => { period: "11th century", contents: "George Cedrenus (vol. 1): Compendium Historiarum",
-                   words: 160_853 },
+                   words: 160_853, genre: "Historia" },
         "122" => { period: "11th century",
                    contents: "George Cedrenus (vol. 2): Compendium Historiarum (contd); John Scylitzes, " \
                              "Breviarium historicum; Michael Psellus, many works",
@@ -257,12 +272,13 @@ module Nabu
         "146" => { period: "14th century",
                    contents: "Nicephorus Callistus (vol. 2): Ecclesiastical History, books 8–14", words: 156_848 },
         "148" => { period: "14th century",
-                   contents: "Nicephorus Gregoras (vol. 1): Historia Byzantina, books 1–24", words: 234_855 },
+                   contents: "Nicephorus Gregoras (vol. 1): Historia Byzantina, books 1–24", words: 234_855,
+                   genre: "Historia" },
         "151" => { period: "14th century", contents: "Gregory Palamas (vol. 2); Gregory Acindynus, Barlaam",
                    words: 399_518 },
         "153" => { period: "14th century",
                    contents: "John Cantacuzene (vol. 1): Historia Byzantina in 4 books (events from 1320–1354)",
-                   words: 230_239 },
+                   words: 230_239, genre: "Historia" },
         "155" => { period: "15th century", contents: "Simeon of Thessalonica (1430 AD)", words: 175_482 },
         "157" => { period: "15th century",
                    contents: "George Codinus (1400–1462): works about Constantinople, De sepulchris " \
@@ -557,6 +573,7 @@ module Nabu
         volume_metadata(lead.volume, VOLUMES.fetch(lead.volume, {}), whole: false).merge(
           "carve" => "work", "carve_slug" => lead.slug, "carve_plan" => CARVE_PLAN_LABEL,
           "author" => lead.author, "work_title" => parts.last.title, "tlg" => parts.filter_map(&:tlg).first,
+          "facets" => genre_facet(CgpgTitleGenre.head(parts.last.title), parts.last.title),
           "carve_rank" => lead.rank, "secondary_reason" => lead.secondary_reason,
           "pg_volumes" => (parts.map(&:volume) if parts.size > 1),
           "pg_volumes_unheld" => (doc.volumes - parts.map(&:volume)).then { |v| v unless v.empty? },
@@ -591,11 +608,17 @@ module Nabu
         {
           "pg_volume" => volume, "period" => entry[:period],
           (whole ? "contents" : "volume_contents") => entry[:contents],
+          "facets" => (genre_facet(entry[:genre], entry[:contents]) if whole),
           "words_advertised" => (entry[:words] if whole),
           "text_nature" => "uncorrected-ocr", "ocr_note" => OCR_NOTE,
           "date" => band && { "not_before" => band.first, "not_after" => band.last,
                               "raw" => entry[:period], "class" => "composition" }
         }.compact
+      end
+
+      # The kind fold's facet: nil (no claim) without a head.
+      def genre_facet(head, raw)
+        head && { "genre" => { "value" => head, "raw" => raw } }
       end
 
       # --- the tree -----------------------------------------------------------------

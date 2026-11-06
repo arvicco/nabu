@@ -26,7 +26,7 @@ outlive, nothing that cannot be restored from a file copy.
 
 **An independent private researcher.** The research interest behind the
 library is twofold: **writing systems** — how scripts encode language,
-how they are deciphered, taught, and change hands — and the
+how they are deciphered, [taught](https://arvicco.github.io/nabu-edubba/), and change hands — and the
 **statistical and diachronic properties of languages**, ancient and
 modern: how vocabularies, spellings, and grammatical habits drift
 across centuries, and what becomes measurable when enough texts sit in

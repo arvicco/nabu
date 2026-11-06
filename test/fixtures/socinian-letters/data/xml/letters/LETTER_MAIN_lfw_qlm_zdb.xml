@@ -1,0 +1,295 @@
+<teiCorpus xmlns="http://www.tei-c.org/ns/1.0">
+    <teiHeader>
+        <fileDesc>
+            <titleStmt>
+                <title type="main">Stanisław Lubieniecki (Hamburg) an Nicolaus Heinsius (Stockholm), 23.
+          Oktober 1665</title>
+                <title type="sub"/>
+                <principal ref="http://d-nb.info/gnd/135995728">Kęstutis Daugirdas</principal>
+                <principal ref="https://orcid.org/0000-0003-1020-507X">Andreas Kuczera</principal>
+                <funder>Deutsche Forschungsgemeinschaft</funder>
+            </titleStmt>
+            <extent>
+                <measure unit="texts" quantity="2"/>
+            </extent>
+            <publicationStmt>
+                <publisher>
+                    <orgName ref="https://www.jalb.de/">Johannes a Lasco Bibliothek</orgName>
+                    <settlement ref="https://sws.geonames.org/2930596">Emden</settlement>
+                </publisher>
+                <publisher>
+                    <orgName ref="https://www.adwmainz.de/">Akademie der Wissenschaften und der Literatur</orgName>
+                    <settlement ref="http://sws.geonames.org/2874225">Mainz</settlement>
+                </publisher>
+                <pubPlace ref="http://sws.geonames.org/2874225">Mainz</pubPlace>
+                <date from="2020">2020–2024</date>
+                <availability>
+                    <licence target="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International (CC-BY 4.0)</licence>
+                </availability>
+            </publicationStmt>
+            <seriesStmt>
+                <title type="main">Die sozinianischen Briefwechsel</title>
+                <title type="sub">Zwischen Theologie, frühmoderner Naturwissenschaft und politischer Korrespondenz</title>
+                <editor ref="http://d-nb.info/gnd/135995728">Kęstutis Daugirdas</editor>
+                <editor ref="https://orcid.org/0000-0003-1020-507X">Andreas Kuczera</editor>
+                <idno>https://gepris.dfg.de/gepris/projekt/324518514</idno>
+                <idno>https://registry.text-plus.org/entity/e4dde8f1-2335-4bc6-aeab-c64c4c163ef4/</idno>
+            </seriesStmt>
+            <notesStmt>
+                <note/>
+            </notesStmt>
+            <sourceDesc>
+                <bibl>„Stanisław Lubieniecki (Hamburg) an Nicolaus Heinsius (Stockholm), 23. Oktober 1665“, in: Zwischen Theologie, frühmoderner Naturwissenschaft und politischer Korrespondenz: Die sozinianischen Briefwechsel, hg. von Kęstutis Daugirdas und Andreas Kuczera unter DH-Mitarbeit von Julian Jarosch, Sebastian Enns und Patrick Toschka. Link zur aktuellen Version dieses Briefes: https://sozinianer.de/id/MAIN_lfw_qlm_zdb</bibl>
+            </sourceDesc>
+        </fileDesc>
+        <encodingDesc>
+            <p/>
+        </encodingDesc>
+    </teiHeader>
+    <TEI xml:id="MAIN_lfw_qlm_zdb" type="letter" n="cover_letter">
+    <teiHeader>
+        <fileDesc>
+            <titleStmt>
+                <title type="main">Stanisław Lubieniecki (Hamburg) an Nicolaus Heinsius (Stockholm), 23.
+          Oktober 1665</title>
+                <principal ref="http://d-nb.info/gnd/135995728">Kęstutis Daugirdas</principal>
+                <principal ref="https://orcid.org/0000-0003-1020-507X">Andreas Kuczera</principal>
+                <funder>Deutsche Forschungsgemeinschaft</funder>
+                <editor>
+                    <persName>Michael Weichenhan</persName>
+                </editor>
+            </titleStmt>
+            <extent>
+                <measure unit="witnesses" quantity="1"/>
+            </extent>
+            <publicationStmt>
+                <publisher>
+                    <orgName ref="https://www.jalb.de/">Johannes a Lasco Bibliothek</orgName>
+                    <settlement ref="https://sws.geonames.org/2930596">Emden</settlement>
+                </publisher>
+                <publisher>
+                    <orgName ref="https://www.adwmainz.de/">Akademie der Wissenschaften und der Literatur</orgName>
+                    <settlement ref="http://sws.geonames.org/2874225">Mainz</settlement>
+                </publisher>
+                <pubPlace ref="http://sws.geonames.org/2874225">Mainz</pubPlace>
+                <date from="2020">2020–2024</date>
+                <availability>
+                    <licence target="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International (CC-BY 4.0)</licence>
+                </availability>
+                <idno type="uri">https://sozinianer.de/id/MAIN_lfw_qlm_zdb</idno>
+            </publicationStmt>
+            <seriesStmt>
+                <title type="main">Die sozinianischen Briefwechsel</title>
+                <title type="sub">Zwischen Theologie, frühmoderner Naturwissenschaft und politischer Korrespondenz</title>
+                <editor ref="http://d-nb.info/gnd/135995728">Kęstutis Daugirdas</editor>
+                <editor ref="https://orcid.org/0000-0003-1020-507X">Andreas Kuczera</editor>
+                <idno>https://gepris.dfg.de/gepris/projekt/324518514</idno>
+                <idno>https://registry.text-plus.org/entity/e4dde8f1-2335-4bc6-aeab-c64c4c163ef4/</idno>
+            </seriesStmt>
+            <notesStmt>
+                <relatedItem type="attachment" target="MAIN_ckw_qlm_zdb"/>
+            </notesStmt>
+            <sourceDesc>
+                <listWit>
+                    <witness corresp="#lfw_qlm_zdb"/>
+                </listWit>
+            </sourceDesc>
+        </fileDesc>
+        <profileDesc>
+            <correspDesc>
+                <correspAction type="sent">
+                    <persName key="Lubieniecki_Stanislaw">Lubieniecki, Stanisław</persName>
+                    <placeName key="Hamburg">Hamburg</placeName>
+                    <date when="1665-10-23"/>
+                </correspAction>
+                <correspAction type="received">
+                    <persName key="Heinsius">Heinsius, Nicolaus</persName>
+                    <placeName key="Stockholm">Stockholm</placeName>
+                </correspAction>
+            </correspDesc>
+        </profileDesc>
+    </teiHeader>
+    <TEI xmlns:ns="http://www.telota.de" xmlns:da="http://www.digitale-akademie.de" xml:id="lfw_qlm_zdb" n="reference_witness" type="letter">
+  <teiHeader>
+        <fileDesc>
+            <titleStmt>
+                
+                <title type="sub">Druck</title>
+                <editor>
+                    <persName>Michael Weichenhan</persName>
+                </editor>
+            </titleStmt>
+            <publicationStmt>
+                <publisher>
+                    <orgName ref="https://www.jalb.de/">Johannes a Lasco Bibliothek</orgName>
+                    <settlement ref="https://sws.geonames.org/2930596">Emden</settlement>
+                </publisher>
+                <publisher>
+                    <orgName ref="https://www.adwmainz.de/">Akademie der Wissenschaften und der Literatur</orgName>
+                    <settlement ref="http://sws.geonames.org/2874225">Mainz</settlement>
+                </publisher>
+                <pubPlace ref="http://sws.geonames.org/2874225">Mainz</pubPlace>
+                <date from="2020">2020–2024</date>
+                <availability>
+                    <licence target="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International (CC-BY 4.0)</licence>
+                </availability>
+                <idno type="file">Lubieniecki_Stanislaw/MW_Heinsius/1665-10-23_Lubieniecki_Heinsius_D_TC.xml</idno>
+            </publicationStmt>
+            <seriesStmt>
+                <title type="main">Die sozinianischen Briefwechsel</title>
+                <title type="sub">Zwischen Theologie, frühmoderner Naturwissenschaft und politischer Korrespondenz</title>
+                <editor ref="http://d-nb.info/gnd/135995728">Kęstutis Daugirdas</editor>
+                <editor ref="https://orcid.org/0000-0003-1020-507X">Andreas Kuczera</editor>
+                <idno>https://gepris.dfg.de/gepris/projekt/324518514</idno>
+                <idno>https://registry.text-plus.org/entity/e4dde8f1-2335-4bc6-aeab-c64c4c163ef4/</idno>
+            </seriesStmt>
+            <sourceDesc>
+                <bibl sameAs="zotero-2065617-5UI8LMLI">Theatrum cometicum I<biblScope unit="pages">316.</biblScope>
+                </bibl>
+                <msDesc rend="print">
+                    <msIdentifier/>
+                    
+                </msDesc>
+            </sourceDesc>
+        </fileDesc>
+        <profileDesc>
+            <langUsage>
+                <language ident="lat"/>
+            </langUsage>
+            <textClass>
+                <classCode scheme="http://www.deutschestextarchiv.de/doku/klassifikation#dwds1main">Gebrauchsliteratur</classCode>
+                <classCode scheme="#sbw">Brief</classCode>
+            </textClass>
+            
+        </profileDesc>
+        <revisionDesc>
+            <change when="2022-10-31">Metadaten publikationsbereit</change>
+            <change when="2018-11-09">Transkription publikationsbereit</change>
+            <change when="2018-06-22">Metadaten publikationsbereit</change>
+            <change when="2022-12-12">Transkription publikationsbereit</change>
+        </revisionDesc>
+    </teiHeader>
+  <text><body><div type="letter"><pb facs="https://archive.org/details/ned-kbn-all-00001420-001/page/316/mode/1up" n="316"/> <opener><dateline>Hamburgo Holmiam die 13. Octobris Juliani 1665.</dateline></opener> <p>Postquam omnia tua, quae a me postulasti, tibi misi, spero te mihi ea brevi remissurum. Quod sane in votis habeo, ut quam primum tua in Hollandiam promoveam, et caeteris adjungam. Nihil de hoc argumento alicunde accepi, praeter haec pauca ab illustrissimo Rautensteinio die 15. hujus mensis scripta. Quae cum aliquantum cum postremis meis ad te exaratis conveniant, ea subjungere merito volui. Tu etiam aliquando, clarissime Heinsi! sententiam de cometarum operatione in senatu nostro dices. Plerique enim eos nonnisi adversa praesignificare, imo et efficere criminantur. Et, quod merito maxime mireris, ab omni quidem aevo. Adeo, ut cum tuo Nasone ingeniosissimo exclamare liceat:</p> <p rendition="#et">Quantum animis erroris inest! - - -</p> <p>At quis est, qui rerum serie, inter cometas gestarum, expensa, aliam non induat mentem, illorumque apparitionem tam laeta quam tristia praecedere non animadvertat? Quod si haec plura numero fuisse comperiantur, minime mirandum si vel semper numero vincant, cum nunquam non longe vincant his potius quam illis digni. Nosti illud vetus.</p> <p rendition="#et">Rari quippe boni - - - - - -</p> <p>Sed haec aliquando, si vivo, in historia cometica, quam scribo, ad oculum videbis.</p> <p>A communi amico Dantiscano nullam literam accepi. Alii spem pacis in patria faciunt. Pacem et ego patriae ex animo precor. Sed honestam et fidam, quae sola aequitate, multum ibi violata, paratur. Id consilii, quod ab Epaminonda omnium Graeciae principum principe mutuatus, amico illi Ratisbonensi proposui, et simul parem Graecorum et Polonorum, culpam quidem in excludendis pace, foedere, libertate et patria communi civibus, fortunam vero in mutuis caedibus exposui, ex Plutarchi Agesilao accepi. En tibi itaque amici responsum, ut tu quoque de hac re judicium feras.</p> <p>Quod reliquum est, accipe ab illo plurimam salutem, qui id juris, imo mandati semper mihi dat, quod et illae ejus postremae testantur. Accipe et a me, qui affectu in te et promto ad officia praestanda tibi animo nulli unquam cedo.</p></div></body></text>
+</TEI>
+</TEI>
+    <TEI xml:id="MAIN_ckw_qlm_zdb" type="letter" n="attachment">
+    <teiHeader>
+        <fileDesc>
+            <titleStmt>
+                <title type="main">Johann Ernst von Rautenstein (Regensburg) an Stanisław Lubieniecki
+          (Hamburg), 15. Oktober 1665</title>
+                <principal ref="http://d-nb.info/gnd/135995728">Kęstutis Daugirdas</principal>
+                <principal ref="https://orcid.org/0000-0003-1020-507X">Andreas Kuczera</principal>
+                <funder>Deutsche Forschungsgemeinschaft</funder>
+            </titleStmt>
+            <extent>
+                <measure unit="witnesses" quantity="1"/>
+            </extent>
+            <publicationStmt>
+                <publisher>
+                    <orgName ref="https://www.jalb.de/">Johannes a Lasco Bibliothek</orgName>
+                    <settlement ref="https://sws.geonames.org/2930596">Emden</settlement>
+                </publisher>
+                <publisher>
+                    <orgName ref="https://www.adwmainz.de/">Akademie der Wissenschaften und der Literatur</orgName>
+                    <settlement ref="http://sws.geonames.org/2874225">Mainz</settlement>
+                </publisher>
+                <pubPlace ref="http://sws.geonames.org/2874225">Mainz</pubPlace>
+                <date from="2020">2020–2024</date>
+                <availability>
+                    <licence target="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International (CC-BY 4.0)</licence>
+                </availability>
+                <idno type="uri">https://sozinianer.de/id/MAIN_ckw_qlm_zdb</idno>
+            </publicationStmt>
+            <seriesStmt>
+                <title type="main">Die sozinianischen Briefwechsel</title>
+                <title type="sub">Zwischen Theologie, frühmoderner Naturwissenschaft und politischer Korrespondenz</title>
+                <editor ref="http://d-nb.info/gnd/135995728">Kęstutis Daugirdas</editor>
+                <editor ref="https://orcid.org/0000-0003-1020-507X">Andreas Kuczera</editor>
+                <idno>https://gepris.dfg.de/gepris/projekt/324518514</idno>
+                <idno>https://registry.text-plus.org/entity/e4dde8f1-2335-4bc6-aeab-c64c4c163ef4/</idno>
+            </seriesStmt>
+                <notesStmt>
+                    <relatedItem type="cover_letter" target="MAIN_lfw_qlm_zdb"/>
+                </notesStmt>
+            <sourceDesc>
+                <listWit>
+                    <witness corresp="#ckw_qlm_zdb"/>
+                </listWit>
+            </sourceDesc>
+        </fileDesc>
+        <profileDesc>
+            <correspDesc>
+                <correspAction type="sent">
+                    <persName key="Rautenstein">Rautenstein, Johann Ernst von</persName>
+                    <placeName key="Regensburg">Regensburg</placeName>
+                    <date when="1665-10-15"/>
+                </correspAction>
+                <correspAction type="received">
+                    <persName key="Lubieniecki_Stanislaw">Lubieniecki, Stanisław</persName>
+                    <placeName key="Hamburg">Hamburg</placeName>
+                </correspAction>
+            </correspDesc>
+        </profileDesc>
+    </teiHeader>
+    <TEI xml:id="ckw_qlm_zdb" n="reference_witness" type="letter">
+  <teiHeader>
+        <fileDesc>
+            <titleStmt>
+                
+                <title type="sub">Druck</title>
+            </titleStmt>
+            <publicationStmt>
+                <publisher>
+                    <orgName ref="https://www.jalb.de/">Johannes a Lasco Bibliothek</orgName>
+                    <settlement ref="https://sws.geonames.org/2930596">Emden</settlement>
+                </publisher>
+                <publisher>
+                    <orgName ref="https://www.adwmainz.de/">Akademie der Wissenschaften und der Literatur</orgName>
+                    <settlement ref="http://sws.geonames.org/2874225">Mainz</settlement>
+                </publisher>
+                <pubPlace ref="http://sws.geonames.org/2874225">Mainz</pubPlace>
+                <date from="2020">2020–2024</date>
+                <availability>
+                    <licence target="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International (CC-BY 4.0)</licence>
+                </availability>
+                <idno type="file">Lubieniecki_Stanislaw/MS_Rautenstein/Publikationsbereite_Transkriptionen/1665-10-15_Rautenstein_Lubieniecki_ckw_qlm_zdb.xml</idno>
+            </publicationStmt>
+            <seriesStmt>
+                <title type="main">Die sozinianischen Briefwechsel</title>
+                <title type="sub">Zwischen Theologie, frühmoderner Naturwissenschaft und politischer Korrespondenz</title>
+                <editor ref="http://d-nb.info/gnd/135995728">Kęstutis Daugirdas</editor>
+                <editor ref="https://orcid.org/0000-0003-1020-507X">Andreas Kuczera</editor>
+                <idno>https://gepris.dfg.de/gepris/projekt/324518514</idno>
+                <idno>https://registry.text-plus.org/entity/e4dde8f1-2335-4bc6-aeab-c64c4c163ef4/</idno>
+            </seriesStmt>
+            <sourceDesc>
+                <bibl sameAs="zotero-2065617-5UI8LMLI">Theatrum cometicum I<biblScope unit="pages">172f.</biblScope>
+                </bibl>
+                <msDesc rend="print">
+                    <msIdentifier/>
+                    
+                </msDesc>
+            </sourceDesc>
+        </fileDesc>
+        <profileDesc>
+            <langUsage>
+                <language ident="lat"/>
+            </langUsage>
+            <textClass>
+                <classCode scheme="http://www.deutschestextarchiv.de/doku/klassifikation#dwds1main">Gebrauchsliteratur</classCode>
+                <classCode scheme="#sbw">Brief</classCode>
+            </textClass>
+            
+        </profileDesc>
+        <revisionDesc>
+            <change when="2021-01-06">Metadaten publikationsbereit</change>
+            <change when="2018-11-09">Transkription publikationsbereit</change>
+            <change when="2018-06-22">Metadaten publikationsbereit</change>
+            <change when="2024-07-05">Transkription publikationsbereit</change>
+        </revisionDesc>
+    </teiHeader>
+  <text><body><div type="letter"><pb facs="https://archive.org/details/ned-kbn-all-00001420-001/page/172/mode/1up" n="172"/> <dateline>Ratisbona Hamburgum die 15. Octobris 1665.</dateline> <p>Luculenta et succi plena est haec ultima epistola generositatis vestrae, quae cum aliquot praecedentibus ex instituto scripta videtur, ut cum caeteris publicum videat. Multa sane ex illa excerpi et evulgari posse censeo: ita tamen ne moles operis vestri nimis excrescat, aut semel dicta saepius repetantur, opus vero illud vestrum non obstantibus armis lucem visurum et cum vere novo proditurum autumo. Pro quo omnes bonae mentis et literarum alumni generositatis vestrae plurimum se debere fatebuntur. Caeterum dextre philosophatur de cometis non solum aspera, sed et prospera iisdem adscribens, pro eo, qui omnium rerum est, quidam velut orbis.</p> <p>Fateor tamen hoc anno nos multa bella, multa funera illustria, multaque alia extraordinaria vidisse. Sola domus Austriaca, quas non columnas pauco tempore amisit? Funera funeribus pensantur. Regem enim Hispaniae secutum nuper esse consobrinam Bavaricam (cujus exequiae hic nudius tertius celebratae) aut praecessisse potius, jam intellexeritis. Haec enim 25. Septembris obiit: illum jam ante obiisse reor, nos autem id tardius rescivisse. Mors istius in sola aula Bavarica mutationis introductura videtur, hujus in tota Europa et forte etiam extra illam: licet diu praevisa minus nocitura sit. Quod si Papa, ut multi augurantur, brevi etiam sequatur, quanta non funera vidissemus parvo tempore? Ex quo in publico versor, memini me audiisse mortuos Viennae et in vicinia ex Augusta domo 3 Ferdinandos, 3 imperatrices, 4. archiduces, quorum 3 in ipso flore aetatis, <pb facs="https://archive.org/details/ned-kbn-all-00001420-001/page/n219" n="173"/>ut et duorum soror, flos foeminarum sui aevi, emarcuerunt. Ita non ludos mors habet, aequo pulsans pede pauperum tabernas regumque turres.</p> <p>Sed ad alia. Poloniae vestrae afflictum statum ex animo doleo. Sunt qui meliora brevi sperent. Ego tamen nescio, quid adhuc mali timeam: veritus, ut tam brevi finem visuri simus. Aequalitatis studium merito a veteribus et recentioribus sapientibus praedicatur: sed ubi practicatur? Passim enim videmus imbecilliores a potentioribus opprimi, et, ut in proverbio est, pisces minores a majoribus devorari. De quo non solum cives vestri conqueri possunt. Nam nimis latum et commune hoc malum est.</p> <p>Ego ulteriorem rerum illarum seriem tranquille opperiar, quoque majora video imminere mala, eo majoribus praesidiis fortioribusque exemplis firmare animum pergam, licet nullum reperiam tutius asylum, prae divina voluntate, quae ut fiat, indies et toties precamur, conformare nos eidem in omnibus, vix recte discimus.</p> <p>Quod vero generositas vestra putat me aliquid conferre per amicos in Polonia posse ad rempublicam pacandam, (quod quidem ex animo opto voveoque) in eo vereor, ne nimium de me speret. Memini quidem, sed non jacto tamen, quid praesens fecerim, cum ad conciliandam pacem Olivensem nomine et authoritate serenissimi principis mei cooperarer: nunc vero absens et tantis locorum intervallis remotus, multis insuper amicis orbatus, ipsoque rerum statu varie immutato, non video, quid praestare magnopere possim. Pro pace tamen facturus sum, quantum possum, plus sane quam dicturus, Hevelianas observationes videre gestio. Ut a <choice><abbr>P.</abbr> <expan>patre</expan></choice> Curtio promissum illi diu librum extorquere tandem possim, allaborabo. Amicos semper salvere jubeo, futurus semper</p> <closer><choice><abbr>G. D.</abbr> <expan>generosae dominationis</expan></choice> vestrae paratissimus servitor de Rautenstein.</closer></div></body></text>
+</TEI>
+</TEI>
+</teiCorpus>

@@ -2,6 +2,9 @@
 
 require "nokogiri"
 
+require_relative "runesdb_lido"
+require_relative "runesdb_lido_fetch"
+
 module Nabu
   module Adapters
     # RuneS-DB — the runic inscription database of the Göttingen Academy's
@@ -65,14 +68,36 @@ module Nabu
     # number: OE-GB, MJy, N KJ, SG, Holm B…) rides the siglum_family facet,
     # the seam the runesdb-siglum lect rule reads (config/lect_facet_rules.yml).
     #
-    # == Axes (aggressive mining, declared)
+    # == Axes — the LIDO layer (P160; aggressive mining, declared)
     #
-    # The TEI zip carries no date and no place. Upstream publishes those
-    # (plus an editorial transcription and an English translation) in a
-    # separate per-find LIDO record (https://www.runesdb.de/lido/<id>, CC BY-SA)
-    # that this adapter does NOT fetch — the LIDO url rides metadata
-    # lido_url, and the per-find LIDO harvest is the follow-up that lights
-    # the dating and places axes.
+    # The TEI zip carries no date and no place. Upstream publishes those —
+    # plus object type, find context, material, the editorial
+    # transcription and an English (often also German) translation — in a
+    # separate per-find LIDO record (https://www.runesdb.de/lido/<id>).
+    # #fetch harvests one per discovered find into lido/<id>.xml
+    # (RunesdbLidoFetch: paced 1 req/s, resumable, never-delete) and
+    # #parse merges the record into the find's metadata (RunesdbLido —
+    # the field map lives there): "date" = the Production event's
+    # earliest/latest years (the MetadataDates :structured lane, artifact
+    # dating, no class), "place" = the Finding event's find place + its
+    # GML point (manuscripts excepted: their finding event names the
+    # holding library), the discovery date as "find_date" (never a dating
+    # claim). A find without a harvested record parses exactly as before
+    # (the TEI-only metadata) — so an unharvested tree and an interrupted
+    # harvest stay honest, and nothing about a find's identity depends on
+    # its LIDO record.
+    #
+    # == Translations (registry `translations: true`)
+    #
+    # A record's English translation mints a -en sibling document
+    # (urn:nabu:runesdb:<id>-en, language eng, one passage :1 — the
+    # riig/open-etruscan/aio shape) when it is a real rendering: "-" is
+    # upstream's none, and a "translation" that merely restates the
+    # reading (a manuscript's single rune "m", the TEI transliteration or
+    # the LIDO transcription again, whitespace-insensitive) mints nothing.
+    # Every translation string rides the find's metadata verbatim either
+    # way (translation_en / translation_de), so nothing is dropped. German
+    # translations stay metadata-only (the layer is the English one).
     #
     # == License
     #
@@ -83,6 +108,24 @@ module Nabu
     # beside that statement in every file; the statement and the record
     # govern. license_class attribution; a file whose statement is not
     # BY-SA goes restricted.
+    #
+    # The LIDO layer is the SAME grant, stated per record: every record's
+    # recordRights reads "CC BY-SA 4.0 - Attribution-ShareAlike 4.0
+    # International" (rdf:about the by-sa/4.0 deed), its objectDescription
+    # rights "CC BY-SA 4.0"; rights holder the Göttingen Academy of
+    # Sciences and Humanities in Lower Saxony (GND 16268620-1) — read on
+    # the 27-record census, 2026-11-05. The site's data-sources page
+    # (runesdb.de/en/data-sources, read 2026-11-05): "The rights to the
+    # data are held by the Göttingen Academy of Sciences and Humanities in
+    # Lower Saxony and are subject to the CC-BY-SA 4.0 law … The RuneS
+    # database contains data from the Kiel Runenprojekt, the Danish
+    # database runer.ku.dk and the Samnordisk runtextdatabas/Rundata
+    # accessible under the Open Database License (ODbL)" — the Scandinavian
+    # translations are Rundata-lineage, ODbL: an attribution + share-alike
+    # grant too, so the class holds (attribution) and no override is
+    # minted. The record's statement rides metadata lido_license; a record
+    # whose statement is not BY-SA sends the find restricted, the TEI
+    # gate's rule.
     class Runesdb < Nabu::Adapter
       ZIP_URL = "https://zenodo.org/records/21788307/files/runes_tei.zip"
       RECORD_URL = "https://doi.org/10.5281/zenodo.21788307"
@@ -90,6 +133,11 @@ module Nabu
 
       LANGUAGE = "gem"
       URN_PREFIX = "urn:nabu:runesdb:"
+      TRANSLATION_SUFFIX = "-en"
+      # LIDO fields that become facets beside the TEI's siglum_family:
+      # facet => mined field (a list field facets every value).
+      LIDO_FACETS = { "object_type" => "object_type", "classification" => "classification",
+                      "material" => "material" }.freeze
       FILE_PATTERN = /\Arunes_find-(?<id>\d+)\.tei\.xml\z/
       TITLE_LABEL = /\AInschrift:\s*/
 
@@ -121,6 +169,23 @@ module Nabu
         MANIFEST
       end
 
+      # The LIDO harvest lands beside the zip's flat TEI tree (the
+      # declared-materializations rule). The plain tree hashes whole
+      # regardless; the declaration keeps the contract explicit and
+      # ZipFetch's keep: shields the dir from the zip's upstream-deletion
+      # attic.
+      def self.materialized_paths = [RunesdbLidoFetch::DIRNAME]
+
+      # +translations+ arrives via SourceRegistry::Entry#build_adapter
+      # (sources.yml `translations: true`); +lido_http+ / +lido_delay+ are
+      # the harvest's seams (tests: a WebMock-backed connection, no pause).
+      def initialize(translations: false, lido_http: nil, lido_delay: RunesdbLidoFetch::DELAY)
+        super()
+        @translations = translations
+        @lido_http = lido_http
+        @lido_delay = lido_delay
+      end
+
       # HEAD the zip: reachability + Last-Modified drift vs the pin.
       def self.remote_probe_strategy = :http_zip
 
@@ -143,15 +208,22 @@ module Nabu
         statement.to_s.match?(/CC BY-SA 4\.0/) ? nil : "restricted"
       end
 
+      # The text-bearing finds, plus (opted in) each one's -en translation
+      # sibling — minted iff #parse_translation would find a real
+      # rendering. Sorted by urn.
       def discover(workdir, &block)
         return enum_for(:discover, workdir) unless block
 
-        find_files(workdir).each do |id, path|
-          next unless transliterated?(path)
+        refs = text_bearing_finds(workdir).flat_map do |id, path|
+          urn = "#{URN_PREFIX}#{id}"
+          base = Nabu::DocumentRef.new(source_id: manifest.id, id: urn, path: File.expand_path(path),
+                                       metadata: { "find_id" => id })
+          next [base] unless @translations && translated?(base)
 
-          yield Nabu::DocumentRef.new(source_id: manifest.id, id: "#{URN_PREFIX}#{id}",
-                                      path: File.expand_path(path), metadata: { "find_id" => id })
+          [base, Nabu::DocumentRef.new(source_id: manifest.id, id: "#{urn}#{TRANSLATION_SUFFIX}",
+                                       path: base.path, metadata: { "find_id" => id, "kind" => "translation" })]
         end
+        refs.sort_by(&:id).each(&block)
       end
 
       def discovery_skips(workdir)
@@ -163,27 +235,104 @@ module Nabu
       end
 
       def parse(document_ref)
-        xml = Nokogiri::XML(SourceRead.utf8_file(document_ref.path, label: "runesdb"))
-        raise ParseError, "#{document_ref.path}: not a RuneS-DB TEI find" if xml.at_xpath("/t:TEI", NS).nil?
+        return parse_translation(document_ref) if document_ref.metadata["kind"] == "translation"
 
-        build_document(xml, document_ref)
-      rescue Nokogiri::XML::SyntaxError => e
-        raise ParseError, "#{document_ref.path}: malformed TEI: #{e.message}"
+        build_document(tei(document_ref.path), document_ref)
       rescue Nabu::ValidationError => e
         raise ParseError, "#{document_ref.path}: #{e.message}"
       end
 
+      # The zip (ZipFetch, lido/ kept out of its upstream-deletion attic),
+      # then the paced per-find LIDO harvest for every text-bearing find
+      # (RunesdbLidoFetch — resumable; a 304 on the zip still runs it, so
+      # an interrupted harvest completes on the next sync).
       def fetch(workdir, progress: nil, force: false)
         result = Nabu::ZipFetch.sync!(
           url: ZIP_URL, dir: workdir, attic_dir: File.join(workdir, ATTIC_DIRNAME),
-          progress: progress, guard: ->(doomed) { guard_mass_deletion!(workdir, doomed, force: force) }
+          progress: progress, keep: [RunesdbLidoFetch::DIRNAME],
+          guard: ->(doomed) { guard_mass_deletion!(workdir, doomed, force: force) }
         )
-        FetchReport.new(sha: result.sha, fetched_at: Time.now, notes: attic_notes(result.atticked))
-      rescue ZipFetch::Error, Nabu::Shell::Error => e
+        lido = RunesdbLidoFetch.sync!(dir: workdir, find_ids: text_bearing_finds(workdir).map(&:first),
+                                      http: @lido_http || ZipFetch.default_http, delay: @lido_delay,
+                                      progress: progress)
+        FetchReport.new(sha: result.sha, fetched_at: Time.now, notes: fetch_notes(result, lido))
+      rescue ZipFetch::Error, RunesdbLidoFetch::Error, Nabu::Shell::Error => e
         raise Nabu::FetchError, "runesdb fetch failed into #{workdir}: #{e.message}"
       end
 
+      # The -en sibling's text: the record's English translation when it is
+      # a real rendering — nil for none ("-", absent) and for a restatement
+      # of the reading (the TEI transliteration or the LIDO transcription,
+      # whitespace-insensitive: a manuscript's single rune "m"). Public for
+      # the discover/parse agreement the tests pin.
+      def translation_for(document_ref)
+        lido = lido_record(document_ref)
+        text = lido && lido["translation_en"]
+        return nil if text.nil?
+
+        passages, _skipped = sequence_readings(tei(document_ref.path), document_ref.id)
+        readings = [lido["transcription"], *passages.map { |_urn, reading, _annotations| reading }]
+        squeezed = text.gsub(/\s+/, "")
+        readings.compact.any? { |reading| reading.gsub(/\s+/, "") == squeezed } ? nil : text
+      end
+
       private
+
+      # The sibling-minting decision is #translation_for itself (the riig
+      # stance): an unreadable TEI or LIDO record mints no sibling — the
+      # base ref already carries the honest quarantine.
+      def translated?(base_ref)
+        !translation_for(base_ref).nil?
+      rescue ParseError
+        false
+      end
+
+      def tei(path)
+        xml = Nokogiri::XML(SourceRead.utf8_file(path, label: "runesdb"))
+        raise ParseError, "#{path}: not a RuneS-DB TEI find" if xml.at_xpath("/t:TEI", NS).nil?
+
+        xml
+      rescue Nokogiri::XML::SyntaxError => e
+        raise ParseError, "#{path}: malformed TEI: #{e.message}"
+      end
+
+      # The harvested LIDO record's mined fields, nil when the find has no
+      # record on disk (unharvested — the TEI-only parse).
+      def lido_record(document_ref)
+        find_id = document_ref.metadata["find_id"] || document_ref.id.delete_prefix(URN_PREFIX)
+        path = File.join(File.dirname(document_ref.path), RunesdbLidoFetch.record_relpath(find_id))
+        File.file?(path) ? RunesdbLido.read(path, find_id: find_id) : nil
+      end
+
+      # The -en sibling: one English passage, the find's title + label.
+      def parse_translation(document_ref)
+        base_urn = document_ref.id.delete_suffix(TRANSLATION_SUFFIX)
+        base_ref = document_ref.with(id: base_urn, metadata: document_ref.metadata.except("kind"))
+        text = translation_for(base_ref)
+        raise ParseError, "#{document_ref.path}: no English translation for #{base_urn}" if text.nil?
+
+        title = document_title(tei(document_ref.path))
+        license = lido_record(base_ref)["lido_license"]
+        document = Nabu::Document.new(
+          urn: document_ref.id, language: "eng", title: title && "#{title} — English translation",
+          canonical_path: document_ref.path,
+          metadata: { "kind" => "translation", "translation_of" => base_urn, "license" => license }.compact,
+          license_override: self.class.license_override_for(license)
+        )
+        document << Nabu::Passage.new(urn: "#{document_ref.id}:1", language: "eng", text: text, sequence: 0)
+        document
+      end
+
+      def fetch_notes(zip, lido)
+        notes = "lido=#{lido.sha[0, 12]} (#{lido.records} finds: #{lido.fetched} fetched, " \
+                "#{lido.cached} on disk, #{lido.missing.size} without a record)"
+        [attic_notes(zip.atticked), notes].compact.join(" · ")
+      end
+
+      # [find id, path] for the finds discover yields.
+      def text_bearing_finds(workdir)
+        find_files(workdir).select { |_id, path| transliterated?(path) }
+      end
 
       # [find id, path] for every runes_find-<id>.tei.xml, sorted by urn.
       def find_files(workdir)
@@ -204,10 +353,13 @@ module Nabu
 
         metadata = document_metadata(xml, document_ref)
         metadata["untransliterated_sequences"] = untransliterated if untransliterated.positive?
+        lido = lido_record(document_ref)
+        metadata = merge_lido(metadata, lido) if lido
+        license_override = self.class.license_override_for(metadata["license"]) ||
+                           (lido && self.class.license_override_for(lido["lido_license"]))
         document = Nabu::Document.new(
           urn: document_ref.id, language: LANGUAGE, title: document_title(xml),
-          canonical_path: document_ref.path, metadata: metadata,
-          license_override: self.class.license_override_for(metadata["license"])
+          canonical_path: document_ref.path, metadata: metadata, license_override: license_override
         )
         readings.each_with_index do |(urn, text, annotations), index|
           document << Nabu::Passage.new(urn: urn, language: LANGUAGE, text: Normalize.nfc(text),
@@ -236,6 +388,19 @@ module Nabu
           "sides" => xml.xpath("//t:body//t:div[@type='side']", NS).size,
           "facets" => ({ "siglum_family" => { "value" => family } } if family)
         }.compact
+      end
+
+      # The TEI metadata wins on any shared key (none today — the LIDO
+      # field names are disjoint by construction); facets merge.
+      def merge_lido(metadata, lido)
+        facets = (metadata["facets"] || {}).dup
+        LIDO_FACETS.each do |facet, field|
+          values = Array(lido[field])
+          next if values.empty?
+
+          facets[facet] = values.size == 1 ? { "value" => values.first } : { "values" => values }
+        end
+        metadata.merge(lido) { |_key, tei, _lido| tei }.merge("facets" => facets.empty? ? nil : facets).compact
       end
 
       # [[urn, text, annotations]…] for every transliterated sequence, plus

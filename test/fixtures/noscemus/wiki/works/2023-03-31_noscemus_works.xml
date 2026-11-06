@@ -1,0 +1,358 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.10/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.10/ http://www.mediawiki.org/xml/export-0.10.xsd" version="0.10" xml:lang="en">
+  <siteinfo>
+    <sitename>noscemus</sitename>
+    <dbname>wf_noscemus</dbname>
+    <base>http://wiki.uibk.ac.at/noscemus/Main_Page</base>
+    <generator>MediaWiki 1.27.4</generator>
+    <case>case-sensitive</case>
+    <namespaces>
+      <namespace key="-2" case="case-sensitive">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="case-sensitive" />
+      <namespace key="1" case="case-sensitive">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="case-sensitive">noscemus</namespace>
+      <namespace key="5" case="case-sensitive">noscemus talk</namespace>
+      <namespace key="6" case="case-sensitive">File</namespace>
+      <namespace key="7" case="case-sensitive">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="case-sensitive">Template</namespace>
+      <namespace key="11" case="case-sensitive">Template talk</namespace>
+      <namespace key="12" case="case-sensitive">Help</namespace>
+      <namespace key="13" case="case-sensitive">Help talk</namespace>
+      <namespace key="14" case="case-sensitive">Category</namespace>
+      <namespace key="15" case="case-sensitive">Category talk</namespace>
+      <namespace key="102" case="case-sensitive">Attribut</namespace>
+      <namespace key="103" case="case-sensitive">Attribut Diskussion</namespace>
+      <namespace key="106" case="case-sensitive">Form</namespace>
+      <namespace key="107" case="case-sensitive">Form talk</namespace>
+      <namespace key="108" case="case-sensitive">Konzept</namespace>
+      <namespace key="109" case="case-sensitive">Konzept Diskussion</namespace>
+      <namespace key="170" case="case-sensitive">Filter</namespace>
+      <namespace key="171" case="case-sensitive">Filter Diskussion</namespace>
+      <namespace key="200" case="case-sensitive">UserWiki</namespace>
+      <namespace key="201" case="case-sensitive">UserWiki talk</namespace>
+      <namespace key="202" case="case-sensitive">User profile</namespace>
+      <namespace key="203" case="case-sensitive">User profile talk</namespace>
+      <namespace key="250" case="case-sensitive">Page</namespace>
+      <namespace key="251" case="case-sensitive">Page talk</namespace>
+      <namespace key="252" case="case-sensitive">Index</namespace>
+      <namespace key="253" case="case-sensitive">Index talk</namespace>
+      <namespace key="274" case="case-sensitive">Widget</namespace>
+      <namespace key="275" case="case-sensitive">Widget talk</namespace>
+      <namespace key="300" case="case-sensitive">Poll</namespace>
+      <namespace key="301" case="case-sensitive">Poll talk</namespace>
+      <namespace key="380" case="case-sensitive">ImageAnnotation</namespace>
+      <namespace key="446" case="case-sensitive">Education Program</namespace>
+      <namespace key="447" case="case-sensitive">Education Program talk</namespace>
+      <namespace key="460" case="case-sensitive">Campaign</namespace>
+      <namespace key="461" case="case-sensitive">Campaign talk</namespace>
+      <namespace key="600" case="case-sensitive">UserBox</namespace>
+      <namespace key="601" case="case-sensitive">UserBox talk</namespace>
+      <namespace key="1198" case="case-sensitive">Translations</namespace>
+      <namespace key="1199" case="case-sensitive">Translations talk</namespace>
+      <namespace key="2300" case="case-sensitive">Gadget</namespace>
+      <namespace key="2301" case="case-sensitive">Gadget talk</namespace>
+      <namespace key="2302" case="case-sensitive">Gadget definition</namespace>
+      <namespace key="2303" case="case-sensitive">Gadget definition talk</namespace>
+      <namespace key="2600" case="first-letter">Topic</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>Aurora borealis</title>
+    <ns>0</ns>
+    <id>282</id>
+    <revision>
+      <id>33599</id>
+      <parentid>33581</parentid>
+      <timestamp>2021-06-28T09:22:10Z</timestamp>
+      <contributor>
+        <username>C60528</username>
+        <id>284</id>
+      </contributor>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text xml:space="preserve" bytes="1672">{{Works
+|Author=Noceti, Carlo
+|Full title=Caroli Noceti e Societate Jesu De Iride et Aurora Boreali Carmina Illustrissimo et Reverendissimo Praesuli Bernardino Giraudio Dicata cum Notis Josephi Rogerii Boscovich ex eadem Societate
+|Year=1747
+|Place=Rome
+|Publisher/Printer=Typographia Palladis
+|Era=18th century
+|Form/Genre=Didactic poem
+|Discipline/Content=Physics, Astronomy/Astrology/Cosmography
+|Digital copy=[https://books.google.at/books?id=dMmw9mtPQlYC&amp;pg=PA49&amp;lpg=PA49 Aurora borealis] (Google Books)
+|Description=Written from 1743 onwards (cf. p. 89 of the Roman edition) and first published in 1747 with extensive notes by Rudjer Josip Boskovic, this poem forms a companion piece to the &quot;Iris&quot; by the same Carlo Noceti. In 1271 hexameters, the author explains the hypothesis of the French scientist Jean Jacques d’Ortous de Mairan concerning the causes of the Aurora (Traité physique et historique de l’Aurore Boréale, 1733). Generally speaking, the phenomenon is understood as the result of a kind of solar wind, which collides with the atmosphere of the earth. The poem is similar to the &quot;Iris&quot; in subject, language, didactic techniques and intention. It is, however, both more ambitious and less unified; the latter may partly be due to the fact that the theory Noceti set out to versify was simply less plausible than the one treated in the &quot;Iris&quot;.
+|Transkribus-ID=[https://transkribus.eu/r/noscemus/#/documents/710272/pages/68 710272] 
+
+[https://transkribus.eu/r/noscemus/#/documents/643448/pages/231 643448] (in: Oudin, François: &lt;i&gt;[[Poemata didascalica]]&lt;/i&gt;, vol. 2, Paris 1749, 224-271)
+}}</text>
+      <sha1>pro1elaa9gd6quz0cumoskwsht06k2h</sha1>
+    </revision>
+  </page>
+  <page>
+    <title>Archimedis De incidentibus in humidis cum Francisci de Mello commentariis</title>
+    <ns>0</ns>
+    <id>299</id>
+    <revision>
+      <id>38162</id>
+      <parentid>36611</parentid>
+      <timestamp>2022-02-04T13:52:31Z</timestamp>
+      <contributor>
+        <username>C60528</username>
+        <id>284</id>
+      </contributor>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text xml:space="preserve" bytes="2285">{{Works
+|Author=Mello, Francisco de
+|Full title=Archimedis De incidentibus in humidis cum Francisci de Mello commentariis
+|Year=1521
+|Era=16th century
+|Form/Genre=Monograph, Commentary
+|Discipline/Content=Physics
+|Digital copy=none available, see description
+|Description=This is a corrected and supplemented version of a ps.-Archimedean work of (probably) the 13th century entitled ''De ponderibus Archimenidis'' [sic]. This work aimed at providing a method for the determination of the proportion of the volumes of different components in a compound body by finding out how much weight this body lost when submerged in water, but failed to reach this goal. De Mello successfully set out to rewrite ''De ponderibus'' so that the stated goal could be achieved. In his rewritten version, the text falls into two parts: 1) a short introduction containing a number of definitions and postulates (e.g. &quot;every body weighs more in air than in water&quot;); 2) seven propositions, i.e. considerations or questions, each of which is subdivided in theorems, problems, lemmata and/or corollaries; in the last proposition, the initial question is solved.&lt;br&gt;The short work is interesting for the following reasons: a) It exemplifies the composite nature of some early modern scientific writings, as it contains a conceptual kernel from Archimedes' ''De corporibus fluitantibus'', the medieval elaboration / depravation of this kernel and the latter's early modern reelaboration / rectification. b) It is a good example of the very common 'Euclidean' structuring of scientific texts with the help of sections entitled definitiones, postulata, proposition, theorema, lemma, corollarium, etc. c) At a comparatively early date, it already uses the letters of the alphabet to indicate volumina, weights, etc. &lt;br&gt;De Mello's work was not printed in the early modern era but has only been preserved in the form of a manuscript dedicated to king Manuel I of Portugal (which is why we cannot present a digital copy). After this manuscript resurfaced in the municipal archive of Stralsund, ''De incidentibus in humidis'' was published with introduction, German translation, and commentary by [[Glei; Kreter 2015]].
+|References=[[Glei; Kreter 2015]]
+}}</text>
+      <sha1>1xh3kdsfohd82vtu5bv9ogt1tjag4mh</sha1>
+    </revision>
+  </page>
+  <page>
+    <title>Epistola invitatoria ad celeberrimos Europae medicos</title>
+    <ns>0</ns>
+    <id>301</id>
+    <revision>
+      <id>36818</id>
+      <parentid>36816</parentid>
+      <timestamp>2021-11-17T12:29:21Z</timestamp>
+      <contributor>
+        <username>C60528</username>
+        <id>284</id>
+      </contributor>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text xml:space="preserve" bytes="1883">{{Works
+|Author=Fehr, Johann Michael
+|Full title=Epistola invitatoria ad celeberrimos Europae medicos
+|In=Miscellanea curiosa medico-physica Academiae Naturae curiosorum 1, 1-8
+|Year=1670
+|Place=Leipzig
+|Era=17th century
+|Form/Genre=Letter
+|Discipline/Content=Medicine
+|Digital copy=[https://www.biodiversitylibrary.org/page/43975259#page/30/ Epistola invitatoria] (Biodiversity Heritage Library)
+|Description=This open letter stands at the beginning of the first volume of the ''Miscellanea curiosa'', addressed to professors of medicine and doctors all over Europe. The text starts with some reflections of the ups and downs of learning in the course of history and leads to effuse praise of the progress recently made in natural science in the various countries of Europe. Moved by these developments and full of desire to contribute to them, German physicians have founded the Academia Naturae Curiosorum. Now, they will start to publish the present journal for medicine and related sciences (physics, botany, anatomy, pathology, chirurgy, chemistry) after the example of the ''Philosophical Transactions'' and the ''Journal des Sçavans''. The aim is to collect the many individual observations which are being made all the time but remain inaccessible to most physicians and to publish them collectively once a year. All professors and practitioners of medicine are invited to contribute. Their own observations, observations about which the know ''per litteras'' as well interesting things found in vernacular books are all welcome. Foreigners are kindly ask to set national pride and prejudice aside. The editors are not striving for their own glory, but only for the glory of God and the common good.
+|Transkribus-ID=[https://transkribus.eu/r/noscemus/#/documents/71583/pages/30 71583]
+}}</text>
+      <sha1>b8wvxhhhkvv0klyfwttkdfsoflenjpd</sha1>
+    </revision>
+  </page>
+  <page>
+    <title>Poemata didascalica</title>
+    <ns>0</ns>
+    <id>381</id>
+    <revision>
+      <id>39932</id>
+      <parentid>33611</parentid>
+      <timestamp>2023-01-02T09:32:00Z</timestamp>
+      <contributor>
+        <username>C60522</username>
+        <id>287</id>
+      </contributor>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text xml:space="preserve" bytes="3478">{{Works
+|Author=Oudin, François
+|Full title=Poemata didascalica nunc primum vel edita vel collecta
+|Year=1749
+|Place=Paris
+|Publisher/Printer=Le Mercier
+|Era=18th century
+|Form/Genre=Didactic poem
+|Discipline/Content=Other (see description)
+|Digital copy=&lt;b&gt;1st edtion (Paris 1749)&lt;/b&gt;
+* [https://books.google.at/books?id=sFteAAAAcAAJ Vol. 1] (Google Books)
+* [https://books.google.at/books?id=T2FeAAAAcAAJ Vol. 2] (Google Books)
+* [https://books.google.at/books?id=awa4lb_ifUQC Vol. 3] (Google Books)
+
+&lt;b&gt;2nd edition (Paris 1813)&lt;/b&gt;
+* [https://books.google.at/books?id=H6exagBL-q8C Vol. 1] (Google Books)
+* [https://books.google.at/books?id=WGrPZalskqgC Vol. 2] (Google Books)
+* [https://books.google.at/books?id=bBxQAAAAYAAJ Vol. 3] (Google Books)
+* [https://books.google.at/books?id=az6TeaKInBAC Supplement = vol. 3] (Google Books)
+|Description=The two volumes constitute the biggest collection of Latin didactic poems known to us. François Oudin did not only collect poems which were interesting to him, he was himself author of several pieces. The collection was issued a second time in 1813 by [[Olivet, Pierre Joseph d']] in three volumes, containing numerous additional poems. The second edition was printed under a different title: &lt;i&gt;Poemata didascalica primum vel edita vel collecta studiis Fr. Oudin, in ordinem digesta et emendata a cl. v. Joseph. Oliveto. Secunda editio. Accessere plurima ejusdem generis poemata, quae tertio operis volumine continentur&lt;/i&gt;.
+The first volume of the editio prima begins with a short preface of the printer, who stresses that didactic poems are amusing juvenilia of great poets, versatile and their Latinity usually simple. The preface to the second volume adds that after the first one had gotten praise from many readers, who however wished to also read the older works, especially Vida, they were included into this tome, mixed with newer ones. The volumes of the second edition lack a preface. Every volume is, however, accompanied by a table of contents at the end. 
+Among the many pieces in this collection are several which address natural philosophical or scientific topics: 
+ 
+Volume I.
+: P. la Coedic, [[Mundus Cartesii]], on Cartesian philosophy
+: F. Tarillon, [[Pulvis pyrius]], on Gunpowder
+: Th. B. Fellon, Magnes, on magnetism
+: F.A. Le Febvre, Aurum, on gold
+: F.A. Le Febvre, [[Terrae-motus]], on earthquakes
+: F. Oudin, Ignis, on fire
+: P. Escoulant, Gnomon manualis, on the watch
+: P. Trante, De connubiis florum, on the sexual reproduction of plants
+
+Volume II. 
+: St. A. Souciet, Cometae, on comets
+: C. Nocetius, [[Iris]], on the rainbow
+: C. Nocetius, [[Aurora borealis]]
+
+Volume III. (1813) 
+: C. Griffet, [[Cerebrum]], on the brain
+: P. Brumoy, [[De arte vitraria|De arte vitraria libri IV]], on glazing
+: J.A. De Cerceau, [[Papiliones]], on butterflies
+|Transkribus-ID=&lt;b&gt;1st edition (Paris 1749)&lt;/b&gt;
+*[https://transkribus.eu/r/noscemus/#/documents/643449 643449] (Vol. 1)
+*[https://transkribus.eu/r/noscemus/#/documents/643448 643448] (Vol. 2)
+*[https://transkribus.eu/r/noscemus/#/documents/643450 643450] (Vol. 3)
+
+&lt;b&gt;2nd edition (Paris 1813)&lt;/b&gt;
+*[https://transkribus.eu/r/noscemus/#/documents/710448 710448] (Vol. 1) 
+*[https://transkribus.eu/r/noscemus/#/documents/710449 710449] (Vol. 2) 
+*[https://transkribus.eu/r/noscemus/#/documents/710450 710450] (Vol. 3)
+*[https://transkribus.eu/r/noscemus/#/documents/710451 710451] (Supplement)
+}}</text>
+      <sha1>5938cqdjao6uogqgdx6lfbsvo1awttw</sha1>
+    </revision>
+  </page>
+  <page>
+    <title>Iris</title>
+    <ns>0</ns>
+    <id>390</id>
+    <revision>
+      <id>39458</id>
+      <parentid>33598</parentid>
+      <timestamp>2022-09-19T13:09:28Z</timestamp>
+      <contributor>
+        <username>C60529</username>
+        <id>286</id>
+      </contributor>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text xml:space="preserve" bytes="4274">{{Works
+|Author=Noceti, Carlo
+|Full title=Iris
+|In=Caroli Noceti e Societate Jesu De iride et aurora boreali carmina, illustrissimo ac reverendissimo praesuli Bernardino Giraudio dicata, cum notis Josephi Rogerii Boscovich ex eadem societate, 1–17 (notes: 18–48)
+|Year=1747
+|Place=Rome
+|Publisher/Printer=Pagliarini
+|Era=18th century
+|Form/Genre=Didactic poem
+|Discipline/Content=Physics
+|Digital copy=[https://books.google.at/books?id=nd1FAAAAcAAJ&amp;lpg=PA1&amp;pg=PA1 Iris] (Google Books)
+|Description=Noceti's Iris is a didactic epic in 527 hexameters about the rainbow, based on the findings set forth a few decades before in Newton's Opticks (1704). Its contents may be summarized as follows. After having announced his theme, Noceti begins by contrasting the correct explanation of the rainbow, based on the reflection and refraction of sunlight in raindrops, with older, false explanations such as chthonic exhalations or the concave form of some clouds (1-69). He then sets out the fundamentals of Newtonian optics (reflexion, refraction, composite nature of sunlight, different angles of refraction for different colours, 70-172), before turning to the rainbow itself. In meticulous detail, the beam path within a single drop of water is analysed: The beam is refracted when it enters the drop, reflected from the drop’s back side and refracted a second time when it exits the drop (173-242). The resulting angle of refraction varies between 40° for blue and 42° for red (243-289). This is confirmed by Experience – Experience, which will expand the boundaries of human knowledge further and further in the future, as promised in a digression (290-345). Next, Noceti moves back from the microscopic to the macroscopic level and shows how the mechanisms he has described do indeed lead to the appearance of a rainbow (346-388). To the scientific explanation, a mythological one is added, invented by Noceti himself; it traces the rainbow’s origin back to an unhappy love story between the nymph Iris and a certain Xanthus, who is finally changed into the homonymous river near Troy (389-444). The poem concludes with a shorter discussion of the secondary rainbow, caused by that part of the sunlight which is reflected not once but twice within the single drops (445-516).
+
+As many scientific didactic epics of its day, Iris seriously attemps to enable the reader to understand the phenomenon in question. In doing so, the poem makes generous use of the whole didactic toolkit of the Lucretian tradition (e.g., clear structure, careful explanation of unfamiliar terminology, visualisation through metaphors and similes, close contact with the reader). In accordance with its Lucretian attitude, the poem's language also draws heavily not only on Virgil, but also on his Epicurean predecessor. 
+
+First printed in 1731 in Venice, the text was substantially enlarged and furnished with a commentary by the great Jesuit scientist (and didactic poet) [[Bošković, Ruđer Josip|Ruđer Josip Bošković]] in the Roman edition of 1747, on which this description is based. Two years after, it was taken over in slightly reduced form and without the commentary into the great collection of didactic epics edited by François Oudin, &lt;i&gt;[[Poemata didascalica|Poemata didascalica Latina]]&lt;/i&gt;, Paris 1749 (vol. 2, 204-223). It was reprinted together with the rest of this collection as late as 1813.
+|References=[[Tautschnig 2017]], [[Tautschnig 2020]]
+|Transkribus-ID=[https://transkribus.eu/r/noscemus/#/documents/710272/pages/18 710272]
+
+[https://transkribus.eu/r/noscemus/#/documents/643448/pages/211 643448] (in: Oudin, François: &lt;i&gt;[[Poemata didascalica]]&lt;/i&gt;, vol. 2, Paris 1749, 204-223)
+}}</text>
+      <sha1>809zhmw7cejhq9cmfp6c6zvhzsahylm</sha1>
+    </revision>
+  </page>
+  <page>
+    <title>Novum Organum</title>
+    <ns>0</ns>
+    <id>9887</id>
+    <revision>
+      <id>39132</id>
+      <parentid>39131</parentid>
+      <timestamp>2022-06-20T08:56:34Z</timestamp>
+      <contributor>
+        <username>C60528</username>
+        <id>284</id>
+      </contributor>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text xml:space="preserve" bytes="4840">{{Works
+|Author=Bacon, Francis
+|Full title=Pars secunda operis, quae dicitur Novum Organum sive indicia vera de interpretatione Naturae
+|In=Francisci de Verulamo summi Angliae cancellarii Instauratio magna, pp. 35–360
+|Year=1620
+|Place=London
+|Publisher/Printer=Bill, John
+|Era=17th century
+|Form/Genre=Monograph, Compendia
+|Discipline/Content=Mathematics, Physics, Astronomy/Astrology/Cosmography, Geography/Cartography, Meteorology/Earth sciences, Alchemy/Chemistry, Other (see description)
+|Digital copy=[https://archive.org/details/instauratiomagna00baco/page/n49 1620 edition in ''Instauratio magna''] (archive.org)
+[https://mdz-nbn-resolving.de/urn:nbn:de:bvb:12-bsb10042653-2 1645 Leiden edition] (MDZ)
+|Description=The ''Novum organum'' is considered one of the key works of the so-called Scientific Revolution. It sets a new paradigm of empiricism which became a scientific standard, especially in England's Royal Society. 
+
+Initially only intended as the second chapter of Bacon's project of the ''Instauratio magna'', it became the part of the work to be at least provisionally completed. Its title was used, ''pars pro toto'', for the book as a whole, as is evident in many the later editions. For clarity and completeness, the structure of the ''Instauratio magna'' shall briefly be presented in its entirety.
+
+The engraved title page bears a picture of a sailing ship and the motto, taken from the biblical book of Daniel, ''Multi pertransibunt et augebitur scientia''. The dedication to King James I of England is followed by a preface and a table of contents (''distributio operis'') together with a brief introduction to the planned six parts of the work, part I being on the various scientific disciplines, part II the ''Novum organum''. Then, a page indicates that the first part is omitted in this version (''deest pars prima instaurationis'') which allows for a direct entrance to the best-known part, the ''Novum organum sive indicia vera de interpretatione naturae''. 
+
+This part is endowed with another preface before the main corpus is presented in aphorisms, again divided in two books. These aphorisms of various lengths are enumerated and present the core of Bacon's promotion of empiricism and criticism of Aristotelian logic and deductive reasoning. 
+
+This involves a theory on observations that should not be obstructed by various sources of errors and prejudices of the (human) observer. These sources are called &quot;idols&quot; (''idola''), and Bacon lists four of them: &quot;Idols of the tribe&quot; (''idola tribus'') consist of all possible obstructions which can occur due to our human nature. We percive nature by our human senses and view phenomena by our human eyes. This is already a filter through which the pure natural phenomena have to pass. In the second source of errors, the &quot;idols of the cave&quot; (''idola specus''), Bacon addresses the individuals and their personal experiences and knowledge playing a role in observations. The third, the &quot;idols of the marketplace&quot; (''idola fori''), are communication problems and misunderstandings between individuals due to blurred notions and unclear language. Finally, &quot;idols of the theatre&quot; (''idola theatri'') consist of philosophical and scientific traditions which, according to Bacon, prevent a scientist from neutral interpretations of phenomena. In order to collect valid data, one has to dispose of these idols as far as possible so that the mind becomes a ''tabula rasa'', where nature could write on. Furthermore, the data has to be arranged systematically in ''historiae'' on various things. 
+
+A list of such 130 ''historiae'',  entitled ''Parasceue ad historiam naturalem et experimentalem'' and accompanied by some more aphorisms, concludes the ''Instauratio magna''.
+
+The ''Novum organum'' does not only refer to Aristotle's ''Organum'' by its title, it is fierce criticism of Aristotelianism and deductive reasoning. According to Bacon, the Aristotelians are not capable of creating new knowledge. This can only be achieved by the inductive method which builds on new observations and experiments. Bacon had a vision of a different science, and especially in England, scientists were willing to follow this vision. The &quot;Philosophical Transactions&quot; of the Royal Society abound with ''Historiae'' and [[Wallis, John|John Wallis]] for instance even tries to fit mathematics in this paradigm (''[[Arithmetica infinitorum]]''). But also on the continent, the work's great success is visible by its many further editions (e.g. Leiden 1645 and 1650).
+|References=[[Complete Dictionary of Scientific Biography 2008]] vol. 1, 372-375 / vol. 19, 137-142&lt;br&gt;[[Alexander 2014]], 265
+|Transkribus-ID=[https://transkribus.eu/r/noscemus/#/documents/1031760/pages/51 1031760] (in &lt;i&gt;Instauratio magna&lt;/i&gt;)
+}}</text>
+      <sha1>ruiwfrqcpeq0dmuhhid6bfoi2re8u5h</sha1>
+    </revision>
+  </page>
+  <page>
+    <title>Hippocratis Aphorismi versibus Graecis et Latinis expositi</title>
+    <ns>0</ns>
+    <id>9988</id>
+    <revision>
+      <id>39973</id>
+      <parentid>39804</parentid>
+      <timestamp>2023-01-09T09:20:24Z</timestamp>
+      <contributor>
+        <username>C60528</username>
+        <id>284</id>
+      </contributor>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text xml:space="preserve" bytes="5143">{{Works
+|Author=Hippocrates; Denisot, Gérard
+|Full title=Hippocratis Aphorismi versibus Graecis et Latinis expositi per magistrum Gerardum Denisotum, olim in celeberrima Parisiensium Academia clarissimum medicum, cuius selectiora aliquot epigrammata addita sunt huic operi, studio et sumptibus Iacobi Denisot nepotis in lucem editi
+|Year=1634
+|Place=Paris
+|Publisher/Printer=Dehors, Fiacre
+|Era=17th century
+|Form/Genre=Translation, Didactic poem, Other (see description)
+|Discipline/Content=Medicine
+|Digital copy=[https://books.google.at/books?id=1PYSL27a6HIC Hippocratis Aphorismi versibus Graecis et Latinis expositi] (Google Books)
+|Description=Among the numerous verse translations of Hippocrates' ''Aphorisms'', the ''Aphorisms of Hippocrates Presented in Greek and Latin Verse'' constitute a high-end example. Their author was a royal physician to Charles IX, Henry III, and Henry IV, as well as a ''docteur régent'' of the University of Paris medical faculty. His translation remained in manuscript after his death and was only printed four decades later on the initiative and with the financial support of his grandson Jacques Denisot. The book's high aspirations are underlined by its introductory paratexts. The first and last of these are dedications, in Latin prose and Greek elegiacs respectively, by the editor to Pierre Séguier, Keeper of the Seals of France (''nomophylax'') and one of the most powerful politicians of his time, and by the author to the young Charles IX. In between, one finds eight Latin and Greek epigrams by the dedicatee, the editor, and others, a flattering imprimatur by the dean of the medical faculty, a six years royal privilege – for the editor, not the publisher, which is exceptional –, and a portrait of the author with an epigram. As announced on the title page, several Latin and two Greek epigrams by Gérard Denisot follow at the end (pp. 156–66).
+
+As is customary in early modern translations, the original Greek prose of the ''Aphorisms'' does not feature in the book's main part. Instead, there are 
+two poetic versions in Greek and Latin, something found, it seems, only in two more versifications of the Hippocratic work ([[Seidenschnur 1847]], 784, nos. 48 and 52.) Both are in elegiac couplets, the most common metre for shorter poems, and placed on facing pages so that the reader can easily compare them and use the Latin version for a better understanding of the Greek one, if necessary. The two versions always contain the same number of couplets – one to seven, depending on the length of the original aphorism – and are quite close to one another in terms of vocabulary and grammar. One may speculate that the Greek version, which preserves much of the original wording, was produced first and then translated into Latin as literally as possible. Thematically related aphorisms are indicated in marginalia in both versions, providing the reader with some orientation within the corpus as a whole. 
+
+Not only the Latin but also the Greek rendering is grammatically and metrically correct and pleasant to read, evidencing Denisot's impressive proficiency in both languages. (France was the leading European country in Greek studies in the 16th and early 17th centuries, see [[Pfeiffer 1976]], 99–123.) A salient trait of Denisot's versions is their tendency to translate the short, elliptic, and often enigmatic snippets of the original 'exegetically': they supplement information that is only implied in the original and replace ambiguous terms by univocal ones. To this end, Denisot often draws on the ample commentary literature, in particular on its fountainhead, namely Galen's commentary. A good example of this phenomenon is provided by aphorism 7.24, which reads: 
+
+:::ἐπὶ ὀστέου διακοπῇ παραφροσύνη, ἢν κενεὸν λάβῃ.&lt;br&gt;After the severing of bone, delirium, if the cavity be penetrated. (trans. W.H.S. Jones)
+
+In the Greek and Latin epigrams (pp. 134–35), this becomes
+
+:::Ἐξ ὀστοῦ κεφαλῆς δι᾽ ὅλου κενεόνδε κοπέντος&lt;br&gt;ἐγγύθι μηνίγγων ἐστὶ παραφροσύνη
+
+and 
+
+:::''Exciso capitis dementia nascitur osse&lt;br&gt;in vacuum penetret si tamen usque locum''
+
+respectively. Both versions – of which the Greek one is a bit more detailed in this case –  may roughly be paraphrased as
+
+:::If a blow penetrates the skull and reaches the cavity below (and comes close to the cerebral membranes), this results in delirium.
+
+The direct or indirect source of the idea that the aphorism refers to a quite specific bone, namely the skull, and that the delirium results from damage done to the brain, is precisely Galen's commentary on this aphorism ([[Kühn 1821–1833]], vol. XVIII 1, pp. 123–124) which explains in detail why the statement makes sense only if taken this way.
+|References=[[Seidenschnur 1847]], 782–785
+|Transkribus-ID=[https://transkribus.eu/r/noscemus/#/documents/1285855 1285855]
+}}</text>
+      <sha1>5srg6nfo8u8a67p3taz2b44obro4ojb</sha1>
+    </revision>
+  </page>
+</mediawiki>

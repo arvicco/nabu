@@ -1,0 +1,304 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="sro-transcription.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<?xml-model href="sro-transcription.rng" type="application/xml" schematypens="http://purl.oclc.org/dsdl/schematron"?>
+<?xml-stylesheet type='text/xsl' href='sro-proofing-view.xsl'?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0">
+    <teiHeader>
+      <fileDesc>
+         <titleStmt>
+            <title>Copy entries in Stationers' Company Liber [Register] B, 1576 - 1595</title>
+            <principal>
+               <persName xml:id="GB">Giles Bergel</persName>
+               <orgName>University of Oxford</orgName>
+            </principal>
+            <principal> 
+               <persName xml:id="IG">Ian Gadd</persName>
+               <orgName>Bath Spa University </orgName>
+            </principal>
+            <editor>Giles Bergel</editor>
+            <editor>Ian Gadd</editor>
+            <respStmt>
+               <resp>Schema Design, Text Processing, Up-Conversion (Phase 1 and Phase 2)</resp>
+               <persName xml:id="JC">James Cummings</persName>
+               <orgName notAfter="2017-08">University of Oxford</orgName>
+               <orgName notBefore="2017-09">Newcastle University</orgName>
+            </respStmt>
+            
+            <respStmt>
+               <resp>Volume Editor</resp>
+               <persName xml:id="EB">Emma Bashforth</persName>
+            </respStmt>
+            <respStmt>
+               <resp>Proofreading and Transcription Guidelines (Phase 1)</resp>
+               <persName>Pip Willcox</persName>
+               <orgName>Bodleian Library, University of Oxford</orgName>
+            </respStmt>
+            <respStmt>
+               <resp>Transcription of Arber (Phase One)</resp>
+               <orgName>Invida Solutions Pvt. Ltd.</orgName>
+            </respStmt>
+            <funder> Phase One (Arber) - University of Oxford JPR Lyell Fund</funder>
+            <funder> Phase Two (Correction and enrichment) CREATe, University of Glasgow; the Bibliographical Society; Bath Spa University</funder>
+          </titleStmt>
+          <publicationStmt>
+            <publisher>Stationers' Register Online <ref target="http://www.stationersregister.online">http://www.stationersregister.online</ref>
+            </publisher>
+            <publisher>The Bibliographical Society <ref target="http://www.bibsoc.org.uk/">http://www.bibsoc.org.uk/</ref>
+            </publisher>
+            <publisher>CREATe, University of Glasgow <ref target="http://www.create.ac.uk/">http://www.create.ac.uk</ref>
+            </publisher>
+            <date when="2017-09-01">1 September 2017</date>
+            <availability>
+               <licence target="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution</licence>
+            </availability>
+             <idno type="DataSourceURI">https://github.com/gbergel/SRO_data/</idno>
+	           <idno type="Liber">B</idno>
+             <idno type="Arber">2</idno>
+         </publicationStmt>
+         <sourceDesc>
+            <bibl>
+               <title>Stationers' Company Liber B</title>
+            </bibl>
+            <bibl>
+               Transcriptions and encodings are jointly derived from an electronic facsmile of
+               Arber, <editor>Edward, A</editor> 
+               <title>Transcript of the Registers of the Company of Stationers 1554-1640
+                  AD</title>, 5 vols, (London: Priv. Print,; <date>1875-77</date>, &amp; Birmingham, <date>1875-94</date>), Volume 2, copy at Butler
+               Library, Columbia University in the City of New York, R015.42 L8a
+               <ref target="https://clio.columbia.edu/catalog/6177070">https://clio.columbia.edu/catalog/6177070</ref> and digital images of <bibl>
+                  <title>The Stationers' Company Liber B,</title> Stationers' Company archives Ref no: TSC/1/F/02/01</bibl>
+            </bibl>
+         </sourceDesc>
+      </fileDesc>
+      <encodingDesc>
+         <projectDesc>
+            <p>Created by the Stationers' Register Online project (www.stationersregister.online)
+               Phase One: http://http://digital.humanities.ox.ac.uk/ProjectProfile/Project_page.aspx?pid=307; 
+               Phase Two: http://www.create.ac.uk/blog/2017/02/24/create-support-stationers-register-online-project/
+            </p>
+         </projectDesc>
+      </encodingDesc>
+       <revisionDesc>
+          <change when="2017-09-27" who="#GB">various attribute emendations</change>
+          <change when="2017-09-26" who="#GB">various attribute emendations</change>
+          <change when="2017-09-25" who="#GB">various attribute emendations</change>
+          <change when="2017-08-21" who="#GB">persName emendations</change> 
+	        <change when="2017-08-21" who="#JC">Post-processing up-conversion</change> 
+           <change when="2017-06-22">clean up ffs</change>
+           <change when="2017-05-25">SP3481-SP3634 by Emma Bashforth</change>
+           <change when="2017-01-29">
+              Metadata block created by JC; Arber's corrections made by IG
+           </change>
+         <change when="2017-01-16">
+     Material other than copy entries removed by Giles Bergel
+  </change>
+            <change from="2013-06" to="2013-10">Semi-automated changes based on bodleian
+                proofreading made to the SRO data after the initial conversion (and up-conversion of
+                roman numerals, fees, dates, names, etc.) from abbreviated tei-corset schema by
+                James Cummings</change>
+            <change from="2012-12" to="2013-05"> Encoding reviewed, with suggestions made for
+                improvements, a random sample of names checked, and spot-proofed by Pip Willcox.
+                December 2012 - May 2013. </change>
+        </revisionDesc>
+    </teiHeader>
+    
+    <text>
+      <body>
+         <div type="entry" xml:id="SRO1679">
+                  <head rend="left struck-through">
+                     <persName n="dewcegarret" role="stationer enterer">
+                        <forename>Garret</forename> 
+                        <surname>Dewce</surname>
+                     </persName>
+                  </head>
+                  <p rend="struck-through">Lycenced vnto him <title>A great herball called 
+                     <persName n="dodoneus">
+                           Dodoneus
+                        </persName> 
+                     herball</title> /
+translated into Englishe by <persName n="lighthenry" role="non-stationer">
+                        <forename>Henry</forename> 
+                        <surname>Light</surname>
+                     </persName> esquire 
+                     <hi rend="aligned-right">
+                        <note resp="#arber">No sum stated</note>
+                     </hi>
+                  </p>
+                  <ab type="metadata">
+               <idno type="Liber">B</idno>
+               <idno type="SRONumber">1679</idno>
+               <date type="SortDate" when="1578-11-03"/>
+               <date type="Register" when="1578-11-03">3 November 1578</date>
+                     <num type="totalEntryPence" value="0"/>
+                     
+                     <idno type="RegisterRef">Register B, f.153v</idno>
+                     <idno type="ArberRef">II. 340</idno>
+                     <idno type="RegisterID">SC-1-F-02-01_1575-1605_0309_f153v</idno>
+                     <num type="works" value="1"/>
+                     <note type="status" subtype="cancelled"/>
+                     <persName n="bishopg" role="warden">
+                        <forename>G.</forename>
+                        <surname>Bishop</surname>
+                     </persName>
+                     <persName n="harisonj" role="warden">
+                        <forename>J.</forename>
+                        <surname>Harison</surname>
+                     </persName>
+                     <persName n="tottler" role="master">
+                        <forename>R.</forename>
+                        <surname>Tottle</surname>
+                     </persName>
+                  <note type="status" subtype="incomplete"/>
+            </ab>
+               </div>
+         <div type="entry" xml:id="SRO1688">
+                  <head rend="left">
+                     <persName n="manthomas" role="stationer enterer">
+                        <forename>Thomas</forename> 
+                        <surname>man</surname>
+                     </persName>.</head>
+                  <p>Lycenced vnto him vnder th<supplied resp="#arber">[e h]</supplied>and of <persName n="harrisonmaster" role="stationer">master <surname>Harrison</surname>
+                     </persName> vpperwarden / iiij. ballates. viz.</p>
+                 
+                  <desc rend="left">
+                     <persName n="manthomas" role="stationer enterer">
+                        <forename>Thomas</forename> 
+                        <surname>man</surname>
+                     </persName>.</desc>
+                  <p>
+                     <title>A pretie songe of the Judgement day when death shall
+                        fetche all awaie</title> 
+                     <seg type="fee" rend="roman-numerals aligned-right"><!--processing: iiijd-->
+                        <num type="totalPence" value="4"><!--orig: iiijd-->
+                           <num type="pence" value="4">iiij<hi rend="superscript">d</hi>
+                           </num>
+                        </num>
+                     </seg>
+                  </p>  
+                  
+                  <desc rend="left">
+                     <persName n="manthomas" role="stationer enterer">
+                        <forename>Thomas</forename> 
+                        <surname>man</surname>
+                     </persName>.</desc>
+                  <p>
+                     <title>A most <corr>proffitable</corr>patterne to all christian men forwarnynge
+                        the day of Judgement</title> 
+                     <seg type="fee" rend="roman-numerals aligned-right"><!--processing: iiijd-->
+                        <num type="totalPence" value="4"><!--orig: iiijd-->
+                           <num type="pence" value="4">iiij<hi rend="superscript">d</hi>
+                           </num>
+                        </num>
+                     </seg>
+                  </p>
+                  
+                  <desc rend="left">
+                     <persName n="manthomas" role="stationer enterer">
+                        <forename>Thomas</forename> 
+                        <surname>man</surname>
+                     </persName>.</desc>
+                  <p>
+                     <title>A godlie exhortacon vnto Englande to repent him of the
+                        evill and sinfull waies / shewinge th
+                     <supplied resp="#arber">[e]</supplied> 
+                     example and distruccon of Jerlm 
+                     <note resp="#arber">Arber: ? Jerusalem
+                     </note> 
+                     and Andwarp</title> 
+                     <seg type="fee" rend="roman-numerals aligned-right"><!--processing: iiijd-->
+                        <num type="totalPence" value="4"><!--orig: iiijd-->
+                           <num type="pence" value="4">iiij<hi rend="superscript">d</hi>
+                           </num>
+                        </num>
+                     </seg>
+                  </p>
+                  
+                  <desc rend="left">
+                     <persName n="manthomas" role="stationer enterer">
+                        <forename>Thomas</forename> 
+                        <surname>man</surname>
+                     </persName>.</desc>
+                  <p>
+                     <title>The lamentacon of a yong <corr>man</corr> confessinge his former lyfe that he hathe led</title> 
+                     <seg type="fee" rend="roman-numerals aligned-right"><!--processing: iiijd-->
+                        <num type="totalPence" value="4"><!--orig: iiijd-->
+                           <num type="pence" value="4">iiij<hi rend="superscript">d</hi>
+                           </num>
+                        </num>
+                     </seg>
+                  </p>
+                  
+                  <ab type="metadata">
+               <idno type="Liber">B</idno>
+               <idno type="SRONumber">1688</idno>
+               <date type="SortDate" when="1578-11-15"/>
+               <date type="Register" when="1578-11-15">15 November 1578</date>
+                     <num type="totalEntryPence" value="16"/>
+                     
+                     <idno type="RegisterRef">Register B, f.154r</idno>
+                     <idno type="ArberRef">II. 341</idno>
+                     <idno type="RegisterID">SC-1-F-02-01_1575-1605_0309_f154r</idno>
+                     <num type="works" value="4"/>
+                     <note type="status" subtype="entered"/>
+                     <persName n="bishopg" role="warden">
+                        <forename>G.</forename>
+                        <surname>Bishop</surname>
+                     </persName>
+                     <persName n="harisonj" role="warden">
+                        <forename>J.</forename>
+                        <surname>Harison</surname>
+                     </persName>
+                     <persName n="tottler" role="master">
+                        <forename>R.</forename>
+                        <surname>Tottle</surname>
+                     </persName>
+                  <note type="status" subtype="incomplete"/>
+            </ab>
+               </div>
+         <div type="entry" xml:id="SRO2203">
+                     <head rend="left">
+                        <persName n="bishopmaster" role="stationer enterer">
+                           master <surname>bishop</surname>
+                        </persName> Receaved of him for printinge <title>
+                           <hi rend="italics">A Reformation in Religion</hi>
+                        </title>. Alowed vnder the <persName n="londonbishopof">bishop of 
+                              <placeName type="pla">london</placeName>
+                           
+                        </persName> his hand. which treatise is devided into <num>7</num> 
+                        <hi rend="italics">Sermons</hi> 
+                        <seg type="fee" rend="roman-numerals aligned-right"><!--processing: vjd/ / /-->
+                           <num type="totalPence" value="6"><!--orig: vjd/ / /-->
+                              <num type="pence" value="6">vj<hi rend="superscript">d</hi>
+                              </num> /  /  / </num>
+                        </seg>
+                     </head>
+                     <ab type="metadata">
+               <idno type="Liber">B</idno>
+               <idno type="SRONumber">2203</idno>
+               <date type="SortDate" when="1581-11-07"/>
+               <date type="Register" when="1581-11-07">7 November 1581</date>
+                        <num type="totalEntryPence" value="6"/>
+                        
+                        <idno type="RegisterRef">Register B, f.185r</idno>
+                        <idno type="ArberRef">II. 403</idno>
+                        <idno type="RegisterID">TSC-1-F-02-01_1576-1595_0361_f185r</idno>
+                        <num type="works" value="1"/>
+                        <note type="status" subtype="entered"/>
+                        <persName n="marshet" role="warden">
+                              <forename>T.</forename> 
+                              <surname>Marshe</surname>
+                           </persName>
+                        <persName n="dewceg" role="warden">
+                              <forename>G.</forename> 
+                              <surname>Dewce</surname>
+                           </persName>
+                        <persName n="nortonw" role="master">
+                           <forename>W.</forename> 
+                           <surname>Norton</surname>
+                        </persName>
+                     <note type="status" subtype="incomplete"/>
+            </ab>
+                  </div>
+      </body>
+   </text>
+</TEI>

@@ -1,0 +1,91 @@
+# Nabu fixture manifest (P5-4 "fixture sentinel"). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md:
+# raw URLs = github.com/Antonomaz/Corpus at main
+# 84f319b947e23b90f86f6948efa5f0f78f21e6f6 (pushed 2025-02-26) joined to the path
+# under tree/ (malformed/ mirrors the same upstream tree), which mirrors upstream's own layout.
+source: mazarinades
+adapter_test: null   # two entries are trims (see README)
+retrieved: 2026-11-05
+files:
+  - path: malformed/Mazarinades/1901-2000/Moreau1902_MANUAL.xml
+    url: https://raw.githubusercontent.com/Antonomaz/Corpus/84f319b947e23b90f86f6948efa5f0f78f21e6f6/Mazarinades/1901-2000/Moreau1902_MANUAL.xml
+    refetchable: true
+    whole: true
+  - path: tree/Doublons/Moreau1suppl195_GBOOKS.textClipping
+    url: https://raw.githubusercontent.com/Antonomaz/Corpus/84f319b947e23b90f86f6948efa5f0f78f21e6f6/Doublons/Moreau1suppl195_GBOOKS.textClipping
+    refetchable: true
+    whole: true
+  - path: tree/Doublons/Moreau3845-bad_GBOOKS.xml
+    url: https://raw.githubusercontent.com/Antonomaz/Corpus/84f319b947e23b90f86f6948efa5f0f78f21e6f6/Doublons/Moreau3845-bad_GBOOKS.xml
+    refetchable: true
+    whole: true
+  - path: tree/Doublons/README.md
+    url: https://raw.githubusercontent.com/Antonomaz/Corpus/84f319b947e23b90f86f6948efa5f0f78f21e6f6/Doublons/README.md
+    refetchable: true
+    whole: true
+  - path: tree/Mazarinades/1-100/diff.txt
+    url: https://raw.githubusercontent.com/Antonomaz/Corpus/84f319b947e23b90f86f6948efa5f0f78f21e6f6/Mazarinades/1-100/diff.txt
+    refetchable: true
+    whole: false
+    trim: the first 20 lines of 63,749 bytes, byte-verbatim
+  - path: tree/Mazarinades/1001-1100/Moreau1021_GBOOKS.xml
+    url: https://raw.githubusercontent.com/Antonomaz/Corpus/84f319b947e23b90f86f6948efa5f0f78f21e6f6/Mazarinades/1001-1100/Moreau1021_GBOOKS.xml
+    refetchable: true
+    whole: true
+  - path: tree/Mazarinades/1001-1100/Moreau1085-i_MAZ.xml
+    url: https://raw.githubusercontent.com/Antonomaz/Corpus/84f319b947e23b90f86f6948efa5f0f78f21e6f6/Mazarinades/1001-1100/Moreau1085-i_MAZ.xml
+    refetchable: true
+    whole: true
+  - path: tree/Mazarinades/1401-1500/Moreau1483_GBOOKS.xml
+    url: https://raw.githubusercontent.com/Antonomaz/Corpus/84f319b947e23b90f86f6948efa5f0f78f21e6f6/Mazarinades/1401-1500/Moreau1483_GBOOKS.xml
+    refetchable: true
+    whole: true
+  - path: tree/Mazarinades/2101-2200/Moreau2135_MAZ.xml
+    url: https://raw.githubusercontent.com/Antonomaz/Corpus/84f319b947e23b90f86f6948efa5f0f78f21e6f6/Mazarinades/2101-2200/Moreau2135_MAZ.xml
+    refetchable: true
+    whole: true
+  - path: tree/Mazarinades/2501-2600/Moreau2542_MANUAL.xml
+    url: https://raw.githubusercontent.com/Antonomaz/Corpus/84f319b947e23b90f86f6948efa5f0f78f21e6f6/Mazarinades/2501-2600/Moreau2542_MANUAL.xml
+    refetchable: true
+    whole: true
+  - path: tree/Mazarinades/4001-4100/Moreau4018_GALL.xml
+    url: https://raw.githubusercontent.com/Antonomaz/Corpus/84f319b947e23b90f86f6948efa5f0f78f21e6f6/Mazarinades/4001-4100/Moreau4018_GALL.xml
+    refetchable: true
+    whole: true
+  - path: tree/Mazarinades/601-700/Moreau614_GALL.xml
+    url: https://raw.githubusercontent.com/Antonomaz/Corpus/84f319b947e23b90f86f6948efa5f0f78f21e6f6/Mazarinades/601-700/Moreau614_GALL.xml
+    refetchable: true
+    whole: true
+  - path: tree/Mazarinades/Labadie/Labadie332_GALL.xml
+    url: https://raw.githubusercontent.com/Antonomaz/Corpus/84f319b947e23b90f86f6948efa5f0f78f21e6f6/Mazarinades/Labadie/Labadie332_GALL.xml
+    refetchable: true
+    whole: true
+  - path: tree/Mazarinades/filecount.txt
+    url: https://raw.githubusercontent.com/Antonomaz/Corpus/84f319b947e23b90f86f6948efa5f0f78f21e6f6/Mazarinades/filecount.txt
+    refetchable: true
+    whole: true
+  - path: tree/Mazarinades_jsons/1401-1500/Moreau1483_GBOOKS.json
+    url: https://raw.githubusercontent.com/Antonomaz/Corpus/84f319b947e23b90f86f6948efa5f0f78f21e6f6/Mazarinades_jsons/1401-1500/Moreau1483_GBOOKS.json
+    refetchable: true
+    whole: true
+  - path: tree/README.md
+    url: https://raw.githubusercontent.com/Antonomaz/Corpus/84f319b947e23b90f86f6948efa5f0f78f21e6f6/README.md
+    refetchable: true
+    whole: true
+  - path: tree/Requete_sous_corpus.md
+    url: https://raw.githubusercontent.com/Antonomaz/Corpus/84f319b947e23b90f86f6948efa5f0f78f21e6f6/Requete_sous_corpus.md
+    refetchable: true
+    whole: true
+  - path: tree/output/Mazarinades_filecount.txt
+    url: https://raw.githubusercontent.com/Antonomaz/Corpus/84f319b947e23b90f86f6948efa5f0f78f21e6f6/output/Mazarinades_filecount.txt
+    refetchable: true
+    whole: true
+  - path: tree/output/reviewed_files.csv
+    url: https://raw.githubusercontent.com/Antonomaz/Corpus/84f319b947e23b90f86f6948efa5f0f78f21e6f6/output/reviewed_files.csv
+    refetchable: true
+    whole: false
+    trim: the header + 8 of 3,064 rows (the first two, then every row naming a fixture file), byte-verbatim
+  - path: tree/script/update_tracking.txt
+    url: https://raw.githubusercontent.com/Antonomaz/Corpus/84f319b947e23b90f86f6948efa5f0f78f21e6f6/script/update_tracking.txt
+    refetchable: true
+    whole: true

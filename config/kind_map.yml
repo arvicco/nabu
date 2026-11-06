@@ -39,6 +39,122 @@ sources:
       "Milestone": boundary/milestone            # 1
       "Graffito": mark/graffito                  # 1 ("Graffito?" — the global ? strip)
       "Topos-inscription": mark/ownership        # 1 — a reserved-place mark (the edh seat fold)
+  cgpg:               # P160 — the carved work's Latin title, cut to ONE keyword head at parse
+    #                   time (Adapters::CgpgTitleGenre: the earliest genre noun of the main
+    #                   title; a fragment/excerpt/preface takes the genre of the work it is
+    #                   part of; a keywordless "De <topic>" title is its own head and folds
+    #                   title by title). Upstream and the carve plan carry no genre field —
+    #                   the title IS the label. Five single-genre whole volumes declare their
+    #                   head in Cgpg::VOLUMES (PG 71, 73 Cyril's commentaries; PG 121, 148,
+    #                   153 the histories); mixed or apparatus volumes and the residua make no
+    #                   claim. Counts = documents, the pinned carve plan through the adapter
+    #                   (2026-11-05): 209 works + 5 volumes carry a head; 145 fold, 69 stay
+    #                   unmapped by design (the block after the map).
+    facet: genre
+    map:
+      # -- commentary on scripture and the classics
+      "Expositio in": exegesis                   # 28 — Theophylact's NT + minor-prophet expositions,
+      #                                            Psellus' exposition of the Chaldaean Oracles
+      "Commentarius": exegesis                   # 10 — Commentarii/Commentarius in (Procopius, Photius,
+      #                                            ps.-Oecumenius, ps.-Theophylact Acts, Psellus on the
+      #                                            Timaeus psychogony) + the PG 71/73 Cyril volumes
+      "Fragmenta in": exegesis                   # 10 — catena fragments on a named book (Photius;
+      #                                            Oecumenius, whose served text is the full catena)
+      "Enarratio": exegesis                      # 4 — Theophylact on the four Gospels
+      "Amphilochia": exegesis                    # 2 — Photius' questions, upstream's own volume label
+      #                                            "Exegetica: Quaestiones Amphilochiana"
+      "In": exegesis                             # 2 — the Latin "In <book>" commentary title: Procopius
+      #                                            In Proverbia; Psellus' note on the Poimandres
+      "Scholia": exegesis                        # 1 — Procopius on Kings and Chronicles
+      # -- letters, preaching, verse
+      "Epistulae": letter                        # 14 — letters by form, the two martyr-letters of the
+      #                                            churches of Smyrna and Lyon included (they ARE letters);
+      #                                            synodal-letter fragments fold here too
+      "Homiliae": sermon/homily                  # 2 — Palamas; Leo VI's Orationes (homiliae et panegyrici)
+      "Sermones": sermon                         # 2 — Isidore's Marian sermons; Theophylact's mid-Lent oration
+      "Oratio in praesentationem Deiparae": sermon  # 1 — a feast oration, preached on the Presentation
+      "Carmina": literary/poetry                 # 3 — Leo VI's carmina and Carmen compunctorium; a carmen politicum
+      "Versus": literary/poetry                  # 2
+      "Poemata": literary/poetry                 # 1 — Psellus' poems, the didactic verse synopses included
+      # -- writing the past
+      "Historia": historiography                 # 12 — church and Byzantine histories (Socrates, Sozomen,
+      #                                            Callistus, Choniates, Ducas, Zonaras' Epitome historiarum,
+      #                                            Scylitzes Continuatus) + the PG 121/148/153 volumes
+      "Excerpta": historiography                 # 7 — Constantine VII's Excerpta de legationibus (with its
+      #                                            prooemium): excerpted historians, history by selection
+      "Chronographia": historiography/chronicle  # 3 — the Byzantine chronographia is the chronicle form
+      "Chronicon": historiography/chronicle      # 2 — incl. ps.-Codinus' Chronicon breve (De annis ab orbe condito)
+      "Annales": historiography/chronicle        # 1 — Glycas' world chronicle under its Latin editors' title,
+      #                                            not year-entry annals
+      "Patria": historiography                   # 2 — the Patria of Constantinople: the city's legendary history
+      "Parastaseis": historiography              # 1 — Parastaseis syntomoi chronikai, the same antiquarian strand
+      "Basileiai": historiography                # 1 — Genesius' reigns
+      "De expugnatione Thessalonicae": historiography  # 1 — Cameniates' narrative of the 904 sack
+      # -- rite, oracle
+      "Exapostilaria": ritual/chant              # 1 — Leo VI's resurrection exapostilaria: the troparion sung
+      #                                            at Matins after the canon, an individual sung piece of the
+      #                                            rite (the cantus Office-chant precedent), not a free hymn
+      "Oracula": divination/oracle               # 1 — the Oracles of Leo the Wise
+      # Symeon of Thessalonica's sacramental-liturgical chapters (the great dialogue's
+      # 33-373 and its companion exposition): each sets out HOW a rite is performed and
+      # in what order, with its mystagogy — the late-Byzantine rite's own description,
+      # so ritual/liturgy. exegesis is the commentary on scripture and the classics; a
+      # rite is neither. His Creed expositions and polemic stay unmapped (below).
+      "De sacramentis": ritual/liturgy           # 1
+      "De sancto chrismate": ritual/liturgy      # 1
+      "De sacra liturgia": ritual/liturgy        # 1
+      "De sacro templo et eius consecratione": ritual/liturgy  # 1
+      "De sacris ordinationibus": ritual/liturgy  # 1
+      "De poenitentia": ritual/liturgy           # 1
+      "De honesto et legitimo matrimonio": ritual/liturgy  # 1 — the marriage rite
+      "De sancto oleo": ritual/liturgy           # 1 — the euchelaion
+      "De sacra precatione": ritual/liturgy      # 1 — the divine office
+      "De fine et exsequiarum ordine": ritual/liturgy  # 1 — the funeral order
+      "Expositio de divino templo": ritual/liturgy  # 1 — the church and its rites, explained
+      # -- law and the registers of church and empire
+      "Tomus": legal/law                         # 3 — the Palamite synodal tomoi (1341–1368): conciliar decrees
+      #                                            (the house decree fold)
+      "Novellae": legal/law                      # 2 — the novels of Leo VI and Constantine VII
+      "Delectus": legal/law                      # 1 — Delectus legum compendiarius, a law digest
+      "Notitiae": administrative/list            # 1 — Notitiae episcopatuum: the see register in rank order
+      "Synecdemus": administrative/list          # 1 — Hierocles' table of the provinces and their cities
+      # -- learning, instruction, criticism
+      "Quaestiones naturales": scholarly         # 1 — Quaestionum naturalium solutiones
+      "De omnifaria doctrina": scholarly         # 1 — Psellus' Didaskalia pantodape
+      "De lapidum virtutibus": scholarly         # 1 — the lapidary
+      "De anima celebres opiniones": scholarly   # 1 — philosophical doxography
+      "Quaenam sunt Graecorum opiniones de daemonibus": scholarly  # 1 — doxography likewise
+      "De legum nominibus": lexical/glossary     # 1 — Roman-law terms and Latin legal loanwords
+      "De actionum nominibus": lexical/glossary  # 1 — the names of Attic lawsuits, defined
+      "De locis et nominibus Atticis": lexical/glossary  # 1
+      "Paraenesis": literary/wisdom              # 2 — Basil I's exhortation chapters to Leo: gnomic instruction
+      "Institutio": literary/wisdom              # 1 — Theophylact's Paideia basilike, a mirror of princes
+      "Characteres": literary/essay              # 1 — Psellus' stylistic characters of four Fathers: criticism
+    # -- unmapped by design (69 documents): genre values with no ruled head yet. They
+    #    surface in the unmapped bucket (`nabu kind census --unmapped cgpg`), never
+    #    forced onto a near class. No hagiography, apologetics-polemic, theology,
+    #    rhetoric or court-treatise head is ruled; a taxonomy sitting is queued.
+    #  hagiography and encomium (10): Vita 3 (incl. the Narratio de vita Mohammedis),
+    #    Martyrium 3 (incl. the Historia martyrii), Laudatio 1, Encomium 1, Narratio 1,
+    #    "Narratio de imagine Edessena" 1
+    #  apologetics and polemic (22): Apologia 3, Dialogus 4 (Cum Tryphone; Symeon
+    #    and Nicetas against heresy and the Latins; ps.-Psellus on demons — a form
+    #    word, not literary/wisdom's wisdom dialogue), Adversus 2, Legatio, Cohortatio,
+    #    Refutatio, Confutatio, Antirrhetici, Irrisio, "Ad Autolycum", "Oratio ad
+    #    gentiles", "Oratio ad Graecos", "De monarchia", "De iis quorum Latini
+    #    incusantur", "Logos dialektikos", "De processione Spiritus Sancti ad magnum ducem"
+    #  theological treatises and question-answer (14): Quaestiones 3 (erotapokriseis
+    #    on doctrine — not exegesis proper, not wisdom literature), Confessio,
+    #    "De resurrectione" 2, "Expositio rectae fidei", "Expositio de sacro symbolo",
+    #    "Expositio necessaria de sacri symboli dictionibus", "De essentia et
+    #    operatione Dei", "Λόγοι δύο", "De mortis determinatione", "Responsa ad
+    #    Gabrielem Pentapolitanum", "De sacerdotio"
+    #  bare fragments of lost works (13): Fragmenta 12, Prooemium 1 — the lost
+    #    work's genre is not in the title
+    #  the court, administration and war (7): "De cerimoniis aulae Byzantinae" 2,
+    #    "De officiis", "De administrando imperio", "De thematibus", Tactica,
+    #    "De sepulcris imperatorum quae sunt in templo sanctorum apostolorum"
+    #  secular rhetoric (3): Monodia 2, "Oratio in imperatorem Alexium I Comnenum"
   cantus:             # the chant record's genre — upstream's own abbreviation list
     #                   (cantusdatabase.org/genres/), the facet value = upstream's genre NAME,
     #                   the code raw (CantusCsvParser::GENRES). Counts = the 17-source sample
@@ -402,6 +518,49 @@ sources:
       "commentary": exegesis                     # 52 — the aṭṭhakathā (upstream files the
       #   Visuddhimagga and the Kaṅkhāvitaraṇī / Vinayasaṅgaha here too; the tipitaka-lk atta fold)
       "subcommentary": exegesis                  # 26 — the ṭīkā, commentary on the commentaries
+  noscemus:           # P160 — the Noscemus Wiki's own Form/Genre list (a CLOSED vocabulary of
+    #                   21 values, split on "," at parse; the facet is the union over a copy's
+    #                   joined wiki works). Counts = value occurrences over the 989 wiki works
+    #                   (census 2026-11-05); the 39 copies with no wiki page carry no genre.
+    #                   The whole corpus is early-modern SCIENTIFIC literature, so the learned
+    #                   prose forms fold to scholarly; the verse and epistolary forms keep their
+    #                   own classes.
+    facet: genre
+    map:
+      "Monograph": scholarly                     # 236 — the learned treatise on one subject
+      "Encyclopedic work": scholarly             # 165 — the comprehensive survey of a field
+      "Historia": scholarly                      # 85 — the descriptive "historia" of natural
+      #   things (historia plantarum, animalium) — natural history, not historiography
+      "Dissertation": scholarly                  # 80 — the academic disputation / thesis
+      "Commentary": scholarly/commentary         # 69 — commentaries on Hippocrates, Euclid,
+      #   Aristotle, Ptolemy: commentary on the scientific classics (exegesis is for scripture)
+      "Compendia": scholarly                     # 57 — the epitome / handbook of a field
+      "Report": scholarly                        # 55 — the observation report (a comet, an
+      #   earthquake, an experiment)
+      "Textbook": scholarly                      # 54 — the teaching treatise (school is for the
+      #   schoolroom's own products, not the books taught from)
+      "Tables and charts": scholarly             # 42 — astronomical tables, ephemerides, charts
+      "Bibliography": scholarly                  # 41 — the learned catalogue of a field's
+      #   literature; no house class for reference works
+      "Review": scholarly                        # 19 — the learned book review (Acta eruditorum)
+      "Didactic poem": literary/poetry           # 77 — the Lucretian/Virgilian verse of science
+      "Panegyric poem": literary/poetry/praise   # 55 — verse in praise of a scientist or a
+      #   discovery
+      "Oration": literary/essay                  # 46 — the academic oration: prose of ideas
+      #   composed for delivery (sermon is preached religious prose)
+      "Dialogue": literary/wisdom/dialogue       # 39 — the dialogue form (the class list
+      #   files the dialogue under wisdom)
+      "Letter": letter                           # 62 — scientific correspondence
+      "Dictionary/Lexicon": lexical              # 41 — nomenclators, medical and botanical
+      #   lexica: words about words
+      "Journal Paper": periodical/journal        # 39 — a paper in (or a volume of) the learned
+      #   journals: Acta eruditorum, the academies' Commentarii
+      "Biography": historiography                # 30 — the scientist's vita: writing the past
+    deliberate:
+      "Other (see description)": "upstream's own catch-all — the wiki's prose description
+        carries the form; no claim to fold"
+      "Translation": "a status, not a form — the translated work's genre rides beside it
+        (Translation, Didactic poem)"
   tlhdig:             # Laroche CTH ranges ARE the genres (23,486 docs)
     facet: cth
     range_map:
@@ -949,6 +1108,62 @@ sources:
         storage jars and plaster — between letter and dedication, no one class"
       "B_1QM": "an eschatological war rule — battle order, trumpets and standards, priestly
         prayers — no class holds it without forcing"
+  korpus16:            # census 2026-11-05: 45 books (the portal's Bibliography + page-1 headers)
+    metadata: siglum   # upstream's book abbreviation verbatim (TC 1550, DB 1584) — each siglum
+    #                    IS one print, so the fold is the parse-time call per book (the
+    #                    extrabiblical mold). Catechisms and confessions have no house class:
+    #                    declared deliberate below, never forced (the taxonomy question is open).
+    map:
+      "TA 1550": school               # Abecedarium und der klein Catechismus — the first Slovene
+      #                                 primer (alphabet + reading exercise), the catechism inside it
+      "TA 1555": school               # Abecedarivm — the reading primer
+      "TA 1566": school               # Abecedarivm, oli tabliza — the primer's third edition
+      "TE 1555": scripture            # Ta evangeli svetiga Matevsha — Matthew
+      "TT 1557": scripture            # the New Testament, part 1 (the Gospels)
+      "TT 1560": scripture            # the New Testament, part 2
+      "TL 1561": scripture            # Paul's two letters (Romans with its prefaces)
+      "TPs 1566": scripture           # Ta celi psalter Dauidou — the Psalter
+      "TL 1567": scripture            # Paul's letters
+      "DJ 1575": scripture            # Jesus Sirah — Ecclesiasticus (Dalmatin)
+      "DPa 1576": scripture           # Passion — the Passion narrative harmonized from the four Gospels
+      "TT 1577": scripture            # the last part of the New Testament
+      "DB 1578": scripture            # Biblie pervi deil — Genesis-Deuteronomy (Dalmatin)
+      "DPr 1580": scripture           # Salomonove pripvvisti — Proverbs
+      "TT 1581-82": scripture         # Ta celi novi testament — the whole New Testament
+      "DB 1584": scripture            # Biblia — Dalmatin's complete Bible
+      "TPs 1579": hymn-prayer/hymn    # Psalm 1 "with three expositions" — its own German title says
+      #                                 "in Gesangweiß gestelt": the expositions are strophic hymns
+      "*P 1563": hymn-prayer/hymn     # Ene dvhovne peisni — the first Slovene hymnal
+      "TP 1567": hymn-prayer/hymn     # Ena dvhovska peissen svbper Tvrke — a hymn against the Turks
+      "TPs 1567": hymn-prayer/hymn    # Eni psalmi — the hymnal (psalm hymns), catechism appended
+      "TP 1575": hymn-prayer/hymn     # Try duhouske peissni — three hymns
+      "TM 1555": hymn-prayer/prayer   # Ena molitov tih kerszhenikou — the prayer of the persecuted
+      "TkM 1579": hymn-prayer/prayer  # Kerszhanske leipe molitve — Tulščak's prayer book
+      "DM 1584": hymn-prayer/prayer   # Karszanske lepe molitve — Dalmatin's prayer book
+      "TfM 1595": hymn-prayer/prayer  # Lepe karszhanske molitve — Felicijan Trubar's prayer book
+      "TR 1558": sermon/homily        # En regishter … ena postilla — the pericope register + a short postil
+      "KPo 1567": sermon/homily       # Postilla slovenska — Krelj's postil
+      "JPo 1578": sermon/homily       # Postilla — Juričič's postil
+      "TPo 1595": sermon/homily       # Hishna postilla — Trubar's house postil (Luther's)
+      "TtPre 1588": sermon            # Ena lepa inu pridna prediga — Trošt's sermon
+      "DAg 1585": ritual/liturgy      # Agenda — the order of the rites
+    deliberate:
+      "TC 1550": "Catechismus — a catechism (with sermon and hymns); catechesis has no house class"
+      "TC 1555": "Catechismvs — a catechism; catechesis has no house class"
+      "TAr 1562": "Articvli oli deili — the confessions of faith (Augsburg/Württemberg/Saxon) in
+        Slovene; a doctrinal confession has no house class"
+      "TO 1564": "Cerkovna ordninga — the church order: doctrine, rites and church law in one book,
+        between legal and ritual/liturgy"
+      "KB 1566": "Otrozhia biblia — Krelj's children's catechism (not a Bible despite the title)"
+      "TC 1567": "Ta celi catehismvs — a catechism with hymns; catechesis has no house class"
+      "TC 1574": "Ta celi catehismvs — the catechism-hymnal composite"
+      "TC 1575": "Catehismvs sdveima islagama — the catechism with two expositions"
+      "DC 1579": "Ta celi catehismvs — Dalmatin's catechism-hymnal composite"
+      "DC 1580": "Catehismvs — Dalmatin's catechism"
+      "DC 1584": "Ta celi catehismvs, eni psalmi — the catechism-hymnal composite"
+      "DC 1585": "Ta kratki wirtemberski catechismvs — the short Württemberg catechism"
+      "TfC 1595": "Ta celi catehismvs, eni psalmi — the catechism-hymnal composite"
+      "ZK 1595": "Katechismvs doctoria Martina Luthra — Luther's catechism (Znojilšek)"
   vulgate:
     source_kind: scripture
   prague-bible-1488:
@@ -1003,6 +1218,11 @@ sources:
     source_kind: lexical     # P154: the Suda is a lexicon-encyclopedia — every passage translates one
     #                          alphabetical entry (headword + gloss/article); the house's lexical head,
     #                          bare (its subs are sign/word lists, glossaries, grammars — none fits whole)
+  statutes-realm:
+    source_kind: legal/law   # P160-7: every document is an Act of Parliament (656) or the statute
+    #                          roll's schedule of a session's private-act titles (5) — legislation
+    #                          whole; the Petition of Right rides with the acts as the roll does
+    #                          (3 Car. I c. 1), not legal/petition
   hexapla:
     source_kind: scripture   # P153: the Hexapla's columns — the Bible in Hebrew and its Greek versions
   etcbc-syriac:        # P153 census 2026-11-02: 31 books (tf/0.92 book nodes), one document each
@@ -1078,6 +1298,10 @@ sources:
       "Warrant": legal/law                   # 1 — the Privy Council's warrant
       "Legal opinion": legal                 # 1 — counsel's opinion with its reply
       "Receipt": administrative/receipt      # 1 — Donne's receipt for £100
+  stationers-register:       # P160 — the Stationers' Company's own Registers (Liber A–D, 1557–1640):
+    source_kind: administrative/register   # every document is one copy entry, the Clerk's
+    #   record of a licence to print a copy and its fee — the ruled register sub exactly
+    #   (the copy-titles name ballads, sermons, almanacs …; the ENTRY is the register's)
   ninjal-textdb:             # the Kirishitan slice — one work per dataset dir (Adapters::NinjalTextdb)
     metadata: dataset
     map:
@@ -2260,3 +2484,144 @@ sources:
       "Euchologion": ritual/liturgy      # the sacramental rites: baptism, marriage, unction, funeral
       "Synekdemos": ritual/liturgy       # the companion shelf: Katabasiai, Megalynaria, the Orthros
       #   enkolpion — service material, two of the three pages hymn sequences (declared coarse)
+  mazarinades:        # census 2026-11-05 over all 3,067 well-formed files at main 84f319b9:
+    facet: genre      # the textClass genre terms (multi-label — 1,312 files carry 2–7, 553
+    #                   none), 141 values, Antonomaz's own French vocabulary. Upstream's
+    #                   form term (prose 2,470 · vers 724) rides beside as metadata form.
+    #                   The folds below are the clear genre claims; the oratory/polemic
+    #                   cluster is LEFT UNMAPPED (listed at the end) — the house taxonomy has
+    #                   no oratory/rhetoric head, and minting one is a taxonomy ruling.
+    map:
+      "lettre": letter                           # 405 — open letters, mock letters, the royal
+      #                                            and princely letters printed as pamphlets
+      "fausse lettre": letter                    # 1 — a forged letter is still in form a letter
+      "narration": literary/narrative            # 255
+      "récit": literary/narrative                # 201
+      "histoire tragique": literary/narrative    # 1
+      "parabole": literary/narrative             # 1
+      "burlesque": literary/poetry               # 250 — the Fronde burlesque is Scarron's verse
+      #                                            mode (octosyllabic "vers burlesques"); 2 + 1 typo
+      "burlesques": literary/poetry              # 1
+      "pseudo-burlesque": literary/poetry        # 2
+      "poésie": literary/poetry                  # 113 (+ the "poésié" typo, 1)
+      "poésié": literary/poetry                  # 1
+      "poésie à forme fixe": literary/poetry     # 34 (+ "poésié à forme fixe" 2)
+      "poésié à forme fixe": literary/poetry     # 2
+      "poésie strophique": literary/poetry       # 1
+      "chanson": literary/poetry                 # 61 — the satirical songs (vaudevilles), lyric verse
+      "triolet": literary/poetry                 # 32 — the fixed forms, each a verse claim:
+      "sonnet": literary/poetry                  # 22
+      "stances": literary/poetry                 # 22
+      "épigramme": literary/poetry               # 13
+      "épitaphe": literary/poetry                # 11 — the mock verse epitaphs of the pamphlet war,
+      #                                            printed, never inscribed (not funerary)
+      "ballade": literary/poetry                 # 10
+      "ode": literary/poetry                     # 9
+      "rondeau": literary/poetry                 # 2
+      "élégie": literary/poetry                  # 2
+      "écho": literary/poetry                    # 2 — the echo poem
+      "complainte": literary/poetry              # 1
+      "dialogue": literary/wisdom/dialogue       # 99 — the political dialogues (paysans, bourgeois,
+      #                                            the dead): the house dialogue sub
+      "entretien": literary/wisdom/dialogue      # 21
+      "entretiens": literary/wisdom/dialogue     # 1
+      "conférence": literary/wisdom/dialogue     # 1
+      "dialogue des morts": literary/wisdom/dialogue  # 1
+      "maximes": literary/wisdom/proverbs        # 7
+      "maxime": literary/wisdom/proverbs         # 3
+      "formes gnomiques": literary/wisdom/proverbs  # 13
+      "proverbe": literary/wisdom/proverbs       # 1
+      "énigme": literary/wisdom/riddle           # 2
+      "texte de forme théâtrale": literary/drama # 3
+      "comédie": literary/drama                  # 1
+      "farce": literary/drama                    # 1
+      "tragi-comédie": literary/drama            # 1
+      "texte officiel": legal/law                # 238 — the printed acts of the crown and the
+      #                                            sovereign courts (declarations, edicts, orders)
+      "déclaration": legal/law                   # 50 — royal declarations (registered law)
+      "ordonnance": legal/law                    # 6
+      "édit": legal/law                          # 2
+      "règlement": legal/law                     # 7
+      "statuts": legal/law                       # 2
+      "arrêt": legal/court                       # 151 — the arrêts of the Parlement (a sovereign
+      #                                            COURT) and the councils: court rulings
+      "arrêts": legal/court                      # 1
+      "jugement": legal/court                    # 1
+      "sentence": legal/court                    # 1
+      "factum": legal/court                      # 16 — a litigant's printed brief
+      "plaidoyer": legal/court                   # 2
+      "procès-verbal": legal/court               # 7 — the official minutes of a proceeding
+      "requête": legal/petition                  # 35
+      "remontrances": legal/petition             # 71 — the Parlement's and the city's formal
+      #                                            remonstrances to the crown
+      "supplique": legal/petition                # 3
+      "supplication": legal/petition             # 1
+      "placet": legal/petition                   # 1
+      "articles": legal/treaty                   # 20 — articles of agreement (the Rueil peace,
+      #                                            the princes' conditions)
+      "registres": administrative/register       # 2
+      "liste": administrative/list               # 36 — lists of names, of the dead, of the
+      #                                            Mazarinists
+      "périodique": periodical                   # 32 — the serial gazettes and courriers of the war
+      "nouvelles": periodical/newspaper          # 59 — news sheets
+      "courrier": periodical/newspaper           # 1
+      "sermon": sermon                           # 4
+      "oraison funèbre": sermon/funeral-sermon   # 2
+      "prière": hymn-prayer/prayer               # 8
+      "cantique": hymn-prayer/hymn               # 1
+      "prophétique": divination/oracle           # 40 (+ the "prohpétique" typo, 1) — the prophecies
+      "prohpétique": divination/oracle           # 1
+      "astrologie": divination/astrology         # 15
+    deliberate:
+      "pamphlet": "a format (the printed occasional piece), not a genre — the dta Flugschrift precedent"  # 103
+      "non renseigné": "upstream's own 'not filled in' — no claim"  # 253
+      "traduction": "a translation marker, not a genre"  # 21
+      "faux": "an authenticity marker (a forgery), not a genre"  # 31
+      "contrefaçon": "an authenticity marker (a counterfeit edition), not a genre"  # 10
+      "parodie": "a mode (parody of another piece), not a genre"  # 17
+      "pastiche": "a mode, not a genre"  # 1
+      "recueil": "a compilation marker, not a genre"  # 15
+      "affiche": "a format (a poster), not a genre"  # 8
+      "placard": "a format (a broadside), not a genre"  # 4
+      "épître dédicatoire": "a paratext component, not the piece's genre"  # 13
+      "épitre dédicatoire": "a paratext component, not the piece's genre"  # 1
+      "dédicace": "a paratext component, not the piece's genre"  # 4
+      "avant-propos": "a paratext component, not the piece's genre"  # 2
+      "avertissement": "a paratext component, not the piece's genre"  # 3
+    # left unmapped (the worklist — no ruled class: an oratory/polemic head is a
+    # taxonomy question): discours adressé 278 (+ "dicours adressé" 1) · satirique 140 ·
+    # rhétorique délibérative 122 (+ "rhérotique délibérative" 1) · réponse 106 ·
+    # prosopopée 78 (+ prosopoée 2, prospopée 1) · relation 69 · harangue 65 · avis 61 ·
+    # lamentation 53 · rhétorique judiciaire 52 · rhétorique épidictique 50 · éloge 42 ·
+    # manifeste 41 (+ maifeste 1) · plainte 26 · apologie 15 · panégyrique 15 ·
+    # justification 11 · regrets 11 · discours 10 · pro et contra 10 · mémoire 9 ·
+    # remerciement 9 · soupirs 8 · anagramme 7 · généalogie 7 · vie 7 · didactique 6 ·
+    # songe 6 · testament 6 · ultima verba 6 · blâme 5 · résolutions 5 · défense 4 ·
+    # galant 4 · réfutation 4 · catéchisme 3 · discours prononcé 3 · allégorie 2 ·
+    # discours doctrinal 2 · portrait 2 · traité 2 · almanach 1 · caquet 1 · consolation 1 ·
+    # délibérations 1 · fait divers 1 · manuel 1 · occasionnel 1 · tract 1
+  socinian-letters:   # P160 — the cover letter's chosen witness's own #sbw classCode
+    metadata: document_type   # (Adapters::SocinianLetters); counts = the 1,869 accepted letters,
+    #                           census through the adapter 2026-11-05 (20 carry no #sbw code and
+    #                           mint no kind row). Attachment types ride metadata "attachments".
+    map:
+      "Brief": letter                            # 1,495 — the letter; private vs official is not
+      #   stated by upstream, so the bare head (deliberately coarse)
+      "Brief/Briefexzerpt": letter               # 291 — a letter edited whole or in excerpt
+      "Briefexzerpt": letter                     # 44 — the letter's excerpt as published (the
+      #   content is the letter; the excerpt is the edition's cut, not a genre)
+      "Brieexzerpt": letter                      # 1 — upstream's typo for Briefexzerpt
+      "Brieffragment": letter                    # 2 — the surviving fragment of a letter
+      "Brief, Beobachtungen": letter             # 1 — a letter carrying its observations
+      "Beobachtungen": scholarly/astronomy       # 6 — the comet correspondence's observation
+      #   reports (positions and times of the 1664/65 comets), sent in the post
+      "Astronomische Beobachtungen": scholarly/astronomy  # 1
+      "Astronomische Beobachtung": scholarly/astronomy    # 1
+      "Nachrichtenbeilage": periodical/newspaper # 2 — the handwritten news enclosure (Zeitung,
+      #   avviso) riding the post: the newspaper in its manuscript form
+      "Bericht": administrative                  # 1 — a report (the dta/ref "Bericht" fold)
+      "Instruktion": administrative              # 1 — an envoy's instruction, an institutional
+      #   paper, not correspondence
+      "Huldigungsgedicht": literary/poetry/praise  # 1 — a homage poem
+    deliberate:
+      "xzerpt": "an excerpt marker (upstream's truncated 'Exzerpt'), not a genre"  # 2

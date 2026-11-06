@@ -91,7 +91,14 @@ module Nabu
     # :tar_gz (P80-5, the ReF Zenodo deposit) unpacks via the system `tar`
     # — no salvage path (the P78-r4 junk-name failure is a zip/APFS
     # phenomenon; a tar that `tar` cannot read is honestly broken).
-    ARCHIVE_KINDS = %i[zip tar_gz].freeze
+    # :zip_bsdtar (P160, the NOSCEMUS Digital Sourcebook) unpacks a zip via
+    # bsdtar (libarchive, macOS-native; libarchive-tools on CI), which
+    # honors the Info-ZIP Unicode Path extra field (0x7075): that deposit
+    # names 183 members in CP437 bytes with the real UTF-8 name in the
+    # extra field, which `unzip` ignores (exit 50 on APFS) and the salvage
+    # reader would then DROP. No salvage path here either: a zip bsdtar
+    # cannot read is honestly broken.
+    ARCHIVE_KINDS = %i[zip tar_gz zip_bsdtar].freeze
 
     # The shared primary-host memo for a multi-project run (see class note).
     # Once ANY sharing fetch marks the primary down, the rest of the run
@@ -343,12 +350,13 @@ module Nabu
 
     def unpack!
       unpacked = File.join(staging, "unpacked")
-      if @archive == :tar_gz
+      if @archive == :tar_gz || @archive == :zip_bsdtar
         FileUtils.mkdir_p(unpacked)
+        tool, flags = @archive == :tar_gz ? %w[tar -xzf] : %w[bsdtar -xf]
         begin
-          Shell.run("tar", "-xzf", download_path, "-C", unpacked)
+          Shell.run(tool, flags, download_path, "-C", unpacked)
         rescue Shell::Error => e
-          raise Error, "tar unpack failed: #{e.message}"
+          raise Error, "#{tool} unpack failed: #{e.message}"
         end
         @tree = tree_root(unpacked)
         return
