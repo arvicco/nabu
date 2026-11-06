@@ -45,6 +45,25 @@ module Nabu
   #      text gets one (cheap, usually no-op) fetch under the new catalog
   #      sha: catalog commit = wave identity. The ledger is rewritten after
   #      EVERY text, so a kill at any point loses at most one entry.
+  #   5. DECLARED EDITION REFS (objects only) — +edition_refs+ names
+  #      edition BRANCHES to acquire beside master (default none: the wave
+  #      above is then the whole story). Membership is the CATALOG's claim,
+  #      never a trial fetch: ref R's members are the `:KR_ID:` lines of
+  #      KR-Catalog/general/<r>.org (sbck.org lists the 四部叢刊 texts; a
+  #      declared ref without its file is a loud Error raised right after
+  #      the catalog sync, before any text is touched). After the per-text
+  #      pass, each member in the wave's scope whose clone exists gets ONE
+  #      shallow `git fetch <repo> +refs/heads/R:refs/remotes/origin/R` —
+  #      the objects and a remote-tracking ref land, the checked-out master
+  #      tree and HEAD never move (so no guard, no attic: nothing local is
+  #      replaced). Members without a local clone are counted "missing" and
+  #      never cloned here; a remote lacking the branch is recorded
+  #      "absent" (git's couldn't-find-remote-ref voice), any other failure
+  #      aborts. Pins live in the same ledger under "editions" → R → id,
+  #      keyed by the catalog sha exactly like the text pins; a fetched pin
+  #      is current only while the clone still carries the pinned ref (a
+  #      vanished-and-recloned text refetches it). Paced like every other
+  #      network operation.
   #
   # Catalog ids with no matching repo are REAL (61 of the 2,989 wave-1 ids
   # at census): a clone failing with git's not-found signature is recorded
@@ -70,25 +89,37 @@ module Nabu
 
     KR_ID = /^:KR_ID:\s*(KR\d[a-z]\d{4})\s*$/
     ABSENT_SIGNATURE = /not found|does not exist|could not read|access denied|denied/i
+    # The edition catalogs indent some property drawers (2 of sbck.org's 469).
+    MEMBER_ID = /^\s*:KR_ID:\s*(KR\d[a-z]\d{4})\s*$/
+    MISSING_REF_SIGNATURE = /couldn't find remote ref/i
+    EDITION_CATALOG_DIR = "general"
 
     # What one wave did: the catalog pin, the per-outcome text id lists
-    # (cloned/refreshed/absent), the count skipped via standing pins, and
-    # the attic activity ("<id>/<relpath>" entries).
-    Result = Data.define(:catalog_sha, :cloned, :refreshed, :skipped, :absent, :atticked)
+    # (cloned/refreshed/absent), the count skipped via standing pins, the
+    # attic activity ("<id>/<relpath>" entries), and one EditionPass per
+    # declared edition ref ([] when none are declared).
+    Result = Data.define(:catalog_sha, :cloned, :refreshed, :skipped, :absent, :atticked, :editions)
 
-    def self.sync!(catalog_url:, repo_base:, dir:, attic_dir:, classes:,
+    # One declared ref's pass: +in_scope+ = catalog membership ∩ wave scope;
+    # fetched/absent are id lists; skipped (standing pins) and missing (no
+    # local clone) are counts.
+    EditionPass = Data.define(:ref, :in_scope, :fetched, :absent, :skipped, :missing)
+
+    def self.sync!(catalog_url:, repo_base:, dir:, attic_dir:, classes:, edition_refs: [],
                    delay: DEFAULT_DELAY, progress: nil, guard: nil, sleeper: nil)
       new(catalog_url: catalog_url, repo_base: repo_base, dir: dir, attic_dir: attic_dir,
-          classes: classes, delay: delay, progress: progress, guard: guard, sleeper: sleeper).sync!
+          classes: classes, edition_refs: edition_refs, delay: delay, progress: progress,
+          guard: guard, sleeper: sleeper).sync!
     end
 
-    def initialize(catalog_url:, repo_base:, dir:, attic_dir:, classes:,
+    def initialize(catalog_url:, repo_base:, dir:, attic_dir:, classes:, edition_refs: [],
                    delay: DEFAULT_DELAY, progress: nil, guard: nil, sleeper: nil)
       @catalog_url = catalog_url
       @repo_base = repo_base
       @dir = dir
       @attic_dir = attic_dir
       @classes = classes
+      @edition_refs = edition_refs
       @delay = delay
       @progress = progress
       @guard = guard
@@ -102,9 +133,12 @@ module Nabu
 
     def sync!
       @catalog_sha = sync_catalog!
-      scope_ids.each { |id| sync_text!(id) }
+      scope = scope_ids
+      memberships = @edition_refs.to_h { |ref| [ref, edition_members(ref)] } # loud before any text
+      scope.each { |id| sync_text!(id) }
+      editions = memberships.map { |ref, members| sync_edition!(ref, (members & scope).sort) }
       Result.new(catalog_sha: @catalog_sha, cloned: @cloned, refreshed: @refreshed,
-                 skipped: @skipped, absent: @absent, atticked: @atticked)
+                 skipped: @skipped, absent: @absent, atticked: @atticked, editions: editions)
     end
 
     private
@@ -212,6 +246,73 @@ module Nabu
       "#{error.message}\n#{error.stderr}".match?(ABSENT_SIGNATURE)
     end
 
+    # -- declared edition refs (design note, item 5) --------------------------
+
+    def edition_members(ref)
+      rel = "#{EDITION_CATALOG_DIR}/#{ref.downcase}.org"
+      path = File.join(catalog_dir, rel)
+      unless File.file?(path)
+        raise Error, "#{@catalog_url}: no membership catalog #{rel} for declared edition ref #{ref}"
+      end
+
+      File.read(path, encoding: "UTF-8").scan(MEMBER_ID).flatten.uniq
+    end
+
+    def sync_edition!(ref, members)
+      tally = { fetched: [], absent: [], skipped: 0, missing: 0 }
+      members.each do |id|
+        if !Dir.exist?(File.join(text_dir(id), ".git"))
+          tally[:missing] += 1
+        elsif edition_pinned_current?(id, ref)
+          tally[:skipped] += 1
+        else
+          tally[fetch_edition!(id, ref)] << id
+        end
+      end
+      EditionPass.new(ref: ref, in_scope: members.size, **tally)
+    end
+
+    # Objects + a remote-tracking ref only: never a checkout, merge or
+    # reset, so the master working tree and HEAD stay byte-identical.
+    def fetch_edition!(id, ref)
+      Shell.run("git", "-C", text_dir(id), "fetch", "--quiet", "--depth", "1", "#{@repo_base}/#{id}",
+                "+refs/heads/#{ref}:#{tracking_ref(ref)}")
+      record_edition!(id, ref, { "sha" => edition_sha(id, ref), "catalog_sha" => @catalog_sha })
+      :fetched
+    rescue Shell::Error => e
+      raise unless "#{e.message}\n#{e.stderr}".match?(MISSING_REF_SIGNATURE)
+
+      record_edition!(id, ref, { "status" => "absent", "catalog_sha" => @catalog_sha })
+      :absent
+    ensure
+      pace!
+    end
+
+    # Current = pinned under the current catalog sha AND (a standing absent
+    # verdict, or the clone still carries the pinned remote-tracking ref).
+    def edition_pinned_current?(id, ref)
+      pin = ledger.dig("editions", ref, id)
+      return false unless pin && pin["catalog_sha"] == @catalog_sha
+      return true if pin["status"] == "absent"
+
+      !pin["sha"].nil? && edition_sha(id, ref) == pin["sha"]
+    end
+
+    def edition_sha(id, ref)
+      Shell.run("git", "-C", text_dir(id), "rev-parse", "--verify", "-q", tracking_ref(ref)).strip
+    rescue Shell::Error
+      nil
+    end
+
+    def record_edition!(id, ref, pin)
+      state = ledger
+      state["catalog"] = { "sha" => @catalog_sha }
+      ((state["editions"] ||= {})[ref] ||= {})[id] = pin
+      write_ledger!(state)
+    end
+
+    def tracking_ref(ref) = "refs/remotes/origin/#{ref}"
+
     def pin_text!(id, sha)
       record_text!(id, { "sha" => sha, "catalog_sha" => @catalog_sha })
     end
@@ -222,6 +323,10 @@ module Nabu
       state = ledger
       state["catalog"] = { "sha" => @catalog_sha }
       (state["texts"] ||= {})[id] = pin
+      write_ledger!(state)
+    end
+
+    def write_ledger!(state)
       File.write(ledger_path, JSON.pretty_generate(state))
       @ledger = state
     end

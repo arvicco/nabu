@@ -167,6 +167,11 @@ module Nabu
     # wired/translations, passed to the adapter's `classes:` keyword by
     # build_adapter. nil (the default) leaves the adapter's own default
     # scope; the adapter validates the class vocabulary.
+    # +edition_refs+: a many-repo source's declared edition BRANCHES to
+    # acquire beside master (kanripo `edition_refs: [SBCK]`) — passed to the
+    # adapter's `edition_refs:` keyword; nil = none. ACQUISITION ONLY: it
+    # lands objects and remote-tracking refs, never the parsed tree, so it
+    # is deliberately NOT a derivation-shaping flag (no stamp churn).
     # +siblings+ (P34-0): the `--parallel` work-pattern declaration — HOW
     # this source's sibling documents spell their variant suffixes. Either
     # CTS_SIBLINGS (the dotted-version form) or a list of "-"-leading tail
@@ -204,14 +209,14 @@ module Nabu
     Entry = Data.define(:slug, :adapter_class_name, :wired, :sync_policy, :kind, :translations,
                         :license_watch, :fuzzy_index, :cjk_index, :embed_index, :lemma_tier,
                         :lemma_dictionary_filter,
-                        :classes, :siblings, :sibling_namespaces, :axes,
+                        :classes, :edition_refs, :siblings, :sibling_namespaces, :axes,
                         :grant_required, :grant, :availability, :quickstart, :multilingual,
                         :group, :requires, :adopted, :credentials) do
       def initialize(slug:, adapter_class_name:, wired:, sync_policy:, kind: DEFAULT_KIND,
                      translations: false, license_watch: nil, fuzzy_index: false, cjk_index: false,
                      embed_index: false,
                      lemma_tier: DEFAULT_LEMMA_TIER, lemma_dictionary_filter: false,
-                     classes: nil, siblings: nil, sibling_namespaces: nil, axes: [],
+                     classes: nil, edition_refs: nil, siblings: nil, sibling_namespaces: nil, axes: [],
                      grant_required: false, grant: nil, availability: DEFAULT_AVAILABILITY,
                      quickstart: DEFAULT_QUICKSTART, multilingual: DEFAULT_MULTILINGUAL,
                      group: nil, requires: [], adopted: nil, credentials: nil)
@@ -266,13 +271,15 @@ module Nabu
       # Construct the adapter this entry configures — THE construction seam
       # for sync/rebuild/verify, so every pipeline agrees on the flags. All
       # flags off (the default) is the plain no-arg construction every
-      # adapter supports; `translations: true` and a `classes:` list pass as
-      # keywords, and an adapter without the keyword is a configuration
-      # error naming source and class, not an ArgumentError crash.
+      # adapter supports; `translations: true`, a `classes:` list and an
+      # `edition_refs:` list pass as keywords, and an adapter without the
+      # keyword is a configuration error naming source and class, not an
+      # ArgumentError crash.
       def build_adapter
         kwargs = {}
         kwargs[:translations] = true if translations
         kwargs[:classes] = classes if classes
+        kwargs[:edition_refs] = edition_refs if edition_refs
         return adapter_class.new if kwargs.empty?
 
         begin
@@ -406,6 +413,7 @@ module Nabu
         lemma_tier: lemma_tier!(slug, config),
         lemma_dictionary_filter: boolean!(slug, config, "lemma_dictionary_filter"),
         classes: classes!(slug, config),
+        edition_refs: edition_refs!(slug, config),
         siblings: siblings!(slug, config),
         sibling_namespaces: sibling_namespaces!(slug, config),
         axes: axes!(slug, config, axis_registry),
@@ -601,6 +609,18 @@ module Nabu
             "source #{slug.inspect}: classes must be a non-empty list of strings, got #{list.inspect}"
     end
     private_class_method :classes!
+
+    # nil (none declared) or a non-empty list of non-empty strings; the ref
+    # vocabulary is the adapter's to validate, like classes!.
+    def self.edition_refs!(slug, config)
+      list = config.fetch("edition_refs", nil)
+      return nil if list.nil?
+      return list if list.is_a?(Array) && !list.empty? && list.all? { |r| r.is_a?(String) && !r.strip.empty? }
+
+      raise ValidationError,
+            "source #{slug.inspect}: edition_refs must be a non-empty list of strings, got #{list.inspect}"
+    end
+    private_class_method :edition_refs!
 
     def self.lemma_tier!(slug, config)
       tier = config.fetch("lemma_tier", DEFAULT_LEMMA_TIER)

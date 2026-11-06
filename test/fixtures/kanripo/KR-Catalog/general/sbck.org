@@ -1,0 +1,131 @@
+#+TITLE: 四部叢刊
+#+LINK: krpimg file:/Volumes/3db4116f-6ca3-3439-8b75-fe0e71f7f47b/imgdb-tif/general/%s
+
+* Comments							   :noexport:
+  - all text should either have a KR_ID property or be in the KR files.
+  - 286 KR_ID
+  - in KR: 16 ([2015-04-08T13:06:28+0900])
+
+* 四部叢刊初編
+  張元濟 等輯
+ 民國五十六年
+ 臺北臺灣商務印書館
+ 用上海商務印書館縮景印本第二次重印
+ 110册
+
+** 經部
+*** SB11n001 周易
+:PROPERTIES:
+:TYPE:  text
+:CUSTOM_ID: SB11n001
+:EXTENT: 九卷
+:BOOK: 0001 - 0002
+:KR_ID: KR1a0006
+:_RESP:    （魏）王弼,（晉）韓康伯,（魏）王弼,（唐）邢璹
+:END:
+
+**** 坿略例
+     :PROPERTIES:
+     :EXTENT:   一卷
+     :END:
+**** 人物
+
+***** 王弼
+:PROPERTIES:
+:FUNCTION: 注
+:DYNASTY: 魏
+:END:
+
+***** 韓康伯
+:PROPERTIES:
+:FUNCTION: 注
+:DYNASTY: 晉
+:END:
+
+***** 王弼
+:PROPERTIES:
+:FUNCTION: 撰略例
+:DYNASTY: 魏
+:END:
+
+***** 邢璹
+:PROPERTIES:
+:FUNCTION: 注
+:DYNASTY: 唐
+:END:
+
+**** 版本
+***** SBCK
+:PROPERTIES:
+:EDITION: 上海涵芬樓藏宋刊本
+:END:
+
+
+**** 电子版
+[[krpimg:sbck/SB1/SB11n001/SB11n001_001-002.tif][冊 1]]
+[[krpimg:sbck/SB1/SB11n001/SB11n001_002-002.tif][冊 2]]
+** 子部
+*** SB13n048 孔子家語
+:PROPERTIES:
+:TYPE:  text
+:CUSTOM_ID: SB13n048
+:EXTENT: 十卷
+:BOOK: 0309 - 0311
+:KR_ID:    KR3a0001
+:_RESP:    （魏）王肅
+:END:
+
+**** 人物
+***** 王肅
+:PROPERTIES:
+:FUNCTION: 注
+:DYNASTY: 魏
+:END:
+
+**** 版本
+***** SBCK
+:PROPERTIES:
+:EDITION:   江南圖書館藏明覆宋刊本
+:END:
+
+
+**** 电子版
+[[krpimg:sbck/SB1/SB13n048/SB13n048_001-002.tif][冊 1]]
+[[krpimg:sbck/SB1/SB13n048/SB13n048_002-002.tif][冊 2]]
+[[krpimg:sbck/SB1/SB13n048/SB13n048_003-002.tif][冊 3]]
+* 四部叢刊三編 
+  張元濟 撰
+ 民國二十四年二十五年 
+ 上海商務印書館 
+ 景印本
+ 500册 
+** 史部
+*** SB32n415 東山國語
+    :PROPERTIES:
+    :_RESP:    （明）查繼佐,（明）沈仲方
+    :EXTENT: 不分卷
+    :KR_ID:    KR2d0018
+    :END:
+**** 人物
+***** 查繼佐
+:PROPERTIES:
+:FUNCTION: 撰
+:DYNASTY: 明
+:END:
+
+***** 沈仲方
+:PROPERTIES:
+:FUNCTION: 補述
+:DYNASTY: 明
+:END:
+
+**** 版本
+***** SBCK
+:PROPERTIES:
+:EDITION: 海寧張氏鐵如意館傅錄本
+:END:
+
+
+**** 电子版
+[[krpimg:sbck/SB3/SB32n415/SB32n415_001-002.tif][冊 1]]
+[[krpimg:sbck/SB3/SB32n415/SB32n415_002-002.tif][冊 2]]
