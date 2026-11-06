@@ -320,6 +320,44 @@ namespace :index do
     fulltext&.disconnect
   end
 
+  # The annotations lane (`search --annotations`): the declared searchable
+  # annotation layers (Nabu::AnnotationKeys' sources). With no argument,
+  # the index:translations shape — the whole lane re-derived standalone
+  # over the live catalog, stage stamp advanced. With slugs
+  # (`rake "index:annotations[cantus,korpus16]"`), the targeted builder:
+  # each named source's slice derived alone (the lane created if absent),
+  # every other slice untouched, the stamp left for a whole-lane pass.
+  # Reads only those sources' annotations; writes only the fulltext
+  # passages_annotations tables.
+  desc "Re-derive the declared annotation layers index (search --annotations); [slug,…] = those sources only"
+  task :annotations do |_task, args|
+    $LOAD_PATH.unshift(File.expand_path("lib", __dir__))
+    require "nabu"
+
+    config = Nabu::Config.load
+    catalog = Nabu::Store.connect(config.catalog_path, readonly: true)
+    fulltext = Nabu::Store.connect_fulltext(config.fulltext_path)
+    index = Nabu::Store::AnnotationIndex
+    started = Process.clock_gettime(Process::CLOCK_MONOTONIC)
+    slugs = args.extras
+    if slugs.empty?
+      summary = index.rebuild!(catalog: catalog, fulltext: fulltext, stamp: true)
+      label = "#{summary.fetch(:passages)} passages from #{summary.fetch(:sources)} sources"
+    else
+      counts = slugs.map { |slug| index.build_source!(catalog: catalog, fulltext: fulltext, slug: slug) }
+      label = "#{counts.sum} passages from #{slugs.join(', ')}"
+    end
+    elapsed = Process.clock_gettime(Process::CLOCK_MONOTONIC) - started
+    puts "index:annotations done — #{label} in " \
+         "#{Object.new.extend(Nabu::DurationFormat).format_duration(elapsed)}"
+    fulltext[index::SCOPE_TABLE].order(:slug).each do |row|
+      puts "  #{row.fetch(:slug)}: #{row.fetch(:passages)}"
+    end
+  ensure
+    catalog&.disconnect
+    fulltext&.disconnect
+  end
+
   # The token-gloss lane (`search --gloss WORD` with no query): the
   # upstream token glosses of the Query::TokenGlosses sources re-derived
   # standalone over the live catalog — the index:translations shape:
