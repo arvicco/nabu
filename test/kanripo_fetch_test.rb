@@ -16,6 +16,7 @@ class KanripoFetchTest < Minitest::Test
   include ClassTemplateFiles
 
   FIXTURES = File.expand_path("fixtures/kanripo", __dir__)
+  EDITION_CLASSES = %w[KR1 KR2 KR3].freeze # the edition rig's scope (KR2d0018 is KR2)
 
   def setup
     @root = Dir.mktmpdir("nabu-kanripo-fetch")
@@ -209,16 +210,179 @@ class KanripoFetchTest < Minitest::Test
     assert_empty @slept
   end
 
+  # -- declared edition refs (objects only, master untouched) ---------------
+  #
+  # The rig (seed_edition_rig): membership comes from the real trimmed
+  # KR-Catalog/general/sbck.org, which lists KR1a0006, KR3a0001 and the
+  # INDENTED-drawer KR2d0018. KR3a0001's upstream carries an SBCK branch;
+  # KR1a0006's does not (the ~11 real member repos without the branch);
+  # KR2d0018 has no repo at all (no clone → never touched by the edition
+  # pass); non-member KR1a0170 DOES carry an SBCK branch upstream, so a
+  # fetch of it would be visible.
+
+  def test_declared_edition_ref_is_fetched_as_a_remote_tracking_ref_for_members
+    seed_edition_rig
+
+    result = sync!(classes: EDITION_CLASSES, edition_refs: ["SBCK"])
+
+    pass = result.editions.first
+    assert_equal "SBCK", pass.ref
+    assert_equal 3, pass.in_scope, "membership ∩ scope, the indented KR2d0018 drawer included"
+    assert_equal ["KR3a0001"], pass.fetched
+    assert_equal head(File.join(@upstream, "KR3a0001"), "SBCK"), clone_ref("KR3a0001", "SBCK")
+    assert_equal head(File.join(@upstream, "KR3a0001"), "SBCK"),
+                 read_ledger.dig("editions", "SBCK", "KR3a0001", "sha")
+    assert_equal result.catalog_sha, read_ledger.dig("editions", "SBCK", "KR3a0001", "catalog_sha")
+  end
+
+  def test_edition_pass_leaves_the_master_working_tree_byte_identical
+    seed_edition_rig
+    sync!(classes: EDITION_CLASSES)
+    before = tree_snapshot("KR3a0001")
+    master = head_of_clone("KR3a0001")
+
+    sync!(classes: EDITION_CLASSES, edition_refs: ["SBCK"])
+
+    refute_nil clone_ref("KR3a0001", "SBCK")
+    assert_equal before, tree_snapshot("KR3a0001"), "objects only — the checked-out tree never moves"
+    assert_equal master, head_of_clone("KR3a0001")
+    assert_empty Nabu::Shell.run("git", "-C", File.join(@dir, "KR3a0001"), "status", "--porcelain").strip
+  end
+
+  def test_member_repo_without_the_branch_records_absent_and_the_pass_continues
+    seed_edition_rig
+
+    result = sync!(classes: EDITION_CLASSES, edition_refs: ["SBCK"])
+
+    pass = result.editions.first
+    assert_equal ["KR1a0006"], pass.absent
+    assert_equal "absent", read_ledger.dig("editions", "SBCK", "KR1a0006", "status")
+    assert_nil clone_ref("KR1a0006", "SBCK")
+  end
+
+  def test_non_members_are_never_attempted_and_missing_clones_are_counted_not_cloned
+    seed_edition_rig
+
+    pass = sync!(classes: EDITION_CLASSES, edition_refs: ["SBCK"]).editions.first
+
+    assert_nil clone_ref("KR1a0170", "SBCK"), "KR1a0170 has the branch upstream but is not an SBCK member"
+    assert_nil read_ledger.dig("editions", "SBCK", "KR1a0170")
+    assert_equal 1, pass.missing, "KR2d0018 has no local clone"
+    refute Dir.exist?(File.join(@dir, "KR2d0018")), "the edition pass never clones"
+  end
+
+  def test_edition_pass_paces_each_network_operation
+    seed_edition_rig
+    sync!(classes: EDITION_CLASSES)
+    @slept.clear
+
+    sync!(classes: EDITION_CLASSES, edition_refs: ["SBCK"], delay: 0.5)
+
+    # catalog fetch + one fetched + one absent edition attempt.
+    assert_equal [0.5] * 3, @slept
+  end
+
+  def test_missing_membership_file_is_a_loud_error_before_any_text_is_fetched
+    seed_edition_rig
+
+    error = assert_raises(Nabu::KanripoFetch::Error) do
+      sync!(classes: EDITION_CLASSES, edition_refs: ["WYG"])
+    end
+
+    assert_match(%r{general/wyg\.org}, error.message)
+    refute Dir.exist?(File.join(@dir, "KR3a0001")), "fails fast, before the per-text pass"
+  end
+
+  def test_resumed_edition_pass_skips_pinned_current_pairs_without_network
+    seed_edition_rig
+    sync!(classes: EDITION_CLASSES, edition_refs: ["SBCK"])
+    # Unreachable upstreams: any edition (or master) fetch would now raise.
+    %w[KR3a0001 KR1a0006].each { |id| FileUtils.mv(File.join(@upstream, id), File.join(@root, "parked-#{id}")) }
+
+    pass = sync!(classes: EDITION_CLASSES, edition_refs: ["SBCK"]).editions.first
+
+    assert_empty pass.fetched
+    assert_empty pass.absent
+    assert_equal 2, pass.skipped, "the fetched pair and the standing absent verdict"
+  end
+
+  def test_a_vanished_clone_refetches_its_edition_ref
+    seed_edition_rig
+    sync!(classes: EDITION_CLASSES, edition_refs: ["SBCK"])
+    FileUtils.rm_rf(File.join(@dir, "KR3a0001"))
+
+    pass = sync!(classes: EDITION_CLASSES, edition_refs: ["SBCK"]).editions.first
+
+    assert_equal ["KR3a0001"], pass.fetched
+    refute_nil clone_ref("KR3a0001", "SBCK")
+  end
+
+  def test_other_edition_fetch_failures_abort_loudly
+    seed_edition_rig
+    sync!(classes: EDITION_CLASSES)
+    FileUtils.mv(File.join(@upstream, "KR3a0001"), File.join(@root, "parked"))
+
+    assert_raises(Nabu::Shell::Error) { sync!(classes: EDITION_CLASSES, edition_refs: ["SBCK"]) }
+  end
+
+  def test_default_no_edition_refs_touches_no_edition_state
+    seed_edition_rig
+
+    result = sync!(classes: EDITION_CLASSES)
+
+    assert_empty result.editions
+    assert_nil clone_ref("KR3a0001", "SBCK")
+    assert_nil read_ledger["editions"]
+  end
+
   private
 
-  def sync!(classes: %w[KR1 KR3], delay: 1, guard: nil)
+  def sync!(classes: %w[KR1 KR3], delay: 1, guard: nil, edition_refs: nil)
+    kwargs = edition_refs ? { edition_refs: edition_refs } : {}
     Nabu::KanripoFetch.sync!(
       catalog_url: File.join(@upstream, "KR-Catalog"),
       repo_base: @upstream,
       dir: @dir, attic_dir: @attic,
       classes: classes, delay: delay, guard: guard,
-      sleeper: ->(seconds) { @slept << seconds }
+      sleeper: ->(seconds) { @slept << seconds },
+      **kwargs
     )
+  end
+
+  def seed_edition_rig
+    catalog = File.join(@upstream, "KR-Catalog")
+    commit_file(catalog, "KR/KR3a.txt", fixture_bytes("KR-Catalog/KR/KR3a.txt"))
+    add_catalog_id("KR1a0006")
+    add_catalog_id("KR2d0018")
+    seed_text(@upstream, "KR3a0001", "KR3a0001_001.txt", "Readme.org")
+    add_branch(File.join(@upstream, "KR3a0001"), "SBCK",
+               "KR3a0001_001.txt" => fixture_bytes("KR3a0001/KR3a0001_001.txt") + "四部叢刊本¶\n".b)
+    seed_repo(File.join(@upstream, "KR1a0006"), "Readme.org" => fixture_bytes("KR1a0170/Readme.org"))
+    add_branch(File.join(@upstream, "KR1a0170"), "SBCK", "KR1a0170_001.txt" => "非成員\n".b)
+  end
+
+  # A branch beside the upstream's default one, which stays checked out.
+  def add_branch(dir, branch, files)
+    default = Nabu::Shell.run("git", "-C", dir, "symbolic-ref", "--short", "HEAD").strip
+    Nabu::Shell.run("git", "-C", dir, "checkout", "-q", "-b", branch)
+    write_files(dir, files)
+    Nabu::Shell.run("git", "-C", dir, "add", ".")
+    commit(dir, "edition #{branch}")
+    Nabu::Shell.run("git", "-C", dir, "checkout", "-q", default)
+  end
+
+  def clone_ref(id, ref)
+    Nabu::Shell.run("git", "-C", File.join(@dir, id), "rev-parse", "--verify", "-q",
+                    "refs/remotes/origin/#{ref}").strip
+  rescue Nabu::Shell::Error
+    nil
+  end
+
+  def tree_snapshot(id)
+    root = File.join(@dir, id)
+    Dir.glob("**/*", File::FNM_DOTMATCH, base: root)
+       .reject { |rel| rel == ".git" || rel.start_with?(".git/") || File.directory?(File.join(root, rel)) }
+       .sort.to_h { |rel| [rel, File.binread(File.join(root, rel))] }
   end
 
   def add_catalog_id(id)
@@ -234,7 +398,8 @@ class KanripoFetchTest < Minitest::Test
     seed_repo(dir,
               "KR/KR1a.txt" => fixture_bytes("KR-Catalog/KR/KR1a.txt"),
               "KR/KR1b.txt" => fixture_bytes("KR-Catalog/KR/KR1b.txt"),
-              "KR/KR3g.txt" => fixture_bytes("KR-Catalog/KR/KR3g.txt"))
+              "KR/KR3g.txt" => fixture_bytes("KR-Catalog/KR/KR3g.txt"),
+              "general/sbck.org" => fixture_bytes("KR-Catalog/general/sbck.org"))
   end
 
   def seed_text(upstream, id, *files)
@@ -274,8 +439,8 @@ class KanripoFetchTest < Minitest::Test
                     "commit", "-q", "-m", message)
   end
 
-  def head(dir)
-    Nabu::Shell.run("git", "-C", dir, "rev-parse", "HEAD").strip
+  def head(dir, rev = "HEAD")
+    Nabu::Shell.run("git", "-C", dir, "rev-parse", rev).strip
   end
 
   def head_of_clone(id)

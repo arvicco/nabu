@@ -137,6 +137,17 @@ repos** (KR2b0041, KR2p0015/0021/0024 — the whole KR2p 出土簡帛 subclass,
 e.g. Mawangdui 合陰陽釋文, has repos but no catalog file) sit outside the
 catalog-driven wave scope.
 
+`KR-Catalog/general/sbck.org` (cut 2026-11-06 from the box's canonical,
+same HEAD) is a byte-verbatim slice of the 四部叢刊 edition catalog — the
+membership list for the SBCK edition BRANCHES the fetch acquires as
+remote-tracking refs (366,049-byte real file, 469 `:KR_ID:` lines). Kept:
+the org header and Comments block, the 初編 and 三編 headings, and three
+complete entry blocks under their 部 headings — KR1a0006 周易 (column-0
+`:KR_ID:`), KR3a0001 孔子家語 (the multi-branch fixture text above) and
+KR2d0018 東山國語, whose property drawer is INDENTED (`    :KR_ID:`) —
+one of the two such drawers in the real file, so membership parsing must
+tolerate leading whitespace.
+
 ## License (org description, verbatim, retrieved 2026-07-20)
 
 > Comprehensive collection of premodern Chinese texts. Licensed as CC BY
