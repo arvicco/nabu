@@ -1144,12 +1144,13 @@ module Nabu
       end
 
       # P11-7 discovery accounting: classify every content-pattern file
-      # selected / skipped-by-rule / unrecognized, combining the loader's fate
-      # of discovered refs (loaded → selected; parse-skipped → skipped-by-rule;
-      # quarantined → unrecognized) with the adapter's discovery census (0-byte
+      # selected / skipped-by-rule / quarantined / unrecognized (/ collided),
+      # combining the loader's fate of discovered refs (loaded → selected;
+      # parse-skipped → skipped-by-rule; ParseError → quarantined; rejected
+      # keep-first → collided) with the adapter's discovery census (0-byte
       # skeletons, non-editions → skipped-by-rule; a tree with no ingestible
-      # content → unrecognized). unrecognized ≥ 1 is rendered loudly, with its
-      # notes, so a silent-ingestion gap can never hide again.
+      # content → unrecognized). Any not-ingested bucket ≥ 1 is rendered
+      # loudly, with the notes, so a silent-ingestion gap can never hide again.
       def print_discovery_accounting(outcome)
         report = outcome.load_report
         discovery = outcome.discovery
@@ -1160,11 +1161,18 @@ module Nabu
 
         selected = report.added + report.updated + report.skipped
         skipped = report.skipped_by_rule + discovery.skipped_by_rule
-        # A collided document (P39-4) was discovered but rejected keep-first, so
-        # it belongs in the loud not-ingested bucket, never among the selected.
-        unrecognized = report.errored + report.collided + discovery.unrecognized
+        # The not-ingested fates read as separate buckets, so the line says
+        # at a glance whether a sync left true quarantines: quarantined
+        # (the adapter raised ParseError — damage), unrecognized (matched no
+        # content pattern), and collided (discovered but rejected keep-first
+        # by the within-pass collision guard — shown only when present).
+        # Any of them positive renders the line loudly.
+        quarantined = report.errored
+        unrecognized = discovery.unrecognized
+        collided = report.collided.positive? ? " · #{report.collided} collided" : ""
+        loud = (quarantined + unrecognized + report.collided).positive?
         say("  discovery: #{selected} selected · #{skipped} skipped-by-rule · " \
-            "#{unrecognized} unrecognized", unrecognized.positive? ? :yellow : nil)
+            "#{quarantined} quarantined · #{unrecognized} unrecognized#{collided}", loud ? :yellow : nil)
         discovery.notes.each { |note| say("  ! #{note}", :yellow) }
         # A fetch that lost items (a retried-out mirror, an aborted walk)
         # says so in its report notes — but those reached only the live
