@@ -108,7 +108,9 @@ module Nabu
     # The Dates label is upstream's attributed era for the volume →
     # metadata "date" {century envelope, class composition} through the
     # MetadataDates :structured lane ("14th century" → 1301–1400).
-    # "Pre-Nicaean" (6 volumes) names no century and mints no envelope.
+    # "Pre-Nicaean" (6 volumes) names no century but has a crisp right
+    # edge, Nicaea (325): an open-start envelope (not_after 325 only,
+    # the label raw, class composition — LABEL_BANDS).
     # Upstream's labels are transcribed, not corrected — two are known
     # loose: PG 3 (ps.-Dionysius, c. 500) sits under "Pre-Nicaean" by
     # Migne's traditional attribution, and PG 87.1 (Procopius of Gaza,
@@ -309,6 +311,19 @@ module Nabu
       def self.volume_of(filename)
         match = File.basename(filename).match(MEMBER) or return nil
         [Integer(match[1], 10).to_s, match[2]].compact.join(".")
+      end
+
+      # Non-century labels with a stated edge. "Pre-Nicaean" (6 volumes)
+      # names no century, but its right edge is crisp — the Council of
+      # Nicaea, 325 — so it bands as an OPEN-START envelope (no lower
+      # bound: the label claims "before Nicaea", nothing about how long
+      # before).
+      LABEL_BANDS = { "Pre-Nicaean" => [nil, 325].freeze }.freeze
+
+      # A Dates label → [not_before, not_after]: a century label through
+      # #century_band, a LABEL_BANDS label verbatim; nil for any other.
+      def self.period_band(label)
+        LABEL_BANDS[label.to_s] || century_band(label)
       end
 
       # "14th century" → [1301, 1400]; nil for any other label.
@@ -604,7 +619,7 @@ module Nabu
       # the volume's contents as volume_contents; the advertised word count
       # is the volume's alone.
       def volume_metadata(volume, entry, whole: true)
-        band = self.class.century_band(entry[:period])
+        band = self.class.period_band(entry[:period])
         {
           "pg_volume" => volume, "period" => entry[:period],
           (whole ? "contents" : "volume_contents") => entry[:contents],
@@ -612,7 +627,7 @@ module Nabu
           "words_advertised" => (entry[:words] if whole),
           "text_nature" => "uncorrected-ocr", "ocr_note" => OCR_NOTE,
           "date" => band && { "not_before" => band.first, "not_after" => band.last,
-                              "raw" => entry[:period], "class" => "composition" }
+                              "raw" => entry[:period], "class" => "composition" }.compact
         }.compact
       end
 
