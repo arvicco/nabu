@@ -12,7 +12,7 @@ files:
   - path: toc/vol5-page-0.html
     url: https://www.british-history.ac.uk/statutes-realm/vol5?page=0
     whole: false
-    trim: main only; rows p1, iii-iv, v-xix, p1a, pp255-259 kept
+    trim: main only; rows p1, iii-iv, v-xix, p1a, pp255-259, pp421-422 kept
   - path: toc/vol5-page-3.html
     url: https://www.british-history.ac.uk/statutes-realm/vol5?page=3
     whole: false
@@ -33,6 +33,11 @@ files:
     url: https://www.british-history.ac.uk/statutes-realm/vol5/pp255-259
     whole: false
     trim: main only; sections s1-s3 and their three footnotes kept
+  - path: vol5/pp421-422.html
+    url: https://www.british-history.ac.uk/statutes-realm/vol5/pp421-422
+    whole: false
+    trim: main only; sections p1-p3 (page-anchored heads) and their two footnotes
+      kept; retrieved 2026-11-06
   - path: vol5/p1.html
     url: https://www.british-history.ac.uk/statutes-realm/vol5/p1
     whole: false

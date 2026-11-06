@@ -36,7 +36,8 @@ module Nabu
     #
     # == Passage = the SECTION
     #
-    # urn <doc>:s<K>, K = upstream's own section id (h2-s1, h3-s2, …).
+    # urn <doc>:s<K>, K = upstream's own section id (h2-s1, h3-s2, … → :s1,
+    # :s2; the page-anchored shape h2-p1, h3-p2, … → :sp1, :sp2).
     # Text = the section's enacted text, one line per paragraph / table row
     # / sub-head, whitespace collapsed (the printed line breaks are layout).
     # The section head rides as annotation "heading", em-only paragraphs as
@@ -120,7 +121,7 @@ module Nabu
         each_block(inner) do |node|
           if %w[h2 h3].include?(node.name)
             flush(current, sections, empty)
-            current = new_section(node["id"].to_s[/-s(\d+)\z/, 1] || "0")
+            current = new_section(section_id(node))
             note_refs(node, current)
             current[:heading] = clean(node)
           else
@@ -143,6 +144,14 @@ module Nabu
       end
 
       def new_section(id) = { id: id, heading: nil, lines: [], marginal: [], notes: [] }
+
+      # Upstream's own head anchor is the section key. Most pages anchor
+      # hN-sK (→ "K", urn :sK); some anchor page-wise, h2-p1/h3-p2 (vol5
+      # pp421-422, live 2026-11-06) — there the whole suffix is kept
+      # (→ "p2", urn :sp2) so sections stay distinct and upstream-derived.
+      def section_id(node)
+        node["id"].to_s[/-s(\d+)\z/, 1] || node["id"].to_s[/-(\w+)\z/, 1] || "0"
+      end
 
       def add_block(node, section)
         note_refs(node, section)

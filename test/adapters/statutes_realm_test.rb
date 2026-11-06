@@ -41,6 +41,7 @@ class StatutesRealmTest < Minitest::Test
   def test_discover_mints_the_accepted_rows_in_toc_order
     ids = adapter.discover(FIXTURES).map(&:id)
     assert_equal %w[urn:nabu:statutes-realm:vol5:p1a urn:nabu:statutes-realm:vol5:pp255-259
+                    urn:nabu:statutes-realm:vol5:pp421-422
                     urn:nabu:statutes-realm:vol7:p641a urn:nabu:statutes-realm:vol7:p750], ids
   end
 
@@ -74,7 +75,7 @@ class StatutesRealmTest < Minitest::Test
       FileUtils.cp(File.join(FIXTURES, "vol5", "p1a.html"), File.join(dir, "vol5"))
       assert_equal ["urn:nabu:statutes-realm:vol5:p1a"], adapter.discover(dir).map(&:id)
       skips = adapter.discovery_skips(dir)
-      assert_equal 3, skips.unrecognized
+      assert_equal 4, skips.unrecognized
       assert(skips.notes.any? { |note| note.start_with?("vol5/pp255-259: listed act page missing") })
     end
   end
