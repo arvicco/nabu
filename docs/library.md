@@ -1636,7 +1636,8 @@ and P84 added a fifth:
   vocab hapaxes, etym reflexes, align ranges, parallels evidence — has the
   same escape hatch.
 - **Discovery accounting** (P11-7): every sync prints
-  `discovery: N selected · M skipped-by-rule · K unrecognized` — silent
+  `discovery: N selected · M skipped-by-rule · Q quarantined · K unrecognized`
+  (plus `· C collided` when present) — silent
   ingestion gaps are structurally visible.
 - **Citation-native retrieval**: `show <urn>` with range support
   (`:1.1-1.32`), suffix display by default, `--full-urn` for scripts.
