@@ -466,11 +466,16 @@ end
 # The same task runs the GH watch-list staleness guard
 # (Nabu::Ops::WatchListCheck): any still-watched row whose checked date is
 # over a week old fails the task, named; boards without the section skip.
+# And the phase-register freshness probe (Nabu::Ops::PhaseRegisterCheck):
+# the register's newest `## P<N>` row must reach the highest phase merged
+# on the local main branch (git log, offline); no register file skips.
 namespace :boards do
-  desc "Gate check: register 'Next number' headers vs minted numbers + GH watch-list staleness (stale = exit 1)"
+  desc "Gate check: register 'Next number' headers vs minted numbers + GH watch-list staleness " \
+       "+ phase-register freshness vs merged phases (stale = exit 1)"
   task :check do
     require_relative "lib/nabu/ops/board_check"
     require_relative "lib/nabu/ops/watch_list_check"
+    require_relative "lib/nabu/ops/phase_register_check"
     dir = ENV.fetch("BOARDS_DIR", File.expand_path(".docs", __dir__))
     report = Nabu::Ops::BoardCheck.new(boards_dir: dir).run
     if report.skipped
@@ -482,9 +487,15 @@ namespace :boards do
     watch = Nabu::Ops::WatchListCheck.new(boards_dir: dir).run
     watch.findings.each { |finding| puts "STALE  watch list #{finding}" }
 
+    phases = Nabu::Ops::PhaseRegisterCheck.new(
+      register_path: File.join(dir, Nabu::Ops::PhaseRegisterCheck::FILE), repo: __dir__
+    ).run
+    phases.findings.each { |finding| puts "STALE  phase register #{finding}" }
+
     failures = []
     failures << "#{report.findings.size} stale register header(s)" unless report.clean?
     failures << "#{watch.findings.size} stale GH watch row(s)" unless watch.clean?
+    failures << "phase register behind the merged phases" unless phases.clean?
     abort "boards:check — #{failures.join(', ')}" unless failures.empty?
 
     puts "boards:check — #{report.registers.size} register header(s) current: #{report.registers.join(', ')}"
@@ -493,6 +504,12 @@ namespace :boards do
     else
       puts "boards:check — #{watch.rows} GH watch row(s) checked within " \
            "#{Nabu::Ops::WatchListCheck::MAX_AGE_DAYS} days"
+    end
+    if phases.skipped
+      puts "boards:check — no #{Nabu::Ops::PhaseRegisterCheck::FILE} on the boards; phase-register probe skipped"
+    else
+      merged = phases.highest_merged ? "P#{phases.highest_merged}" : "none"
+      puts "boards:check — phase register current: newest row P#{phases.newest_row}, highest merged phase #{merged}"
     end
   end
 end
