@@ -34,6 +34,10 @@ class RenderConformanceTest < Minitest::Test
       [%w[search --translations arma --license nc --limit 1], /page may be incomplete under these filters/],
     "search --translations: every render names the lane's scope" =>
       [%w[search --translations zzzz], /translations index covers: coptic-scriptorium 10 · corph 1/],
+    "search --annotations: the same announcement" =>
+      [%w[search --annotations arma --license nc --limit 1], /page may be incomplete under these filters/],
+    "search --annotations: every render names the lane's scope" =>
+      [%w[search --annotations zzzz], /annotations index covers: cantus 10 · korpus16 1/],
     "search: a cross-script zero hit hints instead of missing silently" =>
       [%w[search ⰲⱏⱄⱅⰰ], /Glagolitic/],
     "define: the render cap announces its tail (P34-r2)" =>
@@ -120,6 +124,25 @@ class RenderConformanceTest < Minitest::Test
     passage(catalog, bad, "urn:w:bad:1", "σῆμα κακόν", 0, "grc", raw_annotations: "{broken")
     seed_shelves(catalog, open_id)
     seed_translations(catalog)
+    seed_annotations(catalog)
+  end
+
+  # The declared annotation layers lane (AnnotationKeys slugs): the same
+  # window-exhaustion shape for search --annotations — the layer text
+  # carries the query word, the passage text never does.
+  def seed_annotations(catalog)
+    cantus = catalog[:sources].insert(slug: "cantus", name: "Cantus", adapter_class: "TestAdapter",
+                                      license_class: "open", enabled: true)
+    korpus = catalog[:sources].insert(slug: "korpus16", name: "Korpus 16", adapter_class: "TestAdapter",
+                                      license_class: "nc", enabled: true)
+    chants = document(catalog, cantus, "urn:w:chant", "lat")
+    10.times do |i|
+      passage(catalog, chants, "urn:w:chant:#{i}", "presul", i, "lat", raw_annotations: '{"standardized":"arma cano"}')
+    end
+    page = document(catalog, korpus, "urn:w:k16", "sl")
+    passage(catalog, page, "urn:w:k16:1", "beſeda", 0, "sl",
+            raw_annotations: JSON.generate("notes" => ["arma comes first and the long rest follows " \
+                                                       "for many words, ranking it below the short ones"]))
   end
 
   # The annotation-held translations lane (registry slugs, so the lane

@@ -213,10 +213,22 @@ class CgpgTest < Minitest::Test
                  Nabu::Adapters::Cgpg::VOLUMES.select { |_, entry| entry[:genre] }.transform_values { |e| e[:genre] })
   end
 
-  def test_the_pre_nicaean_label_carries_no_date
+  # "Pre-Nicaean" names no century but has a crisp right edge — the
+  # Council of Nicaea, 325: an OPEN-START envelope, upstream's label raw.
+  def test_the_pre_nicaean_label_is_an_open_start_envelope
     metadata = parse("urn:nabu:cgpg:pg8").metadata
     assert_equal "Pre-Nicaean", metadata["period"]
-    refute metadata.key?("date"), "a label with no century bound mints no envelope"
+    assert_equal({ "not_after" => 325, "raw" => "Pre-Nicaean", "class" => "composition" }, metadata["date"])
+    assert_equal [nil, 325], Nabu::Adapters::Cgpg.period_band("Pre-Nicaean")
+    assert_equal [1101, 1200], Nabu::Adapters::Cgpg.period_band("12th century"), "centuries band as before"
+    assert_nil Nabu::Adapters::Cgpg.period_band("pre-nicaean"), "the label is matched verbatim"
+  end
+
+  def test_the_pre_nicaean_envelope_projects_with_an_open_start
+    doc = { id: 1, metadata_json: JSON.generate(parse("urn:nabu:cgpg:pg8").metadata) }
+    row = Nabu::Store::TimelineBuilder::MetadataDates.axis_row(doc, :structured)
+    assert_equal [nil, 325, "Pre-Nicaean", "composition"],
+                 row.values_at(:not_before, :not_after, :date_raw, :date_class)
   end
 
   def test_without_a_carve_plan_every_volume_keeps_the_volume_grain

@@ -3,7 +3,8 @@
 #
 # Whole real files from SII_B_clean/ and SII_A_raw/3out/ (see README.md):
 # the 2026-10-12 first cut (url on master) and the 2026-10-21 widening
-# (url pinned to HEAD 76608102).
+# (url pinned to HEAD 76608102), plus the 2026-11-06 skeleton specimen (url
+# pinned to HEAD 84b25f53).
 source: sii-clean
 adapter_test: null
 retrieved: 2026-10-21
@@ -52,6 +53,9 @@ files:
     whole: true
   - path: SII_B_clean/SII08/DHARMA_INSSIIv08p0i0503.xml
     url: https://raw.githubusercontent.com/erc-dharma/south-indian-inscriptions/master/SII_B_clean/SII08/DHARMA_INSSIIv08p0i0503.xml
+    whole: true
+  - path: SII_B_clean/SII13/DHARMA_INSSIIv13p0i0032.xml
+    url: https://raw.githubusercontent.com/erc-dharma/south-indian-inscriptions/84b25f534542595a967bf1114ddc9fc0a1496947/SII_B_clean/SII13/DHARMA_INSSIIv13p0i0032.xml
     whole: true
   - path: SII_B_clean/SII17/DHARMA_INSSIIv17p0i0380.xml
     url: https://raw.githubusercontent.com/erc-dharma/south-indian-inscriptions/7660810200c43d60b8d711e710e3b3a05a0e6ddf/SII_B_clean/SII17/DHARMA_INSSIIv17p0i0380.xml

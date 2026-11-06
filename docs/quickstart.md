@@ -77,7 +77,8 @@ This fetches the upstream snapshot into `canonical/sblgnt/` (~11 MB on
 disk) and loads it into the catalog. On the reference box the entire first
 run — fetch, parse, load — took **about 3 seconds** and ended with 27
 books / 7,939 verses loaded, plus a `discovery:` accounting line (selected
-· skipped-by-rule · unrecognized) so nothing is silently dropped.
+· skipped-by-rule · quarantined · unrecognized) so nothing is silently
+dropped.
 
 Check the shelf:
 

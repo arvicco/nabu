@@ -223,6 +223,17 @@ module Nabu
       render names the sources the index covers; the lane is built by the
       reference rebuild (or `bundle exec rake index:translations`).
 
+      ANNOTATIONS (--annotations): search the passage-grain text layers a
+      source keeps in its annotations, declared per source — Cantus'
+      standardized spelling of each chant (so praesul finds the manuscript
+      that writes presul) and Korpus 16's marginal notes (Dalmatin's
+      loanword glosses, the scripture references). Each hit is the passage
+      itself, with the matched layer and the passage text under it. The
+      layers fold with their passage's own language, as the main search
+      does (jam finds iam in Latin; ſ needs no typing in Slovene). Same
+      grammar, filters and scope line as --translations; the lane is built
+      by the reference rebuild (or `bundle exec rake index:annotations`).
+
       Examples:
         nabu search μηνιν                          # finds μῆνιν, accents optional
         nabu search mh=nin --betacode              # the same, typed in Beta Code
@@ -236,6 +247,8 @@ module Nabu
                                                    #   English rendering says so
         nabu search --translations wettergott --source hittite-glossed
                                                    # Hittite lines glossed "storm-god"
+        nabu search --annotations praesul          # chants whose standardized text
+                                                   #   says praesul (manuscript: presul)
         nabu search --lemma λέγω --lang grc        # every attestation in the Greek
                                                    #   treebank: λέγουσι, εἶπας, εἰπεῖν…
         nabu search --lemma tu --lang lat          # te, tibi, tu across PROIEL Cicero
@@ -375,6 +388,10 @@ module Nabu
                           desc: "Search the translations held in passage ANNOTATIONS (coptic, cdli/ebl #tr, " \
                                 "hittite-glossed trans_de, corph, …); hits are the original passages — " \
                                 "composes with --lang/--source/--axis/--license/--limit only"
+    option :annotations, type: :boolean, default: false,
+                         desc: "Search the DECLARED annotation layers (cantus standardized spellings, " \
+                               "korpus16 margin notes); hits are the passages themselves — " \
+                               "composes with --lang/--source/--axis/--license/--limit only"
     option :withdrawn, type: :boolean, default: false,
                        desc: "Attic inspection: search WITHDRAWN passages only (upstream-gone " \
                              "documents, revision-pruned passages) — substring match over the " \
@@ -421,6 +438,7 @@ module Nabu
       date_basis_filter
       return gloss_search(options[:gloss]) if options[:gloss] && !options[:lemma] && query.empty?
       return translations_search(query) if options[:translations]
+      return annotations_search(query) if options[:annotations]
       if (options[:from] || options[:to] || options[:century] || options[:place] || facet_filters ||
           options[:date_basis]) &&
          (options[:near] || options[:lemma])
@@ -2750,7 +2768,7 @@ module Nabu
       # lane (Query::TranslationSearch). Desk rule: the precompiled lane or
       # the honest build hint — never a scan.
       def translations_search(query)
-        clash = translations_incompatible.select { |key| options[key] }
+        clash = (translations_incompatible + %i[annotations]).select { |key| options[key] }
         unless clash.empty?
           raise Thor::Error, "search: --translations searches the annotation-held translations lane and " \
                              "composes with --lang/--source/--axis/--license/--limit only (not " \
@@ -2803,11 +2821,67 @@ module Nabu
         say "translations index covers: #{covered.empty? ? 'no sources' : covered}"
       end
 
+      # search --annotations QUERY: the declared annotation layers lane
+      # (Query::AnnotationSearch). Same composition set and desk rule as
+      # --translations: the precompiled lane or the honest build hint.
+      def annotations_search(query)
+        clash = (translations_incompatible + %i[translations]).select { |key| options[key] }
+        unless clash.empty?
+          raise Thor::Error, "search: --annotations searches the declared annotation layers lane and " \
+                             "composes with --lang/--source/--axis/--license/--limit only (not " \
+                             "#{clash.map { |key| "--#{key.to_s.tr('_', '-')}" }.join(', ')})"
+        end
+        raise Thor::Error, "search: --annotations needs a query" if query.empty?
+
+        validate_license!(options[:license])
+        config = Nabu::Config.load
+        catalog = open_catalog(config)
+        fulltext = open_fulltext(config)
+        raise Thor::Error, "no index — run nabu sync or nabu rebuild" unless catalog && fulltext
+
+        validate_source!(catalog, options[:source])
+        axis_names, axis_slugs = axis_membership(command: "search", config: config)
+        searcher = Nabu::Query::AnnotationSearch.new(catalog: catalog, fulltext: fulltext)
+        results = searcher.run(query, lang: options[:lang], license: options[:license], source: options[:source],
+                                      sources: axis_slugs, limit: options[:limit].to_i)
+        print_annotation_results(results, scope: searcher.scope, axis: axis_names,
+                                          incomplete: searcher.incomplete_hint)
+        print_display_footer
+      rescue Nabu::Query::AnnotationSearch::IndexMissing => e
+        raise Thor::Error, "search: #{e.message}"
+      ensure
+        catalog&.disconnect
+        fulltext&.disconnect
+      end
+
+      # Render annotation hits: the passage (urn + [language]), the matched
+      # layer under its annotation key with the term bracketed, the
+      # passage's own leading text; then the footer, the credits, and ONE
+      # scope line naming what the lane covers.
+      def print_annotation_results(results, scope:, axis: nil, incomplete: nil)
+        if results.empty?
+          say "no matches"
+        else
+          results.each do |result|
+            say "#{result.urn}#{" [#{result.language}]" if result.language}" \
+                "#{"  — #{result.document_title}" if result.document_title}"
+            say "  #{result.layer}: #{display_snippet(result.snippet, result.language)}"
+            say "  text: #{display_snippet(truncate_line(result.text), result.language)}"
+          end
+          say "#{results.size} #{results.size == 1 ? 'hit' : 'hits'} in declared annotation layers " \
+              "(the urn is the passage — nabu show <urn>)#{facet_footer(nil, axis: axis)}"
+          print_search_credits(results)
+        end
+        say "note: #{incomplete}" if incomplete
+        covered = scope.map { |slug, passages| "#{slug} #{passages}" }.join(" · ")
+        say "annotations index covers: #{covered.empty? ? 'no sources' : covered}"
+      end
+
       # search --gloss WORD with no --lemma and no query: the token-gloss
       # lane (Query::GlossSearch) — every word upstream glosses WORD,
       # across lemmas. Same composition set as --translations.
       def gloss_search(gloss)
-        clash = (translations_incompatible + %i[translations]).select { |key| options[key] }
+        clash = (translations_incompatible + %i[translations annotations]).select { |key| options[key] }
         unless clash.empty?
           raise Thor::Error, "search: --gloss alone searches the token-gloss lane and composes with " \
                              "--lang/--source/--axis/--license/--limit only (not " \

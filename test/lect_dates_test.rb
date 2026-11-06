@@ -70,6 +70,42 @@ class LectDatesTest < Minitest::Test
     end
   end
 
+  # -- the interval-grain seam (shared with the dictionary shelf grain) --------
+
+  # #infer is the classification core every grain shares: one closed
+  # interval for one (code, source) answers a stage id or the skip reason.
+  # The document census and the dictionary shelf stager both run through
+  # it, so the containment law cannot drift between grains.
+  def test_infer_answers_the_single_containing_stage
+    assert_equal "lat:late", dates.infer(code: "lat", source: "edh", not_before: 250, not_after: 450)
+    assert_equal "en:early", dates.infer(code: "en", source: "leme", not_before: 1604, not_after: 1604)
+    assert_equal "en:late", dates.infer(code: "en", source: "leme", not_before: 1755, not_after: 1755)
+  end
+
+  def test_infer_answers_skip_reasons_for_everything_else
+    assert_equal :spans_bands, dates.infer(code: "lat", source: "edh", not_before: 100, not_after: 300)
+    assert_equal :spans_bands, dates.infer(code: "en", source: "leme", not_before: 1700, not_after: 1700),
+                 "the shared 1700 edge lies inside BOTH closed bands — honestly bare"
+    assert_equal :outside_bands, dates.infer(code: "en", source: "leme", not_before: 1477, not_after: 1477),
+                 "before en:early's 1500 floor no stage contains the year"
+    assert_equal :open_interval, dates.infer(code: "lat", source: "edh", not_before: 250, not_after: nil)
+    assert_equal :reversed_interval, dates.infer(code: "lat", source: "edh", not_before: 450, not_after: 250)
+    assert_equal :already_refined, dates.infer(code: "grc", source: "papyri-ddbdp", not_before: -100,
+                                               not_after: 100)
+  end
+
+  # The document census keeps its historical tally: a date no band contains
+  # still counts under spans_bands there (the CLI report and the suite's
+  # census tallies predate the finer reason).
+  def test_the_document_census_tallies_outside_bands_as_spans_bands
+    with_seeded_catalog do |catalog|
+      seed_document(catalog, slug: "edh", urn: "urn:t:edh:none", language: "en",
+                             not_before: 1400, not_after: 1450)
+      report = dates.census(catalog: catalog, lang: "en")
+      assert_equal({ spans_bands: 1 }, report.skipped)
+    end
+  end
+
   # -- open-ended bands (P84-3) -----------------------------------------------
 
   # The 2026-08-24 survey's find: two Menota documents (Þiðriks supplements

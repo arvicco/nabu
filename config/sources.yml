@@ -6372,6 +6372,11 @@ sii-clean:   # P122-3, 02-sources row 267
   # → 18,490 docs / 314,882 passages (clean 3,969 / 54,626 · raw 14,521 /
   # 260,256); 2,059 honest quarantines (798 edition-less clean stubs, 848
   # text-less, 406 "und", 2 lang-less, 4 mar-Latn, 1 sin-Latn).
+  # SKELETONS (re-census at HEAD 84b25f53, 2026-11-06): the edition-less
+  # stubs and text-less files are the dharma-epidoc placeholder grain,
+  # skipped by rule per volume — 18,903 discovered (6,452 skipped: 4,806
+  # superseded + 1,646 skeletons) → 18,495 docs; 408 quarantines remain,
+  # all true defects (406 "und" over real text, 2 lang-less).
 
 sillok:
   adapter: Nabu::Adapters::Sillok

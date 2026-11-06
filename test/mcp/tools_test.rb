@@ -2222,6 +2222,17 @@ module MCP
       lexica
     end
 
+    # The stdio server hands every slot as a lazy opener (a Proc resolved
+    # per call); a define MISS must still answer with the shelf note —
+    # the miss path once read the raw slot and killed the whole server.
+    def test_define_miss_answers_through_a_lazy_catalog_slot
+      seed_shelf
+      rig = tools(catalog: -> { @catalog })
+      miss = payload(rig.call("nabu_define", { "lemma" => "zzzznotaword" }))
+      assert_equal [], miss.fetch("entries")
+      assert_match(/no dictionary entry/, miss.fetch("note"))
+    end
+
     # P59-3: nabu_define's shelf-grain lect scope. lsj's grc resolves to
     # identity grc — under "grc", never under "lat"; the module absent is a
     # clean InvalidArguments.

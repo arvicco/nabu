@@ -63,6 +63,10 @@ files:
     url: https://raw.githubusercontent.com/kanripo/KR-Catalog/master/KR/KR6.txt
     whole: true
     trim: none (the small division index file, whole)
+  - path: KR-Catalog/general/sbck.org
+    url: https://raw.githubusercontent.com/kanripo/KR-Catalog/master/general/sbck.org
+    whole: false
+    trim: "org header + three complete entry blocks - KR1a0006 (column-0 KR_ID property), KR3a0001 (the multi-branch fixture text), KR2d0018 (an INDENTED property drawer, one of two in the real file) - with their section headings (366,049 B -> 2,346 B)"
   - path: KR-Catalog/KR/KR1a.txt
     url: https://raw.githubusercontent.com/kanripo/KR-Catalog/master/KR/KR1a.txt
     whole: false

@@ -19,10 +19,13 @@ require "fileutils"
 # Fixtures: whole real files (see the fixture README) — the grant-bearing
 # set of 2026-10-12 plus, at HEAD 76608102 (2026-10-21), a grant-less clean
 # edition, a range edition (Nos. 290-293), a bare-"tam" and a Dutch edition,
-# a Marathi edition (unheld code: quarantined), the raw layer's Telugu /
-# Kannada / Persian conversions and its two quarantine shapes, and the three
-# rejected grains: a raw file superseded by an exact clean stem, one
-# superseded by a clean range, and a clean ~DHARMA_ in-progress file.
+# a Marathi edition, the raw layer's Telugu / Kannada / Persian conversions
+# and its true-defect quarantine ("und" over real text), and the rejected
+# grains: a raw file superseded by an exact clean stem, one superseded by a
+# clean range, a clean ~DHARMA_ in-progress file, and three upstream
+# skeletons (a clean edition-less stub, a clean empty edition div, a raw
+# text-less conversion) — the dharma-epidoc family's placeholder grain,
+# skipped by rule.
 class SiiCleanTest < Minitest::Test
   include AdapterConformance
 
@@ -31,6 +34,7 @@ class SiiCleanTest < Minitest::Test
   AD = "#{PREFIX}INSSIIv22p0i0391".freeze
   TELUGU = "#{PREFIX}INSSIIv22p0i0349".freeze
   STUB = "#{PREFIX}INSSIIv22p0i0408".freeze
+  EMPTY_EDITION = "#{PREFIX}INSSIIv13p0i0032".freeze
   VILLAGE_FIRST = "#{PREFIX}INSSIIv17p0i0656".freeze
   SUMMARY = "#{PREFIX}INSSIIv17p0i0582".freeze
   AT_SHAPE = "#{PREFIX}INSSIIv08p0i0503".freeze
@@ -50,7 +54,9 @@ class SiiCleanTest < Minitest::Test
   CLEAN = [SAKA, AD, TELUGU, VILLAGE_FIRST, SUMMARY, AT_SHAPE, SAME,
            GRANTLESS, RANGE, BARE_TAM, DUTCH].freeze
   RAW = [RAW_TELUGU, RAW_SAKA_ABBR, RAW_KANNADA, RAW_SAKA, RAW_PERSIAN].freeze
-  QUARANTINED = [STUB, MARATHI, RAW_TEXTLESS, RAW_UND].freeze
+  QUARANTINED = [MARATHI, RAW_UND].freeze
+  SKELETONS = [STUB, EMPTY_EDITION, RAW_TEXTLESS].freeze
+  SKELETON_NOTE = "skeleton — no citable text yet (upstream placeholder)"
 
   BY_SA = "https://creativecommons.org/licenses/by-sa/4.0/"
 
@@ -98,7 +104,8 @@ class SiiCleanTest < Minitest::Test
   def test_discover_yields_every_clean_edition_and_the_unsuperseded_raw_conversions
     refs = adapter.discover(workdir).to_a
     assert_equal (CLEAN + RAW + QUARANTINED).sort, refs.map(&:id).sort,
-                 "urn:nabu:sii-clean:<stem sans DHARMA_/~DHARMA_>, one per inscription"
+                 "urn:nabu:sii-clean:<stem sans DHARMA_/~DHARMA_>, one per inscription, skeletons left out"
+    refute(refs.any? { |ref| SKELETONS.include?(ref.id) })
     assert(refs.all? { |ref| ref.source_id == "sii-clean" })
     assert_equal "SII22", refs.find { |ref| ref.id == SAKA }.metadata["volume"]
     assert_equal "SII04", refs.find { |ref| ref.id == RAW_TELUGU }.metadata["volume"],
@@ -112,7 +119,8 @@ class SiiCleanTest < Minitest::Test
     refute_includes ids, "#{PREFIX}INSSIIv04p0i0290", "inside the clean edition's Nos. 290-293 range"
     assert_includes ids, RAW_TELUGU, "No. 294 lies outside every clean range: the raw text stands in"
     skips = adapter.discovery_skips(workdir)
-    assert_equal 3, skips.skipped_by_rule, "raw 22.252 (exact stem) + raw 4.290 (range) + one ~DHARMA_"
+    assert_equal 6, skips.skipped_by_rule,
+                 "raw 22.252 (exact stem) + raw 4.290 (range) + one ~DHARMA_ + three skeletons"
     assert_equal 0, skips.unrecognized
     notes = skips.notes.join("\n")
     assert_match(/SII04: 1 raw conversion\(s\) superseded by a SII_B_clean edition/, notes)
@@ -163,9 +171,41 @@ class SiiCleanTest < Minitest::Test
     assert_equal "class:telugu maturity:undetermined", document.metadata["script_rendition"]
   end
 
-  def test_an_edition_less_stub_quarantines_loudly
-    error = assert_raises(Nabu::ParseError) { adapter.parse(ref_for(STUB)) }
-    assert_match(/no edition div/, error.message)
+  # Upstream's skeletons (the dharma-epidoc family's placeholder grain: no
+  # edition div, or one with no readable character) are a declared grain —
+  # skipped by rule and censused per volume and layer, never quarantined.
+  def test_upstream_skeletons_are_skipped_by_rule_in_both_layers
+    notes = adapter.discovery_skips(workdir).notes
+    assert_includes notes, "SII22: 1 clean edition(s): #{SKELETON_NOTE}", "22.408: commentary + bibliography only"
+    assert_includes notes, "SII13: 1 clean edition(s): #{SKELETON_NOTE}", "13.32: an empty edition div"
+    assert_includes notes, "SII25: 1 raw conversion(s): #{SKELETON_NOTE}", "25.241: heading only"
+  end
+
+  def test_a_clean_skeleton_still_holds_its_inscription_slot
+    Dir.mktmpdir do |dir|
+      clean = File.join(dir, "SII_B_clean", "SII22")
+      raw = File.join(dir, "SII_A_raw", "3out", "22")
+      FileUtils.mkdir_p([clean, raw])
+      FileUtils.cp(File.join(workdir, "SII_B_clean", "SII22", "DHARMA_INSSIIv22p0i0408.xml"), clean)
+      FileUtils.cp(File.join(workdir, "SII_A_raw", "3out", "22", "~DHARMA_INSSIIv22p0i0252.xml"),
+                   File.join(raw, "~DHARMA_INSSIIv22p0i0408.xml"))
+
+      assert_empty adapter.discover(dir).to_a, "the raw stand-in stays superseded behind the clean skeleton"
+      skips = adapter.discovery_skips(dir)
+      assert_equal 2, skips.skipped_by_rule, "one skeleton + one superseded, never counted twice"
+    end
+  end
+
+  def test_a_malformed_file_is_never_a_skeleton
+    Dir.mktmpdir do |dir|
+      volume = File.join(dir, "SII_B_clean", "SII22")
+      FileUtils.mkdir_p(volume)
+      source = File.read(File.join(workdir, "SII_B_clean", "SII22", "DHARMA_INSSIIv22p0i0408.xml"))
+      File.write(File.join(volume, "DHARMA_INSSIIv22p0i0408.xml"), source[0, source.length / 2])
+
+      assert_equal [STUB], adapter.discover(dir).map(&:id), "a truncated file goes on to parse and quarantine"
+      assert_equal 0, adapter.discovery_skips(dir).skipped_by_rule
+    end
   end
 
   def test_a_grantless_clean_edition_rides_the_repository_statement
@@ -226,9 +266,7 @@ class SiiCleanTest < Minitest::Test
     assert_equal "DHARWAR", meta["district"]
   end
 
-  def test_raw_quarantine_shapes
-    error = assert_raises(Nabu::ParseError) { adapter.parse(ref_for(RAW_TEXTLESS)) }
-    assert_match(/no citable text|und/, error.message)
+  def test_the_raw_true_defect_quarantine_stays
     error = assert_raises(Nabu::ParseError) { adapter.parse(ref_for(RAW_UND)) }
     assert_match(/und/, error.message)
   end
