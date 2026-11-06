@@ -1765,15 +1765,17 @@ sources:
         lists, herbals, glossed texts, antiquarian essays) lives only in the items'
         free-text dc.subject headings, not a typed field"}
     lect:
-      posture: identity
+      posture: dates
       note: "per-entry headword language from the <form>'s own LEME @lang (LemeXmlParser::
         LANGUAGES; lang-less forms read LEME's English default), the shelf taking its
         entries' majority — en 233 shelves, lat 28, und 16, ita 6, fra 6, enm 5, hbo/grc/ang 3 …
-        English shelves stay bare en DELIBERATELY: the dictionary lect ladder resolves at
-        (shelf language, source) grain only, and a source-wide en → en:early row would
-        mislabel the 1700–1755 lexicons (Johnson, Bailey, Scott-Bailey — 193,037 of the
-        512,005 English entries, census 2026-11-05) as Early Modern English; the
-        per-lexicon year rides every entry (lexicon_year) for a future shelf-grain staging"
+        The English shelves stage PER SHELF by date band off their own lexicon_year (the
+        leme-lexicon-year dictionary_date_bands rule in lect_facet_rules.yml — a source-wide
+        en → en:early row would mislabel the 1700–1755 lexicons): 215 shelves 1500–1699 →
+        en:early, 12 shelves 1702–1755 (Kersey, Bailey, Johnson, Scott-Bailey) → en:late,
+        census 2026-11-06; the six pre-1500 incunable prints stay bare en (below every en
+        band). The other shelf languages stay identity deliberately — their headwords are
+        the language described, not the compiler's own, so the year is no stage evidence"
     dating:
       posture: dated
       note: "every entry carries its work's typed year (lexicon_year) — the item's
@@ -2166,13 +2168,16 @@ sources:
     lect: {posture: dates, note: "the date-band inference stages the volumes from upstream's own
         per-volume century labels: the 25 volumes labeled 5th–15th century fall inside grc:byz
         [330, 1453]; the two 4th-century volumes (Eusebius, Epiphanius) span the koi/byz
-        boundary and stay bare grc, as do the 6 undated Pre-Nicaean volumes. No facet rule:
+        boundary and stay bare grc, as do the 6 Pre-Nicaean volumes (their open-start
+        envelope is no closed interval, so no stage infers). No facet rule:
         a label map would only repeat the band. Carved works inherit their volume's band;
         the dateless residua stay bare grc"}
     dating: {posture: dated, note: "the per-volume Dates label of upstream's Works and Authors
         table, transcribed (VOLUMES) → a century envelope, date_class composition (MetadataDates
-        :structured; 27 of 33 volumes — the 6 Pre-Nicaean name no century). Transcribed, not
-        corrected: PG 87.1 (Procopius of Gaza, c. 465–528) carries upstream's 7th century.
+        :structured; 27 of 33 volumes); the 6 Pre-Nicaean volumes name no century but a crisp
+        right edge — Nicaea, 325 — and band as an OPEN-START envelope (not_after 325, the label
+        raw). Transcribed, not corrected: PG 87.1 (Procopius of Gaza, c. 465–528) carries
+        upstream's 7th century, PG 3 (ps.-Dionysius, c. 500) upstream's Pre-Nicaean.
         A carved work inherits its volume's label (the plan carries no per-work date);
         a residuum carries none"}
     places: {posture: unplaced, note: "the deposit names no place — no imprint, no provenance,
@@ -3373,8 +3378,9 @@ sources:
         bound"}
     places: {posture: linked, note: "the sending placeName (1,761 of 1,869) joined by its key
         through upstream's own data/csv/indices.csv register → the register label + its
-        GeoNames URL (1,685 linked; geonames: ref); the receiving place rides
-        place_received(_ref), metadata only. In-text rs type=place mentions ride the
-        passages as places"}
+        GeoNames URL (1,685 linked; geonames: ref); the receiving place (place_received +
+        its GeoNames URL, 1,291 letters / 1,260 linked) rides its OWN place-only axis row
+        (axis_source socinian-letters-received) beside the sent row, never merged — the
+        oracc-sender precedent. In-text rs type=place mentions ride the passages as places"}
     script: {posture: implied, note: "Latin script throughout; the Greek (266 foreign grc spans)
         and Hebrew (9) quotations inside Latin letters ride verbatim in their own scripts"}

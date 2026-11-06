@@ -139,13 +139,16 @@ module Nabu
     # passages_translations rows. The token-gloss lane (store/gloss_index.rb)
     # shapes only token_glosses rows; its source registry
     # (query/token_glosses.rb) sits under an excluded dir, so it is named
-    # here to stay covered by the index digest.
+    # here to stay covered by the index digest. The annotations lane
+    # (store/annotation_index.rb) and its key registry (annotation_keys.rb
+    # — read by that lane alone) shape only passages_annotations rows.
     INDEX_FILES = %w[
       store/indexer.rb store/alignment_indexer.rb store/lemma_frequencies.rb
       store/reflex_roots_indexer.rb store/silver_lemma_indexer.rb
       store/cjk_bigrams.rb store/index_delta.rb
       store/translation_index.rb translation_keys.rb
       store/gloss_index.rb query/token_glosses.rb
+      store/annotation_index.rb annotation_keys.rb
     ].freeze
 
     # The shared derivation core is EVERYTHING under lib/nabu/ except

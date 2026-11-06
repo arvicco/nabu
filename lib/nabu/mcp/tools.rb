@@ -2082,9 +2082,12 @@ module Nabu
       end
 
       def define_miss_note(lemma)
-        langs = @catalog[:dictionaries].distinct.order(:language).select_map(:language)
+        # The slot resolves per call like every other reader here — the raw
+        # @catalog may be a lazy opener Proc, and a miss once crashed on it.
+        catalog = resolve(@catalog)
+        langs = catalog[:dictionaries].distinct.order(:language).select_map(:language)
         "no dictionary entry for #{lemma.inspect} — the shelf holds " \
-          "#{@catalog[:dictionaries].count} dictionaries (#{langs.join(', ')}); " \
+          "#{catalog[:dictionaries].count} dictionaries (#{langs.join(', ')}); " \
           "diacritics are optional; the lemma must be a dictionary form " \
           "(nabu_search with lemma: finds attestations)"
       end

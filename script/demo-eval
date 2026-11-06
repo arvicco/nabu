@@ -1,0 +1,69 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+# The demo eval pack runner (Nabu::Ops::DemoEval): replays every task in
+# eval/demo/pack.yml against a running MCP server and checks each answer.
+# Dependency-free (stdlib + lib/nabu/ops/demo_eval.rb), like
+# script/demo-smoke, so it runs on a bare Ruby with no bundle.
+#
+#   script/demo-eval [--image IMAGE] [-- DOCKER_RUN_ARGS...]   # docker run -i --rm IMAGE (default)
+#   script/demo-eval --url http://localhost:8080/mcp           # a server in HTTP mode
+#   script/demo-eval --command "bin/nabu mcp"                  # a local stdio server
+#   script/demo-eval --only search-latin-phrase,show-range     # a subset
+#   script/demo-eval --questions                               # the agent-facing questions (JSON), no server
+#
+# Exit 0 when every task passes, 1 otherwise.
+
+require "json"
+require "optparse"
+require "shellwords"
+require_relative "../lib/nabu/ops/demo_eval"
+
+eval_pack = Nabu::Ops::DemoEval
+args = ARGV.dup
+split = args.index("--")
+docker_args = split ? args.slice!(split..)[1..] : []
+options = { image: eval_pack::DEFAULT_IMAGE, pack: eval_pack::PACK }
+OptionParser.new do |opts|
+  opts.banner = "usage: script/demo-eval [--image IMAGE | --url URL | --command CMD] [--only IDS] [-- DOCKER_ARGS]"
+  opts.on("--image IMAGE", "docker image to run over stdio (default #{eval_pack::DEFAULT_IMAGE})") do |v|
+    options[:image] = v
+  end
+  opts.on("--url URL", "streamable-HTTP endpoint, e.g. http://localhost:8080/mcp") { |v| options[:url] = v }
+  opts.on("--command CMD", "local stdio server command, e.g. \"bin/nabu mcp\"") { |v| options[:command] = v }
+  opts.on("--pack PATH", "pack file (default eval/demo/pack.yml)") { |v| options[:pack] = v }
+  opts.on("--only IDS", "comma-separated task ids") { |v| options[:only] = v.split(",").map(&:strip) }
+  opts.on("--questions", "print the agent-facing questions as JSON and exit") { options[:questions] = true }
+end.parse!(args)
+
+begin
+  tasks = eval_pack::Pack.load(options[:pack])
+  if options[:only]
+    unknown = options[:only] - tasks.map(&:id)
+    abort "unknown task id(s): #{unknown.join(', ')}" unless unknown.empty?
+    tasks = tasks.select { |task| options[:only].include?(task.id) }
+  end
+  if options[:questions]
+    puts JSON.pretty_generate(eval_pack.questions(tasks))
+    exit 0
+  end
+
+  opener =
+    if options[:url]
+      ->(&blk) { eval_pack::HttpSession.open(options[:url], &blk) }
+    else
+      argv = if options[:command]
+               Shellwords.split(options[:command])
+             else
+               ["docker", "run", "-i", "--rm", *docker_args,
+                options[:image]]
+             end
+      ->(&blk) { eval_pack::StdioSession.open(argv, &blk) }
+    end
+  results = eval_pack::Runner.new(tasks: tasks, opener: opener).run
+  puts eval_pack.render(results)
+  exit(results.all? { |result| result.status == :pass } ? 0 : 1)
+rescue Nabu::Error => e
+  warn "demo eval FAILED: #{e.message}"
+  exit 1
+end

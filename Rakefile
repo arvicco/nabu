@@ -320,6 +320,44 @@ namespace :index do
     fulltext&.disconnect
   end
 
+  # The annotations lane (`search --annotations`): the declared searchable
+  # annotation layers (Nabu::AnnotationKeys' sources). With no argument,
+  # the index:translations shape — the whole lane re-derived standalone
+  # over the live catalog, stage stamp advanced. With slugs
+  # (`rake "index:annotations[cantus,korpus16]"`), the targeted builder:
+  # each named source's slice derived alone (the lane created if absent),
+  # every other slice untouched, the stamp left for a whole-lane pass.
+  # Reads only those sources' annotations; writes only the fulltext
+  # passages_annotations tables.
+  desc "Re-derive the declared annotation layers index (search --annotations); [slug,…] = those sources only"
+  task :annotations do |_task, args|
+    $LOAD_PATH.unshift(File.expand_path("lib", __dir__))
+    require "nabu"
+
+    config = Nabu::Config.load
+    catalog = Nabu::Store.connect(config.catalog_path, readonly: true)
+    fulltext = Nabu::Store.connect_fulltext(config.fulltext_path)
+    index = Nabu::Store::AnnotationIndex
+    started = Process.clock_gettime(Process::CLOCK_MONOTONIC)
+    slugs = args.extras
+    if slugs.empty?
+      summary = index.rebuild!(catalog: catalog, fulltext: fulltext, stamp: true)
+      label = "#{summary.fetch(:passages)} passages from #{summary.fetch(:sources)} sources"
+    else
+      counts = slugs.map { |slug| index.build_source!(catalog: catalog, fulltext: fulltext, slug: slug) }
+      label = "#{counts.sum} passages from #{slugs.join(', ')}"
+    end
+    elapsed = Process.clock_gettime(Process::CLOCK_MONOTONIC) - started
+    puts "index:annotations done — #{label} in " \
+         "#{Object.new.extend(Nabu::DurationFormat).format_duration(elapsed)}"
+    fulltext[index::SCOPE_TABLE].order(:slug).each do |row|
+      puts "  #{row.fetch(:slug)}: #{row.fetch(:passages)}"
+    end
+  ensure
+    catalog&.disconnect
+    fulltext&.disconnect
+  end
+
   # The token-gloss lane (`search --gloss WORD` with no query): the
   # upstream token glosses of the Query::TokenGlosses sources re-derived
   # standalone over the live catalog — the index:translations shape:
@@ -466,11 +504,16 @@ end
 # The same task runs the GH watch-list staleness guard
 # (Nabu::Ops::WatchListCheck): any still-watched row whose checked date is
 # over a week old fails the task, named; boards without the section skip.
+# And the phase-register freshness probe (Nabu::Ops::PhaseRegisterCheck):
+# the register's newest `## P<N>` row must reach the highest phase merged
+# on the local main branch (git log, offline); no register file skips.
 namespace :boards do
-  desc "Gate check: register 'Next number' headers vs minted numbers + GH watch-list staleness (stale = exit 1)"
+  desc "Gate check: register 'Next number' headers vs minted numbers + GH watch-list staleness " \
+       "+ phase-register freshness vs merged phases (stale = exit 1)"
   task :check do
     require_relative "lib/nabu/ops/board_check"
     require_relative "lib/nabu/ops/watch_list_check"
+    require_relative "lib/nabu/ops/phase_register_check"
     dir = ENV.fetch("BOARDS_DIR", File.expand_path(".docs", __dir__))
     report = Nabu::Ops::BoardCheck.new(boards_dir: dir).run
     if report.skipped
@@ -482,9 +525,15 @@ namespace :boards do
     watch = Nabu::Ops::WatchListCheck.new(boards_dir: dir).run
     watch.findings.each { |finding| puts "STALE  watch list #{finding}" }
 
+    phases = Nabu::Ops::PhaseRegisterCheck.new(
+      register_path: File.join(dir, Nabu::Ops::PhaseRegisterCheck::FILE), repo: __dir__
+    ).run
+    phases.findings.each { |finding| puts "STALE  phase register #{finding}" }
+
     failures = []
     failures << "#{report.findings.size} stale register header(s)" unless report.clean?
     failures << "#{watch.findings.size} stale GH watch row(s)" unless watch.clean?
+    failures << "phase register behind the merged phases" unless phases.clean?
     abort "boards:check — #{failures.join(', ')}" unless failures.empty?
 
     puts "boards:check — #{report.registers.size} register header(s) current: #{report.registers.join(', ')}"
@@ -493,6 +542,12 @@ namespace :boards do
     else
       puts "boards:check — #{watch.rows} GH watch row(s) checked within " \
            "#{Nabu::Ops::WatchListCheck::MAX_AGE_DAYS} days"
+    end
+    if phases.skipped
+      puts "boards:check — no #{Nabu::Ops::PhaseRegisterCheck::FILE} on the boards; phase-register probe skipped"
+    else
+      merged = phases.highest_merged ? "P#{phases.highest_merged}" : "none"
+      puts "boards:check — phase register current: newest row P#{phases.newest_row}, highest merged phase #{merged}"
     end
   end
 end
@@ -811,6 +866,21 @@ namespace :demo do
     sh "command -v mcp-publisher >/dev/null 2>&1 || brew install mcp-publisher"
     sh "mcp-publisher login github"
     sh "mcp-publisher publish ./server.json"
+  end
+
+  # The demo eval pack (eval/demo/pack.yml) against a running server —
+  # script/demo-eval is the entry point; this task forwards to it.
+  # IMAGE (default :latest over docker stdio), MCP_URL (an HTTP-mode
+  # server) or MCP_COMMAND (a local stdio server) picks the target; ONLY
+  # narrows to comma-separated task ids.
+  desc "Run the demo eval pack against a server (IMAGE | MCP_URL | MCP_COMMAND; ONLY=ids)"
+  task :eval do
+    argv = [RbConfig.ruby, File.join(__dir__, "script", "demo-eval")]
+    { "MCP_URL" => "--url", "MCP_COMMAND" => "--command", "IMAGE" => "--image", "ONLY" => "--only" }.each do |var, flag|
+      value = ENV.fetch(var, "").strip
+      argv += [flag, value] unless value.empty?
+    end
+    sh(*argv)
   end
 
   # The MCP stdio smoke on its own (initialize → tools/list → nabu_status).
