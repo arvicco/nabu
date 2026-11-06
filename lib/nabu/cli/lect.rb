@@ -186,6 +186,54 @@ module Nabu
       end
     end
 
+    desc "stage-dictionaries", "Stage dated dictionary shelves by date band from their own year (--dry-run first)"
+    long_desc <<~HELP, wrap: false
+      The dictionary SHELF grain of date-band staging: the
+      dictionary_date_bands rules in config/lect_facet_rules.yml name the
+      sources, the shelf codes and the entry field carrying each shelf's
+      own year (LEME: lexicon_year). A covered shelf whose code resolves to
+      a bare anchor and whose year sits INSIDE EXACTLY ONE attested stage
+      band takes that stage on its dictionary_stats row (basis
+      rule:date-band, the dating as note); anything else keeps the bare
+      code with the reason declared. The same pass runs in every rebuild,
+      builders:refresh and dictionary-bearing sync — this command re-derives
+      the covered sources' census rows on demand. --dry-run writes nothing.
+    HELP
+    option :source, banner: "SLUG", desc: "scope to one covered source"
+    option :dry_run, type: :boolean, default: false
+    def stage_dictionaries
+      config = Nabu::Config.load
+      guard_catalog_free!(config) unless options[:dry_run]
+      registry = require_lects_module!(config)
+      raise Thor::Error, "lect stage-dictionaries: no catalog at #{config.catalog_path}" unless
+        File.exist?(config.catalog_path)
+
+      shelf_dates = Nabu::LectShelfDates.load_default(config: config)
+      if shelf_dates.nil? || shelf_dates.rules.empty?
+        raise Thor::Error, "lect stage-dictionaries: no dictionary_date_bands rules in lect_facet_rules.yml"
+      end
+
+      begin
+        shelf_dates.validate!(registry)
+      rescue Nabu::Error => e
+        raise Thor::Error, e.message
+      end
+      sources = options[:source] ? [options[:source]] : shelf_dates.rules.flat_map(&:sources).uniq
+      catalog = Nabu::Store.connect(config.catalog_path)
+      render_shelf_stagings(catalog, shelf_dates, registry, sources)
+      if options[:dry_run]
+        say "dry run — nothing written (drop --dry-run to re-derive the census rows)"
+      else
+        Nabu::Store.migrate!(catalog)
+        lects = Nabu::Lects.load_default(config: config)
+        rows = sources.sum do |slug|
+          Nabu::Store::DictionaryStats.refresh_source!(catalog: catalog, lects: lects, slug: slug,
+                                                       shelf_dates: shelf_dates)
+        end
+        say "dictionary stats: #{rows} rows re-derived (#{sources.join(', ')})"
+      end
+    end
+
     desc "materialize", "Recompute the derived lect facet (document_facets 'lect') from the current resolution"
     long_desc <<~HELP, wrap: false
       Flattens the whole lect resolution — journal rulings, per-source
@@ -336,6 +384,27 @@ module Nabu
         Nabu::Store.assert_writable!(config.catalog_path)
       rescue Nabu::CatalogBusyError => e
         raise Thor::Error, e.message
+      end
+
+      # The stage-dictionaries census: staged shelves by (source, code,
+      # lect), bare ones by reason — shelves and live entries each.
+      def render_shelf_stagings(catalog, shelf_dates, registry, sources)
+        scope = catalog[:dictionaries].where(source_id: catalog[:sources].where(slug: sources).select(:id))
+        stagings = shelf_dates.stagings(catalog: catalog, registry: registry, dictionaries: scope)
+        entries = catalog[:dictionary_entries].where(dictionary_id: stagings.keys, withdrawn: false)
+                                              .group_and_count(:dictionary_id).as_hash(:dictionary_id, :count)
+        groups = stagings.values.group_by do |staging|
+          label = staging.staged? ? "→ #{staging.lect_id}" : "bare (#{staging.reason.to_s.tr('_', ' ')})"
+          [staging.source, staging.code, label]
+        end
+        groups.sort_by { |(source, code, label), _| [source, code, label.start_with?("bare") ? 1 : 0, label] }
+              .each do |(source, code, label), members|
+          shelves = members.size
+          say format("  %<source>-12s %<code>-6s %<label>-26s %<shelves>d shelf%<s>s  %<entries>d entries",
+                     source: source, code: code, label: label, shelves: shelves, s: shelves == 1 ? "" : "s",
+                     entries: members.sum { |staging| entries.fetch(staging.dictionary_id, 0) })
+        end
+        say "  covered shelves: #{stagings.size} (#{stagings.values.count(&:staged?)} staged)"
       end
 
       def require_lects_module!(config)

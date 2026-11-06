@@ -414,7 +414,9 @@ class PosturesTest < Minitest::Test
                  "lat:ren / lat:new, the memis shape): 183→184; " \
                  "leme ADDED P160 — identity, per-entry headword languages (English shelves bare en: " \
                  "the shelf-grain ladder cannot date-band, and a source-wide en:early row would " \
-                 "mislabel the 1700–1755 lexicons): 184→185"
+                 "mislabel the 1700–1755 lexicons): 184→185; leme MOVES identity → dates — the " \
+                 "shelf-grain date-band rule stages its English shelves by their own lexicon_year " \
+                 "(en:early / en:late), the other shelf languages identity: dates 28→29, identity 136→135"
     # The epigraphic-belt registry package (merged + canonical-synced
     # 2026-10-18, the add-then-retire shape within one phase) retires both
     # P130 pendings, and the ociana-script rule + the ig-cyprus override
@@ -488,6 +490,8 @@ class PosturesTest < Minitest::Test
     # the sent-date band — lat:new, de:early/new, pl:mid, fr:cls from 1600): 26→27.
     # noscemus joins dates (bare lat, staged lat:ren / lat:new by imprint year): 27→28.
     # leme joins identity (per-entry headword languages, English shelves bare en): 135→136.
-    assert_equal({ "dates" => 28, "codemap" => 21, "identity" => 136 }, by_posture)
+    # leme moves to dates — the dictionary shelf grain stages its English shelves by
+    # lexicon_year onto en:early / en:late: dates 28→29, identity 136→135.
+    assert_equal({ "dates" => 29, "codemap" => 21, "identity" => 135 }, by_posture)
   end
 end

@@ -665,3 +665,41 @@ rules:
       # Zahiri Samarqandi (d. 599 AH per the poets list): the Sindbadnameh
       # is dated c. 1160 — the same edge reasoning.
       "ظهیری سمرقندی": "fa:early"
+
+# ── The dictionary SHELF grain (Nabu::LectShelfDates). Dictionary lect
+# resolution otherwise runs at (shelf language, source) grain only, so a
+# source holding shelves from several centuries cannot be staged by one
+# override. These rules stage each covered shelf by date band FROM THE
+# SHELF'S OWN YEAR — the document grain's containment law (LectDates#infer,
+# basis rule:date-band): the year hull inside exactly one attested banded
+# stage of the bare anchor → that stage; no year, an unparseable value, a
+# year no band reaches or one on a shared band edge → the bare code stays,
+# the reason declared in the dictionary_stats row's lect_note. Compiled
+# into dictionary_stats (lect / lect_basis / lect_note) wherever that
+# census derives — never the lect journal (shelves are not documents).
+# Keys: sources, codes (the shelf codes a year may stage — opt-in: a
+# dictionary's year dates its compiler's own language, never the classical
+# headwords of a Latin or Greek dictionary), field (the entry annotation
+# carrying the shelf's year).
+dictionary_date_bands:
+  # LEME: every entry carries its lexicon's typed year (lexicon_year — the
+  # TSpace item's dc.date.created, the base edition LEME transcribes;
+  # Leme::DATE_ERRATA the one correction from upstream's own data). The
+  # English shelves (233, census 2026-11-06: 215 dated 1500–1699, 12
+  # dated 1701–1755, 6 before 1500) are the compilers' contemporary
+  # English: the registry's en:early [1500, 1700] / en:late [1700, 1900]
+  # bands stage them — Cawdrey (1604), Bullokar (1616), Cockeram (1623),
+  # Blount (1656), Phillips (1658) onto en:early; Kersey (1702), Bailey
+  # (1726, 1737), Johnson (1755) onto en:late. The six pre-1500 English
+  # shelves (the incunable prints 1477–1499: Lydgate, Higden, the Book of
+  # St. Albans, the Promptorium Parvulorum) fall below every en stage and
+  # stay bare en — whether those prints belong under enm is a judgment for
+  # the registry, not this rule. A shelf dated exactly 1700 would sit in both closed bands
+  # and stay bare (none does today). The other shelf languages (lat 28,
+  # ita/fra 6 each, hbo/grc/ang, ...) are deliberately NOT covered: their
+  # headwords are the language described, not the compiler's own, so the
+  # year is no stage evidence for them.
+  - id: leme-lexicon-year
+    sources: [leme]
+    codes: [en]
+    field: lexicon_year
