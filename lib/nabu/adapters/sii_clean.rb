@@ -59,6 +59,24 @@ module Nabu
     # 1 sin-Latn). Mined: 1,536 dated (clean 487 · raw 1,049), 10,380
     # villages (clean 1,833 · raw 8,547).
     #
+    # == Skeletons (re-census at HEAD 84b25f53, 2026-11-06)
+    #
+    # The edition-less stubs and the text-less files are upstream's
+    # SKELETONS — the dharma-epidoc family's placeholder grain
+    # (DharmaEpidocParser, "Skeletons": no edition div, or one with no
+    # readable character) — and are skipped BY RULE at discovery, censused
+    # per volume and layer; quarantine is left to true defects. At that
+    # HEAD (4,801 clean · 20,554 raw, 4,806 superseded) the 2,054 former
+    # quarantines split: 1,646 skeletons (clean 816 = 798 edition-less + 18
+    # empty-edition; raw 830) and 408 true defects ("und" over real text: 6
+    # clean, 400 raw; 2 lang-less clean). No skeleton ever parsed, so no
+    # document changes. Reconciliation at 84b25f53: 4,801 + 20,554 = 25,355
+    # per-inscription files = 18,903 refs + 6,452 skipped by rule (4,806
+    # superseded + 1,646 skeletons); 18,903 refs → 18,495 documents + 408
+    # quarantines. A clean skeleton still holds its inscription's slot —
+    # its raw stand-in stays superseded (the stubs' raw files were
+    # censused text-less or "und" above, so nothing is lost).
+    #
     # == Licence (the 2026-10-21 statement)
     #
     # Until 2026-10-21 the repo carried no licence and only files with an
@@ -380,31 +398,36 @@ module Nabu
         name.sub(/\s+(?:NEAR|ALIAS)\s+.*\z/i, "").strip
       end
 
+      # A clean SKELETON still holds its inscription's slot (coverage reads
+      # every clean file): its raw stand-in was censused text-less too
+      # (class comment), so it stays superseded rather than surfacing as a
+      # second placeholder under the same urn.
       def discover(workdir, &block)
         return enum_for(:discover, workdir) unless block
 
-        clean = clean_paths(workdir)
-        clean.each { |path| block.call(ref_for(path, layer: "edition")) }
-        held = coverage(clean)
-        raw_paths(workdir).each do |path|
-          block.call(ref_for(path, layer: "raw")) unless superseded?(path, held)
+        layers(workdir).each do |layer, paths|
+          paths.each { |path| block.call(ref_for(path, layer: layer)) }
         end
       end
 
       # Every rejected grain the fetched tree can hold, counted with its
-      # note: superseded raw conversions per volume, in-progress clean files
-      # and stray xml one line each.
+      # note: superseded raw conversions and skeletons per volume (and
+      # layer), in-progress clean files and stray xml one line each.
       def discovery_skips(workdir)
         held = coverage(clean_paths(workdir))
         superseded = raw_paths(workdir).select { |path| superseded?(path, held) }
+        skeletons = live_paths(workdir, held).flat_map do |layer, paths|
+          paths.select { |path| skeleton?(path) }.map { |path| [layer, path] }
+        end
         strays = clean_xml(workdir).reject { |path| prefixed?(path, FILE_PREFIX) } +
                  raw_xml(workdir).reject { |path| prefixed?(path, RAW_PREFIX) }
         notes = superseded.group_by { |path| volume_of(path) }.sort.map do |volume, paths|
           "#{volume}: #{paths.size} raw conversion(s) superseded by a SII_B_clean edition " \
             "(one inscription, one document)"
         end
+        notes += skeleton_notes(skeletons)
         notes += strays.map { |path| stray_note(path) }
-        Nabu::Adapter::DiscoverySkips.new(skipped_by_rule: superseded.size + strays.size,
+        Nabu::Adapter::DiscoverySkips.new(skipped_by_rule: superseded.size + skeletons.size + strays.size,
                                           unrecognized: 0, notes: notes)
       end
 
@@ -431,6 +454,33 @@ module Nabu
       private
 
       def sparse_paths = SPARSE
+
+      # The documents discover yields, per layer: every clean edition and
+      # each unsuperseded raw conversion, upstream's skeletons left out.
+      def layers(workdir)
+        held = coverage(clean_paths(workdir))
+        live_paths(workdir, held).to_h { |layer, paths| [layer, paths.reject { |path| skeleton?(path) }] }
+      end
+
+      # The candidate files before the skeleton rule — the "edition" /
+      # "raw" pair both discover and the skip census read.
+      def live_paths(workdir, held)
+        [["edition", clean_paths(workdir)],
+         ["raw", raw_paths(workdir).reject { |path| superseded?(path, held) }]]
+      end
+
+      # The dharma-epidoc family's placeholder grain (DharmaEpidocParser,
+      # "Skeletons"): no edition div, or one with no readable character.
+      def skeleton?(path) = DharmaEpidocParser.skeleton_file?(path)
+
+      # One line per volume and layer — the clean slice carries ~800 of
+      # them, the raw layer ~830, so per-file lines would bury the census.
+      def skeleton_notes(skeletons)
+        skeletons.group_by { |layer, path| [volume_of(path), layer] }.sort.map do |(volume, layer), files|
+          noun = layer == "edition" ? "clean edition(s)" : "raw conversion(s)"
+          "#{volume}: #{files.size} #{noun}: #{DharmaEpidocParser::SKELETON_NOTE}"
+        end
+      end
 
       def ref_for(path, layer:)
         stem = File.basename(path, ".xml")
