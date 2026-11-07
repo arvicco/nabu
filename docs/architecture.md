@@ -1904,7 +1904,12 @@ provenance table on its own track (`db/mined_migrate`, counter table
 runs' finish time), engine marker, the `LinkStamps` preimage at mine time
 (code digest, resolved params, member content identities, index
 identity), the members' `sources.last_ingest_identity` (the cheap
-identity health compares), and its origin (mine | migrated). The ONE
+identity health compares), the language-slice identity of the text the
+run consumed (`slice_json`, mined migration 002: the scope's language
+lane — its `lang` param or reuse profile's language, every language when
+neither — as one `[count, max revision]` pair per member source holding
+any lane passage), its measured elapsed seconds, and its origin (mine |
+migrated). The ONE
 write gateway is `Nabu::Store::MinedLinks` (`#mine!`, `#migrate!`; the
 writable opener is private), reached only through `Nabu::MinedLayers`
 (guard-tested). **Triggers:** `nabu links mine SCOPE` re-mines a recorded
@@ -1930,9 +1935,21 @@ count, then drops them from the journal in one transaction; idempotent
 finds the layer already current and only drops the journal copy); a
 layer whose journal stamp still matches the live catalog also records
 its ingest identities. **Health:** one `mined_layer` finding per layer —
-its age, member sources re-ingested since, producer code moved since, and
-an orphaned-edge estimate from a 200-edge sample (info when current, soft
-when stale) — plus `mined_layers_unmigrated` while heavy runs wait.
+its age, member sources whose content moved since, producer code moved
+since, and an orphaned-edge estimate from a 200-edge sample (info when
+current, soft when stale; a stale line carries `re-mine ≈ <duration>,
+measured` when the layer recorded its mine time) — plus
+`mined_layers_unmigrated` while heavy runs wait. Member staleness is
+two-step: the members whose ingest identity moved are PROBED for their
+language slice, and only a moved slice stales the layer — a reference
+source's or another language's re-ingest reads "current (N re-ingested
+member source(s), lat slice unchanged)". A layer mined before the slice
+was recorded keeps the coarse per-source verdict and says so ("identity
+unrecorded at slice grain, precise from its next mine"). `nabu links mine
+--stale` (owner-fired) grades every recorded heavy scope this way and
+re-mines the stale ones serially through the same `links mine SCOPE`
+path, announcing each; current and never-mined scopes are skipped with a
+line.
 
 **Per-scope stamps (`Nabu::LinkStamps`, owner ruling 2026-10-19).** The
 links stage is the heaviest corpus stage of a replay (3h46m of the
