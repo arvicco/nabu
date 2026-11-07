@@ -53,7 +53,7 @@ module Nabu
 
       # Same candidate over-fetch as TranslationSearch: the catalog side can
       # thin the window; exhaustion is ANNOUNCED via incomplete_hint.
-      # census: 933327, 2026-11-07, live passages carrying a declared key across the 20
+      # census: 2336455, 2026-11-07, live passages carrying a declared key across the 31
       # registry sources (AnnotationKeys) — a window of limit×10 bm25 hits
       INNER_LIMIT_FACTOR = 10
 
