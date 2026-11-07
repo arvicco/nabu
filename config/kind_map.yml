@@ -2516,10 +2516,25 @@ sources:
       '\A(?!.*(?:History and criticism|Controversial literature|Humor))Cookery\b': scholarly/recipe  # 6
       # -- historiography
       '\A(?!.*History and criticism).* -- Biography\.?(?: --|\z)': historiography  # 30
+      # -- oratory, catechesis, theology (the heads ruled 2026-11-07; live census same date)
+      '\A(?!.*History and criticism)Fourth of July orations\b': oratory
+      #   162 — the Independence Day oration, the early republic's civic speech form
+      #   ("Fourth of July orations -- 1798."), one dated heading per year
+      '\A(?!.*(?:History and criticism|Humor))(?:.* -- )?Catechisms\b': catechesis
+      #   33 — "Catechisms.", "Congregational churches -- Catechisms", "… -- Catechisms
+      #   and creeds" (the eebo-tcp rule)
+      '\A(?!.*(?:History and criticism|Humor))(?:.* -- )?Creeds\b': catechesis
+      #   6 — confessions of faith, the catechesis head's ruled grain (the eebo-tcp rule)
+      '\A(?!.*History and criticism).* -- Doctrinal and controversial works\b': theology
+      #   180 — the older LCSH combined subdivision under a church (Society of Friends 123,
+      #   Church of England 19 …): doctrine AND controversy in one heading, so the bare head
+      '\A(?!.*History and criticism)Apologetics\b': theology/apologetics  # 11 — "Apologetics -- 18th century."
     # Left uncovered on purpose (counted, never filed unmapped): Broadsides (a format),
     # Juvenile literature (an audience), Booksellers' advertisements / Advertisements /
     # Prospectuses / Subscribers' lists (the book trade's ephemera — a class the taxonomy
-    # does not carry), Fourth of July orations (oratory), Catechisms, Almanacs.
+    # does not carry), Almanacs. "-- Controversial literature" stays uncovered HERE (41 docs,
+    # unlike eebo-tcp): Evans's instances are overwhelmingly the slavery debate ("Slavery --
+    # United States -- Controversial literature"), not confessional controversy.
   pta:                # census 2026-11-02: the work __cts__.xml dct:type labels of the 105
     metadata: genre   # non-Bible works carrying Greek — the comphistsem text-type head + sub,
     #                   "|"-joined at parse ("Paraenetic|Sermon"); each fragment folds alone
