@@ -502,6 +502,25 @@ end
 # lane worktree — gets an announced skip and exit 0. BOARDS_DIR overrides
 # the location (e.g. a worktree checking the main checkout's boards).
 # The same task runs the GH watch-list staleness guard
+# The post-release directory probe (ops §12 step 8): the Glama listing
+# auto-rebuilds from every GitHub release, and a broken rebuild fails on
+# THEIR builder where our CI never looks. The probe reads the public
+# listing page (released version visible?) and the score badge (grade,
+# informational). VERSION=x.y.z overrides the checked-out Nabu::VERSION.
+namespace :release do
+  desc "Post-release check: the released version is visible on the Glama listing (missing = exit 1)"
+  task :glama do
+    require_relative "lib/nabu/ops/glama_release_check"
+    version = ENV.fetch("VERSION", Nabu::VERSION)
+    report = Nabu::Ops::GlamaReleaseCheck.new(version: version).run
+    report.findings.each { |finding| puts "STALE  glama listing: #{finding}" }
+    abort "release:glama — #{version} not confirmed on the listing" unless report.clean?
+
+    grade = report.grade ? "score #{report.grade}" : "score not evaluated yet (their queue)"
+    puts "release:glama — #{version} visible on #{Nabu::Ops::GlamaReleaseCheck::LISTING_URL} · #{grade}"
+  end
+end
+
 # (Nabu::Ops::WatchListCheck): any still-watched row whose checked date is
 # over a week old fails the task, named; boards without the section skip.
 # And the phase-register freshness probe (Nabu::Ops::PhaseRegisterCheck):
