@@ -185,26 +185,26 @@ module Nabu
       # estimate lane (Store::SilverDates) never answers it — estimates are
       # reached only by naming them (`--date-basis silver`).
       #
-      # Window ∧ place agreement (document grain): when BOTH a window and a
-      # place are active, a matching DATELESS row (a place-only row — a
-      # letter's received place, a sender place, an HGV place-only row)
-      # no longer answers the window by its NULL bounds alone; it answers
-      # only when the document's own upstream date evidence overlaps the
-      # window, or when the document carries no upstream date evidence at
-      # all (the honest-undated stance). A dated row keeps its own
-      # window∧place agreement. The window-only and place-only lanes are
+      # The window at the document grain: under an active window (with or
+      # without a place), a DATELESS row (a place-only row — a letter's
+      # received place, a sender place, an HGV place-only row; an
+      # artifact-script row) no longer answers the window by its NULL
+      # bounds alone; it answers only when the document's own upstream
+      # date evidence overlaps the window, or when the document carries no
+      # upstream date evidence at all (the honest-undated stance). A dated
+      # row keeps its own window∧place agreement. The place-only lane is
       # untouched.
       def timeline_exists(from:, to:, place:)
         axes = Sequel[:document_axes]
         sub = upstream_axes(axes)
         resolution = PlaceFilter.coerce(place)
         sub = sub.where(place_match(axes, resolution)) if resolution
-        if resolution && (from || to)
+        if from || to
           sub.where(Sequel.|(Sequel.&(dated_row(axes), window_overlap(axes, from: from, to: to)),
                              Sequel.&(~dated_row(axes), document_dates_fit(from: from, to: to))))
              .exists
         else
-          overlapping(sub, axes, from: from, to: to).exists
+          sub.exists
         end
       end
 
