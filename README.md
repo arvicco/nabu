@@ -83,26 +83,54 @@ registration — is the site's
 
 ## Run the demo
 
-No clone, no sync: the public `ghcr.io/arvicco/nabu-demo` image bakes an
-open demo slice of the library (Greek New Testament, Hebrew Bible, Latin
-Vulgate, World English Bible, LSJ and Lewis & Short — sources and
-per-source licenses in `/demo/demo-census.json` inside the image) behind
-the read-only MCP server. The full library is a local build (Quickstart
-above).
+No clone, no sync: the public `ghcr.io/arvicco/nabu-demo:1.0.0` image
+(amd64 + arm64) bakes an open demo slice of the library (Greek New
+Testament, Hebrew Bible, Latin Vulgate, World English Bible, LSJ and
+Lewis & Short — sources and per-source licenses in
+`/demo/demo-census.json` inside the image) behind the read-only MCP
+server. The full library is a local build (Quickstart above). Every
+launcher below pins the released demo tag, never `:latest`.
 
 ```
-docker run -i --rm ghcr.io/arvicco/nabu-demo                      # MCP over stdio
-claude mcp add nabu -- docker run -i --rm ghcr.io/arvicco/nabu-demo   # Claude Code
+docker run -i --rm ghcr.io/arvicco/nabu-demo:1.0.0                         # MCP over stdio
+claude mcp add nabu -- docker run -i --rm ghcr.io/arvicco/nabu-demo:1.0.0  # Claude Code
+docker mcp catalog import https://arvicco.github.io/nabu/docker-mcp-catalog.yaml   # Docker MCP Toolkit
 ```
 
-[![Install in VS Code](https://img.shields.io/badge/VS_Code-Install_Nabu_demo-0098FF?logo=visualstudiocode&logoColor=white)](https://vscode.dev/redirect/mcp/install?name=nabu&config=%7B%22command%22%3A%22docker%22%2C%22args%22%3A%5B%22run%22%2C%22-i%22%2C%22--rm%22%2C%22ghcr.io%2Farvicco%2Fnabu-demo%22%5D%7D)
-[![Add to Cursor](https://img.shields.io/badge/Cursor-Add_Nabu_demo-000000?logo=cursor&logoColor=white)](https://cursor.com/install-mcp?name=nabu&config=eyJjb21tYW5kIjoiZG9ja2VyIiwiYXJncyI6WyJydW4iLCItaSIsIi0tcm0iLCJnaGNyLmlvL2FydmljY28vbmFidS1kZW1vIl19)
+(Current Docker MCP Toolkit CLIs replaced `import` with
+`docker mcp catalog create nabu --from-legacy-catalog <the same URL>`.)
+
+**Editors, one click** — both need Docker installed locally, and both
+start the same `docker run -i --rm ghcr.io/arvicco/nabu-demo:1.0.0`:
+
+[![Install in VS Code](https://img.shields.io/badge/VS_Code-Install_Nabu_demo-0098FF?logo=visualstudiocode&logoColor=white)](https://vscode.dev/redirect/mcp/install?name=nabu&config=%7B%22command%22%3A%22docker%22%2C%22args%22%3A%5B%22run%22%2C%22-i%22%2C%22--rm%22%2C%22ghcr.io%2Farvicco%2Fnabu-demo%3A1.0.0%22%5D%7D)
+[![Add to Cursor](https://img.shields.io/badge/Cursor-Add_Nabu_demo-000000?logo=cursor&logoColor=white)](https://cursor.com/install-mcp?name=nabu&config=eyJjb21tYW5kIjoiZG9ja2VyIiwiYXJncyI6WyJydW4iLCItaSIsIi0tcm0iLCJnaGNyLmlvL2FydmljY28vbmFidS1kZW1vOjEuMC4wIl19)
 
 (GitHub strips custom-scheme links, so the badges go through the editors'
 https redirects to `vscode:mcp/install?…` and
-`cursor://anysphere.cursor-deeplink/mcp/install?…`.) Docker Desktop's MCP
-Toolkit, hosted deploy buttons (Render, Koyeb) and the HTTP mode are on
-the site's [MCP page](https://arvicco.github.io/nabu/mcp/).
+`cursor://anysphere.cursor-deeplink/mcp/install?…`.)
+
+**Hosted, one click** — the same tagged image as a streamable-HTTP
+endpoint at `https://<your-service>/mcp`, on your own account (the
+deployer's plan pays; the free tiers suffice, as the demo runs within
+512 MB):
+
+[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/arvicco/nabu)
+[![Deploy to Koyeb](https://www.koyeb.com/static/images/deploy/button.svg)](https://app.koyeb.com/deploy?type=docker&name=nabu-demo&image=ghcr.io/arvicco/nabu-demo:1.0.0&instance_type=free&ports=8080;http;/&env[PORT]=8080&command=bin/nabu&args=mcp&args=--http)
+
+- **Render** reads this repository's `render.yaml`, a Blueprint that
+  names the prebuilt image by its release tag (nothing is compiled from
+  the repository), and pulls that image. **A free Render instance sleeps
+  after 15 minutes without traffic, and the first request after that
+  waits about a minute while it wakes.**
+- **Koyeb** pulls the tagged image directly. **A free Koyeb instance
+  scales to zero after an hour without traffic, and the next request
+  pays a cold start of a few seconds.**
+
+The HTTP endpoint carries no authentication of its own: put access
+control in front of it unless it is meant to be public. Details, and
+the plain `bin/nabu mcp --http` mode, are on the site's
+[MCP page](https://arvicco.github.io/nabu/mcp/).
 
 ## Show me
 
