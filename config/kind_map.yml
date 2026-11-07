@@ -2194,9 +2194,22 @@ sources:
       'الأخلاق والسلوك': literary/wisdom               # 31 — conduct literature (the sefaria
       #   Musar fold)
       'الطرائف والقصص': literary/narrative             # 33 — tales and curiosa
+      # -- theology (the head ruled 2026-11-07; live census the same date, 380 docs carry
+      # a doctrine/sects/refutation bucket). Before the head these stayed unmapped.
+      'ردود': theology/polemic
+      #   52 — the refutation shelves: كتب الردود (books of refutations), ردود علماء
+      #   المسلمين على الوهابية (refutations of the Wahhabis), الفرق والردود (sects and
+      #   refutations), مصادر عقائد أهل الكتاب وردودها (the People of the Book's creeds
+      #   and their refutation)
+      '\A(?!.*ردود).*(?:العقيدة|العقائد|عقدية|الفرق والملل)': theology
+      #   334 — the ʿaqīda shelves (العقيدة 92, the Imāmī and Zaydī creed sources, كتب
+      #   العقائد والملل with its مواضيع عقدية topics, the isnād-borne creed collections)
+      #   and heresiography (الفرق والملل). Declared COARSE: the buckets mix short creeds
+      #   (a confession of faith — catechesis's grain), kalām treatises and sect
+      #   catalogues with no per-book signal, so the bare head; a refutation shelf takes
+      #   the polemic sub above instead
       # left unmapped (genuinely mixed/ambiguous, the decision list —
-      # the sefaria Kabbalah stance): العقيدة/العقائد theology buckets ·
-      # كتب متنوعة/بحوث ومسائل misc buckets · author-collection shelves
+      # the sefaria Kabbalah stance): كتب متنوعة/بحوث ومسائل misc buckets · author-collection shelves
       # (كتب ابن تيمية …) · sect-corpus buckets (مصادر الحديث الشيعية
       # rides the hadith fold; the bare قسم العام tails stay visible).
   seal:               # genre = "Head, subject" — prefix rules ride past the subject tails
