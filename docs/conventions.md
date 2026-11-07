@@ -311,6 +311,7 @@ decoded ones:
 | Menota (menota) | `msa` | category-letter codes, `\|`-joined analyses | `xVB fF tPS mIN p3 nS vA` |
 | Coptic Scriptorium (coptic-scriptorium) | `pos` | Scriptorium tag, **no inflection** — decodes only what the tag fixes (polarity, pronoun type, definiteness, finiteness); fused tags `_`-joined | `ANEGPST`, `PPERS`, `AOPT_PPERS` |
 | AGDT (ceipom) | `pos_code` (+ explicit `case`/`gender`) | 9-slot AGDT tag; the explicit columns refine locative/instrumental and syncretic `M/N`, `ACC/DAT`; lemma anchor = the equivalence tier's Latin key | `v3sria---`, `n-s---m--` + `case=LOC` |
+| Penn-psd (helipad) | `pos` + `morph` | YCOE-family verb tag (tense+mood suffix) / degree tag, `^`-joined case/person/number atoms | `GE+VBDI` + `3^SG`, `N` + `A^SG` |
 | ORACC (akk, sux) | `pos` | NER-flavoured tag, **no inflection** | `PN`, `N`, `GN`, `V` |
 
 **Vocabulary verdict — unified, not per-family passthrough.** The query

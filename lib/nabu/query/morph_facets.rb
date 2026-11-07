@@ -142,6 +142,21 @@ module Nabu
     #   latin_equivalent). The explicit Tense column (simple/past/future) is
     #   coarser than the tag and is not read. CEIPoM is the EQUIVALENCE lemma
     #   tier, so the facets ride `--lemma <Latin equivalent>`.
+    # - HeliPaD `pos` + `morph` (helipad): the Penn-psd tag split on its
+    #   first "^" (PennPsdParser). Censused over the whole deposit (53,466
+    #   real tokens; 93 distinct pos tags; 32,129 morph strings, 59
+    #   distinct, exactly 15 atoms): the morph atoms are case (N 8,776,
+    #   A 6,586, D 6,545, G 3,676, I 346 — instrumental), person (3 9,529,
+    #   2 1,705, 1 1,041) and number (SG 22,893, PL 9,048, DU 16); the 5
+    #   stray atoms (3PL ×2, SGL, SPL, RFL) are skipped, and the one
+    #   G^D^SG decodes as a case alternative. The verb tag carries tense +
+    #   mood in the YCOE family convention (head VB/BE/HV/MD/RD + PI/PS/
+    #   DI/DS; bare head = infinitive; head+I = imperative); VG/VN (+I = the inflected forms, which
+    #   carry case/number) are participles — mood only, no tense claimed
+    #   (the upstream manual is not held). ADJR/ADVR/QR and ADJS/ADVS/QS
+    #   give degree; GE+/NEG+ prefixes are stripped. Undecoded: RN, MG,
+    #   VBG (10 tokens, unattested in the convention) and every tag that
+    #   fixes nothing. 34,434 tokens decode at least one facet.
     module MorphFacets
       # A malformed --morph string (empty, no `=`, blank key/value). Caller-
       # fixable, so CLI/MCP surface it as a plain usage error.
@@ -390,6 +405,28 @@ module Nabu
       }.freeze
       CEIPOM_GENDERS = { "M" => "masc", "F" => "fem", "N" => "neut", "C" => "com" }.freeze
 
+      # HeliPaD "^" morph atoms (class note; the full 15-atom inventory,
+      # censused over the whole deposit). Not listed — skipped: SGL, SPL,
+      # RFL, 3PL (one or two tags each, upstream typos).
+      HELIPAD_ATOMS = {
+        "N" => %w[case nom], "A" => %w[case acc], "D" => %w[case dat], "G" => %w[case gen], "I" => %w[case ins],
+        "1" => %w[person 1], "2" => %w[person 2], "3" => %w[person 3],
+        "SG" => %w[number sing], "PL" => %w[number plur], "DU" => %w[number dual]
+      }.freeze
+      # HeliPaD verb tags (the YCOE family convention): a verb head + the
+      # tense/mood suffix; the participles (VG present, VN past; +I =
+      # inflected, carrying case/number) decode mood only.
+      HELIPAD_VERB = /\A(?:VB|BE|HV|MD|RD)(PI|PS|DI|DS|I)?\z/
+      HELIPAD_VERB_SUFFIXES = {
+        nil => { "mood" => "inf" }, "I" => { "mood" => "imp" },
+        "PI" => { "tense" => "pres", "mood" => "ind" }, "PS" => { "tense" => "pres", "mood" => "sub" },
+        "DI" => { "tense" => "past", "mood" => "ind" }, "DS" => { "tense" => "past", "mood" => "sub" }
+      }.freeze
+      HELIPAD_PARTICIPLE = /\AV[GN]I?\z/
+      HELIPAD_DEGREES = {
+        "ADJR" => "cmp", "ADVR" => "cmp", "QR" => "cmp", "ADJS" => "sup", "ADVS" => "sup", "QS" => "sup"
+      }.freeze
+
       # The per-tagset decoder seam: [token key, decode method, source scope]
       # in precedence order (scope nil = any source; otherwise the slugs
       # whose tokens the row decodes — class note). The first APPLICABLE row
@@ -409,7 +446,8 @@ module Nabu
         ["msd", :imp_features, %w[goo300k].freeze],
         ["msa", :menota_features, %w[menota].freeze],
         ["pos", :coptic_features, %w[coptic-scriptorium].freeze],
-        ["pos_code", :ceipom_features, %w[ceipom].freeze]
+        ["pos_code", :ceipom_features, %w[ceipom].freeze],
+        ["pos", :helipad_features, %w[helipad].freeze]
       ].freeze
 
       # Canonical order for rendering a token's decoded features as evidence
@@ -635,6 +673,25 @@ module Nabu
 
         values = value.split("/").map { |part| table[part.strip.upcase] }
         values.empty? || values.include?(nil) ? nil : values
+      end
+
+      # HeliPaD: the tag (minus GE+/NEG+ prefixes) gives tense/mood or
+      # degree, the "^" morph atoms case/person/number (class note).
+      def helipad_features(pos, token)
+        out = helipad_tag(pos.to_s.split("+").last.to_s).dup
+        token["morph"].to_s.split("^").each do |atom|
+          facet, value = HELIPAD_ATOMS[atom]
+          add_values(out, facet, [value]) if facet
+        end
+        out
+      end
+
+      def helipad_tag(tag)
+        if (verb = HELIPAD_VERB.match(tag)) then HELIPAD_VERB_SUFFIXES.fetch(verb[1])
+        elsif HELIPAD_PARTICIPLE.match?(tag) then { "mood" => "part" }
+        elsif (degree = HELIPAD_DEGREES[tag]) then { "degree" => degree }
+        else {}
+        end
       end
 
       # Shared positional decode: `-` and unknown codes are skipped, never
