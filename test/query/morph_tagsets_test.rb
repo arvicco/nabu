@@ -144,5 +144,19 @@ module Query
       assert_equal "person=3|number=sing|tense=perf|mood=ind|voice=act", hit.morph
       assert_includes search("do", morph: "tense=pres").map(&:urn), "urn:nabu:ceipom:5:5"
     end
+
+    # Heliand 1-5: uuord (word, N A^SG) and uuordun (word, N D^PL);
+    # bigunnun (biginnan, VBDI 3^PL).
+    def test_helipad_tags_reach_the_morph_surface
+      load_source("helipad", "Helipad")
+      urn = "urn:nabu:helipad:OSHeliandC:1.1-5"
+      hit = search("word", morph: "case=acc,number=sg").find { |result| result.urn == urn }
+      refute_nil hit
+      assert_equal "uuord", hit.surface_forms
+      assert_equal "number=sing|case=acc", hit.morph
+      assert_equal "uuordun", search("word", morph: "case=dat").find { |result| result.urn == urn }.surface_forms
+      assert_includes search("biginnan", morph: "tense=past,mood=ind,person=3,number=pl").map(&:urn), urn
+      assert_empty search("biginnan", morph: "mood=sub")
+    end
   end
 end

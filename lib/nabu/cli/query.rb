@@ -92,7 +92,7 @@ module Nabu
       degree (values dat, pl/sg, masc, aor, opt, sub…); UD treebanks match on
       their `feats`; PROIEL/TOROT, GLAUx (AGDT postag), Diorisis, BHSA/DSS,
       OSHB, ReM/ReN/REF (CorA msd/morph), goo300k (IMP msd), Menota (msa), CEIPoM
-      (AGDT pos_code, via its Latin-equivalent lemmas) and Coptic
+      (AGDT pos_code, via its Latin-equivalent lemmas), HeliPaD (pos^morph) and Coptic
       Scriptorium (pos: polarity, prontype, definite, verbform) are
       decoded into the same names — Hebrew/Aramaic add state, stem and
       conjugation (e.g. --morph stem=piel,conjugation=wayq). Ambiguous

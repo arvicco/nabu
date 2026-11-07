@@ -177,7 +177,7 @@ module Query
     # ("morph", "msd", "analyses", "msa" each name DIFFERENT tagsets in
     # other sources), so a scoped row decodes only its own sources' tokens.
     def test_decoder_table_is_explicit_and_ordered
-      assert_equal %w[morphology feats postag analyses vt morpho morph msd morph msd msa pos pos_code],
+      assert_equal %w[morphology feats postag analyses vt morpho morph msd morph msd msa pos pos_code pos],
                    MF::DECODERS.map(&:first)
       MF::DECODERS.each do |_key, method, sources|
         assert MF.respond_to?(method), "#{method} is a module function"
@@ -591,6 +591,59 @@ module Query
                "alternatives" => [{ "latin_equivalent" => "cippus", "pos_code" => "n-p---ma-", "case" => "ACC" }] }
       refute MF.match?(ceip, MF.parse("case=acc"), source: "ceipom")
       assert MF.match?(ceip, MF.parse("tense=perf"), source: "ceipom")
+    end
+
+    # -- HeliPaD (Penn-psd pos + "^" morph) ------------------------------------
+
+    # Real HeliPaD tokens (test/fixtures/helipad + deposit-censused tags):
+    # the "^" morph atoms are case/person/number; the verb tag's suffix is
+    # tense + mood (the YCOE family convention: P/D present/past, I/S
+    # indicative/subjunctive, bare head = infinitive, head+I = imperative);
+    # GE+/NEG+ prefixes ride along.
+    def test_helipad_morph_atoms_and_verb_tags
+      hp = "helipad"
+      assert_equal({ "case" => "acc", "number" => "sing" },
+                   MF.features({ "form" => "uuord", "lemma" => "word", "pos" => "N", "morph" => "A^SG" }, source: hp))
+      assert_equal({ "case" => "acc", "person" => "3", "number" => "plur" },
+                   MF.features({ "form" => "sia", "lemma" => "he", "pos" => "PRO", "morph" => "A^3^PL" }, source: hp))
+      assert_equal({ "tense" => "past", "mood" => "ind", "person" => "3", "number" => "plur" },
+                   MF.features({ "form" => "bigunnun", "pos" => "VBDI", "morph" => "3^PL" }, source: hp))
+      assert_equal({ "tense" => "past", "mood" => "ind", "person" => "3", "number" => "sing" },
+                   MF.features({ "form" => "gespon", "pos" => "GE+VBDI", "morph" => "3^SG" }, source: hp))
+      assert_equal({ "tense" => "pres", "mood" => "sub", "person" => "3", "number" => "sing" },
+                   MF.features({ "pos" => "MDPS", "morph" => "3^SG" }, source: hp))
+      assert_equal({ "tense" => "pres", "mood" => "ind" }, MF.features({ "pos" => "NEG+BEPI" }, source: hp))
+      assert_equal({ "mood" => "inf" }, MF.features({ "form" => "uuisean", "pos" => "VB" }, source: hp))
+      assert_equal({ "mood" => "imp", "person" => "2", "number" => "sing" },
+                   MF.features({ "form" => "lat", "pos" => "VBI", "morph" => "2^SG" }, source: hp))
+      assert_equal({ "mood" => "part", "case" => "nom", "number" => "plur" },
+                   MF.features({ "form" => "cumana", "pos" => "VNI", "morph" => "N^PL" }, source: hp),
+                   "VGI/VNI are inflected participles, not imperatives")
+      assert_equal({ "mood" => "part" }, MF.features({ "form" => "giboran", "pos" => "GE+VN" }, source: hp))
+      assert_equal({ "case" => "ins", "number" => "sing" },
+                   MF.features({ "pos" => "N", "morph" => "I^SG" }, source: hp))
+      assert_equal({ "case" => "nom", "person" => "1", "number" => "dual" },
+                   MF.features({ "pos" => "PRO", "morph" => "N^1^DU" }, source: hp))
+    end
+
+    # Degree rides the adjective/adverb/quantifier tag (R comparative, S
+    # superlative); unmarked positives decode nothing. Stray atoms (SGL,
+    # SPL, RFL, 3PL — 5 tags deposit-wide) and tags fixing nothing are
+    # skipped; G^D^SG (one token) is a genitive|dative alternative.
+    def test_helipad_degree_and_residue
+      hp = "helipad"
+      assert_equal({ "degree" => "cmp", "case" => "nom", "number" => "sing" },
+                   MF.features({ "pos" => "ADJR", "morph" => "N^SG" }, source: hp))
+      assert_equal({ "degree" => "sup" }, MF.features({ "pos" => "ADVS" }, source: hp))
+      assert_equal({ "degree" => "cmp" }, MF.features({ "pos" => "QR" }, source: hp))
+      assert_equal({ "case" => "dat" }, MF.features({ "pos" => "N", "morph" => "D^SGL" }, source: hp))
+      assert_equal({ "case" => "acc" }, MF.features({ "pos" => "PRO", "morph" => "A^3PL" }, source: hp))
+      assert_empty MF.features({ "form" => "endi", "pos" => "CONJ" }, source: hp)
+      assert_empty MF.features({ "pos" => "RN" }, source: hp)
+      gd = { "pos" => "N", "morph" => "G^D^SG" }
+      assert MF.match?(gd, MF.parse("case=gen"), source: hp)
+      assert MF.match?(gd, MF.parse("case=dat"), source: hp)
+      assert_empty MF.features({ "pos" => "VBDI", "morph" => "3^SG" }, source: "ycoe"), "HeliPaD-scoped"
     end
   end
 end
