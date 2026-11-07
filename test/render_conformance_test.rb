@@ -37,7 +37,10 @@ class RenderConformanceTest < Minitest::Test
     "search --annotations: the same announcement" =>
       [%w[search --annotations arma --license nc --limit 1], /page may be incomplete under these filters/],
     "search --annotations: every render names the lane's scope" =>
-      [%w[search --annotations zzzz], /annotations index covers: cantus 10 · korpus16 1/],
+      # the rig's coptic-scriptorium/corph rows (seeded for the translations
+      # lane) are declared annotation sources too: covered, zero layers
+      [%w[search --annotations zzzz],
+       /annotations index covers: cantus 10 · coptic-scriptorium 0 · corph 0 · korpus16 1/],
     "search --gloss-lines: the same announcement" =>
       [%w[search --gloss-lines arma --license nc --limit 1], /page may be incomplete under these filters/],
     "search --gloss-lines: every render names the lane's scope" =>

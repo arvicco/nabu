@@ -32,6 +32,14 @@ files:
     whole: false
     trim: lines 1-11 + 8232-8242 verbatim (deliberately brace-UNBALANCED)
     reason: the stray-brace witness (P77-r7) — a batched `}}` folio close with one container open, plus an EOF-open {CB1.; both ride the brace_defects census, never a quarantine
+  - path: transcriptions/TEXT.AFF.txt
+    refetchable: false
+    provenance: local-trim
+    upstream: https://raw.githubusercontent.com/hispanicseminary/OSTA/main/transcriptions/TEXT.AFF.txt
+    copied: 2026-11-07
+    whole: false
+    trim: lines 1-43 verbatim (header + fol. 1r + the first {CB1. block of fol. 1v, ending on its own close brace)
+    reason: "the post-header remark witness — {RMK: 6 lines of text in 18th century hand.} becomes the passage's notes annotation, the declared annotation layer no other fixture transcription carries"
   - path: verticalized/TEXT.BQ1.vrt.html
     refetchable: false
     provenance: local-trim
