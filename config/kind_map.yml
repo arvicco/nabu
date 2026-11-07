@@ -1683,9 +1683,9 @@ sources:
     # Census 2026-11-04: every id names exactly ONE label, so folding the label folds the id;
     # the AAT ids ride the tail comments below. The tail rules (the mining-law sweep, 2026-11-04)
     # close the census: every label folds, is declared not-genre (`deliberate:`), or is one of
-    # three NAMED uncovered values — Orations (7, AAT 300026674: the slice mixes lectures,
-    # homilies and drama co-tags; no ruled oratory class), Indexes (4, AAT 300026554: catalogue
-    # checklists and author indexes; no ruled reference class), Hadith (1, no id: scripture vs
+    # two NAMED uncovered values (Orations folded to oratory once the head was ruled,
+    # 2026-11-07) — Indexes (4, AAT 300026554: catalogue checklists and author indexes —
+    # catalogues of a library, not an edition's paratext index), Hadith (1, no id: scripture vs
     # exegesis for the canonical tradition is a class-list call). `vocabulary: open` stays so a
     # later generation's new label counts as uncovered, never noise.
     facet: genre
@@ -1704,8 +1704,10 @@ sources:
       "Gospels": scripture                       # 616
       "Psalters": scripture                      # 1,295 — the Psalms as a book
       "Apocrypha": scripture                     # 53 — the Ben Sira "Apocrypha" precedent
-      "Hagiographies": historiography            # 1,577 — the scat fold: lives go to historiography
-      #                                            by the ruled biography precedent
+      "Hagiographies": hagiography               # 1,577 — CORRECTED 2026-11-07: folded to historiography
+      #                                            by the biography precedent while no hagiography head
+      #                                            existed; the label mixes lives, martyr acts and
+      #                                            miracle collections, so the bare head
       "Biographies": historiography              # 27
       "Historical works": historiography         # 287
       "Prayers": hymn-prayer/prayer              # 1,163
@@ -1736,15 +1738,22 @@ sources:
       "Magic scrolls": magic/amulet              # 54 — the Ethiopian protective (healing) scrolls
       "Magical texts": magic                     # 29
       # The tail (census 2026-11-04; count · authority id where upstream gives one).
-      "Apologetic writings": exegesis            # 205 · LCGFT gf2015026027 — defence of the faith,
-      #                                            doctrinal exposition (the ticha catecismo fold)
-      "Catechisms": exegesis                     # 115 · AAT 300026460 — the ticha/bim-sahcoba precedent
+      "Apologetic writings": theology/apologetics  # 205 · LCGFT gf2015026027 — defence of the faith.
+      #                                            CORRECTED 2026-11-07: was exegesis, the nearest head
+      #                                            before theology was ruled; it is no commentary
+      "Catechisms": catechesis                   # 115 · AAT 300026460 — CORRECTED 2026-11-07: was
+      #                                            exegesis (the ticha/bim-sahcoba stopgap); catechesis
+      #                                            is the ruled class for exactly this
+      "Orations": oratory                        # 7 · AAT 300026674 — upstream's own oration term; the
+      #                                            slice's lecture/homily/drama co-tags fold beside it
+      #                                            (multi-label), so the term keeps its own claim
       "Tafsīr": exegesis                         # 1 — Qurʼān commentary
       "Calendars": ritual/festival               # 139 · AAT 300026741 — "Church calendar": the feast
       #                                            calendar of the rite
       "Pontificals": ritual/liturgy              # 4 · AAT 300202602 — the bishop's rites
       "Processionals": ritual/liturgy            # 3 · AAT 300395571
-      "Martyrologies": ritual/liturgy            # 2 · AAT 300026471 — the Martyrologium precedent
+      "Martyrologies": [ritual/liturgy, hagiography]  # 2 · AAT 300026471 — the Martyrologium precedent:
+      #                                            a liturgical book whose content is saints' notices
       "Sacramentaries": ritual/liturgy           # 1 · AAT 300192160
       "Religious rules and constitutions": legal/law   # 59 — monastic rules ("Rule of the Lebanese
       #                                            Maronite Order"): an order's governing law, the
