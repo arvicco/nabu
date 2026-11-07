@@ -389,8 +389,8 @@ module Nabu
                                 "hittite-glossed trans_de, corph, …); hits are the original passages — " \
                                 "composes with --lang/--source/--axis/--license/--limit only"
     option :annotations, type: :boolean, default: false,
-                         desc: "Search the DECLARED annotation layers (cantus standardized spellings, " \
-                               "korpus16 margin notes); hits are the passages themselves — " \
+                         desc: "Search the DECLARED annotation layers (standardized/regularized spellings, " \
+                               "margin notes, footnotes, editors' notes); hits are the passages themselves — " \
                                "composes with --lang/--source/--axis/--license/--limit only"
     option :withdrawn, type: :boolean, default: false,
                        desc: "Attic inspection: search WITHDRAWN passages only (upstream-gone " \

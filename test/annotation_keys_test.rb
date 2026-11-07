@@ -10,20 +10,23 @@ require "test_helper"
 class AnnotationKeysTest < Minitest::Test
   Keys = Nabu::AnnotationKeys
 
-  def test_the_two_declared_consumers
-    assert_equal %w[cantus korpus16], Keys.slugs.sort
+  # The first two consumers (the second tranche is pinned key by key in
+  # annotation_declarations_test.rb).
+  def test_the_first_declared_consumers
+    assert_includes Keys.slugs, "cantus"
+    assert_includes Keys.slugs, "korpus16"
     assert_equal ["standardized"], Keys.specs_for("cantus").map(&:key)
     assert_equal ["notes"], Keys.specs_for("korpus16").map(&:key)
     refute Keys.registered?("perseus")
     assert_empty Keys.specs_for("perseus")
   end
 
-  # The fold-language law: annotations fold with the passage's OWN
-  # language (cantus Latin, korpus16 Slovene) — never the generic fold the
+  # The fold-language law: a layer in the passage's OWN language (cantus
+  # Latin, korpus16 Slovene) folds by it — never the generic fold the
   # translations lane uses for its foreign-language renderings.
-  def test_every_declared_key_folds_with_the_passage_language
-    Keys::REGISTRY.each do |slug, specs|
-      specs.each { |spec| assert_equal :passage, spec.fold, "#{slug} #{spec.key}" }
+  def test_own_language_layers_fold_with_the_passage_language
+    %w[cantus korpus16].each do |slug|
+      Keys.specs_for(slug).each { |spec| assert_equal :passage, spec.fold, "#{slug} #{spec.key}" }
     end
     assert_equal "praesul iam iesu", Keys.fold("Praesul jam Jesu", Keys.specs_for("cantus").first, "lat"),
                  "the Latin rules (j→i) apply to cantus' standardized text"
