@@ -685,9 +685,11 @@ class KindsTest < Minitest::Test
     shipped = shipped_kinds
     assert_equal "work_type", shipped.facet_for("ticha")
     { "manuscript" => ["legal"], "arte" => ["lexical/grammar"],
-      "catecismo" => ["exegesis"], "miscelaneo" => ["unknown"] }.each do |value, want|
+      "catecismo" => ["catechesis"], "miscelaneo" => ["unknown"] }.each do |value, want|
       assert_equal want, shipped.normalize("ticha", value), value
     end
+    assert_equal ["catechesis"], shipped.normalize("bim-sahcoba", "catechism"),
+                 "the Basque catechisms follow the ticha correction (2026-11-07)"
     assert_equal "genre", shipped.facet_for("kdsp")
     { "roman" => ["literary/narrative/novel"], "povest" => ["literary/narrative/tale"],
       "novela" => ["literary/narrative/tale"], "črtica" => ["literary/narrative"],
