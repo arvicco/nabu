@@ -486,23 +486,51 @@ class KindsTest < Minitest::Test
     "Institutio regia (Paideia basilike, ad Constantinum Ducam porphyrogenitum)" => ["literary/wisdom"],
     "Characteres Gregorii Theologi, Basilii Magni, Chrysostomi et Gregorii Nysseni" => ["literary/essay"]
   }.freeze
+  # The 2026-11-07 heads take the bulk of the former unmapped-by-design
+  # block: real carve-plan titles (none sits in the fixture's plan slice).
+  CGPG_RULED_2026_11_07 = {
+    "Vita Clementis Ohridensis (the long life, BHG 355)" => ["hagiography/vita"],
+    "Excerpta e Vita S. Basilii iunioris (BHG 263)" => ["hagiography/vita"],
+    "Historia martyrii XV martyrum Tiberiopolitanorum (BHG 1199)" => ["hagiography/martyrdom"],
+    "Martyrium Ignatii Antiocheni (martyrium Antiochenum, 'Colbertinum')" => ["hagiography/martyrdom"],
+    "Encomium Gregorii Palamae" => ["hagiography/encomium"],
+    "Ex laudatione martyris Demetrii narratio (on the 904 capture of Thessalonica)" => ["hagiography/encomium"],
+    "Narratio de imagine Edessena" => ["hagiography"],
+    "Apologia secunda" => ["theology/apologetics"],
+    "Fragmentum apologiae (apud Eusebium, HE 4.3)" => ["theology/apologetics"],
+    "Legatio sive Supplicatio pro Christianis" => ["theology/apologetics"],
+    "Oratio ad Graecos" => ["theology/apologetics"],
+    "Ad Autolycum" => ["theology/apologetics"],
+    "Irrisio gentilium philosophorum" => ["theology/apologetics"],
+    "Adversus iconoclastas" => ["theology/polemic"],
+    "Antirrhetici contra Gregoram" => ["theology/polemic"],
+    "Refutatio (dialogus) contra Ioannem Argyropulum" => ["theology/polemic"],
+    "De iis quorum Latini incusantur (Allocutio cuidam ex suis familiaribus)" => ["theology/polemic"],
+    "Dialogus cum Tryphone" => ["theology"],
+    "De operatione daemonum dialogus (Timotheus; now held spurious)" => ["theology"],
+    "Quaestiones et responsiones ad orthodoxos" => ["theology/erotapokriseis"],
+    "Responsa ad Gabrielem Pentapolitanum (questions and answers on liturgical and canonical matters)" =>
+      ["theology/erotapokriseis"],
+    "Expositio rectae fidei" => ["theology/treatise"],
+    "De resurrectione" => ["theology/treatise"],
+    "De essentia et operatione Dei" => ["theology/treatise"],
+    "Confessio fidei ('He teleutaia gnome tou patriarchou', Florence, 9 June 1439)" => ["catechesis"],
+    "Occisorum Thessalonicae monodia" => ["oratory"],
+    "Oratio in imperatorem Alexium I Comnenum" => ["oratory"]
+  }.freeze
   CGPG_UNMAPPED = [
-    "Vita Clementis Ohridensis (the long life, BHG 355)",
-    "Historia martyrii XV martyrum Tiberiopolitanorum (BHG 1199)",
-    "Apologia secunda",
-    "Dialogus cum Tryphone",
-    "Expositio rectae fidei",
-    "Quaestiones et responsiones ad orthodoxos",
     "Fragmenta",
+    "Prooemium (to an exposition of the Psalms)",
+    "Narratio (de origine haereseos iconomachorum)",
     "De cerimoniis aulae Byzantinae (lib. 1.1-92)",
-    "Tactica (cum pinace et prooemio)",
-    "Occisorum Thessalonicae monodia"
+    "De administrando imperio",
+    "Tactica (cum pinace et prooemio)"
   ].freeze
 
   def test_shipped_cgpg_folds_the_title_heads
     shipped = shipped_kinds
     assert_equal "genre", shipped.facet_for("cgpg")
-    CGPG_FOLDS.each do |title, want|
+    CGPG_FOLDS.merge(CGPG_RULED_2026_11_07).each do |title, want|
       assert_equal want, shipped.normalize("cgpg", Nabu::Adapters::CgpgTitleGenre.head(title)), title
     end
     CGPG_UNMAPPED.each do |title|

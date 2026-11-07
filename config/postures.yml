@@ -2159,9 +2159,10 @@ sources:
     # the carve plan carry no genre field, so the carved work's Latin title is
     # cut to one keyword head (Adapters::CgpgTitleGenre) and folded — exegesis,
     # historiography, letter, sermon, ritual/liturgy (Symeon of Thessalonica's
-    # rite chapters), legal/law, poetry, scholarly. Hagiography, apologetics-polemic,
-    # theological treatises, bare fragments, court treatises and secular rhetoric
-    # have no ruled head yet and stay in the unmapped bucket by design. Five
+    # rite chapters), legal/law, poetry, scholarly — and, since the 2026-11-07
+    # heads, hagiography, theology (apologetics, polemic, treatises,
+    # erotapokriseis), catechesis and oratory. Bare fragments and the court
+    # treatises have no ruled head and stay in the unmapped bucket by design. Five
     # single-genre whole volumes claim their kind (Cyril's commentaries, the
     # histories); mixed volumes, the deferred PG 3 and every residuum (edition
     # apparatus, rescans, uncarved rows) make no kind claim.
