@@ -475,7 +475,7 @@ module Site
 
     def test_mcp_data_pins_the_released_demo_tag_from_server_json
       mcp = Nabu::Ops::SiteData.new(registry: registry, data_dir: DATA_DIR).mcp
-      version = Nabu::Ops::DemoPublish.version(root: ROOT)
+      version = Nabu::Ops::DemoPublish.version(root: ROOT, nabu_version: nil)
       assert_equal version, mcp.fetch("version")
       assert_equal "#{Nabu::Ops::DemoPublish::IMAGE}:#{version}", mcp.fetch("image")
       assert_equal Nabu::MCP::Server::PROTOCOL_VERSION, mcp.fetch("protocol_version")
