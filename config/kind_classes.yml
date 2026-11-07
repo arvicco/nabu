@@ -2,7 +2,9 @@
 # restructured by owner ruling 2026-09-18: the literature families
 # live under ONE `literary` head — "optionally two-level", so upstream's
 # own bare "Literary" folds to the plain head while `literary/poetry`
-# etc. carry the grain). 21 heads + `unknown`. The heads are the ruled
+# etc. carry the grain). 21 heads + `unknown` then; periodical + sermon
+# joined 2026-10-19, and the five heads of 2026-11-07 (theology, oratory,
+# catechesis, paratext, hagiography) make 28 + `unknown`. The heads are the ruled
 # set; a slash-keyed entry is a NAMED sub-class carrying its own desc
 # and crosswalks; `subs` are further suggested sub-grain vocabulary,
 # extensible without re-ruling.
@@ -138,6 +140,38 @@ classes:
       exegesis."
     subs: [funeral-sermon, homily]
     crosswalk: {aat: "300026923"}
+  # -- the five heads ruled 2026-11-07 (the taxonomy sitting over the
+  # unmapped-by-design material: the Patrologia's hagiography, apologetics
+  # and treatises, the Slovene catechisms and church order, the Fronde's
+  # speeches and manifestos, the early-modern controversial literature).
+  # No crosswalk ids carried yet — pointers are added when verified, never
+  # guessed. -----------------------------------------------------------------
+  theology:
+    desc: "Theology argued in prose: doctrinal treatises, defenses of the faith
+      against outsiders, polemic and controversy between confessions,
+      question-and-answer on doctrine."
+    # apologetics faces outward (the faith defended to pagans, Jews, the
+    # unbelieving); polemic is the refutation of a named error or opponent
+    # (heresy, schism, the Latins); controversial is the early-modern
+    # confessional pamphlet war (LCSH's own "Controversial literature" form);
+    # erotapokriseis is the doctrinal question-and-answer collection.
+    subs: [treatise, apologetics, polemic, controversial, erotapokriseis]
+  oratory:
+    desc: "Rhetoric as a form: orations, harangues, declamations, addresses,
+      manifestos — speech composed to persuade, praise or blame, distinct from
+      the preached sermon."
+    subs: []
+  catechesis:
+    desc: "Doctrinal instruction: catechisms, confessions of faith, church
+      orders — teaching the faith's content, distinct from sermons."
+    subs: []
+  paratext:
+    desc: "Text about the edition rather than a work: prefaces, dedications,
+      testimonia, indexes."
+    subs: [preface, dedication, testimonium, index]
+  hagiography:
+    desc: "Writing the saints: lives, martyr acts, encomia of holy persons."
+    subs: [vita, martyrdom, encomium]
   # -- the honest class ------------------------------------------------------
   unknown:
     desc: "Upstream's own 'cannot determine' — a claim, not a gap."

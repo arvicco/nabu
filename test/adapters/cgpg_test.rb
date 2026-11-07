@@ -208,8 +208,8 @@ class CgpgTest < Minitest::Test
     refute parse("urn:nabu:cgpg:pg3").metadata.key?("facets"), "PG 3 interleaves Dionysius and Pachymeres"
     refute parse("urn:nabu:cgpg:pg8").metadata.key?("facets"), "Clement's Protrepticus, Paedagogus, Stromata"
     refute parse("urn:nabu:cgpg:pg134-residuum").metadata.key?("facets"), "apparatus is no genre"
-    assert_equal({ "71" => "Commentarius", "73" => "Commentarius", "121" => "Historia", "148" => "Historia",
-                   "153" => "Historia" },
+    assert_equal({ "21" => "Apologia", "71" => "Commentarius", "73" => "Commentarius", "121" => "Historia",
+                   "148" => "Historia", "153" => "Historia" },
                  Nabu::Adapters::Cgpg::VOLUMES.select { |_, entry| entry[:genre] }.transform_values { |e| e[:genre] })
   end
 
