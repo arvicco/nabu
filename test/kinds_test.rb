@@ -586,7 +586,9 @@ class KindsTest < Minitest::Test
 
   # P104-1: the openiti BookSUBJ fold — the subject facet's recurring
   # Arabic library-taxonomy heads through regex rules (multi-label by
-  # design); the theology and misc buckets stay deliberately unmapped.
+  # design); the misc buckets stay deliberately unmapped. The theology
+  # buckets, unmapped until the 2026-11-07 head, fold to it (coarse) and
+  # the refutation shelves to its polemic sub.
   def test_shipped_openiti_folds_the_book_subjects
     shipped = shipped_kinds
     assert_equal "subject", shipped.facet_for("openiti")
@@ -597,8 +599,14 @@ class KindsTest < Minitest::Test
     assert_equal ["legal"], shipped.normalize("openiti", "الفقه الشافعي :: كتب الفقه الإسلامي")
     assert_equal ["literary/wisdom"],
                  shipped.normalize("openiti", "كتب الأخلاق والسلوك :: كتب متفرقة في الأخلاق والسلوك")
-    assert_equal ["unmapped"], shipped.normalize("openiti", "العقيدة"),
-                 "theology buckets stay deliberately unmapped — the sefaria Kabbalah stance"
+    assert_equal ["theology"], shipped.normalize("openiti", "العقيدة")
+    assert_equal ["theology"], shipped.normalize("openiti", "كتب العقائد والملل :: مواضيع عقدية")
+    assert_equal ["theology"], shipped.normalize("openiti", "الفرق والملل :: كتب العقائد والملل")
+    assert_equal ["theology/polemic"], shipped.normalize("openiti", "كتب الردود :: كتب العقائد والملل"),
+                 "a refutation shelf takes the polemic sub, never the bare head beside it"
+    assert_equal ["theology/polemic"], shipped.normalize("openiti", "ردود علماء المسلمين على الوهابية والمخالفين")
+    assert_equal ["unmapped"], shipped.normalize("openiti", "كتب متنوعة"),
+                 "the misc buckets stay deliberately unmapped — the sefaria Kabbalah stance"
   end
 
   # P104-1: the kanripo KR-Catalog 部類 graduation — the coarse P100-1
