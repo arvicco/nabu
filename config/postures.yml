@@ -3041,7 +3041,7 @@ sources:
         machine-ocr); the Urach Glagolitic/Cyrillic prints are OUT (OCR noise), declared"}
   korpus16:   # P160-6, 02-sources row 386
     # kind machine-postured — the korpus16 fold in kind_map.yml over the siglum
-    # (catechisms/confessions/the church order declared deliberate there).
+    # (catechisms/confessions/the church order fold to catechesis, ruled 2026-11-07).
     # lect machine-postured — the korpus16 sl → sl:emod override in
     # lect_overrides.yml (the 1550 band-edge books included).
     dating: {posture: dated, note: "every book: the page header's print year (\"Tübingen,
