@@ -15,7 +15,7 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 A source wears every desk it serves — these fifteen answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
-| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 6 November 2026)</span> |
+| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 7 November 2026)</span> |
 |---|---|---|---|---|
 | `calfa-lexicon` | dictionary | nc | wired · manual | 86,067 entries |
 | `cldf-spine` | feature module | attribution | wired · manual | nothing held yet |
@@ -35,9 +35,9 @@ A source wears every desk it serves — these fifteen answer this desk. Holdings
 
 Private research materials under personal grants are not listed.
 
-**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 6 November 2026)</span>: `xcl` 94,608 · `rus` 18,239 · `ine` 17,427 · `tbq` 12,950 · `ine-pro` 9,140 · `gem-pro` 7,743 · `tut` 5,756 · `lat` 5,419 · `dra-sou-pro` 4,692 · `sit-pro` 2,823 … and 71 more (`nabu axis etym` lists all).
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 7 November 2026)</span>: `xcl` 94,608 · `rus` 18,239 · `ine` 17,427 · `tbq` 12,950 · `ine-pro` 9,140 · `gem-pro` 7,743 · `tut` 5,756 · `lat` 5,419 · `dra-sou-pro` 4,692 · `sit-pro` 2,823 … and 71 more (`nabu axis etym` lists all).
 
-**Carried in by multilingual packs** (`wiktionary-recon`, `wold` — whole-source members whose other languages ride along, as of 6 November 2026): `zho` 327,296 · `sga` 6,688 · `gmw-pro` 5,578 · `sla-pro` 5,461 · `mnc` 2,577 … and 55 more (`nabu axis etym` lists all).
+**Carried in by multilingual packs** (`wiktionary-recon`, `wold` — whole-source members whose other languages ride along, as of 7 November 2026): `zho` 327,296 · `sga` 6,688 · `gmw-pro` 5,578 · `sla-pro` 5,461 · `mnc` 2,577 … and 55 more (`nabu axis etym` lists all).
 
 ## The desk's instruments
 

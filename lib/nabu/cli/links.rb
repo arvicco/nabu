@@ -322,7 +322,12 @@ module Nabu
                                         trigger — rebuild never does; a
                                         self-check compares the fresh edges
                                         with the layer they replace)
-        nabu links migrate-mined        move heavy runs still in
+        nabu links mine --stale         re-mine, one after another, every
+                                        recorded heavy layer health calls
+                                        stale (its language slice or the
+                                        producer code moved); current and
+                                        never-mined scopes are skipped
+        nabu links migrate-mined       move heavy runs still in
                                         db/links.sqlite3 into the store, once
                                         (--dry-run counts, writes nothing)
 
@@ -331,6 +336,7 @@ module Nabu
         nabu links urn:nabu:sblgnt:matt:4.4 --long
         nabu links <urn> --db /tmp/links.sqlite3
         nabu links mine perseus-latin           # re-mine the Latin layer (hours)
+        nabu links mine --stale                 # re-mine whatever health calls stale
 
       Use cases: walk the mined citation graph passage by passage; audit what
       a batch run asserted; jump between quotation and source via `nabu show`.

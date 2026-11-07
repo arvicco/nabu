@@ -49,7 +49,8 @@ sources:
     #                   153 the histories); mixed or apparatus volumes and the residua make no
     #                   claim. Counts = documents, the pinned carve plan through the adapter
     #                   (2026-11-05): 209 works + 5 volumes carry a head; 145 fold, 69 stay
-    #                   unmapped by design (the block after the map).
+    #                   unmapped by design — until the 2026-11-07 heads: 193 fold, 21 stay
+    #                   unmapped (the block after the map).
     facet: genre
     map:
       # -- commentary on scripture and the classics
@@ -130,31 +131,80 @@ sources:
       "Paraenesis": literary/wisdom              # 2 — Basil I's exhortation chapters to Leo: gnomic instruction
       "Institutio": literary/wisdom              # 1 — Theophylact's Paideia basilike, a mirror of princes
       "Characteres": literary/essay              # 1 — Psellus' stylistic characters of four Fathers: criticism
-    # -- unmapped by design (69 documents): genre values with no ruled head yet. They
-    #    surface in the unmapped bucket (`nabu kind census --unmapped cgpg`), never
-    #    forced onto a near class. No hagiography, apologetics-polemic, theology,
-    #    rhetoric or court-treatise head is ruled; a taxonomy sitting is queued.
-    #  hagiography and encomium (10): Vita 3 (incl. the Narratio de vita Mohammedis),
-    #    Martyrium 3 (incl. the Historia martyrii), Laudatio 1, Encomium 1, Narratio 1,
-    #    "Narratio de imagine Edessena" 1
-    #  apologetics and polemic (22): Apologia 3, Dialogus 4 (Cum Tryphone; Symeon
-    #    and Nicetas against heresy and the Latins; ps.-Psellus on demons — a form
-    #    word, not literary/wisdom's wisdom dialogue), Adversus 2, Legatio, Cohortatio,
-    #    Refutatio, Confutatio, Antirrhetici, Irrisio, "Ad Autolycum", "Oratio ad
-    #    gentiles", "Oratio ad Graecos", "De monarchia", "De iis quorum Latini
-    #    incusantur", "Logos dialektikos", "De processione Spiritus Sancti ad magnum ducem"
-    #  theological treatises and question-answer (14): Quaestiones 3 (erotapokriseis
-    #    on doctrine — not exegesis proper, not wisdom literature), Confessio,
-    #    "De resurrectione" 2, "Expositio rectae fidei", "Expositio de sacro symbolo",
-    #    "Expositio necessaria de sacri symboli dictionibus", "De essentia et
-    #    operatione Dei", "Λόγοι δύο", "De mortis determinatione", "Responsa ad
-    #    Gabrielem Pentapolitanum", "De sacerdotio"
-    #  bare fragments of lost works (13): Fragmenta 12, Prooemium 1 — the lost
-    #    work's genre is not in the title
+      # -- the five heads ruled 2026-11-07 take 48 of the 69 formerly unmapped-by-design
+      # documents (census through the adapter over the pinned plan, same date).
+      # hagiography: writing the saints
+      "Vita": hagiography/vita                   # 3 — Clement of Ohrid's long life, the Vita S. Basilii
+      #                                            iunioris excerpts; the third is the Narratio de vita
+      #                                            Mohammedis, an anti-Islamic polemical life the head
+      #                                            cannot tell apart (declared stray: polemic in a vita's form)
+      "Martyrium": hagiography/martyrdom         # 3 — the Ignatius and Justin martyr acts, Theophylact's
+      #                                            Historia martyrii of the fifteen Tiberiopolitan martyrs
+      "Encomium": hagiography/encomium           # 1 — Philotheus' encomium of Gregory Palamas, the saint
+      #                                            he canonized
+      "Laudatio": hagiography/encomium           # 1 — the excerpt from the encomium of St Demetrius (the
+      #                                            904 capture of Thessalonica); a part takes its work's genre
+      "Narratio de imagine Edessena": hagiography  # 1 — the feast narrative of the Mandylion's translation
+      #                                            (944), BHG-catalogued: hagiography of a relic, no ruled sub
+      # theology/apologetics: the faith defended outward, to pagans and the Roman state
+      "Apologia": theology/apologetics           # 3 — Justin's two Apologies; Quadratus' fragment
+      "Legatio": theology/apologetics            # 1 — Athenagoras' plea to the emperors for the Christians
+      "Cohortatio": theology/apologetics         # 1 — ps.-Justin's exhortation to the Greeks
+      "Oratio ad gentiles": theology/apologetics  # 1 — ps.-Justin
+      "Oratio ad Graecos": theology/apologetics  # 1 — Tatian: an "oratio" by title, an apology by function
+      "Ad Autolycum": theology/apologetics       # 1 — Theophilus of Antioch
+      "Irrisio": theology/apologetics            # 1 — Hermias' mockery of the pagan philosophers
+      "De monarchia": theology/apologetics       # 1 — ps.-Justin: the one God against polytheism, from the
+      #                                            poets' own testimony
+      # theology/polemic: the refutation of a named error or opponent
+      "Adversus": theology/polemic               # 2 — Apollonius against the Montanists; Adversus iconoclastas
+      "Refutatio": theology/polemic              # 1 — Agallianus against Argyropulus (the Florentine union)
+      "Confutatio": theology/polemic             # 1 — ps.-Justin's confutation of Aristotelian dogmas
+      "Antirrhetici": theology/polemic           # 1 — Philotheus against Gregoras (the Palamite controversy)
+      "De iis quorum Latini incusantur": theology/polemic  # 1 — Theophylact on the charges against the Latins
+      "Logos dialektikos": theology/polemic      # 1 — Hilarion on leavened bread against the Latin azymes
+      "De processione Spiritus Sancti ad magnum ducem": theology/polemic  # 1 — Argyropulus on the filioque
+      #                                            and the Florentine decree: a side taken in the controversy
+      "Dialogus": theology                       # 4 — Cum Tryphone (apologetic, to a Jew), Symeon of
+      #                                            Thessalonica against the heresies and Nicetas against the
+      #                                            Latins (polemic), ps.-Psellus on demons (doctrine): one head,
+      #                                            three subs — the bare head, declared coarse (a form word, not
+      #                                            literary/wisdom's dialogue)
+      # theology/erotapokriseis: doctrinal question-and-answer
+      "Quaestiones": theology/erotapokriseis     # 3 — the ps.-Justinian question-answer collections (not
+      #                                            exegesis proper: the questions are doctrinal)
+      "Responsa ad Gabrielem Pentapolitanum": theology/erotapokriseis  # 1 — Symeon's answers on liturgical
+      #                                            and canonical questions
+      # theology/treatise: doctrine argued in prose
+      "De resurrectione": theology/treatise      # 2 — Athenagoras; ps.-Justin
+      "Expositio rectae fidei": theology/treatise  # 1 — ps.-Justin's trinitarian-christological exposition
+      "Expositio de sacro symbolo": theology/treatise  # 1 — Symeon on the Creed (an exposition, not the creed
+      #                                            itself: no confession is being made)
+      "Expositio necessaria de sacri symboli dictionibus": theology/treatise  # 1 — the Creed's terms expounded
+      "De essentia et operatione Dei": theology/treatise  # 1 — the Palamite essence-energies doctrine
+      "Λόγοι δύο": theology/treatise             # 1 — the anonymous two theological discourses
+      "De mortis determinatione": theology/treatise  # 1 — Psellus' Antigraphe: is the term of life fixed by God
+      "De sacerdotio": theology/treatise         # 1 — Symeon on the priesthood, epistle-framed
+      # catechesis: the confession of faith is the ruled grain
+      "Confessio": catechesis                    # 1 — Patriarch Joseph II's confession of faith (Florence, 1439)
+      # oratory: rhetoric as a form — the Byzantine monody and the imperial oration
+      "Monodia": oratory                         # 2 — Cydones on the slain of Thessalonica; Psellus on the
+      #                                            collapse of Hagia Sophia: the funeral lament as oration
+      "Oratio in imperatorem Alexium I Comnenum": oratory  # 1 — Theophylact's basilikos logos
+    # -- still unmapped by design (21 documents): no ruled head fits. They surface in the
+    #    unmapped bucket (`nabu kind census --unmapped cgpg`), never forced onto a near class.
+    #  bare fragments of lost works (13): Fragmenta 12, Prooemium 1 — the lost or parent
+    #    work's genre is not in the title (Job the Monk's prooemium is an author's preface
+    #    to his Psalms exposition — part of a work, not edition paratext)
+    #  "Narratio" (1): John of Jerusalem's narrative of the iconoclast heresy's origin —
+    #    history written as polemic; the bare head would capture any future narratio
     #  the court, administration and war (7): "De cerimoniis aulae Byzantinae" 2,
     #    "De officiis", "De administrando imperio", "De thematibus", Tactica,
     #    "De sepulcris imperatorum quae sunt in templo sanctorum apostolorum"
-    #  secular rhetoric (3): Monodia 2, "Oratio in imperatorem Alexium I Comnenum"
+    #  The edition's own apparatus (Migne's testimonia, prefaces, monita — the paratext
+    #  grain) sits in the residuum documents, which carry no genre facet: the residuum
+    #  mixes apparatus with rescans and uncarved text, so a paratext claim is an adapter
+    #  question, not a fold line.
   cantus:             # the chant record's genre — upstream's own abbreviation list
     #                   (cantusdatabase.org/genres/), the facet value = upstream's genre NAME,
     #                   the code raw (CantusCsvParser::GENRES). Counts = the 17-source sample
@@ -546,8 +596,9 @@ sources:
       "Didactic poem": literary/poetry           # 77 — the Lucretian/Virgilian verse of science
       "Panegyric poem": literary/poetry/praise   # 55 — verse in praise of a scientist or a
       #   discovery
-      "Oration": literary/essay                  # 46 — the academic oration: prose of ideas
-      #   composed for delivery (sermon is preached religious prose)
+      "Oration": oratory                         # 46 — the academic oration, composed for delivery.
+      #   CORRECTED 2026-11-07: was literary/essay (prose of ideas) before the oratory head
+      #   was ruled; the speech form is the ruled class (sermon stays preached religious prose)
       "Dialogue": literary/wisdom/dialogue       # 39 — the dialogue form (the class list
       #   files the dialogue under wisdom)
       "Letter": letter                           # 62 — scientific correspondence
@@ -1111,8 +1162,9 @@ sources:
   korpus16:            # census 2026-11-05: 45 books (the portal's Bibliography + page-1 headers)
     metadata: siglum   # upstream's book abbreviation verbatim (TC 1550, DB 1584) — each siglum
     #                    IS one print, so the fold is the parse-time call per book (the
-    #                    extrabiblical mold). Catechisms and confessions have no house class:
-    #                    declared deliberate below, never forced (the taxonomy question is open).
+    #                    extrabiblical mold). The catechisms, the confession and the church
+    #                    order were declared deliberate until the catechesis head was ruled
+    #                    (owner-ruled 2026-11-07); they fold onto it at the end of the map.
     map:
       "TA 1550": school               # Abecedarium und der klein Catechismus — the first Slovene
       #                                 primer (alphabet + reading exercise), the catechism inside it
@@ -1147,23 +1199,28 @@ sources:
       "TPo 1595": sermon/homily       # Hishna postilla — Trubar's house postil (Luther's)
       "TtPre 1588": sermon            # Ena lepa inu pridna prediga — Trošt's sermon
       "DAg 1585": ritual/liturgy      # Agenda — the order of the rites
-    deliberate:
-      "TC 1550": "Catechismus — a catechism (with sermon and hymns); catechesis has no house class"
-      "TC 1555": "Catechismvs — a catechism; catechesis has no house class"
-      "TAr 1562": "Articvli oli deili — the confessions of faith (Augsburg/Württemberg/Saxon) in
-        Slovene; a doctrinal confession has no house class"
-      "TO 1564": "Cerkovna ordninga — the church order: doctrine, rites and church law in one book,
-        between legal and ritual/liturgy"
-      "KB 1566": "Otrozhia biblia — Krelj's children's catechism (not a Bible despite the title)"
-      "TC 1567": "Ta celi catehismvs — a catechism with hymns; catechesis has no house class"
-      "TC 1574": "Ta celi catehismvs — the catechism-hymnal composite"
-      "TC 1575": "Catehismvs sdveima islagama — the catechism with two expositions"
-      "DC 1579": "Ta celi catehismvs — Dalmatin's catechism-hymnal composite"
-      "DC 1580": "Catehismvs — Dalmatin's catechism"
-      "DC 1584": "Ta celi catehismvs, eni psalmi — the catechism-hymnal composite"
-      "DC 1585": "Ta kratki wirtemberski catechismvs — the short Württemberg catechism"
-      "TfC 1595": "Ta celi catehismvs, eni psalmi — the catechism-hymnal composite"
-      "ZK 1595": "Katechismvs doctoria Martina Luthra — Luther's catechism (Znojilšek)"
+      # -- catechesis (the head ruled 2026-11-07): doctrinal instruction — catechisms,
+      # confessions of faith, church orders. A catechism-hymnal composite folds by its
+      # title and lead part, the catechism; the hymns it carries are the appendix
+      # (the reverse of TPs 1567, the hymnal with a catechism appended).
+      "TC 1550": catechesis           # Catechismus — the first Slovene catechism (with a sermon and hymns)
+      "TC 1555": catechesis           # Catechismvs — a catechism
+      "TAr 1562": catechesis          # Articvli oli deili — the confessions of faith (Augsburg,
+      #                                 Württemberg, Saxon) in Slovene: the confession-of-faith grain
+      "TO 1564": catechesis           # Cerkovna ordninga — the church order: doctrine, rites and church
+      #                                 law in one book, the ruled church-order grain (no longer split
+      #                                 between legal and ritual/liturgy)
+      "KB 1566": catechesis           # Otrozhia biblia — Krelj's children's catechism (not a Bible
+      #                                 despite the title)
+      "TC 1567": catechesis           # Ta celi catehismvs — a catechism with hymns
+      "TC 1574": catechesis           # Ta celi catehismvs — the catechism-hymnal composite
+      "TC 1575": catechesis           # Catehismvs sdveima islagama — the catechism with two expositions
+      "DC 1579": catechesis           # Ta celi catehismvs — Dalmatin's catechism-hymnal composite
+      "DC 1580": catechesis           # Catehismvs — Dalmatin's catechism
+      "DC 1584": catechesis           # Ta celi catehismvs, eni psalmi — the catechism-hymnal composite
+      "DC 1585": catechesis           # Ta kratki wirtemberski catechismvs — the short Württemberg catechism
+      "TfC 1595": catechesis          # Ta celi catehismvs, eni psalmi — the catechism-hymnal composite
+      "ZK 1595": catechesis           # Katechismvs doctoria Martina Luthra — Luther's catechism (Znojilšek)
   vulgate:
     source_kind: scripture
   prague-bible-1488:
@@ -1256,7 +1313,9 @@ sources:
       # -- the further texts ---------------------------------------------------
       "PsS": hymn-prayer/hymn   # the Psalms of Solomon: eighteen pseudepigraphal psalms
       "BLC": literary/wisdom/dialogue  # Bardaisan's school: a dialogue on fate and freedom
-      "Eprx": literary/essay    # Ephrem's prose polemic against Mani — a treatise of refutation
+      "Eprx": theology/polemic  # Ephrem's Prose Refutation against Mani — a treatise of refutation.
+      #                           CORRECTED 2026-11-07: was literary/essay, the nearest head
+      #                           before theology was ruled
       "ESNJ": sermon/homily     # Ephrem's metrical homily (memra) on Nineveh and Jonah
     deliberate:
       "ApBar": "an apocalypse (2 Baruch): revelatory visions with a review of history — no class
@@ -1276,11 +1335,10 @@ sources:
   litopys:
     source_kind: historiography/chronicle   # P117: the passage shelf IS the Ipatiev chronicle
   scat:                      # 2026-10-20: the whole corpus IS hagiography — 24 saints' lives
-    source_kind: historiography
-    #   (žitija with their miracle cycles and praises); no hagiography class exists, and lives
-    #   fold to historiography by the ruled biography precedent (elephantine "biography",
-    #   the eebo "-- Biography" and aozora NDC 289 folds) — a hagiography sub would be a
-    #   taxonomy change, not this mapping's call
+    source_kind: hagiography/vita
+    #   (žitija with their miracle cycles and praises). CORRECTED 2026-11-07: folded to
+    #   historiography by the biography precedent while no hagiography class existed; the
+    #   head ruled that day is this corpus's class, and a žitie is the vita sub
   emmo:                      # P155 — the catalogue title's head noun (Adapters::Emmo.document_type),
     metadata: document_type  # census 2026-11-03 over all 100 files
     map:
@@ -1419,9 +1477,11 @@ sources:
       #                                    hymns, doxologies, the psalm distribution tables
       "Ordo": ritual/liturgy             # 14 — the Ordinary of the Mass (Roman and the uses)
       "Appendix": ritual/liturgy         # 6 — the commendation of the soul, grace at meals …
-      "Martyrologium": ritual/liturgy    # 367 — the Roman Martyrology's daily notices, a
-      #                                    liturgical book read in choir at Prime (its content is
-      #                                    hagiographic; no hagiography head exists — proposed)
+      "Martyrologium": [ritual/liturgy, hagiography]  # 367 — the Roman Martyrology's daily
+      #                                    notices: a liturgical book read in choir at Prime whose
+      #                                    content is hagiographic — both claims since the
+      #                                    hagiography head was ruled (2026-11-07); the use keeps
+      #                                    the liturgy claim, the content adds the saints
       "Psalmorum": scripture             # 202 — the Vulgate psalms and canticles, verse by verse
       "Regula": legal/law                # 125 — the Rule of St Benedict in its daily portions
       #                                    (the 1QS precedent: a community's rule is law)
@@ -1627,9 +1687,9 @@ sources:
     # Census 2026-11-04: every id names exactly ONE label, so folding the label folds the id;
     # the AAT ids ride the tail comments below. The tail rules (the mining-law sweep, 2026-11-04)
     # close the census: every label folds, is declared not-genre (`deliberate:`), or is one of
-    # three NAMED uncovered values — Orations (7, AAT 300026674: the slice mixes lectures,
-    # homilies and drama co-tags; no ruled oratory class), Indexes (4, AAT 300026554: catalogue
-    # checklists and author indexes; no ruled reference class), Hadith (1, no id: scripture vs
+    # two NAMED uncovered values (Orations folded to oratory once the head was ruled,
+    # 2026-11-07) — Indexes (4, AAT 300026554: catalogue checklists and author indexes —
+    # catalogues of a library, not an edition's paratext index), Hadith (1, no id: scripture vs
     # exegesis for the canonical tradition is a class-list call). `vocabulary: open` stays so a
     # later generation's new label counts as uncovered, never noise.
     facet: genre
@@ -1648,8 +1708,10 @@ sources:
       "Gospels": scripture                       # 616
       "Psalters": scripture                      # 1,295 — the Psalms as a book
       "Apocrypha": scripture                     # 53 — the Ben Sira "Apocrypha" precedent
-      "Hagiographies": historiography            # 1,577 — the scat fold: lives go to historiography
-      #                                            by the ruled biography precedent
+      "Hagiographies": hagiography               # 1,577 — CORRECTED 2026-11-07: folded to historiography
+      #                                            by the biography precedent while no hagiography head
+      #                                            existed; the label mixes lives, martyr acts and
+      #                                            miracle collections, so the bare head
       "Biographies": historiography              # 27
       "Historical works": historiography         # 287
       "Prayers": hymn-prayer/prayer              # 1,163
@@ -1680,15 +1742,22 @@ sources:
       "Magic scrolls": magic/amulet              # 54 — the Ethiopian protective (healing) scrolls
       "Magical texts": magic                     # 29
       # The tail (census 2026-11-04; count · authority id where upstream gives one).
-      "Apologetic writings": exegesis            # 205 · LCGFT gf2015026027 — defence of the faith,
-      #                                            doctrinal exposition (the ticha catecismo fold)
-      "Catechisms": exegesis                     # 115 · AAT 300026460 — the ticha/bim-sahcoba precedent
+      "Apologetic writings": theology/apologetics  # 205 · LCGFT gf2015026027 — defence of the faith.
+      #                                            CORRECTED 2026-11-07: was exegesis, the nearest head
+      #                                            before theology was ruled; it is no commentary
+      "Catechisms": catechesis                   # 115 · AAT 300026460 — CORRECTED 2026-11-07: was
+      #                                            exegesis (the ticha/bim-sahcoba stopgap); catechesis
+      #                                            is the ruled class for exactly this
+      "Orations": oratory                        # 7 · AAT 300026674 — upstream's own oration term; the
+      #                                            slice's lecture/homily/drama co-tags fold beside it
+      #                                            (multi-label), so the term keeps its own claim
       "Tafsīr": exegesis                         # 1 — Qurʼān commentary
       "Calendars": ritual/festival               # 139 · AAT 300026741 — "Church calendar": the feast
       #                                            calendar of the rite
       "Pontificals": ritual/liturgy              # 4 · AAT 300202602 — the bishop's rites
       "Processionals": ritual/liturgy            # 3 · AAT 300395571
-      "Martyrologies": ritual/liturgy            # 2 · AAT 300026471 — the Martyrologium precedent
+      "Martyrologies": [ritual/liturgy, hagiography]  # 2 · AAT 300026471 — the Martyrologium precedent:
+      #                                            a liturgical book whose content is saints' notices
       "Sacramentaries": ritual/liturgy           # 1 · AAT 300192160
       "Religious rules and constitutions": legal/law   # 59 — monastic rules ("Rule of the Lebanese
       #                                            Maronite Order"): an order's governing law, the
@@ -1748,9 +1817,8 @@ sources:
       #   precedent: written instruments fold to legal)
       "arte": lexical/grammar                    # 2 — Córdova's Arte and its kin:
       #   colonial grammars of Zapotec (the grammar sub minted with this fold)
-      "catecismo": exegesis                      # 1 — doctrinal exposition for
-      #   teaching; the nearest ruled head (a religious-instruction sub is a
-      #   future class-list call if the family ever grows)
+      "catecismo": catechesis                    # 1 — the Zapotec catechism. CORRECTED
+      #   2026-11-07: was exegesis, the nearest head before catechesis was ruled
       "miscelaneo": unknown                      # 1 — upstream's own miscellany
   bim-sahcoba:        # census: 15 works, 2026-10-21 — the adapter's GENRES table (the deposit
     facet: genre      # carries no genre field; each label is the standard description of the work)
@@ -1759,8 +1827,9 @@ sources:
       "pastoral romance and verse": literary     # 1 — the Lazarraga manuscript (Silbero and
       #   Sirena + lyric poems); prose romance and verse together, the bare head
       "scripture": scripture                     # 1 — Leizarraga's New Testament
-      "catechism": exegesis                      # 4 — Materra, Kapanaga, Belapeire, Otxoa
-      #   (the ticha catecismo precedent)
+      "catechism": catechesis                    # 4 — Materra, Kapanaga, Belapeire, Otxoa.
+      #   CORRECTED 2026-11-07: was exegesis (the ticha stopgap); catechesis is the ruled class
+      #   (the ascetic and devotional books below stay: devotion is not doctrinal instruction)
       "mass treatise": ritual/liturgy            # 1 — Beriain: how the Mass is heard, its
       #   prayers expounded clause by clause
       "ascetic treatise": exegesis               # 2 — Axular's Gero, Tartas' Onsa hilzeko
@@ -2129,9 +2198,22 @@ sources:
       'الأخلاق والسلوك': literary/wisdom               # 31 — conduct literature (the sefaria
       #   Musar fold)
       'الطرائف والقصص': literary/narrative             # 33 — tales and curiosa
+      # -- theology (the head ruled 2026-11-07; live census the same date, 380 docs carry
+      # a doctrine/sects/refutation bucket). Before the head these stayed unmapped.
+      'ردود': theology/polemic
+      #   52 — the refutation shelves: كتب الردود (books of refutations), ردود علماء
+      #   المسلمين على الوهابية (refutations of the Wahhabis), الفرق والردود (sects and
+      #   refutations), مصادر عقائد أهل الكتاب وردودها (the People of the Book's creeds
+      #   and their refutation)
+      '\A(?!.*ردود).*(?:العقيدة|العقائد|عقدية|الفرق والملل)': theology
+      #   334 — the ʿaqīda shelves (العقيدة 92, the Imāmī and Zaydī creed sources, كتب
+      #   العقائد والملل with its مواضيع عقدية topics, the isnād-borne creed collections)
+      #   and heresiography (الفرق والملل). Declared COARSE: the buckets mix short creeds
+      #   (a confession of faith — catechesis's grain), kalām treatises and sect
+      #   catalogues with no per-book signal, so the bare head; a refutation shelf takes
+      #   the polemic sub above instead
       # left unmapped (genuinely mixed/ambiguous, the decision list —
-      # the sefaria Kabbalah stance): العقيدة/العقائد theology buckets ·
-      # كتب متنوعة/بحوث ومسائل misc buckets · author-collection shelves
+      # the sefaria Kabbalah stance): كتب متنوعة/بحوث ومسائل misc buckets · author-collection shelves
       # (كتب ابن تيمية …) · sect-corpus buckets (مصادر الحديث الشيعية
       # rides the hadith fold; the bare قسم العام tails stay visible).
   seal:               # genre = "Head, subject" — prefix rules ride past the subject tails
@@ -2364,10 +2446,54 @@ sources:
       '\A(?!.*(?:History and criticism|Controversial literature|Humor|Religious aspects))Prophecies\b': divination/oracle
       #   202 — prophecy pamphlets (Mother Shipton, Lilly …): oracle is the ruled sub
       # -- historiography
-      '\A(?!.*History and criticism).* -- Biography\.?(?: --|\z)': historiography
-      #   153 — lives (the elephantine "biography" fold)
+      '\A(?!.*History and criticism)(?!(?:Christian saints|Martyrs)\b).* -- Biography\.?(?: --|\z)': historiography
+      #   153 — lives (the elephantine "biography" fold); a saint's or martyr's life goes to
+      #   hagiography instead (2026-11-07, below)
       # -- funerary
       '\A(?!.*History and criticism)Epitaphs\b': funerary/epitaph  # 16 — epitaph collections
+      # -- theology, catechesis (the heads ruled 2026-11-07; counts = live catalog 2026-11-07)
+      '\A(?!.*History and criticism)(?!(?:Medicine|Surgery|Materia medica|Pharmacy|Astronomy|Mathematics|Arithmetic|Geometry|Navigation|Chemistry|Alchemy|Alchemists|Botany|Cookery|Astrology)\b).* -- Controversial literature\b': theology/controversial
+      #   3,197 — LCSH's form subdivision for works arguing for or against a religion,
+      #   church or doctrine: Catholic Church 1,269 · Society of Friends 402 · Church of
+      #   England 370 · Jesuits, Protestantism, Anabaptists, Presbyterianism … — the
+      #   confessional pamphlet war. "-- Humor" stays (anti-papal satire is still
+      #   controversy); a discipline main heading is refused (a medical or astrological
+      #   controversy is no theology — the scholarly rules refuse it from their side).
+      #   Declared residue: a few dozen secular mains carry the subdivision too (Women,
+      #   East India Company, Whig Party, trade and coinage pamphlets) and fold here
+      '\A(?!.*History and criticism)Apologetics\b': theology/apologetics
+      #   87 — the form main heading ("Apologetics -- Early works to 1800")
+      '\A(?!.*History and criticism).* -- Apologetic works\b': theology/apologetics
+      #   946 — the form subdivision: Society of Friends 507 · Church of England 165 ·
+      #   Catholic Church 159 … defenses of the faith. An author-title heading ("Goodwin,
+      #   Thomas -- Apologeticall narration.") is a work ABOUT that work and never matches
+      '\A(?!.*(?:History and criticism|Humor))Catechisms\b': catechesis
+      #   271 — "Catechisms, English/Welsh/Polish/Latin" ("-- Humor" is the parody, refused);
+      #   a name-title heading ("Westminster Assembly -- Shorter catechism") never matches
+      '\A(?!.*(?:History and criticism|Humor)).* -- Catechisms\b': catechesis
+      #   149 — the form subdivision ("Church of England -- Catechisms")
+      '\A(?!.*(?:History and criticism|Humor))(?:.* -- )?Creeds\b': catechesis
+      #   68 — LCSH's form for confessions of faith, the catechesis head's ruled grain
+      #   ("Church of England -- Creeds", "Creeds."). "Confession" (the sacrament of
+      #   penance) is a topical heading and never matches
+      '\A(?!.*History and criticism)Theology, Doctrinal\b': theology/treatise
+      #   459 — LCSH's doctrinal-theology heading: common-places, doctrine in lectures,
+      #   "Fides Catholica", conciliatory judgments — doctrine argued in prose (titles read
+      #   2026-11-07). A catechism or a controversy co-tagged here keeps its own claim too
+      # -- oratory
+      '\A(?!.*History and criticism)(?:.* -- )?Speeches, addresses, etc\b': oratory
+      #   62 — "Speeches, addresses, etc., English" (parliamentary and civic speeches) and
+      #   the form subdivision ("Society of Friends -- Speeches, addresses, etc.")
+      # -- hagiography. Bare "Saints" is refused: in EEBO it heads Puritan treatises on
+      # "the saints" (the elect) as often as lives; "-- Cult", "-- Controversial
+      # literature", devotions and pictorial works are about the saints, not lives of them
+      '\A(?!.*(?:History and criticism|Controversial literature|Cult|Prayer-books|Pictorial))Christian saints\b': hagiography
+      #   11 — lives of saints ("Christian saints -- Biography", "… -- Italy -- Assisi")
+      '\A(?!.*History and criticism)Saints(?:, [A-Z][a-z]+)? -- Legends\b': hagiography
+      #   5 — the saints' legends (the Legenda aurea shape)
+      '\A(?!.*(?:History and criticism|Controversial literature))Martyrs\b': hagiography/martyrdom
+      #   24 — martyrologies and martyr accounts (Foxe abridged, the Japanese martyrs, the
+      #   primitive persecutions); "-- Poetry" keeps its verse claim beside
   evans-tcp:          # 5,012 docs; the LCSH subject facet (config/facet_map.yml subjects → subject)
     # The same TCP MARC-to-TEI headers as eebo-tcp, so the same OPEN vocabulary and the
     # same refusals ("-- History and criticism": a book ABOUT a form is no instance of
@@ -2426,10 +2552,25 @@ sources:
       '\A(?!.*(?:History and criticism|Controversial literature|Humor))Cookery\b': scholarly/recipe  # 6
       # -- historiography
       '\A(?!.*History and criticism).* -- Biography\.?(?: --|\z)': historiography  # 30
+      # -- oratory, catechesis, theology (the heads ruled 2026-11-07; live census same date)
+      '\A(?!.*History and criticism)Fourth of July orations\b': oratory
+      #   162 — the Independence Day oration, the early republic's civic speech form
+      #   ("Fourth of July orations -- 1798."), one dated heading per year
+      '\A(?!.*(?:History and criticism|Humor))(?:.* -- )?Catechisms\b': catechesis
+      #   33 — "Catechisms.", "Congregational churches -- Catechisms", "… -- Catechisms
+      #   and creeds" (the eebo-tcp rule)
+      '\A(?!.*(?:History and criticism|Humor))(?:.* -- )?Creeds\b': catechesis
+      #   6 — confessions of faith, the catechesis head's ruled grain (the eebo-tcp rule)
+      '\A(?!.*History and criticism).* -- Doctrinal and controversial works\b': theology
+      #   180 — the older LCSH combined subdivision under a church (Society of Friends 123,
+      #   Church of England 19 …): doctrine AND controversy in one heading, so the bare head
+      '\A(?!.*History and criticism)Apologetics\b': theology/apologetics  # 11 — "Apologetics -- 18th century."
     # Left uncovered on purpose (counted, never filed unmapped): Broadsides (a format),
     # Juvenile literature (an audience), Booksellers' advertisements / Advertisements /
     # Prospectuses / Subscribers' lists (the book trade's ephemera — a class the taxonomy
-    # does not carry), Fourth of July orations (oratory), Catechisms, Almanacs.
+    # does not carry), Almanacs. "-- Controversial literature" stays uncovered HERE (41 docs,
+    # unlike eebo-tcp): Evans's instances are overwhelmingly the slavery debate ("Slavery --
+    # United States -- Controversial literature"), not confessional controversy.
   pta:                # census 2026-11-02: the work __cts__.xml dct:type labels of the 105
     metadata: genre   # non-Bible works carrying Greek — the comphistsem text-type head + sub,
     #                   "|"-joined at parse ("Paraenetic|Sermon"); each fragment folds alone
@@ -2438,9 +2579,12 @@ sources:
       #   fold (the dwds Erbauungsliteratur / sefaria Musar precedent); 63 pair it with Sermon
       "Sermon": sermon                           # 63 — Severian's and the Pseudo-Chrysostom
       #   homilies (upstream says sermon; the homily sub is not its claim)
-      "Theological": scholarly                   # 9 — theological scholarship (the Theologie fold)
-      "Dogmatic Treatise": scholarly             # 4 — Athanasius' doctrinal treatises
-      "Polemics": scholarly                      # 3 — anti-Arian controversy treatises
+      "Theological": theology                    # 9 — comphistsem's theology HEAD, paired with its
+      #   sub on every work (Dogmatic Treatise 4 · Polemics 3 · Bible Exegesis 2): the bare head,
+      #   the sub carries the grain (the "Scholarly" head fold below). CORRECTED 2026-11-07
+      #   with the two below: all three were scholarly before the theology head was ruled
+      "Dogmatic Treatise": theology/treatise     # 4 — Athanasius' doctrinal treatises
+      "Polemics": theology/polemic               # 3 — anti-Arian controversy treatises
       "Bible Exegesis: Old Testament": exegesis  # 2
       "Scholarly": scholarly                     # 4 — the head over Commentary
       "Commentary": exegesis                     # 4 — every one a biblical commentary (Psalms,
@@ -2451,8 +2595,9 @@ sources:
       "Church History": historiography           # 2
       "Church history": historiography           # 1 — upstream's lower-case spelling of the same
       "Official letter": letter/official         # 1 — the Epistula synodalis
-      "Märtyrervita/Wundersammlung": historiography  # 1 — the Vita Cononis; lives fold to
-      #   historiography by the ruled biography precedent (the scat fold)
+      "Märtyrervita/Wundersammlung": hagiography/martyrdom  # 1 — the Vita Cononis, a martyr's
+      #   life with its miracle collection. CORRECTED 2026-11-07: was historiography by the
+      #   biography precedent while no hagiography head existed
     deliberate:
       "Genre missing": "the catalog's unfilled genre slot (18 works), not a claim"
   ponomar:            # the adapter's service_part (Adapters::Ponomar): TROPARION / KONTAKION for
@@ -2488,9 +2633,9 @@ sources:
     facet: genre      # the textClass genre terms (multi-label — 1,312 files carry 2–7, 553
     #                   none), 141 values, Antonomaz's own French vocabulary. Upstream's
     #                   form term (prose 2,470 · vers 724) rides beside as metadata form.
-    #                   The folds below are the clear genre claims; the oratory/polemic
-    #                   cluster is LEFT UNMAPPED (listed at the end) — the house taxonomy has
-    #                   no oratory/rhetoric head, and minting one is a taxonomy ruling.
+    #                   The folds below are the clear genre claims; the speech-form cluster
+    #                   waited, unmapped, for the oratory head (ruled 2026-11-07) and folds
+    #                   onto it at the end of the map. What stays unmapped is listed last.
     map:
       "lettre": letter                           # 405 — open letters, mock letters, the royal
       #                                            and princely letters printed as pamphlets
@@ -2572,6 +2717,45 @@ sources:
       "prophétique": divination/oracle           # 40 (+ the "prohpétique" typo, 1) — the prophecies
       "prohpétique": divination/oracle           # 1
       "astrologie": divination/astrology         # 15
+      # -- oratory (the head ruled 2026-11-07): rhetoric as a form. Antonomaz tags the
+      # speech genus and the rhetorical genre of a piece; each label below names a
+      # piece composed as an address or a speech — read against sampled titles over
+      # canonical/ (2026-11-07). A piece the label marks is often also a letter, a
+      # dialogue or verse: the fold is multi-label and keeps both claims.
+      "discours adressé": oratory                # 278 — the address to a named hearer ("L'adieu de la France
+      #                                            au cardinal Mazarin", "… aux bourgeois de Paris")
+      "dicours adressé": oratory                 # 1 — upstream's typo for the same
+      "discours": oratory                        # 10 — the "Discours d'État": a political oration on the crisis
+      "discours prononcé": oratory               # 3 — a speech as delivered (Fournier before the king)
+      "harangue": oratory                        # 65 — harangues to the queen, the king, the échevins
+      "hanrangue": oratory                       # 1 — upstream's typo for harangue (live census 2026-11-07)
+      "manifeste": oratory                       # 41 — the princes' and nobility's manifestos: the ruled grain
+      "maifeste": oratory                        # 1 — upstream's typo for manifeste
+      "rhétorique délibérative": oratory         # 122 — the deliberative genus (remonstrance, counsel)
+      "rhérotique délibérative": oratory         # 1 — upstream's typo for the same
+      "rhétorique judiciaire": oratory           # 52 — the judicial genus: apologies and defenses of a party
+      "rhétorique épidictique": oratory          # 50 — the epideictic genus: thanksgivings, praise, blame
+      "éloge": oratory                           # 42 — praise of the princes and the coadjutor (secular
+      #                                            epideictic, never hagiography: no saint is praised)
+      "panégyrique": oratory                     # 15 — the panegyric (incl. a funeral harangue at Saint-Denis)
+      "blâme": oratory                           # 5 — epideictic blame ("Les justes reproches de la France")
+      "remerciement": oratory                    # 9 — the speech of thanks to the king, the queen, the princes
+      "consolation": oratory                     # 1 — an epideictic consolation to the queen
+      "apologie": oratory                        # 15 — political apologies (of the Prince, the Frondeurs, the
+      #                                            Parlement): the judicial defense speech, not theology's
+      #                                            apologetics (no faith is defended)
+      "justification": oratory                   # 11 — a party's self-justification, the judicial genus
+      "défense": oratory                         # 4 — likewise ("Défense de l'ancienne et légitime Fronde")
+      "réfutation": oratory                      # 4 — the refutatio of a named libel or of the Rueil articles
+      "réponse": oratory                         # 106 — the answer to another pamphlet or address, point by
+      #                                            point: political rejoinder, the refutation's form
+      "avis": oratory                            # 61 — counsel given to the king or the Parisians ("Dernier
+      #                                            avis donné aux Parisiens"): the deliberative address
+      "pro et contra": oratory                   # 10 — argument in utramque partem, the declamation's exercise
+      "prosopopée": oratory                      # 78 — the speech put in the mouth of France, Paris, a statue,
+      #                                            a shade: the rhetorical figure as the piece's frame
+      "prosopoée": oratory                       # 2 — upstream's typo
+      "prospopée": oratory                       # 1 — upstream's typo
     deliberate:
       "pamphlet": "a format (the printed occasional piece), not a genre — the dta Flugschrift precedent"  # 103
       "non renseigné": "upstream's own 'not filled in' — no claim"  # 253
@@ -2588,18 +2772,24 @@ sources:
       "dédicace": "a paratext component, not the piece's genre"  # 4
       "avant-propos": "a paratext component, not the piece's genre"  # 2
       "avertissement": "a paratext component, not the piece's genre"  # 3
-    # left unmapped (the worklist — no ruled class: an oratory/polemic head is a
-    # taxonomy question): discours adressé 278 (+ "dicours adressé" 1) · satirique 140 ·
-    # rhétorique délibérative 122 (+ "rhérotique délibérative" 1) · réponse 106 ·
-    # prosopopée 78 (+ prosopoée 2, prospopée 1) · relation 69 · harangue 65 · avis 61 ·
-    # lamentation 53 · rhétorique judiciaire 52 · rhétorique épidictique 50 · éloge 42 ·
-    # manifeste 41 (+ maifeste 1) · plainte 26 · apologie 15 · panégyrique 15 ·
-    # justification 11 · regrets 11 · discours 10 · pro et contra 10 · mémoire 9 ·
-    # remerciement 9 · soupirs 8 · anagramme 7 · généalogie 7 · vie 7 · didactique 6 ·
-    # songe 6 · testament 6 · ultima verba 6 · blâme 5 · résolutions 5 · défense 4 ·
-    # galant 4 · réfutation 4 · catéchisme 3 · discours prononcé 3 · allégorie 2 ·
-    # discours doctrinal 2 · portrait 2 · traité 2 · almanach 1 · caquet 1 · consolation 1 ·
-    # délibérations 1 · fait divers 1 · manuel 1 · occasionnel 1 · tract 1
+    # left unmapped (the worklist). Judged ambiguous against the 2026-11-07 heads:
+    #   satirique 140 — a mode in verse or prose, not a speech form (eebo folds satire
+    #     to the bare literary head; here parodie/pastiche are declared modes — a call
+    #     between the two precedents, not taken in this fold)
+    #   lamentation 53 · plainte 26 · regrets 11 · soupirs 8 — the lament family,
+    #     verse and prose alike: expressive laments, sometimes addressed (between
+    #     oratory and literary/poetry; hymn-prayer/lament addresses the divine, these do not)
+    #   ultima verba 6 — accounts of a dying man's last words: narrative or speech
+    #   catéchisme 3 — political parodies in catechism form ("Catéchisme des courtisans
+    #     de la cour de Mazarin"), not catechesis
+    #   discours doctrinal 2 — one doctrinal (Lenten observance), one political
+    #     ("La doctrine chrétienne des bons François"): no theology claim from the label
+    # Outside the five heads (other classes' questions, untouched by this fold):
+    # relation 69 · mémoire 9 · anagramme 7 · généalogie 7 · vie 7 (lives of Mazarin
+    # and the partisans — satirical biography, not hagiography) · didactique 6 ·
+    # songe 6 · testament 6 · résolutions 5 · galant 4 · allégorie 2 · portrait 2 ·
+    # traité 2 (political treaties) · almanach 1 · caquet 1 · délibérations 1 ·
+    # fait divers 1 · manuel 1 · occasionnel 1 · tract 1
   socinian-letters:   # P160 — the cover letter's chosen witness's own #sbw classCode
     metadata: document_type   # (Adapters::SocinianLetters); counts = the 1,869 accepted letters,
     #                           census through the adapter 2026-11-05 (20 carry no #sbw code and

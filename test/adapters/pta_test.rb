@@ -213,4 +213,19 @@ class PtaTest < Minitest::Test
     assert_equal %w[historiography], kinds.fold("pta", "Historiography|Church History").paths.uniq
     assert_empty kinds.fold("pta", "Genre missing").paths
   end
+
+  # The 2026-11-07 heads correct the theology labels (once scholarly) and the
+  # martyr life (once historiography). The fixture's works carry none of them
+  # (Biblical, Sermon, Paraenetic, Historiography …), so the pins read the
+  # live census composites through the rule.
+  def test_the_theology_labels_and_the_martyr_life_fold_onto_the_new_heads
+    root = File.expand_path("../../config", __dir__)
+    kinds = Nabu::Kinds.load(classes_path: File.join(root, "kind_classes.yml"),
+                             map_path: File.join(root, "kind_map.yml"))
+
+    assert_equal %w[theology theology/treatise], kinds.fold("pta", "Theological|Dogmatic Treatise").paths.sort
+    assert_equal %w[theology theology/polemic], kinds.fold("pta", "Theological|Polemics").paths.sort
+    assert_equal %w[exegesis theology], kinds.fold("pta", "Theological|Bible Exegesis: Old Testament").paths.sort
+    assert_equal %w[hagiography/martyrdom], kinds.fold("pta", "Märtyrervita/Wundersammlung").paths
+  end
 end

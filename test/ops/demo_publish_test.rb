@@ -37,7 +37,7 @@ module Ops
 
     def test_publish_argv_builds_the_demo_target_multi_arch_with_both_tags_and_pushes
       with_project do |root, slice|
-        argv = P.publish_argv(root: root, slice: slice)
+        argv = P.publish_argv(root: root, slice: slice, nabu_version: "1.2.3")
 
         assert_equal %w[docker buildx build], argv.first(3)
         assert_equal "demo", argv[argv.index("--target") + 1]
@@ -53,10 +53,23 @@ module Ops
 
     def test_publish_argv_takes_a_named_builder_and_custom_platforms
       with_project do |root, slice|
-        argv = P.publish_argv(root: root, slice: slice, builder: "nabu-multi", platforms: ["linux/arm64"])
+        argv = P.publish_argv(root: root, slice: slice, builder: "nabu-multi", platforms: ["linux/arm64"],
+                              nabu_version: "1.2.3")
 
         assert_equal "nabu-multi", argv[argv.index("--builder") + 1]
         assert_equal "linux/arm64", argv[argv.index("--platform") + 1]
+      end
+    end
+
+    # One version line (owner-ruled 2026-11-07): the demo image's number IS
+    # the Nabu release number. A server.json left behind by the release
+    # bump cannot build an image.
+    def test_the_image_version_is_release_synced_to_the_checkout
+      with_project(version: "1.2.3", identifier: "#{P::IMAGE}:1.2.3") do |root, slice|
+        error = assert_raises(P::Refused) { P.publish_argv(root: root, slice: slice, nabu_version: "9.9.9") }
+        assert_match(/release-synced/, error.message)
+        assert_match(/1\.2\.3/, error.message)
+        assert_match(/9\.9\.9/, error.message)
       end
     end
 
@@ -78,9 +91,9 @@ module Ops
     def test_publish_runs_the_assembled_command_through_the_runner
       with_project do |root, slice|
         seen = []
-        P.publish!(root: root, slice: slice, runner: ->(*argv) { seen << argv })
+        P.publish!(root: root, slice: slice, runner: ->(*argv) { seen << argv }, nabu_version: "1.2.3")
 
-        assert_equal [P.publish_argv(root: root, slice: slice)], seen
+        assert_equal [P.publish_argv(root: root, slice: slice, nabu_version: "1.2.3")], seen
       end
     end
 
@@ -227,7 +240,7 @@ module Ops
     def test_verify_pushed_inspects_the_version_tag_and_latest
       with_project do |root, _slice|
         seen = []
-        images = P.verify_pushed!(root: root, log: StringIO.new,
+        images = P.verify_pushed!(root: root, log: StringIO.new, nabu_version: "1.2.3",
                                   inspector: lambda { |image|
                                     seen << image
                                     index_json(%w[amd64 arm64])

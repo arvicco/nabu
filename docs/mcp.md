@@ -187,7 +187,7 @@ case-insensitively with LIKE patterns passing through, at most 8 pairs;
 composes with `kind` (both hold), text search only.
 
 Further **lanes** replace the ranked text search (contract bump
-2026-10-22, plus the gloss lane 2026-11-05 — the CLI flags they mirror, the same query classes, the same
+2026-10-22, plus the gloss lane 2026-11-05 and the annotations lane 2026-11-07 — the CLI flags they mirror, the same query classes, the same
 composition sets; any other arg is refused naming the clash):
 
 - `fuzzy: true` — `search --fuzzy` (`Query::Fuzzy`): `query` is a literal
@@ -206,6 +206,17 @@ composition sets; any other arg is refused naming the clash):
   lists `{source, passages}` per indexed source. Composes with lang (the
   original's language)/license/limit. An unbuilt lane answers the build hint
   (`rake index:translations`).
+- `annotations: true` (bump 2026-11-07) — `search --annotations`
+  (`Query::AnnotationSearch`): `query` (words AND, "phrase", prefix*) over
+  the searchable text layers declared per source in `Nabu::AnnotationKeys`
+  (cantus standardized spellings; regularized/normalized/diplomatic
+  spellings; margin notes, footnotes and editors' notes — each layer
+  folded by its passage's language or its own declared one). Hits are the
+  layer-bearing passages, each naming the matched `layer` (its annotation
+  key) with a bracketed `snippet` of the matching layer; `coverage` lists
+  `{source, passages}` per indexed source. Composes with lang (the
+  passage's language)/license/limit. An unbuilt lane answers the build hint
+  (`rake index:annotations`).
 - `gloss` alone (no `lemma`, no `query`; bump 2026-11-05) — `search --gloss
   WORD` with no query (`Query::GlossSearch`): every WORD some source glosses
   WORD in its upstream token glosses, across lemmas ("king" → BHSA's Hebrew
@@ -714,6 +725,50 @@ user scope:
 Restart Claude Desktop after editing. The `nabu` tools then appear in the
 tools menu of any conversation.
 
+### Agent frameworks — LangChain, LlamaIndex
+
+Any framework with an MCP stdio client can load the tools. The examples
+below start the public demo image, pinned to its released tag, so they run
+with nothing but Docker installed; to use your own library, swap the
+command for the `bundle exec … bin/nabu mcp` form above.
+
+LangChain (`pip install langchain-mcp-adapters`):
+
+```python
+import asyncio
+from langchain_mcp_adapters.client import MultiServerMCPClient
+
+async def main():
+    client = MultiServerMCPClient({
+        "nabu": {
+            "command": "docker",
+            "args": ["run", "-i", "--rm", "ghcr.io/arvicco/nabu-demo:1.0.0"],
+            "transport": "stdio",
+        }
+    })
+    tools = await client.get_tools()  # LangChain tools, ready for an agent
+    print([tool.name for tool in tools])
+
+asyncio.run(main())
+```
+
+LlamaIndex (`pip install llama-index-tools-mcp`):
+
+```python
+import asyncio
+from llama_index.tools.mcp import BasicMCPClient, McpToolSpec
+
+async def main():
+    client = BasicMCPClient("docker", args=["run", "-i", "--rm", "ghcr.io/arvicco/nabu-demo:1.0.0"])
+    tools = await McpToolSpec(client=client).to_tool_list_async()  # FunctionTools
+    print([tool.metadata.name for tool in tools])
+
+asyncio.run(main())
+```
+
+Every tool result keeps the `license_class` and `urn` fields; an agent that
+quotes the library should carry them through (§6).
+
 ---
 
 ## 5. Example conversation
@@ -797,7 +852,9 @@ tool carries both); a third 2026-10-22 bump added nabu_search's `betacode`
 input flag (and its present-only `betacode` echo key); the 2026-11-05
 bump gave nabu_search's existing `gloss` key a second meaning where it
 used to be a usage error — `gloss` without `lemma` is the gloss lane (no
-schema key added, the lemma-anchored filter unchanged). Live MCP servers
+schema key added, the lemma-anchored filter unchanged); the 2026-11-07
+bump added nabu_search's `annotations` lane key (additive — the
+translations lane's shape over the declared annotation layers). Live MCP servers
 serve the old schema until restarted.
 
 | Capability | CLI surface | MCP tool | Status |
@@ -816,7 +873,8 @@ serve the old schema until restarted.
 | Findspot line | `nabu show` findspot (P44-2) | `nabu_show` — additive `findspot` key when the captured id resolves through the dump; carries the Pleiades `attribution` envelope since the 2026-10-22 bump | **added P44-3** (pinned, incl. the dump-absent byte-identical case; attribution pinned 2026-10-22) |
 | Fragment search | `search --fuzzy` | `nabu_search` `fuzzy: true` — `Query::Fuzzy`, the CLI's composition set (minus the CLI-only `--source`/`--axis`/`--loans`) | **added 2026-10-22** (pinned) |
 | Annotation-held translations search | `search --translations` | `nabu_search` `translations: true` — `Query::TranslationSearch`, lang/license/limit (the CLI's `--source`/`--axis` have no MCP param) | **added 2026-10-22** (pinned) |
-| Declared annotation-layer search | `search --annotations` (`Query::AnnotationSearch` — cantus standardized spellings, korpus16 margin notes) | — | **documented gap** — MCP exposure pending (the `translations: true` shape is the template) |
+| Declared annotation-layer search | `search --annotations` (`Query::AnnotationSearch` — the `Nabu::AnnotationKeys` layers: standardized/regularized spellings, margin notes, footnotes, editors' notes) | `nabu_search` `annotations: true` — `Query::AnnotationSearch`, lang/license/limit (the CLI's `--source`/`--axis` have no MCP param) | **added 2026-11-07** (pinned) |
+| Token gloss-line search | `search --gloss-lines` (`Query::GlossLineSearch` — passages whose token glosses match, bhsa/achemenet/aes/tlhdig) | — | **documented gap** — MCP exposure pending (the `translations: true` shape is the template) |
 | Beta Code input | `search --betacode` (query, `--lemma`, `--near` decoded; each decode echoed) | `nabu_search` `betacode: true` — the same `Betacode.decode_query`, decode echoed in a present-only `betacode` key | **added 2026-10-22** (pinned both sides) |
 | The sense desk | `nabu sense TERM [--gloss]` | `nabu_search` `sense` (+ `sense_gloss`) — `Query::Senses`, the desk's senses + citing passages with their tokens | **added 2026-10-22** (pinned; `--source` and the no-term census stay CLI-only) |
 | Token senses on a shown passage | `nabu show URN --senses` | `nabu_show` `senses: true` — present-only `senses` per passage record + `sense_entries` | **added 2026-10-22** (pinned, incl. the flag-off byte-identical case) |

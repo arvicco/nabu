@@ -48,10 +48,11 @@ module Nabu
 
       private
 
-      # { path => [prefix, next_number] } for every top-level board file
-      # carrying a header line.
+      # { path => [prefix, next_number] } for every board file carrying a
+      # header line — a register is defined by its header, wherever it
+      # sits (the outreach segment keeps its queue in a subdirectory).
       def registers
-        Dir[File.join(@dir, "*.md")].each_with_object({}) do |path, found|
+        board_files.each_with_object({}) do |path, found|
           match = File.read(path, encoding: Encoding::UTF_8).match(HEADER)
           found[path] = [match[1], match[2].to_i] if match
         end

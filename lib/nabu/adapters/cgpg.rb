@@ -57,7 +57,9 @@ module Nabu
     #   PG 122's Cedrenus pages, split upstream outside this plan; PG 113's
     #   two Delectus back-matter rows). A residuum carries no date (the
     #   volume's era label dates its works, not Migne's apparatus) and no
-    #   kind claim (no apparatus class exists on the ruled kind list).
+    #   kind claim: the apparatus is paratext's grain (the head ruled
+    #   2026-11-07), but a residuum mixes it with rescans and uncarved
+    #   text, so no one class holds the document.
     #
     # == Kind (the title fold)
     #
@@ -66,12 +68,13 @@ module Nabu
     # head ("Expositio in", "Historia", "Epistulae", or a keywordless
     # "De <topic>" title whole) into facets.genre (raw = the title), and
     # config/kind_map.yml's cgpg section folds the heads — or leaves them
-    # unmapped where no ruled class fits (hagiography, apologetics, …).
+    # unmapped where no ruled class fits (bare fragments, court treatises).
     # A whole volume claims a kind only when it is single-genre and says
     # so in its contents label (VOLUMES genre: PG 71, 73 Cyril's
-    # commentaries; PG 121, 148, 153 the histories); a mixed volume
-    # (PG 8, 9, 16.3, 42), PG 21's apologetic Praeparatio (no ruled head),
-    # the deferred PG 3 and every residuum make none.
+    # commentaries; PG 121, 148, 153 the histories; PG 21's apologetic
+    # Praeparatio, claimable since the 2026-11-07 theology head); a mixed
+    # volume (PG 8, 9, 16.3, 42), the deferred PG 3 and every residuum
+    # make none.
     # - Incipit soft verification: each plan incipit_check whose page the
     #   box holds must carry the quoted opening (CgpgCarvePlan's folded-word
     #   score); a miss quarantines the work (ParseError) — the ranges are
@@ -203,7 +206,8 @@ module Nabu
                  words: 82_135 },
         "16.3" => { period: "Pre-Nicaean",
                     contents: "Origen (vol. 6.3); Hexapla (contd); Hippolytus, Philosophumena", words: 60_921 },
-        "21" => { period: "4th century", contents: "Eusebius (vol. 3); Praeparatio Evangelica", words: 236_625 },
+        "21" => { period: "4th century", contents: "Eusebius (vol. 3); Praeparatio Evangelica", words: 236_625,
+                  genre: "Apologia" },
         "42" => { period: "4th century",
                   contents: "Epiphanius (vol. 2); Panarion (contd), Expositio fidei, Anacephalaeosis; " \
                             "Appendix: dissertations",

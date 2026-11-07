@@ -64,6 +64,15 @@ module Ops
       assert_predicate report, :clean?
     end
 
+    # The outreach segment keeps its queue in a SUBDIRECTORY board; a
+    # register is any board file carrying a header, wherever it sits.
+    def test_a_register_in_a_subdirectory_board_is_checked
+      report = check("outreach/work-queue.md" =>
+        "# Queue\n\nNext number: #{S}O-2.\n\n## #{S}O-2 · entry\n\nbody\n")
+      refute_predicate report, :clean?, "a subdirectory register's stale header must be found"
+      assert_includes report.registers, "outreach/work-queue.md"
+    end
+
     def test_no_boards_dir_is_an_announced_skip
       report = Nabu::Ops::BoardCheck.new(boards_dir: File.join(Dir.tmpdir, "no-such-boards-#{Process.pid}")).run
       assert report.skipped

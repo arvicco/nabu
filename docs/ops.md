@@ -1078,8 +1078,14 @@ automatically; no per-release action.
 2. **CITATION.cff**: set `version:` to `X.Y.Z` and `date-released:` to
    today; bump `Nabu::VERSION` (lib/nabu/version.rb) to the same string —
    it feeds provenance `code_version` stamps and fetch User-Agents;
-   commit both on the phase branch, so the bumps ride the gate PR the
-   owner merges (the loop never pushes to `main`).
+   **and bump `server.json` to the same `X.Y.Z`** (its `version` AND its
+   OCI package identifier tag — ONE VERSION LINE, owner-ruled
+   2026-11-07: the demo image's number IS the release number; the
+   step-7 tag surfaces then follow via the pinned-tag guard, `rake
+   demo:publish` refuses a drifted server.json, and the release
+   workflow fails a release whose server.json was not bumped).
+   Commit all three on the phase branch, so the bumps ride the gate PR
+   the owner merges (the loop never pushes to `main`).
 3. **Tag** — only after the owner has merged the PR carrying the bumps:
    the tag is minted by the GitHub release itself, pointed at the merge
    commit by its full sha (`--target <sha>` in step 4), so no tag or
@@ -1114,10 +1120,27 @@ automatically; no per-release action.
    own preflight checks — handing the owner a sequence of setup
    incantations around it is a defect (same ruling). The deploy
    surfaces pin the RELEASED tag, never `:latest`: a `server.json`
-   version bump also moves the image tag in `render.yaml` and
-   `site/docker-mcp-catalog.yaml`, and `rake site:data` re-projects
+   version bump also moves the image tag in `render.yaml`,
+   `site/docker-mcp-catalog.yaml`, the README's install + deploy block
+   (commands, editor badges and the Koyeb button — copy the links from
+   the regenerated `site/_data/mcp.yml`) and the framework snippets in
+   `docs/mcp.md` §4, and `rake site:data` re-projects
    `site/_data/mcp.yml` (the MCP page's commands and buttons) —
-   `test/site/site_data_test.rb` fails until all four agree.
+   `test/site/site_data_test.rb` fails until every surface agrees.
+
+8. **Directory listings, auto-synced — verify, don't re-publish:** the
+   Glama listing rebuilds and republishes its own release automatically
+   from the GitHub release (auto-release enabled on the listing's
+   admin; the build spec installs Ruby into Glama's Debian base and
+   starts `bin/nabu mcp` through their proxy). Verify with ONE command:
+   `bundle exec rake release:glama` — exit 0 says the released version
+   is visible on the public listing (the grade prints beside it,
+   informationally; a still-queued evaluation is not a failure). A
+   start-requirement change (a gem wanting a new system library, a
+   Ruby floor past the base image's) fails over THERE, not in our CI,
+   and the listing's quality score is what the big MCP list's entry
+   badge renders; on a failure the listing admin's build log is the
+   place to read.
 
 Between releases, phase gates that don't tag still add a News entry
 (MAINTENANCE.md gate duty) — the News section tracks phases; releases are
