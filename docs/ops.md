@@ -1114,10 +1114,13 @@ automatically; no per-release action.
    own preflight checks — handing the owner a sequence of setup
    incantations around it is a defect (same ruling). The deploy
    surfaces pin the RELEASED tag, never `:latest`: a `server.json`
-   version bump also moves the image tag in `render.yaml` and
-   `site/docker-mcp-catalog.yaml`, and `rake site:data` re-projects
+   version bump also moves the image tag in `render.yaml`,
+   `site/docker-mcp-catalog.yaml`, the README's install + deploy block
+   (commands, editor badges and the Koyeb button — copy the links from
+   the regenerated `site/_data/mcp.yml`) and the framework snippets in
+   `docs/mcp.md` §4, and `rake site:data` re-projects
    `site/_data/mcp.yml` (the MCP page's commands and buttons) —
-   `test/site/site_data_test.rb` fails until all four agree.
+   `test/site/site_data_test.rb` fails until every surface agrees.
 
 8. **Directory listings, auto-synced — verify, don't re-publish:** the
    Glama listing rebuilds and republishes its own release automatically
