@@ -362,21 +362,29 @@ class KindsTest < Minitest::Test
 
   # -- the shipped config ----------------------------------------------------
 
-  def test_the_shipped_config_loads_and_carries_the_ruled_21_heads
+  def test_the_shipped_config_loads_and_carries_the_ruled_28_heads
     shipped = Nabu::Kinds.load(
       classes_path: File.expand_path("../config/kind_classes.yml", __dir__),
       map_path: File.expand_path("../config/kind_map.yml", __dir__)
     )
     heads = shipped.heads - ["unknown"]
-    assert_equal 23, heads.size,
+    assert_equal 28, heads.size,
                  "the 26 original heads restructured (owner ruling 2026-09-18): the six literature " \
-                 "families live under `literary`; periodical + sermon ruled 2026-10-19 — " \
-                 "23 heads + unknown"
+                 "families live under `literary`; periodical + sermon ruled 2026-10-19; theology, " \
+                 "oratory, catechesis, paratext + hagiography ruled 2026-11-07 — 28 heads + unknown"
     %w[funerary dedicatory honorific building boundary mark royal
        administrative legal letter lexical scholarly school
        scripture exegesis hymn-prayer ritual magic divination
-       literary historiography periodical sermon].each do |head|
+       literary historiography periodical sermon
+       theology oratory catechesis paratext hagiography].each do |head|
       assert_includes heads, head
+    end
+    { "theology" => %w[treatise apologetics polemic controversial erotapokriseis],
+      "paratext" => %w[preface dedication testimonium index],
+      "hagiography" => %w[vita martyrdom encomium],
+      "oratory" => [], "catechesis" => [] }.each do |head, subs|
+      assert_equal subs, shipped.classes[head].subs, "#{head}: the ruled 2026-11-07 sub grain"
+      refute_empty shipped.classes[head].desc, head
     end
     %w[literary/narrative literary/poetry literary/drama
        literary/essay literary/diary literary/wisdom].each do |sub|
