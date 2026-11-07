@@ -1078,8 +1078,14 @@ automatically; no per-release action.
 2. **CITATION.cff**: set `version:` to `X.Y.Z` and `date-released:` to
    today; bump `Nabu::VERSION` (lib/nabu/version.rb) to the same string —
    it feeds provenance `code_version` stamps and fetch User-Agents;
-   commit both on the phase branch, so the bumps ride the gate PR the
-   owner merges (the loop never pushes to `main`).
+   **and bump `server.json` to the same `X.Y.Z`** (its `version` AND its
+   OCI package identifier tag — ONE VERSION LINE, owner-ruled
+   2026-11-07: the demo image's number IS the release number; the
+   step-7 tag surfaces then follow via the pinned-tag guard, `rake
+   demo:publish` refuses a drifted server.json, and the release
+   workflow fails a release whose server.json was not bumped).
+   Commit all three on the phase branch, so the bumps ride the gate PR
+   the owner merges (the loop never pushes to `main`).
 3. **Tag** — only after the owner has merged the PR carrying the bumps:
    the tag is minted by the GitHub release itself, pointed at the merge
    commit by its full sha (`--target <sha>` in step 4), so no tag or
