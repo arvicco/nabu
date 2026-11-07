@@ -49,7 +49,8 @@ sources:
     #                   153 the histories); mixed or apparatus volumes and the residua make no
     #                   claim. Counts = documents, the pinned carve plan through the adapter
     #                   (2026-11-05): 209 works + 5 volumes carry a head; 145 fold, 69 stay
-    #                   unmapped by design (the block after the map).
+    #                   unmapped by design — until the 2026-11-07 heads: 193 fold, 21 stay
+    #                   unmapped (the block after the map).
     facet: genre
     map:
       # -- commentary on scripture and the classics
@@ -130,31 +131,80 @@ sources:
       "Paraenesis": literary/wisdom              # 2 — Basil I's exhortation chapters to Leo: gnomic instruction
       "Institutio": literary/wisdom              # 1 — Theophylact's Paideia basilike, a mirror of princes
       "Characteres": literary/essay              # 1 — Psellus' stylistic characters of four Fathers: criticism
-    # -- unmapped by design (69 documents): genre values with no ruled head yet. They
-    #    surface in the unmapped bucket (`nabu kind census --unmapped cgpg`), never
-    #    forced onto a near class. No hagiography, apologetics-polemic, theology,
-    #    rhetoric or court-treatise head is ruled; a taxonomy sitting is queued.
-    #  hagiography and encomium (10): Vita 3 (incl. the Narratio de vita Mohammedis),
-    #    Martyrium 3 (incl. the Historia martyrii), Laudatio 1, Encomium 1, Narratio 1,
-    #    "Narratio de imagine Edessena" 1
-    #  apologetics and polemic (22): Apologia 3, Dialogus 4 (Cum Tryphone; Symeon
-    #    and Nicetas against heresy and the Latins; ps.-Psellus on demons — a form
-    #    word, not literary/wisdom's wisdom dialogue), Adversus 2, Legatio, Cohortatio,
-    #    Refutatio, Confutatio, Antirrhetici, Irrisio, "Ad Autolycum", "Oratio ad
-    #    gentiles", "Oratio ad Graecos", "De monarchia", "De iis quorum Latini
-    #    incusantur", "Logos dialektikos", "De processione Spiritus Sancti ad magnum ducem"
-    #  theological treatises and question-answer (14): Quaestiones 3 (erotapokriseis
-    #    on doctrine — not exegesis proper, not wisdom literature), Confessio,
-    #    "De resurrectione" 2, "Expositio rectae fidei", "Expositio de sacro symbolo",
-    #    "Expositio necessaria de sacri symboli dictionibus", "De essentia et
-    #    operatione Dei", "Λόγοι δύο", "De mortis determinatione", "Responsa ad
-    #    Gabrielem Pentapolitanum", "De sacerdotio"
-    #  bare fragments of lost works (13): Fragmenta 12, Prooemium 1 — the lost
-    #    work's genre is not in the title
+      # -- the five heads ruled 2026-11-07 take 48 of the 69 formerly unmapped-by-design
+      # documents (census through the adapter over the pinned plan, same date).
+      # hagiography: writing the saints
+      "Vita": hagiography/vita                   # 3 — Clement of Ohrid's long life, the Vita S. Basilii
+      #                                            iunioris excerpts; the third is the Narratio de vita
+      #                                            Mohammedis, an anti-Islamic polemical life the head
+      #                                            cannot tell apart (declared stray: polemic in a vita's form)
+      "Martyrium": hagiography/martyrdom         # 3 — the Ignatius and Justin martyr acts, Theophylact's
+      #                                            Historia martyrii of the fifteen Tiberiopolitan martyrs
+      "Encomium": hagiography/encomium           # 1 — Philotheus' encomium of Gregory Palamas, the saint
+      #                                            he canonized
+      "Laudatio": hagiography/encomium           # 1 — the excerpt from the encomium of St Demetrius (the
+      #                                            904 capture of Thessalonica); a part takes its work's genre
+      "Narratio de imagine Edessena": hagiography  # 1 — the feast narrative of the Mandylion's translation
+      #                                            (944), BHG-catalogued: hagiography of a relic, no ruled sub
+      # theology/apologetics: the faith defended outward, to pagans and the Roman state
+      "Apologia": theology/apologetics           # 3 — Justin's two Apologies; Quadratus' fragment
+      "Legatio": theology/apologetics            # 1 — Athenagoras' plea to the emperors for the Christians
+      "Cohortatio": theology/apologetics         # 1 — ps.-Justin's exhortation to the Greeks
+      "Oratio ad gentiles": theology/apologetics  # 1 — ps.-Justin
+      "Oratio ad Graecos": theology/apologetics  # 1 — Tatian: an "oratio" by title, an apology by function
+      "Ad Autolycum": theology/apologetics       # 1 — Theophilus of Antioch
+      "Irrisio": theology/apologetics            # 1 — Hermias' mockery of the pagan philosophers
+      "De monarchia": theology/apologetics       # 1 — ps.-Justin: the one God against polytheism, from the
+      #                                            poets' own testimony
+      # theology/polemic: the refutation of a named error or opponent
+      "Adversus": theology/polemic               # 2 — Apollonius against the Montanists; Adversus iconoclastas
+      "Refutatio": theology/polemic              # 1 — Agallianus against Argyropulus (the Florentine union)
+      "Confutatio": theology/polemic             # 1 — ps.-Justin's confutation of Aristotelian dogmas
+      "Antirrhetici": theology/polemic           # 1 — Philotheus against Gregoras (the Palamite controversy)
+      "De iis quorum Latini incusantur": theology/polemic  # 1 — Theophylact on the charges against the Latins
+      "Logos dialektikos": theology/polemic      # 1 — Hilarion on leavened bread against the Latin azymes
+      "De processione Spiritus Sancti ad magnum ducem": theology/polemic  # 1 — Argyropulus on the filioque
+      #                                            and the Florentine decree: a side taken in the controversy
+      "Dialogus": theology                       # 4 — Cum Tryphone (apologetic, to a Jew), Symeon of
+      #                                            Thessalonica against the heresies and Nicetas against the
+      #                                            Latins (polemic), ps.-Psellus on demons (doctrine): one head,
+      #                                            three subs — the bare head, declared coarse (a form word, not
+      #                                            literary/wisdom's dialogue)
+      # theology/erotapokriseis: doctrinal question-and-answer
+      "Quaestiones": theology/erotapokriseis     # 3 — the ps.-Justinian question-answer collections (not
+      #                                            exegesis proper: the questions are doctrinal)
+      "Responsa ad Gabrielem Pentapolitanum": theology/erotapokriseis  # 1 — Symeon's answers on liturgical
+      #                                            and canonical questions
+      # theology/treatise: doctrine argued in prose
+      "De resurrectione": theology/treatise      # 2 — Athenagoras; ps.-Justin
+      "Expositio rectae fidei": theology/treatise  # 1 — ps.-Justin's trinitarian-christological exposition
+      "Expositio de sacro symbolo": theology/treatise  # 1 — Symeon on the Creed (an exposition, not the creed
+      #                                            itself: no confession is being made)
+      "Expositio necessaria de sacri symboli dictionibus": theology/treatise  # 1 — the Creed's terms expounded
+      "De essentia et operatione Dei": theology/treatise  # 1 — the Palamite essence-energies doctrine
+      "Λόγοι δύο": theology/treatise             # 1 — the anonymous two theological discourses
+      "De mortis determinatione": theology/treatise  # 1 — Psellus' Antigraphe: is the term of life fixed by God
+      "De sacerdotio": theology/treatise         # 1 — Symeon on the priesthood, epistle-framed
+      # catechesis: the confession of faith is the ruled grain
+      "Confessio": catechesis                    # 1 — Patriarch Joseph II's confession of faith (Florence, 1439)
+      # oratory: rhetoric as a form — the Byzantine monody and the imperial oration
+      "Monodia": oratory                         # 2 — Cydones on the slain of Thessalonica; Psellus on the
+      #                                            collapse of Hagia Sophia: the funeral lament as oration
+      "Oratio in imperatorem Alexium I Comnenum": oratory  # 1 — Theophylact's basilikos logos
+    # -- still unmapped by design (21 documents): no ruled head fits. They surface in the
+    #    unmapped bucket (`nabu kind census --unmapped cgpg`), never forced onto a near class.
+    #  bare fragments of lost works (13): Fragmenta 12, Prooemium 1 — the lost or parent
+    #    work's genre is not in the title (Job the Monk's prooemium is an author's preface
+    #    to his Psalms exposition — part of a work, not edition paratext)
+    #  "Narratio" (1): John of Jerusalem's narrative of the iconoclast heresy's origin —
+    #    history written as polemic; the bare head would capture any future narratio
     #  the court, administration and war (7): "De cerimoniis aulae Byzantinae" 2,
     #    "De officiis", "De administrando imperio", "De thematibus", Tactica,
     #    "De sepulcris imperatorum quae sunt in templo sanctorum apostolorum"
-    #  secular rhetoric (3): Monodia 2, "Oratio in imperatorem Alexium I Comnenum"
+    #  The edition's own apparatus (Migne's testimonia, prefaces, monita — the paratext
+    #  grain) sits in the residuum documents, which carry no genre facet: the residuum
+    #  mixes apparatus with rescans and uncarved text, so a paratext claim is an adapter
+    #  question, not a fold line.
   cantus:             # the chant record's genre — upstream's own abbreviation list
     #                   (cantusdatabase.org/genres/), the facet value = upstream's genre NAME,
     #                   the code raw (CantusCsvParser::GENRES). Counts = the 17-source sample
