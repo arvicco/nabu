@@ -216,6 +216,22 @@ module Nabu
     #   which layer `number` should mean is a judgment, not a decode;
     #   "unmarked" (12,235), Collective (5), and the prepositions' "Nominal
     #   state" (11,808). Keyed on "form" (every token). 54,929 decode.
+    # - TLA glossing `gloss` (tla-hf): the token "gloss" here is the TLA's
+    #   GRAMMATICAL glossing (Leipzig-style labels), not a word meaning —
+    #   so it belongs to this façade, never TokenGlosses. Censused over the
+    #   whole deposit (212,018 tokens, 259 distinct labels): a head (V, N,
+    #   PREP, ART …) plus atoms joined by . : - = ~ \ — gender m/f/c,
+    #   number sg/pl/du, fused person-number (3sg, 1pl …), state stpr/stc
+    #   (pron/cons), inf/imp/ptcp (mood), act/pass (voice), ipfv (aspect
+    #   imp), art/ART/dem/REL/PRON.rel (prontype), poss, NUM ord/card. A
+    #   head-less person label (-3sg.m, =3sg.c, 1sg) is a personal pronoun
+    #   (prontype prs); a verb's (V\res-3sg.m) is its agreement. The
+    #   possessive article's "-" segment is its POSSESSOR (ART.poss:pl-1sg,
+    #   4 tokens) and is dropped. Flags with no facet (tam, ant, res, cnsv,
+    #   oblv, compl, post, distr, dist, excl, nmlz, adjz, advz, adv, and
+    #   "gen" — the genitival adjective, never the genitive case) and the
+    #   head-only labels (V 18,478, PREP 23,947, PTCL, PERSN, DIVN, TITL,
+    #   "(undefined)" 8,341 …) decode nothing. 109,181 tokens decode.
     module MorphFacets
       # A malformed --morph string (empty, no `=`, blank key/value). Caller-
       # fixable, so CLI/MCP surface it as a plain usage error.
@@ -536,6 +552,22 @@ module Nabu
         "tam" => TRACES_TAM, "tamp" => TRACES_TAM, "temp" => TRACES_TAM
       }.freeze
 
+      # TLA glossing atoms (tla-hf; class note) → [facet, value]; a fused
+      # person-number atom matches CORPH_PERSON_NUMBER's shape. Heads (V,
+      # N, PREP …) and flags (tam, ant, res, adjz, gen …) are not listed.
+      TLA_ATOMS = {
+        "m" => %w[gender masc], "f" => %w[gender fem], "c" => %w[gender com],
+        "sg" => %w[number sing], "pl" => %w[number plur], "du" => %w[number dual],
+        "stpr" => %w[state pron], "stc" => %w[state cons],
+        "inf" => %w[mood inf], "imp" => %w[mood imp], "ptcp" => %w[mood part],
+        "act" => %w[voice act], "pass" => %w[voice pass], "ipfv" => %w[aspect imp],
+        "art" => %w[prontype art], "ART" => %w[prontype art], "dem" => %w[prontype dem], "REL" => %w[prontype rel],
+        "poss" => %w[poss yes], "ord" => %w[numtype ord], "card" => %w[numtype card]
+      }.freeze
+      TLA_SEPARATORS = %r{[.:\-=~\\/()]}
+      # Article heads whose "-" segment is the POSSESSOR (ART.poss:pl-1sg).
+      TLA_ARTICLES = %w[ART art].freeze
+
       HELIPAD_DEGREES = {
         "ADJR" => "cmp", "ADVR" => "cmp", "QR" => "cmp", "ADJS" => "sup", "ADVS" => "sup", "QS" => "sup"
       }.freeze
@@ -563,7 +595,8 @@ module Nabu
         ["pos_code", :ceipom_features, %w[ceipom].freeze],
         ["pos", :helipad_features, %w[helipad].freeze],
         ["analysis", :corph_features, %w[corph].freeze],
-        ["form", :traces_features, %w[traces].freeze]
+        ["form", :traces_features, %w[traces].freeze],
+        ["gloss", :tla_features, %w[tla-hf].freeze]
       ].freeze
 
       # Canonical order for rendering a token's decoded features as evidence
@@ -825,6 +858,28 @@ module Nabu
           facet, value = table[token[field].to_s.strip.downcase]
           out[facet] = value if facet
         end
+      end
+
+      # TLA glossing (tla-hf): the label's atoms (class note). A label with
+      # no head (-3sg.m, =3sg.c, 1sg) is a personal pronoun; an article's
+      # "-" segment names its possessor and is dropped.
+      def tla_features(gloss, _token = nil)
+        label = gloss.to_s.strip
+        head = label[/\A[A-Za-z]+/]
+        label = label.split("-").first.to_s if TLA_ARTICLES.include?(head)
+        atoms = label.split(TLA_SEPARATORS).reject(&:empty?)
+        out = {}
+        atoms.each do |atom|
+          if (fused = CORPH_PERSON_NUMBER.match(atom))
+            add_values(out, "person", [fused[1]])
+            add_values(out, "number", [CORPH_ATOMS.fetch(fused[2]).last])
+          elsif (facet, value = TLA_ATOMS[atom])
+            add_values(out, facet, [value])
+          end
+        end
+        add_values(out, "prontype", ["rel"]) if head == "PRON" && atoms.include?("rel")
+        add_values(out, "prontype", ["prs"]) if head.nil? && out.key?("person")
+        out
       end
 
       # CorPH `analysis`: "."-joined atoms, a "/"-led segment continuing

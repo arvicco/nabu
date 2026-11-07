@@ -180,7 +180,7 @@ module Query
     # one scoped row placed AHEAD of them, so its tokens never reach them.
     def test_decoder_table_is_explicit_and_ordered
       assert_equal %w[form morphology feats postag analyses vt morpho morph msd morph msd msa pos pos_code pos
-                      analysis form],
+                      analysis form gloss],
                    MF::DECODERS.map(&:first)
       MF::DECODERS.each do |_key, method, sources|
         assert MF.respond_to?(method), "#{method} is a module function"
@@ -820,6 +820,64 @@ module Query
       assert_equal({ "state" => "abs" }, MF.features({ "form" => "śarq", "state" => "Absolute state" }, source: tr))
       assert_empty MF.features({ "form" => "ba", "pos" => "Preposition", "state" => "Nominal state" }, source: tr)
       assert_empty MF.features({ "form" => "motat", "tam" => "Perfect" }, source: "aes"), "TraCES-scoped"
+    end
+
+    # -- TLA glossing (tla-hf) ---------------------------------------------------
+
+    # Real tla-hf tokens (test/fixtures/tla-hf + deposit-censused labels):
+    # the "gloss" is the TLA's GRAMMATICAL glossing (Leipzig-style labels),
+    # decoded atom by atom. A head-less person label is a personal pronoun.
+    def test_tla_glossing_labels
+      tla = "tla-hf"
+      assert_equal({ "person" => "3", "number" => "sing", "gender" => "masc", "prontype" => "prs" },
+                   MF.features({ "form" => "=f", "upos" => "PRON", "gloss" => "-3sg.m" }, source: tla))
+      assert_equal({ "person" => "3", "number" => "sing", "gender" => "com", "prontype" => "prs" },
+                   MF.features({ "form" => "s", "upos" => "PRON", "gloss" => "=3sg.c" }, source: tla))
+      assert_equal({ "gender" => "masc", "number" => "plur" },
+                   MF.features({ "form" => "kꜣ(.PL)", "upos" => "NOUN", "gloss" => "N.m:pl" }, source: tla))
+      assert_equal({ "number" => "sing", "state" => "pron" },
+                   MF.features({ "form" => "ḥꜣ.tꞽ", "upos" => "NOUN", "gloss" => "N:sg:stpr" }, source: tla))
+      assert_equal({ "state" => "pron" }, MF.features({ "form" => "r", "gloss" => "PREP:stpr" }, source: tla))
+      assert_equal({ "voice" => "pass" }, MF.features({ "form" => "nḏ", "gloss" => "V\\tam.pass" }, source: tla))
+      assert_equal({ "mood" => "imp", "number" => "sing" },
+                   MF.features({ "form" => "ꜥḥꜥ", "gloss" => "V\\imp.sg" }, source: tla))
+      assert_equal({ "mood" => "inf" }, MF.features({ "form" => "šmi̯.t", "gloss" => "V\\inf" }, source: tla))
+      assert_equal({ "person" => "3", "number" => "sing", "gender" => "masc" },
+                   MF.features({ "form" => "ḥwꜣ", "gloss" => "V\\res-3sg.m" }, source: tla),
+                   "a verb's agreement ending, not a pronoun")
+      assert_equal({ "mood" => "part", "voice" => "act", "gender" => "masc", "number" => "sing" },
+                   MF.features({ "gloss" => "V\\ptcp.act.m.sg" }, source: tla))
+      assert_equal({ "prontype" => "art", "gender" => "masc", "number" => "sing" },
+                   MF.features({ "form" => "pꜣ", "gloss" => "art:m.sg" }, source: tla))
+      assert_equal({ "prontype" => "art", "poss" => "yes", "gender" => "fem", "number" => "sing" },
+                   MF.features({ "form" => "tꜣy", "gloss" => "ART.poss:f.sg" }, source: tla))
+      assert_equal({ "prontype" => "dem", "gender" => "masc", "number" => "sing" },
+                   MF.features({ "gloss" => "dem.m.sg" }, source: tla))
+      assert_equal({ "prontype" => "rel", "gender" => "masc", "number" => "sing" },
+                   MF.features({ "gloss" => "REL:m.sg" }, source: tla))
+      assert_equal({ "numtype" => "ord", "gender" => "masc", "number" => "sing" },
+                   MF.features({ "gloss" => "NUM.ord:m.sg" }, source: tla))
+      assert_equal({ "number" => "dual", "state" => "cons", "gender" => "fem" },
+                   MF.features({ "gloss" => "N.f:du:stc" }, source: tla))
+    end
+
+    # The possessive article's "-1sg" is the POSSESSOR, not the article's
+    # own person/number (ART.poss:pl-1sg — a plural article, "my"); flags
+    # with no facet (tam, ant, res, adjz, gen — the genitival adjective,
+    # never the genitive case) and the head-only/undefined labels decode
+    # nothing beyond their real atoms.
+    def test_tla_glossing_possessor_and_flags
+      tla = "tla-hf"
+      assert_equal({ "prontype" => "art", "poss" => "yes", "number" => "plur" },
+                   MF.features({ "gloss" => "ART.poss:pl-1sg" }, source: tla))
+      assert_equal({ "gender" => "masc", "number" => "sing" },
+                   MF.features({ "gloss" => "PREP-adjz:m.sg" }, source: tla))
+      assert_equal({ "voice" => "act", "state" => "pron" },
+                   MF.features({ "gloss" => "V\\tam.act-ant:stpr" }, source: tla))
+      %w[V N PREP PTCL gen (undefined) PERSN TITL V(unclear) Q].each do |label|
+        assert_empty MF.features({ "gloss" => label }, source: tla), label
+      end
+      assert_empty MF.features({ "gloss" => "-3sg.m" }, source: "aes"), "tla-hf-scoped"
     end
   end
 end

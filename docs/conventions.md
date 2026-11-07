@@ -315,6 +315,7 @@ decoded ones:
 | CorPH (corph) | `analysis` | `.`-joined self-describing atoms, `/`-led alternatives; no POS — a bare case is prepositional government and stays undecoded | `3pl.pres.subj.pass.`, `nom.sg.masc./fem.` |
 | AES (aes) | `numerus` `genus` `status` `pronoun` `inflection` `voice` `number` | one upstream field per category (`status` → `state` incl. `pron`, the pronominal state); `morphology` holds Egyptian morpheme labels, never read — the AES row precedes the unscoped `morphology` row | `numerus=singular genus=feminine status=st_absolutus` |
 | TraCES (traces) | `person` `number` `gender` `case` `state` `tam` | one upstream feature per category; `tam` under the Semitic keys (Perfect/Imperfect → `conjugation` perf/impf); the layered noun number/gender (`SingularP UnmarkedS`) stay undecoded | `tam=Perfect person=Third gender=Feminine` |
+| TLA glossing (tla-hf) | `gloss` | GRAMMATICAL Leipzig-style label (not a word meaning): head + atoms joined by `. : - = ~ \`; a head-less person label is a personal pronoun; an article's `-` segment is its possessor, dropped | `-3sg.m`, `N.m:pl`, `V\res-3sg.m`, `ART.poss:f.sg` |
 | ORACC (akk, sux) | `pos` | NER-flavoured tag, **no inflection** | `PN`, `N`, `GN`, `V` |
 
 **Vocabulary verdict — unified, not per-family passthrough.** The query
