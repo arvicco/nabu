@@ -170,5 +170,18 @@ module Query
       assert_includes search("baïd", morph: "number=sg").map(&:urn), "urn:nabu:corph:0003:S0003-1"
       assert_includes search("macc", morph: "case=gen").map(&:urn), "urn:nabu:corph:0003:S0003-2"
     end
+
+    # AES: ṯḥn.t (singular feminine, st_absolutus) and rn
+    # (st_pronominalis); sḏm as an infinitive.
+    def test_aes_explicit_features_reach_the_morph_surface
+      load_source("aes", "Aes")
+      thnt = search("ṯḥn.t", morph: "number=sg,gender=fem,state=abs").map(&:urn)
+      assert_includes thnt, "urn:nabu:aes:bbawarchive:26BP5JT5RZEDHDDU2R5TMUBD24:IBUBd5yQdZzbSE8TsmQVGvI8nKk"
+      assert_includes search("rn", morph: "state=pron").map(&:urn),
+                      "urn:nabu:aes:sawlit:YSJ3UHIOBJEILCD7KFQIGVOCLY:IBUBdxzCaqjtI0JuqECu8cK9wGw"
+      assert_includes search("sḏm", morph: "mood=inf").map(&:urn),
+                      "urn:nabu:aes:sawlit:2PD2OKCZCRELBGQD6NCAMOFEWA:IBUBd06ap4DyD0RHjM2U50Hs2Zc"
+      assert_empty search("ṯḥn.t", morph: "gender=masc")
+    end
   end
 end

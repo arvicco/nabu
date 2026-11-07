@@ -172,18 +172,22 @@ module Query
     end
 
     # The decoder seam: an explicit ordered table, token key → decode method
-    # → source scope (nil = any source; the treebank families' keys are
-    # unambiguous). The scoped rows' keys collide across the library
-    # ("morph", "msd", "analyses", "msa" each name DIFFERENT tagsets in
-    # other sources), so a scoped row decodes only its own sources' tokens.
+    # → source scope (nil = any source). The scoped rows' keys collide
+    # across the library ("morph", "msd", "analyses", "msa" each name
+    # DIFFERENT tagsets in other sources), so a scoped row decodes only its
+    # own sources' tokens. The treebank rows stay unscoped; AES — whose
+    # "morphology" is an Egyptian morpheme label, not a PROIEL tag — is the
+    # one scoped row placed AHEAD of them, so its tokens never reach them.
     def test_decoder_table_is_explicit_and_ordered
-      assert_equal %w[morphology feats postag analyses vt morpho morph msd morph msd msa pos pos_code pos analysis],
+      assert_equal %w[form morphology feats postag analyses vt morpho morph msd morph msd msa pos pos_code pos
+                      analysis],
                    MF::DECODERS.map(&:first)
       MF::DECODERS.each do |_key, method, sources|
         assert MF.respond_to?(method), "#{method} is a module function"
         assert(sources.nil? || (sources.is_a?(Array) && !sources.empty?), "#{method}: nil or a slug list")
       end
-      assert_equal [nil, nil, nil], MF::DECODERS.first(3).map(&:last), "the treebank rows stay unscoped"
+      assert_equal %w[aes], MF::DECODERS.first.last
+      assert_equal [nil, nil, nil], MF::DECODERS[1, 3].map(&:last), "the treebank rows stay unscoped"
     end
 
     # A scoped row never decodes another source's token, even one carrying
@@ -706,6 +710,65 @@ module Query
         assert_empty MF.features({ "analysis" => analysis }, source: ch), analysis
       end
       assert_empty MF.features({ "analysis" => "gen.sg." }, source: "aoxml"), "CorPH-scoped"
+    end
+
+    # -- AES explicit features ---------------------------------------------------
+
+    # Real AES tokens (test/fixtures/aes + deposit-censused values): the
+    # fine morphology rides verbatim under upstream's own names (numerus,
+    # genus, status, pronoun, inflection, voice, number).
+    def test_aes_explicit_features
+      aes = "aes"
+      thnt = { "form" => "[ṯḥ]n,t", "lemma" => "ṯḥn.t", "pos" => "substantive", "numerus" => "singular",
+               "genus" => "feminine", "status" => "st_absolutus" }
+      assert_equal({ "number" => "sing", "gender" => "fem", "state" => "abs" }, MF.features(thnt, source: aes))
+      rn = { "form" => "rn", "lemma" => "rn", "pos" => "substantive", "numerus" => "singular",
+             "status" => "st_pronominalis" }
+      assert_equal({ "number" => "sing", "state" => "pron" }, MF.features(rn, source: aes))
+      assert_equal "cons", MF.features({ "form" => "ẖ,t", "lemma" => "ẖ.t", "numerus" => "singular",
+                                         "status" => "st_constructus" }, source: aes)["state"]
+      assert_equal({ "verbform" => "fin", "voice" => "act" },
+                   MF.features({ "form" => "ḏd", "pos" => "verb", "inflection" => "suffixConjugation",
+                                 "voice" => "active" }, source: aes))
+      assert_equal({ "mood" => "inf" }, MF.features({ "form" => "sḏm", "inflection" => "infinitive" }, source: aes))
+      assert_equal({ "number" => "sing", "gender" => "masc", "mood" => "part", "voice" => "act" },
+                   MF.features({ "form" => "pri̯", "numerus" => "singular", "genus" => "masculine",
+                                 "inflection" => "participle", "voice" => "active" }, source: aes))
+      assert_equal({ "mood" => "imp", "number" => "sing" },
+                   MF.features({ "form" => "⸢dwꜣ⸣", "lemma" => "dwꜣ", "inflection" => "imperative",
+                                 "numerus" => "singular" }, source: aes))
+      assert_equal({ "prontype" => "dem" },
+                   MF.features({ "form" => "pꜣ", "lemma" => "pꜣ", "pronoun" => "demonstrative_pronoun" }, source: aes))
+      assert_equal({ "numtype" => "card" }, MF.features({ "form" => "⸢13⸣", "number" => "cardinal" }, source: aes))
+      assert_equal({ "numtype" => "ord" }, MF.features({ "form" => "mḥ-3", "number" => "ordinal" }, source: aes))
+      assert_equal({ "gender" => "com", "number" => "sing" },
+                   MF.features({ "form" => "ḥmsi̯.k", "genus" => "commonGender", "inflection" => "pseudoParticiple",
+                                 "numerus" => "singular" }, source: aes))
+    end
+
+    # AES's "morphology" holds Egyptian verb-morpheme labels (n-morpheme,
+    # t-morpheme, geminated …) — never a PROIEL positional tag: the
+    # AES-scoped row decides before the unscoped `morphology` row could
+    # read "n-morpheme" as mood=opt. The Egyptian-specific forms
+    # (pseudoParticiple, relativeform), the lexical subtype leaking into
+    # numerus (substantive_masc/fem) and verbalClass decode nothing; the
+    # agreement those forms carry still does.
+    def test_aes_morpheme_labels_are_never_proiel_tags
+      aes = "aes"
+      samn = { "form" => "sḏm.n", "pos" => "verb", "inflection" => "suffixConjugation", "voice" => "active",
+               "morphology" => "n-morpheme" }
+      assert_equal({ "verbform" => "fin", "voice" => "act" }, MF.features(samn, source: aes))
+      refute MF.match?(samn, MF.parse("mood=opt"), source: aes)
+      assert_equal({ "mood" => "inf" },
+                   MF.features({ "form" => "mꜣꜣ", "inflection" => "infinitive", "morphology" => "geminated" },
+                               source: aes))
+      assert_equal({ "number" => "sing", "gender" => "masc" },
+                   MF.features({ "form" => "kꜣꜣ.n", "numerus" => "singular", "genus" => "masculine",
+                                 "inflection" => "relativeform" }, source: aes))
+      assert_empty MF.features({ "form" => "zꜣw.tj", "inflection" => "pseudoParticiple" }, source: aes)
+      assert_empty MF.features({ "form" => "ꜥnḫ", "pos" => "substantive", "numerus" => "substantive_masc" },
+                               source: aes)
+      assert_equal "ind", MF.features({ "morphology" => "-p-i------" })["mood"], "other sources: PROIEL as before"
     end
   end
 end

@@ -50,7 +50,9 @@ module Nabu
     #
     # == Source-scoped rows (the key collisions)
     #
-    # The treebank keys above are unambiguous library-wide. The later
+    # The treebank keys above are unambiguous library-wide save one: AES's
+    # "morphology" is an Egyptian morpheme label, so the AES-scoped row
+    # precedes the treebank rows (see the AES note below). The later
     # tagsets' keys are NOT: "morph" is OSHB's code AND REF/coptic/vakk/
     # penn-psd tags, "msd" is CorA (ReM/ReN), IMP (goo300k), NKJP and RIIG,
     # "analyses" is Diorisis and aoxml. So a DECODERS row carries a source
@@ -177,6 +179,26 @@ module Nabu
     #   secondary future "sec", free text "or") and 4 segments whose
     #   alternatives span categories (acc.sg./gen.pl.). 71,850 analyses
     #   decode at least one facet.
+    # - AES explicit fields (aes): upstream's fine morphology rides verbatim
+    #   under its own names, censused over the whole deposit (815,026
+    #   tokens): numerus singular/plural/dual, genus masculine/feminine/
+    #   commonGender, status st_absolutus/st_constructus/st_pronominalis
+    #   (→ state abs/cons/pron — the Egyptian pronominal state, the noun
+    #   form before a suffix pronoun), pronoun personal/demonstrative/
+    #   relative/interrogative (→ prontype prs/dem/rel/int), inflection
+    #   (suffixConjugation → verbform fin; infinitive/participle/
+    #   imperative → mood), voice active/passive, number cardinal/ordinal
+    #   (→ numtype). Skipped: inflection pseudoParticiple (8,941) and
+    #   relativeform (5,279) — Egyptian-specific forms with no UD facet,
+    #   their agreement still decodes; numerus substantive_masc/_fem
+    #   (24,326 — the noun's lexical subtype leaking into the number slot,
+    #   not a number); verbalClass, epitheton, name, adjective, particle,
+    #   adverb (lexical classes); and "morphology" — Egyptian verb-morpheme
+    #   labels (n-morpheme, t-morpheme, geminated …, 22,523 tokens). THAT
+    #   key is why the AES row sits FIRST, keyed on "form" (every AES
+    #   token): the unscoped PROIEL row reads "morphology", and read
+    #   positionally "n-morpheme" is mood=opt — 19,309 AES tokens decoded
+    #   to false moods before this row existed. 460,548 tokens decode.
     module MorphFacets
       # A malformed --morph string (empty, no `=`, blank key/value). Caller-
       # fixable, so CLI/MCP surface it as a plain usage error.
@@ -463,6 +485,21 @@ module Nabu
       CORPH_VOIDING = ["(?)", "?", "sec"].freeze
       CORPH_NUMBERS = %w[sg pl du].freeze
 
+      # AES explicit features: upstream field → {upstream value → [facet,
+      # value]} (class note). Values not listed are skipped.
+      AES_FIELDS = {
+        "numerus" => { "singular" => %w[number sing], "plural" => %w[number plur], "dual" => %w[number dual] },
+        "genus" => { "masculine" => %w[gender masc], "feminine" => %w[gender fem], "commonGender" => %w[gender com] },
+        "status" => { "st_absolutus" => %w[state abs], "st_constructus" => %w[state cons],
+                      "st_pronominalis" => %w[state pron] },
+        "pronoun" => { "personal_pronoun" => %w[prontype prs], "demonstrative_pronoun" => %w[prontype dem],
+                       "relative_pronoun" => %w[prontype rel], "interrogative_pronoun" => %w[prontype int] },
+        "inflection" => { "suffixConjugation" => %w[verbform fin], "suffixConjugation;special" => %w[verbform fin],
+                          "infinitive" => %w[mood inf], "participle" => %w[mood part], "imperative" => %w[mood imp] },
+        "voice" => { "active" => %w[voice act], "passive" => %w[voice pass] },
+        "number" => { "cardinal" => %w[numtype card], "ordinal" => %w[numtype ord] }
+      }.freeze
+
       HELIPAD_DEGREES = {
         "ADJR" => "cmp", "ADVR" => "cmp", "QR" => "cmp", "ADJS" => "sup", "ADVS" => "sup", "QS" => "sup"
       }.freeze
@@ -474,6 +511,7 @@ module Nabu
       # a later row, even when its tag decodes to nothing. Every decoder is
       # called as decoder(tag, token).
       DECODERS = [
+        ["form", :aes_features, %w[aes].freeze],
         ["morphology", :proiel_features, nil],
         ["feats", :ud_features, nil],
         ["postag", :agdt_features, nil],
@@ -732,6 +770,15 @@ module Nabu
         elsif HELIPAD_PARTICIPLE.match?(tag) then { "mood" => "part" }
         elsif (degree = HELIPAD_DEGREES[tag]) then { "degree" => degree }
         else {}
+        end
+      end
+
+      # AES: the explicit fine-morphology fields off the token (class
+      # note); "morphology" (Egyptian morpheme labels) is never read.
+      def aes_features(_form, token)
+        AES_FIELDS.each_with_object({}) do |(field, table), out|
+          facet, value = table[token[field]]
+          out[facet] = value if facet
         end
       end
 

@@ -313,6 +313,7 @@ decoded ones:
 | AGDT (ceipom) | `pos_code` (+ explicit `case`/`gender`) | 9-slot AGDT tag; the explicit columns refine locative/instrumental and syncretic `M/N`, `ACC/DAT`; lemma anchor = the equivalence tier's Latin key | `v3sria---`, `n-s---m--` + `case=LOC` |
 | Penn-psd (helipad) | `pos` + `morph` | YCOE-family verb tag (tense+mood suffix) / degree tag, `^`-joined case/person/number atoms | `GE+VBDI` + `3^SG`, `N` + `A^SG` |
 | CorPH (corph) | `analysis` | `.`-joined self-describing atoms, `/`-led alternatives; no POS — a bare case is prepositional government and stays undecoded | `3pl.pres.subj.pass.`, `nom.sg.masc./fem.` |
+| AES (aes) | `numerus` `genus` `status` `pronoun` `inflection` `voice` `number` | one upstream field per category (`status` → `state` incl. `pron`, the pronominal state); `morphology` holds Egyptian morpheme labels, never read — the AES row precedes the unscoped `morphology` row | `numerus=singular genus=feminine status=st_absolutus` |
 | ORACC (akk, sux) | `pos` | NER-flavoured tag, **no inflection** | `PN`, `N`, `GN`, `V` |
 
 **Vocabulary verdict — unified, not per-family passthrough.** The query
