@@ -1015,6 +1015,17 @@ class KindsTest < Minitest::Test
     assert_equal ["hymn-prayer/prayer"], shipped.normalize("korpus16", "TM 1555")
   end
 
+  # The ripple of the 2026-11-07 heads into folds that took the nearest
+  # head while no class existed: scat's saints' lives (historiography by
+  # the biography precedent), Ephrem's prose refutation of Mani
+  # (literary/essay), the Noscemus academic oration (literary/essay).
+  def test_shipped_corrections_onto_the_2026_11_07_heads
+    shipped = shipped_kinds
+    assert_equal "hagiography/vita", shipped.source_kind("scat")
+    assert_equal ["theology/polemic"], shipped.normalize("etcbc-syriac", "Eprx")
+    assert_equal ["oratory"], shipped.normalize("noscemus", "Oration")
+  end
+
   def shipped_kinds
     Nabu::Kinds.load(
       classes_path: File.expand_path("../config/kind_classes.yml", __dir__),
