@@ -195,5 +195,15 @@ module Query
       assert_includes search("ሁ", morph: "person=3,number=sg").map(&:urn), "urn:nabu:traces:rie232:w11"
       assert_empty search("ሞተ", morph: "conjugation=impf")
     end
+
+    # tla-hf's grammatical glossing: the suffix pronoun =f (-3sg.m) and
+    # ḥꜣ.tꞽ in the pronominal state (N:sg:stpr).
+    def test_tla_glossing_reaches_the_morph_surface
+      load_source("tla-hf", "TlaHf")
+      suffix = search("=f", morph: "person=3,gender=masc").map(&:urn)
+      assert_includes suffix, "urn:nabu:tla-hf:demotic-v18:2"
+      assert_includes search("ḥꜣ.tꞽ", morph: "state=pron").map(&:urn), "urn:nabu:tla-hf:late-egyptian-v19:1"
+      assert_empty search("=f", morph: "gender=fem")
+    end
   end
 end

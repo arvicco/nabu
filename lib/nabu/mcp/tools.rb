@@ -493,7 +493,8 @@ module Nabu
                                 "postags, Diorisis analyses, BHSA/DSS (ETCBC/Abegg) features, " \
                                 "OSHB morph codes, CorA msd (ReM/ReN) and morph (REF), IMP msd (goo300k), " \
                                 "Menota msa, CEIPoM AGDT pos_code (via its Latin-equivalent lemmas), " \
-                                "HeliPaD pos^morph tags, CorPH analyses, AES/TraCES explicit fields and " \
+                                "HeliPaD pos^morph tags, CorPH analyses, AES/TraCES explicit fields, " \
+                                "tla-hf grammatical glossing and " \
                                 "Coptic Scriptorium pos tags (polarity, prontype, " \
                                 "definite, verbform) are decoded to the same names (Hebrew/Aramaic add " \
                                 "state, stem, conjugation: e.g. \"stem=piel,conjugation=wayq\"); " \
