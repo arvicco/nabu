@@ -936,9 +936,11 @@ class KindsTest < Minitest::Test
   # id): every label folds, is declared not-genre, or stays a NAMED
   # uncovered value — none silent.
   HMML_TAIL = {
-    "Apologetic writings" => ["exegesis"], "Catechisms" => ["exegesis"], "Tafsīr" => ["exegesis"],
+    # corrected onto the 2026-11-07 heads (were exegesis / historiography / uncovered)
+    "Apologetic writings" => ["theology/apologetics"], "Catechisms" => ["catechesis"],
+    "Orations" => ["oratory"], "Hagiographies" => ["hagiography"], "Tafsīr" => ["exegesis"],
     "Calendars" => ["ritual/festival"], "Pontificals" => ["ritual/liturgy"],
-    "Processionals" => ["ritual/liturgy"], "Martyrologies" => ["ritual/liturgy"],
+    "Processionals" => ["ritual/liturgy"], "Martyrologies" => %w[hagiography ritual/liturgy],
     "Sacramentaries" => ["ritual/liturgy"], "Religious rules and constitutions" => ["legal/law"],
     "Bulls and briefs (non-papal)" => ["legal/law"], "Bulls (papal)" => ["legal/law"],
     "Laws" => ["legal/law"], "Papal documents" => ["legal"], "Indulgences" => ["legal"],
@@ -954,11 +956,11 @@ class KindsTest < Minitest::Test
   }.freeze
   HMML_NOT_GENRE = ["Fragments", "Notebooks", "Compendiums", "Palimpsests", "Scrolls", "Music manuscripts",
                     "Commonplace books", "Maps", "Drawings"].freeze
-  HMML_UNCOVERED = %w[Orations Indexes Hadith].freeze
+  HMML_UNCOVERED = %w[Indexes Hadith].freeze
 
   def test_shipped_hmml_genre_fold_covers_the_whole_census
     shipped = shipped_kinds
-    HMML_TAIL.each { |label, want| assert_equal want, shipped.normalize("hmml-reading-room", label), label }
+    HMML_TAIL.each { |label, want| assert_equal want, shipped.normalize("hmml-reading-room", label).sort, label }
     HMML_NOT_GENRE.each do |label|
       fold = shipped.fold("hmml-reading-room", label)
       assert_empty fold.paths, label
