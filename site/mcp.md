@@ -120,19 +120,25 @@ docker run --rm -p 8080:8080 {{ mcp.image }} bin/nabu mcp --http
 ### Hosted, one click
 
 Both buttons deploy the same prebuilt image, release {{ mcp.version }}, as
-an HTTP endpoint at `https://<your-service>/mcp`. The demo answers
-comfortably within a 512 MB free instance.
+an HTTP endpoint at `https://<your-service>/mcp`, on your own account: the
+deployer's plan pays, and a free instance is enough, since the demo
+answers comfortably within 512 MB.
+
+[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/arvicco/nabu)
+[![Deploy to Koyeb](https://www.koyeb.com/static/images/deploy/button.svg)]({{ mcp.koyeb_deploy_url }})
 
 - [Deploy to Render](https://render.com/deploy?repo=https://github.com/arvicco/nabu).
   Render reads the repository's `render.yaml`, a Blueprint that names the
   prebuilt image by its release tag, then pulls that image and starts it
-  in HTTP mode. It does not compile anything from the repository. Render's
-  free instances sleep after about fifteen minutes idle, and the first
-  request after that waits roughly a minute while the instance wakes.
+  in HTTP mode. It does not compile anything from the repository, and
+  auto-deploys are off, so a deployed instance changes only when you
+  redeploy it. **Render's free instances sleep after fifteen minutes
+  without traffic, and the first request after that waits about a minute
+  while the instance wakes.**
 - [Deploy to Koyeb]({{ mcp.koyeb_deploy_url }}).
-  Koyeb pulls the same tagged image directly. Its free instance scales to
-  zero when idle, so the first request after a quiet spell pays a cold
-  start of several seconds.
+  Koyeb pulls the same tagged image directly. **Its free instance scales
+  to zero after an hour without traffic, so the first request after a
+  quiet spell pays a cold start of a few seconds.**
 
 **Access control over HTTP.** Local stdio is the default: the client
 starts the container itself and talks to it over a pipe, so nothing

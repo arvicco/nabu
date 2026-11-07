@@ -714,6 +714,50 @@ user scope:
 Restart Claude Desktop after editing. The `nabu` tools then appear in the
 tools menu of any conversation.
 
+### Agent frameworks — LangChain, LlamaIndex
+
+Any framework with an MCP stdio client can load the tools. The examples
+below start the public demo image, pinned to its released tag, so they run
+with nothing but Docker installed; to use your own library, swap the
+command for the `bundle exec … bin/nabu mcp` form above.
+
+LangChain (`pip install langchain-mcp-adapters`):
+
+```python
+import asyncio
+from langchain_mcp_adapters.client import MultiServerMCPClient
+
+async def main():
+    client = MultiServerMCPClient({
+        "nabu": {
+            "command": "docker",
+            "args": ["run", "-i", "--rm", "ghcr.io/arvicco/nabu-demo:1.0.0"],
+            "transport": "stdio",
+        }
+    })
+    tools = await client.get_tools()  # LangChain tools, ready for an agent
+    print([tool.name for tool in tools])
+
+asyncio.run(main())
+```
+
+LlamaIndex (`pip install llama-index-tools-mcp`):
+
+```python
+import asyncio
+from llama_index.tools.mcp import BasicMCPClient, McpToolSpec
+
+async def main():
+    client = BasicMCPClient("docker", args=["run", "-i", "--rm", "ghcr.io/arvicco/nabu-demo:1.0.0"])
+    tools = await McpToolSpec(client=client).to_tool_list_async()  # FunctionTools
+    print([tool.metadata.name for tool in tools])
+
+asyncio.run(main())
+```
+
+Every tool result keeps the `license_class` and `urn` fields; an agent that
+quotes the library should carry them through (§6).
+
 ---
 
 ## 5. Example conversation
