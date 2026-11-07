@@ -95,12 +95,13 @@ module Nabu
         fulltext.transaction do
           slugs.each do |slug|
             source_id = catalog[:sources].where(slug: slug).get(:id)
-            next if source_id.nil?
-
-            count = insert_rows(fulltext, source_passages(catalog, source_id, slug), slug)
+            # A registry source absent from this catalog still gets its
+            # scope row at 0 — the coverage line lists every DECLARED
+            # source honestly (the annotations-lane convention).
+            count = source_id ? insert_rows(fulltext, source_passages(catalog, source_id, slug), slug) : 0
             fulltext[SCOPE_TABLE].insert(slug: slug, passages: count)
             total += count
-            sources += 1
+            sources += 1 if count.positive?
           end
         end
         Indexer.stamp_stages!(fulltext, versions: { STAGE => Indexer::STAGE_VERSIONS.fetch(STAGE) }) if stamp
@@ -144,9 +145,11 @@ module Nabu
             insert_rows(fulltext, source_passages(catalog, source_id, slug), slug) if registered && source_id
           end
           fulltext[SCOPE_TABLE].where(slug: slug).delete
-          next 0 unless registered && source_id
+          next 0 unless registered
 
-          count = source_rowids(fulltext, slug).size
+          # A declared source absent from the catalog keeps its scope
+          # row at 0 — same coverage honesty as the full rebuild.
+          count = source_id ? source_rowids(fulltext, slug).size : 0
           fulltext[SCOPE_TABLE].insert(slug: slug, passages: count)
           count
         end
