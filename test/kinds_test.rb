@@ -905,7 +905,18 @@ class KindsTest < Minitest::Test
     "Church of England -- Catechisms. -- English." => ["catechesis"],
     "Creeds." => ["catechesis"],
     "Church of England -- Creeds -- Early works to 1800." => ["catechesis"],
-    "Church of England -- Creeds -- Poetry -- Early works to 1800." => %w[catechesis literary/poetry]
+    "Church of England -- Creeds -- Poetry -- Early works to 1800." => %w[catechesis literary/poetry],
+    # the ripple round: doctrinal theology, speeches, saints' lives and martyrs
+    "Theology, Doctrinal." => ["theology/treatise"],
+    "Theology, Doctrinal -- Early works to 1800." => ["theology/treatise"],
+    "Speeches, addresses, etc., English -- Early works to 1800." => ["oratory"],
+    "Society of Friends -- Speeches, addresses, etc. -- Early works to 1800." => ["oratory"],
+    "Christian saints -- Biography -- Early works to 1800." => ["hagiography"],
+    "Saints -- Legends -- Early works to 1800." => ["hagiography"],
+    "Christian saints -- Prayer-books and devotions -- English -- Early works to 1800." =>
+      ["hymn-prayer/prayer"], # devotions TO the saints: the prayer claim, never a life
+    "Martyrs -- England -- Early works to 1800." => ["hagiography/martyrdom"],
+    "Martyrs -- Poetry -- Early works to 1800." => %w[hagiography/martyrdom literary/poetry]
   }.freeze
 
   # Topical, name, and ABOUT-the-form headings: no rule covers them.
@@ -926,7 +937,10 @@ class KindsTest < Minitest::Test
     "Catechisms, English -- Humor -- Early works to 1800.",
     "Westminster Assembly (1643-1652). -- Shorter catechism.",
     "Confession -- Catholic Church -- Early works to 1800.",
-    "Goodwin, Thomas, 1600-1680. -- Apologeticall narration."
+    "Goodwin, Thomas, 1600-1680. -- Apologeticall narration.",
+    # bare "Saints" heads Puritan treatises on the elect as often as lives
+    "Saints -- Early works to 1800.",
+    "Saints -- Cult -- Early works to 1800."
   ].freeze
 
   def test_shipped_eebo_subject_fold_is_an_open_vocabulary

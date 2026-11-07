@@ -2442,8 +2442,9 @@ sources:
       '\A(?!.*(?:History and criticism|Controversial literature|Humor|Religious aspects))Prophecies\b': divination/oracle
       #   202 — prophecy pamphlets (Mother Shipton, Lilly …): oracle is the ruled sub
       # -- historiography
-      '\A(?!.*History and criticism).* -- Biography\.?(?: --|\z)': historiography
-      #   153 — lives (the elephantine "biography" fold)
+      '\A(?!.*History and criticism)(?!(?:Christian saints|Martyrs)\b).* -- Biography\.?(?: --|\z)': historiography
+      #   153 — lives (the elephantine "biography" fold); a saint's or martyr's life goes to
+      #   hagiography instead (2026-11-07, below)
       # -- funerary
       '\A(?!.*History and criticism)Epitaphs\b': funerary/epitaph  # 16 — epitaph collections
       # -- theology, catechesis (the heads ruled 2026-11-07; counts = live catalog 2026-11-07)
@@ -2471,6 +2472,24 @@ sources:
       #   68 — LCSH's form for confessions of faith, the catechesis head's ruled grain
       #   ("Church of England -- Creeds", "Creeds."). "Confession" (the sacrament of
       #   penance) is a topical heading and never matches
+      '\A(?!.*History and criticism)Theology, Doctrinal\b': theology/treatise
+      #   459 — LCSH's doctrinal-theology heading: common-places, doctrine in lectures,
+      #   "Fides Catholica", conciliatory judgments — doctrine argued in prose (titles read
+      #   2026-11-07). A catechism or a controversy co-tagged here keeps its own claim too
+      # -- oratory
+      '\A(?!.*History and criticism)(?:.* -- )?Speeches, addresses, etc\b': oratory
+      #   62 — "Speeches, addresses, etc., English" (parliamentary and civic speeches) and
+      #   the form subdivision ("Society of Friends -- Speeches, addresses, etc.")
+      # -- hagiography. Bare "Saints" is refused: in EEBO it heads Puritan treatises on
+      # "the saints" (the elect) as often as lives; "-- Cult", "-- Controversial
+      # literature", devotions and pictorial works are about the saints, not lives of them
+      '\A(?!.*(?:History and criticism|Controversial literature|Cult|Prayer-books|Pictorial))Christian saints\b': hagiography
+      #   11 — lives of saints ("Christian saints -- Biography", "… -- Italy -- Assisi")
+      '\A(?!.*History and criticism)Saints(?:, [A-Z][a-z]+)? -- Legends\b': hagiography
+      #   5 — the saints' legends (the Legenda aurea shape)
+      '\A(?!.*(?:History and criticism|Controversial literature))Martyrs\b': hagiography/martyrdom
+      #   24 — martyrologies and martyr accounts (Foxe abridged, the Japanese martyrs, the
+      #   primitive persecutions); "-- Poetry" keeps its verse claim beside
   evans-tcp:          # 5,012 docs; the LCSH subject facet (config/facet_map.yml subjects → subject)
     # The same TCP MARC-to-TEI headers as eebo-tcp, so the same OPEN vocabulary and the
     # same refusals ("-- History and criticism": a book ABOUT a form is no instance of
