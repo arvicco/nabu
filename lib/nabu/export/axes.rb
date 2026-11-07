@@ -23,7 +23,11 @@ module Nabu
     # NULL on a dated row means the source's own artifact/typed date
     # (migration 034) and exports as "artifact"; "composition" stays as
     # stored. Place is the first document-grain row carrying any place
-    # field; artifact_script the first carrying one.
+    # field, skipping role-labeled place lanes
+    # (Store::TimelineBuilder.role_axis_sources — a received or sender
+    # place would ship here without its role); a document whose only
+    # places are role places exports none. artifact_script is the first
+    # row carrying one.
     module Axes
       Summary = Data.define(:not_before, :not_after, :precision, :date_class, :date_basis, :date_raw,
                             :place_name, :place_ref, :place_lat, :place_lon, :artifact_script)
@@ -55,7 +59,10 @@ module Nabu
                     .min_by do |row|
                       [Store::SilverDates.silver?(row) ? 1 : 0, row[:not_before] || row[:not_after], row[:id]]
                     end
-        place = rows.find { |row| row[:place_name] || row[:place_ref] || row[:place_lat] }
+        roles = Store::TimelineBuilder.role_axis_sources
+        place = rows.find do |row|
+          (row[:place_name] || row[:place_ref] || row[:place_lat]) && !roles.include?(row[:axis_source])
+        end
         Summary.new(**date_fields(dated), **place_fields(place),
                     artifact_script: rows.filter_map { |row| row[:artifact_script] }.first)
       end

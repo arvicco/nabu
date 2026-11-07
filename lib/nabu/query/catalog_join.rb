@@ -184,19 +184,64 @@ module Nabu
       # P122-1: the any-row filter promises UPSTREAM dates, so the silver
       # estimate lane (Store::SilverDates) never answers it — estimates are
       # reached only by naming them (`--date-basis silver`).
+      #
+      # The window at the document grain: under an active window (with or
+      # without a place), a DATELESS row (a place-only row — a letter's
+      # received place, a sender place, an HGV place-only row; an
+      # artifact-script row) no longer answers the window by its NULL
+      # bounds alone; it answers only when the document's own upstream
+      # date evidence overlaps the window, or when the document carries no
+      # upstream date evidence at all (the honest-undated stance). A dated
+      # row keeps its own window∧place agreement. The place-only lane is
+      # untouched.
       def timeline_exists(from:, to:, place:)
         axes = Sequel[:document_axes]
-        sub = Store::SilverDates.upstream(@catalog[:document_axes], axes: axes)
-                                .where(axes[:document_id] => Sequel[:documents][:id])
-        sub = sub.where(Sequel.expr(axes[:not_after] => nil) | (axes[:not_after] >= from)) if from
-        sub = sub.where(Sequel.expr(axes[:not_before] => nil) | (axes[:not_before] <= to)) if to
-        if (resolution = PlaceFilter.coerce(place))
-          clauses = []
-          clauses << Sequel.ilike(axes[:place_name], resolution.pattern) if resolution.pattern
-          clauses << place_ref_claims(axes, resolution.identities) if resolution.identity?
-          sub = sub.where(Sequel.|(*clauses))
+        sub = upstream_axes(axes)
+        resolution = PlaceFilter.coerce(place)
+        sub = sub.where(place_match(axes, resolution)) if resolution
+        if from || to
+          sub.where(Sequel.|(Sequel.&(dated_row(axes), window_overlap(axes, from: from, to: to)),
+                             Sequel.&(~dated_row(axes), document_dates_fit(from: from, to: to))))
+             .exists
+        else
+          sub.exists
         end
-        sub.exists
+      end
+
+      # The document's upstream axis rows (silver estimates never answer
+      # the any-row filter — P122-1), correlated on documents.id.
+      def upstream_axes(axes)
+        Store::SilverDates.upstream(@catalog[:document_axes], axes: axes)
+                          .where(axes[:document_id] => Sequel[:documents][:id])
+      end
+
+      # name-ILIKE OR identity-claims for a PlaceFilter::Resolution.
+      def place_match(axes, resolution)
+        clauses = []
+        clauses << Sequel.ilike(axes[:place_name], resolution.pattern) if resolution.pattern
+        clauses << place_ref_claims(axes, resolution.identities) if resolution.identity?
+        Sequel.|(*clauses)
+      end
+
+      def dated_row(axes) = Sequel.|(Sequel.~(axes[:not_before] => nil), Sequel.~(axes[:not_after] => nil))
+
+      # The NULL-aware overlap as one boolean expression (TRUE with no window).
+      def window_overlap(axes, from:, to:)
+        clauses = []
+        clauses << (Sequel.expr(axes[:not_after] => nil) | (axes[:not_after] >= from)) if from
+        clauses << (Sequel.expr(axes[:not_before] => nil) | (axes[:not_before] <= to)) if to
+        Sequel.&(*clauses)
+      end
+
+      # TRUE when the current document has no upstream dated row, or one
+      # overlapping the window — the date evidence a dateless place row
+      # borrows (#timeline_exists).
+      def document_dates_fit(from:, to:)
+        dates = Sequel[:date_axes]
+        evidence = Store::SilverDates.upstream(@catalog.from(Sequel.as(:document_axes, :date_axes)), axes: dates)
+                                     .where(dates[:document_id] => Sequel[:documents][:id])
+                                     .where(dated_row(dates))
+        Sequel.|(~evidence.exists, evidence.where(window_overlap(dates, from: from, to: to)).exists)
       end
 
       # The --date-basis filter (P122-1): a correlated EXISTS over the
