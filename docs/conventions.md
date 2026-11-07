@@ -306,9 +306,11 @@ decoded ones:
 | Abegg (dss) | `gn` `nu` `ps` `st` `vs` `vt` `md` (beside `morpho`) | one feature per key | `vs=hifil vt=ptca gn=m nu=s` |
 | OSHB (oshb) | `morph` | language + `/`-joined segments | `HC/Vqw3ms/Sp3fs` |
 | CorA (rem, ren) | `msd` | `.`-joined self-describing values | `Ind.Pres.Sg.3`, `Masc-Neut.Dat-Akk.Sg` |
+| CorA (ref) | `morph` | the same `.`-joined identity scheme, German spellings; `MN`/`MF`/`FN` syncretic genders | `3.Sg.Präs.Ind.Unr`, `MN.Akk.Sg` |
 | IMP (goo300k) | `msd` | coarse closed tag | `Ncf`, `Vmp`, `Agc` |
 | Menota (menota) | `msa` | category-letter codes, `\|`-joined analyses | `xVB fF tPS mIN p3 nS vA` |
 | Coptic Scriptorium (coptic-scriptorium) | `pos` | Scriptorium tag, **no inflection** — decodes only what the tag fixes (polarity, pronoun type, definiteness, finiteness); fused tags `_`-joined | `ANEGPST`, `PPERS`, `AOPT_PPERS` |
+| AGDT (ceipom) | `pos_code` (+ explicit `case`/`gender`) | 9-slot AGDT tag; the explicit columns refine locative/instrumental and syncretic `M/N`, `ACC/DAT`; lemma anchor = the equivalence tier's Latin key | `v3sria---`, `n-s---m--` + `case=LOC` |
 | ORACC (akk, sux) | `pos` | NER-flavoured tag, **no inflection** | `PN`, `N`, `GN`, `V` |
 
 **Vocabulary verdict — unified, not per-family passthrough.** The query
@@ -354,7 +356,9 @@ in its table comment.
 **Token glosses — the façade's sibling (`Query::TokenGlosses`).** Some sources
 store upstream's own word meaning on each token: bhsa `gloss` and achemenet
 `eng` (English), aes `gloss` (German contextual translation) and tlhdig
-`gloss` (German, on the selected analysis). One registry row per source (token
+`gloss` (German, on the selected analysis), and ceipom `meaning` (English;
+the equivalence tier — the token pass reads the Latin-equivalent key the
+index minted from, folded as Latin). One registry row per source (token
 key + gloss language) makes them displayable — every lemma hit from those
 sources carries `token_gloss`, rendered in ‘quotes’ beside any dictionary
 gloss — and filterable on the same lemma-anchored token pass as `--morph`:

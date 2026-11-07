@@ -125,6 +125,23 @@ module Nabu
     #   COP (lemma-dependent), the plain auxiliaries (no UD feature). A
     #   fused tag (ANEGPST_PPERS — a pronoun cliticized on its host)
     #   decodes every part.
+    # - CEIPoM `pos_code` (ceipom): the 9-slot AGDT tag, through the AGDT
+    #   table. Censused over the whole deposit (36,859 of 37,041 tokens
+    #   carry one; 36,874 analyses with the alternatives; 386 distinct, all
+    #   9 slots wide): every slot code sits inside the AGDT/PROIEL code
+    #   maps (tense p/i/r/l/f/t, mood i/s/m/o/n/p/g/u, voice a/p, case
+    #   n/g/a/b/d/v, degree c/s), and the tag agrees 1:1 with the explicit
+    #   Person/Number/Tense/Mood/Diathesis columns wherever both speak.
+    #   Two lossy spots, refined from the explicit columns: case — slot 8
+    #   is "-" on the 277 LOC and 15 INS tokens — and syncretism — the tag
+    #   writes one gender for the 167 M/N, M/F, F/N tokens and one case for
+    #   the 7 ACC/DAT-style pairs, decoded as value alternatives. Undecoded
+    #   residue: 182 analysis-less tokens, 2,809 all-"-" tags (letters,
+    #   unclear words), and the 12 multi-analysis tokens' alternatives (they
+    #   can be other lexemes — the lemma anchor reads the first analysis's
+    #   latin_equivalent). The explicit Tense column (simple/past/future) is
+    #   coarser than the tag and is not read. CEIPoM is the EQUIVALENCE lemma
+    #   tier, so the facets ride `--lemma <Latin equivalent>`.
     module MorphFacets
       # A malformed --morph string (empty, no `=`, blank key/value). Caller-
       # fixable, so CLI/MCP surface it as a plain usage error.
@@ -363,6 +380,16 @@ module Nabu
         "VIMP" => COPTIC_FINITE.merge("mood" => "imp").freeze
       }.freeze
 
+      # CEIPoM explicit Case/Gender column values (class note) → facet
+      # values; "/"-joined pairs are alternatives. Anything else ("?",
+      # "ABL?", the stray "da") is not a full decode and leaves the tag's
+      # reading alone.
+      CEIPOM_CASES = {
+        "NOM" => "nom", "GEN" => "gen", "DAT" => "dat", "ACC" => "acc", "ABL" => "abl", "VOC" => "voc",
+        "LOC" => "loc", "INS" => "ins"
+      }.freeze
+      CEIPOM_GENDERS = { "M" => "masc", "F" => "fem", "N" => "neut", "C" => "com" }.freeze
+
       # The per-tagset decoder seam: [token key, decode method, source scope]
       # in precedence order (scope nil = any source; otherwise the slugs
       # whose tokens the row decodes — class note). The first APPLICABLE row
@@ -381,7 +408,8 @@ module Nabu
         ["morph", :ref_features, %w[ref].freeze],
         ["msd", :imp_features, %w[goo300k].freeze],
         ["msa", :menota_features, %w[menota].freeze],
-        ["pos", :coptic_features, %w[coptic-scriptorium].freeze]
+        ["pos", :coptic_features, %w[coptic-scriptorium].freeze],
+        ["pos_code", :ceipom_features, %w[ceipom].freeze]
       ].freeze
 
       # Canonical order for rendering a token's decoded features as evidence
@@ -586,6 +614,27 @@ module Nabu
         pos.to_s.split("_").each_with_object({}) do |part, out|
           out.merge!(COPTIC_TAGS.fetch(part, {}))
         end
+      end
+
+      # CEIPoM `pos_code`: the AGDT positional decode, its case/gender
+      # refined by the explicit columns where those fully decode (class
+      # note). Only the first analysis — "alternatives" can be other
+      # lexemes than the one the lemma anchor reads.
+      def ceipom_features(pos_code, token)
+        out = agdt_features(pos_code)
+        cases = ceipom_column(token["case"], CEIPOM_CASES)
+        genders = ceipom_column(token["gender"], CEIPOM_GENDERS)
+        out["case"] = cases if cases
+        out["gender"] = genders if genders
+        out
+      end
+
+      # "ACC/DAT" → %w[acc dat]; nil unless every part is a known value.
+      def ceipom_column(value, table)
+        return nil unless value.is_a?(String)
+
+        values = value.split("/").map { |part| table[part.strip.upcase] }
+        values.empty? || values.include?(nil) ? nil : values
       end
 
       # Shared positional decode: `-` and unknown codes are skipped, never

@@ -127,5 +127,22 @@ module Query
       hits = search("þarfna", morph: "mood=inf,voice=mid")
       assert_includes hits.map(&:urn), "urn:nabu:menota:am-1056-ix-4to:2vB.7"
     end
+
+    # CEIPoM is the EQUIVALENCE tier: its lemma rows are Classical-Latin
+    # keys (latin_equivalent, folded as Latin), so the token pass must read
+    # the same key — Venetic doto (Latin do, "v3sria---") is a perfect;
+    # Old Latin mitat (also do, "v3spia---") is a present.
+    def test_ceipom_pos_code_reaches_the_morph_surface_through_the_equivalence_key
+      load_source("ceipom", "Ceipom", tier: "equivalence")
+      hits = search("do", morph: "tense=perf,person=3")
+      assert_includes hits.map(&:urn), "urn:nabu:ceipom:2390:3373"
+      refute_includes hits.map(&:urn), "urn:nabu:ceipom:5:5"
+      hit = hits.find { |result| result.urn == "urn:nabu:ceipom:2390:3373" }
+      assert_equal "do", hit.lemma
+      assert_equal "equivalence", hit.tier
+      assert_equal "doto", hit.surface_forms
+      assert_equal "person=3|number=sing|tense=perf|mood=ind|voice=act", hit.morph
+      assert_includes search("do", morph: "tense=pres").map(&:urn), "urn:nabu:ceipom:5:5"
+    end
   end
 end

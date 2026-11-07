@@ -177,7 +177,7 @@ module Query
     # ("morph", "msd", "analyses", "msa" each name DIFFERENT tagsets in
     # other sources), so a scoped row decodes only its own sources' tokens.
     def test_decoder_table_is_explicit_and_ordered
-      assert_equal %w[morphology feats postag analyses vt morpho morph msd morph msd msa pos],
+      assert_equal %w[morphology feats postag analyses vt morpho morph msd morph msd msa pos pos_code],
                    MF::DECODERS.map(&:first)
       MF::DECODERS.each do |_key, method, sources|
         assert MF.respond_to?(method), "#{method} is a module function"
@@ -535,6 +535,62 @@ module Query
                 "feats" => "Definite=Def|Number=Plur|Person=2|PronType=Prs" }
       assert_equal({ "definite" => "def", "number" => "plur", "person" => "2", "prontype" => "prs" },
                    MF.features(token, source: "coptic-scriptorium"))
+    end
+
+    # -- CEIPoM pos_code ----------------------------------------------------------
+
+    # Real CEIPoM tokens (test/fixtures/ceipom + deposit-censused ones):
+    # pos_code is the 9-slot AGDT tag, decoded through the AGDT table —
+    # Venetic doto "v3sria---" (perf-3-sg), Old Latin tatod "v3sfma---"
+    # (fut-impr-3-sg), [fiet "v3sfip---", Umbrian upsatuh "v-prppnn-",
+    # Oscan faciundis-type gerundives "v-p-g-nd-", the comparative maior.
+    def test_ceipom_pos_code_decodes_through_the_agdt_table
+      assert_equal({ "person" => "3", "number" => "sing", "tense" => "perf", "mood" => "ind", "voice" => "act" },
+                   MF.features({ "form" => "doto", "pos_code" => "v3sria---" }, source: "ceipom"))
+      assert_equal({ "person" => "3", "number" => "sing", "tense" => "fut", "mood" => "imp", "voice" => "act" },
+                   MF.features({ "form" => "tatod", "pos_code" => "v3sfma---" }, source: "ceipom"))
+      assert_equal "pass", MF.features({ "form" => "[fiet", "pos_code" => "v3sfip---" }, source: "ceipom")["voice"]
+      assert_equal({ "number" => "plur", "tense" => "perf", "mood" => "part", "voice" => "pass", "gender" => "neut",
+                     "case" => "nom" },
+                   MF.features({ "form" => "upsatuh⁝", "pos_code" => "v-prppnn-" }, source: "ceipom"))
+      assert_equal "gdv", MF.features({ "form" => "faciundis", "pos_code" => "v-p-g-nd-" }, source: "ceipom")["mood"]
+      assert_equal({ "number" => "sing", "gender" => "fem", "case" => "nom", "degree" => "cmp" },
+                   MF.features({ "form" => "maior", "pos_code" => "a-s---fnc" }, source: "ceipom"))
+      assert_empty MF.features({ "form" => "asted", "pos_code" => "---------" }, source: "ceipom")
+      assert_empty MF.features({ "pos_code" => "v3sria---" }, source: "glaux"), "pos_code is CEIPoM-scoped"
+    end
+
+    # The positional tag is lossy where the explicit Case/Gender columns are
+    # not: locative/instrumental (slot 8 "-": Oscan okreí⁝ "n-s---m--"
+    # case LOC) and the syncretic genders (manom "a-s---ma-" gender M/N —
+    # the tag writes only the first) and case pairs. A fully decodable
+    # explicit column refines the tag's case/gender; "?" and the odd
+    # stray value ("da", "ABL?") leave the tag's reading alone.
+    def test_ceipom_explicit_case_and_gender_refine_the_tag
+      okrei = { "form" => "okreí⁝", "pos_code" => "n-s---m--", "case" => "LOC", "gender" => "M" }
+      assert_equal({ "number" => "sing", "gender" => "masc", "case" => "loc" }, MF.features(okrei, source: "ceipom"))
+      assert_equal "ins", MF.features({ "pos_code" => "n-s---f--", "case" => "INS", "gender" => "F" },
+                                      source: "ceipom")["case"]
+      manom = { "form" => "manom", "pos_code" => "a-s---ma-", "case" => "ACC", "gender" => "M/N" }
+      assert_equal({ "number" => "sing", "case" => "acc" }, MF.features(manom, source: "ceipom"))
+      assert MF.match?(manom, MF.parse("gender=neut,case=acc"), source: "ceipom")
+      assert MF.match?(manom, MF.parse("gender=masc"), source: "ceipom")
+      refute MF.match?(manom, MF.parse("gender=fem"), source: "ceipom")
+      pair = { "pos_code" => "n-s---fa-", "case" => "ACC/DAT", "gender" => "F" }
+      assert MF.match?(pair, MF.parse("case=dat"), source: "ceipom")
+      unsure = { "pos_code" => "n-s---fb-", "case" => "ABL?", "gender" => "?" }
+      assert_equal({ "number" => "sing", "gender" => "fem", "case" => "abl" }, MF.features(unsure, source: "ceipom"))
+    end
+
+    # The 12 multi-analysis tokens keep upstream's other analyses under
+    # "alternatives"; those can be OTHER lexemes (cei/p() — capio, or
+    # cippus), and the lemma anchor reads only the first analysis's
+    # Latin equivalent, so only the first analysis decodes.
+    def test_ceipom_decodes_the_first_analysis_only
+      ceip = { "form" => "cei/p()", "pos_code" => "v3sria---", "latin_equivalent" => "capio",
+               "alternatives" => [{ "latin_equivalent" => "cippus", "pos_code" => "n-p---ma-", "case" => "ACC" }] }
+      refute MF.match?(ceip, MF.parse("case=acc"), source: "ceipom")
+      assert MF.match?(ceip, MF.parse("tense=perf"), source: "ceipom")
     end
   end
 end

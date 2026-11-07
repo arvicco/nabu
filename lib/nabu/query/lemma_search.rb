@@ -194,9 +194,9 @@ module Nabu
 
         results.map do |result|
           row = rows[result.urn] or next result
-          spec = LemmaKeys.spec_for(row[:source_slug])
+          spec, language = lemma_reading(row[:source_slug], result.tier, row.fetch(:language))
           tokens = passage_tokens(row.fetch(:annotations_json), spec)
-                   .select { |token| lemma_in?(token, variant_set, row.fetch(:language), spec) }
+                   .select { |token| lemma_in?(token, variant_set, language, spec) }
           result.with(token_gloss: token_gloss(tokens, row[:source_slug], language: row.fetch(:language)))
         end
       end
@@ -281,11 +281,10 @@ module Nabu
       # dictionary form exactly as the index did.
       def morph_hit(row, variant_set, filter, tier: nil)
         slug = row[:source_slug]
-        spec = LemmaKeys.spec_for(slug)
+        spec, language = lemma_reading(slug, tier, row.fetch(:language))
         tokens = passage_tokens(row.fetch(:annotations_json), spec)
         return nil if tokens.empty?
 
-        language = row.fetch(:language)
         matches = tokens.select do |token|
           token_passes?(token, filter, slug) && lemma_in?(token, variant_set, language, spec)
         end
@@ -293,6 +292,20 @@ module Nabu
 
         forms = matches.filter_map { |token| token["form"] }.reject(&:empty?).uniq
         build_morph_result(row, matches, forms, tier: tier, spec: spec, facets: filter.facets)
+      end
+
+      # How the token pass reads a token's dictionary form: as the index
+      # row that surfaced the passage was minted — [LemmaKeys spec, fold
+      # language]. An equivalence-tier row (CEIPoM, P34-3) came from the
+      # Classical-Latin equivalent folded as Latin, never from "lemma" or
+      # the passage language; every other tier from the source's LemmaKeys
+      # under the passage language.
+      def lemma_reading(slug, tier, language)
+        if tier == Store::Indexer::EQUIVALENCE_TIER
+          return [Store::Indexer::EQUIVALENCE_SPEC, Store::Indexer::EQUIVALENCE_LANGUAGE]
+        end
+
+        [LemmaKeys.spec_for(slug), language]
       end
 
       def token_passes?(token, filter, slug)
