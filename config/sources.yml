@@ -3609,6 +3609,12 @@ kanripo:
   adopted: "2026-07-20"
   cjk_index: true   # P93-3: the CJK bigram substring lane
   axes: [sinitic]
+  # Declared edition branches, acquired objects-only beside master
+  # (remote-tracking refs; working trees untouched). SBCK = 四部叢刊,
+  # the early-editions witness layer — membership is the catalog's own
+  # general/sbck.org list; the mint of edition-qualified documents is
+  # a future wave.
+  edition_refs: [SBCK]
   # soft edge, not requires: (architecture §5): kr-gaiji is the upstream
   # gaiji list behind the committed config/gaiji/kanripo*.tsv tables the
   # reading ladder consults — refreshed by hand, never read at parse or
