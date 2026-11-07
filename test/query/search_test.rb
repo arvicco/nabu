@@ -1074,13 +1074,35 @@ module Query
       assert_equal %w[urn:m:1], search("στρατηγος", from: 1700, place: "Kraków").map(&:urn)
     end
 
-    def test_date_only_and_place_only_filters_keep_their_any_row_lanes
+    def test_place_only_filter_keeps_its_any_row_lane
       letter("urn:l", 1640, sent: "Raków", received: "Danzig")
       rebuild!
       assert_equal %w[urn:l:1], search("στρατηγος", place: "Danzig").map(&:urn), "place alone: any row"
-      assert_equal %w[urn:l:1], search("στρατηγος", from: 1600, to: 1700).map(&:urn), "window alone: any row"
-      assert_equal %w[urn:l:1], search("στρατηγος", from: 1700).map(&:urn),
-                   "window alone keeps today's any-row NULL-aware lane (the dateless row answers it)"
+    end
+
+    def test_a_window_alone_reads_the_documents_own_dates
+      letter("urn:l", 1640, sent: "Raków", received: "Danzig")
+      rebuild!
+      assert_equal %w[urn:l:1], search("στρατηγος", from: 1600, to: 1700).map(&:urn), "the dated row fits"
+      assert_empty search("στρατηγος", from: 1700),
+                   "a dateless role row never answers a window its document's dates miss"
+      assert_empty search("στρατηγος", to: 1600)
+    end
+
+    def test_a_window_alone_keeps_wholly_undated_documents
+      classed("urn:u", [[nil, nil, nil, { place_name: "Danzig" }]])
+      classed("urn:s", [[nil, nil, nil, { artifact_script: "latn" }]])
+      rebuild!
+      assert_equal %w[urn:s:1 urn:u:1], search("στρατηγος", from: 1700).map(&:urn).sort,
+                   "no date evidence anywhere — the honest-undated stance"
+    end
+
+    def test_a_window_alone_ignores_silver_evidence_on_both_sides
+      classed("urn:x", [[nil, nil, nil, { place_name: "Danzig" }],
+                        [100, 200, "silver", { axis_source: Nabu::Store::SilverDates::AXIS_SOURCE }]])
+      rebuild!
+      assert_equal %w[urn:x:1], search("στρατηγος", from: 1700).map(&:urn),
+                   "an estimate is no date evidence: the document stays honestly undated"
     end
 
     def test_date_basis_drives_a_term_less_browse
