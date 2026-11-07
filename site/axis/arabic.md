@@ -21,7 +21,7 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 A source wears every desk it serves — these seven answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
-| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 6 November 2026)</span> |
+| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 7 November 2026)</span> |
 |---|---|---|---|---|
 | `althurayya` | feature module | attribution | wired · manual | nothing held yet |
 | `diccas` | texts | nc | wired · manual | 10 docs / 879 passages |
@@ -31,7 +31,7 @@ A source wears every desk it serves — these seven answer this desk. Holdings a
 | `openiti` | texts | nc | wired · manual | 9,079 docs / 34,631,499 passages |
 | `wiktionary-ar` | dictionary | attribution | wired · manual | 36,974 entries |
 
-**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 6 November 2026)</span>: `ara` 45,712 · `xna` 36,758 · `fas` 351 · `grc` 22 · `inm` 8 · `arc` 4 · `lat` 1 · `xsa` 1.
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 7 November 2026)</span>: `ara` 45,712 · `xna` 36,758 · `fas` 351 · `grc` 22 · `inm` 8 · `arc` 4 · `lat` 1 · `xsa` 1.
 
 ## The desk's instruments
 
