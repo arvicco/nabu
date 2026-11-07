@@ -23,7 +23,7 @@ class SearchGlossLinesCommandTest < Minitest::Test
       assert_match(/  text: /, out)
       assert_match(/1 hit in token gloss lines/, out)
       assert_match(/nabu show <urn>/, out)
-      assert_match(/gloss-lines index covers: achemenet 5 · aes \d+ · bhsa \d+ · tlhdig \d+/, out)
+      assert_match(/gloss-lines index covers: achemenet 5 · aes \d+ · bhsa \d+ · ceipom 0 · tlhdig \d+/, out)
     end
   end
 

@@ -88,7 +88,7 @@ module Query
 
     def test_scope_reports_what_the_build_indexed
       build!
-      assert_equal %w[achemenet aes bhsa tlhdig], search.scope.map(&:first)
+      assert_equal %w[achemenet aes bhsa ceipom tlhdig], search.scope.map(&:first)
       assert_equal 5, search.scope.to_h.fetch("achemenet")
     end
 

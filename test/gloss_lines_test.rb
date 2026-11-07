@@ -15,11 +15,11 @@ class GlossLinesTest < Minitest::Test
   # language — never sniffed from the data.
   def test_the_lane_reads_the_token_gloss_declarations
     assert_equal TG.sources, GL.slugs
-    assert_equal({ "bhsa" => "en", "aes" => "de", "achemenet" => "en", "tlhdig" => "de" },
+    assert_equal({ "bhsa" => "en", "aes" => "de", "achemenet" => "en", "tlhdig" => "de", "ceipom" => "en" },
                  GL.slugs.to_h { |slug| [slug, GL.language(slug)] })
     assert GL.registered?("bhsa")
     refute GL.registered?("tla-hf"), "grammatical Leipzig labels are not a gloss line"
-    refute GL.registered?("ceipom"), "the equivalence tier's meanings wait on their own wiring"
+    assert GL.registered?("ceipom"), "the equivalence tier's meanings are wired as English glosses"
     assert_equal %w[en de], GL.languages
   end
 
