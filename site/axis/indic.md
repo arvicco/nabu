@@ -15,7 +15,7 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 A source wears every desk it serves — these 35 answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
-| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 6 November 2026)</span> |
+| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 7 November 2026)</span> |
 |---|---|---|---|---|
 | `dacon` | texts | attribution | wired · manual | 4 docs / 977 passages |
 | `dcs` | treebank | attribution | wired · auto | 15,900 docs / 769,373 passages / 300,763 entries |
@@ -53,9 +53,9 @@ A source wears every desk it serves — these 35 answer this desk. Holdings are 
 | `wiktionary-ta` | dictionary | attribution | wired · manual | 13,855 entries |
 | `wiktionary-te` | dictionary | attribution | wired · manual | 23,325 entries |
 
-**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 6 November 2026)</span>: `san` 511,752 · `pli` 97,454 · `pan` 75,061 · `tel` 23,875 · `tam-Latn` 18,583 · `tam` 14,610 · `mal` 11,505 · `tel-Latn` 5,103 · `eng` 4,794 · `kan-Latn` 3,850 … and 32 more (`nabu axis indic` lists all).
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 7 November 2026)</span>: `san` 511,752 · `pli` 97,454 · `pan` 75,061 · `tel` 23,875 · `tam-Latn` 18,583 · `tam` 14,610 · `mal` 11,505 · `tel-Latn` 5,103 · `eng` 4,794 · `kan-Latn` 3,850 … and 32 more (`nabu axis indic` lists all).
 
-**Carried in by multilingual packs** (`ud` — whole-source members whose other languages ride along, as of 6 November 2026): `lat` 11 · `grc` 9 · `orv` 9 · `ota` 5 · `cop` 3 … and 18 more (`nabu axis indic` lists all).
+**Carried in by multilingual packs** (`ud` — whole-source members whose other languages ride along, as of 7 November 2026): `lat` 11 · `grc` 9 · `orv` 9 · `ota` 5 · `cop` 3 … and 18 more (`nabu axis indic` lists all).
 
 ## The desk's instruments
 
