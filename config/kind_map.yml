@@ -1111,8 +1111,9 @@ sources:
   korpus16:            # census 2026-11-05: 45 books (the portal's Bibliography + page-1 headers)
     metadata: siglum   # upstream's book abbreviation verbatim (TC 1550, DB 1584) — each siglum
     #                    IS one print, so the fold is the parse-time call per book (the
-    #                    extrabiblical mold). Catechisms and confessions have no house class:
-    #                    declared deliberate below, never forced (the taxonomy question is open).
+    #                    extrabiblical mold). The catechisms, the confession and the church
+    #                    order were declared deliberate until the catechesis head was ruled
+    #                    (owner-ruled 2026-11-07); they fold onto it at the end of the map.
     map:
       "TA 1550": school               # Abecedarium und der klein Catechismus — the first Slovene
       #                                 primer (alphabet + reading exercise), the catechism inside it
@@ -1147,23 +1148,28 @@ sources:
       "TPo 1595": sermon/homily       # Hishna postilla — Trubar's house postil (Luther's)
       "TtPre 1588": sermon            # Ena lepa inu pridna prediga — Trošt's sermon
       "DAg 1585": ritual/liturgy      # Agenda — the order of the rites
-    deliberate:
-      "TC 1550": "Catechismus — a catechism (with sermon and hymns); catechesis has no house class"
-      "TC 1555": "Catechismvs — a catechism; catechesis has no house class"
-      "TAr 1562": "Articvli oli deili — the confessions of faith (Augsburg/Württemberg/Saxon) in
-        Slovene; a doctrinal confession has no house class"
-      "TO 1564": "Cerkovna ordninga — the church order: doctrine, rites and church law in one book,
-        between legal and ritual/liturgy"
-      "KB 1566": "Otrozhia biblia — Krelj's children's catechism (not a Bible despite the title)"
-      "TC 1567": "Ta celi catehismvs — a catechism with hymns; catechesis has no house class"
-      "TC 1574": "Ta celi catehismvs — the catechism-hymnal composite"
-      "TC 1575": "Catehismvs sdveima islagama — the catechism with two expositions"
-      "DC 1579": "Ta celi catehismvs — Dalmatin's catechism-hymnal composite"
-      "DC 1580": "Catehismvs — Dalmatin's catechism"
-      "DC 1584": "Ta celi catehismvs, eni psalmi — the catechism-hymnal composite"
-      "DC 1585": "Ta kratki wirtemberski catechismvs — the short Württemberg catechism"
-      "TfC 1595": "Ta celi catehismvs, eni psalmi — the catechism-hymnal composite"
-      "ZK 1595": "Katechismvs doctoria Martina Luthra — Luther's catechism (Znojilšek)"
+      # -- catechesis (the head ruled 2026-11-07): doctrinal instruction — catechisms,
+      # confessions of faith, church orders. A catechism-hymnal composite folds by its
+      # title and lead part, the catechism; the hymns it carries are the appendix
+      # (the reverse of TPs 1567, the hymnal with a catechism appended).
+      "TC 1550": catechesis           # Catechismus — the first Slovene catechism (with a sermon and hymns)
+      "TC 1555": catechesis           # Catechismvs — a catechism
+      "TAr 1562": catechesis          # Articvli oli deili — the confessions of faith (Augsburg,
+      #                                 Württemberg, Saxon) in Slovene: the confession-of-faith grain
+      "TO 1564": catechesis           # Cerkovna ordninga — the church order: doctrine, rites and church
+      #                                 law in one book, the ruled church-order grain (no longer split
+      #                                 between legal and ritual/liturgy)
+      "KB 1566": catechesis           # Otrozhia biblia — Krelj's children's catechism (not a Bible
+      #                                 despite the title)
+      "TC 1567": catechesis           # Ta celi catehismvs — a catechism with hymns
+      "TC 1574": catechesis           # Ta celi catehismvs — the catechism-hymnal composite
+      "TC 1575": catechesis           # Catehismvs sdveima islagama — the catechism with two expositions
+      "DC 1579": catechesis           # Ta celi catehismvs — Dalmatin's catechism-hymnal composite
+      "DC 1580": catechesis           # Catehismvs — Dalmatin's catechism
+      "DC 1584": catechesis           # Ta celi catehismvs, eni psalmi — the catechism-hymnal composite
+      "DC 1585": catechesis           # Ta kratki wirtemberski catechismvs — the short Württemberg catechism
+      "TfC 1595": catechesis          # Ta celi catehismvs, eni psalmi — the catechism-hymnal composite
+      "ZK 1595": catechesis           # Katechismvs doctoria Martina Luthra — Luther's catechism (Znojilšek)
   vulgate:
     source_kind: scripture
   prague-bible-1488:

@@ -919,6 +919,26 @@ class KindsTest < Minitest::Test
     end
   end
 
+  # The 2026-11-07 heads, korpus16: the fourteen books once declared
+  # deliberate for want of a class (the catechisms, the 1562 Articuli
+  # confession, the 1564 church order) fold onto catechesis. The fixture
+  # carries none of these books (its complete books are TM 1555 and
+  # TPs 1579), so the pins read the siglum rule itself.
+  KORPUS16_CATECHESIS = ["TC 1550", "TC 1555", "TAr 1562", "TO 1564", "KB 1566", "TC 1567", "TC 1574",
+                         "TC 1575", "DC 1579", "DC 1580", "DC 1584", "DC 1585", "TfC 1595", "ZK 1595"].freeze
+
+  def test_shipped_korpus16_catechisms_confession_and_church_order_fold_to_catechesis
+    shipped = shipped_kinds
+    KORPUS16_CATECHESIS.each do |siglum|
+      assert_equal ["catechesis"], shipped.normalize("korpus16", siglum), siglum
+      refute(shipped.deliberate_declarations.any? { |slug, value, _| slug == "korpus16" && value == siglum },
+             "#{siglum}: a ruled class now holds it — no longer a deliberate non-claim")
+    end
+    assert_equal ["school"], shipped.normalize("korpus16", "TA 1550"),
+                 "the primer with the small catechism inside stays a primer"
+    assert_equal ["hymn-prayer/prayer"], shipped.normalize("korpus16", "TM 1555")
+  end
+
   def shipped_kinds
     Nabu::Kinds.load(
       classes_path: File.expand_path("../config/kind_classes.yml", __dir__),
