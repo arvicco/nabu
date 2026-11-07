@@ -44,7 +44,7 @@ class RenderConformanceTest < Minitest::Test
     "search --gloss-lines: the same announcement" =>
       [%w[search --gloss-lines arma --license nc --limit 1], /page may be incomplete under these filters/],
     "search --gloss-lines: every render names the lane's scope" =>
-      [%w[search --gloss-lines zzzz], /gloss-lines index covers: bhsa 10 · tlhdig 1/],
+      [%w[search --gloss-lines zzzz], /gloss-lines index covers: achemenet 0 · aes 0 · bhsa 10 · ceipom 0 · tlhdig 1/],
     "search: a cross-script zero hit hints instead of missing silently" =>
       [%w[search ⰲⱏⱄⱅⰰ], /Glagolitic/],
     "define: the render cap announces its tail (P34-r2)" =>
