@@ -158,5 +158,17 @@ module Query
       assert_includes search("biginnan", morph: "tense=past,mood=ind,person=3,number=pl").map(&:urn), urn
       assert_empty search("biginnan", morph: "mood=sub")
     end
+
+    # CorPH S0003: bebat (baïd, 3pl.fut.) vs beba (3sg.fut.); maicc (macc,
+    # gen.sg.).
+    def test_corph_analyses_reach_the_morph_surface
+      load_source("corph", "Corph")
+      plural = search("baïd", morph: "tense=fut,number=pl")
+      assert_includes plural.map(&:urn), "urn:nabu:corph:0003:S0003-3"
+      refute_includes plural.map(&:urn), "urn:nabu:corph:0003:S0003-1"
+      assert_equal "bebat", plural.find { |hit| hit.urn == "urn:nabu:corph:0003:S0003-3" }.surface_forms
+      assert_includes search("baïd", morph: "number=sg").map(&:urn), "urn:nabu:corph:0003:S0003-1"
+      assert_includes search("macc", morph: "case=gen").map(&:urn), "urn:nabu:corph:0003:S0003-2"
+    end
   end
 end

@@ -177,7 +177,7 @@ module Query
     # ("morph", "msd", "analyses", "msa" each name DIFFERENT tagsets in
     # other sources), so a scoped row decodes only its own sources' tokens.
     def test_decoder_table_is_explicit_and_ordered
-      assert_equal %w[morphology feats postag analyses vt morpho morph msd morph msd msa pos pos_code pos],
+      assert_equal %w[morphology feats postag analyses vt morpho morph msd morph msd msa pos pos_code pos analysis],
                    MF::DECODERS.map(&:first)
       MF::DECODERS.each do |_key, method, sources|
         assert MF.respond_to?(method), "#{method} is a module function"
@@ -644,6 +644,68 @@ module Query
       assert MF.match?(gd, MF.parse("case=gen"), source: hp)
       assert MF.match?(gd, MF.parse("case=dat"), source: hp)
       assert_empty MF.features({ "pos" => "VBDI", "morph" => "3^SG" }, source: "ycoe"), "HeliPaD-scoped"
+    end
+
+    # -- CorPH analysis ----------------------------------------------------------
+
+    # Real CorPH tokens (test/fixtures/corph + deposit-censused analyses):
+    # "."-joined self-describing atoms; person+number fuse ("3sg"); a
+    # "/"-led segment continues the previous one as an alternative.
+    def test_corph_nominal_and_verbal_analyses
+      ch = "corph"
+      assert_equal({ "case" => "gen", "number" => "sing", "gender" => "masc" },
+                   MF.features({ "form" => "loigde", "lemma" => "Lóegdae", "analysis" => "gen.sg.masc." }, source: ch))
+      assert_equal({ "person" => "3", "number" => "sing", "tense" => "fut" },
+                   MF.features({ "form" => "íbth", "lemma" => "ibid", "analysis" => "3sg.fut." }, source: ch))
+      assert_equal({ "person" => "3", "number" => "plur", "tense" => "pres", "mood" => "sub", "voice" => "pass" },
+                   MF.features({ "form" => "asa·mesatar", "analysis" => "3pl.pres.subj.pass." }, source: ch))
+      assert_equal({ "person" => "3", "number" => "sing", "tense" => "past" },
+                   MF.features({ "analysis" => "augm.3sg.pret." }, source: ch), "augm is skipped")
+      assert_equal({ "person" => "3", "number" => "sing", "tense" => "past", "mood" => "sub" },
+                   MF.features({ "analysis" => "3sg.past.subj." }, source: ch))
+      assert_equal({ "person" => "2", "number" => "sing", "mood" => "imp" },
+                   MF.features({ "analysis" => "2sg.impv." }, source: ch))
+      assert_equal({ "person" => "3", "number" => "sing", "mood" => "cnd" },
+                   MF.features({ "lemma" => "ad·tá", "analysis" => "3sg.cond." }, source: ch))
+      assert_equal({ "person" => "3", "number" => "sing", "aspect" => "hab" },
+                   MF.features({ "lemma" => "ad·tá", "analysis" => "3sg.hab." }, source: ch))
+      assert_equal({ "degree" => "cmp" }, MF.features({ "lemma" => "mór", "analysis" => "comp." }, source: ch))
+      assert_equal({ "degree" => "equ" }, MF.features({ "analysis" => "equ." }, source: ch))
+      assert_equal({ "mood" => "inf", "tense" => "pres", "voice" => "pass" },
+                   MF.features({ "analysis" => "pres.inf.pass." }, source: ch))
+    end
+
+    # Alternatives within a segment; a CASE is decoded only beside a
+    # separate number atom — a bare case ("dat.", "dat./acc.") is the case a
+    # PREPOSITION governs (do, i, ó, di …), and a fused person-number + case
+    # is a conjugated preposition (dó "to him") whose case is governed too.
+    def test_corph_alternatives_and_governed_case
+      ch = "corph"
+      nom = { "analysis" => "nom.sg.masc./fem." }
+      assert MF.match?(nom, MF.parse("gender=fem,case=nom"), source: ch)
+      assert MF.match?(nom, MF.parse("gender=masc"), source: ch)
+      assert_equal({ "case" => "nom", "number" => "sing" }, MF.features(nom, source: ch))
+      assert MF.match?({ "analysis" => "dat./acc.sg." }, MF.parse("case=acc,number=sg"), source: ch)
+      assert_empty MF.features({ "form" => "co", "lemma" => "co", "analysis" => "dat." }, source: ch)
+      assert_empty MF.features({ "lemma" => "i", "analysis" => "dat./acc." }, source: ch)
+      fuiri = { "form" => "fuiri", "lemma" => "for", "analysis" => "3sg.fem.dat." }
+      assert_equal({ "person" => "3", "number" => "sing", "gender" => "fem" }, MF.features(fuiri, source: ch))
+      do_him = { "lemma" => "do", "analysis" => "3sg.masc./neut.dat." }
+      assert MF.match?(do_him, MF.parse("gender=neut,person=3"), source: ch)
+      refute MF.match?(do_him, MF.parse("case=dat"), source: ch)
+    end
+
+    # Undecodable residue: upstream-uncertain analyses ("(?)", "?"), a
+    # segment whose alternatives span categories ("acc.sg./gen.pl." — two
+    # whole readings run together), the secondary-future modifier, and the
+    # infixed-pronoun classes A/B/C and compos./rel./augm. flags.
+    def test_corph_residue_decodes_nothing
+      ch = "corph"
+      ["dat.sg.(?)", "gen.pl.masc./fem.(?)", "?", "acc.sg./gen.pl.", "3sg.sec.fut.pass.", "A", "B", "C",
+       "compos.", "len.rel.", "sub.conj."].each do |analysis|
+        assert_empty MF.features({ "analysis" => analysis }, source: ch), analysis
+      end
+      assert_empty MF.features({ "analysis" => "gen.sg." }, source: "aoxml"), "CorPH-scoped"
     end
   end
 end

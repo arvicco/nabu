@@ -157,6 +157,26 @@ module Nabu
     #   give degree; GE+/NEG+ prefixes are stripped. Undecoded: RN, MG,
     #   VBG (10 tokens, unattested in the convention) and every tag that
     #   fixes nothing. 34,434 tokens decode at least one facet.
+    # - CorPH `analysis` (corph): "."-joined self-describing atoms —
+    #   censused over the whole deposit (85,397 analyses, 359 distinct):
+    #   case nom/gen/dat/acc/voc/abl, number sg/pl/du, gender, fused
+    #   person+number (3sg 11,911, 3pl 3,256 …), tense pres/pret/past/fut/
+    #   impf (+ perf 7, plup 1), mood ind/subj/impv/cond (UD Cnd)/inf/
+    #   supine, voice pass, aspect hab (UD Hab), degree comp/sup/equ (UD
+    #   Equ, the Old Irish equative); a "/"-led segment continues the
+    #   previous one as alternatives (dat./acc., masc./neut.). THE TRAP:
+    #   the field carries no POS, and a bare case ("dat.", "dat./acc.",
+    #   9,512 tokens on do/i/ó/di/fri/la …) is the case a PREPOSITION
+    #   governs, as is the case beside a fused person-number (3sg.masc./
+    #   neut.dat., 2,470 conjugated prepositions — the person/number/
+    #   gender are the incorporated pronoun's and decode). So case decodes
+    #   only beside a separate number atom (the nominal shape: 53,494
+    #   tokens, ≤108 of them on a governing lemma). Skipped as flags:
+    #   augm, rel, compos, conj, nas/len, obj, prep, A/B/C (infixed-pronoun
+    #   classes). Voided whole: 479 upstream-uncertain ("(?)", "?", the
+    #   secondary future "sec", free text "or") and 4 segments whose
+    #   alternatives span categories (acc.sg./gen.pl.). 71,850 analyses
+    #   decode at least one facet.
     module MorphFacets
       # A malformed --morph string (empty, no `=`, blank key/value). Caller-
       # fixable, so CLI/MCP surface it as a plain usage error.
@@ -423,6 +443,26 @@ module Nabu
         "DI" => { "tense" => "past", "mood" => "ind" }, "DS" => { "tense" => "past", "mood" => "sub" }
       }.freeze
       HELIPAD_PARTICIPLE = /\AV[GN]I?\z/
+      # CorPH analysis atoms (class note) → [facet, value]; person+number
+      # fuse ("3sg") and match CORPH_PERSON_NUMBER. Atoms not listed (augm,
+      # rel, compos, conj, A/B/C, …) are flags with no facet and skipped;
+      # CORPH_VOIDING atoms make the whole analysis undecodable.
+      CORPH_ATOMS = {
+        "nom" => %w[case nom], "gen" => %w[case gen], "dat" => %w[case dat], "acc" => %w[case acc],
+        "voc" => %w[case voc], "abl" => %w[case abl],
+        "sg" => %w[number sing], "pl" => %w[number plur], "du" => %w[number dual],
+        "masc" => %w[gender masc], "fem" => %w[gender fem], "neut" => %w[gender neut],
+        "pres" => %w[tense pres], "pret" => %w[tense past], "past" => %w[tense past], "fut" => %w[tense fut],
+        "impf" => %w[tense impf], "perf" => %w[tense perf], "plup" => %w[tense plup],
+        "ind" => %w[mood ind], "subj" => %w[mood sub], "impv" => %w[mood imp], "cond" => %w[mood cnd],
+        "inf" => %w[mood inf], "infinitive" => %w[mood inf], "supine" => %w[mood sup],
+        "hab" => %w[aspect hab], "pass" => %w[voice pass],
+        "comp" => %w[degree cmp], "sup" => %w[degree sup], "equ" => %w[degree equ]
+      }.freeze
+      CORPH_PERSON_NUMBER = /\A([123])(sg|pl|du)\z/
+      CORPH_VOIDING = ["(?)", "?", "sec"].freeze
+      CORPH_NUMBERS = %w[sg pl du].freeze
+
       HELIPAD_DEGREES = {
         "ADJR" => "cmp", "ADVR" => "cmp", "QR" => "cmp", "ADJS" => "sup", "ADVS" => "sup", "QS" => "sup"
       }.freeze
@@ -447,7 +487,8 @@ module Nabu
         ["msa", :menota_features, %w[menota].freeze],
         ["pos", :coptic_features, %w[coptic-scriptorium].freeze],
         ["pos_code", :ceipom_features, %w[ceipom].freeze],
-        ["pos", :helipad_features, %w[helipad].freeze]
+        ["pos", :helipad_features, %w[helipad].freeze],
+        ["analysis", :corph_features, %w[corph].freeze]
       ].freeze
 
       # Canonical order for rendering a token's decoded features as evidence
@@ -692,6 +733,55 @@ module Nabu
         elsif (degree = HELIPAD_DEGREES[tag]) then { "degree" => degree }
         else {}
         end
+      end
+
+      # CorPH `analysis`: "."-joined atoms, a "/"-led segment continuing
+      # the previous one as alternatives; case only beside a separate
+      # number atom (class note — a bare case is prepositional government).
+      def corph_features(analysis, _token = nil)
+        segments = corph_segments(analysis.to_s)
+        return {} if segments.nil?
+
+        out = {}
+        segments.each do |alternatives|
+          pairs = corph_pairs(alternatives) or return {}
+          pairs.each { |facet, values| add_values(out, facet, values) }
+        end
+        out.delete("case") unless segments.any? { |alternatives| alternatives.intersect?(CORPH_NUMBERS) }
+        out
+      end
+
+      # "3sg.masc./neut.dat." → [["3sg"], ["masc", "neut"], ["dat"]]; nil
+      # when a voiding atom (upstream uncertainty, the secondary future) or
+      # free text ("or") is present.
+      def corph_segments(analysis)
+        segments = []
+        analysis.split(".").each do |segment|
+          segment = segment.strip
+          next if segment.empty?
+          return nil if CORPH_VOIDING.include?(segment) || segment.include?(" ") || segment.include?("(?)")
+
+          if segment.start_with?("/") && segments.any? then segments.last.concat(segment.split("/").reject(&:empty?))
+          else segments << segment.split("/").reject(&:empty?)
+          end
+        end
+        segments
+      end
+
+      # One segment's alternatives → [[facet, values], …]: [] for a flag
+      # segment (no atom decodes), nil when its alternatives span
+      # categories (two readings run together — the analysis is voided).
+      def corph_pairs(alternatives)
+        fused = alternatives.map { |atom| CORPH_PERSON_NUMBER.match(atom) }
+        if fused.all?
+          return [["person", fused.map { |m| m[1] }], ["number", fused.map { |m| CORPH_ATOMS.fetch(m[2]).last }]]
+        end
+
+        pairs = alternatives.map { |atom| CORPH_ATOMS[atom] }
+        return [] if pairs.all?(&:nil?) && alternatives.size == 1
+        return nil if pairs.include?(nil) || pairs.map(&:first).uniq.size != 1
+
+        [[pairs.first.first, pairs.map(&:last)]]
       end
 
       # Shared positional decode: `-` and unknown codes are skipped, never
