@@ -596,8 +596,9 @@ sources:
       "Didactic poem": literary/poetry           # 77 — the Lucretian/Virgilian verse of science
       "Panegyric poem": literary/poetry/praise   # 55 — verse in praise of a scientist or a
       #   discovery
-      "Oration": literary/essay                  # 46 — the academic oration: prose of ideas
-      #   composed for delivery (sermon is preached religious prose)
+      "Oration": oratory                         # 46 — the academic oration, composed for delivery.
+      #   CORRECTED 2026-11-07: was literary/essay (prose of ideas) before the oratory head
+      #   was ruled; the speech form is the ruled class (sermon stays preached religious prose)
       "Dialogue": literary/wisdom/dialogue       # 39 — the dialogue form (the class list
       #   files the dialogue under wisdom)
       "Letter": letter                           # 62 — scientific correspondence
@@ -1312,7 +1313,9 @@ sources:
       # -- the further texts ---------------------------------------------------
       "PsS": hymn-prayer/hymn   # the Psalms of Solomon: eighteen pseudepigraphal psalms
       "BLC": literary/wisdom/dialogue  # Bardaisan's school: a dialogue on fate and freedom
-      "Eprx": literary/essay    # Ephrem's prose polemic against Mani — a treatise of refutation
+      "Eprx": theology/polemic  # Ephrem's Prose Refutation against Mani — a treatise of refutation.
+      #                           CORRECTED 2026-11-07: was literary/essay, the nearest head
+      #                           before theology was ruled
       "ESNJ": sermon/homily     # Ephrem's metrical homily (memra) on Nineveh and Jonah
     deliberate:
       "ApBar": "an apocalypse (2 Baruch): revelatory visions with a review of history — no class
@@ -1332,11 +1335,10 @@ sources:
   litopys:
     source_kind: historiography/chronicle   # P117: the passage shelf IS the Ipatiev chronicle
   scat:                      # 2026-10-20: the whole corpus IS hagiography — 24 saints' lives
-    source_kind: historiography
-    #   (žitija with their miracle cycles and praises); no hagiography class exists, and lives
-    #   fold to historiography by the ruled biography precedent (elephantine "biography",
-    #   the eebo "-- Biography" and aozora NDC 289 folds) — a hagiography sub would be a
-    #   taxonomy change, not this mapping's call
+    source_kind: hagiography/vita
+    #   (žitija with their miracle cycles and praises). CORRECTED 2026-11-07: folded to
+    #   historiography by the biography precedent while no hagiography class existed; the
+    #   head ruled that day is this corpus's class, and a žitie is the vita sub
   emmo:                      # P155 — the catalogue title's head noun (Adapters::Emmo.document_type),
     metadata: document_type  # census 2026-11-03 over all 100 files
     map:
@@ -1475,9 +1477,11 @@ sources:
       #                                    hymns, doxologies, the psalm distribution tables
       "Ordo": ritual/liturgy             # 14 — the Ordinary of the Mass (Roman and the uses)
       "Appendix": ritual/liturgy         # 6 — the commendation of the soul, grace at meals …
-      "Martyrologium": ritual/liturgy    # 367 — the Roman Martyrology's daily notices, a
-      #                                    liturgical book read in choir at Prime (its content is
-      #                                    hagiographic; no hagiography head exists — proposed)
+      "Martyrologium": [ritual/liturgy, hagiography]  # 367 — the Roman Martyrology's daily
+      #                                    notices: a liturgical book read in choir at Prime whose
+      #                                    content is hagiographic — both claims since the
+      #                                    hagiography head was ruled (2026-11-07); the use keeps
+      #                                    the liturgy claim, the content adds the saints
       "Psalmorum": scripture             # 202 — the Vulgate psalms and canticles, verse by verse
       "Regula": legal/law                # 125 — the Rule of St Benedict in its daily portions
       #                                    (the 1QS precedent: a community's rule is law)

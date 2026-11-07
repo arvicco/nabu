@@ -1549,8 +1549,8 @@ sources:
         Greek 20, Khmer 3, Chinese 1); the one Byzantine row is romanized Greek and codes
         grc-Latn"}
   scat:
-    # kind: machine-postured — kind_map.yml source_kind historiography (the
-    # corpus is saints' lives). lect: machine-postured by the scat-century
+    # kind: machine-postured — kind_map.yml source_kind hagiography/vita (the
+    # corpus is saints' lives; historiography until the 2026-11-07 head). lect: machine-postured by the scat-century
     # facet rules — 16th/17th c. chu:csl/rus (scat-century); the 18th-c.
     # slice chu:ncs, the registry's New Church Slavonic stage
     # (scat-century-ncs).
