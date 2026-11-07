@@ -369,8 +369,10 @@ with the exact lex and language — exact-lex, so `<D` "unto" never borrows
 filter DSS. Not rows: tla-hf's
 `gloss` is grammatical (Leipzig labels — `PREP`, `N.m`, `-3sg.m`), and ceipom's
 English `meaning` waits on the equivalence tier's Latin keys reaching the
-token pass. Gloss search *across* lemmas (find every word glossed "king") needs
-an index and is a separate, rebuild-class step. ORACC carries no inflectional
+token pass. Gloss search *across* lemmas runs on two fulltext lanes (architecture
+§5): `search --gloss king` (no query) lists every WORD glossed "king", and
+`search --gloss-lines king` every PASSAGE with such a word, the glosses read in
+token order (co-occurrence, cross-token phrases). ORACC carries no inflectional
 morphology (upstream `morph`/`base` is an un-ingested enrichment, §6 above), so
 inflectional facets **never match ORACC** — honest absence, not error. A unified
 `pos` facet was deliberately left out of v1: ORACC's tagset is not UD upos, and
