@@ -516,6 +516,8 @@ module Nabu
       }.freeze
       CORPH_PERSON_NUMBER = /\A([123])(sg|pl|du)\z/
       CORPH_VOIDING = ["(?)", "?", "sec"].freeze
+      # const: the separate number atoms of the closed CorPH inventory
+      # above (the nominal shape that licenses a case decode)
       CORPH_NUMBERS = %w[sg pl du].freeze
 
       # AES explicit features: upstream field → {upstream value → [facet,
@@ -566,6 +568,7 @@ module Nabu
       }.freeze
       TLA_SEPARATORS = %r{[.:\-=~\\/()]}
       # Article heads whose "-" segment is the POSSESSOR (ART.poss:pl-1sg).
+      # const: the glossing convention's two article heads, not a census
       TLA_ARTICLES = %w[ART art].freeze
 
       HELIPAD_DEGREES = {
