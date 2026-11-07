@@ -38,6 +38,10 @@ class RenderConformanceTest < Minitest::Test
       [%w[search --annotations arma --license nc --limit 1], /page may be incomplete under these filters/],
     "search --annotations: every render names the lane's scope" =>
       [%w[search --annotations zzzz], /annotations index covers: cantus 10 · korpus16 1/],
+    "search --gloss-lines: the same announcement" =>
+      [%w[search --gloss-lines arma --license nc --limit 1], /page may be incomplete under these filters/],
+    "search --gloss-lines: every render names the lane's scope" =>
+      [%w[search --gloss-lines zzzz], /gloss-lines index covers: bhsa 10 · tlhdig 1/],
     "search: a cross-script zero hit hints instead of missing silently" =>
       [%w[search ⰲⱏⱄⱅⰰ], /Glagolitic/],
     "define: the render cap announces its tail (P34-r2)" =>
@@ -125,6 +129,27 @@ class RenderConformanceTest < Minitest::Test
     seed_shelves(catalog, open_id)
     seed_translations(catalog)
     seed_annotations(catalog)
+    seed_gloss_lines(catalog)
+  end
+
+  # The gloss-lines lane (Query::TokenGlosses slugs): ten short open
+  # gloss lines outrank one long nc one — the same window-exhaustion
+  # shape for search --gloss-lines; the passage text never carries the
+  # query word, the token glosses do.
+  def seed_gloss_lines(catalog)
+    bhsa = catalog[:sources].insert(slug: "bhsa", name: "BHSA", adapter_class: "TestAdapter",
+                                    license_class: "open", enabled: true)
+    tlhdig = catalog[:sources].insert(slug: "tlhdig", name: "TLHdig", adapter_class: "TestAdapter",
+                                      license_class: "nc", enabled: true)
+    verses = document(catalog, bhsa, "urn:w:hbo", "hbo")
+    10.times do |i|
+      passage(catalog, verses, "urn:w:hbo:#{i}", "מלך", i, "hbo",
+              tokens: [{ "form" => "מלך", "gloss" => "arma" }, { "form" => "שיר", "gloss" => "cano" }])
+    end
+    tablet = document(catalog, tlhdig, "urn:w:hit", "hit")
+    long = "arma comes first and the long rest follows for many words ranking it below the short ones"
+    passage(catalog, tablet, "urn:w:hit:1", "LUGAL", 0, "hit",
+            tokens: long.split.map { |word| { "form" => "x", "gloss" => word } })
   end
 
   # The declared annotation layers lane (AnnotationKeys slugs): the same
