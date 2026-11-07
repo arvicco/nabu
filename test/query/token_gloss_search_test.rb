@@ -96,6 +96,23 @@ module Query
       refute_includes search("parā", gloss: "aus").map(&:urn), "urn:nabu:tlhdig:786:hfr:kbo.20.119:95"
     end
 
+    # CEIPoM's English "meaning" on the EQUIVALENCE tier: the lemma anchor
+    # is the Classical-Latin equivalent (facio), and the gloss splits its
+    # attestations — the Duenos fecet "become" vs the Fibula's fhefhaked
+    # "do, make".
+    def test_ceipom_meaning_gloss_on_the_equivalence_tier
+      load_source("ceipom", "Ceipom", tier: "equivalence")
+      become = search("facio", gloss: "become")
+      assert_equal %w[urn:nabu:ceipom:5:6], become.map(&:urn)
+      assert_equal "become", become.first.token_gloss
+      assert_equal "equivalence", become.first.tier
+      make = search("facio", gloss: "make").map(&:urn)
+      assert_includes make, "urn:nabu:ceipom:2:2"
+      refute_includes make, "urn:nabu:ceipom:5:6"
+      fibula = search("facio").find { |result| result.urn == "urn:nabu:ceipom:2:2" }
+      assert_equal "do, make", fibula.token_gloss
+    end
+
     # DSS tokens carry no gloss of their own, but lex_etcbc is the ETCBC
     # crosswalk into BHSA's lexeme space: the gloss resolves at read time
     # from a BHSA token with the same lex (and language). 11Q19 col. 10

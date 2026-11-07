@@ -492,14 +492,17 @@ module Nabu
                                 "match on feats; PROIEL/TOROT positional tags, GLAUx's AGDT " \
                                 "postags, Diorisis analyses, BHSA/DSS (ETCBC/Abegg) features, " \
                                 "OSHB morph codes, CorA msd (ReM/ReN) and morph (REF), IMP msd (goo300k), " \
-                                "Menota msa and Coptic Scriptorium pos tags (polarity, prontype, " \
+                                "Menota msa, CEIPoM AGDT pos_code (via its Latin-equivalent lemmas), " \
+                                "HeliPaD pos^morph tags, CorPH analyses, AES/TraCES explicit fields, " \
+                                "tla-hf grammatical glossing and " \
+                                "Coptic Scriptorium pos tags (polarity, prontype, " \
                                 "definite, verbform) are decoded to the same names (Hebrew/Aramaic add " \
                                 "state, stem, conjugation: e.g. \"stem=piel,conjugation=wayq\"); " \
                                 "ORACC has no inflectional morphology so these facets never match it." },
           gloss: { type: "string",
                    description: "Token-gloss filter WITH lemma: keep attestations whose upstream " \
                                 "token gloss contains this word (whole word, case-insensitive) — " \
-                                "bhsa/achemenet (English), aes/tlhdig (German). E.g. lemma \"דבר\" + " \
+                                "bhsa/achemenet/ceipom (English), aes/tlhdig (German). E.g. lemma \"דבר\" + " \
                                 "gloss \"word\" splits BHSA's consonantal homograph from \"speak\". " \
                                 "Composes with morph; not with near. Lemma hits from those sources " \
                                 "always carry token_gloss. WITHOUT lemma (and no query): the gloss " \

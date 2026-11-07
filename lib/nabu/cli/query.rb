@@ -91,7 +91,8 @@ module Nabu
       feature names — case, number, gender, person, tense, mood, voice,
       degree (values dat, pl/sg, masc, aor, opt, sub…); UD treebanks match on
       their `feats`; PROIEL/TOROT, GLAUx (AGDT postag), Diorisis, BHSA/DSS,
-      OSHB, ReM/ReN/REF (CorA msd/morph), goo300k (IMP msd), Menota (msa) and Coptic
+      OSHB, ReM/ReN/REF (CorA msd/morph), goo300k (IMP msd), Menota (msa), CEIPoM
+      (AGDT pos_code, via its Latin-equivalent lemmas), HeliPaD (pos^morph), CorPH (analysis), AES and TraCES (their explicit fields), tla-hf (grammatical glossing) and Coptic
       Scriptorium (pos: polarity, prontype, definite, verbform) are
       decoded into the same names — Hebrew/Aramaic add state, stem and
       conjugation (e.g. --morph stem=piel,conjugation=wayq). Ambiguous
@@ -101,7 +102,8 @@ module Nabu
       inflectional facets never match it (honest absence). See conventions §6.1.
 
       TOKEN GLOSSES (--gloss WORD): sources that store upstream's own word
-      meaning on each token (bhsa, achemenet: English; aes, tlhdig: German)
+      meaning on each token (bhsa, achemenet, ceipom: English; aes, tlhdig:
+      German)
       show it on every lemma hit in ‘quotes’, beside any dictionary gloss.
       DSS hits show BHSA's English gloss, borrowed through the lex_etcbc
       lexeme crosswalk at read time (display only — not a --gloss filter).
@@ -316,7 +318,7 @@ module Nabu
                    desc: "Morphology facets (with --lemma), e.g. case=dat,number=pl"
     option :gloss, type: :string, banner: "WORD",
                    desc: "Token-gloss filter (with --lemma): keep attestations whose upstream gloss " \
-                         "contains WORD (bhsa/aes/achemenet/tlhdig); alone (no query): every word " \
+                         "contains WORD (bhsa/aes/achemenet/tlhdig/ceipom); alone (no query): every word " \
                          "glossed WORD, across lemmas"
     option :near, type: :string, banner: "TERM",
                   desc: "Proximity: keep only hits where TERM is within --window words of the query/lemma"
