@@ -183,5 +183,17 @@ module Query
                       "urn:nabu:aes:sawlit:2PD2OKCZCRELBGQD6NCAMOFEWA:IBUBd06ap4DyD0RHjM2U50Hs2Zc"
       assert_empty search("ṯḥn.t", morph: "gender=masc")
     end
+
+    # RIE 232: motat (ሞተ, Perfect 3rd fem sg); the suffix hu (ሁ, 3rd masc
+    # sg) on maḫātǝwi.
+    def test_traces_explicit_features_reach_the_morph_surface
+      load_source("traces", "Traces")
+      died = search("ሞተ", morph: "conjugation=perf,person=3,gender=fem")
+      assert_includes died.map(&:urn), "urn:nabu:traces:rie232:w1"
+      assert_equal "person=3|number=sing|gender=fem|conjugation=perf",
+                   died.find { |hit| hit.urn == "urn:nabu:traces:rie232:w1" }.morph
+      assert_includes search("ሁ", morph: "person=3,number=sg").map(&:urn), "urn:nabu:traces:rie232:w11"
+      assert_empty search("ሞተ", morph: "conjugation=impf")
+    end
   end
 end

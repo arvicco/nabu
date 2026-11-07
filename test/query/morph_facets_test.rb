@@ -180,7 +180,7 @@ module Query
     # one scoped row placed AHEAD of them, so its tokens never reach them.
     def test_decoder_table_is_explicit_and_ordered
       assert_equal %w[form morphology feats postag analyses vt morpho morph msd morph msd msa pos pos_code pos
-                      analysis],
+                      analysis form],
                    MF::DECODERS.map(&:first)
       MF::DECODERS.each do |_key, method, sources|
         assert MF.respond_to?(method), "#{method} is a module function"
@@ -769,6 +769,57 @@ module Query
       assert_empty MF.features({ "form" => "ꜥnḫ", "pos" => "substantive", "numerus" => "substantive_masc" },
                                source: aes)
       assert_equal "ind", MF.features({ "morphology" => "-p-i------" })["mood"], "other sources: PROIEL as before"
+    end
+
+    # -- TraCES explicit features ------------------------------------------------
+
+    # Real TraCES tokens (test/fixtures/traces + deposit-censused values):
+    # one upstream feature per category, Gǝʿǝz verbs under the Semitic
+    # keys (Perfect/Imperfect → conjugation perf/impf, never a Greek tense).
+    def test_traces_verbs_pronouns_and_suffixes
+      tr = "traces"
+      motat = { "form" => "motat", "pos" => "Verb", "tam" => "Perfect", "person" => "Third", "gender" => "Feminine",
+                "number" => "Singular", "lemma" => "ሞተ" }
+      assert_equal({ "conjugation" => "perf", "person" => "3", "gender" => "fem", "number" => "sing" },
+                   MF.features(motat, source: tr))
+      ana = { "form" => "ʾana", "pos" => "Independent Personal Pronoun", "person" => "First", "gender" => "Communis",
+              "number" => "Singular", "case" => "Nominative" }
+      assert_equal({ "person" => "1", "gender" => "com", "number" => "sing", "case" => "nom" },
+                   MF.features(ana, source: tr))
+      assert_equal({ "person" => "3", "gender" => "masc", "number" => "plur" },
+                   MF.features({ "form" => "ama", "pos" => "Pronominal Suffix", "person" => "Third",
+                                 "gender" => "Masculine", "number" => "Plural" }, source: tr))
+      assert_equal({ "conjugation" => "impf" },
+                   MF.features({ "form" => "yǝbl", "pos" => "Verb", "tam" => "Imperfect" }, source: tr))
+      [%w[yǝkun Subjunctive sub], %w[yǝkun subjunctive sub], %w[hab Imperative imp], %w[kawina Infinitive inf],
+       %w[samiʿo Gerund ger]].each do |form, tam, mood|
+        verb = { "form" => form, "pos" => "Verb", "tam" => tam }
+        assert_equal({ "mood" => mood }, MF.features(verb, source: tr), tam)
+      end
+      assert_equal({ "conjugation" => "perf" },
+                   MF.features({ "form" => "baṣḥa", "pos" => "Verb", "tamp" => "Perfect" }, source: tr),
+                   "tamp/temp are upstream misspellings of the tam feature name")
+    end
+
+    # Nouns and proper names carry LAYERED number/gender ("SingularP
+    # UnmarkedS", "masculineNP") whose layers the held export does not
+    # define — undecoded, as are "unmarked" and the prepositions' "Nominal
+    # state"; case and the other states decode.
+    def test_traces_layered_noun_values_stay_undecoded
+      tr = "traces"
+      sama = { "form" => "sǝma", "pos" => "Common Noun", "gender" => "unmarked", "number" => "SingularP UnmarkedS",
+               "case" => "Nominative", "state" => "Construct state" }
+      assert_equal({ "case" => "nom", "state" => "cons" }, MF.features(sama, source: tr))
+      harif = { "form" => "ḫarif", "pos" => "Common Noun", "gender" => "unmarked", "number" => "SingularP UnmarkedS",
+                "case" => "Nominative", "state" => "Pronominal state" }
+      assert_equal({ "case" => "nom", "state" => "pron" }, MF.features(harif, source: tr))
+      qaddusa = { "form" => "qaddusa", "pos" => "Common Noun", "gender" => "masculineP", "number" => "SingularP" }
+      assert_empty MF.features(qaddusa, source: tr)
+      assert_equal "acc", MF.features({ "form" => "zanta", "case" => "Accusative" }, source: tr)["case"]
+      assert_equal "voc", MF.features({ "form" => "ʾǝgziʾo", "case" => "Vocative" }, source: tr)["case"]
+      assert_equal({ "state" => "abs" }, MF.features({ "form" => "śarq", "state" => "Absolute state" }, source: tr))
+      assert_empty MF.features({ "form" => "ba", "pos" => "Preposition", "state" => "Nominal state" }, source: tr)
+      assert_empty MF.features({ "form" => "motat", "tam" => "Perfect" }, source: "aes"), "TraCES-scoped"
     end
   end
 end

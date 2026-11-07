@@ -199,6 +199,23 @@ module Nabu
     #   token): the unscoped PROIEL row reads "morphology", and read
     #   positionally "n-morpheme" is mood=opt — 19,309 AES tokens decoded
     #   to false moods before this row existed. 460,548 tokens decode.
+    # - TraCES explicit features (traces, Gǝʿǝz): one upstream feature per
+    #   category, censused over the whole deposit (113,978 tokens). Decoded:
+    #   person First/Second/Third (23,031), case Nominative/Accusative/
+    #   Vocative (27,605), state Absolute/Construct/Pronominal (23,419 —
+    #   pron as for AES), and tam (10,725, plus the misspelled feature
+    #   names tamp 20 / temp 13) under the Semitic keys: Perfect/Imperfect
+    #   → conjugation perf/impf (the shared ETCBC values, never a Greek
+    #   tense), Subjunctive/Imperative/Infinitive/Gerund → mood sub/imp/
+    #   inf/ger. Number and gender decode only in their PLAIN values
+    #   (Singular/Plural 28,479; Masculine/Feminine/Communis 28,043 — the
+    #   verbs, pronouns, suffixes and numerals). Not decoded: the LAYERED
+    #   values on nouns and names (number "SingularP UnmarkedS",
+    #   "PluralIntP PluralS" … 23,490; gender "masculineNP", "feminineS" …
+    #   ~11.4k) — the P/S/N layers are not defined in the held export, and
+    #   which layer `number` should mean is a judgment, not a decode;
+    #   "unmarked" (12,235), Collective (5), and the prepositions' "Nominal
+    #   state" (11,808). Keyed on "form" (every token). 54,929 decode.
     module MorphFacets
       # A malformed --morph string (empty, no `=`, blank key/value). Caller-
       # fixable, so CLI/MCP surface it as a plain usage error.
@@ -500,6 +517,25 @@ module Nabu
         "number" => { "cardinal" => %w[numtype card], "ordinal" => %w[numtype ord] }
       }.freeze
 
+      # TraCES explicit features (class note): upstream feature name →
+      # {downcased value → [facet, value]}; tamp/temp are upstream's own
+      # misspellings of tam. Layered noun values ("SingularP UnmarkedS",
+      # "masculineNP"), "unmarked", "Collective" and "Nominal state" are
+      # not listed — skipped.
+      TRACES_TAM = {
+        "perfect" => %w[conjugation perf], "imperfect" => %w[conjugation impf], "subjunctive" => %w[mood sub],
+        "imperative" => %w[mood imp], "infinitive" => %w[mood inf], "gerund" => %w[mood ger]
+      }.freeze
+      TRACES_FIELDS = {
+        "person" => { "first" => %w[person 1], "second" => %w[person 2], "third" => %w[person 3] },
+        "number" => { "singular" => %w[number sing], "plural" => %w[number plur] },
+        "gender" => { "masculine" => %w[gender masc], "feminine" => %w[gender fem], "communis" => %w[gender com] },
+        "case" => { "nominative" => %w[case nom], "accusative" => %w[case acc], "vocative" => %w[case voc] },
+        "state" => { "absolute state" => %w[state abs], "construct state" => %w[state cons],
+                     "pronominal state" => %w[state pron] },
+        "tam" => TRACES_TAM, "tamp" => TRACES_TAM, "temp" => TRACES_TAM
+      }.freeze
+
       HELIPAD_DEGREES = {
         "ADJR" => "cmp", "ADVR" => "cmp", "QR" => "cmp", "ADJS" => "sup", "ADVS" => "sup", "QS" => "sup"
       }.freeze
@@ -526,7 +562,8 @@ module Nabu
         ["pos", :coptic_features, %w[coptic-scriptorium].freeze],
         ["pos_code", :ceipom_features, %w[ceipom].freeze],
         ["pos", :helipad_features, %w[helipad].freeze],
-        ["analysis", :corph_features, %w[corph].freeze]
+        ["analysis", :corph_features, %w[corph].freeze],
+        ["form", :traces_features, %w[traces].freeze]
       ].freeze
 
       # Canonical order for rendering a token's decoded features as evidence
@@ -778,6 +815,14 @@ module Nabu
       def aes_features(_form, token)
         AES_FIELDS.each_with_object({}) do |(field, table), out|
           facet, value = table[token[field]]
+          out[facet] = value if facet
+        end
+      end
+
+      # TraCES: the explicit Gǝʿǝz features off the token (class note).
+      def traces_features(_form, token)
+        TRACES_FIELDS.each_with_object({}) do |(field, table), out|
+          facet, value = table[token[field].to_s.strip.downcase]
           out[facet] = value if facet
         end
       end
