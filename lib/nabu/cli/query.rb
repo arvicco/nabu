@@ -389,7 +389,7 @@ module Nabu
                                 "hittite-glossed trans_de, corph, …); hits are the original passages — " \
                                 "composes with --lang/--source/--axis/--license/--limit only"
     option :annotations, type: :boolean, default: false,
-                         desc: "Search the DECLARED annotation layers (standardized/regularized spellings, " \
+                         desc: "Search the DECLARED annotation layers (standardized/regularized spellings, readings, " \
                                "margin notes, footnotes, editors' notes); hits are the passages themselves — " \
                                "composes with --lang/--source/--axis/--license/--limit only"
     option :withdrawn, type: :boolean, default: false,

@@ -249,7 +249,7 @@ module Nabu
         "`translations: true` — the query matched against the translations held in passage " \
         "annotations, hits being the ORIGINAL passages with the matched `layer` (the CLI's " \
         "--translations); `annotations: true` — the query matched against the DECLARED " \
-        "annotation layers (standardized/regularized spellings, margin notes, footnotes, " \
+        "annotation layers (standardized/regularized spellings, readings, margin notes, footnotes, " \
         "editors' notes), hits being the passages with the matched `layer` (the CLI's " \
         "--annotations); `sense` — the word-sense desk (a DCS WordSem id or sense name → the " \
         "passages whose tokens cite it, each with its citing tokens; the CLI's `nabu sense`). " \
