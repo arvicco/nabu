@@ -2528,9 +2528,12 @@ sources:
       #   fold (the dwds Erbauungsliteratur / sefaria Musar precedent); 63 pair it with Sermon
       "Sermon": sermon                           # 63 — Severian's and the Pseudo-Chrysostom
       #   homilies (upstream says sermon; the homily sub is not its claim)
-      "Theological": scholarly                   # 9 — theological scholarship (the Theologie fold)
-      "Dogmatic Treatise": scholarly             # 4 — Athanasius' doctrinal treatises
-      "Polemics": scholarly                      # 3 — anti-Arian controversy treatises
+      "Theological": theology                    # 9 — comphistsem's theology HEAD, paired with its
+      #   sub on every work (Dogmatic Treatise 4 · Polemics 3 · Bible Exegesis 2): the bare head,
+      #   the sub carries the grain (the "Scholarly" head fold below). CORRECTED 2026-11-07
+      #   with the two below: all three were scholarly before the theology head was ruled
+      "Dogmatic Treatise": theology/treatise     # 4 — Athanasius' doctrinal treatises
+      "Polemics": theology/polemic               # 3 — anti-Arian controversy treatises
       "Bible Exegesis: Old Testament": exegesis  # 2
       "Scholarly": scholarly                     # 4 — the head over Commentary
       "Commentary": exegesis                     # 4 — every one a biblical commentary (Psalms,
@@ -2541,8 +2544,9 @@ sources:
       "Church History": historiography           # 2
       "Church history": historiography           # 1 — upstream's lower-case spelling of the same
       "Official letter": letter/official         # 1 — the Epistula synodalis
-      "Märtyrervita/Wundersammlung": historiography  # 1 — the Vita Cononis; lives fold to
-      #   historiography by the ruled biography precedent (the scat fold)
+      "Märtyrervita/Wundersammlung": hagiography/martyrdom  # 1 — the Vita Cononis, a martyr's
+      #   life with its miracle collection. CORRECTED 2026-11-07: was historiography by the
+      #   biography precedent while no hagiography head existed
     deliberate:
       "Genre missing": "the catalog's unfilled genre slot (18 works), not a claim"
   ponomar:            # the adapter's service_part (Adapters::Ponomar): TROPARION / KONTAKION for
