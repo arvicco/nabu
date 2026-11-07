@@ -6555,6 +6555,54 @@ class CLITest < Minitest::Test
     end
   end
 
+  # `links mine --stale` composes `links mine SCOPE`: the per-layer mine
+  # (#mine_layer) is the seam stubbed here — only the selection is real.
+  def with_stubbed_mine_layer
+    mined = []
+    original = Nabu::CLI.instance_method(:mine_layer)
+    Nabu::CLI.send(:define_method, :mine_layer) { |scope, **| mined << scope["scope"] }
+    yield mined
+  ensure
+    Nabu::CLI.send(:define_method, :mine_layer, original)
+    Nabu::CLI.send(:private, :mine_layer)
+  end
+
+  def test_links_mine_stale_re_mines_only_the_stale_recorded_layers
+    with_parallels_corpus do |config|
+      with_config(config) { run_cli(%w[parallels --batch urn:h:od]) }
+      with_stubbed_mine_layer do |mined|
+        out, _err, status = with_config(config) { run_cli(%w[links mine --stale]) }
+        assert_nil status
+        assert_match(/links mine --stale: 0 of 1 recorded heavy layer\(s\) stale/, out)
+        assert_match(/parallels urn:h:od — current, skipped/, out)
+        assert_empty mined, "a current layer is never re-mined"
+
+        catalog = Nabu::Store.connect(config.catalog_path)
+        catalog[:sources].where(slug: "h").update(last_ingest_identity: "re-ingested")
+        catalog[:passages].where(urn: "urn:h:od:1.1").update(revision: 2)
+        catalog.disconnect
+        out, _err, status = with_config(config) { run_cli(%w[links mine --stale]) }
+        assert_nil status
+        assert_match(/1 of 1 recorded heavy layer\(s\) stale/, out)
+        assert_match(/parallels urn:h:od — stale \(member slice moved: h\), re-mine ≈ [\d.]+s, measured/, out)
+        assert_match(%r{\[1/1\] re-mining parallels urn:h:od}, out)
+        assert_equal %w[urn:h:od], mined
+      end
+    end
+  end
+
+  def test_links_mine_stale_skips_a_recorded_scope_never_mined
+    with_parallels_corpus do |config|
+      Nabu::LinkScopes.record!(config.link_scopes_path, producer: "parallels", scope: "urn:h:od", params: {})
+      with_stubbed_mine_layer do |mined|
+        out, _err, status = with_config(config) { run_cli(%w[links mine --stale]) }
+        assert_nil status
+        assert_match(/parallels urn:h:od — never mined, skipped \(`nabu links mine urn:h:od` mines it\)/, out)
+        assert_empty mined
+      end
+    end
+  end
+
   def test_links_mine_refuses_an_unrecorded_scope
     with_parallels_corpus do |config|
       _out, err, status = with_config(config) { run_cli(%w[links mine nope]) }

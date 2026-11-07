@@ -151,6 +151,23 @@ class EvansTcpTest < Minitest::Test
     assert_equal ["Broadsides."], fold.uncovered
   end
 
+  # The 2026-11-07 heads: the fixture's three texts carry none of these
+  # headings (verse, a trial), so the pins read live census headings.
+  def test_orations_catechisms_and_doctrinal_works_fold_onto_the_new_heads
+    kinds = load_kinds
+    { "Fourth of July orations -- 1798." => ["oratory"],
+      "Catechisms." => ["catechesis"],
+      "Congregational churches -- Catechisms" => ["catechesis"],
+      "Society of Friends -- Catechisms and creeds." => ["catechesis"],
+      "Congregational churches -- Creeds" => ["catechesis"],
+      "Society of Friends -- Doctrinal and controversial works." => ["theology"],
+      "Apologetics -- 18th century." => ["theology/apologetics"] }.each do |heading, want|
+      assert_equal want, kinds.normalize("evans-tcp", heading), heading
+    end
+    fold = kinds.fold("evans-tcp", "Slavery -- United States -- Controversial literature -- 1773.")
+    assert_empty fold.paths, "Evans's controversial literature is mostly the slavery debate — no theology claim"
+  end
+
   def test_the_subjects_project_as_the_subject_facet
     fields = Nabu::FacetMap.load(File.join(Nabu::Config::PROJECT_ROOT, "config", "facet_map.yml"))
                            .fields_for("evans-tcp")

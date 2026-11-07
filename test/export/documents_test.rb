@@ -107,6 +107,27 @@ module Export
       assert_equal "documentary/epistolary|documentary/legal", row["kind"], "multi-valued facets join sorted"
     end
 
+    # A role-labeled place row (a letter's received place, a sender place)
+    # is a place in ANOTHER role than the main row's — the export's one
+    # unlabeled place never ships it.
+    def test_the_place_pick_skips_role_labeled_rows
+      received = document(@alpha, "urn:a:received-only")
+      axis(received, not_before: 1640, not_after: 1640)
+      @catalog[:document_axes].insert(document_id: received.id, axis_source: "socinian-letters-received",
+                                      place_name: "Gdańsk", place_ref: "geonames:3099434")
+      sender = document(@alpha, "urn:a:sender-first")
+      @catalog[:document_axes].insert(document_id: sender.id, axis_source: "oracc-sender", place_name: "Kalhu")
+      axis(sender, not_before: -700, not_after: -690, place_name: "Nineveh")
+
+      by_urn = rows(with_axes: true).to_h { |row| [row["urn"], row] }
+      assert_equal [nil, nil, nil, nil],
+                   by_urn["urn:a:received-only"].values_at("place_name", "place_ref", "place_lat", "place_lon"),
+                   "only role rows carry a place — no place exports (never the destination unlabeled)"
+      assert_equal 1640, by_urn["urn:a:received-only"]["not_before"], "the date envelope is untouched"
+      assert_equal "Nineveh", by_urn["urn:a:sender-first"]["place_name"],
+                   "the main row's place wins over a lower-id role row"
+    end
+
     # P122-1: an estimate is the envelope only where no upstream date
     # exists — and then it ships labeled silver.
     def test_silver_estimates_ship_only_where_no_upstream_date_exists

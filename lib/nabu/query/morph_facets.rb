@@ -50,7 +50,9 @@ module Nabu
     #
     # == Source-scoped rows (the key collisions)
     #
-    # The treebank keys above are unambiguous library-wide. The later
+    # The treebank keys above are unambiguous library-wide save one: AES's
+    # "morphology" is an Egyptian morpheme label, so the AES-scoped row
+    # precedes the treebank rows (see the AES note below). The later
     # tagsets' keys are NOT: "morph" is OSHB's code AND REF/coptic/vakk/
     # penn-psd tags, "msd" is CorA (ReM/ReN), IMP (goo300k), NKJP and RIIG,
     # "analyses" is Diorisis and aoxml. So a DECODERS row carries a source
@@ -125,6 +127,111 @@ module Nabu
     #   COP (lemma-dependent), the plain auxiliaries (no UD feature). A
     #   fused tag (ANEGPST_PPERS — a pronoun cliticized on its host)
     #   decodes every part.
+    # - CEIPoM `pos_code` (ceipom): the 9-slot AGDT tag, through the AGDT
+    #   table. Censused over the whole deposit (36,859 of 37,041 tokens
+    #   carry one; 36,874 analyses with the alternatives; 386 distinct, all
+    #   9 slots wide): every slot code sits inside the AGDT/PROIEL code
+    #   maps (tense p/i/r/l/f/t, mood i/s/m/o/n/p/g/u, voice a/p, case
+    #   n/g/a/b/d/v, degree c/s), and the tag agrees 1:1 with the explicit
+    #   Person/Number/Tense/Mood/Diathesis columns wherever both speak.
+    #   Two lossy spots, refined from the explicit columns: case — slot 8
+    #   is "-" on the 277 LOC and 15 INS tokens — and syncretism — the tag
+    #   writes one gender for the 167 M/N, M/F, F/N tokens and one case for
+    #   the 7 ACC/DAT-style pairs, decoded as value alternatives. Undecoded
+    #   residue: 182 analysis-less tokens, 2,809 all-"-" tags (letters,
+    #   unclear words), and the 12 multi-analysis tokens' alternatives (they
+    #   can be other lexemes — the lemma anchor reads the first analysis's
+    #   latin_equivalent). The explicit Tense column (simple/past/future) is
+    #   coarser than the tag and is not read. CEIPoM is the EQUIVALENCE lemma
+    #   tier, so the facets ride `--lemma <Latin equivalent>`.
+    # - HeliPaD `pos` + `morph` (helipad): the Penn-psd tag split on its
+    #   first "^" (PennPsdParser). Censused over the whole deposit (53,466
+    #   real tokens; 93 distinct pos tags; 32,129 morph strings, 59
+    #   distinct, exactly 15 atoms): the morph atoms are case (N 8,776,
+    #   A 6,586, D 6,545, G 3,676, I 346 — instrumental), person (3 9,529,
+    #   2 1,705, 1 1,041) and number (SG 22,893, PL 9,048, DU 16); the 5
+    #   stray atoms (3PL ×2, SGL, SPL, RFL) are skipped, and the one
+    #   G^D^SG decodes as a case alternative. The verb tag carries tense +
+    #   mood in the YCOE family convention (head VB/BE/HV/MD/RD + PI/PS/
+    #   DI/DS; bare head = infinitive; head+I = imperative); VG/VN (+I = the inflected forms, which
+    #   carry case/number) are participles — mood only, no tense claimed
+    #   (the upstream manual is not held). ADJR/ADVR/QR and ADJS/ADVS/QS
+    #   give degree; GE+/NEG+ prefixes are stripped. Undecoded: RN, MG,
+    #   VBG (10 tokens, unattested in the convention) and every tag that
+    #   fixes nothing. 34,434 tokens decode at least one facet.
+    # - CorPH `analysis` (corph): "."-joined self-describing atoms —
+    #   censused over the whole deposit (85,397 analyses, 359 distinct):
+    #   case nom/gen/dat/acc/voc/abl, number sg/pl/du, gender, fused
+    #   person+number (3sg 11,911, 3pl 3,256 …), tense pres/pret/past/fut/
+    #   impf (+ perf 7, plup 1), mood ind/subj/impv/cond (UD Cnd)/inf/
+    #   supine, voice pass, aspect hab (UD Hab), degree comp/sup/equ (UD
+    #   Equ, the Old Irish equative); a "/"-led segment continues the
+    #   previous one as alternatives (dat./acc., masc./neut.). THE TRAP:
+    #   the field carries no POS, and a bare case ("dat.", "dat./acc.",
+    #   9,512 tokens on do/i/ó/di/fri/la …) is the case a PREPOSITION
+    #   governs, as is the case beside a fused person-number (3sg.masc./
+    #   neut.dat., 2,470 conjugated prepositions — the person/number/
+    #   gender are the incorporated pronoun's and decode). So case decodes
+    #   only beside a separate number atom (the nominal shape: 53,494
+    #   tokens, ≤108 of them on a governing lemma). Skipped as flags:
+    #   augm, rel, compos, conj, nas/len, obj, prep, A/B/C (infixed-pronoun
+    #   classes). Voided whole: 479 upstream-uncertain ("(?)", "?", the
+    #   secondary future "sec", free text "or") and 4 segments whose
+    #   alternatives span categories (acc.sg./gen.pl.). 71,850 analyses
+    #   decode at least one facet.
+    # - AES explicit fields (aes): upstream's fine morphology rides verbatim
+    #   under its own names, censused over the whole deposit (815,026
+    #   tokens): numerus singular/plural/dual, genus masculine/feminine/
+    #   commonGender, status st_absolutus/st_constructus/st_pronominalis
+    #   (→ state abs/cons/pron — the Egyptian pronominal state, the noun
+    #   form before a suffix pronoun), pronoun personal/demonstrative/
+    #   relative/interrogative (→ prontype prs/dem/rel/int), inflection
+    #   (suffixConjugation → verbform fin; infinitive/participle/
+    #   imperative → mood), voice active/passive, number cardinal/ordinal
+    #   (→ numtype). Skipped: inflection pseudoParticiple (8,941) and
+    #   relativeform (5,279) — Egyptian-specific forms with no UD facet,
+    #   their agreement still decodes; numerus substantive_masc/_fem
+    #   (24,326 — the noun's lexical subtype leaking into the number slot,
+    #   not a number); verbalClass, epitheton, name, adjective, particle,
+    #   adverb (lexical classes); and "morphology" — Egyptian verb-morpheme
+    #   labels (n-morpheme, t-morpheme, geminated …, 22,523 tokens). THAT
+    #   key is why the AES row sits FIRST, keyed on "form" (every AES
+    #   token): the unscoped PROIEL row reads "morphology", and read
+    #   positionally "n-morpheme" is mood=opt — 19,309 AES tokens decoded
+    #   to false moods before this row existed. 460,548 tokens decode.
+    # - TraCES explicit features (traces, Gǝʿǝz): one upstream feature per
+    #   category, censused over the whole deposit (113,978 tokens). Decoded:
+    #   person First/Second/Third (23,031), case Nominative/Accusative/
+    #   Vocative (27,605), state Absolute/Construct/Pronominal (23,419 —
+    #   pron as for AES), and tam (10,725, plus the misspelled feature
+    #   names tamp 20 / temp 13) under the Semitic keys: Perfect/Imperfect
+    #   → conjugation perf/impf (the shared ETCBC values, never a Greek
+    #   tense), Subjunctive/Imperative/Infinitive/Gerund → mood sub/imp/
+    #   inf/ger. Number and gender decode only in their PLAIN values
+    #   (Singular/Plural 28,479; Masculine/Feminine/Communis 28,043 — the
+    #   verbs, pronouns, suffixes and numerals). Not decoded: the LAYERED
+    #   values on nouns and names (number "SingularP UnmarkedS",
+    #   "PluralIntP PluralS" … 23,490; gender "masculineNP", "feminineS" …
+    #   ~11.4k) — the P/S/N layers are not defined in the held export, and
+    #   which layer `number` should mean is a judgment, not a decode;
+    #   "unmarked" (12,235), Collective (5), and the prepositions' "Nominal
+    #   state" (11,808). Keyed on "form" (every token). 54,929 decode.
+    # - TLA glossing `gloss` (tla-hf): the token "gloss" here is the TLA's
+    #   GRAMMATICAL glossing (Leipzig-style labels), not a word meaning —
+    #   so it belongs to this façade, never TokenGlosses. Censused over the
+    #   whole deposit (212,018 tokens, 259 distinct labels): a head (V, N,
+    #   PREP, ART …) plus atoms joined by . : - = ~ \ — gender m/f/c,
+    #   number sg/pl/du, fused person-number (3sg, 1pl …), state stpr/stc
+    #   (pron/cons), inf/imp/ptcp (mood), act/pass (voice), ipfv (aspect
+    #   imp), art/ART/dem/REL/PRON.rel (prontype), poss, NUM ord/card. A
+    #   head-less person label (-3sg.m, =3sg.c, 1sg) is a personal pronoun
+    #   (prontype prs); a verb's (V\res-3sg.m) is its agreement. The
+    #   possessive article's "-" segment is its POSSESSOR (ART.poss:pl-1sg,
+    #   4 tokens) and is dropped. Flags with no facet (tam, ant, res, cnsv,
+    #   oblv, compl, post, distr, dist, excl, nmlz, adjz, advz, adv, and
+    #   "gen" — the genitival adjective, never the genitive case) and the
+    #   head-only labels (V 18,478, PREP 23,947, PTCL, PERSN, DIVN, TITL,
+    #   "(undefined)" 8,341 …) decode nothing. 109,181 tokens decode.
     module MorphFacets
       # A malformed --morph string (empty, no `=`, blank key/value). Caller-
       # fixable, so CLI/MCP surface it as a plain usage error.
@@ -363,6 +470,111 @@ module Nabu
         "VIMP" => COPTIC_FINITE.merge("mood" => "imp").freeze
       }.freeze
 
+      # CEIPoM explicit Case/Gender column values (class note) → facet
+      # values; "/"-joined pairs are alternatives. Anything else ("?",
+      # "ABL?", the stray "da") is not a full decode and leaves the tag's
+      # reading alone.
+      CEIPOM_CASES = {
+        "NOM" => "nom", "GEN" => "gen", "DAT" => "dat", "ACC" => "acc", "ABL" => "abl", "VOC" => "voc",
+        "LOC" => "loc", "INS" => "ins"
+      }.freeze
+      CEIPOM_GENDERS = { "M" => "masc", "F" => "fem", "N" => "neut", "C" => "com" }.freeze
+
+      # HeliPaD "^" morph atoms (class note; the full 15-atom inventory,
+      # censused over the whole deposit). Not listed — skipped: SGL, SPL,
+      # RFL, 3PL (one or two tags each, upstream typos).
+      HELIPAD_ATOMS = {
+        "N" => %w[case nom], "A" => %w[case acc], "D" => %w[case dat], "G" => %w[case gen], "I" => %w[case ins],
+        "1" => %w[person 1], "2" => %w[person 2], "3" => %w[person 3],
+        "SG" => %w[number sing], "PL" => %w[number plur], "DU" => %w[number dual]
+      }.freeze
+      # HeliPaD verb tags (the YCOE family convention): a verb head + the
+      # tense/mood suffix; the participles (VG present, VN past; +I =
+      # inflected, carrying case/number) decode mood only.
+      HELIPAD_VERB = /\A(?:VB|BE|HV|MD|RD)(PI|PS|DI|DS|I)?\z/
+      HELIPAD_VERB_SUFFIXES = {
+        nil => { "mood" => "inf" }, "I" => { "mood" => "imp" },
+        "PI" => { "tense" => "pres", "mood" => "ind" }, "PS" => { "tense" => "pres", "mood" => "sub" },
+        "DI" => { "tense" => "past", "mood" => "ind" }, "DS" => { "tense" => "past", "mood" => "sub" }
+      }.freeze
+      HELIPAD_PARTICIPLE = /\AV[GN]I?\z/
+      # CorPH analysis atoms (class note) → [facet, value]; person+number
+      # fuse ("3sg") and match CORPH_PERSON_NUMBER. Atoms not listed (augm,
+      # rel, compos, conj, A/B/C, …) are flags with no facet and skipped;
+      # CORPH_VOIDING atoms make the whole analysis undecodable.
+      CORPH_ATOMS = {
+        "nom" => %w[case nom], "gen" => %w[case gen], "dat" => %w[case dat], "acc" => %w[case acc],
+        "voc" => %w[case voc], "abl" => %w[case abl],
+        "sg" => %w[number sing], "pl" => %w[number plur], "du" => %w[number dual],
+        "masc" => %w[gender masc], "fem" => %w[gender fem], "neut" => %w[gender neut],
+        "pres" => %w[tense pres], "pret" => %w[tense past], "past" => %w[tense past], "fut" => %w[tense fut],
+        "impf" => %w[tense impf], "perf" => %w[tense perf], "plup" => %w[tense plup],
+        "ind" => %w[mood ind], "subj" => %w[mood sub], "impv" => %w[mood imp], "cond" => %w[mood cnd],
+        "inf" => %w[mood inf], "infinitive" => %w[mood inf], "supine" => %w[mood sup],
+        "hab" => %w[aspect hab], "pass" => %w[voice pass],
+        "comp" => %w[degree cmp], "sup" => %w[degree sup], "equ" => %w[degree equ]
+      }.freeze
+      CORPH_PERSON_NUMBER = /\A([123])(sg|pl|du)\z/
+      CORPH_VOIDING = ["(?)", "?", "sec"].freeze
+      # const: the separate number atoms of the closed CorPH inventory
+      # above (the nominal shape that licenses a case decode)
+      CORPH_NUMBERS = %w[sg pl du].freeze
+
+      # AES explicit features: upstream field → {upstream value → [facet,
+      # value]} (class note). Values not listed are skipped.
+      AES_FIELDS = {
+        "numerus" => { "singular" => %w[number sing], "plural" => %w[number plur], "dual" => %w[number dual] },
+        "genus" => { "masculine" => %w[gender masc], "feminine" => %w[gender fem], "commonGender" => %w[gender com] },
+        "status" => { "st_absolutus" => %w[state abs], "st_constructus" => %w[state cons],
+                      "st_pronominalis" => %w[state pron] },
+        "pronoun" => { "personal_pronoun" => %w[prontype prs], "demonstrative_pronoun" => %w[prontype dem],
+                       "relative_pronoun" => %w[prontype rel], "interrogative_pronoun" => %w[prontype int] },
+        "inflection" => { "suffixConjugation" => %w[verbform fin], "suffixConjugation;special" => %w[verbform fin],
+                          "infinitive" => %w[mood inf], "participle" => %w[mood part], "imperative" => %w[mood imp] },
+        "voice" => { "active" => %w[voice act], "passive" => %w[voice pass] },
+        "number" => { "cardinal" => %w[numtype card], "ordinal" => %w[numtype ord] }
+      }.freeze
+
+      # TraCES explicit features (class note): upstream feature name →
+      # {downcased value → [facet, value]}; tamp/temp are upstream's own
+      # misspellings of tam. Layered noun values ("SingularP UnmarkedS",
+      # "masculineNP"), "unmarked", "Collective" and "Nominal state" are
+      # not listed — skipped.
+      TRACES_TAM = {
+        "perfect" => %w[conjugation perf], "imperfect" => %w[conjugation impf], "subjunctive" => %w[mood sub],
+        "imperative" => %w[mood imp], "infinitive" => %w[mood inf], "gerund" => %w[mood ger]
+      }.freeze
+      TRACES_FIELDS = {
+        "person" => { "first" => %w[person 1], "second" => %w[person 2], "third" => %w[person 3] },
+        "number" => { "singular" => %w[number sing], "plural" => %w[number plur] },
+        "gender" => { "masculine" => %w[gender masc], "feminine" => %w[gender fem], "communis" => %w[gender com] },
+        "case" => { "nominative" => %w[case nom], "accusative" => %w[case acc], "vocative" => %w[case voc] },
+        "state" => { "absolute state" => %w[state abs], "construct state" => %w[state cons],
+                     "pronominal state" => %w[state pron] },
+        "tam" => TRACES_TAM, "tamp" => TRACES_TAM, "temp" => TRACES_TAM
+      }.freeze
+
+      # TLA glossing atoms (tla-hf; class note) → [facet, value]; a fused
+      # person-number atom matches CORPH_PERSON_NUMBER's shape. Heads (V,
+      # N, PREP …) and flags (tam, ant, res, adjz, gen …) are not listed.
+      TLA_ATOMS = {
+        "m" => %w[gender masc], "f" => %w[gender fem], "c" => %w[gender com],
+        "sg" => %w[number sing], "pl" => %w[number plur], "du" => %w[number dual],
+        "stpr" => %w[state pron], "stc" => %w[state cons],
+        "inf" => %w[mood inf], "imp" => %w[mood imp], "ptcp" => %w[mood part],
+        "act" => %w[voice act], "pass" => %w[voice pass], "ipfv" => %w[aspect imp],
+        "art" => %w[prontype art], "ART" => %w[prontype art], "dem" => %w[prontype dem], "REL" => %w[prontype rel],
+        "poss" => %w[poss yes], "ord" => %w[numtype ord], "card" => %w[numtype card]
+      }.freeze
+      TLA_SEPARATORS = %r{[.:\-=~\\/()]}
+      # Article heads whose "-" segment is the POSSESSOR (ART.poss:pl-1sg).
+      # const: the glossing convention's two article heads, not a census
+      TLA_ARTICLES = %w[ART art].freeze
+
+      HELIPAD_DEGREES = {
+        "ADJR" => "cmp", "ADVR" => "cmp", "QR" => "cmp", "ADJS" => "sup", "ADVS" => "sup", "QS" => "sup"
+      }.freeze
+
       # The per-tagset decoder seam: [token key, decode method, source scope]
       # in precedence order (scope nil = any source; otherwise the slugs
       # whose tokens the row decodes — class note). The first APPLICABLE row
@@ -370,6 +582,7 @@ module Nabu
       # a later row, even when its tag decodes to nothing. Every decoder is
       # called as decoder(tag, token).
       DECODERS = [
+        ["form", :aes_features, %w[aes].freeze],
         ["morphology", :proiel_features, nil],
         ["feats", :ud_features, nil],
         ["postag", :agdt_features, nil],
@@ -381,7 +594,12 @@ module Nabu
         ["morph", :ref_features, %w[ref].freeze],
         ["msd", :imp_features, %w[goo300k].freeze],
         ["msa", :menota_features, %w[menota].freeze],
-        ["pos", :coptic_features, %w[coptic-scriptorium].freeze]
+        ["pos", :coptic_features, %w[coptic-scriptorium].freeze],
+        ["pos_code", :ceipom_features, %w[ceipom].freeze],
+        ["pos", :helipad_features, %w[helipad].freeze],
+        ["analysis", :corph_features, %w[corph].freeze],
+        ["form", :traces_features, %w[traces].freeze],
+        ["gloss", :tla_features, %w[tla-hf].freeze]
       ].freeze
 
       # Canonical order for rendering a token's decoded features as evidence
@@ -586,6 +804,134 @@ module Nabu
         pos.to_s.split("_").each_with_object({}) do |part, out|
           out.merge!(COPTIC_TAGS.fetch(part, {}))
         end
+      end
+
+      # CEIPoM `pos_code`: the AGDT positional decode, its case/gender
+      # refined by the explicit columns where those fully decode (class
+      # note). Only the first analysis — "alternatives" can be other
+      # lexemes than the one the lemma anchor reads.
+      def ceipom_features(pos_code, token)
+        out = agdt_features(pos_code)
+        cases = ceipom_column(token["case"], CEIPOM_CASES)
+        genders = ceipom_column(token["gender"], CEIPOM_GENDERS)
+        out["case"] = cases if cases
+        out["gender"] = genders if genders
+        out
+      end
+
+      # "ACC/DAT" → %w[acc dat]; nil unless every part is a known value.
+      def ceipom_column(value, table)
+        return nil unless value.is_a?(String)
+
+        values = value.split("/").map { |part| table[part.strip.upcase] }
+        values.empty? || values.include?(nil) ? nil : values
+      end
+
+      # HeliPaD: the tag (minus GE+/NEG+ prefixes) gives tense/mood or
+      # degree, the "^" morph atoms case/person/number (class note).
+      def helipad_features(pos, token)
+        out = helipad_tag(pos.to_s.split("+").last.to_s).dup
+        token["morph"].to_s.split("^").each do |atom|
+          facet, value = HELIPAD_ATOMS[atom]
+          add_values(out, facet, [value]) if facet
+        end
+        out
+      end
+
+      def helipad_tag(tag)
+        if (verb = HELIPAD_VERB.match(tag)) then HELIPAD_VERB_SUFFIXES.fetch(verb[1])
+        elsif HELIPAD_PARTICIPLE.match?(tag) then { "mood" => "part" }
+        elsif (degree = HELIPAD_DEGREES[tag]) then { "degree" => degree }
+        else {}
+        end
+      end
+
+      # AES: the explicit fine-morphology fields off the token (class
+      # note); "morphology" (Egyptian morpheme labels) is never read.
+      def aes_features(_form, token)
+        AES_FIELDS.each_with_object({}) do |(field, table), out|
+          facet, value = table[token[field]]
+          out[facet] = value if facet
+        end
+      end
+
+      # TraCES: the explicit Gǝʿǝz features off the token (class note).
+      def traces_features(_form, token)
+        TRACES_FIELDS.each_with_object({}) do |(field, table), out|
+          facet, value = table[token[field].to_s.strip.downcase]
+          out[facet] = value if facet
+        end
+      end
+
+      # TLA glossing (tla-hf): the label's atoms (class note). A label with
+      # no head (-3sg.m, =3sg.c, 1sg) is a personal pronoun; an article's
+      # "-" segment names its possessor and is dropped.
+      def tla_features(gloss, _token = nil)
+        label = gloss.to_s.strip
+        head = label[/\A[A-Za-z]+/]
+        label = label.split("-").first.to_s if TLA_ARTICLES.include?(head)
+        atoms = label.split(TLA_SEPARATORS).reject(&:empty?)
+        out = {}
+        atoms.each do |atom|
+          if (fused = CORPH_PERSON_NUMBER.match(atom))
+            add_values(out, "person", [fused[1]])
+            add_values(out, "number", [CORPH_ATOMS.fetch(fused[2]).last])
+          elsif (facet, value = TLA_ATOMS[atom])
+            add_values(out, facet, [value])
+          end
+        end
+        add_values(out, "prontype", ["rel"]) if head == "PRON" && atoms.include?("rel")
+        add_values(out, "prontype", ["prs"]) if head.nil? && out.key?("person")
+        out
+      end
+
+      # CorPH `analysis`: "."-joined atoms, a "/"-led segment continuing
+      # the previous one as alternatives; case only beside a separate
+      # number atom (class note — a bare case is prepositional government).
+      def corph_features(analysis, _token = nil)
+        segments = corph_segments(analysis.to_s)
+        return {} if segments.nil?
+
+        out = {}
+        segments.each do |alternatives|
+          pairs = corph_pairs(alternatives) or return {}
+          pairs.each { |facet, values| add_values(out, facet, values) }
+        end
+        out.delete("case") unless segments.any? { |alternatives| alternatives.intersect?(CORPH_NUMBERS) }
+        out
+      end
+
+      # "3sg.masc./neut.dat." → [["3sg"], ["masc", "neut"], ["dat"]]; nil
+      # when a voiding atom (upstream uncertainty, the secondary future) or
+      # free text ("or") is present.
+      def corph_segments(analysis)
+        segments = []
+        analysis.split(".").each do |segment|
+          segment = segment.strip
+          next if segment.empty?
+          return nil if CORPH_VOIDING.include?(segment) || segment.include?(" ") || segment.include?("(?)")
+
+          if segment.start_with?("/") && segments.any? then segments.last.concat(segment.split("/").reject(&:empty?))
+          else segments << segment.split("/").reject(&:empty?)
+          end
+        end
+        segments
+      end
+
+      # One segment's alternatives → [[facet, values], …]: [] for a flag
+      # segment (no atom decodes), nil when its alternatives span
+      # categories (two readings run together — the analysis is voided).
+      def corph_pairs(alternatives)
+        fused = alternatives.map { |atom| CORPH_PERSON_NUMBER.match(atom) }
+        if fused.all?
+          return [["person", fused.map { |m| m[1] }], ["number", fused.map { |m| CORPH_ATOMS.fetch(m[2]).last }]]
+        end
+
+        pairs = alternatives.map { |atom| CORPH_ATOMS[atom] }
+        return [] if pairs.all?(&:nil?) && alternatives.size == 1
+        return nil if pairs.include?(nil) || pairs.map(&:first).uniq.size != 1
+
+        [[pairs.first.first, pairs.map(&:last)]]
       end
 
       # Shared positional decode: `-` and unknown codes are skipped, never

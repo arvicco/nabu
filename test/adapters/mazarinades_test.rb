@@ -210,6 +210,30 @@ class MazarinadesTest < Minitest::Test
     assert_equal [], kinds.normalize("mazarinades", "pamphlet"), "a format, not a genre (deliberate)"
   end
 
+  # The oratory head (ruled 2026-11-07) takes the speech-form cluster the
+  # first fold had to leave unmapped. None of these labels sits in the
+  # fixture's five pieces (their genres: lettre, dialogue, poésie, sonnet,
+  # satirique, …), so the pins read the rule over the census labels.
+  ORATORY_LABELS = ["discours adressé", "dicours adressé", "discours", "discours prononcé", "harangue", "hanrangue",
+                    "manifeste", "maifeste", "rhétorique délibérative", "rhérotique délibérative",
+                    "rhétorique judiciaire", "rhétorique épidictique", "éloge", "panégyrique", "blâme",
+                    "remerciement", "consolation", "apologie", "justification", "défense", "réfutation",
+                    "réponse", "avis", "pro et contra", "prosopopée", "prosopoée", "prospopée"].freeze
+
+  def test_the_speech_form_cluster_folds_onto_oratory
+    root = File.expand_path("../../config", __dir__)
+    kinds = Nabu::Kinds.load(classes_path: File.join(root, "kind_classes.yml"),
+                             map_path: File.join(root, "kind_map.yml"))
+    ORATORY_LABELS.each { |label| assert_equal ["oratory"], kinds.normalize("mazarinades", label), label }
+    assert_equal %w[letter oratory], kinds.normalize("mazarinades", "lettre | discours adressé").sort,
+                 "a multi-label piece keeps its letter form beside the speech form"
+    # judged ambiguous, left in the counted unmapped bucket: the laments, the
+    # satirical mode, the parody catechisms, the two "doctrinal" discourses
+    %w[satirique lamentation plainte regrets soupirs catéchisme].push("discours doctrinal").each do |label|
+      assert_equal ["unmapped"], kinds.normalize("mazarinades", label), label
+    end
+  end
+
   # --- language, lect, text nature -----------------------------------------------------
 
   def test_languages_from_the_label

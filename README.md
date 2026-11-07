@@ -83,26 +83,54 @@ registration — is the site's
 
 ## Run the demo
 
-No clone, no sync: the public `ghcr.io/arvicco/nabu-demo` image bakes an
-open demo slice of the library (Greek New Testament, Hebrew Bible, Latin
-Vulgate, World English Bible, LSJ and Lewis & Short — sources and
-per-source licenses in `/demo/demo-census.json` inside the image) behind
-the read-only MCP server. The full library is a local build (Quickstart
-above).
+No clone, no sync: the public `ghcr.io/arvicco/nabu-demo:1.0.0` image
+(amd64 + arm64) bakes an open demo slice of the library (Greek New
+Testament, Hebrew Bible, Latin Vulgate, World English Bible, LSJ and
+Lewis & Short — sources and per-source licenses in
+`/demo/demo-census.json` inside the image) behind the read-only MCP
+server. The full library is a local build (Quickstart above). Every
+launcher below pins the released demo tag, never `:latest`.
 
 ```
-docker run -i --rm ghcr.io/arvicco/nabu-demo                      # MCP over stdio
-claude mcp add nabu -- docker run -i --rm ghcr.io/arvicco/nabu-demo   # Claude Code
+docker run -i --rm ghcr.io/arvicco/nabu-demo:1.0.0                         # MCP over stdio
+claude mcp add nabu -- docker run -i --rm ghcr.io/arvicco/nabu-demo:1.0.0  # Claude Code
+docker mcp catalog import https://arvicco.github.io/nabu/docker-mcp-catalog.yaml   # Docker MCP Toolkit
 ```
 
-[![Install in VS Code](https://img.shields.io/badge/VS_Code-Install_Nabu_demo-0098FF?logo=visualstudiocode&logoColor=white)](https://vscode.dev/redirect/mcp/install?name=nabu&config=%7B%22command%22%3A%22docker%22%2C%22args%22%3A%5B%22run%22%2C%22-i%22%2C%22--rm%22%2C%22ghcr.io%2Farvicco%2Fnabu-demo%22%5D%7D)
-[![Add to Cursor](https://img.shields.io/badge/Cursor-Add_Nabu_demo-000000?logo=cursor&logoColor=white)](https://cursor.com/install-mcp?name=nabu&config=eyJjb21tYW5kIjoiZG9ja2VyIiwiYXJncyI6WyJydW4iLCItaSIsIi0tcm0iLCJnaGNyLmlvL2FydmljY28vbmFidS1kZW1vIl19)
+(Current Docker MCP Toolkit CLIs replaced `import` with
+`docker mcp catalog create nabu --from-legacy-catalog <the same URL>`.)
+
+**Editors, one click** — both need Docker installed locally, and both
+start the same `docker run -i --rm ghcr.io/arvicco/nabu-demo:1.0.0`:
+
+[![Install in VS Code](https://img.shields.io/badge/VS_Code-Install_Nabu_demo-0098FF?logo=visualstudiocode&logoColor=white)](https://vscode.dev/redirect/mcp/install?name=nabu&config=%7B%22command%22%3A%22docker%22%2C%22args%22%3A%5B%22run%22%2C%22-i%22%2C%22--rm%22%2C%22ghcr.io%2Farvicco%2Fnabu-demo%3A1.0.0%22%5D%7D)
+[![Add to Cursor](https://img.shields.io/badge/Cursor-Add_Nabu_demo-000000?logo=cursor&logoColor=white)](https://cursor.com/install-mcp?name=nabu&config=eyJjb21tYW5kIjoiZG9ja2VyIiwiYXJncyI6WyJydW4iLCItaSIsIi0tcm0iLCJnaGNyLmlvL2FydmljY28vbmFidS1kZW1vOjEuMC4wIl19)
 
 (GitHub strips custom-scheme links, so the badges go through the editors'
 https redirects to `vscode:mcp/install?…` and
-`cursor://anysphere.cursor-deeplink/mcp/install?…`.) Docker Desktop's MCP
-Toolkit, hosted deploy buttons (Render, Koyeb) and the HTTP mode are on
-the site's [MCP page](https://arvicco.github.io/nabu/mcp/).
+`cursor://anysphere.cursor-deeplink/mcp/install?…`.)
+
+**Hosted, one click** — the same tagged image as a streamable-HTTP
+endpoint at `https://<your-service>/mcp`, on your own account (the
+deployer's plan pays; the free tiers suffice, as the demo runs within
+512 MB):
+
+[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/arvicco/nabu)
+[![Deploy to Koyeb](https://www.koyeb.com/static/images/deploy/button.svg)](https://app.koyeb.com/deploy?type=docker&name=nabu-demo&image=ghcr.io/arvicco/nabu-demo:1.0.0&instance_type=free&ports=8080;http;/&env[PORT]=8080&command=bin/nabu&args=mcp&args=--http)
+
+- **Render** reads this repository's `render.yaml`, a Blueprint that
+  names the prebuilt image by its release tag (nothing is compiled from
+  the repository), and pulls that image. **A free Render instance sleeps
+  after 15 minutes without traffic, and the first request after that
+  waits about a minute while it wakes.**
+- **Koyeb** pulls the tagged image directly. **A free Koyeb instance
+  scales to zero after an hour without traffic, and the next request
+  pays a cold start of a few seconds.**
+
+The HTTP endpoint carries no authentication of its own: put access
+control in front of it unless it is meant to be public. Details, and
+the plain `bin/nabu mcp --http` mode, are on the site's
+[MCP page](https://arvicco.github.io/nabu/mcp/).
 
 ## Show me
 
@@ -457,7 +485,8 @@ text, and `links`-wired to the passages its manifest entry names as
 | `nabu search --loans CODE` | The language-contact facet (Coptic Scriptorium today): keep only passages carrying loanwords from a donor language — `search ⲛⲟⲩⲧⲉ --lang cop --loans grc` (131K+ Greek loan tokens tagged), composing with text, `--lemma`, `--fuzzy`, `--near` and every catalog filter. `nabu list coptic-scriptorium --loans` prints the donor-language census; `--loans grc` enumerates the most loan-saturated documents. |
 | `nabu search A --near B [--window N]` | Proximity search: keep only hits where `B` is within `N` words of `A` in the same passage (FTS5 NEAR over the folded forms; default 10, `0` = adjacent, order-independent). `λόγος --near θεός` is John 1:1; composes with `--lemma` (the anchor expands to the lemma's attested surface forms first: `--lemma λέγω --near κύριος` finds `τάδε λέγει κύριος`) and `--lang`/`--license`/`--limit`. Both terms bracketed in the snippet. |
 | `nabu search --fuzzy FRAGMENT` | Damaged-text fragment search: substring matching ANYWHERE in a passage, mid-word included — `']μηνιν αει['` works typed straight off the edition (editorial brackets stripped, then the same per-language folding as plain search). Character-trigram index over the DOCUMENTARY shelves only (papyri-ddbdp + oracc + edh, `fuzzy_index: true` in the registry — corpus-wide would cost 15×), candidates verified by real substring match; every render names the indexed scope. The production index is LIVE (1,713,135 passages indexed as of 2026-07-14, EDH aboard). Fragments need ≥3 characters; composes with `--lang`/`--license`/`--limit`/date-place filters; `--long` prints the whole folded passage. For literary half-memories use plain search or `parallels`. |
-| `nabu search --annotations QUERY` | Search the DECLARED annotation layers beside the text itself — the editor's standardized spellings (Cantus: `--annotations praesul` finds chants whose manuscript writes *Presul*), margin notes and glosses (the 1584 Dalmatin Bible's loanword notes). Each layer is declared per source with its fold language (the passage's own, never a generic fold); the render names the layer and the covered scope. Declared today: cantus standardized spellings (142K passages), korpus16 margin notes. |
+| `nabu search --annotations QUERY` | Search the DECLARED annotation layers beside the text itself — the editor's standardized spellings (Cantus: `--annotations praesul` finds chants whose manuscript writes *Presul*), margin notes and glosses (the 1584 Dalmatin Bible's loanword notes). Each layer is declared per source with its fold language (the passage's own, or the declared language of an editor's notes); the render names the layer and the covered scope. Declared: standardized/regularized/diplomatic spellings (cantus, ticha, grand-tour, emmo, memis, ninjal-textdb), margin notes and headings (korpus16, statutes-realm, senie, comenius), footnotes and editors' notes (cbeta, sefaria, suda-translations, suttacentral, socinian-letters, corph, litopys, coptic-scriptorium, oshb, osta, the Perseus/First1K/PTA apparatus, the Evans/ECCO prints' marginalia), and reading aids (Aozora ruby readings — `--annotations` in kana finds the kanji-printed passage — Man'yōshū kundoku/kana, NINJAL kanji-kana, Lotsawa House phonetics, the Latin under CorPH and St Gall glosses). |
+| `nabu search --gloss-lines QUERY` | Search the TEXT of upstream word glosses, one hit per passage: each passage's token glosses read in order as its interlinear gloss line — `--gloss-lines king` finds every verse, tablet or line with a word glossed *king* (BHSA's Hebrew and Aramaic, achemenet's Akkadian, TLHdig's Hittite as *König*), `"king eternity"` is Daniel 2:4, and a quoted phrase may run across words (`"to the king"`). Each hit names the matching words with their glosses; glosses fold by their own language (`konig` finds *König*), `--lang` names the text's. The word-level view stays `--gloss king`. |
 | `nabu show URN` | A passage, a whole document, or a citation range (`urn:…:1.1-1.10`) with license, revision, and full provenance trail. `--parallel` pairs the aligned English translation; `--random` pulls something off the shelf; `--segmented` renders Tibetan text word-split (tsheg delimits syllables, not words — the boundaries come from Nabu's own published segmentation model, `nabu sync nabu-data`). |
 | `nabu parallels URN` | Passage-anchored intertext: point at one passage and find where the corpus quotes or echoes it — reception discovery, not translation alignment. Query-time over the FTS index (no new schema): the anchor's 4-word grams are phrase-probed, candidates ranked by shared-gram count weighted by rarity, elision folded across editions (so Matthew 4:4 finds LXX Deuteronomy 8:3). One hit per document (duplicate witnesses grouped, loci counted), the shared phrase shown as evidence; a gold-lemmatized anchor also gets rare-lemma "echoes" (re-inflected allusion). `--long` expands the truncated evidence; `--lang`/`--license`/`--limit` scope. `--batch SCOPE` flips the engine to corpus-wide mining: every anchor of a source slug or urn prefix, hits persisted as `kind=parallel` edges in the links journal (top `--per-anchor` per anchor at `--min-score`+, both named in the summary — no silent caps); reruns supersede, interactive output never persists. |
 | `nabu formulas SCOPE` | The oral-formulaic reader's mirror of `parallels`, pointed inward: mine the repeated formulas WITHIN a corpus slice (a source slug or a work/urn prefix) — the same gram machinery, counting instead of probing. Homer's `ὣς ἔφαθ' οἵ δ'` (72×), `τὸν δ' ἀπαμειβόμενος προσέφη πολύμητις Ὀδυσσεύς` (50×); the Old English `saga hwæt ic hatte` riddle refrain, `Beowulf maþelode bearn Ecgþeowes`, `awa to feore`. Ranked by count × length — no stoplist, the ranking is self-filtering (a genuine formula out-recurs any function-word run; measured). `--lang` mines one tradition where a source mixes translations; `--gram-size`, `--min-count`, `--limit`, `--long` (every locus). Zero schema, ~0.2 s per slice. `--batch SCOPE` persists the sweep as `kind=formula` edges: a STAR per formula (hub = its first locus in urn order, one edge to every other locus, the gram riding each edge's detail, the count its score — all-pairs would explode quadratically), top `--max-formulas` by rank; reruns supersede, interactive output never persists. |

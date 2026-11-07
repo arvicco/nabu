@@ -384,6 +384,48 @@ namespace :index do
     catalog&.disconnect
     fulltext&.disconnect
   end
+
+  # The gloss-lines lane (`search --gloss-lines`): each passage's token
+  # glosses as one line (the Query::TokenGlosses sources). With no
+  # argument, the index:annotations shape — the whole lane re-derived
+  # standalone over the live catalog, stage stamp advanced. With slugs
+  # (`rake "index:gloss_lines[bhsa,achemenet]"`), the targeted builder:
+  # each named source's slice derived alone (the lane created if absent),
+  # every other slice untouched, the stamp left for a whole-lane pass.
+  # Reads only those sources' annotations; writes only the fulltext
+  # passages_gloss_lines tables.
+  desc "Re-derive the token gloss-lines index (search --gloss-lines); [slug,…] = those sources only"
+  task :gloss_lines do |_task, args|
+    $LOAD_PATH.unshift(File.expand_path("lib", __dir__))
+    require "nabu"
+
+    config = Nabu::Config.load
+    catalog = Nabu::Store.connect(config.catalog_path, readonly: true)
+    fulltext = Nabu::Store.connect_fulltext(config.fulltext_path)
+    index = Nabu::Store::GlossLineIndex
+    started = Process.clock_gettime(Process::CLOCK_MONOTONIC)
+    clock = Object.new.extend(Nabu::DurationFormat)
+    elapsed = -> { clock.format_duration(Process.clock_gettime(Process::CLOCK_MONOTONIC) - started) }
+    slugs = args.extras
+    if slugs.empty?
+      summary = index.rebuild!(catalog: catalog, fulltext: fulltext, stamp: true)
+      label = "#{summary.fetch(:passages)} passages from #{summary.fetch(:sources)} sources"
+    else
+      # One progress line per finished source — readable DURING the run.
+      counts = slugs.map do |slug|
+        index.build_source!(catalog: catalog, fulltext: fulltext, slug: slug)
+             .tap { |count| puts "  #{slug}: #{count} passages (#{elapsed.call} elapsed)" }
+      end
+      label = "#{counts.sum} passages from #{slugs.join(', ')}"
+    end
+    puts "index:gloss_lines done — #{label} in #{elapsed.call}"
+    fulltext[index::SCOPE_TABLE].order(:slug).each do |row|
+      puts "  #{row.fetch(:slug)}: #{row.fetch(:passages)}"
+    end
+  ensure
+    catalog&.disconnect
+    fulltext&.disconnect
+  end
 end
 
 # The short handle (owner request 2026-07-22). Same task, same attestation
@@ -502,6 +544,25 @@ end
 # lane worktree — gets an announced skip and exit 0. BOARDS_DIR overrides
 # the location (e.g. a worktree checking the main checkout's boards).
 # The same task runs the GH watch-list staleness guard
+# The post-release directory probe (ops §12 step 8): the Glama listing
+# auto-rebuilds from every GitHub release, and a broken rebuild fails on
+# THEIR builder where our CI never looks. The probe reads the public
+# listing page (released version visible?) and the score badge (grade,
+# informational). VERSION=x.y.z overrides the checked-out Nabu::VERSION.
+namespace :release do
+  desc "Post-release check: the released version is visible on the Glama listing (missing = exit 1)"
+  task :glama do
+    require_relative "lib/nabu/ops/glama_release_check"
+    version = ENV.fetch("VERSION", Nabu::VERSION)
+    report = Nabu::Ops::GlamaReleaseCheck.new(version: version).run
+    report.findings.each { |finding| puts "STALE  glama listing: #{finding}" }
+    abort "release:glama — #{version} not confirmed on the listing" unless report.clean?
+
+    grade = report.grade ? "score #{report.grade}" : "score not evaluated yet (their queue)"
+    puts "release:glama — #{version} visible on #{Nabu::Ops::GlamaReleaseCheck::LISTING_URL} · #{grade}"
+  end
+end
+
 # (Nabu::Ops::WatchListCheck): any still-watched row whose checked date is
 # over a week old fails the task, named; boards without the section skip.
 # And the phase-register freshness probe (Nabu::Ops::PhaseRegisterCheck):

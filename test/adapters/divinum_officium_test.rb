@@ -147,7 +147,8 @@ class DivinumOfficiumTest < Minitest::Test
                              map_path: File.join(root, "kind_map.yml"))
     assert_equal ["book_part"], kinds.metadata_for("divinum-officium")
     assert_equal ["ritual/liturgy"], kinds.normalize("divinum-officium", "Sancti")
-    assert_equal ["ritual/liturgy"], kinds.normalize("divinum-officium", "Martyrologium")
+    assert_equal %w[hagiography ritual/liturgy], kinds.normalize("divinum-officium", "Martyrologium").sort,
+                 "a liturgical book whose content is saints' notices (both claims since 2026-11-07)"
     assert_equal ["scripture"], kinds.normalize("divinum-officium", "Psalmorum")
     assert_equal ["legal/law"], kinds.normalize("divinum-officium", "Regula")
     assert_equal ["administrative/list"], kinds.normalize("divinum-officium", "Necrologium"),

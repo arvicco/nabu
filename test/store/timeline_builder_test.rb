@@ -1548,5 +1548,13 @@ module Store
       build!
       assert_equal 1, @db[:document_axes].where(document_id: @db[:documents].first[:id]).count
     end
+
+    def test_role_axis_sources_name_every_labeled_role_place_lane
+      roles = Nabu::Store::TimelineBuilder.role_axis_sources
+      assert_includes roles, Nabu::Store::TimelineBuilder::OraccDates::SENDER_AXIS
+      assert_includes roles, "socinian-letters-received"
+      refute_includes roles, "socinian-letters", "a source's main lane is never a role lane"
+      assert roles.frozen?
+    end
   end
 end

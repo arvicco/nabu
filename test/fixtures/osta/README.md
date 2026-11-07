@@ -36,3 +36,12 @@ family — 100 files quarantined on it), `TEXT.ALC.txt` (deliberately
 brace-unbalanced: the batched `}}` folio close + an EOF-open `{CB1.`
 — the brace_defects census), `TEXT.BQ1.vrt.html` (upstream tokenizes
 its own unescaped `<GRK` markup — the HTML4 tag-soup crash).
+
+`TEXT.AFF.txt` (cut 2026-11-07 from the box's synced asset, upstream
+main as fetched 2026-08-13): the first 43 lines of the real file (10 kB
+upstream) — the `{RMK:}` header, fol. 1r and the whole first `{CB1.`
+block of fol. 1v, ending on its own close brace (structural trim, no
+byte added). It is the witness for a post-header `{RMK: …}` remark —
+"6 lines of text in 18th century hand." — which the parser keeps as
+the passage's `notes` annotation (the declared annotation layer; none
+of the other transcriptions carries one).

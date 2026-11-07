@@ -25,7 +25,8 @@ module Nabu
     # fresh edges with the layer they replace.
     def run_links_mine(args)
       name = args.first.to_s
-      raise Thor::Error, "usage: nabu links mine SCOPE (a recorded heavy scope)" if name.empty?
+      return run_links_mine_stale if name == "--stale"
+      raise Thor::Error, "usage: nabu links mine SCOPE | --stale (a recorded heavy scope)" if name.empty?
 
       config = Nabu::Config.load
       scopes = Nabu::MinedLayers.recorded(config.link_scopes_path, name)
@@ -49,6 +50,61 @@ module Nabu
     ensure
       catalog&.disconnect
       fulltext&.disconnect
+    end
+
+    # `nabu links mine --stale` (owner-fired): grade every recorded heavy
+    # scope's layer against the live catalog (MinedLayers.stale_selection —
+    # the language-slice grading health shows) and re-mine the stale ones
+    # serially through #mine_layer, the same path `links mine SCOPE` runs.
+    # Current and never-mined scopes are skipped with a line each.
+    def run_links_mine_stale
+      config = Nabu::Config.load
+      scopes = Nabu::MinedLayers.recorded(config.link_scopes_path)
+      return say("links mine --stale: no recorded heavy scope") if scopes.empty?
+
+      catalog = open_catalog(config)
+      fulltext = open_fulltext(config)
+      raise Thor::Error, "no index — run nabu sync or nabu rebuild" unless catalog && fulltext
+
+      layers = Nabu::Store::MinedLinks.layers_at(config.mined_links_path)
+      picks = Nabu::MinedLayers.stale_selection(scopes, layers: layers, catalog: catalog)
+      stale = picks.select { |pick| pick.status == :stale }
+      say "links mine --stale: #{stale.size} of #{picks.size} recorded heavy layer(s) stale"
+      picks.each { |pick| say "  #{stale_pick_line(pick)}" }
+      registry = Nabu::SourceRegistry.load(config.sources_path)
+      stale.each_with_index do |pick, i|
+        say "links mine --stale: [#{i + 1}/#{stale.size}] re-mining " \
+            "#{pick.scope['producer']} #{pick.scope['scope']}"
+        mine_layer(pick.scope, config: config, catalog: catalog, fulltext: fulltext, registry: registry)
+      end
+    rescue Nabu::Error => e
+      raise Thor::Error, e.message
+    ensure
+      catalog&.disconnect
+      fulltext&.disconnect
+    end
+
+    def stale_pick_line(pick)
+      label = "#{pick.scope['producer']} #{pick.scope['scope']}"
+      case pick.status
+      when :unmined then "#{label} — never mined, skipped (`nabu links mine #{pick.scope['scope']}` mines it)"
+      when :current then "#{label} — current, skipped"
+      else
+        seconds = pick.layer.seconds
+        "#{label} — stale (#{stale_reasons(pick.staleness).join('; ')})" \
+          "#{", re-mine ≈ #{format_duration(seconds)}, measured" if seconds}"
+      end
+    end
+
+    def stale_reasons(staleness)
+      reasons = []
+      unless staleness.changed.to_a.empty?
+        what = staleness.grain == :slice ? "member slice moved" : "member re-ingested"
+        reasons << "#{what}: #{staleness.changed.first(3).join(', ')}" \
+                   "#{" +#{staleness.changed.size - 3} more" if staleness.changed.size > 3}"
+      end
+      reasons << "producer code changed" if staleness.code_moved
+      reasons
     end
 
     def mine_layer(scope, config:, catalog:, fulltext:, registry:)

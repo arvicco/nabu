@@ -127,5 +127,83 @@ module Query
       hits = search("þarfna", morph: "mood=inf,voice=mid")
       assert_includes hits.map(&:urn), "urn:nabu:menota:am-1056-ix-4to:2vB.7"
     end
+
+    # CEIPoM is the EQUIVALENCE tier: its lemma rows are Classical-Latin
+    # keys (latin_equivalent, folded as Latin), so the token pass must read
+    # the same key — Venetic doto (Latin do, "v3sria---") is a perfect;
+    # Old Latin mitat (also do, "v3spia---") is a present.
+    def test_ceipom_pos_code_reaches_the_morph_surface_through_the_equivalence_key
+      load_source("ceipom", "Ceipom", tier: "equivalence")
+      hits = search("do", morph: "tense=perf,person=3")
+      assert_includes hits.map(&:urn), "urn:nabu:ceipom:2390:3373"
+      refute_includes hits.map(&:urn), "urn:nabu:ceipom:5:5"
+      hit = hits.find { |result| result.urn == "urn:nabu:ceipom:2390:3373" }
+      assert_equal "do", hit.lemma
+      assert_equal "equivalence", hit.tier
+      assert_equal "doto", hit.surface_forms
+      assert_equal "person=3|number=sing|tense=perf|mood=ind|voice=act", hit.morph
+      assert_includes search("do", morph: "tense=pres").map(&:urn), "urn:nabu:ceipom:5:5"
+    end
+
+    # Heliand 1-5: uuord (word, N A^SG) and uuordun (word, N D^PL);
+    # bigunnun (biginnan, VBDI 3^PL).
+    def test_helipad_tags_reach_the_morph_surface
+      load_source("helipad", "Helipad")
+      urn = "urn:nabu:helipad:OSHeliandC:1.1-5"
+      hit = search("word", morph: "case=acc,number=sg").find { |result| result.urn == urn }
+      refute_nil hit
+      assert_equal "uuord", hit.surface_forms
+      assert_equal "number=sing|case=acc", hit.morph
+      assert_equal "uuordun", search("word", morph: "case=dat").find { |result| result.urn == urn }.surface_forms
+      assert_includes search("biginnan", morph: "tense=past,mood=ind,person=3,number=pl").map(&:urn), urn
+      assert_empty search("biginnan", morph: "mood=sub")
+    end
+
+    # CorPH S0003: bebat (baïd, 3pl.fut.) vs beba (3sg.fut.); maicc (macc,
+    # gen.sg.).
+    def test_corph_analyses_reach_the_morph_surface
+      load_source("corph", "Corph")
+      plural = search("baïd", morph: "tense=fut,number=pl")
+      assert_includes plural.map(&:urn), "urn:nabu:corph:0003:S0003-3"
+      refute_includes plural.map(&:urn), "urn:nabu:corph:0003:S0003-1"
+      assert_equal "bebat", plural.find { |hit| hit.urn == "urn:nabu:corph:0003:S0003-3" }.surface_forms
+      assert_includes search("baïd", morph: "number=sg").map(&:urn), "urn:nabu:corph:0003:S0003-1"
+      assert_includes search("macc", morph: "case=gen").map(&:urn), "urn:nabu:corph:0003:S0003-2"
+    end
+
+    # AES: ṯḥn.t (singular feminine, st_absolutus) and rn
+    # (st_pronominalis); sḏm as an infinitive.
+    def test_aes_explicit_features_reach_the_morph_surface
+      load_source("aes", "Aes")
+      thnt = search("ṯḥn.t", morph: "number=sg,gender=fem,state=abs").map(&:urn)
+      assert_includes thnt, "urn:nabu:aes:bbawarchive:26BP5JT5RZEDHDDU2R5TMUBD24:IBUBd5yQdZzbSE8TsmQVGvI8nKk"
+      assert_includes search("rn", morph: "state=pron").map(&:urn),
+                      "urn:nabu:aes:sawlit:YSJ3UHIOBJEILCD7KFQIGVOCLY:IBUBdxzCaqjtI0JuqECu8cK9wGw"
+      assert_includes search("sḏm", morph: "mood=inf").map(&:urn),
+                      "urn:nabu:aes:sawlit:2PD2OKCZCRELBGQD6NCAMOFEWA:IBUBd06ap4DyD0RHjM2U50Hs2Zc"
+      assert_empty search("ṯḥn.t", morph: "gender=masc")
+    end
+
+    # RIE 232: motat (ሞተ, Perfect 3rd fem sg); the suffix hu (ሁ, 3rd masc
+    # sg) on maḫātǝwi.
+    def test_traces_explicit_features_reach_the_morph_surface
+      load_source("traces", "Traces")
+      died = search("ሞተ", morph: "conjugation=perf,person=3,gender=fem")
+      assert_includes died.map(&:urn), "urn:nabu:traces:rie232:w1"
+      assert_equal "person=3|number=sing|gender=fem|conjugation=perf",
+                   died.find { |hit| hit.urn == "urn:nabu:traces:rie232:w1" }.morph
+      assert_includes search("ሁ", morph: "person=3,number=sg").map(&:urn), "urn:nabu:traces:rie232:w11"
+      assert_empty search("ሞተ", morph: "conjugation=impf")
+    end
+
+    # tla-hf's grammatical glossing: the suffix pronoun =f (-3sg.m) and
+    # ḥꜣ.tꞽ in the pronominal state (N:sg:stpr).
+    def test_tla_glossing_reaches_the_morph_surface
+      load_source("tla-hf", "TlaHf")
+      suffix = search("=f", morph: "person=3,gender=masc").map(&:urn)
+      assert_includes suffix, "urn:nabu:tla-hf:demotic-v18:2"
+      assert_includes search("ḥꜣ.tꞽ", morph: "state=pron").map(&:urn), "urn:nabu:tla-hf:late-egyptian-v19:1"
+      assert_empty search("=f", morph: "gender=fem")
+    end
   end
 end

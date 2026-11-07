@@ -15,7 +15,7 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 A source wears every desk it serves — these thirteen answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
-| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 6 November 2026)</span> |
+| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 7 November 2026)</span> |
 |---|---|---|---|---|
 | `burman-concordance` | feature module | open | wired · manual | nothing held yet |
 | `ceipom` | inscriptions | attribution | wired · frozen | 3,871 docs / 5,303 passages |
@@ -33,9 +33,9 @@ A source wears every desk it serves — these thirteen answer this desk. Holding
 
 Private research materials under personal grants are not listed.
 
-**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 6 November 2026)</span>: `ett` 8,087 · `eng` 3,290 · `grc` 3,201 · `lat` 2,662 · `osc` 1,373 · `ita` 705 · `xum` 686 · `xlp` 633 · `cms` 591 · `osc-Ital-x-oscetr` 501 … and 21 more (`nabu axis italic` lists all).
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 7 November 2026)</span>: `ett` 8,087 · `eng` 3,290 · `grc` 3,201 · `lat` 2,662 · `osc` 1,373 · `ita` 705 · `xum` 686 · `xlp` 633 · `cms` 591 · `osc-Ital-x-oscetr` 501 … and 21 more (`nabu axis italic` lists all).
 
-**Carried in by multilingual packs** (`wiktionary-recon` — whole-source members whose other languages ride along, as of 6 November 2026): `zho` 327,296 · `xcl` 8,541 · `sga` 6,688 · `gem-pro` 5,749 · `gmw-pro` 5,578 … and 18 more (`nabu axis italic` lists all).
+**Carried in by multilingual packs** (`wiktionary-recon` — whole-source members whose other languages ride along, as of 7 November 2026): `zho` 327,296 · `xcl` 8,541 · `sga` 6,688 · `gem-pro` 5,749 · `gmw-pro` 5,578 … and 18 more (`nabu axis italic` lists all).
 
 ## The desk's instruments
 

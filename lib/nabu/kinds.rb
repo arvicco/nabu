@@ -5,8 +5,11 @@ require "yaml"
 module Nabu
   # The kind axis' config seam (P99-1, owner-ruled 2026-09-13): the
   # fourth document axis, "what KIND of document is this?", as one
-  # multi-label facet over a RULED class list (21 heads + unknown since
-  # the literary-family restructure, owner-ruled 2026-09-18). Two files:
+  # multi-label facet over a RULED class list (28 heads + unknown: 21 after
+  # the literary-family restructure, owner-ruled 2026-09-18; periodical +
+  # sermon ruled 2026-10-19; theology, oratory, catechesis, paratext and
+  # hagiography ruled 2026-11-07 — config/kind_classes.yml is the list's
+  # one home, this count only a pointer). Two files:
   #
   # - config/kind_classes.yml — the ruled heads (+ `unknown`, upstream's
   #   own "cannot determine" as a claim, not a gap), each with a one-line

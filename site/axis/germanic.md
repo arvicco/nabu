@@ -28,7 +28,7 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 A source wears every desk it serves — these 40 answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
-| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 6 November 2026)</span> |
+| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 7 November 2026)</span> |
 |---|---|---|---|---|
 | `aspr` | texts | attribution | wired · manual | 349 docs / 30,550 passages |
 | `bosworth-toller` | dictionary | attribution | wired · manual | 62,815 entries |
@@ -71,9 +71,9 @@ A source wears every desk it serves — these 40 answer this desk. Holdings are 
 | `wiktionary-sco` | dictionary | attribution | wired · manual | 6,042 entries |
 | `zoega` | dictionary | attribution | wired · manual | 29,951 entries |
 
-**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 6 November 2026)</span>: `en` 598,766 · `ita` 167,236 · `lat` 138,255 · `non` 97,010 · `ang` 71,142 · `enm` 60,521 · `fra` 59,810 · `sv` 53,406 · `spa` 28,346 · `got` 23,038 … and 39 more (`nabu axis germanic` lists all).
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 7 November 2026)</span>: `en` 598,766 · `ita` 167,236 · `lat` 138,255 · `non` 97,010 · `ang` 71,142 · `enm` 60,521 · `fra` 59,810 · `sv` 53,406 · `spa` 28,346 · `got` 23,038 … and 39 more (`nabu axis germanic` lists all).
 
-**Carried in by multilingual packs** (`ud` — whole-source members whose other languages ride along, as of 6 November 2026): `orv` 9 · `ota` 5 · `lzh` 4 · `cop` 3 · `egy` 3 … and 12 more (`nabu axis germanic` lists all).
+**Carried in by multilingual packs** (`ud` — whole-source members whose other languages ride along, as of 7 November 2026): `orv` 9 · `ota` 5 · `lzh` 4 · `cop` 3 · `egy` 3 … and 12 more (`nabu axis germanic` lists all).
 
 ## The desk's instruments
 

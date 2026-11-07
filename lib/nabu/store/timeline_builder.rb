@@ -121,6 +121,19 @@ module Nabu
 
       module_function
 
+      # Every axis_source value that labels a ROLE place lane — a place-only
+      # row naming a place in another role than the document's main row
+      # (the SAA letters' sender place, MetadataDates::ROLE_PLACES' received
+      # places). Read-side consumers that render ONE unlabeled place (the
+      # documents export) skip these rows rather than ship a role place
+      # without its role.
+      def role_axis_sources
+        @role_axis_sources ||= [
+          OraccDates::SENDER_AXIS,
+          *MetadataDates::ROLE_PLACES.values.flatten.map { |role| role[:axis_source] }
+        ].uniq.freeze
+      end
+
       # Drop every timeline row and rebuild from canonical. Full-rebuild semantics
       # (the table is small — ≤ ~100k rows), matching the drop-and-rebuild
       # lifecycle of the derived indexes. Returns a Summary.

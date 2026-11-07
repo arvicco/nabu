@@ -362,21 +362,29 @@ class KindsTest < Minitest::Test
 
   # -- the shipped config ----------------------------------------------------
 
-  def test_the_shipped_config_loads_and_carries_the_ruled_21_heads
+  def test_the_shipped_config_loads_and_carries_the_ruled_28_heads
     shipped = Nabu::Kinds.load(
       classes_path: File.expand_path("../config/kind_classes.yml", __dir__),
       map_path: File.expand_path("../config/kind_map.yml", __dir__)
     )
     heads = shipped.heads - ["unknown"]
-    assert_equal 23, heads.size,
+    assert_equal 28, heads.size,
                  "the 26 original heads restructured (owner ruling 2026-09-18): the six literature " \
-                 "families live under `literary`; periodical + sermon ruled 2026-10-19 — " \
-                 "23 heads + unknown"
+                 "families live under `literary`; periodical + sermon ruled 2026-10-19; theology, " \
+                 "oratory, catechesis, paratext + hagiography ruled 2026-11-07 — 28 heads + unknown"
     %w[funerary dedicatory honorific building boundary mark royal
        administrative legal letter lexical scholarly school
        scripture exegesis hymn-prayer ritual magic divination
-       literary historiography periodical sermon].each do |head|
+       literary historiography periodical sermon
+       theology oratory catechesis paratext hagiography].each do |head|
       assert_includes heads, head
+    end
+    { "theology" => %w[treatise apologetics polemic controversial erotapokriseis],
+      "paratext" => %w[preface dedication testimonium index],
+      "hagiography" => %w[vita martyrdom encomium],
+      "oratory" => [], "catechesis" => [] }.each do |head, subs|
+      assert_equal subs, shipped.classes[head].subs, "#{head}: the ruled 2026-11-07 sub grain"
+      refute_empty shipped.classes[head].desc, head
     end
     %w[literary/narrative literary/poetry literary/drama
        literary/essay literary/diary literary/wisdom].each do |sub|
@@ -478,23 +486,51 @@ class KindsTest < Minitest::Test
     "Institutio regia (Paideia basilike, ad Constantinum Ducam porphyrogenitum)" => ["literary/wisdom"],
     "Characteres Gregorii Theologi, Basilii Magni, Chrysostomi et Gregorii Nysseni" => ["literary/essay"]
   }.freeze
+  # The 2026-11-07 heads take the bulk of the former unmapped-by-design
+  # block: real carve-plan titles (none sits in the fixture's plan slice).
+  CGPG_RULED_2026_11_07 = {
+    "Vita Clementis Ohridensis (the long life, BHG 355)" => ["hagiography/vita"],
+    "Excerpta e Vita S. Basilii iunioris (BHG 263)" => ["hagiography/vita"],
+    "Historia martyrii XV martyrum Tiberiopolitanorum (BHG 1199)" => ["hagiography/martyrdom"],
+    "Martyrium Ignatii Antiocheni (martyrium Antiochenum, 'Colbertinum')" => ["hagiography/martyrdom"],
+    "Encomium Gregorii Palamae" => ["hagiography/encomium"],
+    "Ex laudatione martyris Demetrii narratio (on the 904 capture of Thessalonica)" => ["hagiography/encomium"],
+    "Narratio de imagine Edessena" => ["hagiography"],
+    "Apologia secunda" => ["theology/apologetics"],
+    "Fragmentum apologiae (apud Eusebium, HE 4.3)" => ["theology/apologetics"],
+    "Legatio sive Supplicatio pro Christianis" => ["theology/apologetics"],
+    "Oratio ad Graecos" => ["theology/apologetics"],
+    "Ad Autolycum" => ["theology/apologetics"],
+    "Irrisio gentilium philosophorum" => ["theology/apologetics"],
+    "Adversus iconoclastas" => ["theology/polemic"],
+    "Antirrhetici contra Gregoram" => ["theology/polemic"],
+    "Refutatio (dialogus) contra Ioannem Argyropulum" => ["theology/polemic"],
+    "De iis quorum Latini incusantur (Allocutio cuidam ex suis familiaribus)" => ["theology/polemic"],
+    "Dialogus cum Tryphone" => ["theology"],
+    "De operatione daemonum dialogus (Timotheus; now held spurious)" => ["theology"],
+    "Quaestiones et responsiones ad orthodoxos" => ["theology/erotapokriseis"],
+    "Responsa ad Gabrielem Pentapolitanum (questions and answers on liturgical and canonical matters)" =>
+      ["theology/erotapokriseis"],
+    "Expositio rectae fidei" => ["theology/treatise"],
+    "De resurrectione" => ["theology/treatise"],
+    "De essentia et operatione Dei" => ["theology/treatise"],
+    "Confessio fidei ('He teleutaia gnome tou patriarchou', Florence, 9 June 1439)" => ["catechesis"],
+    "Occisorum Thessalonicae monodia" => ["oratory"],
+    "Oratio in imperatorem Alexium I Comnenum" => ["oratory"]
+  }.freeze
   CGPG_UNMAPPED = [
-    "Vita Clementis Ohridensis (the long life, BHG 355)",
-    "Historia martyrii XV martyrum Tiberiopolitanorum (BHG 1199)",
-    "Apologia secunda",
-    "Dialogus cum Tryphone",
-    "Expositio rectae fidei",
-    "Quaestiones et responsiones ad orthodoxos",
     "Fragmenta",
+    "Prooemium (to an exposition of the Psalms)",
+    "Narratio (de origine haereseos iconomachorum)",
     "De cerimoniis aulae Byzantinae (lib. 1.1-92)",
-    "Tactica (cum pinace et prooemio)",
-    "Occisorum Thessalonicae monodia"
+    "De administrando imperio",
+    "Tactica (cum pinace et prooemio)"
   ].freeze
 
   def test_shipped_cgpg_folds_the_title_heads
     shipped = shipped_kinds
     assert_equal "genre", shipped.facet_for("cgpg")
-    CGPG_FOLDS.each do |title, want|
+    CGPG_FOLDS.merge(CGPG_RULED_2026_11_07).each do |title, want|
       assert_equal want, shipped.normalize("cgpg", Nabu::Adapters::CgpgTitleGenre.head(title)), title
     end
     CGPG_UNMAPPED.each do |title|
@@ -550,7 +586,9 @@ class KindsTest < Minitest::Test
 
   # P104-1: the openiti BookSUBJ fold — the subject facet's recurring
   # Arabic library-taxonomy heads through regex rules (multi-label by
-  # design); the theology and misc buckets stay deliberately unmapped.
+  # design); the misc buckets stay deliberately unmapped. The theology
+  # buckets, unmapped until the 2026-11-07 head, fold to it (coarse) and
+  # the refutation shelves to its polemic sub.
   def test_shipped_openiti_folds_the_book_subjects
     shipped = shipped_kinds
     assert_equal "subject", shipped.facet_for("openiti")
@@ -561,8 +599,14 @@ class KindsTest < Minitest::Test
     assert_equal ["legal"], shipped.normalize("openiti", "الفقه الشافعي :: كتب الفقه الإسلامي")
     assert_equal ["literary/wisdom"],
                  shipped.normalize("openiti", "كتب الأخلاق والسلوك :: كتب متفرقة في الأخلاق والسلوك")
-    assert_equal ["unmapped"], shipped.normalize("openiti", "العقيدة"),
-                 "theology buckets stay deliberately unmapped — the sefaria Kabbalah stance"
+    assert_equal ["theology"], shipped.normalize("openiti", "العقيدة")
+    assert_equal ["theology"], shipped.normalize("openiti", "كتب العقائد والملل :: مواضيع عقدية")
+    assert_equal ["theology"], shipped.normalize("openiti", "الفرق والملل :: كتب العقائد والملل")
+    assert_equal ["theology/polemic"], shipped.normalize("openiti", "كتب الردود :: كتب العقائد والملل"),
+                 "a refutation shelf takes the polemic sub, never the bare head beside it"
+    assert_equal ["theology/polemic"], shipped.normalize("openiti", "ردود علماء المسلمين على الوهابية والمخالفين")
+    assert_equal ["unmapped"], shipped.normalize("openiti", "كتب متنوعة"),
+                 "the misc buckets stay deliberately unmapped — the sefaria Kabbalah stance"
   end
 
   # P104-1: the kanripo KR-Catalog 部類 graduation — the coarse P100-1
@@ -649,9 +693,11 @@ class KindsTest < Minitest::Test
     shipped = shipped_kinds
     assert_equal "work_type", shipped.facet_for("ticha")
     { "manuscript" => ["legal"], "arte" => ["lexical/grammar"],
-      "catecismo" => ["exegesis"], "miscelaneo" => ["unknown"] }.each do |value, want|
+      "catecismo" => ["catechesis"], "miscelaneo" => ["unknown"] }.each do |value, want|
       assert_equal want, shipped.normalize("ticha", value), value
     end
+    assert_equal ["catechesis"], shipped.normalize("bim-sahcoba", "catechism"),
+                 "the Basque catechisms follow the ticha correction (2026-11-07)"
     assert_equal "genre", shipped.facet_for("kdsp")
     { "roman" => ["literary/narrative/novel"], "povest" => ["literary/narrative/tale"],
       "novela" => ["literary/narrative/tale"], "črtica" => ["literary/narrative"],
@@ -842,14 +888,41 @@ class KindsTest < Minitest::Test
     "Fables -- Early works to 1800." => ["literary/narrative/fable"],
     "Proverbs, English." => ["literary/wisdom/proverbs"],
     "Dialogues, English -- Early works to 1800." => ["literary/wisdom/dialogue"],
-    "Epitaphs -- England -- Early works to 1800." => ["funerary/epitaph"]
+    "Epitaphs -- England -- Early works to 1800." => ["funerary/epitaph"],
+    # the 2026-11-07 heads: controversy, apologetics, catechisms and creeds
+    "Church of England -- Controversial literature." => ["theology/controversial"],
+    "Catholic Church -- Controversial literature -- Early works to 1800." => ["theology/controversial"],
+    "Society of Friends -- Controversial literature." => ["theology/controversial"],
+    "Catholic Church -- Controversial literature -- Humor." => ["theology/controversial"],
+    "Society of Friends -- Apologetic works." => ["theology/apologetics"],
+    "Church of England -- Apologetic works -- Early works to 1800." => ["theology/apologetics"],
+    "Apologetics -- Early works to 1800." => ["theology/apologetics"],
+    "Apologetics." => ["theology/apologetics"],
+    "Catechisms, English." => ["catechesis"],
+    "Catechisms, English -- Early works to 1800." => ["catechesis"],
+    "Catechisms, Welsh -- Early works to 1800." => ["catechesis"],
+    "Church of England -- Catechisms -- Early works to 1800." => ["catechesis"],
+    "Church of England -- Catechisms. -- English." => ["catechesis"],
+    "Creeds." => ["catechesis"],
+    "Church of England -- Creeds -- Early works to 1800." => ["catechesis"],
+    "Church of England -- Creeds -- Poetry -- Early works to 1800." => %w[catechesis literary/poetry],
+    # the ripple round: doctrinal theology, speeches, saints' lives and martyrs
+    "Theology, Doctrinal." => ["theology/treatise"],
+    "Theology, Doctrinal -- Early works to 1800." => ["theology/treatise"],
+    "Speeches, addresses, etc., English -- Early works to 1800." => ["oratory"],
+    "Society of Friends -- Speeches, addresses, etc. -- Early works to 1800." => ["oratory"],
+    "Christian saints -- Biography -- Early works to 1800." => ["hagiography"],
+    "Saints -- Legends -- Early works to 1800." => ["hagiography"],
+    "Christian saints -- Prayer-books and devotions -- English -- Early works to 1800." =>
+      ["hymn-prayer/prayer"], # devotions TO the saints: the prayer claim, never a life
+    "Martyrs -- England -- Early works to 1800." => ["hagiography/martyrdom"],
+    "Martyrs -- Poetry -- Early works to 1800." => %w[hagiography/martyrdom literary/poetry]
   }.freeze
 
   # Topical, name, and ABOUT-the-form headings: no rule covers them.
   EEBO_UNCOVERED = [
     "Great Britain -- Politics and government -- 1642-1649.",
     "Broadsides -- England -- London -- 17th century.",
-    "Church of England -- Controversial literature.",
     "Sermons -- History and criticism -- England -- 17th century.",
     "Smallwood, Allan, 1608-1686. -- Sermon preached at Carlisle, Aug. 17, 1664.",
     "Prayers -- Law and legislation -- Scotland -- Early works to 1800.",
@@ -858,7 +931,16 @@ class KindsTest < Minitest::Test
     "Medicine -- England -- Controversial literature.",
     "Astrology -- Humor -- Early works to 1800.",
     "Proverbs in the Bible.",
-    "Catechisms, English."
+    # the 2026-11-07 rules' refusals: a book ABOUT the form, a parody of it, a
+    # name-title heading for one catechism, and the sacrament of penance
+    "Catholic Church -- Controversial literature -- History and criticism.",
+    "Catechisms, English -- Humor -- Early works to 1800.",
+    "Westminster Assembly (1643-1652). -- Shorter catechism.",
+    "Confession -- Catholic Church -- Early works to 1800.",
+    "Goodwin, Thomas, 1600-1680. -- Apologeticall narration.",
+    # bare "Saints" heads Puritan treatises on the elect as often as lives
+    "Saints -- Early works to 1800.",
+    "Saints -- Cult -- Early works to 1800."
   ].freeze
 
   def test_shipped_eebo_subject_fold_is_an_open_vocabulary
@@ -878,9 +960,11 @@ class KindsTest < Minitest::Test
   # id): every label folds, is declared not-genre, or stays a NAMED
   # uncovered value — none silent.
   HMML_TAIL = {
-    "Apologetic writings" => ["exegesis"], "Catechisms" => ["exegesis"], "Tafsīr" => ["exegesis"],
+    # corrected onto the 2026-11-07 heads (were exegesis / historiography / uncovered)
+    "Apologetic writings" => ["theology/apologetics"], "Catechisms" => ["catechesis"],
+    "Orations" => ["oratory"], "Hagiographies" => ["hagiography"], "Tafsīr" => ["exegesis"],
     "Calendars" => ["ritual/festival"], "Pontificals" => ["ritual/liturgy"],
-    "Processionals" => ["ritual/liturgy"], "Martyrologies" => ["ritual/liturgy"],
+    "Processionals" => ["ritual/liturgy"], "Martyrologies" => %w[hagiography ritual/liturgy],
     "Sacramentaries" => ["ritual/liturgy"], "Religious rules and constitutions" => ["legal/law"],
     "Bulls and briefs (non-papal)" => ["legal/law"], "Bulls (papal)" => ["legal/law"],
     "Laws" => ["legal/law"], "Papal documents" => ["legal"], "Indulgences" => ["legal"],
@@ -896,11 +980,11 @@ class KindsTest < Minitest::Test
   }.freeze
   HMML_NOT_GENRE = ["Fragments", "Notebooks", "Compendiums", "Palimpsests", "Scrolls", "Music manuscripts",
                     "Commonplace books", "Maps", "Drawings"].freeze
-  HMML_UNCOVERED = %w[Orations Indexes Hadith].freeze
+  HMML_UNCOVERED = %w[Indexes Hadith].freeze
 
   def test_shipped_hmml_genre_fold_covers_the_whole_census
     shipped = shipped_kinds
-    HMML_TAIL.each { |label, want| assert_equal want, shipped.normalize("hmml-reading-room", label), label }
+    HMML_TAIL.each { |label, want| assert_equal want, shipped.normalize("hmml-reading-room", label).sort, label }
     HMML_NOT_GENRE.each do |label|
       fold = shipped.fold("hmml-reading-room", label)
       assert_empty fold.paths, label
@@ -909,6 +993,37 @@ class KindsTest < Minitest::Test
     HMML_UNCOVERED.each do |label|
       assert_equal [label], shipped.fold("hmml-reading-room", label).uncovered, label
     end
+  end
+
+  # The 2026-11-07 heads, korpus16: the fourteen books once declared
+  # deliberate for want of a class (the catechisms, the 1562 Articuli
+  # confession, the 1564 church order) fold onto catechesis. The fixture
+  # carries none of these books (its complete books are TM 1555 and
+  # TPs 1579), so the pins read the siglum rule itself.
+  KORPUS16_CATECHESIS = ["TC 1550", "TC 1555", "TAr 1562", "TO 1564", "KB 1566", "TC 1567", "TC 1574",
+                         "TC 1575", "DC 1579", "DC 1580", "DC 1584", "DC 1585", "TfC 1595", "ZK 1595"].freeze
+
+  def test_shipped_korpus16_catechisms_confession_and_church_order_fold_to_catechesis
+    shipped = shipped_kinds
+    KORPUS16_CATECHESIS.each do |siglum|
+      assert_equal ["catechesis"], shipped.normalize("korpus16", siglum), siglum
+      refute(shipped.deliberate_declarations.any? { |slug, value, _| slug == "korpus16" && value == siglum },
+             "#{siglum}: a ruled class now holds it — no longer a deliberate non-claim")
+    end
+    assert_equal ["school"], shipped.normalize("korpus16", "TA 1550"),
+                 "the primer with the small catechism inside stays a primer"
+    assert_equal ["hymn-prayer/prayer"], shipped.normalize("korpus16", "TM 1555")
+  end
+
+  # The ripple of the 2026-11-07 heads into folds that took the nearest
+  # head while no class existed: scat's saints' lives (historiography by
+  # the biography precedent), Ephrem's prose refutation of Mani
+  # (literary/essay), the Noscemus academic oration (literary/essay).
+  def test_shipped_corrections_onto_the_2026_11_07_heads
+    shipped = shipped_kinds
+    assert_equal "hagiography/vita", shipped.source_kind("scat")
+    assert_equal ["theology/polemic"], shipped.normalize("etcbc-syriac", "Eprx")
+    assert_equal ["oratory"], shipped.normalize("noscemus", "Oration")
   end
 
   def shipped_kinds

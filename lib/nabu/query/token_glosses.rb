@@ -24,15 +24,19 @@ module Nabu
     #   218,568 of 262,128 tokens.
     # - tlhdig "gloss": German, minted only beside the lemma of a selected
     #   (or single-candidate) analysis — the aoxml lemma discipline.
+    # - ceipom "meaning": English, 32,917 of 37,041 tokens. The source is
+    #   the EQUIVALENCE tier — its lemma rows are Classical-Latin keys
+    #   (latin_equivalent), and the token pass reads that same key on an
+    #   equivalence hit (LemmaSearch#lemma_reading). 32,193 glossed tokens
+    #   carry a Latin equivalent; the other 724 (glossed, no equivalent)
+    #   are unreachable through --lemma.
     #
     # Deliberately NOT rows:
     # - tla-hf "gloss" is GRAMMATICAL (Leipzig labels, 259 distinct values
     #   over all 212,018 tokens: PREP, N.m, -3sg.m, "(undefined)" …) — a
-    #   morphology-class layer, not a word meaning.
-    # - ceipom "meaning" (English, 32,917 of 37,041 tokens) is lexical, but
-    #   the source is the EQUIVALENCE tier: its lemma rows are Latin keys
-    #   (latin_equivalent), which the token pass does not yet read. A row
-    #   here would filter nothing — it waits for that wiring.
+    #   morphology-class layer, not a word meaning; MorphFacets decodes it.
+    #   A lexical gloss for tla-hf would come through its lemma_id (the
+    #   AED/AES lemma space), a crosswalk like dss → bhsa — not built.
     #
     # Matching is whole-word and case-insensitive over the NFC gloss
     # ("glas" finds "Fayence; Glas (aus Silicium)"; "Fay" finds nothing):
@@ -48,7 +52,8 @@ module Nabu
         "bhsa" => Field.new(key: "gloss", language: "en"),
         "aes" => Field.new(key: "gloss", language: "de"),
         "achemenet" => Field.new(key: "eng", language: "en"),
-        "tlhdig" => Field.new(key: "gloss", language: "de")
+        "tlhdig" => Field.new(key: "gloss", language: "de"),
+        "ceipom" => Field.new(key: "meaning", language: "en")
       }.freeze
 
       module_function

@@ -91,7 +91,8 @@ module Nabu
       feature names — case, number, gender, person, tense, mood, voice,
       degree (values dat, pl/sg, masc, aor, opt, sub…); UD treebanks match on
       their `feats`; PROIEL/TOROT, GLAUx (AGDT postag), Diorisis, BHSA/DSS,
-      OSHB, ReM/ReN/REF (CorA msd/morph), goo300k (IMP msd), Menota (msa) and Coptic
+      OSHB, ReM/ReN/REF (CorA msd/morph), goo300k (IMP msd), Menota (msa), CEIPoM
+      (AGDT pos_code, via its Latin-equivalent lemmas), HeliPaD (pos^morph), CorPH (analysis), AES and TraCES (their explicit fields), tla-hf (grammatical glossing) and Coptic
       Scriptorium (pos: polarity, prontype, definite, verbform) are
       decoded into the same names — Hebrew/Aramaic add state, stem and
       conjugation (e.g. --morph stem=piel,conjugation=wayq). Ambiguous
@@ -101,7 +102,8 @@ module Nabu
       inflectional facets never match it (honest absence). See conventions §6.1.
 
       TOKEN GLOSSES (--gloss WORD): sources that store upstream's own word
-      meaning on each token (bhsa, achemenet: English; aes, tlhdig: German)
+      meaning on each token (bhsa, achemenet, ceipom: English; aes, tlhdig:
+      German)
       show it on every lemma hit in ‘quotes’, beside any dictionary gloss.
       DSS hits show BHSA's English gloss, borrowed through the lex_etcbc
       lexeme crosswalk at read time (display only — not a --gloss filter).
@@ -115,6 +117,19 @@ module Nabu
       case- and diacritic-insensitive (konig finds König). Composes with
       --lang/--source/--axis/--license/--limit only; built by the reference
       rebuild (or `bundle exec rake index:glosses`).
+
+      GLOSS LINES (--gloss-lines QUERY): the CONTENT search of those same
+      token glosses, one hit per PASSAGE. Each passage's glosses are read
+      in token order as its interlinear gloss line, so `--gloss-lines king`
+      finds every verse, tablet or line with a word glossed king (BHSA's
+      Daniel in Aramaic, achemenet's Akkadian, tlhdig's Hittite as König),
+      words AND within the passage (king eternity is Dan 2:4), and a quoted
+      phrase may run across tokens ("to the king"). Each hit shows the
+      gloss line, the matching words with their glosses, and the passage
+      text. Glosses fold by their own language (konig finds König); --lang
+      names the TEXT language. Same grammar, filters and scope line as
+      --annotations; built by the reference rebuild (or `bundle exec rake
+      index:gloss_lines`).
 
       PROXIMITY (A --near B [--window N]): keep only hits where B occurs
       within N words of A in the SAME passage — λόγος near θεός is John 1:1.
@@ -255,6 +270,8 @@ module Nabu
         nabu search --lemma λόγος --morph case=dat,number=pl
                                                    # only the dative-plural λόγοις
         nabu search --lemma דבר --gloss word       # BHSA דבר as "word", not "speak"
+        nabu search --gloss-lines "king eternity"  # every passage whose glosses say
+                                                   #   both — Dan 2:4 in Aramaic
         nabu search --gloss king                   # every word glossed "king", across
                                                    #   lemmas and sources
         nabu search λόγος --near θεός --window 5    # λόγος within 5 words of θεός
@@ -301,7 +318,7 @@ module Nabu
                    desc: "Morphology facets (with --lemma), e.g. case=dat,number=pl"
     option :gloss, type: :string, banner: "WORD",
                    desc: "Token-gloss filter (with --lemma): keep attestations whose upstream gloss " \
-                         "contains WORD (bhsa/aes/achemenet/tlhdig); alone (no query): every word " \
+                         "contains WORD (bhsa/aes/achemenet/tlhdig/ceipom); alone (no query): every word " \
                          "glossed WORD, across lemmas"
     option :near, type: :string, banner: "TERM",
                   desc: "Proximity: keep only hits where TERM is within --window words of the query/lemma"
@@ -389,9 +406,13 @@ module Nabu
                                 "hittite-glossed trans_de, corph, …); hits are the original passages — " \
                                 "composes with --lang/--source/--axis/--license/--limit only"
     option :annotations, type: :boolean, default: false,
-                         desc: "Search the DECLARED annotation layers (cantus standardized spellings, " \
-                               "korpus16 margin notes); hits are the passages themselves — " \
+                         desc: "Search the DECLARED annotation layers (standardized/regularized spellings, readings, " \
+                               "margin notes, footnotes, editors' notes); hits are the passages themselves — " \
                                "composes with --lang/--source/--axis/--license/--limit only"
+    option :gloss_lines, type: :boolean, default: false,
+                         desc: "Content search of the upstream TOKEN GLOSSES (bhsa/achemenet English, " \
+                               "aes/tlhdig German), one hit per passage — composes with " \
+                               "--lang/--source/--axis/--license/--limit only"
     option :withdrawn, type: :boolean, default: false,
                        desc: "Attic inspection: search WITHDRAWN passages only (upstream-gone " \
                              "documents, revision-pruned passages) — substring match over the " \
@@ -439,6 +460,7 @@ module Nabu
       return gloss_search(options[:gloss]) if options[:gloss] && !options[:lemma] && query.empty?
       return translations_search(query) if options[:translations]
       return annotations_search(query) if options[:annotations]
+      return gloss_lines_search(query) if options[:gloss_lines]
       if (options[:from] || options[:to] || options[:century] || options[:place] || facet_filters ||
           options[:date_basis]) &&
          (options[:near] || options[:lemma])
@@ -1045,6 +1067,11 @@ module Nabu
     # "… and N more" tail (P75 C-4, the same house render-cap rule).
     # const: a render cap, not a corpus census
     SIGN_SEARCH_VALUES_SHOWN = 12
+
+    # Matching words shown per `search --gloss-lines` hit before the
+    # "(+N more)" tail (the same house render-cap rule).
+    # const: a render cap, not a corpus census
+    GLOSS_LINE_WORDS = 6
 
     # RTL snippet highlight = SGR reverse video (P42-r4, strike 4 — the
     # matrix ruling on the owner's iTerm2). Every CHARACTER-based highlight
@@ -2768,7 +2795,7 @@ module Nabu
       # lane (Query::TranslationSearch). Desk rule: the precompiled lane or
       # the honest build hint — never a scan.
       def translations_search(query)
-        clash = (translations_incompatible + %i[annotations]).select { |key| options[key] }
+        clash = (translations_incompatible + %i[annotations gloss_lines]).select { |key| options[key] }
         unless clash.empty?
           raise Thor::Error, "search: --translations searches the annotation-held translations lane and " \
                              "composes with --lang/--source/--axis/--license/--limit only (not " \
@@ -2825,7 +2852,7 @@ module Nabu
       # (Query::AnnotationSearch). Same composition set and desk rule as
       # --translations: the precompiled lane or the honest build hint.
       def annotations_search(query)
-        clash = (translations_incompatible + %i[translations]).select { |key| options[key] }
+        clash = (translations_incompatible + %i[translations gloss_lines]).select { |key| options[key] }
         unless clash.empty?
           raise Thor::Error, "search: --annotations searches the declared annotation layers lane and " \
                              "composes with --lang/--source/--axis/--license/--limit only (not " \
@@ -2877,11 +2904,79 @@ module Nabu
         say "annotations index covers: #{covered.empty? ? 'no sources' : covered}"
       end
 
+      # search --gloss-lines QUERY: the passage-grain content search of
+      # the token glosses (Query::GlossLineSearch). Same composition set
+      # and desk rule as --annotations; --gloss (the word-grain lane and
+      # the lemma filter) is a different question, refused.
+      def gloss_lines_search(query)
+        clash = (translations_incompatible + %i[translations annotations gloss]).select { |key| options[key] }
+        unless clash.empty?
+          raise Thor::Error, "search: --gloss-lines searches the passages' token-gloss lines and " \
+                             "composes with --lang/--source/--axis/--license/--limit only (not " \
+                             "#{clash.map { |key| "--#{key.to_s.tr('_', '-')}" }.join(', ')})"
+        end
+        raise Thor::Error, "search: --gloss-lines needs a query, e.g. --gloss-lines king" if query.empty?
+
+        validate_license!(options[:license])
+        config = Nabu::Config.load
+        catalog = open_catalog(config)
+        fulltext = open_fulltext(config)
+        raise Thor::Error, "no index — run nabu sync or nabu rebuild" unless catalog && fulltext
+
+        validate_source!(catalog, options[:source])
+        axis_names, axis_slugs = axis_membership(command: "search", config: config)
+        searcher = Nabu::Query::GlossLineSearch.new(catalog: catalog, fulltext: fulltext)
+        results = searcher.run(query, lang: options[:lang], license: options[:license], source: options[:source],
+                                      sources: axis_slugs, limit: options[:limit].to_i)
+        print_gloss_line_results(results, scope: searcher.scope, axis: axis_names,
+                                          incomplete: searcher.incomplete_hint)
+        print_display_footer
+      rescue Nabu::Query::GlossLineSearch::IndexMissing => e
+        raise Thor::Error, "search: #{e.message}"
+      ensure
+        catalog&.disconnect
+        fulltext&.disconnect
+      end
+
+      # Render gloss-line hits: the passage (urn + [language] + source),
+      # its gloss line with the term bracketed, the matching words
+      # (form ‘gloss’, capped and the tail announced), the passage's own
+      # leading text; then the footer, the credits, and ONE scope line.
+      def print_gloss_line_results(results, scope:, axis: nil, incomplete: nil)
+        if results.empty?
+          say "no matches"
+        else
+          results.each do |result|
+            say "#{result.urn}#{" [#{result.language}]" if result.language} #{result.source}" \
+                "#{"  — #{result.document_title}" if result.document_title}"
+            say "  glosses: #{result.snippet}"
+            say "  words: #{gloss_line_words(result)}" unless result.words.empty?
+            say "  text: #{display_snippet(truncate_line(result.text), result.language)}"
+          end
+          say "#{results.size} #{results.size == 1 ? 'hit' : 'hits'} in token gloss lines " \
+              "(the urn is the passage — nabu show <urn>)#{facet_footer(nil, axis: axis)}"
+          print_search_credits(results)
+        end
+        say "note: #{incomplete}" if incomplete
+        covered = scope.map { |slug, passages| "#{slug} #{passages}" }.join(" · ")
+        say "gloss-lines index covers: #{covered.empty? ? 'no sources' : covered}"
+      end
+
+      # The matching words, form ‘gloss’, capped at GLOSS_LINE_WORDS with
+      # the tail counted — never silently dropped.
+      def gloss_line_words(result)
+        shown = result.words.first(GLOSS_LINE_WORDS).map do |form, gloss|
+          "#{display_text(form, result.language) unless form.empty?} ‘#{gloss}’".strip
+        end
+        rest = result.words.size - shown.size
+        "#{shown.join(' · ')}#{" (+#{rest} more)" if rest.positive?}"
+      end
+
       # search --gloss WORD with no --lemma and no query: the token-gloss
       # lane (Query::GlossSearch) — every word upstream glosses WORD,
       # across lemmas. Same composition set as --translations.
       def gloss_search(gloss)
-        clash = (translations_incompatible + %i[translations annotations]).select { |key| options[key] }
+        clash = (translations_incompatible + %i[translations annotations gloss_lines]).select { |key| options[key] }
         unless clash.empty?
           raise Thor::Error, "search: --gloss alone searches the token-gloss lane and composes with " \
                              "--lang/--source/--axis/--license/--limit only (not " \

@@ -1033,6 +1033,78 @@ module Query
       assert_equal %w[urn:a:1], search("στρατηγος", date_basis: %w[artifact], place: "oxyrhynch%").map(&:urn)
     end
 
+    # -- window ∧ place agreement at the document grain ----------------------
+
+    # The letter shape: a dated main row (the sending place) plus a dateless
+    # place-only role row (the receiving place).
+    def letter(urn, year, sent:, received:)
+      classed(urn, [[year, year, nil, { place_name: sent, axis_source: "letters" }],
+                    [nil, nil, nil, { place_name: received, axis_source: "letters-received" }]])
+    end
+
+    def test_window_and_place_on_one_dated_row
+      classed("urn:a", [[1640, 1640, nil, { place_name: "Danzig" }]])
+      rebuild!
+      assert_equal %w[urn:a:1], search("στρατηγος", from: 1600, to: 1700, place: "Danzig").map(&:urn)
+      assert_empty search("στρατηγος", from: 1700, place: "Danzig"), "the one row's date misses the window"
+    end
+
+    def test_a_dateless_place_row_rides_the_documents_own_dates
+      letter("urn:l", 1640, sent: "Raków", received: "Danzig")
+      rebuild!
+      assert_equal %w[urn:l:1], search("στρατηγος", from: 1600, to: 1700, place: "Danzig").map(&:urn),
+                   "the document IS dated 1640 and IS tied to Danzig"
+      assert_empty search("στρατηγος", from: 1700, place: "Danzig"),
+                   "a 1640 letter received in Danzig never answers a 1700+ window"
+      assert_empty search("στρατηγος", to: 1600, place: "danzig"), "nor a window closing before it"
+    end
+
+    def test_a_wholly_undated_placed_document_keeps_passing_any_window
+      classed("urn:u", [[nil, nil, nil, { place_name: "Danzig" }]])
+      rebuild!
+      assert_equal %w[urn:u:1], search("στρατηγος", from: 1700, place: "Danzig").map(&:urn),
+                   "no date evidence anywhere — the honest-undated stance"
+    end
+
+    def test_place_on_a_missed_dated_row_is_not_rescued_by_another_dated_row
+      classed("urn:m", [[1640, 1640, nil, { place_name: "Danzig" }], [1750, 1750, nil, { place_name: "Kraków" }]])
+      rebuild!
+      assert_empty search("στρατηγος", from: 1700, place: "Danzig"),
+                   "a dated row keeps its own window∧place agreement"
+      assert_equal %w[urn:m:1], search("στρατηγος", from: 1700, place: "Kraków").map(&:urn)
+    end
+
+    def test_place_only_filter_keeps_its_any_row_lane
+      letter("urn:l", 1640, sent: "Raków", received: "Danzig")
+      rebuild!
+      assert_equal %w[urn:l:1], search("στρατηγος", place: "Danzig").map(&:urn), "place alone: any row"
+    end
+
+    def test_a_window_alone_reads_the_documents_own_dates
+      letter("urn:l", 1640, sent: "Raków", received: "Danzig")
+      rebuild!
+      assert_equal %w[urn:l:1], search("στρατηγος", from: 1600, to: 1700).map(&:urn), "the dated row fits"
+      assert_empty search("στρατηγος", from: 1700),
+                   "a dateless role row never answers a window its document's dates miss"
+      assert_empty search("στρατηγος", to: 1600)
+    end
+
+    def test_a_window_alone_keeps_wholly_undated_documents
+      classed("urn:u", [[nil, nil, nil, { place_name: "Danzig" }]])
+      classed("urn:s", [[nil, nil, nil, { artifact_script: "latn" }]])
+      rebuild!
+      assert_equal %w[urn:s:1 urn:u:1], search("στρατηγος", from: 1700).map(&:urn).sort,
+                   "no date evidence anywhere — the honest-undated stance"
+    end
+
+    def test_a_window_alone_ignores_silver_evidence_on_both_sides
+      classed("urn:x", [[nil, nil, nil, { place_name: "Danzig" }],
+                        [100, 200, "silver", { axis_source: Nabu::Store::SilverDates::AXIS_SOURCE }]])
+      rebuild!
+      assert_equal %w[urn:x:1], search("στρατηγος", from: 1700).map(&:urn),
+                   "an estimate is no date evidence: the document stays honestly undated"
+    end
+
     def test_date_basis_drives_a_term_less_browse
       classed("urn:art", [[-113, -113, nil]])
       classed("urn:comp", [[-400, -300, "composition"]])

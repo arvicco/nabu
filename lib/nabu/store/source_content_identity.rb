@@ -36,6 +36,27 @@ module Nabu
         end
       end
 
+      # The LANGUAGE-SLICE identity (Nabu::MinedLayers — a mined layer's
+      # staleness grain): { slug => [count, max revision] } over the live
+      # passages (passage and document both unwithdrawn) of +slugs+ whose
+      # language is one of +lang+'s code variants (every language when
+      # +lang+ is nil) — the lane a language-scoped miner reads. A slug
+      # with no lane passage is absent (reads [0, nil] to a comparer).
+      # Cost on the live catalog: one grouped pass over the language
+      # index, ~15-20 s for the whole grc or lat lane, cold.
+      def slices(db, lang:, slugs:)
+        dataset = db[:passages].join(:documents, id: Sequel[:passages][:document_id])
+                               .join(:sources, id: Sequel[:documents][:source_id])
+                               .where(Sequel[:passages][:withdrawn] => false, Sequel[:documents][:withdrawn] => false)
+                               .where(Sequel[:sources][:slug] => slugs)
+        dataset = dataset.where(Sequel[:passages][:language] => Nabu::Languages.code_variants(lang)) if lang
+        dataset.group(Sequel[:sources][:slug])
+               .select(Sequel[:sources][:slug], Sequel.function(:count).*.as(:count),
+                       Sequel.function(:max, Sequel[:passages][:revision]).as(:revision))
+               .order(Sequel[:sources][:slug])
+               .to_h { |row| [row[:slug], [row[:count], row[:revision]]] }
+      end
+
       def identity(db, source_id, license_class)
         digest = Digest::SHA256.new
         digest << "license#{SEPARATOR}#{license_class}\n"

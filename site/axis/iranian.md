@@ -24,7 +24,7 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 A source wears every desk it serves — these eight answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
-| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 6 November 2026)</span> |
+| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 7 November 2026)</span> |
 |---|---|---|---|---|
 | `cdli` | tablet catalog | attribution | wired · manual | 353,156 docs / 2,186,961 passages |
 | `ganjoor` | texts | attribution | wired · manual | 126,165 docs / 1,453,355 passages |
@@ -37,7 +37,7 @@ A source wears every desk it serves — these eight answer this desk. Holdings a
 
 Private research materials under personal grants are not listed.
 
-**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 6 November 2026)</span>: `sux` 264,506 · `akk` 153,945 · `fas` 146,364 · `und` 74,258 · `qpn` 70,329 · `akk-x-stdbab` 24,517 · `akk-x-neoass` 18,750 · `eng` 15,418 · `hit` 14,678 · `qpc` 8,931 … and 43 more (`nabu axis iranian` lists all).
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 7 November 2026)</span>: `sux` 264,506 · `akk` 153,945 · `fas` 146,364 · `und` 74,258 · `qpn` 70,329 · `akk-x-stdbab` 24,517 · `akk-x-neoass` 18,750 · `eng` 15,418 · `hit` 14,678 · `qpc` 8,931 … and 43 more (`nabu axis iranian` lists all).
 
 ## The desk's instruments
 

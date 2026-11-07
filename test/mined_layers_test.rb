@@ -115,6 +115,109 @@ class MinedLayersTest < Minitest::Test
     refute unrecorded.stale?
   end
 
+  # -- the language-slice identity ---------------------------------------------
+
+  # Two members: "pl" holds Latin (two live passages, one withdrawn, one
+  # Greek), "pleiades" holds no Latin at all.
+  def slice_catalog
+    catalog = store_test_db
+    pl = catalog[:sources].insert(slug: "pl", name: "P", adapter_class: "X", license_class: "open",
+                                  last_ingest_identity: "i-pl")
+    catalog[:sources].insert(slug: "pleiades", name: "G", adapter_class: "X", license_class: "open",
+                             last_ingest_identity: "i-pleiades")
+    doc = catalog[:documents].insert(source_id: pl, urn: "urn:pl:d", language: "lat", content_sha256: "x",
+                                     revision: 1, withdrawn: false)
+    [["urn:pl:d:1", "lat", 1, false], ["urn:pl:d:2", "lat", 2, false], ["urn:pl:d:3", "lat", 5, true],
+     ["urn:pl:d:4", "grc", 7, false]].each_with_index do |(urn, lang, revision, withdrawn), i|
+      catalog[:passages].insert(document_id: doc, urn: urn, sequence: i, language: lang, text: "t",
+                                text_normalized: "t", content_sha256: "x", revision: revision, withdrawn: withdrawn)
+    end
+    catalog
+  end
+
+  def latin_scope = { "producer" => "parallels", "scope" => "pl", "params" => { "lang" => "lat" } }
+
+  def test_provenance_records_the_language_slice_the_run_consumed
+    catalog = slice_catalog
+    config = Struct.new(:canonical_dir).new(File.join(@dir, "canonical"))
+    prov = Nabu::MinedLayers.provenance(latin_scope, catalog: catalog, config: config, registry: nil)
+    assert_equal({ "pl" => "i-pl", "pleiades" => "i-pleiades" }, prov.catalog, "global membership, as before")
+    assert_equal({ "lang" => "lat", "members" => { "pl" => [2, 2] } }, prov.slice,
+                 "the lat lane (the engine's code variants, live rows only) per member holding any; " \
+                 "an empty lane is absent")
+  end
+
+  def test_the_slice_lane_follows_the_profile_and_spans_every_language_without_one
+    assert_equal "lat", Nabu::MinedLayers.slice_lang("producer" => "parallels", "params" => { "profile" => "latin" })
+    assert_nil Nabu::MinedLayers.slice_lang("producer" => "parallels", "params" => {})
+    assert_equal({ "pl" => [3, 7] }, Nabu::Store::SourceContentIdentity.slices(slice_catalog, lang: nil, slugs: %w[pl]))
+  end
+
+  def sliced_layer(catalog, inputs: { "producer_code" => Nabu::LinkStamps.code_digests["parallels"] })
+    config = Struct.new(:canonical_dir).new(File.join(@dir, "canonical"))
+    prov = Nabu::MinedLayers.provenance(latin_scope, catalog: catalog, config: config, registry: nil)
+    layer(catalog: prov.catalog, inputs: inputs).with(slice: prov.slice)
+  end
+
+  def test_a_touch_outside_the_slice_no_longer_stales_the_layer
+    catalog = slice_catalog
+    sliced = sliced_layer(catalog)
+    catalog[:sources].where(slug: "pleiades").update(last_ingest_identity: "i-pleiades-2")
+    catalog[:sources].where(slug: "pl").update(last_ingest_identity: "i-pl-2")
+    pl_doc = catalog[:documents].where(urn: "urn:pl:d").get(:id)
+    catalog[:passages].where(urn: "urn:pl:d:4").update(revision: 8) # the Greek passage: outside the lane
+    staleness = Nabu::MinedLayers.staleness(sliced, catalog: catalog)
+    assert_equal [[], :slice, %w[pl pleiades]], [staleness.changed, staleness.grain, staleness.touched]
+    refute staleness.stale?
+
+    catalog[:passages].insert(document_id: pl_doc, urn: "urn:pl:d:5", sequence: 9, language: "lat", text: "t",
+                              text_normalized: "t", content_sha256: "x", revision: 1, withdrawn: false)
+    grown = Nabu::MinedLayers.staleness(sliced, catalog: catalog)
+    assert_equal %w[pl], grown.changed, "a member whose lane grew is stale"
+    assert grown.stale?
+  end
+
+  def test_a_re_parsed_lane_member_still_stales_the_layer
+    catalog = slice_catalog
+    sliced = sliced_layer(catalog)
+    catalog[:sources].where(slug: "pl").update(last_ingest_identity: "i-pl-2")
+    catalog[:passages].where(urn: "urn:pl:d:1").update(revision: 3)
+    assert_equal %w[pl], Nabu::MinedLayers.staleness(sliced, catalog: catalog).changed
+  end
+
+  # The slice is probed only for members whose ingest identity moved: an
+  # unmoved source was not re-ingested, so its slice cannot have moved.
+  def test_the_slice_is_probed_only_for_members_whose_ingest_identity_moved
+    catalog = slice_catalog
+    sliced = sliced_layer(catalog)
+    catalog[:passages].where(urn: "urn:pl:d:1").update(revision: 3) # no re-ingest recorded
+    staleness = Nabu::MinedLayers.staleness(sliced, catalog: catalog)
+    assert_equal [[], []], [staleness.changed, staleness.touched]
+  end
+
+  def test_a_layer_mined_before_the_slice_keeps_the_coarse_verdict
+    catalog = slice_catalog
+    coarse = layer(catalog: { "pl" => "i-pl", "pleiades" => "i-pleiades" })
+    catalog[:sources].where(slug: "pleiades").update(last_ingest_identity: "i-pleiades-2")
+    staleness = Nabu::MinedLayers.staleness(coarse, catalog: catalog)
+    assert_equal [%w[pleiades], :source], [staleness.changed, staleness.grain]
+    assert staleness.stale?, "never upgraded: an old layer's claim stays coarse"
+  end
+
+  # -- `links mine --stale`'s selection ---------------------------------------
+
+  def test_stale_selection_grades_every_recorded_scope
+    catalog = slice_catalog
+    current = sliced_layer(catalog).with(scope: "pl")
+    moved_code = sliced_layer(catalog, inputs: { "producer_code" => "old" }).with(scope: "moved")
+    scopes = [latin_scope, latin_scope.merge("scope" => "moved"), latin_scope.merge("scope" => "never")]
+    picks = Nabu::MinedLayers.stale_selection(scopes, layers: [current, moved_code], catalog: catalog)
+    assert_equal([["pl", :current], ["moved", :stale], ["never", :unmined]],
+                 picks.map { |pick| [pick.scope["scope"], pick.status] })
+    assert picks[1].staleness.code_moved
+    assert_nil picks[2].layer
+  end
+
   # -- the rebuild summary's presence line -------------------------------------
 
   def test_presence_line_states

@@ -300,6 +300,16 @@ module Query
       assert_equal ["urn:nabu:ccmh:mar:mt"], page.rows.map(&:urn)
     end
 
+    def test_documents_date_window_reads_the_documents_own_dates_not_a_dateless_row
+      seed_document_pile
+      dated, undated = %w[mt mk].map { |book| @catalog[:documents].where(urn: "urn:nabu:ccmh:mar:#{book}").first }
+      @catalog[:document_axes].insert(document_id: dated[:id], not_before: 850, not_after: 900, axis_source: "hgv")
+      @catalog[:document_axes].insert(document_id: dated[:id], place_name: "Gaza", axis_source: "hgv-received")
+      @catalog[:document_axes].insert(document_id: undated[:id], place_name: "Gaza", axis_source: "hgv")
+      assert_equal ["urn:nabu:ccmh:mar:mk"], list.documents("ccmh", from: 1000).rows.map(&:urn),
+                   "the dated document's place row never answers a window its dates miss; the undated one keeps passing"
+    end
+
     def test_documents_unknown_source_raises
       assert_raises(Nabu::Query::List::Error) { list.documents("nope") }
     end

@@ -1074,11 +1074,12 @@ class InvariantsTest < Minitest::Test
                                  mined_links_path: File.join(root, "mined-links.sqlite3"))
   end
 
-  def seed_mined_layer(root, edges:, catalog: { "perseus-latin" => "i1" })
+  def seed_mined_layer(root, edges:, catalog: { "perseus-latin" => "i1" }, slice: nil)
     inputs = { "producer_code" => Nabu::LinkStamps.code_digests.fetch("parallels") }
     Nabu::Store::MinedLinks.mine!(File.join(root, "mined-links.sqlite3"), producer: "parallels",
                                                                           scope: "perseus-latin", stamp: "s",
-                                                                          inputs: inputs, catalog: catalog) do |db|
+                                                                          inputs: inputs, catalog: catalog,
+                                                                          slice: slice) do |db|
       run = Nabu::Store::LinksJournal.record_run!(db, producer: "parallels", scope: "perseus-latin", params: {},
                                                       code_version: "p/2")
       edges.each do |from, to|
@@ -1121,6 +1122,67 @@ class InvariantsTest < Minitest::Test
       assert_match(/STALE: 1 member source\(s\) re-ingested since \(e\.g\. perseus-latin\)/, finding.message)
       assert_match(/1 of 2 sampled edges have an endpoint no longer in the catalog/, finding.message)
       assert_match(/`nabu links mine perseus-latin` re-mines it \(owner-fired\)\z/, finding.message)
+    end
+  end
+
+  # The slice grain: perseus-latin's lat lane is recorded as [2, 1] (the
+  # two seed_latin passages) beside a lane-less reference member.
+  LATIN_SLICE = { "lang" => "lat", "members" => { "perseus-latin" => [2, 1] } }.freeze
+
+  def seed_reference_member
+    Nabu::Store::Source.create(slug: "pleiades", name: "G", adapter_class: "T", license_class: "open")
+    @db[:sources].where(slug: "pleiades").update(last_ingest_identity: "g1")
+  end
+
+  def sliced_catalog = { "perseus-latin" => "i1", "pleiades" => "g1" }
+
+  # Store-side edit of a seeded layer's measured seconds (test setup only).
+  def set_mined_seconds(root, seconds)
+    db = Nabu::Store.connect(File.join(root, "mined-links.sqlite3"))
+    db[:mined_layers].update(seconds: seconds)
+    db.disconnect
+  end
+
+  def test_a_touch_outside_the_layers_language_slice_stays_current
+    seed_latin
+    seed_reference_member
+    Dir.mktmpdir do |root|
+      seed_mined_layer(root, edges: [%w[urn:l:d:1 urn:l:d:2]], catalog: sliced_catalog, slice: LATIN_SLICE)
+      @db[:sources].where(slug: "pleiades").update(last_ingest_identity: "g2")
+      finding = mined_invariants(root).global.find { |f| f.kind == :mined_layer }
+      assert_equal :info, finding.severity
+      assert_match(/— current against the catalog \(1 re-ingested member source\(s\), lat slice unchanged\)\z/,
+                   finding.message)
+    end
+  end
+
+  def test_a_moved_language_slice_is_stale_and_carries_the_measured_cost
+    seed_latin
+    seed_reference_member
+    Dir.mktmpdir do |root|
+      seed_mined_layer(root, edges: [%w[urn:l:d:1 urn:l:d:2]], catalog: sliced_catalog, slice: LATIN_SLICE)
+      set_mined_seconds(root, 12_189.49)
+      @db[:sources].where(slug: "perseus-latin").update(last_ingest_identity: "i2")
+      @db[:passages].where(urn: "urn:l:d:2").update(revision: 2)
+      finding = mined_invariants(root).global.find { |f| f.kind == :mined_layer }
+      assert_equal :soft, finding.severity
+      assert_match(/STALE: 1 member source\(s\)' lat slice moved since \(e\.g\. perseus-latin\); re-mine ≈ 203m09s, measured — `nabu links mine perseus-latin` re-mines it \(owner-fired\)\z/, # rubocop:disable Layout/LineLength
+                   finding.message)
+    end
+  end
+
+  def test_a_layer_without_a_slice_keeps_the_coarse_verdict_and_says_so
+    seed_latin
+    seed_reference_member
+    Dir.mktmpdir do |root|
+      seed_mined_layer(root, edges: [%w[urn:l:d:1 urn:l:d:2]], catalog: sliced_catalog)
+      set_mined_seconds(root, nil)
+      @db[:sources].where(slug: "pleiades").update(last_ingest_identity: "g2")
+      finding = mined_invariants(root).global.find { |f| f.kind == :mined_layer }
+      assert_equal :soft, finding.severity, "an old layer's coarse claim is never upgraded"
+      assert_match(/STALE: 1 member source\(s\) re-ingested since \(e\.g\. pleiades\) — identity unrecorded at slice grain, precise from its next mine — `nabu links mine/, # rubocop:disable Layout/LineLength
+                   finding.message)
+      refute_match(/re-mine ≈/, finding.message, "no measured cost recorded, none shown")
     end
   end
 

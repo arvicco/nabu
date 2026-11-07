@@ -77,6 +77,21 @@ jobs:
           echo "name=$(jq -r .name server.json)" >> "$GITHUB_OUTPUT"
           echo "version=$(jq -r .version server.json)" >> "$GITHUB_OUTPUT"
           echo "identifier=$(jq -r '.packages[] | select(.registryType == "oci") | .identifier' server.json)" >> "$GITHUB_OUTPUT"
+      # One version line: the demo image's number IS the release number.
+      # A release whose server.json was not bumped with CITATION.cff and
+      # Nabu::VERSION fails here, before anything is smoked or published.
+      - name: The image version must equal the release version
+        if: github.event_name == 'release'
+        env:
+          VERSION: ${{ steps.server.outputs.version }}
+          TAG: ${{ github.event.release.tag_name }}
+        run: |
+          release="${TAG#v}"
+          if [ "$VERSION" != "$release" ]; then
+            echo "server.json says $VERSION but this release is $release — the demo image version" >&2
+            echo "is release-synced (one version line); bump server.json in the release's bump commit." >&2
+            exit 1
+          fi
       - name: Skip if this version is already listed
         id: listed
         env:

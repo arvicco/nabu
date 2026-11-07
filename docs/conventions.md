@@ -306,9 +306,16 @@ decoded ones:
 | Abegg (dss) | `gn` `nu` `ps` `st` `vs` `vt` `md` (beside `morpho`) | one feature per key | `vs=hifil vt=ptca gn=m nu=s` |
 | OSHB (oshb) | `morph` | language + `/`-joined segments | `HC/Vqw3ms/Sp3fs` |
 | CorA (rem, ren) | `msd` | `.`-joined self-describing values | `Ind.Pres.Sg.3`, `Masc-Neut.Dat-Akk.Sg` |
+| CorA (ref) | `morph` | the same `.`-joined identity scheme, German spellings; `MN`/`MF`/`FN` syncretic genders | `3.Sg.Präs.Ind.Unr`, `MN.Akk.Sg` |
 | IMP (goo300k) | `msd` | coarse closed tag | `Ncf`, `Vmp`, `Agc` |
 | Menota (menota) | `msa` | category-letter codes, `\|`-joined analyses | `xVB fF tPS mIN p3 nS vA` |
 | Coptic Scriptorium (coptic-scriptorium) | `pos` | Scriptorium tag, **no inflection** — decodes only what the tag fixes (polarity, pronoun type, definiteness, finiteness); fused tags `_`-joined | `ANEGPST`, `PPERS`, `AOPT_PPERS` |
+| AGDT (ceipom) | `pos_code` (+ explicit `case`/`gender`) | 9-slot AGDT tag; the explicit columns refine locative/instrumental and syncretic `M/N`, `ACC/DAT`; lemma anchor = the equivalence tier's Latin key | `v3sria---`, `n-s---m--` + `case=LOC` |
+| Penn-psd (helipad) | `pos` + `morph` | YCOE-family verb tag (tense+mood suffix) / degree tag, `^`-joined case/person/number atoms | `GE+VBDI` + `3^SG`, `N` + `A^SG` |
+| CorPH (corph) | `analysis` | `.`-joined self-describing atoms, `/`-led alternatives; no POS — a bare case is prepositional government and stays undecoded | `3pl.pres.subj.pass.`, `nom.sg.masc./fem.` |
+| AES (aes) | `numerus` `genus` `status` `pronoun` `inflection` `voice` `number` | one upstream field per category (`status` → `state` incl. `pron`, the pronominal state); `morphology` holds Egyptian morpheme labels, never read — the AES row precedes the unscoped `morphology` row | `numerus=singular genus=feminine status=st_absolutus` |
+| TraCES (traces) | `person` `number` `gender` `case` `state` `tam` | one upstream feature per category; `tam` under the Semitic keys (Perfect/Imperfect → `conjugation` perf/impf); the layered noun number/gender (`SingularP UnmarkedS`) stay undecoded | `tam=Perfect person=Third gender=Feminine` |
+| TLA glossing (tla-hf) | `gloss` | GRAMMATICAL Leipzig-style label (not a word meaning): head + atoms joined by `. : - = ~ \`; a head-less person label is a personal pronoun; an article's `-` segment is its possessor, dropped | `-3sg.m`, `N.m:pl`, `V\res-3sg.m`, `ART.poss:f.sg` |
 | ORACC (akk, sux) | `pos` | NER-flavoured tag, **no inflection** | `PN`, `N`, `GN`, `V` |
 
 **Vocabulary verdict — unified, not per-family passthrough.** The query
@@ -354,7 +361,9 @@ in its table comment.
 **Token glosses — the façade's sibling (`Query::TokenGlosses`).** Some sources
 store upstream's own word meaning on each token: bhsa `gloss` and achemenet
 `eng` (English), aes `gloss` (German contextual translation) and tlhdig
-`gloss` (German, on the selected analysis). One registry row per source (token
+`gloss` (German, on the selected analysis), and ceipom `meaning` (English;
+the equivalence tier — the token pass reads the Latin-equivalent key the
+index minted from, folded as Latin). One registry row per source (token
 key + gloss language) makes them displayable — every lemma hit from those
 sources carries `token_gloss`, rendered in ‘quotes’ beside any dictionary
 gloss — and filterable on the same lemma-anchored token pass as `--morph`:
@@ -369,8 +378,10 @@ with the exact lex and language — exact-lex, so `<D` "unto" never borrows
 filter DSS. Not rows: tla-hf's
 `gloss` is grammatical (Leipzig labels — `PREP`, `N.m`, `-3sg.m`), and ceipom's
 English `meaning` waits on the equivalence tier's Latin keys reaching the
-token pass. Gloss search *across* lemmas (find every word glossed "king") needs
-an index and is a separate, rebuild-class step. ORACC carries no inflectional
+token pass. Gloss search *across* lemmas runs on two fulltext lanes (architecture
+§5): `search --gloss king` (no query) lists every WORD glossed "king", and
+`search --gloss-lines king` every PASSAGE with such a word, the glosses read in
+token order (co-occurrence, cross-token phrases). ORACC carries no inflectional
 morphology (upstream `morph`/`base` is an un-ingested enrichment, §6 above), so
 inflectional facets **never match ORACC** — honest absence, not error. A unified
 `pos` facet was deliberately left out of v1: ORACC's tagset is not UD upos, and

@@ -25,9 +25,11 @@ module Nabu
     # --lang/--source/--axis filter INSIDE the MATCH.
     #
     # Folding: per the key's declared fold (AnnotationKeys::Spec#fold) —
-    # for every key today the PASSAGE's own language (search_form with
-    # the passage language: cantus folds Latin, j→i and v→u, korpus16
-    # Slovene, ſ→s), exactly as the passage's own text_normalized folds.
+    # for most keys the PASSAGE's own language (search_form with the
+    # passage language: cantus folds Latin, j→i and v→u, korpus16
+    # Slovene, ſ→s), exactly as the passage's own text_normalized folds;
+    # a metalanguage layer by its declared language (the Socinian
+    # letters' German notes keep their j on a Latin letter).
     # The query side folds the main search's way (Normalize.query_forms,
     # the per-language union — fold-both-sides by the P6-4 argument).
     #

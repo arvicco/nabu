@@ -1549,8 +1549,8 @@ sources:
         Greek 20, Khmer 3, Chinese 1); the one Byzantine row is romanized Greek and codes
         grc-Latn"}
   scat:
-    # kind: machine-postured — kind_map.yml source_kind historiography (the
-    # corpus is saints' lives). lect: machine-postured by the scat-century
+    # kind: machine-postured — kind_map.yml source_kind hagiography/vita (the
+    # corpus is saints' lives; historiography until the 2026-11-07 head). lect: machine-postured by the scat-century
     # facet rules — 16th/17th c. chu:csl/rus (scat-century); the 18th-c.
     # slice chu:ncs, the registry's New Church Slavonic stage
     # (scat-century-ncs).
@@ -1665,7 +1665,7 @@ sources:
   ticha:   # P117-5
     # kind machine-postured since 2026-10-12 — the ruled work_type fold in
     # kind_map.yml (manuscript → legal, arte → lexical/grammar, catecismo →
-    # exegesis, miscelaneo → unknown). The pending row retired under the
+    # catechesis since 2026-11-07, miscelaneo → unknown). The pending row retired under the
     # shadowing rule.
     # lect machine-postured since 2026-10-11 — the per-collection zap/xzp →
     # zap:col overrides (the americas registry package merged; xzp stays
@@ -2159,9 +2159,10 @@ sources:
     # the carve plan carry no genre field, so the carved work's Latin title is
     # cut to one keyword head (Adapters::CgpgTitleGenre) and folded — exegesis,
     # historiography, letter, sermon, ritual/liturgy (Symeon of Thessalonica's
-    # rite chapters), legal/law, poetry, scholarly. Hagiography, apologetics-polemic,
-    # theological treatises, bare fragments, court treatises and secular rhetoric
-    # have no ruled head yet and stay in the unmapped bucket by design. Five
+    # rite chapters), legal/law, poetry, scholarly — and, since the 2026-11-07
+    # heads, hagiography, theology (apologetics, polemic, treatises,
+    # erotapokriseis), catechesis and oratory. Bare fragments and the court
+    # treatises have no ruled head and stay in the unmapped bucket by design. Five
     # single-genre whole volumes claim their kind (Cyril's commentaries, the
     # histories); mixed volumes, the deferred PG 3 and every residuum (edition
     # apparatus, rescans, uncarved rows) make no kind claim.
@@ -3041,7 +3042,7 @@ sources:
         machine-ocr); the Urach Glagolitic/Cyrillic prints are OUT (OCR noise), declared"}
   korpus16:   # P160-6, 02-sources row 386
     # kind machine-postured — the korpus16 fold in kind_map.yml over the siglum
-    # (catechisms/confessions/the church order declared deliberate there).
+    # (catechisms/confessions/the church order fold to catechesis, ruled 2026-11-07).
     # lect machine-postured — the korpus16 sl → sl:emod override in
     # lect_overrides.yml (the 1550 band-edge books included).
     dating: {posture: dated, note: "every book: the page header's print year (\"Tübingen,
@@ -3339,7 +3340,8 @@ sources:
     script: {posture: implied}
   mazarinades:
     # kind machine-postured — the kind_map.yml mazarinades genre fold (the
-    # oratory/polemic cluster left unmapped: no ruled head).
+    # speech-form cluster on oratory since the 2026-11-07 head; satire and
+    # the laments stay unmapped, judged ambiguous).
     # lect machine-postured — the fra → fr:cls override (config/lect_overrides.yml).
     dating: {posture: dated, note: "the bibliographic entry's typed dates (Moreau, Mazarine,
         Labadie, Socard, Carrier's day-precise datings, Antonomaz): the narrowest year

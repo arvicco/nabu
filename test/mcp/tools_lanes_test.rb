@@ -35,8 +35,8 @@ module MCP
     def test_the_search_and_show_schemas_carry_the_bumped_key_sets
       search = Nabu::MCP::Tools::SEARCH_SCHEMA.fetch(:properties).keys
       assert_equal %i[query similar_to lemma morph gloss near window lang license from to century date_basis
-                      place script kind facets meter meter_pattern words lect fuzzy translations sense
-                      sense_gloss betacode limit include_restricted], search
+                      place script kind facets meter meter_pattern words lect fuzzy translations annotations
+                      sense sense_gloss betacode limit include_restricted], search
       show = Nabu::MCP::Tools::SHOW_SCHEMA.fetch(:properties).keys
       assert_equal %i[urn parallel parallel_lang max_passages segmented senses include_restricted], show
     end
@@ -98,8 +98,8 @@ module MCP
 
     def test_fuzzy_refuses_the_flags_the_cli_refuses
       seed_papyri
-      %w[near lemma morph lect script meter words translations].each do |key|
-        value = %w[words translations].include?(key) || "x"
+      %w[near lemma morph lect script meter words translations annotations].each do |key|
+        value = %w[words translations annotations].include?(key) || "x"
         args = { "query" => "ρατηγ", "fuzzy" => true, key => value }
         args.delete("query") if key == "lemma"
         assert_raises(Nabu::MCP::Tools::InvalidArguments, key) { call("nabu_search", args) }
@@ -194,6 +194,53 @@ module MCP
       seed_translations(build: false)
       assert_match(/rake index:translations/,
                    text_of(call("nabu_search", { "query" => "brothers", "translations" => true })))
+    end
+
+    # -- annotations (bump 2026-11-07, the CLI's search --annotations) ---------
+    # One additive schema key: the declared annotation-layer lane
+    # (Query::AnnotationSearch) on the translations lane's shape.
+
+    def seed_annotations(build: true)
+      @catalog = store_test_db
+      @fulltext = Nabu::Store.connect_fulltext("sqlite::memory:")
+      Nabu::TestSupport.load_annotation_corpus(@catalog)
+      Nabu::Store::AnnotationIndex.rebuild!(catalog: @catalog, fulltext: @fulltext) if build
+    end
+
+    def test_annotations_finds_the_passage_and_names_its_layer
+      seed_annotations
+      body = payload(call("nabu_search", { "query" => "praesul", "annotations" => true }))
+      hit = body.fetch("matches").first
+      assert_equal "urn:nabu:cantus:455843:1", hit.fetch("urn")
+      assert_equal %w[lat open cantus standardized], hit.values_at("language", "license_class", "source", "layer")
+      assert_match(/\[praesul\]/, hit.fetch("snippet"))
+      assert_includes hit.fetch("text"), "presul", "the passage's own spelling rides along"
+      assert_equal(%w[cantus korpus16], body.fetch("coverage").map { |row| row.fetch("source") })
+      assert_match(/declared annotation layers/, body.fetch("note"))
+    end
+
+    def test_annotations_composes_with_lang_license_limit_only
+      seed_annotations
+      assert_empty payload(call("nabu_search", { "query" => "praesul", "annotations" => true,
+                                                 "lang" => "sl" })).fetch("matches")
+      refute_empty payload(call("nabu_search", { "query" => "prasnik", "annotations" => true,
+                                                 "lang" => "sl", "limit" => 1 })).fetch("matches")
+      error = assert_raises(Nabu::MCP::Tools::InvalidArguments) do
+        call("nabu_search", { "query" => "praesul", "annotations" => true, "from" => -100 })
+      end
+      assert_match(/annotations composes with .* only \(not from\)/, error.message)
+      assert_raises(Nabu::MCP::Tools::InvalidArguments, "one lane per call") do
+        call("nabu_search", { "query" => "praesul", "annotations" => true, "translations" => true })
+      end
+      assert_raises(Nabu::MCP::Tools::InvalidArguments, "the lane needs a query") do
+        call("nabu_search", { "annotations" => true })
+      end
+    end
+
+    def test_annotations_without_the_lane_is_the_build_hint_note
+      seed_annotations(build: false)
+      assert_match(/rake index:annotations/,
+                   text_of(call("nabu_search", { "query" => "praesul", "annotations" => true })))
     end
 
     # -- the token-gloss lane (gloss with no lemma; bump 2026-11-05) -----------

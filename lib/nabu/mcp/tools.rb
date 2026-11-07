@@ -18,6 +18,7 @@ require_relative "../query/parallels_explain"
 require_relative "../query/clarify"
 require_relative "../query/fuzzy"
 require_relative "../query/translation_search"
+require_relative "../query/annotation_search"
 require_relative "../query/gloss_search"
 require_relative "../query/senses"
 require_relative "../query/align"
@@ -242,12 +243,15 @@ module Nabu
         "the note names that layer or explains an empty one. `words` (text search only) is the " \
         "Tibetan word-grain filter: keep only hits whose match aligns with word boundaries per " \
         "the nabu-data segmentation dataset (degrades honestly for non-Tibetan queries or an " \
-        "unsynced module). Three further LANES replace the ranked text search (each composes " \
+        "unsynced module). Four further LANES replace the ranked text search (each composes " \
         "with the args its schema line names, nothing else): `fuzzy: true` — substring/fragment " \
         "search over the documentary trigram index (]μηνιν αει[, the CLI's --fuzzy); " \
         "`translations: true` — the query matched against the translations held in passage " \
         "annotations, hits being the ORIGINAL passages with the matched `layer` (the CLI's " \
-        "--translations); `sense` — the word-sense desk (a DCS WordSem id or sense name → the " \
+        "--translations); `annotations: true` — the query matched against the DECLARED " \
+        "annotation layers (standardized/regularized spellings, readings, margin notes, footnotes, " \
+        "editors' notes), hits being the passages with the matched `layer` (the CLI's " \
+        "--annotations); `sense` — the word-sense desk (a DCS WordSem id or sense name → the " \
         "passages whose tokens cite it, each with its citing tokens; the CLI's `nabu sense`). " \
         "`betacode: true` reads query/lemma/near as TLG Beta Code (mh=nin → μῆνιν). " \
         "Use nabu_show with a hit's urn for " \
@@ -492,14 +496,17 @@ module Nabu
                                 "match on feats; PROIEL/TOROT positional tags, GLAUx's AGDT " \
                                 "postags, Diorisis analyses, BHSA/DSS (ETCBC/Abegg) features, " \
                                 "OSHB morph codes, CorA msd (ReM/ReN) and morph (REF), IMP msd (goo300k), " \
-                                "Menota msa and Coptic Scriptorium pos tags (polarity, prontype, " \
+                                "Menota msa, CEIPoM AGDT pos_code (via its Latin-equivalent lemmas), " \
+                                "HeliPaD pos^morph tags, CorPH analyses, AES/TraCES explicit fields, " \
+                                "tla-hf grammatical glossing and " \
+                                "Coptic Scriptorium pos tags (polarity, prontype, " \
                                 "definite, verbform) are decoded to the same names (Hebrew/Aramaic add " \
                                 "state, stem, conjugation: e.g. \"stem=piel,conjugation=wayq\"); " \
                                 "ORACC has no inflectional morphology so these facets never match it." },
           gloss: { type: "string",
                    description: "Token-gloss filter WITH lemma: keep attestations whose upstream " \
                                 "token gloss contains this word (whole word, case-insensitive) — " \
-                                "bhsa/achemenet (English), aes/tlhdig (German). E.g. lemma \"דבר\" + " \
+                                "bhsa/achemenet/ceipom (English), aes/tlhdig (German). E.g. lemma \"דבר\" + " \
                                 "gloss \"word\" splits BHSA's consonantal homograph from \"speak\". " \
                                 "Composes with morph; not with near. Lemma hits from those sources " \
                                 "always carry token_gloss. WITHOUT lemma (and no query): the gloss " \
@@ -617,6 +624,16 @@ module Nabu
                                        "hits are the ORIGINAL passages, each naming the matched " \
                                        "`layer` with a bracketed `snippet` of it. Composes with " \
                                        "lang (the original's language)/license/limit only." },
+          annotations: { type: "boolean", default: false,
+                         description: "Annotation-layer lane (the CLI's search --annotations): " \
+                                      "`query` (words AND, \"phrase\", prefix*) is matched against " \
+                                      "the searchable text layers sources keep in passage " \
+                                      "ANNOTATIONS, declared per source (cantus standardized " \
+                                      "spellings, regularized/normalized/diplomatic spellings, " \
+                                      "margin notes, footnotes, editors' notes — each folded by " \
+                                      "its own language); hits are the passages, each naming the " \
+                                      "matched `layer` with a bracketed `snippet` of it. Composes " \
+                                      "with lang (the passage's language)/license/limit only." },
           sense: { type: "string",
                    description: "Sense desk (the CLI's `nabu sense TERM`): a sense id (59344, or " \
                                 "comma-joined ids) or a sense NAME matched case-insensitively " \
@@ -650,6 +667,8 @@ module Nabu
                       include_restricted].freeze
       # const: the --translations composition set
       TRANSLATIONS_ARGS = %w[translations query lang license limit include_restricted].freeze
+      # const: the --annotations composition set
+      ANNOTATIONS_ARGS = %w[annotations query lang license limit include_restricted].freeze
       # const: the --gloss-alone composition set (gloss with no lemma)
       GLOSS_ARGS = %w[gloss lang license limit include_restricted].freeze
       # const: the sense desk composition set
@@ -1179,6 +1198,7 @@ module Nabu
         return sense_search(args) unless args["sense"].nil?
         raise InvalidArguments, "sense_gloss applies with sense only" if args["sense_gloss"] == true
         return translations_search(args) if args["translations"] == true
+        return annotations_search(args) if args["annotations"] == true
         return fuzzy_search(args) if args["fuzzy"] == true
         return gloss_search(args) if !args["gloss"].nil? && args["lemma"].nil?
 
@@ -1329,6 +1349,36 @@ module Nabu
                              searcher.incomplete_hint),
              coverage: searcher.scope.map { |slug, passages| { source: slug, passages: passages } })
       rescue Query::TranslationSearch::IndexMissing => e
+        note(e.message)
+      end
+
+      # The annotation-layer lane (the CLI's search --annotations,
+      # Query::AnnotationSearch): the declared searchable layers held in
+      # passage annotations, hits the passages themselves. Desk rule: an
+      # unbuilt lane is the honest build-hint note, never a scan.
+      def annotations_search(args)
+        lane_conflicts!(args, "annotations", ANNOTATIONS_ARGS)
+        query = string_arg(args, "query") or raise InvalidArguments, "annotations needs a query"
+        license = license_arg(args)
+        include_restricted = args["include_restricted"] == true
+        refused = restricted_license_note(license, include_restricted) and return refused
+
+        catalog = resolve(@catalog) or return note(NO_CORPUS_NOTE)
+        limit = clamp(args["limit"], default: SEARCH_DEFAULT_LIMIT, max: SEARCH_MAX_LIMIT)
+        searcher = Query::AnnotationSearch.new(catalog: catalog, fulltext: resolve(@fulltext))
+        results = searcher.run(query, lang: args["lang"], license: license, limit: limit + 1)
+        results = results.reject { |r| EXCLUDED_LICENSE_CLASSES.include?(r.license_class) } unless include_restricted
+        shown = results.first(limit)
+        sources = sources_by_urn(catalog, shown.map(&:urn))
+        json(matches: shown.map do |result|
+          { urn: result.urn, language: result.language, license_class: result.license_class,
+            source: sources[result.urn], document: result.document_title, layer: result.layer,
+            snippet: result.snippet, text: truncate(result.text) }.merge(credit_field(result))
+        end,
+             note: lane_note(results, limit, "declared annotation layers; hits are the layer-bearing passages",
+                             searcher.incomplete_hint),
+             coverage: searcher.scope.map { |slug, passages| { source: slug, passages: passages } })
+      rescue Query::AnnotationSearch::IndexMissing => e
         note(e.message)
       end
 

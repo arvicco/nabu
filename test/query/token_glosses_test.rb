@@ -12,10 +12,12 @@ module Query
     TG = Nabu::Query::TokenGlosses
 
     def test_registry_names_each_sources_gloss_field
-      assert_equal %w[achemenet aes bhsa tlhdig], TG::FIELDS.keys.sort
+      assert_equal %w[achemenet aes bhsa ceipom tlhdig], TG::FIELDS.keys.sort
       assert_equal "gloss", TG::FIELDS.fetch("bhsa").key
       assert_equal "eng", TG::FIELDS.fetch("achemenet").key
       assert_equal "de", TG::FIELDS.fetch("aes").language
+      assert_equal "meaning", TG::FIELDS.fetch("ceipom").key
+      assert_equal "en", TG::FIELDS.fetch("ceipom").language
     end
 
     def test_gloss_reads_the_registered_field_only

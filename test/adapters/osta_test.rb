@@ -70,12 +70,12 @@ module Adapters
 
     def test_discover_yields_transcriptions_then_verticalized_in_siglum_order
       refs = conformance_adapter.discover(FIXTURES).to_a
-      assert_equal %w[urn:nabu:osta:ace urn:nabu:osta:alc urn:nabu:osta:dac urn:nabu:osta:rhj
+      assert_equal %w[urn:nabu:osta:ace urn:nabu:osta:aff urn:nabu:osta:alc urn:nabu:osta:dac urn:nabu:osta:rhj
                       urn:nabu:osta:ac2-vrt urn:nabu:osta:bq1-vrt], refs.map(&:id),
                    "the filename siglum IS the identity, lowercased; the verticalized lane " \
                    "appends with the -vrt sibling tail (transcription positions stay fixed)"
       files = refs.map { |ref| ref.metadata["file"] }
-      assert_equal %w[TEXT.ACE.txt TEXT.ALC.txt TEXT.DAC.txt TEXT.RHJ.txt TEXT.AC2.vrt.html
+      assert_equal %w[TEXT.ACE.txt TEXT.AFF.txt TEXT.ALC.txt TEXT.DAC.txt TEXT.RHJ.txt TEXT.AC2.vrt.html
                       TEXT.BQ1.vrt.html], files
     end
 
@@ -259,7 +259,7 @@ module Adapters
       source = osta_source
       first = Nabu::Store::Loader.new(db: catalog, source: source)
                                  .load_from(conformance_adapter, workdir: FIXTURES, full: true)
-      assert_equal 6, first.added
+      assert_equal 7, first.added
       assert_equal 0, first.errored
 
       counts = [catalog[:documents].count, catalog[:passages].count]

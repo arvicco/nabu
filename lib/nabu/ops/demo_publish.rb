@@ -45,8 +45,12 @@ module Nabu
       # The image did not answer the MCP smoke correctly.
       class SmokeFailed < Nabu::Error; end
 
-      # server.json's version, checked against its OCI package identifier.
-      def self.version(root:)
+      # server.json's version, checked against its OCI package identifier
+      # AND against the checkout's own release number (owner-ruled
+      # 2026-11-07: ONE version line — the demo image's number IS the Nabu
+      # release number; server.json bumps with CITATION.cff and
+      # Nabu::VERSION in the release rail's bump commit, ops §12 step 2).
+      def self.version(root:, nabu_version: Nabu::VERSION)
         server = JSON.parse(File.read(File.join(root, SERVER_JSON)))
         version = server.fetch("version")
         identifier = Array(server["packages"]).find { |pkg| pkg["registryType"] == "oci" }&.fetch("identifier", nil)
@@ -55,18 +59,23 @@ module Nabu
           raise Refused, "server.json version #{version} but its OCI identifier is #{identifier.inspect} " \
                          "(expected #{expected}) — bump both together"
         end
+        if nabu_version && version != nabu_version
+          raise Refused, "server.json says #{version} but this checkout is nabu #{nabu_version} — the image " \
+                         "version is release-synced (one version line); bump server.json in the release's " \
+                         "bump commit before publishing"
+        end
 
         version
       end
 
       # The one buildx command: demo target, the slice as the named
       # `demo-slice` context, both tags, multi-arch, pushed.
-      def self.publish_argv(root:, slice:, platforms: PLATFORMS, builder: nil)
+      def self.publish_argv(root:, slice:, platforms: PLATFORMS, builder: nil, nabu_version: Nabu::VERSION)
         unless File.file?(File.join(slice, CENSUS_FILE))
           raise Refused, "#{slice} is not a finished demo slice (no #{CENSUS_FILE}) — run rake demo:build first"
         end
 
-        version = version(root: root)
+        version = version(root: root, nabu_version: nabu_version)
         argv = %w[docker buildx build]
         argv += ["--builder", builder] if builder
         argv + ["--platform", platforms.join(","), "--target", "demo",
@@ -87,9 +96,9 @@ module Nabu
       # After the push, both tags must inspect as REAL multi-arch indexes —
       # a single-platform manifest is exactly the failure that shipped an
       # arm64-only public image. Returns the verified image refs.
-      def self.verify_pushed!(root:, inspector: nil, log: $stderr)
+      def self.verify_pushed!(root:, inspector: nil, log: $stderr, nabu_version: Nabu::VERSION)
         inspector ||= ->(image) { Nabu::Shell.run("docker", "buildx", "imagetools", "inspect", "--raw", image) }
-        [version(root: root), "latest"].map do |tag|
+        [version(root: root, nabu_version: nabu_version), "latest"].map do |tag|
           image = "#{IMAGE}:#{tag}"
           archs = verify_index!(inspector.call(image), image: image)
           log.puts "verified #{image}: #{archs.join('+')}"

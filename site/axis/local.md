@@ -15,7 +15,7 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 A source wears every desk it serves — these five answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
-| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 6 November 2026)</span> |
+| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 7 November 2026)</span> |
 |---|---|---|---|---|
 | `local-language` | language dossiers | open | wired · manual | 656 dossiers |
 | `local-lemmas` | silver lemmas | open | wired · manual | 36,155,944 lemma rows |
@@ -23,7 +23,7 @@ A source wears every desk it serves — these five answer this desk. Holdings ar
 | `local-notes` | owner notes | open | wired · manual | 2 notes |
 | `local-source` | source records | open | wired · manual | 369 dossiers |
 
-**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 6 November 2026)</span>: `eng` 27 · `phn` 16 · `egy` 11 · `arc` 8 · `osc` 8 · `orv` 7 · `sga` 7 · `cel` 5 · `akk` 4 · `lav` 4 … and 40 more (`nabu axis local` lists all).
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 7 November 2026)</span>: `eng` 27 · `phn` 16 · `egy` 11 · `arc` 8 · `osc` 8 · `orv` 7 · `sga` 7 · `cel` 5 · `akk` 4 · `lav` 4 … and 40 more (`nabu axis local` lists all).
 
 ## The desk's instruments
 

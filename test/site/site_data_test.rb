@@ -475,7 +475,7 @@ module Site
 
     def test_mcp_data_pins_the_released_demo_tag_from_server_json
       mcp = Nabu::Ops::SiteData.new(registry: registry, data_dir: DATA_DIR).mcp
-      version = Nabu::Ops::DemoPublish.version(root: ROOT)
+      version = Nabu::Ops::DemoPublish.version(root: ROOT, nabu_version: nil)
       assert_equal version, mcp.fetch("version")
       assert_equal "#{Nabu::Ops::DemoPublish::IMAGE}:#{version}", mcp.fetch("image")
       assert_equal Nabu::MCP::Server::PROTOCOL_VERSION, mcp.fetch("protocol_version")
@@ -535,11 +535,38 @@ module Site
     def test_deploy_surfaces_pin_the_released_tag
       image = Nabu::Ops::SiteData.new(registry: registry, data_dir: DATA_DIR).mcp.fetch("image")
       render = YAML.safe_load_file(File.join(ROOT, "render.yaml"))
-      assert_equal image, render.fetch("services").first.dig("image", "url")
+      service = render.fetch("services").first
+      assert_equal image, service.dig("image", "url")
+      assert_equal "image", service.fetch("runtime"), "Render pulls the prebuilt image, never builds the repo"
+      assert_equal "off", service.fetch("autoDeployTrigger"),
+                   "button deploys must not redeploy on every push (Render's Deploy-button advice)"
       catalog = YAML.safe_load_file(File.join(ROOT, "site", "docker-mcp-catalog.yaml"))
       entry = catalog.dig("registry", "nabu")
       assert_equal image, entry.fetch("image")
       assert_equal(Nabu::MCP::Tools::TOOLS.keys, entry.fetch("tools").map { |tool| tool.fetch("name") })
+    end
+
+    # The README's install + deploy block (and the framework snippets in
+    # docs/mcp.md) are hand-written Markdown outside the Liquid site, so
+    # they are the surfaces most likely to drift: every image reference
+    # carries the released tag, and each one-click link is byte-identical
+    # to the projection the MCP page renders.
+    def test_readme_install_block_pins_the_released_tag
+      mcp = Nabu::Ops::SiteData.new(registry: registry, data_dir: DATA_DIR).mcp
+      image = mcp.fetch("image")
+      readme = File.read(File.join(ROOT, "README.md"))
+      { "README.md" => readme, "docs/mcp.md" => File.read(File.join(ROOT, "docs", "mcp.md")) }.each do |name, text|
+        refs = text.scan(%r{ghcr\.io/arvicco/nabu-demo(?::[\w.]+)?})
+        refute_empty refs, "#{name} names the demo image"
+        refs.each { |ref| assert_equal image, ref, "#{name} references the demo image off the released tag" }
+      end
+      ["docker run -i --rm #{image}", "claude mcp add nabu -- docker run -i --rm #{image}",
+       "docker mcp catalog import https://arvicco.github.io/nabu/docker-mcp-catalog.yaml",
+       "(#{mcp.fetch('vscode_redirect_url')})", "(#{mcp.fetch('cursor_redirect_url')})",
+       "(#{mcp.fetch('koyeb_deploy_url')})",
+       "(https://render.com/deploy?repo=https://github.com/arvicco/nabu)"].each do |needle|
+        assert_includes readme, needle
+      end
     end
   end
 end

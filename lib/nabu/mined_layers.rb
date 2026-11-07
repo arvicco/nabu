@@ -17,16 +17,32 @@ module Nabu
     CLASSES = %w[cheap heavy].freeze
 
     # One layer's identity at mine time (Store::MinedLinks provenance):
-    # the LinkStamps preimage and the member sources' ingest identities.
-    Provenance = Data.define(:stamp, :inputs, :catalog)
+    # the LinkStamps preimage, the member sources' ingest identities, and
+    # the language-slice identity of the text the run consumed
+    # ({"lang", "members" => {slug => [count, max revision]}} —
+    # Store::SourceContentIdentity.slices).
+    Provenance = Data.define(:stamp, :inputs, :catalog, :slice)
 
     # A layer's staleness reading (health): +changed+ the member slugs
-    # whose ingest identity moved since the mine (nil when the layer
-    # recorded none — a migrated layer whose stamp no longer matched),
-    # +code_moved+ whether the producer's code digest moved.
-    Staleness = Data.define(:changed, :code_moved) do
+    # whose identity moved since the mine at the layer's +grain+ (nil when
+    # the layer recorded none — a migrated layer whose stamp no longer
+    # matched), +code_moved+ whether the producer's code digest moved.
+    # +grain+ :slice (the member's language slice moved — the precise
+    # reading), :source (its ingest identity moved — the coarse reading of
+    # a layer mined before the slice was recorded), nil (unrecorded).
+    # +touched+ the members whose ingest identity moved (the slice grain
+    # probes exactly these; [] at the other grains).
+    Staleness = Data.define(:changed, :code_moved, :grain, :touched) do
+      def initialize(changed:, code_moved:, grain: nil, touched: [])
+        super
+      end
+
       def stale? = code_moved || !changed.to_a.empty?
     end
+
+    # One recorded heavy scope graded for `nabu links mine --stale`:
+    # +status+ :stale | :current | :unmined (no layer in the store).
+    Pick = Data.define(:scope, :layer, :staleness, :status)
 
     module_function
 
@@ -74,11 +90,26 @@ module Nabu
     # The layer's identity at mine time: LinkStamps' preimage (code digest,
     # resolved params, member CONTENT identities, producer extras — the
     # self-check's basis) plus the members' sources.last_ingest_identity
-    # (the cheap identity health compares).
+    # (the cheap identity health compares) plus the language-slice
+    # identity (#slice_lang's lane over those members — the grain health
+    # judges staleness at).
     def provenance(scope, catalog:, config:, registry:)
       unit = LinkStamps.new(catalog: catalog, config: config, registry: registry).unit(scope)
       members = unit.inputs ? unit.inputs.fetch("members", {}).keys : []
-      Provenance.new(stamp: unit.stamp, inputs: unit.inputs, catalog: ingest_identities(catalog, members))
+      lang = slice_lang(scope)
+      slice = { "lang" => lang, "members" => Store::SourceContentIdentity.slices(catalog, lang: lang, slugs: members) }
+      Provenance.new(stamp: unit.stamp, inputs: unit.inputs, catalog: ingest_identities(catalog, members),
+                     slice: slice)
+    end
+
+    # The language lane a recorded scope's run reads: its +lang+ param,
+    # else (parallels) its reuse profile's language — the resolution
+    # BatchParallels::Settings makes; nil = every language.
+    def slice_lang(scope)
+      params = scope["params"] || {}
+      return params["lang"] if params["lang"]
+
+      ReuseProfiles.default.fetch(params["profile"]).lang if scope["producer"] == "parallels" && params["profile"]
     end
 
     def ingest_identities(catalog, slugs)
@@ -97,7 +128,8 @@ module Nabu
 
       prov = provenance(scope, catalog: catalog, config: config, registry: registry)
       Store::MinedLinks.mine!(path, producer: scope["producer"], scope: scope["scope"], run_scope: run_scope(scope),
-                                    stamp: prov.stamp, inputs: prov.inputs, catalog: prov.catalog, &producer)
+                                    stamp: prov.stamp, inputs: prov.inputs, catalog: prov.catalog,
+                                    slice: prov.slice, &producer)
     end
 
     # The one-time move of the heavy producers' runs out of the links
@@ -143,14 +175,49 @@ module Nabu
 
     # A layer's staleness against the live +catalog+ and the producer's
     # current code (LinkStamps.code_digests — file hashes, cheap).
+    #
+    # Members first by ingest identity (one indexed read): a member whose
+    # identity did not move was not re-ingested, so nothing it holds moved.
+    # A layer that recorded its language slice then PROBES each touched
+    # member's slice against the live catalog — a touch outside the lane
+    # (a reference source, another language's re-parse) stays current; a
+    # moved lane is stale. A layer mined before the slice was recorded
+    # keeps the coarse per-source verdict (never upgraded after the fact).
     def staleness(layer, catalog:, code_digests: LinkStamps.code_digests)
       code = layer.inputs && layer.inputs["producer_code"]
       code_moved = !code.nil? && code_digests.key?(layer.producer) && code != code_digests[layer.producer]
-      changed = if layer.catalog
-                  now = ingest_identities(catalog, layer.catalog.keys)
-                  layer.catalog.keys.reject { |slug| now[slug] == layer.catalog[slug] }
-                end
-      Staleness.new(changed: changed, code_moved: code_moved)
+      return Staleness.new(changed: nil, code_moved: code_moved) unless layer.catalog
+
+      now = ingest_identities(catalog, layer.catalog.keys)
+      touched = layer.catalog.keys.reject { |slug| now[slug] == layer.catalog[slug] }
+      return Staleness.new(changed: touched, code_moved: code_moved, grain: :source) unless layer.slice
+
+      Staleness.new(changed: slice_moved(layer.slice, catalog, touched), code_moved: code_moved, grain: :slice,
+                    touched: touched)
+    end
+
+    # The +touched+ members whose live language slice differs from the
+    # recorded one (an absent member reads [0, nil] on both sides).
+    def slice_moved(slice, catalog, touched)
+      return [] if touched.empty?
+
+      recorded = slice.fetch("members", {})
+      live = Store::SourceContentIdentity.slices(catalog, lang: slice["lang"], slugs: touched)
+      touched.reject { |slug| (live[slug] || [0, nil]) == (recorded[slug] || [0, nil]) }
+    end
+
+    # `nabu links mine --stale`'s selection: every recorded heavy +scopes+
+    # entry graded against its layer among +layers+ (Store::MinedLinks)
+    # by #staleness — stale, current, or never mined. The caller re-mines
+    # the stale ones; nothing here mines.
+    def stale_selection(scopes, layers:, catalog:, code_digests: LinkStamps.code_digests)
+      scopes.map do |scope|
+        layer = layers.find { |row| row.producer == scope["producer"] && row.scope == scope["scope"] }
+        next Pick.new(scope: scope, layer: nil, staleness: nil, status: :unmined) if layer.nil?
+
+        staleness = staleness(layer, catalog: catalog, code_digests: code_digests)
+        Pick.new(scope: scope, layer: layer, staleness: staleness, status: staleness.stale? ? :stale : :current)
+      end
     end
   end
 end

@@ -1429,17 +1429,12 @@ module Nabu
         staleness = MinedLayers.staleness(layer, catalog: @catalog)
         orphans, sampled = mined_orphans(store, layer)
         days = ((@now - layer.mined_at) / 86_400).floor
-        notes = []
-        if staleness.changed.nil?
-          notes << "catalog identity unrecorded (#{layer.origin} layer) — known from its next mine"
-        elsif !staleness.changed.empty?
-          notes << "STALE: #{staleness.changed.size} member source(s) re-ingested since " \
-                   "(e.g. #{staleness.changed.first(3).join(', ')})"
-        end
+        notes = mined_member_notes(layer, staleness)
         notes << "STALE: producer code changed since the mine" if staleness.code_moved
         notes << "#{orphans} of #{sampled} sampled edges have an endpoint no longer in the catalog" if orphans.positive?
-        notes << "current against the catalog" if notes.empty?
         stale = staleness.stale? || orphans.positive?
+        notes << current_note(layer, staleness) if notes.empty?
+        notes << "re-mine ≈ #{BoardView.format_duration(layer.seconds)}, measured" if stale && layer.seconds
         Finding.new(
           kind: :mined_layer, severity: stale ? :soft : :info,
           message: "mined layer #{layer.label}: #{layer.edges} edges mined #{layer.mined_at.strftime('%Y-%m-%d')} " \
@@ -1447,6 +1442,36 @@ module Nabu
                    "#{" — `nabu links mine #{layer.scope}` re-mines it (owner-fired)" if stale}"
         )
       end
+
+      # The member-identity half of a mined layer's notes, at the grain the
+      # layer recorded (MinedLayers.staleness): the language slice (precise),
+      # the per-source ingest identity (a layer mined before the slice —
+      # its coarse claim kept, said so), or none at all.
+      def mined_member_notes(layer, staleness)
+        changed = staleness.changed
+        return ["catalog identity unrecorded (#{layer.origin} layer) — known from its next mine"] if changed.nil?
+        return [] if changed.empty?
+
+        examples = changed.first(3).join(", ")
+        if staleness.grain == :slice
+          ["STALE: #{changed.size} member source(s)' #{slice_name(layer)} slice moved since (e.g. #{examples})"]
+        else
+          ["STALE: #{changed.size} member source(s) re-ingested since (e.g. #{examples}) — identity unrecorded " \
+           "at slice grain, precise from its next mine"]
+        end
+      end
+
+      # "current against the catalog", naming the re-ingested members the
+      # slice probe cleared (the touches that no longer stale the layer).
+      def current_note(layer, staleness)
+        touched = staleness.touched.to_a
+        return "current against the catalog" if touched.empty?
+
+        "current against the catalog (#{touched.size} re-ingested member source(s), " \
+          "#{slice_name(layer)} slice unchanged)"
+      end
+
+      def slice_name(layer) = layer.slice["lang"] || "all-language"
 
       # [orphaned, sampled]: endpoints of a sample of the layer's edges no
       # live catalog row (passage, document or dictionary entry) answers.

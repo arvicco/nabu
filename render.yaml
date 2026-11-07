@@ -8,8 +8,12 @@
 # plan's 512 MB (about 185 MiB resident after search/align/define calls).
 # The image is pinned to the RELEASED tag — server.json's version, the
 # demo-publish rail's SSOT; test/site/site_data_test.rb fails the day the
-# two disagree. autoDeploy is off: a new release is picked up by a manual
-# redeploy after this pin moves.
+# two disagree. Auto-deploys are off (`autoDeployTrigger: "off"`, Render's
+# advice for Deploy-button Blueprints; the deprecated `autoDeploy: false`
+# is kept beside it for older Blueprint readers): a new release is picked
+# up by a manual redeploy after this pin moves. Free instances spin down
+# after 15 minutes without traffic; the first request after that waits
+# about a minute while the instance wakes.
 services:
   - type: web
     name: nabu-demo
@@ -17,5 +21,6 @@ services:
     image:
       url: ghcr.io/arvicco/nabu-demo:1.0.0
     plan: free
+    autoDeployTrigger: "off"
     autoDeploy: false
     dockerCommand: bin/nabu mcp --http
