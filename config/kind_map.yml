@@ -2544,9 +2544,9 @@ sources:
     facet: genre      # the textClass genre terms (multi-label — 1,312 files carry 2–7, 553
     #                   none), 141 values, Antonomaz's own French vocabulary. Upstream's
     #                   form term (prose 2,470 · vers 724) rides beside as metadata form.
-    #                   The folds below are the clear genre claims; the oratory/polemic
-    #                   cluster is LEFT UNMAPPED (listed at the end) — the house taxonomy has
-    #                   no oratory/rhetoric head, and minting one is a taxonomy ruling.
+    #                   The folds below are the clear genre claims; the speech-form cluster
+    #                   waited, unmapped, for the oratory head (ruled 2026-11-07) and folds
+    #                   onto it at the end of the map. What stays unmapped is listed last.
     map:
       "lettre": letter                           # 405 — open letters, mock letters, the royal
       #                                            and princely letters printed as pamphlets
@@ -2628,6 +2628,45 @@ sources:
       "prophétique": divination/oracle           # 40 (+ the "prohpétique" typo, 1) — the prophecies
       "prohpétique": divination/oracle           # 1
       "astrologie": divination/astrology         # 15
+      # -- oratory (the head ruled 2026-11-07): rhetoric as a form. Antonomaz tags the
+      # speech genus and the rhetorical genre of a piece; each label below names a
+      # piece composed as an address or a speech — read against sampled titles over
+      # canonical/ (2026-11-07). A piece the label marks is often also a letter, a
+      # dialogue or verse: the fold is multi-label and keeps both claims.
+      "discours adressé": oratory                # 278 — the address to a named hearer ("L'adieu de la France
+      #                                            au cardinal Mazarin", "… aux bourgeois de Paris")
+      "dicours adressé": oratory                 # 1 — upstream's typo for the same
+      "discours": oratory                        # 10 — the "Discours d'État": a political oration on the crisis
+      "discours prononcé": oratory               # 3 — a speech as delivered (Fournier before the king)
+      "harangue": oratory                        # 65 — harangues to the queen, the king, the échevins
+      "hanrangue": oratory                       # 1 — upstream's typo for harangue (live census 2026-11-07)
+      "manifeste": oratory                       # 41 — the princes' and nobility's manifestos: the ruled grain
+      "maifeste": oratory                        # 1 — upstream's typo for manifeste
+      "rhétorique délibérative": oratory         # 122 — the deliberative genus (remonstrance, counsel)
+      "rhérotique délibérative": oratory         # 1 — upstream's typo for the same
+      "rhétorique judiciaire": oratory           # 52 — the judicial genus: apologies and defenses of a party
+      "rhétorique épidictique": oratory          # 50 — the epideictic genus: thanksgivings, praise, blame
+      "éloge": oratory                           # 42 — praise of the princes and the coadjutor (secular
+      #                                            epideictic, never hagiography: no saint is praised)
+      "panégyrique": oratory                     # 15 — the panegyric (incl. a funeral harangue at Saint-Denis)
+      "blâme": oratory                           # 5 — epideictic blame ("Les justes reproches de la France")
+      "remerciement": oratory                    # 9 — the speech of thanks to the king, the queen, the princes
+      "consolation": oratory                     # 1 — an epideictic consolation to the queen
+      "apologie": oratory                        # 15 — political apologies (of the Prince, the Frondeurs, the
+      #                                            Parlement): the judicial defense speech, not theology's
+      #                                            apologetics (no faith is defended)
+      "justification": oratory                   # 11 — a party's self-justification, the judicial genus
+      "défense": oratory                         # 4 — likewise ("Défense de l'ancienne et légitime Fronde")
+      "réfutation": oratory                      # 4 — the refutatio of a named libel or of the Rueil articles
+      "réponse": oratory                         # 106 — the answer to another pamphlet or address, point by
+      #                                            point: political rejoinder, the refutation's form
+      "avis": oratory                            # 61 — counsel given to the king or the Parisians ("Dernier
+      #                                            avis donné aux Parisiens"): the deliberative address
+      "pro et contra": oratory                   # 10 — argument in utramque partem, the declamation's exercise
+      "prosopopée": oratory                      # 78 — the speech put in the mouth of France, Paris, a statue,
+      #                                            a shade: the rhetorical figure as the piece's frame
+      "prosopoée": oratory                       # 2 — upstream's typo
+      "prospopée": oratory                       # 1 — upstream's typo
     deliberate:
       "pamphlet": "a format (the printed occasional piece), not a genre — the dta Flugschrift precedent"  # 103
       "non renseigné": "upstream's own 'not filled in' — no claim"  # 253
@@ -2644,18 +2683,24 @@ sources:
       "dédicace": "a paratext component, not the piece's genre"  # 4
       "avant-propos": "a paratext component, not the piece's genre"  # 2
       "avertissement": "a paratext component, not the piece's genre"  # 3
-    # left unmapped (the worklist — no ruled class: an oratory/polemic head is a
-    # taxonomy question): discours adressé 278 (+ "dicours adressé" 1) · satirique 140 ·
-    # rhétorique délibérative 122 (+ "rhérotique délibérative" 1) · réponse 106 ·
-    # prosopopée 78 (+ prosopoée 2, prospopée 1) · relation 69 · harangue 65 · avis 61 ·
-    # lamentation 53 · rhétorique judiciaire 52 · rhétorique épidictique 50 · éloge 42 ·
-    # manifeste 41 (+ maifeste 1) · plainte 26 · apologie 15 · panégyrique 15 ·
-    # justification 11 · regrets 11 · discours 10 · pro et contra 10 · mémoire 9 ·
-    # remerciement 9 · soupirs 8 · anagramme 7 · généalogie 7 · vie 7 · didactique 6 ·
-    # songe 6 · testament 6 · ultima verba 6 · blâme 5 · résolutions 5 · défense 4 ·
-    # galant 4 · réfutation 4 · catéchisme 3 · discours prononcé 3 · allégorie 2 ·
-    # discours doctrinal 2 · portrait 2 · traité 2 · almanach 1 · caquet 1 · consolation 1 ·
-    # délibérations 1 · fait divers 1 · manuel 1 · occasionnel 1 · tract 1
+    # left unmapped (the worklist). Judged ambiguous against the 2026-11-07 heads:
+    #   satirique 140 — a mode in verse or prose, not a speech form (eebo folds satire
+    #     to the bare literary head; here parodie/pastiche are declared modes — a call
+    #     between the two precedents, not taken in this fold)
+    #   lamentation 53 · plainte 26 · regrets 11 · soupirs 8 — the lament family,
+    #     verse and prose alike: expressive laments, sometimes addressed (between
+    #     oratory and literary/poetry; hymn-prayer/lament addresses the divine, these do not)
+    #   ultima verba 6 — accounts of a dying man's last words: narrative or speech
+    #   catéchisme 3 — political parodies in catechism form ("Catéchisme des courtisans
+    #     de la cour de Mazarin"), not catechesis
+    #   discours doctrinal 2 — one doctrinal (Lenten observance), one political
+    #     ("La doctrine chrétienne des bons François"): no theology claim from the label
+    # Outside the five heads (other classes' questions, untouched by this fold):
+    # relation 69 · mémoire 9 · anagramme 7 · généalogie 7 · vie 7 (lives of Mazarin
+    # and the partisans — satirical biography, not hagiography) · didactique 6 ·
+    # songe 6 · testament 6 · résolutions 5 · galant 4 · allégorie 2 · portrait 2 ·
+    # traité 2 (political treaties) · almanach 1 · caquet 1 · délibérations 1 ·
+    # fait divers 1 · manuel 1 · occasionnel 1 · tract 1
   socinian-letters:   # P160 — the cover letter's chosen witness's own #sbw classCode
     metadata: document_type   # (Adapters::SocinianLetters); counts = the 1,869 accepted letters,
     #                           census through the adapter 2026-11-05 (20 carry no #sbw code and

@@ -3340,7 +3340,8 @@ sources:
     script: {posture: implied}
   mazarinades:
     # kind machine-postured — the kind_map.yml mazarinades genre fold (the
-    # oratory/polemic cluster left unmapped: no ruled head).
+    # speech-form cluster on oratory since the 2026-11-07 head; satire and
+    # the laments stay unmapped, judged ambiguous).
     # lect machine-postured — the fra → fr:cls override (config/lect_overrides.yml).
     dating: {posture: dated, note: "the bibliographic entry's typed dates (Moreau, Mazarine,
         Labadie, Socard, Carrier's day-precise datings, Antonomaz): the narrowest year
