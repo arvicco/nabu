@@ -38,16 +38,41 @@ module Nabu
   # footnotes, reading aids in other sources) — each is a declaration
   # decision of its own, not this registry's default.
   module AnnotationKeys
-    # The fold choices a key may declare (class note).
+    # The fold choices a key may declare (class note), beside a DECLARED
+    # language code (LANGUAGE_FOLD) for a layer plainly written in a
+    # metalanguage other than its passage's — English notes on Coptic
+    # manuscripts, German notes on Latin letters: such a layer folds by its
+    # own language's rules, never the passage's.
     FOLDS = %i[passage generic].freeze
+    LANGUAGE_FOLD = /\A[a-z]{2,3}\z/
+
+    # The markup a key may declare its values to carry: :html — an HTML
+    # fragment (suttacentral's comments) whose tags are stripped before
+    # the text indexes or snippets.
+    MARKUPS = %i[html].freeze
+
+    # const: an inline HTML tag (open, close or empty), attributes included
+    HTML_TAG = %r{</?[A-Za-z][A-Za-z0-9]*(?:\s[^<>]*)?/?>}
 
     # One annotation key. The value is a string, or an array of strings
     # (each item its own layer under the same label — korpus16's notes).
-    # +fold+: FOLDS. +reject+: a placeholder pattern whose matches mint
-    # nothing.
-    Spec = Data.define(:key, :fold, :reject) do
-      def initialize(key:, fold: :passage, reject: nil)
-        raise ArgumentError, "annotation key #{key}: fold must be one of #{FOLDS.inspect}" unless FOLDS.include?(fold)
+    # +field+: the value is instead a LIST OF OBJECTS, each holding its
+    # text under this object key (grand-tour's {place:, text:}); every
+    # object is its own layer, a non-object or an object without the
+    # field mints nothing. +fold+: FOLDS or a LANGUAGE_FOLD code.
+    # +reject+: a placeholder pattern whose matches mint nothing.
+    # +markup+: nil or one of MARKUPS.
+    Spec = Data.define(:key, :fold, :reject, :field, :markup) do
+      def initialize(key:, fold: :passage, reject: nil, field: nil, markup: nil)
+        unless FOLDS.include?(fold) || (fold.is_a?(String) && fold.match?(LANGUAGE_FOLD))
+          raise ArgumentError, "annotation key #{key}: fold must be one of #{FOLDS.inspect} or a language code"
+        end
+        unless field.nil? || (field.is_a?(String) && !field.empty?)
+          raise ArgumentError, "annotation key #{key}: field must be a non-empty object key"
+        end
+        unless markup.nil? || MARKUPS.include?(markup)
+          raise ArgumentError, "annotation key #{key}: markup must be one of #{MARKUPS.inspect}"
+        end
 
         super
       end
@@ -74,10 +99,20 @@ module Nabu
 
     def specs_for(slug) = REGISTRY.fetch(slug, [])
 
+    # The language whose rules fold +spec+'s layers on a passage in
+    # +language+: the passage's own, nil (generic), or the declared code.
+    def fold_language(spec, language)
+      case spec.fold
+      when :passage then language
+      when :generic then nil
+      else spec.fold
+      end
+    end
+
     # The search form of one layer's +text+ under +spec+'s fold choice,
     # +language+ being the passage's own.
     def fold(text, spec, language)
-      Normalize.search_form(text, language: spec.fold == :passage ? language : nil)
+      Normalize.search_form(text, language: fold_language(spec, language))
     end
 
     # The cheap substring probe run before a JSON parse.
@@ -107,9 +142,11 @@ module Nabu
       end
     end
 
-    def layer_text(text, spec)
+    def layer_text(item, spec)
+      text = spec.field ? (item[spec.field] if item.is_a?(Hash)) : item
       return nil unless text.is_a?(String)
 
+      text = text.gsub(HTML_TAG, "") if spec.markup == :html
       text = text.strip
       return nil unless text.match?(LETTER)
       return nil if spec.reject&.match?(text)

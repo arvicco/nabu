@@ -171,7 +171,7 @@ module Nabu
           language = row.fetch(:language)
           label, text, spec = matched_layer(layers, terms, language)
           Result.new(urn: row.fetch(:urn), language: language, text: row.fetch(:text), layer: label,
-                     snippet: StoredSnippet.build(text: text, language: spec.fold == :passage ? language : nil,
+                     snippet: StoredSnippet.build(text: text, language: AnnotationKeys.fold_language(spec, language),
                                                   terms: terms),
                      document_title: row.fetch(:document_title), license_class: row.fetch(:license_class),
                      credit: row.fetch(:credit))
