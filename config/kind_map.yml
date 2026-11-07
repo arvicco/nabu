@@ -1813,9 +1813,8 @@ sources:
       #   precedent: written instruments fold to legal)
       "arte": lexical/grammar                    # 2 — Córdova's Arte and its kin:
       #   colonial grammars of Zapotec (the grammar sub minted with this fold)
-      "catecismo": exegesis                      # 1 — doctrinal exposition for
-      #   teaching; the nearest ruled head (a religious-instruction sub is a
-      #   future class-list call if the family ever grows)
+      "catecismo": catechesis                    # 1 — the Zapotec catechism. CORRECTED
+      #   2026-11-07: was exegesis, the nearest head before catechesis was ruled
       "miscelaneo": unknown                      # 1 — upstream's own miscellany
   bim-sahcoba:        # census: 15 works, 2026-10-21 — the adapter's GENRES table (the deposit
     facet: genre      # carries no genre field; each label is the standard description of the work)
@@ -1824,8 +1823,9 @@ sources:
       "pastoral romance and verse": literary     # 1 — the Lazarraga manuscript (Silbero and
       #   Sirena + lyric poems); prose romance and verse together, the bare head
       "scripture": scripture                     # 1 — Leizarraga's New Testament
-      "catechism": exegesis                      # 4 — Materra, Kapanaga, Belapeire, Otxoa
-      #   (the ticha catecismo precedent)
+      "catechism": catechesis                    # 4 — Materra, Kapanaga, Belapeire, Otxoa.
+      #   CORRECTED 2026-11-07: was exegesis (the ticha stopgap); catechesis is the ruled class
+      #   (the ascetic and devotional books below stay: devotion is not doctrinal instruction)
       "mass treatise": ritual/liturgy            # 1 — Beriain: how the Mass is heard, its
       #   prayers expounded clause by clause
       "ascetic treatise": exegesis               # 2 — Axular's Gero, Tartas' Onsa hilzeko
