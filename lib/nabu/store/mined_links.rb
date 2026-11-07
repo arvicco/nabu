@@ -41,9 +41,17 @@ module Nabu
       MIGRATIONS_TABLE = :mined_schema_info
 
       # One layer's provenance row, decoded. +mined_at+ is when its runs
-      # finished — the date every reader shows beside its edges.
+      # finished — the date every reader shows beside its edges. +seconds+
+      # the mine's measured elapsed time (nil on a migrated layer).
+      # +slice+ the language-slice identity recorded at mine time
+      # ({"lang", "members" => {slug => [count, max revision]}}; nil on a
+      # layer mined before the slice column — Nabu::MinedLayers.staleness).
       Layer = Data.define(:producer, :scope, :run_scope, :run_ids, :edges, :code_version, :stamp, :inputs,
-                          :catalog, :origin, :seconds, :mined_at) do
+                          :catalog, :origin, :seconds, :mined_at, :slice) do
+        def initialize(slice: nil, **rest)
+          super
+        end
+
         def label = "#{producer} #{scope}"
       end
 
@@ -112,8 +120,9 @@ module Nabu
       # then records the layer's provenance and returns the MineResult.
       # +run_scope+ is the scope string the producer's run rows carry (the
       # recorded scope for parallels). +stamp+/+inputs+ are the
-      # LinkStamps preimage; +catalog+ the members' ingest identities.
-      def mine!(path, producer:, scope:, stamp:, inputs:, catalog:, run_scope: scope, at: Time.now)
+      # LinkStamps preimage; +catalog+ the members' ingest identities;
+      # +slice+ the members' language-slice identity (optional).
+      def mine!(path, producer:, scope:, stamp:, inputs:, catalog:, slice: nil, run_scope: scope, at: Time.now)
         db = open!(path)
         prior = layer(db, producer, scope)
         expected = prior ? LinksJournal.edge_digests(db, prior.run_ids) : nil
@@ -127,8 +136,8 @@ module Nabu
 
         seconds = Process.clock_gettime(Process::CLOCK_MONOTONIC) - started
         fresh = record_layer!(db, producer: producer, scope: scope, run_scope: run_scope, run_ids: run_ids,
-                                  stamp: stamp, inputs: inputs, catalog: catalog, origin: "mine",
-                                  seconds: seconds, at: at)
+                                  stamp: stamp, inputs: inputs, catalog: catalog, slice: slice,
+                                  origin: "mine", seconds: seconds, at: at)
         verdict, blame = verdict(prior, fresh, expected, LinksJournal.edge_digests(db, run_ids))
         MineResult.new(layer: fresh, verdict: verdict, blame: blame, before_edges: prior&.edges)
       ensure
@@ -202,13 +211,14 @@ module Nabu
                   run_ids: JSON.parse(row[:run_ids_json]), edges: row[:edges], code_version: row[:code_version],
                   stamp: row[:stamp], inputs: row[:inputs_json] && JSON.parse(row[:inputs_json]),
                   catalog: row[:catalog_json] && JSON.parse(row[:catalog_json]), origin: row[:origin],
-                  seconds: row[:seconds], mined_at: row[:mined_at])
+                  seconds: row[:seconds], mined_at: row[:mined_at],
+                  slice: row[:slice_json] && JSON.parse(row[:slice_json]))
       end
 
       # Write one layer's provenance row from the runs now holding its
       # edges: mined_at is their finish time, the engine marker theirs.
       def record_layer!(db, producer:, scope:, run_scope:, run_ids:, stamp:, inputs:, catalog:, origin:,
-                        seconds:, at:)
+                        seconds:, at:, slice: nil)
         runs = db[:link_runs].where(id: run_ids).order(:id).all
         mined_at = runs.map { |run| run[:finished_at] || run[:created_at] }.max || at
         row = { producer: producer, scope: scope, run_scope: run_scope, run_ids_json: JSON.generate(run_ids),
@@ -216,6 +226,7 @@ module Nabu
                 stamp: stamp, inputs_json: inputs && JSON.generate(inputs),
                 catalog_json: catalog && JSON.generate(catalog), origin: origin, seconds: seconds,
                 mined_at: mined_at, recorded_at: at }
+        row[:slice_json] = JSON.generate(slice) if slice
         db[:mined_layers].where(producer: producer, scope: scope).delete
         db[:mined_layers].insert(row)
         layer(db, producer, scope)

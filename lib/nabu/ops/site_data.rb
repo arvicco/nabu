@@ -317,7 +317,10 @@ module Nabu
       # source's manifest license — exactly what the image's
       # demo-census.json enumerates.
       def mcp
-        version = DemoPublish.version(root: @project_root)
+        # A READ of the published image's number (nabu_version: nil skips
+        # the release-sync gate — that gate guards PUBLISHING; the site
+        # must describe the image that is live right now).
+        version = DemoPublish.version(root: @project_root, nabu_version: nil)
         image = "#{DemoPublish::IMAGE}:#{version}"
         launch = { "command" => "docker", "args" => ["run", "-i", "--rm", image] }
         launch_json = JSON.generate(launch)

@@ -23,7 +23,7 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 A source wears every desk it serves — these fifteen answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
-| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 6 November 2026)</span> |
+| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 7 November 2026)</span> |
 |---|---|---|---|---|
 | `actib` | feature module | attribution | wired · manual | nothing held yet |
 | `bdrc-transcriptions` | texts | open | wired · manual | 1,160 docs / 99,571 passages |
@@ -41,9 +41,9 @@ A source wears every desk it serves — these fifteen answer this desk. Holdings
 | `tibetan-verbs` | dictionary | open | wired · manual | 2,491 entries |
 | `wiktionary-bo` | dictionary | attribution | wired · manual | 3,651 entries |
 
-**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 6 November 2026)</span>: `bod` 455,971 · `xct` 64,870 · `san` 9,379 · `eng` 3,053 · `otb` 410 · `en` 388 · `xzh` 5.
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 7 November 2026)</span>: `bod` 455,971 · `xct` 64,870 · `san` 9,379 · `eng` 3,053 · `otb` 410 · `en` 388 · `xzh` 5.
 
-**Carried in by multilingual packs** (`lotsawa-house` — whole-source members whose other languages ride along, as of 6 November 2026): `fra` 624 · `spa` 333 · `deu` 277 · `cmn` 196 · `por` 142 … and 2 more (`nabu axis tibetan` lists all).
+**Carried in by multilingual packs** (`lotsawa-house` — whole-source members whose other languages ride along, as of 7 November 2026): `fra` 624 · `spa` 333 · `deu` 277 · `cmn` 196 · `por` 142 … and 2 more (`nabu axis tibetan` lists all).
 
 ## The desk's instruments
 
