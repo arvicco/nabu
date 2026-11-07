@@ -63,6 +63,36 @@ module Store
       end
     end
 
+    # The language-slice identity (count, max revision per member) rides
+    # its own column; a mine that records none reads nil.
+    def test_a_mine_records_its_language_slice_identity
+      slice = { "lang" => "lat", "members" => { "a" => [2, 1] } }
+      layer = M.mine!(@path, producer: "parallels", scope: "alpha", stamp: "s1", inputs: INPUTS,
+                             catalog: { "a" => "i1" }, slice: slice) do |db|
+        J.finish_run!(db, J.record_run!(db, producer: "parallels", scope: "alpha", params: {}, code_version: "v"))
+      end.layer
+      assert_equal slice, layer.slice
+      with_store { |db| assert_equal slice, M.layers(db).first.slice }
+      assert_nil mine([%w[u:1 u:2]]).layer.slice, "no slice given, none recorded"
+    end
+
+    # A store written before the slice column (schema version 1) still
+    # decodes for every reader — its layers simply carry no slice.
+    def test_a_store_from_before_the_slice_column_reads_slice_nil
+      FileUtils.mkdir_p(File.dirname(@path))
+      db = J.migrate!(J.connect(@path))
+      require "sequel/extensions/migration"
+      Sequel::Migrator.run(db, M::MIGRATIONS_DIR, table: M::MIGRATIONS_TABLE, target: 1)
+      db[:mined_layers].insert(producer: "parallels", scope: "old", run_scope: "old", run_ids_json: "[]", edges: 0,
+                               origin: "mine", seconds: 9.0, mined_at: Time.now, recorded_at: Time.now)
+      db.disconnect
+      with_store do |store|
+        layer = M.layers(store).first
+        assert_nil layer.slice
+        assert_in_delta 9.0, layer.seconds
+      end
+    end
+
     def test_the_self_check_verifies_an_unchanged_re_mine
       mine([%w[u:1 u:2]])
       result = mine([%w[u:1 u:2]])
