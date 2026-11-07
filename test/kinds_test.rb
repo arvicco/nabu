@@ -878,14 +878,30 @@ class KindsTest < Minitest::Test
     "Fables -- Early works to 1800." => ["literary/narrative/fable"],
     "Proverbs, English." => ["literary/wisdom/proverbs"],
     "Dialogues, English -- Early works to 1800." => ["literary/wisdom/dialogue"],
-    "Epitaphs -- England -- Early works to 1800." => ["funerary/epitaph"]
+    "Epitaphs -- England -- Early works to 1800." => ["funerary/epitaph"],
+    # the 2026-11-07 heads: controversy, apologetics, catechisms and creeds
+    "Church of England -- Controversial literature." => ["theology/controversial"],
+    "Catholic Church -- Controversial literature -- Early works to 1800." => ["theology/controversial"],
+    "Society of Friends -- Controversial literature." => ["theology/controversial"],
+    "Catholic Church -- Controversial literature -- Humor." => ["theology/controversial"],
+    "Society of Friends -- Apologetic works." => ["theology/apologetics"],
+    "Church of England -- Apologetic works -- Early works to 1800." => ["theology/apologetics"],
+    "Apologetics -- Early works to 1800." => ["theology/apologetics"],
+    "Apologetics." => ["theology/apologetics"],
+    "Catechisms, English." => ["catechesis"],
+    "Catechisms, English -- Early works to 1800." => ["catechesis"],
+    "Catechisms, Welsh -- Early works to 1800." => ["catechesis"],
+    "Church of England -- Catechisms -- Early works to 1800." => ["catechesis"],
+    "Church of England -- Catechisms. -- English." => ["catechesis"],
+    "Creeds." => ["catechesis"],
+    "Church of England -- Creeds -- Early works to 1800." => ["catechesis"],
+    "Church of England -- Creeds -- Poetry -- Early works to 1800." => %w[catechesis literary/poetry]
   }.freeze
 
   # Topical, name, and ABOUT-the-form headings: no rule covers them.
   EEBO_UNCOVERED = [
     "Great Britain -- Politics and government -- 1642-1649.",
     "Broadsides -- England -- London -- 17th century.",
-    "Church of England -- Controversial literature.",
     "Sermons -- History and criticism -- England -- 17th century.",
     "Smallwood, Allan, 1608-1686. -- Sermon preached at Carlisle, Aug. 17, 1664.",
     "Prayers -- Law and legislation -- Scotland -- Early works to 1800.",
@@ -894,7 +910,13 @@ class KindsTest < Minitest::Test
     "Medicine -- England -- Controversial literature.",
     "Astrology -- Humor -- Early works to 1800.",
     "Proverbs in the Bible.",
-    "Catechisms, English."
+    # the 2026-11-07 rules' refusals: a book ABOUT the form, a parody of it, a
+    # name-title heading for one catechism, and the sacrament of penance
+    "Catholic Church -- Controversial literature -- History and criticism.",
+    "Catechisms, English -- Humor -- Early works to 1800.",
+    "Westminster Assembly (1643-1652). -- Shorter catechism.",
+    "Confession -- Catholic Church -- Early works to 1800.",
+    "Goodwin, Thomas, 1600-1680. -- Apologeticall narration."
   ].freeze
 
   def test_shipped_eebo_subject_fold_is_an_open_vocabulary

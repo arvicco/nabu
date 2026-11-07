@@ -2424,6 +2424,31 @@ sources:
       #   153 — lives (the elephantine "biography" fold)
       # -- funerary
       '\A(?!.*History and criticism)Epitaphs\b': funerary/epitaph  # 16 — epitaph collections
+      # -- theology, catechesis (the heads ruled 2026-11-07; counts = live catalog 2026-11-07)
+      '\A(?!.*History and criticism)(?!(?:Medicine|Surgery|Materia medica|Pharmacy|Astronomy|Mathematics|Arithmetic|Geometry|Navigation|Chemistry|Alchemy|Alchemists|Botany|Cookery|Astrology)\b).* -- Controversial literature\b': theology/controversial
+      #   3,197 — LCSH's form subdivision for works arguing for or against a religion,
+      #   church or doctrine: Catholic Church 1,269 · Society of Friends 402 · Church of
+      #   England 370 · Jesuits, Protestantism, Anabaptists, Presbyterianism … — the
+      #   confessional pamphlet war. "-- Humor" stays (anti-papal satire is still
+      #   controversy); a discipline main heading is refused (a medical or astrological
+      #   controversy is no theology — the scholarly rules refuse it from their side).
+      #   Declared residue: a few dozen secular mains carry the subdivision too (Women,
+      #   East India Company, Whig Party, trade and coinage pamphlets) and fold here
+      '\A(?!.*History and criticism)Apologetics\b': theology/apologetics
+      #   87 — the form main heading ("Apologetics -- Early works to 1800")
+      '\A(?!.*History and criticism).* -- Apologetic works\b': theology/apologetics
+      #   946 — the form subdivision: Society of Friends 507 · Church of England 165 ·
+      #   Catholic Church 159 … defenses of the faith. An author-title heading ("Goodwin,
+      #   Thomas -- Apologeticall narration.") is a work ABOUT that work and never matches
+      '\A(?!.*(?:History and criticism|Humor))Catechisms\b': catechesis
+      #   271 — "Catechisms, English/Welsh/Polish/Latin" ("-- Humor" is the parody, refused);
+      #   a name-title heading ("Westminster Assembly -- Shorter catechism") never matches
+      '\A(?!.*(?:History and criticism|Humor)).* -- Catechisms\b': catechesis
+      #   149 — the form subdivision ("Church of England -- Catechisms")
+      '\A(?!.*(?:History and criticism|Humor))(?:.* -- )?Creeds\b': catechesis
+      #   68 — LCSH's form for confessions of faith, the catechesis head's ruled grain
+      #   ("Church of England -- Creeds", "Creeds."). "Confession" (the sacrament of
+      #   penance) is a topical heading and never matches
   evans-tcp:          # 5,012 docs; the LCSH subject facet (config/facet_map.yml subjects → subject)
     # The same TCP MARC-to-TEI headers as eebo-tcp, so the same OPEN vocabulary and the
     # same refusals ("-- History and criticism": a book ABOUT a form is no instance of
