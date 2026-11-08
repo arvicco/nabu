@@ -2822,3 +2822,67 @@ sources:
       "Huldigungsgedicht": literary/poetry/praise  # 1 — a homage poem
     deliberate:
       "xzerpt": "an excerpt marker (upstream's truncated 'Exzerpt'), not a genre"  # 2
+  llct1:              # P164 — each charter's own "type" root attribute (Adapters::Llct1 →
+    metadata: document_type   # metadata document_type, verbatim). Counts = charters, census over
+    #                   the whole v1.2 file 2026-11-08 (519; 50 labels, Latin for CDL/MED, Italian
+    #                   for the Brunetti CDT rows). Every charter IS a legal instrument (the LLCT2
+    #                   README: "They all represent the legal (documentary) genre"), so the bare
+    #                   head is always honest; a sub is claimed only where the label names it —
+    #                   bilateral transactions → contract (the HGV Kauf/Pacht/Darlehen folds),
+    #                   judgments/placita → court. Gifts, offerings, testaments, notices and
+    #                   appointments have no ruled sub and stay bare legal (the HGV
+    #                   Urkunde/Testament shape).
+    map:
+      # -- leases, sales, exchanges, loans, pledges, agreements: contract
+      "charta livellaria": legal/contract        # 126 — the livello lease (land for rent + a term)
+      "charta venditionis": legal/contract       # 67 — sale
+      "Charta venditionis": legal/contract       # 1 — the same, capitalized upstream
+      "Istrumento di vendita": legal/contract    # 16 — sale (Brunetti's Italian label)
+      "charta comparationis": legal/contract     # 4 — purchase
+      "charta locationis": legal/contract        # 21 — lease
+      "Locazione": legal/contract                # 3 — lease
+      "Concessione livellaria": legal/contract   # 1 — a livello grant
+      "Conferma di locazione livellaria": legal/contract  # 1 — a confirmed livello lease
+      "charta promissionis": legal/contract      # 18 — the tenant's undertaking (the lease's other half)
+      "charta repromissionis": legal/contract    # 19 — the counter-undertaking
+      "charta cambiationis": legal/contract      # 8 — exchange of lands
+      "charta commutationis": legal/contract     # 6 — exchange
+      "Istrumento di permuta": legal/contract    # 2 — exchange
+      "Carta di permuta": legal/contract         # 1 — exchange
+      "charta convenientiae": legal/contract     # 3 — agreement
+      "Carta di convenienza": legal/contract     # 1 — agreement
+      "Convenzione": legal/contract              # 1 — agreement
+      "mutuum": legal/contract                   # 1 — loan (the Darlehen fold)
+      "hypotheca": legal/contract                # 1 — pledge of land (the Bürgschaft/Garantie shape)
+      "Ipoteca": legal/contract                  # 1 — the same, Italian
+      "charta pignoris": legal/contract          # 1 — pledge
+      # -- judgments: court
+      "notitia iudicati": legal/court            # 12 — the record of a judgment
+      "charta iudicati": legal/court             # 4 — the same as a charter
+      "Placito": legal/court                     # 1 — a placitum, the court session's record
+      # -- gifts, offerings, dowries, testaments, notices, grants: the bare head
+      "charta offersionis": legal                # 79 — an offering of self/property to a church
+      "charta donationis": legal                 # 19 — gift
+      "Donazione": legal                         # 11 — gift
+      "charta largitatis": legal                 # 1 — gift
+      "charta dotis": legal                      # 30 — dowry settlement
+      "memoratorium de morgengab": legal         # 1 — the Lombard morning-gift memorandum
+      "testamentum": legal                       # 4 — the HGV Testament fold
+      "charta testamenti": legal                 # 1
+      "notitia": legal                           # 5 — a notice recording a transaction
+      "notitia brevis": legal                    # 1
+      "notitia manifestationis": legal           # 1 — a declaration placed on record
+      "breve": legal                             # 4 — the memorandum (inventory, record) form
+      "breve divisionis": legal                  # 1 — the record of a division of property
+      "charta viganationis": legal               # 17 — upstream's label, verbatim; no sub claimed
+      "charta viganiationis": legal              # 2 — the same label, variant spelling
+      "charta concessionis": legal               # 7 — grant
+      "charta confirmationis": legal             # 3 — confirmation
+      "charta firmitatis": legal                 # 3 — security/confirmation
+      "charta decretionis": legal                # 3 — a bishop's decree (appointing a church's rector)
+      "charta ordinationis": legal               # 1 — appointment
+      "charta nominationis": legal               # 1 — nomination
+      "charta dispensationis": legal             # 1
+      "charta allocationis": legal               # 1
+      "charta beneficii": legal                  # 1 — benefice grant
+      "charta adfiliationis": legal              # 1 — adoption

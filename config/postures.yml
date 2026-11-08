@@ -3404,3 +3404,21 @@ sources:
         oracc-sender precedent. In-text rs type=place mentions ride the passages as places"}
     script: {posture: implied, note: "Latin script throughout; the Greek (266 foreign grc spans)
         and Hebrew (9) quotations inside Latin letters ride verbatim in their own scripts"}
+  llct1:   # P164
+    # kind machine-postured — kind_map.yml metadata document_type (the charter's type label).
+    lect:
+      posture: dates
+      note: "bare lat at source grain; every charter carries its own year (714–869), and
+        date-band inference stages all 519 onto lat:med (band 600–1350) — agreeing with the
+        record's own description ('Early Medieval Latin documentary texts'). The treebank's
+        NAME says 'Late Latin' (the authors' label for the non-standard charter variety, not
+        the registry's 200–600 lat:late stage); no lat/vul register claim is made — that would
+        be a ruling, not a transcription"
+    dating: {posture: dated, note: "every charter's year (714–869, 519 of 519) → a one-year
+        envelope, :structured; an original's year is the artifact's own (481, no class), a
+        copy's is the act's (38, class composition)"}
+    places: {posture: named, note: "the place of issue verbatim (109 forms — Lucca on 6,319 of
+        9,227 trees; upstream's hedges 'Chiusi?', '(Lucca?)' kept); '-' (4 charters) is
+        upstream's no-place and mints none. No gazetteer refs in the asset"}
+    script: {posture: implied, note: "Latin script; the editions' lacunae ride as '.....'
+        words, abbreviations expanded (status expan per word)"}

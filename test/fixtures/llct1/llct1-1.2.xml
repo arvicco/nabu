@@ -1,0 +1,958 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<aldt_treebank xmlns="http://ufal.mff.cuni.cz/pdt/pml/">
+  <head>
+    <schema href="aldt_schema.xml" />
+  </head>
+  <aldt_meta>
+    <aldt_annotator>
+      <aldt_short>short_name</aldt_short>
+      <aldt_name>name</aldt_name>
+      <aldt_address>address</aldt_address>
+    </aldt_annotator>
+  </aldt_meta>
+  <aldt_trees>
+    <LM id="2935509" document_id="CDL" subdoc="115" date="754" place="S. Cassiano (di Moriano o a Vico?, Lucca)" scribe="Osprand" type="charta dotis" redaction="copy">
+      <LM id="1" relation="AuxP" seg="formulaic" status="damage" form="In" lemma="in1" pos="preposition">
+        <LM id="3" relation="ADV" seg="formulaic" status="damage" declension="3" animacy="-" iobj="-" form="nomine" lemma="nomen1" pos="noun" number="singular" gender="neuter" case="ablative">
+          <LM id="2" relation="ATR" seg="formulaic" status="damage" declension="2" animacy="1" iobj="-" form="Dei" lemma="deus1" pos="noun" number="singular" gender="masculine" case="genitive"></LM>
+        </LM>
+      </LM>
+      <LM id="4" relation="AuxK" seg="formulaic" status="damage" form="." lemma="unknown1"></LM>
+    </LM>
+    <LM id="2935510" document_id="CDL" subdoc="115" date="754" place="S. Cassiano (di Moriano o a Vico?, Lucca)" scribe="Osprand" type="charta dotis" redaction="copy">
+      <LM id="1" relation="ADV" seg="formulaic" status="damage" declension="3" animacy="0" iobj="-" form="regnante" lemma="regno1" pos="participle" number="singular" tense="present" mood="participial" voice="active" gender="masculine" case="ablative">
+        <LM id="5" relation="SBJ" seg="formulaic" status="normal" declension="2" animacy="1" iobj="-" form="Aistulfo" lemma="Aistolfus1" pos="noun" number="singular" gender="masculine" case="ablative">
+          <LM id="2" relation="ATR" seg="formulaic" status="damage" declension="2" animacy="0" iobj="-" form="piissimo" lemma="pius1" pos="adjective" number="singular" gender="masculine" case="ablative" degree="superlative"></LM>
+          <LM id="3" relation="ATR" seg="formulaic" status="expan" declension="2" animacy="0" iobj="-" form="domno" lemma="domnus1" pos="noun" number="singular" gender="masculine" case="ablative">
+            <LM id="4" relation="ATR" seg="formulaic" status="normal" declension="2" animacy="0" iobj="-" form="nostro" lemma="noster1" pos="adjective" number="singular" gender="masculine" case="ablative"></LM>
+          </LM>
+          <LM id="6" relation="ATR" seg="formulaic" status="normal" declension="3" animacy="0" iobj="-" form="rege" lemma="rex1" pos="noun" number="singular" gender="masculine" case="ablative"></LM>
+        </LM>
+        <LM id="8" relation="ADV" seg="formulaic" status="normal" declension="2" animacy="-" iobj="-" form="anno" lemma="annus1" pos="noun" number="singular" gender="masculine" case="ablative">
+          <LM id="9" relation="ATR" seg="formulaic" status="normal" declension="2" animacy="-" iobj="-" form="regni" lemma="regnum1" pos="noun" number="singular" gender="neuter" case="genitive">
+            <LM id="10" relation="ATR" seg="formulaic" status="normal" form="eius" lemma="is1" pos="pronoun" number="singular" gender="masculine" case="genitive"></LM>
+          </LM>
+          <LM id="11" relation="ATR" seg="formulaic" status="normal" declension="2" animacy="-" iobj="-" form="quinto" lemma="quintus1" pos="adjective" number="singular" gender="masculine" case="ablative"></LM>
+        </LM>
+        <LM id="13" relation="ADV" seg="formulaic" status="expan" declension="3" animacy="-" iobj="-" form="mense" lemma="mensis1" pos="noun" number="singular" gender="masculine" case="ablative">
+          <LM id="14" relation="ATR" seg="formulaic" status="normal" declension="2" animacy="-" iobj="-" form="iulio" lemma="Julius1" pos="adjective" number="singular" gender="masculine" case="ablative"></LM>
+        </LM>
+        <LM id="16" relation="ADV" seg="formulaic" status="expan" declension="3" animacy="-" iobj="-" form="indictione" lemma="indictio1" pos="noun" number="singular" gender="feminine" case="ablative">
+          <LM id="17" relation="ATR" seg="formulaic" status="normal" declension="1" animacy="-" iobj="-" form="septima" lemma="septimus1" pos="adjective" number="singular" gender="feminine" case="ablative"></LM>
+        </LM>
+      </LM>
+      <LM id="7" relation="UNDEFINED" seg="formulaic" status="normal" form="," lemma="unknown1"></LM>
+      <LM id="12" relation="UNDEFINED" seg="formulaic" status="normal" form="," lemma="unknown1"></LM>
+      <LM id="15" relation="UNDEFINED" seg="formulaic" status="normal" form="," lemma="unknown1"></LM>
+      <LM id="18" relation="UNDEFINED" seg="formulaic" status="normal" form=";" lemma="semicolon1" pos="punctuation"></LM>
+      <LM id="19" relation="UNDEFINED" seg="formulaic" status="normal" form="feliciter" lemma="feliciter1" pos="adverb"></LM>
+      <LM id="20" relation="AuxK" seg="formulaic" status="normal" form="." lemma="unknown1"></LM>
+    </LM>
+    <LM id="2935511" document_id="CDL" subdoc="115" date="754" place="S. Cassiano (di Moriano o a Vico?, Lucca)" scribe="Osprand" type="charta dotis" redaction="copy">
+      <LM id="1" relation="PRED" seg="formulaic" status="normal" declension="2" animacy="0" iobj="-" form="Recordatu" lemma="recordor1" pos="participle" number="singular" tense="perfect" mood="participial" voice="passive" gender="masculine" case="nominative">
+        <LM id="2" relation="AuxV" seg="formulaic" status="normal" form="sum" lemma="sum1" pos="verb" person="first_person" number="singular" tense="present" mood="indicative" voice="active"></LM>
+        <LM id="3" relation="SBJ" seg="formulaic" status="normal" form="ego" lemma="ego1" pos="pronoun" number="singular" gender="masculine" case="nominative">
+          <LM id="4" relation="ATR" seg="formulaic" status="normal" declension="0" animacy="1" iobj="-" form="Austripert" lemma="Austripertus1" pos="noun" number="singular" gender="masculine" case="nominative"></LM>
+        </LM>
+      </LM>
+      <LM id="5" relation="UNDEFINED" seg="formulaic" status="damage" form="....." lemma="unknown1"></LM>
+      <LM id="6" relation="UNDEFINED" seg="formulaic" status="damage" form="o" lemma="other"></LM>
+      <LM id="10" relation="PRED" seg="formulaic" status="normal" form="penetraui" lemma="penetro1" pos="verb" person="first_person" number="singular" tense="perfect" mood="indicative" voice="active">
+        <LM id="7" relation="AuxP" seg="formulaic" status="normal" form="in" lemma="in1" pos="preposition">
+          <LM id="9" relation="ADV" seg="formulaic" status="normal" declension="2" animacy="-" iobj="-" form="seculo" lemma="saeculum1" pos="noun" number="singular" gender="neuter" case="ablative">
+            <LM id="8" relation="ATR" seg="formulaic" status="normal" form="hoc" lemma="hic1" pos="pronoun" number="singular" gender="neuter" case="ablative"></LM>
+          </LM>
+        </LM>
+      </LM>
+      <LM id="13" relation="ExD" seg="formulaic" status="normal" form="sunt" lemma="sum1" pos="verb" person="third_person" number="plural" tense="present" mood="indicative" voice="active">
+        <LM id="11" relation="SBJ" seg="formulaic" status="normal" form="que" lemma="qui1" pos="pronoun" number="plural" gender="neuter" case="nominative"></LM>
+        <LM id="12" relation="AuxZ" seg="formulaic" status="normal" form="non" lemma="non1" pos="adverb"></LM>
+        <LM id="14" relation="PNOM" seg="formulaic" status="normal" declension="2" animacy="-" iobj="-" form="extimanda" lemma="aestimo1" pos="participle" number="plural" tense="present" mood="gerundive" voice="passive" gender="neuter" case="nominative"></LM>
+      </LM>
+      <LM id="15" relation="UNDEFINED" seg="formulaic" status="normal" form="," lemma="unknown1"></LM>
+      <LM id="17" relation="UNDEFINED" seg="formulaic" status="normal" form="ad" lemma="unknown1"></LM>
+      <LM id="18" relation="COORD" seg="formulaic" status="normal" form="que" lemma="que1" pos="conjunction">
+        <LM id="16" relation="ExD_CO" seg="formulaic" status="normal" form="uolo" lemma="volo1" pos="verb" person="first_person" number="singular" tense="present" mood="indicative" voice="active"></LM>
+        <LM id="19" relation="ExD_CO" seg="formulaic" status="normal" form="decerno" lemma="decerno1" pos="verb" person="first_person" number="singular" tense="present" mood="indicative" voice="active"></LM>
+      </LM>
+      <LM id="20" relation="UNDEFINED" seg="formulaic" status="normal" form="," lemma="unknown1"></LM>
+      <LM id="21" relation="AuxC" seg="formulaic" status="normal" form="ut" lemma="ut1" pos="conjunction"></LM>
+      <LM id="22" relation="AuxP" seg="formulaic" status="normal" form="pro" lemma="pro1" pos="preposition">
+        <LM id="23" relation="ADV" seg="formulaic" status="normal" declension="1" animacy="-" iobj="-" form="anima" lemma="anima1" pos="noun" number="singular" gender="feminine" case="ablative">
+          <LM id="24" relation="ATR" seg="formulaic" status="normal" declension="1" animacy="-" iobj="-" form="mea" lemma="meus1" pos="adjective" number="singular" gender="feminine" case="ablative"></LM>
+        </LM>
+      </LM>
+      <LM id="25" relation="UNDEFINED" seg="formulaic" status="damage" form="....." lemma="unknown1"></LM>
+      <LM id="26" relation="UNDEFINED" seg="formulaic" status="damage" form="ram" lemma="unknown1"></LM>
+      <LM id="27" relation="AuxK" seg="formulaic" status="normal" form="." lemma="unknown1"></LM>
+    </LM>
+    <LM id="2935512" document_id="CDL" subdoc="115" date="754" place="S. Cassiano (di Moriano o a Vico?, Lucca)" scribe="Osprand" type="charta dotis" redaction="copy">
+      <LM id="1" relation="UNDEFINED" seg="free" status="normal" form="Et" lemma="et1" pos="conjunction"></LM>
+      <LM id="2" relation="UNDEFINED" seg="free" status="normal" form="ideo" lemma="ideo1" pos="adverb"></LM>
+      <LM id="4" relation="UNDEFINED" seg="free" status="normal" form="," lemma="unknown1"></LM>
+      <LM id="6" relation="COORD" seg="free" status="normal" form="et" lemma="et1" pos="conjunction">
+        <LM id="3" relation="PRED_CO" seg="free" status="normal" form="do" lemma="do1" pos="verb" person="first_person" number="singular" tense="present" mood="indicative" voice="active"></LM>
+        <LM id="5" relation="PRED_CO" seg="free" status="normal" form="duno" lemma="dono1" pos="verb" person="first_person" number="singular" tense="present" mood="indicative" voice="active"></LM>
+        <LM id="7" relation="PRED_CO" seg="free" status="normal" form="offero" lemma="offero1" pos="verb" person="first_person" number="singular" tense="present" mood="indicative" voice="active"></LM>
+        <LM id="9" relation="COORD" seg="free" status="normal" form="et" lemma="et1" pos="conjunction">
+          <LM id="8" relation="OBJ_CO" seg="free" status="normal" declension="2" animacy="1" iobj="1" form="Deo" lemma="deus1" pos="noun" number="singular" gender="masculine" case="dative"></LM>
+          <LM id="10" relation="OBJ_CO" seg="free" status="normal" declension="-" animacy="-" iobj="1" form="tibi" lemma="tu1" pos="pronoun" number="singular" gender="masculine" case="dative">
+            <LM id="13" relation="ATR" seg="free" status="normal" declension="2" animacy="1" iobj="1" form="Cassiane" lemma="Cassianus1" pos="noun" number="singular" gender="masculine" case="vocative">
+              <LM id="11" relation="ATR" seg="free" status="normal" declension="2" animacy="0" iobj="1" form="beate" lemma="beatus1" pos="adjective" number="singular" gender="masculine" case="vocative"></LM>
+              <LM id="12" relation="ATR" seg="free" status="normal" declension="2" animacy="0" iobj="1" form="sancte" lemma="sanctus1" pos="adjective" number="singular" gender="masculine" case="vocative"></LM>
+              <LM id="14" relation="ATR" seg="free" status="normal" declension="3" animacy="0" iobj="1" form="marthere" lemma="martyr1" pos="noun" number="singular" gender="masculine" case="dative">
+                <LM id="15" relation="ATR" seg="free" status="normal" declension="2" animacy="1" iobj="-" form="Christi" lemma="Christus1" pos="noun" number="singular" gender="masculine" case="genitive"></LM>
+              </LM>
+            </LM>
+          </LM>
+        </LM>
+        <LM id="20" relation="AuxP" seg="free" status="normal" form="excepto" lemma="excepto2" pos="preposition">
+          <LM id="21" relation="ADV" seg="free" status="normal" declension="1" animacy="-" iobj="-" form="casa" lemma="casa1" pos="noun" number="singular" gender="feminine" case="ablative">
+            <LM id="22" relation="AuxP" seg="free" status="normal" form="in" lemma="in1" pos="preposition">
+              <LM id="23" relation="ATR" seg="free" status="normal" declension="2" animacy="2" iobj="-" form="Uico" lemma="vicus1" pos="noun" number="singular" gender="masculine" case="ablative"></LM>
+            </LM>
+            <LM id="25" relation="AuxP" seg="free" status="normal" form="cum" lemma="cum1" pos="preposition">
+              <LM id="33" relation="COORD" seg="free" status="normal" form="uel" lemma="vel1" pos="conjunction">
+                <LM id="26" relation="ATR_CO" seg="free" status="normal" declension="2" animacy="-" iobj="-" form="fundamento" lemma="fundamentum1" pos="noun" number="singular" gender="neuter" case="ablative"></LM>
+                <LM id="30" relation="ATR_CO" seg="free" status="normal" declension="2" animacy="-" iobj="-" form="edificia" lemma="aedificium1" pos="noun" number="plural" gender="neuter" case="accusative">
+                  <LM id="29" relation="ATR" seg="free" status="normal" declension="3" animacy="-" iobj="-" form="omnem" lemma="omnis1" pos="adjective" number="singular" gender="feminine" case="ablative"></LM>
+                  <LM id="31" relation="ATR" seg="free" status="normal" declension="1" animacy="-" iobj="-" form="cunstructe" lemma="construo1" pos="participle" number="plural" tense="perfect" mood="participial" voice="passive" gender="feminine" case="nominative"></LM>
+                </LM>
+                <LM id="34" relation="ATR_CO" seg="free" status="normal" declension="2" animacy="-" iobj="-" form="orto" lemma="hortus1" pos="noun" number="singular" gender="masculine" case="ablative"></LM>
+              </LM>
+            </LM>
+          </LM>
+        </LM>
+        <LM id="41" relation="AuxC" seg="formulaic" status="normal" form="ut" lemma="ut1" pos="conjunction">
+          <LM id="42" relation="ADV" seg="formulaic" status="normal" form="dixi" lemma="dico2" pos="verb" person="first_person" number="singular" tense="perfect" mood="indicative" voice="active"></LM>
+        </LM>
+        <LM id="55" relation="AuxC" seg="formulaic" status="damage" form="ut" lemma="ut1" pos="conjunction">
+          <LM id="57" relation="ADV" seg="formulaic" status="normal" form="dixi" lemma="dico2" pos="verb" person="first_person" number="singular" tense="perfect" mood="indicative" voice="active"></LM>
+        </LM>
+        <LM id="58" relation="APOS" seg="formulaic" status="normal" form="," lemma="comma1" pos="conjunction">
+          <LM id="17" relation="OBJ_AP" seg="free" status="normal" declension="3" animacy="-" iobj="-" form="portionem" lemma="portio1" pos="noun" number="singular" gender="feminine" case="accusative">
+            <LM id="16" relation="ATR" seg="free" status="normal" declension="1" animacy="-" iobj="-" form="tertia" lemma="tertius1" pos="adjective" number="singular" gender="feminine" case="accusative"></LM>
+          </LM>
+          <LM id="46" relation="OBJ_AP" seg="formulaic" status="normal" declension="3" animacy="-" iobj="-" form="portionem" lemma="portio1" pos="noun" number="singular" gender="feminine" case="accusative">
+            <LM id="44" relation="ATR" seg="formulaic" status="normal" declension="3" animacy="-" iobj="-" form="omnia" lemma="omnis1" pos="adjective" number="plural" gender="neuter" case="accusative"></LM>
+            <LM id="45" relation="ATR" seg="formulaic" status="normal" declension="1" animacy="-" iobj="-" form="tertia" lemma="tertius1" pos="adjective" number="singular" gender="feminine" case="accusative"></LM>
+            <LM id="47" relation="AuxP" seg="formulaic" status="normal" form="cum" lemma="cum1" pos="preposition">
+              <LM id="49" relation="COORD" seg="formulaic" status="normal" form="uel" lemma="vel1" pos="conjunction">
+                <LM id="48" relation="ATR_CO" seg="formulaic" status="normal" declension="3" animacy="-" iobj="-" form="mobilem" lemma="mobilis1" pos="adjective" number="singular" gender="neuter" case="ablative"></LM>
+                <LM id="50" relation="ATR_CO" seg="formulaic" status="normal" declension="3" animacy="-" iobj="-" form="inmobile" lemma="immobilis1" pos="adjective" number="singular" gender="neuter" case="ablative"></LM>
+              </LM>
+            </LM>
+          </LM>
+          <LM id="52" relation="OBJ_AP" seg="formulaic" status="normal" declension="3" animacy="-" iobj="-" form="omnia" lemma="omnis1" pos="adjective" number="plural" gender="neuter" case="accusative"></LM>
+          <LM id="59" relation="OBJ_AP" seg="formulaic" status="normal" declension="1" animacy="-" iobj="-" form="casa" lemma="casa1" pos="noun" number="singular" gender="feminine" case="accusative">
+            <LM id="60" relation="ATR" seg="formulaic" status="damage" declension="3" animacy="-" iobj="-" form="habitationis" lemma="habitatio1" pos="noun" number="singular" gender="feminine" case="genitive"></LM>
+            <LM id="61" relation="AuxP" seg="formulaic" status="normal" form="in" lemma="in1" pos="preposition">
+              <LM id="62" relation="ATR" seg="formulaic" status="normal" declension="2" animacy="2" iobj="-" form="Uico" lemma="vicus1" pos="noun" number="singular" gender="masculine" case="ablative"></LM>
+            </LM>
+          </LM>
+        </LM>
+      </LM>
+      <LM id="18" relation="UNDEFINED" seg="free" status="damage" form="....." lemma="unknown1"></LM>
+      <LM id="19" relation="UNDEFINED" seg="free" status="normal" form="," lemma="unknown1"></LM>
+      <LM id="24" relation="UNDEFINED" seg="free" status="normal" form="," lemma="unknown1"></LM>
+      <LM id="27" relation="UNDEFINED" seg="free" status="normal" form="," lemma="unknown1"></LM>
+      <LM id="28" relation="UNDEFINED" seg="free" status="normal" form="uel" lemma="vel1" pos="conjunction"></LM>
+      <LM id="32" relation="UNDEFINED" seg="free" status="normal" form="," lemma="unknown1"></LM>
+      <LM id="35" relation="UNDEFINED" seg="free" status="normal" declension="3" animacy="-" iobj="-" form="quem" lemma="qui1" pos="pronoun" number="singular" gender="masculine" case="accusative"></LM>
+      <LM id="36" relation="UNDEFINED" seg="free" status="damage" form="....." lemma="unknown1"></LM>
+      <LM id="37" relation="AuxP" seg="free" status="normal" form="in" lemma="in1" pos="preposition">
+        <LM id="39" relation="ADV" seg="free" status="normal" declension="2" animacy="-" iobj="-" form="loca" lemma="locum1" pos="noun" number="plural" gender="neuter" case="accusative">
+          <LM id="38" relation="ATR" seg="free" status="normal" declension="1" animacy="-" iobj="-" form="alie" lemma="alius1" pos="adjective" number="plural" gender="feminine" case="nominative"></LM>
+        </LM>
+      </LM>
+      <LM id="40" relation="AuxK" seg="free" status="normal" form="." lemma="unknown1"></LM>
+      <LM id="43" relation="UNDEFINED" seg="formulaic" status="normal" form="," lemma="unknown1"></LM>
+      <LM id="51" relation="UNDEFINED" seg="formulaic" status="normal" form="," lemma="unknown1"></LM>
+      <LM id="53" relation="UNDEFINED" seg="formulaic" status="normal" form="et" lemma="et1" pos="conjunction"></LM>
+      <LM id="54" relation="UNDEFINED" seg="formulaic" status="damage" form="....." lemma="unknown1"></LM>
+      <LM id="56" relation="UNDEFINED" seg="formulaic" status="normal" form="sepe" lemma="other"></LM>
+      <LM id="63" relation="UNDEFINED" seg="formulaic" status="normal" form="." lemma="unknown1"></LM>
+    </LM>
+    <LM id="2935513" document_id="CDL" subdoc="115" date="754" place="S. Cassiano (di Moriano o a Vico?, Lucca)" scribe="Osprand" type="charta dotis" redaction="copy">
+      <LM id="1" relation="UNDEFINED" seg="formulaic" status="normal" form="et" lemma="et1" pos="conjunction"></LM>
+      <LM id="2" relation="UNDEFINED" seg="formulaic" status="normal" form="sic" lemma="sic1" pos="adverb"></LM>
+      <LM id="4" relation="PRED" seg="formulaic" status="normal" form="decreuet" lemma="decerno1" pos="verb" person="third_person" number="singular" tense="perfect" mood="indicative" voice="active">
+        <LM id="5" relation="SBJ" seg="formulaic" status="normal" declension="3" animacy="-" iobj="-" vcomp="(#)" stype="A" form="uoluntas" lemma="voluntas1" pos="noun" number="singular" gender="feminine" case="nominative">
+          <LM id="3" relation="ATR" seg="formulaic" status="normal" declension="1" animacy="-" iobj="-" form="mea" lemma="meus1" pos="adjective" number="singular" gender="feminine" case="nominative"></LM>
+        </LM>
+      </LM>
+      <LM id="6" relation="UNDEFINED" seg="formulaic" status="damage" form="....." lemma="unknown1"></LM>
+      <LM id="7" relation="UNDEFINED" seg="formulaic" status="damage" form="turium" lemma="unknown1"></LM>
+      <LM id="8" relation="UNDEFINED" seg="formulaic" status="normal" form="in" lemma="in1" pos="preposition"></LM>
+      <LM id="9" relation="UNDEFINED" seg="formulaic" status="damage" form="ho" lemma="unknown1"></LM>
+      <LM id="10" relation="UNDEFINED" seg="formulaic" status="damage" form="....." lemma="unknown1"></LM>
+    </LM>
+    <LM id="2936672" document_id="CDL" subdoc="208" date="767" place="Monte San Quirico (Lucca?)" scribe="Osprandus" type="breve" redaction="original">
+      <LM id="1" relation="UNDEFINED" seg="free" status="normal" form="Et" lemma="et1" pos="conjunction"></LM>
+      <LM id="2" relation="UNDEFINED" seg="free" status="normal" form="ecce" lemma="ecce1" pos="adverb"></LM>
+      <LM id="3" relation="ExD" seg="free" status="normal" declension="3" animacy="-" iobj="-" form="breue" lemma="brevis1" pos="noun" number="singular" gender="masculine" case="accusative">
+        <LM id="4" relation="ATR" seg="free" status="normal" declension="2" animacy="-" iobj="-" form="scriptum" lemma="scribo1" pos="participle" number="singular" tense="perfect" mood="participial" voice="passive" gender="masculine" case="accusative">
+          <LM id="11" relation="AuxP" seg="free" status="normal" form="de" lemma="de1" pos="preposition">
+            <LM id="15" relation="COORD" seg="free" status="normal" form="et" lemma="et1" pos="conjunction">
+              <LM id="12" relation="ADV_CO" seg="free" status="normal" declension="1" animacy="-" iobj="-" form="casis" lemma="casa1" pos="noun" number="plural" gender="feminine" case="ablative"></LM>
+              <LM id="14" relation="ADV_CO" seg="free" status="normal" declension="3" animacy="-" iobj="-" form="pertinentia" lemma="pertineo1" pos="participle" number="plural" tense="present" mood="participial" voice="active" gender="neuter" case="accusative"></LM>
+              <LM id="16" relation="ADV_CO" seg="free" status="normal" declension="3" animacy="0" iobj="-" form="hominibus" lemma="homo1" pos="noun" number="plural" gender="masculine" case="ablative"></LM>
+              <LM id="18" relation="ATR" seg="free" status="normal" declension="2" animacy="1" iobj="-" form="Quirici" lemma="Quiricus1" pos="noun" number="singular" gender="masculine" case="genitive">
+                <LM id="17" relation="ATR" seg="free" status="normal" declension="2" animacy="0" iobj="-" form="sancti" lemma="sanctus1" pos="adjective" number="singular" gender="masculine" case="genitive"></LM>
+              </LM>
+            </LM>
+          </LM>
+        </LM>
+        <LM id="19" relation="COORD" seg="free" status="normal" form="," lemma="comma1" pos="conjunction">
+          <LM id="7" relation="ATR_CO" seg="free" status="normal" form="dictauit" lemma="dicto1" pos="verb" person="third_person" number="singular" tense="perfect" mood="indicative" voice="active">
+            <LM id="6" relation="OBJ" seg="free" status="normal" declension="1" animacy="-" iobj="-" form="quam" lemma="qui1" pos="pronoun" number="singular" gender="feminine" case="accusative"></LM>
+            <LM id="8" relation="SBJ" seg="free" status="normal" declension="0" animacy="1" iobj="-" form="Barbenti" lemma="Barbentius1" pos="noun" number="singular" gender="masculine" case="nominative">
+              <LM id="9" relation="ATR" seg="free" status="normal" declension="2" animacy="0" iobj="-" form="presbiter" lemma="presbyter1" pos="noun" number="singular" gender="masculine" case="nominative"></LM>
+            </LM>
+          </LM>
+          <LM id="23" relation="ATR_CO" seg="free" status="normal" form="scripsit" lemma="scribo1" pos="verb" person="third_person" number="singular" tense="perfect" mood="indicative" voice="active">
+            <LM id="20" relation="OBJ" seg="free" status="normal" declension="1" animacy="-" iobj="-" form="quam" lemma="qui1" pos="pronoun" number="singular" gender="feminine" case="accusative"></LM>
+            <LM id="21" relation="SBJ" seg="free" status="normal" declension="2" animacy="1" iobj="-" vcomp="quam" stype="A" form="Osprandus" lemma="Osprandus1" pos="noun" number="singular" gender="masculine" case="nominative">
+              <LM id="22" relation="ATR" seg="free" status="normal" declension="2" animacy="0" iobj="-" form="diaconus" lemma="diaconus1" pos="noun" number="singular" gender="masculine" case="nominative"></LM>
+            </LM>
+            <LM id="24" relation="AuxP" seg="free" status="normal" form="per" lemma="per1" pos="preposition">
+              <LM id="26" relation="ADV" seg="free" status="normal" declension="4" animacy="-" iobj="-" form="dictatum" lemma="dictatus1" pos="noun" number="singular" gender="masculine" case="accusative">
+                <LM id="25" relation="ATR" seg="free" status="normal" form="eius" lemma="is1" pos="pronoun" number="singular" gender="masculine" case="genitive"></LM>
+              </LM>
+            </LM>
+          </LM>
+        </LM>
+      </LM>
+      <LM id="5" relation="UNDEFINED" seg="free" status="normal" form="," lemma="unknown1"></LM>
+      <LM id="10" relation="UNDEFINED" seg="free" status="normal" form="," lemma="unknown1"></LM>
+      <LM id="13" relation="UNDEFINED" seg="free" status="normal" form="et" lemma="et1" pos="conjunction"></LM>
+      <LM id="27" relation="AuxK" seg="free" status="normal" form="." lemma="unknown1"></LM>
+    </LM>
+    <LM id="2936673" document_id="CDL" subdoc="208" date="767" place="Monte San Quirico (Lucca?)" scribe="Osprandus" type="breve" redaction="original">
+      <LM id="1" relation="ADV" seg="formulaic" status="normal" declension="3" animacy="-" iobj="-" form="temporibus" lemma="tempus1" pos="noun" number="plural" gender="neuter" case="ablative">
+        <LM id="3" relation="COORD" seg="formulaic" status="normal" form="et" lemma="et1" pos="conjunction">
+          <LM id="2" relation="ATR_CO" seg="formulaic" status="normal" declension="2" animacy="1" iobj="-" form="Desiderii" lemma="Desiderius1" pos="noun" number="singular" gender="masculine" case="genitive"></LM>
+          <LM id="4" relation="ATR_CO" seg="formulaic" status="normal" declension="3" animacy="1" iobj="-" form="Adelchis" lemma="Adelchis1" pos="noun" number="singular" gender="masculine" case="genitive"></LM>
+          <LM id="5" relation="ATR" seg="formulaic" status="normal" declension="3" animacy="0" iobj="-" form="regum" lemma="rex1" pos="noun" number="plural" gender="masculine" case="genitive"></LM>
+        </LM>
+      </LM>
+      <LM id="6" relation="UNDEFINED" seg="formulaic" status="normal" form="," lemma="unknown1"></LM>
+      <LM id="7" relation="ADV" seg="formulaic" status="normal" declension="2" animacy="-" iobj="-" form="anno" lemma="annus1" pos="noun" number="singular" gender="masculine" case="ablative">
+        <LM id="8" relation="ATR" seg="formulaic" status="normal" declension="2" animacy="-" iobj="-" form="regni" lemma="regnum1" pos="noun" number="singular" gender="neuter" case="genitive">
+          <LM id="9" relation="ATR" seg="formulaic" status="normal" declension="2" animacy="0" iobj="-" form="eorum" lemma="is1" pos="pronoun" number="plural" gender="masculine" case="genitive"></LM>
+        </LM>
+        <LM id="11" relation="COORD" seg="formulaic" status="normal" form="et" lemma="et1" pos="conjunction">
+          <LM id="10" relation="ATR_CO" seg="formulaic" status="normal" declension="2" animacy="-" iobj="-" form="undecimo" lemma="undecimus1" pos="adjective" number="singular" gender="masculine" case="ablative"></LM>
+          <LM id="12" relation="ATR_CO" seg="formulaic" status="normal" declension="2" animacy="-" iobj="-" form="octauo" lemma="octavus1" pos="adjective" number="singular" gender="masculine" case="ablative"></LM>
+        </LM>
+      </LM>
+      <LM id="13" relation="UNDEFINED" seg="formulaic" status="normal" form="," lemma="unknown1"></LM>
+      <LM id="14" relation="ADV" seg="formulaic" status="normal" declension="2" animacy="-" iobj="-" form="undecimo" lemma="undecimus1" pos="adjective" number="singular" gender="masculine" case="ablative">
+        <LM id="15" relation="ATR" seg="formulaic" status="normal" declension="1" animacy="-" iobj="-" form="kalendas" lemma="Kalendae1" pos="noun" number="plural" gender="feminine" case="accusative">
+          <LM id="16" relation="ATR" seg="formulaic" status="normal" declension="1" animacy="-" iobj="-" form="iulias" lemma="Julius1" pos="adjective" number="plural" gender="feminine" case="accusative"></LM>
+        </LM>
+      </LM>
+      <LM id="17" relation="UNDEFINED" seg="formulaic" status="normal" form="," lemma="unknown1"></LM>
+      <LM id="18" relation="ADV" seg="formulaic" status="normal" declension="3" animacy="-" iobj="-" form="indictione" lemma="indictio1" pos="noun" number="singular" gender="feminine" case="ablative">
+        <LM id="19" relation="ATR" seg="formulaic" status="normal" declension="1" animacy="-" iobj="-" form="quinta" lemma="quintus1" pos="adjective" number="singular" gender="feminine" case="ablative"></LM>
+      </LM>
+      <LM id="20" relation="AuxK" seg="formulaic" status="normal" form="." lemma="unknown1"></LM>
+    </LM>
+    <LM id="2938304" document_id="CDT" subdoc="63" date="804" place="Pisa" scribe="Anselmo" type="Locazione" redaction="original">
+      <LM id="1" relation="AuxP" seg="formulaic" status="normal" form="In" lemma="in1" pos="preposition">
+        <LM id="2" relation="ADV" seg="formulaic" status="expan" declension="3" animacy="-" iobj="-" form="nomine" lemma="nomen1" pos="noun" number="singular" gender="neuter" case="ablative">
+          <LM id="6" relation="COORD" seg="formulaic" status="normal" form="et" lemma="et1" pos="conjunction">
+            <LM id="3" relation="ATR_CO" seg="formulaic" status="normal" declension="3" animacy="0" iobj="-" form="patris" lemma="pater1" pos="noun" number="singular" gender="masculine" case="genitive"></LM>
+            <LM id="5" relation="ATR_CO" seg="formulaic" status="normal" declension="2" animacy="0" iobj="-" form="filii" lemma="filius1" pos="noun" number="singular" gender="masculine" case="genitive"></LM>
+            <LM id="7" relation="ATR_CO" seg="formulaic" status="normal" declension="4" animacy="0" iobj="-" form="Spiritus" lemma="spiritus1" pos="noun" number="singular" gender="masculine" case="genitive">
+              <LM id="8" relation="ATR" seg="formulaic" status="normal" declension="2" animacy="0" iobj="-" form="sancti" lemma="sanctus1" pos="adjective" number="singular" gender="masculine" case="genitive"></LM>
+            </LM>
+          </LM>
+        </LM>
+      </LM>
+      <LM id="4" relation="UNDEFINED" seg="formulaic" status="normal" form="et" lemma="et1" pos="conjunction"></LM>
+      <LM id="9" relation="AuxK" seg="formulaic" status="normal" form="." lemma="unknown1"></LM>
+    </LM>
+    <LM id="2938305" document_id="CDT" subdoc="63" date="804" place="Pisa" scribe="Anselmo" type="Locazione" redaction="original">
+      <LM id="1" relation="ADV" seg="formulaic" status="normal" declension="3" animacy="0" iobj="-" form="Regnante" lemma="regno1" pos="participle" number="singular" tense="present" mood="participial" voice="active" gender="masculine" case="ablative">
+        <LM id="4" relation="SBJ_CO_ExD0_COORD" seg="formulaic" status="normal" declension="2" animacy="1" iobj="-" form="Carulo" lemma="Carolus1" pos="noun" number="singular" gender="masculine" case="ablative">
+          <LM id="2" relation="ATR" seg="formulaic" status="expan" declension="2" animacy="0" iobj="-" form="domno" lemma="domnus1" pos="noun" number="singular" gender="masculine" case="ablative">
+            <LM id="3" relation="ATR" seg="formulaic" status="expan" declension="2" animacy="0" iobj="-" form="nostro" lemma="noster1" pos="adjective" number="singular" gender="masculine" case="ablative"></LM>
+          </LM>
+          <LM id="6" relation="ATR" seg="formulaic" status="normal" declension="2" animacy="0" iobj="-" form="augusto" lemma="augustus1" pos="adjective" number="singular" gender="masculine" case="ablative">
+            <LM id="5" relation="ATR" seg="formulaic" status="normal" declension="2" animacy="0" iobj="-" form="serenissimo" lemma="serenus1" pos="adjective" number="singular" gender="masculine" case="ablative" degree="superlative"></LM>
+          </LM>
+          <LM id="13" relation="ATR" seg="formulaic" status="normal" declension="3" animacy="0" iobj="-" form="imperatore" lemma="imperator1" pos="noun" number="singular" gender="masculine" case="ablative">
+            <LM id="9" relation="ATR" seg="formulaic" status="normal" declension="2" animacy="0" iobj="-" form="coronato" lemma="corono1" pos="participle" number="singular" tense="perfect" mood="participial" voice="passive" gender="masculine" case="ablative">
+              <LM id="7" relation="AuxP" seg="formulaic" status="normal" form="a" lemma="ab1" pos="preposition">
+                <LM id="8" relation="OBJ" seg="formulaic" status="normal" declension="2" animacy="1" iobj="-" form="Deo" lemma="deus1" pos="noun" number="singular" gender="masculine" case="ablative"></LM>
+              </LM>
+            </LM>
+            <LM id="11" relation="COORD" seg="formulaic" status="normal" form="et" lemma="et1" pos="conjunction">
+              <LM id="10" relation="ATR_CO" seg="formulaic" status="normal" declension="2" animacy="0" iobj="-" form="magno" lemma="magnus1" pos="adjective" number="singular" gender="masculine" case="ablative"></LM>
+              <LM id="12" relation="ATR_CO" seg="formulaic" status="normal" declension="2" animacy="0" iobj="-" form="pacifico" lemma="pacificus1" pos="adjective" number="singular" gender="masculine" case="ablative"></LM>
+            </LM>
+          </LM>
+          <LM id="15" relation="ATR" seg="formulaic" status="normal" declension="3" animacy="0" iobj="-" form="gubernante" lemma="guberno1" pos="participle" number="singular" tense="present" mood="participial" voice="active" gender="masculine" case="ablative">
+            <LM id="16" relation="OBJ" seg="formulaic" status="normal" declension="2" animacy="-" iobj="-" form="imperio" lemma="imperium1" pos="noun" number="singular" gender="neuter" case="accusative">
+              <LM id="14" relation="ATR" seg="formulaic" status="normal" declension="2" animacy="-" iobj="-" form="Romano" lemma="Romanus1" pos="adjective" number="singular" gender="neuter" case="accusative"></LM>
+            </LM>
+          </LM>
+          <LM id="21" relation="ATR" seg="formulaic" status="normal" declension="3" animacy="0" iobj="-" form="rege" lemma="rex1" pos="noun" number="singular" gender="masculine" case="ablative">
+            <LM id="18" relation="AuxP" seg="formulaic" status="normal" form="per" lemma="per1" pos="preposition">
+              <LM id="19" relation="ADV" seg="formulaic" status="normal" declension="1" animacy="-" iobj="-" form="misericordiam" lemma="misericordia1" pos="noun" number="singular" gender="feminine" case="accusative">
+                <LM id="20" relation="ATR" seg="formulaic" status="normal" declension="2" animacy="1" iobj="-" form="Dei" lemma="deus1" pos="noun" number="singular" gender="masculine" case="genitive"></LM>
+              </LM>
+            </LM>
+            <LM id="23" relation="COORD" seg="formulaic" status="normal" form="et" lemma="et1" pos="conjunction">
+              <LM id="22" relation="ATR_CO" seg="formulaic" status="normal" declension="2" animacy="0" iobj="-" form="Francorum" lemma="Franci1" pos="noun" number="plural" gender="masculine" case="genitive"></LM>
+              <LM id="24" relation="ATR_CO" seg="formulaic" status="normal" declension="2" animacy="0" iobj="-" form="Langubardorum" lemma="Langobardi1" pos="noun" number="plural" gender="masculine" case="genitive"></LM>
+            </LM>
+          </LM>
+        </LM>
+        <LM id="26" relation="ADV" seg="formulaic" status="normal" declension="2" animacy="-" iobj="-" form="anno" lemma="annus1" pos="noun" number="singular" gender="masculine" case="ablative">
+          <LM id="27" relation="ATR" seg="formulaic" status="normal" declension="2" animacy="-" iobj="-" form="regni" lemma="regnum1" pos="noun" number="singular" gender="neuter" case="genitive">
+            <LM id="28" relation="ATR" seg="formulaic" status="normal" form="eius" lemma="is1" pos="pronoun" number="singular" gender="masculine" case="genitive"></LM>
+          </LM>
+          <LM id="32" relation="ATR" seg="formulaic" status="normal" form="cepit" lemma="capio1" pos="verb" person="third_person" number="singular" tense="perfect" mood="indicative" voice="active">
+            <LM id="29" relation="AuxP" seg="formulaic" status="normal" form="a" lemma="ab1" pos="preposition">
+              <LM id="30" relation="ADV" seg="formulaic" status="normal" declension="2" animacy="-" iobj="-" form="quo" lemma="qui1" pos="pronoun" number="singular" gender="masculine" case="ablative"></LM>
+            </LM>
+            <LM id="31" relation="OBJ" seg="formulaic" status="normal" declension="1" animacy="2" iobj="-" form="Langubardia" lemma="Langobardia1" pos="noun" number="singular" gender="feminine" case="accusative"></LM>
+          </LM>
+          <LM id="33" relation="ADV" seg="formulaic" status="normal" declension="2" animacy="1" iobj="-" form="Deo" lemma="deus1" pos="noun" number="singular" gender="masculine" case="ablative">
+            <LM id="34" relation="ATV" seg="formulaic" status="normal" declension="2" animacy="0" iobj="-" form="propitio" lemma="propitius1" pos="adjective" number="singular" gender="masculine" case="ablative"></LM>
+          </LM>
+          <LM id="35" relation="ATR" seg="formulaic" status="damage" declension="2" animacy="-" iobj="-" form="trigisimo" lemma="tricesimus1" pos="adjective" number="singular" gender="masculine" case="ablative"></LM>
+        </LM>
+        <LM id="40" relation="SBJ_CO_ExD0_COORD" seg="formulaic" status="normal" declension="2" animacy="1" iobj="-" form="Pippino" lemma="Pipinus1" pos="noun" number="singular" gender="masculine" case="ablative">
+          <LM id="38" relation="ATR" seg="formulaic" status="expan" declension="2" animacy="0" iobj="-" form="domno" lemma="domnus1" pos="noun" number="singular" gender="masculine" case="ablative">
+            <LM id="39" relation="ATR" seg="formulaic" status="expan" declension="2" animacy="0" iobj="-" form="nostro" lemma="noster1" pos="adjective" number="singular" gender="masculine" case="ablative"></LM>
+          </LM>
+          <LM id="41" relation="ATR" seg="formulaic" status="normal" declension="3" animacy="0" iobj="-" form="rege" lemma="rex1" pos="noun" number="singular" gender="masculine" case="ablative">
+            <LM id="42" relation="ATR" seg="formulaic" status="normal" declension="2" animacy="0" iobj="-" form="Langubardorum" lemma="Langobardi1" pos="noun" number="plural" gender="masculine" case="genitive"></LM>
+          </LM>
+        </LM>
+        <LM id="44" relation="ADV" seg="formulaic" status="normal" declension="2" animacy="-" iobj="-" form="anno" lemma="annus1" pos="noun" number="singular" gender="masculine" case="ablative">
+          <LM id="45" relation="ATR" seg="formulaic" status="normal" declension="2" animacy="-" iobj="-" form="regni" lemma="regnum1" pos="noun" number="singular" gender="neuter" case="genitive">
+            <LM id="46" relation="ATR" seg="formulaic" status="normal" form="eius" lemma="is1" pos="pronoun" number="singular" gender="masculine" case="genitive"></LM>
+          </LM>
+          <LM id="47" relation="AuxP" seg="formulaic" status="normal" form="in" lemma="in1" pos="preposition">
+            <LM id="49" relation="ATR" seg="formulaic" status="expan" declension="3" animacy="-" iobj="-" form="nomine" lemma="nomen1" pos="noun" number="singular" gender="neuter" case="ablative">
+              <LM id="48" relation="ATR" seg="formulaic" status="normal" declension="2" animacy="1" iobj="-" form="Dei" lemma="deus1" pos="noun" number="singular" gender="masculine" case="genitive"></LM>
+            </LM>
+          </LM>
+          <LM id="50" relation="ATR" seg="formulaic" status="normal" declension="2" animacy="-" iobj="-" form="vigisimo" lemma="vicesimus1" pos="adjective" number="singular" gender="masculine" case="ablative"></LM>
+          <LM id="51" relation="ATR" seg="formulaic" status="normal" declension="2" animacy="-" iobj="-" form="tertio" lemma="tertius1" pos="adjective" number="singular" gender="masculine" case="ablative"></LM>
+        </LM>
+        <LM id="53" relation="ADV" seg="formulaic" status="normal" declension="3" animacy="-" iobj="-" form="mense" lemma="mensis1" pos="noun" number="singular" gender="masculine" case="ablative"></LM>
+        <LM id="57" relation="ADV" seg="formulaic" status="expan" declension="3" animacy="-" iobj="-" form="indictione" lemma="indictio1" pos="noun" number="singular" gender="feminine" case="ablative">
+          <LM id="58" relation="ATR" seg="formulaic" status="damage" declension="1" animacy="-" iobj="-" form="duodecima" lemma="duodecimus1" pos="adjective" number="singular" gender="feminine" case="ablative"></LM>
+        </LM>
+      </LM>
+      <LM id="17" relation="UNDEFINED" seg="formulaic" status="damage" form="....." lemma="unknown1"></LM>
+      <LM id="25" relation="UNDEFINED" seg="formulaic" status="normal" form="," lemma="unknown1"></LM>
+      <LM id="36" relation="UNDEFINED" seg="formulaic" status="damage" form="....." lemma="unknown1"></LM>
+      <LM id="37" relation="UNDEFINED" seg="formulaic" status="normal" form="eius" lemma="is1" pos="pronoun" number="singular" gender="masculine" case="genitive"></LM>
+      <LM id="43" relation="UNDEFINED" seg="formulaic" status="normal" form="," lemma="unknown1"></LM>
+      <LM id="52" relation="UNDEFINED" seg="formulaic" status="normal" form="," lemma="unknown1"></LM>
+      <LM id="54" relation="UNDEFINED" seg="formulaic" status="damage" form="..." lemma="unknown1"></LM>
+      <LM id="55" relation="UNDEFINED" seg="formulaic" status="damage" form="ario" lemma="unknown1"></LM>
+      <LM id="56" relation="UNDEFINED" seg="formulaic" status="normal" form="," lemma="unknown1"></LM>
+      <LM id="59" relation="AuxK" seg="formulaic" status="normal" form="." lemma="unknown1"></LM>
+    </LM>
+    <LM id="2938306" document_id="CDT" subdoc="63" date="804" place="Pisa" scribe="Anselmo" type="Locazione" redaction="original">
+      <LM id="2" relation="COORD" seg="free" status="normal" form="atque" lemma="atque1" pos="conjunction">
+        <LM id="1" relation="PRED_CO" seg="free" status="normal" form="Placuit" lemma="placeo1" pos="verb" person="third_person" number="singular" tense="perfect" mood="indicative" voice="active"></LM>
+        <LM id="3" relation="PRED_CO" seg="free" status="normal" form="convenit" lemma="convenio1" pos="verb" person="third_person" number="singular" tense="perfect" mood="indicative" voice="active"></LM>
+        <LM id="4" relation="AuxP" seg="free" status="normal" form="inter" lemma="inter1" pos="preposition">
+          <LM id="5" relation="ADV" seg="free" status="damage" declension="2" animacy="0" iobj="-" form="nos" lemma="nos1" pos="pronoun" number="plural" gender="masculine" case="accusative">
+            <LM id="19" relation="COORD" seg="free" status="normal" form="et" lemma="et1" pos="conjunction">
+              <LM id="6" relation="ATR_CO" seg="free" status="normal" declension="2" animacy="1" iobj="-" form="Adelpertus" lemma="Adalpertus1" pos="noun" number="singular" gender="masculine" case="nominative">
+                <LM id="7" relation="ATR" seg="free" status="expan" declension="2" animacy="0" iobj="-" form="presbiter" lemma="presbyter1" pos="noun" number="singular" gender="masculine" case="nominative">
+                  <LM id="8" relation="ATR" seg="free" status="normal" declension="1" animacy="-" iobj="-" form="ecclesie" lemma="ecclesia1" pos="noun" number="singular" gender="feminine" case="genitive">
+                    <LM id="10" relation="ATR" seg="free" status="normal" declension="2" animacy="1" iobj="-" form="Petri" lemma="Petrus1" pos="noun" number="singular" gender="masculine" case="genitive">
+                      <LM id="9" relation="ATR" seg="free" status="normal" declension="2" animacy="0" iobj="-" form="sancti" lemma="sanctus1" pos="adjective" number="singular" gender="masculine" case="genitive"></LM>
+                    </LM>
+                    <LM id="13" relation="ATR" seg="free" status="normal" form="vocatur" lemma="voco1" pos="verb" person="third_person" number="singular" tense="present" mood="indicative" voice="passive">
+                      <LM id="12" relation="SBJ" seg="free" status="normal" form="que" lemma="qui1" pos="pronoun" number="singular" gender="feminine" case="nominative"></LM>
+                      <LM id="14" relation="AuxP" seg="free" status="normal" form="ad" lemma="ad1" pos="preposition">
+                        <LM id="16" relation="PNOM" seg="free" status="normal" declension="2" animacy="2" iobj="-" form="Pinos" lemma="pinus1" pos="noun" number="plural" gender="feminine" case="accusative">
+                          <LM id="15" relation="ATR" seg="free" status="normal" form="septem" lemma="septem1" pos="numeral"></LM>
+                        </LM>
+                      </LM>
+                    </LM>
+                  </LM>
+                </LM>
+              </LM>
+              <LM id="20" relation="ATR_CO" seg="free" status="normal" declension="2" animacy="1" iobj="-" form="Sichiprandus" lemma="Sichiprandus1" pos="noun" number="singular" gender="masculine" case="nominative">
+                <LM id="21" relation="ATR" seg="free" status="damage" declension="2" animacy="0" iobj="-" form="filius" lemma="filius1" pos="noun" number="singular" gender="masculine" case="nominative">
+                  <LM id="23" relation="ATR" seg="free" status="normal" declension="2" animacy="1" iobj="-" form="Teuperti" lemma="Teutpertus1" pos="noun" number="singular" gender="masculine" case="genitive"></LM>
+                </LM>
+              </LM>
+            </LM>
+          </LM>
+        </LM>
+        <LM id="25" relation="AuxC" seg="free" status="normal" form="ut" lemma="ut1" pos="conjunction">
+          <LM id="32" relation="SBJ" seg="free" status="normal" form="deveam" lemma="debeo1" pos="verb" person="first_person" number="singular" tense="present" mood="subjunctive" voice="active">
+            <LM id="26" relation="SBJ" seg="free" status="normal" form="ego" lemma="ego1" pos="pronoun" number="singular" gender="masculine" case="nominative">
+              <LM id="27" relation="ATR" seg="free" status="normal" declension="2" animacy="1" iobj="-" form="Sichiprandus" lemma="Sichiprandus1" pos="noun" number="singular" gender="masculine" case="nominative">
+                <LM id="28" relation="ATR" seg="free" status="expan" declension="2" animacy="0" iobj="-" form="clericus" lemma="clericus1" pos="noun" number="singular" gender="masculine" case="nominative"></LM>
+              </LM>
+            </LM>
+            <LM id="30" relation="COORD" seg="free" status="normal" form="et" lemma="et1" pos="conjunction">
+              <LM id="29" relation="OBJ_CO" seg="free" status="normal" form="resedere" lemma="resideo1" pos="verb" tense="present" mood="infinitive" voice="active"></LM>
+              <LM id="31" relation="OBJ_CO" seg="free" status="normal" form="avitare" lemma="habito1" pos="verb" tense="present" mood="infinitive" voice="active"></LM>
+              <LM id="33" relation="OBJ" seg="free" status="normal" declension="1" animacy="-" iobj="-" form="casa" lemma="casa1" pos="noun" number="singular" gender="feminine" case="accusative">
+                <LM id="38" relation="ATR" seg="free" status="normal" declension="1" animacy="-" iobj="-" form="ecclesie" lemma="ecclesia1" pos="noun" number="singular" gender="feminine" case="genitive">
+                  <LM id="37" relation="ATR" seg="free" status="normal" form="ipsius" lemma="ipse1" pos="pronoun" number="singular" gender="feminine" case="genitive"></LM>
+                  <LM id="40" relation="ATR" seg="free" status="damage" declension="2" animacy="1" iobj="-" form="Petri" lemma="Petrus1" pos="noun" number="singular" gender="masculine" case="genitive">
+                    <LM id="39" relation="ATR" seg="free" status="normal" declension="2" animacy="0" iobj="-" form="sancti" lemma="sanctus1" pos="adjective" number="singular" gender="masculine" case="genitive"></LM>
+                  </LM>
+                </LM>
+              </LM>
+              <LM id="42" relation="AuxP" seg="free" status="normal" form="in" lemma="in1" pos="preposition">
+                <LM id="44" relation="ADV" seg="free" status="normal" declension="1" animacy="-" iobj="-" form="casa" lemma="casa1" pos="noun" number="singular" gender="feminine" case="ablative">
+                  <LM id="43" relation="ATR" seg="free" status="normal" declension="1" animacy="-" iobj="-" form="ipsa" lemma="ipse1" pos="pronoun" number="singular" gender="feminine" case="ablative"></LM>
+                  <LM id="57" relation="ATR" seg="free" status="normal" form="evenit" lemma="evenio1" pos="verb" person="third_person" number="singular" tense="perfect" mood="indicative" voice="active">
+                    <LM id="47" relation="AuxP" seg="free" status="normal" form="ad" lemma="ad1" pos="preposition">
+                      <LM id="51" relation="ADV" seg="free" status="damage" declension="1" animacy="-" iobj="-" form="ecclesia" lemma="ecclesia1" pos="noun" number="singular" gender="feminine" case="accusative">
+                        <LM id="48" relation="ATR" seg="free" status="normal" declension="1" animacy="-" iobj="-" form="ipsa" lemma="ipse1" pos="pronoun" number="singular" gender="feminine" case="accusative"></LM>
+                        <LM id="49" relation="ATR" seg="free" status="normal" declension="1" animacy="-" iobj="-" form="suprascripta" lemma="suprascriptus1" pos="adjective" number="singular" gender="feminine" case="accusative"></LM>
+                        <LM id="50" relation="ATR" seg="free" status="normal" declension="2" animacy="1" iobj="-" form="Dei" lemma="deus1" pos="noun" number="singular" gender="masculine" case="genitive"></LM>
+                      </LM>
+                    </LM>
+                    <LM id="53" relation="AuxP" seg="free" status="normal" form="per" lemma="per1" pos="preposition">
+                      <LM id="55" relation="ADV" seg="free" status="normal" declension="2" animacy="-" iobj="-" form="titulum" lemma="titulus1" pos="noun" number="singular" gender="masculine" case="accusative">
+                        <LM id="54" relation="ATR" seg="free" status="normal" declension="3" animacy="-" iobj="-" form="offersionis" lemma="offersio1" pos="noun" number="singular" gender="feminine" case="genitive"></LM>
+                      </LM>
+                    </LM>
+                  </LM>
+                </LM>
+              </LM>
+            </LM>
+          </LM>
+        </LM>
+      </LM>
+      <LM id="11" relation="UNDEFINED" seg="free" status="normal" form="," lemma="unknown1"></LM>
+      <LM id="17" relation="UNDEFINED" seg="free" status="normal" form="," lemma="unknown1"></LM>
+      <LM id="18" relation="UNDEFINED" seg="free" status="damage" form="....." lemma="unknown1"></LM>
+      <LM id="22" relation="UNDEFINED" seg="free" status="normal" form="quondam" lemma="quondam1" pos="adverb"></LM>
+      <LM id="24" relation="UNDEFINED" seg="free" status="normal" form="," lemma="unknown1"></LM>
+      <LM id="34" relation="UNDEFINED" seg="free" status="normal" form="et" lemma="et1" pos="conjunction"></LM>
+      <LM id="35" relation="UNDEFINED" seg="free" status="damage" form="colo" lemma="unknown1"></LM>
+      <LM id="36" relation="UNDEFINED" seg="free" status="damage" form="..." lemma="unknown1"></LM>
+      <LM id="41" relation="UNDEFINED" seg="free" status="damage" form="....." lemma="unknown1"></LM>
+      <LM id="45" relation="UNDEFINED" seg="free" status="normal" form="et" lemma="et1" pos="conjunction"></LM>
+      <LM id="46" relation="UNDEFINED" seg="free" status="damage" form="....." lemma="unknown1"></LM>
+      <LM id="52" relation="UNDEFINED" seg="free" status="damage" form="....." lemma="unknown1"></LM>
+      <LM id="56" relation="UNDEFINED" seg="free" status="damage" form="....." lemma="unknown1"></LM>
+      <LM id="58" relation="AuxK" seg="free" status="normal" form="." lemma="unknown1"></LM>
+    </LM>
+    <LM id="2938307" document_id="CDT" subdoc="63" date="804" place="Pisa" scribe="Anselmo" type="Locazione" redaction="original">
+      <LM id="1" relation="UNDEFINED" seg="free" status="normal" form="Et" lemma="et1" pos="conjunction"></LM>
+      <LM id="4" relation="UNDEFINED" seg="free" status="damage" form="....." lemma="unknown1"></LM>
+      <LM id="6" relation="UNDEFINED" seg="free" status="normal" form="bene" lemma="bene1" pos="adverb"></LM>
+      <LM id="11" relation="UNDEFINED" seg="free" status="normal" form="," lemma="unknown1"></LM>
+      <LM id="17" relation="UNDEFINED" seg="free" status="normal" form="," lemma="unknown1"></LM>
+      <LM id="18" relation="COORD" seg="free" status="normal" form="et" lemma="et1" pos="conjunction">
+        <LM id="10" relation="PRED_CO" seg="free" status="normal" form="deveam" lemma="debeo1" pos="verb" person="first_person" number="singular" tense="present" mood="subjunctive" voice="active">
+          <LM id="5" relation="SBJ" seg="free" status="normal" form="ego" lemma="ego1" pos="pronoun" number="singular" gender="masculine" case="nominative"></LM>
+          <LM id="8" relation="COORD" seg="free" status="normal" form="et" lemma="et1" pos="conjunction">
+            <LM id="3" relation="OBJ" seg="free" status="damage" declension="1" animacy="-" iobj="-" form="casa" lemma="casa1" pos="noun" number="singular" gender="feminine" case="accusative">
+              <LM id="2" relation="ATR" seg="free" status="normal" declension="1" animacy="-" iobj="-" form="ipsa" lemma="ipse1" pos="pronoun" number="singular" gender="feminine" case="accusative"></LM>
+            </LM>
+            <LM id="7" relation="OBJ_CO" seg="free" status="normal" form="lavorare" lemma="laboro1" pos="verb" tense="present" mood="infinitive" voice="active"></LM>
+            <LM id="9" relation="OBJ_CO" seg="free" status="normal" form="excolere" lemma="excolo1" pos="verb" tense="present" mood="infinitive" voice="active"></LM>
+            <LM id="12" relation="AuxC" seg="free" status="normal" form="ut" lemma="ut1" pos="conjunction">
+              <LM id="14" relation="COORD" seg="free" status="normal" form="et" lemma="et1" pos="conjunction">
+                <LM id="13" relation="ADV_CO" seg="free" status="normal" form="melioretur" lemma="melioro1" pos="verb" person="third_person" number="singular" tense="present" mood="subjunctive" voice="passive"></LM>
+                <LM id="16" relation="ADV_CO" seg="free" status="normal" form="peioretur" lemma="peioro1" pos="verb" person="third_person" number="singular" tense="present" mood="subjunctive" voice="passive">
+                  <LM id="15" relation="AuxZ" seg="free" status="normal" form="non" lemma="non1" pos="adverb"></LM>
+                </LM>
+              </LM>
+            </LM>
+          </LM>
+        </LM>
+        <LM id="49" relation="PRED_CO" seg="free" status="normal" form="debeamus" lemma="debeo1" pos="verb" person="first_person" number="plural" tense="present" mood="subjunctive" voice="active">
+          <LM id="26" relation="COORD" seg="free" status="normal" form="aut" lemma="aut1" pos="conjunction">
+            <LM id="22" relation="SBJ_CO" seg="free" status="normal" form="ego" lemma="ego1" pos="pronoun" number="singular" gender="masculine" case="nominative">
+              <LM id="25" relation="ATR" seg="free" status="damage" declension="2" animacy="1" iobj="-" form="Sichiprandus" lemma="Sichiprandus1" pos="noun" number="singular" gender="masculine" case="nominative">
+                <LM id="23" relation="ATR" seg="free" status="expan" form="qui" lemma="qui1" pos="pronoun" number="singular" gender="masculine" case="nominative"></LM>
+                <LM id="24" relation="ATR" seg="free" status="expan" form="supra" lemma="supra1" pos="adverb"></LM>
+              </LM>
+            </LM>
+            <LM id="28" relation="SBJ_CO" seg="free" status="normal" declension="3" animacy="0" iobj="-" form="heredes" lemma="heres1" pos="noun" number="plural" gender="masculine" case="accusative">
+              <LM id="27" relation="ATR" seg="free" status="normal" declension="2" animacy="0" iobj="-" form="meus" lemma="meus1" pos="adjective" number="plural" gender="masculine" case="accusative"></LM>
+            </LM>
+          </LM>
+          <LM id="48" relation="OBJ" seg="free" status="normal" form="facere" lemma="facio1" pos="verb" tense="present" mood="infinitive" voice="active">
+            <LM id="19" relation="AuxP" seg="free" status="normal" form="per" lemma="per1" pos="preposition">
+              <LM id="20" relation="ADV" seg="free" status="normal" declension="3" animacy="-" iobj="-" form="omnem" lemma="omnis1" pos="adjective" number="singular" gender="masculine" case="accusative"></LM>
+            </LM>
+            <LM id="33" relation="COORD" seg="free" status="normal" form="vel" lemma="vel1" pos="conjunction">
+              <LM id="29" relation="OBJ_CO" seg="free" status="normal" declension="-" animacy="-" iobj="1" form="tibi" lemma="tu1" pos="pronoun" number="singular" gender="masculine" case="dative">
+                <LM id="31" relation="ATR" seg="free" status="normal" declension="2" animacy="1" iobj="1" form="Adelpertus" lemma="Adalpertus1" pos="noun" number="singular" gender="masculine" case="nominative">
+                  <LM id="30" relation="ATR" seg="free" status="normal" declension="2" animacy="0" iobj="1" form="suprascripto" lemma="suprascriptus1" pos="adjective" number="singular" gender="masculine" case="dative"></LM>
+                  <LM id="32" relation="ATR" seg="free" status="expan" declension="2" animacy="0" iobj="1" form="presbiter" lemma="presbyter1" pos="noun" number="singular" gender="masculine" case="nominative"></LM>
+                </LM>
+              </LM>
+              <LM id="34" relation="AuxP" seg="free" status="normal" declension="-" animacy="-" iobj="1" form="ad" lemma="ad1" pos="preposition">
+                <LM id="35" relation="OBJ_CO" seg="free" status="normal" declension="2" animacy="0" iobj="-" form="posteros" lemma="posterus1" pos="adjective" number="plural" gender="masculine" case="accusative">
+                  <LM id="36" relation="ATR" seg="free" status="normal" declension="2" animacy="0" iobj="-" form="tuos" lemma="tuus1" pos="adjective" number="plural" gender="masculine" case="accusative"></LM>
+                </LM>
+              </LM>
+            </LM>
+            <LM id="37" relation="AuxP" seg="free" status="normal" form="ad" lemma="ad1" pos="preposition">
+              <LM id="38" relation="ADV" seg="free" status="normal" declension="3" animacy="-" iobj="-" form="partem" lemma="pars1" pos="noun" number="singular" gender="feminine" case="accusative">
+                <LM id="40" relation="ATR" seg="free" status="normal" declension="1" animacy="-" iobj="-" form="ecclesie" lemma="ecclesia1" pos="noun" number="singular" gender="feminine" case="genitive">
+                  <LM id="39" relation="ATR" seg="free" status="normal" declension="1" animacy="-" iobj="-" form="predicte" lemma="praedico2" pos="participle" number="singular" tense="perfect" mood="participial" voice="passive" gender="feminine" case="genitive"></LM>
+                </LM>
+              </LM>
+            </LM>
+            <LM id="41" relation="AuxP" seg="free" status="normal" form="de" lemma="de1" pos="preposition">
+              <LM id="44" relation="COORD" seg="free" status="normal" form="et" lemma="et1" pos="conjunction">
+                <LM id="42" relation="ATR" seg="free" status="normal" declension="1" animacy="-" iobj="-" form="ipsa" lemma="ipse1" pos="pronoun" number="singular" gender="feminine" case="ablative"></LM>
+                <LM id="43" relation="ADV_CO" seg="free" status="normal" declension="1" animacy="-" iobj="-" form="casa" lemma="casa1" pos="noun" number="singular" gender="feminine" case="ablative"></LM>
+                <LM id="45" relation="ADV_CO" seg="free" status="normal" declension="1" animacy="-" iobj="-" form="colonia" lemma="colonia1" pos="noun" number="singular" gender="feminine" case="ablative"></LM>
+              </LM>
+            </LM>
+            <LM id="46" relation="OBJ" seg="free" status="normal" declension="2" animacy="0" iobj="1" form="vobis" lemma="tu1" pos="pronoun" number="plural" gender="masculine" case="dative"></LM>
+            <LM id="47" relation="OBJ_AP_ExD0_APOS" seg="free" status="normal" declension="4" animacy="-" iobj="-" form="redditum" lemma="reditus1" pos="noun" number="singular" gender="masculine" case="accusative"></LM>
+            <LM id="51" relation="OBJ_AP_ExD0_APOS" seg="free" status="expan" declension="2" animacy="-" iobj="-" form="solido" lemma="solidus1" pos="noun" number="singular" gender="masculine" case="accusative">
+              <LM id="50" relation="ATR" seg="free" status="normal" declension="2" animacy="-" iobj="-" form="uno" lemma="unus1" pos="adjective" number="singular" gender="masculine" case="accusative"></LM>
+              <LM id="52" relation="ATR" seg="free" status="normal" declension="2" animacy="-" iobj="-" form="argento" lemma="argentum1" pos="noun" number="singular" gender="neuter" case="accusative"></LM>
+            </LM>
+            <LM id="53" relation="AuxP" seg="free" status="normal" form="per" lemma="per1" pos="preposition">
+              <LM id="55" relation="ADV" seg="free" status="normal" declension="3" animacy="-" iobj="-" form="natale" lemma="natalis1" pos="noun" number="singular" gender="masculine" case="accusative">
+                <LM id="54" relation="ATR" seg="free" status="normal" declension="3" animacy="-" iobj="-" form="omnem" lemma="omnis1" pos="adjective" number="singular" gender="masculine" case="accusative"></LM>
+                <LM id="57" relation="ATR" seg="free" status="normal" declension="2" animacy="1" iobj="-" form="Petri" lemma="Petrus1" pos="noun" number="singular" gender="masculine" case="genitive">
+                  <LM id="56" relation="ATR" seg="free" status="normal" declension="2" animacy="0" iobj="-" form="sancti" lemma="sanctus1" pos="adjective" number="singular" gender="masculine" case="genitive"></LM>
+                </LM>
+              </LM>
+            </LM>
+          </LM>
+        </LM>
+      </LM>
+      <LM id="21" relation="UNDEFINED" seg="free" status="damage" form="....." lemma="unknown1"></LM>
+      <LM id="58" relation="AuxK" seg="free" status="normal" form="." lemma="unknown1"></LM>
+    </LM>
+    <LM id="2938308" document_id="CDT" subdoc="63" date="804" place="Pisa" scribe="Anselmo" type="Locazione" redaction="original">
+      <LM id="1" relation="UNDEFINED" seg="formulaic" status="normal" form="Et" lemma="et1" pos="conjunction"></LM>
+      <LM id="6" relation="PRED" seg="formulaic" status="normal" form="deveamus" lemma="debeo1" pos="verb" person="first_person" number="plural" tense="present" mood="subjunctive" voice="active">
+        <LM id="5" relation="OBJ" seg="formulaic" status="normal" form="venire" lemma="venio1" pos="verb" tense="present" mood="infinitive" voice="active">
+          <LM id="2" relation="AuxP" seg="formulaic" status="normal" form="a" lemma="ab1" pos="preposition">
+            <LM id="3" relation="ADV" seg="formulaic" status="normal" declension="2" animacy="-" iobj="-" form="mandato" lemma="mandatum1" pos="noun" number="singular" gender="neuter" case="ablative">
+              <LM id="4" relation="ATR" seg="formulaic" status="normal" declension="2" animacy="-" iobj="-" form="vestro" lemma="vester1" pos="adjective" number="singular" gender="masculine" case="ablative"></LM>
+            </LM>
+          </LM>
+          <LM id="8" relation="ADV" seg="formulaic" status="normal" declension="2" animacy="-" iobj="-" form="faciendo" lemma="facio1" pos="participle" number="singular" tense="present" mood="gerundive" voice="passive" gender="neuter" case="accusative">
+            <LM id="7" relation="OBJ" seg="formulaic" status="normal" declension="1" animacy="-" iobj="-" form="iustitia" lemma="justitia1" pos="noun" number="singular" gender="feminine" case="accusative"></LM>
+          </LM>
+        </LM>
+      </LM>
+      <LM id="9" relation="AuxK" seg="formulaic" status="normal" form="." lemma="unknown1"></LM>
+    </LM>
+    <LM id="2938309" document_id="CDT" subdoc="63" date="804" place="Pisa" scribe="Anselmo" type="Locazione" redaction="original">
+      <LM id="1" relation="UNDEFINED" seg="formulaic" status="normal" form="Unde" lemma="unde1" pos="adverb"></LM>
+      <LM id="11" relation="PRED" seg="formulaic" status="normal" form="rogavimus" lemma="rogo1" pos="verb" person="first_person" number="plural" tense="perfect" mood="indicative" voice="active">
+        <LM id="10" relation="OBJ" seg="formulaic" status="normal" form="scrivere" lemma="scribo1" pos="verb" tense="present" mood="infinitive" voice="active">
+          <LM id="2" relation="AuxP" seg="formulaic" status="normal" form="inter" lemma="inter1" pos="preposition">
+            <LM id="3" relation="ADV" seg="formulaic" status="normal" declension="2" animacy="0" iobj="-" form="nobis" lemma="nos1" pos="pronoun" number="plural" gender="masculine" case="ablative"></LM>
+          </LM>
+          <LM id="5" relation="OBJ" seg="formulaic" status="normal" declension="1" animacy="-" iobj="-" form="cartule" lemma="chartula1" pos="noun" number="plural" gender="feminine" case="nominative">
+            <LM id="4" relation="ATR" seg="formulaic" status="normal" declension="1" animacy="-" iobj="-" form="due" lemma="duo1" pos="adjective" number="plural" gender="feminine" case="nominative"></LM>
+          </LM>
+          <LM id="7" relation="ADV" seg="formulaic" status="normal" declension="3" animacy="-" iobj="-" form="tenore" lemma="tenor1" pos="noun" number="singular" gender="masculine" case="ablative">
+            <LM id="6" relation="ATR" seg="formulaic" status="normal" declension="2" animacy="-" iobj="-" form="uno" lemma="unus1" pos="adjective" number="singular" gender="masculine" case="ablative"></LM>
+          </LM>
+          <LM id="8" relation="SBJ" seg="formulaic" status="normal" declension="2" animacy="1" iobj="-" form="Anselmo" lemma="Anselmus1" pos="noun" number="singular" gender="masculine" case="accusative">
+            <LM id="9" relation="ATR" seg="formulaic" status="expan" declension="2" animacy="0" iobj="-" form="notario" lemma="notarius1" pos="noun" number="singular" gender="masculine" case="accusative"></LM>
+          </LM>
+        </LM>
+      </LM>
+      <LM id="12" relation="AuxK" seg="formulaic" status="normal" form="." lemma="unknown1"></LM>
+    </LM>
+    <LM id="2938310" document_id="CDT" subdoc="63" date="804" place="Pisa" scribe="Anselmo" type="Locazione" redaction="original">
+      <LM id="1" relation="PRED" seg="formulaic" status="normal" declension="2" animacy="-" iobj="-" form="Actum" lemma="ago1" pos="participle" number="singular" tense="perfect" mood="participial" voice="passive" gender="neuter" case="nominative">
+        <LM id="2" relation="ADV" seg="formulaic" status="normal" declension="1" animacy="2" iobj="-" form="Pisa" lemma="Pisa2" pos="noun" number="singular" gender="feminine" case="ablative"></LM>
+      </LM>
+      <LM id="3" relation="UNDEFINED" seg="formulaic" status="normal" form="." lemma="unknown1"></LM>
+      <LM id="4" relation="ExD" seg="formulaic" status="normal" declension="2" animacy="-" iobj="-" form="Signum" lemma="signum1" pos="noun" number="singular" gender="neuter" case="nominative">
+        <LM id="5" relation="ATR" seg="formulaic" status="expan" declension="4" animacy="-" iobj="-" form="manus" lemma="manus1" pos="noun" number="singular" gender="feminine" case="genitive">
+          <LM id="6" relation="ATR" seg="formulaic" status="normal" declension="2" animacy="1" iobj="-" form="Sichiprandi" lemma="Sichiprandus1" pos="noun" number="singular" gender="masculine" case="genitive">
+            <LM id="7" relation="ATR" seg="formulaic" status="expan" declension="2" animacy="0" iobj="-" form="clerici" lemma="clericus1" pos="noun" number="singular" gender="masculine" case="genitive"></LM>
+            <LM id="13" relation="ATR" seg="formulaic" status="normal" form="rogavit" lemma="rogo1" pos="verb" person="third_person" number="singular" tense="perfect" mood="indicative" voice="active">
+              <LM id="9" relation="SBJ" seg="formulaic" status="normal" form="qui" lemma="qui1" pos="pronoun" number="singular" gender="masculine" case="nominative"></LM>
+              <LM id="12" relation="OBJ" seg="formulaic" status="normal" form="scrivere" lemma="scribo1" pos="verb" tense="present" mood="infinitive" voice="active">
+                <LM id="11" relation="OBJ" seg="formulaic" status="normal" declension="1" animacy="-" iobj="-" form="cartula" lemma="chartula1" pos="noun" number="singular" gender="feminine" case="accusative">
+                  <LM id="10" relation="ATR" seg="formulaic" status="normal" form="hanc" lemma="hic1" pos="pronoun" number="singular" gender="feminine" case="accusative"></LM>
+                </LM>
+              </LM>
+            </LM>
+          </LM>
+        </LM>
+      </LM>
+      <LM id="8" relation="UNDEFINED" seg="formulaic" status="normal" form="," lemma="unknown1"></LM>
+      <LM id="14" relation="AuxK" seg="formulaic" status="normal" form="." lemma="unknown1"></LM>
+    </LM>
+    <LM id="2938311" document_id="CDT" subdoc="63" date="804" place="Pisa" scribe="Anselmo" type="Locazione" redaction="original">
+      <LM id="5" relation="UNDEFINED" seg="subs" status="normal" form="quondam" lemma="quondam1" pos="adverb"></LM>
+      <LM id="13" relation="PRED" seg="subs" status="normal" form="subscripsi" lemma="subscribo1" pos="verb" person="first_person" number="singular" tense="perfect" mood="indicative" voice="active">
+        <LM id="1" relation="SBJ" seg="subs" status="normal" form="Ego" lemma="ego1" pos="pronoun" number="singular" gender="masculine" case="nominative">
+          <LM id="2" relation="ATR" seg="subs" status="normal" declension="2" animacy="1" iobj="-" form="Petrus" lemma="Petrus1" pos="noun" number="singular" gender="masculine" case="nominative">
+            <LM id="3" relation="ATR" seg="subs" status="expan" declension="2" animacy="0" iobj="-" form="clericus" lemma="clericus1" pos="noun" number="singular" gender="masculine" case="nominative"></LM>
+            <LM id="4" relation="ATR" seg="subs" status="normal" declension="2" animacy="0" iobj="-" form="filius" lemma="filius1" pos="noun" number="singular" gender="masculine" case="nominative">
+              <LM id="6" relation="ATR" seg="subs" status="normal" declension="2" animacy="1" iobj="-" form="Pertuingi" lemma="Pertingus1" pos="noun" number="singular" gender="masculine" case="genitive"></LM>
+            </LM>
+            <LM id="7" relation="ATR" seg="subs" status="normal" declension="2" animacy="0" iobj="-" form="rogatus" lemma="rogo1" pos="participle" number="singular" tense="perfect" mood="participial" voice="passive" gender="masculine" case="nominative">
+              <LM id="8" relation="AuxP" seg="subs" status="normal" form="ad" lemma="ab1" pos="preposition">
+                <LM id="9" relation="OBJ" seg="subs" status="normal" declension="2" animacy="1" iobj="-" form="Sichiprandu" lemma="Sichiprandus1" pos="noun" number="singular" gender="masculine" case="ablative">
+                  <LM id="10" relation="ATR" seg="subs" status="expan" declension="2" animacy="0" iobj="-" form="clerico" lemma="clericus1" pos="noun" number="singular" gender="masculine" case="ablative"></LM>
+                </LM>
+              </LM>
+            </LM>
+          </LM>
+        </LM>
+        <LM id="11" relation="ADV" seg="subs" status="normal" form="me" lemma="ego1" pos="pronoun" number="singular" gender="masculine" case="ablative">
+          <LM id="12" relation="ATV" seg="subs" status="normal" declension="3" animacy="0" iobj="-" form="teste" lemma="testis1" pos="noun" number="singular" gender="masculine" case="ablative"></LM>
+        </LM>
+      </LM>
+      <LM id="14" relation="AuxK" seg="subs" status="normal" form="." lemma="unknown1"></LM>
+    </LM>
+    <LM id="2938312" document_id="CDT" subdoc="63" date="804" place="Pisa" scribe="Anselmo" type="Locazione" redaction="original">
+      <LM id="4" relation="UNDEFINED" seg="subs" status="normal" form="quondam" lemma="quondam1" pos="adverb"></LM>
+      <LM id="12" relation="PRED" seg="subs" status="normal" form="subscripsi" lemma="subscribo1" pos="verb" person="first_person" number="singular" tense="perfect" mood="indicative" voice="active">
+        <LM id="1" relation="SBJ" seg="subs" status="normal" form="Ego" lemma="ego1" pos="pronoun" number="singular" gender="masculine" case="nominative">
+          <LM id="2" relation="ATR" seg="subs" status="normal" declension="2" animacy="1" iobj="-" form="Ilmerandu" lemma="Ilmerandus1" pos="noun" number="singular" gender="masculine" case="accusative">
+            <LM id="3" relation="ATR" seg="subs" status="normal" declension="2" animacy="0" iobj="-" form="filio" lemma="filius1" pos="noun" number="singular" gender="masculine" case="accusative">
+              <LM id="5" relation="ATR" seg="subs" status="normal" declension="0" animacy="1" iobj="-" form="Deusdedi" lemma="Deusdedit1" pos="noun" number="singular" gender="masculine" case="genitive"></LM>
+            </LM>
+            <LM id="6" relation="ATR" seg="subs" status="normal" declension="2" animacy="0" iobj="-" form="rogatus" lemma="rogo1" pos="participle" number="singular" tense="perfect" mood="participial" voice="passive" gender="masculine" case="nominative">
+              <LM id="7" relation="AuxP" seg="subs" status="normal" form="at" lemma="ab1" pos="preposition">
+                <LM id="8" relation="OBJ" seg="subs" status="normal" declension="2" animacy="1" iobj="-" form="Sichiprandu" lemma="Sichiprandus1" pos="noun" number="singular" gender="masculine" case="ablative">
+                  <LM id="9" relation="ATR" seg="subs" status="expan" declension="2" animacy="0" iobj="-" form="clerico" lemma="clericus1" pos="noun" number="singular" gender="masculine" case="ablative"></LM>
+                </LM>
+              </LM>
+            </LM>
+          </LM>
+        </LM>
+        <LM id="10" relation="ADV" seg="subs" status="normal" form="me" lemma="ego1" pos="pronoun" number="singular" gender="masculine" case="ablative">
+          <LM id="11" relation="ATV" seg="subs" status="normal" declension="3" animacy="0" iobj="-" form="teste" lemma="testis1" pos="noun" number="singular" gender="masculine" case="ablative"></LM>
+        </LM>
+      </LM>
+      <LM id="13" relation="AuxK" seg="subs" status="normal" form="." lemma="unknown1"></LM>
+    </LM>
+    <LM id="2938313" document_id="CDT" subdoc="63" date="804" place="Pisa" scribe="Anselmo" type="Locazione" redaction="original">
+      <LM id="1" relation="ExD" seg="formulaic" status="normal" declension="2" animacy="-" iobj="-" form="Signum" lemma="signum1" pos="noun" number="singular" gender="neuter" case="nominative">
+        <LM id="2" relation="ATR" seg="formulaic" status="normal" declension="4" animacy="-" iobj="-" form="manus" lemma="manus1" pos="noun" number="singular" gender="feminine" case="genitive">
+          <LM id="3" relation="ATR" seg="formulaic" status="normal" declension="1" animacy="1" iobj="-" form="Cocie" lemma="Coccia1" pos="noun" number="singular" gender="masculine" case="genitive">
+            <LM id="4" relation="ATR" seg="formulaic" status="normal" declension="2" animacy="0" iobj="-" form="filio" lemma="filius1" pos="noun" number="singular" gender="masculine" case="accusative">
+              <LM id="6" relation="ATR" seg="formulaic" status="normal" declension="2" animacy="1" iobj="-" form="Nandulfi" lemma="Nandulfus1" pos="noun" number="singular" gender="masculine" case="genitive"></LM>
+            </LM>
+            <LM id="7" relation="ATR" seg="formulaic" status="normal" declension="3" animacy="0" iobj="-" form="testis" lemma="testis1" pos="noun" number="singular" gender="masculine" case="genitive"></LM>
+          </LM>
+        </LM>
+      </LM>
+      <LM id="5" relation="UNDEFINED" seg="formulaic" status="normal" form="quondam" lemma="quondam1" pos="adverb"></LM>
+      <LM id="8" relation="AuxK" seg="formulaic" status="normal" form="." lemma="unknown1"></LM>
+    </LM>
+    <LM id="2938314" document_id="CDT" subdoc="63" date="804" place="Pisa" scribe="Anselmo" type="Locazione" redaction="original">
+      <LM id="6" relation="PRED" seg="formulaic" status="normal" form="complevi" lemma="compleo1" pos="verb" person="first_person" number="singular" tense="perfect" mood="indicative" voice="active">
+        <LM id="1" relation="SBJ" seg="formulaic" status="normal" form="Ego" lemma="ego1" pos="pronoun" number="singular" gender="masculine" case="nominative">
+          <LM id="2" relation="ATR" seg="formulaic" status="normal" declension="2" animacy="1" iobj="-" form="Anselmo" lemma="Anselmus1" pos="noun" number="singular" gender="masculine" case="accusative">
+            <LM id="3" relation="ATR" seg="formulaic" status="expan" declension="2" animacy="0" iobj="-" form="notarius" lemma="notarius1" pos="noun" number="singular" gender="masculine" case="nominative"></LM>
+          </LM>
+        </LM>
+        <LM id="4" relation="AuxP" seg="formulaic" status="normal" form="post" lemma="post1" pos="preposition">
+          <LM id="5" relation="ADV" seg="formulaic" status="normal" declension="1" animacy="-" iobj="-" form="tradita" lemma="trado1" pos="participle" number="singular" tense="perfect" mood="participial" voice="passive" gender="feminine" case="accusative"></LM>
+        </LM>
+      </LM>
+      <LM id="7" relation="AuxK" seg="formulaic" status="normal" form="." lemma="unknown1"></LM>
+    </LM>
+    <LM id="2939364" document_id="MED" subdoc="259" date="797" place="Lucca" scribe="anonimo" type="notitia" redaction="original">
+      <LM id="8" relation="ExD" seg="free" status="normal" declension="1" animacy="-" iobj="-" form="notitia" lemma="notitia1" pos="noun" number="singular" gender="feminine" case="nominative">
+        <LM id="1" relation="AuxP" seg="free" status="normal" form="In" lemma="in1" pos="preposition">
+          <LM id="2" relation="ADV" seg="free" status="expan" declension="3" animacy="-" iobj="-" form="nomine" lemma="nomen1" pos="noun" number="singular" gender="neuter" case="ablative">
+            <LM id="6" relation="ATR" seg="free" status="normal" declension="0" animacy="1" iobj="-" form="Iesu" lemma="Iesus1" pos="noun" number="singular" gender="masculine" case="genitive">
+              <LM id="3" relation="ATR" seg="free" status="normal" declension="2" animacy="1" iobj="-" form="Domini" lemma="dominus1" pos="noun" number="singular" gender="masculine" case="genitive"></LM>
+              <LM id="4" relation="ATR" seg="free" status="normal" declension="2" animacy="1" iobj="-" form="Dei" lemma="deus1" pos="noun" number="singular" gender="masculine" case="genitive">
+                <LM id="5" relation="ATR" seg="free" status="normal" declension="2" animacy="0" iobj="-" form="nostri" lemma="noster1" pos="adjective" number="singular" gender="masculine" case="genitive"></LM>
+              </LM>
+              <LM id="7" relation="ATR" seg="free" status="normal" declension="2" animacy="1" iobj="-" form="Christi" lemma="Christus1" pos="noun" number="singular" gender="masculine" case="genitive"></LM>
+            </LM>
+          </LM>
+        </LM>
+        <LM id="9" relation="ATR" seg="free" status="normal" declension="3" animacy="-" iobj="-" form="brevis" lemma="brevis1" pos="noun" number="singular" gender="masculine" case="genitive"></LM>
+        <LM id="11" relation="AuxC" seg="free" status="normal" form="qualiter" lemma="qualiter2" pos="conjunction">
+          <LM id="30" relation="ADV" seg="free" status="normal" form="rogavat" lemma="rogo1" pos="verb" person="third_person" number="singular" tense="imperfect" mood="indicative" voice="active">
+            <LM id="12" relation="AuxP" seg="free" status="normal" form="ante" lemma="ante1" pos="preposition">
+              <LM id="19" relation="COORD" seg="free" status="normal" form="et" lemma="et1" pos="conjunction">
+                <LM id="13" relation="ADV_CO" seg="free" status="normal" declension="2" animacy="1" iobj="-" form="Viccheramum" lemma="Wicheramus1" pos="noun" number="singular" gender="masculine" case="accusative">
+                  <LM id="15" relation="ATR" seg="free" status="normal" declension="3" animacy="0" iobj="-" form="ducem" lemma="dux1" pos="noun" number="singular" gender="masculine" case="accusative">
+                    <LM id="14" relation="ATR" seg="free" status="normal" declension="2" animacy="0" iobj="-" form="gloriosum" lemma="gloriosus1" pos="adjective" number="singular" gender="masculine" case="accusative"></LM>
+                  </LM>
+                </LM>
+                <LM id="17" relation="ADV_CO" seg="free" status="normal" declension="2" animacy="1" iobj="-" form="Ghisprandum" lemma="Ghisprandus1" pos="noun" number="singular" gender="masculine" case="accusative">
+                  <LM id="18" relation="ATR" seg="free" status="normal" declension="3" animacy="0" iobj="-" form="lociservatorem" lemma="lociservator1" pos="noun" number="singular" gender="masculine" case="accusative"></LM>
+                </LM>
+                <LM id="22" relation="ADV_CO" seg="free" status="normal" declension="1" animacy="-" iobj="-" form="presentiam" lemma="praesentia1" pos="noun" number="singular" gender="feminine" case="accusative">
+                  <LM id="21" relation="ATR" seg="free" status="normal" declension="3" animacy="0" iobj="-" form="hominum" lemma="homo1" pos="noun" number="plural" gender="masculine" case="genitive">
+                    <LM id="20" relation="ATR" seg="free" status="normal" declension="2" animacy="0" iobj="-" form="aliorum" lemma="alius1" pos="adjective" number="plural" gender="masculine" case="genitive"></LM>
+                    <LM id="27" relation="ATR" seg="free" status="normal" declension="2" animacy="-" iobj="-" form="scripta" lemma="scribo1" pos="participle" number="plural" tense="perfect" mood="participial" voice="passive" gender="neuter" case="nominative">
+                      <LM id="25" relation="SBJ" seg="free" status="normal" declension="3" animacy="-" iobj="-" form="nomina" lemma="nomen1" pos="noun" number="plural" gender="neuter" case="nominative">
+                        <LM id="24" relation="ATR" seg="free" status="normal" declension="2" animacy="0" iobj="-" form="quorum" lemma="qui1" pos="pronoun" number="plural" gender="masculine" case="genitive"></LM>
+                      </LM>
+                      <LM id="28" relation="AuxV" seg="free" status="normal" form="sunt" lemma="sum1" pos="verb" person="third_person" number="plural" tense="present" mood="indicative" voice="active"></LM>
+                    </LM>
+                  </LM>
+                </LM>
+              </LM>
+            </LM>
+            <LM id="31" relation="SBJ" seg="free" status="normal" declension="2" animacy="1" iobj="-" vcomp="Iohannem" stype="A" form="Ghiso" lemma="Ghisus1" pos="noun" number="singular" gender="masculine" case="accusative"></LM>
+            <LM id="33" relation="OBJ" seg="free" status="normal" declension="3" animacy="1" iobj="-" form="Iohannem" lemma="Johannes1" pos="noun" number="singular" gender="masculine" case="accusative">
+              <LM id="32" relation="ATR" seg="free" status="normal" declension="2" animacy="0" iobj="-" form="domnum" lemma="domnus1" pos="noun" number="singular" gender="masculine" case="accusative"></LM>
+              <LM id="34" relation="ATR" seg="free" status="normal" declension="2" animacy="0" iobj="-" form="episcopum" lemma="episcopus1" pos="noun" number="singular" gender="masculine" case="accusative"></LM>
+            </LM>
+            <LM id="36" relation="AuxC" seg="free" status="normal" form="ut" lemma="ut1" pos="conjunction">
+              <LM id="39" relation="ADV" seg="free" status="normal" form="faceret" lemma="facio1" pos="verb" person="third_person" number="singular" tense="imperfect" mood="subjunctive" voice="active">
+                <LM id="37" relation="OBJ" seg="free" status="normal" declension="-" animacy="-" iobj="1" form="ei" lemma="is1" pos="pronoun" number="singular" gender="masculine" case="dative"></LM>
+                <LM id="38" relation="OBJ" seg="free" status="normal" declension="1" animacy="-" iobj="-" form="misericordiam" lemma="misericordia1" pos="noun" number="singular" gender="feminine" case="accusative"></LM>
+                <LM id="40" relation="AuxP" seg="free" status="normal" form="de" lemma="de1" pos="preposition">
+                  <LM id="41" relation="ADV" seg="free" status="normal" declension="1" animacy="-" iobj="-" form="wadiam" lemma="wadia1" pos="noun" number="singular" gender="feminine" case="ablative">
+                    <LM id="42" relation="ATR" seg="free" status="normal" declension="1" animacy="-" iobj="-" form="illam" lemma="ille1" pos="pronoun" number="singular" gender="feminine" case="ablative"></LM>
+                    <LM id="45" relation="ATR" seg="free" status="normal" form="dederat" lemma="do1" pos="verb" person="third_person" number="singular" tense="pluperfect" mood="indicative" voice="active">
+                      <LM id="44" relation="OBJ" seg="free" status="normal" declension="1" animacy="-" iobj="-" form="quam" lemma="qui1" pos="pronoun" number="singular" gender="feminine" case="accusative"></LM>
+                      <LM id="46" relation="OBJ" seg="free" status="normal" declension="2" animacy="1" iobj="1" form="Sariperti" lemma="Saripertus1" pos="noun" number="singular" gender="masculine" case="genitive">
+                        <LM id="47" relation="ATR" seg="free" status="normal" declension="2" animacy="0" iobj="1" form="presbiteri" lemma="presbyter1" pos="noun" number="singular" gender="masculine" case="genitive"></LM>
+                      </LM>
+                      <LM id="48" relation="AuxP" seg="free" status="normal" form="de" lemma="de1" pos="preposition">
+                        <LM id="49" relation="ADV" seg="free" status="normal" declension="2" animacy="-" iobj="-" form="monasterio" lemma="monasterium1" pos="noun" number="singular" gender="neuter" case="ablative">
+                          <LM id="50" relation="ATR" seg="free" status="normal" declension="2" animacy="0" iobj="-" form="sancti" lemma="sanctus1" pos="adjective" number="singular" gender="masculine" case="genitive">
+                            <LM id="51" relation="ATR" seg="free" status="normal" declension="2" animacy="1" iobj="-" form="Pauli" lemma="Paulus2" pos="noun" number="singular" gender="masculine" case="genitive"></LM>
+                          </LM>
+                          <LM id="52" relation="AuxP" seg="free" status="normal" form="de" lemma="de1" pos="preposition">
+                            <LM id="53" relation="ATR" seg="free" status="normal" declension="1" animacy="2" iobj="-" form="Villa" lemma="villa1" pos="noun" number="singular" gender="feminine" case="ablative"></LM>
+                          </LM>
+                        </LM>
+                      </LM>
+                    </LM>
+                  </LM>
+                </LM>
+              </LM>
+            </LM>
+          </LM>
+        </LM>
+      </LM>
+      <LM id="10" relation="UNDEFINED" seg="free" status="normal" form="," lemma="unknown1"></LM>
+      <LM id="16" relation="UNDEFINED" seg="free" status="normal" form="et" lemma="et1" pos="conjunction"></LM>
+      <LM id="23" relation="UNDEFINED" seg="free" status="normal" form="," lemma="unknown1"></LM>
+      <LM id="26" relation="UNDEFINED" seg="free" status="normal" form="subter" lemma="subter1" pos="adverb"></LM>
+      <LM id="29" relation="UNDEFINED" seg="free" status="normal" form="," lemma="unknown1"></LM>
+      <LM id="35" relation="UNDEFINED" seg="free" status="normal" form="," lemma="unknown1"></LM>
+      <LM id="43" relation="UNDEFINED" seg="free" status="normal" form="," lemma="unknown1"></LM>
+      <LM id="54" relation="AuxK" seg="free" status="normal" form="." lemma="unknown1"></LM>
+    </LM>
+    <LM id="2939365" document_id="MED" subdoc="259" date="797" place="Lucca" scribe="anonimo" type="notitia" redaction="original">
+      <LM id="1" relation="UNDEFINED" seg="free" status="normal" form="Et" lemma="et1" pos="conjunction"></LM>
+      <LM id="2" relation="PRED" seg="free" status="normal" form="dicevat" lemma="dico2" pos="verb" person="third_person" number="singular" tense="imperfect" mood="indicative" voice="active">
+        <LM id="3" relation="OBJ" seg="free" status="normal" declension="-" animacy="-" iobj="1" form="ei" lemma="is1" pos="pronoun" number="singular" gender="masculine" case="dative"></LM>
+        <LM id="4" relation="SBJ" seg="free" status="normal" declension="3" animacy="1" iobj="-" vcomp="(quotation)" stype="A" form="Iohannes" lemma="Johannes1" pos="noun" number="singular" gender="masculine" case="nominative">
+          <LM id="5" relation="ATR" seg="free" status="normal" declension="2" animacy="0" iobj="-" form="episcopus" lemma="episcopus1" pos="noun" number="singular" gender="masculine" case="nominative"></LM>
+        </LM>
+      </LM>
+      <LM id="6" relation="AuxK" seg="free" status="normal" form=":" lemma="unknown1"></LM>
+    </LM>
+    <LM id="2939366" document_id="MED" subdoc="259" date="797" place="Lucca" scribe="anonimo" type="notitia" redaction="original">
+      <LM id="1" relation="UNDEFINED" seg="free" status="normal" form="et" lemma="et1" pos="conjunction"></LM>
+      <LM id="4" relation="PRED" seg="free" status="normal" form="contendis" lemma="contendo1" pos="verb" person="second_person" number="singular" tense="present" mood="indicative" voice="active">
+        <LM id="2" relation="SBJ" seg="free" status="normal" form="tu" lemma="tu1" pos="pronoun" number="singular" gender="masculine" case="nominative">
+          <LM id="3" relation="ATR" seg="free" status="normal" declension="2" animacy="1" iobj="-" form="Ghiso" lemma="Ghisus1" pos="noun" number="singular" gender="masculine" case="accusative"></LM>
+        </LM>
+        <LM id="13" relation="COORD" seg="free" status="normal" form="et" lemma="et1" pos="conjunction">
+          <LM id="5" relation="OBJ_CO" seg="free" status="expan" declension="1" animacy="-" iobj="-" form="ecclesiam" lemma="ecclesia1" pos="noun" number="singular" gender="feminine" case="accusative">
+            <LM id="7" relation="ATR" seg="free" status="normal" declension="2" animacy="1" iobj="-" form="Pauli" lemma="Paulus2" pos="noun" number="singular" gender="masculine" case="genitive">
+              <LM id="6" relation="ATR" seg="free" status="normal" declension="2" animacy="0" iobj="-" form="sancti" lemma="sanctus1" pos="adjective" number="singular" gender="masculine" case="genitive"></LM>
+            </LM>
+            <LM id="10" relation="ATR" seg="free" status="normal" form="est" lemma="sum1" pos="verb" person="third_person" number="singular" tense="present" mood="indicative" voice="active">
+              <LM id="9" relation="SBJ" seg="free" status="normal" form="que" lemma="qui1" pos="pronoun" number="singular" gender="feminine" case="nominative"></LM>
+              <LM id="11" relation="AuxP" seg="free" status="normal" form="in" lemma="in1" pos="preposition">
+                <LM id="12" relation="ADV" seg="free" status="normal" declension="1" animacy="2" iobj="-" form="Villa" lemma="villa1" pos="noun" number="singular" gender="feminine" case="ablative"></LM>
+              </LM>
+            </LM>
+            <LM id="18" relation="ATR" seg="free" status="normal" declension="2" animacy="-" iobj="-" form="wadiatum" lemma="wadio1" pos="participle" number="singular" tense="perfect" mood="participial" voice="passive" gender="neuter" case="accusative">
+              <LM id="17" relation="ADV" seg="free" status="normal" form="unde" lemma="unde1" pos="adverb"></LM>
+              <LM id="19" relation="AuxV" seg="free" status="normal" form="aves" lemma="habeo1" pos="verb" person="second_person" number="singular" tense="present" mood="indicative" voice="active"></LM>
+              <LM id="20" relation="AuxP" seg="free" status="normal" form="cum" lemma="cum1" pos="preposition">
+                <LM id="21" relation="ADV" seg="free" status="normal" declension="2" animacy="1" iobj="-" form="Sariperto" lemma="Saripertus1" pos="noun" number="singular" gender="masculine" case="ablative">
+                  <LM id="22" relation="ATR" seg="free" status="normal" declension="2" animacy="0" iobj="-" form="presbitero" lemma="presbyter1" pos="noun" number="singular" gender="masculine" case="ablative">
+                    <LM id="23" relation="ATR" seg="free" status="normal" declension="2" animacy="0" iobj="-" form="nostro" lemma="noster1" pos="adjective" number="singular" gender="masculine" case="ablative"></LM>
+                  </LM>
+                </LM>
+              </LM>
+            </LM>
+          </LM>
+          <LM id="14" relation="OBJ_CO" seg="free" status="normal" declension="5" animacy="-" iobj="-" form="rebus" lemma="res1" pos="noun" number="plural" gender="feminine" case="ablative"></LM>
+        </LM>
+      </LM>
+      <LM id="8" relation="UNDEFINED" seg="free" status="normal" form="," lemma="unknown1"></LM>
+      <LM id="15" relation="UNDEFINED" seg="free" status="normal" form="ividem" lemma="unknown1"></LM>
+      <LM id="16" relation="UNDEFINED" seg="free" status="normal" form="," lemma="unknown1"></LM>
+      <LM id="24" relation="AuxK" seg="free" status="normal" form="." lemma="unknown1"></LM>
+    </LM>
+    <LM id="2939367" document_id="MED" subdoc="259" date="797" place="Lucca" scribe="anonimo" type="notitia" redaction="original">
+      <LM id="1" relation="UNDEFINED" seg="free" status="normal" form="Sed" lemma="sed1" pos="conjunction"></LM>
+      <LM id="3" relation="PRED" seg="free" status="normal" form="dixit" lemma="dico2" pos="verb" person="third_person" number="singular" tense="perfect" mood="indicative" voice="active">
+        <LM id="2" relation="SBJ" seg="free" status="normal" form="ille" lemma="ille1" pos="pronoun" number="singular" gender="masculine" case="nominative"></LM>
+      </LM>
+      <LM id="4" relation="AuxK" seg="free" status="normal" form=":" lemma="unknown1"></LM>
+    </LM>
+    <LM id="2939368" document_id="MED" subdoc="259" date="797" place="Lucca" scribe="anonimo" type="notitia" redaction="original">
+      <LM id="1" relation="UNDEFINED" seg="free" status="normal" form="quia" lemma="quia1" pos="conjunction"></LM>
+      <LM id="2" relation="UNDEFINED" seg="free" status="normal" form="ne" lemma="ne1" pos="adverb"></LM>
+      <LM id="3" relation="UNDEFINED" seg="free" status="normal" form="c" lemma="que1" pos="conjunction"></LM>
+      <LM id="11" relation="UNDEFINED" seg="free" status="normal" form="ibidem" lemma="ibidem1" pos="adverb"></LM>
+      <LM id="17" relation="COORD" seg="free" status="normal" form="c" lemma="que1" pos="conjunction">
+        <LM id="15" relation="PRED_CO" seg="free" status="normal" form="possum" lemma="possum1" pos="verb" person="first_person" number="singular" tense="present" mood="indicative" voice="active">
+          <LM id="12" relation="OBJ" seg="free" status="normal" form="contrare" lemma="contro1" pos="verb" tense="present" mood="infinitive" voice="active">
+            <LM id="9" relation="COORD" seg="free" status="normal" form="c" lemma="que1" pos="conjunction">
+              <LM id="5" relation="OBJ_CO" seg="free" status="expan" declension="1" animacy="-" iobj="-" form="ecclesiam" lemma="ecclesia1" pos="noun" number="singular" gender="feminine" case="accusative">
+                <LM id="4" relation="ATR" seg="free" status="normal" declension="1" animacy="-" iobj="-" form="illam" lemma="ille1" pos="pronoun" number="singular" gender="feminine" case="accusative"></LM>
+                <LM id="7" relation="ATR" seg="free" status="normal" declension="2" animacy="1" iobj="-" form="Pauli" lemma="Paulus2" pos="noun" number="singular" gender="masculine" case="genitive">
+                  <LM id="6" relation="ATR" seg="free" status="normal" declension="2" animacy="0" iobj="-" form="sancti" lemma="sanctus1" pos="adjective" number="singular" gender="masculine" case="genitive"></LM>
+                </LM>
+              </LM>
+              <LM id="8" relation="AuxZ" seg="free" status="normal" form="ne" lemma="ne1" pos="adverb"></LM>
+              <LM id="10" relation="OBJ_CO" seg="free" status="normal" declension="5" animacy="-" iobj="-" form="rebus" lemma="res1" pos="noun" number="plural" gender="feminine" case="ablative"></LM>
+            </LM>
+            <LM id="13" relation="OBJ" seg="free" status="normal" declension="2" animacy="0" iobj="1" form="vobis" lemma="tu1" pos="pronoun" number="plural" gender="masculine" case="dative"></LM>
+          </LM>
+          <LM id="14" relation="AuxZ" seg="free" status="normal" form="non" lemma="non1" pos="adverb"></LM>
+        </LM>
+        <LM id="16" relation="AuxZ" seg="free" status="normal" form="ne" lemma="ne1" pos="adverb"></LM>
+        <LM id="18" relation="PRED_CO" seg="free" status="normal" form="contro" lemma="contro1" pos="verb" person="first_person" number="singular" tense="present" mood="indicative" voice="active">
+          <LM id="20" relation="AuxC" seg="free" status="normal" form="quia" lemma="quia1" pos="conjunction">
+            <LM id="22" relation="OBJ" seg="free" status="normal" form="est" lemma="sum1" pos="verb" person="third_person" number="singular" tense="present" mood="indicative" voice="active">
+              <LM id="21" relation="PNOM" seg="free" status="normal" declension="1" animacy="-" iobj="-" form="vestra" lemma="vester1" pos="adjective" number="singular" gender="feminine" case="nominative"></LM>
+            </LM>
+          </LM>
+        </LM>
+      </LM>
+      <LM id="19" relation="UNDEFINED" seg="free" status="normal" form="," lemma="unknown1"></LM>
+      <LM id="23" relation="AuxK" seg="free" status="normal" form="." lemma="unknown1"></LM>
+    </LM>
+    <LM id="2939369" document_id="MED" subdoc="259" date="797" place="Lucca" scribe="anonimo" type="notitia" redaction="original">
+      <LM id="1" relation="PRED" seg="formulaic" status="normal" declension="2" animacy="-" iobj="-" form="Actum" lemma="ago1" pos="participle" number="singular" tense="perfect" mood="participial" voice="passive" gender="neuter" case="nominative">
+        <LM id="2" relation="SBJ" seg="formulaic" status="normal" form="hoc" lemma="hic1" pos="pronoun" number="singular" gender="neuter" case="nominative"></LM>
+        <LM id="3" relation="AuxV" seg="formulaic" status="normal" form="est" lemma="sum1" pos="verb" person="third_person" number="singular" tense="present" mood="indicative" voice="active"></LM>
+        <LM id="4" relation="AuxP" seg="formulaic" status="normal" form="in" lemma="in1" pos="preposition">
+          <LM id="5" relation="ADV" seg="formulaic" status="normal" declension="2" animacy="-" iobj="-" form="sagrario" lemma="sacrarium1" pos="noun" number="singular" gender="neuter" case="ablative">
+            <LM id="7" relation="ATR" seg="formulaic" status="normal" declension="1" animacy="1" iobj="-" form="Reparate" lemma="Reparata1" pos="noun" number="singular" gender="feminine" case="genitive">
+              <LM id="6" relation="ATR" seg="formulaic" status="normal" declension="1" animacy="0" iobj="-" form="sanctae" lemma="sanctus1" pos="adjective" number="singular" gender="feminine" case="genitive"></LM>
+            </LM>
+          </LM>
+        </LM>
+        <LM id="9" relation="ADV" seg="formulaic" status="normal" declension="5" animacy="-" iobj="-" form="die" lemma="dies1" pos="noun" number="singular" gender="masculine" case="ablative">
+          <LM id="8" relation="ATR" seg="formulaic" status="normal" declension="2" animacy="-" iobj="-" form="secundum" lemma="secundus1" pos="adjective" number="singular" gender="masculine" case="ablative"></LM>
+          <LM id="10" relation="ATR" seg="formulaic" status="normal" declension="1" animacy="-" iobj="-" form="epiphaniae" lemma="epiphania1" pos="noun" number="singular" gender="feminine" case="genitive"></LM>
+        </LM>
+        <LM id="11" relation="AuxP" seg="formulaic" status="normal" form="in" lemma="in1" pos="preposition">
+          <LM id="12" relation="ADV" seg="formulaic" status="normal" declension="2" animacy="-" iobj="-" form="anno" lemma="annus1" pos="noun" number="singular" gender="masculine" case="ablative">
+            <LM id="17" relation="COORD" seg="formulaic" status="normal" form="et" lemma="et1" pos="conjunction">
+              <LM id="13" relation="ATR" seg="formulaic" status="normal" declension="2" animacy="1" iobj="-" form="Dominorum" lemma="dominus1" pos="noun" number="plural" gender="masculine" case="genitive">
+                <LM id="14" relation="ATR" seg="formulaic" status="normal" declension="2" animacy="0" iobj="-" form="nostrorum" lemma="noster1" pos="adjective" number="plural" gender="masculine" case="genitive"></LM>
+              </LM>
+              <LM id="15" relation="ATR" seg="formulaic" status="normal" declension="3" animacy="0" iobj="-" form="regum" lemma="rex1" pos="noun" number="plural" gender="masculine" case="genitive"></LM>
+              <LM id="16" relation="ATR_CO" seg="formulaic" status="normal" declension="2" animacy="1" iobj="-" form="Caruli" lemma="Carolus1" pos="noun" number="singular" gender="masculine" case="genitive"></LM>
+              <LM id="18" relation="ATR_CO" seg="formulaic" status="normal" declension="2" animacy="1" iobj="-" form="Pipini" lemma="Pipinus1" pos="noun" number="singular" gender="masculine" case="genitive"></LM>
+            </LM>
+            <LM id="19" relation="ATR" seg="formulaic" status="normal" declension="2" animacy="-" iobj="-" form="vigisimo" lemma="vicesimus1" pos="adjective" number="singular" gender="masculine" case="ablative"></LM>
+            <LM id="20" relation="ATR" seg="formulaic" status="normal" declension="2" animacy="-" iobj="-" form="tertio" lemma="tertius1" pos="adjective" number="singular" gender="masculine" case="ablative"></LM>
+            <LM id="22" relation="ATR" seg="formulaic" status="normal" declension="2" animacy="-" iobj="-" form="sexto" lemma="sextus1" pos="adjective" number="singular" gender="masculine" case="ablative"></LM>
+            <LM id="23" relation="ATR" seg="formulaic" status="normal" declension="2" animacy="-" iobj="-" form="decimo" lemma="decimus1" pos="adjective" number="singular" gender="masculine" case="ablative"></LM>
+          </LM>
+        </LM>
+        <LM id="25" relation="ADV" seg="formulaic" status="expan" declension="3" animacy="-" iobj="-" form="indictione" lemma="indictio1" pos="noun" number="singular" gender="feminine" case="ablative">
+          <LM id="26" relation="ATR" seg="formulaic" status="normal" declension="1" animacy="-" iobj="-" form="quinta" lemma="quintus1" pos="adjective" number="singular" gender="feminine" case="ablative"></LM>
+        </LM>
+      </LM>
+      <LM id="21" relation="UNDEFINED" seg="formulaic" status="normal" form="et" lemma="et1" pos="conjunction"></LM>
+      <LM id="24" relation="UNDEFINED" seg="formulaic" status="normal" form="," lemma="unknown1"></LM>
+      <LM id="27" relation="AuxK" seg="formulaic" status="normal" form="." lemma="unknown1"></LM>
+    </LM>
+    <LM id="2939370" document_id="MED" subdoc="259" date="797" place="Lucca" scribe="anonimo" type="notitia" redaction="original">
+      <LM id="4" relation="PRED" seg="subs" status="normal" form="interfui" lemma="intersum1" pos="verb" person="first_person" number="singular" tense="perfect" mood="indicative" voice="active">
+        <LM id="1" relation="SBJ" seg="subs" status="normal" form="Ego" lemma="ego1" pos="pronoun" number="singular" gender="masculine" case="nominative">
+          <LM id="2" relation="ATR" seg="subs" status="normal" declension="2" animacy="1" iobj="-" form="Alpertus" lemma="Alpertus1" pos="noun" number="singular" gender="masculine" case="nominative">
+            <LM id="3" relation="ATR" seg="subs" status="expan" declension="2" animacy="0" iobj="-" form="presbiter" lemma="presbyter1" pos="noun" number="singular" gender="masculine" case="nominative"></LM>
+          </LM>
+        </LM>
+      </LM>
+      <LM id="5" relation="AuxK" seg="subs" status="normal" form="." lemma="unknown1"></LM>
+    </LM>
+    <LM id="2939371" document_id="MED" subdoc="259" date="797" place="Lucca" scribe="anonimo" type="notitia" redaction="original">
+      <LM id="4" relation="PRED" seg="subs" status="normal" form="interfui" lemma="intersum1" pos="verb" person="first_person" number="singular" tense="perfect" mood="indicative" voice="active">
+        <LM id="1" relation="SBJ" seg="subs" status="normal" form="Ego" lemma="ego1" pos="pronoun" number="singular" gender="masculine" case="nominative">
+          <LM id="2" relation="ATR" seg="subs" status="normal" declension="1" animacy="1" iobj="-" form="Deusduna" lemma="Deusdona1" pos="noun" number="singular" gender="masculine" case="nominative">
+            <LM id="3" relation="ATR" seg="subs" status="expan" declension="2" animacy="0" iobj="-" form="presbiter" lemma="presbyter1" pos="noun" number="singular" gender="masculine" case="nominative"></LM>
+          </LM>
+        </LM>
+      </LM>
+      <LM id="5" relation="AuxK" seg="subs" status="normal" form="." lemma="unknown1"></LM>
+    </LM>
+    <LM id="2939372" document_id="MED" subdoc="259" date="797" place="Lucca" scribe="anonimo" type="notitia" redaction="original">
+      <LM id="4" relation="PRED" seg="subs" status="normal" form="interfui" lemma="intersum1" pos="verb" person="first_person" number="singular" tense="perfect" mood="indicative" voice="active">
+        <LM id="1" relation="SBJ" seg="subs" status="normal" form="Ego" lemma="ego1" pos="pronoun" number="singular" gender="masculine" case="nominative">
+          <LM id="2" relation="ATR" seg="subs" status="normal" declension="2" animacy="1" iobj="-" form="Alprandus" lemma="Alprandus1" pos="noun" number="singular" gender="masculine" case="nominative">
+            <LM id="3" relation="ATR" seg="subs" status="normal" declension="2" animacy="0" iobj="-" form="presbiter" lemma="presbyter1" pos="noun" number="singular" gender="masculine" case="nominative"></LM>
+          </LM>
+        </LM>
+      </LM>
+      <LM id="5" relation="AuxK" seg="subs" status="normal" form="." lemma="unknown1"></LM>
+    </LM>
+    <LM id="2939373" document_id="MED" subdoc="259" date="797" place="Lucca" scribe="anonimo" type="notitia" redaction="original">
+      <LM id="4" relation="PRED" seg="subs" status="normal" form="interfui" lemma="intersum1" pos="verb" person="first_person" number="singular" tense="perfect" mood="indicative" voice="active">
+        <LM id="1" relation="SBJ" seg="subs" status="normal" form="Ego" lemma="ego1" pos="pronoun" number="singular" gender="masculine" case="nominative">
+          <LM id="2" relation="ATR" seg="subs" status="normal" declension="2" animacy="1" iobj="-" form="Ato" lemma="Atus1" pos="noun" number="singular" gender="masculine" case="accusative">
+            <LM id="3" relation="ATR" seg="subs" status="expan" declension="2" animacy="0" iobj="-" form="subdiaconus" lemma="subdiaconus1" pos="noun" number="singular" gender="masculine" case="nominative"></LM>
+          </LM>
+        </LM>
+      </LM>
+      <LM id="5" relation="AuxK" seg="subs" status="normal" form="." lemma="unknown1"></LM>
+    </LM>
+    <LM id="2939374" document_id="MED" subdoc="259" date="797" place="Lucca" scribe="anonimo" type="notitia" redaction="original">
+      <LM id="4" relation="PRED" seg="subs" status="normal" form="interfui" lemma="intersum1" pos="verb" person="first_person" number="singular" tense="perfect" mood="indicative" voice="active">
+        <LM id="1" relation="SBJ" seg="subs" status="normal" form="Ego" lemma="ego1" pos="pronoun" number="singular" gender="masculine" case="nominative">
+          <LM id="2" relation="ATR" seg="subs" status="normal" declension="0" animacy="1" iobj="-" form="Eleuteri" lemma="Eleutherius1" pos="noun" number="singular" gender="masculine" case="nominative">
+            <LM id="3" relation="ATR" seg="subs" status="expan" declension="2" animacy="0" iobj="-" form="subdiaconus" lemma="subdiaconus1" pos="noun" number="singular" gender="masculine" case="nominative"></LM>
+          </LM>
+        </LM>
+      </LM>
+      <LM id="5" relation="AuxK" seg="subs" status="normal" form="." lemma="unknown1"></LM>
+    </LM>
+  </aldt_trees>
+</aldt_treebank>
+<?tred-pattern rootstyle: #{NodeLabel-skipempty:1}
+?>
+<?tred-pattern text: ${form}
+?>
+<?tred-pattern node: ${document_id} &lt;? if($${document_id} =~ '.*') { '${subdoc}'} ?&gt;
+?>
+<?tred-pattern node: ${form}
+?>
+<?tred-pattern node: #{darkblue} ${relation}
+${case}
+${seg}
+${status}
+${id}
+?>
+<?tred-hint lemma: ${lemma}&lt;? 
+  $${pos} ? "\n".'pos: ${pos}' : '' ?&gt;&lt;? 
+  $${mood} ? "\n".'mood: ${mood}' : '' ?&gt;&lt;? 
+  $${case} ? "\n".'case: ${case}' : '' ?&gt;&lt;? 
+  $${tense} ? "\n".'tense: ${tense}' : '' ?&gt;&lt;? 
+  $${person} ? "\n".'person: ${person}' : '' ?&gt;&lt;? 
+  $${number} ? "\n".'number: ${number}' : '' ?&gt;&lt;? 
+  $${voice} ? "\n".'voice: ${voice}' : '' ?&gt;&lt;? 
+  $${gender} ? "\n".'gender: ${gender}' : '' ?&gt;&lt;? 
+  $${degree} ? "\n".'degree: ${degree}' : '' ?&gt;?>
