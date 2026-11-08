@@ -2269,3 +2269,16 @@ OCR's own confidence score): a searchable finding aid to the printed
 page, not an edition. CC0 metadata over Public Domain Mark texts.
 The 19th-century decades (ten more tarballs, ~47k books) remain
 upstream for later cones.
+
+**`dbnl`** — **3,653 documents / 950,870 passages**: the DBNL
+public-domain collection (KB, the national library of the
+Netherlands) — edited, hand-corrected transcriptions of Dutch and
+Flemish literature from the Hulthem manuscript's abele spelen
+(Esmoreit, Lanseloet van Denemerken) and the Dutch incunabula
+through the Golden Age (Hooft, Bredero, Vondel, Cats, Huygens,
+the emblem books) to the novels, periodicals and philology of the
+nineteenth century. Each title carries DBNL's dating of its
+witness, printing history, genre and authors with life dates, and
+is cited by printed page. Mostly Dutch with Latin, French and
+Middle Dutch shelves; public domain, offered "voor elk doel" —
+credit DBNL and the KB.
