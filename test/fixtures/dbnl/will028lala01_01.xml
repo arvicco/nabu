@@ -1,0 +1,257 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE TEI.2 PUBLIC "-//DBNL//DTD TEI.2 XML//NL" "https://www.dbnl.org/xml/dtd/teixlite.dtd">
+<TEI.2>
+   <teiHeader>
+        <fileDesc>
+           <titleStmt>
+               <title type="main">De la langue belgique</title>
+               <author>J.F. Willems</author>
+           </titleStmt>
+           <editionStmt>
+               <edition>
+                   Dit bestand biedt, behoudens een aantal hierna te noemen ingrepen, een diplomatische weergave van <hi rend="i">De la langue belgique</hi> van J.F. Willems uit 1829.
+               </edition>
+               <respStmt>
+                   <resp>
+                       <corr></corr>
+                   </resp>
+               </respStmt>
+           </editionStmt>
+           <extent><!-- aantal pagina's --></extent>
+           <publicationStmt>
+               <idno type="titelcode">will028lala01_01</idno>
+               <idno type="format">DBNL-TEI 1</idno>
+               <availability>
+                   <p>2019 dbnl</p>
+               </availability>
+           </publicationStmt>
+           <notesStmt>
+               <note></note>
+           </notesStmt>
+           <sourceDesc>
+               <bibl>
+                   <idno type="isbn"></idno>
+                   <idno type="usedcopy">exemplaar Koninklijke Bibliotheek Den Haag, signatuur: 9191 G 16, scans van Google Books</idno>
+               </bibl>
+               <p>J.F. Willems, <hi rend="i">De la langue belgique</hi>. Brest van Kempen, Brussel 1829</p>
+               <p>&nbsp;</p>
+           </sourceDesc>
+       </fileDesc>
+       <encodingDesc>
+           <projectDesc>
+               <p>Wijze van coderen: standaard</p>
+               <p></p>
+           </projectDesc>
+       </encodingDesc>
+       <profileDesc>
+           <langUsage>
+               <language id="fr">French</language>
+           </langUsage>
+       </profileDesc>
+       <ebook>
+           <bibl>
+               <title type="main">De la langue belgique</title>
+               <author>J.F. Willems</author>
+               <idno type="isbn"></idno>
+               <idno type="nur"></idno>
+               <imprint>
+                   <date></date>
+                   <publisher></publisher>
+                   <pubPlace></pubPlace>
+               </imprint>
+           </bibl>
+           <idno type="isbn"></idno>
+           <idno type="nur"></idno>
+           <availability>
+               <p></p>
+           </availability>
+           <order>
+               <price curr="euro"></price>
+               <link></link>
+           </order>
+           <blurb><p></p></blurb>
+           <titlepage><p></p></titlepage>
+           <colofon><p></p></colofon>
+       </ebook>
+       <pod>
+           <bibl>
+               <title type="main">De la langue belgique</title>
+               <author>J.F. Willems</author>
+               <idno type="isbn"></idno>
+               <idno type="nur"></idno>
+               <imprint>
+                   <date></date>
+                   <publisher></publisher>
+                   <pubPlace></pubPlace>
+               </imprint>
+           </bibl>
+           <idno type="isbn"></idno>
+           <idno type="nur"></idno>
+           <availability>
+               <p></p>
+           </availability>
+           <order>
+               <price curr="euro"></price>
+               <link></link>
+           </order>
+           <blurb><p></p></blurb>
+           <titlepage><p></p></titlepage>
+           <colofon><p></p></colofon>
+       </pod>
+       <revisionDesc>
+           <change>
+               <date>2018-12-17</date>
+               <respStmt>
+                   <name type="person">KE</name>
+               </respStmt>
+               <item>colofon toegevoegd</item>
+           </change>
+       </revisionDesc>
+   </teiHeader>
+   <text>
+<interpGrp>
+<interp type="taalkunde" value="nor"/>
+<interp type="secundair" value="weye012"/>
+</interpGrp>
+<body>
+<cf>
+<div type="chapter">
+<pb n="I"/>
+<p>LETTRE</p>
+<p><hi rend="sc">a</hi></p>
+<p><hi rend="b">M. SYLVAIN VAN DE WEYER.</hi></p>
+<pb n="II"/>
+<p>M. HAYEZ, <hi rend="sc">imprimeur</hi>.</p>
+<pb n="III"/>
+<p>DE LA</p>
+<p>LANGUE BELGIQUE.</p>
+<p>LETTRE</p>
+<p>DE</p>
+<p>JEAN FRANÇOIS WILLEMS,</p>
+<p>MEMBRE DE L'INSTITUT DES PAYSBAS, ETC.,</p>
+<p>A</p>
+<p>M. Sylvain Van de Weyer,</p>
+<p>Avocat, Conservateur de la Bibliothéque de Bruxelles et des manuscrits du Roi, Professeur de philosophie au Musée, Membre de la commission chargée de la publication des monumens inédits de l'histoire du pays, et l'un des Rédacteurs du <hi rend="i">Courrier des Pays-Bas.</hi></p>
+<p>BRUXELLES,</p>
+<p>BREST VAN KEMPEN, LIBRAIRE,</p>
+<p>Marché - aux - Herbes, n<hi rend="sup">o</hi> 331.</p>
+<p>1829.</p>
+<pb rend="blank" n="IV"/>
+</div>
+</cf>
+<div type="chapter">
+<pb n="1"/>
+<head rend="h3">L'auteur et le lecteur.</head>
+<sp>
+<speaker><hi rend="sc">l'auteur</hi>.</speaker>
+<p>Mon ami, j'ai l'honneur de vous présenter ce petit ouvrage, écrit sous la forme d'une lettre à M. S<hi rend="sc">ylvain</hi> V<hi rend="sc">an de</hi> W<hi rend="sc">eyer</hi>, mais qui s'adresse également aux autres rédacteurs du <hi rend="i">Courrier des Pays-Bas</hi>, et à tous ceux qui veulent la liberté du français, pour ne pas avoir la liberté du flamand.</p>
+</sp>
+<sp>
+<speaker><hi rend="sc">le lecteur</hi>.</speaker>
+<p>C'est très-bien; mais pourquoi ne l'écrivez-vous pas en flamand?</p>
+</sp>
+<pb n="2"/>
+<sp>
+<speaker><hi rend="sc">l'auteur</hi>.</speaker>
+<p>Parce que je doute si M. V<hi rend="sc">an de</hi> W<hi rend="sc">eyer</hi> lit le flamand. Sa <hi rend="i">Lettre à</hi> M. M<hi rend="sc">unch</hi> est remplie de citations grecques, latines, françaises, espagnoles, italiennes, anglaises et allemandes; mais de flamand</p>
+<lg>
+<l>Pas un seul petit morceau!<note n="(1)" place="foot"><hi rend="i">Fables de La Fontaine</hi>, liv. 1, fab. 1.</note></l>
+</lg>
+</sp>
+<sp>
+<speaker><hi rend="sc">le lecteur</hi>,</speaker>
+<stage><hi rend="i">après avoir lu.</hi></stage>
+<p>Votre lettre est mordante, et je n'aime pas ce ton d'ironie, qui fait tort à la vérité.</p>
+</sp>
+<sp>
+<speaker><hi rend="sc">l'auteur</hi>.</speaker>
+<p>Je ne l'aime pas non plus, et je me garderais bien d'écrire sur ce ton en flamand, la langue étant peu propre à
+<pb n="3"/>cela; mais, que voulez-vous? Ces messieurs ne connaissent pas d'autre style: il faut bien <hi rend="i">aboyer avec les chiens.</hi> Lisez ce qu'ils ont écrit de moi.</p>
+</sp>
+<sp>
+<speaker><hi rend="sc">le lecteur</hi>.</speaker>
+<p>Mais aboyer si fort?</p>
+</sp>
+<sp>
+<speaker><hi rend="sc">l'auteur</hi>.</speaker>
+<p>Tout bon chien doit aboyer fort, quand il voit venir les voleurs.</p>
+</sp>
+<pb rend="blank" n="4"/>
+</div>
+<div type="chapter">
+<pb n="5"/>
+<head rend="h3">Lettre a M. van de Weyer, bibliothécaire a Bruxelles.</head>
+<q rend="bq">E a pieni voti il pappaG<hi rend="sc">allo</hi> a un tratto,
+<lb/>
+Di lingue precettor privilegiato
+<lb/>
+Del regio <hi rend="i">lioncin</hi> fu dichiarato.
+<lb/>
+J.B. C<hi rend="sc">asti</hi>, <hi rend="i">gli animali parlanti</hi> canto <hi rend="sc">ix</hi>, str. 13.</q>
+<div type="section">
+<head rend="h4">Anvers, 26 novembre 1829.</head>
+<p>J'<hi rend="sc">ai</hi> lu, monsieur et savant collaborateur, votre <hi rend="i">Lettre</hi> à M. M<hi rend="sc">unch</hi>, imprimée à la Librairie Romantique de Bruxelles. Elle est venue me tirer du milieu de la bataille de Woeringen, que
+<pb n="6"/>je m'occupais à finir, sur les traces de <hi rend="i">Jean</hi> V<hi rend="sc">an</hi> H<hi rend="sc">eelu</hi>, poète flamand du treizième siècle, dont la chronique m'est tombée en partage, dans le travail de la commission pour la publication des monumens inédits de notre histoire, comme vous le savez. J'en étais tout juste au point où le comte de Luxembourg, s'étant jeté au cou du duc de Brabant, pour le tirer de son cheval à force de bras, et s'élevant un peu de la selle, eut le malheur d'être atteint par l'épée du chevalier V<hi rend="sc">an den</hi> B<hi rend="sc">isdomme</hi>, un peu au-dessous de l'épine dorsale. Je laisse là le malheureux comte tenant de ses deux mains la partie blessée, et je viens m'occuper de vous et de votre Épître.</p>
+<pb n="7"/>
+<p>Ce n'est pas que je veuille y répondre pour M. M<hi rend="sc">unch</hi>, et agiter la question grave, de savoir si vous êtes effectivement, ou si vous n'êtes pas l'auteur de quelqu'<hi rend="i">écrit en faveur de la langue flamande.</hi> Outre que je n'ai pas l'honneur de connaître ce savant allemand, pas plus que son <hi rend="i">Aletheia</hi>, mon père m'a dit mille fois: <hi rend="i">Jongen! bemoeit u toch nooit met zaken daer ge niets van weet!</hi> et me réglant sur ce précepte sage, je n'imiterai jamais un quidam de mon voisinage, qui,</p>
+<lg type="poem">
+<l>Venant de balayer dans une sacristie,</l>
+<l>Traite l'instruction d'hérétique et d'impie,</l>
+</lg>
+<p>et va signer une pétition, conçue dans un idiome qu'il ne parle pas.</p>
+<pb n="8"/>
+<p>Mais si je ne connais pas M. M<hi rend="sc">unch</hi>, j'ai l'honneur de vous connaître et de connaître un peu la langue, que l'on a toujours parlée dans votre famille et dans la mienne. Quand vous avez l'air de renier cette langue (et vous avez cet air-là, monsieur), quand vous protestez hautement devant le public, qu'un homme comme M. V<hi rend="sc">an de</hi> W<hi rend="sc">eyer</hi>, se croirait déshonoré d'avoir écrit en faveur de cette même langue, je prétends avoir quelques droits de me placer alors dans cette partie du public qui vous juge; indépendamment de l'obligation, communè à nous deux, de nous aider réciproquement de nos lumières, pour éclaircir l'histoire nationale. Vous faire réfléchir sur le contenu de votre lettre,
+<pb n="9"/>ce n'est pas sortir, en effet, de la position relative où nous nous trouvons placés; car, mon auteur V<hi rend="sc">an</hi> H<hi rend="sc">eelu</hi> m'enseigne, au commencement de son poème, qu'il est bon d'apprendre le flamand à ceux qui ne le savent pas. C'est ce qui lui fit dédier son ouvrage à Marguerite d'Angleterre, femme de notre duc Jean II. Veuillez un moment vous donner la peine d'abaisser votre ouïe à la simplicité de son langage:</p>
+<lg type="poem">
+<l>Vrouwe Margriete van Inghelant</l>
+<l>Die seker hevet van Brabant</l>
+<l>Tshertoghen Jans sone, J<hi rend="sc">an</hi>,</l>
+<l>Want si dietsche tale niet en can</l>
+<l>Daerom willic haer ene gichte</l>
+<l>Senden, van dietschen gedichte,</l>
+<l>Daer si dietsch in leeren moghe<note n="(1)" place="foot">J<hi rend="sc">an</hi> V<hi rend="sc">an</hi> H<hi rend="sc">eelu's</hi> <hi rend="i">slag van Woeringen</hi>, v<hi rend="sup">s</hi>. 1-7.</note>.</l>
+</lg>
+<pb n="23"/>
+<p>Consacrer le principe d'une égalité de droit entre deux langues d'un même pays, c'est alimenter ces haines nationales, c'est même les porter dans la législature. Des milliers d'hommes ont été massacrés à cause de l'interprétation d'un mot. Aussi les gouvernemens bien constitués de l'Europe se gardentils de suivre un principe si destructif de l'ordre public<note n="(1)" place="foot">On n'a pas senti cela sous notre gouvernement d'autrefois, parce que chaque province avait nu gouvernement séparé.</note>, et les allemands de l'Alsace ont-ils le bon esprit de ne pas réclamer une liberté de langage, qui les séparerait du reste de la France. L'allemand est adopté dans la représentation suisse, quoiqu'il y ait des cantons
+<pb n="24"/>français et italiens, et je m'assure que, dans notre seconde chambre, les choses n'en iraient que mieux, si le député hollandais pouvait être toujours entendu par le député wallon. Au moins on pourrait dire alors que celui-ci est tout-à-fait à sa place; car ce n'est pas être tout-à-fait à sa place que de faire partie d'un corps délibérant, et de ne pas savoir ce qui s'y passe.</p>
+<p>Les haines, ou plutôt les antipathies nationales, résultat de la diversité des moeurs et du langage, quand elles ont pour objet les nations étrangères, et qu'elles ne vont pas plus loin que le christianisme ne le permet, modérées d'ailleurs, en temps de paix, par le commerce, et se cachant sous les formes
+<pb n="25"/>de la civilisation, ont toujours opéré de grandes choses, et assuré l'indépendance des peuples. Elles sont plus fortes que les armées, <hi rend="i">puisqu'elles ne meurent pas</hi>, et sont pour le moins aussi nécessaires. Je n'aime pas ces soldats, qui ôtaient leurs chapeaux devant l'ennemi, pour le saluer, et qui lui criaient: <hi rend="i">Messieurs des gardes françaises, veuillez tirer!</hi> On n'est pas là pour se faire des complimens, mais pour se tuer. Les Français du temps de Charles VII, lorsque la France allait devenir pour toujours une province anglaise, n'ont pas sauvé leur pays avec des complimens, mais avec la haine nationale. Comment les Espagnols de nos jours ont-ils résisté aux armées de vingt peu-<pb n="26"/>ples divers, se ralliant sous les aigles de Napoléon? par la haine nationale:</p>
+<lg type="poem">
+<l>They fight for freedom who were never free<note n="(1)" place="foot">Lord B<hi rend="sc">yron's</hi> <hi rend="i">Childe Harolds pilgrimage</hi>, Canto <hi rend="sc">i</hi>, § 86.</note>.</l>
+</lg>
+<p>Aussi, ce n'était pas avec des complimens que leur général P<hi rend="sc">alafox</hi> répondit aux complimens du général français qui l'avait sommé de se rendre. ‘Repassez les Pyrénées, lui dit-il, et l'Espagne redeviendra tranquille! Ce n'est point à la nation la plus signalée par la légèreté de son esprit, par la mobilité de son caractère et par son inquiète turbulence, qu'il
+<pb n="27"/>appartient de venir prêcher les graves et paisibles Castillans. Si la fureur de propager vos maximes vous tourmente, allez dans certaines contrées, dont les savans et les raisonneurs vous prêteront sans doute une oreille complaisante, et ne manqueront pas de célébrer votre modération, votre tolérance, la perfection de votre discipline, la beauté de votre tenue, le ravissement de vos hôtes en vous recevant chez eux, leur désespoir en vous perdant, vos idées libérales.... Mais nous autres, pauvres Espagnols, nous sommes trop ignorans pour renverser notre antique constitution, et pour faire tomber la tête de nos rois... Nous avons
+<pb n="28"/>encore cet énergique caractère national, <hi rend="i">presque partout ailleurs effacé, dégradé</hi>, <hi rend="i">avili....</hi> Vous parlez de <hi rend="i">guerre interminable?</hi> quant à cela, il faut vous rendre justice: nous savons que vous avez une patience à toute épreuve; car, depuis vingt ans que durent vos convulsions, il ne serait guère possible d'imaginer un mal, soit physique, soit moral, auquel vous ne vous soyez soumis avec un stoïcisme qui eût fait rougir Épictète. Votre Roi, le plus honnête homme peut-être qui fût parmi vous, a été traîné à l'échafaud, après avoir été abreuvé, pendant quatre ans, des plus lâches et des plus infâmes outrages..... Vous
+<pb n="29"/>l'avez vu sans murmurer. Le sang de vos plus dignes citoyens a été versé à flots par une poignée de scélérats.... Vous l'avez vu sans murmurer. Les crimes les plus atroces ont souillé pendant sept ans toute la surface de la France.... Vous l'avez vu et entendu sans murmurer. Trois cent soixante de vos prêtres ont été égorgés, dans un seul jour, dans la grande capitale de la <hi rend="i">grande nation...</hi> et la grande nation l'a vu sans murmurer. Vous avez, pendant quinze ans, changé de gouvernement et de joug, aussi souvent qu'il a plu à vos geôliers de vous les imposer.... et vous avez porté votre bât et votre muselière sans murmurer. Depuis
+<pb n="30"/>huit ans on vous traîne des bords du Nil à ceux de la Vistule, et de la Vistule à l'Èbre et au Tage, en vous faisant faucher et en vous fauchant comme l'herbe des champs..... Pas un mot, pas un mouvement pour rompre cette horrible et dégoûtante servitude. Oui, Français, vous êtes devenus le peuple le plus <hi rend="i">patient</hi> sous vos tyrans. Mais sachez que nous sommes prêts à tout, et que la <hi rend="i">patience</hi> aussi nous caractérise. Souvenez-vous qu'une petite peuplade d'espagnols chrétiens, réfugiés dans les montagnes des Asturies, a bravé pendant sept siècles toute la puissance des Maures, et que ces Maures ont fini par être chassés de
+<pb n="31"/>toutes les Espagnes<note n="(1)" place="foot"><hi rend="i">Recueil de pièces officielles destinées à détromper les Français, par</hi> F. S<hi rend="sc">choell</hi>, 1, pag. 114-122.</note>!’ Voilà comment s'exprime la haine nationale, réveillée par la guerre! Il ne s'agit pas ici, comme vous voyez, d'une vaine dispute de la foi des traités (le peuple n'entend rien à cela!), mais de <hi rend="i">conduite</hi> et de <hi rend="i">moeurs.</hi> Et notez que ce peuple espagnol, le seul qui n'ait pu être subjugué par Napoléon, était aussi le seul, du continent européen, chez lequel les manières et la langue françaises ne jouaient pas de rôle. Les barons allemands, qui avaient fait leur éducation à Paris, avec les G<hi rend="sc">rimm</hi><note n="(2)" place="foot">Ce G<hi rend="sc">rimm</hi>, <hi rend="i">plus français que les Français</hi>, comme disait dernièrement la <hi rend="i">Revue de Paris.</hi></note>
+<pb n="32"/>et les <hi rend="sc">d</hi>'H<hi rend="sc">olbach</hi>, furent plus dociles à se laisser mener<note n="(1)" place="foot">Depuis que la gallomanie a fait un peu de place en Allemagne aux sentimens nationaux, les Allemands ont une littérature et des auteurs comparables à ceux des autres nations. Voyons ce que dit un de leurs auteurs, au sujet de cette gallomanie: ‘Ja, unsere wackern Väter verstanden wohl, wo die teutsche Ehre war, wo das Geheimniss der teutschen Grösse oder Schwâche sass. Als im Anfange des Sechszehnten Jahrhunderts, da Karl der Fünfte von Oestreich und Spanien teutscher Kaiser war, das Italianische und Spanische in Europa vorherrschte und in Teutschland eindringen wollte, wie beschwerten die Männer sich über das verderben wâlscher Moden und über die Buhlerei und Nachâfferei, welche die teutsche Jugend mit dem Wâlschen trieb! Wie schalten und klagten sie! Hâufiger wurden ihre Beschwerden, bitterer ihre Klagen und Strafen, dunkler ihre Weissagungen einer unglücklichen teutschen Zukunft, als nach Karls des Fünften zeiten in der letzten Hâlfte des Sechszehnten Jahrhunderts und im Anfange des Ziebenzehnten Jahrhunderts die Französische Wuth einriss und Teutschland zu überschwemmen drohte, als die Söhne der teutschen Fürsten, Grafen, und Freiherren aufingen für ihre letzte Bildung und Abglattung einen Ausflug nach Paris zu machen, als nur schön; liebenswürdig, gebildet, höfisch, kunstreich, und geistreich hiess, was Frankreich geschen hatte, was in französischer Sprache lallte, was sich französisch gebehrdete, kleidete und trug, und was mit französischem Leichtsinn und mit französischer Leichtfertigkeit der ehrbaren und einfältigen teutschen Sitten und Weissen spottete. Da erschallten viele stimmen lauter Klagen, Warnungen, und 
+Verwünschungen; aber die Gewalt der Thorheit war mâchtiger, als die krafft der Weisheit.’ E.M. A<hi rend="sc">rnd</hi>ï, <hi rend="i">ueber Volkshass und über den Gebrauch einer fremden Sprache.</hi> Leipzig, 1813, s. 68.</note>. Mais citons un exemple d'héroïsme patriotique plus proche de nous; prenons-le dans notre histoire, et voyons ce que fit la haine nationale chez les Flamands, dans une
+<pb n="33"/>circonstance où la langue même fut mise à l'épreuve. La Flandre gémissait sous le joug des Français. Son territoire était envahi et couvert par les troupes de Philippe-le-Bel, lesquelles se permettaient toutes sortes d'exac-<pb n="34"/>tions. Le comte et la noblesse de Flandre, enfermés dans les prisons de France; partout les municipalités détruites; le commerce éteint; les habitans du pays forcés à bâtir eux-mêmes des citadelles destinées à les tenir en
+<pb n="35"/>bride; <hi rend="i">le roi de France</hi>, enfin, <hi rend="i">proposant et délibérant d'extirper le peuple universel et de ruyner et anéantir toute la ville de Bruges</hi><note n="(1)" place="foot">D'O<hi rend="sc">udegherst</hi>, <hi rend="i">Annales de Flandre</hi>, édition de M. L<hi rend="sc">esbroussart, ii</hi>, pag. 300.</note>; il semblait alors que tout espoir de salut était perdu; mais le Lion Belgique vivait encore, en d'autres termes: ce qui distinguait les Flamands d'avec les Français n'avait pas pu être détruit par les tyrans. Un homme du peuple, doyen des drapiers de Bruges, nommé <hi rend="i">Pierre</hi> <hi rend="sc">de</hi> K<hi rend="sc">oning</hi>, que les historiens nous peignent comme très-éloquent dans sa langue maternelle, et comme n'en parlant point d'autre<note n="(2)" place="foot">‘Welsprekende in syn moederlyke tael, buyten de welke hy geen ander en sprak.’ <hi rend="i">Chronyke van Vlaenderen</hi> (door C. V<hi rend="sc">ernimmen</hi>, B<hi rend="sc">lootacker</hi> en W<hi rend="sc">ydts</hi>). Brugge (1727), in-folio, deel <hi rend="sc">i</hi>, bl. 416.</note>, se lève et se montre sur la
+<pb n="36"/>place publique de Bruges. Il harangue le peuple consterné, lui montrant d'une main les monumens de la ville menacés d'être abattus, et brandissant de l'autre une arme meurtrière. Il lui propose de se mettre à sa tête, de chasser les Français, et vient à bout de ce noble dessein. Les Brugeois s'élancent sur les oppresseurs étrangers, en criant: <hi rend="i">Lion Belgique! Lion Belgique!</hi> et massacrent impitoyablement tous ceux de leurs ennemis qui s'étaient déguisés pour s'enfuir, et qui ne pouvaient prononcer les mots du guet: <hi rend="i">Schild en vriend</hi><note n="(1)" place="foot">On sait que les Français ne peuvent prononcer <hi rend="i">sch.</hi> Ils disaient donc <hi rend="i">Skild.</hi></note>!
+<pb n="37"/>Quinze cents cavaliers et environ deux mille fantassins français furent égorgés dans cette sanglante journée. Ce n'est pas tout: cette troupe de simples bourgeois, bientôt soutenue par le peuple des autres villes et par le comte de Namur, mais toujours sous la conduite du même chef, va battre les cinquante mille soldats de l'armée du roi de France, sous les murs de Courtrai!.... C'étaient là de bien <hi rend="i">nobles bourgeois flamands</hi>, Monsieur V<hi rend="sc">an de</hi> W<hi rend="sc">eyer</hi>!</p>
+<p>Quelque chose d'un pareil élan se manifesta à Bruxelles, dans les assemblées populaires tenues sous les baïonnettes de D<hi rend="sc">umourier</hi>, le 29 décembre 1792, lorsqu'on voulut forcer la nation à émettre son voeu de réunion à la
+<pb n="38"/>France, circonstance dans laquelle les Bruxellois se montrèrent de véritables Belges, non-seulement sous le rapport du caractère national, mais aussi sous le rapport de la langue. <hi rend="i">Neuf</hi> sections firent leurs procès verbaux dans la seule langue flamande<note n="(1)" place="foot">Dans les autres sections, les pièces furent lues dans les deux langues, la proclamation et les lettres des généraux D<hi rend="sc">umourier</hi> et M<hi rend="sc">oreton</hi> étant produites en français. <hi rend="i">Collection des procès verbaux des représentans.</hi> Bruxelles, 1794, vol. <hi rend="sc">ii</hi>, pag. 28, 42, 47, 72, 80, 93, 95, 116, 121, 143, 160, 169, 175.</note>. Dans une de ces sections, le peuple ne voulut pas même entendre la traduction des proclamations de D<hi rend="sc">umourier</hi>, pour ne pas laisser profaner sa langue nationale<note n="(2)" place="foot"><hi rend="i">Ibid.</hi>, p. 84.</note>,
+<pb n="39"/>appelée <hi rend="sc">notre</hi> <hi rend="i">langue flamande</hi>, par le président J.-B. M<hi rend="sc">aillard</hi><note n="(1)" place="foot"><hi rend="i">Ibid.</hi>, p. 141. Et dans la même ville de Bruxelles, M. D<hi rend="sc">e</hi> P<hi rend="sc">otter</hi> parla en 1828 de <hi rend="i">notre langue française!</hi></note>. Et cependant, s'il fallait en croire M. D<hi rend="sc">e</hi> V<hi rend="sc">illete</hi>, dans sa pétition adressée au corps législatif le 26 brumaire an V, il y eut, dans les assemblées dont je viens de parler, beaucoup de ces individus qui, dans tous les temps et dans tous les pays, se vendent aux factions. A cette occasion feu M. L<hi rend="sc">esbroussart</hi> fit l'éloge du <hi rend="i">caractère des Belges</hi>, qu'il prononça et publia après le départ des Français<note n="(2)" place="foot"><hi rend="i">Réflexions sur le caractère qu'ont développé les Belges et particulièrement les Brabançons, pendant l'occupation des Pays-Bas par les Français.</hi> Bruxelles, 1793, in-8<hi rend="sup">o</hi>. L'Académie de Bruxelles, qui fit publier ce Mémoire, a oublié de le porter sur la liste de ses ouvrages.</note>. Ah! si cet estimable sa-<pb n="40"/>vant pouvait sortir aujourd'hui du tombeau, sans doute on l'entendrait répéter à de certaines gens, ce qu'il mit alors en tête de son discours:</p>
+<lg type="poem">
+<l>Que tous ces charlatans, populaires larrons,</l>
+<l>Et de patriotisme insolens fanfarons,</l>
+<l>Purgent de leur aspect cette terre affranchie!</l>
+<l>Guerre, guerre éternelle aux faiseurs d'anarchie!</l>
+</lg>
+<p>Il dirait encore, à ceux qui ne veulent pas du flamand: ‘La langue flamande, fût-elle aussi pauvre et aussi faible qu'elle est riche et énergique, puis<hy>-</hy><pb n="41"/>qu'elle est la <hi rend="i">langue du pays</hi>, elle doit nécessairement être apprise. Quoi de plus fatigant et de plus désagréable que d'entendre des hommes, ornés d'ailleurs de certaines connaissances, s'exprimer dans leur langue avec une barbarie et une trivialité qui annoncent presque l'impéritie!... Ceux qui conservent encore un sentiment d'amour pour la gloire de leur patrie, voient avec peine qu'elle est tombée dans l'avilissement<note n="(1)" place="foot">Il aurait pu ajouter, avec M. S<hi rend="sc">haw</hi>, <hi rend="i">à cause que le langage du peuple n'a jamais été celui de la cour.</hi> (<hi rend="i">Essai sur les Pays-Bas autrichiens</hi>, p. 131.)</note>. Les peuples qui se sont distingués et se distinguent encore
+<pb n="42"/>dans les lettres, <hi rend="i">n'y sont parvenus qu'en joignant à l'étude des langues anciennes, une connaissance approfondie de la leur.</hi> Le gouvernement des Pays-Bas, jaloux de la gloire de la <hi rend="i">nation,</hi> n'a donc prescrit à Bruxelles, pour le flamand, que ce qu'on a prescrit à Paris pour le français<note n="(1)" place="foot"><hi rend="i">De l'éducation belgique.</hi> Bruxelles, 1783, p. 39-45.</note>.’ - Et M. L<hi rend="sc">esbroussart</hi> était français!</p>
+<p>J'ai dit que nous avons une langue belgique, parce qu'il y a des moeurs belgiques. Il me reste à vous prouver que sous ce rapport aussi l'idiome français nous est étranger. En effet, s'il nous est si naturel, qu'on veut le faire accroire, pourquoi les quatre-vingt<hy>-</hy><pb n="43"/>dix-neuf centièmes au moins de ceux d'entre nous, qui ont appris à le parler, se montrent-ils tous les jours flamands en français? Le dictionnaire des <hi rend="i">flandricismes</hi> et <hi rend="i">wallonnismes</hi>, composé par M. T<hi rend="sc">arte</hi> cadet, <hi rend="i">ouvrage dans lequel on indique les fautes que commettent les Belges en parlant l'idiome français</hi>, <hi rend="i">ou en l'écrivant</hi><note n="(1)" place="foot">Titre d'un livre imprimé plusieurs fois à Bruxelles, chez R<hi rend="sc">ampelbergh</hi>.</note>, est un véritable dictionnaire de la différence de l'expression de nos moeurs, d'avec celle des moeurs françaises, quoiqu'il soit loin d'être complet. Vous avez beau chasser le naturel, <hi rend="i">il revient au galop</hi>, et de véritables écrivains français prouvent tous les jours, que même
+<pb n="44"/>ces messieurs du <hi rend="i">Courrier des Pays-Bas,</hi> malgré leur correcteur français, restent entachés de ce vilain péché originel (<hi rend="i">horresco referens!</hi>). Tant il est vrai de dire: <hi rend="i">n'est pas français qui veut.</hi> Aussi le public éclairé se montre-t-il peu dupe de toutes les protestations de francisme qu'on lui fait<note n="(1)" place="foot">Sous d'autres rapports cependant, une partie du public est tout-à-fait dupe des journalistes; par exemple, quand ceux-ci lui font accroire qu'on veut proscrire la langue flamande, que le hollandais est imposé à tous les fonctionnaires, aux avocats, aux maîtres d'école qui seront nommés par le Gouvernement, etc. Il est <hi rend="i">très-certain</hi> que les pétitionnaires de la province d'Anvers en général <hi rend="sc">ne réclament pas</hi> le libre usage de la langue française, mais le libre usage du flamand. Les rédacteurs et colporteurs des pétitions se sont bien gardés de faire mention de la première de ces deux langues.</note>. Il a peu
+<pb n="45"/>de goût pour le français des Belges. Les gens comme il faut envoient leurs enfans à Paris, ou bien leur donnent des professeurs français. Les <hi rend="i">Muses</hi> bruxelloises ont de la peine à trouver tous les ans un imprimeur, et la collection des poètes gallo - belges est restée là sans souscripteurs; tandis que les poésies flamandes de l'<hi rend="i">Almanak voor Blijgeestigen</hi> comptent 6000 acheteurs, et qu'on vend tous les ans plus d'un millier d'exemplaires du <hi rend="i">Belgische Muzenalmanak</hi> de Gand. Il faut bien le dire: quand nous achetons du français, nous en achetons de bon aloi<note n="(1)" place="foot">Chose étonnante, les provinces méridionales des Pays-Bas n'ont pu produire encore aucun ouvrage comparable aux <hi rend="i">Institutions judiciaires</hi>, de M. M<hi rend="sc">eyer</hi>, et M. M<hi rend="sc">eyer</hi> n'écrit pas mieux en français que dans sa langue maternelle.</note>. En
+<pb n="46"/>Flandre et en Brabant, on lit vingt fois plus de livres flamands, qu'on n'y lit d'ouvrages français <hi rend="i">faits par des Belges.</hi> J'ai donné ailleurs des extraits de près de 300 poètes, appartenans à ces provinces, qui ont écrit en langue maternelle<note n="(1)" place="foot">Voyez la liste à la fin du tome <hi rend="sc">ii</hi> de ma <hi rend="i">Verhandeling over de nederd. tael en dichtkunde.</hi></note>. Et combien de poètes français croyez-vous qu'elles ont produits?</p>
+<lg type="poem">
+<l>Il en est jusqu'à <hi rend="i">trois</hi> que l'on pourrait nommer.</l>
+</lg>
+</div>
+</div>
+</body>
+</text>
+
+</TEI.2>

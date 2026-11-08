@@ -1,0 +1,297 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE TEI.2 PUBLIC "-//DBNL//DTD TEI.2 XML//NL" "https://www.dbnl.org/xml/dtd/teixlite.dtd">
+<TEI.2>
+   <teiHeader>
+        <fileDesc>
+           <titleStmt>
+               <title type="main">De geschiedenis van een goed en van een kwaad kind</title>
+           </titleStmt>
+           <editionStmt>
+               <edition>
+                   Dit bestand biedt, behoudens een aantal hierna te noemen ingrepen, een diplomatische weergave van de 4de druk van <hi rend="i">De geschiedenis van een goed en van een kwaad kind</hi> uit 1840. De eerste druk dateert uit 1838.
+               </edition>
+               <respStmt>
+                   <resp>
+                       <corr>p. 1: De afbeelding en het gedicht op de titelpagina zijn in deze digitale versie in de lopende tekst opgenomen.</corr>
+                   </resp>
+               </respStmt>
+           </editionStmt>
+           <extent><!-- aantal pagina's --></extent>
+           <scandetails>
+               <scan section="1">
+                   <extent-detail><!-- pagina range van een sectie --></extent-detail>
+                   <empty-page><!-- specificeer de lege pagina's hier --></empty-page>
+                   <!-- <insert after="na deze pagina begint de insert"> aantal insert pagina's </insert> -->
+                   <insert after=""></insert>
+               </scan>
+           </scandetails>
+           <publicationStmt>
+               <idno type="titelcode">_ges002gesc01_01</idno>
+               <idno type="format">DBNL-TEI 1</idno>
+               <availability>
+                   <p>2010 dbnl</p>
+               </availability>
+           </publicationStmt>
+           <notesStmt>
+               <note></note>
+           </notesStmt>
+           <sourceDesc>
+               <bibl>
+                   <idno type="isbn"></idno>
+                   <idno type="usedcopy">exemplaar Koninklijke Bibliotheek Den Haag, signatuur: 1088 G 107</idno>
+               </bibl>
+               <p><hi rend="i">De geschiedenis van een goed en van een kwaad kind</hi>. J. Zender, Dordrecht 1840 (4de druk)</p>
+               <p>&nbsp;</p>
+           </sourceDesc>
+       </fileDesc>
+       <encodingDesc>
+           <projectDesc>
+               <p>Wijze van coderen: standaard</p>
+               <p></p>
+           </projectDesc>
+       </encodingDesc>
+       <profileDesc>
+           <langUsage>
+               <language id="nl">Nederlands</language>
+           </langUsage>
+       </profileDesc>
+       <ebook>
+           <bibl>
+               <title type="main">De geschiedenis van een goed en van een kwaad kind</title>
+               <idno></idno>
+               <imprint>
+                   <publisher></publisher>
+                   <pubPlace></pubPlace>
+               </imprint>
+           </bibl>
+           <idno type="isbn"></idno>
+           <order>
+               <price curr="euro"></price>
+               <link></link>
+           </order>
+           <blurb><p></p></blurb>
+           <titlepage><p></p></titlepage>
+           <colofon><p></p></colofon>
+       </ebook>
+       <pod>
+           <bibl>
+               <title type="main">De geschiedenis van een goed en van een kwaad kind</title>
+               <idno></idno>
+               <imprint>
+                   <publisher></publisher>
+                   <pubPlace></pubPlace>
+               </imprint>
+           </bibl>
+           <idno type="isbn"></idno>
+           <order>
+               <price curr="euro"></price>
+               <link></link>
+           </order>
+           <blurb><p></p></blurb>
+           <titlepage><p></p></titlepage>
+           <colofon><p></p></colofon>
+       </pod>
+       <revisionDesc>
+           <change>
+               <date>2010-07-01</date>
+               <respStmt>
+                   <name type="person">MR</name>
+               </respStmt>
+               <item>colofon toegevoegd</item>
+           </change>
+       </revisionDesc>
+   </teiHeader>
+      <text>
+<body>
+<div type="chapter">
+<pb n="1"/>
+    <cf>
+<p><hi rend="b">De Geschiedenis van een goed</hi></p>
+<p>en van een</p>
+<p><hi rend="b">kwaad Kind</hi></p>
+<p><hi rend="b">in 12 Afbeeldingen</hi></p>
+<p>met</p>
+<p>toepasselijke Versjes.</p>
+<p>&nbsp;</p>
+    <p><hi rend="i">VIERDE DRUK.</hi></p></cf>
+<p><figure>
+<p><xptr to="_ges002gesc01ill01.gif"/></p>
+</figure></p>
+<lg type="poem">
+<l><hi rend="i">Genoeg'lijk wordt de Kindertijd</hi></l>
+<l><hi rend="i">Aan vreugd en spelen toegewijd</hi></l>
+<l><hi rend="i">Alleen de jeugd zij steeds verzot</hi></l>
+<l><hi rend="i">Op zorgloos dartel zingenot!</hi></l></lg>
+<p>&nbsp;</p>
+    <cf><p><hi rend="i">te Dordrecht bij J. Zender. 1840.</hi></p></cf>
+<div type="section">
+<pb n="2"/>
+<p><figure>
+<p><xptr to="_ges002gesc01ill02.gif"/></p>
+</figure></p>
+<div type="section">
+<head rend="h3">De School.</head>
+<lg type="poem">
+<l>Twee knaapjes, die ter schole gaan,</l>
+<l>Ziet men hier op dit printje staan:</l>
+<l><hi rend="sc">Frans</hi> gaat met lust, maar <hi rend="sc">Willem</hi> niet,</l>
+<l>Die liever speelt dan boeken ziet.</l>
+</lg>
+</div>
+    </div>
+</div>
+<div type="chapter">
+<pb n="3"/>
+<p><figure>
+<p><xptr to="_ges002gesc01ill03.gif"/></p>
+</figure></p>
+<div type="section">
+<head rend="h3">Baldadigheid.</head>
+<lg type="poem">
+<l>Twee jongens van het slechtste slag,</l>
+<l>Die ledig loopen gansch den dag,</l>
+<l>Beletten <hi rend="sc">Willem</hi> school te gaan,</l>
+<l>En vallen hem, al vechtend, aan.</l>
+</lg>
+</div>
+</div>
+<div type="chapter">
+<pb n="4"/>
+<p><figure>
+<p><xptr to="_ges002gesc01ill04.gif"/></p>
+</figure></p>
+<div type="section">
+<head rend="h3">Godsdienstigheid.</head>
+<lg type="poem">
+<l>Met deugd en Godsvrucht in 't gemoed,</l>
+<l>Koos <hi rend="sc">Frans</hi>, voor zich, het zedigst goed:</l>
+<l>Hij gaat hier, stil en vroom van zin,</l>
+<l>Ter kerke aan 's ouders zijden in.</l>
+</lg>
+</div>
+</div>
+<div type="chapter">
+<pb n="5"/>
+<p><figure>
+<p><xptr to="_ges002gesc01ill05.gif"/></p>
+</figure></p>
+<div type="section">
+<head rend="h3">Kwaadwilligheid.</head>
+<lg type="poem">
+<l>Maar <hi rend="sc">Willem</hi>, o wat booze grief!</l>
+<l>Groeit op in 't kwaad, en wordt een' dief.</l>
+<l>Zie eens wat de onverlaat hier doet;</l>
+<l>Hij slaat zijn hand aan 's naastens goed.</l>
+</lg>
+</div>
+</div>
+<div type="chapter">
+<pb n="6"/>
+<p><figure>
+<p><xptr to="_ges002gesc01ill06.gif"/></p>
+</figure></p>
+<div type="section">
+<head rend="h3">Belooning.</head>
+<lg type="poem">
+<l>Voor braafheid en voor vlijtbetoon,</l>
+<l>Krijgt <hi rend="sc">Fransje</hi> meer dan dubbel loon:</l>
+<l>Zijne ouders schenken hem, met vreugd</l>
+<l>Het liefste speelgoed zijner jeugd.</l>
+</lg>
+</div>
+</div>
+<div type="chapter">
+<pb n="7"/>
+<p><figure>
+<p><xptr to="_ges002gesc01ill07.gif"/></p>
+</figure></p>
+<div type="section">
+<head rend="h3">Straf.</head>
+<lg type="poem">
+<l>Ziet hier de dief reeds in den nood;</l>
+<l>Hij zit op water en op brood</l>
+<l>Gevangen, schreijend van verdriet;</l>
+<l>Maar kermen baat den booswicht niet.</l>
+</lg>
+</div>
+</div>
+<div type="chapter">
+<pb n="8"/>
+<p><figure>
+<p><xptr to="_ges002gesc01ill08.gif"/></p>
+</figure></p>
+<div type="section">
+<head rend="h3">Kunde en Vlijt.</head>
+<lg type="poem">
+<l><hi rend="sc">Frans</hi>, om zijn kunde en vlijt geroemd,</l>
+<l>Werd reeds als koopmansklerk benoemd:</l>
+<l>Met goede winst en deftig kleed</l>
+<l>Zit hij hier, werkzaam, toegereed.</l>
+</lg>
+</div>
+</div>
+<div type="chapter">
+<pb n="9"/>
+<p><figure>
+<p><xptr to="_ges002gesc01ill09.gif"/></p>
+</figure></p>
+<div type="section">
+<head rend="h3">Domheid en Ondeugd.</head>
+<lg type="poem">
+<l>Maar <hi rend="sc">Willem</hi> werd te regt gehaat,</l>
+<l>Om 't daaglijks nog bedrijvend kwaad;</l>
+<l>Pas was hij bij een' baas verhuurd,</l>
+<l>Of werd, met slagen, weggestuurd.</l>
+</lg>
+</div>
+</div>
+<div type="chapter">
+<pb n="10"/>
+<p><figure>
+<p><xptr to="_ges002gesc01ill10.gif"/></p>
+</figure></p>
+<div type="section">
+<head rend="h3">De Moederlijke Zegen.</head>
+<lg type="poem">
+<l>In goeden stand en ruim gewin,</l>
+<l>Treedt <hi rend="sc">Frans</hi> de groote wereld in:</l>
+<l>Zijn moeder, blijde om 't gunstig lot,</l>
+<l>Dankt, zeeg'nend, hier den goeden God.</l>
+</lg>
+</div>
+</div>
+<div type="chapter">
+<pb n="11"/>
+<p><figure>
+<p><xptr to="_ges002gesc01ill11.gif"/></p>
+</figure></p>
+<div type="section">
+<head rend="h3">Het Vaderlijk Verdriet.</head>
+<lg type="poem">
+<l>Maar wie, wie wordt niet aangedaan,</l>
+<l>Ziet hij hier <hi rend="sc">Willems</hi> vader staan,</l>
+<l>Genade vragend voor zijn kind,</l>
+<l>Dat zich in 's regters hand bevindt.</l>
+</lg>
+</div>
+</div>
+<div type="chapter">
+<pb n="12"/>
+<p><figure>
+<p><xptr to="_ges002gesc01ill12.gif"/></p>
+</figure></p>
+<div type="section">
+<head rend="h3">Het Geregte Loon.</head>
+<lg type="poem">
+<l>O lieve kind'ren, staren wij,</l>
+<l>Getroffen, op deez' schilderij!</l>
+<l><hi rend="sc">Frans</hi> zit hier op zijn buitegoed,</l>
+<l>Wijl <hi rend="sc">Willem</hi>, schamel, beed'len moet.</l>
+</lg>
+    <cf><p>Eigendom van den Uitgever. Zie Staats-Courant van 8 October 1838.</p></cf>
+</div>
+</div>
+</body>
+</text>
+
+</TEI.2>
