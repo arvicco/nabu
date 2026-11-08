@@ -1,0 +1,13 @@
+# Nabu fixture manifest (P5-4 "fixture sentinel"). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# The one book is a documented koma trim (whole: false), so adapter_test
+# stays null.
+source: shiratori-shm
+adapter_test: null
+retrieved: "2026-11-08"
+files:
+  - path: books/1184344.json
+    url: https://lab.ndl.go.jp/dl/api/book/fulltext-json/1184344
+    whole: false
+    trim: 9 of 636 koma (pages 1, 2, 3, 4, 11, 17, 18, 153, 636), entries verbatim, compact JSON — README recipe
