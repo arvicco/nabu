@@ -253,6 +253,8 @@ module Nabu
           "paramara" => :structured, # P153: the Period field's leading era-typed year
           #                            (config/eras.yml VS/Śaka); place = the Location findspot
           "mk-wikisource" => :structured,
+          "mongolic-pd" => :structured, # each work's edition year (the africa-pd mold); the
+          #                               imprint rides "imprint" — no place claim
           "ms-wikisource" => :structured, # P120-3: the manuscript's stated date (header
           #                                 year= / Index Year=; "abad ke-N" a century)
           "ndl-kotenseki" => :structured,

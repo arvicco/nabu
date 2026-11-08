@@ -328,6 +328,10 @@ sources:
   africa-pd:                  # 10 scanned editions
     fields:
       author: author          # "F. Ll. Griffith (ed.)" — the title page's responsibility verbatim
+  mongolic-pd:                # 15 scanned volumes (13 works)
+    fields:
+      author: author          # "J.-M. Amiot; L. Langlès (ed.)" — the census's responsibility
+      #                         line verbatim (Cyrillic names with their romanization)
   eebo-tcp:                   # 45,048 of 60,325 docs, 13,589 authors
     fields:
       author: author          # ESTC-style headings with life dates INSIDE the string
