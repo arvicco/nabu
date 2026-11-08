@@ -4452,6 +4452,28 @@ mk-wikisource:   # P116-2, 02-sources row 236
   # and modern-orthography duplicates are out by rule. Texts PD;
   # layer CC BY-SA 4.0.
 
+mnc-wikisource:   # P164, 02-sources row 395
+  adapter: Nabu::Adapters::MncWikisource
+  adopted: "2026-11-08"
+  axes: [mongolic]
+  wired: false   # until the first real sync is verified
+  sync_policy: manual
+  # The Manchu texts on Multilingual Wikisource (wikisource.org), Unicode
+  # Manchu script and Möllendorff romanization — the provenance census
+  # 2026-11-08 (paced): 34 main-namespace member pages of the three
+  # categories → 21 ADMITTED pages of 13 premodern works (滿洲實錄 juan
+  # 1–4 of 8, 清文啓蒙 preface + juan 1–2, 盛京賦, the Treaty of
+  # Nerchinsk, the Seven Grievances, the Samjeondo stele, three Kangxi
+  # 避暑山莊 poems, the Manchu Sunzi, Yijing hexagrams 1–2, Lunyu ch. 1,
+  # 清語老乞大 juan 1, the native-script 三字經, the Acts of the 1835 NT);
+  # 13 SKIPPED BY RULE (6 landing/contents, 4 modern compositions, 2
+  # unattested romanized 三字經 copies, 1 Sibe-orthography page) + the
+  # non-main-namespace members. Texts PD; layer CC BY-SA → attribution.
+  # EXPECTED FIRST SYNC (parsed through the adapter over the census
+  # pages, 2026-11-08): 21 docs / 1,359 passages (mnc 977 · lzh 355 · zho
+  # 27); 16 skipped by rule (13 census rejects + 3 non-main-namespace
+  # members).
+
 mongolic-pd:   # P164, 02-sources row 393
   adapter: Nabu::Adapters::MongolicPd
   adopted: "2026-11-08"

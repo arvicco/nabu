@@ -328,6 +328,10 @@ sources:
   africa-pd:                  # 10 scanned editions
     fields:
       author: author          # "F. Ll. Griffith (ed.)" — the title page's responsibility verbatim
+  mnc-wikisource:             # 21 pages, 13 works
+    fields:
+      author: author          # the census's attribution ("the Qianlong Emperor", "Nurhaci")
+      work: work              # the work key (manju-i-yargiyan-kooli …) — joins a work's pages
   shiratori-shm:              # 1 edition
     fields:
       series: series          # "東洋文庫叢刊 第8 (The Tōyō Bunko Publications, Series C, Volume VIII)"

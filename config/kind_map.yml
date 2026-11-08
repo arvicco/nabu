@@ -1234,6 +1234,23 @@ sources:
   africa-pd:
     source_kind: scholarly   # P124-1: the PD African-languages reference shelf — grammars,
     #                          text editions, a reader, a proverb collection
+  mnc-wikisource:     # P164 — the census's own per-work genre label (MncWikisource::WORKS), one per
+    #                   document; counts = admitted pages 2026-11-08 (21)
+    facet: genre
+    map:
+      "veritable records": historiography/annals # 4 — 滿洲實錄: the dynasty's year-by-year record
+      "grammar": lexical/grammar                 # 3 — 清文啓蒙, the Manchu primer-grammar
+      "fu": literary/poetry                      # 1 — 盛京賦, the rhapsody (賦) as verse
+      "treaty": legal/treaty                     # 1 — Nerchinsk
+      "proclamation": oratory                    # 1 — the Seven Grievances: Nurhaci's declaration of
+      #                                            war, the manifesto the oratory head names
+      "stele": royal                             # 1 — the Samjeondo stele: the ruler's monumental merit
+      #                                            inscription
+      "poetry": literary/poetry                  # 3 — the Kangxi 避暑山莊 poems
+      "military treatise": scholarly             # 1 — Sunzi: the kanripo KR3b 兵家 → scholarly precedent
+      "classic": scripture                       # 3 — Yijing, Lunyu: the kanripo KR1 經部 → scripture fold
+      "primer": school                           # 2 — 清語老乞大, 三字經: the schoolroom's own texts
+      "scripture": scripture                     # 1 — the Acts, Manchu New Testament
   shiratori-shm:
     source_kind: historiography/chronicle   # P164: the Secret History of the Mongols — the
     #                                         Chinggisid house's chronicle, Shiratori's edition
