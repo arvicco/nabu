@@ -1767,6 +1767,13 @@ profession, place and origin, and 25,164 person-text attestations —
 2,275 State Archives of Assyria texts), so `nabu person` walks from
 Assurbanipal to the letters that name him. CC BY-SA 3.0.
 
+**`dprr`** — the Digital Prosopography of the Roman Republic
+(King's College London; Mouritsen, Robb, Bradley's Linked Data
+edition) as a person authority behind `nabu person`: the senators
+and office-holders of the Republic under their disambiguated names,
+with offices, dates, filiation and the sources that attest them.
+CC BY-NC 4.0.
+
 **`theatre-classique`** — Paul Fièvre's Théâtre Classique: 1,939
 French plays in their printed editions, 1550s–1930s — Corneille,
 Molière, Racine and the whole repertoire around them, with front
