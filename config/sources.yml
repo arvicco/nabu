@@ -728,6 +728,27 @@ bim-sahcoba:
   # and Castilian it borrowed from. CC BY 4.0 → class attribution. A
   # deposited version is frozen → sync_policy manual.
 
+blbooks:   # 02-sources row 398
+  adapter: Nabu::Adapters::Blbooks
+  adopted: "2026-11-08"
+  axes: [germanic]   # the English print line (the eebo-tcp precedent); 2,470 of the
+                     # 2,497 cone books are English
+  wired: false
+  sync_policy: manual
+  # British Library Digitised Books c.1510–c.1900 (BL Labs JSONL release,
+  # DOI 10.23636/r7w6-zy15): raw Microsoft-era OCR + catalogue metadata,
+  # page grain. THIS era holds the PRE-1800 CONE: the 1510_1699 and
+  # 1700_1799 tarballs (BL repository bitstreams, sha256-pinned; 137.5 MB
+  # on the wire and on disk, the per-book files stay gzipped). CC0 1.0
+  # metadata / Public Domain Mark 1.0 texts → open. Document = book,
+  # passage = page with text; text_nature machine-ocr. EXPECTED at the
+  # first sync: 2,497 documents / 230,206 page passages, 0 errored, 1
+  # book skipped by rule (Capell's MS. catalogues, no OCR on any page);
+  # ~301M characters of OCR into the FTS index. One fetch (two GETs, no
+  # pacing needed), then a ~76 s serial parse (measured over the whole
+  # cone 2026-11-08). The 19th-century decades (10.4 GB) and the 79
+  # undated books stay out of this era — one CONE line each.
+
 bosworth-toller:
   adapter: Nabu::Adapters::BosworthToller
   adopted: "2026-07-11"

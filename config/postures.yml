@@ -3092,6 +3092,23 @@ sources:
         personography and taxonomies censused) — declared"}
     script: {posture: implied, note: "Latin (gajica) as the digital sources transcribe
         it; no bohoričica censused"}
+  blbooks:   # 02-sources row 398
+    # kind machine-postured — the blbooks title fold in kind_map.yml (the cgpg precedent:
+    # no upstream genre field, the catalogue title's form noun is the label).
+    lect: {posture: dates, note: "Language_1 onto the registry codes (en 2,470 · fr 10 ·
+        lat 8 · it 4 · de 3 · es 1 · nl 1 over the 2,497 cone books, census 2026-11-08,
+        24 record errata applied); the English stages by DATE-BAND INFERENCE over the
+        print years — en:early [1500, 1700] for the 1510–1699 tarball, en:late
+        [1700, 1900] for the eighteenth century — no rule needed; the Latin and
+        vernacular minority stage the same way where their anchors carry bands"}
+    dating: {posture: dated, note: "the BL catalogue's print year on every cone book
+        (raw_date ranges widen it: 1780-1790), class edition on the :structured lane"}
+    places: {posture: named, note: "the catalogued imprint place verbatim (London, Oxonii,
+        Seuilla, Lond), the first of a ; list (the list rides imprint_places); 2,465
+        of 2,497 books carry one — the 32 others carry upstream's NaN. Country of
+        publication rides beside, unprojected"}
+    script: {posture: implied, note: "Latin type (roman, blackletter, a few Fraktur
+        prints) read by uncorrected Microsoft-era OCR (text_nature machine-ocr)"}
   mdz-protestant:   # 02-sources row 243
     kind: {posture: unclassified, note: "MDZ manifests carry no genre field (catechism,
         hymnal, prayer book, grammar, confession, sapiential book live in the titles only)"}

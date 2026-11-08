@@ -26,11 +26,12 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 ## The shelves
 
-A source wears every desk it serves — these 40 answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
+A source wears every desk it serves — these 41 answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
 | Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 8 November 2026)</span> |
 |---|---|---|---|---|
 | `aspr` | texts | attribution | wired · manual | 349 docs / 30,550 passages |
+| `blbooks` | texts | open | not yet wired | not synced yet |
 | `bosworth-toller` | dictionary | attribution | wired · manual | 62,815 entries |
 | `cleasby-vigfusson` | dictionary | attribution | wired · manual | 35,207 entries |
 | `cme` | texts | open | wired · manual | 297 docs / 1,355,279 passages |
