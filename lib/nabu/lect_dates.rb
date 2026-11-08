@@ -138,6 +138,13 @@ module Nabu
               .join(:sources, id: :source_id)
               .join(:document_axes, document_id: Sequel[:documents][:id])
               .exclude(Sequel[:document_axes][:axis_source] => Store::SilverDates::AXIS_SOURCE)
+              # An edition-class date dates the PRINT, never the text: the
+              # P164 formulae-open find (181 charters' print-year fallback
+              # would band-infer medieval charters onto lat:new). Same law
+              # as the silver exclusion above (P122-1). NULL class (the
+              # unclassed majority) is the document's own date and stays.
+              .where(Sequel.|({ Sequel[:document_axes][:date_class] => nil },
+                              Sequel.~(Sequel[:document_axes][:date_class] => "edition")))
               .where(Sequel[:documents][:withdrawn] => false)
               .exclude(Sequel[:documents][:language] => nil)
       scope = scope.where(Sequel[:sources][:slug] => source) if source
