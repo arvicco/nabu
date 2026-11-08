@@ -21,7 +21,7 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 A source wears every desk it serves — these 29 answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
-| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 7 November 2026)</span> |
+| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 8 November 2026)</span> |
 |---|---|---|---|---|
 | `babelstone-ids` | dictionary | open | wired · manual | 97,680 entries |
 | `baley-manuscripts` | texts | attribution | wired · manual | 19 docs / 4,626 passages |
@@ -31,7 +31,7 @@ A source wears every desk it serves — these 29 answer this desk. Holdings are 
 | `chgis` | feature module | open | wired · manual | nothing held yet |
 | `classical-modern` | texts | attribution | wired · manual | 14,608 docs / 1,944,934 passages |
 | `hdic` | dictionary | attribution | wired · manual | 96,414 entries |
-| `kanripo` | texts | attribution | wired · manual | 5,123 docs / 4,571,403 passages |
+| `kanripo` | texts | attribution | wired · manual | 5,126 docs / 4,572,314 passages |
 | `kr-gaiji` | feature module | attribution | wired · manual | nothing held yet |
 | `lzh-collection` | texts | open | wired · manual | 20 docs / 42,303 passages |
 | `menggu-ziyun` | dictionary | attribution | wired · manual | 9,446 entries |
@@ -53,9 +53,9 @@ A source wears every desk it serves — these 29 answer this desk. Holdings are 
 | `zh-wikisource` | texts | attribution | wired · manual | 1,238 docs / 71,547 passages |
 | `zhongyuan` | dictionary | open | wired · manual | 5,877 entries |
 
-**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 7 November 2026)</span>: `zho` 543,313 · `lzh` 93,438 · `ltc` 58,680 · `vi` 52,107 · `och` 38,234 · `jpn` 32,607 · `cmn` 7,387 · `pli` 7,288 · `eng` 4,794 · `za` 3,577 … and 3 more (`nabu axis sinitic` lists all).
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 8 November 2026)</span>: `zho` 543,313 · `lzh` 93,441 · `ltc` 58,680 · `vi` 52,107 · `och` 38,234 · `jpn` 32,607 · `cmn` 7,387 · `pli` 7,288 · `eng` 4,794 · `za` 3,577 … and 3 more (`nabu axis sinitic` lists all).
 
-**Carried in by multilingual packs** (`ud`, `wiktionary-recon` — whole-source members whose other languages ride along, as of 7 November 2026): `xcl` 8,544 · `sga` 6,691 · `gem-pro` 5,749 · `gmw-pro` 5,578 · `sla-pro` 5,461 … and 38 more (`nabu axis sinitic` lists all).
+**Carried in by multilingual packs** (`ud`, `wiktionary-recon` — whole-source members whose other languages ride along, as of 8 November 2026): `xcl` 8,544 · `sga` 6,691 · `gem-pro` 5,749 · `gmw-pro` 5,578 · `sla-pro` 5,461 … and 38 more (`nabu axis sinitic` lists all).
 
 ## The desk's instruments
 
