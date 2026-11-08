@@ -25,6 +25,8 @@ liturgy-chant:
 latin-romance:
   - digiliblt
   - openmgh
+  - formulae-open
+  - llct1
   - croala
   - corpus-corporum
   - bfm
@@ -87,7 +89,7 @@ hebrew-aramaic: [oshb, bhsa, dss, extrabiblical, etcbc-targum, sefaria, iip]
 elephantine: [elephantine]
 arabic-persian: [openiti, ganjoor, diccas]
 iranian-silk-road: [iedc, skjaervo-khotanese, shkz, perseus-farsilit]
-turkic-mongolic: [atmo, altaica-shm]
+turkic-mongolic: [atmo, altaica-shm, mnc-wikisource, shiratori-shm, mongolic-pd]
 egyptian: [aes, tla-hf]
 ethiopic: [betamasaheft-works, traces]
 pre-roman-italy: [ceipom, itant, open-etruscan, tir, lexlep, isicily]

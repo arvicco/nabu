@@ -107,11 +107,11 @@ module Adapters
       assert_equal "ia-hocr-text", manifest.parser_family
     end
 
-    def test_registry_row_is_registered_unwired_and_manual
+    def test_registry_row_is_registered_wired_and_manual
       registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources.yml", __dir__))
       entry = registry["mongolic-pd"]
       refute_nil entry
-      refute entry.wired, "wired: false until the first real sync is verified"
+      assert entry.wired, "flipped live after the verified first sync (P164)"
       assert_equal "manual", entry.sync_policy
       assert_equal ["mongolic"], entry.axes
     end

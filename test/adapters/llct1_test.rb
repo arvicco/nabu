@@ -164,10 +164,10 @@ class Llct1Test < Minitest::Test
 
   # --- registration -----------------------------------------------------------
 
-  def test_registered_unwired_manual_romance
+  def test_registered_wired_manual_romance
     row = YAML.safe_load_file(File.expand_path("../../config/sources.yml", __dir__)).fetch("llct1")
     assert_equal "Nabu::Adapters::Llct1", row.fetch("adapter")
-    assert_equal false, row.fetch("wired")
+    assert_equal true, row.fetch("wired"), "flipped live after the verified first sync (P164)"
     assert_equal "manual", row.fetch("sync_policy")
     assert_equal ["romance"], row.fetch("axes")
   end
