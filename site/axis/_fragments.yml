@@ -35,6 +35,7 @@ kinds:
   ppchy: treebank
   torot: treebank
   dcs: treebank
+  llct1: treebank
   oncoj: annotated corpus
   # documentary / epigraphic shelves
   papyri-ddbdp: papyri

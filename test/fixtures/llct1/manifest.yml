@@ -1,0 +1,17 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# The single fixture is a trim (header + 4 whole charters + trailing PIs) of
+# the 42 MB LLCT1 v1.2 file, so whole: false — a raw GET of the URL returns the
+# FULL file and is fetched for URL-liveness only, never byte-compared.
+# adapter_test stays null (the helipad/aspr rationale): the llct1 adapter test
+# asserts trimmed charter/tree counts an untrimmed upstream file would
+# false-fail. Re-apply the README trim after any refresh.
+source: llct1
+adapter_test:
+retrieved: 2026-11-08
+files:
+  - path: llct1-1.2.xml
+    url: https://zenodo.org/api/records/3633607/files/LLCT1,%20version%201.2.xml/content
+    whole: false
+    trim: the PML header + charters CDL 115, CDL 208, CDT 63, MED 259 whole (29 of 9,227 sentence trees; every tree of each, byte-identical) + the trailing TrEd PIs (42,231,522 B -> 110,832 B)
