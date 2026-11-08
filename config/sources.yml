@@ -4089,7 +4089,7 @@ liv:
   # Last-Modified, so a re-sync refetches unconditionally (657 KB).
   sync_policy: manual
 
-llct1:   # P164, 02-sources row 393
+llct1:   # P164, 02-sources row 394
   adapter: Nabu::Adapters::Llct1
   adopted: "2026-11-08"
   axes: [romance]
