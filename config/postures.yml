@@ -1362,6 +1362,22 @@ sources:
     script: {posture: implied, note: "Latin-script prose and Latin transcription of the African
         languages; Old Nubian, Ajami facsimiles, Tifinagh and the Vai syllabary are uncorrected
         OCR, garbled (declared per document)"}
+  mongolic-pd:   # P164
+    # kind: machine-postured — kind_map.yml genre facet fold.
+    lect: {posture: identity, note: "the reference-shelf posture (africa-pd, slavistics-pd): each
+        work claims its PROSE language — rus 7, eng 3, fra 3, deu 2, all real anchors; the
+        language presented rides metadata object_language — mnc (7), cmg (5), xwo (3), all
+        three real registry nodes (cmg + xwo minted 2026-11-02 for exactly this shelf), never
+        a claim. Kowalewski's dictionary glosses in Russian AND French and claims rus, declared
+        coarse"}
+    dating: {posture: dated, note: "every work carries its edition year (Kowalewski per volume:
+        1844/1846/1849) — :structured lane"}
+    places: {posture: unplaced, note: "imprint places (St Petersburg, Kazan, Paris, Shanghai,
+        Canton, Leipzig) ride metadata 'imprint' — the printing place, not a text place"}
+    script: {posture: mixed, note: "Cyrillic (pre-reform) and Latin-script prose; Manchu and
+        Mongolian forms in Cyrillic or Latin transcription; the native vertical scripts
+        (Manchu, Uyghur-Mongolian, the Oirat Clear Script) are uncorrected OCR, garbled
+        (declared per document)"}
   bu-ajami:   # P124-1
     # kind machine-postured since 2026-10-14 — the genre fold in kind_map
     # (Poetry/Poem onto the poetry sub; the prose and mixed form labels
