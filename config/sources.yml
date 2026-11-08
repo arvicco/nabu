@@ -8174,6 +8174,35 @@ vulgate:
   # occasionally updated: re-syncable, not on a live schedule.
   sync_policy: manual
 
+wellcome:   # P165, 02-sources row 398
+  adapter: Nabu::Adapters::Wellcome
+  adopted: "2026-11-08"
+  axes: [classical, romance, germanic]  # the era-1 cone is Latin-led (13,262 of 31,883
+                                        # volumes — the noscemus classical+romance hat), then
+                                        # English 8,511 · French 4,413 · German 2,046 · Italian
+                                        # 2,005 · Spanish 747 · Dutch 394 prints
+  wired: false   # until the first real slice is verified. bin/nabu sync wellcome: the
+                 # ~530 MB catalogue snapshot (one streamed GET, census derived ~10 s), then
+                 # SLICE 240 text-zip GETs at ONE PER 30 s (Wellcome's robots Request-rate)
+                 # = ~2 h. Slice 1 = 240 Latin volumes printed 1501–1586 (digearly /
+                 # UKMHL / uncoded scans; the ProQuest scans serve no text and wait at
+                 # the tail). EXPECT ~180-190 held + ~50 ledgered empty (yield sample:
+                 # 7 of 9 head volumes served text, 2 a 0-byte member), ~90k segment
+                 # passages, ~85 MB of zips. Eyeball nabu show on 5 random segments;
+                 # probe nabu search with a Latin word from one; then flip.
+  sync_policy: manual
+  # Wellcome Collection — the digitised printed books of the Wellcome
+  # Library (Public Domain Mark): the keyless per-volume OCR text zips
+  # (api.wellcomecollection.org/text/v1/<bnumber>.zip), census from the
+  # catalogue's daily snapshot (126,537 digitised PDM volumes ≤1899 at the
+  # 2026-11-08 snapshot). Era 1 = the cone ≤1799 (31,883 volumes), Latin
+  # first, then Greek, then the rest by print year. Resumable paced crawl
+  # (.wellcome-crawl.json: missing/denied/empty/malformed/timeout-stuck +
+  # the position), multi-phase by construction (~11 days of pace for the
+  # cone). Document = volume (zip member), passage = ~2,000-character
+  # segment — the text has no page breaks (declared). Uncorrected OCR:
+  # text_nature machine-ocr on every document.
+
 wenhai:   # P156, 02-sources row 378
   adapter: Nabu::Adapters::Wenhai
   adopted: "2026-11-04"

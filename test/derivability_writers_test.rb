@@ -174,6 +174,12 @@ class DerivabilityWritersTest < Minitest::Test
   # its .wiki-fetch.json pin) and shiratori_shm writes ONE NDL book
   # (books/1184344.json, .part + rename) inside Adapter#fetch — the
   # ja/zh-wikisource and ndl-kotenseki canonical-gateway law kinds.
+  # The P165 wellcome adapter writes canonical/wellcome/ inside
+  # Adapter#fetch: the catalogue snapshot (works.json.gz, streamed to
+  # .part + rename) and its .wellcome-census.json pin, the derived
+  # census.tsv (tmp + rename, a declared materialization), the text zips
+  # (zips/<bnumber>.zip, .part + rename) and the .wellcome-crawl.json
+  # ledger — the ndl-kotenseki crawl law kind.
   # credentials (the credentials seam) writes ONE instance file,
   # local/config/credentials.yml (tmp born mode 600 + chmod + rename),
   # driven only by the `nabu creds set` gateway — the local/config
@@ -298,6 +304,7 @@ class DerivabilityWritersTest < Minitest::Test
     nabu/adapters/damos.rb nabu/adapters/itkc_catalog.rb
     nabu/adapters/aclt.rb nabu/adapters/ia_scan_shelf.rb
     nabu/adapters/mnc_wikisource.rb nabu/adapters/shiratori_shm.rb
+    nabu/adapters/wellcome.rb
     nabu/language_shelf.rb nabu/lemma_shelf.rb nabu/date_shelf.rb nabu/meter_shelf.rb
     nabu/library_shelf.rb nabu/note_shelf.rb
     nabu/source_shelf.rb nabu/ingest.rb
