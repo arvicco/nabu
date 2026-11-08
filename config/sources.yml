@@ -733,7 +733,7 @@ blbooks:   # 02-sources row 398
   adopted: "2026-11-08"
   axes: [germanic]   # the English print line (the eebo-tcp precedent); 2,470 of the
                      # 2,497 cone books are English
-  wired: false
+  wired: true   # FIRST SYNC VERIFIED 2026-11-08, exact: 2,497 docs / 230,206 passages, 1 skipped by rule, searchable
   sync_policy: manual
   # British Library Digitised Books c.1510–c.1900 (BL Labs JSONL release,
   # DOI 10.23636/r7w6-zy15): raw Microsoft-era OCR + catalogue metadata,
