@@ -612,6 +612,67 @@ sources:
         carries the form; no claim to fold"
       "Translation": "a status, not a form — the translated work's genre rides beside it
         (Translation, Didactic poem)"
+  wellcome:           # P165 — the catalogue's genre/form labels (LCGFT-style headings, often
+    #                   subdivided by place and period: "Academic dissertations - Germany - Halle
+    #                   - 18th cent"), folded by PREFIX on the head term. Counts = cone volumes
+    #                   (≤1799, census 2026-11-08): 7,799 of 31,884 carry any genre. OPEN
+    #                   vocabulary — the catalogue's genre field is a subject-heading-like list,
+    #                   so the long tail and the carrier/format labels mint nothing. The
+    #                   collection is a medical-historical library, so the learned forms fold to
+    #                   scholarly (the noscemus folds), recipe books to scholarly/recipe.
+    facet: genre
+    vocabulary: open
+    prefix_map:
+      "Academic dissertations": scholarly        # 3,757 — the inaugural disputation/thesis of
+      #                                            the medical faculties (Leiden, Halle, Edinburgh …)
+      "Academic Dissertation": scholarly         # 2 — the same heading, upstream's case variant
+      "Academic theses": scholarly               # 2
+      "Academic addresses": oratory              # 3 — the rector's/professor's oration
+      "Pharmacopoeias": scholarly/recipe         # 171 — the official book of compound recipes
+      "Medical formularies": scholarly/recipe    # 16
+      "Cookbooks": scholarly/recipe              # 11
+      "Case studies": scholarly/medicine         # 31 — observationes, the clinical case report
+      "Herbals": scholarly/medicine              # 15 — the materia medica of plants
+      "Anatomical atlases": scholarly/medicine   # 6
+      "Dictionaries": lexical                    # 56 + 28 "Dictionaries, Medical"
+      "Glossaries": lexical/glossary             # 4
+      "Grammars": lexical/grammar                # 6
+      "Bibliographies": scholarly                # 22 — the learned catalogue (noscemus fold)
+      "Manuals (Handbooks)": scholarly           # 18
+      "Tables (Systematic lists)": scholarly     # 18 — the noscemus "Tables and charts" fold
+      "Textbooks": scholarly                     # 3
+      "Encyclopedias": scholarly                 # 5
+      "Lectures": scholarly                      # 9 — the published course of lectures
+      "Commentaries": scholarly/commentary       # 2
+      "Travel literature": literary/diary/travelogue       # 88
+      "Exploration literature": literary/diary/travelogue  # 9
+      "Memoirs": literary/diary/memoir           # 5
+      "Autobiographies": literary/diary/memoir   # 2
+      "Biographies": historiography              # 17 — the noscemus vita fold
+      "Local histories": historiography          # 3
+      "Poems": literary/poetry                   # 28
+      "Satires": literary                        # 16 — verse and prose satire alike
+      "Essays": literary/essay                   # 12
+      "Fiction": literary/narrative              # 2
+      "Novels": literary/narrative/novel         # 1
+      "Letters": letter                          # 15
+      "Sermons": sermon                          # 45
+      "Funeral sermons": sermon/funeral-sermon   # 5
+      "Prayers": hymn-prayer/prayer              # 14
+      "Novenas": hymn-prayer/prayer              # 23 — the nine-day devotion's prayers (the
+      #                                            Mexican imprints)
+      "Regulations": legal/law                   # 27
+      "Laws": legal/law                          # 9
+      "Proclamations": legal/law                 # 23 — the promulgated royal/civic ordinance
+      "Charters": legal                          # 1
+      "Trial proceedings": legal/court           # 9
+      "Addresses": oratory                       # 22
+    deliberate:
+      "Electronic books": "a carrier label (2,751), not a form"
+      "Incunabula": "a printing-period label (270) — the date axis already says it"
+      "Collected works": "an edition shape (102), the works inside carry their own forms"
+      "Illustrated works": "a physical feature (32), not a form"
+      "Popular works": "an audience label (37), not a form"
   tlhdig:             # Laroche CTH ranges ARE the genres (23,486 docs)
     facet: cth
     range_map:
