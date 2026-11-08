@@ -4,6 +4,7 @@ require "digest"
 require "fileutils"
 require "json"
 
+require_relative "source_read"
 require_relative "../redirect_follow"
 require_relative "../wiki_fetch"
 require_relative "../zip_fetch"
@@ -211,7 +212,7 @@ module Nabu
       end
 
       def read_book(path)
-        book = JSON.parse(File.read(path))
+        book = JSON.parse(SourceRead.utf8_file(path, label: "shiratori-shm book"))
         raise ParseError, "#{path}: no koma list in the book payload" unless book["list"].is_a?(Array)
 
         book

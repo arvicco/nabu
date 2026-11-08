@@ -168,7 +168,10 @@ class DerivabilityWritersTest < Minitest::Test
   # ndl-kotenseki crawl law kind. The itkc-catalog module writes
   # canonical/itkc-catalog/ (the OpenAPI 서지 response pages under
   # <section>/<start>.xml, tmp+rename, stale pages renamed into .attic/)
-  # inside Adapter#fetch — the same crawl law kind.
+  # inside Adapter#fetch — the same crawl law kind. The P164
+  # shiratori_shm writes ONE NDL book (books/1184344.json, .part +
+  # rename) inside Adapter#fetch — the ndl-kotenseki canonical-gateway
+  # law kind.
   # credentials (the credentials seam) writes ONE instance file,
   # local/config/credentials.yml (tmp born mode 600 + chmod + rename),
   # driven only by the `nabu creds set` gateway — the local/config
@@ -292,6 +295,7 @@ class DerivabilityWritersTest < Minitest::Test
     nabu/adapters/mdz_protestant.rb nabu/adapters/vakk.rb nabu/adapters/korpus16.rb
     nabu/adapters/damos.rb nabu/adapters/itkc_catalog.rb
     nabu/adapters/aclt.rb nabu/adapters/ia_scan_shelf.rb
+    nabu/adapters/shiratori_shm.rb
     nabu/language_shelf.rb nabu/lemma_shelf.rb nabu/date_shelf.rb nabu/meter_shelf.rb
     nabu/library_shelf.rb nabu/note_shelf.rb
     nabu/source_shelf.rb nabu/ingest.rb
