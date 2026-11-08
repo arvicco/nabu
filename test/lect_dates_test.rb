@@ -45,6 +45,43 @@ class LectDatesTest < Minitest::Test
     end
   end
 
+  # The P164 formulae-open find: 181 charters whose ONLY date is the
+  # printed edition's year (date_class "edition") band-inferred onto
+  # lat:new — a print year dates the EDITION, never the composition, so
+  # edition-class rows must not feed the hull (the silver-dates logic,
+  # extended: P122-1's "a silver estimate never feeds a lect ruling").
+  def test_an_edition_class_date_never_feeds_the_inference
+    with_seeded_catalog do |catalog|
+      doc = catalog[:documents].insert(
+        source_id: catalog[:sources].first(slug: "edh")[:id],
+        urn: "urn:t:edh:edition-only", language: "lat", content_sha256: "x"
+      )
+      catalog[:document_axes].insert(document_id: doc, not_before: 1850, not_after: 1850,
+                                     axis_source: "test", date_class: "edition")
+      report = dates.census(catalog: catalog)
+      refute_includes report.candidates.map(&:urn), "urn:t:edh:edition-only",
+                      "a print year is not the charter's date"
+    end
+  end
+
+  def test_the_hull_ignores_edition_rows_beside_a_real_date
+    with_seeded_catalog do |catalog|
+      doc = catalog[:documents].insert(
+        source_id: catalog[:sources].first(slug: "edh")[:id],
+        urn: "urn:t:edh:mixed-classes", language: "lat", content_sha256: "x"
+      )
+      catalog[:document_axes].insert(document_id: doc, not_before: 250, not_after: 450,
+                                     axis_source: "test")
+      catalog[:document_axes].insert(document_id: doc, not_before: 1850, not_after: 1850,
+                                     axis_source: "test", date_class: "edition")
+      report = dates.census(catalog: catalog)
+      candidate = report.candidates.find { |c| c.urn == "urn:t:edh:mixed-classes" }
+      refute_nil candidate, "the real 250..450 date stays inferable"
+      assert_equal "lat:late", candidate.lect_id
+      assert_equal 450, candidate.not_after, "the hull must not stretch to the print year"
+    end
+  end
+
   # The 2026-08-04 live-audit find (iip idum0080): a REVERSED interval
   # (not_before -36, not_after -335) satisfies the containment arithmetic
   # vacuously and slipped into arc:imp — check-dates caught it. A backwards
