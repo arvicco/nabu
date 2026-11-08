@@ -1234,6 +1234,37 @@ sources:
   africa-pd:
     source_kind: scholarly   # P124-1: the PD African-languages reference shelf — grammars,
     #                          text editions, a reader, a proverb collection
+  mnc-wikisource:     # P164 — the census's own per-work genre label (MncWikisource::WORKS), one per
+    #                   document; counts = admitted pages 2026-11-08 (21)
+    facet: genre
+    map:
+      "veritable records": historiography/annals # 4 — 滿洲實錄: the dynasty's year-by-year record
+      "grammar": lexical/grammar                 # 3 — 清文啓蒙, the Manchu primer-grammar
+      "fu": literary/poetry                      # 1 — 盛京賦, the rhapsody (賦) as verse
+      "treaty": legal/treaty                     # 1 — Nerchinsk
+      "proclamation": oratory                    # 1 — the Seven Grievances: Nurhaci's declaration of
+      #                                            war, the manifesto the oratory head names
+      "stele": royal                             # 1 — the Samjeondo stele: the ruler's monumental merit
+      #                                            inscription
+      "poetry": literary/poetry                  # 3 — the Kangxi 避暑山莊 poems
+      "military treatise": scholarly             # 1 — Sunzi: the kanripo KR3b 兵家 → scholarly precedent
+      "classic": scripture                       # 3 — Yijing, Lunyu: the kanripo KR1 經部 → scripture fold
+      "primer": school                           # 2 — 清語老乞大, 三字經: the schoolroom's own texts
+      "scripture": scripture                     # 1 — the Acts, Manchu New Testament
+  shiratori-shm:
+    source_kind: historiography/chronicle   # P164: the Secret History of the Mongols — the
+    #                                         Chinggisid house's chronicle, Shiratori's edition
+  mongolic-pd:        # P164 — the census's own per-work genre label (MongolicPd::ITEMS), one per
+    #                   document; counts = census items 2026-11-08 (15)
+    facet: genre
+    map:
+      "dictionary": lexical                      # 6 — Zakharov, Amiot, Kowalewski ×3, Pozdneev: bilingual
+      #                                            dictionaries, the bare head (the jaschke-1881 fold)
+      "grammar": lexical/grammar                 # 5 — Möllendorff, Adam, Wylie, Schmidt, Popov
+      "chrestomathy": school                     # 3 — Klaproth, Meadows, Kowalewski II: readers compiled
+      #                                            for the language's learner (texts + vocabulary/apparatus)
+      #                                            — the schoolroom's own product, the nearest head
+      "tales": literary/narrative/tale           # 1 — Jülg's Siddhi-Kür: the tale cycle edited and translated
   vedaweb:
     source_kind: hymn-prayer/hymn   # the Rigveda: 1,028 hymns, each addressed to its deity
     #                                 (upstream's own addressee per hymn) — hymns by form;
@@ -2600,6 +2631,13 @@ sources:
       #   biography precedent while no hagiography head existed
     deliberate:
       "Genre missing": "the catalog's unfilled genre slot (18 works), not a claim"
+  formulae-open:      # P164 — the TEI's own <text type="charta">, on every one of the 5,207
+    metadata: genre   # Latin files (census 2026-11-08 over the 2ce73416 clone)
+    map:
+      "charta": legal                            # 5,164 accepted — the charter, the legal instrument
+      #   of a grant, sale, exchange or royal diploma; the "Charters"/"charter" precedent (bare
+      #   head). DELIBERATELY COARSE: upstream labels every piece charta whatever the act
+      #   (donation, precaria, commutatio, notitia, diploma), so no contract/law sub is its claim
   ponomar:            # the adapter's service_part (Adapters::Ponomar): TROPARION / KONTAKION for
     metadata: service_part  # the hymn subtrees, else the top folder; census 2026-11-04 over all 246
     map:
@@ -2815,3 +2853,67 @@ sources:
       "Huldigungsgedicht": literary/poetry/praise  # 1 — a homage poem
     deliberate:
       "xzerpt": "an excerpt marker (upstream's truncated 'Exzerpt'), not a genre"  # 2
+  llct1:              # P164 — each charter's own "type" root attribute (Adapters::Llct1 →
+    metadata: document_type   # metadata document_type, verbatim). Counts = charters, census over
+    #                   the whole v1.2 file 2026-11-08 (519; 50 labels, Latin for CDL/MED, Italian
+    #                   for the Brunetti CDT rows). Every charter IS a legal instrument (the LLCT2
+    #                   README: "They all represent the legal (documentary) genre"), so the bare
+    #                   head is always honest; a sub is claimed only where the label names it —
+    #                   bilateral transactions → contract (the HGV Kauf/Pacht/Darlehen folds),
+    #                   judgments/placita → court. Gifts, offerings, testaments, notices and
+    #                   appointments have no ruled sub and stay bare legal (the HGV
+    #                   Urkunde/Testament shape).
+    map:
+      # -- leases, sales, exchanges, loans, pledges, agreements: contract
+      "charta livellaria": legal/contract        # 126 — the livello lease (land for rent + a term)
+      "charta venditionis": legal/contract       # 67 — sale
+      "Charta venditionis": legal/contract       # 1 — the same, capitalized upstream
+      "Istrumento di vendita": legal/contract    # 16 — sale (Brunetti's Italian label)
+      "charta comparationis": legal/contract     # 4 — purchase
+      "charta locationis": legal/contract        # 21 — lease
+      "Locazione": legal/contract                # 3 — lease
+      "Concessione livellaria": legal/contract   # 1 — a livello grant
+      "Conferma di locazione livellaria": legal/contract  # 1 — a confirmed livello lease
+      "charta promissionis": legal/contract      # 18 — the tenant's undertaking (the lease's other half)
+      "charta repromissionis": legal/contract    # 19 — the counter-undertaking
+      "charta cambiationis": legal/contract      # 8 — exchange of lands
+      "charta commutationis": legal/contract     # 6 — exchange
+      "Istrumento di permuta": legal/contract    # 2 — exchange
+      "Carta di permuta": legal/contract         # 1 — exchange
+      "charta convenientiae": legal/contract     # 3 — agreement
+      "Carta di convenienza": legal/contract     # 1 — agreement
+      "Convenzione": legal/contract              # 1 — agreement
+      "mutuum": legal/contract                   # 1 — loan (the Darlehen fold)
+      "hypotheca": legal/contract                # 1 — pledge of land (the Bürgschaft/Garantie shape)
+      "Ipoteca": legal/contract                  # 1 — the same, Italian
+      "charta pignoris": legal/contract          # 1 — pledge
+      # -- judgments: court
+      "notitia iudicati": legal/court            # 12 — the record of a judgment
+      "charta iudicati": legal/court             # 4 — the same as a charter
+      "Placito": legal/court                     # 1 — a placitum, the court session's record
+      # -- gifts, offerings, dowries, testaments, notices, grants: the bare head
+      "charta offersionis": legal                # 79 — an offering of self/property to a church
+      "charta donationis": legal                 # 19 — gift
+      "Donazione": legal                         # 11 — gift
+      "charta largitatis": legal                 # 1 — gift
+      "charta dotis": legal                      # 30 — dowry settlement
+      "memoratorium de morgengab": legal         # 1 — the Lombard morning-gift memorandum
+      "testamentum": legal                       # 4 — the HGV Testament fold
+      "charta testamenti": legal                 # 1
+      "notitia": legal                           # 5 — a notice recording a transaction
+      "notitia brevis": legal                    # 1
+      "notitia manifestationis": legal           # 1 — a declaration placed on record
+      "breve": legal                             # 4 — the memorandum (inventory, record) form
+      "breve divisionis": legal                  # 1 — the record of a division of property
+      "charta viganationis": legal               # 17 — upstream's label, verbatim; no sub claimed
+      "charta viganiationis": legal              # 2 — the same label, variant spelling
+      "charta concessionis": legal               # 7 — grant
+      "charta confirmationis": legal             # 3 — confirmation
+      "charta firmitatis": legal                 # 3 — security/confirmation
+      "charta decretionis": legal                # 3 — a bishop's decree (appointing a church's rector)
+      "charta ordinationis": legal               # 1 — appointment
+      "charta nominationis": legal               # 1 — nomination
+      "charta dispensationis": legal             # 1
+      "charta allocationis": legal               # 1
+      "charta beneficii": legal                  # 1 — benefice grant
+      "charta adfiliationis": legal              # 1 — adoption

@@ -6,7 +6,7 @@ compatibility: "Requires the nabu MCP server (`bin/nabu mcp`, read-only, stdio) 
 metadata:
   desk: romance
   origin: generated
-  sources: "analecta-hymnica aranese bdcamoes bfm bim-sahcoba cantigas cantus corpus-corporum croala ctilc cv-sardinian derom digiliblt disco divinum-officium gregobase littre lo-congres mazarinades meloniromance memis noscemus openmgh osta salom socinian-letters theatre-classique typikon-bible ud wiktionary-ca wiktionary-frm wiktionary-fro wiktionary-oc wiktionary-osp wiktionary-pro"
+  sources: "analecta-hymnica aranese bdcamoes bfm bim-sahcoba cantigas cantus corpus-corporum croala ctilc cv-sardinian derom digiliblt disco divinum-officium formulae-open gregobase littre llct1 lo-congres mazarinades meloniromance memis noscemus openmgh osta salom socinian-letters theatre-classique typikon-bible ud wiktionary-ca wiktionary-frm wiktionary-fro wiktionary-oc wiktionary-osp wiktionary-pro"
 ---
 
 # The Romanist — the `romance` desk
@@ -38,8 +38,10 @@ verbatim upstream terms are in `docs/02-sources.md` of the Nabu repository.
 | `digiliblt` | digilibLT — Biblioteca digitale di testi latini tardoantichi (CIRCSE CoNLL-U) | attribution |
 | `disco` | DISCO — Diachronic Spanish Sonnet Corpus (Ruiz Fabo et al., v5.0) | attribution |
 | `divinum-officium` | Divinum Officium — the Tridentine Latin Office and Mass (Breviarium and Missale Romanum) | open |
+| `formulae-open` | Formulae – Litterae – Chartae: formulae-open (early medieval charters) | attribution |
 | `gregobase` | GregoBase — a database of Gregorian scores (gregobase.selapa.net) | open |
 | `littre` | Littré, Dictionnaire de la langue française (1863–1877) — oeuvres/littre TEI | attribution |
+| `llct1` | LLCT1 — Late Latin Charter Treebank 1 (Korkiakangas; Zenodo 3633607, v1.2) | attribution |
 | `lo-congres` | Lo Congrès Occitan news corpus (six dialects, French-aligned) | attribution |
 | `mazarinades` | Mazarinades — the Antonomaz corpus of Fronde pamphlets (1648–1653) | attribution |
 | `meloniromance` | Meloni et al. 2021 Romance cognate sets (lexibank/meloniromance CLDF) | attribution |

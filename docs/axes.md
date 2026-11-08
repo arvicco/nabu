@@ -59,7 +59,7 @@ registry currently tags to it.
 
 The Greco-Roman literary lane: the Perseus canons and First1KGreek, Diorisis, LSJ and Lewis & Short, the grc/lat treebanks, and the Vulgate wearing its Latin-literature hat beside its scripture one.
 
-**Members** (28): `aio`, `analecta-hymnica`, `cgpg`, `corpus-corporum`, `croala`, `damos`, `digiliblt`, `diorisis`, `dprr`, `first1k-greek`, `glaux`, `glt`, `hypotactic`, `ig-cyprus`, `lasla`, `lexica`, `lila`, `noscemus`, `openmgh`, `pedecerto`, `perseus-greek`, `perseus-latin`, `proiel`, `pta`, `sigla`, `suda-translations`, `ud`, `vulgate`
+**Members** (29): `aio`, `analecta-hymnica`, `cgpg`, `corpus-corporum`, `croala`, `damos`, `digiliblt`, `diorisis`, `dprr`, `first1k-greek`, `formulae-open`, `glaux`, `glt`, `hypotactic`, `ig-cyprus`, `lasla`, `lexica`, `lila`, `noscemus`, `openmgh`, `pedecerto`, `perseus-greek`, `perseus-latin`, `proiel`, `pta`, `sigla`, `suda-translations`, `ud`, `vulgate`
 
 ### romance
 
@@ -67,7 +67,7 @@ The Greco-Roman literary lane: the Perseus canons and First1KGreek, Diorisis, LS
 
 The Latin-to-vernacular continuum: CroALa's medieval and neo-Latin opens the desk; late-antique prose, the MGH critical editions, and the Old French treebanks and texts join as their shelves land.
 
-**Members** (35): `analecta-hymnica`, `aranese`, `bdcamoes`, `bfm`, `bim-sahcoba`, `cantigas`, `cantus`, `corpus-corporum`, `croala`, `ctilc`, `cv-sardinian`, `derom`, `digiliblt`, `disco`, `divinum-officium`, `gregobase`, `littre`, `lo-congres`, `mazarinades`, `meloniromance`, `memis`, `noscemus`, `openmgh`, `osta`, `salom`, `socinian-letters`, `theatre-classique`, `typikon-bible`, `ud`, `wiktionary-ca`, `wiktionary-frm`, `wiktionary-fro`, `wiktionary-oc`, `wiktionary-osp`, `wiktionary-pro`
+**Members** (37): `analecta-hymnica`, `aranese`, `bdcamoes`, `bfm`, `bim-sahcoba`, `cantigas`, `cantus`, `corpus-corporum`, `croala`, `ctilc`, `cv-sardinian`, `derom`, `digiliblt`, `disco`, `divinum-officium`, `formulae-open`, `gregobase`, `littre`, `llct1`, `lo-congres`, `mazarinades`, `meloniromance`, `memis`, `noscemus`, `openmgh`, `osta`, `salom`, `socinian-letters`, `theatre-classique`, `typikon-bible`, `ud`, `wiktionary-ca`, `wiktionary-frm`, `wiktionary-fro`, `wiktionary-oc`, `wiktionary-osp`, `wiktionary-pro`
 
 ### epigraphy
 
@@ -260,7 +260,7 @@ The Turkic historical lane, opening on ATMO's Jarring-collection Turki manuscrip
 
 The Mongolic-Tungusic lane, opening on Street's romanized Secret History via Monumenta Altaica (use granted by the site's maintainer, 2026-09-27) — the kaikki Manchu extract, the zh.wikisource hanzi transmission text and the Manchu corpus asks joining as they land.
 
-**Members** (3): `altaica-shm`, `ptg`, `wiktionary-recon`
+**Members** (6): `altaica-shm`, `mnc-wikisource`, `mongolic-pd`, `ptg`, `shiratori-shm`, `wiktionary-recon`
 
 ### americas
 
