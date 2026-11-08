@@ -2217,3 +2217,15 @@ Jüngere. Every charter carries its editor's regest and dating
 (4,983 bounded dates), 1,984 their issuing place. Licensed file by
 file: CC BY 4.0 for nearly all (`attribution`), the Eudes of Blois
 and Marmoutier Perche collections CC BY-NC-ND 4.0 (`nc`).
+
+**`llct1`** — **519 documents / 9,227 passages**: the Late Latin
+Charter Treebank 1 (Timo Korkiakangas, University of Helsinki),
+private charters of Lombard and Carolingian Tuscany, AD 714–869,
+written mostly at Lucca — livello leases, sales, offerings, dowries,
+exchanges, court notices and testaments from Schiaparelli's Codice
+diplomatico longobardo, Brunetti's Codice diplomatico toscano and
+the Lucca Memorie e documenti. Every one of its ~226,000 words is
+hand-annotated with lemma, morphology and dependency syntax and
+marked formulaic, free or subscription; each charter carries its
+year, place of issue, scribe, and whether it survives as original
+or copy. The sister of the UD-held LLCT2 (CC BY 4.0).
