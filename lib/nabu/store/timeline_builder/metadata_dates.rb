@@ -394,6 +394,8 @@ module Nabu
           #                       envelope (collection files carry per-passage years too)
           "vuk-danicic" => :structured, # P117-2: the translation era per testament
           #                               (NT 1847, OT 1865–1868), composition class
+          "wellcome" => :structured, # P165: the catalogue's production-date labels → the print
+          #                            year envelope (class edition); place = the first imprint place
           "zh-wikisource" => :dynasty_band
         }.freeze
 

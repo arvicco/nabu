@@ -455,6 +455,8 @@ vienna_wiki.rb:
   reads: 1
 viet_wikisource.rb:
   reads: 2
+wellcome.rb:
+  reads: 1
 westoldturkic.rb:
   reads: 2
 wiktionary_jsonl_parser.rb:
