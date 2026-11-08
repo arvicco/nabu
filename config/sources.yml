@@ -2777,7 +2777,7 @@ formulae-open:   # P164, 02-sources row 393
   adopted: "2026-11-08"
   axes: [classical, romance]  # the openmgh/corpus-corporum precedent: the continuum's Latin side
   siblings: cts   # lat001/lat002 are the printed edition's a/b pieces of one charter number
-  wired: false   # EXPECT first sync (~25 MB clone): 5,164 docs / 5,281 passages, 0 errored,
+  wired: true    # FIRST SYNC VERIFIED 2026-11-08, exact on the census: 5,164 docs / 5,281 passages, 0 errored,
                  # 302 rule skips (259 E-Lexicon entry files + 37 regest-only records + 6
                  # unlicensed luzern charters) — the adapter's census over the 2ce73416 clone;
                  # 105 docs license_override nc (eudes + marmoutier_pour_le_perche, CC BY-NC-ND).
