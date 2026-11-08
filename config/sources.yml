@@ -6293,6 +6293,24 @@ shabados:   # P122-3, 02-sources row 269
   # EXPECTED FIRST SYNC: 127 docs / 141,264 passages, 0 quarantined
   # (parse census ~55 s on the scratch clone).
 
+shiratori-shm:   # P164, 02-sources row 394
+  adapter: Nabu::Adapters::ShiratoriShm
+  adopted: "2026-11-08"
+  axes: [mongolic]
+  wired: false   # until the first real sync is verified
+  sync_policy: manual
+  # Shiratori Kurakichi's 音訳蒙文元朝秘史 (Tōyō Bunko 1943): Ye Dehui's
+  # 1908 hanzi Secret History reproduced leaf for leaf with Shiratori's
+  # romanized re-transcription — a SECOND Middle Mongol edition beside
+  # altaica-shm (Street), not a dedupe. One NDL PID (1184344) over the
+  # NDL Lab bulk full-text route (granted by email 2026-09-29), ONE
+  # request; its own slug because ndl-kotenseki is census-driven (the
+  # 古典籍 file this 図書 is not in) and claims jpn wholesale. PD
+  # (Shiratori †1942). EXPECTED FIRST SYNC (parsed through the adapter
+  # over the full 2026-11-08 answer, 16 MB): 1 doc / 632 koma passages
+  # (xng 602 · zho 9 · jpn 8 · eng 7 · lzh 6), 2 koma skipped by rule
+  # (the Kodak calibration frame, one letterless koma) of 636.
+
 shkz:   # P107-3b
   adapter: Nabu::Adapters::Shkz
   adopted: "2026-09-28"

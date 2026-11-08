@@ -1234,6 +1234,9 @@ sources:
   africa-pd:
     source_kind: scholarly   # P124-1: the PD African-languages reference shelf — grammars,
     #                          text editions, a reader, a proverb collection
+  shiratori-shm:
+    source_kind: historiography/chronicle   # P164: the Secret History of the Mongols — the
+    #                                         Chinggisid house's chronicle, Shiratori's edition
   mongolic-pd:        # P164 — the census's own per-work genre label (MongolicPd::ITEMS), one per
     #                   document; counts = census items 2026-11-08 (15)
     facet: genre

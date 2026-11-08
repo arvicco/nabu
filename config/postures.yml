@@ -1450,6 +1450,21 @@ sources:
     script: {posture: implied, note: "Latin script for both lat and sga (metadata script
         Latn); Priscian's Greek examples put Greek letters in 250 glosses (0.7% of letters) —
         declared, not a second script lane"}
+  shiratori-shm:   # P164
+    # kind: machine-postured — kind_map.yml source_kind historiography/chronicle.
+    lect: {posture: identity, note: "the document claims xng (a real node, the altaica-shm
+        claim); per-koma passages claim what the OCR's script mix shows — the interlinear body
+        xng, the Japanese front matter jpn, Ye Dehui's preface lzh, the Ming 總譯 openings zho
+        (the zh-wikisource claim for that layer), the English back matter eng — all real anchors"}
+    dating: {posture: dated, note: "the 1943 Tōyō Bunko edition year (class edition, the NDL
+        record; the English title leaf's 1942 rides raw) — :structured lane; the SHM's own
+        13th-century composition rides metadata work_note, a future curated-band candidate
+        shared with altaica-shm"}
+    places: {posture: unplaced, note: "the chronicle's places are in its text; the imprint (Tokyo)
+        rides metadata 'publisher' — not a text place"}
+    script: {posture: mixed, note: "Han (the Ming phonetic transcription, glosses and 總譯) and
+        Latin (Shiratori's romanization) interleaved per opening as the NDL OCR read them;
+        kana-mixed Japanese front matter"}
   altaica-shm:   # P107-7
     kind: {posture: unclassified}
     lect: {posture: identity, note: xng — real at the Central Asia registry wave's merge}

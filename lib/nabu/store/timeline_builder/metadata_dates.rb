@@ -313,6 +313,7 @@ module Nabu
           "seal" => :period_label,
           "senie" => :structured, # the TEI header <date>: the print's or manuscript's year,
           #                         a "1681_90" span as its envelope — the artifact date
+          "shiratori-shm" => :structured, # the 1943 Tōyō Bunko edition year (class edition)
           "sigla" => :period_label, # P142: the Linear A inscription's Minoan ceramic phase
           #                           ("LM IB", "MM IIB") through the ruled Aegean rows;
           #                           place = the site (Haghia Triada, Khania …)
