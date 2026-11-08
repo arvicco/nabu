@@ -2201,3 +2201,19 @@ work is its own shelf, every word-entry kept in the print's spelling
 with its explanation, its sub-entries, the language LEME tagged it
 with, the modern OED headwords LEME mapped it to, and the editors'
 notes on OED antedatings (CC BY 4.0).
+
+## 8bh. The P164 arrivals — the Latin charters wave
+
+**`formulae-open`** — **5,164 documents / 5,281 passages**: the
+public-domain charter editions of the Hamburg Formulae – Litterae –
+Chartae project, early medieval Latin charters and royal diplomas
+c. 700–1300 from the classic printed editions with hand-corrected
+OCR. St. Gallen (Wartmann) and Freising (Bitterauf) are the largest
+blocks, beside Redon, Stavelot-Malmedy, the Marmoutier cartularies,
+Tours, Anjou, Gorze, Hersfeld, Schäftlarn, Zürich, the Lombard
+charters of the Codice diplomatico longobardo, and the diplomas of
+Pippin III, Charlemagne (MGH DD Karol. 1), Karlmann and Ludwig der
+Jüngere. Every charter carries its editor's regest and dating
+(4,983 bounded dates), 1,984 their issuing place. Licensed file by
+file: CC BY 4.0 for nearly all (`attribution`), the Eudes of Blois
+and Marmoutier Perche collections CC BY-NC-ND 4.0 (`nc`).
