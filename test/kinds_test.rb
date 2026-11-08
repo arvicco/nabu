@@ -527,6 +527,30 @@ class KindsTest < Minitest::Test
     "Tactica (cum pinace et prooemio)"
   ].freeze
 
+  # The blbooks title fold: BlbooksTitleGenre's heads off real BL cone
+  # titles fold onto the ruled classes; "Satire" stays unmapped by design.
+  BLBOOKS_FOLDS = {
+    "The Roman Actor; a tragædie [in five acts and in verse]" => ["literary/drama"],
+    "North-ward Hoe. Sundry times acted by the children of Paules." => ["literary/drama"],
+    "Messiah. An Oratorio. As perform'd at the theatre in York, etc" => ["literary/drama"],
+    "Poems on religious and moral subjects" => ["literary/poetry"],
+    "Ro. vrbis excidium [In verse.]" => ["literary/poetry"],
+    "Two Hymns on the Nativity of Christ" => ["hymn-prayer/hymn"],
+    "An Epistle [in verse] to the Right Honourable Charles Earl of Dorset" => ["letter/literary"],
+    "A Tale of a Tub" => ["literary/narrative"],
+    "An Essay on Criticism ... The sixth edition, corrected" => ["literary/essay"],
+    "A Sermon, preached before the University of Cambridge" => ["sermon"]
+  }.freeze
+
+  def test_shipped_blbooks_folds_the_title_heads
+    shipped = shipped_kinds
+    assert_equal "genre", shipped.facet_for("blbooks")
+    BLBOOKS_FOLDS.each do |title, want|
+      assert_equal want, shipped.normalize("blbooks", Nabu::Adapters::BlbooksTitleGenre.head(title)), title
+    end
+    assert_equal ["unmapped"], shipped.normalize("blbooks", "Satire"), "verse or prose unstated — by design"
+  end
+
   def test_shipped_cgpg_folds_the_title_heads
     shipped = shipped_kinds
     assert_equal "genre", shipped.facet_for("cgpg")

@@ -37,6 +37,8 @@ bfm.rb:
   reads: 1
 bilara_json_parser.rb:
   reads: 1
+blbooks.rb:
+  reads: 1   # the gzipped book's bytes (the vakk gz mold); decoded through SourceRead.utf8
 bosworth_csv_parser.rb:
   reads: 1
 bu_ajami_item_parser.rb:

@@ -205,6 +205,53 @@ sources:
     #  grain) sits in the residuum documents, which carry no genre facet: the residuum
     #  mixes apparatus with rescans and uncarved text, so a paratext claim is an adapter
     #  question, not a fold line.
+  blbooks:            # the BL catalogue title's form noun, cut to ONE head at parse time
+    #                   (Adapters::BlbooksTitleGenre — the cgpg precedent: upstream carries no
+    #                   genre field, the title IS the label; the main title's earliest form word
+    #                   wins, else the cataloguer's bracketed gloss: "[in five acts …]" → Play,
+    #                   "[In verse.]" → Verse). Counts = books, the pre-1800 cone through the
+    #                   adapter (census 2026-11-08, 2,498 titles): 2,090 carry a head, 408 none
+    #                   (no claim — the facet is absent). The cone is the BL's literature
+    #                   digitisation: plays and verse dominate.
+    facet: genre
+    map:
+      # -- written for performance (the print of a play or libretto is still the play)
+      "Comedy": literary/drama                   # 320 — Comedie/Comœdie/Comoedie spellings included
+      "Tragedy": literary/drama                  # 256 — Tragedie/Tragædie/Tragaedie
+      "Play": literary/drama                     # 166 — "acted by …", "[in five acts …]", play(s), drama,
+      #                                            dramatic piece/romance
+      "Opera": literary/drama                    # 49 — the libretto as printed for the house
+      "Farce": literary/drama                    # 44
+      "Tragicomedy": literary/drama              # 37
+      "Entertainment": literary/drama            # 19 — musical/dramatic/comic entertainments only
+      #                                            (a bare "Royal Entertainments" never heads)
+      "Masque": literary/drama                   # 11
+      "Interlude": literary/drama                # 7
+      "Burletta": literary/drama                 # 6
+      "Oratorio": literary/drama                 # 6 — the word-book of a sung drama
+      # -- verse as verse
+      "Poem": literary/poetry                    # 681 — poem(s)/poema, poetical/poeticall, poetry, verses,
+      #                                            canto, monody, idyl, eclogue
+      "Ode": literary/poetry                     # 81
+      "Verse": literary/poetry                   # 70 — the cataloguer's "[In verse.]" and nothing else
+      "Song": literary/poetry                    # 36 — song collections, the lyric as printed
+      "Elegy": literary/poetry                   # 27 — the verse elegy (a funeral sermon never heads Elegy)
+      "Ballad": literary/poetry                  # 14
+      "Sonnet": literary/poetry                  # 3
+      "Epigram": literary/poetry                 # 3
+      "Hymn": hymn-prayer/hymn                   # 4 — Defoe's Hymn to Victory, the Nativity hymns
+      # -- address, story, argument
+      "Epistle": letter/literary                 # 78 — the verse/heroic epistle and the printed
+      #                                            open epistle: a letter in literary form
+      "Letter": letter                           # 38 — printed letters, "A letter [in verse] to …"
+      "Tale": literary/narrative                 # 44 — tales in verse and prose
+      "Novel": literary/narrative                # 3
+      "Essay": literary/essay                    # 34 — Pope's Essay on Criticism/Man included: the
+      #                                            essay is the claim, the verse rides the text
+      "Sermon": sermon                           # 3
+    # -- unmapped by design (50 documents): "Satire" — the title says satire, not whether
+    #    in verse (Oldham, the Tory satyrs) or prose; the bare head waits for a ruling
+    #    rather than forcing literary/poetry.
   cantus:             # the chant record's genre — upstream's own abbreviation list
     #                   (cantusdatabase.org/genres/), the facet value = upstream's genre NAME,
     #                   the code raw (CantusCsvParser::GENRES). Counts = the 17-source sample
