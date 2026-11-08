@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE TEI.2 PUBLIC "-//DBNL//DTD TEI.2 XML//NL" "https://www.dbnl.org/xml/dtd/teixlite.dtd">
+<TEI.2> 
+  <teiHeader> 
+	 <fileDesc><titleStmt> 
+	   <title type="main">Emblemata aliquot selectiora amatoria</title> 
+	   <author>Otto Vaenius</author>  
+	   <funder>logo_epu__01</funder>
+		</titleStmt><editionStmt> 
+		  <p>GEBRUIKT EXEMPLAAR</p> 
+		  <p>exemplaar universiteitsbibliotheek Amsterdam, signatuur: 2008 E 3</p> 
+		  <p>&nbsp;</p>  
+		  <p>ALGEMENE OPMERKINGEN</p> 
+		  <p>Dit bestand is, met een aantal hierna te noemen aanpassingen, een diplomatische weergave van <hi rend="i">Emblemata aliquot selectiora amatoria</hi> van Otto Vaenius uit 1618. Het nawerk (fol. M1r-N3r) is niet opgenomen in deze digitale editie.</p>
+		  <p>De tegenover elkaar liggende linker- en rechterpagina's in het middengedeelte van het boek (fol. C2v-L8r) hebben telkens hetzelfde paginanummer. In deze digitale editie is ervoor gekozen een ‘a’ en ‘b’ toe te voegen aan deze paginanummers. Aan sommige hoofdstukken is een kop toegevoegd tussen vierkante haken.</p>
+		  <p>&nbsp;</p>  
+		  <p>REDACTIONELE INGREPEN</p> 
+		  <p>p. B1v: <hi rend="i">krachtigb</hi> → <hi rend="i">krachtigh</hi>, ‘<hi rend="i">Te lyden is gheen schand', als komende seer krachtigh</hi>’</p>
+		  <p>p. B1v: <hi rend="i">Mjin</hi> → <hi rend="i">Mijn</hi>, ‘<hi rend="i">Mijn onghetemde kracht al 't gheen' dat leeft</hi>,’</p>
+		  <p>p. B1v: <hi rend="i">fweeft</hi> → <hi rend="i">sweeft</hi>, ‘<hi rend="i">Mijn onghetemde kracht al 't gheen' dat leeft, en sweeft</hi>,’</p>
+		  <p>p. B6v: <hi rend="i">jeugbt</hi> → <hi rend="i">jeught</hi>, ‘<hi rend="i">Niet weder men vercrijght, door my zo bloeyt u jeught</hi>’</p>
+		  <p>p. 56: ptysen → prysen, ‘Dat toonen meer in Liefd' als 't spreecken is te prysen.’</p>
+		  <p>p. 56: veslinnē → verslinnē, ‘Een Crocodil' noch weent, gaend' eenē mensch verslinnē,’</p>
+		  <p>p. 61: <hi rend="i">tunditnr</hi> → <hi rend="i">tunditur</hi>, ‘<hi rend="i">Saxea ceu rupes undeundique tunditur undis</hi>,’</p>
+		  <p>p. 66: <hi rend="i">genns</hi> → <hi rend="i">genus</hi>, ‘<hi rend="i">Nullum eis obest voluptatis genus</hi>.’</p>
+		  <p>p. 69: <hi rend="i">ulmnm</hi> → <hi rend="i">ulmum</hi>, ‘<hi rend="i">Arentem senio nudam quoque frondibus ulmum</hi>’</p>
+		  <p>&nbsp;</p>
+		  <p>Bij de omzetting van de gebruikte bron naar deze publicatie in de dbnl is een aantal delen van de tekst niet overgenomen. Hieronder volgen de tekstgedeelten die wel in het origineel voorkomen maar hier uit de lopende tekst zijn weggelaten. Ook de blanco pagina (A1v) is niet opgenomen in de lopende tekst.</p> 
+		  <p>&nbsp;</p> 
+		  <p><hi rend="b">[pagina ongenummerd (p. A1r)]</hi></p>
+		    <p>Othonis Vaeni</p> 
+		      <p>Emblemata </p>
+		      <p><hi rend="i">aliquot Selectiora</hi></p> 
+		      <p>Amatoria.</p> 
+		      <p><hi rend="i">Amsterodami</hi>,</p> 
+		      <p>Apud Guilj: Ianssonium.</p> 
+		      <p>A<hi rend="sup">o</hi>. 1618.</p>
+		  <p>&nbsp;</p>  
+		</editionStmt><publicationStmt> 
+		  <availability> 
+			 <p>2006 dbnl</p> 
+			 <p>&nbsp;</p>  
+		  </availability> 
+		  <idno>vaen001embl01_01</idno>
+		</publicationStmt>
+	   <notesStmt>
+	     <note>scans</note>
+	     <note>unicode</note>
+	   </notesStmt>
+	   <sourceDesc> 
+		  <p>Otto Vaenius, <hi rend="i">Emblemata aliquot selectiora amatoria</hi>.  Willem Jansz. Blaeu, Amsterdam 1618</p> 
+		  <p>&nbsp;</p>  
+		</sourceDesc></fileDesc> 
+	 <encodingDesc> 
+		<p>DBNL-TEI 1</p> 
+	 </encodingDesc> 
+	 <revisionDesc> 
+	   <change> 
+	     <date>2006-11-16</date> 
+	     <respStmt> 
+	       <name type="person">MG</name> 
+	     </respStmt> 
+	     <item>colofon toegevoegd</item> 
+	   </change> 
+	 </revisionDesc> 
+  </teiHeader> 
+  <text> 
+    <interpGrp>
+      <interp type="primair" value="vaen001embl01"></interp>
+    </interpGrp>
+	 <body> 
+<div type="chapter">
+<pb n="A2r"/>
+<head rend="h3">Admodum Ill<hi rend="sup">ri.</hi> Domino, D. <name type="person">Gvilielmo Bavaro</name>, Domino de Holinchovem, Equiti Aurato.</head>
+<p><hi rend="b">Q</hi>Vo tempore huic urbi te habe<c type="shy">-</c><lb/> 
+re, mihi tecum interdum esse conti<c type="shy">-</c><lb/> 
+git, vidi planeque perspexi, inter litte<c type="shy">-</c><lb/> 
+rarum &amp; elegantiae studia, nostra hac arte pin<c type="shy">-</c><lb/> 
+gendi non minimum te oblectari. Itaque post<lb/> 
+discessum tuum, saepe mecum deliberavi, quod<lb/> 
+potissimum artis simul &amp; animi specimen tibi<lb/> 
+<pb n="A2v"/>
+praeberem ac dicarem. Tandem venit in men<c type="shy">-</c><lb/> 
+tem Amorum aliquot Emblemata inter sce<c type="shy">-</c><lb/> 
+das meas esse, quae jam olim in juventute con<c type="shy">-</c><lb/> 
+ceperam atque delineaveram: &amp; quamquam<lb/> 
+haec aetati nunc meae parum congruerent, tua<lb/> 
+tamen, id est, bonae &amp; florenti satis convenire,<lb/> 
+eíque recreandae esse posse. Quibus adductus<lb/> 
+in aes incidi, praelóque committi curavi, &amp; ec<c type="shy">-</c><lb/> 
+ce, quo destinaveram, nunc mitto, tibíque of<c type="shy">-</c><lb/> 
+fero cum voto, lubens ut volensque accipias,<lb/> 
+méque tibi devotum Amore, quo soles, porrò<lb/> 
+prosequare. Ita te Admodū Ill. Domine, voti<lb/> 
+compotē Deus faciat atq; servet. Antverpiae.</p>
+</div>
+<div type="chapter">
+<pb n="B1r"/>
+<head rend="h3"><hi rend="i">Proh quanta potentia regni est Venus alma tuì!</hi></head>
+<p><figure><p><xptr to="vaen001embl01ill71.gif"/></p></figure></p>
+</div>
+<div type="chapter">
+<pb n="B1v"/>
+  <div type="section">
+<head rend="h3">Cvpido tot de Ieught.</head>
+<lg type="poem">
+<l><hi rend="b">VV</hi><hi rend="i">Anneer ick yet ontsteeck' en wercklick dryve voort</hi></l>
+<l><hi rend="i">met myne heete kracht, so wert volbracht het woort</hi>.</l>
+<l><hi rend="i">Vermeerdert ende wast</hi>; <hi rend="i">een woort 't welck quam gedreven</hi></l>
+<l><hi rend="i">De gantsche wereldt door. Al die natuerlijck leven</hi></l>
+<l><hi rend="i">Staen onder myne wet, die niemant en ontvliet:</hi></l>
+<l><hi rend="i">Mijn overgroot ghewelt en wijdtghespreyt ghebiedt</hi></l>
+<l><hi rend="i">Te lyden is gheen schand', als komende seer krachtigh</hi></l>
+<l><hi rend="i">Van hoogher hant ghedaelt, en van een will' almachtigh</hi>.</l>
+<l><hi rend="i">Mjin onghetemde kracht al 't gheen' dat leeft, en sweeft</hi>,</l>
+<l><hi rend="i">Beheerscht, en heete lust om voort te teelen gheeft</hi>.</l>
+<l><hi rend="i">Al 't gheen' hem openbaert in de vier elementen</hi>,</l>
+<l><hi rend="i">Hem dees' ghenegentheyt ghewilligh laet inprenten</hi>.</l>
+</lg>
+</div>
+<div type="section">
+<pb n="B2r"/>
+<lg type="poem">
+<head>Cvpidon a la Ieunesse.</head>
+<l><hi rend="b">Q</hi>Vand j'enflamme les corps &amp; les coeurs de mon feu,</l>
+<l>c'Est lors que s'accomplit la parole de Dieu,</l>
+<l>Qui mande au monde croistre &amp; accroistre sa race:</l>
+<l>Parolle qui l'effect de sa puissance trace</l>
+<l>En tout cest univers. Tout ce qu' icy est né,</l>
+<l>Tant qu' il hume cest air, se trouve condemné</l>
+<l>d'Obeyr à ma loy, doncques ce n'est pas blasme</l>
+<l>De souffrir les efforts de l'amourese flamme:</l>
+<l>Ce n'est pas deshonneur suivre d'Amour le train,</l>
+<l>Ce vous est commandè par decret souverain.</l>
+<l>Mon pouvoir indomptè tous animaux maistrise,</l>
+<l>Et es reins le desir d'engendrer il attise.</l>
+</lg>
+</div>
+</div>
+</body>
+</text>
+</TEI.2>

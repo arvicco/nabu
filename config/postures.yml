@@ -3469,3 +3469,28 @@ sources:
         upstream's no-place and mints none. No gazetteer refs in the asset"}
     script: {posture: implied, note: "Latin script; the editions' lacunae ride as '.....'
         words, abbreviations expanded (status expan per word)"}
+  dbnl:   # P165
+    # kind machine-postured — kind_map.yml facet genre (the register's genre column).
+    lect:
+      posture: identity
+      note: "per title the header langUsage id, transcribed (nl → nld, la → lat, fr → fra, de,
+        en, fy, af, nds); a title without langUsage is Dutch. Dutch dated by 1500 is claimed
+        dum (the conventional close of Middle Dutch; 15 titles) — a transcription of the
+        register's date onto the existing anchor, not a band inference: the registry's dum
+        band reads 1050–1350 (ISO reference), so the 1400–1500 titles sit past its stated
+        band (recorded for the lect-scope review). nl carries no stages (no early-modern /
+        19th-c. Dutch nodes exist), so the 3,500+ nld titles 1500–1899 stay bare nl —
+        identity is the honest posture until a stage pair is minted"
+    dating: {posture: dated, note: "every member's register jaar (DBNL's date of the transcribed
+        witness) → :structured; a manuscript or first print is the witness's own date (no
+        class), a later or unknown printing is class edition — or, when the header states the
+        first print's year ('De eerste druk dateert uit 1838'), that year as class composition
+        with the edition riding raw. Century labels ('13de eeuw') band to the whole century;
+        'voor'/'na' one-sided"}
+    places: {posture: unplaced, note: "no place field: the imprint lives only in the sourceDesc
+        prose ('A. Tjaden, Deventer 1875'), carried verbatim as source_edition (declared coarse);
+        the persons' birth/death places ride the authors metadata; DBNL's place link codes
+        (interp primair 'ieper001') ride the pages unresolved — no code table ships with the dump"}
+    script: {posture: implied, note: "Latin script; quotations in other scripts ride verbatim
+        (Greek characters in 821 of the 3,654 members, Hebrew in 123, Cyrillic in 74 — the
+        2026-11-08 census; the nl-rus titles among the last)"}
