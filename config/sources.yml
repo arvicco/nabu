@@ -2772,6 +2772,28 @@ first1k-greek:
   translations: true
 
 # P77-6
+formulae-open:   # P164, 02-sources row 393
+  adapter: Nabu::Adapters::FormulaeOpen
+  adopted: "2026-11-08"
+  axes: [classical, romance]  # the openmgh/corpus-corporum precedent: the continuum's Latin side
+  siblings: cts   # lat001/lat002 are the printed edition's a/b pieces of one charter number
+  wired: false   # EXPECT first sync (~25 MB clone): 5,164 docs / 5,281 passages, 0 errored,
+                 # 302 rule skips (259 E-Lexicon entry files + 37 regest-only records + 6
+                 # unlicensed luzern charters) — the adapter's census over the 2ce73416 clone;
+                 # 105 docs license_override nc (eudes + marmoutier_pour_le_perche, CC BY-NC-ND).
+                 # Probe: nabu search "Gotefridus Alemanniae dux" → stgallen.wartmann0001.lat001:1.
+  sync_policy: manual
+  # Formulae – Litterae – Chartae (Akademie der Wissenschaften in Hamburg):
+  # the project's public-domain charter editions, OCR hand-corrected, one
+  # charter per CapiTainS TEI file — St. Gallen (Wartmann), Freising
+  # (Bitterauf), Redon, Stavelot-Malmedy, the Marmoutier cartularies,
+  # Charlemagne's diplomas (MGH DD Karol. 1 — not in openmgh), Lombard
+  # charters (CDL), Gorze, Hersfeld and more, c. 700–1300. LICENCE PER
+  # DOCUMENT: each file's <licence> — by → attribution, by-nc-nd →
+  # license_override nc, none → never ingested; an unknown target stops
+  # discovery. The E-Lexicon (German dictionary entries) and the regest-only
+  # records (no Latin text) skip by rule.
+
 fornsvenska:
   adapter: Nabu::Adapters::Fornsvenska
   adopted: "2026-08-13"

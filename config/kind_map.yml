@@ -2600,6 +2600,13 @@ sources:
       #   biography precedent while no hagiography head existed
     deliberate:
       "Genre missing": "the catalog's unfilled genre slot (18 works), not a claim"
+  formulae-open:      # P164 — the TEI's own <text type="charta">, on every one of the 5,207
+    metadata: genre   # Latin files (census 2026-11-08 over the 2ce73416 clone)
+    map:
+      "charta": legal                            # 5,164 accepted — the charter, the legal instrument
+      #   of a grant, sale, exchange or royal diploma; the "Charters"/"charter" precedent (bare
+      #   head). DELIBERATELY COARSE: upstream labels every piece charta whatever the act
+      #   (donation, precaria, commutatio, notitia, diploma), so no contract/law sub is its claim
   ponomar:            # the adapter's service_part (Adapters::Ponomar): TROPARION / KONTAKION for
     metadata: service_part  # the hymn subtrees, else the top folder; census 2026-11-04 over all 246
     map:
