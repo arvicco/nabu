@@ -52,6 +52,7 @@ A source wears every desk it serves — these 41 answer this desk. Holdings are 
 | `leme` | dictionary | attribution | wired · manual | 943,211 entries |
 | `menota` | texts | attribution | wired · manual | 91 docs / 229,501 passages |
 | `menotec` | texts | nc | wired · manual | 7 docs / 20,308 passages |
+| `nb-no` | texts | open | not yet wired | not synced yet |
 | `perseus-anglit` | texts | attribution | wired · manual | 2 docs / 86 passages |
 | `ppchy` | treebank | nc | wired · manual | 63 docs / 17,861 passages |
 | `proiel` | treebank | nc | wired · frozen | 12 docs / 51,321 passages |

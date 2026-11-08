@@ -270,6 +270,9 @@ module Nabu
           #                               imprint rides "imprint" — no place claim
           "ms-wikisource" => :structured, # P120-3: the manuscript's stated date (header
           #                                 year= / Index Year=; "abad ke-N" a century)
+          "nb-no" => :structured, # P165: the item record's issued year (+ the untouched
+          #                         imprint date where it differs), class edition; place =
+          #                         the imprint place in the print's own form (Christianiae)
           "ndl-kotenseki" => :structured,
           "ninjal-textdb" => :structured, # each work page's Publication Date (1592/1593/1596,
           #                                 class edition); place = the title page's imprint

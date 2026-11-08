@@ -4754,6 +4754,30 @@ nabu-places:
   # nabu-places + bin/nabu sync nabu-places + bin/nabu place apply.
   sync_policy: manual
 
+nb-no:   # P165
+  adapter: Nabu::Adapters::NbNo
+  adopted: "2026-11-08"
+  axes: [germanic, romance]
+  wired: false   # awaiting the first real slice (the paced api.nb.no crawl)
+  sync_policy: manual
+  # Nasjonalbiblioteket (National Library of Norway) — public-domain books
+  # through the keyless catalog API: the item record + per-page ALTO OCR.
+  # License per item: accessInfo "publicdomain"; the IIIF attribution,
+  # verbatim: "Du kan kopiere, endre, spre, vise og fremføre dette verket,
+  # selv for kommersielle formål, uten å spørre om tillatelse." → open.
+  # THE CONE (the first era): pre-1700 prints + Old Norse, Latin, Greek
+  # and Sámi at any date — 1,910 items / 530,042 pages (census
+  # 2026-11-08, reconciled to the API's totalElements). Crawled non →
+  # Greek → Sámi → lat → other pre-1700, oldest first, 1 req/s request
+  # starts (~1.1 s latency), SLICE 1,500 requests ≈ 28 min a sync;
+  # ~165 h for the cone (multi-phase). Document = book (discovered when
+  # complete), passage = page (ALTO lines, OCR uncorrected: text_nature
+  # machine-ocr). EXPECTED first slice (the census order, 2026-11-08):
+  # 2 documents — Verelius's Index linguae veteris Scytho-Scandicae (1691,
+  # 325 pages) and Ari's Íslendingabók (Oxford 1733 ed., 301) — ≤ 626 page
+  # passages; the 1768 Kongs-skugg-sio partial (~868/893 pages, skipped
+  # by rule until the second slice).
+
 ndl-kotenseki:   # P109-2
   adapter: Nabu::Adapters::NdlKotenseki
   adopted: "2026-09-29"

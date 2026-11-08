@@ -145,7 +145,11 @@ class DerivabilityWritersTest < Minitest::Test
   # writes the fran.si index + portal pages under map/, the raw reading
   # pages under books/<id>/ (tmp+rename) and its .korpus16-crawl.json
   # ledger into canonical/korpus16/ inside Adapter#fetch — the same
-  # crawl law kind (the vakk sibling).
+  # crawl law kind (the vakk sibling). P165's nb-no writes the cone
+  # census.tsv, the api.nb.no item records + ALTO lists and the gzipped
+  # per-page ALTO under items/<id>/ (tmp+rename) and its .nb-crawl.json
+  # ledger into canonical/nb-no/ inside Adapter#fetch — the same crawl
+  # law kind.
   # same fetch — the ja/zh-wikisource law kind. The P117-2
   # elektire_fetch writes canonical/elektire/ (the WP-JSON listing
   # pages under index/ + epub/<slug>.epub books, tmp+rename, and its
@@ -297,7 +301,7 @@ class DerivabilityWritersTest < Minitest::Test
     nabu/adapters/mdz_protestant.rb nabu/adapters/vakk.rb nabu/adapters/korpus16.rb
     nabu/adapters/damos.rb nabu/adapters/itkc_catalog.rb
     nabu/adapters/aclt.rb nabu/adapters/ia_scan_shelf.rb
-    nabu/adapters/mnc_wikisource.rb nabu/adapters/shiratori_shm.rb
+    nabu/adapters/mnc_wikisource.rb nabu/adapters/shiratori_shm.rb nabu/adapters/nb_no.rb
     nabu/language_shelf.rb nabu/lemma_shelf.rb nabu/date_shelf.rb nabu/meter_shelf.rb
     nabu/library_shelf.rb nabu/note_shelf.rb
     nabu/source_shelf.rb nabu/ingest.rb
