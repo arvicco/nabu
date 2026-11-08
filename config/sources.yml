@@ -4498,6 +4498,51 @@ mk-wikisource:   # P116-2, 02-sources row 236
   # and modern-orthography duplicates are out by rule. Texts PD;
   # layer CC BY-SA 4.0.
 
+mnc-wikisource:   # P164, 02-sources row 395
+  adapter: Nabu::Adapters::MncWikisource
+  adopted: "2026-11-08"
+  axes: [mongolic]
+  wired: false   # until the first real sync is verified
+  sync_policy: manual
+  # The Manchu texts on Multilingual Wikisource (wikisource.org), Unicode
+  # Manchu script and Möllendorff romanization — the provenance census
+  # 2026-11-08 (paced): 34 main-namespace member pages of the three
+  # categories → 21 ADMITTED pages of 13 premodern works (滿洲實錄 juan
+  # 1–4 of 8, 清文啓蒙 preface + juan 1–2, 盛京賦, the Treaty of
+  # Nerchinsk, the Seven Grievances, the Samjeondo stele, three Kangxi
+  # 避暑山莊 poems, the Manchu Sunzi, Yijing hexagrams 1–2, Lunyu ch. 1,
+  # 清語老乞大 juan 1, the native-script 三字經, the Acts of the 1835 NT);
+  # 13 SKIPPED BY RULE (6 landing/contents, 4 modern compositions, 2
+  # unattested romanized 三字經 copies, 1 Sibe-orthography page) + the
+  # non-main-namespace members. Texts PD; layer CC BY-SA → attribution.
+  # EXPECTED FIRST SYNC (parsed through the adapter over the census
+  # pages, 2026-11-08): 21 docs / 1,359 passages (mnc 977 · lzh 355 · zho
+  # 27); 16 skipped by rule (13 census rejects + 3 non-main-namespace
+  # members).
+
+mongolic-pd:   # P164, 02-sources row 393
+  adapter: Nabu::Adapters::MongolicPd
+  adopted: "2026-11-08"
+  axes: [mongolic]
+  wired: false   # until the first real sync is verified
+  sync_policy: manual
+  # The PD Manchu–Mongolic–Oirat reference shelf as archive.org scans — 15
+  # census items (13 works): Zakharov's Manchu-Russian dictionary (1875),
+  # Möllendorff's Manchu Grammar (1892), Amiot–Langlès tome I (1789),
+  # Klaproth's Chrestomathie mandchou (1828), Meadows' Translations from
+  # the Manchu (1849), Adam's Grammaire (1873), Wylie's T'sing wan k'e mung
+  # (1855); Kowalewski's Mongol-Russian-French dictionary in three volumes
+  # (1844/46/49), Schmidt's Mongolian grammar (1831), Kowalewski's
+  # Mongolian chrestomathy II (1837); Pozdneev's Kalmyk-Russian dictionary
+  # (1911), Jülg's Siddhi-Kür (1866), Popov's Kalmyk grammar (1847). The
+  # africa-pd mechanics (IaScanShelf, hOCR pair, page grain, UNCORRECTED
+  # OCR declared; the native vertical scripts are garbled — declared).
+  # Language = the prose's (rus 7, eng 3, fra 3, deu 2) with the language
+  # presented in "object_language" (mnc 7, cmg 5, xwo 3). Public domain
+  # (authors †1793–1920, prints 1789–1911). EXPECTED FIRST SYNC (census
+  # 2026-11-08, every page index fetched): 15 docs / ~7,358 passages (the
+  # non-empty hOCR page spans; whitespace-only spans may trim a few).
+
 monlam-lexicon:   # P88-A3, 02-sources row 183
   adapter: Nabu::Adapters::MonlamLexicon
   adopted: "2026-08-29"
@@ -6315,6 +6360,24 @@ shabados:   # P122-3, 02-sources row 269
   # + README/LICENSE (the app code stays out); ~141k small files.
   # EXPECTED FIRST SYNC: 127 docs / 141,264 passages, 0 quarantined
   # (parse census ~55 s on the scratch clone).
+
+shiratori-shm:   # P164, 02-sources row 394
+  adapter: Nabu::Adapters::ShiratoriShm
+  adopted: "2026-11-08"
+  axes: [mongolic]
+  wired: false   # until the first real sync is verified
+  sync_policy: manual
+  # Shiratori Kurakichi's 音訳蒙文元朝秘史 (Tōyō Bunko 1943): Ye Dehui's
+  # 1908 hanzi Secret History reproduced leaf for leaf with Shiratori's
+  # romanized re-transcription — a SECOND Middle Mongol edition beside
+  # altaica-shm (Street), not a dedupe. One NDL PID (1184344) over the
+  # NDL Lab bulk full-text route (granted by email 2026-09-29), ONE
+  # request; its own slug because ndl-kotenseki is census-driven (the
+  # 古典籍 file this 図書 is not in) and claims jpn wholesale. PD
+  # (Shiratori †1942). EXPECTED FIRST SYNC (parsed through the adapter
+  # over the full 2026-11-08 answer, 16 MB): 1 doc / 632 koma passages
+  # (xng 602 · zho 9 · jpn 8 · eng 7 · lzh 6), 2 koma skipped by rule
+  # (the Kodak calibration frame, one letterless koma) of 636.
 
 shkz:   # P107-3b
   adapter: Nabu::Adapters::Shkz

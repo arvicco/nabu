@@ -260,7 +260,7 @@ The Turkic historical lane, opening on ATMO's Jarring-collection Turki manuscrip
 
 The Mongolic-Tungusic lane, opening on Street's romanized Secret History via Monumenta Altaica (use granted by the site's maintainer, 2026-09-27) — the kaikki Manchu extract, the zh.wikisource hanzi transmission text and the Manchu corpus asks joining as they land.
 
-**Members** (3): `altaica-shm`, `ptg`, `wiktionary-recon`
+**Members** (6): `altaica-shm`, `mnc-wikisource`, `mongolic-pd`, `ptg`, `shiratori-shm`, `wiktionary-recon`
 
 ### americas
 
