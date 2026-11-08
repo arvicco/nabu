@@ -3137,6 +3137,25 @@ sources:
     script: {posture: implied, note: "Latin type as double-keyed (ſ, ß, the m/n tilde kept,
         most ligatures resolved; # marks illegible spots) — Trubar's spelling and the 1580s
         bohoričica alike, no per-book orthography claim"}
+  nb-no:   # P165
+    # kind machine-postured — the nb-no fold in kind_map.yml over the record's
+    # subject.genres headings (open vocabulary: unruled headings stay uncovered).
+    lect: {posture: codemap, note: "the item record's own MARC language codes, the FIRST
+        non-collective leading (lat, non, grc, sme, sma, smj, nob, nno ride their own
+        codes; dan/ger/fre/swe/nor/ita/spa/eng alias through the codemap). No date
+        staging by design: the print year is class edition, which date-band inference
+        excludes (a 1902 saga edition is not Modern Icelandic). Declared bare: the Sámi
+        codes (no registry anchors yet), nob/nno, and the 639-2/B spellings dut and ice
+        and the catalogue's gre (no alias rows) — a lect-scope review item"}
+    dating: {posture: dated, note: "the record's issued year (+ the untouched imprint date
+        where the record keeps a different one), class edition on the :structured lane —
+        the print's date, never the text's composition"}
+    places: {posture: named, note: "the imprint place in the print's own form (Christianiae,
+        Hafniae, Kiøbenhaffn, Kristianiast; supplied brackets dropped); the cataloguer's
+        'Land - By' authority form rides place_normalized; no gazetteer link"}
+    script: {posture: implied, note: "each language's own script as NB's library OCR read it
+        (Antiqua and Fraktur Latin type, Greek type in the grc editions); uncorrected OCR,
+        text_nature machine-ocr"}
   ganjoor:   # P153
     # kind machine-postured — the ganjoor fold in kind_map.yml over the poem's own
     # section label (the divan's form sections; work/chapter titles uncovered, open).

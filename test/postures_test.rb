@@ -179,7 +179,7 @@ class PosturesTest < Minitest::Test
   def test_the_lect_migration_kept_the_p59_4_census
     lect = postures.declarations.select { |d| d.layer == "lect" }
     by_posture = lect.group_by(&:posture).transform_values(&:size)
-    assert_equal 192, lect.size,
+    assert_equal 193, lect.size,
                  "the P59-4 declarations survive the move (61 at migration; itant retired P61-3," \
                  "oracc retired P62-2, etcsl/ccmh/freising/coptic-scriptorium retired P64-6, " \
                  "titus-avestan retired P66-1, osta+fornsvenska retired P77-r8, achemenet " \
@@ -430,7 +430,9 @@ class PosturesTest < Minitest::Test
                  "blbooks ADDED P165 — identity (Language_1 onto en/fr/lat/it/de/es/nl; bare by " \
                  "the edition-class exclusion): 190→191; " \
                  "dbnl ADDED P165 — identity, the header langUsage per title (nld/lat/fra…; Dutch " \
-                 "dated by 1500 claimed dum; nl carries no stages): 191→192"
+                 "dated by 1500 claimed dum; nl carries no stages): 191→192; " \
+                 "nb-no ADDED P165 — codemap, the item record's own MARC codes (edition-class " \
+                 "prints never date-stage): 192→193"
     # The epigraphic-belt registry package (merged + canonical-synced
     # 2026-10-18, the add-then-retire shape within one phase) retires both
     # P130 pendings, and the ociana-script rule + the ig-cyprus override
@@ -517,6 +519,7 @@ class PosturesTest < Minitest::Test
     # year, class edition, which the inference law excludes — the cone holds
     # reprints and ancient texts beside first editions): 138→139.
     # dbnl joins identity (langUsage nld/lat/fra…, dum by date; nl has no stages): 139→140.
-    assert_equal({ "dates" => 31, "codemap" => 21, "identity" => 140 }, by_posture)
+    # nb-no joins codemap (the record's MARC codes; edition-class prints never stage): 21→22.
+    assert_equal({ "dates" => 31, "codemap" => 22, "identity" => 140 }, by_posture)
   end
 end

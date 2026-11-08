@@ -867,6 +867,19 @@ class KindsTest < Minitest::Test
     end
   end
 
+  # The nb-no genre fold (the item record's subject.genres, an OPEN
+  # vocabulary): the census sample's form headings fold, the occasion /
+  # editorial headings are deliberate, an unruled heading mints nothing.
+  def test_nb_no_genre_headings_fold_and_unruled_ones_mint_nothing
+    shipped = shipped_kinds
+    {
+      "Likprekener" => ["sermon/funeral-sermon"], "ABC-bøker" => ["school"], "Sagaer" => ["literary/narrative"],
+      "Forordninger" => ["legal/law"], "Krøniker" => ["historiography/chronicle"]
+    }.each { |heading, want| assert_equal want, shipped.normalize("nb-no", heading), heading }
+    assert_empty shipped.normalize("nb-no", "Leilighetstrykk"), "an occasion, declared deliberate"
+    assert_empty shipped.normalize("nb-no", "Biografier"), "unruled in an open vocabulary: nothing"
+  end
+
   # eebo-tcp's first kind wave: the LCSH subject facet as an OPEN
   # vocabulary — form headings and form subdivisions fold onto ruled
   # heads; topical, name and about-the-form headings mint nothing.

@@ -1665,6 +1665,44 @@ sources:
       "NDC 779": "modern NDC subject shelving (vaudeville), not genre"
       "NDC 786": "modern NDC subject shelving (outdoor pursuits), not genre"
       "NDC 787": "modern NDC subject shelving (fishing), not genre"
+  nb-no:              # P165 — the item record's subject.genres (NB's Norwegian genre
+    #                   headings, verbatim). Census 2026-11-08: an 80-item random sample of
+    #                   the 1,910-item cone — 63 records carry a subject block, ~25 a genre
+    #                   heading; the counts below are that sample's. The headings mix FORM
+    #                   with topic, so the vocabulary is open: an unruled heading mints
+    #                   nothing (counted uncovered), never a guess. The full vocabulary lands
+    #                   with the crawl (`nabu kind census --uncovered nb-no`).
+    facet: genre
+    vocabulary: open
+    map:
+      "Likprekener": sermon/funeral-sermon      # 3 — funeral sermons, the commonest pre-1700 print
+      "Ordbøker": lexical/word-list             # 3 — dictionaries
+      "Krøniker": historiography/chronicle      # 2 — chronicles
+      "Lærebøker": school                       # 2 — textbooks
+      "ABC-bøker": school                       # 1 — primers (Stockfleth's 1837 Sámi ABC)
+      "Lesebøker": school                       # 1 — readers
+      "Sagaer": literary/narrative              # 2 — the sagas as told prose (the saga editions
+      #                                            of the non arm)
+      "Skillingsviser": literary/poetry         # 2 — broadside ballads
+      "Sanger": literary/poetry                 # 1 — songs
+      "Forordninger": legal/law                 # 1 — royal ordinances
+      "Forskrifter": legal/law                  # 1 — regulations
+      "Lovsamling": legal/law                   # 1 — law collections
+      "Breviarium": ritual/liturgy              # 1 — the breviary, the office as performed
+      "Bibelkommentarer": exegesis              # 1 — Bible commentaries
+      "Auksjonskataloger": administrative/list  # 1 — auction catalogues: lists of lots
+      "Bibliotekkataloger": administrative/list # 1 — library catalogues: lists of books
+      "Hyldningsskrift": honorific              # 1 — homage prints for a ruler or patron
+    deliberate:
+      "Leilighetstrykk": "occasional print — a print OCCASION (wedding, funeral, accession),
+        not a genre; the piece's form (verse, sermon, oration) is the kind"
+      "Kildeskrifter": "source edition — an editorial class (an edited primary source), not
+        the genre of the text edited"
+      "Oppbyggelig litteratur": "edifying literature — devotional reading spanning prayer,
+        meditation, sermon and catechesis; no one house class holds it"
+      "Avhandlinger": "dissertation/treatise — an academic FORM, its subject any discipline"
+      "Almanakker": "almanac — calendar, astronomy, prognostication and household lore in one
+        annual; no one house class holds it"
   ndl-kotenseki:      # the NDL Search bib join's NDC codes (dc:subject NDC, verbatim:
     facet: ndc        # "813.2", "291.36", "221"). Census 2026-10-19, 500 random held
     #                   PIDs: 33 carry an NDC (6.6% → ~2.6k of 38.7k books), 26 of them

@@ -1,0 +1,94 @@
+# Nabu fixture manifest (P5-4 "fixture sentinel"). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# Item records and ALTO lists are whole raw GETs (two lists trimmed, README);
+# ALTO pages are whole upstream bodies stored gzip-wrapped (as the adapter
+# stores them), so they are never byte-compared. adapter_test stays null.
+source: nb-no
+adapter_test:
+retrieved: "2026-11-08"
+files:
+  - path: canonical/items/0056d274e30fd6246b3d29373c35ab97/item.json
+    url: "https://api.nb.no/catalog/v1/items/0056d274e30fd6246b3d29373c35ab97"
+    whole: true
+    trim: none
+  - path: canonical/items/0148f6ba555e6d8ec9b5aaea23d39cbc/item.json
+    url: "https://api.nb.no/catalog/v1/items/0148f6ba555e6d8ec9b5aaea23d39cbc"
+    whole: true
+    trim: none
+  - path: canonical/items/0148f6ba555e6d8ec9b5aaea23d39cbc/altos.json
+    url: "https://api.nb.no/catalog/v1/metadata/0148f6ba555e6d8ec9b5aaea23d39cbc/altos"
+    whole: true
+    trim: none
+  - path: canonical/items/0148f6ba555e6d8ec9b5aaea23d39cbc/alto/0011.xml.gz
+    url: "https://api.nb.no/catalog/v1/metadata/0148f6ba555e6d8ec9b5aaea23d39cbc/altos/URN:NBN:no-nb_digibok_2016101048209_0011"
+    whole: false
+    trim: none to the body — the whole ALTO page gzip-wrapped (mtime 0), as the adapter stores it
+  - path: canonical/items/3d460ef4040b4bc7a4c849f4b6ceec1b/item.json
+    url: "https://api.nb.no/catalog/v1/items/3d460ef4040b4bc7a4c849f4b6ceec1b"
+    whole: true
+    trim: none
+  - path: canonical/items/3d460ef4040b4bc7a4c849f4b6ceec1b/altos.json
+    url: "https://api.nb.no/catalog/v1/metadata/3d460ef4040b4bc7a4c849f4b6ceec1b/altos"
+    whole: true
+    trim: none
+  - path: canonical/items/3d460ef4040b4bc7a4c849f4b6ceec1b/alto/C1.xml.gz
+    url: "https://api.nb.no/catalog/v1/metadata/3d460ef4040b4bc7a4c849f4b6ceec1b/altos/URN:NBN:no-nb_digibok_2026030928001_C1"
+    whole: false
+    trim: none to the body — the whole ALTO page gzip-wrapped (mtime 0), as the adapter stores it
+  - path: canonical/items/3d460ef4040b4bc7a4c849f4b6ceec1b/alto/C3.xml.gz
+    url: "https://api.nb.no/catalog/v1/metadata/3d460ef4040b4bc7a4c849f4b6ceec1b/altos/URN:NBN:no-nb_digibok_2026030928001_C3"
+    whole: false
+    trim: none to the body — the whole ALTO page gzip-wrapped (mtime 0), as the adapter stores it
+  - path: canonical/items/3d460ef4040b4bc7a4c849f4b6ceec1b/alto/I1.xml.gz
+    url: "https://api.nb.no/catalog/v1/metadata/3d460ef4040b4bc7a4c849f4b6ceec1b/altos/URN:NBN:no-nb_digibok_2026030928001_I1"
+    whole: false
+    trim: none to the body — the whole ALTO page gzip-wrapped (mtime 0), as the adapter stores it
+  - path: canonical/items/3d460ef4040b4bc7a4c849f4b6ceec1b/alto/I3.xml.gz
+    url: "https://api.nb.no/catalog/v1/metadata/3d460ef4040b4bc7a4c849f4b6ceec1b/altos/URN:NBN:no-nb_digibok_2026030928001_I3"
+    whole: false
+    trim: none to the body — the whole ALTO page gzip-wrapped (mtime 0), as the adapter stores it
+  - path: canonical/items/59aa6dee234eab2f582dd5ba75f57597/item.json
+    url: "https://api.nb.no/catalog/v1/items/59aa6dee234eab2f582dd5ba75f57597"
+    whole: true
+    trim: none
+  - path: canonical/items/59aa6dee234eab2f582dd5ba75f57597/altos.json
+    url: "https://api.nb.no/catalog/v1/metadata/59aa6dee234eab2f582dd5ba75f57597/altos"
+    whole: false
+    trim: _links.alto cut to the three held pages, re-serialized compactly (README)
+  - path: canonical/items/59aa6dee234eab2f582dd5ba75f57597/alto/0001.xml.gz
+    url: "https://api.nb.no/catalog/v1/metadata/59aa6dee234eab2f582dd5ba75f57597/altos/URN:NBN:no-nb_digibok_2021052848605_0001"
+    whole: false
+    trim: none to the body — the whole ALTO page gzip-wrapped (mtime 0), as the adapter stores it
+  - path: canonical/items/59aa6dee234eab2f582dd5ba75f57597/alto/0003.xml.gz
+    url: "https://api.nb.no/catalog/v1/metadata/59aa6dee234eab2f582dd5ba75f57597/altos/URN:NBN:no-nb_digibok_2021052848605_0003"
+    whole: false
+    trim: none to the body — the whole ALTO page gzip-wrapped (mtime 0), as the adapter stores it
+  - path: canonical/items/59aa6dee234eab2f582dd5ba75f57597/alto/0010.xml.gz
+    url: "https://api.nb.no/catalog/v1/metadata/59aa6dee234eab2f582dd5ba75f57597/altos/URN:NBN:no-nb_digibok_2021052848605_0010"
+    whole: false
+    trim: none to the body — the whole ALTO page gzip-wrapped (mtime 0), as the adapter stores it
+  - path: canonical/items/9353c8a56ea655710692a548673b9618/item.json
+    url: "https://api.nb.no/catalog/v1/items/9353c8a56ea655710692a548673b9618"
+    whole: true
+    trim: none
+  - path: canonical/items/9353c8a56ea655710692a548673b9618/altos.json
+    url: "https://api.nb.no/catalog/v1/metadata/9353c8a56ea655710692a548673b9618/altos"
+    whole: false
+    trim: _links.alto cut to the three held pages, re-serialized compactly (README)
+  - path: canonical/items/9353c8a56ea655710692a548673b9618/alto/0001.xml.gz
+    url: "https://api.nb.no/catalog/v1/metadata/9353c8a56ea655710692a548673b9618/altos/URN:NBN:no-nb_digibok_2009020300033_0001"
+    whole: false
+    trim: none to the body — the whole ALTO page gzip-wrapped (mtime 0), as the adapter stores it
+  - path: canonical/items/9353c8a56ea655710692a548673b9618/alto/0005.xml.gz
+    url: "https://api.nb.no/catalog/v1/metadata/9353c8a56ea655710692a548673b9618/altos/URN:NBN:no-nb_digibok_2009020300033_0005"
+    whole: false
+    trim: none to the body — the whole ALTO page gzip-wrapped (mtime 0), as the adapter stores it
+  - path: canonical/items/9353c8a56ea655710692a548673b9618/alto/0012.xml.gz
+    url: "https://api.nb.no/catalog/v1/metadata/9353c8a56ea655710692a548673b9618/altos/URN:NBN:no-nb_digibok_2009020300033_0012"
+    whole: false
+    trim: none to the body — the whole ALTO page gzip-wrapped (mtime 0), as the adapter stores it
+  - path: api/search-cone.json
+    url: "https://api.nb.no/catalog/v1/items?q=*&filter=mediatype:b%C3%B8ker&filter=contentClasses:publicdomain&filter=year:%5B*%20TO%201699%5D%20OR%20languages:(non%20OR%20lat%20OR%20grc%20OR%20gre%20OR%20sme%20OR%20sma%20OR%20smj%20OR%20smn%20OR%20sms%20OR%20sje%20OR%20sju%20OR%20smi)&filter=sesamid:(3d460ef4040b4bc7a4c849f4b6ceec1b%20OR%2059aa6dee234eab2f582dd5ba75f57597%20OR%209353c8a56ea655710692a548673b9618%20OR%200148f6ba555e6d8ec9b5aaea23d39cbc)&size=100&page=0&sort=date,asc"
+    whole: false
+    trim: the live answer re-indexes (timestamps move); compared for liveness only
