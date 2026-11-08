@@ -109,6 +109,8 @@ module Nabu
           "bim-sahcoba" => :structured, # the work's imprint year read from the stream's title
           #                               page, else its standard attribution (raw says which);
           #                               place = the title page's imprint town
+          "blbooks" => :structured, # the BL catalogue's print year (raw_date ranges widen it),
+          #                           class edition; place = the catalogued imprint place
           "br-wikisource" => :edition_year_text, # P140: the scan Index Year= print year
           #                                         (≤ 1900, the dated cone; date_class edition)
           "bu-ajami" => :structured, # P124-1: a typed source-reference year or a date the item
