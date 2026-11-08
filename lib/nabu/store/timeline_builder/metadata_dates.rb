@@ -192,6 +192,9 @@ module Nabu
           #                               keyed on metadata "book"); place = the find-site hash
           #                               (ancient name + Pleiades id) the adapter's table carries
           "first1k-greek" => :edition_year_text,
+          "formulae-open" => :structured, # P164: the charter edition's dateline <date> children
+          #                                 (when / notBefore-notAfter envelope; class-less — the
+          #                                 charter's own date); place = the edition's issuing place
           "fornsvenska" => :compact_date_keys,
           "freising" => :structured, # the edition's own witness dating of the Clm 6426 record
           #                            (Kos: 972–1039, artifact class) on the transcription
@@ -241,6 +244,9 @@ module Nabu
           #                            "1581-82" span), class edition; place = the imprint
           #                            place as the portal names it (Tübingen, Ljubljana …)
           "litopys" => :era_band_key,
+          "llct1" => :structured, # P164: every charter's own year (714–869) — an
+          #                         original's artifact year (no class), a copy's act year
+          #                         (class composition); place = the place of issue verbatim
           "local-library" => :year_key,
           "mazarinades" => :structured, # the bibliographic entry's typed dates (Moreau,
           #                               Mazarine, Carrier …: the narrowest year envelope);
@@ -253,6 +259,10 @@ module Nabu
           "paramara" => :structured, # P153: the Period field's leading era-typed year
           #                            (config/eras.yml VS/Śaka); place = the Location findspot
           "mk-wikisource" => :structured,
+          "mnc-wikisource" => :structured, # each censused work's composition date (class
+          #                                  composition; the basis in raw — a date line, a reign year)
+          "mongolic-pd" => :structured, # each work's edition year (the africa-pd mold); the
+          #                               imprint rides "imprint" — no place claim
           "ms-wikisource" => :structured, # P120-3: the manuscript's stated date (header
           #                                 year= / Index Year=; "abad ke-N" a century)
           "ndl-kotenseki" => :structured,
@@ -311,6 +321,7 @@ module Nabu
           "seal" => :period_label,
           "senie" => :structured, # the TEI header <date>: the print's or manuscript's year,
           #                         a "1681_90" span as its envelope — the artifact date
+          "shiratori-shm" => :structured, # the 1943 Tōyō Bunko edition year (class edition)
           "sigla" => :period_label, # P142: the Linear A inscription's Minoan ceramic phase
           #                           ("LM IB", "MM IIB") through the ruled Aegean rows;
           #                           place = the site (Haghia Triada, Khania …)
@@ -560,8 +571,12 @@ module Nabu
         # wears date_class "edition", never the composition class. pta:
         # the edition's dct:dateCopyrighted year ("edition_year"), else the
         # TEI sourceDesc print year ("source_date") — 21 of 113 works carry
-        # no composition span (census 2026-11-04).
+        # no composition span (census 2026-11-04). formulae-open: the
+        # printed edition's imprint year ("source_date") for the 181
+        # charters whose dateline bounds nothing (an empty <date/> or an
+        # open single bound; census 2026-11-08).
         EDITION_FALLBACK = {
+          "formulae-open" => %w[source_date].freeze,
           "pta" => %w[edition_year source_date].freeze
         }.freeze
 

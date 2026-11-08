@@ -1,0 +1,122 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml. Files are the formulae-open repository
+# at commit 2ce73416 (README.md): the charter TEI and work catalogs whole,
+# the textgroup catalogs trimmed to the pinned members.
+source: formulae-open
+# adapter_test is null: the collection catalogs are documented TRIMS
+# (whole: false), so `check` re-runs nothing count-based against upstream.
+adapter_test: null
+retrieved: 2026-11-08
+files:
+  - path: data/anjou_archives/__capitains__.xml
+    url: https://raw.githubusercontent.com/Formulae-Litterae-Chartae/formulae-open/2ce7341634926492d5a75a44f22b850fbb142f2f/data/anjou_archives/__capitains__.xml
+    whole: false
+    trim: members list cut to the pinned sub-collections (README trim rule)
+  - path: data/anjou_archives/marchegay_carbaio/__capitains__.xml
+    url: https://raw.githubusercontent.com/Formulae-Litterae-Chartae/formulae-open/2ce7341634926492d5a75a44f22b850fbb142f2f/data/anjou_archives/marchegay_carbaio/__capitains__.xml
+    whole: false
+    trim: members list cut to the pinned sub-collections (README trim rule)
+  - path: data/anjou_archives/marchegay_carbaio/marchegay_carbaio_0006/__capitains__.xml
+    url: https://raw.githubusercontent.com/Formulae-Litterae-Chartae/formulae-open/2ce7341634926492d5a75a44f22b850fbb142f2f/data/anjou_archives/marchegay_carbaio/marchegay_carbaio_0006/__capitains__.xml
+    whole: true
+    trim: none
+  - path: data/anjou_archives/marchegay_carbaio/marchegay_carbaio_0006/anjou_archives.marchegay_carbaio_0006.lat001.xml
+    url: https://raw.githubusercontent.com/Formulae-Litterae-Chartae/formulae-open/2ce7341634926492d5a75a44f22b850fbb142f2f/data/anjou_archives/marchegay_carbaio/marchegay_carbaio_0006/anjou_archives.marchegay_carbaio_0006.lat001.xml
+    whole: true
+    trim: none
+  - path: data/elexicon/__capitains__.xml
+    url: https://raw.githubusercontent.com/Formulae-Litterae-Chartae/formulae-open/2ce7341634926492d5a75a44f22b850fbb142f2f/data/elexicon/__capitains__.xml
+    whole: false
+    trim: members list cut to the pinned sub-collections (README trim rule)
+  - path: data/elexicon/riga/__capitains__.xml
+    url: https://raw.githubusercontent.com/Formulae-Litterae-Chartae/formulae-open/2ce7341634926492d5a75a44f22b850fbb142f2f/data/elexicon/riga/__capitains__.xml
+    whole: true
+    trim: none
+  - path: data/elexicon/riga/elexicon.riga.deu001.xml
+    url: https://raw.githubusercontent.com/Formulae-Litterae-Chartae/formulae-open/2ce7341634926492d5a75a44f22b850fbb142f2f/data/elexicon/riga/elexicon.riga.deu001.xml
+    whole: true
+    trim: none
+  - path: data/eudes/__capitains__.xml
+    url: https://raw.githubusercontent.com/Formulae-Litterae-Chartae/formulae-open/2ce7341634926492d5a75a44f22b850fbb142f2f/data/eudes/__capitains__.xml
+    whole: false
+    trim: members list cut to the pinned sub-collections (README trim rule)
+  - path: data/eudes/lex0034/__capitains__.xml
+    url: https://raw.githubusercontent.com/Formulae-Litterae-Chartae/formulae-open/2ce7341634926492d5a75a44f22b850fbb142f2f/data/eudes/lex0034/__capitains__.xml
+    whole: true
+    trim: none
+  - path: data/eudes/lex0034/eudes.lex0034.lat001.xml
+    url: https://raw.githubusercontent.com/Formulae-Litterae-Chartae/formulae-open/2ce7341634926492d5a75a44f22b850fbb142f2f/data/eudes/lex0034/eudes.lex0034.lat001.xml
+    whole: true
+    trim: none
+  - path: data/freising/__capitains__.xml
+    url: https://raw.githubusercontent.com/Formulae-Litterae-Chartae/formulae-open/2ce7341634926492d5a75a44f22b850fbb142f2f/data/freising/__capitains__.xml
+    whole: false
+    trim: members list cut to the pinned sub-collections (README trim rule)
+  - path: data/freising/bitterauf1019/__capitains__.xml
+    url: https://raw.githubusercontent.com/Formulae-Litterae-Chartae/formulae-open/2ce7341634926492d5a75a44f22b850fbb142f2f/data/freising/bitterauf1019/__capitains__.xml
+    whole: true
+    trim: none
+  - path: data/freising/bitterauf1019/freising.bitterauf1019.lat001.xml
+    url: https://raw.githubusercontent.com/Formulae-Litterae-Chartae/formulae-open/2ce7341634926492d5a75a44f22b850fbb142f2f/data/freising/bitterauf1019/freising.bitterauf1019.lat001.xml
+    whole: true
+    trim: none
+  - path: data/freising/bitterauf1019/freising.bitterauf1019.lat002.xml
+    url: https://raw.githubusercontent.com/Formulae-Litterae-Chartae/formulae-open/2ce7341634926492d5a75a44f22b850fbb142f2f/data/freising/bitterauf1019/freising.bitterauf1019.lat002.xml
+    whole: true
+    trim: none
+  - path: data/hersfeld/__capitains__.xml
+    url: https://raw.githubusercontent.com/Formulae-Litterae-Chartae/formulae-open/2ce7341634926492d5a75a44f22b850fbb142f2f/data/hersfeld/__capitains__.xml
+    whole: false
+    trim: members list cut to the pinned sub-collections (README trim rule)
+  - path: data/hersfeld/weirich0004/__capitains__.xml
+    url: https://raw.githubusercontent.com/Formulae-Litterae-Chartae/formulae-open/2ce7341634926492d5a75a44f22b850fbb142f2f/data/hersfeld/weirich0004/__capitains__.xml
+    whole: true
+    trim: none
+  - path: data/hersfeld/weirich0004/hersfeld.weirich0004.lat001.xml
+    url: https://raw.githubusercontent.com/Formulae-Litterae-Chartae/formulae-open/2ce7341634926492d5a75a44f22b850fbb142f2f/data/hersfeld/weirich0004/hersfeld.weirich0004.lat001.xml
+    whole: true
+    trim: none
+  - path: data/hersfeld/weirich0037/__capitains__.xml
+    url: https://raw.githubusercontent.com/Formulae-Litterae-Chartae/formulae-open/2ce7341634926492d5a75a44f22b850fbb142f2f/data/hersfeld/weirich0037/__capitains__.xml
+    whole: true
+    trim: none
+  - path: data/hersfeld/weirich0037/hersfeld.weirich0037.lat001.xml
+    url: https://raw.githubusercontent.com/Formulae-Litterae-Chartae/formulae-open/2ce7341634926492d5a75a44f22b850fbb142f2f/data/hersfeld/weirich0037/hersfeld.weirich0037.lat001.xml
+    whole: true
+    trim: none
+  - path: data/luzern/__capitains__.xml
+    url: https://raw.githubusercontent.com/Formulae-Litterae-Chartae/formulae-open/2ce7341634926492d5a75a44f22b850fbb142f2f/data/luzern/__capitains__.xml
+    whole: false
+    trim: members list cut to the pinned sub-collections (README trim rule)
+  - path: data/luzern/schiess0004/__capitains__.xml
+    url: https://raw.githubusercontent.com/Formulae-Litterae-Chartae/formulae-open/2ce7341634926492d5a75a44f22b850fbb142f2f/data/luzern/schiess0004/__capitains__.xml
+    whole: true
+    trim: none
+  - path: data/luzern/schiess0004/luzern.schiess0004.lat001.xml
+    url: https://raw.githubusercontent.com/Formulae-Litterae-Chartae/formulae-open/2ce7341634926492d5a75a44f22b850fbb142f2f/data/luzern/schiess0004/luzern.schiess0004.lat001.xml
+    whole: true
+    trim: none
+  - path: data/marmoutier_vendomois/__capitains__.xml
+    url: https://raw.githubusercontent.com/Formulae-Litterae-Chartae/formulae-open/2ce7341634926492d5a75a44f22b850fbb142f2f/data/marmoutier_vendomois/__capitains__.xml
+    whole: false
+    trim: members list cut to the pinned sub-collections (README trim rule)
+  - path: data/marmoutier_vendomois/trémault0011/__capitains__.xml
+    url: https://raw.githubusercontent.com/Formulae-Litterae-Chartae/formulae-open/2ce7341634926492d5a75a44f22b850fbb142f2f/data/marmoutier_vendomois/tr%C3%A9mault0011/__capitains__.xml
+    whole: true
+    trim: none
+  - path: data/marmoutier_vendomois/trémault0011/marmoutier_vendomois.trémault0011.lat001.xml
+    url: https://raw.githubusercontent.com/Formulae-Litterae-Chartae/formulae-open/2ce7341634926492d5a75a44f22b850fbb142f2f/data/marmoutier_vendomois/tr%C3%A9mault0011/marmoutier_vendomois.tr%C3%A9mault0011.lat001.xml
+    whole: true
+    trim: none
+  - path: data/stgallen/__capitains__.xml
+    url: https://raw.githubusercontent.com/Formulae-Litterae-Chartae/formulae-open/2ce7341634926492d5a75a44f22b850fbb142f2f/data/stgallen/__capitains__.xml
+    whole: false
+    trim: members list cut to the pinned sub-collections (README trim rule)
+  - path: data/stgallen/wartmann0001/__capitains__.xml
+    url: https://raw.githubusercontent.com/Formulae-Litterae-Chartae/formulae-open/2ce7341634926492d5a75a44f22b850fbb142f2f/data/stgallen/wartmann0001/__capitains__.xml
+    whole: true
+    trim: none
+  - path: data/stgallen/wartmann0001/stgallen.wartmann0001.lat001.xml
+    url: https://raw.githubusercontent.com/Formulae-Litterae-Chartae/formulae-open/2ce7341634926492d5a75a44f22b850fbb142f2f/data/stgallen/wartmann0001/stgallen.wartmann0001.lat001.xml
+    whole: true
+    trim: none

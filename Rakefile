@@ -563,6 +563,28 @@ namespace :release do
   end
 end
 
+# Software Heritage "save code now" for the whole repo family — ONE
+# owner-fired command (direct POSTs are permission-gated in loop
+# sessions): asks SWH to archive each repo and prints the snapshot
+# SWHIDs already on record (a fresh save's SWHID appears on a LATER
+# run — their queue). Rejected saves fail the task.
+namespace :outreach do
+  desc "Software Heritage save-code-now for arvicco/nabu + sisters; prints recorded SWHIDs"
+  task :swh do
+    require_relative "lib/nabu/ops/swh_save"
+    report = Nabu::Ops::SwhSave.new.run
+    report.rows.each do |row|
+      swhid = row.snapshot_swhid || "no visit recorded yet (their queue)"
+      puts format("  %<repo>-14s save: %<status>-9s %<swhid>s", repo: row.repo, status: row.request_status,
+                                                                swhid: swhid)
+    end
+    report.findings.each { |finding| puts "FINDING  #{finding}" }
+    abort "outreach:swh — #{report.findings.size} finding(s)" unless report.clean?
+
+    puts "outreach:swh — #{report.rows.size} repos saved/queued at archive.softwareheritage.org"
+  end
+end
+
 # (Nabu::Ops::WatchListCheck): any still-watched row whose checked date is
 # over a week old fails the task, named; boards without the section skip.
 # And the phase-register freshness probe (Nabu::Ops::PhaseRegisterCheck):

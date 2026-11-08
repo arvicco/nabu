@@ -1,0 +1,62 @@
+# Nabu fixture manifest (P5-4 "fixture sentinel"). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# Every page is a whole api.php revision, re-enveloped in the adapter's
+# own on-disk shape (the envelope is ours, the wikitext verbatim) — so
+# whole: false, adapter_test null.
+source: mnc-wikisource
+adapter_test: null
+retrieved: "2026-11-08"
+files:
+  - path: pages/168826.json
+    url: https://wikisource.org/w/index.php?curid=168826&oldid=1338622
+    whole: false
+    trim: whole wikitext of revid 1338622, re-enveloped — README
+  - path: pages/84446.json
+    url: https://wikisource.org/w/index.php?curid=84446&oldid=793701
+    whole: false
+    trim: whole wikitext of revid 793701, re-enveloped — README
+  - path: pages/64127.json
+    url: https://wikisource.org/w/index.php?curid=64127&oldid=238375
+    whole: false
+    trim: whole wikitext of revid 238375, re-enveloped — README
+  - path: pages/152894.json
+    url: https://wikisource.org/w/index.php?curid=152894&oldid=494236
+    whole: false
+    trim: whole wikitext of revid 494236, re-enveloped — README
+  - path: pages/153207.json
+    url: https://wikisource.org/w/index.php?curid=153207&oldid=495036
+    whole: false
+    trim: whole wikitext of revid 495036, re-enveloped — README
+  - path: pages/64132.json
+    url: https://wikisource.org/w/index.php?curid=64132&oldid=771518
+    whole: false
+    trim: whole wikitext of revid 771518, re-enveloped — README
+  - path: pages/260168.json
+    url: https://wikisource.org/w/index.php?curid=260168&oldid=845089
+    whole: false
+    trim: whole wikitext of revid 845089, re-enveloped — README
+  - path: pages/64129.json
+    url: https://wikisource.org/w/index.php?curid=64129&oldid=238377
+    whole: false
+    trim: whole wikitext of revid 238377, re-enveloped — README
+  - path: pages/152815.json
+    url: https://wikisource.org/w/index.php?curid=152815&oldid=520485
+    whole: false
+    trim: whole wikitext of revid 520485, re-enveloped — README
+  - path: pages/64134.json
+    url: https://wikisource.org/w/index.php?curid=64134&oldid=238383
+    whole: false
+    trim: whole wikitext of revid 238383, re-enveloped — README
+  - path: pages/159228.json
+    url: https://wikisource.org/w/index.php?curid=159228&oldid=788532
+    whole: false
+    trim: whole wikitext of revid 788532, re-enveloped — README
+  - path: pages/325868.json
+    url: https://wikisource.org/w/index.php?curid=325868&oldid=977143
+    whole: false
+    trim: whole wikitext of revid 977143, re-enveloped — README
+  - path: pages/64120.json
+    url: https://wikisource.org/w/index.php?curid=64120&oldid=1353858
+    whole: false
+    trim: whole wikitext of revid 1353858, re-enveloped — README

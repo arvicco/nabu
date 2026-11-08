@@ -2772,6 +2772,28 @@ first1k-greek:
   translations: true
 
 # P77-6
+formulae-open:   # P164, 02-sources row 393
+  adapter: Nabu::Adapters::FormulaeOpen
+  adopted: "2026-11-08"
+  axes: [classical, romance]  # the openmgh/corpus-corporum precedent: the continuum's Latin side
+  siblings: cts   # lat001/lat002 are the printed edition's a/b pieces of one charter number
+  wired: true    # FIRST SYNC VERIFIED 2026-11-08, exact on the census: 5,164 docs / 5,281 passages, 0 errored,
+                 # 302 rule skips (259 E-Lexicon entry files + 37 regest-only records + 6
+                 # unlicensed luzern charters) — the adapter's census over the 2ce73416 clone;
+                 # 105 docs license_override nc (eudes + marmoutier_pour_le_perche, CC BY-NC-ND).
+                 # Probe: nabu search "Gotefridus Alemanniae dux" → stgallen.wartmann0001.lat001:1.
+  sync_policy: manual
+  # Formulae – Litterae – Chartae (Akademie der Wissenschaften in Hamburg):
+  # the project's public-domain charter editions, OCR hand-corrected, one
+  # charter per CapiTainS TEI file — St. Gallen (Wartmann), Freising
+  # (Bitterauf), Redon, Stavelot-Malmedy, the Marmoutier cartularies,
+  # Charlemagne's diplomas (MGH DD Karol. 1 — not in openmgh), Lombard
+  # charters (CDL), Gorze, Hersfeld and more, c. 700–1300. LICENCE PER
+  # DOCUMENT: each file's <licence> — by → attribution, by-nc-nd →
+  # license_override nc, none → never ingested; an unknown target stops
+  # discovery. The E-Lexicon (German dictionary entries) and the regest-only
+  # records (no Latin text) skip by rule.
+
 fornsvenska:
   adapter: Nabu::Adapters::Fornsvenska
   adopted: "2026-08-13"
@@ -4067,6 +4089,30 @@ liv:
   # Last-Modified, so a re-sync refetches unconditionally (657 KB).
   sync_policy: manual
 
+llct1:   # P164, 02-sources row 394
+  adapter: Nabu::Adapters::Llct1
+  adopted: "2026-11-08"
+  axes: [romance]
+  wired: true    # FIRST SYNC VERIFIED 2026-11-08, exact: 519 docs / 9,227 passages / 0 errored; staged 519 lat:med
+                 # file, sha256-pinned; Zenodo throttles one connection to ~17 kB/s —
+                 # the download can take ~40 min; the parse takes seconds). EXPECT 519
+                 # docs / 9,227 passages, 0 errored, 0 skipped (census through the
+                 # family's span scan + Reader over the whole v1.2 file, 2026-11-08).
+                 # Eyeball nabu show urn:nabu:llct1:CDL-208:2936672 ("Et ecce breue
+                 # scriptum, quam dictauit Barbenti presbiter …", Monte San Quirico 767),
+                 # probe nabu search "breue scriptum quam dictauit", then flip.
+  sync_policy: manual   # versioned-immutable Zenodo deposit; a new version = owner re-pin
+  # LLCT1 — the Late Latin Charter Treebank 1 (Korkiakangas, Helsinki; v1.2):
+  # 519 private charters of Lombard and Carolingian Tuscany, 714–869 (Lucca
+  # above all), from three editions (CDL Schiaparelli, CDT Brunetti, MED the
+  # Lucca Memorie e documenti), LDT-style gold lemma/morphology/dependency
+  # annotation on every word, in PML — NEW family aldt-pml. Document =
+  # charter (urn:nabu:llct1:<siglum>-<number>), passage = sentence tree.
+  # Date, place of issue, scribe, type and original/copy per charter;
+  # formulaic/free/subscription segment and abbreviation/damage status per
+  # word. NOT the held ud latin-llct (= LLCT2, a disjoint charter set).
+  # CC BY 4.0 (Zenodo record license field) → attribution.
+
 lo-congres:
   adapter: Nabu::Adapters::LoCongres
   adopted: "2026-08-19"
@@ -4451,6 +4497,51 @@ mk-wikisource:   # P116-2, 02-sources row 236
   # silent. Partisan/modern-reworked songs, Prličev (Greek originals)
   # and modern-orthography duplicates are out by rule. Texts PD;
   # layer CC BY-SA 4.0.
+
+mnc-wikisource:   # P164, 02-sources row 397
+  adapter: Nabu::Adapters::MncWikisource
+  adopted: "2026-11-08"
+  axes: [mongolic]
+  wired: true    # FIRST SYNC VERIFIED 2026-11-08, exact: 21 docs / 1,359 passages / 28 rule skips, 0 errored
+  sync_policy: manual
+  # The Manchu texts on Multilingual Wikisource (wikisource.org), Unicode
+  # Manchu script and Möllendorff romanization — the provenance census
+  # 2026-11-08 (paced): 34 main-namespace member pages of the three
+  # categories → 21 ADMITTED pages of 13 premodern works (滿洲實錄 juan
+  # 1–4 of 8, 清文啓蒙 preface + juan 1–2, 盛京賦, the Treaty of
+  # Nerchinsk, the Seven Grievances, the Samjeondo stele, three Kangxi
+  # 避暑山莊 poems, the Manchu Sunzi, Yijing hexagrams 1–2, Lunyu ch. 1,
+  # 清語老乞大 juan 1, the native-script 三字經, the Acts of the 1835 NT);
+  # 13 SKIPPED BY RULE (6 landing/contents, 4 modern compositions, 2
+  # unattested romanized 三字經 copies, 1 Sibe-orthography page) + the
+  # non-main-namespace members. Texts PD; layer CC BY-SA → attribution.
+  # EXPECTED FIRST SYNC (parsed through the adapter over the census
+  # pages, 2026-11-08): 21 docs / 1,359 passages (mnc 977 · lzh 355 · zho
+  # 27); 16 skipped by rule (13 census rejects + 3 non-main-namespace
+  # members).
+
+mongolic-pd:   # P164, 02-sources row 395
+  adapter: Nabu::Adapters::MongolicPd
+  adopted: "2026-11-08"
+  axes: [mongolic]
+  wired: true    # FIRST SYNC VERIFIED 2026-11-08, exact: 15 docs / 7,358 passages, 0 errored
+  sync_policy: manual
+  # The PD Manchu–Mongolic–Oirat reference shelf as archive.org scans — 15
+  # census items (13 works): Zakharov's Manchu-Russian dictionary (1875),
+  # Möllendorff's Manchu Grammar (1892), Amiot–Langlès tome I (1789),
+  # Klaproth's Chrestomathie mandchou (1828), Meadows' Translations from
+  # the Manchu (1849), Adam's Grammaire (1873), Wylie's T'sing wan k'e mung
+  # (1855); Kowalewski's Mongol-Russian-French dictionary in three volumes
+  # (1844/46/49), Schmidt's Mongolian grammar (1831), Kowalewski's
+  # Mongolian chrestomathy II (1837); Pozdneev's Kalmyk-Russian dictionary
+  # (1911), Jülg's Siddhi-Kür (1866), Popov's Kalmyk grammar (1847). The
+  # africa-pd mechanics (IaScanShelf, hOCR pair, page grain, UNCORRECTED
+  # OCR declared; the native vertical scripts are garbled — declared).
+  # Language = the prose's (rus 7, eng 3, fra 3, deu 2) with the language
+  # presented in "object_language" (mnc 7, cmg 5, xwo 3). Public domain
+  # (authors †1793–1920, prints 1789–1911). EXPECTED FIRST SYNC (census
+  # 2026-11-08, every page index fetched): 15 docs / ~7,358 passages (the
+  # non-empty hOCR page spans; whitespace-only spans may trim a few).
 
 monlam-lexicon:   # P88-A3, 02-sources row 183
   adapter: Nabu::Adapters::MonlamLexicon
@@ -6269,6 +6360,24 @@ shabados:   # P122-3, 02-sources row 269
   # + README/LICENSE (the app code stays out); ~141k small files.
   # EXPECTED FIRST SYNC: 127 docs / 141,264 passages, 0 quarantined
   # (parse census ~55 s on the scratch clone).
+
+shiratori-shm:   # P164, 02-sources row 396
+  adapter: Nabu::Adapters::ShiratoriShm
+  adopted: "2026-11-08"
+  axes: [mongolic]
+  wired: true    # FIRST SYNC VERIFIED 2026-11-08, exact: 1 doc / 632 passages, 0 errored
+  sync_policy: manual
+  # Shiratori Kurakichi's 音訳蒙文元朝秘史 (Tōyō Bunko 1943): Ye Dehui's
+  # 1908 hanzi Secret History reproduced leaf for leaf with Shiratori's
+  # romanized re-transcription — a SECOND Middle Mongol edition beside
+  # altaica-shm (Street), not a dedupe. One NDL PID (1184344) over the
+  # NDL Lab bulk full-text route (granted by email 2026-09-29), ONE
+  # request; its own slug because ndl-kotenseki is census-driven (the
+  # 古典籍 file this 図書 is not in) and claims jpn wholesale. PD
+  # (Shiratori †1942). EXPECTED FIRST SYNC (parsed through the adapter
+  # over the full 2026-11-08 answer, 16 MB): 1 doc / 632 koma passages
+  # (xng 602 · zho 9 · jpn 8 · eng 7 · lzh 6), 2 koma skipped by rule
+  # (the Kodak calibration frame, one letterless koma) of 636.
 
 shkz:   # P107-3b
   adapter: Nabu::Adapters::Shkz

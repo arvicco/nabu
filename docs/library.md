@@ -1063,7 +1063,7 @@ Historical GIS gazetteer — places.md) and `cbdb` (the China
 Biographical Database person index behind `nabu person`; nc).
 
 **Japonic.** `ndl-kotenseki` — the National Diet Library's classical-book
-OCR, crawled in slices (26,860 / 833,013; open), `honkoku` — citizen
+OCR, crawled in per-phase slices (61,201 docs; open), `honkoku` — citizen
 transcriptions of premodern documents (6,092 / 129,458), `ja-wikisource`
 — the premodern era cone (838 / 88,745), `kouigenji` — Ikeda's critical
 Genji text (54 / 25,065), `kokubunken` — NIJL TEI editions of the
@@ -1767,6 +1767,13 @@ profession, place and origin, and 25,164 person-text attestations —
 2,275 State Archives of Assyria texts), so `nabu person` walks from
 Assurbanipal to the letters that name him. CC BY-SA 3.0.
 
+**`dprr`** — the Digital Prosopography of the Roman Republic
+(King's College London; Mouritsen, Robb, Bradley's Linked Data
+edition) as a person authority behind `nabu person`: the senators
+and office-holders of the Republic under their disambiguated names,
+with offices, dates, filiation and the sources that attest them.
+CC BY-NC 4.0.
+
 **`theatre-classique`** — Paul Fièvre's Théâtre Classique: 1,939
 French plays in their printed editions, 1550s–1930s — Corneille,
 Molière, Racine and the whole repertoire around them, with front
@@ -2201,3 +2208,50 @@ work is its own shelf, every word-entry kept in the print's spelling
 with its explanation, its sub-entries, the language LEME tagged it
 with, the modern OED headwords LEME mapped it to, and the editors'
 notes on OED antedatings (CC BY 4.0).
+
+## 8bh. The P164 arrivals — the Latin charters wave
+
+**`formulae-open`** — **5,164 documents / 5,281 passages**: the
+public-domain charter editions of the Hamburg Formulae – Litterae –
+Chartae project, early medieval Latin charters and royal diplomas
+c. 700–1300 from the classic printed editions with hand-corrected
+OCR. St. Gallen (Wartmann) and Freising (Bitterauf) are the largest
+blocks, beside Redon, Stavelot-Malmedy, the Marmoutier cartularies,
+Tours, Anjou, Gorze, Hersfeld, Schäftlarn, Zürich, the Lombard
+charters of the Codice diplomatico longobardo, and the diplomas of
+Pippin III, Charlemagne (MGH DD Karol. 1), Karlmann and Ludwig der
+Jüngere. Every charter carries its editor's regest and dating
+(4,983 bounded dates), 1,984 their issuing place. Licensed file by
+file: CC BY 4.0 for nearly all (`attribution`), the Eudes of Blois
+and Marmoutier Perche collections CC BY-NC-ND 4.0 (`nc`).
+
+**`llct1`** — **519 documents / 9,227 passages**: the Late Latin
+Charter Treebank 1 (Timo Korkiakangas, University of Helsinki),
+private charters of Lombard and Carolingian Tuscany, AD 714–869,
+written mostly at Lucca — livello leases, sales, offerings, dowries,
+exchanges, court notices and testaments from Schiaparelli's Codice
+diplomatico longobardo, Brunetti's Codice diplomatico toscano and
+the Lucca Memorie e documenti. Every one of its ~226,000 words is
+hand-annotated with lemma, morphology and dependency syntax and
+marked formulaic, free or subscription; each charter carries its
+year, place of issue, scribe, and whether it survives as original
+or copy. The sister of the UD-held LLCT2 (CC BY 4.0).
+
+**The Mongolic shelf** (three sources): **`mnc-wikisource`** — 21
+documents / 1,359 passages of real Manchu text from multilingual
+Wikisource: the Manchu Veritable Records (juan 1–4), the 清文啓蒙
+primer, Qianlong's Ode to Mukden, the Treaty of Nerchinsk, the Seven
+Grievances, the Samjeondo stele, the Manchu Sunzi, and more — in
+Manchu script and romanization, with the works' Literary Chinese
+layers beside them (CC BY-SA). **`shiratori-shm`** — Shiratori
+Kurakichi's 音訳蒙文元朝秘史 (1943): the romanized interlinear
+Secret History of the Mongols over Ye Dehui's edition, 632 scanned
+pages via the NDL bulk route — a second Middle Mongol witness beside
+the held Street edition (public domain). **`mongolic-pd`** — the
+public-domain reference canon for Manchu, Classical Mongolian and
+Written Oirat: fifteen volumes from Zakharov's great Manchu–Russian
+dictionary (1875, searchable Cyrillic transcription) through
+Kowalewski's three-volume Mongolian dictionary to Pozdneev's Kalmyk
+dictionary and Jülg's Siddhi-Kür — scanned pages with declared-OCR
+honesty, each volume claiming its prose language and naming the
+language it presents.
