@@ -44,6 +44,7 @@ A source wears every desk it serves — these 36 answer this desk. Holdings are 
 | `formulae-open` | texts | attribution | not yet wired | not synced yet |
 | `gregobase` | texts | open | wired · manual | 18,422 docs / 20,810 passages |
 | `littre` | dictionary | attribution | wired · manual | 78,483 entries |
+| `llct1` | treebank | attribution | not yet wired | not synced yet |
 | `lo-congres` | texts | attribution | wired · manual | 12 docs / 10,304 passages |
 | `mazarinades` | texts | attribution | wired · manual | 3,067 docs / 40,883 passages |
 | `meloniromance` | cognacy dataset | attribution | wired · manual | 5,419 entries |

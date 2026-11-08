@@ -4089,6 +4089,30 @@ liv:
   # Last-Modified, so a re-sync refetches unconditionally (657 KB).
   sync_policy: manual
 
+llct1:   # P164, 02-sources row 393
+  adapter: Nabu::Adapters::Llct1
+  adopted: "2026-11-08"
+  axes: [romance]
+  wired: false   # READY: bin/nabu enable llct1 && bin/nabu sync llct1 (one 42 MB Zenodo
+                 # file, sha256-pinned; Zenodo throttles one connection to ~17 kB/s —
+                 # the download can take ~40 min; the parse takes seconds). EXPECT 519
+                 # docs / 9,227 passages, 0 errored, 0 skipped (census through the
+                 # family's span scan + Reader over the whole v1.2 file, 2026-11-08).
+                 # Eyeball nabu show urn:nabu:llct1:CDL-208:2936672 ("Et ecce breue
+                 # scriptum, quam dictauit Barbenti presbiter …", Monte San Quirico 767),
+                 # probe nabu search "breue scriptum quam dictauit", then flip.
+  sync_policy: manual   # versioned-immutable Zenodo deposit; a new version = owner re-pin
+  # LLCT1 — the Late Latin Charter Treebank 1 (Korkiakangas, Helsinki; v1.2):
+  # 519 private charters of Lombard and Carolingian Tuscany, 714–869 (Lucca
+  # above all), from three editions (CDL Schiaparelli, CDT Brunetti, MED the
+  # Lucca Memorie e documenti), LDT-style gold lemma/morphology/dependency
+  # annotation on every word, in PML — NEW family aldt-pml. Document =
+  # charter (urn:nabu:llct1:<siglum>-<number>), passage = sentence tree.
+  # Date, place of issue, scribe, type and original/copy per charter;
+  # formulaic/free/subscription segment and abbreviation/damage status per
+  # word. NOT the held ud latin-llct (= LLCT2, a disjoint charter set).
+  # CC BY 4.0 (Zenodo record license field) → attribution.
+
 lo-congres:
   adapter: Nabu::Adapters::LoCongres
   adopted: "2026-08-19"

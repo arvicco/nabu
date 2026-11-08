@@ -244,6 +244,9 @@ module Nabu
           #                            "1581-82" span), class edition; place = the imprint
           #                            place as the portal names it (Tübingen, Ljubljana …)
           "litopys" => :era_band_key,
+          "llct1" => :structured, # P164: every charter's own year (714–869) — an
+          #                         original's artifact year (no class), a copy's act year
+          #                         (class composition); place = the place of issue verbatim
           "local-library" => :year_key,
           "mazarinades" => :structured, # the bibliographic entry's typed dates (Moreau,
           #                               Mazarine, Carrier …: the narrowest year envelope);

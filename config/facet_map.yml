@@ -803,3 +803,10 @@ sources:
       #                         Louis XIV, Condé, Du Bosc de Montandré, Scarron …)
       printer: printer        # the imprint's printer-bookseller (Nicolas L'Angevin, Pierre
       #                         Rocolet, Salomon de La Fosse …)
+  llct1:                      # P164 — 519 charters (census over the whole v1.2 file 2026-11-08)
+    fields:
+      edition: collection     # the edition siglum: MED 300 · CDL 180 · CDT 39
+      document_type: genre    # the charter type verbatim (charta livellaria 126 · charta
+      #                         offersionis 79 · charta venditionis 67 … 50 labels; kind_map folds)
+      scribe: scribe          # the writing notary/cleric, 165 names verbatim (incl. "anonimo")
+      redaction: redaction    # original 481 · copy 38

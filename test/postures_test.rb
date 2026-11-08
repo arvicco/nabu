@@ -179,7 +179,7 @@ class PosturesTest < Minitest::Test
   def test_the_lect_migration_kept_the_p59_4_census
     lect = postures.declarations.select { |d| d.layer == "lect" }
     by_posture = lect.group_by(&:posture).transform_values(&:size)
-    assert_equal 186, lect.size,
+    assert_equal 187, lect.size,
                  "the P59-4 declarations survive the move (61 at migration; itant retired P61-3," \
                  "oracc retired P62-2, etcsl/ccmh/freising/coptic-scriptorium retired P64-6, " \
                  "titus-avestan retired P66-1, osta+fornsvenska retired P77-r8, achemenet " \
@@ -418,7 +418,9 @@ class PosturesTest < Minitest::Test
                  "shelf-grain date-band rule stages its English shelves by their own lexicon_year " \
                  "(en:early / en:late), the other shelf languages identity: dates 28→29, identity 136→135; " \
                  "formulae-open ADDED P164 — dates (bare lat; date-band inference stages the charters' " \
-                 "own dateline envelopes onto lat:med, the memis shape): 185→186"
+                 "own dateline envelopes onto lat:med, the memis shape): 185→186; " \
+                 "llct1 ADDED P164 — dates (bare lat; every charter's own year 714–869 date-bands " \
+                 "onto lat:med): 186→187"
     # The epigraphic-belt registry package (merged + canonical-synced
     # 2026-10-18, the add-then-retire shape within one phase) retires both
     # P130 pendings, and the ociana-script rule + the ig-cyprus override
@@ -496,6 +498,7 @@ class PosturesTest < Minitest::Test
     # lexicon_year onto en:early / en:late: dates 28→29, identity 136→135.
     # formulae-open joins dates (bare lat, staged lat:med by the charters' own
     # dateline envelopes): 29→30.
-    assert_equal({ "dates" => 30, "codemap" => 21, "identity" => 135 }, by_posture)
+    # llct1 joins dates (bare lat; the charters' own years 714–869 → lat:med): 30→31.
+    assert_equal({ "dates" => 31, "codemap" => 21, "identity" => 135 }, by_posture)
   end
 end
