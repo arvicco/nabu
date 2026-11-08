@@ -3,9 +3,9 @@
 as_of: 8 November 2026
 classes:
 - head: literary
-  documents: 801180
-  documents_display: '801,180'
-  sources: 49
+  documents: 803096
+  documents_display: '803,096'
+  sources: 50
 - head: administrative
   documents: 500153
   documents_display: '500,153'
@@ -27,9 +27,9 @@ classes:
   documents_display: '49,234'
   sources: 36
 - head: letter
-  documents: 37309
-  documents_display: '37,309'
-  sources: 24
+  documents: 37425
+  documents_display: '37,425'
+  sources: 25
 - head: royal
   documents: 30136
   documents_display: '30,136'
@@ -47,9 +47,9 @@ classes:
   documents_display: '21,103'
   sources: 16
 - head: hymn-prayer
-  documents: 21075
-  documents_display: '21,075'
-  sources: 26
+  documents: 21079
+  documents_display: '21,079'
+  sources: 27
 - head: lexical
   documents: 18243
   documents_display: '18,243'
@@ -71,9 +71,9 @@ classes:
   documents_display: '8,061'
   sources: 8
 - head: sermon
-  documents: 7841
-  documents_display: '7,841'
-  sources: 11
+  documents: 7844
+  documents_display: '7,844'
+  sources: 12
 - head: school
   documents: 5286
   documents_display: '5,286'
@@ -110,10 +110,10 @@ classes:
   documents: 596
   documents_display: '596'
   sources: 7
-unclassified_sources: 133
+unclassified_sources: 134
 unknown_documents: 47058
 unknown_documents_display: '47,058'
-unmapped_documents: 12441
-unmapped_documents_display: '12,441'
-unclassified_documents: 541330
-unclassified_documents_display: '541,330'
+unmapped_documents: 12491
+unmapped_documents_display: '12,491'
+unclassified_documents: 541906
+unclassified_documents_display: '541,906'

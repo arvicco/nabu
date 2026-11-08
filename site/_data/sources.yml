@@ -295,6 +295,17 @@ sources:
     entries_display: '0'
     holdings: 15 documents / 19,361 passages
     canonical_display: 16 MB
+  blbooks:
+    name: British Library Digitised Books c.1510–c.1900 — OCR text (pre-1800 cone)
+    license_class: open
+    documents: 2497
+    documents_display: '2,497'
+    passages: 230206
+    passages_display: '230,206'
+    entries: 0
+    entries_display: '0'
+    holdings: 2,497 documents / 230,206 passages
+    canonical_display: 136 MB
   bosworth-toller:
     name: Bosworth-Toller — An Anglo-Saxon Dictionary (LINDAT dump)
     license_class: attribution
@@ -4289,6 +4300,6 @@ shelves:
     passages_display: '7,014'
     size_display: 1,282 / 7,014
 disk:
-  canonical_display: 148 GB
-  derived_display: 194 GB
+  canonical_display: 151 GB
+  derived_display: 195 GB
   starter_display: 693 MB
