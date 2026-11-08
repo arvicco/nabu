@@ -192,6 +192,9 @@ module Nabu
           #                               keyed on metadata "book"); place = the find-site hash
           #                               (ancient name + Pleiades id) the adapter's table carries
           "first1k-greek" => :edition_year_text,
+          "formulae-open" => :structured, # P164: the charter edition's dateline <date> children
+          #                                 (when / notBefore-notAfter envelope; class-less — the
+          #                                 charter's own date); place = the edition's issuing place
           "fornsvenska" => :compact_date_keys,
           "freising" => :structured, # the edition's own witness dating of the Clm 6426 record
           #                            (Kos: 972–1039, artifact class) on the transcription
@@ -560,8 +563,12 @@ module Nabu
         # wears date_class "edition", never the composition class. pta:
         # the edition's dct:dateCopyrighted year ("edition_year"), else the
         # TEI sourceDesc print year ("source_date") — 21 of 113 works carry
-        # no composition span (census 2026-11-04).
+        # no composition span (census 2026-11-04). formulae-open: the
+        # printed edition's imprint year ("source_date") for the 181
+        # charters whose dateline bounds nothing (an empty <date/> or an
+        # open single bound; census 2026-11-08).
         EDITION_FALLBACK = {
+          "formulae-open" => %w[source_date].freeze,
           "pta" => %w[edition_year source_date].freeze
         }.freeze
 

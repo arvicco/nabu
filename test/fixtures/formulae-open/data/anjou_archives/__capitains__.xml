@@ -1,0 +1,18 @@
+<?xml-model href="../../capitains.rng" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<collection xmlns="http://purl.org/capitains/ns/1.0#" xmlns:cts="http://chs.harvard.edu/xmlns/cts"
+            xmlns:dct="http://purl.org/dc/terms/" xmlns:dc="http://purl.org/dc/elements/1.1/"
+            xmlns:foaf="http://xmlns.com/foaf/0.1/" xmlns:bib="http://bibliotek-o.org/1.0/ontology/">
+            <identifier>urn:cts:formulae:anjou_archives</identifier>
+            <dc:coverage>Anjou</dc:coverage>
+            <dc:title xml:lang="mul">Archives d’Anjou. Recueil de documents et mémoires inédits sur
+                        cette province publié sous les auspices du Conseil général de Maine et
+                        Loire, ed. von P. Marchegay (1853)</dc:title>
+            <dc:type>cts:textgroup</dc:type>
+            <structured-metadata>
+                        <bib:AbbreviatedTitle>Archives d’Anjou</bib:AbbreviatedTitle>
+            </structured-metadata>
+            <members>
+                        <collection path="./marchegay_carbaio/__capitains__.xml"
+                                    identifier="urn:cts:formulae:anjou_archives.marchegay_carbaio"/>
+   </members>
+</collection>
