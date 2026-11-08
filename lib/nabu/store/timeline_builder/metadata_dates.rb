@@ -147,6 +147,9 @@ module Nabu
           "damos" => :period_label, # the Aegean ceramic-phase chronology ("LM IIIA2 or LM
           #   IIIB") through the ruled Aegean rows of period_bands.yml (every
           #   held label covered); the site/findspot place hash rides along
+          "dbnl" => :structured, # P165: the register's jaar — the transcribed witness's date (a
+          #                        manuscript or first print: no class; a later printing: class
+          #                        edition, or the header's first-print year as composition); no place
 
           "dharma-deccan" => :structured, # P118-2: Ollett's origDate + the Vengī metadata TSV;
           #                                 place = the origPlace placeName (findspot)

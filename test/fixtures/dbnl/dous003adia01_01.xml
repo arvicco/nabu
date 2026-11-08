@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE TEI.2 PUBLIC "-//DBNL//DTD TEI.2 XML//NL" "https://www.dbnl.org/xml/dtd/teixlite.dtd">
+<TEI.2> 
+  <teiHeader> 
+	 <fileDesc><titleStmt> 
+		  <title type="main">‘Ad Ianvm Havtenvm’</title> 
+		  <author>Janus Dousa Filius</author> 
+	 	<editor role="translator">Joan de Stoppelaar</editor>
+		</titleStmt><editionStmt> 
+		  <p>ALGEMENE OPMERKINGEN</p> 
+		  <p>Dit bestand is een door Johan Koppenol vervaardigde transcriptie van
+			 Janus Dousa Filius' ‘Ad Ianvm Havtenvm’ uit 1607. Er is een vertaling aan
+			 toegevoegd van Joan de Stoppelaar, te vinden in zijn <hi rend="i">Gedichten</hi>. Johannes
+			 Allart, Amsterdam 1801, p. 1-4.</p> 
+		  <p> </p> 
+		</editionStmt><publicationStmt> 
+		  <availability> 
+			 <p>2002 dbnl / Johan Koppenol</p> 
+			 
+		  </availability> 
+		  <idno>dous003adia01_01</idno> 
+		</publicationStmt>	 
+	 	<notesStmt>
+	 		<note type="clarin-edite">yes</note>
+	 	</notesStmt>
+	 	<sourceDesc> <bibl>
+	 			<idno type="isbn"></idno>
+	 			<idno type="usedcopy">bestand aangeleverd door Johan Koppenol</idno>
+	 		</bibl>
+		  <p>Janus Dousa Filius, ‘Ad Ianvm Havtenvm’. In: id.,
+			 <hi rend="i">Poemata</hi>. Z.p., 1607, p. 129-131.</p> 
+	 		<p>&nbsp;</p> 
+		</sourceDesc></fileDesc> 
+	 <encodingDesc> 
+		<p>DBNL-TEI 1</p> 
+	 </encodingDesc> 
+  	<profileDesc>
+  		<langUsage>
+  			<language id="la">Latin</language>
+  			<language id="nl">Nederlands</language>
+  		</langUsage>
+  	</profileDesc>
+	 <revisionDesc> 
+		<change> 
+		  <date>2001-12-18</date> 
+		  <respStmt> 
+			 <name type="person">LvtL</name> 
+		  </respStmt> 
+		  <item>colofon toegevoegd</item> 
+		</change> 
+	 	<change> 
+	 		<date>2015-07-14</date> 
+	 		<respStmt> 
+	 			<name type="person">AS</name> 
+	 		</respStmt> 
+	 		<item>aangepast aan richtlijnen juli 2015</item> 
+	 	</change>
+	 </revisionDesc> 
+  </teiHeader> 
+  <text> 
+	 <body> 
+		<div type="chapter"> 
+		  <head rend="h3">Ad Ianvm Havtenvm</head> 
+		  <lg type="poem"> 
+			 <l>HAUTENE, quò me, quò rapis enthei</l> 
+			 <l>Plenum furoris? quis nouus hic ferit</l> 
+			 <l rend="; 1tab">Accentus aures, prisca qualem</l> 
+			 <l rend="; 2tab">Secla nec audierunt, nec olim</l> 
+			 <l n="5">Futura credent, ni genij tui</l> 
+			 <l>AEternitatem per memores typos</l> 
+			 <l rend="; 1tab">Propaget ad seros nepotes</l> 
+			 <l rend="; 2tab">Chalcographâ vigil arte cura.</l> 
+			 <l>Ah ne beatos diuitis ingenî,</l> 
+			 <l n="10">Hautene, foetus, ne patere amplius</l> 
+			 <l rend="; 1tab">Sic lucis expertes latére</l> 
+			 <l rend="; 2tab">In situ &amp; in tenebris sepultos,</l> 
+			 <l>Vnde &amp; perennem Calliope tibi</l> 
+			 <l>Nectat coronam, &amp; saepe auidus terens</l> 
+			 <l rend="; 1tab" n="15">Te lector inuidenda priscis</l> 
+			 <l rend="; 2tab">Vatibus obstuperat loquentem.</l> 
+			 <l>Non solus acri Maeonides tuba</l> 
+			 <l>Fatalem Achillem moenibus Ilij,</l> 
+			 <l rend="; 1tab">Pollacis aut cursus Vlysseî,</l> 
+			 <l rend="; 2tab" n="20">Aut Helenen cecinit Lacaenam;</l> 
+			 <l>Primús ve Diuos aut genitos Diis</l> 
+			 <l>Heroas, aut quos palma Diis pares</l> 
+			 <l rend="; 1tab">Elea redducit superbos</l> 
+			 <l rend="; 2tab">Pindaricus celebrauit ardor.</l> 
+			 <l n="25">Non ipse quondam pectine eburneo</l> 
+			 <l>Vocalis Orpheus praecipites stitit</l> 
+			 <l rend="; 1tab">Lapsus aquarum, auresque ventis</l> 
+			 <l rend="; 2tab">Indidit arboribusque princeps.</l> 
+			 <l>Vixere vates ante Lini lyram</l> 
+			 <l n="30">Multi, sed omnes perpetuo premit</l> 
+			 <l rend="; 1tab">Nox alta somno, quòd suorum</l> 
+			 <l rend="; 2tab">Promeritâ caruere curâ.</l> 
+			 <l>Paulum imperitae distat inertiae</l> 
+			 <l>Celatus acris ingenij vigor.</l> 
+			 <l rend="; 1tab" n="35">Non tu pias Musas sileri</l> 
+			 <l rend="; 2tab">Tot ve tuas patiare noctes,</l> 
+			 <l>Noctis perennis carpere liuidas</l> 
+			 <l>Obliuiones, carmina dum premis</l> 
+			 <l rend="; 1tab">Quibus reuiuiscat resurgens</l> 
+			 <l rend="; 2tab" n="40">Pindaricis numeris Apollo.</l> 
+			 <l>Apollo, Beeotae vt suis in suos</l> 
+			 <l>Connitium olim depulit aurei</l> 
+			 <l rend="; 1tab">Cantu Poëtae, sic Batauis</l> 
+			 <l rend="; 2tab">Auriculis maculam hanc tuorum ex-</l> 
+			 <l n="45">tersurus insuetâ indole carminum.</l> 
+			 <l>Nam seu potenti concitus alite</l> 
+			 <l rend="; 1tab">Iessei epos caeleste nostros</l> 
+			 <l rend="; 2tab">Induis in numeros Poêtae:</l> 
+			 <l>Siue Appulani fert impetus ad lyram;</l> 
+			 <l n="50">Seu picta Tuscis belgica temperas</l> 
+			 <l rend="; 1tab">Emblematis magni Petrarchae</l> 
+			 <l rend="; 2tab">Aut Latiis teneri Secundi,</l> 
+			 <l>Gallís ve Porti, sic canis vt tua</l> 
+			 <l>Possint videri. quare age &amp; haec diem</l> 
+			 <l rend="; 1tab" n="55">Iam ferre condiscant serenum, ac</l> 
+			 <l rend="; 2tab">Laude frui merita nepotum.</l> 
+			 <l>Mirentur vt te saecula principem</l> 
+			 <l>Quondam Latinos ad Batauam chelym</l> 
+			 <l rend="; 1tab">Duxisse flexus, audiasque</l> 
+			 <l rend="; 2tab" n="60">Belgiadis fididen Camoenae.</l> 
+			 <l>Laudem Batauis quid precor hanc tuis,</l> 
+			 <l>Lucemque scriptis &amp; tibi gloriam</l> 
+			 <l rend="; 1tab">Fructumque nobis posterisque</l> 
+			 <l rend="; 2tab">Vlterius iuuat inuidere?</l> 
+		  </lg> 
+		</div> 
+		<div type="chapter"> 
+			<interpGrp><interp type="primair" value="stop003gedi01"/></interpGrp>
+		  <head rend="h3">Vertaling</head> 
+		  
+		  <lg type="poem">
+<head><name type="person">Jan van der Does de Jonge</name> aan 
+			 <name type="person">Jan van Hout</name>, dat hij zijne gedichten het
+			 licht gunne.</head> 		   
+			 <l>Waar heen, Van Hout! waar heen vervoert gij mijne zinnen,</l> 
+			 <l>Daar Febus godlijk vuur in mijnen boezem blaakt?</l> 
+			 <l>Wat hemeltoonen juicht het puik der Zanggoddinnen?</l> 
+			 <l>Wat nieuw geluid is dit, het welk mijne ooren raakt?</l> 
+			 <l>Een nieuw geluid, waarvan, zo lang de Zonnewagen</l> 
+			 <l>Aan de Oosterkimmen rees, en daalde in 't Wester zout,</l> 
+			 <l>Nooit weêrgaê werd gehoord: en 't geen in laatre
+				dagen</l> 
+			 <l>De naneef zeker voor verdichte grootspraak houdt,</l> 
+			 <l>Ten zij een wakkre zorg de onsterfelijke gaaven</l> 
+			 <l>Van uwen geest, zo rijk in vinding, zwier en kracht,</l> 
+			 <l>Met onuitwischbren inkt, door plaat, en letterstaaven,</l> 
+			 <l>Doe straalen in het oog van 't laatste nageslacht.</l> 
+			 <l>Laat deeze vruchten, uit uw treflijk brein geboren,</l> 
+			 <l>Ach, mijn Van Hout! dan niet als ijdle nietigheên,</l> 
+			 <l>Der duisternis gewijd, in 't logge stof versmooren:</l> 
+			 <l>Neen, laatze toch bij tijds in 't helder daglicht treên:</l>
+			 
+			 <l>Opdat Kalliopé u kranssen, die de tijden</l> 
+			 <l>Verduuren, vlechten moge, en elk, wanneer gij zingt,</l> 
+			 <l>Dat de oude Dichtrenrei uw toonen zou benijden,</l> 
+			 <l>Verbaasd den lof erkenn', dien gij naar waarde ontvingt.</l> 
+			 <l>Homerus Zangster heeft alleen niet aangeheeven</l> 
+			 <l>Van peleus grooten Zoon, den geessel des Trojaans,</l> 
+			 <l>Noch van Ulysses woede en lastig ommezweeven,</l> 
+			 <l>Noch van de Koningin des deftigen Spartaans.</l> 
+			 <l>De vuurige Pindaar heeft de eerste niet gezongen</l> 
+			 <l>Ter eere van de Goôn, en hun heldhaftig bloed,</l> 
+			 <l>Noch hen, die om den roem op nieuw met Goden dongen,</l> 
+			 <l>Na 't winnen van den strijd te Olimpie eerst begroet.</l> 
+			 <l>De zangrige Orfeus heeft door 't roeren zyner snaaren</l> 
+			 <l>Niet eerst het stroomend nat in zijnen loop gestuit:</l> 
+			 <l>De winden en 't geboomt doen luistren naar het paaren</l> 
+			 <l>Van zijn vergoode stem met zijn ivooren luit:</l> 
+			 <l>Veel Zangers lieten zich vóór Linus tijd reeds
+				hooren,</l> 
+			 <l>Maar nu ligt al hun roem, helaas! in 't stof gedrukt:</l> 
+			 <l>Terwijl hun schriften in een' donkren nacht versmooren,</l> 
+			 <l>Door vriend noch tijdgenoot dien doodschen slaap ontrukt.</l> 
+			 <l>Wat zich de arbeidzaamheid eens vlug vernufts moog' vergen;</l> 
+			 <l>Wat eedle schatten zich de Wijsheid ook bereid',</l> 
+			 <l>Zij heeft, indien zij zich voor andren blijft verbergen,</l> 
+			 <l>Of geen, kleen verschil met plompe vadzigheid.</l> 
+			 <l>Ai, duld niet, dat uw kunst, een gaaf der Zanggodinnen,</l> 
+			 <l>Zo ligt vergeeten word': dat de averechtsche nijd</l> 
+			 <l>Eens eindeloozen nachts den arbeid uwer zinnen</l> 
+			 <l>En al de nachten dekk', door u der kunst gewijd:</l> 
+			 <l>Daar gij tot d' ondergang gedichten wilt verwijzen,</l> 
+			 <l>Waardoor Apollo zelfs, als voor den hemelval</l> 
+			 <l>En 't Goddelijk gezang van Pindarus, verrijzen,</l> 
+			 <l>En, met herboren vuur, op nieuw herleeven zal.</l> 
+			 <l>Dat dan die vuile vlek van alle Hollandsche ooren,</l> 
+			 <l>Door d' ongewoonen aart van uwe kunst, verdwijn';</l> 
+			 <l>Gelijk Apol, toen zich held Pindarus deed hooren,</l> 
+			 <l>de blaam heeft uitgewischt van het Boeotisch zwijn.</l> 
+			 <l>Want, 't zij gij, rijk bezield met goddelijke krachten,</l> 
+			 <l>Vorst Davids Zangheldin in 't neêrduitsch kleed doet
+				gaan:</l> 
+			 <l>Hetzij gij wordt vervoerd door hooge Dichtgedachten</l> 
+			 <l>Om aan de Apulsche lier de vlugge hand te slaan:</l> 
+			 <l>Hetzij ge uw Neêrlandsch Dicht aanloklijk wilt versieren</l>
+			 
+			 <l>Met Italjaanschen tooi, met held petrarcha's goud:</l> 
+			 <l>Of met Secundus Roomsche, of Portus Fransche zwieren:</l> 
+			 <l>'T schijnt alles vinding van den schranderen Van Hout.</l> 
+			 <l>Welaan dan! leer dit werk het daglicht eens verdragen,</l> 
+			 <l>Opdat de naneef meld', hoe groot gij zijt geweest,</l> 
+			 <l>En de eeuwen zelfs, verrukt, van uwe kunst gewaagen,</l> 
+			 <l>Die 't eerst den Roomschen zang schoeide op een duitsche
+				leest,</l> 
+			 <l>Maar! waarom, bidde ik toch! benijdt ge uw' Batavieren</l> 
+			 <l>Dien heerelijken lof, door u hun aangebragt?</l> 
+			 <l>Aan u den roem, het licht aan uwe kunstpapieren,</l> 
+			 <l>De vrucht daar van aan ons, en aan ons nageslacht?</l> 
+		  </lg> 
+		  <p><hi rend="i">Het Latijnsche gevolgd.</hi></p> 
+			<interpGrp><interp type="end" value="stop003gedi01"/></interpGrp>
+		</div> 
+	 </body> 
+  </text>
+</TEI.2>
