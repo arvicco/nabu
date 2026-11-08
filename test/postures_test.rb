@@ -179,7 +179,7 @@ class PosturesTest < Minitest::Test
   def test_the_lect_migration_kept_the_p59_4_census
     lect = postures.declarations.select { |d| d.layer == "lect" }
     by_posture = lect.group_by(&:posture).transform_values(&:size)
-    assert_equal 185, lect.size,
+    assert_equal 186, lect.size,
                  "the P59-4 declarations survive the move (61 at migration; itant retired P61-3," \
                  "oracc retired P62-2, etcsl/ccmh/freising/coptic-scriptorium retired P64-6, " \
                  "titus-avestan retired P66-1, osta+fornsvenska retired P77-r8, achemenet " \
@@ -416,7 +416,9 @@ class PosturesTest < Minitest::Test
                  "the shelf-grain ladder cannot date-band, and a source-wide en:early row would " \
                  "mislabel the 1700–1755 lexicons): 184→185; leme MOVES identity → dates — the " \
                  "shelf-grain date-band rule stages its English shelves by their own lexicon_year " \
-                 "(en:early / en:late), the other shelf languages identity: dates 28→29, identity 136→135"
+                 "(en:early / en:late), the other shelf languages identity: dates 28→29, identity 136→135; " \
+                 "formulae-open ADDED P164 — dates (bare lat; date-band inference stages the charters' " \
+                 "own dateline envelopes onto lat:med, the memis shape): 185→186"
     # The epigraphic-belt registry package (merged + canonical-synced
     # 2026-10-18, the add-then-retire shape within one phase) retires both
     # P130 pendings, and the ociana-script rule + the ig-cyprus override
@@ -492,6 +494,8 @@ class PosturesTest < Minitest::Test
     # leme joins identity (per-entry headword languages, English shelves bare en): 135→136.
     # leme moves to dates — the dictionary shelf grain stages its English shelves by
     # lexicon_year onto en:early / en:late: dates 28→29, identity 136→135.
-    assert_equal({ "dates" => 29, "codemap" => 21, "identity" => 135 }, by_posture)
+    # formulae-open joins dates (bare lat, staged lat:med by the charters' own
+    # dateline envelopes): 29→30.
+    assert_equal({ "dates" => 30, "codemap" => 21, "identity" => 135 }, by_posture)
   end
 end

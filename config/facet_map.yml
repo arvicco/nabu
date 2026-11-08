@@ -484,6 +484,11 @@ sources:
       work: work
       cts_textgroup: author_id
       cts_work: work_id
+  formulae-open:              # 5,164 Latin charters (census over the 2ce73416 clone, 2026-11-08)
+    fields:
+      collection: collection  # the textgroup id — 31 charter collections (freising 1,383 ·
+      #                         stgallen 779 · redon 391 · stavelot_malmedy 289 · karl_der_grosse 266 …)
+      genre: genre            # the TEI's <text type="charta">; config/kind_map.yml folds it
   pta:                        # 113 grc editions (census over the 524eb976 clone, 2026-11-02)
     fields:
       author: author          # the textgroup groupname (Severian of Gabala 64 · Athanasius …)

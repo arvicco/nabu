@@ -2138,6 +2138,24 @@ sources:
         'composition')"}
     places: {posture: unplaced}
     script: {posture: implied}
+  formulae-open:   # P164
+    lect: {posture: dates, note: "the date-band inference stages the charters from their own
+        dateline envelopes: the c. 700–1300 bulk falls inside lat:med [600, 1350]; the four
+        charters dated before 600 (one spanning the 600 boundary) stay bare lat or take
+        lat:late by containment. No facet rule: a source-wide lat:med label would only repeat
+        the band and overclaim the early pieces"}
+    dating: {posture: dated, note: "the edition's dateline <date> children (when, or the
+        notBefore/notAfter pair; census 2026-11-08: 4,983 of the 5,164 accepted charters
+        bounded) → metadata date, class-less — the charter's own date (MetadataDates
+        :structured). The 181 whose dateline bounds nothing (an empty <date/> or an open
+        single bound) fall back to the printed edition's imprint year, date_class edition
+        (MetadataDates::EDITION_FALLBACK)"}
+    places: {posture: named, note: "the edition's issuing place (front div
+        subtype=ausstellungsort, 1,984 of the 5,164 accepted charters: 'Cannstadt', 'Aachen')
+        → place, verbatim; no gazetteer ref upstream. The textgroup's dc:coverage (the
+        archive: 'St. Gallen', 'Anjou') stays metadata-free — a collection label, not the
+        charter's origin"}
+    script: {posture: implied}
   pta:   # P154
     lect: {posture: dates, note: "the date-band inference stages the editions from the archive's
         own per-work dct:created spans (composition class): Severian's homilies (401–404) and
