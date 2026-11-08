@@ -1450,6 +1450,22 @@ sources:
     script: {posture: implied, note: "Latin script for both lat and sga (metadata script
         Latn); Priscian's Greek examples put Greek letters in 250 glosses (0.7% of letters) —
         declared, not a second script lane"}
+  mnc-wikisource:   # P164
+    # kind: machine-postured — kind_map.yml genre facet fold.
+    lect: {posture: identity, note: "bare mnc (a real node) for every Manchu line, Unicode script
+        and Möllendorff romanization alike (the script rides the passage annotation — no
+        mnc-Latn codemap row exists; a mnc~latn row is a future registry call); Han-dominant
+        lines claim the work's own Chinese layer — lzh (MYK juan 1's Chinese column, the Lunyu)
+        or zho (清文啓蒙's Qing vernacular glosses), both real anchors"}
+    dating: {posture: dated, note: "every censused work carries its composition date (class
+        composition), the basis in raw: the text's own date line (Nerchinsk Kangxi 28, the stele
+        Chongde 4, the 清文啓蒙 preface 雍正庚戌), a reign year, or the Qing span where the
+        page states nothing (the Yijing, Lunyu, 三字經, Sunzi translations) — :structured lane"}
+    places: {posture: unplaced, note: "the pages carry no place field; the works' places
+        (Nerchinsk, Samjeondo, Mukden, Chengde) are a future curated rider, declared"}
+    script: {posture: mixed, note: "Unicode Manchu script (Mong) and Möllendorff romanization
+        (Latn — the 2008-era pages in the old wiki keyboard, v = ū, x = š, verbatim), Han for
+        the Chinese layers; per-passage annotation script"}
   shiratori-shm:   # P164
     # kind: machine-postured — kind_map.yml source_kind historiography/chronicle.
     lect: {posture: identity, note: "the document claims xng (a real node, the altaica-shm

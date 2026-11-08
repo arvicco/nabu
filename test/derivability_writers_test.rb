@@ -169,9 +169,11 @@ class DerivabilityWritersTest < Minitest::Test
   # canonical/itkc-catalog/ (the OpenAPI 서지 response pages under
   # <section>/<start>.xml, tmp+rename, stale pages renamed into .attic/)
   # inside Adapter#fetch — the same crawl law kind. The P164
-  # shiratori_shm writes ONE NDL book (books/1184344.json, .part +
-  # rename) inside Adapter#fetch — the ndl-kotenseki canonical-gateway
-  # law kind.
+  # mnc_wikisource adapter writes canonical/mnc-wikisource/ (one api.php
+  # page envelope per member under pages/<pageid>.json, tmp+rename, and
+  # its .wiki-fetch.json pin) and shiratori_shm writes ONE NDL book
+  # (books/1184344.json, .part + rename) inside Adapter#fetch — the
+  # ja/zh-wikisource and ndl-kotenseki canonical-gateway law kinds.
   # credentials (the credentials seam) writes ONE instance file,
   # local/config/credentials.yml (tmp born mode 600 + chmod + rename),
   # driven only by the `nabu creds set` gateway — the local/config
@@ -295,7 +297,7 @@ class DerivabilityWritersTest < Minitest::Test
     nabu/adapters/mdz_protestant.rb nabu/adapters/vakk.rb nabu/adapters/korpus16.rb
     nabu/adapters/damos.rb nabu/adapters/itkc_catalog.rb
     nabu/adapters/aclt.rb nabu/adapters/ia_scan_shelf.rb
-    nabu/adapters/shiratori_shm.rb
+    nabu/adapters/mnc_wikisource.rb nabu/adapters/shiratori_shm.rb
     nabu/language_shelf.rb nabu/lemma_shelf.rb nabu/date_shelf.rb nabu/meter_shelf.rb
     nabu/library_shelf.rb nabu/note_shelf.rb
     nabu/source_shelf.rb nabu/ingest.rb
