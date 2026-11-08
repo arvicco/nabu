@@ -821,3 +821,11 @@ sources:
       #                         offersionis 79 · charta venditionis 67 … 50 labels; kind_map folds)
       scribe: scribe          # the writing notary/cleric, 165 names verbatim (incl. "anonimo")
       redaction: redaction    # original 481 · copy 38
+  dbnl:                       # P165 — 3,653 titles (census over the whole 2026-11-04 zip, 2026-11-08)
+    fields:
+      genres: genre           # the register's genre column, multi-label (poëzie 1,677 · proza 799 ·
+      #                         non-fictie 750 · sec - letterkunde 424 · jeugdliteratuur 374 ·
+      #                         sec - taalkunde 299 · drama 292; kind_map folds)
+      author: author          # the register's named persons (anonymous titles name none)
+      printing: printing      # the register's druk: 1ste druk 3,068 · ? 180 · 2de druk 132 ·
+      #                         3de druk 61 · 6de druk 42 · handschrift 20 · … (the date class reads it)

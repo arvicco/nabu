@@ -2917,3 +2917,24 @@ sources:
       "charta allocationis": legal               # 1
       "charta beneficii": legal                  # 1 — benefice grant
       "charta adfiliationis": legal              # 1 — adoption
+  dbnl:               # P165 — the DBNL register's genre column (titels_pd.csv), 1–4 values per
+    facet: genre      # title, projected as the genre facet (facet_map.yml). DBNL's own seven-value
+    #                   vocabulary, every value covered; counts = documents carrying the value,
+    #                   census through the adapter over the whole 2026-11-04 zip (3,653 docs).
+    map:
+      "poëzie": literary/poetry                  # 1,677 — verse of every kind: lyric, songbooks, emblem
+      #                                            verse, epic and narrative verse, the Middle Dutch rhymed romances
+      "drama": literary/drama                    # 292 — plays: the abele spelen and sotternieën, rederijker
+      #                                            plays, tragedies and comedies, 19th-century stage works
+      "proza": literary                          # 799 — DBNL's literary prose: novels and tales above all, but also
+      #   medieval prose romances, devotional prose and the incunable histories — no narrative claim
+      #   holds across the label, so the bare head (deliberately coarse)
+      "jeugdliteratuur": literary                # 374 — children's literature: an audience, not a form; the
+      #   form rides the title's other value when DBNL gives one (poëzie/proza), the bare head here
+      "sec - letterkunde": scholarly             # 424 — secondary literature on literature: literary history,
+      #   criticism, editors' studies — the learned discipline, the nearest ruled head
+      "sec - taalkunde": lexical                 # 299 — secondary literature on language: grammars,
+      #   dictionaries, spelling and dialect treatises — words about words
+    deliberate:
+      "non-fictie": "DBNL's catch-all for everything outside literature (history, religion, travel, natural
+        science, law, letters) — a negative label, not a genre claim (750)"
