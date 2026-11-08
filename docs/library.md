@@ -2229,3 +2229,22 @@ hand-annotated with lemma, morphology and dependency syntax and
 marked formulaic, free or subscription; each charter carries its
 year, place of issue, scribe, and whether it survives as original
 or copy. The sister of the UD-held LLCT2 (CC BY 4.0).
+
+**The Mongolic shelf** (three sources): **`mnc-wikisource`** — 21
+documents / 1,359 passages of real Manchu text from multilingual
+Wikisource: the Manchu Veritable Records (juan 1–4), the 清文啓蒙
+primer, Qianlong's Ode to Mukden, the Treaty of Nerchinsk, the Seven
+Grievances, the Samjeondo stele, the Manchu Sunzi, and more — in
+Manchu script and romanization, with the works' Literary Chinese
+layers beside them (CC BY-SA). **`shiratori-shm`** — Shiratori
+Kurakichi's 音訳蒙文元朝秘史 (1943): the romanized interlinear
+Secret History of the Mongols over Ye Dehui's edition, 632 scanned
+pages via the NDL bulk route — a second Middle Mongol witness beside
+the held Street edition (public domain). **`mongolic-pd`** — the
+public-domain reference canon for Manchu, Classical Mongolian and
+Written Oirat: fifteen volumes from Zakharov's great Manchu–Russian
+dictionary (1875, searchable Cyrillic transcription) through
+Kowalewski's three-volume Mongolian dictionary to Pozdneev's Kalmyk
+dictionary and Jülg's Siddhi-Kür — scanned pages with declared-OCR
+honesty, each volume claiming its prose language and naming the
+language it presents.
