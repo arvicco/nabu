@@ -4093,7 +4093,7 @@ llct1:   # P164, 02-sources row 394
   adapter: Nabu::Adapters::Llct1
   adopted: "2026-11-08"
   axes: [romance]
-  wired: false   # READY: bin/nabu enable llct1 && bin/nabu sync llct1 (one 42 MB Zenodo
+  wired: true    # FIRST SYNC VERIFIED 2026-11-08, exact: 519 docs / 9,227 passages / 0 errored; staged 519 lat:med
                  # file, sha256-pinned; Zenodo throttles one connection to ~17 kB/s —
                  # the download can take ~40 min; the parse takes seconds). EXPECT 519
                  # docs / 9,227 passages, 0 errored, 0 skipped (census through the
