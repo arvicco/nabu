@@ -259,6 +259,10 @@ module Nabu
           "paramara" => :structured, # P153: the Period field's leading era-typed year
           #                            (config/eras.yml VS/Śaka); place = the Location findspot
           "mk-wikisource" => :structured,
+          "mnc-wikisource" => :structured, # each censused work's composition date (class
+          #                                  composition; the basis in raw — a date line, a reign year)
+          "mongolic-pd" => :structured, # each work's edition year (the africa-pd mold); the
+          #                               imprint rides "imprint" — no place claim
           "ms-wikisource" => :structured, # P120-3: the manuscript's stated date (header
           #                                 year= / Index Year=; "abad ke-N" a century)
           "ndl-kotenseki" => :structured,
@@ -317,6 +321,7 @@ module Nabu
           "seal" => :period_label,
           "senie" => :structured, # the TEI header <date>: the print's or manuscript's year,
           #                         a "1681_90" span as its envelope — the artifact date
+          "shiratori-shm" => :structured, # the 1943 Tōyō Bunko edition year (class edition)
           "sigla" => :period_label, # P142: the Linear A inscription's Minoan ceramic phase
           #                           ("LM IB", "MM IIB") through the ruled Aegean rows;
           #                           place = the site (Haghia Triada, Khania …)

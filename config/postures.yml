@@ -1362,6 +1362,22 @@ sources:
     script: {posture: implied, note: "Latin-script prose and Latin transcription of the African
         languages; Old Nubian, Ajami facsimiles, Tifinagh and the Vai syllabary are uncorrected
         OCR, garbled (declared per document)"}
+  mongolic-pd:   # P164
+    # kind: machine-postured — kind_map.yml genre facet fold.
+    lect: {posture: identity, note: "the reference-shelf posture (africa-pd, slavistics-pd): each
+        work claims its PROSE language — rus 7, eng 3, fra 3, deu 2, all real anchors; the
+        language presented rides metadata object_language — mnc (7), cmg (5), xwo (3), all
+        three real registry nodes (cmg + xwo minted 2026-11-02 for exactly this shelf), never
+        a claim. Kowalewski's dictionary glosses in Russian AND French and claims rus, declared
+        coarse"}
+    dating: {posture: dated, note: "every work carries its edition year (Kowalewski per volume:
+        1844/1846/1849) — :structured lane"}
+    places: {posture: unplaced, note: "imprint places (St Petersburg, Kazan, Paris, Shanghai,
+        Canton, Leipzig) ride metadata 'imprint' — the printing place, not a text place"}
+    script: {posture: mixed, note: "Cyrillic (pre-reform) and Latin-script prose; Manchu and
+        Mongolian forms in Cyrillic or Latin transcription; the native vertical scripts
+        (Manchu, Uyghur-Mongolian, the Oirat Clear Script) are uncorrected OCR, garbled
+        (declared per document)"}
   bu-ajami:   # P124-1
     # kind machine-postured since 2026-10-14 — the genre fold in kind_map
     # (Poetry/Poem onto the poetry sub; the prose and mixed form labels
@@ -1434,6 +1450,37 @@ sources:
     script: {posture: implied, note: "Latin script for both lat and sga (metadata script
         Latn); Priscian's Greek examples put Greek letters in 250 glosses (0.7% of letters) —
         declared, not a second script lane"}
+  mnc-wikisource:   # P164
+    # kind: machine-postured — kind_map.yml genre facet fold.
+    lect: {posture: identity, note: "bare mnc (a real node) for every Manchu line, Unicode script
+        and Möllendorff romanization alike (the script rides the passage annotation — no
+        mnc-Latn codemap row exists; a mnc~latn row is a future registry call); Han-dominant
+        lines claim the work's own Chinese layer — lzh (MYK juan 1's Chinese column, the Lunyu)
+        or zho (清文啓蒙's Qing vernacular glosses), both real anchors"}
+    dating: {posture: dated, note: "every censused work carries its composition date (class
+        composition), the basis in raw: the text's own date line (Nerchinsk Kangxi 28, the stele
+        Chongde 4, the 清文啓蒙 preface 雍正庚戌), a reign year, or the Qing span where the
+        page states nothing (the Yijing, Lunyu, 三字經, Sunzi translations) — :structured lane"}
+    places: {posture: unplaced, note: "the pages carry no place field; the works' places
+        (Nerchinsk, Samjeondo, Mukden, Chengde) are a future curated rider, declared"}
+    script: {posture: mixed, note: "Unicode Manchu script (Mong) and Möllendorff romanization
+        (Latn — the 2008-era pages in the old wiki keyboard, v = ū, x = š, verbatim), Han for
+        the Chinese layers; per-passage annotation script"}
+  shiratori-shm:   # P164
+    # kind: machine-postured — kind_map.yml source_kind historiography/chronicle.
+    lect: {posture: identity, note: "the document claims xng (a real node, the altaica-shm
+        claim); per-koma passages claim what the OCR's script mix shows — the interlinear body
+        xng, the Japanese front matter jpn, Ye Dehui's preface lzh, the Ming 總譯 openings zho
+        (the zh-wikisource claim for that layer), the English back matter eng — all real anchors"}
+    dating: {posture: dated, note: "the 1943 Tōyō Bunko edition year (class edition, the NDL
+        record; the English title leaf's 1942 rides raw) — :structured lane; the SHM's own
+        13th-century composition rides metadata work_note, a future curated-band candidate
+        shared with altaica-shm"}
+    places: {posture: unplaced, note: "the chronicle's places are in its text; the imprint (Tokyo)
+        rides metadata 'publisher' — not a text place"}
+    script: {posture: mixed, note: "Han (the Ming phonetic transcription, glosses and 總譯) and
+        Latin (Shiratori's romanization) interleaved per opening as the NDL OCR read them;
+        kana-mixed Japanese front matter"}
   altaica-shm:   # P107-7
     kind: {posture: unclassified}
     lect: {posture: identity, note: xng — real at the Central Asia registry wave's merge}
