@@ -2255,3 +2255,17 @@ Kowalewski's three-volume Mongolian dictionary to Pozdneev's Kalmyk
 dictionary and Jülg's Siddhi-Kür — scanned pages with declared-OCR
 honesty, each volume claiming its prose language and naming the
 language it presents.
+
+## 8bi. The P165 arrivals — the mass-digitization wave, first leg
+
+**`blbooks`** — **2,497 documents / 230,206 passages**: the British
+Library's Digitised Books (the Microsoft digitisation, BL Labs JSONL
+release) at their pre-1800 cone — overwhelmingly English drama and
+verse, Elizabethan and Jacobean plays through Restoration comedy to
+the eighteenth century's odes, epistles and farces, with a small
+continental shelf from a Paris Plutarch of 1510 onward. Raw period
+OCR, declared as such (long s reads as f; every page carries the
+OCR's own confidence score): a searchable finding aid to the printed
+page, not an edition. CC0 metadata over Public Domain Mark texts.
+The 19th-century decades (ten more tarballs, ~47k books) remain
+upstream for later cones.

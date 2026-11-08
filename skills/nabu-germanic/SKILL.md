@@ -6,7 +6,7 @@ compatibility: "Requires the nabu MCP server (`bin/nabu mcp`, read-only, stdio) 
 metadata:
   desk: germanic
   origin: generated
-  sources: "aspr bosworth-toller cleasby-vigfusson cme corpus-gysseling corpus-oudfries corpus-oudnederlands dta ecco-tcp eebo-tcp emmo evans-tcp fornsvenska fsv-lexica grand-tour helipad iswoc leme menota menotec perseus-anglit ppchy proiel ref rem ren rundata runesdb stationers-register statutes-realm ud wiktionary-dum wiktionary-enm wiktionary-gmh wiktionary-gmq-osw wiktionary-got wiktionary-non wiktionary-ofs wiktionary-sco zoega"
+  sources: "aspr blbooks bosworth-toller cleasby-vigfusson cme corpus-gysseling corpus-oudfries corpus-oudnederlands dta ecco-tcp eebo-tcp emmo evans-tcp fornsvenska fsv-lexica grand-tour helipad iswoc leme menota menotec perseus-anglit ppchy proiel ref rem ren rundata runesdb stationers-register statutes-realm ud wiktionary-dum wiktionary-enm wiktionary-gmh wiktionary-gmq-osw wiktionary-got wiktionary-non wiktionary-ofs wiktionary-sco zoega"
 ---
 
 # The Germanicist — the `germanic` desk
@@ -24,6 +24,7 @@ verbatim upstream terms are in `docs/02-sources.md` of the Nabu repository.
 | Source | Upstream | License class |
 | --- | --- | --- |
 | `aspr` | ASPR — The Anglo-Saxon Poetic Records (Krapp & Dobbie; OTA 3009) | attribution |
+| `blbooks` | British Library Digitised Books c.1510–c.1900 — OCR text (pre-1800 cone) | open |
 | `bosworth-toller` | Bosworth-Toller — An Anglo-Saxon Dictionary (LINDAT dump) | attribution |
 | `cleasby-vigfusson` | Cleasby-Vigfusson, An Icelandic-English Dictionary (1874) — stscoundrel JSON edition | attribution |
 | `cme` | Corpus of Middle English Prose and Verse (Middle English Compendium, Univ. of Michigan) | open |
