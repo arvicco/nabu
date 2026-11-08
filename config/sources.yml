@@ -2114,7 +2114,7 @@ dprr:   # 02-sources row 310
   adopted: "2026-10-27"
   kind: module   # person authority — zero document rows, the cbdb shape
   axes: [classical]
-  wired: true    # FIRST SYNC VERIFIED 2026-11-08, exact: 21 docs / 1,359 passages / 28 rule skips, 0 errored
+  wired: false   # until the first real sync is verified
   sync_policy: manual
   # DPRR — Digital Prosopography of the Roman Republic (King's College
   # London; Mouritsen, Robb, Bradley): the Republican elite from
@@ -4502,7 +4502,7 @@ mnc-wikisource:   # P164, 02-sources row 397
   adapter: Nabu::Adapters::MncWikisource
   adopted: "2026-11-08"
   axes: [mongolic]
-  wired: true    # FIRST SYNC VERIFIED 2026-11-08, exact: 1 doc / 632 passages, 0 errored
+  wired: true    # FIRST SYNC VERIFIED 2026-11-08, exact: 21 docs / 1,359 passages / 28 rule skips, 0 errored
   sync_policy: manual
   # The Manchu texts on Multilingual Wikisource (wikisource.org), Unicode
   # Manchu script and Möllendorff romanization — the provenance census
@@ -6365,7 +6365,7 @@ shiratori-shm:   # P164, 02-sources row 396
   adapter: Nabu::Adapters::ShiratoriShm
   adopted: "2026-11-08"
   axes: [mongolic]
-  wired: false   # until the first real sync is verified
+  wired: true    # FIRST SYNC VERIFIED 2026-11-08, exact: 1 doc / 632 passages, 0 errored
   sync_policy: manual
   # Shiratori Kurakichi's 音訳蒙文元朝秘史 (Tōyō Bunko 1943): Ye Dehui's
   # 1908 hanzi Secret History reproduced leaf for leaf with Shiratori's

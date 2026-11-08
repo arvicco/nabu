@@ -2671,6 +2671,18 @@ sources:
     entries_display: '0'
     holdings: 127 documents / 141,264 passages
     canonical_display: 696 MB
+  shiratori-shm:
+    name: Shiratori Kurakichi, 音訳蒙文元朝秘史 — the romanized Secret History of the Mongols
+      (Tōyō Bunko 1943; NDL OCR full text)
+    license_class: open
+    documents: 1
+    documents_display: '1'
+    passages: 632
+    passages_display: '632'
+    entries: 0
+    entries_display: '0'
+    holdings: 1 documents / 632 passages
+    canonical_display: 15 MB
   shkz:
     name: ŠKZ — the trilingual Kaʿba-ye Zartošt inscription (aligned)
     license_class: open
@@ -3799,6 +3811,8 @@ shelves:
     sources:
     - digiliblt
     - openmgh
+    - formulae-open
+    - llct1
     - croala
     - corpus-corporum
     - bfm
@@ -3816,11 +3830,11 @@ shelves:
     - noscemus
     - mazarinades
     - socinian-letters
-    documents: 19451
-    documents_display: '19,451'
-    passages: 5593298
-    passages_display: '5,593,298'
-    size_display: 19,451 / 5,593,298
+    documents: 25134
+    documents_display: '25,134'
+    passages: 5607806
+    passages_display: '5,607,806'
+    size_display: 25,134 / 5,607,806
   papyri:
     sources:
     - papyri-ddbdp
@@ -4020,11 +4034,14 @@ shelves:
     sources:
     - atmo
     - altaica-shm
-    documents: 16
-    documents_display: '16'
-    passages: 8457
-    passages_display: '8,457'
-    size_display: 16 / 8,457
+    - mnc-wikisource
+    - shiratori-shm
+    - mongolic-pd
+    documents: 53
+    documents_display: '53'
+    passages: 17806
+    passages_display: '17,806'
+    size_display: 53 / 17,806
   egyptian:
     sources:
     - aes

@@ -6,7 +6,7 @@ compatibility: "Requires the nabu MCP server (`bin/nabu mcp`, read-only, stdio) 
 metadata:
   desk: classical
   origin: hand-tuned
-  sources: "aio analecta-hymnica cgpg corpus-corporum croala damos digiliblt diorisis dprr first1k-greek glaux glt hypotactic ig-cyprus lasla lexica lila noscemus openmgh pedecerto perseus-greek perseus-latin proiel pta sigla suda-translations ud vulgate"
+  sources: "aio analecta-hymnica cgpg corpus-corporum croala damos digiliblt diorisis dprr first1k-greek formulae-open glaux glt hypotactic ig-cyprus lasla lexica lila noscemus openmgh pedecerto perseus-greek perseus-latin proiel pta sigla suda-translations ud vulgate"
 ---
 
 # The Classicist — the `classical` desk
@@ -33,6 +33,7 @@ verbatim upstream terms are in `docs/02-sources.md` of the Nabu repository.
 | `diorisis` | Diorisis Ancient Greek Corpus (Vatri & McGillivray, figshare v1 2018) | attribution |
 | `dprr` | DPRR — Digital Prosopography of the Roman Republic (person authority) | nc |
 | `first1k-greek` | Open Greek and Latin — First1KGreek | attribution |
+| `formulae-open` | Formulae – Litterae – Chartae: formulae-open (early medieval charters) | attribution |
 | `glaux` | GLAUx — the Greek Language Automated (Keersmaekers) | attribution |
 | `glt` | GLT — Greek Orthodox Liturgical Texts (glt.goarch.org): the Byzantine service books in Greek | open |
 | `hypotactic` | Hypotactic — Greek metrical scansions (D. Chamberlain) | attribution |
