@@ -1063,7 +1063,7 @@ Historical GIS gazetteer — places.md) and `cbdb` (the China
 Biographical Database person index behind `nabu person`; nc).
 
 **Japonic.** `ndl-kotenseki` — the National Diet Library's classical-book
-OCR, crawled in slices (26,860 / 833,013; open), `honkoku` — citizen
+OCR, crawled in per-phase slices (61,201 docs; open), `honkoku` — citizen
 transcriptions of premodern documents (6,092 / 129,458), `ja-wikisource`
 — the premodern era cone (838 / 88,745), `kouigenji` — Ikeda's critical
 Genji text (54 / 25,065), `kokubunken` — NIJL TEI editions of the

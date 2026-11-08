@@ -25,8 +25,8 @@ divine custodian of Ashurbanipal's library. It is not a website and not a
 reader app: it is a pipeline plus a database, operated from the command
 line, designed to outlive the services it draws from.
 
-As of **2026-10-13** the shelves hold **2,374,951 documents /
-112,521,554 passages** in 207 language codes — from proto-cuneiform
+As of **2026-11-08** the shelves hold **2,861,746 documents /
+128,602,664 passages** in 278 language codes — from proto-cuneiform
 tablets of the late 4th millennium BCE to Meiji-era Japanese. The
 summer waves built the core: **EEBO-TCP Phase I** brought the
 early-modern English print library whole (24.1M passages — the
@@ -57,11 +57,11 @@ Behind TITUS's members-only gate, personal grants opened the
 4,250 West Tocharian documents of the Berlin, London and Paris
 collections, plus two leaves Maue's handlist identifies as
 Tumshuqese. **OpenITI's Classical Arabic** remains the largest
-language at 33.3 million passages, ahead of early-modern English
-(24.3M) and Literary Chinese (19.0M).
-Plus **2,761,739 dictionary entries** across 566 dictionary
-shelves and **22.8 million gold lemma annotations in 48 languages** (a
-further 31.0 million ride an honestly labelled silver tier). (All numbers in this
+language at 33.3 million passages, ahead of English (28.8M) and
+Literary Chinese (20.7M).
+Plus **5,281,593 dictionary entries** across 956 dictionary
+shelves and **25.5 million gold lemma annotations** (a further
+36.2 million ride an honestly labelled silver tier). (All numbers in this
 README are read from the live catalog, never estimated.)
 
 ## Quickstart
