@@ -2114,7 +2114,7 @@ dprr:   # 02-sources row 310
   adopted: "2026-10-27"
   kind: module   # person authority — zero document rows, the cbdb shape
   axes: [classical]
-  wired: false   # until the first real sync is verified
+  wired: true    # FIRST SYNC VERIFIED 2026-11-08, exact: 21 docs / 1,359 passages / 28 rule skips, 0 errored
   sync_policy: manual
   # DPRR — Digital Prosopography of the Roman Republic (King's College
   # London; Mouritsen, Robb, Bradley): the Republican elite from
@@ -4502,7 +4502,7 @@ mnc-wikisource:   # P164, 02-sources row 397
   adapter: Nabu::Adapters::MncWikisource
   adopted: "2026-11-08"
   axes: [mongolic]
-  wired: false   # until the first real sync is verified
+  wired: true    # FIRST SYNC VERIFIED 2026-11-08, exact: 1 doc / 632 passages, 0 errored
   sync_policy: manual
   # The Manchu texts on Multilingual Wikisource (wikisource.org), Unicode
   # Manchu script and Möllendorff romanization — the provenance census
@@ -4524,7 +4524,7 @@ mongolic-pd:   # P164, 02-sources row 395
   adapter: Nabu::Adapters::MongolicPd
   adopted: "2026-11-08"
   axes: [mongolic]
-  wired: false   # until the first real sync is verified
+  wired: true    # FIRST SYNC VERIFIED 2026-11-08, exact: 15 docs / 7,358 passages, 0 errored
   sync_policy: manual
   # The PD Manchu–Mongolic–Oirat reference shelf as archive.org scans — 15
   # census items (13 works): Zakharov's Manchu-Russian dictionary (1875),
