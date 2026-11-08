@@ -64,6 +64,7 @@ A source wears every desk it serves — these 41 answer this desk. Holdings are 
 | `stationers-register` | texts | attribution | wired · manual | 10,453 docs / 26,047 passages |
 | `statutes-realm` | texts | open | wired · manual | 661 docs / 8,053 passages |
 | `ud` | treebank | nc | wired · manual | 83 docs / 329,980 passages |
+| `wellcome` | texts | open | not yet wired | not synced yet |
 | `wiktionary-dum` | dictionary | attribution | wired · manual | 2,342 entries |
 | `wiktionary-enm` | dictionary | attribution | wired · manual | 56,687 entries |
 | `wiktionary-gmh` | dictionary | attribution | wired · manual | 2,142 entries |

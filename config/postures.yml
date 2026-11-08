@@ -3533,3 +3533,28 @@ sources:
     script: {posture: implied, note: "Latin script; quotations in other scripts ride verbatim
         (Greek characters in 821 of the 3,654 members, Hebrew in 123, Cyrillic in 74 — the
         2026-11-08 census; the nl-rus titles among the last)"}
+  wellcome:   # P165
+    # kind machine-postured — kind_map.yml folds the catalogue's genre labels (the
+    # facet genre; open vocabulary: only ~a quarter of the cone carries one).
+    lect: {posture: identity, note: "each volume claims the FIRST code of the catalogue's
+        languages field (MARC 21) — lat 13,262 · eng 8,511 · fra 4,413 · deu 2,046 · ita 2,005 ·
+        spa 747 · nld 394 of the 31,883-volume cone (census 2026-11-08); 639-2/B codes map to
+        639-3 (fre→fra, ger→deu, dut→nld …); MARC gre (legacy all-periods Greek) on a ≤1799
+        print claims grc. Every code rides metadata languages. No date staging: the dates are
+        edition-class print years, which the staging law excludes by design. Declared coarse:
+        bilingual prints (1,773 cone volumes list ≥2 codes) claim their first; 285 cone volumes
+        carry no language field and claim und"}
+    dating: {posture: dated, note: "the catalogue's production-date labels → the print-year
+        envelope, class EDITION (:structured) — the print's date; the catalogue marks no
+        original-composition date, so none is claimed. Read: Arabic years 1450–2030, an 'i.e.'
+        correction alone, the CE bracket beside a Hijri year, Roman-numeral imprints
+        (M.DCC.XLV), decade/century marks ([188?], 17--). Unread, declared: French Republican
+        years without a CE bracket (An VI), '[date of publication not identified]' — those
+        volumes fall outside the census (no year, no era)"}
+    places: {posture: named, note: "the first production place label, brackets stripped, as
+        the catalogue transcribes the imprint (Latin and vernacular forms verbatim: Trajecti ad
+        Rhenum, Lugduni Batavorum, A Paris); every label rides metadata places; '[Place of
+        publication not identified]' / s.l. name none. No gazetteer join"}
+    script: {posture: implied, note: "the OCR's Latin type throughout; Greek passages in the
+        bilingual prints ride as the OCR read them (often as Latin-letter noise) — uncorrected
+        OCR, text_nature machine-ocr"}

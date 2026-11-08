@@ -58,6 +58,7 @@ A source wears every desk it serves — these 38 answer this desk. Holdings are 
 | `theatre-classique` | texts | nc | wired · manual | 1,939 docs / 1,601,085 passages |
 | `typikon-bible` | texts | attribution | wired · manual | 229 docs / 105,698 passages |
 | `ud` | treebank | nc | wired · manual | 83 docs / 329,980 passages |
+| `wellcome` | texts | open | not yet wired | not synced yet |
 | `wiktionary-ca` | dictionary | attribution | wired · manual | 198,685 entries |
 | `wiktionary-frm` | dictionary | attribution | wired · manual | 4,956 entries |
 | `wiktionary-fro` | dictionary | attribution | wired · manual | 9,280 entries |

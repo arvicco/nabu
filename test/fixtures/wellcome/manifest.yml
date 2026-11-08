@@ -1,0 +1,39 @@
+# Nabu fixture manifest (P5-4 "fixture sentinel"). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# Two zips are member trims and the snapshot is an 11-line cut (whole:
+# false), so adapter_test stays null.
+source: wellcome
+adapter_test: null
+retrieved: "2026-11-08"
+files:
+  - path: zips/b30773490.zip
+    url: https://api.wellcomecollection.org/text/v1/b30773490.zip
+    whole: true
+    trim: none
+  - path: zips/b33011564.zip
+    url: https://api.wellcomecollection.org/text/v1/b33011564.zip
+    whole: true
+    trim: none (the real 0-byte-member answer — the rejected-grain specimen)
+  - path: zips/b33275154.zip
+    url: https://api.wellcomecollection.org/text/v1/b33275154.zip
+    whole: false
+    trim: member b33275154_0001.txt cut to its first 6,499 characters at a space, re-zipped under the same
+      member name — README recipe
+  - path: zips/b30765808.zip
+    url: https://api.wellcomecollection.org/text/v1/b30765808.zip
+    whole: false
+    trim: member b30765808.txt cut to its first 5,999 characters at a space, re-zipped under the same member
+      name — README recipe
+  - path: works.json.gz
+    url: https://data.wellcomecollection.org/catalogue/v2/works.json.gz
+    whole: false
+    trim: 11 whole JSON lines of the 2026-11-08 snapshot (530 MB, 1,141,672 lines), re-gzipped — the works
+      named in the README
+  - path: census.tsv
+    refetchable: false
+    provenance: local-trim
+    reason: the adapter's own derivation of works.json.gz (Wellcome#derive_census!) — re-derive, never fetch
+    copied: "2026-11-08"
+    whole: true
+    trim: none
