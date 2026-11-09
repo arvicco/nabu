@@ -109,6 +109,8 @@ module Nabu
           "bim-sahcoba" => :structured, # the work's imprint year read from the stream's title
           #                               page, else its standard attribution (raw says which);
           #                               place = the title page's imprint town
+          "blbooks" => :structured, # the BL catalogue's print year (raw_date ranges widen it),
+          #                           class edition; place = the catalogued imprint place
           "br-wikisource" => :edition_year_text, # P140: the scan Index Year= print year
           #                                         (≤ 1900, the dated cone; date_class edition)
           "bu-ajami" => :structured, # P124-1: a typed source-reference year or a date the item
@@ -145,6 +147,9 @@ module Nabu
           "damos" => :period_label, # the Aegean ceramic-phase chronology ("LM IIIA2 or LM
           #   IIIB") through the ruled Aegean rows of period_bands.yml (every
           #   held label covered); the site/findspot place hash rides along
+          "dbnl" => :structured, # P165: the register's jaar — the transcribed witness's date (a
+          #                        manuscript or first print: no class; a later printing: class
+          #                        edition, or the header's first-print year as composition); no place
 
           "dharma-deccan" => :structured, # P118-2: Ollett's origDate + the Vengī metadata TSV;
           #                                 place = the origPlace placeName (findspot)
@@ -265,6 +270,9 @@ module Nabu
           #                               imprint rides "imprint" — no place claim
           "ms-wikisource" => :structured, # P120-3: the manuscript's stated date (header
           #                                 year= / Index Year=; "abad ke-N" a century)
+          "nb-no" => :structured, # P165: the item record's issued year (+ the untouched
+          #                         imprint date where it differs), class edition; place =
+          #                         the imprint place in the print's own form (Christianiae)
           "ndl-kotenseki" => :structured,
           "ninjal-textdb" => :structured, # each work page's Publication Date (1592/1593/1596,
           #                                 class edition); place = the title page's imprint
@@ -386,6 +394,8 @@ module Nabu
           #                       envelope (collection files carry per-passage years too)
           "vuk-danicic" => :structured, # P117-2: the translation era per testament
           #                               (NT 1847, OT 1865–1868), composition class
+          "wellcome" => :structured, # P165: the catalogue's production-date labels → the print
+          #                            year envelope (class edition); place = the first imprint place
           "zh-wikisource" => :dynasty_band
         }.freeze
 

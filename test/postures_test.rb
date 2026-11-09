@@ -179,7 +179,7 @@ class PosturesTest < Minitest::Test
   def test_the_lect_migration_kept_the_p59_4_census
     lect = postures.declarations.select { |d| d.layer == "lect" }
     by_posture = lect.group_by(&:posture).transform_values(&:size)
-    assert_equal 190, lect.size,
+    assert_equal 194, lect.size,
                  "the P59-4 declarations survive the move (61 at migration; itant retired P61-3," \
                  "oracc retired P62-2, etcsl/ccmh/freising/coptic-scriptorium retired P64-6, " \
                  "titus-avestan retired P66-1, osta+fornsvenska retired P77-r8, achemenet " \
@@ -426,7 +426,15 @@ class PosturesTest < Minitest::Test
                  "shiratori-shm ADDED P164 — identity, xng document + per-koma script-mix claims " \
                  "(jpn/lzh/zho/eng, all real anchors): 188→189; " \
                  "mnc-wikisource ADDED P164 — identity, bare mnc (script and romanization alike) " \
-                 "+ the works' lzh/zho Chinese layers: 189→190"
+                 "+ the works' lzh/zho Chinese layers: 189→190; " \
+                 "blbooks ADDED P165 — identity (Language_1 onto en/fr/lat/it/de/es/nl; bare by " \
+                 "the edition-class exclusion): 190→191; " \
+                 "dbnl ADDED P165 — identity, the header langUsage per title (nld/lat/fra…; Dutch " \
+                 "dated by 1500 claimed dum; nl carries no stages): 191→192; " \
+                 "nb-no ADDED P165 — codemap, the item record's own MARC codes (edition-class " \
+                 "prints never date-stage): 192→193; " \
+                 "wellcome ADDED P165 — identity, each volume's first MARC code mapped to 639-3 " \
+                 "(edition-class print years never stage): 193→194"
     # The epigraphic-belt registry package (merged + canonical-synced
     # 2026-10-18, the add-then-retire shape within one phase) retires both
     # P130 pendings, and the ociana-script rule + the ig-cyprus override
@@ -509,6 +517,12 @@ class PosturesTest < Minitest::Test
     # mnc/cmg/xwo in metadata object_language): 135→136.
     # shiratori-shm joins identity (xng, per-koma jpn/lzh/zho/eng): 136→137.
     # mnc-wikisource joins identity (bare mnc + the works' lzh/zho layers): 137→138.
-    assert_equal({ "dates" => 31, "codemap" => 21, "identity" => 138 }, by_posture)
+    # blbooks joins identity (bare codes deliberately: the only date is the print
+    # year, class edition, which the inference law excludes — the cone holds
+    # reprints and ancient texts beside first editions): 138→139.
+    # dbnl joins identity (langUsage nld/lat/fra…, dum by date; nl has no stages): 139→140.
+    # nb-no joins codemap (the record's MARC codes; edition-class prints never stage): 21→22.
+    # wellcome joins identity (the volume's first MARC code → 639-3): 140→141.
+    assert_equal({ "dates" => 31, "codemap" => 22, "identity" => 141 }, by_posture)
   end
 end

@@ -2255,3 +2255,56 @@ Kowalewski's three-volume Mongolian dictionary to Pozdneev's Kalmyk
 dictionary and Jülg's Siddhi-Kür — scanned pages with declared-OCR
 honesty, each volume claiming its prose language and naming the
 language it presents.
+
+## 8bi. The P165 arrivals — the mass-digitization wave, first leg
+
+**`blbooks`** — **2,497 documents / 230,206 passages**: the British
+Library's Digitised Books (the Microsoft digitisation, BL Labs JSONL
+release) at their pre-1800 cone — overwhelmingly English drama and
+verse, Elizabethan and Jacobean plays through Restoration comedy to
+the eighteenth century's odes, epistles and farces, with a small
+continental shelf from a Paris Plutarch of 1510 onward. Raw period
+OCR, declared as such (long s reads as f; every page carries the
+OCR's own confidence score): a searchable finding aid to the printed
+page, not an edition. CC0 metadata over Public Domain Mark texts.
+The 19th-century decades (ten more tarballs, ~47k books) remain
+upstream for later cones.
+
+**`dbnl`** — **3,653 documents / 950,870 passages**: the DBNL
+public-domain collection (KB, the national library of the
+Netherlands) — edited, hand-corrected transcriptions of Dutch and
+Flemish literature from the Hulthem manuscript's abele spelen
+(Esmoreit, Lanseloet van Denemerken) and the Dutch incunabula
+through the Golden Age (Hooft, Bredero, Vondel, Cats, Huygens,
+the emblem books) to the novels, periodicals and philology of the
+nineteenth century. Each title carries DBNL's dating of its
+witness, printing history, genre and authors with life dates, and
+is cited by printed page. Mostly Dutch with Latin, French and
+Middle Dutch shelves; public domain, offered "voor elk doel" —
+credit DBNL and the KB.
+
+**`nb-no`** — the Nasjonalbiblioteket (Norway) cone, opening: the
+national library's keyless per-page ALTO texts for public-domain
+books, taken at the declared cone — everything pre-1700 plus all
+years of Old Norse, Latin, Greek and the Sámi languages (1,910
+items / 530,042 pages censused; the paced crawl fills it slice by
+slice, oldest and rarest first). The first slice holds Verelius'
+Index linguae veteris Scytho-Scandicae (1691) and the 1733
+Íslendingabók. Library OCR, declared per book with its engine;
+explicit public-domain license ("selv for kommersielle formål").
+
+**`wellcome`** — the Wellcome Collection cone, opening: keyless
+per-volume OCR text over the catalogue-snapshot census — 31,883
+pre-1800 Public Domain Mark volumes censused (13,262 Latin), the
+paced crawl filling it Latin-first at the library's own requested
+rate of one request per thirty seconds. The first slice holds 43
+sixteenth-century Latin medical volumes. Passages are ~2,000-
+character segments, declared never-pages (upstream ships each
+volume's text as one unbroken line); raw OCR, declared. The
+medical canon of early modern Europe — fever tracts, herbals,
+anatomies — arrives here slice by slice.
+
+**`nb-no`, `wellcome`, `blbooks`, `dbnl`** together open the
+mass-digitization rail: national- and research-library OCR at
+declared cones, each with a resumable ledger, each honest about
+what OCR is.

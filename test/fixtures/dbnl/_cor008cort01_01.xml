@@ -1,0 +1,368 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE TEI.2 PUBLIC "-//DBNL//DTD TEI.2 XML//NL" "https://www.dbnl.org/xml/dtd/teixlite.dtd">
+<TEI.2>
+   <teiHeader>
+        <fileDesc>
+           <titleStmt>
+               <title type="main">Corte verhalinghe van de beeldtstormerye</title>
+               
+           </titleStmt>
+           <editionStmt>
+               <edition>
+                   Dit bestand biedt, behoudens een aantal hierna te noemen ingrepen, een diplomatische weergave van <hi rend="i">Corte verhalinghe van de beeldtstormerye</hi> uit 1566.
+               </edition>
+               <respStmt>
+                   <resp>
+                       <corr></corr>
+                   </resp>
+               </respStmt>
+           </editionStmt>
+           <extent><!-- aantal pagina's --></extent>
+           <publicationStmt>
+               <idno type="titelcode">_cor008cort01_01</idno>
+               <idno type="format">DBNL-TEI 1</idno>
+               <availability>
+                   <p>2019 dbnl</p>
+               </availability>
+           </publicationStmt>
+           <notesStmt>
+               <note></note>
+           </notesStmt>
+           <sourceDesc>
+               <bibl>
+                   <idno type="isbn"></idno>
+                   <idno type="usedcopy">eigen exemplaar dbnl</idno>
+               </bibl>
+               <p><hi rend="i">Corte verhalinghe van de beeldtstormerye</hi>. Gheraert Speelmans, Antwerpen 1566</p>
+               <p>&nbsp;</p>
+           </sourceDesc>
+       </fileDesc>
+       <encodingDesc>
+           <projectDesc>
+               <p>Wijze van coderen: standaard</p>
+               <p></p>
+           </projectDesc>
+       </encodingDesc>
+       <profileDesc>
+           <langUsage>
+               <language id="nl">Nederlands</language>
+           </langUsage>
+       </profileDesc>
+       <ebook>
+           <bibl>
+               <title type="main">Corte verhalinghe van de beeldtstormerye</title>
+               
+               <idno type="isbn"></idno>
+               <idno type="nur"></idno>
+               <imprint>
+                   <date></date>
+                   <publisher></publisher>
+                   <pubPlace></pubPlace>
+               </imprint>
+           </bibl>
+           <idno type="isbn"></idno>
+           <idno type="nur"></idno>
+           <availability>
+               <p></p>
+           </availability>
+           <order>
+               <price curr="euro"></price>
+               <link></link>
+           </order>
+           <blurb><p></p></blurb>
+           <titlepage><p></p></titlepage>
+           <colofon><p></p></colofon>
+       </ebook>
+       <pod>
+           <bibl>
+               <title type="main">Corte verhalinghe van de beeldtstormerye</title>
+               
+               <idno type="isbn"></idno>
+               <idno type="nur"></idno>
+               <imprint>
+                   <date></date>
+                   <publisher></publisher>
+                   <pubPlace></pubPlace>
+               </imprint>
+           </bibl>
+           <idno type="isbn"></idno>
+           <idno type="nur"></idno>
+           <availability>
+               <p></p>
+           </availability>
+           <order>
+               <price curr="euro"></price>
+               <link></link>
+           </order>
+           <blurb><p></p></blurb>
+           <titlepage><p></p></titlepage>
+           <colofon><p></p></colofon>
+       </pod>
+       <revisionDesc>
+           <change>
+               <date>2018-12-13</date>
+               <respStmt>
+                   <name type="person">RK</name>
+               </respStmt>
+               <item>colofon toegevoegd</item>
+           </change>
+       </revisionDesc>
+   </teiHeader>
+<text>
+<body>
+<div type="chapter">
+
+<cf><pb n="1"/>
+<p>§ Corte verhalinghe vande Beeldtstormerye,</p>
+<p>geschiet binnen dese Nederlanden,</p>
+<p>also Brabant, Vlaenderen, Hollant, ende</p>
+<p>Zeelant, ende int lant van Luydick,</p>
+<p>tot een eewige ende perpetuelle</p>
+<p>memorie der nacomelinghen.</p>
+<p>&nbsp;</p>
+<p>Gheapprobeert bi. M. A. Cunerum Petri,</p>
+<p>Postoor van. S. Peeters</p>
+<p>binnen Louen.</p>
+<p>&nbsp;</p>
+<p>Anno. M. D. L X V I.</p>
+<p>&nbsp;</p>
+<p>Caret omni heresi, quod ego Marcelius Broeghel, curatus Ecclesie Sancti Andreae Antvverpie<hi rend="i">n</hi>sis manu propria verificus, Marcelius Ioannes Broeghel.</p>
+<pb rend="blank" n="2"/></cf>
+<pb n="3"/>
+<lg type="poem">
+<l>Een cort beschrijf van datmen bedreef,</l>
+<l>In Hollant, Vlaenderen, en Brabant mede,</l>
+<l>In d'Oostmaent, alsmen .xv.c.lxvi. schreeft,</l>
+<l>In Kercken, in Cloosters, en menighe stede.</l>
+</lg>
+
+<div type="section">
+<head rend="h3">Die Autheur tot den Leser.</head>
+<lg type="poem">
+<l>Aensiet hier Leser d'iaer, maent, en dach</l>
+<l>Datmen sach die Religie staken</l>
+<l>Twelck was deerlick om sien o wee o wach</l>
+<l>En voor deuote herten een hart gheclach</l>
+<l>Die verlieten haer Cloosters en eygen daecke<hi rend="i">n</hi></l>
+<l>Daer si den Heer dienden in bidde<hi rend="i">n</hi> en waecken</l>
+<l>Naer Sheren beuel en Gods goet ingheuen</l>
+<l>Godt wilse vertroost van herten maecken</l>
+<l>En naemaels verleenen het eewich leuen.</l>
+</lg>
+</div></div>
+<div type="chapter">
+    <interpGrp><interp type="primair" value="ieper001"/>
+        <interp type="secundair" value="15660815"/></interpGrp>
+<head rend="h3">Yperen.</head>
+
+<lg type="poem">
+<l>Den vijfthiensten Oost op den dach van Onser vrouwen</l>
+<l>Sachmen Typeren die beelden in stucken houwe<hi rend="i">n</hi>.</l>
+</lg>
+</div>
+<div type="chapter">
+    <interpGrp><interp type="primair" value="antwe001"/>
+        <interp type="secundair" value="15660820"/></interpGrp>
+<head rend="h3">Antwerpen.</head>
+
+<lg type="poem">
+<l>Den .xx. Oochst zijn die beelden verfoyt</l>
+<l>Tantwerpen, en van die ketters verstroyt,</l>
+<l>En den .xvii. Octobris hebben si tselfste bestae<hi rend="i">n</hi></l>
+<l>Maer met sommighen ist qualick vergaen.</l>
+</lg>
+</div>
+<div type="chapter">
+    <interpGrp><interp type="primair" value="midde005"/>
+        <interp type="secundair" value="15660821"/></interpGrp>
+<head rend="h3">Middelborch.</head>
+
+<lg type="poem">
+<l>Te Middelborch mosten mans en vrouwen</l>
+<l>Den .xxi. Oost tselue aenschouwen.</l>
+</lg>
+
+
+</div>
+<div type="chapter">
+<interpGrp><interp type="primair" value="lier_001"/>
+    <interp type="secundair" value="15660821"/></interpGrp>
+    <pb n="4"/>
+<head rend="h3">Liere.</head>
+
+<lg type="poem">
+<l>Ten daeghe voorseydt te Lier ghebuerde</l>
+<l>Datmen die beelden haer cleederen scheurde.</l>
+</lg>
+</div>
+<div type="chapter">
+    <interpGrp><interp type="primair" value="delft001"/>
+        <interp type="secundair" value="15660824"/></interpGrp>
+<head rend="h3">Tot Delft</head>
+
+<lg type="poem">
+<l>Tgheschiede op sinte Bartholomeus dach.</l>
+<l>Datmen die Beelden tot Delft afworpe<hi rend="i">n</hi> sach.</l>
+</lg>
+</div>
+<div type="chapter">
+    <interpGrp><interp type="primair" value="leide001"/>
+        <interp type="secundair" value="15660822"/></interpGrp>
+<head rend="h3">Leyden.</head>
+
+<lg type="poem">
+<l>Te Leyden was die selue destructie swaer</l>
+<l>Den .xxii. Oochst daernaer.</l>
+</lg>
+</div>
+<div type="chapter">
+    <interpGrp><interp type="primair" value="gent_001"/>
+        <interp type="secundair" value="15660822"/></interpGrp>
+<head rend="h3">Ghendt.</head>
+
+<lg type="poem">
+<l>Te Ghent worde met kettersche practijcken</l>
+<l>Den .xxii. Oost ghedaen van ghelijcken.</l>
+</lg>
+</div>
+<div type="chapter">
+    <interpGrp><interp type="primair" value="meche001"/>
+        <interp type="secundair" value="15660822"/></interpGrp>
+<head rend="h3">Mechelen.</head>
+
+<lg type="poem">
+<l>Den .xxii. Oochst is tselue naer mijn bediet</l>
+<l>In sommighe<hi rend="i">n</hi> Kercken binnen Mechelen geschiet.</l>
+</lg>
+</div>
+<div type="chapter">
+    <interpGrp><interp type="primair" value="amste001"/>
+        <interp type="secundair" value="15660822"/></interpGrp>
+<head rend="h3">Amsterdam.</head>
+
+<lg type="poem">
+<l>Ten seluen daeghe als ick vernam</l>
+<l>Verstroidemen die beelden Tamsterdam.</l>
+</lg>
+</div>
+<div type="chapter">
+    <interpGrp><interp type="primair" value="shert001"/>
+        <interp type="secundair" value="15660824"/>
+        <interp type="secundair" value="15661010"/></interpGrp>
+<head rend="h3">Shertoghen Bossche.</head>
+
+<lg type="poem">
+<l>Den .xxiiii. Oochst wel ghetelt</l>
+
+<pb n="5"/>
+<l>Sijn die beelden Shertoghen Bosch gheuelt,</l>
+<l>En het selfste te doene ee<hi rend="i">n</hi> menichte gereet was</l>
+<l>Op den .x. Octobris wient lief oft leet was.</l>
+</lg>
+</div>
+<div type="chapter">
+    <interpGrp><interp type="primair" value="utrec001"/>
+        <interp type="secundair" value="15660824"/></interpGrp>
+<head rend="h3">Vtrecht.</head>
+
+<lg type="poem">
+<l>Tuytrecht sachment haer oock ghedooghen</l>
+<l>Ten voorscheuen dage voor allemans oogen.</l>
+</lg>
+</div>
+<div type="chapter">
+    <interpGrp><interp type="primair" value="doorn006"/>
+        <interp type="secundair" value="15660824"/></interpGrp>
+<head rend="h3">Dornick.</head>
+
+<lg type="poem">
+<l>Te Dornick op den xxiiii. dach voorsproken</l>
+<l>Heeft die Kettersche natie die beelden gebroke<hi rend="i">n</hi></l>
+</lg>
+</div>
+<div type="chapter">
+    <interpGrp>
+        <interp type="primair" value="frank01"/>
+        <interp type="secundair" value="15660824"/></interpGrp>
+<head rend="h3">Valenceen.</head>
+
+<lg type="poem">
+<l>Den .xxiiii. Oochst door der Ketters biesen</l>
+<l>Moesten te Valenceen die beelden haer plaetse verliesen.</l>
+</lg>
+</div>
+<div type="chapter">
+    <interpGrp><interp type="primair" value="hasse003"/>
+        <interp type="secundair" value="15660428"/></interpGrp>
+<head rend="h3">Hasselt.</head>
+
+<lg type="poem">
+<l>Hier in is Hasselt oock seer te beclaghen</l>
+<l>Mits hijse beleyt heeft en oock verwonnen</l>
+<l>Want een groote schade hebben si gheleden</l>
+<l>Om dat si nae den Bisschop niet en woude<hi rend="i">n</hi> vraghen</l>
+<l>Maer hebben met wapene<hi rend="i">n</hi> tegen hem gestreden.</l>
+<l>Dit hebben si gedaen thaerder grooter schaden</l>
+<l>Want haer doen niemant en stont staden</l>
+<l>Al en hebben zijer bey geen sy by gesponnen.</l>
+
+<pb n="6"/>
+<l>Den .xxviii. April als ick heb vernomen</l>
+<l>Is die Gouernandt, ten was niet te laet</l>
+<l>Binnen die Stadt van Antwerpen ghecomen</l>
+<l>Om te stellen die Kerck in haere<hi rend="i">n</hi> eerste<hi rend="i">n</hi> staet.</l>
+</lg>
+
+<lg type="poem">
+<l>In dandere palen vlecken en steden</l>
+<l>Ist oock meest aldus gheraeckt</l>
+<l>Dat alst dander waren ontgaen doutzeden</l>
+<l>Doutaren en beelden zijn hermaeckt,</l>
+<l>Die dit bestaen hadden en<hi rend="i">de</hi> wijf of mannen</l>
+<l>Hebbent seer deerlick moeten becoopen</l>
+<l>Want si worden gedoyt oft verbannen</l>
+<l>Diet niet en hebben connen ontloopen.</l>
+<l>Dit is den loon die daer naer volcht</l>
+<l>Overpeynst dit rijckelick ick bids v vrient</l>
+<l>V niet meer op Kercken oft Cloosters v<hi rend="i">er</hi>bolcht</l>
+<l>En versint altijt eer ghi beghint.</l>
+</lg>
+</div>
+<div type="chapter">
+<head rend="h3">Conclusie.</head>
+
+<lg type="poem">
+<l>Daer zijn noch veel steden, dorpen, iae landen</l>
+<l>Daer thaerder schanden tghelooue is vergaen</l>
+<l>Als inden Haghe en Gelderlant daer ketters met manden</l>
+<l>Die Beelden ghebroken hebben met haer eyghen handen</l>
+<l>Gelijck ooc te Weert hebben si tzelue gedaen</l>
+<l>Ghesedt haer ghetouwen en gheweuen saen</l>
+<l>Inden Tempel Gods tfy v der treecken</l>
+<l>Houdt op van tquaet naer Gods vermaen</l>
+<l>En peynst om den dach als thert sal breecken.</l>
+</lg>
+
+
+</div>
+<div type="chapter">
+    <pb n="7"/>
+<head rend="h3">Vertroostinghe der gheender die by bedwanck hebben moeten Godts dienst, en haer habijt v<hi rend="i">er</hi>laten.</head>
+
+<lg type="poem">
+<l>Deuote herten vol onghenoechten</l>
+<l>Die daer suchten, beuen en weenen</l>
+<l>Sijt blyde van herten en wilt niet duchten</l>
+<l>Al hoordy veel der Ketters gheruchten</l>
+<l>Sy zijn haest vernielt wilt vry sulcx meenen</l>
+<l>En Godt sal v te meer vruechde verleenen</l>
+<l>Ouermidts ghy zijn beproeuing passeert</l>
+<l>Haer natie sal hy haest vercleenen</l>
+<l>Die daer dryeuuldich in glorie regneert.</l>
+</lg>
+<cf><p>Gheprint Tantwerpen by Gheraert Speelmans.</p></cf>
+    <pb rend="blank" n="8"/>
+</div>
+</body>
+</text>
+</TEI.2>

@@ -6,7 +6,7 @@ compatibility: "Requires the nabu MCP server (`bin/nabu mcp`, read-only, stdio) 
 metadata:
   desk: classical
   origin: hand-tuned
-  sources: "aio analecta-hymnica cgpg corpus-corporum croala damos digiliblt diorisis dprr first1k-greek formulae-open glaux glt hypotactic ig-cyprus lasla lexica lila noscemus openmgh pedecerto perseus-greek perseus-latin proiel pta sigla suda-translations ud vulgate"
+  sources: "aio analecta-hymnica cgpg corpus-corporum croala damos digiliblt diorisis dprr first1k-greek formulae-open glaux glt hypotactic ig-cyprus lasla lexica lila noscemus openmgh pedecerto perseus-greek perseus-latin proiel pta sigla suda-translations ud vulgate wellcome"
 ---
 
 # The Classicist — the `classical` desk
@@ -52,6 +52,7 @@ verbatim upstream terms are in `docs/02-sources.md` of the Nabu repository.
 | `suda-translations` | Suda On Line — English translations of the Suda | nc |
 | `ud` | Universal Dependencies — ancient treebanks | nc |
 | `vulgate` | Biblia Sacra Vulgata Clementina (Tweedale/eBible.org, via open-bibles) | open |
+| `wellcome` | Wellcome Collection — digitised printed books, OCR full text (pre-1800 cone) | open |
 <!-- nabu:skill-sources:end -->
 
 ## What the shelves hold
