@@ -1145,10 +1145,16 @@ module Nabu
       CLARIFY_VOCAB_SQL = "CREATE VIRTUAL TABLE clarify_trigram_vocab USING fts5vocab(clarify_trigram, 'row')"
 
       # The one name fold both sides share: NFC → downcase → mark strip
-      # (Normalize's generic fold) → final sigma → collapsed whitespace.
+      # (Normalize's generic fold) → final sigma → the Latin ligatures æ/œ
+      # expanded to the digraphs a typist writes (the Vulgate's "Matthæus"
+      # answers "Matthaeus"; letters, not marks, so the mark strip leaves
+      # them) → collapsed whitespace. A change here re-folds the stored
+      # names: bump STAGE_VERSIONS["clarify"] with it.
       def clarify_fold(text)
-        Normalize.fold_diacritics(Normalize.nfc(text.to_s).downcase).tr("ς", "σ").gsub(/\s+/, " ").strip
+        Normalize.fold_diacritics(Normalize.nfc(text.to_s).downcase).tr("ς", "σ")
+                 .gsub(/[æœ]/, CLARIFY_LIGATURES).gsub(/\s+/, " ").strip
       end
+      CLARIFY_LIGATURES = { "æ" => "ae", "œ" => "oe" }.freeze
 
       # Derive the whole lane from +catalog+ (drop + recreate). +stamp+
       # advances the "clarify" stage stamp (the standalone/rake path; the
@@ -1499,7 +1505,9 @@ module Nabu
         "reflex" => "v1",
         # The clarify lane (nabu_clarify): an index stamped before it existed
         # reads stale here, so `--incremental` builds it standalone.
-        "clarify" => "v1",
+        # v2: clarify_fold expands æ/œ — names folded under v1 keep the
+        # ligature and miss the new query fold until re-derived.
+        "clarify" => "v2-ligatures",
         # The translations lane (Store::TranslationIndex): an index
         # stamped before it existed reads stale here, so `--incremental`
         # (or `rake index:translations`) builds it standalone.
