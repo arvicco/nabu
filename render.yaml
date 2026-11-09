@@ -19,7 +19,7 @@ services:
     name: nabu-demo
     runtime: image
     image:
-      url: ghcr.io/arvicco/nabu-demo:1.0.0
+      url: ghcr.io/arvicco/nabu-demo:1.8.0
     plan: free
     autoDeployTrigger: "off"
     autoDeploy: false

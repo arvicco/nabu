@@ -193,6 +193,57 @@ class SourceReadTest < Minitest::Test
     writer&.kill
   end
 
+  # -- gzip members ------------------------------------------------------------------
+
+  # A real gzipped upstream file (the wellcome catalogue-snapshot sample).
+  WELLCOME_GZ = File.expand_path("../fixtures/wellcome/works.json.gz", __dir__)
+
+  def test_a_real_gzip_file_reads_through_the_belt_as_its_gunzipped_text
+    text = Nabu::Adapters::SourceRead.utf8_gzip(WELLCOME_GZ, label: "src")
+
+    assert_equal Zlib.gunzip(File.binread(WELLCOME_GZ)).force_encoding(Encoding::UTF_8), text
+    assert_equal Encoding::UTF_8, text.encoding
+    assert text.valid_encoding?
+  end
+
+  def test_an_invalid_gzip_member_is_a_parse_error_naming_the_file
+    path = write("page.html.gz", Zlib.gzip(BROKEN))
+
+    error = assert_raises(Nabu::ParseError) { Nabu::Adapters::SourceRead.utf8_gzip(path, label: "src") }
+    assert_equal "src: #{path} is not valid UTF-8", error.message
+  end
+
+  def test_a_gzip_member_takes_the_same_opt_in_repair
+    path = write("page.html.gz", Zlib.gzip(SEVERED))
+
+    assert_raises(Nabu::ParseError) { Nabu::Adapters::SourceRead.utf8_gzip(path, label: "src") }
+    repaired = Nabu::Adapters::SourceRead.utf8_gzip(path, label: "src", repair: :severed_tags)
+    assert repaired.valid_encoding?
+  end
+
+  # Container defects stay the caller's to map (like ZipReader::Error).
+  def test_a_non_gzip_raises_zlibs_own_error
+    path = write("not.gz", "plain text, no gzip header")
+
+    assert_raises(Zlib::Error) { Nabu::Adapters::SourceRead.utf8_gzip(path, label: "src") }
+  end
+
+  def test_utf8_lines_streams_a_real_gzip_file_line_by_line
+    lines = Nabu::Adapters::SourceRead.utf8_lines(WELLCOME_GZ, label: "src", gzip: true).to_a
+
+    assert_equal Zlib.gunzip(File.binread(WELLCOME_GZ)).force_encoding(Encoding::UTF_8).lines, lines
+    assert(lines.all? { |line| line.encoding == Encoding::UTF_8 })
+  end
+
+  def test_an_invalid_gzip_line_is_a_parse_error_naming_file_and_line
+    path = write("rows.jsonl.gz", Zlib.gzip("ok\n#{BROKEN}\n".b))
+
+    error = assert_raises(Nabu::ParseError) do
+      Nabu::Adapters::SourceRead.utf8_lines(path, label: "src", gzip: true) { |_line| nil }
+    end
+    assert_match(/\Asrc: .*rows\.jsonl\.gz line 2 is not valid UTF-8\z/, error.message)
+  end
+
   private
 
   # A minimal spec-conformant STORED zip (method 0) — the container only;

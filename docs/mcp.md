@@ -53,7 +53,10 @@ corpus. What you register today is what that surface promises.
   ```
 - **A demo library for images** (`rake demo:build`, `Nabu::DemoBuild`):
   syncs a small open/attribution-only starter set (SBLGNT, Vulgate, World
-  English Bible, OSHB, LSJ + Lewis & Short, plus the core instruments) into
+  English Bible, OSHB, LSJ + Lewis & Short, the Achemenet Babylonian texts
+  — whose sync writes CDLI reference edges into the links journal — and
+  the Oracc Sign List, shipped as its two read-seam files, plus the core
+  instruments) into
   a self-contained directory (default `tmp/demo`) and refuses — before any
   network, and again on the built catalog — to bake anything non-servable.
   Point the server at it with `NABU_ROOT=<dir>
@@ -742,7 +745,7 @@ async def main():
     client = MultiServerMCPClient({
         "nabu": {
             "command": "docker",
-            "args": ["run", "-i", "--rm", "ghcr.io/arvicco/nabu-demo:1.0.0"],
+            "args": ["run", "-i", "--rm", "ghcr.io/arvicco/nabu-demo:1.8.0"],
             "transport": "stdio",
         }
     })
@@ -759,7 +762,7 @@ import asyncio
 from llama_index.tools.mcp import BasicMCPClient, McpToolSpec
 
 async def main():
-    client = BasicMCPClient("docker", args=["run", "-i", "--rm", "ghcr.io/arvicco/nabu-demo:1.0.0"])
+    client = BasicMCPClient("docker", args=["run", "-i", "--rm", "ghcr.io/arvicco/nabu-demo:1.8.0"])
     tools = await McpToolSpec(client=client).to_tool_list_async()  # FunctionTools
     print([tool.metadata.name for tool in tools])
 

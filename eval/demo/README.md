@@ -4,10 +4,11 @@
 baked into the public image `ghcr.io/arvicco/nabu-demo` (see the
 `Dockerfile` `demo` target and `Nabu::DemoBuild`): the SBL Greek New
 Testament, the Clementine Vulgate, the World English Bible, the Open
-Scriptures Hebrew Bible and the LSJ + Lewis & Short lexica — 223 documents,
-104,585 passages, 168,142 dictionary entries.
+Scriptures Hebrew Bible, the LSJ + Lewis & Short lexica, the Achemenet
+Babylonian texts and the Oracc Sign List — 2,997 documents, 107,359
+passages, 168,142 dictionary entries.
 
-Each of the 36 tasks pairs a natural-language question with:
+Each of the 42 tasks pairs a natural-language question with:
 
 - `answer` — the reference answer in words, for grading an agent;
 - `steps` — the reference MCP tool calls (`tool` + `args`);
