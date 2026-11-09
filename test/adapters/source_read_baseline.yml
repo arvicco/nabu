@@ -37,6 +37,8 @@ bfm.rb:
   reads: 1
 bilara_json_parser.rb:
   reads: 1
+blbooks.rb:
+  reads: 1   # the gzipped book's bytes (the vakk gz mold); decoded through SourceRead.utf8
 bosworth_csv_parser.rb:
   reads: 1
 bu_ajami_item_parser.rb:
@@ -260,6 +262,8 @@ mvp.rb:
   reads: 1
 mw.rb:
   reads: 1
+nb_no.rb:            # P165: the one gzip-ALTO byte read (the belt has no gzip reader;
+  reads: 1           # the bytes pass SourceRead.utf8 straight after the gunzip)
 ndl_kotenseki.rb:
   reads: 7
 ndl_search_bib.rb:
@@ -451,6 +455,8 @@ vienna_wiki.rb:
   reads: 1
 viet_wikisource.rb:
   reads: 2
+wellcome.rb:
+  reads: 1
 westoldturkic.rb:
   reads: 2
 wiktionary_jsonl_parser.rb:

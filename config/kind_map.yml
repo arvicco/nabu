@@ -205,6 +205,53 @@ sources:
     #  grain) sits in the residuum documents, which carry no genre facet: the residuum
     #  mixes apparatus with rescans and uncarved text, so a paratext claim is an adapter
     #  question, not a fold line.
+  blbooks:            # the BL catalogue title's form noun, cut to ONE head at parse time
+    #                   (Adapters::BlbooksTitleGenre — the cgpg precedent: upstream carries no
+    #                   genre field, the title IS the label; the main title's earliest form word
+    #                   wins, else the cataloguer's bracketed gloss: "[in five acts …]" → Play,
+    #                   "[In verse.]" → Verse). Counts = books, the pre-1800 cone through the
+    #                   adapter (census 2026-11-08, 2,498 titles): 2,090 carry a head, 408 none
+    #                   (no claim — the facet is absent). The cone is the BL's literature
+    #                   digitisation: plays and verse dominate.
+    facet: genre
+    map:
+      # -- written for performance (the print of a play or libretto is still the play)
+      "Comedy": literary/drama                   # 320 — Comedie/Comœdie/Comoedie spellings included
+      "Tragedy": literary/drama                  # 256 — Tragedie/Tragædie/Tragaedie
+      "Play": literary/drama                     # 166 — "acted by …", "[in five acts …]", play(s), drama,
+      #                                            dramatic piece/romance
+      "Opera": literary/drama                    # 49 — the libretto as printed for the house
+      "Farce": literary/drama                    # 44
+      "Tragicomedy": literary/drama              # 37
+      "Entertainment": literary/drama            # 19 — musical/dramatic/comic entertainments only
+      #                                            (a bare "Royal Entertainments" never heads)
+      "Masque": literary/drama                   # 11
+      "Interlude": literary/drama                # 7
+      "Burletta": literary/drama                 # 6
+      "Oratorio": literary/drama                 # 6 — the word-book of a sung drama
+      # -- verse as verse
+      "Poem": literary/poetry                    # 681 — poem(s)/poema, poetical/poeticall, poetry, verses,
+      #                                            canto, monody, idyl, eclogue
+      "Ode": literary/poetry                     # 81
+      "Verse": literary/poetry                   # 70 — the cataloguer's "[In verse.]" and nothing else
+      "Song": literary/poetry                    # 36 — song collections, the lyric as printed
+      "Elegy": literary/poetry                   # 27 — the verse elegy (a funeral sermon never heads Elegy)
+      "Ballad": literary/poetry                  # 14
+      "Sonnet": literary/poetry                  # 3
+      "Epigram": literary/poetry                 # 3
+      "Hymn": hymn-prayer/hymn                   # 4 — Defoe's Hymn to Victory, the Nativity hymns
+      # -- address, story, argument
+      "Epistle": letter/literary                 # 78 — the verse/heroic epistle and the printed
+      #                                            open epistle: a letter in literary form
+      "Letter": letter                           # 38 — printed letters, "A letter [in verse] to …"
+      "Tale": literary/narrative                 # 44 — tales in verse and prose
+      "Novel": literary/narrative                # 3
+      "Essay": literary/essay                    # 34 — Pope's Essay on Criticism/Man included: the
+      #                                            essay is the claim, the verse rides the text
+      "Sermon": sermon                           # 3
+    # -- unmapped by design (50 documents): "Satire" — the title says satire, not whether
+    #    in verse (Oldham, the Tory satyrs) or prose; the bare head waits for a ruling
+    #    rather than forcing literary/poetry.
   cantus:             # the chant record's genre — upstream's own abbreviation list
     #                   (cantusdatabase.org/genres/), the facet value = upstream's genre NAME,
     #                   the code raw (CantusCsvParser::GENRES). Counts = the 17-source sample
@@ -612,6 +659,67 @@ sources:
         carries the form; no claim to fold"
       "Translation": "a status, not a form — the translated work's genre rides beside it
         (Translation, Didactic poem)"
+  wellcome:           # P165 — the catalogue's genre/form labels (LCGFT-style headings, often
+    #                   subdivided by place and period: "Academic dissertations - Germany - Halle
+    #                   - 18th cent"), folded by PREFIX on the head term. Counts = cone volumes
+    #                   (≤1799, census 2026-11-08): 7,799 of 31,884 carry any genre. OPEN
+    #                   vocabulary — the catalogue's genre field is a subject-heading-like list,
+    #                   so the long tail and the carrier/format labels mint nothing. The
+    #                   collection is a medical-historical library, so the learned forms fold to
+    #                   scholarly (the noscemus folds), recipe books to scholarly/recipe.
+    facet: genre
+    vocabulary: open
+    prefix_map:
+      "Academic dissertations": scholarly        # 3,757 — the inaugural disputation/thesis of
+      #                                            the medical faculties (Leiden, Halle, Edinburgh …)
+      "Academic Dissertation": scholarly         # 2 — the same heading, upstream's case variant
+      "Academic theses": scholarly               # 2
+      "Academic addresses": oratory              # 3 — the rector's/professor's oration
+      "Pharmacopoeias": scholarly/recipe         # 171 — the official book of compound recipes
+      "Medical formularies": scholarly/recipe    # 16
+      "Cookbooks": scholarly/recipe              # 11
+      "Case studies": scholarly/medicine         # 31 — observationes, the clinical case report
+      "Herbals": scholarly/medicine              # 15 — the materia medica of plants
+      "Anatomical atlases": scholarly/medicine   # 6
+      "Dictionaries": lexical                    # 56 + 28 "Dictionaries, Medical"
+      "Glossaries": lexical/glossary             # 4
+      "Grammars": lexical/grammar                # 6
+      "Bibliographies": scholarly                # 22 — the learned catalogue (noscemus fold)
+      "Manuals (Handbooks)": scholarly           # 18
+      "Tables (Systematic lists)": scholarly     # 18 — the noscemus "Tables and charts" fold
+      "Textbooks": scholarly                     # 3
+      "Encyclopedias": scholarly                 # 5
+      "Lectures": scholarly                      # 9 — the published course of lectures
+      "Commentaries": scholarly/commentary       # 2
+      "Travel literature": literary/diary/travelogue       # 88
+      "Exploration literature": literary/diary/travelogue  # 9
+      "Memoirs": literary/diary/memoir           # 5
+      "Autobiographies": literary/diary/memoir   # 2
+      "Biographies": historiography              # 17 — the noscemus vita fold
+      "Local histories": historiography          # 3
+      "Poems": literary/poetry                   # 28
+      "Satires": literary                        # 16 — verse and prose satire alike
+      "Essays": literary/essay                   # 12
+      "Fiction": literary/narrative              # 2
+      "Novels": literary/narrative/novel         # 1
+      "Letters": letter                          # 15
+      "Sermons": sermon                          # 45
+      "Funeral sermons": sermon/funeral-sermon   # 5
+      "Prayers": hymn-prayer/prayer              # 14
+      "Novenas": hymn-prayer/prayer              # 23 — the nine-day devotion's prayers (the
+      #                                            Mexican imprints)
+      "Regulations": legal/law                   # 27
+      "Laws": legal/law                          # 9
+      "Proclamations": legal/law                 # 23 — the promulgated royal/civic ordinance
+      "Charters": legal                          # 1
+      "Trial proceedings": legal/court           # 9
+      "Addresses": oratory                       # 22
+    deliberate:
+      "Electronic books": "a carrier label (2,751), not a form"
+      "Incunabula": "a printing-period label (270) — the date axis already says it"
+      "Collected works": "an edition shape (102), the works inside carry their own forms"
+      "Illustrated works": "a physical feature (32), not a form"
+      "Popular works": "an audience label (37), not a form"
   tlhdig:             # Laroche CTH ranges ARE the genres (23,486 docs)
     facet: cth
     range_map:
@@ -1618,6 +1726,44 @@ sources:
       "NDC 779": "modern NDC subject shelving (vaudeville), not genre"
       "NDC 786": "modern NDC subject shelving (outdoor pursuits), not genre"
       "NDC 787": "modern NDC subject shelving (fishing), not genre"
+  nb-no:              # P165 — the item record's subject.genres (NB's Norwegian genre
+    #                   headings, verbatim). Census 2026-11-08: an 80-item random sample of
+    #                   the 1,910-item cone — 63 records carry a subject block, ~25 a genre
+    #                   heading; the counts below are that sample's. The headings mix FORM
+    #                   with topic, so the vocabulary is open: an unruled heading mints
+    #                   nothing (counted uncovered), never a guess. The full vocabulary lands
+    #                   with the crawl (`nabu kind census --uncovered nb-no`).
+    facet: genre
+    vocabulary: open
+    map:
+      "Likprekener": sermon/funeral-sermon      # 3 — funeral sermons, the commonest pre-1700 print
+      "Ordbøker": lexical/word-list             # 3 — dictionaries
+      "Krøniker": historiography/chronicle      # 2 — chronicles
+      "Lærebøker": school                       # 2 — textbooks
+      "ABC-bøker": school                       # 1 — primers (Stockfleth's 1837 Sámi ABC)
+      "Lesebøker": school                       # 1 — readers
+      "Sagaer": literary/narrative              # 2 — the sagas as told prose (the saga editions
+      #                                            of the non arm)
+      "Skillingsviser": literary/poetry         # 2 — broadside ballads
+      "Sanger": literary/poetry                 # 1 — songs
+      "Forordninger": legal/law                 # 1 — royal ordinances
+      "Forskrifter": legal/law                  # 1 — regulations
+      "Lovsamling": legal/law                   # 1 — law collections
+      "Breviarium": ritual/liturgy              # 1 — the breviary, the office as performed
+      "Bibelkommentarer": exegesis              # 1 — Bible commentaries
+      "Auksjonskataloger": administrative/list  # 1 — auction catalogues: lists of lots
+      "Bibliotekkataloger": administrative/list # 1 — library catalogues: lists of books
+      "Hyldningsskrift": honorific              # 1 — homage prints for a ruler or patron
+    deliberate:
+      "Leilighetstrykk": "occasional print — a print OCCASION (wedding, funeral, accession),
+        not a genre; the piece's form (verse, sermon, oration) is the kind"
+      "Kildeskrifter": "source edition — an editorial class (an edited primary source), not
+        the genre of the text edited"
+      "Oppbyggelig litteratur": "edifying literature — devotional reading spanning prayer,
+        meditation, sermon and catechesis; no one house class holds it"
+      "Avhandlinger": "dissertation/treatise — an academic FORM, its subject any discipline"
+      "Almanakker": "almanac — calendar, astronomy, prognostication and household lore in one
+        annual; no one house class holds it"
   ndl-kotenseki:      # the NDL Search bib join's NDC codes (dc:subject NDC, verbatim:
     facet: ndc        # "813.2", "291.36", "221"). Census 2026-10-19, 500 random held
     #                   PIDs: 33 carry an NDC (6.6% → ~2.6k of 38.7k books), 26 of them
@@ -2917,3 +3063,24 @@ sources:
       "charta allocationis": legal               # 1
       "charta beneficii": legal                  # 1 — benefice grant
       "charta adfiliationis": legal              # 1 — adoption
+  dbnl:               # P165 — the DBNL register's genre column (titels_pd.csv), 1–4 values per
+    facet: genre      # title, projected as the genre facet (facet_map.yml). DBNL's own seven-value
+    #                   vocabulary, every value covered; counts = documents carrying the value,
+    #                   census through the adapter over the whole 2026-11-04 zip (3,653 docs).
+    map:
+      "poëzie": literary/poetry                  # 1,677 — verse of every kind: lyric, songbooks, emblem
+      #                                            verse, epic and narrative verse, the Middle Dutch rhymed romances
+      "drama": literary/drama                    # 292 — plays: the abele spelen and sotternieën, rederijker
+      #                                            plays, tragedies and comedies, 19th-century stage works
+      "proza": literary                          # 799 — DBNL's literary prose: novels and tales above all, but also
+      #   medieval prose romances, devotional prose and the incunable histories — no narrative claim
+      #   holds across the label, so the bare head (deliberately coarse)
+      "jeugdliteratuur": literary                # 374 — children's literature: an audience, not a form; the
+      #   form rides the title's other value when DBNL gives one (poëzie/proza), the bare head here
+      "sec - letterkunde": scholarly             # 424 — secondary literature on literature: literary history,
+      #   criticism, editors' studies — the learned discipline, the nearest ruled head
+      "sec - taalkunde": lexical                 # 299 — secondary literature on language: grammars,
+      #   dictionaries, spelling and dialect treatises — words about words
+    deliberate:
+      "non-fictie": "DBNL's catch-all for everything outside literature (history, religion, travel, natural
+        science, law, letters) — a negative label, not a genre claim (750)"

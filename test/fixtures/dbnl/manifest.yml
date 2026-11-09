@@ -1,0 +1,59 @@
+# Nabu fixture manifest (P5-4 "fixture sentinel"). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# Every entry is a member of DBNL's xml_pd.zip (or a trim of the register):
+# no per-title URL may be fetched (dbnl.org robots "Disallow: /"; the terms
+# forbid bulk per-title download), so nothing here is refetchable by a raw
+# GET — re-cut from one download of the zip per the README recipe.
+source: dbnl
+adapter_test: null
+files:
+- path: _rub001rubb01_01.xml
+  refetchable: false
+  provenance: local-trim
+  reason: member of https://www.dbnl.org/letterkunde/pd/xml_pd.zip (2026-11-04 build) — per-title URLs are robots-disallowed; re-cut with `unzip -p xml_pd.zip _rub001rubb01_01.xml`
+  copied: "2026-11-08"
+  whole: true
+  trim: none
+- path: _cor008cort01_01.xml
+  refetchable: false
+  provenance: local-trim
+  reason: member of https://www.dbnl.org/letterkunde/pd/xml_pd.zip (2026-11-04 build) — per-title URLs are robots-disallowed; re-cut with `unzip -p xml_pd.zip _cor008cort01_01.xml`
+  copied: "2026-11-08"
+  whole: true
+  trim: none
+- path: dous003adia01_01.xml
+  refetchable: false
+  provenance: local-trim
+  reason: member of https://www.dbnl.org/letterkunde/pd/xml_pd.zip (2026-11-04 build) — per-title URLs are robots-disallowed; re-cut with `unzip -p xml_pd.zip dous003adia01_01.xml`
+  copied: "2026-11-08"
+  whole: true
+  trim: none
+- path: _ges002gesc01_01.xml
+  refetchable: false
+  provenance: local-trim
+  reason: member of https://www.dbnl.org/letterkunde/pd/xml_pd.zip (2026-11-04 build) — per-title URLs are robots-disallowed; re-cut with `unzip -p xml_pd.zip _ges002gesc01_01.xml`
+  copied: "2026-11-08"
+  whole: true
+  trim: none
+- path: vaen001embl01_01.xml
+  refetchable: false
+  provenance: local-trim
+  reason: trimmed member of https://www.dbnl.org/letterkunde/pd/xml_pd.zip (2026-11-04 build) — per-title URLs are robots-disallowed
+  copied: "2026-11-08"
+  whole: false
+  trim: lines 1-95 + 264-305 of the member, closed with </div></body></text></TEI.2> (README)
+- path: will028lala01_01.xml
+  refetchable: false
+  provenance: local-trim
+  reason: trimmed member of https://www.dbnl.org/letterkunde/pd/xml_pd.zip (2026-11-04 build) — per-title URLs are robots-disallowed
+  copied: "2026-11-08"
+  whole: false
+  trim: lines 1-213 + 246-283 of the member, closed with </div></div></body></text></TEI.2> (README)
+- path: metadata/titels_pd.csv
+  refetchable: false
+  provenance: local-trim
+  reason: trim of https://www.dbnl.org/extern/titels_pd.php (the full register is 2.7 MB) — re-cut per the README recipe
+  copied: "2026-11-08"
+  whole: false
+  trim: the two header lines + every row of the six fixture titles and of hade002jvan01 (register-only)

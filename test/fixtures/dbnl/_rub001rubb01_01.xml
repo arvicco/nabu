@@ -1,0 +1,429 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE TEI.2 PUBLIC "-//DBNL//DTD TEI.2 XML//NL" "https://www.dbnl.org/xml/dtd/teixlite.dtd">
+<TEI.2>
+  <teiHeader> 
+	 <fileDesc><titleStmt> 
+		  <title type="main">Rubben</title> 
+		  <editor>editie P. Leendertz jr.</editor> 
+	 	<funder>logo_inl__01</funder>	
+		</titleStmt><editionStmt> 
+		  <p>GEBRUIKT EXEMPLAAR</p> 
+		  <p>Voor de digitale editie van <hi rend="i">Rubben</hi> in de dbnl is gebruik
+			 gemaakt van de <hi rend="i">Cd-rom Middelnederlands</hi> die in 1998 werd uitgebracht door
+			 het Instituut voor Nederlandse Lexicologie.</p> 
+		  <p> </p> 
+		  <p>ALGEMENE OPMERKINGEN</p> 
+		  <p>De tekst op de <hi rend="i">Cd-rom Middelnederlands</hi> berust op de uitgave:
+			 </p> 
+		  <p>P. Leendertz jr., <hi rend="i">Middelnederlandsche dramatische
+			 poëzie.</hi> Leiden 1897 (Bibliotheek van Middelnederlandsche Letterkunde),
+			 p. 152-159.</p> 
+		  <p>Op de cd-rom is ook de paginering opgenomen van de uitgave uit 1897; deze paginaverwijzingen zijn hier achterwege gelaten. Wel zijn de
+			 verwijzingen naar de foliumnummers en de kolommen in het oorspronkelijke
+			 handschrift hier overgenomen.</p> 
+		  <p>Op de <hi rend="i">Cd-rom Middelnederlands</hi> wordt de volgende beschrijving
+			 gegeven van de oorspronkelijke bron:</p> 
+		  <p> </p> 
+		  <p>‘Bron: Brussel, Koninklijke Bibliotheek, 15589-623</p> 
+		  <p>Datum: 1400-1420</p> 
+		  <p>Omvang: 245 verzen </p> 
+		  <p>Opm.: De codex staat bekend als het Hulthemse handschrift. Hij bevat
+			 in totaal 241 bladen (oorspronkelijk 250 of meer) en per bladzijde 2 kolommen
+			 van 46-47 regels. <hi rend="i">Rubben</hi>, een van de zes sotternieën in dit
+			 handschrift, bevindt zich op fol. 239vb-241vb. De andere vijf sotternieën
+			 zijn: <hi rend="i">Lippijn</hi> (fol. 178rb-180ra), de <hi rend="i">Buskenblazer</hi> (fol.
+			 221rb-223rb), de <hi rend="i">Hexe</hi> (fol. 230ra-230vb), <hi rend="i">Drie daghe here</hi> (fol.
+			 231vb-234vb; slot ontbreekt) en <hi rend="i">Truwanten</hi> (fol. 235ra-235va; begin
+			 ontbreekt). Daarnaast komen in het handschrift ook vier abele spelen voor:
+			 <hi rend="i">Esmoreit</hi> (fol. 170vb-178rb), <hi rend="i">Gloriant</hi> (fol. 213ra-221rb),
+			 <hi rend="i">Lanseloet van Denemerken</hi> (fol. 223rb-230ra) en <hi rend="i">Vanden winter ende
+			 vanden somer</hi> (fol. 235va-239vb). Voorts bevat de codex o.a. (excerpten uit)
+			 de volgende teksten: de <hi rend="i">Brandaen</hi> (fol. 1ra-10ra), de <hi rend="i">Borch van
+			 Vroudenrijc</hi> (fol. 51vb-52vb), de <hi rend="i">Korte kroniek van Brabant</hi> (<hi rend="i">korte
+			 versie 1</hi>) (fol. 82vb-84va), de <hi rend="i">Historie van Troyen
+			 </hi>(fol.118rb-136va), <hi rend="i">Borchgravinne van Vergi</hi> (<hi rend="i">1</hi>) (fol.
+			 158va-164vb), <hi rend="i">Vander rijcheit ende vander doot</hi> (fol. 182va-183ra),
+			 <hi rend="i">Theophilus</hi> (fol. 196va-206va).</p> 
+		  <p>Status: kritisch</p> 
+		  <p>MNW-nr: 377.10 </p> 
+		  <p>Opm.: De opmerkingen, aantekeningen en andere lezingen die aan de
+			 voet van de bladzijde vermeld staan, zijn hier niet overgenomen. Wel in de
+			 tekst verwerkt zijn de lezingen die genoemd worden in de lijst “Verbeteringen
+			 en toevoegsels” (pag. 693-696).’</p> 
+		  <p> </p> 
+		  <p>REDACTIONELE INGREPEN</p> 
+		  <p>geen</p> 
+		  <p> </p> 
+		</editionStmt><publicationStmt> 
+		  <availability> 
+			 <p>2001 DBNL </p> 
+			 <p> </p> 
+		  </availability> 
+		  <idno>_rub001rubb01_01</idno> 
+		</publicationStmt><sourceDesc> 
+		  <p>‘Rubben’ In: Instituut voor Nederlandse Lexicologie
+			 (samenstelling en redactie), <hi rend="i">Cd-rom Middelnederlands</hi>. Sdu
+			 Uitgevers/Standaard Uitgeverij, Den Haag/Antwerpen 1998.</p> 
+		  <p> </p> 
+		</sourceDesc></fileDesc> 
+	 <encodingDesc> 
+		<p>DBNL-TEI 1</p> 
+	 </encodingDesc> 
+	 <revisionDesc> 
+		<change> 
+		  <date>2001-06-12</date> 
+		  <respStmt> 
+			 <name type="person">IH</name> 
+		  </respStmt> 
+		  <item>colofon toegevoegd</item> 
+		</change> 
+	 	<change> 
+	 		<date>2006-08-25</date> 
+	 		<respStmt> 
+	 			<name type="person">CB</name> 
+	 		</respStmt> 
+	 		<item>conversie van het bestand naar teixlite</item> 
+	 	</change> 
+	 </revisionDesc> 
+  </teiHeader> 
+	<text><interpGrp><interp type="editeur" value="leen006"/><interp type="primair" value="_abe001"/>
+		<interp type="primair" value="_abe001abel01"/><interp type="primair" value="_rub001rubb01"/></interpGrp>  
+	 <body> 
+		<div type="act"> <pb ed="fol." n="239vb"/>
+			<head rend="h3">Rubben. <lb/>Hier beghint die sotternie.</head> 
+		  <div type="scene"> 
+			 <sp><speaker>Rubben.</speaker> 
+				<l>Ay boy, nu es mi wel becant</l> 
+				<l>Ende daer toe benicx wel vroet,</l> 
+				<l>Dat die meneghe met haesten doet,</l> 
+				<l>Dat hem namaels sere berout.</l><pb ed="fol." n="240ra"/> 
+				<l n="5">Ic ben hier selve en hebbe een
+				  jonc wijf getrout;</l> 
+				<l>Dies es omtrent drie maent leden dat icse nam,</l> 
+				<l>Ende gister navont doen ic thuusweert quam,</l> 
+				<l>Was si van enen kinde genesen.</l> 
+				<l>Ende ic hebbe dicwile horen lesen,</l> 
+				<l n="10">Dat ment neghen maent plecht te dragen;</l> 
+				<l>Nochtan segghen si alle diet saghen,</l> 
+				<l>Dat hem en ghebrac dach noch ure,</l> 
+				<l>Ende es voldraghen, een scoen creature,</l> 
+				<l>Ende alle sijn ledekijn wel ghemaect,</l> 
+				<l n="15">Naghelken, teelken, ende al wel geraect.</l> 
+				<l>Es dit binnen drie maenden al ghesciet?</l> 
+				<l>Alle die leven en seiden mi niet,</l> 
+				<l>Dat ic dat kijnt hebbe ghewonnen.</l> 
+				<l>Si moets emmer hebben begonnen</l> 
+				<l n="20">Langhe te voren eer icse nam.</l> 
+				<l>Die duvel hebts deel, dat icker noit an quam!</l> 
+				<l>Maer haer moeder en liet mi niet met ghemake.</l> 
+				<l>Bi gode, si wijst wel vander dochter sake</l> 
+				<l>Bat dan ic dede, dat wetic wel voerwaer.</l> 
+			 </sp> 
+			 <sp><speaker>Dwijf.</speaker> 
+				<l n="25">Wat, Rubben, en sidi daer?</l> 
+				<l>Nu segt mi, hoet met mijnder dochter steet.</l> 
+			 </sp> 
+			 <sp><speaker>Rubben.</speaker> 
+				<l>Ewaerheit, vrouwe, ic en weet.</l> 
+				<l>U dochter es van kinde gelegen</l> 
+				<l>Ende heeft bracht enen jongen degen,</l> 
+				<l n="30">Al waer hi een haelf jaer out.</l> 
+			 </sp> 
+			 <sp><speaker>Dwijf.</speaker> 
+				<l>Dies hebbe god danc menichfout,</l> 
+				<l>Dat si dat nu heeft leden.</l> 
+			 </sp> 
+			 <sp><speaker>Rubben.</speaker> 
+				<l>Ic en beens niet wel te vreden,</l> 
+				<l>Dat si haer soe sere heeft ghehaest.</l> 
+				<l n="35">Ic sta van herten soe beraest,</l> 
+				<l>Dat ic en weet wat viseren.</l> 
+			 </sp> 
+			 <sp><speaker>Dwijf.</speaker><pb ed="fol." n="240rb"/> 
+				<l>Hoe ende in wat manieren?</l> 
+				<l>Vertrect mi coenlijc uwen staet.</l> 
+				<l>Ic sal u gheven selken raet,</l> 
+				<l n="40">Ghi seles wel in vreden bliven.</l> 
+			 </sp> 
+			 <sp><speaker>Rubben.</speaker> 
+				<l>Ewaerheit, al soude men mi ontliven,</l> 
+				<l>Ic en mochte niet meer sijn tonvreden;</l> 
+				<l>Want dies es op den dach van heden</l> 
+				<l>Drie maent, dat ic uwer dochter nam</l> 
+				<l n="45">Ende ierst in haer gheselscap quam,</l> 
+				<l>Ende omtrent vijf nacht,</l> 
+				<l>Ende heeft nu een kint ter werelt bracht,</l> 
+				<l>Al waert out een haelf jaer.</l> 
+				<l>Hem en ghebrect niet alsoe vele als een haer</l> 
+				<l n="50">Ochte naghel aen vingher of aen tee;</l> 
+				<l>Het es ghedragen min of mee</l> 
+				<l>Neghen maent al uut en uut.</l> 
+				<l>Ic deert wel segghen overluut,</l> 
+				<l>Dat ic dat kint noit en wan.</l> 
+			 </sp> 
+			 <sp><speaker>Dwijf.</speaker> 
+				<l n="55">Keren, nu hoert met desen man!</l> 
+				<l>Entrouwen, ghi sijt emmer verdoert!</l> 
+			 </sp> 
+			 <sp><speaker>Rubben.</speaker> 
+				<l>Ic en ben druncken noch versmoert,</l> 
+				<l>Ic weet herde wel wat ic segghe.</l> 
+				<l>Als ic een op twee legghe,</l> 
+				<l n="60">Soe eest drie, ende vijf nacht.</l> 
+			 </sp> 
+			 <sp><speaker>Dwijf.</speaker> 
+				<l>Liefkint, ghi sijt qualijc bedacht,</l> 
+				<l>Dien tijt hebdi qualijc onthouden.</l> 
+				<l>Ghi waert wel weert, dat ghi waert bescouden,</l> 
+				<l>Dat ghi van uwen wive wilt spreken lachter.</l> 
+				<l n="65">Drie maent vore ende drie maent achter</l> 
+				<l>Ende drie maent in die midden gestelt,</l> 
+				<l>Dits emmer neghen te gader getelt,</l> 
+				<l>Want dat wetic wel bi saken.</l> 
+			 </sp> 
+			 <sp><speaker>Rubben.</speaker><pb ed="fol." n="240va"/> 
+				<l>Condijs mi dies vroet ghemaken,</l> 
+				<l n="70">Ic wille, dat ghi mi Hughe heet,</l> 
+				<l>Want ic weet soe goeden bescheet</l> 
+				<l>Van eenre coe, die ic doe vercocht,</l> 
+				<l>Daer was mi gister navont tgelt af brocht,</l> 
+				<l>Ende doense die man copen soude,</l> 
+				<l n="75">Bat hi, dat icse hem borgen woude;</l> 
+				<l>Drie maent was sijn ondersprect.</l> 
+				<l>Wat waendi, dat ic ben een gect,</l> 
+				<l>Ic en onthoude wel den tijt?</l> 
+			 </sp> 
+			 <sp><speaker>Dwijf.</speaker> 
+				<l>Nu hoeric wel, dat ghi druncken sijt,</l> 
+				<l n="80">Want drie werven drie dats neghen te gader.</l> 
+				<l>Hier es mijn man, onser dochter vader,</l> 
+				<l>Ic weet wel, dat hijt oec wel weet.</l> 
+				<l>Hou! Gosen, sidi ghereet?</l> 
+				<l>Comt tote hier, ic moet u spreken.</l> 
+			 </sp> 
+			 <sp><speaker>Gosen.</speaker> 
+				<l n="85">Keren, wat duvel sal u ghebreken?</l> 
+				<l>Nu benic hier, wat saelt sijn?</l> 
+			 </sp> 
+			 <sp> 
+				<speaker>Dwijf.</speaker> 
+				<l>Nu segt, goede Goeswijn,</l> 
+				<l>En ghedinct u niet, dat ons dochter hude?</l> 
+				<l>Jaet, ende dat si enen man troude,</l> 
+				<l n="90">Dies es omtrent drie maent leden.</l> 
+			 </sp> 
+			 <sp><speaker>Dwijf.</speaker> 
+				<l>Dat eest op den dach van heden</l> 
+				<l>Neghen, diet wel teelt,</l> 
+				<l>Maer Rubben ons sone es sere ontsteelt,</l> 
+				<l>Dat si van kinde nu es bleven.</l> 
+				<l n="95">Al en ware der maenden maer seven,</l> 
+				<l>Nochtan mocht dat wel sijn ghesciet.</l> 
+			 </sp> 
+			 <sp><speaker>Gosen.</speaker><pb ed="fol." n="240vb"/> 
+				<l>Wat, Rubben goede sone, ic en sach u
+				  niet;</l> 
+				<l>Es ons dochter bleven? god hebse in hoeden!</l> 
+			 </sp> 
+			 <sp><speaker>Rubben.</speaker> 
+				<l>Jaes, maer ic en can niet bevroeden,</l> 
+				<l n="100">Dat icker vader af soude sijn.</l> 
+				<l>Ic deert wel sweren bider trouwen mijn,</l> 
+				<l>Dat icse maer drie maent en hebbe gat.</l> 
+			 </sp> 
+			 <sp><speaker>Dwijf.</speaker> 
+				<l>Ende drie maent, datse bruut sat,</l> 
+				<l>Ende drie maent, die ghi niet en teelt,</l> 
+				<l n="105">Ende als men dit te gader stelt,</l> 
+				<l>Soe eest neghen tenen hoep.</l> 
+				<l>Dats den rechten jaer loep,</l> 
+				<l>Dat een vrouwe kint te draghen plecht.</l> 
+			 </sp> 
+			 <sp><speaker>Gosen.</speaker> 
+				<l>Hets waer, dat si u secht;</l> 
+				<l n="110">Hier ane en heeft si niet gheloghen.</l> 
+			 </sp> 
+			 <sp><speaker>Rubben.</speaker> 
+				<l>Heeft mi die duvel dan bedroghen?</l> 
+				<l>Ende ict soe wel weet bi mijnder coe!</l> 
+				<l>Noch salicker meer segghen toe:</l> 
+				<l>Doen ic uwer dochter nam</l> 
+				<l n="115">Ende ierst werven bi haer slapen quam</l> 
+				<l>Ende icse te werke soude stellen,</l> 
+				<l>Vrouwe, dit moetic u vertellen,</l> 
+				<l>Si wijst alsoe wel als ic dede,</l> 
+				<l>Si gincker toe stellen al haer lede</l> 
+				<l n="120">Al hadser seven jaer met ommegegaen.</l> 
+				<l>Daer namic alte quaden exempel aen;</l> 
+				<l>Al sweechic, ic was herde gram.</l> 
+			 </sp> 
+			 <sp><speaker>Gosen.</speaker> 
+				<l>Soe dede haer moeder, doen icse nam</l> 
+				<l>Ende wi te gader slapen gingen:</l> 
+				<l n="125">Si wijst alsoe wel van allen dingen,</l> 
+				<l>Al haddicse seven maent gehat.</l> 
+			 </sp> <pb ed="fol." n="241ra"/>
+			 <sp><speaker>Dwijf.</speaker> 
+				<l>Waer bi quam dat?</l> 
+				<l>Dat haddic van horen segghen geleert;</l> 
+				<l>Want wie datter hem toe keert</l> 
+				<l n="130">Ende al onthout, dat hi hoert spreken,</l> 
+				<l>Hem en mach nemmermeer const gebreken;</l> 
+				<l>Alsoe was mijnder dochter ghesciet.</l> 
+				<l>Hoert, liefkint, ende verslaet u niet.</l> 
+				<l>Wildi die waerheit wel verstaen?</l> 
+				<l n="135">Die tijt es u bi nachte ontgaen;</l> 
+				<l>Die soe en hebdi niet ghetelt,</l> 
+				<l>Als ghi in vrouden hebt gespelt</l> 
+				<l>Met mijnder dochter, uwen jongen wive,</l> 
+				<l>Als ghi laecht bi haren sconen live</l> 
+				<l n="140">Vriendelijc ghedect waerme,</l> 
+				<l>Elkerlijc in anders aerme;</l> 
+				<l>Dien tijt hebdi vergheten,</l> 
+				<l>Maer die daghe hebdi ghemeten,</l> 
+				<l>Als ghi die sonne verbaren saecht.</l> 
+				<l n="145">En es gheen vrouwe die kint draecht,</l> 
+				<l>En wast alsoe wel bi nachte als bi dage;</l> 
+				<l>Dits emmer waer, dits ghene saghe,</l> 
+				<l>Hier met hebdi den tijt verloren.</l> 
+				<l>Wildi die waerheit sweren hoeren</l> 
+				<l n="150">Soe deric wel sweren op een cruus,</l> 
+				<l>Doen mijn dochter quam in u huus,</l> 
+				<l>Dat si niet te meer van man en wijst</l> 
+				<l>Noch daer op en hadde gheghijst,</l> 
+				<l>Dan ic en dede, doen ic haren vader nam.</l> 
+			 </sp> 
+			 <sp><speaker>Gosen.</speaker> 
+				<l n="155">Bi gode, nochtan wasic herde gram!</l> 
+				<l>Om dat ghi u soe wel te werke ginc stellen,</l> 
+				<l>Peinsic: dese heeft onder goede gesellen</l> 
+				<l>Yewerijnc enen hort ontfaen.</l> 
+				<l>Maer ghi gaeft mi te verstaen,</l> 
+				<l n="160">Dat ghijt al van horen seggen wijst.</l> 
+			 </sp> 
+			 <sp><speaker>Rubben.</speaker> 
+				<l>Ewaerheit, here, vrouwen list,</l> 
+				<l>Hebbic horen segghen, es quaet te gronden.</l> 
+				<l>Maer haddic uwer dochter vonden</l> 
+				<l>Saeftier ghelijc icse meesterse vant ....</l><pb ed="fol." n="241rb"/> 
+				<l n="165">Wat duvel, het ginc haer soe
+				  wel in hant,</l> 
+				<l>Dat mi niet verwonderen en conste.</l> 
+			 </sp> 
+			 <sp><speaker>Dwijf.</speaker> 
+				<l>Dat quam daer bi, dat sijt u wel onste</l> 
+				<l>Ende groet vrienscap tuwert droech.</l> 
+				<l>Haer herte altoes in vrouden loech,</l> 
+				<l n="170">Wanneer dat si u sach.</l> 
+				<l>Tierst dat si te segghen plach:</l> 
+				<l>Haddic Rubben mijn lief ghesien,</l> 
+				<l>Soe en mocht mi van desen dage gheen quaet gescien;</l> 
+				<l>Dat was altoes haren sanc.</l> 
+				<l n="175">Het was grote vrientscap, diese dwanc,</l> 
+				<l>Daer omme en conste si haer niet gheveinsen.</l> 
+				<l>Ghine doerft nemmermeer peinsen,</l> 
+				<l>Mijn dochter en was maecht te voren</l> 
+				<l>Vijf jaer na dat si was gheboren;</l> 
+				<l n="180">Dat deric wel ten heileghen sweren.</l> 
+			 </sp> 
+			 <sp><speaker>Rubben.</speaker> 
+				<l>Bi gode, soe sout mi ewelijc deren,</l> 
+				<l>Haddic haer onvrede ghedaen.</l> 
+				<l>Maer dat mi die tijt dus es ontgaen,</l> 
+				<l>Dats een dinc, dies ic mi niet en bevroede,</l> 
+				<l n="185">Want mi es emmer alsoe te moede,</l> 
+				<l>Dats maer drie maent en es leden.</l> 
+			 </sp> 
+			 <sp><speaker>Dwijf.</speaker> 
+				<l>Hoert, liefkint, sijt dies te vreden.</l> 
+				<l>Den tijt willic u te rechte stellen</l> 
+				<l>Ende op dese drie vingher tellen:</l> 
+				<l n="190">Die ierste drie maent settic hier,</l> 
+				<l>Ende dander drie maent sat si biden vier,</l> 
+				<l>Ende die derde drie maent dat sijn die nacht;</l> 
+				<l>Hier met es die tijt volbracht,</l> 
+				<l>Dits neghen maent te gader.</l> 
+				<l n="195">Ic swere u bi allen heilegen: kints es vader,</l> 
+				<l>Ende peinst anders nemmermeere.</l> 
+			 </sp> 
+			 <sp><speaker>Gosen.</speaker> 
+				<l>Si segt waer, bi onsen here,</l><pb ed="fol." n="241va"/>
+				<l>Daer en can si niet ane ghelieghen.</l>
+				
+			 </sp> 
+			 <sp><speaker>Rubben.</speaker> 
+				<l>Latic mi dan den duvel bedrieghen,</l> 
+				<l n="200">En hebbic die nachte niet ghetelt?</l> 
+				<l>Soe hebbic mijn herte om niet gequelt,</l> 
+				<l>Soe sijn die scouden al gader mijn;</l> 
+				<l>Soe soudic ewelijc rouwich sijn,</l> 
+				<l>Haddic minen wive verweten.</l> 
+				<l n="205">Nu willic gaen ende ghereiden haer teten</l> 
+				<l>Ende doen haer werdicheit ende ere</l> 
+				<l>Ende danckens gode onsen lieven here,</l> 
+				<l>Dat si mi soe sconen kint heeft bracht.</l> 
+			 </sp> 
+			 <sp><speaker>Dwijf.</speaker> 
+				<l>Soe doet en haest u al u macht</l> 
+				<l n="210">Ende doet ons enen pot met vleesche te viere,</l> 
+				<l>Want ic sal darweert comen sciere</l> 
+				<l>Ende besien hoet met haer steet.</l> 
+			 </sp> 
+			 <sp><speaker>Rubben.</speaker> 
+				<l>Dat salic gherne doen, god weet!</l> 
+				<l>Ende saelt alsoe lecker maken,</l> 
+				<l n="215">Dat u soe wel sal duncken smaken,</l> 
+				<l>Ghi selter al u vingher na lecken.</l> 
+			 </sp> 
+			 <sp> 
+				<speaker>Dwijf.</speaker> 
+				<l>Al dus soude men roden gecken,</l> 
+				<l>Als men hadde alsulken man,</l> 
+				<l>Ende hanghen hem ene blau hoyke an</l> 
+				<l n="220">Ende steken hem thoeft in enen sac.</l> 
+			 </sp> 
+			 <sp> 
+				<speaker>Gosen.</speaker> 
+				<l>Ghi ende u dochter sijt beide lac:</l> 
+				<l>Ghi soudes Rubben vele ontmeten!</l> 
+				<l>Ic hebbe oec wel selc dinc geweten,</l> 
+				<l>Dat ghi mi alte male ontgaeft.</l> 
+			 </sp> 
+			 <sp> 
+				<speaker>Dwijf.</speaker> 
+				<l n="225">Ic waen, ghi noit niet an mi en saecht,</l><pb ed="fol." n="241vb"/> 
+				<l>Ghine mochtet wel vertrecken met
+				  eren.</l> 
+			 </sp> 
+			 <sp> 
+				<speaker>Gosen.</speaker> 
+				<l>Ghi wet soe vele loser keren;</l> 
+				<l>Al sie ic een dinc, ghi gheeft mi anders te verstaen,</l> 
+				<l>Als ghi Rubben hebt ghedaen</l> 
+				<l n="230">Ende hebt hem neghen voer drie ghetelt</l> 
+				<l>Ende hebbet hem alsoe wel ghespelt,</l> 
+				<l>Dat hi daer jeghen niet en can geseggen.</l> 
+				<l>Maer ghi ende ghi conet soe wel omleggen</l> 
+				<l>Ende maect den selken mans die mouwe.</l> 
+				<l n="235">Het gheeft die selke een wijf sijn trouwe</l> 
+				<l>Ende wense hebben voer maeght,</l> 
+				<l>Bi gode, si es doer haer boschkijn gejaecht!</l> 
+				<l>Soe waerdi oec, doen ic u nam,</l> 
+				<l>Ende doen ons dochter aen Rubben quam,</l> 
+				<l n="240">Si wijst oec wel van melc meten.</l> 
+			 </sp> 
+			 <sp><speaker>Dwijf.</speaker> 
+				<l>Sidi op uwen clap stoel gheseten?</l> 
+				<l>Dies moet die duvel hebben deel!</l> 
+				<l>Ic soude u vollijc voer u museel</l> 
+				<l>Smiten, die tande souden u uutspringen.</l> 
+			 </sp> 
+			 <stage>Hier vechten si.</stage> 
+			 <sp><speaker>Gosen.</speaker> 
+				<l n="245">Soe seldi tierst voren singhen.</l> 
+			 </sp> 
+			 <l> Nota .ijc.xlv. vs;.</l> 
+		  </div> 
+		</div> 
+	 </body> 
+  </text>
+</TEI.2>

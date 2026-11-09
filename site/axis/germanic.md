@@ -26,17 +26,19 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 ## The shelves
 
-A source wears every desk it serves — these 40 answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
+A source wears every desk it serves — these 44 answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
-| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 8 November 2026)</span> |
+| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 9 November 2026)</span> |
 |---|---|---|---|---|
 | `aspr` | texts | attribution | wired · manual | 349 docs / 30,550 passages |
+| `blbooks` | texts | open | wired · manual | 2,497 docs / 230,206 passages |
 | `bosworth-toller` | dictionary | attribution | wired · manual | 62,815 entries |
 | `cleasby-vigfusson` | dictionary | attribution | wired · manual | 35,207 entries |
 | `cme` | texts | open | wired · manual | 297 docs / 1,355,279 passages |
 | `corpus-gysseling` | texts | research_private | wired · manual | 2,226 docs / 207,793 passages |
 | `corpus-oudfries` | texts | research_private | wired · manual | 177 docs / 14,136 passages |
 | `corpus-oudnederlands` | texts | research_private | wired · manual | 89 docs / 5,745 passages |
+| `dbnl` | texts | attribution | wired · manual | 3,653 docs / 950,870 passages |
 | `dta` | texts | attribution | wired · manual | 5,478 docs / 729,090 passages |
 | `ecco-tcp` | texts | open | wired · manual | 3,101 docs / 2,697,714 passages |
 | `eebo-tcp` | texts | open | wired · manual | 60,325 docs / 25,065,921 passages |
@@ -50,6 +52,7 @@ A source wears every desk it serves — these 40 answer this desk. Holdings are 
 | `leme` | dictionary | attribution | wired · manual | 943,211 entries |
 | `menota` | texts | attribution | wired · manual | 91 docs / 229,501 passages |
 | `menotec` | texts | nc | wired · manual | 7 docs / 20,308 passages |
+| `nb-no` | texts | open | wired · manual | 2 docs / 611 passages |
 | `perseus-anglit` | texts | attribution | wired · manual | 2 docs / 86 passages |
 | `ppchy` | treebank | nc | wired · manual | 63 docs / 17,861 passages |
 | `proiel` | treebank | nc | wired · frozen | 12 docs / 51,321 passages |
@@ -61,6 +64,7 @@ A source wears every desk it serves — these 40 answer this desk. Holdings are 
 | `stationers-register` | texts | attribution | wired · manual | 10,453 docs / 26,047 passages |
 | `statutes-realm` | texts | open | wired · manual | 661 docs / 8,053 passages |
 | `ud` | treebank | nc | wired · manual | 83 docs / 329,980 passages |
+| `wellcome` | texts | open | wired · manual | 43 docs / 10,963 passages |
 | `wiktionary-dum` | dictionary | attribution | wired · manual | 2,342 entries |
 | `wiktionary-enm` | dictionary | attribution | wired · manual | 56,687 entries |
 | `wiktionary-gmh` | dictionary | attribution | wired · manual | 2,142 entries |
@@ -71,9 +75,9 @@ A source wears every desk it serves — these 40 answer this desk. Holdings are 
 | `wiktionary-sco` | dictionary | attribution | wired · manual | 6,042 entries |
 | `zoega` | dictionary | attribution | wired · manual | 29,951 entries |
 
-**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 8 November 2026)</span>: `en` 598,766 · `ita` 167,236 · `lat` 138,255 · `non` 97,010 · `ang` 71,142 · `enm` 60,521 · `fra` 59,810 · `sv` 53,406 · `spa` 28,346 · `got` 23,038 … and 39 more (`nabu axis germanic` lists all).
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 9 November 2026)</span>: `en` 601,236 · `ita` 167,236 · `lat` 138,318 · `non` 97,011 · `ang` 71,142 · `enm` 60,521 · `fra` 59,833 · `sv` 53,406 · `spa` 28,346 · `got` 23,038 … and 46 more (`nabu axis germanic` lists all).
 
-**Carried in by multilingual packs** (`ud` — whole-source members whose other languages ride along, as of 8 November 2026): `orv` 9 · `ota` 5 · `lzh` 4 · `cop` 3 · `egy` 3 … and 12 more (`nabu axis germanic` lists all).
+**Carried in by multilingual packs** (`ud` — whole-source members whose other languages ride along, as of 9 November 2026): `orv` 9 · `ota` 5 · `lzh` 4 · `cop` 3 · `egy` 3 … and 12 more (`nabu axis germanic` lists all).
 
 ## The desk's instruments
 
