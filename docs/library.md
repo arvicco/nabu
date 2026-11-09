@@ -2282,3 +2282,13 @@ witness, printing history, genre and authors with life dates, and
 is cited by printed page. Mostly Dutch with Latin, French and
 Middle Dutch shelves; public domain, offered "voor elk doel" —
 credit DBNL and the KB.
+
+**`nb-no`** — the Nasjonalbiblioteket (Norway) cone, opening: the
+national library's keyless per-page ALTO texts for public-domain
+books, taken at the declared cone — everything pre-1700 plus all
+years of Old Norse, Latin, Greek and the Sámi languages (1,910
+items / 530,042 pages censused; the paced crawl fills it slice by
+slice, oldest and rarest first). The first slice holds Verelius'
+Index linguae veteris Scytho-Scandicae (1691) and the 1733
+Íslendingabók. Library OCR, declared per book with its engine;
+explicit public-domain license ("selv for kommersielle formål").
