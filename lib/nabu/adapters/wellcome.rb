@@ -620,11 +620,7 @@ module Nabu
       end
 
       def each_dump_line(dump, &)
-        Zlib::GzipReader.open(dump) do |gz|
-          gz.each_line do |line|
-            yield SourceRead.utf8(line, label: "wellcome catalogue snapshot line")
-          end
-        end
+        SourceRead.utf8_lines(dump, label: "wellcome catalogue snapshot", gzip: true, &)
       rescue Nabu::ParseError => e
         raise Nabu::FetchError, e.message
       end
