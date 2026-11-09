@@ -46,9 +46,9 @@ A source wears every desk it serves — these 30 answer this desk. Holdings are 
 | `suda-translations` | texts | nc | wired · manual | 27 docs / 31,341 passages |
 | `ud` | treebank | nc | wired · manual | 83 docs / 329,980 passages |
 | `vulgate` | texts | open | wired · manual | 73 docs / 35,809 passages |
-| `wellcome` | texts | open | wired · manual | 43 docs / 10,963 passages |
+| `wellcome` | texts | open | wired · manual | 131 docs / 94,664 passages |
 
-**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 9 November 2026)</span>: `grc` 122,400 · `lat` 64,997 · `gmy` 5,890 · `eng` 4,335 · `lab` 787 · `grc-Latn` 510 · `deu` 225 · `en` 27 · `ecy-Latn` 22 · `gmh` 11 … and 5 more (`nabu axis classical` lists all).
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 9 November 2026)</span>: `grc` 122,400 · `lat` 65,085 · `gmy` 5,890 · `eng` 4,335 · `lab` 787 · `grc-Latn` 510 · `deu` 225 · `en` 27 · `ecy-Latn` 22 · `gmh` 11 … and 5 more (`nabu axis classical` lists all).
 
 **Carried in by multilingual packs** (`ud` — whole-source members whose other languages ride along, as of 9 November 2026): `orv` 9 · `ota` 5 · `lzh` 4 · `egy` 3 · `frm` 3 … and 15 more (`nabu axis classical` lists all).
 
