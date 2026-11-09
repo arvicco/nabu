@@ -46,8 +46,9 @@ module Nabu
   # any, else its own anchor-level band (enm/frm/fro/ang carry theirs
   # bare). Tie-break: parent: is a single edge, so the walk is a chain and
   # nearest-first decides a shared edge year (1400 is in both frm and fro
-  # → frm); an ancestor whose OWN stages straddle the hull ends the walk
-  # bare rather than skipping to a grandparent. The walk STOPS at the
+  # → frm); an ancestor none of whose bands contains the hull is passed
+  # over (an ancestor with SEVERAL containing bands ends the walk bare —
+  # the ambiguity is not ours to resolve). The walk STOPS at the
   # first ancestor carrying no attested band — the end of the dated
   # succession (fro → roa, enm → ang → gmw:pro): past it the chain crosses
   # into another language's ladder (roa's parent is lat, whose open
