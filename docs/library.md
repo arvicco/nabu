@@ -2292,3 +2292,19 @@ slice, oldest and rarest first). The first slice holds Verelius'
 Index linguae veteris Scytho-Scandicae (1691) and the 1733
 Íslendingabók. Library OCR, declared per book with its engine;
 explicit public-domain license ("selv for kommersielle formål").
+
+**`wellcome`** — the Wellcome Collection cone, opening: keyless
+per-volume OCR text over the catalogue-snapshot census — 31,883
+pre-1800 Public Domain Mark volumes censused (13,262 Latin), the
+paced crawl filling it Latin-first at the library's own requested
+rate of one request per thirty seconds. The first slice holds 43
+sixteenth-century Latin medical volumes. Passages are ~2,000-
+character segments, declared never-pages (upstream ships each
+volume's text as one unbroken line); raw OCR, declared. The
+medical canon of early modern Europe — fever tracts, herbals,
+anatomies — arrives here slice by slice.
+
+**`nb-no`, `wellcome`, `blbooks`, `dbnl`** together open the
+mass-digitization rail: national- and research-library OCR at
+declared cones, each with a resumable ledger, each honest about
+what OCR is.

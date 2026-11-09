@@ -8243,7 +8243,7 @@ wellcome:   # P165, 02-sources row 401
                                         # volumes — the noscemus classical+romance hat), then
                                         # English 8,511 · French 4,413 · German 2,046 · Italian
                                         # 2,005 · Spanish 747 · Dutch 394 prints
-  wired: false   # until the first real slice is verified. bin/nabu sync wellcome: the
+  wired: true   # FIRST SYNC VERIFIED 2026-11-09: first slice 43 docs / 10,963 passages, 0 errors, ledger 41 done + 19 ledgered = the 60-volume slice, searchable
                  # ~530 MB catalogue snapshot (one streamed GET, census derived ~10 s), then
                  # SLICE 240 text-zip GETs at ONE PER 30 s (Wellcome's robots Request-rate)
                  # = ~2 h. Slice 1 = 240 Latin volumes printed 1501–1586 (digearly /
