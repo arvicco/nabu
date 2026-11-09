@@ -6,7 +6,7 @@ compatibility: "Requires the nabu MCP server (`bin/nabu mcp`, read-only, stdio) 
 metadata:
   desk: romance
   origin: generated
-  sources: "analecta-hymnica aranese bdcamoes bfm bim-sahcoba cantigas cantus corpus-corporum croala ctilc cv-sardinian derom digiliblt disco divinum-officium formulae-open gregobase littre llct1 lo-congres mazarinades meloniromance memis noscemus openmgh osta salom socinian-letters theatre-classique typikon-bible ud wiktionary-ca wiktionary-frm wiktionary-fro wiktionary-oc wiktionary-osp wiktionary-pro"
+  sources: "analecta-hymnica aranese bdcamoes bfm bim-sahcoba cantigas cantus corpus-corporum croala ctilc cv-sardinian derom digiliblt disco divinum-officium formulae-open gregobase littre llct1 lo-congres mazarinades meloniromance memis nb-no noscemus openmgh osta salom socinian-letters theatre-classique typikon-bible ud wellcome wiktionary-ca wiktionary-frm wiktionary-fro wiktionary-oc wiktionary-osp wiktionary-pro"
 ---
 
 # The Romanist — the `romance` desk
@@ -46,6 +46,7 @@ verbatim upstream terms are in `docs/02-sources.md` of the Nabu repository.
 | `mazarinades` | Mazarinades — the Antonomaz corpus of Fronde pamphlets (1648–1653) | attribution |
 | `meloniromance` | Meloni et al. 2021 Romance cognate sets (lexibank/meloniromance CLDF) | attribution |
 | `memis` | MEMIS — Epigraphic corpus of Medieval and Early Modern inscriptions in Slovenia 1.0 (Pobežin, ZRC SAZU) | attribution |
+| `nb-no` | Nasjonalbiblioteket — public-domain books, page OCR (National Library of Norway) | open |
 | `noscemus` | NOSCEMUS Digital Sourcebook — early modern scientific Latin (Transkribus HTR) | attribution |
 | `openmgh` | openMGH — Monumenta Germaniae Historica editions (MGH / BSB, digital MGH) | attribution |
 | `osta` | OSTA — Old Spanish Textual Archive (Hispanic Seminary of Medieval Studies) | nc |
@@ -54,6 +55,7 @@ verbatim upstream terms are in `docs/02-sources.md` of the Nabu repository.
 | `theatre-classique` | Théâtre Classique — Paul Fièvre's TEI corpus of French plays | nc |
 | `typikon-bible` | typikon.info Bible layer — the 1688 Bucharest Bible, the Elizabeth Bible in Church Cyrillic and the Old Georgian Bible (dump 2026-09-21) | attribution |
 | `ud` | Universal Dependencies — ancient treebanks | nc |
+| `wellcome` | Wellcome Collection — digitised printed books, OCR full text (pre-1800 cone) | open |
 | `wiktionary-ca` | Wiktionary Catalan — kaikki.org machine-readable extract | attribution |
 | `wiktionary-frm` | Wiktionary Middle French — kaikki.org machine-readable extract | attribution |
 | `wiktionary-fro` | Wiktionary Old French — kaikki.org machine-readable extract | attribution |
