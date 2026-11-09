@@ -38,6 +38,18 @@ module Ops
       end
     end
 
+    # The slice carries the Oracc Sign List and a links journal (Achemenet's
+    # CDLI reference edges), so these tools answer something real — not
+    # only their honest-absence notes. nabu_cognates stays negative-only:
+    # no open/attribution gold-lemmatized witness pair exists to bake (the
+    # DemoBuild class note records the census).
+    def test_the_sign_desk_and_links_carry_positive_tasks
+      positive = tasks.reject { |t| t.difficulty == "negative" }.flat_map(&:tools).tally
+      %w[nabu_char nabu_signs nabu_links].each do |tool|
+        assert_operator positive.fetch(tool, 0), :>=, 1, "#{tool} needs a positive task"
+      end
+    end
+
     def test_the_pack_mixes_lookups_chains_and_negatives
       by = tasks.group_by(&:difficulty).transform_values(&:size)
 

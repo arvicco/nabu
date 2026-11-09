@@ -1,23 +1,28 @@
 # The demo eval pack: question -> expected-answer tasks over the FROZEN
 # demo slice the public image bakes in (Nabu::DemoBuild: sblgnt, vulgate,
-# eng-web, oshb, lexica + the core registry modules; 223 documents,
-# 104,585 passages, 168,142 dictionary entries). Every expected answer is
-# a machine check on the tool payload (Nabu::Ops::DemoEval documents the
-# check grammar); nothing is scored by model judgment. The runner
-# (script/demo-eval) replays each task's reference steps against a running
-# server; an agent under evaluation gets only the questions
-# (script/demo-eval --questions) and is graded against `answer`.
+# eng-web, oshb, lexica, achemenet, osl + the core registry modules;
+# 2,997 documents, 107,359 passages, 168,142 dictionary entries). Every
+# expected answer is a machine check on the tool payload
+# (Nabu::Ops::DemoEval documents the check grammar); nothing is scored by
+# model judgment. The runner (script/demo-eval) replays each task's
+# reference steps against a running server; an agent under evaluation
+# gets only the questions (script/demo-eval --questions) and is graded
+# against `answer`.
 #
-# Ground truth is the slice, not the full library: the batch layers
-# (links, vectors, mined layers) and the sign/hieroglyph modules are not
-# baked, so those tools answer with honest absence notes — the negative
-# tasks pin that honesty. The demo slice is open/attribution material
-# only; every quoted text below is from it.
+# Ground truth is the slice, not the full library. The Oracc Sign List
+# (osl) is baked, so the sign desk (nabu_char, nabu_signs) serves real
+# cards; Achemenet's sync writes its CDLI reference edges into the links
+# journal, so nabu_links reads real edges (their CDLI counterparts are not
+# baked and render unresolved). The batch layers (batch-mined links,
+# vectors, mined layers), the hieroglyph spine and any gold-lemmatized
+# cognate witnesses are not baked, so those answers are honest absence
+# notes — the negative tasks pin that honesty. The demo slice is
+# open/attribution material only; every quoted text below is from it.
 schema: nabu.demo-eval/1
 slice:
-  sources: [sblgnt, vulgate, eng-web, oshb, lexica]
-  documents: 223
-  passages: 104585
+  sources: [sblgnt, vulgate, eng-web, oshb, lexica, achemenet, osl]
+  documents: 2997
+  passages: 107359
   dictionary_entries: 168142
 tasks:
   # -- status ------------------------------------------------------------------
@@ -25,16 +30,19 @@ tasks:
     difficulty: lookup
     question: >-
       How many passages, documents and dictionary entries does the demo
-      library hold, and how many of its passages are Aramaic?
-    answer: 104,585 passages in 223 documents, 168,142 dictionary entries; 268 Aramaic (arc) passages.
+      library hold, and how many of its passages are Aramaic and how many Akkadian?
+    answer: >-
+      107,359 passages in 2,997 documents, 168,142 dictionary entries; 268
+      Aramaic (arc) and 2,774 Akkadian (akk) passages.
     steps:
       - tool: nabu_status
         args: {}
         expect:
-          - {path: totals.passages, equals: 104585}
-          - {path: totals.documents, equals: 223}
+          - {path: totals.passages, equals: 107359}
+          - {path: totals.documents, equals: 2997}
           - {path: totals.dictionary_entries, equals: 168142}
           - {path: languages.arc, equals: 268}
+          - {path: languages.akk, equals: 2774}
           - {path: sources.*.slug, includes: sblgnt}
 
   # -- search ------------------------------------------------------------------
@@ -136,7 +144,9 @@ tasks:
   - id: search-negative-gilgamesh
     difficulty: negative
     question: Does the demo corpus mention Gilgamesh?
-    answer: No — the search returns no matches (the slice holds only the Bible witnesses and two lexica).
+    answer: >-
+      No — the search returns no matches (the slice holds the Bible witnesses,
+      two lexica and Achaemenid-period Babylonian documents, none naming him).
     steps:
       - tool: nabu_search
         args: {query: Gilgamesh}
@@ -394,25 +404,87 @@ tasks:
           - {path: dictionary_entries.0.gloss, includes: a god}
 
   # -- char / signs ------------------------------------------------------------
-  - id: char-negative-no-sign-list
-    difficulty: negative
-    question: Give the character card for the cuneiform sign SAR.
-    answer: Not available in the demo — the server says sign lookup needs the Oracc Sign List, which the slice does not carry.
+  - id: char-sar
+    difficulty: lookup
+    question: >-
+      Give the character card for the cuneiform sign SAR. What is its glyph
+      and codepoint, and which sign list answers?
+    answer: SAR is 𒊬 (U+122AC), served from the Oracc Sign List (osl, CC0 — open class).
     steps:
       - tool: nabu_char
         args: {query: SAR}
         expect:
-          - {text_includes: Oracc Sign List}
+          - {path: card.name, equals: SAR}
+          - {path: card.glyph, equals: 𒊬}
+          - {path: card.codepoints, includes: U+122AC}
+          - {path: source, equals: osl}
+          - {path: license_class, equals: open}
 
-  - id: signs-negative-no-sign-list
+  - id: char-negative-no-hieroglyph-spine
     difficulty: negative
-    question: Resolve the signs of the ATF line "lugal".
-    answer: Not available in the demo — sign resolution needs the Oracc Sign List, which the slice does not carry.
+    question: Give the character card for the Egyptian hieroglyph 𓅃.
+    answer: Not available in the demo — the Egyptian sign card needs the Unikemet spine, which the slice does not carry.
+    steps:
+      - tool: nabu_char
+        args: {query: 𓅃}
+        expect:
+          - {text_includes: Unikemet spine}
+
+  - id: signs-text-lugal
+    difficulty: lookup
+    question: Resolve the signs of the ATF line "lugal-e".
+    answer: Two signs, both read deterministically — LUGAL (U+12217) and E (U+1208A), through the Oracc Sign List.
+    steps:
+      - tool: nabu_signs
+        args: {text: lugal-e}
+        expect:
+          - {path: lines.0.tokens.0.sign_name, equals: LUGAL}
+          - {path: lines.0.tokens.0.status, equals: deterministic}
+          - {path: lines.0.tokens.0.codepoints, includes: U+12217}
+          - {path: lines.0.tokens.*.sign_name, includes: E}
+          - {path: sign_list.source, equals: osl}
+
+  - id: signs-urn-achemenet-letter
+    difficulty: lookup
+    question: >-
+      Resolve the signs of the Achemenet letter CT 55, 001
+      (urn:nabu:achemenet:p314392:1). What language is it, and what is its first sign?
+    answer: Akkadian (akk), attribution class; it opens with IM (U+1214E), read deterministically.
+    steps:
+      - tool: nabu_signs
+        args: {urn: "urn:nabu:achemenet:p314392:1", max_lines: 1}
+        expect:
+          - {path: source, equals: achemenet}
+          - {path: language, equals: akk}
+          - {path: license_class, equals: attribution}
+          - {path: lines.0.tokens.0.sign_name, equals: IM}
+          - {path: lines.0.tokens.0.codepoints, includes: U+1214E}
+
+  - id: chain-signs-then-char
+    difficulty: chain
+    question: Resolve the ATF value "lugal" to its sign, then pull that sign's full card.
+    answer: lugal is the sign LUGAL; its card gives the glyph 𒈗 (U+12217).
     steps:
       - tool: nabu_signs
         args: {text: lugal}
         expect:
-          - {text_includes: Oracc Sign List}
+          - {path: lines.0.tokens.0.sign_name, equals: LUGAL}
+      - tool: nabu_char
+        args: {query: "${1.lines.0.tokens.0.sign_name}"}
+        expect:
+          - {path: card.name, equals: LUGAL}
+          - {path: card.codepoints, includes: U+12217}
+
+  - id: signs-negative-unknown-value
+    difficulty: negative
+    question: Resolve the signs of the ATF line "qwq".
+    answer: No sign carries the value qwq — the token comes back with status unknown, not a guess.
+    steps:
+      - tool: nabu_signs
+        args: {text: qwq}
+        expect:
+          - {path: lines.0.tokens.0.status, equals: unknown}
+          - {path: lines.0.tokens.0.sign_name, equals: null}
 
   # -- place -------------------------------------------------------------------
   - id: place-lilybaeum
@@ -439,15 +511,36 @@ tasks:
           - {text_includes: no place titled}
 
   # -- links -------------------------------------------------------------------
-  - id: links-negative-no-journal
+  - id: links-achemenet-cdli-reference
+    difficulty: lookup
+    question: >-
+      What persisted links does the Achemenet document
+      urn:nabu:achemenet:p314392 carry, and which producer minted them?
+    answer: >-
+      One outbound reference edge to the same tablet's CDLI record (P314392;
+      detail "manifest achemenet"), minted by the achemenet producer at sync.
+      The CDLI side is not in the demo, so the counterpart renders unresolved.
+    steps:
+      - tool: nabu_links
+        args: {urn: "urn:nabu:achemenet:p314392"}
+        expect:
+          - {path: document, equals: "CT 55, 001"}
+          - {path: kinds.reference, size: 1}
+          - {path: kinds.reference.0.direction, equals: out}
+          - {path: kinds.reference.0.detail, equals: manifest achemenet}
+          - {path: runs.*.producer, includes: achemenet}
+
+  - id: links-negative-no-batch-run
     difficulty: negative
     question: What mined links does John 1:1 carry?
-    answer: None — the demo slice has no links journal (batch layers are not baked); nabu_parallels discovers parallels on the fly instead.
+    answer: >-
+      None — no batch run has covered it (the batch-mined layers are not
+      baked); nabu_parallels discovers parallels on the fly instead.
     steps:
       - tool: nabu_links
         args: {urn: "urn:nabu:sblgnt:john:1.1"}
         expect:
-          - {text_includes: no links journal}
+          - {text_includes: no persisted edges touch this urn}
 
   # -- clarify -----------------------------------------------------------------
   - id: clarify-resolve-joannes
@@ -461,6 +554,17 @@ tasks:
           - {path: resolved_urn, equals: "urn:nabu:vulgate:jhn:1.1"}
           - {path: structure.passages, equals: 879}
           - {path: structure.last_citation, equals: "21.25"}
+
+  - id: clarify-ae-ligature
+    difficulty: lookup
+    question: Resolve "Matthaeus 1.23" (typed without the æ ligature) to a passage urn.
+    answer: urn:nabu:vulgate:mat:1.23 — the Vulgate titles the book "Matthæus"; the ligature folds to "ae".
+    steps:
+      - tool: nabu_clarify
+        args: {query: Matthaeus 1.23}
+        expect:
+          - {path: resolved_urn, equals: "urn:nabu:vulgate:mat:1.23"}
+          - {path: ref.title, equals: Matthæus}
 
   - id: clarify-negative-ambiguous-genesis
     difficulty: negative

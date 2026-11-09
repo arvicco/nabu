@@ -60,7 +60,8 @@ class DemoBuildTest < Minitest::Test
     Nabu::SourceRegistry.load(path)
   end
 
-  def build(registry, slugs: %w[texts more-texts], max_bytes: 50_000_000, keep: %w[core-mod], &sync)
+  def build(registry, slugs: %w[texts more-texts], max_bytes: 50_000_000, keep: %w[core-mod], keep_files: {},
+            &sync)
     sync ||= ->(config) { fake_sync(config) }
     runner = lambda do |env, argv|
       @commands << [env, argv]
@@ -70,8 +71,8 @@ class DemoBuildTest < Minitest::Test
       end
     end
     Nabu::DemoBuild.new(registry: registry, out_dir: @out, work_dir: @work, project_root: @project,
-                        slugs: slugs, keep_canonical: keep, max_bytes: max_bytes, runner: runner,
-                        log: StringIO.new)
+                        slugs: slugs, keep_canonical: keep, keep_files: keep_files, max_bytes: max_bytes,
+                        runner: runner, log: StringIO.new)
   end
 
   # What a real `nabu sync` leaves behind, in miniature: a canonical tree
@@ -80,6 +81,9 @@ class DemoBuildTest < Minitest::Test
     %w[core-mod gazetteer].each do |slug|
       FileUtils.mkdir_p(File.join(config.canonical_dir, slug, ".git"))
       File.write(File.join(config.canonical_dir, slug, "data.yml"), "x: 1\n")
+      FileUtils.mkdir_p(File.join(config.canonical_dir, slug, "lib", "res"))
+      File.write(File.join(config.canonical_dir, slug, "lib", "list.asl"), "@sign A\n")
+      File.write(File.join(config.canonical_dir, slug, "lib", "res", "scans.bin"), "x" * 100)
     end
     FileUtils.mkdir_p(config.db_dir)
     catalog = Nabu::Store.connect(config.catalog_path)
@@ -182,6 +186,26 @@ class DemoBuildTest < Minitest::Test
                  written["sources"]
     assert_operator written["total_bytes"], :>, 0
     assert_includes written["files"].keys, "db/catalog.sqlite3"
+  end
+
+  # A kept module whose read seam needs a few files out of a big upstream
+  # tree (osl: two files out of ~450 MB) ships ONLY those files.
+  def test_a_keep_files_rule_ships_only_the_named_files_of_a_kept_tree
+    build(registry, keep_files: { "core-mod" => ["lib/list.asl", "lib/absent.tsv"] }).build!
+
+    kept = File.join(@out, "canonical", "core-mod")
+    shipped = Dir.glob("**/*", base: kept).select { |path| File.file?(File.join(kept, path)) }
+    assert_equal ["lib/list.asl"], shipped
+    assert_equal "@sign A\n", File.read(File.join(kept, "lib", "list.asl"))
+  end
+
+  def test_the_shipped_slice_keeps_the_sign_list_read_seams_only
+    assert_includes Nabu::DemoBuild::KEEP_CANONICAL, "osl"
+    assert_equal [Nabu::SignList::ASL_FILE, Nabu::CdliSignReadings::TSV_FILE],
+                 Nabu::DemoBuild::KEEP_CANONICAL_FILES.fetch("osl")
+    slugs = Nabu::DemoBuild::DEMO_SOURCES.map(&:slug)
+    assert_includes slugs, "osl", "the sign desk (nabu_char / nabu_signs) answers from the Oracc Sign List"
+    assert_includes slugs, "achemenet", "the links journal + ATF passages come from Achemenet"
   end
 
   def test_build_is_rerunnable_into_its_own_output

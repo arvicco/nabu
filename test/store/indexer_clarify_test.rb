@@ -89,6 +89,8 @@ module Store
       place = entries.where(key: "pleiades:462281").get(:id)
       assert_includes names.where(entry_id: place).select_map(:folded), "marsala", "gazetteer name keys are aliases"
       assert_equal "ιλιασ", Indexer.clarify_fold("  Ἰλιάς "), "the one fold both sides share"
+      assert_equal "matthaeus oedipus", Indexer.clarify_fold("Matthæus Œdipus"),
+                   "the Latin ligatures expand to the digraphs a typist writes"
     end
 
     def test_refresh_source_rederives_the_slice_row_identically

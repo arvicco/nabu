@@ -134,6 +134,20 @@ module Query
       assert_includes greek.completions.map(&:key), ODYSSEY, "unaccented Greek finds Ὀδύσσεια"
     end
 
+    # The Vulgate titles its gospel "Matthæus"; a typist writes "Matthaeus".
+    # The ligature folds on BOTH sides (index + query), so either spelling
+    # resolves the same passage, and the ligature input keeps resolving.
+    def test_the_ae_ligature_folds_both_ways
+      document("urn:nabu:vulgate:mat", title: "Matthæus", citations: %w[1.22 1.23], language: "lat")
+      Nabu::Store::Indexer.rebuild!(catalog: @catalog, fulltext: @fulltext)
+
+      %w[Matthaeus Matthæus MATTHÆUS].each do |title|
+        result = clarify("#{title} 1.23")
+        assert_equal "urn:nabu:vulgate:mat:1.23", result.resolved_urn, "#{title} 1.23"
+      end
+      assert_equal "exact", clarify("Matthaeus").completions.first.match
+    end
+
     def test_a_misspelling_reaches_the_title_through_the_trigram_lane
       result = clarify("Illiad")
       iliad = result.completions.find { |c| c.key == ILIAD }
