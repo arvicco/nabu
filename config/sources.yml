@@ -4758,7 +4758,7 @@ nb-no:   # P165
   adapter: Nabu::Adapters::NbNo
   adopted: "2026-11-08"
   axes: [germanic, romance]
-  wired: false   # awaiting the first real slice (the paced api.nb.no crawl)
+  wired: true   # FIRST SYNC VERIFIED 2026-11-09, exact: first slice 2 docs / 611 passages, the partial item correctly held, searchable
   sync_policy: manual
   # Nasjonalbiblioteket (National Library of Norway) — public-domain books
   # through the keyless catalog API: the item record + per-page ALTO OCR.
