@@ -4,6 +4,8 @@ require "fileutils"
 require "json"
 require "rbconfig"
 require "time"
+require_relative "sign_list"
+require_relative "cdli_sign_readings"
 
 module Nabu
   # The demo slice (`rake demo:build`): a SELF-CONTAINED demo library
@@ -51,9 +53,11 @@ module Nabu
   # The size ceiling (max_bytes, DEMO_MAX_MB) fails the build rather than
   # shipping an image larger than the slice was sized for.
   #
-  # Deliberately NOT built here: the batch layers (links, vectors, mined
-  # layers) — they are separate owner-fired commands, and the tools answer
-  # their absence with the honest "not built" notes. The slice is a
+  # Deliberately NOT built here: the batch layers (batch-mined links,
+  # vectors, mined layers) — they are separate owner-fired commands, and
+  # the tools answer their absence with the honest "not built" notes. The
+  # links journal itself exists: sync-time reference producers (achemenet's
+  # CDLI edges) write it, so nabu_links reads real edges. The slice is a
   # read-only SERVING snapshot, not a rebuildable library: canonical/ is
   # pruned, so `nabu rebuild` inside the image is meaningless by design.
   class DemoBuild
@@ -66,16 +70,51 @@ module Nabu
     # minus its two nc treebanks (proiel, iswoc), plus the open Bible
     # witnesses that keep `nabu_align "MARK 2.3"` multi-lingual.
     # census: ~105k passages + ~168k dictionary entries, 2026-10-29, the
-    # live catalog's source_stats/dictionary_entries for these slugs —
-    # an estimated 250-400 MB of derived stores (the library-wide ratio is
-    # ~1.4 KB of catalog+index per passage); the census file measures the
-    # real figure at every build.
+    # live catalog's source_stats/dictionary_entries for these slugs; the
+    # 2026-10-29 build measured 440 MiB (catalog 340, fulltext 97). The
+    # census file measures the real figure at every build.
+    #
+    # == v2 (2026-11-09): the sign desk and the links journal
+    #
+    # v1 left nabu_char / nabu_signs / nabu_links / nabu_cognates answering
+    # only their honest-absence notes. The smallest servable additions that
+    # light up the first three, chosen against the live catalog
+    # (2026-11-09):
+    #
+    # * osl (CC0, a kind: module) — the Oracc Sign List the sign desk reads
+    #   at call time. Its upstream tree is ~450 MB without .git (scans,
+    #   web assets), so KEEP_CANONICAL_FILES ships just the two read-seam
+    #   files (osl.asl 956 KB + cdli_sign_readings.tsv 79 KB).
+    # * achemenet (CC BY 4.0) — 2,774 Neo/Late-Babylonian documents (one
+    #   passage each) in transliteration, so nabu_signs has passage urns to
+    #   resolve, and a reference_edges? source: its sync mints 1,139 CDLI
+    #   reference edges into the links journal (db/links.sqlite3), so
+    #   nabu_links serves a real journal. Estimated +30-45 MB derived (22 MB
+    #   of passage text + silver-lemma annotations in the live catalog;
+    #   16 MB canonical stays in WORK). The edges' CDLI counterparts are
+    #   not baked — they render unresolved (document null), honestly.
+    #
+    # Rejected: riig (415 edges, 1,357 passages, attribution) — smaller,
+    # but no ATF, so it would light links without giving nabu_signs a urn
+    # mode; ceipom/corph/isicily (edges, no ATF, larger); the sign-bearing
+    # ATF corpora cdli/oracc (1.8-2.2M passages — over the ceiling) and
+    # ebl/etcsl (nc). nabu_cognates is NOT lit: its join needs
+    # gold-lemmatized witnesses in two languages of one alignment work,
+    # and every gold NT/OT witness held is nc (proiel, iswoc, bhsa,
+    # peshitta, etcbc-targum, coptic-scriptorium at source level) — the
+    # open/attribution ones carry no lemmas (ccmh, sblgnt, vulgate,
+    # eng-web, elizabeth-bible) or Strong's-number lemmas no
+    # reconstruction reflex can join (oshb). Its eval task stays the
+    # honest-absence one.
     DEMO_SOURCES = [
       DemoSource.new(slug: "sblgnt", blurb: "SBL Greek New Testament (CC BY)"),
       DemoSource.new(slug: "vulgate", blurb: "Clementine Vulgate — the Latin witness (open)"),
       DemoSource.new(slug: "eng-web", blurb: "World English Bible — the English witness (open)"),
       DemoSource.new(slug: "oshb", blurb: "Open Scriptures Hebrew Bible — WLC text, morphology-tagged (open)"),
-      DemoSource.new(slug: "lexica", blurb: "LSJ + Lewis & Short — the dictionary shelf (CC BY-SA)")
+      DemoSource.new(slug: "lexica", blurb: "LSJ + Lewis & Short — the dictionary shelf (CC BY-SA)"),
+      DemoSource.new(slug: "achemenet", blurb: "Achemenet Babylonian — Achaemenid-period Akkadian texts " \
+                                               "with CDLI reference links (CC BY)"),
+      DemoSource.new(slug: "osl", blurb: "Oracc Sign List — the cuneiform sign desk (CC0)")
     ].freeze
 
     # const: the license model's redistributable classes (Model::Validation;
@@ -86,7 +125,14 @@ module Nabu
     # tools read lazily at call time. All attribution-class, together a few
     # MB. Everything else the tools need is derived into db/ at sync time
     # (the Pleiades place index included).
-    KEEP_CANONICAL = %w[nabu-lects nabu-places cigs].freeze
+    KEEP_CANONICAL = %w[nabu-lects nabu-places cigs osl].freeze
+
+    # A kept tree whose read seams need only a few files out of a big
+    # upstream checkout ships ONLY those (paths relative to the tree; an
+    # absent one is skipped). Every other kept tree is copied whole.
+    KEEP_CANONICAL_FILES = {
+      "osl" => [Nabu::SignList::ASL_FILE, Nabu::CdliSignReadings::TSV_FILE]
+    }.freeze
 
     # Upstream bookkeeping never shipped inside kept trees.
     PRUNED_ENTRIES = %w[.git .attic].freeze
@@ -114,13 +160,14 @@ module Nabu
 
     def initialize(registry:, out_dir:, work_dir:, project_root: Config::PROJECT_ROOT,
                    slugs: DEMO_SOURCES.map(&:slug), keep_canonical: KEEP_CANONICAL,
-                   max_bytes: DEFAULT_MAX_BYTES, runner: nil, log: $stderr)
+                   keep_files: KEEP_CANONICAL_FILES, max_bytes: DEFAULT_MAX_BYTES, runner: nil, log: $stderr)
       @registry = registry
       @out_dir = File.expand_path(out_dir)
       @work_dir = File.expand_path(work_dir)
       @project_root = project_root
       @slugs = slugs
       @keep_canonical = keep_canonical
+      @keep_files = keep_files
       @max_bytes = max_bytes
       @log = log
       @runner = runner || method(:shell_runner)
@@ -265,8 +312,22 @@ module Nabu
         tree = File.join(work_canonical, slug)
         next unless Dir.exist?(tree)
 
-        FileUtils.cp_r(tree, out_canonical)
-        PRUNED_ENTRIES.each { |entry| FileUtils.rm_rf(File.join(out_canonical, slug, entry)) }
+        if (files = @keep_files[slug])
+          copy_files(tree, File.join(out_canonical, slug), files)
+        else
+          FileUtils.cp_r(tree, out_canonical)
+          PRUNED_ENTRIES.each { |entry| FileUtils.rm_rf(File.join(out_canonical, slug, entry)) }
+        end
+      end
+    end
+
+    def copy_files(tree, target, files)
+      files.each do |relative|
+        source = File.join(tree, relative)
+        next unless File.file?(source)
+
+        FileUtils.mkdir_p(File.dirname(File.join(target, relative)))
+        FileUtils.cp(source, File.join(target, relative))
       end
     end
 
