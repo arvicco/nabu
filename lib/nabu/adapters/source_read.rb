@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require "zlib"
+
 module Nabu
   module Adapters
     # The encoding/bounds belt at the adapter read seam (architecture §3).
@@ -22,6 +24,7 @@ module Nabu
     #   SourceRead.utf8_file(path, label: "titus-pahlavi", repair: :severed_tags)
     #   SourceRead.utf8(bytes, label: "zip:#{member}")
     #   SourceRead.utf8_lines(path, label: "hmml-reading-room") { |line| … }
+    #   SourceRead.utf8_gzip(path, label: "vakk page")
     #   SourceRead.utf8_member(SourceRead.zip_file(path), entry, label: path)
     #   SourceRead.nfc(text, language: lang)
     #   SourceRead.slice(heap, offset: ptr, length: len, what: "#{path}: var pointer")
@@ -67,23 +70,40 @@ module Nabu
         raise Nabu::ParseError, "#{label} is not valid UTF-8"
       end
 
+      # The gzipped file at +path+, gunzipped whole and read as UTF-8 through
+      # #utf8 (the error names the path, as #utf8_file). Container defects
+      # stay Zlib::Error (and a missing file Errno::ENOENT): each caller maps
+      # them onto its own contract, as with #zip_file. For members too big
+      # to slurp, #utf8_lines with gzip: true.
+      def utf8_gzip(path, label:, repair: nil)
+        utf8(Zlib.gunzip(File.binread(path)), label: "#{label}: #{path}", repair: repair)
+      end
+
       # Stream +path+ line by line — the reader for files too big to slurp
       # (a multi-hundred-MB JSONL member): each line (terminator kept, the
       # File.foreach split) is checked as UTF-8 and yielded; the file is
       # never read whole. Without a block, a lazy Enumerator. An invalid
       # line is Nabu::ParseError "<label>: <path> line <n> is not valid
-      # UTF-8"; +repair+ as #utf8, per line.
-      def utf8_lines(path, label:, repair: nil)
-        return enum_for(:utf8_lines, path, label: label, repair: repair) unless block_given?
+      # UTF-8"; +repair+ as #utf8, per line. +gzip+ streams the lines of a
+      # gzipped file (Zlib::GzipReader; container defects stay Zlib::Error).
+      def utf8_lines(path, label:, repair: nil, gzip: false, &block)
+        return enum_for(:utf8_lines, path, label: label, repair: repair, gzip: gzip) unless block
 
-        File.open(path, "rb") do |io|
-          io.each_line.with_index(1) do |line, number|
-            text = line.force_encoding(Encoding::UTF_8)
-            yield text.valid_encoding? ? text : utf8(line, label: "#{label}: #{path} line #{number}", repair: repair)
-          end
+        if gzip
+          Zlib::GzipReader.open(path) { |io| check_lines(io, path, label, repair, &block) }
+        else
+          File.open(path, "rb") { |io| check_lines(io, path, label, repair, &block) }
         end
         nil
       end
+
+      def check_lines(io, path, label, repair)
+        io.each_line.with_index(1) do |line, number|
+          text = line.force_encoding(Encoding::UTF_8)
+          yield text.valid_encoding? ? text : utf8(line, label: "#{label}: #{path} line #{number}", repair: repair)
+        end
+      end
+      private_class_method :check_lines
 
       # Open the ZIP archive at +path+ (a Nabu::ZipReader over its bytes) —
       # the belt's one binary read. Structural defects stay

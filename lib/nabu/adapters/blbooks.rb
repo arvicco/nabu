@@ -376,10 +376,10 @@ module Nabu
 
       # -- parse internals ---------------------------------------------------
 
-      # The gunzipped book through the belt's UTF-8 check (the vakk gz
-      # mold — the belt has no gzip reader; a book is ≤ 2.6 MB gzipped).
+      # The gunzipped book through the belt's UTF-8 check (a book is
+      # ≤ 2.6 MB gzipped, so it is read whole).
       def read_rows(path)
-        body = SourceRead.utf8(Zlib.gunzip(File.binread(path)), label: "blbooks book #{path}")
+        body = SourceRead.utf8_gzip(path, label: "blbooks book")
         body.each_line.reject { |line| line.strip.empty? }.map { |line| JSON.parse(line, allow_nan: true) }
       rescue JSON::ParserError, Zlib::Error, Errno::ENOENT => e
         raise ParseError, "#{path}: unreadable book file: #{e.message}"
