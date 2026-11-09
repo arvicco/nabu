@@ -33,11 +33,16 @@ class LectShelfDatesTest < Minitest::Test
     @registry ||= Nabu::Lects.load(FIXTURES, overrides_path: LECT_OVERRIDES_PATH)
   end
 
-  def shelf_dates(codes: %w[en], sources: %w[leme])
+  def shelf_dates(codes: %w[en], sources: %w[leme], parent_anchor_fallback: false)
     Nabu::LectShelfDates.new(rules: [
                                Nabu::LectShelfDates::Rule.new(id: "test-year", sources: sources, codes: codes,
-                                                              field: "lexicon_year", note: nil)
+                                                              field: "lexicon_year", note: nil,
+                                                              parent_anchor_fallback: parent_anchor_fallback)
                              ])
+  end
+
+  def fallback_dates(codes: %w[en fra])
+    shelf_dates(codes: codes, parent_anchor_fallback: true)
   end
 
   # One shelf whose entries carry +years+ (nil = an entry without the field).
@@ -160,6 +165,96 @@ class LectShelfDatesTest < Minitest::Test
     refute result.key?(cawdrey)
   end
 
+  # -- the opt-in parent-anchor fallback (2026-11-09) -------------------------
+
+  # A shelf dated below every stage of its code's own anchor reaches the
+  # PARENT anchor's band — LEME's incunable English lexicons (1477–1499)
+  # sit under enm [1100, 1500], not under any en stage.
+  def test_the_fallback_stages_an_outside_band_shelf_onto_the_parent_anchor
+    incunable = shelf("leme-1477", years: %w[1477 1499])
+    result = stagings(fallback_dates)
+    staging = result.fetch(incunable)
+    assert_equal "enm", staging.lect_id
+    assert_equal "rule:date-band", staging.basis
+    assert_equal "en", staging.fallback_from
+    assert_equal "dated 1477..1499 (lexicon_year) — parent-anchor fallback from en", staging.note
+  end
+
+  def test_the_fallback_is_off_by_default
+    incunable = shelf("leme-1477", years: %w[1477])
+    staging = stagings.fetch(incunable)
+    assert_equal :outside_bands, staging.reason
+    assert_nil staging.lect_id
+    assert_nil staging.fallback_from
+  end
+
+  def test_a_codemapped_french_shelf_stages_its_own_band_first_and_the_parent_below_it
+    cotgrave = shelf("leme-cotgrave", years: %w[1611], language: "fra")
+    solleysel = shelf("leme-solleysel", years: %w[1696], language: "fra")
+    palsgrave = shelf("leme-palsgrave", years: %w[1530], language: "fra")
+    result = stagings(fallback_dates)
+    assert_equal "fr:cls", result.fetch(cotgrave).lect_id, "a contemporary headword list stages fr's own band"
+    assert_nil result.fetch(cotgrave).fallback_from, "the fallback never fires when the own anchor stages"
+    assert_equal "fr:cls", result.fetch(solleysel).lect_id
+    assert_equal "frm", result.fetch(palsgrave).lect_id
+    assert_equal "fr", result.fetch(palsgrave).fallback_from
+  end
+
+  def test_the_fallback_only_rescues_outside_bands_never_a_straddle
+    straddle = shelf("leme-straddle", years: ["1490-1510"])
+    staging = stagings(fallback_dates).fetch(straddle)
+    assert_equal :spans_bands, staging.reason, "a hull touching en:early is a straddle, not a reach below"
+    assert_nil staging.lect_id
+  end
+
+  # Tie-break: the walk is nearest-first. 1400 sits on the shared edge of
+  # frm [1400, 1600] and fro [842, 1400]; the nearer ancestor wins.
+  def test_the_nearest_ancestor_whose_band_contains_the_date_wins
+    edge = shelf("leme-1400", years: %w[1400], language: "fra")
+    assert_equal "frm", stagings(fallback_dates).fetch(edge).lect_id
+  end
+
+  def test_the_walk_climbs_past_a_parent_whose_band_misses
+    old = shelf("leme-1050", years: %w[1050])
+    assert_equal "ang", stagings(fallback_dates).fetch(old).lect_id, "enm [1100, 1500] misses; ang [450, 1100] holds"
+  end
+
+  # The fallback reaches BACKWARD only: a hull above the own anchor's
+  # floor is no predecessor-stage evidence (fr's chain climbs roa → lat,
+  # and lat:new [1550, open] would otherwise swallow a 1950 French shelf).
+  def test_a_shelf_above_the_own_anchors_floor_never_falls_back
+    modern = shelf("leme-1950", years: %w[1950], language: "fra")
+    staging = stagings(fallback_dates).fetch(modern)
+    assert_equal :outside_bands, staging.reason
+    assert_nil staging.lect_id
+  end
+
+  # The walk ends at the first ancestor carrying no attested band — the
+  # end of the dated succession (fro → roa, a reconstructed family node);
+  # it never crosses into another language's ladder (roa's parent lat).
+  def test_the_walk_stops_at_the_first_unbanded_ancestor
+    carolingian = shelf("leme-800", years: %w[800], language: "fra")
+    staging = stagings(fallback_dates).fetch(carolingian)
+    assert_equal :outside_bands, staging.reason, "never lat:med through roa"
+    assert_nil staging.lect_id
+  end
+
+  def test_a_resolved_script_surface_rides_onto_the_parent_anchor
+    raw = YAML.safe_load_file(File.join(FIXTURES, "lects.yml"))
+    surfaced = Nabu::Lects.new(anchors: raw.fetch("anchors"), scripts: raw.fetch("scripts"),
+                               codemap: YAML.safe_load_file(File.join(FIXTURES, "codemap.yml")).fetch("map"),
+                               overrides: { "leme" => { "en" => "en~latn" } })
+    incunable = shelf("leme-1477", years: %w[1477])
+    staging = fallback_dates.stagings(catalog: @catalog, registry: surfaced).fetch(incunable)
+    assert_equal "enm~latn", staging.lect_id
+  end
+
+  def test_the_document_grain_is_untouched_by_the_fallback
+    dates = Nabu::LectDates.new(registry: registry)
+    assert_equal :outside_bands, dates.infer(code: "en", source: "leme", not_before: 1477, not_after: 1477),
+                 "document grain never climbs to a parent anchor"
+  end
+
   # -- provenance stamp shape -------------------------------------------------
 
   def test_the_stamp_mirrors_the_document_grain
@@ -221,18 +316,41 @@ class LectShelfDatesTest < Minitest::Test
     end
   end
 
-  def test_the_shipped_leme_rule_stages_english_shelves_off_lexicon_year
+  def test_the_shipped_leme_rule_stages_english_and_french_shelves_off_lexicon_year
     loaded = Nabu::LectShelfDates.load(RULES_PATH)
     rule = loaded.rules.find { |r| r.sources.include?("leme") }
     refute_nil rule, "config/lect_facet_rules.yml carries the leme shelf-year rule"
-    assert_equal %w[en], rule.codes, "English shelves only — the other shelf languages are not staged by year"
+    assert_equal %w[en fra], rule.codes,
+                 "the living languages' contemporary headwords only — lat stays out (classical headwords)"
     assert_equal "lexicon_year", rule.field
+    assert rule.parent_anchor_fallback, "the pre-1500 en / pre-1600 fra shelves reach enm / frm"
     loaded.validate!(registry)
+  end
+
+  def test_load_reads_the_parent_anchor_fallback_opt_in_default_off
+    Dir.mktmpdir do |dir|
+      path = File.join(dir, "rules.yml")
+      File.write(path, <<~YAML)
+        dictionary_date_bands:
+          - {id: on, sources: [s], codes: [en], field: year, parent_anchor_fallback: true}
+          - {id: off, sources: [s], codes: [en], field: year}
+      YAML
+      on, off = Nabu::LectShelfDates.load(path).rules
+      assert on.parent_anchor_fallback
+      refute off.parent_anchor_fallback
+      File.write(path, "dictionary_date_bands:\n  - {id: x, sources: [s], codes: [en], field: year, " \
+                       "parent_anchor_fallback: \"yes\"}\n")
+      assert_raises(Nabu::Error) { Nabu::LectShelfDates.load(path) }
+    end
   end
 
   def test_validate_refuses_a_code_the_registry_does_not_define
     dates = shelf_dates(codes: %w[zz-not-a-code])
     assert_raises(Nabu::Error) { dates.validate!(registry) }
+  end
+
+  def test_validate_accepts_a_shelf_code_the_codemap_maps_onto_a_node
+    shelf_dates(codes: %w[fra]).validate!(registry)
   end
 
   # -- the real upstream field, end to end ------------------------------------

@@ -680,7 +680,12 @@ rules:
 # Keys: sources, codes (the shelf codes a year may stage — opt-in: a
 # dictionary's year dates its compiler's own language, never the classical
 # headwords of a Latin or Greek dictionary), field (the entry annotation
-# carrying the shelf's year).
+# carrying the shelf's year), parent_anchor_fallback (opt-in, default
+# false — 2026-11-09: a shelf whose year hull ends BELOW the own anchor's lowest
+# band floor climbs the registry's parent edges to the nearest ancestor
+# whose band contains it, stopping at the first ancestor with no attested
+# band; shelf grain only, the document grain never climbs — see
+# Nabu::LectShelfDates).
 dictionary_date_bands:
   # LEME: every entry carries its lexicon's typed year (lexicon_year — the
   # TSpace item's dc.date.created, the base edition LEME transcribes;
@@ -692,14 +697,27 @@ dictionary_date_bands:
   # Blount (1656), Phillips (1658) onto en:early; Kersey (1702), Bailey
   # (1726, 1737), Johnson (1755) onto en:late. The six pre-1500 English
   # shelves (the incunable prints 1477–1499: Lydgate, Higden, the Book of
-  # St. Albans, the Promptorium Parvulorum) fall below every en stage and
-  # stay bare en — whether those prints belong under enm is a judgment for
-  # the registry, not this rule. A shelf dated exactly 1700 would sit in both closed bands
-  # and stay bare (none does today). The other shelf languages (lat 28,
-  # ita/fra 6 each, hbo/grc/ang, ...) are deliberately NOT covered: their
-  # headwords are the language described, not the compiler's own, so the
-  # year is no stage evidence for them.
+  # St. Albans, the English-and-French vocabulary, the Promptorium
+  # Parvulorum — 11,212 entries) fall below en:early's 1500 floor; the
+  # parent-anchor fallback stages them onto en's parent enm [1100, 1500],
+  # the language those prints are in. A shelf dated exactly 1700 would sit
+  # in both closed bands and stay bare (none does today).
+  # fra is covered too (2026-11-09): in a bilingual dictionary of a LIVING
+  # language the headwords are the compiler's contemporaries' French, so
+  # the lexicon's year dates them as it dates the English — Cotgrave
+  # (1611) and Solleysel (1696), 24,543 entries, stage fr:cls
+  # [1600, 1789]; the four pre-1600 French shelves (Caxton 1480, Barclay
+  # 1521, L. H. 1571, Hollyband 1593 — 35,267 entries) fall below fr:cls's
+  # floor and reach fr's parent frm [1400, 1600] by the fallback. lat
+  # stays OUT deliberately: a Latin dictionary's headwords are the
+  # language DESCRIBED, often classical — the compiler's year dates his
+  # English glosses, so Thomas Thomas's classical Latin must never become
+  # lat:new. The other shelf languages (ita, hbo/grc/ang, ...) are not
+  # covered: ita is a living language like fra and awaits its own census
+  # before joining; the rest describe historical languages, the year no
+  # stage evidence for their headwords.
   - id: leme-lexicon-year
     sources: [leme]
-    codes: [en]
+    codes: [en, fra]
     field: lexicon_year
+    parent_anchor_fallback: true

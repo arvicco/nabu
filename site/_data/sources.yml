@@ -2057,14 +2057,14 @@ sources:
     name: Nasjonalbiblioteket — public-domain books, page OCR (National Library of
       Norway)
     license_class: open
-    documents: 2
-    documents_display: '2'
-    passages: 611
-    passages_display: '611'
+    documents: 9
+    documents_display: '9'
+    passages: 3940
+    passages_display: '3,940'
     entries: 0
     entries_display: '0'
-    holdings: 2 documents / 611 passages
-    canonical_display: 23 MB
+    holdings: 9 documents / 3,940 passages
+    canonical_display: 78 MB
   ndl-kotenseki:
     name: NDL 次世代デジタルライブラリー — 古典籍 OCR full text (bulk API)
     license_class: open
@@ -3269,14 +3269,14 @@ sources:
   wellcome:
     name: Wellcome Collection — digitised printed books, OCR full text (pre-1800 cone)
     license_class: open
-    documents: 43
-    documents_display: '43'
-    passages: 10963
-    passages_display: '10,963'
+    documents: 131
+    documents_display: '131'
+    passages: 94664
+    passages_display: '94,664'
     entries: 0
     entries_display: '0'
-    holdings: 43 documents / 10,963 passages
-    canonical_display: 564 MB
+    holdings: 131 documents / 94,664 passages
+    canonical_display: 636 MB
   wenhai:
     name: 'The Digital Wenhai v1.1: Phonology (Beaudouin 2026) — the Tangut rhyme
       dictionary 文海'
@@ -3877,11 +3877,11 @@ shelves:
     - mazarinades
     - socinian-letters
     - wellcome
-    documents: 25177
-    documents_display: '25,177'
-    passages: 5618769
-    passages_display: '5,618,769'
-    size_display: 25,177 / 5,618,769
+    documents: 25265
+    documents_display: '25,265'
+    passages: 5702470
+    passages_display: '5,702,470'
+    size_display: 25,265 / 5,702,470
   papyri:
     sources:
     - papyri-ddbdp
@@ -4314,11 +4314,11 @@ shelves:
     - grand-tour
     - dbnl
     - nb-no
-    documents: 44407
-    documents_display: '44,407'
-    passages: 3483545
-    passages_display: '3,483,545'
-    size_display: 44,407 / 3,483,545
+    documents: 44414
+    documents_display: '44,414'
+    passages: 3486874
+    passages_display: '3,486,874'
+    size_display: 44,414 / 3,486,874
   africa:
     sources:
     - africa-pd
@@ -4340,5 +4340,5 @@ shelves:
     size_display: 1,282 / 7,014
 disk:
   canonical_display: 153 GB
-  derived_display: 207 GB
+  derived_display: 208 GB
   starter_display: 693 MB
