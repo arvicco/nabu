@@ -193,12 +193,12 @@ module Adapters
 
     # -- registry --------------------------------------------------------------------------
 
-    def test_registry_row_is_unwired_and_manual
+    def test_registry_row_is_wired_and_manual
       registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources.yml", __dir__))
       entry = registry["dbnl"]
       refute_nil entry
       assert_equal ADAPTER, entry.adapter_class
-      refute entry.wired, "wired: false until the first real sync is verified"
+      assert entry.wired, "wired flipped true after the verified first sync (3,653 docs / 950,870 passages)"
       assert_equal "manual", entry.sync_policy
     end
 

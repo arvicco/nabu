@@ -6,7 +6,7 @@ compatibility: "Requires the nabu MCP server (`bin/nabu mcp`, read-only, stdio) 
 metadata:
   desk: germanic
   origin: generated
-  sources: "aspr blbooks bosworth-toller cleasby-vigfusson cme corpus-gysseling corpus-oudfries corpus-oudnederlands dta ecco-tcp eebo-tcp emmo evans-tcp fornsvenska fsv-lexica grand-tour helipad iswoc leme menota menotec perseus-anglit ppchy proiel ref rem ren rundata runesdb stationers-register statutes-realm ud wiktionary-dum wiktionary-enm wiktionary-gmh wiktionary-gmq-osw wiktionary-got wiktionary-non wiktionary-ofs wiktionary-sco zoega"
+  sources: "aspr blbooks bosworth-toller cleasby-vigfusson cme corpus-gysseling corpus-oudfries corpus-oudnederlands dbnl dta ecco-tcp eebo-tcp emmo evans-tcp fornsvenska fsv-lexica grand-tour helipad iswoc leme menota menotec nb-no perseus-anglit ppchy proiel ref rem ren rundata runesdb stationers-register statutes-realm ud wellcome wiktionary-dum wiktionary-enm wiktionary-gmh wiktionary-gmq-osw wiktionary-got wiktionary-non wiktionary-ofs wiktionary-sco zoega"
 ---
 
 # The Germanicist — the `germanic` desk
@@ -31,6 +31,7 @@ verbatim upstream terms are in `docs/02-sources.md` of the Nabu repository.
 | `corpus-gysseling` | Corpus Gysseling — 13th-c. Early Middle Dutch, lemma+POS (INT/IvdNT) | research_private |
 | `corpus-oudfries` | Corpus Oudfries — Old Frisian text witnesses c. 1200–1550, lemma+POS (INT/IvdNT) | research_private |
 | `corpus-oudnederlands` | Corpus Oudnederlands — Old Dutch word material 475–1200 (INT/IvdNT) | research_private |
+| `dbnl` | DBNL — Digitale Bibliotheek voor de Nederlandse Letteren, public-domain collection (KB) | attribution |
 | `dta` | Deutsches Textarchiv (BBAW) | attribution |
 | `ecco-tcp` | ECCO-TCP — Eighteenth Century Collections Online, Text Creation Partnership | open |
 | `eebo-tcp` | EEBO-TCP — Early English Books Online, Text Creation Partnership (Phases I–II) | open |
@@ -44,6 +45,7 @@ verbatim upstream terms are in `docs/02-sources.md` of the Nabu repository.
 | `leme` | LEME — Lexicons of Early Modern English (University of Toronto), the LEME-XML texts on TSpace | attribution |
 | `menota` | Menota — the Medieval Nordic Text Archive (clarino.uib.no) | attribution |
 | `menotec` | Menotec — Old Norwegian treebanks + the Poetic Edda (Codex Regius), PROIEL scheme | nc |
+| `nb-no` | Nasjonalbiblioteket — public-domain books, page OCR (National Library of Norway) | open |
 | `perseus-anglit` | Perseus Digital Library — canonical Old English literature (Beowulf) | attribution |
 | `ppchy` | PPCHY — Penn Parsed Corpus of Historical Yiddish (Santorini) | nc |
 | `proiel` | PROIEL Treebank | nc |
@@ -55,6 +57,7 @@ verbatim upstream terms are in `docs/02-sources.md` of the Nabu repository.
 | `stationers-register` | Stationers' Register Online — the copy entries of Registers A–D, 1557–1640 | attribution |
 | `statutes-realm` | Statutes of the Realm, vols 5–7 (1625–1701; Raithby, via British History Online) | open |
 | `ud` | Universal Dependencies — ancient treebanks | nc |
+| `wellcome` | Wellcome Collection — digitised printed books, OCR full text (pre-1800 cone) | open |
 | `wiktionary-dum` | Wiktionary Middle Dutch — kaikki.org machine-readable extract | attribution |
 | `wiktionary-enm` | Wiktionary Middle English — kaikki.org machine-readable extract | attribution |
 | `wiktionary-gmh` | Wiktionary Middle High German — kaikki.org machine-readable extract | attribution |
