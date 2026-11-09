@@ -912,7 +912,17 @@ dating as `lect_note`; a covered shelf that cannot stage keeps the bare
 node with the reason declared in `lect_note` (`bare: undated`, `bare:
 outside bands — dated 1477..1477 (lexicon_year)`, a shared band-edge
 year → `bare: spans bands`); uncovered shelves leave both stamp columns
-NULL. Compiled wherever `dictionary_stats` derives (both rebuild
+NULL. A rule may opt in to the **parent-anchor fallback**
+(`parent_anchor_fallback: true`, default off; shelf grain only — the
+document grain never climbs): a shelf whose hull ends below its own
+anchor's lowest band floor walks the registry's `parent:` edges to the
+nearest ancestor whose band contains it (its attested banded stages, else
+its anchor-level band), stopping bare at the first ancestor with no
+attested band — so LEME's 1477–1499 English shelves stage `enm` and its
+pre-1600 French ones `frm`, while nothing crosses a family node into
+another language's ladder (`fro` → `roa` → `lat`). The note then reads
+`dated 1480..1480 (lexicon_year) — parent-anchor fallback from fr`.
+Compiled wherever `dictionary_stats` derives (both rebuild
 flavors, `builders:refresh`, the post-sync refresh), never into the lect
 journal — shelves are not documents. `nabu lect stage-dictionaries
 [--source SLUG] [--dry-run]` prints the census and re-derives the
