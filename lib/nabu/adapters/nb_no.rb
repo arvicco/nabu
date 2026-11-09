@@ -710,7 +710,7 @@ module Nabu
       end
 
       def read_alto(path)
-        SourceRead.utf8(Zlib.gunzip(File.binread(path)), label: "nb-no ALTO page #{path}")
+        SourceRead.utf8_gzip(path, label: "nb-no ALTO page")
       rescue Zlib::Error, Errno::ENOENT => e
         raise ParseError, "#{path}: unreadable ALTO page: #{e.message}"
       end

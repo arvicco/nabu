@@ -450,7 +450,7 @@ module Nabu
       end
 
       def read_gz(path)
-        SourceRead.utf8(Zlib.gunzip(File.binread(path)), label: "vakk page #{path}")
+        SourceRead.utf8_gzip(path, label: "vakk page")
       rescue Zlib::Error, Errno::ENOENT => e
         raise ParseError, "#{path}: unreadable page archive: #{e.message}"
       end
