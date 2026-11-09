@@ -34,6 +34,27 @@ module Nabu
   # Latin or Greek dictionary — so codes are opt-in, never "all"), and the
   # entry annotation field carrying the shelf's year.
   #
+  # The PARENT-ANCHOR FALLBACK (2026-11-09, opt-in per rule —
+  # parent_anchor_fallback: true; default off). A shelf dated below every
+  # stage of its own anchor (:outside_bands AND the hull ends before the
+  # anchor's lowest band floor — never a straddle, never a shelf above the
+  # ladder, never an undated or already-refined shelf) climbs the
+  # registry's descent edges (Nabu::Lects#parent_of) to the NEAREST
+  # ancestor whose band contains the hull: LEME's 1477–1499 English lexicons fall below en:early and
+  # land on enm [1100, 1500]; its pre-1600 French ones on frm [1400, 1600].
+  # An ancestor's candidates are its attested banded stages when it has
+  # any, else its own anchor-level band (enm/frm/fro/ang carry theirs
+  # bare). Tie-break: parent: is a single edge, so the walk is a chain and
+  # nearest-first decides a shared edge year (1400 is in both frm and fro
+  # → frm); an ancestor whose OWN stages straddle the hull ends the walk
+  # bare rather than skipping to a grandparent. The walk STOPS at the
+  # first ancestor carrying no attested band — the end of the dated
+  # succession (fro → roa, enm → ang → gmw:pro): past it the chain crosses
+  # into another language's ladder (roa's parent is lat, whose open
+  # lat:new band would swallow any late hull). SHELF GRAIN ONLY — the
+  # document grain (LectDates#infer) never climbs. The staged shelf keeps
+  # basis rule:date-band; its note names the anchor it fell back from.
+  #
   # Read by Store::DictionaryStats, which stamps the verdict on the
   # dictionary_stats row (lect, lect_basis, lect_note).
   class LectShelfDates
@@ -44,12 +65,18 @@ module Nabu
     YEAR_RANGE = /\A(-?\d{1,4})\s*[–-]\s*(-?\d{1,4})\z/
     private_constant :FIELD_NAME, :YEAR, :YEAR_RANGE
 
-    Rule = Data.define(:id, :sources, :codes, :field, :note)
+    Rule = Data.define(:id, :sources, :codes, :field, :note, :parent_anchor_fallback) do
+      def initialize(parent_anchor_fallback: false, **) = super
+    end
 
     # One covered shelf's verdict: +lect_id+ when staged, else nil and the
     # +reason+ it stayed bare.
+    # +fallback_from+ names the code's own anchor when the parent-anchor
+    # fallback staged the shelf, else nil.
     Staging = Data.define(:dictionary_id, :rule_id, :source, :code, :field, :lect_id, :reason,
-                          :not_before, :not_after) do
+                          :not_before, :not_after, :fallback_from) do
+      def initialize(fallback_from: nil, **) = super
+
       def staged? = !lect_id.nil?
 
       def interval = [not_before, not_after]
@@ -58,7 +85,7 @@ module Nabu
 
       def note
         dated = not_before && not_after ? "dated #{not_before}..#{not_after} (#{field})" : nil
-        return dated if staged?
+        return [dated, fallback_from && "parent-anchor fallback from #{fallback_from}"].compact.join(" — ") if staged?
 
         ["bare: #{reason.to_s.tr('_', ' ')}", dated].compact.join(" — ")
       end
@@ -87,8 +114,14 @@ module Nabu
         raise Nabu::Error, "dictionary date-band rule #{entry['id']}: field #{field.inspect} is not an annotation name"
       end
 
+      fallback = entry.fetch("parent_anchor_fallback", false)
+      unless [true, false].include?(fallback)
+        raise Nabu::Error, "dictionary date-band rule #{entry['id']}: parent_anchor_fallback must be true or false"
+      end
+
       Rule.new(id: entry.fetch("id"), sources: Array(entry.fetch("sources")).map(&:to_s),
-               codes: Array(entry.fetch("codes")).map(&:to_s), field: field, note: entry["note"])
+               codes: Array(entry.fetch("codes")).map(&:to_s), field: field, note: entry["note"],
+               parent_anchor_fallback: fallback)
     end
     private_class_method :build_rule
 
@@ -112,10 +145,13 @@ module Nabu
 
     # Every covered code must be a node the registry defines — the
     # never-silently-coerced rule LectRules#validate! enforces for targets.
+    # A shelf code is a LANGUAGE code, so a codemapped one (fra → fr)
+    # qualifies when it resolves onto a node for every covered source.
     def validate!(registry)
       rules.each do |rule|
         rule.codes.each do |code|
           next if registry.lect(code)
+          next if rule.sources.all? { |source| registry.lect(registry.resolve(code, source: source)) }
 
           raise Nabu::Error, "dictionary date-band rule #{rule.id}: code #{code.inspect} " \
                              "is not defined in the nabu-lects registry"
@@ -145,14 +181,14 @@ module Nabu
 
         years = year_values(catalog, covered.map { |shelf| shelf[:id] }, rule.field)
         covered.each do |shelf|
-          out[shelf[:id]] = stage(dates, rule, shelf, years.fetch(shelf[:id], []))
+          out[shelf[:id]] = stage(dates, registry, rule, shelf, years.fetch(shelf[:id], []))
         end
       end
     end
 
     private
 
-    def stage(dates, rule, shelf, values)
+    def stage(dates, registry, rule, shelf, values)
       base = { dictionary_id: shelf[:id], rule_id: rule.id, source: shelf[:source], code: shelf[:language],
                field: rule.field }
       return Staging.new(**base, lect_id: nil, reason: :undated, not_before: nil, not_after: nil) if values.empty?
@@ -167,7 +203,59 @@ module Nabu
       verdict = dates.infer(code: shelf[:language], source: shelf[:source],
                             not_before: not_before, not_after: not_after)
       lect_id, reason = verdict.is_a?(Symbol) ? [nil, verdict] : [verdict, nil]
+      if reason == :outside_bands && rule.parent_anchor_fallback
+        fallback = parent_anchor_stage(registry, shelf, not_before, not_after)
+        if fallback
+          return Staging.new(**base, lect_id: fallback.last, reason: nil, not_before: not_before,
+                                     not_after: not_after, fallback_from: fallback.first)
+        end
+      end
       Staging.new(**base, lect_id: lect_id, reason: reason, not_before: not_before, not_after: not_after)
+    end
+
+    # The parent-anchor fallback walk (class doc): [own anchor, staged id]
+    # for the nearest ancestor holding exactly one attested band that
+    # contains the hull, or nil. The resolution's script surface rides on
+    # (en~latn → enm~latn), the LectDates#infer stance.
+    def parent_anchor_stage(registry, shelf, not_before, not_after)
+      match = Nabu::Lects.parse_id(registry.resolve(shelf[:language], source: shelf[:source]))
+      return nil unless match && below_floor?(registry, match[:anchor], not_after)
+
+      seen = Set[match[:anchor]]
+      ancestor = registry.parent_of(match[:anchor])
+      while ancestor && seen.add?(ancestor)
+        bands = ancestor_bands(registry, ancestor)
+        return nil if bands.empty?
+
+        containing = bands.select do |record|
+          (record.band[0].nil? || record.band[0] <= not_before) && (record.band[1].nil? || not_after <= record.band[1])
+        end
+        return nil if containing.size > 1
+        return [match[:anchor], "#{containing.first.id}#{"~#{match[:script]}" if match[:script]}"] if containing.one?
+
+        ancestor = registry.parent_of(ancestor)
+      end
+      nil
+    end
+
+    # Does the hull end before every band of the own anchor's attested
+    # stages? (An open floor admits nothing below it.)
+    def below_floor?(registry, anchor, not_after)
+      floors = registry.stages_of(anchor).select { |lect| lect.mode == :attested && lect.band }
+                                         .map { |lect| lect.band[0] }
+      !floors.empty? && floors.none?(&:nil?) && not_after < floors.min
+    end
+
+    # An ancestor's candidate bands: its attested banded stages when it has
+    # any, else its own record (an anchor-level band, or a stage id's band
+    # — a reconstructed stage never qualifies).
+    def ancestor_bands(registry, id)
+      record = registry.lect(id)
+      return [] unless record
+
+      stages = record.stage ? [] : registry.stages_of(record.anchor)
+      candidates = stages.empty? ? [record] : stages
+      candidates.select { |lect| lect.mode == :attested && lect.band && (lect.band[0] || lect.band[1]) }
     end
 
     # {dictionary_id => [distinct non-null year values]} over LIVE entries.
