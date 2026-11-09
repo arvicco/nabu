@@ -15,7 +15,7 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 A source wears every desk it serves — these 30 answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
-| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 8 November 2026)</span> |
+| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 9 November 2026)</span> |
 |---|---|---|---|---|
 | `aio` | inscriptions | attribution | wired · manual | 4,002 docs / 67,429 passages |
 | `analecta-hymnica` | texts | open | wired · manual | 55 docs / 17,211 passages |
@@ -25,7 +25,7 @@ A source wears every desk it serves — these 30 answer this desk. Holdings are 
 | `damos` | texts | nc | wired · manual | 5,890 docs / 14,421 passages |
 | `digiliblt` | texts | attribution | wired · manual | 372 docs / 459,451 passages |
 | `diorisis` | texts | attribution | wired · manual | 767 docs / 516,505 passages |
-| `dprr` | feature module | nc | wired · manual | not synced yet |
+| `dprr` | feature module | nc | not yet wired | not synced yet |
 | `first1k-greek` | texts | attribution | wired · auto | 1,153 docs / 260,088 passages |
 | `formulae-open` | texts | attribution | wired · manual | 5,164 docs / 5,281 passages |
 | `glaux` | texts | attribution | wired · manual | 1,421 docs / 968,578 passages |
@@ -46,11 +46,11 @@ A source wears every desk it serves — these 30 answer this desk. Holdings are 
 | `suda-translations` | texts | nc | wired · manual | 27 docs / 31,341 passages |
 | `ud` | treebank | nc | wired · manual | 83 docs / 329,980 passages |
 | `vulgate` | texts | open | wired · manual | 73 docs / 35,809 passages |
-| `wellcome` | texts | open | not yet wired | not synced yet |
+| `wellcome` | texts | open | wired · manual | 43 docs / 10,963 passages |
 
-**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 8 November 2026)</span>: `grc` 122,400 · `lat` 64,954 · `gmy` 5,890 · `eng` 4,335 · `lab` 787 · `grc-Latn` 510 · `deu` 225 · `en` 27 · `ecy-Latn` 22 · `gmh` 11 … and 5 more (`nabu axis classical` lists all).
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 9 November 2026)</span>: `grc` 122,400 · `lat` 64,997 · `gmy` 5,890 · `eng` 4,335 · `lab` 787 · `grc-Latn` 510 · `deu` 225 · `en` 27 · `ecy-Latn` 22 · `gmh` 11 … and 5 more (`nabu axis classical` lists all).
 
-**Carried in by multilingual packs** (`ud` — whole-source members whose other languages ride along, as of 8 November 2026): `orv` 9 · `ota` 5 · `lzh` 4 · `egy` 3 · `frm` 3 … and 15 more (`nabu axis classical` lists all).
+**Carried in by multilingual packs** (`ud` — whole-source members whose other languages ride along, as of 9 November 2026): `orv` 9 · `ota` 5 · `lzh` 4 · `egy` 3 · `frm` 3 … and 15 more (`nabu axis classical` lists all).
 
 ## The desk's instruments
 
