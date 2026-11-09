@@ -20,7 +20,7 @@ registry:
       /demo/demo-census.json inside the image.
     type: server
     dateAdded: "2026-11-02T00:00:00Z"
-    image: ghcr.io/arvicco/nabu-demo:1.0.0
+    image: ghcr.io/arvicco/nabu-demo:1.8.0
     readme: https://github.com/arvicco/nabu/blob/main/docs/mcp.md
     source: https://github.com/arvicco/nabu
     upstream: https://github.com/arvicco/nabu

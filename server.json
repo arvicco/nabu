@@ -3,7 +3,7 @@
   "name": "io.github.arvicco/nabu-demo",
   "title": "Nabu",
   "description": "Ancient-text research library: search, concordance, dictionaries, alignment over an open demo slice",
-  "version": "1.0.0",
+  "version": "1.8.0",
   "repository": {
     "url": "https://github.com/arvicco/nabu",
     "source": "github"
@@ -12,7 +12,7 @@
   "packages": [
     {
       "registryType": "oci",
-      "identifier": "ghcr.io/arvicco/nabu-demo:1.0.0",
+      "identifier": "ghcr.io/arvicco/nabu-demo:1.8.0",
       "transport": {
         "type": "stdio"
       }
