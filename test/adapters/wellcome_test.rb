@@ -2,6 +2,7 @@
 
 require "test_helper"
 require "support/adapter_conformance"
+require "support/paced_crawl_conformance"
 require "tmpdir"
 require "zlib"
 
@@ -14,6 +15,7 @@ module Adapters
   # from it.
   class WellcomeTest < Minitest::Test
     include AdapterConformance
+    include PacedCrawlConformance
 
     FIXTURES = Nabu::TestSupport.fixtures("wellcome")
     W = Nabu::Adapters::Wellcome
@@ -31,6 +33,51 @@ module Adapters
 
     def quiet_adapter(slice: 10, http: Nabu::ZipFetch.default_http)
       W.new(delay: 0, slice: slice, timeout_backoff: 0, http: http)
+    end
+
+    def fixture_zip(bnumber) = File.binread(File.join(FIXTURES, "zips", "#{bnumber}.zip"))
+
+    # A census.tsv whose cone is exactly +bnumbers+ in that order (one Latin
+    # print each, a year apart — the cone order's own sort keeps them).
+    def write_census(dir, bnumbers)
+      rows = bnumbers.each_with_index.map do |bnumber, index|
+        year = (1600 + index).to_s
+        row = { "bnumber" => bnumber, "languages" => "lat", "not_before" => year, "not_after" => year }
+        W::CENSUS_COLUMNS.map { |column| row.fetch(column, "") }.join("\t")
+      end
+      File.write(File.join(dir, "census.tsv"), "#{[W::CENSUS_HEADER, *rows].join("\n")}\n")
+    end
+
+    # The held snapshot and its census, fresh (no census GET).
+    def seed_fresh_census(dir)
+      FileUtils.cp(File.join(FIXTURES, "works.json.gz"), dir)
+      FileUtils.cp(File.join(FIXTURES, "census.tsv"), dir)
+      File.write(File.join(dir, ".wellcome-census.json"),
+                 JSON.generate("etag" => '"abc"', "fetched_at" => Time.now.utc.iso8601))
+    end
+
+    # The paced-crawl conformance drives the zip lane through its real
+    # wiring: census.tsv's cone is the universe, zips/<bnumber>.zip the held
+    # rule, and the script answers over the stubbed text API.
+    def paced_crawl_engine(dir:, ids:, slice:, script:)
+      write_census(dir, ids)
+      lettered = fixture_zip("b30773490")
+      blank = fixture_zip("b33011564")
+      stub_request(:get, %r{\Ahttps://api\.wellcomecollection\.org/text/v1/[^/]+\.zip\z}).to_return do |request|
+        case script.call(request.uri.path[%r{/([^/]+)\.zip\z}, 1])
+        when :ok then { status: 200, body: lettered }
+        when :denied then { status: 403, body: PacedCrawlConformance::PC_REFUSAL_BODY }
+        when :empty then { status: 200, body: blank }
+        when :timeout then raise Net::ReadTimeout
+        when :fatal then { status: 500, body: "" }
+        end
+      end
+      quiet_adapter(slice: slice).zip_crawl(dir)
+    end
+
+    def paced_crawl_hold!(dir, id)
+      FileUtils.mkdir_p(File.join(dir, "zips"))
+      File.binwrite(File.join(dir, "zips", "#{id}.zip"), fixture_zip("b30773490"))
     end
 
     # -- documents ------------------------------------------------------------
@@ -136,8 +183,6 @@ module Adapters
 
     # -- the crawl ------------------------------------------------------------
 
-    def fixture_zip(bnumber) = File.binread(File.join(FIXTURES, "zips", "#{bnumber}.zip"))
-
     def test_the_crawl_ledgers_every_refusal_class_and_holds_the_zips
       stub_request(:get, format(ZIP, "b10000011")).to_return(status: 404,
                                                              body: "No text resource found for b10000011.zip")
@@ -145,19 +190,27 @@ module Adapters
       stub_request(:get, format(ZIP, "b10000033")).to_return(status: 403, body: "Forbidden")
       stub_request(:get, format(ZIP, "b10000044")).to_return(status: 200, body: "<html>not a zip</html>")
       stuck = stub_request(:get, format(ZIP, "b10000055")).to_raise(Net::ReadTimeout)
-      ledger = quiet_adapter.send(:read_ledger, "/nonexistent")
       Dir.mktmpdir do |dir|
-        order = %w[b10000011 b10000022 b10000033 b10000044 b10000055]
-        tally = quiet_adapter.send(:crawl_slice!, dir, order, ledger, nil)
+        write_census(dir, %w[b10000011 b10000022 b10000033 b10000044 b10000055])
+        report = quiet_adapter.zip_crawl(dir).slice!
         assert_requested stuck, times: W::TIMEOUT_ATTEMPTS
-        assert_equal [1, 1, 1, 1, 1], tally.values_at(:ok, :missing, :denied, :malformed, :timeout)
+        assert_equal [1, { "denied" => 1, "missing" => 1, "empty" => 0, "malformed" => 1, "timeout-stuck" => 1 }],
+                     [report.ok, report.refused]
         assert File.file?(File.join(dir, "zips", "b10000022.zip")), "the zip is held verbatim"
+        assert_equal({ id: "b10000011", status: :denied, http_status: 404,
+                       body_head: "No text resource found for b10000011.zip" }, report.samples.first,
+                     "the refusal's own answer rides as evidence")
         on_disk = JSON.parse(File.read(File.join(dir, ".wellcome-crawl.json")))
         assert_equal({ "missing" => ["b10000011"], "denied" => ["b10000033"], "empty" => [],
                        "malformed" => ["b10000044"], "timeout-stuck" => ["b10000055"] },
                      on_disk.slice(*W::LEDGER_CLASSES))
-        assert_equal({ "cone" => 5, "done" => 1, "ledgered" => 4 }, on_disk["position"])
-        assert_equal ["b10000022"], on_disk["done"]
+        assert_equal W::LEDGER_CLASSES.sort, (on_disk.keys - ["last_slice"]).sort,
+                     "the class arrays keep their shape; the slice report rides beside them"
+        # The crawl's position, readable without walking the tree, now rides
+        # the persisted slice report (it supersedes the old position block).
+        last = on_disk.fetch("last_slice")
+        assert_equal [5, 1, 4], [last["census"], last.dig("held", "after"),
+                                 last["ledgered"].values.sum { |pair| pair["after"] }]
       end
     end
 
@@ -166,14 +219,34 @@ module Adapters
       asked = []
       adapter.define_singleton_method(:fetch_zip!) do |_workdir, bnumber|
         asked << bnumber
-        :missing
+        Nabu::PacedCrawl::Outcome.new(status: :denied, ledger_class: "missing")
       end
       Dir.mktmpdir do |dir|
+        write_census(dir, %w[b10000011 b10000022 b10000033 b10000044 b10000055])
         FileUtils.mkdir_p(File.join(dir, "zips"))
         File.binwrite(File.join(dir, "zips", "b10000022.zip"), "held")
-        ledger = { "missing" => ["b10000011"], "denied" => [], "empty" => [], "malformed" => [], "timeout-stuck" => [] }
-        adapter.send(:crawl_slice!, dir, %w[b10000011 b10000022 b10000033 b10000044 b10000055], ledger, nil)
-        assert_equal %w[b10000033 b10000044], asked, "ledgered and held skip; the slice stops at 2 attempts"
+        File.write(File.join(dir, ".wellcome-crawl.json"), JSON.generate({ "missing" => ["b10000011"] }))
+        adapter.zip_crawl(dir).slice!
+        assert_equal %w[b10000033 b10000044], asked.first(2), "ledgered and held skip; the slice stops at 2 attempts"
+        assert_equal %w[b10000033 b10000044 b10000022], asked,
+                     "…then the all-refused slice's one re-probe of the held zip (never against the budget)"
+      end
+    end
+
+    # A ledger written before the paced-crawl engine (its position block and
+    # done list beside the classes) reads cleanly: the classes load, the
+    # derived blocks are dropped on the next write.
+    def test_a_legacy_ledger_reads_cleanly
+      Dir.mktmpdir do |dir|
+        write_census(dir, %w[b10000011 b10000022])
+        File.write(File.join(dir, ".wellcome-crawl.json"),
+                   JSON.generate({ "missing" => ["b10000011"], "denied" => [], "empty" => [], "malformed" => [],
+                                   "timeout-stuck" => [], "position" => { "cone" => 2, "done" => 0, "ledgered" => 1 },
+                                   "done" => [] }))
+        crawl = quiet_adapter.zip_crawl(dir)
+        assert_equal({ "denied" => [], "missing" => ["b10000011"], "empty" => [], "malformed" => [],
+                       "timeout-stuck" => [] }, crawl.ledger)
+        assert_predicate crawl.diagnose, :reconciles?
       end
     end
 
@@ -184,20 +257,55 @@ module Adapters
         stub_request(:get, format(ZIP, "b10000099")).to_return(status: 200, body: fixture_zip("b33011564"))
         stub_request(:get, format(ZIP, "b10000088")).to_return(status: 429, body: "slow down")
         never = stub_request(:get, format(ZIP, "b10000077"))
-        ledger = quiet_adapter.send(:read_ledger, dir)
-        tally = quiet_adapter.send(:crawl_slice!, dir, %w[b10000099 b10000088 b10000077], ledger, nil)
-        assert_equal ["b10000099"], ledger["empty"]
-        assert tally[:rate_limited]
+        write_census(dir, %w[b10000099 b10000088 b10000077])
+        crawl = quiet_adapter.zip_crawl(dir)
+        assert_raises(W::RateLimited) { crawl.slice! }
+        assert_equal ["b10000099"], crawl.ledger["empty"], "what the slice learned is ledgered before the stop"
         assert_not_requested never
-        refute_includes ledger.values.flatten, "b10000088", "a rate limit is never ledgered — the next sync resumes"
+        refute_includes crawl.ledger.values.flatten, "b10000088",
+                        "a rate limit is never ledgered — the next sync resumes"
+      end
+    end
+
+    def test_a_429_ends_the_fetch_with_a_stop_line_and_the_offline_position
+      Dir.mktmpdir do |dir|
+        seed_fresh_census(dir)
+        stub_request(:get, format(ZIP, "b33275154")).to_return(status: 429, body: "slow down")
+        report = quiet_adapter(slice: 2).fetch(dir)
+        lines = report.notes.split("; ")
+        assert_equal "zips: STOPPED on HTTP 429 (rate-limited) — the next sync resumes", lines.first
+        assert_includes lines, "zips: census 5 = held 0 + ledgered 0 [denied 0, missing 0, empty 0, malformed 0, " \
+                               "timeout-stuck 0] + remaining 5 — reconciles"
       end
     end
 
     def test_a_server_error_stays_fatal
       stub_request(:get, format(ZIP, "b10000011")).to_return(status: 500)
       Dir.mktmpdir do |dir|
-        assert_raises(Nabu::FetchError) { quiet_adapter.send(:crawl_slice!, dir, %w[b10000011], quiet_adapter.send(:read_ledger, dir), nil) }
+        write_census(dir, %w[b10000011])
+        error = assert_raises(Nabu::FetchError) { quiet_adapter.zip_crawl(dir).slice! }
+        refute_kind_of W::RateLimited, error
       end
+    end
+
+    def test_a_held_zip_reprobed_is_never_overwritten
+      stub_request(:get, format(ZIP, "b10000022")).to_return(status: 200, body: fixture_zip("b30773490"))
+      Dir.mktmpdir do |dir|
+        paced_crawl_hold!(dir, "b10000022")
+        File.binwrite(File.join(dir, "zips", "b10000022.zip"), "held bytes")
+        outcome = quiet_adapter.send(:fetch_zip!, dir, "b10000022")
+        assert_equal [:ok, 200], [outcome.status, outcome.http_status]
+        assert_equal "held bytes", File.binread(File.join(dir, "zips", "b10000022.zip")), "the probe answers liveness"
+      end
+    end
+
+    def test_the_lane_keeps_the_committed_etiquette
+      lane = W::ZIP_CRAWL
+      assert_equal [".wellcome-crawl.json", 30.0, 60, 3, 30.0],
+                   [lane.ledger_file, lane.delay, lane.slice, lane.timeout_attempts, lane.timeout_backoff]
+      assert_equal W::LEDGER_CLASSES.sort, lane.class_names.sort
+      assert_equal %w[denied missing], lane.classes_for(:denied)
+      assert_equal %w[empty malformed], lane.classes_for(:empty)
     end
 
     def test_the_pace_is_thirty_seconds_and_the_slice_honest
@@ -219,7 +327,9 @@ module Adapters
         report = quiet_adapter(slice: 2).fetch(dir)
         assert_equal File.read(File.join(FIXTURES, "census.tsv")), File.read(File.join(dir, "census.tsv"))
         assert_equal '"abc"', JSON.parse(File.read(File.join(dir, ".wellcome-census.json")))["etag"]
-        assert_match(%r{crawl at 1/5 cone volume\(s\) held, 1 ledgered}, report.notes)
+        assert_includes report.notes.split("; "),
+                        "zips: census 5 = held 1 (+1) + ledgered 1 (+1) [denied 0, missing 1, empty 0, " \
+                        "malformed 0, timeout-stuck 0] + remaining 3 — reconciles"
         assert_equal 0, quiet_adapter.discovery_skips(dir).unrecognized, "census, dump and zips are no strays"
       end
     end

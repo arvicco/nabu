@@ -176,6 +176,54 @@ class PacedCrawlTest < Minitest::Test
     end
   end
 
+  # A lane whose upstream answers several refusals of one terminal kind
+  # (a 404 "no text" beside a 403) ledgers each under its own declared
+  # class: the Outcome names it, the Spec declares it per status.
+  def subclass_spec
+    PC::Spec.new(
+      name: "zips", ledger_file: ".zips-crawl.json",
+      classes: { denied: "denied", empty: "empty", timeout: "timeout-stuck" },
+      subclasses: { denied: ["missing"], empty: ["malformed"] },
+      delay: 0, slice: 4, schedule: PC::Schedule.new(cadence: :per_phase, slices_per_phase: 1,
+                                                     stop_after_zero_slices: 1)
+    )
+  end
+
+  def test_a_lane_ledgers_declared_subclasses_of_a_terminal_answer
+    assert_equal %w[denied missing empty malformed timeout-stuck], subclass_spec.class_names,
+                 "each status's class, then its subclasses, in declaration order"
+    answers = {
+      "1" => PC::Outcome.new(status: :denied, ledger_class: "missing"),
+      "2" => PC::Outcome.new(status: :denied),
+      "3" => PC::Outcome.new(status: :empty, ledger_class: "malformed")
+    }
+    Dir.mktmpdir do |dir|
+      engine = PC::Engine.new(spec: subclass_spec, dir: dir, universe: -> { %w[1 2 3] }, held: ->(_id) { false },
+                              fetch_one: ->(id) { answers.fetch(id) })
+      report = engine.slice!
+      assert_equal({ "denied" => ["2"], "missing" => ["1"], "empty" => [], "malformed" => ["3"],
+                     "timeout-stuck" => [] }, engine.ledger)
+      assert_equal({ "denied" => 1, "missing" => 1, "empty" => 0, "malformed" => 1, "timeout-stuck" => 0 },
+                   report.refused)
+      assert_match(/ledgered 3 \(\+3\) \[denied 1, missing 1, empty 0, malformed 1, timeout-stuck 0\]/,
+                   report.lines.join("\n"))
+    end
+  end
+
+  def test_an_outcome_naming_a_class_its_status_does_not_declare_raises
+    Dir.mktmpdir do |dir|
+      engine = PC::Engine.new(spec: subclass_spec, dir: dir, universe: -> { %w[1] }, held: ->(_id) { false },
+                              fetch_one: ->(_id) { PC::Outcome.new(status: :denied, ledger_class: "malformed") })
+      error = assert_raises(PC::Error) { engine.slice! }
+      assert_match(/malformed/, error.message)
+    end
+    assert_raises(ArgumentError) { PC::Outcome.new(status: :ok, ledger_class: "missing") }
+    assert_raises(ArgumentError) do
+      PC::Spec.new(name: "x", ledger_file: ".x", classes: { denied: "denied" }, subclasses: { empty: ["e"] },
+                   delay: 0, slice: 1, schedule: nil)
+    end
+  end
+
   def test_fetch_one_must_answer_an_outcome
     Dir.mktmpdir do |dir|
       engine = PC::Engine.new(spec: spec, dir: dir, universe: -> { %w[1] }, held: ->(_id) { false },
