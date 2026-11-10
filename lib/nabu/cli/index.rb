@@ -40,13 +40,85 @@ module Nabu
       begin
         report_gauges(fulltext)
         report_stamps(fulltext, config)
+        report_deferred(fulltext, config)
         consolidate(fulltext) if options[:consolidate]
       ensure
         fulltext.disconnect
       end
     end
 
+    desc "refresh SLUG", "Refresh one source's fulltext slice (the index step a deferred sync skipped)"
+    long_desc <<~HELP, wrap: false
+      Runs the full slice refresh for one registered source — the same
+      index step a sync runs inline, with the same announced stages and
+      recorded stage timings. A source declared `index_policy: deferred`
+      in config/sources.yml (the paced-crawl citizens) loads its documents
+      at sync time and skips the index; this command pays it, once per
+      wave. Any source may be refreshed: a pending (crashed) or behind
+      slice heals here too. `index doctor` lists the deferred sources and
+      whether their slice is behind the catalog.
+
+      Examples:
+        nabu index refresh ndl-kotenseki
+        nabu index refresh wellcome
+    HELP
+    def refresh(slug)
+      config = Nabu::Config.load
+      registry = Nabu::SourceRegistry.load(config.sources_path)
+      unless registry[slug]
+        raise Thor::Error, "index refresh: unknown source #{slug.inspect} — " \
+                           "known sources: #{registry.slugs.join(', ')}"
+      end
+      unless File.exist?(config.catalog_path)
+        raise Thor::Error, "index refresh: no catalog at #{config.catalog_path} — run bin/nabu sync #{slug} first"
+      end
+
+      run_refresh(config, registry, slug)
+    rescue Nabu::Error => e
+      raise Thor::Error, "index refresh: #{e.message}"
+    end
+
     no_commands do
+      # The refresh rides SyncRunner#index_entry (the sync path's own
+      # reindex! wiring) and the main CLI's progress reporter, so the
+      # stages read exactly as they do inside a sync.
+      def run_refresh(config, registry, slug)
+        Nabu::Store.assert_writable!(config.catalog_path)
+        ledger = Nabu::Store::Ledger.open!(config.history_path)
+        catalog = Nabu::Store.connect(config.catalog_path)
+        Nabu::Store.setup!(catalog)
+        runner = Nabu::SyncRunner.new(config: config, registry: registry, db: catalog, ledger: ledger)
+        narrator = Nabu::CLI.new
+        started = Process.clock_gettime(Process::CLOCK_MONOTONIC)
+        indexed = runner.index_entry(slug, progress: narrator.progress_reporter)
+        narrator.finish_progress
+        seconds = Process.clock_gettime(Process::CLOCK_MONOTONIC) - started
+        say "index refresh: #{slug} — indexed #{indexed} passages (#{format_duration(seconds)})"
+      ensure
+        catalog&.disconnect
+        ledger&.disconnect
+      end
+
+      # P168: the index_policy: deferred sources and whether each slice
+      # is behind the catalog (the P111-1b probe) — a deferred wave with
+      # no freshness stamp (the first wave after a full rebuild) would
+      # otherwise read as "everything fresh". Silent when none declared.
+      def report_deferred(fulltext, config)
+        deferred = Nabu::SourceRegistry.load(config.sources_path).each_source.select(&:index_deferred?)
+        return if deferred.empty? || !File.exist?(config.catalog_path)
+
+        say "deferred-index sources (index_policy: deferred):"
+        catalog = Nabu::Store.connect(config.catalog_path, readonly: true)
+        begin
+          deferred.map(&:slug).sort.each do |slug|
+            behind = Nabu::Store::Indexer.slice_behind?(fulltext, catalog, slug)
+            say(behind ? "  #{slug}: BEHIND the catalog — run bin/nabu index refresh #{slug}" : "  #{slug}: current")
+          end
+        ensure
+          catalog.disconnect
+        end
+      end
+
       def report_gauges(fulltext)
         say "fts5 structure (segment hard cap 2000):"
         DOCTOR_TABLES.each do |table|
