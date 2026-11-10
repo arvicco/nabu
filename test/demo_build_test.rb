@@ -113,14 +113,16 @@ class DemoBuildTest < Minitest::Test
   # runs a rebuild, so the build itself must derive the lane, or the
   # image ships fuzzy-only clarify (the v1.8.0 release-day finding: the
   # ligature eval task red against the published image).
-  def test_build_derives_the_clarify_lane_the_sync_path_never_bootstraps
+  def test_build_derives_the_lanes_the_sync_path_never_bootstraps
     reg = registry
     builder = build(reg) do |config|
       fake_sync(config)
       fulltext = Nabu::Store.connect_fulltext(config.fulltext_path)
       [Nabu::Store::Indexer::CLARIFY_VOCAB_TABLE, Nabu::Store::Indexer::CLARIFY_FTS_TABLE,
        Nabu::Store::Indexer::CLARIFY_TRIGRAM_TABLE, Nabu::Store::Indexer::CLARIFY_NAMES_TABLE,
-       Nabu::Store::Indexer::CLARIFY_TABLE, Nabu::Store::Indexer::CLARIFY_META_TABLE].each do |table|
+       Nabu::Store::Indexer::CLARIFY_TABLE, Nabu::Store::Indexer::CLARIFY_META_TABLE,
+       Nabu::Store::AnnotationIndex::TABLE, Nabu::Store::AnnotationIndex::SCOPE_TABLE,
+       Nabu::Store::GlossLineIndex::TABLE, Nabu::Store::GlossLineIndex::SCOPE_TABLE].each do |table|
         fulltext.drop_table?(table)
       end
       fulltext.disconnect
@@ -131,6 +133,10 @@ class DemoBuildTest < Minitest::Test
            "the built slice must carry the clarify lane"
     folded = fulltext[Nabu::Store::Indexer::CLARIFY_NAMES_TABLE].select_map(:folded)
     assert_includes folded, "a", "the slice's document titles must be in the clarify lane"
+    assert Nabu::Store::AnnotationIndex.built?(fulltext),
+           "the built slice must carry the annotation lane (empty is fine; absent degrades search)"
+    assert Nabu::Store::GlossLineIndex.built?(fulltext),
+           "the built slice must carry the gloss-line lane (empty is fine; absent degrades search)"
     fulltext.disconnect
   end
 

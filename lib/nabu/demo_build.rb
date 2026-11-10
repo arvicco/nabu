@@ -206,7 +206,7 @@ module Nabu
       run_cli("enable", *@slugs)
       run_cli("sync", *@slugs)
       verify_catalog!
-      derive_clarify!
+      derive_lanes!
       write_nabu_yml(canonical: "canonical")
       prune_canonical!
       seal_stores!
@@ -294,12 +294,21 @@ module Nabu
     # never sees a rebuild — without this step the image ships fuzzy-only
     # clarify (found 2026-11-10: the published image failed the ligature
     # eval task while the live library resolved it exactly).
-    def derive_clarify!
+    def derive_lanes!
       config = runtime_config
       catalog = Store.connect(config.catalog_path, readonly: true)
       fulltext = Store.connect_fulltext(config.fulltext_path)
-      summary = Store::Indexer.rebuild_clarify!(catalog: catalog, fulltext: fulltext, stamp: true)
-      say("clarify lane derived: #{summary.fetch(:entries)} entries")
+      clarify = Store::Indexer.rebuild_clarify!(catalog: catalog, fulltext: fulltext, stamp: true)
+      say("clarify lane derived: #{clarify.fetch(:entries)} entries")
+      # The declared-layer lanes share clarify's no-bootstrap sync path, so
+      # a fresh slice would ship without them — and the slice HOLDS layer
+      # sources (oshb's notes, achemenet's gloss lines): absent lanes would
+      # degrade their search silently. Empty lanes are fine; absent are not.
+      [[Store::AnnotationIndex, "annotation"], [Store::GlossLineIndex, "gloss-line"],
+       [Store::TranslationIndex, "translation"]].each do |index, label|
+        summary = index.rebuild!(catalog: catalog, fulltext: fulltext, stamp: true)
+        say("#{label} lane derived: #{summary.fetch(:passages)} passages from #{summary.fetch(:sources)} sources")
+      end
     ensure
       catalog&.disconnect
       fulltext&.disconnect
