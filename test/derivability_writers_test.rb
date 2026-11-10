@@ -182,8 +182,8 @@ class DerivabilityWritersTest < Minitest::Test
   # Adapter#fetch: the catalogue snapshot (works.json.gz, streamed to
   # .part + rename) and its .wellcome-census.json pin, the derived
   # census.tsv (tmp + rename, a declared materialization), the text zips
-  # (zips/<bnumber>.zip, .part + rename) and the .wellcome-crawl.json
-  # ledger — the ndl-kotenseki crawl law kind.
+  # (zips/<bnumber>.zip, .part + rename); its .wellcome-crawl.json ledger
+  # is written by the paced-crawl engine — the ndl-kotenseki crawl law kind.
   # credentials (the credentials seam) writes ONE instance file,
   # local/config/credentials.yml (tmp born mode 600 + chmod + rename),
   # driven only by the `nabu creds set` gateway — the local/config

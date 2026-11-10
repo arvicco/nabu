@@ -2935,9 +2935,14 @@ own test drives the same suite with an in-memory fake.
 **Citizens.** ndl-kotenseki's book crawl is the first (the `BOOK_CRAWL`
 lane, `.ndl-crawl.json`); its NDL Search bib crawl keeps its own batch
 mechanics for now — its unit is an SRU batch of PIDs per request, which
-the one-id `fetch_one` contract does not model. The other hand-rolled
-crawl adapters (wellcome, nb-no, blbooks, ctilc, damos, korpus16,
-lotsawa-house, mdz-protestant, vakk) move onto the engine next. The engine
+the one-id `fetch_one` contract does not model. Since then:
+
+- wellcome — the `ZIP_CRAWL` lane, `.wellcome-crawl.json`; its 404
+  "missing" and non-zip "malformed" ride as `subclasses` of denied and
+  empty; a 429 stops the slice and the notes carry the offline diagnosis.
+
+The other hand-rolled crawl adapters (ctilc, damos, korpus16,
+lotsawa-house, mdz-protestant) move onto the engine next. The engine
 is fetch-side code: it sits beside the fetch helpers outside the shared
 derivation digest (§5's derivation stamps — parse never reads it), and it joins the
 derivability writer census as a canonical/ crawl-ledger writer.
