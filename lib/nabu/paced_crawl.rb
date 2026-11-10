@@ -23,7 +23,9 @@ module Nabu
   #                lambda stored the payload (held? turns true). Anything
   #                that is not a terminal answer (5xx, network) RAISES — the
   #                crawl is resumable, the ledger already holds what the
-  #                slice learned.
+  #                slice learned. Outcome.halt is the CLEAN STOP (a 429, a
+  #                quota floor): the slice ends at once, the id stays
+  #                selectable, the report classifies :clean_stop.
   #
   # The engine owns selection (universe − held − ledgered, order kept), the
   # slice loop under ONE budget (every id the slice asks for spends one unit,
@@ -56,7 +58,7 @@ module Nabu
     # signature — a slice that would re-offer the same ids forever).
     class FrozenFrontierError < Error; end
 
-    STATUSES = %i[ok denied empty timeout].freeze
+    STATUSES = %i[ok denied empty timeout halt].freeze
     TERMINAL = %i[denied empty timeout].freeze
     # The ledger section the engine persists its last report into, beside
     # the classes (each an array of ids).
@@ -146,24 +148,40 @@ module Nabu
     # One answer from fetch_one. +ledger_class+ (terminal answers only)
     # names one of the Spec's subclasses for the status; nil ledgers the
     # status's own class.
-    Outcome = Data.define(:status, :evidence, :ledger_class) do
+    #
+    # A :halt (Outcome.halt) is the CLEAN STOP: upstream said "no more for
+    # now" (a 429, a quota floor read off a good answer's header). It is no
+    # answer about the id — never ledgered, never refused, the id stays
+    # selectable — and it ends the slice at once (no further id, no
+    # re-probe, no look-ahead). Its +reason+ is required; its evidence is
+    # kept verbatim (a quota header is not an HTTP status + body head).
+    Outcome = Data.define(:status, :evidence, :ledger_class, :reason) do
       def self.from_body(status, http_status:, body:, ledger_class: nil)
         new(status: status, evidence: { http_status: http_status, body_head: PacedCrawl.body_head(body) },
             ledger_class: ledger_class)
       end
 
-      def initialize(status:, evidence: {}, ledger_class: nil)
+      def self.halt(reason:, evidence: {}) = new(status: :halt, evidence: evidence, reason: reason)
+
+      def initialize(status:, evidence: {}, ledger_class: nil, reason: nil)
         raise ArgumentError, "Outcome status must be one of #{STATUSES.inspect} (got #{status.inspect})" unless
           STATUSES.include?(status)
-        raise ArgumentError, "only a terminal Outcome names a ledger class" if ledger_class && status == :ok
+        raise ArgumentError, "only a terminal Outcome names a ledger class" if
+          ledger_class && !TERMINAL.include?(status)
+        raise ArgumentError, "a halt Outcome needs a reason" if status == :halt && reason.to_s.strip.empty?
+        raise ArgumentError, "only a halt Outcome carries a reason" if reason && status != :halt
 
         evidence = evidence.to_h
-        super(status: status,
-              evidence: { http_status: evidence[:http_status], body_head: evidence[:body_head] }.freeze,
-              ledger_class: ledger_class&.to_s)
+        evidence = if status == :halt
+                     evidence.dup
+                   else
+                     { http_status: evidence[:http_status], body_head: evidence[:body_head] }
+                   end
+        super(status: status, evidence: evidence.freeze, ledger_class: ledger_class&.to_s, reason: reason&.to_s)
       end
 
       def ok? = status == :ok
+      def halt? = status == :halt
       def http_status = evidence[:http_status]
       def body_head = evidence[:body_head]
     end
@@ -199,10 +217,13 @@ module Nabu
     # (#to_json_h) into the ledger's last_slice section.
     Report = Data.define(:name, :at, :classification, :slice, :census, :held, :ledgered, :remaining,
                          :strays, :attempted, :ok, :refused, :stuck, :frontier, :statuses, :samples,
-                         :reprobe, :lookahead, :requests, :elapsed) do
+                         :reprobe, :lookahead, :requests, :elapsed, :halt) do
       include Render
 
       def zero_yield? = ok.zero?
+      # The slice ended on a clean stop (Outcome.halt): halt is {id:,
+      # reason:, evidence:}.
+      def halted? = !halt.nil?
       # Yield OR frontier movement — what a chained run asserts per slice.
       def progressed? = ok.positive? || frontier[:moved].positive?
       def reconciles? = held[:after] + ledgered.values.sum { |pair| pair[:after] } + remaining[:after] == census
@@ -214,7 +235,8 @@ module Nabu
 
       def lines
         out = []
-        out << verdict_text if zero_yield?
+        out << halt_text if halted?
+        out << verdict_text if zero_yield? && !halted?
         out << tally_text
         out << census_text(held_delta: held[:after] - held[:before],
                            ledgered_delta: ledgered.values.sum { |pair| pair[:after] - pair[:before] })
@@ -244,6 +266,13 @@ module Nabu
           "frontier advanced #{frontier[:moved]} position(s) through a refusal stripe; the ledger is this " \
           "slice's yield"
         end
+      end
+
+      def halt_text
+        detail = halt[:evidence].to_h.map { |key, value| "#{key} #{value}" }.join(", ")
+        detail = " (#{detail})" unless detail.empty?
+        "CLEAN STOP at #{halt[:id]}: #{halt[:reason]}#{detail} — upstream asked the crawl to stop; the id " \
+          "stays selectable (never ledgered) and the next slice starts there"
       end
 
       def tally_text
@@ -409,9 +438,10 @@ module Nabu
         tally = run_slice(before)
         after = scan
         guard_frontier!(tally[:asked], after)
-        reprobe = tally[:ok].zero? && !tally[:asked].empty? ? reprobe!(before) : nil
+        reprobe = tally[:ok].zero? && !tally[:asked].empty? && !tally[:halt] ? reprobe!(before, tally) : nil
         classification = classify(tally, reprobe)
-        lookahead = classification == :all_refused ? lookahead!(after) : []
+        lookahead = classification == :all_refused ? lookahead!(after, tally) : []
+        classification = :clean_stop if tally[:halt]
         after = scan if lookahead.any? { |probe| probe[:status] == :ok }
         report = build_report(before: before, after: after, tally: tally, reprobe: reprobe,
                               lookahead: lookahead, classification: classification,
@@ -438,20 +468,30 @@ module Nabu
 
       def run_slice(census)
         tally = { asked: [], ok: 0, refused: spec.class_names.to_h { |klass| [klass, 0] },
-                  stuck: [], refusals: [] }
+                  stuck: [], refusals: [], halt: nil }
         census.selectable.each do |id|
           break if tally[:asked].size >= spec.slice
           next if @held.call(id) # held since the scan: never re-fetched
 
-          record!(tally, id, fetch_with_retries(id))
+          outcome = fetch_with_retries(id)
+          break note_halt!(tally, id, outcome) if outcome.halt?
+
+          record!(tally, id, outcome)
           report_progress(tally)
         end
-        if tally[:asked].empty? && !census.selectable.empty?
+        if tally[:asked].empty? && !tally[:halt] && !census.selectable.empty?
           raise SelectionEmptyError,
                 "#{spec.name}: selection offered nothing while #{census.selectable.size} id(s) remain " \
                 "(first: #{census.frontier}) — the held? oracle disagrees with itself"
         end
         tally
+      end
+
+      # A clean stop: noted on the tally (the id is NOT asked — it got no
+      # answer about itself), never ledgered.
+      def note_halt!(tally, id, outcome)
+        tally[:halt] = { id: id, reason: outcome.reason, evidence: outcome.evidence }
+        say("#{spec.name}: clean stop at #{id} — #{outcome.reason}")
       end
 
       def record!(tally, id, outcome)
@@ -521,6 +561,7 @@ module Nabu
       end
 
       def classify(tally, reprobe)
+        return :clean_stop if tally[:halt]
         return :yield if tally[:ok].positive?
         return :cone_exhausted if tally[:asked].empty?
         return :upstream_refusing if reprobe && reprobe[:status] != :ok
@@ -530,26 +571,37 @@ module Nabu
 
       # ONE request on a held id — the nearest before the slice's frontier —
       # answers upstream-alive vs wholesale-block. nil when nothing is held.
-      def reprobe!(census)
+      # A halt answered to the re-probe is the clean stop, not a block.
+      def reprobe!(census, tally)
         limit = census.position(census.frontier)
         target = census.held.reverse_each.find { |id| census.positions[id] < limit } || census.held.first
         return nil unless target
 
-        evidence(target, request(target))
+        outcome = request(target)
+        return evidence(target, outcome) unless outcome.halt?
+
+        note_halt!(tally, target, outcome)
+        nil
       end
 
       # Up to LOOKAHEAD_PROBES probes at slice × 2^k ids past the new
       # frontier (clamped to the remaining cone): where does servable text
       # resume?
-      def lookahead!(census)
+      # (A halted probe ends the probing: the clean stop.)
+      def lookahead!(census, tally)
         pool = census.selectable
         return [] if pool.empty?
 
         aheads = (0...LOOKAHEAD_PROBES).map { |k| [spec.slice * (2**k), pool.size].min }.uniq
-        aheads.map do |ahead|
+        probes = []
+        aheads.each do |ahead|
           id = pool[ahead - 1]
-          evidence(id, request(id)).merge(ahead: ahead)
+          outcome = request(id)
+          break note_halt!(tally, id, outcome) if outcome.halt?
+
+          probes << evidence(id, outcome).merge(ahead: ahead)
         end
+        probes
       end
 
       def evidence(id, outcome)
@@ -571,7 +623,7 @@ module Nabu
           strays: after.strays, attempted: tally[:asked].size, ok: tally[:ok], refused: tally[:refused],
           stuck: tally[:stuck], frontier: frontier(before, after), statuses: statuses,
           samples: refusals.first(REFUSAL_SAMPLES).map { |id, outcome| evidence(id, outcome) },
-          reprobe: reprobe, lookahead: lookahead, requests: requests, elapsed: elapsed.to_f
+          reprobe: reprobe, lookahead: lookahead, requests: requests, elapsed: elapsed.to_f, halt: tally[:halt]
         )
       end
 

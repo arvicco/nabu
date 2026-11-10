@@ -37,6 +37,7 @@ class PacedCrawlTest < Minitest::Test
         when :denied then PC::Outcome.from_body(:denied, http_status: 403, body: PC_REFUSAL_BODY)
         when :empty then PC::Outcome.from_body(:empty, http_status: 200, body: '{"list":[]}')
         when :timeout then PC::Outcome.new(status: :timeout)
+        when :halt then PC::Outcome.halt(reason: "quota floor", evidence: { http_status: 200, remaining: 3 })
         when :fatal then raise Nabu::FetchError, "HTTP 500 for #{id}"
         end
       end,
@@ -207,6 +208,85 @@ class PacedCrawlTest < Minitest::Test
       assert_equal %w[refused pages last_slice], on_disk.keys
       assert_equal({ "denied" => %w[101], "empty" => %w[103], "timeout-stuck" => [] }, on_disk["refused"])
       assert_equal({ "1" => [2] }, on_disk["pages"])
+    end
+  end
+
+  # ── the clean stop ──
+
+  def test_a_halt_ends_the_slice_cleanly_and_leaves_the_id_selectable
+    Dir.mktmpdir do |dir|
+      asked, script = pc_upstream({ "102" => :denied, "103" => :halt })
+      report = fake_engine(dir: dir, ids: PC_IDS, script: script, spec: spec(slice: 10)).slice!
+      assert_equal %w[101 102 103], asked, "nothing is asked after the halt — no further id, no probe"
+      assert_equal :clean_stop, report.classification
+      assert_predicate report, :halted?
+      assert_equal({ id: "103", reason: "quota floor", evidence: { http_status: 200, remaining: 3 } }, report.halt)
+      assert_equal [2, 1, 3], [report.attempted, report.ok, report.requests], "the halted id is not an answer"
+      assert_equal({ "denied" => 1, "empty" => 0, "timeout-stuck" => 0 }, report.refused, "a halt is never refused")
+      assert_nil report.reprobe
+      assert_empty report.lookahead
+      assert_equal "103", report.frontier[:after], "the halted id stays the frontier"
+      assert_match(/CLEAN STOP at 103: quota floor \(http_status 200, remaining 3\)/, report.lines.first)
+
+      resumed_asked, resumed_script = pc_upstream
+      engine = fake_engine(dir: dir, ids: PC_IDS, script: resumed_script, spec: spec(slice: 1))
+      assert(engine.ledger.values.none? { |ids| ids.include?("103") }, "a halt is never ledgered")
+      engine.slice!
+      assert_equal %w[103], resumed_asked, "the next slice re-asks the halted id first"
+    end
+  end
+
+  def test_a_halt_on_the_first_id_is_a_clean_stop_not_a_zero_yield_pathology
+    Dir.mktmpdir do |dir|
+      stores[dir] << "112"
+      _, script = pc_upstream({ "101" => :halt })
+      report = fake_engine(dir: dir, ids: PC_IDS, script: script).slice!
+      assert_equal :clean_stop, report.classification, "neither SelectionEmpty nor FrozenFrontier fires"
+      assert_predicate report, :zero_yield?
+      assert_nil report.reprobe, "a halt is not a refusal — no re-probe"
+      text = report.lines.join("\n")
+      refute_match(/ZERO-YIELD/, text)
+      assert_match(/CLEAN STOP at 101/, text)
+      on_disk = JSON.parse(File.read(File.join(dir, ".items-crawl.json")))
+      assert_equal "clean_stop", on_disk.dig("last_slice", "classification")
+    end
+  end
+
+  def test_a_halt_answered_to_a_probe_stops_the_probing_cleanly
+    Dir.mktmpdir do |dir|
+      stores[dir] << "101"
+      asked, script = pc_upstream({ "101" => :halt }, default: :denied)
+      report = fake_engine(dir: dir, ids: PC_IDS, script: script, spec: spec(slice: 2)).slice!
+      assert_equal %w[102 103 101], asked
+      assert_equal :clean_stop, report.classification, "a halted re-probe is a stop, not a wholesale block"
+      assert_equal "101", report.halt[:id]
+      assert_empty report.lookahead
+
+      Dir.mktmpdir do |other|
+        asked, script = pc_upstream({ "110" => :halt }, default: :denied)
+        report = fake_engine(dir: other, ids: PC_IDS, script: script, spec: spec(slice: 2)).slice!
+        assert_equal %w[101 102 104 106 110], asked, "the look-ahead stops at the halted probe"
+        assert_equal :clean_stop, report.classification
+        assert_equal([2, 4], report.lookahead.map { |probe| probe[:ahead] })
+        assert_equal "110", report.halt[:id]
+      end
+    end
+  end
+
+  def test_a_halt_outcome_validates_its_shape
+    halt = PC::Outcome.halt(reason: "429 Too Many Requests", evidence: { http_status: 429, retry_after: "60" })
+    assert_equal :halt, halt.status
+    assert_equal "429 Too Many Requests", halt.reason
+    assert_equal({ http_status: 429, retry_after: "60" }, halt.evidence, "halt evidence is kept verbatim")
+    assert_equal 429, halt.http_status
+    refute_predicate halt, :ok?
+    assert_predicate halt, :halt?
+    assert_raises(ArgumentError) { PC::Outcome.new(status: :halt) }
+    assert_raises(ArgumentError) { PC::Outcome.halt(reason: "") }
+    assert_raises(ArgumentError) { PC::Outcome.new(status: :denied, reason: "x") }
+    assert_raises(ArgumentError) { PC::Outcome.new(status: :halt, reason: "x", ledger_class: "denied") }
+    assert_raises(ArgumentError) do
+      PC::Spec.new(name: "x", ledger_file: ".x", classes: { halt: "h" }, delay: 0, slice: 1, schedule: nil)
     end
   end
 
