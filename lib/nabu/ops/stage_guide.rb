@@ -212,6 +212,10 @@ module Nabu
       stage :index_slice_skipped, /\Aindex slice: \S+ skipped\b/,
             "Leaves this source's search-index slice as it is: the load changed no passage text, so the " \
             "index already matches it."
+      stage :index_deferred, /\Aindex deferred: \S+ — /,
+            "Leaves this source's search-index slice for later: the source is declared index_policy: " \
+            "deferred (a paced crawl), so the new documents are not searchable until `nabu index refresh " \
+            "<slug>` runs — once per crawl wave."
       stage :alignment_registry_refresh, /\Aalignment refs: \S+ — registry changed\b/,
             "Rebuilds the verse-alignment index alone: config/alignments.yml changed since it was built and " \
             "this source holds a witness, so `nabu align` sees the new registry without a full rebuild."
