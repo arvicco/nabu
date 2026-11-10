@@ -254,6 +254,27 @@ module Nabu
       #
       # Contentless shape only — a legacy contentful file keeps the old path
       # until its next full rebuild, like every other shape arrival.
+      #
+      # == The deferral is universal (the 2026-11-11 ndl-kotenseki hang)
+      #
+      # MEASURED: a parse-only sync of ndl-kotenseki (+616 books, a 17,505-row
+      # index delta) hung 5h+ at 100% CPU in its index stage — a live stack
+      # sample read fts5UpdateMethod → fts5IndexFlush → fts5IndexMerge →
+      # fts5IndexMergeLevel → fts5DataDelete: deletemerge-triggered segment
+      # merges firing during the delta's inserts against a 57 GB index
+      # carrying the tombstone debt of many earlier incremental syncs. The
+      # gate measured the DELTA (ids >= threshold) while the hazard is the
+      # INDEX's accumulated tombstone debt — a small delta ran with
+      # deletemerge=10 live and paid the debt's merges inside one atomic
+      # transaction. So the deferral + consolidation recipe now governs
+      # EVERY slice write against the contentless shape (governed_fts_tables
+      # keys on shape alone); on a debt-free index the consolidation probe
+      # exits after one no-op chunk, so the universal recipe costs nothing
+      # when there is no debt, and where there IS debt it is paid down in
+      # the announced, ticked, checkpointed loop OUTSIDE the write's
+      # transaction. BULK_SLICE_THRESHOLD now decides ONLY the transaction
+      # shape (P111-1b below): atomic swap under it, autocommit + checkpoint
+      # at/above it.
       BULK_SLICE_THRESHOLD = 500_000
       BULK_MERGE_SETTINGS = { "deletemerge" => 0 }.freeze
       DEFAULT_MERGE_SETTINGS = { "deletemerge" => 10 }.freeze
@@ -641,23 +662,25 @@ module Nabu
         # each multi-second sub-step records its wall time to the ledger's
         # stage_timings under kind "sync" and announces with the estimate
         # the LAST sync of this source earned.
-        # Bulk mode binds to the WRITE VOLUME: the slice size on the rewrite
-        # path, the changed-row count at the delta grain — small deltas on a
-        # huge source never enter bulk mode (P112-1: tombstone volume stays
-        # proportional to churn, retiring the segment-pressure class).
-        bulk_tables = bulk_slice_tables(fulltext, ids, bulk_threshold)
-        unless bulk_tables.empty?
-          progress&.stage("index slice: #{slug} — bulk mode (#{ids.size} rows): merges deferred")
-        end
+        # The deferred-deletemerge recipe governs EVERY slice write against
+        # the contentless shape (constants note: the hazard is the index's
+        # tombstone debt, not the write's size). The WRITE VOLUME binds only
+        # the transaction shape: the slice size on the rewrite path, the
+        # changed-row count at the delta grain — small deltas on a huge
+        # source keep the atomic swap (P112-1: tombstone volume stays
+        # proportional to churn).
+        governed = governed_fts_tables(fulltext)
+        bulk = !governed.empty? && ids.size >= bulk_threshold
+        progress&.stage("index slice: #{slug} — bulk mode (#{ids.size} rows): merges deferred") if bulk
         if use_delta
           progress&.stage("index delta: #{slug} — #{delta.upserted_ids.size} changed / " \
                           "#{delta.removed_ids.size} removed rows")
         end
         mark_slice_pending!(fulltext, slug)
-        with_bulk_write_mode(fulltext, bulk_tables) do
+        with_bulk_write_mode(fulltext, governed) do
           timed_sync_stage(ledger, slug, "index_slice",
                            "index slice: #{slug} (fts + lemma rows)", progress) do
-            slice_write_unit(fulltext, bulk: !bulk_tables.empty?) do
+            slice_write_unit(fulltext, bulk: bulk) do
               # P42-1: snapshot this source's lemma-frequency contribution BEFORE
               # the rewrite, re-snapshot AFTER, and apply the delta to the corpus
               # freq table (same transaction). incremental_ready? guarantees the
@@ -761,7 +784,7 @@ module Nabu
             end
           end
         end
-        consolidate_after_bulk!(fulltext, bulk_tables, slug: slug, ledger: ledger, progress: progress)
+        consolidate_deferred_merges!(fulltext, governed, slug: slug, ledger: ledger, progress: progress)
         timed_sync_stage(ledger, slug, "postings_swaps",
                          "index slice: #{slug} — postings/coverage swaps", progress) do
           unless fulltext.table_exists?(CHAR_POSTINGS_TABLE)
@@ -825,7 +848,7 @@ module Nabu
         mark_slice_finished!(fulltext, slug, live_rows: live_rows, max_passage_id: max_id)
         # The bulk pass's final reclaim — AFTER the last write, so the WAL
         # file ends the refresh truncated, not holding the postings swaps.
-        checkpoint_wal!(fulltext) unless bulk_tables.empty?
+        checkpoint_wal!(fulltext) if bulk
         # The slice rewrite's insert count IS the source's live total; the
         # delta grain inserts only the changed rows, so the honest
         # "indexed N" is counted from the catalog instead.
@@ -896,14 +919,16 @@ module Nabu
 
       # -- the bulk slice mode internals (P111-1) ----------------------------
 
-      # The FTS5 tables the bulk recipe governs for this slice: engaged only
-      # at/above +threshold+ ids and only against the contentless shape (the
-      # constants' class note); the cjk lane joins whenever it exists — its
-      # slice shares the same delete+insert mechanics. The trigram lane
-      # stays out: contentful shape, and its scoped sources (documentary
-      # shelves) never reach bulk size.
-      def bulk_slice_tables(fulltext, ids, threshold)
-        return [] if ids.size < threshold || !fts_contentless?(fulltext)
+      # The FTS5 tables the deferred-merge recipe governs: EVERY slice write
+      # against the contentless shape, whatever its size (the constants'
+      # ndl-kotenseki note — the hazard is the index's tombstone debt, so
+      # the write's size cannot gate it); a legacy contentful file gets []
+      # and keeps the old untouched path. The cjk lane joins whenever it
+      # exists — its slice shares the same delete+insert mechanics. The
+      # trigram lane stays out: contentful shape, and its scoped sources
+      # (documentary shelves) never reach bulk size.
+      def governed_fts_tables(fulltext)
+        return [] unless fts_contentless?(fulltext)
 
         [TABLE] + (fulltext.table_exists?(CJK_TABLE) ? [CJK_TABLE] : [])
       end
@@ -1042,9 +1067,11 @@ module Nabu
         settings.each { |key, value| fulltext[table].insert(table => key, :rank => value) }
       end
 
-      # The deferred-merge consolidation after a bulk slice — its own
-      # announced stage, AFTER the defaults are restored (crash-safe order).
-      def consolidate_after_bulk!(fulltext, tables, slug:, ledger: nil, progress: nil)
+      # The deferred-merge consolidation after every governed slice write —
+      # its own announced stage, AFTER the defaults are restored (crash-safe
+      # order) and outside the write's transaction. On a debt-free index it
+      # is one no-op merge chunk per table (consolidate_merges! probe).
+      def consolidate_deferred_merges!(fulltext, tables, slug:, ledger: nil, progress: nil)
         return if tables.empty?
 
         timed_sync_stage(ledger, slug, "fts_merge",
