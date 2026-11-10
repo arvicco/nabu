@@ -3,6 +3,7 @@
 require "json"
 require_relative "../errors"
 require_relative "../shell"
+require_relative "../version"
 
 module Nabu
   module Ops
