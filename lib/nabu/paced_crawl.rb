@@ -25,7 +25,10 @@ module Nabu
   #                crawl is resumable, the ledger already holds what the
   #                slice learned. Outcome.halt is the CLEAN STOP (a 429, a
   #                quota floor): the slice ends at once, the id stays
-  #                selectable, the report classifies :clean_stop.
+  #                selectable, the report classifies :clean_stop. A lane
+  #                arming the outage breaker (Spec#outage_statuses) has
+  #                those answers staged until upstream proves alive, and a
+  #                run of outage_run of them classifies :outage_abort.
   #
   # The engine owns selection (universe − held − ledgered, order kept), the
   # slice loop under ONE budget (every id the slice asks for spends one unit,
@@ -111,13 +114,22 @@ module Nabu
     # kinds of refusal — a 404 "no text" beside a 403 — keeps them apart:
     # the Outcome names its ledger_class, the default is the status's own).
     # +codec+ is the ledger's on-disk shape (FLAT_CODEC unless the lane
-    # keeps a nested one).
+    # keeps a nested one). +outage_statuses+ arms the OUTAGE BREAKER: an
+    # answer of one of those statuses is staged, committed only when a later
+    # id answers otherwise (upstream alive — the failures were real), and
+    # +outage_run+ consecutive staged answers abort the slice with the run
+    # dropped unledgered (upstream is down; the run is re-asked next slice).
     Spec = Data.define(:name, :ledger_file, :classes, :subclasses, :delay, :slice,
-                       :timeout_attempts, :timeout_backoff, :schedule, :codec) do
+                       :timeout_attempts, :timeout_backoff, :schedule, :codec,
+                       :outage_statuses, :outage_run) do
       def initialize(name:, ledger_file:, classes:, delay:, slice:, schedule:, subclasses: {},
-                     timeout_attempts: 3, timeout_backoff: 5.0, codec: FLAT_CODEC)
+                     timeout_attempts: 3, timeout_backoff: 5.0, codec: FLAT_CODEC,
+                     outage_statuses: [], outage_run: nil)
         raise ArgumentError, "codec must answer #load and #dump" unless
           codec.respond_to?(:load) && codec.respond_to?(:dump)
+
+        outage_statuses = Array(outage_statuses).uniq.freeze
+        self.class.validate_outage!(outage_statuses, outage_run, classes)
 
         unknown = classes.keys - TERMINAL
         raise ArgumentError, "classes map only #{TERMINAL.inspect} (got #{unknown.inspect})" unless unknown.empty?
@@ -135,8 +147,22 @@ module Nabu
               subclasses: subclasses.transform_values { |names| Array(names).map(&:to_s).freeze }.freeze,
               delay: Float(delay), slice: slice,
               timeout_attempts: timeout_attempts, timeout_backoff: Float(timeout_backoff), schedule: schedule,
-              codec: codec)
+              codec: codec, outage_statuses: outage_statuses, outage_run: outage_run)
       end
+
+      def self.validate_outage!(statuses, run, classes)
+        undeclared = statuses - classes.keys
+        raise ArgumentError, "outage_statuses name declared classes only (got #{undeclared.inspect})" unless
+          undeclared.empty?
+
+        if statuses.empty?
+          raise ArgumentError, "outage_run needs outage_statuses" unless run.nil?
+        elsif !(run.is_a?(Integer) && run.positive?)
+          raise ArgumentError, "outage_statuses need a positive Integer outage_run"
+        end
+      end
+
+      def outage?(status) = outage_statuses.include?(status)
 
       # Every ledger class: each status's own, then its subclasses.
       def class_names = classes.flat_map { |status, klass| [klass, *subclasses.fetch(status, [])] }.uniq
@@ -217,13 +243,17 @@ module Nabu
     # (#to_json_h) into the ledger's last_slice section.
     Report = Data.define(:name, :at, :classification, :slice, :census, :held, :ledgered, :remaining,
                          :strays, :attempted, :ok, :refused, :stuck, :frontier, :statuses, :samples,
-                         :reprobe, :lookahead, :requests, :elapsed, :halt) do
+                         :reprobe, :lookahead, :requests, :elapsed, :halt, :outage) do
       include Render
 
       def zero_yield? = ok.zero?
       # The slice ended on a clean stop (Outcome.halt): halt is {id:,
       # reason:, evidence:}.
       def halted? = !halt.nil?
+      # The outage breaker tripped (outage is {aborted:, count:, ids:,
+      # statuses:, last:}; aborted false = a staged run the slice's end left
+      # uncommitted).
+      def outage_aborted? = outage&.fetch(:aborted) == true
       # Yield OR frontier movement — what a chained run asserts per slice.
       def progressed? = ok.positive? || frontier[:moved].positive?
       def reconciles? = held[:after] + ledgered.values.sum { |pair| pair[:after] } + remaining[:after] == census
@@ -236,7 +266,8 @@ module Nabu
       def lines
         out = []
         out << halt_text if halted?
-        out << verdict_text if zero_yield? && !halted?
+        out << outage_text if outage
+        out << verdict_text if zero_yield? && !halted? && !outage_aborted?
         out << tally_text
         out << census_text(held_delta: held[:after] - held[:before],
                            ledgered_delta: ledgered.values.sum { |pair| pair[:after] - pair[:before] })
@@ -273,6 +304,21 @@ module Nabu
         detail = " (#{detail})" unless detail.empty?
         "CLEAN STOP at #{halt[:id]}: #{halt[:reason]}#{detail} — upstream asked the crawl to stop; the id " \
           "stays selectable (never ledgered) and the next slice starts there"
+      end
+
+      def outage_text
+        ids = outage[:ids]
+        span = ids.size == 1 ? ids.first : "#{ids.first}…#{ids.last}"
+        what = "#{outage[:count]}#{' consecutive' if outage[:aborted]} outage answer(s) " \
+               "(#{outage[:statuses].join(', ')}) at #{span}"
+        last = "last: #{outage[:last][:id]} #{evidence_text(outage[:last])}"
+        if outage[:aborted]
+          "OUTAGE ABORT: #{what} — upstream looks down; the run was dropped unledgered and stays selectable " \
+            "(the next slice re-asks it), everything ledgered before it stands; #{last}"
+        else
+          "OUTAGE STAGE: #{what} uncommitted when the slice ended — no later id confirmed upstream alive; " \
+            "left unledgered, re-asked next slice; #{last}"
+        end
       end
 
       def tally_text
@@ -437,8 +483,9 @@ module Nabu
         before = scan
         tally = run_slice(before)
         after = scan
-        guard_frontier!(tally[:asked], after)
-        reprobe = tally[:ok].zero? && !tally[:asked].empty? && !tally[:halt] ? reprobe!(before, tally) : nil
+        guard_frontier!(tally[:asked] - tally.dig(:outage, :ids).to_a, after)
+        stopped = tally[:halt] || tally.dig(:outage, :aborted)
+        reprobe = tally[:ok].zero? && !tally[:asked].empty? && !stopped ? reprobe!(before, tally) : nil
         classification = classify(tally, reprobe)
         lookahead = classification == :all_refused ? lookahead!(after, tally) : []
         classification = :clean_stop if tally[:halt]
@@ -468,7 +515,7 @@ module Nabu
 
       def run_slice(census)
         tally = { asked: [], ok: 0, refused: spec.class_names.to_h { |klass| [klass, 0] },
-                  stuck: [], refusals: [], halt: nil }
+                  stuck: [], refusals: [], halt: nil, staged: [], outage: nil }
         census.selectable.each do |id|
           break if tally[:asked].size >= spec.slice
           next if @held.call(id) # held since the scan: never re-fetched
@@ -476,9 +523,16 @@ module Nabu
           outcome = fetch_with_retries(id)
           break note_halt!(tally, id, outcome) if outcome.halt?
 
-          record!(tally, id, outcome)
+          if spec.outage?(outcome.status)
+            stage!(tally, id, outcome)
+            break if tally[:outage]
+          else
+            commit_staged!(tally)
+            record!(tally, id, outcome)
+          end
           report_progress(tally)
         end
+        note_uncommitted!(tally)
         if tally[:asked].empty? && !tally[:halt] && !census.selectable.empty?
           raise SelectionEmptyError,
                 "#{spec.name}: selection offered nothing while #{census.selectable.size} id(s) remain " \
@@ -501,16 +555,65 @@ module Nabu
           return
         end
 
+        ledger!(tally, id, outcome)
+        write_ledger! # a killed slice resumes with what it learned
+      end
+
+      # The ledger class +outcome+ lands in, or a raise when the lane
+      # declares none for it.
+      def ledger_class!(id, outcome)
         klass = outcome.ledger_class || spec.classes[outcome.status]
-        unless klass && spec.classes_for(outcome.status).include?(klass)
-          raise Error, "#{spec.name}: fetch_one answered #{outcome.status}#{" (#{klass})" if klass} for #{id}, " \
-                       "which this lane declares no such ledger class for"
-        end
+        return klass if klass && spec.classes_for(outcome.status).include?(klass)
+
+        raise Error, "#{spec.name}: fetch_one answered #{outcome.status}#{" (#{klass})" if klass} for #{id}, " \
+                     "which this lane declares no such ledger class for"
+      end
+
+      # In memory only — the caller writes.
+      def ledger!(tally, id, outcome)
+        klass = ledger_class!(id, outcome)
         @ledger[klass] << id
         tally[:refused][klass] += 1
         tally[:stuck] << id if outcome.status == :timeout
         tally[:refusals] << [id, outcome]
-        write_ledger! # a killed slice resumes with what it learned
+      end
+
+      # The outage breaker: an outage-status answer waits off the ledger
+      # (it spent its budget unit); outage_run of them in a row abort.
+      def stage!(tally, id, outcome)
+        ledger_class!(id, outcome)
+        tally[:asked] << id
+        tally[:staged] << [id, outcome]
+        return if tally[:staged].size < spec.outage_run
+
+        tally[:outage] = outage_entry(tally[:staged], aborted: true)
+        say("#{spec.name}: #{tally[:staged].size} consecutive outage answer(s) — upstream looks down; " \
+            "slice aborted, the run left unledgered")
+      end
+
+      # A later id answered: upstream is alive, the staged failures were
+      # real — they commit, in one write.
+      def commit_staged!(tally)
+        return if tally[:staged].empty?
+
+        tally[:staged].each { |id, outcome| ledger!(tally, id, outcome) }
+        tally[:staged].clear
+        write_ledger!
+      end
+
+      # Staged answers no later id confirmed when the slice ended stay
+      # unledgered (re-asked next slice); the report names them.
+      def note_uncommitted!(tally)
+        return if tally[:outage] || tally[:staged].empty?
+
+        tally[:outage] = outage_entry(tally[:staged], aborted: false)
+      end
+
+      def outage_entry(staged, aborted:)
+        id, outcome = staged.last
+        { aborted: aborted, count: staged.size, ids: staged.map(&:first),
+          statuses: staged.map { |_id, staged_outcome| staged_outcome.status }.uniq,
+          last: evidence(id, outcome) }
       end
 
       def report_progress(tally)
@@ -562,6 +665,7 @@ module Nabu
 
       def classify(tally, reprobe)
         return :clean_stop if tally[:halt]
+        return :outage_abort if tally.dig(:outage, :aborted)
         return :yield if tally[:ok].positive?
         return :cone_exhausted if tally[:asked].empty?
         return :upstream_refusing if reprobe && reprobe[:status] != :ok
@@ -623,7 +727,8 @@ module Nabu
           strays: after.strays, attempted: tally[:asked].size, ok: tally[:ok], refused: tally[:refused],
           stuck: tally[:stuck], frontier: frontier(before, after), statuses: statuses,
           samples: refusals.first(REFUSAL_SAMPLES).map { |id, outcome| evidence(id, outcome) },
-          reprobe: reprobe, lookahead: lookahead, requests: requests, elapsed: elapsed.to_f, halt: tally[:halt]
+          reprobe: reprobe, lookahead: lookahead, requests: requests, elapsed: elapsed.to_f, halt: tally[:halt],
+          outage: tally[:outage]
         )
       end
 
