@@ -105,6 +105,29 @@ class PacedCrawlChainTest < Minitest::Test
     end
   end
 
+  def test_an_outage_abort_stops_the_chain_naming_it
+    Dir.mktmpdir do |dir|
+      held = {}
+      lane = spec(stop_after: 5).with(outage_statuses: [:timeout], outage_run: 2, timeout_attempts: 1)
+      eng = P::Engine.new(
+        spec: lane, dir: dir, universe: -> { %w[a b c d e f] }, held: ->(id) { held.key?(id) },
+        fetch_one: lambda do |id|
+          next P::Outcome.new(status: :timeout, evidence: { body_head: "execution expired" }) if %w[c d].include?(id)
+
+          held[id] = true
+          P::Outcome.new(status: :ok, evidence: { http_status: 200 })
+        end,
+        sleeper: ->(_) {}
+      )
+      log = StringIO.new
+      summary = run_chain(eng, slices: 5, log: log)
+      assert_equal 2, summary.reports.size
+      assert_equal :outage_abort, summary.reports.last.classification
+      assert_match(/upstream outage — 2 consecutive outage answer\(s\) at c…d/, summary.stop_reason)
+      assert_match(/CHAIN STOPPED: upstream outage/, log.string)
+    end
+  end
+
   def test_the_chain_logs_every_report_line
     Dir.mktmpdir do |dir|
       log = StringIO.new

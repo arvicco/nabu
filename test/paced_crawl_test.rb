@@ -290,6 +290,98 @@ class PacedCrawlTest < Minitest::Test
     end
   end
 
+  # ── the outage breaker ──
+
+  def outage_spec(slice: 10, run: 3)
+    spec(slice: slice, attempts: 1).with(outage_statuses: [:timeout], outage_run: run)
+  end
+
+  def ledger_now(dir, ids: PC_IDS)
+    fake_engine(dir: dir, ids: ids, script: ->(_id) { flunk "no ask" }, spec: outage_spec).ledger
+  end
+
+  def test_staged_outage_failures_commit_when_a_later_id_answers
+    Dir.mktmpdir do |dir|
+      seen_at_recovery = nil
+      asked, upstream = pc_upstream({ "101" => :timeout, "102" => :timeout, "104" => :timeout, "105" => :empty })
+      script = lambda do |id|
+        seen_at_recovery = ledger_now(dir) if id == "103"
+        upstream.call(id)
+      end
+      report = fake_engine(dir: dir, ids: PC_IDS, script: script, spec: outage_spec(slice: 5)).slice!
+      assert_equal %w[101 102 103 104 105], asked
+      assert_empty seen_at_recovery["timeout-stuck"], "staged failures are not on disk before upstream answers"
+      assert_equal({ "denied" => [], "empty" => %w[105], "timeout-stuck" => %w[101 102 104] }, ledger_now(dir),
+                   "an ok and a non-outage refusal each commit the run before them")
+      assert_equal %w[101 102 104], report.stuck
+      assert_equal 3, report.refused["timeout-stuck"]
+      assert_equal :yield, report.classification
+      assert_nil report.outage
+    end
+  end
+
+  def test_an_outage_run_aborts_the_slice_and_drops_the_run_unledgered
+    Dir.mktmpdir do |dir|
+      stores[dir] << "112"
+      asked, script = pc_upstream({ "101" => :denied, "102" => :timeout, "103" => :timeout, "104" => :timeout })
+      report = fake_engine(dir: dir, ids: PC_IDS, script: script, spec: outage_spec).slice!
+      assert_equal %w[101 102 103 104], asked, "the third consecutive failure ends the slice — no probe after"
+      assert_equal :outage_abort, report.classification
+      assert_predicate report, :outage_aborted?
+      assert_equal({ aborted: true, count: 3, ids: %w[102 103 104] }, report.outage.slice(:aborted, :count, :ids))
+      assert_equal %w[104 timeout], report.outage[:last].values_at(:id, :status).map(&:to_s)
+      assert_equal({ "denied" => %w[101], "empty" => [], "timeout-stuck" => [] }, ledger_now(dir),
+                   "everything before the run stays; nothing from the run is ledgered")
+      assert_equal({ "denied" => 1, "empty" => 0, "timeout-stuck" => 0 }, report.refused)
+      assert_empty report.stuck
+      assert_nil report.reprobe
+      assert_empty report.lookahead
+      assert_equal "102", report.frontier[:after]
+      text = report.lines.join("\n")
+      refute_match(/ZERO-YIELD/, text)
+      assert_match(/OUTAGE ABORT: 3 consecutive outage answer\(s\) \(timeout\) at 102…104 — .*last: 104 timeout/,
+                   text)
+
+      resumed, resumed_script = pc_upstream
+      fake_engine(dir: dir, ids: PC_IDS, script: resumed_script, spec: outage_spec(slice: 1)).slice!
+      assert_equal %w[102], resumed, "the dropped run is re-asked next slice"
+    end
+  end
+
+  def test_a_run_still_staged_when_the_slice_ends_stays_unledgered
+    Dir.mktmpdir do |dir|
+      _, script = pc_upstream({ "102" => :timeout })
+      report = fake_engine(dir: dir, ids: PC_IDS, script: script, spec: outage_spec(slice: 2)).slice!
+      assert_equal :yield, report.classification, "no FrozenFrontier for the staged id"
+      assert_equal({ aborted: false, count: 1, ids: %w[102] }, report.outage.slice(:aborted, :count, :ids))
+      refute_predicate report, :outage_aborted?
+      assert_empty ledger_now(dir)["timeout-stuck"]
+      assert_match(/OUTAGE STAGE: 1 outage answer\(s\) \(timeout\) at 102 uncommitted/, report.lines.join("\n"))
+    end
+  end
+
+  def test_a_slice_killed_mid_stage_loses_only_the_staged_items
+    Dir.mktmpdir do |dir|
+      _, script = pc_upstream({ "101" => :denied, "102" => :timeout, "103" => :fatal })
+      assert_raises(Nabu::FetchError) { fake_engine(dir: dir, ids: PC_IDS, script: script, spec: outage_spec).slice! }
+      assert_equal({ "denied" => %w[101], "empty" => [], "timeout-stuck" => [] }, ledger_now(dir))
+    end
+  end
+
+  def test_the_outage_knobs_validate
+    assert_equal [[], nil], spec.to_h.values_at(:outage_statuses, :outage_run), "off by default"
+    assert_equal [[:timeout], 3], outage_spec.to_h.values_at(:outage_statuses, :outage_run)
+    assert_raises(ArgumentError) { spec.with(outage_statuses: [:ok], outage_run: 2) }
+    assert_raises(ArgumentError) { spec.with(outage_statuses: [:halt], outage_run: 2) }
+    assert_raises(ArgumentError) { spec.with(outage_statuses: [:timeout]) }
+    assert_raises(ArgumentError) { spec.with(outage_run: 3) }
+    assert_raises(ArgumentError) { spec.with(outage_statuses: [:timeout], outage_run: 0) }
+    assert_raises(ArgumentError) do
+      PC::Spec.new(name: "x", ledger_file: ".x", classes: { denied: "denied" }, delay: 0, slice: 1, schedule: nil,
+                   outage_statuses: [:timeout], outage_run: 2)
+    end
+  end
+
   def test_an_undeclared_terminal_answer_raises
     lane = PC::Spec.new(name: "x", ledger_file: ".x.json", classes: { denied: "denied" }, delay: 0, slice: 1,
                         schedule: nil)
@@ -370,4 +462,39 @@ class PacedCrawlTest < Minitest::Test
     assert outcome.body_head.start_with?("This PID is not allowed"), "whitespace collapsed"
     assert_equal "ab", PC.body_head("ab\xE3\x81".b), "a byte cut mid-character is scrubbed, never raised on"
   end
+end
+
+# The whole conformance suite again over a lane that declares the outage
+# breaker (timeouts staged, a run of three aborts) — so the OUTAGE LAW runs
+# against the engine itself, and every other pin holds with the breaker on.
+class PacedCrawlOutageLaneTest < Minitest::Test
+  include PacedCrawlConformance
+
+  PC = Nabu::PacedCrawl
+
+  def stores = @stores ||= Hash.new { |hash, dir| hash[dir] = Set.new }
+
+  def paced_crawl_engine(dir:, ids:, slice:, script:)
+    store = stores[dir]
+    lane = PC::Spec.new(
+      name: "items", ledger_file: ".items-crawl.json",
+      classes: { denied: "denied", empty: "empty", timeout: "timeout-stuck" },
+      delay: 0, slice: slice, timeout_backoff: 0, outage_statuses: [:timeout], outage_run: 3,
+      schedule: PC::Schedule.new(cadence: :per_phase, slices_per_phase: 2, stop_after_zero_slices: 3)
+    )
+    PC::Engine.new(
+      spec: lane, dir: dir, universe: -> { ids }, held: ->(id) { store.include?(id) }, sleeper: ->(_) {},
+      fetch_one: lambda do |id|
+        case script.call(id)
+        when :ok then (store << id) && PC::Outcome.from_body(:ok, http_status: 200, body: "{}")
+        when :denied then PC::Outcome.from_body(:denied, http_status: 403, body: PC_REFUSAL_BODY)
+        when :empty then PC::Outcome.from_body(:empty, http_status: 200, body: "{}")
+        when :timeout then PC::Outcome.new(status: :timeout)
+        when :fatal then raise Nabu::FetchError, "HTTP 500 for #{id}"
+        end
+      end
+    )
+  end
+
+  def paced_crawl_hold!(dir, id) = stores[dir] << id
 end

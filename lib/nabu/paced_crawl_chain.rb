@@ -58,8 +58,13 @@ module Nabu
       private
 
       # A slice that ended on upstream's word stops the run at once: a quota
-      # floor or a 429 does not recover within a run.
+      # floor or a 429 does not recover within a run, nor does an outage.
       def stop_reason(report)
+        if report.classification == :outage_abort
+          return "upstream outage — #{report.outage[:count]} consecutive outage answer(s) at " \
+                 "#{report.outage[:ids].first}…#{report.outage[:ids].last}; the run was dropped unledgered — " \
+                 "chain again once upstream recovers"
+        end
         return unless report.classification == :clean_stop
 
         "clean stop at #{report.halt[:id]}: #{report.halt[:reason]} — upstream asked the crawl to stop; " \
