@@ -166,6 +166,50 @@ class PacedCrawlTest < Minitest::Test
     end
   end
 
+  def test_the_default_codec_is_flat_and_passes_foreign_sections_through
+    assert_same PC::FLAT_CODEC, spec.codec
+    Dir.mktmpdir do |dir|
+      File.write(File.join(dir, ".items-crawl.json"),
+                 JSON.generate({ "denied" => %w[112], "pages" => { "7" => %w[a b] }, "server-error" => %w[9],
+                                 "legacy" => 1, "last_slice" => { "name" => "old" } }))
+      _, script = pc_upstream({ "101" => :denied })
+      engine = fake_engine(dir: dir, ids: PC_IDS, script: script, spec: spec(slice: 1))
+      assert_equal({ "name" => "old" }, engine.last_slice)
+      engine.slice!
+      on_disk = JSON.parse(File.read(engine.ledger_path))
+      assert_equal %w[denied empty timeout-stuck pages server-error last_slice], on_disk.keys,
+                   "classes first, then the foreign sections, then the engine's last_slice"
+      assert_equal [%w[101 112], { "7" => %w[a b] }, %w[9]], on_disk.values_at("denied", "pages", "server-error")
+      assert_equal "items", on_disk.dig("last_slice", "name")
+    end
+  end
+
+  # A nested on-disk shape: the classes live under one "refused" map.
+  class NestedCodec
+    def load(raw) = raw.fetch("refused", {}).transform_values { |ids| ids.to_set(&:to_s) }
+
+    def dump(classes, raw)
+      raw.merge("refused" => classes.transform_values { |ids| ids.to_a.sort })
+    end
+  end
+
+  def test_a_lane_codec_routes_every_ledger_read_and_write
+    lane = spec(slice: 2).with(codec: NestedCodec.new)
+    Dir.mktmpdir do |dir|
+      File.write(File.join(dir, ".items-crawl.json"),
+                 JSON.generate({ "refused" => { "denied" => %w[101] }, "pages" => { "1" => [2] } }))
+      asked, script = pc_upstream({ "103" => :empty })
+      engine = fake_engine(dir: dir, ids: PC_IDS, script: script, spec: lane)
+      assert_equal %w[101], engine.ledger.fetch("denied")
+      engine.slice!
+      assert_equal %w[102 103], asked, "the codec's ledgered id is never asked"
+      on_disk = JSON.parse(File.read(engine.ledger_path))
+      assert_equal %w[refused pages last_slice], on_disk.keys
+      assert_equal({ "denied" => %w[101], "empty" => %w[103], "timeout-stuck" => [] }, on_disk["refused"])
+      assert_equal({ "1" => [2] }, on_disk["pages"])
+    end
+  end
+
   def test_an_undeclared_terminal_answer_raises
     lane = PC::Spec.new(name: "x", ledger_file: ".x.json", classes: { denied: "denied" }, delay: 0, slice: 1,
                         schedule: nil)
