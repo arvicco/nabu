@@ -89,6 +89,11 @@ rows also carry the **source** slug; reference data — gazetteer facts, sign
 cards — carries its own license envelope). Preserve those fields when you
 quote — see §6.
 
+Every tool refuses an argument its input schema does not declare (contract
+bump 2026-11-10): the call returns an `isError` result naming the unknown
+argument(s) and the tool's valid ones, so a misspelled or unsupported
+filter is never silently ignored.
+
 ### `nabu_search`
 
 Full-text, exact-lemma, or semantic-neighbour search over the whole corpus.
@@ -143,7 +148,14 @@ Cross-passage adjacency is out (the passage is the unit); `near` does not
 compose with `morph`.
 
 Optional `lang` (ISO-639-3), `license` (exact class), `limit` (default 10, max
-50). Optional `meter` / `meter_pattern` (P45-5, text search only — refused
+50). Optional `source` (one source slug) and `axis` (a research axis from
+`config/axes.yml` or a functional set — `core`, `signs`, `quickstart` —
+comma-joined for a union) scope hits exactly like the CLI's
+`--source`/`--axis`, through the same `Query::SourceScope`: they compose with
+text, lemma and `near` search and with the fuzzy/translations/annotations/
+gloss lanes (the sense lane takes `source` only; `similar_to` neither), and an
+unknown slug or axis is an `isError` naming the valid set, never an empty
+page. Optional `meter` / `meter_pattern` (P45-5, text search only — refused
 with `lemma`/`near`): restrict hits to metrically **scanned** passages — the
 pedecerto (Latin) / hypotactic (Greek) meter enrichment layer — matching the
 meter code/name (`H`, `P`, `dactylic hexameter`) and/or the exact foot
@@ -857,8 +869,13 @@ bump gave nabu_search's existing `gloss` key a second meaning where it
 used to be a usage error — `gloss` without `lemma` is the gloss lane (no
 schema key added, the lemma-anchored filter unchanged); the 2026-11-07
 bump added nabu_search's `annotations` lane key (additive — the
-translations lane's shape over the declared annotation layers). Live MCP servers
-serve the old schema until restarted.
+translations lane's shape over the declared annotation layers); the 2026-11-10
+bump added nabu_search's `source`/`axis` scoping keys (additive — the CLI's
+`--source`/`--axis`, resolved through the same `Query::SourceScope`) and
+made every tool refuse an argument its schema does not declare (an
+`isError` result naming the unknown argument and the valid ones, where it
+used to be silently ignored). Live MCP servers serve the old schema until
+restarted.
 
 | Capability | CLI surface | MCP tool | Status |
 | --- | --- | --- | --- |
@@ -874,12 +891,12 @@ serve the old schema until restarted.
 | Credit lines (`sources.credit`, migration 020) | `show`/`search` credit line | `nabu_show` / `nabu_search` — additive `credit` key, only when the source carries one | parity (verified; pinned P43-2) |
 | The place desk | `nabu place NAME\|ID` (P44-2) | `nabu_place` | **added P44-3** — new tool, read-only, `Query::Place` unchanged; dump-absent degradation mirrors the CLI (id counts holdings, name lookup notes the sync hint) |
 | Findspot line | `nabu show` findspot (P44-2) | `nabu_show` — additive `findspot` key when the captured id resolves through the dump; carries the Pleiades `attribution` envelope since the 2026-10-22 bump | **added P44-3** (pinned, incl. the dump-absent byte-identical case; attribution pinned 2026-10-22) |
-| Fragment search | `search --fuzzy` | `nabu_search` `fuzzy: true` — `Query::Fuzzy`, the CLI's composition set (minus the CLI-only `--source`/`--axis`/`--loans`) | **added 2026-10-22** (pinned) |
-| Annotation-held translations search | `search --translations` | `nabu_search` `translations: true` — `Query::TranslationSearch`, lang/license/limit (the CLI's `--source`/`--axis` have no MCP param) | **added 2026-10-22** (pinned) |
-| Declared annotation-layer search | `search --annotations` (`Query::AnnotationSearch` — the `Nabu::AnnotationKeys` layers: standardized/regularized spellings, margin notes, footnotes, editors' notes) | `nabu_search` `annotations: true` — `Query::AnnotationSearch`, lang/license/limit (the CLI's `--source`/`--axis` have no MCP param) | **added 2026-11-07** (pinned) |
+| Fragment search | `search --fuzzy` | `nabu_search` `fuzzy: true` — `Query::Fuzzy`, the CLI's composition set (minus the CLI-only `--loans`; `source`/`axis` since 2026-11-10) | **added 2026-10-22** (pinned) |
+| Annotation-held translations search | `search --translations` | `nabu_search` `translations: true` — `Query::TranslationSearch`, lang/license/source/axis/limit | **added 2026-10-22** (pinned) |
+| Declared annotation-layer search | `search --annotations` (`Query::AnnotationSearch` — the `Nabu::AnnotationKeys` layers: standardized/regularized spellings, margin notes, footnotes, editors' notes) | `nabu_search` `annotations: true` — `Query::AnnotationSearch`, lang/license/source/axis/limit | **added 2026-11-07** (pinned) |
 | Token gloss-line search | `search --gloss-lines` (`Query::GlossLineSearch` — passages whose token glosses match, bhsa/achemenet/aes/tlhdig) | — | **documented gap** — MCP exposure pending (the `translations: true` shape is the template) |
 | Beta Code input | `search --betacode` (query, `--lemma`, `--near` decoded; each decode echoed) | `nabu_search` `betacode: true` — the same `Betacode.decode_query`, decode echoed in a present-only `betacode` key | **added 2026-10-22** (pinned both sides) |
-| The sense desk | `nabu sense TERM [--gloss]` | `nabu_search` `sense` (+ `sense_gloss`) — `Query::Senses`, the desk's senses + citing passages with their tokens | **added 2026-10-22** (pinned; `--source` and the no-term census stay CLI-only) |
+| The sense desk | `nabu sense TERM [--gloss]` | `nabu_search` `sense` (+ `sense_gloss`) — `Query::Senses`, the desk's senses + citing passages with their tokens | **added 2026-10-22** (pinned; `source` since 2026-11-10; the no-term census stays CLI-only) |
 | Token senses on a shown passage | `nabu show URN --senses` | `nabu_show` `senses: true` — present-only `senses` per passage record + `sense_entries` | **added 2026-10-22** (pinned, incl. the flag-off byte-identical case) |
 | Meter line | `nabu show` meter (P44-6/7 enrichments) | `nabu_show` — additive `meter` key on scanned passages | **added P44-3** (pinned) |
 | Sign-coverage graded search (`search --signset "ŠEŠ, AK" --max-foreign N`, P77-r16) | CLI only | no `nabu_search` parameter yet | **documented gap** — MCP exposure pending |
@@ -888,6 +905,8 @@ serve the old schema until restarted.
 | Meter search facet | `search --meter CODE [--meter-pattern PATTERN]` (P45-5) | `nabu_search` `meter`/`meter_pattern` — text mode only, refusal parity with lemma/near; the honesty note (source layer named, empty layer explained) rides the free-text `note` | **added P45-5** (pinned; no frozen payload key changed) |
 | Tibetan word-grain search | `search --words` (P54-4) | `nabu_search` `words` — text mode only, refusal parity with lemma/near; present-only `word_grain` key when the filter ran, present-only `word_grain_note` when it degraded (non-Tibetan query / nabu-data not synced) | **added P54-4** (pinned; additive keys only, flag-off byte-identical) |
 | `--lang` on search/concordance | `search`/`concord` `--lang` | `nabu_search` / `nabu_concord` `lang` | parity (pinned P8) |
+| Source / axis scoping | `search --source SLUG`, `search --axis NAME[,NAME…]` (every search path; `nabu sense --source`) | `nabu_search` `source` / `axis` — the same `Query::SourceScope` resolution and refusals (unknown slug/axis → `isError` naming the valid set), threaded into text, lemma, `near`, and the fuzzy/translations/annotations/gloss lanes; the sense lane takes `source` only (the CLI's `nabu sense` has no `--axis`); refused with `similar_to` (the CLI's `--similar` composes with `--limit` only). `concord` has no `--source` on the CLI and `Query::Concord` no source filter, so `nabu_concord` carries none | **added 2026-11-10** (pinned) |
+| Unknown arguments | Thor rejects an undeclared option | every tool refuses an argument its schema does not declare — one server-side check in `Tools#call` keyed off the schema's `properties`, an `isError` naming the unknown argument(s) and the valid ones (MCP transports do not enforce `additionalProperties`) | **added 2026-11-10** (pinned per tool) |
 | `--lang`/`langs` on intertext/cognates | `parallels --lang`, `cognates --langs` | `nabu_parallels` `lang`, `nabu_cognates` `langs` | parity (pinned P15) |
 | Shelf-language scoping | `define --lang`, `etym --lang` | `nabu_define` / `nabu_etym` `lang` (define's enum live-derived) | parity (pinned P35-6) |
 | `list SOURCE --lang` implying the mode (P44-r1) | `nabu list` | — | documented gap (subsumed by the list gap above; the filters themselves exist on every MCP tool that lists passages) |
