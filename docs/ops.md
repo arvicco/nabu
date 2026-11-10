@@ -1139,12 +1139,13 @@ automatically; no per-release action.
 8. **The Glama listing's release:** a Glama release is the listing's
    OWN containerized build (their build spec installs Ruby into
    Glama's Debian base and starts `bin/nabu mcp` through their
-   proxy) — it is NOT produced by the GitHub release. The admin page
-   carries an auto-release option, but its trigger is unverified
-   (checked and inert at v1.8.0; likely requires the Glama GitHub
-   App on the repo — under clarification with Glama, 2026-11-10):
-   until the automatic path is proven at a release, the release is
-   made from the server's Dockerfile admin page (Deploy → create
+   proxy) — it is NOT produced by the GitHub release. The admin
+   page's auto-release option needs the Glama GitHub App
+   (github.com/apps/glama-ai) installed on the repository to receive
+   release events (their hosting documentation; a listing claimed
+   via OAuth alone has no event source, and the option sits inert —
+   observed at a release). Until the app is installed, the release
+   is made from the server's Dockerfile admin page (Deploy → create
    release, replacing the previous one). Either way the loop
    verifies with ONE command: `bundle exec rake release:glama` —
    exit 0 says the released version is visible on the public listing
