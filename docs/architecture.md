@@ -2952,6 +2952,27 @@ the one-id `fetch_one` contract does not model. Since then:
   committed it), so a genuinely bad id at the very end of the cone is
   re-asked every run and a chained run stops on the zero-yield budget
   instead of reporting cone-exhausted.
+- korpus16 — the `PAGE_CRAWL` lane, `.korpus16-crawl.json`: one id per
+  reading page, the bare book id being its page 1 (the sizing request)
+  and `<book>:<n>` the pages its pager names once page 1 is held, so the
+  universe grows as page 1s land; the engine fixes a slice's selection at
+  its start, so a sync re-slices with the budget left while a slice
+  sized new pages. 403/404/410 ledger `refused` (a refused page 1 refuses
+  the book), a 200 that is no reading page `not-reading`, a timeout
+  `timeout-stuck`; a 429 is the clean stop. Its `LedgerCodec` keeps the
+  hand-rolled shape (`{"books": [...], "pages": {book: [n]}}`) for the
+  refused class, the new classes flat beside it.
+- mdz-protestant — one lane per seed object (named by its bsb id), run in
+  seed order under one per-sync budget, all sharing `.mdz-crawl.json`:
+  each lane's `LedgerCodec` owns only its object's entry in the
+  per-object class maps (`{"missing": {bsb: [pages]}}`, the hand-rolled
+  shape, beside `denied`/`empty`/`timeout-stuck` maps), every other object
+  passing through. A 404 is `missing` (a subclass of denied), 401/403/410
+  `denied`, an empty 200 `empty`. A 429 is the clean stop, and so is the
+  quota floor: the answer whose rate-limit header reads `RATE_FLOOR` or
+  less is kept, and the next ask — in any lane, the quota being the
+  API's — halts without a request. The lanes share the top-level
+  `last_slice` (the last lane to slice writes it).
 
 Off the rail, by shape rather than by queue:
 
@@ -2973,18 +2994,9 @@ Off the rail, by shape rather than by queue:
   no ledger (a 404 is censused and re-asked every sync, feeding the
   systemic-miss cap).
 
-Paced by shape; the engine capabilities they need have shipped (below),
-their migrations onto the rail are pending:
-
-- korpus16 — two-stage: page 1 sizes its book, so the id universe grows
-  mid-slice; the ledger is nested (refused books, refused pages per book);
-  a 429 stops the slice cleanly.
-- mdz-protestant — the ledger is nested (404 pages per object), and a 429
-  or the quota floor (read off a successful answer's rate-limit header)
-  stops the slice cleanly, never raising.
-
-**Engine capabilities for those three** (additive; a lane that declares
-none of them behaves exactly as before):
+**The v2 engine capabilities** (additive; a lane that declares none of
+them behaves exactly as before — the damos, korpus16 and mdz-protestant
+migrations above are their first riders):
 
 - **Clean stop.** `Outcome.halt(reason:, evidence:)` — upstream's "no more
   for now" (a 429, a quota floor read off a good answer's header). The
@@ -3013,7 +3025,8 @@ none of them behaves exactly as before):
   mid-stage loses only the staged items.
 
 The conformance suite carries a CODEC LAW (every lane; the flat default
-satisfies it) and an opt-in OUTAGE LAW (lanes declaring
+satisfies it — and every pin reads the ledger through the lane's codec,
+so a nested-ledger lane runs the whole suite) and an opt-in OUTAGE LAW (lanes declaring
 `outage_statuses`). The nb-no/vakk multi-stage shape, if it is ever to
 ride, still needs a staged-item model whose budget counts requests. The
 engine
