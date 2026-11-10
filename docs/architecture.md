@@ -2950,6 +2950,17 @@ the one-id `fetch_one` contract does not model. Since then:
   `timeout-stuck`; a 429 is the clean stop. Its `LedgerCodec` keeps the
   hand-rolled shape (`{"books": [...], "pages": {book: [n]}}`) for the
   refused class, the new classes flat beside it.
+- mdz-protestant — one lane per seed object (named by its bsb id), run in
+  seed order under one per-sync budget, all sharing `.mdz-crawl.json`:
+  each lane's `LedgerCodec` owns only its object's entry in the
+  per-object class maps (`{"missing": {bsb: [pages]}}`, the hand-rolled
+  shape, beside `denied`/`empty`/`timeout-stuck` maps), every other object
+  passing through. A 404 is `missing` (a subclass of denied), 401/403/410
+  `denied`, an empty 200 `empty`. A 429 is the clean stop, and so is the
+  quota floor: the answer whose rate-limit header reads `RATE_FLOOR` or
+  less is kept, and the next ask — in any lane, the quota being the
+  API's — halts without a request. The lanes share the top-level
+  `last_slice` (the last lane to slice writes it).
 
 Off the rail, by shape rather than by queue:
 
@@ -2981,9 +2992,6 @@ their migrations onto the rail are pending:
   engine's outage breaker models the second; the flat codec now passes
   an undeclared class array through instead of dropping it, and
   `server-error` rides once the lane declares it (a subclass).
-- mdz-protestant — the ledger is nested (404 pages per object), and a 429
-  or the quota floor (read off a successful answer's rate-limit header)
-  stops the slice cleanly, never raising.
 
 **Engine capabilities for those three** (additive; a lane that declares
 none of them behaves exactly as before):
