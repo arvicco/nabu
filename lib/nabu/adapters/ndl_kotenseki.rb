@@ -242,6 +242,13 @@ module Nabu
       # instance's knobs): census order, held = books/<pid>.json on disk,
       # one paced GET per PID. Public so an offline surface can
       # #diagnose the crawl without crawling.
+      # The chain runner's seam (rake crawl:chain): every paced lane this
+      # adapter runs, by name. The bib crawl stays off the rail (SRU batch
+      # grain), so books is the one lane.
+      def paced_crawls(workdir, progress: nil)
+        { "books" => book_crawl(workdir, progress: progress) }
+      end
+
       def book_crawl(workdir, progress: nil)
         Nabu::PacedCrawl::Engine.new(
           spec: BOOK_CRAWL.with(delay: @delay, slice: @slice, timeout_backoff: @timeout_backoff),
