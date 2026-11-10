@@ -332,5 +332,28 @@ module Ops
       replies[0]["id"] = 7
       assert_raises(P::SmokeFailed) { run_smoke(replies) }
     end
+
+    # -- load path -------------------------------------------------------------
+
+    # The Rakefile requires ONLY this file (`require_relative
+    # "lib/nabu/ops/demo_publish"`), so every constant its default kwargs
+    # reach — Nabu::VERSION included — must be required by the file
+    # itself. The suite's test_helper loads everything and masks a
+    # missing require; a clean subprocess reproduces the Rakefile's path.
+    # Regression: v1.8.0 release day, `rake demo:publish` died with
+    # `uninitialized constant Nabu::VERSION` at the publish_argv call.
+    def test_the_file_is_self_sufficient_on_the_rakefile_load_path
+      file = File.join(ROOT, "lib/nabu/ops/demo_publish.rb")
+      script = <<~RUBY
+        require #{file.dump}
+        begin
+          Nabu::Ops::DemoPublish.publish_argv(root: "/nonexistent", slice: "/nonexistent")
+        rescue Nabu::Ops::DemoPublish::Refused
+          # expected: the kwarg defaults (Nabu::VERSION among them) resolved
+        end
+      RUBY
+      out = IO.popen([RbConfig.ruby, "-e", script], err: %i[child out], &:read)
+      assert Process.last_status.success?, "demo_publish.rb is not loadable standalone:\n#{out}"
+    end
   end
 end
