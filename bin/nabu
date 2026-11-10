@@ -9,4 +9,9 @@ require_relative "../lib/nabu"
 # diagnostics; the CLI prints the one honest interrupt line itself.
 Thread.report_on_exception = false
 
+# Progress must reach a redirected log as it happens: with stdout sent to
+# a file, Ruby block-buffers it, and a long sync's stage lines sat 2h in a
+# 4K buffer during the ndl-kotenseki index hang.
+$stdout.sync = true
+
 Nabu::CLI.start(ARGV)
