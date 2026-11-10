@@ -1159,10 +1159,27 @@ module Nabu
         tool = TOOLS[name] or raise UnknownTool, "Unknown tool: #{name}"
         raise InvalidArguments, "arguments must be an object" unless arguments.is_a?(Hash)
 
+        reject_unknown_arguments!(name, tool, arguments)
         with_grace { send(tool.fetch(:handler), arguments) }
       end
 
       private
+
+      # The ONE unknown-argument gate, for every tool (contract bump
+      # 2026-11-10): MCP transports do not enforce a schema's
+      # additionalProperties: false, so an undeclared argument would
+      # otherwise be silently dropped — an unimplemented filter no-op'ing
+      # invisibly. Keyed off the tool's declared schema properties (the
+      # frozen constant; the live define enum adds no names); the refusal
+      # names the stranger(s) and the valid set so a model self-corrects.
+      def reject_unknown_arguments!(name, tool, arguments)
+        valid = tool.fetch(:input_schema).fetch(:properties).keys.map(&:to_s)
+        unknown = arguments.keys.map(&:to_s) - valid
+        return if unknown.empty?
+
+        takes = valid.empty? ? "it takes no arguments" : "valid arguments: #{valid.join(', ')}"
+        raise InvalidArguments, "#{name} does not take #{unknown.sort.join(', ')} — #{takes}"
+      end
 
       # -- handlers --------------------------------------------------------------
 

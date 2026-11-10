@@ -89,6 +89,11 @@ rows also carry the **source** slug; reference data — gazetteer facts, sign
 cards — carries its own license envelope). Preserve those fields when you
 quote — see §6.
 
+Every tool refuses an argument its input schema does not declare (contract
+bump 2026-11-10): the call returns an `isError` result naming the unknown
+argument(s) and the tool's valid ones, so a misspelled or unsupported
+filter is never silently ignored.
+
 ### `nabu_search`
 
 Full-text, exact-lemma, or semantic-neighbour search over the whole corpus.
@@ -866,7 +871,10 @@ schema key added, the lemma-anchored filter unchanged); the 2026-11-07
 bump added nabu_search's `annotations` lane key (additive — the
 translations lane's shape over the declared annotation layers); the 2026-11-10
 bump added nabu_search's `source`/`axis` scoping keys (additive — the CLI's
-`--source`/`--axis`, resolved through the same `Query::SourceScope`). Live MCP servers serve the old schema until
+`--source`/`--axis`, resolved through the same `Query::SourceScope`) and
+made every tool refuse an argument its schema does not declare (an
+`isError` result naming the unknown argument and the valid ones, where it
+used to be silently ignored). Live MCP servers serve the old schema until
 restarted.
 
 | Capability | CLI surface | MCP tool | Status |
@@ -898,6 +906,7 @@ restarted.
 | Tibetan word-grain search | `search --words` (P54-4) | `nabu_search` `words` — text mode only, refusal parity with lemma/near; present-only `word_grain` key when the filter ran, present-only `word_grain_note` when it degraded (non-Tibetan query / nabu-data not synced) | **added P54-4** (pinned; additive keys only, flag-off byte-identical) |
 | `--lang` on search/concordance | `search`/`concord` `--lang` | `nabu_search` / `nabu_concord` `lang` | parity (pinned P8) |
 | Source / axis scoping | `search --source SLUG`, `search --axis NAME[,NAME…]` (every search path; `nabu sense --source`) | `nabu_search` `source` / `axis` — the same `Query::SourceScope` resolution and refusals (unknown slug/axis → `isError` naming the valid set), threaded into text, lemma, `near`, and the fuzzy/translations/annotations/gloss lanes; the sense lane takes `source` only (the CLI's `nabu sense` has no `--axis`); refused with `similar_to` (the CLI's `--similar` composes with `--limit` only). `concord` has no `--source` on the CLI and `Query::Concord` no source filter, so `nabu_concord` carries none | **added 2026-11-10** (pinned) |
+| Unknown arguments | Thor rejects an undeclared option | every tool refuses an argument its schema does not declare — one server-side check in `Tools#call` keyed off the schema's `properties`, an `isError` naming the unknown argument(s) and the valid ones (MCP transports do not enforce `additionalProperties`) | **added 2026-11-10** (pinned per tool) |
 | `--lang`/`langs` on intertext/cognates | `parallels --lang`, `cognates --langs` | `nabu_parallels` `lang`, `nabu_cognates` `langs` | parity (pinned P15) |
 | Shelf-language scoping | `define --lang`, `etym --lang` | `nabu_define` / `nabu_etym` `lang` (define's enum live-derived) | parity (pinned P35-6) |
 | `list SOURCE --lang` implying the mode (P44-r1) | `nabu list` | — | documented gap (subsumed by the list gap above; the filters themselves exist on every MCP tool that lists passages) |
