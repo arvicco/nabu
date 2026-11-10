@@ -34,7 +34,8 @@ module MCP
     # dated bump (docs/mcp.md records each).
     def test_the_search_and_show_schemas_carry_the_bumped_key_sets
       search = Nabu::MCP::Tools::SEARCH_SCHEMA.fetch(:properties).keys
-      assert_equal %i[query similar_to lemma morph gloss near window lang license from to century date_basis
+      # source/axis: the scoping bump (2026-11-10), the CLI's --source/--axis.
+      assert_equal %i[query similar_to lemma morph gloss near window lang license source axis from to century date_basis
                       place script kind facets meter meter_pattern words lect fuzzy translations annotations
                       sense sense_gloss betacode limit include_restricted], search
       show = Nabu::MCP::Tools::SHOW_SCHEMA.fetch(:properties).keys
