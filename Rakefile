@@ -930,7 +930,13 @@ namespace :demo do
     platforms = ENV.fetch("DEMO_PLATFORMS", "").split(",").map(&:strip).reject(&:empty?)
     options = { root: __dir__, slice: slice }
     options[:platforms] = platforms unless platforms.empty?
-    builder = ENV.fetch("DEMO_BUILDER", "").strip.then { |v| v.empty? ? publish::Preflight.ensure! : v }
+    # The preflight always runs (daemon + auth + builder probes); a
+    # DEMO_BUILDER override replaces only its builder CHOICE — before this,
+    # the override skipped the whole preflight and a stopped daemon died
+    # deep in buildx as a raw shell error.
+    builder = publish::Preflight.ensure!
+    override = ENV.fetch("DEMO_BUILDER", "").strip
+    builder = override unless override.empty?
     options[:builder] = builder if builder
     puts "$ #{publish.publish_argv(**options).join(' ')}"
     publish.publish!(**options)
@@ -976,5 +982,40 @@ namespace :demo do
     image = ENV.fetch("IMAGE", "").strip.then { |v| v.empty? ? "#{Nabu::Ops::DemoPublish::IMAGE}:latest" : v }
     result = smoke.run!(image: image, docker_args: ENV.fetch("DEMO_SMOKE_ARGS", "").split)
     puts "ok #{image} — #{result.server}, protocol #{result.protocol}, #{result.tools.size} tools"
+  end
+end
+
+# The paced-crawl chain (architecture §19): N slices of a source's paced
+# lanes through the shared runner — per-slice progress asserted, consecutive
+# zero-yield slices stopped at the spec's declared budget, the cone's end
+# honored. The sanctioned way to run a standing slice's chain; never a bash
+# loop of syncs. Loads only the adapter + engine (no catalog writes beyond
+# the crawl's own fetch gateway).
+namespace :crawl do
+  desc "Run N paced-crawl slices of SOURCE through the chain runner (crawl:chain[slug,n])"
+  task :chain, %i[slug n] do |_t, args|
+    $LOAD_PATH.unshift(File.expand_path("lib", __dir__))
+    require "nabu"
+    require "nabu/paced_crawl_chain"
+
+    slug = args[:slug].to_s.strip
+    abort "crawl:chain[slug,n] — name a source slug" if slug.empty?
+    slices = Integer(args[:n] || 1)
+    config = Nabu::Config.load
+    registry = Nabu::SourceRegistry.load(config.sources_path)
+    entry = registry[slug] or abort "unknown source: #{slug}"
+    adapter = entry.build_adapter
+    unless adapter.respond_to?(:paced_crawls)
+      abort "#{slug} does not ride the paced-crawl rail (no paced_crawls lanes) — " \
+            "use bin/nabu sync #{slug} as usual"
+    end
+    workdir = File.join(config.canonical_dir, slug)
+    progress = ->(line) { $stderr.print(line) }
+    adapter.paced_crawls(workdir, progress: progress).each do |name, engine|
+      warn "== #{slug} / #{name}: #{slices} slice(s) =="
+      summary = Nabu::PacedCrawl::Chain.new(engine: engine, slices: slices).run!
+      abort "#{slug}/#{name}: #{summary.stop_reason}" if summary.stalled?
+    end
+    warn "chain complete — run bin/nabu sync #{slug} to load what the crawl stored"
   end
 end

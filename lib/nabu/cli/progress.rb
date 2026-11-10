@@ -4,6 +4,55 @@
 # Carved out of lib/nabu/cli.rb, the registry that loads it.
 module Nabu
   class CLI < Thor
+    # The one-physical-line contract for every \r-rendered progress line: a
+    # line wider than the terminal soft-wraps, and "\r\e[K" then rewrites
+    # only the LAST wrapped row — so each tick scrolls a permanent line and
+    # a stage meant to be ONE updating line prints one line per tick. Every
+    # \r site renders through here: the assembled line is clamped to
+    # width-1 cells by ellipsis-truncating the LABEL (the counters the
+    # viewer watches stay whole). +width+ is the seam tests stub.
+    module ProgressLine
+      ELLIPSIS = "…"
+      MIN_LABEL = 10 # label chars kept before the ellipsis, however long the tail
+      NARROW = 20 # below this, just hard-truncate the whole line
+      DEFAULT_WIDTH = 80
+
+      module_function
+
+      # The live terminal width: the console's winsize, else $COLUMNS, else 80.
+      def width(console: IO.console, env: ENV)
+        cols = console_cols(console)
+        return cols if cols.positive?
+
+        cols = env["COLUMNS"].to_i
+        cols.positive? ? cols : DEFAULT_WIDTH
+      end
+
+      def console_cols(console)
+        console&.winsize&.last.to_i
+      rescue SystemCallError, IOError
+        0
+      end
+
+      # +lead+ + +label+ + +tail+, fitted to width-1 cells; only the label
+      # gives way. Assumes single-cell characters (labels are slugs/prose).
+      def fit(lead:, label:, tail:, width: self.width)
+        max = width - 1
+        line = "#{lead}#{label}#{tail}"
+        return line if line.length <= max
+        return line[0, max] if width < NARROW
+
+        keep = [max - lead.length - tail.length - ELLIPSIS.length, MIN_LABEL].max
+        line = "#{lead}#{label[0, keep]}#{ELLIPSIS}#{tail}" if keep < label.length
+        line.length <= max ? line : line[0, max]
+      end
+
+      # The \r-overwrite form: return to column 0, clear, print the fitted line.
+      def render(lead:, label:, tail:, width: self.width)
+        "\r\e[K#{fit(lead: lead, label: label, tail: tail, width: width)}"
+      end
+    end
+
     no_commands do
       # A print-free runner needs a sink for live progress; the CLI owns all
       # formatting and tty decisions here. Progress goes to $stderr (final counts
@@ -54,7 +103,9 @@ module Nabu
 
       # A durable header/tally line (owner UX rule 2026-10-07 — the
       # incremental verdict sweep's ETA header and closing tally): closes
-      # any open stage first, then prints on tty and non-tty alike.
+      # any open stage first, then prints on tty and non-tty alike. Not
+      # clamped (ProgressLine): the note is printed ONCE and ends in \n, so
+      # a soft wrap cannot multiply — and truncating would drop the tally.
       def progress_note(state)
         lambda do |line|
           close_stage(state)
@@ -80,7 +131,7 @@ module Nabu
           state[:processed] = state[:errored] = state[:last] = 0
           suffix = eta ? "#{eta.render} " : ""
           if tty
-            $stderr.print("\r\e[K  #{label}… #{suffix}")
+            $stderr.print(ProgressLine.render(lead: "  ", label: "#{label}…", tail: " #{suffix}"))
           elsif eta&.real?
             # Non-tty prints the open line only when there is a REAL
             # estimate to speak (P78-r3: "first run — no estimate" on
@@ -94,8 +145,13 @@ module Nabu
       def close_stage(state)
         return if state[:stage].nil?
 
-        line = "  #{state[:stage]}… #{stage_counts(state)}#{format_elapsed(state)}"
-        $stderr.tty? ? $stderr.print("\r\e[K#{line}\n") : warn(line)
+        label = "#{state[:stage]}…"
+        tail = " #{stage_counts(state)}#{format_elapsed(state)}"
+        if $stderr.tty?
+          $stderr.print("#{ProgressLine.render(lead: '  ', label: label, tail: tail)}\n")
+        else
+          warn("  #{label}#{tail}")
+        end
         state[:stage] = nil
       end
 
@@ -118,7 +174,8 @@ module Nabu
           label = state[:stage] || "loading"
           left = time_left_suffix(state, processed)
           if tty
-            $stderr.print("\r\e[K  #{label}… #{processed} docs#{quarantine_suffix(errored)}#{left}  ")
+            tail = " #{processed} docs#{quarantine_suffix(errored)}#{left}  "
+            $stderr.print(ProgressLine.render(lead: "  ", label: "#{label}…", tail: tail))
           elsif processed - state[:last] >= (state[:stage] ? 1000 : 100)
             state[:last] = processed
             warn("  #{label}… #{processed} docs#{quarantine_suffix(errored)}#{left}")

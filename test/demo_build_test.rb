@@ -105,6 +105,41 @@ class DemoBuildTest < Minitest::Test
     fulltext.disconnect
   end
 
+  # -- the standalone index lanes -----------------------------------------
+
+  # The real `nabu sync` refreshes the clarify lane only when it already
+  # exists (refresh_clarify_source! has no bootstrap — on the main
+  # library the rebuild owns the lane's arrival). A fresh slice never
+  # runs a rebuild, so the build itself must derive the lane, or the
+  # image ships fuzzy-only clarify (the v1.8.0 release-day finding: the
+  # ligature eval task red against the published image).
+  def test_build_derives_the_lanes_the_sync_path_never_bootstraps
+    reg = registry
+    builder = build(reg) do |config|
+      fake_sync(config)
+      fulltext = Nabu::Store.connect_fulltext(config.fulltext_path)
+      [Nabu::Store::Indexer::CLARIFY_VOCAB_TABLE, Nabu::Store::Indexer::CLARIFY_FTS_TABLE,
+       Nabu::Store::Indexer::CLARIFY_TRIGRAM_TABLE, Nabu::Store::Indexer::CLARIFY_NAMES_TABLE,
+       Nabu::Store::Indexer::CLARIFY_TABLE, Nabu::Store::Indexer::CLARIFY_META_TABLE,
+       Nabu::Store::AnnotationIndex::TABLE, Nabu::Store::AnnotationIndex::SCOPE_TABLE,
+       Nabu::Store::GlossLineIndex::TABLE, Nabu::Store::GlossLineIndex::SCOPE_TABLE].each do |table|
+        fulltext.drop_table?(table)
+      end
+      fulltext.disconnect
+    end
+    builder.build!
+    fulltext = Nabu::Store.connect_fulltext(File.join(@out, "db", "fulltext.sqlite3"))
+    assert fulltext.table_exists?(Nabu::Store::Indexer::CLARIFY_TABLE),
+           "the built slice must carry the clarify lane"
+    folded = fulltext[Nabu::Store::Indexer::CLARIFY_NAMES_TABLE].select_map(:folded)
+    assert_includes folded, "a", "the slice's document titles must be in the clarify lane"
+    assert Nabu::Store::AnnotationIndex.built?(fulltext),
+           "the built slice must carry the annotation lane (empty is fine; absent degrades search)"
+    assert Nabu::Store::GlossLineIndex.built?(fulltext),
+           "the built slice must carry the gloss-line lane (empty is fine; absent degrades search)"
+    fulltext.disconnect
+  end
+
   # -- the license guard (before any network) --------------------------------
 
   def test_plan_is_the_named_slugs_plus_core_and_requires_closure
@@ -186,6 +221,8 @@ class DemoBuildTest < Minitest::Test
                  written["sources"]
     assert_operator written["total_bytes"], :>, 0
     assert_includes written["files"].keys, "db/catalog.sqlite3"
+    assert_equal Nabu::VERSION, written["nabu_version"],
+                 "rake demo:publish refuses a slice whose census does not name the release it was cut for"
   end
 
   # A kept module whose read seam needs a few files out of a big upstream

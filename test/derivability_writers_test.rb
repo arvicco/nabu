@@ -182,8 +182,8 @@ class DerivabilityWritersTest < Minitest::Test
   # Adapter#fetch: the catalogue snapshot (works.json.gz, streamed to
   # .part + rename) and its .wellcome-census.json pin, the derived
   # census.tsv (tmp + rename, a declared materialization), the text zips
-  # (zips/<bnumber>.zip, .part + rename) and the .wellcome-crawl.json
-  # ledger — the ndl-kotenseki crawl law kind.
+  # (zips/<bnumber>.zip, .part + rename); its .wellcome-crawl.json ledger
+  # is written by the paced-crawl engine — the ndl-kotenseki crawl law kind.
   # credentials (the credentials seam) writes ONE instance file,
   # local/config/credentials.yml (tmp born mode 600 + chmod + rename),
   # driven only by the `nabu creds set` gateway — the local/config
@@ -267,6 +267,11 @@ class DerivabilityWritersTest < Minitest::Test
   # sources_table writes the tracked site include
   # site/_includes/sources_table.md — a pure projection of config/sources.yml
   # + the hand notes it only reads (the DERIVED law kind, like axis_pages).
+  # paced_crawl (the paced-crawl engine, architecture §19) writes ONE file:
+  # its lane's crawl ledger (the terminal-class id arrays + the last_slice
+  # report, tmp+rename) into canonical/<slug>/ inside the adapter's
+  # Adapter#fetch — the ndl-kotenseki crawl law kind; the payloads stay
+  # the adapter's own fetch_one writes.
   WRITER_ALLOWLIST = %w[
     nabu/demo_build.rb
     nabu/adapters/hmml_reading_room.rb
@@ -308,7 +313,7 @@ class DerivabilityWritersTest < Minitest::Test
     nabu/adapters/damos.rb nabu/adapters/itkc_catalog.rb
     nabu/adapters/aclt.rb nabu/adapters/ia_scan_shelf.rb
     nabu/adapters/mnc_wikisource.rb nabu/adapters/shiratori_shm.rb nabu/adapters/nb_no.rb
-    nabu/adapters/wellcome.rb
+    nabu/adapters/wellcome.rb nabu/paced_crawl.rb
     nabu/language_shelf.rb nabu/lemma_shelf.rb nabu/date_shelf.rb nabu/meter_shelf.rb
     nabu/library_shelf.rb nabu/note_shelf.rb
     nabu/source_shelf.rb nabu/ingest.rb

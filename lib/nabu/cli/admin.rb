@@ -644,7 +644,7 @@ module Nabu
         lambda do |slug, index, total|
           elapsed = Process.clock_gettime(Process::CLOCK_MONOTONIC) - started
           suffix = elapsed >= 1 ? format(" %ds", elapsed) : ""
-          $stderr.print("\r\e[K  probing #{index}/#{total} #{slug}…#{suffix}")
+          $stderr.print(ProgressLine.render(lead: "  probing #{index}/#{total} ", label: "#{slug}…", tail: suffix))
         end
       end
 

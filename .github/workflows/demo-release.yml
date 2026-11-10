@@ -47,6 +47,14 @@ jobs:
     env:
       IMAGE: ${{ inputs.image || 'ghcr.io/arvicco/nabu-demo:latest' }}
     steps:
+      # On a release the smoke must prove the RELEASE's own image, not
+      # whatever :latest held before the local push — a premature trigger
+      # then fails both halves honestly instead of green-washing.
+      - name: Pin the release's own image tag
+        if: github.event_name == 'release'
+        env:
+          TAG: ${{ github.event.release.tag_name }}
+        run: echo "IMAGE=ghcr.io/arvicco/nabu-demo:${TAG#v}" >> "$GITHUB_ENV"
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       # Bare Ruby, no bundle: script/demo-smoke loads only the stdlib and
       # lib/nabu/ops/demo_publish.rb.

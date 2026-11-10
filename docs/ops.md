@@ -1112,13 +1112,21 @@ automatically; no per-release action.
    concept-DOI badge into README and the site About page.
 7. **Demo image, RELEASE-SYNCED ONLY (owner ruling 2026-11-02):** the
    public demo image (ghcr.io/arvicco/nabu-demo) is re-published only
-   as part of a release — never per phase gate. The GitHub release in
-   step 4 triggers `.github/workflows/demo-release.yml` (multi-arch
-   build + push + two-arch smoke + registry publish) and that is the
-   normal path; `rake demo:publish` is the local fallback, and like
-   every owner-run operation it must be ONE command that carries its
-   own preflight checks — handing the owner a sequence of setup
-   incantations around it is a defect (same ruling). The deploy
+   as part of a release — never per phase gate. **The image is built
+   and pushed LOCALLY**: the demo slice needs this box's full library,
+   which a GitHub-hosted runner never has, so the order is
+   `rake demo:build` (a FRESH slice — a kept tmp/demo can be a stale
+   release's) then `rake demo:publish` (self-contained: auth probe,
+   builder, multi-arch verify, smoke — one command). The GitHub
+   release in step 4 triggers `.github/workflows/demo-release.yml`
+   for the halves CI CAN do — the two-arch smoke of the release's own
+   tag and the MCP Registry publish — and its registry-publish job
+   hard-fails ("manifest unknown") until the local push has made the
+   release tag public, so when the release is cut before the push,
+   re-fire that half afterwards:
+   `gh workflow run demo-release.yml -f jobs=registry-publish`. The
+   first live release through this rail (v1.8.0) ran it in exactly
+   that order. The deploy
    surfaces pin the RELEASED tag, never `:latest`: a `server.json`
    version bump also moves the image tag in `render.yaml`,
    `site/docker-mcp-catalog.yaml`, the README's install + deploy block
@@ -1128,19 +1136,24 @@ automatically; no per-release action.
    `site/_data/mcp.yml` (the MCP page's commands and buttons) —
    `test/site/site_data_test.rb` fails until every surface agrees.
 
-8. **Directory listings, auto-synced — verify, don't re-publish:** the
-   Glama listing rebuilds and republishes its own release automatically
-   from the GitHub release (auto-release enabled on the listing's
-   admin; the build spec installs Ruby into Glama's Debian base and
-   starts `bin/nabu mcp` through their proxy). Verify with ONE command:
-   `bundle exec rake release:glama` — exit 0 says the released version
-   is visible on the public listing (the grade prints beside it,
-   informationally; a still-queued evaluation is not a failure). A
-   start-requirement change (a gem wanting a new system library, a
-   Ruby floor past the base image's) fails over THERE, not in our CI,
-   and the listing's quality score is what the big MCP list's entry
-   badge renders; on a failure the listing admin's build log is the
-   place to read.
+8. **The Glama listing's release:** a Glama release is the listing's
+   OWN containerized build (their build spec installs Ruby into
+   Glama's Debian base and starts `bin/nabu mcp` through their
+   proxy) — it is NOT produced by the GitHub release. The admin
+   page's auto-release option needs the Glama GitHub App
+   (github.com/apps/glama-ai) installed on the repository to receive
+   release events (their hosting documentation; a listing claimed
+   via OAuth alone has no event source, and the option sits inert —
+   observed at a release). Until the app is installed, the release
+   is made from the server's Dockerfile admin page (Deploy → create
+   release, replacing the previous one). Either way the loop
+   verifies with ONE command: `bundle exec rake release:glama` —
+   exit 0 says the released version is visible on the public listing
+   (the grade prints beside it, informationally; a still-queued
+   evaluation is not a failure). A start-requirement change (a gem
+   wanting a new system library, a Ruby floor past the base image's)
+   fails over THERE, not in our CI, and the listing's quality score
+   is what the big MCP list's entry badge renders.
 
 Between releases, phase gates that don't tag still add a News entry
 (MAINTENANCE.md gate duty) — the News section tracks phases; releases are
