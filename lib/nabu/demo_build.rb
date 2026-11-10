@@ -206,6 +206,7 @@ module Nabu
       run_cli("enable", *@slugs)
       run_cli("sync", *@slugs)
       verify_catalog!
+      derive_clarify!
       write_nabu_yml(canonical: "canonical")
       prune_canonical!
       seal_stores!
@@ -287,6 +288,23 @@ module Nabu
 
     # Layer 2 — the built catalog, re-read: source rows and per-document
     # overrides alike.
+    # The standalone index lanes a plain sync never bootstraps: on the
+    # main library refresh_clarify_source! deliberately skips a fulltext
+    # without the lane (the rebuild owns its arrival), but a fresh slice
+    # never sees a rebuild — without this step the image ships fuzzy-only
+    # clarify (found 2026-11-10: the published image failed the ligature
+    # eval task while the live library resolved it exactly).
+    def derive_clarify!
+      config = runtime_config
+      catalog = Store.connect(config.catalog_path, readonly: true)
+      fulltext = Store.connect_fulltext(config.fulltext_path)
+      summary = Store::Indexer.rebuild_clarify!(catalog: catalog, fulltext: fulltext, stamp: true)
+      say("clarify lane derived: #{summary.fetch(:entries)} entries")
+    ensure
+      catalog&.disconnect
+      fulltext&.disconnect
+    end
+
     def verify_catalog!
       db = Store.connect(runtime_config.catalog_path, readonly: true)
       sources = db[:sources].exclude(license_class: SERVABLE_LICENSE_CLASSES)
