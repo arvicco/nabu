@@ -930,7 +930,13 @@ namespace :demo do
     platforms = ENV.fetch("DEMO_PLATFORMS", "").split(",").map(&:strip).reject(&:empty?)
     options = { root: __dir__, slice: slice }
     options[:platforms] = platforms unless platforms.empty?
-    builder = ENV.fetch("DEMO_BUILDER", "").strip.then { |v| v.empty? ? publish::Preflight.ensure! : v }
+    # The preflight always runs (daemon + auth + builder probes); a
+    # DEMO_BUILDER override replaces only its builder CHOICE — before this,
+    # the override skipped the whole preflight and a stopped daemon died
+    # deep in buildx as a raw shell error.
+    builder = publish::Preflight.ensure!
+    override = ENV.fetch("DEMO_BUILDER", "").strip
+    builder = override unless override.empty?
     options[:builder] = builder if builder
     puts "$ #{publish.publish_argv(**options).join(' ')}"
     publish.publish!(**options)
