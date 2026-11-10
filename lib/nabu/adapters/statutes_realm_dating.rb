@@ -42,8 +42,18 @@ module Nabu
     # contains it. When they disagree, NEITHER is picked: the envelope is
     # their union and the date carries "conflict" => true. The live case:
     # BHO heads the 20 acts of 11 Will. III (session 16 Nov 1699 – 11 Apr
-    # 1700) "1698-9", contradicting the roll's own "11 Gul. III" — the
-    # union [1698, 1701] contains the truth whichever claim is the slip.
+    # 1700) "1698-9", beside the roll's own "11 Gul. III". Per the BHO
+    # editor (by email, 2026-11-10) this is NOT a transcription slip and
+    # will not change: BHO reproduces the official Statutes of the Realm
+    # print as-is, and the official print's years (confirmed by the
+    # Chronological Table of the Statutes) differ from the unofficial
+    # collections (Ruffhead/Pickering head the same acts "A.D. 1700,
+    # 11 & 12 Will. III") — regnal dating is inherently ambiguous
+    # (sessions span regnal years; an act has four defensible in-force
+    # dates; the 25 Mar → 1 Jan new-year change; shifting prorogation
+    # semantics). The union envelope is therefore the permanent honest
+    # treatment, not a wait-for-upstream-fix: [1698, 1701] contains the
+    # truth under every reckoning. Do not re-report this upstream.
     #
     # The vol. 5/6 titles (Charles I – William and Mary) carry no regnal
     # citation (their "[Chapter I. Rot. Parl. nu. 1.]" names roll numbers
@@ -65,11 +75,12 @@ module Nabu
 
       # Labels whose envelope is stated rather than derived:
       # - the Long Parliament session (above) — assents into 1642;
-      # - BHO's "William III, 1698-9": 20 of its 25 rows cite the roll's
-      #   "11 Gul. III" (the session of 16 Nov 1699 – 11 Apr 1700), so the
-      #   label misheads that session; its uncited rows (the private-acts
-      #   schedule among them) read the span covering both claims, never a
-      #   pick — the cited rows still meet their citation in #date.
+      # - "William III, 1698-9": the OFFICIAL print's own heading for the
+      #   session of 16 Nov 1699 – 11 Apr 1700, reproduced as-is by BHO
+      #   policy (see the module comment); 20 of its 25 rows cite the
+      #   roll's "11 Gul. III", so the two official claims span years and
+      #   this envelope covers both, never a pick — the cited rows still
+      #   meet their citation in #date.
       SESSION_ENVELOPES = {
         ["Charles I", "1640"] => [1640, 1642],
         ["William III", "1698-9"] => [1698, 1700]
