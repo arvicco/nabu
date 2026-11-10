@@ -25,14 +25,17 @@ class PacedCrawlChainTest < Minitest::Test
   end
 
   # ids answering :ok land in +held+; ids in +refused+ answer :denied.
-  def engine(dir, universe:, refused: [], slice: 2, stop_after: 2)
+  # ids in +halt+ answer a clean stop.
+  def engine(dir, universe:, refused: [], halt: [], slice: 2, stop_after: 2)
     held = {}
     P::Engine.new(
       spec: spec(slice: slice, stop_after: stop_after), dir: dir,
       universe: -> { universe },
       held: ->(id) { held.key?(id) },
       fetch_one: lambda do |id|
-        if refused.include?(id)
+        if halt.include?(id)
+          P::Outcome.halt(reason: "quota floor reached", evidence: { http_status: 200, remaining: 0 })
+        elsif refused.include?(id)
           P::Outcome.new(status: :denied, evidence: { http_status: 403, body_head: "no" })
         else
           held[id] = true
@@ -85,6 +88,20 @@ class PacedCrawlChainTest < Minitest::Test
                                       stop_after: 2), slices: 3)
       assert_equal 3, summary.reports.size
       refute summary.stalled?
+    end
+  end
+
+  def test_a_clean_stop_slice_stops_the_chain_naming_it
+    Dir.mktmpdir do |dir|
+      log = StringIO.new
+      # slice 1 yields a,b; slice 2 yields c then halts at d — the chain
+      # stops there, even though the zero budget is far from spent.
+      summary = run_chain(engine(dir, universe: %w[a b c d e f], halt: %w[d], stop_after: 5), slices: 5, log: log)
+      assert_equal 2, summary.reports.size
+      assert_predicate summary, :stalled?
+      assert_equal :clean_stop, summary.reports.last.classification
+      assert_match(/clean stop at d: quota floor reached/, summary.stop_reason)
+      assert_match(/CHAIN STOPPED: clean stop/, log.string)
     end
   end
 

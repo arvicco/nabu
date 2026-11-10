@@ -11,7 +11,8 @@ module Nabu
     # frozen frontier); zero-yield slices are budgeted by the spec's
     # declared stop_after_zero_slices (a refusal desert wider than the
     # budget stops the chain loudly for a human read, instead of burning
-    # hours ledgering refusals); the cone's honest end stops it cleanly.
+    # hours ledgering refusals); the cone's honest end stops it cleanly; a
+    # clean-stop slice (upstream's own "no more for now") stops it at once.
     class Chain
       # reports: every slice's Report, in order. stop_reason: nil on a
       # completed chain, the loud sentence otherwise.
@@ -37,6 +38,12 @@ module Nabu
           emit(index, report)
           break if report.classification == :cone_exhausted
 
+          reason = stop_reason(report)
+          if reason
+            @log.puts("CHAIN STOPPED: #{reason}")
+            return Summary.new(reports: reports, stop_reason: reason)
+          end
+
           zero_streak = report.zero_yield? ? zero_streak + 1 : 0
           next if zero_streak < budget
 
@@ -49,6 +56,15 @@ module Nabu
       end
 
       private
+
+      # A slice that ended on upstream's word stops the run at once: a quota
+      # floor or a 429 does not recover within a run.
+      def stop_reason(report)
+        return unless report.classification == :clean_stop
+
+        "clean stop at #{report.halt[:id]}: #{report.halt[:reason]} — upstream asked the crawl to stop; " \
+          "chain again once it recovers"
+      end
 
       def budget
         @engine.spec.schedule.stop_after_zero_slices
