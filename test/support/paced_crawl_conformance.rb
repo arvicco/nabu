@@ -69,6 +69,19 @@ module PacedCrawlConformance
 
   def pc_class(engine, status) = engine.spec.classes.fetch(status)
 
+  # The ids of +status+'s class as they stand on disk, read through the
+  # lane's codec (a nested ledger is not one top-level array per class).
+  def pc_ledgered_on_disk(engine, status)
+    engine.spec.codec.load(pc_ledger_on_disk(engine).except(Nabu::PacedCrawl::LAST_SLICE))
+          .fetch(pc_class(engine, status), Set.new).to_a.sort
+  end
+
+  # The document the lane's codec writes over a blank ledger for +ids+
+  # ({class => ids}; every other class empty).
+  def pc_doc(spec, ids = {})
+    spec.codec.dump(spec.class_names.to_h { |klass| [klass, Set.new(ids.fetch(klass, []))] }, {})
+  end
+
   def test_paced_crawl_held_ids_are_never_fetched
     Dir.mktmpdir do |dir|
       paced_crawl_hold!(dir, "101")
@@ -102,9 +115,9 @@ module PacedCrawlConformance
       attempts = engine.spec.timeout_attempts
       assert_equal attempts, asked.count("103"), "a timeout is retried timeout_attempts times, then ledgered"
       assert_equal ["103"], report.stuck
-      assert_equal ["101"], pc_ledger_on_disk(engine).fetch(pc_class(engine, :denied))
-      assert_equal ["102"], pc_ledger_on_disk(engine).fetch(pc_class(engine, :empty))
-      assert_equal ["103"], pc_ledger_on_disk(engine).fetch(pc_class(engine, :timeout))
+      assert_equal ["101"], pc_ledgered_on_disk(engine, :denied)
+      assert_equal ["102"], pc_ledgered_on_disk(engine, :empty)
+      assert_equal ["103"], pc_ledgered_on_disk(engine, :timeout)
 
       resumed, asked_again = pc_engine(dir, slice: 4)
       resumed.slice!
@@ -116,7 +129,7 @@ module PacedCrawlConformance
     Dir.mktmpdir do |dir|
       engine, = pc_engine(dir, slice: 5, answers: { "101" => :denied, "102" => :denied, "103" => :fatal })
       assert_raises(Nabu::Error) { engine.slice! }
-      assert_equal %w[101 102], pc_ledger_on_disk(engine).fetch(pc_class(engine, :denied)),
+      assert_equal %w[101 102], pc_ledgered_on_disk(engine, :denied),
                    "the ledger holds what the slice learned before it died"
 
       resumed, asked = pc_engine(dir, slice: 2)
@@ -222,8 +235,8 @@ module PacedCrawlConformance
       assert_match(/3 request\(s\) in .*; ~3 slice\(s\) of 3 to the end of the cone/, text)
       last = pc_ledger_on_disk(engine).fetch(Nabu::PacedCrawl::LAST_SLICE)
       assert_equal %w[yield 3 3], [last["classification"], last["ok"].to_s, last["attempted"].to_s]
-      assert_equal engine.spec.class_names.sort, (pc_ledger_on_disk(engine).keys - [Nabu::PacedCrawl::LAST_SLICE]).sort,
-                   "the ledger keeps its shape: one array of ids per class, beside last_slice"
+      assert_equal pc_doc(engine.spec).keys.sort, (pc_ledger_on_disk(engine).keys - [Nabu::PacedCrawl::LAST_SLICE]).sort,
+                   "the ledger keeps its codec's shape (flat: one array of ids per class), beside last_slice"
     end
   end
 
@@ -231,7 +244,7 @@ module PacedCrawlConformance
     Dir.mktmpdir do |dir|
       paced_crawl_hold!(dir, "101")
       engine, = pc_engine(dir, slice: 1)
-      File.write(engine.ledger_path, JSON.generate({ pc_class(engine, :denied) => ["101"] }))
+      File.write(engine.ledger_path, JSON.generate(pc_doc(engine.spec, pc_class(engine, :denied) => ["101"])))
       report = engine.slice!
       refute_predicate report, :reconciles?
       assert(report.lines.any? { |line| line.include?("RECONCILIATION MISMATCH: census 12") }, report.lines.inspect)
