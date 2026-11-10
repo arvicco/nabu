@@ -9,10 +9,13 @@ require_relative "../version"
 module Nabu
   module Ops
     # `rake release:glama` — the post-release directory probe (ops §12
-    # step 8). The Glama listing rebuilds and republishes its own release
-    # automatically from every GitHub release; when a release changes the
-    # server's start requirements, the rebuild fails on THEIR builder,
-    # where our CI never looks. The probe reads two PUBLIC, unauthenticated
+    # step 8). A Glama release is the listing's OWN containerized build,
+    # made from the server's admin page — it is not produced by the
+    # GitHub release (the admin's auto-release option exists but its
+    # trigger is unverified; under clarification with Glama, 2026-11-10).
+    # When a release changes the server's start requirements, the build
+    # fails on THEIR builder, where our CI never looks. The probe reads
+    # two PUBLIC, unauthenticated
     # surfaces: the listing page (the released version must be visible on
     # it) and the score badge SVG (the grade, reported informationally —
     # a still-queued evaluation is not a release failure). The directory
@@ -50,8 +53,9 @@ module Nabu
         listed = listing.match?(/(?<![\d.])#{Regexp.escape(@version)}(?![\d.])/)
         findings = []
         unless listed
-          findings << "#{@version} not visible on the listing — Glama's auto-release build " \
-                      "likely failed; check the listing admin's build log"
+          findings << "#{@version} not visible on the listing — the Glama release has not " \
+                      "been made or has not propagated (a Glama release is its own " \
+                      "containerized build, not the GitHub release; ops §12 step 8)"
         end
         Report.new(version: @version, version_listed: listed,
                    grade: badge[GRADE, 1], findings: findings)
