@@ -1530,13 +1530,12 @@ module Nabu
 
       # --source SLUG (P22-1, search/export): reject an unknown slug up front,
       # naming the valid slugs (the define-miss pattern). Validated against
-      # the CATALOG — what is held is what can be filtered.
+      # the CATALOG — what is held is what can be filtered. The resolution
+      # lives once in Query::SourceScope (the MCP nabu_search shares it).
       def validate_source!(catalog, slug)
-        return if slug.nil?
-        return if catalog[:sources].where(slug: slug).any?
-
-        known = catalog[:sources].order(:slug).select_map(:slug)
-        raise Thor::Error, "unknown source #{slug.inspect} — the catalog holds: #{known.join(', ')}"
+        Nabu::Query::SourceScope.validate_source!(catalog, slug)
+      rescue Nabu::Query::SourceScope::Error => e
+        raise Thor::Error, e.message
       end
 
       # P57-4: --lect needs the nabu-lects module. nil when +lect+ was not
@@ -1558,28 +1557,16 @@ module Nabu
       # order asked, member slugs] or nil when --axis is absent. An unknown
       # axis is refused naming the known set (the P35-1 resolution guarantee),
       # and an empty registry says so; the slug/axis collision guarantee makes
-      # a bare name unambiguous.
+      # a bare name unambiguous. The resolution lives once in
+      # Query::SourceScope (the MCP nabu_search shares it).
       def axis_membership(command:, config:)
         spec = options[:axis].to_s.strip
         return nil if spec.empty?
 
         registry = Nabu::SourceRegistry.load(config.sources_path)
-        axes = registry.axes
-        raise Thor::Error, "#{command}: no research axes are defined (config/axes.yml)" if axes.empty?
-
-        names = spec.split(",").map(&:strip).reject(&:empty?).uniq
-        names.each do |name|
-          next if registry.functional_set?(name)
-
-          axes[name] ||
-            raise(Thor::Error, "#{command}: unknown axis #{name.inspect} — known axes: " \
-                               "#{axes.names.join(', ')} · functional sets: " \
-                               "#{Nabu::SourceRegistry::FUNCTIONAL_SETS.join(', ')}")
-        end
-        slugs = names.flat_map do |name|
-          registry.functional_set?(name) ? registry.functional_set_members(name) : registry.axis_members(name)
-        end
-        [names, slugs.uniq]
+        Nabu::Query::SourceScope.axis_membership(registry, spec, command: command)
+      rescue Nabu::Query::SourceScope::Error => e
+        raise Thor::Error, e.message
       end
 
       # `show --random` (P11-9): N random visible passages, each in the standard
