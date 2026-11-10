@@ -32,7 +32,8 @@ module Nabu
   # moves), pacing (delay between every two requests), the timeout policy
   # (attempts with doubling backoff, then the timeout class), the ledger
   # (atomic tmp+rename after every terminal answer, so a killed slice
-  # resumes where it died) and the SLICE REPORT, printed on every path: the
+  # resumes where it died; its on-disk shape is the Spec's codec, flat by
+  # default) and the SLICE REPORT, printed on every path: the
   # reconciliation triple (census = held + ledgered + remaining, or a LOUD
   # mismatch), frontier position and movement, per-class deltas, refusal
   # evidence verbatim, requests/elapsed/pace, and on a zero-yield slice a
@@ -72,6 +73,31 @@ module Nabu
       head.scrub("").gsub(/\s+/, " ").strip
     end
 
+    # The default ledger codec: the mold's flat shape — one sorted array of
+    # ids per class at the top level. A codec maps the on-disk document to
+    # {class name => Set of id Strings} (#load) and back (#dump), where +raw+
+    # is the previous on-disk document ({} when absent or unreadable) minus
+    # the engine-owned last_slice. Every section the codec does not own
+    # passes through #dump. The flat codec owns the class keys it is handed;
+    # a foreign top-level container (a "pages" map, an array from a class
+    # the lane no longer declares) passes through verbatim, while a bare
+    # top-level scalar is not a section and is dropped — the shape every
+    # flat ledger has had since the rail began.
+    module FlatCodec
+      def self.load(raw)
+        raw.reject { |_key, value| value.is_a?(Hash) }.transform_values { |ids| Array(ids).to_set(&:to_s) }
+      end
+
+      def self.dump(classes, raw)
+        doc = classes.transform_values { |ids| ids.to_a.sort }
+        raw.each do |key, value|
+          doc[key] = value if !doc.key?(key) && (value.is_a?(Hash) || value.is_a?(Array))
+        end
+        doc
+      end
+    end
+    FLAT_CODEC = FlatCodec
+
     # The declared cadence the phase slate reads off the adapter: how
     # often the lane runs, how many slices a phase spends, and how many
     # consecutive zero-yield slices stop a chained run.
@@ -82,10 +108,15 @@ module Nabu
     # optionally names further classes per status (an upstream with two
     # kinds of refusal — a 404 "no text" beside a 403 — keeps them apart:
     # the Outcome names its ledger_class, the default is the status's own).
+    # +codec+ is the ledger's on-disk shape (FLAT_CODEC unless the lane
+    # keeps a nested one).
     Spec = Data.define(:name, :ledger_file, :classes, :subclasses, :delay, :slice,
-                       :timeout_attempts, :timeout_backoff, :schedule) do
+                       :timeout_attempts, :timeout_backoff, :schedule, :codec) do
       def initialize(name:, ledger_file:, classes:, delay:, slice:, schedule:, subclasses: {},
-                     timeout_attempts: 3, timeout_backoff: 5.0)
+                     timeout_attempts: 3, timeout_backoff: 5.0, codec: FLAT_CODEC)
+        raise ArgumentError, "codec must answer #load and #dump" unless
+          codec.respond_to?(:load) && codec.respond_to?(:dump)
+
         unknown = classes.keys - TERMINAL
         raise ArgumentError, "classes map only #{TERMINAL.inspect} (got #{unknown.inspect})" unless unknown.empty?
         raise ArgumentError, "classes must declare at least one ledger class" if classes.empty?
@@ -101,7 +132,8 @@ module Nabu
               classes: classes.transform_values(&:to_s).freeze,
               subclasses: subclasses.transform_values { |names| Array(names).map(&:to_s).freeze }.freeze,
               delay: Float(delay), slice: slice,
-              timeout_attempts: timeout_attempts, timeout_backoff: Float(timeout_backoff), schedule: schedule)
+              timeout_attempts: timeout_attempts, timeout_backoff: Float(timeout_backoff), schedule: schedule,
+              codec: codec)
       end
 
       # Every ledger class: each status's own, then its subclasses.
@@ -572,9 +604,11 @@ module Nabu
                    selectable: selectable, strays: strays)
       end
 
-      # A ledger from before a class existed reads that class empty; an
-      # unreadable ledger reads blank (the mold's posture — it is rebuilt
-      # by re-asking, never by guessing).
+      # Every read and write goes through spec.codec; the engine owns the
+      # top-level last_slice beside whatever the codec writes. A ledger from
+      # before a class existed reads that class empty; an unreadable ledger
+      # reads blank (the mold's posture — it is rebuilt by re-asking, never
+      # by guessing).
       def load_ledger!
         data = begin
           File.file?(ledger_path) ? JSON.parse(File.read(ledger_path)) : {}
@@ -582,14 +616,17 @@ module Nabu
           {}
         end
         data = {} unless data.is_a?(Hash)
-        @ledger = spec.class_names.to_h { |klass| [klass, Array(data[klass]).to_set(&:to_s)] }
         @last_slice = data[LAST_SLICE]
+        @raw = data.except(LAST_SLICE)
+        loaded = spec.codec.load(@raw)
+        @ledger = spec.class_names.to_h { |klass| [klass, loaded.fetch(klass, Set.new).to_set] }
       end
 
       def write_ledger!
         FileUtils.mkdir_p(dir)
-        doc = spec.class_names.to_h { |klass| [klass, @ledger[klass].to_a.sort] }
-        doc[LAST_SLICE] = @last_slice if @last_slice
+        doc = spec.codec.dump(spec.class_names.to_h { |klass| [klass, @ledger[klass].dup] }, @raw)
+        @raw = doc.except(LAST_SLICE)
+        doc = @raw.merge(LAST_SLICE => @last_slice) if @last_slice
         File.write("#{ledger_path}.tmp", JSON.pretty_generate(doc))
         File.rename("#{ledger_path}.tmp", ledger_path)
       end
