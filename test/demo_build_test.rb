@@ -215,6 +215,8 @@ class DemoBuildTest < Minitest::Test
                  written["sources"]
     assert_operator written["total_bytes"], :>, 0
     assert_includes written["files"].keys, "db/catalog.sqlite3"
+    assert_equal Nabu::VERSION, written["nabu_version"],
+                 "rake demo:publish refuses a slice whose census does not name the release it was cut for"
   end
 
   # A kept module whose read seam needs a few files out of a big upstream

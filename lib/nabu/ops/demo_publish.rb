@@ -77,6 +77,7 @@ module Nabu
         end
 
         version = version(root: root, nabu_version: nabu_version)
+        check_slice_version!(slice: slice, version: version)
         argv = %w[docker buildx build]
         argv += ["--builder", builder] if builder
         argv + ["--platform", platforms.join(","), "--target", "demo",
@@ -84,6 +85,27 @@ module Nabu
                 "-t", "#{IMAGE}:#{version}", "-t", "#{IMAGE}:latest",
                 "--push", root]
       end
+
+      # The slice must have been cut for THIS release: a kept tmp/demo from
+      # the previous release carries its census's older nabu_version, and
+      # baking it would ship last release's library under the new tag.
+      # Slices predating the census key refuse too.
+      def self.check_slice_version!(slice:, version:)
+        census = JSON.parse(File.read(File.join(slice, CENSUS_FILE)))
+        cut_for = census["nabu_version"] if census.is_a?(Hash)
+        unless cut_for
+          raise Refused, "#{slice}/#{CENSUS_FILE} carries no nabu_version (a slice from before the key) — " \
+                         "run rake demo:build to re-cut the slice"
+        end
+        return if cut_for == version
+
+        raise Refused, "#{slice} was cut for nabu #{cut_for} but server.json says #{version} — " \
+                       "run rake demo:build to re-cut the slice"
+      rescue JSON::ParserError => e
+        raise Refused, "#{slice}/#{CENSUS_FILE} is not JSON (#{e.message[0, 80]}) — " \
+                       "run rake demo:build to re-cut the slice"
+      end
+      private_class_method :check_slice_version!
 
       # Run the build + push. +runner+ receives the argv (default: streamed
       # through Nabu::Shell so buildx progress shows live).
@@ -165,10 +187,16 @@ module Nabu
           :create
         end
 
-        # Ensure auth + a capable builder; returns the --builder name to pass
-        # (nil when the current builder already suffices).
-        def self.ensure!(config: default_config, log: $stderr,
+        DAEMON_DOWN = "the docker daemon is not running — start Docker (or the daemon) and re-run rake demo:publish"
+
+        # Ensure a live daemon, auth + a capable builder; returns the
+        # --builder name to pass (nil when the current builder already
+        # suffices). The daemon probe comes FIRST: a stopped daemon otherwise
+        # dies deep in builder creation as a raw shell-error stack.
+        def self.ensure!(config: default_config, log: $stderr, daemon: method(:default_daemon),
                          login: method(:default_login), buildx_ls: method(:default_ls), create: method(:default_create))
+          raise Refused, DAEMON_DOWN unless daemon.call
+
           unless authed?(config: config)
             log.puts "ghcr.io credentials not found — running `docker login ghcr.io` " \
                      "(username: your GitHub login; password: a token with write:packages)"
@@ -183,6 +211,15 @@ module Nabu
             choice
           end
         end
+
+        # `docker info` exits nonzero when the client cannot reach the daemon.
+        def self.default_daemon
+          Nabu::Shell.run("docker", "info")
+          true
+        rescue Nabu::Shell::Error
+          false
+        end
+        private_class_method :default_daemon
 
         def self.default_login
           Kernel.system("docker", "login", "ghcr.io") || raise(Refused, "docker login ghcr.io failed")
