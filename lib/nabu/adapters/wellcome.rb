@@ -491,6 +491,11 @@ module Nabu
       # instance's knobs): the cone order, held = zips/<bnumber>.zip on
       # disk, one paced GET per bnumber. Public so an offline surface can
       # #diagnose the crawl without crawling.
+      # The chain runner's seam (rake crawl:chain): the one paced lane.
+      def paced_crawls(workdir, progress: nil)
+        { "zips" => zip_crawl(workdir, progress: progress) }
+      end
+
       def zip_crawl(workdir, progress: nil)
         Nabu::PacedCrawl::Engine.new(
           spec: ZIP_CRAWL.with(delay: @delay, slice: @slice, timeout_backoff: @timeout_backoff),

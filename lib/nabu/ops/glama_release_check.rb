@@ -11,8 +11,9 @@ module Nabu
     # `rake release:glama` — the post-release directory probe (ops §12
     # step 8). A Glama release is the listing's OWN containerized build,
     # made from the server's admin page — it is not produced by the
-    # GitHub release (the admin's auto-release option exists but its
-    # trigger is unverified; under clarification with Glama, 2026-11-10).
+    # GitHub release (the admin's auto-release option needs the Glama
+    # GitHub App installed on the repo to receive release events; a
+    # listing claimed via OAuth alone has no event source).
     # When a release changes the server's start requirements, the build
     # fails on THEIR builder, where our CI never looks. The probe reads
     # two PUBLIC, unauthenticated
