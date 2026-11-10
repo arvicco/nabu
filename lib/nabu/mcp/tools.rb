@@ -28,6 +28,7 @@ require_relative "../query/etym"
 require_relative "../query/cognates"
 require_relative "../query/place"
 require_relative "../query/signs"
+require_relative "../query/source_scope"
 require_relative "../lects"
 require_relative "../pleiades"
 require_relative "../sign_list"
@@ -529,6 +530,18 @@ module Nabu
                   description: "ISO-639-3 passage language filter: grc, lat, chu, got, orv, eng, …" },
           license: { type: "string", enum: LICENSE_CLASSES,
                      description: "Exact effective license class filter." },
+          source: { type: "string",
+                    description: "Scope hits to ONE source, by its source slug (the `source` field every " \
+                                 "hit carries; nabu_status lists the held slugs) — the CLI's --source. " \
+                                 "Composes with every lane except similar_to; an unknown slug is refused " \
+                                 "naming the held ones (never an empty page)." },
+          axis: { type: "string",
+                  description: "Scope hits to the member sources of a research axis (config/axes.yml — " \
+                               "the library's desks, e.g. classical, slavic, epigraphy) or a functional " \
+                               "set (core, signs, quickstart); comma-join several names for their union " \
+                               "(\"slavic,celtic\") — the CLI's --axis, the multi-source generalization of " \
+                               "source. Composes with every lane except sense/similar_to; an unknown name " \
+                               "is refused naming the known axes." },
           from: { type: "integer",
                   description: "Earliest date: signed HISTORICAL year, negative = BCE, no year 0 " \
                                "(-300 = 300 BCE, 14 = 14 CE). Filters the document timeline — the " \
@@ -663,16 +676,16 @@ module Nabu
       # exactly the args its CLI flag composes with (the MCP-available
       # subset) — anything else is a usage error, never a silent drop.
       # const: argument vocabularies mirroring the CLI flags, not corpus claims
-      FUZZY_ARGS = %w[fuzzy query lang license from to century date_basis place kind facets limit
+      FUZZY_ARGS = %w[fuzzy query lang license source axis from to century date_basis place kind facets limit
                       include_restricted].freeze
       # const: the --translations composition set
-      TRANSLATIONS_ARGS = %w[translations query lang license limit include_restricted].freeze
+      TRANSLATIONS_ARGS = %w[translations query lang license source axis limit include_restricted].freeze
       # const: the --annotations composition set
-      ANNOTATIONS_ARGS = %w[annotations query lang license limit include_restricted].freeze
+      ANNOTATIONS_ARGS = %w[annotations query lang license source axis limit include_restricted].freeze
       # const: the --gloss-alone composition set (gloss with no lemma)
-      GLOSS_ARGS = %w[gloss lang license limit include_restricted].freeze
-      # const: the sense desk composition set
-      SENSE_ARGS = %w[sense sense_gloss limit include_restricted].freeze
+      GLOSS_ARGS = %w[gloss lang license source axis limit include_restricted].freeze
+      # const: the sense desk composition set (`nabu sense` takes --source, not --axis)
+      SENSE_ARGS = %w[sense sense_gloss source limit include_restricted].freeze
 
       SHOW_SCHEMA = {
         type: "object",
@@ -1223,6 +1236,7 @@ module Nabu
         lect, lects = search_lect(args, mode, near)
         script = search_script(args, mode, near)
         catalog = resolve(@catalog) or return note(NO_CORPUS_NOTE)
+        source, sources = search_scope(args, catalog)
         fulltext = search_index(mode) or return note(mode == :lemma ? LEMMA_REBUILDING_NOTE : REBUILDING_NOTE)
 
         limit = clamp(args["limit"], default: SEARCH_DEFAULT_LIMIT, max: SEARCH_MAX_LIMIT)
@@ -1232,7 +1246,8 @@ module Nabu
                                  window: window, lang: args["lang"], license: license,
                                  limit: limit + 1, morph: morph, from: from, to: to, place: place,
                                  kind: kind, facets: facets, meter: meter, meter_pattern: meter_pattern, words: words,
-                                 lect: lect, lects: lects, script: script, date_basis: date_basis, gloss: gloss)
+                                 lect: lect, lects: lects, script: script, date_basis: date_basis, gloss: gloss,
+                                 source: source, sources: sources)
         results = results.reject { |r| EXCLUDED_LICENSE_CLASSES.include?(r.license_class) } unless include_restricted
         render_search(results, limit: limit, catalog: catalog, incomplete: incomplete, rank_note: rank_note,
                                meter_note: meter_note, word_grain: word_grain, word_grain_note: words_note,
@@ -1249,6 +1264,10 @@ module Nabu
       # classes are excluded exactly as the text-search page excludes them.
       def similar_neighbors(args)
         raise InvalidArguments, "similar_to replaces query/lemma — give exactly one" if args["query"] || args["lemma"]
+        if args.key?("source") || args.key?("axis")
+          raise InvalidArguments, "similar_to composes with limit/include_restricted only (not source/axis — " \
+                                  "the neighbor scan is not source-scoped)"
+        end
 
         catalog = resolve(@catalog) or return note(NO_CORPUS_NOTE)
         vectors = resolve(@vectors)
@@ -1299,6 +1318,7 @@ module Nabu
         kind = search_kind(args, :text, nil)
         facets = (search_facets(args, :text, nil) || {}).merge(kind ? { "kind" => kind } : {})
         catalog = resolve(@catalog) or return note(NO_CORPUS_NOTE)
+        source, sources = search_scope(args, catalog)
         fulltext = resolve(@fulltext)
         return note(NO_FUZZY_INDEX_NOTE) unless fulltext&.table_exists?(Store::Indexer::TRIGRAM_TABLE)
 
@@ -1306,7 +1326,7 @@ module Nabu
         searcher = Query::Fuzzy.new(catalog: catalog, fulltext: fulltext)
         results = searcher.run(fragment, lang: args["lang"], license: license, limit: limit + 1,
                                          from: from, to: to, place: place, date_basis: date_basis,
-                                         facets: facets.empty? ? nil : facets)
+                                         facets: facets.empty? ? nil : facets, source: source, sources: sources)
         results = results.reject { |r| EXCLUDED_LICENSE_CLASSES.include?(r.license_class) } unless include_restricted
         shown = results.first(limit)
         sources = sources_by_urn(catalog, shown.map(&:urn))
@@ -1334,9 +1354,11 @@ module Nabu
         refused = restricted_license_note(license, include_restricted) and return refused
 
         catalog = resolve(@catalog) or return note(NO_CORPUS_NOTE)
+        source, sources = search_scope(args, catalog)
         limit = clamp(args["limit"], default: SEARCH_DEFAULT_LIMIT, max: SEARCH_MAX_LIMIT)
         searcher = Query::TranslationSearch.new(catalog: catalog, fulltext: resolve(@fulltext))
-        results = searcher.run(query, lang: args["lang"], license: license, limit: limit + 1)
+        results = searcher.run(query, lang: args["lang"], license: license, source: source, sources: sources,
+                                      limit: limit + 1)
         results = results.reject { |r| EXCLUDED_LICENSE_CLASSES.include?(r.license_class) } unless include_restricted
         shown = results.first(limit)
         sources = sources_by_urn(catalog, shown.map(&:urn))
@@ -1364,9 +1386,11 @@ module Nabu
         refused = restricted_license_note(license, include_restricted) and return refused
 
         catalog = resolve(@catalog) or return note(NO_CORPUS_NOTE)
+        source, sources = search_scope(args, catalog)
         limit = clamp(args["limit"], default: SEARCH_DEFAULT_LIMIT, max: SEARCH_MAX_LIMIT)
         searcher = Query::AnnotationSearch.new(catalog: catalog, fulltext: resolve(@fulltext))
-        results = searcher.run(query, lang: args["lang"], license: license, limit: limit + 1)
+        results = searcher.run(query, lang: args["lang"], license: license, source: source, sources: sources,
+                                      limit: limit + 1)
         results = results.reject { |r| EXCLUDED_LICENSE_CLASSES.include?(r.license_class) } unless include_restricted
         shown = results.first(limit)
         sources = sources_by_urn(catalog, shown.map(&:urn))
@@ -1394,9 +1418,11 @@ module Nabu
         refused = restricted_license_note(license, include_restricted) and return refused
 
         catalog = resolve(@catalog) or return note(NO_CORPUS_NOTE)
+        source, sources = search_scope(args, catalog)
         limit = clamp(args["limit"], default: SEARCH_DEFAULT_LIMIT, max: SEARCH_MAX_LIMIT)
         searcher = Query::GlossSearch.new(catalog: catalog, fulltext: resolve(@fulltext))
-        results = searcher.run(gloss, lang: args["lang"], license: license, limit: limit + 1)
+        results = searcher.run(gloss, lang: args["lang"], license: license, source: source, sources: sources,
+                                      limit: limit + 1)
         results = results.reject { |r| EXCLUDED_LICENSE_CLASSES.include?(r.license_class) } unless include_restricted
         json(matches: results.first(limit).map do |result|
           { lemma: result.lemma, form: result.form, gloss: result.gloss, source: result.source,
@@ -1423,8 +1449,9 @@ module Nabu
 
         include_restricted = args["include_restricted"] == true
         limit = clamp(args["limit"], default: Query::Senses::DEFAULT_LIMIT, max: SEARCH_MAX_LIMIT)
+        source, = search_scope(args, catalog)
         result = Query::Senses.new(catalog: catalog, facet_map: @facet_map)
-                              .run(term, gloss: args["sense_gloss"] == true, limit: limit)
+                              .run(term, gloss: args["sense_gloss"] == true, source: source, limit: limit)
         licenses = licenses_by_urn(catalog, result.hits.map(&:urn))
         hits = result.hits.reject { |hit| withhold?(licenses[hit.urn], include_restricted) }
         json(type: "sense", query: result.query, sense_total: result.sense_total,
@@ -1946,7 +1973,8 @@ module Nabu
       # never guard, so theirs is always nil).
       def run_search(mode, term, catalog:, fulltext:, lang:, license:, limit:, near: nil, window: nil, morph: nil,
                      from: nil, to: nil, place: nil, kind: nil, facets: nil, meter: nil, meter_pattern: nil,
-                     words: false, lect: nil, lects: nil, script: nil, date_basis: nil, gloss: nil)
+                     words: false, lect: nil, lects: nil, script: nil, date_basis: nil, gloss: nil,
+                     source: nil, sources: nil)
         # kind is one more named facet (the CLI's facet_filters shape); an
         # explicit kind arg wins over a facets "kind" key.
         facets = (facets || {}).merge(kind ? { "kind" => kind } : {})
@@ -1954,10 +1982,12 @@ module Nabu
           if near
             searcher = Query::Proximity.new(catalog: catalog, fulltext: fulltext)
             [searcher.run(query: mode == :lemma ? nil : term, lemma: mode == :lemma ? term : nil,
-                          near: near, window: window, lang: lang, license: license, limit: limit), searcher]
+                          near: near, window: window, lang: lang, license: license, limit: limit,
+                          source: source, sources: sources), searcher]
           elsif mode == :lemma
             searcher = Query::LemmaSearch.new(catalog: catalog, fulltext: fulltext)
-            [searcher.run(term, lang: lang, license: license, limit: limit, morph: morph, gloss: gloss), searcher]
+            [searcher.run(term, lang: lang, license: license, limit: limit, morph: morph, gloss: gloss,
+                                source: source, sources: sources), searcher]
           else
             searcher = Query::Search.new(catalog: catalog, fulltext: fulltext,
                                          tibetan_words: words ? tibetan_words_seam : nil,
@@ -1965,7 +1995,8 @@ module Nabu
             [searcher.run(term, lang: lang, license: license, limit: limit,
                                 from: from, to: to, place: place, script: script, date_basis: date_basis,
                                 facets: facets.empty? ? nil : facets,
-                                meter: meter, meter_pattern: meter_pattern, words: words, lect: lect), searcher]
+                                meter: meter, meter_pattern: meter_pattern, words: words, lect: lect,
+                                source: source, sources: sources), searcher]
           end
         rank_note = searcher.respond_to?(:rank_note) ? searcher.rank_note : nil
         meter_note = searcher.respond_to?(:meter_note) ? searcher.meter_note : nil
@@ -3600,6 +3631,28 @@ module Nabu
         raise InvalidArguments, "#{key} must be an integer" unless value.is_a?(Integer)
 
         value
+      end
+
+      # The source/axis scoping pair (the CLI's --source/--axis), resolved
+      # through the SAME Query::SourceScope the CLI search family uses:
+      # [source slug or nil, axis member slugs or nil] for the query
+      # classes' source:/sources: filters. An unknown slug/axis is a
+      # caller-fixable refusal naming the valid set — never an empty page.
+      def search_scope(args, catalog)
+        source = string_arg(args, "source")
+        axis = string_arg(args, "axis")
+        Query::SourceScope.validate_source!(catalog, source)
+        return [source, nil] if axis.nil?
+
+        registry = resolve(@registry)
+        unless registry
+          raise InvalidArguments, "axis needs the source registry (config/sources.yml + config/axes.yml), " \
+                                  "which this server was started without — scope by source instead"
+        end
+        _names, sources = Query::SourceScope.axis_membership(registry, axis, command: "search")
+        [source, sources]
+      rescue Query::SourceScope::Error => e
+        raise InvalidArguments, e.message
       end
 
       def license_arg(args)
