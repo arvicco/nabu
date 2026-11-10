@@ -9,6 +9,7 @@ require_relative "../redirect_follow"
 require_relative "../zip_fetch"
 require_relative "../zip_reader"
 require_relative "../normalize"
+require_relative "../paced_crawl"
 require_relative "source_read"
 
 module Nabu
@@ -76,9 +77,19 @@ module Nabu
     # timeout-wedge fix). A 429 beyond RedirectFollow's one Retry-After
     # pause STOPS the slice cleanly (ledger written, the next sync
     # resumes); any other failure stays fatal — the crawl is resumable.
-    # The ledger also carries the position ("done" — the held bnumbers —
-    # and the cone size), so a reader sees where the crawl stands without
-    # walking the tree.
+    #
+    # The crawl rides the paced-crawl rail (Nabu::PacedCrawl, architecture
+    # §19; ZIP_CRAWL is the lane): the adapter supplies the cone order, the
+    # held-on-disk rule and the per-bnumber GET; the engine owns selection,
+    # the slice budget, pacing, the timeout policy, the ledger (its class
+    # arrays unchanged — missing and malformed ride as declared subclasses
+    # of denied and empty — with a last_slice section beside them, which
+    # carries the crawl's position: census, held, ledgered, frontier) and
+    # the slice report the fetch notes carry. A 429 raises out of the
+    # slice (RateLimited) and the fetch notes lead with the stop, then the
+    # engine's offline diagnosis of where the crawl stands. A ledger from
+    # before the engine (its "position" block and "done" list) reads
+    # cleanly; the next write drops those derived blocks.
     #
     # == Documents and passages
     #
@@ -149,7 +160,29 @@ module Nabu
       TIMEOUT_ATTEMPTS = 3
       TIMEOUT_BACKOFF = 30.0
       STUCK = "timeout-stuck"
+      # The ledger classes, in the order the crawl identity hashes them.
       LEDGER_CLASSES = ["missing", "denied", "empty", "malformed", STUCK].freeze
+      # The zip lane's declared schedule (read by the phase slate): chained
+      # like the NDL book crawl — one cadence per phase, three slices a
+      # phase (~90 min of paced requests), and a chained run stops after
+      # three consecutive zero-yield slices (the deferred ProQuest tail is
+      # a 404 desert by design; the phase that reaches it re-samples first).
+      ZIP_CRAWL = Nabu::PacedCrawl::Spec.new(
+        name: "zips", ledger_file: LEDGER_FILE,
+        classes: { denied: "denied", empty: "empty", timeout: STUCK },
+        subclasses: { denied: ["missing"], empty: ["malformed"] },
+        delay: DELAY, slice: SLICE, timeout_attempts: TIMEOUT_ATTEMPTS, timeout_backoff: TIMEOUT_BACKOFF,
+        schedule: Nabu::PacedCrawl::Schedule.new(cadence: :per_phase, slices_per_phase: 3, stop_after_zero_slices: 3)
+      )
+      # The refusals a zip GET answers itself, accepted so their bodies ride
+      # as evidence: 404 "No text resource found" (missing), 401/403/410
+      # (denied). Every other non-200 stays fatal; a 429 stops the slice.
+      MISSING_STATUSES = [404].freeze
+      DENIED_STATUSES = [401, 403, 410].freeze
+      # HTTP 429 beyond RedirectFollow's one Retry-After pause: the slice
+      # stops (the ledger already holds what it learned); the next sync
+      # resumes.
+      class RateLimited < Nabu::FetchError; end
       TIMEOUT_PATTERN = /transport error for .*(timeout|timed out|execution expired)/i
 
       # The census scope and the era-1 cone (see the header).
@@ -244,7 +277,6 @@ module Nabu
         @timeout_backoff = timeout_backoff
         @http = http
         @clock = clock
-        @requests = 0
       end
 
       # -- the year reading (public: the census derivation and the tests) ----
@@ -444,14 +476,29 @@ module Nabu
       def fetch(workdir, progress: nil, force: false) # rubocop:disable Lint/UnusedMethodArgument
         FileUtils.mkdir_p(workdir)
         ensure_census!(workdir, progress)
-        order = self.class.cone_order(census(workdir))
-        ledger = read_ledger(workdir)
-        tally = crawl_slice!(workdir, order, ledger, progress)
-        held = held_bnumbers(workdir)
-        write_ledger!(workdir, ledger, held: held, cone: order.size)
-        notes = crawl_notes(held, order, ledger, tally)
-        progress&.call("#{notes}\n")
-        Nabu::FetchReport.new(sha: crawl_sha(workdir, held, ledger), fetched_at: @clock.call, notes: notes)
+        crawl = zip_crawl(workdir, progress: progress)
+        lines = begin
+          crawl.slice!.lines
+        rescue RateLimited
+          ["#{ZIP_CRAWL.name}: STOPPED on HTTP 429 (rate-limited) — the next sync resumes", *crawl.diagnose.lines]
+        end
+        lines.each { |line| progress&.call("#{line}\n") }
+        Nabu::FetchReport.new(sha: crawl_sha(workdir, held_bnumbers(workdir), crawl.ledger), fetched_at: @clock.call,
+                              notes: lines.join("; "))
+      end
+
+      # The zip lane's engine over +workdir+ (ZIP_CRAWL retuned by this
+      # instance's knobs): the cone order, held = zips/<bnumber>.zip on
+      # disk, one paced GET per bnumber. Public so an offline surface can
+      # #diagnose the crawl without crawling.
+      def zip_crawl(workdir, progress: nil)
+        Nabu::PacedCrawl::Engine.new(
+          spec: ZIP_CRAWL.with(delay: @delay, slice: @slice, timeout_backoff: @timeout_backoff),
+          dir: workdir, progress: progress,
+          universe: -> { self.class.cone_order(census(workdir)) },
+          held: ->(bnumber) { File.file?(zip_path(workdir, bnumber)) },
+          fetch_one: ->(bnumber) { fetch_zip!(workdir, bnumber) }
+        )
       end
 
       # -- discover ----------------------------------------------------------
@@ -634,78 +681,48 @@ module Nabu
 
       # -- crawl internals ---------------------------------------------------
 
-      def crawl_slice!(workdir, order, ledger, progress)
-        skip = LEDGER_CLASSES.flat_map { |key| ledger.fetch(key, []) }.to_set
-        tally = Hash.new(0)
-        tally[:stuck_list] = []
-        attempted = 0
-        order.each do |bnumber|
-          break if attempted >= @slice
-          next if skip.include?(bnumber) || File.file?(zip_path(workdir, bnumber))
-
-          attempted += 1
-          outcome = fetch_with_retries!(workdir, bnumber, progress)
-          if outcome == :rate_limited
-            tally[:rate_limited] = true
-            break
-          end
-
-          record_outcome!(ledger, tally, bnumber, outcome)
-          progress&.call("crawl: #{attempted}/#{@slice} — +#{tally[:ok]} held, #{tally[:missing]} missing…\n") if
-            (attempted % 20).zero?
-        end
-        tally
-      ensure
-        write_ledger!(workdir, ledger, held: held_bnumbers(workdir), cone: order.size) if ledger
-      end
-
-      def record_outcome!(ledger, tally, bnumber, outcome)
-        tally[outcome] += 1
-        return if outcome == :ok
-
-        klass = outcome == :timeout ? STUCK : outcome.to_s
-        (ledger[klass] ||= []) << bnumber
-        tally[:stuck_list] << bnumber if outcome == :timeout
-      end
-
-      def fetch_with_retries!(workdir, bnumber, progress)
-        TIMEOUT_ATTEMPTS.times do |attempt|
-          outcome = fetch_zip!(workdir, bnumber)
-          return outcome unless outcome == :timeout
-          break if attempt == TIMEOUT_ATTEMPTS - 1
-
-          progress&.call("crawl: #{bnumber} timed out (attempt #{attempt + 1}/#{TIMEOUT_ATTEMPTS}), retrying…\n")
-          backoff = @timeout_backoff * (2**attempt)
-          sleep(backoff) if backoff.positive?
-        end
-        progress&.call("crawl: #{bnumber} timed out #{TIMEOUT_ATTEMPTS}× — ledgered #{STUCK}\n")
-        :timeout
-      end
-
-      # One paced GET → :ok (zip held) / :missing / :denied / :empty /
-      # :malformed / :timeout / :rate_limited.
+      # One GET → a PacedCrawl::Outcome (the engine paces, retries and
+      # ledgers): :ok (the zip held), :denied (401/403/410, or the
+      # "missing" subclass for a 404), :empty (a zip without letters, or
+      # the "malformed" subclass for a 200 that is no zip) and :timeout. A
+      # 429 raises RateLimited; anything else stays fatal. An already-held
+      # zip (the engine's held-id re-probe) is never overwritten: the probe
+      # answers liveness, canonical stays.
       def fetch_zip!(workdir, bnumber)
-        sleep(@delay) if @delay.positive? && @requests.positive?
-        @requests += 1
         response, = Nabu::RedirectFollow.get(format(ZIP_URL, bnumber),
                                              http: @http, error: Nabu::FetchError,
+                                             accept: [200, *MISSING_STATUSES, *DENIED_STATUSES],
                                              headers: { "User-Agent" => Nabu::WikiFetch::USER_AGENT })
-        body = response.body.to_s.b
-        verdict = zip_verdict(body)
-        return verdict unless verdict == :ok
+        return zip_outcome(:denied, response, ledger_class: "missing") if MISSING_STATUSES.include?(response.status)
+        return zip_outcome(:denied, response) if DENIED_STATUSES.include?(response.status)
 
-        target = zip_path(workdir, bnumber)
+        body = response.body.to_s.b
+        case zip_verdict(body)
+        when :malformed then zip_outcome(:empty, response, ledger_class: "malformed")
+        when :empty then zip_outcome(:empty, response)
+        else
+          store_zip!(zip_path(workdir, bnumber), body)
+          zip_outcome(:ok, response)
+        end
+      rescue Nabu::FetchError => e
+        raise if e.is_a?(RateLimited)
+        raise RateLimited, e.message if e.message.match?(/HTTP 429\b/)
+        raise unless e.message.match?(TIMEOUT_PATTERN)
+
+        Nabu::PacedCrawl::Outcome.new(status: :timeout, evidence: { body_head: Nabu::PacedCrawl.body_head(e.message) })
+      end
+
+      def zip_outcome(status, response, ledger_class: nil)
+        Nabu::PacedCrawl::Outcome.from_body(status, http_status: response.status, body: response.body,
+                                                    ledger_class: ledger_class)
+      end
+
+      def store_zip!(target, body)
+        return if File.file?(target)
+
         FileUtils.mkdir_p(File.dirname(target))
         File.binwrite("#{target}.part", body)
         File.rename("#{target}.part", target)
-        :ok
-      rescue Nabu::FetchError => e
-        return :timeout if e.message.match?(TIMEOUT_PATTERN)
-        return :missing if e.message.match?(/HTTP 404\b/)
-        return :denied if e.message.match?(/HTTP (?:401|403|410)\b/)
-        return :rate_limited if e.message.match?(/HTTP 429\b/)
-
-        raise
       end
 
       def zip_verdict(body)
@@ -723,17 +740,6 @@ module Nabu
         :malformed
       end
 
-      def crawl_notes(held, order, ledger, tally)
-        ledgered = LEDGER_CLASSES.sum { |key| ledger.fetch(key, []).size }
-        stuck = tally[:stuck_list]
-        notes = "crawl at #{held.size}/#{order.size} cone volume(s) held, #{ledgered} ledgered " \
-                "(+#{tally[:ok]} this sync; #{tally[:missing]} missing text, #{tally[:denied]} denied, " \
-                "#{tally[:empty]} empty, #{tally[:malformed]} malformed, #{stuck.size} stuck on timeout" \
-                "#{" (#{stuck.join(', ')})" unless stuck.empty?})"
-        notes += "; STOPPED on HTTP 429 (rate-limited) — the next sync resumes" if tally[:rate_limited]
-        notes
-      end
-
       def zip_path(workdir, bnumber) = File.join(workdir, ZIPS_DIRNAME, "#{bnumber}.zip")
 
       def zip_paths(workdir)
@@ -742,21 +748,6 @@ module Nabu
       end
 
       def held_bnumbers(workdir) = zip_paths(workdir).map { |path| File.basename(path, ".zip") }
-
-      def read_ledger(workdir)
-        blank = LEDGER_CLASSES.to_h { |key| [key, []] }
-        stored = read_json(File.join(workdir, LEDGER_FILE))
-        blank.merge(stored.slice(*LEDGER_CLASSES))
-      end
-
-      # The ledger: the refusal classes (sorted, unique) + the position.
-      def write_ledger!(workdir, ledger, held:, cone:)
-        payload = LEDGER_CLASSES.to_h { |key| [key, ledger.fetch(key, []).uniq.sort] }
-        payload["position"] = { "cone" => cone, "done" => held.size,
-                                "ledgered" => LEDGER_CLASSES.sum { |key| payload[key].size } }
-        payload["done"] = held
-        File.write(File.join(workdir, LEDGER_FILE), JSON.pretty_generate(payload))
-      end
 
       def read_json(path)
         return {} unless File.file?(path)

@@ -78,40 +78,57 @@ module Nabu
     Schedule = Data.define(:cadence, :slices_per_phase, :stop_after_zero_slices)
 
     # One crawl lane's knobs. +classes+ maps each terminal Outcome status
-    # (:denied / :empty / :timeout) to its ledger class name.
-    Spec = Data.define(:name, :ledger_file, :classes, :delay, :slice,
+    # (:denied / :empty / :timeout) to its ledger class name; +subclasses+
+    # optionally names further classes per status (an upstream with two
+    # kinds of refusal — a 404 "no text" beside a 403 — keeps them apart:
+    # the Outcome names its ledger_class, the default is the status's own).
+    Spec = Data.define(:name, :ledger_file, :classes, :subclasses, :delay, :slice,
                        :timeout_attempts, :timeout_backoff, :schedule) do
-      def initialize(name:, ledger_file:, classes:, delay:, slice:, schedule:,
+      def initialize(name:, ledger_file:, classes:, delay:, slice:, schedule:, subclasses: {},
                      timeout_attempts: 3, timeout_backoff: 5.0)
         unknown = classes.keys - TERMINAL
         raise ArgumentError, "classes map only #{TERMINAL.inspect} (got #{unknown.inspect})" unless unknown.empty?
         raise ArgumentError, "classes must declare at least one ledger class" if classes.empty?
+
+        orphans = subclasses.keys - classes.keys
+        raise ArgumentError, "subclasses refine declared classes only (got #{orphans.inspect})" unless orphans.empty?
         raise ArgumentError, "slice must be a positive Integer" unless slice.is_a?(Integer) && slice.positive?
         unless timeout_attempts.is_a?(Integer) && timeout_attempts.positive?
           raise ArgumentError, "timeout_attempts must be a positive Integer"
         end
 
         super(name: name.to_s, ledger_file: ledger_file.to_s,
-              classes: classes.transform_values(&:to_s).freeze, delay: Float(delay), slice: slice,
+              classes: classes.transform_values(&:to_s).freeze,
+              subclasses: subclasses.transform_values { |names| Array(names).map(&:to_s).freeze }.freeze,
+              delay: Float(delay), slice: slice,
               timeout_attempts: timeout_attempts, timeout_backoff: Float(timeout_backoff), schedule: schedule)
       end
 
-      def class_names = classes.values
+      # Every ledger class: each status's own, then its subclasses.
+      def class_names = classes.flat_map { |status, klass| [klass, *subclasses.fetch(status, [])] }.uniq
+
+      # The ledger classes an Outcome of +status+ may name.
+      def classes_for(status) = [classes[status], *subclasses.fetch(status, [])].compact
     end
 
-    # One answer from fetch_one.
-    Outcome = Data.define(:status, :evidence) do
-      def self.from_body(status, http_status:, body:)
-        new(status: status, evidence: { http_status: http_status, body_head: PacedCrawl.body_head(body) })
+    # One answer from fetch_one. +ledger_class+ (terminal answers only)
+    # names one of the Spec's subclasses for the status; nil ledgers the
+    # status's own class.
+    Outcome = Data.define(:status, :evidence, :ledger_class) do
+      def self.from_body(status, http_status:, body:, ledger_class: nil)
+        new(status: status, evidence: { http_status: http_status, body_head: PacedCrawl.body_head(body) },
+            ledger_class: ledger_class)
       end
 
-      def initialize(status:, evidence: {})
+      def initialize(status:, evidence: {}, ledger_class: nil)
         raise ArgumentError, "Outcome status must be one of #{STATUSES.inspect} (got #{status.inspect})" unless
           STATUSES.include?(status)
+        raise ArgumentError, "only a terminal Outcome names a ledger class" if ledger_class && status == :ok
 
         evidence = evidence.to_h
         super(status: status,
-              evidence: { http_status: evidence[:http_status], body_head: evidence[:body_head] }.freeze)
+              evidence: { http_status: evidence[:http_status], body_head: evidence[:body_head] }.freeze,
+              ledger_class: ledger_class&.to_s)
       end
 
       def ok? = status == :ok
@@ -412,9 +429,10 @@ module Nabu
           return
         end
 
-        klass = spec.classes.fetch(outcome.status) do
-          raise Error, "#{spec.name}: fetch_one answered #{outcome.status} for #{id}, " \
-                       "which this lane declares no ledger class for"
+        klass = outcome.ledger_class || spec.classes[outcome.status]
+        unless klass && spec.classes_for(outcome.status).include?(klass)
+          raise Error, "#{spec.name}: fetch_one answered #{outcome.status}#{" (#{klass})" if klass} for #{id}, " \
+                       "which this lane declares no such ledger class for"
         end
         @ledger[klass] << id
         tally[:refused][klass] += 1

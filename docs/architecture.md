@@ -2865,7 +2865,10 @@ configures it.
 
 **The contract.** A lane declares a `PacedCrawl::Spec`: its name, ledger
 file, terminal classes (`:denied` / `:empty` / `:timeout` → ledger class
-names), delay, slice, timeout policy (attempts, doubling backoff) and a
+names, optionally refined by `subclasses` — further classes per status,
+which an `Outcome` names through its `ledger_class`, so an upstream with
+two kinds of refusal keeps them apart), delay, slice, timeout policy
+(attempts, doubling backoff) and a
 `Schedule` (cadence, slices per phase, consecutive zero-yield slices that
 stop a chained run — the declaration the phase slate reads). It supplies
 three lambdas: `universe` (the ordered census ids — order IS crawl order),
@@ -2932,11 +2935,24 @@ own test drives the same suite with an in-memory fake.
 **Citizens.** ndl-kotenseki's book crawl is the first (the `BOOK_CRAWL`
 lane, `.ndl-crawl.json`); its NDL Search bib crawl keeps its own batch
 mechanics for now — its unit is an SRU batch of PIDs per request, which
-the one-id `fetch_one` contract does not model. The other hand-rolled
-crawl adapters (wellcome, nb-no, blbooks, vakk) move onto the engine next.
-Five crawl adapters were audited against the contract and keep their own
-mechanics, each for a stated reason:
+the one-id `fetch_one` contract does not model. Since then:
 
+- wellcome — the `ZIP_CRAWL` lane, `.wellcome-crawl.json`; its 404
+  "missing" and non-zip "malformed" ride as `subclasses` of denied and
+  empty; a 429 stops the slice and the notes carry the offline diagnosis.
+
+Off the rail, by shape rather than by queue:
+
+- nb-no and vakk crawl a multi-stage tree per census id (nb-no: the item
+  record, then its ALTO list, then every page the list names; vakk: the
+  info page, the first reading page, then every page its selector
+  names). The page ids are unknown until an earlier stage lands, the
+  slice budget counts requests across all stages, and the ledgers are
+  keyed per item (`{"items": {id: reason}, "pages": {id: [tails]}}`,
+  `{"texts": [...], "pages": {href: [names]}}`) — not one id per
+  `fetch_one`, not class arrays. They keep their own mechanics.
+- blbooks is not a crawl: two sha-pinned period tarballs through
+  ZipFetch, no slice, no ledger.
 - ctilc — no slice and no refusal ledger: one listing-driven pass fetches
   every missing work, and any non-200 aborts the sync; there is no
   terminal answer to ledger.
@@ -2944,12 +2960,15 @@ mechanics, each for a stated reason:
   catalog walk inside a prepare!/complete! retention contract: no slice,
   no ledger (a 404 is censused and re-asked every sync, feeding the
   systemic-miss cap).
+
+Paced by shape but awaiting engine capabilities:
+
 - damos — its ledger carries a fourth class (`server-error`: a lone
   persistent 5xx, upstream's answer for a missing id) and an outage
   breaker that defers ledgering a failure until a later id answers,
   aborting unledgered after `OUTAGE_RUN` consecutive failures. The
-  engine's three terminal classes and per-answer ledger writes model
-  neither (its first write would drop the `server-error` array).
+  engine's per-answer ledger writes model neither (its first write would
+  drop the `server-error` array).
 - korpus16 — two-stage: page 1 sizes its book, so the id universe grows
   mid-slice; the ledger is nested (refused books, refused pages per book);
   a 429 stops the slice cleanly.
@@ -2957,10 +2976,12 @@ mechanics, each for a stated reason:
   or the quota floor (read off a successful answer's rate-limit header)
   stops the slice cleanly, never raising.
 
-Moving them needs capabilities the engine does not have: a clean-stop
+Moving those three — and the nb-no/vakk multi-stage shape, if it is ever
+to ride — needs capabilities the engine does not have: a clean-stop
 outcome (the id stays selectable, the slice ends without raising), a
-ledger codec for nested on-disk shapes, and a deferred-failure outage
-breaker with its own class. The engine
+ledger codec for nested on-disk shapes, a deferred-failure outage
+breaker with its own class, and a staged-item model whose budget counts
+requests. The engine
 is fetch-side code: it sits beside the fetch helpers outside the shared
 derivation digest (§5's derivation stamps — parse never reads it), and it joins the
 derivability writer census as a canonical/ crawl-ledger writer.
