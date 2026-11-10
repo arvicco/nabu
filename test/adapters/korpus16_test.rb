@@ -2,6 +2,7 @@
 
 require "test_helper"
 require "support/adapter_conformance"
+require "support/paced_crawl_conformance"
 require "fileutils"
 require "json"
 require "tmpdir"
@@ -18,15 +19,54 @@ module Adapters
   # rule as crawls in progress.
   class Korpus16Test < Minitest::Test
     include AdapterConformance
+    include PacedCrawlConformance
 
     FIXTURES = Nabu::TestSupport.fixtures("korpus16")
     Adapter = Nabu::Adapters::Korpus16
     PRAYER = "urn:nabu:korpus16:9"
     PSALM = "urn:nabu:korpus16:39"
+    PAGE_URL_PATTERN = %r{\Ahttps://fran\.si/korpus16/Knjiga/(\d+)/[^?]+\?stran=(\d+)\z}
 
     def conformance_adapter = Adapter.new
     def conformance_workdir = FIXTURES
     def conformance_expected_source_id = "korpus16"
+
+    # The paced-crawl conformance drives the page lane through its real
+    # wiring: the on-disk index lists one book per conformance id (the
+    # real tile anchor, re-pointed), each id is that book's page 1 (the
+    # sizing request), held = books/<id>/00001.html, and the script answers
+    # over the stubbed reading pages. An :ok page is a real page 1 whose
+    # pager says one page, so a stored id sizes its book to itself and the
+    # universe stays exactly +ids+.
+    def paced_crawl_engine(dir:, ids:, slice:, script:)
+      write_index(dir, ids)
+      stub_request(:get, PAGE_URL_PATTERN).to_return do |request|
+        book = request.uri.path[%r{/Knjiga/(\d+)/}, 1]
+        page = request.uri.query[/stran=(\d+)/, 1]
+        case script.call(page == "1" ? book : "#{book}:#{page}")
+        when :ok then { status: 200, body: one_page_book }
+        when :denied then { status: 403, body: PacedCrawlConformance::PC_REFUSAL_BODY }
+        when :empty then { status: 200, body: File.read(File.join(FIXTURES, "map", "about-Info.html")) }
+        when :timeout then raise Net::ReadTimeout
+        when :fatal then { status: 500, body: "" }
+        end
+      end
+      quiet(slice: slice).page_crawl(dir)
+    end
+
+    def paced_crawl_hold!(dir, id)
+      FileUtils.mkdir_p(File.join(dir, "books", id))
+      File.write(File.join(dir, "books", id, "00001.html"), one_page_book)
+    end
+
+    def write_index(dir, ids)
+      anchor = File.read(File.join(FIXTURES, "map", "korpus16.html"))[%r{<a href="/korpus16/Knjiga/9/[^>]*>}]
+      tiles = ids.map { |id| "#{anchor.sub('/Knjiga/9/', "/Knjiga/#{id}/")}tile</a>" }
+      FileUtils.mkdir_p(File.join(dir, "map"))
+      File.write(File.join(dir, "map", "korpus16.html"), "<html><body>#{tiles.join("\n")}</body></html>")
+    end
+
+    def one_page_book = page_html(9, 1).sub('max="7"', 'max="1"')
 
     def documents
       @documents ||= conformance_adapter.discover(FIXTURES).to_h { |ref| [ref.id, conformance_adapter.parse(ref)] }
@@ -185,9 +225,75 @@ module Adapters
         report = quiet(books: ["9"]).fetch(dir)
         assert_match(/2 page\(s\) ledgered/, report.notes)
         ledger = JSON.parse(File.read(File.join(dir, Adapter::LEDGER_FILE)))
-        assert_equal({ "9" => [4, 6] }, ledger["pages"])
+        assert_equal({ "9" => [4] }, ledger["pages"], "the 404 rides the legacy refused section")
+        assert_equal ["9:6"], ledger["not-reading"], "a 200 that is no reading page is its own class"
         quiet(books: ["9"]).fetch(dir)
         assert_requested :get, page_url(9, "molitev_krscenikov", 4), times: 1
+        assert_requested :get, page_url(9, "molitev_krscenikov", 6), times: 1
+        assert_equal [PRAYER], Adapter.new.discover(dir).map(&:id), "both ledgered pages complete the book"
+      end
+    end
+
+    def test_a_timed_out_page_is_retried_then_ledgered_stuck
+      stub_portal
+      stub_prayer([1, 2, 4, 5, 6, 7])
+      stub_request(:get, page_url(9, "molitev_krscenikov", 3)).to_raise(Net::ReadTimeout)
+      Dir.mktmpdir do |dir|
+        report = quiet(books: ["9"]).fetch(dir)
+        assert_requested :get, page_url(9, "molitev_krscenikov", 3), times: Adapter::PAGE_CRAWL.timeout_attempts
+        assert_equal ["9:3"], JSON.parse(File.read(File.join(dir, Adapter::LEDGER_FILE)))["timeout-stuck"]
+        assert_match(/\(\+6 page\(s\) this sync\)/, report.notes)
+      end
+    end
+
+    # A ledger as the hand-rolled crawl wrote it (refused books, refused
+    # pages per book) reads through the lane's codec and writes back with
+    # every entry intact, the new classes beside it.
+    LEGACY_LEDGER = { "books" => %w[17 4], "pages" => { "58" => [200, 7], "9" => [4] } }.freeze
+
+    def test_a_legacy_ledger_round_trips_through_the_codec
+      codec = Adapter::LedgerCodec
+      classes = codec.load(LEGACY_LEDGER)
+      assert_equal Set["17", "4", "58:7", "58:200", "9:4"], classes.fetch("refused")
+      dumped = codec.dump(Adapter::PAGE_CRAWL.class_names.to_h { |klass| [klass, classes.fetch(klass, Set.new)] },
+                          LEGACY_LEDGER)
+      assert_equal({ "books" => %w[4 17], "pages" => { "9" => [4], "58" => [7, 200] },
+                     "not-reading" => [], "timeout-stuck" => [] }, dumped)
+      assert_equal classes.fetch("refused"), codec.load(JSON.parse(JSON.generate(dumped))).fetch("refused")
+    end
+
+    def test_a_slice_over_a_legacy_ledger_keeps_every_entry
+      stub_portal
+      stub_prayer
+      Dir.mktmpdir do |dir|
+        File.write(File.join(dir, Adapter::LEDGER_FILE), JSON.generate(LEGACY_LEDGER.merge("pages" => { "9" => [4] })))
+        quiet(books: ["9"]).fetch(dir)
+        on_disk = JSON.parse(File.read(File.join(dir, Adapter::LEDGER_FILE)))
+        assert_equal [%w[4 17], { "9" => [4] }], on_disk.values_at("books", "pages")
+        assert_equal "yield", on_disk.dig("last_slice", "classification")
+        assert_not_requested :get, page_url(9, "molitev_krscenikov", 4)
+      end
+    end
+
+    def test_the_chain_seam_names_the_one_page_lane
+      lanes = quiet.paced_crawls(Dir.mktmpdir)
+      assert_equal ["pages"], lanes.keys
+      assert_kind_of Nabu::PacedCrawl::Engine, lanes.fetch("pages")
+      assert_equal Adapter::LedgerCodec, lanes.fetch("pages").spec.codec
+    end
+
+    def test_a_refused_page_one_ledgers_the_whole_book
+      stub_portal
+      stub_request(:get, page_url(9, "molitev_krscenikov", 1)).to_return(status: 404)
+      Dir.mktmpdir do |dir|
+        report = quiet(books: ["9"]).fetch(dir)
+        assert_match(/1 book\(s\) refused/, report.notes)
+        ledger = JSON.parse(File.read(File.join(dir, Adapter::LEDGER_FILE)))
+        assert_equal [["9"], {}], ledger.values_at("books", "pages")
+        quiet(books: ["9"]).fetch(dir)
+        assert_requested :get, page_url(9, "molitev_krscenikov", 1), times: 1
+        FileUtils.mkdir_p(File.join(dir, "books", "9"))
+        assert_includes Adapter.new.discovery_skips(dir).notes, "book 9: page 1 refused upstream (ledgered)"
       end
     end
 
@@ -198,6 +304,12 @@ module Adapters
       Dir.mktmpdir do |dir|
         report = quiet(books: ["9"]).fetch(dir)
         assert_match(/\(\+2 page\(s\) this sync\); rate limited — resume next sync/, report.notes)
+        assert_match(/CLEAN STOP at 9:3: HTTP 429/, report.notes)
+        on_disk = JSON.parse(File.read(File.join(dir, Adapter::LEDGER_FILE)))
+        assert_equal [[], {}], on_disk.values_at("books", "pages"), "a 429 is never ledgered"
+        stub_prayer([3, 4, 5, 6, 7])
+        quiet(books: ["9"]).fetch(dir)
+        assert_equal [PRAYER], Adapter.new.discover(dir).map(&:id), "the next sync resumes at the halted page"
       end
     end
 
