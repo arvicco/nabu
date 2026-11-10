@@ -178,6 +178,51 @@ class SourceRegistryTest < Minitest::Test
     assert_match(/sync_policy/, error.message)
   end
 
+  # index_policy: inline (default — the sync refreshes the source's index
+  # slice) | deferred (paced-crawl citizens: the sync skips index work and
+  # `nabu index refresh <slug>` runs it once per wave).
+  def test_index_policy_defaults_to_inline
+    registry = load_registry(<<~YAML)
+      my-src:
+        adapter: A
+    YAML
+    entry = registry["my-src"]
+    assert_equal "inline", entry.index_policy
+    refute_predicate entry, :index_deferred?
+  end
+
+  def test_index_policy_parses_explicit_values
+    registry = load_registry(<<~YAML)
+      inline-src:
+        adapter: A
+        index_policy: inline
+      crawl-src:
+        adapter: B
+        index_policy: deferred
+    YAML
+    assert_equal "inline", registry["inline-src"].index_policy
+    assert_equal "deferred", registry["crawl-src"].index_policy
+    assert_predicate registry["crawl-src"], :index_deferred?
+  end
+
+  def test_unknown_index_policy_raises_naming_the_slug
+    error = assert_raises(Nabu::ValidationError) do
+      load_registry(<<~YAML)
+        my-src:
+          adapter: A
+          index_policy: nightly
+      YAML
+    end
+    assert_match(/my-src/, error.message)
+    assert_match(/index_policy must be one of inline, deferred/, error.message)
+  end
+
+  def test_shipped_registry_defers_only_the_paced_crawl_index_citizens
+    registry = Nabu::SourceRegistry.load(File.expand_path("../config/sources.yml", __dir__))
+    deferred = registry.each_source.select(&:index_deferred?).map(&:slug).sort
+    assert_equal %w[ndl-kotenseki wellcome], deferred
+  end
+
   def test_non_hash_entry_raises_naming_the_slug
     error = assert_raises(Nabu::ValidationError) do
       load_registry(<<~YAML)
