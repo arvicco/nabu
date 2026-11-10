@@ -2933,8 +2933,34 @@ own test drives the same suite with an in-memory fake.
 lane, `.ndl-crawl.json`); its NDL Search bib crawl keeps its own batch
 mechanics for now — its unit is an SRU batch of PIDs per request, which
 the one-id `fetch_one` contract does not model. The other hand-rolled
-crawl adapters (wellcome, nb-no, blbooks, ctilc, damos, korpus16,
-lotsawa-house, mdz-protestant, vakk) move onto the engine next. The engine
+crawl adapters (wellcome, nb-no, blbooks, vakk) move onto the engine next.
+Five crawl adapters were audited against the contract and keep their own
+mechanics, each for a stated reason:
+
+- ctilc — no slice and no refusal ledger: one listing-driven pass fetches
+  every missing work, and any non-200 aborts the sync; there is no
+  terminal answer to ledger.
+- lotsawa-house — `LotsawaFetch`'s text crawl is the tail of a full
+  catalog walk inside a prepare!/complete! retention contract: no slice,
+  no ledger (a 404 is censused and re-asked every sync, feeding the
+  systemic-miss cap).
+- damos — its ledger carries a fourth class (`server-error`: a lone
+  persistent 5xx, upstream's answer for a missing id) and an outage
+  breaker that defers ledgering a failure until a later id answers,
+  aborting unledgered after `OUTAGE_RUN` consecutive failures. The
+  engine's three terminal classes and per-answer ledger writes model
+  neither (its first write would drop the `server-error` array).
+- korpus16 — two-stage: page 1 sizes its book, so the id universe grows
+  mid-slice; the ledger is nested (refused books, refused pages per book);
+  a 429 stops the slice cleanly.
+- mdz-protestant — the ledger is nested (404 pages per object), and a 429
+  or the quota floor (read off a successful answer's rate-limit header)
+  stops the slice cleanly, never raising.
+
+Moving them needs capabilities the engine does not have: a clean-stop
+outcome (the id stays selectable, the slice ends without raising), a
+ledger codec for nested on-disk shapes, and a deferred-failure outage
+breaker with its own class. The engine
 is fetch-side code: it sits beside the fetch helpers outside the shared
 derivation digest (§5's derivation stamps — parse never reads it), and it joins the
 derivability writer census as a canonical/ crawl-ledger writer.
