@@ -261,7 +261,7 @@ mvp.rb:
 mw.rb:
   reads: 1
 ndl_kotenseki.rb:
-  reads: 7
+  reads: 6
 ndl_search_bib.rb:
   reads: 1
 nikh_xml_parser.rb:
