@@ -25,14 +25,17 @@ class PacedCrawlChainTest < Minitest::Test
   end
 
   # ids answering :ok land in +held+; ids in +refused+ answer :denied.
-  def engine(dir, universe:, refused: [], slice: 2, stop_after: 2)
+  # ids in +halt+ answer a clean stop.
+  def engine(dir, universe:, refused: [], halt: [], slice: 2, stop_after: 2)
     held = {}
     P::Engine.new(
       spec: spec(slice: slice, stop_after: stop_after), dir: dir,
       universe: -> { universe },
       held: ->(id) { held.key?(id) },
       fetch_one: lambda do |id|
-        if refused.include?(id)
+        if halt.include?(id)
+          P::Outcome.halt(reason: "quota floor reached", evidence: { http_status: 200, remaining: 0 })
+        elsif refused.include?(id)
           P::Outcome.new(status: :denied, evidence: { http_status: 403, body_head: "no" })
         else
           held[id] = true
@@ -85,6 +88,43 @@ class PacedCrawlChainTest < Minitest::Test
                                       stop_after: 2), slices: 3)
       assert_equal 3, summary.reports.size
       refute summary.stalled?
+    end
+  end
+
+  def test_a_clean_stop_slice_stops_the_chain_naming_it
+    Dir.mktmpdir do |dir|
+      log = StringIO.new
+      # slice 1 yields a,b; slice 2 yields c then halts at d — the chain
+      # stops there, even though the zero budget is far from spent.
+      summary = run_chain(engine(dir, universe: %w[a b c d e f], halt: %w[d], stop_after: 5), slices: 5, log: log)
+      assert_equal 2, summary.reports.size
+      assert_predicate summary, :stalled?
+      assert_equal :clean_stop, summary.reports.last.classification
+      assert_match(/clean stop at d: quota floor reached/, summary.stop_reason)
+      assert_match(/CHAIN STOPPED: clean stop/, log.string)
+    end
+  end
+
+  def test_an_outage_abort_stops_the_chain_naming_it
+    Dir.mktmpdir do |dir|
+      held = {}
+      lane = spec(stop_after: 5).with(outage_statuses: [:timeout], outage_run: 2, timeout_attempts: 1)
+      eng = P::Engine.new(
+        spec: lane, dir: dir, universe: -> { %w[a b c d e f] }, held: ->(id) { held.key?(id) },
+        fetch_one: lambda do |id|
+          next P::Outcome.new(status: :timeout, evidence: { body_head: "execution expired" }) if %w[c d].include?(id)
+
+          held[id] = true
+          P::Outcome.new(status: :ok, evidence: { http_status: 200 })
+        end,
+        sleeper: ->(_) {}
+      )
+      log = StringIO.new
+      summary = run_chain(eng, slices: 5, log: log)
+      assert_equal 2, summary.reports.size
+      assert_equal :outage_abort, summary.reports.last.classification
+      assert_match(/upstream outage — 2 consecutive outage answer\(s\) at c…d/, summary.stop_reason)
+      assert_match(/CHAIN STOPPED: upstream outage/, log.string)
     end
   end
 
