@@ -2940,6 +2940,18 @@ the one-id `fetch_one` contract does not model. Since then:
 - wellcome — the `ZIP_CRAWL` lane, `.wellcome-crawl.json`; its 404
   "missing" and non-zip "malformed" ride as `subclasses` of denied and
   empty; a 429 stops the slice and the notes carry the offline diagnosis.
+- damos — the `ITEM_CRAWL` lane, `.damos-crawl.json` (the pre-engine flat
+  ledger reads and writes back byte for byte); its fourth class,
+  `server-error` (a lone persistent 5xx — upstream's answer for a missing
+  id), rides as a `subclass` of the timeout class, so it keeps the
+  retry-with-backoff policy. It is the first lane to arm the outage
+  breaker (`outage_statuses: [:timeout]`, `outage_run: 3`, replacing its
+  hand-rolled `OUTAGE_RUN`); a tripped breaker still aborts the sync. The
+  breaker's law changes one thing: a sub-threshold staged run still open
+  at slice end stays unledgered and is re-asked (the hand-rolled crawl
+  committed it), so a genuinely bad id at the very end of the cone is
+  re-asked every run and a chained run stops on the zero-yield budget
+  instead of reporting cone-exhausted.
 
 Off the rail, by shape rather than by queue:
 
@@ -2964,13 +2976,6 @@ Off the rail, by shape rather than by queue:
 Paced by shape; the engine capabilities they need have shipped (below),
 their migrations onto the rail are pending:
 
-- damos — its ledger carries a fourth class (`server-error`: a lone
-  persistent 5xx, upstream's answer for a missing id) and an outage
-  breaker that defers ledgering a failure until a later id answers,
-  aborting unledgered after `OUTAGE_RUN` consecutive failures. The
-  engine's outage breaker models the second; the flat codec now passes
-  an undeclared class array through instead of dropping it, and
-  `server-error` rides once the lane declares it (a subclass).
 - korpus16 — two-stage: page 1 sizes its book, so the id universe grows
   mid-slice; the ledger is nested (refused books, refused pages per book);
   a 429 stops the slice cleanly.

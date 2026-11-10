@@ -7,6 +7,7 @@ require "json"
 require_relative "../zip_fetch"
 require_relative "../redirect_follow"
 require_relative "../normalize"
+require_relative "../paced_crawl"
 
 module Nabu
   module Adapters
@@ -17,7 +18,7 @@ module Nabu
     # Footer, verbatim (re-read 2026-10-18): "Content: CC BY-NC-SA 4.0"
     # (software GPL-3.0) → license_class nc.
     #
-    # == The resumable crawl (the ndl-kotenseki mold)
+    # == The resumable crawl (the paced-crawl rail)
     #
     # The census: ONE POST to /ajaxgetfilter (empty body) answers the
     # site's whole filter state as JSON (~967 KB) — "collections" (29,
@@ -27,18 +28,38 @@ module Nabu
     # own numbers pointing at their host item, "!KN 31 = 5797 >+ KN 1
     # Fp(1)"). The unique ids must equal the summed collection counts —
     # the truncation defense; zero ids aborts. The listing is kept
-    # under map/ verbatim.
+    # under map/ verbatim, and only a listing that passed the defense
+    # replaces it — the held listing IS the crawl's universe.
     #
-    # The crawl: GET /ajaxitem/<id>/ per id, ascending, up to SLICE per
-    # sync, resume at the file grain (items/<id>.json on disk is done).
-    # Ledgered in .damos-crawl.json and never retried: 403/404 or a
-    # non-JSON answer ("denied"), a record with no transliteration
-    # ("empty"), an item that times out TIMEOUT_ATTEMPTS times
-    # ("timeout-stuck"), and an item that answers 5xx as often
-    # ("server-error" — upstream answers a missing id with HTTP 500,
-    # probed 2026-10-18, so a lone persistent 500 is a bad id, not an
-    # outage). OUTAGE_RUN consecutive failures ARE an outage: the sync
-    # aborts without ledgering the run and the next one resumes there.
+    # The crawl rides the paced-crawl rail (Nabu::PacedCrawl,
+    # architecture §19; ITEM_CRAWL is the lane): GET /ajaxitem/<id>/ per
+    # id, ascending, up to SLICE per sync, held = items/<id>.json on
+    # disk. The engine owns selection, the one slice budget, pacing, the
+    # timeout policy, the ledger and the slice report the fetch notes
+    # carry. Ledgered in .damos-crawl.json (flat class arrays — the
+    # pre-engine shape reads and writes back unchanged, the engine's
+    # last_slice beside it) and never retried: 403/404 or a non-JSON
+    # answer ("denied"), a record with no transliteration ("empty"), an
+    # item that times out TIMEOUT_ATTEMPTS times ("timeout-stuck"), and
+    # an item that answers 5xx as often ("server-error", a subclass of
+    # the timeout class, retried with the same backoff — upstream
+    # answers a missing id with HTTP 500, probed 2026-10-18, so a lone
+    # persistent 500 is a bad id, not an outage). Any other failure
+    # stays fatal (the crawl is resumable).
+    #
+    # THE OUTAGE BREAKER is the engine's (outage_statuses [:timeout],
+    # outage_run OUTAGE_RUN): a timeout or 5xx answer is STAGED off the
+    # ledger and commits only when a later id answers otherwise;
+    # OUTAGE_RUN consecutive staged answers abort the slice with the run
+    # dropped unledgered (the next sync re-asks it), and the sync then
+    # raises FetchError, as the hand-rolled breaker did. ENGINE LAW,
+    # accepted: a staged run shorter than OUTAGE_RUN still open when the
+    # slice ends stays UNLEDGERED too and is re-asked next slice (the
+    # hand-rolled crawl committed it at slice end). The consequence:
+    # genuine failures at the very END of the cone are re-asked every
+    # run, the crawl never reports cone-exhausted, and a chained run
+    # (rake crawl:chain) stops loudly on the declared zero-yield budget
+    # instead — a human read of those ids, never a silent commit.
     #
     # == Documents
     #
@@ -95,8 +116,26 @@ module Nabu
       OUTAGE_RUN = 3
       STUCK = "timeout-stuck"
       SERVER_ERROR = "server-error"
-      LEDGER_CLASSES = ["denied", "empty", STUCK, SERVER_ERROR].freeze
-      FAILURE_CLASS = { timeout: STUCK, server_error: SERVER_ERROR }.freeze
+      # The item lane's declared schedule (read by the phase slate). The
+      # cone completed 2026-10-18 (four slices); a phase's slices now
+      # answer cone-exhausted until the listing grows. Undeclared before
+      # the rail, so the citizens' default: per phase, three slices, and a
+      # chained run stops after three consecutive zero-yield slices.
+      ITEM_CRAWL = Nabu::PacedCrawl::Spec.new(
+        name: "items", ledger_file: LEDGER_FILE,
+        classes: { denied: "denied", empty: "empty", timeout: STUCK },
+        subclasses: { timeout: [SERVER_ERROR] },
+        delay: DELAY, slice: SLICE, timeout_attempts: TIMEOUT_ATTEMPTS, timeout_backoff: TIMEOUT_BACKOFF,
+        outage_statuses: [:timeout], outage_run: OUTAGE_RUN,
+        schedule: Nabu::PacedCrawl::Schedule.new(cadence: :per_phase, slices_per_phase: 3, stop_after_zero_slices: 3)
+      )
+      # The ledger classes, in the on-disk order the crawl identity hashes.
+      LEDGER_CLASSES = ITEM_CRAWL.class_names.freeze
+      # The answers an item GET takes as terminal, accepted so their bodies
+      # ride as evidence: 403/404 (denied) and any 5xx (server-error).
+      # Every other non-200 stays fatal.
+      DENIED_STATUSES = [403, 404].freeze
+      SERVER_ERRORS = (500..599).to_a.freeze
       TIMEOUT_PATTERN = /transport error for .*(timeout|timed out|execution expired)/i
 
       # Upstream's no-value sentinel in every metadata field.
@@ -137,7 +176,7 @@ module Nabu
         @slice = slice
         @timeout_backoff = timeout_backoff
         @http = http
-        @requests = 0
+        @listing_ids = {}
       end
 
       # -- fetch -------------------------------------------------------------
@@ -147,18 +186,34 @@ module Nabu
       def fetch(workdir, progress: nil, force: false) # rubocop:disable Lint/UnusedMethodArgument
         FileUtils.mkdir_p(workdir)
         body = post_listing!(progress)
-        ids = listing_ids(body)
+        listing_ids(body) # the truncation defense, before the listing replaces map/
         write_listing!(workdir, body)
-        ledger = read_ledger(workdir)
-        crawled, refused, stuck = crawl_slice!(workdir, ids, ledger, progress)
-        held = held_ids(workdir)
-        stuck_list = stuck.empty? ? "" : " (#{stuck.join(', ')})"
-        notes = "crawl at #{held.size}/#{ids.size} item(s) " \
-                "(+#{crawled} this sync, #{refused} newly refused, " \
-                "#{stuck.size} stuck on timeout/server error#{stuck_list}, " \
-                "#{LEDGER_CLASSES.sum { |key| ledger[key].size }} ledgered)"
-        progress&.call("#{notes}\n")
-        Nabu::FetchReport.new(sha: crawl_sha(workdir, held, ledger), fetched_at: Time.now, notes: notes)
+        crawl = item_crawl(workdir, progress: progress)
+        report = crawl.slice!
+        lines = report.lines
+        lines.each { |line| progress&.call("#{line}\n") }
+        abort_outage!(report) if report.outage_aborted?
+        Nabu::FetchReport.new(sha: crawl_sha(workdir, held_ids(workdir), crawl.ledger), fetched_at: Time.now,
+                              notes: lines.join("; "))
+      end
+
+      # The chain runner's seam (rake crawl:chain): the one paced lane.
+      def paced_crawls(workdir, progress: nil)
+        { ITEM_CRAWL.name => item_crawl(workdir, progress: progress) }
+      end
+
+      # The item lane's engine over +workdir+ (ITEM_CRAWL retuned by this
+      # instance's knobs): the held listing's ids ascending, held =
+      # items/<id>.json on disk, one paced GET per id. Public so an offline
+      # surface can #diagnose the crawl without crawling.
+      def item_crawl(workdir, progress: nil)
+        Nabu::PacedCrawl::Engine.new(
+          spec: ITEM_CRAWL.with(delay: @delay, slice: @slice, timeout_backoff: @timeout_backoff),
+          dir: workdir, progress: progress,
+          universe: -> { held_listing_ids(workdir) },
+          held: ->(id) { File.file?(item_path(workdir, id)) },
+          fetch_one: ->(id) { fetch_item!(workdir, id) }
+        )
       end
 
       # -- discover ----------------------------------------------------------
@@ -221,10 +276,23 @@ module Nabu
 
       # Only a listing that passed the truncation defense replaces map/.
       def write_listing!(workdir, body)
-        target = File.join(workdir, MAP_DIRNAME, LISTING_FILE)
+        target = listing_path(workdir)
         FileUtils.mkdir_p(File.dirname(target))
         File.binwrite("#{target}.tmp", body)
         File.rename("#{target}.tmp", target)
+        @listing_ids.delete(workdir)
+      end
+
+      def listing_path(workdir) = File.join(workdir, MAP_DIRNAME, LISTING_FILE)
+
+      # The crawl's universe: the held listing's ids (none before the first
+      # listing lands), parsed once per listing write — the engine asks for
+      # the universe on every scan.
+      def held_listing_ids(workdir)
+        @listing_ids[workdir] ||= begin
+          path = listing_path(workdir)
+          File.file?(path) ? listing_ids(File.read(path, encoding: Encoding::UTF_8)) : []
+        end
       end
 
       # Unique item ids, ascending — alias rows (a joined fragment's own
@@ -245,100 +313,63 @@ module Nabu
         raise FetchError, "damos listing is not JSON: #{e.message}"
       end
 
-      # Returns [crawled, refused, stuck_ids]. Failed ids (timeout/5xx
-      # after retries) wait in +pending+ until a later id answers — a run
-      # of OUTAGE_RUN of them aborts the slice unledgered.
-      def crawl_slice!(workdir, ids, ledger, progress)
-        skip = LEDGER_CLASSES.flat_map { |key| ledger.fetch(key, []) }.to_set
-        crawled = 0
-        refused = 0
-        stuck = []
-        pending = []
-        ids.each do |id|
-          break if crawled + refused + stuck.size + pending.size >= @slice
-          next if skip.include?(id) || File.file?(item_path(workdir, id))
-
-          outcome = fetch_with_retries!(workdir, id, progress)
-          if FAILURE_CLASS.key?(outcome)
-            pending << [id, FAILURE_CLASS.fetch(outcome)]
-            abort_outage!(workdir, ledger, pending) if pending.size >= OUTAGE_RUN
-            next
-          end
-
-          stuck.concat(flush_pending!(ledger, pending))
-          case outcome
-          when :ok then crawled += 1
-          when :denied, :empty
-            ledger[outcome.to_s] << id
-            refused += 1
-          end
-          progress&.call("crawl: +#{crawled} item(s), #{refused} refused…\n") if ((crawled + refused) % 100).zero?
-        end
-        stuck.concat(flush_pending!(ledger, pending))
-        write_ledger!(workdir, ledger)
-        [crawled, refused, stuck]
-      end
-
-      def flush_pending!(ledger, pending)
-        flushed = pending.map do |id, klass|
-          (ledger[klass] ||= []) << id
-          id
-        end
-        pending.clear
-        flushed
-      end
-
-      def abort_outage!(workdir, ledger, pending)
-        write_ledger!(workdir, ledger)
-        raise FetchError, "damos crawl aborted — upstream outage: #{pending.size} consecutive item(s) " \
-                          "failed (#{pending.map(&:first).join(', ')}); nothing ledgered for the run, " \
+      # The sync aborts on a tripped breaker, as the hand-rolled crawl did
+      # (the ledger is already written; the run stays selectable).
+      def abort_outage!(report)
+        ids = report.outage[:ids]
+        raise FetchError, "damos crawl aborted — upstream outage: #{ids.size} consecutive item(s) " \
+                          "failed (#{ids.join(', ')}); nothing ledgered for the run, " \
                           "the next sync resumes here"
       end
 
-      # A timeout or 5xx is retried in-slice with doubling backoff; only
-      # TIMEOUT_ATTEMPTS consecutive failures give up.
-      def fetch_with_retries!(workdir, id, progress)
-        outcome = nil
-        TIMEOUT_ATTEMPTS.times do |attempt|
-          outcome = fetch_item!(workdir, id)
-          return outcome unless FAILURE_CLASS.key?(outcome)
-          break if attempt == TIMEOUT_ATTEMPTS - 1
-
-          progress&.call("crawl: #{id} #{outcome} (attempt #{attempt + 1}/#{TIMEOUT_ATTEMPTS}), retrying…\n")
-          backoff = @timeout_backoff * (2**attempt)
-          sleep(backoff) if backoff.positive?
-        end
-        progress&.call("crawl: #{id} #{outcome} #{TIMEOUT_ATTEMPTS}× — held back\n")
-        outcome
-      end
-
+      # One GET → a PacedCrawl::Outcome (the engine paces, retries, stages
+      # and ledgers): :ok (the item held), :denied (403/404, or a 200 that
+      # is no item record), :empty (no transliteration), :timeout (a
+      # transport timeout, or the server-error subclass for a 5xx — both
+      # outage-staged). Any other failure raises. An already-held item (the
+      # engine's held-id re-probe) is never overwritten: the probe answers
+      # liveness, canonical stays.
       def fetch_item!(workdir, id)
-        sleep(@delay) if @delay.positive? && @requests.positive?
-        @requests += 1
         response, = Nabu::RedirectFollow.get(
           format(ITEM_URL, id), http: @http, error: Nabu::FetchError,
+                                accept: [200, *DENIED_STATUSES, *SERVER_ERRORS],
                                 headers: { "User-Agent" => Nabu::WikiFetch::USER_AGENT }
         )
+        return item_outcome(:denied, response) if DENIED_STATUSES.include?(response.status)
+        return item_outcome(:timeout, response, ledger_class: SERVER_ERROR) if SERVER_ERRORS.include?(response.status)
+
         body = response.body.to_s
+        verdict = item_verdict(body)
+        store_item!(item_path(workdir, id), body) if verdict == :ok
+        item_outcome(verdict, response)
+      rescue Nabu::FetchError => e
+        raise unless e.message.match?(TIMEOUT_PATTERN)
+
+        Nabu::PacedCrawl::Outcome.new(status: :timeout, evidence: { body_head: Nabu::PacedCrawl.body_head(e.message) })
+      end
+
+      def item_verdict(body)
         return :denied unless body.lstrip.start_with?("{")
 
         item = JSON.parse(body)["item"]
         return :denied unless item.is_a?(Hash)
-        return :empty if item["content"].to_s.strip.empty?
 
-        target = item_path(workdir, id)
+        item["content"].to_s.strip.empty? ? :empty : :ok
+      rescue JSON::ParserError
+        :denied
+      end
+
+      def item_outcome(status, response, ledger_class: nil)
+        Nabu::PacedCrawl::Outcome.from_body(status, http_status: response.status, body: response.body,
+                                                    ledger_class: ledger_class)
+      end
+
+      def store_item!(target, body)
+        return if File.file?(target)
+
         FileUtils.mkdir_p(File.dirname(target))
         File.binwrite("#{target}.tmp", body)
         File.rename("#{target}.tmp", target)
-        :ok
-      rescue JSON::ParserError
-        :denied
-      rescue Nabu::FetchError => e
-        return :timeout if e.message.match?(TIMEOUT_PATTERN)
-        return :server_error if e.message.match?(/HTTP 5\d\d\b/)
-        raise unless e.message.match?(/HTTP 40[34]\b/)
-
-        :denied
       end
 
       def item_path(workdir, id)
@@ -349,23 +380,11 @@ module Nabu
         Dir.glob(File.join(workdir, ITEMS_DIRNAME, "*.json")).map { |path| File.basename(path, ".json") }.sort
       end
 
-      def read_ledger(workdir)
-        blank = LEDGER_CLASSES.to_h { |key| [key, []] }
-        path = File.join(workdir, LEDGER_FILE)
-        return blank unless File.file?(path)
-
-        blank.merge(JSON.parse(File.read(path)))
-      rescue JSON::ParserError
-        blank
-      end
-
-      def write_ledger!(workdir, ledger)
-        File.write(File.join(workdir, LEDGER_FILE),
-                   JSON.pretty_generate(LEDGER_CLASSES.to_h { |key| [key, ledger.fetch(key, []).uniq.sort] }))
-      end
-
+      # The crawl identity: the listing bytes, the held items, the ledgered
+      # classes (last_slice is derived, never identity) — the same inputs
+      # as before the rail, so an unchanged tree keeps its sha.
       def crawl_sha(workdir, held, ledger)
-        listing = File.join(workdir, MAP_DIRNAME, LISTING_FILE)
+        listing = listing_path(workdir)
         census = File.file?(listing) ? Digest::SHA256.file(listing).hexdigest : ""
         classes = LEDGER_CLASSES.map { |key| ledger.fetch(key, []).sort }
         Digest::SHA256.hexdigest(JSON.generate([census, held, *classes]))
