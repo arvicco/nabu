@@ -19,6 +19,8 @@ module Ops
     P = Nabu::Ops::DemoPublish
     ROOT = File.expand_path("../..", __dir__)
 
+    # +census+: true writes a census cut for +version+; a Hash is written
+    # verbatim; false/nil writes none.
     def with_project(version: "1.2.3", identifier: nil, census: true)
       Dir.mktmpdir("demo-publish") do |dir|
         root = File.join(dir, "repo")
@@ -28,7 +30,8 @@ module Ops
         server = { "name" => P::SERVER_NAME, "version" => version,
                    "packages" => [{ "registryType" => "oci", "identifier" => identifier }] }
         File.write(File.join(root, "server.json"), JSON.generate(server))
-        File.write(File.join(slice, "demo-census.json"), "{}") if census
+        census = { "schema" => 1, "nabu_version" => version } if census == true
+        File.write(File.join(slice, "demo-census.json"), JSON.generate(census)) if census
         yield root, slice
       end
     end
@@ -84,6 +87,33 @@ module Ops
       with_project(census: false) do |root, slice|
         error = assert_raises(P::Refused) { P.publish_argv(root: root, slice: slice) }
         assert_match(/demo-census\.json/, error.message)
+        assert_match(/rake demo:build/, error.message)
+      end
+    end
+
+    # A kept tmp/demo from the previous release must never be baked into
+    # the new image: the slice's census names the release it was cut for.
+    def test_a_slice_cut_for_another_release_is_refused
+      with_project(version: "1.8.0", census: { "nabu_version" => "1.7.0" }) do |root, slice|
+        error = assert_raises(P::Refused) { P.publish_argv(root: root, slice: slice, nabu_version: "1.8.0") }
+        assert_match(/1\.7\.0/, error.message)
+        assert_match(/1\.8\.0/, error.message)
+        assert_match(/run rake demo:build to re-cut the slice/, error.message)
+      end
+    end
+
+    def test_a_slice_cut_for_this_release_builds_the_argv
+      with_project(version: "1.8.0", census: { "nabu_version" => "1.8.0" }) do |root, slice|
+        argv = P.publish_argv(root: root, slice: slice, nabu_version: "1.8.0")
+
+        assert_includes argv, "#{P::IMAGE}:1.8.0"
+      end
+    end
+
+    def test_a_census_without_a_version_is_refused
+      with_project(version: "1.8.0", census: { "schema" => 1 }) do |root, slice|
+        error = assert_raises(P::Refused) { P.publish_argv(root: root, slice: slice, nabu_version: "1.8.0") }
+        assert_match(/nabu_version/, error.message)
         assert_match(/rake demo:build/, error.message)
       end
     end
@@ -189,9 +219,31 @@ module Ops
                    "the plain docker driver on Apple Silicon is what produced an arm64-only public image"
     end
 
+    # A stopped daemon used to surface as a raw Nabu::Shell::Error stack
+    # from deep inside builder creation; it is now one plain line, first.
+    def test_ensure_refuses_plainly_when_the_docker_daemon_is_down
+      calls = []
+      error = assert_raises(P::Refused) do
+        P::Preflight.ensure!(config: docker_config,
+                             daemon: -> { false },
+                             login: -> { calls << :login },
+                             buildx_ls: lambda {
+                               calls << :ls
+                               BUILDX_DOCKER_ONLY
+                             },
+                             create: ->(name) { calls << [:create, name] },
+                             log: StringIO.new)
+      end
+
+      assert_match(/docker daemon is not running/i, error.message)
+      assert_match(/start Docker/, error.message)
+      assert_equal 1, error.message.lines.size, "one plain line, no stack"
+      assert_empty calls, "nothing else is probed against a dead daemon"
+    end
+
     def test_ensure_logs_in_and_creates_the_builder_only_when_needed
       calls = []
-      builder = P::Preflight.ensure!(config: docker_config,
+      builder = P::Preflight.ensure!(config: docker_config, daemon: -> { true },
                                      login: -> { calls << :login },
                                      buildx_ls: -> { BUILDX_DOCKER_ONLY },
                                      create: ->(name) { calls << [:create, name] },
@@ -203,7 +255,7 @@ module Ops
 
     def test_ensure_is_a_no_op_when_authed_with_a_capable_builder
       calls = []
-      builder = P::Preflight.ensure!(config: docker_config(auths: { "ghcr.io" => {} }),
+      builder = P::Preflight.ensure!(config: docker_config(auths: { "ghcr.io" => {} }), daemon: -> { true },
                                      login: -> { calls << :login },
                                      buildx_ls: -> { BUILDX_CONTAINER_CURRENT },
                                      create: ->(name) { calls << [:create, name] },
@@ -331,6 +383,29 @@ module Ops
       replies = good_replies
       replies[0]["id"] = 7
       assert_raises(P::SmokeFailed) { run_smoke(replies) }
+    end
+
+    # -- load path -------------------------------------------------------------
+
+    # The Rakefile requires ONLY this file (`require_relative
+    # "lib/nabu/ops/demo_publish"`), so every constant its default kwargs
+    # reach — Nabu::VERSION included — must be required by the file
+    # itself. The suite's test_helper loads everything and masks a
+    # missing require; a clean subprocess reproduces the Rakefile's path.
+    # Regression: v1.8.0 release day, `rake demo:publish` died with
+    # `uninitialized constant Nabu::VERSION` at the publish_argv call.
+    def test_the_file_is_self_sufficient_on_the_rakefile_load_path
+      file = File.join(ROOT, "lib/nabu/ops/demo_publish.rb")
+      script = <<~RUBY
+        require #{file.dump}
+        begin
+          Nabu::Ops::DemoPublish.publish_argv(root: "/nonexistent", slice: "/nonexistent")
+        rescue Nabu::Ops::DemoPublish::Refused
+          # expected: the kwarg defaults (Nabu::VERSION among them) resolved
+        end
+      RUBY
+      out = IO.popen([RbConfig.ruby, "-e", script], err: %i[child out], &:read)
+      assert Process.last_status.success?, "demo_publish.rb is not loadable standalone:\n#{out}"
     end
   end
 end

@@ -1,6 +1,6 @@
 # Nabu
 
-[![CI](https://github.com/arvicco/nabu/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/arvicco/nabu/actions/workflows/ci.yml) [![DOI](https://img.shields.io/badge/DOI-10.5281%2Fzenodo.21361956-blue.svg)](https://doi.org/10.5281/zenodo.21361956)
+[![CI](https://github.com/arvicco/nabu/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/arvicco/nabu/actions/workflows/ci.yml) [![DOI](https://img.shields.io/badge/DOI-10.5281%2Fzenodo.21361956-blue.svg)](https://doi.org/10.5281/zenodo.21361956) [![Listed on mcpservers.org](https://mcpservers.org/badge.svg)](https://mcpservers.org/servers/arvicco/nabu)
 
 **A personal, local, license-honest library of the ancient world — that your
 AI tools can read.**

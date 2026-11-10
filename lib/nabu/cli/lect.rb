@@ -619,7 +619,7 @@ module Nabu
           on_stage: ->(label, _eta = nil) { warn(label) },
           on_load_tick: lambda do |processed, _errored|
             if tty
-              $stderr.print("\r  #{processed} rows…")
+              $stderr.print(CLI::ProgressLine.render(lead: "  ", label: "", tail: "#{processed} rows…"))
             elsif (processed % 100_000) < Nabu::Store::LectFacets::INSERT_BATCH
               warn("  #{processed} rows…")
             end

@@ -53,6 +53,7 @@ nabu/
 │   ├── ops/                     # backup, drill, site-data projection
 │   ├── data_build/              # the nabu-data production rail (§17)
 │   ├── export/                  # the research exporter: tables + manifest frame (§18)
+│   ├── paced_crawl.rb           # the paced-crawl engine for multi-segment sources (§19)
 │   ├── cli.rb                   # the CLI registry: root class, subcommand registrations, area requires
 │   ├── cli/                     # the CLI by area — one file per command area or subcommand family,
 │   │                            #   each reopening Nabu::CLI; outside the derivation fingerprint, like cli.rb
@@ -2849,3 +2850,138 @@ code that writes files nobody derives from; the purity scan in
 `derivation_fingerprint_test` keeps it that way. The passage stream (P4-3)
 is the family's default command: `nabu export --format plain|jsonl` is
 unchanged and means `nabu export passages`.
+
+## 19. The paced-crawl rail: multi-segment sources (P167)
+
+Some sources are too large or too politely rate-limited to fetch in one
+sync: a census of ids (a bibliography, a catalogue, a listing) is crawled
+a SLICE per sync, at the upstream's committed pace, over many phases. Each
+such adapter used to hand-roll the same machine — census, held set, ledger
+of terminal refusals, slice budget, pacing, timeout retries, a prose notes
+line — and the prose line could not tell a slice burning through a
+refusal desert from a stalled crawl. `Nabu::PacedCrawl`
+(`lib/nabu/paced_crawl.rb`) is that machine, built once; an adapter
+configures it.
+
+**The contract.** A lane declares a `PacedCrawl::Spec`: its name, ledger
+file, terminal classes (`:denied` / `:empty` / `:timeout` → ledger class
+names, optionally refined by `subclasses` — further classes per status,
+which an `Outcome` names through its `ledger_class`, so an upstream with
+two kinds of refusal keeps them apart), delay, slice, timeout policy
+(attempts, doubling backoff) and a
+`Schedule` (cadence, slices per phase, consecutive zero-yield slices that
+stop a chained run — the declaration the phase slate reads). It supplies
+three lambdas: `universe` (the ordered census ids — order IS crawl order),
+`held` (id → payload already on disk) and `fetch_one` (id → an `Outcome`
+of `:ok` / `:denied` / `:empty` / `:timeout` with its evidence,
+`{http_status:, body_head:}`; `:ok` means the lambda stored the payload).
+A non-terminal failure (5xx, network) raises out of `fetch_one` and aborts
+the slice; the crawl is resumable.
+
+**What the engine owns.** `Engine#slice!` selects universe − held −
+ledgered in census order, re-checking `held` at fetch time; spends ONE
+budget — every asked id costs one unit whatever it answers, so the budget
+bounds a slice's wall time (the politeness unit) and a refusal-burning
+slice is progress when the frontier moves; sleeps the delay between every
+two requests (clock and sleeper are injectable); retries a timeout with
+doubling backoff, then ledgers the timeout class; and writes the ledger
+atomically (tmp + rename) after every terminal answer, so a killed slice
+resumes where it died.
+
+**The ledger** keeps the mold's shape — one sorted array of ids per class
+(`{"denied": [...], "empty": [...], "timeout-stuck": [...]}`) — and adds a
+`last_slice` section holding the last report, so an offline surface can
+project the crawl without crawling. A ledger from before a class existed
+reads that class empty.
+
+**The slice report** (`PacedCrawl::Report`, returned structured and
+rendered by `#lines` into the fetch notes) prints on every path: the
+reconciliation triple `census = held + ledgered + remaining` (or a LOUD
+`RECONCILIATION MISMATCH` when an id is both held and ledgered), frontier
+position and movement, per-class deltas and stuck ids, refusal samples
+quoted verbatim (status + first body bytes), and requests / elapsed / pace
+with a slices-to-end estimate. A zero-yield slice classifies itself and
+leads its report with `ZERO-YIELD SLICE [<class>]`:
+
+- `all-refused` — per-id refusals; the frontier advanced through a refusal
+  stripe and the ledger is the slice's yield. On a fully refused slice the
+  engine spends up to six look-ahead probes at slice × 2^k ids past the new
+  frontier to estimate where servable text resumes and what reaching it
+  costs at the current pace.
+- `upstream-refusing` — the engine's ONE re-probe of a held id (the nearest
+  before the frontier) was refused too: a wholesale block, not a desert.
+  (A uniform refusal status alone cannot discriminate: a per-id desert
+  answers a uniform 403 too.)
+- `cone-exhausted` — nothing left to select: the honest end.
+
+Two states are bookkeeping bugs and RAISE instead of reporting:
+`SelectionEmptyError` (selection offered nothing while ids remain) and
+`FrozenFrontierError` (an asked id is still selectable after the slice — a
+crawl that would re-offer the same ids forever). The re-probe and the
+look-ahead go through `fetch_one` and count in the request tally, never
+against the slice budget; a probe's refusal is not ledgered (the frontier
+reaches it in order). `Engine#diagnose` computes the same census
+arithmetic, frontier and last slice offline — `universe` and `held` only,
+no request.
+
+**Conformance.** `test/support/paced_crawl_conformance.rb` pins every lane
+through an engine factory driving its REAL wiring (its census file, its
+held rule, its transport stubbed): held never re-fetched, the one budget,
+ledgered never retried, resume from a kill, the idempotent re-slice, every
+zero-yield class, both raising bugs, the report shape and the persisted
+`last_slice`, the offline diagnose and the declared schedule. The engine's
+own test drives the same suite with an in-memory fake.
+
+**Citizens.** ndl-kotenseki's book crawl is the first (the `BOOK_CRAWL`
+lane, `.ndl-crawl.json`); its NDL Search bib crawl keeps its own batch
+mechanics for now — its unit is an SRU batch of PIDs per request, which
+the one-id `fetch_one` contract does not model. Since then:
+
+- wellcome — the `ZIP_CRAWL` lane, `.wellcome-crawl.json`; its 404
+  "missing" and non-zip "malformed" ride as `subclasses` of denied and
+  empty; a 429 stops the slice and the notes carry the offline diagnosis.
+
+Off the rail, by shape rather than by queue:
+
+- nb-no and vakk crawl a multi-stage tree per census id (nb-no: the item
+  record, then its ALTO list, then every page the list names; vakk: the
+  info page, the first reading page, then every page its selector
+  names). The page ids are unknown until an earlier stage lands, the
+  slice budget counts requests across all stages, and the ledgers are
+  keyed per item (`{"items": {id: reason}, "pages": {id: [tails]}}`,
+  `{"texts": [...], "pages": {href: [names]}}`) — not one id per
+  `fetch_one`, not class arrays. They keep their own mechanics.
+- blbooks is not a crawl: two sha-pinned period tarballs through
+  ZipFetch, no slice, no ledger.
+- ctilc — no slice and no refusal ledger: one listing-driven pass fetches
+  every missing work, and any non-200 aborts the sync; there is no
+  terminal answer to ledger.
+- lotsawa-house — `LotsawaFetch`'s text crawl is the tail of a full
+  catalog walk inside a prepare!/complete! retention contract: no slice,
+  no ledger (a 404 is censused and re-asked every sync, feeding the
+  systemic-miss cap).
+
+Paced by shape but awaiting engine capabilities:
+
+- damos — its ledger carries a fourth class (`server-error`: a lone
+  persistent 5xx, upstream's answer for a missing id) and an outage
+  breaker that defers ledgering a failure until a later id answers,
+  aborting unledgered after `OUTAGE_RUN` consecutive failures. The
+  engine's per-answer ledger writes model neither (its first write would
+  drop the `server-error` array).
+- korpus16 — two-stage: page 1 sizes its book, so the id universe grows
+  mid-slice; the ledger is nested (refused books, refused pages per book);
+  a 429 stops the slice cleanly.
+- mdz-protestant — the ledger is nested (404 pages per object), and a 429
+  or the quota floor (read off a successful answer's rate-limit header)
+  stops the slice cleanly, never raising.
+
+Moving those three — and the nb-no/vakk multi-stage shape, if it is ever
+to ride — needs capabilities the engine does not have: a clean-stop
+outcome (the id stays selectable, the slice ends without raising), a
+ledger codec for nested on-disk shapes, a deferred-failure outage
+breaker with its own class, and a staged-item model whose budget counts
+requests. The engine
+is fetch-side code: it sits beside the fetch helpers outside the shared
+derivation digest (§5's derivation stamps — parse never reads it), and it joins the
+derivability writer census as a canonical/ crawl-ledger writer.

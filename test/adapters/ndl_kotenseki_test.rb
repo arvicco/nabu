@@ -2,6 +2,7 @@
 
 require "test_helper"
 require "support/adapter_conformance"
+require "support/paced_crawl_conformance"
 require "tmpdir"
 
 module Adapters
@@ -14,12 +15,42 @@ module Adapters
   # bibliographic dataset.
   class NdlKotensekiTest < Minitest::Test
     include AdapterConformance
+    include PacedCrawlConformance
 
     FIXTURES = Nabu::TestSupport.fixtures("ndl-kotenseki")
 
     def conformance_adapter = Nabu::Adapters::NdlKotenseki.new
     def conformance_workdir = FIXTURES
     def conformance_expected_source_id = "ndl-kotenseki"
+
+    # The paced-crawl conformance drives the BOOK lane through its real
+    # wiring: census.tsv is the universe, books/<pid>.json the held rule,
+    # and the script answers over the stubbed bulk-API transport.
+    BOOK_PAYLOAD = '{"list":[{"page":1,"contents":"x"}]}'
+
+    def paced_crawl_engine(dir:, ids:, slice:, script:)
+      write_census(dir, ids)
+      stub_request(:get, %r{\Ahttps://lab\.ndl\.go\.jp/dl/api/book/fulltext-json/\d+\z}).to_return do |request|
+        case script.call(request.uri.path[/\d+\z/])
+        when :ok then { status: 200, body: BOOK_PAYLOAD }
+        when :denied then { status: 403, body: "This PID is not allowed" }
+        when :empty then { status: 200, body: '{"list":[]}' }
+        when :timeout then raise Net::ReadTimeout
+        when :fatal then { status: 500, body: "" }
+        end
+      end
+      quiet_adapter(slice: slice).book_crawl(dir)
+    end
+
+    def paced_crawl_hold!(dir, id)
+      FileUtils.mkdir_p(File.join(dir, "books"))
+      File.write(File.join(dir, "books", "#{id}.json"), BOOK_PAYLOAD)
+    end
+
+    def write_census(dir, pids)
+      File.write(File.join(dir, "census.tsv"),
+                 "#{Nabu::Adapters::NdlKotenseki::CENSUS_HEADER}\n#{pids.map { |pid| "#{pid}\tx\n" }.join}")
+    end
 
     def documents
       @documents ||= conformance_adapter.discover(FIXTURES)
@@ -156,18 +187,20 @@ module Adapters
       end
     end
 
-    def test_crawl_slice_tallies_denied_pids_into_the_ledger
-      adapter = conformance_adapter
-      def adapter.fetch_book!(_workdir, pid) = pid == "1" ? :denied : :empty
-      ledger = { "denied" => [], "empty" => [] }
+    def test_book_slice_tallies_denied_pids_into_the_ledger
+      adapter = quiet_adapter
+      def adapter.fetch_book!(_workdir, pid)
+        Nabu::PacedCrawl::Outcome.new(status: pid == "1" ? :denied : :empty)
+      end
       Dir.mktmpdir do |dir|
-        File.write(File.join(dir, "census.tsv"), "pid\ttitle\n")
-        crawled, denied = adapter.send(:crawl_slice!, dir, %w[1 2], ledger, nil)
-        assert_equal [0, 2], [crawled, denied],
+        write_census(dir, %w[1 2])
+        crawl = adapter.book_crawl(dir)
+        report = crawl.slice!
+        assert_equal [0, { "denied" => 1, "empty" => 1, "timeout-stuck" => 0 }], [report.ok, report.refused],
                      "each refusal counts ONCE (the first live slice died on a " \
                      "denied-arm arithmetic bug)"
-        assert_equal ["1"], ledger["denied"]
-        assert_equal ["2"], ledger["empty"]
+        assert_equal ["1"], crawl.ledger["denied"]
+        assert_equal ["2"], crawl.ledger["empty"]
       end
     end
 
@@ -180,23 +213,26 @@ module Adapters
 
     def quiet_adapter(slice: 400) = Nabu::Adapters::NdlKotenseki.new(delay: 0, slice: slice, timeout_backoff: 0)
 
-    def fresh_ledger = { "denied" => [], "empty" => [], "timeout-stuck" => [] }
-
     def test_a_book_timing_out_repeatedly_is_ledgered_stuck_and_the_slice_continues
       stub_request(:get, format(BOOK, "1")).to_return(status: 403, body: "This PID is not allowed")
       stuck = stub_request(:get, format(BOOK, "2")).to_raise(Net::ReadTimeout)
       stub_request(:get, format(BOOK, "3")).to_return(status: 200, body: '{"list":[{"page":1,"contents":"x"}]}')
-      ledger = fresh_ledger
       Dir.mktmpdir do |dir|
-        crawled, denied, stuck_pids = quiet_adapter.send(:crawl_slice!, dir, %w[1 2 3], ledger, nil)
+        write_census(dir, %w[1 2 3])
+        crawl = quiet_adapter.book_crawl(dir)
+        report = crawl.slice!
         assert_requested stuck, times: Nabu::Adapters::NdlKotenseki::TIMEOUT_ATTEMPTS
         assert_equal 3, Nabu::Adapters::NdlKotenseki::TIMEOUT_ATTEMPTS
-        assert_equal [1, 1, ["2"]], [crawled, denied, stuck_pids]
+        assert_equal [1, 1, ["2"]], [report.ok, report.refused["denied"], report.stuck]
         assert File.file?(File.join(dir, "books", "3.json")), "the slice advanced past the hanging book"
-        assert_equal ["1"], ledger["denied"], "a 403 stays a denial"
-        assert_equal ["2"], ledger["timeout-stuck"], "the hang is ledgered under its own reason, not as a 403"
+        assert_equal ["1"], crawl.ledger["denied"], "a 403 stays a denial"
+        assert_equal ["2"], crawl.ledger["timeout-stuck"], "the hang is ledgered under its own reason, not as a 403"
+        assert_equal({ id: "1", status: :denied, http_status: 403, body_head: "This PID is not allowed" },
+                     report.samples.first, "the refusal's own answer rides as evidence")
         on_disk = JSON.parse(File.read(File.join(dir, ".ndl-crawl.json")))
-        assert_equal({ "denied" => ["1"], "empty" => [], "timeout-stuck" => ["2"] }, on_disk)
+        assert_equal({ "denied" => ["1"], "empty" => [], "timeout-stuck" => ["2"] }, on_disk.except("last_slice"),
+                     "the ledger's class arrays keep their shape; the engine's report rides beside them")
+        assert_equal "yield", on_disk.dig("last_slice", "classification")
       end
     end
 
@@ -204,18 +240,20 @@ module Adapters
       stub_request(:get, format(BOOK, "2"))
         .to_raise(Net::ReadTimeout).then
         .to_return(status: 200, body: '{"list":[{"page":1,"contents":"x"}]}')
-      ledger = fresh_ledger
       Dir.mktmpdir do |dir|
-        crawled, denied, stuck_pids = quiet_adapter.send(:crawl_slice!, dir, %w[2], ledger, nil)
-        assert_equal [1, 0, []], [crawled, denied, stuck_pids]
-        assert_empty ledger["timeout-stuck"]
+        write_census(dir, %w[2])
+        crawl = quiet_adapter.book_crawl(dir)
+        report = crawl.slice!
+        assert_equal [1, 0, []], [report.ok, report.refused.values.sum, report.stuck]
+        assert_empty crawl.ledger["timeout-stuck"]
       end
     end
 
     def test_a_non_timeout_transport_failure_stays_fatal
       stub_request(:get, format(BOOK, "2")).to_return(status: 500)
       Dir.mktmpdir do |dir|
-        assert_raises(Nabu::FetchError) { quiet_adapter.send(:crawl_slice!, dir, %w[2], fresh_ledger, nil) }
+        write_census(dir, %w[2])
+        assert_raises(Nabu::FetchError) { quiet_adapter.book_crawl(dir).slice! }
       end
     end
 
@@ -224,16 +262,17 @@ module Adapters
       asked = []
       adapter.define_singleton_method(:fetch_book!) do |_workdir, pid|
         asked << pid
-        :empty
+        Nabu::PacedCrawl::Outcome.new(status: :empty)
       end
       Dir.mktmpdir do |dir|
+        write_census(dir, %w[1 2 3])
         File.write(File.join(dir, ".ndl-crawl.json"),
                    JSON.generate({ "denied" => ["1"], "empty" => [], "timeout-stuck" => ["2"] }))
-        ledger = adapter.send(:read_ledger, dir)
-        adapter.send(:crawl_slice!, dir, %w[1 2 3], ledger, nil)
+        crawl = adapter.book_crawl(dir)
+        crawl.slice!
         assert_equal ["3"], asked, "neither the 403 nor the stuck book is re-hit"
-        assert_equal ["2"], ledger["timeout-stuck"]
-        refute_includes ledger["denied"], "2"
+        assert_equal ["2"], crawl.ledger["timeout-stuck"]
+        refute_includes crawl.ledger["denied"], "2"
       end
     end
 
@@ -241,7 +280,17 @@ module Adapters
       Dir.mktmpdir do |dir|
         File.write(File.join(dir, ".ndl-crawl.json"), JSON.generate({ "denied" => ["1"], "empty" => ["4"] }))
         assert_equal({ "denied" => ["1"], "empty" => ["4"], "timeout-stuck" => [] },
-                     quiet_adapter.send(:read_ledger, dir))
+                     quiet_adapter.book_crawl(dir).ledger)
+      end
+    end
+
+    def test_a_held_book_reprobed_is_never_overwritten
+      stub_request(:get, format(BOOK, "7")).to_return(status: 200, body: '{"list":[{"page":1,"contents":"new"}]}')
+      Dir.mktmpdir do |dir|
+        paced_crawl_hold!(dir, "7")
+        outcome = quiet_adapter.send(:fetch_book!, dir, "7")
+        assert_equal [:ok, 200], [outcome.status, outcome.http_status]
+        assert_equal BOOK_PAYLOAD, File.read(File.join(dir, "books", "7.json")), "the probe answers liveness only"
       end
     end
 
@@ -264,6 +313,29 @@ module Adapters
                    "#{Nabu::Adapters::NdlKotenseki::CENSUS_HEADER}\n2546843\tx\n")
         report = quiet_adapter.fetch(dir)
         assert_match(/1 stuck on timeout \(2546843\)/, report.notes)
+      end
+    end
+
+    # The fetch notes ARE the engine's slice report (then the bib line): a
+    # slice burned on a refusal desert says so, with the evidence.
+    def test_fetch_notes_carry_the_slice_report
+      stub_request(:get, %r{fulltext-json/\d+\z}).to_return(status: 403, body: "This PID is not allowed")
+      stub_request(:get, format(BOOK, "2590647")).to_return(status: 200, body: BOOK_PAYLOAD)
+      stub_request(:get, SRU).to_return(status: 200, body: SRU_BODY)
+      Dir.mktmpdir do |dir|
+        File.write(File.join(dir, "dataset_202602_k_internet.xlsx"), "")
+        write_census(dir, %w[2590647 2610251 2610252 2610254])
+        paced_crawl_hold!(dir, "2590647")
+        notes = Nabu::Adapters::NdlKotenseki.new(delay: 0, slice: 2, timeout_backoff: 0, bib_slice: 0).fetch(dir).notes
+        parts = notes.split("; books: ")
+        assert notes.start_with?("books: ZERO-YIELD SLICE [all-refused]: 2/2 asked refused (HTTP 403 ×2, uniform)"),
+               notes
+        assert_includes parts, "census 4 = held 1 (+0) + ledgered 2 (+2) [denied 2, empty 0, timeout-stuck 0] " \
+                               "+ remaining 1 — reconciles"
+        assert_includes parts, "frontier 2610251 → 2610254 (advanced 2 of 4 position(s))"
+        assert_includes parts, "re-probe of held 2590647: ok HTTP 200 — upstream alive " \
+                               "(the refusals are per id, not a block)"
+        assert_match(%r{; bib records at 0/1 held book\(s\) \(\+0 this sync}, notes, "the bib line closes the notes")
       end
     end
 
