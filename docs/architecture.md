@@ -2865,7 +2865,10 @@ configures it.
 
 **The contract.** A lane declares a `PacedCrawl::Spec`: its name, ledger
 file, terminal classes (`:denied` / `:empty` / `:timeout` → ledger class
-names), delay, slice, timeout policy (attempts, doubling backoff) and a
+names, optionally refined by `subclasses` — further classes per status,
+which an `Outcome` names through its `ledger_class`, so an upstream with
+two kinds of refusal keeps them apart), delay, slice, timeout policy
+(attempts, doubling backoff) and a
 `Schedule` (cadence, slices per phase, consecutive zero-yield slices that
 stop a chained run — the declaration the phase slate reads). It supplies
 three lambdas: `universe` (the ordered census ids — order IS crawl order),
