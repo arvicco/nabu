@@ -2961,14 +2961,16 @@ Off the rail, by shape rather than by queue:
   no ledger (a 404 is censused and re-asked every sync, feeding the
   systemic-miss cap).
 
-Paced by shape but awaiting engine capabilities:
+Paced by shape; the engine capabilities they need have shipped (below),
+their migrations onto the rail are pending:
 
 - damos — its ledger carries a fourth class (`server-error`: a lone
   persistent 5xx, upstream's answer for a missing id) and an outage
   breaker that defers ledgering a failure until a later id answers,
   aborting unledgered after `OUTAGE_RUN` consecutive failures. The
-  engine's per-answer ledger writes model neither (its first write would
-  drop the `server-error` array).
+  engine's outage breaker models the second; the flat codec now passes
+  an undeclared class array through instead of dropping it, and
+  `server-error` rides once the lane declares it (a subclass).
 - korpus16 — two-stage: page 1 sizes its book, so the id universe grows
   mid-slice; the ledger is nested (refused books, refused pages per book);
   a 429 stops the slice cleanly.
@@ -2976,12 +2978,40 @@ Paced by shape but awaiting engine capabilities:
   or the quota floor (read off a successful answer's rate-limit header)
   stops the slice cleanly, never raising.
 
-Moving those three — and the nb-no/vakk multi-stage shape, if it is ever
-to ride — needs capabilities the engine does not have: a clean-stop
-outcome (the id stays selectable, the slice ends without raising), a
-ledger codec for nested on-disk shapes, a deferred-failure outage
-breaker with its own class, and a staged-item model whose budget counts
-requests. The engine
+**Engine capabilities for those three** (additive; a lane that declares
+none of them behaves exactly as before):
+
+- **Clean stop.** `Outcome.halt(reason:, evidence:)` — upstream's "no more
+  for now" (a 429, a quota floor read off a good answer's header). The
+  slice ends at once: no further id, no re-probe, no look-ahead (a halt
+  answered to a probe ends the probing the same way). The id is never
+  ledgered, never counted refused, and stays selectable; the slice
+  classifies `clean-stop` (its own label, not a zero-yield pathology),
+  the report leads with `CLEAN STOP at <id>: <reason>` and its evidence
+  verbatim, and the Chain stops the run naming it.
+- **Ledger codec.** `Spec#codec` — `load(raw) → {class => Set}` and
+  `dump(classes, raw) → doc`, where `raw` is the previous on-disk document
+  minus `last_slice` (which the engine keeps owning at the top level).
+  Sections the codec does not own pass through every write. The default
+  `FLAT_CODEC` writes today's flat shape and passes foreign top-level
+  containers through (a `pages` map, an array of a class the lane does not
+  declare); a bare top-level scalar is not a section and is dropped.
+- **Outage breaker.** `Spec#outage_statuses` + `outage_run` — an answer of
+  an outage status is STAGED off the ledger; it commits (one write) when a
+  later id in the slice answers otherwise (upstream alive — the failures
+  were real). `outage_run` consecutive staged answers end the slice
+  (`outage-abort`): the run is dropped unledgered and re-asked next slice,
+  everything committed before it stands, the report says
+  `OUTAGE ABORT: …` with the last evidence, and the Chain stops the run.
+  A run still staged when the slice ends (budget spent, or a halt) stays
+  unledgered too and the report names it (`OUTAGE STAGE: …`); a kill
+  mid-stage loses only the staged items.
+
+The conformance suite carries a CODEC LAW (every lane; the flat default
+satisfies it) and an opt-in OUTAGE LAW (lanes declaring
+`outage_statuses`). The nb-no/vakk multi-stage shape, if it is ever to
+ride, still needs a staged-item model whose budget counts requests. The
+engine
 is fetch-side code: it sits beside the fetch helpers outside the shared
 derivation digest (§5's derivation stamps — parse never reads it), and it joins the
 derivability writer census as a canonical/ crawl-ledger writer.
