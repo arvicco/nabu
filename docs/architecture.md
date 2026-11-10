@@ -2941,8 +2941,21 @@ the one-id `fetch_one` contract does not model. Since then:
   "missing" and non-zip "malformed" ride as `subclasses` of denied and
   empty; a 429 stops the slice and the notes carry the offline diagnosis.
 
+Off the rail, by shape rather than by queue:
+
+- nb-no and vakk crawl a multi-stage tree per census id (nb-no: the item
+  record, then its ALTO list, then every page the list names; vakk: the
+  info page, the first reading page, then every page its selector
+  names). The page ids are unknown until an earlier stage lands, the
+  slice budget counts requests across all stages, and the ledgers are
+  keyed per item (`{"items": {id: reason}, "pages": {id: [tails]}}`,
+  `{"texts": [...], "pages": {href: [names]}}`) — not one id per
+  `fetch_one`, not class arrays. They keep their own mechanics.
+- blbooks is not a crawl: two sha-pinned period tarballs through
+  ZipFetch, no slice, no ledger.
+
 The other hand-rolled crawl adapters (ctilc, damos, korpus16,
-lotsawa-house, mdz-protestant) move onto the engine next. The engine
+lotsawa-house, mdz-protestant) are yet to be weighed. The engine
 is fetch-side code: it sits beside the fetch helpers outside the shared
 derivation digest (§5's derivation stamps — parse never reads it), and it joins the
 derivability writer census as a canonical/ crawl-ledger writer.
