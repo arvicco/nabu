@@ -267,6 +267,36 @@ module Adapters
       end
     end
 
+    # Characterization (pre-engine): a failure still pending when the slice
+    # ends is committed to its class.
+    def test_a_trailing_failure_at_slice_end_is_committed
+      stub_request(:get, format(ITEM, "1")).to_return(status: 200, body: item_body("755"))
+      stub_request(:get, format(ITEM, "2")).to_return(status: 500)
+      ledger = fresh_ledger
+      Dir.mktmpdir do |dir|
+        quiet_adapter.send(:crawl_slice!, dir, %w[1 2], ledger, nil)
+        assert_equal ["2"], ledger["server-error"]
+      end
+    end
+
+    # The on-disk ledger shape: the four classes, in this order, each a
+    # sorted array, pretty-printed (anything else rides beside them).
+    def test_the_ledger_on_disk_is_four_sorted_flat_arrays
+      stub_request(:post, LISTING)
+        .to_return(status: 200, body: File.read(File.join(FIXTURES, "map", "ajaxgetfilter.json")))
+      stub_request(:get, format(ITEM, "277")).to_return(status: 200, body: '{"item":{"content":""}}')
+      stub_request(:get, format(ITEM, "755")).to_return(status: 404, body: "gone")
+      stub_request(:get, format(ITEM, "4972")).to_return(status: 200, body: "<html>no</html>")
+      Dir.mktmpdir do |dir|
+        quiet_adapter(slice: 3).fetch(dir)
+        on_disk = JSON.parse(File.read(File.join(dir, ".damos-crawl.json")))
+        assert_equal %w[denied empty timeout-stuck server-error], on_disk.keys - ["last_slice"]
+        expected = JSON.pretty_generate({ "denied" => %w[4972 755], "empty" => ["277"],
+                                          "timeout-stuck" => [], "server-error" => [] })
+        assert_equal expected, JSON.pretty_generate(on_disk.except("last_slice"))
+      end
+    end
+
     def test_a_ledgered_item_is_skipped_on_resume
       adapter = quiet_adapter
       asked = []
