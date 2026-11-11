@@ -72,6 +72,72 @@ module Store
       end
     end
 
+    # The fulltext is derived-of-derived and re-runnable: read-write
+    # connects PIN synchronous=NORMAL under WAL (no fsync per commit),
+    # whatever the build's WAL default. The catalog connect sets nothing —
+    # its posture stays the engine's own (Store.connect_fulltext note).
+    def test_fulltext_writers_pin_synchronous_normal
+      Dir.mktmpdir do |dir|
+        fulltext = Nabu::Store.connect_fulltext(File.join(dir, "ft.sqlite3"))
+        begin
+          assert_equal 1, pragma(fulltext, "synchronous"), "NORMAL on a read-write fulltext connect"
+        ensure
+          fulltext.disconnect
+        end
+      end
+    end
+
+    def test_the_catalog_connect_keeps_the_engine_synchronous
+      Dir.mktmpdir do |dir|
+        path = File.join(dir, "cat.sqlite3")
+        catalog = Nabu::Store.connect(path, rebuild: false)
+        catalog.create_table(:t) { Integer :x }
+        raw = Sequel.connect("sqlite://#{path}")
+        begin
+          assert_equal pragma(raw, "synchronous"), pragma(catalog, "synchronous"),
+                       "the catalog connect leaves the engine's own durability posture alone"
+        ensure
+          raw.disconnect
+          catalog.disconnect
+        end
+      end
+    end
+
+    def test_readonly_fulltext_connects_keep_the_live_profile_only
+      Dir.mktmpdir do |dir|
+        path = File.join(dir, "ft.sqlite3")
+        rw = Nabu::Store.connect_fulltext(path)
+        rw.create_table(:t) { Integer :x }
+        rw.disconnect
+
+        db = Nabu::Store.connect_fulltext(path, readonly: true, writer_profile: :index)
+        begin
+          assert_equal Nabu::Store::LIVE_CACHE_KIB, pragma(db, "cache_size"),
+                       "a read-only connect never takes the writer cache"
+        ensure
+          db.disconnect
+        end
+      end
+    end
+
+    def test_index_writer_profile_raises_the_cache_on_top_of_the_live_profile
+      Dir.mktmpdir do |dir|
+        path = File.join(dir, "ft.sqlite3")
+        writer = Nabu::Store.connect_fulltext(path, writer_profile: :index)
+        casual = Nabu::Store.connect_fulltext(path)
+        begin
+          assert_equal Nabu::Store::INDEX_WRITER_CACHE_KIB, pragma(writer, "cache_size")
+          assert_equal 1, pragma(writer, "synchronous")
+          assert_operator pragma(writer, "mmap_size"), :>, 0, "the live mmap half still applies"
+          assert_equal Nabu::Store::LIVE_CACHE_KIB, pragma(casual, "cache_size"),
+                       "a casual read-write connect keeps the 64 MiB live cache"
+        ensure
+          writer.disconnect
+          casual.disconnect
+        end
+      end
+    end
+
     def test_rebuild_profile_keeps_its_larger_cache
       db = Nabu::Store.connect("sqlite::memory:", rebuild: true)
 
