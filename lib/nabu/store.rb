@@ -130,7 +130,7 @@ module Nabu
     # == The index-writer profile (connect_fulltext writer_profile: :index)
     #
     # The connections that WRITE the fulltext index at sync/index-refresh
-    # time walk the fts5 segment B-trees and the 100M-row lemma table's
+    # time walk the fts5 segment B-trees and the ~62M-row lemma table's
     # three secondary indexes on every batch — a 64 MiB cache churns
     # against a ~60 GB file, and every miss is a page read the batch
     # waits on. 512 MiB is one writer connection at a time (the write
