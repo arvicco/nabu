@@ -339,6 +339,36 @@ module Nabu
       # defers to it, and a full rebuild clears it wholesale.
       SLICE_REFRESHES_TABLE = :slice_refreshes
 
+      # == The row-sha sidecar — what makes a heal exact
+      #
+      # The contentless index cannot say what it indexed (no column value
+      # reads back), so a crashed slice used to heal by rewriting the WHOLE
+      # slice: delete + reinsert of millions of rows for a crash that left
+      # a few thousand behind — tombstones, segments and WAL churn on the
+      # multi-GB main index, proportional to the slice rather than to the
+      # damage. fts_row_shas records, per indexed
+      # rowid (= the catalog passage id), its source and the FIRST 8 BYTES
+      # of the catalog content_sha256 the row was indexed from. Eight bytes
+      # is the grain because the question is per-row change detection
+      # within one passage's own history, not global identity: a 64-bit
+      # prefix collision between a row's old and new content is a 2^-64
+      # event per revision.
+      #
+      # The consistency invariant: a row's sidecar sha is REMOVED before
+      # any of its fts/lemma rows go (the delete loops run sidecar first)
+      # and UPSERTED as the last statement of each insert batch (after the
+      # batch's fts and lemma rows). So a rowid whose sidecar sha matches
+      # the catalog is fully indexed at the fts+lemma grain; a crash
+      # between any two statements leaves the sidecar BEHIND the index,
+      # never ahead of it, and the heal's diff counts that row as drift and
+      # re-does it. refresh_source! heals by that diff when the sidecar
+      # holds rows for the source (exact_heal_diff); a fulltext predating
+      # the sidecar keeps the full-slice heal, and the table arrives at the
+      # next full rebuild or full-slice rewrite — the standard
+      # shape-arrival contract. Contentless shape only (a legacy rowid is
+      # not the passage id). Never a readiness prerequisite.
+      ROW_SHAS_TABLE = :fts_row_shas
+
       # FTS5 DDL (see class note). text_normalized carries the folded search
       # form; urn + passage_id ride along UNINDEXED so a hit joins back to the
       # catalog (where the pristine text and annotations stay) without
@@ -506,7 +536,9 @@ module Nabu
         # P111-1b: a full rebuild refreshes every slice by construction —
         # nothing stays pending (absent table = nothing pending).
         fulltext.drop_table?(SLICE_REFRESHES_TABLE)
+        fulltext.drop_table?(ROW_SHAS_TABLE)
         fulltext.run(CREATE_TABLE)
+        create_row_shas_table(fulltext, indexed: false)
         create_lemma_table(fulltext)
         create_char_postings_table(fulltext)
         tiers = source_tiers(catalog, lemma_tiers || {})
@@ -524,6 +556,7 @@ module Nabu
           # per-row inserts. Still inside the fts_lemma stage and BEFORE the
           # reflex pass, which reads passage_lemmas by these very indexes.
           create_lemma_indexes(fulltext)
+          index_row_shas(fulltext) # the sidecar's source_id B-tree, the same deferred pass
           # Owner-ruled 2026-08-29: the silver projection LEFT the rebuild
           # path — a full rebuild never pays the whole-shelf replay again
           # (the 2026-08-29 profile: 99m39s). The shelf is announced
@@ -679,12 +712,24 @@ module Nabu
         # id is legitimately unindexed on entry.)
         healing = slice_pending?(fulltext, slug)
         use_delta = !delta.nil? && !delta.overflowed? && !healing
+        # The exact heal (ROW_SHAS_TABLE note): with the sidecar on hand the
+        # fts+lemma grain re-does exactly the drifted rows. EVERY other lane
+        # keeps its whole-slice heal on +slice_ids+: the cjk and trigram
+        # lanes carry no sidecar (the asymmetry is deliberate — the main
+        # index's multi-GB churn is what the sidecar kills; the cjk lane is
+        # ~2.3 GB and governed), and the coverage/annotation lanes write
+        # after the fts+lemma batches, so a current sidecar sha says
+        # nothing about them.
+        heal = (exact_heal_diff(catalog, fulltext, source_id) if healing)
         ids, urns =
           if use_delta
             [delta.changed_ids, delta.changed_urns.to_a]
+          elsif heal
+            [heal.changed_ids, heal.changed_urns]
           else
             source_passage_keys(catalog, source_id)
           end
+        slice_ids = heal ? heal.slice_ids : ids
         count = 0
         lemmas_changed = false
         # P77-r16d (owner ruling 2026-08-18, applied to the WHOLE sync
@@ -712,6 +757,13 @@ module Nabu
           progress&.stage("index delta: #{slug} — #{delta.upserted_ids.size} changed / " \
                           "#{delta.removed_ids.size} removed rows")
         end
+        if heal
+          progress&.stage("index heal: #{slug} — exact diff against the row-sha sidecar: " \
+                          "#{heal.upserted_ids.size} rows to re-derive / #{ids.size} to clear")
+        end
+        # A full-slice rewrite is where the sidecar arrives on a fulltext
+        # predating it (ROW_SHAS_TABLE note) — it populates the whole slice.
+        create_row_shas_table(fulltext) if !use_delta && !heal && fts_contentless?(fulltext)
         mark_slice_pending!(fulltext, slug)
         with_bulk_write_mode(fulltext, governed) do
           timed_sync_stage(ledger, slug, "index_slice",
@@ -722,6 +774,9 @@ module Nabu
               # freq table (same transaction). incremental_ready? guarantees the
               # table exists here; both snapshots are passage-keyed and B-tree bounded.
               before = LemmaFrequencies.snapshot(fulltext, ids: ids, urns: urns)
+              # FIRST destructive write: the doomed rows' sidecar shas
+              # (ROW_SHAS_TABLE invariant — removed before their fts/lemma rows).
+              delete_row_shas(fulltext, ids)
               deleted = delete_source_lemma_rows(fulltext, ids: ids, urns: urns)
               if fts_contentless?(fulltext)
                 delete_fts_rows_by_rowid(fulltext, TABLE, ids, progress: progress)
@@ -731,6 +786,8 @@ module Nabu
               insert_scope =
                 if use_delta
                   ids_scoped(live_passages(catalog), delta.upserted_ids)
+                elsif heal
+                  ids_scoped(live_passages(catalog), heal.upserted_ids)
                 else
                   live_passages(catalog).where(Sequel[:documents][:source_id] => source_id)
                 end
@@ -746,13 +803,24 @@ module Nabu
               # ARM-GATE (owner-ruled 2026-08-29): only when the owner has projected the shelf
               # (any silver row standing) — an unarmed index stays
               # silver-free through syncs.
+              # An exact heal re-applies over the WHOLE slice's urns: the
+              # crashed run's silver pass (after its insert loop) may never
+              # have run, and the apply is insert-if-absent.
               if lemma_shelf && silver_armed?(fulltext)
                 silver = SilverLemmaIndexer.apply!(catalog: catalog, fulltext: fulltext, shelf: lemma_shelf,
-                                                   urns: urns.to_set,
+                                                   urns: (heal ? heal.slice_urns : urns).to_set,
                                                    dictionary_filter_slugs: Array(lemma_filter_slugs))
                 inserted += silver.rows_inserted
               end
               lemmas_changed = deleted.positive? || inserted.positive?
+              # The exact heal moves only drifted rows, but the crashed run
+              # may have rewritten CURRENT rows' lemma rows without ever
+              # reaching its frequency delta or the reflex closure (both run
+              # after the insert loop) — the aggregates are not row-grained,
+              # so the sidecar cannot vouch for them. A lemma-bearing slice
+              # therefore re-censuses absolutely and re-closes, exactly as
+              # the full-slice heal does.
+              lemmas_changed ||= heal && source_lemma_rows?(fulltext, ids: heal.slice_ids, urns: heal.slice_urns)
               if healing && lemmas_changed
                 # The crashed run's before-snapshot is lost — the delta would
                 # bake its drift in; re-census absolutely instead (rare path).
@@ -765,11 +833,11 @@ module Nabu
                 refresh_trigram_delta(catalog, fulltext, slug, Array(fuzzy_slugs), delta)
                 refresh_cjk_delta(catalog, fulltext, slug, Array(cjk_slugs), delta, progress: progress)
               else
-                refresh_trigram_slice(catalog, fulltext, slug, Array(fuzzy_slugs), ids)
+                refresh_trigram_slice(catalog, fulltext, slug, Array(fuzzy_slugs), slice_ids)
                 # P93-3: the CJK lane's slice — same drift-honest contract as
                 # the trigram slice; a fulltext file predating the lane skips
                 # here and bootstraps below (flagged sources only).
-                refresh_cjk_slice(catalog, fulltext, slug, Array(cjk_slugs), ids, progress: progress)
+                refresh_cjk_slice(catalog, fulltext, slug, Array(cjk_slugs), slice_ids, progress: progress)
               end
               # P65: swap this source's char-postings slice; a pre-P65 fulltext
               # file (no table) gets the whole postings build below instead —
@@ -780,7 +848,7 @@ module Nabu
               # read-only).
               if fulltext.table_exists?(CHAR_POSTINGS_TABLE)
                 fulltext[CHAR_POSTINGS_TABLE].where(source_id: source_id).delete
-                chars = source_char_postings(catalog, source_id) if use_delta
+                chars = source_char_postings(catalog, source_id) if use_delta || heal
                 write_char_postings(fulltext, chars)
               end
               # P72-1: swap this source's coverage-index slice too (ranks from
@@ -888,7 +956,7 @@ module Nabu
         # The slice rewrite's insert count IS the source's live total; the
         # delta grain inserts only the changed rows, so the honest
         # "indexed N" is counted from the catalog instead.
-        use_delta ? live_rows : count
+        use_delta || heal ? live_rows : count
       end
 
       # P78-r3: announce with the last sync's estimate, run, record the
@@ -1631,6 +1699,7 @@ module Nabu
         lemma_count = 0
         chars = Hash.new(0)
         governor = fts_governor(fulltext, TABLE, progress: progress)
+        with_shas = contentless && fulltext.table_exists?(ROW_SHAS_TABLE)
         dataset.each_slice(BATCH_SIZE) do |batch|
           fulltext[TABLE].multi_insert(
             batch.map do |row|
@@ -1640,6 +1709,8 @@ module Nabu
           )
           rows = batch.flat_map { |row| lemma_rows(row, tiers: tiers, slugs: slugs, with_urn: with_urn) }
           fulltext[LEMMA_TABLE].multi_insert(rows)
+          # LAST statement of the batch — the ROW_SHAS_TABLE invariant.
+          write_row_shas(fulltext, batch) if with_shas
           batch.each { |row| accumulate_char_postings(chars, row) }
           count += batch.size
           lemma_count += rows.size
@@ -2156,6 +2227,155 @@ module Nabu
         [ids, urns]
       end
 
+      # -- the row-sha sidecar (ROW_SHAS_TABLE note) ---------------------------
+
+      # Bare at rebuild (+indexed: false+ — index_row_shas builds the
+      # source_id B-tree in one pass after the streaming insert, the lemma
+      # table's P36-2 trick); indexed at once when a full-slice rewrite
+      # brings it to an older file. Idempotent.
+      def create_row_shas_table(fulltext, indexed: true)
+        return if fulltext.table_exists?(ROW_SHAS_TABLE)
+
+        fulltext.create_table(ROW_SHAS_TABLE) do
+          Integer :rowid, primary_key: true # = passages.id, the FTS rowid convention
+          Integer :source_id, null: false
+          File :sha, null: false # the first 8 bytes of the catalog content_sha256
+        end
+        index_row_shas(fulltext) if indexed
+      end
+
+      def index_row_shas(fulltext)
+        fulltext.add_index(ROW_SHAS_TABLE, :source_id, if_not_exists: true)
+      end
+
+      # The sidecar grain: the catalog's hex sha → its first 8 bytes.
+      def row_sha(hex)
+        Sequel.blob([hex.to_s[0, 16]].pack("H*"))
+      end
+
+      # Upsert one insert batch's shas (the batch's LAST statement).
+      def write_row_shas(fulltext, batch)
+        fulltext[ROW_SHAS_TABLE].insert_conflict(:replace).multi_insert(
+          batch.map do |row|
+            { rowid: row.fetch(:passage_id), source_id: row.fetch(:source_id),
+              sha: row_sha(row.fetch(:content_sha256)) }
+          end
+        )
+      end
+
+      # Clear the doomed rows' shas — the FIRST destructive write of a
+      # slice/delta/heal pass. No-op on a fulltext without the sidecar.
+      def delete_row_shas(fulltext, ids)
+        return unless fulltext.table_exists?(ROW_SHAS_TABLE)
+
+        delete_rowid_slices(fulltext, ROW_SHAS_TABLE, ids)
+      end
+
+      # The exact heal's sets: +changed_ids+/+changed_urns+ — every row
+      # to clear from the fts+lemma grain; +upserted_ids+ — the live ones
+      # among them, to re-derive; +slice_ids+/+slice_urns+ — the source's
+      # whole key set, for the lanes that keep their whole-slice heal.
+      HealDiff = Data.define(:changed_ids, :changed_urns, :upserted_ids, :slice_ids, :slice_urns)
+
+      # Diff the catalog's live (id, sha8) set for +source_id+ against the
+      # sidecar's, or nil when the sidecar cannot answer (absent table,
+      # legacy shape, or no rows for this source — the full-slice heal).
+      # One ordered catalog pass merge-walks the sidecar slice, held as a
+      # sorted id array + one packed byte string (16 bytes a row, never a
+      # Hash of millions of strings). A row drifts when it is live but
+      # unrecorded or recorded under another sha, or recorded but no longer
+      # live. The one case the sidecar cannot see — a crashed run inserted a
+      # row that a LATER load withdrew before this heal, leaving it neither
+      # live nor recorded — is closed by probing the source's unrecorded
+      # non-live ids against the index itself (rowid lookups, reads only).
+      def exact_heal_diff(catalog, fulltext, source_id)
+        return nil unless fts_contentless?(fulltext) && fulltext.table_exists?(ROW_SHAS_TABLE)
+
+        recorded = fulltext[ROW_SHAS_TABLE].where(source_id: source_id).order(:rowid)
+        return nil if recorded.empty?
+
+        recorded_ids = []
+        recorded_shas = +"".b
+        recorded.select(:rowid, :sha).each do |row|
+          recorded_ids << row[:rowid]
+          recorded_shas << row[:sha].to_s.b
+        end
+        walk_heal_diff(catalog, fulltext, source_id, recorded_ids, recorded_shas)
+      end
+
+      def walk_heal_diff(catalog, fulltext, source_id, recorded_ids, recorded_shas)
+        changed = Set.new
+        changed_urns = []
+        upserted = Set.new
+        slice_ids = Set.new
+        slice_urns = []
+        unseen = [] # [id, urn] of non-live, unrecorded rows — probed below
+        cursor = 0
+        source_passage_states(catalog, source_id).each do |row|
+          id = row.fetch(:passage_id)
+          slice_ids << id
+          slice_urns << row.fetch(:urn)
+          while cursor < recorded_ids.size && recorded_ids[cursor] < id
+            changed << recorded_ids[cursor] # recorded, but no longer the source's row at all
+            cursor += 1
+          end
+          sha = nil
+          if cursor < recorded_ids.size && recorded_ids[cursor] == id
+            sha = recorded_shas.byteslice(cursor * 8, 8)
+            cursor += 1
+          end
+          live = !row.fetch(:passage_withdrawn) && !row.fetch(:document_withdrawn)
+          current = (row_sha(row.fetch(:content_sha256)).b if live)
+          next if current == sha && !current.nil?
+
+          if current.nil? && sha.nil?
+            unseen << [id, row.fetch(:urn)]
+            next
+          end
+          changed << id
+          changed_urns << row.fetch(:urn)
+          upserted << id if live
+        end
+        changed.merge(recorded_ids[cursor..])
+        indexed_unseen(fulltext, unseen).each do |id, urn|
+          changed << id
+          changed_urns << urn
+        end
+        HealDiff.new(changed_ids: changed, changed_urns: changed_urns, upserted_ids: upserted,
+                     slice_ids: slice_ids, slice_urns: slice_urns)
+      end
+
+      # Which of the [id, urn] pairs the index still holds (rowid lookups —
+      # the slice_behind? read, batched).
+      def indexed_unseen(fulltext, pairs)
+        pairs.each_slice(BATCH_SIZE).flat_map do |batch|
+          present = fulltext[TABLE].where(rowid: batch.map(&:first)).select_map(Sequel.lit("rowid")).to_set
+          batch.select { |pair| present.include?(pair.first) }
+        end
+      end
+
+      # Every passage of the source (withdrawn included — the
+      # source_passage_keys scope) with its liveness and sha, in id order.
+      def source_passage_states(catalog, source_id)
+        catalog[:passages]
+          .join(:documents, id: Sequel[:passages][:document_id])
+          .where(Sequel[:documents][:source_id] => source_id)
+          .order(Sequel[:passages][:id])
+          .select(Sequel[:passages][:id].as(:passage_id), Sequel[:passages][:urn],
+                  Sequel[:passages][:content_sha256],
+                  Sequel[:passages][:withdrawn].as(:passage_withdrawn),
+                  Sequel[:documents][:withdrawn].as(:document_withdrawn))
+      end
+
+      # Whether any of the slice's passages carries lemma rows — bounded
+      # passage-key IN probes, stopping at the first hit.
+      def source_lemma_rows?(fulltext, ids:, urns:)
+        key = lemma_passage_key(fulltext)
+        (key == :urn ? urns : ids).to_a.each_slice(BATCH_SIZE).any? do |batch|
+          !fulltext[LEMMA_TABLE].where(key => batch).empty?
+        end
+      end
+
       # The contentless shape's delete (P93-1): rowid IS the catalog
       # passage id, so the source's rows delete by key — no streaming scan
       # at all (the legacy path below pays a full-table pass per sync).
@@ -2485,6 +2705,8 @@ module Nabu
             Sequel[:passages][:id].as(:passage_id),
             Sequel[:passages][:language],
             Sequel[:passages][:annotations_json],
+            # The catalog sha the fts_row_shas sidecar records (ROW_SHAS_TABLE).
+            Sequel[:passages][:content_sha256],
             # source_id rides along for the lemma tier only (P26-0): the
             # per-source tier resolves through the small source_tiers map, not
             # a third join on the 2.6M-row streaming pass.
