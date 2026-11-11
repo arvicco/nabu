@@ -921,6 +921,43 @@ module Store
       end
     end
 
+    # The 2026-11-11 stall: the CJK slice rewrite — a tombstone pass plus a
+    # full re-derivation, 2 × 3.77M statements on ndl-kotenseki — ran with
+    # ZERO output after the main loop's last tick; the owner read nine
+    # silent hours. The lane announces both phases and ticks per full
+    # batch now, like every other multi-minute stage (P105-5d).
+    CjkSpy = Struct.new(:stages, :ticks) do
+      def stage(label, **) = (self.stages ||= []) << label
+      def load_tick(count, _errored) = (self.ticks ||= []) << count
+    end
+
+    def test_the_cjk_slice_rewrite_announces_both_phases
+      doc = make_document(urn: "urn:d:s")
+      make_passage(doc, urn: "urn:d:s:1", text_normalized: "六龍", sequence: 0, language: "lzh")
+      cjk_rebuild!
+      spy = CjkSpy.new
+
+      refresh!(cjk_slugs: ["s"], progress: spy)
+
+      assert(spy.stages.any? { |label| label.start_with?("cjk slice: s — clearing 1 rows") },
+             "the tombstone phase announces itself (got: #{spy.stages.inspect})")
+      assert(spy.stages.any? { |label| label.start_with?("cjk slice: s — indexing") },
+             "the insert phase announces itself (got: #{spy.stages.inspect})")
+    end
+
+    def test_cjk_insert_batches_tick_per_full_batch
+      doc = make_document(urn: "urn:d:s")
+      3.times do |i|
+        make_passage(doc, urn: "urn:d:s:#{i + 1}", text_normalized: "六龍#{i}", sequence: i, language: "lzh")
+      end
+      rebuild!
+      spy = CjkSpy.new
+      rows = Nabu::Store::Indexer.send(:cjk_passages, @catalog, ["s"])
+      Nabu::Store::Indexer.send(:insert_cjk_batches, @fulltext, rows, progress: spy, batch_size: 2)
+
+      assert_equal [2], spy.ticks, "one tick per FULL batch; the partial final batch stays silent"
+    end
+
     # -- incremental per-source refresh (P26-5) ------------------------------
     # refresh_source! deletes ONE source's rows from the passage-keyed tables
     # and re-inserts them from the current catalog — the sync-time replacement
@@ -1033,9 +1070,10 @@ module Store
     # A content-bearing re-parse of a big source rewrites millions of fts
     # rows; under the default merge config the automerge/deletemerge
     # machinery fires DURING the delete storm and the batched inserts (the
-    # kanripo 6h18m shape). At/above bulk_threshold the slice defers every
-    # merge (automerge 0, crisismerge high, deletemerge 0), ensure-restores
-    # the defaults, then consolidates in an announced bounded merge loop.
+    # kanripo 6h18m shape). The governed recipe defers the delete-triggered
+    # merges (deletemerge 0 — BULK_MERGE_SETTINGS; automerge/crisismerge
+    # stay untouched, the 2026-10-01 wedge lesson), ensure-restores the
+    # defaults, then consolidates in an announced bounded merge loop.
     # The contract stays ROW IDENTITY.
 
     BulkSpy = Struct.new(:stages) do
@@ -2217,6 +2255,51 @@ module Store
       refresh!(bulk_threshold: 1)
 
       assert_identical_to_a_fresh_rebuild
+    end
+
+    # The 2026-11-11 stall, part two: a healed slice used to hand the CJK
+    # lane its WHOLE key set — tombstone everything, re-derive everything —
+    # 2 × 3.77M statements on ndl-kotenseki with the engine free to grind
+    # a giant merge inside any one of them. The heal grain reconciles
+    # instead: tombstone exactly the drifted rows, land the drifted live
+    # rows plus the rows a crashed cjk pass never wrote (probed by rowid
+    # presence — the contentless lane's rowid IS the passage id).
+    def test_a_heal_reconciles_the_cjk_lane_instead_of_rewriting_it
+      doc = make_document(urn: "urn:d:s")
+      %w[天地玄黃 宇宙洪荒 日月盈昃 辰宿列張].each_with_index do |text, i|
+        make_passage(doc, urn: "urn:d:s:#{i + 1}", text_normalized: text, sequence: i,
+                          language: "lzh", sha: sha_hex(text))
+      end
+      Nabu::Store::Indexer.rebuild!(catalog: @catalog, fulltext: @fulltext, cjk_slugs: ["s"])
+
+      # The crashed run: one revision (sha drifted — its stale cjk bigrams
+      # still stand) and one row the crashed cjk pass never wrote (sha
+      # current — only a presence probe can see it).
+      revised = Nabu::Store::Passage.first(urn: "urn:d:s:2")
+      revised.update(text_normalized: "乾坤一擲", content_sha256: sha_hex("乾坤一擲"))
+      missing = Nabu::Store::Passage.first(urn: "urn:d:s:4")
+      cjk.where(rowid: missing.id).delete
+      Nabu::Store::Indexer.mark_slice_pending!(@fulltext, "s")
+
+      cjk_deleted = []
+      mod = Nabu::Store::Indexer
+      original = mod.method(:delete_fts_rows_by_rowid)
+      mod.define_singleton_method(:delete_fts_rows_by_rowid) do |fulltext, table, ids, **kw|
+        cjk_deleted.concat(ids.to_a) if table == Nabu::Store::Indexer::CJK_TABLE
+        original.call(fulltext, table, ids, **kw)
+      end
+      begin
+        refresh!(cjk_slugs: ["s"])
+      ensure
+        mod.define_singleton_method(:delete_fts_rows_by_rowid, original)
+      end
+
+      assert_equal [revised.id], cjk_deleted,
+                   "only the drifted row is tombstoned — never the whole slice"
+      assert_equal %w[urn:d:s:2], cjk_match_urns('"乾坤"'), "the drifted row's bigrams re-derive"
+      assert_empty cjk_match_urns('"宇宙"'), "…and its stale bigrams are gone"
+      assert_equal %w[urn:d:s:4], cjk_match_urns('"辰宿"'), "the row the crashed cjk pass missed lands"
+      assert_equal 4, cjk.count, "the lane holds exactly the live slice"
     end
 
     def test_a_heal_without_the_sidecar_falls_back_to_the_full_slice

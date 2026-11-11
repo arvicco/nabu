@@ -252,26 +252,37 @@ module Nabu
       #
       # What was once written here — that insert-side automerge is the same
       # amortized logarithmic cost every rebuild pays and was never the
-      # pathology — the 2026-11-11 crisis-merge stall FALSIFIED. A
-      # 3.77M-row slice refresh, deletemerge deferred, ran its whole insert
-      # loop in ~10 min; then one statement never returned: a single merge
-      # ground 3h+ and grew the WAL to 26 GB inside ONE sqlite3_step. The
-      # mechanism is fts5's crisis path: automerge does a bounded slice of
-      # work per write, and when the insert flood outruns that budget a
-      # level keeps gaining segments until it reaches crisismerge (16) —
-      # whereupon the engine merges that level TO COMPLETION inside the
-      # triggering statement, however large the level has grown. Changing
-      # the engine's knobs is no answer (automerge=0 is the wedge above);
-      # the answer is that OUR code owns the merge schedule during every
-      # governed write — the merge governor below. Every
-      # GOVERNOR_CHECK_EVERY_BATCHES batches it reads the live structure
-      # and, the moment any level holds more than GOVERNOR_LEVEL_LIMIT
-      # segments (half of crisismerge — the crisis-distance invariant) or
-      # the total passes FtsStructure::SEGMENT_WARN, advances bounded
-      # ('merge', MERGE_CHUNK_PAGES) chunks until the structure is back
-      # under both lines. Neither heuristic — automerge's budget nor the
-      # crisis merge — ever finds a mountain to climb; they stay a
-      # never-reached backstop.
+      # pathology — the two 2026-11-11 merge stalls FALSIFIED. Twice, a
+      # 3.77M-row ndl-kotenseki slice refresh ran its whole announced
+      # insert loop in ~10 min, then ground for hours (3h+, then ~9h)
+      # inside ONE sqlite3_step. The autopsy of the second (committed
+      # state read after the kill): the stall was NOT the main loop at all
+      # — every row and sidecar sha had committed — but the then-SILENT
+      # cjk slice rewrite that follows it, and the committed structure sat
+      # CALM the whole time (≤4 segments per level, both tables), so no
+      # between-statement structure read could have seen it coming. Both
+      # live stack samples agree on the grind itself: fts5IndexMergeLevel
+      # → fts5DataDelete — the engine, inside an ordinary row-insert's
+      # flush, continuing a merge whose input-segment cleanup walks a
+      # deleted data range across a 26 GB-class b-tree, I/O-bound, sized
+      # by the segments being consumed and not by the statement that
+      # happened to trigger it. Changing the engine's knobs is no answer
+      # (automerge=0 is the wedge above), and no statement-side budget can
+      # bound work the engine schedules on its own clock inside a flush.
+      # The defenses that remain OURS: every heavy lane announces and
+      # ticks (a grind is then a visible event in a named stage, caught by
+      # the run's watchdog — never a silent hang); the heal grain
+      # reconciles instead of re-deriving (reconcile_cjk_slice /
+      # exact_heal_diff — million-row floods are rare arrival events, not
+      # routine heals); and the merge governor below keeps segment-count
+      # pressure paid down in bounded announced chunks between statements
+      # (GOVERNOR_CHECK_EVERY_BATCHES / GOVERNOR_LEVEL_LIMIT /
+      # FtsStructure::SEGMENT_WARN), so the flush-time heuristics find as
+      # little standing debt as we can arrange. Why the engine chose an
+      # hours-scale merge against a calm committed structure is OPEN — the
+      # rolled-back statement's in-flight structure is unobservable; the
+      # governor is a real backstop for the pressure it can see, not a
+      # proof against this grind class.
       #
       # Contentless shape only — a legacy contentful file keeps the old path
       # until its next full rebuild, like every other shape arrival.
@@ -837,7 +848,8 @@ module Nabu
                 # P93-3: the CJK lane's slice — same drift-honest contract as
                 # the trigram slice; a fulltext file predating the lane skips
                 # here and bootstraps below (flagged sources only).
-                refresh_cjk_slice(catalog, fulltext, slug, Array(cjk_slugs), slice_ids, progress: progress)
+                refresh_cjk_slice(catalog, fulltext, slug, Array(cjk_slugs), slice_ids,
+                                  progress: progress, heal: heal)
               end
               # P65: swap this source's char-postings slice; a pre-P65 fulltext
               # file (no table) gets the whole postings build below instead —
@@ -2451,19 +2463,59 @@ module Nabu
       # build, hands-off otherwise. Deletes go by rowid (contentless — the
       # ids ARE the rowids). A fulltext file without the lane skips
       # (bootstrap is the flagged-sync gate in refresh_source!).
-      def refresh_cjk_slice(catalog, fulltext, slug, cjk_slugs, ids, progress: nil)
+      # Both phases ANNOUNCE (the 2026-11-11 stall: 2 × 3.77M statements
+      # ran here without a line of output), and a heal reconciles instead
+      # of rewriting (reconcile_cjk_slice).
+      def refresh_cjk_slice(catalog, fulltext, slug, cjk_slugs, ids, progress: nil, heal: nil)
         return unless fulltext.table_exists?(CJK_TABLE)
 
         flagged = cjk_slugs.include?(slug)
         in_scope = !fulltext[CJK_SCOPE_TABLE].where(slug: slug).empty?
         return unless flagged || in_scope
+        return reconcile_cjk_slice(catalog, fulltext, slug, ids, heal, progress: progress) if
+          heal && flagged && in_scope
 
-        delete_fts_rows_by_rowid(fulltext, CJK_TABLE, ids, progress: progress) if in_scope
+        if in_scope
+          progress&.stage("cjk slice: #{slug} — clearing #{ids.size} rows (tombstones)")
+          delete_fts_rows_by_rowid(fulltext, CJK_TABLE, ids, progress: progress)
+        end
         if flagged
           fulltext[CJK_SCOPE_TABLE].insert(slug: slug) unless in_scope
+          progress&.stage("cjk slice: #{slug} — indexing bigram rows")
           insert_cjk_batches(fulltext, cjk_passages(catalog, [slug]), progress: progress)
         else
           fulltext[CJK_SCOPE_TABLE].where(slug: slug).delete
+        end
+      end
+
+      # The CJK lane's heal grain (the 2026-11-11 stall): a healed slice
+      # used to hand this lane the whole key set — tombstone + re-derive
+      # millions of unchanged rows, with the engine free to grind a giant
+      # merge inside any one of those statements. The sidecar diff already
+      # names the drifted rows, and the lane's rowid IS the passage id, so
+      # presence is probe-able: tombstone exactly the drifted rows, land
+      # the drifted live rows plus whatever a crashed cjk pass never wrote.
+      # A present row is current — the lane derives from the same catalog
+      # text the sidecar vouches for, and every drifted row rides the diff.
+      # Runless rows (cjk_row nil) index nothing and probe as absent on
+      # every heal: the fetch yields no row for them, a harmless re-probe.
+      def reconcile_cjk_slice(catalog, fulltext, slug, ids, heal, progress: nil)
+        progress&.stage("cjk heal: #{slug} — probing #{ids.size} rowids for missing rows")
+        missing = missing_cjk_rowids(fulltext, ids)
+        doomed = heal.changed_ids.to_a
+        landing = heal.upserted_ids.to_a | missing
+        progress&.stage("cjk heal: #{slug} — #{doomed.size} drifted out / #{landing.size} rows to land")
+        delete_fts_rows_by_rowid(fulltext, CJK_TABLE, doomed, progress: progress)
+        insert_cjk_batches(fulltext, ids_scoped(cjk_passages(catalog, [slug]), landing),
+                           progress: progress)
+      end
+
+      # Which of the slice's rowids the CJK lane does not hold (batched
+      # rowid IN probes — the indexed_unseen shape).
+      def missing_cjk_rowids(fulltext, ids)
+        ids.to_a.each_slice(BATCH_SIZE).flat_map do |batch|
+          present = fulltext[CJK_TABLE].where(rowid: batch).select_map(Sequel.lit("rowid")).to_set
+          batch.reject { |id| present.include?(id) }
         end
       end
 
@@ -2509,13 +2561,21 @@ module Nabu
                            progress: progress)
       end
 
-      # The slice-time CJK insert loop (slice + delta grain), governed.
-      def insert_cjk_batches(fulltext, rows, progress: nil)
+      # The slice-time CJK insert loop (slice + delta grain), governed and
+      # TICKED per full batch (P105-5d — the 2026-11-11 stall ran this
+      # loop over millions of rows without a line of output). Returns the
+      # number of rows landed (runless rows index nothing).
+      def insert_cjk_batches(fulltext, rows, progress: nil, batch_size: BATCH_SIZE)
         governor = fts_governor(fulltext, CJK_TABLE, progress: progress)
-        rows.each_slice(BATCH_SIZE) do |batch|
-          fulltext[CJK_TABLE].multi_insert(batch.filter_map { |row| cjk_row(row) })
+        count = 0
+        rows.each_slice(batch_size) do |batch|
+          landed = batch.filter_map { |row| cjk_row(row) }
+          fulltext[CJK_TABLE].multi_insert(landed)
+          count += landed.size
+          progress&.load_tick(count, 0) if batch.size == batch_size
           governor&.tick!
         end
+        count
       end
 
       # Chunked where-in over catalog passage ids: one IN list per
