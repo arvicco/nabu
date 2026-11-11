@@ -4789,10 +4789,10 @@ nb-no:   # P165
 ndl-kotenseki:   # P109-2
   adapter: Nabu::Adapters::NdlKotenseki
   adopted: "2026-09-29"
-  # cjk_index dropped 2026-11-11: at this source's scale (3.77M passages)
-  # the bigram lane's write cost (a second multi-million-row FTS5 build
-  # per slice rewrite) outweighs substring search; the main FTS index
-  # keeps the source searchable at the token grain.
+  # cjk_index 2026-11-11: the bigram lane is rebuild-cadence — written
+  # only at rebuilds (one linear corpus stage), never on the sync path —
+  # so this source's 3.77M-passage scale rides no refresh.
+  cjk_index: true
   axes: [japonic]
   wired: true    # first slice 2026-09-29: 398 books / 24,568 koma passages,
                    # 0 errored, oldest PIDs first; 葬祭考/玉篇 cards eyeballed

@@ -879,29 +879,52 @@ module Store
       assert_equal %w[urn:d:s:1 urn:d:s:2], cjk_match_urns(%{"六龍" AND source : ("0srcs")})
     end
 
-    def test_cjk_refresh_updates_the_slice_and_honors_config_drift
+    # 2026-11-11 maintenance ruling: the lane is REBUILD-CADENCE — rebuilds
+    # are its ONLY writer. A source refresh leaves it exactly as the last
+    # rebuild built it (the in-place slice rewrites it used to run —
+    # 2 × 3.77M statements on ndl-kotenseki — were where the multi-hour
+    # engine grinds lived), so between rebuilds it serves at most one
+    # rebuild-cadence stale.
+    def test_cjk_refresh_never_touches_the_lane
       doc = make_document(urn: "urn:d:s")
       make_passage(doc, urn: "urn:d:s:1", text_normalized: "六龍", sequence: 0, language: "lzh")
       cjk_rebuild!
 
       make_passage(doc, urn: "urn:d:s:2", text_normalized: "飛天", sequence: 1, language: "lzh")
-      refresh!(cjk_slugs: ["s"])
-      assert_equal %w[urn:d:s:1 urn:d:s:2],
-                   urns_of(cjk.select_map(Sequel.lit("rowid"))), "the flagged source's slice refreshes"
-
-      refresh!(cjk_slugs: [])
-      assert_equal 0, cjk.count, "a de-flagged source loses its rows at refresh"
-      assert_equal 0, cjk_scope.count, "…and its scope row, so coverage reads honestly"
+      refresh!
+      assert_equal [passage_id("urn:d:s:1")], cjk.select_map(Sequel.lit("rowid")),
+                   "the refresh leaves the lane as the last rebuild built it"
+      assert_equal %w[s], cjk_scope.select_map(:slug), "…scope row included"
     end
 
-    def test_cjk_refresh_adds_a_newly_flagged_sources_slice
+    def test_cjk_lane_refresh_rebuilds_on_scope_drift_or_flagged_replays
       doc = make_document(urn: "urn:d:s")
       make_passage(doc, urn: "urn:d:s:1", text_normalized: "六龍", sequence: 0, language: "lzh")
-      rebuild! # no cjk slugs — empty lane
+      rebuild! # no cjk slugs — empty lane, empty scope
 
-      refresh!(cjk_slugs: ["s"])
+      # Newly flagged since the last build: the scope drifted — rebuild.
+      count = Nabu::Store::Indexer.refresh_cjk_lane!(catalog: @catalog, fulltext: @fulltext,
+                                                     cjk_slugs: ["s"], replayed_slugs: [])
+      assert_equal 1, count
       assert_equal [passage_id("urn:d:s:1")], cjk.select_map(Sequel.lit("rowid"))
       assert_equal %w[s], cjk_scope.select_map(:slug)
+
+      # No flagged replay, no drift: the lane is left alone (stale rows prove it).
+      make_passage(doc, urn: "urn:d:s:2", text_normalized: "飛天", sequence: 1, language: "lzh")
+      assert_nil Nabu::Store::Indexer.refresh_cjk_lane!(catalog: @catalog, fulltext: @fulltext,
+                                                        cjk_slugs: ["s"], replayed_slugs: ["other"])
+      assert_equal 1, cjk.count
+
+      # A flagged source replayed: the rebuild catches the lane up.
+      assert_equal 2, Nabu::Store::Indexer.refresh_cjk_lane!(catalog: @catalog, fulltext: @fulltext,
+                                                             cjk_slugs: ["s"], replayed_slugs: ["s"])
+      assert_equal 2, cjk.count
+
+      # De-flagging lands at the rebuild too: the lane rebuilds to empty.
+      assert_equal 0, Nabu::Store::Indexer.refresh_cjk_lane!(catalog: @catalog, fulltext: @fulltext,
+                                                             cjk_slugs: [], replayed_slugs: [])
+      assert_equal 0, cjk.count
+      assert_equal 0, cjk_scope.count
     end
 
     def test_cjk_lane_is_idempotent_and_regenerates_into_a_fresh_db
@@ -921,28 +944,25 @@ module Store
       end
     end
 
-    # The 2026-11-11 stall: the CJK slice rewrite — a tombstone pass plus a
-    # full re-derivation, 2 × 3.77M statements on ndl-kotenseki — ran with
-    # ZERO output after the main loop's last tick; the owner read nine
-    # silent hours. The lane announces both phases and ticks per full
-    # batch now, like every other multi-minute stage (P105-5d).
+    # The 2026-11-11 stalls ran the lane's writes for hours with ZERO
+    # output. All lane writing now happens at the rebuild, which announces
+    # its stage and ticks per full batch (insert_cjk_batches below).
     CjkSpy = Struct.new(:stages, :ticks) do
       def stage(label, **) = (self.stages ||= []) << label
       def load_tick(count, _errored) = (self.ticks ||= []) << count
     end
 
-    def test_the_cjk_slice_rewrite_announces_both_phases
+    def test_the_cjk_lane_rebuild_announces_itself
       doc = make_document(urn: "urn:d:s")
       make_passage(doc, urn: "urn:d:s:1", text_normalized: "六龍", sequence: 0, language: "lzh")
-      cjk_rebuild!
+      rebuild! # no cjk slugs — the lane refresh below rebuilds on scope drift
       spy = CjkSpy.new
 
-      refresh!(cjk_slugs: ["s"], progress: spy)
+      Nabu::Store::Indexer.refresh_cjk_lane!(catalog: @catalog, fulltext: @fulltext,
+                                             cjk_slugs: ["s"], replayed_slugs: [], progress: spy)
 
-      assert(spy.stages.any? { |label| label.start_with?("cjk slice: s — clearing 1 rows") },
-             "the tombstone phase announces itself (got: #{spy.stages.inspect})")
-      assert(spy.stages.any? { |label| label.start_with?("cjk slice: s — indexing") },
-             "the insert phase announces itself (got: #{spy.stages.inspect})")
+      assert(spy.stages.any? { |label| label.include?("cjk bigram lane") },
+             "the lane rebuild announces its stage (got: #{spy.stages.inspect})")
     end
 
     def test_cjk_insert_batches_tick_per_full_batch
@@ -2015,8 +2035,11 @@ module Store
         Nabu::Store::Indexer.rebuild!(catalog: @catalog, fulltext: fresh, **options)
         assert_equal fts_rowids(fresh), fts_rowids(@fulltext),
                      "passages_fts must hold the identical rowid set at the delta grain"
-        assert_equal cjk_rowids(fresh), cjk_rowids(@fulltext),
-                     "the cjk lane must hold the identical rowid set at the delta grain"
+        # The cjk lane is REBUILD-CADENCE (2026-11-11 ruling): the delta
+        # deliberately leaves it as the pre-delta build made it — stale
+        # until the next rebuild, never rewritten inline.
+        assert_equal [passage_id_of("urn:d:s:3")], cjk_rowids(@fulltext),
+                     "the cjk lane keeps the pre-delta build's rows at the delta grain"
         %i[passage_lemmas passages_trigram passages_trigram_scope lemma_frequencies
            char_postings passage_chars reflex_roots reflex_root_stats].each do |table|
           assert_equal table_rows(fresh, table), table_rows(@fulltext, table),
@@ -2257,49 +2280,28 @@ module Store
       assert_identical_to_a_fresh_rebuild
     end
 
-    # The 2026-11-11 stall, part two: a healed slice used to hand the CJK
-    # lane its WHOLE key set — tombstone everything, re-derive everything —
-    # 2 × 3.77M statements on ndl-kotenseki with the engine free to grind
-    # a giant merge inside any one of them. The heal grain reconciles
-    # instead: tombstone exactly the drifted rows, land the drifted live
-    # rows plus the rows a crashed cjk pass never wrote (probed by rowid
-    # presence — the contentless lane's rowid IS the passage id).
-    def test_a_heal_reconciles_the_cjk_lane_instead_of_rewriting_it
+    # 2026-11-11 maintenance ruling: a heal — like every refresh — leaves
+    # the cjk lane entirely alone. A crashed run's lane damage (stale or
+    # missing bigram rows) waits for the next rebuild, which rebuilds the
+    # lane whole as a linear append; the sidecar heal repairs the MAIN
+    # index only.
+    def test_a_heal_leaves_the_cjk_lane_alone
       doc = make_document(urn: "urn:d:s")
-      %w[天地玄黃 宇宙洪荒 日月盈昃 辰宿列張].each_with_index do |text, i|
+      %w[天地玄黃 宇宙洪荒].each_with_index do |text, i|
         make_passage(doc, urn: "urn:d:s:#{i + 1}", text_normalized: text, sequence: i,
                           language: "lzh", sha: sha_hex(text))
       end
       Nabu::Store::Indexer.rebuild!(catalog: @catalog, fulltext: @fulltext, cjk_slugs: ["s"])
 
-      # The crashed run: one revision (sha drifted — its stale cjk bigrams
-      # still stand) and one row the crashed cjk pass never wrote (sha
-      # current — only a presence probe can see it).
       revised = Nabu::Store::Passage.first(urn: "urn:d:s:2")
       revised.update(text_normalized: "乾坤一擲", content_sha256: sha_hex("乾坤一擲"))
-      missing = Nabu::Store::Passage.first(urn: "urn:d:s:4")
-      cjk.where(rowid: missing.id).delete
       Nabu::Store::Indexer.mark_slice_pending!(@fulltext, "s")
+      refresh!
 
-      cjk_deleted = []
-      mod = Nabu::Store::Indexer
-      original = mod.method(:delete_fts_rows_by_rowid)
-      mod.define_singleton_method(:delete_fts_rows_by_rowid) do |fulltext, table, ids, **kw|
-        cjk_deleted.concat(ids.to_a) if table == Nabu::Store::Indexer::CJK_TABLE
-        original.call(fulltext, table, ids, **kw)
-      end
-      begin
-        refresh!(cjk_slugs: ["s"])
-      ensure
-        mod.define_singleton_method(:delete_fts_rows_by_rowid, original)
-      end
-
-      assert_equal [revised.id], cjk_deleted,
-                   "only the drifted row is tombstoned — never the whole slice"
-      assert_equal %w[urn:d:s:2], cjk_match_urns('"乾坤"'), "the drifted row's bigrams re-derive"
-      assert_empty cjk_match_urns('"宇宙"'), "…and its stale bigrams are gone"
-      assert_equal %w[urn:d:s:4], cjk_match_urns('"辰宿"'), "the row the crashed cjk pass missed lands"
-      assert_equal 4, cjk.count, "the lane holds exactly the live slice"
+      assert_equal %w[urn:d:s:2], match_urns("乾坤一擲"), "the heal repairs the main index"
+      assert_equal 2, cjk.count, "the lane keeps the last rebuild's rows untouched"
+      assert_equal %w[urn:d:s:2], cjk_match_urns('"宇宙"'),
+                   "…stale bigrams included — they wait for the next rebuild"
     end
 
     def test_a_heal_without_the_sidecar_falls_back_to_the_full_slice

@@ -122,8 +122,13 @@ module Nabu
       TRIGRAM_TABLE = :passages_trigram
       TRIGRAM_SCOPE_TABLE = :passages_trigram_scope
       # P93-3: the CJK bigram lane — a CONTENTLESS second lane
-      # over the cjk-flagged sources (sources.yml `cjk_index: true`,
-      # threaded in as +cjk_slugs+ — the fuzzy_index pattern). Each
+      # over the cjk-flagged sources (sources.yml `cjk_index: true`).
+      # REBUILD-CADENCE since the 2026-11-11 maintenance ruling: written
+      # ONLY by rebuild_cjk!/refresh_cjk_lane! on the rebuild paths — a
+      # sync or source refresh NEVER touches it (its in-place slice
+      # rewrites were the 2026-11 multi-hour stall class), so between
+      # rebuilds it serves the last rebuild's rows, at most one
+      # rebuild-cadence stale. Each
       # Han/kana run of the folded text indexes as its overlapping
       # character pairs plus a trailing unigram (CjkBigrams — the mint
       # AND the query grammar), so a mid-run substring matches as a
@@ -269,11 +274,15 @@ module Nabu
       # happened to trigger it. Changing the engine's knobs is no answer
       # (automerge=0 is the wedge above), and no statement-side budget can
       # bound work the engine schedules on its own clock inside a flush.
-      # The defenses that remain OURS: every heavy lane announces and
-      # ticks (a grind is then a visible event in a named stage, caught by
-      # the run's watchdog — never a silent hang); the heal grain
-      # reconciles instead of re-deriving (reconcile_cjk_slice /
-      # exact_heal_diff — million-row floods are rare arrival events, not
+      # The defenses that remain OURS: the cjk lane left the write path
+      # entirely (the 2026-11-11 maintenance ruling — REBUILD-CADENCE:
+      # rebuilt whole as a linear append at rebuilds, zero inline
+      # tombstones; the 2 × 3.77M-statement slice rewrites where both
+      # grinds lived are gone by construction); every heavy stage
+      # announces and ticks (a grind is then a visible event in a named
+      # stage, caught by the run's watchdog — never a silent hang); the
+      # heal grain reconciles the main index instead of re-deriving
+      # (exact_heal_diff — million-row floods are rare arrival events, not
       # routine heals); and the merge governor below keeps segment-count
       # pressure paid down in bounded announced chunks between statements
       # (GOVERNOR_CHECK_EVERY_BATCHES / GOVERNOR_LEVEL_LIMIT /
@@ -840,16 +849,14 @@ module Nabu
                 after = LemmaFrequencies.snapshot(fulltext, ids: ids, urns: urns)
                 LemmaFrequencies.apply_delta(fulltext, before: before, after: after)
               end
+              # The cjk lane is REBUILD-CADENCE (2026-11-11 ruling): no
+              # slice or delta write here, ever — +cjk_slugs+ feeds only
+              # the full-rebuild fallback above; the lane catches up at
+              # the next rebuild (refresh_cjk_lane!).
               if use_delta
                 refresh_trigram_delta(catalog, fulltext, slug, Array(fuzzy_slugs), delta)
-                refresh_cjk_delta(catalog, fulltext, slug, Array(cjk_slugs), delta, progress: progress)
               else
                 refresh_trigram_slice(catalog, fulltext, slug, Array(fuzzy_slugs), slice_ids)
-                # P93-3: the CJK lane's slice — same drift-honest contract as
-                # the trigram slice; a fulltext file predating the lane skips
-                # here and bootstraps below (flagged sources only).
-                refresh_cjk_slice(catalog, fulltext, slug, Array(cjk_slugs), slice_ids,
-                                  progress: progress, heal: heal)
               end
               # P65: swap this source's char-postings slice; a pre-P65 fulltext
               # file (no table) gets the whole postings build below instead —
@@ -920,15 +927,6 @@ module Nabu
           if SIGN_SOURCES.include?(slug) && !fulltext.table_exists?(PASSAGE_SIGNS_TABLE)
             rebuild_sign_coverage!(catalog: catalog, fulltext: fulltext, sign_list: sign_list,
                                    progress: progress)
-          end
-          # P93-3 bootstrap: a fulltext file predating the CJK lane gains
-          # it when a FLAGGED source syncs (the sign-coverage gate: the
-          # CJK corpora pay their own indexing cost; an unrelated source's
-          # sync is never ambushed). Elsewhere it arrives at the next
-          # full rebuild.
-          if Array(cjk_slugs).include?(slug) && !fulltext.table_exists?(CJK_TABLE)
-            progress&.stage("cjk bigram lane: building (first flagged sync — scoped sources only)")
-            rebuild_cjk!(catalog: catalog, fulltext: fulltext, cjk_slugs: Array(cjk_slugs), progress: progress)
           end
           refresh_alignment(catalog, fulltext, alignments, source_id)
         end
@@ -1010,10 +1008,32 @@ module Nabu
         count
       end
 
+      # REBUILD-CADENCE (the 2026-11-11 maintenance ruling): the
+      # rebuild-side lane refresh — with rebuild!'s own corpus stage, the
+      # ONLY cjk writers. Rebuilds the lane WHOLE (drop + linear append:
+      # no tombstones, no merge debt against a standing structure) when
+      # the built scope drifted from the config flags, a flagged source
+      # replayed, or the lane is missing; returns nil untouched otherwise.
+      # The incremental rebuild calls this after its replays; syncs and
+      # refreshes never do.
+      def refresh_cjk_lane!(catalog:, fulltext:, cjk_slugs:, replayed_slugs:, progress: nil)
+        flags = cjk_slugs.sort
+        scope = fulltext.table_exists?(CJK_SCOPE_TABLE) &&
+                fulltext[CJK_SCOPE_TABLE].select_map(:slug).sort
+        return nil if scope == flags && !replayed_slugs.intersect?(flags)
+
+        rebuild_cjk!(catalog: catalog, fulltext: fulltext, cjk_slugs: cjk_slugs, progress: progress)
+      end
+
       # Drop and rebuild the CJK bigram lane (CJK_TABLE note) over the live
-      # passages of the +cjk_slugs+ sources, and record that scope. Returns
+      # passages of the +cjk_slugs+ sources, and record that scope — the
+      # announced, batch-ticked linear append (insert_cjk_batches). Returns
       # the number of passages indexed (runless passages contribute none).
       def rebuild_cjk!(catalog:, fulltext:, cjk_slugs:, progress: nil)
+        # A flagless build is an instant table mint — announcing it would
+        # only pollute the rebuild's stage record.
+        progress&.stage("cjk bigram lane: rebuilding over #{cjk_slugs.size} flagged sources") if
+          cjk_slugs.any?
         fulltext.drop_table?(CJK_TABLE)
         fulltext.drop_table?(CJK_SCOPE_TABLE)
         fulltext.run(CREATE_CJK_TABLE)
@@ -1022,15 +1042,9 @@ module Nabu
         end
 
         count = 0
-        governor = fts_governor(fulltext, CJK_TABLE, progress: progress)
         fulltext.transaction do
           fulltext[CJK_SCOPE_TABLE].multi_insert(cjk_slugs.map { |slug| { slug: slug } })
-          cjk_passages(catalog, cjk_slugs).each_slice(BATCH_SIZE) do |batch|
-            rows = batch.filter_map { |row| cjk_row(row) }
-            fulltext[CJK_TABLE].multi_insert(rows)
-            count += rows.size
-            governor&.tick!
-          end
+          count = insert_cjk_batches(fulltext, cjk_passages(catalog, cjk_slugs), progress: progress)
         end
         count
       end
@@ -2458,67 +2472,6 @@ module Nabu
         end
       end
 
-      # The CJK lane's slice (P93-3): the trigram slice contract — refresh
-      # when flagged, drop rows + scope row when de-flagged since the last
-      # build, hands-off otherwise. Deletes go by rowid (contentless — the
-      # ids ARE the rowids). A fulltext file without the lane skips
-      # (bootstrap is the flagged-sync gate in refresh_source!).
-      # Both phases ANNOUNCE (the 2026-11-11 stall: 2 × 3.77M statements
-      # ran here without a line of output), and a heal reconciles instead
-      # of rewriting (reconcile_cjk_slice).
-      def refresh_cjk_slice(catalog, fulltext, slug, cjk_slugs, ids, progress: nil, heal: nil)
-        return unless fulltext.table_exists?(CJK_TABLE)
-
-        flagged = cjk_slugs.include?(slug)
-        in_scope = !fulltext[CJK_SCOPE_TABLE].where(slug: slug).empty?
-        return unless flagged || in_scope
-        return reconcile_cjk_slice(catalog, fulltext, slug, ids, heal, progress: progress) if
-          heal && flagged && in_scope
-
-        if in_scope
-          progress&.stage("cjk slice: #{slug} — clearing #{ids.size} rows (tombstones)")
-          delete_fts_rows_by_rowid(fulltext, CJK_TABLE, ids, progress: progress)
-        end
-        if flagged
-          fulltext[CJK_SCOPE_TABLE].insert(slug: slug) unless in_scope
-          progress&.stage("cjk slice: #{slug} — indexing bigram rows")
-          insert_cjk_batches(fulltext, cjk_passages(catalog, [slug]), progress: progress)
-        else
-          fulltext[CJK_SCOPE_TABLE].where(slug: slug).delete
-        end
-      end
-
-      # The CJK lane's heal grain (the 2026-11-11 stall): a healed slice
-      # used to hand this lane the whole key set — tombstone + re-derive
-      # millions of unchanged rows, with the engine free to grind a giant
-      # merge inside any one of those statements. The sidecar diff already
-      # names the drifted rows, and the lane's rowid IS the passage id, so
-      # presence is probe-able: tombstone exactly the drifted rows, land
-      # the drifted live rows plus whatever a crashed cjk pass never wrote.
-      # A present row is current — the lane derives from the same catalog
-      # text the sidecar vouches for, and every drifted row rides the diff.
-      # Runless rows (cjk_row nil) index nothing and probe as absent on
-      # every heal: the fetch yields no row for them, a harmless re-probe.
-      def reconcile_cjk_slice(catalog, fulltext, slug, ids, heal, progress: nil)
-        progress&.stage("cjk heal: #{slug} — probing #{ids.size} rowids for missing rows")
-        missing = missing_cjk_rowids(fulltext, ids)
-        doomed = heal.changed_ids.to_a
-        landing = heal.upserted_ids.to_a | missing
-        progress&.stage("cjk heal: #{slug} — #{doomed.size} drifted out / #{landing.size} rows to land")
-        delete_fts_rows_by_rowid(fulltext, CJK_TABLE, doomed, progress: progress)
-        insert_cjk_batches(fulltext, ids_scoped(cjk_passages(catalog, [slug]), landing),
-                           progress: progress)
-      end
-
-      # Which of the slice's rowids the CJK lane does not hold (batched
-      # rowid IN probes — the indexed_unseen shape).
-      def missing_cjk_rowids(fulltext, ids)
-        ids.to_a.each_slice(BATCH_SIZE).flat_map do |batch|
-          present = fulltext[CJK_TABLE].where(rowid: batch).select_map(Sequel.lit("rowid")).to_set
-          batch.reject { |id| present.include?(id) }
-        end
-      end
-
       # The trigram lane at the delta grain (P112-1): changed rowids out,
       # upserted rows in — provided the flag and the scope row AGREE. On
       # config drift (newly flagged / de-flagged since the last build) the
@@ -2541,30 +2494,10 @@ module Nabu
         end
       end
 
-      # The CJK lane at the delta grain — the trigram contract, deletes by
-      # rowid (contentless). Same config-drift delegation.
-      def refresh_cjk_delta(catalog, fulltext, slug, cjk_slugs, delta, progress: nil)
-        return unless fulltext.table_exists?(CJK_TABLE)
-
-        flagged = cjk_slugs.include?(slug)
-        in_scope = !fulltext[CJK_SCOPE_TABLE].where(slug: slug).empty?
-        return unless flagged || in_scope
-
-        unless flagged && in_scope
-          source_id = catalog[:sources].where(slug: slug).get(:id)
-          ids, = source_passage_keys(catalog, source_id)
-          return refresh_cjk_slice(catalog, fulltext, slug, cjk_slugs, ids, progress: progress)
-        end
-
-        delete_fts_rows_by_rowid(fulltext, CJK_TABLE, delta.changed_ids, progress: progress)
-        insert_cjk_batches(fulltext, ids_scoped(cjk_passages(catalog, [slug]), delta.upserted_ids),
-                           progress: progress)
-      end
-
-      # The slice-time CJK insert loop (slice + delta grain), governed and
-      # TICKED per full batch (P105-5d — the 2026-11-11 stall ran this
-      # loop over millions of rows without a line of output). Returns the
-      # number of rows landed (runless rows index nothing).
+      # The rebuild-time CJK insert loop, governed and TICKED per full
+      # batch (P105-5d — the 2026-11-11 stall ran the lane's writes over
+      # millions of rows without a line of output). Returns the number of
+      # rows landed (runless rows index nothing).
       def insert_cjk_batches(fulltext, rows, progress: nil, batch_size: BATCH_SIZE)
         governor = fts_governor(fulltext, CJK_TABLE, progress: progress)
         count = 0
