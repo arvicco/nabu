@@ -248,9 +248,30 @@ module Nabu
       # before crisis merge can ever trigger, and the index is left
       # write-WEDGED (even the merge command needs a segment allocation).
       # The first two cbeta runs died exactly there, deterministically, with
-      # half a terabyte of disk free. Insert-side automerge is the same
-      # amortized logarithmic cost every rebuild pays — it was never the
-      # pathology.
+      # half a terabyte of disk free.
+      #
+      # What was once written here — that insert-side automerge is the same
+      # amortized logarithmic cost every rebuild pays and was never the
+      # pathology — the 2026-11-11 crisis-merge stall FALSIFIED. A
+      # 3.77M-row slice refresh, deletemerge deferred, ran its whole insert
+      # loop in ~10 min; then one statement never returned: a single merge
+      # ground 3h+ and grew the WAL to 26 GB inside ONE sqlite3_step. The
+      # mechanism is fts5's crisis path: automerge does a bounded slice of
+      # work per write, and when the insert flood outruns that budget a
+      # level keeps gaining segments until it reaches crisismerge (16) —
+      # whereupon the engine merges that level TO COMPLETION inside the
+      # triggering statement, however large the level has grown. Changing
+      # the engine's knobs is no answer (automerge=0 is the wedge above);
+      # the answer is that OUR code owns the merge schedule during every
+      # governed write — the merge governor below. Every
+      # GOVERNOR_CHECK_EVERY_BATCHES batches it reads the live structure
+      # and, the moment any level holds more than GOVERNOR_LEVEL_LIMIT
+      # segments (half of crisismerge — the crisis-distance invariant) or
+      # the total passes FtsStructure::SEGMENT_WARN, advances bounded
+      # ('merge', MERGE_CHUNK_PAGES) chunks until the structure is back
+      # under both lines. Neither heuristic — automerge's budget nor the
+      # crisis merge — ever finds a mountain to climb; they stay a
+      # never-reached backstop.
       #
       # Contentless shape only — a legacy contentful file keeps the old path
       # until its next full rebuild, like every other shape arrival.
@@ -279,6 +300,21 @@ module Nabu
       BULK_MERGE_SETTINGS = { "deletemerge" => 0 }.freeze
       DEFAULT_MERGE_SETTINGS = { "deletemerge" => 10 }.freeze
       MERGE_CHUNK_PAGES = 2_000
+
+      # The merge governor's cadence (class note above): one structure
+      # read per this many batches. A read is one small-blob fetch (the
+      # shadow table's row 10) plus a varint decode — microseconds against
+      # the 2,000-row batch it rides between — while 25 batches (50k rows)
+      # is far too few for an insert flood to carry a level from the limit
+      # below to the engine's crisis line between two reads.
+      GOVERNOR_CHECK_EVERY_BATCHES = 25
+
+      # The crisis-distance invariant: no level of a governed table holds
+      # more than half of fts5's crisismerge (16) segments when our code
+      # can help it — the engine's to-completion crisis merge is never
+      # reached. The total-segment line is FtsStructure::SEGMENT_WARN
+      # (1200 against the hard cap of 2000), shared with the health gauges.
+      GOVERNOR_LEVEL_LIMIT = 8
 
       # == P111-1b — the transaction shape and the slice-pending marker
       #
@@ -510,7 +546,7 @@ module Nabu
         # P93-3: the CJK bigram lane — its own scoped streaming pass, the
         # trigram precedent exactly.
         timed(profile, :cjk) do
-          rebuild_cjk!(catalog: catalog, fulltext: fulltext, cjk_slugs: Array(cjk_slugs))
+          rebuild_cjk!(catalog: catalog, fulltext: fulltext, cjk_slugs: Array(cjk_slugs), progress: progress)
         end
         # P72-1: the coverage index — its own streaming pass (the trigram
         # precedent), AFTER the postings exist (the rarity ranks read them).
@@ -688,7 +724,7 @@ module Nabu
               before = LemmaFrequencies.snapshot(fulltext, ids: ids, urns: urns)
               deleted = delete_source_lemma_rows(fulltext, ids: ids, urns: urns)
               if fts_contentless?(fulltext)
-                delete_fts_rows_by_rowid(fulltext, TABLE, ids)
+                delete_fts_rows_by_rowid(fulltext, TABLE, ids, progress: progress)
               else
                 delete_fts_rows(fulltext, TABLE, ids)
               end
@@ -727,13 +763,13 @@ module Nabu
               end
               if use_delta
                 refresh_trigram_delta(catalog, fulltext, slug, Array(fuzzy_slugs), delta)
-                refresh_cjk_delta(catalog, fulltext, slug, Array(cjk_slugs), delta)
+                refresh_cjk_delta(catalog, fulltext, slug, Array(cjk_slugs), delta, progress: progress)
               else
                 refresh_trigram_slice(catalog, fulltext, slug, Array(fuzzy_slugs), ids)
                 # P93-3: the CJK lane's slice — same drift-honest contract as
                 # the trigram slice; a fulltext file predating the lane skips
                 # here and bootstraps below (flagged sources only).
-                refresh_cjk_slice(catalog, fulltext, slug, Array(cjk_slugs), ids)
+                refresh_cjk_slice(catalog, fulltext, slug, Array(cjk_slugs), ids, progress: progress)
               end
               # P65: swap this source's char-postings slice; a pre-P65 fulltext
               # file (no table) gets the whole postings build below instead —
@@ -812,7 +848,7 @@ module Nabu
           # full rebuild.
           if Array(cjk_slugs).include?(slug) && !fulltext.table_exists?(CJK_TABLE)
             progress&.stage("cjk bigram lane: building (first flagged sync — scoped sources only)")
-            rebuild_cjk!(catalog: catalog, fulltext: fulltext, cjk_slugs: Array(cjk_slugs))
+            rebuild_cjk!(catalog: catalog, fulltext: fulltext, cjk_slugs: Array(cjk_slugs), progress: progress)
           end
           refresh_alignment(catalog, fulltext, alignments, source_id)
         end
@@ -897,7 +933,7 @@ module Nabu
       # Drop and rebuild the CJK bigram lane (CJK_TABLE note) over the live
       # passages of the +cjk_slugs+ sources, and record that scope. Returns
       # the number of passages indexed (runless passages contribute none).
-      def rebuild_cjk!(catalog:, fulltext:, cjk_slugs:)
+      def rebuild_cjk!(catalog:, fulltext:, cjk_slugs:, progress: nil)
         fulltext.drop_table?(CJK_TABLE)
         fulltext.drop_table?(CJK_SCOPE_TABLE)
         fulltext.run(CREATE_CJK_TABLE)
@@ -906,12 +942,14 @@ module Nabu
         end
 
         count = 0
+        governor = fts_governor(fulltext, CJK_TABLE, progress: progress)
         fulltext.transaction do
           fulltext[CJK_SCOPE_TABLE].multi_insert(cjk_slugs.map { |slug| { slug: slug } })
           cjk_passages(catalog, cjk_slugs).each_slice(BATCH_SIZE) do |batch|
             rows = batch.filter_map { |row| cjk_row(row) }
             fulltext[CJK_TABLE].multi_insert(rows)
             count += rows.size
+            governor&.tick!
           end
         end
         count
@@ -1100,21 +1138,131 @@ module Nabu
       def consolidate_merges!(fulltext, table, progress: nil)
         chunks = 0
         loop do
-          before = total_changes(fulltext)
-          fulltext[table].insert(table => "merge", :rank => MERGE_CHUNK_PAGES)
+          worked = merge_chunk!(fulltext, table) >= MERGE_NOOP_LINE
           chunks += 1
           if (chunks % 25).zero?
             progress&.stage("fts merge: #{table} — chunk #{chunks}")
             checkpoint_wal!(fulltext, progress: progress) # merges rewrite pages too — keep the WAL bounded
           end
-          break if total_changes(fulltext) - before < 2
+          break unless worked
         end
         checkpoint_wal!(fulltext, progress: progress)
         chunks
       end
 
+      # ONE bounded positive merge step — its own statement (autocommit
+      # outside a transaction), at most MERGE_CHUNK_PAGES pages of work.
+      # Returns the total_changes delta the step caused: the probe counts
+      # the command row itself (1) plus every page the merge wrote, so
+      # below MERGE_NOOP_LINE is the documented no-op completion signal.
+      # Positive merges run with deletemerge=0 active — the deferral
+      # governs only the engine's own delete-triggered merges.
+      def merge_chunk!(fulltext, table)
+        before = total_changes(fulltext)
+        fulltext[table].insert(table => "merge", :rank => MERGE_CHUNK_PAGES)
+        total_changes(fulltext) - before
+      end
+      MERGE_NOOP_LINE = 2
+
       def total_changes(fulltext)
         fulltext.synchronize(&:total_changes)
+      end
+
+      # -- the merge governor (the 2026-11-11 crisis-merge stall) ------------
+
+      # The governor for +table+'s batch loop, or nil when the table is not
+      # governed (governed_fts_tables: the contentless shape only — a
+      # legacy contentful file keeps the old untouched path, like every
+      # other recipe of this family).
+      def fts_governor(fulltext, table, progress: nil)
+        return nil unless governed_fts_tables(fulltext).include?(table)
+
+        FtsGovernor.new(fulltext: fulltext, table: table, progress: progress)
+      end
+
+      # The governor's decision over a decoded FtsStructure::Structure:
+      # { level:, segments: } for the FIRST level past +level_limit+,
+      # else { total: } when the total passes +total_limit+, else nil.
+      # AT a limit is fine — only past it fires. A nil structure (no
+      # record yet) is no pressure.
+      def governor_pressure(structure, level_limit:, total_limit:)
+        return nil if structure.nil?
+
+        structure.levels.each_with_index do |level, index|
+          count = level[:segments].size
+          return { level: index, segments: count } if count > level_limit
+        end
+        return { total: structure.total_segments } if structure.total_segments > total_limit
+
+        nil
+      end
+
+      # Holds the crisis-distance invariant over one governed batch loop
+      # (class note: the governor). The loop calls #tick! after every
+      # batch; every +cadence+ ticks the live structure is read, and
+      # pressure is relieved in bounded merge chunks right there, between
+      # batches — never inside one. Limits are parameters (the constants
+      # are the defaults) so the decision is testable at small scale.
+      # Inside a wrapping transaction (rebuild!'s streaming pass, the small
+      # slice's atomic swap) the chunks still run — they keep the structure
+      # bounded either way — but the checkpoint is skipped: a checkpoint
+      # cannot reclaim an open transaction's frames.
+      class FtsGovernor
+        attr_reader :table, :batches, :checks, :relief_chunks
+
+        def initialize(fulltext:, table:, progress: nil, cadence: GOVERNOR_CHECK_EVERY_BATCHES,
+                       level_limit: GOVERNOR_LEVEL_LIMIT, total_limit: FtsStructure::SEGMENT_WARN)
+          @fulltext = fulltext
+          @table = table
+          @progress = progress
+          @cadence = cadence
+          @level_limit = level_limit
+          @total_limit = total_limit
+          @batches = 0
+          @checks = 0
+          @relief_chunks = 0
+        end
+
+        def tick!
+          @batches += 1
+          check! if (@batches % @cadence).zero?
+        end
+
+        # Read the structure; relieve any pressure. Returns the chunks run.
+        def check!
+          @checks += 1
+          found = pressure
+          found ? relieve!(found) : 0
+        end
+
+        # Bounded chunks until both limits hold again or the engine reports
+        # a no-op (nothing left it will merge at this grain), then a WAL
+        # checkpoint when no transaction holds the frames.
+        def relieve!(found)
+          @progress&.stage("fts governor: #{@table} — #{describe(found)}, consolidating")
+          chunks = 0
+          loop do
+            chunks += 1
+            break if Indexer.merge_chunk!(@fulltext, @table) < MERGE_NOOP_LINE
+            break if pressure.nil?
+          end
+          @relief_chunks += chunks
+          Indexer.checkpoint_wal!(@fulltext, progress: @progress) unless @fulltext.in_transaction?
+          chunks
+        end
+
+        private
+
+        def pressure
+          Indexer.governor_pressure(FtsStructure.read(@fulltext, @table),
+                                    level_limit: @level_limit, total_limit: @total_limit)
+        end
+
+        def describe(found)
+          return "level #{found[:level]} at #{found[:segments]} segments" if found.key?(:level)
+
+          "#{found[:total]} segments total (line #{@total_limit})"
+        end
       end
 
       # -- refresh_source! internals (P26-5) ---------------------------------
@@ -1482,6 +1630,7 @@ module Nabu
         count = 0
         lemma_count = 0
         chars = Hash.new(0)
+        governor = fts_governor(fulltext, TABLE, progress: progress)
         dataset.each_slice(BATCH_SIZE) do |batch|
           fulltext[TABLE].multi_insert(
             batch.map do |row|
@@ -1495,6 +1644,7 @@ module Nabu
           count += batch.size
           lemma_count += rows.size
           progress&.load_tick(count, 0) if batch.size == BATCH_SIZE
+          governor&.tick!
         end
         [count, lemma_count, chars]
       end
@@ -1640,7 +1790,8 @@ module Nabu
           progress&.stage("stage re-derive: #{stage} (derivation version moved)")
           case stage
           when "char_postings" then rebuild_char_postings!(catalog: catalog, fulltext: fulltext)
-          when "cjk" then rebuild_cjk!(catalog: catalog, fulltext: fulltext, cjk_slugs: Array(cjk_slugs))
+          when "cjk"
+            rebuild_cjk!(catalog: catalog, fulltext: fulltext, cjk_slugs: Array(cjk_slugs), progress: progress)
           when "passage_chars" then rebuild_passage_chars!(catalog: catalog, fulltext: fulltext)
           when "sign_coverage"
             rebuild_sign_coverage!(catalog: catalog, fulltext: fulltext, sign_list: sign_list,
@@ -2010,9 +2161,14 @@ module Nabu
       # at all (the legacy path below pays a full-table pass per sync).
       # contentless_delete=1 makes these real deletions. Returns the
       # number of rows deleted.
-      def delete_fts_rows_by_rowid(fulltext, table, ids)
+      # Governed tables tick the merge governor per batch: contentless
+      # deletes write tombstones and flush segments like inserts do.
+      def delete_fts_rows_by_rowid(fulltext, table, ids, progress: nil)
+        governor = fts_governor(fulltext, table, progress: progress)
         ids.to_a.each_slice(BATCH_SIZE).sum do |batch|
-          fulltext[table].where(rowid: batch).delete
+          deleted = fulltext[table].where(rowid: batch).delete
+          governor&.tick!
+          deleted
         end
       end
 
@@ -2067,19 +2223,17 @@ module Nabu
       # build, hands-off otherwise. Deletes go by rowid (contentless — the
       # ids ARE the rowids). A fulltext file without the lane skips
       # (bootstrap is the flagged-sync gate in refresh_source!).
-      def refresh_cjk_slice(catalog, fulltext, slug, cjk_slugs, ids)
+      def refresh_cjk_slice(catalog, fulltext, slug, cjk_slugs, ids, progress: nil)
         return unless fulltext.table_exists?(CJK_TABLE)
 
         flagged = cjk_slugs.include?(slug)
         in_scope = !fulltext[CJK_SCOPE_TABLE].where(slug: slug).empty?
         return unless flagged || in_scope
 
-        delete_fts_rows_by_rowid(fulltext, CJK_TABLE, ids) if in_scope
+        delete_fts_rows_by_rowid(fulltext, CJK_TABLE, ids, progress: progress) if in_scope
         if flagged
           fulltext[CJK_SCOPE_TABLE].insert(slug: slug) unless in_scope
-          cjk_passages(catalog, [slug]).each_slice(BATCH_SIZE) do |batch|
-            fulltext[CJK_TABLE].multi_insert(batch.filter_map { |row| cjk_row(row) })
-          end
+          insert_cjk_batches(fulltext, cjk_passages(catalog, [slug]), progress: progress)
         else
           fulltext[CJK_SCOPE_TABLE].where(slug: slug).delete
         end
@@ -2109,7 +2263,7 @@ module Nabu
 
       # The CJK lane at the delta grain — the trigram contract, deletes by
       # rowid (contentless). Same config-drift delegation.
-      def refresh_cjk_delta(catalog, fulltext, slug, cjk_slugs, delta)
+      def refresh_cjk_delta(catalog, fulltext, slug, cjk_slugs, delta, progress: nil)
         return unless fulltext.table_exists?(CJK_TABLE)
 
         flagged = cjk_slugs.include?(slug)
@@ -2119,12 +2273,20 @@ module Nabu
         unless flagged && in_scope
           source_id = catalog[:sources].where(slug: slug).get(:id)
           ids, = source_passage_keys(catalog, source_id)
-          return refresh_cjk_slice(catalog, fulltext, slug, cjk_slugs, ids)
+          return refresh_cjk_slice(catalog, fulltext, slug, cjk_slugs, ids, progress: progress)
         end
 
-        delete_fts_rows_by_rowid(fulltext, CJK_TABLE, delta.changed_ids)
-        ids_scoped(cjk_passages(catalog, [slug]), delta.upserted_ids).each_slice(BATCH_SIZE) do |batch|
+        delete_fts_rows_by_rowid(fulltext, CJK_TABLE, delta.changed_ids, progress: progress)
+        insert_cjk_batches(fulltext, ids_scoped(cjk_passages(catalog, [slug]), delta.upserted_ids),
+                           progress: progress)
+      end
+
+      # The slice-time CJK insert loop (slice + delta grain), governed.
+      def insert_cjk_batches(fulltext, rows, progress: nil)
+        governor = fts_governor(fulltext, CJK_TABLE, progress: progress)
+        rows.each_slice(BATCH_SIZE) do |batch|
           fulltext[CJK_TABLE].multi_insert(batch.filter_map { |row| cjk_row(row) })
+          governor&.tick!
         end
       end
 
