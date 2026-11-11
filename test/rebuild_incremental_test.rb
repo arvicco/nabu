@@ -794,9 +794,48 @@ class RebuildIncrementalTest < Minitest::Test
     assert_equal before, File.binread(catalog_path), "the refusal must precede any replay work"
   end
 
+  # -- the cjk bigram lane: rebuild-cadence (2026-11-11 ruling) ------------
+
+  # Syncs never write the lane; the rebuild catches it up. A dirty flagged
+  # replay rebuilds it whole, and a pure config-flag drift (built scope ≠
+  # flags) does too — the path that heals a lane an interrupted rebuild
+  # left empty or a flag edit left stale.
+  def test_incremental_catches_the_cjk_lane_up
+    write_sources(<<~YAML)
+      alpha:
+        adapter: TestAdapter
+        cjk_index: true
+      beta:
+        adapter: TestAdapter
+    YAML
+    write_canonical("alpha", "a.txt" => "Alpha\n六龍御天\n")
+    full_rebuilder.run
+    assert_equal 1, cjk_lane_count
+
+    write_canonical("alpha", "a.txt" => "Alpha\n六龍御天\n飛龍在天\n")
+    incremental_rebuilder.run
+    assert_equal 2, cjk_lane_count, "the flagged replay rebuilt the lane whole"
+
+    write_sources(<<~YAML)
+      alpha:
+        adapter: TestAdapter
+      beta:
+        adapter: TestAdapter
+    YAML
+    incremental_rebuilder.run
+    assert_equal 0, cjk_lane_count, "a de-flag lands at the next rebuild (scope drift)"
+  end
+
   # -- helpers -------------------------------------------------------------
 
   private
+
+  def cjk_lane_count(db_dir: @db_dir)
+    ft = Nabu::Store.connect_fulltext(File.join(db_dir, "fulltext.sqlite3"), readonly: true)
+    ft[:passages_cjk].count
+  ensure
+    ft&.disconnect
+  end
 
   def config(db_dir: @db_dir)
     Nabu::Config.new(

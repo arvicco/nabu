@@ -211,7 +211,8 @@ module Store
         Indexer.refresh_source!(catalog: @catalog, fulltext: @fulltext, slug: "s", cjk_slugs: ["s"])
 
         assert_includes governors.map(&:table), :passages_fts, "the ordinary slice refresh is governed"
-        assert_includes governors.map(&:table), :passages_cjk
+        refute_includes governors.map(&:table), :passages_cjk,
+                        "the cjk lane is rebuild-cadence — a refresh never writes (or governs) it"
 
         governors.clear
         Indexer.refresh_source!(catalog: @catalog, fulltext: @fulltext, slug: "s", cjk_slugs: ["s"],
