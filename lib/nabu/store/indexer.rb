@@ -1305,12 +1305,20 @@ module Nabu
 
         # Bounded chunks until both limits hold again or the engine reports
         # a no-op (nothing left it will merge at this grain), then a WAL
-        # checkpoint when no transaction holds the frames.
+        # checkpoint when no transaction holds the frames. The loop TICKS
+        # and checkpoints every 25 chunks (the consolidate_merges! cadence):
+        # the first relief against a debt-laden standing index can run
+        # thousands of chunks, and a long silent relief would be the very
+        # single-announcement opacity the governor exists to end.
         def relieve!(found)
           @progress&.stage("fts governor: #{@table} — #{describe(found)}, consolidating")
           chunks = 0
           loop do
             chunks += 1
+            if (chunks % 25).zero?
+              @progress&.stage("fts governor: #{@table} — relief chunk #{chunks}")
+              Indexer.checkpoint_wal!(@fulltext, progress: @progress) unless @fulltext.in_transaction?
+            end
             break if Indexer.merge_chunk!(@fulltext, @table) < MERGE_NOOP_LINE
             break if pressure.nil?
           end
