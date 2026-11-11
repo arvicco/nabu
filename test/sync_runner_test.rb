@@ -827,6 +827,26 @@ class SyncRunnerTest < Minitest::Test
     fulltext&.disconnect
   end
 
+  # The sync's index writer (and `nabu index refresh`, which rides the
+  # same reindex!) opens the fulltext with the index-writer cache profile.
+  def test_reindex_opens_the_fulltext_with_the_index_writer_profile
+    BreakerAdapter.reset!(urns: %w[urn:cts:test:w1])
+    runner = make_runner(registry(entry("breaker", BreakerAdapter, wired: true)))
+    profiles = []
+    original = Nabu::Store.method(:connect_fulltext)
+    Nabu::Store.define_singleton_method(:connect_fulltext) do |url, **kwargs|
+      profiles << kwargs[:writer_profile]
+      original.call(url, **kwargs)
+    end
+    begin
+      runner.sync("breaker")
+    ensure
+      Nabu::Store.define_singleton_method(:connect_fulltext, original)
+    end
+
+    assert_includes profiles, :index, "the reindex writer asks for the index-writer profile"
+  end
+
   # --parse-only still reindexes (content may have changed).
   def test_parse_only_sync_reindexes
     BreakerAdapter.reset!(urns: %w[urn:cts:test:w1])

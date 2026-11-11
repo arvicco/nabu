@@ -1306,6 +1306,53 @@ module Store
       end
     end
 
+    # checkpoint_wal! returns the engine's answer row instead of discarding
+    # it: TRUNCATE degrades silently against a pinned reader.
+    def test_checkpoint_returns_the_engine_result_row
+      Dir.mktmpdir do |dir|
+        disk = Nabu::Store.connect_fulltext(File.join(dir, "ft.sqlite3"))
+        begin
+          disk.create_table(:t) { Integer :x }
+          disk[:t].insert(x: 1)
+          result = Nabu::Store::Indexer.checkpoint_wal!(disk)
+
+          assert_equal %i[busy log checkpointed], result.keys
+          assert_equal 0, result[:busy], "an unpinned TRUNCATE checkpoint completes"
+          assert_equal result[:log], result[:checkpointed], "every frame was checkpointed"
+        ensure
+          disk.disconnect
+        end
+      end
+    end
+
+    def test_checkpoint_announces_when_a_reader_pins_the_wal
+      Dir.mktmpdir do |dir|
+        path = File.join(dir, "ft.sqlite3")
+        disk = Nabu::Store.connect_fulltext(path)
+        reader = Sequel.connect("sqlite://#{path}")
+        begin
+          disk.create_table(:t) { Integer :x }
+          disk[:t].insert(x: 1)
+          disk.run("PRAGMA busy_timeout = 0") # never wait on the pinned reader
+          reader.synchronize do |conn|
+            conn.execute("BEGIN")
+            conn.execute("SELECT count(*) FROM t") # opens the read snapshot
+            disk[:t].insert(x: 2) # frames past the reader's mark
+            spy = BulkSpy.new([])
+            result = Nabu::Store::Indexer.checkpoint_wal!(disk, progress: spy)
+            conn.execute("COMMIT")
+
+            assert_equal 1, result[:busy], "TRUNCATE cannot finish under a pinned reader"
+            assert(spy.stages.any? { |label| label.include?("wal checkpoint refused (reader pinning)") },
+                   "the refusal is announced, never silent (got #{spy.stages.inspect})")
+          end
+        ensure
+          reader.disconnect
+          disk.disconnect
+        end
+      end
+    end
+
     # A LEGACY contentful passages_fts keeps the ordinary path even past the
     # threshold — the bulk recipe is designed against the contentless shape,
     # and legacy files upgrade at their next full rebuild anyway.
@@ -1427,9 +1474,9 @@ module Store
       shapes = []
       mod = Nabu::Store::Indexer
       original = mod.method(:slice_write_unit)
-      mod.define_singleton_method(:slice_write_unit) do |fulltext, bulk:, &blk|
+      mod.define_singleton_method(:slice_write_unit) do |fulltext, bulk:, **kwargs, &blk|
         shapes << bulk
-        original.call(fulltext, bulk: bulk, &blk)
+        original.call(fulltext, bulk: bulk, **kwargs, &blk)
       end
       begin
         refresh!

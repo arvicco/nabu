@@ -774,10 +774,13 @@ module Nabu
     # for a dictionary sync — the crosswalk changed). Opens its own
     # short-lived connection to config.fulltext_path so callers need not
     # thread a handle through. Returns the source's live passage count.
+    # The ONE writer open behind both a sync's inline index step and
+    # `nabu index refresh` (which rides index_entry here) — so the
+    # index-writer cache profile threads through this single site.
     def reindex!(entry, adapter, progress = nil, delta: nil)
       require "fileutils"
       FileUtils.mkdir_p(File.dirname(@config.fulltext_path))
-      fulltext = Store.connect_fulltext(@config.fulltext_path)
+      fulltext = Store.connect_fulltext(@config.fulltext_path, writer_profile: :index)
       Store::Indexer.refresh_source!(catalog: @db, fulltext: fulltext, slug: entry.slug,
                                      delta: delta,
                                      alignments: AlignmentRegistry.load(@config.alignments_path),

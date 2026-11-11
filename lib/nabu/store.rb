@@ -127,6 +127,18 @@ module Nabu
     LIVE_CACHE_KIB = -65_536
     LIVE_MMAP_BYTES = 8 * (1024**3)
 
+    # == The index-writer profile (connect_fulltext writer_profile: :index)
+    #
+    # The connections that WRITE the fulltext index at sync/index-refresh
+    # time walk the fts5 segment B-trees and the 100M-row lemma table's
+    # three secondary indexes on every batch — a 64 MiB cache churns
+    # against a ~60 GB file, and every miss is a page read the batch
+    # waits on. 512 MiB is one writer connection at a time (the write
+    # lock admits one), so the cost is bounded and per-process; readers
+    # and casual connects keep the live profile. Same negative-KiB
+    # convention as the others.
+    INDEX_WRITER_CACHE_KIB = -524_288
+
     # == page_size 8192 at the NEXT from-scratch generation (P112-3)
     #
     # The standing files were created at SQLite's 4096 default. 8192
@@ -254,16 +266,42 @@ module Nabu
     # only link to the catalog is the UNINDEXED passage_id column). +rebuild+
     # (P36-2) applies the same rebuild-mode profile — the fulltext db is
     # derived-of-derived, so it is even more disposable.
-    def connect_fulltext(url, readonly: false, rebuild: false)
+    #
+    # Every read-write fulltext connect PINS synchronous=NORMAL under WAL:
+    # a commit no longer fsyncs, only checkpoints do, so a power loss can
+    # roll back the last few commits but never corrupts the file. Sound
+    # for the index because it is derived-of-derived and re-runnable (the
+    # slice-pending marker heals a lost tail); the cost it removes is
+    # macOS F_FULLFSYNC per autocommit batch, paid thousands of times by
+    # the bulk recipe's short autocommitted statements. Measured
+    # 2026-11-11: this box's SQLite (3.53.2) is compiled with
+    # DEFAULT_WAL_SYNCHRONOUS=1, so a WAL connection ALREADY defaults to
+    # NORMAL — the pragma makes the fulltext's posture explicit and
+    # build-independent rather than changing today's behavior. The
+    # catalog connect deliberately sets nothing: its durability posture
+    # (engine default — FULL outside WAL, the build's WAL default inside)
+    # is an owner decision, not a rider on an index change.
+    # +writer_profile: :index+ layers the INDEX_WRITER_CACHE_KIB cache on
+    # top of the live profile for the sync/index-refresh writer only.
+    def connect_fulltext(url, readonly: false, rebuild: false, writer_profile: nil)
       db = Sequel.connect(sqlite_url(url), readonly: readonly, timeout: BUSY_TIMEOUT_MS)
       if db.database_type == :sqlite
         live_pragmas!(db)
         unless readonly
           db.run("PRAGMA page_size = #{PAGE_SIZE}") # fresh files only (class doc)
           write_ahead_log!(db)
+          db.run("PRAGMA synchronous = NORMAL")
           rebuild_pragmas!(db) if rebuild
+          index_writer_pragmas!(db) if writer_profile == :index
         end
       end
+      db
+    end
+
+    # The index-writer profile (INDEX_WRITER_CACHE_KIB note) — applied
+    # last, so it wins over both the live and the rebuild cache.
+    def index_writer_pragmas!(db)
+      db.run("PRAGMA cache_size = #{INDEX_WRITER_CACHE_KIB}")
       db
     end
 

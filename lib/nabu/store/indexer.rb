@@ -680,7 +680,7 @@ module Nabu
         with_bulk_write_mode(fulltext, governed) do
           timed_sync_stage(ledger, slug, "index_slice",
                            "index slice: #{slug} (fts + lemma rows)", progress) do
-            slice_write_unit(fulltext, bulk: bulk) do
+            slice_write_unit(fulltext, bulk: bulk, progress: progress) do
               # P42-1: snapshot this source's lemma-frequency contribution BEFORE
               # the rewrite, re-snapshot AFTER, and apply the delta to the corpus
               # freq table (same transaction). incremental_ready? guarantees the
@@ -848,7 +848,7 @@ module Nabu
         mark_slice_finished!(fulltext, slug, live_rows: live_rows, max_passage_id: max_id)
         # The bulk pass's final reclaim — AFTER the last write, so the WAL
         # file ends the refresh truncated, not holding the postings swaps.
-        checkpoint_wal!(fulltext) if bulk
+        checkpoint_wal!(fulltext, progress: progress) if bulk
         # The slice rewrite's insert count IS the source's live total; the
         # delta grain inserts only the changed rows, so the honest
         # "indexed N" is counted from the catalog instead.
@@ -1032,18 +1032,31 @@ module Nabu
       # slice is one atomic swap; a bulk slice autocommits per statement
       # batch (auto-checkpoint keeps the WAL bounded between batches) and
       # TRUNCATE-checkpoints when the pass completes.
-      def slice_write_unit(fulltext, bulk:, &)
+      def slice_write_unit(fulltext, bulk:, progress: nil, &)
         return fulltext.transaction(&) unless bulk
 
         yield
-        checkpoint_wal!(fulltext)
+        checkpoint_wal!(fulltext, progress: progress)
       end
 
       # PRAGMA has no Sequel-dataset form — rides this file's documented
-      # raw-SQL exception (DDL/maintenance statements only). Harmless no-op
-      # on an in-memory db.
-      def checkpoint_wal!(fulltext)
-        fulltext.run("PRAGMA wal_checkpoint(TRUNCATE)")
+      # raw-SQL exception (DDL/maintenance statements only). Harmless on an
+      # in-memory db (busy 0, log/checkpointed -1).
+      #
+      # Returns the engine's answer row as { busy:, log:, checkpointed: }
+      # and announces through +progress+ when busy is nonzero: TRUNCATE
+      # degrades SILENTLY against a reader pinning an old snapshot (a
+      # long-lived `nabu mcp`, a desk query mid-scan) — the frames past
+      # that reader's mark stay in the WAL, the file never shrinks, and
+      # the run reads as "checkpointed" unless somebody looks at the row.
+      def checkpoint_wal!(fulltext, progress: nil)
+        row = fulltext.fetch("PRAGMA wal_checkpoint(TRUNCATE)").first || {}
+        result = { busy: row[:busy].to_i, log: row[:log].to_i, checkpointed: row[:checkpointed].to_i }
+        if result[:busy].positive?
+          remaining = [result[:log] - result[:checkpointed], 0].max
+          progress&.stage("wal checkpoint refused (reader pinning) — #{remaining} frames remain")
+        end
+        result
       end
 
       # Apply the deferred-merge settings around the block and ALWAYS
@@ -1092,11 +1105,11 @@ module Nabu
           chunks += 1
           if (chunks % 25).zero?
             progress&.stage("fts merge: #{table} — chunk #{chunks}")
-            checkpoint_wal!(fulltext) # merges rewrite pages too — keep the WAL bounded
+            checkpoint_wal!(fulltext, progress: progress) # merges rewrite pages too — keep the WAL bounded
           end
           break if total_changes(fulltext) - before < 2
         end
-        checkpoint_wal!(fulltext)
+        checkpoint_wal!(fulltext, progress: progress)
         chunks
       end
 
