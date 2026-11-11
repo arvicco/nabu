@@ -180,6 +180,29 @@ module Nabu
       end
     end
 
+    # The explicit index refresh (`nabu index refresh <slug>`, P168): the
+    # full slice refresh of one registered source — the same reindex! the
+    # sync path runs (delta nil = the whole slice, so a deferred wave's
+    # rows all land and a pending/behind slice heals), with the same stage
+    # announcements and stage timings, then the lemma rollups the sync
+    # path refreshes after a reindex. Returns the source's live passage
+    # count. An unknown slug is a ValidationError; an index-inert grain
+    # (no passages, no dictionary entries) has no slice to refresh.
+    def index_entry(slug, progress: nil)
+      entry = @registry[slug]
+      raise ValidationError, "unknown source #{slug.inspect}" if entry.nil?
+
+      adapter = entry.build_adapter
+      if index_inert?(adapter)
+        raise ValidationError, "source #{slug.inspect} is index-inert (#{adapter.class.content_kind}) — " \
+                               "it holds no fulltext slice"
+      end
+
+      indexed = reindex!(entry, adapter, progress)
+      refresh_lemma_rollups(entry, adapter, nil, indexed)
+      indexed
+    end
+
     private
 
     # P84-1: the local-lemmas shelf when it exists on this box — an absent
@@ -344,9 +367,18 @@ module Nabu
       # idempotent re-parse) skips the slice rewrite too — announced, never
       # silent. The whole-slice delete+reinsert is FTS5-pathological at big-
       # source scale and re-derives nothing when no passage byte changed.
+      # P168 (the ndl-kotenseki hang): an index_policy: deferred source
+      # (paced-crawl citizens) skips ALL inline index work — no slice
+      # refresh, no heal probe, no alignment-registry refresh — and says so
+      # loudly; `nabu index refresh <slug>` (#index_entry) runs it once per
+      # wave. The slice stays visibly behind meanwhile (slice_behind? →
+      # index doctor / health).
       indexed =
         if index_inert?(adapter)
           nil
+        elsif entry.index_deferred?
+          progress&.stage("index deferred: #{entry.slug} — run bin/nabu index refresh #{entry.slug}")
+          :deferred
         elsif skip_reindex?(adapter, load_report, lane_report)
           if slice_stale?(entry)
             # The heal path: a pending (crashed) or behind (never-started)

@@ -1327,6 +1327,139 @@ module Store
              "a legacy contentful table must not take the bulk recipe")
     end
 
+    # -- universal deferred deletemerge (the ndl-kotenseki incident) ---------
+    # A 17,505-row delta against a 57 GB index hung 5h+ inside
+    # fts5IndexMerge → fts5DataDelete: the bulk gate measured the DELTA,
+    # while the hazard is the INDEX's accumulated tombstone debt — a small
+    # delta ran with deletemerge=10 live and paid the debt's segment merges
+    # inside one atomic transaction. The deferral (+ consolidation) is now
+    # universal for the contentless shape; the threshold decides only the
+    # transaction shape.
+
+    # Swap one Indexer entry point for a recording wrapper, restore after.
+    def observing(name)
+      mod = Nabu::Store::Indexer
+      original = mod.method(name)
+      calls = []
+      mod.define_singleton_method(name) do |*args, **kwargs, &blk|
+        calls << original.call(*args, **kwargs, &blk)
+        calls.last
+      end
+      yield calls
+    ensure
+      mod.define_singleton_method(name, original)
+    end
+
+    def assert_default_deletemerge(message)
+      stored = merge_config(@fulltext, "deletemerge")
+      assert(stored.nil? || stored.to_i == Nabu::Store::Indexer::DEFAULT_MERGE_SETTINGS["deletemerge"],
+             "#{message} (got #{stored.inspect})")
+    end
+
+    def test_delta_grain_refresh_defers_deletemerge_during_the_write
+      doc = make_document(urn: "urn:d:s")
+      make_passage(doc, urn: "urn:d:s:1", text_normalized: "alpha", sequence: 0)
+      rebuild!
+      make_passage(doc, urn: "urn:d:s:2", text_normalized: "beta", sequence: 1)
+
+      seen = nil
+      mod = Nabu::Store::Indexer
+      original = mod.method(:insert_passage_batches)
+      mod.define_singleton_method(:insert_passage_batches) do |fulltext, *rest, **kwargs|
+        seen = fulltext[:passages_fts_config].where(k: "deletemerge").get(:v)
+        original.call(fulltext, *rest, **kwargs)
+      end
+      begin
+        refresh!(delta: delta_of(upserted: %w[urn:d:s:2]))
+      ensure
+        mod.define_singleton_method(:insert_passage_batches, original)
+      end
+
+      refute_nil seen, "the deferral is written as explicit index config during the write"
+      assert_equal Nabu::Store::Indexer::BULK_MERGE_SETTINGS["deletemerge"], seen.to_i,
+                   "a small delta writes with deletemerge deferred — the debt is the index's, not the delta's"
+      assert_default_deletemerge("the default is restored once the write completes")
+      assert_equal %w[urn:d:s:2], match_urns("beta")
+    end
+
+    # The universal recipe's cost claim: on a debt-free index the
+    # consolidation probe exits after ONE no-op merge chunk per governed
+    # table (the command row is the only change total_changes sees).
+    def test_consolidation_runs_after_a_small_delta_and_is_a_no_op_on_a_clean_index
+      doc = make_document(urn: "urn:d:s")
+      make_passage(doc, urn: "urn:d:s:1", text_normalized: "alpha", sequence: 0)
+      rebuild!
+      make_passage(doc, urn: "urn:d:s:2", text_normalized: "beta", sequence: 1)
+
+      spy = BulkSpy.new([])
+      observing(:consolidate_merges!) do |chunks|
+        refresh!(delta: delta_of(upserted: %w[urn:d:s:2]), progress: spy)
+        governed = Nabu::Store::Indexer.governed_fts_tables(@fulltext)
+        assert_equal [Nabu::Store::Indexer::TABLE, Nabu::Store::Indexer::CJK_TABLE], governed
+        assert_equal [1] * governed.size, chunks,
+                     "one no-op chunk per governed table — the clean-index probe exits at once"
+      end
+      assert(spy.stages.any? { |label| label.include?("merge consolidation") },
+             "the consolidation stage runs (announced) after every slice write")
+      refute(spy.stages.any? { |label| label.include?("bulk mode") },
+             "a small delta keeps the ordinary (atomic) transaction shape")
+    end
+
+    def test_a_small_write_stays_atomic_under_deferred_merges
+      doc = make_document(urn: "urn:d:s")
+      make_passage(doc, urn: "urn:d:s:1", text_normalized: "alpha", sequence: 0)
+      rebuild!
+      make_passage(doc, urn: "urn:d:s:2", text_normalized: "fresh", sequence: 1)
+
+      raising_char_postings do
+        assert_raises(RuntimeError) { refresh!(delta: delta_of(upserted: %w[urn:d:s:2])) }
+      end
+
+      assert_equal 1, fts.count, "below the threshold the write is one atomic transaction"
+      assert_default_deletemerge("the deferral is ensure-restored even when the atomic write rolls back")
+    end
+
+    def test_threshold_decides_only_the_transaction_shape
+      doc = make_document(urn: "urn:d:s")
+      make_passage(doc, urn: "urn:d:s:1", text_normalized: "alpha", sequence: 0)
+      rebuild!
+
+      shapes = []
+      mod = Nabu::Store::Indexer
+      original = mod.method(:slice_write_unit)
+      mod.define_singleton_method(:slice_write_unit) do |fulltext, bulk:, &blk|
+        shapes << bulk
+        original.call(fulltext, bulk: bulk, &blk)
+      end
+      begin
+        refresh!
+        refresh!(bulk_threshold: 1)
+      ensure
+        mod.define_singleton_method(:slice_write_unit, original)
+      end
+
+      assert_equal [false, true], shapes, "below threshold: atomic txn; at/above: autocommit + checkpoint"
+    end
+
+    def test_governed_tables_key_only_on_the_contentless_shape
+      doc = make_document(urn: "urn:d:s")
+      make_passage(doc, urn: "urn:d:s:1", text_normalized: "王道", sequence: 0, language: "lzh")
+      Nabu::Store::Indexer.rebuild!(catalog: @catalog, fulltext: @fulltext, cjk_slugs: ["s"])
+
+      assert_equal [Nabu::Store::Indexer::TABLE, Nabu::Store::Indexer::CJK_TABLE],
+                   Nabu::Store::Indexer.governed_fts_tables(@fulltext)
+
+      @fulltext.drop_table(:passages_fts)
+      @fulltext.run(<<~SQL)
+        CREATE VIRTUAL TABLE passages_fts USING fts5(
+          text_normalized, language, source, urn UNINDEXED, passage_id UNINDEXED,
+          tokenize = 'unicode61 remove_diacritics 2'
+        )
+      SQL
+      assert_empty Nabu::Store::Indexer.governed_fts_tables(@fulltext),
+                   "a legacy contentful file keeps the old untouched path"
+    end
+
     # Bootstrap safety: against a fulltext db that has never been built (the
     # very first sync), refresh falls back to a FULL rebuild — every source
     # lands, and the return value is still the refreshed source's own count.

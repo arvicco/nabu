@@ -5,6 +5,7 @@ require "fileutils"
 require "json"
 require "nokogiri"
 
+require_relative "../paced_crawl"
 require_relative "../redirect_follow"
 require_relative "../zip_fetch"
 require_relative "../normalize"
@@ -62,16 +63,26 @@ module Nabu
     # license_override "nc" (the glaux per-text override precedent) — the
     # manifest's own license field decides, never the seed.
     #
-    # == The paced, resumable crawl (the ndl-kotenseki mold)
+    # == The paced, resumable crawl (the paced-crawl rail, architecture §19)
     #
     # The hOCR API is rate limited (x-ratelimit-limit 5001 per window,
-    # censused 2026-10-11; MDZ documents a 24 h quota). The crawl: per
-    # sync, the six manifests (re-read, written only when changed) then
-    # up to SLICE missing pages, DELAY seconds apart, resuming at the file
-    # grain (<bsb>/hocr/<page>.hocr on disk is done). It stops cleanly —
-    # never raising — when the server says 429 or the remaining quota
-    # falls to RATE_FLOOR, and the next sync continues. A page the API
-    # answers 404 is ledgered in .mdz-crawl.json and never retried.
+    # censused 2026-10-11; MDZ documents a 24 h quota). Per sync: the six
+    # manifests (re-read, written only when changed), then one page lane
+    # per object on Nabu::PacedCrawl, in seed order, under ONE budget of
+    # SLICE requests. A lane's universe is its manifest's canvas numbers;
+    # held = <bsb>/hocr/<page>.hocr on disk; the engine owns selection,
+    # pacing (DELAY between requests), the timeout policy and the ledger.
+    # Terminal answers are ledgered in .mdz-crawl.json and never retried:
+    # a 404 "missing", 401/403/410 "denied", a 200 with an empty body
+    # "empty" (never written), a page timing out TIMEOUT_ATTEMPTS times
+    # "timeout-stuck". The clean stop (Outcome.halt — never raising, the
+    # page stays selectable, the next sync continues): a 429, or the
+    # remaining quota read off a good answer's x-ratelimit-remaining
+    # falling to RATE_FLOOR — that page is kept and the NEXT ask halts
+    # without a request, across objects, since the quota is the API's.
+    # Each lane's LedgerCodec reads and writes only its own object's
+    # entry in the shared per-object maps ({"missing": {bsb: [pages]}},
+    # the hand-rolled crawl's shape), every other object passing through.
     # Census: 1,551 pages across the six objects → two syncs at SLICE
     # 800 (~15 min each at 1 req/s plus latency).
     #
@@ -111,6 +122,74 @@ module Nabu
       SLICE = 800
       # Stop the slice when the server's remaining quota falls this low.
       RATE_FLOOR = 50
+      TIMEOUT_ATTEMPTS = 3
+      TIMEOUT_BACKOFF = 5.0
+      MISSING_STATUSES = [404].freeze
+      DENIED_STATUSES = [401, 403, 410].freeze
+      RATE_LIMITED = 429
+      TIMEOUT_PATTERN = /transport error for .*(timeout|timed out|execution expired)/i
+      STUCK = "timeout-stuck"
+
+      # One object's page lane ledger on disk: every class is a map
+      # {bsb => [pages]} shared by all the objects' lanes (the hand-rolled
+      # crawl wrote "missing" so); the codec owns only its object's entry
+      # and passes every other object and section through. A page id in
+      # canonical integer form is stored as a number, anything else
+      # verbatim (the codec is total and lossless).
+      class LedgerCodec
+        CLASSES = ["missing", "denied", "empty", STUCK].freeze
+        # Always written, as the hand-rolled crawl did.
+        STANDING = "missing"
+        INTEGER = /\A(?:0|[1-9]\d*)\z/
+
+        attr_reader :object
+
+        def initialize(object)
+          @object = object.to_s
+        end
+
+        def load(raw)
+          CLASSES.to_h do |klass|
+            section = raw[klass]
+            [klass, (section.is_a?(Hash) ? Array(section[object]) : []).to_set(&:to_s)]
+          end
+        end
+
+        def dump(classes, raw)
+          doc = raw.dup
+          CLASSES.each do |klass|
+            section = raw[klass].is_a?(Hash) ? raw[klass].dup : {}
+            ids = classes.fetch(klass, [])
+            ids.empty? ? section.delete(object) : section[object] = encode(ids)
+            next unless klass == STANDING || !section.empty? || raw.key?(klass)
+
+            doc[klass] = section.sort.to_h
+          end
+          doc
+        end
+
+        private
+
+        def encode(ids)
+          ids.map { |id| id.match?(INTEGER) ? Integer(id, 10) : id }
+             .uniq.sort_by { |page| page.is_a?(Integer) ? [0, page, ""] : [1, 0, page] }
+        end
+      end
+
+      # The lanes' declared schedule: the rail's default (two syncs cover
+      # the census; a phase spends at most a few slices).
+      PAGE_SCHEDULE = Nabu::PacedCrawl::Schedule.new(cadence: :per_phase, slices_per_phase: 3,
+                                                     stop_after_zero_slices: 3)
+
+      # One object's page lane (see the header).
+      def self.page_crawl_spec(bsb)
+        Nabu::PacedCrawl::Spec.new(
+          name: bsb, ledger_file: LEDGER_FILE,
+          classes: { denied: "denied", empty: "empty", timeout: STUCK }, subclasses: { denied: ["missing"] },
+          delay: DELAY, slice: SLICE, timeout_attempts: TIMEOUT_ATTEMPTS, timeout_backoff: TIMEOUT_BACKOFF,
+          codec: LedgerCodec.new(bsb), schedule: PAGE_SCHEDULE
+        )
+      end
 
       PDM = "https://creativecommons.org/publicdomain/mark/1.0/"
       NC_LICENSES = ["https://rightsstatements.org/vocab/NoC-NC/1.0/"].freeze
@@ -150,13 +229,16 @@ module Nabu
         )]
       end
 
-      def initialize(delay: DELAY, slice: SLICE, http: Nabu::ZipFetch.default_http, seeds: SEEDS)
+      def initialize(delay: DELAY, slice: SLICE, http: Nabu::ZipFetch.default_http, seeds: SEEDS,
+                     backoff: TIMEOUT_BACKOFF)
         super()
         @delay = delay
         @slice = slice
         @http = http
         @seeds = seeds
-        @requests = 0
+        @backoff = backoff
+        @last_request_at = nil
+        @quota_halt = nil
       end
 
       # -- fetch -------------------------------------------------------------
@@ -164,13 +246,32 @@ module Nabu
       # +force+ is part of the fetch interface; nothing here ever deletes.
       def fetch(workdir, progress: nil, force: false) # rubocop:disable Lint/UnusedMethodArgument
         FileUtils.mkdir_p(workdir)
-        ledger = read_ledger(workdir)
         @seeds.each { |seed| refresh_manifest!(workdir, seed.id) }
-        crawled, stop = crawl_slice!(workdir, ledger, progress)
-        write_ledger!(workdir, ledger)
-        notes = crawl_notes(workdir, ledger, crawled, stop)
+        reports = crawl_slices!(workdir, progress)
+        ledger = ledger_view(workdir)
+        notes = crawl_notes(workdir, ledger, reports)
         progress&.call("#{notes}\n")
+        notes = [notes, *reports.select { |report| active?(report) }.flat_map(&:lines)].join("; ")
         Nabu::FetchReport.new(sha: crawl_sha(workdir, ledger), fetched_at: Time.now, notes: notes)
+      end
+
+      # The chain runner's seam (rake crawl:chain): one page lane per
+      # object, in seed order.
+      def paced_crawls(workdir, progress: nil)
+        @seeds.to_h { |seed| [seed.id, page_crawl(workdir, seed.id, progress: progress)] }
+      end
+
+      # Object +bsb+'s page lane over +workdir+ (its spec retuned by this
+      # instance's knobs; +slice+ overrides the budget). Public so an
+      # offline surface can #diagnose the crawl without crawling.
+      def page_crawl(workdir, bsb, progress: nil, slice: @slice)
+        Nabu::PacedCrawl::Engine.new(
+          spec: self.class.page_crawl_spec(bsb).with(delay: @delay, slice: slice, timeout_backoff: @backoff),
+          dir: workdir, progress: progress,
+          universe: -> { page_universe(workdir, bsb) },
+          held: ->(page) { File.file?(page_path(workdir, bsb, Integer(page, 10))) },
+          fetch_one: ->(page) { fetch_page!(workdir, bsb, Integer(page, 10)) }
+        )
       end
 
       # -- discover ----------------------------------------------------------
@@ -178,7 +279,7 @@ module Nabu
       def discover(workdir, &block)
         return enum_for(:discover, workdir) unless block
 
-        ledger = read_ledger(workdir)
+        ledger = ledger_view(workdir)
         @seeds.each do |seed|
           path = manifest_path(workdir, seed.id)
           next unless File.file?(path) && missing_pages(workdir, seed.id, ledger).empty?
@@ -193,7 +294,7 @@ module Nabu
       end
 
       def discovery_skips(workdir)
-        ledger = read_ledger(workdir)
+        ledger = ledger_view(workdir)
         notes = @seeds.filter_map do |seed|
           next unless File.file?(manifest_path(workdir, seed.id))
 
@@ -245,56 +346,109 @@ module Nabu
         raise Nabu::FetchError, "mdz-protestant: manifest #{id} is not JSON: #{e.message}"
       end
 
-      # Returns [pages fetched, stop reason or nil].
-      def crawl_slice!(workdir, ledger, progress)
-        crawled = 0
+      # Every object's lane in seed order under ONE budget of @slice
+      # requests; a clean stop ends the sync's crawl (the quota is the
+      # API's, not the object's).
+      def crawl_slices!(workdir, progress)
+        @quota_halt = nil
+        budget = @slice
+        reports = []
         @seeds.each do |seed|
-          missing_pages(workdir, seed.id, ledger).each do |page|
-            return [crawled, :slice] if crawled >= @slice
+          break if budget <= 0
 
-            case fetch_page!(workdir, seed.id, page)
-            when :ok then crawled += 1
-            when :ok_at_floor then return [crawled + 1, :rate_limited]
-            when :missing then (ledger["missing"][seed.id] ||= []) << page
-            when :rate_limited then return [crawled, :rate_limited]
-            end
-            progress&.call("crawl: +#{crawled} page(s)…\n") if crawled.positive? && (crawled % 50).zero?
-          end
+          report = page_crawl(workdir, seed.id, progress: progress, slice: budget).slice!
+          reports << report
+          report.lines.each { |line| progress&.call("#{line}\n") } if active?(report)
+          budget -= report.attempted
+          break if report.halted?
         end
-        [crawled, nil]
+        reports
       end
 
-      def fetch_page!(workdir, id, page)
-        response = get(format(OCR_URL, id, page))
-        case response.status
-        when 404 then return :missing
-        when 429 then return :rate_limited
-        end
-        write_page!(workdir, id, page, response.body.to_s)
-        remaining = response.headers["x-ratelimit-remaining"]
-        remaining && Integer(remaining, 10) <= RATE_FLOOR ? :ok_at_floor : :ok
+      # A slice that asked something or stopped — a complete object's
+      # cone-exhausted slice says nothing worth a line.
+      def active?(report) = report.attempted.positive? || report.halted?
+
+      # The object's canvas numbers, manifest order (none before its
+      # manifest is on disk).
+      def page_universe(workdir, bsb)
+        path = manifest_path(workdir, bsb)
+        File.file?(path) ? canvas_pages(read_manifest(path)).map(&:to_s) : []
+      end
+
+      # One hOCR GET → a PacedCrawl::Outcome. The quota floor seen on an
+      # earlier answer halts at once, without a request. An already-held
+      # page (the engine's held-id re-probe) is never overwritten.
+      def fetch_page!(workdir, bsb, page)
+        return @quota_halt if @quota_halt
+
+        response = get(format(OCR_URL, bsb, page),
+                       accept: [200, RATE_LIMITED, *MISSING_STATUSES, *DENIED_STATUSES])
+        return rate_limited(response) if response.status == RATE_LIMITED
+        return page_outcome(:denied, response, ledger_class: "missing") if MISSING_STATUSES.include?(response.status)
+        return page_outcome(:denied, response) if DENIED_STATUSES.include?(response.status)
+
+        body = response.body.to_s
+        return page_outcome(:empty, response) if body.strip.empty?
+
+        write_page!(workdir, bsb, page, body)
+        note_quota!(bsb, page, response)
+        page_outcome(:ok, response)
+      rescue Nabu::FetchError => e
+        raise unless e.message.match?(TIMEOUT_PATTERN)
+
+        Nabu::PacedCrawl::Outcome.new(status: :timeout, evidence: { body_head: Nabu::PacedCrawl.body_head(e.message) })
+      end
+
+      # The remaining quota at RATE_FLOOR: this page is kept, the next ask
+      # is the clean stop. An unreadable header reads as no floor.
+      def note_quota!(bsb, page, response)
+        remaining = Integer(response.headers["x-ratelimit-remaining"].to_s, 10)
+        return if remaining > RATE_FLOOR
+
+        @quota_halt = Nabu::PacedCrawl::Outcome.halt(
+          reason: "quota floor", evidence: { after: "#{bsb}:#{page}", remaining: remaining, floor: RATE_FLOOR }
+        )
       rescue ArgumentError
-        :ok
+        nil
+      end
+
+      def rate_limited(response)
+        Nabu::PacedCrawl::Outcome.halt(reason: "HTTP 429 (rate limited)",
+                                       evidence: { http_status: response.status,
+                                                   remaining: response.headers["x-ratelimit-remaining"] }.compact)
+      end
+
+      def page_outcome(status, response, ledger_class: nil)
+        Nabu::PacedCrawl::Outcome.from_body(status, http_status: response.status, body: response.body,
+                                                    ledger_class: ledger_class)
       end
 
       def write_page!(workdir, id, page, body)
         target = page_path(workdir, id, page)
+        return if File.file?(target)
+
         FileUtils.mkdir_p(File.dirname(target))
         File.binwrite("#{target}.tmp", body)
         File.rename("#{target}.tmp", target)
       end
 
-      def get(url)
-        sleep(@delay) if @delay.positive? && @requests.positive?
-        @requests += 1
+      # Request STARTS are spaced DELAY apart (latency counts toward the
+      # pause): the manifests and the page lanes share one pace.
+      def get(url, accept: [200, 404, 429])
+        if @delay.positive? && @last_request_at
+          pause = @delay - (Process.clock_gettime(Process::CLOCK_MONOTONIC) - @last_request_at)
+          sleep(pause) if pause.positive?
+        end
+        @last_request_at = Process.clock_gettime(Process::CLOCK_MONOTONIC)
         response, = Nabu::RedirectFollow.get(
-          url, http: @http, error: Nabu::FetchError, accept: [200, 404, 429],
+          url, http: @http, error: Nabu::FetchError, accept: accept,
                headers: { "User-Agent" => Nabu::WikiFetch::USER_AGENT }
         )
         response
       end
 
-      def crawl_notes(workdir, ledger, crawled, stop)
+      def crawl_notes(workdir, ledger, reports)
         total = 0
         held = 0
         @seeds.each do |seed|
@@ -304,8 +458,11 @@ module Nabu
           total += pages.size
           held += pages.size - missing_pages(workdir, seed.id, ledger).size
         end
+        stop = if reports.any?(&:halted?) || @quota_halt then :rate_limited
+               elsif held < total && reports.sum(&:attempted) >= @slice then :slice
+               end
         reason = { slice: "slice limit reached", rate_limited: "rate limit reached — resume next sync" }[stop]
-        ["crawl at #{held}/#{total} page(s) (+#{crawled} this sync)", reason].compact.join("; ")
+        ["crawl at #{held}/#{total} page(s) (+#{reports.sum(&:ok)} this sync)", reason].compact.join("; ")
       end
 
       def crawl_sha(workdir, ledger)
@@ -315,21 +472,26 @@ module Nabu
           pages = Dir.glob(File.join(workdir, seed.id, HOCR_DIR, "*.hocr")).map { |f| File.basename(f) }.sort
           [seed.id, manifest_sha, pages]
         end
-        Digest::SHA256.hexdigest(JSON.generate([parts, ledger["missing"]]))
+        Digest::SHA256.hexdigest(JSON.generate([parts, ledger]))
       end
 
-      def read_ledger(workdir)
+      # Every ledger class, read through each object's codec:
+      # {bsb => sorted ledgered pages} (objects with none left out — the
+      # hand-rolled crawl's "missing" map shape, so an unchanged ledger
+      # keeps its crawl sha). An unreadable ledger reads blank, as the
+      # engine reads it.
+      def ledger_view(workdir)
         path = File.join(workdir, LEDGER_FILE)
-        return { "missing" => {} } unless File.file?(path)
-
-        { "missing" => JSON.parse(File.read(path)).fetch("missing", {}) }
+        raw = File.file?(path) ? JSON.parse(File.read(path)) : {}
+        raw = {} unless raw.is_a?(Hash)
+        objects = LedgerCodec::CLASSES.flat_map { |klass| raw[klass].is_a?(Hash) ? raw[klass].keys : [] }.uniq
+        view = objects.sort.to_h do |bsb|
+          ids = LedgerCodec.new(bsb).load(raw).values.reduce(Set.new, :|)
+          [bsb, ids.filter_map { |id| Integer(id, 10) if id.match?(LedgerCodec::INTEGER) }.sort]
+        end
+        view.reject { |_, pages| pages.empty? }
       rescue JSON::ParserError
-        { "missing" => {} }
-      end
-
-      def write_ledger!(workdir, ledger)
-        missing = ledger["missing"].transform_values { |pages| pages.uniq.sort }.sort.to_h
-        File.write(File.join(workdir, LEDGER_FILE), JSON.pretty_generate({ "missing" => missing }))
+        {}
       end
 
       # -- shared internals --------------------------------------------------
@@ -342,7 +504,7 @@ module Nabu
         path = manifest_path(workdir, id)
         return [] unless File.file?(path)
 
-        ledgered = Array(ledger.dig("missing", id))
+        ledgered = ledger.fetch(id, [])
         canvas_pages(read_manifest(path)).reject do |page|
           ledgered.include?(page) || File.file?(page_path(workdir, id, page))
         end

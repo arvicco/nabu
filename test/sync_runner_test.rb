@@ -1158,6 +1158,76 @@ class SyncRunnerTest < Minitest::Test
     originals&.each { |mod, name, original| mod.define_singleton_method(name, original) }
   end
 
+  # --- index_policy: deferred (P168, the ndl-kotenseki hang) -------------
+  # A paced-crawl citizen's sync loads its documents and SKIPS every inline
+  # index step — no slice refresh, no heal probe, no alignment-registry
+  # refresh — announcing the deferral; `nabu index refresh <slug>` runs it.
+
+  def deferred_entry(slug, klass)
+    Nabu::SourceRegistry::Entry.new(slug: slug, adapter_class_name: klass.name, wired: true,
+                                    sync_policy: "manual", index_policy: "deferred")
+  end
+
+  def test_deferred_index_policy_sync_skips_index_work_and_announces
+    BreakerAdapter.reset!(urns: %w[urn:cts:test:w1 urn:cts:test:w2])
+    runner = make_runner(registry(deferred_entry("breaker", BreakerAdapter)))
+    stages = []
+    reporter = Nabu::ProgressReporter.new(on_stage: ->(label, _eta) { stages << label })
+
+    outcome = forbidding_index_work { runner.sync("breaker", progress: reporter) }
+
+    refute outcome.aborted?
+    assert_equal 2, outcome.load_report.added, "the documents still load"
+    assert_equal :deferred, outcome.indexed, "the Outcome names the deferral"
+    assert_includes stages, "index deferred: breaker — run bin/nabu index refresh breaker"
+    refute File.exist?(config.fulltext_path), "no index file is touched — not even the heal probe"
+  end
+
+  # The wave cycle: a deferred wave's sync leaves the slice BEHIND — the
+  # visible staleness the P111-1b probe (and so index doctor / health)
+  # reads — and the explicit refresh catches the slice up through the
+  # sync path's own announced, timed stages.
+  def test_index_entry_runs_the_deferred_slice_refresh
+    BreakerAdapter.reset!(urns: %w[urn:cts:test:w1])
+    runner = make_runner(registry(deferred_entry("breaker", BreakerAdapter)))
+    runner.sync("breaker")
+    assert_equal 1, runner.index_entry("breaker"), "the first refresh bootstraps the index"
+
+    BreakerAdapter.urns = %w[urn:cts:test:w1 urn:cts:test:w2]
+    assert_equal :deferred, runner.sync("breaker").indexed
+    assert slice_behind?, "the deferred wave's new rows are not yet indexed — and that reads as behind"
+
+    stages = []
+    reporter = Nabu::ProgressReporter.new(on_stage: ->(label, _eta) { stages << label })
+    indexed = runner.index_entry("breaker", progress: reporter)
+
+    assert_equal 2, indexed, "the refresh reports the source's live passage count"
+    assert_includes stages, "index slice: breaker (fts + lemma rows)",
+                    "the explicit refresh rides the sync path's stage announcements"
+    refute slice_behind?, "the refresh caught the slice up"
+    fulltext = Nabu::Store.connect_fulltext(config.fulltext_path)
+    begin
+      assert_equal 2, fulltext[:passages_fts].where(Sequel.lit("passages_fts MATCH ?", "α")).count
+    ensure
+      fulltext.disconnect
+    end
+    refute_nil Nabu::Store::StageTimings.last(@ledger, kind: "sync", scope: "breaker", stage: "index_slice"),
+               "the refresh records the sync path's stage timings"
+  end
+
+  def slice_behind?
+    fulltext = Nabu::Store.connect_fulltext(config.fulltext_path)
+    Nabu::Store::Indexer.slice_behind?(fulltext, @db, "breaker")
+  ensure
+    fulltext&.disconnect
+  end
+
+  def test_index_entry_refuses_an_unknown_slug
+    runner = make_runner(registry(entry("breaker", BreakerAdapter, wired: true)))
+    error = assert_raises(Nabu::ValidationError) { runner.index_entry("nope") }
+    assert_match(/unknown source "nope"/, error.message)
+  end
+
   # Part A: an index-inert grain's sync must never invoke ANY Indexer entry
   # point — the spy raises on every one of them — and reports indexed: nil
   # (the CLI omits the fragment). No fulltext file may even be created.

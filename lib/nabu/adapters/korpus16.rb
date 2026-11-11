@@ -5,6 +5,7 @@ require "fileutils"
 require "json"
 require "nokogiri"
 
+require_relative "../paced_crawl"
 require_relative "../redirect_follow"
 require_relative "../zip_fetch"
 require_relative "../normalize"
@@ -101,21 +102,31 @@ module Nabu
     # title) — the HTML carries no language tag, so every passage reads
     # sl: deliberately coarse, declared.
     #
-    # == The paced, resumable crawl (the vakk / mdz-protestant mold)
+    # == The paced, resumable crawl (the paced-crawl rail, architecture §19)
     #
     # Per sync: the index (rewritten only when changed; zero books
-    # aborts) and the three portal pages, then up to SLICE page requests
-    # DELAY apart, book by book in id order: page 1 (which sizes the
-    # book), then every missing page. Resume is at the file grain
-    # (books/<id>/<nnnnn>.html on disk is done) — a killed run loses at
-    # most the page in flight. A 404, or a 200 that is not a reading page,
-    # is ledgered in .korpus16-crawl.json and never retried (a refused
-    # page 1 ledgers the whole book); a 429 stops the slice cleanly; a 5xx
-    # or transport failure retries RETRIES times with backoff, then aborts
-    # the sync — the next one resumes there. Pages land as the raw bytes
-    # upstream served (~16 KB each, ~210 MB for the corpus). Sizing:
-    # 12,945 pages ≈ 3.6 h at 1 req/s plus latency; SLICE covers the whole
-    # corpus in one detached run.
+    # aborts) and the three portal pages, then the PAGE_CRAWL lane on
+    # Nabu::PacedCrawl. Its universe is one id per reading page, in book
+    # id order: the bare book id is the book's page 1 — the sizing
+    # request — and once page 1 is held its pager adds "<book>:<n>" for
+    # pages 2..max. The universe therefore GROWS as page 1s land; the
+    # engine fixes a slice's selection at its start, so #fetch re-slices
+    # with the budget left while a slice sized new pages (SLICE requests
+    # per sync in all). held = books/<id>/<nnnnn>.html on disk (a killed
+    # run loses at most the page in flight); the engine owns selection,
+    # pacing (DELAY between requests), the timeout policy and the ledger.
+    # Terminal answers are ledgered in .korpus16-crawl.json and never
+    # retried: 403/404/410 "refused" (a refused page 1 refuses the whole
+    # book — it never sizes), a 200 that is no reading page "not-reading",
+    # a page timing out timeout_attempts times "timeout-stuck". A 429 is
+    # the clean stop (Outcome.halt): the slice ends, the page stays
+    # selectable, the next sync resumes there. A 5xx retries RETRIES
+    # times with backoff, then aborts the sync. The ledger keeps the shape
+    # the hand-rolled crawl wrote — refused books and refused pages per
+    # book — through LedgerCodec, the new classes beside it. Pages land as
+    # the raw bytes upstream served (~16 KB each, ~210 MB for the corpus).
+    # Sizing: 12,945 pages ≈ 3.6 h at 1 req/s plus latency; SLICE covers
+    # the whole corpus in one detached run.
     #
     # == Documents and passages
     #
@@ -174,11 +185,66 @@ module Nabu
       DELAY = 1.0
       # Page requests per sync — the whole corpus (12,945 pages) in one detached run.
       SLICE = 15_000
+      # Attempts for a 5xx (the timeout policy is the engine's).
       RETRIES = 3
       BACKOFF = 5.0
-      PROGRESS_EVERY = 100
       STOP_NOTES = { slice: "slice limit reached — resume next sync",
                      rate_limited: "rate limited — resume next sync" }.freeze
+      # The answers that refuse a page (ledgered "refused").
+      REFUSED_STATUSES = [403, 404, 410].freeze
+      RATE_LIMITED = 429
+      TIMEOUT_PATTERN = /transport error for .*(timeout|timed out|execution expired)/i
+
+      REFUSED = "refused"
+      NOT_READING = "not-reading"
+      STUCK = "timeout-stuck"
+
+      # The page lane's ledger on disk. The "refused" class keeps the
+      # hand-rolled crawl's shape: a book-level id (a refused page 1)
+      # in "books", "<book>:<n>" as n under "pages"[book]; an id of
+      # neither form lands in "books" verbatim (the codec is total and
+      # lossless). The other classes are flat id arrays; any other
+      # section passes through.
+      module LedgerCodec
+        LEGACY = %w[books pages].freeze
+        PAGE_ID = /\A(.+):([1-9]\d*)\z/
+
+        def self.load(raw)
+          refused = Array(raw["books"]).to_set(&:to_s)
+          pages = raw["pages"].is_a?(Hash) ? raw["pages"] : {}
+          pages.each { |book, list| Array(list).each { |page| refused << "#{book}:#{page}" } }
+          Nabu::PacedCrawl::FLAT_CODEC.load(raw.except(*LEGACY)).merge(REFUSED => refused)
+        end
+
+        def self.dump(classes, raw)
+          books = []
+          pages = Hash.new { |hash, book| hash[book] = [] }
+          classes.fetch(REFUSED, []).each do |id|
+            match = PAGE_ID.match(id)
+            match ? pages[match[1]] << Integer(match[2], 10) : books << id
+          end
+          legacy = { "books" => books.uniq.sort_by { |id| order(id) },
+                     "pages" => pages.sort_by { |book, _| order(book) }.to_h { |book, list| [book, list.uniq.sort] } }
+          legacy.merge(Nabu::PacedCrawl::FLAT_CODEC.dump(classes.except(REFUSED), raw.except(*LEGACY)))
+        end
+
+        # Numeric ids in numeric order, anything else after them.
+        def self.order(id) = id.match?(/\A\d+\z/) ? [0, Integer(id, 10), ""] : [1, 0, id]
+      end
+
+      # The page lane (see the header): the declared schedule is the
+      # rail's default — the corpus is one detached run, so a phase
+      # spends at most a few slices.
+      PAGE_CRAWL = Nabu::PacedCrawl::Spec.new(
+        name: "pages", ledger_file: LEDGER_FILE,
+        classes: { denied: REFUSED, empty: NOT_READING, timeout: STUCK },
+        delay: DELAY, slice: SLICE, timeout_backoff: BACKOFF, codec: LedgerCodec,
+        schedule: Nabu::PacedCrawl::Schedule.new(cadence: :per_phase, slices_per_phase: 3, stop_after_zero_slices: 3)
+      )
+
+      # The union of every ledger class: book-level refusals and
+      # ledgered pages per book (what discovery and the notes read).
+      Ledger = Data.define(:books, :pages)
 
       BOOK_HREF = %r{\A/korpus16/Knjiga/(\d+)/([^?/#]+)}
       ADVERTISED = /prepise\s+(\d+)\s+knjižnih\s+del\s+na\s+([\d.]+)\s+straneh/
@@ -238,6 +304,7 @@ module Nabu
         @backoff = backoff
         @last_request_at = nil
         @page_counts = {}
+        @index_books = {}
       end
 
       # -- fetch -------------------------------------------------------------
@@ -247,13 +314,30 @@ module Nabu
         FileUtils.mkdir_p(workdir)
         books = refresh_index!(workdir, progress)
         PORTAL_PAGES.each { |name| refresh_portal!(workdir, name) }
-        ledger = read_ledger(workdir)
-        crawl = crawl_set(books)
-        written, stop = crawl_slice!(workdir, crawl, ledger, progress)
-        write_ledger!(workdir, ledger)
-        notes = crawl_notes(workdir, books, crawl, ledger, written, stop)
+        reports = crawl_slices!(workdir, progress)
+        ledger = ledger_view(workdir)
+        notes = crawl_notes(workdir, books, crawl_set(books), ledger, reports)
         progress&.call("#{notes}\n")
+        notes = [notes, *reports.last.lines].join("; ")
         Nabu::FetchReport.new(sha: crawl_sha(workdir, ledger), fetched_at: Time.now, notes: notes)
+      end
+
+      # The chain runner's seam (rake crawl:chain): the one paced lane.
+      def paced_crawls(workdir, progress: nil)
+        { PAGE_CRAWL.name => page_crawl(workdir, progress: progress) }
+      end
+
+      # The page lane's engine over +workdir+ (PAGE_CRAWL retuned by this
+      # instance's knobs; +slice+ overrides the budget). Public so an
+      # offline surface can #diagnose the crawl without crawling.
+      def page_crawl(workdir, progress: nil, slice: @slice)
+        Nabu::PacedCrawl::Engine.new(
+          spec: PAGE_CRAWL.with(delay: @delay, slice: slice, timeout_backoff: @backoff),
+          dir: workdir, progress: progress,
+          universe: -> { page_universe(workdir) },
+          held: ->(id) { File.file?(page_path(workdir, *split_id(id))) },
+          fetch_one: ->(id) { fetch_page!(workdir, id) }
+        )
       end
 
       # -- discover ----------------------------------------------------------
@@ -261,7 +345,7 @@ module Nabu
       def discover(workdir, &block)
         return enum_for(:discover, workdir) unless block
 
-        ledger = read_ledger(workdir)
+        ledger = ledger_view(workdir)
         index_books(workdir).each do |book|
           next unless complete?(workdir, book, ledger)
 
@@ -274,7 +358,7 @@ module Nabu
       end
 
       def discovery_skips(workdir)
-        ledger = read_ledger(workdir)
+        ledger = ledger_view(workdir)
         listed = index_books(workdir)
         held = book_dirs(workdir)
         by_rule = listed.select { |book| held.include?(book.id) }
@@ -298,7 +382,7 @@ module Nabu
         first_html = read_page(document_ref.path)
         first = parser.parse(first_html)
         metadata = book_metadata(first_html, book_id: id, slug: document_ref.metadata.fetch("slug"))
-        pages, accounting = read_pages(workdir, id, first, read_ledger(workdir))
+        pages, accounting = read_pages(workdir, id, first, ledger_view(workdir))
         document = Nabu::Document.new(urn: document_ref.id, language: LANGUAGE, title: first.header.title,
                                       canonical_path: document_ref.path, metadata: metadata.merge(accounting))
         pages.each do |number, page|
@@ -351,62 +435,84 @@ module Nabu
         @books ? books.select { |book| @books.include?(book.id) } : books
       end
 
-      # Returns [pages written, stop reason or nil].
-      def crawl_slice!(workdir, books, ledger, progress)
-        written = 0
-        made = 0
-        books.each do |book|
-          until (wanted = missing_pages(workdir, book, ledger)).empty?
-            return [written, :slice] if made >= @slice
-
-            page = wanted.first
-            made += 1
-            case fetch_page!(workdir, book, page)
-            when :ok then written += 1
-            when :rate_limited then return [written, :rate_limited]
-            else refuse!(ledger, book, page)
-            end
-            report_progress(progress, written, book, page)
-          end
+      # The page lane's slices for one sync, under ONE budget of @slice
+      # requests: a slice that sized books (its page 1s landed) leaves
+      # their pages selectable only for the next slice, so the sync
+      # re-slices with the budget left. Stops on a clean stop, a spent
+      # budget, or nothing left to select.
+      def crawl_slices!(workdir, progress)
+        budget = @slice
+        reports = []
+        loop do
+          report = page_crawl(workdir, progress: progress, slice: budget).slice!
+          reports << report
+          report.lines.each { |line| progress&.call("#{line}\n") }
+          budget -= report.attempted
+          break if report.halted? || budget <= 0 || report.attempted.zero? || report.remaining[:after].zero?
         end
-        [written, nil]
+        reports
       end
 
-      def report_progress(progress, written, book, page)
-        return unless progress && written.positive? && (written % PROGRESS_EVERY).zero?
-
-        progress.call("crawl: +#{written} page(s) this sync (book #{book.id}, page #{page}/" \
-                      "#{@page_counts[book.id] || '?'})…\n")
+      # "<book>" is the book's page 1; "<book>:<n>" its page n.
+      def split_id(id)
+        book, sep, page = id.to_s.rpartition(":")
+        sep.empty? ? [id.to_s, 1] : [book, Integer(page, 10)]
       end
 
-      def refuse!(ledger, book, page)
-        if page == 1
-          ledger["books"] << book.id
-        else
-          (ledger["pages"][book.id] ||= []) << page
+      # Every reading page, book by book in id order: page 1 (the bare
+      # book id) until it is held, then the pages its pager names.
+      def page_universe(workdir)
+        crawl_set(index_books(workdir)).flat_map do |book|
+          next [book.id] unless File.file?(page_path(workdir, book.id, 1))
+
+          [book.id, *(2..page_count(workdir, book.id)).map { |page| "#{book.id}:#{page}" }]
         end
       end
 
-      def fetch_page!(workdir, book, page)
+      # One page GET → a PacedCrawl::Outcome. An already-held page (the
+      # engine's held-id re-probe) is never overwritten: the probe answers
+      # liveness, canonical stays.
+      def fetch_page!(workdir, id)
+        book_id, page = split_id(id)
+        book = index_books(workdir).find { |listed| listed.id == book_id } or
+          raise FetchError, "korpus16: #{id} names a book the index does not list"
         response = get_with_retries!(format(PAGE_URL, id: book.id, slug: book.slug, page: page),
-                                     accept: [200, 404, 429])
-        return :rate_limited if response.status == 429
-        return :refused if response.status == 404
+                                     accept: [200, *REFUSED_STATUSES, RATE_LIMITED], timeouts: false)
+        return rate_limited(response) if response.status == RATE_LIMITED
+        return page_outcome(:denied, response) if REFUSED_STATUSES.include?(response.status)
 
         body = utf8_body(response)
-        return :refused unless parser.reading_page?(body)
+        return page_outcome(:empty, response) unless parser.reading_page?(body)
 
-        write_atomic!(page_path(workdir, book.id, page), body)
-        :ok
+        path = page_path(workdir, book.id, page)
+        write_atomic!(path, body) unless File.file?(path)
+        page_outcome(:ok, response)
+      rescue Nabu::FetchError => e
+        raise unless e.message.match?(TIMEOUT_PATTERN)
+
+        Nabu::PacedCrawl::Outcome.new(status: :timeout, evidence: { body_head: Nabu::PacedCrawl.body_head(e.message) })
       end
 
-      def get_with_retries!(url, accept:)
+      def rate_limited(response)
+        Nabu::PacedCrawl::Outcome.halt(reason: "HTTP 429 (rate limited)",
+                                       evidence: { http_status: response.status,
+                                                   retry_after: response.headers["retry-after"] }.compact)
+      end
+
+      def page_outcome(status, response)
+        Nabu::PacedCrawl::Outcome.from_body(status, http_status: response.status, body: utf8_body(response))
+      end
+
+      # A 5xx (or any non-accepted answer) is retried RETRIES times with
+      # backoff; +timeouts+ false hands a transport timeout straight up
+      # (the page lane's timeout policy is the engine's).
+      def get_with_retries!(url, accept:, timeouts: true)
         attempt = 0
         begin
           attempt += 1
           get!(url, accept: accept)
-        rescue Nabu::FetchError
-          raise if attempt >= RETRIES
+        rescue Nabu::FetchError => e
+          raise if attempt >= RETRIES || (!timeouts && e.message.match?(TIMEOUT_PATTERN))
 
           pause = @backoff * (2**(attempt - 1))
           sleep(pause) if pause.positive?
@@ -443,18 +549,19 @@ module Nabu
         File.rename("#{path}.tmp", path)
       end
 
-      def crawl_notes(workdir, books, crawl, ledger, written, stop)
+      def crawl_notes(workdir, books, crawl, ledger, reports)
         sized = crawl.select { |book| File.file?(page_path(workdir, book.id, 1)) }
         total = sized.sum { |book| page_count(workdir, book.id) }
         held = sized.sum { |book| held_pages(workdir, book.id).size }
-        ledgered = ledger["pages"].values_at(*crawl.map(&:id)).compact.sum(&:size)
+        ledgered = ledger.pages.values_at(*crawl.map(&:id)).compact.sum(&:size)
         complete = crawl.count { |book| complete?(workdir, book, ledger) }
         unsized = crawl.size - sized.size
+        written = reports.sum(&:ok)
         parts = ["crawl at #{held}/#{total} page(s)#{" (+#{unsized} book(s) not yet sized)" if unsized.positive?}; " \
                  "#{complete}/#{crawl.size} book(s) complete (+#{written} page(s) this sync)"]
-        parts << STOP_NOTES[stop]
+        parts << STOP_NOTES[stop_reason(reports.last)]
         parts << "#{ledgered} page(s) ledgered" if ledgered.positive?
-        parts << "#{ledger['books'].size} book(s) refused" unless ledger["books"].empty?
+        parts << "#{ledger.books.size} book(s) refused" unless ledger.books.empty?
         parts << "#{advertised(workdir)}; the index lists #{books.size} book(s)"
         parts.compact.join("; ")
       end
@@ -475,32 +582,55 @@ module Nabu
         files = Dir.glob(File.join(workdir, BOOKS_DIRNAME, "*", "*.html"))
                    .map { |path| path.delete_prefix("#{workdir}/") }.sort
         Digest::SHA256.hexdigest(JSON.generate([File.file?(index) ? Digest::SHA256.file(index).hexdigest : "",
-                                                files, ledger]))
+                                                files, ledger_identity(ledger)]))
       end
 
-      def read_ledger(workdir)
+      # The ledger as the crawl identity hashes it: the hand-rolled
+      # crawl's {"books", "pages"} shape (so an unchanged ledger keeps its
+      # sha across the move onto the rail), over every class.
+      def ledger_identity(ledger)
+        { "books" => ledger.books.sort_by { |id| LedgerCodec.order(id) },
+          "pages" => ledger.pages.sort_by { |id, _| LedgerCodec.order(id) }.to_h }
+      end
+
+      def stop_reason(report)
+        return :rate_limited if report.halted?
+
+        :slice if report.remaining[:after].positive?
+      end
+
+      # Every ledger class, read through the lane's codec (an unreadable
+      # ledger reads blank, as the engine reads it).
+      def ledger_view(workdir)
         path = File.join(workdir, LEDGER_FILE)
-        blank = { "books" => [], "pages" => {} }
-        return blank unless File.file?(path)
-
-        stored = JSON.parse(SourceRead.utf8_file(path, label: "korpus16 crawl ledger"))
-        { "books" => Array(stored["books"]).map(&:to_s),
-          "pages" => stored.fetch("pages", {}).to_h { |id, pages| [id.to_s, Array(pages)] } }
+        raw = File.file?(path) ? JSON.parse(SourceRead.utf8_file(path, label: "korpus16 crawl ledger")) : {}
+        raw = {} unless raw.is_a?(Hash)
+        classes = LedgerCodec.load(raw.except(Nabu::PacedCrawl::LAST_SLICE))
+        ids = PAGE_CRAWL.class_names.reduce(Set.new) { |all, klass| all | classes.fetch(klass, Set.new) }
+        books = Set.new
+        pages = Hash.new { |hash, id| hash[id] = [] }
+        ids.each do |id|
+          match = LedgerCodec::PAGE_ID.match(id)
+          match ? pages[match[1]] << Integer(match[2], 10) : books << id
+        end
+        Ledger.new(books: books, pages: pages.to_h { |id, list| [id, list.uniq.sort] })
       rescue JSON::ParserError
-        blank
-      end
-
-      def write_ledger!(workdir, ledger)
-        pages = ledger["pages"].transform_values { |list| list.uniq.sort }.sort_by { |id, _| Integer(id, 10) }.to_h
-        books = ledger["books"].uniq.sort_by { |id| Integer(id, 10) }
-        File.write(File.join(workdir, LEDGER_FILE), JSON.pretty_generate({ "books" => books, "pages" => pages }))
+        Ledger.new(books: Set.new, pages: {})
       end
 
       # -- index -------------------------------------------------------------
 
       def index_books(workdir)
         path = File.join(workdir, MAP_DIRNAME, INDEX_FILE)
-        File.file?(path) ? parse_index(SourceRead.utf8_file(path, label: "korpus16 index")) : []
+        return [] unless File.file?(path)
+
+        stamp = [File.mtime(path), File.size(path)]
+        cached = @index_books[workdir]
+        return cached.last if cached&.first == stamp
+
+        books = parse_index(SourceRead.utf8_file(path, label: "korpus16 index"))
+        @index_books[workdir] = [stamp, books]
+        books
       end
 
       # Every tile links its book; the four tabs repeat them — first
@@ -548,21 +678,21 @@ module Nabu
       end
 
       def missing_pages(workdir, book, ledger)
-        return [] if ledger["books"].include?(book.id)
+        return [] if ledger.books.include?(book.id)
         return [1] unless File.file?(page_path(workdir, book.id, 1))
 
-        done = held_pages(workdir, book.id) + Array(ledger["pages"][book.id])
+        done = held_pages(workdir, book.id) + ledger.pages.fetch(book.id, [])
         (1..page_count(workdir, book.id)).to_a - done
       end
 
       def complete?(workdir, book, ledger)
-        return false if ledger["books"].include?(book.id) || !File.file?(page_path(workdir, book.id, 1))
+        return false if ledger.books.include?(book.id) || !File.file?(page_path(workdir, book.id, 1))
 
         missing_pages(workdir, book, ledger).empty?
       end
 
       def incomplete_note(workdir, book, ledger)
-        return "book #{book.id}: page 1 refused upstream (ledgered)" if ledger["books"].include?(book.id)
+        return "book #{book.id}: page 1 refused upstream (ledgered)" if ledger.books.include?(book.id)
 
         first = page_path(workdir, book.id, 1)
         return "crawl incomplete: book #{book.id} (page count unknown)" unless File.file?(first)
@@ -590,7 +720,7 @@ module Nabu
           [number, page] unless page.text.empty?
         end
         accounting = { "page_count" => count, "blank_pages" => blank,
-                       "ledgered_pages" => Array(ledger["pages"][id]).sort }
+                       "ledgered_pages" => ledger.pages.fetch(id, []) }
         [pages, accounting.reject { |_, value| value.respond_to?(:empty?) && value.empty? }]
       end
 

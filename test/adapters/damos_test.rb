@@ -2,6 +2,9 @@
 
 require "test_helper"
 require "support/adapter_conformance"
+require "support/paced_crawl_conformance"
+require "nabu/paced_crawl_chain"
+require "stringio"
 require "tmpdir"
 
 module Adapters
@@ -14,6 +17,7 @@ module Adapters
   # ajaxgetfilter listing (six ids, collection counts restated).
   class DamosTest < Minitest::Test
     include AdapterConformance
+    include PacedCrawlConformance
 
     FIXTURES = Nabu::TestSupport.fixtures("damos")
     LISTING = "https://damos.hf.uio.no/ajaxgetfilter"
@@ -186,6 +190,76 @@ module Adapters
 
     # -- the crawl ---------------------------------------------------------
 
+    D = Nabu::Adapters::Damos
+    EMPTY_ITEM = '{"item":{"content":"  "}}'
+
+    # A held listing whose unique ids are exactly +ids+ (the truncation
+    # defense satisfied: one collection counting them all).
+    def write_listing(dir, ids)
+      FileUtils.mkdir_p(File.join(dir, "map"))
+      File.write(File.join(dir, "map", "ajaxgetfilter.json"),
+                 JSON.generate({ "collections" => [{ "count" => ids.size }],
+                                 "tables" => ids.map { |id| { "id" => Integer(id, 10) } } }))
+    end
+
+    def crawl_over(dir, ids, slice: 1_500)
+      write_listing(dir, ids)
+      quiet_adapter(slice: slice).item_crawl(dir)
+    end
+
+    def ledger_on_disk(dir) = JSON.parse(File.read(File.join(dir, ".damos-crawl.json")))
+
+    # The paced-crawl conformance drives the item lane through its real
+    # wiring: the held listing is the universe, items/<id>.json the held
+    # rule, the script answers over the stubbed ajaxitem endpoint. damos
+    # answers a missing id with HTTP 500 (a terminal class, server-error),
+    # so the script's :fatal — a non-terminal failure — is an HTTP 400.
+    def paced_crawl_engine(dir:, ids:, slice:, script:)
+      stub_request(:get, %r{\Ahttps://damos\.hf\.uio\.no/ajaxitem/\d+/\z}).to_return do |request|
+        case script.call(request.uri.path[%r{/ajaxitem/(\d+)/}, 1])
+        when :ok then { status: 200, body: item_body("755") }
+        when :denied then { status: 403, body: PacedCrawlConformance::PC_REFUSAL_BODY }
+        when :empty then { status: 200, body: EMPTY_ITEM }
+        when :timeout then raise Net::ReadTimeout
+        when :fatal then { status: 400, body: "bad request" }
+        end
+      end
+      crawl_over(dir, ids, slice: slice)
+    end
+
+    def paced_crawl_hold!(dir, id)
+      FileUtils.mkdir_p(File.join(dir, "items"))
+      File.write(File.join(dir, "items", "#{id}.json"), item_body("755"))
+    end
+
+    def test_the_lane_keeps_the_committed_etiquette
+      lane = D::ITEM_CRAWL
+      assert_equal ["items", ".damos-crawl.json", 1.0, 1_500, 3, 5.0],
+                   [lane.name, lane.ledger_file, lane.delay, lane.slice, lane.timeout_attempts, lane.timeout_backoff]
+      assert_equal %w[denied empty timeout-stuck server-error], lane.class_names,
+                   "the four classes, in the ledger's own order"
+      assert_equal %w[timeout-stuck server-error], lane.classes_for(:timeout),
+                   "a persistent 5xx is a timeout-grade failure: retried with backoff, then ledgered"
+      assert_equal [[:timeout], 3], [lane.outage_statuses, lane.outage_run], "the outage breaker is armed"
+      assert_equal D::LEDGER_CLASSES, lane.class_names
+    end
+
+    def test_paced_crawls_is_the_chain_seam
+      Dir.mktmpdir do |dir|
+        lanes = quiet_adapter.paced_crawls(dir)
+        assert_equal ["items"], lanes.keys
+        assert_kind_of Nabu::PacedCrawl::Engine, lanes["items"]
+        assert_equal "items", lanes["items"].spec.name
+      end
+    end
+
+    def test_no_held_listing_is_an_empty_cone
+      Dir.mktmpdir do |dir|
+        report = quiet_adapter.item_crawl(dir).slice!
+        assert_equal [:cone_exhausted, 0], [report.classification, report.census]
+      end
+    end
+
     def test_fetch_posts_the_listing_and_crawls_one_slice_resumably
       listing = stub_request(:post, LISTING)
                 .to_return(status: 200, body: File.read(File.join(FIXTURES, "map", "ajaxgetfilter.json")))
@@ -197,41 +271,43 @@ module Adapters
         assert_requested listing
         assert File.file?(File.join(dir, "map", "ajaxgetfilter.json")), "the listing is kept under map/"
         assert_equal %w[277 4972 755], Dir.children(File.join(dir, "items")).map { |f| File.basename(f, ".json") }.sort
-        assert_match(%r{crawl at 3/6 item\(s\) \(\+3 this sync}, report.notes)
+        assert_includes report.notes.split("; "),
+                        "items: census 6 = held 3 (+3) + ledgered 0 (+0) [denied 0, empty 0, timeout-stuck 0, " \
+                        "server-error 0] + remaining 3 — reconciles"
 
         %w[4985 5443 5755].each do |id|
           stub_request(:get, format(ITEM, id)).to_return(status: 200, body: item_body(id == "5443" ? "755" : id))
         end
         resumed = quiet_adapter(slice: 3).fetch(dir)
-        assert_match(%r{crawl at 6/6 item\(s\) \(\+3 this sync}, resumed.notes)
+        assert_match(/items: census 6 = held 6 \(\+3\)/, resumed.notes)
         assert_requested :get, format(ITEM, "277"), times: 1 # on-disk is done: never re-fetched
       end
     end
 
     def test_denied_and_empty_items_are_ledgered_and_never_retried
       stub_request(:get, format(ITEM, "1")).to_return(status: 404, body: "gone")
-      stub_request(:get, format(ITEM, "2")).to_return(status: 200, body: '{"item":{"content":"  "}}')
+      stub_request(:get, format(ITEM, "2")).to_return(status: 200, body: EMPTY_ITEM)
       stub_request(:get, format(ITEM, "3")).to_return(status: 200, body: "<html>not json</html>")
-      ledger = fresh_ledger
       Dir.mktmpdir do |dir|
-        crawled, refused, stuck = quiet_adapter.send(:crawl_slice!, dir, %w[1 2 3], ledger, nil)
-        assert_equal [0, 3, []], [crawled, refused, stuck]
-        assert_equal %w[1 3], ledger["denied"]
-        assert_equal ["2"], ledger["empty"], "an item with no transliteration is ledgered empty"
-        on_disk = JSON.parse(File.read(File.join(dir, ".damos-crawl.json")))
+        report = crawl_over(dir, %w[1 2 3]).slice!
+        assert_equal [0, { "denied" => 2, "empty" => 1, "timeout-stuck" => 0, "server-error" => 0 }, []],
+                     [report.ok, report.refused, report.stuck]
+        assert_equal({ id: "1", status: :denied, http_status: 404, body_head: "gone" }, report.samples.first,
+                     "the refusal's own answer rides as evidence")
+        on_disk = ledger_on_disk(dir)
         assert_equal %w[1 3], on_disk["denied"]
+        assert_equal ["2"], on_disk["empty"], "an item with no transliteration is ledgered empty"
       end
     end
 
     def test_a_timing_out_item_is_ledgered_stuck_and_the_slice_continues
       stuck = stub_request(:get, format(ITEM, "2")).to_raise(Net::ReadTimeout)
       stub_request(:get, format(ITEM, "3")).to_return(status: 200, body: item_body("755"))
-      ledger = fresh_ledger
       Dir.mktmpdir do |dir|
-        crawled, refused, stuck_ids = quiet_adapter.send(:crawl_slice!, dir, %w[2 3], ledger, nil)
-        assert_requested stuck, times: Nabu::Adapters::Damos::TIMEOUT_ATTEMPTS
-        assert_equal [1, 0, ["2"]], [crawled, refused, stuck_ids]
-        assert_equal ["2"], ledger["timeout-stuck"]
+        report = crawl_over(dir, %w[2 3]).slice!
+        assert_requested stuck, times: D::TIMEOUT_ATTEMPTS
+        assert_equal [1, ["2"]], [report.ok, report.stuck]
+        assert_equal ["2"], ledger_on_disk(dir)["timeout-stuck"]
         assert File.file?(File.join(dir, "items", "3.json"))
       end
     end
@@ -240,48 +316,150 @@ module Adapters
     # → 500 with an HTML error page), so a lone persistent 500 is
     # ledgered under its own class rather than wedging every resume.
     def test_a_lone_server_error_is_retried_then_ledgered
-      failing = stub_request(:get, format(ITEM, "2")).to_return(status: 500)
+      failing = stub_request(:get, format(ITEM, "2")).to_return(status: 500, body: "<html>Server Error</html>")
       stub_request(:get, format(ITEM, "3")).to_return(status: 200, body: item_body("755"))
-      ledger = fresh_ledger
       Dir.mktmpdir do |dir|
-        crawled, _refused, stuck_ids = quiet_adapter.send(:crawl_slice!, dir, %w[2 3], ledger, nil)
-        assert_requested failing, times: Nabu::Adapters::Damos::TIMEOUT_ATTEMPTS
-        assert_equal [1, ["2"]], [crawled, stuck_ids]
-        assert_equal ["2"], ledger["server-error"]
+        report = crawl_over(dir, %w[2 3]).slice!
+        assert_requested failing, times: D::TIMEOUT_ATTEMPTS
+        assert_equal [1, ["2"]], [report.ok, report.stuck]
+        assert_equal ["2"], ledger_on_disk(dir)["server-error"]
+        assert_empty ledger_on_disk(dir)["timeout-stuck"]
+        assert_equal [:timeout, 500], report.samples.first.values_at(:status, :http_status)
+      end
+    end
+
+    def test_another_client_error_stays_fatal
+      stub_request(:get, format(ITEM, "2")).to_return(status: 400)
+      Dir.mktmpdir do |dir|
+        assert_raises(Nabu::FetchError) { crawl_over(dir, %w[2]).slice! }
       end
     end
 
     # The outage defense: a run of consecutive failures is upstream down,
     # not bad ids — the crawl aborts WITHOUT ledgering the run, and the
-    # next sync resumes at the same place.
-    def test_consecutive_failures_abort_without_ledgering_the_run
-      %w[1 2 3 4].each { |id| stub_request(:get, format(ITEM, id)).to_return(status: 503) }
-      ledger = fresh_ledger
+    # next sync resumes at the same place. The sync still aborts loudly.
+    def test_consecutive_failures_abort_the_sync_without_ledgering_the_run
+      stub_request(:post, LISTING)
+        .to_return(status: 200, body: File.read(File.join(FIXTURES, "map", "ajaxgetfilter.json")))
+      %w[277 755 4972 4985].each { |id| stub_request(:get, format(ITEM, id)).to_return(status: 503) }
       Dir.mktmpdir do |dir|
-        error = assert_raises(Nabu::FetchError) do
-          quiet_adapter.send(:crawl_slice!, dir, %w[1 2 3 4], ledger, nil)
-        end
-        assert_match(/outage/i, error.message)
-        assert_empty ledger["server-error"], "the outage run is never ledgered"
-        assert_not_requested :get, format(ITEM, "4")
+        error = assert_raises(Nabu::FetchError) { quiet_adapter.fetch(dir) }
+        assert_match(/damos crawl aborted — upstream outage: 3 consecutive item\(s\) failed \(277, 755, 4972\)/,
+                     error.message)
+        assert_empty ledger_on_disk(dir)["server-error"], "the outage run is never ledgered"
+        assert_equal "outage_abort", ledger_on_disk(dir).dig("last_slice", "classification")
+        assert_not_requested :get, format(ITEM, "4985")
+      end
+    end
+
+    # THE ENGINE LAW (a deliberate delta from the hand-rolled crawl, which
+    # committed a short trailing run at slice end): a failure still staged
+    # when the slice ends stays UNLEDGERED and is re-asked next slice; it
+    # commits once a later id answers.
+    def test_a_trailing_failure_at_slice_end_stays_unledgered_and_is_re_asked
+      stub_request(:get, format(ITEM, "1")).to_return(status: 200, body: item_body("755"))
+      failing = stub_request(:get, format(ITEM, "2")).to_return(status: 500)
+      stub_request(:get, format(ITEM, "3")).to_return(status: 200, body: item_body("755"))
+      Dir.mktmpdir do |dir|
+        report = crawl_over(dir, %w[1 2 3], slice: 2).slice!
+        assert_empty ledger_on_disk(dir)["server-error"], "no later id confirmed upstream alive"
+        assert_equal({ aborted: false, count: 1, ids: ["2"] }, report.outage.slice(:aborted, :count, :ids))
+        assert(report.lines.any? { |line| line.include?("OUTAGE STAGE") }, report.lines.inspect)
+
+        crawl_over(dir, %w[1 2 3], slice: 2).slice!
+        assert_requested failing, times: 2 * D::TIMEOUT_ATTEMPTS
+        assert_equal ["2"], ledger_on_disk(dir)["server-error"], "item 3 answering commits it"
+      end
+    end
+
+    # …and its consequence at the very END of the cone: a genuinely bad
+    # last id is re-asked every slice, never reaching cone-exhausted — a
+    # chained run stops loudly on the declared zero-yield budget instead.
+    def test_a_bad_last_id_stops_a_chain_on_the_zero_yield_budget
+      stub_request(:get, format(ITEM, "1")).to_return(status: 200, body: item_body("755"))
+      stub_request(:get, format(ITEM, "2")).to_return(status: 500)
+      Dir.mktmpdir do |dir|
+        paced_crawl_hold!(dir, "1")
+        engine = crawl_over(dir, %w[1 2])
+        summary = Nabu::PacedCrawl::Chain.new(engine: engine, slices: 5, log: StringIO.new).run!
+        assert_predicate summary, :stalled?
+        assert_match(/3 consecutive zero-yield slice\(s\)/, summary.stop_reason)
+        assert_equal 3, summary.reports.size
+        refute(summary.reports.any? { |r| r.classification == :cone_exhausted })
+        assert_empty ledger_on_disk(dir)["server-error"]
       end
     end
 
     def test_a_ledgered_item_is_skipped_on_resume
-      adapter = quiet_adapter
       asked = []
-      adapter.define_singleton_method(:fetch_item!) do |_workdir, id|
-        asked << id
-        :empty
+      stub_request(:get, %r{/ajaxitem/\d+/\z}).to_return do |request|
+        asked << request.uri.path[/\d+/]
+        { status: 200, body: EMPTY_ITEM }
       end
       Dir.mktmpdir do |dir|
         File.write(File.join(dir, ".damos-crawl.json"),
                    JSON.generate({ "denied" => ["1"], "timeout-stuck" => ["2"], "server-error" => ["3"] }))
-        ledger = adapter.send(:read_ledger, dir)
-        assert_equal [], ledger["empty"], "a missing class defaults empty"
-        adapter.send(:crawl_slice!, dir, %w[1 2 3 4], ledger, nil)
+        crawl = crawl_over(dir, %w[1 2 3 4])
+        assert_equal [], crawl.ledger["empty"], "a missing class defaults empty"
+        crawl.slice!
         assert_equal ["4"], asked
       end
+    end
+
+    # The on-disk ledger shape: the four classes, in this order, each a
+    # sorted array, pretty-printed; the engine's last_slice rides beside.
+    def test_the_ledger_on_disk_is_four_sorted_flat_arrays
+      stub_request(:post, LISTING)
+        .to_return(status: 200, body: File.read(File.join(FIXTURES, "map", "ajaxgetfilter.json")))
+      stub_request(:get, format(ITEM, "277")).to_return(status: 200, body: '{"item":{"content":""}}')
+      stub_request(:get, format(ITEM, "755")).to_return(status: 404, body: "gone")
+      stub_request(:get, format(ITEM, "4972")).to_return(status: 200, body: "<html>no</html>")
+      stub_request(:get, format(ITEM, "4985")).to_return(status: 200, body: item_body("4985"))
+      Dir.mktmpdir do |dir|
+        quiet_adapter(slice: 4).fetch(dir)
+        on_disk = ledger_on_disk(dir)
+        assert_equal %w[denied empty timeout-stuck server-error last_slice], on_disk.keys
+        expected = JSON.pretty_generate({ "denied" => %w[4972 755], "empty" => ["277"],
+                                          "timeout-stuck" => [], "server-error" => [] })
+        assert_equal expected, JSON.pretty_generate(on_disk.except("last_slice"))
+      end
+    end
+
+    # A ledger written by the pre-engine crawl (the live one's shape: four
+    # pretty-printed class arrays, no last_slice) reads cleanly, and a
+    # slice that learns nothing writes the class section back byte for byte.
+    def test_a_pre_engine_ledger_reads_and_writes_back_byte_compatibly
+      legacy = JSON.pretty_generate({ "denied" => [], "empty" => %w[5089 5090], "timeout-stuck" => [],
+                                      "server-error" => [] })
+      Dir.mktmpdir do |dir|
+        File.write(File.join(dir, ".damos-crawl.json"), legacy)
+        %w[277 755].each { |id| paced_crawl_hold!(dir, id) }
+        crawl = crawl_over(dir, %w[277 755 5089 5090])
+        assert_equal({ "denied" => [], "empty" => %w[5089 5090], "timeout-stuck" => [], "server-error" => [] },
+                     crawl.ledger)
+        assert_predicate crawl.diagnose, :reconciles?
+        report = crawl.slice!
+        assert_equal [:cone_exhausted, 0], [report.classification, report.requests]
+        written = File.read(File.join(dir, ".damos-crawl.json"))
+        assert_equal legacy, JSON.pretty_generate(JSON.parse(written).except("last_slice"))
+        assert written.start_with?(legacy.delete_suffix("\n}")), "the class section leads, unchanged"
+      end
+    end
+
+    def test_a_held_item_reprobed_is_never_overwritten
+      stub_request(:get, format(ITEM, "755")).to_return(status: 200, body: item_body("4985"))
+      Dir.mktmpdir do |dir|
+        paced_crawl_hold!(dir, "755")
+        outcome = quiet_adapter.send(:fetch_item!, dir, "755")
+        assert_equal [:ok, 200], [outcome.status, outcome.http_status]
+        assert_equal item_body("755"), File.read(File.join(dir, "items", "755.json")), "the probe answers liveness"
+      end
+    end
+
+    def test_the_lane_declares_its_schedule
+      schedule = D::ITEM_CRAWL.schedule
+      assert_equal [:per_phase, 3, 3],
+                   [schedule.cadence, schedule.slices_per_phase, schedule.stop_after_zero_slices]
     end
 
     def test_crawl_sha_moves_with_the_held_set_and_the_ledger
