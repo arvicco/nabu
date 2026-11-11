@@ -1144,9 +1144,14 @@ automatically; no per-release action.
    (github.com/apps/glama-ai) installed on the repository to receive
    release events (their hosting documentation; a listing claimed
    via OAuth alone has no event source, and the option sits inert —
-   observed at a release). Until the app is installed, the release
-   is made from the server's Dockerfile admin page (Deploy → create
-   release, replacing the previous one). Either way the loop
+   observed at a release). The install is PROSPECTIVE only: GitHub
+   delivers events published after it, nothing replays an earlier
+   release event, so a release published before the install never
+   auto-builds (observed: the install landed after a release and
+   changed nothing for it). Such a release is made from the
+   server's Dockerfile admin page (Deploy → create release,
+   replacing the previous one) — or simply waits for the next
+   GitHub release, which auto-builds at ITS version. Either way the loop
    verifies with ONE command: `bundle exec rake release:glama` —
    exit 0 says the released version is visible on the public listing
    (the grade prints beside it, informationally; a still-queued

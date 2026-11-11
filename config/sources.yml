@@ -21,6 +21,14 @@
 #                                        #   (upstream may be very much alive);
 #                                        #   frozen = immutable snapshot. Omit
 #                                        #   on kind: shelf rows (kind implies it).
+#     index_policy: deferred             # inline | deferred (default: inline,
+#                                        #   P168). inline = the sync refreshes
+#                                        #   the source's fulltext slice;
+#                                        #   deferred = the sync loads documents
+#                                        #   and SKIPS index work (announced),
+#                                        #   `nabu index refresh <slug>` runs it
+#                                        #   — paced-crawl citizens index once
+#                                        #   per wave, never once per slice
 #     translations: true                 # ALSO ingest parallel translations
 #                                        #   (perseus-eng*) as aligned documents
 #                                        #   (P7-4; default false — original-only)
@@ -4789,6 +4797,7 @@ ndl-kotenseki:   # P109-2
                    # newest PIDs 403-ledgered (no OCR served yet); the crawl
                    # resumes per phase
   sync_policy: manual
+  index_policy: deferred   # paced-crawl citizen: books load per slice, the index runs once per wave (index refresh)
   # The NDL 次世代デジタルライブラリー 古典籍 OCR mass over the bulk
   # route NDL Lab granted (by email, 2026-09-29): per-book
   # fulltext-json API + the open-dataset PID census (97,731 PD-expired
@@ -8253,6 +8262,7 @@ wellcome:   # P165, 02-sources row 401
                  # passages, ~85 MB of zips. Eyeball nabu show on 5 random segments;
                  # probe nabu search with a Latin word from one; then flip.
   sync_policy: manual
+  index_policy: deferred   # paced-crawl citizen: volumes load per slice, the index runs once per wave (index refresh)
   # Wellcome Collection — the digitised printed books of the Wellcome
   # Library (Public Domain Mark): the keyless per-volume OCR text zips
   # (api.wellcomecollection.org/text/v1/<bnumber>.zip), census from the

@@ -126,6 +126,18 @@ module Nabu
     # desks' own subject matter, not spillover).
     DEFAULT_MULTILINGUAL = false
 
+    # The index cadence (P168, the ndl-kotenseki hang). `inline` (the
+    # default) = a sync refreshes the source's fulltext slice as part of the
+    # sync, today's behavior. `deferred` = the sync loads the documents and
+    # SKIPS all index work, announcing it; `nabu index refresh <slug>` runs
+    # the slice refresh explicitly. For paced-crawl chain citizens, whose
+    # documents land wave by wave: the index runs once per wave instead of
+    # once per slice, and never ambushes a crawl with an hours-scale merge.
+    # The staleness stays visible meanwhile (slice_behind? → index doctor,
+    # health).
+    INDEX_POLICIES = %w[inline deferred].freeze
+    DEFAULT_INDEX_POLICY = "inline"
+
     # The fetch-grant block (P42-r1): a permission-bound source whose right to
     # fetch is NOT conveyed by a public license (StarLing's personal e-mail
     # grant to the project author, the future TITUS Avestan). A public clone of
@@ -206,12 +218,14 @@ module Nabu
     # doctrine: declared per source in sources.yml, never hardcoded.
     # +credentials+: the stored-credential name (Nabu::Credentials) a gated
     # upstream's fetch needs — nil for every ordinary source.
+    # +index_policy+ (P168): inline (default) | deferred — whether the sync
+    # refreshes the index slice or leaves it to `nabu index refresh`.
     Entry = Data.define(:slug, :adapter_class_name, :wired, :sync_policy, :kind, :translations,
                         :license_watch, :fuzzy_index, :cjk_index, :embed_index, :lemma_tier,
                         :lemma_dictionary_filter,
                         :classes, :edition_refs, :siblings, :sibling_namespaces, :axes,
                         :grant_required, :grant, :availability, :quickstart, :multilingual,
-                        :group, :requires, :adopted, :credentials) do
+                        :group, :requires, :adopted, :credentials, :index_policy) do
       def initialize(slug:, adapter_class_name:, wired:, sync_policy:, kind: DEFAULT_KIND,
                      translations: false, license_watch: nil, fuzzy_index: false, cjk_index: false,
                      embed_index: false,
@@ -219,9 +233,14 @@ module Nabu
                      classes: nil, edition_refs: nil, siblings: nil, sibling_namespaces: nil, axes: [],
                      grant_required: false, grant: nil, availability: DEFAULT_AVAILABILITY,
                      quickstart: DEFAULT_QUICKSTART, multilingual: DEFAULT_MULTILINGUAL,
-                     group: nil, requires: [], adopted: nil, credentials: nil)
+                     group: nil, requires: [], adopted: nil, credentials: nil,
+                     index_policy: DEFAULT_INDEX_POLICY)
         super
       end
+
+      # The sync skips index work; `nabu index refresh <slug>` runs it
+      # (INDEX_POLICIES note).
+      def index_deferred? = index_policy == "deferred"
 
       # The CORE group (P63 rider, owner ruling 2026-08-09): registry-sibling
       # instruments the library itself depends on (nabu-lects, nabu-places,
@@ -424,7 +443,8 @@ module Nabu
         multilingual: boolean!(slug, config, "multilingual"),
         group: group!(slug, config),
         requires: requires!(slug, config),
-        credentials: credentials!(slug, config)
+        credentials: credentials!(slug, config),
+        index_policy: index_policy!(slug, config)
       )
     end
     private_class_method :build_entry
@@ -481,6 +501,16 @@ module Nabu
             "got #{value.inspect}"
     end
     private_class_method :availability!
+
+    def self.index_policy!(slug, config)
+      value = config.fetch("index_policy", DEFAULT_INDEX_POLICY)
+      return value if INDEX_POLICIES.include?(value)
+
+      raise ValidationError,
+            "source #{slug.inspect}: index_policy must be one of #{INDEX_POLICIES.join(', ')}, " \
+            "got #{value.inspect}"
+    end
+    private_class_method :index_policy!
 
     # The fetch-grant gate keys (P42-r1). Returns [grant_required, Grant|nil].
     # The flag and the block travel together: grant_required without a grant

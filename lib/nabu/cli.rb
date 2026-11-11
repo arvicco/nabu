@@ -101,8 +101,10 @@ module Nabu
     subcommand "layer", LayerCLI
 
     # P112-3: the fulltext-index operations surface — gauges,
-    # freshness stamps, and the standalone merge consolidation.
-    desc "index SUBCOMMAND ...ARGS", "Fulltext-index operations: doctor (gauges + freshness)"
+    # freshness stamps, and the standalone merge consolidation; P168 adds
+    # the explicit per-source slice refresh (index_policy: deferred).
+    desc "index SUBCOMMAND ...ARGS",
+         "Fulltext-index operations: doctor (gauges + freshness), refresh SLUG (one source's slice)"
     subcommand "index", IndexCLI
 
     # P121-1: `nabu export` is a command family — the research tables

@@ -1281,7 +1281,10 @@ module Nabu
       # total (which would imply work that no longer happens). Suppressed for
       # index-inert shelves (indexed nil — no index work at all) and for
       # zero-passage grains like dictionaries (compact zero-field rule).
+      # P168: an index_policy: deferred source skipped the index on purpose
+      # — the line says so loudly and names the command that pays it.
       def format_sync_indexed(outcome)
+        return "  index DEFERRED — run bin/nabu index refresh #{outcome.slug}" if outcome.indexed == :deferred
         return "" if outcome.indexed.nil? || outcome.indexed.zero?
 
         "  indexed #{outcome.indexed} passages (#{outcome.slug})"

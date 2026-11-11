@@ -31,7 +31,13 @@ require "tmpdir"
 # upstream-refusing, cone-exhausted, selection-empty raises); the frozen
 # frontier raises; the report shape incl. the reconciliation triple, its
 # loud mismatch, and the persisted last_slice; the offline diagnose; the
-# declared schedule.
+# declared schedule. The CODEC LAW (every lane — the flat default satisfies
+# it): load∘dump round-trips, foreign sections survive a slice, an
+# unreadable ledger reads blank. The OUTAGE LAW (opt-in through the lane's
+# outage_statuses; the script's :denied/:empty/:timeout symbols drive the
+# outage status): staged-then-committed on recovery, an abort at
+# outage_run with nothing ledgered from the run, a kill mid-stage losing
+# only the staged items.
 module PacedCrawlConformance
   PC_IDS = (101..112).map(&:to_s).freeze
   PC_REFUSAL_BODY = "This PID is not allowed"
@@ -62,6 +68,19 @@ module PacedCrawlConformance
   def pc_ledger_on_disk(engine) = JSON.parse(File.read(engine.ledger_path))
 
   def pc_class(engine, status) = engine.spec.classes.fetch(status)
+
+  # The ids of +status+'s class as they stand on disk, read through the
+  # lane's codec (a nested ledger is not one top-level array per class).
+  def pc_ledgered_on_disk(engine, status)
+    engine.spec.codec.load(pc_ledger_on_disk(engine).except(Nabu::PacedCrawl::LAST_SLICE))
+          .fetch(pc_class(engine, status), Set.new).to_a.sort
+  end
+
+  # The document the lane's codec writes over a blank ledger for +ids+
+  # ({class => ids}; every other class empty).
+  def pc_doc(spec, ids = {})
+    spec.codec.dump(spec.class_names.to_h { |klass| [klass, Set.new(ids.fetch(klass, []))] }, {})
+  end
 
   def test_paced_crawl_held_ids_are_never_fetched
     Dir.mktmpdir do |dir|
@@ -96,9 +115,9 @@ module PacedCrawlConformance
       attempts = engine.spec.timeout_attempts
       assert_equal attempts, asked.count("103"), "a timeout is retried timeout_attempts times, then ledgered"
       assert_equal ["103"], report.stuck
-      assert_equal ["101"], pc_ledger_on_disk(engine).fetch(pc_class(engine, :denied))
-      assert_equal ["102"], pc_ledger_on_disk(engine).fetch(pc_class(engine, :empty))
-      assert_equal ["103"], pc_ledger_on_disk(engine).fetch(pc_class(engine, :timeout))
+      assert_equal ["101"], pc_ledgered_on_disk(engine, :denied)
+      assert_equal ["102"], pc_ledgered_on_disk(engine, :empty)
+      assert_equal ["103"], pc_ledgered_on_disk(engine, :timeout)
 
       resumed, asked_again = pc_engine(dir, slice: 4)
       resumed.slice!
@@ -110,7 +129,7 @@ module PacedCrawlConformance
     Dir.mktmpdir do |dir|
       engine, = pc_engine(dir, slice: 5, answers: { "101" => :denied, "102" => :denied, "103" => :fatal })
       assert_raises(Nabu::Error) { engine.slice! }
-      assert_equal %w[101 102], pc_ledger_on_disk(engine).fetch(pc_class(engine, :denied)),
+      assert_equal %w[101 102], pc_ledgered_on_disk(engine, :denied),
                    "the ledger holds what the slice learned before it died"
 
       resumed, asked = pc_engine(dir, slice: 2)
@@ -216,8 +235,8 @@ module PacedCrawlConformance
       assert_match(/3 request\(s\) in .*; ~3 slice\(s\) of 3 to the end of the cone/, text)
       last = pc_ledger_on_disk(engine).fetch(Nabu::PacedCrawl::LAST_SLICE)
       assert_equal %w[yield 3 3], [last["classification"], last["ok"].to_s, last["attempted"].to_s]
-      assert_equal engine.spec.class_names.sort, (pc_ledger_on_disk(engine).keys - [Nabu::PacedCrawl::LAST_SLICE]).sort,
-                   "the ledger keeps its shape: one array of ids per class, beside last_slice"
+      assert_equal pc_doc(engine.spec).keys.sort, (pc_ledger_on_disk(engine).keys - [Nabu::PacedCrawl::LAST_SLICE]).sort,
+                   "the ledger keeps its codec's shape (flat: one array of ids per class), beside last_slice"
     end
   end
 
@@ -225,7 +244,7 @@ module PacedCrawlConformance
     Dir.mktmpdir do |dir|
       paced_crawl_hold!(dir, "101")
       engine, = pc_engine(dir, slice: 1)
-      File.write(engine.ledger_path, JSON.generate({ pc_class(engine, :denied) => ["101"] }))
+      File.write(engine.ledger_path, JSON.generate(pc_doc(engine.spec, pc_class(engine, :denied) => ["101"])))
       report = engine.slice!
       refute_predicate report, :reconciles?
       assert(report.lines.any? { |line| line.include?("RECONCILIATION MISMATCH: census 12") }, report.lines.inspect)
@@ -246,6 +265,159 @@ module PacedCrawlConformance
       text = diagnosis.lines.join("\n")
       assert_match(/census 12 = held 1 \+ ledgered 1 \[[^\]]*\] \+ remaining 10 — reconciles/, text)
       assert_match(/last slice .*: yield, \+1 ok of 2 asked/, text)
+    end
+  end
+
+  # ── CODEC LAW (runs for every lane; the flat default satisfies it) ──
+  #
+  # The lane's ledger codec (spec.codec) maps the on-disk document to
+  # {class => Set of ids} and back. load∘dump reproduces every class; a
+  # section the codec does not own passes through a slice losslessly; an
+  # unreadable ledger reads blank.
+
+  PC_FOREIGN_KEY = "pc-conformance-foreign"
+  PC_FOREIGN_SECTION = { "a" => %w[1 2], "b" => { "c" => [3] } }.freeze
+
+  def pc_sample_classes(spec)
+    spec.class_names.each_with_index.to_h { |klass, index| [klass, Set.new([(101 + index).to_s, "9#{index}"])] }
+  end
+
+  def test_paced_crawl_codec_law_load_dump_round_trips
+    Dir.mktmpdir do |dir|
+      engine, = pc_engine(dir, slice: 1)
+      codec = engine.spec.codec
+      classes = pc_sample_classes(engine.spec)
+      [{}, { PC_FOREIGN_KEY => PC_FOREIGN_SECTION }].each do |raw|
+        dumped = JSON.parse(JSON.generate(codec.dump(classes, raw)))
+        loaded = codec.load(dumped)
+        assert_equal classes, engine.spec.class_names.to_h { |klass| [klass, loaded.fetch(klass, Set.new)] },
+                     "load∘dump reproduces every class (raw #{raw.keys.inspect})"
+        assert_equal PC_FOREIGN_SECTION, dumped[PC_FOREIGN_KEY] if raw.key?(PC_FOREIGN_KEY)
+      end
+      assert_equal Set.new, codec.load({}).values.reduce(Set.new, :|), "an empty document loads no ids"
+    end
+  end
+
+  def test_paced_crawl_codec_law_foreign_sections_survive_a_slice
+    Dir.mktmpdir do |dir|
+      engine, = pc_engine(dir, slice: 2, answers: { "101" => :denied })
+      seed = engine.spec.codec.dump(engine.spec.class_names.to_h { |klass| [klass, Set.new] }, {})
+      File.write(engine.ledger_path, JSON.generate(seed.merge(PC_FOREIGN_KEY => PC_FOREIGN_SECTION)))
+      engine.slice!
+      on_disk = pc_ledger_on_disk(engine)
+      assert_equal PC_FOREIGN_SECTION, on_disk[PC_FOREIGN_KEY], "a section the codec does not own survives"
+      assert on_disk.key?(Nabu::PacedCrawl::LAST_SLICE), "the engine keeps last_slice at the top level"
+      assert_equal ["101"], engine.ledger.fetch(pc_class(engine, :denied))
+    end
+  end
+
+  def test_paced_crawl_codec_law_an_unreadable_ledger_reads_blank
+    ["not json {", "[1, 2]", "\"a string\""].each do |garbage|
+      Dir.mktmpdir do |dir|
+        engine, = pc_engine(dir, slice: 1)
+        File.write(engine.ledger_path, garbage)
+        assert(engine.ledger.values.all?(&:empty?), "#{garbage.inspect} reads blank")
+        assert_nil engine.last_slice
+        engine.slice!
+        assert_kind_of Hash, pc_ledger_on_disk(engine), "the next write is a valid document again"
+      end
+    end
+  end
+
+  # ── OUTAGE LAW (opt-in: a lane declaring outage_statuses) ──
+  #
+  # An answer whose status is an outage status is STAGED: it commits only
+  # when a later id answers otherwise; outage_run consecutive staged
+  # answers abort the slice with the run dropped unledgered; a kill
+  # mid-stage loses only the staged items. A lane without outage_statuses
+  # passes these trivially (never a skip — skips fail on the owner's box).
+
+  # [outage script symbol, run length, a non-outage terminal symbol or :ok]
+  # for this lane, or nil when it declares no breaker.
+  def pc_outage_lane(dir)
+    lane = pc_engine(dir, slice: 1).first.spec
+    return nil if lane.outage_statuses.empty?
+
+    other = (lane.classes.keys - lane.outage_statuses).first || :ok
+    [lane.outage_statuses.first, lane.outage_run, other]
+  end
+
+  def pc_outage_ids(count) = (101...(101 + count)).map(&:to_s)
+
+  # The lane's ledger as it stands on disk right now, read through the
+  # lane's codec ({class => Set}; blank before the first write).
+  def pc_ledger_now(engine)
+    return {} unless File.file?(engine.ledger_path)
+
+    engine.spec.codec.load(pc_ledger_on_disk(engine).except(Nabu::PacedCrawl::LAST_SLICE))
+  end
+
+  def pc_ledgered?(ledger, id) = ledger.values.any? { |ids| ids.include?(id) }
+
+  def test_paced_crawl_outage_law_staged_failures_commit_when_upstream_answers
+    Dir.mktmpdir do |dir|
+      outage, run, = pc_outage_lane(dir)
+      next unless outage
+
+      ids = pc_outage_ids(run + 3)
+      staged = ids.first(run - 1)
+      recovery = ids[run - 1]
+      on_disk_at_recovery = nil
+      engine = nil
+      engine = paced_crawl_engine(dir: dir, ids: ids, slice: run + 1, script: lambda do |id|
+        on_disk_at_recovery ||= pc_ledger_now(engine) if id == recovery
+        staged.include?(id) ? outage : :ok
+      end)
+      report = engine.slice!
+      assert(staged.none? { |id| pc_ledgered?(on_disk_at_recovery, id) }, "staged answers wait off the ledger")
+      assert_equal staged, pc_ledger_now(engine).fetch(pc_class(engine, outage)).to_a.sort & staged,
+                   "upstream answering #{recovery} commits the staged run"
+      assert_equal staged.size, report.refused.fetch(pc_class(engine, outage))
+    end
+  end
+
+  def test_paced_crawl_outage_law_a_run_aborts_with_nothing_ledgered_from_it
+    Dir.mktmpdir do |dir|
+      outage, run, other = pc_outage_lane(dir)
+      next unless outage
+
+      pre = run > 1 ? [outage, :ok, other] : [:ok, other]
+      ids = pc_outage_ids(pre.size + run + 4)
+      plan = ids.each_with_index.to_h { |id, index| [id, pre[index] || (index < pre.size + run ? outage : :ok)] }
+      the_run = ids[pre.size, run]
+      asked, script = pc_upstream(plan)
+      engine = paced_crawl_engine(dir: dir, ids: ids, slice: ids.size, script: script)
+      report = engine.slice!
+      assert_equal :outage_abort, report.classification
+      assert_equal ids.first(pre.size + run), asked.uniq, "the run's last failure ends the slice"
+      assert_equal the_run, report.outage[:ids]
+      ledger = pc_ledger_now(engine)
+      assert(the_run.none? { |id| pc_ledgered?(ledger, id) }, "nothing from the run is ledgered")
+      assert pc_ledgered?(ledger, ids[0]), "a run committed before the outage stays" if run > 1
+      assert pc_ledgered?(ledger, ids[pre.size - 1]), "the pre-run refusal stays" unless other == :ok
+      assert(report.lines.any? { |line| line.include?("OUTAGE ABORT") }, report.lines.inspect)
+
+      resumed, = pc_engine(dir, slice: 1, ids: ids)
+      resumed_report = resumed.slice!
+      assert_equal the_run.first, resumed_report.frontier[:before], "the next slice re-asks the run"
+    end
+  end
+
+  def test_paced_crawl_outage_law_a_kill_mid_stage_loses_only_the_staged_items
+    Dir.mktmpdir do |dir|
+      outage, run, other = pc_outage_lane(dir)
+      next unless outage && run > 1
+
+      ids = pc_outage_ids(6)
+      engine = paced_crawl_engine(dir: dir, ids: ids, slice: 6,
+                                  script: ->(id) { { "101" => other, "102" => outage, "103" => :fatal }[id] || :ok })
+      assert_raises(Nabu::Error) { engine.slice! }
+      ledger = pc_ledger_now(engine)
+      refute pc_ledgered?(ledger, "102"), "the staged item is lost with the kill"
+      assert pc_ledgered?(ledger, "101"), "the committed refusal before it stays" unless other == :ok
+      resumed, asked = pc_engine(dir, slice: 1, ids: ids)
+      resumed.slice!
+      assert_equal %w[102], asked.uniq
     end
   end
 

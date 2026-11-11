@@ -13,7 +13,10 @@ module Nabu
     # made from the server's admin page — it is not produced by the
     # GitHub release (the admin's auto-release option needs the Glama
     # GitHub App installed on the repo to receive release events; a
-    # listing claimed via OAuth alone has no event source).
+    # listing claimed via OAuth alone has no event source, and the
+    # install only covers releases published after it — an earlier
+    # release's event is never replayed, so that release is built by
+    # hand or superseded by the next one).
     # When a release changes the server's start requirements, the build
     # fails on THEIR builder, where our CI never looks. The probe reads
     # two PUBLIC, unauthenticated

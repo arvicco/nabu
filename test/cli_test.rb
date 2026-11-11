@@ -5820,6 +5820,77 @@ class CLITest < Minitest::Test
     end
   end
 
+  # -- nabu index refresh (P168) + the deferred-source doctor lines ----------
+  # index_policy: deferred sources (paced-crawl citizens) skip the index at
+  # sync time; `index refresh <slug>` runs the slice refresh explicitly.
+
+  # A passages-grain stand-in the registry can resolve for "pap" — the
+  # refresh reads only the adapter's content kind (never fetches/parses).
+  class IndexRefreshAdapter < Nabu::Adapter
+    MANIFEST = Nabu::SourceManifest.new(
+      id: "pap", name: "Papyri", license: "CC0 1.0", license_class: "open",
+      upstream_url: "https://example.invalid/pap", parser_family: "plaintext"
+    )
+    def self.manifest = MANIFEST
+  end
+
+  # with_fuzzy_corpus, with "pap" registered as a deferred source and a
+  # second pap passage landed in the catalog after the index was built
+  # (the deferred wave's state: the slice is behind).
+  def with_deferred_wave
+    with_fuzzy_corpus do |config|
+      File.write(config.sources_path, <<~YAML)
+        pap:
+          adapter: CLITest::IndexRefreshAdapter
+          index_policy: deferred
+      YAML
+      catalog = Nabu::Store.connect(config.catalog_path)
+      pap = catalog[:sources].where(slug: "pap").get(:id)
+      seed_fuzzy_passage(catalog, pap, "urn:nabu:pap:b", "ἄνδρα μοι ἔννεπε μοῦσα")
+      catalog.disconnect
+      yield config
+    end
+  end
+
+  def test_index_refresh_runs_the_slice_refresh_and_reports_the_live_count
+    with_deferred_wave do |config|
+      out, err, status = with_config(config) { run_cli(%w[index refresh pap]) }
+
+      assert_nil status, err
+      assert_match(/index refresh: pap — indexed 2 passages/, out)
+      assert_match(/index slice: pap \(fts \+ lemma rows\)/, err, "the sync path's stage announcements ride along")
+      fulltext = Nabu::Store.connect_fulltext(config.fulltext_path)
+      begin
+        assert_equal 3, fulltext[:passages_fts].count, "pap's two rows + lit's untouched one"
+      ensure
+        fulltext.disconnect
+      end
+    end
+  end
+
+  def test_index_refresh_refuses_an_unknown_slug_naming_the_valid_set
+    with_deferred_wave do |config|
+      _out, err, status = with_config(config) { run_cli(%w[index refresh nope]) }
+
+      assert_equal 1, status
+      assert_match(/index refresh: unknown source "nope" — known sources: pap/, err)
+    end
+  end
+
+  def test_index_doctor_flags_a_deferred_source_whose_slice_is_behind
+    with_deferred_wave do |config|
+      out, _err, status = with_config(config) { run_cli(%w[index doctor]) }
+
+      assert_nil status
+      assert_match(/deferred-index sources \(index_policy: deferred\):/, out)
+      assert_match(%r{pap: BEHIND the catalog — run bin/nabu index refresh pap}, out)
+
+      with_config(config) { run_cli(%w[index refresh pap]) }
+      out, = with_config(config) { run_cli(%w[index doctor]) }
+      assert_match(/pap: current/, out)
+    end
+  end
+
   def test_index_doctor_without_an_index_says_so
     with_empty_registry_env do |config|
       out, _err, status = with_config(config) { run_cli(%w[index doctor]) }
