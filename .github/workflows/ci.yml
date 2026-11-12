@@ -15,9 +15,18 @@ jobs:
     steps:
       - uses: actions/checkout@v5
       # bsdtar (libarchive) — the aclt adapter's 7z extraction; ships with
-      # macOS, needs the package on Ubuntu runners.
+      # macOS, needs the package on Ubuntu runners. Retried with backoff:
+      # runner-side DNS can fail transiently (two runs died on
+      # "Temporary failure resolving security.ubuntu.com" in one day),
+      # and a dead apt step reads as a red suite that never started.
       - name: Install libarchive-tools
-        run: sudo apt-get update -qq && sudo apt-get install -y -qq libarchive-tools
+        run: |
+          for i in 1 2 3; do
+            sudo apt-get update -qq && sudo apt-get install -y -qq libarchive-tools && exit 0
+            echo "apt attempt $i failed; retrying in $((i * 20))s"
+            sleep $((i * 20))
+          done
+          exit 1
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
