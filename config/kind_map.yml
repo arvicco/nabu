@@ -205,6 +205,46 @@ sources:
     #  grain) sits in the residuum documents, which carry no genre facet: the residuum
     #  mixes apparatus with rescans and uncarved text, so a paratext claim is an adapter
     #  question, not a fold line.
+  cllg-sc:            # the French/Latin work title's earliest genre noun, cut at parse time
+    #                   (CllgSc::TITLE_GENRES — the cgpg title-keyword precedent: the catalog
+    #                   carries no genre field). Counts = the 366 parsed documents of the
+    #                   219176d8 clone (2026-11-12): 172 carry a noun; the other 194 name none
+    #                   ("Sur la prière", "Contre Celse", Gregory's "Discours N") and make no
+    #                   kind claim.
+    metadata: genre
+    map:
+      "Lettre": letter                           # 49 — Lettre(s), Épître, Epistula, Correspondance
+      "Homélie": sermon/homily                   # 45 — Homélie(s), sermo, Sermons: preached by title
+      "Commentaire": exegesis                    # 15 — Commentaire, Scholie(s), the Palestinian catena
+      #                                            on Ps 118; Simplicius-style commentary on Epictetus too
+      #                                            (exegesis covers the classics)
+      "Vie": hagiography/vita                    # 8 — "Vie de/d'…" only (Antony, Macrina, Melania,
+      #                                            Hypatios, Constantine — the encomiastic vita); never
+      #                                            "La Vie en Christ"
+      "Martyre": hagiography/martyrdom           # 6 — Polycarp's martyrdom + appendices, the Martyrs of
+      #                                            Palestine, the Greek Passio Perpetuae
+      "Éloge": hagiography/encomium              # 6 — encomia of martyrs and saints, Chrysostom's
+      #                                            panegyrics of Paul
+      "Histoire ecclésiastique": historiography  # 6
+      "Éloge funèbre": sermon/funeral-sermon     # 4 — Flacilla, Meletius; Gregory's Funebris orations
+      "Catéchèse": catechesis                    # 8 — catecheses (Cyril, Chrysostom), the Catechetical
+      #                                            Oration
+      "Profession de foi": catechesis            # 3 — confessions of faith and the Nicene symbol (title-
+      #                                            initial only: a refutation of a creed is not one)
+      "Constitutions": catechesis                # 2 — the Apostolic Constitutions and the Didache: church
+      #                                            orders
+      "Hymne": hymn-prayer/hymn                  # 3
+      "Prière": hymn-prayer/prayer               # 1 — "Prière mystique" (never "Sur la prière", a treatise)
+      "Questions": theology/erotapokriseis       # 3 — Maximus to Thalassios, Eusebius' Gospel questions
+      "Épigramme": literary/poetry               # 2
+      "Vers": literary/poetry                    # 3 — iambic verses, the Homeric centos
+      "Sentences": literary/wisdom               # 2 — Evagrius' Sentences, the Apophthegmata
+      "Préface": paratext/preface                # 2 — prefaces to Dorotheus' work and Symeon's hymns
+      "Table": paratext/index                    # 1 — the table of Symeon's treatises (the hymn table
+      #                                            is the zero-match skip)
+    # -- unmapped by design: "Dialogue" (3 — the intellect's dialogue with its soul, Palladius'
+    #    dialogue on Chrysostom, Cyril's Trinity dialogues): a form word spanning spirituality,
+    #    biography and doctrine; no one head fits (the cgpg "Dialogus" note).
   blbooks:            # the BL catalogue title's form noun, cut to ONE head at parse time
     #                   (Adapters::BlbooksTitleGenre — the cgpg precedent: upstream carries no
     #                   genre field, the title IS the label; the main title's earliest form word

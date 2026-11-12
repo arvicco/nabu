@@ -1313,6 +1313,28 @@ clics:
   # CLICS release is a new tag the owner re-pins.
   sync_policy: manual
 
+cllg-sc:   # 02-sources row 403
+  adapter: Nabu::Adapters::CllgSc
+  adopted: "2026-11-12"
+  axes: [classical]
+  siblings: cts
+  wired: false   # first sync pending: bin/nabu sync cllg-sc (a ~118 MB shallow clone).
+                 # EXPECT (census through the adapter over the 219176d8 clone,
+                 # 2026-11-12): 368 refs → 366 docs (360 grc + 6 lat) / 94,713
+                 # passages, 0 errored, 2 skipped by rule (zero-match trees) +
+                 # 3 uncatalogued files skipped at discovery; ~30 s parse.
+                 # Eyeball nabu show urn:cts:greekLit:tlg2042.tlg001.sc-cllg-grc1:1.1
+                 # ("Πρῶτον τῷ Κέλσῳ κεφάλαιόν ἐστι") and 5 random sections; probe
+                 # nabu search "ψευδομαρτυρούμενος"; then flip.
+  # The Inria CLLG Sources Chrétiennes corpus: the Greek (and 6 Latin)
+  # texts of the Cerf series as citeStructure TEI (the cllg-tei family).
+  # CC-BY floor; the texts ride the French critical-edition case law.
+  # Witness overlap, not duplication: ~225 SC works are also in the TLG
+  # canon (cllg-freed) and 42 in perseus/first1k — the newer Cerf text,
+  # a different edition urn (sc-cllg-grc1). sc_tlg.csv (the SC↔TLG
+  # alignment) is future edition-pairing material, not ingested.
+  sync_policy: manual
+
 # P82-2
 cme:
   adapter: Nabu::Adapters::Cme

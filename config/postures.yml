@@ -2219,6 +2219,23 @@ sources:
         {pleiades, ref}: 88 of 113 editions, every id in the held gazetteer; the XXXXX
         placeholder and empty values mint nothing"}
     script: {posture: implied}
+  cllg-sc:   # 02-sources row 402
+    # kind is machine-postured by the kind_map rule (genre): the work title's
+    # genre noun (CllgSc::TITLE_GENRES) folds to letter, sermon/homily, exegesis,
+    # hagiography, catechesis …; titles naming no genre noun make no claim.
+    lect: {posture: identity, note: "bare grc (and lat for the six Latin editions) is the claim: the
+        corpus spans the Apostolic Fathers to Cabasilas (1st–14th c.) and upstream dates only 7 of 368
+        works, so neither a source-grain stage nor the date band can stage the rest (the
+        first1k-greek/corpus-corporum deliberately-unstaged stance); the 7 composition-dated works
+        stage by the band like any dated document. Refinement candidate: the TLG concordance lane
+        (most SC works carry TLG ids) once SC joins its targets"}
+    dating: {posture: dated, note: "two labeled classes: the catalog description's own '(Original work
+        published ca. Nth century)' → a century envelope, date_class composition (7 of 368 —
+        MetadataDates :structured); every other work falls back to its Sources chrétiennes volumes'
+        print years (metadata edition_year, date_class edition — MetadataDates::EDITION_FALLBACK)"}
+    places: {posture: unplaced, note: "the sourceDesc names only the printing place (pubPlace Paris,
+        a GeoNames ref), never an origin; the catalog names no place"}
+    script: {posture: implied}
   cgpg:   # P153
     # kind is machine-postured by the kind_map rule (genre, P160): upstream and
     # the carve plan carry no genre field, so the carved work's Latin title is
