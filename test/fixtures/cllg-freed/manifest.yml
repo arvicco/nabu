@@ -39,7 +39,7 @@ files:
   - path: cllg-freed.xml
     url: https://gitlab.inria.fr/almanach/cllg/freed-corpus/-/raw/281049a3dc8c96ddd7c8ef9a9f37da0021d16764/cllg-freed.xml
     whole: false
-    trim: only the seven metadata.xml entries of the fixture authors kept
+    trim: only the eight metadata.xml entries of the fixture authors kept
   - path: data/tlg0012/metadata.xml
     url: https://gitlab.inria.fr/almanach/cllg/freed-corpus/-/raw/281049a3dc8c96ddd7c8ef9a9f37da0021d16764/data/tlg0012/metadata.xml
     whole: false
@@ -68,3 +68,11 @@ files:
     url: https://gitlab.inria.fr/almanach/cllg/freed-corpus/-/raw/281049a3dc8c96ddd7c8ef9a9f37da0021d16764/data/spurious-and-dubia/cllg-spuria0001/metadata.xml
     whole: false
     trim: author header kept; only the tlg2062.tlg473 work collection kept
+  - path: data/tlg2035/tlg043/tlg2035.tlg043.cllg-grc1.xml
+    url: https://gitlab.inria.fr/almanach/cllg/freed-corpus/-/raw/281049a3dc8c96ddd7c8ef9a9f37da0021d16764/data/tlg2035/tlg043/tlg2035.tlg043.cllg-grc1.xml
+    whole: false
+    trim: teiHeader verbatim; only the praefatio chapter kept (README trim rule)
+  - path: data/tlg2035/metadata.xml
+    url: https://gitlab.inria.fr/almanach/cllg/freed-corpus/-/raw/281049a3dc8c96ddd7c8ef9a9f37da0021d16764/data/tlg2035/metadata.xml
+    whole: false
+    trim: only the tlg043 work collection kept
