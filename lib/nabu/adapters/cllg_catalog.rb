@@ -19,7 +19,7 @@ module Nabu
     # identifiers), and the author collection's title.
     class CllgCatalog
       Resource = Data.define(:urn, :path, :title, :description, :work_title, :creator, :author,
-                             :identifiers, :metadata_path)
+                             :identifiers, :spuria_of, :metadata_path)
 
       METADATA_GLOB = File.join("data", "**", "metadata.xml")
       EDITION_GLOB = File.join("data", "**", "*.xml")
@@ -74,6 +74,7 @@ module Nabu
             creator: squash(work&.at_xpath("dublinCore/creator")&.text),
             author: author,
             identifiers: work ? work.xpath("dublinCore/identifier").filter_map { |id| squash(id.text) } : [],
+            spuria_of: squash(work&.at_xpath("extensions/isSpuriaOf")&.text),
             metadata_path: File.expand_path(path)
           )
         end

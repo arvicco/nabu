@@ -33,8 +33,15 @@ trimmed but structurally intact.
 
 ## Files
 
+The catalog: `cllg-freed.xml` (trimmed to the seven fixture records) and
+`data/<author>/metadata.xml` for each fixture author (trimmed to the
+fixture work; the `spurious-and-dubia/cllg-spuria0001` record keeps its
+author-level `isSpuriaOf` extension).
+
 | Path (under `data/`) | Why it is here |
 |---|---|
+| `tlg0085/tlg011/tlg0085.tlg011.cllg-grc1.xml` | Aeschylus, fragments (Radt) — one papyrus fragment, 451s**,50, kept: line 2 is a lacuna alone and line 3 a lone U+035C metrical sign (no searchable text — not a passage; this unit quarantined the whole document before the rule) |
+| `spurious-and-dubia/cllg-spuria0001/tlg473/tlg2062.tlg473.cllg-grc1.xml` | Pseudo-Chrysostom, *In nativitatem Christi* fragments (whole file) — the dubia/spuria layout, `isSpuriaOf` tlg2062 |
 | `tlg0012/tlg001/tlg0012.tlg001.cllg-grc1.xml` | Homer, *Iliad* (Allen 1931) — verse: `div[@type='book']` > `l`; `seg rend="Marginalia"` margin signs; book 1 lines 1–3 + book 2 lines 1–2 |
 | `tlg0059/tlg030/tlg0059.tlg030.cllg-grc1.xml` | Plato, *Republic* (Burnet) — prose cited by flat `milestone[@unit='section'][@ed='Burnet']` (default tree) beside a physical `pb` tree; sections 327a–327c; carries U+0387/U+037E (the non-NFC codepoints) |
 | `tlg2738/tlg002/tlg2738.tlg002.cllg-grc1.xml` | Anonymous chronicle (de Boor) — the `pb[@ed='Boor']` stream alone is the citation, across `head`/`p`/`div type="subsection"`; pages 218–220 (page 220 cut after its first line) |

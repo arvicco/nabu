@@ -245,6 +245,56 @@ sources:
     # -- unmapped by design: "Dialogue" (3 — the intellect's dialogue with its soul, Palladius'
     #    dialogue on Chrysostom, Cyril's Trinity dialogues): a form word spanning spirituality,
     #    biography and doctrine; no one head fits (the cgpg "Dialogus" note).
+  cllg-freed:         # the TLG canon's author epithets ("Homerus Epic. Homer" → Epic.), cut at
+    #                   parse against the closed CllgFreed::EPITHETS list and "|"-joined ("Hist.|
+    #                   Phil."); each fragment folds alone. An epithet classes the AUTHOR, so every
+    #                   work of that author takes it — upstream's own genre signal, declared coarse.
+    #                   Counts = author labels over the 1,839 catalog records (2026-11-12).
+    metadata: genre
+    map:
+      "Hist.": historiography                    # 341 — historians (the FGrH tail included)
+      "Chronogr.": historiography/chronicle      # 6
+      "Comic.": literary/drama                   # 150
+      "Trag.": literary/drama                    # 85
+      "Mimogr.": literary/drama                  # 2 — mime writers (Herodas, Sophron)
+      "Epic.": literary/narrative/epic           # 67
+      "Myth.": literary/narrative/myth           # 7 — mythographers
+      "Erot.": literary/narrative/novel          # the erotic novelists ("Xenophon Scr. Erot." below)
+      "Scr. Erot.": literary/narrative/novel     # 8 with the bare form
+      "Fab.": literary/narrative/fable           # 2 — fabulists (Babrius)
+      "Lyr.": literary/poetry/lyric              # 57
+      "Eleg.": literary/poetry                   # 33
+      "Epigr.": literary/poetry                  # 23
+      "Iamb.": literary/poetry                   # 14
+      "Choliamb.": literary/poetry               # 1
+      "Bucol.": literary/poetry                  # 3
+      "Poet.": literary/poetry                   # 13
+      "Poeta": literary/poetry                   # 39 — the Byzantine poets' unabbreviated label
+      "Gnom.": literary/wisdom                   # 4 — gnomic poets
+      "Paroemiogr.": literary/wisdom/proverbs    # 5 — the proverb collectors
+      "Med.": scholarly/medicine                 # 50
+      "Math.": scholarly/mathematics             # 15
+      "Geom.": scholarly/mathematics             # 4
+      "Astron.": scholarly/astronomy             # 14
+      "Mech.": scholarly                         # 8 — mechanics, the learned-discipline head
+      "Mus.": scholarly                          # 5 — music theory
+      "Alchem.": scholarly                       # 26 — the alchemical corpus
+      "Tact.": scholarly                         # 6 — the tacticians' military science
+      "Astrol.": divination/astrology            # 14
+      "Onir.": divination                        # 2 — dream interpretation (Artemidorus)
+      "Gramm.": lexical/grammar                  # 73
+      "Lexicogr.": lexical                       # 4
+      "Attic.": lexical                          # 4 — the Atticist lexicographers (Moeris, Phrynichus)
+      "Orat.": oratory                           # 12 — the Attic orators
+      "Theol.": theology                         # 35
+      "Apol.": theology/apologetics              # 9
+      "Gnost.": theology                         # 2 — Valentinus, Ptolemaeus
+      "Epist.": letter                           # 6 — epistolographers
+    # -- unmapped by design (counted in `nabu kind census --unmapped cllg-freed`): Phil. 250
+    #    (no philosophy head is ruled), Scr. Eccl. 62 (the ecclesiastical writer writes every
+    #    genre), Rhet. 61 and Soph./Sophista 46 (rhetorical handbooks beside declamations —
+    #    forkful between scholarly and oratory), Geogr. 13, Biogr. 11, Perieg. 9, Paradox. 9,
+    #    Philol. 6, Polyhist. 3, Doxogr. 2, Didac. 1, Scr. Rerum Nat. 1.
   blbooks:            # the BL catalogue title's form noun, cut to ONE head at parse time
     #                   (Adapters::BlbooksTitleGenre — the cgpg precedent: upstream carries no
     #                   genre field, the title IS the label; the main title's earliest form word

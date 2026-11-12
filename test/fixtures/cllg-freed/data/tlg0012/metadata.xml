@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+    <collection identifier="urn:cts:greekLit:tlg0012">
+        <title>Homerus Epic. Homer</title>
+        <members>
+        <collection identifier="urn:cts:greekLit:tlg0012.tlg001">
+            <title>Ilias</title>
+            <dublinCore>
+                <creator xmlns="http://purl.org/dc/terms/">Homerus Epic. Homer</creator>
+            </dublinCore>
+            <members>
+                <resource identifier="urn:cts:greekLit:tlg0012.tlg001.cllg-grc1" filepath="./tlg001/tlg0012.tlg001.cllg-grc1.xml">
+                    <title>Ilias</title>
+                    <description>Homerus Epic. (c. 8 B.C.), Ilias (0012: 001) "Homeri Ilias, vols. 2 3", Ed. Allen, T.W. Oxford: Clarendon Press, 1931.</description>
+                    <parent>urn:cts:greekLit:tlg0012.tlg001</parent>
+                </resource>
+            </members>
+        </collection>
+        </members>
+    </collection>

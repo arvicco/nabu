@@ -1313,6 +1313,31 @@ clics:
   # CLICS release is a new tag the owner re-pins.
   sync_policy: manual
 
+cllg-freed:   # 02-sources row 403
+  adapter: Nabu::Adapters::CllgFreed
+  adopted: "2026-11-12"
+  axes: [classical]
+  siblings: cts
+  wired: false   # first sync pending: bin/nabu sync cllg-freed — a blobless SPARSE clone
+                 # of data/ + the root catalog + README/CITATION.cff (~1.0 GB of TEI;
+                 # the repo's 1.1 GB scripts/out classifier data never transfers).
+                 # EXPECT (census through the parser over the 281049a3 clone,
+                 # 2026-11-12): 6,626 catalogued files → 331 skipped by rule at
+                 # discovery (no citeStructure) → 6,295 refs → 6,294 docs /
+                 # ~1,256,190 passages, 1 quarantined (tlg2021.tlg037: citeStructure
+                 # use="n", an upstream typo for @n). Parse ~15 min on the probe box
+                 # (plus the load) — run with a log file and a watchdog (the long-op
+                 # rule). Eyeball nabu show urn:cts:greekLit:tlg0012.tlg001.cllg-grc1:1.1
+                 # ("Μῆνιν ἄειδε θεὰ") and 5 random passages; probe nabu search
+                 # "Πηληϊάδεω"; then flip.
+  # The Inria CLLG Freed Corpus: the TLG E canon as citeStructure TEI (the
+  # cllg-tei family), Diogenes-derived; CC0 texts / CC-BY structure. Witness
+  # overlap, not duplication: ~1,605 works also held in perseus-greek /
+  # first1k-greek under their own edition urns (cllg-grc1 vs perseus-grc2 /
+  # 1st1K-grc1); ~5,021 works are new. ~225 SC works also sit here in the
+  # older TLG edition (cllg-sc carries the Cerf text).
+  sync_policy: manual
+
 cllg-sc:   # 02-sources row 403
   adapter: Nabu::Adapters::CllgSc
   adopted: "2026-11-12"

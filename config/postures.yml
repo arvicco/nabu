@@ -2219,6 +2219,24 @@ sources:
         {pleiades, ref}: 88 of 113 editions, every id in the held gazetteer; the XXXXX
         placeholder and empty values mint nothing"}
     script: {posture: implied}
+  cllg-freed:   # 02-sources row 403
+    # kind is machine-postured by the kind_map rule (genre): the TLG canon author
+    # epithets (Hist., Trag., Epic., Med. …) fold onto historiography, drama, epic,
+    # medicine …; Phil., Scr. Eccl., Rhet., Soph. stay counted unmapped.
+    lect: {posture: dates, note: "the date-band inference stages the works from the TLG canon's own
+        century dating (composition class): c. 8 B.C. Homer inside grc:hom [-800, -600], the 5th-4th
+        c. B.C. classics inside grc:cla, the Hellenistic and imperial authors inside grc:koi, the
+        5th-c.-and-later Byzantines inside grc:byz; centuries straddling a band edge (c. A.D. 4 vs
+        330) and the Varia/Incertum works stay bare grc. No facet rule: a label map would only repeat
+        the band"}
+    dating: {posture: dated, note: "two labeled classes: the TLG canon's dating in each catalog line
+        ('c. A.D. 4-5', 'c. 5 B.C.?', 'c. p. A.D. 2') → a century envelope, date_class composition
+        (CllgFreed::TlgDate, MetadataDates :structured; 6,139 of 6,626 — ante/post one open bound);
+        the 442 Varia + 45 Incertum works fall back to the printed edition's year (metadata
+        edition_year, date_class edition — MetadataDates::EDITION_FALLBACK)"}
+    places: {posture: unplaced, note: "the biblStruct names only the printing place (imprint
+        pubPlace), never an origin; the TLG canon line names no place"}
+    script: {posture: implied}
   cllg-sc:   # 02-sources row 402
     # kind is machine-postured by the kind_map rule (genre): the work title's
     # genre noun (CllgSc::TITLE_GENRES) folds to letter, sermon/homily, exegesis,
