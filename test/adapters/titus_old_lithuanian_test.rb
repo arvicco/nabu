@@ -96,7 +96,8 @@ class TitusOldLithuanianTest < Minitest::Test
 
   def test_discover_yields_one_document_per_lithuanian_page
     require_fixtures!
-    assert_equal %w[donmetai.donme001 mazvkat.mazvk004 wp.wp002],
+    assert_equal %w[donmetai.donme001 engels.engel001 mazvkat.mazvk004 mazvkat.mazvk010
+                    spslt.spslt015 wp.wp002 wp.wp075],
                  @adapter.discover(FIXTURES).map { |ref| ref.id.split(":").last }.sort
   end
 
@@ -147,6 +148,37 @@ class TitusOldLithuanianTest < Minitest::Test
     latin = documents.fetch("wp.wp002").passages.select { |p| p.annotations.key?("latin") }
     assert_equal 13, latin.size
     refute(latin.any? { |p| p.text.include?("CAPITVLVM") })
+  end
+
+  # --- the first retrieval's quarantine classes (2026-11-12: 27 pages) -----
+
+  # Mažvydas's German source lines (oend*, the Old Prussian family's German
+  # lane) ride the german annotation, never the text. The German-only
+  # heading unit ("Nu bittenn wir…" with no Lithuanian beside it) mints no
+  # passage at all — the no-text drop — so its words appear nowhere.
+  def test_mazvydas_german_source_lines_ride_the_german_annotation
+    document = documents.fetch("mazvkat.mazvk010")
+    german = document.passages.select { |p| p.annotations.key?("german") }
+    refute_empty german
+    assert(german.any? { |p| p.annotations["german"].include?("Vater vn") })
+    refute(document.passages.any? do |p|
+      p.text.include?("bittenn") || p.annotations.values.any? { |v| v.to_s.include?("bittenn") }
+    end)
+  end
+
+  # The bpla* lane is the LATIN parallel (the -la stem): Szyrwid's "&c."
+  # rubric runs and Engel's "Dicat" route to the latin annotation.
+  def test_the_latin_la_lane_rides_the_latin_annotation
+    spslt = documents.fetch("spslt.spslt015")
+    assert(spslt.passages.any? { |p| p.annotations.key?("latin") })
+    assert documents.key?("engels.engel001"), "the drop-cap title page parses"
+  end
+
+  # The Wolfenbüttel apparatus's quire-signature furniture (oec) is
+  # excluded; the page parses instead of quarantining.
+  def test_the_postil_apparatus_quire_signature_is_excluded
+    assert documents.key?("wp.wp075")
+    refute(documents.fetch("wp.wp075").passages.any? { |p| p.text.strip == "B" })
   end
 
   # --- Donelaitis -----------------------------------------------------------
