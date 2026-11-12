@@ -1313,23 +1313,20 @@ clics:
   # CLICS release is a new tag the owner re-pins.
   sync_policy: manual
 
-cllg-freed:   # 02-sources row 403
+cllg-freed:   # 02-sources row 404
   adapter: Nabu::Adapters::CllgFreed
   adopted: "2026-11-12"
   axes: [classical]
   siblings: cts
-  wired: false   # first sync pending: bin/nabu sync cllg-freed — a blobless SPARSE clone
-                 # of data/ + the root catalog + README/CITATION.cff (~1.0 GB of TEI;
-                 # the repo's 1.1 GB scripts/out classifier data never transfers).
-                 # EXPECT (census through the parser over the 281049a3 clone,
-                 # 2026-11-12): 6,626 catalogued files → 331 skipped by rule at
-                 # discovery (no citeStructure) → 6,295 refs → 6,294 docs /
-                 # ~1,256,190 passages, 1 quarantined (tlg2021.tlg037: citeStructure
-                 # use="n", an upstream typo for @n). Parse ~15 min on the probe box
-                 # (plus the load) — run with a log file and a watchdog (the long-op
-                 # rule). Eyeball nabu show urn:cts:greekLit:tlg0012.tlg001.cllg-grc1:1.1
-                 # ("Μῆνιν ἄειδε θεὰ") and 5 random passages; probe nabu search
-                 # "Πηληϊάδεω"; then flip.
+  wired: true    # flipped 2026-11-12: first sync verified — 6,290 docs / 1,258,099
+                 # passages, 335 skipped by rule (331 no citeStructure + 4 SC_OVERLAP
+                 # deferrals), 1 honest quarantine (tlg2021.tlg037: citeStructure
+                 # use="n", an upstream typo for @n); 6,626 accounted, residue 0.
+                 # Probes green: show tlg0012…:1.1 ("Μῆνιν ἄειδε θεὰ"), search
+                 # "Πηληϊάδεω", 5 random passages. The fetch is a blobless SPARSE
+                 # clone of data/ + the root catalog + README/CITATION.cff (~1.0 GB
+                 # of TEI; the repo's 1.1 GB scripts/out classifier data never
+                 # transfers). Full parse ~9.5 min on this box — log + watchdog.
   # The Inria CLLG Freed Corpus: the TLG E canon as citeStructure TEI (the
   # cllg-tei family), Diogenes-derived; CC0 texts / CC-BY structure. Witness
   # overlap, not duplication: ~1,605 works also held in perseus-greek /
@@ -1343,14 +1340,11 @@ cllg-sc:   # 02-sources row 403
   adopted: "2026-11-12"
   axes: [classical]
   siblings: cts
-  wired: false   # first sync pending: bin/nabu sync cllg-sc (a ~118 MB shallow clone).
-                 # EXPECT (census through the adapter over the 219176d8 clone,
-                 # 2026-11-12): 368 refs → 366 docs (360 grc + 6 lat) / 94,713
-                 # passages, 0 errored, 2 skipped by rule (zero-match trees) +
-                 # 3 uncatalogued files skipped at discovery; ~30 s parse.
-                 # Eyeball nabu show urn:cts:greekLit:tlg2042.tlg001.sc-cllg-grc1:1.1
-                 # ("Πρῶτον τῷ Κέλσῳ κεφάλαιόν ἐστι") and 5 random sections; probe
-                 # nabu search "ψευδομαρτυρούμενος"; then flip.
+  wired: true    # flipped 2026-11-12: first sync verified EXACT on the census —
+                 # 366 docs (360 grc + 6 lat) / 94,713 passages, 0 errored,
+                 # 5 skipped by rule. Probes green: show tlg2042…:1.1 ("Πρῶτον
+                 # τῷ Κέλσῳ κεφάλαιόν ἐστι"), search "ψευδομαρτυρούμενος",
+                 # 5 random sections. ~118 MB shallow clone, ~30 s parse.
   # The Inria CLLG Sources Chrétiennes corpus: the Greek (and 6 Latin)
   # texts of the Cerf series as citeStructure TEI (the cllg-tei family).
   # CC-BY floor; the texts ride the French critical-edition case law.
@@ -7447,8 +7441,12 @@ titus-old-prussian:   # 02-sources row 402
   # Grant-gated PRIVATE research material, the titus-avestan posture verbatim
   # (the fetch right is the owner's personal grant, not conveyed by a clone):
   availability: blocked
-  wired: false   # adapter + fixtures landed 2026-11-12; the one-time retrieval + verification
-                 # (status counts, 5 random passages, a search probe) flips it.
+  wired: true    # flipped 2026-11-12: the one-time granted retrieval verified —
+                 # 34 docs / 2,704 passages (all 40 pages parse: 34 documents +
+                 # 6 skipped by rule, 0 quarantined after the five fragment pages
+                 # were classified into the content model). Probes green: show a
+                 # Lib.Bapt. line, search "Noūson" (fold-aware hits across three
+                 # catechisms incl. a fragment page), 5 random passages.
   # TITUS Old Prussian Corpus (titus.uni-frankfurt.de/texte/etcs/balt/apreuss/apreuss/):
   # the complete Old Prussian record in a diplomatic edition after V. Mažiulis, Prūsų
   # kalbos paminklai (Vilnius 1966/1981), data entry W. Euler (München 1997-1998), TITUS
