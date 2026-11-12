@@ -644,12 +644,11 @@ sources:
     # One document per full-text chant record (Adapters::CantusCsvParser);
     # the manuscript source's own fields (Browse Sources listing) join every
     # record of it. kind is machine-postured by the kind_map rule (genre).
-    lect: {posture: identity, note: "lat — the liturgical Latin of the Office and Mass as each
-        manuscript spells it. The lat/ecc register claim is MINTED (lect_overrides row, ruled
-        2026-11-12 after the lect-scope review): chant is register-classed like gregobase /
-        divinum-officium, and the witness-date band staging that once made lat:ren 98.6% chant
-        is replaced by the stageless register. A rare vernacular cantio (genre Cn) would ride
-        under lat — none in the 17-source sample"}
+    # lect rides the lect_overrides row (lat → lat/ecc, ruled 2026-11-12:
+    # chant is register-classed like gregobase/divinum-officium; the
+    # witness-date band staging that once made lat:ren 98.6% chant is
+    # replaced by the stageless register) — machine files are the single
+    # source of truth, so no declaration here.
     dating: {posture: partial, note: "the source's curated century labels (Browse Sources
         /century/ links: '10th century (975-1000)', '13th century (2nd half)', 40 labels) band
         every record of that source — basis 'source', the witness's copying date, never the
