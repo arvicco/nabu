@@ -272,7 +272,13 @@ class DerivabilityWritersTest < Minitest::Test
   # report, tmp+rename) into canonical/<slug>/ inside the adapter's
   # Adapter#fetch — the ndl-kotenseki crawl law kind; the payloads stay
   # the adapter's own fetch_one writes.
+  # index_watcher writes the supervised writer's TRANSIENT heartbeat file
+  # (db/.index-writer-<pid>.heartbeat — the last progress event, its mtime
+  # the tick age the forked watcher reads), removed when the supervised
+  # command ends, plus its lines into a caller-named log file when one is
+  # given (the suite) — run-scoped scratch, never persistent state.
   WRITER_ALLOWLIST = %w[
+    nabu/index_watcher.rb
     nabu/demo_build.rb
     nabu/adapters/hmml_reading_room.rb
     nabu/adapters/dprr.rb nabu/adapters/pna.rb

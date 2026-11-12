@@ -145,11 +145,12 @@ module Nabu
     # gloss-lines lane (store/gloss_line_index.rb) and its extraction
     # contract (gloss_lines.rb) shape only passages_gloss_lines rows. The
     # lane files (store/lanes.rb) decide only WHERE the cjk/trigram lane
-    # rows live, never what they hold.
+    # rows live, never what they hold; the engine-config intent journal
+    # (store/engine_intents.rb) only restores fts5 merge settings.
     INDEX_FILES = %w[
       store/indexer.rb store/alignment_indexer.rb store/lemma_frequencies.rb
       store/reflex_roots_indexer.rb store/silver_lemma_indexer.rb
-      store/cjk_bigrams.rb store/index_delta.rb store/lanes.rb
+      store/cjk_bigrams.rb store/index_delta.rb store/lanes.rb store/engine_intents.rb
       store/translation_index.rb translation_keys.rb
       store/gloss_index.rb query/token_glosses.rb
       store/annotation_index.rb annotation_keys.rb
@@ -184,7 +185,8 @@ module Nabu
     # a builder file above), which reads shelf records, not scanner code.
     EXCLUDED_DIRS = (%w[adapters mcp query health ops data_build export cli scansion] + BUILDER_DIRS).freeze
     EXCLUDED_FILES = (BUILDER_FILES + INDEX_FILES + %w[
-      store/fts_structure.rb store/lane_coverage.rb
+      store/fts_structure.rb store/lane_coverage.rb store/rebuild_runs.rb
+      index_watcher.rb process_probe.rb
       cli.rb display.rb status_report.rb progress_reporter.rb version.rb
       backup.rb review_hook.rb verify.rb fixture_sentinel.rb
       batch_cognates.rb batch_formulas.rb batch_parallels.rb

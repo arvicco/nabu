@@ -1217,15 +1217,23 @@ module Nabu
 
       # Apply the deferred-merge settings around the block and ALWAYS
       # restore the defaults — the settings are persisted index config, so
-      # an exception must not leave a never-merging index behind.
+      # an exception must not leave a never-merging index behind. The
+      # ensure arm cannot cover a SIGKILL, so each table's restore is
+      # JOURNALED before its bulk setting applies (Store::EngineIntents):
+      # a killed run's restore replays on the next read-write connect.
       def with_bulk_write_mode(fulltext, tables)
         return yield if tables.empty?
 
+        intents = []
         begin
-          tables.each { |table| apply_merge_settings(fulltext, table, BULK_MERGE_SETTINGS) }
+          tables.each do |table|
+            intents << EngineIntents.journal!(fulltext, table: table, restore: DEFAULT_MERGE_SETTINGS)
+            apply_merge_settings(fulltext, table, BULK_MERGE_SETTINGS)
+          end
           yield
         ensure
           tables.each { |table| apply_merge_settings(fulltext, table, DEFAULT_MERGE_SETTINGS) }
+          EngineIntents.clear!(fulltext, intents)
         end
       end
 

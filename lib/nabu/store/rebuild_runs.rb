@@ -21,7 +21,7 @@ module Nabu
     # A row without completed_at reads three ways: its pid alive → still
     # RUNNING (a fact, not damage); a recorded error → failed; otherwise
     # the process died mid-run — "never completed, the index may be
-    # partial". The pid probe is local (Process.kill 0): the ledger is a
+    # partial". The pid probe is local (Nabu::ProcessProbe): the ledger is a
     # per-box file, so a pid always names a process on this box; a
     # recycled pid can only make a dead run read as running (the
     # conservative error, never a false alarm).
@@ -95,16 +95,7 @@ module Nabu
         lines.compact
       end
 
-      def alive?(pid)
-        return false if pid.nil?
-
-        Process.kill(0, pid)
-        true
-      rescue Errno::ESRCH
-        false
-      rescue Errno::EPERM
-        true # exists, owned by someone else
-      end
+      def alive?(pid) = ProcessProbe.alive?(pid)
 
       def stamp(iso) = Time.iso8601(iso.to_s).utc.strftime("%Y-%m-%d %H:%M:%S UTC")
 
