@@ -143,11 +143,13 @@ module Nabu
     # (store/annotation_index.rb) and its key registry (annotation_keys.rb
     # — read by that lane alone) shape only passages_annotations rows. The
     # gloss-lines lane (store/gloss_line_index.rb) and its extraction
-    # contract (gloss_lines.rb) shape only passages_gloss_lines rows.
+    # contract (gloss_lines.rb) shape only passages_gloss_lines rows. The
+    # lane files (store/lanes.rb) decide only WHERE the cjk/trigram lane
+    # rows live, never what they hold.
     INDEX_FILES = %w[
       store/indexer.rb store/alignment_indexer.rb store/lemma_frequencies.rb
       store/reflex_roots_indexer.rb store/silver_lemma_indexer.rb
-      store/cjk_bigrams.rb store/index_delta.rb
+      store/cjk_bigrams.rb store/index_delta.rb store/lanes.rb
       store/translation_index.rb translation_keys.rb
       store/gloss_index.rb query/token_glosses.rb
       store/annotation_index.rb annotation_keys.rb

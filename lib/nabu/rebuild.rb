@@ -149,7 +149,7 @@ module Nabu
       # Sidecars go WITH each db (Store.drop_database_files! — the 2026-08-02
       # incident: a held -shm surviving the drop poisons the fresh file).
       Store.drop_database_files!(db_path)
-      Store.drop_database_files!(fulltext_path) # the index is derived-of-derived; drop it too
+      Store.drop_fulltext_files!(fulltext_path) # the index (and its lane files) is derived-of-derived; drop it too
       db = fresh_db
       # P36-2: bulk-load with the non-unique secondary indexes DROPPED, then
       # build them in one pass at the end (Store.create_deferred_indexes!). A
