@@ -10,7 +10,7 @@ require "tmpdir"
 # real pages (one per lane class) + the frameset. No network: fetch is
 # owner-run only.
 #
-# The fixture bytes are grant-gated (Gippert, by email 2026-08-31: one-time
+# The fixture bytes are grant-gated (the license terms: one-time
 # download, local non-commercial use, NO redistribution), so they live under
 # the gitignored local/fixtures/titus-osco-umbrian/ (that dir's README
 # carries the re-cut recipe + sha256) and every data-bearing case SKIPs when
@@ -57,6 +57,8 @@ class TitusOscoUmbrianTest < Minitest::Test
     assert_equal "titus-osco-umbrian", manifest.id
     assert_equal "titus_osco_umbrian", manifest.parser_family
     assert_equal "nc", manifest.license_class
+    refute_match(/\b20\d\d-\d\d-\d\d\b|by e-?mail|personal(?:ly)? grant/i, manifest.license,
+                 "terms + credit only — never the grant's date, channel or arrangement")
     assert_match(/TITUS/, manifest.credit)
     assert_match(/Slunečko/, manifest.credit, "the text-entry editors are part of the display duty")
   end
@@ -214,7 +216,7 @@ class TitusOscoUmbrianTest < Minitest::Test
   def require_fixtures!
     return if Nabu::TestSupport.local_fixtures?(SLUG)
 
-    skip "#{SLUG} local fixtures absent (personal grant forbids redistribution — " \
+    skip "#{SLUG} local fixtures absent (the license forbids redistribution — " \
          "bytes live in local/fixtures/, never in git)"
   end
 end

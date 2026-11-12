@@ -81,7 +81,7 @@ module Nabu
         else unknown << name
         end
       end
-      # An AXIS expands to its PUBLIC members only (P44-r3b): a blocked
+      # An AXIS expands only to its PUBLIC members (P44-r3b): a blocked
       # (grant-gated private) source is never enabled implicitly by its desk —
       # it joins the set only when named explicitly by slug (which the +sources+
       # arm carries, blocked or not).

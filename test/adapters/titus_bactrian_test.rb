@@ -10,7 +10,7 @@ require "fileutils"
 # grain keyed off the `<!Level 4>` "Line" headers, the edition's own line
 # labels kept verbatim.
 #
-# The fixture bytes are grant-gated (Gippert, by email 2026-10-06: one
+# The fixture bytes are grant-gated (the license terms: one
 # retrieval, local personal research only, NO redistribution), so they live
 # under the gitignored local/fixtures/titus-bactrian/ and every data-bearing
 # case SKIPs when absent (on the owner's box StrictSkips turns a skip into a
@@ -70,7 +70,8 @@ class TitusBactrianTest < Minitest::Test
     assert_equal SLUG, manifest.id
     assert_equal "titus_bactrian", manifest.parser_family
     assert_equal "nc", manifest.license_class
-    assert_match(/2026-10-06/, manifest.license, "the grant date is recorded")
+    refute_match(/\b20\d\d-\d\d-\d\d\b|by e-?mail|personal(?:ly)? grant/i, manifest.license,
+                 "terms + credit only — never the grant's date, channel or arrangement")
     assert_match(/no redistribution/i, manifest.license)
     assert_match(/TITUS/, manifest.credit)
     assert_match(/Gippert/, manifest.credit)
@@ -464,8 +465,7 @@ class TitusBactrianTest < Minitest::Test
     assert_equal "manual", entry.sync_policy
     assert_predicate entry, :grant_required?
     assert_predicate entry, :blocked?
-    assert_equal "2026-10-06", entry.grant.date
-    assert_match(/Gippert/, entry.grant.grantor)
+    assert_match(/Contact TITUS .* for a license grant/, entry.grant.request_hint)
     assert_match(/one retrieval/i, entry.grant.terms)
     assert_match(/no redistribution/i, entry.grant.terms)
     assert_match(/titus-bactrian: fetch requires a GRANT/, Nabu::GrantGate.notice(entry))
@@ -483,7 +483,7 @@ class TitusBactrianTest < Minitest::Test
   def require_fixtures!
     return if Nabu::TestSupport.local_fixtures?(SLUG)
 
-    skip "#{SLUG} local fixtures absent (personal grant forbids redistribution — " \
+    skip "#{SLUG} local fixtures absent (the license forbids redistribution — " \
          "bytes live in local/fixtures/, never in git)"
   end
 end

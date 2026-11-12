@@ -13,18 +13,24 @@ class GrantGateTest < Minitest::Test
     @ledger = ledger_test_db
   end
 
-  def grant_entry(slug: "starling", grant_required: true)
+  def grant_entry(slug: "starling", grant_required: true, grant: sample_grant)
     Nabu::SourceRegistry::Entry.new(
       slug: slug, adapter_class_name: "TestAdapter", wired: true, sync_policy: "manual",
-      grant_required: grant_required, grant: (grant_required ? sample_grant : nil)
+      grant_required: grant_required, grant: (grant_required ? grant : nil)
     )
   end
 
+  # The PUBLIC grant (what config/sources.yml carries on every clone).
   def sample_grant
     Nabu::SourceRegistry::Grant.new(
-      grantor: "G. Starostin", date: "2026-07-15", terms: "any use, per-base attribution required",
-      thread: "by email, 2026-07-15", request_hint: "write to George Starostin for your own grant"
+      terms: "any use, per-base attribution required",
+      request_hint: "contact the source (example.org) for a license grant"
     )
+  end
+
+  # The same grant with this box's instance provenance merged in.
+  def provenanced_grant
+    sample_grant.with(grantor: "A. Grantor", date: "2026-01-02", thread: "a written grant")
   end
 
   def test_unacknowledged_source_is_blocked
@@ -64,17 +70,32 @@ class GrantGateTest < Minitest::Test
     refute Nabu::GrantGate.acknowledged_answer?(nil)
   end
 
+  # A public clone (no provenance file): terms, the criterion and the
+  # on-ramp — and NO provenance line at all.
   def test_notice_carries_terms_criterion_and_request_scaffold
     notice = Nabu::GrantGate.notice(grant_entry)
     assert_match(/any use, per-base attribution required/, notice, "terms verbatim")
-    assert_match(/granted personally to the project author — you need your own/, notice, "the criterion")
-    assert_match(/write to George Starostin/, notice, "the request scaffold")
-    assert_match(/G\. Starostin, 2026-07-15/, notice)
+    assert_match(/not conveyed by a public license — you need your own grant/, notice, "the criterion")
+    assert_match(/request your own: contact the source/, notice, "the request scaffold")
+    refute_match(/on this box/, notice, "no provenance line without the instance file")
+    assert_equal 4, notice.lines.size
+  end
+
+  # The owner's box (provenance file present): one extra line, after terms.
+  def test_notice_renders_the_provenance_line_only_when_the_box_holds_it
+    notice = Nabu::GrantGate.notice(grant_entry(grant: provenanced_grant))
+    assert_match(/^  on this box: granted by A\. Grantor, 2026-01-02 · a written grant$/, notice)
+    assert_equal 5, notice.lines.size
+  end
+
+  def test_a_partial_provenance_row_renders_what_it_has
+    partial = sample_grant.with(grantor: "A. Grantor")
+    assert_match(/^  on this box: granted by A\. Grantor$/, Nabu::GrantGate.notice(grant_entry(grant: partial)))
   end
 
   def test_abort_message_includes_the_scaffold_pointer
     msg = Nabu::GrantGate.abort_message(grant_entry)
-    assert_match(/write to George Starostin/, msg, "the on-ramp, not a bare wall")
+    assert_match(/contact the source/, msg, "the on-ramp, not a bare wall")
     assert_match(/--grant-acknowledged/, msg)
     assert_match(/Nothing was fetched/, msg)
   end

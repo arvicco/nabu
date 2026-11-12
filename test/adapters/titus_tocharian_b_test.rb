@@ -4,9 +4,9 @@ require "test_helper"
 require "tmpdir"
 
 # TITUS Tocharian B adapter tests: the West Tocharian corpus TITUS serves
-# to MEMBERS ONLY (HTTP Basic auth at titus.fkidg1.uni-frankfurt.de) — the
+# only behind a login (HTTP Basic auth at titus.fkidg1.uni-frankfurt.de) — the
 # titus-tocharian-a family with its own constants, fetched through the
-# credentials seam.
+# Nabu::Credentials.
 #
 # Parse coverage rides real member-area pages cut into the restricted
 # local/fixtures/titus-tocharian-b/ (never test/fixtures — the grant forbids
@@ -33,7 +33,8 @@ class TitusTocharianBTest < Minitest::Test
     assert_equal SLUG, manifest.id
     assert_equal "titus_tocharian", manifest.parser_family
     assert_equal "nc", manifest.license_class
-    assert_match(/2026-10-06/, manifest.license)
+    refute_match(/\b20\d\d-\d\d-\d\d\b|by e-?mail|personal(?:ly)? grant/i, manifest.license,
+                 "terms + credit only — never the grant's date, channel or arrangement")
     assert_match(/no redistribution/i, manifest.license)
     assert_match(/TITUS/, manifest.credit)
     assert_match(/Schaefer/, manifest.credit, "the Berlin B data-entry editors are part of the display duty")
@@ -60,7 +61,7 @@ class TitusTocharianBTest < Minitest::Test
     assert_equal [Nabu::TitusFetch::STATE_FILE], targets.map(&:state_file)
   end
 
-  # --- fetch through the credentials seam (WebMock) ---------------------------
+  # --- fetch through Nabu::Credentials (WebMock) ------------------------------
 
   def test_fetch_sends_the_stored_credential_and_walks_the_chain
     stub_request(:get, ENTRY).with(basic_auth: %w[member pw])
@@ -113,8 +114,7 @@ class TitusTocharianBTest < Minitest::Test
     assert_equal "titus", entry.credentials
     assert_predicate entry, :grant_required?
     assert_predicate entry, :blocked?
-    assert_equal "2026-10-06", entry.grant.date
-    assert_match(/Gippert/, entry.grant.grantor)
+    assert_match(/Contact TITUS .* for a license grant/, entry.grant.request_hint)
     assert_match(/Tocharian A and B/, entry.grant.terms)
     assert_equal %w[etym buddhist], entry.axes
     assert_equal ADAPTER.manifest, entry.manifest

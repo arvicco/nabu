@@ -37,7 +37,7 @@ class SealFetchTest < Minitest::Test
   def require_fixtures!
     return if Nabu::TestSupport.local_fixtures?(SLUG)
 
-    skip "#{SLUG} local fixtures absent (personal-research grant forbids redistribution)"
+    skip "#{SLUG} local fixtures absent (the license forbids redistribution)"
   end
 
   def index_bytes
@@ -80,10 +80,12 @@ class SealFetchTest < Minitest::Test
     refute Nabu::SealFetch.record?(Nabu::SealFetch::STATE_FILE)
   end
 
-  def test_the_user_agent_names_the_grant
-    assert_includes Nabu::SealFetch::USER_AGENT, "Wasserman",
-                    "the crawl identifies itself under the grant it fetches by"
+  def test_the_user_agent_identifies_the_permitted_crawl
+    assert_includes Nabu::SealFetch::USER_AGENT, "SEAL",
+                    "the crawl identifies itself as the permitted SEAL fetch"
     assert_includes Nabu::SealFetch::USER_AGENT, "arvicco@nabu.ac"
+    refute_match(/\b20\d\d-\d\d-\d\d\b|by e-?mail|personal(?:ly)?[\s-](?:research[\s-])?grant/i, Nabu::SealFetch::USER_AGENT,
+                 "the public UA string carries no grant date, channel or arrangement")
   end
 
   # --- the happy path --------------------------------------------------------

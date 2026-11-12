@@ -5,9 +5,9 @@ require "tmpdir"
 require "fileutils"
 
 # SEAL adapter tests (P89-3): Sources of Early Akkadian Literature
-# (seal.huji.ac.il) under the research_private posture — Prof. Nathan
-# Wasserman's personal-research grant (by email, 2026-08-30): local
-# machine only, NO redistribution/mirroring/derivative publication. The
+# (seal.huji.ac.il) under the research_private posture — the restricted
+# terms: local machine only, NO redistribution/mirroring/derivative
+# publication. The
 # fixture bytes therefore live under the gitignored local/fixtures/seal/
 # (the corpus-oudnederlands/freising mold) and every data-bearing case SKIPs
 # when they are absent — CI and other users pass without the bytes, the
@@ -48,15 +48,15 @@ class SealTest < Minitest::Test
     SLUG
   end
 
-  # --- manifest: the personal-research grant (runs in CI, no bytes) ----------
+  # --- manifest: the license terms (runs in CI, no bytes) --------------------
 
-  def test_manifest_quotes_the_wasserman_grant_and_is_research_private
+  def test_manifest_states_the_terms_and_is_research_private
     manifest = Nabu::Adapters::Seal.manifest
     assert_equal SLUG, manifest.id
     assert_equal "research_private", manifest.license_class,
                  "local personal research only — never on a redistribution surface"
-    assert_match(/Wasserman/, manifest.license, "the grantor is named")
-    assert_match(/2026-08-30/, manifest.license, "the grant date is recorded")
+    refute_match(/\b20\d\d-\d\d-\d\d\b|by e-?mail|personal(?:ly)?[\s-](?:research[\s-])?grant/i, manifest.license,
+                 "terms + credit only — never the grant's date, channel or arrangement")
     assert_match(/no redistribution/i, manifest.license)
     assert_match(/CC BY-NC-ND/, manifest.license)
     assert_match(/text only/i, manifest.license, "third-party visual material is excluded")
@@ -316,7 +316,7 @@ class SealTest < Minitest::Test
   def require_fixtures!
     return if Nabu::TestSupport.local_fixtures?(SLUG)
 
-    skip "#{SLUG} local fixtures absent (personal-research grant forbids redistribution — " \
+    skip "#{SLUG} local fixtures absent (the license forbids redistribution — " \
          "bytes live in local/fixtures/, never in git)"
   end
 

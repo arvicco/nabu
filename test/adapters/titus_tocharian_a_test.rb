@@ -9,8 +9,8 @@ require "tmpdir"
 # manuscripts), one document per text page, manuscript LINES as passages
 # keyed off the <A NAME="TochA_THT_<ms>_<part>_<line>"> anchors.
 #
-# The grant (J. Gippert, by email 2026-10-06 — the third extension on the
-# Avestan terms) is local personal research only with NO redistribution,
+# The license terms (the TITUS family terms) are local personal research
+# only with NO redistribution,
 # so the fixture bytes live under the gitignored local/fixtures/
 # titus-tocharian-a/ (the seal / corpus-oudnederlands restricted mold) and
 # every data-bearing case SKIPs when they are absent — public clones pass
@@ -52,7 +52,8 @@ class TitusTocharianATest < Minitest::Test
     assert_equal SLUG, manifest.id
     assert_equal "titus_tocharian", manifest.parser_family
     assert_equal "nc", manifest.license_class
-    assert_match(/2026-10-06/, manifest.license, "the grant date is recorded")
+    refute_match(/\b20\d\d-\d\d-\d\d\b|by e-?mail|personal(?:ly)? grant/i, manifest.license,
+                 "terms + credit only — never the grant's date, channel or arrangement")
     assert_match(/no redistribution/i, manifest.license)
     assert_match(/TITUS/, manifest.credit)
     assert_match(/Sieg/, manifest.credit, "the edition's editors are part of the display duty")

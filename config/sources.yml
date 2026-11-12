@@ -81,8 +81,7 @@
 #                                        #   site archive, a script corpus) is
 #                                        #   its desks' own subject matter.
 #     grant_required: true               # P42-r1: the right to FETCH is a
-#                                        #   PERSONAL permission to this project's
-#                                        #   author (StarLing), NOT conveyed by a
+#                                        #   permission NOT conveyed by a
 #                                        #   public license — so `sync <slug>`
 #                                        #   demands a typed `granted` before the
 #                                        #   first fetch (recorded in the ledger,
@@ -91,12 +90,16 @@
 #                                        #   un-acknowledged grant source). NOT the
 #                                        #   license machinery (CC BY-NC-SA needs
 #                                        #   no gate). Requires a grant: block.
-#     grant:                             # the block the gate renders (all five
-#       grantor: ...                     #   required, non-empty strings; QUOTE the
-#       date: "2026-07-15"               #   date so YAML keeps it a String, not a
-#       terms: ...                       #   parsed Date). terms = a short verbatim
-#       thread: "by email, 2026-07-15"   #   quote; request_hint = whom a new user
-#       request_hint: ...                #   should ask + what to promise.
+#     grant:                             # the PUBLIC block the gate renders (both
+#       terms: ...                       #   required, non-empty strings). terms =
+#       request_hint: ...                #   the obligations (retrieval, use,
+#                                        #   redistribution, the required credit);
+#                                        #   request_hint = whom a new user contacts
+#                                        #   for a license grant + what to promise.
+#                                        #   Who granted, when and how is instance
+#                                        #   provenance: local/config/grants-
+#                                        #   provenance.yml (grantor/date/thread
+#                                        #   here FAIL the load).
 #
 # Registered sources follow. `wired: false` until a first real sync is
 # verified by hand (CLAUDE.md "add a new adapter" checklist).
@@ -122,25 +125,21 @@ aclt:   # P110-2
                    # all live, e.g. porsuk:s4)
   sync_policy: manual
   # The Annotated Corpus of Luwian Texts (Yakubovich's edition; the
-  # Tsakorpus per-inscription JSON, delivered by email — a ManualDrop
+  # Tsakorpus per-inscription JSON, delivered directly — a ManualDrop
   # source, docs/manual/aclt.md). 267 inscriptions / one tombstone
   # skip-by-rule; language hlu (the hieroglyphic tradition only).
-  # research_private: a personal grant, not redistributable — excluded
+  # research_private: no public license, not redistributable — excluded
   # from every public surface like the class demands.
   grant_required: true
   grant:
-    grantor: I. Yakubovich (corpus delivery T. Arkhangelskiy)
-    date: "2026-09-28"
     terms: >-
-      personal research use, by email 2026-09-28 ("we both agree to share
-      the source code with you"); corpus JSON delivered 2026-09-29. Credit
-      promised in return: the corpus + Yakubovich's editorship as
-      provenance on every text, the Tsakorpus platform named as the
-      technical channel. No redistribution.
-    thread: "by email, 2026-09-28/29"
+      one delivery of the corpus, local personal research use only, no
+      redistribution; the corpus and Yakubovich's editorship credited as
+      provenance on every text, the Tsakorpus platform named as the technical
+      channel
     request_hint: >-
-      Write to the ACLT team (luwian.web-corpora.net) for your own grant;
-      promise per-text corpus + editorship credit.
+      Contact the ACLT team (luwian.web-corpora.net) for a license grant; promise
+      per-text corpus + editorship credit.
 
 actib:
   adapter: Nabu::Adapters::Actib
@@ -6300,7 +6299,7 @@ seal:
   # SEAL — Sources of Early Akkadian Literature (P89-3; seal.huji.ac.il;
   # Michael P. Streck & Nathan Wasserman): the edition of record for
   # third/second-millennium Akkadian literature — 1,065 texts (scout census
-  # 2026-08-30). GRANT (N. Wasserman, by email 2026-08-30): local
+  # 2026-08-30). TERMS (no public license): local
   # personal-research use ONLY, CC BY-NC-ND terms — local machine, NO
   # redistribution/mirroring/derivative publication, attribution on display,
   # scholarly reference by the fixed SEAL number + permanent URL, TEXT ONLY
@@ -6318,7 +6317,7 @@ seal:
   # fallback (the GRETIL precedent — p1/p2/… refs, FLAGGED in metadata,
   # 30 pages). The English translation rides as document metadata;
   # Vocabulary/Statistics tabs deliberately out of v1. CENSUSED SKIPS, by
-  # rule: 89 sister-series pages (DLL/LBPL — the grant names SEAL; held
+  # rule: 89 sister-series pages (DLL/LBPL — the terms name SEAL; held
   # out pending a widened blessing), 474 catalog-only pages (no online
   # transliteration), 37 stubs (pointer/fragment note only); 3 pages with
   # Word-broken markup quarantine honestly. FETCH: ~54 search-page GETs
@@ -6851,9 +6850,8 @@ starling:
                    # scale). Eyeball `nabu define kül` (turc → "Turkic
                    # etymology: #2") and a drav entry's "inferred, not
                    # documented upstream" Language line.
-  # StarLing / Tower of Babel package (G. Starostin's e-mail grant,
-  # 2026-07-15: any use "as long as the source is properly acknowledged" →
-  # attribution). THE GRANT'S CONDITION: credit the specific compilers of
+  # StarLing / Tower of Babel package (terms: any use "as long as the
+  # source is properly acknowledged" → attribution). THE CONDITION: credit the specific compilers of
   # each base (roster: starlingdb.org/descrip.php?lan=en#bases) — Pokorny:
   # scanned/recognized by George Starostin, corrected by A. Lubotsky; PIET:
   # compiled by S. L. Nikolayev (after Walde-Pokorny), Hitt./Tokh. reflexes
@@ -6865,25 +6863,23 @@ starling:
   # G. Klimov and Fähnrich–Sardshveladze (kartet.inf DBINFO + roster item
   # 6) — all carried verbatim in the adapter MANIFEST.license so every
   # serving surface renders them. Upstream is a hand-curated 2005-era
-  # package family: re-fetch is an owner decision. EXTENSION (G. Starostin,
-  # e-mail 2026-10-01): all remaining DOWNLOADABLE databases, same
-  # conditions (any use, per-base attribution wherever displayed).
+  # package family: re-fetch is an owner decision. The terms cover all
+  # remaining DOWNLOADABLE databases, same conditions (any use, per-base
+  # attribution wherever displayed).
   sync_policy: manual
-  # P42-r1: THE FETCH GRANT is personal to this project's author and a PUBLIC
-  # clone of nabu does NOT convey it — so `nabu sync starling` demands an
+  # P42-r1: THE FETCH RIGHT is not conveyed by a public license, so a PUBLIC
+  # clone of nabu does NOT carry it — so `nabu sync starling` demands an
   # explicit, recorded acknowledgment before its first fetch (the grant gate,
   # docs/maintenance-and-extension.md §4). This is NOT the same as the CC/nc
   # license machinery above (attribution obligations); the gate criterion is
-  # solely "the right to FETCH is not conveyed by a public license." Quote the
-  # date so YAML keeps it a String.
+  # solely "the right to FETCH is not conveyed by a public license."
   grant_required: true
   grant:
-    grantor: G. Starostin
-    date: "2026-07-15"
-    terms: any use, per-base attribution required (credit each base's compilers)
-    thread: "by email, 2026-07-15"
+    terms: >-
+      any use; per-base attribution required (credit each base's compilers
+      wherever displayed)
     request_hint: >-
-      Write to George Starostin (starlingdb.org) for your own use grant, and
+      Contact the StarLing project (starlingdb.org) for a license grant, and
       promise to credit each base's compilers per
       starlingdb.org/descrip.php?lan=en#bases (Pokorny, PIET, Vasmer, Germet,
       Baltet, Kartet) verbatim on every serving surface.
@@ -7275,15 +7271,15 @@ titus-avestan:
                          # forms feed the comparative shelves. availability: blocked still
                          # drops it from the PUBLIC iranian membership (the site page + docs
                          # list only oracc/cdli and carry the private-materials footnote).
-  # P44-r3a: grant-gated PRIVATE research material (the fetch right is the owner's
-  # owner's personal grant of 2026-07-23, not conveyed by a public clone). The public repo keeps
+  # P44-r3a: grant-gated PRIVATE research material (the fetch right is not
+  # conveyed by a public license, so not by a public clone). The public repo keeps
   # this license/scouting record, but must NOT advertise it as a library holding:
   # `availability: blocked` excludes it from the generated site axis pages, the
   # docs/axes.md memberships, and every public census (owner ruling 2026-07-24).
   # Distinct from grant_required (the sync-time gate) and wired — this governs
   # PUBLIC VISIBILITY only; local fetch/serve are unaffected.
   availability: blocked
-  wired: true    # Owner flip 2026-07-25 (the 2026-07-23 grant acknowledged on this box,
+  wired: true    # Owner flip 2026-07-25 (the grant acknowledged on this box,
                    # synced: 248 docs; status reads `granted` per P44-i2).
                    # `nabu sync titus-avestan` still REFUSES on any box until
                    # its owner types `granted` (the grant gate is per-box and
@@ -7294,27 +7290,25 @@ titus-avestan:
   # prepared by Sonja Fritz (Berlin 1985-88), corrected by J. Gippert et al.
   # One document per text page (avest001.htm …); verses (and chapter/paragraph
   # ritual rubrics) are the passages, keyed off the <A NAME="Avest._…"> anchors.
-  # Served under the owner's PERSONAL grant (Prof. Jost Gippert,
-  # 2026-07-23): non-commercial use, "TITUS and the editors clearly indicated
+  # Terms: non-commercial use, "TITUS and the editors clearly indicated
   # wherever displayed." license_class `nc` (servable, NOT hidden — the grant
   # wants it DISPLAYED, credited); the manifest carries the verbatim credit line,
   # threaded onto every serving surface (show cards, search hits, MCP payloads).
   sync_policy: manual
-  # P43-2: THE FETCH GRANT is personal to this project's author — a public clone
-  # does NOT convey it, so `nabu sync titus-avestan` demands an explicit, recorded
+  # P43-2: THE FETCH RIGHT is not conveyed by a public license — a public clone
+  # does NOT carry it, so `nabu sync titus-avestan` demands an explicit, recorded
   # acknowledgment before its first fetch (the grant gate — DISTINCT from the nc
-  # license's per-display credit duty). Quote the date so YAML keeps it a String.
+  # license's per-display credit duty).
   grant_required: true
   grant:
-    grantor: Prof. Jost Gippert (TITUS, Frankfurt)
-    date: "2026-07-23"
-    terms: non-commercial use; TITUS and the editors clearly indicated wherever displayed
-    thread: "personal research grant of 2026-07-23"
+    terms: >-
+      one retrieval, local non-commercial use, no redistribution; TITUS and the
+      editors clearly indicated wherever displayed
     request_hint: >-
-      Write to Prof. Jost Gippert (TITUS, titus.uni-frankfurt.de) for your own
-      non-commercial grant, and promise to credit TITUS and the editors
-      (Avesta ed. Geldner/Westergaard; electronic text Sonja Fritz; corrections
-      Gippert et al.) wherever any Avestan text is displayed.
+      Contact TITUS (titus.uni-frankfurt.de) for a license grant, and promise
+      to credit TITUS and the editors (Avesta ed. Geldner/Westergaard; electronic text Sonja Fritz;
+      corrections Gippert et al.)
+      wherever any text is displayed.
 
 titus-bactrian:   # 02-sources row 229
   adapter: Nabu::Adapters::TitusBactrian
@@ -7323,7 +7317,7 @@ titus-bactrian:   # 02-sources row 229
                          # Avestan anchor and the Pahlavi books); etym because the Bactrian
                          # forms feed the comparative shelves.
   # Grant-gated PRIVATE research material, the titus-avestan posture verbatim
-  # (the fetch right is the owner's personal grant, not conveyed by a clone):
+  # (the fetch right is not conveyed by a public license, so not by a clone):
   availability: blocked
   wired: true    # First retrieval + recovery verified 2026-10-10: 123 docs / 3,537 passages / 0 quarantines / 3 illegible-text skips.
   # TITUS Bactrian Corpus (titus.uni-frankfurt.de/texte/etcs/iran/miran/baktr/baktcorp/):
@@ -7339,17 +7333,14 @@ titus-bactrian:   # 02-sources row 229
   sync_policy: manual
   grant_required: true
   grant:
-    grantor: Prof. Jost Gippert (TITUS, Frankfurt)
-    date: "2026-10-06"
     terms: >-
       the Middle Iranian families on TITUS, to whatever extent TITUS hosts them as
       retrievable text: one retrieval per corpus, local personal research use only,
       no redistribution; TITUS and the editors credited wherever displayed
-    thread: "personal research grant of 2026-10-06"
     request_hint: >-
-      Write to Prof. Jost Gippert (TITUS, titus.uni-frankfurt.de) for your own
-      non-commercial grant, and promise to credit TITUS and the editors (N.
-      Sims-Williams, who prepared the Bactrian corpus) wherever any text is displayed.
+      Contact TITUS (titus.uni-frankfurt.de) for a license grant, and promise
+      to credit TITUS and the editors (N. Sims-Williams, who prepared the Bactrian corpus)
+      wherever any text is displayed.
 
 titus-khotanese:   # 02-sources row 228
   adapter: Nabu::Adapters::TitusKhotanese
@@ -7361,7 +7352,7 @@ titus-khotanese:   # 02-sources row 228
                          # Buddhist scripture, the corpus's volume-majority — source-grain axis
                          # membership on the dharma-* / titus-tocharian-a precedent.
   # Grant-gated PRIVATE research material, the titus-avestan posture verbatim
-  # (the fetch right is the owner's personal grant, not conveyed by a clone):
+  # (the fetch right is not conveyed by a public license, so not by a clone):
   availability: blocked
   wired: true    # First retrieval + recovery verified 2026-10-10: 1,648 docs / 20,279 passages / 0 quarantines.
   # TITUS Corpus of Khotanese Saka Texts (titus.uni-frankfurt.de/texte/etcs/iran/miran/
@@ -7376,17 +7367,14 @@ titus-khotanese:   # 02-sources row 228
   sync_policy: manual
   grant_required: true
   grant:
-    grantor: Prof. Jost Gippert (TITUS, Frankfurt)
-    date: "2026-10-06"
     terms: >-
       the Middle Iranian families on TITUS, to whatever extent TITUS hosts them as
       retrievable text: one retrieval per corpus, local personal research use only,
       no redistribution; TITUS and the editors credited wherever displayed
-    thread: "personal research grant of 2026-10-06"
     request_hint: >-
-      Write to Prof. Jost Gippert (TITUS, titus.uni-frankfurt.de) for your own
-      non-commercial grant, and promise to credit TITUS and the editors (data entry
-      R.E. Emmerick, corrections H. Kumamoto; the Bailey and Emmerick editions)
+      Contact TITUS (titus.uni-frankfurt.de) for a license grant, and promise
+      to credit TITUS and the editors (data entry R.E. Emmerick, corrections
+      H. Kumamoto; the Bailey and Emmerick editions)
       wherever any text is displayed.
 
 titus-manichaica:   # 02-sources row 226
@@ -7396,7 +7384,7 @@ titus-manichaica:   # 02-sources row 226
                          # Parthian, Sogdian) beside the Pahlavi books on the iranian desk;
                          # etym because the forms feed the comparative shelves.
   # Grant-gated PRIVATE research material, the titus-avestan posture verbatim
-  # (the fetch right is the owner's personal grant, not conveyed by a clone):
+  # (the fetch right is not conveyed by a public license, so not by a clone):
   availability: blocked
   wired: true    # First retrieval + recovery verified 2026-10-10: 542 docs / 3,089 passages / 0 quarantines / 41 header-page skips.
   # TITUS Manichaean Middle Iranian corpora (titus.uni-frankfurt.de/texte/etcs/iran/
@@ -7417,19 +7405,16 @@ titus-manichaica:   # 02-sources row 226
   sync_policy: manual
   grant_required: true
   grant:
-    grantor: Prof. Jost Gippert (TITUS, Frankfurt)
-    date: "2026-10-06"
     terms: >-
       the Middle Iranian families on TITUS, to whatever extent TITUS hosts them as
       retrievable text: one retrieval per corpus, local personal research use only,
       no redistribution; TITUS and the editors credited wherever displayed
-    thread: "personal research grant of 2026-10-06"
     request_hint: >-
-      Write to Prof. Jost Gippert (TITUS, titus.uni-frankfurt.de) for your own
-      non-commercial grant, and promise to credit TITUS and the editors (M. Boyce,
-      J. Gippert, D.N. MacKenzie; D. Durkin-Meisterernst, N. Sims-Williams,
-      W. Sundermann and the Corpus's edition editors; P. Zieme) wherever any text is
-      displayed.
+      Contact TITUS (titus.uni-frankfurt.de) for a license grant, and promise
+      to credit TITUS and the editors (M. Boyce, J. Gippert, D.N. MacKenzie;
+      D. Durkin-Meisterernst, N. Sims-Williams, W. Sundermann and the Corpus's
+      edition editors; P. Zieme)
+      wherever any text is displayed.
 
 titus-old-albanian:   # 02-sources row 406
   adapter: Nabu::Adapters::TitusOldAlbanian
@@ -7546,7 +7531,7 @@ titus-old-prussian:   # 02-sources row 402
                                 # Elbing/Grunau vocabularies and catechism forms feed the
                                 # comparative shelves.
   # Grant-gated PRIVATE research material, the titus-avestan posture verbatim
-  # (the fetch right is the owner's personal grant, not conveyed by a clone):
+  # (the fetch right is not conveyed by a public license, so not by a clone):
   availability: blocked
   wired: true    # flipped 2026-11-12: the one-time granted retrieval verified —
                  # 34 docs / 2,704 passages (all 40 pages parse: 34 documents +
@@ -7567,16 +7552,13 @@ titus-old-prussian:   # 02-sources row 402
   sync_policy: manual
   grant_required: true
   grant:
-    grantor: Prof. Jost Gippert (TITUS, Frankfurt)
-    date: "2026-11-12"
     terms: >-
       the TITUS family terms: one retrieval per corpus, local personal research use
       only, no redistribution; TITUS and the editors credited wherever displayed
-    thread: "personal research grant of 2026-11-12"
     request_hint: >-
-      Write to Prof. Jost Gippert (TITUS, titus.uni-frankfurt.de) for your own
-      non-commercial grant, and promise to credit TITUS and the editors (data entry
-      W. Euler, after V. Mažiulis's edition) wherever any text is displayed.
+      Contact TITUS (titus.uni-frankfurt.de) for a license grant, and promise
+      to credit TITUS and the editors (data entry W. Euler, after V. Mažiulis's edition)
+      wherever any text is displayed.
 
 titus-osco-umbrian:   # P90-2, 02-sources row 188
   adapter: Nabu::Adapters::TitusOscoUmbrian
@@ -7587,7 +7569,7 @@ titus-osco-umbrian:   # P90-2, 02-sources row 188
                         # feed the comparative shelves (CEIPoM's equivalence
                         # keys already reach the Tables — this is the text).
   # Grant-gated PRIVATE research material, the titus-avestan posture verbatim
-  # (the fetch right is the owner's personal grant, not conveyed by a clone):
+  # (the fetch right is not conveyed by a public license, so not by a clone):
   availability: blocked
   wired: true    # first real sync 2026-08-31 (owner-fired, 390 pages); verified after the
                    # census fixes: 386 docs / 1,697 passages (osc 323 · xum 62 · lat 1) /
@@ -7607,17 +7589,13 @@ titus-osco-umbrian:   # P90-2, 02-sources row 188
   sync_policy: manual
   grant_required: true
   grant:
-    grantor: Prof. Jost Gippert (TITUS, Frankfurt)
-    date: "2026-08-31"
     terms: >-
-      extends the 2026-07-23 Avestan terms: one-time download, local
-      non-commercial use, no redistribution; TITUS and the editors clearly
-      indicated wherever displayed
-    thread: "personal research grant of 2026-08-31"
+      the TITUS family terms: one-time download, local non-commercial use, no
+      redistribution; TITUS and the editors clearly indicated wherever displayed
     request_hint: >-
-      Write to Prof. Jost Gippert (TITUS, titus.uni-frankfurt.de) for your own
-      non-commercial grant, and promise to credit TITUS and the editors
-      (text entry J. Gippert / V. Slunečko) wherever any text is displayed.
+      Contact TITUS (titus.uni-frankfurt.de) for a license grant, and promise
+      to credit TITUS and the editors (text entry J. Gippert / V. Slunečko)
+      wherever any text is displayed.
 
 titus-pahlavi:
   adapter: Nabu::Adapters::TitusPahlavi
@@ -7626,7 +7604,7 @@ titus-pahlavi:
                          # Persian, beside the Avestan anchor); etym because the Pahlavi forms
                          # and the Zand's Avestan-to-Pahlavi glossing feed the comparative shelves.
   # Grant-gated PRIVATE research material, the titus-avestan posture verbatim
-  # (the fetch right is the owner's personal grant, not conveyed by a clone):
+  # (the fetch right is not conveyed by a public license, so not by a clone):
   availability: blocked
   wired: true    # First retrieval owner-fired 2026-10-10 (1,573 pages over 24
                  # editions); sync verified live the same day after the first-sync
@@ -7650,17 +7628,14 @@ titus-pahlavi:
   sync_policy: manual
   grant_required: true
   grant:
-    grantor: Prof. Jost Gippert (TITUS, Frankfurt)
-    date: "2026-10-06"
     terms: >-
       the Middle Iranian families on TITUS, to whatever extent TITUS hosts them as
       retrievable text: one retrieval per corpus, local personal research use only,
       no redistribution; TITUS and the editors credited wherever displayed
-    thread: "personal research grant of 2026-10-06"
     request_hint: >-
-      Write to Prof. Jost Gippert (TITUS, titus.uni-frankfurt.de) for your own
-      non-commercial grant, and promise to credit TITUS and the editors (the
-      data-entry editors of each Pahlavi edition) wherever any text is displayed.
+      Contact TITUS (titus.uni-frankfurt.de) for a license grant, and promise
+      to credit TITUS and the editors (the data-entry editors of each Pahlavi edition)
+      wherever any text is displayed.
 
 titus-sogdian:   # 02-sources row 227
   adapter: Nabu::Adapters::TitusSogdian
@@ -7670,7 +7645,7 @@ titus-sogdian:   # 02-sources row 227
                          # books); etym because the Sogdian forms feed the comparative shelves.
                          # A buddhist/manichaean tag would be per-text, not whole-source.
   # Grant-gated PRIVATE research material, the titus-avestan posture verbatim
-  # (the fetch right is the owner's personal grant, not conveyed by a clone):
+  # (the fetch right is not conveyed by a public license, so not by a clone):
   availability: blocked
   wired: true    # First retrieval + recovery verified 2026-10-10: 364 docs / 21,354 passages / 0 quarantines / 29 declared skips.
   # TITUS Sogdian corpora (titus.uni-frankfurt.de/texte/etcs/iran/miran/sogd/): the
@@ -7687,18 +7662,15 @@ titus-sogdian:   # 02-sources row 227
   sync_policy: manual
   grant_required: true
   grant:
-    grantor: Prof. Jost Gippert (TITUS, Frankfurt)
-    date: "2026-10-06"
     terms: >-
       the Middle Iranian families on TITUS, to whatever extent TITUS hosts them as
       retrievable text: one retrieval per corpus, local personal research use only,
       no redistribution; TITUS and the editors credited wherever displayed
-    thread: "personal research grant of 2026-10-06"
     request_hint: >-
-      Write to Prof. Jost Gippert (TITUS, titus.uni-frankfurt.de) for your own
-      non-commercial grant, and promise to credit TITUS and the editors (N.
-      Sims-Williams for the Sogdian corpus, E. Morano for the Stellung-Jesu
-      hymns) wherever any text is displayed.
+      Contact TITUS (titus.uni-frankfurt.de) for a license grant, and promise
+      to credit TITUS and the editors (N. Sims-Williams for the Sogdian corpus, E. Morano
+      for the Stellung-Jesu hymns)
+      wherever any text is displayed.
 
 titus-tocharian-a:   # P114-1a, 02-sources row 224
   adapter: Nabu::Adapters::TitusTocharianA
@@ -7709,7 +7681,7 @@ titus-tocharian-a:   # P114-1a, 02-sources row 224
                           # the comparative shelves; a dedicated Tocharian desk
                           # is an owner call, not minted here.
   # Grant-gated PRIVATE research material, the titus-avestan posture verbatim
-  # (the fetch right is the owner's personal grant, not conveyed by a clone):
+  # (the fetch right is not conveyed by a public license, so not by a clone):
   availability: blocked
   wired: true    # First retrieval + recovery verified 2026-10-10: 466 docs / 5,779 passages / 0 quarantines / 1 catalogue-only skip.
                    # acknowledgment is an identity act): bin/nabu sync
@@ -7732,19 +7704,15 @@ titus-tocharian-a:   # P114-1a, 02-sources row 224
   sync_policy: manual
   grant_required: true
   grant:
-    grantor: Prof. Jost Gippert (TITUS, Frankfurt)
-    date: "2026-10-06"
     terms: >-
-      extends the 2026-07-23 Avestan terms to the Tocharian A and B texts of
-      the Berlin Turfan collection as TITUS presents them: one retrieval per
-      corpus, local personal research use only, no redistribution; TITUS and
-      the editors clearly indicated wherever displayed
-    thread: "personal research grant of 2026-10-06"
+      the Tocharian A and B texts of the Berlin Turfan collection as TITUS presents
+      them: one retrieval per corpus, local personal research use only, no
+      redistribution; TITUS and the editors clearly indicated wherever displayed
     request_hint: >-
-      Write to Prof. Jost Gippert (TITUS, titus.uni-frankfurt.de) for your own
-      non-commercial grant, and promise to credit TITUS and the editors
-      (Sieg & Siegling; data entry P. Olivier / T. Tamai; collation T. Tamai;
-      corrections K. Kupfer) wherever any text is displayed.
+      Contact TITUS (titus.uni-frankfurt.de) for a license grant, and promise
+      to credit TITUS and the editors (Sieg & Siegling; data entry P. Olivier / T. Tamai;
+      collation T. Tamai; corrections K. Kupfer)
+      wherever any text is displayed.
 
 titus-tocharian-b:   # 02-sources row 224 (the B half)
   adapter: Nabu::Adapters::TitusTocharianB
@@ -7753,10 +7721,10 @@ titus-tocharian-b:   # 02-sources row 224 (the B half)
                           # manuscripts are Buddhist literature and feed the
                           # comparative shelves.
   # Grant-gated PRIVATE research material, the titus-avestan posture verbatim
-  # (the fetch right is the owner's personal grant, not conveyed by a clone):
+  # (the fetch right is not conveyed by a public license, so not by a clone):
   availability: blocked
   wired: true    # first sync verified 2026-10-12: 866 docs / 13,809 passages (the Berlin tochbNNN series only; 133 baseline quarantines recorded); THT 1 eyeballed, txb
-                 # Scope widened 2026-10-12 (the grant read corpus-level): the
+                 # Scope widened 2026-10-12 (the terms read corpus-level): the
                  # whole 4,349-page chain parses — the toch1000-toch4349 pages
                  # continue Berlin THT, then Berlin SHT, London IOL Toch. and
                  # Paris PK (census in the adapter note). Re-parse verified
@@ -7782,30 +7750,26 @@ titus-tocharian-b:   # 02-sources row 224 (the B half)
                  # and the 1 iotk16 page (unclassified, ruled to stay), 14
                  # pages with B-lane TEXT (not a note) before a line anchor,
                  # and the London collection header page toch3560.
-  # TITUS Tocharian B Corpus (members area,
+  # TITUS Tocharian B Corpus (authenticated area,
   # titus.fkidg1.uni-frankfurt.de/texte/etcc/toch/tochb/tochb.htm — HTTP
   # Basic auth): the Berlin Turfan West Tocharian texts (data entry P.
   # Olivier, Chr. Schaefer, T. Tamai, K. Kupfer) and the London / partial
   # Paris collections (P. Widmer, K. Kupfer, M. Peyrot) behind one frameset.
   # The titus-tocharian-a family with its own constants; the stored
-  # credential rides the fetch as Basic auth (the credentials seam).
+  # credential rides the fetch as Basic auth (Nabu::Credentials).
   credentials: titus
   sync_policy: manual
   grant_required: true
   grant:
-    grantor: Prof. Jost Gippert (TITUS, Frankfurt)
-    date: "2026-10-06"
     terms: >-
-      extends the 2026-07-23 Avestan terms to the Tocharian A and B texts of
-      the Berlin Turfan collection as TITUS presents them: one retrieval per
-      corpus, local personal research use only, no redistribution; TITUS and
-      the editors clearly indicated wherever displayed
-    thread: "personal research grant of 2026-10-06"
+      the Tocharian A and B texts of the Berlin Turfan collection as TITUS presents
+      them: one retrieval per corpus, local personal research use only, no
+      redistribution; TITUS and the editors clearly indicated wherever displayed
     request_hint: >-
-      Write to Prof. Jost Gippert (TITUS, titus.uni-frankfurt.de) for your own
-      non-commercial grant and TITUS membership (the Tocharian B texts are
-      members-only), and promise to credit TITUS and the editors (data entry
-      P. Olivier, Chr. Schaefer, T. Tamai, K. Kupfer; P. Widmer, M. Peyrot)
+      Contact TITUS (titus.uni-frankfurt.de) for a license grant and a TITUS login (the Tocharian B texts
+      sit behind TITUS's authenticated area), and promise
+      to credit TITUS and the editors (data entry P. Olivier, Chr. Schaefer, T. Tamai,
+      K. Kupfer; P. Widmer, M. Peyrot)
       wherever any text is displayed.
 
 tla-hf:

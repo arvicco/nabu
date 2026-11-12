@@ -1264,26 +1264,24 @@ class SourceRegistryTest < Minitest::Test
                  registry.public_axis_members("buddhist").sort
   end
 
-  # P43-2: the shipped TITUS Avestan row is fetch-gated on the personal grant, and
-  # its refusal notice is the on-ramp (terms + whom to ask), never a bare wall.
+  # P43-2: the shipped TITUS Avestan row is fetch-gated, and its refusal
+  # notice is the on-ramp (terms + whom to contact), never a bare wall.
   def test_shipped_titus_avestan_is_grant_gated_with_the_on_ramp
-    registry = Nabu::SourceRegistry.load(File.expand_path("../config/sources.yml", __dir__))
+    registry = Nabu::SourceRegistry.load(File.expand_path("../config/sources.yml", __dir__),
+                                         provenance_path: false)
     entry = registry["titus-avestan"]
 
     assert_predicate entry, :grant_required?
-    assert_equal "2026-07-23", entry.grant.date
-    assert_equal "personal research grant of 2026-07-23", entry.grant.thread
-    assert_match(/Gippert/, entry.grant.grantor)
     assert_match(/non-commercial/, entry.grant.terms)
 
     notice = Nabu::GrantGate.notice(entry)
     assert_match(/titus-avestan: fetch requires a GRANT/, notice)
     assert_match(/request your own:/, notice, "the refusal points at the request scaffold")
-    assert_match(/Gippert/, notice)
+    assert_match(/Contact TITUS .* for a license grant/, notice)
   end
 
   # P114-1a: the Tocharian A row rides the titus-avestan posture verbatim —
-  # grant-gated on the 2026-10-06 extension, blocked from public surfaces,
+  # grant-gated on the TITUS family terms, blocked from public surfaces,
   # and wired since the verified 2026-10-10 first retrieval + recovery.
   def test_shipped_titus_tocharian_a_is_grant_gated_blocked_and_wired
     registry = Nabu::SourceRegistry.load(File.expand_path("../config/sources.yml", __dir__))
@@ -1293,14 +1291,12 @@ class SourceRegistryTest < Minitest::Test
     assert_predicate entry, :blocked?
     assert entry.wired, "wired: true — first retrieval + recovery verified 2026-10-10 " \
                         "(466 docs / 5,779 passages / 0 quarantines)"
-    assert_equal "2026-10-06", entry.grant.date
-    assert_match(/Gippert/, entry.grant.grantor)
     assert_match(/one retrieval per corpus/, entry.grant.terms)
     assert_match(/no redistribution/, entry.grant.terms)
     assert_match(/titus-tocharian-a: fetch requires a GRANT/, Nabu::GrantGate.notice(entry))
   end
 
-  # P44-r3a: the fetch right is a PRIVATE personal grant, so the public repo
+  # P44-r3a: the fetch right is PRIVATE (no public license), so the public repo
   # must not advertise the row as a library holding — availability: blocked
   # excludes it from public docs/site/census, and etym's public membership
   # drops it (while the full axis_members list keeps it for CLI/sync scopes).
@@ -1419,28 +1415,141 @@ class SourceRegistryTest < Minitest::Test
     assert_nil entry.grant
   end
 
-  def test_parses_a_valid_grant_block
+  # The public grant block carries ONLY the class-level obligations (terms)
+  # and the on-ramp (request_hint): who granted, when, and through which
+  # channel is instance provenance (local/config/grants-provenance.yml).
+  def test_parses_a_valid_public_grant_block
     entry = load_registry(<<~YAML)["src"]
       src:
         adapter: FakeAdapter
         wired: true
         grant_required: true
         grant:
-          grantor: G. Starostin
-          date: "2026-07-15"
           terms: any use, per-base attribution required
-          thread: "by email, 2026-07-15"
-          request_hint: write to George Starostin for your own grant
+          request_hint: contact the source for a license grant
     YAML
     assert_predicate entry, :grant_required?
-    assert_equal "G. Starostin", entry.grant.grantor
-    assert_equal "2026-07-15", entry.grant.date
     assert_equal "any use, per-base attribution required", entry.grant.terms
-    assert_equal "by email, 2026-07-15", entry.grant.thread
-    assert_match(/your own grant/, entry.grant.request_hint)
+    assert_match(/contact the source/, entry.grant.request_hint)
+    assert_nil entry.grant.grantor
+    assert_nil entry.grant.date
+    assert_nil entry.grant.thread
+    refute_predicate entry.grant, :provenance?
   end
 
-  # The credentials seam: `credentials: <name>` names the stored credential
+  # Provenance keys in the PUBLIC registry fail loudly, naming the slug and
+  # the instance file they belong in — nobody re-adds them by habit.
+  def test_provenance_keys_in_the_public_grant_block_are_refused
+    %w[grantor date thread].each do |key|
+      error = assert_raises(Nabu::ValidationError, key) do
+        load_registry(<<~YAML)
+          src:
+            adapter: FakeAdapter
+            wired: true
+            grant_required: true
+            grant:
+              terms: t
+              request_hint: ask
+              #{key}: "x"
+        YAML
+      end
+      assert_match(/"src": grant\.#{key} is instance provenance/, error.message)
+      assert_match(%r{local/config/grants-provenance\.yml}, error.message)
+    end
+  end
+
+  def test_an_unknown_grant_key_is_refused
+    error = assert_raises(Nabu::ValidationError) do
+      load_registry(<<~YAML)
+        src:
+          adapter: FakeAdapter
+          wired: true
+          grant_required: true
+          grant:
+            terms: t
+            request_hint: ask
+            granted_on: x
+      YAML
+    end
+    assert_match(/"src": unknown grant key "granted_on"/, error.message)
+  end
+
+  # Present on the box: the provenance row merges into the Grant at load.
+  def test_provenance_file_merges_into_the_grant_when_present
+    entry = load_registry_with_provenance(<<~SOURCES, <<~PROVENANCE)["src"]
+      src:
+        adapter: FakeAdapter
+        wired: true
+        grant_required: true
+        grant:
+          terms: t
+          request_hint: ask
+      plain:
+        adapter: FakeAdapter
+        wired: true
+    SOURCES
+      src:
+        grantor: A. Grantor
+        date: 2026-01-02
+        thread: "a written grant"
+      retired-slug:
+        grantor: B. Grantor
+    PROVENANCE
+    assert_equal "A. Grantor", entry.grant.grantor
+    assert_equal "2026-01-02", entry.grant.date, "an unquoted date stringifies"
+    assert_equal "a written grant", entry.grant.thread
+    assert_equal "t", entry.grant.terms
+    assert_predicate entry.grant, :provenance?
+  end
+
+  def test_a_malformed_provenance_row_names_the_file_and_slug
+    error = assert_raises(Nabu::ValidationError) do
+      load_registry_with_provenance(<<~SOURCES, <<~PROVENANCE)
+        src:
+          adapter: FakeAdapter
+          wired: true
+          grant_required: true
+          grant:
+            terms: t
+            request_hint: ask
+      SOURCES
+        src:
+          grantor: [not, a, string]
+      PROVENANCE
+    end
+    assert_match(/grants-provenance\.yml: "src": grantor must be a non-empty string/, error.message)
+  end
+
+  # A row naming a retired or ungated slug is inert instance memo — it must
+  # never take the whole registry (every command) down.
+  def test_a_provenance_row_for_an_ungated_source_is_inert
+    registry = load_registry_with_provenance(<<~SOURCES, <<~PROVENANCE)
+      plain:
+        adapter: FakeAdapter
+        wired: true
+    SOURCES
+      plain:
+        grantor: A. Grantor
+    PROVENANCE
+    assert_nil registry["plain"].grant
+  end
+
+  # Absent (any public clone): the gate still renders, public fields only.
+  def test_no_provenance_file_leaves_the_public_grant
+    entry = load_registry_with_provenance(<<~SOURCES, nil)["src"]
+      src:
+        adapter: FakeAdapter
+        wired: true
+        grant_required: true
+        grant:
+          terms: t
+          request_hint: ask
+    SOURCES
+    refute_predicate entry.grant, :provenance?
+    assert_equal "ask", entry.grant.request_hint
+  end
+
+  # Nabu::Credentials: `credentials: <name>` names the stored credential
   # (local/config/credentials.yml) a gated upstream's fetch needs.
   def test_credentials_absent_by_default
     entry = load_registry(<<~YAML)["src"]
@@ -1492,10 +1601,7 @@ class SourceRegistryTest < Minitest::Test
           adapter: FakeAdapter
           wired: true
           grant:
-            grantor: X
-            date: "2026-07-15"
             terms: t
-            thread: "by email, 2026-07-15"
             request_hint: ask
       YAML
     end
@@ -1510,39 +1616,15 @@ class SourceRegistryTest < Minitest::Test
           wired: true
           grant_required: true
           grant:
-            grantor: X
-            date: "2026-07-15"
             terms: t
-            request_hint: ask
       YAML
     end
-    assert_match(/grant\.thread must be a non-empty string/, error.message)
-  end
-
-  def test_an_unquoted_date_is_rejected_at_yaml_load
-    # A bare 2026-07-15 is a YAML Date, not a String — and the registry's
-    # YAML.safe_load refuses the Date class outright, so an unquoted grant date
-    # never even reaches the entry validator. Quoting keeps it a String the
-    # gate can render verbatim; this proves the guard rail exists.
-    assert_raises(Psych::DisallowedClass) do
-      load_registry(<<~YAML)
-        src:
-          adapter: FakeAdapter
-          wired: true
-          grant_required: true
-          grant:
-            grantor: X
-            date: 2026-07-15
-            terms: t
-            thread: "by email, 2026-07-15"
-            request_hint: ask
-      YAML
-    end
+    assert_match(/grant\.request_hint must be a non-empty string/, error.message)
   end
 
   def test_a_non_string_grant_field_is_a_validation_error
-    # The belt-and-suspenders: even if a non-String slipped past YAML load
-    # (e.g. a numeric thread), grant_field! names the offending key.
+    # The belt-and-suspenders: a non-String (e.g. numeric terms) names the
+    # offending key.
     error = assert_raises(Nabu::ValidationError) do
       load_registry(<<~YAML)
         src:
@@ -1550,23 +1632,41 @@ class SourceRegistryTest < Minitest::Test
           wired: true
           grant_required: true
           grant:
-            grantor: X
-            date: "2026-07-15"
-            terms: t
-            thread: 1
+            terms: 1
             request_hint: ask
       YAML
     end
-    assert_match(/grant\.thread must be a non-empty string/, error.message)
+    assert_match(/grant\.terms must be a non-empty string/, error.message)
   end
 
   def test_shipped_starling_row_carries_the_grant
-    registry = Nabu::SourceRegistry.load(File.expand_path("../config/sources.yml", __dir__))
+    registry = Nabu::SourceRegistry.load(File.expand_path("../config/sources.yml", __dir__),
+                                         provenance_path: false)
     starling = registry["starling"]
     assert_predicate starling, :grant_required?, "starling arms the grant gate"
-    assert_equal "G. Starostin", starling.grant.grantor
+    assert_match(/attribution/, starling.grant.terms)
     # hdic's license contradiction was owner-resolved (GO, 2026-07-20) — NOT gated.
     refute_predicate registry["hdic"], :grant_required?, "hdic was resolved, not gated"
+  end
+
+  # The public view of every shipped grant: obligations + on-ramp only —
+  # no grantor, date or channel (those are local/config/grants-provenance.yml
+  # rows; the loader refuses them here, this pins the rendered text too).
+  def test_shipped_grant_blocks_carry_no_provenance
+    registry = Nabu::SourceRegistry.load(File.expand_path("../config/sources.yml", __dir__),
+                                         provenance_path: false)
+    gated = registry.each_source.select(&:grant_required?)
+    assert_equal %w[aclt starling titus-avestan titus-bactrian titus-khotanese titus-manichaica
+                    titus-old-prussian titus-osco-umbrian titus-pahlavi titus-sogdian titus-tocharian-a
+                    titus-tocharian-b], gated.map(&:slug).sort
+    gated.each do |entry|
+      refute_predicate entry.grant, :provenance?, entry.slug
+      [entry.grant.terms, entry.grant.request_hint].each do |text|
+        refute_match(/\b20\d\d-\d\d-\d\d\b/, text, "#{entry.slug}: no dates in the public grant")
+        refute_match(/by e-?mail/i, text, "#{entry.slug}: no channel in the public grant")
+      end
+      assert_match(/contact .* for a license grant/i, entry.grant.request_hint, entry.slug)
+    end
   end
 
   private
@@ -1575,6 +1675,22 @@ class SourceRegistryTest < Minitest::Test
     Dir.mktmpdir do |dir|
       path = File.join(dir, "sources.yml")
       File.write(path, yaml)
+      return Nabu::SourceRegistry.load(path)
+    end
+  end
+
+  # The box layout: <root>/config/sources.yml beside <root>/local/config/
+  # grants-provenance.yml — the default wiring (no explicit path at any call
+  # site). +provenance+ nil writes no file (the public-clone state).
+  def load_registry_with_provenance(sources_yaml, provenance)
+    Dir.mktmpdir do |root|
+      FileUtils.mkdir_p(File.join(root, "config"))
+      path = File.join(root, "config", "sources.yml")
+      File.write(path, sources_yaml)
+      if provenance
+        FileUtils.mkdir_p(File.join(root, "local", "config"))
+        File.write(File.join(root, "local", "config", "grants-provenance.yml"), provenance)
+      end
       return Nabu::SourceRegistry.load(path)
     end
   end
