@@ -9,5 +9,6 @@
         <collection filepath="data/tlg0085/metadata.xml"/>
         <collection filepath="data/tlg0059/metadata.xml"/>
         <collection filepath="data/tlg1514/metadata.xml"/>
+        <collection filepath="data/tlg2035/metadata.xml"/>
     </members>
 </collection>

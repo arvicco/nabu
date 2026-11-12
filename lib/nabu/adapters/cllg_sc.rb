@@ -59,7 +59,10 @@ module Nabu
     # "creator", the work's dc identifiers ("CPG 1502" → "cpg", others
     # verbatim under "catalog_identifiers"), "tlg" (the urn's
     # tlgNNNN.tlgNNN pair when both are TLG ids — the cross-source join
-    # key with perseus-greek / first1k-greek / cllg-freed).
+    # key with perseus-greek / first1k-greek / cllg-freed). Four edition
+    # urns here are minted by cllg-freed too (same cllg-grc1 version id,
+    # different text state); this corpus is the owner of record — freed
+    # defers them by rule (CllgFreed::SC_OVERLAP carries the census).
     # From the teiHeader sourceDesc (one <bibl> per printed volume):
     # "editions" (each volume: n, title, editors, date, publisher, place,
     # series, volume, identifiers), "sc_volumes", "editors", "identifiers"

@@ -53,10 +53,13 @@ module Nabu
     # site's own "Without citeStructure: 331"; 316 of them carry real
     # text, ~1.96 M characters, honestly uncitable until upstream declares
     # a tree) → skipped by rule at discovery (a header peek, counted in
-    # #discovery_skips). Reconciliation: 6,295 refs + 331 skipped = 6,626 =
-    # the site's text count, residue 0. At parse, the cllg-tei family over
-    # the 6,295 (census 2026-11-12, ~15 min on the probe box): 6,294 parse
-    # (1,256,190 passages through the parser; the site's 1,408,724
+    # #discovery_skips), and 4 more defer to cllg-sc by rule (SC_OVERLAP —
+    # both repos mint the same cllg-grc1 version urn over different text
+    # states; the constant's comment carries the census). Reconciliation:
+    # 6,291 refs + 331 + 4 skipped = 6,626 = the site's text count,
+    # residue 0. At parse, the cllg-tei family over the cited editions
+    # (census 2026-11-12, ~15 min on the probe box): all but 1 parse
+    # (~1.256 M passages through the parser; the site's 1,408,724
     # "citation units" counts every level of every tree, not leaves) and 1
     # quarantines — tlg2021.tlg037 declares use="n", an upstream typo for
     # "@n", refused loudly rather than guessed. No declared tree in freed
@@ -104,6 +107,24 @@ module Nabu
       SPARSE = ["/data/", "/cllg-freed.xml", "/README.md", "/CITATION.cff"].freeze
 
       DUBIA_DIR = "spurious-and-dubia"
+
+      # The four edition urns BOTH CLLG repos mint (full urn intersection
+      # of cllg-sc × cllg-freed, censused 2026-11-12): upstream reuses the
+      # cllg-grc1 version id across the two corpora for Gregory of Nyssa's
+      # De vita Moysis / De opificio hominis and Athanasius' Contra gentes /
+      # Epistulae ad Serapionem, over DIFFERENT text states (the SC files
+      # carry the Sources Chrétiennes editions, 10–50% larger). One version
+      # urn must resolve to one document, so freed defers these by rule at
+      # discovery — a deterministic owner-of-record choice (the SC record is
+      # the richer one: volumes, editors, CPG ids) instead of the
+      # load-order lottery a shared unique urn otherwise runs on every
+      # rebuild. Counted in #discovery_skips with its note.
+      SC_OVERLAP = %w[
+        urn:cts:greekLit:tlg2017.tlg042.cllg-grc1
+        urn:cts:greekLit:tlg2017.tlg079.cllg-grc1
+        urn:cts:greekLit:tlg2035.tlg001.cllg-grc1
+        urn:cts:greekLit:tlg2035.tlg043.cllg-grc1
+      ].freeze
       TLG_PAIR = /\Aurn:cts:greekLit:(?<pair>tlg\d{4}\.tlg\d{3})\./
       # The first "(…), " group of the TLG canon line.
       CANON_DATE = /\((?<date>[^()]*)\),\s/
@@ -220,12 +241,17 @@ module Nabu
         found = census(workdir)
         catalog = found[:catalog]
         uncited = found[:uncited].map { |resource| catalog.relative(resource.path) }
+        deferred = found[:deferred].map(&:urn)
         uncatalogued = catalog.uncatalogued.map { |path| catalog.relative(path) }
         missing = catalog.missing.map(&:urn)
         notes = []
         unless uncited.empty?
           notes << "#{uncited.size} edition file#{'s' unless uncited.size == 1} declaring no citeStructure " \
                    "(no citation tree — upstream's \"Without citeStructure\"): #{listing(uncited)}"
+        end
+        unless deferred.empty?
+          notes << "#{deferred.size} edition#{'s' unless deferred.size == 1} also served by cllg-sc under " \
+                   "the same version urn (deferred to the SC record — SC_OVERLAP): #{listing(deferred)}"
         end
         unless uncatalogued.empty?
           notes << "#{uncatalogued.size} uncatalogued edition file#{'s' unless uncatalogued.size == 1} " \
@@ -235,7 +261,7 @@ module Nabu
           notes << "#{missing.size} catalog resource#{'s' unless missing.size == 1} whose file is absent: " \
                    "#{listing(missing)}"
         end
-        Adapter::DiscoverySkips.new(skipped_by_rule: uncited.size + uncatalogued.size,
+        Adapter::DiscoverySkips.new(skipped_by_rule: uncited.size + deferred.size + uncatalogued.size,
                                     unrecognized: missing.size, notes: notes)
       end
 
@@ -260,10 +286,11 @@ module Nabu
         @census[workdir] ||= begin
           catalog = CllgCatalog.new(workdir)
           present = catalog.resources.select { |resource| File.file?(resource.path) }
-          cited, uncited = present.partition do |resource|
+          deferred, owned = present.partition { |resource| SC_OVERLAP.include?(resource.urn) }
+          cited, uncited = owned.partition do |resource|
             CllgTeiParser.header_slice(resource.path).include?("<citeStructure")
           end
-          { catalog: catalog, cited: cited, uncited: uncited }
+          { catalog: catalog, cited: cited, uncited: uncited, deferred: deferred }
         end
       end
 
