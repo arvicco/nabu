@@ -51,6 +51,17 @@ class IndexWatcherTest < Minitest::Test
     assert_nil Watcher.deadline_for(estimate: 3_600, override_minutes: 0)
   end
 
+  def test_an_unarmed_default_ignores_the_estimate_but_obeys_the_flag
+    assert_nil Watcher.deadline_for(estimate: 3_600, arm_default: false)
+    assert_equal 600, Watcher.deadline_for(estimate: 3_600, override_minutes: 10, arm_default: false)
+  end
+
+  def test_the_unarmed_default_announces_itself_as_a_policy_not_a_gap
+    line = Watcher.arming_line(deadline: nil, estimate: 3_600, kill_default: false)
+    assert_match(/heartbeats only — this command arms no kill by default/, line)
+    assert_match(/--deadline MINUTES arms one/, line)
+  end
+
   def test_the_estimate_sums_each_stages_latest_ledger_row
     ledger = Nabu::Store::Ledger.open!(File.join(@dir, "history.sqlite3"))
     Nabu::Store::StageTimings.record!(ledger, kind: "sync", scope: "pap", stage: "index_slice", seconds: 100)

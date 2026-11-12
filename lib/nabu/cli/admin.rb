@@ -54,7 +54,8 @@ module Nabu
                                  "default: rebuild.parse_workers setting, else cores - 1, capped)"
     option :verbose, type: :boolean, default: false, desc: Nabu::Ops::StageGuide::OPTION_DESC
     option :deadline, type: :numeric, banner: "MINUTES",
-                      desc: "Index-watcher kill deadline (default 2x the ledger's last rebuild; 0 = never kill)"
+                      desc: "Arm the index watcher's kill at MINUTES (default: heartbeats only — " \
+                            "a rebuild is never killed on a backward-looking estimate)"
     def rebuild
       config = Nabu::Config.load
       parse_workers = rebuild_parse_workers(config)
@@ -77,7 +78,7 @@ module Nabu
       else
         explain_command(:rebuild)
         estimate = watcher_estimate(config, kind: "rebuild")
-        result = supervised_index_write(config, label: "rebuild", estimate: estimate) do
+        result = supervised_index_write(config, label: "rebuild", estimate: estimate, arm_kill: false) do
           rebuilder.run(progress: progress_reporter)
         end
         finish_progress
@@ -471,7 +472,8 @@ module Nabu
 
         explain_command(:rebuild_incremental)
         result = supervised_index_write(config, label: "rebuild --incremental",
-                                                estimate: watcher_estimate(config, kind: "rebuild")) do
+                                                estimate: watcher_estimate(config, kind: "rebuild"),
+                                                arm_kill: false) do
           incremental.run(progress: progress_reporter)
         end
         finish_progress
