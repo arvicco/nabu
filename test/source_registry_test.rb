@@ -1314,6 +1314,7 @@ class SourceRegistryTest < Minitest::Test
     refute_includes registry.public_axis_members("etym"), "titus-avestan",
                     "the PUBLIC etym membership drops the grant-gated row"
     assert_equal %w[titus-avestan titus-bactrian titus-khotanese titus-manichaica
+                    titus-old-albanian titus-old-frisian titus-old-lithuanian
                     titus-old-prussian titus-osco-umbrian titus-pahlavi titus-sogdian
                     titus-tocharian-a titus-tocharian-b],
                  registry.blocked_axis_members("etym")

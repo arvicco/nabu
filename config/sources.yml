@@ -7431,6 +7431,113 @@ titus-manichaica:   # 02-sources row 226
       W. Sundermann and the Corpus's edition editors; P. Zieme) wherever any text is
       displayed.
 
+titus-old-albanian:   # 02-sources row 406
+  adapter: Nabu::Adapters::TitusOldAlbanian
+  adopted: "2026-11-12"
+  axes: [etym]  # Albanian is its own branch and no desk holds it; etym because the
+                # early Gheg/Tosk forms (Buzuku, Bogdani, the Blanchus dictionary)
+                # feed the comparative shelves.
+  # Grant-gated PRIVATE research material, the titus-avestan posture verbatim
+  # (the fetch right is not conveyed by a clone):
+  availability: blocked
+  wired: false
+  # TITUS Old Albanian texts (titus.uni-frankfurt.de/texte/etcs/alban/): Buzuku's
+  # Missale (data entry W. Hock), Blanchus's Dictionarium Latino-Epiroticum (Rome 1635)
+  # and Bogdani's Cuneus Prophetarum (M. de Vaan), Casasi's Breve compendio della
+  # dottrina christiana (B. Demiraj), Matrënga's Dottrina christiana of 1592 (M. de
+  # Vaan). Five editions, 286 pages by the index frames' census (2026-11-12) — one
+  # TitusFetch walk per edition into canonical/titus-old-albanian/<edition>/. One
+  # document per page carrying an Albanian lane; passages at the titus_levels unit
+  # (Buzuku's printed line, the paragraphs, Matrënga's line), the Latin riding the
+  # `latin` annotation. Language sqi (staged sq:old by lect_overrides).
+  # EXPECTED FIRST SYNC: 286 pages, crawl ≈ 10 min at the polite 2s pace (~15 MB —
+  # Bogdani's pages run to 0.7 MB).
+  sync_policy: manual
+  grant_required: true
+  grant:
+    grantor: Prof. Jost Gippert (TITUS, Frankfurt)
+    date: "2026-11-12"
+    terms: >-
+      the TITUS family terms: one retrieval per corpus, local personal research use
+      only, no redistribution; TITUS and the editors credited wherever displayed
+    thread: "personal research grant of 2026-11-12"
+    request_hint: >-
+      Write to Prof. Jost Gippert (TITUS, titus.uni-frankfurt.de) for your own
+      non-commercial grant, and promise to credit TITUS and the editors (data entry
+      W. Hock, M. de Vaan, B. Demiraj) wherever any text is displayed.
+
+titus-old-frisian:   # 02-sources row 407
+  adapter: Nabu::Adapters::TitusOldFrisian
+  adopted: "2026-11-12"
+  axes: [etym, germanic]  # the North Sea Germanic member of the germanic desk; etym
+                          # because the law texts' vocabulary feeds the comparative shelves.
+  # Grant-gated PRIVATE research material, the titus-avestan posture verbatim
+  # (the fetch right is not conveyed by a clone):
+  availability: blocked
+  wired: false
+  # TITUS Old Frisian texts (titus.uni-frankfurt.de/texte/etcs/germ/afries/): Thomas F.
+  # Shannon's Corpus of Old East and West Frisian Texts (the Ten Commandments and the
+  # Seventeen Statutes after the Hunsingo manuscripts, the Londriucht, Fon alra Fresena
+  # fridome, Thet Freske Riim, the Skeltana Riucht — one text per page) and the Brokmer
+  # Recht after Buma/Ebel (data entry: Forschungsstelle des Deutschen Rechtswörterbuchs,
+  # Heidelberg — one paragraph per page). Two editions, 248 pages by the index frames'
+  # census (2026-11-12). Passages at the SENTENCE; the Latin incipits ride the `latin`
+  # annotation. Language ofs throughout. The separately served Brokmer edition carrying
+  # the editors' (protected) German translation is NOT walked.
+  # EXPECTED FIRST SYNC: 248 pages, crawl ≈ 9 min at the polite 2s pace (~1.5 MB).
+  sync_policy: manual
+  grant_required: true
+  grant:
+    grantor: Prof. Jost Gippert (TITUS, Frankfurt)
+    date: "2026-11-12"
+    terms: >-
+      the TITUS family terms: one retrieval per corpus, local personal research use
+      only, no redistribution; TITUS and the editors credited wherever displayed
+    thread: "personal research grant of 2026-11-12"
+    request_hint: >-
+      Write to Prof. Jost Gippert (TITUS, titus.uni-frankfurt.de) for your own
+      non-commercial grant, and promise to credit TITUS and the editors (data entry
+      T. F. Shannon; the Forschungsstelle des Deutschen Rechtswörterbuchs, after
+      W. J. Buma and W. Ebel's edition) wherever any text is displayed.
+
+titus-old-lithuanian:   # 02-sources row 405
+  adapter: Nabu::Adapters::TitusOldLithuanian
+  adopted: "2026-11-12"
+  axes: [etym, baltic, slavic]  # the East Baltic member of the baltic desk (the Balto-Slavic
+                                # lineage dual-tag, the senie ruling); etym because the
+                                # Old Lithuanian forms feed the comparative shelves.
+  # Grant-gated PRIVATE research material, the titus-avestan posture verbatim
+  # (the fetch right is not conveyed by a clone):
+  availability: blocked
+  wired: false
+  # TITUS Old Lithuanian texts (titus.uni-frankfurt.de/texte/etcs/balt/lit/): Mažvydas's
+  # Katekizmas, his Ambrosian hymn and Forma Chrikstima (data entry D. Ardoino,
+  # J. Gelumbeckaitė, P.U. Dini), the Wolfenbüttel Postil (J. Gelumbeckaitė), Szyrwid's
+  # Punktai sakymų, Lithuanian text (F. Thies), the catechisms of Daukša 1595
+  # (S. Young), Vilentas 1579 (R.P. Ritter), Lysius 1719 (P.U. Dini) and Engel
+  # (D. Ardoino), the Dzūkian prayers (J. Gelumbeckaitė) and Donelaitis's Metai
+  # (G. Keydana). Eleven editions, 188 pages by the index frames' census (2026-11-12);
+  # Szyrwid's Polish text and Latin notes are rejected editions. One document per page
+  # carrying a Lithuanian lane (notes pages skip by rule); passages at the titus_levels
+  # unit (the printed line, Donelaitis's verse, the catechisms' paragraph). Language lit
+  # (staged lt:old by lect_overrides).
+  # EXPECTED FIRST SYNC: 188 pages, crawl ≈ 7 min at the polite 2s pace (~20 MB — the
+  # Postil's pages run to 0.2 MB, Donelaitis's to 0.4 MB).
+  sync_policy: manual
+  grant_required: true
+  grant:
+    grantor: Prof. Jost Gippert (TITUS, Frankfurt)
+    date: "2026-11-12"
+    terms: >-
+      the TITUS family terms: one retrieval per corpus, local personal research use
+      only, no redistribution; TITUS and the editors credited wherever displayed
+    thread: "personal research grant of 2026-11-12"
+    request_hint: >-
+      Write to Prof. Jost Gippert (TITUS, titus.uni-frankfurt.de) for your own
+      non-commercial grant, and promise to credit TITUS and the editors (data entry
+      D. Ardoino, J. Gelumbeckaitė, P.U. Dini, F. Thies, S. Young, R.P. Ritter,
+      G. Keydana) wherever any text is displayed.
+
 titus-old-prussian:   # 02-sources row 402
   adapter: Nabu::Adapters::TitusOldPrussian
   adopted: "2026-11-12"
