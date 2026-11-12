@@ -2,7 +2,7 @@
 title: Quickstart
 permalink: /quickstart/
 description: >-
-  From a fresh clone to the first aligned verse in about ten minutes: prerequisites,
+  From a fresh clone to the first aligned verse in about a quarter hour: prerequisites,
   the starter shelf, the first three commands, and how to grow the library.
 ---
 
@@ -23,7 +23,8 @@ beside the first output that prints them.
 - **You need Ruby 3.3 or newer and git.** Check with `ruby -v`; if Ruby is
   missing or older, follow the official
   [Ruby installation guide](https://www.ruby-lang.org/en/documentation/installation/).
-- **Budget up to ten minutes** for the whole quickstart path below. The
+- **Budget ten to fifteen minutes** for the whole quickstart path below
+  (measured: ~12 on the reference machine). The
   four starter sources measure **{{ sizes.disk.starter_display }} on disk**
   ({{ sizes.as_of }}), and the databases derived from them add roughly
   half that again. Most of the time is download, and the dictionary
