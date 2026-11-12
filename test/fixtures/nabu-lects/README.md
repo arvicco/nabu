@@ -7,7 +7,17 @@ already small (340 + 40 lines) and the module's read seam
 full codemap to be exercised honestly (a trimmed slice would hide
 referential-integrity gaps the drift guard exists to catch).
 
-- **Retrieved 2026-11-05 (fifth cut)** — the New Persian staging
+- **Retrieved 2026-11-12 (sixth cut)** — the Albanian package (the sqj
+  Albanoid family with sqj-pro, the sq anchor with its sq:old stage, the
+  sqi/alb → sq codemap rows) that the titus-old-albanian lect row targets,
+  with the Latin and Persian (lat stage notes, fa:cls widened, la-cla /
+  la-eme) and Sámi packages and the MARC aliases merged since the fifth
+  cut. Copied verbatim from canonical/nabu-lects (synced 2026-11-12).
+  `lects.yml` 263,428 B, sha256
+  `fec69f4325cbc56e2b8089216cf2c834d27c7b6480e1969977463d2b7bb256ca`;
+  `codemap.yml` 14,001 B, sha256
+  `ec51174ba1e6909ed8ab5f3ee0994081986820aa1887cba9f5225464807d38b7`.
+- Previously retrieved 2026-11-05 (fifth cut) — the New Persian staging
   (fa:early / fa:cls), Middle Georgian (ka:mid), the pt, lad, sco
   (with sco:old), gd and xeb anchors, en:late, fr:cls, de:new, sv:run,
   and the codemap rows for the held catalog's unrouted spellings and
