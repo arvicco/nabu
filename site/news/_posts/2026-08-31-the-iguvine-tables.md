@@ -5,7 +5,7 @@ description: >-
   The seven bronze tables of Iguvium — the longest ritual text to
   survive from pre-Roman Italy, and the corpus of the Umbrian
   language — arrive with the Oscan inscriptions in the TITUS
-  edition, under an extended personal grant. The same week's census
+  edition, held as private research material. The same week's census
   crosses one hundred million passages, and the rebuild machinery
   learns to trust its own stamps.
 ---
@@ -16,8 +16,8 @@ erased: **Umbrian**. They are the longest ritual text surviving
 from ancient Italy in any language — Latin included — and the
 **TITUS Osco-Umbrian corpus** (text entry J. Gippert and V.
 Slunečko; the only complete digital edition of the Tables) now
-stands in the library under a personal grant extending the Avestan
-terms: **386 documents, 1,697 inscription lines** — the Tables
+stands in the library as private research material on the Avestan
+shelf's terms: **386 documents, 1,697 inscription lines** — the Tables
 complete, the Oscan inscriptions of Pompeii, Bantia and
 Pietrabbondante beside them, and one archaic-Latin legal
 comparandum the edition carries for contrast.

@@ -2,8 +2,8 @@
 title: "From Bactria to the Balkans to Oaxaca"
 date: 2026-10-11 00:00:00 +0000
 description: >-
-  Three phases in one arc: the TITUS Middle Iranian shelf completed
-  under its personal grants, the Slavic shelves opened end to end —
+  Three phases in one arc: the TITUS Middle Iranian shelf completed,
+  the Slavic shelves opened end to end —
   nine wikisource cones, KorBa, the 1488 Prague Bible, the Ipatiev
   chronicle, Brückner's etymological dictionary as a queryable shelf
   — and the library's first American wing: colonial Zapotec
@@ -13,8 +13,8 @@ description: >-
 Two wings opened and a third began. The Middle Iranian shelf is now
 complete as TITUS hosts it: five grant-gated corpora — the Pahlavi
 books, the Manichaean corpora, Sogdian, Khotanese Saka and Bactrian —
-joined Tocharian A in one wave, each retrieved once under its
-personal grant, census-fixed against the real pages, and verified to
+joined Tocharian A in one wave, each retrieved once and politely,
+census-fixed against the real pages, and verified to
 a clean parse. Not one of the 191 first-sync surprises (unknown
 editorial lanes, severed UTF-8, the editors' own "not yet read"
 entries) aborted a sync: every one quarantined honestly, got its
