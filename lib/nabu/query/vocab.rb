@@ -327,7 +327,7 @@ module Nabu
       end
 
       # The tier of the scope's OWN lemma rows, read from the index by the
-      # first annotated passage's key (passage_id; urn on a v1 table). Tier
+      # first annotated passage's id (a retired v1 table refuses). Tier
       # is per-source and a scope is within one document, so one passage
       # answers for all. nil — no tier claim —
       # when the column predates the tier or the index lacks the passage
@@ -340,8 +340,7 @@ module Nabu
         end
         return nil unless row
 
-        Store::Indexer.lemma_rows_of_passages(@fulltext, ids: [row.fetch(:passage_id)], urns: [row.fetch(:urn)])
-                      .get(:tier)
+        Store::Indexer.lemma_rows_of_passages(@fulltext, ids: [row.fetch(:passage_id)]).get(:tier)
       end
 
       # Rank the lemmas by log-odds z-score (see class note), most distinctive

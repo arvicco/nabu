@@ -137,17 +137,15 @@ module Query
                    "the attesting passage urns ride the witness word (BatchCognates' edge anchor)"
     end
 
-    # The lemma table keys passages by id; a v1 table (urn stored and
-    # indexed) is the live file until the next full rebuild — a work-wide
-    # query answers identically through either shape.
-    def test_a_v1_lemma_table_answers_identically
+    # The v1 lemma shape (urn stored + indexed) is retired: a pre-v2 index
+    # refuses with the rebuild hint rather than answering through the urn.
+    def test_a_v1_lemma_table_refuses_with_the_rebuild_hint
       seed_gospel_verses
       rebuild!
-      narrow = run_cognates("nt", all: true)
       LegacyLemmaTable.widen!(@fulltext, @catalog)
 
-      assert_equal narrow, run_cognates("nt", all: true)
-      refute_empty narrow.groups
+      error = assert_raises(Nabu::Store::Indexer::LegacyLemmaShape) { run_cognates("nt", all: true) }
+      assert_match(/predates the v2 lemma shape.*full rebuild/, error.message)
     end
 
     # P59-3: `lect:` is ANCHOR-SCOPED on this cross-language tool — a

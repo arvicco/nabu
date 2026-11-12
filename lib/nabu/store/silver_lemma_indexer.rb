@@ -100,7 +100,6 @@ module Nabu
         by_urn = rows.group_by { |row| row[:urn] }
         urns = by_urn.keys
         covered = covered_urns(catalog, fulltext, urns)
-        with_urn = Indexer.lemma_urn_column?(fulltext)
         live = live_passages_for_urns(catalog, urns)
         insert_rows = []
         by_urn.each do |urn, cache_rows|
@@ -122,10 +121,9 @@ module Nabu
               counts[:filtered_lemmas] += 1
               next
             end
-            lemma = { lemma_folded: row[:lemma_folded], lemma_raw: row[:lemma_raw],
-                      passage_id: passage[:passage_id], language: row[:language],
-                      surface_forms: row[:surface_forms], tier: TIER }
-            with_urn ? lemma.merge(urn: urn) : lemma
+            { lemma_folded: row[:lemma_folded], lemma_raw: row[:lemma_raw],
+              passage_id: passage[:passage_id], language: row[:language],
+              surface_forms: row[:surface_forms], tier: TIER }
           end
           next if kept.empty?
 
@@ -169,7 +167,6 @@ module Nabu
 
       def apply_batch(catalog, fulltext, batch, counts:, frequencies:, dictionary:, filter_slugs:)
         covered = covered_urns(catalog, fulltext, batch.map(&:urn))
-        with_urn = Indexer.lemma_urn_column?(fulltext)
         live = live_passages_by_urn(catalog, batch)
         rows = []
         batch.each do |record|
@@ -180,7 +177,7 @@ module Nabu
           next counts[:skipped_mismatch] += 1 if passage[:language] != record.language
 
           filter = dictionary if filter_slugs.include?(passage[:slug])
-          record_rows = silver_rows(record, passage, dictionary: filter, counts: counts, with_urn: with_urn)
+          record_rows = silver_rows(record, passage, dictionary: filter, counts: counts)
           next if record_rows.empty?
 
           counts[:passages_indexed] += 1
@@ -192,15 +189,13 @@ module Nabu
       end
 
       # The +urns+ that already hold ANY lemma rows (the insert-if-absent
-      # guard), through the passage-key B-tree (Indexer.lemma_passage_key).
-      # The narrow table keys by passage id, so the urns resolve through the
-      # catalog first — EVERY passage, withdrawn included, so a lingering
-      # row of a since-withdrawn passage reads covered exactly as the v1
-      # urn-keyed guard read it.
+      # guard), through the passage_id B-tree. The table keys by passage
+      # id, so the urns resolve through the catalog first — EVERY passage,
+      # withdrawn included, so a lingering row of a since-withdrawn passage
+      # reads covered. A retired v1 table refuses (Indexer.require_v2_lemmas!).
       def covered_urns(catalog, fulltext, urns)
+        Indexer.require_v2_lemmas!(fulltext)
         lemmas = fulltext[Indexer::LEMMA_TABLE]
-        return lemmas.where(urn: urns).distinct.select_map(:urn).to_set if Indexer.lemma_urn_column?(fulltext)
-
         by_id = catalog[:passages].where(urn: urns).select_hash(:id, :urn)
         lemmas.where(passage_id: by_id.keys).distinct.select_map(:passage_id).to_set { |id| by_id.fetch(id) }
       end
@@ -224,17 +219,16 @@ module Nabu
       # annotation pass), one row per (passage, folded lemma), distinct
       # surface forms in first-seen order. Lemma-less tokens contribute
       # nothing; the dictionary filter (when armed) drops unattested
-      # non-identity lemmas. +with_urn+ fills a v1 table's urn column.
-      def silver_rows(record, passage, dictionary:, counts:, with_urn: false)
+      # non-identity lemmas.
+      def silver_rows(record, passage, dictionary:, counts:)
         grouped = group_tokens(record)
         grouped.filter_map do |folded, entry|
           if dictionary && !dictionary.include?(folded) && !identity_lemma?(folded, entry, record.language)
             counts[:filtered_lemmas] += 1
             next
           end
-          row = { lemma_folded: folded, lemma_raw: entry[:raw], passage_id: passage[:passage_id],
-                  language: record.language, surface_forms: entry[:forms].join(", "), tier: TIER }
-          with_urn ? row.merge(urn: record.urn) : row
+          { lemma_folded: folded, lemma_raw: entry[:raw], passage_id: passage[:passage_id],
+            language: record.language, surface_forms: entry[:forms].join(", "), tier: TIER }
         end
       end
 

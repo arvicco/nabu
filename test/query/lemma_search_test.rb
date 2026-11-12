@@ -213,20 +213,16 @@ module Query
       assert_equal %w[urn:d:got:1], search("ναι", lang: "got").map(&:urn)
     end
 
-    # A v1 lemma table (urn stored, urn-indexed) is the live file until the
-    # next full rebuild: the same hits come back in its pre-narrowing urn
-    # order, and the one-passage probe filters its stored urn.
-    def test_a_v1_lemma_table_still_answers_in_urn_order
+    # The v1 lemma shape is retired: a pre-v2 index refuses with the
+    # rebuild hint instead of answering in its old urn order.
+    def test_a_v1_lemma_table_refuses_with_the_rebuild_hint
       grc = make_document(urn: "urn:d:grc", language: "grc")
       make_passage(grc, urn: "urn:d:grc:1", text: "ναι", sequence: 0, lemmas: [%w[ναι ναι]])
-      got = make_document(urn: "urn:d:got", language: "got")
-      make_passage(got, urn: "urn:d:got:1", text: "nai", sequence: 0,
-                        language: "got", lemmas: [%w[ναι nai]])
       rebuild!
       LegacyLemmaTable.widen!(@fulltext, @catalog)
 
-      assert_equal %w[urn:d:got:1 urn:d:grc:1], search("ναι").map(&:urn)
-      assert_equal %w[urn:d:grc:1], search("ναι", urn: "urn:d:grc:1").map(&:urn)
+      error = assert_raises(Nabu::Store::Indexer::LegacyLemmaShape) { search("ναι") }
+      assert_match(/predates the v2 lemma shape.*full rebuild/, error.message)
     end
 
     def test_the_one_passage_probe_resolves_its_urn_through_the_catalog

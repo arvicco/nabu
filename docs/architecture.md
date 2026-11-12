@@ -1416,8 +1416,10 @@ packet added to `Store::Indexer#create_lemma_table` (the anchor-lemma lookup;
 also needed by cognate-in-parallel, design §6). It began as `passage_lemmas(urn)`;
 the fts_lemma v2 narrowing (2026-10) dropped the stored urn column — derivable
 from `passage_id` through the catalog, ~4.5 GB of column + B-tree at 56M rows —
-and keys the lookup by `passage_id` instead (a v1 table keeps its urn key until
-the next full rebuild: `Indexer.lemma_passage_key`). Like the rest of the fulltext db
+and keys the lookup by `passage_id` instead. The v1 shape is retired: its
+dual-shape paths are gone, and a live v1 file meets `Indexer.require_v2_lemmas!`
+at every entry point that once branched on it — one actionable error naming the
+full rebuild, never a silent second path. Like the rest of the fulltext db
 the index is derived-of-derived — created imperatively in the Indexer,
 rebuilt with the table, never a numbered migration (§5; migrations own the
 catalog only).

@@ -302,21 +302,17 @@ module Nabu
       # --langs is active; silver rows are not reconstruction evidence —
       # class note). Batched IN() — a whole-work query holds ~65k urns. The
       # lemma table keys passages by id (Store::Indexer class note), so each
-      # batch resolves its urns through the catalog first; a v1 table still
-      # keys them by its stored urn (lemma_passage_key).
+      # batch resolves its urns through the catalog first; a retired v1
+      # table refuses (Store::Indexer.require_v2_lemmas!).
       def lemma_rows_for(hits, langs)
         rows = Hash.new { |hash, key| hash[key] = [] }
-        key = Store::Indexer.lemma_passage_key(@fulltext)
+        Store::Indexer.require_v2_lemmas!(@fulltext)
         hits.map { |hit| hit.fetch(:passage_urn) }.uniq.each_slice(URN_BATCH) do |batch|
-          urn_of = if key == :urn
-                     batch.to_h { |urn| [urn, urn] }
-                   else
-                     @catalog[:passages].where(urn: batch).select_hash(:id, :urn)
-                   end
-          dataset = gold_lemma_rows.where(key => urn_of.keys)
+          urn_of = @catalog[:passages].where(urn: batch).select_hash(:id, :urn)
+          dataset = gold_lemma_rows.where(passage_id: urn_of.keys)
           dataset = dataset.where(language: langs) if langs
-          dataset.select(key, :language, :lemma_folded, :lemma_raw, :surface_forms)
-                 .each { |row| rows[urn_of.fetch(row.fetch(key))] << row }
+          dataset.select(:passage_id, :language, :lemma_folded, :lemma_raw, :surface_forms)
+                 .each { |row| rows[urn_of.fetch(row.fetch(:passage_id))] << row }
         end
         rows
       end
