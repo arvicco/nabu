@@ -1,7 +1,7 @@
 # ACLT — acquiring the Luwian corpus (manual drop)
 
-Where from: personal grant — the corpus JSON arrives by email from the
-ACLT team (the public search UI is
+Where from: gated — contact the ACLT team for a license grant; the
+corpus JSON is supplied by them directly (the public search UI is
 https://luwian.web-corpora.net/luwian_corpus/search); no download URL
 exists.
 
