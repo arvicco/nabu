@@ -5868,6 +5868,19 @@ class CLITest < Minitest::Test
     end
   end
 
+  # Index writers supervise themselves (Nabu::IndexWatcher): the refresh
+  # runs under a forked watcher, armed by --deadline here, and the
+  # heartbeat file it feeds is gone when the command ends.
+  def test_index_refresh_runs_under_the_index_watcher
+    with_deferred_wave do |config|
+      _out, err, status = with_config(config) { run_cli(%w[index refresh pap --deadline 30]) }
+
+      assert_nil status, err
+      assert_match(/index watcher: armed — kills the writer at 30m00s \(--deadline; --deadline 0 disables\)/, err)
+      assert_empty Dir.glob(File.join(config.db_dir, ".index-writer-*.heartbeat")), "the heartbeat is cleaned up"
+    end
+  end
+
   def test_index_refresh_refuses_an_unknown_slug_naming_the_valid_set
     with_deferred_wave do |config|
       _out, err, status = with_config(config) { run_cli(%w[index refresh nope]) }

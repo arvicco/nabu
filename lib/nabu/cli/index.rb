@@ -29,6 +29,8 @@ module Nabu
     HELP
     option :consolidate, type: :boolean, default: false,
                          desc: "run the bounded merge loop on the fts tables, then checkpoint"
+    option :deadline, type: :numeric, banner: "MINUTES",
+                      desc: "--consolidate only: index-watcher kill deadline (0 = never kill)"
     def doctor
       config = Nabu::Config.load
       unless File.exist?(config.fulltext_path)
@@ -43,7 +45,11 @@ module Nabu
         report_lanes(fulltext, config)
         report_stamps(fulltext, config)
         report_deferred(fulltext, config)
-        consolidate(fulltext) if options[:consolidate]
+        if options[:consolidate]
+          supervise(config, label: "index doctor --consolidate", estimate: nil) do |tee|
+            consolidate(fulltext, progress: tee.call(nil))
+          end
+        end
       ensure
         fulltext.disconnect
       end
@@ -64,6 +70,8 @@ module Nabu
         nabu index refresh ndl-kotenseki
         nabu index refresh wellcome
     HELP
+    option :deadline, type: :numeric, banner: "MINUTES",
+                      desc: "Index-watcher kill deadline (default 2x the ledger estimate; 0 = never kill)"
     def refresh(slug)
       config = Nabu::Config.load
       registry = Nabu::SourceRegistry.load(config.sources_path)
@@ -92,13 +100,26 @@ module Nabu
         runner = Nabu::SyncRunner.new(config: config, registry: registry, db: catalog, ledger: ledger)
         narrator = Nabu::CLI.new
         started = Process.clock_gettime(Process::CLOCK_MONOTONIC)
-        indexed = runner.index_entry(slug, progress: narrator.progress_reporter)
+        estimate = Nabu::IndexWatcher.ledger_estimate(ledger, kind: "sync", scopes: [slug, "corpus"],
+                                                              stages: Nabu::IndexWatcher::REFRESH_STAGES)
+        indexed = supervise(config, label: "index refresh #{slug}", estimate: estimate, slug: slug) do |tee|
+          runner.index_entry(slug, progress: tee.call(narrator.progress_reporter))
+        end
         narrator.finish_progress
         seconds = Process.clock_gettime(Process::CLOCK_MONOTONIC) - started
         say "index refresh: #{slug} — indexed #{indexed} passages (#{format_duration(seconds)})"
       ensure
         catalog&.disconnect
         ledger&.disconnect
+      end
+
+      # The index watcher over this command's writes (Nabu::IndexWatcher —
+      # the CLI class's supervised_index_write, for this Thor class).
+      def supervise(config, label:, estimate:, slug: nil, &)
+        deadline = Nabu::IndexWatcher.deadline_for(estimate: estimate, override_minutes: options[:deadline])
+        warn Nabu::IndexWatcher.arming_line(deadline: deadline, estimate: estimate) if deadline || $stderr.tty?
+        Nabu::IndexWatcher.supervise(label: label, fulltext_path: config.fulltext_path, deadline: deadline,
+                                     slug: slug, &)
       end
 
       # P168: the index_policy: deferred sources and whether each slice
@@ -212,13 +233,13 @@ module Nabu
         "#{line}#{fresh ? ' · fresh' : "  ⚠ STALE (catalog holds #{live})"}"
       end
 
-      def consolidate(fulltext)
+      def consolidate(fulltext, progress: nil)
         started = Process.clock_gettime(Process::CLOCK_MONOTONIC)
         chunks = [Nabu::Store::Indexer::TABLE, Nabu::Store::Indexer::CJK_TABLE].sum do |table|
           next 0 unless fulltext.table_exists?(table)
 
           say "consolidating #{table}…"
-          Nabu::Store::Indexer.consolidate_merges!(fulltext, table)
+          Nabu::Store::Indexer.consolidate_merges!(fulltext, table, progress: progress)
         end
         seconds = Process.clock_gettime(Process::CLOCK_MONOTONIC) - started
         say "consolidated: #{chunks} merge chunks, WAL truncated (#{format_duration(seconds)})"

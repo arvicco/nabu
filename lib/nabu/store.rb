@@ -309,6 +309,10 @@ module Nabu
           db.run("PRAGMA synchronous = NORMAL")
           rebuild_pragmas!(db) if rebuild
           index_writer_pragmas!(db) if writer_profile == :index
+          # A killed writer's journaled engine-config restore (the intent
+          # journal — Store::EngineIntents): replayed here, on the next
+          # read-write connect, for every journaled writer that is gone.
+          EngineIntents.replay!(db)
         end
       end
       db
@@ -486,6 +490,7 @@ module Nabu
 end
 
 require_relative "store/lanes"
+require_relative "store/engine_intents"
 require_relative "store/ledger"
 require_relative "store/stage_timings"
 require_relative "store/links_journal"

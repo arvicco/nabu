@@ -53,6 +53,8 @@ module Nabu
                            desc: "Forked parse workers for parallel-replay sources (1 = serial; " \
                                  "default: rebuild.parse_workers setting, else cores - 1, capped)"
     option :verbose, type: :boolean, default: false, desc: Nabu::Ops::StageGuide::OPTION_DESC
+    option :deadline, type: :numeric, banner: "MINUTES",
+                      desc: "Index-watcher kill deadline (default 2x the ledger's last rebuild; 0 = never kill)"
     def rebuild
       config = Nabu::Config.load
       parse_workers = rebuild_parse_workers(config)
@@ -74,7 +76,10 @@ module Nabu
         print_plan(rebuilder.plan)
       else
         explain_command(:rebuild)
-        result = rebuilder.run(progress: progress_reporter)
+        estimate = watcher_estimate(config, kind: "rebuild")
+        result = supervised_index_write(config, label: "rebuild", estimate: estimate) do
+          rebuilder.run(progress: progress_reporter)
+        end
         finish_progress
         print_result(result)
         print_profile(result.profile) if options[:profile]
@@ -465,7 +470,10 @@ module Nabu
         end
 
         explain_command(:rebuild_incremental)
-        result = incremental.run(progress: progress_reporter)
+        result = supervised_index_write(config, label: "rebuild --incremental",
+                                                estimate: watcher_estimate(config, kind: "rebuild")) do
+          incremental.run(progress: progress_reporter)
+        end
         finish_progress
         print_incremental_result(result)
       rescue Nabu::Error => e

@@ -75,6 +75,8 @@ module Nabu
                           "the hook's exit status is reported, never fails the sync). " \
                           "Example: --review script/review-sync-claude. Single-source sync only."
     option :verbose, type: :boolean, default: false, desc: Nabu::Ops::StageGuide::OPTION_DESC
+    option :deadline, type: :numeric, banner: "MINUTES",
+                      desc: "Index-watcher kill deadline (default 2x the ledger estimate; 0 = never kill)"
     def sync(*slugs)
       # Thor hands unknown flags through as positional args, so a typo
       # (--fetch-onli) or a trailing --help would fire the REAL slugs
@@ -118,10 +120,12 @@ module Nabu
       runner = Nabu::SyncRunner.new(config: config, registry: registry, db: db, ledger: ledger)
       enabled = sync_enabled_slugs(config, registry, db)
       explain_command(sync_intro_key)
-      if slugs.size <= 1
-        run_sync(runner, registry, slugs.first, db, ledger, enabled: enabled)
-      else
-        run_sync_list(runner, registry, slugs, db, ledger, enabled: enabled)
+      supervised_sync(config, slugs) do
+        if slugs.size <= 1
+          run_sync(runner, registry, slugs.first, db, ledger, enabled: enabled)
+        else
+          run_sync_list(runner, registry, slugs, db, ledger, enabled: enabled)
+        end
       end
     rescue Nabu::Error => e
       # Unknown slug (ValidationError), fetch failure (FetchError), ... all
@@ -402,6 +406,19 @@ module Nabu
     MODULE_CHANGED_SHOWN = 5
 
     no_commands do
+      # A sync writes the index (its slice refresh), so it runs under the
+      # index watcher — except --fetch-only, which never touches the index.
+      # The estimate is the named sources' last sync stages; --all/--axis
+      # (no explicit slugs) sum every source's.
+      def supervised_sync(config, slugs, &)
+        return yield if options[:fetch_only]
+
+        scopes = slugs.empty? || options[:all] || options[:axis] ? nil : slugs
+        estimate = watcher_estimate(config, kind: "sync", scopes: scopes && (scopes + ["corpus"]))
+        supervised_index_write(config, label: "sync #{slugs.join(' ')}".strip, estimate: estimate,
+                                       slug: (slugs.first if slugs.size == 1), &)
+      end
+
       # The registry entry for one slug, nil when the catalog source is not
       # (or no longer) registered — the card words that honestly.
       def registry_entry(config, slug)
