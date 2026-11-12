@@ -2,6 +2,9 @@
 
 require "test_helper"
 require "tmpdir"
+require "digest"
+require "logger"
+require "stringio"
 
 module Store
   # Nabu::Store::Indexer (P4-1). Catalog is a fresh in-memory SQLite (the house
@@ -34,11 +37,11 @@ module Store
 
     # sequence is unique per (document_id, sequence); callers pass distinct seqs.
     def make_passage(document, urn:, text_normalized:, sequence:, withdrawn: false,
-                     language: "grc", annotations: nil)
+                     language: "grc", annotations: nil, sha: "x")
       Nabu::Store::Passage.create(
         document_id: document.id, urn: urn, sequence: sequence, language: language,
         text: text_normalized, text_normalized: text_normalized,
-        content_sha256: "x", revision: 1, withdrawn: withdrawn,
+        content_sha256: sha, revision: 1, withdrawn: withdrawn,
         annotations_json: annotations ? JSON.generate(annotations) : "{}"
       )
     end
@@ -876,29 +879,52 @@ module Store
       assert_equal %w[urn:d:s:1 urn:d:s:2], cjk_match_urns(%{"六龍" AND source : ("0srcs")})
     end
 
-    def test_cjk_refresh_updates_the_slice_and_honors_config_drift
+    # 2026-11-11 maintenance ruling: the lane is REBUILD-CADENCE — rebuilds
+    # are its ONLY writer. A source refresh leaves it exactly as the last
+    # rebuild built it (the in-place slice rewrites it used to run —
+    # 2 × 3.77M statements on ndl-kotenseki — were where the multi-hour
+    # engine grinds lived), so between rebuilds it serves at most one
+    # rebuild-cadence stale.
+    def test_cjk_refresh_never_touches_the_lane
       doc = make_document(urn: "urn:d:s")
       make_passage(doc, urn: "urn:d:s:1", text_normalized: "六龍", sequence: 0, language: "lzh")
       cjk_rebuild!
 
       make_passage(doc, urn: "urn:d:s:2", text_normalized: "飛天", sequence: 1, language: "lzh")
-      refresh!(cjk_slugs: ["s"])
-      assert_equal %w[urn:d:s:1 urn:d:s:2],
-                   urns_of(cjk.select_map(Sequel.lit("rowid"))), "the flagged source's slice refreshes"
-
-      refresh!(cjk_slugs: [])
-      assert_equal 0, cjk.count, "a de-flagged source loses its rows at refresh"
-      assert_equal 0, cjk_scope.count, "…and its scope row, so coverage reads honestly"
+      refresh!
+      assert_equal [passage_id("urn:d:s:1")], cjk.select_map(Sequel.lit("rowid")),
+                   "the refresh leaves the lane as the last rebuild built it"
+      assert_equal %w[s], cjk_scope.select_map(:slug), "…scope row included"
     end
 
-    def test_cjk_refresh_adds_a_newly_flagged_sources_slice
+    def test_cjk_lane_refresh_rebuilds_on_scope_drift_or_flagged_replays
       doc = make_document(urn: "urn:d:s")
       make_passage(doc, urn: "urn:d:s:1", text_normalized: "六龍", sequence: 0, language: "lzh")
-      rebuild! # no cjk slugs — empty lane
+      rebuild! # no cjk slugs — empty lane, empty scope
 
-      refresh!(cjk_slugs: ["s"])
+      # Newly flagged since the last build: the scope drifted — rebuild.
+      count = Nabu::Store::Indexer.refresh_cjk_lane!(catalog: @catalog, fulltext: @fulltext,
+                                                     cjk_slugs: ["s"], replayed_slugs: [])
+      assert_equal 1, count
       assert_equal [passage_id("urn:d:s:1")], cjk.select_map(Sequel.lit("rowid"))
       assert_equal %w[s], cjk_scope.select_map(:slug)
+
+      # No flagged replay, no drift: the lane is left alone (stale rows prove it).
+      make_passage(doc, urn: "urn:d:s:2", text_normalized: "飛天", sequence: 1, language: "lzh")
+      assert_nil Nabu::Store::Indexer.refresh_cjk_lane!(catalog: @catalog, fulltext: @fulltext,
+                                                        cjk_slugs: ["s"], replayed_slugs: ["other"])
+      assert_equal 1, cjk.count
+
+      # A flagged source replayed: the rebuild catches the lane up.
+      assert_equal 2, Nabu::Store::Indexer.refresh_cjk_lane!(catalog: @catalog, fulltext: @fulltext,
+                                                             cjk_slugs: ["s"], replayed_slugs: ["s"])
+      assert_equal 2, cjk.count
+
+      # De-flagging lands at the rebuild too: the lane rebuilds to empty.
+      assert_equal 0, Nabu::Store::Indexer.refresh_cjk_lane!(catalog: @catalog, fulltext: @fulltext,
+                                                             cjk_slugs: [], replayed_slugs: [])
+      assert_equal 0, cjk.count
+      assert_equal 0, cjk_scope.count
     end
 
     def test_cjk_lane_is_idempotent_and_regenerates_into_a_fresh_db
@@ -916,6 +942,40 @@ module Store
       ensure
         fresh.disconnect
       end
+    end
+
+    # The 2026-11-11 stalls ran the lane's writes for hours with ZERO
+    # output. All lane writing now happens at the rebuild, which announces
+    # its stage and ticks per full batch (insert_cjk_batches below).
+    CjkSpy = Struct.new(:stages, :ticks) do
+      def stage(label, **) = (self.stages ||= []) << label
+      def load_tick(count, _errored) = (self.ticks ||= []) << count
+    end
+
+    def test_the_cjk_lane_rebuild_announces_itself
+      doc = make_document(urn: "urn:d:s")
+      make_passage(doc, urn: "urn:d:s:1", text_normalized: "六龍", sequence: 0, language: "lzh")
+      rebuild! # no cjk slugs — the lane refresh below rebuilds on scope drift
+      spy = CjkSpy.new
+
+      Nabu::Store::Indexer.refresh_cjk_lane!(catalog: @catalog, fulltext: @fulltext,
+                                             cjk_slugs: ["s"], replayed_slugs: [], progress: spy)
+
+      assert(spy.stages.any? { |label| label.include?("cjk bigram lane") },
+             "the lane rebuild announces its stage (got: #{spy.stages.inspect})")
+    end
+
+    def test_cjk_insert_batches_tick_per_full_batch
+      doc = make_document(urn: "urn:d:s")
+      3.times do |i|
+        make_passage(doc, urn: "urn:d:s:#{i + 1}", text_normalized: "六龍#{i}", sequence: i, language: "lzh")
+      end
+      rebuild!
+      spy = CjkSpy.new
+      rows = Nabu::Store::Indexer.send(:cjk_passages, @catalog, ["s"])
+      Nabu::Store::Indexer.send(:insert_cjk_batches, @fulltext, rows, progress: spy, batch_size: 2)
+
+      assert_equal [2], spy.ticks, "one tick per FULL batch; the partial final batch stays silent"
     end
 
     # -- incremental per-source refresh (P26-5) ------------------------------
@@ -1030,9 +1090,10 @@ module Store
     # A content-bearing re-parse of a big source rewrites millions of fts
     # rows; under the default merge config the automerge/deletemerge
     # machinery fires DURING the delete storm and the batched inserts (the
-    # kanripo 6h18m shape). At/above bulk_threshold the slice defers every
-    # merge (automerge 0, crisismerge high, deletemerge 0), ensure-restores
-    # the defaults, then consolidates in an announced bounded merge loop.
+    # kanripo 6h18m shape). The governed recipe defers the delete-triggered
+    # merges (deletemerge 0 — BULK_MERGE_SETTINGS; automerge/crisismerge
+    # stay untouched, the 2026-10-01 wedge lesson), ensure-restores the
+    # defaults, then consolidates in an announced bounded merge loop.
     # The contract stays ROW IDENTITY.
 
     BulkSpy = Struct.new(:stages) do
@@ -1163,10 +1224,13 @@ module Store
       refresh!
 
       # Simulate the crash: the marker never finished and the slice is half
-      # written (one of the source's rows missing).
+      # written (one of the source's rows missing). A real crash removes the
+      # row's sidecar sha FIRST (the fts_row_shas invariant), so the
+      # simulation drops both.
       slice_rows.where(slug: "s").update(finished_at: nil)
       doomed = @catalog[:passages].where(urn: "urn:d:s:2").get(:id)
       @fulltext[:passages_fts].where(rowid: doomed).delete
+      @fulltext[Nabu::Store::Indexer::ROW_SHAS_TABLE].where(rowid: doomed).delete
 
       assert Nabu::Store::Indexer.slice_pending?(@fulltext, "s")
       refresh!
@@ -1306,6 +1370,53 @@ module Store
       end
     end
 
+    # checkpoint_wal! returns the engine's answer row instead of discarding
+    # it: TRUNCATE degrades silently against a pinned reader.
+    def test_checkpoint_returns_the_engine_result_row
+      Dir.mktmpdir do |dir|
+        disk = Nabu::Store.connect_fulltext(File.join(dir, "ft.sqlite3"))
+        begin
+          disk.create_table(:t) { Integer :x }
+          disk[:t].insert(x: 1)
+          result = Nabu::Store::Indexer.checkpoint_wal!(disk)
+
+          assert_equal %i[busy log checkpointed], result.keys
+          assert_equal 0, result[:busy], "an unpinned TRUNCATE checkpoint completes"
+          assert_equal result[:log], result[:checkpointed], "every frame was checkpointed"
+        ensure
+          disk.disconnect
+        end
+      end
+    end
+
+    def test_checkpoint_announces_when_a_reader_pins_the_wal
+      Dir.mktmpdir do |dir|
+        path = File.join(dir, "ft.sqlite3")
+        disk = Nabu::Store.connect_fulltext(path)
+        reader = Sequel.connect("sqlite://#{path}")
+        begin
+          disk.create_table(:t) { Integer :x }
+          disk[:t].insert(x: 1)
+          disk.run("PRAGMA busy_timeout = 0") # never wait on the pinned reader
+          reader.synchronize do |conn|
+            conn.execute("BEGIN")
+            conn.execute("SELECT count(*) FROM t") # opens the read snapshot
+            disk[:t].insert(x: 2) # frames past the reader's mark
+            spy = BulkSpy.new([])
+            result = Nabu::Store::Indexer.checkpoint_wal!(disk, progress: spy)
+            conn.execute("COMMIT")
+
+            assert_equal 1, result[:busy], "TRUNCATE cannot finish under a pinned reader"
+            assert(spy.stages.any? { |label| label.include?("wal checkpoint refused (reader pinning)") },
+                   "the refusal is announced, never silent (got #{spy.stages.inspect})")
+          end
+        ensure
+          reader.disconnect
+          disk.disconnect
+        end
+      end
+    end
+
     # A LEGACY contentful passages_fts keeps the ordinary path even past the
     # threshold — the bulk recipe is designed against the contentless shape,
     # and legacy files upgrade at their next full rebuild anyway.
@@ -1427,9 +1538,9 @@ module Store
       shapes = []
       mod = Nabu::Store::Indexer
       original = mod.method(:slice_write_unit)
-      mod.define_singleton_method(:slice_write_unit) do |fulltext, bulk:, &blk|
+      mod.define_singleton_method(:slice_write_unit) do |fulltext, bulk:, **kwargs, &blk|
         shapes << bulk
-        original.call(fulltext, bulk: bulk, &blk)
+        original.call(fulltext, bulk: bulk, **kwargs, &blk)
       end
       begin
         refresh!
@@ -1924,8 +2035,11 @@ module Store
         Nabu::Store::Indexer.rebuild!(catalog: @catalog, fulltext: fresh, **options)
         assert_equal fts_rowids(fresh), fts_rowids(@fulltext),
                      "passages_fts must hold the identical rowid set at the delta grain"
-        assert_equal cjk_rowids(fresh), cjk_rowids(@fulltext),
-                     "the cjk lane must hold the identical rowid set at the delta grain"
+        # The cjk lane is REBUILD-CADENCE (2026-11-11 ruling): the delta
+        # deliberately leaves it as the pre-delta build made it — stale
+        # until the next rebuild, never rewritten inline.
+        assert_equal [passage_id_of("urn:d:s:3")], cjk_rowids(@fulltext),
+                     "the cjk lane keeps the pre-delta build's rows at the delta grain"
         %i[passage_lemmas passages_trigram passages_trigram_scope lemma_frequencies
            char_postings passage_chars reflex_roots reflex_root_stats].each do |table|
           assert_equal table_rows(fresh, table), table_rows(@fulltext, table),
@@ -1993,12 +2107,14 @@ module Store
       slice_rows.where(slug: "s").update(finished_at: nil)
       tampered = passage_id_of("urn:d:s:1")
       @fulltext[:passages_fts].where(rowid: tampered).delete
-      Nabu::Store::Passage.first(urn: "urn:d:s:2").update(text_normalized: "revised")
+      @fulltext[Nabu::Store::Indexer::ROW_SHAS_TABLE].where(rowid: tampered).delete # the crash shape
+      Nabu::Store::Passage.first(urn: "urn:d:s:2").update(text_normalized: "revised", content_sha256: "ab12")
 
       refresh!(delta: delta_of(upserted: %w[urn:d:s:2]))
 
       assert_includes fts_rowids(@fulltext), tampered,
-                      "a pending slice heals in full — the delta's baseline is lost"
+                      "a pending slice heals the crashed run's rows — the delta's baseline is lost"
+      assert_equal %w[urn:d:s:2], match_urns("revised"), "and the load's own change lands too"
       refute Nabu::Store::Indexer.slice_pending?(@fulltext, "s")
     end
 
@@ -2049,6 +2165,230 @@ module Store
       revised = table.first(rowid: passage_id_of("urn:d:sign:2"))
 
       assert_equal 2, revised[:nsigns], "the revised passage's coverage re-tokenized (AK + MIN)"
+    end
+
+    # -- the exact-diff heal (fts_row_shas) ----------------------------------
+    # A crashed slice refresh used to heal by rewriting the WHOLE slice —
+    # the contentless index cannot say what it indexed. The fts_row_shas
+    # sidecar records, per indexed rowid, the first 8 bytes of the catalog
+    # sha it was indexed from; a heal diffs that against the catalog and
+    # re-does exactly the drifted rows. The invariant: a row's sidecar sha
+    # is removed BEFORE any of its fts/lemma rows go and written LAST after
+    # they land, so a current sha means fully indexed at the fts+lemma grain.
+
+    def row_shas = @fulltext[Nabu::Store::Indexer::ROW_SHAS_TABLE]
+
+    def sha_hex(text) = Digest::SHA256.hexdigest(text)
+
+    def heal_fixture
+      doc = make_document(urn: "urn:d:s")
+      %w[alpha beta gamma delta epsilon].each_with_index do |word, index|
+        make_passage(doc, urn: "urn:d:s:#{index + 1}", text_normalized: word, sequence: index,
+                          sha: sha_hex(word), annotations: token_annotations([word, word]))
+      end
+      lit = make_document(urn: "urn:d:lit", source: literary_source)
+      make_passage(lit, urn: "urn:d:lit:1", text_normalized: "στρατηγοσ", sequence: 0, sha: sha_hex("σ"))
+      rebuild!
+      doc
+    end
+
+    # The crashed run: marker left pending, one revision whose fts row was
+    # rewritten but whose lemma + sidecar writes never landed, one added row
+    # whose fts insert landed alone, and one withdrawal whose sidecar delete
+    # landed but whose fts/lemma deletes did not.
+    def crash_mid_refresh(doc)
+      revised = Nabu::Store::Passage.first(urn: "urn:d:s:2")
+      revised.update(text_normalized: "revised", content_sha256: sha_hex("revised"),
+                     annotations_json: JSON.generate(token_annotations(%w[revised revised])))
+      row_shas.where(rowid: revised.id).delete
+      lemmas.where(passage_id: revised.id).delete
+      fts.where(rowid: revised.id).delete
+      fts.insert(rowid: revised.id, text_normalized: "revised", language: Nabu::Store::Indexer.language_token("grc"),
+                 source: Nabu::Store::Indexer.source_token("s"))
+      added = make_passage(doc, urn: "urn:d:s:6", text_normalized: "zeta", sequence: 5, sha: sha_hex("zeta"))
+      fts.insert(rowid: added.id, text_normalized: "zeta", language: Nabu::Store::Indexer.language_token("grc"),
+                 source: Nabu::Store::Indexer.source_token("s"))
+      withdrawn = Nabu::Store::Passage.first(urn: "urn:d:s:3")
+      withdrawn.update(withdrawn: true)
+      row_shas.where(rowid: withdrawn.id).delete
+      slice_rows.where(slug: "s").update(finished_at: nil) if @fulltext.table_exists?(:slice_refreshes)
+      Nabu::Store::Indexer.mark_slice_pending!(@fulltext, "s")
+      [revised.id, added.id, withdrawn.id]
+    end
+
+    def assert_identical_to_a_fresh_rebuild
+      fresh = Nabu::Store.connect_fulltext("sqlite::memory:")
+      begin
+        Nabu::Store::Indexer.rebuild!(catalog: @catalog, fulltext: fresh)
+        assert_equal fts_rowids(fresh), fts_rowids(@fulltext), "passages_fts holds the identical rowid set"
+        %i[passage_lemmas lemma_frequencies fts_row_shas char_postings].each do |table|
+          assert_equal table_rows(fresh, table), table_rows(@fulltext, table),
+                       "#{table} must be row-identical to a from-scratch rebuild"
+        end
+      ensure
+        fresh.disconnect
+      end
+    end
+
+    def test_rebuild_records_a_sidecar_sha_per_indexed_row
+      heal_fixture
+
+      assert_equal fts_rowids(@fulltext), row_shas.select_map(:rowid).sort
+      alpha = @catalog[:passages].first(urn: "urn:d:s:1")
+
+      assert_equal [sha_hex("alpha")[0, 16]].pack("H*"), row_shas.first(rowid: alpha[:id])[:sha],
+                   "the grain: the first 8 bytes of the catalog sha"
+      assert_equal 8, row_shas.first(rowid: alpha[:id])[:sha].bytesize
+      assert_equal [@source.id], row_shas.where(rowid: alpha[:id]).select_map(:source_id)
+    end
+
+    def test_a_heal_with_the_sidecar_moves_only_the_drifted_rows
+      doc = heal_fixture
+      drifted = crash_mid_refresh(doc)
+      inserted = nil
+      deleted_ids = nil
+      mod = Nabu::Store::Indexer
+      original_insert = mod.method(:insert_passage_batches)
+      original_delete = mod.method(:delete_fts_rows_by_rowid)
+      mod.define_singleton_method(:insert_passage_batches) do |*args, **kw|
+        original_insert.call(*args, **kw).tap { |result| inserted = result.first }
+      end
+      mod.define_singleton_method(:delete_fts_rows_by_rowid) do |fulltext, table, ids, **kw|
+        deleted_ids = ids.to_a.sort if table == :passages_fts
+        original_delete.call(fulltext, table, ids, **kw)
+      end
+      begin
+        refresh!
+      ensure
+        mod.define_singleton_method(:insert_passage_batches, original_insert)
+        mod.define_singleton_method(:delete_fts_rows_by_rowid, original_delete)
+      end
+
+      assert_equal drifted.sort, deleted_ids, "exactly the drifted rowids leave the index"
+      assert_equal 2, inserted, "exactly the drifted LIVE rows are re-derived (revised + added)"
+      refute Nabu::Store::Indexer.slice_pending?(@fulltext, "s")
+      assert_identical_to_a_fresh_rebuild
+      assert_equal %w[urn:d:s:2], match_urns("revised")
+      assert_empty match_urns("gamma"), "the withdrawn row stops matching"
+    end
+
+    def test_the_exact_heal_survives_the_bulk_transaction_shape
+      doc = heal_fixture
+      crash_mid_refresh(doc)
+      refresh!(bulk_threshold: 1)
+
+      assert_identical_to_a_fresh_rebuild
+    end
+
+    # 2026-11-11 maintenance ruling: a heal — like every refresh — leaves
+    # the cjk lane entirely alone. A crashed run's lane damage (stale or
+    # missing bigram rows) waits for the next rebuild, which rebuilds the
+    # lane whole as a linear append; the sidecar heal repairs the MAIN
+    # index only.
+    def test_a_heal_leaves_the_cjk_lane_alone
+      doc = make_document(urn: "urn:d:s")
+      %w[天地玄黃 宇宙洪荒].each_with_index do |text, i|
+        make_passage(doc, urn: "urn:d:s:#{i + 1}", text_normalized: text, sequence: i,
+                          language: "lzh", sha: sha_hex(text))
+      end
+      Nabu::Store::Indexer.rebuild!(catalog: @catalog, fulltext: @fulltext, cjk_slugs: ["s"])
+
+      revised = Nabu::Store::Passage.first(urn: "urn:d:s:2")
+      revised.update(text_normalized: "乾坤一擲", content_sha256: sha_hex("乾坤一擲"))
+      Nabu::Store::Indexer.mark_slice_pending!(@fulltext, "s")
+      refresh!
+
+      assert_equal %w[urn:d:s:2], match_urns("乾坤一擲"), "the heal repairs the main index"
+      assert_equal 2, cjk.count, "the lane keeps the last rebuild's rows untouched"
+      assert_equal %w[urn:d:s:2], cjk_match_urns('"宇宙"'),
+                   "…stale bigrams included — they wait for the next rebuild"
+    end
+
+    def test_a_heal_without_the_sidecar_falls_back_to_the_full_slice
+      doc = heal_fixture
+      crash_mid_refresh(doc)
+      @fulltext.drop_table(Nabu::Store::Indexer::ROW_SHAS_TABLE) # a fulltext predating the sidecar
+      inserted = nil
+      observing(:insert_passage_batches) do |calls|
+        refresh!
+        inserted = calls.first.first
+      end
+
+      assert_equal 5, inserted, "the whole live slice is rewritten (5 live rows of s)"
+      live_ids = @catalog[:passages].where(urn: (1..6).map { |i| "urn:d:s:#{i}" }, withdrawn: false)
+                                    .select_map(:id).sort
+
+      assert_equal live_ids, row_shas.where(source_id: @source.id).select_map(:rowid).sort,
+                   "the full-slice rewrite brings the sidecar and populates the whole slice"
+      fresh = Nabu::Store.connect_fulltext("sqlite::memory:")
+      begin
+        Nabu::Store::Indexer.rebuild!(catalog: @catalog, fulltext: fresh)
+        assert_equal fts_rowids(fresh), fts_rowids(@fulltext)
+        assert_equal table_rows(fresh, :passage_lemmas), table_rows(@fulltext, :passage_lemmas)
+      ensure
+        fresh.disconnect
+      end
+    end
+
+    def test_incremental_readiness_never_requires_the_sidecar
+      heal_fixture
+      @fulltext.drop_table(Nabu::Store::Indexer::ROW_SHAS_TABLE)
+
+      assert Nabu::Store::Indexer.incremental_ready?(@fulltext)
+    end
+
+    def test_the_sidecar_sha_is_written_last_and_removed_first
+      doc = heal_fixture
+      Nabu::Store::Passage.first(urn: "urn:d:s:1").update(text_normalized: "changed", content_sha256: sha_hex("c"))
+      make_passage(doc, urn: "urn:d:s:6", text_normalized: "zeta", sequence: 5, sha: sha_hex("zeta"),
+                        annotations: token_annotations(%w[zeta zeta]))
+      io = StringIO.new
+      logger = Logger.new(io)
+      @fulltext.loggers << logger
+      begin
+        refresh!
+      ensure
+        @fulltext.loggers.delete(logger)
+      end
+      config_command = /'(merge|deletemerge)'/
+      writes = io.string.lines.grep_v(config_command).filter_map do |line|
+        case line
+        when /DELETE FROM `fts_row_shas`/ then :sidecar_delete
+        when /DELETE FROM `passage_lemmas`/ then :lemma_delete
+        when /DELETE FROM `passages_fts`/ then :fts_delete
+        when /INSERT INTO `passages_fts`/ then :fts_insert
+        when /INSERT INTO `passage_lemmas`/ then :lemma_insert
+        when /INSERT (OR REPLACE )?INTO `fts_row_shas`/ then :sidecar_insert
+        end
+      end
+
+      assert_equal :sidecar_delete, writes.first,
+                   "the sidecar sha goes BEFORE any fts/lemma row (got #{writes.inspect})"
+      assert_operator writes.index(:sidecar_delete), :<, writes.index(:lemma_delete)
+      assert_operator writes.index(:lemma_delete), :<, writes.index(:fts_delete)
+      assert_equal :sidecar_insert, writes.last, "the sidecar sha lands LAST, after the batch's fts and lemma rows"
+      assert_operator writes.index(:fts_insert), :<, writes.index(:lemma_insert)
+      assert_operator writes.index(:lemma_insert), :<, writes.index(:sidecar_insert)
+    end
+
+    def test_withdrawn_and_removed_rows_leave_the_sidecar
+      doc = heal_fixture
+      gone = Nabu::Store::Passage.first(urn: "urn:d:s:3")
+      gone.update(withdrawn: true)
+      refresh!
+
+      assert_nil row_shas.first(rowid: gone.id), "a slice rewrite drops the withdrawn row's sha"
+
+      removed = Nabu::Store::Passage.first(urn: "urn:d:s:4")
+      removed.update(withdrawn: true)
+      refresh!(delta: delta_of(removed: %w[urn:d:s:4]))
+
+      assert_nil row_shas.first(rowid: removed.id), "a delta removal drops the row's sha"
+      doc.update(withdrawn: true)
+      refresh!
+
+      assert_empty row_shas.where(source_id: @source.id), "a withdrawn document takes every sha with it"
+      assert_identical_to_a_fresh_rebuild
     end
   end
 end

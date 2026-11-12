@@ -4789,6 +4789,9 @@ nb-no:   # P165
 ndl-kotenseki:   # P109-2
   adapter: Nabu::Adapters::NdlKotenseki
   adopted: "2026-09-29"
+  # cjk_index 2026-11-11: the bigram lane is rebuild-cadence — written
+  # only at rebuilds (one linear corpus stage), never on the sync path —
+  # so this source's 3.77M-passage scale rides no refresh.
   cjk_index: true
   axes: [japonic]
   wired: true    # first slice 2026-09-29: 398 books / 24,568 koma passages,

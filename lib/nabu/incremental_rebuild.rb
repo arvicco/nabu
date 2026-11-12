@@ -286,17 +286,20 @@ module Nabu
         progress&.stage("aes titles")
         AesAedTitles.new(catalog: db, canonical_dir: @config.canonical_dir).run
       end
+      healed = false
       if index_dirty
         # P112-4: the covering mechanism — index-core drift re-derives the
         # fulltext index whole, then the sentinel records the code it ran as.
         progress&.stage("fulltext index — index-core drift: full re-derivation")
         indexed = heal_index(db, fulltext, progress)
+        healed = true
         Store::DerivationStamp.stamp_index!(
           db, digest: DerivationFingerprint.index_core_digest,
               migration_level: DerivationFingerprint.migration_level
         )
       elsif outcomes.empty? && !Store::Indexer.incremental_ready?(fulltext)
         indexed = heal_index(db, fulltext, progress)
+        healed = true
       end
       # P87-3 (Q52a): reconcile the fulltext STAGE stamps — a derivation
       # version bump (the P86-3 postings widening is the type specimen)
@@ -314,6 +317,17 @@ module Nabu
 
       progress&.stage(stage_note) if stage_note
       indexed = (indexed || 0) + 1 if redone_stages.any? && indexed.nil?
+      # The cjk bigram lane is REBUILD-CADENCE (2026-11-11 ruling): syncs
+      # never write it, so the rebuild is where it catches up — rebuilt
+      # whole when a flagged source replayed or the config flags drifted
+      # from the built scope. A full index heal or a cjk stage re-derive
+      # above already built it current.
+      unless healed || redone_stages.include?("cjk")
+        Store::Indexer.refresh_cjk_lane!(
+          catalog: db, fulltext: fulltext, cjk_slugs: @registry.cjk_slugs,
+          replayed_slugs: outcomes.map(&:slug), progress: progress
+        )
+      end
       # P121-2: the lemma attestation rollups read the index AND the
       # timeline, so they re-derive (wholesale, after both settled) whenever
       # either could have moved: a dirty replay, a builders-digest drift
@@ -561,6 +575,7 @@ module Nabu
       Store::Indexer.refresh_source!(
         catalog: db, fulltext: fulltext, slug: entry.slug,
         alignments: alignments, fuzzy_slugs: @registry.fuzzy_slugs,
+        cjk_slugs: @registry.cjk_slugs,
         lemma_tiers: @registry.lemma_tiers,
         reflexes_changed: entry.adapter_class.content_kind == :dictionary,
         sign_list: Nabu::SignList.load_default(config: @config),
@@ -618,7 +633,8 @@ module Nabu
     def heal_index(db, fulltext, progress)
       progress&.stage("fulltext index")
       Store::Indexer.rebuild!(catalog: db, fulltext: fulltext, alignments: alignments,
-                              fuzzy_slugs: @registry.fuzzy_slugs, lemma_tiers: @registry.lemma_tiers,
+                              fuzzy_slugs: @registry.fuzzy_slugs, cjk_slugs: @registry.cjk_slugs,
+                              lemma_tiers: @registry.lemma_tiers,
                               sign_list: Nabu::SignList.load_default(config: @config),
                               progress: progress)
     end
