@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://www.tei-c.org/release/xml/tei/custom/schema/relaxng/tei_all.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<?xml-model href="http://www.tei-c.org/release/xml/tei/custom/schema/relaxng/tei_all.rng" type="application/xml"
+    schematypens="http://purl.oclc.org/dsdl/schematron"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0">
+   <teiHeader>
+      <fileDesc>
+         <titleStmt>
+            <title>Homélie sur la résurrection du Sauveur</title>
+            <author>
+               <persName>Jean de Béryte</persName>
+            </author>
+            <respStmt>
+               <orgName>Corpus Liberatum Linguae Graecae</orgName>
+               <resp>
+                  Refined conversion to XML-TEI
+                  <name resp="#cllg-transformation">Thibault Clérice</name>
+                  <name resp="#cllg-transformation">Nicolas Angleraud</name>
+                  <name resp="#cllg-transformation">Antonia Karamolegkou</name>
+                  <name resp="#cllg-transformation">Maïna Laurent</name>
+                  <name resp="#cllg-transformation">Benoît Sagot</name>
+               </resp>
+            </respStmt>
+            <principal>
+               <name>Thibault Clérice</name>
+               <orgName>Inria</orgName>
+            </principal>
+            <funder>
+               <orgName>Agence Nationale de la Recherche</orgName>
+               <orgName>Programme Inria Quadrant</orgName>
+               <note>Ce travail a bénéficié d'une aide de l'État gérée par l'Agence Nationale de la Recherche au titre de France 2030 portant la référence «ANR-24-RRII-0002».</note>
+            </funder>
+         </titleStmt>
+         <publicationStmt>
+            <p>
+               This file has then been released by the Corpus Liberatum Linguae Graecae (dir. Thibault Clérice)
+               which added citeStructure information, bibliographical metadata and reworked, where applicable, the
+               citation structure to follow editions rather than physical citation systems.
+            </p>
+         </publicationStmt>
+         <sourceDesc>
+            <bibl n="SC187">
+               <author>Jean de Béryte</author>
+               <title level="m">Homélies pascales (Homélie sur la résurrection du Sauveur)</title>
+               <editor role="editor">Michel Aubineau</editor>
+               <editor role="translator">Michel Aubineau</editor>
+               <publisher>Les Éditions du Cerf</publisher>
+               <pubPlace ref="geonames:2988506">Paris</pubPlace>
+               <date when="1972">1972</date>
+               <series>
+                  <title>Sources chrétiennes</title>
+                  <biblScope unit="volume">187</biblScope>
+               </series>
+               <idno type="ISBN">978-2-204-03537-8</idno>
+               <biblScope unit="page">296-298</biblScope>
+            </bibl>
+         </sourceDesc>
+      </fileDesc>
+      <encodingDesc>
+        <refsDecl n="default">
+          <citeStructure match="/TEI/text/body/div[@type='edition']/p" use="@n" unit="paragraph">
+          </citeStructure>
+        </refsDecl>
+        <refsDecl n="physical">
+          <citeStructure match="/TEI/text/body//pb[@ed='SC']" use="@n" unit="page">
+            <citeStructure match=".//lb" use="@n" unit="line" delim="."/>
+          </citeStructure>
+        </refsDecl>
+        <refsDecl n="MS">
+          <citeStructure match="/TEI/text/body//milestone[@ed='MS'][@unit='folio']" use="@n" unit="folio"/>
+        </refsDecl>
+      </encodingDesc>
+      <profileDesc>
+         <langUsage>
+            <language ident="grc">Texte du document en grec ancien</language>
+         </langUsage>
+      </profileDesc>
+      <revisionDesc>
+        <change who="Thibault Clérice" when="2026-10-10">Head, sections (bold numerals removed, @n) as div, italics as quote, closing title as trailer, manuscript folios from the margin placed at the '|' signs, editorial signs, pb/lb (lb recounted per page), word breaks joined.</change>
+      </revisionDesc>
+   </teiHeader>
+
+<text>
+<body>
+
+<div type="edition" n="urn:cts:greekLit:cllg0010.cllg001.sc-cllg-grc1" xml:lang="grc">
+  <pb ed="SC" n="296"/>
+  <head><lb n="1"/><milestone unit="folio" ed="MS" n="85v"/>Τοῦ μακαρίου Ἰωάννου ἐπισκόπου Βηρυτοῦ εἰς τὴν ἁγίαν
+    <lb n="2"/>ἀνάστασιν τοῦ σωτῆρος ἡμῶν Ἰησοῦ Χριστοῦ.</head>
+  <p><lb n="3"/>Τὸν μὲν εὐσεβῆ χορὸν τῶν φιλοθέων γυναικῶν τάφῳ
+    <lb n="4"/>δεσποτικῷ προσδεδεμένον ὑπὸ τοῦ πόθου, καὶ προσδεχομένας
+    <lb n="5"/>ἰδεῖν ζωὴν ἀναλάμπουσαν ἐκ « μνήματος λαξευτοῦ »,
+    <lb n="6"/><quote>ἄγγελοι δύο</quote> φωτεινοί τε καὶ <quote>ἀπαστράπτοντες</quote> εὐηγγελίζοντο
+    <lb n="7"/>δακρύουσας. Καὶ τοῖς ἑαυτῶν προσώποις φαιδροῖς τε καὶ
+    <lb n="8"/>μειδιῶσι, τὴν τοῦ κοσμοῦ χαρὰν ἐμήνυον ἐγηγέρθαι καὶ ταῖς
+    <lb n="9"/>γυναιξὶν ἐπετίμων ὡς οὐ καλῶς νομιζούσαις ἔτι τὴν <quote>ζωὴν</quote>
+    <lb n="10"/>ἐν τάφῳ κατακεκρύφθαι, <milestone unit="folio" ed="MS" n="86r"/>καὶ ὡς « ζητοῦσαις τὸν ζῶντα
+    <lb n="11"/>μετὰ τῶν νεκρῶν ». Ἐμέμφοντο καὶ πρὸς αὐτὰς ἀνεβόων ·
+    <lb n="12"/>« Τί ζητεῖτε τὸν ζῶντα μετὰ τῶν νεκρῶν ; Μέχρι τίνος,
+    <lb n="13"/>φησίν, οὕτως ἠπάτησθε καὶ δακρύετε ; Μέχρι τίνος νεκρὸν
+    <lb n="14"/>ὑπειλήφατε τὸν ζῶντα καὶ ζωοδότην ; Ἀνέστη τὸ <quote>Φῶς</quote>,
+    <lb n="15"/>ὡς προεῖπεν, <quote>τριήμερον</quote>. Οὐκέτι τάφος καλύπτει τὸν
+    <lb n="16"/>καλύψαντα τὴν γῆν οὐρανῷ. Οὐκέτι <quote>σπαργάνοις</quote> ἐνδέδεται
+    <lb n="17"/>ὁ λύσας μόνῃ φωνῇ τοὺς τοῦ θανάτου δεσμούς. Ἄπιτε
+    <lb n="18"/>χαίρουσαι δρόμῳ καὶ τοὺς <quote>μαθητὰς</quote> εὐαγγελίσασθε τὴν
+    <lb n="19"/>ἀνάστασιν. » Ἐκείνας μὲν οὖν τὰς γυναῖκας ὡς φύσει φιλο<lb n="20" break="no"/>πενθεῖς, προσλαβοῦσας δ' ἔτι <milestone unit="folio" ed="MS" n="86v"/>καὶ ἀπὸ τοῦ πόθου τοῦ
+    <lb n="21"/>φιλοθέου, μόνος ὁ δι' ἀγγέλων εὐαγγελισμὸς ὁ τοσοῦτος
+    <pb ed="SC" n="298"/>
+    <lb n="1"/>ἐξήρκει παραμυθήσασθαι καὶ παῦσαι τὴν λύπην. Τὰς μέντοι
+    <lb n="2"/>γε κατ' ἅπασαν τὴν οἰκουμένην ἐκκλησίας τοῦ σταυρωθέντος
+    <lb n="3"/>οἱ ποιμένες τῆς χάριτος εὐαγγελίζονται σήμερον, φωνὰς
+    <lb n="4"/>ἱερὰς τοῦ Παύλου καταχρωμένοι μεθ' ὧν κἀγὼ πρὸς ὑμᾶς
+    <lb n="5"/>ἀγαλλιώμενος ἀνακράζω · « Χριστὸς ἐγήγερται ἐκ νεκρῶν ·
+    <lb n="6"/>ἀπαρχὴ τῶν κεκοιμημένων ἐγένετο » · αὐτῷ ἡ δόξα εἰς
+    <lb n="7"/>τοὺς αἰῶνας τῶν αἰώνων. Ἀμήν.</p>
+  <trailer>
+    <lb n="8"/>Τοῦ μακαρίου Ἰωάννου ἐπισκόπου Βηρυτοῦ εἰς τὴν
+    <lb n="9"/>ἀνάστασιν τοῦ σωτῆρος ἡμῶν.
+  </trailer>
+</div>
+</body>
+</text>
+</TEI>

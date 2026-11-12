@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<collection identifier="urn:cts:greekLit:tlg2042">
+    <title>Origène</title>
+    <members>
+        <collection identifier="urn:cts:greekLit:tlg2042.tlg001">
+            <title>Contre Celse</title>
+            <dublinCore>
+                <creator xmlns="http://purl.org/dc/terms/">Origène</creator>
+            </dublinCore>
+            <members>
+                <resource identifier="urn:cts:greekLit:tlg2042.tlg001.sc-cllg-grc1" filepath="./contra_celsum.xml">
+                    <title>Contre Celse (SC 132, 136, 147, 150)</title>
+                    <description>Origène, Contre Celse, livres I à VIII, Greek edition of Sources chrétiennes 132, 136, 147 and 150 (M. Borret, 1967-1969).</description>
+                </resource>
+            </members>
+        </collection>
+    </members>
+</collection>
