@@ -194,22 +194,21 @@ module Nabu
                Sequel[:documents][:withdrawn] => false)
     end
 
-    # The lane's lemma-covered passages (any tier), keyed the way the live
-    # lemma table names a passage (Store::Indexer.lemma_passage_key):
-    # passage ids on the narrow table, urns on a v1 one. One distinct
-    # select over the language index either way.
+    # The lane's lemma-covered passages (any tier), by passage id — one
+    # distinct select over the language index. A retired v1 lemma table
+    # refuses (Store::Indexer.require_v2_lemmas!).
     def covered_passages
       @covered_passages ||=
         if @fulltext.table_exists?(Store::Indexer::LEMMA_TABLE)
-          @covered_key = Store::Indexer.lemma_passage_key(@fulltext)
-          @fulltext[Store::Indexer::LEMMA_TABLE].where(language: @language).distinct.select_map(@covered_key).to_set
+          Store::Indexer.require_v2_lemmas!(@fulltext)
+          @fulltext[Store::Indexer::LEMMA_TABLE].where(language: @language).distinct.select_map(:passage_id).to_set
         else
           Set.new
         end
     end
 
     def covered?(row)
-      covered_passages.include?(row[@covered_key == :urn ? :urn : :passage_id])
+      covered_passages.include?(row[:passage_id])
     end
 
     def shelved_urns

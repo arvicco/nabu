@@ -48,7 +48,7 @@ module Nabu
     #
     # Why this lives in application code and not in the FTS5 tokenizer: the
     # index's `unicode61 remove_diacritics 2` provably does NOT fold precomposed
-    # polytonic Greek (SQLite 3.53.2 leaves ά/ῆ/ἀ/ῃ untouched — it only strips a
+    # polytonic Greek (SQLite 3.53.2 and 3.54.1 leave ά/ῆ/ἀ/ῃ untouched — it only strips a
     # handful of *combining* marks, and only when the text is already NFD;
     # perispomeni/breathings/iota-subscript are never removed). Our corpus is
     # stored NFC, so the tokenizer alone cannot deliver Greek diacritic-insensitive

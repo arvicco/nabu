@@ -29,6 +29,8 @@ module Nabu
     HELP
     option :consolidate, type: :boolean, default: false,
                          desc: "run the bounded merge loop on the fts tables, then checkpoint"
+    option :deadline, type: :numeric, banner: "MINUTES",
+                      desc: "--consolidate only: index-watcher kill deadline (0 = never kill)"
     def doctor
       config = Nabu::Config.load
       unless File.exist?(config.fulltext_path)
@@ -38,10 +40,17 @@ module Nabu
 
       fulltext = Nabu::Store.connect_fulltext(config.fulltext_path, readonly: !options[:consolidate])
       begin
+        report_runs(config)
         report_gauges(fulltext)
+        report_lanes(fulltext, config)
         report_stamps(fulltext, config)
+        report_stale(fulltext)
         report_deferred(fulltext, config)
-        consolidate(fulltext) if options[:consolidate]
+        if options[:consolidate]
+          supervise(config, label: "index doctor --consolidate", estimate: nil) do |tee|
+            consolidate(fulltext, progress: tee.call(nil))
+          end
+        end
       ensure
         fulltext.disconnect
       end
@@ -62,6 +71,10 @@ module Nabu
         nabu index refresh ndl-kotenseki
         nabu index refresh wellcome
     HELP
+    option :deadline, type: :numeric, banner: "MINUTES",
+                      desc: "Index-watcher kill deadline (default 2x the ledger estimate; 0 = never kill)"
+    option :accept_long, type: :boolean, default: false,
+                         desc: "Run even when the preflight predicts more than the inline budget (~15m)"
     def refresh(slug)
       config = Nabu::Config.load
       registry = Nabu::SourceRegistry.load(config.sources_path)
@@ -73,12 +86,99 @@ module Nabu
         raise Thor::Error, "index refresh: no catalog at #{config.catalog_path} — run bin/nabu sync #{slug} first"
       end
 
+      # The proportionality law's preflight (Nabu::IndexPreflight): the
+      # plan prints and a long one refuses BEFORE any db is opened.
+      Nabu::IndexPreflight.gate!(history_path: config.history_path, slugs: [slug],
+                                 accept_long: options[:accept_long])
       run_refresh(config, registry, slug)
     rescue Nabu::Error => e
       raise Thor::Error, "index refresh: #{e.message}"
     end
 
+    desc "maintain", "The maintenance rail: stale-aggregate recomputes, merge consolidation, WAL truncation"
+    long_desc <<~HELP, wrap: false
+      Runs ALL corpus-scale index work the sync path no longer pays inline
+      (the proportionality law, docs/architecture.md §1), in one
+      announced, ledgered run under the index watcher:
+
+        1. every stale aggregate `index doctor` lists is recomputed and its
+           flag cleared (char postings per source, the reflex closure, the
+           corpus lemma census);
+        2. every fts5 table's merge debt is consolidated in bounded chunks
+           until the engine reports no work (the debt a sync only probes
+           and reports as "run nabu index maintain");
+        3. the WAL is truncated;
+        4. the structure gauges are reported before and after.
+
+      Resumable: a killed run leaves exactly its unfinished flags and the
+      merge state it reached — the next run continues there. Fire it
+      between phases (or from cron); the kill deadline defaults to 2x the
+      ledger's estimate of the last run.
+
+      Examples:
+        nabu index maintain
+        nabu index maintain --deadline 0
+    HELP
+    option :deadline, type: :numeric, banner: "MINUTES",
+                      desc: "Index-watcher kill deadline (default 2x the ledger estimate; 0 = never kill)"
+    def maintain
+      config = Nabu::Config.load
+      unless File.exist?(config.fulltext_path)
+        say "index maintain: no fulltext index at #{config.fulltext_path} — nothing to maintain"
+        return
+      end
+      unless File.exist?(config.catalog_path)
+        raise Thor::Error, "index maintain: no catalog at #{config.catalog_path} — recomputes read it"
+      end
+
+      run_maintain(config)
+    rescue Nabu::Error => e
+      raise Thor::Error, "index maintain: #{e.message.delete_prefix('index maintain: ')}"
+    end
+
     no_commands do
+      def run_maintain(config)
+        ledger = Nabu::Store::Ledger.open!(config.history_path)
+        catalog = Nabu::Store.connect(config.catalog_path, readonly: true)
+        fulltext = Nabu::Store.connect_fulltext(config.fulltext_path)
+        narrator = Nabu::CLI.new
+        estimate = Nabu::IndexWatcher.ledger_estimate(ledger, kind: Nabu::Store::IndexMaintenance::KIND)
+        started = Process.clock_gettime(Process::CLOCK_MONOTONIC)
+        report = supervise(config, label: "index maintain", estimate: estimate) do |tee|
+          Nabu::Store::IndexMaintenance.run!(catalog: catalog, fulltext: fulltext, ledger: ledger,
+                                             progress: tee.call(narrator.progress_reporter))
+        end
+        narrator.finish_progress
+        print_maintain(report, Process.clock_gettime(Process::CLOCK_MONOTONIC) - started)
+      ensure
+        fulltext&.disconnect
+        catalog&.disconnect
+        ledger&.disconnect
+      end
+
+      def print_maintain(report, seconds)
+        recomputed = report.recomputed.empty? ? "no stale aggregates" : "recomputed #{report.recomputed.join(', ')}"
+        say "index maintain: #{recomputed}; #{report.merge_chunks} merge chunks; WAL truncated " \
+            "(#{format_duration(seconds)})"
+        report.gauges_after.each do |table, gauges|
+          was = report.gauges_before[table]
+          say "  #{table}: #{"#{was[:segments]} → " if was}#{gauges[:segments]} segments · " \
+              "tombstones #{gauges[:tombstone_pages]} (#{format('%.1f%%', gauges[:tombstone_share] * 100)})"
+        end
+      end
+
+      # The stale-aggregate flags (Store::StaleAggregates): what the
+      # maintenance rail owes, oldest first.
+      def report_stale(fulltext)
+        flags = Nabu::Store::StaleAggregates.all(fulltext)
+        return say "stale aggregates: none" if flags.empty?
+
+        say "stale aggregates (nabu index maintain recomputes):"
+        flags.each do |flag|
+          say "  ⚠ #{flag[:aggregate]} (#{flag[:scope]}) since #{flag[:marked_at]} — #{flag[:reason]}"
+        end
+      end
+
       # The refresh rides SyncRunner#index_entry (the sync path's own
       # reindex! wiring) and the main CLI's progress reporter, so the
       # stages read exactly as they do inside a sync.
@@ -90,13 +190,26 @@ module Nabu
         runner = Nabu::SyncRunner.new(config: config, registry: registry, db: catalog, ledger: ledger)
         narrator = Nabu::CLI.new
         started = Process.clock_gettime(Process::CLOCK_MONOTONIC)
-        indexed = runner.index_entry(slug, progress: narrator.progress_reporter)
+        estimate = Nabu::IndexWatcher.ledger_estimate(ledger, kind: "sync", scopes: [slug, "corpus"],
+                                                              stages: Nabu::IndexWatcher::REFRESH_STAGES)
+        indexed = supervise(config, label: "index refresh #{slug}", estimate: estimate, slug: slug) do |tee|
+          runner.index_entry(slug, progress: tee.call(narrator.progress_reporter))
+        end
         narrator.finish_progress
         seconds = Process.clock_gettime(Process::CLOCK_MONOTONIC) - started
         say "index refresh: #{slug} — indexed #{indexed} passages (#{format_duration(seconds)})"
       ensure
         catalog&.disconnect
         ledger&.disconnect
+      end
+
+      # The index watcher over this command's writes (Nabu::IndexWatcher —
+      # the CLI class's supervised_index_write, for this Thor class).
+      def supervise(config, label:, estimate:, slug: nil, &)
+        deadline = Nabu::IndexWatcher.deadline_for(estimate: estimate, override_minutes: options[:deadline])
+        warn Nabu::IndexWatcher.arming_line(deadline: deadline, estimate: estimate) if deadline || $stderr.tty?
+        Nabu::IndexWatcher.supervise(label: label, fulltext_path: config.fulltext_path, deadline: deadline,
+                                     slug: slug, &)
       end
 
       # P168: the index_policy: deferred sources and whether each slice
@@ -129,6 +242,48 @@ module Nabu
           say "  #{table}: #{gauges[:segments]} segments / #{gauges[:levels]} levels · " \
               "#{gauges[:pages]} pages · tombstones #{gauges[:tombstone_pages]} (#{share})" \
               "#{segment_flag(gauges[:segments])}"
+        end
+      end
+
+      # The run-health lines (the dead-row sweep + an unfinished rebuild —
+      # RebuildRuns.health_lines, shared with `nabu status`). The
+      # doctor is the place a partial index gets diagnosed, so it opens
+      # the ledger for writing (migrating it forward) when one exists.
+      def report_runs(config)
+        return unless File.exist?(config.history_path)
+
+        ledger = Nabu::Store::Ledger.open!(config.history_path)
+        Nabu::Store::RebuildRuns.health_lines(ledger).each { |line| say line }
+      ensure
+        ledger&.disconnect
+      end
+
+      # The lane-coverage check (Store::LaneCoverage — the Nov 2026
+      # crash-loss incident): config flags vs built scope vs rows, every
+      # disagreement a ⚠ line. Needs the catalog for the row probes; a
+      # box without one says so instead of guessing.
+      def report_lanes(fulltext, config)
+        say "lane coverage (config flags vs built scope vs rows):"
+        unless File.exist?(config.catalog_path)
+          return say "  (no catalog at #{config.catalog_path} — row probes skipped)"
+        end
+
+        registry = Nabu::SourceRegistry.load(config.sources_path)
+        catalog = Nabu::Store.connect(config.catalog_path, readonly: true)
+        begin
+          lanes = { cjk: [Nabu::Store::Indexer::CJK_SCOPE_TABLE, registry.cjk_slugs],
+                    trigram: [Nabu::Store::Indexer::TRIGRAM_SCOPE_TABLE, registry.fuzzy_slugs] }
+          lanes.each do |lane, (scope_table, flags)|
+            summary = Nabu::Store::LaneCoverage.summary(fulltext, scope_table, flags)
+            say "  #{lane}: #{summary || 'absent'}"
+          end
+          findings = Nabu::Store::LaneCoverage.findings(catalog: catalog, fulltext: fulltext,
+                                                        cjk_slugs: registry.cjk_slugs,
+                                                        fuzzy_slugs: registry.fuzzy_slugs)
+          findings.each { |finding| say "  ⚠ #{finding.lane}: #{finding.message}" }
+          say "  every flagged source is built and has rows" if findings.empty?
+        ensure
+          catalog.disconnect
         end
       end
 
@@ -168,13 +323,13 @@ module Nabu
         "#{line}#{fresh ? ' · fresh' : "  ⚠ STALE (catalog holds #{live})"}"
       end
 
-      def consolidate(fulltext)
+      def consolidate(fulltext, progress: nil)
         started = Process.clock_gettime(Process::CLOCK_MONOTONIC)
         chunks = [Nabu::Store::Indexer::TABLE, Nabu::Store::Indexer::CJK_TABLE].sum do |table|
           next 0 unless fulltext.table_exists?(table)
 
           say "consolidating #{table}…"
-          Nabu::Store::Indexer.consolidate_merges!(fulltext, table)
+          Nabu::Store::Indexer.consolidate_merges!(fulltext, table, progress: progress)
         end
         seconds = Process.clock_gettime(Process::CLOCK_MONOTONIC) - started
         say "consolidated: #{chunks} merge chunks, WAL truncated (#{format_duration(seconds)})"

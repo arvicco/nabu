@@ -96,11 +96,11 @@ module Nabu
     #   in-table plus a ~2.6 GB urn B-tree at 56M rows; the passage-keyed
     #   lookups (sync slice deletes, the frequency snapshots, the silver
     #   coverage guard, the parallels/cognates/vocab probes) ride a
-    #   passage_id B-tree (~0.7 GB) instead. A v1 table (urn column + urn
-    #   index) stays on disk until the next full rebuild: writers keep
-    #   filling its urn and keyed reads keep going through its urn index —
-    #   the lemma_urn_column? feature detect, the fts_language_column?
-    #   precedent.
+    #   passage_id B-tree (~0.7 GB) instead. The v1 table (urn column + urn
+    #   index) is RETIRED: its dual-shape write/read paths are gone, and a
+    #   live v1 file meets require_v2_lemmas! at every entry point that
+    #   once branched on it — one actionable error (run a full rebuild)
+    #   instead of a silent second code path.
     # == The trigram index (P16-4) — fragment search, documentary scope
     #
     # passages_trigram is a second FTS5 table over the SAME folded search form
@@ -116,6 +116,16 @@ module Nabu
     # surface reports real coverage, never a config that may have drifted
     # since the last reindex. Same lifecycle as everything else here:
     # drop-and-rebuild, never migrated, disposable.
+    #
+    # == The lane files (the incrementality review's split)
+    #
+    # The trigram lane and the cjk lane below live in their OWN database
+    # files beside this one (Store::Lanes — db/fulltext-trigram.sqlite3,
+    # db/fulltext-cjk.sqlite3), ATTACHed onto every connect_fulltext
+    # connection. Only their BUILDS know: rebuild_trigram!/rebuild_cjk!
+    # ready the lane schema and qualify their DDL with it; every other
+    # read and write here — and in the query layer — names the tables
+    # unqualified and SQLite resolves them into the lane file.
     module Indexer
       TABLE = :passages_fts
       LEMMA_TABLE = :passage_lemmas
@@ -389,6 +399,103 @@ module Nabu
       # not the passage id). Never a readiness prerequisite.
       ROW_SHAS_TABLE = :fts_row_shas
 
+      # == Above-budget rewrites become shadow builds (the incrementality review)
+      #
+      # The measured hours-class grinds (the two 2026-11-11 stalls, the
+      # kanripo 6h18m) were all multi-million-row IN-PLACE rewrites of a
+      # built fts5 structure: every delete leaves a tombstone, every
+      # re-insert a segment, and the engine repays the resulting merge debt
+      # on ITS clock, inside whichever later statement trips it — a debt no
+      # between-statement governor can see coming. FTS5 is excellent at the
+      # other shape: a linear append into a FRESH structure (every rebuild
+      # proves it). So the write path now has a hard row budget on in-place
+      # fts writes, per lane per run:
+      #
+      #   - AT or under IN_PLACE_ROW_BUDGET rows, the lane is written in
+      #     place as before (the deferred-deletemerge recipe and the merge
+      #     governor stay the backstop);
+      #   - OVER it, the lane's new content is built as an APPEND-ONLY
+      #     shadow — linear writes, batch-ticked, governed — and swapped in
+      #     atomically; the old structure is DROPPED WHOLE. Zero tombstones,
+      #     zero merge debt, no old structure for the engine to grind; the
+      #     cost is linear and announced.
+      #
+      # Two grains, matching where each lane lives:
+      #
+      #   - passages_fts (the main file): the in-main-file SHADOW TABLE
+      #     (SHADOW_TABLE). It is filled from the catalog with exactly the
+      #     membership the old table had — every row the row-sha sidecar
+      #     records for OTHER sources (re-derived from the catalog by id, so
+      #     a deferred source's behind slice stays exactly as behind) plus
+      #     the refreshing source's live rows — then one transaction drops
+      #     the old table and renames the shadow over it. The lemma table,
+      #     the sidecar and the aggregates are plain B-trees (no tombstone
+      #     pathology) and keep their in-place slice writes, with the fts
+      #     half of each batch skipped. The shadow needs a COMPLETE sidecar
+      #     (shadow_ready?): a slice indexed before the sidecar existed has
+      #     no recorded membership, so a shadow would silently drop it —
+      #     that file stays in place, announced, until the next full
+      #     rebuild backfills the sidecar.
+      #   - the trigram lane (its own file, Store::Lanes): Lanes.build!
+      #     already IS this pattern for whole-lane builds — an over-budget
+      #     trigram write runs rebuild_trigram! (a fresh lane file, renamed
+      #     over the serving one) instead of the in-place slice. The cjk
+      #     lane never takes inline writes at all (rebuild-cadence).
+      #
+      # Crash honesty: the shadow is built BEFORE any destructive slice
+      # write and under the pending marker. A death mid-build leaves the
+      # old table serving untouched and an orphan shadow, which the next
+      # refresh drops at entry; a death after the swap leaves an index
+      # AHEAD of the sidecar, never behind it (the sidecar invariant still
+      # holds — a current sha still means fully indexed), and the pending
+      # marker heals the rest.
+      #
+      # The budget: 100k rows is the line the review drew between the
+      # measured minutes-class in-place writes (the 17.5k-row ndl delta;
+      # the ~35-document heals) and the hours-class ones (3.77M, 8.75M) —
+      # comfortably above routine sync deltas, two orders below the grinds.
+      # A named constant so a re-measurement moves it in one place.
+      IN_PLACE_ROW_BUDGET = 100_000
+      SHADOW_TABLE = :passages_fts_shadow
+      # Shadow batches commit in groups: per-batch autocommit would flush a
+      # level-0 segment per 2,000 rows, one wrapping transaction would hold
+      # the whole multi-GB build in the WAL — 50 batches (100k rows) per
+      # commit keeps both bounded.
+      SHADOW_COMMIT_BATCHES = 50
+
+      # == The heal's lemma census, bounded to the healed source
+      #
+      # lemma_frequencies and reflex_root_stats are corpus aggregates the
+      # slice moves by its before/after delta. A healing refresh used to
+      # throw the delta away and re-census lemma_frequencies over the WHOLE
+      # lemma table (tens of millions of rows) — "the crashed run's
+      # before-snapshot is lost". Whether it is lost depends on the crashed
+      # run's TRANSACTION SHAPE, which slice_refreshes now records:
+      #
+      #   - "atomic" (the ordinary slice — one transaction holds the lemma
+      #     writes AND the census delta): a crash rolled the whole unit
+      #     back, so the census still matches the lemma table and the
+      #     heal's own before/after delta is exact. O(Δ).
+      #   - "bulk" (autocommit statement batches — P111-1b): the lemma
+      #     writes and the census delta are NOT atomic, so before its first
+      #     destructive write a bulk run journals the source's WHOLE
+      #     contribution to both aggregates here (O(source) — inside a run
+      #     that is already O(slice) by definition), and moves the census
+      #     by baseline → the source's whole current contribution, clearing
+      #     the baseline in the SAME transaction. A run that crashes leaves
+      #     the baseline standing; the next run — heal or not — finds it
+      #     and finishes the move exactly. Bounded to the healed source.
+      #   - unrecorded (a marker minted before shapes were): the heal still
+      #     applies its own delta, and flags the census stale
+      #     (Store::StaleAggregates, "lemma_census") for the maintenance
+      #     rail's corpus re-census — never inline.
+      #
+      # Rows: (slug, kind "freq"|"stats", lemma_folded, language, tier, n);
+      # dropped by every full rebuild. Same lifecycle as the rest of the
+      # file: derived, disposable, never migrated.
+      CENSUS_BASELINES_TABLE = :lemma_census_baselines
+      CENSUS_AGGREGATE = "lemma_census"
+
       # FTS5 DDL (see class note). text_normalized carries the folded search
       # form; urn + passage_id ride along UNINDEXED so a hit joins back to the
       # catalog (where the pristine text and annotations stay) without
@@ -458,7 +565,7 @@ module Nabu
       # the catalog passage id (the passage_chars rowid convention). Every
       # reader joins back to the catalog by rowid;
       # fts_passage_id_expression is the shape-aware read seam.
-      # contentless_delete (SQLite ≥3.43; the box runs 3.53) makes per-row
+      # contentless_delete (SQLite ≥3.43; the bundled engine is 3.54.1) makes per-row
       # DELETE real, so the incremental slice refresh keeps working — by
       # key now, no streaming scan (delete_fts_rows_by_rowid).
       # Same arrival contract as the columns above: the shape appears at
@@ -486,8 +593,11 @@ module Nabu
       # Trigram FTS5 DDL (class note; same raw-DDL exception as CREATE_TABLE —
       # virtual-table DDL has no Sequel API). Same column shape as
       # passages_fts so index_row feeds both; only the tokenizer differs.
+      # A template over the SCHEMA the table is created in: the lane lives
+      # in its own attached file (Store::Lanes), so the build qualifies its
+      # DDL with the lane schema while every reader stays unqualified.
       CREATE_TRIGRAM_TABLE = <<~SQL
-        CREATE VIRTUAL TABLE passages_trigram USING fts5(
+        CREATE VIRTUAL TABLE %<schema>s.passages_trigram USING fts5(
           text_normalized,
           urn UNINDEXED,
           passage_id UNINDEXED,
@@ -498,9 +608,9 @@ module Nabu
       # The CJK lane's DDL (P93-3, CJK_TABLE note): contentless like the
       # main table; plain unicode61 — the cjk column holds space-joined
       # bigram tokens, already the token grain, and the sentinel columns
-      # tokenize as they always have.
+      # tokenize as they always have. Schema-templated like the trigram's.
       CREATE_CJK_TABLE = <<~SQL
-        CREATE VIRTUAL TABLE passages_cjk USING fts5(
+        CREATE VIRTUAL TABLE %<schema>s.passages_cjk USING fts5(
           cjk,
           language,
           source,
@@ -511,6 +621,11 @@ module Nabu
       SQL
 
       module_function
+
+      # The lane DDL for +schema+ (the attached lane schema at a build; any
+      # schema name SQLite knows).
+      def create_trigram_sql(schema) = format(CREATE_TRIGRAM_TABLE, schema: schema)
+      def create_cjk_sql(schema) = format(CREATE_CJK_TABLE, schema: schema)
 
       # Drop and rebuild the whole index (FTS + lemma table + alignment refs)
       # from +catalog+ into +fulltext+. Indexes every passage that is itself
@@ -557,6 +672,9 @@ module Nabu
         # nothing stays pending (absent table = nothing pending).
         fulltext.drop_table?(SLICE_REFRESHES_TABLE)
         fulltext.drop_table?(ROW_SHAS_TABLE)
+        fulltext.drop_table?(SHADOW_TABLE) # a killed shadow build's orphan
+        StaleAggregates.drop!(fulltext) # every aggregate is fresh by construction
+        fulltext.drop_table?(CENSUS_BASELINES_TABLE)
         fulltext.run(CREATE_TABLE)
         create_row_shas_table(fulltext, indexed: false)
         create_lemma_table(fulltext)
@@ -673,8 +791,8 @@ module Nabu
       #   rowids by their stored passage_id (UNINDEXED — per-IN-batch scans
       #   would each rescan the table), then deletes by rowid. ~4.3M-row
       #   scan, seconds — against the minutes of a full rebuild.
-      # - passage_lemmas deletes by passage-key IN-batches (B-tree indexed:
-      #   passage_id; urn on a v1 table — lemma_passage_key).
+      # - passage_lemmas deletes by passage_id IN-batches (B-tree indexed;
+      #   a retired v1 table refuses — require_v2_lemmas!).
       # - trigram: only touched when the source is in scope — flagged now
       #   (fuzzy_slugs) or indexed by the last build (the scope table); a
       #   de-flagged source loses its rows AND its scope row, so coverage
@@ -701,15 +819,17 @@ module Nabu
       # (the sets were freed — at that volume the slice costs the same), and
       # a HEALING refresh (pending marker at entry: the crashed run's work
       # is not in this load's delta, so only the full rewrite is honest).
-      # The one deliberate delta-mode exception: char_postings is a
-      # per-source AGGREGATE whose decrements would need the replaced rows'
-      # OLD text (gone by refresh time), so it is recomputed from a lean
-      # source-scoped catalog scan — reads only, never an fts write.
+      # char_postings, a per-source AGGREGATE, moves by exact decrements +
+      # increments at the delta grain (char_postings_basis) — never a
+      # whole-source scan; where the grain cannot recover a revised row's
+      # OLD contribution the source's postings are flagged stale for the
+      # maintenance rail (Store::StaleAggregates) instead.
       def refresh_source!(catalog:, fulltext:, slug:, alignments: nil, fuzzy_slugs: nil,
                           cjk_slugs: nil, lemma_tiers: nil, reflexes_changed: false,
                           sign_list: nil, progress: nil,
                           ledger: nil, lemma_shelf: nil, lemma_filter_slugs: nil,
-                          bulk_threshold: BULK_SLICE_THRESHOLD, delta: nil)
+                          bulk_threshold: BULK_SLICE_THRESHOLD, delta: nil,
+                          row_budget: IN_PLACE_ROW_BUDGET)
         unless incremental_ready?(fulltext)
           rebuild!(catalog: catalog, fulltext: fulltext, alignments: alignments,
                    fuzzy_slugs: fuzzy_slugs, cjk_slugs: cjk_slugs, lemma_tiers: lemma_tiers,
@@ -722,15 +842,17 @@ module Nabu
         return 0 if source_id.nil?
 
         # P111-1b: a refresh entered over an unfinished marker is a HEAL —
-        # the prior run crashed mid-slice, so the lemma-frequency delta's
-        # baseline is lost (absolute re-census below instead of the delta)
-        # and a load delta cannot cover the crashed run's missing work.
+        # the prior run crashed mid-slice, so a load delta cannot cover the
+        # crashed run's missing work. The crashed run's recorded transaction
+        # SHAPE decides how its lemma census heals (CENSUS_BASELINES_TABLE
+        # note) — never by an absolute corpus re-census.
         # (The slice_behind? case — a landed load whose reindex never
         # started — heals through the runner instead: it passes delta nil,
         # which takes the full-slice path here. Probing behind-ness at this
         # depth would misread every content-adding refresh, whose new max
         # id is legitimately unindexed on entry.)
         healing = slice_pending?(fulltext, slug)
+        prior_shape = (slice_shape(fulltext, slug) if healing)
         use_delta = !delta.nil? && !delta.overflowed? && !healing
         # The exact heal (ROW_SHAS_TABLE note): with the sidecar on hand the
         # fts+lemma grain re-does exactly the drifted rows. EVERY other lane
@@ -772,7 +894,24 @@ module Nabu
         # proportional to churn).
         governed = governed_fts_tables(fulltext)
         bulk = !governed.empty? && ids.size >= bulk_threshold
+        # The in-place row budget (SHADOW_TABLE note): over it, the lane is
+        # built as an append-only shadow instead. A killed build's orphan
+        # goes first, whatever this run decides.
+        fulltext.drop_table?(SHADOW_TABLE)
+        shadow = shadow_main?(catalog, fulltext, ids, row_budget, source_id: source_id, slug: slug,
+                                                                  progress: progress)
+        trigram_ids = use_delta ? delta.changed_ids : slice_ids
+        trigram_shadow = trigram_ids.size > row_budget && trigram_touched?(fulltext, slug, Array(fuzzy_slugs))
+        # The shadow writes passages_fts nowhere in place — its deferral
+        # recipe has nothing to govern (the cjk lane, when present, keeps it).
+        governed -= [TABLE] if shadow
         progress&.stage("index slice: #{slug} — bulk mode (#{ids.size} rows): merges deferred") if bulk
+        # The census grain (CENSUS_BASELINES_TABLE note): a bulk run — or
+        # any run over a standing baseline a crashed bulk run left — moves
+        # the lemma census by the source's WHOLE contribution against that
+        # baseline; every other run by its own before/after delta.
+        census_whole = bulk || census_baseline?(fulltext, slug)
+        whole_ids = (census_whole_ids(catalog, source_id, ids, heal, use_delta) if census_whole)
         if use_delta
           progress&.stage("index delta: #{slug} — #{delta.upserted_ids.size} changed / " \
                           "#{delta.removed_ids.size} removed rows")
@@ -784,7 +923,20 @@ module Nabu
         # A full-slice rewrite is where the sidecar arrives on a fulltext
         # predating it (ROW_SHAS_TABLE note) — it populates the whole slice.
         create_row_shas_table(fulltext) if !use_delta && !heal && fts_contentless?(fulltext)
-        mark_slice_pending!(fulltext, slug)
+        # The bulk run's census baseline lands BEFORE its marker and its
+        # first destructive write — and never over a standing one (that
+        # one is the last consistent point).
+        write_census_baseline!(fulltext, slug, whole_ids) if bulk && !census_baseline?(fulltext, slug)
+        mark_slice_pending!(fulltext, slug, shape: bulk ? "bulk" : "atomic")
+        census_moves = nil
+        if shadow
+          timed_sync_stage(ledger, slug, "fts_shadow",
+                           "index slice: #{slug} — passages_fts shadow build (#{ids.size} rows over the " \
+                           "#{row_budget}-row in-place budget: append-only, swapped in whole)", progress) do
+            build_fts_shadow!(catalog: catalog, fulltext: fulltext, source_id: source_id, progress: progress)
+            swap_fts_shadow!(fulltext)
+          end
+        end
         with_bulk_write_mode(fulltext, governed) do
           timed_sync_stage(ledger, slug, "index_slice",
                            "index slice: #{slug} (fts + lemma rows)", progress) do
@@ -793,12 +945,23 @@ module Nabu
               # the rewrite, re-snapshot AFTER, and apply the delta to the corpus
               # freq table (same transaction). incremental_ready? guarantees the
               # table exists here; both snapshots are passage-keyed and B-tree bounded.
-              before = LemmaFrequencies.snapshot(fulltext, ids: ids, urns: urns)
+              unless census_whole
+                before = LemmaFrequencies.snapshot(fulltext, ids: ids)
+                before_stats = ReflexRootsIndexer.stats_snapshot(fulltext, ids: ids)
+              end
+              # The postings decrements read the sidecar, so they are taken
+              # before its rows go (char_postings_basis).
+              postings_basis = (char_postings_basis(catalog, fulltext, source_id, slug, ids) if use_delta)
               # FIRST destructive write: the doomed rows' sidecar shas
               # (ROW_SHAS_TABLE invariant — removed before their fts/lemma rows).
               delete_row_shas(fulltext, ids)
-              deleted = delete_source_lemma_rows(fulltext, ids: ids, urns: urns)
-              if fts_contentless?(fulltext)
+              deleted = delete_source_lemma_rows(fulltext, ids: ids)
+              # Under a shadow the swapped-in table already holds the
+              # source's current rows — its fts half is done, in neither
+              # direction in place.
+              if shadow
+                nil
+              elsif fts_contentless?(fulltext)
                 delete_fts_rows_by_rowid(fulltext, TABLE, ids, progress: progress)
               else
                 delete_fts_rows(fulltext, TABLE, ids)
@@ -813,7 +976,8 @@ module Nabu
                 end
               count, inserted, chars = insert_passage_batches(
                 fulltext, insert_scope,
-                source_tiers(catalog, lemma_tiers || {}), source_slugs(catalog), progress: progress
+                source_tiers(catalog, lemma_tiers || {}), source_slugs(catalog), progress: progress,
+                                                                                 fts: !shadow
               )
               # P84-1: re-apply the silver-lemma slice — the delete above
               # stripped any shelf-projected rows for these urns, and the
@@ -833,27 +997,37 @@ module Nabu
                 inserted += silver.rows_inserted
               end
               lemmas_changed = deleted.positive? || inserted.positive?
-              # The exact heal moves only drifted rows, but the crashed run
-              # may have rewritten CURRENT rows' lemma rows without ever
-              # reaching its frequency delta or the reflex closure (both run
-              # after the insert loop) — the aggregates are not row-grained,
-              # so the sidecar cannot vouch for them. A lemma-bearing slice
-              # therefore re-censuses absolutely and re-closes, exactly as
-              # the full-slice heal does.
-              lemmas_changed ||= heal && source_lemma_rows?(fulltext, ids: heal.slice_ids, urns: heal.slice_urns)
-              if healing && lemmas_changed
-                # The crashed run's before-snapshot is lost — the delta would
-                # bake its drift in; re-census absolutely instead (rare path).
-                LemmaFrequencies.rebuild!(fulltext)
-              else
-                after = LemmaFrequencies.snapshot(fulltext, ids: ids, urns: urns)
-                LemmaFrequencies.apply_delta(fulltext, before: before, after: after)
+              # The exact heal moves only drifted rows; whether the crashed
+              # run left the census drifted is the shape's question
+              # (CENSUS_BASELINES_TABLE note), answered without a corpus read.
+              lemmas_changed ||= heal && source_lemma_rows?(fulltext, ids: heal.slice_ids)
+              census_moves =
+                if census_whole
+                  apply_census_from_baseline!(fulltext, slug, whole_ids)
+                else
+                  after = LemmaFrequencies.snapshot(fulltext, ids: ids)
+                  LemmaFrequencies.apply_delta(fulltext, before: before, after: after)
+                  ReflexRootsIndexer.apply_stats_delta!(
+                    fulltext, before: before_stats, after: ReflexRootsIndexer.stats_snapshot(fulltext, ids: ids)
+                  )
+                end
+              if healing && prior_shape.nil? && !census_whole && lemmas_changed
+                # A crash of unrecorded shape (a marker minted before shapes
+                # were) may have drifted the census beyond this source's
+                # rows: the delta above is exact for THIS run, the base is
+                # owed to the maintenance rail.
+                StaleAggregates.mark!(fulltext, aggregate: CENSUS_AGGREGATE, scope: "corpus",
+                                                reason: "#{slug}: heal over a pending marker of unrecorded shape")
               end
               # The cjk lane is REBUILD-CADENCE (2026-11-11 ruling): no
               # slice or delta write here, ever — +cjk_slugs+ feeds only
               # the full-rebuild fallback above; the lane catches up at
               # the next rebuild (refresh_cjk_lane!).
-              if use_delta
+              # An over-budget trigram write rebuilds the lane file whole
+              # below, outside this unit (Lanes.build! refuses a transaction).
+              if trigram_shadow
+                nil
+              elsif use_delta
                 refresh_trigram_delta(catalog, fulltext, slug, Array(fuzzy_slugs), delta)
               else
                 refresh_trigram_slice(catalog, fulltext, slug, Array(fuzzy_slugs), slice_ids)
@@ -861,14 +1035,21 @@ module Nabu
               # P65: swap this source's char-postings slice; a pre-P65 fulltext
               # file (no table) gets the whole postings build below instead —
               # NEVER a full FTS rebuild for a missing derived sub-table.
-              # Delta mode recomputes the aggregate from a lean source-scoped
-              # catalog scan (method note: the replaced rows' old text is gone,
-              # so exact decrements are impossible — the scan stays exact and
-              # read-only).
+              # Delta mode moves the aggregate by exact arithmetic (decrements
+              # taken above, increments = this pass's +chars+) or flags it
+              # stale; the whole-slice rewrite re-derives it outright (and so
+              # clears any flag); a heal re-reads the source (its insert pass
+              # covers only the drifted rows).
               if fulltext.table_exists?(CHAR_POSTINGS_TABLE)
-                fulltext[CHAR_POSTINGS_TABLE].where(source_id: source_id).delete
-                chars = source_char_postings(catalog, source_id) if use_delta || heal
-                write_char_postings(fulltext, chars)
+                if use_delta
+                  apply_char_postings_delta!(fulltext, slug: slug, source_id: source_id,
+                                                       basis: postings_basis, increments: chars)
+                else
+                  fulltext[CHAR_POSTINGS_TABLE].where(source_id: source_id).delete
+                  chars = source_char_postings(catalog, source_id) if heal
+                  write_char_postings(fulltext, chars)
+                  StaleAggregates.clear!(fulltext, aggregate: POSTINGS_AGGREGATE, scope: slug)
+                end
               end
               # P72-1: swap this source's coverage-index slice too (ranks from
               # current postings — performance-only, the exact check verifies).
@@ -908,6 +1089,13 @@ module Nabu
           end
         end
         consolidate_deferred_merges!(fulltext, governed, slug: slug, ledger: ledger, progress: progress)
+        if trigram_shadow
+          timed_sync_stage(ledger, slug, "trigram_shadow",
+                           "trigram lane: shadow build (#{trigram_ids.size} rows over the #{row_budget}-row " \
+                           "in-place budget — the lane file rebuilt whole)", progress) do
+            rebuild_trigram!(catalog: catalog, fulltext: fulltext, fuzzy_slugs: Array(fuzzy_slugs))
+          end
+        end
         timed_sync_stage(ledger, slug, "postings_swaps",
                          "index slice: #{slug} — postings/coverage swaps", progress) do
           unless fulltext.table_exists?(CHAR_POSTINGS_TABLE)
@@ -930,10 +1118,21 @@ module Nabu
           end
           refresh_alignment(catalog, fulltext, alignments, source_id)
         end
-        if lemmas_changed || reflexes_changed
-          timed_sync_stage(ledger, "corpus", "reflex_closure",
-                           "reflex root closure (corpus-wide — lemma rows changed)", progress) do
-            ReflexRootsIndexer.rebuild!(catalog: catalog, fulltext: fulltext)
+        # The closure at the delta grain (ReflexRootsIndexer class note):
+        # a crosswalk change re-walks the closure alone (O(crosswalk), the
+        # dictionary's own arrival); a lemma change moves it only by the
+        # gold languages that crossed zero. The corpus pass is the rebuild's
+        # and the maintenance rail's.
+        if reflexes_changed
+          timed_sync_stage(ledger, slug, "reflex_rewalk",
+                           "reflex root closure (crosswalk changed — re-walked; gold stats kept)", progress) do
+            ReflexRootsIndexer.rebuild_closure!(catalog: catalog, fulltext: fulltext)
+          end
+        elsif census_moves && !(census_moves[:entered].empty? && census_moves[:left].empty?)
+          timed_sync_stage(ledger, slug, "reflex_closure",
+                           "reflex root closure: gold languages moved (+#{census_moves[:entered].join(',')} " \
+                           "-#{census_moves[:left].join(',')})", progress) do
+            ReflexRootsIndexer.apply_language_moves!(catalog: catalog, fulltext: fulltext, **census_moves)
           end
         end
         # The clarify lane's slice (names only — cheap; skipped on a
@@ -971,8 +1170,11 @@ module Nabu
 
       # P78-r3: announce with the last sync's estimate, run, record the
       # wall time (kind "sync"). A nil ledger announces bare and records
-      # nothing — the rebuild path keeps its own profiler lane.
+      # nothing — the rebuild path keeps its own profiler lane. The stage
+      # must DECLARE its cost class first (Store::IndexCostClasses — the
+      # proportionality law): an undeclared stage refuses to time.
       def timed_sync_stage(ledger, scope, stage, label, progress, &)
+        IndexCostClasses.for("sync", stage)
         eta = ledger && Nabu::Eta.for(ledger, kind: "sync", scope: scope, stage: stage)
         progress&.stage(label, eta: eta)
         started = Process.clock_gettime(Process::CLOCK_MONOTONIC)
@@ -989,23 +1191,27 @@ module Nabu
       # streaming pass rather than a branch in the main one: the scope is a
       # small subset of the corpus, and the fts/lemma pass stays untouched.
       # Returns the number of passages trigram-indexed.
+      # The lane lives in its own file (Store::Lanes): the build readies the
+      # lane schema and qualifies its DDL; the inserts stay unqualified.
+      # The build runs through Lanes.build!'s crash-honest swap: a fresh
+      # file, renamed over the serving one only once complete.
       def rebuild_trigram!(catalog:, fulltext:, fuzzy_slugs:)
-        fulltext.drop_table?(TRIGRAM_TABLE)
-        fulltext.drop_table?(TRIGRAM_SCOPE_TABLE)
-        fulltext.run(CREATE_TRIGRAM_TABLE)
-        fulltext.create_table(TRIGRAM_SCOPE_TABLE) do
-          String :slug, null: false
-        end
-
-        count = 0
-        fulltext.transaction do
-          fulltext[TRIGRAM_SCOPE_TABLE].multi_insert(fuzzy_slugs.map { |slug| { slug: slug } })
-          trigram_passages(catalog, fuzzy_slugs).each_slice(BATCH_SIZE) do |batch|
-            fulltext[TRIGRAM_TABLE].multi_insert(batch.map { |row| index_row(row) })
-            count += batch.size
+        Lanes.build!(fulltext, Lanes::TRIGRAM) do |schema|
+          fulltext.run(create_trigram_sql(schema))
+          fulltext.create_table(Lanes.qualified(Lanes::TRIGRAM, TRIGRAM_SCOPE_TABLE)) do
+            String :slug, null: false
           end
+
+          count = 0
+          fulltext.transaction do
+            fulltext[TRIGRAM_SCOPE_TABLE].multi_insert(fuzzy_slugs.map { |slug| { slug: slug } })
+            trigram_passages(catalog, fuzzy_slugs).each_slice(BATCH_SIZE) do |batch|
+              fulltext[TRIGRAM_TABLE].multi_insert(batch.map { |row| index_row(row) })
+              count += batch.size
+            end
+          end
+          count
         end
-        count
       end
 
       # REBUILD-CADENCE (the 2026-11-11 maintenance ruling): the
@@ -1034,19 +1240,189 @@ module Nabu
         # only pollute the rebuild's stage record.
         progress&.stage("cjk bigram lane: rebuilding over #{cjk_slugs.size} flagged sources") if
           cjk_slugs.any?
-        fulltext.drop_table?(CJK_TABLE)
-        fulltext.drop_table?(CJK_SCOPE_TABLE)
-        fulltext.run(CREATE_CJK_TABLE)
-        fulltext.create_table(CJK_SCOPE_TABLE) do
-          String :slug, null: false
-        end
+        # Its own file, built through the crash-honest swap (Store::Lanes):
+        # a death anywhere in here leaves the previous lane serving.
+        Lanes.build!(fulltext, Lanes::CJK) do |schema|
+          fulltext.run(create_cjk_sql(schema))
+          fulltext.create_table(Lanes.qualified(Lanes::CJK, CJK_SCOPE_TABLE)) do
+            String :slug, null: false
+          end
 
-        count = 0
-        fulltext.transaction do
-          fulltext[CJK_SCOPE_TABLE].multi_insert(cjk_slugs.map { |slug| { slug: slug } })
-          count = insert_cjk_batches(fulltext, cjk_passages(catalog, cjk_slugs), progress: progress)
+          count = 0
+          fulltext.transaction do
+            fulltext[CJK_SCOPE_TABLE].multi_insert(cjk_slugs.map { |slug| { slug: slug } })
+            count = insert_cjk_batches(fulltext, cjk_passages(catalog, cjk_slugs), progress: progress)
+          end
+          count
         end
+      end
+
+      # -- the census baseline (CENSUS_BASELINES_TABLE note) -----------------
+
+      def census_baseline?(fulltext, slug)
+        fulltext.table_exists?(CENSUS_BASELINES_TABLE) &&
+          !fulltext[CENSUS_BASELINES_TABLE].where(slug: slug).empty?
+      end
+
+      # The source's whole key set for a whole-contribution census: the
+      # slice's own keys where the run already holds them, else one keyed
+      # read (a bulk delta — test-scale only; a real delta never reaches
+      # the bulk threshold under the delta cap).
+      def census_whole_ids(catalog, source_id, ids, heal, use_delta)
+        return heal.slice_ids if heal
+        return ids unless use_delta
+
+        source_passage_keys(catalog, source_id).first
+      end
+
+      def write_census_baseline!(fulltext, slug, ids)
+        freq = LemmaFrequencies.snapshot(fulltext, ids: ids)
+        stats = ReflexRootsIndexer.stats_snapshot(fulltext, ids: ids)
+        fulltext.create_table?(CENSUS_BASELINES_TABLE) do
+          String :slug, null: false
+          String :kind, null: false
+          String :lemma_folded
+          String :language
+          String :tier
+          Integer :n, null: false
+          index :slug
+        end
+        rows = freq.map do |(folded, language, tier), n|
+          { slug: slug, kind: "freq", lemma_folded: folded, language: language, tier: tier, n: n }
+        end
+        rows += stats.map { |language, n| { slug: slug, kind: "stats", language: language, n: n } }
+        fulltext.transaction do
+          rows.each_slice(BATCH_SIZE) { |batch| fulltext[CENSUS_BASELINES_TABLE].multi_insert(batch) }
+          # An empty contribution still needs its marker row, or a crash
+          # would leave no baseline to find.
+          fulltext[CENSUS_BASELINES_TABLE].insert(slug: slug, kind: "marker", n: 0) if rows.empty?
+        end
+      end
+
+      # baseline → the source's whole current contribution, applied to
+      # both aggregates and the baseline cleared in ONE transaction (so a
+      # crash leaves either the standing baseline or a finished move —
+      # never both). Returns the stats delta's gold-language moves.
+      def apply_census_from_baseline!(fulltext, slug, ids)
+        base = fulltext[CENSUS_BASELINES_TABLE].where(slug: slug)
+        freq = base.where(kind: "freq").to_h { |row| [[row[:lemma_folded], row[:language], row[:tier]], row[:n]] }
+        stats = base.where(kind: "stats").to_h { |row| [row[:language], row[:n]] }
+        after = LemmaFrequencies.snapshot(fulltext, ids: ids)
+        after_stats = ReflexRootsIndexer.stats_snapshot(fulltext, ids: ids)
+        fulltext.transaction do
+          LemmaFrequencies.apply_delta(fulltext, before: freq, after: after)
+          moves = ReflexRootsIndexer.apply_stats_delta!(fulltext, before: stats, after: after_stats)
+          base.delete
+          moves
+        end
+      end
+
+      # -- the shadow build (SHADOW_TABLE note) -----------------------------
+
+      # Whether this run's main-index write goes to a shadow: over the
+      # budget, contentless shape (a legacy contentful file keeps its old
+      # path, like every recipe of this family), and a sidecar complete
+      # enough to name the old table's membership — else in place,
+      # announced.
+      def shadow_main?(catalog, fulltext, ids, row_budget, source_id:, slug:, progress: nil)
+        return false unless ids.size > row_budget && fts_contentless?(fulltext)
+        return true if shadow_ready?(catalog, fulltext, source_id)
+
+        progress&.stage("index slice: #{slug} — #{ids.size} rows over the #{row_budget}-row in-place budget, " \
+                        "but the row-sha sidecar incomplete (a slice predating it): writing in place " \
+                        "under the governor until a full rebuild backfills it")
+        false
+      end
+
+      # The sidecar names every OTHER source's indexed membership: each
+      # source either has sidecar rows, or no indexed rows at all (its
+      # first and last live passages probed in the index — a slice that
+      # predates the sidecar was written whole, so both would be there).
+      # O(sources) point lookups.
+      def shadow_ready?(catalog, fulltext, source_id)
+        return false unless fulltext.table_exists?(ROW_SHAS_TABLE)
+
+        catalog[:sources].exclude(id: source_id).select_map(:id).all? do |other|
+          next true unless fulltext[ROW_SHAS_TABLE].where(source_id: other).empty?
+
+          scope = live_passages(catalog).where(Sequel[:documents][:source_id] => other)
+          probes = [scope.min(Sequel[:passages][:id]), scope.max(Sequel[:passages][:id])].compact
+          probes.empty? || fulltext[TABLE].where(rowid: probes).empty?
+        end
+      end
+
+      # Build SHADOW_TABLE as an append-only linear pass (class note):
+      # every sidecar-recorded row of the other sources, re-derived from
+      # the catalog by id, then the refreshing source's live rows. Batch-
+      # ticked, governed, committed every SHADOW_COMMIT_BATCHES batches.
+      # Returns the rows written.
+      def build_fts_shadow!(catalog:, fulltext:, source_id:, progress: nil)
+        fulltext.drop_table?(SHADOW_TABLE)
+        fulltext.run(CREATE_TABLE.sub("passages_fts", SHADOW_TABLE.to_s))
+        slugs = source_slugs(catalog)
+        governor = FtsGovernor.new(fulltext: fulltext, table: SHADOW_TABLE, progress: progress)
+        count = 0
+        shadow_rows(catalog, fulltext, source_id).each_slice(BATCH_SIZE * SHADOW_COMMIT_BATCHES) do |group|
+          fulltext.transaction do
+            group.each_slice(BATCH_SIZE) do |batch|
+              fulltext[SHADOW_TABLE].multi_insert(
+                batch.map { |row| fts_row(row, language: true, source_slugs: slugs, contentless: true) }
+              )
+              count += batch.size
+              progress&.load_tick(count, 0) if batch.size == BATCH_SIZE
+              governor.tick!
+            end
+          end
+        end
+        checkpoint_wal!(fulltext, progress: progress)
         count
+      end
+
+      # The swap: one transaction drops the old table whole (pages to the
+      # freelist — no tombstones, no merges) and renames the shadow over
+      # it (fts5's xRename carries its shadow tables along).
+      def swap_fts_shadow!(fulltext)
+        fulltext.transaction do
+          fulltext.drop_table(TABLE)
+          fulltext.rename_table(SHADOW_TABLE, TABLE)
+        end
+      end
+
+      # The shadow's row stream: the sidecar-keyed membership of the other
+      # sources (paged by rowid — never the whole id set in memory), then
+      # the refreshing source's live rows.
+      def shadow_rows(catalog, fulltext, source_id)
+        Enumerator.new do |y|
+          last = 0
+          loop do
+            others = fulltext[ROW_SHAS_TABLE].exclude(source_id: source_id)
+            page = others.where { rowid > last }.order(:rowid).limit(BATCH_SIZE).select_map(:rowid)
+            break if page.empty?
+
+            shadow_catalog_rows(catalog).where(Sequel[:passages][:id] => page).each { |row| y << row }
+            last = page.last
+          end
+          shadow_catalog_rows(catalog)
+            .where(Sequel[:passages][:withdrawn] => false, Sequel[:documents][:withdrawn] => false)
+            .where(Sequel[:documents][:source_id] => source_id).each { |row| y << row }
+        end
+      end
+
+      # The lean four-column row fts_row needs — no liveness filter: a
+      # recorded row the old table still holds (a withdrawal not yet
+      # refreshed) is membership the shadow must keep.
+      def shadow_catalog_rows(catalog)
+        catalog[:passages]
+          .join(:documents, id: Sequel[:passages][:document_id])
+          .select(Sequel[:passages][:text_search].as(:text_normalized), Sequel[:passages][:id].as(:passage_id),
+                  Sequel[:passages][:language], Sequel[:documents][:source_id].as(:source_id))
+      end
+
+      # Whether this refresh writes the source's trigram slice at all:
+      # flagged now, or indexed by the last build (refresh_trigram_slice's
+      # own hands-off rule).
+      def trigram_touched?(fulltext, slug, fuzzy_slugs)
+        fuzzy_slugs.include?(slug) || !fulltext[TRIGRAM_SCOPE_TABLE].where(slug: slug).empty?
       end
 
       # -- the bulk slice mode internals (P111-1) ----------------------------
@@ -1082,6 +1458,7 @@ module Nabu
           String :finished_at
           Integer :live_rows
           Integer :max_passage_id
+          String :shape # "atomic" | "bulk" — CENSUS_BASELINES_TABLE note
         end
         ensure_slice_stamp_columns(fulltext)
       end
@@ -1094,16 +1471,28 @@ module Nabu
         fulltext.alter_table(SLICE_REFRESHES_TABLE) do
           add_column :live_rows, Integer unless columns.include?(:live_rows)
           add_column :max_passage_id, Integer unless columns.include?(:max_passage_id)
+          add_column :shape, String unless columns.include?(:shape)
         end
       end
 
-      def mark_slice_pending!(fulltext, slug)
+      # +shape+ records the run's transaction shape (the census heal's
+      # question); nil — the index watcher's hygiene marking a killed
+      # writer's slice — leaves the shape the run itself recorded.
+      def mark_slice_pending!(fulltext, slug, shape: nil)
         create_slice_refreshes_table(fulltext)
+        update = { started_at: Time.now.utc.iso8601, finished_at: nil, live_rows: nil, max_passage_id: nil }
+        update[:shape] = shape if shape
         fulltext[SLICE_REFRESHES_TABLE]
-          .insert_conflict(target: :slug,
-                           update: { started_at: Time.now.utc.iso8601, finished_at: nil,
-                                     live_rows: nil, max_passage_id: nil })
-          .insert(slug: slug, started_at: Time.now.utc.iso8601, finished_at: nil)
+          .insert_conflict(target: :slug, update: update)
+          .insert(slug: slug, started_at: Time.now.utc.iso8601, finished_at: nil, shape: shape)
+      end
+
+      # The shape the slice's last run recorded, nil when unrecorded.
+      def slice_shape(fulltext, slug)
+        return nil unless fulltext.table_exists?(SLICE_REFRESHES_TABLE)
+        return nil unless fulltext[SLICE_REFRESHES_TABLE].columns.include?(:shape)
+
+        fulltext[SLICE_REFRESHES_TABLE].where(slug: slug).get(:shape)
       end
 
       def mark_slice_finished!(fulltext, slug, live_rows: nil, max_passage_id: nil)
@@ -1193,15 +1582,23 @@ module Nabu
 
       # Apply the deferred-merge settings around the block and ALWAYS
       # restore the defaults — the settings are persisted index config, so
-      # an exception must not leave a never-merging index behind.
+      # an exception must not leave a never-merging index behind. The
+      # ensure arm cannot cover a SIGKILL, so each table's restore is
+      # JOURNALED before its bulk setting applies (Store::EngineIntents):
+      # a killed run's restore replays on the next read-write connect.
       def with_bulk_write_mode(fulltext, tables)
         return yield if tables.empty?
 
+        intents = []
         begin
-          tables.each { |table| apply_merge_settings(fulltext, table, BULK_MERGE_SETTINGS) }
+          tables.each do |table|
+            intents << EngineIntents.journal!(fulltext, table: table, restore: DEFAULT_MERGE_SETTINGS)
+            apply_merge_settings(fulltext, table, BULK_MERGE_SETTINGS)
+          end
           yield
         ensure
           tables.each { |table| apply_merge_settings(fulltext, table, DEFAULT_MERGE_SETTINGS) }
+          EngineIntents.clear!(fulltext, intents)
         end
       end
 
@@ -1212,24 +1609,38 @@ module Nabu
         settings.each { |key, value| fulltext[table].insert(table => key, :rank => value) }
       end
 
-      # The deferred-merge consolidation after every governed slice write —
-      # its own announced stage, AFTER the defaults are restored (crash-safe
-      # order) and outside the write's transaction. On a debt-free index it
-      # is one no-op merge chunk per table (consolidate_merges! probe).
+      # The merge PROBE after every governed slice write — its own
+      # announced stage, AFTER the defaults are restored (crash-safe order)
+      # and outside the write's transaction: ONE bounded chunk per table
+      # (SYNC_PROBE_CHUNKS), never a consolidation to completion. The
+      # maintenance rail (Store::IndexMaintenance, `nabu index maintain`)
+      # owns consolidation — the proportionality law keeps the sync path
+      # O(Δ), and an index's standing merge debt is O(index), not O(Δ): the
+      # 2026-11 ndl delta that hung 5h+ was paying exactly that debt inline.
+      # Debt the probe leaves is REPORTED (IndexMaintenance.debt_line) as a
+      # durable note naming the rail. On a debt-free index the probe is one
+      # no-op chunk per table, exactly as before.
       def consolidate_deferred_merges!(fulltext, tables, slug:, ledger: nil, progress: nil)
         return if tables.empty?
 
         timed_sync_stage(ledger, slug, "fts_merge",
-                         "index slice: #{slug} — merge consolidation (deferred merges)", progress) do
-          tables.each { |table| consolidate_merges!(fulltext, table, progress: progress) }
+                         "index slice: #{slug} — merge consolidation probe (one bounded chunk per table)",
+                         progress) do
+          tables.each do |table|
+            consolidate_merges!(fulltext, table, progress: progress, max_chunks: SYNC_PROBE_CHUNKS)
+            line = IndexMaintenance.debt_line(fulltext, table)
+            progress&.note(line) if line
+          end
         end
       end
+      SYNC_PROBE_CHUNKS = 1
 
       # Positive incremental merges until the total_changes probe reports a
-      # no-op call (< 2 — the documented completion signal). Proportional to
-      # the segment storm the bulk writes created; ticks so an hours-scale
-      # consolidation is never silent.
-      def consolidate_merges!(fulltext, table, progress: nil)
+      # no-op call (< 2 — the documented completion signal), or until
+      # +max_chunks+ chunks ran (the sync path's probe). Proportional to
+      # the debt it consumes; ticks so an hours-scale consolidation (the
+      # maintenance rail's) is never silent.
+      def consolidate_merges!(fulltext, table, progress: nil, max_chunks: nil)
         chunks = 0
         loop do
           worked = merge_chunk!(fulltext, table) >= MERGE_NOOP_LINE
@@ -1239,6 +1650,7 @@ module Nabu
             checkpoint_wal!(fulltext, progress: progress) # merges rewrite pages too — keep the WAL bounded
           end
           break unless worked
+          break if max_chunks && chunks >= max_chunks
         end
         checkpoint_wal!(fulltext, progress: progress)
         chunks
@@ -1684,30 +2096,36 @@ module Nabu
         fts_contentless?(fulltext) ? Sequel.lit("rowid").as(:passage_id) : Sequel[:passage_id]
       end
 
-      # Whether the LIVE lemma table is the v1 shape that still stores each
-      # row's passage urn (class note) — the write side keeps filling the
-      # column there, and passage-keyed reads go through its urn index
-      # (lemma_passage_key). A fresh rebuild! always creates the narrow
-      # shape; same next-full-rebuild arrival as fts_language_column?.
-      def lemma_urn_column?(fulltext)
-        fulltext[LEMMA_TABLE].columns.include?(:urn)
+      # == The retired v1 lemma shape (class note)
+      #
+      # A v1 passage_lemmas still stores each row's passage urn and keys
+      # its passage lookups on a urn B-tree; every consumer used to probe
+      # the shape and branch. The coming from-scratch rebuild mints v2
+      # everywhere, so the branches are gone — and a v1 file that is still
+      # live must not fall into the v2 path either (a passage_id filter
+      # there scans 56M rows; a v2-shaped insert fails its NOT NULL urn).
+      # Every entry point that once branched calls this guard instead: one
+      # clear, actionable error, never a silent wrong path.
+      class LegacyLemmaShape < Nabu::Error; end
+      LEGACY_LEMMA_MESSAGE = "this index predates the v2 lemma shape (passage_lemmas still carries the " \
+                             "v1 urn column) — run a full rebuild (`nabu rebuild`) to mint the " \
+                             "passage-keyed table"
+
+      # Raise LegacyLemmaShape on a v1 lemma table; nil otherwise (an absent
+      # table is not this guard's business — callers keep their own
+      # table_exists? degrade). One column read (SELECT * LIMIT 0).
+      def require_v2_lemmas!(fulltext)
+        return nil unless fulltext.table_exists?(LEMMA_TABLE)
+        raise LegacyLemmaShape, LEGACY_LEMMA_MESSAGE if fulltext[LEMMA_TABLE].columns.include?(:urn)
+
+        nil
       end
 
-      # The column a passage-keyed lemma lookup filters on: :passage_id on
-      # the narrow shape, :urn on a v1 table (whose B-tree is the urn
-      # index — a passage_id filter there would scan 56M rows).
-      def lemma_passage_key(fulltext)
-        lemma_urn_column?(fulltext) ? :urn : :passage_id
-      end
-
-      # The lemma rows of a set of passages, through whichever passage
-      # B-tree the live shape carries. +ids+ and +urns+ name the SAME
-      # passages (catalog ids and their urns); only the one the shape keys
-      # on is read, so a caller holding just one side resolves the other
-      # first (catalog urn/primary-key lookups). Unsliced — callers batch.
-      def lemma_rows_of_passages(fulltext, ids: nil, urns: nil)
-        key = lemma_passage_key(fulltext)
-        fulltext[LEMMA_TABLE].where(key => (key == :urn ? urns : ids).to_a)
+      # The lemma rows of a set of passages (catalog ids), through the
+      # passage_id B-tree. Unsliced — callers batch.
+      def lemma_rows_of_passages(fulltext, ids:)
+        require_v2_lemmas!(fulltext)
+        fulltext[LEMMA_TABLE].where(passage_id: ids.to_a)
       end
 
       # One streaming pass feeding the FTS and lemma tables (shared by
@@ -1724,24 +2142,28 @@ module Nabu
       # silent (the non-tty one-close-line contract), and the sync
       # fallthrough into this full rebuild would otherwise stamp passage
       # counts onto the still-open parse+load stage.
-      def insert_passage_batches(fulltext, dataset, tiers, slugs = nil, progress: nil)
+      # +fts: false+ (the shadow path, SHADOW_TABLE note) skips each batch's
+      # passages_fts half — the swapped-in shadow already holds those rows.
+      def insert_passage_batches(fulltext, dataset, tiers, slugs = nil, progress: nil, fts: true)
         with_language = fts_language_column?(fulltext)
         with_source = slugs && fts_source_column?(fulltext) ? slugs : nil
         contentless = fts_contentless?(fulltext)
-        with_urn = lemma_urn_column?(fulltext)
+        require_v2_lemmas!(fulltext)
         count = 0
         lemma_count = 0
         chars = Hash.new(0)
-        governor = fts_governor(fulltext, TABLE, progress: progress)
+        governor = (fts_governor(fulltext, TABLE, progress: progress) if fts)
         with_shas = contentless && fulltext.table_exists?(ROW_SHAS_TABLE)
         dataset.each_slice(BATCH_SIZE) do |batch|
-          fulltext[TABLE].multi_insert(
-            batch.map do |row|
-              fts_row(row, language: with_language, source_slugs: with_source,
-                           contentless: contentless)
-            end
-          )
-          rows = batch.flat_map { |row| lemma_rows(row, tiers: tiers, slugs: slugs, with_urn: with_urn) }
+          if fts
+            fulltext[TABLE].multi_insert(
+              batch.map do |row|
+                fts_row(row, language: with_language, source_slugs: with_source,
+                             contentless: contentless)
+              end
+            )
+          end
+          rows = batch.flat_map { |row| lemma_rows(row, tiers: tiers, slugs: slugs) }
           fulltext[LEMMA_TABLE].multi_insert(rows)
           # LAST statement of the batch — the ROW_SHAS_TABLE invariant.
           write_row_shas(fulltext, batch) if with_shas
@@ -2402,11 +2824,10 @@ module Nabu
       end
 
       # Whether any of the slice's passages carries lemma rows — bounded
-      # passage-key IN probes, stopping at the first hit.
-      def source_lemma_rows?(fulltext, ids:, urns:)
-        key = lemma_passage_key(fulltext)
-        (key == :urn ? urns : ids).to_a.each_slice(BATCH_SIZE).any? do |batch|
-          !fulltext[LEMMA_TABLE].where(key => batch).empty?
+      # passage_id IN probes, stopping at the first hit.
+      def source_lemma_rows?(fulltext, ids:)
+        ids.to_a.each_slice(BATCH_SIZE).any? do |batch|
+          !fulltext[LEMMA_TABLE].where(passage_id: batch).empty?
         end
       end
 
@@ -2442,13 +2863,13 @@ module Nabu
         doomed.size
       end
 
-      # Delete the source's lemma rows by passage key — passage_id, or urn
-      # on a v1 table (B-tree indexed either way — no scan). +ids+ and
-      # +urns+ name the same passages. Returns the number of rows deleted.
-      def delete_source_lemma_rows(fulltext, ids:, urns:)
-        key = lemma_passage_key(fulltext)
-        (key == :urn ? urns : ids).to_a.each_slice(BATCH_SIZE).sum do |batch|
-          fulltext[LEMMA_TABLE].where(key => batch).delete
+      # Delete the source's lemma rows by passage_id (B-tree indexed — no
+      # scan). Returns the number of rows deleted. A retired v1 table
+      # refuses here, before the slice's first lemma write.
+      def delete_source_lemma_rows(fulltext, ids:)
+        require_v2_lemmas!(fulltext)
+        ids.to_a.each_slice(BATCH_SIZE).sum do |batch|
+          fulltext[LEMMA_TABLE].where(passage_id: batch).delete
         end
       end
 
@@ -2529,8 +2950,133 @@ module Nabu
         ids.to_a.each_slice(BATCH_SIZE) { |batch| fulltext[table].where(rowid: batch).delete }
       end
 
+      # -- char postings at the delta grain (the incrementality review) ------
+      #
+      # char_postings is DECOMPOSABLE: per (source, char, language), the
+      # count of the source's live passages carrying that char — a sum over
+      # rows. So a delta moves it exactly by subtracting the changed rows'
+      # OLD contribution and adding the upserted rows' new one (the insert
+      # pass already accumulates the latter), replacing the whole-source
+      # catalog scan that used to re-run on EVERY delta (the review's
+      # "recomputed whole, re-done next slice"). The hard half is the OLD
+      # contribution, read BEFORE the slice's first destructive write:
+      #
+      #   - a changed row the sidecar does not record was never indexed (an
+      #     insert, or a re-entry whose sha left at withdrawal): nothing to
+      #     subtract;
+      #   - a recorded row whose sha still matches the catalog (a
+      #     withdrawal, an unchanged re-entry): the catalog holds exactly
+      #     the indexed text (the sha covers text AND language) — subtract
+      #     its posted chars;
+      #   - a recorded row whose sha moved (a REVISION): the replaced text is
+      #     gone. passage_chars still holds the row's old distinct HAN set,
+      #     and when every char the source posts is Han (a Han-pure source)
+      #     that set IS its old posted set — subtract it. Otherwise the
+      #     grain is unsound for this source.
+      #
+      # Unsound (a mixed-script revision, a slice predating the sidecar, a
+      # source already flagged) returns nil, and the delta flags the
+      # source's postings stale (Store::StaleAggregates) — the maintenance
+      # rail recomputes them; nothing O(source) runs inline.
+      POSTINGS_AGGREGATE = "char_postings"
+
+      def char_postings_basis(catalog, fulltext, source_id, slug, ids)
+        return nil unless fulltext.table_exists?(CHAR_POSTINGS_TABLE) && fulltext.table_exists?(ROW_SHAS_TABLE)
+        return nil if StaleAggregates.stale?(fulltext, aggregate: POSTINGS_AGGREGATE, scope: slug)
+
+        posted = fulltext[CHAR_POSTINGS_TABLE].where(source_id: source_id)
+        # A slice predating the sidecar records nothing — no row could be
+        # told from an insert.
+        return nil if fulltext[ROW_SHAS_TABLE].where(source_id: source_id).empty? && !posted.empty?
+
+        han_pure = posted.select_map(:char).all? { |char| char.match?(HAN) }
+        decrements = Hash.new(0)
+        ids.to_a.each_slice(BATCH_SIZE) do |batch|
+          revised = old_postings_by_sidecar(catalog, fulltext, batch, decrements)
+          next if revised.empty?
+          return nil unless han_pure && fulltext.table_exists?(PASSAGE_CHARS_TABLE)
+
+          fulltext[PASSAGE_CHARS_TABLE].where(rowid: revised).select(:chars, :language).each do |row|
+            row[:chars].each_char { |char| decrements[[source_id, char, row[:language]]] += 1 }
+          end
+        end
+        decrements
+      end
+
+      # One batch's sidecar-vouched old contribution, accumulated into
+      # +decrements+; returns the batch's REVISED rowids (recorded, sha
+      # moved) for the caller's Han-pure rule.
+      def old_postings_by_sidecar(catalog, fulltext, batch, decrements)
+        recorded = fulltext[ROW_SHAS_TABLE].where(rowid: batch).select_hash(:rowid, :sha)
+        return [] if recorded.empty?
+
+        revised = []
+        catalog[:passages].join(:documents, id: Sequel[:passages][:document_id])
+                          .where(Sequel[:passages][:id] => recorded.keys)
+                          .select(Sequel[:passages][:id].as(:passage_id),
+                                  Sequel[:passages][:text_search].as(:text_normalized),
+                                  Sequel[:passages][:language], Sequel[:passages][:content_sha256],
+                                  Sequel[:documents][:source_id].as(:source_id))
+                          .each do |row|
+          if row_sha(row[:content_sha256]).b == recorded.fetch(row[:passage_id]).to_s.b
+            accumulate_char_postings(decrements, row)
+          else
+            revised << row[:passage_id]
+          end
+        end
+        revised
+      end
+
+      # Apply a delta's arithmetic to the source's postings rows, or flag
+      # them stale when +basis+ is nil (char_postings_basis note). Rows
+      # reaching zero are pruned — the same row set a full recompute mints.
+      def apply_char_postings_delta!(fulltext, slug:, source_id:, basis:, increments:)
+        if basis.nil?
+          StaleAggregates.mark!(fulltext, aggregate: POSTINGS_AGGREGATE, scope: slug,
+                                          reason: "a delta's old contribution was unrecoverable at the row grain")
+          return
+        end
+
+        (basis.keys | increments.keys).each do |key|
+          net = increments.fetch(key, 0) - basis.fetch(key, 0)
+          upsert_char_posting(fulltext, source_id, key, net) unless net.zero?
+        end
+      end
+
+      def upsert_char_posting(fulltext, source_id, key, net)
+        _source, char, language = key
+        scope = fulltext[CHAR_POSTINGS_TABLE].where(source_id: source_id, char: char, language: language)
+        current = scope.get(:docs)
+        total = (current || 0) + net
+        if total <= 0
+          scope.delete
+        elsif current
+          scope.update(docs: total)
+        else
+          fulltext[CHAR_POSTINGS_TABLE].insert(source_id: source_id, char: char, language: language, docs: total)
+        end
+      end
+
+      # The maintenance rail's recompute of ONE source's postings (the
+      # O(source) re-read the delta grain refuses to run inline): swap the
+      # source's rows for a fresh accumulation, clear its stale flag.
+      # Returns the rows written.
+      def recompute_char_postings!(catalog:, fulltext:, slug:)
+        source_id = catalog[:sources].where(slug: slug).get(:id)
+        fulltext.transaction do
+          if source_id && fulltext.table_exists?(CHAR_POSTINGS_TABLE)
+            fulltext[CHAR_POSTINGS_TABLE].where(source_id: source_id).delete
+            chars = source_char_postings(catalog, source_id)
+            write_char_postings(fulltext, chars)
+          end
+          StaleAggregates.clear!(fulltext, aggregate: POSTINGS_AGGREGATE, scope: slug)
+          chars&.size || 0
+        end
+      end
+
       # The char-postings aggregate for ONE source, recomputed from a lean
-      # three-column catalog scan (refresh_source! delta-mode note).
+      # three-column catalog scan — the heal path and the maintenance
+      # rail's recompute; the delta grain never calls it.
       def source_char_postings(catalog, source_id)
         chars = Hash.new(0)
         live_passages(catalog)
@@ -2659,16 +3205,14 @@ module Nabu
       #   the lemma-aware second signals (parallels' rare-lemma co-occurrence,
       #   cognate-in-parallel, design §6), the sync slice delete, the
       #   frequency snapshots and the silver coverage guard look a passage's
-      #   lemmas up by it. A v1 table keeps its urn index instead
-      #   (lemma_passage_key) — the shape decides, so an interrupted
-      #   cycle_lemma_indexes on a live v1 file restores the v1 set.
+      #   lemmas up by it.
       # - language (P18-4 follow-up): `nabu language CODE` counts a language's
       #   gold rows; without it the card scans 2.85M rows (owner-measured 11.6 s
       #   per card). All rebuilt with the table (never migrated — the fulltext
       #   db is derived-of-derived; class note).
       def create_lemma_indexes(fulltext)
         fulltext.add_index(LEMMA_TABLE, :lemma_folded)
-        fulltext.add_index(LEMMA_TABLE, lemma_passage_key(fulltext))
+        fulltext.add_index(LEMMA_TABLE, :passage_id)
         fulltext.add_index(LEMMA_TABLE, :language)
       end
 
@@ -2677,6 +3221,7 @@ module Nabu
       # in one sorted pass (the P36-2 trick at command grain). The ensure
       # arm means an interrupted apply still leaves the table indexed.
       def cycle_lemma_indexes(fulltext)
+        require_v2_lemmas!(fulltext)
         drop_lemma_indexes(fulltext)
         yield
       ensure
@@ -2684,7 +3229,7 @@ module Nabu
       end
 
       def drop_lemma_indexes(fulltext)
-        %i[lemma_folded passage_id urn language].each do |column|
+        %i[lemma_folded passage_id language].each do |column|
           fulltext.drop_index(LEMMA_TABLE, column)
         rescue Sequel::DatabaseError
           nil # a prior interrupted cycle may have left this one missing
@@ -2792,15 +3337,11 @@ module Nabu
       # +slugs+ (source_id → slug) selects the source's LemmaKeys spec
       # (P118-R4 S1): bhsa/dss read their own lexeme keys, everyone else
       # "lemma". Absent map (a caller predating the registry) = default.
-      # +with_urn+ adds the passage urn for a v1 table (lemma_urn_column?).
-      def lemma_rows(row, tiers: {}, slugs: nil, with_urn: false)
+      def lemma_rows(row, tiers: {}, slugs: nil)
         tier = tiers.fetch(row[:source_id], GOLD_TIER)
-        rows = if tier == EQUIVALENCE_TIER
-                 equivalence_rows(row)
-               else
-                 annotation_rows(row, tier: tier, slugs: slugs)
-               end
-        with_urn ? rows.map { |lemma| lemma.merge(urn: row.fetch(:urn)) } : rows
+        return equivalence_rows(row) if tier == EQUIVALENCE_TIER
+
+        annotation_rows(row, tier: tier, slugs: slugs)
       end
 
       # The annotation-keyed rows (every tier but equivalence).

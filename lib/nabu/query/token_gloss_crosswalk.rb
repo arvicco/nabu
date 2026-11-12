@@ -95,14 +95,14 @@ module Nabu
 
       # The lemma index's passage keys for +folded+, in passage order.
       def candidates(folded)
-        key = Store::Indexer.lemma_passage_key(@fulltext)
-        @fulltext[Store::Indexer::LEMMA_TABLE].where(lemma_folded: folded).order(key).distinct.select_map(key)
+        Store::Indexer.require_v2_lemmas!(@fulltext)
+        @fulltext[Store::Indexer::LEMMA_TABLE].where(lemma_folded: folded).order(:passage_id).distinct
+                                              .select_map(:passage_id)
       end
 
       def target_annotations(target, slice, pattern)
-        key = Store::Indexer.lemma_passage_key(@fulltext) == :urn ? :urn : :id
         visible_passages(lang: nil, license: nil, source: target)
-          .where(Sequel[:passages][key] => slice)
+          .where(Sequel[:passages][:id] => slice)
           .where(Sequel.like(Sequel[:passages][:annotations_json], pattern))
           .order(Sequel[:passages][:id])
           .select_map(Sequel[:passages][:annotations_json])

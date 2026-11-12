@@ -427,11 +427,10 @@ module Nabu
       # The anchor's folded lemmas mapped to their global df, keeping only the
       # rare ones (2 ≤ df ≤ RARE_LEMMA_DF): df==1 co-occurs with nothing, common
       # lemmas do not diagnose an echo and would balloon the IN-list probe.
-      # The anchor's rows come through the passage-key B-tree (passage_id;
-      # its urn on a v1 table — Store::Indexer.lemma_passage_key).
+      # The anchor's rows come through the passage_id B-tree
+      # (Store::Indexer.lemma_rows_of_passages).
       def rare_anchor_lemmas(anchor)
-        folded = Store::Indexer.lemma_rows_of_passages(@fulltext, ids: [anchor.fetch(:passage_id)],
-                                                                  urns: [anchor.fetch(:urn)])
+        folded = Store::Indexer.lemma_rows_of_passages(@fulltext, ids: [anchor.fetch(:passage_id)])
                                .distinct.select_map(:lemma_folded)
         folded.each_with_object({}) do |lemma, acc|
           df = @fulltext[Store::Indexer::LEMMA_TABLE].where(lemma_folded: lemma).count

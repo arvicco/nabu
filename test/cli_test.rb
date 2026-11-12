@@ -5868,12 +5868,99 @@ class CLITest < Minitest::Test
     end
   end
 
+  # Index writers supervise themselves (Nabu::IndexWatcher): the refresh
+  # runs under a forked watcher, armed by --deadline here, and the
+  # heartbeat file it feeds is gone when the command ends.
+  def test_index_refresh_runs_under_the_index_watcher
+    with_deferred_wave do |config|
+      _out, err, status = with_config(config) { run_cli(%w[index refresh pap --deadline 30]) }
+
+      assert_nil status, err
+      assert_match(/index watcher: armed — kills the writer at 30m00s \(--deadline; --deadline 0 disables\)/, err)
+      assert_empty Dir.glob(File.join(config.db_dir, ".index-writer-*.heartbeat")), "the heartbeat is cleaned up"
+    end
+  end
+
   def test_index_refresh_refuses_an_unknown_slug_naming_the_valid_set
     with_deferred_wave do |config|
       _out, err, status = with_config(config) { run_cli(%w[index refresh nope]) }
 
       assert_equal 1, status
       assert_match(/index refresh: unknown source "nope" — known sources: pap/, err)
+    end
+  end
+
+  # The preflight gate (the proportionality law, tool side): the stage plan
+  # with ledger times prints BEFORE the db is touched, and a predicted
+  # inline run past the budget refuses unless --accept-long.
+  def plant_long_index_history(config, slug: "pap")
+    ledger = Nabu::Store::Ledger.open!(config.history_path)
+    Nabu::Store::StageTimings.record!(ledger, kind: "sync", scope: slug, stage: "index_slice", seconds: 40 * 60)
+  ensure
+    ledger&.disconnect
+  end
+
+  def test_index_refresh_refuses_a_predicted_long_run_before_touching_the_index
+    with_deferred_wave do |config|
+      plant_long_index_history(config)
+      before = File.mtime(config.fulltext_path)
+      _out, err, status = with_config(config) { run_cli(%w[index refresh pap]) }
+
+      assert_equal 1, status
+      assert_match(/index preflight: pap — predicted inline index work ~40m/, err)
+      assert_match(/index_slice/, err)
+      assert_match(/--accept-long/, err)
+      assert_equal before, File.mtime(config.fulltext_path), "the refused run never opened the index"
+    end
+  end
+
+  def test_index_refresh_runs_a_long_plan_with_accept_long
+    with_deferred_wave do |config|
+      plant_long_index_history(config)
+      out, err, status = with_config(config) { run_cli(%w[index refresh pap --accept-long --deadline 0]) }
+
+      assert_nil status, err
+      assert_match(/index preflight: pap — predicted inline index work ~40m/, err)
+      assert_match(/index refresh: pap — indexed 2 passages/, out)
+    end
+  end
+
+  def test_sync_refuses_a_predicted_long_index_run
+    with_deferred_wave do |config|
+      File.write(config.sources_path, <<~YAML)
+        pap:
+          adapter: CLITest::IndexRefreshAdapter
+      YAML
+      plant_long_index_history(config)
+      _out, err, status = with_config(config) { run_cli(%w[sync pap --parse-only]) }
+
+      assert_equal 1, status
+      assert_match(/index preflight: pap — predicted inline index work ~40m/, err)
+      assert_match(/--accept-long/, err)
+    end
+  end
+
+  # The maintenance rail: one command owns corpus-scale index work —
+  # stale-aggregate recomputes, merge consolidation, WAL truncation —
+  # under the index watcher, and the doctor lists the stale flags it owes.
+  def test_index_maintain_recomputes_stale_aggregates_under_the_watcher
+    with_deferred_wave do |config|
+      fulltext = Nabu::Store.connect_fulltext(config.fulltext_path)
+      Nabu::Store::StaleAggregates.mark!(fulltext, aggregate: "char_postings", scope: "pap", reason: "planted")
+      fulltext.disconnect
+
+      out, = with_config(config) { run_cli(%w[index doctor]) }
+      assert_match(/stale aggregates \(nabu index maintain recomputes\):/, out)
+      assert_match(/char_postings \(pap\) since/, out)
+
+      out, err, status = with_config(config) { run_cli(%w[index maintain --deadline 30]) }
+
+      assert_nil status, err
+      assert_match(/index watcher: armed — kills the writer at 30m00s/, err)
+      assert_match(/index maintain: recomputed char_postings \(pap\)/, out)
+      assert_match(/merge chunks/, out)
+      out, = with_config(config) { run_cli(%w[index doctor]) }
+      assert_match(/stale aggregates: none/, out)
     end
   end
 
@@ -5888,6 +5975,61 @@ class CLITest < Minitest::Test
       with_config(config) { run_cli(%w[index refresh pap]) }
       out, = with_config(config) { run_cli(%w[index doctor]) }
       assert_match(/pap: current/, out)
+    end
+  end
+
+  # The lane-coverage check: with_deferred_wave's registry no longer
+  # flags pap for the fuzzy lane, yet the built trigram scope holds it.
+  def test_index_doctor_reports_lane_coverage_findings_loudly
+    with_deferred_wave do |config|
+      out, _err, status = with_config(config) { run_cli(%w[index doctor]) }
+
+      assert_nil status
+      assert_match(/lane coverage \(config flags vs built scope vs rows\):/, out)
+      assert_match(/⚠ trigram: pap is in the built scope but no longer flagged/, out)
+    end
+  end
+
+  # -- rebuild runs + dead run rows surface on status and the doctor -------
+
+  def dead_pid
+    pid = Process.spawn("true")
+    Process.wait(pid)
+    pid
+  end
+
+  def seed_dead_rebuild_and_sync(config)
+    ledger = Nabu::Store::Ledger.open!(config.history_path)
+    Nabu::Store::RebuildRuns.start!(ledger, mode: "incremental", planned_stages: %w[index], git_sha: "abc",
+                                            pid: dead_pid, at: Time.utc(2026, 11, 9, 22, 37))
+    Nabu::Store::Run.create(source_slug: "pap", started_at: Time.utc(2026, 11, 10), status: "running",
+                            pid: dead_pid)
+  ensure
+    ledger&.disconnect
+  end
+
+  def test_index_doctor_flags_an_unfinished_rebuild_and_closes_dead_run_rows
+    with_fuzzy_corpus do |config|
+      seed_dead_rebuild_and_sync(config)
+      out, _err, status = with_config(config) { run_cli(%w[index doctor]) }
+
+      assert_nil status
+      assert_match(/⚠ rebuild \(incremental\) started 2026-11-09 22:37:00 UTC, never completed/, out)
+      assert_match(/never completed — the index may be partial/, out)
+      assert_match(/closed 1 dead run row\(s\) "abandoned"/, out)
+      ledger = Nabu::Store::Ledger.open!(config.history_path)
+      assert_equal "abandoned", Nabu::Store::Run.where(source_slug: "pap").get(:status)
+      ledger.disconnect
+    end
+  end
+
+  def test_status_flags_an_unfinished_rebuild
+    with_fuzzy_corpus do |config|
+      seed_dead_rebuild_and_sync(config)
+      out, _err, status = with_config(config) { run_cli(%w[status]) }
+
+      assert_nil status
+      assert_match(/⚠ rebuild \(incremental\) started 2026-11-09 22:37:00 UTC, never completed/, out)
     end
   end
 

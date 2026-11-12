@@ -60,17 +60,53 @@ module Nabu
       # $stderr is a tty: git output streams raw (its own \r overwrites the line)
       # and a \r-updating "loading…" counter refreshes each tick. Non-tty: no git
       # streaming (callbacks stay nil) and one plain line per 100 documents.
+      # Under supervised_index_write every reporter is TEED into the index
+      # watcher's heartbeat (Nabu::IndexWatcher.tee) — the ticks the
+      # watcher's stall clock reads.
       def progress_reporter
         tty = $stderr.tty?
         state = { stage: nil, started: nil, processed: 0, errored: 0, last: 0 }
         @progress_state = state
-        Nabu::ProgressReporter.new(
+        reporter = Nabu::ProgressReporter.new(
           on_fetch_line: tty ? ->(line) { $stderr.print(line) } : nil,
           on_load_tick: load_tick(tty, state),
           on_stage: stage_tick(tty, state),
           on_note: progress_note(state),
           on_explain: verbose_narrator
         )
+        @watch_tee ? @watch_tee.call(reporter) : reporter
+      end
+
+      # Run an index-writing command under the forked index watcher
+      # (Nabu::IndexWatcher — the incrementality review's R6): heartbeat
+      # lines once ticks stall, a kill + hygiene at the deadline (2× the
+      # ledger estimate; --deadline MINUTES overrides, 0 disables). The
+      # arming line goes to stderr beside the progress lines. +slug+ names
+      # the source whose slice the hygiene leaves pending after a kill.
+      # +arm_kill+ false (the rebuild flavors) = heartbeats only unless the
+      # owner's --deadline arms one (IndexWatcher.deadline_for's rationale).
+      def supervised_index_write(config, label:, estimate:, slug: nil, arm_kill: true, &)
+        deadline = Nabu::IndexWatcher.deadline_for(estimate: estimate, override_minutes: options[:deadline],
+                                                   arm_default: arm_kill)
+        if deadline || $stderr.tty?
+          warn Nabu::IndexWatcher.arming_line(deadline: deadline, estimate: estimate, kill_default: arm_kill)
+        end
+        Nabu::IndexWatcher.supervise(label: label, fulltext_path: config.fulltext_path, deadline: deadline,
+                                     slug: slug) do |tee|
+          @watch_tee = tee
+          yield
+        ensure
+          @watch_tee = nil
+        end
+      end
+
+      # The ledger estimate for +kind+ over +scopes+ (IndexWatcher), read
+      # through a short read-only ledger handle; nil on a fresh box.
+      def watcher_estimate(config, kind:, scopes: nil, stages: nil)
+        ledger = open_ledger(config)
+        ledger && Nabu::IndexWatcher.ledger_estimate(ledger, kind: kind, scopes: scopes, stages: stages)
+      ensure
+        ledger&.disconnect
       end
 
       # --verbose (Ops::StageGuide): ONE narrator per invocation, so each

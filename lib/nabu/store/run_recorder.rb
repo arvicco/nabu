@@ -106,6 +106,46 @@ module Nabu
         rows
       end
 
+      # == The dead-row sweep (status / index doctor reads)
+      #
+      # The cheapest honest rule for a row stuck "running": every row
+      # carries the pid that opened it (ledger migration 013), and a row
+      # whose process no longer exists cannot still be running — closed
+      # "abandoned" at once, no 48 h wait. A recycled pid can only keep a
+      # dead row open (the conservative error). Rows minted before the pid
+      # column have no process to ask; such a row is closed only when a
+      # NEWER run of the same source has both started after it and
+      # finished — the source has demonstrably moved on, so the old
+      # process is gone or its result superseded. A pid-less row with no
+      # successor stays open: nothing honest can be concluded, and the
+      # age-based health finding still covers it. Returns the closed rows.
+      DEAD_NOTE = "abandoned: its process (pid %<pid>s) is gone and never closed the row " \
+                  "(closed by the dead-row sweep)"
+      SUPERSEDED_NOTE = "abandoned: superseded — a newer run of this source started and finished " \
+                        "after it; its process never closed the row (closed by the dead-row sweep)"
+
+      def self.sweep_dead!(clock: DEFAULT_CLOCK)
+        return [] unless Run.columns.include?(:pid)
+
+        now = clock.call
+        Run.where(status: "running").order(:id).all.select do |run|
+          note = dead_note(run)
+          next false if note.nil?
+
+          Run.where(id: run.id, status: "running").update(finished_at: now, status: ABANDONED, notes: note)
+          true
+        end
+      end
+
+      def self.dead_note(run)
+        return (RebuildRuns.alive?(run.pid) ? nil : format(DEAD_NOTE, pid: run.pid)) if run.pid
+
+        newer = Run.where(source_slug: run.source_slug).exclude(finished_at: nil)
+                   .where { started_at > run.started_at }
+        newer.empty? ? nil : SUPERSEDED_NOTE
+      end
+      private_class_method :dead_note
+
       def self.settle(runs, **fields)
         ids = runs.compact.map(&:id)
         Run.where(id: ids, status: "running").update(fields) unless ids.empty?
@@ -122,7 +162,9 @@ module Nabu
       # load's counts and loaded_at stamped; re-raises (after recording the
       # failure, which closes the row) on error.
       def record_load
-        run = Run.create(source_slug: @source_slug, kind: @kind, started_at: @clock.call, status: "running")
+        fields = { source_slug: @source_slug, kind: @kind, started_at: @clock.call, status: "running" }
+        fields[:pid] = Process.pid if Run.columns.include?(:pid) # the dead-row sweep's probe
+        run = Run.create(**fields)
         result = yield(run)
         run.update(loaded_at: @clock.call, **counts_from(result))
         run

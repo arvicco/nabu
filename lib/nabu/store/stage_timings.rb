@@ -37,6 +37,17 @@ module Nabu
                              seconds: seconds, rows: rows, finished_at: at)
       end
 
+      # Stamp the work-size denominator onto rows already flushed (a run
+      # that flushes each stage as it ends learns its corpus denominator —
+      # the indexed passage count — only later). +ids+ are record!'s
+      # return values; nils (a table-less ledger) are skipped.
+      def denominate!(ledger, ids, rows:)
+        ids = Array(ids).compact
+        return if ids.empty? || !table?(ledger)
+
+        ledger[TABLE].where(id: ids).update(rows: rows)
+      end
+
       # The governing (latest) row for one (kind, scope, stage) —
       # {seconds:, rows:, finished_at:} — or nil ("first run, no estimate").
       def last(ledger, kind:, scope:, stage:)
