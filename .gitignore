@@ -2,6 +2,7 @@
 /db/*.sqlite3
 /db/*.sqlite3-*
 /db/bench/
+/db/.index-writer-*.heartbeat
 /vectors.sqlite3
 
 # Personal research focus (nabu focus) — owner interest, not a publication
