@@ -1313,6 +1313,47 @@ clics:
   # CLICS release is a new tag the owner re-pins.
   sync_policy: manual
 
+cllg-freed:   # 02-sources row 404
+  adapter: Nabu::Adapters::CllgFreed
+  adopted: "2026-11-12"
+  axes: [classical]
+  siblings: cts
+  wired: true    # flipped 2026-11-12: first sync verified — 6,290 docs / 1,258,099
+                 # passages, 335 skipped by rule (331 no citeStructure + 4 SC_OVERLAP
+                 # deferrals), 1 honest quarantine (tlg2021.tlg037: citeStructure
+                 # use="n", an upstream typo for @n); 6,626 accounted, residue 0.
+                 # Probes green: show tlg0012…:1.1 ("Μῆνιν ἄειδε θεὰ"), search
+                 # "Πηληϊάδεω", 5 random passages. The fetch is a blobless SPARSE
+                 # clone of data/ + the root catalog + README/CITATION.cff (~1.0 GB
+                 # of TEI; the repo's 1.1 GB scripts/out classifier data never
+                 # transfers). Full parse ~9.5 min on this box — log + watchdog.
+  # The Inria CLLG Freed Corpus: the TLG E canon as citeStructure TEI (the
+  # cllg-tei family), Diogenes-derived; CC0 texts / CC-BY structure. Witness
+  # overlap, not duplication: ~1,605 works also held in perseus-greek /
+  # first1k-greek under their own edition urns (cllg-grc1 vs perseus-grc2 /
+  # 1st1K-grc1); ~5,021 works are new. ~225 SC works also sit here in the
+  # older TLG edition (cllg-sc carries the Cerf text).
+  sync_policy: manual
+
+cllg-sc:   # 02-sources row 403
+  adapter: Nabu::Adapters::CllgSc
+  adopted: "2026-11-12"
+  axes: [classical]
+  siblings: cts
+  wired: true    # flipped 2026-11-12: first sync verified EXACT on the census —
+                 # 366 docs (360 grc + 6 lat) / 94,713 passages, 0 errored,
+                 # 5 skipped by rule. Probes green: show tlg2042…:1.1 ("Πρῶτον
+                 # τῷ Κέλσῳ κεφάλαιόν ἐστι"), search "ψευδομαρτυρούμενος",
+                 # 5 random sections. ~118 MB shallow clone, ~30 s parse.
+  # The Inria CLLG Sources Chrétiennes corpus: the Greek (and 6 Latin)
+  # texts of the Cerf series as citeStructure TEI (the cllg-tei family).
+  # CC-BY floor; the texts ride the French critical-edition case law.
+  # Witness overlap, not duplication: ~225 SC works are also in the TLG
+  # canon (cllg-freed) and 42 in perseus/first1k — the newer Cerf text,
+  # a different edition urn (sc-cllg-grc1). sc_tlg.csv (the SC↔TLG
+  # alignment) is future edition-pairing material, not ingested.
+  sync_policy: manual
+
 # P82-2
 cme:
   adapter: Nabu::Adapters::Cme
@@ -7389,6 +7430,46 @@ titus-manichaica:   # 02-sources row 226
       J. Gippert, D.N. MacKenzie; D. Durkin-Meisterernst, N. Sims-Williams,
       W. Sundermann and the Corpus's edition editors; P. Zieme) wherever any text is
       displayed.
+
+titus-old-prussian:   # 02-sources row 402
+  adapter: Nabu::Adapters::TitusOldPrussian
+  adopted: "2026-11-12"
+  axes: [etym, baltic, slavic]  # the West Baltic member of the baltic desk (the Balto-Slavic
+                                # lineage dual-tag, the senie ruling); etym because the
+                                # Elbing/Grunau vocabularies and catechism forms feed the
+                                # comparative shelves.
+  # Grant-gated PRIVATE research material, the titus-avestan posture verbatim
+  # (the fetch right is the owner's personal grant, not conveyed by a clone):
+  availability: blocked
+  wired: true    # flipped 2026-11-12: the one-time granted retrieval verified —
+                 # 34 docs / 2,704 passages (all 40 pages parse: 34 documents +
+                 # 6 skipped by rule, 0 quarantined after the five fragment pages
+                 # were classified into the content model). Probes green: show a
+                 # Lib.Bapt. line, search "Noūson" (fold-aware hits across three
+                 # catechisms incl. a fragment page), 5 random passages.
+  # TITUS Old Prussian Corpus (titus.uni-frankfurt.de/texte/etcs/balt/apreuss/apreuss/):
+  # the complete Old Prussian record in a diplomatic edition after V. Mažiulis, Prūsų
+  # kalbos paminklai (Vilnius 1966/1981), data entry W. Euler (München 1997-1998), TITUS
+  # version J. Gippert — Catechisms I and II (1545), the Enchiridion (1561), the Elbing
+  # Vocabulary and Simon Grunau's vocabulary, the minor fragments. 40 text pages
+  # (apreu001…apreu040; the frameset index's offsets, censused 2026-11-12). One document
+  # per page carrying an Old Prussian lane (notes pages and German-only front matter skip
+  # by rule); passages at the printed LINE (the h6 "Line" anchors, urn tail verbatim),
+  # the German lane riding as the `german` annotation. Language prg throughout.
+  # EXPECTED FIRST SYNC: 40 pages, crawl ≈ 2 min at the polite 2s pace (~2.5 MB).
+  sync_policy: manual
+  grant_required: true
+  grant:
+    grantor: Prof. Jost Gippert (TITUS, Frankfurt)
+    date: "2026-11-12"
+    terms: >-
+      the TITUS family terms: one retrieval per corpus, local personal research use
+      only, no redistribution; TITUS and the editors credited wherever displayed
+    thread: "personal research grant of 2026-11-12"
+    request_hint: >-
+      Write to Prof. Jost Gippert (TITUS, titus.uni-frankfurt.de) for your own
+      non-commercial grant, and promise to credit TITUS and the editors (data entry
+      W. Euler, after V. Mažiulis's edition) wherever any text is displayed.
 
 titus-osco-umbrian:   # P90-2, 02-sources row 188
   adapter: Nabu::Adapters::TitusOscoUmbrian

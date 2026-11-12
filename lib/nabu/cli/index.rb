@@ -192,7 +192,10 @@ module Nabu
         started = Process.clock_gettime(Process::CLOCK_MONOTONIC)
         estimate = Nabu::IndexWatcher.ledger_estimate(ledger, kind: "sync", scopes: [slug, "corpus"],
                                                               stages: Nabu::IndexWatcher::REFRESH_STAGES)
-        indexed = supervise(config, label: "index refresh #{slug}", estimate: estimate, slug: slug) do |tee|
+        covered = Nabu::IndexWatcher.evidence_covers?(ledger, kind: "sync", scopes: [slug, "corpus"],
+                                                              stages: Nabu::IndexWatcher::REFRESH_STAGES)
+        indexed = supervise(config, label: "index refresh #{slug}", estimate: estimate, slug: slug,
+                                    arm_kill: covered) do |tee|
           runner.index_entry(slug, progress: tee.call(narrator.progress_reporter))
         end
         narrator.finish_progress
@@ -205,9 +208,12 @@ module Nabu
 
       # The index watcher over this command's writes (Nabu::IndexWatcher —
       # the CLI class's supervised_index_write, for this Thor class).
-      def supervise(config, label:, estimate:, slug: nil, &)
-        deadline = Nabu::IndexWatcher.deadline_for(estimate: estimate, override_minutes: options[:deadline])
-        warn Nabu::IndexWatcher.arming_line(deadline: deadline, estimate: estimate) if deadline || $stderr.tty?
+      def supervise(config, label:, estimate:, slug: nil, arm_kill: true, &)
+        deadline = Nabu::IndexWatcher.deadline_for(estimate: estimate, override_minutes: options[:deadline],
+                                                   arm_default: arm_kill)
+        if deadline || $stderr.tty?
+          warn Nabu::IndexWatcher.arming_line(deadline: deadline, estimate: estimate, kill_default: arm_kill)
+        end
         Nabu::IndexWatcher.supervise(label: label, fulltext_path: config.fulltext_path, deadline: deadline,
                                      slug: slug, &)
       end

@@ -127,6 +127,12 @@ module Nabu
           #                        envelope (not_after 325, Nicaea)
           "classical-modern" => :work_era, # the work's attributed era (config/work_eras.yml,
           #                                  keyed on metadata "book"), composition class
+          "cllg-freed" => :structured, # the TLG canon century dating of each work (CllgFreed::TlgDate,
+          #                              class composition; 6,139 of 6,626 parse); Varia/Incertum
+          #                              fall back to the edition's print year (EDITION_FALLBACK)
+          "cllg-sc" => :structured, # the catalog's own "(Original work published ca. Nth century)"
+          #                           as a century envelope (class composition, 7 of 368);
+          #                           else the SC volumes' print years (EDITION_FALLBACK)
           "cme" => :edition_year_text,
           "comenius" => :structured, # P153: the title page's docDate @when (one year), its
           #                            printed wording raw ("LÉTA PÁNĚ MDCXIX")
@@ -381,6 +387,9 @@ module Nabu
           "ticha" => :structured,
           "titus-bactrian" => :structured,
           "titus-manichaica" => :place_only,
+          "titus-old-prussian" => :structured, # each catechism's title-page print year (class
+          #                                      edition — 1545 / 1545 / 1561); the Enchiridion's
+          #                                      stated Königsberg rides "place"
           "titus-sogdian" => :place_only, # the page findspot (one site every line resolves to)
           "titus-tocharian-a" => :place_only,
           "titus-tocharian-b" => :place_only, # the A family's findspot mining
@@ -584,8 +593,15 @@ module Nabu
         # no composition span (census 2026-11-04). formulae-open: the
         # printed edition's imprint year ("source_date") for the 181
         # charters whose dateline bounds nothing (an empty <date/> or an
-        # open single bound; census 2026-11-08).
+        # open single bound; census 2026-11-08). cllg-sc: the Sources
+        # chrétiennes volumes' print years ("edition_year", every volume
+        # the edition spans) for the 361 of 368 works the catalog dates no
+        # composition century for (census 2026-11-12). cllg-freed: the
+        # biblStruct print year for the works the TLG canon dates "Varia" /
+        # "Incertum" (487 of 6,626).
         EDITION_FALLBACK = {
+          "cllg-freed" => %w[edition_year].freeze,
+          "cllg-sc" => %w[edition_year].freeze,
           "formulae-open" => %w[source_date].freeze,
           "pta" => %w[edition_year source_date].freeze
         }.freeze

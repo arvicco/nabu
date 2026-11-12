@@ -21,7 +21,7 @@ achemenet:
 aclt:
   upstream: "[ACLT — Annotated Corpus of Luwian Texts](https://luwian.web-corpora.net/) (I. Yakubovich; corpus files prepared by T. Arkhangelskiy)"
   contents: 266 Hieroglyphic Luwian inscriptions / 2,682 clauses, each with full morphology and a sign-by-sign transliteration (synchronized 30 September 2026)
-  license: Personal research grant (I. Yakubovich, by email, 2026-09-28) — held at `research_private`, never redistributed
+  license: Held at `research_private` — never redistributed
 aed:
   upstream: "[Ägyptische Wortliste](https://github.com/simondschweitzer/aed-tei) (TLA/BBAW)"
   contents: 35,052 Egyptian dictionary entries keyed by the corpus's own lemma ids (synchronized 18 July 2026)
@@ -37,7 +37,7 @@ aio:
 altaica-shm:
   upstream: "[Monumenta Altaica](http://altaica.ru/e_SecretH.php) — John C. Street's text"
   contents: 'The *Secret History of the Mongols* in Street''s romanized text (v24, 2013): 3,523 lines at Street''s own numbering (synchronized 28 September 2026)'
-  license: Use granted by the Monumenta Altaica maintainer (by email, 2026-09-27); Street's copyright notice carried verbatim
+  license: Attribution — Street's copyright notice carried verbatim
 analecta-hymnica:
   upstream: "[*Analecta Hymnica Medii Aevi*](https://archive.org/details/analectahymnicam01drev), Bd. 1–55 (archive.org scans of the Toronto/PIMS copies)"
   contents: Dreves and Blume's corpus of medieval Latin hymnody, 1886–1922, in the archive's uncorrected OCR — hymns, sequences, rhymed offices, tropes and rhymed prayers, one document per volume (synchronized 4 November 2026)
@@ -142,6 +142,14 @@ clics:
   upstream: "[CLICS³](https://clics.clld.org/)"
   contents: 'The cross-linguistic colexification network: 2,919 concepts / 4,228 weighted edges over ~3,156 varieties (synchronized 26 July 2026)'
   license: CC BY 4.0
+cllg-freed:
+  upstream: "[CLLG Freed Corpus](https://gitlab.inria.fr/almanach/cllg/freed-corpus) (Inria ALMAnaCH, dir. Thibault Clérice)"
+  contents: 'The TLG E canon freed as citeStructure TEI — Homer to the Byzantine chroniclers, 6,290 documents / 1,258,099 passages with the canon''s century datings and author epithets (synchronized 12 November 2026)'
+  license: CC0 texts, CC-BY 4.0 structure and metadata
+cllg-sc:
+  upstream: "[CLLG Sources Chrétiennes](https://gitlab.inria.fr/almanach/cllg/sources-chretiennes) (Inria ALMAnaCH, dir. Thibault Clérice)"
+  contents: 'The Greek (and six Latin) texts of the Éditions du Cerf Sources chrétiennes series in its own critical editions: 366 documents / 94,713 passages with the volumes'' full bibliography (synchronized 12 November 2026)'
+  license: CC-BY (structure); texts under the French critical-edition case law
 cme:
   upstream: "[Corpus of Middle English Prose and Verse](http://www.medictionary.info) (Middle English Compendium, Univ. of Michigan)"
   contents: 297 Middle English texts / 1,355,279 passages, Chaucer to the mystery plays (synchronized 23 August 2026)
@@ -715,7 +723,7 @@ sdbh:
 seal:
   upstream: "[SEAL — Sources of Early Akkadian Literature](https://seal.huji.ac.il) (M. P. Streck and N. Wasserman)"
   contents: 408 Old Babylonian and Old Akkadian literary texts, cited by SEAL number (synchronized 30 August 2026)
-  license: Personal research grant (N. Wasserman, by email, 2026-08-30) — held at `research_private`, never redistributed
+  license: Held at `research_private` — never redistributed
 sefaria:
   upstream: "[Sefaria](https://www.sefaria.org/) (Sefaria-Export, named versions only)"
   contents: 'The Targum shelf plus the Rabbinic library — Mishnah (three complete Hebrew editions incl. the Kaufmann MS), the Wikisource Bavli, Guggenheimer''s Yerushalmi, Tosefta, Minor Tractates, the Davidson/Steinsaltz nc lane: with daf-grain Talmud citations, joined by the classical midrash (the ten Rabbah collections and the Midrash Halakhah shelf, synchronized 1 August 2026)'

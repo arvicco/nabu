@@ -33,7 +33,7 @@ A source wears every desk it serves — these fifteen answer this desk. Holdings
 | `wiktionary-recon` | dictionary | attribution | wired · manual | 376,415 entries |
 | `wold` | dictionary | attribution | wired · manual | 64,289 entries |
 
-Private research materials under personal grants are not listed.
+Private research materials are not listed.
 
 **Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 12 November 2026)</span>: `xcl` 94,608 · `rus` 18,239 · `ine` 17,427 · `tbq` 12,950 · `ine-pro` 9,140 · `gem-pro` 7,743 · `tut` 5,756 · `lat` 5,419 · `dra-sou-pro` 4,692 · `sit-pro` 2,823 … and 71 more (`nabu axis etym` lists all).
 

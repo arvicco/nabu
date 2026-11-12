@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://www.tei-c.org/release/xml/tei/custom/schema/relaxng/tei_all.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<?xml-model href="http://www.tei-c.org/release/xml/tei/custom/schema/relaxng/tei_all.rng" type="application/xml"
+    schematypens="http://purl.oclc.org/dsdl/schematron"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0">
+   <teiHeader>
+      <fileDesc>
+         <titleStmt>
+            <title>Lettre sur la foi</title>
+            <author>
+               <persName>Évagre le Pontique</persName>
+            </author>
+            <respStmt>
+               <orgName>Corpus Liberatum Linguae Graecae</orgName>
+               <resp>
+                  Refined conversion to XML-TEI
+                  <name resp="#cllg-transformation">Thibault Clérice</name>
+                  <name resp="#cllg-transformation">Nicolas Angleraud</name>
+                  <name resp="#cllg-transformation">Antonia Karamolegkou</name>
+                  <name resp="#cllg-transformation">Maïna Laurent</name>
+                  <name resp="#cllg-transformation">Benoît Sagot</name>
+               </resp>
+            </respStmt>
+            <principal>
+               <name>Thibault Clérice</name>
+               <orgName>Inria</orgName>
+            </principal>
+            <funder>
+               <orgName>Agence Nationale de la Recherche</orgName>
+               <orgName>Programme Inria Quadrant</orgName>
+               <note>Ce travail a bénéficié d'une aide de l'État gérée par l'Agence Nationale de la Recherche au titre de France 2030 portant la référence «ANR-24-RRII-0002».</note>
+            </funder>
+         </titleStmt>
+         <publicationStmt>
+            <p>
+               This file has then been released by the Corpus Liberatum Linguae Graecae (dir. Thibault Clérice)
+               which added citeStructure information, bibliographical metadata and reworked, where applicable, the
+               citation structure to follow editions rather than physical citation systems.
+            </p>
+         </publicationStmt>
+         <sourceDesc>
+            <bibl>
+               <author>Évagre le Pontique</author>
+               <title level="m">Lettres</title>
+               <editor role="editor">Paul Géhin</editor>
+               <editor role="translator">Paul Géhin</editor>
+               <publisher>Les Éditions du Cerf</publisher>
+               <pubPlace ref="geonames:2988506">Paris</pubPlace>
+               <date when="2025">2025</date>
+               <series>
+                  <title>Sources chrétiennes</title>
+                  <biblScope unit="volume">652</biblScope>
+               </series>
+               <idno type="ISBN">978-2-204-16441-2</idno>
+               <biblScope unit="page">210-268</biblScope>
+            </bibl>
+         </sourceDesc>
+      </fileDesc>
+      <encodingDesc>
+        <refsDecl n="default">
+          <citeStructure match="/TEI/text/body/div[@type='edition']/div[@subtype='section']" use="@n" unit="section">
+          </citeStructure>
+        </refsDecl>
+        <refsDecl n="physical">
+          <citeStructure match="/TEI/text/body//pb[@ed='SC']" use="@n" unit="page">
+            <citeStructure match=".//lb" use="@n" unit="line" delim="."/>
+          </citeStructure>
+        </refsDecl>
+      </encodingDesc>
+      <profileDesc>
+         <langUsage>
+            <language ident="grc">Texte du document en grec ancien</language>
+         </langUsage>
+      </profileDesc>
+      <revisionDesc>
+        <change who="Thibault Clérice" when="2026-10-10">Head, sections as div (Arabic @n, numeral removed), quotations (italics), physical citation pb/lb (lb recounted per page), word breaks joined, OCR Latin H/I in the title replaced by Greek.</change>
+      </revisionDesc>
+   </teiHeader>
+
+<text>
+<body>
+
+<div type="edition" n="urn:cts:greekLit:tlg4110.cllg001.sc-cllg-grc1" xml:lang="grc">
+  <pb ed="SC" n="210"/>
+  <head><lb n="1"/>ἘΠΙΣΤΟΛΗ ΠΕΡΙ ΠΙΣΤΕΩΣ</head>
+  <div type="textpart" subtype="section" n="1">
+    <p><lb n="2"/>Πολλάκις ἐθαύμασα τί ποτε πρὸς ἡμᾶς πεπόνθατε
+      <lb n="3"/>καὶ πόθεν τοσοῦτον ἥττησθε τῆς ἡμετέρας βραχύτητος
+      <lb n="4"/>τῆς μικρᾶς καὶ ὀλίγης καὶ οὐδὲν ἴσως ἐχούσης ἐράσμιον,
+      <lb n="5"/>καὶ λόγοις ἡμᾶς προτρέπεσθε ϕιλίας τε καὶ πατρίδος
+      <lb n="6"/>ὑπομιμνήσκοντες, ὥσπερ ϕυγάδας τινὰς πατρικοῖς σπλάγ<lb n="7" break="no"/>χνοις πρὸς ἑαυτοὺς πάλιν ἐπιστρέφειν πειρώμενοι. Ἐγὼ δὲ
+      <lb n="8"/>τὸ μὲν ϕυγὰς γεγονέναι ὁμολογῶ καὶ οὐκ ἀρνηθείην, τὴν
+      <lb n="9"/>δ' αἰτίαν μάθοιτ' ἂν ἤδη πάλαι ποθοῦντες ἴσως.
+      <pb ed="SC" n="212"/>
+      <lb n="1"/>Μάλιστα μὲν τῷ ἀδοκήτῳ τότε πληγείς, καθάπερ οἱ τοῖς
+      <lb n="2"/>αἰφνιδίοις ψόφοις ἀθρόως καταπλαγέντες, οὐ κατέσχον
+      <lb n="3"/>τοὺς λογισμούς, ἀλλ' <quote>ἐμάκρυνα ϕυγαδεύων καὶ ηὐλίσθην</quote>
+      <lb n="4"/>χρόνον ἱκανὸν ἀϕ' ὑμῶν, ἔπειτα δὲ καὶ πόθος τις ὑπεισῄει
+      <lb n="5"/>με τῶν θείων δογμάτων καὶ τῆς περὶ ἐκεῖνα ϕιλοσοφίας.
+      <lb n="6"/>Πῶς γὰρ ἂν δυναίμην, ἔφην ἐγώ, κρατῆσαι τῆς συνοικούσης
+      <lb n="7"/>ἡμῖν κακίας ; Τίς δ' ἄν μοι γένοιτο Λάβαν, ἀπαλλάττων με
+      <lb n="8"/>τοῦ Ἡσαῦ καὶ πρὸς τὴν ἀνωτάτω ϕιλοσοφίαν παιδαγωγῶν ;
+      <lb n="9"/>Ἀλλ' ἐπειδή, σὺν θεῷ, τοῦ σκοποῦ κατὰ δύναμιν τετυχή<lb n="10" break="no"/>καμεν εὑρόντες σκεῦος ἐκλογῆς καὶ ϕρέαρ βαθύ, λέγω
+      <lb n="11"/>δὴ τὸ τοῦ Χριστοῦ στόμα Γρηγόριον, ὀλίγον ἡμῖν, παρακαλῶ,
+      <lb n="12"/>ὀλίγον συγχωρήσατε χρόνον · αἰτούμεθα, οὐ τὴν ἐν ταῖς
+      <lb n="13"/>πόλεσι διατριβὴν ἀσπαζόμενοι, οὐ γὰρ λέληθεν ἡμᾶς ὁ
+      <lb n="14"/>πονηρὸς διὰ τῶν τοιούτων τὴν ἀπάτην τοῖς ἀνθρώποις
+      <lb n="15"/>προσμηχανώμενος, ἀλλὰ τὴν συντυχίαν τὴν πρὸς τοὺς
+      <lb n="16"/>ἁγίους ἐπωφελῆ μάλιστα κρίνοντες. Ἐν γὰρ τῷ λέγειν τι
+      <pb ed="SC" n="214"/>
+      <lb n="1"/>περὶ τῶν θείων δογμάτων καὶ ἀκούειν πυκνότερον ἕξιν
+      <lb n="2"/>δυσαπόβλητον τῶν θεωρημάτων λαμβάνομεν. Καὶ τὰ μὲν
+      <lb n="3"/>καθ' ἡμᾶς τοῦτον ἔχει τὸν τρόπον.</p>
+  </div>
+</div>
+</body>
+</text>
+</TEI>

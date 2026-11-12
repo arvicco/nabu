@@ -32,7 +32,7 @@ A source wears every desk it serves — these fourteen answer this desk. Holding
 | `suttacentral` | texts | open | wired · auto | 12,397 docs / 699,511 passages |
 | `tipitaka-lk` | texts | research_private | wired · auto | 563 docs / 456,967 passages |
 
-Private research materials under personal grants are not listed.
+Private research materials are not listed.
 
 **Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 12 November 2026)</span>: `pli` 97,454 · `xct` 64,867 · `san` 10,449 · `eng` 7,150 · `lzh` 5,602 · `cmg` 1,069 · `mnc` 1,068 · `san-Latn` 817 · `en` 389 · `cmn` 279 … and 7 more (`nabu axis buddhist` lists all).
 

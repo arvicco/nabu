@@ -330,12 +330,12 @@ downstream; and honestly: no stated owner research axis in Arabic yet.
 Park until the axis exists; the corpus can absorb it whenever.
 **Effort.** scout + fable family, when wanted.
 
-### 2.5 TITUS, Manuscript (manuscripts.ru), Sreznevsky  [PARTIAL — TITUS largely UNBLOCKED through personal research grants (eight corpora wired by 2026-10-10); manuscripts.ru still blocked; Sreznevsky still scans-only]
+### 2.5 TITUS, Manuscript (manuscripts.ru), Sreznevsky  [PARTIAL — TITUS largely UNBLOCKED (eight corpora wired by 2026-10-10; gated, terms recorded); manuscripts.ru still blocked; Sreznevsky still scans-only]
 
 Surveyed and honestly BLOCKED (license/no-export/scans-only) — except that
-the TITUS grant path WORKED for the Avesta: `titus-avestan` shipped P45 on a
-personal research grant (Prof. Jost Gippert, 2026-07-23 —
-`research_private`, credit + nc terms). The Slavic-side TITUS blocks stand. The unblock
+the TITUS ask WORKED for the Avesta: `titus-avestan` shipped P45 gated
+(`research_private`, credit + nc terms — contact TITUS for a license
+grant). The Slavic-side TITUS blocks stand. The unblock
 paths are noted in the survey: writing for data grants (`research_private`
 ingestion — the license class exists for exactly this), or HTR for the
 scan-only dictionaries once the cluster lands (§3.4). Owner-initiated
@@ -354,7 +354,7 @@ the shared `Nabu::TitusFetch` page-walk. All eight TITUS sources keep the
 carry the grant), `license_class` **nc** with a per-display credit line,
 local-only fixtures, and `availability: blocked`, so they stay off the
 public census and axis pages. Still out of reach: **Tocharian B** (served
-to TITUS members only — the directory answers HTTP 401, so no adapter is
+gated — the directory answers HTTP 401, so no adapter is
 built) and the Slavic-side TITUS texts (the OCS canon is covered more
 cleanly by CCMH and the treebanks). **manuscripts.ru** remains blocked —
 no public bulk export or data license; the unblock path is a structured

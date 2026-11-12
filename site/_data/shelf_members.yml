@@ -11,8 +11,8 @@
 # on an unplaced or unknown slug. Dictionary-only sources (no documents)
 # ride the reference shelf, whose row reads the census entry total instead.
 ---
-classical-greek: [perseus-greek]
-post-classical-greek: [first1k-greek, pta, cgpg, hexapla, suda-translations]
+classical-greek: [perseus-greek, cllg-freed]
+post-classical-greek: [first1k-greek, pta, cgpg, hexapla, suda-translations, cllg-sc]
 greek-silver: [diorisis, glaux]
 classical-latin: [perseus-latin, lasla]
 liturgy-chant:

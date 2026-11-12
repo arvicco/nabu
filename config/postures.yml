@@ -2219,6 +2219,41 @@ sources:
         {pleiades, ref}: 88 of 113 editions, every id in the held gazetteer; the XXXXX
         placeholder and empty values mint nothing"}
     script: {posture: implied}
+  cllg-freed:   # 02-sources row 403
+    # kind is machine-postured by the kind_map rule (genre): the TLG canon author
+    # epithets (Hist., Trag., Epic., Med. …) fold onto historiography, drama, epic,
+    # medicine …; Phil., Scr. Eccl., Rhet., Soph. stay counted unmapped.
+    lect: {posture: dates, note: "the date-band inference stages the works from the TLG canon's own
+        century dating (composition class): c. 8 B.C. Homer inside grc:hom [-800, -600], the 5th-4th
+        c. B.C. classics inside grc:cla, the Hellenistic and imperial authors inside grc:koi, the
+        5th-c.-and-later Byzantines inside grc:byz; centuries straddling a band edge (c. A.D. 4 vs
+        330) and the Varia/Incertum works stay bare grc. No facet rule: a label map would only repeat
+        the band"}
+    dating: {posture: dated, note: "two labeled classes: the TLG canon's dating in each catalog line
+        ('c. A.D. 4-5', 'c. 5 B.C.?', 'c. p. A.D. 2') → a century envelope, date_class composition
+        (CllgFreed::TlgDate, MetadataDates :structured; 6,139 of 6,626 — ante/post one open bound);
+        the 442 Varia + 45 Incertum works fall back to the printed edition's year (metadata
+        edition_year, date_class edition — MetadataDates::EDITION_FALLBACK)"}
+    places: {posture: unplaced, note: "the biblStruct names only the printing place (imprint
+        pubPlace), never an origin; the TLG canon line names no place"}
+    script: {posture: implied}
+  cllg-sc:   # 02-sources row 402
+    # kind is machine-postured by the kind_map rule (genre): the work title's
+    # genre noun (CllgSc::TITLE_GENRES) folds to letter, sermon/homily, exegesis,
+    # hagiography, catechesis …; titles naming no genre noun make no claim.
+    lect: {posture: identity, note: "bare grc (and lat for the six Latin editions) is the claim: the
+        corpus spans the Apostolic Fathers to Cabasilas (1st–14th c.) and upstream dates only 7 of 368
+        works, so neither a source-grain stage nor the date band can stage the rest (the
+        first1k-greek/corpus-corporum deliberately-unstaged stance); the 7 composition-dated works
+        stage by the band like any dated document. Refinement candidate: the TLG concordance lane
+        (most SC works carry TLG ids) once SC joins its targets"}
+    dating: {posture: dated, note: "two labeled classes: the catalog description's own '(Original work
+        published ca. Nth century)' → a century envelope, date_class composition (7 of 368 —
+        MetadataDates :structured); every other work falls back to its Sources chrétiennes volumes'
+        print years (metadata edition_year, date_class edition — MetadataDates::EDITION_FALLBACK)"}
+    places: {posture: unplaced, note: "the sourceDesc names only the printing place (pubPlace Paris,
+        a GeoNames ref), never an origin; the catalog names no place"}
+    script: {posture: implied}
   cgpg:   # P153
     # kind is machine-postured by the kind_map rule (genre, P160): upstream and
     # the carve plan carry no genre field, so the carved work's Latin title is
@@ -2582,6 +2617,25 @@ sources:
         ship in the tab"}
     places: {posture: unplaced}
     script: {posture: qualified, note: "romanized headwords (the OJED transliteration)"}
+  titus-old-prussian:
+    # kind machine-postured — the titus-old-prussian fold in kind_map.yml over the
+    # page's text siglum (the catechisms → catechesis, the vocabularies →
+    # lexical/glossary; the fragments declared deliberate).
+    lect: {posture: identity, note: "prg — the bare Old Prussian anchor (nabu-lects, band
+        1350-1700), deliberately coarse: no stage split (the record is 14th-16th c. and
+        thin); the German lanes are never passages (they ride the `german` annotation),
+        so no German claim is minted"}
+    dating: {posture: partial, note: "each catechism's own title-page imprint year — Kat.I
+        and Kat.II \"1.5.45\", the Enchiridion \"M.D. LXI.\" — on every page of that text,
+        class edition on the :structured lane; the vocabularies and fragments carry no date
+        in the edition's headers (the Elbing manuscript's c. 1400 is scholarship, not a
+        header — no claim)"}
+    places: {posture: named, note: "the Enchiridion's stated print place (\"Gedruckt zu
+        Kőnigsperg in Preuſſen\") as Königsberg on its pages; Catechisms I and II name no
+        place on their title pages and the vocabularies/fragments none at all — declared
+        coarse"}
+    script: {posture: implied, note: "Latin type and manuscript hands, transcribed
+        diplomatically (ſ, ʒ, the print's superscripts and line-break hyphens kept)"}
   titus-osco-umbrian:
     kind: {posture: unclassified}
     # P90-2: `osc` and `xum` are both real nabu-lects anchors (xum minted

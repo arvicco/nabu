@@ -31,7 +31,7 @@ A source wears every desk it serves — these thirteen answer this desk. Holding
 | `tir` | inscriptions | nc | wired · manual | 389 docs / 434 passages |
 | `wiktionary-recon` | dictionary | attribution | wired · manual | 376,415 entries |
 
-Private research materials under personal grants are not listed.
+Private research materials are not listed.
 
 **Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 12 November 2026)</span>: `ett` 8,087 · `eng` 3,290 · `grc` 3,201 · `lat` 2,662 · `osc` 1,373 · `ita` 705 · `xum` 686 · `xlp` 633 · `cms` 591 · `osc-Ital-x-oscetr` 501 … and 21 more (`nabu axis italic` lists all).
 

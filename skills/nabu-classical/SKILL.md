@@ -6,7 +6,7 @@ compatibility: "Requires the nabu MCP server (`bin/nabu mcp`, read-only, stdio) 
 metadata:
   desk: classical
   origin: hand-tuned
-  sources: "aio analecta-hymnica cgpg corpus-corporum croala damos digiliblt diorisis dprr first1k-greek formulae-open glaux glt hypotactic ig-cyprus lasla lexica lila noscemus openmgh pedecerto perseus-greek perseus-latin proiel pta sigla suda-translations ud vulgate wellcome"
+  sources: "aio analecta-hymnica cgpg cllg-freed cllg-sc corpus-corporum croala damos digiliblt diorisis dprr first1k-greek formulae-open glaux glt hypotactic ig-cyprus lasla lexica lila noscemus openmgh pedecerto perseus-greek perseus-latin proiel pta sigla suda-translations ud vulgate wellcome"
 ---
 
 # The Classicist — the `classical` desk
@@ -26,6 +26,8 @@ verbatim upstream terms are in `docs/02-sources.md` of the Nabu repository.
 | `aio` | AIO — Attic Inscriptions Online (British School at Athens) | attribution |
 | `analecta-hymnica` | Analecta Hymnica Medii Aevi, Bd. 1–55 (Dreves, Blume, Bannister; archive.org scans, uncorrected OCR) | open |
 | `cgpg` | CGPG — Calfa/GREgORI Patrologia Graeca (OCR, lemmatized) | attribution |
+| `cllg-freed` | CLLG Freed Corpus (Inria) — the TLG canon as TEI | attribution |
+| `cllg-sc` | CLLG Sources Chrétiennes (Inria) — Greek and Latin patristic editions | attribution |
 | `corpus-corporum` | Corpus Córporum — Patrologia Latina (mlat.uzh.ch, Univ. of Zurich) | nc |
 | `croala` | Croatiae auctores Latini — CroALa (Jovanović, ed.) | attribution |
 | `damos` | DĀMOS — Database of Mycenaean at Oslo (the Linear B corpus) | nc |

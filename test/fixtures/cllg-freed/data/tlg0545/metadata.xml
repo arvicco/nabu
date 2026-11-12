@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+    <collection identifier="urn:cts:greekLit:tlg0545">
+        <title>Claudius Aelianus Soph.</title>
+        <members>
+        <collection identifier="urn:cts:greekLit:tlg0545.tlg005">
+            <title>Titulus</title>
+            <dublinCore>
+                <creator xmlns="http://purl.org/dc/terms/">Claudius Aelianus Soph.</creator>
+            </dublinCore>
+            <members>
+                <resource identifier="urn:cts:greekLit:tlg0545.tlg005.cllg-grc1" filepath="./tlg005/tlg0545.tlg005.cllg-grc1.xml">
+                    <title>Titulus</title>
+                    <description>Claudius Aelianus Soph. (c. A.D. 2-3), Titulus (0545: 005) "Paradoxographorum Graecorum reliquiae", Ed. Giannini, A. Milan: Istituto Editoriale Italiano, 1965.</description>
+                    <parent>urn:cts:greekLit:tlg0545.tlg005</parent>
+                </resource>
+            </members>
+        </collection>
+        </members>
+    </collection>

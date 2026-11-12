@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<collection identifier="cllg-freed">
+    <title>CLLG Sources Chrétiennes</title>
+    <members>
+        <collection filepath="data/stoa0104a/metadata.xml"/>
+        <collection filepath="data/tlg4110/metadata.xml"/>
+        <collection filepath="data/tlg2042/metadata.xml"/>
+        <collection filepath="data/cllg0010/metadata.xml"/>
+    </members>
+</collection>

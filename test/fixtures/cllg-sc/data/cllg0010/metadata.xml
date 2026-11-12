@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<collection identifier="urn:cts:greekLit:cllg0010">
+    <title>Jean de Béryte</title>
+    <members>
+        <collection identifier="urn:cts:greekLit:cllg0010.cllg001">
+            <title>Homélie sur la résurrection du Sauveur</title>
+            <dublinCore>
+                <creator xmlns="http://purl.org/dc/terms/">Jean de Béryte</creator>
+            </dublinCore>
+            <members>
+                <resource identifier="urn:cts:greekLit:cllg0010.cllg001.sc-cllg-grc1" filepath="./homilia_in_resurrectionem_salvatoris.xml">
+                    <title>Homélie sur la résurrection du Sauveur (SC 187)</title>
+                    <description>Homélie pascale, éd. M. Aubineau, Sources Chrétiennes 187 (1972); sections as div, manuscript folios as milestones.</description>
+                </resource>
+            </members>
+        </collection>
+    </members>
+</collection>

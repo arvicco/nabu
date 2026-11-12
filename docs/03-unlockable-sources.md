@@ -17,15 +17,17 @@ Sources not readily ingestible today, with concrete unlock paths. Ordered by exp
 
 **What was locked:** parts of TITUS require registration/permission per agreement with original editors; the public HTML is scrapeable but encoding-hostile.
 
-**Unlocked, in three grants from Prof. Jost Gippert (TITUS, Frankfurt), all by email:**
+**Unlocked, in four grants from Prof. Jost Gippert (TITUS, Frankfurt), all by email:**
 
 - **2026-07-23 — Avestan** (`titus-avestan`): non-commercial use, TITUS and the editors credited wherever the text is displayed. The letter described the specific texts and the private comparative-IE use; writing it was the entire cost — exactly as this page predicted.
 - **2026-08-31 — Oscan-Umbrian** (`titus-osco-umbrian`), extending the Avestan terms: one-time download, local non-commercial use, no redistribution.
 - **2026-10-06 — Tocharian and the Middle Iranian families** (the terms cover the Tocharian A and B texts of the Berlin Turfan collection; `titus-tocharian-a` holds the Tocharian A corpus today; `titus-pahlavi`, `titus-sogdian`, `titus-khotanese`, `titus-bactrian`, `titus-manichaica`): one retrieval per corpus, local personal research use only, no redistribution, TITUS and the editors credited wherever displayed.
 
-All eight sources are wired. The grants are personal, so every one is grant-gated: each box records its own acknowledgment of the terms before its first fetch, and none of the texts ships in any public artifact.
+- **2026-11-12 — Old Prussian** (`titus-old-prussian`: the catechisms, the Elbing and Grunau vocabularies, the fragments), on the same terms: one retrieval, local personal research use, no redistribution, TITUS and the editors credited wherever displayed.
 
-**Remaining long tail:** Tocharian B (already covered by the 2026-10-06 terms; the members-only adapter `titus-tocharian-b` is built and awaits the TITUS member credential and its first authenticated sync) and other TITUS corpora as concrete needs arise — the same scoped-letter route, now with three precedents to cite. Hittite is served independently (the tlhdig and hittite-glossed shelves), and the hieroglyphic Luwian corpus arrived by a separate personal grant (ACLT, I. Yakubovich, 2026-09-28).
+The first eight sources are wired; `titus-old-prussian` awaits its one-time retrieval. Every one is gated: each box records its own acknowledgment of the terms before its first fetch, and none of the texts ships in any public artifact.
+
+**Remaining long tail:** Tocharian B (already covered by the 2026-10-06 terms; the gated adapter `titus-tocharian-b` is built and awaits its credential and first verified sync) and other TITUS corpora as concrete needs arise — the same scoped-letter route, now with three precedents to cite. Hittite is served independently (the tlhdig and hittite-glossed shelves), and the hieroglyphic Luwian corpus (ACLT) is gated — contact the editors for a license grant.
 
 ## 3. IIIF manuscript universe (Vatican, BnF, British Library, Bodleian, Munich…)
 

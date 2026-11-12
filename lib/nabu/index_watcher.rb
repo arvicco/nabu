@@ -59,8 +59,11 @@ module Nabu
     SAMPLE_SECONDS = 15
     # The deadline is DEADLINE_FACTOR × the ledger estimate, floored: a
     # seconds-scale estimate must not arm a seconds-scale kill (statement
-    # variance on a cold page cache alone exceeds it).
-    DEADLINE_FACTOR = 2
+    # variance on a cold page cache alone exceeds it). The factor prices
+    # estimate UNCERTAINTY, not the estimate (owner, 2026-11-12, after a
+    # healthy first-sync shadow build was killed at the floor): a ledger
+    # estimate is one past run, so the killer stands well back from it.
+    DEADLINE_FACTOR = 2.5
     MIN_DEADLINE_SECONDS = 15 * 60
     KILL_GRACE_SECONDS = 30
 
@@ -80,6 +83,32 @@ module Nabu
       return nil if estimate.nil? || !estimate.positive?
 
       [estimate * DEADLINE_FACTOR, MIN_DEADLINE_SECONDS].max
+    end
+
+    # A kill may only be armed on evidence that DESCRIBES the run: every
+    # named non-corpus scope must carry its own history under +kind+, or
+    # the summed "estimate" is just the corpus riders' seconds — about a
+    # first sync it says nothing (measured 2026-11-12: a healthy
+    # 1.26M-row first-sync shadow build killed at the floor, armed off
+    # 40.9s of corpus rows). nil +scopes+ = an unscoped command whose
+    # estimate sums everything it will run: covered by construction.
+    # +stages+ names the stage class whose history must exist (a killed
+    # run flushes the stages that FINISHED, so scope-level history can
+    # exist while the dominant stage — the one the kill endangers — has
+    # no row at all; measured 2026-11-12, the rerun after the first
+    # kill: fetch+parse rows summed to an 11m25s "estimate" with the
+    # index stage absent from it entirely).
+    def self.evidence_covers?(ledger, kind:, scopes:, stages: nil)
+      return true if scopes.nil?
+
+      own = scopes - ["corpus"]
+      return true if own.empty?
+      return false unless Store::StageTimings.table?(ledger)
+
+      rows = ledger[Store::StageTimings::TABLE].where(kind: kind, scope: own)
+      rows = rows.where(stage: stages) if stages
+      covered = rows.distinct.select_map(:scope)
+      (own - covered).empty?
     end
 
     # The stage ledger's estimate for a command: the sum of the LATEST row
@@ -214,17 +243,36 @@ module Nabu
     # Fork the watcher; returns its pid.
     def start!
       reader, @stop_writer = IO.pipe
-      @pid = fork do
-        @stop_writer.close
-        trap("INT", "IGNORE")
-        begin
-          watch(reader)
-        ensure
-          exit!(0) # never the writer's at_exit handlers (a suite, a CLI)
+      @pid = quiet_sqlite_fork_warning do
+        fork do
+          @stop_writer.close
+          trap("INT", "IGNORE")
+          begin
+            watch(reader)
+          ensure
+            exit!(0) # never the writer's at_exit handlers (a suite, a CLI)
+          end
         end
       end
       reader.close
       @pid
+    end
+
+    # The sqlite3 gem (2.10.x) warns in the child about every writable
+    # handle the fork inherited, then discards it. This fork is deliberate
+    # and the child touches no inherited connection by construction (pipe +
+    # File.mtime + ps only), so the warning is silenced for it alone — any
+    # other fork in the process still warns. The parse-pool precedent.
+    def quiet_sqlite_fork_warning
+      return yield unless defined?(SQLite3::ForkSafety)
+
+      previous = SQLite3::ForkSafety.instance_variable_get(:@suppress)
+      SQLite3::ForkSafety.suppress_warnings!
+      begin
+        yield
+      ensure
+        SQLite3::ForkSafety.instance_variable_set(:@suppress, previous)
+      end
     end
 
     # The clean finish: tell the watcher, reap it.

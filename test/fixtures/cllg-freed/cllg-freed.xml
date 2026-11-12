@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<collection identifier="cllg-freed">
+    <title>CLLG FREED</title>
+    <members>
+        <collection filepath="data/tlg0012/metadata.xml"/>
+        <collection filepath="data/spurious-and-dubia/cllg-spuria0001/metadata.xml"/>
+        <collection filepath="data/tlg2738/metadata.xml"/>
+        <collection filepath="data/tlg0545/metadata.xml"/>
+        <collection filepath="data/tlg0085/metadata.xml"/>
+        <collection filepath="data/tlg0059/metadata.xml"/>
+        <collection filepath="data/tlg1514/metadata.xml"/>
+        <collection filepath="data/tlg2035/metadata.xml"/>
+    </members>
+</collection>
