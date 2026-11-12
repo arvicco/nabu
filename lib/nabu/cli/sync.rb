@@ -434,9 +434,12 @@ module Nabu
         return yield if options[:fetch_only]
 
         scopes = slugs.empty? || options[:all] || options[:axis] ? nil : slugs
-        estimate = watcher_estimate(config, kind: "sync", scopes: scopes && (scopes + ["corpus"]))
+        estimate, covered = watcher_estimate(config, kind: "sync", scopes: scopes && (scopes + ["corpus"]))
+        # A first sync (any named source without its own history) runs
+        # heartbeats-only: the estimate describes the corpus riders, not
+        # the unknown source — the rebuild rationale on the sync path.
         supervised_index_write(config, label: "sync #{slugs.join(' ')}".strip, estimate: estimate,
-                                       slug: (slugs.first if slugs.size == 1), &)
+                                       slug: (slugs.first if slugs.size == 1), arm_kill: covered, &)
       end
 
       # The registry entry for one slug, nil when the catalog source is not

@@ -54,10 +54,42 @@ class IndexWatcherTest < Minitest::Test
     held&.close
   end
 
+  # -- evidence coverage ----------------------------------------------------
+
+  # A kill may only be armed on evidence that describes the run: for a
+  # named-scope command every non-corpus scope needs its OWN ledger
+  # history. A first sync's "estimate" is otherwise the corpus riders'
+  # seconds alone (measured 2026-11-12: a healthy 1.26M-row first-sync
+  # shadow build killed at the 15m floor armed off 40.9s of corpus rows).
+  def test_evidence_covers_requires_every_named_scope_to_have_history
+    ledger = Sequel.sqlite
+    ledger.create_table(:stage_timings) do
+      primary_key :id
+      String :kind, null: false
+      String :scope, null: false
+      String :stage, null: false
+      Float :seconds, null: false
+      Integer :rows
+      Time :finished_at, null: false
+    end
+    ledger[:stage_timings].insert(kind: "sync", scope: "corpus", stage: "stats", seconds: 40.9,
+                                  finished_at: Time.now)
+    ledger[:stage_timings].insert(kind: "sync", scope: "pap", stage: "index", seconds: 120.0,
+                                  finished_at: Time.now)
+
+    refute Watcher.evidence_covers?(ledger, kind: "sync", scopes: %w[newsrc corpus]),
+           "a first sync has no own-scope history — corpus riders are not evidence about it"
+    assert Watcher.evidence_covers?(ledger, kind: "sync", scopes: %w[pap corpus])
+    assert Watcher.evidence_covers?(ledger, kind: "sync", scopes: nil),
+           "an unscoped command's estimate sums everything — full coverage by construction"
+    refute Watcher.evidence_covers?(ledger, kind: "sync", scopes: %w[pap newsrc corpus]),
+           "one uncovered scope poisons the whole estimate"
+  end
+
   # -- deadline arithmetic --------------------------------------------------
 
-  def test_the_deadline_is_twice_the_ledger_estimate
-    assert_equal 2 * 3_600, Watcher.deadline_for(estimate: 3_600)
+  def test_the_deadline_prices_estimate_uncertainty_at_two_and_a_half_times
+    assert_in_delta 2.5 * 3_600, Watcher.deadline_for(estimate: 3_600)
   end
 
   def test_the_deadline_never_falls_below_the_floor
