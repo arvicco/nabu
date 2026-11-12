@@ -39,6 +39,7 @@ module Nabu
       fulltext = Nabu::Store.connect_fulltext(config.fulltext_path, readonly: !options[:consolidate])
       begin
         report_gauges(fulltext)
+        report_lanes(fulltext, config)
         report_stamps(fulltext, config)
         report_deferred(fulltext, config)
         consolidate(fulltext) if options[:consolidate]
@@ -129,6 +130,35 @@ module Nabu
           say "  #{table}: #{gauges[:segments]} segments / #{gauges[:levels]} levels · " \
               "#{gauges[:pages]} pages · tombstones #{gauges[:tombstone_pages]} (#{share})" \
               "#{segment_flag(gauges[:segments])}"
+        end
+      end
+
+      # The lane-coverage check (Store::LaneCoverage — the Nov 2026
+      # crash-loss incident): config flags vs built scope vs rows, every
+      # disagreement a ⚠ line. Needs the catalog for the row probes; a
+      # box without one says so instead of guessing.
+      def report_lanes(fulltext, config)
+        say "lane coverage (config flags vs built scope vs rows):"
+        unless File.exist?(config.catalog_path)
+          return say "  (no catalog at #{config.catalog_path} — row probes skipped)"
+        end
+
+        registry = Nabu::SourceRegistry.load(config.sources_path)
+        catalog = Nabu::Store.connect(config.catalog_path, readonly: true)
+        begin
+          lanes = { cjk: [Nabu::Store::Indexer::CJK_SCOPE_TABLE, registry.cjk_slugs],
+                    trigram: [Nabu::Store::Indexer::TRIGRAM_SCOPE_TABLE, registry.fuzzy_slugs] }
+          lanes.each do |lane, (scope_table, flags)|
+            summary = Nabu::Store::LaneCoverage.summary(fulltext, scope_table, flags)
+            say "  #{lane}: #{summary || 'absent'}"
+          end
+          findings = Nabu::Store::LaneCoverage.findings(catalog: catalog, fulltext: fulltext,
+                                                        cjk_slugs: registry.cjk_slugs,
+                                                        fuzzy_slugs: registry.fuzzy_slugs)
+          findings.each { |finding| say "  ⚠ #{finding.lane}: #{finding.message}" }
+          say "  every flagged source is built and has rows" if findings.empty?
+        ensure
+          catalog.disconnect
         end
       end
 

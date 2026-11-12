@@ -5891,6 +5891,18 @@ class CLITest < Minitest::Test
     end
   end
 
+  # The lane-coverage check: with_deferred_wave's registry no longer
+  # flags pap for the fuzzy lane, yet the built trigram scope holds it.
+  def test_index_doctor_reports_lane_coverage_findings_loudly
+    with_deferred_wave do |config|
+      out, _err, status = with_config(config) { run_cli(%w[index doctor]) }
+
+      assert_nil status
+      assert_match(/lane coverage \(config flags vs built scope vs rows\):/, out)
+      assert_match(/⚠ trigram: pap is in the built scope but no longer flagged/, out)
+    end
+  end
+
   def test_index_doctor_without_an_index_says_so
     with_empty_registry_env do |config|
       out, _err, status = with_config(config) { run_cli(%w[index doctor]) }
