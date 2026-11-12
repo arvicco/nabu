@@ -519,6 +519,57 @@ class SyncRunnerTest < Minitest::Test
     assert_equal 0, @db[:passage_entities].count
   end
 
+  # The catalog-lane twin of the never-started slice (live 2026-11-12,
+  # cllg-freed): a first sync whose load LANDED all 6,290 documents but
+  # whose process died before the post-load lanes ran left the timeline,
+  # facet and kind lanes dark, and every later re-sync's no-op load
+  # skipped the lane refresh — dark forever. A no-op load now still
+  # refreshes the lanes when the source carries lane ore (date bounds /
+  # facet metadata) its lane tables hold no rows for — the same probes
+  # `nabu health`'s drift twins read.
+  def test_idempotent_resync_heals_catalog_lanes_a_dead_first_sync_never_projected
+    date = { "not_before" => -300, "not_after" => -201, "raw" => "c. 3 B.C.", "class" => "composition" }
+    BreakerAdapter.reset!(urns: %w[urn:cts:test:w1 urn:cts:test:w2],
+                          doc_metadata: { "date" => date,
+                                          "facets" => { "genre" => { "value" => "epic", "raw" => "Epic." } } })
+    runner = make_runner(registry(entry("cllg-freed", BreakerAdapter, wired: true)))
+    runner.sync("cllg-freed", parse_only: true)
+    assert_equal 2, @db[:document_axes].where(axis_source: "cllg-freed").count, "the first sync projects"
+
+    # The dead-first-sync state: documents landed, lanes never projected.
+    @db[:document_axes].delete
+    @db[:document_facets].delete
+
+    outcome = runner.sync("cllg-freed", parse_only: true)
+
+    assert_equal 2, outcome.load_report.skipped, "the load itself is still a no-op"
+    assert_equal [[-300, -201, "composition"]] * 2,
+                 @db[:document_axes].where(axis_source: "cllg-freed").select_map(%i[not_before not_after date_class])
+    assert_equal 2, @db[:document_facets].where(facet: "genre").count, "the facet lane healed with it"
+  end
+
+  # The heal is a probe, never a standing cost: a no-op re-sync of a
+  # source whose lanes are lit leaves the lane refresh skipped.
+  def test_idempotent_resync_with_lit_lanes_skips_the_lane_refresh
+    date = { "not_before" => -300, "not_after" => -201, "raw" => "c. 3 B.C." }
+    BreakerAdapter.reset!(urns: %w[urn:cts:test:w1], doc_metadata: { "date" => date })
+    runner = make_runner(registry(entry("cllg-freed", BreakerAdapter, wired: true)))
+    runner.sync("cllg-freed", parse_only: true)
+
+    calls = 0
+    original = Nabu::Store::TimelineBuilder::MetadataDates.method(:refresh_source!)
+    Nabu::Store::TimelineBuilder::MetadataDates.define_singleton_method(:refresh_source!) do |**kwargs|
+      calls += 1
+      original.call(**kwargs)
+    end
+    begin
+      runner.sync("cllg-freed", parse_only: true)
+    ensure
+      Nabu::Store::TimelineBuilder::MetadataDates.define_singleton_method(:refresh_source!, original)
+    end
+    assert_equal 0, calls
+  end
+
   def test_parse_only_keeps_prior_last_sync_sha
     BreakerAdapter.reset!(urns: %w[urn:cts:test:w1])
     BreakerAdapter.fetch_sha = "sha-abc"
