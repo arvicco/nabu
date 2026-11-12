@@ -1,6 +1,9 @@
 # frozen_string_literal: true
 
-require_relative "../store"
+# The full entrypoint, not a partial tree: the rail-freshness probe reads
+# the ledger through Store, whose require graph (indexer, timeline
+# builders, adapters) only loads in nabu.rb's order.
+require_relative "../../nabu"
 
 module Nabu
   module Ops
