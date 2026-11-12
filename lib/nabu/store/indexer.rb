@@ -468,7 +468,7 @@ module Nabu
       # the catalog passage id (the passage_chars rowid convention). Every
       # reader joins back to the catalog by rowid;
       # fts_passage_id_expression is the shape-aware read seam.
-      # contentless_delete (SQLite ≥3.43; the box runs 3.53) makes per-row
+      # contentless_delete (SQLite ≥3.43; the bundled engine is 3.54.1) makes per-row
       # DELETE real, so the incremental slice refresh keeps working — by
       # key now, no streaming scan (delete_fts_rows_by_rowid).
       # Same arrival contract as the columns above: the shape appears at

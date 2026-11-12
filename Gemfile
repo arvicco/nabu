@@ -13,7 +13,10 @@ gem "csv"
 gem "faraday"
 gem "nokogiri"
 gem "sequel"
-gem "sqlite3"
+# The gem bundles its own SQLite engine; the floor pins the engine the
+# fts governor and connection profile were re-verified against (2.10.2 →
+# SQLite 3.54.1), so a fresh install never resolves an older engine.
+gem "sqlite3", ">= 2.10.2"
 gem "thor"
 
 group :development, :test do
