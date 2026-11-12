@@ -2373,5 +2373,133 @@ module Store
       assert_empty row_shas.where(source_id: @source.id), "a withdrawn document takes every sha with it"
       assert_identical_to_a_fresh_rebuild
     end
+
+    # -- above-budget rewrites become shadow builds (the incrementality review)
+    # In-place fts churn is what the engine is pathological at: tombstones
+    # plus re-inserts leave merge debt it repays inside arbitrary later
+    # statements. Past IN_PLACE_ROW_BUDGET rows, a lane's new content is
+    # built as an APPEND-ONLY shadow and swapped in whole — the old
+    # structure is dropped, never churned. Below it, in place as before.
+
+    # Two sources, both indexed; "s" then mutates (add + revise + withdraw).
+    def shadow_fixture(also: nil)
+      doc = make_document(urn: "urn:d:s")
+      %w[alpha beta gamma].each_with_index do |word, index|
+        make_passage(doc, urn: "urn:d:s:#{index + 1}", text_normalized: word, sequence: index,
+                          sha: sha_hex(word), annotations: token_annotations([word, word]))
+      end
+      lit = make_document(urn: "urn:d:lit", source: literary_source)
+      make_passage(lit, urn: "urn:d:lit:1", text_normalized: "στρατηγοσ 棄", sequence: 0, sha: sha_hex("σ"))
+      make_passage(lit, urn: "urn:d:lit:2", text_normalized: "ναυσ", sequence: 1, sha: sha_hex("ν"))
+      [@fulltext, also].compact.each do |fulltext|
+        Nabu::Store::Indexer.rebuild!(catalog: @catalog, fulltext: fulltext, fuzzy_slugs: %w[s lit])
+      end
+      doc
+    end
+
+    def mutate_shadow_fixture(doc)
+      make_passage(doc, urn: "urn:d:s:4", text_normalized: "delta 王", sequence: 3, sha: sha_hex("delta"),
+                        annotations: token_annotations(%w[delta delta]))
+      Nabu::Store::Passage.first(urn: "urn:d:s:2").update(text_normalized: "revised", content_sha256: sha_hex("r"))
+      Nabu::Store::Passage.first(urn: "urn:d:s:3").update(withdrawn: true)
+    end
+
+    # The slice key set of "s" is 4 rows after the mutation.
+    def test_a_rewrite_at_the_budget_stays_in_place
+      doc = shadow_fixture
+      mutate_shadow_fixture(doc)
+      # The discriminator: a tampered row of ANOTHER source. In place, the
+      # refresh never touches it; a shadow re-derives every indexed row.
+      tampered = passage_id_of("urn:d:lit:2")
+      fts.where(rowid: tampered).delete
+      spy = BulkSpy.new
+      refresh!(row_budget: 4, fuzzy_slugs: %w[s lit], progress: spy)
+
+      refute_includes fts_rowids(@fulltext), tampered, "at the budget the write stays in place"
+      refute(spy.stages.any? { |line| line.include?("shadow") }, "no shadow is announced (#{spy.stages.inspect})")
+    end
+
+    def test_a_rewrite_over_the_budget_builds_a_shadow_identical_to_the_in_place_run
+      in_place = Nabu::Store.connect_fulltext("sqlite::memory:")
+      begin
+        doc = shadow_fixture(also: in_place)
+        mutate_shadow_fixture(doc)
+        Nabu::Store::Indexer.refresh_source!(catalog: @catalog, fulltext: in_place, slug: "s",
+                                             fuzzy_slugs: %w[s lit])
+        spy = BulkSpy.new
+        refresh!(row_budget: 3, fuzzy_slugs: %w[s lit], progress: spy)
+
+        assert(spy.stages.any? { |line| line.include?("shadow build") },
+               "the shadow is announced (#{spy.stages.inspect})")
+        assert_equal fts_rowids(in_place), fts_rowids(@fulltext), "passages_fts: the identical rowid set"
+        %i[passage_lemmas lemma_frequencies fts_row_shas char_postings passage_chars
+           passages_trigram passages_trigram_scope].each do |table|
+          assert_equal table_rows(in_place, table), table_rows(@fulltext, table),
+                       "#{table} must be row-identical to the in-place run"
+        end
+        assert_equal %w[urn:d:s:2], match_urns("revised"), "the swapped-in table answers MATCH"
+        assert_empty match_urns("gamma"), "the withdrawn row is absent from the shadow"
+        refute @fulltext.table_exists?(Nabu::Store::Indexer::SHADOW_TABLE), "the shadow name is gone after the swap"
+        assert_equal 0, Nabu::Store::FtsStructure.gauges(@fulltext, :passages_fts)[:tombstone_pages],
+                     "an append-only build carries zero tombstones"
+      ensure
+        in_place.disconnect
+      end
+    end
+
+    def test_a_shadow_build_rederives_every_indexed_row_of_other_sources
+      doc = shadow_fixture
+      mutate_shadow_fixture(doc)
+      tampered = passage_id_of("urn:d:lit:2")
+      fts.where(rowid: tampered).delete
+      refresh!(row_budget: 0)
+
+      assert_includes fts_rowids(@fulltext), tampered,
+                      "the shadow indexes every sidecar-recorded row, not just the refreshed source's"
+      assert_identical_to_a_fresh_rebuild
+    end
+
+    def test_a_killed_shadow_builds_orphan_is_dropped_and_the_old_table_keeps_serving
+      shadow_fixture
+      @fulltext.run(Nabu::Store::Indexer::CREATE_TABLE.sub("passages_fts", "passages_fts_shadow"))
+
+      assert_equal %w[urn:d:lit:1 urn:d:lit:2 urn:d:s:1 urn:d:s:2 urn:d:s:3], fts_urns,
+                   "the serving table is untouched by an orphan beside it"
+      refresh!
+
+      refute @fulltext.table_exists?(Nabu::Store::Indexer::SHADOW_TABLE), "the next refresh drops the orphan"
+    end
+
+    def test_the_shadow_needs_a_complete_sidecar_and_says_so_otherwise
+      doc = shadow_fixture
+      mutate_shadow_fixture(doc)
+      row_shas.where(source_id: literary_source.id).delete # a slice indexed before the sidecar existed
+      spy = BulkSpy.new
+      refresh!(row_budget: 0, progress: spy)
+
+      assert(spy.stages.any? { |line| line.include?("sidecar incomplete") },
+             "the fallback is announced (#{spy.stages.inspect})")
+      assert_equal %w[urn:d:lit:1 urn:d:lit:2], urns_of(fts_rowids(@fulltext)).grep(/lit/),
+                   "the other source keeps its rows — a shadow would have lost them"
+    end
+
+    def test_an_over_budget_trigram_lane_is_rebuilt_whole
+      doc = shadow_fixture
+      mutate_shadow_fixture(doc)
+      spy = BulkSpy.new
+      refresh!(row_budget: 3, fuzzy_slugs: %w[s lit], progress: spy)
+
+      assert(spy.stages.any? { |line| line.include?("trigram lane: shadow build") },
+             "the trigram lane's whole rebuild is announced (#{spy.stages.inspect})")
+      fresh = Nabu::Store.connect_fulltext("sqlite::memory:")
+      begin
+        Nabu::Store::Indexer.rebuild!(catalog: @catalog, fulltext: fresh, fuzzy_slugs: %w[s lit])
+        %i[passages_trigram passages_trigram_scope].each do |table|
+          assert_equal table_rows(fresh, table), table_rows(@fulltext, table), "#{table} matches a fresh build"
+        end
+      ensure
+        fresh.disconnect
+      end
+    end
   end
 end

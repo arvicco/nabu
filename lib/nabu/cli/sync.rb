@@ -77,6 +77,8 @@ module Nabu
     option :verbose, type: :boolean, default: false, desc: Nabu::Ops::StageGuide::OPTION_DESC
     option :deadline, type: :numeric, banner: "MINUTES",
                       desc: "Index-watcher kill deadline (default 2x the ledger estimate; 0 = never kill)"
+    option :accept_long, type: :boolean, default: false,
+                         desc: "Run even when the index preflight predicts more than the inline budget (~15m)"
     def sync(*slugs)
       # Thor hands unknown flags through as positional args, so a typo
       # (--fetch-onli) or a trailing --help would fire the REAL slugs
@@ -113,6 +115,7 @@ module Nabu
       # load with a BusyException stack.
       Nabu::Store.assert_writable!(config.catalog_path)
       registry = Nabu::SourceRegistry.load(config.sources_path)
+      preflight_sync(config, registry, slugs)
       # Ledger FIRST: open_or_create_ledger lifts a pre-P7-1 catalog's history
       # before open_or_create_catalog migrates the moved tables away.
       ledger = open_or_create_ledger(config)
@@ -406,6 +409,23 @@ module Nabu
     MODULE_CHANGED_SHOWN = 5
 
     no_commands do
+      # The index preflight (Nabu::IndexPreflight — the proportionality
+      # law's tool-side gate), before the ledger or catalog opens: every
+      # explicitly NAMED registered source whose sync will run the inline
+      # index step prints its stage plan, and a predicted run past the
+      # budget refuses unless --accept-long. Skipped: --fetch-only (no
+      # index work), index_policy: deferred sources (their index step is
+      # `index refresh`, gated there), and the --all/--axis/group batches,
+      # whose member set resolves later — each member still runs under the
+      # index watcher's deadline.
+      def preflight_sync(config, registry, slugs)
+        return if options[:fetch_only] || options[:all] || options[:axis]
+
+        gated = slugs.select { |slug| (entry = registry[slug]) && !entry.index_deferred? }
+        Nabu::IndexPreflight.gate!(history_path: config.history_path, slugs: gated,
+                                   accept_long: options[:accept_long])
+      end
+
       # A sync writes the index (its slice refresh), so it runs under the
       # index watcher — except --fetch-only, which never touches the index.
       # The estimate is the named sources' last sync stages; --all/--axis

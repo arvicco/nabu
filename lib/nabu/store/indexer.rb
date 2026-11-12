@@ -399,6 +399,70 @@ module Nabu
       # not the passage id). Never a readiness prerequisite.
       ROW_SHAS_TABLE = :fts_row_shas
 
+      # == Above-budget rewrites become shadow builds (the incrementality review)
+      #
+      # The measured hours-class grinds (the two 2026-11-11 stalls, the
+      # kanripo 6h18m) were all multi-million-row IN-PLACE rewrites of a
+      # built fts5 structure: every delete leaves a tombstone, every
+      # re-insert a segment, and the engine repays the resulting merge debt
+      # on ITS clock, inside whichever later statement trips it — a debt no
+      # between-statement governor can see coming. FTS5 is excellent at the
+      # other shape: a linear append into a FRESH structure (every rebuild
+      # proves it). So the write path now has a hard row budget on in-place
+      # fts writes, per lane per run:
+      #
+      #   - AT or under IN_PLACE_ROW_BUDGET rows, the lane is written in
+      #     place as before (the deferred-deletemerge recipe and the merge
+      #     governor stay the backstop);
+      #   - OVER it, the lane's new content is built as an APPEND-ONLY
+      #     shadow — linear writes, batch-ticked, governed — and swapped in
+      #     atomically; the old structure is DROPPED WHOLE. Zero tombstones,
+      #     zero merge debt, no old structure for the engine to grind; the
+      #     cost is linear and announced.
+      #
+      # Two grains, matching where each lane lives:
+      #
+      #   - passages_fts (the main file): the in-main-file SHADOW TABLE
+      #     (SHADOW_TABLE). It is filled from the catalog with exactly the
+      #     membership the old table had — every row the row-sha sidecar
+      #     records for OTHER sources (re-derived from the catalog by id, so
+      #     a deferred source's behind slice stays exactly as behind) plus
+      #     the refreshing source's live rows — then one transaction drops
+      #     the old table and renames the shadow over it. The lemma table,
+      #     the sidecar and the aggregates are plain B-trees (no tombstone
+      #     pathology) and keep their in-place slice writes, with the fts
+      #     half of each batch skipped. The shadow needs a COMPLETE sidecar
+      #     (shadow_ready?): a slice indexed before the sidecar existed has
+      #     no recorded membership, so a shadow would silently drop it —
+      #     that file stays in place, announced, until the next full
+      #     rebuild backfills the sidecar.
+      #   - the trigram lane (its own file, Store::Lanes): Lanes.build!
+      #     already IS this pattern for whole-lane builds — an over-budget
+      #     trigram write runs rebuild_trigram! (a fresh lane file, renamed
+      #     over the serving one) instead of the in-place slice. The cjk
+      #     lane never takes inline writes at all (rebuild-cadence).
+      #
+      # Crash honesty: the shadow is built BEFORE any destructive slice
+      # write and under the pending marker. A death mid-build leaves the
+      # old table serving untouched and an orphan shadow, which the next
+      # refresh drops at entry; a death after the swap leaves an index
+      # AHEAD of the sidecar, never behind it (the sidecar invariant still
+      # holds — a current sha still means fully indexed), and the pending
+      # marker heals the rest.
+      #
+      # The budget: 100k rows is the line the review drew between the
+      # measured minutes-class in-place writes (the 17.5k-row ndl delta;
+      # the ~35-document heals) and the hours-class ones (3.77M, 8.75M) —
+      # comfortably above routine sync deltas, two orders below the grinds.
+      # A named constant so a re-measurement moves it in one place.
+      IN_PLACE_ROW_BUDGET = 100_000
+      SHADOW_TABLE = :passages_fts_shadow
+      # Shadow batches commit in groups: per-batch autocommit would flush a
+      # level-0 segment per 2,000 rows, one wrapping transaction would hold
+      # the whole multi-GB build in the WAL — 50 batches (100k rows) per
+      # commit keeps both bounded.
+      SHADOW_COMMIT_BATCHES = 50
+
       # FTS5 DDL (see class note). text_normalized carries the folded search
       # form; urn + passage_id ride along UNINDEXED so a hit joins back to the
       # catalog (where the pristine text and annotations stay) without
@@ -575,6 +639,7 @@ module Nabu
         # nothing stays pending (absent table = nothing pending).
         fulltext.drop_table?(SLICE_REFRESHES_TABLE)
         fulltext.drop_table?(ROW_SHAS_TABLE)
+        fulltext.drop_table?(SHADOW_TABLE) # a killed shadow build's orphan
         fulltext.run(CREATE_TABLE)
         create_row_shas_table(fulltext, indexed: false)
         create_lemma_table(fulltext)
@@ -727,7 +792,8 @@ module Nabu
                           cjk_slugs: nil, lemma_tiers: nil, reflexes_changed: false,
                           sign_list: nil, progress: nil,
                           ledger: nil, lemma_shelf: nil, lemma_filter_slugs: nil,
-                          bulk_threshold: BULK_SLICE_THRESHOLD, delta: nil)
+                          bulk_threshold: BULK_SLICE_THRESHOLD, delta: nil,
+                          row_budget: IN_PLACE_ROW_BUDGET)
         unless incremental_ready?(fulltext)
           rebuild!(catalog: catalog, fulltext: fulltext, alignments: alignments,
                    fuzzy_slugs: fuzzy_slugs, cjk_slugs: cjk_slugs, lemma_tiers: lemma_tiers,
@@ -790,6 +856,17 @@ module Nabu
         # proportional to churn).
         governed = governed_fts_tables(fulltext)
         bulk = !governed.empty? && ids.size >= bulk_threshold
+        # The in-place row budget (SHADOW_TABLE note): over it, the lane is
+        # built as an append-only shadow instead. A killed build's orphan
+        # goes first, whatever this run decides.
+        fulltext.drop_table?(SHADOW_TABLE)
+        shadow = shadow_main?(catalog, fulltext, ids, row_budget, source_id: source_id, slug: slug,
+                                                                  progress: progress)
+        trigram_ids = use_delta ? delta.changed_ids : slice_ids
+        trigram_shadow = trigram_ids.size > row_budget && trigram_touched?(fulltext, slug, Array(fuzzy_slugs))
+        # The shadow writes passages_fts nowhere in place — its deferral
+        # recipe has nothing to govern (the cjk lane, when present, keeps it).
+        governed -= [TABLE] if shadow
         progress&.stage("index slice: #{slug} — bulk mode (#{ids.size} rows): merges deferred") if bulk
         if use_delta
           progress&.stage("index delta: #{slug} — #{delta.upserted_ids.size} changed / " \
@@ -803,6 +880,14 @@ module Nabu
         # predating it (ROW_SHAS_TABLE note) — it populates the whole slice.
         create_row_shas_table(fulltext) if !use_delta && !heal && fts_contentless?(fulltext)
         mark_slice_pending!(fulltext, slug)
+        if shadow
+          timed_sync_stage(ledger, slug, "fts_shadow",
+                           "index slice: #{slug} — passages_fts shadow build (#{ids.size} rows over the " \
+                           "#{row_budget}-row in-place budget: append-only, swapped in whole)", progress) do
+            build_fts_shadow!(catalog: catalog, fulltext: fulltext, source_id: source_id, progress: progress)
+            swap_fts_shadow!(fulltext)
+          end
+        end
         with_bulk_write_mode(fulltext, governed) do
           timed_sync_stage(ledger, slug, "index_slice",
                            "index slice: #{slug} (fts + lemma rows)", progress) do
@@ -816,7 +901,12 @@ module Nabu
               # (ROW_SHAS_TABLE invariant — removed before their fts/lemma rows).
               delete_row_shas(fulltext, ids)
               deleted = delete_source_lemma_rows(fulltext, ids: ids)
-              if fts_contentless?(fulltext)
+              # Under a shadow the swapped-in table already holds the
+              # source's current rows — its fts half is done, in neither
+              # direction in place.
+              if shadow
+                nil
+              elsif fts_contentless?(fulltext)
                 delete_fts_rows_by_rowid(fulltext, TABLE, ids, progress: progress)
               else
                 delete_fts_rows(fulltext, TABLE, ids)
@@ -831,7 +921,8 @@ module Nabu
                 end
               count, inserted, chars = insert_passage_batches(
                 fulltext, insert_scope,
-                source_tiers(catalog, lemma_tiers || {}), source_slugs(catalog), progress: progress
+                source_tiers(catalog, lemma_tiers || {}), source_slugs(catalog), progress: progress,
+                                                                                 fts: !shadow
               )
               # P84-1: re-apply the silver-lemma slice — the delete above
               # stripped any shelf-projected rows for these urns, and the
@@ -871,7 +962,11 @@ module Nabu
               # slice or delta write here, ever — +cjk_slugs+ feeds only
               # the full-rebuild fallback above; the lane catches up at
               # the next rebuild (refresh_cjk_lane!).
-              if use_delta
+              # An over-budget trigram write rebuilds the lane file whole
+              # below, outside this unit (Lanes.build! refuses a transaction).
+              if trigram_shadow
+                nil
+              elsif use_delta
                 refresh_trigram_delta(catalog, fulltext, slug, Array(fuzzy_slugs), delta)
               else
                 refresh_trigram_slice(catalog, fulltext, slug, Array(fuzzy_slugs), slice_ids)
@@ -926,6 +1021,13 @@ module Nabu
           end
         end
         consolidate_deferred_merges!(fulltext, governed, slug: slug, ledger: ledger, progress: progress)
+        if trigram_shadow
+          timed_sync_stage(ledger, slug, "trigram_shadow",
+                           "trigram lane: shadow build (#{trigram_ids.size} rows over the #{row_budget}-row " \
+                           "in-place budget — the lane file rebuilt whole)", progress) do
+            rebuild_trigram!(catalog: catalog, fulltext: fulltext, fuzzy_slugs: Array(fuzzy_slugs))
+          end
+        end
         timed_sync_stage(ledger, slug, "postings_swaps",
                          "index slice: #{slug} — postings/coverage swaps", progress) do
           unless fulltext.table_exists?(CHAR_POSTINGS_TABLE)
@@ -1071,6 +1173,114 @@ module Nabu
           end
           count
         end
+      end
+
+      # -- the shadow build (SHADOW_TABLE note) -----------------------------
+
+      # Whether this run's main-index write goes to a shadow: over the
+      # budget, contentless shape (a legacy contentful file keeps its old
+      # path, like every recipe of this family), and a sidecar complete
+      # enough to name the old table's membership — else in place,
+      # announced.
+      def shadow_main?(catalog, fulltext, ids, row_budget, source_id:, slug:, progress: nil)
+        return false unless ids.size > row_budget && fts_contentless?(fulltext)
+        return true if shadow_ready?(catalog, fulltext, source_id)
+
+        progress&.stage("index slice: #{slug} — #{ids.size} rows over the #{row_budget}-row in-place budget, " \
+                        "but the row-sha sidecar incomplete (a slice predating it): writing in place " \
+                        "under the governor until a full rebuild backfills it")
+        false
+      end
+
+      # The sidecar names every OTHER source's indexed membership: each
+      # source either has sidecar rows, or no indexed rows at all (its
+      # first and last live passages probed in the index — a slice that
+      # predates the sidecar was written whole, so both would be there).
+      # O(sources) point lookups.
+      def shadow_ready?(catalog, fulltext, source_id)
+        return false unless fulltext.table_exists?(ROW_SHAS_TABLE)
+
+        catalog[:sources].exclude(id: source_id).select_map(:id).all? do |other|
+          next true unless fulltext[ROW_SHAS_TABLE].where(source_id: other).empty?
+
+          scope = live_passages(catalog).where(Sequel[:documents][:source_id] => other)
+          probes = [scope.min(Sequel[:passages][:id]), scope.max(Sequel[:passages][:id])].compact
+          probes.empty? || fulltext[TABLE].where(rowid: probes).empty?
+        end
+      end
+
+      # Build SHADOW_TABLE as an append-only linear pass (class note):
+      # every sidecar-recorded row of the other sources, re-derived from
+      # the catalog by id, then the refreshing source's live rows. Batch-
+      # ticked, governed, committed every SHADOW_COMMIT_BATCHES batches.
+      # Returns the rows written.
+      def build_fts_shadow!(catalog:, fulltext:, source_id:, progress: nil)
+        fulltext.drop_table?(SHADOW_TABLE)
+        fulltext.run(CREATE_TABLE.sub("passages_fts", SHADOW_TABLE.to_s))
+        slugs = source_slugs(catalog)
+        governor = FtsGovernor.new(fulltext: fulltext, table: SHADOW_TABLE, progress: progress)
+        count = 0
+        shadow_rows(catalog, fulltext, source_id).each_slice(BATCH_SIZE * SHADOW_COMMIT_BATCHES) do |group|
+          fulltext.transaction do
+            group.each_slice(BATCH_SIZE) do |batch|
+              fulltext[SHADOW_TABLE].multi_insert(
+                batch.map { |row| fts_row(row, language: true, source_slugs: slugs, contentless: true) }
+              )
+              count += batch.size
+              progress&.load_tick(count, 0) if batch.size == BATCH_SIZE
+              governor.tick!
+            end
+          end
+        end
+        checkpoint_wal!(fulltext, progress: progress)
+        count
+      end
+
+      # The swap: one transaction drops the old table whole (pages to the
+      # freelist — no tombstones, no merges) and renames the shadow over
+      # it (fts5's xRename carries its shadow tables along).
+      def swap_fts_shadow!(fulltext)
+        fulltext.transaction do
+          fulltext.drop_table(TABLE)
+          fulltext.rename_table(SHADOW_TABLE, TABLE)
+        end
+      end
+
+      # The shadow's row stream: the sidecar-keyed membership of the other
+      # sources (paged by rowid — never the whole id set in memory), then
+      # the refreshing source's live rows.
+      def shadow_rows(catalog, fulltext, source_id)
+        Enumerator.new do |y|
+          last = 0
+          loop do
+            others = fulltext[ROW_SHAS_TABLE].exclude(source_id: source_id)
+            page = others.where { rowid > last }.order(:rowid).limit(BATCH_SIZE).select_map(:rowid)
+            break if page.empty?
+
+            shadow_catalog_rows(catalog).where(Sequel[:passages][:id] => page).each { |row| y << row }
+            last = page.last
+          end
+          shadow_catalog_rows(catalog)
+            .where(Sequel[:passages][:withdrawn] => false, Sequel[:documents][:withdrawn] => false)
+            .where(Sequel[:documents][:source_id] => source_id).each { |row| y << row }
+        end
+      end
+
+      # The lean four-column row fts_row needs — no liveness filter: a
+      # recorded row the old table still holds (a withdrawal not yet
+      # refreshed) is membership the shadow must keep.
+      def shadow_catalog_rows(catalog)
+        catalog[:passages]
+          .join(:documents, id: Sequel[:passages][:document_id])
+          .select(Sequel[:passages][:text_search].as(:text_normalized), Sequel[:passages][:id].as(:passage_id),
+                  Sequel[:passages][:language], Sequel[:documents][:source_id].as(:source_id))
+      end
+
+      # Whether this refresh writes the source's trigram slice at all:
+      # flagged now, or indexed by the last build (refresh_trigram_slice's
+      # own hands-off rule).
+      def trigram_touched?(fulltext, slug, fuzzy_slugs)
+        fuzzy_slugs.include?(slug) || !fulltext[TRIGRAM_SCOPE_TABLE].where(slug: slug).empty?
       end
 
       # -- the bulk slice mode internals (P111-1) ----------------------------
@@ -1762,7 +1972,9 @@ module Nabu
       # silent (the non-tty one-close-line contract), and the sync
       # fallthrough into this full rebuild would otherwise stamp passage
       # counts onto the still-open parse+load stage.
-      def insert_passage_batches(fulltext, dataset, tiers, slugs = nil, progress: nil)
+      # +fts: false+ (the shadow path, SHADOW_TABLE note) skips each batch's
+      # passages_fts half — the swapped-in shadow already holds those rows.
+      def insert_passage_batches(fulltext, dataset, tiers, slugs = nil, progress: nil, fts: true)
         with_language = fts_language_column?(fulltext)
         with_source = slugs && fts_source_column?(fulltext) ? slugs : nil
         contentless = fts_contentless?(fulltext)
@@ -1770,15 +1982,17 @@ module Nabu
         count = 0
         lemma_count = 0
         chars = Hash.new(0)
-        governor = fts_governor(fulltext, TABLE, progress: progress)
+        governor = (fts_governor(fulltext, TABLE, progress: progress) if fts)
         with_shas = contentless && fulltext.table_exists?(ROW_SHAS_TABLE)
         dataset.each_slice(BATCH_SIZE) do |batch|
-          fulltext[TABLE].multi_insert(
-            batch.map do |row|
-              fts_row(row, language: with_language, source_slugs: with_source,
-                           contentless: contentless)
-            end
-          )
+          if fts
+            fulltext[TABLE].multi_insert(
+              batch.map do |row|
+                fts_row(row, language: with_language, source_slugs: with_source,
+                             contentless: contentless)
+              end
+            )
+          end
           rows = batch.flat_map { |row| lemma_rows(row, tiers: tiers, slugs: slugs) }
           fulltext[LEMMA_TABLE].multi_insert(rows)
           # LAST statement of the batch — the ROW_SHAS_TABLE invariant.
