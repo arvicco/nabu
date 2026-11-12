@@ -121,8 +121,10 @@ module Nabu
     end
 
     # The sync stages an index refresh runs (Indexer.refresh_source!'s
-    # timed stages), and the corpus one it may trigger.
-    REFRESH_STAGES = %w[index_slice postings_swaps fts_merge reflex_closure].freeze
+    # timed stages; a dictionary sync's closure re-walk included). The
+    # shadow builds are arrival events sized by the load, never planned
+    # from history (Store::IndexCostClasses).
+    REFRESH_STAGES = %w[index_slice postings_swaps fts_merge reflex_closure reflex_rewalk].freeze
 
     # Run the block as the supervised writer: a watcher forked over THIS
     # process, the heartbeat file fed through the progress tee the block

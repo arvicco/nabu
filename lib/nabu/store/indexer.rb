@@ -1124,7 +1124,7 @@ module Nabu
         # gold languages that crossed zero. The corpus pass is the rebuild's
         # and the maintenance rail's.
         if reflexes_changed
-          timed_sync_stage(ledger, slug, "reflex_closure",
+          timed_sync_stage(ledger, slug, "reflex_rewalk",
                            "reflex root closure (crosswalk changed — re-walked; gold stats kept)", progress) do
             ReflexRootsIndexer.rebuild_closure!(catalog: catalog, fulltext: fulltext)
           end
@@ -1170,8 +1170,11 @@ module Nabu
 
       # P78-r3: announce with the last sync's estimate, run, record the
       # wall time (kind "sync"). A nil ledger announces bare and records
-      # nothing — the rebuild path keeps its own profiler lane.
+      # nothing — the rebuild path keeps its own profiler lane. The stage
+      # must DECLARE its cost class first (Store::IndexCostClasses — the
+      # proportionality law): an undeclared stage refuses to time.
       def timed_sync_stage(ledger, scope, stage, label, progress, &)
+        IndexCostClasses.for("sync", stage)
         eta = ledger && Nabu::Eta.for(ledger, kind: "sync", scope: scope, stage: stage)
         progress&.stage(label, eta: eta)
         started = Process.clock_gettime(Process::CLOCK_MONOTONIC)
