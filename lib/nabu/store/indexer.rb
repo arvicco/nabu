@@ -1009,22 +1009,25 @@ module Nabu
       # Returns the number of passages trigram-indexed.
       # The lane lives in its own file (Store::Lanes): the build readies the
       # lane schema and qualifies its DDL; the inserts stay unqualified.
+      # The build runs through Lanes.build!'s crash-honest swap: a fresh
+      # file, renamed over the serving one only once complete.
       def rebuild_trigram!(catalog:, fulltext:, fuzzy_slugs:)
-        schema = Lanes.prepare_build!(fulltext, Lanes::TRIGRAM)
-        fulltext.run(create_trigram_sql(schema))
-        fulltext.create_table(Lanes.qualified(Lanes::TRIGRAM, TRIGRAM_SCOPE_TABLE)) do
-          String :slug, null: false
-        end
-
-        count = 0
-        fulltext.transaction do
-          fulltext[TRIGRAM_SCOPE_TABLE].multi_insert(fuzzy_slugs.map { |slug| { slug: slug } })
-          trigram_passages(catalog, fuzzy_slugs).each_slice(BATCH_SIZE) do |batch|
-            fulltext[TRIGRAM_TABLE].multi_insert(batch.map { |row| index_row(row) })
-            count += batch.size
+        Lanes.build!(fulltext, Lanes::TRIGRAM) do |schema|
+          fulltext.run(create_trigram_sql(schema))
+          fulltext.create_table(Lanes.qualified(Lanes::TRIGRAM, TRIGRAM_SCOPE_TABLE)) do
+            String :slug, null: false
           end
+
+          count = 0
+          fulltext.transaction do
+            fulltext[TRIGRAM_SCOPE_TABLE].multi_insert(fuzzy_slugs.map { |slug| { slug: slug } })
+            trigram_passages(catalog, fuzzy_slugs).each_slice(BATCH_SIZE) do |batch|
+              fulltext[TRIGRAM_TABLE].multi_insert(batch.map { |row| index_row(row) })
+              count += batch.size
+            end
+          end
+          count
         end
-        count
       end
 
       # REBUILD-CADENCE (the 2026-11-11 maintenance ruling): the
@@ -1053,18 +1056,21 @@ module Nabu
         # only pollute the rebuild's stage record.
         progress&.stage("cjk bigram lane: rebuilding over #{cjk_slugs.size} flagged sources") if
           cjk_slugs.any?
-        schema = Lanes.prepare_build!(fulltext, Lanes::CJK) # its own file (Store::Lanes)
-        fulltext.run(create_cjk_sql(schema))
-        fulltext.create_table(Lanes.qualified(Lanes::CJK, CJK_SCOPE_TABLE)) do
-          String :slug, null: false
-        end
+        # Its own file, built through the crash-honest swap (Store::Lanes):
+        # a death anywhere in here leaves the previous lane serving.
+        Lanes.build!(fulltext, Lanes::CJK) do |schema|
+          fulltext.run(create_cjk_sql(schema))
+          fulltext.create_table(Lanes.qualified(Lanes::CJK, CJK_SCOPE_TABLE)) do
+            String :slug, null: false
+          end
 
-        count = 0
-        fulltext.transaction do
-          fulltext[CJK_SCOPE_TABLE].multi_insert(cjk_slugs.map { |slug| { slug: slug } })
-          count = insert_cjk_batches(fulltext, cjk_passages(catalog, cjk_slugs), progress: progress)
+          count = 0
+          fulltext.transaction do
+            fulltext[CJK_SCOPE_TABLE].multi_insert(cjk_slugs.map { |slug| { slug: slug } })
+            count = insert_cjk_batches(fulltext, cjk_passages(catalog, cjk_slugs), progress: progress)
+          end
+          count
         end
-        count
       end
 
       # -- the bulk slice mode internals (P111-1) ----------------------------

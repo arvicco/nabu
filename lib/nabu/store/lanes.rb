@@ -60,6 +60,44 @@ module Nabu
     # connects page_size 8192 (fresh files only — the main file's
     # one-way-door rule), WAL, and synchronous NORMAL (OFF under the
     # rebuild profile, the same disposable-derived argument).
+    #
+    # == Crash-honest builds (the Nov 2026 crash-loss incident)
+    #
+    # The rebuild that died mid-reindex on 2026-11-10 left the cjk lane
+    # EMPTY with an empty scope: the lane build dropped its tables BEFORE
+    # rebuilding, so the death took the old lane with it, and fourteen
+    # flagged sources silently lost substring search. Now that a lane is
+    # a file, its build (Lanes.build!) never touches the serving file:
+    #
+    #   1. clear any orphan a previous KILLED build left (<lane>.building);
+    #   2. DETACH the serving lane on the builder's connection and ATTACH
+    #      the fresh <lane>.building file under the SAME schema name — so
+    #      the build's unqualified writes, the merge governor's structure
+    #      reads and the fts5 commands all land in the new file, untouched;
+    #   3. the build runs; the new file is then SEALED (checkpointed, the
+    #      journal back to rollback mode — no -wal/-shm left beside it);
+    #   4. the swap: the serving file's sidecars go, and one rename(2)
+    #      puts the new file at the serving path — atomic on one volume;
+    #   5. the serving path is re-ATTACHed on the builder's connection.
+    #
+    # A build that RAISES anywhere before the swap detaches and deletes
+    # its file and re-attaches the old one (the ensure arm); a build that
+    # is KILLED runs no ensure at all — the old file was never opened for
+    # writing, so it simply keeps serving, and the orphan is step 1's job
+    # next time. Readers in other processes holding the old inode keep
+    # reading it until they reconnect (unlinked, never corrupted).
+    #
+    # The building file takes the rebuild profile (synchronous OFF): it is
+    # disposable until the swap by construction. The seal raises it back
+    # to NORMAL before the checkpoint, so the bytes the rename publishes
+    # were synced.
+    #
+    # Two honest gaps, both shape-arrival one-offs: an in-memory main has
+    # no file to swap (the suite's fulltexts — build in place), and the
+    # FIRST split build over a pre-split fulltext drops the main-schema
+    # copy before building (it would shadow the new file's schema for the
+    # build's own unqualified writes) — that one arrival is not
+    # crash-honest; every lane build after it is.
     module Lanes
       Lane = Data.define(:name, :schema, :suffix, :tables)
 
@@ -68,6 +106,10 @@ module Nabu
       TRIGRAM = Lane.new(name: :trigram, schema: "lane_trigram", suffix: "-trigram",
                          tables: %i[passages_trigram passages_trigram_scope].freeze)
       ALL = [CJK, TRIGRAM].freeze
+
+      # The in-progress build's file: <lane path><BUILDING_SUFFIX>. Never
+      # attached by a connect (attach_existing! names only the lane path).
+      BUILDING_SUFFIX = ".building"
 
       module_function
 
@@ -159,6 +201,64 @@ module Nabu
         ensure_attached!(db, lane)
         lane.tables.each { |table| db.run("DROP TABLE IF EXISTS #{lane.schema}.#{table}") }
         lane.schema
+      end
+
+      # Build +lane+ from scratch through the crash-honest swap (class
+      # note); yields the schema name the build's DDL qualifies with and
+      # returns the block's value. Must run OUTSIDE a transaction (ATTACH
+      # and DETACH refuse inside one) — every lane build is a top-level
+      # rebuild stage. An in-memory main builds in place.
+      def build!(db, lane)
+        main = main_path(db)
+        return yield(prepare_build!(db, lane)) if main.nil?
+
+        final = path_for(main, lane)
+        building = "#{final}#{BUILDING_SUFFIX}"
+        drop_legacy!(db, lane)
+        Store.drop_database_files!(building) # a killed build's orphan
+        db.synchronize do |conn|
+          swapped = false
+          begin
+            detach_raw!(conn, lane)
+            attach_raw!(conn, lane, building, readonly: false, rebuild: true)
+            result = yield lane.schema
+            seal_raw!(conn, lane)
+            detach_raw!(conn, lane)
+            swap_in!(building, final)
+            swapped = true
+            result
+          ensure
+            unless swapped
+              detach_raw!(conn, lane)
+              Store.drop_database_files!(building)
+            end
+            attach_raw!(conn, lane, final, readonly: false) if File.file?(final) && !attached_raw?(conn, lane)
+          end
+        end
+      end
+
+      # The swap (class note, step 4): the serving file's sidecars first —
+      # a -wal left beside the new file would replay the OLD file's frames
+      # over it (the drop_database_files! incident class) — then one rename.
+      def swap_in!(building, final)
+        FileUtils.rm_f(["#{final}-wal", "#{final}-shm"])
+        File.rename(building, final)
+      end
+
+      # Fold the WAL in and leave no sidecars (Store.seal_rollback_journal!,
+      # per schema): the file is renamed as one self-contained file.
+      def seal_raw!(conn, lane)
+        conn.execute("PRAGMA #{lane.schema}.synchronous = NORMAL")
+        conn.execute("PRAGMA #{lane.schema}.wal_checkpoint(TRUNCATE)")
+        conn.execute("PRAGMA #{lane.schema}.journal_mode = delete")
+      end
+
+      def detach_raw!(conn, lane)
+        conn.execute("DETACH DATABASE #{lane.schema}") if attached_raw?(conn, lane)
+      end
+
+      def attached_raw?(conn, lane)
+        conn.execute("PRAGMA database_list").any? { |row| row[1] == lane.schema }
       end
 
       # A lane table as a schema-qualified identifier (create_table).

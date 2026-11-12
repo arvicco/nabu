@@ -137,6 +137,83 @@ module Store
       fulltext&.disconnect
     end
 
+    # -- crash-honest lane builds (the Nov 2026 crash-loss incident) --------
+    # A lane build writes a NEW file and renames it over the old one only
+    # once complete: a build that dies leaves the old lane serving.
+
+    def add_second_passage
+      doc = Nabu::Store::Document.create(source_id: @source.id, urn: "urn:d:s2", title: "t", language: "lzh",
+                                         content_sha256: "y", revision: 1, withdrawn: false)
+      Nabu::Store::Passage.create(document_id: doc.id, urn: "urn:d:s2:1", sequence: 0, language: "lzh",
+                                  text: "六龍在天", text_normalized: "六龍在天", content_sha256: "y",
+                                  revision: 1, withdrawn: false, annotations_json: "{}")
+    end
+
+    # The death injected between the finished build and the swap.
+    def with_failing_swap
+      original = Lanes.method(:swap_in!)
+      Lanes.define_singleton_method(:swap_in!) { |*| raise IOError, "simulated death between build and swap" }
+      yield
+    ensure
+      Lanes.define_singleton_method(:swap_in!, original)
+    end
+
+    def building_path = "#{Lanes.path_for(@path, Lanes::CJK)}#{Lanes::BUILDING_SUFFIX}"
+
+    def test_a_completed_build_swaps_in_and_leaves_no_orphan
+      fulltext = build!
+      add_second_passage
+      Indexer.rebuild_cjk!(catalog: @catalog, fulltext: fulltext, cjk_slugs: ["s"])
+
+      assert_equal 2, cjk_hits(fulltext).size, "the building connection serves the swapped-in lane"
+      refute File.exist?(building_path)
+      refute File.exist?("#{building_path}-wal")
+      assert_equal 2, cjk_hits(connect(readonly: true)).size, "a fresh connect reads the new file"
+    end
+
+    def test_a_build_that_dies_before_the_swap_leaves_the_old_lane_serving
+      fulltext = build!
+      add_second_passage
+      with_failing_swap do
+        assert_raises(IOError) { Indexer.rebuild_cjk!(catalog: @catalog, fulltext: fulltext, cjk_slugs: ["s"]) }
+      end
+
+      assert_equal [@passage.id], cjk_hits(fulltext), "the old lane is re-attached and serving"
+      assert_equal %w[s], fulltext[Indexer::CJK_SCOPE_TABLE].select_map(:slug), "its scope too"
+      assert_equal [@passage.id], cjk_hits(connect(readonly: true)), "the old FILE is intact"
+      refute File.exist?(building_path), "the failed build's file is cleared"
+    end
+
+    # A KILLED build runs no ensure at all: the orphan stays on disk, the
+    # old file serves, and the next build clears the orphan first.
+    def test_a_killed_build_leaves_the_old_lane_and_the_next_build_clears_the_orphan
+      build!.disconnect
+      @open.clear
+      pid = fork do
+        child = Nabu::Store.connect_fulltext(@path)
+        Lanes.build!(child, Lanes::CJK) do |schema|
+          child.run(Indexer.create_cjk_sql(schema))
+          Process.kill(:KILL, Process.pid)
+        end
+      end
+      Process.wait(pid)
+
+      assert File.exist?(building_path), "a SIGKILL leaves the half-built orphan"
+      fulltext = connect
+      assert_equal [@passage.id], cjk_hits(fulltext), "a connect ignores the orphan and serves the old lane"
+      Indexer.rebuild_cjk!(catalog: @catalog, fulltext: fulltext, cjk_slugs: ["s"])
+      refute File.exist?(building_path)
+      assert_equal [@passage.id], cjk_hits(fulltext)
+    end
+
+    def test_the_trigram_lane_builds_the_same_way
+      fulltext = build!
+      with_failing_swap do
+        assert_raises(IOError) { Indexer.rebuild_trigram!(catalog: @catalog, fulltext: fulltext, fuzzy_slugs: []) }
+      end
+      assert_equal %w[s], fulltext[Indexer::TRIGRAM_SCOPE_TABLE].select_map(:slug), "old scope still serving"
+    end
+
     def test_drop_fulltext_files_takes_the_lanes_with_it
       build!.disconnect
       @open.clear
