@@ -381,6 +381,9 @@ module Nabu
           "ticha" => :structured,
           "titus-bactrian" => :structured,
           "titus-manichaica" => :place_only,
+          "titus-old-prussian" => :structured, # each catechism's title-page print year (class
+          #                                      edition — 1545 / 1545 / 1561); the Enchiridion's
+          #                                      stated Königsberg rides "place"
           "titus-sogdian" => :place_only, # the page findspot (one site every line resolves to)
           "titus-tocharian-a" => :place_only,
           "titus-tocharian-b" => :place_only, # the A family's findspot mining

@@ -2582,6 +2582,25 @@ sources:
         ship in the tab"}
     places: {posture: unplaced}
     script: {posture: qualified, note: "romanized headwords (the OJED transliteration)"}
+  titus-old-prussian:
+    # kind machine-postured — the titus-old-prussian fold in kind_map.yml over the
+    # page's text siglum (the catechisms → catechesis, the vocabularies →
+    # lexical/glossary; the fragments declared deliberate).
+    lect: {posture: identity, note: "prg — the bare Old Prussian anchor (nabu-lects, band
+        1350-1700), deliberately coarse: no stage split (the record is 14th-16th c. and
+        thin); the German lanes are never passages (they ride the `german` annotation),
+        so no German claim is minted"}
+    dating: {posture: partial, note: "each catechism's own title-page imprint year — Kat.I
+        and Kat.II \"1.5.45\", the Enchiridion \"M.D. LXI.\" — on every page of that text,
+        class edition on the :structured lane; the vocabularies and fragments carry no date
+        in the edition's headers (the Elbing manuscript's c. 1400 is scholarship, not a
+        header — no claim)"}
+    places: {posture: named, note: "the Enchiridion's stated print place (\"Gedruckt zu
+        Kőnigsperg in Preuſſen\") as Königsberg on its pages; Catechisms I and II name no
+        place on their title pages and the vocabularies/fragments none at all — declared
+        coarse"}
+    script: {posture: implied, note: "Latin type and manuscript hands, transcribed
+        diplomatically (ſ, ʒ, the print's superscripts and line-break hyphens kept)"}
   titus-osco-umbrian:
     kind: {posture: unclassified}
     # P90-2: `osc` and `xum` are both real nabu-lects anchors (xum minted
