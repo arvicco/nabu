@@ -179,7 +179,7 @@ class PosturesTest < Minitest::Test
   def test_the_lect_migration_kept_the_p59_4_census
     lect = postures.declarations.select { |d| d.layer == "lect" }
     by_posture = lect.group_by(&:posture).transform_values(&:size)
-    assert_equal 196, lect.size,
+    assert_equal 197, lect.size,
                  "the P59-4 declarations survive the move (61 at migration; itant retired P61-3," \
                  "oracc retired P62-2, etcsl/ccmh/freising/coptic-scriptorium retired P64-6, " \
                  "titus-avestan retired P66-1, osta+fornsvenska retired P77-r8, achemenet " \
@@ -441,7 +441,9 @@ class PosturesTest < Minitest::Test
                  "cllg-freed ADDED — dates (the TLG canon's century datings band the works onto " \
                  "grc:hom/cla/koi/byz): 196→197; " \
                  "cantus RETIRED — the lat → lat/ecc override machine-postures it (ruled 2026-11-12, " \
-                 "the gregobase stageless-register precedent; the shadowing rule): 197→196"
+                 "the gregobase stageless-register precedent; the shadowing rule): 197→196; " \
+                 "titus-old-frisian ADDED — identity ofs (the bare " \
+                 "Old Frisian anchor; the East/West split stays registry prose): 196→197"
     # The epigraphic-belt registry package (merged + canonical-synced
     # 2026-10-18, the add-then-retire shape within one phase) retires both
     # P130 pendings, and the ociana-script rule + the ig-cyprus override
@@ -536,6 +538,7 @@ class PosturesTest < Minitest::Test
     # cllg-freed joins dates (the TLG canon centuries band onto grc:hom/cla/koi/byz): 31→32.
     # cantus leaves identity (the lat → lat/ecc override machine-postures it,
     # ruled 2026-11-12 — the shadowing rule): 143→142.
-    assert_equal({ "dates" => 32, "codemap" => 22, "identity" => 142 }, by_posture)
+    # titus-old-frisian joins identity (ofs, the bare Old Frisian anchor): 142→143.
+    assert_equal({ "dates" => 32, "codemap" => 22, "identity" => 143 }, by_posture)
   end
 end
