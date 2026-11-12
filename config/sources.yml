@@ -7425,7 +7425,7 @@ titus-old-albanian:   # 02-sources row 406
   # Grant-gated PRIVATE research material, the titus-avestan posture verbatim
   # (the fetch right is not conveyed by a clone):
   availability: blocked
-  wired: false
+  wired: true    # flipped 2026-11-13: first retrieval verified — 286 pages -> 283 docs / 25,748 passages, 0 errored
   # TITUS Old Albanian texts (titus.uni-frankfurt.de/texte/etcs/alban/): Buzuku's
   # Missale (data entry W. Hock), Blanchus's Dictionarium Latino-Epiroticum (Rome 1635)
   # and Bogdani's Cuneus Prophetarum (M. de Vaan), Casasi's Breve compendio della
@@ -7456,7 +7456,7 @@ titus-old-frisian:   # 02-sources row 407
   # Grant-gated PRIVATE research material, the titus-avestan posture verbatim
   # (the fetch right is not conveyed by a clone):
   availability: blocked
-  wired: false
+  wired: true    # flipped 2026-11-13: first retrieval verified — 248 docs / 2,581 passages, 0 errored
   # TITUS Old Frisian texts (titus.uni-frankfurt.de/texte/etcs/germ/afries/): Thomas F.
   # Shannon's Corpus of Old East and West Frisian Texts (the Ten Commandments and the
   # Seventeen Statutes after the Hunsingo manuscripts, the Londriucht, Fon alra Fresena
@@ -7488,7 +7488,7 @@ titus-old-lithuanian:   # 02-sources row 405
   # Grant-gated PRIVATE research material, the titus-avestan posture verbatim
   # (the fetch right is not conveyed by a clone):
   availability: blocked
-  wired: false
+  wired: true    # flipped 2026-11-13: first retrieval verified — 188 pages -> 186 docs / 52,748 passages, 0 errored
   # TITUS Old Lithuanian texts (titus.uni-frankfurt.de/texte/etcs/balt/lit/): Mažvydas's
   # Katekizmas, his Ambrosian hymn and Forma Chrikstima (data entry D. Ardoino,
   # J. Gelumbeckaitė, P.U. Dini), the Wolfenbüttel Postil (J. Gelumbeckaitė), Szyrwid's
