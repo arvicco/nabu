@@ -31,6 +31,29 @@ class IndexWatcherTest < Minitest::Test
     FileUtils.rm_rf(@dir)
   end
 
+  # -- fork hygiene ----------------------------------------------------------
+
+  # The sqlite3 gem (2.10.x) warns in every forked child about writable
+  # handles the fork inherited, then discards them. The watcher's fork is
+  # deliberate and touches no inherited connection by construction, so the
+  # warning is noise on every supervised sync a user runs — suppressed for
+  # this fork alone (the parse-pool precedent).
+  def test_the_watcher_fork_stays_silent_about_inherited_sqlite_handles
+    skip "sqlite3 gem without fork safety" unless defined?(SQLite3::ForkSafety)
+
+    held = SQLite3::Database.new(File.join(@dir, "held-writable.sqlite3"))
+    w = watcher(writer_pid: Process.pid, deadline: 30)
+    _out, err = capture_subprocess_io do
+      @watcher_pid = w.start!
+      w.stop!
+      @watcher_pid = nil
+    end
+    refute_match(/inherited from a forked process/, err,
+                 "the watcher child uses no inherited connection — the gem's fork warning must not reach the user")
+  ensure
+    held&.close
+  end
+
   # -- deadline arithmetic --------------------------------------------------
 
   def test_the_deadline_is_twice_the_ledger_estimate
