@@ -994,8 +994,8 @@ module Nabu
         say %(  bin/nabu align "MARK 2.3"      # one verse, seven witnesses: Greek ×2, Latin, Gothic, OCS, Old English)
         say "  bin/nabu search --lemma λέγω    # every inflection over the gold treebanks: λέγουσι, εἶπας, εἰπεῖν…"
         say "  bin/nabu define λόγος           # the whole LSJ entry, citations resolved (Latin: define virtus)"
-        say "grow the library: bin/nabu sync --all (live sources) or bin/nabu sync <slug> — " \
-            "the menu is config/sources.yml, the shelf map docs/library.md"
+        say "grow the library: bin/nabu enable <slug> then sync <slug> (enable writes this box's profile; " \
+            "sync refuses what is not on it) — the menu is config/sources.yml, the shelf map docs/library.md"
       end
 
       # -- ingest (P19-5): the canonical-memory intake front door ---------------
