@@ -141,7 +141,16 @@ search`, `help show`, `help align`, `help export`.
 
 ## 5. Grow the library
 
-Each shelf is one `sync` command. Real on-disk sizes from the reference
+**Growth is a deliberate two-step: enable, then sync.** Your library
+carries an enablement profile (`config/profile.yml`, local to your box,
+never committed) — the explicit list of shelves it has chosen to carry.
+`nabu sync` refuses a source that is not on it, so nothing large ever
+downloads by accident, and the profile also sets the default rows
+`nabu list` / `status` / `health` report (reading commands — `search`,
+`show`, `export` — always see the whole library). The quickstart step
+already enabled the four starter sources for you. Each further shelf is
+`bin/nabu enable <source>` followed by its `sync` (each table row below
+assumes its `enable` ran first). Real on-disk sizes from the reference
 box, so you know what you're signing up for:
 
 | Sync | Unlocks | Canonical size |
@@ -156,9 +165,10 @@ box, so you know what you're signing up for:
 with lemma search — are already on board from the starter shelf.)
 
 The full menu is `config/sources.yml`; the full shelf map with research
-uses is [library.md](library.md). Each further shelf is one
-`bin/nabu enable <source>` (or `enable <axis>` for a whole desk)
-followed by its `sync`. (`bin/nabu sync --all` is deliberately narrow —
+uses is [library.md](library.md). `enable` is additive and takes an
+axis name too (`bin/nabu enable celtic` puts that whole desk's public
+members on the profile); grant-gated research sources are never swept
+in by an axis — each is enabled by name and shows its terms first. (`bin/nabu sync --all` is deliberately narrow —
 it sweeps only the enabled `sync_policy: auto` sources, three rows on
 the reference box today, the rolling upstream clones; it is not the
 library-wide updater.)
