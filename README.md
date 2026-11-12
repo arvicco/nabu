@@ -25,8 +25,8 @@ divine custodian of Ashurbanipal's library. It is not a website and not a
 reader app: it is a pipeline plus a database, operated from the command
 line, designed to outlive the services it draws from.
 
-As of **2026-11-09** the shelves hold **2,873,222 documents /
-130,262,150 passages** in 282 language codes — from proto-cuneiform
+As of **2026-11-12** the shelves hold **2,880,831 documents /
+131,777,913 passages** in 282 language codes — from proto-cuneiform
 tablets of the late 4th millennium BCE to Meiji-era Japanese. The
 summer waves built the core: **EEBO-TCP Phase I** brought the
 early-modern English print library whole (24.1M passages — the
@@ -52,11 +52,11 @@ printed *South Indian Inscriptions* volumes, Project Madurai's
 classical Tamil e-texts at 1.2M lines, the Gurmukhī scriptural
 canon at line grain — and **TAMILEX**, whose per-word gold
 wordsplit layer (262,093 rows) exists nowhere else for Old Tamil.
-Behind TITUS's members-only gate, personal grants opened the
-**Middle Iranian books** and the **whole Tocharian corpus** — all
-4,250 West Tocharian documents of the Berlin, London and Paris
-collections, plus two leaves Maue's handlist identifies as
-Tumshuqese. **OpenITI's Classical Arabic** remains the largest
+November opened the **Greek wave**: the CLLG's freeing of the TLG
+E canon landed the library's largest TEI source to date (6,290
+works, 1.26M passages — Ancient Greek now stands at 4.8M), with
+the *Sources chrétiennes* critical editions beside it.
+**OpenITI's Classical Arabic** remains the largest
 language at 33.3 million passages, ahead of English (28.8M) and
 Literary Chinese (20.7M).
 Plus **5,281,593 dictionary entries** across 956 dictionary
@@ -390,21 +390,16 @@ sources are **wired** — adapter built and first sync verified —
 except **KorBa** (the Baroque Polish corpus: adapter ready, the
 IJP's download server answering 502 since early October); the
 newest arrivals are the October South Asia slice (`tamilex`,
-`sii-clean`, `madurai`, `shabados`), the whole members-area
-**Tocharian B chain** behind the new credentials seam, the
-SEA/Gujarat Wikisource cones (`ban`/`gu`/`ms`/`th`), and the TITUS
-Middle Iranian books — behind them the **StarLing etymology
+`sii-clean`, `madurai`, `shabados`) and the
+SEA/Gujarat Wikisource cones (`ban`/`gu`/`ms`/`th`) — behind them
+the **StarLing etymology
 bases** (Pokorny, Vasmer, the branch comparative shelves and the
 LEXSTAT wordlists), the
 **Southeast Asia seven** (the five DHARMA corpora, the Bagan
 inscriptions, and the Old Javanese Wordnet — the desk opened whole
 in one phase), `okhc` — the historical slice of
 the Open Korean Historical Corpus, 1,198,779 documents that more
-than doubled the library's document count in a day —
-`titus-osco-umbrian` (the complete Iguvine Tables with the Oscan
-inscriptions, 386 documents at line grain under a personal grant)
-and `seal` (Sources of Early Akkadian Literature, 408 compositions,
-the editors' written personal-research grant), after the August wave
+than doubled the library's document count in a day — after the August wave
 (the Old Mandarin rhyme books, the Classical↔Modern Chinese parallel
 corpus, the Monlam Tibetan lexicon, DACON's Newar, EEBO-TCP,
 the Corpus of Middle English, Menota, and the INT Dutch corpora)

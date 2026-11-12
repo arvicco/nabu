@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+    <collection identifier="urn:cts:greekLit:tlg2035">
+        <title>Athanasius Theol.</title>
+        <members>
+        <collection identifier="urn:cts:greekLit:tlg2035.tlg043">
+            <title>Epistulae quattuor ad Serapionem</title>
+            <dublinCore>
+                <creator xmlns="http://purl.org/dc/terms/">Athanasius Theol.</creator>
+            </dublinCore>
+            <members>
+                <resource identifier="urn:cts:greekLit:tlg2035.tlg043.cllg-grc1" filepath="./tlg043/tlg2035.tlg043.cllg-grc1.xml">
+                    <title>Epistulae quattuor ad Serapionem</title>
+                    <description>Athanasius Theol. (c. A.D. 4), Epistulae quattuor ad Serapionem (2035: 043); MPG  26.</description>
+                    <parent>urn:cts:greekLit:tlg2035.tlg043</parent>
+                </resource>
+            </members>
+        </collection>
+    </members>
+    </collection>

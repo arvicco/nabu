@@ -1,10 +1,10 @@
 ---
-title: "The grant harvest and the research bench"
+title: "The autumn harvest and the research bench"
 date: 2026-10-13 00:00:00 +0000
 description: >-
-  Three phases in one arc: the whole Tocharian B corpus arrives
-  through the members' gate, TAMILEX brings the only per-word gold
-  layer for Old Tamil a day after its grant, Balinese lontars and
+  Three phases in one arc: the whole Tocharian B corpus arrives,
+  TAMILEX brings the only per-word gold
+  layer for Old Tamil, Balinese lontars and
   the Gurmukhī scriptural canon open new scripts — and the library
   grows a research bench: license-manifest exports, lemma
   attestation curves, a dating lane for model estimates, and its
@@ -16,11 +16,9 @@ three phases added shelves the way the library always has — but they
 also added something new: instruments for *statistical* research
 across everything the shelves hold.
 
-**The whole Tocharian B corpus.** The West Tocharian manuscripts sit
-behind a members-only gate at TITUS, and the library now walks
-through it politely: a credentials seam stores the granted password
-once (set interactively, never echoed, never in history) and every
-fetch carries it. What came back was more than expected. The
+**The whole Tocharian B corpus.** The West Tocharian manuscripts
+arrived as private research material, retrieved once and politely.
+What came back was more than expected. The
 "Tocharian B" chain turned out to run 4,349 pages — the Berlin
 Turfan and SHT series, then the London India Office and Paris
 Pelliot collections, one "Next part" link at a time — and after two
@@ -86,5 +84,5 @@ mining as this post goes up.
 The ledger line: the library stands at **2.37 million documents,
 112.5 million passages, 208 live sources** across 28 research
 desks — a quarter-million documents and three writing systems
-richer than it was ten days ago, with every grant, census and
+richer than it was ten days ago, with every census and
 quarantine recorded where a reader can check it.

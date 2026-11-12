@@ -1,0 +1,126 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<?xml-model href="http://www.tei-c.org/release/xml/tei/custom/schema/relaxng/tei_all.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?><?xml-model href="http://www.tei-c.org/release/xml/tei/custom/schema/relaxng/tei_all.rng" type="application/xml"
+    schematypens="http://purl.oclc.org/dsdl/schematron"?><TEI xmlns="http://www.tei-c.org/ns/1.0">
+   <teiHeader>
+      <fileDesc>
+         <titleStmt>
+            <title>À Démétrien</title>
+            <author>
+               <persName>Cyprien de Carthage</persName>
+            </author>
+            <editor>Jean-Claude Fredouille</editor>
+            <editor>Yasmine Ech Chael</editor>
+            <respStmt>
+               <orgName>Corpus Liberatum Linguae Graecae</orgName>
+               <resp>
+                  Refined conversion to XML-TEI
+                  <name resp="#cllg-transformation">Thibault Clérice</name>
+                  <name resp="#cllg-transformation">Nicolas Angleraud</name>
+                  <name resp="#cllg-transformation">Antonia Karamolegkou</name>
+                  <name resp="#cllg-transformation">Maïna Laurent</name>
+                  <name resp="#cllg-transformation">Benoît Sagot</name>
+               </resp>
+            </respStmt>
+            <principal>
+               <name>Thibault Clérice</name>
+               <orgName>Inria</orgName>
+            </principal>
+            <funder>
+               <orgName>Agence Nationale de la Recherche</orgName>
+               <orgName>Programme Inria Quadrant</orgName>
+               <note>Ce travail a bénéficié d'une aide de l'État gérée par l'Agence Nationale de la Recherche au titre de France 2030 portant la référence «ANR-24-RRII-0002».</note>
+            </funder>
+         </titleStmt>
+         <publicationStmt>
+            <p>
+               This file has then been released by the Corpus Liberatum Linguae Graecae (dir. Thibault Clérice)
+               which added citeStructure information, bibliographical metadata and reworked, where applicable, the
+               citation structure to follow edition and physical citation systems.
+            </p>
+         </publicationStmt>
+         <sourceDesc>
+            <bibl>
+              <author>Cyprien de Carthage</author>
+              <title level="m">À Démétrien</title>
+               <editor role="editor">Jean-Claude Fredouille</editor>
+               <editor role="revision">Yasmine Ech Chael</editor>
+               <date when="2003">2003</date>
+               <publisher>Les Éditions du Cerf</publisher>
+               <series>
+                 <title>Sources chrétiennes</title>
+                 <biblScope unit="volume">467</biblScope>
+               </series>
+               <idno type="ISBN">978-2-204-06854-3</idno>
+               <idno type="CPL">46</idno>
+               <biblScope unit="page">70-128</biblScope>
+            </bibl>
+         </sourceDesc>
+      </fileDesc>
+      <encodingDesc>
+        <refsDecl n="default">
+          <citeStructure match="/TEI/text/body/div[@type='edition']/div[@type='chapter']" use="@n" unit="chapter">
+            <citeStructure match=".//milestone[@unit='section']" use="@n" unit="section" delim="."/>
+          </citeStructure>
+        </refsDecl>
+        <refsDecl n="physical">
+          <citeStructure match="/TEI/text/body//pb[@ed='SC']" use="@n" unit="page">
+            <citeStructure match=".//lb" use="@n" unit="line" delim="."/>
+          </citeStructure>
+        </refsDecl>
+        <refsDecl n="physical-alternative">
+          <citeStructure match="/TEI/text/body//milestone[@unit='alternative-ln']" use="@n" unit="line"/>
+        </refsDecl>
+      </encodingDesc>
+      <profileDesc>
+         <langUsage>
+            <language ident="la">Texte du document en latin</language>
+         </langUsage>
+      </profileDesc>
+      <revisionDesc>
+        <change who="Maïna Laurent" when="2026-08-31">First XML TEI export.</change> 
+        <change who="Nicolas Angleraud" when="2026-09-22">Reformat structure of the document and add citeStructure.</change>
+      </revisionDesc>
+   </teiHeader>
+
+<text>
+<body>
+<div type="edition">
+        <pb ed="SC" n="70"/>
+        <milestone unit="segmentation" n="(CCL 3A)"/>
+        <milestone unit="segmentation" n="(I. 1)"/>
+        <div type="chapter" n="1">
+          <p><lb n="1"/> <milestone unit="section" n="1"/>Oblatrantem te et aduersus Deum qui unus et uerus
+<lb n="2"/> est ore sacrilego et uerbis impiis obstrepentem frequenter,
+<lb n="3"/> Demetriane, contempseram uerecundius et melius existi<lb n="4" break="no"/>mans errantis imperitiam silentio spernere quam loquendo
+<lb n="5"/> dementis insaniam prouocare. Nec hoc sine magisterii diuini
+<lb n="6"/> auctoritate faciebam, cum scriptum sit : In aures impruden<lb n="7" break="no"/>tis noli quicquam dicere, ne quando audierit irrideat sensa<lb n="8" break="no"/>tos sermones tuos , et iterum : Noli respondere imprudenti
+<lb n="9"/> ad imprudentiam eius ne similis fias illi , et sanctum quoque
+<lb n="10"/> iubeamur intra conscientiam nostram tenere nec inculcan<lb n="11" break="no"/>dum porcis et canibus exponere loquente Domino et
+<pb ed="SC" n="72"/>
+<lb n="1"/> dicente : Ne dederitis sanctum canibus neque miseritis mar<lb n="2" break="no"/>garitas uestras ante porcos, ne inculcent eas pedibus suis .</p>
+          <p><lb n="3"/> <milestone unit="section" n="2"/>Nam cum ad me saepe studio magis contradicendi
+<lb n="4"/> quam uoto discendi uenires et clamosis uocibus personans
+<lb n="5"/> malles tua impudenter ingerere quam nostra patienter
+<lb n="6"/> audire, ineptum uidebatur congredi tecum, quando facilius
+<lb n="7"/> esset et leuius turbulenti maris concitos fluctus clamoribus
+<lb n="8"/> retundere quam tuam rabiem tractatibus coercere. Certe et
+<lb n="9"/> labor irritus et nullus effectus offerre lumen caeco, sermo<lb n="10" break="no"/><milestone unit="alternative-ln" n="20"/>nem surdo, sapientiam bruto, cum nec sentire brutus possit
+<lb n="11"/> nec caecus lumen admittere nec surdus audire.</p>
+        </div>
+        <div type="chapter" n="2">
+          <p><lb n="12"/> <milestone unit="section" n="1"/>Haec considerans saepe conticui et impatientem
+<lb n="13"/> patientia uici, cum nec docere indocilem possem nec
+<lb n="14"/> impium religione comprimere nec furentem lenitate cohi<lb n="15" break="no"/>bere. Sed enim cum dicas plurimos conqueri et quod bella
+<lb n="16"/> crebrius surgant, quod lues, quod fames saeuiant, quodque
+<lb n="17"/> imbres et pluuias serena longa suspendant nobis imputari,
+<lb n="18"/> tacere ultra non oportet, ne iam non uerecundiae, sed diffi<pb ed="SC" n="74" break="no"/><lb n="1" break="no"/>dentiae esse incipiat quod tacemus, et dum criminationes
+<lb n="2"/> falsas contemnimus refutare, uideamur crimen agnoscere.
+<lb n="3"/> <milestone unit="section" n="2"/>Respondeo igitur et tibi, Demetriane, pariter et ceteris
+<lb n="4"/> quos tu forsitan concitasti et, aduersum nos odia tuis male<lb n="5" break="no"/>dicis uocibus seminando, comites tibi plures radicis atque
+<lb n="6"/> originis tuae pullulatione fecisti : quos tamen sermonis nos<lb n="7" break="no"/>tri admittere credo rationem. Nam qui ad malum motus est
+<lb n="8"/> mendacio fallente, multo magis ad bonum mouebitur ueritate.</p>
+        </div>
+      </div>
+</body>
+</text>
+</TEI>

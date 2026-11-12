@@ -9,9 +9,9 @@ description: >-
 
 The Iranian-language lane, Zoroastrian canon at its heart: the TITUS Avesta (Old Iranian liturgy — grant-gated private research, not a public holding) and the Old Persian of the Achaemenid royal inscriptions, which ride the ORACC and CDLI cuneiform shelves whole — their trilinguals' Old Persian column the desk's shared lane with the tablet world — classical Persian literature (Hafez's Divan with its aligned English, perseus-farsilit) — and the Middle Iranian east: Skjærvø's British Library Khotanese editions, the Invisible East catalog's Khotanese/Sogdian/Bactrian/Judeo-Persian documents, and the trilingual ŠKZ inscription with its Parthian and Middle Persian columns.
 
-The desk's heart, the **Avesta** (TITUS, `titus-avestan`), is grant-gated
-PRIVATE research material — served locally under the owner's personal grant
-of 2026-07-23 and credited on every serving surface (the grant's own condition), but
+The desk's heart, the **Avesta** (TITUS, `titus-avestan`), is PRIVATE
+research material — held locally at its nc class and credited on every
+serving surface, but
 NOT a public library holding, so it is absent from the shelves table above and
 the footnote there says so. What the desk publicly holds is the **Old Persian**
 of the Achaemenid royal inscriptions, riding the shared cuneiform corpora
@@ -35,7 +35,7 @@ A source wears every desk it serves — these eight answer this desk. Holdings a
 | `skjaervo-khotanese` | texts | open | wired · manual | 2,357 docs / 14,574 passages |
 | `wiktionary-fa` | dictionary | attribution | wired · manual | 20,350 entries |
 
-Private research materials under personal grants are not listed.
+Private research materials are not listed.
 
 **Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 12 November 2026)</span>: `sux` 264,506 · `akk` 153,945 · `fas` 146,364 · `und` 74,258 · `qpn` 70,329 · `akk-x-stdbab` 24,517 · `akk-x-neoass` 18,750 · `eng` 15,418 · `hit` 14,678 · `qpc` 8,931 … and 43 more (`nabu axis iranian` lists all).
 
@@ -82,7 +82,7 @@ nabu show urn:nabu:titus-avestan:avest020:Y.19.1  # a citation prefix opens into
 
 With the [MCP server]({{ '/tools/#ask-your-model' | relative_url }}) connected, this desk answers conversational research questions. Each example ran live against this library:
 
-- **“Where does the Avesta invoke Ahura Mazdā?”** → `nabu_search "ahura mazda" (lang: ave)` — Yasna and Yašt passages (Y.19.1, Y.58.8, Yt.3.2 …) served under their nc class with the TITUS/editors credit line riding every card — a personal research grant, honored in the payload.
+- **“Where does the Avesta invoke Ahura Mazdā?”** → `nabu_search "ahura mazda" (lang: ave)` — Yasna and Yašt passages (Y.19.1, Y.58.8, Yt.3.2 …) served under their nc class with the TITUS/editors credit line riding every card — research-private terms, honored in the payload.
 
 ## Terminal setup
 

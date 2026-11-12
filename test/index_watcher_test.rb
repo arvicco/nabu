@@ -31,10 +31,96 @@ class IndexWatcherTest < Minitest::Test
     FileUtils.rm_rf(@dir)
   end
 
+  # -- fork hygiene ----------------------------------------------------------
+
+  # The sqlite3 gem (2.10.x) warns in every forked child about writable
+  # handles the fork inherited, then discards them. The watcher's fork is
+  # deliberate and touches no inherited connection by construction, so the
+  # warning is noise on every supervised sync a user runs — suppressed for
+  # this fork alone (the parse-pool precedent).
+  def test_the_watcher_fork_stays_silent_about_inherited_sqlite_handles
+    skip "sqlite3 gem without fork safety" unless defined?(SQLite3::ForkSafety)
+
+    held = SQLite3::Database.new(File.join(@dir, "held-writable.sqlite3"))
+    w = watcher(writer_pid: Process.pid, deadline: 30)
+    _out, err = capture_subprocess_io do
+      @watcher_pid = w.start!
+      w.stop!
+      @watcher_pid = nil
+    end
+    refute_match(/inherited from a forked process/, err,
+                 "the watcher child uses no inherited connection — the gem's fork warning must not reach the user")
+  ensure
+    held&.close
+  end
+
+  # -- evidence coverage ----------------------------------------------------
+
+  # A kill may only be armed on evidence that describes the run: for a
+  # named-scope command every non-corpus scope needs its OWN ledger
+  # history. A first sync's "estimate" is otherwise the corpus riders'
+  # seconds alone (measured 2026-11-12: a healthy 1.26M-row first-sync
+  # shadow build killed at the 15m floor armed off 40.9s of corpus rows).
+  def test_evidence_covers_requires_every_named_scope_to_have_history
+    ledger = Sequel.sqlite
+    ledger.create_table(:stage_timings) do
+      primary_key :id
+      String :kind, null: false
+      String :scope, null: false
+      String :stage, null: false
+      Float :seconds, null: false
+      Integer :rows
+      Time :finished_at, null: false
+    end
+    ledger[:stage_timings].insert(kind: "sync", scope: "corpus", stage: "stats", seconds: 40.9,
+                                  finished_at: Time.now)
+    ledger[:stage_timings].insert(kind: "sync", scope: "pap", stage: "index", seconds: 120.0,
+                                  finished_at: Time.now)
+
+    refute Watcher.evidence_covers?(ledger, kind: "sync", scopes: %w[newsrc corpus]),
+           "a first sync has no own-scope history — corpus riders are not evidence about it"
+    assert Watcher.evidence_covers?(ledger, kind: "sync", scopes: %w[pap corpus])
+    assert Watcher.evidence_covers?(ledger, kind: "sync", scopes: nil),
+           "an unscoped command's estimate sums everything — full coverage by construction"
+    refute Watcher.evidence_covers?(ledger, kind: "sync", scopes: %w[pap newsrc corpus]),
+           "one uncovered scope poisons the whole estimate"
+  end
+
+  def test_evidence_coverage_is_stage_grained_because_killed_runs_flush_partial_history
+    ledger = Sequel.sqlite
+    ledger.create_table(:stage_timings) do
+      primary_key :id
+      String :kind, null: false
+      String :scope, null: false
+      String :stage, null: false
+      Float :seconds, null: false
+      Integer :rows
+      Time :finished_at, null: false
+    end
+    # The killed first sync's residue: fetch and load flushed, the index
+    # stage (the one the kill endangers) never did.
+    ledger[:stage_timings].insert(kind: "sync", scope: "pap", stage: "fetch", seconds: 59.0,
+                                  finished_at: Time.now)
+    ledger[:stage_timings].insert(kind: "sync", scope: "pap", stage: "load", seconds: 589.0,
+                                  finished_at: Time.now)
+
+    assert Watcher.evidence_covers?(ledger, kind: "sync", scopes: %w[pap corpus]),
+           "scope-level coverage exists"
+    refute Watcher.evidence_covers?(ledger, kind: "sync", scopes: %w[pap corpus],
+                                            stages: Watcher::REFRESH_STAGES),
+           "but the index stages have no history — the estimate omits the dominant cost, no kill"
+
+    ledger[:stage_timings].insert(kind: "sync", scope: "pap", stage: "index_slice", seconds: 900.0,
+                                  finished_at: Time.now)
+    assert Watcher.evidence_covers?(ledger, kind: "sync", scopes: %w[pap corpus],
+                                            stages: Watcher::REFRESH_STAGES),
+           "a completed index stage makes the history honest evidence"
+  end
+
   # -- deadline arithmetic --------------------------------------------------
 
-  def test_the_deadline_is_twice_the_ledger_estimate
-    assert_equal 2 * 3_600, Watcher.deadline_for(estimate: 3_600)
+  def test_the_deadline_prices_estimate_uncertainty_at_two_and_a_half_times
+    assert_in_delta 2.5 * 3_600, Watcher.deadline_for(estimate: 3_600)
   end
 
   def test_the_deadline_never_falls_below_the_floor

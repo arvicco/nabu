@@ -2,7 +2,7 @@
 title: Quickstart
 permalink: /quickstart/
 description: >-
-  From a fresh clone to the first aligned verse in about ten minutes: prerequisites,
+  From a fresh clone to the first aligned verse in about a quarter hour: prerequisites,
   the starter shelf, the first three commands, and how to grow the library.
 ---
 
@@ -23,7 +23,8 @@ beside the first output that prints them.
 - **You need Ruby 3.3 or newer and git.** Check with `ruby -v`; if Ruby is
   missing or older, follow the official
   [Ruby installation guide](https://www.ruby-lang.org/en/documentation/installation/).
-- **Budget up to ten minutes** for the whole quickstart path below. The
+- **Budget ten to fifteen minutes** for the whole quickstart path below
+  (measured: ~12 on the reference machine). The
   four starter sources measure **{{ sizes.disk.starter_display }} on disk**
   ({{ sizes.as_of }}), and the databases derived from them add roughly
   half that again. Most of the time is download, and the dictionary
@@ -123,8 +124,10 @@ The sample below is not a quickstart run. It was captured on 2026-07-11
 from the maintainer's full library, which holds more witnesses of this
 verse than the quickstart corpus — hence its "13 of 13". On a fresh
 quickstart library the same command shows the seven starter witnesses;
-the other six (the English WEB, the Clementine Vulgate, and four further
-Old Church Slavonic manuscripts) arrive as you grow the library.
+the other nine (the English WEB, the Clementine Vulgate, four further
+Old Church Slavonic manuscripts, the Sahidic and Bohairic Coptic
+versions, and the Church Slavonic Elizabeth Bible) arrive as you grow
+the library.
 
 ```
 $ bin/nabu align "MARK 2.3"
@@ -176,10 +179,31 @@ clients, the tool reference, and the quoting etiquette are in
 
 ## Grow the library
 
-Each further shelf is one `nabu enable <source>` (or `enable <axis>` for a whole desk) followed by its `sync`; `bin/nabu sync --all` re-syncs
-every enabled live-policy source in one pass. The full menu is
-`config/sources.yml`; real on-disk sizes for the larger shelves, measured
-{{ sizes.as_of }}:
+**Growth is a deliberate two-step: enable, then sync.** Your library
+carries an *enablement profile* (`config/profile.yml`, local to your
+box, never committed): the explicit list of shelves this library has
+chosen to carry. `nabu sync` refuses a source that is not on it — so
+nothing large ever downloads by accident — and the profile also sets
+the default rows `nabu list`, `status`, and `health` report (reading
+commands like `search` and `show` always see the whole library). The
+quickstart step already wrote your first profile entries: the four
+starter sources, enabled before they synced.
+
+Each further shelf is the pair:
+
+```
+bin/nabu enable perseus-greek   # add the shelf to your profile
+bin/nabu sync perseus-greek     # fetch, load, index
+```
+
+`enable` is additive and takes an axis name too (`bin/nabu enable
+celtic` enables that whole desk's public members); a handful of
+grant-gated research sources are never swept in by an axis — each
+must be enabled by name and shows you its terms first. After that,
+`bin/nabu sync --all` re-syncs every enabled live-policy source in
+one pass. The full menu is `config/sources.yml`; real on-disk sizes
+for the larger shelves, measured {{ sizes.as_of }} (each row below
+assumes its `enable` ran first):
 
 | Sync | Unlocks | Canonical size |
 |---|---|---|
@@ -205,12 +229,13 @@ The starter shelf is running; the natural next move is to find the desk for
 your own field. `bin/nabu list --axis` prints the shelf census grouped under
 the {{ census.desks }} [research desks]({{ '/axis/' | relative_url }}) — scholarly hats
 over the same sources, from the Classicist to the Assyriologist. Pick the one
-that fits and sync its members in a single command — `bin/nabu sync celtic`,
-or whichever desk is yours — then open its page: each desk carries its own
+that fits, enable it, and sync its members — `bin/nabu enable celtic &&
+bin/nabu sync celtic`, or whichever desk is yours — then open its page: each desk carries its own
 member shelves, CLI recipes, search modes, and terminal setup for its scripts.
 
 ```
 bin/nabu list --axis        # the shelf census, grouped by research desk
 bin/nabu axis celtic        # one desk's card: members, holdings, gold coverage
-bin/nabu sync celtic        # sync that desk's enabled members
+bin/nabu enable celtic      # put the desk's public members on your profile
+bin/nabu sync celtic        # then sync them
 ```

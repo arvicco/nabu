@@ -663,9 +663,9 @@ from every tool — they never appear in search results, `nabu_show` withholds
 them, and `nabu_status` counts them only under `excluded_by_default`. As of
 October 2026 six sources carry `research_private` — the Freising Manuscripts
 (BY-ND posture), the owner's acquired library (`local-library`, private by
-default), the personally granted ACLT Luwian corpus, the two IvdNT
+default), the gated ACLT Luwian corpus, the two IvdNT
 historical-Dutch corpora (Gysseling, Oudnederlands), and SEAL (early
-Akkadian literature, by grant) — so the
+Akkadian literature, gated) — so the
 exclusion is live, not theoretical: a conversational surface never leaks
 restricted material casually. A caller who understands and will honor the restriction can opt in
 per call with `include_restricted: true`.

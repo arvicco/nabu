@@ -40,6 +40,6 @@ term's postings, not just its frequency — recalibrated the guard's
 threshold with a measured curve rather than a guess.
 
 Permission-bound sources also gained a proper front door this phase: a
-source whose fetch right comes from a personal grant rather than a
+source whose fetch right is restricted rather than covered by a
 public license now asks for a typed acknowledgment once, records it
 durably, and steps politely out of `sync --all` until it has one.

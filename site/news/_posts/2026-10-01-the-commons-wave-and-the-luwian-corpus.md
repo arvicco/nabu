@@ -74,10 +74,9 @@ soared. The crawl continues.
 **The Luwian corpus.** The library's 174th source could not be
 fetched from anywhere: the Annotated Corpus of Luwian Texts (ACLT,
 luwian.web-corpora.net) — the annotated edition of the Hieroglyphic
-Luwian inscriptions — arrived by the editor's personal grant (Ilya
-Yakubovich, by email, 2026-09-28/29, with the corpus files prepared
-by the platform's developer, Timofey Arkhangelskiy). It is held as a
-personal research copy, never redistributed. 266 inscriptions, 2,682
+Luwian inscriptions — with the corpus files prepared
+by the platform's developer, Timofey Arkhangelskiy. It is held as a
+private research copy, never redistributed. 266 inscriptions, 2,682
 clause units, each clause in two paired representations: a broad
 transcription carrying full morphology — lemma, part of speech,
 case/gender/number, English glosses — and a sign-by-sign

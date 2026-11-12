@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://www.tei-c.org/release/xml/tei/custom/schema/relaxng/tei_all.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<?xml-model href="http://www.tei-c.org/release/xml/tei/custom/schema/relaxng/tei_all.rng" type="application/xml"
+    schematypens="http://purl.oclc.org/dsdl/schematron"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0">
+   <teiHeader>
+      <fileDesc>
+         <titleStmt>
+            <title>Contre Celse</title>
+            <author>
+               <persName>Origène</persName>
+            </author>
+            <respStmt>
+               <orgName>Corpus Liberatum Linguae Graecae</orgName>
+               <resp>
+                  Refined conversion to XML-TEI
+                  <name resp="#cllg-transformation">Thibault Clérice</name>
+                  <name resp="#cllg-transformation">Nicolas Angleraud</name>
+                  <name resp="#cllg-transformation">Antonia Karamolegkou</name>
+                  <name resp="#cllg-transformation">Maïna Laurent</name>
+                  <name resp="#cllg-transformation">Benoît Sagot</name>
+               </resp>
+            </respStmt>
+            <principal>
+               <name>Thibault Clérice</name>
+               <orgName>Inria</orgName>
+            </principal>
+            <funder>
+               <orgName>Agence Nationale de la Recherche</orgName>
+               <orgName>Programme Inria Quadrant</orgName>
+               <note>Ce travail a bénéficié d'une aide de l'État gérée par l'Agence Nationale de la Recherche au titre de France 2030 portant la référence «ANR-24-RRII-0002».</note>
+            </funder>
+         </titleStmt>
+         <publicationStmt>
+            <p>
+               This file has then been released by the Corpus Liberatum Linguae Graecae (dir. Thibault Clérice)
+               which added citeStructure information, bibliographical metadata and reworked, where applicable, the
+               citation structure to follow editions rather than physical citation systems.
+            </p>
+         </publicationStmt>
+         <sourceDesc>
+            <bibl n="SC132">
+               <author>Origène</author>
+               <title level="m">Contre Celse, Livres I et II</title>
+               <biblScope unit="volume">1</biblScope>
+               <editor role="editor">Marcel Borret</editor>
+               <editor role="translator">Marcel Borret</editor>
+               <publisher>Les Éditions du Cerf</publisher>
+               <pubPlace ref="geonames:2988506">Paris</pubPlace>
+               <date when="1967">1967</date>
+               <series>
+                  <title>Sources chrétiennes</title>
+                  <biblScope unit="volume">132</biblScope>
+               </series>
+               <idno type="ISBN">978-2-204-07872-6</idno>
+               <biblScope unit="page">64-476</biblScope>
+            </bibl>
+            <bibl n="SC136">
+               <author>Origène</author>
+               <title level="m">Contre Celse, Livres III et IV</title>
+               <biblScope unit="volume">2</biblScope>
+               <editor role="editor">Marcel Borret</editor>
+               <editor role="translator">Marcel Borret</editor>
+               <publisher>Les Éditions du Cerf</publisher>
+               <pubPlace ref="geonames:2988506">Paris</pubPlace>
+               <date when="1968">1968</date>
+               <series>
+                  <title>Sources chrétiennes</title>
+                  <biblScope unit="volume">136</biblScope>
+               </series>
+               <idno type="ISBN">978-2-204-03421-0</idno>
+               <biblScope unit="page">14-434</biblScope>
+            </bibl>
+            <bibl n="SC147">
+               <author>Origène</author>
+               <title level="m">Contre Celse, Livres V et VI</title>
+               <biblScope unit="volume">3</biblScope>
+               <editor role="editor">Marcel Borret</editor>
+               <editor role="translator">Marcel Borret</editor>
+               <publisher>Les Éditions du Cerf</publisher>
+               <pubPlace ref="geonames:2988506">Paris</pubPlace>
+               <date when="1969">1969</date>
+               <series>
+                  <title>Sources chrétiennes</title>
+                  <biblScope unit="volume">147</biblScope>
+               </series>
+               <idno type="ISBN">978-2-204-03422-7</idno>
+               <biblScope unit="page">14-382</biblScope>
+            </bibl>
+            <bibl n="SC150">
+               <author>Origène</author>
+               <title level="m">Contre Celse, Livres VII et VIII</title>
+               <biblScope unit="volume">4</biblScope>
+               <editor role="editor">Marcel Borret</editor>
+               <editor role="translator">Marcel Borret</editor>
+               <publisher>Les Éditions du Cerf</publisher>
+               <pubPlace ref="geonames:2988506">Paris</pubPlace>
+               <date when="1969">1969</date>
+               <series>
+                  <title>Sources chrétiennes</title>
+                  <biblScope unit="volume">150</biblScope>
+               </series>
+               <idno type="ISBN">978-2-204-03423-4</idno>
+               <biblScope unit="page">14-352</biblScope>
+            </bibl>
+         </sourceDesc>
+      </fileDesc>
+      <encodingDesc>
+        <refsDecl n="default">
+          <citeStructure match="/TEI/text/body/div[@type='edition']/div[@subtype='volume']/div[@type='textpart']" use="@n" unit="book">
+            <citeStructure match="./div[@subtype='section']" use="@n" unit="section" delim=".">
+            </citeStructure>
+          </citeStructure>
+        </refsDecl>
+        <refsDecl n="physical">
+          <citeStructure match="/TEI/text/body/div[@type='edition']/div[@subtype='volume']" use="@n" unit="volume">
+            <citeStructure match=".//pb[@ed='SC']" use="@n" unit="page" delim=".">
+              <citeStructure match=".//lb" use="@n" unit="line" delim="."/>
+            </citeStructure>
+          </citeStructure>
+        </refsDecl>
+      </encodingDesc>
+      <profileDesc>
+         <langUsage>
+            <language ident="grc">Texte du document en grec ancien</language>
+         </langUsage>
+      </profileDesc>
+      <revisionDesc>
+        <change who="Thibault Clérice" when="2026-10-10">Volumes, proem, books and sections (bold numerals removed, @n) as div, italics as quote, editorial signs, pb/lb (lb recounted per page, no printed line numbers), word breaks joined.</change>
+      </revisionDesc>
+   </teiHeader>
+
+<text>
+<body>
+
+<div type="edition" n="urn:cts:greekLit:tlg2042.tlg001.sc-cllg-grc1" xml:lang="grc">
+  <div type="textpart" subtype="volume" n="132">
+    <pb ed="SC" n="64"/>
+    <div type="textpart" subtype="proem" n="proem">
+      <head type="main"><lb n="1"/>ΠΡΟΣ ΤΟΝ ΕΠΙΓΕΓΡΑΜΜΕΝΟΝ
+        <lb n="2"/>ΚΕΛΣΟΥ ΑΛΗΘΗ ΛΟΓΟΝ
+        <lb n="3"/>ΩΡΙΓΕΝΟΥΣ
+        <lb n="4"/>ΤΟΜΟΙ Ηʹ</head>
+      <head type="sub"><lb n="5"/>ΠΡΟΟΙΜΙΟΝ</head>
+      <div type="textpart" subtype="section" n="1">
+        <p><lb n="6"/><surplus>Ὁ μὲν σωτὴρ καὶ κύριος ἡμῶν Ἰησοῦς Χριστὸς
+          <lb n="7"/>ψευδομαρτυρούμενος μὲν « ἐσιώπα » κατηγορούμενος δὲ
+          <lb n="8"/>« οὐδὲν ἀπεκρίνετο »</surplus>, πειθόμενος πάντα τὸν βίον ἑαυτοῦ
+          <lb n="9"/>καὶ τὰς ἐν Ἰουδαίοις πράξεις κρείττους γεγονέναι φωνῆς
+          <lb n="10"/>ἐλεγχούσης τὴν ψευδομαρτυρίαν καὶ λέξεων ἀπολογουμένων
+          <lb n="11"/>πρὸς τὰς κατηγορίας · <surplus>σὺ δ' ὦ φιλόθεε Ἀμβρόσιε, οὐκ
+          <lb n="12"/>οἶδ' ὅπως πρὸς τὰς Κέλσου κατὰ Χριστιανῶν ἐν συγγράμμασι
+          <lb n="13"/>ψευδομαρτυρίας</surplus> καὶ τῆς πίστεως τῶν ἐκκλησιῶν ἐν βιβλίῳ
+          <lb n="14"/>κατηγορίας <surplus>ἐβουλήθης ἡμᾶς ἀπολογήσασθαι</surplus>, ὡς οὐκ ὄντος
+          <lb n="15"/>ἐναργοῦς ἐλέγχου ἐν τοῖς πράγμασι καὶ πάντων γραμμάτων
+          <pb ed="SC" n="66"/>
+          <lb n="1"/>κρείττονος λόγου, τοῦ τε τὰς ψευδομαρτυρίας ἀφανίζοντος
+          <lb n="2"/>καὶ ταῖς κατηγορίαις μηδὲ πιθανότητα εἰς τὸ δύνασθαί τι
+          <lb n="3"/>αὐτὰς ἐνδιδόντος. Περὶ δὲ τοῦ Ἰησοῦ ὅτι « ἐσιώπα »
+          <lb n="4"/>ψευδομαρτυρούμενος, ἀρκεῖ ἐπὶ τοῦ παρόντος τὰ Ματθαίου
+          <lb n="5"/>παραθέσθαι · τὰ γὰρ ἰσοδυναμοῦντα αὐτῷ ὁ Μάρκος ἔγραψεν.
+          <lb n="6"/>Ἔχει δ' οὕτως ἡ τοῦ Ματθαίου λέξις · « Ὁ δὲ ἀρχιερεὺς
+          <lb n="7"/>καὶ τὸ συνέδριον ἐζήτουν ψευδομαρτυρίαν κατὰ τοῦ Ἰησοῦ,
+          <lb n="8"/>ὅπως θανατώσωσιν αὐτόν, καὶ οὐχ εὗρον πολλῶν προσελ<lb n="9" break="no"/>θόντων ψευδομαρτύρων. Ὕστερον δὲ προσελθόντες δύο
+          <lb n="10"/>εἶπον · <surplus>Οὗτος ἔφη · Δύναμαι καταλῦσαι τὸν ναὸν τοῦ θεοῦ
+          <lb n="11"/>καὶ διὰ τριῶν ἡμερῶν οἰκοδομῆσαι. Καὶ ἀναστὰς ὁ ἀρχιερεὺς
+          <lb n="12"/>εἶπεν αὐτῷ · Οὐδὲν ἀποκρίνῃ, ὅτι οὗτοί σου καταμαρτυ<lb n="13" break="no"/>ροῦσιν ; Ὁ δὲ Ἰησοῦς ἐσιώπα. »</surplus> Ἀλλὰ καὶ ὅτι οὐκ
+          <lb n="14"/>ἀπεκρίνετο κατηγορούμενος, τοιαῦτα γέγραπται · « Ὁ δὲ
+          <lb n="15"/>Ἰησοῦς ἐστάθη ἔμπροσθεν τοῦ ἡγεμόνος · καὶ ἐπηρώτησεν
+          <lb n="16"/>αὐτὸν λέγων · Σὺ εἶ ὁ βασιλεὺς τῶν Ἰουδαίων ; Ὁ δὲ Ἰησοῦς
+          <lb n="17"/>ἔφη αὐτῷ · Σὺ λέγεις. <surplus>Καὶ ἐν τῷ κατηγορεῖσθαι αὐτὸν
+          <lb n="18"/>ὑπὸ τῶν ἀρχιερέων καὶ πρεσβυτέρων οὐδὲν ἀπεκρίνετο.
+          <lb n="19"/>Τότε λέγει αὐτῷ ὁ Πιλᾶτος · Οὐκ ἀκούεις, πόσα σου
+          <lb n="20"/>καταμαρτυροῦσι ; Καὶ οὐκ ἀπεκρίθη αὐτῷ πρὸς οὐδὲν
+          <lb n="21"/>ῥῆμα, ὥστε θαυμάζειν τὸν ἡγεμόνα λίαν ».</surplus></p>
+      </div>
+      <div type="textpart" subtype="section" n="2">
+        <p><lb n="22"/><surplus>Καὶ γὰρ θαυμασμοῦ ἄξιον ἦν παρὰ τοῖς καὶ μετρίως
+          <lb n="23"/>φρονεῖν δυναμένοις τὸ τὸν κατηγορούμενον καὶ ψευδομαρ<lb n="24" break="no"/>τυρούμενον, δυνάμενον ἀπολογήσασθαι καὶ παραστῆσαι
+          <lb n="25"/>ἑαυτὸν οὐδενὶ ἔνοχον ἐγκλήματι καὶ ἐγκώμια τοῦ ἑαυτοῦ
+          <lb n="26"/>βίου διεξελθεῖν καὶ τῶν δυνάμεων, ὡς ἀπὸ θεοῦ γεγένηνται,
+          <lb n="27"/>ἵνα δῷ τῷ δικαστῇ ὁδὸν τοῦ χρηστότερα περὶ αὐτοῦ ἀποφή<lb n="28" break="no"/>νασθαι, τοῦτο μὲν μὴ πεποιηκέναι καταπεφρονηκέναι δὲ
+          <pb ed="SC" n="68"/>
+          <lb n="1"/>καὶ μεγαλοφυῶς ὑπερεωρακέναι τοὺς κατηγόρους. Ὅτι δέ,
+          <lb n="2"/>εἰ ἀπελογήσατο, ἀπέλυσεν ἂν ὁ δικαστὴς μηδὲ διστάσας
+          <lb n="3"/>τὸν Ἰησοῦν, δῆλον ἐκ τῶν ἀναγεγραμμένων περὶ αὐτοῦ, ἐν
+          <lb n="4"/>οἷς εἶπε · « Τίνα θέλετε τῶν δύο ἀπολύσω ὑμῖν, τὸν Βαραββᾶν
+          <lb n="5"/>ἢ Ἰησοῦν τὸν λεγόμενον Χριστόν ; » καὶ τοῦ, ὡς ἐπιφέρει
+          <lb n="6"/>ἡ γραφὴ λέγουσα · « ᾜδει γὰρ ὅτι διὰ φθόνον παρέδωκαν
+          <lb n="7"/>αὐτόν. »</surplus> Ἰησοῦς οὖν ἀεὶ ψευδομαρτυρεῖται, καὶ οὐκ
+          <lb n="8"/>ἔστιν ὅτε κακίας οὔσης ἐν ἀνθρώποις οὐ κατηγορεῖται.
+          <lb n="9"/>Καὶ αὐτὸς μὲν καὶ νῦν σιωπᾷ πρὸς ταῦτα καὶ οὐκ ἀποκρίνεται
+          <lb n="10"/>μὲν διὰ φωνῆς, ἀπολογεῖται δὲ ἐν τῷ βίῳ τῶν γνησίων
+          <lb n="11"/>ἑαυτοῦ μαθητῶν, κεκραγότι τὰ διαφέροντα καὶ πάσης
+          <lb n="12"/>ψευδομαρτυρίας ὄντι κρείττονι, ἐλέγχων καὶ ἀνατρέπων τὰς
+          <lb n="13"/>ψευδομαρτυρίας καὶ κατηγορίας.</p>
+      </div>
+    </div>
+    <pb ed="SC" n="78"/>
+    <div type="textpart" subtype="book" n="1">
+      <head type="main"><lb n="1"/>ΠΡΟΣ ΤΟΝ ΕΠΙΓΕΓΡΑΜΜΕΝΟΝ
+        <lb n="2"/>ΚΕΛΣΟΥ ΑΛΗΘΗ ΛΟΓΟΝ
+        <lb n="3"/>ΩΡΙΓΕΝΟΥΣ</head>
+      <head type="sub"><lb n="4"/>ΤΟΜΟΣ ΠΡΩΤΟΣ</head>
+      <div type="textpart" subtype="section" n="1">
+        <p><lb n="5"/><surplus>Πρῶτον τῷ Κέλσῳ κεφάλαιόν</surplus> ἐστι βουλομένῳ
+          <lb n="6"/>διαβαλεῖν χριστιανισμόν, <surplus>ὡς <quote>συνθήκας κρύβδην πρὸς
+          <lb n="7"/>ἀλλήλους ποιουμένων Χριστιανῶν παρὰ τὰ νενομισμένα</quote>, ὅτι
+          <lb n="8"/><quote>τῶν συνθηκῶν αἱ μέν εἰσι φανεραί, ὅσαι κατὰ νόμους
+          <lb n="9"/>γίνονται, αἱ δὲ ἀφανεῖς, ὅσαι παρὰ τὰ νενομισμένα συντε<lb n="10" break="no"/>λοῦνται</quote>. Καὶ βούλεται διαβαλεῖν τὴν καλουμένην <quote>ἀγάπην</quote>
+          <lb n="11"/>Χριστιανῶν πρὸς ἀλλήλους, <quote>ἀπὸ τοῦ κοινοῦ κινδύνου ὑφιστα<lb n="12" break="no"/>μένην καὶ δυναμένην ὑπερόρκια</quote></surplus>. Ἐπεὶ οὖν <quote>τὸν κοινὸν νόμον</quote>
+          <lb n="13"/>θρυλεῖ <quote>παρὰ τοῦτον</quote> λέγων <quote>Χριστιανοῖς τὰς συνθήκας</quote>,
+          <lb n="14"/>λεκτέον πρὸς τοῦτο ὅτι, ὥσπερ <surplus>εἴ τις παρὰ Σκύθαις νόμους
+          <lb n="15"/>ἀθέσμους ἔχουσι γενόμενος ἀναχωρήσεως μὴ ἔχων καιρὸν
+          <pb ed="SC" n="80"/>
+          <lb n="1"/>βιοῦν παρ' ἐκείνοις ἀναγκάζοιτο, εὐλόγως ἂν οὗτος διὰ τὸν
+          <lb n="2"/>τῆς ἀληθείας νόμον, ὡς πρὸς τοὺς Σκύθας παρανομίαν, καὶ
+          <lb n="3"/>συνθήκας πρὸς τοὺς τὰ αὐτὰ αὐτῷ φρονοῦντας ποιήσαι ἂν
+          <lb n="4"/>παρὰ τὰ ἐκείνοις νενομισμένα</surplus> · οὕτως παρ' ἀληθείᾳ δικα<lb n="5" break="no"/>ζούσῃ οἱ νόμοι τῶν ἐθνῶν, οἱ περὶ ἀγαλμάτων καὶ τῆς
+          <lb n="6"/>ἀθέου πολυθεότητος, νόμοι εἰσὶ Σκυθῶν καὶ εἴ τι Σκυθῶν
+          <lb n="7"/>ἀσεβέστερον. <surplus>Οὐκ ἄλογον οὖν συνθήκας παρὰ τὰ νενομισμένα
+          <lb n="8"/>ποιεῖν τὰς ὑπὲρ ἀληθείας. Ὥσπερ γάρ, εἰ ὑπὲρ τοῦ τύραννον
+          <lb n="9"/>προλαβόντα τὰ τῆς πόλεως ἀνελεῖν συνθήκας τινὲς κρύβδην</surplus>
+          <lb n="10"/>ἐποιοῦντο, καλῶς ἂν <surplus>ἐποίουν · οὕτω δὴ καὶ Χριστιανοί,
+          <lb n="11"/>τυραννοῦντος τοῦ παρ' αὐτοῖς καλουμένου διαβόλου καὶ
+          <lb n="12"/>τοῦ ψεύδους, συνθήκας ποιοῦνται παρὰ τὰ νενομισμένα τῷ
+          <lb n="13"/>διαβόλῳ κατὰ τοῦ διαβόλου καὶ ὑπὲρ σωτηρίας ἑτέρων, οὓς
+          <lb n="14"/>ἂν πεῖσαι δυνηθῶσιν ἀποστῆναι τοῦ ὡσανεὶ Σκυθῶν καὶ
+          <lb n="15"/>τυράννου νόμου.</surplus></p>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</text>
+</TEI>

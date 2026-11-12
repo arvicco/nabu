@@ -479,6 +479,28 @@ sources:
     entries_display: '1,647'
     holdings: 1,647 entries
     canonical_display: 67 MB
+  cllg-freed:
+    name: CLLG Freed Corpus (Inria) — the TLG canon as TEI
+    license_class: attribution
+    documents: 6290
+    documents_display: '6,290'
+    passages: 1258099
+    passages_display: '1,258,099'
+    entries: 0
+    entries_display: '0'
+    holdings: 6,290 documents / 1,258,099 passages
+    canonical_display: 1.3 GB
+  cllg-sc:
+    name: CLLG Sources Chrétiennes (Inria) — Greek and Latin patristic editions
+    license_class: attribution
+    documents: 366
+    documents_display: '366'
+    passages: 94713
+    passages_display: '94,713'
+    entries: 0
+    entries_display: '0'
+    holdings: 366 documents / 94,713 passages
+    canonical_display: 118 MB
   cme:
     name: Corpus of Middle English Prose and Verse (Middle English Compendium, Univ.
       of Michigan)
@@ -3269,14 +3291,14 @@ sources:
   wellcome:
     name: Wellcome Collection — digitised printed books, OCR full text (pre-1800 cone)
     license_class: open
-    documents: 284
-    documents_display: '284'
-    passages: 176140
-    passages_display: '176,140'
+    documents: 434
+    documents_display: '434'
+    passages: 237406
+    passages_display: '237,406'
     entries: 0
     entries_display: '0'
-    holdings: 284 documents / 176,140 passages
-    canonical_display: 707 MB
+    holdings: 434 documents / 237,406 passages
+    canonical_display: 763 MB
   wenhai:
     name: 'The Digital Wenhai v1.1: Phonology (Beaudouin 2026) — the Tangut rhyme
       dictionary 文海'
@@ -3877,11 +3899,11 @@ shelves:
     - mazarinades
     - socinian-letters
     - wellcome
-    documents: 25418
-    documents_display: '25,418'
-    passages: 5783946
-    passages_display: '5,783,946'
-    size_display: 25,418 / 5,783,946
+    documents: 25568
+    documents_display: '25,568'
+    passages: 5845212
+    passages_display: '5,845,212'
+    size_display: 25,568 / 5,845,212
   papyri:
     sources:
     - papyri-ddbdp
@@ -4339,6 +4361,6 @@ shelves:
     passages_display: '7,014'
     size_display: 1,282 / 7,014
 disk:
-  canonical_display: 153 GB
-  derived_display: 209 GB
+  canonical_display: 155 GB
+  derived_display: 234 GB
   starter_display: 693 MB

@@ -100,11 +100,17 @@ module Nabu
         end
       end
 
-      # The ledger estimate for +kind+ over +scopes+ (IndexWatcher), read
-      # through a short read-only ledger handle; nil on a fresh box.
+      # The ledger estimate for +kind+ over +scopes+ (IndexWatcher) and
+      # whether that evidence COVERS the named scopes (a kill is armed
+      # only when it does — IndexWatcher.evidence_covers?); read through a
+      # short read-only ledger handle. [nil, false] on a fresh box.
       def watcher_estimate(config, kind:, scopes: nil, stages: nil)
         ledger = open_ledger(config)
-        ledger && Nabu::IndexWatcher.ledger_estimate(ledger, kind: kind, scopes: scopes, stages: stages)
+        return [nil, false] if ledger.nil?
+
+        [Nabu::IndexWatcher.ledger_estimate(ledger, kind: kind, scopes: scopes, stages: stages),
+         Nabu::IndexWatcher.evidence_covers?(ledger, kind: kind, scopes: scopes,
+                                                     stages: Nabu::IndexWatcher::REFRESH_STAGES)]
       ensure
         ledger&.disconnect
       end

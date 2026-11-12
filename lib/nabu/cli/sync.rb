@@ -434,9 +434,12 @@ module Nabu
         return yield if options[:fetch_only]
 
         scopes = slugs.empty? || options[:all] || options[:axis] ? nil : slugs
-        estimate = watcher_estimate(config, kind: "sync", scopes: scopes && (scopes + ["corpus"]))
+        estimate, covered = watcher_estimate(config, kind: "sync", scopes: scopes && (scopes + ["corpus"]))
+        # A first sync (any named source without its own history) runs
+        # heartbeats-only: the estimate describes the corpus riders, not
+        # the unknown source — the rebuild rationale on the sync path.
         supervised_index_write(config, label: "sync #{slugs.join(' ')}".strip, estimate: estimate,
-                                       slug: (slugs.first if slugs.size == 1), &)
+                                       slug: (slugs.first if slugs.size == 1), arm_kill: covered, &)
       end
 
       # The registry entry for one slug, nil when the catalog source is not
@@ -994,8 +997,8 @@ module Nabu
         say %(  bin/nabu align "MARK 2.3"      # one verse, seven witnesses: Greek ×2, Latin, Gothic, OCS, Old English)
         say "  bin/nabu search --lemma λέγω    # every inflection over the gold treebanks: λέγουσι, εἶπας, εἰπεῖν…"
         say "  bin/nabu define λόγος           # the whole LSJ entry, citations resolved (Latin: define virtus)"
-        say "grow the library: bin/nabu sync --all (live sources) or bin/nabu sync <slug> — " \
-            "the menu is config/sources.yml, the shelf map docs/library.md"
+        say "grow the library: bin/nabu enable <slug> then sync <slug> (enable writes this box's profile; " \
+            "sync refuses what is not on it) — the menu is config/sources.yml, the shelf map docs/library.md"
       end
 
       # -- ingest (P19-5): the canonical-memory intake front door ---------------
