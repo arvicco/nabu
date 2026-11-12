@@ -3821,7 +3821,8 @@ class CLITest < Minitest::Test
         assert_match(/align "MARK 2\.3"/, out)
         assert_match(/search --lemma/, out)
         assert_match(/define λόγος/, out)
-        assert_match(%r{grow the library: bin/nabu sync --all}, out)
+        assert_match(%r{grow the library: bin/nabu enable <slug> then sync <slug>}, out,
+                     "the closing line must teach the enable step — a bare sync of a new source refuses")
       end
     end
   end
