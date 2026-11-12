@@ -93,7 +93,7 @@ class AxisPagesTest < Minitest::Test
   # honesty footnote below the (public-only) shelves table; an axis with none
   # must NOT carry it. Pinned to the registry so a new blocked source without a
   # page regeneration fails the gate.
-  FOOTNOTE = "Private research materials under personal grants are not listed."
+  FOOTNOTE = "Private research materials are not listed."
 
   def test_blocked_member_axes_carry_the_footnote_and_others_do_not
     axes.each_axis do |axis|

@@ -302,7 +302,7 @@ upstream-disambiguated analyses mint searchable lemmas; the rest ride as
 annotations). The UD HitTB treebank adds 1,309 gold-lemmatized words from
 Hoffner & Melchert's grammar; a Zenodo corpus of glossed Hittite texts
 with German translations rides beside it, and the Annotated Corpus of
-Luwian Texts (held under the editor's personal grant) brings the
+Luwian Texts (held research-private, never redistributed) brings the
 Hieroglyphic Luwian inscriptions of Iron Age Anatolia, each clause with
 full morphology and a sign-by-sign transliteration. The Anatolian reflex
 columns of the comparative shelf light against the corpus:

@@ -36,7 +36,7 @@ module Nabu
       # The footnote line rendered ONLY on axis pages with ≥1 blocked member
       # (P44-r3a): grant-gated private research materials are excluded from the
       # member table and holdings above, so the page says so honestly.
-      BLOCKED_FOOTNOTE = "Private research materials under personal grants are not listed."
+      BLOCKED_FOOTNOTE = "Private research materials are not listed."
 
       # Language codes shown by the desks' languages line before the "… and
       # N more" tail — the `nabu axis` card's compact cap, mirrored (the

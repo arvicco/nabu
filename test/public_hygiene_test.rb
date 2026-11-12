@@ -55,6 +55,36 @@ class PublicHygieneTest < Minitest::Test
      "time-of-day narrative — public surfaces carry dates, never day-parts"]
   ].freeze
 
+  # The showcase surfaces — README.md and everything under site/ — carry
+  # NO personal-grant information (owner rule 2026-11-12, minted on a live
+  # leak: the README narrated the TITUS members-gate grants, the public
+  # sources table named grantors with email dates, and a news post
+  # described the credentials seam). A personal grant is the owner's
+  # private arrangement, not a library fact: the showcase says what a
+  # source's license CLASS is (nc, research-private, never redistributed)
+  # and credits whom the terms require — never that a grant exists, who
+  # granted it, or how the gate is walked. docs/02-sources.md and
+  # config/sources.yml remain the license-provenance ledger (grantor,
+  # date, terms are ALLOWED there, per the 2026-08-30 rule above).
+  SHOWCASE = %r{\A(?:README\.md|site/)}
+  # Separators are [\s-] (whitespace INCLUDING newline, or hyphen):
+  # prose wraps mid-phrase, and the first sweep missed a leak exactly
+  # because "personal research\ngrants" straddled a line break.
+  SHOWCASE_FORBIDDEN = [
+    [/personal(?:ly)?[\s-](?:research[\s-])?grant(?:ed|s)?/i,
+     "a personal grant is a private arrangement — state the license class instead"],
+    [/\bmembers[-']?\s*(?:only|area|gate)\b/i,
+     "the members gate is the owner's private access — never showcase narrative"],
+    [/credentials\s+seam/i,
+     "access machinery for granted sources is private"],
+    [/granted\s+password/i,
+     "access machinery for granted sources is private"],
+    [/grant\s+estate/i,
+     "a personal grant is a private arrangement — state the license class instead"],
+    [/owner's\s+personal/i,
+     "the owner's private arrangements never appear on the showcase"]
+  ].freeze
+
   # Pre-rule files exempted while awaiting an owner call — EMPTY since
   # 2026-11-03 (the two early history files untracked into the private
   # boards by owner ruling; every tracked file now meets the full rule).
@@ -114,6 +144,29 @@ class PublicHygieneTest < Minitest::Test
 
     assert_empty offenders,
                  "internal workflow leaked into the public tree:\n  #{offenders.join("\n  ")}"
+  end
+
+  def test_showcase_surfaces_carry_no_personal_grant_information
+    offenders = []
+    tracked_files.each do |rel|
+      next unless rel.match?(SHOWCASE)
+      next if rel == "site/MAINTENANCE.md" # maintainer contract, excluded from rendering
+
+      path = File.join(ROOT, rel)
+      next unless File.file?(path)
+
+      content = File.read(path, encoding: Encoding::UTF_8)
+      next unless content.valid_encoding?
+
+      SHOWCASE_FORBIDDEN.each do |pattern, reason|
+        content.scan(pattern).first(1).each do |hit|
+          offenders << "#{rel}: #{Array(hit).first.to_s.strip[0, 40].inspect} — #{reason}"
+        end
+      end
+    end
+
+    assert_empty offenders,
+                 "personal-grant information leaked onto a showcase surface:\n  #{offenders.join("\n  ")}"
   end
 
   def test_no_redistribution_grant_sources_ship_no_public_fixture_bytes
