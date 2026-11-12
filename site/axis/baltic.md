@@ -22,6 +22,8 @@ A source wears every desk it serves — these four answer this desk. Holdings ar
 | `vks` | texts | attribution | wired · manual | 128 docs / 65,311 passages |
 | `wiktionary-et` | dictionary | attribution | wired · manual | 13,549 entries |
 
+Private research materials under personal grants are not listed.
+
 **Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 12 November 2026)</span>: `et` 16,601 · `lv` 172 · `fi` 128 · `de` 10 · `lat` 1.
 
 ## The desk's instruments

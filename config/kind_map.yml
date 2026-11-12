@@ -2419,7 +2419,21 @@ sources:
       #   non-canonical (not scripture), addressed to the Buddhas
       "Fragments of documents of uncertain type": unknown  # 3 — upstream's own
       #   "cannot determine" (ruled "unclassified": the honest class)
-  gretil:             # census: 784 files, 48 ladder values, 2026-10-18 — the teiHeader's
+  titus-old-prussian:  # census 2026-11-12: 40 pages over five text sigla (the frameset index)
+    metadata: text     # the page's text siglum, from its line anchors (OPr.Corp._<text>_…)
+    map:
+      "Kat.I": catechesis       # pages 1-7 — Catechism I (1545), Luther's Small Catechism
+      #                           in Prussian: Decalogue, Creed, Lord's Prayer, the sacraments
+      "Kat.II": catechesis      # pages 8-14 — Catechism II (1545), the corrected reissue
+      "Kat.III": catechesis     # pages 15-27 — the Enchiridion (1561), Abel Will's
+      #                           translation of the Small Catechism with its tables and orders
+      "Gloss.": lexical/glossary  # pages 28-32 — the Elbing Vocabulary (topical German →
+      #                             Prussian glossary) and Simon Grunau's word list; the
+      #                             edition's own word: "Glossar Simon Grünaus"
+    deliberate:
+      "Fragm.": "the minor fragments (pages 33-40: BPT the Basel epigram, a drinker's toast,
+        beside the short pieces TNa/TNb/TNc, MBS, OT, GrF) — mixed, no one class holds them"
+  gretil:            # census: 784 files, 48 ladder values, 2026-10-18 — the teiHeader's
     metadata: genre   # keywords term ("Sanskrit -- Śāstra -- Philosophy -- Buddhist"),
     #                   mined verbatim; exact rules per ladder value, folded as the
     #                   loop's call on each shelf's own scholarly identity

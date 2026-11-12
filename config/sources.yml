@@ -7390,6 +7390,42 @@ titus-manichaica:   # 02-sources row 226
       W. Sundermann and the Corpus's edition editors; P. Zieme) wherever any text is
       displayed.
 
+titus-old-prussian:   # 02-sources row 402
+  adapter: Nabu::Adapters::TitusOldPrussian
+  adopted: "2026-11-12"
+  axes: [etym, baltic, slavic]  # the West Baltic member of the baltic desk (the Balto-Slavic
+                                # lineage dual-tag, the senie ruling); etym because the
+                                # Elbing/Grunau vocabularies and catechism forms feed the
+                                # comparative shelves.
+  # Grant-gated PRIVATE research material, the titus-avestan posture verbatim
+  # (the fetch right is the owner's personal grant, not conveyed by a clone):
+  availability: blocked
+  wired: false   # adapter + fixtures landed 2026-11-12; the one-time retrieval + verification
+                 # (status counts, 5 random passages, a search probe) flips it.
+  # TITUS Old Prussian Corpus (titus.uni-frankfurt.de/texte/etcs/balt/apreuss/apreuss/):
+  # the complete Old Prussian record in a diplomatic edition after V. Mažiulis, Prūsų
+  # kalbos paminklai (Vilnius 1966/1981), data entry W. Euler (München 1997-1998), TITUS
+  # version J. Gippert — Catechisms I and II (1545), the Enchiridion (1561), the Elbing
+  # Vocabulary and Simon Grunau's vocabulary, the minor fragments. 40 text pages
+  # (apreu001…apreu040; the frameset index's offsets, censused 2026-11-12). One document
+  # per page carrying an Old Prussian lane (notes pages and German-only front matter skip
+  # by rule); passages at the printed LINE (the h6 "Line" anchors, urn tail verbatim),
+  # the German lane riding as the `german` annotation. Language prg throughout.
+  # EXPECTED FIRST SYNC: 40 pages, crawl ≈ 2 min at the polite 2s pace (~2.5 MB).
+  sync_policy: manual
+  grant_required: true
+  grant:
+    grantor: Prof. Jost Gippert (TITUS, Frankfurt)
+    date: "2026-11-12"
+    terms: >-
+      the TITUS family terms: one retrieval per corpus, local personal research use
+      only, no redistribution; TITUS and the editors credited wherever displayed
+    thread: "personal research grant of 2026-11-12"
+    request_hint: >-
+      Write to Prof. Jost Gippert (TITUS, titus.uni-frankfurt.de) for your own
+      non-commercial grant, and promise to credit TITUS and the editors (data entry
+      W. Euler, after V. Mažiulis's edition) wherever any text is displayed.
+
 titus-osco-umbrian:   # P90-2, 02-sources row 188
   adapter: Nabu::Adapters::TitusOscoUmbrian
   adopted: "2026-08-31"

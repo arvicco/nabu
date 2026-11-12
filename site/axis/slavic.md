@@ -59,6 +59,8 @@ A source wears every desk it serves — these 41 answer this desk. Holdings are 
 | `wiktionary-cu` | dictionary | attribution | wired · manual | 4,615 entries |
 | `wiktionary-sh` | dictionary | attribution | wired · manual | 70,466 entries |
 
+Private research materials under personal grants are not listed.
+
 **Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 12 November 2026)</span>: `sl` 142,058 · `srp` 75,102 · `be` 35,159 · `pol` 6,942 · `chu` 5,083 · `pl` 2,091 · `hrv` 1,730 · `orv` 1,026 · `mkd` 836 · `ces` 331 … and 15 more (`nabu axis slavic` lists all).
 
 **Carried in by multilingual packs** (`ud` — whole-source members whose other languages ride along, as of 12 November 2026): `ota` 5 · `lzh` 4 · `cop` 3 · `egy` 3 · `frm` 3 … and 14 more (`nabu axis slavic` lists all).
