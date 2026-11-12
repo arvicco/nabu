@@ -66,10 +66,17 @@ module Nabu
 
     # The kill deadline in seconds, or nil (heartbeats only): the flag
     # wins (0 = never kill); else DEADLINE_FACTOR × +estimate+, floored.
-    def self.deadline_for(estimate:, override_minutes: nil)
+    # +arm_default+ false means the command never arms a kill from history
+    # alone — only an explicit flag does. Rebuilds run that way: a
+    # rebuild's ledger estimate is a backward-looking sum, and the very
+    # rebuilds that matter most are the ones that GROW past it (new
+    # sources, a re-flagged lane, a new storage layout) — a kill armed at
+    # 2× yesterday would execute the crash-loss incident on purpose.
+    def self.deadline_for(estimate:, override_minutes: nil, arm_default: true)
       unless override_minutes.nil?
         return override_minutes.to_f.positive? ? override_minutes.to_f * 60 : nil
       end
+      return nil unless arm_default
       return nil if estimate.nil? || !estimate.positive?
 
       [estimate * DEADLINE_FACTOR, MIN_DEADLINE_SECONDS].max
@@ -97,9 +104,13 @@ module Nabu
     # do, and on what evidence. The CLI prints it whenever a kill is armed,
     # and the heartbeats-only case on a tty alone — honesty on a screen,
     # never noise in a log (the no-estimate note's P78-r3 rule).
-    def self.arming_line(deadline:, estimate:)
+    def self.arming_line(deadline:, estimate:, kill_default: true)
       fmt = Object.new.extend(DurationFormat)
       if deadline.nil?
+        unless kill_default
+          return "index watcher: heartbeats only — this command arms no kill by default " \
+                 "(--deadline MINUTES arms one)"
+        end
         return "index watcher: heartbeats only — no kill deadline (--deadline MINUTES arms one)" if estimate
 
         return "index watcher: heartbeats only — no ledger estimate for this run (--deadline MINUTES arms a kill)"

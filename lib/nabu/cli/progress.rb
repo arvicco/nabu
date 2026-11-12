@@ -83,9 +83,14 @@ module Nabu
       # ledger estimate; --deadline MINUTES overrides, 0 disables). The
       # arming line goes to stderr beside the progress lines. +slug+ names
       # the source whose slice the hygiene leaves pending after a kill.
-      def supervised_index_write(config, label:, estimate:, slug: nil, &)
-        deadline = Nabu::IndexWatcher.deadline_for(estimate: estimate, override_minutes: options[:deadline])
-        warn Nabu::IndexWatcher.arming_line(deadline: deadline, estimate: estimate) if deadline || $stderr.tty?
+      # +arm_kill+ false (the rebuild flavors) = heartbeats only unless the
+      # owner's --deadline arms one (IndexWatcher.deadline_for's rationale).
+      def supervised_index_write(config, label:, estimate:, slug: nil, arm_kill: true, &)
+        deadline = Nabu::IndexWatcher.deadline_for(estimate: estimate, override_minutes: options[:deadline],
+                                                   arm_default: arm_kill)
+        if deadline || $stderr.tty?
+          warn Nabu::IndexWatcher.arming_line(deadline: deadline, estimate: estimate, kill_default: arm_kill)
+        end
         Nabu::IndexWatcher.supervise(label: label, fulltext_path: config.fulltext_path, deadline: deadline,
                                      slug: slug) do |tee|
           @watch_tee = tee
