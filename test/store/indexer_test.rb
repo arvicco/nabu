@@ -1278,13 +1278,15 @@ module Store
     # The forbidding_index_work pattern: swap one Indexer entry point for a
     # raiser, restore after — write_char_postings runs AFTER the fts inserts
     # inside the stage body, so it simulates a mid-slice crash.
-    def raising_char_postings
+    # +name+: the in-slice writer to fail — the delta grain moves the
+    # postings by arithmetic, so a delta crash rides its coverage write.
+    def raising_char_postings(name = :write_char_postings)
       mod = Nabu::Store::Indexer
-      original = mod.method(:write_char_postings)
-      mod.define_singleton_method(:write_char_postings) { |*, **| raise "boom" }
+      original = mod.method(name)
+      mod.define_singleton_method(name) { |*, **| raise "boom" }
       yield
     ensure
-      mod.define_singleton_method(:write_char_postings, original)
+      mod.define_singleton_method(name, original)
     end
 
     def test_bulk_slice_failure_persists_partial_state_and_stays_pending
@@ -1505,7 +1507,7 @@ module Store
       rebuild!
       make_passage(doc, urn: "urn:d:s:2", text_normalized: "fresh", sequence: 1)
 
-      raising_char_postings do
+      raising_char_postings(:write_passage_chars) do
         assert_raises(RuntimeError) { refresh!(delta: delta_of(upserted: %w[urn:d:s:2])) }
       end
 
@@ -2005,8 +2007,9 @@ module Store
       # mutation set — applied through a delta this time.
       make_passage(doc, urn: "urn:d:s:4", text_normalized: "fresh 王道", sequence: 3,
                         annotations: token_annotations(%w[φέρω φέρει]))
+      # A revision moves the content sha, exactly as the loader mints it.
       Nabu::Store::Passage.first(urn: "urn:d:s:2").update(
-        text_normalized: "revised 国",
+        text_normalized: "revised 国", content_sha256: "ab12",
         annotations_json: JSON.generate(token_annotations(%w[ὁράω ὁρᾷ]))
       )
       Nabu::Store::Passage.first(urn: "urn:d:s:3").update(withdrawn: true)
@@ -2024,10 +2027,22 @@ module Store
         assert_equal [passage_id_of("urn:d:s:3")], cjk_rowids(@fulltext),
                      "the cjk lane keeps the pre-delta build's rows at the delta grain"
         %i[passage_lemmas passages_trigram passages_trigram_scope lemma_frequencies
-           char_postings passage_chars reflex_roots reflex_root_stats].each do |table|
+           passage_chars reflex_roots reflex_root_stats].each do |table|
           assert_equal table_rows(fresh, table), table_rows(@fulltext, table),
                        "#{table} must be row-identical to a from-scratch rebuild"
         end
+        # char_postings at the delta grain: "s" mixes Greek with Han, and
+        # urn:d:s:2 was REVISED — its old text is gone and passage_chars
+        # holds only Han, so its exact decrement is unknowable. The
+        # aggregate is flagged stale (never silently recomputed inline)
+        # and the maintenance rail's recompute converges it exactly.
+        assert Nabu::Store::StaleAggregates.stale?(@fulltext, aggregate: "char_postings", scope: "s"),
+               "the unsound revision flags the source's postings stale"
+        Nabu::Store::Indexer.recompute_char_postings!(catalog: @catalog, fulltext: @fulltext, slug: "s")
+
+        assert_equal table_rows(fresh, :char_postings), table_rows(@fulltext, :char_postings),
+                     "the rail's recompute converges char_postings to the rebuild's rows"
+        refute Nabu::Store::StaleAggregates.stale?(@fulltext, aggregate: "char_postings", scope: "s")
         assert_equal %w[urn:d:s:2], match_urns("revised"),
                      "the delta-refreshed slice answers MATCH with the revised tokens"
         assert_empty match_urns("doomed"), "the removed row stops matching"
@@ -2372,6 +2387,116 @@ module Store
 
       assert_empty row_shas.where(source_id: @source.id), "a withdrawn document takes every sha with it"
       assert_identical_to_a_fresh_rebuild
+    end
+
+    # -- char postings at the delta grain (the incrementality review) -------
+    # The per-source postings aggregate is decomposable: a delta subtracts
+    # the changed rows' OLD contribution and adds the upserted rows' new
+    # one — never a whole-source catalog scan. The old contribution is
+    # exact where the row-sha sidecar vouches the catalog still holds the
+    # indexed text (withdrawals, unchanged re-entries), and for a REVISED
+    # row where the source is Han-pure (passage_chars holds its old Han
+    # set, which is then its whole posted set). Anywhere else the grain is
+    # unsound and the source's postings are flagged STALE for the
+    # maintenance rail — never recomputed inline.
+
+    def postings_rows(db = @fulltext) = table_rows(db, :char_postings)
+
+    def stale_postings?(slug = "s")
+      Nabu::Store::StaleAggregates.stale?(@fulltext, aggregate: "char_postings", scope: slug)
+    end
+
+    def assert_postings_match_a_fresh_rebuild
+      fresh = Nabu::Store.connect_fulltext("sqlite::memory:")
+      begin
+        Nabu::Store::Indexer.rebuild!(catalog: @catalog, fulltext: fresh)
+        assert_equal postings_rows(fresh), postings_rows, "char_postings must be row-identical to a full recompute"
+      ensure
+        fresh.disconnect
+      end
+    end
+
+    def refute_source_scan(&)
+      observing(:source_char_postings) do |calls|
+        yield
+        assert_empty calls, "the delta never scans the whole source for its postings"
+      end
+    end
+
+    def test_a_delta_of_adds_and_withdrawals_moves_postings_exactly
+      doc = make_document(urn: "urn:d:s")
+      make_passage(doc, urn: "urn:d:s:1", text_normalized: "λογοσ αει", sequence: 0, sha: sha_hex("1"))
+      make_passage(doc, urn: "urn:d:s:2", text_normalized: "μηνιν", sequence: 1, sha: sha_hex("2"))
+      lit = make_document(urn: "urn:d:lit", source: literary_source)
+      make_passage(lit, urn: "urn:d:lit:1", text_normalized: "λογοσ", sequence: 0, sha: sha_hex("l"))
+      rebuild!
+
+      make_passage(doc, urn: "urn:d:s:3", text_normalized: "ναυσ λογοσ", sequence: 2, sha: sha_hex("3"))
+      Nabu::Store::Passage.first(urn: "urn:d:s:2").update(withdrawn: true)
+      refute_source_scan { refresh!(delta: delta_of(upserted: %w[urn:d:s:3], removed: %w[urn:d:s:2])) }
+
+      refute stale_postings?, "adds and withdrawals are always sound"
+      assert_postings_match_a_fresh_rebuild
+    end
+
+    def test_a_revision_in_a_han_pure_source_decrements_from_passage_chars
+      doc = make_document(urn: "urn:d:s")
+      make_passage(doc, urn: "urn:d:s:1", text_normalized: "天地玄黃", sequence: 0, language: "lzh", sha: sha_hex("1"))
+      make_passage(doc, urn: "urn:d:s:2", text_normalized: "宇宙洪荒 abc", sequence: 1, language: "lzh",
+                        sha: sha_hex("2"))
+      make_passage(doc, urn: "urn:d:s:3", text_normalized: "plain ascii", sequence: 2, sha: sha_hex("3"))
+      rebuild!
+
+      Nabu::Store::Passage.first(urn: "urn:d:s:2").update(text_normalized: "日月盈昃", content_sha256: sha_hex("2b"))
+      Nabu::Store::Passage.first(urn: "urn:d:s:3").update(text_normalized: "now 天", content_sha256: sha_hex("3b"))
+      refute_source_scan { refresh!(delta: delta_of(upserted: %w[urn:d:s:2 urn:d:s:3])) }
+
+      refute stale_postings?, "a Han-pure source's revisions decrement exactly from passage_chars"
+      assert_postings_match_a_fresh_rebuild
+    end
+
+    def test_a_revision_in_a_mixed_source_flags_the_postings_stale_without_a_scan
+      doc = make_document(urn: "urn:d:s")
+      make_passage(doc, urn: "urn:d:s:1", text_normalized: "λογοσ 天", sequence: 0, sha: sha_hex("1"))
+      make_passage(doc, urn: "urn:d:s:2", text_normalized: "μηνιν", sequence: 1, sha: sha_hex("2"))
+      rebuild!
+      before = postings_rows
+
+      Nabu::Store::Passage.first(urn: "urn:d:s:2").update(text_normalized: "ναυσ", content_sha256: sha_hex("2b"))
+      refute_source_scan { refresh!(delta: delta_of(upserted: %w[urn:d:s:2])) }
+
+      assert stale_postings?, "the old Greek of a revised row is unknowable — flagged, not guessed"
+      assert_equal before, postings_rows, "the stale source's postings are left as they stood"
+      Nabu::Store::Indexer.recompute_char_postings!(catalog: @catalog, fulltext: @fulltext, slug: "s")
+
+      refute stale_postings?
+      assert_postings_match_a_fresh_rebuild
+    end
+
+    def test_a_stale_source_stays_stale_through_later_deltas_until_recomputed
+      doc = make_document(urn: "urn:d:s")
+      make_passage(doc, urn: "urn:d:s:1", text_normalized: "λογοσ", sequence: 0, sha: sha_hex("1"))
+      rebuild!
+      Nabu::Store::StaleAggregates.mark!(@fulltext, aggregate: "char_postings", scope: "s", reason: "planted")
+
+      make_passage(doc, urn: "urn:d:s:2", text_normalized: "ναυσ", sequence: 1, sha: sha_hex("2"))
+      refresh!(delta: delta_of(upserted: %w[urn:d:s:2]))
+
+      assert stale_postings?, "a delta never applies its arithmetic on a stale base"
+      refresh! # the whole-slice rewrite re-derives the source's postings outright
+
+      refute stale_postings?, "a full-slice refresh clears the flag"
+      assert_postings_match_a_fresh_rebuild
+    end
+
+    def test_a_full_rebuild_clears_every_stale_flag
+      doc = make_document(urn: "urn:d:s")
+      make_passage(doc, urn: "urn:d:s:1", text_normalized: "λογοσ", sequence: 0)
+      rebuild!
+      Nabu::Store::StaleAggregates.mark!(@fulltext, aggregate: "char_postings", scope: "s", reason: "planted")
+      rebuild!
+
+      refute stale_postings?
     end
 
     # -- above-budget rewrites become shadow builds (the incrementality review)
