@@ -23,9 +23,11 @@ module Nabu
   # == What the plan reads
   #
   # The refresh's own timed stages (IndexWatcher::REFRESH_STAGES —
-  # index_slice / postings_swaps / fts_merge under the source's scope, the
-  # reflex closure under "corpus"), the LATEST row of each (the ledger's
-  # governing-row convention). Prediction is honest about its basis: a
+  # index_slice / postings_swaps / fts_merge / reflex_closure, all under
+  # the source's scope), the LATEST row of each (the ledger's
+  # governing-row convention). The closure's older "corpus"-scoped rows
+  # timed the corpus-wide closure the sync path no longer runs, so they
+  # are deliberately not read. Prediction is honest about its basis: a
   # source with no history plans nothing and passes (first run — no
   # estimate; refusing every first sync would make the gate a wall), and
   # the plan never invents stages it has no row for. The shadow build
@@ -39,11 +41,6 @@ module Nabu
     # is a scheduled event, not a sync side-effect (the cost law's ~15-min
     # heavy line, architecture §1, applied per run).
     BUDGET_SECONDS = 15 * 60
-
-    # The stage → scope convention of Indexer.refresh_source!'s timed
-    # stages: the reflex closure records under "corpus", the rest under
-    # the source.
-    CORPUS_STAGES = %w[reflex_closure].freeze
 
     Stage = Data.define(:scope, :stage, :seconds)
 
@@ -80,9 +77,8 @@ module Nabu
       return Plan.new(slug: slug, stages: []) unless Store::StageTimings.table?(ledger)
 
       rows = stages.filter_map do |stage|
-        scope = CORPUS_STAGES.include?(stage) ? "corpus" : slug
-        last = Store::StageTimings.last(ledger, kind: "sync", scope: scope, stage: stage)
-        Stage.new(scope: scope, stage: stage, seconds: last[:seconds].to_f) if last
+        last = Store::StageTimings.last(ledger, kind: "sync", scope: slug, stage: stage)
+        Stage.new(scope: slug, stage: stage, seconds: last[:seconds].to_f) if last
       end
       Plan.new(slug: slug, stages: rows)
     end
