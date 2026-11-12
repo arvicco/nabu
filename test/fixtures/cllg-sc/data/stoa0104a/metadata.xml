@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<collection identifier="urn:cts:latinLit:stoa0104a">
+    <title>Cyprien de Carthage</title>
+    <members>
+    <collection identifier="urn:cts:latinLit:stoa0104a.stoa002">
+        <title>À Démétrien</title>
+        <dublinCore>
+            <creator xmlns="http://purl.org/dc/terms/">Cyprien de Carthage</creator>
+            <identifier xmlns="http://purl.org/dc/terms/">https://data.biblissima.fr/w/Item:Q3485</identifier>
+        </dublinCore>
+        <members>
+            <resource identifier="urn:cts:latinLit:stoa0104a.stoa002.cllg-lat1" filepath="./ad_demetrianum.xml">
+                <title>À Démétrien (SC 467)</title>
+                <description>Cyprien de Carthage. (2003). À Démétrien (Jean-Claude Fredouille, Text Ed. &amp; notes;  Yasmine Ech Chael, Rev.). Les Éditions du Cerf. (Original work published ca. 3th century)</description>
+            </resource>
+        </members>
+    </collection>
+    </members>
+</collection>

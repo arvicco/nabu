@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://www.tei-c.org/release/xml/tei/custom/schema/relaxng/tei_all.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<?xml-model href="http://www.tei-c.org/release/xml/tei/custom/schema/relaxng/tei_all.rng" type="application/xml"
+    schematypens="http://purl.oclc.org/dsdl/schematron"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0">
+   <teiHeader>
+      <fileDesc>
+         <titleStmt>
+            <title>Commentaire des Proverbes numériques (Pr 30, 15-31)</title>
+            <author>
+               <persName>Évagre le Pontique</persName>
+            </author>
+            <respStmt>
+               <orgName>Corpus Liberatum Linguae Graecae</orgName>
+               <resp>
+                  Refined conversion to XML-TEI
+                  <name resp="#cllg-transformation">Thibault Clérice</name>
+                  <name resp="#cllg-transformation">Nicolas Angleraud</name>
+                  <name resp="#cllg-transformation">Antonia Karamolegkou</name>
+                  <name resp="#cllg-transformation">Maïna Laurent</name>
+                  <name resp="#cllg-transformation">Benoît Sagot</name>
+               </resp>
+            </respStmt>
+            <principal>
+               <name>Thibault Clérice</name>
+               <orgName>Inria</orgName>
+            </principal>
+            <funder>
+               <orgName>Agence Nationale de la Recherche</orgName>
+               <orgName>Programme Inria Quadrant</orgName>
+               <note>Ce travail a bénéficié d'une aide de l'État gérée par l'Agence Nationale de la Recherche au titre de France 2030 portant la référence «ANR-24-RRII-0002».</note>
+            </funder>
+         </titleStmt>
+         <publicationStmt>
+            <p>
+               This file has then been released by the Corpus Liberatum Linguae Graecae (dir. Thibault Clérice)
+               which added citeStructure information, bibliographical metadata and reworked, where applicable, the
+               citation structure to follow editions rather than physical citation systems.
+            </p>
+         </publicationStmt>
+         <sourceDesc>
+            <bibl>
+               <author>Évagre le Pontique</author>
+               <title level="m">Commentaire des Proverbes numériques (Pr 30, 15-31)</title>
+               <editor role="editor">Paul Géhin</editor>
+               <publisher>Les Éditions du Cerf</publisher>
+               <pubPlace ref="geonames:2988506">Paris</pubPlace>
+               <date when="1987">1987</date>
+               <series>
+                  <title>Sources chrétiennes</title>
+                  <biblScope unit="volume">340</biblScope>
+               </series>
+               <idno type="ISBN">978-2-204-02885-1</idno>
+               <biblScope unit="page">487-489</biblScope>
+            </bibl>
+         </sourceDesc>
+      </fileDesc>
+      <encodingDesc>
+        <refsDecl n="default">
+          <citeStructure match="/TEI/text/body/div[@type='edition']/div[@subtype='chunk']" use="@n" unit="chunk">
+            <citeStructure match="./div[@subtype='item']" use="@n" unit="item" delim=".">
+            </citeStructure>
+          </citeStructure>
+        </refsDecl>
+        <refsDecl n="physical">
+          <citeStructure match="/TEI/text/body//pb[@ed='SC']" use="@n" unit="page">
+            <citeStructure match=".//lb" use="@n" unit="line" delim="."/>
+          </citeStructure>
+        </refsDecl>
+      </encodingDesc>
+      <profileDesc>
+         <langUsage>
+            <language ident="grc">Texte du document en grec ancien</language>
+         </langUsage>
+      </profileDesc>
+      <revisionDesc>
+        <change who="Thibault Clérice" when="2026-10-10">Chunks and items (printed numerals removed, @n) as div, editorial signs, pb/lb (lb recounted per page), word breaks joined.</change>
+      </revisionDesc>
+   </teiHeader>
+
+<text>
+<body>
+
+<div type="edition" n="urn:cts:greekLit:tlg4110.cllg001.sc-cllg-grc1" xml:lang="grc">
+  <pb ed="SC" n="487"/>
+  <div type="textpart" subtype="chunk" n="1">
+    <head xml:lang="la"><lb n="1"/>Ad Prov. 30, 24-28</head>
+    <div type="textpart" subtype="item" n="1">
+      <p><lb n="2"/>Μύρμηξ ἐστὶν ἄνθρωπος πρακτικὸς τὴν ἑαυτοῦ τροφὴν ἐν τῷ
+        <lb n="3"/>αἰῶνι τούτῳ παρασκευάζων.</p>
+    </div>
+    <div type="textpart" subtype="item" n="2">
+      <p><lb n="4"/>Χοιρογρύλλιοί εἰσιν ἔθνη ἀκάθαρτα τὰς ἐντολὰς δεξάμενα τοῦ
+        <lb n="5"/>σωτῆρος ἡμῶν Χριστοῦ.</p>
+    </div>
+    <div type="textpart" subtype="item" n="3">
+      <p><lb n="6"/>Ἀβασίλευτοι ἀκρίδες εἰσὶ ψυχαὶ λογικαὶ μὴ βασιλευόμεναι ὑπὸ
+        <lb n="7"/>τοῦ θανάτου καὶ ὑπὸ τῶν τοῦ θεοῦ σπερμάτων διατρεφόμεναι.</p>
+    </div>
+    <div type="textpart" subtype="item" n="4">
+      <p><lb n="8"/>Ἀσκαλαβώτης ἐστὶ νοῦς πρακτικὸς ἐπερειδόμενος ἀρεταῖς καὶ
+        <lb n="9"/>κατοικῶν ἐν ταῖς γνώσεσι τῶν οὐρανίων δυνάμεων.</p>
+    </div>
+  </div>
+  <div type="textpart" subtype="chunk" n="2">
+    <head xml:lang="la"><lb n="10"/>Ad Prov. 30, 29-31</head>
+    <div type="textpart" subtype="item" n="5">
+      <p><lb n="11"/>Σκύμνος λέοντός ἐστιν ἄνθρωπος ἀπαθὴς τῶν ἐν αὐτῷ γενομένων
+        <lb n="12"/>βασιλεύσας θηρίων.</p>
+    </div>
+    <div type="textpart" subtype="item" n="6">
+      <p><lb n="13"/>Ἀλεκτρύων ἐστιν ἄνθρωπος πνευματικὸς πληρούμενος γνώσεως
+        <lb n="14"/>καὶ ἑτέραις εὐαγγελιζόμενος ψυχαῖς τὴν παρὰ τοῦ νοητοῦ ἡλίου
+        <lb n="15"/>γενομένην ἡμέραν.</p>
+    </div>
+    <pb ed="SC" n="488"/>
+    <div type="textpart" subtype="item" n="7">
+      <p><lb n="1"/>Τράγος ἐστὶν ἀνὴρ πρακτικὸς τῶν ἐν αὐτῷ ἀτάκτων λογισμῶν
+        <lb n="2"/>ὀρθῶς καθηγούμενος.</p>
+    </div>
+    <div type="textpart" subtype="item" n="8">
+      <p><lb n="3"/>Βασιλεύς ἐστιν ἄνθρωπος καταξιωθεὶς τῆς βασιλείας τῶν
+        <lb n="4"/>οὐρανῶν διδάσκειν ἑτέρους πεπαιδευμένος.</p>
+    </div>
+  </div>
+  <div type="textpart" subtype="chunk" n="3">
+    <head xml:lang="la"><lb n="5"/>Ad Prov. 30, 15-16</head>
+    <div type="textpart" subtype="item" n="9">
+      <p><lb n="6"/>Βδέλλα ἐστὶ φύσις ἀκάθαρτος τὸ δίκαιον αἷμα ἐκ τῶν λογικῶν
+        <lb n="7"/>ψυχῶν ἐκμυζῶσα.</p>
+    </div>
+    <div type="textpart" subtype="item" n="10">
+      <p><lb n="8"/>ᾍδης ἐστὶν ἄγνοια φύσεως λογικῆς κατὰ στέρησιν τῆς τοῦ θεοῦ
+        <lb n="9"/>θεωρίας ἐπισυμβαίνουσα.</p>
+    </div>
+    <div type="textpart" subtype="item" n="11">
+      <p><lb n="10"/>Γυνή ἐστιν ἀφροσύνη λογικὰς ψυχὰς ἐπὶ ἀκαθαρσίαν προσκα<lb n="11" break="no"/>λουμένη.</p>
+    </div>
+    <div type="textpart" subtype="item" n="12">
+      <p><lb n="12"/>Γῆ ἐστιν ἕξις χειρίστη ἐξ ἀσεβείας καὶ παρανομίας συλλεγομένη.
+        <lb n="13"/>La « terre », c'est l'état mauvais composé de l'impiété et de
+        <lb n="14"/>l'iniquité.</p>
+    </div>
+    <div type="textpart" subtype="item" n="13">
+      <p><lb n="15"/>Πῦρ ἐστι κακία φύσεως λογικῆς φθαρτικὴ τῶν τοῦ θεοῦ
+        <lb n="16"/>ἀρετῶν.</p>
+    </div>
+    <div type="textpart" subtype="item" n="14">
+      <p><lb n="17"/>Ὕδωρ ἐστὶ γνῶσις ψευδὴς σβεστικὴ γνώσεως ἀληθοῦς.</p>
+    </div>
+  </div>
+  <div type="textpart" subtype="chunk" n="4">
+    <head xml:lang="la"><lb n="18"/>Ad Prov. 30, 17</head>
+    <div type="textpart" subtype="item" n="15">
+      <p><lb n="19"/>Ὀφθαλμὸς καταγελῶν ἐστι φύσις ἀκαθαρτος τῆς τοῦ θεοῦ
+        <lb n="20"/>καταγελῶσα γνώσεως καὶ ἀτιμάζουσα τὴν ἐν τοῖς γεγονόσι σοφίαν.</p>
+    </div>
+    <pb ed="SC" n="489"/>
+    <div type="textpart" subtype="item" n="16">
+      <p><lb n="1"/>Κόρακές εἰσι δυνάμεις ἅγιαι φθαρτικαὶ τῶν κακιῶν.</p>
+    </div>
+    <div type="textpart" subtype="item" n="17">
+      <p><lb n="2"/>Φάραγγές εἰσι ψυχαὶ λογικαὶ κοιλανθεῖσαι ἀπὸ κακίας καὶ
+        <lb n="3"/>ἀγνωσίας.</p>
+    </div>
+    <div type="textpart" subtype="item" n="18">
+      <p><lb n="4"/>Νεοσσοὶ ἀετῶν εἰσι δυνάμεις ἅγιαι τοὺς ἀκαθάρτους καταβάλ<lb n="5" break="no"/>λειν πεπιστευμέναι.</p>
+    </div>
+  </div>
+</div>
+</body>
+</text>
+</TEI>

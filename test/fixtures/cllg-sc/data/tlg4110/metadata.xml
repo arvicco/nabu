@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<collection identifier="urn:cts:greekLit:tlg4110">
+    <title>Évagre le Pontique</title>
+    <members>
+        <collection identifier="urn:cts:greekLit:tlg4110.cllg001">
+            <title>Commentaire des Proverbes numériques (Pr 30, 15-31)</title>
+            <dublinCore>
+                <creator xmlns="http://purl.org/dc/terms/">Évagre le Pontique</creator>
+            </dublinCore>
+            <members>
+                <resource identifier="urn:cts:greekLit:tlg4110.cllg001.sc-cllg-grc1" filepath="./commentaire_proverbes_numeriques.xml">
+                    <title>Commentaire des Proverbes numériques (Pr 30, 15-31) (SC 340)</title>
+                    <description>Commentary on the numerical proverbs (Prov. 30, 15-31), appendix of SC 340 (provisional id).</description>
+                </resource>
+            </members>
+        </collection>
+    </members>
+</collection>
