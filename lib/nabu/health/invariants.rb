@@ -399,6 +399,12 @@ module Nabu
                    "source_date" => "consumed: the TEI sourceDesc print year, the second EDITION_FALLBACK " \
                                     "key (mostly restating edition_year; where the two differ the " \
                                     "edition record's own year answers first)" },
+        "cllg-freed" => { "edition_year" => "consumed: the biblStruct print year projects as the " \
+                                            "edition-class FALLBACK (MetadataDates::EDITION_FALLBACK) " \
+                                            "on the works the TLG canon dates Varia/Incertum (384 rows, " \
+                                            "census 2026-11-12); a canon-dated work keeps its composition " \
+                                            "row (one row per document), so the census sample — all " \
+                                            "canon-dated — never meets it" },
         "ban-wikisource" => { "index_year" => "the Index Year= of the lontar scans is the 2017–2021 " \
                                               "photography campaign year (the adapter's CAMPAIGN_FLOOR " \
                                               "rule excludes Indexes whose Year= names a print) — " \
