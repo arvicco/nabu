@@ -59,11 +59,17 @@ module Nabu
       # siglum (Kat.I, Gloss., …); +part+/+paragraph+/+page+/+line+ the
       # header levels (raw tokens, "" when the level is empty); +text+ the
       # NFC Prussian line; +german+ the German lane's NFC text or nil.
-      Line = Data.define(:anchor, :siglum, :part, :paragraph, :page, :line, :text, :german)
+      Line = Data.define(:anchor, :siglum, :part, :paragraph, :page, :line, :text, :german, :variant_c, :variant_h)
 
       ANCHOR_PREFIX = "OPr.Corp._"
 
       PRUSSIAN_LANE = /\Abaapx?(?:12|16|22)\z/
+      # Grunau's GrA page collates the A text with its C and H manuscript
+      # copies in parallel Prussian lanes (baapc*/baaph*, censused at the
+      # first sync's quarantine review): the A reading is the passage, the
+      # copies ride as variant annotations.
+      VARIANT_C_LANE = /\Abaapcx?(?:12|16|22)\z/
+      VARIANT_H_LANE = /\Abaaphx?(?:12|16|22)\z/
       GERMAN_LANE = /\Aoendx?(?:12|16|22)\z/
       # The editors' own renderings and title furniture: Latin, English,
       # Lithuanian (sample census 2026-11-12, 9 of 40 pages).
@@ -87,16 +93,27 @@ module Nabu
       def self.parse(html)
         doc = Nokogiri::HTML(html)
         strip_footnote_links(doc)
+        # GrColl (the Grunau cross-witness collation) carries NO Line
+        # headers: each entry is one h4 Paragraph holding the witness
+        # lanes directly, anchored at paragraph grain. A page with zero
+        # h6 headers parses in that mode; every other page is line-grain.
+        return parse_paragraph_grain(doc) if doc.css("span[id=h6]").empty?
+
         levels = { part: "", paragraph: "", page: "" }
         lines = []
         current = nil
         TitusAvestanParser.walk(doc) do |node|
           if (level = header_level(node))
-            current = nil
             if level == 6
               current = open_line(node, levels)
               lines << current if current
             else
+              # A part/paragraph/page header does NOT close the open print
+              # line: the edition breaks paragraphs MID-LINE (the header
+              # pair's own second anchor names the line it lands on, e.g.
+              # Kat.I II._Cr. paragraph 2 beginning at line 11), so the
+              # line's tail after the header still belongs to it. The
+              # levels update for the NEXT line only.
               set_level(levels, level, label_of(node))
             end
           elsif node.text?
@@ -104,6 +121,48 @@ module Nabu
           end
         end
         lines.filter_map { |line| finish(line) }
+      end
+
+      # Paragraph-grain mode (GrColl): an h4 whose first corpus anchor is
+      # the clean paragraph anchor opens a unit; the next h4 (or body end)
+      # closes it. The anchor is verified against the h3/h4 headers with
+      # the same no-guessing discipline as the line grain.
+      def self.parse_paragraph_grain(doc)
+        levels = { part: "", paragraph: "", page: "" }
+        lines = []
+        current = nil
+        TitusAvestanParser.walk(doc) do |node|
+          if (level = header_level(node))
+            case level
+            when 3
+              set_level(levels, level, label_of(node))
+            when 4
+              set_level(levels, level, label_of(node))
+              current = open_paragraph(node, levels)
+              lines << current if current
+            end
+          elsif node.text?
+            accumulate(current, lane_of(node), node.text)
+          end
+        end
+        lines.filter_map { |line| finish(line) }
+      end
+
+      def self.open_paragraph(node, levels)
+        anchor = node.css("a[name]").map { |a| a["name"] }.find { |name| name.start_with?(ANCHOR_PREFIX) }
+        return nil if anchor.nil?
+
+        tail = anchor.delete_prefix(ANCHOR_PREFIX)
+        siglum = tail.split("_", 2).first
+        expected = [siglum, levels[:part], levels[:paragraph]].join("_")
+        unless tail == expected
+          raise Nabu::ParseError,
+                "titus-old-prussian: paragraph anchor #{anchor.inspect} does not match its headers " \
+                "(expected #{ANCHOR_PREFIX}#{expected})"
+        end
+
+        { anchor: tail, siglum: siglum, part: levels[:part], paragraph: levels[:paragraph],
+          page: "", line: "", prussian: +"", german: +"", variant_c: +"", variant_h: +"" }
       end
 
       # Remove each footnote link and the note-number superscript after it.
@@ -161,14 +220,24 @@ module Nabu
         siglum = tail.split("_", 2).first
         line = label_of(node)
         expected = [siglum, levels[:part], levels[:paragraph], levels[:page], line].join("_")
-        unless tail == expected
+        unless tail == expected || tail == placeholder_join(siglum, levels, line)
           raise Nabu::ParseError,
                 "titus-old-prussian: line anchor #{anchor.inspect} does not match its headers " \
                 "(expected #{ANCHOR_PREFIX}#{expected})"
         end
 
         { anchor: tail, siglum: siglum, part: levels[:part], paragraph: levels[:paragraph],
-          page: levels[:page], line: line, prussian: +"", german: +"" }
+          page: levels[:page], line: line, prussian: +"", german: +"", variant_c: +"", variant_h: +"" }
+      end
+
+      # Fragments without a Page header spell the empty page as a literal
+      # "_" in their anchors (the OT fragment; BPT spells it "" — upstream
+      # is inconsistent, both are the same absent page): the placeholder
+      # join is the one accepted alternative to the strict join.
+      def self.placeholder_join(siglum, levels, line)
+        return nil unless levels[:page].empty?
+
+        [siglum, levels[:part], levels[:paragraph], "_", line].join("_")
       end
 
       # The lane of a text node — :prussian / :german / :other — or nil for
@@ -178,6 +247,8 @@ module Nabu
           id = ancestor["id"]
           next if id.nil?
           return :prussian if PRUSSIAN_LANE.match?(id)
+          return :variant_c if VARIANT_C_LANE.match?(id)
+          return :variant_h if VARIANT_H_LANE.match?(id)
           return :german if GERMAN_LANE.match?(id)
           return :other if OTHER_LANE.match?(id)
           return nil if FOOTNOTE_LANE.match?(id) || LAYOUT_LANE.match?(id) || !LANE_SHAPE.match?(id)
@@ -200,6 +271,10 @@ module Nabu
           line[:prussian] << text
         when :german
           line[:german] << text if line
+        when :variant_c
+          line[:variant_c] << text if line
+        when :variant_h
+          line[:variant_h] << text if line
         end
       end
 
@@ -208,9 +283,13 @@ module Nabu
         return nil if text.empty?
 
         german = clean(line[:german])
+        variant_c = clean(line[:variant_c])
+        variant_h = clean(line[:variant_h])
         Line.new(anchor: line[:anchor], siglum: line[:siglum], part: line[:part],
                  paragraph: line[:paragraph], page: line[:page], line: line[:line],
-                 text: text, german: german.empty? ? nil : german)
+                 text: text, german: german.empty? ? nil : german,
+                 variant_c: variant_c.empty? ? nil : variant_c,
+                 variant_h: variant_h.empty? ? nil : variant_h)
       end
 
       def self.clean(text)

@@ -207,6 +207,8 @@ module Nabu
           annotations[key] = value unless value.empty? || value == "_"
         end
         annotations["german"] = line.german if line.german
+        annotations["variant_c"] = line.variant_c if line.variant_c
+        annotations["variant_h"] = line.variant_h if line.variant_h
         annotations["repetition"] = occurrence if occurrence > 1
         annotations
       end

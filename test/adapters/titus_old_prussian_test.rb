@@ -71,7 +71,8 @@ class TitusOldPrussianTest < Minitest::Test
   def test_discover_yields_one_document_per_prussian_text_page
     require_fixtures!
     pages = @adapter.discover(FIXTURES).map { |ref| ref.metadata.fetch("page") }.sort
-    assert_equal %w[apreu002 apreu015 apreu017 apreu028 apreu029 apreu033], pages
+    assert_equal %w[apreu002 apreu003 apreu015 apreu017 apreu028 apreu029 apreu030 apreu032 apreu033
+                    apreu037], pages
   end
 
   def test_pages_without_an_old_prussian_lane_skip_by_rule_with_accounting
@@ -217,6 +218,45 @@ class TitusOldPrussianTest < Minitest::Test
     assert_match(/\AKayle rekyſe\. thoneaw labonache thewelyſe\. Eg koyte\. poyte\./, line.text)
     refute line.annotations.key?("page"), "the edition's '_' page placeholder is no page"
     assert_equal "Fragm.", document.metadata["text"]
+  end
+
+  # --- the first sync's quarantine classes, classified ----------------------
+
+  def test_a_paragraph_break_mid_line_keeps_the_line_tail
+    document = documents_by_page.fetch("apreu003")
+    line11 = document.passages.find { |passage| passage.urn.end_with?(":apreu003:Kat.I_II._Cr._1_7_11") }
+    assert line11, "line 11 of the Creed parses under paragraph 1"
+    assert_match(/dangon bah/, line11.text)
+    assert_match(/Bah an/, line11.text,
+                 "the print line straddles the paragraph break — its tail after the mid-line " \
+                 "Paragraph header belongs to the same line (the header's own anchor says the " \
+                 "new paragraph begins AT this line)")
+  end
+
+  def test_grunau_collation_lanes_ride_as_variant_annotations
+    document = documents_by_page.fetch("apreu030")
+    with_variants = document.passages.select do |passage|
+      passage.annotations.key?("variant_c") || passage.annotations.key?("variant_h")
+    end
+    refute_empty with_variants,
+                 "GrA survives in the C and H manuscript copies — their readings ride as annotations"
+    assert(document.passages.all? { |passage| !passage.text.strip.empty? })
+  end
+
+  def test_an_absent_page_header_accepts_the_anchor_placeholder
+    document = documents_by_page.fetch("apreu037")
+    line = document.passages.find { |passage| passage.urn.end_with?(":apreu037:Fragm._OT____1") }
+    assert line, "the OT fragment has no Page header and spells the empty page as '_' in its anchors"
+    refute line.annotations.key?("page")
+  end
+
+  def test_the_collation_table_page_parses_at_paragraph_grain
+    document = documents_by_page.fetch("apreu032")
+    first = document.passages.find { |passage| passage.urn.end_with?(":apreu032:Gloss._GrColl._1") }
+    assert first, "GrColl has no Line headers — each entry is one Paragraph-grain unit"
+    assert_match(/\ADewes\b/, first.text)
+    assert_equal "dewus", first.annotations["variant_c"]
+    assert_equal "Dewus", first.annotations["variant_h"]
   end
 
   # --- defensive quarantines ------------------------------------------------
