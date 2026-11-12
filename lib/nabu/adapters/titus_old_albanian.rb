@@ -86,11 +86,14 @@ module Nabu
         flavor_annotations: { "c" => "margin_number" }
       )
 
-      # Matrënga's interlinear modern interpretation (PROVISIONAL — class doc).
+      # Matrënga's interlinear modern interpretation: the preface types it
+      # as the bual i flavor; the body pages give it its own buto* lane
+      # ("Gjithëve u thëres…", modern orthography beside the bual old
+      # text) — both ride the interpretation annotation.
       MATRANGA_LANES = TitusLevelsParser::Lanes.new(
         prefixes: %w[bual], text_flavors: "bx",
         others: { /\Awela/ => "latin", /\Abula/ => "latin", /\Aweit/ => "italian",
-                  /\Awetk/ => "turkish", /\Agrx?\d/ => "greek" },
+                  /\Awetk/ => "turkish", /\Agrx?\d/ => "greek", /\Abuto/ => "interpretation" },
         flavor_annotations: { "i" => "interpretation", "c" => "margin_number" }
       )
 

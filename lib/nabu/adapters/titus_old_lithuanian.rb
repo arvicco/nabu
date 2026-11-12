@@ -80,11 +80,16 @@ module Nabu
       # apparatus lanes of the Wolfenbüttel Postil) — excluded like the
       # family's other furniture, nothing lexical rides it; oeopl* is the
       # OLD POLISH source lane of the same oe- family ("O Anno pany…",
-      # the Polish hymn sources beside Mažvydas's German ones).
+      # the Polish hymn sources beside Mažvydas's German ones); bali* is
+      # the editors' MODERN Lithuanian layer (normalized renderings "ʽTu
+      # Kriste esi garbus" and editorial headings "Apie Mažvydo…" beside
+      # the baal old text on the Ambrosian hymn's commentary page) —
+      # the interpretation annotation, the Matrënga precedent.
       LANES = TitusLevelsParser::Lanes.new(
         prefixes: %w[bpal baal], text_flavors: "bijklrx",
         others: { /\Awela/ => "latin", /\Agrx?\d/ => "greek",
-                  /\Aoend/ => "german", /\Aoeopl/ => "polish", /\Abpla/ => "latin" },
+                  /\Aoend/ => "german", /\Aoeopl/ => "polish", /\Abpla/ => "latin",
+                  /\Abali/ => "interpretation" },
         excluded: [/\Aoec\d+\z/]
       )
 
