@@ -88,18 +88,125 @@ anchors:
     glottocode: lati1261
     parent: itc:pro
     stages:
-      arch: {name: Old Latin,         band: [-700, -75],  ord: 10, wikt: itc-ola,
-             band_note: "conventional philological bands"}
-      cla:  {name: Classical Latin,   band: [-75, 200],   ord: 20,
-             band_note: "conventional philological bands"}
-      late: {name: Late Latin,        band: [200, 600],   ord: 30, wikt: la-lat,
-             band_note: "conventional philological bands"}
-      med:  {name: Medieval Latin,    band: [600, 1350],  ord: 40, wikt: la-med,
-             band_note: "conventional philological bands; boundaries vary by school"}
+      arch: {name: Old Latin, band: [-700, -75], ord: 10, wikt: itc-ola,
+             band_note: "conventional, approximate — from the earliest
+                         inscriptions (the Lapis Niger and Duenos vase,
+                         6th c. BCE; the Praeneste fibula, 7th c., its
+                         authenticity disputed) to the onset of the
+                         Ciceronian norm; −75 is the conventional seam
+                         (Palmer, The Latin Language 1954; Clackson &
+                         Horrocks, The Blackwell History of the Latin
+                         Language 2007)",
+             note: "archaic and pre-classical Latin — the Satricum
+                    lapis, the Scipionic elogia, the Senatus consultum de
+                    Bacchanalibus (186 BCE); Livius Andronicus, Naevius,
+                    Ennius, Plautus, Terence, Cato, Lucilius: the
+                    unreduced diphthongs (oi, ei), final -d, the old
+                    o-stem endings. Consumers: 3,066 dated inscriptions
+                    staged by date-band inference (edr 1,729, the
+                    Republican CEIPoM corpus 1,198, edh 125); the held
+                    Plautus and Terence ride the classical canon's
+                    source-level lat:cla reading, a per-document
+                    refinement candidate"}
+      cla:  {name: Classical Latin, band: [-75, 200], ord: 20, wikt: la-cla,
+             band_note: "conventional — the Golden (Cicero to Augustus'
+                         death, AD 14) and Silver (to c. 200) Latinity of
+                         the literary histories (Teuffel; Schanz–Hosius);
+                         200 is the conventional onset of Late Latin in
+                         the 3rd c. (Löfstedt, Late Latin 1959). Epigraphic
+                         2nd–3rd-c. date envelopes straddle any 3rd-c. seam
+                         and stay bare by the containment law",
+             note: "the codified literary standard — Cicero, Caesar,
+                    Virgil, Horace, Livy, Ovid; Seneca, Lucan, Tacitus,
+                    Pliny, Juvenal, Suetonius, Apuleius — and the
+                    imperial epigraphic koine. The library's largest
+                    staged Latin after the medieval: 90,335 documents,
+                    edr 63,601 and edh 25,324 by date-band inference,
+                    the Perseus and LASLA canons (381, 242) by source
+                    reading"}
+      late: {name: Late Latin, band: [200, 600], ord: 30, wikt: la-lat,
+             band_note: "conventional — the 3rd to 6th centuries
+                         (Löfstedt 1959; Clackson & Horrocks 2007); 600 is
+                         the conventional threshold of early medieval Latin,
+                         Gregory the Great (d. 604) and Isidore (d. 636)
+                         closing late antiquity (Norberg, Manuel pratique de
+                         latin médiéval 1968)",
+             note: "the Latin of the late Empire and the successor
+                    kingdoms' first generation — Tertullian, Cyprian,
+                    Lactantius, Ambrose, Jerome's Vulgate, Augustine,
+                    Boethius, Cassiodorus, Gregory of Tours — with the
+                    spoken language's drift visible in documents and
+                    inscriptions (the attested substandard is lat/vul;
+                    Christian idiom, Mohrmann's Nijmegen school, rides
+                    lat/ecc). Consumers: 25,433 documents — edr 11,919
+                    and edh 11,439 by inference, digiliblt's 'testi
+                    latini tardoantichi' (372) and the Vulgate (73,
+                    lat:late/ecc) by source reading"}
+      med:  {name: Medieval Latin, band: [600, 1350], ord: 40, wikt: la-med,
+             band_note: "boundaries vary by school: the 1350 close is the
+                         registry's seam with humanist Latin (lat:ren),
+                         while the handbooks run Medieval Latin to c. 1500
+                         (Stotz, Handbuch zur lateinischen Sprache des
+                         Mittelalters 1996–2004; Mantello & Rigg, Medieval
+                         Latin 1996) and the period dictionaries draw their
+                         own windows (Niermeyer 550–1150, the
+                         Mittellateinisches Wörterbuch to 1280, the DMLBS
+                         540–1600). Stated, not resolved. No
+                         early-medieval split until a consumer needs one:
+                         the defensible seam is the Carolingian reform
+                         (c. 800; Wright, Late Latin and Early Romance
+                         1982), Wiktionary's la-eme (Early Medieval Latin)
+                         folds here",
+             note: "the learned, chancery and liturgical Latin of the
+                    Middle Ages — Merovingian, Visigothic and Lombard
+                    charter Latin, the Carolingian correctio (Alcuin),
+                    the twelfth-century renaissance, scholastic Latin;
+                    norms in Norberg (1968), Stotz and Mantello & Rigg.
+                    The library's largest staged Latin: 103,188
+                    documents — chant manuscripts (cantus 94,302, the
+                    witness's copying date), the early-medieval formulae
+                    and charters (formulae-open 4,979, LLCT1 519),
+                    corpus-corporum 2,729, the St Gall Priscian glosses,
+                    the MGH editions and the Analecta Hymnica by source
+                    reading"}
       ren:  {name: Renaissance Latin, band: [1350, 1550], ord: 50, wikt: la-ren,
-             band_note: "conventional philological bands"}
-      new:  {name: New Latin,         band: [1550, null], ord: 60, wikt: la-new,
-             band_note: "conventional philological bands"}
+             band_note: "a PERIOD band: humanist Latin from Petrarch's
+                         generation (IJsewijn & Sacré, Companion to
+                         Neo-Latin Studies 1990–98, date Neo-Latin from the
+                         Paduan prehumanists c. 1300 and Petrarch) to the
+                         mid-16th c., when humanist Latin has become the
+                         schools' common standard; many surveys turn at 1500
+                         instead. Through the 15th c. scholastic, legal and
+                         liturgical Latin of medieval stamp coexists with
+                         the humanist norm — a diglossia of styles no date
+                         band separates; documents staged here by date
+                         carry the period, not the register",
+             note: "the Latin of the humanists — Petrarch, Salutati,
+                    Bruni, Valla's Elegantiae (c. 1440), Poliziano,
+                    Erasmus — and of the incunable and early-sixteenth-
+                    century press. Consumers: noscemus 131, croala 107,
+                    eebo-tcp 53 and the other early prints by date-band
+                    inference; the dated cantus chant witnesses of
+                    1350–1550 (22,425) currently stage here by the same
+                    inference"}
+      new:  {name: New Latin, band: [1550, null], ord: 60, wikt: la-new,
+             band_note: "conventional, open-ended — the post-humanist
+                         learned Latin of early modern Europe to the
+                         present (Brill's Encyclopaedia of the Neo-Latin
+                         World, 2014; Knight & Tilg, Oxford Handbook of
+                         Neo-Latin, 2015); Wiktionary's la-con
+                         (Contemporary Latin) has no stage of its own here",
+             note: "the Latin of the Republic of Letters, the
+                    confessional theologies, the Jesuit schools and the
+                    sciences (Kepler, Newton's Principia, Linnaeus) —
+                    the European scholarly lingua franca into the 19th
+                    c. Consumers: 9,477 documents — the Socinian
+                    correspondence 1,543, noscemus's early-modern
+                    scientific Latin 904, eebo-tcp 462, croala 124,
+                    post-1550 chant books; the adopted early-modern
+                    printing intakes (the Wellcome Latin prints, the
+                    Norwegian national library's Latin cone) land here
+                    in bulk"}
     varieties:
       vul: {name: Vulgar Latin (attested substandard), kind: register, wikt: la-vul,
             note: "the ATTESTED register (Appendix Probi, graffiti) — the
@@ -1500,9 +1607,12 @@ anchors:
            until 2026-11 the registry's largest unstaged holding (2.8M
            passages: the Ganjoor classical library, OpenITI's Persian
            shelf, the Invisible East documents). Modern Persian is the
-           bare anchor's open end from the mid-19th c. (Qajar prose
-           reform, the Constitutional press); the Dari and Tajik
-           standards stay prose until a consumer separates them"
+           bare anchor's open end from the Constitutional era (1906); the
+           Qajar prose reform (Qaʾem-Maqam's chancery style, the 1851
+           gazette and Dar al-Fonun) opens modern PROSE a half-century
+           earlier — a register-specific onset stated in fa:cls's
+           band_note, not a stage. The Dari and Tajik standards stay prose
+           until a consumer separates them"
     stages:
       early: {name: Early New Persian, band: [800, 1200], ord: 10,
               band_note: "Lazard (The Rise of the New Persian Language,
@@ -1516,17 +1626,34 @@ anchors:
                      early Quran commentaries, Ferdowsi's Shahnameh;
                      keeps the majhul vowels and the postvocalic ḏāl
                      the classical norm later levels"}
-      cls: {name: Classical Persian, band: [1200, 1850], ord: 20,
+      cls: {name: Classical Persian, band: [1200, 1906], ord: 20,
             wikt: fa-cls,
-            band_note: "conventional, approximate — the Seljuk–Mongol
-                        consolidation of the supra-regional norm to the
-                        Qajar-era turn toward modern prose; other
-                        schools close it at 1500 or run it to 1900",
+            band_note: "the Seljuk–Mongol consolidation of the
+                        supra-regional literary norm (c. 1200) to the
+                        Constitutional Revolution (1906; 1324 AH), the
+                        standard watershed of modern Persian literature
+                        (Kamshad 1966; Balaÿ & Cuypers 1983;
+                        Karimi-Hakkak 1995) and the close of Ganjoor's own
+                        classical cone. Stated, not resolved: Windfuhr
+                        (1979) and the handbooks after him open
+                        Contemporary Persian in the 19th c. — right for
+                        prose (the Qajar chancery reform from the 1820s,
+                        the 1851 gazette), while verse held the classical
+                        norm by programme through the Bazgasht-e adabi
+                        (from c. 1750); other schools close the period at
+                        1500. Approximate; widened from 1850 at the
+                        2026-11 review",
             note: "the remarkably stable literary standard of Nezami,
                    ʿAṭṭār, Rumi, Saʿdi, Hafez and Jami, carried across
-                   Iran, Central Asia, the Caucasus and Mughal India;
-                   the bulk of the held Ganjoor and OpenITI material
-                   composes here, and the date-band inference stages it"}
+                   Iran, Central Asia, the Caucasus and Mughal India, and
+                   deliberately prolonged by the Bazgasht poets of the
+                   Zand and Qajar courts (Hatef, Saba, Qaʾani, Forughi
+                   Bastami, Yaghma Jandaqi) and the Indo-Persian divans
+                   (Ghalib). Consumers: the bulk of the held Ganjoor and
+                   OpenITI material composes here — the 2026-11 widening
+                   adds 9,517 Ganjoor poems of 22 nineteenth-century
+                   poets and six OpenITI works (1854–1871) — and the
+                   date-band inference stages it"}
 
   jpr:
     name: Judeo-Persian
@@ -4308,6 +4435,62 @@ anchors:
            reflexes resolve here (Mažiulis, Prūsų kalbos etimologijos
            žodynas, 1988–97)"
 
+  # ── Albanian: a primary Indo-European branch of one surviving language,
+  # the latest-attested major branch of the family (first record 1462).
+  # Pre-minted 2026-11-12 ahead of the TITUS Old Albanian intake
+  # (Buzuku, Blanchus, Bogdani).
+
+  sqj:
+    name: Albanoid
+    kind: family
+    parent: ine
+    note: "ISO 639-5 sqj (Albanian languages): the branch node. Albanian
+           constitutes its own primary Indo-European branch; the popular
+           Illyrian descent hypothesis is geographically natural but
+           linguistically unprovable (Illyrian is attested in names only),
+           and the closest possibly-related attested material is Messapic
+           (the 'Albanoid' grouping of Hyllested & Joseph 2022, whence the
+           node's name). The node exists for the reconstruction rung and
+           the descent edge, not as a classification claim beyond that."
+    stages:
+      pro: {name: Proto-Albanian, mode: reconstructed, ord: 5, wikt: sqj-pro}
+
+  sq:
+    name: Albanian
+    parent: sqj
+    glottocode: alba1267
+    band: [1462, null]
+    band_note: "from the first record (Pal Engjëlli's baptismal formula,
+                1462); open end"
+    note: "The sole survivor of its branch, attested later than any other
+           major Indo-European language: the 1462 baptismal formula (Gheg,
+           one sentence), von Harff's 1497 wordlist, then the print
+           tradition from Buzuku's Meshari (1555, a Gheg missal surviving
+           in one Vatican copy). Two dialect groups split along the
+           Shkumbin — Gheg (north; Buzuku, Budi, Bardhi, Bogdani) and Tosk
+           (south; first in Matrënga's 1592 catechism, an Arbëresh text);
+           the 1972 standard is Tosk-based. Its Latin loan strata (archaic
+           through Balkan Romance) make it load-bearing for Romance and
+           Balkan historical linguistics. ISO 639-3 members aln (Gheg) and
+           als (Tosk) are DELIBERATELY unmapped in the codemap — a
+           macrolanguage fold would erase the dialect claim a consumer
+           makes by using them; Gheg/Tosk ride the variety axis (sq/gheg,
+           sq/tosk) if content ever needs the split. Corpus: none held
+           yet; the TITUS Old Albanian texts are the queued first intake"
+    stages:
+      old: {name: Old Albanian, band: [1462, 1800], ord: 10,
+            band_note: "the early written tradition, from the 1462 formula
+                        through the 18th c. — the altalbanisch span of
+                        Schumacher & Matzinger (Die altalbanische Sprache);
+                        the 19th-c. Rilindja opens the modern literary
+                        period; approximate",
+            note: "the language of the 15th–18th-c. records and the
+                   Catholic north's print tradition (Buzuku 1555, Budi
+                   1618–21, Bardhi's Dictionarium latino-epiroticum 1635,
+                   Bogdani's Cuneus prophetarum 1685) plus the early
+                   Italo-Albanian texts (Matrënga 1592). No Wiktionary
+                   period code exists. Corpus: none held yet"}
+
   # ── Uralic. Glottolog (ural1272) lists the branches flat — Finnic, Saami,
   # Mordvinic, Mari, Permic, Hungarian, Mansi, Khanty, Samoyedic; the
   # intermediate Finno-Ugric / Finno-Permic / Finno-Volgaic groupings are
@@ -4387,6 +4570,74 @@ anchors:
             note: "the German-clergy written language of catechisms,
                    sermons (Müller's 1600–06), hymnals and the first
                    grammars (Stahl 1637, Gutslaff 1648). Corpus: none held"}
+
+  smi:
+    name: Sámi
+    kind: family
+    parent: urj
+    glottocode: saam1281
+    note: "Saamic (Wiktionary's family code smi): the Uralic branch of
+           Fennoscandia, nine living languages from South Sámi to Ter
+           Sámi. The conventional West (South, Ume, Pite, Lule, North)
+           vs East (Inari, Skolt, Akkala, Kildin, Ter) split stays
+           prose, the urj-fin contested-intermediates discipline; the
+           Finnic–Saamic tie likewise. The earliest Sámi printing is
+           Nicolaus Andreae's ABC book and missal (Stockholm 1619, a
+           southern mission idiom) — stated here because no single
+           daughter owns it. Consumers: the Norwegian national
+           library's Sámi cone (147 public-domain items censused
+           2026-11-08) rides the daughters below"
+    stages:
+      pro: {name: Proto-Samic, mode: reconstructed, ord: 5, wikt: smi-pro,
+            note: "the comparative-method ancestor (Korhonen 1981;
+                   Sammallahti, The Saami Languages, 1998); Wiktionary's
+                   reconstruction pages file here"}
+
+  sme:
+    name: North Sámi
+    parent: smi
+    glottocode: nort2671
+    wikt: se
+    note: "the largest Sámi language (Norway, Sweden, Finland; ~¾ of
+           all speakers). Written through three orthographic eras: the
+           Copenhagen mission's (Knud Leem's Lappisk Grammatica 1748
+           and dictionary 1768–81, the mission scriptures), the
+           Rask–Stockfleth line (Stockfleth's 1832 grammar and 1837
+           ABC — the latter a held nb-no item — through Friis's 1856
+           grammar, 1887 dictionary and the 1895 Bible, and Konrad
+           Nielsen's scholarly standard), and the common Nordic
+           orthography of 1979, the bare anchor's open end. No stages
+           until a consumer needs the orthographic eras as bands.
+           Consumers: nb-no 139 items (13 of them 18th-c.), censused
+           2026-11-08"
+
+  sma:
+    name: South Sámi
+    parent: smi
+    glottocode: sout2674
+    wikt: sma
+    note: "the southernmost Sámi language (Trøndelag, Jämtland,
+           Härjedalen), archaic within the family — no consonant
+           gradation, conservative vowel system (Bergsland,
+           Südlappisches Wörterbuch; Hasselbrink). The literary
+           language is young: mission-era southern prints (the 1619
+           Stockholm books and the 1755 'southern' NT tradition sit
+           closer to Ume Sámi and stay at the smi family note), the
+           modern orthography Bergsland's (approved 1978). Consumers:
+           nb-no 8 items (20th-c.), censused 2026-11-08"
+
+  smj:
+    name: Lule Sámi
+    parent: smi
+    glottocode: lule1254
+    wikt: smj
+    note: "the second-largest Sámi language (the Lule river valley,
+           Jokkmokk and Tysfjord), transitional between North and
+           South Sámi. Written from the Swedish mission's Lule-area
+           prints and Laestadius' 1840s tracts, through Wiklund's
+           grammar (1891) and the 1903 New Testament, to the 1983
+           orthography. Consumers: nb-no 4 items (20th-c.), censused
+           2026-11-08"
 
   # ── Basque: the European isolate. Parentless by the ecy/xht discipline;
   # the Aquitanian inscriptions of Roman Gaul are its acknowledged
