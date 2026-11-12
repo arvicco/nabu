@@ -64,7 +64,7 @@ class TitusOldAlbanianTest < Minitest::Test
   def test_discover_yields_one_document_per_albanian_page
     require_fixtures!
     assert_equal %w[blanchus.blanc001 blanchus.blanc006 bogdani.bogda001 bogdani.bogda003 bogdani.bogda008
-                    buzuku.buzuk002 casasi.casas001 matranga.matra001],
+                    buzuku.buzuk002 casasi.casas001 matranga.matra001 matranga.matra002],
                  @adapter.discover(FIXTURES).map { |ref| ref.id.split(":").last }.sort
     assert_equal 0, @adapter.discovery_skips(FIXTURES).skipped_by_rule
   end
@@ -158,6 +158,15 @@ class TitusOldAlbanianTest < Minitest::Test
     refute(casas.passages.any? { |p| p.text.include?("Roma") }, "the Italian imprint never rides the text")
     blanc = documents.fetch("blanchus.blanc006")
     assert(blanc.passages.any? { |p| p.annotations["turkish"]&.include?("Bunda") })
+  end
+
+  # Matrënga's modern-orthography interpretation rides its own buto* lane
+  # on the body pages (beside the bual old text and the weit Italian) —
+  # the same interpretation annotation as the preface's i flavor.
+  def test_matranga_modern_interpretation_rides_its_own_lane
+    document = documents.fetch("matranga.matra002")
+    assert(document.passages.any? { |p| p.annotations["interpretation"]&.include?("Gjithëve") })
+    refute(document.passages.any? { |p| p.text.include?("Gjithëve") })
   end
 
   private

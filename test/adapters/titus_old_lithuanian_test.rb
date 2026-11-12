@@ -96,7 +96,7 @@ class TitusOldLithuanianTest < Minitest::Test
 
   def test_discover_yields_one_document_per_lithuanian_page
     require_fixtures!
-    assert_equal %w[donmetai.donme001 engels.engel001 mazvkat.mazvk004 mazvkat.mazvk010
+    assert_equal %w[donmetai.donme001 engels.engel001 mazvga.mazvg005 mazvkat.mazvk004 mazvkat.mazvk010
                     spslt.spslt015 wp.wp002 wp.wp075],
                  @adapter.discover(FIXTURES).map { |ref| ref.id.split(":").last }.sort
   end
@@ -164,6 +164,16 @@ class TitusOldLithuanianTest < Minitest::Test
     refute(document.passages.any? do |p|
       p.text.include?("bittenn") || p.annotations.values.any? { |v| v.to_s.include?("bittenn") }
     end)
+  end
+
+  # The bali* lane is the editors' MODERN Lithuanian layer (normalized
+  # renderings and editorial headings beside the baal old text) — it rides
+  # the interpretation annotation, never the text.
+  def test_the_editors_modern_lithuanian_rides_the_interpretation_annotation
+    document = documents.fetch("mazvga.mazvg005")
+    assert(document.passages.any? { |p| p.annotations.key?("interpretation") })
+    refute(document.passages.any? { |p| p.text.include?("Apie Mažvydo") })
+    assert(document.passages.any? { |p| p.text.include?("Chriſtus") }, "the baal old text is the text")
   end
 
   # The bpla* lane is the LATIN parallel (the -la stem): Szyrwid's "&c."
