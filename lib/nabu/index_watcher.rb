@@ -92,14 +92,22 @@ module Nabu
     # 1.26M-row first-sync shadow build killed at the floor, armed off
     # 40.9s of corpus rows). nil +scopes+ = an unscoped command whose
     # estimate sums everything it will run: covered by construction.
-    def self.evidence_covers?(ledger, kind:, scopes:)
+    # +stages+ names the stage class whose history must exist (a killed
+    # run flushes the stages that FINISHED, so scope-level history can
+    # exist while the dominant stage — the one the kill endangers — has
+    # no row at all; measured 2026-11-12, the rerun after the first
+    # kill: fetch+parse rows summed to an 11m25s "estimate" with the
+    # index stage absent from it entirely).
+    def self.evidence_covers?(ledger, kind:, scopes:, stages: nil)
       return true if scopes.nil?
 
       own = scopes - ["corpus"]
       return true if own.empty?
       return false unless Store::StageTimings.table?(ledger)
 
-      covered = ledger[Store::StageTimings::TABLE].where(kind: kind, scope: own).distinct.select_map(:scope)
+      rows = ledger[Store::StageTimings::TABLE].where(kind: kind, scope: own)
+      rows = rows.where(stage: stages) if stages
+      covered = rows.distinct.select_map(:scope)
       (own - covered).empty?
     end
 
