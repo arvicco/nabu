@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require "sequel"
+require_relative "../store"
 
 module Nabu
   module Ops
@@ -63,7 +63,7 @@ module Nabu
       end
 
       def current_plan
-        plans = Dir.children(@boards_dir).filter_map do |entry|
+        plans = Dir.children(@boards_dir).sort.filter_map do |entry|
           match = entry.match(PLAN)
           [entry, match[1].to_i] if match
         end
@@ -92,7 +92,7 @@ module Nabu
         cutoff = previous_merge_date
         return [] unless cutoff && File.file?(@ledger_path)
 
-        db = Sequel.sqlite(@ledger_path)
+        db = Nabu::Store.connect(@ledger_path, readonly: true)
         begin
           return [] unless db.table_exists?(:runs)
 
