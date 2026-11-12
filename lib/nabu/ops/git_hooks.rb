@@ -118,15 +118,14 @@ module Nabu
 
       # -- the checks (pure; the hooks feed them git/ps output) ---------------
 
-      # Added lines carrying a conflict marker, from `git diff --cached -U0`
-      # output: ["path:line: marker", ...].
-      def conflict_markers(diff)
-        offenses = []
+      # Walk a `git diff --cached -U0` post-image: yields every added line
+      # as (path, line_no, text). Staged diffs can carry non-UTF-8 fixture
+      # bytes (Windows-1252 upstream files); the patterns the callers scan
+      # for are pure ASCII, so scrubbing loses nothing and the walk must
+      # never crash a commit.
+      def each_added_line(diff)
         path = nil
         line_no = 0
-        # Staged diffs can carry non-UTF-8 fixture bytes (Windows-1252
-        # upstream files); the markers are pure ASCII, so scrubbing loses
-        # nothing and the scan must never crash a commit.
         diff = diff.dup.force_encoding(Encoding::UTF_8).scrub("�")
         diff.each_line do |raw|
           line = raw.chomp
@@ -136,14 +135,82 @@ module Nabu
           elsif (hunk = line.match(/\A@@ -\S+ \+(\d+)/))
             line_no = hunk[1].to_i
           elsif line.start_with?("+") && path
-            added = line[1..]
-            if !path.match?(MARKER_EXEMPT) && added.match?(MARKER_LINE)
-              offenses << "#{path}:#{line_no}: #{added.strip[0, 40]}"
-            end
+            yield path, line_no, line[1..]
             line_no += 1
           end
         end
+      end
+
+      # Added lines carrying a conflict marker, from `git diff --cached -U0`
+      # output: ["path:line: marker", ...].
+      def conflict_markers(diff)
+        offenses = []
+        each_added_line(diff) do |path, line_no, added|
+          if !path.match?(MARKER_EXEMPT) && added.match?(MARKER_LINE)
+            offenses << "#{path}:#{line_no}: #{added.strip[0, 40]}"
+          end
+        end
         offenses
+      end
+
+      # -- exit-code discipline ----------------------------------------------
+      #
+      # Shell outcomes are never neutral (the 2026-11-12 incident family: a
+      # chained run's failure sat invisible behind a swallowed pipe exit and
+      # a neutral "exit=N" log line, and a dormant launcher bug hid behind
+      # the same neutrality for weeks). Three line classes are refused in
+      # staged SHELL content — .sh/.bash files, workflow YAML (its run:
+      # blocks are shell), and extensionless script/ files whose shebang is
+      # a shell:
+      #   1. `|| true` with no same-line comment naming why the failure is
+      #      ignorable;
+      #   2. a gate piped into tail/head and then `&&`-chained — the pipe
+      #      exits as the filter, so the chain proceeds over a red gate
+      #      (grep conditionals are idiomatic and stay allowed);
+      #   3. an echo of a captured exit code (`exit=$…`) with no verdict
+      #      word — "ok" or "FAILED" — on the line: a neutral exit=N reads
+      #      the same for both outcomes.
+
+      SHELL_FILE = %r{\.(?:sh|bash)\z|\A\.github/workflows/[^/]+\.ya?ml\z}
+      SCRIPT_FILE = %r{\Ascript/[^/]+\z}
+      SHELL_SHEBANG = /\A#!\s*\S*\b(?:ba|z)?sh\b/
+
+      # ["path:line: reason — excerpt", ...] over the staged diff's shell
+      # content. +shebang_of+ answers an extensionless script/ path's first
+      # line (nil when unreadable — then it is not treated as shell).
+      def exit_code_offenses(diff, shebang_of:)
+        offenses = []
+        shell = {}
+        each_added_line(diff) do |path, line_no, text|
+          next unless shell.fetch(path) { shell[path] = shell_path?(path, shebang_of) }
+
+          reason = shell_exit_code_offense(text)
+          offenses << "#{path}:#{line_no}: #{reason} — #{text.strip[0, 60]}" if reason
+        end
+        offenses
+      end
+
+      def shell_path?(path, shebang_of)
+        return false if path.match?(MARKER_EXEMPT)
+        return true if path.match?(SHELL_FILE)
+        return false unless path.match?(SCRIPT_FILE)
+
+        shebang_of.call(path).to_s.match?(SHELL_SHEBANG)
+      end
+
+      # The reason one shell line offends, or nil. Comment-only lines carry
+      # no live pipeline; a trailing comment is read as the justification.
+      def shell_exit_code_offense(line)
+        code = line.sub(/\A\s*#.*/, "")
+        return nil if code.strip.empty?
+
+        if code.match?(/\|\|\s*true\b/) && !code.match?(/\|\|\s*true\b[^#]*#/)
+          "a swallowed failure states its reason in a same-line comment"
+        elsif code.match?(/\|\s*(?:tail|head)\b[^|&]*&&/)
+          "the pipe's exit is the filter's — never chain past a piped gate"
+        elsif code.match?(/echo\b[^#]*exit=\$/) && !code.match?(/\b(?:ok|FAILED)\b/)
+          "a neutral exit=N reads the same for both outcomes — state the verdict as a word"
+        end
       end
 
       # Live rebuild processes from `ps -Ao pid=,command=` output:
@@ -244,6 +311,21 @@ module Nabu
           markers.first(20).each { |offense| err.puts "  #{offense}" }
           err.puts "  Why: a committed marker is a broken merge shipped; resolve every hunk"
           err.puts "  (all three marker strings — a lone ======= line survives a <<<<<<<-only sweep)."
+          err.puts "  #{OVERRIDE}"
+          return 1
+        end
+        shell_offenses = exit_code_offenses(diff, shebang_of: lambda { |path|
+          begin
+            git.call("show", ":0:#{path}").lines.first
+          rescue StandardError
+            nil
+          end
+        })
+        unless shell_offenses.empty?
+          err.puts "pre-commit: REFUSED — exit-code discipline in staged shell content:"
+          shell_offenses.first(20).each { |offense| err.puts "  #{offense}" }
+          err.puts "  Why: a shell outcome is never neutral — a swallowed or unworded exit code"
+          err.puts "  is how a failed run reads as a finished one."
           err.puts "  #{OVERRIDE}"
           return 1
         end
