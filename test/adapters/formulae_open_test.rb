@@ -23,7 +23,8 @@ class FormulaeOpenTest < Minitest::Test
   ANJOU = "urn:cts:formulae:anjou_archives.marchegay_carbaio_0006.lat001" # undated; three-level tree
   VENDOME = "urn:cts:formulae:marmoutier_vendomois.trémault0011.lat001" # a non-ASCII path
   EUDES = "urn:cts:formulae:eudes.lex0034.lat001"                       # CC BY-NC-ND 4.0
-  ACCEPTED = [STGALLEN, FREISING_A, FREISING_B, HERSFELD, ANJOU, VENDOME, EUDES].freeze
+  LUZERN = "urn:cts:formulae:luzern.schiess0004.lat001"                 # deposit-licensed (no per-file grant)
+  ACCEPTED = [STGALLEN, FREISING_A, FREISING_B, HERSFELD, ANJOU, VENDOME, EUDES, LUZERN].freeze
 
   BY = "https://creativecommons.org/licenses/by/4.0/"
   BY_NC_ND = "https://creativecommons.org/licenses/by-nc-nd/4.0/"
@@ -80,12 +81,24 @@ class FormulaeOpenTest < Minitest::Test
     skips = adapter.discovery_skips(FIXTURES)
 
     assert_predicate skips, :clean?
-    assert_equal 3, skips.skipped_by_rule
+    assert_equal 2, skips.skipped_by_rule
     notes = skips.notes.join("\n")
 
     assert_match(/1 E-Lexicon entry \(elexicon.*\): elexicon\.riga\.deu001/, notes)
-    assert_match(/1 unlicensed file \(no <licence> in the header\): luzern\.schiess0004\.lat001/, notes)
     assert_match(/1 regest-only record \(.*no Latin text.*\): hersfeld\.weirich0004\.lat001/, notes)
+  end
+
+  # The luzern six (Schiess 1933): their <availability> is upstream's own
+  # "to be filled in" placeholder, but the whole Zenodo deposit is
+  # recorded CC BY 4.0 — upstream's grant over the entire set (ruled
+  # 2026-11-12). Admitted under the deposit licence, basis declared.
+  def test_a_luzern_charter_is_admitted_under_the_deposit_licence
+    ref = refs.fetch("urn:cts:formulae:luzern.schiess0004.lat001")
+
+    assert_equal "https://creativecommons.org/licenses/by/4.0/", ref.metadata["license"]
+    assert_equal "deposit licence (Zenodo 10.5281/zenodo.10082515; per-file availability is an " \
+                 "upstream placeholder)", ref.metadata["license_basis"]
+    assert_nil ref.metadata["license_override"], "CC BY is the source class — no override"
   end
 
   def test_a_regest_only_record_is_skipped_not_quarantined
