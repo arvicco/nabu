@@ -711,7 +711,7 @@ historiography beside the classical Latin shelf (§3) it grew from.
 |---|---|
 | **Category** | Two same-day flips: corpus-scale machine annotation for Ancient Greek, and the Old Iranian liturgy anchoring the new `iranian` axis |
 | **Size** | `glaux`: **1,421 docs / 968,578 passages** (`grc`) — GLAUx, "the Greek Language Automated" (Keersmaekers, Leuven): ~20M tokens of Ancient Greek (8th c. BCE – ~4th c. CE) automatically annotated for morphology, syntax, lemmas, animacy and word senses (AGDT guidelines) — the silver analysis-side complement to the held Perseus/First1K editions (the DCS-beside-GRETIL pattern); the known page-boundary split-token artifact (ψυ\|χροῖς, per-fragment lemmas) is preserved verbatim — canonical means canonical. `titus-avestan`: **248 docs / 40,108 passages** (`ave`) — the TITUS Avestan Corpus (Gippert, Frankfurt): the Avesta in Latin transliteration — Yasna, Yašts, Videvdad, Visperad — a preliminary edition on the Geldner/Westergaard base (e-text S. Fritz, corrections Gippert et al.), rescued from 1990s frame-based HTML |
-| **Licenses** | glaux mixed `attribution`/`nc` per document (README: most CC BY-SA, some texts more restrictive); titus-avestan `nc` — a personal grant (Gippert, 2026-07-23) for non-commercial use, with TITUS and the editors credited wherever served |
+| **Licenses** | glaux mixed `attribution`/`nc` per document (README: most CC BY-SA, some texts more restrictive); titus-avestan `nc` — gated (contact TITUS for a license grant), non-commercial, with TITUS and the editors credited wherever served |
 
 **Research uses:** machine-annotated Greek at full corpus scale with
 honest [silver] labels, a second analysis witness beside Diorisis (§8n);
@@ -1085,9 +1085,9 @@ library and Old Sundanese texts (92 / 46,482), `dharma-pyu` (145 / 629)
 (4 / 977); `monlam-lexicon` — the Monlam Tibetan headword lists
 (449,829 entries).
 
-**Iranian, Indo-European, and the TITUS grants.** The personally
-granted TITUS corpora (all nc, grant-gated — 03-unlockable-sources.md
-§2): `titus-osco-umbrian` (386 / 1,697), `titus-pahlavi` (1,572 /
+**Iranian, Indo-European, and the TITUS corpora.** The gated TITUS
+corpora (all nc — contact TITUS for a license grant;
+03-unlockable-sources.md §2): `titus-osco-umbrian` (386 / 1,697), `titus-pahlavi` (1,572 /
 20,302), `titus-khotanese` (1,648 / 20,279), `titus-sogdian` (364 /
 21,354), `titus-manichaica` (542 / 3,089), `titus-bactrian` (123 /
 3,537), `titus-tocharian-a` (466 / 5,779). Beside them:
@@ -1107,9 +1107,9 @@ attribution).
 
 **Anatolian and cuneiform.** `hittite-glossed` — glossed Hittite texts
 with German translation (7,099 / 72,507; open), `aclt` — the Annotated
-Corpus of Luwian Texts, by personal grant (266 / 2,682;
-`research_private`), `seal` — Sources of Early Akkadian Literature, by
-grant (408 / 14,953; `research_private`), and two Wiktionary extracts,
+Corpus of Luwian Texts, gated (266 / 2,682;
+`research_private`), `seal` — Sources of Early Akkadian Literature,
+gated (408 / 14,953; `research_private`), and two Wiktionary extracts,
 `wiktionary-hit` (481 entries) and `wiktionary-akk` (1,348).
 
 **Turkic and Mongolic.** `atmo` — annotated Turki manuscripts from the
@@ -1160,7 +1160,7 @@ Library's edition of the *Nueva corónica y buen gobierno* (1,189 /
 **Character identity.** `ucd` — the Unicode Character Database core, the
 universal character-identity instrument behind `nabu char`.
 
-## 8am. The South Asia opening and the members' gate (P118–P123)
+## 8am. The South Asia opening and the gated Tocharian chain (P118–P123)
 
 The October 2026 arc, in the §8al register shape — one line per
 shelf, live holdings read from the catalog 2026-10-13, license class
@@ -1195,10 +1195,10 @@ bhakti prints (207 / 1,462) · `ms-wikisource` — the Jawi manuscript
 cone (64 / 5,081) · `th-wikisource` — the Collected Chronicles to
 BE 2473 (92 / 11,006); all texts PD, transcription CC BY-SA.
 
-**The members' gate.** `titus-tocharian-b` — the whole West
-Tocharian B chain across the Berlin, London and Paris collections,
-retrieved through the credentials seam under the TITUS personal
-grant, with two leaves identified as Tumshuqese (4,250 / 43,499;
+**The gated chain.** `titus-tocharian-b` — the whole West
+Tocharian B chain across the Berlin, London and Paris collections
+(gated; contact TITUS for a license grant), with two leaves
+identified as Tumshuqese (4,250 / 43,499;
 `nc`, never redistributed).
 
 ## 8an. The Africa opening (P124)
@@ -2341,6 +2341,6 @@ entries, Simon Grunau's vocabulary in its variant copies, and the
 minor fragments with the Basel epigram. A diplomatic edition after
 Mažiulis (data entry W. Euler, TITUS version J. Gippert), every
 printed line a passage with its German lane riding as annotation.
-Served under a personal research grant on the TITUS family terms —
-non-redistributable, credited wherever displayed; `prg` joins the
+Gated — contact TITUS for a license grant; held non-redistributable,
+credited wherever displayed; `prg` joins the
 registry's West Baltic branch beside the East Baltic shelves.

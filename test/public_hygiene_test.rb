@@ -55,18 +55,26 @@ class PublicHygieneTest < Minitest::Test
      "time-of-day narrative — public surfaces carry dates, never day-parts"]
   ].freeze
 
-  # The showcase surfaces — README.md and everything under site/ — carry
-  # NO personal-grant information (owner rule 2026-11-12, minted on a live
-  # leak: the README narrated the TITUS members-gate grants, the public
+  # The showcase surfaces — README.md, everything under site/, and (by
+  # the owner's 2026-11-12 ruling extending the same-day rule) all of
+  # docs/ — carry NO personal-grant information (minted on a live leak:
+  # the README narrated the TITUS members-gate grants, the public
   # sources table named grantors with email dates, and a news post
   # described the credentials seam). A personal grant is the owner's
-  # private arrangement, not a library fact: the showcase says what a
-  # source's license CLASS is (nc, research-private, never redistributed)
-  # and credits whom the terms require — never that a grant exists, who
-  # granted it, or how the gate is walked. docs/02-sources.md and
-  # config/sources.yml remain the license-provenance ledger (grantor,
-  # date, terms are ALLOWED there, per the 2026-08-30 rule above).
-  SHOWCASE = %r{\A(?:README\.md|site/)}
+  # private arrangement, not a library fact: these surfaces say what a
+  # source's license CLASS is (nc, research-private, never
+  # redistributed), direct a reader to "contact the source for a
+  # license grant", and credit whom the terms require — never that a
+  # grant exists, who granted it, or how the gate is walked. The
+  # provenance trail (grantor, date, channel) lives in the untracked
+  # correspondence register. config/sources.yml's machine-read grant
+  # blocks are the remaining tracked carrier, queued for their own
+  # excision seam.
+  SHOWCASE = %r{\A(?:README\.md|site/|docs/)}
+  # The component NAME "credentials seam" stays legal in docs/ — the
+  # architecture doc names its own public mechanism; what it may not do
+  # is narrate whose gate the seam walks.
+  DOCS_LEGAL = [/credentials\s+seam/i].freeze
   # Separators are [\s-] (whitespace INCLUDING newline, or hyphen):
   # prose wraps mid-phrase, and the first sweep missed a leak exactly
   # because "personal research\ngrants" straddled a line break.
@@ -158,7 +166,10 @@ class PublicHygieneTest < Minitest::Test
       content = File.read(path, encoding: Encoding::UTF_8)
       next unless content.valid_encoding?
 
+      docs = rel.start_with?("docs/")
       SHOWCASE_FORBIDDEN.each do |pattern, reason|
+        next if docs && DOCS_LEGAL.any? { |legal| legal.source == pattern.source }
+
         content.scan(pattern).first(1).each do |hit|
           offenders << "#{rel}: #{Array(hit).first.to_s.strip[0, 40].inspect} — #{reason}"
         end
