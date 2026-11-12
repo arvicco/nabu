@@ -597,6 +597,7 @@ namespace :boards do
     require_relative "lib/nabu/ops/board_check"
     require_relative "lib/nabu/ops/watch_list_check"
     require_relative "lib/nabu/ops/phase_register_check"
+    require_relative "lib/nabu/ops/acquisition_check"
     dir = ENV.fetch("BOARDS_DIR", File.expand_path(".docs", __dir__))
     report = Nabu::Ops::BoardCheck.new(boards_dir: dir).run
     if report.skipped
@@ -613,10 +614,17 @@ namespace :boards do
     ).run
     phases.findings.each { |finding| puts "STALE  phase register #{finding}" }
 
+    acquisition = Nabu::Ops::AcquisitionCheck.new(
+      boards_dir: dir, adapters_dir: File.expand_path("lib/nabu/adapters", __dir__),
+      ledger_path: File.expand_path("local/history.sqlite3", __dir__)
+    ).run
+    acquisition.findings.each { |finding| puts "STALE  acquisition #{finding}" }
+
     failures = []
     failures << "#{report.findings.size} stale register header(s)" unless report.clean?
     failures << "#{watch.findings.size} stale GH watch row(s)" unless watch.clean?
     failures << "phase register behind the merged phases" unless phases.clean?
+    failures << "#{acquisition.findings.size} acquisition-duty finding(s)" unless acquisition.clean?
     abort "boards:check — #{failures.join(', ')}" unless failures.empty?
 
     puts "boards:check — #{report.registers.size} register header(s) current: #{report.registers.join(', ')}"
@@ -632,6 +640,7 @@ namespace :boards do
       merged = phases.highest_merged ? "P#{phases.highest_merged}" : "none"
       puts "boards:check — phase register current: newest row P#{phases.newest_row}, highest merged phase #{merged}"
     end
+    puts "boards:check — acquisition duties current (segment named, rail fresh)" if acquisition.clean?
   end
 end
 
