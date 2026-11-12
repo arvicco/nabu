@@ -297,26 +297,17 @@ module Store
       assert_equal before, index_names.call, "indexes restored by ensure"
     end
 
-    # A v1 lemma table (urn stored + urn-indexed — the live file until the
-    # next full rebuild) takes the projection in its own shape: the coverage
-    # guard reads its urns, inserted rows carry the urn, and an interrupted
-    # index cycle restores the v1 index set (urn, not passage_id).
-    def test_a_v1_lemma_table_takes_the_projection_in_its_own_shape
+    # The v1 lemma shape is retired: the projection refuses a pre-v2 lemma
+    # table with the rebuild hint instead of writing its urn column.
+    def test_a_v1_lemma_table_refuses_the_projection_with_the_rebuild_hint
       doc = make_document
       make_passage(doc, urn: "urn:d:1:1", annotations: { "tokens" => [{ "form" => "In", "lemma" => "in" }] })
-      make_passage(doc, urn: "urn:d:1:2", sequence: 1)
       rebuild_gold!
       LegacyLemmaTable.widen!(@fulltext, @catalog)
       shelve(urn: "urn:d:1:1", tokens: [%w[fronte frons NOUN]])
-      shelve(urn: "urn:d:1:2", tokens: [%w[fronte frons NOUN]])
 
-      result = apply!
-      assert_equal 1, result.skipped_covered, "the gold-covered urn is skipped through the urn index"
-      assert_equal [["urn:d:1:2", "frons"]], lemmas.where(tier: "silver").select_map(%i[urn lemma_raw])
-      before = @fulltext.indexes(:passage_lemmas).values.map { |i| i[:columns] }.sort
-      assert_includes before, [:urn]
-      assert_raises(RuntimeError) { Nabu::Store::Indexer.cycle_lemma_indexes(@fulltext) { raise "boom" } }
-      assert_equal before, @fulltext.indexes(:passage_lemmas).values.map { |i| i[:columns] }.sort
+      error = assert_raises(Nabu::Store::Indexer::LegacyLemmaShape) { apply! }
+      assert_match(/predates the v2 lemma shape.*full rebuild/, error.message)
     end
 
     # The arm-gate's other half: an index the owner never armed stays

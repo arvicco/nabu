@@ -336,44 +336,27 @@ module Store
       rebuild!
 
       refute_includes lemmas.columns, :urn
-      refute Nabu::Store::Indexer.lemma_urn_column?(@fulltext)
+      assert_nil Nabu::Store::Indexer.require_v2_lemmas!(@fulltext), "the v2 guard passes a fresh table"
       indexed = @fulltext.indexes(:passage_lemmas).values.map { |i| i[:columns] }
       assert_equal [%i[language], %i[lemma_folded], %i[passage_id]], indexed.sort
       assert_equal "v2-passage-keyed", Nabu::Store::Indexer::STAGE_VERSIONS.fetch("fts_lemma"),
                    "the narrowing is a derivation change: a v1-stamped index reads stale"
     end
 
-    # A v1-shape lemma table (urn column + urn index) is the owner's live
-    # file until the next full rebuild: syncs keep writing that shape — urn
-    # filled — and the slice swap stays urn-keyed and row-identical to the
-    # narrow rebuild everywhere but the urn column itself.
-    def test_incremental_refresh_keeps_a_v1_lemma_table_wide
+    # The v1 lemma shape (urn column + urn index) is retired ahead of the
+    # from-scratch rebuild that mints v2 everywhere: an incremental refresh
+    # over a v1 file refuses with the rebuild hint instead of keeping the
+    # urn-keyed dual path alive.
+    def test_incremental_refresh_refuses_a_v1_lemma_table_with_the_rebuild_hint
       doc = make_document(urn: "urn:d:s")
       make_passage(doc, urn: "urn:d:s:1", text_normalized: "λεγει", sequence: 0,
                         annotations: token_annotations(%w[λέγω λέγει]))
-      make_passage(doc, urn: "urn:d:s:2", text_normalized: "doomed", sequence: 1,
-                        annotations: token_annotations(%w[ὁράω ὁρᾷ]))
       rebuild!
       LegacyLemmaTable.widen!(@fulltext, @catalog)
-      assert Nabu::Store::Indexer.lemma_urn_column?(@fulltext)
 
-      make_passage(doc, urn: "urn:d:s:3", text_normalized: "φερει", sequence: 2,
-                        annotations: token_annotations(%w[φέρω φέρει]))
-      Nabu::Store::Passage.first(urn: "urn:d:s:2").update(withdrawn: true)
-      refresh!
-
-      assert_includes lemmas.columns, :urn, "an incremental sync never narrows the table"
-      assert_equal %w[urn:d:s:1 urn:d:s:3], lemmas.order(:urn).distinct.select_map(:urn)
-      assert(@fulltext.indexes(:passage_lemmas).values.any? { |i| i[:columns] == [:urn] })
-      fresh = Nabu::Store.connect_fulltext("sqlite::memory:")
-      begin
-        Nabu::Store::Indexer.rebuild!(catalog: @catalog, fulltext: fresh)
-        wide = lemmas.all.map { |row| row.except(:urn).sort_by { |key, _| key } }.sort_by(&:inspect)
-        assert_equal table_rows(fresh, :passage_lemmas), wide
-        assert_equal table_rows(fresh, :lemma_frequencies), table_rows(@fulltext, :lemma_frequencies)
-      ensure
-        fresh.disconnect
-      end
+      error = assert_raises(Nabu::Store::Indexer::LegacyLemmaShape) { refresh! }
+      assert_match(/predates the v2 lemma shape.*full rebuild/, error.message)
+      assert_match(/nabu rebuild/, error.message, "the hint names the command")
     end
 
     # Non-treebank passages (annotations "{}", or annotations without token

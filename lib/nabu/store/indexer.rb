@@ -96,11 +96,11 @@ module Nabu
     #   in-table plus a ~2.6 GB urn B-tree at 56M rows; the passage-keyed
     #   lookups (sync slice deletes, the frequency snapshots, the silver
     #   coverage guard, the parallels/cognates/vocab probes) ride a
-    #   passage_id B-tree (~0.7 GB) instead. A v1 table (urn column + urn
-    #   index) stays on disk until the next full rebuild: writers keep
-    #   filling its urn and keyed reads keep going through its urn index —
-    #   the lemma_urn_column? feature detect, the fts_language_column?
-    #   precedent.
+    #   passage_id B-tree (~0.7 GB) instead. The v1 table (urn column + urn
+    #   index) is RETIRED: its dual-shape write/read paths are gone, and a
+    #   live v1 file meets require_v2_lemmas! at every entry point that
+    #   once branched on it — one actionable error (run a full rebuild)
+    #   instead of a silent second code path.
     # == The trigram index (P16-4) — fragment search, documentary scope
     #
     # passages_trigram is a second FTS5 table over the SAME folded search form
@@ -691,8 +691,8 @@ module Nabu
       #   rowids by their stored passage_id (UNINDEXED — per-IN-batch scans
       #   would each rescan the table), then deletes by rowid. ~4.3M-row
       #   scan, seconds — against the minutes of a full rebuild.
-      # - passage_lemmas deletes by passage-key IN-batches (B-tree indexed:
-      #   passage_id; urn on a v1 table — lemma_passage_key).
+      # - passage_lemmas deletes by passage_id IN-batches (B-tree indexed;
+      #   a retired v1 table refuses — require_v2_lemmas!).
       # - trigram: only touched when the source is in scope — flagged now
       #   (fuzzy_slugs) or indexed by the last build (the scope table); a
       #   de-flagged source loses its rows AND its scope row, so coverage
@@ -811,11 +811,11 @@ module Nabu
               # the rewrite, re-snapshot AFTER, and apply the delta to the corpus
               # freq table (same transaction). incremental_ready? guarantees the
               # table exists here; both snapshots are passage-keyed and B-tree bounded.
-              before = LemmaFrequencies.snapshot(fulltext, ids: ids, urns: urns)
+              before = LemmaFrequencies.snapshot(fulltext, ids: ids)
               # FIRST destructive write: the doomed rows' sidecar shas
               # (ROW_SHAS_TABLE invariant — removed before their fts/lemma rows).
               delete_row_shas(fulltext, ids)
-              deleted = delete_source_lemma_rows(fulltext, ids: ids, urns: urns)
+              deleted = delete_source_lemma_rows(fulltext, ids: ids)
               if fts_contentless?(fulltext)
                 delete_fts_rows_by_rowid(fulltext, TABLE, ids, progress: progress)
               else
@@ -858,13 +858,13 @@ module Nabu
               # so the sidecar cannot vouch for them. A lemma-bearing slice
               # therefore re-censuses absolutely and re-closes, exactly as
               # the full-slice heal does.
-              lemmas_changed ||= heal && source_lemma_rows?(fulltext, ids: heal.slice_ids, urns: heal.slice_urns)
+              lemmas_changed ||= heal && source_lemma_rows?(fulltext, ids: heal.slice_ids)
               if healing && lemmas_changed
                 # The crashed run's before-snapshot is lost — the delta would
                 # bake its drift in; re-census absolutely instead (rare path).
                 LemmaFrequencies.rebuild!(fulltext)
               else
-                after = LemmaFrequencies.snapshot(fulltext, ids: ids, urns: urns)
+                after = LemmaFrequencies.snapshot(fulltext, ids: ids)
                 LemmaFrequencies.apply_delta(fulltext, before: before, after: after)
               end
               # The cjk lane is REBUILD-CADENCE (2026-11-11 ruling): no
@@ -1708,30 +1708,36 @@ module Nabu
         fts_contentless?(fulltext) ? Sequel.lit("rowid").as(:passage_id) : Sequel[:passage_id]
       end
 
-      # Whether the LIVE lemma table is the v1 shape that still stores each
-      # row's passage urn (class note) — the write side keeps filling the
-      # column there, and passage-keyed reads go through its urn index
-      # (lemma_passage_key). A fresh rebuild! always creates the narrow
-      # shape; same next-full-rebuild arrival as fts_language_column?.
-      def lemma_urn_column?(fulltext)
-        fulltext[LEMMA_TABLE].columns.include?(:urn)
+      # == The retired v1 lemma shape (class note)
+      #
+      # A v1 passage_lemmas still stores each row's passage urn and keys
+      # its passage lookups on a urn B-tree; every consumer used to probe
+      # the shape and branch. The coming from-scratch rebuild mints v2
+      # everywhere, so the branches are gone — and a v1 file that is still
+      # live must not fall into the v2 path either (a passage_id filter
+      # there scans 56M rows; a v2-shaped insert fails its NOT NULL urn).
+      # Every entry point that once branched calls this guard instead: one
+      # clear, actionable error, never a silent wrong path.
+      class LegacyLemmaShape < Nabu::Error; end
+      LEGACY_LEMMA_MESSAGE = "this index predates the v2 lemma shape (passage_lemmas still carries the " \
+                             "v1 urn column) — run a full rebuild (`nabu rebuild`) to mint the " \
+                             "passage-keyed table"
+
+      # Raise LegacyLemmaShape on a v1 lemma table; nil otherwise (an absent
+      # table is not this guard's business — callers keep their own
+      # table_exists? degrade). One column read (SELECT * LIMIT 0).
+      def require_v2_lemmas!(fulltext)
+        return nil unless fulltext.table_exists?(LEMMA_TABLE)
+        raise LegacyLemmaShape, LEGACY_LEMMA_MESSAGE if fulltext[LEMMA_TABLE].columns.include?(:urn)
+
+        nil
       end
 
-      # The column a passage-keyed lemma lookup filters on: :passage_id on
-      # the narrow shape, :urn on a v1 table (whose B-tree is the urn
-      # index — a passage_id filter there would scan 56M rows).
-      def lemma_passage_key(fulltext)
-        lemma_urn_column?(fulltext) ? :urn : :passage_id
-      end
-
-      # The lemma rows of a set of passages, through whichever passage
-      # B-tree the live shape carries. +ids+ and +urns+ name the SAME
-      # passages (catalog ids and their urns); only the one the shape keys
-      # on is read, so a caller holding just one side resolves the other
-      # first (catalog urn/primary-key lookups). Unsliced — callers batch.
-      def lemma_rows_of_passages(fulltext, ids: nil, urns: nil)
-        key = lemma_passage_key(fulltext)
-        fulltext[LEMMA_TABLE].where(key => (key == :urn ? urns : ids).to_a)
+      # The lemma rows of a set of passages (catalog ids), through the
+      # passage_id B-tree. Unsliced — callers batch.
+      def lemma_rows_of_passages(fulltext, ids:)
+        require_v2_lemmas!(fulltext)
+        fulltext[LEMMA_TABLE].where(passage_id: ids.to_a)
       end
 
       # One streaming pass feeding the FTS and lemma tables (shared by
@@ -1752,7 +1758,7 @@ module Nabu
         with_language = fts_language_column?(fulltext)
         with_source = slugs && fts_source_column?(fulltext) ? slugs : nil
         contentless = fts_contentless?(fulltext)
-        with_urn = lemma_urn_column?(fulltext)
+        require_v2_lemmas!(fulltext)
         count = 0
         lemma_count = 0
         chars = Hash.new(0)
@@ -1765,7 +1771,7 @@ module Nabu
                            contentless: contentless)
             end
           )
-          rows = batch.flat_map { |row| lemma_rows(row, tiers: tiers, slugs: slugs, with_urn: with_urn) }
+          rows = batch.flat_map { |row| lemma_rows(row, tiers: tiers, slugs: slugs) }
           fulltext[LEMMA_TABLE].multi_insert(rows)
           # LAST statement of the batch — the ROW_SHAS_TABLE invariant.
           write_row_shas(fulltext, batch) if with_shas
@@ -2426,11 +2432,10 @@ module Nabu
       end
 
       # Whether any of the slice's passages carries lemma rows — bounded
-      # passage-key IN probes, stopping at the first hit.
-      def source_lemma_rows?(fulltext, ids:, urns:)
-        key = lemma_passage_key(fulltext)
-        (key == :urn ? urns : ids).to_a.each_slice(BATCH_SIZE).any? do |batch|
-          !fulltext[LEMMA_TABLE].where(key => batch).empty?
+      # passage_id IN probes, stopping at the first hit.
+      def source_lemma_rows?(fulltext, ids:)
+        ids.to_a.each_slice(BATCH_SIZE).any? do |batch|
+          !fulltext[LEMMA_TABLE].where(passage_id: batch).empty?
         end
       end
 
@@ -2466,13 +2471,13 @@ module Nabu
         doomed.size
       end
 
-      # Delete the source's lemma rows by passage key — passage_id, or urn
-      # on a v1 table (B-tree indexed either way — no scan). +ids+ and
-      # +urns+ name the same passages. Returns the number of rows deleted.
-      def delete_source_lemma_rows(fulltext, ids:, urns:)
-        key = lemma_passage_key(fulltext)
-        (key == :urn ? urns : ids).to_a.each_slice(BATCH_SIZE).sum do |batch|
-          fulltext[LEMMA_TABLE].where(key => batch).delete
+      # Delete the source's lemma rows by passage_id (B-tree indexed — no
+      # scan). Returns the number of rows deleted. A retired v1 table
+      # refuses here, before the slice's first lemma write.
+      def delete_source_lemma_rows(fulltext, ids:)
+        require_v2_lemmas!(fulltext)
+        ids.to_a.each_slice(BATCH_SIZE).sum do |batch|
+          fulltext[LEMMA_TABLE].where(passage_id: batch).delete
         end
       end
 
@@ -2683,16 +2688,14 @@ module Nabu
       #   the lemma-aware second signals (parallels' rare-lemma co-occurrence,
       #   cognate-in-parallel, design §6), the sync slice delete, the
       #   frequency snapshots and the silver coverage guard look a passage's
-      #   lemmas up by it. A v1 table keeps its urn index instead
-      #   (lemma_passage_key) — the shape decides, so an interrupted
-      #   cycle_lemma_indexes on a live v1 file restores the v1 set.
+      #   lemmas up by it.
       # - language (P18-4 follow-up): `nabu language CODE` counts a language's
       #   gold rows; without it the card scans 2.85M rows (owner-measured 11.6 s
       #   per card). All rebuilt with the table (never migrated — the fulltext
       #   db is derived-of-derived; class note).
       def create_lemma_indexes(fulltext)
         fulltext.add_index(LEMMA_TABLE, :lemma_folded)
-        fulltext.add_index(LEMMA_TABLE, lemma_passage_key(fulltext))
+        fulltext.add_index(LEMMA_TABLE, :passage_id)
         fulltext.add_index(LEMMA_TABLE, :language)
       end
 
@@ -2701,6 +2704,7 @@ module Nabu
       # in one sorted pass (the P36-2 trick at command grain). The ensure
       # arm means an interrupted apply still leaves the table indexed.
       def cycle_lemma_indexes(fulltext)
+        require_v2_lemmas!(fulltext)
         drop_lemma_indexes(fulltext)
         yield
       ensure
@@ -2708,7 +2712,7 @@ module Nabu
       end
 
       def drop_lemma_indexes(fulltext)
-        %i[lemma_folded passage_id urn language].each do |column|
+        %i[lemma_folded passage_id language].each do |column|
           fulltext.drop_index(LEMMA_TABLE, column)
         rescue Sequel::DatabaseError
           nil # a prior interrupted cycle may have left this one missing
@@ -2816,15 +2820,11 @@ module Nabu
       # +slugs+ (source_id → slug) selects the source's LemmaKeys spec
       # (P118-R4 S1): bhsa/dss read their own lexeme keys, everyone else
       # "lemma". Absent map (a caller predating the registry) = default.
-      # +with_urn+ adds the passage urn for a v1 table (lemma_urn_column?).
-      def lemma_rows(row, tiers: {}, slugs: nil, with_urn: false)
+      def lemma_rows(row, tiers: {}, slugs: nil)
         tier = tiers.fetch(row[:source_id], GOLD_TIER)
-        rows = if tier == EQUIVALENCE_TIER
-                 equivalence_rows(row)
-               else
-                 annotation_rows(row, tier: tier, slugs: slugs)
-               end
-        with_urn ? rows.map { |lemma| lemma.merge(urn: row.fetch(:urn)) } : rows
+        return equivalence_rows(row) if tier == EQUIVALENCE_TIER
+
+        annotation_rows(row, tier: tier, slugs: slugs)
       end
 
       # The annotation-keyed rows (every tier but equivalence).

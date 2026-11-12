@@ -115,15 +115,15 @@ module Nabu
       # -- incremental (Indexer.refresh_source!) ------------------------------
 
       # One source's contribution to the table: { [folded, language, tier] =>
-      # passage_count } over its passages (B-tree indexed by passage key —
-      # Indexer.lemma_passage_key; +ids+ and +urns+ name the same passages —
+      # passage_count } over its passages (B-tree indexed by passage_id,
       # sliced). Summed across slices so a key split over two batches still
-      # totals correctly.
-      def snapshot(fulltext, ids:, urns:)
+      # totals correctly. A retired v1 lemma table refuses
+      # (Indexer.require_v2_lemmas!).
+      def snapshot(fulltext, ids:)
         counts = Hash.new(0)
-        key = Indexer.lemma_passage_key(fulltext)
-        (key == :urn ? urns : ids).to_a.each_slice(BATCH_SIZE) do |batch|
-          fulltext[Indexer::LEMMA_TABLE].where(key => batch)
+        Indexer.require_v2_lemmas!(fulltext)
+        ids.to_a.each_slice(BATCH_SIZE) do |batch|
+          fulltext[Indexer::LEMMA_TABLE].where(passage_id: batch)
                                         .group(:lemma_folded, :language, :tier)
                                         .select(:lemma_folded, :language, :tier,
                                                 Sequel.function(:count).*.as(:n))

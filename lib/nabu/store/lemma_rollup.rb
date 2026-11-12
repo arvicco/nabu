@@ -230,18 +230,15 @@ module Nabu
       # Wholesale: drive from passage_lemmas and hop to passages by primary
       # key (CROSS JOIN pins SQLite's join order — the cross-file planner has
       # no statistics at build time). Per source: drive from the source's
-      # documents → passages → passage_lemmas by its passage-key index
-      # (passage_id; the urn on a v1 table — Indexer.lemma_passage_key).
+      # documents → passages → passage_lemmas by its passage_id index (a
+      # retired v1 table refuses — require_v2_attached_lemmas!).
       def lemma_dataset(catalog, source_id)
         lemmas = Sequel[:pl]
         documents = Sequel[:documents]
         passages = Sequel[:passages]
         ds = if source_id
-               passage_key = if attached_lemma_urn?(catalog)
-                               { lemmas[:urn] => passages[:urn] }
-                             else
-                               { lemmas[:passage_id] => passages[:id] }
-                             end
+               require_v2_attached_lemmas!(catalog)
+               passage_key = { lemmas[:passage_id] => passages[:id] }
                catalog[:documents].where(documents[:source_id] => source_id)
                                   .cross_join(:passages)
                                   .where(passages[:document_id] => documents[:id])
@@ -334,17 +331,20 @@ module Nabu
           .where(type: "table", name: Indexer::LEMMA_TABLE.to_s).any?
       end
 
-      # Whether the attached lemma table is the v1 shape that still stores
-      # the passage urn (Indexer.lemma_urn_column?, read through the attach).
-      def attached_lemma_urn?(catalog)
-        catalog[Sequel[FULLTEXT_ALIAS][Indexer::LEMMA_TABLE]].columns.include?(:urn)
+      # The retired v1 lemma shape, read through the attach: raise the
+      # Indexer's actionable error rather than join a 56M-row table by a
+      # column it does not index (Indexer.require_v2_lemmas!).
+      def require_v2_attached_lemmas!(catalog)
+        return unless catalog[Sequel[FULLTEXT_ALIAS][Indexer::LEMMA_TABLE]].columns.include?(:urn)
+
+        raise Indexer::LegacyLemmaShape, Indexer::LEGACY_LEMMA_MESSAGE
       end
 
       def clock = Process.clock_gettime(Process::CLOCK_MONOTONIC)
 
       private_class_method :astronomical, :floor_half, :century_of_astronomical, :mix_dataset,
                            :curve_dataset, :lemma_dataset, :live_passages, :with_dates, :replace!,
-                           :replace_lemmas!, :attachable?, :lemma_source?, :attached_lemma_urn?, :clock
+                           :replace_lemmas!, :attachable?, :lemma_source?, :require_v2_attached_lemmas!, :clock
     end
   end
 end

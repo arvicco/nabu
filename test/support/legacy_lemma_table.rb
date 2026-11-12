@@ -2,10 +2,10 @@
 
 # The pre-narrowing passage_lemmas shape (fts_lemma stage "v1"): every row
 # carried its passage URN beside the passage id, and the urn — not the
-# passage id — was the B-tree key of the passage-keyed lookups. An index
-# built by that code stays on disk until the next full rebuild, so every
-# consumer must keep answering against it; tests downgrade a freshly built
-# table into that shape with this helper.
+# passage id — was the B-tree key of the passage-keyed lookups. The shape is
+# retired: every consumer that once branched on it now refuses with the
+# rebuild hint (Indexer.require_v2_lemmas!); tests downgrade a freshly built
+# table into that shape with this helper to pin the refusal.
 module LegacyLemmaTable
   module_function
 
