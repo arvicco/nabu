@@ -3,8 +3,10 @@
 # live under ONE `literary` head — "optionally two-level", so upstream's
 # own bare "Literary" folds to the plain head while `literary/poetry`
 # etc. carry the grain). 21 heads + `unknown` then; periodical + sermon
-# joined 2026-10-19, and the five heads of 2026-11-07 (theology, oratory,
-# catechesis, paratext, hagiography) make 28 + `unknown`. The heads are the ruled
+# joined 2026-10-19, the five heads of 2026-11-07 (theology, oratory,
+# catechesis, paratext, hagiography) made 28, and philosophy (ruled
+# 2026-11-13 for the TLG canon's Phil. epithet — a quarter-million-passage
+# corpus deserved its head) makes 29 + `unknown`. The heads are the ruled
 # set; a slash-keyed entry is a NAMED sub-class carrying its own desc
 # and crosswalks; `subs` are further suggested sub-grain vocabulary,
 # extensible without re-ruling.
@@ -172,6 +174,15 @@ classes:
   hagiography:
     desc: "Writing the saints: lives, martyr acts, encomia of holy persons."
     subs: [vita, martyrdom, encomium]
+  philosophy:
+    desc: "Philosophy argued as philosophy: dialogues, treatises, the
+      commentary tradition on the schools' texts, doxography — distinct from
+      theology (doctrine of a faith) and from scholarly (the positive
+      disciplines)."
+    # ruled 2026-11-13 from the TLG canon's author epithets: Plato's
+    # tradition and the dialogues, the treatise writers, the Aristotle/Plato
+    # commentators, and the doxographers who report the schools' opinions.
+    subs: [dialogue, treatise, commentary, doxography]
   # -- the honest class ------------------------------------------------------
   unknown:
     desc: "Upstream's own 'cannot determine' — a claim, not a gap."
