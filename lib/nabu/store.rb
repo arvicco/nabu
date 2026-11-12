@@ -259,6 +259,14 @@ module Nabu
       [path, "#{path}-wal", "#{path}-shm"].each { |file| FileUtils.rm_f(file) }
     end
 
+    # The fulltext family's drop: the main index file AND its lane files
+    # (Store::Lanes), each with its sidecars. A full rebuild regenerates the
+    # catalog, so every passage id a lane row names is about to be re-minted
+    # — a surviving lane would answer with the wrong passages.
+    def drop_fulltext_files!(path)
+      [path, *Lanes.paths_for(path)].each { |file| drop_database_files!(file) }
+    end
+
     # Open the fulltext index database (architecture §2: a SEPARATE SQLite file
     # from the catalog). Same scheme-less-path handling as #connect so callers
     # can pass config.fulltext_path directly. No foreign_keys pragma: the index
@@ -283,8 +291,13 @@ module Nabu
     # is an owner decision, not a rider on an index change.
     # +writer_profile: :index+ layers the INDEX_WRITER_CACHE_KIB cache on
     # top of the live profile for the sync/index-refresh writer only.
+    # Every connection ATTACHes the lane files that exist beside the main
+    # file (Store::Lanes — the cjk and trigram lanes' own files), with the
+    # same riders applied per attached schema.
     def connect_fulltext(url, readonly: false, rebuild: false, writer_profile: nil)
-      db = Sequel.connect(sqlite_url(url), readonly: readonly, timeout: BUSY_TIMEOUT_MS)
+      main_file = Lanes.main_file(url)
+      attach = ->(conn) { Lanes.attach_existing!(conn, main_file, readonly: readonly, rebuild: rebuild) }
+      db = Sequel.connect(sqlite_url(url), readonly: readonly, timeout: BUSY_TIMEOUT_MS, after_connect: attach)
       if db.database_type == :sqlite
         live_pragmas!(db)
         unless readonly
@@ -469,6 +482,7 @@ module Nabu
   end
 end
 
+require_relative "store/lanes"
 require_relative "store/ledger"
 require_relative "store/stage_timings"
 require_relative "store/links_journal"

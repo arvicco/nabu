@@ -116,6 +116,16 @@ module Nabu
     # surface reports real coverage, never a config that may have drifted
     # since the last reindex. Same lifecycle as everything else here:
     # drop-and-rebuild, never migrated, disposable.
+    #
+    # == The lane files (the incrementality review's split)
+    #
+    # The trigram lane and the cjk lane below live in their OWN database
+    # files beside this one (Store::Lanes — db/fulltext-trigram.sqlite3,
+    # db/fulltext-cjk.sqlite3), ATTACHed onto every connect_fulltext
+    # connection. Only their BUILDS know: rebuild_trigram!/rebuild_cjk!
+    # ready the lane schema and qualify their DDL with it; every other
+    # read and write here — and in the query layer — names the tables
+    # unqualified and SQLite resolves them into the lane file.
     module Indexer
       TABLE = :passages_fts
       LEMMA_TABLE = :passage_lemmas
@@ -486,8 +496,11 @@ module Nabu
       # Trigram FTS5 DDL (class note; same raw-DDL exception as CREATE_TABLE —
       # virtual-table DDL has no Sequel API). Same column shape as
       # passages_fts so index_row feeds both; only the tokenizer differs.
+      # A template over the SCHEMA the table is created in: the lane lives
+      # in its own attached file (Store::Lanes), so the build qualifies its
+      # DDL with the lane schema while every reader stays unqualified.
       CREATE_TRIGRAM_TABLE = <<~SQL
-        CREATE VIRTUAL TABLE passages_trigram USING fts5(
+        CREATE VIRTUAL TABLE %<schema>s.passages_trigram USING fts5(
           text_normalized,
           urn UNINDEXED,
           passage_id UNINDEXED,
@@ -498,9 +511,9 @@ module Nabu
       # The CJK lane's DDL (P93-3, CJK_TABLE note): contentless like the
       # main table; plain unicode61 — the cjk column holds space-joined
       # bigram tokens, already the token grain, and the sentinel columns
-      # tokenize as they always have.
+      # tokenize as they always have. Schema-templated like the trigram's.
       CREATE_CJK_TABLE = <<~SQL
-        CREATE VIRTUAL TABLE passages_cjk USING fts5(
+        CREATE VIRTUAL TABLE %<schema>s.passages_cjk USING fts5(
           cjk,
           language,
           source,
@@ -511,6 +524,11 @@ module Nabu
       SQL
 
       module_function
+
+      # The lane DDL for +schema+ (the attached lane schema at a build; any
+      # schema name SQLite knows).
+      def create_trigram_sql(schema) = format(CREATE_TRIGRAM_TABLE, schema: schema)
+      def create_cjk_sql(schema) = format(CREATE_CJK_TABLE, schema: schema)
 
       # Drop and rebuild the whole index (FTS + lemma table + alignment refs)
       # from +catalog+ into +fulltext+. Indexes every passage that is itself
@@ -989,11 +1007,12 @@ module Nabu
       # streaming pass rather than a branch in the main one: the scope is a
       # small subset of the corpus, and the fts/lemma pass stays untouched.
       # Returns the number of passages trigram-indexed.
+      # The lane lives in its own file (Store::Lanes): the build readies the
+      # lane schema and qualifies its DDL; the inserts stay unqualified.
       def rebuild_trigram!(catalog:, fulltext:, fuzzy_slugs:)
-        fulltext.drop_table?(TRIGRAM_TABLE)
-        fulltext.drop_table?(TRIGRAM_SCOPE_TABLE)
-        fulltext.run(CREATE_TRIGRAM_TABLE)
-        fulltext.create_table(TRIGRAM_SCOPE_TABLE) do
+        schema = Lanes.prepare_build!(fulltext, Lanes::TRIGRAM)
+        fulltext.run(create_trigram_sql(schema))
+        fulltext.create_table(Lanes.qualified(Lanes::TRIGRAM, TRIGRAM_SCOPE_TABLE)) do
           String :slug, null: false
         end
 
@@ -1034,10 +1053,9 @@ module Nabu
         # only pollute the rebuild's stage record.
         progress&.stage("cjk bigram lane: rebuilding over #{cjk_slugs.size} flagged sources") if
           cjk_slugs.any?
-        fulltext.drop_table?(CJK_TABLE)
-        fulltext.drop_table?(CJK_SCOPE_TABLE)
-        fulltext.run(CREATE_CJK_TABLE)
-        fulltext.create_table(CJK_SCOPE_TABLE) do
+        schema = Lanes.prepare_build!(fulltext, Lanes::CJK) # its own file (Store::Lanes)
+        fulltext.run(create_cjk_sql(schema))
+        fulltext.create_table(Lanes.qualified(Lanes::CJK, CJK_SCOPE_TABLE)) do
           String :slug, null: false
         end
 
