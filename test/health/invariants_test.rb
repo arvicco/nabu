@@ -780,6 +780,29 @@ class InvariantsTest < Minitest::Test
     assert_match(/death/, Nabu::Health::Invariants::PASSAGE_MINING_EXEMPT.dig("divinum-officium", "entry_years").to_s)
   end
 
+  # cllg-freed's edition_year projects only as the EDITION_FALLBACK for
+  # the works the TLG canon dates "Varia"/"Incertum" (384 rows, census
+  # 2026-11-12); a canon-dated work keeps its composition row, so the
+  # first-N census sample — all canon-dated — never meets it (the pta
+  # shape). The live document's metadata and rows verbatim
+  # (urn tlg0001.tlg001, the Argonautica), the description trimmed.
+  def test_cllg_freed_edition_year_is_declared_consumed
+    meta = '{"author":"Apollonius Rhodius Epic.","author_label":"Apollonius Rhodius Epic.",' \
+           '"date":{"class":"composition","not_after":-201,"not_before":-300,"raw":"c. 3 B.C."},' \
+           '"edition_year":"1961","editions":[{"date":"1961","editors":["Fraenkel, H."],"place":"Oxford",' \
+           '"publisher":"Clarendon Press","title":"Apollonii Rhodii Argonautica"}],"editors":["Fraenkel, H."],' \
+           '"epithets":["Epic."],"genre":"Epic.","tlg":"tlg0001.tlg001","tlg_date":"c. 3 B.C.",' \
+           '"work_title":"Argonautica"}'
+    doc_id = seed_lane_doc("cllg-freed", "urn:nabu:cllg-freed:tlg0001.tlg001", meta)
+    @db[:document_axes].insert(document_id: doc_id, not_before: -300, not_after: -201, date_raw: "c. 3 B.C.",
+                               date_class: "composition", axis_source: "cllg-freed")
+    @db[:document_facets].insert(document_id: doc_id, facet: "kind", value: "literary/narrative/epic",
+                                 raw: "Epic.")
+    finding = global_finding(:unmined_axis_metadata)
+    refute_match(/cllg-freed/, finding&.message.to_s, "date/tlg_date/genre trace; edition_year is declared")
+    assert_match(/\Aconsumed:/, Nabu::Health::Invariants::MINING_EXEMPT.dig("cllg-freed", "edition_year").to_s)
+  end
+
   # tianyige's era + year are consumed into the projected date (the live
   # document's metadata and axis row, trimmed): "洪武" is two characters
   # and "4" one, below the containment rule's floor — declared, not ore.
