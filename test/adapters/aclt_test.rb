@@ -8,14 +8,14 @@ require "fileutils"
 module Adapters
   # ACLT (P110-2): the Annotated Corpus of Luwian Texts —
   # Yakubovich's edition, delivered by Arkhangelskiy as Tsakorpus
-  # per-inscription JSON (personal grant → research_private). Fixtures
-  # are three real files copied whole from the emailed archive: the
+  # per-inscription JSON (no public license → research_private). Fixtures
+  # are three real files copied whole from the delivered archive: the
   # YALE seal (one clause, both representations), TRAGANA (LOCRIS)
   # (the parenthetical-title slug case), and the KARKAMIŠ B39a
   # upstream tombstone (zero analyzed words — skip-by-rule).
   #
-  # The fixture bytes are grant-gated (personal research grant, by email
-  # 2026-09-28/29 — no redistribution), so they live under the gitignored
+  # The fixture bytes are grant-gated (local research use only, no
+  # redistribution), so they live under the gitignored
   # local/fixtures/aclt/ (that dir's README carries the re-cut recipe +
   # sha256) and every data-bearing case SKIPs when absent — the
   # titus-pahlavi mold; on the owner's box StrictSkips makes a skip fail.
@@ -43,6 +43,17 @@ module Adapters
     end
 
     def doc(suffix) = documents.find { |d| d.urn.end_with?(":#{suffix}") } || flunk("#{suffix} missing")
+
+    # The manifest states the terms + the required credit, never the
+    # arrangement behind them (who granted, when, through which channel).
+    def test_manifest_states_the_terms_and_is_research_private
+      manifest = Nabu::Adapters::Aclt.manifest
+      assert_equal "research_private", manifest.license_class
+      assert_match(/not redistributable/i, manifest.license)
+      assert_match(/Yakubovich/, manifest.license, "the editorship credit the terms require")
+      refute_match(/\b20\d\d-\d\d-\d\d\b|by e-?mail|personal(?:ly)?[\s-](?:research[\s-])?grant/i,
+                   manifest.license, "terms + credit only — never the grant's date, channel or arrangement")
+    end
 
     def test_discovers_one_document_per_inscription_titled_slug
       require_fixtures!
@@ -118,7 +129,7 @@ module Adapters
     def require_fixtures!
       return if Nabu::TestSupport.local_fixtures?(SLUG)
 
-      skip "#{SLUG} local fixtures absent (personal grant forbids redistribution — " \
+      skip "#{SLUG} local fixtures absent (the license forbids redistribution — " \
            "bytes live in local/fixtures/, never in git)"
     end
 

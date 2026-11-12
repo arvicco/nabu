@@ -27,9 +27,9 @@ module Nabu
     # same hymn the frameset no longer reaches (no "Next part" leads to it;
     # the walk IS the map).
     #
-    # == The grant (by email, 2026-10-06) and the credit duty
+    # == The terms and the credit duty
     #
-    # Fetched under the owner's PERSONAL grant (Gippert): the Middle Iranian
+    # Fetched under a license grant (no public license): the Middle Iranian
     # families on TITUS "to whatever extent TITUS hosts them as retrievable
     # text" — ONE retrieval per corpus, local personal research use only, no
     # redistribution, TITUS and the editors credited wherever displayed. The
@@ -90,9 +90,8 @@ module Nabu
                                  credit_name: "Morano")
       }.freeze
 
-      LICENSE = "personal grant, Gippert (by email, 2026-10-06): one retrieval, local personal " \
-                "research use only, no redistribution; TITUS and the editors clearly indicated " \
-                "wherever displayed"
+      LICENSE = "restricted: one retrieval, local personal research use only, no redistribution; " \
+                "TITUS and the editors clearly indicated wherever displayed"
 
       CREDIT = "TITUS (J. Gippert, Frankfurt) — Sogdian corpora: the Sogdian Corpus arranged by " \
                "texts (data entry and text revision N. Sims-Williams) and the Stellung-Jesu " \

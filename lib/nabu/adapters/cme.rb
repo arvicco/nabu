@@ -45,7 +45,7 @@ module Nabu
     # OPEN: the downloads page verbatim — "available for free downloading,
     # with no restrictions on use or reuse" — plus one uniform per-file
     # public-domain AVAILABILITY statement (censused identical across all
-    # 297 files), plus the personal grant (P.F. Schaffner, MED editor and
+    # 297 files), plus the editor's written confirmation (P.F. Schaffner, MED editor and
     # TCP text manager, 2026-08-20: "free to use both the CME and the TCP
     # files in any way you choose, and obtain them by any means
     # convenient"). Credit appreciated-not-insisted — the manifest credit
@@ -64,7 +64,7 @@ module Nabu
                  "reuse\"; every file carries the U-M Library public-domain statement (\"You may " \
                  "copy, modify, distribute and perform the work, even for commercial purposes, " \
                  "all without asking permission\" — censused identical across all 297 files). " \
-                 "Personal grant of 2026-08-20 (P.F. Schaffner, MED editor / TCP text manager, " \
+                 "Editor's written confirmation (P.F. Schaffner, MED editor / TCP text manager, " \
                  "2026-08-20): \"free to use both the CME and the TCP files in any way you " \
                  "choose, and obtain them by any means convenient\"; credit appreciated.",
         license_class: "open",

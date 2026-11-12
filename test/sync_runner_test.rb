@@ -1579,7 +1579,7 @@ class SyncRunnerTest < Minitest::Test
     assert_equal 1, LiveEnabled.fetches, "an acknowledged grant source syncs normally"
   end
 
-  # --- the credentials seam -----------------------------------------------
+  # --- Nabu::Credentials at the sync boundary ----------------------------
 
   # A source whose fetch records the credential the runner handed it.
   class CredentialedSource < CountingSource
@@ -1733,8 +1733,8 @@ class SyncRunnerTest < Minitest::Test
 
   def sample_grant
     Nabu::SourceRegistry::Grant.new(
-      grantor: "G. Starostin", date: "2026-07-15", terms: "any use, per-base attribution required",
-      thread: "by email, 2026-07-15", request_hint: "ask George Starostin"
+      terms: "any use, per-base attribution required",
+      request_hint: "contact the source (example.org) for a license grant"
     )
   end
 

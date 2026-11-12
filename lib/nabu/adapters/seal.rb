@@ -11,9 +11,10 @@ module Nabu
     # census 2026-08-30). A thin composition of the SealHtmlParser family
     # with the SealFetch advanced-search crawl.
     #
-    # == The grant (N. Wasserman, by email, 2026-08-30)
+    # == The terms
     #
-    # Local personal-research use ONLY (CC BY-NC-ND terms): local machine,
+    # No public license covers the crawl; the terms are: local
+    # personal-research use ONLY (CC BY-NC-ND terms): local machine,
     # NO redistribution/mirroring/derivative publication, attribution on
     # display, scholarly references by the fixed SEAL number + permanent
     # URL, TEXT ONLY (third-party visual material excluded — the crawl
@@ -46,8 +47,8 @@ module Nabu
       MANIFEST = Nabu::SourceManifest.new(
         id: "seal",
         name: "SEAL — Sources of Early Akkadian Literature",
-        license: "Local personal research per N. Wasserman's email grant 2026-08-30 " \
-                 "(CC BY-NC-ND terms): local machine only, no redistribution, " \
+        license: "restricted: local personal research only (CC BY-NC-ND terms): " \
+                 "local machine only, no redistribution, " \
                  "mirroring or derivative publication; attribution on display; scholarly " \
                  "reference by the fixed SEAL number + permanent URL; text only — " \
                  "third-party visual material excluded, never fetched or stored. " \

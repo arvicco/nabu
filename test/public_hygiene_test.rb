@@ -55,26 +55,28 @@ class PublicHygieneTest < Minitest::Test
      "time-of-day narrative — public surfaces carry dates, never day-parts"]
   ].freeze
 
-  # The showcase surfaces — README.md, everything under site/, and (by
-  # the owner's 2026-11-12 ruling extending the same-day rule) all of
-  # docs/ — carry NO personal-grant information (minted on a live leak:
-  # the README narrated the TITUS members-gate grants, the public
-  # sources table named grantors with email dates, and a news post
-  # described the credentials seam). A personal grant is the owner's
-  # private arrangement, not a library fact: these surfaces say what a
-  # source's license CLASS is (nc, research-private, never
-  # redistributed), direct a reader to "contact the source for a
-  # license grant", and credit whom the terms require — never that a
-  # grant exists, who granted it, or how the gate is walked. The
-  # provenance trail (grantor, date, channel) lives in the untracked
-  # correspondence register. config/sources.yml's machine-read grant
-  # blocks are the remaining tracked carrier, queued for their own
-  # excision seam.
-  SHOWCASE = %r{\A(?:README\.md|site/|docs/)}
-  # The component NAME "credentials seam" stays legal in docs/ — the
-  # architecture doc names its own public mechanism; what it may not do
-  # is narrate whose gate the seam walks.
-  DOCS_LEGAL = [/credentials\s+seam/i].freeze
+  # The WHOLE tracked tree carries NO personal-grant information. Minted
+  # for the showcase surfaces (README.md, site/, then all of docs/, owner
+  # rulings 2026-11-12) on a live leak — the README narrated the TITUS
+  # members-gate grants, the public sources table named grantors with
+  # email dates, a news post described the credentials seam — and
+  # widened the same day to every tracked file once the machine-read
+  # carriers were excised: config/sources.yml's grant blocks keep only
+  # the public half (terms + request_hint; grantor/date/thread live in
+  # the untracked local/config/grants-provenance.yml and fail the
+  # registry load if re-added), and adapter LICENSE strings state terms +
+  # credit. A personal grant is the owner's private arrangement, not a
+  # library fact: tracked files say what a source's license CLASS is (nc,
+  # research-private, never redistributed), direct a reader to "contact
+  # the source for a license grant", and credit whom the terms require —
+  # never who granted it, when, or how the gate is walked. Same file
+  # exclusions as the workflow-marker scan (#scanned?).
+  #
+  # The component NAME "credentials seam" stays legal in docs/ and lib/ —
+  # the architecture doc and the code name their own public mechanism;
+  # what they may not do is narrate whose gate the seam walks.
+  COMPONENT_NAME_SCOPE = %r{\A(?:docs|lib)/}
+  COMPONENT_NAME_LEGAL = [/credentials\s+seam/i].freeze
   # Separators are [\s-] (whitespace INCLUDING newline, or hyphen):
   # prose wraps mid-phrase, and the first sweep missed a leak exactly
   # because "personal research\ngrants" straddled a line break.
@@ -154,11 +156,10 @@ class PublicHygieneTest < Minitest::Test
                  "internal workflow leaked into the public tree:\n  #{offenders.join("\n  ")}"
   end
 
-  def test_showcase_surfaces_carry_no_personal_grant_information
+  def test_tracked_files_carry_no_personal_grant_information
     offenders = []
     tracked_files.each do |rel|
-      next unless rel.match?(SHOWCASE)
-      next if rel == "site/MAINTENANCE.md" # maintainer contract, excluded from rendering
+      next unless scanned?(rel)
 
       path = File.join(ROOT, rel)
       next unless File.file?(path)
@@ -166,9 +167,9 @@ class PublicHygieneTest < Minitest::Test
       content = File.read(path, encoding: Encoding::UTF_8)
       next unless content.valid_encoding?
 
-      docs = rel.start_with?("docs/")
+      component_scope = rel.match?(COMPONENT_NAME_SCOPE)
       SHOWCASE_FORBIDDEN.each do |pattern, reason|
-        next if docs && DOCS_LEGAL.any? { |legal| legal.source == pattern.source }
+        next if component_scope && COMPONENT_NAME_LEGAL.any? { |legal| legal.source == pattern.source }
 
         content.scan(pattern).first(1).each do |hit|
           offenders << "#{rel}: #{Array(hit).first.to_s.strip[0, 40].inspect} — #{reason}"
@@ -177,7 +178,7 @@ class PublicHygieneTest < Minitest::Test
     end
 
     assert_empty offenders,
-                 "personal-grant information leaked onto a showcase surface:\n  #{offenders.join("\n  ")}"
+                 "personal-grant information leaked into the public tree:\n  #{offenders.join("\n  ")}"
   end
 
   def test_no_redistribution_grant_sources_ship_no_public_fixture_bytes
@@ -216,6 +217,12 @@ class PublicHygieneTest < Minitest::Test
       refute FORBIDDEN.any? { |pattern, _| fine.match?(pattern) },
              "date-grain language and quoted content must pass: #{fine.inspect}"
     end
+    ["fetched under the owner's personal grant", "a personal research\ngrant", "TITUS members-only",
+     "the members area", "the credentials seam"].each do |leak|
+      assert SHOWCASE_FORBIDDEN.any? { |pattern, _| leak.match?(pattern) }, "the guard must catch #{leak.inspect}"
+    end
+    assert "lib/nabu/credentials.rb".match?(COMPONENT_NAME_SCOPE), "the component name is legal in lib/"
+    refute "config/sources.yml".match?(COMPONENT_NAME_SCOPE), "…but nowhere outside docs/ and lib/"
     refute scanned?("test/fixtures/perseus/data/tlg0012.xml"), "upstream fixture bytes stay verbatim"
     assert scanned?("test/fixtures/perseus/README.md"), "our fixture provenance notes are prose"
   end

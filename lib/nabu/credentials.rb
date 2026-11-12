@@ -8,7 +8,7 @@ require_relative "errors"
 
 module Nabu
   # The credentials seam: stored upstream credentials for gated member
-  # areas (the live case: the TITUS members area, HTTP Basic auth with a
+  # areas (the live case: the TITUS authenticated area, HTTP Basic auth with a
   # password that ROTATES with emailed notice).
   #
   # == The one home

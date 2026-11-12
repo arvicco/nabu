@@ -269,7 +269,7 @@ class PosturesTest < Minitest::Test
                  "2026-10-12) RETIRES all five P118 pendings to identity — te/kn/pka minted, " \
                  "ta re-parented, the tam/tel/kan codemap rows live (the add-then-retire " \
                  "shape, five at once); titus-tocharian-b ADDED — identity txb (a real " \
-                 "anchor; the members-only B corpus on the titus-tocharian-a family) and " \
+                 "anchor; the login-gated B corpus on the titus-tocharian-a family) and " \
                  "ban-wikisource ADDED P120-2 — pending on the ban/sas nodes of the " \
                  "nabu-lects mint (kaw resolves on the held node): 133→135; " \
                  "P120-3 ADDS gu/ms/th-wikisource as PENDING on the hub-side gu/ms/th " \

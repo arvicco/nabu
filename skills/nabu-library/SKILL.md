@@ -45,7 +45,7 @@ passage carries `license_class`, a closed vocabulary.
 | `attribution` | Reuse permitted with credit to the source edition (CC BY, CC BY-SA and similar; share-alike terms travel with the text). |
 | `nc` | Non-commercial terms (CC BY-NC and its variants): quote for research and teaching; no commercial reuse; credit required. |
 | `odbl` | Open Database License: credit the database; databases derived from it are share-alike. |
-| `research_private` | Personal research grants and private holdings: **excluded by default**; returned only with `include_restricted: true`; never redistributed. |
+| `research_private` | Restricted research-use terms and private holdings: **excluded by default**; returned only with `include_restricted: true`; never redistributed. |
 | `restricted` | Excluded by default, as above. |
 
 A document can carry a class different from its source's (per-document grants

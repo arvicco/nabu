@@ -17,9 +17,9 @@ module Nabu
     # inscription (TiS). 126 index entries over 126 pages (the TITUS index
     # frames baktcx1–6, censused 2026-10-10; baktc126.htm is the last page).
     #
-    # == The grant (by email, 2026-10-06) and the credit duty
+    # == The terms and the credit duty
     #
-    # Fetched under the owner's PERSONAL grant (Gippert): the Middle Iranian
+    # Fetched under a license grant (no public license): the Middle Iranian
     # families on TITUS — ONE retrieval per corpus, local personal research
     # use only, no redistribution, TITUS and the editors credited wherever
     # displayed. The titus-avestan mechanisms verbatim: `grant_required:
@@ -100,9 +100,8 @@ module Nabu
       PAGE_RE = /\Abaktc\d+\.htm\z/
       TEXT_HEADER = /<!Level 3>Text:\s*([^<\s&]+)/n
 
-      LICENSE = "personal grant, Gippert (by email, 2026-10-06): one retrieval, local personal " \
-                "research use only, no redistribution; TITUS and the editors clearly indicated " \
-                "wherever displayed"
+      LICENSE = "restricted: one retrieval, local personal research use only, no redistribution; " \
+                "TITUS and the editors clearly indicated wherever displayed"
 
       CREDIT = "TITUS (J. Gippert, Frankfurt) — Corpus of Bactrian Texts, electronically prepared " \
                "by N. Sims-Williams (Bactrian Documents from Northern Afghanistan I–II, London " \

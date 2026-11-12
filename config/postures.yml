@@ -2717,7 +2717,7 @@ sources:
     kind: {posture: unclassified}
     # `txb` is a real nabu-lects anchor (the bare code is the claim). The
     # adapter's page-shape constants are PROVISIONAL until the first
-    # authenticated sync (members-only upstream) — the postures below are
+    # authenticated sync (login-gated upstream) — the postures below are
     # the titus-tocharian-a family's, re-censused at that sync.
     # The two London Tumshuqese leaves (IOL Toch. 162 / 185, the `ts` lane
     # stem; ruled 2026-10-13) claim bare `xtq` — the ISO code is the claim.

@@ -9,10 +9,10 @@ module Nabu
     # edition on the basis of Geldner and Westergaard, prepared by Sonja Fritz
     # and corrected by Gippert et al.
     #
-    # == The grant (2026-07-23) and the credit duty
+    # == The terms and the credit duty
     #
-    # This corpus is fetched under the owner's PERSONAL grant (Gippert,
-    # 2026-07-23): non-commercial use, with "TITUS and the editors clearly
+    # No public license covers this corpus; it is fetched under a license
+    # grant: non-commercial use, with "TITUS and the editors clearly
     # indicated wherever displayed." Two mechanisms carry that:
     #   - the FETCH right (not conveyed by a public clone) → `grant_required: true`
     #     on the registry row arms the sync-time grant gate (Nabu::GrantGate);
@@ -35,7 +35,7 @@ module Nabu
       # The frameset entry the fetch walks from; page files hang off the same dir.
       ENTRY_URL = "https://titus.uni-frankfurt.de/texte/etcs/iran/airan/avesta/avest.htm"
 
-      LICENSE = "personal grant, Gippert 2026-07-23: non-commercial use; " \
+      LICENSE = "restricted: one retrieval, local non-commercial use, no redistribution; " \
                 "TITUS and the editors clearly indicated wherever displayed"
 
       # The verbatim attribution the grant requires rendered wherever text shows.

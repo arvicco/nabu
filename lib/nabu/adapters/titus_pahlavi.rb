@@ -19,9 +19,9 @@ module Nabu
     # the inscriptions (listed "under preparation", nothing retrievable) —
     # each a separate packet under the same grant if wanted.
     #
-    # == The grant (by email, 2026-10-06) and the credit duty
+    # == The terms and the credit duty
     #
-    # Fetched under the owner's PERSONAL grant (Gippert): the Middle Iranian
+    # Fetched under a license grant (no public license): the Middle Iranian
     # families on TITUS "to whatever extent TITUS hosts them as retrievable
     # text" — ONE retrieval per corpus, local personal research use only, no
     # redistribution, TITUS and the editors credited wherever displayed. The
@@ -123,9 +123,8 @@ module Nabu
                              editors: "B. Ataei (Berlin)", credit_name: "Ataei")
       }.freeze
 
-      LICENSE = "personal grant, Gippert (by email, 2026-10-06): one retrieval, local personal " \
-                "research use only, no redistribution; TITUS and the editors clearly indicated " \
-                "wherever displayed"
+      LICENSE = "restricted: one retrieval, local personal research use only, no redistribution; " \
+                "TITUS and the editors clearly indicated wherever displayed"
 
       CREDIT = "TITUS (J. Gippert, Frankfurt) — Middle Persian (Pahlavi) text editions, data entry " \
                "#{EDITIONS.values.map(&:credit_name).uniq.join(', ')} " \

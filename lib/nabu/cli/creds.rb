@@ -5,7 +5,7 @@
 module Nabu
   # `nabu creds` — the ONE write gateway of local/config/credentials.yml
   # (Nabu::Credentials; the local/config write-through law). Gated
-  # upstreams (the TITUS members area: HTTP Basic auth, a password that
+  # upstreams (the TITUS authenticated area: HTTP Basic auth, a password that
   # rotates with emailed notice) read their stored credential through the
   # seam at sync time. Secrets never echo, never print, never enter shell
   # history; `list` shows names and ages only, and there is deliberately

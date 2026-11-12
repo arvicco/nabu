@@ -234,7 +234,7 @@ class FocusTest < Minitest::Test
     assert_match(/registry drift/, line)
   end
 
-  # P44-r3b: an AXIS enables its PUBLIC members only — a blocked (grant-gated)
+  # P44-r3b: an AXIS enables only its PUBLIC members — a blocked (grant-gated)
   # member never joins the enabled set implicitly; a blocked source named BY
   # SLUG does.
   def test_axis_expansion_excludes_blocked_members_but_a_named_slug_includes

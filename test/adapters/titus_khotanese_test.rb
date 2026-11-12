@@ -10,7 +10,7 @@ require "fileutils"
 # (khotsNNN.htm, khotNNNN.htm from page 1000), one passage per `<!Level 5>`
 # Line (the manuscript line; in the Book of Zambasta the verse).
 #
-# The fixture bytes are grant-gated (Gippert, by email 2026-10-06: one
+# The fixture bytes are grant-gated (the license terms: one
 # retrieval, local personal research only, NO redistribution), so they live
 # under the gitignored local/fixtures/titus-khotanese/ and every data-bearing
 # case SKIPs when absent. Ground truth (retrieved 2026-10-10, see that dir's
@@ -64,7 +64,8 @@ class TitusKhotaneseTest < Minitest::Test
     assert_equal SLUG, manifest.id
     assert_equal "titus_khotanese", manifest.parser_family
     assert_equal "nc", manifest.license_class
-    assert_match(/2026-10-06/, manifest.license, "the grant date is recorded")
+    refute_match(/\b20\d\d-\d\d-\d\d\b|by e-?mail|personal(?:ly)? grant/i, manifest.license,
+                 "terms + credit only — never the grant's date, channel or arrangement")
     assert_match(/no redistribution/i, manifest.license)
     %w[TITUS Gippert Emmerick Kumamoto Bailey].each do |name|
       assert_includes manifest.credit, name, "the display duty names #{name}"
@@ -350,8 +351,7 @@ class TitusKhotaneseTest < Minitest::Test
     assert_equal "manual", entry.sync_policy
     assert_predicate entry, :grant_required?
     assert_predicate entry, :blocked?
-    assert_equal "2026-10-06", entry.grant.date
-    assert_match(/Gippert/, entry.grant.grantor)
+    assert_match(/Contact TITUS .* for a license grant/, entry.grant.request_hint)
     assert_match(/one retrieval/i, entry.grant.terms)
     assert_match(/no redistribution/i, entry.grant.terms)
     assert_equal %w[etym iranian buddhist], entry.axes
@@ -363,7 +363,7 @@ class TitusKhotaneseTest < Minitest::Test
   def require_fixtures!
     return if Nabu::TestSupport.local_fixtures?(SLUG)
 
-    skip "#{SLUG} local fixtures absent (personal grant forbids redistribution — " \
+    skip "#{SLUG} local fixtures absent (the license forbids redistribution — " \
          "bytes live in local/fixtures/, never in git)"
   end
 end
