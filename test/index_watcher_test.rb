@@ -86,6 +86,37 @@ class IndexWatcherTest < Minitest::Test
            "one uncovered scope poisons the whole estimate"
   end
 
+  def test_evidence_coverage_is_stage_grained_because_killed_runs_flush_partial_history
+    ledger = Sequel.sqlite
+    ledger.create_table(:stage_timings) do
+      primary_key :id
+      String :kind, null: false
+      String :scope, null: false
+      String :stage, null: false
+      Float :seconds, null: false
+      Integer :rows
+      Time :finished_at, null: false
+    end
+    # The killed first sync's residue: fetch and load flushed, the index
+    # stage (the one the kill endangers) never did.
+    ledger[:stage_timings].insert(kind: "sync", scope: "pap", stage: "fetch", seconds: 59.0,
+                                  finished_at: Time.now)
+    ledger[:stage_timings].insert(kind: "sync", scope: "pap", stage: "load", seconds: 589.0,
+                                  finished_at: Time.now)
+
+    assert Watcher.evidence_covers?(ledger, kind: "sync", scopes: %w[pap corpus]),
+           "scope-level coverage exists"
+    refute Watcher.evidence_covers?(ledger, kind: "sync", scopes: %w[pap corpus],
+                                            stages: Watcher::REFRESH_STAGES),
+           "but the index stages have no history — the estimate omits the dominant cost, no kill"
+
+    ledger[:stage_timings].insert(kind: "sync", scope: "pap", stage: "index_slice", seconds: 900.0,
+                                  finished_at: Time.now)
+    assert Watcher.evidence_covers?(ledger, kind: "sync", scopes: %w[pap corpus],
+                                            stages: Watcher::REFRESH_STAGES),
+           "a completed index stage makes the history honest evidence"
+  end
+
   # -- deadline arithmetic --------------------------------------------------
 
   def test_the_deadline_prices_estimate_uncertainty_at_two_and_a_half_times

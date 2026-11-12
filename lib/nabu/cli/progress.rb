@@ -109,7 +109,8 @@ module Nabu
         return [nil, false] if ledger.nil?
 
         [Nabu::IndexWatcher.ledger_estimate(ledger, kind: kind, scopes: scopes, stages: stages),
-         Nabu::IndexWatcher.evidence_covers?(ledger, kind: kind, scopes: scopes)]
+         Nabu::IndexWatcher.evidence_covers?(ledger, kind: kind, scopes: scopes,
+                                                     stages: Nabu::IndexWatcher::REFRESH_STAGES)]
       ensure
         ledger&.disconnect
       end

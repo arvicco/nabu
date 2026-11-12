@@ -192,7 +192,8 @@ module Nabu
         started = Process.clock_gettime(Process::CLOCK_MONOTONIC)
         estimate = Nabu::IndexWatcher.ledger_estimate(ledger, kind: "sync", scopes: [slug, "corpus"],
                                                               stages: Nabu::IndexWatcher::REFRESH_STAGES)
-        covered = Nabu::IndexWatcher.evidence_covers?(ledger, kind: "sync", scopes: [slug, "corpus"])
+        covered = Nabu::IndexWatcher.evidence_covers?(ledger, kind: "sync", scopes: [slug, "corpus"],
+                                                              stages: Nabu::IndexWatcher::REFRESH_STAGES)
         indexed = supervise(config, label: "index refresh #{slug}", estimate: estimate, slug: slug,
                                     arm_kill: covered) do |tee|
           runner.index_entry(slug, progress: tee.call(narrator.progress_reporter))
