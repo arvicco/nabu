@@ -110,6 +110,74 @@ module Ops
       assert_nil H.rebuild_hold(staged: ["lib/nabu/cli.rb"], processes: [], toplevel: "/r", cwd_of: ->(_) {})
     end
 
+    # -- (b2) exit-code discipline in staged shell content ----------------------
+
+    BASH = ->(path) { path.start_with?("script/runner") ? "#!/bin/bash" : "#!/usr/bin/env ruby" }
+
+    def test_a_bare_or_true_in_shell_is_caught_and_a_reasoned_one_passes
+      offenses = H.exit_code_offenses(diff_adding("tools/run.sh", "curl -s $url || true"), shebang_of: BASH)
+      assert_equal 1, offenses.size
+      assert_match(%r{tools/run\.sh:3: a swallowed failure}, offenses.first)
+      assert_empty H.exit_code_offenses(
+        diff_adding("tools/run.sh", "afplay bell.aiff || true  # sound is best-effort"), shebang_of: BASH
+      )
+    end
+
+    def test_a_gate_piped_into_tail_then_chained_is_caught_but_a_grep_conditional_passes
+      offenses = H.exit_code_offenses(
+        diff_adding(".github/workflows/x.yml", "      run: rake lint 2>&1 | tail -1 && git push"),
+        shebang_of: BASH
+      )
+      assert_equal 1, offenses.size
+      assert_match(/the pipe's exit/, offenses.first)
+      assert_empty H.exit_code_offenses(
+        diff_adding("tools/run.sh", "grep -q ready log && echo up"), shebang_of: BASH
+      )
+    end
+
+    def test_a_neutral_exit_echo_is_caught_and_a_verdict_worded_one_passes
+      offenses = H.exit_code_offenses(diff_adding("tools/run.sh", 'echo "ci-exit=$?"'), shebang_of: BASH)
+      assert_equal 1, offenses.size
+      assert_match(/a neutral exit/, offenses.first)
+      assert_empty H.exit_code_offenses(
+        diff_adding("tools/run.sh", 'echo "FAILED exit=$rc"', 'echo "ok exit=0"'), shebang_of: BASH
+      )
+    end
+
+    def test_scope_is_shell_content_only
+      assert_empty H.exit_code_offenses(diff_adding("lib/nabu/x.rb", "value || true"), shebang_of: BASH),
+                   "ruby is not shell — || true is an expression there"
+      assert_empty H.exit_code_offenses(diff_adding("script/helper", "x || true"), shebang_of: BASH),
+                   "an extensionless script with a ruby shebang is not shell"
+      assert_equal 1, H.exit_code_offenses(diff_adding("script/runner", "x || true"), shebang_of: BASH).size,
+                   "an extensionless script with a bash shebang is shell"
+      assert_empty H.exit_code_offenses(diff_adding("tools/run.sh", "# historical: x || true"), shebang_of: BASH),
+                   "comment lines carry no live pipeline"
+    end
+
+    def test_the_tracked_tree_itself_holds_the_exit_code_discipline
+      tracked = `git -C #{ROOT} ls-files -z`.split("\0")
+      shell = tracked.select do |path|
+        next true if path.match?(H::SHELL_FILE)
+        next false unless path.match?(H::SCRIPT_FILE)
+
+        full = File.join(ROOT, path)
+        File.file?(full) && begin
+          File.open(full, &:readline).match?(H::SHELL_SHEBANG)
+        rescue EOFError
+          false
+        end
+      end
+      refute_empty shell, "the scan must see the repo's shell files (workflows at least)"
+      offenses = shell.flat_map do |path|
+        File.foreach(File.join(ROOT, path)).with_index(1).filter_map do |line, line_no|
+          reason = H.shell_exit_code_offense(line.chomp)
+          "#{path}:#{line_no}: #{reason}" if reason
+        end
+      end
+      assert_empty offenses, "tracked shell content must hold the discipline the pre-commit hook enforces"
+    end
+
     # -- (c) commit-message refusals ---------------------------------------------
 
     # Id-shape fragments, joined at runtime (see the class comment).
