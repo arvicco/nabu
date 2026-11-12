@@ -28,12 +28,13 @@ trimmed but structurally intact.
 |---|---|---|
 | edition file `data/<author>/<work>/<urn>.xml` (incl. `data/spurious-and-dubia/`) | 6,626 | **the document** |
 | — of which: no `refsDecl`/`citeStructure` declared at all | 331 | skipped by rule (no citation tree) |
+| — of which: version urn also minted by cllg-sc (`SC_OVERLAP`) | 4 | skipped by rule (deferred to the SC record — the adapter constant carries the census) |
 | per-author `metadata.xml` collection | 1,839 | catalog record — read for urns/titles, structure, never a document |
 | root `cllg-freed.xml` | 1 | the catalog root listing every `metadata.xml` |
 
 ## Files
 
-The catalog: `cllg-freed.xml` (trimmed to the seven fixture records) and
+The catalog: `cllg-freed.xml` (trimmed to the eight fixture records) and
 `data/<author>/metadata.xml` for each fixture author (trimmed to the
 fixture work; the `spurious-and-dubia/cllg-spuria0001` record keeps its
 author-level `isSpuriaOf` extension).
@@ -47,3 +48,4 @@ author-level `isSpuriaOf` extension).
 | `tlg2738/tlg002/tlg2738.tlg002.cllg-grc1.xml` | Anonymous chronicle (de Boor) — the `pb[@ed='Boor']` stream alone is the citation, across `head`/`p`/`div type="subsection"`; pages 218–220 (page 220 cut after its first line) |
 | `tlg1514/tlg002/tlg1514.tlg002.cllg-grc1.xml` | Mnaseas, fragments (whole file) — `div[@type='fragment']` with @n like `25 bis a`; `bibl type="fragment-source"`, inline `bibl`, `note`, and the Leiden sigla `supplied`/`surplus`/`del`/`gap`/`unclear`/`space` |
 | `tlg0545/tlg005/tlg0545.tlg005.cllg-grc1.xml` | Aelian (whole file) — one of the 331 files declaring NO citation tree (the rejected grain) |
+| `tlg2035/tlg043/tlg2035.tlg043.cllg-grc1.xml` | Athanasius, *Epistulae ad Serapionem* (praefatio chapter kept) — one of the 4 `SC_OVERLAP` editions whose version urn cllg-sc also mints (the second rejected grain: deferred to the SC record) |

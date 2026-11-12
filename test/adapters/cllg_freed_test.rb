@@ -21,6 +21,7 @@ class CllgFreedTest < Minitest::Test
   AESCHYLUS = "urn:cts:greekLit:tlg0085.tlg011.cllg-grc1"
   PSEUDO_CHRYSOSTOM = "urn:cts:greekLit:tlg2062.tlg473.cllg-grc1"
   AELIAN = "urn:cts:greekLit:tlg0545.tlg005.cllg-grc1"
+  ATHANASIUS_SERAPION = "urn:cts:greekLit:tlg2035.tlg043.cllg-grc1"
   CITED = [ILIAD, REPUBLIC, CHRONICLE, MNASEAS, AESCHYLUS, PSEUDO_CHRYSOSTOM].freeze
 
   def conformance_adapter
@@ -73,9 +74,33 @@ class CllgFreedTest < Minitest::Test
     refute refs.key?(AELIAN)
     skips = adapter.discovery_skips(FIXTURES)
     assert_predicate skips, :clean?
-    assert_equal 1, skips.skipped_by_rule
+    assert_equal 2, skips.skipped_by_rule, "1 uncited + 1 SC-overlap specimen"
     assert_match(%r{1 edition file declaring no citeStructure.*data/tlg0545/tlg005/tlg0545\.tlg005\.cllg-grc1\.xml},
                  skips.notes.join("\n"))
+  end
+
+  # The 4 class: an edition urn the CLLG Sources Chrétiennes corpus mints
+  # too (same cllg-grc1 version id over a different text state). Freed
+  # defers by rule — deterministically, whatever the sync or rebuild order —
+  # so the catalog always holds the SC record and never flips winners.
+  def test_an_edition_the_sc_corpus_also_mints_defers_to_sc_by_rule
+    refute refs.key?(ATHANASIUS_SERAPION), "the SC-overlap specimen must not be discovered"
+    skips = adapter.discovery_skips(FIXTURES)
+    assert_predicate skips, :clean?
+    assert_match(/1 edition also served by cllg-sc under the same version urn.*tlg2035\.tlg043\.cllg-grc1/,
+                 skips.notes.join("\n"))
+  end
+
+  # The overlap is a closed census fact (full urn intersection of the two
+  # repos, 2026-11-12): exactly these four, pinned so a registry drift on
+  # either side surfaces as a test failure, not a load-order surprise.
+  def test_the_sc_overlap_list_is_the_censused_intersection
+    assert_equal %w[
+      urn:cts:greekLit:tlg2017.tlg042.cllg-grc1
+      urn:cts:greekLit:tlg2017.tlg079.cllg-grc1
+      urn:cts:greekLit:tlg2035.tlg001.cllg-grc1
+      urn:cts:greekLit:tlg2035.tlg043.cllg-grc1
+    ].sort, Nabu::Adapters::CllgFreed::SC_OVERLAP.sort
   end
 
   # -- parse --------------------------------------------------------------------
