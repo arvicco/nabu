@@ -290,11 +290,22 @@ sources:
       "Apol.": theology/apologetics              # 9
       "Gnost.": theology                         # 2 — Valentinus, Ptolemaeus
       "Epist.": letter                           # 6 — epistolographers
-    # -- unmapped by design (counted in `nabu kind census --unmapped cllg-freed`): Phil. 250
-    #    (no philosophy head is ruled), Scr. Eccl. 62 (the ecclesiastical writer writes every
-    #    genre), Rhet. 61 and Soph./Sophista 46 (rhetorical handbooks beside declamations —
-    #    forkful between scholarly and oratory), Geogr. 13, Biogr. 11, Perieg. 9, Paradox. 9,
-    #    Philol. 6, Polyhist. 3, Doxogr. 2, Didac. 1, Scr. Rerum Nat. 1.
+      # -- the 2026-11-13 ruling: the philosophy head minted, two folds beside it
+      "Phil.": philosophy                        # 250 — Plato's tradition, the commentators, the
+      #                                            treatise writers: the head minted for them
+      "Doxogr.": philosophy/doxography           # 2 — the reporters of the schools' opinions
+      "Scr. Eccl.": theology                     # 62 — the ecclesiastical writer IS the patristic
+      #                                            theology shelf; TLG marks the genre-spanning
+      #                                            church authors with it, and their argued prose
+      #                                            is doctrine (same-day fold with the ruling)
+      "Rhet.": oratory                           # 61 — the rhetors taught and practiced oratory;
+      #                                            handbooks beside declamations, one practice
+      "Soph.": oratory                           # 46 with Sophista — the sophists: display oratory
+      #                                            and its teaching (the Second Sophistic's declaimers)
+      "Sophista": oratory                        # the unabbreviated Byzantine form
+    # -- unmapped by design (counted in `nabu kind census --unmapped cllg-freed`):
+    #    Geogr. 13, Biogr. 11, Perieg. 9, Paradox. 9, Philol. 6, Polyhist. 3,
+    #    Didac. 1, Scr. Rerum Nat. 1.
   blbooks:            # the BL catalogue title's form noun, cut to ONE head at parse time
     #                   (Adapters::BlbooksTitleGenre — the cgpg precedent: upstream carries no
     #                   genre field, the title IS the label; the main title's earliest form word
