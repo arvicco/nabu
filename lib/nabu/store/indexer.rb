@@ -122,8 +122,13 @@ module Nabu
       TRIGRAM_TABLE = :passages_trigram
       TRIGRAM_SCOPE_TABLE = :passages_trigram_scope
       # P93-3: the CJK bigram lane — a CONTENTLESS second lane
-      # over the cjk-flagged sources (sources.yml `cjk_index: true`,
-      # threaded in as +cjk_slugs+ — the fuzzy_index pattern). Each
+      # over the cjk-flagged sources (sources.yml `cjk_index: true`).
+      # REBUILD-CADENCE since the 2026-11-11 maintenance ruling: written
+      # ONLY by rebuild_cjk!/refresh_cjk_lane! on the rebuild paths — a
+      # sync or source refresh NEVER touches it (its in-place slice
+      # rewrites were the 2026-11 multi-hour stall class), so between
+      # rebuilds it serves the last rebuild's rows, at most one
+      # rebuild-cadence stale. Each
       # Han/kana run of the folded text indexes as its overlapping
       # character pairs plus a trailing unigram (CjkBigrams — the mint
       # AND the query grammar), so a mid-run substring matches as a
@@ -248,9 +253,45 @@ module Nabu
       # before crisis merge can ever trigger, and the index is left
       # write-WEDGED (even the merge command needs a segment allocation).
       # The first two cbeta runs died exactly there, deterministically, with
-      # half a terabyte of disk free. Insert-side automerge is the same
-      # amortized logarithmic cost every rebuild pays — it was never the
-      # pathology.
+      # half a terabyte of disk free.
+      #
+      # What was once written here — that insert-side automerge is the same
+      # amortized logarithmic cost every rebuild pays and was never the
+      # pathology — the two 2026-11-11 merge stalls FALSIFIED. Twice, a
+      # 3.77M-row ndl-kotenseki slice refresh ran its whole announced
+      # insert loop in ~10 min, then ground for hours (3h+, then ~9h)
+      # inside ONE sqlite3_step. The autopsy of the second (committed
+      # state read after the kill): the stall was NOT the main loop at all
+      # — every row and sidecar sha had committed — but the then-SILENT
+      # cjk slice rewrite that follows it, and the committed structure sat
+      # CALM the whole time (≤4 segments per level, both tables), so no
+      # between-statement structure read could have seen it coming. Both
+      # live stack samples agree on the grind itself: fts5IndexMergeLevel
+      # → fts5DataDelete — the engine, inside an ordinary row-insert's
+      # flush, continuing a merge whose input-segment cleanup walks a
+      # deleted data range across a 26 GB-class b-tree, I/O-bound, sized
+      # by the segments being consumed and not by the statement that
+      # happened to trigger it. Changing the engine's knobs is no answer
+      # (automerge=0 is the wedge above), and no statement-side budget can
+      # bound work the engine schedules on its own clock inside a flush.
+      # The defenses that remain OURS: the cjk lane left the write path
+      # entirely (the 2026-11-11 maintenance ruling — REBUILD-CADENCE:
+      # rebuilt whole as a linear append at rebuilds, zero inline
+      # tombstones; the 2 × 3.77M-statement slice rewrites where both
+      # grinds lived are gone by construction); every heavy stage
+      # announces and ticks (a grind is then a visible event in a named
+      # stage, caught by the run's watchdog — never a silent hang); the
+      # heal grain reconciles the main index instead of re-deriving
+      # (exact_heal_diff — million-row floods are rare arrival events, not
+      # routine heals); and the merge governor below keeps segment-count
+      # pressure paid down in bounded announced chunks between statements
+      # (GOVERNOR_CHECK_EVERY_BATCHES / GOVERNOR_LEVEL_LIMIT /
+      # FtsStructure::SEGMENT_WARN), so the flush-time heuristics find as
+      # little standing debt as we can arrange. Why the engine chose an
+      # hours-scale merge against a calm committed structure is OPEN — the
+      # rolled-back statement's in-flight structure is unobservable; the
+      # governor is a real backstop for the pressure it can see, not a
+      # proof against this grind class.
       #
       # Contentless shape only — a legacy contentful file keeps the old path
       # until its next full rebuild, like every other shape arrival.
@@ -280,6 +321,21 @@ module Nabu
       DEFAULT_MERGE_SETTINGS = { "deletemerge" => 10 }.freeze
       MERGE_CHUNK_PAGES = 2_000
 
+      # The merge governor's cadence (class note above): one structure
+      # read per this many batches. A read is one small-blob fetch (the
+      # shadow table's row 10) plus a varint decode — microseconds against
+      # the 2,000-row batch it rides between — while 25 batches (50k rows)
+      # is far too few for an insert flood to carry a level from the limit
+      # below to the engine's crisis line between two reads.
+      GOVERNOR_CHECK_EVERY_BATCHES = 25
+
+      # The crisis-distance invariant: no level of a governed table holds
+      # more than half of fts5's crisismerge (16) segments when our code
+      # can help it — the engine's to-completion crisis merge is never
+      # reached. The total-segment line is FtsStructure::SEGMENT_WARN
+      # (1200 against the hard cap of 2000), shared with the health gauges.
+      GOVERNOR_LEVEL_LIMIT = 8
+
       # == P111-1b — the transaction shape and the slice-pending marker
       #
       # MEASURED crash (2026-10-01, the first at-scale bulk run): the slice
@@ -302,6 +358,36 @@ module Nabu
       # at refresh start and finished at the end; SyncRunner's skip gate
       # defers to it, and a full rebuild clears it wholesale.
       SLICE_REFRESHES_TABLE = :slice_refreshes
+
+      # == The row-sha sidecar — what makes a heal exact
+      #
+      # The contentless index cannot say what it indexed (no column value
+      # reads back), so a crashed slice used to heal by rewriting the WHOLE
+      # slice: delete + reinsert of millions of rows for a crash that left
+      # a few thousand behind — tombstones, segments and WAL churn on the
+      # multi-GB main index, proportional to the slice rather than to the
+      # damage. fts_row_shas records, per indexed
+      # rowid (= the catalog passage id), its source and the FIRST 8 BYTES
+      # of the catalog content_sha256 the row was indexed from. Eight bytes
+      # is the grain because the question is per-row change detection
+      # within one passage's own history, not global identity: a 64-bit
+      # prefix collision between a row's old and new content is a 2^-64
+      # event per revision.
+      #
+      # The consistency invariant: a row's sidecar sha is REMOVED before
+      # any of its fts/lemma rows go (the delete loops run sidecar first)
+      # and UPSERTED as the last statement of each insert batch (after the
+      # batch's fts and lemma rows). So a rowid whose sidecar sha matches
+      # the catalog is fully indexed at the fts+lemma grain; a crash
+      # between any two statements leaves the sidecar BEHIND the index,
+      # never ahead of it, and the heal's diff counts that row as drift and
+      # re-does it. refresh_source! heals by that diff when the sidecar
+      # holds rows for the source (exact_heal_diff); a fulltext predating
+      # the sidecar keeps the full-slice heal, and the table arrives at the
+      # next full rebuild or full-slice rewrite — the standard
+      # shape-arrival contract. Contentless shape only (a legacy rowid is
+      # not the passage id). Never a readiness prerequisite.
+      ROW_SHAS_TABLE = :fts_row_shas
 
       # FTS5 DDL (see class note). text_normalized carries the folded search
       # form; urn + passage_id ride along UNINDEXED so a hit joins back to the
@@ -470,7 +556,9 @@ module Nabu
         # P111-1b: a full rebuild refreshes every slice by construction —
         # nothing stays pending (absent table = nothing pending).
         fulltext.drop_table?(SLICE_REFRESHES_TABLE)
+        fulltext.drop_table?(ROW_SHAS_TABLE)
         fulltext.run(CREATE_TABLE)
+        create_row_shas_table(fulltext, indexed: false)
         create_lemma_table(fulltext)
         create_char_postings_table(fulltext)
         tiers = source_tiers(catalog, lemma_tiers || {})
@@ -488,6 +576,7 @@ module Nabu
           # per-row inserts. Still inside the fts_lemma stage and BEFORE the
           # reflex pass, which reads passage_lemmas by these very indexes.
           create_lemma_indexes(fulltext)
+          index_row_shas(fulltext) # the sidecar's source_id B-tree, the same deferred pass
           # Owner-ruled 2026-08-29: the silver projection LEFT the rebuild
           # path — a full rebuild never pays the whole-shelf replay again
           # (the 2026-08-29 profile: 99m39s). The shelf is announced
@@ -510,7 +599,7 @@ module Nabu
         # P93-3: the CJK bigram lane — its own scoped streaming pass, the
         # trigram precedent exactly.
         timed(profile, :cjk) do
-          rebuild_cjk!(catalog: catalog, fulltext: fulltext, cjk_slugs: Array(cjk_slugs))
+          rebuild_cjk!(catalog: catalog, fulltext: fulltext, cjk_slugs: Array(cjk_slugs), progress: progress)
         end
         # P72-1: the coverage index — its own streaming pass (the trigram
         # precedent), AFTER the postings exist (the rarity ranks read them).
@@ -643,12 +732,24 @@ module Nabu
         # id is legitimately unindexed on entry.)
         healing = slice_pending?(fulltext, slug)
         use_delta = !delta.nil? && !delta.overflowed? && !healing
+        # The exact heal (ROW_SHAS_TABLE note): with the sidecar on hand the
+        # fts+lemma grain re-does exactly the drifted rows. EVERY other lane
+        # keeps its whole-slice heal on +slice_ids+: the cjk and trigram
+        # lanes carry no sidecar (the asymmetry is deliberate — the main
+        # index's multi-GB churn is what the sidecar kills; the cjk lane is
+        # ~2.3 GB and governed), and the coverage/annotation lanes write
+        # after the fts+lemma batches, so a current sidecar sha says
+        # nothing about them.
+        heal = (exact_heal_diff(catalog, fulltext, source_id) if healing)
         ids, urns =
           if use_delta
             [delta.changed_ids, delta.changed_urns.to_a]
+          elsif heal
+            [heal.changed_ids, heal.changed_urns]
           else
             source_passage_keys(catalog, source_id)
           end
+        slice_ids = heal ? heal.slice_ids : ids
         count = 0
         lemmas_changed = false
         # P77-r16d (owner ruling 2026-08-18, applied to the WHOLE sync
@@ -676,25 +777,37 @@ module Nabu
           progress&.stage("index delta: #{slug} — #{delta.upserted_ids.size} changed / " \
                           "#{delta.removed_ids.size} removed rows")
         end
+        if heal
+          progress&.stage("index heal: #{slug} — exact diff against the row-sha sidecar: " \
+                          "#{heal.upserted_ids.size} rows to re-derive / #{ids.size} to clear")
+        end
+        # A full-slice rewrite is where the sidecar arrives on a fulltext
+        # predating it (ROW_SHAS_TABLE note) — it populates the whole slice.
+        create_row_shas_table(fulltext) if !use_delta && !heal && fts_contentless?(fulltext)
         mark_slice_pending!(fulltext, slug)
         with_bulk_write_mode(fulltext, governed) do
           timed_sync_stage(ledger, slug, "index_slice",
                            "index slice: #{slug} (fts + lemma rows)", progress) do
-            slice_write_unit(fulltext, bulk: bulk) do
+            slice_write_unit(fulltext, bulk: bulk, progress: progress) do
               # P42-1: snapshot this source's lemma-frequency contribution BEFORE
               # the rewrite, re-snapshot AFTER, and apply the delta to the corpus
               # freq table (same transaction). incremental_ready? guarantees the
               # table exists here; both snapshots are passage-keyed and B-tree bounded.
               before = LemmaFrequencies.snapshot(fulltext, ids: ids, urns: urns)
+              # FIRST destructive write: the doomed rows' sidecar shas
+              # (ROW_SHAS_TABLE invariant — removed before their fts/lemma rows).
+              delete_row_shas(fulltext, ids)
               deleted = delete_source_lemma_rows(fulltext, ids: ids, urns: urns)
               if fts_contentless?(fulltext)
-                delete_fts_rows_by_rowid(fulltext, TABLE, ids)
+                delete_fts_rows_by_rowid(fulltext, TABLE, ids, progress: progress)
               else
                 delete_fts_rows(fulltext, TABLE, ids)
               end
               insert_scope =
                 if use_delta
                   ids_scoped(live_passages(catalog), delta.upserted_ids)
+                elsif heal
+                  ids_scoped(live_passages(catalog), heal.upserted_ids)
                 else
                   live_passages(catalog).where(Sequel[:documents][:source_id] => source_id)
                 end
@@ -710,13 +823,24 @@ module Nabu
               # ARM-GATE (owner-ruled 2026-08-29): only when the owner has projected the shelf
               # (any silver row standing) — an unarmed index stays
               # silver-free through syncs.
+              # An exact heal re-applies over the WHOLE slice's urns: the
+              # crashed run's silver pass (after its insert loop) may never
+              # have run, and the apply is insert-if-absent.
               if lemma_shelf && silver_armed?(fulltext)
                 silver = SilverLemmaIndexer.apply!(catalog: catalog, fulltext: fulltext, shelf: lemma_shelf,
-                                                   urns: urns.to_set,
+                                                   urns: (heal ? heal.slice_urns : urns).to_set,
                                                    dictionary_filter_slugs: Array(lemma_filter_slugs))
                 inserted += silver.rows_inserted
               end
               lemmas_changed = deleted.positive? || inserted.positive?
+              # The exact heal moves only drifted rows, but the crashed run
+              # may have rewritten CURRENT rows' lemma rows without ever
+              # reaching its frequency delta or the reflex closure (both run
+              # after the insert loop) — the aggregates are not row-grained,
+              # so the sidecar cannot vouch for them. A lemma-bearing slice
+              # therefore re-censuses absolutely and re-closes, exactly as
+              # the full-slice heal does.
+              lemmas_changed ||= heal && source_lemma_rows?(fulltext, ids: heal.slice_ids, urns: heal.slice_urns)
               if healing && lemmas_changed
                 # The crashed run's before-snapshot is lost — the delta would
                 # bake its drift in; re-census absolutely instead (rare path).
@@ -725,15 +849,14 @@ module Nabu
                 after = LemmaFrequencies.snapshot(fulltext, ids: ids, urns: urns)
                 LemmaFrequencies.apply_delta(fulltext, before: before, after: after)
               end
+              # The cjk lane is REBUILD-CADENCE (2026-11-11 ruling): no
+              # slice or delta write here, ever — +cjk_slugs+ feeds only
+              # the full-rebuild fallback above; the lane catches up at
+              # the next rebuild (refresh_cjk_lane!).
               if use_delta
                 refresh_trigram_delta(catalog, fulltext, slug, Array(fuzzy_slugs), delta)
-                refresh_cjk_delta(catalog, fulltext, slug, Array(cjk_slugs), delta)
               else
-                refresh_trigram_slice(catalog, fulltext, slug, Array(fuzzy_slugs), ids)
-                # P93-3: the CJK lane's slice — same drift-honest contract as
-                # the trigram slice; a fulltext file predating the lane skips
-                # here and bootstraps below (flagged sources only).
-                refresh_cjk_slice(catalog, fulltext, slug, Array(cjk_slugs), ids)
+                refresh_trigram_slice(catalog, fulltext, slug, Array(fuzzy_slugs), slice_ids)
               end
               # P65: swap this source's char-postings slice; a pre-P65 fulltext
               # file (no table) gets the whole postings build below instead —
@@ -744,7 +867,7 @@ module Nabu
               # read-only).
               if fulltext.table_exists?(CHAR_POSTINGS_TABLE)
                 fulltext[CHAR_POSTINGS_TABLE].where(source_id: source_id).delete
-                chars = source_char_postings(catalog, source_id) if use_delta
+                chars = source_char_postings(catalog, source_id) if use_delta || heal
                 write_char_postings(fulltext, chars)
               end
               # P72-1: swap this source's coverage-index slice too (ranks from
@@ -805,15 +928,6 @@ module Nabu
             rebuild_sign_coverage!(catalog: catalog, fulltext: fulltext, sign_list: sign_list,
                                    progress: progress)
           end
-          # P93-3 bootstrap: a fulltext file predating the CJK lane gains
-          # it when a FLAGGED source syncs (the sign-coverage gate: the
-          # CJK corpora pay their own indexing cost; an unrelated source's
-          # sync is never ambushed). Elsewhere it arrives at the next
-          # full rebuild.
-          if Array(cjk_slugs).include?(slug) && !fulltext.table_exists?(CJK_TABLE)
-            progress&.stage("cjk bigram lane: building (first flagged sync — scoped sources only)")
-            rebuild_cjk!(catalog: catalog, fulltext: fulltext, cjk_slugs: Array(cjk_slugs))
-          end
           refresh_alignment(catalog, fulltext, alignments, source_id)
         end
         if lemmas_changed || reflexes_changed
@@ -848,11 +962,11 @@ module Nabu
         mark_slice_finished!(fulltext, slug, live_rows: live_rows, max_passage_id: max_id)
         # The bulk pass's final reclaim — AFTER the last write, so the WAL
         # file ends the refresh truncated, not holding the postings swaps.
-        checkpoint_wal!(fulltext) if bulk
+        checkpoint_wal!(fulltext, progress: progress) if bulk
         # The slice rewrite's insert count IS the source's live total; the
         # delta grain inserts only the changed rows, so the honest
         # "indexed N" is counted from the catalog instead.
-        use_delta ? live_rows : count
+        use_delta || heal ? live_rows : count
       end
 
       # P78-r3: announce with the last sync's estimate, run, record the
@@ -894,10 +1008,32 @@ module Nabu
         count
       end
 
+      # REBUILD-CADENCE (the 2026-11-11 maintenance ruling): the
+      # rebuild-side lane refresh — with rebuild!'s own corpus stage, the
+      # ONLY cjk writers. Rebuilds the lane WHOLE (drop + linear append:
+      # no tombstones, no merge debt against a standing structure) when
+      # the built scope drifted from the config flags, a flagged source
+      # replayed, or the lane is missing; returns nil untouched otherwise.
+      # The incremental rebuild calls this after its replays; syncs and
+      # refreshes never do.
+      def refresh_cjk_lane!(catalog:, fulltext:, cjk_slugs:, replayed_slugs:, progress: nil)
+        flags = cjk_slugs.sort
+        scope = fulltext.table_exists?(CJK_SCOPE_TABLE) &&
+                fulltext[CJK_SCOPE_TABLE].select_map(:slug).sort
+        return nil if scope == flags && !replayed_slugs.intersect?(flags)
+
+        rebuild_cjk!(catalog: catalog, fulltext: fulltext, cjk_slugs: cjk_slugs, progress: progress)
+      end
+
       # Drop and rebuild the CJK bigram lane (CJK_TABLE note) over the live
-      # passages of the +cjk_slugs+ sources, and record that scope. Returns
+      # passages of the +cjk_slugs+ sources, and record that scope — the
+      # announced, batch-ticked linear append (insert_cjk_batches). Returns
       # the number of passages indexed (runless passages contribute none).
-      def rebuild_cjk!(catalog:, fulltext:, cjk_slugs:)
+      def rebuild_cjk!(catalog:, fulltext:, cjk_slugs:, progress: nil)
+        # A flagless build is an instant table mint — announcing it would
+        # only pollute the rebuild's stage record.
+        progress&.stage("cjk bigram lane: rebuilding over #{cjk_slugs.size} flagged sources") if
+          cjk_slugs.any?
         fulltext.drop_table?(CJK_TABLE)
         fulltext.drop_table?(CJK_SCOPE_TABLE)
         fulltext.run(CREATE_CJK_TABLE)
@@ -908,11 +1044,7 @@ module Nabu
         count = 0
         fulltext.transaction do
           fulltext[CJK_SCOPE_TABLE].multi_insert(cjk_slugs.map { |slug| { slug: slug } })
-          cjk_passages(catalog, cjk_slugs).each_slice(BATCH_SIZE) do |batch|
-            rows = batch.filter_map { |row| cjk_row(row) }
-            fulltext[CJK_TABLE].multi_insert(rows)
-            count += rows.size
-          end
+          count = insert_cjk_batches(fulltext, cjk_passages(catalog, cjk_slugs), progress: progress)
         end
         count
       end
@@ -1032,18 +1164,31 @@ module Nabu
       # slice is one atomic swap; a bulk slice autocommits per statement
       # batch (auto-checkpoint keeps the WAL bounded between batches) and
       # TRUNCATE-checkpoints when the pass completes.
-      def slice_write_unit(fulltext, bulk:, &)
+      def slice_write_unit(fulltext, bulk:, progress: nil, &)
         return fulltext.transaction(&) unless bulk
 
         yield
-        checkpoint_wal!(fulltext)
+        checkpoint_wal!(fulltext, progress: progress)
       end
 
       # PRAGMA has no Sequel-dataset form — rides this file's documented
-      # raw-SQL exception (DDL/maintenance statements only). Harmless no-op
-      # on an in-memory db.
-      def checkpoint_wal!(fulltext)
-        fulltext.run("PRAGMA wal_checkpoint(TRUNCATE)")
+      # raw-SQL exception (DDL/maintenance statements only). Harmless on an
+      # in-memory db (busy 0, log/checkpointed -1).
+      #
+      # Returns the engine's answer row as { busy:, log:, checkpointed: }
+      # and announces through +progress+ when busy is nonzero: TRUNCATE
+      # degrades SILENTLY against a reader pinning an old snapshot (a
+      # long-lived `nabu mcp`, a desk query mid-scan) — the frames past
+      # that reader's mark stay in the WAL, the file never shrinks, and
+      # the run reads as "checkpointed" unless somebody looks at the row.
+      def checkpoint_wal!(fulltext, progress: nil)
+        row = fulltext.fetch("PRAGMA wal_checkpoint(TRUNCATE)").first || {}
+        result = { busy: row[:busy].to_i, log: row[:log].to_i, checkpointed: row[:checkpointed].to_i }
+        if result[:busy].positive?
+          remaining = [result[:log] - result[:checkpointed], 0].max
+          progress&.stage("wal checkpoint refused (reader pinning) — #{remaining} frames remain")
+        end
+        result
       end
 
       # Apply the deferred-merge settings around the block and ALWAYS
@@ -1087,21 +1232,139 @@ module Nabu
       def consolidate_merges!(fulltext, table, progress: nil)
         chunks = 0
         loop do
-          before = total_changes(fulltext)
-          fulltext[table].insert(table => "merge", :rank => MERGE_CHUNK_PAGES)
+          worked = merge_chunk!(fulltext, table) >= MERGE_NOOP_LINE
           chunks += 1
           if (chunks % 25).zero?
             progress&.stage("fts merge: #{table} — chunk #{chunks}")
-            checkpoint_wal!(fulltext) # merges rewrite pages too — keep the WAL bounded
+            checkpoint_wal!(fulltext, progress: progress) # merges rewrite pages too — keep the WAL bounded
           end
-          break if total_changes(fulltext) - before < 2
+          break unless worked
         end
-        checkpoint_wal!(fulltext)
+        checkpoint_wal!(fulltext, progress: progress)
         chunks
       end
 
+      # ONE bounded positive merge step — its own statement (autocommit
+      # outside a transaction), at most MERGE_CHUNK_PAGES pages of work.
+      # Returns the total_changes delta the step caused: the probe counts
+      # the command row itself (1) plus every page the merge wrote, so
+      # below MERGE_NOOP_LINE is the documented no-op completion signal.
+      # Positive merges run with deletemerge=0 active — the deferral
+      # governs only the engine's own delete-triggered merges.
+      def merge_chunk!(fulltext, table)
+        before = total_changes(fulltext)
+        fulltext[table].insert(table => "merge", :rank => MERGE_CHUNK_PAGES)
+        total_changes(fulltext) - before
+      end
+      MERGE_NOOP_LINE = 2
+
       def total_changes(fulltext)
         fulltext.synchronize(&:total_changes)
+      end
+
+      # -- the merge governor (the 2026-11-11 crisis-merge stall) ------------
+
+      # The governor for +table+'s batch loop, or nil when the table is not
+      # governed (governed_fts_tables: the contentless shape only — a
+      # legacy contentful file keeps the old untouched path, like every
+      # other recipe of this family).
+      def fts_governor(fulltext, table, progress: nil)
+        return nil unless governed_fts_tables(fulltext).include?(table)
+
+        FtsGovernor.new(fulltext: fulltext, table: table, progress: progress)
+      end
+
+      # The governor's decision over a decoded FtsStructure::Structure:
+      # { level:, segments: } for the FIRST level past +level_limit+,
+      # else { total: } when the total passes +total_limit+, else nil.
+      # AT a limit is fine — only past it fires. A nil structure (no
+      # record yet) is no pressure.
+      def governor_pressure(structure, level_limit:, total_limit:)
+        return nil if structure.nil?
+
+        structure.levels.each_with_index do |level, index|
+          count = level[:segments].size
+          return { level: index, segments: count } if count > level_limit
+        end
+        return { total: structure.total_segments } if structure.total_segments > total_limit
+
+        nil
+      end
+
+      # Holds the crisis-distance invariant over one governed batch loop
+      # (class note: the governor). The loop calls #tick! after every
+      # batch; every +cadence+ ticks the live structure is read, and
+      # pressure is relieved in bounded merge chunks right there, between
+      # batches — never inside one. Limits are parameters (the constants
+      # are the defaults) so the decision is testable at small scale.
+      # Inside a wrapping transaction (rebuild!'s streaming pass, the small
+      # slice's atomic swap) the chunks still run — they keep the structure
+      # bounded either way — but the checkpoint is skipped: a checkpoint
+      # cannot reclaim an open transaction's frames.
+      class FtsGovernor
+        attr_reader :table, :batches, :checks, :relief_chunks
+
+        def initialize(fulltext:, table:, progress: nil, cadence: GOVERNOR_CHECK_EVERY_BATCHES,
+                       level_limit: GOVERNOR_LEVEL_LIMIT, total_limit: FtsStructure::SEGMENT_WARN)
+          @fulltext = fulltext
+          @table = table
+          @progress = progress
+          @cadence = cadence
+          @level_limit = level_limit
+          @total_limit = total_limit
+          @batches = 0
+          @checks = 0
+          @relief_chunks = 0
+        end
+
+        def tick!
+          @batches += 1
+          check! if (@batches % @cadence).zero?
+        end
+
+        # Read the structure; relieve any pressure. Returns the chunks run.
+        def check!
+          @checks += 1
+          found = pressure
+          found ? relieve!(found) : 0
+        end
+
+        # Bounded chunks until both limits hold again or the engine reports
+        # a no-op (nothing left it will merge at this grain), then a WAL
+        # checkpoint when no transaction holds the frames. The loop TICKS
+        # and checkpoints every 25 chunks (the consolidate_merges! cadence):
+        # the first relief against a debt-laden standing index can run
+        # thousands of chunks, and a long silent relief would be the very
+        # single-announcement opacity the governor exists to end.
+        def relieve!(found)
+          @progress&.stage("fts governor: #{@table} — #{describe(found)}, consolidating")
+          chunks = 0
+          loop do
+            chunks += 1
+            if (chunks % 25).zero?
+              @progress&.stage("fts governor: #{@table} — relief chunk #{chunks}")
+              Indexer.checkpoint_wal!(@fulltext, progress: @progress) unless @fulltext.in_transaction?
+            end
+            break if Indexer.merge_chunk!(@fulltext, @table) < MERGE_NOOP_LINE
+            break if pressure.nil?
+          end
+          @relief_chunks += chunks
+          Indexer.checkpoint_wal!(@fulltext, progress: @progress) unless @fulltext.in_transaction?
+          chunks
+        end
+
+        private
+
+        def pressure
+          Indexer.governor_pressure(FtsStructure.read(@fulltext, @table),
+                                    level_limit: @level_limit, total_limit: @total_limit)
+        end
+
+        def describe(found)
+          return "level #{found[:level]} at #{found[:segments]} segments" if found.key?(:level)
+
+          "#{found[:total]} segments total (line #{@total_limit})"
+        end
       end
 
       # -- refresh_source! internals (P26-5) ---------------------------------
@@ -1469,6 +1732,8 @@ module Nabu
         count = 0
         lemma_count = 0
         chars = Hash.new(0)
+        governor = fts_governor(fulltext, TABLE, progress: progress)
+        with_shas = contentless && fulltext.table_exists?(ROW_SHAS_TABLE)
         dataset.each_slice(BATCH_SIZE) do |batch|
           fulltext[TABLE].multi_insert(
             batch.map do |row|
@@ -1478,10 +1743,13 @@ module Nabu
           )
           rows = batch.flat_map { |row| lemma_rows(row, tiers: tiers, slugs: slugs, with_urn: with_urn) }
           fulltext[LEMMA_TABLE].multi_insert(rows)
+          # LAST statement of the batch — the ROW_SHAS_TABLE invariant.
+          write_row_shas(fulltext, batch) if with_shas
           batch.each { |row| accumulate_char_postings(chars, row) }
           count += batch.size
           lemma_count += rows.size
           progress&.load_tick(count, 0) if batch.size == BATCH_SIZE
+          governor&.tick!
         end
         [count, lemma_count, chars]
       end
@@ -1627,7 +1895,8 @@ module Nabu
           progress&.stage("stage re-derive: #{stage} (derivation version moved)")
           case stage
           when "char_postings" then rebuild_char_postings!(catalog: catalog, fulltext: fulltext)
-          when "cjk" then rebuild_cjk!(catalog: catalog, fulltext: fulltext, cjk_slugs: Array(cjk_slugs))
+          when "cjk"
+            rebuild_cjk!(catalog: catalog, fulltext: fulltext, cjk_slugs: Array(cjk_slugs), progress: progress)
           when "passage_chars" then rebuild_passage_chars!(catalog: catalog, fulltext: fulltext)
           when "sign_coverage"
             rebuild_sign_coverage!(catalog: catalog, fulltext: fulltext, sign_list: sign_list,
@@ -1992,14 +2261,168 @@ module Nabu
         [ids, urns]
       end
 
+      # -- the row-sha sidecar (ROW_SHAS_TABLE note) ---------------------------
+
+      # Bare at rebuild (+indexed: false+ — index_row_shas builds the
+      # source_id B-tree in one pass after the streaming insert, the lemma
+      # table's P36-2 trick); indexed at once when a full-slice rewrite
+      # brings it to an older file. Idempotent.
+      def create_row_shas_table(fulltext, indexed: true)
+        return if fulltext.table_exists?(ROW_SHAS_TABLE)
+
+        fulltext.create_table(ROW_SHAS_TABLE) do
+          Integer :rowid, primary_key: true # = passages.id, the FTS rowid convention
+          Integer :source_id, null: false
+          File :sha, null: false # the first 8 bytes of the catalog content_sha256
+        end
+        index_row_shas(fulltext) if indexed
+      end
+
+      def index_row_shas(fulltext)
+        fulltext.add_index(ROW_SHAS_TABLE, :source_id, if_not_exists: true)
+      end
+
+      # The sidecar grain: the catalog's hex sha → its first 8 bytes.
+      def row_sha(hex)
+        Sequel.blob([hex.to_s[0, 16]].pack("H*"))
+      end
+
+      # Upsert one insert batch's shas (the batch's LAST statement).
+      def write_row_shas(fulltext, batch)
+        fulltext[ROW_SHAS_TABLE].insert_conflict(:replace).multi_insert(
+          batch.map do |row|
+            { rowid: row.fetch(:passage_id), source_id: row.fetch(:source_id),
+              sha: row_sha(row.fetch(:content_sha256)) }
+          end
+        )
+      end
+
+      # Clear the doomed rows' shas — the FIRST destructive write of a
+      # slice/delta/heal pass. No-op on a fulltext without the sidecar.
+      def delete_row_shas(fulltext, ids)
+        return unless fulltext.table_exists?(ROW_SHAS_TABLE)
+
+        delete_rowid_slices(fulltext, ROW_SHAS_TABLE, ids)
+      end
+
+      # The exact heal's sets: +changed_ids+/+changed_urns+ — every row
+      # to clear from the fts+lemma grain; +upserted_ids+ — the live ones
+      # among them, to re-derive; +slice_ids+/+slice_urns+ — the source's
+      # whole key set, for the lanes that keep their whole-slice heal.
+      HealDiff = Data.define(:changed_ids, :changed_urns, :upserted_ids, :slice_ids, :slice_urns)
+
+      # Diff the catalog's live (id, sha8) set for +source_id+ against the
+      # sidecar's, or nil when the sidecar cannot answer (absent table,
+      # legacy shape, or no rows for this source — the full-slice heal).
+      # One ordered catalog pass merge-walks the sidecar slice, held as a
+      # sorted id array + one packed byte string (16 bytes a row, never a
+      # Hash of millions of strings). A row drifts when it is live but
+      # unrecorded or recorded under another sha, or recorded but no longer
+      # live. The one case the sidecar cannot see — a crashed run inserted a
+      # row that a LATER load withdrew before this heal, leaving it neither
+      # live nor recorded — is closed by probing the source's unrecorded
+      # non-live ids against the index itself (rowid lookups, reads only).
+      def exact_heal_diff(catalog, fulltext, source_id)
+        return nil unless fts_contentless?(fulltext) && fulltext.table_exists?(ROW_SHAS_TABLE)
+
+        recorded = fulltext[ROW_SHAS_TABLE].where(source_id: source_id).order(:rowid)
+        return nil if recorded.empty?
+
+        recorded_ids = []
+        recorded_shas = +"".b
+        recorded.select(:rowid, :sha).each do |row|
+          recorded_ids << row[:rowid]
+          recorded_shas << row[:sha].to_s.b
+        end
+        walk_heal_diff(catalog, fulltext, source_id, recorded_ids, recorded_shas)
+      end
+
+      def walk_heal_diff(catalog, fulltext, source_id, recorded_ids, recorded_shas)
+        changed = Set.new
+        changed_urns = []
+        upserted = Set.new
+        slice_ids = Set.new
+        slice_urns = []
+        unseen = [] # [id, urn] of non-live, unrecorded rows — probed below
+        cursor = 0
+        source_passage_states(catalog, source_id).each do |row|
+          id = row.fetch(:passage_id)
+          slice_ids << id
+          slice_urns << row.fetch(:urn)
+          while cursor < recorded_ids.size && recorded_ids[cursor] < id
+            changed << recorded_ids[cursor] # recorded, but no longer the source's row at all
+            cursor += 1
+          end
+          sha = nil
+          if cursor < recorded_ids.size && recorded_ids[cursor] == id
+            sha = recorded_shas.byteslice(cursor * 8, 8)
+            cursor += 1
+          end
+          live = !row.fetch(:passage_withdrawn) && !row.fetch(:document_withdrawn)
+          current = (row_sha(row.fetch(:content_sha256)).b if live)
+          next if current == sha && !current.nil?
+
+          if current.nil? && sha.nil?
+            unseen << [id, row.fetch(:urn)]
+            next
+          end
+          changed << id
+          changed_urns << row.fetch(:urn)
+          upserted << id if live
+        end
+        changed.merge(recorded_ids[cursor..])
+        indexed_unseen(fulltext, unseen).each do |id, urn|
+          changed << id
+          changed_urns << urn
+        end
+        HealDiff.new(changed_ids: changed, changed_urns: changed_urns, upserted_ids: upserted,
+                     slice_ids: slice_ids, slice_urns: slice_urns)
+      end
+
+      # Which of the [id, urn] pairs the index still holds (rowid lookups —
+      # the slice_behind? read, batched).
+      def indexed_unseen(fulltext, pairs)
+        pairs.each_slice(BATCH_SIZE).flat_map do |batch|
+          present = fulltext[TABLE].where(rowid: batch.map(&:first)).select_map(Sequel.lit("rowid")).to_set
+          batch.select { |pair| present.include?(pair.first) }
+        end
+      end
+
+      # Every passage of the source (withdrawn included — the
+      # source_passage_keys scope) with its liveness and sha, in id order.
+      def source_passage_states(catalog, source_id)
+        catalog[:passages]
+          .join(:documents, id: Sequel[:passages][:document_id])
+          .where(Sequel[:documents][:source_id] => source_id)
+          .order(Sequel[:passages][:id])
+          .select(Sequel[:passages][:id].as(:passage_id), Sequel[:passages][:urn],
+                  Sequel[:passages][:content_sha256],
+                  Sequel[:passages][:withdrawn].as(:passage_withdrawn),
+                  Sequel[:documents][:withdrawn].as(:document_withdrawn))
+      end
+
+      # Whether any of the slice's passages carries lemma rows — bounded
+      # passage-key IN probes, stopping at the first hit.
+      def source_lemma_rows?(fulltext, ids:, urns:)
+        key = lemma_passage_key(fulltext)
+        (key == :urn ? urns : ids).to_a.each_slice(BATCH_SIZE).any? do |batch|
+          !fulltext[LEMMA_TABLE].where(key => batch).empty?
+        end
+      end
+
       # The contentless shape's delete (P93-1): rowid IS the catalog
       # passage id, so the source's rows delete by key — no streaming scan
       # at all (the legacy path below pays a full-table pass per sync).
       # contentless_delete=1 makes these real deletions. Returns the
       # number of rows deleted.
-      def delete_fts_rows_by_rowid(fulltext, table, ids)
+      # Governed tables tick the merge governor per batch: contentless
+      # deletes write tombstones and flush segments like inserts do.
+      def delete_fts_rows_by_rowid(fulltext, table, ids, progress: nil)
+        governor = fts_governor(fulltext, table, progress: progress)
         ids.to_a.each_slice(BATCH_SIZE).sum do |batch|
-          fulltext[table].where(rowid: batch).delete
+          deleted = fulltext[table].where(rowid: batch).delete
+          governor&.tick!
+          deleted
         end
       end
 
@@ -2049,29 +2472,6 @@ module Nabu
         end
       end
 
-      # The CJK lane's slice (P93-3): the trigram slice contract — refresh
-      # when flagged, drop rows + scope row when de-flagged since the last
-      # build, hands-off otherwise. Deletes go by rowid (contentless — the
-      # ids ARE the rowids). A fulltext file without the lane skips
-      # (bootstrap is the flagged-sync gate in refresh_source!).
-      def refresh_cjk_slice(catalog, fulltext, slug, cjk_slugs, ids)
-        return unless fulltext.table_exists?(CJK_TABLE)
-
-        flagged = cjk_slugs.include?(slug)
-        in_scope = !fulltext[CJK_SCOPE_TABLE].where(slug: slug).empty?
-        return unless flagged || in_scope
-
-        delete_fts_rows_by_rowid(fulltext, CJK_TABLE, ids) if in_scope
-        if flagged
-          fulltext[CJK_SCOPE_TABLE].insert(slug: slug) unless in_scope
-          cjk_passages(catalog, [slug]).each_slice(BATCH_SIZE) do |batch|
-            fulltext[CJK_TABLE].multi_insert(batch.filter_map { |row| cjk_row(row) })
-          end
-        else
-          fulltext[CJK_SCOPE_TABLE].where(slug: slug).delete
-        end
-      end
-
       # The trigram lane at the delta grain (P112-1): changed rowids out,
       # upserted rows in — provided the flag and the scope row AGREE. On
       # config drift (newly flagged / de-flagged since the last build) the
@@ -2094,25 +2494,21 @@ module Nabu
         end
       end
 
-      # The CJK lane at the delta grain — the trigram contract, deletes by
-      # rowid (contentless). Same config-drift delegation.
-      def refresh_cjk_delta(catalog, fulltext, slug, cjk_slugs, delta)
-        return unless fulltext.table_exists?(CJK_TABLE)
-
-        flagged = cjk_slugs.include?(slug)
-        in_scope = !fulltext[CJK_SCOPE_TABLE].where(slug: slug).empty?
-        return unless flagged || in_scope
-
-        unless flagged && in_scope
-          source_id = catalog[:sources].where(slug: slug).get(:id)
-          ids, = source_passage_keys(catalog, source_id)
-          return refresh_cjk_slice(catalog, fulltext, slug, cjk_slugs, ids)
+      # The rebuild-time CJK insert loop, governed and TICKED per full
+      # batch (P105-5d — the 2026-11-11 stall ran the lane's writes over
+      # millions of rows without a line of output). Returns the number of
+      # rows landed (runless rows index nothing).
+      def insert_cjk_batches(fulltext, rows, progress: nil, batch_size: BATCH_SIZE)
+        governor = fts_governor(fulltext, CJK_TABLE, progress: progress)
+        count = 0
+        rows.each_slice(batch_size) do |batch|
+          landed = batch.filter_map { |row| cjk_row(row) }
+          fulltext[CJK_TABLE].multi_insert(landed)
+          count += landed.size
+          progress&.load_tick(count, 0) if batch.size == batch_size
+          governor&.tick!
         end
-
-        delete_fts_rows_by_rowid(fulltext, CJK_TABLE, delta.changed_ids)
-        ids_scoped(cjk_passages(catalog, [slug]), delta.upserted_ids).each_slice(BATCH_SIZE) do |batch|
-          fulltext[CJK_TABLE].multi_insert(batch.filter_map { |row| cjk_row(row) })
-        end
+        count
       end
 
       # Chunked where-in over catalog passage ids: one IN list per
@@ -2310,6 +2706,8 @@ module Nabu
             Sequel[:passages][:id].as(:passage_id),
             Sequel[:passages][:language],
             Sequel[:passages][:annotations_json],
+            # The catalog sha the fts_row_shas sidecar records (ROW_SHAS_TABLE).
+            Sequel[:passages][:content_sha256],
             # source_id rides along for the lemma tier only (P26-0): the
             # per-source tier resolves through the small source_tiers map, not
             # a third join on the 2.6M-row streaming pass.
