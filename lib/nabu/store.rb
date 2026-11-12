@@ -122,8 +122,9 @@ module Nabu
     # use, not an allocation). Applied to read-write AND read-only
     # connects — both pragmas are per-connection and read-path knobs.
     # The request is a ceiling twice over: the engine clamps it to its
-    # compile-time SQLITE_MAX_MMAP_SIZE (measured 2 GiB-epsilon on this
-    # build — the pragma reports what it actually granted).
+    # compile-time SQLITE_MAX_MMAP_SIZE (measured 2 GiB-epsilon, 0x7fff0000,
+    # on this build — unchanged from 3.53.2 to 3.54.1; the pragma reports
+    # what it actually granted).
     LIVE_CACHE_KIB = -65_536
     LIVE_MMAP_BYTES = 8 * (1024**3)
 
@@ -282,7 +283,9 @@ module Nabu
     # slice-pending marker heals a lost tail); the cost it removes is
     # macOS F_FULLFSYNC per autocommit batch, paid thousands of times by
     # the bulk recipe's short autocommitted statements. Measured
-    # 2026-11-11: this box's SQLite (3.53.2) is compiled with
+    # 2026-11-11 on 3.53.2 and re-measured 2026-11-12 on the engine the
+    # sqlite3 gem now bundles (2.10.2 → SQLite 3.54.1, compile options
+    # identical but for MAX_SCHEMA): the build carries
     # DEFAULT_WAL_SYNCHRONOUS=1, so a WAL connection ALREADY defaults to
     # NORMAL — the pragma makes the fulltext's posture explicit and
     # build-independent rather than changing today's behavior. The

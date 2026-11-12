@@ -20,7 +20,7 @@ module Nabu
     # phrase occurs with AT MOST N tokens between them — order-independent, so
     # "a … b" and "b … a" both count. N is FTS5's second argument verbatim:
     # N=0 means the terms are immediately adjacent, N=5 allows up to five words
-    # between them. (Boundary probed on SQLite 3.53: N=0 matches only "a b";
+    # between them. (Boundary probed on SQLite 3.53 and 3.54: N=0 matches only "a b";
     # gap-k passages need N≥k.) That is exactly what `--window N` exposes — no
     # hidden ±1. Default window is 10, FTS5's own default.
     #
