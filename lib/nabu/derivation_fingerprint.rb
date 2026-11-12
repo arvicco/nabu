@@ -186,7 +186,7 @@ module Nabu
     EXCLUDED_DIRS = (%w[adapters mcp query health ops data_build export cli scansion] + BUILDER_DIRS).freeze
     EXCLUDED_FILES = (BUILDER_FILES + INDEX_FILES + %w[
       store/fts_structure.rb store/lane_coverage.rb store/rebuild_runs.rb
-      index_watcher.rb process_probe.rb
+      index_watcher.rb index_preflight.rb process_probe.rb
       cli.rb display.rb status_report.rb progress_reporter.rb version.rb
       backup.rb review_hook.rb verify.rb fixture_sentinel.rb
       batch_cognates.rb batch_formulas.rb batch_parallels.rb

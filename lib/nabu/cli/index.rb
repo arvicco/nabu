@@ -72,6 +72,8 @@ module Nabu
     HELP
     option :deadline, type: :numeric, banner: "MINUTES",
                       desc: "Index-watcher kill deadline (default 2x the ledger estimate; 0 = never kill)"
+    option :accept_long, type: :boolean, default: false,
+                         desc: "Run even when the preflight predicts more than the inline budget (~15m)"
     def refresh(slug)
       config = Nabu::Config.load
       registry = Nabu::SourceRegistry.load(config.sources_path)
@@ -83,6 +85,10 @@ module Nabu
         raise Thor::Error, "index refresh: no catalog at #{config.catalog_path} — run bin/nabu sync #{slug} first"
       end
 
+      # The proportionality law's preflight (Nabu::IndexPreflight): the
+      # plan prints and a long one refuses BEFORE any db is opened.
+      Nabu::IndexPreflight.gate!(history_path: config.history_path, slugs: [slug],
+                                 accept_long: options[:accept_long])
       run_refresh(config, registry, slug)
     rescue Nabu::Error => e
       raise Thor::Error, "index refresh: #{e.message}"

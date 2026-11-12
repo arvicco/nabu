@@ -5890,6 +5890,56 @@ class CLITest < Minitest::Test
     end
   end
 
+  # The preflight gate (the proportionality law, tool side): the stage plan
+  # with ledger times prints BEFORE the db is touched, and a predicted
+  # inline run past the budget refuses unless --accept-long.
+  def plant_long_index_history(config, slug: "pap")
+    ledger = Nabu::Store::Ledger.open!(config.history_path)
+    Nabu::Store::StageTimings.record!(ledger, kind: "sync", scope: slug, stage: "index_slice", seconds: 40 * 60)
+  ensure
+    ledger&.disconnect
+  end
+
+  def test_index_refresh_refuses_a_predicted_long_run_before_touching_the_index
+    with_deferred_wave do |config|
+      plant_long_index_history(config)
+      before = File.mtime(config.fulltext_path)
+      _out, err, status = with_config(config) { run_cli(%w[index refresh pap]) }
+
+      assert_equal 1, status
+      assert_match(/index preflight: pap — predicted inline index work ~40m/, err)
+      assert_match(/index_slice/, err)
+      assert_match(/--accept-long/, err)
+      assert_equal before, File.mtime(config.fulltext_path), "the refused run never opened the index"
+    end
+  end
+
+  def test_index_refresh_runs_a_long_plan_with_accept_long
+    with_deferred_wave do |config|
+      plant_long_index_history(config)
+      out, err, status = with_config(config) { run_cli(%w[index refresh pap --accept-long --deadline 0]) }
+
+      assert_nil status, err
+      assert_match(/index preflight: pap — predicted inline index work ~40m/, err)
+      assert_match(/index refresh: pap — indexed 2 passages/, out)
+    end
+  end
+
+  def test_sync_refuses_a_predicted_long_index_run
+    with_deferred_wave do |config|
+      File.write(config.sources_path, <<~YAML)
+        pap:
+          adapter: CLITest::IndexRefreshAdapter
+      YAML
+      plant_long_index_history(config)
+      _out, err, status = with_config(config) { run_cli(%w[sync pap --parse-only]) }
+
+      assert_equal 1, status
+      assert_match(/index preflight: pap — predicted inline index work ~40m/, err)
+      assert_match(/--accept-long/, err)
+    end
+  end
+
   def test_index_doctor_flags_a_deferred_source_whose_slice_is_behind
     with_deferred_wave do |config|
       out, _err, status = with_config(config) { run_cli(%w[index doctor]) }
