@@ -214,17 +214,36 @@ module Nabu
     # Fork the watcher; returns its pid.
     def start!
       reader, @stop_writer = IO.pipe
-      @pid = fork do
-        @stop_writer.close
-        trap("INT", "IGNORE")
-        begin
-          watch(reader)
-        ensure
-          exit!(0) # never the writer's at_exit handlers (a suite, a CLI)
+      @pid = quiet_sqlite_fork_warning do
+        fork do
+          @stop_writer.close
+          trap("INT", "IGNORE")
+          begin
+            watch(reader)
+          ensure
+            exit!(0) # never the writer's at_exit handlers (a suite, a CLI)
+          end
         end
       end
       reader.close
       @pid
+    end
+
+    # The sqlite3 gem (2.10.x) warns in the child about every writable
+    # handle the fork inherited, then discards it. This fork is deliberate
+    # and the child touches no inherited connection by construction (pipe +
+    # File.mtime + ps only), so the warning is silenced for it alone — any
+    # other fork in the process still warns. The parse-pool precedent.
+    def quiet_sqlite_fork_warning
+      return yield unless defined?(SQLite3::ForkSafety)
+
+      previous = SQLite3::ForkSafety.instance_variable_get(:@suppress)
+      SQLite3::ForkSafety.suppress_warnings!
+      begin
+        yield
+      ensure
+        SQLite3::ForkSafety.instance_variable_set(:@suppress, previous)
+      end
     end
 
     # The clean finish: tell the watcher, reap it.
