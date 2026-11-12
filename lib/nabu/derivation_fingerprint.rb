@@ -150,7 +150,7 @@ module Nabu
     INDEX_FILES = %w[
       store/indexer.rb store/alignment_indexer.rb store/lemma_frequencies.rb
       store/reflex_roots_indexer.rb store/silver_lemma_indexer.rb
-      store/cjk_bigrams.rb store/index_delta.rb store/lanes.rb store/engine_intents.rb
+      store/cjk_bigrams.rb store/index_delta.rb store/lanes.rb store/engine_intents.rb store/stale_aggregates.rb
       store/translation_index.rb translation_keys.rb
       store/gloss_index.rb query/token_glosses.rb
       store/annotation_index.rb annotation_keys.rb

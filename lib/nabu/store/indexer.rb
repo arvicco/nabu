@@ -640,6 +640,7 @@ module Nabu
         fulltext.drop_table?(SLICE_REFRESHES_TABLE)
         fulltext.drop_table?(ROW_SHAS_TABLE)
         fulltext.drop_table?(SHADOW_TABLE) # a killed shadow build's orphan
+        StaleAggregates.drop!(fulltext) # every aggregate is fresh by construction
         fulltext.run(CREATE_TABLE)
         create_row_shas_table(fulltext, indexed: false)
         create_lemma_table(fulltext)
@@ -784,10 +785,11 @@ module Nabu
       # (the sets were freed — at that volume the slice costs the same), and
       # a HEALING refresh (pending marker at entry: the crashed run's work
       # is not in this load's delta, so only the full rewrite is honest).
-      # The one deliberate delta-mode exception: char_postings is a
-      # per-source AGGREGATE whose decrements would need the replaced rows'
-      # OLD text (gone by refresh time), so it is recomputed from a lean
-      # source-scoped catalog scan — reads only, never an fts write.
+      # char_postings, a per-source AGGREGATE, moves by exact decrements +
+      # increments at the delta grain (char_postings_basis) — never a
+      # whole-source scan; where the grain cannot recover a revised row's
+      # OLD contribution the source's postings are flagged stale for the
+      # maintenance rail (Store::StaleAggregates) instead.
       def refresh_source!(catalog:, fulltext:, slug:, alignments: nil, fuzzy_slugs: nil,
                           cjk_slugs: nil, lemma_tiers: nil, reflexes_changed: false,
                           sign_list: nil, progress: nil,
@@ -897,6 +899,9 @@ module Nabu
               # freq table (same transaction). incremental_ready? guarantees the
               # table exists here; both snapshots are passage-keyed and B-tree bounded.
               before = LemmaFrequencies.snapshot(fulltext, ids: ids)
+              # The postings decrements read the sidecar, so they are taken
+              # before its rows go (char_postings_basis).
+              postings_basis = (char_postings_basis(catalog, fulltext, source_id, slug, ids) if use_delta)
               # FIRST destructive write: the doomed rows' sidecar shas
               # (ROW_SHAS_TABLE invariant — removed before their fts/lemma rows).
               delete_row_shas(fulltext, ids)
@@ -974,14 +979,21 @@ module Nabu
               # P65: swap this source's char-postings slice; a pre-P65 fulltext
               # file (no table) gets the whole postings build below instead —
               # NEVER a full FTS rebuild for a missing derived sub-table.
-              # Delta mode recomputes the aggregate from a lean source-scoped
-              # catalog scan (method note: the replaced rows' old text is gone,
-              # so exact decrements are impossible — the scan stays exact and
-              # read-only).
+              # Delta mode moves the aggregate by exact arithmetic (decrements
+              # taken above, increments = this pass's +chars+) or flags it
+              # stale; the whole-slice rewrite re-derives it outright (and so
+              # clears any flag); a heal re-reads the source (its insert pass
+              # covers only the drifted rows).
               if fulltext.table_exists?(CHAR_POSTINGS_TABLE)
-                fulltext[CHAR_POSTINGS_TABLE].where(source_id: source_id).delete
-                chars = source_char_postings(catalog, source_id) if use_delta || heal
-                write_char_postings(fulltext, chars)
+                if use_delta
+                  apply_char_postings_delta!(fulltext, slug: slug, source_id: source_id,
+                                                       basis: postings_basis, increments: chars)
+                else
+                  fulltext[CHAR_POSTINGS_TABLE].where(source_id: source_id).delete
+                  chars = source_char_postings(catalog, source_id) if heal
+                  write_char_postings(fulltext, chars)
+                  StaleAggregates.clear!(fulltext, aggregate: POSTINGS_AGGREGATE, scope: slug)
+                end
               end
               # P72-1: swap this source's coverage-index slice too (ranks from
               # current postings — performance-only, the exact check verifies).
@@ -2780,8 +2792,133 @@ module Nabu
         ids.to_a.each_slice(BATCH_SIZE) { |batch| fulltext[table].where(rowid: batch).delete }
       end
 
+      # -- char postings at the delta grain (the incrementality review) ------
+      #
+      # char_postings is DECOMPOSABLE: per (source, char, language), the
+      # count of the source's live passages carrying that char — a sum over
+      # rows. So a delta moves it exactly by subtracting the changed rows'
+      # OLD contribution and adding the upserted rows' new one (the insert
+      # pass already accumulates the latter), replacing the whole-source
+      # catalog scan that used to re-run on EVERY delta (the review's
+      # "recomputed whole, re-done next slice"). The hard half is the OLD
+      # contribution, read BEFORE the slice's first destructive write:
+      #
+      #   - a changed row the sidecar does not record was never indexed (an
+      #     insert, or a re-entry whose sha left at withdrawal): nothing to
+      #     subtract;
+      #   - a recorded row whose sha still matches the catalog (a
+      #     withdrawal, an unchanged re-entry): the catalog holds exactly
+      #     the indexed text (the sha covers text AND language) — subtract
+      #     its posted chars;
+      #   - a recorded row whose sha moved (a REVISION): the replaced text is
+      #     gone. passage_chars still holds the row's old distinct HAN set,
+      #     and when every char the source posts is Han (a Han-pure source)
+      #     that set IS its old posted set — subtract it. Otherwise the
+      #     grain is unsound for this source.
+      #
+      # Unsound (a mixed-script revision, a slice predating the sidecar, a
+      # source already flagged) returns nil, and the delta flags the
+      # source's postings stale (Store::StaleAggregates) — the maintenance
+      # rail recomputes them; nothing O(source) runs inline.
+      POSTINGS_AGGREGATE = "char_postings"
+
+      def char_postings_basis(catalog, fulltext, source_id, slug, ids)
+        return nil unless fulltext.table_exists?(CHAR_POSTINGS_TABLE) && fulltext.table_exists?(ROW_SHAS_TABLE)
+        return nil if StaleAggregates.stale?(fulltext, aggregate: POSTINGS_AGGREGATE, scope: slug)
+
+        posted = fulltext[CHAR_POSTINGS_TABLE].where(source_id: source_id)
+        # A slice predating the sidecar records nothing — no row could be
+        # told from an insert.
+        return nil if fulltext[ROW_SHAS_TABLE].where(source_id: source_id).empty? && !posted.empty?
+
+        han_pure = posted.select_map(:char).all? { |char| char.match?(HAN) }
+        decrements = Hash.new(0)
+        ids.to_a.each_slice(BATCH_SIZE) do |batch|
+          revised = old_postings_by_sidecar(catalog, fulltext, batch, decrements)
+          next if revised.empty?
+          return nil unless han_pure && fulltext.table_exists?(PASSAGE_CHARS_TABLE)
+
+          fulltext[PASSAGE_CHARS_TABLE].where(rowid: revised).select(:chars, :language).each do |row|
+            row[:chars].each_char { |char| decrements[[source_id, char, row[:language]]] += 1 }
+          end
+        end
+        decrements
+      end
+
+      # One batch's sidecar-vouched old contribution, accumulated into
+      # +decrements+; returns the batch's REVISED rowids (recorded, sha
+      # moved) for the caller's Han-pure rule.
+      def old_postings_by_sidecar(catalog, fulltext, batch, decrements)
+        recorded = fulltext[ROW_SHAS_TABLE].where(rowid: batch).select_hash(:rowid, :sha)
+        return [] if recorded.empty?
+
+        revised = []
+        catalog[:passages].join(:documents, id: Sequel[:passages][:document_id])
+                          .where(Sequel[:passages][:id] => recorded.keys)
+                          .select(Sequel[:passages][:id].as(:passage_id),
+                                  Sequel[:passages][:text_search].as(:text_normalized),
+                                  Sequel[:passages][:language], Sequel[:passages][:content_sha256],
+                                  Sequel[:documents][:source_id].as(:source_id))
+                          .each do |row|
+          if row_sha(row[:content_sha256]).b == recorded.fetch(row[:passage_id]).to_s.b
+            accumulate_char_postings(decrements, row)
+          else
+            revised << row[:passage_id]
+          end
+        end
+        revised
+      end
+
+      # Apply a delta's arithmetic to the source's postings rows, or flag
+      # them stale when +basis+ is nil (char_postings_basis note). Rows
+      # reaching zero are pruned — the same row set a full recompute mints.
+      def apply_char_postings_delta!(fulltext, slug:, source_id:, basis:, increments:)
+        if basis.nil?
+          StaleAggregates.mark!(fulltext, aggregate: POSTINGS_AGGREGATE, scope: slug,
+                                          reason: "a delta's old contribution was unrecoverable at the row grain")
+          return
+        end
+
+        (basis.keys | increments.keys).each do |key|
+          net = increments.fetch(key, 0) - basis.fetch(key, 0)
+          upsert_char_posting(fulltext, source_id, key, net) unless net.zero?
+        end
+      end
+
+      def upsert_char_posting(fulltext, source_id, key, net)
+        _source, char, language = key
+        scope = fulltext[CHAR_POSTINGS_TABLE].where(source_id: source_id, char: char, language: language)
+        current = scope.get(:docs)
+        total = (current || 0) + net
+        if total <= 0
+          scope.delete
+        elsif current
+          scope.update(docs: total)
+        else
+          fulltext[CHAR_POSTINGS_TABLE].insert(source_id: source_id, char: char, language: language, docs: total)
+        end
+      end
+
+      # The maintenance rail's recompute of ONE source's postings (the
+      # O(source) re-read the delta grain refuses to run inline): swap the
+      # source's rows for a fresh accumulation, clear its stale flag.
+      # Returns the rows written.
+      def recompute_char_postings!(catalog:, fulltext:, slug:)
+        source_id = catalog[:sources].where(slug: slug).get(:id)
+        fulltext.transaction do
+          if source_id && fulltext.table_exists?(CHAR_POSTINGS_TABLE)
+            fulltext[CHAR_POSTINGS_TABLE].where(source_id: source_id).delete
+            chars = source_char_postings(catalog, source_id)
+            write_char_postings(fulltext, chars)
+          end
+          StaleAggregates.clear!(fulltext, aggregate: POSTINGS_AGGREGATE, scope: slug)
+          chars&.size || 0
+        end
+      end
+
       # The char-postings aggregate for ONE source, recomputed from a lean
-      # three-column catalog scan (refresh_source! delta-mode note).
+      # three-column catalog scan — the heal path and the maintenance
+      # rail's recompute; the delta grain never calls it.
       def source_char_postings(catalog, source_id)
         chars = Hash.new(0)
         live_passages(catalog)
