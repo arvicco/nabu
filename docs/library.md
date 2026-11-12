@@ -2308,3 +2308,39 @@ anatomies — arrives here slice by slice.
 mass-digitization rail: national- and research-library OCR at
 declared cones, each with a resumable ledger, each honest about
 what OCR is.
+
+## 8bj. The P171 arrivals — the Greek wave opens, and the whole of Old Prussian
+
+**`cllg-sc`** — **366 documents / 94,713 passages**: the Inria CLLG
+Sources Chrétiennes corpus — the Greek (and six Latin) texts of the
+Éditions du Cerf *Sources chrétiennes* series in the series' own
+critical editions, from the Apostolic Fathers, Justin and Clement
+through Origen, Athanasius, the Cappadocians and Chrysostom to
+Symeon the New Theologian and Nicholas Cabasilas. Each text rides
+its printed volumes' full bibliography (editors, years, CPG
+numbers) and the series' citation scheme as the passage grain.
+CC-BY structure over texts under the French critical-edition case
+law; credit the CLLG (dir. Thibault Clérice, Inria ALMAnaCH).
+
+**`cllg-freed`** — **6,290 documents / 1,258,099 passages**: the
+TLG E canon, freed — the CLLG's re-release of the Thesaurus Linguae
+Graecae CD-ROM texts as citeStructure TEI, by way of Peter Heslin's
+Diogenes export. Homer to the Byzantine chroniclers: epic, lyric,
+drama, historiography, philosophy, oratory, medicine, mathematics,
+scholia, lexica, the Fathers and the fragmentary authors, ~5,000 of
+its works held nowhere else in the library. The single largest TEI
+source to date — it roughly quadruples the library's Ancient Greek
+and carries the TLG canon's own century datings and author epithets
+onto the timeline and the kind axis. CC0 texts, CC-BY structure.
+
+**`titus-old-prussian`** — **34 documents / 2,704 passages**: the
+complete written record of Old Prussian, the extinct West Baltic
+language — Catechisms I and II (Königsberg 1545), Abel Will's
+Enchiridion (1561), the Elbing Vocabulary's 802 German–Prussian
+entries, Simon Grunau's vocabulary in its variant copies, and the
+minor fragments with the Basel epigram. A diplomatic edition after
+Mažiulis (data entry W. Euler, TITUS version J. Gippert), every
+printed line a passage with its German lane riding as annotation.
+Served under a personal research grant on the TITUS family terms —
+non-redistributable, credited wherever displayed; `prg` joins the
+registry's West Baltic branch beside the East Baltic shelves.
