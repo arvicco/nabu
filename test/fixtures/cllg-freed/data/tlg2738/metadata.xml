@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+    <collection identifier="urn:cts:greekLit:tlg2738">
+        <title>Chronographiae Anonymae</title>
+        <members>
+        <collection identifier="urn:cts:greekLit:tlg2738.tlg002">
+            <title>Chronographia brevis (e cod. Coislin. 193)</title>
+            <dublinCore>
+                <creator xmlns="http://purl.org/dc/terms/">Chronographiae Anonymae</creator>
+            </dublinCore>
+            <members>
+                <resource identifier="urn:cts:greekLit:tlg2738.tlg002.cllg-grc1" filepath="./tlg002/tlg2738.tlg002.cllg-grc1.xml">
+                    <title>Chronographia brevis (e cod. Coislin. 193)</title>
+                    <description>Chronographiae Anonymae (c. A.D. 5-16), Chronographia brevis (e cod. Coislin. 193) (2738: 002) "Nicephori archiepiscopi Constantinopolitani opuscula historica", Ed. de Boor, C. Leipzig: Teubner, 1880, Repr. 1975.</description>
+                    <parent>urn:cts:greekLit:tlg2738.tlg002</parent>
+                </resource>
+            </members>
+        </collection>
+        </members>
+    </collection>

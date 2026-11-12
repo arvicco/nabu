@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+    <collection identifier="urn:cts:greekLit:tlg1514">
+        <title>Mnaseas Perieg.</title>
+        <members>
+            <collection identifier="urn:cts:greekLit:tlg1514.tlg002">
+            <title>Fragmenta</title>
+            <dublinCore>
+                <creator xmlns="http://purl.org/dc/terms/">Mnaseas Perieg.</creator>
+            </dublinCore>
+            <members>
+                <resource identifier="urn:cts:greekLit:tlg1514.tlg002.cllg-grc1" filepath="./tlg002/tlg1514.tlg002.cllg-grc1.xml">
+                    <title>Fragmenta</title>
+                    <description>Mnaseas Perieg. (c. 3 B.C.), Fragmenta (1514: 002) ""Die "Kleinen" griechischen Historiker heute"", Ed. Mette, H.J., 1978; Lustrum  21.</description>
+                    <parent>urn:cts:greekLit:tlg1514.tlg002</parent>
+                </resource>
+            </members>
+        </collection>
+        </members>
+    </collection>

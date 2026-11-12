@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+    <collection identifier="urn:cts:greekLit:tlg0085">
+        <title>Aeschylus Trag.</title>
+        <members>
+        <collection identifier="urn:cts:greekLit:tlg0085.tlg011">
+            <title>Fragmenta</title>
+            <dublinCore>
+                <creator xmlns="http://purl.org/dc/terms/">Aeschylus Trag.</creator>
+            </dublinCore>
+            <members>
+                <resource identifier="urn:cts:greekLit:tlg0085.tlg011.cllg-grc1" filepath="./tlg011/tlg0085.tlg011.cllg-grc1.xml">
+                    <title>Fragmenta</title>
+                    <description>Aeschylus Trag. (c. 6-5 B.C.), Fragmenta (0085: 011) "Tragicorum Graecorum fragmenta, vol. 3", Ed. Radt, S. Göttingen: Vandenhoeck : Ruprecht, 1985.</description>
+                    <parent>urn:cts:greekLit:tlg0085.tlg011</parent>
+                </resource>
+            </members>
+        </collection>
+        </members>
+    </collection>

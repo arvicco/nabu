@@ -13,13 +13,14 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 ## The shelves
 
-A source wears every desk it serves — these 31 answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
+A source wears every desk it serves — these 32 answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
 | Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 12 November 2026)</span> |
 |---|---|---|---|---|
 | `aio` | inscriptions | attribution | wired · manual | 4,002 docs / 67,429 passages |
 | `analecta-hymnica` | texts | open | wired · manual | 55 docs / 17,211 passages |
 | `cgpg` | texts | attribution | wired · manual | 232 docs / 18,701 passages |
+| `cllg-freed` | texts | attribution | not yet wired | not synced yet |
 | `cllg-sc` | texts | attribution | not yet wired | not synced yet |
 | `corpus-corporum` | texts | nc | wired · manual | 5,248 docs / 896,770 passages |
 | `croala` | texts | attribution | wired · manual | 570 docs / 309,180 passages |

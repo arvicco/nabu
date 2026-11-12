@@ -17,6 +17,7 @@ class CllgTeiParserTest < Minitest::Test
   CHRONICLE = File.join(FREED, "tlg2738", "tlg002", "tlg2738.tlg002.cllg-grc1.xml")
   MNASEAS = File.join(FREED, "tlg1514", "tlg002", "tlg1514.tlg002.cllg-grc1.xml")
   AELIAN = File.join(FREED, "tlg0545", "tlg005", "tlg0545.tlg005.cllg-grc1.xml")
+  AESCHYLUS = File.join(FREED, "tlg0085", "tlg011", "tlg0085.tlg011.cllg-grc1.xml")
   CELSUM = File.join(SC, "tlg2042", "contra_celsum.xml")
   DEMETRIANUM = File.join(SC, "stoa0104a", "ad_demetrianum.xml")
   PROVERBS = File.join(SC, "tlg4110", "commentaire_proverbes_numeriques.xml")
@@ -150,6 +151,16 @@ class CllgTeiParserTest < Minitest::Test
     items = passages(PROVERBS)
     assert_equal "1.1", items.keys.first
     refute(items.values.any? { |item| item.text.include?("Ad Prov.") }, "chunk heads sit outside the items")
+  end
+
+  # Aeschylus fr. 451s**,50 (Radt; a papyrus): line 2 is a lacuna alone (no
+  # text at all) and line 3 a lone U+035C metrical sign — text, but nothing a
+  # search form keeps, which the Passage model refuses. Neither is a passage;
+  # the document still parses (the full freed run quarantined it before).
+  def test_units_with_no_searchable_text_are_not_passages
+    lines = passages(AESCHYLUS)
+    assert_equal ["451s**,50.1", "451s**,50.4", "451s**,50.5"], lines.keys
+    assert_equal "ας", lines.fetch("451s**,50.1").text
   end
 
   # -- the rejected grain: no citation tree declared -----------------------------

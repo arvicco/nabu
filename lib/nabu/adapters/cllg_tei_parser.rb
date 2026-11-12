@@ -78,7 +78,10 @@ module Nabu
     #   beside its lines, a chunk's Latin head over its items) is not
     #   cited — the EpiDoc rule for heads outside leaves.
     #
-    # Duplicate refs disambiguate deterministically (":b2", the house
+    # A unit whose text folds to an empty search form (Aeschylus fr.
+    # 451s**,50.3 is a lone U+035C metrical sign) is not a passage — the one
+    # such unit in freed quarantined its whole document before (census
+    # 2026-11-12). Duplicate refs disambiguate deterministically (":b2", the house
     # collision tolerance), never quarantine.
     #
     # == Text policy (verified against the clones, 2026-11-12)
@@ -249,7 +252,7 @@ module Nabu
         header ||= self.class.header(path)
         raise NoCitationTree, "#{path}: the teiHeader declares no citeStructure" unless header.cited?
 
-        units = extract(source, path: path, levels: header.tree)
+        units = extract(source, path: path, levels: header.tree).select { |unit| searchable?(unit, language) }
         units = disambiguate_collisions(units)
         build_document(units, urn: urn, language: language, title: title || header.title, path: path,
                               metadata: metadata, license_override: license_override)
@@ -258,6 +261,14 @@ module Nabu
       private
 
       def extraction_class = Extraction
+
+      # A unit whose text folds to nothing searchable (a lone metrical sign
+      # on a papyrus line) is no passage — the Passage model refuses an empty
+      # search form, and one such line would quarantine a whole document.
+      def searchable?(unit, language)
+        text = Normalize.nfc(unit.text.gsub(/[[:space:]]+/, " ").strip)
+        !Normalize.search_form(text, language: language).strip.empty?
+      end
 
       def no_passages_message = "the citation tree matched only empty units"
 

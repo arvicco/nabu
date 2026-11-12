@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+    <collection identifier="urn:cts:greekLit:tlg0059">
+        <title>Plato Phil.</title>
+        <members>
+        <collection identifier="urn:cts:greekLit:tlg0059.tlg030">
+            <title>Respublica</title>
+            <dublinCore>
+                <creator xmlns="http://purl.org/dc/terms/">Plato Phil.</creator>
+            </dublinCore>
+            <members>
+                <resource identifier="urn:cts:greekLit:tlg0059.tlg030.cllg-grc1" filepath="./tlg030/tlg0059.tlg030.cllg-grc1.xml">
+                    <title>Respublica</title>
+                    <description>Plato Phil. (c. 5-4 B.C.), Respublica (0059: 030) "Platonis opera, vol. 4", Ed. Burnet, J. Oxford: Clarendon Press, 1902, Repr. 1968.</description>
+                    <parent>urn:cts:greekLit:tlg0059.tlg030</parent>
+                </resource>
+            </members>
+        </collection>
+        </members>
+    </collection>

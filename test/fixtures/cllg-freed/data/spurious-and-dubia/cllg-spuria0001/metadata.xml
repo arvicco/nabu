@@ -1,0 +1,29 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<collection identifier="urn:cts:greekLit:cllg-spuria0001">
+    <title>Pseudo-Chrysostomus</title>
+    <dublinCore>
+        <identifier xmlns="http://purl.org/dc/terms/">CLACLA:F2D8CB2EC70E4C90914116D85322151E</identifier>
+        <relation xmlns="http://purl.org/dc/terms/">urn:cts:greekLit:tlg2062</relation>
+    </dublinCore>
+    <extensions>
+        <isSpuriaOf xmlns="https://textes.biblissima.fr">urn:cts:greekLit:tlg2062</isSpuriaOf>
+    </extensions>
+    <members>
+        <collection identifier="urn:cts:greekLit:tlg2062.tlg473">
+            <title>In nativitatem Christi (fragmenta duo) [Sp.]</title>
+            <dublinCore>
+                <creator xmlns="http://purl.org/dc/terms/">Pseudo-Chrysostomus</creator>
+            </dublinCore>
+            <extensions>
+                <isSpuriaOf xmlns="https://textes.biblissima.fr">urn:cts:greekLit:tlg2062</isSpuriaOf>
+            </extensions>
+            <members>
+                <resource identifier="urn:cts:greekLit:tlg2062.tlg473.cllg-grc1" filepath="./tlg473/tlg2062.tlg473.cllg-grc1.xml">
+                    <title>In nativitatem Christi (fragmenta duo) [Sp.]</title>
+                    <description>Joannes Chrysostomus Scr. Eccl. (c. A.D. 4-5), In nativitatem Christi (fragmenta duo) [Sp.] (2062: 473) ""La mort et l'assomption de la sainte Vierge dans la tradition des cinq premiers siècles"", Ed. Jugie, M., 1926; Échos d'Orient  25.</description>
+                    <parent>urn:cts:greekLit:tlg2062.tlg473</parent>
+                </resource>
+            </members>
+        </collection>
+    </members>
+</collection>
