@@ -555,7 +555,8 @@ module Site
       mcp = Nabu::Ops::SiteData.new(registry: registry, data_dir: DATA_DIR).mcp
       image = mcp.fetch("image")
       readme = File.read(File.join(ROOT, "README.md"))
-      { "README.md" => readme, "docs/mcp.md" => File.read(File.join(ROOT, "docs", "mcp.md")) }.each do |name, text|
+      { "README.md" => readme, "docs/mcp.md" => File.read(File.join(ROOT, "docs", "mcp.md")),
+        "llms-install.md" => File.read(File.join(ROOT, "llms-install.md")) }.each do |name, text|
         refs = text.scan(%r{ghcr\.io/arvicco/nabu-demo(?::[\w.]+)?})
         refute_empty refs, "#{name} names the demo image"
         refs.each { |ref| assert_equal image, ref, "#{name} references the demo image off the released tag" }
