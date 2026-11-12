@@ -213,6 +213,27 @@ module Adapters
 
     def quiet_adapter(slice: 400) = Nabu::Adapters::NdlKotenseki.new(delay: 0, slice: slice, timeout_backoff: 0)
 
+    # -- The bib 429 posture (ruled 2026-11-12): the book lane tolerates
+    # rate limits by design, but one SRU 429 in the bib join aborted the
+    # whole sync (and, chained, the source's remaining slices) after the
+    # books had already yielded. A 429 now rides the timeout mold —
+    # retried with backoff, then the batch ledgered stuck for the next
+    # sync — never a fatal.
+    def test_a_bib_batch_answering_429_takes_the_timeout_posture_not_a_fatal
+      url = Nabu::Adapters::NdlSearchBib.query_url(%w[123], start: 1)
+      stub_request(:get, url).to_return(status: 429, body: "rate limited")
+
+      assert_equal :timeout, quiet_adapter.send(:fetch_bib_batch, %w[123]),
+                   "a rate limit is a retry-later, never a sync-killing fatal"
+    end
+
+    def test_a_bib_batch_answering_403_stays_denied
+      url = Nabu::Adapters::NdlSearchBib.query_url(%w[123], start: 1)
+      stub_request(:get, url).to_return(status: 403, body: "no")
+
+      assert_equal :denied, quiet_adapter.send(:fetch_bib_batch, %w[123])
+    end
+
     def test_a_book_timing_out_repeatedly_is_ledgered_stuck_and_the_slice_continues
       stub_request(:get, format(BOOK, "1")).to_return(status: 403, body: "This PID is not allowed")
       stuck = stub_request(:get, format(BOOK, "2")).to_raise(Net::ReadTimeout)
