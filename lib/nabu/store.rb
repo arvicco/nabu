@@ -492,6 +492,7 @@ end
 require_relative "store/lanes"
 require_relative "store/engine_intents"
 require_relative "store/stale_aggregates"
+require_relative "store/index_cost_classes"
 require_relative "store/ledger"
 require_relative "store/stage_timings"
 require_relative "store/links_journal"

@@ -131,6 +131,7 @@ module Nabu
 
       # Announce with the ledger's estimate, run, record (kind "maintain").
       def timed(ledger, scope, stage, label, progress)
+        IndexCostClasses.for(KIND, stage)
         eta = ledger && Nabu::Eta.for(ledger, kind: KIND, scope: scope, stage: stage)
         progress&.stage(label, eta: eta)
         started = Process.clock_gettime(Process::CLOCK_MONOTONIC)
