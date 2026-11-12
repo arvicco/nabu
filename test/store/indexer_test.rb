@@ -1501,6 +1501,59 @@ module Store
              "a small delta keeps the ordinary (atomic) transaction shape")
     end
 
+    # The maintenance rail owns merge consolidation: the sync path runs ONE
+    # bounded probe chunk per governed table, and debt beyond it is
+    # REPORTED ("run nabu index maintain"), never paid inline.
+    NoteSpy = Struct.new(:stages, :notes) do
+      def stage(label, **) = (self.stages ||= []) << label
+      def note(line) = (self.notes ||= []) << line
+      def load_tick(*); end
+    end
+
+    def test_the_sync_path_reports_merge_debt_past_its_one_probe_chunk
+      doc = make_document(urn: "urn:d:s")
+      make_passage(doc, urn: "urn:d:s:1", text_normalized: "alpha", sequence: 0)
+      rebuild!
+      # Planted debt: automerge off, one level-0 segment per committed insert.
+      Nabu::Store::Indexer.apply_merge_settings(@fulltext, :passages_fts, { "automerge" => 0 })
+      12.times do |i|
+        fts.insert(rowid: 9_000 + i, text_normalized: "debt", language: Nabu::Store::Indexer.language_token("grc"),
+                   source: Nabu::Store::Indexer.source_token("s"))
+      end
+      make_passage(doc, urn: "urn:d:s:2", text_normalized: "beta", sequence: 1)
+      spy = NoteSpy.new([], [])
+      chunks = 0
+      mod = Nabu::Store::Indexer
+      original = mod.method(:merge_chunk!)
+      # A chunk that barely dents a huge debt (the live shape) — at test
+      # scale one real chunk would merge everything.
+      mod.define_singleton_method(:merge_chunk!) do |*|
+        chunks += 1
+        1
+      end
+      begin
+        refresh!(delta: delta_of(upserted: %w[urn:d:s:2]), progress: spy)
+      ensure
+        mod.define_singleton_method(:merge_chunk!, original)
+      end
+
+      assert_equal Nabu::Store::Indexer.governed_fts_tables(@fulltext).size, chunks,
+                   "the sync path runs exactly one probe chunk per governed table"
+      line = spy.notes.find { |note| note.include?("passages_fts") }
+      assert_match(/merge debt.*run nabu index maintain/, line.to_s, "the debt is reported (#{spy.notes.inspect})")
+    end
+
+    def test_a_clean_index_reports_no_merge_debt
+      doc = make_document(urn: "urn:d:s")
+      make_passage(doc, urn: "urn:d:s:1", text_normalized: "alpha", sequence: 0)
+      rebuild!
+      make_passage(doc, urn: "urn:d:s:2", text_normalized: "beta", sequence: 1)
+      spy = NoteSpy.new([], [])
+      refresh!(delta: delta_of(upserted: %w[urn:d:s:2]), progress: spy)
+
+      assert_empty spy.notes.grep(/merge debt/)
+    end
+
     def test_a_small_write_stays_atomic_under_deferred_merges
       doc = make_document(urn: "urn:d:s")
       make_passage(doc, urn: "urn:d:s:1", text_normalized: "alpha", sequence: 0)

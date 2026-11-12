@@ -5940,6 +5940,30 @@ class CLITest < Minitest::Test
     end
   end
 
+  # The maintenance rail: one command owns corpus-scale index work —
+  # stale-aggregate recomputes, merge consolidation, WAL truncation —
+  # under the index watcher, and the doctor lists the stale flags it owes.
+  def test_index_maintain_recomputes_stale_aggregates_under_the_watcher
+    with_deferred_wave do |config|
+      fulltext = Nabu::Store.connect_fulltext(config.fulltext_path)
+      Nabu::Store::StaleAggregates.mark!(fulltext, aggregate: "char_postings", scope: "pap", reason: "planted")
+      fulltext.disconnect
+
+      out, = with_config(config) { run_cli(%w[index doctor]) }
+      assert_match(/stale aggregates \(nabu index maintain recomputes\):/, out)
+      assert_match(/char_postings \(pap\) since/, out)
+
+      out, err, status = with_config(config) { run_cli(%w[index maintain --deadline 30]) }
+
+      assert_nil status, err
+      assert_match(/index watcher: armed — kills the writer at 30m00s/, err)
+      assert_match(/index maintain: recomputed char_postings \(pap\)/, out)
+      assert_match(/merge chunks/, out)
+      out, = with_config(config) { run_cli(%w[index doctor]) }
+      assert_match(/stale aggregates: none/, out)
+    end
+  end
+
   def test_index_doctor_flags_a_deferred_source_whose_slice_is_behind
     with_deferred_wave do |config|
       out, _err, status = with_config(config) { run_cli(%w[index doctor]) }
