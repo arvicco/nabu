@@ -16,11 +16,11 @@ with **`en` (Early Modern English) second at 28.7M** (the TCP shelves
 whole — EEBO joined by Evans and ECCO at the P155 gate);
 `lzh` (Literary Chinese, 20.6M — the hanmun written tradition beyond
 China: Korea's state records and Đại Việt's annals ride it) is third,
-Japanese (`jpn` 6.69M — Aozora joined by the NDL classical-book OCR and
-the Honkoku citizen transcriptions) fourth, Latin (`lat` 4.39M — the
+Japanese (`jpn` 7.20M — Aozora joined by the NDL classical-book OCR and
+the Honkoku citizen transcriptions) fourth, Ancient Greek (`grc` 4.78M —
+the CLLG wave freed the TLG E canon) fifth, Latin (`lat` 4.65M — the
 P160 wave added NOSCEMUS's scientific Latin and the Socinian letters)
-fifth,
-Ancient Greek (`grc` 3.19M) sixth, and Sumerian (`sux` 3.04M) seventh.
+sixth, and Sumerian (`sux` 3.04M) seventh.
 Below them the seven-figure floor has widened: Korean-tradition
 holdings (`ko` 1.48M via OKHC), Classical Tibetan (`xct` 1.45M — the
 Derge canon), Middle English (`enm` 1.36M), Persian (`fas` 2.80M),
@@ -171,7 +171,7 @@ module if used), the old `-pro`-suffix string test, the old bracket names.
 | Code | Language | One sentence |
 |---|---|---|
 | `lzh` | Literary Chinese | The library's third-largest language (20.6M passages, 2026-10-22) — the Kanripo classical-Chinese repository and the CBETA Buddhist canon (Taishō + Xuzangjing), plus the HDIC Heian-period character-dictionary line — and now the hanmun written tradition beyond China: Korea's dynastic records (the sillok, the Royal Secretariat's daily registers, the Goryeo histories, the ITKC classics) and Đại Việt's annals, the Korean wave's first syncs landed 2026-08-18/19. Since P37-2, traditional/simplified/z-variant spellings fold to one search skeleton (conventions §9). |
-| `grc` | Ancient Greek | The third *Western* language (Latin and EEBO's English ahead) — sixth overall at 3.19M passages (2026-10-22) — Homer through the papyri to Swete's Septuagint, both Greek NTs, and the EDH bilinguals, polytonic. |
+| `grc` | Ancient Greek | The second *Western* language (EEBO's English ahead) — fifth overall at 4.78M passages (2026-11-12, the CLLG wave) — Homer through the papyri and the freed TLG canon to Swete's Septuagint, both Greek NTs, and the EDH bilinguals, polytonic. |
 | `sux` | Sumerian | The language isolate of the earliest written literature, from Ur III royal inscriptions to the great lexical lists — 3.04M passages, the largest cuneiform language. |
 | `akk` | Akkadian | East Semitic language of Babylon and Assyria, held in transliteration with ORACC's gold lemmas (SAA letters, omens, royal inscriptions) — joined at scale by the CDLI and eBL fragment shelves, and since 2026-08-18 by the Achemenet archives: 2,774 Achaemenid-period legal/administrative texts and letters (Murašû, Eanna, Sippar), silver-lemmatized with English glosses. |
 | `san-Latn` | Sanskrit (IAST romanization) | The GRETIL, SARIT, and DCS shelves — Vedas to early-modern śāstra — stored in the international transliteration scheme with accents preserved (0.87M passages). |
