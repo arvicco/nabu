@@ -250,19 +250,19 @@ module Store
       end
     end
 
-    # The per-source slice joins passages to the lemma table by passage id;
-    # a v1 lemma table (urn stored + indexed — the live file until the next
-    # full rebuild) joins by its urn instead, to the identical rollup.
-    def test_refresh_source_over_a_v1_lemma_table_matches_the_wholesale_build
+    # The v1 lemma shape is retired: the per-source rollup refuses a pre-v2
+    # lemma table with the rebuild hint instead of joining by urn.
+    def test_refresh_source_over_a_v1_lemma_table_refuses_with_the_rebuild_hint
       seed
       build!
-      wholesale = @catalog[:lemma_rollup].order(*@catalog[:lemma_rollup].columns).all
       fulltext = Nabu::Store.connect_fulltext(@fulltext_path)
       LegacyLemmaTable.widen!(fulltext, @catalog)
       fulltext.disconnect
-      @catalog[:lemma_rollup].where(source_id: @gold.id).delete
-      Nabu::Store::LemmaRollup.refresh_source!(catalog: @catalog, fulltext_path: @fulltext_path, slug: "proiel")
-      assert_equal wholesale, @catalog[:lemma_rollup].order(*@catalog[:lemma_rollup].columns).all
+
+      error = assert_raises(Nabu::Store::Indexer::LegacyLemmaShape) do
+        Nabu::Store::LemmaRollup.refresh_source!(catalog: @catalog, fulltext_path: @fulltext_path, slug: "proiel")
+      end
+      assert_match(/predates the v2 lemma shape.*full rebuild/, error.message)
     end
 
     def test_no_fulltext_file_leaves_the_lemma_rollup_empty_and_builds_the_rest

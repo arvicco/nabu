@@ -571,6 +571,17 @@ on the assumption that the library must outlive its sources:
   Every sync prints a discovery-accounting line (`selected ·
   skipped-by-rule · unrecognized`), so silent ingestion gaps are
   structurally visible.
+- **A proportional, supervised index.** Online index writes stay
+  proportional to what changed (a suite invariant times the stages and
+  fails a build whose cost follows source size); rewrites past a row
+  budget become atomic shadow swaps, and the substring-search lanes live
+  in their own database files rebuilt by build-and-rename, so a crashed
+  build leaves the old index serving. Corpus-scale work (stale-aggregate
+  recomputes, merge-debt consolidation, structural gauges) belongs to one
+  command, `nabu index maintain`. Rebuild runs record their own start and
+  completion — `nabu status` and `nabu index doctor` call out a run that
+  never finished — and every index writer runs under a forked watcher
+  that narrates engine stalls from outside the process.
 - **Boring storage.** Files, git, SQLite. Restorable from an rsync with
   zero services.
 

@@ -14,7 +14,8 @@ module Nabu
     # These gauges make segment pressure visible long before the cap.
     #
     # Format (fts5_index.c, fts5StructureDecode; verified against 3.53.2
-    # during the incident and pinned by behavioral tests): the record is
+    # during the incident, re-verified against 3.54.1 — the engine the
+    # sqlite3 2.10.2 gem bundles — and pinned by behavioral tests): the record is
     # row id=10 of the shadow table <name>_data —
     #   4-byte big-endian cookie
     #   optional V2 marker "\xFF\x00\x00\x01" (FTS5_STRUCTURE_V2 —

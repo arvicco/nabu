@@ -542,5 +542,94 @@ module Store
       assert_equal true, borrowed_of("got", "ts1", "urn:nabu:dict:t-gem-pro:twosub:test"),
                    "the OR-aggregate matches the display merge rule (true > false > nil)"
     end
+
+    # -- the closure at the delta grain (the incrementality review) ----------
+    # The closure's rows depend on the lemma table ONLY through the gold
+    # language SET (closure_rows emits every crosswalk key of a gold
+    # language, attested or not); the stats are per-language distinct gold
+    # passage counts — a sum over passages. So a lemma-bearing refresh moves
+    # the stats by its rows' before/after languages and the closure by the
+    # languages entering or leaving the gold set; the corpus pass stays at
+    # rebuild and on the maintenance rail.
+
+    def closure_rig
+      ine = make_dictionary(slug: "t-ine-pro", language: "ine-pro")
+      make_proto_entry(dictionary: ine, headword: "leg",
+                       reflexes: [{ language: "grc", word: "λεγω" }, { language: "lat", word: "lego" },
+                                  { language: "got", word: "lisan" }])
+      make_gold_passage(language: "grc", lemma: "λεγω")
+      make_gold_passage(language: "lat", lemma: "lego")
+      rebuild!
+    end
+
+    def refresh_texts!(**)
+      Nabu::Store::Indexer.refresh_source!(catalog: @catalog, fulltext: @fulltext, slug: "texts", **)
+    end
+
+    def stats = @fulltext[Nabu::Store::ReflexRootsIndexer::STATS_TABLE]
+
+    def rows_of(db, table) = db[table].all.map { |row| row.sort_by { |key, _| key } }.sort_by(&:inspect)
+
+    def assert_closure_matches_the_corpus_pass
+      fresh = Nabu::Store.connect_fulltext("sqlite::memory:")
+      begin
+        Nabu::Store::Indexer.rebuild!(catalog: @catalog, fulltext: fresh)
+        %i[reflex_roots reflex_root_stats].each do |table|
+          assert_equal rows_of(fresh, table), rows_of(@fulltext, table), "#{table} matches the corpus pass"
+        end
+      ensure
+        fresh.disconnect
+      end
+    end
+
+    def refute_corpus_closure(&)
+      mod = Nabu::Store::ReflexRootsIndexer
+      original = mod.method(:rebuild!)
+      calls = 0
+      mod.define_singleton_method(:rebuild!) do |**kw|
+        calls += 1
+        original.call(**kw)
+      end
+      yield
+      assert_equal 0, calls, "a lemma-bearing refresh never runs the corpus-wide closure"
+    ensure
+      mod.define_singleton_method(:rebuild!, original)
+    end
+
+    def test_a_lemma_refresh_moves_stats_and_closure_by_the_delta_alone
+      closure_rig
+      make_gold_passage(language: "grc", lemma: "λεγω") # a second grc passage
+      Nabu::Store::Passage.first(urn: "urn:nabu:test:lat:1").update(withdrawn: true) # lat leaves the gold set
+      refute_corpus_closure { refresh_texts! }
+
+      assert_equal 2, stats.where(language: "grc").get(:gold_passages)
+      assert_empty roots.where(language: "lat"), "a language leaving the gold set takes its closure rows"
+      refute Nabu::Store::StaleAggregates.stale?(@fulltext, aggregate: "reflex_closure", scope: "corpus")
+      assert_closure_matches_the_corpus_pass
+    end
+
+    def test_a_language_entering_the_gold_set_flags_the_closure_for_the_rail
+      closure_rig
+      make_gold_passage(language: "got", lemma: "lisan")
+      refute_corpus_closure { refresh_texts! }
+
+      assert Nabu::Store::StaleAggregates.stale?(@fulltext, aggregate: "reflex_closure", scope: "corpus"),
+             "its closure needs the whole crosswalk walk — flagged, never paid inline"
+      assert_equal 1, stats.where(language: "got").get(:gold_passages), "the stats still move exactly"
+      Nabu::Store::ReflexRootsIndexer.rebuild_closure!(catalog: @catalog, fulltext: @fulltext)
+
+      refute Nabu::Store::StaleAggregates.stale?(@fulltext, aggregate: "reflex_closure", scope: "corpus")
+      assert_closure_matches_the_corpus_pass
+    end
+
+    def test_the_closure_rewalk_reads_the_gold_set_from_the_stats
+      closure_rig
+      stats.where(language: "lat").delete # the gold set as the stats record it
+
+      Nabu::Store::ReflexRootsIndexer.rebuild_closure!(catalog: @catalog, fulltext: @fulltext)
+
+      assert_empty roots.where(language: "lat"), "no passage_lemmas scan — the stats name the gold languages"
+      refute_empty roots.where(language: "grc")
+    end
   end
 end

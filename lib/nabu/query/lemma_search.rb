@@ -38,8 +38,8 @@ module Nabu
     # back in PASSAGE order (catalog passage id — load order, which keeps a
     # loaded document's passages together) — deterministic, and answerable from
     # the lemma table alone, which stores no urn (Store::Indexer class note).
-    # A v1 table, which still stores the urn, keeps its urn order until the
-    # next full rebuild narrows it.
+    # A retired v1 table (which still stores the urn) refuses with the
+    # rebuild hint (Store::Indexer.require_v2_lemmas!).
     class LemmaSearch
       include CatalogJoin
 
@@ -233,21 +233,24 @@ module Nabu
         [ids.uniq, tiers]
       end
 
-      # Narrow +dataset+ to the one passage +urn+ names (nil = no narrowing),
-      # through the live shape's passage key: the catalog resolves the urn
-      # to its id on the narrow table (an unknown urn → no rows); a v1 table
-      # still filters its stored urn.
+      # Narrow +dataset+ to the one passage +urn+ names (nil = no narrowing):
+      # the catalog resolves the urn to its passage id (an unknown urn → no
+      # rows).
       def passage_scoped(dataset, urn)
         return dataset unless urn
-        return dataset.where(urn: urn) if order_key == :urn
 
         dataset.where(passage_id: @catalog[:passages].where(urn: urn).select_map(:id))
       end
 
-      # The hit order (class note): passage id, or the stored urn on a v1
-      # table (its pre-narrowing order, unchanged until the rebuild).
+      # The hit order (class note): passage id. The first read guards the
+      # shape — a retired v1 lemma table refuses with the rebuild hint
+      # (Store::Indexer.require_v2_lemmas!) instead of scanning by a column
+      # it does not index.
       def order_key
-        @order_key ||= Store::Indexer.lemma_passage_key(@fulltext)
+        @order_key ||= begin
+          Store::Indexer.require_v2_lemmas!(@fulltext)
+          :passage_id
+        end
       end
 
       # Pre-tier fulltext tolerance (P26-0): an index built before the tier

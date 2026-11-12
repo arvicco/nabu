@@ -336,44 +336,27 @@ module Store
       rebuild!
 
       refute_includes lemmas.columns, :urn
-      refute Nabu::Store::Indexer.lemma_urn_column?(@fulltext)
+      assert_nil Nabu::Store::Indexer.require_v2_lemmas!(@fulltext), "the v2 guard passes a fresh table"
       indexed = @fulltext.indexes(:passage_lemmas).values.map { |i| i[:columns] }
       assert_equal [%i[language], %i[lemma_folded], %i[passage_id]], indexed.sort
       assert_equal "v2-passage-keyed", Nabu::Store::Indexer::STAGE_VERSIONS.fetch("fts_lemma"),
                    "the narrowing is a derivation change: a v1-stamped index reads stale"
     end
 
-    # A v1-shape lemma table (urn column + urn index) is the owner's live
-    # file until the next full rebuild: syncs keep writing that shape — urn
-    # filled — and the slice swap stays urn-keyed and row-identical to the
-    # narrow rebuild everywhere but the urn column itself.
-    def test_incremental_refresh_keeps_a_v1_lemma_table_wide
+    # The v1 lemma shape (urn column + urn index) is retired ahead of the
+    # from-scratch rebuild that mints v2 everywhere: an incremental refresh
+    # over a v1 file refuses with the rebuild hint instead of keeping the
+    # urn-keyed dual path alive.
+    def test_incremental_refresh_refuses_a_v1_lemma_table_with_the_rebuild_hint
       doc = make_document(urn: "urn:d:s")
       make_passage(doc, urn: "urn:d:s:1", text_normalized: "λεγει", sequence: 0,
                         annotations: token_annotations(%w[λέγω λέγει]))
-      make_passage(doc, urn: "urn:d:s:2", text_normalized: "doomed", sequence: 1,
-                        annotations: token_annotations(%w[ὁράω ὁρᾷ]))
       rebuild!
       LegacyLemmaTable.widen!(@fulltext, @catalog)
-      assert Nabu::Store::Indexer.lemma_urn_column?(@fulltext)
 
-      make_passage(doc, urn: "urn:d:s:3", text_normalized: "φερει", sequence: 2,
-                        annotations: token_annotations(%w[φέρω φέρει]))
-      Nabu::Store::Passage.first(urn: "urn:d:s:2").update(withdrawn: true)
-      refresh!
-
-      assert_includes lemmas.columns, :urn, "an incremental sync never narrows the table"
-      assert_equal %w[urn:d:s:1 urn:d:s:3], lemmas.order(:urn).distinct.select_map(:urn)
-      assert(@fulltext.indexes(:passage_lemmas).values.any? { |i| i[:columns] == [:urn] })
-      fresh = Nabu::Store.connect_fulltext("sqlite::memory:")
-      begin
-        Nabu::Store::Indexer.rebuild!(catalog: @catalog, fulltext: fresh)
-        wide = lemmas.all.map { |row| row.except(:urn).sort_by { |key, _| key } }.sort_by(&:inspect)
-        assert_equal table_rows(fresh, :passage_lemmas), wide
-        assert_equal table_rows(fresh, :lemma_frequencies), table_rows(@fulltext, :lemma_frequencies)
-      ensure
-        fresh.disconnect
-      end
+      error = assert_raises(Nabu::Store::Indexer::LegacyLemmaShape) { refresh! }
+      assert_match(/predates the v2 lemma shape.*full rebuild/, error.message)
+      assert_match(/nabu rebuild/, error.message, "the hint names the command")
     end
 
     # Non-treebank passages (annotations "{}", or annotations without token
@@ -1295,13 +1278,15 @@ module Store
     # The forbidding_index_work pattern: swap one Indexer entry point for a
     # raiser, restore after — write_char_postings runs AFTER the fts inserts
     # inside the stage body, so it simulates a mid-slice crash.
-    def raising_char_postings
+    # +name+: the in-slice writer to fail — the delta grain moves the
+    # postings by arithmetic, so a delta crash rides its coverage write.
+    def raising_char_postings(name = :write_char_postings)
       mod = Nabu::Store::Indexer
-      original = mod.method(:write_char_postings)
-      mod.define_singleton_method(:write_char_postings) { |*, **| raise "boom" }
+      original = mod.method(name)
+      mod.define_singleton_method(name) { |*, **| raise "boom" }
       yield
     ensure
-      mod.define_singleton_method(:write_char_postings, original)
+      mod.define_singleton_method(name, original)
     end
 
     def test_bulk_slice_failure_persists_partial_state_and_stays_pending
@@ -1516,13 +1501,66 @@ module Store
              "a small delta keeps the ordinary (atomic) transaction shape")
     end
 
+    # The maintenance rail owns merge consolidation: the sync path runs ONE
+    # bounded probe chunk per governed table, and debt beyond it is
+    # REPORTED ("run nabu index maintain"), never paid inline.
+    NoteSpy = Struct.new(:stages, :notes) do
+      def stage(label, **) = (self.stages ||= []) << label
+      def note(line) = (self.notes ||= []) << line
+      def load_tick(*); end
+    end
+
+    def test_the_sync_path_reports_merge_debt_past_its_one_probe_chunk
+      doc = make_document(urn: "urn:d:s")
+      make_passage(doc, urn: "urn:d:s:1", text_normalized: "alpha", sequence: 0)
+      rebuild!
+      # Planted debt: automerge off, one level-0 segment per committed insert.
+      Nabu::Store::Indexer.apply_merge_settings(@fulltext, :passages_fts, { "automerge" => 0 })
+      12.times do |i|
+        fts.insert(rowid: 9_000 + i, text_normalized: "debt", language: Nabu::Store::Indexer.language_token("grc"),
+                   source: Nabu::Store::Indexer.source_token("s"))
+      end
+      make_passage(doc, urn: "urn:d:s:2", text_normalized: "beta", sequence: 1)
+      spy = NoteSpy.new([], [])
+      chunks = 0
+      mod = Nabu::Store::Indexer
+      original = mod.method(:merge_chunk!)
+      # A chunk that barely dents a huge debt (the live shape) — at test
+      # scale one real chunk would merge everything.
+      mod.define_singleton_method(:merge_chunk!) do |*|
+        chunks += 1
+        1
+      end
+      begin
+        refresh!(delta: delta_of(upserted: %w[urn:d:s:2]), progress: spy)
+      ensure
+        mod.define_singleton_method(:merge_chunk!, original)
+      end
+
+      assert_equal Nabu::Store::Indexer.governed_fts_tables(@fulltext).size, chunks,
+                   "the sync path runs exactly one probe chunk per governed table"
+      line = spy.notes.find { |note| note.include?("passages_fts") }
+      assert_match(/merge debt.*run nabu index maintain/, line.to_s, "the debt is reported (#{spy.notes.inspect})")
+    end
+
+    def test_a_clean_index_reports_no_merge_debt
+      doc = make_document(urn: "urn:d:s")
+      make_passage(doc, urn: "urn:d:s:1", text_normalized: "alpha", sequence: 0)
+      rebuild!
+      make_passage(doc, urn: "urn:d:s:2", text_normalized: "beta", sequence: 1)
+      spy = NoteSpy.new([], [])
+      refresh!(delta: delta_of(upserted: %w[urn:d:s:2]), progress: spy)
+
+      assert_empty spy.notes.grep(/merge debt/)
+    end
+
     def test_a_small_write_stays_atomic_under_deferred_merges
       doc = make_document(urn: "urn:d:s")
       make_passage(doc, urn: "urn:d:s:1", text_normalized: "alpha", sequence: 0)
       rebuild!
       make_passage(doc, urn: "urn:d:s:2", text_normalized: "fresh", sequence: 1)
 
-      raising_char_postings do
+      raising_char_postings(:write_passage_chars) do
         assert_raises(RuntimeError) { refresh!(delta: delta_of(upserted: %w[urn:d:s:2])) }
       end
 
@@ -1822,16 +1860,23 @@ module Store
     end
 
     # A dictionary sync mints no passages but DOES change the crosswalk the
-    # closure is built from — the caller forces the reflex rebuild.
+    # closure is built from — the caller forces the closure re-walk. The
+    # gold stats are a function of the lemma table alone, which no
+    # crosswalk edit moves, so they are kept (the delta grain's O(Δ) rule —
+    # no corpus-wide lemma scan behind a dictionary sync).
     def test_refresh_rebuilds_the_reflex_closure_when_reflexes_changed
       doc = make_document(urn: "urn:d:s")
       make_passage(doc, urn: "urn:d:s:1", text_normalized: "plain", sequence: 0)
       rebuild!
+      @fulltext[Nabu::Store::ReflexRootsIndexer::TABLE].insert(language: "zz", lemma_folded: "x",
+                                                               root_urn: "urn:sentinel")
       reflex_stats.insert(language: "zz-sentinel", gold_passages: 1)
 
       assert_equal 1, refresh!(reflexes_changed: true)
-      assert_equal 0, reflex_stats.where(language: "zz-sentinel").count,
-                   "reflexes_changed forces the closure rebuild"
+      assert_empty @fulltext[Nabu::Store::ReflexRootsIndexer::TABLE].where(root_urn: "urn:sentinel"),
+                   "reflexes_changed forces the closure re-walk"
+      assert_equal 1, reflex_stats.where(language: "zz-sentinel").count,
+                   "the gold stats are not re-snapshotted behind a crosswalk change"
     end
 
     # -- the char-postings index (P65 gate: `nabu char 纹` must be instant) --
@@ -2022,8 +2067,9 @@ module Store
       # mutation set — applied through a delta this time.
       make_passage(doc, urn: "urn:d:s:4", text_normalized: "fresh 王道", sequence: 3,
                         annotations: token_annotations(%w[φέρω φέρει]))
+      # A revision moves the content sha, exactly as the loader mints it.
       Nabu::Store::Passage.first(urn: "urn:d:s:2").update(
-        text_normalized: "revised 国",
+        text_normalized: "revised 国", content_sha256: "ab12",
         annotations_json: JSON.generate(token_annotations(%w[ὁράω ὁρᾷ]))
       )
       Nabu::Store::Passage.first(urn: "urn:d:s:3").update(withdrawn: true)
@@ -2041,10 +2087,22 @@ module Store
         assert_equal [passage_id_of("urn:d:s:3")], cjk_rowids(@fulltext),
                      "the cjk lane keeps the pre-delta build's rows at the delta grain"
         %i[passage_lemmas passages_trigram passages_trigram_scope lemma_frequencies
-           char_postings passage_chars reflex_roots reflex_root_stats].each do |table|
+           passage_chars reflex_roots reflex_root_stats].each do |table|
           assert_equal table_rows(fresh, table), table_rows(@fulltext, table),
                        "#{table} must be row-identical to a from-scratch rebuild"
         end
+        # char_postings at the delta grain: "s" mixes Greek with Han, and
+        # urn:d:s:2 was REVISED — its old text is gone and passage_chars
+        # holds only Han, so its exact decrement is unknowable. The
+        # aggregate is flagged stale (never silently recomputed inline)
+        # and the maintenance rail's recompute converges it exactly.
+        assert Nabu::Store::StaleAggregates.stale?(@fulltext, aggregate: "char_postings", scope: "s"),
+               "the unsound revision flags the source's postings stale"
+        Nabu::Store::Indexer.recompute_char_postings!(catalog: @catalog, fulltext: @fulltext, slug: "s")
+
+        assert_equal table_rows(fresh, :char_postings), table_rows(@fulltext, :char_postings),
+                     "the rail's recompute converges char_postings to the rebuild's rows"
+        refute Nabu::Store::StaleAggregates.stale?(@fulltext, aggregate: "char_postings", scope: "s")
         assert_equal %w[urn:d:s:2], match_urns("revised"),
                      "the delta-refreshed slice answers MATCH with the revised tokens"
         assert_empty match_urns("doomed"), "the removed row stops matching"
@@ -2196,7 +2254,13 @@ module Store
     # rewritten but whose lemma + sidecar writes never landed, one added row
     # whose fts insert landed alone, and one withdrawal whose sidecar delete
     # landed but whose fts/lemma deletes did not.
+    # A crash that leaves the lemma rows moved without the census delta is
+    # a BULK-shape crash (an atomic run rolls back whole), so the run had
+    # journaled its census baseline and recorded its shape first — exactly
+    # as refresh_source! does before a bulk unit's first write.
     def crash_mid_refresh(doc)
+      source_ids = @catalog[:passages].where(document_id: doc.id).select_map(:id)
+      Nabu::Store::Indexer.write_census_baseline!(@fulltext, "s", source_ids)
       revised = Nabu::Store::Passage.first(urn: "urn:d:s:2")
       revised.update(text_normalized: "revised", content_sha256: sha_hex("revised"),
                      annotations_json: JSON.generate(token_annotations(%w[revised revised])))
@@ -2212,7 +2276,7 @@ module Store
       withdrawn.update(withdrawn: true)
       row_shas.where(rowid: withdrawn.id).delete
       slice_rows.where(slug: "s").update(finished_at: nil) if @fulltext.table_exists?(:slice_refreshes)
-      Nabu::Store::Indexer.mark_slice_pending!(@fulltext, "s")
+      Nabu::Store::Indexer.mark_slice_pending!(@fulltext, "s", shape: "bulk")
       [revised.id, added.id, withdrawn.id]
     end
 
@@ -2389,6 +2453,346 @@ module Store
 
       assert_empty row_shas.where(source_id: @source.id), "a withdrawn document takes every sha with it"
       assert_identical_to_a_fresh_rebuild
+    end
+
+    # -- char postings at the delta grain (the incrementality review) -------
+    # The per-source postings aggregate is decomposable: a delta subtracts
+    # the changed rows' OLD contribution and adds the upserted rows' new
+    # one — never a whole-source catalog scan. The old contribution is
+    # exact where the row-sha sidecar vouches the catalog still holds the
+    # indexed text (withdrawals, unchanged re-entries), and for a REVISED
+    # row where the source is Han-pure (passage_chars holds its old Han
+    # set, which is then its whole posted set). Anywhere else the grain is
+    # unsound and the source's postings are flagged STALE for the
+    # maintenance rail — never recomputed inline.
+
+    def postings_rows(db = @fulltext) = table_rows(db, :char_postings)
+
+    def stale_postings?(slug = "s")
+      Nabu::Store::StaleAggregates.stale?(@fulltext, aggregate: "char_postings", scope: slug)
+    end
+
+    def assert_postings_match_a_fresh_rebuild
+      fresh = Nabu::Store.connect_fulltext("sqlite::memory:")
+      begin
+        Nabu::Store::Indexer.rebuild!(catalog: @catalog, fulltext: fresh)
+        assert_equal postings_rows(fresh), postings_rows, "char_postings must be row-identical to a full recompute"
+      ensure
+        fresh.disconnect
+      end
+    end
+
+    def refute_source_scan(&)
+      observing(:source_char_postings) do |calls|
+        yield
+        assert_empty calls, "the delta never scans the whole source for its postings"
+      end
+    end
+
+    def test_a_delta_of_adds_and_withdrawals_moves_postings_exactly
+      doc = make_document(urn: "urn:d:s")
+      make_passage(doc, urn: "urn:d:s:1", text_normalized: "λογοσ αει", sequence: 0, sha: sha_hex("1"))
+      make_passage(doc, urn: "urn:d:s:2", text_normalized: "μηνιν", sequence: 1, sha: sha_hex("2"))
+      lit = make_document(urn: "urn:d:lit", source: literary_source)
+      make_passage(lit, urn: "urn:d:lit:1", text_normalized: "λογοσ", sequence: 0, sha: sha_hex("l"))
+      rebuild!
+
+      make_passage(doc, urn: "urn:d:s:3", text_normalized: "ναυσ λογοσ", sequence: 2, sha: sha_hex("3"))
+      Nabu::Store::Passage.first(urn: "urn:d:s:2").update(withdrawn: true)
+      refute_source_scan { refresh!(delta: delta_of(upserted: %w[urn:d:s:3], removed: %w[urn:d:s:2])) }
+
+      refute stale_postings?, "adds and withdrawals are always sound"
+      assert_postings_match_a_fresh_rebuild
+    end
+
+    def test_a_revision_in_a_han_pure_source_decrements_from_passage_chars
+      doc = make_document(urn: "urn:d:s")
+      make_passage(doc, urn: "urn:d:s:1", text_normalized: "天地玄黃", sequence: 0, language: "lzh", sha: sha_hex("1"))
+      make_passage(doc, urn: "urn:d:s:2", text_normalized: "宇宙洪荒 abc", sequence: 1, language: "lzh",
+                        sha: sha_hex("2"))
+      make_passage(doc, urn: "urn:d:s:3", text_normalized: "plain ascii", sequence: 2, sha: sha_hex("3"))
+      rebuild!
+
+      Nabu::Store::Passage.first(urn: "urn:d:s:2").update(text_normalized: "日月盈昃", content_sha256: sha_hex("2b"))
+      Nabu::Store::Passage.first(urn: "urn:d:s:3").update(text_normalized: "now 天", content_sha256: sha_hex("3b"))
+      refute_source_scan { refresh!(delta: delta_of(upserted: %w[urn:d:s:2 urn:d:s:3])) }
+
+      refute stale_postings?, "a Han-pure source's revisions decrement exactly from passage_chars"
+      assert_postings_match_a_fresh_rebuild
+    end
+
+    def test_a_revision_in_a_mixed_source_flags_the_postings_stale_without_a_scan
+      doc = make_document(urn: "urn:d:s")
+      make_passage(doc, urn: "urn:d:s:1", text_normalized: "λογοσ 天", sequence: 0, sha: sha_hex("1"))
+      make_passage(doc, urn: "urn:d:s:2", text_normalized: "μηνιν", sequence: 1, sha: sha_hex("2"))
+      rebuild!
+      before = postings_rows
+
+      Nabu::Store::Passage.first(urn: "urn:d:s:2").update(text_normalized: "ναυσ", content_sha256: sha_hex("2b"))
+      refute_source_scan { refresh!(delta: delta_of(upserted: %w[urn:d:s:2])) }
+
+      assert stale_postings?, "the old Greek of a revised row is unknowable — flagged, not guessed"
+      assert_equal before, postings_rows, "the stale source's postings are left as they stood"
+      Nabu::Store::Indexer.recompute_char_postings!(catalog: @catalog, fulltext: @fulltext, slug: "s")
+
+      refute stale_postings?
+      assert_postings_match_a_fresh_rebuild
+    end
+
+    def test_a_stale_source_stays_stale_through_later_deltas_until_recomputed
+      doc = make_document(urn: "urn:d:s")
+      make_passage(doc, urn: "urn:d:s:1", text_normalized: "λογοσ", sequence: 0, sha: sha_hex("1"))
+      rebuild!
+      Nabu::Store::StaleAggregates.mark!(@fulltext, aggregate: "char_postings", scope: "s", reason: "planted")
+
+      make_passage(doc, urn: "urn:d:s:2", text_normalized: "ναυσ", sequence: 1, sha: sha_hex("2"))
+      refresh!(delta: delta_of(upserted: %w[urn:d:s:2]))
+
+      assert stale_postings?, "a delta never applies its arithmetic on a stale base"
+      refresh! # the whole-slice rewrite re-derives the source's postings outright
+
+      refute stale_postings?, "a full-slice refresh clears the flag"
+      assert_postings_match_a_fresh_rebuild
+    end
+
+    def test_a_full_rebuild_clears_every_stale_flag
+      doc = make_document(urn: "urn:d:s")
+      make_passage(doc, urn: "urn:d:s:1", text_normalized: "λογοσ", sequence: 0)
+      rebuild!
+      Nabu::Store::StaleAggregates.mark!(@fulltext, aggregate: "char_postings", scope: "s", reason: "planted")
+      rebuild!
+
+      refute stale_postings?
+    end
+
+    # -- the heal's lemma census, bounded to the healed source --------------
+    # A healing refresh used to re-census lemma_frequencies over the WHOLE
+    # corpus (the crashed run's before-snapshot was lost). Now the run's
+    # transaction shape decides: an atomic run's crash rolled back whole,
+    # so the heal's own before/after delta is exact; a bulk run journals
+    # the source's whole contribution as a baseline before its first
+    # write, and its heal applies baseline → the source's current
+    # contribution. Either way only the healed source's rows are read.
+
+    def crash_after(name)
+      mod = Nabu::Store::Indexer
+      original = mod.method(name)
+      mod.define_singleton_method(name) do |*args, **kw, &blk|
+        original.call(*args, **kw, &blk)
+        raise "crash after #{name}"
+      end
+      yield
+    ensure
+      mod.define_singleton_method(name, original)
+    end
+
+    def census_fixture
+      doc = make_document(urn: "urn:d:s")
+      %w[alpha beta].each_with_index do |word, index|
+        make_passage(doc, urn: "urn:d:s:#{index + 1}", text_normalized: word, sequence: index,
+                          sha: sha_hex(word), annotations: token_annotations([word, word]))
+      end
+      lit = make_document(urn: "urn:d:lit", source: literary_source)
+      make_passage(lit, urn: "urn:d:lit:1", text_normalized: "gamma", sequence: 0, sha: sha_hex("g"),
+                        annotations: token_annotations(%w[gamma gamma]))
+      rebuild!
+      Nabu::Store::Passage.first(urn: "urn:d:s:2").update(
+        text_normalized: "revised", content_sha256: sha_hex("revised"),
+        annotations_json: JSON.generate(token_annotations(%w[revised revised]))
+      )
+      make_passage(doc, urn: "urn:d:s:3", text_normalized: "delta", sequence: 2, sha: sha_hex("delta"),
+                        annotations: token_annotations(%w[delta delta]))
+    end
+
+    # The heal's census reads: no corpus re-census, and every snapshot
+    # stays inside the healed source's passage ids.
+    def assert_census_bounded_to_the_source(&)
+      source_ids = @catalog[:passages].join(:documents, id: Sequel[:passages][:document_id])
+                                      .where(Sequel[:documents][:source_id] => @source.id)
+                                      .select_map(Sequel[:passages][:id]).to_set
+      snapshot_ids = Set.new
+      freq = Nabu::Store::LemmaFrequencies
+      original_rebuild = freq.method(:rebuild!)
+      original_snapshot = freq.method(:snapshot)
+      rebuilds = 0
+      freq.define_singleton_method(:rebuild!) do |*args|
+        rebuilds += 1
+        original_rebuild.call(*args)
+      end
+      freq.define_singleton_method(:snapshot) do |fulltext, ids:|
+        snapshot_ids.merge(ids.to_a)
+        original_snapshot.call(fulltext, ids: ids)
+      end
+      begin
+        yield
+      ensure
+        freq.define_singleton_method(:rebuild!, original_rebuild)
+        freq.define_singleton_method(:snapshot, original_snapshot)
+      end
+      assert_equal 0, rebuilds, "the heal never re-censuses the corpus"
+      assert_operator snapshot_ids, :subset?, source_ids, "every census read stays in the healed source"
+    end
+
+    def test_a_crashed_bulk_run_heals_its_census_from_the_source_baseline
+      census_fixture
+      crash_after(:insert_passage_batches) do
+        assert_raises(RuntimeError) { refresh!(bulk_threshold: 1) }
+      end
+      assert Nabu::Store::Indexer.slice_pending?(@fulltext, "s")
+
+      assert_census_bounded_to_the_source { refresh! }
+      refute Nabu::Store::StaleAggregates.stale?(@fulltext, aggregate: "lemma_census", scope: "corpus")
+      assert_identical_to_a_fresh_rebuild
+      assert_equal 0, @fulltext[Nabu::Store::Indexer::CENSUS_BASELINES_TABLE].count, "the baseline is spent"
+    end
+
+    def test_a_crashed_atomic_run_heals_its_census_by_the_delta_alone
+      census_fixture
+      crash_after(:insert_passage_batches) do
+        assert_raises(RuntimeError) { refresh! }
+      end
+      assert Nabu::Store::Indexer.slice_pending?(@fulltext, "s")
+
+      assert_census_bounded_to_the_source { refresh! }
+      refute Nabu::Store::StaleAggregates.stale?(@fulltext, aggregate: "lemma_census", scope: "corpus")
+      assert_identical_to_a_fresh_rebuild
+    end
+
+    def test_a_pending_marker_of_unknown_shape_flags_the_census_for_the_rail
+      census_fixture
+      Nabu::Store::Indexer.mark_slice_pending!(@fulltext, "s") # minted before shapes were recorded
+
+      assert_census_bounded_to_the_source { refresh! }
+      assert Nabu::Store::StaleAggregates.stale?(@fulltext, aggregate: "lemma_census", scope: "corpus"),
+             "a crash of unknown shape may have drifted the census — flagged, not re-censused inline"
+    end
+
+    # -- above-budget rewrites become shadow builds (the incrementality review)
+    # In-place fts churn is what the engine is pathological at: tombstones
+    # plus re-inserts leave merge debt it repays inside arbitrary later
+    # statements. Past IN_PLACE_ROW_BUDGET rows, a lane's new content is
+    # built as an APPEND-ONLY shadow and swapped in whole — the old
+    # structure is dropped, never churned. Below it, in place as before.
+
+    # Two sources, both indexed; "s" then mutates (add + revise + withdraw).
+    def shadow_fixture(also: nil)
+      doc = make_document(urn: "urn:d:s")
+      %w[alpha beta gamma].each_with_index do |word, index|
+        make_passage(doc, urn: "urn:d:s:#{index + 1}", text_normalized: word, sequence: index,
+                          sha: sha_hex(word), annotations: token_annotations([word, word]))
+      end
+      lit = make_document(urn: "urn:d:lit", source: literary_source)
+      make_passage(lit, urn: "urn:d:lit:1", text_normalized: "στρατηγοσ 棄", sequence: 0, sha: sha_hex("σ"))
+      make_passage(lit, urn: "urn:d:lit:2", text_normalized: "ναυσ", sequence: 1, sha: sha_hex("ν"))
+      [@fulltext, also].compact.each do |fulltext|
+        Nabu::Store::Indexer.rebuild!(catalog: @catalog, fulltext: fulltext, fuzzy_slugs: %w[s lit])
+      end
+      doc
+    end
+
+    def mutate_shadow_fixture(doc)
+      make_passage(doc, urn: "urn:d:s:4", text_normalized: "delta 王", sequence: 3, sha: sha_hex("delta"),
+                        annotations: token_annotations(%w[delta delta]))
+      Nabu::Store::Passage.first(urn: "urn:d:s:2").update(text_normalized: "revised", content_sha256: sha_hex("r"))
+      Nabu::Store::Passage.first(urn: "urn:d:s:3").update(withdrawn: true)
+    end
+
+    # The slice key set of "s" is 4 rows after the mutation.
+    def test_a_rewrite_at_the_budget_stays_in_place
+      doc = shadow_fixture
+      mutate_shadow_fixture(doc)
+      # The discriminator: a tampered row of ANOTHER source. In place, the
+      # refresh never touches it; a shadow re-derives every indexed row.
+      tampered = passage_id_of("urn:d:lit:2")
+      fts.where(rowid: tampered).delete
+      spy = BulkSpy.new
+      refresh!(row_budget: 4, fuzzy_slugs: %w[s lit], progress: spy)
+
+      refute_includes fts_rowids(@fulltext), tampered, "at the budget the write stays in place"
+      refute(spy.stages.any? { |line| line.include?("shadow") }, "no shadow is announced (#{spy.stages.inspect})")
+    end
+
+    def test_a_rewrite_over_the_budget_builds_a_shadow_identical_to_the_in_place_run
+      in_place = Nabu::Store.connect_fulltext("sqlite::memory:")
+      begin
+        doc = shadow_fixture(also: in_place)
+        mutate_shadow_fixture(doc)
+        Nabu::Store::Indexer.refresh_source!(catalog: @catalog, fulltext: in_place, slug: "s",
+                                             fuzzy_slugs: %w[s lit])
+        spy = BulkSpy.new
+        refresh!(row_budget: 3, fuzzy_slugs: %w[s lit], progress: spy)
+
+        assert(spy.stages.any? { |line| line.include?("shadow build") },
+               "the shadow is announced (#{spy.stages.inspect})")
+        assert_equal fts_rowids(in_place), fts_rowids(@fulltext), "passages_fts: the identical rowid set"
+        %i[passage_lemmas lemma_frequencies fts_row_shas char_postings passage_chars
+           passages_trigram passages_trigram_scope].each do |table|
+          assert_equal table_rows(in_place, table), table_rows(@fulltext, table),
+                       "#{table} must be row-identical to the in-place run"
+        end
+        assert_equal %w[urn:d:s:2], match_urns("revised"), "the swapped-in table answers MATCH"
+        assert_empty match_urns("gamma"), "the withdrawn row is absent from the shadow"
+        refute @fulltext.table_exists?(Nabu::Store::Indexer::SHADOW_TABLE), "the shadow name is gone after the swap"
+        assert_equal 0, Nabu::Store::FtsStructure.gauges(@fulltext, :passages_fts)[:tombstone_pages],
+                     "an append-only build carries zero tombstones"
+      ensure
+        in_place.disconnect
+      end
+    end
+
+    def test_a_shadow_build_rederives_every_indexed_row_of_other_sources
+      doc = shadow_fixture
+      mutate_shadow_fixture(doc)
+      tampered = passage_id_of("urn:d:lit:2")
+      fts.where(rowid: tampered).delete
+      refresh!(row_budget: 0)
+
+      assert_includes fts_rowids(@fulltext), tampered,
+                      "the shadow indexes every sidecar-recorded row, not just the refreshed source's"
+      assert_identical_to_a_fresh_rebuild
+    end
+
+    def test_a_killed_shadow_builds_orphan_is_dropped_and_the_old_table_keeps_serving
+      shadow_fixture
+      @fulltext.run(Nabu::Store::Indexer::CREATE_TABLE.sub("passages_fts", "passages_fts_shadow"))
+
+      assert_equal %w[urn:d:lit:1 urn:d:lit:2 urn:d:s:1 urn:d:s:2 urn:d:s:3], fts_urns,
+                   "the serving table is untouched by an orphan beside it"
+      refresh!
+
+      refute @fulltext.table_exists?(Nabu::Store::Indexer::SHADOW_TABLE), "the next refresh drops the orphan"
+    end
+
+    def test_the_shadow_needs_a_complete_sidecar_and_says_so_otherwise
+      doc = shadow_fixture
+      mutate_shadow_fixture(doc)
+      row_shas.where(source_id: literary_source.id).delete # a slice indexed before the sidecar existed
+      spy = BulkSpy.new
+      refresh!(row_budget: 0, progress: spy)
+
+      assert(spy.stages.any? { |line| line.include?("sidecar incomplete") },
+             "the fallback is announced (#{spy.stages.inspect})")
+      assert_equal %w[urn:d:lit:1 urn:d:lit:2], urns_of(fts_rowids(@fulltext)).grep(/lit/),
+                   "the other source keeps its rows — a shadow would have lost them"
+    end
+
+    def test_an_over_budget_trigram_lane_is_rebuilt_whole
+      doc = shadow_fixture
+      mutate_shadow_fixture(doc)
+      spy = BulkSpy.new
+      refresh!(row_budget: 3, fuzzy_slugs: %w[s lit], progress: spy)
+
+      assert(spy.stages.any? { |line| line.include?("trigram lane: shadow build") },
+             "the trigram lane's whole rebuild is announced (#{spy.stages.inspect})")
+      fresh = Nabu::Store.connect_fulltext("sqlite::memory:")
+      begin
+        Nabu::Store::Indexer.rebuild!(catalog: @catalog, fulltext: fresh, fuzzy_slugs: %w[s lit])
+        %i[passages_trigram passages_trigram_scope].each do |table|
+          assert_equal table_rows(fresh, table), table_rows(@fulltext, table), "#{table} matches a fresh build"
+        end
+      ensure
+        fresh.disconnect
+      end
     end
   end
 end

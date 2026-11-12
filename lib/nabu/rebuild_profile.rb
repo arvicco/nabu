@@ -82,8 +82,16 @@ module Nabu
       analyze: "analyze" # P42-4: the bounded post-rebuild ANALYZE (catalog + index)
     }.freeze
 
-    def initialize(clock: -> { Process.clock_gettime(Process::CLOCK_MONOTONIC) })
+    # +on_measure+ (the machine-visible runs packet): a callable invoked
+    # the moment each #measure'd stage RETURNS, with (scope, stage,
+    # accumulated seconds, the block's value). The rebuild hands one in
+    # that flushes the stage to the ledger at once — the profile used to
+    # hold every fact until a successful run end, so a killed run (the
+    # 2026-11-09 rebuild) left no timing at all. Component samples (#add)
+    # never fire it: they are not stages.
+    def initialize(clock: -> { Process.clock_gettime(Process::CLOCK_MONOTONIC) }, on_measure: nil)
       @clock = clock
+      @on_measure = on_measure
       @seconds = Hash.new(0.0) # [scope, stage] => accumulated wall seconds
     end
 
@@ -95,6 +103,7 @@ module Nabu
       started = @clock.call
       result = yield
       add(scope: scope, stage: stage, seconds: @clock.call - started)
+      @on_measure&.call(scope, stage, @seconds[[scope, stage]], result)
       result
     end
 

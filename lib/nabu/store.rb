@@ -122,8 +122,9 @@ module Nabu
     # use, not an allocation). Applied to read-write AND read-only
     # connects — both pragmas are per-connection and read-path knobs.
     # The request is a ceiling twice over: the engine clamps it to its
-    # compile-time SQLITE_MAX_MMAP_SIZE (measured 2 GiB-epsilon on this
-    # build — the pragma reports what it actually granted).
+    # compile-time SQLITE_MAX_MMAP_SIZE (measured 2 GiB-epsilon, 0x7fff0000,
+    # on this build — unchanged from 3.53.2 to 3.54.1; the pragma reports
+    # what it actually granted).
     LIVE_CACHE_KIB = -65_536
     LIVE_MMAP_BYTES = 8 * (1024**3)
 
@@ -259,6 +260,14 @@ module Nabu
       [path, "#{path}-wal", "#{path}-shm"].each { |file| FileUtils.rm_f(file) }
     end
 
+    # The fulltext family's drop: the main index file AND its lane files
+    # (Store::Lanes), each with its sidecars. A full rebuild regenerates the
+    # catalog, so every passage id a lane row names is about to be re-minted
+    # — a surviving lane would answer with the wrong passages.
+    def drop_fulltext_files!(path)
+      [path, *Lanes.paths_for(path)].each { |file| drop_database_files!(file) }
+    end
+
     # Open the fulltext index database (architecture §2: a SEPARATE SQLite file
     # from the catalog). Same scheme-less-path handling as #connect so callers
     # can pass config.fulltext_path directly. No foreign_keys pragma: the index
@@ -274,7 +283,9 @@ module Nabu
     # slice-pending marker heals a lost tail); the cost it removes is
     # macOS F_FULLFSYNC per autocommit batch, paid thousands of times by
     # the bulk recipe's short autocommitted statements. Measured
-    # 2026-11-11: this box's SQLite (3.53.2) is compiled with
+    # 2026-11-11 on 3.53.2 and re-measured 2026-11-12 on the engine the
+    # sqlite3 gem now bundles (2.10.2 → SQLite 3.54.1, compile options
+    # identical but for MAX_SCHEMA): the build carries
     # DEFAULT_WAL_SYNCHRONOUS=1, so a WAL connection ALREADY defaults to
     # NORMAL — the pragma makes the fulltext's posture explicit and
     # build-independent rather than changing today's behavior. The
@@ -283,8 +294,13 @@ module Nabu
     # is an owner decision, not a rider on an index change.
     # +writer_profile: :index+ layers the INDEX_WRITER_CACHE_KIB cache on
     # top of the live profile for the sync/index-refresh writer only.
+    # Every connection ATTACHes the lane files that exist beside the main
+    # file (Store::Lanes — the cjk and trigram lanes' own files), with the
+    # same riders applied per attached schema.
     def connect_fulltext(url, readonly: false, rebuild: false, writer_profile: nil)
-      db = Sequel.connect(sqlite_url(url), readonly: readonly, timeout: BUSY_TIMEOUT_MS)
+      main_file = Lanes.main_file(url)
+      attach = ->(conn) { Lanes.attach_existing!(conn, main_file, readonly: readonly, rebuild: rebuild) }
+      db = Sequel.connect(sqlite_url(url), readonly: readonly, timeout: BUSY_TIMEOUT_MS, after_connect: attach)
       if db.database_type == :sqlite
         live_pragmas!(db)
         unless readonly
@@ -293,6 +309,10 @@ module Nabu
           db.run("PRAGMA synchronous = NORMAL")
           rebuild_pragmas!(db) if rebuild
           index_writer_pragmas!(db) if writer_profile == :index
+          # A killed writer's journaled engine-config restore (the intent
+          # journal — Store::EngineIntents): replayed here, on the next
+          # read-write connect, for every journaled writer that is gone.
+          EngineIntents.replay!(db)
         end
       end
       db
@@ -469,6 +489,10 @@ module Nabu
   end
 end
 
+require_relative "store/lanes"
+require_relative "store/engine_intents"
+require_relative "store/stale_aggregates"
+require_relative "store/index_cost_classes"
 require_relative "store/ledger"
 require_relative "store/stage_timings"
 require_relative "store/links_journal"
@@ -481,6 +505,7 @@ require_relative "store/source_stats"
 require_relative "store/place_index"
 require_relative "store/person_index"
 require_relative "store/fts_structure"
+require_relative "store/lane_coverage"
 require_relative "store/index_delta"
 require_relative "store/loader"
 require_relative "store/dictionary_loader"
@@ -489,6 +514,7 @@ require_relative "store/note_loader"
 require_relative "store/lemma_shelf_loader"
 require_relative "store/silver_lemma_cache"
 require_relative "store/source_dossier_loader"
+require_relative "store/rebuild_runs"
 require_relative "store/run_recorder"
 require_relative "store/derivation_stamp"
 require_relative "store/lemma_frequencies"
@@ -514,3 +540,4 @@ require_relative "store/lemma_rollup"
 require_relative "store/hiero_postings_builder"
 require_relative "store/sign_concordances"
 require_relative "store/reflex_roots_indexer"
+require_relative "store/index_maintenance"

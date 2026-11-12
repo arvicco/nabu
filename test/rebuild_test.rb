@@ -883,6 +883,76 @@ class RebuildTest < Minitest::Test
     assert_match(/after the load: index boom/, run.notes)
   end
 
+  # -- rebuild runs are machine-visible ---------------------------------------
+  # A run row at START (mode, code revision, planned stages, pid),
+  # completed_at stamped as the run's LAST act; stage timings flush PER
+  # STAGE so a killed run still leaves the stages it finished on record.
+
+  def test_a_completed_rebuild_records_its_run_row_start_to_finish
+    write_sources(<<~YAML)
+      hexameter:
+        adapter: TestAdapter
+    YAML
+    write_canonical("hexameter", "one.txt" => ILIAD)
+
+    rebuilder.run
+
+    row = with_ledger { |ledger| ledger[Nabu::Store::RebuildRuns::TABLE].order(:id).last }
+    assert_equal "full", row[:mode]
+    refute_nil row[:started_at]
+    refute_nil row[:completed_at], "the last act stamps completion"
+    assert_equal Process.pid, row[:pid]
+    planned = JSON.parse(row[:planned_stages])
+    assert_includes planned, "load:hexameter"
+    assert_includes planned, "fts_lemma"
+    assert_nil(with_ledger { |ledger| Nabu::Store::RebuildRuns.attention(ledger) })
+  end
+
+  def test_a_rebuild_killed_mid_run_leaves_its_row_incomplete_and_its_finished_stages_flushed
+    write_sources(<<~YAML)
+      hexameter:
+        adapter: TestAdapter
+    YAML
+    write_canonical("hexameter", "one.txt" => ILIAD)
+
+    original = Nabu::Store::Indexer.method(:rebuild!)
+    Nabu::Store::Indexer.define_singleton_method(:rebuild!) { |*, **| raise Interrupt }
+    begin
+      assert_raises(Interrupt) { rebuilder.run }
+    ensure
+      Nabu::Store::Indexer.define_singleton_method(:rebuild!, original)
+    end
+
+    with_ledger do |ledger|
+      row = ledger[Nabu::Store::RebuildRuns::TABLE].order(:id).last
+      assert_nil row[:completed_at], "a killed run never reads completed"
+      refute_nil Nabu::Store::StageTimings.last(ledger, kind: "rebuild", scope: "hexameter", stage: "load"),
+                 "the replay's timing flushed when its stage ended, not at run end"
+      refute_nil Nabu::Store::StageTimings.last(ledger, kind: "rebuild", scope: "corpus", stage: "timeline")
+      assert_nil Nabu::Store::StageTimings.last(ledger, kind: "rebuild", scope: "corpus", stage: "analyze"),
+                 "a stage the run never reached records nothing"
+    end
+  end
+
+  def test_a_rebuild_that_raises_records_the_failure_on_its_run_row
+    write_sources(<<~YAML)
+      alpha:
+        adapter: TestAdapter
+    YAML
+    write_canonical("alpha", "a.txt" => ILIAD)
+
+    original = Nabu::Store::Indexer.method(:rebuild!)
+    Nabu::Store::Indexer.define_singleton_method(:rebuild!) { |*, **| raise Nabu::Error, "index boom" }
+    begin
+      assert_raises(Nabu::Error) { rebuilder.run }
+    ensure
+      Nabu::Store::Indexer.define_singleton_method(:rebuild!, original)
+    end
+
+    line = with_ledger { |ledger| Nabu::Store::RebuildRuns.attention(ledger) }
+    assert_match(/never completed \(failed: index boom\) — the index may be partial/, line)
+  end
+
   # -- the ledger survives rebuild (P7-1) -----------------------------------
 
   def test_rebuild_never_touches_seeded_ledger_history
