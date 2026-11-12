@@ -66,9 +66,11 @@ module Nabu
       # ("bpal", "baal"); +text_flavors+ the flavor letters that are text;
       # +others+ {Regexp => annotation key} for other-language lane stems;
       # +flavor_annotations+ {letter => annotation key} — a flavor that rides
-      # its own annotation instead of the text.
-      Lanes = Data.define(:prefixes, :text_flavors, :others, :flavor_annotations) do
-        def initialize(prefixes:, text_flavors:, others: {}, flavor_annotations: {})
+      # its own annotation instead of the text; +excluded+ an adapter's own
+      # furniture lanes (each a full-id Regexp), dropped like the family's
+      # EXCLUDED_LANE — declared per edition, never guessed.
+      Lanes = Data.define(:prefixes, :text_flavors, :others, :flavor_annotations, :excluded) do
+        def initialize(prefixes:, text_flavors:, others: {}, flavor_annotations: {}, excluded: [])
           super
         end
 
@@ -213,6 +215,7 @@ module Nabu
         end
         return [:mark] if MARK_LANE.match?(id)
         return nil if EXCLUDED_LANE.match?(id)
+        return nil if lanes.excluded.any? { |pattern| pattern.match?(id) }
 
         other = lanes.others.find { |pattern, _| pattern.match?(id) }
         return [:other, other.last] if other

@@ -63,7 +63,8 @@ class TitusOldAlbanianTest < Minitest::Test
 
   def test_discover_yields_one_document_per_albanian_page
     require_fixtures!
-    assert_equal %w[blanchus.blanc001 bogdani.bogda003 buzuku.buzuk002 matranga.matra001],
+    assert_equal %w[blanchus.blanc001 blanchus.blanc006 bogdani.bogda001 bogdani.bogda003 bogdani.bogda008
+                    buzuku.buzuk002 casasi.casas001 matranga.matra001],
                  @adapter.discover(FIXTURES).map { |ref| ref.id.split(":").last }.sort
     assert_equal 0, @adapter.discovery_skips(FIXTURES).skipped_by_rule
   end
@@ -130,6 +131,33 @@ class TitusOldAlbanianTest < Minitest::Test
     line = passage("#{URN}:matranga.matra001:Matr._Dottr._Pref._XXV_3")
     assert_equal "BAEAERAE per tae Urtaenae Atae Ladesmae", line.text
     assert_equal({ "unit" => "Line", "page" => "XXV" }, line.annotations)
+  end
+
+  # --- the first retrieval's quarantine classes (2026-11-12: 121 pages) ----
+
+  # The language-coded stem family: bu-la is Bogdani's LATIN parallel
+  # (bulai its italic), gr(x) the editorial legend's Greek letters —
+  # classified so the page parses, then dropped with their note's unit
+  # (no Albanian text beside them) — and the bual c flavor his marginal
+  # verse-concordance number, its own annotation.
+  def test_bogdani_latin_parallel_greek_legend_and_margin_numbers
+    page = documents.fetch("bogdani.bogda001")
+    assert(page.passages.any? { |p| p.annotations["latin"]&.include?("PROPTEREA") })
+    refute(page.passages.any? { |p| p.text.match?(/[ΣΘ]/) }, "the legend's Greek letters sit in the editorial note")
+    numbered = documents.fetch("bogdani.bogda008").passages.select { |p| p.annotations.key?("margin_number") }
+    refute_empty numbered
+    assert_match(/\A\d+\z/, numbered.first.annotations["margin_number"].strip)
+  end
+
+  # we-it is Casasi's ITALIAN lane (the imprint "In Roma…" — a title-page
+  # unit with no Albanian text, so it drops rather than quarantining);
+  # we-tk is Bardhi's occasional TURKISH equivalent, riding its annotation
+  # inside the dictionary's texted units.
+  def test_casasi_italian_and_blanchus_turkish_ride_their_annotations
+    casas = documents.fetch("casasi.casas001")
+    refute(casas.passages.any? { |p| p.text.include?("Roma") }, "the Italian imprint never rides the text")
+    blanc = documents.fetch("blanchus.blanc006")
+    assert(blanc.passages.any? { |p| p.annotations["turkish"]&.include?("Bunda") })
   end
 
   private

@@ -68,12 +68,30 @@ module Nabu
 
       BASE_URL = "https://titus.uni-frankfurt.de/texte/etcs/alban/"
 
-      LANES = TitusLevelsParser::Lanes.new(prefixes: %w[bual], text_flavors: "bix", others: { /\Awela/ => "latin" })
+      # The other-language lanes, classified from the first retrieval's 121
+      # quarantined pages (2026-11-12, the loud-quarantine discipline). The
+      # editions' lane grammar is a language-coded stem family: bu-al the
+      # Albanian text, bu-la the LATIN parallel (Bogdani's "PROPTEREA
+      # captivus ductus est…", bulai its italic), we-la Latin, we-it
+      # ITALIAN (Casasi's imprint and parallel — "In Roma, MDCCXLIII,
+      # nella…"), we-tk TURKISH (Bardhi's occasional Turkish equivalents —
+      # "Bunda"), gr(x) the GREEK letters of the editorial legends. The
+      # bual flavor c carries Bogdani's marginal verse-concordance NUMBER
+      # (a bare "2077" between the Verse header and the text) — its own
+      # annotation, never the text.
+      LANES = TitusLevelsParser::Lanes.new(
+        prefixes: %w[bual], text_flavors: "bix",
+        others: { /\Awela/ => "latin", /\Abula/ => "latin", /\Aweit/ => "italian",
+                  /\Awetk/ => "turkish", /\Agrx?\d/ => "greek" },
+        flavor_annotations: { "c" => "margin_number" }
+      )
 
       # Matrënga's interlinear modern interpretation (PROVISIONAL — class doc).
       MATRANGA_LANES = TitusLevelsParser::Lanes.new(
-        prefixes: %w[bual], text_flavors: "bx", others: { /\Awela/ => "latin" },
-        flavor_annotations: { "i" => "interpretation" }
+        prefixes: %w[bual], text_flavors: "bx",
+        others: { /\Awela/ => "latin", /\Abula/ => "latin", /\Aweit/ => "italian",
+                  /\Awetk/ => "turkish", /\Agrx?\d/ => "greek" },
+        flavor_annotations: { "i" => "interpretation", "c" => "margin_number" }
       )
 
       # census: 5 Albanian editions on texte2.htm, 2026-11-12 (names and

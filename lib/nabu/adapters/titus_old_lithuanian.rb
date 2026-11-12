@@ -68,9 +68,24 @@ module Nabu
 
       BASE_URL = "https://titus.uni-frankfurt.de/texte/etcs/balt/lit/"
 
+      # The other-language lanes, classified from the first retrieval's 27
+      # quarantined pages (2026-11-12, the loud-quarantine discipline):
+      # oend* is the GERMAN lane exactly as in the Old Prussian family —
+      # Mažvydas's German hymn/source lines ("Nu bitten wir…") and Engel's
+      # German title text, oendx its hyphen-broken flavor; bpla* is the
+      # LATIN lane (the -la stem, the Albanian bula twin): rubrics
+      # ("Dicat"), "&c." and Roman numerals inside the Lithuanian text,
+      # bplax its drop-cap/display flavor; oec is the German apparatus's
+      # quire-signature furniture (a lone "B" beside the v-flavor
+      # apparatus lanes of the Wolfenbüttel Postil) — excluded like the
+      # family's other furniture, nothing lexical rides it; oeopl* is the
+      # OLD POLISH source lane of the same oe- family ("O Anno pany…",
+      # the Polish hymn sources beside Mažvydas's German ones).
       LANES = TitusLevelsParser::Lanes.new(
         prefixes: %w[bpal baal], text_flavors: "bijklrx",
-        others: { /\Awela/ => "latin", /\Agrx?\d/ => "greek" }
+        others: { /\Awela/ => "latin", /\Agrx?\d/ => "greek",
+                  /\Aoend/ => "german", /\Aoeopl/ => "polish", /\Abpla/ => "latin" },
+        excluded: [/\Aoec\d+\z/]
       )
 
       # A catechism whose TITUS text siglum names its print year (the index
