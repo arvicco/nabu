@@ -88,7 +88,7 @@ module Nabu
       def self.manual_acquisition
         @manual_acquisition ||= ManualDrop::Spec.new(
           slug: "aclt",
-          upstream_url: "personal grant — the corpus JSON arrives by email from the ACLT team " \
+          upstream_url: "gated — the ACLT team supplies the corpus JSON on request " \
                         "(the public search UI is #{MANIFEST.upstream_url})",
           steps: [
             "Receive (or request a refresh of) the corpus archive from the ACLT team by email",
