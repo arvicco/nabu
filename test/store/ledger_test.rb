@@ -228,8 +228,9 @@ module Store
       # 005 baselines + 006 drift widen + 007 grant acks (P42-r1) + 008 creep
       # acceptances (P43-0) + 009 stage timings (P78-r1) + 010 revisions
       # reason (P93-2) + 011 runs.loaded_at (the row closes at operation end)
-      # + 012 the "abandoned" run status (runs close-stale)
-      assert_equal 12, db[:schema_info].get(:version)
+      # + 012 the "abandoned" run status (runs close-stale) + 013 runs.pid
+      # (the dead-row sweep) + 014 rebuild_runs (machine-visible rebuilds)
+      assert_equal 14, db[:schema_info].get(:version)
       assert_includes db[:runs].columns, :loaded_at
       assert db.table_exists?(:stage_timings)
       assert db.table_exists?(:quarantine_baselines)

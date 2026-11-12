@@ -411,6 +411,26 @@ class RebuildIncrementalTest < Minitest::Test
     assert_equal %w[alpha lexica], result.cleans.map(&:slug).sort
   end
 
+  def test_an_incremental_run_records_its_run_row_and_narrows_the_plan_to_the_dirty_set
+    full_rebuilder.run
+    write_canonical("beta", "b.txt" => THEOGONY)
+    incremental_rebuilder.run
+
+    row = with_ledger { |ledger| ledger[Nabu::Store::RebuildRuns::TABLE].order(:id).last }
+    assert_equal "incremental", row[:mode]
+    refute_nil row[:completed_at]
+    assert_includes JSON.parse(row[:planned_stages]), "replay:beta"
+    refute_includes JSON.parse(row[:planned_stages]), "replay:alpha", "a clean source is not planned work"
+  end
+
+  def test_an_incremental_dry_run_records_no_run_row
+    full_rebuilder.run
+    before = with_ledger { |ledger| ledger[Nabu::Store::RebuildRuns::TABLE].count }
+    incremental_rebuilder.plan
+    after = with_ledger { |ledger| ledger[Nabu::Store::RebuildRuns::TABLE].count }
+    assert_equal before, after
+  end
+
   def test_the_sweep_records_its_wall_time_and_the_next_run_speaks_the_estimate
     full_rebuilder.run
     incremental_rebuilder.run

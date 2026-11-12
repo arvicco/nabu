@@ -221,5 +221,48 @@ module Store
       assert_equal 2, runs.size
       assert(runs.all? { |run| run.status == "succeeded" })
     end
+
+    # -- the dead-row sweep (status / index doctor reads) ----------------------
+    # A sync row can sit "running" forever after its process dies. Every row
+    # now carries the pid that opened it, so the honest rule is cheap: a
+    # running row whose pid is gone is abandoned. A pre-pid row has no pid
+    # to ask; it is closed only when a NEWER run of the same source has
+    # started AND finished after it — the supersession rule.
+
+    def dead_pid
+      pid = Process.spawn("true")
+      Process.wait(pid)
+      pid
+    end
+
+    def test_record_load_stamps_the_pid_that_opened_the_row
+      run = Nabu::Store::RunRecorder.record_load(source_slug: "s") { nil }
+      assert_equal Process.pid, run.refresh.pid
+    end
+
+    def test_sweep_abandons_running_rows_whose_process_is_gone
+      dead = Nabu::Store::Run.create(source_slug: "s", started_at: Time.now, status: "running", pid: dead_pid)
+      live = Nabu::Store::Run.create(source_slug: "t", started_at: Time.now, status: "running", pid: Process.pid)
+
+      swept = Nabu::Store::RunRecorder.sweep_dead!
+
+      assert_equal [dead.id], swept.map(&:id)
+      dead.refresh
+      assert_equal "abandoned", dead.status
+      refute_nil dead.finished_at
+      assert_match(/its process \(pid #{dead.pid}\) is gone/, dead.notes)
+      assert_equal "running", live.refresh.status, "a live process keeps its row"
+    end
+
+    def test_sweep_closes_a_pidless_row_only_when_superseded
+      old = Nabu::Store::Run.create(source_slug: "s", started_at: Time.utc(2026, 11, 1), status: "running")
+      lone = Nabu::Store::Run.create(source_slug: "t", started_at: Time.utc(2026, 11, 1), status: "running")
+      Nabu::Store::Run.create(source_slug: "s", started_at: Time.utc(2026, 11, 2), finished_at: Time.utc(2026, 11, 2),
+                              status: "succeeded")
+
+      assert_equal [old.id], Nabu::Store::RunRecorder.sweep_dead!.map(&:id)
+      assert_match(/superseded/, old.refresh.notes)
+      assert_equal "running", lone.refresh.status, "no pid, no newer run — nothing honest to conclude"
+    end
   end
 end

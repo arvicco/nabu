@@ -140,12 +140,19 @@ module Nabu
       LectRulings.validate!(@config.lect_rulings_paths)
       @open_runs = []
       db_existed = File.exist?(db_path)
+      ledger = Store::Ledger.open_with_lift!(history_path: history_path, catalog_path: db_path)
+      # The run is machine-visible from its first act (Store::RebuildRuns):
+      # a ledger row at START, completed_at stamped as the LAST act below —
+      # a killed run leaves a row that says so.
+      run_id = Store::RebuildRuns.start!(ledger, mode: "full", planned_stages: planned_stages)
       # P36-0: the always-on stage profiler. Cheap (a monotonic sample per stage
       # boundary; per document for parse/insert), so it runs on every rebuild.
-      # Since P78-r1 its facts persist to the LEDGER at run end (stage_timings
-      # — operational history outside db/, so still rebuild-safe: db/ stays f(canonical)).
-      profile = RebuildProfile.new
-      ledger = Store::Ledger.open_with_lift!(history_path: history_path, catalog_path: db_path)
+      # Since P78-r1 its facts persist to the LEDGER (stage_timings —
+      # operational history outside db/, so still rebuild-safe: db/ stays
+      # f(canonical)), and each stage now flushes the moment it RETURNS
+      # (stage_flusher), never only at a successful run end.
+      flushed = []
+      profile = RebuildProfile.new(on_measure: stage_flusher(ledger, flushed))
       # Sidecars go WITH each db (Store.drop_database_files! — the 2026-08-02
       # incident: a held -shm surviving the drop poisons the fresh file).
       Store.drop_database_files!(db_path)
@@ -382,21 +389,28 @@ module Nabu
         Store::AnalyzeReport.new(scope: "catalog + index",
                                  seconds: Store.analyze!(db) + Store.analyze!(fulltext))
       end
-      # P78-r1: the profiler's facts now OUTLIVE the run — appended to
-      # the ledger's stage_timings so the next rebuild can render ETAs. The
-      # ledger lies outside db/ (operational history, never dropped here),
-      # so the derivability law holds: db/ stays f(canonical) and the
+      # P78-r1: the profiler's facts OUTLIVE the run — each stage already
+      # flushed to the ledger's stage_timings as it returned (stage_flusher);
+      # what remains is the corpus stages' work-size denominator, known only
+      # now. The ledger lies outside db/ (operational history, never dropped
+      # here), so the derivability law holds: db/ stays f(canonical) and the
       # timings survive it by construction.
-      persist_stage_timings!(ledger, profile, outcomes, indexed)
+      Store::StageTimings.denominate!(ledger, flushed, rows: indexed)
       # Every stage returned: NOW the replay rows close "succeeded".
       Store::RunRecorder.finish(open_runs)
+      # The LAST act: the run row reads completed.
+      Store::RebuildRuns.complete!(ledger, run_id)
       Result.new(db_path: db_path, db_existed: db_existed, outcomes: outcomes,
                  skips: skips, indexed: indexed, axes: axes, facets: facets, profile: profile,
                  analyzed: analyzed, link_failures: links.failures, links: links)
     rescue StandardError => e
       # A stage raised: the replay rows still open close "failed after the
-      # load" (a signal-kill rescues nothing and leaves them open — also true).
-      Store::RunRecorder.fail_open(open_runs, e) if ledger
+      # load" (a signal-kill rescues nothing and leaves them open — also true),
+      # and the run row records the error while staying incomplete.
+      if ledger
+        Store::RunRecorder.fail_open(open_runs, e)
+        Store::RebuildRuns.fail!(ledger, run_id, e)
+      end
       raise
     ensure
       db&.disconnect
@@ -479,26 +493,38 @@ module Nabu
       Nabu::Eta.for_stages(ledger, kind: "rebuild", scope: "corpus", stages: INDEX_ETA_STAGES)
     end
 
-    # P78-r1: append the profiler's facts to the ledger's stage_timings
-    # (append-only; the latest row governs the next run's ETA). +rows+ is the
-    # honest work-size denominator so the estimate can scale by drift: the
-    # replayed document count for a source's :load, the indexed passage count
-    # for corpus stages (they all scan the corpus). One timestamp for the
-    # whole batch — the rows describe one run, not fourteen moments.
-    def persist_stage_timings!(ledger, profile, outcomes, indexed)
-      return if profile.nil? || profile.empty?
+    # P78-r1: the profiler's facts land in the ledger's stage_timings
+    # (append-only; the latest row governs the next run's ETA) — PER STAGE,
+    # the moment each returns (RebuildProfile on_measure), so a killed run
+    # keeps every stage it finished. +rows+ is the honest work-size
+    # denominator so the estimate can scale by drift: the replayed document
+    # count for a source's :load (known as its replay returns), the indexed
+    # passage count for corpus stages (they all scan the corpus — known only
+    # after the index stage, so their ids collect in +flushed+ and the run
+    # end stamps it via StageTimings.denominate!). A killed run's corpus
+    # rows keep rows nil: no honest denominator, and the ETA renderer reads
+    # nil as "no drift scaling". Only stages the profile knows record —
+    # source :load roll-ups and the labelled corpus stages, as before.
+    def stage_flusher(ledger, flushed)
+      lambda do |scope, stage, seconds, result|
+        if scope == RebuildProfile::CORPUS
+          next unless RebuildProfile::CORPUS_STAGE_LABELS.key?(stage)
 
-      at = Time.now
-      docs = outcomes.to_h { |outcome| [outcome.slug, outcome.report.added + outcome.report.updated] }
-      profile.source_scopes.each do |slug|
-        Store::StageTimings.record!(ledger, kind: "rebuild", scope: slug, stage: "load",
-                                            seconds: profile.seconds(scope: slug, stage: :load),
-                                            rows: docs[slug], at: at)
+          flushed << Store::StageTimings.record!(ledger, kind: "rebuild", scope: "corpus",
+                                                         stage: stage.to_s, seconds: seconds)
+        elsif stage == :load
+          report = result.respond_to?(:report) ? result.report : nil
+          Store::StageTimings.record!(ledger, kind: "rebuild", scope: scope.to_s, stage: "load",
+                                              seconds: seconds, rows: report && (report.added + report.updated))
+        end
       end
-      profile.corpus_stages.each do |stage|
-        Store::StageTimings.record!(ledger, kind: "rebuild", scope: "corpus", stage: stage.to_s,
-                                            seconds: profile.corpus_total(stage), rows: indexed, at: at)
-      end
+    end
+
+    # The run row's planned stage set: every replayable source's load, then
+    # the corpus stages the profile knows (the full rebuild runs them all).
+    def planned_stages
+      loads = @registry.each_source.select { |entry| replayable?(entry) }.map { |entry| "load:#{entry.slug}" }
+      loads + RebuildProfile::CORPUS_STAGE_LABELS.keys.map(&:to_s)
     end
 
     # P104-4: the rebuild half of the secondary dictionary lane — the
