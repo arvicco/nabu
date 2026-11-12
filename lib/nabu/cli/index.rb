@@ -38,6 +38,7 @@ module Nabu
 
       fulltext = Nabu::Store.connect_fulltext(config.fulltext_path, readonly: !options[:consolidate])
       begin
+        report_runs(config)
         report_gauges(fulltext)
         report_lanes(fulltext, config)
         report_stamps(fulltext, config)
@@ -131,6 +132,19 @@ module Nabu
               "#{gauges[:pages]} pages · tombstones #{gauges[:tombstone_pages]} (#{share})" \
               "#{segment_flag(gauges[:segments])}"
         end
+      end
+
+      # The run-health lines (the dead-row sweep + an unfinished rebuild —
+      # RebuildRuns.health_lines, shared with `nabu status`). The
+      # doctor is the place a partial index gets diagnosed, so it opens
+      # the ledger for writing (migrating it forward) when one exists.
+      def report_runs(config)
+        return unless File.exist?(config.history_path)
+
+        ledger = Nabu::Store::Ledger.open!(config.history_path)
+        Nabu::Store::RebuildRuns.health_lines(ledger).each { |line| say line }
+      ensure
+        ledger&.disconnect
       end
 
       # The lane-coverage check (Store::LaneCoverage — the Nov 2026

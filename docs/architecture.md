@@ -461,7 +461,18 @@ stage_timings(kind[sync|rebuild|drill], scope, stage, seconds, rows,
    -- P78-r1 (ledger 009): durable per-stage wall times, keyed
    -- (kind, scope, stage) — append-only, the LATEST row governs the ETA
    -- estimate, and the rows column is the drift denominator that lets an
-   -- estimate scale by work size instead of silently aging
+   -- estimate scale by work size instead of silently aging. Rebuilds
+   -- flush each stage the moment it returns (a killed run keeps every
+   -- stage it finished; corpus rows get their denominator at run end)
+rebuild_runs(id, mode[full|incremental], started_at, completed_at, git_sha,
+             planned_stages, pid, notes)
+   -- ledger 014: one row per rebuild run, written at START, completed_at
+   -- stamped as the run's LAST act; a row without it is a run that never
+   -- completed — `nabu status` and `nabu index doctor` print it loudly
+   -- (a live pid reads RUNNING instead). runs.pid (ledger 013) feeds the
+   -- dead-row sweep those same reads run: a "running" row whose process
+   -- is gone closes "abandoned"; a pre-pid row closes only when a newer
+   -- run of its source started and finished after it
 language_notes(id, lang_code, kind[name|family|context|…], body, source,
                created_at)
    -- P18-4, TRANSITIONAL since P19-1: the accumulated per-language layer's

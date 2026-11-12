@@ -93,6 +93,18 @@ module Nabu
         nil
       end
 
+      # The run-health lines `nabu status` and `nabu index doctor` share:
+      # the dead-row sweep (RunRecorder.sweep_dead! — a "running" row whose
+      # process is gone closes "abandoned" right here, at the next read)
+      # and the latest rebuild run's state (Store::RebuildRuns — a run that
+      # never completed is one loud line). Silent when there is nothing to
+      # say; a nil ledger (fresh box) has nothing to say.
+      def announce_run_health(ledger)
+        return if ledger.nil?
+
+        Nabu::Store::RebuildRuns.health_lines(ledger).each { |line| say line }
+      end
+
       # Open the history ledger for writing: create + migrate it, and lift a
       # pre-P7-1 catalog's runs/pins/baselines into it (one-shot; the catalog
       # is then migrated forward, dropping the moved tables).

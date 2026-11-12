@@ -142,6 +142,10 @@ module Nabu
       db = Store.connect(db_path)
       Store.setup!(db)
       ledger = Store::Ledger.open!(history_path)
+      # Machine-visible from the first act (Store::RebuildRuns): the row
+      # opens planning only the sweep; the sweep below narrows it to the
+      # dirty set it found, and completed_at is the run's LAST act.
+      run_id = Store::RebuildRuns.start!(ledger, mode: "incremental", planned_stages: %w[verdict_sweep])
       fulltext = Store.connect_fulltext(fulltext_path)
       outcomes = []
       cleans = []
@@ -171,7 +175,9 @@ module Nabu
       # source announced as its tree is fingerprinted, the tally closing
       # the sweep — the minutes of hashing are no longer silent, and the
       # job's size is known before the first replay.
-      sweep(db, progress, ledger: ledger, record: true).each do |item|
+      swept = sweep(db, progress, ledger: ledger, record: true)
+      Store::RebuildRuns.plan!(ledger, run_id, incremental_plan(swept, index_dirty))
+      swept.each do |item|
         entry = item.entry
         if item.verdict.state == :skip
           skips << Skip.new(slug: entry.slug, reason: :no_canonical)
@@ -358,11 +364,16 @@ module Nabu
       # Every stage returned: NOW the dirty replays' rows close "succeeded"
       # (Rebuild#replay leaves them open past the load).
       Store::RunRecorder.finish(open_runs)
+      # The LAST act: the run row reads completed.
+      Store::RebuildRuns.complete!(ledger, run_id)
       Result.new(db_path: db_path, outcomes: outcomes, cleans: cleans, skips: skips,
                  indexed: indexed, axes: axes, facets: facets, analyzed: analyzed,
                  link_failures: link_failures, trusted: trusted, links: links)
     rescue StandardError => e
-      Store::RunRecorder.fail_open(open_runs, e) if ledger
+      if ledger
+        Store::RunRecorder.fail_open(open_runs, e)
+        Store::RebuildRuns.fail!(ledger, run_id, e)
+      end
       raise
     ensure
       db&.disconnect
@@ -371,6 +382,15 @@ module Nabu
     end
 
     private
+
+    # The incremental run's planned stage set, once the sweep has named
+    # the dirty sources: their replays, the index re-derivation when the
+    # index core drifted, and the tail stages every run reconciles.
+    def incremental_plan(swept, index_dirty)
+      replays = swept.reject { |item| %i[skip clean].include?(item.verdict.state) }
+                     .map { |item| "replay:#{item.entry.slug}" }
+      replays + (index_dirty ? %w[fulltext_index] : []) + %w[stage_reconcile cjk_lane lect_journal]
+    end
 
     # A content digest of the journal's resolution-relevant columns —
     # the facet re-materialization trigger (order-independent via sum of

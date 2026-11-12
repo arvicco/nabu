@@ -5903,6 +5903,49 @@ class CLITest < Minitest::Test
     end
   end
 
+  # -- rebuild runs + dead run rows surface on status and the doctor -------
+
+  def dead_pid
+    pid = Process.spawn("true")
+    Process.wait(pid)
+    pid
+  end
+
+  def seed_dead_rebuild_and_sync(config)
+    ledger = Nabu::Store::Ledger.open!(config.history_path)
+    Nabu::Store::RebuildRuns.start!(ledger, mode: "incremental", planned_stages: %w[index], git_sha: "abc",
+                                            pid: dead_pid, at: Time.utc(2026, 11, 9, 22, 37))
+    Nabu::Store::Run.create(source_slug: "pap", started_at: Time.utc(2026, 11, 10), status: "running",
+                            pid: dead_pid)
+  ensure
+    ledger&.disconnect
+  end
+
+  def test_index_doctor_flags_an_unfinished_rebuild_and_closes_dead_run_rows
+    with_fuzzy_corpus do |config|
+      seed_dead_rebuild_and_sync(config)
+      out, _err, status = with_config(config) { run_cli(%w[index doctor]) }
+
+      assert_nil status
+      assert_match(/⚠ rebuild \(incremental\) started 2026-11-09 22:37:00 UTC, never completed/, out)
+      assert_match(/never completed — the index may be partial/, out)
+      assert_match(/closed 1 dead run row\(s\) "abandoned"/, out)
+      ledger = Nabu::Store::Ledger.open!(config.history_path)
+      assert_equal "abandoned", Nabu::Store::Run.where(source_slug: "pap").get(:status)
+      ledger.disconnect
+    end
+  end
+
+  def test_status_flags_an_unfinished_rebuild
+    with_fuzzy_corpus do |config|
+      seed_dead_rebuild_and_sync(config)
+      out, _err, status = with_config(config) { run_cli(%w[status]) }
+
+      assert_nil status
+      assert_match(/⚠ rebuild \(incremental\) started 2026-11-09 22:37:00 UTC, never completed/, out)
+    end
+  end
+
   def test_index_doctor_without_an_index_says_so
     with_empty_registry_env do |config|
       out, _err, status = with_config(config) { run_cli(%w[index doctor]) }

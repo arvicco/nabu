@@ -51,6 +51,7 @@ module Nabu
       # from that fresh cache. Bare `status` is read-only and shows the cached
       # verdicts as-is (with their age).
       ledger = options[:remote] ? probe_upstreams(config, registry) : open_ledger(config)
+      announce_run_health(ledger)
       db = open_catalog(config)
       # `status SOURCE` is the detail block — UNSCOPED (explicit naming is
       # explicit intent; any source, focused or not). The bare/--long/--axis
