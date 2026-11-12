@@ -438,7 +438,8 @@ class PosturesTest < Minitest::Test
                  "identity prg (a real anchor, declared coarse; the German lanes mint no passages): 194→195; " \
                  "cllg-sc ADDED — identity grc + lat " \
                  "(the Apostolic-Fathers-to-Cabasilas span, 7 of 368 works dated): 195→196; " \
-                 "cllg-freed ADDED — dates (the TLG canon's century datings band the works onto grc:hom/cla/koi/byz): 196→197"
+                 "cllg-freed ADDED — dates (the TLG canon's century datings band the works onto " \
+                 "grc:hom/cla/koi/byz): 196→197"
     # The epigraphic-belt registry package (merged + canonical-synced
     # 2026-10-18, the add-then-retire shape within one phase) retires both
     # P130 pendings, and the ociana-script rule + the ig-cyprus override
