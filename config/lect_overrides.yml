@@ -194,6 +194,19 @@ sources:
   # date (the D57-f mixed-at-source-grain class). The vernacular rows
   # (eng, vie, pol, grc …) stay bare. Tier certain: the register claim is
   # the database's definition, not an inference.
+  cantus:
+    # The CANTUS records are the chants of the Latin Office and Mass —
+    # the same register claim the gregobase/divinum-officium rows make
+    # (ruled 2026-11-12 after the lect-scope review): chant is
+    # register-classed, never period-classed. The date on a cantus
+    # record is the WITNESS's copying date (basis "source" in the
+    # posture) over texts that are mostly far older liturgy, and the
+    # automatic date-band staging it fed made lat:ren 98.6% chant
+    # manuscripts — a 15th-century antiphoner is not the humanists'
+    # Latin. This override replaces that band staging wholesale;
+    # stageless like its two precedents. Tier certain: the register
+    # claim is the database's own definition.
+    lat: { lect: "lat/ecc", tier: certain }
   gregobase:
     lat: { lect: "lat/ecc", tier: certain }
   divinum-officium:
