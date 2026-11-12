@@ -28,12 +28,13 @@ class IndexPreflightTest < Minitest::Test
     record("pap", "index_slice", 900)
     record("pap", "index_slice", 120)
     record("pap", "postings_swaps", 30)
-    record("corpus", "reflex_closure", 10)
+    record("pap", "reflex_closure", 10)
+    record("corpus", "reflex_closure", 9_999) # the retired corpus-wide closure — never planned
     record("pap", "fetch", 9_999) # not an index stage — never planned
 
     plan = Preflight.plan(@ledger, slug: "pap")
 
-    assert_equal([["pap", "index_slice", 120.0], ["pap", "postings_swaps", 30.0], ["corpus", "reflex_closure", 10.0]],
+    assert_equal([["pap", "index_slice", 120.0], ["pap", "postings_swaps", 30.0], ["pap", "reflex_closure", 10.0]],
                  plan.stages.map { |row| [row.scope, row.stage, row.seconds] })
     assert_in_delta 160.0, plan.total
   end

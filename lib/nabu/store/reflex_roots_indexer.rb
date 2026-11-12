@@ -99,11 +99,44 @@ module Nabu
     # what Query::Cognates' common-word suppression divides by (a fixed
     # absolute df threshold is percentile-incoherent across corpora spanning
     # 125 to 113k gold passages; the review's calibration finding).
+    #
+    # == The delta grain (the incrementality review)
+    #
+    # The corpus pass (#rebuild!) used to run on EVERY lemma-bearing sync:
+    # a grouped distinct count over the whole gold lemma table (tens of
+    # millions of rows) plus a full crosswalk walk — O(corpus) work re-done
+    # for any slice. But the closure depends on passage_lemmas ONLY through
+    # the gold language SET (closure_rows emits every crosswalk key of a
+    # gold language, attested or not — no lemma VALUE enters it), and the
+    # stats are a sum over passages (a passage contributes 1 to each gold
+    # language it carries). So a lemma-bearing refresh now:
+    #
+    #   - moves the stats by its own rows' before/after gold languages
+    #     (stats_snapshot / apply_stats_delta!, O(Δ), inside the slice's
+    #     transaction so they can never drift from the lemma rows);
+    #   - moves the closure by the languages that LEFT the gold set (their
+    #     rows deleted — a point delete on the language index) or ENTERED
+    #     it. An entering language's rows need the whole crosswalk walk
+    #     (the ascent can route through any shelf), so instead of paying it
+    #     inline the closure is flagged stale (Store::StaleAggregates) for
+    #     the maintenance rail — unless the crosswalk names the language
+    #     nowhere (an indexed probe), in which case it has no rows to mint.
+    #
+    # A crosswalk change (a dictionary sync) re-walks the closure ALONE
+    # (#rebuild_closure!, gold set read from the stats — O(crosswalk), the
+    # dictionary's own arrival work) and leaves the stats, which no
+    # crosswalk edit can move. The corpus pass remains the reference: the
+    # full rebuild and the maintenance rail run it, and the delta grain is
+    # test-pinned row-identical to it.
     module ReflexRootsIndexer
       TABLE = :reflex_roots
       STATS_TABLE = :reflex_root_stats
 
       BATCH_SIZE = 2_000
+
+      # The stale-flag name the closure carries (Store::StaleAggregates);
+      # its scope is always "corpus" — the closure is one corpus-wide table.
+      CLOSURE_AGGREGATE = "reflex_closure"
 
       module_function
 
@@ -117,9 +150,26 @@ module Nabu
         fulltext.drop_table?(STATS_TABLE)
         create_tables(fulltext)
         write_stats(fulltext)
-        return 0 unless catalog.table_exists?(:dictionary_reflexes)
+        StaleAggregates.clear!(fulltext, aggregate: CLOSURE_AGGREGATE, scope: "corpus")
+        write_closure(catalog, fulltext, gold_languages(fulltext))
+      end
 
-        gold = gold_languages(fulltext)
+      # Re-walk the closure ALONE over the gold set the stats record (class
+      # note: a crosswalk change, and the maintenance rail's recompute of a
+      # stale closure) — no passage_lemmas scan. Clears the stale flag.
+      # Returns the closure row count.
+      def rebuild_closure!(catalog:, fulltext:)
+        fulltext.drop_table?(TABLE)
+        create_closure_table(fulltext)
+        StaleAggregates.clear!(fulltext, aggregate: CLOSURE_AGGREGATE, scope: "corpus")
+        # Stats rows are pruned at zero, so every row IS a gold language.
+        gold = (fulltext[STATS_TABLE].exclude(gold_passages: 0).select_map(:language) if
+          fulltext.table_exists?(STATS_TABLE))
+        write_closure(catalog, fulltext, Array(gold))
+      end
+
+      def write_closure(catalog, fulltext, gold)
+        return 0 unless catalog.table_exists?(:dictionary_reflexes)
         return 0 if gold.empty?
 
         rows = closure_rows(entry_meta(catalog), reflex_edges(catalog), gold)
@@ -133,7 +183,70 @@ module Nabu
         count
       end
 
+      # -- the delta grain (class note) ---------------------------------------
+
+      # The gold contribution of +ids+ to the stats: { language => distinct
+      # (passage, language) pairs } — passage_id B-tree bounded, sliced.
+      def stats_snapshot(fulltext, ids:)
+        counts = Hash.new(0)
+        return counts unless fulltext.table_exists?(Indexer::LEMMA_TABLE)
+
+        ids.to_a.each_slice(BATCH_SIZE) do |batch|
+          gold_rows(fulltext).where(passage_id: batch).distinct.select(:passage_id, :language)
+                             .each { |row| counts[row[:language]] += 1 }
+        end
+        counts
+      end
+
+      # Apply a before → after stats delta; rows reaching zero are pruned
+      # (the wholesale build's row set). Returns { entered:, left: } — the
+      # languages whose gold count crossed zero, for apply_language_moves!.
+      def apply_stats_delta!(fulltext, before:, after:)
+        moves = { entered: [], left: [] }
+        (before.keys | after.keys).sort.each do |language|
+          net = after.fetch(language, 0) - before.fetch(language, 0)
+          next if net.zero?
+
+          scope = fulltext[STATS_TABLE].where(language: language)
+          current = scope.get(:gold_passages)
+          total = (current || 0) + net
+          if total <= 0
+            scope.delete
+            moves[:left] << language if current
+          elsif current
+            scope.update(gold_passages: total)
+          else
+            fulltext[STATS_TABLE].insert(language: language, gold_passages: total)
+            moves[:entered] << language
+          end
+        end
+        moves
+      end
+
+      # Move the closure by the gold-set change (class note): a language
+      # that left takes its rows; one that entered — and that the crosswalk
+      # names at all — flags the closure stale for the maintenance rail.
+      # Returns the languages flagged.
+      def apply_language_moves!(catalog:, fulltext:, entered:, left:)
+        fulltext[TABLE].where(language: left).delete unless left.empty?
+        walk = entered.select do |language|
+          catalog.table_exists?(:dictionary_reflexes) &&
+            !catalog[:dictionary_reflexes].where(language: language).empty?
+        end
+        unless walk.empty?
+          StaleAggregates.mark!(fulltext, aggregate: CLOSURE_AGGREGATE, scope: "corpus",
+                                          reason: "gold language(s) #{walk.join(', ')} entered — the closure " \
+                                                  "needs the whole crosswalk walk")
+        end
+        walk
+      end
+
       def create_tables(fulltext)
+        create_closure_table(fulltext)
+        create_stats_table(fulltext)
+      end
+
+      def create_closure_table(fulltext)
         fulltext.create_table(TABLE) do
           String :language, null: false
           String :lemma_folded, null: false
@@ -141,6 +254,9 @@ module Nabu
           TrueClass :borrowed # NULL = a path edge predates the flag reparse
           index %i[language lemma_folded]
         end
+      end
+
+      def create_stats_table(fulltext)
         fulltext.create_table(STATS_TABLE) do
           String :language, null: false
           Integer :gold_passages, null: false

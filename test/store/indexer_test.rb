@@ -1807,16 +1807,23 @@ module Store
     end
 
     # A dictionary sync mints no passages but DOES change the crosswalk the
-    # closure is built from — the caller forces the reflex rebuild.
+    # closure is built from — the caller forces the closure re-walk. The
+    # gold stats are a function of the lemma table alone, which no
+    # crosswalk edit moves, so they are kept (the delta grain's O(Δ) rule —
+    # no corpus-wide lemma scan behind a dictionary sync).
     def test_refresh_rebuilds_the_reflex_closure_when_reflexes_changed
       doc = make_document(urn: "urn:d:s")
       make_passage(doc, urn: "urn:d:s:1", text_normalized: "plain", sequence: 0)
       rebuild!
+      @fulltext[Nabu::Store::ReflexRootsIndexer::TABLE].insert(language: "zz", lemma_folded: "x",
+                                                               root_urn: "urn:sentinel")
       reflex_stats.insert(language: "zz-sentinel", gold_passages: 1)
 
       assert_equal 1, refresh!(reflexes_changed: true)
-      assert_equal 0, reflex_stats.where(language: "zz-sentinel").count,
-                   "reflexes_changed forces the closure rebuild"
+      assert_empty @fulltext[Nabu::Store::ReflexRootsIndexer::TABLE].where(root_urn: "urn:sentinel"),
+                   "reflexes_changed forces the closure re-walk"
+      assert_equal 1, reflex_stats.where(language: "zz-sentinel").count,
+                   "the gold stats are not re-snapshotted behind a crosswalk change"
     end
 
     # -- the char-postings index (P65 gate: `nabu char 纹` must be instant) --
@@ -2194,7 +2201,13 @@ module Store
     # rewritten but whose lemma + sidecar writes never landed, one added row
     # whose fts insert landed alone, and one withdrawal whose sidecar delete
     # landed but whose fts/lemma deletes did not.
+    # A crash that leaves the lemma rows moved without the census delta is
+    # a BULK-shape crash (an atomic run rolls back whole), so the run had
+    # journaled its census baseline and recorded its shape first — exactly
+    # as refresh_source! does before a bulk unit's first write.
     def crash_mid_refresh(doc)
+      source_ids = @catalog[:passages].where(document_id: doc.id).select_map(:id)
+      Nabu::Store::Indexer.write_census_baseline!(@fulltext, "s", source_ids)
       revised = Nabu::Store::Passage.first(urn: "urn:d:s:2")
       revised.update(text_normalized: "revised", content_sha256: sha_hex("revised"),
                      annotations_json: JSON.generate(token_annotations(%w[revised revised])))
@@ -2210,7 +2223,7 @@ module Store
       withdrawn.update(withdrawn: true)
       row_shas.where(rowid: withdrawn.id).delete
       slice_rows.where(slug: "s").update(finished_at: nil) if @fulltext.table_exists?(:slice_refreshes)
-      Nabu::Store::Indexer.mark_slice_pending!(@fulltext, "s")
+      Nabu::Store::Indexer.mark_slice_pending!(@fulltext, "s", shape: "bulk")
       [revised.id, added.id, withdrawn.id]
     end
 
@@ -2497,6 +2510,108 @@ module Store
       rebuild!
 
       refute stale_postings?
+    end
+
+    # -- the heal's lemma census, bounded to the healed source --------------
+    # A healing refresh used to re-census lemma_frequencies over the WHOLE
+    # corpus (the crashed run's before-snapshot was lost). Now the run's
+    # transaction shape decides: an atomic run's crash rolled back whole,
+    # so the heal's own before/after delta is exact; a bulk run journals
+    # the source's whole contribution as a baseline before its first
+    # write, and its heal applies baseline → the source's current
+    # contribution. Either way only the healed source's rows are read.
+
+    def crash_after(name)
+      mod = Nabu::Store::Indexer
+      original = mod.method(name)
+      mod.define_singleton_method(name) do |*args, **kw, &blk|
+        original.call(*args, **kw, &blk)
+        raise "crash after #{name}"
+      end
+      yield
+    ensure
+      mod.define_singleton_method(name, original)
+    end
+
+    def census_fixture
+      doc = make_document(urn: "urn:d:s")
+      %w[alpha beta].each_with_index do |word, index|
+        make_passage(doc, urn: "urn:d:s:#{index + 1}", text_normalized: word, sequence: index,
+                          sha: sha_hex(word), annotations: token_annotations([word, word]))
+      end
+      lit = make_document(urn: "urn:d:lit", source: literary_source)
+      make_passage(lit, urn: "urn:d:lit:1", text_normalized: "gamma", sequence: 0, sha: sha_hex("g"),
+                        annotations: token_annotations(%w[gamma gamma]))
+      rebuild!
+      Nabu::Store::Passage.first(urn: "urn:d:s:2").update(
+        text_normalized: "revised", content_sha256: sha_hex("revised"),
+        annotations_json: JSON.generate(token_annotations(%w[revised revised]))
+      )
+      make_passage(doc, urn: "urn:d:s:3", text_normalized: "delta", sequence: 2, sha: sha_hex("delta"),
+                        annotations: token_annotations(%w[delta delta]))
+    end
+
+    # The heal's census reads: no corpus re-census, and every snapshot
+    # stays inside the healed source's passage ids.
+    def assert_census_bounded_to_the_source(&)
+      source_ids = @catalog[:passages].join(:documents, id: Sequel[:passages][:document_id])
+                                      .where(Sequel[:documents][:source_id] => @source.id)
+                                      .select_map(Sequel[:passages][:id]).to_set
+      snapshot_ids = Set.new
+      freq = Nabu::Store::LemmaFrequencies
+      original_rebuild = freq.method(:rebuild!)
+      original_snapshot = freq.method(:snapshot)
+      rebuilds = 0
+      freq.define_singleton_method(:rebuild!) do |*args|
+        rebuilds += 1
+        original_rebuild.call(*args)
+      end
+      freq.define_singleton_method(:snapshot) do |fulltext, ids:|
+        snapshot_ids.merge(ids.to_a)
+        original_snapshot.call(fulltext, ids: ids)
+      end
+      begin
+        yield
+      ensure
+        freq.define_singleton_method(:rebuild!, original_rebuild)
+        freq.define_singleton_method(:snapshot, original_snapshot)
+      end
+      assert_equal 0, rebuilds, "the heal never re-censuses the corpus"
+      assert_operator snapshot_ids, :subset?, source_ids, "every census read stays in the healed source"
+    end
+
+    def test_a_crashed_bulk_run_heals_its_census_from_the_source_baseline
+      census_fixture
+      crash_after(:insert_passage_batches) do
+        assert_raises(RuntimeError) { refresh!(bulk_threshold: 1) }
+      end
+      assert Nabu::Store::Indexer.slice_pending?(@fulltext, "s")
+
+      assert_census_bounded_to_the_source { refresh! }
+      refute Nabu::Store::StaleAggregates.stale?(@fulltext, aggregate: "lemma_census", scope: "corpus")
+      assert_identical_to_a_fresh_rebuild
+      assert_equal 0, @fulltext[Nabu::Store::Indexer::CENSUS_BASELINES_TABLE].count, "the baseline is spent"
+    end
+
+    def test_a_crashed_atomic_run_heals_its_census_by_the_delta_alone
+      census_fixture
+      crash_after(:insert_passage_batches) do
+        assert_raises(RuntimeError) { refresh! }
+      end
+      assert Nabu::Store::Indexer.slice_pending?(@fulltext, "s")
+
+      assert_census_bounded_to_the_source { refresh! }
+      refute Nabu::Store::StaleAggregates.stale?(@fulltext, aggregate: "lemma_census", scope: "corpus")
+      assert_identical_to_a_fresh_rebuild
+    end
+
+    def test_a_pending_marker_of_unknown_shape_flags_the_census_for_the_rail
+      census_fixture
+      Nabu::Store::Indexer.mark_slice_pending!(@fulltext, "s") # minted before shapes were recorded
+
+      assert_census_bounded_to_the_source { refresh! }
+      assert Nabu::Store::StaleAggregates.stale?(@fulltext, aggregate: "lemma_census", scope: "corpus"),
+             "a crash of unknown shape may have drifted the census — flagged, not re-censused inline"
     end
 
     # -- above-budget rewrites become shadow builds (the incrementality review)

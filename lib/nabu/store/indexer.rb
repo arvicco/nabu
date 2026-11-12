@@ -463,6 +463,39 @@ module Nabu
       # commit keeps both bounded.
       SHADOW_COMMIT_BATCHES = 50
 
+      # == The heal's lemma census, bounded to the healed source
+      #
+      # lemma_frequencies and reflex_root_stats are corpus aggregates the
+      # slice moves by its before/after delta. A healing refresh used to
+      # throw the delta away and re-census lemma_frequencies over the WHOLE
+      # lemma table (tens of millions of rows) — "the crashed run's
+      # before-snapshot is lost". Whether it is lost depends on the crashed
+      # run's TRANSACTION SHAPE, which slice_refreshes now records:
+      #
+      #   - "atomic" (the ordinary slice — one transaction holds the lemma
+      #     writes AND the census delta): a crash rolled the whole unit
+      #     back, so the census still matches the lemma table and the
+      #     heal's own before/after delta is exact. O(Δ).
+      #   - "bulk" (autocommit statement batches — P111-1b): the lemma
+      #     writes and the census delta are NOT atomic, so before its first
+      #     destructive write a bulk run journals the source's WHOLE
+      #     contribution to both aggregates here (O(source) — inside a run
+      #     that is already O(slice) by definition), and moves the census
+      #     by baseline → the source's whole current contribution, clearing
+      #     the baseline in the SAME transaction. A run that crashes leaves
+      #     the baseline standing; the next run — heal or not — finds it
+      #     and finishes the move exactly. Bounded to the healed source.
+      #   - unrecorded (a marker minted before shapes were): the heal still
+      #     applies its own delta, and flags the census stale
+      #     (Store::StaleAggregates, "lemma_census") for the maintenance
+      #     rail's corpus re-census — never inline.
+      #
+      # Rows: (slug, kind "freq"|"stats", lemma_folded, language, tier, n);
+      # dropped by every full rebuild. Same lifecycle as the rest of the
+      # file: derived, disposable, never migrated.
+      CENSUS_BASELINES_TABLE = :lemma_census_baselines
+      CENSUS_AGGREGATE = "lemma_census"
+
       # FTS5 DDL (see class note). text_normalized carries the folded search
       # form; urn + passage_id ride along UNINDEXED so a hit joins back to the
       # catalog (where the pristine text and annotations stay) without
@@ -641,6 +674,7 @@ module Nabu
         fulltext.drop_table?(ROW_SHAS_TABLE)
         fulltext.drop_table?(SHADOW_TABLE) # a killed shadow build's orphan
         StaleAggregates.drop!(fulltext) # every aggregate is fresh by construction
+        fulltext.drop_table?(CENSUS_BASELINES_TABLE)
         fulltext.run(CREATE_TABLE)
         create_row_shas_table(fulltext, indexed: false)
         create_lemma_table(fulltext)
@@ -808,15 +842,17 @@ module Nabu
         return 0 if source_id.nil?
 
         # P111-1b: a refresh entered over an unfinished marker is a HEAL —
-        # the prior run crashed mid-slice, so the lemma-frequency delta's
-        # baseline is lost (absolute re-census below instead of the delta)
-        # and a load delta cannot cover the crashed run's missing work.
+        # the prior run crashed mid-slice, so a load delta cannot cover the
+        # crashed run's missing work. The crashed run's recorded transaction
+        # SHAPE decides how its lemma census heals (CENSUS_BASELINES_TABLE
+        # note) — never by an absolute corpus re-census.
         # (The slice_behind? case — a landed load whose reindex never
         # started — heals through the runner instead: it passes delta nil,
         # which takes the full-slice path here. Probing behind-ness at this
         # depth would misread every content-adding refresh, whose new max
         # id is legitimately unindexed on entry.)
         healing = slice_pending?(fulltext, slug)
+        prior_shape = (slice_shape(fulltext, slug) if healing)
         use_delta = !delta.nil? && !delta.overflowed? && !healing
         # The exact heal (ROW_SHAS_TABLE note): with the sidecar on hand the
         # fts+lemma grain re-does exactly the drifted rows. EVERY other lane
@@ -870,6 +906,12 @@ module Nabu
         # recipe has nothing to govern (the cjk lane, when present, keeps it).
         governed -= [TABLE] if shadow
         progress&.stage("index slice: #{slug} — bulk mode (#{ids.size} rows): merges deferred") if bulk
+        # The census grain (CENSUS_BASELINES_TABLE note): a bulk run — or
+        # any run over a standing baseline a crashed bulk run left — moves
+        # the lemma census by the source's WHOLE contribution against that
+        # baseline; every other run by its own before/after delta.
+        census_whole = bulk || census_baseline?(fulltext, slug)
+        whole_ids = (census_whole_ids(catalog, source_id, ids, heal, use_delta) if census_whole)
         if use_delta
           progress&.stage("index delta: #{slug} — #{delta.upserted_ids.size} changed / " \
                           "#{delta.removed_ids.size} removed rows")
@@ -881,7 +923,12 @@ module Nabu
         # A full-slice rewrite is where the sidecar arrives on a fulltext
         # predating it (ROW_SHAS_TABLE note) — it populates the whole slice.
         create_row_shas_table(fulltext) if !use_delta && !heal && fts_contentless?(fulltext)
-        mark_slice_pending!(fulltext, slug)
+        # The bulk run's census baseline lands BEFORE its marker and its
+        # first destructive write — and never over a standing one (that
+        # one is the last consistent point).
+        write_census_baseline!(fulltext, slug, whole_ids) if bulk && !census_baseline?(fulltext, slug)
+        mark_slice_pending!(fulltext, slug, shape: bulk ? "bulk" : "atomic")
+        census_moves = nil
         if shadow
           timed_sync_stage(ledger, slug, "fts_shadow",
                            "index slice: #{slug} — passages_fts shadow build (#{ids.size} rows over the " \
@@ -898,7 +945,10 @@ module Nabu
               # the rewrite, re-snapshot AFTER, and apply the delta to the corpus
               # freq table (same transaction). incremental_ready? guarantees the
               # table exists here; both snapshots are passage-keyed and B-tree bounded.
-              before = LemmaFrequencies.snapshot(fulltext, ids: ids)
+              unless census_whole
+                before = LemmaFrequencies.snapshot(fulltext, ids: ids)
+                before_stats = ReflexRootsIndexer.stats_snapshot(fulltext, ids: ids)
+              end
               # The postings decrements read the sidecar, so they are taken
               # before its rows go (char_postings_basis).
               postings_basis = (char_postings_basis(catalog, fulltext, source_id, slug, ids) if use_delta)
@@ -947,21 +997,27 @@ module Nabu
                 inserted += silver.rows_inserted
               end
               lemmas_changed = deleted.positive? || inserted.positive?
-              # The exact heal moves only drifted rows, but the crashed run
-              # may have rewritten CURRENT rows' lemma rows without ever
-              # reaching its frequency delta or the reflex closure (both run
-              # after the insert loop) — the aggregates are not row-grained,
-              # so the sidecar cannot vouch for them. A lemma-bearing slice
-              # therefore re-censuses absolutely and re-closes, exactly as
-              # the full-slice heal does.
+              # The exact heal moves only drifted rows; whether the crashed
+              # run left the census drifted is the shape's question
+              # (CENSUS_BASELINES_TABLE note), answered without a corpus read.
               lemmas_changed ||= heal && source_lemma_rows?(fulltext, ids: heal.slice_ids)
-              if healing && lemmas_changed
-                # The crashed run's before-snapshot is lost — the delta would
-                # bake its drift in; re-census absolutely instead (rare path).
-                LemmaFrequencies.rebuild!(fulltext)
-              else
-                after = LemmaFrequencies.snapshot(fulltext, ids: ids)
-                LemmaFrequencies.apply_delta(fulltext, before: before, after: after)
+              census_moves =
+                if census_whole
+                  apply_census_from_baseline!(fulltext, slug, whole_ids)
+                else
+                  after = LemmaFrequencies.snapshot(fulltext, ids: ids)
+                  LemmaFrequencies.apply_delta(fulltext, before: before, after: after)
+                  ReflexRootsIndexer.apply_stats_delta!(
+                    fulltext, before: before_stats, after: ReflexRootsIndexer.stats_snapshot(fulltext, ids: ids)
+                  )
+                end
+              if healing && prior_shape.nil? && !census_whole && lemmas_changed
+                # A crash of unrecorded shape (a marker minted before shapes
+                # were) may have drifted the census beyond this source's
+                # rows: the delta above is exact for THIS run, the base is
+                # owed to the maintenance rail.
+                StaleAggregates.mark!(fulltext, aggregate: CENSUS_AGGREGATE, scope: "corpus",
+                                                reason: "#{slug}: heal over a pending marker of unrecorded shape")
               end
               # The cjk lane is REBUILD-CADENCE (2026-11-11 ruling): no
               # slice or delta write here, ever — +cjk_slugs+ feeds only
@@ -1062,10 +1118,21 @@ module Nabu
           end
           refresh_alignment(catalog, fulltext, alignments, source_id)
         end
-        if lemmas_changed || reflexes_changed
-          timed_sync_stage(ledger, "corpus", "reflex_closure",
-                           "reflex root closure (corpus-wide — lemma rows changed)", progress) do
-            ReflexRootsIndexer.rebuild!(catalog: catalog, fulltext: fulltext)
+        # The closure at the delta grain (ReflexRootsIndexer class note):
+        # a crosswalk change re-walks the closure alone (O(crosswalk), the
+        # dictionary's own arrival); a lemma change moves it only by the
+        # gold languages that crossed zero. The corpus pass is the rebuild's
+        # and the maintenance rail's.
+        if reflexes_changed
+          timed_sync_stage(ledger, slug, "reflex_closure",
+                           "reflex root closure (crosswalk changed — re-walked; gold stats kept)", progress) do
+            ReflexRootsIndexer.rebuild_closure!(catalog: catalog, fulltext: fulltext)
+          end
+        elsif census_moves && !(census_moves[:entered].empty? && census_moves[:left].empty?)
+          timed_sync_stage(ledger, slug, "reflex_closure",
+                           "reflex root closure: gold languages moved (+#{census_moves[:entered].join(',')} " \
+                           "-#{census_moves[:left].join(',')})", progress) do
+            ReflexRootsIndexer.apply_language_moves!(catalog: catalog, fulltext: fulltext, **census_moves)
           end
         end
         # The clarify lane's slice (names only — cheap; skipped on a
@@ -1184,6 +1251,66 @@ module Nabu
             count = insert_cjk_batches(fulltext, cjk_passages(catalog, cjk_slugs), progress: progress)
           end
           count
+        end
+      end
+
+      # -- the census baseline (CENSUS_BASELINES_TABLE note) -----------------
+
+      def census_baseline?(fulltext, slug)
+        fulltext.table_exists?(CENSUS_BASELINES_TABLE) &&
+          !fulltext[CENSUS_BASELINES_TABLE].where(slug: slug).empty?
+      end
+
+      # The source's whole key set for a whole-contribution census: the
+      # slice's own keys where the run already holds them, else one keyed
+      # read (a bulk delta — test-scale only; a real delta never reaches
+      # the bulk threshold under the delta cap).
+      def census_whole_ids(catalog, source_id, ids, heal, use_delta)
+        return heal.slice_ids if heal
+        return ids unless use_delta
+
+        source_passage_keys(catalog, source_id).first
+      end
+
+      def write_census_baseline!(fulltext, slug, ids)
+        freq = LemmaFrequencies.snapshot(fulltext, ids: ids)
+        stats = ReflexRootsIndexer.stats_snapshot(fulltext, ids: ids)
+        fulltext.create_table?(CENSUS_BASELINES_TABLE) do
+          String :slug, null: false
+          String :kind, null: false
+          String :lemma_folded
+          String :language
+          String :tier
+          Integer :n, null: false
+          index :slug
+        end
+        rows = freq.map do |(folded, language, tier), n|
+          { slug: slug, kind: "freq", lemma_folded: folded, language: language, tier: tier, n: n }
+        end
+        rows += stats.map { |language, n| { slug: slug, kind: "stats", language: language, n: n } }
+        fulltext.transaction do
+          rows.each_slice(BATCH_SIZE) { |batch| fulltext[CENSUS_BASELINES_TABLE].multi_insert(batch) }
+          # An empty contribution still needs its marker row, or a crash
+          # would leave no baseline to find.
+          fulltext[CENSUS_BASELINES_TABLE].insert(slug: slug, kind: "marker", n: 0) if rows.empty?
+        end
+      end
+
+      # baseline → the source's whole current contribution, applied to
+      # both aggregates and the baseline cleared in ONE transaction (so a
+      # crash leaves either the standing baseline or a finished move —
+      # never both). Returns the stats delta's gold-language moves.
+      def apply_census_from_baseline!(fulltext, slug, ids)
+        base = fulltext[CENSUS_BASELINES_TABLE].where(slug: slug)
+        freq = base.where(kind: "freq").to_h { |row| [[row[:lemma_folded], row[:language], row[:tier]], row[:n]] }
+        stats = base.where(kind: "stats").to_h { |row| [row[:language], row[:n]] }
+        after = LemmaFrequencies.snapshot(fulltext, ids: ids)
+        after_stats = ReflexRootsIndexer.stats_snapshot(fulltext, ids: ids)
+        fulltext.transaction do
+          LemmaFrequencies.apply_delta(fulltext, before: freq, after: after)
+          moves = ReflexRootsIndexer.apply_stats_delta!(fulltext, before: stats, after: after_stats)
+          base.delete
+          moves
         end
       end
 
@@ -1328,6 +1455,7 @@ module Nabu
           String :finished_at
           Integer :live_rows
           Integer :max_passage_id
+          String :shape # "atomic" | "bulk" — CENSUS_BASELINES_TABLE note
         end
         ensure_slice_stamp_columns(fulltext)
       end
@@ -1340,16 +1468,28 @@ module Nabu
         fulltext.alter_table(SLICE_REFRESHES_TABLE) do
           add_column :live_rows, Integer unless columns.include?(:live_rows)
           add_column :max_passage_id, Integer unless columns.include?(:max_passage_id)
+          add_column :shape, String unless columns.include?(:shape)
         end
       end
 
-      def mark_slice_pending!(fulltext, slug)
+      # +shape+ records the run's transaction shape (the census heal's
+      # question); nil — the index watcher's hygiene marking a killed
+      # writer's slice — leaves the shape the run itself recorded.
+      def mark_slice_pending!(fulltext, slug, shape: nil)
         create_slice_refreshes_table(fulltext)
+        update = { started_at: Time.now.utc.iso8601, finished_at: nil, live_rows: nil, max_passage_id: nil }
+        update[:shape] = shape if shape
         fulltext[SLICE_REFRESHES_TABLE]
-          .insert_conflict(target: :slug,
-                           update: { started_at: Time.now.utc.iso8601, finished_at: nil,
-                                     live_rows: nil, max_passage_id: nil })
-          .insert(slug: slug, started_at: Time.now.utc.iso8601, finished_at: nil)
+          .insert_conflict(target: :slug, update: update)
+          .insert(slug: slug, started_at: Time.now.utc.iso8601, finished_at: nil, shape: shape)
+      end
+
+      # The shape the slice's last run recorded, nil when unrecorded.
+      def slice_shape(fulltext, slug)
+        return nil unless fulltext.table_exists?(SLICE_REFRESHES_TABLE)
+        return nil unless fulltext[SLICE_REFRESHES_TABLE].columns.include?(:shape)
+
+        fulltext[SLICE_REFRESHES_TABLE].where(slug: slug).get(:shape)
       end
 
       def mark_slice_finished!(fulltext, slug, live_rows: nil, max_passage_id: nil)
