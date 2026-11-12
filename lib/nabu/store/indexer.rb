@@ -1606,24 +1606,38 @@ module Nabu
         settings.each { |key, value| fulltext[table].insert(table => key, :rank => value) }
       end
 
-      # The deferred-merge consolidation after every governed slice write —
-      # its own announced stage, AFTER the defaults are restored (crash-safe
-      # order) and outside the write's transaction. On a debt-free index it
-      # is one no-op merge chunk per table (consolidate_merges! probe).
+      # The merge PROBE after every governed slice write — its own
+      # announced stage, AFTER the defaults are restored (crash-safe order)
+      # and outside the write's transaction: ONE bounded chunk per table
+      # (SYNC_PROBE_CHUNKS), never a consolidation to completion. The
+      # maintenance rail (Store::IndexMaintenance, `nabu index maintain`)
+      # owns consolidation — the proportionality law keeps the sync path
+      # O(Δ), and an index's standing merge debt is O(index), not O(Δ): the
+      # 2026-11 ndl delta that hung 5h+ was paying exactly that debt inline.
+      # Debt the probe leaves is REPORTED (IndexMaintenance.debt_line) as a
+      # durable note naming the rail. On a debt-free index the probe is one
+      # no-op chunk per table, exactly as before.
       def consolidate_deferred_merges!(fulltext, tables, slug:, ledger: nil, progress: nil)
         return if tables.empty?
 
         timed_sync_stage(ledger, slug, "fts_merge",
-                         "index slice: #{slug} — merge consolidation (deferred merges)", progress) do
-          tables.each { |table| consolidate_merges!(fulltext, table, progress: progress) }
+                         "index slice: #{slug} — merge consolidation probe (one bounded chunk per table)",
+                         progress) do
+          tables.each do |table|
+            consolidate_merges!(fulltext, table, progress: progress, max_chunks: SYNC_PROBE_CHUNKS)
+            line = IndexMaintenance.debt_line(fulltext, table)
+            progress&.note(line) if line
+          end
         end
       end
+      SYNC_PROBE_CHUNKS = 1
 
       # Positive incremental merges until the total_changes probe reports a
-      # no-op call (< 2 — the documented completion signal). Proportional to
-      # the segment storm the bulk writes created; ticks so an hours-scale
-      # consolidation is never silent.
-      def consolidate_merges!(fulltext, table, progress: nil)
+      # no-op call (< 2 — the documented completion signal), or until
+      # +max_chunks+ chunks ran (the sync path's probe). Proportional to
+      # the debt it consumes; ticks so an hours-scale consolidation (the
+      # maintenance rail's) is never silent.
+      def consolidate_merges!(fulltext, table, progress: nil, max_chunks: nil)
         chunks = 0
         loop do
           worked = merge_chunk!(fulltext, table) >= MERGE_NOOP_LINE
@@ -1633,6 +1647,7 @@ module Nabu
             checkpoint_wal!(fulltext, progress: progress) # merges rewrite pages too — keep the WAL bounded
           end
           break unless worked
+          break if max_chunks && chunks >= max_chunks
         end
         checkpoint_wal!(fulltext, progress: progress)
         chunks
