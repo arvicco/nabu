@@ -59,8 +59,11 @@ module Nabu
     SAMPLE_SECONDS = 15
     # The deadline is DEADLINE_FACTOR × the ledger estimate, floored: a
     # seconds-scale estimate must not arm a seconds-scale kill (statement
-    # variance on a cold page cache alone exceeds it).
-    DEADLINE_FACTOR = 2
+    # variance on a cold page cache alone exceeds it). The factor prices
+    # estimate UNCERTAINTY, not the estimate (owner, 2026-11-12, after a
+    # healthy first-sync shadow build was killed at the floor): a ledger
+    # estimate is one past run, so the killer stands well back from it.
+    DEADLINE_FACTOR = 2.5
     MIN_DEADLINE_SECONDS = 15 * 60
     KILL_GRACE_SECONDS = 30
 
@@ -80,6 +83,24 @@ module Nabu
       return nil if estimate.nil? || !estimate.positive?
 
       [estimate * DEADLINE_FACTOR, MIN_DEADLINE_SECONDS].max
+    end
+
+    # A kill may only be armed on evidence that DESCRIBES the run: every
+    # named non-corpus scope must carry its own history under +kind+, or
+    # the summed "estimate" is just the corpus riders' seconds — about a
+    # first sync it says nothing (measured 2026-11-12: a healthy
+    # 1.26M-row first-sync shadow build killed at the floor, armed off
+    # 40.9s of corpus rows). nil +scopes+ = an unscoped command whose
+    # estimate sums everything it will run: covered by construction.
+    def self.evidence_covers?(ledger, kind:, scopes:)
+      return true if scopes.nil?
+
+      own = scopes - ["corpus"]
+      return true if own.empty?
+      return false unless Store::StageTimings.table?(ledger)
+
+      covered = ledger[Store::StageTimings::TABLE].where(kind: kind, scope: own).distinct.select_map(:scope)
+      (own - covered).empty?
     end
 
     # The stage ledger's estimate for a command: the sum of the LATEST row
