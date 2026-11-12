@@ -124,8 +124,10 @@ The sample below is not a quickstart run. It was captured on 2026-07-11
 from the maintainer's full library, which holds more witnesses of this
 verse than the quickstart corpus — hence its "13 of 13". On a fresh
 quickstart library the same command shows the seven starter witnesses;
-the other six (the English WEB, the Clementine Vulgate, and four further
-Old Church Slavonic manuscripts) arrive as you grow the library.
+the other nine (the English WEB, the Clementine Vulgate, four further
+Old Church Slavonic manuscripts, the Sahidic and Bohairic Coptic
+versions, and the Church Slavonic Elizabeth Bible) arrive as you grow
+the library.
 
 ```
 $ bin/nabu align "MARK 2.3"
