@@ -174,6 +174,59 @@ class IndexWatcherTest < Minitest::Test
     assert_match(/load_tick 2000/, File.read(@heartbeat))
   end
 
+  # The heartbeat keeps the last STAGE marker beside the last event, so a
+  # stall inside a ticking stage still names the stage it is in.
+  def test_the_heartbeat_keeps_the_last_stage_marker_under_later_ticks
+    teed = Watcher.tee(Nabu::ProgressReporter.new, Watcher::Heartbeat.new(@heartbeat, min_interval: 0))
+    teed.stage("index slice: pap")
+    teed.load_tick(2_000, 0)
+
+    lines = File.read(@heartbeat).lines.map(&:strip)
+    assert_equal "load_tick 2000", lines.first, "the last event leads"
+    assert_includes lines, "stage index slice: pap", "the stage marker survives the tick"
+  end
+
+  def stall_line_for(heartbeat_text, label: "index refresh pap")
+    File.write(@heartbeat, heartbeat_text)
+    w = Watcher.new(writer_pid: Process.pid, heartbeat_path: @heartbeat, fulltext_path: @fulltext_path,
+                    label: label, deadline: nil)
+    w.send(:stall_line, 12 * 60)
+  end
+
+  # The stall line quotes the marker it saw, and suspects an fts5 merge
+  # only when that marker is an index stage — a fetch that goes quiet is
+  # a quiet fetch, not a merge.
+  def test_a_stall_inside_an_index_stage_suspects_an_fts5_merge
+    line = stall_line_for("load_tick 4000\nstage index slice: pap\n")
+
+    assert_match(/last stage marker: index slice: pap/, line)
+    assert_match(/fts5 merge suspected/, line)
+  end
+
+  def test_a_stall_inside_a_fetch_stage_names_the_fetch_and_suspects_no_merge
+    line = stall_line_for("fetch\nstage fetch: pap\n", label: "sync pap")
+
+    assert_match(/last stage marker: fetch: pap/, line)
+    refute_match(/fts5 merge/, line)
+  end
+
+  def test_a_stall_before_any_stage_quotes_the_run_opening
+    line = stall_line_for("start sync pap\n", label: "sync pap")
+
+    assert_match(/last stage marker: start sync pap/, line)
+    refute_match(/fts5 merge/, line)
+  end
+
+  def test_a_stall_with_no_heartbeat_file_falls_back_to_the_run_label
+    FileUtils.rm_f(@heartbeat)
+    w = Watcher.new(writer_pid: Process.pid, heartbeat_path: @heartbeat, fulltext_path: @fulltext_path,
+                    label: "index refresh pap", deadline: nil)
+    line = w.send(:stall_line, 12 * 60)
+
+    assert_match(/last stage marker: start index refresh pap/, line)
+    assert_match(/fts5 merge suspected/, line, "an index command's opening is an index marker")
+  end
+
   # -- the watcher against a fake writer --------------------------------------
 
   # A writer that never ticks and ignores SIGTERM — the GVL-held statement's
@@ -236,6 +289,24 @@ class IndexWatcherTest < Minitest::Test
     db.disconnect
     refute File.exist?("#{@fulltext_path}-wal") && File.size("#{@fulltext_path}-wal").positive?,
            "the WAL was truncated"
+  end
+
+  # A wave refresh (index refresh A B) supervises several slugs: a killed
+  # wave leaves every member's slice pending for the next refresh to heal.
+  def test_the_hygiene_after_a_killed_wave_leaves_every_member_pending
+    @writer = spawn_stuck_writer
+    seed_killed_bulk_state(@writer)
+    @watcher_pid = watcher(writer_pid: @writer, deadline: 0.6, slug: %w[pap lit]).start!
+    Process.wait(@watcher_pid)
+    Process.wait2(@writer)
+    @writer = nil
+    @watcher_pid = nil
+
+    assert_match(/hygiene: engine config restored, WAL truncated, slices pap, lit left pending/, File.read(@log))
+    db = Nabu::Store.connect_fulltext(@fulltext_path, readonly: true)
+    assert Indexer.slice_pending?(db, "pap")
+    assert Indexer.slice_pending?(db, "lit")
+    db.disconnect
   end
 
   def test_a_stopped_watcher_leaves_the_writer_and_the_index_alone
