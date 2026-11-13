@@ -57,7 +57,10 @@ module Nabu
     # markers vanish, formatting tags unwrap keeping their text.
     #
     # A malformed file, a missing/mis-shaped `text`, a non-string leaf, or a
-    # file with zero non-empty leaves is damage → Nabu::ParseError.
+    # file with zero non-empty leaves is damage → Nabu::ParseError — except
+    # the structurally EMPTY version (`"text": []`, no leaf of any kind),
+    # upstream's placeholder for a translation not yet begun: skipped BY
+    # RULE (DocumentSkipped; 12 files at the 2026-11-13 quarantine review).
     class SefariaJsonParser
       # The shared identity fold (adapter urns + node citation tokens):
       # Sefaria titles/versionTitles are prose ("Targum Onkelos, vocalized
@@ -89,14 +92,33 @@ module Nabu
           )
           sequence += 1
         end
-        raise ParseError, "#{path}: no non-empty text leaves" if document.empty?
+        if document.empty?
+          raise DocumentSkipped.new("#{path}: #{EMPTY_VERSION_REASON}", reason: EMPTY_VERSION_REASON) if
+            leafless?(data["text"])
+
+          raise ParseError, "#{path}: no non-empty text leaves"
+        end
 
         document
       rescue Nabu::ValidationError, Normalize::EncodingError => e
         raise ParseError, "#{path}: #{e.message}"
       end
 
+      # The skip note for a version whose text tree carries no leaf at all.
+      EMPTY_VERSION_REASON = "empty version — the text tree holds no leaf (upstream placeholder)"
+
       private
+
+      # True when the (already-walked) text tree holds no leaf of any kind —
+      # only empty arrays/dicts (`"text": []`). Blank STRING leaves are not
+      # leafless: those stay the damage quarantine.
+      def leafless?(node)
+        case node
+        when Array then node.all? { |child| leafless?(child) }
+        when Hash then node.each_value.all? { |child| leafless?(child) }
+        else false
+        end
+      end
 
       def read_version(path)
         parsed = JSON.parse(File.read(path))

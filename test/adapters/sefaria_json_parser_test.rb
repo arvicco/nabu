@@ -287,6 +287,18 @@ class SefariaJsonParserTest < Minitest::Test
     end
   end
 
+  # A version whose text tree holds NO leaf at all (`"text": []`) is an
+  # empty version upstream — a placeholder, not damage: skipped BY RULE
+  # (quarantine review 2026-11-13: all 12 "no non-empty text leaves"
+  # quarantines were this shape). Blank-string leaves above still quarantine.
+  def test_a_structurally_empty_version_is_skipped_by_rule
+    path = File.join(FIXTURES, "empty-version/Kabbalah/Zohar/Idra Zuta/English/Sefaria Community Translation.json")
+    assert_equal [], JSON.parse(File.read(path))["text"]
+    error = assert_raises(Nabu::DocumentSkipped) { parse(path, language: "eng") }
+    refute_kind_of Nabu::ParseError, error
+    assert_equal Nabu::Adapters::SefariaJsonParser::EMPTY_VERSION_REASON, error.reason
+  end
+
   def test_non_string_leaf_raises_parse_error
     with_file('{"title": "T", "versionTitle": "V", "text": [[42]]}') do |path|
       assert_raises(Nabu::ParseError) { parse(path) }
