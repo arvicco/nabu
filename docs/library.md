@@ -2344,3 +2344,39 @@ printed line a passage with its German lane riding as annotation.
 Gated — contact TITUS for a license grant; held non-redistributable,
 credited wherever displayed; `prg` joins the
 registry's West Baltic branch beside the East Baltic shelves.
+
+**`titus-old-lithuanian`** — **186 documents / 52,748 passages**: the
+Old Lithuanian prints in TITUS's diplomatic editions — Mažvydas's
+Katekizmas (1547, the first Lithuanian book), his Ambrosian hymn and
+baptismal Forma, the Wolfenbüttel Postil's 75 manuscript pages,
+Szyrwid's Punktai sakymų, the catechisms of Daukša (1595), Vilentas
+(1579), Lysius (1719) and Engel, the Dzūkian prayers, and
+Donelaitis's *Metai* — every printed line or verse a passage, the
+prints' German, Polish, Latin and Greek lanes riding as annotations
+(data entry Gelumbeckaitė, Dini, Ardoino, Thies, Young, Ritter,
+Keydana). Gated — contact TITUS for a license grant; held
+non-redistributable, credited wherever displayed; `lit` staged
+`lt:old` on the East Baltic shelf.
+
+**`titus-old-albanian`** — **283 documents / 25,748 passages**: the
+Old Albanian books in TITUS's diplomatic editions — Buzuku's
+*Missale* (1555, the first Albanian book), Blanchus (Bardhi)'s
+*Dictionarium Latino-Epiroticum* (Rome 1635) with its occasional
+Turkish equivalents, Bogdani's *Cuneus Prophetarum* with its facing
+Latin, Casasi's *Breve compendio*, and Matrënga's *Dottrina
+christiana* (1592) with its modern-orthography interlinear — the
+printed line or paragraph as the passage, the Latin, Italian,
+Turkish and Greek lanes as annotations (data entry Hock, de Vaan,
+Demiraj). Gated — contact TITUS for a license grant; held
+non-redistributable, credited wherever displayed; `sqi` staged
+`sq:old`.
+
+**`titus-old-frisian`** — **248 documents / 2,581 passages**: Old
+Frisian law in TITUS's editions — Thomas F. Shannon's Corpus of Old
+East and West Frisian Texts (the Ten Commandments and Seventeen
+Statutes after the Hunsingo manuscripts, the Londriucht, the
+privilege of Charlemagne, *Thet Freske Riim*, the Skeltana Riucht)
+and the Brokmer Recht after Buma–Ebel (data entry Forschungsstelle
+des Deutschen Rechtswörterbuchs, Heidelberg) — the legal sentence as
+the passage. Gated — contact TITUS for a license grant; held
+non-redistributable, credited wherever displayed; bare `ofs`.

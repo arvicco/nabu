@@ -6,7 +6,7 @@ require_relative "titus_tocharian_a"
 module Nabu
   module Adapters
     # TITUS Tocharian B Corpus — the West Tocharian manuscripts TITUS
-    # serves to MEMBERS ONLY (J. W. Goethe-Universität Frankfurt, Prof.
+    # serves only behind a login (J. W. Goethe-Universität Frankfurt, Prof.
     # Jost Gippert). The public TITUS text index (texte/texte2.htm, read
     # 2026-10-12) links ONE frameset for three parts: the Berlin Turfan
     # texts (data entry P. Olivier, Chr. Schaefer, T. Tamai, K. Kupfer;
@@ -25,9 +25,9 @@ module Nabu
     # command. The fetch is the Tocharian A family's TitusFetch walk with
     # the credential riding as Basic auth.
     #
-    # == The grant (by email, 2026-10-06)
+    # == The terms
     #
-    # The owner's personal grant names "the Tocharian A and B texts of the
+    # The license terms name "the Tocharian A and B texts of the
     # Berlin Turfan collection as TITUS presents them" — the titus-avestan
     # mechanisms verbatim (grant_required, availability blocked, license
     # class nc + the manifest credit). The frameset ALSO carries the
@@ -54,12 +54,11 @@ module Nabu
       # the same 401, and the http host is never asked to carry the secret).
       ENTRY_URL = "https://titus.fkidg1.uni-frankfurt.de/texte/etcc/toch/tochb/tochb.htm"
 
-      LICENSE = "personal grant, Gippert (by email, 2026-10-06, extending the 2026-07-23 " \
-                "Avestan terms to the Tocharian A and B texts of the Berlin Turfan collection): " \
-                "one retrieval, local personal research use only, no redistribution; TITUS and " \
-                "the editors clearly indicated wherever displayed"
+      LICENSE = "restricted (the TITUS family terms, covering the Tocharian A and B texts of the " \
+                "Berlin Turfan collection): one retrieval, local personal research use only, no " \
+                "redistribution; TITUS and the editors clearly indicated wherever displayed"
 
-      CREDIT = "TITUS (J. Gippert, Frankfurt) — Tocharian B corpus (members area): Berlin Turfan " \
+      CREDIT = "TITUS (J. Gippert, Frankfurt) — Tocharian B corpus (authenticated area): Berlin Turfan " \
                "collection, data entry P. Olivier, Chr. Schaefer, T. Tamai, K. Kupfer (preliminary " \
                "edition); London and Paris collections, data entry P. Widmer, K. Kupfer, M. Peyrot."
 
@@ -118,11 +117,11 @@ module Nabu
         )
       end
 
-      # The probe HEADs the members entry page unauthenticated — a 401 there
+      # The probe HEADs the authenticated entry page without credentials — a 401 there
       # is the gate answering, not an outage.
       def self.http_probe_targets
         [Nabu::Adapter::HttpProbeTarget.new(
-          label: "tochb.htm entry (members only)", zip_url: ENTRY_URL, metadata_url: nil,
+          label: "tochb.htm entry (login required)", zip_url: ENTRY_URL, metadata_url: nil,
           state_subdir: "", state_file: Nabu::TitusFetch::STATE_FILE
         )]
       end

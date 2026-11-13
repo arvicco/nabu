@@ -447,7 +447,8 @@ module Nabu
       if entry.slug == Store::SignConcordances::SOURCE_SLUG
         Store::SignConcordances.rebuild!(catalog: @db, canonical_dir: @config.canonical_dir)
       end
-      return if load_report.nil? || (load_report.added.zero? && load_report.updated.zero?)
+      return if load_report.nil?
+      return if load_report.added.zero? && load_report.updated.zero? && !catalog_lanes_dark?(entry.slug)
 
       facet_map = Nabu::FacetMap.load_default(config: @config)
       Store::FacetBuilder.refresh_source!(catalog: @db, slug: entry.slug, facet_map: facet_map)
@@ -478,6 +479,28 @@ module Nabu
       # scansion — drop those rows now (the shelf keeps the record; the
       # next --run re-scans it, the next projection counts it stale).
       Store::SilverMeter.drop_stale!(catalog: @db, slug: entry.slug)
+    end
+
+    # The lane heal (the slice_stale? twin, live 2026-11-12 — cllg-freed):
+    # a sync whose load LANDED rows but whose process died before the
+    # lanes above ran leaves them dark, and every later no-op load would
+    # skip the refresh forever. A no-op load still refreshes when the
+    # source's live documents carry lane ore — structured date bounds or
+    # facet metadata — that its lane tables hold no row for: the same two
+    # probes `nabu health`'s drift twins read (Dataset#empty? — a LIMIT 1 probe).
+    def catalog_lanes_dark?(slug)
+      source_id = @db[:sources].where(slug: slug).get(:id)
+      return false if source_id.nil?
+
+      live = @db[:documents].where(source_id: source_id, withdrawn: false)
+      ids = @db[:documents].where(source_id: source_id).select(:id)
+      lane_dark?(live, Health::Invariants::DATE_BOUNDS_MARKER,
+                 Store::SilverDates.upstream(@db[:document_axes]).where(document_id: ids)) ||
+        lane_dark?(live, '"facets"', @db[:document_facets].where(document_id: ids))
+    end
+
+    def lane_dark?(live, marker, rows)
+      !live.where(Sequel.like(:metadata_json, "%#{marker}%")).empty? && rows.empty?
     end
 
     # P106-1: the dictionary-group census follows every dictionary-bearing

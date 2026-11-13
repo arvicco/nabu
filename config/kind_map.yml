@@ -290,11 +290,22 @@ sources:
       "Apol.": theology/apologetics              # 9
       "Gnost.": theology                         # 2 — Valentinus, Ptolemaeus
       "Epist.": letter                           # 6 — epistolographers
-    # -- unmapped by design (counted in `nabu kind census --unmapped cllg-freed`): Phil. 250
-    #    (no philosophy head is ruled), Scr. Eccl. 62 (the ecclesiastical writer writes every
-    #    genre), Rhet. 61 and Soph./Sophista 46 (rhetorical handbooks beside declamations —
-    #    forkful between scholarly and oratory), Geogr. 13, Biogr. 11, Perieg. 9, Paradox. 9,
-    #    Philol. 6, Polyhist. 3, Doxogr. 2, Didac. 1, Scr. Rerum Nat. 1.
+      # -- the 2026-11-13 ruling: the philosophy head minted, two folds beside it
+      "Phil.": philosophy                        # 250 — Plato's tradition, the commentators, the
+      #                                            treatise writers: the head minted for them
+      "Doxogr.": philosophy/doxography           # 2 — the reporters of the schools' opinions
+      "Scr. Eccl.": theology                     # 62 — the ecclesiastical writer IS the patristic
+      #                                            theology shelf; TLG marks the genre-spanning
+      #                                            church authors with it, and their argued prose
+      #                                            is doctrine (same-day fold with the ruling)
+      "Rhet.": oratory                           # 61 — the rhetors taught and practiced oratory;
+      #                                            handbooks beside declamations, one practice
+      "Soph.": oratory                           # 46 with Sophista — the sophists: display oratory
+      #                                            and its teaching (the Second Sophistic's declaimers)
+      "Sophista": oratory                        # the unabbreviated Byzantine form
+    # -- unmapped by design (counted in `nabu kind census --unmapped cllg-freed`):
+    #    Geogr. 13, Biogr. 11, Perieg. 9, Paradox. 9, Philol. 6, Polyhist. 3,
+    #    Didac. 1, Scr. Rerum Nat. 1.
   blbooks:            # the BL catalogue title's form noun, cut to ONE head at parse time
     #                   (Adapters::BlbooksTitleGenre — the cgpg precedent: upstream carries no
     #                   genre field, the title IS the label; the main title's earliest form word
@@ -2509,6 +2520,42 @@ sources:
       #   non-canonical (not scripture), addressed to the Buddhas
       "Fragments of documents of uncertain type": unknown  # 3 — upstream's own
       #   "cannot determine" (ruled "unclassified": the honest class)
+  titus-old-albanian:  # census 2026-11-12: five editions (texte2.htm), one work each
+    metadata: work     # the page's edition id (TitusLevelsAdapter#work_for)
+    map:
+      buzuku: ritual/liturgy      # Buzuku's Missale (1555): the Mass propers, rites and
+      #                             lessons of the Roman missal in Albanian
+      blanchus: lexical/glossary  # the Dictionarium Latino-Epiroticum: Latin headwords
+      #                             glossed in Albanian (the Elbing-vocabulary fold)
+      bogdani: theology/treatise  # the Cuneus Prophetarum: a doctrinal treatise on the
+      #                             prophets and the life of Christ
+      casasi: catechesis          # "Breve compendio della dottrina christiana"
+      matranga: catechesis        # "Dottrina christiana" (E mbsuame e krështerë)
+  titus-old-frisian:   # census 2026-11-12: two editions — six corpus texts + the Brokmer Recht
+    metadata: work     # the corpus page's Text header; the Brokmer edition id
+    map:
+      "10_Gebote": catechesis     # the Ten Commandments (Hunsingo mss.) — the
+      #                             Decalogue as taught, the catechetical core
+      "17_Küren": legal/law       # the Seventeen Statutes, the shared Frisian law
+      Londriucht: legal/law       # the Land-law
+      Fres.Frid.: legal/law       # Fon alra Fresena fridome — the privilege of Charlemagne
+      Fr.Riim: literary/poetry    # Thet Freske Riim — the rhymed Frisian history
+      Skelt.Riucht: legal/law     # the Skeltana Riucht (the schout's law)
+      brokmrx: legal/law          # the Brokmer Recht — the law book of the Brokmerland
+  titus-old-lithuanian:  # census 2026-11-12: eleven editions (texte2.htm), one work each
+    metadata: work       # the page's edition id (TitusLevelsAdapter#work_for)
+    map:
+      dzuk: hymn-prayer/prayer    # the Dzūkian prayers
+      mazvga: hymn-prayer/hymn    # "Giesme S. Ambraßeijaus" — the Ambrosian hymn (Te Deum)
+      forma: ritual/liturgy       # "Forma Chrikstima" — the order of baptism
+      mazvkat: catechesis         # Mažvydas's Katekizmas
+      wp: sermon                  # the Wolfenbüttel Postil — sermons on the Sunday gospels
+      spslt: sermon               # Szyrwid's Punktai sakymų — sermon outlines
+      dauksakt: catechesis        # Daukša's catechism (Kat.1595)
+      vilentas: catechesis        # Vilentas's catechism (Kat.1579)
+      lysius: catechesis          # Lysius's catechism (Kat.1719)
+      engels: catechesis          # Engel's catechism
+      donmetai: literary/poetry   # Donelaitis's Metai — the hexameter poem of the seasons
   titus-old-prussian:  # census 2026-11-12: 40 pages over five text sigla (the frameset index)
     metadata: text     # the page's text siglum, from its line anchors (OPr.Corp._<text>_…)
     map:

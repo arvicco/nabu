@@ -644,12 +644,11 @@ sources:
     # One document per full-text chant record (Adapters::CantusCsvParser);
     # the manuscript source's own fields (Browse Sources listing) join every
     # record of it. kind is machine-postured by the kind_map rule (genre).
-    lect: {posture: identity, note: "lat — the liturgical Latin of the Office and Mass as each
-        manuscript spells it. DELIBERATELY coarse: two refinements are candidates, not mints —
-        the registry's lat/ecc (Ecclesiastical Latin) register as a whole-source claim, and a
-        source-century date-band staging (lat:med / lat:ren / lat:new) of the WITNESS's spelling;
-        both judgment-grade. A rare vernacular cantio (genre Cn) would ride under lat — none in
-        the 17-source sample"}
+    # lect rides the lect_overrides row (lat → lat/ecc, ruled 2026-11-12:
+    # chant is register-classed like gregobase/divinum-officium; the
+    # witness-date band staging that once made lat:ren 98.6% chant is
+    # replaced by the stageless register) — machine files are the single
+    # source of truth, so no declaration here.
     dating: {posture: partial, note: "the source's curated century labels (Browse Sources
         /century/ links: '10th century (975-1000)', '13th century (2nd half)', 40 labels) band
         every record of that source — basis 'source', the witness's copying date, never the
@@ -2617,6 +2616,50 @@ sources:
         ship in the tab"}
     places: {posture: unplaced}
     script: {posture: qualified, note: "romanized headwords (the OJED transliteration)"}
+  titus-old-albanian:
+    # kind machine-postured — the titus-old-albanian fold in kind_map.yml over the
+    # page's edition (the Missal → ritual/liturgy, the dictionary → lexical/glossary,
+    # the Cuneus → theology/treatise, the two doctrinae → catechesis). Lect
+    # machine-postured: the lect_overrides.yml row stages sqi → sq:old.
+    dating: {posture: partial, note: "only what a page states — Blanchus's title page
+        \"Romae … 1635\" (class edition) and Matrënga's TITUS header \"Dottrina Christiana
+        (1592)\" (the autograph, class composition); Buzuku's only copy lacks its title
+        page; Bogdani's and Casasi's title pages are read from the held pages after the
+        first retrieval (the titus-old-prussian precedent), never supplied from scholarship"}
+    places: {posture: named, note: "Blanchus's stated print place (\"Romae\") as Rome on its
+        pages; the other editions name none in the census — declared coarse"}
+    script: {posture: implied, note: "Latin type and hands transcribed diplomatically (ſ, ξ,
+        ɛ, ћ, ɣ — Buzuku's and Bogdani's special letters kept as printed)"}
+  titus-old-frisian:
+    # kind machine-postured — the titus-old-frisian fold in kind_map.yml over the
+    # corpus page's Text header and the Brokmer edition (the law texts → legal/law,
+    # the Ten Commandments → catechesis, the Riim → literary/poetry).
+    lect: {posture: identity, note: "ofs — the bare Old Frisian anchor (nabu-lects, band
+        1200-1550), deliberately coarse: the registry draws the East/West Frisian split
+        as prose, not a stage or variety pair; the Latin incipits mint no claim (they
+        ride the `latin` annotation)"}
+    dating: {posture: undatable, note: "the headers state only the modern editions' years
+        (Steller 1928, Heuser 1903, Buma/Ebel 1965) — never a manuscript or composition
+        date; the Hunsingo and Brokmer codices' dates are scholarship, not a header"}
+    places: {posture: unplaced, note: "no place field; the law texts name their lands
+        (the Brokmerland, Hunsingo) in title and text only — a ruled text→region table
+        would be a future overlay"}
+    script: {posture: implied, note: "Latin-script manuscripts in normalized critical
+        editions"}
+  titus-old-lithuanian:
+    # kind machine-postured — the titus-old-lithuanian fold in kind_map.yml over the
+    # page's edition (the catechisms → catechesis, the postils → sermon, the Forma →
+    # ritual/liturgy, the hymn and prayers → hymn-prayer, the Metai → poetry). Lect
+    # machine-postured: the lect_overrides.yml row stages lit → lt:old.
+    dating: {posture: partial, note: "the print year three catechisms carry in TITUS's own
+        text siglum (Daukša Kat.1595, Vilentas Kat.1579, Lysius Kat.1719), class edition;
+        the other editions' title pages are read from the held pages after the first
+        retrieval (the titus-old-prussian precedent), never supplied from scholarship"}
+    places: {posture: unplaced, note: "no place in the census pages; the title-page imprint
+        places (Königsberg, Vilnius) are read from the held pages after the first
+        retrieval — until then no claim"}
+    script: {posture: implied, note: "Latin type and hands transcribed diplomatically (ſ, ʒ,
+        the prints' hyphen breaks and drop capitals kept)"}
   titus-old-prussian:
     # kind machine-postured — the titus-old-prussian fold in kind_map.yml over the
     # page's text siglum (the catechisms → catechesis, the vocabularies →
@@ -2674,7 +2717,7 @@ sources:
     kind: {posture: unclassified}
     # `txb` is a real nabu-lects anchor (the bare code is the claim). The
     # adapter's page-shape constants are PROVISIONAL until the first
-    # authenticated sync (members-only upstream) — the postures below are
+    # authenticated sync (login-gated upstream) — the postures below are
     # the titus-tocharian-a family's, re-censused at that sync.
     # The two London Tumshuqese leaves (IOL Toch. 162 / 185, the `ts` lane
     # stem; ruled 2026-10-13) claim bare `xtq` — the ISO code is the claim.

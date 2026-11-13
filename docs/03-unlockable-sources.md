@@ -25,7 +25,9 @@ Sources not readily ingestible today, with concrete unlock paths. Ordered by exp
 
 - **2026-11-12 — Old Prussian** (`titus-old-prussian`: the catechisms, the Elbing and Grunau vocabularies, the fragments), on the same terms: one retrieval, local personal research use, no redistribution, TITUS and the editors credited wherever displayed.
 
-The first eight sources are wired; `titus-old-prussian` awaits its one-time retrieval. Every one is gated: each box records its own acknowledgment of the terms before its first fetch, and none of the texts ships in any public artifact.
+- **Old Lithuanian, Old Albanian and Old Frisian** (`titus-old-lithuanian`: Mažvydas, the Wolfenbüttel Postil, Szyrwid, the catechisms of Daukša, Vilentas, Lysius and Engel, Donelaitis; `titus-old-albanian`: Buzuku, Blanchus, Bogdani, Casasi, Matrënga; `titus-old-frisian`: Shannon's Old Frisian corpus and the Brokmer Recht), on the same terms.
+
+The first nine sources are wired; the three Old Lithuanian / Old Albanian / Old Frisian sources await their one-time retrievals. Every one is gated: each box records its own acknowledgment of the terms before its first fetch, and none of the texts ships in any public artifact.
 
 **Remaining long tail:** Tocharian B (already covered by the 2026-10-06 terms; the gated adapter `titus-tocharian-b` is built and awaits its credential and first verified sync) and other TITUS corpora as concrete needs arise — the same scoped-letter route, now with three precedents to cite. Hittite is served independently (the tlhdig and hittite-glossed shelves), and the hieroglyphic Luwian corpus (ACLT) is gated — contact the editors for a license grant.
 

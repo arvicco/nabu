@@ -41,9 +41,9 @@ module Nabu
   # The fetch pin is the sha256 of the reachable page set (name → body sha256,
   # sorted) — a stable identity for "what the edition currently is."
   #
-  # == The members area (+auth+)
+  # == The authenticated area (+auth+)
   #
-  #   A gated corpus (Tocharian B: TITUS members only, HTTP Basic auth)
+  #   A gated corpus (Tocharian B: TITUS login required, HTTP Basic auth)
   #   passes its stored Nabu::Credentials::Entry as +auth+: every request
   #   carries the Authorization header. A 401 to SENT credentials raises
   #   Credentials::Rejected (the rotation signal — the message names the
@@ -262,7 +262,7 @@ module Nabu
       response
     end
 
-    # The members-area GET: Basic auth on THIS request only — a redirect is
+    # The authenticated-area GET: Basic auth on THIS request only — a redirect is
     # returned (never followed) and aborts, so the header cannot reach
     # another host; a 401 is the rejected (rotated) credential.
     def authenticated_get(url)

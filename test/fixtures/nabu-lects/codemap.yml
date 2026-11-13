@@ -59,6 +59,8 @@ map:
   wol:     wo
   swa:     sw
   kor:     ko
+  sqi:     sq   # the macrolanguage (639-3; Wiktionary anchors sq)
+  alb:     sq   # the 639-2/B bibliographic spelling (sqi is the /T twin)
   # The shabados line database's script-qualified claims: the Dasam
   # Granth-tradition Braj corpus (Kabitt Savayye, Sarabloh) and Bhai
   # Nand Lal's Persian works (the Zafarnama, the Hikayatan) are held
@@ -79,6 +81,11 @@ map:
                 # modern translations and commentary (classical-modern, cbeta)
   tha:     th
   ger:     de   # the 639-2/B bibliographic spelling (deu is the /T twin)
+  dut:     nl   # the 639-2/B bibliographic spelling (nld is the /T twin; nb-no emits it)
+  ice:     isl  # the 639-2/B bibliographic spelling (isl is the /T twin; nb-no emits it)
+  gre:     el   # the 639-2/B bibliographic spelling of MODERN Greek (ell is the /T twin);
+                # legacy MARC records also put gre on ancient editions — a consumer that
+                # knows the item is premodern reads grc at parse time (the nb-no rule)
   nor:     "no" # the macrolanguage alias, claiming nothing historical (quoted: YAML 1.1 reads bare no as false)
   dan:     da
   # The Pacific wing (2026-11-02): the 639-2/3 spellings of the newly
@@ -225,6 +232,8 @@ map:
   la-ecc:  lat/ecc
   la-ren:  lat:ren
   la-new:  lat:new
+  la-cla:  lat:cla      # Wiktionary Classical Latin — 84 held reflex rows
+  la-eme:  lat:med      # Wiktionary Early Medieval Latin, no stage of its own (see lat:med) — 252 held reflex rows
   itc-ola: lat:arch
 
   # Reconstructed proto-languages: the stage is pro, the machine truth is

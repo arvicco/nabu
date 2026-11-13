@@ -35,8 +35,8 @@ module Nabu
     # ortolang-item-license.json): "Licence Creative Commons Attribution -
     # Pas d'Utilisation Commerciale - Partage dans les Mêmes Conditions 4.0
     # International" (license-cc-by-nc-sa-4_0, status "Free for non
-    # commercial use") → CC BY-NC-SA 4.0, class `nc`: INGESTIBLE for the
-    # owner's personal research catalog, served locally with its license
+    # commercial use") → CC BY-NC-SA 4.0, class `nc`: INGESTIBLE for a
+    # personal research catalog, served locally with its license
     # label and never redistributed, like every nc shelf.
     #
     # == Proto-Romance speaks la-vul (the packet's code decision)

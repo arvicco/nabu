@@ -11,10 +11,10 @@ module Nabu
     # entry J. Gippert (Frankfurt 1991) and V. Slunečko (Praha 1995), with
     # Gippert's synoptical arrangement of the original scripts.
     #
-    # == The grant (by email, 2026-08-31) and the credit duty
+    # == The terms and the credit duty
     #
-    # Fetched under the owner's PERSONAL grant extending the Avestan terms
-    # verbatim: one-time download, local use only, no redistribution, TITUS
+    # Fetched under a license grant (no public license) on the TITUS family
+    # terms: one-time download, local use only, no redistribution, TITUS
     # and the editors credited wherever displayed. Same two mechanisms as
     # titus-avestan: `grant_required: true` guards the fetch right;
     # license_class `nc` + the manifest +credit+ line carry the display duty.
@@ -34,9 +34,8 @@ module Nabu
 
       ENTRY_URL = "https://titus.uni-frankfurt.de/texte/etcs/ital/oskumb/oskum.htm"
 
-      LICENSE = "personal grant, Gippert (by email, 2026-08-31, extending the 2026-07-23 " \
-                "Avestan terms): non-commercial local use; TITUS and the editors " \
-                "clearly indicated wherever displayed"
+      LICENSE = "restricted (the TITUS family terms): one-time download, non-commercial local " \
+                "use, no redistribution; TITUS and the editors clearly indicated wherever displayed"
 
       CREDIT = "TITUS (J. Gippert, Frankfurt) — Osco-Umbrian corpus, text entry " \
                "J. Gippert / V. Slunečko, synoptical script arrangement J. Gippert."

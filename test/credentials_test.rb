@@ -4,7 +4,7 @@ require "test_helper"
 require "tmpdir"
 require "pp"
 
-# The credentials seam (Nabu::Credentials): local/config/credentials.yml is
+# Nabu::Credentials: local/config/credentials.yml is
 # the ONE home of stored upstream credentials (a gated member area's Basic-
 # auth user + password, or a token). Written only through the `nabu creds`
 # gateway, always mode 600; read by the fetch layer through

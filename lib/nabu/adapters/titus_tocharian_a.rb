@@ -12,10 +12,10 @@ module Nabu
     # T. Tamai (1998–2001), corrections K. Kupfer; TITUS version with the
     # THT catalogue data by J. Gippert, K. Kupfer, T. Tamai.
     #
-    # == The grant (by email, 2026-10-06) and the credit duty
+    # == The terms and the credit duty
     #
-    # Fetched under the owner's PERSONAL grant — the third extension on the
-    # 2026-07-23 Avestan terms: ONE retrieval per corpus, local personal
+    # Fetched under a license grant (no public license) on the TITUS family
+    # terms: ONE retrieval per corpus, local personal
     # research use only, no redistribution, TITUS and the editors credited
     # wherever displayed. The titus-avestan mechanisms verbatim:
     # `grant_required: true` guards the fetch right; license_class `nc` +
@@ -43,7 +43,7 @@ module Nabu
     #
     # == The family seam
     #
-    # Nabu::Adapters::TitusTocharianB (the members-only West Tocharian
+    # Nabu::Adapters::TitusTocharianB (the login-gated West Tocharian
     # corpus) subclasses this adapter: every instance method reads its
     # corpus constants through self.class (SLUG, LANGUAGE, ENTRY_URL, the
     # page pattern, the catalogue anchors, PARSER_PROFILE, CORPUS_TITLE),
@@ -55,9 +55,9 @@ module Nabu
 
       ENTRY_URL = "https://titus.uni-frankfurt.de/texte/etcs/toch/tocha/tocha.htm"
 
-      LICENSE = "personal grant, Gippert (by email, 2026-10-06, extending the 2026-07-23 " \
-                "Avestan terms): one retrieval, local personal research use only, no " \
-                "redistribution; TITUS and the editors clearly indicated wherever displayed"
+      LICENSE = "restricted (the TITUS family terms): one retrieval, local personal research " \
+                "use only, no redistribution; TITUS and the editors clearly indicated wherever " \
+                "displayed"
 
       CREDIT = "TITUS (J. Gippert, Frankfurt) — Tocharian A corpus (Berlin Turfan collection) " \
                "on the basis of E. Sieg & W. Siegling, Tocharische Sprachreste I (1921); data " \
@@ -191,7 +191,7 @@ module Nabu
       # Polite sequential page walk from the frameset (owner-run; never in
       # tests) — the same TitusFetch machinery as the Avestan and
       # Osco-Umbrian corpora, steered by this corpus's page pattern. A
-      # members-only corpus's stored credential (the credentials seam —
+      # login-gated corpus's stored credential (the credentials seam —
       # SyncRunner sets #credentials) rides as Basic auth; a rejected one
       # raises Credentials::Rejected unwrapped, so its message stays the
       # gateway command.

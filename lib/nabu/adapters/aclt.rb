@@ -12,8 +12,8 @@ module Nabu
     #
     # == Acquisition (ManualDrop — docs/manual/aclt.md)
     #
-    # A personal grant, delivered by email as ONE 7z archive — no public
-    # fetch URL exists. The owner drops `luwian_aclt.7z` into
+    # No public license and no public fetch URL: the corpus is delivered on
+    # request as ONE 7z archive. The owner drops `luwian_aclt.7z` into
     # incoming/aclt/; sync validates (7z magic), moves it into
     # canonical/aclt/ with `.manual-fetch.json` provenance, and extracts
     # the archive's own `luwian_aclt/json/` tree beside it (declared via
@@ -46,13 +46,14 @@ module Nabu
     # hieroglyphic tradition only, xlu untouched). License: personal
     # grant → research_private; credit the corpus + Yakubovich's
     # editorship as provenance, Tsakorpus named as the technical channel
-    # (both promised on the thread).
+    # (both required by the terms).
     class Aclt < Nabu::Adapter
       MANIFEST = Nabu::SourceManifest.new(
         id: "aclt",
         name: "ACLT — Annotated Corpus of Luwian Texts (Yakubovich)",
-        license: "Personal research grant (I. Yakubovich, 2026-09-28; corpus JSON " \
-                 "delivered by T. Arkhangelskiy, Tsakorpus platform, 2026-09-29) — not redistributable",
+        license: "restricted: local research use only — not redistributable; the corpus and " \
+                 "I. Yakubovich's editorship credited on every text, the Tsakorpus platform " \
+                 "(T. Arkhangelskiy) named as the technical channel",
         license_class: "research_private",
         upstream_url: "https://luwian.web-corpora.net/luwian_corpus/search",
         parser_family: "tsakorpus-json"

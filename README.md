@@ -25,8 +25,8 @@ divine custodian of Ashurbanipal's library. It is not a website and not a
 reader app: it is a pipeline plus a database, operated from the command
 line, designed to outlive the services it draws from.
 
-As of **2026-11-12** the shelves hold **2,880,831 documents /
-131,777,913 passages** in 282 language codes — from proto-cuneiform
+As of **2026-11-13** the shelves hold **2,881,554 documents /
+131,858,996 passages** in 284 language codes — from proto-cuneiform
 tablets of the late 4th millennium BCE to Meiji-era Japanese. The
 summer waves built the core: **EEBO-TCP Phase I** brought the
 early-modern English print library whole (24.1M passages — the

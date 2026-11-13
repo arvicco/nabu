@@ -567,6 +567,12 @@ module Nabu
         raise Nabu::FetchError, "NDL Search SRU: batch at #{batch.first} still paging after #{BIB_MAX_PAGES} pages"
       rescue Nabu::FetchError => e
         return :timeout if e.message.match?(TIMEOUT_PATTERN)
+        # A rate limit is a retry-later, never a sync-killing fatal (the
+        # book lane's own posture, extended here after one SRU 429 aborted
+        # a sync whose books had already yielded): the timeout mold backs
+        # off and retries, and a persistent 429 ledgers the batch stuck
+        # for the next sync.
+        return :timeout if e.message.match?(/HTTP 429\b/)
         raise unless e.message.match?(/HTTP 40[34]\b/)
 
         :denied

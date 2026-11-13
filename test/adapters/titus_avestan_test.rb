@@ -10,8 +10,8 @@ require "tmpdir"
 # continuation page) + the whole Yasna 28 page. No network: fetch is
 # owner-run only.
 #
-# The fixture bytes are grant-gated (Gippert, 2026-07-23: a personal,
-# non-commercial grant — no redistribution), so they live under the
+# The fixture bytes are grant-gated (the license terms: non-commercial,
+# no redistribution), so they live under the
 # gitignored local/fixtures/titus-avestan/ (that dir's README carries the
 # re-cut recipe + sha256) and every data-bearing case SKIPs when absent —
 # the titus-pahlavi mold; on the owner's box StrictSkips makes a skip fail.
@@ -73,6 +73,8 @@ class TitusAvestanTest < Minitest::Test
     assert_equal "nc", manifest.license_class
     assert_includes manifest.license, "non-commercial use"
     assert_includes manifest.license, "clearly indicated wherever displayed"
+    refute_match(/\b20\d\d-\d\d-\d\d\b|by e-?mail|personal(?:ly)? grant/i, manifest.license,
+                 "terms + credit only — never the grant's date, channel or arrangement")
   end
 
   def test_manifest_carries_the_credit_line
@@ -252,7 +254,7 @@ class TitusAvestanTest < Minitest::Test
   def require_fixtures!
     return if Nabu::TestSupport.local_fixtures?(SLUG)
 
-    skip "#{SLUG} local fixtures absent (personal grant forbids redistribution — " \
+    skip "#{SLUG} local fixtures absent (the license forbids redistribution — " \
          "bytes live in local/fixtures/, never in git)"
   end
 end

@@ -3,7 +3,7 @@
 require "test_helper"
 require "tmpdir"
 
-# TitusFetch's credentials arm (the gated TITUS members area): an optional
+# TitusFetch's credentials arm (the gated TITUS authenticated area): an optional
 # Credentials::Entry rides every request as HTTP Basic auth; a 401 to SENT
 # credentials is the rotation signal (Credentials::Rejected, the gateway
 # command in the message); credentials are never forwarded across a
