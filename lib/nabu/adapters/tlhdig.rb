@@ -48,9 +48,14 @@ module Nabu
     #
     # 224 files are not well-formed XML and 226 more carry no
     # transliteration lines (the deposit's own description: "XML errors
-    # and inconsistencies" are work in progress) — both quarantine as
-    # ParseError at sync, loud and censused, never patched or skipped
-    # silently. Fixture exemplars pin both shapes.
+    # and inconsistencies" are work in progress). The malformed ones and
+    # the line-bearing-but-empty ones quarantine as ParseError at sync,
+    # loud and censused, never patched. The quarantine review 2026-11-13
+    # read the reasons: 220 of the 226 are line-less STUBS (witness block
+    # + a <gap> description of an untransliterated fragment, no line, no
+    # word) — upstream's placeholder grain, skipped BY RULE at parse
+    # (AoxmlParser#stub?), counted as skipped_by_rule, never silent.
+    # Fixture exemplars pin both shapes.
     #
     # == fetch / license
     #
