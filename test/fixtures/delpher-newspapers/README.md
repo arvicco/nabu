@@ -24,6 +24,7 @@ Attribution 4.0, The Hague, 2017").
 |---|---|---|---|
 | `1618/06/14/DDD_ddd_010500649_mpeg21/` | Courante uyt Italien, Duytslandt, &c. (Amsterdam) | 1618-06-14 | the archive's first issue; 1 page, 4 articles; hand-corrected OCR (DIDL OCRConfidencelevel 1.00; ALTO "Manual correction ocr", Meertens Instituut 2015) |
 | `1631/09/19/KRANTEN_MMKB08_MMKB08_000213603_mpeg21/` | the same Courante | 1631-09-19 | the second folder-id scheme (MMKB08, a Metamorfoze batch; record id `MMKB08:000213603:mpeg21`, language "NL" upper-case); gothic-type uncorrected OCR (confidence 0.33) |
+| `1650/05/17/DDD_ddd_010899278_mpeg21/` | Ordinarisse middel-weeckse courante (Amsterdam) | 1650-05-17 | the packaging-gap specimen (one of the first retrieval's 4): the DIDL names 9 articles but gives a0001 no articletext resource; the fixture keeps only 0002+0003 on disk, so a0004–a0009 are named-but-absent — all seven ride `missing_articles`, the issue parses with its 2 present articles |
 | `1685/12/22/DDD_ddd_011225333_mpeg21/` | Oprechte Haerlemsche courant (Haerlem) | 1685-12-22 | 2 pages, 8 articles (a0004 runs over both pages; a0008, the printer's colophon, is an advertentie whose articletext title is empty — the DIDL's title answers) |
 | `1695/03/14/DDD_ddd_011005283_mpeg21/` | Gazette de Rotterdam | 1695-03-14 | a French-language gazette (dc:language fr), 2 pages, 4 articles |
 

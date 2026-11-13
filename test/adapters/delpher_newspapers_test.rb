@@ -18,7 +18,7 @@ module Adapters
     FIXTURES = Nabu::TestSupport.fixtures("delpher-newspapers")
     URN = "urn:nabu:delpher-newspapers"
     ADAPTER = Nabu::Adapters::DelpherNewspapers
-    ISSUES = %w[ddd:010500649 MMKB08:000213603 ddd:011225333 ddd:011005283].freeze
+    ISSUES = %w[ddd:010500649 MMKB08:000213603 ddd:010899278 ddd:011225333 ddd:011005283].freeze
 
     def conformance_adapter = ADAPTER.new
     def conformance_workdir = FIXTURES
@@ -37,6 +37,20 @@ module Adapters
         FileUtils.cp_r(File.join(FIXTURES, "kranten_pd_16xx"), dir)
         yield dir
       end
+    end
+
+    # -- upstream packaging gaps (the first retrieval's 4 quarantines) -----------
+
+    # Four 16xx issues name articles the zip never carried text for: a0001
+    # of the 1650 Courante has no articletext resource in its own DIDL, and
+    # a named file can be absent from the folder. Both ride the
+    # missing_articles metadata (the empty-OCR pattern) — the issue keeps
+    # its present articles instead of quarantining away real news text.
+    def test_an_article_without_text_rides_missing_articles
+      document = documents.find { |d| d.urn.end_with?("ddd:010899278") }
+      assert_equal 2, document.passages.size, "a2 and a3 are the fixture's present articles"
+      assert_equal %w[a0001 a0004 a0005 a0006 a0007 a0008 a0009], document.metadata["missing_articles"]
+      assert_equal 9, document.metadata["article_count"]
     end
 
     # -- discovery ---------------------------------------------------------------
@@ -89,7 +103,7 @@ module Adapters
       assert first.text.start_with?("VVt Venetien den 1. Iunij, Anno 1618. DEn 25. Passato is geadviseert worden")
       assert_equal({ "article" => "ddd:010500649:mpeg21:a0001", "subject" => "artikel",
                      "title" => "VVt Venetien den 1.Iunij, Anno 1618.", "pages" => [1] }, first.annotations)
-      assert_equal([4, 1, 8, 4], ISSUES.map { |id| doc(id).size })
+      assert_equal([4, 1, 2, 8, 4], ISSUES.map { |id| doc(id).size })
     end
 
     def test_an_article_over_two_pages_and_the_didl_title_fallback
@@ -117,7 +131,12 @@ module Adapters
         issue = File.join(dir, "kranten_pd_16xx", "1618", "06", "14", "DDD_ddd_010500649_mpeg21")
         FileUtils.rm(File.join(issue, "DDD_010500649_0002_articletext.xml"))
         ref = conformance_adapter.discover(dir).first
-        assert_raises(Nabu::ParseError) { conformance_adapter.parse(ref) }
+        document = conformance_adapter.parse(ref)
+        assert_equal %w[a0002], document.metadata["missing_articles"],
+                     "a named-but-absent file rides missing_articles (the 2017 zip's packaging gaps)"
+        Dir.glob(File.join(issue, "*_articletext.xml")).each { |f| FileUtils.rm(f) }
+        error = assert_raises(Nabu::ParseError) { conformance_adapter.parse(ref) }
+        assert_match(/no article carries OCR text/, error.message)
       end
     end
 
@@ -141,7 +160,7 @@ module Adapters
     end
 
     def test_language_comes_from_dc_language
-      assert_equal(%w[nld nld nld fra], ISSUES.map { |id| doc(id).language })
+      assert_equal(%w[nld nld nld nld fra], ISSUES.map { |id| doc(id).language })
       gazette = doc("ddd:011005283")
       assert_equal ["fra"], gazette.metadata["languages"]
       assert gazette.passages.first.text.start_with?("Ardi au loir le carnaval")
@@ -149,7 +168,9 @@ module Adapters
 
     def test_hand_corrected_pages_are_told_from_machine_ocr
       assert_equal "hand-corrected", doc("ddd:010500649").metadata["text_nature"]
-      assert_equal(%w[machine-ocr machine-ocr machine-ocr], ISSUES.drop(1).map { |id| doc(id).metadata["text_nature"] })
+      assert_equal(%w[machine-ocr machine-ocr machine-ocr machine-ocr], ISSUES.drop(1).map do |id|
+        doc(id).metadata["text_nature"]
+      end)
       assert_equal [0.33], doc("MMKB08:000213603").metadata["ocr_confidence"]
     end
 
@@ -168,7 +189,7 @@ module Adapters
     def test_loading_twice_is_idempotent
       catalog = loaded_catalog
       first = [catalog[:documents].count, catalog[:passages].count]
-      assert_equal [4, 17], first
+      assert_equal [5, 19], first
       Nabu::Store::Loader.new(db: catalog, source: Nabu::Store::Source.first(slug: "delpher-newspapers"))
                          .load_from(ADAPTER.new, workdir: FIXTURES, full: true)
       assert_equal first, [catalog[:documents].count, catalog[:passages].count]
@@ -180,7 +201,7 @@ module Adapters
       rows = catalog[:document_axes].join(:documents, id: :document_id)
                                     .select(Sequel[:documents][:urn], :not_before, :place_name, :date_class)
                                     .to_hash(:urn, %i[not_before place_name date_class])
-      assert_equal 4, rows.size
+      assert_equal 5, rows.size
       assert_equal [1618, "Amsterdam", nil], rows["#{URN}:ddd:010500649"]
       assert_equal [1695, "Rotterdam", nil], rows["#{URN}:ddd:011005283"]
     end

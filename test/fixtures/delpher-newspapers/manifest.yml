@@ -190,3 +190,24 @@ files:
   copied: "2026-11-13"
   whole: false
   trim: the four fixture issues' rows of 8,559
+- path: kranten_pd_16xx/1650/05/17/DDD_ddd_010899278_mpeg21/didl.xml
+  refetchable: false
+  provenance: local-trim
+  reason: member 1650/05/17/DDD_ddd_010899278_mpeg21/didl.xml of https://resolver.kb.nl/resolve?urn=DATA:kranten:kranten_pd_16xx.zip (Last-Modified 2017-01-16) — copied from the landed canonical tree; the folder's a0004–a0009 articletext files are deliberately NOT copied (the missing-articles specimen)
+  copied: "2026-11-13"
+  whole: true
+  trim: none
+- path: kranten_pd_16xx/1650/05/17/DDD_ddd_010899278_mpeg21/DDD_010899278_0002_articletext.xml
+  refetchable: false
+  provenance: local-trim
+  reason: member 1650/05/17/DDD_ddd_010899278_mpeg21/DDD_010899278_0002_articletext.xml of https://resolver.kb.nl/resolve?urn=DATA:kranten:kranten_pd_16xx.zip (Last-Modified 2017-01-16) — copied from the landed canonical tree; the folder's a0004–a0009 articletext files are deliberately NOT copied (the missing-articles specimen)
+  copied: "2026-11-13"
+  whole: true
+  trim: none
+- path: kranten_pd_16xx/1650/05/17/DDD_ddd_010899278_mpeg21/DDD_010899278_0003_articletext.xml
+  refetchable: false
+  provenance: local-trim
+  reason: member 1650/05/17/DDD_ddd_010899278_mpeg21/DDD_010899278_0003_articletext.xml of https://resolver.kb.nl/resolve?urn=DATA:kranten:kranten_pd_16xx.zip (Last-Modified 2017-01-16) — copied from the landed canonical tree; the folder's a0004–a0009 articletext files are deliberately NOT copied (the missing-articles specimen)
+  copied: "2026-11-13"
+  whole: true
+  trim: none
