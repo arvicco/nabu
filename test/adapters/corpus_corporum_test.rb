@@ -36,6 +36,7 @@ class CorpusCorporumTest < Minitest::Test
   # The 2026-11-13 quarantine review's specimens (whole upstream texts).
   GLOSSARY = "urn:nabu:corpus-corporum:8927"   # list + table (a list nested in a cell)
   CATALOGUS = "urn:nabu:corpus-corporum:9269"  # a papal list, 84 items over six lists
+  STUB = "stubs/8298.xml"                      # a cross-reference stub, OUTSIDE texts/
 
   def conformance_adapter = Nabu::Adapters::CorpusCorporum.new
 
@@ -60,7 +61,7 @@ class CorpusCorporumTest < Minitest::Test
 
   def test_discover_never_yields_catalog_files_or_the_refusal_fixture
     ids = adapter.discover(workdir).map(&:id)
-    assert_equal 5, ids.size, "catalog/*.xml and refusal.txt are not documents"
+    assert_equal 5, ids.size, "catalog/*.xml, stubs/ and refusal.txt are not documents"
   end
 
   # -- the PL structural-note quirk (the reason this family exists) -----------
@@ -134,6 +135,32 @@ class CorpusCorporumTest < Minitest::Test
                                                                          language: "lat")
       assert_equal ["urn:nabu:corpus-corporum:9269:d1.p1"], document.map(&:urn)
     end
+  end
+
+  # -- cross-reference stubs (skipped BY RULE, never quarantined) --------------
+
+  # PL prints a placeholder where a work appears elsewhere in the series:
+  # a <head> and a <p> holding ONLY a short parenthesized editorial pointer
+  # ("(Vide infra inter Opera sancti Desiderii, … col. 261.)"). No text of
+  # its own: skipped by rule with its note, never a quarantine.
+  def test_a_cross_reference_stub_is_skipped_by_rule
+    error = assert_raises(Nabu::DocumentSkipped) { parse_stub(File.read(File.join(workdir, STUB))) }
+    assert_match(/cross-reference stub/, error.reason)
+  end
+
+  # The care rule: the stub shape is the POINTER, never note-wrapping alone.
+  # This corpus wraps whole real texts in <note> (the 10468 fixture parses
+  # through its body note), and a p-wrapped note carrying a real text's
+  # length is damage to look at — it stays a loud quarantine.
+  def test_a_long_note_only_text_is_not_a_stub
+    long = "(#{(['Vide infra inter Opera sancti Desiderii'] * 20).join(', ')}.)"
+    xml = File.read(File.join(workdir, STUB)).sub("(Vide ibidem, col. 262.)", long)
+    assert_raises(Nabu::ParseError) { parse_stub(xml) }
+  end
+
+  def test_an_unparenthesized_note_only_text_is_not_a_stub
+    xml = File.read(File.join(workdir, STUB)).sub("(Vide ibidem, col. 262.)", "Vide ibidem, col. 262.")
+    assert_raises(Nabu::ParseError) { parse_stub(xml) }
   end
 
   # -- Migne column provenance ------------------------------------------------
@@ -309,6 +336,14 @@ class CorpusCorporumTest < Minitest::Test
   end
 
   private
+
+  def parse_stub(xml)
+    Dir.mktmpdir("nabu-cc-stub") do |dir|
+      path = File.join(dir, "8298.xml")
+      File.write(path, xml)
+      Nabu::Adapters::CorpusCorporumTeiParser.new.parse(path, urn: "urn:nabu:corpus-corporum:8298", language: "lat")
+    end
+  end
 
   def ref_for(urn)
     adapter.discover(workdir).to_a.find { |ref| ref.id == urn } || flunk("no ref #{urn}")

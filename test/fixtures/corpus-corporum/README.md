@@ -86,3 +86,20 @@ corpus-corporum/texts/`, the same download.php responses), 2026-11-13:
 
 The grain is the empty-document fallback (15 such list/table-only texts in
 the 2026-11-13 census; no loaded text gains or moves a passage).
+
+## The cross-reference stub specimen (outside texts/)
+
+- **`stubs/8298.xml`** — WHOLE, copied from the local canonical tree
+  2026-11-13: a PL placeholder for two letters printed elsewhere in the
+  series — each `<div1>` a `<head>` and a `<p>` holding ONLY a
+  parenthesized pointer ("(Vide infra inter Opera sancti Desiderii, lib.
+  II Epistolarum, hujus tomi col. 261.)", "(Vide ibidem, col. 262.)").
+  Skipped BY RULE, never quarantined. Kept outside `texts/` so discovery
+  and the conformance suite never meet it (the sefaria precedent).
+
+The rule's census (2026-11-13): 12 such stubs, every note parenthesized,
+24-464 characters; only 5 open with "Vide" — the others point with
+"Exstat", "videsis", "reperies", "exstant apud" or "reservamus … locum" —
+so the rule keys on the pointer SHAPE (every unit empty but for its notes,
+every note parenthesized and at most 500 characters, no other body text),
+never on note-wrapping alone and never on the word "Vide".

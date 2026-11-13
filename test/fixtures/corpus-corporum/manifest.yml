@@ -69,3 +69,7 @@ files:
     url: https://mlat.uzh.ch/php_modules/download.php?idno=8927&type=file-xml
     whole: true
     trim: none
+  - path: stubs/8298.xml
+    url: https://mlat.uzh.ch/php_modules/download.php?idno=8298&type=file-xml
+    whole: true
+    trim: none

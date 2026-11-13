@@ -52,7 +52,7 @@ module Nabu
     # <persName> … keep their characters — OCR quirks reproduced, never
     # "cleaned"). Whitespace collapses, output is NFC (lat is not exempt).
     #
-    # == Lists and tables (the 2026-11-13 quarantine review)
+    # == Lists, tables and cross-reference stubs (the 2026-11-13 review)
     #
     # A text whose body is ONLY lists or tables — a papal catalogue, a
     # glossary, a calendar, a table of notae — has no l/p unit at all. Each
@@ -63,6 +63,17 @@ module Nabu
     # beside reading paragraphs (contents, sigla) stays out and no loaded
     # document gains or moves a passage. A <note> inside a block is
     # apparatus (excluded from the block text, the inline-note rule).
+    #
+    # PL also prints a placeholder where a work stands elsewhere in the
+    # series: a <head> and a <p> holding only a short parenthesized
+    # editorial pointer — "(Vide infra inter Opera sancti Desiderii, …
+    # col. 261.)", "(Exstat inter epistolas S. Bernardi …)". Such a text has
+    # no reading text of its own and is SKIPPED BY RULE (DocumentSkipped),
+    # never quarantined. The rule keys on the POINTER shape — every unit
+    # empty but for its notes, every such note parenthesized and at most
+    # STUB_NOTE_LIMIT characters, no other body text — never on note-
+    # wrapping alone: this corpus wraps whole real texts in <note>, and
+    # those parse through the structural-note rule above.
     #
     # == Header metadata (the 80-1 provenance/license capture)
     #
@@ -89,6 +100,13 @@ module Nabu
       Unit = Data.define(:citation, :text, :annotations)
       private_constant :Unit
 
+      # The longest editorial pointer the stub rule accepts (the 2026-11-13
+      # census: 12 PL stubs, notes of 24-464 characters).
+      STUB_NOTE_LIMIT = 500
+
+      # The discovery-accounting note of a skipped cross-reference stub.
+      STUB_REASON = "cross-reference stub — the body holds only an editorial pointer to text printed elsewhere"
+
       # +license_mapper+: an optional callable mapping the header's verbatim
       # availability text (or nil) to a license_override class or nil — the
       # adapter owns the mapping policy, the parser owns the capture.
@@ -100,6 +118,8 @@ module Nabu
                 license_mapper: nil, metadata_mapper: nil)
         path = resolve_canonical_path(source, canonical_path)
         extraction = extract(source, path: path)
+        raise DocumentSkipped.new("#{path}: #{STUB_REASON}", reason: STUB_REASON) if extraction.stub
+
         units = disambiguate_collisions(extraction.units)
         metadata = (metadata_mapper&.call(extraction.metadata) || {}).merge(extraction.metadata)
         build_document(units, urn: urn, language: language,
@@ -123,7 +143,7 @@ module Nabu
         private_constant :DIV_ELEMENTS,
                          :SEPARATOR_ELEMENTS, :DROPPED_ELEMENTS
 
-        Result = Data.define(:units, :title, :metadata)
+        Result = Data.define(:units, :title, :metadata, :stub)
         BLOCK_ELEMENTS = { "item" => "i", "row" => "r" }.freeze
         private_constant :BLOCK_ELEMENTS
 
@@ -139,6 +159,9 @@ module Nabu
           @block = nil        # open list item / table row (the fallback grain)
           @block_note = nil   # depth of a <note> excluded from the open block
           @blocks = []
+          @note_capture = nil # text of an inline note dropped from a unit
+          @stub_notes = []    # notes of units that held nothing else
+          @stray_text = false # body text outside every unit and block
           @header = {}
           @capture = nil
           @contexts = []
@@ -148,7 +171,9 @@ module Nabu
           @reader.each { |node| process(node) }
           raise ParseError, "#{@path}: no <text><body> found" unless @seen_body
 
-          Result.new(units: @units.empty? ? @blocks : @units, title: presence(@header[:title]), metadata: metadata)
+          units = @units.empty? ? @blocks : @units
+          Result.new(units: units, title: presence(@header[:title]), metadata: metadata,
+                     stub: units.empty? && stub?)
         end
 
         private
@@ -163,7 +188,7 @@ module Nabu
           return if dropping?
 
           if DROPPED_ELEMENTS.include?(name) || (name == "note" && @unit)
-            @drop_depth = node.depth unless node.empty_element?
+            drop(node, note: name == "note")
             return
           end
 
@@ -177,13 +202,20 @@ module Nabu
           end
         end
 
+        def drop(node, note:)
+          return if node.empty_element?
+
+          @drop_depth = node.depth
+          @note_capture = +"" if note
+        end
+
         def end_element(node)
           name = local_name(node)
           return header_end(name) unless @seen_body
           return unless @in_body
 
           if dropping?
-            @drop_depth = nil if node.depth == @drop_depth
+            end_drop if node.depth == @drop_depth
             return
           end
 
@@ -196,16 +228,26 @@ module Nabu
           end
         end
 
+        def end_drop
+          @drop_depth = nil
+          @unit[:notes] << flatten(@note_capture) if @note_capture && @unit && flatten(@note_capture)
+          @note_capture = nil
+        end
+
         def text_node(node)
           value = node.value.to_s
           if !@seen_body
             @capture << value if @capture
-          elsif !@in_body || dropping?
+          elsif !@in_body
             nil
+          elsif dropping?
+            @note_capture << value if @note_capture
           elsif @unit
             @unit[:text] << value
           elsif @block
             @block[:text] << value unless @block_note
+          elsif !value.strip.empty?
+            @stray_text = true
           end
         end
 
@@ -327,7 +369,7 @@ module Nabu
           return if @unit || node.empty_element? # nested unit-openers stay transparent
 
           @unit = { tag: name, depth: node.depth, n: presence(node.attribute("n")),
-                    text: +"", column: @column }
+                    text: +"", column: @column, notes: [] }
         end
 
         def close_unit(node, name)
@@ -335,7 +377,10 @@ module Nabu
 
           unit = @unit
           @unit = nil
-          return if unit[:text].strip.empty? # empty unit consumes no ordinal
+          if unit[:text].strip.empty? # empty unit consumes no ordinal
+            @stub_notes.concat(unit[:notes])
+            return
+          end
 
           frame = @div_frames.last
           token = VERSE_UNITS.include?(unit[:tag]) ? "l#{frame[:verse] += 1}" : "p#{frame[:prose] += 1}"
@@ -368,6 +413,16 @@ module Nabu
           path = div_path
           @blocks << Unit.new(citation: path.empty? ? token : "#{path}.#{token}", text: block[:text],
                               annotations: annotations_for(block, frame))
+        end
+
+        # The cross-reference stub shape (see the class note): nothing but
+        # short parenthesized pointers in otherwise-empty units.
+        def stub?
+          return false if @stray_text || @stub_notes.empty?
+
+          @stub_notes.all? do |note|
+            note.start_with?("(") && note.end_with?(")") && note.length <= STUB_NOTE_LIMIT
+          end
         end
 
         def annotations_for(unit, frame)
