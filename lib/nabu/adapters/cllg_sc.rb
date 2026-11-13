@@ -2,6 +2,7 @@
 
 require_relative "cllg_catalog"
 require_relative "cllg_tei_parser"
+require_relative "cllg_tlg_alignment"
 
 module Nabu
   module Adapters
@@ -48,9 +49,14 @@ module Nabu
     # the loader as skipped-by-rule: 366 documents load (360 grc + 6 lat;
     # 94,713 passages through this adapter over the clone at census).
     #
-    # sc_tlg.csv / sc_tlg_authors.csv (an SC-volume ↔ TLG alignment, every
-    # link agent-checked per upstream's README) are future edition-pairing
-    # material — not ingested by this adapter.
+    # sc_tlg.csv (the SC-volume ↔ TLG-work alignment, 243 rows, every link
+    # agent-checked per upstream's README) is never a document: the
+    # reference producer (CllgTlgAlignment, reference_edges?) re-derives it
+    # into links-journal edges after every sync — each held SC edition →
+    # its tlg:<id> work identity and → the cllg-freed edition of the same
+    # work; its class note carries the census. sc_catalog.csv (the SC
+    # publication list) and sc_tlg_authors.csv (author-level TLG ids) are
+    # not read.
     #
     # == Metadata mining (the aggressive-mining law)
     #
@@ -130,6 +136,14 @@ module Nabu
       ].freeze
 
       def self.manifest = MANIFEST
+
+      # The SC↔TLG alignment rides the reference seam (class note) —
+      # without the flag SyncRunner never invokes the producer.
+      def self.reference_edges? = true
+
+      def self.reference_producer(catalog:, journal:)
+        CllgTlgAlignment.new(catalog: catalog, journal: journal)
+      end
 
       # The earliest genre noun of +title+, or nil.
       def self.title_genre(title)
