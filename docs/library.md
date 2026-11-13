@@ -137,9 +137,9 @@ sub-commentaries, dharmaśāstra, Nāṭyaśāstra, Dhvanyāloka with its commen
 layers (kārikā vs. vṛtti separately citable as `:DhvK.…`/`:DhvA.…`),
 Buddhacarita, Gītagovinda, and — recovered by the P11-7 silent-skip audit —
 the Mitākṣarā (the standard commentary on Yājñavalkya, 4,788 passages).
-Only 4 of 784 upstream files remain unparsed: flat verse lists with no
-numbering of any kind, genuinely unaddressable (and now loudly reported as
-`unrecognized` in every sync's discovery line).
+The last 4 of 784 upstream files once read as unaddressable — flat verse
+lists numbered only by a bare line-final verse number ("// 12", "|| 12 ||")
+— are cited by that number since the 2026-11-13 quarantine review.
 
 **Research uses:** Indology across every genre; commentary-tradition studies
 (base text and commentaries interleaved but separately citable); Vedic accent

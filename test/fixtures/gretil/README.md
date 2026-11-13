@@ -137,8 +137,9 @@ Both carry an `-h1`/`-l1` trim suffix so the fixture urn is a fixture urn,
 never claiming the real corpus file's slug — the same convention as the P9-4c
 fixtures above. The remaining 4 quarantines (`sa_abhinavagupta-paramArthasAra`,
 `sa_bIjanighaNTu`, `sa_lagadha-RgvedavedAGgajyotiSa`,
-`sa_vAmadeva-janmamaraNavicAra`) are genuinely unaddressable flat `<lg>`/`<l>`
-with zero `@n`/xml:id/marker/prose and stay quarantined by design.
+`sa_vAmadeva-janmamaraNavicAra`) were then read as unaddressable flat
+`<lg>`/`<l>`; the 2026-11-13 quarantine review found they DO carry a verse
+number — a prefixless one (see the bare-number section below).
 
 ## Single-blob re-split fixtures (2 more, cut from local canonical)
 
@@ -172,3 +173,30 @@ a single prose-ordinal blob; 20 now re-split (sa_manusmRti 2,688 verses,
 sa_pANini-aSTAdhyAyI 3,951 sūtras, and 18 smaller texts via the same xml:id
 rung), 5 stay p1 because no fallback rung addresses them. No other file's
 urns move.
+
+## Bare-number line-marker fixtures (2 more, cut from local canonical)
+
+The four files the P10-3 note called unaddressable close every verse with a
+line-final verse number that carries NO abbreviation prefix: `… // 12</l>`
+(sa_vAmadeva-janmamaraNavicAra — flat `<l>` directly in `<body>`;
+sa_bIjanighaNTu, sa_lagadha-RgvedavedAGgajyotiSa — `<lg>` of two `<l>`)
+or the double-daṇḍa `… || 12 ||</l>` (sa_abhinavagupta-paramArthasAra). Every
+marked number is unique per file (318/318, 87/87, 35/35, 105/105) and no
+text trails the last marker. A last fallback pass (BARE_LINE_MARKER — the
+LINE_MARKER pass without the prefix; the opening delimiter is the
+verse-closing `//` or `||` only, never a single half-verse daṇḍa) cites
+them, run only when every other rung leaves the document empty. Trimmed
+REAL slices from the same local canonical clone
+(`mmehner/gretil-corpus-tei@master`), cut **2026-11-13**, same CC BY-NC-SA
+4.0 notice (`license_class: nc`):
+
+12. **`sa_vAmadeva-janmamaraNavicAra-v1.xml`** — TRIM: upstream lines
+    1..322 (teiHeader + the first five `<l>`, citations `1`…`5`) + 636..639
+    (closing tags).
+13. **`sa_abhinavagupta-paramArthasAra-v1.xml`** — TRIM: upstream lines
+    1..327 (teiHeader + verses 1-3) + 833..842 (verse 105, the body's
+    archive-credit `<note>`, closing tags) → citations `1 2 3 105`.
+
+Whole-corpus census (parse-level, 2026-11-13): the bare pass changes
+exactly these 4 files' results (quarantine → 318 + 87 + 35 + 105 verses);
+no other file's urns move.

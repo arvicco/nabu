@@ -31,10 +31,13 @@ class GretilTest < Minitest::Test
   # Single-blob re-split fixtures: lg/marker shapes a trailing <p> mashed into ONE p1.
   MANUSMRTI = "urn:nabu:gretil:sa_manusmRti-a1a2" # <lg xml:id="Manu_N.N"> + colophon <p>
   ASTADHYAYI = "urn:nabu:gretil:sa_pANini-aSTAdhyAyI-s1" # "|| PS_1,1.1 ||" + one <p> sūtra
+  # Bare-number line-marker fixtures (the 2026-11-13 quarantine review).
+  VAMADEVA = "urn:nabu:gretil:sa_vAmadeva-janmamaraNavicAra-v1" # bare <l> in <body>, "… // N</l>"
+  PARAMARTHASARA = "urn:nabu:gretil:sa_abhinavagupta-paramArthasAra-v1" # <lg>, "… || N ||</l>"
 
   ALL_FIXTURES = [
     RGVEDA, BRAHMABINDU, HEART_SUTRA, RGVIDHANA, BRAHMASUTRA, VALLALACARITA, DHVANYALOKA,
-    ABHIDHARMADIPA, SOMANANDA, MANUSMRTI, ASTADHYAYI
+    ABHIDHARMADIPA, SOMANANDA, MANUSMRTI, ASTADHYAYI, VAMADEVA, PARAMARTHASARA
   ].freeze
 
   # --- AdapterConformance hooks -------------------------------------------
@@ -285,6 +288,39 @@ class GretilTest < Minitest::Test
     citations = parse(BRAHMABINDU).map { |p| p.urn.split(":").last }
     assert_equal((1..22).map(&:to_s), citations)
     citations.each { |c| refute_includes c, "BrbUp", "single-prefix file must not be prefix-joined" }
+  end
+
+  # --- bare-number line markers (the 2026-11-13 quarantine review) ----------
+
+  # sa_vAmadeva-janmamaraNavicAra: flat <l> directly in <body> (no <lg>, no
+  # @n, no xml:id, no <p>), each line closed by a prefixless "// N" — the
+  # number IS the verse citation, the marker is stripped like every other
+  # verse-marker rung.
+  def test_vamadeva_bare_lines_cite_by_line_final_number
+    doc = parse(VAMADEVA)
+    assert_equal(%w[1 2 3 4 5], doc.map { |p| p.urn.split(":").last })
+    first = doc.to_a.first
+    assert_equal "verse-marker", first.annotations["addressing"]
+    assert_equal "sāndrodrekakṣubhitam abhitaḥ svāntam antar niyamya prāyo dhatte " \
+                 "navanavarasollekham ānandakandam", first.text
+    doc.each { |p| refute_includes p.text, "//", "the bare-number marker must be stripped" }
+  end
+
+  # sa_abhinavagupta-paramArthasAra: <lg> of two <l>, the verse closed by a
+  # double-daṇḍa "|| N ||"; both pādas join into one passage, the single
+  # half-verse daṇḍa "|" kept as reading text. The trailing body <note>
+  # (an archive credit) is dropped as everywhere in the family.
+  def test_paramarthasara_double_danda_bare_numbers
+    doc = parse(PARAMARTHASARA)
+    assert_equal(%w[1 2 3 105], doc.map { |p| p.urn.split(":").last })
+    first = doc.to_a.first
+    assert_equal "verse-marker", first.annotations["addressing"]
+    assert_equal "paraṃ parasthaṃ gahanād anādim ekaṃ niviṣṭaṃ bahudhā guhāsu | " \
+                 "sarvālayaṃ sarvacarācarasthaṃ tvām eva śambhuṃ śaraṇaṃ prapadye", first.text
+    doc.each do |p|
+      refute_includes p.text, "||", "the double-daṇḍa marker must be stripped"
+      refute_includes p.text, "Gandharva", "the body <note> must stay dropped"
+    end
   end
 
   # --- single-blob re-split: a lone trailing <p> must not swallow the text -----
