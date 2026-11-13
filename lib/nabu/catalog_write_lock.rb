@@ -151,6 +151,12 @@ module Nabu
         end
         sleep @poll
       end
+      # A wait that was announced announces its end too: the operator sees
+      # the queue drain, and the index watcher's paused deadline clock
+      # (which reads the waiting line in the heartbeat) resumes at once.
+      unless last_announce.nil?
+        @announce.call("catalog write window: #{@slug} acquired after #{(@clock.call - started).round}s")
+      end
       stamp(file)
       file
     end

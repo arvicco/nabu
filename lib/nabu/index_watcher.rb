@@ -68,6 +68,11 @@ module Nabu
       /\A(?:start )?index (?:slice|delta|heal|wave|refresh|maintain|doctor)/,
       /\A(?:trigram lane|cjk bigram lane|reflex root closure|sign coverage|fts|passages_fts|consolidat)/
     )
+    # A writer QUEUED at the catalog write window (its last heartbeat event
+    # is the window's waiting announcement) is waiting, not working — that
+    # time is excluded from the kill clock. The deadline prices the
+    # writer's OWN work; the holder it waits on runs under its own watcher.
+    WAITING_EVENT = /\Anote catalog write window: .+ waiting on /
     # The deadline is DEADLINE_FACTOR × the ledger estimate, floored: a
     # seconds-scale estimate must not arm a seconds-scale kill (statement
     # variance on a cold page cache alone exceeds it). The factor prices
@@ -316,17 +321,28 @@ module Nabu
     def watch(stop_reader)
       started = now
       last_line = nil
+      waited = 0.0
+      last_sample = started
       loop do
         return if stopped?(stop_reader)
         return writer_died! unless self.class.alive?(@writer_pid)
 
+        sample = now
+        waited += sample - last_sample if waiting_at_write_window?
+        last_sample = sample
         age = tick_age(started)
         if age >= @stall && (last_line.nil? || now - last_line >= @heartbeat_every)
           say(stall_line(age))
           last_line = now
         end
-        return deadline! if @deadline && now - started >= @deadline
+        return deadline!(waited) if @deadline && now - started - waited >= @deadline
       end
+    end
+
+    def waiting_at_write_window?
+      File.open(@heartbeat_path) { |f| f.gets.to_s.match?(WAITING_EVENT) }
+    rescue Errno::ENOENT
+      false
     end
 
     # Wait one sample on the stop pipe: "stop" = clean finish; EOF without
@@ -375,8 +391,11 @@ module Nabu
 
     def merge_suspicion(marker) = marker.match?(INDEX_MARKER) ? "; fts5 merge suspected" : ""
 
-    def deadline!
-      say("index watcher: deadline #{format_duration(@deadline)} passed — killing the writer (pid #{@writer_pid})")
+    def deadline!(waited = 0)
+      excluded =
+        waited >= 1 ? " — #{format_duration(waited)} queued at the catalog write window excluded from the clock" : ""
+      say("index watcher: deadline #{format_duration(@deadline)} passed — " \
+          "killing the writer (pid #{@writer_pid})#{excluded}")
       kill_writer!
       hygiene!
     end
