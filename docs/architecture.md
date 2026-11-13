@@ -269,7 +269,9 @@ document_facets(document_id, facet, value, ...)
    -- facet, values verbatim, arrays one row per element), so a source
    -- whose axis-shaped fields already ride the catalog facets without
    -- an adapter change or a canonical re-parse (okhc's 1.2M corpus
-   -- labels, seal, rsti, coptic-scriptorium).
+   -- labels, seal, rsti, coptic-scriptorium). The drop half never
+   -- touches the `lect` facet (Store::LectFacets' own rows, with
+   -- lect_stats derived beside them — FacetBuilder::FOREIGN_FACETS).
 passage_facet_values(id, source_id, facet, value, ref)
 passage_facets(value_id, passage_id)          -- WITHOUT ROWID, PK (value_id, passage_id)
    -- Migration 045: the passage-grain facet surface — claims upstream

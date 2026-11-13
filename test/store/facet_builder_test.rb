@@ -186,6 +186,48 @@ module Store
       assert_equal(first, @db[:document_facets].order(:id).all.map { |row| row.except(:id) })
     end
 
+    # -- foreign facet owners (the 2026-11-12 lect-stats drift class) --------
+    # The "lect" facet is Store::LectFacets' alone (with lect_stats derived
+    # in the same breath): a sync's per-source facet refresh dropped every
+    # facet row of the source's documents, lect included, so the synced
+    # source's lect axis went dark while lect_stats kept counting it.
+
+    def lect_staged_document
+      doc = make_document("urn:nabu:edh:hd000020", metadata: FACETS)
+      @db[:document_facets].insert(document_id: doc.id, facet: Nabu::Store::LectFacets::FACET,
+                                   value: "lat:late", raw: "rule:date-band")
+      Nabu::Store::LectFacets.derive_stats!(@db)
+      doc
+    end
+
+    def lect_census_matches_facet?
+      facet = @db[:document_facets].where(facet: Nabu::Store::LectFacets::FACET).group_and_count(:value)
+                                   .to_hash(:value, :count)
+      @db[:lect_stats].where(kind: "lect").to_hash(:key, :documents) == facet
+    end
+
+    def test_refresh_source_keeps_the_lect_facet_and_its_census
+      doc = lect_staged_document
+      Nabu::Store::FacetBuilder.refresh_source!(catalog: @db, slug: "edh")
+
+      assert_equal ["lat:late"],
+                   @db[:document_facets].where(document_id: doc.id, facet: "lect").select_map(:value),
+                   "a facet refresh must never drop LectFacets' rows"
+      assert lect_census_matches_facet?, "lect_stats must still describe the facet"
+      assert_equal %w[genre lect province],
+                   @db[:document_facets].where(document_id: doc.id).order(:facet).select_map(:facet)
+    end
+
+    def test_rebuild_keeps_the_lect_facet
+      doc = lect_staged_document
+      Nabu::Store::FacetBuilder.rebuild!(catalog: @db)
+
+      assert_equal ["lat:late"],
+                   @db[:document_facets].where(document_id: doc.id, facet: "lect").select_map(:value)
+      assert lect_census_matches_facet?
+      assert_equal 3, @db[:document_facets].where(document_id: doc.id).count, "adapter rows re-projected once"
+    end
+
     # -- the batched write path ----------------------------------------------
     # The adapter-facet lane streams documents in id order (keyset paging,
     # never the whole facet-bearing set in memory) and writes its rows as
