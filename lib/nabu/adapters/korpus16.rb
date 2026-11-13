@@ -234,7 +234,8 @@ module Nabu
 
       # The page lane (see the header): the declared schedule is the
       # rail's default — the corpus is one detached run, so a phase
-      # spends at most a few slices.
+      # spends at most a few slices. Basis: the rail's default cap (3),
+      # not a measured or ratified cadence.
       PAGE_CRAWL = Nabu::PacedCrawl::Spec.new(
         name: "pages", ledger_file: LEDGER_FILE,
         classes: { denied: REFUSED, empty: NOT_READING, timeout: STUCK },

@@ -186,7 +186,8 @@ module Nabu
       # The shard lane (architecture §19): the universe is the pinned
       # revision's shard numbers, held = the shard's stamp names this
       # revision and this cone. Six slices finish the cone, so the
-      # declared schedule spends all six in one phase.
+      # declared schedule spends all six in one phase. Basis: cone
+      # arithmetic (145 shards / 25 a slice = 6) — a cap, never a quota.
       SHARD_CRAWL = Nabu::PacedCrawl::Spec.new(
         name: "shards", ledger_file: LEDGER_FILE,
         classes: { denied: "denied", empty: "empty", timeout: STUCK },
