@@ -99,4 +99,4 @@ Trimmed REAL slices from the local canonical clone
   grain (addressing `label`). The grain is the empty-document fallback, so
   the loaded editions whose lists sit beside lg/l/p (bhoja-rajamartanda,
   caryamelapakapradipa, pujyapada-sarvarthasiddhi) are untouched. Grant:
-  CC BY-SA 4.0.
+  CC BY-SA 3.0 (ref target in the header).
