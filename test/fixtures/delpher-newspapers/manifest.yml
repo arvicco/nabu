@@ -1,0 +1,213 @@
+# Nabu fixture manifest (P5-4 "fixture sentinel"). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# Every entry is a member of the Delpher open newspaper archive's
+# kranten_pd_16xx.zip (1 GB); members are not addressable by a raw GET, so
+# nothing here is refetchable — re-cut per the README recipe (HTTP range
+# reads of the zip, or unzip of one download).
+source: delpher-newspapers
+adapter_test: null
+files:
+- path: kranten_pd_16xx/1618/06/14/DDD_ddd_010500649_mpeg21/DDD_010500649_0001_articletext.xml
+  refetchable: false
+  provenance: local-trim
+  reason: member 1618/06/14/DDD_ddd_010500649_mpeg21/DDD_010500649_0001_articletext.xml of https://resolver.kb.nl/resolve?urn=DATA:kranten:kranten_pd_16xx.zip (Last-Modified 2017-01-16) — read by HTTP range; no per-member URL
+  copied: "2026-11-13"
+  whole: true
+  trim: none
+- path: kranten_pd_16xx/1618/06/14/DDD_ddd_010500649_mpeg21/DDD_010500649_0002_articletext.xml
+  refetchable: false
+  provenance: local-trim
+  reason: member 1618/06/14/DDD_ddd_010500649_mpeg21/DDD_010500649_0002_articletext.xml of https://resolver.kb.nl/resolve?urn=DATA:kranten:kranten_pd_16xx.zip (Last-Modified 2017-01-16) — read by HTTP range; no per-member URL
+  copied: "2026-11-13"
+  whole: true
+  trim: none
+- path: kranten_pd_16xx/1618/06/14/DDD_ddd_010500649_mpeg21/DDD_010500649_0003_articletext.xml
+  refetchable: false
+  provenance: local-trim
+  reason: member 1618/06/14/DDD_ddd_010500649_mpeg21/DDD_010500649_0003_articletext.xml of https://resolver.kb.nl/resolve?urn=DATA:kranten:kranten_pd_16xx.zip (Last-Modified 2017-01-16) — read by HTTP range; no per-member URL
+  copied: "2026-11-13"
+  whole: true
+  trim: none
+- path: kranten_pd_16xx/1618/06/14/DDD_ddd_010500649_mpeg21/DDD_010500649_0004_articletext.xml
+  refetchable: false
+  provenance: local-trim
+  reason: member 1618/06/14/DDD_ddd_010500649_mpeg21/DDD_010500649_0004_articletext.xml of https://resolver.kb.nl/resolve?urn=DATA:kranten:kranten_pd_16xx.zip (Last-Modified 2017-01-16) — read by HTTP range; no per-member URL
+  copied: "2026-11-13"
+  whole: true
+  trim: none
+- path: kranten_pd_16xx/1618/06/14/DDD_ddd_010500649_mpeg21/DDD_010500649_001_alto.xml
+  refetchable: false
+  provenance: local-trim
+  reason: member 1618/06/14/DDD_ddd_010500649_mpeg21/DDD_010500649_001_alto.xml of https://resolver.kb.nl/resolve?urn=DATA:kranten:kranten_pd_16xx.zip (Last-Modified 2017-01-16) — read by HTTP range; no per-member URL
+  copied: "2026-11-13"
+  whole: false
+  trim: the header (Description/Styles/Tags) and the FIRST TextBlock, then the closing PrintSpace/Page/Layout/alto tags
+- path: kranten_pd_16xx/1618/06/14/DDD_ddd_010500649_mpeg21/didl.xml
+  refetchable: false
+  provenance: local-trim
+  reason: member 1618/06/14/DDD_ddd_010500649_mpeg21/didl.xml of https://resolver.kb.nl/resolve?urn=DATA:kranten:kranten_pd_16xx.zip (Last-Modified 2017-01-16) — read by HTTP range; no per-member URL
+  copied: "2026-11-13"
+  whole: true
+  trim: none
+- path: kranten_pd_16xx/1631/09/19/KRANTEN_MMKB08_MMKB08_000213603_mpeg21/MMKB08_000213603_0001_articletext.xml
+  refetchable: false
+  provenance: local-trim
+  reason: member 1631/09/19/KRANTEN_MMKB08_MMKB08_000213603_mpeg21/MMKB08_000213603_0001_articletext.xml of https://resolver.kb.nl/resolve?urn=DATA:kranten:kranten_pd_16xx.zip (Last-Modified 2017-01-16) — read by HTTP range; no per-member URL
+  copied: "2026-11-13"
+  whole: true
+  trim: none
+- path: kranten_pd_16xx/1631/09/19/KRANTEN_MMKB08_MMKB08_000213603_mpeg21/MMKB08_000213603_001_alto.xml
+  refetchable: false
+  provenance: local-trim
+  reason: member 1631/09/19/KRANTEN_MMKB08_MMKB08_000213603_mpeg21/MMKB08_000213603_001_alto.xml of https://resolver.kb.nl/resolve?urn=DATA:kranten:kranten_pd_16xx.zip (Last-Modified 2017-01-16) — read by HTTP range; no per-member URL
+  copied: "2026-11-13"
+  whole: false
+  trim: the header (Description/Styles/Tags) and the FIRST TextBlock, then the closing PrintSpace/Page/Layout/alto tags
+- path: kranten_pd_16xx/1631/09/19/KRANTEN_MMKB08_MMKB08_000213603_mpeg21/didl.xml
+  refetchable: false
+  provenance: local-trim
+  reason: member 1631/09/19/KRANTEN_MMKB08_MMKB08_000213603_mpeg21/didl.xml of https://resolver.kb.nl/resolve?urn=DATA:kranten:kranten_pd_16xx.zip (Last-Modified 2017-01-16) — read by HTTP range; no per-member URL
+  copied: "2026-11-13"
+  whole: true
+  trim: none
+- path: kranten_pd_16xx/1685/12/22/DDD_ddd_011225333_mpeg21/DDD_011225333_0001_articletext.xml
+  refetchable: false
+  provenance: local-trim
+  reason: member 1685/12/22/DDD_ddd_011225333_mpeg21/DDD_011225333_0001_articletext.xml of https://resolver.kb.nl/resolve?urn=DATA:kranten:kranten_pd_16xx.zip (Last-Modified 2017-01-16) — read by HTTP range; no per-member URL
+  copied: "2026-11-13"
+  whole: true
+  trim: none
+- path: kranten_pd_16xx/1685/12/22/DDD_ddd_011225333_mpeg21/DDD_011225333_0002_articletext.xml
+  refetchable: false
+  provenance: local-trim
+  reason: member 1685/12/22/DDD_ddd_011225333_mpeg21/DDD_011225333_0002_articletext.xml of https://resolver.kb.nl/resolve?urn=DATA:kranten:kranten_pd_16xx.zip (Last-Modified 2017-01-16) — read by HTTP range; no per-member URL
+  copied: "2026-11-13"
+  whole: true
+  trim: none
+- path: kranten_pd_16xx/1685/12/22/DDD_ddd_011225333_mpeg21/DDD_011225333_0003_articletext.xml
+  refetchable: false
+  provenance: local-trim
+  reason: member 1685/12/22/DDD_ddd_011225333_mpeg21/DDD_011225333_0003_articletext.xml of https://resolver.kb.nl/resolve?urn=DATA:kranten:kranten_pd_16xx.zip (Last-Modified 2017-01-16) — read by HTTP range; no per-member URL
+  copied: "2026-11-13"
+  whole: true
+  trim: none
+- path: kranten_pd_16xx/1685/12/22/DDD_ddd_011225333_mpeg21/DDD_011225333_0004_articletext.xml
+  refetchable: false
+  provenance: local-trim
+  reason: member 1685/12/22/DDD_ddd_011225333_mpeg21/DDD_011225333_0004_articletext.xml of https://resolver.kb.nl/resolve?urn=DATA:kranten:kranten_pd_16xx.zip (Last-Modified 2017-01-16) — read by HTTP range; no per-member URL
+  copied: "2026-11-13"
+  whole: true
+  trim: none
+- path: kranten_pd_16xx/1685/12/22/DDD_ddd_011225333_mpeg21/DDD_011225333_0005_articletext.xml
+  refetchable: false
+  provenance: local-trim
+  reason: member 1685/12/22/DDD_ddd_011225333_mpeg21/DDD_011225333_0005_articletext.xml of https://resolver.kb.nl/resolve?urn=DATA:kranten:kranten_pd_16xx.zip (Last-Modified 2017-01-16) — read by HTTP range; no per-member URL
+  copied: "2026-11-13"
+  whole: true
+  trim: none
+- path: kranten_pd_16xx/1685/12/22/DDD_ddd_011225333_mpeg21/DDD_011225333_0006_articletext.xml
+  refetchable: false
+  provenance: local-trim
+  reason: member 1685/12/22/DDD_ddd_011225333_mpeg21/DDD_011225333_0006_articletext.xml of https://resolver.kb.nl/resolve?urn=DATA:kranten:kranten_pd_16xx.zip (Last-Modified 2017-01-16) — read by HTTP range; no per-member URL
+  copied: "2026-11-13"
+  whole: true
+  trim: none
+- path: kranten_pd_16xx/1685/12/22/DDD_ddd_011225333_mpeg21/DDD_011225333_0007_articletext.xml
+  refetchable: false
+  provenance: local-trim
+  reason: member 1685/12/22/DDD_ddd_011225333_mpeg21/DDD_011225333_0007_articletext.xml of https://resolver.kb.nl/resolve?urn=DATA:kranten:kranten_pd_16xx.zip (Last-Modified 2017-01-16) — read by HTTP range; no per-member URL
+  copied: "2026-11-13"
+  whole: true
+  trim: none
+- path: kranten_pd_16xx/1685/12/22/DDD_ddd_011225333_mpeg21/DDD_011225333_0008_articletext.xml
+  refetchable: false
+  provenance: local-trim
+  reason: member 1685/12/22/DDD_ddd_011225333_mpeg21/DDD_011225333_0008_articletext.xml of https://resolver.kb.nl/resolve?urn=DATA:kranten:kranten_pd_16xx.zip (Last-Modified 2017-01-16) — read by HTTP range; no per-member URL
+  copied: "2026-11-13"
+  whole: true
+  trim: none
+- path: kranten_pd_16xx/1685/12/22/DDD_ddd_011225333_mpeg21/didl.xml
+  refetchable: false
+  provenance: local-trim
+  reason: member 1685/12/22/DDD_ddd_011225333_mpeg21/didl.xml of https://resolver.kb.nl/resolve?urn=DATA:kranten:kranten_pd_16xx.zip (Last-Modified 2017-01-16) — read by HTTP range; no per-member URL
+  copied: "2026-11-13"
+  whole: true
+  trim: none
+- path: kranten_pd_16xx/1695/03/14/DDD_ddd_011005283_mpeg21/DDD_011005283_0001_articletext.xml
+  refetchable: false
+  provenance: local-trim
+  reason: member 1695/03/14/DDD_ddd_011005283_mpeg21/DDD_011005283_0001_articletext.xml of https://resolver.kb.nl/resolve?urn=DATA:kranten:kranten_pd_16xx.zip (Last-Modified 2017-01-16) — read by HTTP range; no per-member URL
+  copied: "2026-11-13"
+  whole: true
+  trim: none
+- path: kranten_pd_16xx/1695/03/14/DDD_ddd_011005283_mpeg21/DDD_011005283_0002_articletext.xml
+  refetchable: false
+  provenance: local-trim
+  reason: member 1695/03/14/DDD_ddd_011005283_mpeg21/DDD_011005283_0002_articletext.xml of https://resolver.kb.nl/resolve?urn=DATA:kranten:kranten_pd_16xx.zip (Last-Modified 2017-01-16) — read by HTTP range; no per-member URL
+  copied: "2026-11-13"
+  whole: true
+  trim: none
+- path: kranten_pd_16xx/1695/03/14/DDD_ddd_011005283_mpeg21/DDD_011005283_0003_articletext.xml
+  refetchable: false
+  provenance: local-trim
+  reason: member 1695/03/14/DDD_ddd_011005283_mpeg21/DDD_011005283_0003_articletext.xml of https://resolver.kb.nl/resolve?urn=DATA:kranten:kranten_pd_16xx.zip (Last-Modified 2017-01-16) — read by HTTP range; no per-member URL
+  copied: "2026-11-13"
+  whole: true
+  trim: none
+- path: kranten_pd_16xx/1695/03/14/DDD_ddd_011005283_mpeg21/DDD_011005283_0004_articletext.xml
+  refetchable: false
+  provenance: local-trim
+  reason: member 1695/03/14/DDD_ddd_011005283_mpeg21/DDD_011005283_0004_articletext.xml of https://resolver.kb.nl/resolve?urn=DATA:kranten:kranten_pd_16xx.zip (Last-Modified 2017-01-16) — read by HTTP range; no per-member URL
+  copied: "2026-11-13"
+  whole: true
+  trim: none
+- path: kranten_pd_16xx/1695/03/14/DDD_ddd_011005283_mpeg21/didl.xml
+  refetchable: false
+  provenance: local-trim
+  reason: member 1695/03/14/DDD_ddd_011005283_mpeg21/didl.xml of https://resolver.kb.nl/resolve?urn=DATA:kranten:kranten_pd_16xx.zip (Last-Modified 2017-01-16) — read by HTTP range; no per-member URL
+  copied: "2026-11-13"
+  whole: true
+  trim: none
+- path: kranten_pd_16xx/LEESMIJ_kranten_pd_16xx.txt
+  refetchable: false
+  provenance: local-trim
+  reason: member LEESMIJ_kranten_pd_16xx.txt of https://resolver.kb.nl/resolve?urn=DATA:kranten:kranten_pd_16xx.zip (Last-Modified 2017-01-16) — read by HTTP range; no per-member URL
+  copied: "2026-11-13"
+  whole: true
+  trim: none
+- path: kranten_pd_16xx/README_newspapers_pd_16xx.txt
+  refetchable: false
+  provenance: local-trim
+  reason: member README_newspapers_pd_16xx.txt of https://resolver.kb.nl/resolve?urn=DATA:kranten:kranten_pd_16xx.zip (Last-Modified 2017-01-16) — read by HTTP range; no per-member URL
+  copied: "2026-11-13"
+  whole: true
+  trim: none
+- path: kranten_pd_16xx/index_kranten_pd_16xx.tsv
+  refetchable: false
+  provenance: local-trim
+  reason: member index_kranten_pd_16xx.tsv of https://resolver.kb.nl/resolve?urn=DATA:kranten:kranten_pd_16xx.zip (Last-Modified 2017-01-16) — read by HTTP range; no per-member URL
+  copied: "2026-11-13"
+  whole: false
+  trim: the four fixture issues' rows of 8,559
+- path: kranten_pd_16xx/1650/05/17/DDD_ddd_010899278_mpeg21/didl.xml
+  refetchable: false
+  provenance: local-trim
+  reason: member 1650/05/17/DDD_ddd_010899278_mpeg21/didl.xml of https://resolver.kb.nl/resolve?urn=DATA:kranten:kranten_pd_16xx.zip (Last-Modified 2017-01-16) — copied from the landed canonical tree; the folder's a0004–a0009 articletext files are deliberately NOT copied (the missing-articles specimen)
+  copied: "2026-11-13"
+  whole: true
+  trim: none
+- path: kranten_pd_16xx/1650/05/17/DDD_ddd_010899278_mpeg21/DDD_010899278_0002_articletext.xml
+  refetchable: false
+  provenance: local-trim
+  reason: member 1650/05/17/DDD_ddd_010899278_mpeg21/DDD_010899278_0002_articletext.xml of https://resolver.kb.nl/resolve?urn=DATA:kranten:kranten_pd_16xx.zip (Last-Modified 2017-01-16) — copied from the landed canonical tree; the folder's a0004–a0009 articletext files are deliberately NOT copied (the missing-articles specimen)
+  copied: "2026-11-13"
+  whole: true
+  trim: none
+- path: kranten_pd_16xx/1650/05/17/DDD_ddd_010899278_mpeg21/DDD_010899278_0003_articletext.xml
+  refetchable: false
+  provenance: local-trim
+  reason: member 1650/05/17/DDD_ddd_010899278_mpeg21/DDD_010899278_0003_articletext.xml of https://resolver.kb.nl/resolve?urn=DATA:kranten:kranten_pd_16xx.zip (Last-Modified 2017-01-16) — copied from the landed canonical tree; the folder's a0004–a0009 articletext files are deliberately NOT copied (the missing-articles specimen)
+  copied: "2026-11-13"
+  whole: true
+  trim: none

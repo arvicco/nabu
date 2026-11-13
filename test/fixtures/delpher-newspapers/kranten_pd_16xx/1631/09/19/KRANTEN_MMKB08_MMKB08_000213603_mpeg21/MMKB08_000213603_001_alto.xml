@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<alto xmlns="http://www.loc.gov/standards/alto/ns-v2#">
+	<Description>
+		<MeasurementUnit>pixel</MeasurementUnit>
+		<sourceImageInformation>
+			<fileName>MMKB08_000213603_001_master.jp2</fileName>
+		</sourceImageInformation>
+		<OCRProcessing ID="ID0">
+			<ocrProcessingStep>
+				<processingDateTime>2014-09-01T13:39:48</processingDateTime>
+				<processingAgency>HTC Global Services</processingAgency>
+				<processingSoftware>
+					<softwareCreator>ABBYY</softwareCreator>
+					<softwareName>ABBYY Recognition</softwareName>
+					<softwareVersion>10.0</softwareVersion>
+				</processingSoftware>
+			</ocrProcessingStep>
+			<postProcessingStep>
+				<processingDateTime>2014-09-01T13:39:48</processingDateTime>
+				<processingAgency>HTC Global Services</processingAgency>
+				<processingStepDescription>Generation of ALTO file</processingStepDescription>
+				<processingSoftware>
+					<softwareCreator>HTC Global Services</softwareCreator>
+					<softwareName>ALTO XML Creation</softwareName>
+					<softwareVersion>1.0</softwareVersion>
+				</processingSoftware>
+			</postProcessingStep>
+		</OCRProcessing>
+	</Description>
+	<Styles>
+		<TextStyle ID="TS1" FONTSIZE="22" FONTFAMILY="Georgia"/>
+		<TextStyle ID="TS2" FONTSIZE="21" FONTFAMILY="Georgia"/>
+		<TextStyle ID="TS3" FONTSIZE="11.5" FONTFAMILY="Georgia"/>
+		<TextStyle ID="TS4" FONTSIZE="9" FONTFAMILY="Georgia"/>
+		<TextStyle ID="TS5" FONTSIZE="10.5" FONTFAMILY="Georgia"/>
+		<TextStyle ID="TS6" FONTSIZE="9.5" FONTFAMILY="Georgia"/>
+		<TextStyle ID="TS7" FONTSIZE="10" FONTFAMILY="Georgia"/>
+		<ParagraphStyle ID="PAR1" ALIGN="Block"/>
+	</Styles>
+	<Layout>
+		<Page ID="PAGE1" HEIGHT="3520" WIDTH="2055" PHYSICAL_IMG_NR="1" QUALITY="OK" POSITION="Single" PROCESSING="ID0" PC="0.33">
+			<TopMargin ID="MARGIN1" HPOS="0" VPOS="0" WIDTH="2055" HEIGHT="153"/>
+			<LeftMargin ID="MARGIN2" HPOS="0" VPOS="153" WIDTH="100" HEIGHT="3172"/>
+			<RightMargin ID="MARGIN3" HPOS="1875" VPOS="153" WIDTH="180" HEIGHT="3172"/>
+			<BottomMargin ID="MARGIN4" HPOS="0" VPOS="3325" WIDTH="2055" HEIGHT="195"/>
+			<PrintSpace ID="SPACE1" HPOS="100" VPOS="153" WIDTH="1775" HEIGHT="3172">
+				<TextBlock ID="TextBlock1" STYLEREFS="PAR1 TS3" HPOS="109" VPOS="153" WIDTH="1766" HEIGHT="206">
+					<TextLine ID="TextLine1" HPOS="146" VPOS="164" WIDTH="1656" HEIGHT="116">
+						<String ID="String1" CONTENT="Extradt" HPOS="146" VPOS="172" WIDTH="286" HEIGHT="86" STYLEREFS="TS1" WC="0.29" CC="4235695"/>
+						<SP ID="SP1" HPOS="432" VPOS="172" WIDTH="22"/>
+						<String ID="String2" CONTENT="uyt" HPOS="454" VPOS="188" WIDTH="138" HEIGHT="88" STYLEREFS="TS1" WC="0.33" CC="636"/>
+						<SP ID="SP2" HPOS="592" VPOS="188" WIDTH="18"/>
+						<String ID="String3" CONTENT="feker" HPOS="610" VPOS="164" WIDTH="210" HEIGHT="82" STYLEREFS="TS1" WC="0.4" CC="88763"/>
+						<SP ID="SP3" HPOS="820" VPOS="164" WIDTH="24"/>
+						<String ID="String4" CONTENT="Milïïve," HPOS="844" VPOS="164" WIDTH="308" HEIGHT="96" STYLEREFS="TS2" WC="0.27" CC="31418929"/>
+						<SP ID="SP4" HPOS="1152" VPOS="164" WIDTH="34"/>
+						<String ID="String5" CONTENT="gefchreven" HPOS="1186" VPOS="168" WIDTH="458" HEIGHT="106" STYLEREFS="TS1" WC="0.31" CC="9826772219"/>
+						<SP ID="SP5" HPOS="1644" VPOS="168" WIDTH="22"/>
+						<String ID="String6" CONTENT="uyt" HPOS="1666" VPOS="194" WIDTH="136" HEIGHT="86" STYLEREFS="TS1" WC="0.38" CC="854"/>
+					</TextLine>
+					<TextLine ID="TextLine2" HPOS="298" VPOS="278" WIDTH="1332" HEIGHT="71">
+						<String ID="String7" CONTENT="Eulenburgh" HPOS="298" VPOS="279" WIDTH="258" HEIGHT="69" WC="0.27" CC="2437884371"/>
+						<SP ID="SP6" HPOS="556" VPOS="279" WIDTH="9"/>
+						<String ID="String8" CONTENT="in" HPOS="565" VPOS="281" WIDTH="43" HEIGHT="46" WC="0.41" CC="47"/>
+						<SP ID="SP7" HPOS="608" VPOS="281" WIDTH="11"/>
+						<String ID="String9" CONTENT="Saxen," HPOS="619" VPOS="283" WIDTH="144" HEIGHT="56" STYLEREFS="TS4" WC="0.26" CC="631871"/>
+						<SP ID="SP8" HPOS="763" VPOS="283" WIDTH="13"/>
+						<String ID="String10" CONTENT="van" HPOS="776" VPOS="296" WIDTH="77" HEIGHT="32" WC="0.18" CC="134"/>
+						<SP ID="SP9" HPOS="853" VPOS="296" WIDTH="14"/>
+						<String ID="String11" CONTENT="den" HPOS="867" VPOS="278" WIDTH="80" HEIGHT="50" WC="0.33" CC="681"/>
+						<SP ID="SP10" HPOS="947" VPOS="278" WIDTH="19"/>
+						<String ID="String12" CONTENT="19" HPOS="966" VPOS="294" WIDTH="54" HEIGHT="49" WC="0.37" CC="46"/>
+						<SP ID="SP11" HPOS="1020" VPOS="294" WIDTH="10"/>
+						<String ID="String13" CONTENT=".September" HPOS="1030" VPOS="279" WIDTH="249" HEIGHT="68" WC="0.27" CC="6458492513"/>
+						<SP ID="SP12" HPOS="1279" VPOS="279" WIDTH="27"/>
+						<String ID="String14" CONTENT="A" HPOS="1306" VPOS="284" WIDTH="39" HEIGHT="45" WC="0.56" CC="5"/>
+						<SP ID="SP13" HPOS="1345" VPOS="284" WIDTH="7"/>
+						<String ID="String15" CONTENT="nno" HPOS="1352" VPOS="297" WIDTH="94" HEIGHT="32" STYLEREFS="TS4" WC="0.27" CC="183"/>
+						<SP ID="SP14" HPOS="1446" VPOS="297" WIDTH="41"/>
+						<String ID="String16" CONTENT="1631." HPOS="1487" VPOS="279" WIDTH="143" HEIGHT="70" WC="0.33" CC="47916"/>
+					</TextLine>
+				</TextBlock>
+      </PrintSpace>
+		</Page>
+	</Layout>
+</alto>

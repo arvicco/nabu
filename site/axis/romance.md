@@ -22,7 +22,7 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 ## The shelves
 
-A source wears every desk it serves — these 39 answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
+A source wears every desk it serves — these 40 answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
 | Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 13 November 2026)</span> |
 |---|---|---|---|---|
@@ -53,6 +53,7 @@ A source wears every desk it serves — these 39 answer this desk. Holdings are 
 | `noscemus` | texts | attribution | wired · frozen | 1,038 docs / 555,797 passages |
 | `openmgh` | texts | attribution | wired · manual | 153 docs / 36,143 passages |
 | `osta` | texts | nc | wired · manual | 740 docs / 5,177 passages |
+| `pleias-french-books` | texts | open | not yet wired | not synced yet |
 | `salom` | texts | attribution | wired · manual | 1 docs / 10,685 passages |
 | `socinian-letters` | texts | attribution | wired · manual | 1,869 docs / 18,067 passages |
 | `theatre-classique` | texts | nc | wired · manual | 1,939 docs / 1,601,085 passages |
