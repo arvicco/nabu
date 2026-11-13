@@ -420,11 +420,11 @@ module Nabu
 
         def call
           language = language_code
-          passages, empty = article_passages(language)
+          passages, empty, missing = article_passages(language)
           raise Nabu::ParseError, "#{@dir}: no article carries OCR text" if passages.empty?
 
           document = Nabu::Document.new(urn: @urn, language: language, canonical_path: File.join(@dir, DIDL),
-                                        title: title, metadata: metadata(empty))
+                                        title: title, metadata: metadata(empty, missing))
           passages.each { |passage| document << passage }
           document
         end
@@ -442,29 +442,40 @@ module Nabu
           LANGUAGES.fetch(first) { raise Nabu::ParseError, "#{@dir}: dc:language #{first.inspect} has no house code" }
         end
 
-        # One passage per article with OCR text, in DIDL order, and the
-        # citations of the articles whose OCR is empty.
+        # One passage per article with OCR text, in DIDL order; the
+        # citations of the articles whose OCR is empty, and of the
+        # articles upstream never carried text for (the 2017 zip's
+        # packaging gaps, 4 issues in the 16xx cone: a DIDL article
+        # entry without an articletext resource, or a named file absent
+        # from the folder — the same user-visible outcome as empty OCR,
+        # so both ride missing_articles instead of quarantining the
+        # issue's present articles away; the dump is frozen upstream,
+        # so no report can repair it).
         def article_passages(language)
           passages = []
           empty = []
+          missing = []
           @issue.articles.each do |article|
-            text = @parser.read_article(article_path(article))
+            path = article_path(article)
+            next missing << "a#{article.number}" unless path
+
+            text = @parser.read_article(path)
             next empty << "a#{article.number}" if text.paragraphs.empty?
 
             passages << Nabu::Passage.new(urn: "#{@urn}:a#{article.number}", language: language,
                                           text: text.paragraphs.join("\n"), sequence: passages.size,
                                           annotations: annotations(article, text))
           end
-          [passages, empty]
+          [passages, empty, missing]
         end
 
+        # The article's on-disk text file, or nil when upstream carries
+        # none (no resource in the DIDL, or the named member absent).
         def article_path(article)
-          raise Nabu::ParseError, "#{@dir}: article #{article.id} names no articletext file" unless article.file
+          return nil unless article.file
 
           path = File.join(@dir, article.file)
-          return path if File.file?(path)
-
-          raise Nabu::ParseError, "#{@dir}: #{article.file} (article #{article.id}) is missing"
+          File.file?(path) ? path : nil
         end
 
         def annotations(article, text)
@@ -472,7 +483,7 @@ module Nabu
             "pages" => article.pages }.reject { |_, value| value.nil? || value == [] }
         end
 
-        def metadata(empty)
+        def metadata(empty, missing)
           {
             "delpher_id" => @id, "record_id" => @issue.record_id,
             "resolver_url" => "http://resolver.kb.nl/resolve?urn=#{@issue.record_id}",
@@ -484,7 +495,8 @@ module Nabu
             "ppn" => @fields["ppn"], "holding" => @fields["holding"], "collections" => @fields["collections"],
             "years_digitized" => @fields["years_digitized"], **page_fields,
             "article_count" => @issue.articles.size, "subjects" => subjects,
-            "empty_articles" => empty, "unlisted_article_files" => unlisted_files
+            "empty_articles" => empty, "missing_articles" => missing,
+            "unlisted_article_files" => unlisted_files
           }.reject { |_, value| value.nil? || value == [] || value == {} }
         end
 
