@@ -384,8 +384,10 @@ module Nabu
 
       db = Store.connect_fulltext(@fulltext_path) # replays the engine-config intent journal
       Store::Indexer.checkpoint_wal!(db)
-      Store::Indexer.mark_slice_pending!(db, @slug) if @slug
-      pending = @slug ? ", slice #{@slug} left pending" : ""
+      # +slug+ is one slug, or a wave's array of them (index refresh A B…).
+      slugs = Array(@slug)
+      slugs.each { |slug| Store::Indexer.mark_slice_pending!(db, slug) }
+      pending = slugs.empty? ? "" : ", slice#{'s' if slugs.size > 1} #{slugs.join(', ')} left pending"
       say("index watcher: hygiene: engine config restored, WAL truncated#{pending}")
     ensure
       db&.disconnect
