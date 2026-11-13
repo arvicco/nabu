@@ -23,20 +23,24 @@ module Nabu
     # into the existing same-inscription hub, the full concordance line
     # riding each edge's detail.
     class BurmanConcordance < Nabu::Adapter
-      CSV_URL = "https://zenodo.org/records/7801485/files/" \
-                "A%20Digital%20Concordance%20of%20Etruscan,%20Faliscan%20and%20Etrurian%20Latin%201.0.0.csv"
+      # v1.0.3 (record 17209666, published 2025-09-26; re-pinned at the
+      # 2026-11-13 desk census — the held pin had stayed on v1.0.0 while
+      # three point releases landed; note upstream renamed the CSV's tail
+      # from "Etrurian Latin" to "early Latin in Etruria").
+      CSV_URL = "https://zenodo.org/records/17209666/files/" \
+                "A%20Digital%20Concordance%20of%20Etruscan,%20Faliscan%20and%20early%20Latin%20in%20Etruria%201.0.3.csv"
       CSV_FILENAME = "burman-concordance.csv"
 
       MANIFEST = Nabu::SourceManifest.new(
         id: "burman-concordance",
         name: "Burman — Digital Concordance of Etruscan, Faliscan and Early Latin Inscriptions",
         license: "Public Domain / CC0 (the Zenodo deposit's license field + in-record " \
-                 "legalcode.txt, record 7801485 v1.0.0, read 2026-08-17)",
+                 "legalcode.txt, record 17209666 v1.0.3, read 2026-11-13)",
         license_class: "open",
-        upstream_url: "https://zenodo.org/records/7801485",
+        upstream_url: "https://zenodo.org/records/17209666",
         parser_family: "burman-crosswalk",
         credit: "Annie Cecilia Burman (Uppsala University), A Digital Concordance of " \
-                "Etruscan, Faliscan and Early Latin Inscriptions from Etruria, v1.0.0, " \
+                "Etruscan, Faliscan and Early Latin Inscriptions from Etruria, v1.0.3, " \
                 "Zenodo, doi:10.5281/zenodo.7801485"
       )
 
