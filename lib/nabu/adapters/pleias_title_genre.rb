@@ -33,46 +33,50 @@ module Nabu
       def self.kw(pattern, head) = Keyword.new(pattern: pattern, head: head)
       private_class_method :kw
 
-      # \p{L}-aware word edges: Ruby's (?!\p{L}) treats accented letters as word
-      # characters already, so "Édict" and "édits" edge correctly.
+      # \p{L}-aware word edges, and UPPERCASE accented letters listed
+      # explicitly inside every character class: under /i, Ruby <= 3.3
+      # (Onigmo) case-folds literals but NOT multibyte characters inside
+      # a class — [éÉe] silently never matches "Édict" there, while the
+      # Ruby >= 3.4 engine folds both, so the dev box passes and CI
+      # fails. Explicit [éÉe] matches on every engine.
       KEYWORDS = [
         # -- royal and judicial acts (the cone's dominant print class)
         kw(/(?<!\p{L})lettres?[\s-]+patentes(?!\p{L})/i, "Lettres patentes"),
-        kw(/(?<!\p{L})lettres?\s+de\s+d[ée]claration(?!\p{L})/i, "Déclaration"),
-        kw(/(?<!\p{L})[ée]dicts?(?!\p{L})|(?<!\p{L})[ée]dits?(?!\p{L})/i, "Édit"),
-        kw(/(?<!\p{L})d[ée]clarations?(?!\p{L})/i, "Déclaration"),
+        kw(/(?<!\p{L})lettres?\s+de\s+d[éÉe]claration(?!\p{L})/i, "Déclaration"),
+        kw(/(?<!\p{L})[éÉe]dicts?(?!\p{L})|(?<!\p{L})[éÉe]dits?(?!\p{L})/i, "Édit"),
+        kw(/(?<!\p{L})d[éÉe]clarations?(?!\p{L})/i, "Déclaration"),
         kw(/(?<!\p{L})ordonnances?(?!\p{L})/i, "Ordonnance"),
-        kw(/(?<!\p{L})arr[eê]s?ts?(?!\p{L})/i, "Arrêt"),
-        kw(/(?<!\p{L})r[ée]glemens?(?!\p{L})|(?<!\p{L})r[ée]glements?(?!\p{L})/i, "Règlement"),
+        kw(/(?<!\p{L})arr[eêÊ]s?ts?(?!\p{L})/i, "Arrêt"),
+        kw(/(?<!\p{L})r[éÉe]glemens?(?!\p{L})|(?<!\p{L})r[éÉe]glements?(?!\p{L})/i, "Règlement"),
         kw(/(?<!\p{L})statuts?(?!\p{L})/i, "Statuts"),
         kw(/(?<!\p{L})cou(?:s)?tumes?(?!\p{L})/i, "Coutume"),
         kw(/(?<!\p{L})factum(?!\p{L})/i, "Factum"),
         kw(/(?<!\p{L})mandement(?!\p{L})/i, "Mandement"),
         # -- performance
-        kw(/(?<!\p{L})tragi[\s-]*com[ée]dies?(?!\p{L})/i, "Tragi-comédie"),
-        kw(/(?<!\p{L})trag[ée]dies?(?!\p{L})/i, "Tragédie"),
-        kw(/(?<!\p{L})com(?:[ée]|œ|oe)dies?(?!\p{L})/i, "Comédie"),
+        kw(/(?<!\p{L})tragi[\s-]*com[éÉe]dies?(?!\p{L})/i, "Tragi-comédie"),
+        kw(/(?<!\p{L})trag[éÉe]dies?(?!\p{L})/i, "Tragédie"),
+        kw(/(?<!\p{L})com(?:[éÉe]|œ|oe)dies?(?!\p{L})/i, "Comédie"),
         kw(/(?<!\p{L})pastorales?(?!\p{L})/i, "Pastorale"),
         kw(/(?<!\p{L})ballets?(?!\p{L})/i, "Ballet"),
         # -- verse
-        kw(/(?<!\p{L})po[ëeè]mes?(?!\p{L})/i, "Poème"),
-        kw(/(?<!\p{L})po[ée]sies?(?!\p{L})/i, "Poésie"),
+        kw(/(?<!\p{L})po[ëËeèÈ]mes?(?!\p{L})/i, "Poème"),
+        kw(/(?<!\p{L})po[éÉe]sies?(?!\p{L})/i, "Poésie"),
         kw(/(?<!\p{L})odes?(?!\p{L})/i, "Ode"),
         kw(/(?<!\p{L})stances(?!\p{L})/i, "Stances"),
         kw(/(?<!\p{L})sonnets?(?!\p{L})/i, "Sonnet"),
         kw(/(?<!\p{L})triolets?(?!\p{L})/i, "Triolet"),
-        kw(/(?<!\p{L})[ée]l[ée]gies?(?!\p{L})/i, "Élégie"),
-        kw(/(?<!\p{L})[ée]pithalames?(?!\p{L})/i, "Épithalame"),
+        kw(/(?<!\p{L})[éÉe]l[éÉe]gies?(?!\p{L})/i, "Élégie"),
+        kw(/(?<!\p{L})[éÉe]pithalames?(?!\p{L})/i, "Épithalame"),
         kw(/(?<!\p{L})chansons?(?!\p{L})/i, "Chanson"),
         kw(/(?<!\p{L})sat[yi]res?(?!\p{L})/i, "Satire"),
         # -- address and the pulpit
-        kw(/(?<!\p{L})oraisons?\s+fun[èe]bres?(?!\p{L})/i, "Oraison funèbre"),
+        kw(/(?<!\p{L})oraisons?\s+fun[èÈe]bres?(?!\p{L})/i, "Oraison funèbre"),
         kw(/(?<!\p{L})sermons?(?!\p{L})/i, "Sermon"),
-        kw(/(?<!\p{L})hom[ée]lies?(?!\p{L})/i, "Homélie"),
+        kw(/(?<!\p{L})hom[éÉe]lies?(?!\p{L})/i, "Homélie"),
         kw(/(?<!\p{L})harangues?(?!\p{L})/i, "Harangue"),
-        kw(/(?<!\p{L})pan[ée]gyriques?(?!\p{L})/i, "Panégyrique"),
-        kw(/(?<!\p{L})cat[ée]chismes?(?!\p{L})/i, "Catéchisme"),
-        kw(/(?<!\p{L})(?:[ée]pistres?|[ée]p[iî]tres?)(?!\p{L})/i, "Épître"),
+        kw(/(?<!\p{L})pan[éÉe]gyriques?(?!\p{L})/i, "Panégyrique"),
+        kw(/(?<!\p{L})cat[éÉe]chismes?(?!\p{L})/i, "Catéchisme"),
+        kw(/(?<!\p{L})(?:[éÉe]pistres?|[éÉe]p[iîÎ]tres?)(?!\p{L})/i, "Épître"),
         kw(/(?<!\p{L})lettres?(?!\p{L})/i, "Lettre"),
         # -- story, record, reference
         kw(/(?<!\p{L})annales(?!\p{L})/i, "Annales"),
