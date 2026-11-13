@@ -74,3 +74,11 @@ files:
     copied: 2026-10-21
     whole: false
     trim: a 40-sentence window crossing the 1805 -> 1806 text elements
+  - path: empty-sentence/rekisteri1.jsonl
+    refetchable: false
+    provenance: local-trim
+    reason: three consecutive landed lines copied verbatim from the local canonical (sentence_ids 416-418)
+    canonical: canonical/vks/texts/VKS_BIBLIA/rekisteri1.jsonl
+    copied: 2026-11-13
+    whole: false
+    trim: lines 48-50 of the landed text (the all-null-token sentence and its neighbours)

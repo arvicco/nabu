@@ -288,7 +288,7 @@ module Nabu
       # consulted on the "no citable lines" failure path, so a clean parse
       # never pays for the second read.
       def textless_edition?(path)
-        doc = Nokogiri::XML(File.read(path))
+        doc = Nokogiri::XML(SourceRead.utf8_file(path, label: "papyri-ddbdp"))
         edition = doc.at_xpath("//t:div[@type='edition']", TEI_NS) or return false
         return false if edition.at_xpath(".//t:g", TEI_NS)
 

@@ -234,7 +234,7 @@ module Nabu
       # (class note). Any other line — a `# sent_id` comment, a token row —
       # leaves the file to the parser, so a real defect still quarantines.
       def skip_header_only!(document_ref)
-        body = File.foreach(document_ref.path, chomp: true).reject do |line|
+        body = SourceRead.utf8_lines(document_ref.path, label: "dcs").reject do |line|
           line.strip.empty? || line.start_with?("##")
         end
         return unless body.empty?

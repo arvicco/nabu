@@ -69,3 +69,30 @@ files:
     copied: 2026-10-20
     whole: true
     trim: none (sb;30;17872 apparatus exemplar — plain and break="no" line breaks inside lemma and reading, copied whole)
+  - path: textless/Historical/p.tebt/1/210.xml
+    refetchable: false
+    provenance: local-trim
+    reason: copied whole from the canonical clone's working tree; re-acquiring = full idp.data corpus sync, not a raw GET
+    canonical: canonical/papyri-ddbdp/Historical/p.tebt/1/210.xml
+    upstream: https://github.com/papyri/idp.data
+    copied: 2026-11-13
+    whole: true
+    trim: none (text-less edition exemplar, the quarantine review 2026-11-13)
+  - path: textless/DCLP/109/109580.xml
+    refetchable: false
+    provenance: local-trim
+    reason: copied whole from the canonical clone's working tree; re-acquiring = full idp.data corpus sync, not a raw GET
+    canonical: canonical/papyri-ddbdp/DCLP/109/109580.xml
+    upstream: https://github.com/papyri/idp.data
+    copied: 2026-11-13
+    whole: true
+    trim: none (text-less edition exemplar, the quarantine review 2026-11-13)
+  - path: textless/DDbDP/31/31692.xml
+    refetchable: false
+    provenance: local-trim
+    reason: copied whole from the canonical clone's working tree; re-acquiring = full idp.data corpus sync, not a raw GET
+    canonical: canonical/papyri-ddbdp/DDbDP/31/31692.xml
+    upstream: https://github.com/papyri/idp.data
+    copied: 2026-11-13
+    whole: true
+    trim: none (text-less edition exemplar, the quarantine review 2026-11-13)
