@@ -3,17 +3,17 @@
 as_of: 13 November 2026
 classes:
 - head: literary
-  documents: 807034
-  documents_display: '807,034'
-  sources: 57
+  documents: 807138
+  documents_display: '807,138'
+  sources: 58
 - head: administrative
   documents: 500153
   documents_display: '500,153'
   sources: 25
 - head: historiography
-  documents: 359234
-  documents_display: '359,234'
-  sources: 35
+  documents: 359236
+  documents_display: '359,236'
+  sources: 36
 - head: ritual
   documents: 194692
   documents_display: '194,692'
@@ -23,13 +23,13 @@ classes:
   documents_display: '115,146'
   sources: 13
 - head: legal
-  documents: 49489
-  documents_display: '49,489'
-  sources: 37
+  documents: 49868
+  documents_display: '49,868'
+  sources: 38
 - head: letter
-  documents: 37485
-  documents_display: '37,485'
-  sources: 28
+  documents: 37543
+  documents_display: '37,543'
+  sources: 29
 - head: royal
   documents: 30136
   documents_display: '30,136'
@@ -51,12 +51,12 @@ classes:
   documents_display: '21,091'
   sources: 29
 - head: lexical
-  documents: 18787
-  documents_display: '18,787'
-  sources: 26
+  documents: 18795
+  documents_display: '18,795'
+  sources: 28
 - head: scholarly
-  documents: 15957
-  documents_display: '15,957'
+  documents: 15999
+  documents_display: '15,999'
   sources: 29
 - head: mark
   documents: 12298
@@ -66,14 +66,18 @@ classes:
   documents: 11692
   documents_display: '11,692'
   sources: 6
+- head: periodical
+  documents: 10991
+  documents_display: '10,991'
+  sources: 7
 - head: building
   documents: 8061
   documents_display: '8,061'
   sources: 8
 - head: sermon
-  documents: 7993
-  documents_display: '7,993'
-  sources: 14
+  documents: 8001
+  documents_display: '8,001'
+  sources: 15
 - head: theology
   documents: 6783
   documents_display: '6,783'
@@ -94,26 +98,22 @@ classes:
   documents: 2947
   documents_display: '2,947'
   sources: 15
-- head: periodical
-  documents: 2432
-  documents_display: '2,432'
-  sources: 6
 - head: hagiography
   documents: 2037
   documents_display: '2,037'
   sources: 7
 - head: oratory
-  documents: 1613
-  documents_display: '1,613'
-  sources: 8
+  documents: 1623
+  documents_display: '1,623'
+  sources: 9
 - head: philosophy
   documents: 897
   documents_display: '897'
   sources: 1
 - head: catechesis
-  documents: 806
-  documents_display: '806'
-  sources: 12
+  documents: 808
+  documents_display: '808'
+  sources: 13
 - head: paratext
   documents: 3
   documents_display: '3'
@@ -121,7 +121,7 @@ classes:
 unclassified_sources: 133
 unknown_documents: 47058
 unknown_documents_display: '47,058'
-unmapped_documents: 14177
-unmapped_documents_display: '14,177'
-unclassified_documents: 547197
-unclassified_documents_display: '547,197'
+unmapped_documents: 14194
+unmapped_documents_display: '14,194'
+unclassified_documents: 548904
+unclassified_documents_display: '548,904'

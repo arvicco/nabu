@@ -1800,7 +1800,7 @@ delpher-newspapers:   # P173, 02-sources row 408
   adapter: Nabu::Adapters::DelpherNewspapers
   adopted: "2026-11-13"
   axes: [germanic]
-  wired: false   # until the first real sync (the 16xx cone: expect 8,559 docs / ~68,000 article passages)
+  wired: true   # flipped 2026-11-13: 16xx cone live-probed — 8,559 docs / 68,690 passages, 0 quarantined (the packaging gaps ride missing_articles), search + credit line verified
   sync_policy: manual   # one-time period zips (Last-Modified 2017; the 1877–79 zip 2020)
   # Delpher open krantenarchief (KB, Nationale Bibliotheek van
   # Nederland): every Delpher newspaper issue 1618–1879 as text (OCR per
@@ -5721,7 +5721,7 @@ pleias-french-books:   # P173-A, 02-sources row 408
   adopted: "2026-11-13"
   axes: [romance]   # French print to 1699 (census 2026-11-13: 166 books closing
                     # before 1600, 6,306 opening 1600 or later, 5 straddling)
-  wired: false   # first real sync (the shard rail's first slice) runs post-merge
+  wired: true   # flipped 2026-11-13: slice 1 live-probed — 1,141 docs / 212,656 passages, loaded AND searchable (the deferred index paid by the wave refresh), credit line verified; 5 cone slices remain
   sync_policy: manual
   index_policy: deferred   # paced-crawl citizen: books load per shard slice, the index runs once per wave (index refresh)
   # PleIAs/French-PD-Books (Hugging Face) — Gallica/BnF public-domain

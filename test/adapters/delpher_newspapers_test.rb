@@ -208,12 +208,12 @@ module Adapters
 
     # -- registry --------------------------------------------------------------------
 
-    def test_registry_row_is_unwired_and_manual
+    def test_registry_row_is_wired_and_manual
       registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources.yml", __dir__))
       entry = registry["delpher-newspapers"]
       refute_nil entry
       assert_equal ADAPTER, entry.adapter_class
-      refute entry.wired, "wired flips true after the verified first sync"
+      assert entry.wired, "flipped after the verified first sync (8,559 docs / 68,690 passages, probed live)"
       assert_equal "manual", entry.sync_policy
     end
 

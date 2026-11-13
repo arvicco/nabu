@@ -2380,3 +2380,33 @@ and the Brokmer Recht after Buma–Ebel (data entry Forschungsstelle
 des Deutschen Rechtswörterbuchs, Heidelberg) — the legal sentence as
 the passage. Gated — contact TITUS for a license grant; held
 non-redistributable, credited wherever displayed; bare `ofs`.
+
+## 8bk. The P174 arrivals — the Dutch newspaper press, and the French books of the ancien régime
+
+**`delpher-newspapers`** — **8,559 documents / 68,690 passages**: the
+seventeenth-century Dutch newspaper press, complete as Delpher's open
+archive holds it — from the very first issue, the *Courante uyt
+Italien, Duytslandt, &c.* (Amsterdam, 14 June 1618), through the
+courantes and tijdinghen of twenty-two papers to 1699, the *Oprechte
+Haerlemsche courant* and the Republic's French-language gazettes
+among them. The issue is the document, the article the passage, each
+with the paper, date, place of publication and per-page OCR
+confidence (the hand-corrected pages marked as such). Issue texts are
+public domain; the archive rides CC BY 4.0 (KB, Nationale Bibliotheek
+van Nederland), credited on every hit. `nld` bare, the French
+gazettes `fr:cls`. The eighteenth- and nineteenth-century zips stay
+enumerated future slices.
+
+**`pleias-french-books`** — **1,141 documents / 212,656 passages**
+(first slice; the pre-1700 cone holds 6,477 books): French books
+printed to 1699 from the BnF's public-domain shelves, as digitized by
+Gallica and re-hosted by PleIAs — the royal print of the ancien
+régime (édits, déclarations, lettres patentes, ordonnances, arrêts,
+coutumes), the grand-siècle stage, the Fronde's verse, pulpit
+oratory, letters, dictionaries and grammars; 166 books printed
+before 1600. Machine OCR as upstream ships it (long s as f, u/v as
+printed), never an edition; the page segment is the passage, cited
+by ordinal. Credit Gallica / Bibliothèque nationale de France and
+PleIAs on every hit; kind read from the title's form noun where one
+speaks. The remaining five slices of the cone ride the acquisition
+rail.

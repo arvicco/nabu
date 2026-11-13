@@ -43,6 +43,7 @@ latin-romance:
   - typikon-bible
   - noscemus
   - mazarinades
+  - pleias-french-books
   - socinian-letters
   - wellcome
 papyri: [papyri-ddbdp]
@@ -183,6 +184,7 @@ germanic:
   - runesdb
   - grand-tour
   - dbnl
+  - delpher-newspapers
   - nb-no
 africa: [africa-pd, bu-ajami, old-nubian-ud]
 americas: [ticha, guaman-poma]

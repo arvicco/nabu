@@ -6,7 +6,7 @@ compatibility: "Requires the nabu MCP server (`bin/nabu mcp`, read-only, stdio) 
 metadata:
   desk: romance
   origin: generated
-  sources: "analecta-hymnica aranese bdcamoes bfm bim-sahcoba cantigas cantus corpus-corporum croala ctilc cv-sardinian derom digiliblt disco divinum-officium formulae-open gregobase littre llct1 lo-congres mazarinades meloniromance memis nb-no noscemus openmgh osta salom socinian-letters theatre-classique typikon-bible ud wellcome wiktionary-ca wiktionary-frm wiktionary-fro wiktionary-oc wiktionary-osp wiktionary-pro"
+  sources: "analecta-hymnica aranese bdcamoes bfm bim-sahcoba cantigas cantus corpus-corporum croala ctilc cv-sardinian derom digiliblt disco divinum-officium formulae-open gregobase littre llct1 lo-congres mazarinades meloniromance memis nb-no noscemus openmgh osta pleias-french-books salom socinian-letters theatre-classique typikon-bible ud wellcome wiktionary-ca wiktionary-frm wiktionary-fro wiktionary-oc wiktionary-osp wiktionary-pro"
 ---
 
 # The Romanist — the `romance` desk
@@ -50,6 +50,7 @@ verbatim upstream terms are in `docs/02-sources.md` of the Nabu repository.
 | `noscemus` | NOSCEMUS Digital Sourcebook — early modern scientific Latin (Transkribus HTR) | attribution |
 | `openmgh` | openMGH — Monumenta Germaniae Historica editions (MGH / BSB, digital MGH) | attribution |
 | `osta` | OSTA — Old Spanish Textual Archive (Hispanic Seminary of Medieval Studies) | nc |
+| `pleias-french-books` | French Public Domain Books — Gallica OCR via PleIAs (pre-1700 cone) | open |
 | `salom` | Şalom Ladino articles text corpus (Col·lectivaT / Sephardic Center of Istanbul) | attribution |
 | `socinian-letters` | Die sozinianischen Briefwechsel — the Socinian correspondence (AdW Mainz) | attribution |
 | `theatre-classique` | Théâtre Classique — Paul Fièvre's TEI corpus of French plays | nc |
