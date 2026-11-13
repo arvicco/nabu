@@ -49,3 +49,23 @@ Per-document `<availability>` (the same statement in all six; line wrapping vari
 > Creative Commons Attribution 3.0 License.
 
 license_class `attribution`.
+
+## Text-less editions past the discover probe (added 2026-11-13, under `textless/`)
+
+Copied whole, byte-identical, from the canonical working tree
+(`canonical/papyri-ddbdp/`, upstream commit
+`cba513a24dbd6cafbe0a86faa680709206718bf5`). They live under `textless/`
+so the discover walk over this directory (which reads only `DDbDP/`,
+`Historical/` and `DCLP/` at the root) is unchanged; the tests build their
+refs directly.
+
+| Path | idno | Class it exemplifies |
+|---|---|---|
+| `textless/Historical/p.tebt/1/210.xml` | ddb-hybrid `p.tebt;1;210` | **Pointer-note stub**: `<ab><lb n="1"/><note>PTebt 1.210 reprinted in Chrest.Wilck. 327</note></ab>` — passes the `<lb>` probe, carries no text. SKIPPED BY RULE at parse. |
+| `textless/DCLP/109/109580.xml` | dclp `109580` | **Figure-only stub** (an ostracon drawing): `<lb n="1"/><figure><figDesc>drawing</figDesc></figure>` — passes the DCLP text-node probe through the figDesc. SKIPPED BY RULE at parse. |
+| `textless/DDbDP/31/31692.xml` | ddb-hybrid `p.leipz;;19v` | **Glyph-only edition** (`<g type="tachygraphic-marks"/>` under textpart `v`): a symbol is content, so it is NOT a stub — the boundary case that must still QUARANTINE ("no citable lines"). |
+
+At the 2026-11-13 quarantine review 33 of the 42 "no citable lines"
+quarantines were the stub shapes (26 `<lb>`-only scaffolds, pointer notes,
+figures, headings); the 9 left are glyph-only editions and one lemma-only
+apparatus.

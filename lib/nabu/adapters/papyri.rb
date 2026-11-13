@@ -269,7 +269,33 @@ module Nabu
           title: document_ref.metadata["title"],
           metadata: idno_metadata(document_ref.metadata).merge(header_metadata(document_ref))
         )
+      rescue ParseError => e
+        raise unless e.message.include?(NO_LINES) && textless_edition?(document_ref.path)
+
+        raise DocumentSkipped.new("#{document_ref.path}: #{TEXTLESS_REASON}", reason: TEXTLESS_REASON)
       end
+
+      # The skip note for a text-less edition that slipped the discover probe.
+      TEXTLESS_REASON = "text-less edition — only a pointer note, figure or heading (upstream stub)"
+      NO_LINES = "no citable lines"
+      TEI_NS = { "t" => "http://www.tei-c.org/ns/1.0" }.freeze
+      private_constant :NO_LINES, :TEI_NS
+
+      # A text-less edition (quarantine review 2026-11-13): no character
+      # survives outside <note>, <figure> and <head>, and no <g> symbol —
+      # the stub grain the discover probes miss when the stub carries an
+      # <lb/> scaffold (DDbDP) or a figure/heading text node (DCLP). Only
+      # consulted on the "no citable lines" failure path, so a clean parse
+      # never pays for the second read.
+      def textless_edition?(path)
+        doc = Nokogiri::XML(File.read(path))
+        edition = doc.at_xpath("//t:div[@type='edition']", TEI_NS) or return false
+        return false if edition.at_xpath(".//t:g", TEI_NS)
+
+        edition.xpath(".//text()[not(ancestor::t:note or ancestor::t:figure or ancestor::t:head)]", TEI_NS)
+               .all? { |node| node.text.strip.empty? }
+      end
+      private :textless_edition?
 
       # The header mining (PapyriHeader — the aggressive-mining law): a DCLP
       # file's own origDate/origPlace/keywords, and for any edition carrying
