@@ -5866,6 +5866,68 @@ class CLITest < Minitest::Test
     end
   end
 
+  # The wave: several deferred sources refreshed in ONE command — one
+  # preflight, one supervised writer, and (over budget) one shadow pass
+  # (Store::Indexer.refresh_sources!). Here both pap and lit have a
+  # landed-but-unindexed passage.
+  def with_two_source_wave
+    with_deferred_wave do |config|
+      File.write(config.sources_path, <<~YAML)
+        pap:
+          adapter: CLITest::IndexRefreshAdapter
+          index_policy: deferred
+        lit:
+          adapter: CLITest::IndexRefreshAdapter
+          index_policy: deferred
+      YAML
+      catalog = Nabu::Store.connect(config.catalog_path)
+      lit = catalog[:sources].where(slug: "lit").get(:id)
+      seed_fuzzy_passage(catalog, lit, "urn:nabu:lit:b", "ἄνδρα πολύτροπον")
+      catalog.disconnect
+      yield config
+    end
+  end
+
+  def test_index_refresh_takes_several_slugs_as_one_wave
+    with_two_source_wave do |config|
+      out, err, status = with_config(config) { run_cli(%w[index refresh pap lit --deadline 30]) }
+
+      assert_nil status, err
+      assert_match(/index refresh: pap — indexed 2 passages/, out)
+      assert_match(/index refresh: lit — indexed 2 passages/, out)
+      assert_match(/index refresh: wave of 2 sources \(pap, lit\) — indexed 4 passages/, out)
+      assert_equal 1, err.scan("index watcher: armed").size, "one supervised writer for the whole wave"
+      fulltext = Nabu::Store.connect_fulltext(config.fulltext_path)
+      begin
+        assert_equal 4, fulltext[:passages_fts].count, "both members' new rows landed"
+      ensure
+        fulltext.disconnect
+      end
+    end
+  end
+
+  def test_an_index_refresh_wave_validates_every_slug_before_any_write
+    with_two_source_wave do |config|
+      before = File.mtime(config.fulltext_path)
+      _out, err, status = with_config(config) { run_cli(%w[index refresh pap nope]) }
+
+      assert_equal 1, status
+      assert_match(/index refresh: unknown source "nope" — known sources: pap, lit/, err)
+      assert_equal before, File.mtime(config.fulltext_path), "the refused wave never opened the index"
+    end
+  end
+
+  def test_an_index_refresh_wave_preflights_every_member
+    with_two_source_wave do |config|
+      plant_long_index_history(config, slug: "lit")
+      _out, err, status = with_config(config) { run_cli(%w[index refresh pap lit]) }
+
+      assert_equal 1, status
+      assert_match(/index preflight: lit — predicted inline index work ~40m/, err)
+      assert_match(/lit's predicted inline index work/, err, "the wave refuses before any write")
+    end
+  end
+
   # Index writers supervise themselves (Nabu::IndexWatcher): the refresh
   # runs under a forked watcher, armed by --deadline here, and the
   # heartbeat file it feeds is gone when the command ends.

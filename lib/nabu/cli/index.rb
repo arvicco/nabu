@@ -56,41 +56,52 @@ module Nabu
       end
     end
 
-    desc "refresh SLUG", "Refresh one source's fulltext slice (the index step a deferred sync skipped)"
+    desc "refresh SLUG...", "Refresh sources' fulltext slices (the index step a deferred sync skipped)"
     long_desc <<~HELP, wrap: false
-      Runs the full slice refresh for one registered source — the same
-      index step a sync runs inline, with the same announced stages and
-      recorded stage timings. A source declared `index_policy: deferred`
-      in config/sources.yml (the paced-crawl citizens) loads its documents
-      at sync time and skips the index; this command pays it, once per
-      wave. Any source may be refreshed: a pending (crashed) or behind
-      slice heals here too. `index doctor` lists the deferred sources and
-      whether their slice is behind the catalog.
+      Runs the full slice refresh for one or more registered sources — the
+      same index step a sync runs inline, with the same announced stages
+      and recorded stage timings. A source declared `index_policy:
+      deferred` in config/sources.yml (the paced-crawl citizens) loads its
+      documents at sync time and skips the index; this command pays it,
+      once per wave. Any source may be refreshed: a pending (crashed) or
+      behind slice heals here too. `index doctor` lists the deferred
+      sources and whether their slice is behind the catalog.
+
+      Several slugs refresh as ONE WAVE: one preflight, one supervised
+      writer, and — when the wave's slices together pass the in-place
+      row budget — ONE passages_fts shadow pass for all of them, instead
+      of one full-corpus pass per source. Name every deferred source due
+      in the same command.
 
       Examples:
         nabu index refresh ndl-kotenseki
-        nabu index refresh wellcome
+        nabu index refresh ndl-kotenseki wellcome pleias-french-books
     HELP
     option :deadline, type: :numeric, banner: "MINUTES",
                       desc: "Index-watcher kill deadline (default 2x the ledger estimate; 0 = never kill)"
     option :accept_long, type: :boolean, default: false,
                          desc: "Run even when the preflight predicts more than the inline budget (~15m)"
-    def refresh(slug)
+    def refresh(*slugs)
+      raise Thor::Error, "index refresh: name at least one source" if slugs.empty?
+
+      slugs = slugs.uniq
       config = Nabu::Config.load
       registry = Nabu::SourceRegistry.load(config.sources_path)
-      unless registry[slug]
-        raise Thor::Error, "index refresh: unknown source #{slug.inspect} — " \
+      unknown = slugs.find { |slug| registry[slug].nil? }
+      if unknown
+        raise Thor::Error, "index refresh: unknown source #{unknown.inspect} — " \
                            "known sources: #{registry.slugs.join(', ')}"
       end
       unless File.exist?(config.catalog_path)
-        raise Thor::Error, "index refresh: no catalog at #{config.catalog_path} — run bin/nabu sync #{slug} first"
+        raise Thor::Error, "index refresh: no catalog at #{config.catalog_path} — " \
+                           "run bin/nabu sync #{slugs.first} first"
       end
 
       # The proportionality law's preflight (Nabu::IndexPreflight): the
       # plan prints and a long one refuses BEFORE any db is opened.
-      Nabu::IndexPreflight.gate!(history_path: config.history_path, slugs: [slug],
+      Nabu::IndexPreflight.gate!(history_path: config.history_path, slugs: slugs,
                                  accept_long: options[:accept_long])
-      run_refresh(config, registry, slug)
+      slugs.one? ? run_refresh(config, registry, slugs.first) : run_wave_refresh(config, registry, slugs)
     rescue Nabu::Error => e
       raise Thor::Error, "index refresh: #{e.message}"
     end
@@ -201,6 +212,38 @@ module Nabu
         narrator.finish_progress
         seconds = Process.clock_gettime(Process::CLOCK_MONOTONIC) - started
         say "index refresh: #{slug} — indexed #{indexed} passages (#{format_duration(seconds)})"
+      ensure
+        catalog&.disconnect
+        ledger&.disconnect
+      end
+
+      # The wave (several slugs): one supervised writer over
+      # SyncRunner#index_entries — Store::Indexer.refresh_sources!, so an
+      # over-budget passages_fts write is ONE shadow pass for the wave.
+      # The estimate and the kill's evidence span every member; the
+      # watcher's hygiene leaves every member pending if the writer dies.
+      def run_wave_refresh(config, registry, slugs)
+        Nabu::Store.assert_writable!(config.catalog_path)
+        ledger = Nabu::Store::Ledger.open!(config.history_path)
+        catalog = Nabu::Store.connect(config.catalog_path)
+        Nabu::Store.setup!(catalog)
+        runner = Nabu::SyncRunner.new(config: config, registry: registry, db: catalog, ledger: ledger)
+        narrator = Nabu::CLI.new
+        started = Process.clock_gettime(Process::CLOCK_MONOTONIC)
+        scopes = slugs + ["corpus"]
+        estimate = Nabu::IndexWatcher.ledger_estimate(ledger, kind: "sync", scopes: scopes,
+                                                              stages: Nabu::IndexWatcher::REFRESH_STAGES)
+        covered = Nabu::IndexWatcher.evidence_covers?(ledger, kind: "sync", scopes: scopes,
+                                                              stages: Nabu::IndexWatcher::REFRESH_STAGES)
+        counts = supervise(config, label: "index refresh #{slugs.join(' ')}", estimate: estimate, slug: slugs,
+                                   arm_kill: covered) do |tee|
+          runner.index_entries(slugs, progress: tee.call(narrator.progress_reporter))
+        end
+        narrator.finish_progress
+        seconds = Process.clock_gettime(Process::CLOCK_MONOTONIC) - started
+        counts.each { |slug, indexed| say "index refresh: #{slug} — indexed #{indexed} passages" }
+        say "index refresh: wave of #{slugs.size} sources (#{slugs.join(', ')}) — indexed " \
+            "#{counts.values.sum} passages (#{format_duration(seconds)})"
       ensure
         catalog&.disconnect
         ledger&.disconnect

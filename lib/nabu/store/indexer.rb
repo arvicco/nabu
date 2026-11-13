@@ -830,7 +830,7 @@ module Nabu
                           sign_list: nil, progress: nil,
                           ledger: nil, lemma_shelf: nil, lemma_filter_slugs: nil,
                           bulk_threshold: BULK_SLICE_THRESHOLD, delta: nil,
-                          row_budget: IN_PLACE_ROW_BUDGET)
+                          row_budget: IN_PLACE_ROW_BUDGET, plan: nil, fts_prebuilt: false)
         unless incremental_ready?(fulltext)
           rebuild!(catalog: catalog, fulltext: fulltext, alignments: alignments,
                    fuzzy_slugs: fuzzy_slugs, cjk_slugs: cjk_slugs, lemma_tiers: lemma_tiers,
@@ -842,37 +842,18 @@ module Nabu
         source_id = catalog[:sources].where(slug: slug).get(:id)
         return 0 if source_id.nil?
 
-        # P111-1b: a refresh entered over an unfinished marker is a HEAL —
-        # the prior run crashed mid-slice, so a load delta cannot cover the
-        # crashed run's missing work. The crashed run's recorded transaction
-        # SHAPE decides how its lemma census heals (CENSUS_BASELINES_TABLE
-        # note) — never by an absolute corpus re-census.
-        # (The slice_behind? case — a landed load whose reindex never
-        # started — heals through the runner instead: it passes delta nil,
-        # which takes the full-slice path here. Probing behind-ness at this
-        # depth would misread every content-adding refresh, whose new max
-        # id is legitimately unindexed on entry.)
-        healing = slice_pending?(fulltext, slug)
-        prior_shape = (slice_shape(fulltext, slug) if healing)
-        use_delta = !delta.nil? && !delta.overflowed? && !healing
-        # The exact heal (ROW_SHAS_TABLE note): with the sidecar on hand the
-        # fts+lemma grain re-does exactly the drifted rows. EVERY other lane
-        # keeps its whole-slice heal on +slice_ids+: the cjk and trigram
-        # lanes carry no sidecar (the asymmetry is deliberate — the main
-        # index's multi-GB churn is what the sidecar kills; the cjk lane is
-        # ~2.3 GB and governed), and the coverage/annotation lanes write
-        # after the fts+lemma batches, so a current sidecar sha says
-        # nothing about them.
-        heal = (exact_heal_diff(catalog, fulltext, source_id) if healing)
-        ids, urns =
-          if use_delta
-            [delta.changed_ids, delta.changed_urns.to_a]
-          elsif heal
-            [heal.changed_ids, heal.changed_urns]
-          else
-            source_passage_keys(catalog, source_id)
-          end
-        slice_ids = heal ? heal.slice_ids : ids
+        # The run's entry state and key sets (slice_plan). A wave
+        # (refresh_sources!) hands in the plan it took BEFORE its own
+        # pending markers and shadow swap, so the entry state read here is
+        # the source's own, never the wave's.
+        plan ||= slice_plan(catalog, fulltext, slug: slug, source_id: source_id, delta: delta)
+        healing = plan.healing
+        prior_shape = plan.prior_shape
+        use_delta = plan.use_delta
+        heal = plan.heal
+        ids = plan.ids
+        urns = plan.urns
+        slice_ids = plan.slice_ids
         count = 0
         lemmas_changed = false
         # P77-r16d (owner ruling 2026-08-18, applied to the WHOLE sync
@@ -897,10 +878,15 @@ module Nabu
         bulk = !governed.empty? && ids.size >= bulk_threshold
         # The in-place row budget (SHADOW_TABLE note): over it, the lane is
         # built as an append-only shadow instead. A killed build's orphan
-        # goes first, whatever this run decides.
+        # goes first, whatever this run decides. +fts_prebuilt+: a wave
+        # (refresh_sources!) already swapped in a shadow holding this
+        # source's live rows — the run's fts half is done, exactly as
+        # after its own shadow build, and no second build runs.
         fulltext.drop_table?(SHADOW_TABLE)
-        shadow = shadow_main?(catalog, fulltext, ids, row_budget, source_id: source_id, slug: slug,
-                                                                  progress: progress)
+        build_shadow = !fts_prebuilt && shadow_main?(catalog, fulltext, ids, row_budget, source_id: source_id,
+                                                                                         slug: slug,
+                                                                                         progress: progress)
+        shadow = fts_prebuilt || build_shadow
         trigram_ids = use_delta ? delta.changed_ids : slice_ids
         trigram_shadow = trigram_ids.size > row_budget && trigram_touched?(fulltext, slug, Array(fuzzy_slugs))
         # The shadow writes passages_fts nowhere in place — its deferral
@@ -930,7 +916,7 @@ module Nabu
         write_census_baseline!(fulltext, slug, whole_ids) if bulk && !census_baseline?(fulltext, slug)
         mark_slice_pending!(fulltext, slug, shape: bulk ? "bulk" : "atomic")
         census_moves = nil
-        if shadow
+        if build_shadow
           timed_sync_stage(ledger, slug, "fts_shadow",
                            "index slice: #{slug} — passages_fts shadow build (#{ids.size} rows over the " \
                            "#{row_budget}-row in-place budget: append-only, swapped in whole)", progress) do
@@ -1169,6 +1155,152 @@ module Nabu
         use_delta || heal ? live_rows : count
       end
 
+      # A slice refresh's entry state and key sets — what refresh_source!
+      # reads before its first write: whether it heals (+healing+, the
+      # crashed run's +prior_shape+, the exact +heal+ diff), whether it
+      # works the load's delta, and the +ids+/+urns+ it rewrites
+      # (+slice_ids+ the whole-slice lanes' key set).
+      SlicePlan = Data.define(:healing, :prior_shape, :use_delta, :heal, :ids, :urns, :slice_ids)
+
+      def slice_plan(catalog, fulltext, slug:, source_id:, delta: nil)
+        # P111-1b: a refresh entered over an unfinished marker is a HEAL —
+        # the prior run crashed mid-slice, so a load delta cannot cover the
+        # crashed run's missing work. The crashed run's recorded transaction
+        # SHAPE decides how its lemma census heals (CENSUS_BASELINES_TABLE
+        # note) — never by an absolute corpus re-census.
+        # (The slice_behind? case — a landed load whose reindex never
+        # started — heals through the runner instead: it passes delta nil,
+        # which takes the full-slice path here. Probing behind-ness at this
+        # depth would misread every content-adding refresh, whose new max
+        # id is legitimately unindexed on entry.)
+        healing = slice_pending?(fulltext, slug)
+        prior_shape = (slice_shape(fulltext, slug) if healing)
+        use_delta = !delta.nil? && !delta.overflowed? && !healing
+        # The exact heal (ROW_SHAS_TABLE note): with the sidecar on hand the
+        # fts+lemma grain re-does exactly the drifted rows. EVERY other lane
+        # keeps its whole-slice heal on +slice_ids+: the cjk and trigram
+        # lanes carry no sidecar (the asymmetry is deliberate — the main
+        # index's multi-GB churn is what the sidecar kills; the cjk lane is
+        # ~2.3 GB and governed), and the coverage/annotation lanes write
+        # after the fts+lemma batches, so a current sidecar sha says
+        # nothing about them.
+        heal = (exact_heal_diff(catalog, fulltext, source_id) if healing)
+        ids, urns =
+          if use_delta
+            [delta.changed_ids, delta.changed_urns.to_a]
+          elsif heal
+            [heal.changed_ids, heal.changed_urns]
+          else
+            source_passage_keys(catalog, source_id)
+          end
+        SlicePlan.new(healing: healing, prior_shape: prior_shape, use_delta: use_delta, heal: heal,
+                      ids: ids, urns: urns, slice_ids: heal ? heal.slice_ids : ids)
+      end
+
+      # == The wave refresh: one shadow pass for many sources
+      #
+      # The economics: an over-budget slice pays a FULL-CORPUS shadow pass
+      # (the shadow holds every indexed row, not just the refreshed
+      # source's — ~25-30 min measured at the live corpus scale), so N
+      # deferred sources (index_policy: deferred) refreshed one after the
+      # other pay N corpus passes for what is one rebuild's worth of
+      # passages_fts content. refresh_sources! refreshes a WAVE of sources
+      # so that an over-budget passages_fts write happens AT MOST ONCE:
+      #
+      #   1. every member's slice_plan is taken first (its own entry state —
+      #      heal or not — before the wave touches anything);
+      #   2. the wave's write volume (the members' summed key sets) is
+      #      measured against +row_budget+ — a wave of individually small
+      #      slices whose union is over budget still takes the shadow, since
+      #      N in-place writes summing past the budget are exactly the churn
+      #      the budget exists to stop;
+      #   3. over budget, with the sidecar complete OUTSIDE the wave
+      #      (shadow_ready? over the members' ids), ONE shadow is built whose
+      #      membership is the union of every non-member's recorded rows and
+      #      every member's live rows, and swapped in once (stage
+      #      "fts_shadow", scope "corpus" — the pass is corpus-sized and
+      #      belongs to no one member);
+      #   4. each member then runs refresh_source! with its plan and
+      #      +fts_prebuilt+ — its lemma/sidecar/aggregate/lane stages in
+      #      place, per source, with their per-slug stage timings — exactly
+      #      the single-source shadow path minus its own build.
+      #
+      # Crash honesty (the SHADOW_TABLE note, wave-wide): the orphan shadow
+      # is dropped at entry; every member not already pending is marked
+      # pending ("atomic" — no lemma write has happened, so a heal's own
+      # delta is exact) BEFORE the build, which precedes every destructive
+      # write; a member already pending keeps its recorded shape. A death
+      # mid-build leaves the old table serving; a death after the swap
+      # leaves the index AHEAD of every unrun member's sidecar, never
+      # behind, with its pending marker standing for the next refresh to
+      # heal. Over budget but with an incomplete sidecar outside the wave,
+      # the wave says so and each member refreshes on its own path (its
+      # own shadow decision and fallback, the documented contract).
+      #
+      # A single slug is refresh_source! unchanged. The wave works whole
+      # slices (no load delta — the `index refresh` grain). +opts+ go to
+      # every member's refresh_source!, +member_opts+ ({ slug => kwargs })
+      # to that member's alone (a dictionary's reflexes_changed). Returns
+      # { slug => the source's live passage count }.
+      def refresh_sources!(catalog:, fulltext:, slugs:, row_budget: IN_PLACE_ROW_BUDGET, ledger: nil,
+                           progress: nil, member_opts: {}, **opts)
+        slugs = slugs.uniq
+        each_member = lambda do |slug, **extra|
+          refresh_source!(catalog: catalog, fulltext: fulltext, slug: slug, row_budget: row_budget,
+                          ledger: ledger, progress: progress, **opts, **member_opts.fetch(slug, {}), **extra)
+        end
+        return slugs.to_h { |slug| [slug, each_member.call(slug)] } if slugs.size < 2
+
+        unless incremental_ready?(fulltext)
+          # The first member's refresh falls back to the full rebuild,
+          # which indexes every member at once.
+          first = each_member.call(slugs.first)
+          return slugs.to_h { |slug| [slug, slug == slugs.first ? first : source_live_count(catalog, slug)] }
+        end
+
+        source_ids = catalog[:sources].where(slug: slugs).to_hash(:slug, :id)
+        members = slugs.select { |slug| source_ids[slug] }
+        plans = members.to_h do |slug|
+          [slug, slice_plan(catalog, fulltext, slug: slug, source_id: source_ids[slug])]
+        end
+        wave = wave_shadow?(catalog, fulltext, plans, source_ids, row_budget, progress: progress)
+        build_wave_shadow!(catalog, fulltext, plans, source_ids, row_budget, ledger: ledger, progress: progress) if
+          wave
+        slugs.to_h do |slug|
+          extra = plans.key?(slug) ? { plan: plans[slug], fts_prebuilt: wave } : {}
+          [slug, each_member.call(slug, **extra)]
+        end
+      end
+
+      # Whether the wave's passages_fts write goes to ONE shadow
+      # (refresh_sources! note): more than one member, the summed volume
+      # over budget, the contentless shape, and a sidecar complete enough
+      # to name every non-member's membership — else announced, per source.
+      def wave_shadow?(catalog, fulltext, plans, source_ids, row_budget, progress: nil)
+        volume = plans.values.sum { |plan| plan.ids.size }
+        return false unless plans.size > 1 && volume > row_budget && fts_contentless?(fulltext)
+        return true if shadow_ready?(catalog, fulltext, plans.keys.map { |slug| source_ids[slug] })
+
+        progress&.stage("index wave: #{plans.keys.join(', ')} — #{volume} rows over the #{row_budget}-row " \
+                        "in-place budget, but the row-sha sidecar incomplete outside the wave (a slice " \
+                        "predating it): each source refreshes on its own path")
+        false
+      end
+
+      def build_wave_shadow!(catalog, fulltext, plans, source_ids, row_budget, ledger: nil, progress: nil)
+        volume = plans.values.sum { |plan| plan.ids.size }
+        fulltext.drop_table?(SHADOW_TABLE) # a killed build's orphan
+        plans.each { |slug, plan| mark_slice_pending!(fulltext, slug, shape: "atomic") unless plan.healing }
+        timed_sync_stage(ledger, "corpus", "fts_shadow",
+                         "index wave: #{plans.keys.join(', ')} — passages_fts shadow build (#{volume} rows " \
+                         "over the #{row_budget}-row in-place budget: ONE append-only pass for the wave, " \
+                         "swapped in whole)", progress) do
+          build_fts_shadow!(catalog: catalog, fulltext: fulltext, source_id: plans.keys.map { |slug| source_ids[slug] },
+                            progress: progress)
+          swap_fts_shadow!(fulltext)
+        end
+      end
+
       # P78-r3: announce with the last sync's estimate, run, record the
       # wall time (kind "sync"). A nil ledger announces bare and records
       # nothing — the rebuild path keeps its own profiler lane. The stage
@@ -1356,7 +1488,9 @@ module Nabu
       # every sidecar-recorded row of the other sources, re-derived from
       # the catalog by id, then the refreshing source's live rows. Batch-
       # ticked, governed, committed every SHADOW_COMMIT_BATCHES batches.
-      # Returns the rows written.
+      # Returns the rows written. +source_id+ may be one id or a wave's
+      # array of them (refresh_sources!): the refreshed set's live rows,
+      # everyone else's recorded ones.
       def build_fts_shadow!(catalog:, fulltext:, source_id:, progress: nil)
         fulltext.drop_table?(SHADOW_TABLE)
         fulltext.run(CREATE_TABLE.sub("passages_fts", SHADOW_TABLE.to_s))

@@ -2794,5 +2794,160 @@ module Store
         fresh.disconnect
       end
     end
+
+    # -- the wave refresh: one shadow pass for many deferred sources --------
+    # A >budget slice pays a full-corpus shadow pass; N deferred sources
+    # refreshed one by one pay N corpus passes. refresh_sources! plans the
+    # whole wave first and, when the wave's write volume is over budget,
+    # builds ONE shadow holding every wave member's live rows plus the
+    # recorded rows of everyone else, swaps it once, and then runs each
+    # member's non-fts stages in place.
+
+    # Both sources indexed, then both grow in the catalog without an index
+    # step (the deferred-sync shape): s by two rows, lit by one.
+    def wave_fixture
+      doc = shadow_fixture
+      mutate_shadow_fixture(doc)
+      lit = Nabu::Store::Document.first(urn: "urn:d:lit")
+      make_passage(lit, urn: "urn:d:lit:3", text_normalized: "τριηρησ", sequence: 2, sha: sha_hex("τ"))
+      doc
+    end
+
+    def with_ledger
+      dir = Dir.mktmpdir("nabu-wave")
+      ledger = Nabu::Store::Ledger.open!(File.join(dir, "history.sqlite3"))
+      yield ledger
+    ensure
+      ledger&.disconnect
+      FileUtils.rm_rf(dir) if dir
+    end
+
+    def refresh_wave!(slugs, **)
+      Nabu::Store::Indexer.refresh_sources!(catalog: @catalog, fulltext: @fulltext, slugs: slugs, **)
+    end
+
+    def shadow_stage_rows(ledger)
+      ledger[Nabu::Store::StageTimings::TABLE].where(stage: "fts_shadow").all
+    end
+
+    def test_a_wave_of_over_budget_sources_pays_exactly_one_shadow_pass
+      wave_fixture
+      with_ledger do |ledger|
+        spy = BulkSpy.new([])
+        counts = refresh_wave!(%w[s lit], row_budget: 2, ledger: ledger, progress: spy)
+
+        assert_equal({ "s" => 3, "lit" => 3 }, counts, "each member reports its own live count")
+        assert_equal 1, shadow_stage_rows(ledger).size, "ONE fts_shadow stage for the whole wave"
+        assert_equal 1, spy.stages.count { |line| line.include?("passages_fts shadow build") }, spy.stages.inspect
+        assert_equal %w[lit s], ledger[Nabu::Store::StageTimings::TABLE].where(stage: "index_slice")
+                                                                        .select_map(:scope).sort,
+                     "the non-fts stages still record per source"
+      end
+      assert_equal %w[urn:d:s:4], match_urns("delta"), "the first member is searchable"
+      assert_equal %w[urn:d:lit:3], match_urns("τριηρησ"), "the second member is searchable"
+      refute Nabu::Store::Indexer.slice_pending?(@fulltext, "s")
+      refute Nabu::Store::Indexer.slice_pending?(@fulltext, "lit")
+      assert_identical_to_a_fresh_rebuild
+    end
+
+    def test_a_wave_whose_union_is_over_budget_takes_the_one_shadow_path
+      wave_fixture
+      with_ledger do |ledger|
+        # s writes 4 slice keys, lit 3: each under the 5-row budget, 7 together over it.
+        refresh_wave!(%w[s lit], row_budget: 5, ledger: ledger)
+
+        assert_equal 1, shadow_stage_rows(ledger).size, "the union crossed the budget — one shadow"
+      end
+      assert_identical_to_a_fresh_rebuild
+    end
+
+    def test_a_wave_under_budget_stays_in_place
+      wave_fixture
+      tampered = passage_id_of("urn:d:s:1")
+      with_ledger do |ledger|
+        refresh_wave!(%w[s lit], row_budget: 7, ledger: ledger)
+
+        assert_empty shadow_stage_rows(ledger), "7 rows at the 7-row budget stay in place"
+      end
+      assert_equal %w[urn:d:lit:3], match_urns("τριηρησ")
+      assert_includes fts_rowids(@fulltext), tampered
+    end
+
+    def test_a_one_slug_wave_is_the_plain_refresh
+      wave_fixture
+      with_ledger do |ledger|
+        counts = refresh_wave!(%w[s], row_budget: 2, ledger: ledger)
+
+        assert_equal({ "s" => 3 }, counts)
+        assert_equal ["s"], shadow_stage_rows(ledger).map { |row| row[:scope] },
+                     "a single slug keeps the per-source shadow, scoped to its slug"
+      end
+    end
+
+    def test_a_wave_keeps_recorded_rows_of_sources_outside_it
+      wave_fixture
+      third = Nabu::Store::Source.create(slug: "x", name: "X", adapter_class: "TestAdapter", license_class: "open")
+      xdoc = make_document(urn: "urn:d:x", source: third)
+      make_passage(xdoc, urn: "urn:d:x:1", text_normalized: "ξενοσ", sequence: 0, sha: sha_hex("ξ"))
+      refresh!(slug: "x")
+      refresh_wave!(%w[s lit], row_budget: 2)
+
+      assert_equal %w[urn:d:x:1], match_urns("ξενοσ"), "a non-member's recorded rows survive the swap"
+      assert_identical_to_a_fresh_rebuild
+    end
+
+    def test_a_wave_falls_back_per_source_when_an_outside_sidecar_is_incomplete
+      wave_fixture
+      third = Nabu::Store::Source.create(slug: "x", name: "X", adapter_class: "TestAdapter", license_class: "open")
+      xdoc = make_document(urn: "urn:d:x", source: third)
+      make_passage(xdoc, urn: "urn:d:x:1", text_normalized: "ξενοσ", sequence: 0, sha: sha_hex("ξ"))
+      refresh!(slug: "x")
+      row_shas.where(source_id: third.id).delete # a slice indexed before the sidecar existed
+      spy = BulkSpy.new([])
+      with_ledger do |ledger|
+        refresh_wave!(%w[s lit], row_budget: 2, ledger: ledger, progress: spy)
+
+        assert_empty shadow_stage_rows(ledger), "no shadow could name x's membership"
+      end
+      assert(spy.stages.any? { |line| line.include?("wave") && line.include?("sidecar incomplete") },
+             "the wave announces its fallback (#{spy.stages.inspect})")
+      assert_equal %w[urn:d:x:1], match_urns("ξενοσ"), "x keeps its rows"
+      assert_equal %w[urn:d:lit:3], match_urns("τριηρησ")
+      assert_equal %w[urn:d:s:4], match_urns("delta")
+    end
+
+    def test_a_death_after_the_wave_swap_leaves_every_member_pending
+      wave_fixture
+      # The second member's refresh dies at entry — after the wave's swap
+      # (Minitest 6 ships no stub: the original is restored in ensure).
+      real = Nabu::Store::Indexer.method(:refresh_source!)
+      calls = 0
+      Nabu::Store::Indexer.define_singleton_method(:refresh_source!) do |**kwargs|
+        calls += 1
+        raise Nabu::Error, "simulated death" if calls == 2
+
+        real.call(**kwargs)
+      end
+      begin
+        assert_raises(Nabu::Error) { refresh_wave!(%w[s lit], row_budget: 2) }
+      ensure
+        Nabu::Store::Indexer.define_singleton_method(:refresh_source!, real)
+      end
+
+      assert_equal %w[urn:d:lit:3], match_urns("τριηρησ"),
+                   "the swapped index is AHEAD for the member that never ran — never behind"
+      assert Nabu::Store::Indexer.slice_pending?(@fulltext, "lit"), "the unrun member reads pending"
+      refresh_wave!(%w[s lit], row_budget: 2)
+      assert_identical_to_a_fresh_rebuild
+    end
+
+    def test_a_wave_member_already_pending_heals_inside_the_wave
+      wave_fixture
+      Nabu::Store::Indexer.mark_slice_pending!(@fulltext, "lit", shape: "atomic")
+      refresh_wave!(%w[s lit], row_budget: 2)
+
+      refute Nabu::Store::Indexer.slice_pending?(@fulltext, "lit")
+      assert_identical_to_a_fresh_rebuild
+    end
   end
 end
