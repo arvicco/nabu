@@ -3,16 +3,16 @@
 as_of: 13 November 2026
 classes:
 - head: literary
-  documents: 807138
-  documents_display: '807,138'
+  documents: 807727
+  documents_display: '807,727'
   sources: 58
 - head: administrative
   documents: 500153
   documents_display: '500,153'
   sources: 25
 - head: historiography
-  documents: 359236
-  documents_display: '359,236'
+  documents: 359254
+  documents_display: '359,254'
   sources: 36
 - head: ritual
   documents: 194692
@@ -23,20 +23,20 @@ classes:
   documents_display: '115,146'
   sources: 13
 - head: legal
-  documents: 49868
-  documents_display: '49,868'
+  documents: 51670
+  documents_display: '51,670'
   sources: 38
 - head: letter
-  documents: 37543
-  documents_display: '37,543'
+  documents: 37787
+  documents_display: '37,787'
   sources: 29
 - head: royal
   documents: 30136
   documents_display: '30,136'
   sources: 6
 - head: scripture
-  documents: 27776
-  documents_display: '27,776'
+  documents: 27778
+  documents_display: '27,778'
   sources: 38
 - head: dedicatory
   documents: 24250
@@ -47,16 +47,16 @@ classes:
   documents_display: '21,139'
   sources: 17
 - head: hymn-prayer
-  documents: 21091
-  documents_display: '21,091'
+  documents: 21092
+  documents_display: '21,092'
   sources: 29
 - head: lexical
-  documents: 18795
-  documents_display: '18,795'
+  documents: 18819
+  documents_display: '18,819'
   sources: 28
 - head: scholarly
-  documents: 15999
-  documents_display: '15,999'
+  documents: 16047
+  documents_display: '16,047'
   sources: 29
 - head: mark
   documents: 12298
@@ -75,8 +75,8 @@ classes:
   documents_display: '8,061'
   sources: 8
 - head: sermon
-  documents: 8001
-  documents_display: '8,001'
+  documents: 8050
+  documents_display: '8,050'
   sources: 15
 - head: theology
   documents: 6783
@@ -103,16 +103,16 @@ classes:
   documents_display: '2,037'
   sources: 7
 - head: oratory
-  documents: 1623
-  documents_display: '1,623'
+  documents: 1666
+  documents_display: '1,666'
   sources: 9
 - head: philosophy
   documents: 897
   documents_display: '897'
   sources: 1
 - head: catechesis
-  documents: 808
-  documents_display: '808'
+  documents: 815
+  documents_display: '815'
   sources: 13
 - head: paratext
   documents: 3
@@ -121,7 +121,7 @@ classes:
 unclassified_sources: 133
 unknown_documents: 47058
 unknown_documents_display: '47,058'
-unmapped_documents: 14194
-unmapped_documents_display: '14,194'
-unclassified_documents: 548904
-unclassified_documents_display: '548,904'
+unmapped_documents: 14223
+unmapped_documents_display: '14,223'
+unclassified_documents: 553175
+unclassified_documents_display: '553,175'
