@@ -44,3 +44,8 @@ current shelves cannot answer?
 
 Rough document/entry count, on-disk size, data format (TEI, CoNLL-U, CSV,
 Turtle, plain text, …).
+
+## Where did you find Nabu? (optional)
+
+One line — a listing, a mailing list, a colleague, a search engine.
+It helps the project know which doors are worth keeping open.
