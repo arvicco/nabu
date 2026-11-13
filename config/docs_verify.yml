@@ -134,7 +134,9 @@ steps:
       quote: "On a fresh quickstart library the same command shows the seven starter witnesses"
     expect:
       exit: 0
-      output_includes: ["7 of 7 witnesses"]
+      # The hub registers 16 witnesses; a fresh quickstart library holds
+      # text for the seven starter ones (sandbox-verified 2026-11-13).
+      output_includes: ["7 of 16 witnesses attest"]
 
   - id: search-lemma-lego
     run: bin/nabu search --lemma λέγω
