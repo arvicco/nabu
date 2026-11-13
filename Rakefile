@@ -585,6 +585,26 @@ namespace :outreach do
   end
 end
 
+# The documented command flows EXECUTED, not proofread
+# (Nabu::Ops::DocsVerify; the plan is config/docs_verify.yml): the
+# quickstart walkthroughs, the README install block and the MCP
+# registration recipes run in a throwaway sandbox (a fresh clone of the
+# committed HEAD), one OK/FAIL verdict line per documented claim. The
+# default mode is offline (network steps print NET and never run; an
+# unroutable proxy guards the rest); `rake "docs:verify[network]"` adds the
+# real syncs (the starter shelf: ~690 MB, ten to fifteen minutes).
+namespace :docs do
+  desc "Run the documented command flows in a fresh-clone sandbox; [network] adds the real syncs"
+  task :verify, [:mode] do |_task, args|
+    require_relative "lib/nabu/ops/docs_verify"
+    mode = args[:mode].to_s == "network" ? :network : :offline
+    abort "docs:verify — unknown mode #{args[:mode].inspect} (offline or network)" unless
+      [nil, "", "offline", "network"].include?(args[:mode])
+    ok = Nabu::Ops::DocsVerify.run_sandboxed(repo: __dir__, mode: mode)
+    abort "docs:verify — documented claims failed (verdict lines above)" unless ok
+  end
+end
+
 # (Nabu::Ops::WatchListCheck): any still-watched row whose checked date is
 # over a week old fails the task, named; boards without the section skip.
 # And the phase-register freshness probe (Nabu::Ops::PhaseRegisterCheck):

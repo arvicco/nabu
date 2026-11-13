@@ -140,6 +140,16 @@ At **every phase gate**, alongside the README/library.md truthfulness pass
    ride `relative_url` (both in `test/site/site_prose_ssot_test.rb`) —
    but prose sanity ("does the page read correctly as rendered?") is the
    review, every time.
+9. **Taught commands, executed** (`bundle exec rake docs:verify`): the
+   quickstart walkthroughs (this site's and docs/quickstart.md), the README
+   install block and the MCP registration recipes run in a throwaway
+   fresh-clone sandbox, one OK/FAIL verdict line per documented claim
+   (plan: `config/docs_verify.yml`). Offline mode at every gate; the
+   network mode (`rake "docs:verify[network]"` — the real starter-shelf
+   sync, ten to fifteen minutes) whenever a gate touched the quickstart
+   path, its pages, or the sync/enable surface. The suite's drift guard
+   (`test/docs_verify_coverage_test.rb`) fails on any newly documented
+   command the plan neither verifies nor ignores with a reason.
 
 ## Hard rules
 
