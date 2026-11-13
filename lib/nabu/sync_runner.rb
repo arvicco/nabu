@@ -198,9 +198,13 @@ module Nabu
                                "it holds no fulltext slice"
       end
 
-      indexed = reindex!(entry, adapter, progress)
-      refresh_lemma_rollups(entry, adapter, nil, indexed)
-      indexed
+      # The standalone refresh writes the same window a sync's index slice
+      # does, so it queues behind any concurrent writer the same way.
+      catalog_write_window(slug, progress) do
+        indexed = reindex!(entry, adapter, progress)
+        refresh_lemma_rollups(entry, adapter, nil, indexed)
+        indexed
+      end
     end
 
     private
@@ -306,10 +310,15 @@ module Nabu
       lane_report = nil
       module_before = module_ref_before(entry, source, workdir)
       module_held_before = module_held_before?(entry, workdir)
+      window = nil
 
       begin
         run = Store::RunRecorder.record_load(source_slug: entry.slug) do
           fetch_report = fetch(adapter, workdir, slug: entry.slug, force: force, progress: progress) unless parse_only
+          # The catalog write window opens AFTER the fetch (fetches stay fully
+          # parallel across sources) and stays open through the load and every
+          # post-load index/lane stage below — released in the ensure.
+          window = open_catalog_write_window(entry.slug, progress)
           guard_withdrawal!(adapter, source, workdir, force: force)
           load_report = load(source, adapter, workdir, progress)
           # P104-4: the secondary dictionary lane loads under the SAME run —
@@ -334,6 +343,33 @@ module Nabu
                           progress: progress, module_before: module_before,
                           module_held_before: module_held_before)
       end
+    ensure
+      window&.release
+    end
+
+    # The catalog write window (Nabu::CatalogWriteLock): concurrent syncs of
+    # different sources queue their catalog + fulltext writes here instead of
+    # one dying on SQLite's busy_timeout behind another's long transaction.
+    # A queued writer's waiting line rides the progress note seam (stderr
+    # when the reporter carries none). No db_dir (a config-less runner) means
+    # no window — nothing on disk to share.
+    def open_catalog_write_window(slug, progress)
+      return nil if @config&.db_dir.nil?
+
+      CatalogWriteLock.acquire(db_dir: @config.db_dir, slug: slug, announce: window_announcer(progress))
+    end
+
+    def catalog_write_window(slug, progress)
+      window = open_catalog_write_window(slug, progress)
+      yield
+    ensure
+      window&.release
+    end
+
+    def window_announcer(progress)
+      return ->(line) { warn(line) } if progress.nil? || progress.on_note.nil?
+
+      ->(line) { progress.note(line) }
     end
 
     # Everything a sync does after its load commits, up to the Outcome — run
