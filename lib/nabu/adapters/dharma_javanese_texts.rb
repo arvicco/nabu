@@ -33,6 +33,11 @@ module Nabu
       # (the manuscript's own script is the artifact fact).
       ALIASES = { "kaw-Latin" => "kaw-Latn", "kaw-ban" => "kaw-Latn" }.freeze
 
+      # Five editions keep the template's "und" (the Kidung Surajaya
+      # witnesses, the Rāmavijaya): admitted as "und" (the und-admission
+      # ruling, 2026-11-13).
+      ADMIT_UNDETERMINED = true
+
       # The edition template's unfilled placeholder (7 witnesses carry
       # "..." in every msIdentifier part — census 2026-10-18).
       PLACEHOLDER = "..."

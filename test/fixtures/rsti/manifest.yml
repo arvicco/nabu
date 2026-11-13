@@ -21,11 +21,11 @@ files:
   - path: sets/2a414954-e077-496b-8b06-a9d0cd417eba.json
     url: https://pi.lib.uchicago.edu/1001/org/ochre/2a414954-e077-496b-8b06-a9d0cd417eba&format=json
     whole: false
-    trim: Season 01 items.spatialUnit trimmed 106 -> 4 records (RS 1.001, RS 1.003+, RS 1.004, RS 1.009 [A]); container re-serialized compact
+    trim: Season 01 items.spatialUnit trimmed 106 -> 4 records (RS 1.001, RS 1.003+, RS 1.004, RS 1.009 [A]), plus RS 17.009 (Season 17) and — 2026-11-13, appended verbatim from the local canonical set — RS 1.017 and RS 1.022 (the line-model specimens); container re-serialized compact
   - path: sets/a7a3a86e-8cdb-4ea9-92fe-6dc31d07dcbc.json
     url: https://pi.lib.uchicago.edu/1001/org/ochre/a7a3a86e-8cdb-4ea9-92fe-6dc31d07dcbc&format=json
     whole: false
-    trim: Ras Ibn Hani items.spatialUnit trimmed 238 -> 2 records (RIH 77/01, RIH 84/ [31,10]); container re-serialized compact
+    trim: Ras Ibn Hani items.spatialUnit trimmed 238 -> 2 records (RIH 77/01, RIH 84/ [31,10]), plus — 2026-11-13, appended verbatim from the local canonical set — RIH 77/25+ and RIH 83/02; container re-serialized compact
   - path: texts/de32293f-9b4b-435e-bf02-c4894863035b.json
     url: https://pi.lib.uchicago.edu/1001/org/ochre/de32293f-9b4b-435e-bf02-c4894863035b&format=json
     whole: true
@@ -38,3 +38,120 @@ files:
     url: https://pi.lib.uchicago.edu/1001/org/ochre/223fa8f2-a5a6-47b0-9f82-80b159c1e23c&format=json
     whole: true
     trim: none (the 13-byte {"result":[]} tombstone — the API's stable "not published" body)
+  - path: sets/7e5dbd07-bbfb-47ca-8fc1-13a0717bf464.json
+    provenance: local-trim
+    refetchable: false
+    reason: copied from the local canonical sync (2026-11-13) to pin the line-model shapes the live corpus carries; a raw GET of the upstream url serves the same record
+    canonical: canonical/rsti/sets/7e5dbd07-bbfb-47ca-8fc1-13a0717bf464.json
+    upstream: https://pi.lib.uchicago.edu/1001/org/ochre/7e5dbd07-bbfb-47ca-8fc1-13a0717bf464&format=json
+    copied: "2026-11-13"
+    whole: false
+    trim: 'TEO Season 15 items.spatialUnit trimmed to RS 15.125 (root-level transliteration lines, no surface node); container re-serialized compact'
+  - path: sets/83bb804c-d8cd-4859-9855-e3d04a668dd0.json
+    provenance: local-trim
+    refetchable: false
+    reason: copied from the local canonical sync (2026-11-13) to pin the line-model shapes the live corpus carries; a raw GET of the upstream url serves the same record
+    canonical: canonical/rsti/sets/83bb804c-d8cd-4859-9855-e3d04a668dd0.json
+    upstream: https://pi.lib.uchicago.edu/1001/org/ochre/83bb804c-d8cd-4859-9855-e3d04a668dd0&format=json
+    copied: "2026-11-13"
+    whole: false
+    trim: 'TEO Season 08 items.spatialUnit trimmed to RS 8.220 (Language property "<unassigned>"); container re-serialized compact'
+  - path: texts/e8e93bf6-c133-410c-9be2-9827d0db913c.json
+    provenance: local-trim
+    refetchable: false
+    reason: copied from the local canonical sync (2026-11-13) to pin the line-model shapes the live corpus carries; a raw GET of the upstream url serves the same record
+    canonical: canonical/rsti/texts/e8e93bf6-c133-410c-9be2-9827d0db913c.json
+    upstream: https://pi.lib.uchicago.edu/1001/org/ochre/e8e93bf6-c133-410c-9be2-9827d0db913c&format=json
+    copied: "2026-11-13"
+    whole: true
+    trim: 'none (RIH 77/01 text item: rulings + "broken" lacunae between lines)'
+  - path: texts/bda5afe1-c241-4e3c-846f-829af180ad24.json
+    provenance: local-trim
+    refetchable: false
+    reason: copied from the local canonical sync (2026-11-13) to pin the line-model shapes the live corpus carries; a raw GET of the upstream url serves the same record
+    canonical: canonical/rsti/texts/bda5afe1-c241-4e3c-846f-829af180ad24.json
+    upstream: https://pi.lib.uchicago.edu/1001/org/ochre/bda5afe1-c241-4e3c-846f-829af180ad24&format=json
+    copied: "2026-11-13"
+    whole: true
+    trim: 'none (RS 1.017 text item: a counted lacuna, missingLines 8)'
+  - path: texts/120210e5-f88e-4853-8809-7f6678104db4.json
+    provenance: local-trim
+    refetchable: false
+    reason: copied from the local canonical sync (2026-11-13) to pin the line-model shapes the live corpus carries; a raw GET of the upstream url serves the same record
+    canonical: canonical/rsti/texts/120210e5-f88e-4853-8809-7f6678104db4.json
+    upstream: https://pi.lib.uchicago.edu/1001/org/ochre/120210e5-f88e-4853-8809-7f6678104db4&format=json
+    copied: "2026-11-13"
+    whole: true
+    trim: 'none (RS 1.022 text item: unlabeled lacuna regions)'
+  - path: texts/d9c1af5f-23dd-4869-a029-1bfe0a840c36.json
+    provenance: local-trim
+    refetchable: false
+    reason: copied from the local canonical sync (2026-11-13) to pin the line-model shapes the live corpus carries; a raw GET of the upstream url serves the same record
+    canonical: canonical/rsti/texts/d9c1af5f-23dd-4869-a029-1bfe0a840c36.json
+    upstream: https://pi.lib.uchicago.edu/1001/org/ochre/d9c1af5f-23dd-4869-a029-1bfe0a840c36&format=json
+    copied: "2026-11-13"
+    whole: true
+    trim: 'none (RIH 77/25+ text item: per-fragment sections nested under each surface)'
+  - path: texts/8731a20f-5d0b-4067-8f5b-8158afc6c1ae.json
+    provenance: local-trim
+    refetchable: false
+    reason: copied from the local canonical sync (2026-11-13) to pin the line-model shapes the live corpus carries; a raw GET of the upstream url serves the same record
+    canonical: canonical/rsti/texts/8731a20f-5d0b-4067-8f5b-8158afc6c1ae.json
+    upstream: https://pi.lib.uchicago.edu/1001/org/ochre/8731a20f-5d0b-4067-8f5b-8158afc6c1ae&format=json
+    copied: "2026-11-13"
+    whole: true
+    trim: 'none (RS 15.125 text item: lines at the rendering root)'
+  - path: texts/2ef071ab-d901-4f09-bd88-60c3bc05f247.json
+    provenance: local-trim
+    refetchable: false
+    reason: copied from the local canonical sync (2026-11-13) to pin the line-model shapes the live corpus carries; a raw GET of the upstream url serves the same record
+    canonical: canonical/rsti/texts/2ef071ab-d901-4f09-bd88-60c3bc05f247.json
+    upstream: https://pi.lib.uchicago.edu/1001/org/ochre/2ef071ab-d901-4f09-bd88-60c3bc05f247&format=json
+    copied: "2026-11-13"
+    whole: true
+    trim: 'none (RIH 83/02: the 38-byte bare XML declaration the resolver answered — the empty answer)'
+  - path: texts/dfcebd3b-a63c-4345-9642-f6979a1cb7ee.json
+    provenance: local-trim
+    refetchable: false
+    reason: copied from the local canonical sync (2026-11-13) to pin the line-model shapes the live corpus carries; a raw GET of the upstream url serves the same record
+    canonical: canonical/rsti/texts/dfcebd3b-a63c-4345-9642-f6979a1cb7ee.json
+    upstream: https://pi.lib.uchicago.edu/1001/org/ochre/dfcebd3b-a63c-4345-9642-f6979a1cb7ee&format=json
+    copied: "2026-11-13"
+    whole: true
+    trim: 'none (RS 8.220: the {"result":[]} tombstone)'
+  - path: quarantine/sets/063495df-dbbd-4c9e-9b71-1c22302ed75b.json
+    provenance: local-trim
+    refetchable: false
+    reason: copied from the local canonical sync (2026-11-13) to pin the line-model shapes the live corpus carries; a raw GET of the upstream url serves the same record
+    canonical: canonical/rsti/sets/063495df-dbbd-4c9e-9b71-1c22302ed75b.json
+    upstream: https://pi.lib.uchicago.edu/1001/org/ochre/063495df-dbbd-4c9e-9b71-1c22302ed75b&format=json
+    copied: "2026-11-13"
+    whole: false
+    trim: 'TEO Season 17 items.spatialUnit trimmed to RS 17.238 (the mixed-markup quarantine specimen); container re-serialized compact; outside the conformance workdir by design'
+  - path: quarantine/texts/39ba4c2f-6d82-4b6c-a13b-6ded30136c42.json
+    provenance: local-trim
+    refetchable: false
+    reason: copied from the local canonical sync (2026-11-13) to pin the line-model shapes the live corpus carries; a raw GET of the upstream url serves the same record
+    canonical: canonical/rsti/texts/39ba4c2f-6d82-4b6c-a13b-6ded30136c42.json
+    upstream: https://pi.lib.uchicago.edu/1001/org/ochre/39ba4c2f-6d82-4b6c-a13b-6ded30136c42&format=json
+    copied: "2026-11-13"
+    whole: true
+    trim: 'none (RS 17.238 text item: transliteration lines as flattened {i, content, sup} lists)'
+  - path: sets/b7ea3e39-8751-49e2-a45e-9b237e539617.json
+    provenance: local-trim
+    refetchable: false
+    reason: copied from the local canonical sync (2026-11-13) to pin the line-model shapes the live corpus carries; a raw GET of the upstream url serves the same record
+    canonical: canonical/rsti/sets/b7ea3e39-8751-49e2-a45e-9b237e539617.json
+    upstream: https://pi.lib.uchicago.edu/1001/org/ochre/b7ea3e39-8751-49e2-a45e-9b237e539617&format=json
+    copied: "2026-11-13"
+    whole: false
+    trim: 'TEO Season 11 items.spatialUnit trimmed to RS 11.850 (a mixed-markup PHONEMIC line beside a clean transliteration); container re-serialized compact'
+  - path: texts/458102d8-530d-406a-8a43-6504f7c1a575.json
+    provenance: local-trim
+    refetchable: false
+    reason: copied from the local canonical sync (2026-11-13) to pin the line-model shapes the live corpus carries; a raw GET of the upstream url serves the same record
+    canonical: canonical/rsti/texts/458102d8-530d-406a-8a43-6504f7c1a575.json
+    upstream: https://pi.lib.uchicago.edu/1001/org/ochre/458102d8-530d-406a-8a43-6504f7c1a575&format=json
+    copied: "2026-11-13"
+    whole: true
+    trim: 'none (RS 11.850 text item: unlabeled trailing ruling on the Lower edge; phonemic line 10 as {i, content})'

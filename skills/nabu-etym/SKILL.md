@@ -6,7 +6,7 @@ compatibility: "Requires the nabu MCP server (`bin/nabu mcp`, read-only, stdio) 
 metadata:
   desk: etym
   origin: hand-tuned
-  sources: "calfa-lexicon cldf-spine clics derom edl etruscan-loans iecor liv meloniromance nabu-lects sabellic-loans starling westoldturkic wiktionary-recon wold"
+  sources: "acd calfa-lexicon cldf-spine clics csd derom dyenindoeuropean edl etruscan-loans iecor liv mcd meloniromance nabu-lects sabellic-loans saenkoromance sagartst starling tlopo uralex westoldturkic wiktionary-recon wold"
 ---
 
 # The Comparative Indo-Europeanist — the `etym` desk
@@ -23,18 +23,26 @@ verbatim upstream terms are in `docs/02-sources.md` of the Nabu repository.
 <!-- nabu:skill-sources:begin — generated from config/sources.yml by `rake skills:scaffold`; edit outside this block -->
 | Source | Upstream | License class |
 | --- | --- | --- |
+| `acd` | Austronesian Comparative Dictionary (Blust, Trussel & Smith; lexibank/acd CLDF v2.0) | attribution |
 | `calfa-lexicon` | Calfa — Classical Armenian dictionary databases (NBHL, Bedrossian, Calfa 1861, Ačaṙean) | nc |
 | `cldf-spine` | Concepticon + Glottolog — the CLDF reference spine (concept/languoid resolver instrument) | attribution |
 | `clics` | CLICS³ — Database of Cross-Linguistic Colexifications (aggregate network, v1.1) | attribution |
+| `csd` | Comparative Siouan Dictionary (Rankin et al. 2015; lexibank/csd CLDF) | attribution |
 | `derom` | DÉRom — Dictionnaire Étymologique Roman (ATILF/Ortolang) | nc |
+| `dyenindoeuropean` | Dyen, Kruskal & Black 1992 Indo-European cognate classes (lexibank/dyenindoeuropean CLDF) | attribution |
 | `edl` | de Vaan — Etymological Dictionary of Latin (Brill 2008), LiLa LOD skeleton (CIRCSE) | nc |
 | `etruscan-loans` | Etruscan → Latin loans — en.wiktionary curation | attribution |
-| `iecor` | IE-CoR — Indo-European Cognate Relationships database (lexibank/iecor v1.2) | attribution |
+| `iecor` | IE-CoR — Indo-European Cognate Relationships database (lexibank/iecor v1.2.1) | attribution |
 | `liv` | LIV — Lexikon der indogermanischen Verben (Rix 2001), LiLa LOD (CIRCSE) | attribution |
+| `mcd` | Micronesian Comparative Dictionary (Bender et al. 2003; lexibank/mcd CLDF v2.0) | attribution |
 | `meloniromance` | Meloni et al. 2021 Romance cognate sets (lexibank/meloniromance CLDF) | attribution |
 | `nabu-lects` | nabu-lects — the lect registry (anchor x stage x variety x orthography resolver) | attribution |
 | `sabellic-loans` | Sabellic → Latin loans — en.wiktionary curation (Oscan/Umbrian/Sabine) | attribution |
+| `saenkoromance` | Saenko 2015 annotated Swadesh wordlists for the Romance group (lexibank/saenkoromance CLDF v1.1) | attribution |
+| `sagartst` | Sagart et al. 2019 Sino-Tibetan Database of Lexical Cognates (lexibank/sagartst CLDF v2.1) | attribution |
 | `starling` | StarLing / Tower of Babel — etymological databases (Pokorny IEW + PIET + Vasmer + Germanic + Baltic + Kartvelian + Altaic + North Caucasian + Sino-Tibetan + Dravidian + Chukchee-Kamchatkan + Yenisseian + IE lexicostatistical wordlists + the Altaic/Caucasian/Dravidian/Kiranti branch bases) | attribution |
+| `tlopo` | The lexicon of Proto Oceanic (Ross, Pawley & Osmond; lexibank/tlopo CLDF v0.1.1) | attribution |
+| `uralex` | UraLex — Uralic basic vocabulary with cognate and loanword information (lexibank/uralex CLDF v2.0) | attribution |
 | `westoldturkic` | West Old Turkic — Turkic loanwords in Hungarian (Róna-Tas & Berta 2011, CLDF) | attribution |
 | `wiktionary-recon` | Wiktionary reconstructions + attested Celtic, Italic, Etruscan, Old Japanese and Chinese — kaikki.org machine-readable extracts (Proto-Slavic, PIE, Proto-Germanic, Proto-Balto-Slavic, Proto-West Germanic, Proto-Italic, Proto-Indo-Iranian; Old Irish, Middle Irish, Middle Welsh, Umbrian, Etruscan, Chinese) | attribution |
 | `wold` | WOLD — World Loanword Database (Haspelmath & Tadmor eds.; lexibank/wold v4.2) | attribution |

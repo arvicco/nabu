@@ -17,3 +17,7 @@ files:
   - path: editions/DHARMA_DiplEdDurgastakaPerpusnasL128.xml
     url: https://raw.githubusercontent.com/erc-dharma/tfd-nusantara-philology/master/editions/DHARMA_DiplEdDurgastakaPerpusnasL128.xml
     whole: true
+  - path: editions/DHARMA_CritEdKidungSurajayaMSD.xml
+    url: https://raw.githubusercontent.com/erc-dharma/tfd-nusantara-philology/master/editions/DHARMA_CritEdKidungSurajayaMSD.xml
+    whole: false
+    trim: opening colophon + canto 1 stanzas 001-003 + closing colophon (element-boundary cuts)

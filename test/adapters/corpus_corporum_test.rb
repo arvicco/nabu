@@ -33,6 +33,10 @@ class CorpusCorporumTest < Minitest::Test
   HISTORIA = "urn:nabu:corpus-corporum:10454"  # Petrus Bibliothecarius, 71 blocks
   EPISTOLA = "urn:nabu:corpus-corporum:10468"  # Wido monachus, 2 blocks
   FRACTIO  = "urn:nabu:corpus-corporum:10821"  # Abbaudus abbas, 12 blocks
+  # The 2026-11-13 quarantine review's specimens (whole upstream texts).
+  GLOSSARY = "urn:nabu:corpus-corporum:8927"   # list + table (a list nested in a cell)
+  CATALOGUS = "urn:nabu:corpus-corporum:9269"  # a papal list, 84 items over six lists
+  STUB = "stubs/8298.xml"                      # a cross-reference stub, OUTSIDE texts/
 
   def conformance_adapter = Nabu::Adapters::CorpusCorporum.new
 
@@ -48,7 +52,7 @@ class CorpusCorporumTest < Minitest::Test
 
   def test_discover_yields_one_ref_per_text_file_sorted_by_urn
     refs = adapter.discover(workdir).to_a
-    assert_equal [HISTORIA, EPISTOLA, FRACTIO], refs.map(&:id),
+    assert_equal [HISTORIA, EPISTOLA, FRACTIO, GLOSSARY, CATALOGUS], refs.map(&:id),
                  "one document per texts/<idno>.xml, urn urn:nabu:corpus-corporum:<idno>, sorted"
     assert(refs.all? { |ref| ref.source_id == "corpus-corporum" })
     assert(refs.all? { |ref| ref.id == adapter.parse(ref).urn },
@@ -57,7 +61,7 @@ class CorpusCorporumTest < Minitest::Test
 
   def test_discover_never_yields_catalog_files_or_the_refusal_fixture
     ids = adapter.discover(workdir).map(&:id)
-    assert_equal 3, ids.size, "catalog/*.xml and refusal.txt are not documents"
+    assert_equal 5, ids.size, "catalog/*.xml, stubs/ and refusal.txt are not documents"
   end
 
   # -- the PL structural-note quirk (the reason this family exists) -----------
@@ -91,6 +95,72 @@ class CorpusCorporumTest < Minitest::Test
     assert_equal 71, document.count, "71 <p> blocks in the single div1"
     assert_equal "#{HISTORIA}:d1.p1", document.first.urn
     assert_includes document.first.text, "Historiam hanc, Chesnio"
+  end
+
+  # -- list / table content models (the 2026-11-13 quarantine review) --------
+
+  # A text whose body is only lists (a papal catalogue, a glossary, a
+  # calendar): each <item> is a reading block "i<k>", counted per div like
+  # the l/p ordinals, carrying its Migne column. The grain is the
+  # EMPTY-DOCUMENT fallback — see the guard below.
+  def test_a_list_only_text_cites_one_block_per_item
+    document = adapter.parse(ref_for(CATALOGUS))
+    assert_equal 84, document.count
+    assert_equal "#{CATALOGUS}:d1.i1", document.first.urn
+    assert_equal "Linus sedit annos xij, menses v, dies xij.", document.first.text
+    assert_equal "0145B", document.first.annotations["column"]
+    assert_equal "item", document.first.annotations["unit"]
+  end
+
+  # A <table> row is one block "r<k>", its cells space-joined; a list nested
+  # inside a cell stays part of the row (never a second, overlapping block).
+  def test_a_table_row_is_one_block_with_its_nested_list
+    document = adapter.parse(ref_for(GLOSSARY))
+    assert_equal(%w[d1.i1 d1.i2 d1.r1], document.map { |p| p.urn.delete_prefix("#{GLOSSARY}:") })
+    assert_equal "pikinnant.", document.first.text
+    assert_equal "Inchoant, euu. worto. fona deru niuuun. anti, deru altun.", document.to_a.last.text
+    assert_equal "row", document.to_a.last.annotations["unit"]
+  end
+
+  # Guard: lists and tables beside l/p reading units stay out — in a text
+  # that already cites through its paragraphs a list is apparatus (contents,
+  # sigla), and no already-loaded document gains or moves a passage.
+  def test_lists_beside_reading_units_stay_out
+    Dir.mktmpdir("nabu-cc-list") do |dir|
+      xml = File.read(File.join(workdir, "texts", "9269.xml"))
+                .sub("</head>", "</head><p>Catalogus sequitur.</p>")
+      path = File.join(dir, "9269.xml")
+      File.write(path, xml)
+      document = Nabu::Adapters::CorpusCorporumTeiParser.new.parse(path, urn: "urn:nabu:corpus-corporum:9269",
+                                                                         language: "lat")
+      assert_equal ["urn:nabu:corpus-corporum:9269:d1.p1"], document.map(&:urn)
+    end
+  end
+
+  # -- cross-reference stubs (skipped BY RULE, never quarantined) --------------
+
+  # PL prints a placeholder where a work appears elsewhere in the series:
+  # a <head> and a <p> holding ONLY a short parenthesized editorial pointer
+  # ("(Vide infra inter Opera sancti Desiderii, … col. 261.)"). No text of
+  # its own: skipped by rule with its note, never a quarantine.
+  def test_a_cross_reference_stub_is_skipped_by_rule
+    error = assert_raises(Nabu::DocumentSkipped) { parse_stub(File.read(File.join(workdir, STUB))) }
+    assert_match(/cross-reference stub/, error.reason)
+  end
+
+  # The care rule: the stub shape is the POINTER, never note-wrapping alone.
+  # This corpus wraps whole real texts in <note> (the 10468 fixture parses
+  # through its body note), and a p-wrapped note carrying a real text's
+  # length is damage to look at — it stays a loud quarantine.
+  def test_a_long_note_only_text_is_not_a_stub
+    long = "(#{(['Vide infra inter Opera sancti Desiderii'] * 20).join(', ')}.)"
+    xml = File.read(File.join(workdir, STUB)).sub("(Vide ibidem, col. 262.)", long)
+    assert_raises(Nabu::ParseError) { parse_stub(xml) }
+  end
+
+  def test_an_unparenthesized_note_only_text_is_not_a_stub
+    xml = File.read(File.join(workdir, STUB)).sub("(Vide ibidem, col. 262.)", "Vide ibidem, col. 262.")
+    assert_raises(Nabu::ParseError) { parse_stub(xml) }
   end
 
   # -- Migne column provenance ------------------------------------------------
@@ -252,20 +322,28 @@ class CorpusCorporumTest < Minitest::Test
     db = store_test_db
     source = create_source(db)
     first = Nabu::Store::Loader.new(db: db, source: source).load_from(adapter, workdir: workdir)
-    assert_equal 3, first.added
+    assert_equal 5, first.added
     assert_equal 0, first.errored
-    assert_equal 85, db[:passages].count, "71 + 2 + 12 prose blocks"
+    assert_equal 172, db[:passages].count, "71 + 2 + 12 prose blocks, 84 + 3 list/table blocks"
 
     second = Nabu::Store::Loader.new(db: db, source: source).load_from(adapter, workdir: workdir)
     assert_equal 0, second.errored
-    assert_equal 3, second.skipped, "a byte-identical reload skips every document"
-    assert_equal 85, db[:passages].count
+    assert_equal 5, second.skipped, "a byte-identical reload skips every document"
+    assert_equal 172, db[:passages].count
     assert_equal [1], db[:passages].distinct.select_map(:revision)
   ensure
     db&.disconnect
   end
 
   private
+
+  def parse_stub(xml)
+    Dir.mktmpdir("nabu-cc-stub") do |dir|
+      path = File.join(dir, "8298.xml")
+      File.write(path, xml)
+      Nabu::Adapters::CorpusCorporumTeiParser.new.parse(path, urn: "urn:nabu:corpus-corporum:8298", language: "lat")
+    end
+  end
 
   def ref_for(urn)
     adapter.discover(workdir).to_a.find { |ref| ref.id == urn } || flunk("no ref #{urn}")

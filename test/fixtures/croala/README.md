@@ -31,3 +31,14 @@ Commons **Attribution 4.0 International** legal text ("# Attribution
 resolving the recorded site-vs-GitHub fork to CC BY 4.0 → class
 `attribution`. Kept here so the local-git fetch test can seed an
 upstream cone with the real license bytes.
+
+## The list grain specimen (the 2026-11-13 quarantine review)
+
+- **`txts/marul-mar-catull.xml`** — WHOLE, copied from the local canonical
+  clone 2026-11-13: Marko Marulić's argumenta to Catullus, a list-only text
+  (one `<list>` per poem, its `<head>` the Catullus reference, its `<item>`
+  the argument; no l/p/opener/closer anywhere). Each item is a block
+  `d1.i<k>` (43); the grain is the empty-document fallback, so no loaded
+  text gains a passage. One reference upstream set as an `<item>`
+  ("Catull. 14-14b") stays reading text by the markup's word. Same CC BY 4.0
+  in-repo grant.

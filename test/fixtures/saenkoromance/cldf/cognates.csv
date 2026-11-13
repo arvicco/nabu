@@ -1,0 +1,9 @@
+ID,Form_ID,Form,Cognateset_ID,Doubt,Cognate_Detection_Method,Source,Alignment,Alignment_Method,Alignment_Source
+meglenoromanian-7_bite-1-1,meglenoromanian-7_bite-1,m.ˈu.tʃ.k.+.u,23,false,expert,Saenko2015,,,
+istroromanian-7_bite-1-1,istroromanian-7_bite-1,m.u.tʃ.k.+.ˈɒ,23,false,expert,Saenko2015,,,
+aromanian-7_bite-1-1,aromanian-7_bite-1,m.ˈɨ.š.k.+.u,23,false,expert,Saenko2015,,,
+romanian-7_bite-1-1,romanian-7_bite-1,a.+.m.u.š.k.+.ˈa,23,false,expert,Saenko2015,,,
+carmagnolapiemontese-11_breast-1-1,carmagnolapiemontese-11_breast-1,s.t.ˈɔ.m.i,34,false,expert,Saenko2015,,,
+vercellesepiemontese-11_breast-1-1,vercellesepiemontese-11_breast-1,s.t.ˈɔː.m.i.k,34,false,expert,Saenko2015,,,
+reggianoemiliano-11_breast-1-1,reggianoemiliano-11_breast-1,s.t.ˈɔ.m.e.ɡ,34,false,expert,Saenko2015,,,
+neapolitan-100_yellow-1-1,neapolitan-100_yellow-1,dʒ.ˈa.lː.+.ə,-456,false,expert,Saenko2015,,,

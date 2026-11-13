@@ -6,7 +6,7 @@ compatibility: "Requires the nabu MCP server (`bin/nabu mcp`, read-only, stdio) 
 metadata:
   desk: sinitic
   origin: hand-tuned
-  sources: "babelstone-ids baley-manuscripts baxter-sagart cbdb cbeta chgis classical-modern hdic kanripo kr-gaiji lzh-collection menggu-ziyun obimd qieyun-restored shuowen suttacentral tianyige tls tshet-uinh ud unihan viet-wikisource wenhai wiktionary-recon wiktionary-tyz wiktionary-vi wiktionary-za zh-wikisource zhongyuan"
+  sources: "babelstone-ids baley-manuscripts baxter-sagart cbdb cbeta chgis classical-modern hdic kanripo kr-gaiji lzh-collection menggu-ziyun obimd qieyun-restored sagartst shuowen suttacentral tianyige tls tshet-uinh ud unihan viet-wikisource wenhai wiktionary-recon wiktionary-tyz wiktionary-vi wiktionary-za zh-wikisource zhongyuan"
 ---
 
 # The Sinologist — the `sinitic` desk
@@ -37,6 +37,7 @@ verbatim upstream terms are in `docs/02-sources.md` of the Nabu repository.
 | `menggu-ziyun` | menggu-ziyun-data — 蒙古字韻 'Phags-pa rhyme book (nk2028) | attribution |
 | `obimd` | OBIMD — Oracle Bone Inscriptions Multi-modal Dataset (KLOBIP) | attribution |
 | `qieyun-restored` | qieyun-restored — 切韻 Fujita restoration (nk2028) | attribution |
+| `sagartst` | Sagart et al. 2019 Sino-Tibetan Database of Lexical Cognates (lexibank/sagartst CLDF v2.1) | attribution |
 | `shuowen` | 說文解字 Shuowen Jiezi — the shuowen.org data repo | attribution |
 | `suttacentral` | SuttaCentral — bilara-data segmented canon (Pali Tipiṭaka + Chinese Āgamas + aligned English) | open |
 | `tianyige` | Tianyige Ming examination records (天一閣藏明代科舉錄) — machine transcription | open |

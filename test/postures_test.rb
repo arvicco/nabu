@@ -179,7 +179,7 @@ class PosturesTest < Minitest::Test
   def test_the_lect_migration_kept_the_p59_4_census
     lect = postures.declarations.select { |d| d.layer == "lect" }
     by_posture = lect.group_by(&:posture).transform_values(&:size)
-    assert_equal 199, lect.size,
+    assert_equal 207, lect.size,
                  "the P59-4 declarations survive the move (61 at migration; itant retired P61-3," \
                  "oracc retired P62-2, etcsl/ccmh/freising/coptic-scriptorium retired P64-6, " \
                  "titus-avestan retired P66-1, osta+fornsvenska retired P77-r8, achemenet " \
@@ -447,7 +447,10 @@ class PosturesTest < Minitest::Test
                  "delpher-newspapers ADDED — dates (dc:language per issue; the French gazettes " \
                  "band onto fr:cls by issue date, Dutch bare — nl has no stages): 197→198; " \
                  "pleias-french-books ADDED — identity fra (edition-class print years never " \
-                 "stage; the print-year staging is an escalated ruling): 198→199"
+                 "stage; the print-year staging is an escalated ruling): 198→199; " \
+                 "the lexibank-cldf wave 1 ADDS eight dictionary shelves — acd/dyenindoeuropean/" \
+                 "mcd/saenkoromance/sagartst/tlopo/uralex identity on their family anchors " \
+                 "(map/ine/poz-mic/roa/sit/poz-oce/urj), csd PENDING on a sio anchor mint: 199→207"
     # The epigraphic-belt registry package (merged + canonical-synced
     # 2026-10-18, the add-then-retire shape within one phase) retires both
     # P130 pendings, and the ociana-script rule + the ig-cyprus override
@@ -547,6 +550,10 @@ class PosturesTest < Minitest::Test
     # fr:cls; Dutch stays bare nl — no stages): 32→33. pleias-french-books joins
     # identity (bare fra; the imprint year is class edition, the blbooks
     # posture): 143→144.
-    assert_equal({ "dates" => 33, "codemap" => 22, "identity" => 144 }, by_posture)
+    # The lexibank-cldf wave 1 joins as dictionary shelves: acd, dyenindoeuropean,
+    # mcd, saenkoromance, sagartst, tlopo and uralex identity on their family
+    # anchors (map/ine/poz-mic/roa/sit/poz-oce/urj): 144→151; csd pending on a
+    # sio (Siouan) anchor mint — the pending ledger reopens: 0→1.
+    assert_equal({ "dates" => 33, "codemap" => 22, "identity" => 151, "pending" => 1 }, by_posture)
   end
 end

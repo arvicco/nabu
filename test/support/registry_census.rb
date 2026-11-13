@@ -10,10 +10,12 @@ module Nabu
     # advance instead of a hunt across assertion literals (the P152
     # consolidation; the 2026-10-30 third cut broke nine assertions in
     # four files by moving 272 → 284; the 2026-11-02 fourth cut moved it to
-    # 312; the 2026-11-04 fifth cut to 317; the 2026-11-12 sixth cut to 323).
+    # 312; the 2026-11-04 fifth cut to 317; the 2026-11-12 sixth cut to 323;
+    # the 2026-11-13 seventh cut carried the merged nl early-modern stage,
+    # 172 stages → 173).
     module RegistryCensus
       ANCHORS = 323
-      STAGES = 172
+      STAGES = 173
       VARIETIES = 33
       CODEMAP_ROWS = 238
 

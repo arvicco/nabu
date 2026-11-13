@@ -51,6 +51,12 @@ module Nabu
     # genuinely contradicts the body fail both passes and stay quarantined,
     # with a message naming both failures.
     #
+    # A step may name its element by a NAME UNION — "*[self::tei:p or
+    # self::tei:l]" (Perseus' 2026-08 citeStructure refresh of the Ausonius
+    # files: a prose preface paragraph and verse lines cited alike under one
+    # poem div). It selects any of the named elements, exactly as the xpath
+    # engine would; no other wildcard form is accepted.
+    #
     # FROZEN-URN SAFETY: the retry runs strictly after the subtype pass has
     # raised. Every document that parsed cleanly before P6-1 succeeds in the
     # unchanged first pass and never reaches the retry, so its urns and
@@ -499,15 +505,15 @@ module Nabu
 
         CRefPattern = Data.define(:unit, :depth, :replacement)
         Scheme = Data.define(:depth, :leaf_element, :unit_names, :deepest_unit)
-        Capture = Struct.new(:citation, :depth, :buffer, :drop_depths, :inline, :mute_depths, keyword_init: true)
-        # One xpath step of the structural scheme: element name, axis
+        Capture = Struct.new(:name, :citation, :depth, :buffer, :drop_depths, :inline, :mute_depths,
+                             keyword_init: true)
+        # One xpath step of the structural scheme: the element names it
+        # selects (one, or a "*[self::tei:a or self::tei:b]" union), axis
         # (:child for /, :desc for //), the citation component it binds
         # ($k → k, nil for structural steps), and literal attribute
         # predicates it requires (e.g. {"subtype" => "fragment"}).
-        Step = Data.define(:name, :axis, :binds, :predicates)
-        StructuralScheme = Data.define(:steps) do
-          def leaf_name = steps.last.name
-        end
+        Step = Data.define(:names, :axis, :binds, :predicates)
+        StructuralScheme = Data.define(:steps)
         private_constant :CRefPattern, :Scheme, :Capture, :Step, :StructuralScheme
 
         # Structural-frame state marking a subtree that can no longer match
@@ -701,8 +707,8 @@ module Nabu
           citation = components.join(".")
           return if node.empty_element? # nothing to capture; empty unit → skipped
 
-          @capture = Capture.new(citation: citation, depth: node.depth, buffer: +"", drop_depths: [], mute_depths: [],
-                                 inline: InlineLayer.new)
+          @capture = Capture.new(name: local_name(node), citation: citation, depth: node.depth, buffer: +"",
+                                 drop_depths: [], mute_depths: [], inline: InlineLayer.new)
         end
 
         def citation_components(node, leaf_n)
@@ -754,7 +760,7 @@ module Nabu
         # element without @n is not selected by [@n='...']; it is structural
         # noise, exactly as an xpath engine would treat it).
         def step_matches?(step, node, name)
-          return false unless name == step.name
+          return false unless step.names.include?(name)
           return false if step.binds && blank?(node.attribute("n"))
 
           step.predicates.all? { |attribute, value| node.attribute(attribute) == value }
@@ -780,8 +786,8 @@ module Nabu
         def build_structural_scheme
           deepest = deepest_pattern
           steps = parse_xpath_steps(deepest.replacement.to_s)
-          steps.shift while steps.first && %w[TEI text body].include?(steps.first.name) && steps.first.binds.nil?
-          steps.shift if steps.first && steps.first.name == "div" && steps.first.binds.nil? && steps.size > 1
+          steps.shift while steps.first && structural_prefix?(steps.first, %w[TEI text body])
+          steps.shift if steps.first && structural_prefix?(steps.first, %w[div]) && steps.size > 1
 
           binds = steps.map(&:binds).compact
           unless steps.any? && steps.last.binds && binds == (1..binds.size).to_a
@@ -796,19 +802,29 @@ module Nabu
           StructuralScheme.new(steps: steps)
         end
 
+        def structural_prefix?(step, names)
+          step.names.size == 1 && names.include?(step.names.first) && step.binds.nil?
+        end
+
+        # One step: "/" or "//", then a name test — "tei:name", or the name
+        # union "*[self::tei:a or self::tei:b]" — then literal predicates.
+        XPATH_NAME = "tei:[A-Za-z][\\w.-]*"
+        XPATH_STEP = %r{(/{1,2})(#{XPATH_NAME}|\*\[self::#{XPATH_NAME}(?: or self::#{XPATH_NAME})*\])((?:\[[^\]]*\])*)}
+        private_constant :XPATH_NAME, :XPATH_STEP
+
         def parse_xpath_steps(raw)
           inner = raw.gsub("\\'", "'")[/#xpath\((.*)\)/m, 1]
           raise ParseError, "#{@path}: cannot parse replacementPattern #{raw.inspect} as an #xpath(...)" unless inner
 
-          matches = inner.scan(%r{(/{1,2})tei:([A-Za-z][\w.-]*)((?:\[[^\]]*\])*)})
-          parsed = matches.map { |axis, name, preds| [axis, name, preds] }
-          unless parsed.map { |axis, name, preds| "#{axis}tei:#{name}#{preds}" }.join == inner
+          parsed = inner.scan(XPATH_STEP)
+          unless parsed.map(&:join).join == inner
             raise ParseError, "#{@path}: unsupported replacementPattern xpath #{inner.inspect}"
           end
 
-          parsed.map do |axis, name, preds|
+          parsed.map do |axis, name_test, preds|
             binds, predicates = parse_predicates(preds, context: inner)
-            Step.new(name: name, axis: axis == "//" ? :desc : :child, binds: binds, predicates: predicates)
+            Step.new(names: name_test.scan(/tei:([A-Za-z][\w.-]*)/).flatten, axis: axis == "//" ? :desc : :child,
+                     binds: binds, predicates: predicates)
           end
         end
 
@@ -891,7 +907,7 @@ module Nabu
         end
 
         def captured_end(node, name)
-          if name == leaf_name && node.depth == @capture.depth
+          if name == @capture.name && node.depth == @capture.depth
             finish_capture
           elsif !@capture.mute_depths.empty?
             @capture.mute_depths.pop if @capture.mute_depths.last == node.depth && @apparatus.include?(name)
@@ -899,10 +915,6 @@ module Nabu
             @capture.drop_depths.pop if DROPPED_ELEMENTS.include?(name) && @capture.drop_depths.last == node.depth
             @capture.inline.finish(name, depth: node.depth)
           end
-        end
-
-        def leaf_name
-          @structural ? structural_scheme.leaf_name : scheme.leaf_element
         end
 
         def finish_capture

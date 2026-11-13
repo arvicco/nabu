@@ -1,0 +1,12 @@
+ID,Local_ID,Language_ID,Parameter_ID,Value,Form,Segments,Comment,Source,Cognacy,Loan,Graphemes,Profile,Description,Sic,Doubt,Morpheme_Gloss,Kinship_Gloss
+pmp-sasahq-1,,pmp,cutorcollectpalmleavesforroofing,"sasa(h,q)",sasa,s a s a,,Blust1980b[143],,,^ s a s a $,pmp,cut or collect palm leaves for roofing,false,false,,
+poc-sajaq-1,,poc,preparethatchingmaterialsorbegintothatcharoof,saja(q),saja,s a j a,,,,,^ s a j a $,poc,prepare thatching materials or begin to thatch a roof,false,false,,
+gela-sada-1,,gela,tiethethatchinbeginningaroof,sada,sada,s a d a,,,,,^ s a d a $,default,tie the thatch in beginning a roof,false,false,,
+poc-burua-1,,poc,coverplug,buruŋ(a),buruŋ,b u r u ŋ,,,,,^ b u r u ŋ $,poc,"cover, plug",false,false,,
+drehet-napulu-1,,drehet,plugusuallyforateapotspout,(na)puluŋ,puluŋ,p u l u ŋ,,,,,^ p u l u ŋ $,default,"plug, usually for a teapot spout",false,false,,
+patpatar-buru-1,,patpatar,cover,buruŋ,buruŋ,b u r u ŋ,,,,,^ b u r u ŋ $,default,cover,false,false,,
+ramoaaina-buruburu-1,,ramoaaina,cover,buru-buruŋ,buru-buruŋ,b u r u b u r u ŋ,,,,,^ b u r u - b u r u ŋ $,default,cover,false,false,,
+peoc-ibe-1,,peoc,mat,ibe,ibe,i b e,,Pawley1976,,,^ i b e $,peoc,mat,false,false,,
+gela-ibe-1,,gela,mat,ibe,ibe,i b e,,,,,^ i b e $,default,mat,false,false,,
+areare-ipe-1,,areare,matbed,ipe,ipe,i p e,,,,,^ i p e $,default,"mat, bed",false,false,,
+bauanfijian-ibe-1,,bauanfijian,mat,ibe,ibe,i b e,,,,,^ i b e $,default,mat,false,false,,

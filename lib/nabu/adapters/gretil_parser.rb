@@ -171,6 +171,17 @@ module Nabu
       # doc is touched (frozen-urn).
       LINE_MARKER = %r{//\s*(?<prefix>\p{L}[\p{L}\d-]*)_(?<num>\d[\d.,]*)\s*(?://\s*)?\z}
 
+      # In-text verse marker, BARE-NUMBER line-terminated pass (the 2026-11-13
+      # quarantine review): a line-final verse number with NO abbreviation
+      # prefix — "… // 12</l>" (sa_vAmadeva-janmamaraNavicAra, flat <l> in
+      # <body>; sa_bIjanighaNTu, sa_lagadha-RgvedavedAGgajyotiSa) or the
+      # double-daṇḍa "… || 12 ||</l>" (sa_abhinavagupta-paramArthasAra). The
+      # opening delimiter is the verse-closing "//" or "||" only (a single
+      # half-verse daṇḍa never anchors), the closing one optional and matched.
+      # Same \z per-<l> anchoring as LINE_MARKER; runs ONLY after every other
+      # rung leaves the document empty, so no already-loaded doc moves.
+      BARE_LINE_MARKER = %r{(?<delim>//|\|\|)\s*(?<num>\d[\d.,]*)\s*(?:\k<delim>\s*)?\z}
+
       # Leading "<Abbr>_" prefix of a citation xml:id (RgV_1.1.1 → 1.1.1). A
       # bare id with no such prefix (or one that would strip to empty) is kept
       # verbatim.
@@ -299,8 +310,16 @@ module Nabu
         end
         return verses unless verses.empty?
 
+        verses = run_line_marker(path, language: language, marker: LINE_MARKER)
+        return verses unless verses.empty?
+
+        run_line_marker(path, language: language, marker: BARE_LINE_MARKER)
+      end
+
+      def run_line_marker(path, language:, marker:)
         File.open(path, "r") do |io|
-          LineMarkerExtraction.new(reader: Nokogiri::XML::Reader(io, path), path: path, language: language).call
+          LineMarkerExtraction.new(reader: Nokogiri::XML::Reader(io, path), path: path,
+                                   language: language, marker: marker).call
         end
       end
 
@@ -641,9 +660,10 @@ module Nabu
         DROPPED_ELEMENTS = %w[reg note].freeze
         private_constant :DROPPED_ELEMENTS
 
-        def initialize(reader:, path:, language:)
+        def initialize(reader:, path:, language:, marker: LINE_MARKER)
           super(reader: reader, path: path)
           @language = language
+          @marker = marker
           @in_body = false
           @capturing = false
           @drop_depth = nil
@@ -704,9 +724,9 @@ module Nabu
         # markerless line just accumulates (multi-<l> verses, half-verse daṇḍas).
         def close_line
           @capturing = false
-          if (match = LINE_MARKER.match(@line))
+          if (match = @marker.match(@line))
             append(@line[0...match.begin(0)])
-            emit(match[:num], match[:prefix])
+            emit(match[:num], match.names.include?("prefix") ? match[:prefix] : nil)
           else
             append(@line)
           end

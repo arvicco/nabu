@@ -1,0 +1,9 @@
+ID,Name,Glottocode,Glottolog_Name,ISO639P3code,Macroarea,Latitude,Longitude,Family,Abbr,Group,Source,Is_Proto
+psi,Proto-Siouan,,,,,,,,,,,true
+pma,Pre-Mandan,,,,,,,,,,,true
+ma,Mandan,,,,,,,,,,,false
+la,Lakota,,,,,,,,,,,false
+da,Dakota,,,,,,,,,,,false
+bi,Biloxi,,,,,,,,,,,false
+of,Ofo,,,,,,,,,,,false
+tu,Tutelo,,,,,,,,,,,false

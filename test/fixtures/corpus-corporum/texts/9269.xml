@@ -1,0 +1,187 @@
+<?xml-model href="http://www.tei-c.org/release/xml/tei/custom/schema/relaxng/tei_all.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<?xml-model href="http://www.tei-c.org/release/xml/tei/custom/schema/relaxng/tei_all.rng" type="application/xml"
+        schematypens="http://purl.oclc.org/dsdl/schematron"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0">
+  <teiHeader>
+     <fileDesc>
+         <titleStmt>
+              <title>Catalogus episcoporum Romanorum</title>
+              <author>Auctor incertus<date/> </author>
+         </titleStmt>
+         <editionStmt>
+              <edition>early modern edition, no apparatus</edition>
+              <editor>Jacques-Paul Migne</editor>
+         </editionStmt>
+         <publicationStmt>
+                 <publisher>J. P. Migne</publisher>
+                 <pubPlace>Parisiis</pubPlace>
+                 <date>1852</date>
+              </publicationStmt>
+          <seriesStmt>
+           <title>Patrologia Latina, vol. 127</title>
+           <idno>AucInc.CaEpRo</idno>
+          </seriesStmt>
+          <notesStmt>
+  			<note/>
+ 		  </notesStmt>
+  		<sourceDesc>
+    		<p>Patrologia Latina</p>
+  		</sourceDesc>
+ 	</fileDesc>
+      <encodingDesc>
+         <projectDesc>
+        <p>this file was encoded in TEI xml for the University of Zurich's <emph>Corpus Corporum</emph> project (www.mlat.uzh.ch) by Ph. Roelli in 2019</p>
+      </projectDesc>
+          <editorialDecl>
+             <normalization>
+          <p>Classical Latin orthography</p>
+        </normalization>
+          </editorialDecl>
+      </encodingDesc>
+ 	  <profileDesc>
+		<creation>
+ 		<date/>
+  		</creation>
+  	  <langUsage>
+  		<language ident="lat">latin</language>
+  	  </langUsage>
+  	  <textClass>
+  		<keywords>
+ 		 <list>
+ 		  <item/>
+		  <item/>
+	  	 </list>
+  		</keywords>
+  		<keywords scheme="genre">
+  		 <list>
+   			<item/>
+  		</list>
+  		</keywords>
+  		<keywords scheme="period">
+ 		 <list>
+   			<item/>
+  		 </list>
+  		</keywords>
+ 	   </textClass>
+ 	</profileDesc>
+ </teiHeader>
+<text>
+ <body>	
+<div1>
+        <head>Catalogus episcoporum Romanorum</head>
+
+<list>
+<item>
+<pb n="0145B"/>Linus sedit annos xij, menses v, dies xij.</item>
+<item>Clerus sed. an. viij, mens. ij, d. v.</item>
+<item>Clemens sed. an. vj, mens. j, d. xiv.</item>
+<item>Evaristus sed. an. xiv, mens. iij. d. xij.</item>
+        </list>
+
+<pb n="0145C"/>
+<list>
+<item>Alexander sed. an. vij, mens. vj, d. vj.</item>
+<item>Xystus sed. an. xxv, mens. ij, d. j.</item>
+<item>Thelisforus sed. an. xj, mens. iiij, d. xxvj.</item>
+<item>Yginus sed. an. vj, mens. iij, d. iv.</item>
+<item>Pius sed. an. xviij, mens. iv, d. iij.</item>
+<item>Anicitus sed. an. xj, mens. iv, d. iij.</item>
+<item>Soter sed. an. xiv, mens. v, d. ij.</item>
+<item>Filetus [Eleutherius] sed. an. v, mens. x, d.
+xxij.</item>
+<item>Victor sed. an. xv, mens. iij, d. x.</item>
+<item>Severinus sed. an. xviij, mens. vj, d. v.</item>
+<item>Calestus sed. an. v, mens. ij, d. x.</item>
+<item>Urbanus sed. an. ix, mens. j, d. ij.</item>
+<item>Pontianus sed. an. ix, mens. v, d. ij.</item>
+<item>Antherus sed. an. xj, mens. j, d. x.</item>
+<item>Galitanus [Fabianus] sed. an. xiv, mens. j, d. x.</item>
+<item>Cornelius sed. an. ij, mens. ij, d. iij</item>
+<item>Lucius sed. an. iij, mens. iij, d. iij.</item>
+<item>Stephanus sed. an. . . .</item>
+<item>Xystus sed. an. j, mens. x, d. xxvj.</item>
+        </list>
+
+<pb n="0145D"/>
+<list>
+<item>Dionysius sed. an. vj, mens. v, d. j.</item>
+<item>Felix sed. an. iij, mens. j, d. xxv.</item>
+<item>Eutychianus sed. an. j, mens. j.</item>
+<item>Caius sed. an. xj, mens. iv, d. xij.</item>
+<item>Marcellus sed. an. ix, mens. iv, d. xvj.</item>
+<item>Eusebius sed. an. vj, mens. j, d. iij.</item>
+<item>Militiades sed. an. iv, mens. . . .</item>
+<item>Sylvester sed. an. xxiij, mens. x, d. xj.</item>
+<item>Marcus sed. an. ij. . . . d. x.</item>
+<item>Julius an. xv, mens. ij, d. x.</item>
+<item>Liberius an. vj, mens. vj, d. iv.</item>
+<item>Felix sedit . . . .</item>
+<item>Damasus sed. an. xviij, mens. iij, d. xij.</item>
+<item>Syricius an. xv.</item>
+<item>Anastasius an. iij, d. x.</item>
+<item>Innocentius an. xv, mens. j, d. xxj.</item>
+<item>Zosimus an. j, mens. iij, d. xj.</item>
+<item>Bonifacius an. iij, mens. viij, d. vj.</item>
+<item>Coelestinus an. viij, mens. x, d. xvj.</item>
+        </list>
+
+<pb n="0146B"/>
+<list>
+<item>Xystus an. viij, mens. . . . d. xvij.</item>
+<item>Leo an. xxj, mens. j, d. xiij.</item>
+<item>Hilarus an. vj, mens. ij, d. xij.</item>
+<item>Simplicius an. xv, mens. j, d. vj.</item>
+        </list>
+
+<pb n="0146C"/>
+<list>
+<item>Felix an. viij, mens. x, d. xviij.</item>
+<item>Gelasius an. iv, mens. viij, d. xviij.</item>
+<item>Anastasius an. j, mens. xj, d. xxiij.</item>
+<item>Symmachus an. xv, mens. vij, d. xvij.</item>
+<item>Hormisda an. ix, mens. . . . d. xvj.</item>
+<item>Joannes an. ij, mens. ix, d. xvj.</item>
+<item>Felix an. iv, mens. ij, d. xij.</item>
+<item>Bonifacius an. ij, d. xxvj.</item>
+<item>Joannes an. ij, mens. iv, d. vj.</item>
+<item>Agapitus an. iv, mens. xj, d. xviij.</item>
+<item>Sylverius an. ij, mens. v, d. xxvj.</item>
+<item>Vigilius an. xvij, mens. vij.</item>
+<item>Pelagius an. . . . mens. ix, d. xix.</item>
+<item>Joannes an. xij, mens. xj, d. xxvj.</item>
+<item>Benedictus an. iv, mens. j, d. xxvij.</item>
+<item>Pelagius an. x, mens. ij, d. x.</item>
+<item>Gregorius an. xiij, m. ij, d. x. [Fiunt usque
+hic LXIII.]</item>
+<item>Salvinianus sed. an. j, mens. v, d. ix.</item>
+<item>Bonifacius sed. an. . . . mens. viij, d. xxii.</item>
+        </list>
+
+<pb n="0146D"/>
+<list>
+<item>Item Bonifacius an. . . . mens. viij, d. . .</item>
+<item>Deus dedit an. iij, d. xx.</item>
+<item>Bonifacius an. v, mens. x.</item>
+<item>Honorius an. xij, mens. xj, d. xvij.</item>
+<item>Severinus an. . . . mens. ij, d. iv.</item>
+<item>Joannes an. j, mens. viij, d. vj.</item>
+<item>Theodorus an. vj, mens. v, d. xviij</item>
+<item>Martinus an. iij, mens. j, d. xxvj.</item>
+<item>Eugenius an. ij, mens. ix, d. xix.</item>
+<item>Vitalianus an. xiv, mens. vj.</item>
+<item>Adeodatus an. iv, mens. ij, d. v.</item>
+<item>Donus an. j, mens. v, d. x.</item>
+<item>Agatho an. ij, mens. vj, d. xiv.</item>
+<item>Leo sed. an. . . . mens. x, d. xviij.</item>
+<item>Benedictus sed. mens. x, d. xiij.</item>
+<item>Joannes sed. an. . . . d. x.</item>
+<item>Conon sed. mens. xj.</item>
+<item>Sergius sed. ann. . . .</item>
+<item>Joannes sed . . . .</item>
+        </list>
+
+
+</div1>
+</body>
+  </text>
+</TEI>

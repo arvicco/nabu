@@ -49,9 +49,10 @@ class DharmaNusantaraTest < Minitest::Test
   N24 = "urn:nabu:dharma-nusantara:INSIDENK00024"
   N50 = "urn:nabu:dharma-nusantara:INSIDENK00050"
   PASRUJAMBE28 = "urn:nabu:dharma-nusantara:INSIDENKPasrujambe28"
+  RABVAN = "urn:nabu:dharma-nusantara:INSIDENKRabvan"
 
   # The languageb-Latn file quarantines by design, so the conformance
-  # sweep runs over the three clean fixtures; the bug file is asserted
+  # sweep runs over the four parseable fixtures; the bug file is asserted
   # separately below.
   def conformance_adapter
     adapter = Nabu::Adapters::DharmaNusantara.new
@@ -98,6 +99,19 @@ class DharmaNusantaraTest < Minitest::Test
                  "<div type=\"translation\"> (\"Lord Indra\") is editorial and never mints"
   end
 
+  # The und-admission ruling, 2026-11-13: one of the repo's 16 lang-less
+  # editions (the Rabvan bell, Śaka 827) — real Old Javanese text with no
+  # xml:lang anywhere — admits as "und": searchable, no language claim.
+  def test_a_lang_less_edition_admits_as_undetermined
+    adapter = Nabu::Adapters::DharmaNusantara.new
+    ref = adapter.discover(conformance_workdir).find { |r| r.id == RABVAN }
+    document = adapter.parse(ref)
+    assert_equal "und", document.language
+    assert_equal ["und"], document.passages.map(&:language).uniq
+    refute document.metadata.key?("language_raw"), "no upstream tag exists to keep"
+    assert_match(/I śaka 827 phālguṇa-māsa/, document.passages.map(&:text).join(" "))
+  end
+
   def test_the_upstream_languageb_bug_quarantines
     adapter = Nabu::Adapters::DharmaNusantara.new
     ref = adapter.discover(conformance_workdir).find { |r| r.id == N50 }
@@ -109,9 +123,9 @@ class DharmaNusantaraTest < Minitest::Test
 
   private
 
-  # Scope discover to the three clean fixtures for the conformance sweep.
+  # Scope discover to the parseable fixtures for the conformance sweep.
   def conformance_scope(adapter)
-    clean = [N7, N24, PASRUJAMBE28]
+    clean = [N7, N24, PASRUJAMBE28, RABVAN]
     original = adapter.method(:discover)
     adapter.define_singleton_method(:discover) do |workdir, &block|
       return enum_for(:discover, workdir) unless block

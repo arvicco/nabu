@@ -27,3 +27,7 @@ files:
     url: https://raw.githubusercontent.com/nevenjovanovic/croatiae-auctores-latini-textus/master/LICENSE.md
     whole: true
     trim: none
+  - path: txts/marul-mar-catull.xml
+    url: https://raw.githubusercontent.com/nevenjovanovic/croatiae-auctores-latini-textus/master/txts/marul-mar-catull.xml
+    whole: true
+    trim: none

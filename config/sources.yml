@@ -104,6 +104,23 @@
 # Registered sources follow. `wired: false` until a first real sync is
 # verified by hand (CLAUDE.md "add a new adapter" checklist).
 
+acd:
+  adapter: Nabu::Adapters::Acd
+  adopted: "2026-11-13"
+  axes: [etym]
+  wired: true    # first sync 2026-11-13: +10,857 sets / 110,825 reflexes.
+                 # Expected (full-scale dry parse): 10,857 entries /
+                 # 110,825 reflex rows (99 loan-flagged); raw/ skipped by rule.
+  sync_policy: manual
+  # The Austronesian Comparative Dictionary (Blust, Trussel & Smith) in
+  # the lexibank CLDF edition v2.0 (Zenodo 10.5281/zenodo.14608975,
+  # CC BY 4.0): 10,857 cognate sets headed by their reconstruction (PAn,
+  # PMP and the subgroup protos), 1,063 varieties, acd's etymon records
+  # in the body, borrowings.csv targets flagged borrowed. Dictionary
+  # language `map` (the Austronesian collective). The lexibank-cldf
+  # family (lib/nabu/adapters/lexibank_cldf.rb); proto varieties map onto
+  # registry codes only where nabu-lects resolves them (POc, PEMP, PMc, PPn).
+
 achemenet:
   adapter: Nabu::Adapters::Achemenet
   adopted: "2026-08-17"
@@ -1590,6 +1607,24 @@ cs-wikisource:   # P116-3, 02-sources row 239
   # Hospodine, pomiluj ny! keys to the 1959 kancionál → excluded by
   # EDITION_TAINT_POST_1930. Texts PD; transcription layer CC BY-SA 4.0.
 
+csd:
+  adapter: Nabu::Adapters::Csd
+  adopted: "2026-11-13"
+  axes: [etym]
+  wired: true    # first sync 2026-11-13: +1,193 sets / 17,902 reflexes.
+                 # Expected: 1,193 entries / 17,902 reflex rows; 11 set
+                 # records without any judgment skipped by rule.
+  sync_policy: manual
+  # The Comparative Siouan Dictionary (Rankin, Carter, Jones, Koontz,
+  # Rood & Hartmann eds. 2015; csd.clld.org) in the lexibank CLDF
+  # edition — CC BY 4.0. The repository has never cut a release (no tag,
+  # no Zenodo record): the house GitFetch of the default branch, sparse
+  # to cldf/ + LICENSE + README.md (head 91756e90 at intake). Sets
+  # head with their Proto-Siouan (or sub-group) reconstruction.
+  # Upstream's languages.csv carries no ISO code or Glottocode for any of
+  # its 36 varieties, so every member is display-only (csd-<variety>).
+  # Dictionary language `sio` (ISO 639-5 Siouan).
+
 # P80-8
 ctilc:
   adapter: Nabu::Adapters::Ctilc
@@ -2283,6 +2318,22 @@ dta:   # P94-1
   # page), class attribution. Page-grain passages, orthography AS
   # PRINTED (sic/abbr halves; DTA's corr/expan normalization layers are
   # deliberately not ingested v1 — corrections are enrichments).
+
+dyenindoeuropean:
+  adapter: Nabu::Adapters::Dyenindoeuropean
+  adopted: "2026-11-13"
+  axes: [etym]
+  wired: true    # first sync 2026-11-13: +2,388 sets / 14,752 reflexes.
+                 # Expected: 2,388 entries / 14,752 reflex rows; 6,854
+                 # forms outside the CognateTable mint nothing (counted).
+  sync_policy: manual
+  # Dyen, Kruskal & Black 1992, An Indoeuropean Classification (TAPS
+  # 82/5), in the lexibank CLDF edition — CC BY 4.0. 95 modern IE
+  # Swadesh-200 lists in Dyen's ASCII transcription, 2,388 cognate
+  # classes; no reconstructions, so each class is headed by its concept.
+  # Never released (no tag, no Zenodo record): sparse GitFetch of the
+  # default branch (head cd1ad5f8, last upstream commit 2021-04-27).
+  # Dictionary language `ine` (the iecor collective).
 
 e84000:   # P48-2, 02-sources row 133
   adapter: Nabu::Adapters::E84000
@@ -3437,12 +3488,15 @@ iecor:
                    # iecor note, then flip). Projected: 4,981 entries /
                    # ~26.3k reflex rows (~2.3k loan-flagged) + ~144
                    # language notes accreted into the ledger.
-  # IE-CoR (lexibank/iecor v1.2, CC BY 4.0; .docs/surveys/pie-survey.md §1): the
+  # IE-CoR (lexibank/iecor v1.2.1, CC BY 4.0; .docs/surveys/pie-survey.md §1): the
   # cognacy-matrix dictionary shelf — one entry per expert-curated cognate
   # set under the collective `ine` tag, members as reflex edges, loans.csv
   # feeding the borrowed flag. The Zenodo versioned record is immutable; a
   # future release is a NEW DOI the owner re-pins (URL + RELEASE_SHA256,
-  # the Coptic RELEASE_TAG pattern) before firing a re-sync.
+  # the Coptic RELEASE_TAG pattern) before firing a re-sync. Re-pinned
+  # 2026-11-13 v1.2 → v1.2.1 (10.5281/zenodo.23183358): catalog-version
+  # refresh only — the data tables are byte-identical and the full parse
+  # is identical, so the re-sync re-reads and changes nothing.
 
 iedc:   # P107-2
   adapter: Nabu::Adapters::Iedc
@@ -4463,6 +4517,21 @@ mazarinades:   # P160, 02-sources row 389
   # publiés sous la licence CC BY 4.0"; every file's <licence> names CC BY
   # 4.0 (its availability@status "restricted" is the template default —
   # the licence element governs) → attribution.
+
+mcd:
+  adapter: Nabu::Adapters::Mcd
+  adopted: "2026-11-13"
+  axes: [etym]
+  wired: true    # first sync 2026-11-13: +1,707 sets / 16,592 reflexes.
+                 # Expected: 1,707 entries / 16,592 reflex rows (61
+                 # uncertain); raw/ skipped by rule.
+  sync_policy: manual
+  # The Micronesian Comparative Dictionary — Bender, Goodenough, Jackson,
+  # Marck, Rehg, Sohn, Trussel & Wang 2003, Proto-Micronesian
+  # Reconstructions 1–2 (Oceanic Linguistics 42) — in the lexibank CLDF
+  # edition v2.0 (Zenodo 10.5281/zenodo.14608119, CC BY 4.0): 1,707 sets
+  # headed by their PMc / sub-group reconstruction over 60 varieties.
+  # Dictionary language `poz-mic` (the nabu-lects Micronesian anchor).
 
 mdz-protestant:   # 02-sources row 243
   adapter: Nabu::Adapters::MdzProtestant
@@ -6210,6 +6279,37 @@ sabellic-loans:
   # reads it as vendored, never ls-remotes the provenance page.
   sync_policy: frozen
 
+saenkoromance:
+  adapter: Nabu::Adapters::Saenkoromance
+  adopted: "2026-11-13"
+  axes: [etym, romance]
+  wired: true    # first sync 2026-11-13: +465 sets / 5,092 reflexes.
+                 # Expected: 465 entries / 5,092 reflex rows (174
+                 # loan-flagged); raw/ skipped by rule.
+  sync_policy: manual
+  # Saenko 2015, Annotated Swadesh wordlists for the Romance group (The
+  # Global Lexicostatistical Database), lexibank CLDF edition v1.1
+  # (Zenodo 10.5281/zenodo.13163492, CC BY 4.0): 43 Romance varieties ×
+  # 110 concepts, 465 cognate sets headed by their concept. The Value
+  # column carries "transcription {orthography}" variants joined by "~":
+  # the orthography is the reflex word, the transcription its roman.
+  # Dictionary language `roa`.
+
+sagartst:
+  adapter: Nabu::Adapters::Sagartst
+  adopted: "2026-11-13"
+  axes: [etym, sinitic]
+  wired: true    # first sync 2026-11-13: +5,120 sets / 12,179 reflexes.
+                 # Expected: 5,120 entries / 12,179 reflex rows (540
+                 # loan-flagged); raw/ skipped by rule.
+  sync_policy: manual
+  # Sagart, Jacques, Lai & List 2019, Sino-Tibetan Database of Lexical
+  # Cognates, lexibank CLDF edition v2.1 (Zenodo 10.5281/zenodo.13162889,
+  # CC BY 4.0): 50 varieties × 250 concepts incl. Old Chinese (Baxter-
+  # Sagart), Old Tibetan, Old Burmese and Tangut; 5,120 cognate sets
+  # headed by their concept. Form is a segmentation artifact, so the
+  # source Value is the reflex word. Dictionary language `sit`.
+
 salom:
   adapter: Nabu::Adapters::Salom
   adopted: "2026-08-19"
@@ -7893,6 +7993,21 @@ tlhdig:
   sync_policy: manual
   lemma_tier: silver
 
+tlopo:
+  adapter: Nabu::Adapters::Tlopo
+  adopted: "2026-11-13"
+  axes: [etym]
+  wired: true    # first sync 2026-11-13: +2,821 sets / 38,139 reflexes
+                 # (318 MB Zenodo zip, ~10 MB of it CLDF, the rest the
+                 # OCR'd volumes and rendered book; sha-pinned); raw/ and
+                 # out/ skipped by rule.
+  sync_policy: manual
+  # The lexicon of Proto Oceanic (Ross, Pawley & Osmond, vols 1–6) in the
+  # lexibank CLDF edition v0.1.1 (Zenodo 10.5281/zenodo.23688418,
+  # CC BY 4.0): 2,821 sets headed by their reconstruction (POc and its
+  # daughters, PAn/PMP antecedents), 755 varieties. Dictionary language
+  # `poz-oce` (the nabu-lects Oceanic anchor).
+
 tls:
   adapter: Nabu::Adapters::Tls
   adopted: "2026-07-20"
@@ -8322,6 +8437,21 @@ unikemet:
   # (unicode.org/license.txt, MIT-style, quoted in the adapter manifest)
   # → class open, the Unihan class.
   sync_policy: manual
+
+uralex:
+  adapter: Nabu::Adapters::Uralex
+  adopted: "2026-11-13"
+  axes: [etym]
+  wired: true    # first sync 2026-11-13: +3,792 sets / 9,614 reflexes.
+                 # Expected: 3,792 entries / 9,614 reflex rows (2,180
+                 # loan-flagged); raw/ skipped by rule.
+  sync_policy: manual
+  # UraLex 2.0 — Uralic basic vocabulary with cognate and loanword
+  # information (Syrjänen et al.; de Heer et al.), lexibank CLDF v2.0
+  # (Zenodo 10.5281/zenodo.4777568, CC BY 4.0): 27 varieties × 313
+  # meanings, 3,792 cognate sets; the Proto-Uralic rows (no Is_Proto
+  # column upstream — declared) head their sets; curated loan records
+  # name the donor languoid and likelihood. Dictionary language `urj`.
 
 vakk:
   adapter: Nabu::Adapters::Vakk

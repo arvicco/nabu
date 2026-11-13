@@ -13,6 +13,12 @@ Nabu is the hub of a family of small sibling repos, each a `kind: module` source
 | **nabu-data** (`arvicco/nabu-data`) | derived datasets (CLDF + Frictionless), DOI'd on Zenodo | **two-way** — Nabu produces via `nabu data build` **and** consumes back | `Nabu::FormLemma`, `Nabu::LanguageDossiers`, … |
 | **nabu-edubba** (`arvicco/nabu-edubba`) | the sister school's curated didactic overlay (sign pedagogy) | **two-way** — edubba consumes Nabu's exports downstream; its curated data feeds back (its frequency TSVs are NEVER re-imported — circularity guard) | `Nabu::EdubbaOverlay` |
 
+The WIDER family is larger than this seam table: **nabu-skill**
+(`arvicco/nabu-skill`, the published Claude skill) is family too,
+with no data seam. Every family-wide operation — hygiene sweeps,
+identity work, branch cleanups, release-adjacent checks — enumerates
+from the account's project repos, never from this table alone.
+
 **The lect registry is maintained PROACTIVELY (owner rule 2026-11-02):** beside the per-adapter mint (checklist step 8), a periodic **lect-scope review** compares the registry against (a) the planned work-queue items — researching and PRE-minting the anchors/stages the upcoming material needs, so codes exist before the adapters that use them — and (b) the already-integrated content, surfacing registry gaps (bare codes carrying real volume, missing stages, missing parents). The review rides slates on a regular cadence and whenever a queue wave names codes the registry lacks; its yield is the standard aggregated mint PR with researched notes.
 
 **Publications/mints into any sister ride as prepared PRs I open** (branch → build → push → `gh pr create` on `arvicco/<sister>`, body explaining the USE CASE); the owner reviews + merges, and any release/DOI (e.g. nabu-data's Zenodo mint) stays the owner's identity act. Nabu-side targets depending on a sister node stay queued (a work-queue entry naming the PR) until the mint merges and reaches `canonical/<slug>`. Mechanics: architecture §16 (shelves) / §17 (the nabu-data rail); the lect-mint specifics are the adapter-checklist step below; nabu-data's producer contract is docs/nabu-data.md.

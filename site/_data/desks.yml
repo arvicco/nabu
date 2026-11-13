@@ -7,7 +7,7 @@
 - slug: romance
   persona: The Romanist
   blurb: the Latin-to-vernacular continuum, charter Latin to Roland to the troubadours
-  members: 40
+  members: 41
 - slug: epigraphy
   persona: The Papyrologist-Epigraphist
   blurb: reads what survives on stone, sherd, papyrus and tablet, lacunae and all
@@ -32,7 +32,7 @@
 - slug: etym
   persona: The Comparative Indo-Europeanist
   blurb: laryngeals, reflex chains, the long descent of words
-  members: 15
+  members: 23
 - slug: biblical
   persona: The Biblical scholar
   blurb: one text across Hebrew, Greek, Latin, Syriac, Coptic and English witnesses
@@ -94,7 +94,7 @@
 - slug: sinitic
   persona: The Sinologist
   blurb: the classical Chinese written world and its phonological deep past
-  members: 29
+  members: 30
 - slug: japonic
   persona: The Japanologist
   blurb: Old Japanese song to the Sino-Japanese dictionary tradition

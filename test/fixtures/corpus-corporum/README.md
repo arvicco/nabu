@@ -71,3 +71,35 @@ reused freely (but non-commercially) as long as the source is indicated";
 most texts "either in the public domain or their use was granted us by their
 owners"; project goal: "Texts may be downloaded as TEI xml for non-commercial
 use" → source class `nc`.
+
+## List and table specimens (the 2026-11-13 quarantine review)
+
+Two WHOLE texts copied from the local canonical tree (`canonical/
+corpus-corporum/texts/`, the same download.php responses), 2026-11-13:
+
+- **`texts/9269.xml`** — Catalogus episcoporum Romanorum (PL 127): six
+  `<list>`s of 84 `<item>`s and nothing else; each item a block
+  `d1.i<k>` carrying its Migne column (`0145B`).
+- **`texts/8927.xml`** — Fragmentum glossarii Latino-Theotisci: two items,
+  then a `<table>` whose second cell nests a list — the row is ONE block
+  `d1.r1` with the nested items in its text.
+
+The grain is the empty-document fallback (15 such list/table-only texts in
+the 2026-11-13 census; no loaded text gains or moves a passage).
+
+## The cross-reference stub specimen (outside texts/)
+
+- **`stubs/8298.xml`** — WHOLE, copied from the local canonical tree
+  2026-11-13: a PL placeholder for two letters printed elsewhere in the
+  series — each `<div1>` a `<head>` and a `<p>` holding ONLY a
+  parenthesized pointer ("(Vide infra inter Opera sancti Desiderii, lib.
+  II Epistolarum, hujus tomi col. 261.)", "(Vide ibidem, col. 262.)").
+  Skipped BY RULE, never quarantined. Kept outside `texts/` so discovery
+  and the conformance suite never meet it (the sefaria precedent).
+
+The rule's census (2026-11-13): 12 such stubs, every note parenthesized,
+24-464 characters; only 5 open with "Vide" — the others point with
+"Exstat", "videsis", "reperies", "exstant apud" or "reservamus … locum" —
+so the rule keys on the pointer SHAPE (every unit empty but for its notes,
+every note parenthesized and at most 500 characters, no other body text),
+never on note-wrapping alone and never on the word "Vide".

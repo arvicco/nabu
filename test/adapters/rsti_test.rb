@@ -90,12 +90,19 @@ module Adapters
     def test_discover_yields_one_ref_per_inventory_record_sorted_by_urn
       all = refs
       assert_equal ["urn:nabu:rsti:rih-77/01",
+                    "urn:nabu:rsti:rih-77/25+",
+                    "urn:nabu:rsti:rih-83/02",
                     "urn:nabu:rsti:rih-84/-[31,10]",
                     "urn:nabu:rsti:rs-1.001",
                     "urn:nabu:rsti:rs-1.003+",
                     "urn:nabu:rsti:rs-1.004",
                     "urn:nabu:rsti:rs-1.009-[a]",
-                    "urn:nabu:rsti:rs-17.009"], all.map(&:id)
+                    "urn:nabu:rsti:rs-1.017",
+                    "urn:nabu:rsti:rs-1.022",
+                    "urn:nabu:rsti:rs-11.850",
+                    "urn:nabu:rsti:rs-15.125",
+                    "urn:nabu:rsti:rs-17.009",
+                    "urn:nabu:rsti:rs-8.220"], all.map(&:id)
       assert(all.all? { |r| File.dirname(r.path).end_with?("sets") })
       assert_predicate adapter.discovery_skips(FIXTURES), :clean?
     end
@@ -116,9 +123,9 @@ module Adapters
         FileUtils.cp(source, File.join(dir, "sets", "#{SEASON01}.json"))
         FileUtils.cp(source, File.join(dir, "sets", "ffffffff-aaaa-bbbb-cccc-000000000000.json"))
         fresh = Nabu::Adapters::Rsti.new
-        assert_equal 5, fresh.discover(dir).to_a.size, "each record once, first set file wins"
+        assert_equal 7, fresh.discover(dir).to_a.size, "each record once, first set file wins"
         skips = fresh.discovery_skips(dir)
-        assert_equal 5, skips.skipped_by_rule
+        assert_equal 7, skips.skipped_by_rule
         assert_predicate skips, :clean?
       end
     end
@@ -224,7 +231,125 @@ module Adapters
       assert_equal ["KTU 2.77"], document.metadata["concordances"]
     end
 
+    # -- the line model: furniture creates no passage --------------------------
+    # OCHRE types every leaf under a rendering: "line" is text; "separator"
+    # (a scribal ruling), "region" (a lacuna: "broken", "N lines missing"),
+    # a childless column/section header and an empty row are FURNITURE —
+    # never passages (the 2026-11-13 review's rsti findings: rulings shared
+    # one label and collided as duplicate urns; nil-valued lacunae minted
+    # empty passages). Rulings and lacunae ride the ATF precedent: "states"
+    # on the NEXT minted line, trailing ones as "states_after" on the last.
+
+    def test_rulings_and_lacunae_ride_as_states_never_as_passages
+      document = parse("urn:nabu:rsti:rih-77/01")
+      assert_equal "edition", document.metadata["text_status"]
+      assert_equal 20, document.size, "11 Recto + 9 Verso lines; 2 rulings and 4 lacunae mint nothing"
+      first = document.passages.fetch(0)
+      assert_equal "urn:nabu:rsti:rih-77/01:recto.01'", first.urn
+      assert_equal ["broken"], first.annotations["states"]
+      after_ruling = document.find { |p| p.urn.end_with?("recto.08'") }
+      assert_equal ["single ruling"], after_ruling.annotations["states"]
+      verso_first = document.find { |p| p.urn.end_with?("verso.12'") }
+      assert_equal %w[broken broken], verso_first.annotations["states"],
+                   "Recto's trailing lacuna and Verso's opening one both precede line 12'"
+      last = document.passages.last
+      assert_equal "urn:nabu:rsti:rih-77/01:verso.20'", last.urn
+      assert_equal ["broken"], last.annotations["states_after"]
+      assert_equal({ "ruling" => 2, "lacuna" => 4 }, document.metadata["line_furniture"])
+      refute(document.any? { |p| p.text.match?(/\A-+\z/) }, "no ruling is ever servable text")
+    end
+
+    def test_a_counted_lacuna_names_its_missing_lines
+      document = parse("urn:nabu:rsti:rs-1.017")
+      assert_equal 26, document.size, "13 Recto + 13 Verso lines"
+      line22 = document.find { |p| p.urn == "urn:nabu:rsti:rs-1.017:verso.22" }
+      assert_equal ["8 lines missing"], line22.annotations["states"]
+    end
+
+    def test_an_unlabeled_lacuna_is_broken_and_never_an_empty_passage
+      document = parse("urn:nabu:rsti:rs-1.022")
+      assert_equal 15, document.size
+      assert_equal "urn:nabu:rsti:rs-1.022:recto.1’", document.passages.fetch(0).urn
+      assert_equal ["broken"], document.passages.fetch(0).annotations["states"]
+      assert_equal({ "lacuna" => 4 }, document.metadata["line_furniture"])
+    end
+
+    def test_root_level_lines_mint_without_a_surface_segment
+      document = parse("urn:nabu:rsti:rs-15.125")
+      assert_equal "edition", document.metadata["text_status"],
+                   "lines at the rendering root are text, not a shell"
+      assert_equal 15, document.size
+      first = document.passages.fetch(0)
+      assert_equal "urn:nabu:rsti:rs-15.125:01'", first.urn
+      assert_equal "l . yı͗ḫd ṣṭqšlm", first.text
+      refute first.annotations.key?("surface")
+      assert_equal "01'", first.annotations["line"]
+      assert first.annotations.key?("phonemic"), "the parallel renderings key on the same root path"
+    end
+
+    def test_nested_sections_ride_the_urn_and_a_division_annotation
+      document = parse("urn:nabu:rsti:rih-77/25+")
+      assert_equal 24, document.size
+      first = document.passages.fetch(0)
+      assert_equal "urn:nabu:rsti:rih-77/25+:recto.rih-78/21.01'", first.urn
+      assert_equal "Recto", first.annotations["surface"]
+      assert_equal "RIH 78/21", first.annotations["division"]
+      assert_includes document.map(&:urn), "urn:nabu:rsti:rih-77/25+:verso.rih-77/25.11'"
+    end
+
+    # -- the bare XML prologue: the resolver's empty answer -------------------
+
+    def test_a_bare_xml_prologue_is_an_empty_answer_metadata_document
+      body = File.read(File.join(FIXTURES, "texts", "2ef071ab-d901-4f09-bd88-60c3bc05f247.json"))
+      assert_equal %(<?xml version="1.0" encoding="UTF-8"?>), body,
+                   "byte-verbatim: the resolver answered a &format=json request with an empty XML document"
+      document = parse("urn:nabu:rsti:rih-83/02")
+      assert_equal 0, document.size
+      assert_equal "empty-answer", document.metadata["text_status"]
+      assert_equal "none", document.metadata["text_layer"]
+    end
+
+    # -- mixed-markup lines: the JSON loses the piece order -------------------
+    # OCHRE's JSON flattens a line of interleaved markup (italic syllables,
+    # superscript determinatives, plain logograms) into parallel lists —
+    # {"i" => [...], "content" => [...], "sup" => ...} — and the original
+    # order is NOT recoverable from it. The XML rendition is outside this
+    # adapter's delivery (OchreFetch fetches &format=json only), so the
+    # honest answer is quarantine: never a printed Ruby Hash as text
+    # (RS 17.238 served 19 such passages before this rule).
+
+    def test_a_mixed_markup_transliteration_line_quarantines_the_document
+      quarantine = File.join(FIXTURES, "quarantine")
+      ref = Nabu::Adapters::Rsti.new.discover(quarantine).find { |r| r.id == "urn:nabu:rsti:rs-17.238" }
+      refute_nil ref
+      error = assert_raises(Nabu::ParseError) { Nabu::Adapters::Rsti.new.parse(ref) }
+      assert_match(/mixed-markup line Recto 1/, error.message)
+      assert_match(/piece order is unrecoverable/, error.message)
+    end
+
+    def test_a_mixed_markup_parallel_rendering_is_omitted_and_counted_never_partial
+      # RS 11.850: clean transliteration, but phonemic line 10 is
+      # {"i" => "napḫaru šābū", "content" => 16} — no partial reading rides.
+      document = parse("urn:nabu:rsti:rs-11.850")
+      assert_equal 10, document.size
+      line10 = document.find { |p| p.urn == "urn:nabu:rsti:rs-11.850:reverse.10" }
+      assert_equal "ŠU.NÍGIN ÉRIN.MEŠ 10+6", line10.text
+      refute line10.annotations.key?("phonemic")
+      assert_equal ["single ruling"], line10.annotations["states"],
+                   "the Lower edge's trailing (unlabeled) ruling precedes the Reverse"
+      assert_equal 1, document.metadata["mixed_markup_parallels_omitted"]
+      assert document.passages.fetch(0).annotations.key?("phonemic"), "plain phonemic lines still ride"
+    end
+
     # -- language honesty -----------------------------------------------------
+
+    def test_the_unassigned_placeholder_is_absence_never_a_language
+      document = parse("urn:nabu:rsti:rs-8.220")
+      assert_equal "und", document.language,
+                   "OCHRE's <unassigned> value is its explicit empty — und, the no-Language rule"
+      refute document.metadata.key?("languages")
+      refute(document.metadata.values.any? { |v| v.to_s.include?("<unassigned>") })
+    end
 
     def test_the_language_map_covers_the_witnessed_vocabulary_and_stops_loud_on_unknown
       { "Ugaritic" => "uga", "Akkadian" => "akk", "Hurrian" => "xhu", "Sumerian" => "sux",
@@ -275,7 +400,9 @@ module Adapters
     def text_uuids
       %w[de32293f-9b4b-435e-bf02-c4894863035b 223fa8f2-a5a6-47b0-9f82-80b159c1e23c
          3e80daf3-a394-4a0e-9f00-dd76392b3834 b8e6a1c9-d0f5-4576-aab6-3b96905fe5ba
-         e8e93bf6-c133-410c-9be2-9827d0db913c c033b607-489b-42bf-8b10-931ebc6c7404]
+         e8e93bf6-c133-410c-9be2-9827d0db913c c033b607-489b-42bf-8b10-931ebc6c7404
+         bda5afe1-c241-4e3c-846f-829af180ad24 120210e5-f88e-4853-8809-7f6678104db4
+         d9c1af5f-23dd-4869-a029-1bfe0a840c36 2ef071ab-d901-4f09-bd88-60c3bc05f247]
     end
 
     def test_fetch_stages_menu_sets_then_text_details_and_persists_tombstones
@@ -284,12 +411,12 @@ module Adapters
         report = Nabu::Adapters::Rsti.new(delay: 0).fetch(dir)
         assert File.file?(File.join(dir, "menu.json"))
         assert_equal 2, Dir.children(File.join(dir, "sets")).size
-        assert_equal 6, Dir.children(File.join(dir, "texts")).size
+        assert_equal 10, Dir.children(File.join(dir, "texts")).size
         assert_equal '{"result":[]}',
                      File.read(File.join(dir, "texts", "b8e6a1c9-d0f5-4576-aab6-3b96905fe5ba.json")),
                      "the API's not-published answer is PERSISTED as-is — a tombstone, never an error"
-        assert_match(/6 text details fetched/, report.notes)
-        assert_equal 7, Nabu::Adapters::Rsti.new.discover(dir).to_a.size
+        assert_match(/10 text details fetched/, report.notes)
+        assert_equal 11, Nabu::Adapters::Rsti.new.discover(dir).to_a.size
       end
     end
 
@@ -302,7 +429,7 @@ module Adapters
         report = Nabu::Adapters::Rsti.new(delay: 0).fetch(dir)
         refute File.file?(File.join(dir, "texts", "#{gone}.json")),
                "a real miss persists nothing — only the 404-tombstone body does"
-        assert_match(/5 text details fetched/, report.notes)
+        assert_match(/9 text details fetched/, report.notes)
       end
     end
 
@@ -311,7 +438,7 @@ module Adapters
       Dir.mktmpdir do |dir|
         Nabu::Adapters::Rsti.new(delay: 0).fetch(dir)
         report = Nabu::Adapters::Rsti.new(delay: 0).fetch(dir)
-        assert_match(/0 text details fetched, 6 already present/, report.notes)
+        assert_match(/0 text details fetched, 10 already present/, report.notes)
         text_uuids.each do |uuid|
           assert_requested :get, Nabu::OchreFetch.item_url(uuid), times: 1
         end

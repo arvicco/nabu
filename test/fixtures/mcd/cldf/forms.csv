@@ -1,0 +1,14 @@
+ID,Local_ID,Language_ID,Parameter_ID,Value,Form,Segments,Comment,Source,Cognacy,Loan,Graphemes,Profile,Description,Sic,Doubt
+chuukese-swimbeswimming-1,,chuukese,swimbeswimming,"á, áá-",á,æ,,goodenoughandsugita1980;goodenough1963,,,^ á $,chuukese,"swim, be swimming",false,false
+fijian-thatdistanttheonethat-1,,fijian,thatdistanttheonethat,"[ko]-yaa, [a]-yaa",[ko]-yaa,<<[>> k o <<]>> y aː,,capell1957;geraghty1983,,,^ <[> k o <]> - y aa $,fijian,"that [distant], the one that",false,false
+gilbertese-crawl-1,,gilbertese,crawl,ae,ae,a e,,bingham1908,,,^ a e $,gilbertese,crawl,false,false
+gilbertese-thisheretheonethat-1,,gilbertese,thisheretheonethat,ae,ae,a e,,bingham1908,,,^ a e $,gilbertese,"this here, the one that",false,false
+gilbertese-goashore-1,,gilbertese,goashore,ae (rake),ae rake,a e + r a k e,,bingham1908,,,^ a e + r a k e $,gilbertese,go ashore,false,false
+gilbertese-fullbunchorcluster-1,,gilbertese,fullbunchorcluster,amʷii,amʷii,a mʷ iː,,bingham1908,,,^ a mʷ ii $,gilbertese,full bunch or cluster,false,false
+lakalai-thistheonethat-1,,lakalai,thistheonethat,ale,ale,a l e,,chowningandgoodenoughnd,,,^ a l e $,lakalai,"this, the one that",false,false
+pingilapese-bunchorclusterofnuts-1,,pingilapese,bunchorclusterofnuts,ɛmʷi,ɛmʷi,ɛ mʷ i,,benderetal1984,,,^ ɛ mʷ i $,pingilapese,bunch or cluster of nuts,false,false
+pohnpeian-bunchofitpalmnuts-1,,pohnpeian,bunchofitpalmnuts,ɛmʷii,ɛmʷii,ɛ mʷ iː,,rehgandsohl1979;sohlrehgandandreasnd,,,^ ɛ mʷ ii $,pohnpeian,bunch of it (palm nuts),false,false
+protomicronesian-crawl-1,,protomicronesian,crawl,ae₁,ae,a e,,pmr1,,,^ a e $,protomicronesian,crawl,false,false
+protomicronesian-this-1,,protomicronesian,this,ae₂,ae,a e,,pmr1,,,^ a e $,protomicronesian,this,false,false
+protooceanic-this-1,,protooceanic,this,aRe,aRe,a R e,,,,,^ a R e $,protooceanic,this,false,true
+protocentralmicronesian-bunchorclusterofnuts-1,,protocentralmicronesian,bunchorclusterofnuts,amʷii,amʷii,a mʷ iː,,pmr1,,,^ a mʷ ii $,protocentralmicronesian,bunch or cluster of nuts,false,false

@@ -16,7 +16,7 @@ large file — see their table rows and manifest.yml.
   University.
 - **Acquisition plan** approved by owner 2026-07-03 (dev-loop §8; packet P2-1).
 
-## Editions (12) — chosen to cover the parser's hard cases
+## Editions (13) — chosen to cover the parser's hard cases
 
 | File | Work | Lang | Why this one |
 |---|---|---|---|
@@ -31,6 +31,7 @@ large file — see their table rows and manifest.yml.
 | `latinLit/data/phi0914/phi0011/phi0914.phi0011.perseus-lat3.xml` | Livy, Ab Urbe Condita I (**trimmed**, P9-2) | lat | P4-fallback exemplar, the DOMINANT legacy sub-shape (~64 of 167 census files): P5 namespace but a `refState`-only refsDecl (no cRefPattern), one `div[@type="book" n="1"]` with `milestone unit="chapter"/"section"` streams — first ladder rung, milestone-hierarchy citation `1.pr.1`–`1.2.6` incl. the non-numeric praefatio chapter `n="pr"`. Trimmed 2026-07-08 from the local canonical snapshot (synced 2026-07-07): teiHeader + book div, chapters pr/1/2 kept whole, chapters 3–60 removed |
 | `latinLit/data/phi1351/phi004/phi1351.phi004.perseus-eng1.xml` | Tacitus, Histories, Church/Brodribb translation (**trimmed**, P9-2) | eng | P4-fallback exemplar, true TEI P4: `<TEI.2>` DOCTYPE, unnamespaced, numbered `div1[@type=book]`/`div2[@type=chapter]` containers (citation `1.1`–`2.2`), undefined ISO entities (`&aelig;`) resolved from the parser's fixed table, `<head>` apparatus dropped. Trimmed 2026-07-08 from the local canonical snapshot (synced 2026-07-07): books 1–2 each reduced to chapters 1–2, rest removed |
 | `latinLit/data/phi0692/phi012/phi0692.phi012.perseus-lat1.xml` | Appendix Vergiliana, De Institutione Viri Boni | lat | P4 ladder rung 2 (lb-per-line): TEI.2 verse with NO divs and NO milestones — the poem's 26 lines exist only as `<lb n>` marks. Copied whole from the local canonical snapshot 2026-07-08 |
+| `latinLit/data/stoa0045/stoa001/stoa0045.stoa001.perseus-lat2.xml` | Ausonius, De Bissula | lat | Name-union replacementPattern step (the 2026-11-13 quarantine review): `…/tei:div[@n='$1']/*[self::tei:p or self::tei:l][@n='$2']` cites a prose preface `<p n>` and verse `<l n>` alike under the poem div — the subtype pass trips on its depth, the structural retry reads the union as an xpath engine would (`pr.1`, `1.1`…, 41 passages). Copied whole, with its work `__cts__.xml`, from the local canonical snapshot 2026-11-13 |
 | `latinLit/data/stoa0058/stoa028/stoa0058.stoa028.perseus-eng1.xml` | Boethius, Quomodo Trinitas, Stewart/Rand translation | eng | P4 ladder rung 3 (p ordinals): TEI.2 with a bare `<p>` body — no citation apparatus at all; passages are 1-based `<p>` ordinals (the empty first p mints nothing, citations run 2–7). Copied whole from the local canonical snapshot 2026-07-08 |
 
 Each edition is accompanied by its work-level `__cts__.xml` and the

@@ -1,0 +1,11 @@
+ID,Name,Glottocode,Glottolog_Name,ISO639P3code,Macroarea,Latitude,Longitude,Family,Name_in_Text,Name_in_Source,SubGroup,Coverage,Source,Number
+Beijing,Sinitic_Beijing,beij1235,Beijingic,,Eurasia,39.909056,116.397422,Sino-Tibetan,Beijing Chinese,Beijing,Sinitic,217,Lai2017FN,5
+Guangzhou,Sinitic_Guangzhou,guan1279,Guangzhou,,Eurasia,23.131111,113.258099,Sino-Tibetan,Guangzhou Chinese,Guangzhou,Sinitic,218,Lai2017FN,16
+Japhug,rGyalrong_Japhug,japh1234,Japhug,,Eurasia,32.207076,101.957636,Sino-Tibetan,Japhug,Japhug,rGyalrong,225,Jacques2015b,19
+Jingpho,Jingpho_Jingpho,jing1260,Jingpho,,Eurasia,25.461826,97.329866,Sino-Tibetan,Jingpho,Jingpho,Jingpho,225,Huang1992,21
+Limbu,Kiranti_Limbu,limb1266,Limbu,lif,Eurasia,27.272065,87.889909,Sino-Tibetan,Limbu,Limbu,Kiranti,198,Jacques2017FN,25
+OldBurmese,Burmish_Old_Burmese,oldb1235,Old Burmese,obr,Eurasia,21.624974,97.126742,Sino-Tibetan,Old Burmese,Old_Burmese,Burmish,214,Hill2017,32
+OldChinese,Sinitic_Old_Chinese,oldc1244,Old Chinese,och,Eurasia,34.101745,108.777868,Sino-Tibetan,Old Chinese,Old_Chinese,Sinitic,221,Baxter2014,33
+OldTibetan,Tibetan_Old_Tibetan,clas1254,Classical Tibetan,xct,Eurasia,30.027852,91.158704,Sino-Tibetan,Old Tibetan,Old_Tibetan,Tibetan,216,Huang1992,34
+Rangoon,Burmish_Rangoon,nucl1310,Burmese,mya,Eurasia,16.874207,96.190785,Sino-Tibetan,Rangoon Burmese,Rangoon,Burmish,216,"Huang1992,Hill2017",36
+Xingning,Sinitic_Xingning,hakk1236,Hakka Chinese,hak,Eurasia,24.13674,115.732382,Sino-Tibetan,Xingning Chinese,Xingning,Sinitic,212,Lai2017FN,47

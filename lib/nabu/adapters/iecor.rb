@@ -54,14 +54,23 @@ module Nabu
     #     a NEW versioned DOI; (b) GitHub's release zipball — generated
     #     on the fly, NOT byte-stable (compression drift has broken sha pins
     #     ecosystem-wide), unpinnable; (c) the Zenodo VERSIONED record
-    #     10.5281/zenodo.13304537 (= v1.2, 2024-08-12), one immutable
-    #     6.4 MB zip with a published checksum — archival-grade, citation-
+    #     10.5281/zenodo.23183358 (= v1.2.1, 2026-10-06), one immutable
+    #     6.1 MB zip with a published checksum — archival-grade, citation-
     #     grade, byte-stable. (c) wins: ZipFetch + a hard sha256 pin
     #     (RELEASE_SHA256, verified against the fresh download AND Zenodo's
-    #     own md5 2d4e742ab755c0f506e91a74e6b6e2ad). A body that misses the
-    #     pin aborts BEFORE any tree mutation. A future v1.3 is a new DOI:
+    #     own md5 235e3c4672fdbe9165a2006964d2e084). A body that misses the
+    #     pin aborts BEFORE any tree mutation. A future release is a new DOI:
     #     the owner re-pins URL + sha (the Coptic RELEASE_TAG pattern) and
     #     fires the re-sync. sync_policy: manual.
+    #
+    # Re-pinned 2026-11-13 from v1.2 (10.5281/zenodo.13304537) to v1.2.1:
+    # the release refreshes the reference catalogs (Glottolog 5.3,
+    # Concepticon 3.4.0) and cites the 2025 data paper; forms, cognates,
+    # cognatesets and loans are byte-identical to v1.2, and a full parse
+    # of both releases yields identical entries, reflexes and language
+    # notes (4,981 / 26,325 / 144) — the re-sync re-reads, changes nothing.
+    # (The GitHub release body carries no DOI badge; the Zenodo record
+    # exists under the same concept DOI.)
     #
     # == License (read three ways, all agreeing — survey §1)
     #
@@ -73,25 +82,25 @@ module Nabu
     class Iecor < Nabu::Adapter
       MANIFEST = Nabu::SourceManifest.new(
         id: "iecor",
-        name: "IE-CoR — Indo-European Cognate Relationships database (lexibank/iecor v1.2)",
+        name: "IE-CoR — Indo-European Cognate Relationships database (lexibank/iecor v1.2.1)",
         license: "CC BY 4.0 (README verbatim: \"This dataset is licensed under a " \
                  "https://creativecommons.org/licenses/by/4.0/ license\"; Zenodo record cc-by-4.0; " \
                  "cite Heggarty, Anderson, Scarborough et al. 2023, Science 381, eabg0818)",
         license_class: "attribution",
-        upstream_url: "https://zenodo.org/records/13304537",
+        upstream_url: "https://zenodo.org/records/23183358",
         parser_family: "cldf-csv"
       )
 
-      # The immutable versioned artifact (10.5281/zenodo.13304537 = v1.2;
+      # The immutable versioned artifact (10.5281/zenodo.23183358 = v1.2.1;
       # the concept DOI 10.5281/zenodo.8089433 always resolves to latest).
-      ZENODO_ZIP_URL = "https://zenodo.org/records/13304537/files/lexibank/iecor-v1.2.zip?download=1"
+      ZENODO_ZIP_URL = "https://zenodo.org/api/records/23183358/files/lexibank/iecor-v1.2.1.zip/content"
 
-      # sha256 of the release zip, pinned from the 2026-07-14 fixture
-      # snapshot download (md5 cross-checked against Zenodo's published
-      # 2d4e742ab755c0f506e91a74e6b6e2ad). A mismatch aborts the fetch with
+      # sha256 of the release zip, pinned from the 2026-11-13 download
+      # (6,095,537 B; md5 cross-checked against Zenodo's published
+      # 235e3c4672fdbe9165a2006964d2e084). A mismatch aborts the fetch with
       # the live tree untouched — Zenodo files are immutable, so a mismatch
       # means corruption or tampering, never a routine update.
-      RELEASE_SHA256 = "ff249cffc1bba75048d9eace3f9d95bf723f5a5c406f75ec739ab97586cc03c4"
+      RELEASE_SHA256 = "3076e9b31a52490e54ba471ee3101af4a3740b58c2e23e186456d931fa83966a"
 
       DICTIONARY_SLUG = "iecor"
       TITLE = "IE-CoR — Indo-European cognate sets (Heggarty et al. 2023)"
@@ -113,7 +122,7 @@ module Nabu
 
       def self.http_probe_targets
         [Nabu::Adapter::HttpProbeTarget.new(
-          label: "iecor-v1.2.zip", zip_url: ZENODO_ZIP_URL, metadata_url: nil,
+          label: "iecor-v1.2.1.zip", zip_url: ZENODO_ZIP_URL, metadata_url: nil,
           state_subdir: "", state_file: Nabu::ZipFetch::STATE_FILE
         )]
       end
@@ -190,7 +199,7 @@ module Nabu
       end
 
       def fetch_notes(fetch)
-        base = fetch.not_modified? ? "not modified (304)" : "zenodo v1.2 sha pin verified"
+        base = fetch.not_modified? ? "not modified (304)" : "zenodo v1.2.1 sha pin verified"
         [base, attic_notes(fetch.atticked)].compact.join("; ")
       end
     end

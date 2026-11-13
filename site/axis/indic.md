@@ -19,11 +19,11 @@ A source wears every desk it serves — these 35 answer this desk. Holdings are 
 |---|---|---|---|---|
 | `dacon` | texts | attribution | wired · manual | 4 docs / 977 passages |
 | `dcs` | treebank | attribution | wired · auto | 15,900 docs / 769,373 passages / 300,763 entries |
-| `dharma-deccan` | texts | attribution | wired · auto | 1,702 docs / 28,295 passages |
+| `dharma-deccan` | texts | attribution | wired · auto | 1,711 docs / 28,391 passages |
 | `dharma-mdt` | texts | attribution | wired · auto | 734 docs |
 | `dharma-tamil` | texts | attribution | wired · auto | 1,275 docs / 18,133 passages |
 | `dpd` | dictionary | nc | wired · manual | 89,763 entries |
-| `gretil` | texts | nc | wired · manual | 780 docs / 713,718 passages |
+| `gretil` | texts | nc | wired · manual | 784 docs / 714,263 passages |
 | `gretil-legacy` | texts | nc | wired · manual | 22 docs / 83,383 passages |
 | `gu-wikisource` | texts | attribution | wired · manual | 207 docs / 1,462 passages |
 | `kannada-texts` | texts | attribution | wired · auto | 16 docs / 16,151 passages |
@@ -34,10 +34,10 @@ A source wears every desk it serves — these 35 answer this desk. Holdings are 
 | `osbct` | texts | nc | wired · frozen | 118 docs / 89,512 passages |
 | `paramara` | texts | attribution | wired · manual | 114 docs / 2,373 passages |
 | `prakrit-texts` | texts | attribution | wired · auto | 22 docs / 27,124 passages |
-| `sarit` | texts | attribution | wired · manual | 78 docs / 345,601 passages |
+| `sarit` | texts | attribution | wired · manual | 83 docs / 346,313 passages |
 | `shabados` | texts | open | wired · auto | 127 docs / 141,264 passages |
 | `siddham` | texts | attribution | wired · manual | 427 docs / 6,334 passages |
-| `sii-clean` | texts | attribution | wired · auto | 18,495 docs / 314,915 passages |
+| `sii-clean` | texts | attribution | wired · auto | 18,903 docs / 318,689 passages |
 | `suttacentral` | texts | open | wired · auto | 12,397 docs / 699,511 passages |
 | `tamilex` | texts | nc | wired · auto | 7,878 docs / 15,228 passages |
 | `te-wikisource` | texts | attribution | wired · manual | 453 docs / 208,794 passages |
@@ -53,7 +53,7 @@ A source wears every desk it serves — these 35 answer this desk. Holdings are 
 | `wiktionary-ta` | dictionary | attribution | wired · manual | 13,855 entries |
 | `wiktionary-te` | dictionary | attribution | wired · manual | 23,325 entries |
 
-**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 13 November 2026)</span>: `san` 511,752 · `pli` 97,454 · `pan` 75,061 · `tel` 23,875 · `tam-Latn` 18,583 · `tam` 14,610 · `mal` 11,505 · `tel-Latn` 5,103 · `eng` 4,794 · `kan-Latn` 3,850 … and 32 more (`nabu axis indic` lists all).
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 13 November 2026)</span>: `san` 511,752 · `pli` 97,454 · `pan` 75,061 · `tel` 23,875 · `tam-Latn` 18,584 · `tam` 14,610 · `mal` 11,505 · `tel-Latn` 5,104 · `eng` 4,794 · `kan-Latn` 3,850 … and 33 more (`nabu axis indic` lists all).
 
 **Carried in by multilingual packs** (`ud` — whole-source members whose other languages ride along, as of 13 November 2026): `lat` 11 · `grc` 9 · `orv` 9 · `ota` 5 · `cop` 3 … and 18 more (`nabu axis indic` lists all).
 

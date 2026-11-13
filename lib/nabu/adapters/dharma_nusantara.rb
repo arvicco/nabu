@@ -23,6 +23,10 @@ module Nabu
       # (INSIDENK00050) is upstream's template-placeholder bug — it
       # quarantines loudly by design.
       LANGUAGES = %w[kaw-Latn omy-Latn osn-Latn san-Latn].freeze
+
+      # A multilingual repo: its 16 lang-less editions claim no language
+      # and admit as "und" (the und-admission ruling, 2026-11-13).
+      ADMIT_UNDETERMINED = true
     end
   end
 end

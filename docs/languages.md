@@ -33,7 +33,7 @@ measured 2026-10-11.
 
 **The desk reference is a command (P18-4), and languages are now
 file-backed (P19-1):** `nabu language CODE` explains any code this page
-covers AND the **1,671-code** etymology universe the `etym`
+covers AND the **2,967-code** etymology universe the `etym`
 cognate lists surface (`gkm`, `zle-ort`, `zlw-opl`…) — name, family,
 curated context, live holdings, and (since 2026-07-28) the related
 research axes: an `axes:` line naming the desks whose shelves hold the

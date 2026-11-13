@@ -1,0 +1,4 @@
+ID,Name,Concepticon_ID,Concepticon_Gloss,Definition,LJ_rank,WOLD401_500_rank,Ura100,Swadesh100,Swadesh207,Leipzig_Jakarta,WOLD401_500,Fullbasic,Swadesh200
+100,hard,1884,HARD,"A generic adjective for 'hard', i.e. firm or solid. Antonym of 'soft'.",99,,yes,no,no,yes,no,yes,no
+104,animal,619,ANIMAL,"A generic noun for 'animal', i.e. any living and moving organism (not a human being).",-,,no,no,yes,no,no,yes,yes
+106,bad,1292,BAD,"A generic adjective for 'bad', i.e. unpleasant or unwelcome. Antonym of 'good'.",-,,no,no,yes,no,no,yes,yes

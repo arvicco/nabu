@@ -1,0 +1,10 @@
+ID,Name,Glottocode,Glottolog_Name,ISO639P3code,Macroarea,Latitude,Longitude,Family,Abbr,Group,Source,Is_Proto,Alternative_Names,Classification,Note,Map,Icon
+poc,POc,,,,,,,,,,,true,Proto Oceanic,,,,
+pmp,PMP,,,,,,,,,,,true,Proto Malayo-Polynesian,,,,
+peoc,PEOc,,,,,,,,,,,true,Proto Eastern Oceanic,,hypothetical subgroup comprising SE Solomonic and Remote Oceanic,,
+drehet,Drehet,kheh1237,Khehek,tlx,Papunesia,-2.07,146.75,Austronesian,,Adm,,false,Khehek;Levei-Tulu;Ndrehet;Levei;Levei-Drehet,OC,"= Ndrehet, Khehek, Levei-Tulu",B.1,se31a1c
+patpatar,Patpatar,patp1243,Patpatar,gfk,Papunesia,-3.74711,152.493,Austronesian,,MM,,false,,OC,,B.6,ced62ff
+ramoaaina,Ramoaaina,ramo1244,Ramoaaina,rai,Papunesia,-4.17306,152.45100000000002,Austronesian,,MM,,false,Duke of York;Ramoaina,OC,= Duke of York,B.6,c6100fd
+gela,Gela,gela1263,Gela,nlg,Papunesia,-9.04587,160.186,Austronesian,,SES,Fox1955,false,Nggela,OC,,B.8,cff1d21
+areare,’Are’are,area1240,'Are'are,alu,Papunesia,-9.20699,161.15800000000002,Austronesian,,SES,Geerts1970,false,'Are'are;‘Are’are;’Are’Are;‘Are‘are;'Are’are,OC,,B.8,c0e7400
+bauanfijian,Bauan,fiji1243,Fijian,fij,Papunesia,-18.00, 178.33,Austronesian,,Fij,Capell1941;Dixon1988,false,"Fijian;Standard Fijian;Bauan Fijian;Fijian, E (Bauan)",OC,= Standard Fijian,B.14,c1100ff

@@ -43,6 +43,37 @@ uuid-named), so `discover` walks this directory unchanged.
   published", byte-verbatim. ~8 of 10 scouted text probes returned exactly
   this — the inventory-first verdict.
 
+## The line-model specimens (cut 2026-11-13 from the local canonical sync)
+
+Real records + text items pinning the shapes the live corpus carries beyond
+RS 1.001 (set records appended verbatim; text items byte-verbatim):
+
+- Season 01 set + `RS 1.017` (`texts/bda5afe1…`): a counted lacuna
+  (`region`, `missingLines: 8`) — line numbering resumes at Verso 22.
+- Season 01 set + `RS 1.022` (`texts/120210e5…`): unlabeled lacuna regions
+  (`missingLines: -1`, no label) and typographic-prime line labels (`1’`).
+- Ras Ibn Hani set + `RIH 77/01` (`texts/e8e93bf6…`, the record already
+  pinned above now resolves): `separator` rulings and "broken" regions
+  between lines — before the line model these minted duplicate-urn and
+  empty passages.
+- Ras Ibn Hani set + `RIH 77/25+` (`texts/d9c1af5f…`): each surface holds
+  one nested `section` per joined fragment (RIH 78/21, RIH 77/25).
+- Ras Ibn Hani set + `RIH 83/02` (`texts/2ef071ab…`): the 38-byte bare XML
+  declaration the resolver answered a `&format=json` request with — the
+  empty answer.
+- `sets/7e5dbd07…` (Season 15, trimmed to `RS 15.125`, `texts/8731a20f…`):
+  transliteration lines at the rendering ROOT, no surface node.
+- `sets/83bb804c…` (Season 08, trimmed to `RS 8.220`, tombstone
+  `texts/dfcebd3b…`): Language property `<unassigned>` — OCHRE's explicit
+  empty.
+- `sets/b7ea3e39…` (Season 11, trimmed to `RS 11.850`, `texts/458102d8…`):
+  an unlabeled trailing ruling on the Lower edge, and phonemic line 10 as
+  mixed markup (`{"i" => "napḫaru šābū", "content" => 16}`).
+- `quarantine/` (Season 17 trimmed to `RS 17.238`, `texts/39ba4c2f…`): every
+  transliteration line is mixed markup flattened into `{i, content, sup}`
+  lists — the quarantine specimen, outside the conformance workdir by
+  design (`discover` walks only `sets/` at the workdir root).
+
 Trimming was structural only (list members removed, remaining objects
 untouched); the trimmed containers are re-serialized compact JSON, matching
 the wire format. Raw scout snapshots (full seasons 01/19/24/35-48 + Ras Ibn

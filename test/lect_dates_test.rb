@@ -119,6 +119,20 @@ class LectDatesTest < Minitest::Test
     assert_equal "en:late", dates.infer(code: "en", source: "leme", not_before: 1755, not_after: 1755)
   end
 
+  # The Dutch early-modern stage (minted at the lect-scope review,
+  # 2026-11-13): a newspaper issue's own day is a composition-class date,
+  # so the 17th-century press stages into nl:early by the standing
+  # machinery — the first Courante's 1618 lands inside [1500, 1700], and
+  # a year past the ceiling stays honestly bare modern nl.
+  def test_the_dutch_press_stages_into_the_early_modern_band
+    assert_equal "nl:early", dates.infer(code: "nl", source: "delpher-newspapers",
+                                         not_before: 1618, not_after: 1618)
+    assert_equal "nl:early", dates.infer(code: "nl", source: "delpher-newspapers",
+                                         not_before: 1699, not_after: 1699)
+    assert_equal :outside_bands, dates.infer(code: "nl", source: "delpher-newspapers",
+                                             not_before: 1701, not_after: 1701)
+  end
+
   def test_infer_answers_skip_reasons_for_everything_else
     assert_equal :spans_bands, dates.infer(code: "lat", source: "edh", not_before: 100, not_after: 300)
     assert_equal :spans_bands, dates.infer(code: "en", source: "leme", not_before: 1700, not_after: 1700),

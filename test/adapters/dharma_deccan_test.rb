@@ -18,7 +18,10 @@ require "fileutils"
 # verse), Vengī Cālukya 99 (the multi-face plates) with the repo's own
 # metadata TSV trimmed to its row; Ollett's My1 (2026-10-21), whose
 # edition dates by a regnal year of Puḷumāvi (cal:regnal) beside Ollett's
-# own CE origDate.
+# own CE origDate. The undetermined lane (the und-admission ruling,
+# 2026-11-13; whole real files, 2026-11-13): Ollett's Ju10 (xml:lang
+# "und" — "the language is unknown"), EIAD 129 ("unknown-Latn") and the
+# lang-less EIAD 134 admit as "und".
 class DharmaDeccanTest < Minitest::Test
   include AdapterConformance
 
@@ -30,6 +33,9 @@ class DharmaDeccanTest < Minitest::Test
   TEL48 = "urn:nabu:dharma-deccan:INSTelugu00048"
   KC1004 = "urn:nabu:dharma-deccan:INSKalyanaCalukya01004"
   VC99 = "urn:nabu:dharma-deccan:INSVengiCalukya00099"
+  JU10 = "urn:nabu:dharma-deccan:Ju10"
+  EIAD129 = "urn:nabu:dharma-deccan:INSEIAD00129"
+  EIAD134 = "urn:nabu:dharma-deccan:INSEIAD00134"
 
   def conformance_adapter = Nabu::Adapters::DharmaDeccan.new
 
@@ -94,7 +100,7 @@ class DharmaDeccanTest < Minitest::Test
 
   def test_discover_yields_one_ref_per_edition_across_repos_sorted
     refs = adapter.discover(workdir).to_a
-    assert_equal [AM499, EIAD1, KC1004, TEL48, VC99, MY1, N10], refs.map(&:id),
+    assert_equal [AM499, EIAD1, EIAD129, EIAD134, KC1004, TEL48, VC99, JU10, MY1, N10], refs.map(&:id),
                  "urn:nabu:dharma-deccan:<stem sans DHARMA_>, sorted across repos"
     assert_equal "tfb-satavahana-epigraphy", refs.first.metadata["repo"]
     assert(refs.all? { |ref| ref.source_id == SLUG })
@@ -327,6 +333,28 @@ class DharmaDeccanTest < Minitest::Test
 
   def test_the_timeline_reads_the_structured_date_shape
     assert_equal :structured, Nabu::Store::TimelineBuilder::MetadataDates::SHAPES[SLUG]
+  end
+
+  # -- the undetermined lane (the und-admission ruling, 2026-11-13) -----------
+
+  def test_ollett_ju10_und_admits_as_undetermined
+    document = parsed(JU10)
+    assert_equal "und", document.language, "Ollett: \"the language is unknown\" — no claim"
+    assert_equal %w[tābake kesusa tatobho gaḍhi], document.passages.map(&:text)
+    refute document.metadata.key?("language_raw"), "the raw tag IS und"
+  end
+
+  def test_eiad129_unknown_latn_admits_keeping_the_raw_tag
+    document = parsed(EIAD129)
+    assert_equal "und", document.language
+    assert_equal "unknown-Latn", document.metadata["language_raw"], "upstream's own tag, verbatim"
+    assert_equal ["und"], document.passages.map(&:language).uniq
+  end
+
+  def test_a_lang_less_eiad_edition_admits_as_undetermined
+    document = parsed(EIAD134)
+    assert_equal "und", document.language
+    refute document.metadata.key?("language_raw"), "no upstream tag exists to keep"
   end
 
   # -- defensive quarantines --------------------------------------------------

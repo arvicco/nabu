@@ -758,6 +758,25 @@ anchors:
   nl:
     name: Dutch
     parent: dum
+    note: "the written line runs odt (to ca. 1150) → dum (the ISO/MARC
+           reference band 1050–1350 on the anchor; Dutch handbook
+           convention extends Middle Dutch to ca. 1500) → nl; the
+           handbook periodization (van der Wal & van Bree, Geschiedenis
+           van het Nederlands) divides the modern language at ca. 1700
+           into Vroegnieuwnederlands and Nieuwnederlands — the early
+           half is the stage below, the bare code past 1700 is the
+           honest modern claim"
+    stages:
+      early: {name: Early Modern Dutch, band: [1500, 1700], ord: 1,
+              band_note: "Vroegnieuwnederlands by the Dutch handbook
+                          periodization (van der Wal–van Bree): from
+                          the printing/standardization turn at the
+                          Middle Dutch ceiling to the post-Statenbijbel
+                          consolidation ca. 1700; the attested corpus
+                          class is the 17th-century newspaper press
+                          (the courantes from 1618) and the early-print
+                          literature shelves, staged by imprint/issue
+                          date inference"}
 
   ofs:
     name: Old Frisian

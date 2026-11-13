@@ -60,3 +60,12 @@ files:
     url: https://raw.githubusercontent.com/mmehner/gretil-corpus-tei/master/sa_pANini-aSTAdhyAyI.xml
     whole: false
     trim: upstream lines 1..341 + 5404..5411 + 8232..8235 (teiHeader, sūtras 1,1.1-1,1.6 and 6,1.128-6,1.131 incl. the <p> sūtra 6,1.130)
+  # --- bare-number line-marker fixtures (the 2026-11-13 quarantine review; cut from local canonical) ---
+  - path: sa_vAmadeva-janmamaraNavicAra-v1.xml
+    url: https://raw.githubusercontent.com/mmehner/gretil-corpus-tei/master/sa_vAmadeva-janmamaraNavicAra.xml
+    whole: false
+    trim: upstream lines 1..322 + 636..639 (teiHeader, the first five flat <l> closed by a prefixless "// N", closing tags)
+  - path: sa_abhinavagupta-paramArthasAra-v1.xml
+    url: https://raw.githubusercontent.com/mmehner/gretil-corpus-tei/master/sa_abhinavagupta-paramArthasAra.xml
+    whole: false
+    trim: upstream lines 1..327 + 833..842 (teiHeader, verses 1-3 and 105 closed by "|| N ||", the body note, closing tags)

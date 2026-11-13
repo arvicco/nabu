@@ -27,6 +27,9 @@ class PerseusLatinTest < Minitest::Test
   # P4 ladder — lb-numbered verse and a milestone-cited Livy book.
   DIRAE_CLASS_URN = "urn:cts:latinLit:phi0692.phi012.perseus-lat1"
   LIVY_URN = "urn:cts:latinLit:phi0914.phi0011.perseus-lat3"
+  # A name-union replacementPattern step (the 2026-11-13 quarantine review):
+  # .../tei:div[@n='$1']/*[self::tei:p or self::tei:l][@n='$2'].
+  BISSULA_URN = "urn:cts:latinLit:stoa0045.stoa001.perseus-lat2"
 
   # --- AdapterConformance hooks -------------------------------------------
 
@@ -70,7 +73,7 @@ class PerseusLatinTest < Minitest::Test
     refs = Nabu::Adapters::PerseusLatin.new.discover(LATIN_WORKDIR).to_a
     # The eng fixtures (phi1351, stoa0058) are translations: skipped with the
     # default flag. The two P4 lat fixtures are ordinary editions.
-    assert_equal [DIRAE_CLASS_URN, LIVY_URN, AUSONIUS_URN], refs.map(&:id).sort
+    assert_equal [DIRAE_CLASS_URN, LIVY_URN, BISSULA_URN, AUSONIUS_URN], refs.map(&:id).sort
 
     ref = refs.find { |r| r.id == AUSONIUS_URN }
     assert_equal "perseus-latin", ref.source_id
@@ -128,6 +131,21 @@ class PerseusLatinTest < Minitest::Test
     assert_equal 30, document.size
     assert_equal "#{LIVY_URN}:1.pr.1", document.first.urn
     assert_includes document.first.text, "facturusne operae pretium sim"
+  end
+
+  # De Bissula cites a prose preface paragraph and verse lines through ONE
+  # union step ("*[self::tei:p or self::tei:l]"): the subtype pass trips on
+  # its depth, and the structural retry now reads the union as the xpath
+  # engine would — both element kinds, bound by @n under the poem div.
+  def test_parse_round_trips_the_union_step_bissula
+    adapter = Nabu::Adapters::PerseusLatin.new
+    ref = adapter.discover(LATIN_WORKDIR).find { |r| r.id == BISSULA_URN }
+    document = adapter.parse(ref)
+    assert_equal 41, document.size
+    citations = document.map { |p| p.urn.delete_prefix("#{BISSULA_URN}:") }
+    assert_equal %w[pr.1 1.1 1.2 1.3 1.4 1.5 1.6 2.1], citations.first(8)
+    assert document.first.text.start_with?("Pervincis tandem et operta musarum mearum"), document.first.text[0, 60]
+    assert_equal "UT voluisti, Paule, cunctos Bissulae versus habes,", document.to_a[1].text
   end
 
   # --- registry round-trip ------------------------------------------------

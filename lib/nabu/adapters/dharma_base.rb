@@ -46,6 +46,10 @@ module Nabu
     #   nusantara    308 = 291 + 17 (16 lang-less, "languageb-Latn")
     #                                             skips 0 + 2
     #   javanese      96 = 91 + 5 ("und")         skips 0 + 2
+    # Under the und-admission ruling (2026-11-13) nusantara's 16 lang-less
+    # and javanese's 5 "und" editions admit as "und" (ADMIT_UNDETERMINED):
+    # nusantara 307 + 1 (the languageb-Latn template bug stays
+    # quarantined), javanese 96 + 0.
     #   pyu          146 = 145 + 1 (PYU 120)      skips 0 + 16
     #   campa        122 = 122 + 0                skips 1 + 0
     # (dharma-tamil and dharma-deccan reconcile in their own notes.)
@@ -107,6 +111,11 @@ module Nabu
       # for multilingual repos — their lang-less editions quarantine.
       DEFAULT_LANGUAGE = nil
 
+      # The und-admission ruling, 2026-11-13: a corpus whose untagged/"und"
+      # editions are real text admits them as "und" (DharmaEpidocParser,
+      # "The undetermined lane"); default off — the family stance.
+      ADMIT_UNDETERMINED = false
+
       def parse(document_ref)
         doc = Nokogiri::XML(File.read(document_ref.path, encoding: "UTF-8"), &:noblanks)
         doc.remove_namespaces!
@@ -114,14 +123,16 @@ module Nabu
         result = DharmaEpidocParser.parse_doc(
           doc, path: document_ref.path, allowed_languages: self.class::LANGUAGES,
                aliases: self.class::ALIASES,
-               default_language: self.class::DEFAULT_LANGUAGE
+               default_language: self.class::DEFAULT_LANGUAGE,
+               admit_undetermined: self.class::ADMIT_UNDETERMINED
         )
         document = Nabu::Document.new(
           urn: document_ref.id, language: result.language,
           canonical_path: document_ref.path,
           title: result.title || document_ref.metadata["stem"],
           metadata: {
-            "license" => result.license, "maturity" => result.maturity
+            "license" => result.license, "maturity" => result.maturity,
+            "language_raw" => result.language_raw
           }.merge(header).compact
         )
         result.passages.each_with_index do |unit, index|

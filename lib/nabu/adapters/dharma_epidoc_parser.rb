@@ -98,8 +98,21 @@ module Nabu
     # the Pyu corpus carries no xml:lang — the repo's own name is the
     # claim; multilingual repos declare none and their lang-less
     # editions stay quarantined). Anything else — including the real
-    # "languageb-Latn" template bug and "und" stubs — quarantines
-    # loudly.
+    # "languageb-Latn" template bug — quarantines loudly.
+    #
+    # == The undetermined lane (the und-admission ruling, 2026-11-13)
+    #
+    # A tag that DECLARES no language — none at all, "und", "und-<Script>",
+    # "unknown", "unknown-<Script>" (#undetermined_tag?) — is upstream's
+    # honest non-claim, not dirt. An adapter that opts in
+    # (admit_undetermined: true) admits such real text as language "und":
+    # searchable, and no language-facet claim ("und" resolves to no
+    # nabu-lects node). Upstream's raw tag rides Result#language_raw where
+    # it differs from "und" (EIAD 129's "unknown-Latn"); a lang-less
+    # edition has none to keep. Without the opt-in the family stance
+    # holds and such editions quarantine. A malformed tag (the
+    # "languageb-Latn" template bug) is never an undetermined
+    # declaration and quarantines either way.
     #
     # == Skeletons (upstream's placeholder grain)
     #
@@ -117,8 +130,8 @@ module Nabu
     module DharmaEpidocParser
       XML_NS = "http://www.w3.org/XML/1998/namespace"
 
-      Result = Data.define(:title, :language, :license, :maturity, :passages)
-      Unit = Data.define(:key, :text, :language, :met, :entities)
+      Result = Data.define(:title, :language, :license, :maturity, :passages, :language_raw)
+      Unit = Data.define(:key, :text, :language, :met, :entities, :raw_language)
 
       DROP = %w[note bibl figure desc certainty ref rdg sic orig abbr head label fw].freeze
       EDITORIAL_DIVS = %w[commentary translation apparatus bibliography].freeze
@@ -126,6 +139,10 @@ module Nabu
       GAP_MARKER = "[…]"
       SKELETON_NOTE = "skeleton — no citable text yet (upstream placeholder)"
       PLACEHOLDER_RESIDUE = %r{[[:space:].?/…]}
+      UNDETERMINED = "und"
+      # BCP 47's undetermined subtag, or the plain word, optionally with a
+      # four-letter script subtag — case as upstream writes it.
+      UNDETERMINED_TAG = /\A(?:und|unknown)(?:-[A-Z][a-z]{3})?\z/
 
       module_function
 
@@ -158,22 +175,31 @@ module Nabu
       # Parse one DHARMA edition file. +allowed_languages+ is the adapter's
       # measured code set; +aliases+ maps censused upstream tag dirt onto
       # held codes. Any other code raises Nabu::ParseError at mint.
-      def parse(path, allowed_languages:, aliases: {}, default_language: nil, names: false)
+      def parse(path, allowed_languages:, aliases: {}, default_language: nil, names: false,
+                admit_undetermined: false)
         doc = Nokogiri::XML(File.read(path, encoding: "UTF-8"), &:noblanks)
         doc.remove_namespaces!
         parse_doc(doc, path: path, allowed_languages: allowed_languages, aliases: aliases,
-                       default_language: default_language, names: names)
+                       default_language: default_language, names: names,
+                       admit_undetermined: admit_undetermined)
+      end
+
+      # Does +tag+ declare NO language (class note "The undetermined lane")?
+      # nil/empty (no xml:lang) counts; a malformed tag never does.
+      def undetermined_tag?(tag)
+        tag.nil? || tag.empty? || UNDETERMINED_TAG.match?(tag)
       end
 
       # #parse on an already-loaded, namespace-stripped DOM (an adapter
       # that also mines the header — dharma-deccan — loads once). PRUNES
       # the edition's nested editorial divs from +doc+ in place.
-      def parse_doc(doc, path:, allowed_languages:, aliases: {}, default_language: nil, names: false)
+      def parse_doc(doc, path:, allowed_languages:, aliases: {}, default_language: nil, names: false,
+                    admit_undetermined: false)
         edition = doc.at_xpath('//body//div[@type="edition"]') or
           raise Nabu::ParseError, "#{File.basename(path)}: no edition div#{malformed_note(doc)}"
         prune_editorial!(edition)
 
-        checker = language_checker(allowed_languages, aliases, path)
+        checker = language_checker(allowed_languages, aliases, path, admit_undetermined: admit_undetermined)
         state = WalkState.new(checker: checker, names: names,
                               paragraph_mode: !edition.at_xpath(".//lb[not(ancestor::lg)]"))
         edition_lang = lang_of(edition) ||
@@ -185,13 +211,25 @@ module Nabu
         units = state.units
         raise Nabu::ParseError, "#{File.basename(path)}: edition has no citable text" if units.empty?
 
+        raw = edition_lang || units.first.raw_language
+        language = checker.call(raw)
         Result.new(
           title: presence(text_of(doc.at_xpath("//teiHeader//titleStmt/title"))),
-          language: checker.call(edition_lang || units.first.language),
+          language: language,
           license: doc.at_xpath("//availability/licence/@target")&.value,
           maturity: edition["rendition"]&.[](/maturity:(\d+)/, 1),
-          passages: units
+          passages: units,
+          language_raw: undetermined_raw(language, raw)
         )
+      end
+
+      # Upstream's raw tag where an admitted "und" differs from it
+      # ("unknown-Latn"); nil for a lang-less edition or a literal "und".
+      def undetermined_raw(language, raw)
+        return nil unless language == UNDETERMINED
+        return nil if raw.nil? || raw.empty? || raw == UNDETERMINED
+
+        raw
       end
 
       # Editorial divs NESTED inside the edition div (the sibling position
@@ -234,7 +272,8 @@ module Nabu
         def mint_verse(key, text, language, met, entities: nil)
           @units << Unit.new(key: disambiguated(sectioned(key)), text: text,
                              language: @checker.call(language), met: met,
-                             entities: DharmaEpidocParser.entities_or_nil(entities))
+                             entities: DharmaEpidocParser.entities_or_nil(entities),
+                             raw_language: language)
         end
 
         # A fresh sink for one verse line (nil when names are off).
@@ -286,7 +325,8 @@ module Nabu
           unless text.empty? || DharmaEpidocParser.marker_only?(text)
             @units << Unit.new(key: disambiguated(sectioned(@key || "pre")), text: text,
                                language: @checker.call(@language), met: nil,
-                               entities: DharmaEpidocParser.entities_or_nil(@entities))
+                               entities: DharmaEpidocParser.entities_or_nil(@entities),
+                               raw_language: @language)
           end
           @entities = @names ? [] : nil
           @buffer = +""
@@ -422,10 +462,11 @@ module Nabu
         records.nil? || records.empty? ? nil : records
       end
 
-      def language_checker(allowed, aliases, path)
+      def language_checker(allowed, aliases, path, admit_undetermined: false)
         lambda do |code|
           resolved = aliases.fetch(code, code)
           next resolved if allowed.include?(resolved)
+          next UNDETERMINED if admit_undetermined && undetermined_tag?(code)
 
           raise Nabu::ParseError,
                 "#{File.basename(path)}: unknown language code #{code.inspect} — classify it before ingesting"

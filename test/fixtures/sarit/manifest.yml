@@ -28,3 +28,12 @@ files:
     url: https://raw.githubusercontent.com/sarit/SARIT-corpus/master/mahabharata-devanagari.xml
     whole: false
     trim: teiHeader + ādiparva adhyāya 001 (upstream lines 1..1831) + svargārohaṇaparva adhyāya 001 (lines 487077..487220) + closing tags; 38.6 MB -> 147 KB, two-parva nesting preserved
+  # --- the 2026-11-13 quarantine review's citation-unit fixtures (cut from local canonical) ---
+  - path: trisuli-piyusalahari-p4p5p16.xml
+    url: https://raw.githubusercontent.com/sarit/SARIT-corpus/master/trisuli-piyusalahari.xml
+    whole: false
+    trim: upstream lines 1..144 + 415..444 (teiHeader, front, body pages 04-05, page 16 through the <ab> close, trailers, closing tags)
+  - path: ayurvedasutram-c1c2.xml
+    url: https://raw.githubusercontent.com/sarit/SARIT-corpus/master/ayurvedasutram.xml
+    whole: false
+    trim: upstream lines 1..124 + </list></div> + 313..320 + </list></div> + 1155..1157 (teiHeader, sūtras 1.1-1.3 and 2.1-2.2, closing tags)
