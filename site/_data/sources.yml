@@ -2149,14 +2149,14 @@ sources:
   ndl-kotenseki:
     name: NDL 次世代デジタルライブラリー — 古典籍 OCR full text (bulk API)
     license_class: open
-    documents: 69640
-    documents_display: '69,640'
-    passages: 3842562
-    passages_display: '3,842,562'
+    documents: 70840
+    documents_display: '70,840'
+    passages: 3907533
+    passages_display: '3,907,533'
     entries: 0
     entries_display: '0'
-    holdings: 69,640 documents / 3,842,562 passages
-    canonical_display: 18 GB
+    holdings: 70,840 documents / 3,907,533 passages
+    canonical_display: 19 GB
   ninjal-textdb:
     name: NINJAL Text Data Sets for Research on the History of Japanese — the Kirishitan
       materials
@@ -3078,14 +3078,14 @@ sources:
     name: SuttaCentral — bilara-data segmented canon (Pali Tipiṭaka + Chinese Āgamas
       + aligned English)
     license_class: open
-    documents: 12397
-    documents_display: '12,397'
-    passages: 699511
-    passages_display: '699,511'
+    documents: 12399
+    documents_display: '12,399'
+    passages: 699639
+    passages_display: '699,639'
     entries: 0
     entries_display: '0'
-    holdings: 12,397 documents / 699,511 passages
-    canonical_display: 557 MB
+    holdings: 12,399 documents / 699,639 passages
+    canonical_display: 558 MB
   syriac-corpus:
     name: Digital Syriac Corpus (srophe, 632 TEI documents)
     license_class: attribution
@@ -3100,14 +3100,14 @@ sources:
   tamilex:
     name: TAMILEX — critical editions of the classical Tamil corpus (Universität Hamburg)
     license_class: nc
-    documents: 7878
-    documents_display: '7,878'
-    passages: 15228
-    passages_display: '15,228'
+    documents: 7914
+    documents_display: '7,914'
+    passages: 15320
+    passages_display: '15,320'
     entries: 0
     entries_display: '0'
-    holdings: 7,878 documents / 15,228 passages
-    canonical_display: 105 MB
+    holdings: 7,914 documents / 15,320 passages
+    canonical_display: 117 MB
   te-wikisource:
     name: Telugu Wikisource — the classical cone (kāvya, prabandha, śataka; prints
       to 1930)
@@ -3182,12 +3182,12 @@ sources:
     license_class: research_private
     documents: 563
     documents_display: '563'
-    passages: 456967
-    passages_display: '456,967'
+    passages: 456965
+    passages_display: '456,965'
     entries: 0
     entries_display: '0'
-    holdings: 563 documents / 456,967 passages
-    canonical_display: 425 MB
+    holdings: 563 documents / 456,965 passages
+    canonical_display: 437 MB
   tir:
     name: Thesaurus Inscriptionum Raeticarum (TIR) — Raetic corpus of record (Univ.
       Vienna)
@@ -3409,14 +3409,14 @@ sources:
   wellcome:
     name: Wellcome Collection — digitised printed books, OCR full text (pre-1800 cone)
     license_class: open
-    documents: 703
-    documents_display: '703'
-    passages: 319304
-    passages_display: '319,304'
+    documents: 879
+    documents_display: '879'
+    passages: 353551
+    passages_display: '353,551'
     entries: 0
     entries_display: '0'
-    holdings: 703 documents / 319,304 passages
-    canonical_display: 835 MB
+    holdings: 879 documents / 353,551 passages
+    canonical_display: 867 MB
   wenhai:
     name: 'The Digital Wenhai v1.1: Phonology (Beaudouin 2026) — the Tangut rhyme
       dictionary 文海'
@@ -4020,11 +4020,11 @@ shelves:
     - pleias-french-books
     - socinian-letters
     - wellcome
-    documents: 32336
-    documents_display: '32,336'
-    passages: 7040541
-    passages_display: '7,040,541'
-    size_display: 32,336 / 7,040,541
+    documents: 32512
+    documents_display: '32,512'
+    passages: 7074788
+    passages_display: '7,074,788'
+    size_display: 32,512 / 7,074,788
   papyri:
     sources:
     - papyri-ddbdp
@@ -4104,11 +4104,11 @@ shelves:
     - gretil-legacy
     - osbct
     - tipitaka-lk
-    documents: 29087
-    documents_display: '29,087'
-    passages: 2446036
-    passages_display: '2,446,036'
-    size_display: 29,087 / 2,446,036
+    documents: 29089
+    documents_display: '29,089'
+    passages: 2446162
+    passages_display: '2,446,162'
+    size_display: 29,089 / 2,446,162
   south-asia:
     sources:
     - dharma-tamil
@@ -4124,11 +4124,11 @@ shelves:
     - shabados
     - gu-wikisource
     - te-wikisource
-    documents: 32622
-    documents_display: '32,622'
-    passages: 1998626
-    passages_display: '1,998,626'
-    size_display: 32,622 / 1,998,626
+    documents: 32658
+    documents_display: '32,658'
+    passages: 1998718
+    passages_display: '1,998,718'
+    size_display: 32,658 / 1,998,718
   treebanks:
     sources:
     - proiel
@@ -4415,11 +4415,11 @@ shelves:
     - kouigenji
     - ninjal-textdb
     - oncoj
-    documents: 98816
-    documents_display: '98,816'
-    passages: 7134657
-    passages_display: '7,134,657'
-    size_display: 98,816 / 7,134,657
+    documents: 100016
+    documents_display: '100,016'
+    passages: 7199628
+    passages_display: '7,199,628'
+    size_display: 100,016 / 7,199,628
   southeast-asia:
     sources:
     - dharma-khmer
@@ -4484,5 +4484,5 @@ shelves:
     size_display: 1,282 / 7,014
 disk:
   canonical_display: 162 GB
-  derived_display: 241 GB
+  derived_display: 242 GB
   starter_display: 693 MB

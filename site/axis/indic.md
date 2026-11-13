@@ -38,10 +38,10 @@ A source wears every desk it serves — these 35 answer this desk. Holdings are 
 | `shabados` | texts | open | wired · auto | 127 docs / 141,264 passages |
 | `siddham` | texts | attribution | wired · manual | 427 docs / 6,334 passages |
 | `sii-clean` | texts | attribution | wired · auto | 18,903 docs / 318,689 passages |
-| `suttacentral` | texts | open | wired · auto | 12,397 docs / 699,511 passages |
-| `tamilex` | texts | nc | wired · auto | 7,878 docs / 15,228 passages |
+| `suttacentral` | texts | open | wired · auto | 12,399 docs / 699,639 passages |
+| `tamilex` | texts | nc | wired · auto | 7,914 docs / 15,320 passages |
 | `te-wikisource` | texts | attribution | wired · manual | 453 docs / 208,794 passages |
-| `tipitaka-lk` | texts | research_private | wired · auto | 563 docs / 456,967 passages |
+| `tipitaka-lk` | texts | research_private | wired · auto | 563 docs / 456,965 passages |
 | `ud` | treebank | nc | wired · manual | 83 docs / 329,980 passages |
 | `vedaweb` | texts | attribution | wired · manual | 1,028 docs / 10,552 passages |
 | `wiktionary-dv` | dictionary | attribution | wired · manual | 2,047 entries |
@@ -53,7 +53,7 @@ A source wears every desk it serves — these 35 answer this desk. Holdings are 
 | `wiktionary-ta` | dictionary | attribution | wired · manual | 13,855 entries |
 | `wiktionary-te` | dictionary | attribution | wired · manual | 23,325 entries |
 
-**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 13 November 2026)</span>: `san` 511,752 · `pli` 97,454 · `pan` 75,061 · `tel` 23,875 · `tam-Latn` 18,584 · `tam` 14,610 · `mal` 11,505 · `tel-Latn` 5,104 · `eng` 4,794 · `kan-Latn` 3,850 … and 33 more (`nabu axis indic` lists all).
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 13 November 2026)</span>: `san` 511,752 · `pli` 97,454 · `pan` 75,061 · `tel` 23,875 · `tam-Latn` 18,620 · `tam` 14,610 · `mal` 11,505 · `tel-Latn` 5,104 · `eng` 4,796 · `kan-Latn` 3,850 … and 33 more (`nabu axis indic` lists all).
 
 **Carried in by multilingual packs** (`ud` — whole-source members whose other languages ride along, as of 13 November 2026): `lat` 11 · `grc` 9 · `orv` 9 · `ota` 5 · `cop` 3 … and 18 more (`nabu axis indic` lists all).
 
