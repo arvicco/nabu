@@ -62,13 +62,32 @@ MIT ×1 (bhattojidiksita-siddhantakaumudi) — zero NC**. These fixtures:
   T.R. Vyasacharya, Nirnayasagar 1906–1910, 17 volumes). NOT the BORI
   critical edition and NOT the Calcutta vulgate Monier-Williams's "MB."
   citations reference — no MW citation joins are promised on this text.
-- Five corpus files stay honestly quarantined under the v1 rungs (all named
-  in docs/02-sources.md): four Braj/Awadhi texts whose content rides in
-  `<ab>` blocks (diksita-jivanacaritra, hajarilala-srisivavivahakavitavali,
-  nivajakavi-sakuntala-upakhyana, trisuli-piyusalahari) and the
-  list-shaped ayurvedasutram (`<label>1.1</label><item>sūtra</item>`) —
-  small v2 rung candidates, the GRETIL P9-4c recovery precedent.
+- Five corpus files were quarantined under the v1 rungs: four Braj/Awadhi
+  texts whose content rides in `<ab>` blocks (diksita-jivanacaritra,
+  hajarilala-srisivavivahakavitavali, nivajakavi-sakuntala-upakhyana,
+  trisuli-piyusalahari) and the list-shaped ayurvedasutram
+  (`<label>1.1</label><item>sūtra</item>`). The 2026-11-13 quarantine
+  review's grains recover them (see "Citation-unit fixtures" below).
 - Six corpus files declare no language anywhere (`<text>`/`<body>` both
   bare); discovery sniffs the script of the first body text (san default).
   Not exercised by these fixtures' headers but covered by a doctored-copy
   test.
+
+## Citation-unit fixtures (the 2026-11-13 quarantine review)
+
+Trimmed REAL slices from the local canonical clone
+(`sarit/SARIT-corpus@master`), cut **2026-11-13**; headers byte-verbatim.
+
+- **`trisuli-piyusalahari-p4p5p16.xml`** — the lb-in-ab print
+  transcription: the whole text in ONE attribute-less `<ab>` segmented only
+  by `<lb/>` print lines and `<pb n="…"/>` pages (no lg/l/p; heads and
+  trailers outside the `<ab>`). TRIM: upstream lines 1..144 (teiHeader,
+  front, body through page 05) + 415..444 (page 16 to the end: the `<ab>`
+  close, both trailers, closing tags) → passages `pb04 pb05 pb16`, the PAGE
+  grain (addressing `page`). Grant: CC BY-SA 4.0 (`<licence>` target in the
+  header). The same shape carries the other three quarantined Braj/Awadhi
+  texts AND four loaded siblings (bandimocana,
+  giridharadasa-bharatibhusana, pyarelala-ragabinoda,
+  tulasidasa-ramayanasatika) that held one passage each — their epigraph
+  `<p>` — while the `<ab>` text was dropped; those gain their pages (15, 31,
+  39, 48 passages) and their existing `p1` stays put.

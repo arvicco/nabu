@@ -25,6 +25,7 @@ class SaritParserTest < Minitest::Test
   SAMANYA = File.join(FIXTURES, "samanyadusana.xml")
   NYAYA = File.join(FIXTURES, "vatsyayana-nyayabhasya-s1-2.xml")
   MBH = File.join(FIXTURES, "mahabharata-devanagari-adi1-svarga1.xml")
+  TRISULI = File.join(FIXTURES, "trisuli-piyusalahari-p4p5p16.xml")
 
   def parser
     Nabu::Adapters::SaritParser.new
@@ -255,6 +256,50 @@ class SaritParserTest < Minitest::Test
     XML
     with_tempfile(xml) do |path|
       assert_equal "CC BY-SA 3.0", parse(path, language: "san-Latn").metadata["license"]
+    end
+  end
+
+  # --- the page grain: lb-in-ab print transcriptions (2026-11-13 review) -----
+
+  # The Braj/Avadhi print transcriptions (trisuli-piyusalahari and its three
+  # siblings) carry the whole text in ONE attribute-less <ab>, segmented only
+  # by <lb/> print lines and <pb n="…"/> page breaks — no lg/l/p anywhere.
+  # Each printed page becomes a passage cited by its pb @n ("pb04"); a
+  # page that opens before the <ab> (the pb precedes the heads) still names
+  # the text that follows. lb stays a word space; the <head>s stay dropped
+  # and the <trailer>s outside the <ab> stay out.
+  def test_trisuli_lb_in_ab_cites_one_passage_per_print_page
+    doc = parse(TRISULI, language: "bra-Deva")
+    assert_equal(%w[pb04 pb05 pb16], doc.map { |p| p.urn.delete_prefix("#{doc.urn}:") })
+    doc.each { |p| assert_equal "page", p.annotations["addressing"] }
+    first = doc.to_a.first
+    assert first.text.start_with?("क० ॥ सकल मही को परिपूरण सौभाग्य यही वेद औ पुराणनको"), first.text[0, 60]
+    refute_includes first.text, "पीयूषलहरी", "the page's <head> stays dropped"
+    assert doc.to_a.last.text.end_with?("खानि यह पियूष लहरी रची ५६ ॥"), doc.to_a.last.text[-40..]
+    doc.each { |p| refute_includes p.text, "इतिश्रीपीयूषलहरीसम्पूर्णा", "the trailer is outside the <ab>" }
+  end
+
+  # Guards: the page grain fires only on the lb-segmented, attribute-less
+  # <ab>. An <ab> with its own @n (nyāyasudhā's sūtra blocks) or with no
+  # <lb> (vidhiviveka's two run-in headings) keeps its v1 treatment — not a
+  # unit — so no already-loaded document gains or moves a passage.
+  def test_ab_without_lb_or_with_its_own_address_is_not_a_page_unit
+    xml = <<~XML
+      <TEI xmlns="http://www.tei-c.org/ns/1.0">
+        <teiHeader><fileDesc><publicationStmt><availability>
+          <p>This work is licensed under a Creative Commons Attribution-ShareAlike 4.0 licence.</p>
+        </availability></publicationStmt></fileDesc></teiHeader>
+        <text xml:lang="sa-Latn"><body><div>
+          <pb n="1"/>
+          <ab>anāgamaś ca so 'bhyāsaḥ</ab>
+          <ab type="sūtra" n="1">āmnāyasya<lb/>kriyārthatvāt</ab>
+          <p>namaḥ</p>
+        </div></body></text>
+      </TEI>
+    XML
+    with_tempfile(xml) do |path|
+      doc = parse(path, language: "san-Latn")
+      assert_equal(%w[p1], doc.map { |p| p.urn.delete_prefix("#{doc.urn}:") })
     end
   end
 

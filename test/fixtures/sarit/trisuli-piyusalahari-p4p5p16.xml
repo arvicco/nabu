@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:id="navalkishore-piyusalahari1890">  
+  <teiHeader xml:lang="en"> 
+    <fileDesc> 
+      <titleStmt> 
+       <title>Pīyūṣalaharī</title>
+		<author>Jagannātha Triśūli</author>
+        <funder>German Research Foundation (Deutsche Forschungsgemeinschaft, DFG); Project "CrossAsia - Fachinformationsdienst Asien" 2016-2018</funder>  
+        <respStmt> 
+          <resp>The text were scanned and OCRed at Heidelberg University with the software 
+            <ref target="http://www.indsenz.com/int/index.php?content=software_ind_ocr_sanskrit">SanskritOCR</ref> Version 1.0.1.0 [+S] by
+          </resp>  
+          <name>Fachinformationsdienst Asien at Heidelberg University</name> 
+        </respStmt>  
+        <respStmt> 
+          <resp>Rough corrections of the OCRed texts by</resp>  
+          <name>Fachinformationsdienst Asien at Heidelberg University</name> 
+        </respStmt> 
+		<respStmt>
+	  <resp>prepared for SARIT by</resp>
+	  <persName ref="https://viaf.org/viaf/308710472/">Liudmila Olalde</persName>
+	</respStmt>
+      </titleStmt>  
+      <editionStmt> 
+        <p>The text was OCRed and has to be proofread. Only evident OCR errors were corrected.</p> 
+      </editionStmt>  
+      <publicationStmt> 
+        <publisher>Project "CrossAsia - Fachinformationsdienst Asien", 2016-2018.</publisher>  
+        <availability status="restricted"> 
+          <licence> 
+            <p>Distributed under a 
+              <ref target="https://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International licence.</ref> Under this licence, you are free to:
+            </p>  
+            <list> 
+              <item>Share — copy and redistribute the material in any medium or format.</item>  
+              <item>Adapt — remix, transform, and build upon the material for any purpose, even commercially.</item> 
+            </list>  
+            <p>The licensor cannot revoke these freedoms as long as you follow the license terms.</p>  
+            <p>Under the following terms:</p>  
+            <list> 
+              <item>Attribution — You must give appropriate credit, provide a link to the license, and indicate if changes were made. You may do so in any reasonable manner, but not in any way that suggests the licensor endorses you or your use.</item>  
+              <item>ShareAlike — If you remix, transform, or build upon the material, you must distribute your contributions under the same license as the original.</item> 
+            </list>  
+            <p>More information and fuller details of this license are given on the Creative Commons website.</p> 
+          </licence>  
+          <p>SARIT assumes no responsibility for unauthorised use that infringes the rights of any copyright owners, known or unknown.</p> 
+        </availability>  
+        <date>2018</date> 
+      </publicationStmt>  
+      <sourceDesc> 
+        <p><bibl>Jagannātha Triśūli. Pīyūṣalaharī: Artthāt Gaṅgālaharī; Jisameṃ Śrīmahārāṇī Gaṅgājīkā Caritra Uttamarītise Varṇitahai. 2nd ed. Lakhanaū: Navalakiśora; 1890. doi: <ref target="https://doi.org/10.11588/diglit.31592">https://doi.org/10.11588/diglit.31592</ref>.</bibl></p>
+      </sourceDesc> 
+    </fileDesc> 
+  </teiHeader>  
+  <text xml:lang="braj-Deva"> 
+  <front>
+  <div><pb n="01"/>
+            <head>भूमिका ॥</head><lb/> 
+          <p>विदितहो कि श्रीमन्महाराजाधिराज राजेन्द्र श्रीब्रजेन्द्रमहा-<lb/>  
+            राज परम धर्मज्ञ प्रजापालन तत्पर भूलोक पुरन्दर परमउदार<lb/>  
+            बैकुणठागारवालीय भरतपुर श्रीमत्‌बलवंतसिंह बहादुर बहादुर-<lb/>  
+            जंगने अपनी कृपातिशय प्रकटकरनेके हेतु मेरेपिताजीको आज्ञा<lb/>  
+            दीथी कि आजकल संस्कृत विद्याका प्रचार न्यूनहोता जाता है<lb/>  
+            लोगोंकी बुद्धि अतिकुण्ठितहै इस्से कोई पुस्तक भाषानिबन्धसे<lb/>  
+            उल्थाकीजाय, इसआज्ञानुसार पिताजीते पण्डित राजजगन्नाथ<lb/>  
+            त्रिशूलीकृत पियूषलहरीको उल्था प्रतिश्लोकसंस्कृतसे भाषामें<lb/>  
+            किया, श्रीमहाराजने उसउल्थाकोदेख अतिप्रसन्न मनहोकर एक<lb/>  
+            लेखक गिरिधरनामीको नौकरकरके केवलइसकीप्रति लिखाने को<lb/>  
+            नियतकरदिया कि यत्रतत्र इसकीप्रति प्रचलितहुंई परंतु यन्त्रा-<lb/>  
+            लयकाप्रचार ऐसाअधिक न था देशीरीतिपर पुस्तकैं लिखीगंई<lb/>  
+            इससेप्रचार अधिक न हुआ और इसउल्थाके उपरान्त हनुमा-<lb/>  
+            न्नाटक संस्कृत ग्रन्थकाउल्था विचित्र रामायणनामसे विख्यात<lb/>  
+            उक्तश्रीमन्महाराजकी आज्ञानुसार कियागयाथा कि वहउक्तरीति<lb/>  
+            अनुसार लिखलिखकर प्रचलित हुआ परंतु जैसाशीघ्र और सार्ब-<lb/>  
+            जननि बिदित अबयंत्रालयद्वारा पस्तकोंका प्रचारहोताहै वहकहां<lb/>  
+            इसलिये जोउल्थाप्रथम आज्ञानुसार बनायागयाथा उसकासार्व-<lb/>  
+            जनीनप्रचार होनेके हेतु श्रीमन्महाराजाधिराज बैकुण्ठागारकी<lb/>  
+            कीर्त्ति और परलोकनिवासी पिताजीकीकृति प्रकट करनेको यह<lb/>  
+            उल्था पीयूषलहरीका छपवायागयाहै शब्द अर्थका संस्कृतकेअनु-<lb/>  
+            सारहोना और रीतिविरुद्ध नहोना इसउल्यासे प्रकटहै परम्परासे<lb/>  
+            श्री मत् ब्रजेनद्र वालीय भरतपुरके चरणसेवक बलदेवसिंह वैश्य<lb/>  
+            खंडेलवाल, पेशकारनकम, तत्पुत्र गोपालसिंहकी यहप्रार्थना है<lb/> 
+          <pb n="02"/>  
+            कि इसपुस्तकमें जोकुछ लेखक प्रमाद आदिकसे भूलचूक देखें<lb/>  
+            वहक्षमाकरैं और बनादें और इसश्लोकके आशयको यादकरैं ॥</p><lb/>
+<div>
+            <head>श्लोक ॥</head><lb/>  
+<lg><l>गुणायन्तेदोषास्सुजनवदनेदुर्ज्जनमुखे</l><lb/>  
+<l>गुणादोषायन्तेतदिदमितिनोविस्मयपदम् ॥</l><lb/>  
+<l>यथाजीमूतास्येलवणजलधेर्वारिमधुरं</l><lb/>  
+<l>फणिःपीत्वाक्षीरंवमतिगरलंदुस्सहतरम १ ॥</l></lg><lb/>  
+<lg><l>सत्सङ्गाद्भवतिहिसाधुताखलानां</l><lb/>  
+<l>साधूनांनचखलसंगमात्‌खलत्वम ॥</l><lb/>  
+<l>आमोदंकुसुमभवंमृदेवधत्ते</l><lb/>  
+<l>मृदूगन्धंनहिकुसुमानिधारयंति २ ॥</l></lg><lb/> 
+          </div></div></front>
+    <body> 
+      <div> 
+            
+          <pb n="04"/>  
+          <head>पीयूषलहरी</head><lb/>  
+            <head>अर्थात् गङ्गालहरी ॥</head><lb/> 
+            <ab>क० ॥ सकल मही को परिपूरण सौभाग्य यही वेद<lb/>  
+            औ पुराणनको सरबससारहै । लीलाही करिकै जिन<lb/>  
+            अखिलरच्यो है जग ऐसेत्रिपुरारिजूको बैभवउदारहै ॥<lb/>  
+            देवनकोसुकृत अमोघप्रकट्योहैसही सुधातैंसरिससुतौ<lb/>  
+            शोभाको अगारहै । सलिलतुम्हासे गंग मंगलहमारो<lb/>  
+            नित पादपअमंगलको काटन कुठारहै १ दारिदजनित<lb/>  
+            दीनताईकेबिदारनके कारणहै जिनको ते दृष्टि तैं निहारै<lb/>  
+            हैं । जिनकेहृदय दुरबासनानहूतैं युक्त ऐसे पावरनहूँ के<lb/>  
+            पापनको हारै हैं ॥ मनकी अविद्यादीह द्रुमताहि काटन<lb/>  
+            को शिक्षाके करनहार तिनहि उचारै हैं । दायक हैं श्री<lb/>  
+            के हमैंनीके मात गंगतेरे वारिके प्रवाह चाह सकल सु-<lb/>  
+            धारै हैं २ उदयमत्सर तातैं प्रकट्यो कपट जाके जननी<lb/>  
+            बिनायककी कोपके कटाक्ष संग । बारबार तिनको चला-<lb/>  
+            इकै निहारैं तुम्हैं यातेई विदित कढ़ैक्षोभके भरेतरंग ॥<lb/>  
+            तेईवे अपारसब सुखके भँडार सदा करत बिहार ईश<lb/> 
+          <pb n="05"/>  
+            
+            शीशपै लिये उमंग । सकलहमारेते दुरित भरभंगकरो<lb/>  
+            निकसे तो अंगते तरंगजे उतंगगंग ३ कबहूंही सुकृत न<lb/>  
+            कीनो जिनतेऊ तुम्हैं सुमिरैं त्यों तिनहूँकी तंद्राको हरत<lb/>  
+            हाल । जैसे मारतंडकी प्रचंडने मयूष सदा सबै अंधकार<lb/>  
+            को बिदारतहैं ततकाल ॥ सेवत सकल सुरनिशिदिन जल<lb/>  
+            जाको ऐसी तेरी मूरति सो चूरति अघबिशाल । सोई त्रय<lb/>  
+            ताप मेरीब्याधि व्यथा अंतरकी एहोमातगंग तिन्हैं भंग<lb/>  
+            करो ह्वै दयाल ४ तेरे आसरेते बलपायकै बिशाल गंग<lb/>  
+            बढ़योगर्वजाकूँ सोमैं तुमसों कहतसब । याही तैं वृंदारक<lb/>  
+            वृन्दनकी अवज्ञाकरी काहूकी न अबलगिमानी कछू<lb/>  
+            दाहदब ॥ जोपै कहूँ यासमै उदासता गहौगी अंब तो<lb/>  
+            मैं निराधारनाहिं दूसरो अधार भव । मुख बिलखाय<lb/>  
+            अति दीनता दिखायक हौ कौनके अगारीज ाइ रुदन<lb/>  
+            करूंगो अब ५ तृण ज्यों तुरंत निजराज त्यागितेईनृप<lb/>  
+            तेरे तीरहीको आय आसरो चितैधरैं । बैतकीलताबि-<lb/>  
+            लोल चैत चांदनीसे गंग तेरे वे तरंगनकी शोभाजे मनै<lb/>  
+            हरैं ॥ तिनको दरसकरैं सरस पियूषहू ते स्वादित तु-<lb/>  
+            म्हारो जल पेट तृप्ति ह्वै भरैं । ऐसेजे सदाईजन आनँद<lb/>  
+            उमंगभरे तुच्छ जाति मुक्तिकीहू हाँसीते कस्यो करैं ६<lb/>  
+            तेरे वे प्रवाह में प्रभात काल न्हात आय रमणीनरेशन<lb/>  
+            की आनँदको छायकै । तिनहीं के कुच लपटानो हुतो<lb/>  
+            मृगमद सोवह पखरिपस्यो तेरे जल आइकै ॥ जिनजिन<lb/>  
+            कौ हुतौ सुतेई वे कुरंगयूथ अतिही अनूप दिव्यरूप<lb/>  
+            को बनायकै । सेवितहैं वृंदारक वृंदनसों चहूं ओर की-<lb/>  
+            नो तिननंदन उद्यानबास जाइकै ७ एकबार सुमिरण<lb/> 
+          <pb n="16"/>  
+              
+            तब । चंचल उतंग याते फैलीजे तरंगघटा तिनकोतां<lb/>  
+            डवसो पवित्रकरौ हमैं अब ५१ ॥ छंदगीतिका ॥ की<lb/>  
+            बिभूषित मदन रिपुको जिनहिं उत्तम अंग है । जै<lb/>  
+            अनेक न दीनजनकी करत आरत भंग है ॥ मनहर<lb/>  
+            उतंग तरंग जाकी चलत आनँदकी भरी । सोई हमा-<lb/>  
+            रे अंग तिनको करौ पावन सुरसरी ५२ अभिराम<lb/>  
+            नाम पियूष लहरी सकल मंगलकी भरी । यह जग-<lb/>  
+            न्नाथ उदार पण्डितराज ने निर्मित करी ॥ इकद्योस<lb/>  
+            मिश्र उदाम सबगुण ग्रामरूप सुरामनै । इमि भांति उर<lb/>  
+            अभिलाष करि आयसु दई सुखधामनै ५३ यह देव<lb/>  
+            बाणी संस्कृत अति कठिन समुझि न आवही । मति-<lb/>  
+            मंदनर कलिकालके किहिभांति अर्थहि पावही ॥ यातें<lb/>  
+            अरथ अनुकूलयाके जातमन हितलायकै । समझैं स-<lb/>  
+            कलनर भाषतामैं रचौं छंद बनाइकै ५४ यह धारिआ<lb/>  
+            यसु शीशगुरुकी बुद्धि निजअनुसारही । बलदेव वैश्य<lb/>  
+            खँडेलवार बिचार जिन भाषा कही ॥ जे पढ़हिं याहि<lb/>  
+            पढ़ावहीं अरु सुनहिं श्रवण करावहीं । तेईअनुग्रहगंग<lb/>  
+            की जयसंपदा नरपावहीं ५५ ॥ सोरठा ॥ शशि नभ<lb/>  
+            नवभुवजानि हियअतिमोद बढाइकै । सकलसुमंगल<lb/>  
+            खानि यह पियूष लहरी रची ५६ ॥</ab><lb/>  
+            <trailer>इतिश्रीपीयूषलहरीसम्पूर्णा ॥</trailer><lb/>  
+            <trailer>मुन्शीनवलकिशोर (सी आई ई) के यंत्रालयमें छापीगई<lb/>  
+            नवम्बर सन् १८९० ई॰ ॥</trailer> 
+       
+      </div> 
+    </body> 
+  </text> 
+</TEI>

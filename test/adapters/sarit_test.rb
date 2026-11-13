@@ -22,8 +22,10 @@ class SaritTest < Minitest::Test
   SAMANYA = "urn:nabu:sarit:samanyadusana"
   NYAYA = "urn:nabu:sarit:vatsyayana-nyayabhasya-s1-2"
   MBH = "urn:nabu:sarit:mahabharata-devanagari-adi1-svarga1"
+  # The 2026-11-13 quarantine review's lb-in-ab citation shape.
+  TRISULI = "urn:nabu:sarit:trisuli-piyusalahari-p4p5p16" # lb-in-ab Braj print transcription
 
-  ALL_FIXTURES = [ASTAVAKRA, MBH, SAMANYA, NYAYA].freeze # discover order (sorted by urn)
+  ALL_FIXTURES = [ASTAVAKRA, MBH, SAMANYA, TRISULI, NYAYA].freeze # discover order (sorted by urn)
 
   # --- AdapterConformance hooks --------------------------------------------
 
@@ -140,7 +142,7 @@ class SaritTest < Minitest::Test
     source = sarit_source
     loader = Nabu::Store::Loader.new(db: catalog, source: source)
     first = loader.load_from(conformance_adapter, workdir: FIXTURES, full: true)
-    assert_equal 4, first.added
+    assert_equal ALL_FIXTURES.size, first.added
     assert_equal 0, first.errored
 
     counts = [catalog[:documents].count, catalog[:passages].count]

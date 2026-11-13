@@ -188,6 +188,8 @@ module Nabu
           @group = nil      # open verse group (lg, or a standalone l)
           @lg_depth = 0
           @para = nil       # open prose unit
+          @page_block = nil # open lb-in-ab print block (the page grain)
+          @last_page = nil  # @n of the latest <pb> in the body
           @units = []
         end
 
@@ -218,8 +220,10 @@ module Nabu
           when "l" then open_line(node)
           when "p" then open_paragraph(node)
           when "quote" then open_quote(node)
+          when "ab" then open_page_block(node)
           when "lb" then line_break(node)
-          when "pb", "milestone" then separator
+          when "pb" then page_break(node)
+          when "milestone" then separator
           end
         end
 
@@ -241,6 +245,7 @@ module Nabu
           when "l" then close_line
           when "p" then close_paragraph
           when "quote" then close_quote
+          when "ab" then close_page_block
           end
         end
 
@@ -256,8 +261,12 @@ module Nabu
             line[:text] << value if line
           elsif @para
             @para[:text] << value
+          elsif @page_block
+            @page_block[:segments].last[:text] << value
           end
         end
+
+        def in_unit? = !(@group || @para || @page_block).nil?
 
         # -- header: availability + language + titleStmt authors ---------------
 
@@ -488,6 +497,53 @@ module Nabu
           @quote_citations.pop unless @group || @para
         end
 
+        # -- body: the page grain (lb-in-ab print transcriptions) ----------------
+        #
+        # The Braj/Avadhi print transcriptions carry their whole text in ONE
+        # attribute-less <ab> segmented only by <lb/> print lines and <pb/>
+        # pages — no lg/l/p. Each page segment of such a block is a unit
+        # cited by the page's @n ("pb04"; "ab<k>" for text before any pb).
+        # The grain fires only for an <ab> with no @n/@xml:id/@type of its
+        # own AND at least one <lb>: the census's addressed sūtra blocks
+        # (siddhāntakaumudī, suśrutasaṃhitā, nyāyasudhā) and lb-less run-in
+        # headings keep their v1 treatment, so no loaded document moves.
+
+        def open_page_block(node)
+          return if in_unit? || node.empty_element?
+          return if %w[n xml:id type].any? { |attribute| node.attribute(attribute) }
+
+          @page_block = { lined: false, segments: [{ page: @last_page, text: +"" }] }
+        end
+
+        def close_page_block
+          block = @page_block
+          return if block.nil? || @group || @para
+
+          @page_block = nil
+          return unless block[:lined]
+
+          block[:segments].each { |segment| emit_page(segment) }
+        end
+
+        def page_break(node)
+          @last_page = node.attribute("n") || @last_page
+          if @page_block && !@group && !@para
+            @page_block[:segments] << { page: @last_page, text: +"" }
+          else
+            separator
+          end
+        end
+
+        def emit_page(segment)
+          return if segment[:text].strip.empty?
+
+          frame = @div_frames.last
+          token = segment[:page] ? "pb#{segment[:page]}" : "ab#{frame[:block] = frame.fetch(:block, 0) + 1}"
+          path = div_path
+          citation = path.empty? ? token : "#{path}.#{token}"
+          @units << Unit.new(citation: citation, text: segment[:text], addressing: "page")
+        end
+
         # -- emission ----------------------------------------------------------
 
         def citation_for(number:, id:)
@@ -518,11 +574,12 @@ module Nabu
         # -- breaks ------------------------------------------------------------
 
         def line_break(node)
+          @page_block[:lined] = true if @page_block && !@group && !@para
           separator unless node.attribute("break") == "no"
         end
 
         def separator
-          target = @group ? @group[:current] : @para
+          target = @group ? @group[:current] : (@para || @page_block&.dig(:segments, -1))
           target[:text] << " " if target
         end
       end
