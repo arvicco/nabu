@@ -17,33 +17,33 @@ A source wears every desk it serves — these twenty-three answer this desk. Hol
 
 | Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 13 November 2026)</span> |
 |---|---|---|---|---|
-| `acd` | dictionary | attribution | not yet wired | not synced yet |
+| `acd` | dictionary | attribution | wired · manual | 10,857 entries |
 | `calfa-lexicon` | dictionary | nc | wired · manual | 86,067 entries |
 | `cldf-spine` | feature module | attribution | wired · manual | nothing held yet |
 | `clics` | dictionary | attribution | wired · manual | 1,647 entries |
-| `csd` | dictionary | attribution | not yet wired | not synced yet |
+| `csd` | dictionary | attribution | wired · manual | 1,193 entries |
 | `derom` | dictionary | nc | wired · manual | 233 entries |
-| `dyenindoeuropean` | dictionary | attribution | not yet wired | not synced yet |
+| `dyenindoeuropean` | dictionary | attribution | wired · manual | 2,388 entries |
 | `edl` | dictionary | nc | wired · manual | 2,860 entries |
 | `etruscan-loans` | dictionary | attribution | wired · frozen | 199 entries |
 | `iecor` | cognacy dataset | attribution | wired · manual | 4,981 entries |
 | `liv` | dictionary | attribution | wired · manual | 305 entries |
-| `mcd` | dictionary | attribution | not yet wired | not synced yet |
+| `mcd` | dictionary | attribution | wired · manual | 1,707 entries |
 | `meloniromance` | cognacy dataset | attribution | wired · manual | 5,419 entries |
 | `nabu-lects` | feature module | attribution | wired · manual | nothing held yet |
 | `sabellic-loans` | dictionary | attribution | wired · frozen | 85 entries |
-| `saenkoromance` | dictionary | attribution | not yet wired | not synced yet |
-| `sagartst` | dictionary | attribution | not yet wired | not synced yet |
+| `saenkoromance` | dictionary | attribution | wired · manual | 465 entries |
+| `sagartst` | dictionary | attribution | wired · manual | 5,120 entries |
 | `starling` | etymological bases | attribution | wired · manual | 146,798 entries |
-| `tlopo` | dictionary | attribution | not yet wired | not synced yet |
-| `uralex` | dictionary | attribution | not yet wired | not synced yet |
+| `tlopo` | dictionary | attribution | wired · manual | 2,821 entries |
+| `uralex` | dictionary | attribution | wired · manual | 3,792 entries |
 | `westoldturkic` | dictionary | attribution | wired · manual | 480 entries |
 | `wiktionary-recon` | dictionary | attribution | wired · manual | 376,415 entries |
 | `wold` | dictionary | attribution | wired · manual | 64,289 entries |
 
 Private research materials are not listed.
 
-**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 13 November 2026)</span>: `xcl` 94,608 · `rus` 18,239 · `ine` 17,427 · `tbq` 12,950 · `ine-pro` 9,140 · `gem-pro` 7,743 · `tut` 5,756 · `lat` 5,419 · `dra-sou-pro` 4,692 · `sit-pro` 2,823 … and 71 more (`nabu axis etym` lists all).
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 13 November 2026)</span>: `xcl` 94,608 · `ine` 19,815 · `rus` 18,239 · `tbq` 12,950 · `map` 10,857 · `ine-pro` 9,140 · `gem-pro` 7,743 · `tut` 5,756 · `lat` 5,419 · `sit` 5,120 … and 77 more (`nabu axis etym` lists all).
 
 **Carried in by multilingual packs** (`wiktionary-recon`, `wold` — whole-source members whose other languages ride along, as of 13 November 2026): `zho` 327,296 · `sga` 6,688 · `gmw-pro` 5,578 · `sla-pro` 5,461 · `mnc` 2,577 … and 55 more (`nabu axis etym` lists all).
 

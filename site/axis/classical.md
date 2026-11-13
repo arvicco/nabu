@@ -22,8 +22,8 @@ A source wears every desk it serves — these 32 answer this desk. Holdings are 
 | `cgpg` | texts | attribution | wired · manual | 232 docs / 18,701 passages |
 | `cllg-freed` | texts | attribution | wired · manual | 6,290 docs / 1,258,099 passages |
 | `cllg-sc` | texts | attribution | wired · manual | 366 docs / 94,713 passages |
-| `corpus-corporum` | texts | nc | wired · manual | 5,248 docs / 896,770 passages |
-| `croala` | texts | attribution | wired · manual | 570 docs / 309,180 passages |
+| `corpus-corporum` | texts | nc | wired · manual | 5,263 docs / 902,214 passages |
+| `croala` | texts | attribution | wired · manual | 571 docs / 309,223 passages |
 | `damos` | texts | nc | wired · manual | 5,890 docs / 14,421 passages |
 | `digiliblt` | texts | attribution | wired · manual | 372 docs / 459,451 passages |
 | `diorisis` | texts | attribution | wired · manual | 767 docs / 516,505 passages |
@@ -41,7 +41,7 @@ A source wears every desk it serves — these 32 answer this desk. Holdings are 
 | `openmgh` | texts | attribution | wired · manual | 153 docs / 36,143 passages |
 | `pedecerto` | feature module | nc | wired · manual | nothing held yet |
 | `perseus-greek` | texts | attribution | wired · auto | 1,419 docs / 394,706 passages |
-| `perseus-latin` | texts | attribution | wired · auto | 568 docs / 405,989 passages |
+| `perseus-latin` | texts | attribution | wired · auto | 576 docs / 407,535 passages |
 | `proiel` | treebank | nc | wired · frozen | 12 docs / 51,321 passages |
 | `pta` | texts | attribution | wired · manual | 113 docs / 8,778 passages |
 | `sigla` | inscriptions | nc | wired · manual | 787 docs / 3,097 passages |
@@ -50,7 +50,7 @@ A source wears every desk it serves — these 32 answer this desk. Holdings are 
 | `vulgate` | texts | open | wired · manual | 73 docs / 35,809 passages |
 | `wellcome` | texts | open | wired · manual | 703 docs / 319,304 passages |
 
-**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 13 November 2026)</span>: `grc` 129,050 · `lat` 65,669 · `gmy` 5,890 · `eng` 4,335 · `lab` 787 · `grc-Latn` 510 · `deu` 225 · `en` 27 · `ecy-Latn` 22 · `gmh` 11 … and 5 more (`nabu axis classical` lists all).
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 13 November 2026)</span>: `grc` 129,050 · `lat` 65,693 · `gmy` 5,890 · `eng` 4,335 · `lab` 787 · `grc-Latn` 510 · `deu` 225 · `en` 27 · `ecy-Latn` 22 · `gmh` 11 … and 5 more (`nabu axis classical` lists all).
 
 **Carried in by multilingual packs** (`ud` — whole-source members whose other languages ride along, as of 13 November 2026): `orv` 9 · `ota` 5 · `lzh` 4 · `egy` 3 · `frm` 3 … and 15 more (`nabu axis classical` lists all).
 

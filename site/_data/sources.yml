@@ -2,6 +2,18 @@
 ---
 as_of: 13 November 2026
 sources:
+  acd:
+    name: Austronesian Comparative Dictionary (Blust, Trussel & Smith; lexibank/acd
+      CLDF v2.0)
+    license_class: attribution
+    documents: 0
+    documents_display: '0'
+    passages: 0
+    passages_display: '0'
+    entries: 10857
+    entries_display: '10,857'
+    holdings: 10,857 entries
+    canonical_display: 95 MB
   achemenet:
     name: Achemenet Babylonian — linguistically annotated Achaemenid-period texts
       (Helsinki)
@@ -549,13 +561,13 @@ sources:
   corpus-corporum:
     name: Corpus Córporum — Patrologia Latina (mlat.uzh.ch, Univ. of Zurich)
     license_class: nc
-    documents: 5248
-    documents_display: '5,248'
-    passages: 896770
-    passages_display: '896,770'
+    documents: 5263
+    documents_display: '5,263'
+    passages: 902214
+    passages_display: '902,214'
     entries: 0
     entries_display: '0'
-    holdings: 5,248 documents / 896,770 passages
+    holdings: 5,263 documents / 902,214 passages
     canonical_display: 674 MB
   corpus-gysseling:
     name: Corpus Gysseling — 13th-c. Early Middle Dutch, lemma+POS (INT/IvdNT)
@@ -593,13 +605,13 @@ sources:
   croala:
     name: Croatiae auctores Latini — CroALa (Jovanović, ed.)
     license_class: attribution
-    documents: 570
-    documents_display: '570'
-    passages: 309180
-    passages_display: '309,180'
+    documents: 571
+    documents_display: '571'
+    passages: 309223
+    passages_display: '309,223'
     entries: 0
     entries_display: '0'
-    holdings: 570 documents / 309,180 passages
+    holdings: 571 documents / 309,223 passages
     canonical_display: 82 MB
   cs-wikisource:
     name: Czech Wikisource — censused premodern works (Dalimil · Bible kralická ·
@@ -613,6 +625,17 @@ sources:
     entries_display: '0'
     holdings: 330 documents / 4,748 passages
     canonical_display: 15 MB
+  csd:
+    name: Comparative Siouan Dictionary (Rankin et al. 2015; lexibank/csd CLDF)
+    license_class: attribution
+    documents: 0
+    documents_display: '0'
+    passages: 0
+    passages_display: '0'
+    entries: 1193
+    entries_display: '1,193'
+    holdings: 1,193 entries
+    canonical_display: 7 MB
   ctilc:
     name: CTILC public-domain works slice — Corpus Textual Informatitzat de la Llengua
       Catalana (IEC)
@@ -777,24 +800,24 @@ sources:
     name: DHARMA Task Force B — South Asian inscriptions (Deccan, Āndhra, Karnataka,
       Odisha, Bengal, Gujarat)
     license_class: attribution
-    documents: 1702
-    documents_display: '1,702'
-    passages: 28295
-    passages_display: '28,295'
+    documents: 1711
+    documents_display: '1,711'
+    passages: 28391
+    passages_display: '28,391'
     entries: 0
     entries_display: '0'
-    holdings: 1,702 documents / 28,295 passages
+    holdings: 1,711 documents / 28,391 passages
     canonical_display: 33 MB
   dharma-javanese-texts:
     name: DHARMA Nusantara philology (the kakawin library and Old Sundanese texts)
     license_class: attribution
-    documents: 92
-    documents_display: '92'
-    passages: 46518
-    passages_display: '46,518'
+    documents: 97
+    documents_display: '97'
+    passages: 70947
+    passages_display: '70,947'
     entries: 0
     entries_display: '0'
-    holdings: 92 documents / 46,518 passages
+    holdings: 97 documents / 70,947 passages
     canonical_display: 37 MB
   dharma-khmer:
     name: DHARMA Corpus des inscriptions khmères (Old Khmer epigraphy)
@@ -822,13 +845,13 @@ sources:
   dharma-nusantara:
     name: DHARMA Nusantara epigraphy (Old Javanese/Malay/Sundanese charters)
     license_class: attribution
-    documents: 291
-    documents_display: '291'
-    passages: 5898
-    passages_display: '5,898'
+    documents: 307
+    documents_display: '307'
+    passages: 6214
+    passages_display: '6,214'
     entries: 0
     entries_display: '0'
-    holdings: 291 documents / 5,898 passages
+    holdings: 307 documents / 6,214 passages
     canonical_display: 9 MB
   dharma-pyu:
     name: DHARMA Corpus of Pyu Inscriptions
@@ -952,6 +975,18 @@ sources:
     entries_display: '0'
     holdings: 5,478 documents / 729,090 passages
     canonical_display: 1.9 GB
+  dyenindoeuropean:
+    name: Dyen, Kruskal & Black 1992 Indo-European cognate classes (lexibank/dyenindoeuropean
+      CLDF)
+    license_class: attribution
+    documents: 0
+    documents_display: '0'
+    passages: 0
+    passages_display: '0'
+    entries: 2388
+    entries_display: '2,388'
+    holdings: 2,388 entries
+    canonical_display: 2 MB
   e84000:
     name: 84000 — Translating the Words of the Buddha (English Kangyur translations)
     license_class: nc
@@ -1366,13 +1401,13 @@ sources:
     name: GRETIL — Göttingen Register of Electronic Texts in Indian Languages (TEI
       corpus)
     license_class: nc
-    documents: 780
-    documents_display: '780'
-    passages: 713718
-    passages_display: '713,718'
+    documents: 784
+    documents_display: '784'
+    passages: 714263
+    passages_display: '714,263'
     entries: 0
     entries_display: '0'
-    holdings: 780 documents / 713,718 passages
+    holdings: 784 documents / 714,263 passages
     canonical_display: 303 MB
   gretil-legacy:
     name: GRETIL legacy e-texts — Prakrit, New Indo-Aryan and Dravidian collections
@@ -1937,6 +1972,18 @@ sources:
     entries_display: '0'
     holdings: 3,067 documents / 40,883 passages
     canonical_display: 145 MB
+  mcd:
+    name: Micronesian Comparative Dictionary (Bender et al. 2003; lexibank/mcd CLDF
+      v2.0)
+    license_class: attribution
+    documents: 0
+    documents_display: '0'
+    passages: 0
+    passages_display: '0'
+    entries: 1707
+    entries_display: '1,707'
+    holdings: 1,707 entries
+    canonical_display: 17 MB
   mdz-protestant:
     name: MDZ — 16th-century Slovene/Croatian Protestant prints, page OCR (Bayerische
       Staatsbibliothek)
@@ -2394,13 +2441,13 @@ sources:
   perseus-latin:
     name: Perseus Digital Library — canonical Latin literature
     license_class: attribution
-    documents: 568
-    documents_display: '568'
-    passages: 405989
-    passages_display: '405,989'
+    documents: 576
+    documents_display: '576'
+    passages: 407535
+    passages_display: '407,535'
     entries: 0
     entries_display: '0'
-    holdings: 568 documents / 405,989 passages
+    holdings: 576 documents / 407,535 passages
     canonical_display: 295 MB
   peshitta:
     name: Peshitta OT incl. deuterocanon (ETCBC, Text-Fabric tf/0.2)
@@ -2584,13 +2631,13 @@ sources:
     name: RSTI — Ras Shamra Tablet Inventory (U. Chicago CORPUS/OCHRE; the inscribed
       objects of Ugarit and Ras Ibn Hani)
     license_class: nc
-    documents: 5075
-    documents_display: '5,075'
-    passages: 740
-    passages_display: '740'
+    documents: 5149
+    documents_display: '5,149'
+    passages: 3325
+    passages_display: '3,325'
     entries: 0
     entries_display: '0'
-    holdings: 5,075 documents / 740 passages
+    holdings: 5,149 documents / 3,325 passages
     canonical_display: 27 MB
   ru-wikisource:
     name: Russian Wikisource — the Old East Slavic cone (edition-filtered)
@@ -2636,6 +2683,30 @@ sources:
     entries_display: '85'
     holdings: 85 entries
     canonical_display: "<1 MB"
+  saenkoromance:
+    name: Saenko 2015 annotated Swadesh wordlists for the Romance group (lexibank/saenkoromance
+      CLDF v1.1)
+    license_class: attribution
+    documents: 0
+    documents_display: '0'
+    passages: 0
+    passages_display: '0'
+    entries: 465
+    entries_display: '465'
+    holdings: 465 entries
+    canonical_display: 2 MB
+  sagartst:
+    name: Sagart et al. 2019 Sino-Tibetan Database of Lexical Cognates (lexibank/sagartst
+      CLDF v2.1)
+    license_class: attribution
+    documents: 0
+    documents_display: '0'
+    passages: 0
+    passages_display: '0'
+    entries: 5120
+    entries_display: '5,120'
+    holdings: 5,120 entries
+    canonical_display: 7 MB
   salom:
     name: Şalom Ladino articles text corpus (Col·lectivaT / Sephardic Center of Istanbul)
     license_class: attribution
@@ -2650,13 +2721,13 @@ sources:
   sarit:
     name: SARIT — Search and Retrieval of Indic Texts (scholarly TEI editions)
     license_class: attribution
-    documents: 78
-    documents_display: '78'
-    passages: 345601
-    passages_display: '345,601'
+    documents: 83
+    documents_display: '83'
+    passages: 346313
+    passages_display: '346,313'
     entries: 0
     entries_display: '0'
-    holdings: 78 documents / 345,601 passages
+    holdings: 83 documents / 346,313 passages
     canonical_display: 204 MB
   sblgnt:
     name: SBL Greek New Testament (SBLGNT)
@@ -2811,13 +2882,13 @@ sources:
   sii-clean:
     name: South Indian Inscriptions — DHARMA editions and conversions
     license_class: attribution
-    documents: 18495
-    documents_display: '18,495'
-    passages: 314915
-    passages_display: '314,915'
+    documents: 18903
+    documents_display: '18,903'
+    passages: 318689
+    passages_display: '318,689'
     entries: 0
     entries_display: '0'
-    holdings: 18,495 documents / 314,915 passages
+    holdings: 18,903 documents / 318,689 passages
     canonical_display: 253 MB
   sillok:
     name: 조선왕조실록 원문 — Veritable Records of the Joseon Dynasty (NIKH)
@@ -3152,6 +3223,18 @@ sources:
     entries_display: '0'
     holdings: 23,486 documents / 402,195 passages
     canonical_display: 385 MB
+  tlopo:
+    name: The lexicon of Proto Oceanic (Ross, Pawley & Osmond; lexibank/tlopo CLDF
+      v0.1.1)
+    license_class: attribution
+    documents: 0
+    documents_display: '0'
+    passages: 0
+    passages_display: '0'
+    entries: 2821
+    entries_display: '2,821'
+    holdings: 2,821 entries
+    canonical_display: 415 MB
   tls:
     name: 'TLS — Thesaurus Linguae Sericae (tls-kr/tls-data: concepts + words)'
     license_class: attribution
@@ -3241,6 +3324,18 @@ sources:
     entries_display: '102,998'
     holdings: 102,998 entries
     canonical_display: 41 MB
+  uralex:
+    name: UraLex — Uralic basic vocabulary with cognate and loanword information (lexibank/uralex
+      CLDF v2.0)
+    license_class: attribution
+    documents: 0
+    documents_display: '0'
+    passages: 0
+    passages_display: '0'
+    entries: 3792
+    entries_display: '3,792'
+    holdings: 3,792 entries
+    canonical_display: 3 MB
   vakk:
     name: VAKK — Vana kirjakeele korpus, the Corpus of Old Written Estonian (University
       of Tartu)
@@ -3882,11 +3977,11 @@ shelves:
     sources:
     - perseus-latin
     - lasla
-    documents: 810
-    documents_display: '810'
-    passages: 501963
-    passages_display: '501,963'
-    size_display: 810 / 501,963
+    documents: 818
+    documents_display: '818'
+    passages: 503509
+    passages_display: '503,509'
+    size_display: 818 / 503,509
   liturgy-chant:
     sources:
     - divinum-officium
@@ -3925,11 +4020,11 @@ shelves:
     - pleias-french-books
     - socinian-letters
     - wellcome
-    documents: 32320
-    documents_display: '32,320'
-    passages: 7035054
-    passages_display: '7,035,054'
-    size_display: 32,320 / 7,035,054
+    documents: 32336
+    documents_display: '32,336'
+    passages: 7040541
+    passages_display: '7,040,541'
+    size_display: 32,336 / 7,040,541
   papyri:
     sources:
     - papyri-ddbdp
@@ -3995,11 +4090,11 @@ shelves:
     sources:
     - gretil
     - vedaweb
-    documents: 1808
-    documents_display: '1,808'
-    passages: 724270
-    passages_display: '724,270'
-    size_display: 1,808 / 724,270
+    documents: 1812
+    documents_display: '1,812'
+    passages: 724815
+    passages_display: '724,815'
+    size_display: 1,812 / 724,815
   indic-expansion:
     sources:
     - sarit
@@ -4009,11 +4104,11 @@ shelves:
     - gretil-legacy
     - osbct
     - tipitaka-lk
-    documents: 29082
-    documents_display: '29,082'
-    passages: 2445324
-    passages_display: '2,445,324'
-    size_display: 29,082 / 2,445,324
+    documents: 29087
+    documents_display: '29,087'
+    passages: 2446036
+    passages_display: '2,446,036'
+    size_display: 29,087 / 2,446,036
   south-asia:
     sources:
     - dharma-tamil
@@ -4029,11 +4124,11 @@ shelves:
     - shabados
     - gu-wikisource
     - te-wikisource
-    documents: 32205
-    documents_display: '32,205'
-    passages: 1994756
-    passages_display: '1,994,756'
-    size_display: 32,205 / 1,994,756
+    documents: 32622
+    documents_display: '32,622'
+    passages: 1998626
+    passages_display: '1,998,626'
+    size_display: 32,622 / 1,998,626
   treebanks:
     sources:
     - proiel
@@ -4077,11 +4172,11 @@ shelves:
   ugarit:
     sources:
     - rsti
-    documents: 5075
-    documents_display: '5,075'
-    passages: 740
-    passages_display: '740'
-    size_display: 5,075 / 740
+    documents: 5149
+    documents_display: '5,149'
+    passages: 3325
+    passages_display: '3,325'
+    size_display: 5,149 / 3,325
   hebrew-aramaic:
     sources:
     - oshb
@@ -4338,11 +4433,11 @@ shelves:
     - su-wikisource
     - ms-wikisource
     - th-wikisource
-    documents: 4619
-    documents_display: '4,619'
-    passages: 184442
-    passages_display: '184,442'
-    size_display: 4,619 / 184,442
+    documents: 4640
+    documents_display: '4,640'
+    passages: 209187
+    passages_display: '209,187'
+    size_display: 4,640 / 209,187
   germanic:
     sources:
     - menotec
@@ -4388,6 +4483,6 @@ shelves:
     passages_display: '7,014'
     size_display: 1,282 / 7,014
 disk:
-  canonical_display: 161 GB
+  canonical_display: 162 GB
   derived_display: 241 GB
   starter_display: 693 MB

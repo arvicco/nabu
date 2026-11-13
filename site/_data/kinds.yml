@@ -3,8 +3,8 @@
 as_of: 13 November 2026
 classes:
 - head: literary
-  documents: 807727
-  documents_display: '807,727'
+  documents: 807729
+  documents_display: '807,729'
   sources: 58
 - head: administrative
   documents: 500153
@@ -35,16 +35,16 @@ classes:
   documents_display: '30,136'
   sources: 6
 - head: scripture
-  documents: 27778
-  documents_display: '27,778'
+  documents: 27779
+  documents_display: '27,779'
   sources: 38
 - head: dedicatory
   documents: 24250
   documents_display: '24,250'
   sources: 11
 - head: divination
-  documents: 21139
-  documents_display: '21,139'
+  documents: 21140
+  documents_display: '21,140'
   sources: 17
 - head: hymn-prayer
   documents: 21092
@@ -55,8 +55,8 @@ classes:
   documents_display: '18,819'
   sources: 28
 - head: scholarly
-  documents: 16047
-  documents_display: '16,047'
+  documents: 16048
+  documents_display: '16,048'
   sources: 29
 - head: mark
   documents: 12298
@@ -123,5 +123,5 @@ unknown_documents: 47058
 unknown_documents_display: '47,058'
 unmapped_documents: 14223
 unmapped_documents_display: '14,223'
-unclassified_documents: 553175
-unclassified_documents_display: '553,175'
+unclassified_documents: 553716
+unclassified_documents_display: '553,716'

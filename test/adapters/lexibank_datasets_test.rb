@@ -212,13 +212,15 @@ class LexibankDatasetsTest < Minitest::Test
 
   # --- registry -------------------------------------------------------------------------------
 
-  def test_each_dataset_is_registered_unwired_and_manual
+  def test_each_dataset_is_registered_wired_and_manual
+    # Wired flipped per slug after the verified first syncs (counts in the
+    # registry comments and the 02-sources status cells).
     EXPECTED.each do |expect|
       slug = expect.klass.dataset.slug
       entry = registry[slug]
       refute_nil entry, "#{slug} must be registered in config/sources.yml"
       assert_equal expect.klass, entry.adapter_class
-      refute entry.wired, "#{slug}: wired flips only after the first verified sync"
+      assert entry.wired, "#{slug}: first sync verified — the registry row stays wired"
       assert_equal "manual", entry.sync_policy
       assert_includes entry.axes, "etym", slug
     end

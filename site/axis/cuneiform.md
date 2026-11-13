@@ -27,7 +27,7 @@ A source wears every desk it serves — these seventeen answer this desk. Holdin
 | `oracc` | tablets | open | wired · manual | 118,367 docs / 1,800,218 passages / 211,040 entries |
 | `osl` | feature module | open | wired · manual | nothing held yet |
 | `pna` | feature module | attribution | wired · manual | nothing held yet |
-| `rsti` | texts | nc | wired · manual | 5,075 docs / 740 passages |
+| `rsti` | texts | nc | wired · manual | 5,149 docs / 3,325 passages |
 | `seal` | texts | research_private | wired · manual | 408 docs / 14,953 passages |
 | `tlhdig` | tablets | attribution | wired · manual | 23,486 docs / 402,195 passages |
 | `ud` | treebank | nc | wired · manual | 83 docs / 329,980 passages |
@@ -35,7 +35,7 @@ A source wears every desk it serves — these seventeen answer this desk. Holdin
 | `wiktionary-hit` | dictionary | attribution | wired · manual | 481 entries |
 | `wiktionary-sux` | dictionary | attribution | wired · manual | 2,499 entries |
 
-**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 13 November 2026)</span>: `sux` 271,097 · `akk` 181,279 · `und` 75,034 · `qpn` 70,329 · `hit` 36,380 · `akk-x-stdbab` 24,517 · `akk-x-neoass` 18,750 · `eng` 15,798 · `qpc` 8,931 · `xeb` 6,844 … and 34 more (`nabu axis cuneiform` lists all).
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 13 November 2026)</span>: `sux` 271,097 · `akk` 181,279 · `und` 75,039 · `qpn` 70,329 · `hit` 36,380 · `akk-x-stdbab` 24,517 · `akk-x-neoass` 18,750 · `eng` 15,798 · `qpc` 8,931 · `xeb` 6,844 … and 34 more (`nabu axis cuneiform` lists all).
 
 **Carried in by multilingual packs** (`ud` — whole-source members whose other languages ride along, as of 13 November 2026): `orv` 9 · `ota` 5 · `lzh` 4 · `cop` 3 · `frm` 3 … and 15 more (`nabu axis cuneiform` lists all).
 
