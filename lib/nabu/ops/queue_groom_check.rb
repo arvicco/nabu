@@ -4,10 +4,10 @@ require "date"
 
 module Nabu
   module Ops
-    # The ship-time write-back probe of `rake boards:check` (the №I-49
-    # class: two gates shipped queue items recording the ships only in
-    # the plan docs — zero queue rows touched — and the next slate ranked
-    # against the stale board). Doctrine: a ship updates its queue row in
+    # The ship-time write-back probe of `rake boards:check` (the
+    # 2026-11-13 incident class: two gates shipped queue items recording
+    # the ships only in the plan docs — zero queue rows touched — and the
+    # next slate ranked against the stale board). A ship updates its queue row in
     # the same motion; this is the machine half, the acquisition-check
     # precedent for a duty that lapsed silently.
     #
