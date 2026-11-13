@@ -2410,3 +2410,36 @@ by ordinal. Credit Gallica / Bibliothèque nationale de France and
 PleIAs on every hit; kind read from the title's form noun where one
 speaks. The cone is complete; the post-1700 widens stay deliberate
 future calls.
+
+## 8bl. The P176 arrivals — the comparative dictionaries of five families
+
+The Lexibank wave: eight CLDF comparative dictionaries, every one a
+cognate-set shelf on the `etym` desk, each set headed by its
+reconstruction where upstream gives one and by its concept where it
+does not, members as reflex rows with loan and doubt flags carried.
+All eight CC BY 4.0, credited on every hit.
+
+**`acd`** — **10,857 cognate sets / 110,825 reflexes**: the
+*Austronesian Comparative Dictionary* (Blust, Trussel & Smith) — the
+monumental reference of the family, Proto-Austronesian and
+Proto-Malayo-Polynesian reconstructions over 1,063 varieties from
+Taiwan to Madagascar to Hawaiʻi, with Blust's etymon essays riding
+the set bodies and the borrowing records flagged. **`tlopo`** —
+**2,821 sets / 38,139 reflexes**: *The lexicon of Proto Oceanic*
+(Ross, Pawley & Osmond, vols 1–6) — the material and natural world
+of the Oceanic speakers, semantically organized. **`mcd`** —
+**1,707 sets / 16,592 reflexes**: the *Micronesian Comparative
+Dictionary* (Bender et al. 2003). **`uralex`** — **3,792 sets /
+9,614 reflexes**: UraLex 2.0, Uralic basic vocabulary across 27
+languages with Proto-Uralic heads and curated loan records naming
+the donor. **`sagartst`** — **5,120 sets / 12,179 reflexes**: the
+Sino-Tibetan Database of Lexical Cognates (Sagart et al. 2019), Old
+Chinese (Baxter–Sagart), Old Tibetan, Old Burmese and Tangut among
+its fifty varieties. **`csd`** — **1,193 sets / 17,902 reflexes**:
+the *Comparative Siouan Dictionary* (Rankin et al. 2015),
+Proto-Siouan reconstructions with subgroup protoforms. **`dyenindoeuropean`** —
+**2,388 cognate classes / 14,752 judgments**: Dyen, Kruskal & Black's
+1992 Indo-European lexicostatistical database, the Swadesh-200 lists
+of 95 modern languages. **`saenkoromance`** — **465 sets / 5,092
+reflexes**: Saenko's Romance Swadesh wordlists over 43 varieties,
+Dalmatian and Ladin beside the dialect continua.

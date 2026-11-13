@@ -388,14 +388,18 @@ module Nabu
 
       # -- folds -------------------------------------------------------------------
 
+      # Beside the parens, the fold drops the raised length dot (csd writes
+      # vowel length as •) and the doubt mark ? (uralex/csd write uncertainty
+      # into the form itself) — upstream notation no one can type at the
+      # define prompt. The headword keeps upstream's spelling verbatim.
       def fold_head(text)
-        cleaned = text.sub(/\A[?*\s]+/, "").delete("()⁽⁾")
+        cleaned = text.sub(/\A[?*\s]+/, "").delete("()⁽⁾•?").strip
         folded = Nabu::Normalize.search_form(cleaned, language: @language)
         folded.strip.empty? ? nil : folded
       end
 
       def fold_member(text, language)
-        cleaned = text.sub(/\A[?*\s]+/, "").delete("()⁽⁾").sub(/-\z/, "")
+        cleaned = text.sub(/\A[?*\s]+/, "").delete("()⁽⁾•?").strip.sub(/-\z/, "")
         folded = Nabu::Normalize.search_form(cleaned, language: language || @language)
         folded.strip.empty? ? nil : folded
       end

@@ -108,7 +108,7 @@ acd:
   adapter: Nabu::Adapters::Acd
   adopted: "2026-11-13"
   axes: [etym]
-  wired: false   # awaiting the first sync (31 MB Zenodo zip, sha-pinned).
+  wired: true    # first sync 2026-11-13: +10,857 sets / 110,825 reflexes.
                  # Expected (full-scale dry parse): 10,857 entries /
                  # 110,825 reflex rows (99 loan-flagged); raw/ skipped by rule.
   sync_policy: manual
@@ -1611,7 +1611,7 @@ csd:
   adapter: Nabu::Adapters::Csd
   adopted: "2026-11-13"
   axes: [etym]
-  wired: false   # awaiting the first sync (sparse GitFetch, ~6 MB of CLDF).
+  wired: true    # first sync 2026-11-13: +1,193 sets / 17,902 reflexes.
                  # Expected: 1,193 entries / 17,902 reflex rows; 11 set
                  # records without any judgment skipped by rule.
   sync_policy: manual
@@ -2323,7 +2323,7 @@ dyenindoeuropean:
   adapter: Nabu::Adapters::Dyenindoeuropean
   adopted: "2026-11-13"
   axes: [etym]
-  wired: false   # awaiting the first sync (sparse GitFetch, ~2 MB of CLDF).
+  wired: true    # first sync 2026-11-13: +2,388 sets / 14,752 reflexes.
                  # Expected: 2,388 entries / 14,752 reflex rows; 6,854
                  # forms outside the CognateTable mint nothing (counted).
   sync_policy: manual
@@ -4522,7 +4522,7 @@ mcd:
   adapter: Nabu::Adapters::Mcd
   adopted: "2026-11-13"
   axes: [etym]
-  wired: false   # awaiting the first sync (4.4 MB Zenodo zip, sha-pinned).
+  wired: true    # first sync 2026-11-13: +1,707 sets / 16,592 reflexes.
                  # Expected: 1,707 entries / 16,592 reflex rows (61
                  # uncertain); raw/ skipped by rule.
   sync_policy: manual
@@ -6283,7 +6283,7 @@ saenkoromance:
   adapter: Nabu::Adapters::Saenkoromance
   adopted: "2026-11-13"
   axes: [etym, romance]
-  wired: false   # awaiting the first sync (0.3 MB Zenodo zip, sha-pinned).
+  wired: true    # first sync 2026-11-13: +465 sets / 5,092 reflexes.
                  # Expected: 465 entries / 5,092 reflex rows (174
                  # loan-flagged); raw/ skipped by rule.
   sync_policy: manual
@@ -6299,7 +6299,7 @@ sagartst:
   adapter: Nabu::Adapters::Sagartst
   adopted: "2026-11-13"
   axes: [etym, sinitic]
-  wired: false   # awaiting the first sync (1.6 MB Zenodo zip, sha-pinned).
+  wired: true    # first sync 2026-11-13: +5,120 sets / 12,179 reflexes.
                  # Expected: 5,120 entries / 12,179 reflex rows (540
                  # loan-flagged); raw/ skipped by rule.
   sync_policy: manual
@@ -7997,10 +7997,10 @@ tlopo:
   adapter: Nabu::Adapters::Tlopo
   adopted: "2026-11-13"
   axes: [etym]
-  wired: false   # awaiting the first sync (318 MB Zenodo zip — ~10 MB of
-                 # it CLDF, the rest the OCR'd volumes and rendered book;
-                 # sha-pinned). Expected: 2,821 entries / 38,139 reflex
-                 # rows; raw/ and out/ skipped by rule.
+  wired: true    # first sync 2026-11-13: +2,821 sets / 38,139 reflexes
+                 # (318 MB Zenodo zip, ~10 MB of it CLDF, the rest the
+                 # OCR'd volumes and rendered book; sha-pinned); raw/ and
+                 # out/ skipped by rule.
   sync_policy: manual
   # The lexicon of Proto Oceanic (Ross, Pawley & Osmond, vols 1–6) in the
   # lexibank CLDF edition v0.1.1 (Zenodo 10.5281/zenodo.23688418,
@@ -8442,7 +8442,7 @@ uralex:
   adapter: Nabu::Adapters::Uralex
   adopted: "2026-11-13"
   axes: [etym]
-  wired: false   # awaiting the first sync (0.7 MB Zenodo zip, sha-pinned).
+  wired: true    # first sync 2026-11-13: +3,792 sets / 9,614 reflexes.
                  # Expected: 3,792 entries / 9,614 reflex rows (2,180
                  # loan-flagged); raw/ skipped by rule.
   sync_policy: manual

@@ -45,7 +45,8 @@ class LexibankCldfParserTest < Minitest::Test
     result = read("uralex", language: "urj", proto_varieties: ["0"])
     set = entry(result, "100-f")
     assert_equal "*kämä ?", set.headword, "uralex writes the asterisk and the doubt mark itself — verbatim"
-    assert_equal Nabu::Normalize.search_form("kämä ?", language: "urj"), set.headword_folded
+    assert_equal Nabu::Normalize.search_form("kämä", language: "urj"), set.headword_folded,
+                 "the doubt mark is upstream prose, not a key character — folds drop it"
     assert_equal %w[keme kemény], set.reflexes.map(&:word)
     undeclared = entry(read("uralex", language: "urj"), "100-f")
     assert_equal "hard", undeclared.headword, "undeclared, the asterisk is never sniffed: the concept heads"
@@ -184,6 +185,17 @@ class LexibankCldfParserTest < Minitest::Test
       error = assert_raises(Nabu::ParseError) { read("uralex", dir: File.join(dir, "cldf"), language: "urj") }
       assert_match(/missing cognates\.csv/, error.message)
     end
+  end
+
+  def test_folds_strip_the_length_dot_and_the_doubt_mark
+    # csd writes vowel length as a raised dot and doubt as "(?)" INSIDE the
+    # form ("*sitó• (?)"); neither is typeable at the define prompt, so the
+    # fold key drops them while the headword keeps upstream's spelling.
+    set = entry(read("csd", language: "sio"), "2")
+    assert_equal "*sitó• (?)", set.headword
+    assert_equal Nabu::Normalize.search_form("sitó", language: "sio"), set.headword_folded
+    tutelo = set.reflexes.find { |r| r.lang_code == "csd-tu" }
+    assert_equal Nabu::Normalize.search_form("šitóre", language: nil), tutelo.word_folded
   end
 
   def test_folds_are_the_house_search_forms_with_the_member_hyphen_strip
