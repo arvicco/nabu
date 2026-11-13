@@ -97,8 +97,12 @@ sources:
     arc: { lect: "arc:imp", tier: certain }
     # P61-3 (D60-b): the Demotic papyri are HELD as Latin transliteration
     # (byte-census P60-1) — surface claim ~latn; the artifact's Egyd rides
-    # config/artifact_scripts.yml.
-    egy-Egyd: { lect: "egy~latn", tier: certain }
+    # config/artifact_scripts.yml. 2026-11-13 (the big-sitting merge tail):
+    # the STAGE joins the claim — Demotic script carries Demotic-stage
+    # Egyptian by standard Egyptological coupling (the registry's egy:dem
+    # band note), a transcription of upstream's own Egyd onto the existing
+    # stage node, not a judgment.
+    egy-Egyd: { lect: "egy:dem~latn", tier: certain }
   openiti:
     # OpenITI is the premodern Classical Arabic written tradition —
     # approximation (the fas rows are untouched). Owner ruling, P58 D58-d.
@@ -325,6 +329,25 @@ sources:
     # nodes — parse-time work, the 2026-10-18 generalization.
     snt: { lect: "qps", tier: certain }
     xca: { lect: "qcp", tier: certain }
+    # 2026-11-13 (the big-sitting merge tail): the shelves' comparanda
+    # lines write the literal siglum PIE for Proto-Indo-European — an
+    # author convention, not a standard code, so the mapping is
+    # collection knowledge (the sitting ruled author sigla consumer-side,
+    # never universal codemap rows). 263 reflex lines censused that day.
+    PIE: { lect: "ine:pro", tier: certain }
+  westoldturkic:
+    # 2026-11-13 (the big-sitting merge tail): Róna-Tas & Berta's own
+    # sigla (West Old Turkic 2011), transcribed onto the registry nodes
+    # the sitting minted for exactly this shelf. WOT — their West Old
+    # Turkic, the Oghur r-Turkic donor language of the Hungarian loan
+    # stratum: no ISO code exists and no Oghur node is minted, so the
+    # trk family anchor is the honest coarse claim (tier approximation;
+    # a future oghur node is the finer call). EAH/LAH — their Early and
+    # Late Ancient Hungarian, the receiving stages: both land on hu:anc
+    # (ősmagyar), whose note records the finer split as prose.
+    WOT: { lect: "trk", tier: approximation }
+    EAH: { lect: "hu:anc", tier: certain }
+    LAH: { lect: "hu:anc", tier: certain }
   fsv-lexica:
     # Söderwall's Ordbok öfver svenska medeltids-språket (+ its
     # supplement) and Schlyter's glossary to the medieval laws are by

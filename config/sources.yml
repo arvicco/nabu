@@ -1367,7 +1367,8 @@ cllg-sc:   # 02-sources row 403
   # Witness overlap, not duplication: ~225 SC works are also in the TLG
   # canon (cllg-freed) and 42 in perseus/first1k — the newer Cerf text,
   # a different edition urn (sc-cllg-grc1). sc_tlg.csv (the SC↔TLG
-  # alignment) is future edition-pairing material, not ingested.
+  # alignment) rides the reference seam: Adapters::CllgTlgAlignment mints
+  # SC edition → tlg:<id> (reference) + → freed edition (parallel-witness).
   sync_policy: manual
 
 # P82-2

@@ -471,7 +471,14 @@ module Nabu
                                 "dwds_class" => "a single corpus-wide DWDS text-class label " \
                                                 "(\"Gebrauchsliteratur\", 1,525 of 1,869 letters) — " \
                                                 "no per-document signal; the kind facet already " \
-                                                "classes the documents" }
+                                                "classes the documents" },
+        # The article subjects themselves project as the passage genre
+        # facet (facet_map.yml passage_fields) and trace there.
+        "delpher-newspapers" => { "subjects" => "the per-issue TALLY of the article subjects " \
+                                                "({\"artikel\" => 4, \"advertentie\" => 1}: the " \
+                                                "names are hash keys, the leaves counts) — a " \
+                                                "summary of the per-article claim, which projects " \
+                                                "as the passage genre facet" }
       }.freeze
 
       MINING_SAMPLE = 40

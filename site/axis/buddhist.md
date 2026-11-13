@@ -29,12 +29,12 @@ A source wears every desk it serves — these fourteen answer this desk. Holding
 | `osbct` | texts | nc | wired · frozen | 118 docs / 89,512 passages |
 | `ptg` | dictionary | attribution | wired · manual | 4,276 entries |
 | `sarit` | texts | attribution | wired · manual | 83 docs / 346,313 passages |
-| `suttacentral` | texts | open | wired · auto | 12,397 docs / 699,511 passages |
-| `tipitaka-lk` | texts | research_private | wired · auto | 563 docs / 456,967 passages |
+| `suttacentral` | texts | open | wired · auto | 12,399 docs / 699,639 passages |
+| `tipitaka-lk` | texts | research_private | wired · auto | 563 docs / 456,965 passages |
 
 Private research materials are not listed.
 
-**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 13 November 2026)</span>: `pli` 97,454 · `xct` 64,867 · `san` 10,449 · `eng` 7,150 · `lzh` 5,602 · `cmg` 1,069 · `mnc` 1,068 · `san-Latn` 822 · `en` 389 · `cmn` 279 … and 8 more (`nabu axis buddhist` lists all).
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 13 November 2026)</span>: `pli` 97,454 · `xct` 64,867 · `san` 10,449 · `eng` 7,152 · `lzh` 5,602 · `cmg` 1,069 · `mnc` 1,068 · `san-Latn` 822 · `en` 389 · `cmn` 279 … and 8 more (`nabu axis buddhist` lists all).
 
 **Carried in by multilingual packs** (`lotsawa-house` — whole-source members whose other languages ride along, as of 13 November 2026): `fra` 624 · `spa` 333 · `deu` 277 · `por` 142 · `ita` 74 … and 1 more (`nabu axis buddhist` lists all).
 

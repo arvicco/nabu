@@ -33,7 +33,8 @@ as TEI; CLAUDE.md fixture rules), trimmed but structurally intact.
 | edition file no `metadata.xml` resource claims | 3 | skipped by rule (uncatalogued; their in-file edition urns collide with catalogued works) |
 | per-author `metadata.xml` collection | 103 | catalog record — read for urns/titles, structure, never a document |
 | root `cllg-sc.xml` | 1 | the catalog root listing every `metadata.xml` |
-| `sc_catalog.csv`, `sc_tlg.csv`, `sc_tlg_authors.csv` | 3 | not walked (the SC↔TLG alignment tables; future edition-pairing material) |
+| `sc_tlg.csv` (the SC-volume ↔ TLG-work alignment, 243 rows) | 1 | never a document — read by the reference producer (`Adapters::CllgTlgAlignment`): links-journal edges |
+| `sc_catalog.csv`, `sc_tlg_authors.csv` | 2 | not walked (the SC publication list; the author-level TLG ids) |
 
 ## Files
 
@@ -49,3 +50,17 @@ author (trimmed to the fixture works; `cllg0010` whole).
 | `tlg4110/commentaire_proverbes_numeriques.xml` | Evagrius (whole file) — chunk > item, with Latin chunk heads outside the items |
 | `tlg4110/lettre_sur_la_foi.xml` | Evagrius, *Letter on Faith* — an edition file NO metadata.xml resource claims (the uncatalogued grain); section 1 |
 | `cllg0010/homilia_in_resurrectionem_salvatoris.xml` | John of Berytus, homily (whole file) — its tree cites `div[@type='edition']/p` by @n but no `p` carries @n: the zero-match grain |
+
+At the root, `sc_tlg.csv` keeps upstream's header and 10 of its 243 rows
+verbatim (upstream lines 2–4, 85–86, 166–168, 240, 242), chosen for the
+alignment grains the producer handles:
+
+| Upstream line | Why it is here |
+|---|---|
+| 2 (SC 1 bis) | no `here` urn — the SC volume names no held document: unmapped, counted |
+| 3 (SC 2 bis) | `here` + freed `urn`, same-edition: identity edge + witness edge |
+| 4 (SC 4 bis) | tlg-online row (no freed text): identity edge only |
+| 85–86 (SC 132, 136) | *Contra Celsum*, two SC volumes of ONE held document: the two rows merge onto one edge pair |
+| 166–168 (SC 400) | *Vita Antonii*: freed witness (166), a here-less row (167), the same SC text aligned to a second TLG work 2035.128 (168) |
+| 240 (SC 654) | the SC urn's work id (`cllg001`) is not a TLG id: the alignment is the only bridge to TLG 4090.179 |
+| 242 (SC 400) | `urn-clash` — upstream's own verdict that its `here` names the freed urn (pre-rename): skipped by rule, counted |

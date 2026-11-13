@@ -877,7 +877,8 @@ sources:
   hr-wikisource:
     kind: {posture: unclassified, note: "genre categories ride verbatim in metadata
         categories — a kind_map candidate"}
-    lect: {posture: identity, note: "hrv bare (no nabu-lects hrv node yet — reported).
+    lect: {posture: identity, note: "hrv → hr through the Slavic-package codemap row (the
+        2026-10-10 mint; note refreshed 2026-11-13 — the 'no node yet' premise was stale).
         Povaljska listina (1250) mixes Croatian and Church Slavonic in Croatian Cyrillic
         — a chu/cro candidate, censused, not claimed"}
     dating: {posture: dated, note: "P116-2: the century categories (srednji vijek, 15.–18.
@@ -887,7 +888,8 @@ sources:
     script: {posture: implied}
   mk-wikisource:
     kind: {posture: unclassified}
-    lect: {posture: identity, note: "mkd bare (no nabu-lects mk node yet — reported); the
+    lect: {posture: identity, note: "mkd → mk through the Slavic-package codemap row (the
+        2026-10-10 mint; note refreshed 2026-11-13 — the 'no node yet' premise was stale); the
         Miladinov collection is in MODERNIZED orthography (metadata orthography, per
         page). Pejčinović/Krčovski's CS-tinged vernacular is the bul:emod/damaskini
         neighbourhood — censused, not staged"}
@@ -908,8 +910,9 @@ sources:
     kind: {posture: unclassified, note: "song-type and collection categories ride verbatim
         in metadata categories — a kind_map candidate"}
     lect: {posture: identity, note: "srp (Cyrillic pages) + hrv (the Latin-script,
-        Croatian-collected pages, censused 136) — bare codes, neither has a nabu-lects
-        node yet (reported)"}
+        Croatian-collected pages, censused 136) — both resolve through the Slavic-package
+        codemap rows onto sr / hr (the 2026-10-10 mint; note refreshed 2026-11-13 — the
+        'no node yet' premise was stale)"}
     dating: {posture: pending, note: "no page-grain date exists; candidate: the Vuk
         volume publication year inside the verbatim base_edition (Избор) line — an
         edition-class envelope, the openmgh printed_year_text precedent — awaiting a
@@ -1489,8 +1492,11 @@ sources:
     script: {posture: implied, note: Street romanization with his ASCII substitutions verbatim}
   westoldturkic:   # P108-7
     kind: {posture: unclassified}
-    lect: {posture: identity, note: trk collective — WOT (r-Turkic/Bolgar, Glottocode
-        bolg1249) has no ISO code; a wot-shaped registry node is a future mint call}
+    # lect machine-postured 2026-11-13 (the big-sitting merge tail): the
+    # Róna-Tas & Berta sigla ride config/lect_overrides.yml (WOT → trk
+    # approximation — still no Oghur node, the finer call stands; EAH/LAH
+    # → hu:anc), so the declaration row is retired (machine files are the
+    # single source of truth).
     dating: {posture: undatable, note: Hungarian first-attestation years ride entry
         bodies — a dictionary shelf, no document timeline}
     places: {posture: unplaced}
@@ -2461,10 +2467,11 @@ sources:
     # Tivākaram → lexical/word-list, the epics → narrative/epic, the
     # Āḻvār and Tirumuṟai hymns → hymn-prayer/hymn). The pending row
     # retired under the shadowing rule.
-    lect: {posture: identity, note: "tam-Latn → ta (the codemap tam row); nabu-lects mints
-        no Tamil stage, so the classical corpus (the Caṅkam anthologies to the medieval
-        devotional canons) claims the bare anchor, declared coarse — an Old Tamil stage is
-        the named mint candidate"}
+    lect: {posture: identity, note: "tam-Latn → ta (the codemap tam row); ta:old and ta:mid
+        exist (the 2026-10-27 South Asian stage suite — the old 'no Tamil stage' premise
+        was stale, refreshed 2026-11-13), but the corpus SPANS them (the Caṅkam anthologies
+        to the medieval devotional canons), so the bare anchor stays the honest source-grain
+        claim; a per-work staging rule is the next review's candidate"}
     dating: {posture: undatable, note: "no origDate or composition date in any header
         (census 2026-10-12); the years inside the listWit witness descriptions date
         manuscripts and printed editions, ride metadata verbatim, and are never the
@@ -2478,8 +2485,9 @@ sources:
     lect: {posture: identity, note: "the P118-1 pending retired 2026-10-12: the Indic
         registry package added the tam → ta codemap row (ta re-parented onto dra-sou)
         and minted te for the tel-Latn passages, so every claimed code resolves;
-        Tamil stages stay unminted — the epigraphic corpus claims the bare anchor,
-        declared coarse"}
+        ta:old/ta:mid exist since 2026-10-27 (note refreshed 2026-11-13) but the
+        epigraphic corpus claims the bare anchor, declared coarse — the inscriptions
+        span the stages and carry no per-document stage data"}
     dating: {posture: partial, note: "no origDate in any header; title-mined: the titles'
         attributed statements ride metadata title_dating verbatim on 965 of the 1,267 parsed
         docs, and the 112 ERA-TYPED ones convert via config/eras.yml (109 Śaka Y → Y+78, 3
@@ -2524,8 +2532,9 @@ sources:
         Genre column (riding metadata genres verbatim — சங்ககாலம், நீதிநெறி, சமயம் - சைவம்,
         பிரபந்தம் - …, புராணம், காப்பியம், இலக்கணம் …); one ruling"}
     lect: {posture: identity, note: "tam (Tamil script) → ta through the held codemap row;
-        no Tamil stage in nabu-lects — the Caṅkam-to-prabandha span claims the bare anchor,
-        declared coarse (the tamilex shape; an Old Tamil stage is the named mint candidate)"}
+        ta:old/ta:mid exist (refreshed 2026-11-13 — the 'no Tamil stage' premise was stale)
+        but the Caṅkam-to-prabandha span CROSSES them, so the bare anchor stays the honest
+        source-grain claim (the tamilex shape; per-work staging is the review candidate)"}
     dating: {posture: undatable, note: "the works list carries no date column and the
         e-texts no composition date; the footers' first-put-up / revised dates date the
         e-text, never the work — they ride metadata pm_footer verbatim"}
@@ -3022,9 +3031,10 @@ sources:
     script: {posture: implied}
   ctilc:
     kind: {posture: unclassified}
-    lect: {posture: identity, note: "P80-8: bare cat is the honest one-tag claim
-        for 19th-20th c. printed Catalan (no Catalan node in nabu-lects yet —
-        identity-default bare anchor); the CLASSIFICACIÓ_TEXTUAL variant=
+    lect: {posture: identity, note: "P80-8: bare Catalan is the honest one-tag claim
+        for 19th-20th c. printed Catalan — cat → ca through the alias suite (note
+        refreshed 2026-11-13: the 'no Catalan node' premise was stale, the ca anchor
+        stands); the CLASSIFICACIÓ_TEXTUAL variant=
         dialect attr (baleàric/central/valencià…) rides metadata AND the
         variant facet — the future lect seam, no rules ruled yet"}
     dating: {posture: dated, note: "the ANY publication year per work, riding
@@ -3391,8 +3401,11 @@ sources:
   perseus-farsilit:   # P95-4
     kind: {posture: pending, note: "candidate: TEI textClass ingestion (unruled)"}
     lect: {posture: identity, note: "fas IS Persian (codemap → the bare fa
-        anchor) — Hafez; the registry holds no Persian stages yet, so the
-        bare code is the honest claim"}
+        anchor) — Hafez; fa:cls [1200, 1906] exists (PR #45), and Hafez
+        sits squarely inside it — the stage claim is a one-rule candidate
+        for the next review, the bare code honest meanwhile (note
+        refreshed 2026-11-13; the old 'no Persian stages' premise was
+        stale)"}
     dating: {posture: undatable}
     places: {posture: unplaced}
     script: {posture: implied}
@@ -3485,8 +3498,9 @@ sources:
     script: {posture: implied}
   cv-sardinian:
     kind: {posture: unclassified}
-    lect: {posture: identity, note: bare srd — the registry's own identity example;
-        modern Sardinian sentence text}
+    lect: {posture: identity, note: "srd — a real nabu-lects anchor since the 2026-11-13
+        sitting (PR #48; it had been the codemap header's identity-fallback example);
+        modern Sardinian sentence text on the bare anchor"}
     dating: {posture: undatable, note: crowd-collected modern sentences, no per-item dates}
     places: {posture: unplaced}
     script: {posture: implied}
@@ -3716,11 +3730,11 @@ sources:
   acd:
     kind: {posture: unclassified, note: "a dictionary shelf — the Austronesian Comparative
         Dictionary (comparative/etymological) by its own title; kind folds documents only"}
-    lect: {posture: identity, note: "map — the nabu-lects Austronesian anchor (no stages);
-        reflexes carry their varieties' ISO codes bare, and the reconstructed varieties the
-        registry resolves ride their codemap aliases (pqe-pro, poz-oce-pro, poz-mic-pro,
-        poz-pol-pro); PAn/PMP and the subgroup protos stay display-only until registry nodes
-        exist (map has no pro stage, poz none at all)"}
+    lect: {posture: identity, note: "map — the nabu-lects Austronesian anchor; the PAn/PMP
+        set heads ride map:pro / poz:pro (the 2026-11-13 sitting, PR #48) and the other
+        reconstructed varieties their codemap aliases (pqe-pro, poz-oce-pro, poz-mic-pro,
+        poz-pol-pro); reflexes carry their varieties' ISO codes bare; the subgroup protos
+        (PWMP, PCEMP, PPh …) stay display-only per the registry's recorded depth ruling"}
     dating: {posture: undatable, note: "a reference dataset — the release carries no dates"}
     places: {posture: unplaced, note: "variety coordinates are doculect reference points, not
         findspots — no place claim at dictionary grain"}
@@ -3728,10 +3742,12 @@ sources:
   csd:
     kind: {posture: unclassified, note: "a dictionary shelf — the Comparative Siouan
         Dictionary by its own title; kind folds documents only"}
-    lect: {posture: pending, note: "candidate: a sio (Siouan, ISO 639-5) nabu-lects anchor with
-        a pro stage — the dictionary language rides bare sio until it exists; upstream's
+    lect: {posture: identity, note: "sio — the nabu-lects Siouan family anchor with its pro
+        stage (the 2026-11-13 sitting, PR #48: the pending retired, the add-then-retire
+        shape); the Proto-Siouan heads ride the dictionary language, the subgroup protos
+        stay display-only per the registry's recorded depth ruling; upstream's
         languages.csv carries no ISO or Glottocode for any of its 36 varieties, so the
-        members are display-only (csd-<variety>) whatever the registry holds"}
+        members stay display-only (csd-<variety>)"}
     dating: {posture: undatable, note: "a reference dataset — the repository carries no dates"}
     places: {posture: unplaced, note: "the varieties carry no coordinates at all"}
     script: {posture: implied, note: "Siouanist Americanist notation"}
@@ -3750,8 +3766,10 @@ sources:
         Dictionary by its own title; kind folds documents only"}
     lect: {posture: identity, note: "poz-mic — the nabu-lects Micronesian anchor; the
         Proto-Micronesian/Proto-Oceanic/Proto-Polynesian members ride their codemap aliases
-        (poz-mic-pro, poz-oce-pro, poz-pol-pro); PMP/PAn and the sub-group protos stay
-        display-only until registry nodes exist"}
+        (poz-mic-pro, poz-oce-pro, poz-pol-pro); PMP/PAn now land on poz:pro / map:pro and
+        the core daughters (chk, woe, puw, cal, gil, mah, yap, pau) on their 2026-11-13
+        anchors (PR #48); the sub-group protos and the dialect-chain tail (mkj, stw, mrl …)
+        stay display-only per the recorded depth ruling"}
     dating: {posture: undatable, note: "a reference dataset — the release carries no dates"}
     places: {posture: unplaced, note: "variety coordinates are doculect reference points, not
         findspots — no place claim at dictionary grain"}
@@ -3784,9 +3802,9 @@ sources:
         its own title; kind folds documents only"}
     lect: {posture: identity, note: "poz-oce — the nabu-lects Oceanic anchor; POc/PEMP/PMic/
         PCP/PPn/PNPn/PEPn members ride their codemap aliases (poz-oce-pro, pqe-pro,
-        poz-mic-pro, poz-pcc-pro, poz-pol-pro, poz-pnp-pro, poz-pep-pro); PAn/PMP and the
-        Oceanic sub-group protos (PWOc, PEOc, PROc, PNCV, PSV …) stay display-only until
-        registry nodes exist"}
+        poz-mic-pro, poz-pcc-pro, poz-pol-pro, poz-pnp-pro, poz-pep-pro); PAn/PMP now land
+        on map:pro / poz:pro (the 2026-11-13 sitting, PR #48); the Oceanic sub-group protos
+        (PWOc, PEOc, PROc, PNCV, PSV …) stay display-only per the recorded depth ruling"}
     dating: {posture: undatable, note: "a reference dataset — the release carries no dates"}
     places: {posture: unplaced, note: "variety coordinates are doculect reference points, not
         findspots — no place claim at dictionary grain"}
@@ -3795,8 +3813,9 @@ sources:
     kind: {posture: unclassified, note: "a dictionary shelf — basic-vocabulary cognate sets;
         kind folds documents only"}
     lect: {posture: identity, note: "urj — the nabu-lects Uralic anchor; members carry their
-        varieties' ISO codes bare; the Proto-Uralic heads ride the dictionary language (urj
-        has a pro stage, but the codemap carries no urj-pro alias for a member to name)"}
+        varieties' ISO codes bare; the Proto-Uralic heads ride the dictionary language and
+        members naming urj-pro resolve through the codemap alias onto urj:pro (the
+        2026-11-13 sitting, PR #48); Hungarian members meet the new hu anchor"}
     dating: {posture: undatable, note: "a reference dataset (UraLex 2.0) — no dates"}
     places: {posture: unplaced, note: "variety coordinates are doculect reference points, not
         findspots — no place claim at dictionary grain"}

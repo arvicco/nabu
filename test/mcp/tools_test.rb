@@ -313,6 +313,29 @@ module MCP
       end
     end
 
+    def test_similar_to_honors_lang_against_the_anchors_language
+      doc = make_document(urn: "urn:d:sim", language: "grc")
+      make_passage(doc, urn: "urn:d:sim:1", text: "μῆνιν ἄειδε", sequence: 0)
+      vectors = Sequel.sqlite
+      begin
+        Nabu::Embed.ensure_schema!(vectors)
+        vectors[Nabu::Embed::META_TABLE].insert(model: Nabu::Embed::MODEL, dim: 4, encoding: "i8",
+                                                worker_version: "test",
+                                                updated_at: Time.now.utc.iso8601)
+        vectors[Nabu::Embed::VECTORS_TABLE].insert(
+          model: Nabu::Embed::MODEL, urn: "urn:d:sim:1", language: "grc",
+          text_sha: "sha", vec: Sequel.blob([127, 0, 0, 0].pack("c*"))
+        )
+
+        result = tools(vectors: vectors).call("nabu_search", { "similar_to" => "urn:d:sim:1", "lang" => "lat" })
+        assert_equal false, result.fetch(:isError)
+        assert_match(/same-language only.*grc/m, text_of(result),
+                     "a lang the anchor does not carry is answered honestly, never dropped into a grc page")
+      ensure
+        vectors.disconnect
+      end
+    end
+
     def test_similar_to_rejects_a_composed_query
       error = assert_raises(Nabu::MCP::Tools::InvalidArguments) do
         tools.call("nabu_search", { "similar_to" => "urn:x", "query" => "μηνιν" })

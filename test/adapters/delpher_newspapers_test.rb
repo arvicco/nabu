@@ -206,6 +206,36 @@ module Adapters
       assert_equal [1695, "Rotterdam", nil], rows["#{URN}:ddd:011005283"]
     end
 
+    # -- the genre axis: the article subject (aggressive-mining law) ----------------
+
+    def facet_map = Nabu::FacetMap.load(File.join(Nabu::Config::PROJECT_ROOT, "config", "facet_map.yml"))
+
+    # Every article's DIDL dc:subject (the fixture: artikel, advertentie)
+    # projects verbatim as the passage genre facet — upstream's per-ARTICLE
+    # claim lives at the passage grain, beside the issue's source_kind.
+    def test_the_article_subject_projects_as_the_passage_genre_facet
+      fields = facet_map.passage_fields_for("delpher-newspapers")
+      refute_nil fields, "the article subject is ruled for the passage facet lane"
+      keys = documents.flat_map(&:passages).flat_map do |passage|
+        Nabu::Store::PassageFacetBuilder.facet_keys(passage.annotations, fields)
+      end
+      assert_equal [["genre", "advertentie", nil], ["genre", "artikel", nil]], keys.uniq.sort
+      assert_equal 19, keys.size, "one genre row per article passage"
+    end
+
+    # The health census (Invariants#unmined_axis_metadata) over the loaded
+    # fixture, once the ordinary facet builders ran: no delpher key is dark.
+    def test_the_mining_census_finds_no_dark_ore_after_the_builders
+      catalog = loaded_catalog
+      map = facet_map
+      Nabu::Store::FacetBuilder.refresh_source!(catalog: catalog, slug: "delpher-newspapers", facet_map: map)
+      Nabu::Store::PassageFacetBuilder.refresh_source!(catalog: catalog, slug: "delpher-newspapers", facet_map: map)
+      Nabu::Store::TimelineBuilder::MetadataDates.refresh_source!(catalog: catalog, slug: "delpher-newspapers")
+      invariants = Nabu::Health::Invariants.new(registry: nil, catalog: catalog, fulltext: nil, ledger: nil)
+      finding = invariants.send(:unmined_axis_metadata)
+      assert_nil finding, finding&.message
+    end
+
     # -- registry --------------------------------------------------------------------
 
     def test_registry_row_is_wired_and_manual

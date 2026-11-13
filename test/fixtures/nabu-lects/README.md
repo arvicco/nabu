@@ -7,6 +7,19 @@ already small (340 + 40 lines) and the module's read seam
 full codemap to be exercised honestly (a trimmed slice would hide
 referential-integrity gaps the drift guard exists to catch).
 
+- **Retrieved 2026-11-13 (eighth cut)** — the big registry sitting
+  (nabu-lects PR #48, merged this day): the ancient epigraphic
+  anchors (xrr, cms, xmr, xcr, xlc), amh, hu with anc/old, ota, the
+  historical Romance/Germanic/Iranian set (xno, pcd, nrf, dlm, srd,
+  frk, nrn, xco), sio + sio:pro, map:pro/poz:pro, the nine
+  Micronesian/Oceanic daughters, the dum re-band to [1050, 1500],
+  the 639-1 mirror wave and the script-suffix rows — plus the
+  seventh cut's nl:early (PR #47, same day). Copied verbatim from
+  canonical/nabu-lects (synced 2026-11-13). `lects.yml` 286,121 B,
+  sha256
+  `1ef7f8ea3e51977562eda1b902c4a513e4459b424efd3a34f435ec28f991231d`;
+  `codemap.yml` 16,077 B, sha256
+  `c33a2c3b6853f6538c454baf4a203fcf3b74a80195be5a67e343bd6a7b48bbbc`.
 - **Retrieved 2026-11-12 (sixth cut)** — the Albanian package (the sqj
   Albanoid family with sqj-pro, the sq anchor with its sq:old stage, the
   sqi/alb → sq codemap rows) that the titus-old-albanian lect row targets,

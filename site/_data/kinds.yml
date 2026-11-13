@@ -3,8 +3,8 @@
 as_of: 13 November 2026
 classes:
 - head: literary
-  documents: 807729
-  documents_display: '807,729'
+  documents: 807730
+  documents_display: '807,730'
   sources: 58
 - head: administrative
   documents: 500153
@@ -51,12 +51,12 @@ classes:
   documents_display: '21,092'
   sources: 29
 - head: lexical
-  documents: 18819
-  documents_display: '18,819'
+  documents: 18844
+  documents_display: '18,844'
   sources: 28
 - head: scholarly
-  documents: 16048
-  documents_display: '16,048'
+  documents: 16117
+  documents_display: '16,117'
   sources: 29
 - head: mark
   documents: 12298
@@ -121,7 +121,7 @@ classes:
 unclassified_sources: 133
 unknown_documents: 47058
 unknown_documents_display: '47,058'
-unmapped_documents: 14223
-unmapped_documents_display: '14,223'
-unclassified_documents: 553716
-unclassified_documents_display: '553,716'
+unmapped_documents: 14234
+unmapped_documents_display: '14,234'
+unclassified_documents: 555024
+unclassified_documents_display: '555,024'

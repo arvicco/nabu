@@ -94,7 +94,32 @@ module Query
                    "an identical Latin vector never serves a Greek anchor — the trial's NO is pinned"
     end
 
+    def test_a_language_matching_the_anchor_is_honored_as_the_pinned_subpool
+      skip "sqlite-vec extension not installed on this box" unless extension_present?
+
+      plant_meta
+      make_passage(urn: "urn:d:1:a", text: "grc a", sequence: 0)
+      make_passage(urn: "urn:d:1:b", text: "grc b", sequence: 1)
+      plant_vector(urn: "urn:d:1:a", values: [127, 0, 0, 0])
+      plant_vector(urn: "urn:d:1:b", values: [126, 9, 0, 0])
+
+      page = similar.run("urn:d:1:a", limit: 5, language: "grc")
+      assert_equal %w[urn:d:1:b], page.results.map(&:urn)
+      assert_equal "grc", page.language
+    end
+
     # -- the honest refusals (run everywhere) --------------------------------
+
+    def test_a_language_other_than_the_anchors_is_refused_never_widened
+      plant_meta
+      make_passage(urn: "urn:d:1:a", text: "grc a", sequence: 0)
+      plant_vector(urn: "urn:d:1:a", values: [127, 0, 0, 0])
+
+      error = assert_raises(Nabu::Error) { similar.run("urn:d:1:a", limit: 5, language: "lat") }
+      assert_match(/same-language only/, error.message)
+      assert_match(/grc/, error.message, "the refusal names the anchor's own language")
+      assert_match(/lat/, error.message)
+    end
 
     def test_absent_store_names_the_build_command
       bare = Sequel.sqlite

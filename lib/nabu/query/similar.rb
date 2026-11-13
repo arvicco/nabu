@@ -56,10 +56,18 @@ module Nabu
       # The similarity page for +urn+: up to +limit+ same-language
       # neighbors in ascending cosine distance, banded. Raises Nabu::Error
       # with the honest next step on every absent-machinery case.
-      def run(urn, limit: 10)
+      # +language+ (optional) is a passage-language filter honored against
+      # the pinned subpool: the anchor's own language passes, any other is
+      # refused naming it — cross-language retrieval is never served, so a
+      # foreign language can neither widen the pool nor be silently ignored.
+      def run(urn, limit: 10, language: nil)
         model = store_model!
         anchor = @vectors[Nabu::Embed::VECTORS_TABLE].where(model: model, urn: urn).first
         raise Nabu::Error, missing_anchor_message(urn) if anchor.nil?
+        if language && language != anchor[:language]
+          raise Nabu::Error, "similar is same-language only: the anchor #{urn} is #{anchor[:language]}, " \
+                             "so a #{language} filter matches nothing (cross-language retrieval is not served)"
+        end
 
         load_extension!
         rows = neighbor_rows(model, anchor, limit)

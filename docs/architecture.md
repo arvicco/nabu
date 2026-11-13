@@ -2174,6 +2174,16 @@ lemma index, so they get no leg: a token hit in running text is
 attestation, not a lemma bridge. Lives under adapters/ (the lane-helper
 placement) so its edits dirty only the mvp stamp; a dcs or e84000 sync
 does not re-run it — `sync mvp --parse-only` does.
+#16 `Adapters::CllgTlgAlignment` (kind=reference + parallel-witness):
+the CLLG Sources Chrétiennes corpus's own `sc_tlg.csv` (SC volume ↔ TLG
+work, agent-checked upstream) re-derived on every cllg-sc sync — a text
+source's canonical crosswalk file, the KyotoKanripo shape. Each held SC
+edition gets a reference edge to the `tlg:<NNNN.NNN>` work identity (the
+compact external-id hub, like `tm:<id>`; the only bridge for TLG-online-only
+works and for SC urns whose work id is not a TLG id) and a parallel-witness
+edge to the cllg-freed edition the row names; rows sharing an edge pair
+merge their alignment lines into one detail. Here-less rows and upstream's
+`urn-clash` verdicts are counted, never guessed.
 SyncRunner re-runs the adapter's declared producer
 (`Adapter.reference_producer`) after every load of a `reference_edges?`
 source, passing the source's canonical workdir — the seam for the

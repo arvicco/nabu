@@ -53,6 +53,66 @@ class WritableProbeTest < Minitest::Test
     end
   end
 
+  # The late-launch collision (2026-11-13): a write command launched while a
+  # cooperative peer is mid-write INSIDE the catalog write window queues on
+  # the window (announcing it the window's way) and passes once the peer
+  # releases — it never dies at the pre-flight.
+  def test_a_cooperative_window_holder_is_queued_behind_not_failed
+    with_db_path do |path, _db|
+      held = Queue.new
+      release = Queue.new
+      peer = Thread.new do
+        Nabu::CatalogWriteLock.hold(db_dir: File.dirname(path), slug: "alpha") do
+          writer = Sequel.connect(Nabu::Store.sqlite_url(path))
+          writer.run("BEGIN IMMEDIATE")
+          held << true
+          release.pop(timeout: 10)
+          writer.run("ROLLBACK")
+          writer.disconnect
+        end
+      end
+      held.pop(timeout: 5)
+      lines = Queue.new
+      late = Thread.new do
+        Nabu::Store.assert_writable!(path, waiter: "beta", announce: ->(line) { lines << line })
+        :passed
+      end
+
+      assert_match(/catalog write window: beta waiting on alpha's writer \(pid #{Process.pid}/,
+                   lines.pop(timeout: 5).to_s)
+      sleep 0.3
+      assert late.alive?, "the late writer waits while the peer holds the window"
+      release << true
+      assert late.join(5), "the late writer finished after the release"
+      assert_equal :passed, late.value, "the late writer proceeds once the peer releases — never CatalogBusyError"
+      peer.join
+      assert_match(/catalog write window: beta acquired after/, lines.pop(timeout: 5).to_s)
+    end
+  end
+
+  # A NON-cooperating holder (busy catalog, window FREE — a rebuild, a stray
+  # process) still fails fast with the unchanged sentence.
+  def test_a_busy_catalog_with_a_free_window_still_fails_fast
+    with_db_path do |path, db|
+      db.run("BEGIN IMMEDIATE")
+      begin
+        lines = []
+        started = Process.clock_gettime(Process::CLOCK_MONOTONIC)
+        error = assert_raises(Nabu::CatalogBusyError) do
+          Nabu::Store.assert_writable!(path, announce: ->(line) { lines << line })
+        end
+        assert_operator Process.clock_gettime(Process::CLOCK_MONOTONIC) - started, :<, 2
+        assert_equal Nabu::CatalogBusyError.new(path).message, error.message
+        assert_empty lines, "a free window is taken at once — no waiting line"
+        handle = Nabu::CatalogWriteLock.acquire(db_dir: File.dirname(path), slug: "probe", timeout: 0,
+                                                announce: ->(_) {})
+        handle.release # the failed pre-flight left the window free
+      ensure
+        db.run("ROLLBACK")
+      end
+    end
+  end
+
   def test_a_missing_file_is_not_a_busy_error
     assert_nil Nabu::Store.assert_writable!("/nonexistent/dir/catalog.sqlite3"),
                "absence is the caller's concern (open_or_create handles it) — never a busy lie"

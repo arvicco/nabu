@@ -48,3 +48,7 @@ files:
     url: https://gitlab.inria.fr/almanach/cllg/sources-chretiennes/-/raw/219176d8d9b9a2dae51fe3e3aeb7fca76afc0977/data/cllg0010/homilia_in_resurrectionem_salvatoris.xml
     whole: true
     trim: none
+  - path: sc_tlg.csv
+    url: https://gitlab.inria.fr/almanach/cllg/sources-chretiennes/-/raw/219176d8d9b9a2dae51fe3e3aeb7fca76afc0977/sc_tlg.csv
+    whole: false
+    trim: header + 10 of 243 rows kept verbatim (upstream lines 2-4, 85-86, 166-168, 240, 242 — README)

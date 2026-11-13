@@ -484,7 +484,10 @@ module Nabu
                                      "measured unreliable and not served); model named in the " \
                                      "payload — statistical similarity, never a curated " \
                                      "alignment (nabu_align/nabu_parallels serve those). " \
-                                     "Replaces query/lemma; composes with limit only." },
+                                     "Replaces query/lemma; composes with limit/include_restricted/" \
+                                     "lang only (lang must be the anchor's own language — another " \
+                                     "is answered with a same-language note); any other filter " \
+                                     "is refused." },
           lemma: { type: "string",
                    description: "Dictionary form for exact-lemma search over the lemma index " \
                                 "(every tier; non-gold hits carry `tier`). Mutually exclusive " \
@@ -686,6 +689,11 @@ module Nabu
       GLOSS_ARGS = %w[gloss lang license source axis limit include_restricted].freeze
       # const: the sense desk composition set (`nabu sense` takes --source, not --axis)
       SENSE_ARGS = %w[sense sense_gloss source limit include_restricted].freeze
+      # const: the similar_to composition set — the neighbor scan is
+      # same-language and unscoped, so lang (checked against the anchor's
+      # pinned language) is the only filter it can honor; every other
+      # search filter is refused, never silently dropped
+      SIMILAR_ARGS = %w[similar_to limit include_restricted lang].freeze
 
       SHOW_SCHEMA = {
         type: "object",
@@ -1281,11 +1289,8 @@ module Nabu
       # classes are excluded exactly as the text-search page excludes them.
       def similar_neighbors(args)
         raise InvalidArguments, "similar_to replaces query/lemma — give exactly one" if args["query"] || args["lemma"]
-        if args.key?("source") || args.key?("axis")
-          raise InvalidArguments, "similar_to composes with limit/include_restricted only (not source/axis — " \
-                                  "the neighbor scan is not source-scoped)"
-        end
 
+        lane_conflicts!(args, "similar_to", SIMILAR_ARGS)
         catalog = resolve(@catalog) or return note(NO_CORPUS_NOTE)
         vectors = resolve(@vectors)
         if vectors.nil?
@@ -1296,7 +1301,7 @@ module Nabu
         limit = clamp(args["limit"], default: SEARCH_DEFAULT_LIMIT, max: SEARCH_MAX_LIMIT)
         include_restricted = args["include_restricted"] == true
         page = Query::Similar.new(catalog: catalog, vectors: vectors)
-                             .run(args["similar_to"], limit: limit)
+                             .run(args["similar_to"], limit: limit, language: string_arg(args, "lang"))
         results = page.results
         results = results.reject { |r| EXCLUDED_LICENSE_CLASSES.include?(r.license_class) } unless include_restricted
         sources = sources_by_urn(catalog, results.map(&:urn))

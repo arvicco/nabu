@@ -65,6 +65,42 @@ module MCP
       end
     end
 
+    # Declared-but-dropped (the lane half of the same honesty rule): the
+    # similar_to lane shares nabu_search's schema, so every search filter
+    # is DECLARED there — the neighbor scan honors lang (checked against
+    # the anchor's pinned language), limit and include_restricted; every
+    # other declared filter is refused, never silently ignored.
+    SIMILAR_HONORED = %w[similar_to lang limit include_restricted].freeze
+    # query/lemma (replaces) and betacode (decodes text) carry their own refusals
+    SIMILAR_OWN_REFUSALS = %w[query lemma betacode].freeze
+
+    def sample_value(spec)
+      case spec[:type]
+      when "integer" then 1
+      when "boolean" then true
+      when "object" then { "genre" => "x" }
+      else spec[:enum]&.first || "x"
+      end
+    end
+
+    def test_similar_to_refuses_every_declared_filter_it_cannot_honor
+      schema = Nabu::MCP::Tools::TOOLS.fetch("nabu_search").fetch(:input_schema).fetch(:properties)
+      dropped = schema.reject { |key, _| (SIMILAR_HONORED + SIMILAR_OWN_REFUSALS).include?(key.to_s) }
+      refute_empty dropped
+      dropped.each do |key, spec|
+        error = assert_raises(Nabu::MCP::Tools::InvalidArguments, key.to_s) do
+          tools.call("nabu_search", { "similar_to" => "urn:x", key.to_s => sample_value(spec) })
+        end
+        assert_match(/similar_to composes with limit.*only \(not #{key}\)/, error.message, key.to_s)
+      end
+    end
+
+    def test_similar_to_lets_its_honored_arguments_through
+      result = tools.call("nabu_search", { "similar_to" => "urn:x", "lang" => "grc", "limit" => 3,
+                                           "include_restricted" => true })
+      assert_equal false, result.fetch(:isError), "honored arguments reach the lane (its no-corpus note)"
+    end
+
     def test_the_server_maps_an_unknown_argument_to_an_is_error_result
       server = Nabu::MCP::Server.new(tools: tools)
       server.handle_line(JSON.generate({ jsonrpc: "2.0", id: 1, method: "initialize",

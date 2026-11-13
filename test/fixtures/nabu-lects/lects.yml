@@ -285,6 +285,57 @@ anchors:
                    (3,080 pieces, 1648–1653) lands squarely inside.
                    Modern French stays the bare anchor's open end"}
 
+  xno:
+    name: Anglo-Norman
+    parent: fro
+    glottocode: angl1258
+    band: [1066, 1500]
+    band_note: "the Conquest to the end of Law French's literary
+                vitality, approximate (Short, Manual of Anglo-Norman
+                2013); as a fossilized legal register it lingers
+                centuries longer"
+    note: "the Old French of post-Conquest England — insular Old
+           French with Norman and Picard traits, the language of
+           administration, law and a major literature (the Voyage of
+           St Brendan, Marie de France's traditional home, the Anglo-
+           Norman legal corpus; the AND is its dictionary). The
+           single largest donor layer in English after 1066: 676
+           wiktionary-enm etymology lines ride this code, plus iecor
+           (171) and wold-english (137) (censused 2026-11-13)"
+
+  pcd:
+    name: Picard
+    parent: fro
+    glottocode: pica1241
+    band: [1200, null]
+    band_note: "the Picard scripta emerges in 13th-c. charters and
+                literature; the modern lect is living (chti/rouchi
+                among its names)"
+    note: "langue d'oïl of Picardy, Artois and Hainaut. Its medieval
+           scripta is one of Old French's great regional written
+           forms (Gossen, Grammaire de l'ancien picard) — the parent
+           edge reads 'continues from fro' in exactly that sense —
+           and Picard traits mark much of what xno carried to
+           England. Consumers: 437 Wiktionary etymology lines + 2
+           library documents (censused 2026-11-13)"
+
+  nrf:
+    name: Norman
+    parent: fro
+    glottocode: norm1245
+    band: [1050, null]
+    band_note: "the Norman scripta is among the earliest Old French
+                written forms (Alexis manuscript tradition); ISO nrf
+                chiefly names the living insular varieties (Jèrriais,
+                Guernésiais) and mainland Norman"
+    note: "langue d'oïl of Normandy and the Channel Islands; the
+           medieval scripta is xno's continental sibling (the
+           Conquest carried Norman to England), the modern code
+           covers Jèrriais/Guernésiais/mainland Norman. 2,038
+           Wiktionary etymology lines ride it — the second-largest
+           unanchored Romance code in the etym layer (censused
+           2026-11-13)"
+
   ro:
     name: Romanian
     parent: roa
@@ -307,6 +358,42 @@ anchors:
               Orăștie (1582), the Noul Testament de la Bălgrad (1648), the
               Biblia de la București (1688), Dosoftei's Psaltirea în
               versuri (1673)"}
+
+  dlm:
+    name: Dalmatian
+    parent: roa
+    glottocode: dalm1243
+    band: [1300, 1898]
+    band_note: "the written record to the death of the last speaker:
+                Ragusan appears in 13th–15th-c. chancery documents;
+                Vegliote dies with Tuone Udaina on 10 June 1898"
+    note: "the extinct Romance of the eastern Adriatic coast (Bartoli,
+           Das Dalmatische 1906): Ragusan (Dubrovnik, displaced by
+           Venetian and Croatian by the 16th c.) and Vegliote (Krk),
+           the latter recorded from Udaina by Bartoli himself.
+           Classed Eastern-Romance-adjacent but minted on roa
+           directly — its position between Italo- and Eastern
+           Romance is exactly the debate (the ro note's
+           stays-prose discipline). Consumers: saenkoromance's
+           Dalmatian lists + 419 Wiktionary etymology lines
+           (censused 2026-11-13)"
+
+  srd:
+    name: Sardinian
+    parent: roa
+    glottocode: sard1257
+    band: [1065, null]
+    band_note: "the written record is among Romance's earliest
+                documentary traditions: the Privilegio Logudorese
+                (c. 1080–85) and the condaghes open it; the language
+                is living"
+    note: "the most conservative Romance language (Wagner, La lingua
+           sarda; DÉRom's pivotal witness for Proto-Romance vocalism)
+           — the macrolanguage code over Logudorese/Campidanese,
+           which stay prose. Medieval Sardinian is a documentary
+           language of condaghes and the Carta de Logu. Consumers:
+           cv-sardinian + derom + 186 Wiktionary etymology lines
+           (censused 2026-11-13)"
 
   pro:
     name: Old Occitan
@@ -745,14 +832,43 @@ anchors:
     name: Low German
     parent: gml
 
+  frk:
+    name: Frankish
+    parent: gmw:pro
+    glottocode: fran1264
+    band: [400, 900]
+    band_note: "the Merovingian-Carolingian attestation window,
+                approximate: the Malberg glosses of the Lex Salica
+                (6th c., in 8th–9th-c. copies), names, and the
+                loanword layer; by the 9th c. the West Frankish lands
+                speak Romance and the Low Franconian line is better
+                called Old Dutch"
+    note: "the West Germanic of the Franks, attested only obliquely —
+           the Malberg glosses, onomastics, and above all the massive
+           loan layer it left in Gallo-Romance (253 wiktionary-fro
+           etymology lines ride it, with 98 more in wiktionary-ca and
+           66 in wiktionary-enm; censused 2026-11-13). Its Low
+           Franconian continuation IS odt (next entry) — Wiktionary
+           keeps frk for the loan-donor stage, and the registry
+           follows that use: both parent on gmw:pro as siblings
+           rather than drawing frk → odt as a formal edge through
+           material this thin"
+
   odt:
     name: Old Dutch
     parent: gmw:pro
 
   dum:
     name: Middle Dutch
-    band: [1050, 1350]
-    band_note: "ISO 639-2/MARC reference name (ca. 1050–1350)"
+    band: [1050, 1500]
+    band_note: "re-banded 2026-11-13 from the ISO/MARC reference span
+                (1050–1350) to the Dutch handbook convention: van der
+                Wal & van Bree and van der Horst run Middle Dutch to
+                ca. 1500, and the held dum corpus demanded it — 14 of
+                dbnl's 15 dum-claimed titles sit 1400–1500, outside
+                the old band (the containment defect that triggered
+                the re-band); the nl note's periodization already
+                stated the 1500 seam"
     parent: odt
 
   nl:
@@ -1158,6 +1274,24 @@ anchors:
            held corpus spans Aksumite inscriptions to 19th-century
            manuscripts and Geʿez remains liturgically alive"
 
+  amh:
+    name: Amharic
+    parent: sem
+    glottocode: amha1245
+    band: [1300, null]
+    band_note: "attestation, approximate: the Old Amharic royal songs
+                (14th c., the 'soldiers' songs' of the Solomonic
+                court) open the written record; the language is living"
+    note: "Ethio-Semitic (South Semitic, Transversal branch — Hetzron
+           1972), the court and chancery vernacular of highland
+           Ethiopia beside liturgical Geʿez; the parent edge stops at
+           sem like gez's — Amharic is NOT a descendant of Geʿez, and
+           the Ethiosemitic intermediate carries no established code.
+           Old Amharic (14th–17th c.) stays prose until a consumer
+           dates its documents. Consumers: hmml-reading-room (343
+           Amharic manuscripts) + betamasaheft-works (22 docs) +
+           wold-gawwada donor lines (censused 2026-11-13)"
+
   # ── Egyptian ───────────────────────────────────────────────────────────────
 
   egy:
@@ -1195,6 +1329,24 @@ anchors:
             note: "the classical literary dialect of Upper Egypt"}
       boh: {name: Bohairic, kind: dialect,
             note: "the Delta dialect, later the liturgical standard"}
+
+  xmr:
+    name: Meroitic
+    glottocode: mero1237
+    band: [-300, 420]
+    band_note: "the written record, approximate: the earliest Meroitic
+                texts under Arnekhamani/Arqamani (3rd c. BCE) to the
+                last dated inscriptions after the kingdom's fall
+                (Kalabsha, 5th c. CE)"
+    note: "the language of the Kushite kingdom of Meroë, written in
+           its own alphasyllabary (hieroglyphic and cursive garbs,
+           deciphered phonetically by Griffith 1911; the language
+           itself read only in part). Affiliation debated — Rilly's
+           Northern East Sudanic case (Rilly & de Voogt 2012) is the
+           strongest, but no NES node is held, so xmr rides
+           parentless (the xht isolate discipline). Placed here for
+           its Nile-valley company, not for any Afro-Asiatic claim.
+           Consumers: elephantine (13 documents, censused 2026-11-13)"
 
   # ── Sumerian and the proto-cuneiform corpus ────────────────────────────────
 
@@ -1396,6 +1548,39 @@ anchors:
            (hieroglyphic vs cuneiform script, largely one language in two
            garbs); a joint Luwic node below ine-ana carries no established
            code, so the pair rides as siblings"
+
+  xlc:
+    name: Lycian
+    parent: ine-ana
+    glottocode: lyci1241
+    band: [-500, -300]
+    band_note: "conventional epigraphic span, approximate — the coin
+                legends and stone inscriptions of dynastic and early
+                Hellenistic Lycia"
+    note: "first-millennium Anatolian of the Luwic group (Melchert;
+           the Lycian A of the handbooks — Lycian B/Milyan stays
+           prose until a consumer tags it): ~200 inscriptions in its
+           own Greek-derived alphabet, the Xanthos stele and the
+           Letoon trilingual (with Greek and Aramaic) the keystones.
+           Like xlu/hlu it parents on ine-ana directly — no Luwic
+           node carries an established code"
+
+  xcr:
+    name: Carian
+    parent: ine-ana
+    glottocode: cari1274
+    band: [-700, -300]
+    band_note: "conventional epigraphic span, approximate — the
+                Egyptian mercenary graffiti and funerary stelae
+                (7th–6th c.) through the Carian-homeland and coastal
+                texts"
+    note: "first-millennium Anatolian, Luwic-adjacent (Adiego 2007,
+           The Carian Language): an alphabet whose letter values
+           resisted reading until the Egyptian bilinguals
+           (Ray–Schürr–Adiego system). Most of the corpus is from
+           EGYPT — the Memphis stelae and mercenary graffiti — which
+           is exactly where the library first meets it (2 elephantine
+           documents, censused 2026-11-13)"
 
   plq:
     name: Palaic
@@ -1618,6 +1803,25 @@ anchors:
            written in GREEK script (the Kushan chancery's inheritance).
            Consumers: 26 IEDC documents — the open rail into the
            Bactrian economic-document corpus (censused 2026-09-28)"
+
+  xco:
+    name: Chorasmian
+    parent: iir:pro
+    glottocode: khwa1238
+    band: [-100, 1400]
+    band_note: "the full attestation arc, approximate: coin legends
+                and the Toprak-kala/Toq-qala documents of the early
+                centuries CE at one end, the Islamic-era glosses
+                (al-Zamakhsharī's Muqaddimat al-adab and the legal
+                qunyas, 12th–13th c., in copies to the 14th) at the
+                other — two thin clusters, not a continuum"
+    note: "Eastern Middle Iranian of Khwarazm, beside sog/kho/xbc
+           (same iir:pro parent discipline). The early corpus is
+           epigraphic-documentary in an Aramaic-derived script; the
+           late corpus is Arabic-script glosses preserved inside
+           Arabic works (Henning; MacKenzie; Humbach in CLI). 233
+           Wiktionary etymology lines ride the code (censused
+           2026-11-13)"
 
   fa:
     name: Persian
@@ -2236,6 +2440,27 @@ anchors:
            late-Turki node a future call. Consumers: ATMO TEI + kaikki
            extract (813 senses) (censused 2026-09-28)"
 
+  ota:
+    name: Ottoman Turkish
+    parent: trk
+    glottocode: otto1234
+    band: [1299, 1928]
+    band_note: "the conventional dynastic span to the alphabet reform:
+                from the beylik's rise (the Old Anatolian Turkish of
+                the 13th–15th c. is conventionally folded into the
+                code's early edge) to the 1928 Latin-script law that
+                closes the Perso-Arabic written tradition"
+    note: "the Perso-Arabic-script literary and chancery language of
+           the Ottoman state — OGHUZ Turkic, continuing Old Anatolian
+           Turkish, NOT the otk Orkhon lineage (Kerslake in Johanson &
+           Csató, The Turkic Languages; Erdal): the parent edge
+           therefore stops at the trk family node beside otk, never
+           under it. Elite Ottoman carries heavy Persian and Arabic
+           strata over a Turkic frame. Consumers: the UD Ottoman
+           treebank (5 docs) + 8,556 Wiktionary etymology lines — the
+           single largest unanchored historical code in the held etym
+           layer (censused 2026-11-13)"
+
   # ── Mongolic and Tungusic (ISO 639-5 families, one anchor each) ───────────
 
   xgn:
@@ -2344,6 +2569,24 @@ anchors:
     parent: gmq:run
     note: "parent is the ATTESTED runic stage, per the most-specific-ancestor
            rule (attested lect preferred over gmq:pro)"
+
+  nrn:
+    name: Norn
+    parent: non
+    glottocode: norn1239
+    band: [850, 1850]
+    band_note: "Norse settlement of the Northern Isles to the
+                language's death, approximate: the last fluent
+                Shetland speakers die in the mid-19th c. (Walter
+                Sutherland of Unst, d. c. 1850, by tradition the
+                last)"
+    note: "the extinct North Germanic of Orkney and Shetland (Barnes,
+           The Norn Language of Orkney and Shetland 1998): a handful
+           of runic inscriptions (Maeshowe is Norse proper), the
+           Hildina ballad and Lord's Prayer versions taken down by
+           Low in 1774, and Jakobsen's dialect-dictionary harvest of
+           its Shetland Scots substrate. 730 Wiktionary etymology
+           lines ride the code (censused 2026-11-13)"
 
   isl:
     name: Icelandic
@@ -2707,6 +2950,40 @@ anchors:
            Euboean-Greek-derived alphabet written right-to-left.
            Consumers: the wiktionary-ett and larth-etp shelves and 30
            ett documents (censused 2026-09-27)"
+
+  xrr:
+    name: Raetic
+    glottocode: raet1238
+    band: [-500, -50]
+    band_note: "conventional epigraphic span, approximate — the corpus
+                clusters in the 5th–1st c. BCE"
+    note: "Tyrsenian (with Etruscan and Lemnian — Rix 1998, Schumacher
+           2004 Die rätischen Inschriften): the pre-Indo-European
+           language of the Alpine arc (Trentino, South Tyrol, the lower
+           Inn valley), ~300 mostly short votive and ownership
+           inscriptions in North-Italic ('Sanzeno', 'Magrè') alphabets
+           of Etruscan descent. The Tyrsenian family carries no ISO
+           639-5 or Wiktionary code, so xrr rides parentless beside ett
+           (the ett-note discipline). Consumers: tir (Thesaurus
+           Inscriptionum Raeticarum, 112 documents, censused
+           2026-11-13)"
+
+  cms:
+    name: Messapic
+    parent: ine
+    glottocode: mess1244
+    band: [-550, -50]
+    band_note: "conventional epigraphic span, approximate — the oldest
+                texts c. 6th c. BCE, the corpus thinning out by the
+                1st c. BCE under Latin"
+    note: "the Indo-European language of the Salento peninsula (the
+           Calabri and Messapii of the ancient geographers), treated as
+           its own IE branch: the old Illyrian connection stays a
+           hypothesis (de Simone 2018; Matzinger, Messapisch 2019), so
+           the parent edge stops at ine. ~600 inscriptions, mostly
+           funerary and votive, in a Laconian-Tarentine Greek-derived
+           alphabet. Consumers: ceipom (591 documents, censused
+           2026-11-13) + 13 wiktionary-ine-pro descendant lines"
 
   xlp:
     name: Lepontic
@@ -3262,11 +3539,29 @@ anchors:
   map:
     name: Austronesian
     kind: family
+    stages:
+      pro: {name: Proto-Austronesian, mode: reconstructed, ord: 5, wikt: map-pro,
+            note: "Blust's PAn (the ACD's reconstruction level, *aNak
+                   grade): the speech of pre-dispersal Taiwan, c. 4th
+                   millennium BCE on the archaeological reading.
+                   Corpus: the acd shelf's PAn-headed cognate sets
+                   (censused 2026-11-13)"}
 
   poz:
     name: Malayo-Polynesian
     kind: family
     parent: map
+    stages:
+      pro: {name: Proto-Malayo-Polynesian, mode: reconstructed, ord: 5, wikt: poz-pro,
+            note: "Blust's PMP, the ancestor of everything Austronesian
+                   outside Taiwan. The ACD's intermediate levels below
+                   it (PWMP, PCEMP, PPh …) stay display-only — the
+                   subgroup-proto depth ruling of the 2026-11-13
+                   sitting: the registry's comparative grain is the
+                   family/branch proto, and upstream's internal
+                   skeleton is not duplicated node-for-node. Corpus:
+                   the acd shelf's PMP-headed sets (censused
+                   2026-11-13)"}
 
   cmc:
     name: Chamic
@@ -3701,6 +3996,97 @@ anchors:
            orthography standardization. Consumers: eBible pon1922 (the
            old translation in its old alphabet — the respelled
            new-alphabet text is out of scope as a modernization)"
+
+  # The Micronesian daughters the comparative shelves lean on (the
+  # 2026-11-13 sitting): mcd's own variety skeleton — the Chuukic
+  # chain, the two outer Nuclear-Micronesian branches, and the two
+  # non-Nuclear neighbors — plus Niuean under Tongic. Minted at
+  # ≥~700 held reflex lines or a named structural role; the long
+  # tail of dialect-chain lists (mkj, stw, mrl, tpv …) stays bare
+  # by the modern-variety design.
+
+  chk:
+    name: Chuukese
+    parent: poz-mic
+    glottocode: chuu1238
+    note: "Chuukic (Jackson 1983's Trukic continuum, its biggest
+           member); the lagoon language of Chuk. Written from the
+           Logan mission era; Goodenough & Sugita's dictionary
+           (1980). Consumers: 2,906 reflex lines, 2,448 of them
+           mcd's (censused 2026-11-13)"
+
+  woe:
+    name: Woleaian
+    parent: poz-mic
+    glottocode: wole1240
+    note: "Chuukic, outer-islands Yap State; Sohn's reference grammar
+           and dictionary (1975/1976). Consumers: 2,486 reflex lines
+           (mcd + tlopo; censused 2026-11-13)"
+
+  puw:
+    name: Puluwatese
+    parent: poz-mic
+    glottocode: pulu1242
+    note: "Chuukic, the western atolls (Polowat); Elbert's dictionary
+           (1972). Consumers: 1,941 reflex lines (censused
+           2026-11-13)"
+
+  cal:
+    name: Carolinian
+    parent: poz-mic
+    glottocode: caro1242
+    note: "Chuukic as resettled on Saipan (the 19th-c. migrations
+           from the Caroline atolls); Jackson & Marck's dictionary
+           (1991). Consumers: 1,721 reflex lines (censused
+           2026-11-13)"
+
+  gil:
+    name: Gilbertese
+    parent: poz-mic
+    glottocode: gilb1244
+    note: "Kiribati; with Marshallese and Kosraean one of the outer
+           branches of Nuclear Micronesian (Bender et al. 2003).
+           Written from the Hiram Bingham Jr. mission Bible (1860s–
+           90s). Consumers: 1,424 reflex lines (censused 2026-11-13)"
+
+  mah:
+    name: Marshallese
+    parent: poz-mic
+    glottocode: mars1254
+    note: "its own first-order branch of Nuclear Micronesian; the
+           Marshallese Reference Grammar (Willson) and the online MED
+           carry the modern standard. ISO 639-1 mh aliases here.
+           Consumers: 1,093 reflex lines (censused 2026-11-13)"
+
+  yap:
+    name: Yapese
+    parent: poz-oce
+    glottocode: yape1248
+    note: "Oceanic but NOT Nuclear Micronesian — the poz-mic note
+           names its placement disputed; Ross (1996) argues an
+           Admiralties link, Glottolog leaves it high in Oceanic. The
+           parent edge stops at poz-oce for exactly that reason.
+           Consumers: mcd's Yapese comparanda (censused 2026-11-13)"
+
+  pau:
+    name: Palauan
+    parent: poz
+    glottocode: pala1344
+    note: "Western Malayo-Polynesian, NOT Oceanic — with Chamorro one
+           of the two pre-Oceanic Austronesian languages of
+           geographic Micronesia (the poz-mic note's distinction);
+           its higher placement inside MP stays debated, so the edge
+           stops at poz. Consumers: 426 reflex lines (censused
+           2026-11-13)"
+
+  niu:
+    name: Niuean
+    parent: poz-pol
+    glottocode: niue1239
+    note: "Tongic (with Tongan — the poz-pol note already names the
+           pair as the subgroup's first split and parents its leaves
+           here). Sperlich's dictionary (1997). Consumers: 974 reflex
+           lines, 422 of them tlopo's (censused 2026-11-13)"
 
   sit:
     name: Sino-Tibetan
@@ -4577,9 +4963,9 @@ anchors:
            Standard Estonian — the est macrolanguage aliases here). Written
            from the 1520s–30s (the Kullamaa prayers c. 1524–32, the
            Wanradt–Koell catechism of 1535); the first full Bible in North
-           Estonian 1739. Corpus: none held yet (VAKK, the Old Written
-           Estonian corpus, is the candidate shelf); 1,139 Wiktionary
-           descendant reflexes"
+           Estonian 1739. Corpus: vakk (the Old Written Estonian corpus,
+           live in the library since 2026-10-21, et:old staged by
+           date-band inference); 1,139 Wiktionary descendant reflexes"
     stages:
       old: {name: Old Written Estonian, band: [1520, 1739], ord: 10,
             band_note: "the earliest written records (the Kullamaa prayers,
@@ -4588,7 +4974,50 @@ anchors:
                         (vana kirjakeel); approximate",
             note: "the German-clergy written language of catechisms,
                    sermons (Müller's 1600–06), hymnals and the first
-                   grammars (Stahl 1637, Gutslaff 1648). Corpus: none held"}
+                   grammars (Stahl 1637, Gutslaff 1648). Corpus: vakk —
+                   every dated text inside the band (date-band
+                   inference staging, live since 2026-10-21)"}
+
+  hu:
+    name: Hungarian
+    parent: urj
+    glottocode: hung1274
+    band: [1055, null]
+    band_note: "the written record: the Tihany abbey charter's
+                Hungarian fragments (1055) open it; the language is
+                living"
+    note: "ISO 639-1 (639-3 hun aliases here). Ugric; the parent edge
+           reads urj directly — the Ugric intermediate (with Khanty
+           and Mansi) is real but carries no established code the
+           registry holds, and Glottolog's flat-Uralic reading backs
+           the direct edge (the urj-fin note's
+           contested-intermediates discipline). The periodization
+           below follows Hungarian historical linguistics' standard
+           grid (Kiss & Pusztai, Magyar nyelvtörténet): ősmagyar to
+           the Conquest, ómagyar to Mohács. Consumers: the
+           westoldturkic shelf's Hungarian target rows (EAH/LAH) +
+           ohu (347) and hun (1,965) Wiktionary etymology lines
+           (censused 2026-11-13)"
+    stages:
+      anc: {name: Ancient Hungarian, band: [null, 896], ord: 5,
+            mode: reconstructed,
+            band_note: "ősmagyar: from the Ugric separation to the
+                        Conquest (896), closed by convention at the
+                        settlement of the Carpathian basin",
+            note: "no texts — the stage is read from the loanword
+                   strata and internal reconstruction; Róna-Tas &
+                   Berta (West Old Turkic, 2011) divide it into
+                   Early and Late Ancient Hungarian (their EAH/LAH),
+                   both folding onto this one stage — the registry
+                   keeps their finer split as prose"}
+      old: {name: Old Hungarian, band: [896, 1526], ord: 10,
+            wikt: ohu,
+            band_note: "ómagyar: the Conquest to Mohács (1526), the
+                        standard handbook close",
+            note: "the charter fragments (Tihany 1055), the Funeral
+                   Sermon and Prayer (c. 1195, the first continuous
+                   text), the Old Hungarian Lament of Mary, and the
+                   15th–16th-c. codex literature"}
 
   smi:
     name: Sámi
@@ -4882,6 +5311,31 @@ anchors:
                    notaries. Corpus: ticha (93 documents — the printed
                    works plus the Valley manuscripts, dated 1633–1832 in
                    the consuming lane's census)"}
+
+  sio:
+    name: Siouan
+    kind: family
+    glottocode: siou1252
+    note: "ISO 639-5 sio (the LoC hierarchy's Siouan languages);
+           Glottolog siou1252 is Siouan proper within Siouan-Catawban
+           (siou1253) — the Catawban side (Catawba, Woccon) stays
+           prose, no coded node below it is held. Rankin, Carter,
+           Jones, Koontz, Rood & Hartmann's Comparative Siouan
+           Dictionary (2015, csd.clld.org) is the family's comparative
+           reference and the consuming shelf: 1,193 cognate sets over
+           36 varieties, the Proto-Siouan reconstructions heading
+           them. The subgroup protos the CSD reconstructs beside PSI
+           (Proto-Mississippi-Valley, Proto-Dhegiha, Proto-Crow-
+           Hidatsa …) stay display-only per the poz:pro note's
+           subgroup-proto ruling; the modern daughters (Lakota,
+           Crow, Hidatsa, Osage …) stay unminted until a consumer
+           holds their text"
+    stages:
+      pro: {name: Proto-Siouan, mode: reconstructed, ord: 5, wikt: sio-pro,
+            note: "the CSD's reconstruction level (*wa-rį́• grade,
+                   Rankin et al. 2015); the registry's first American
+                   proto. Corpus: the csd shelf's PSI-headed sets
+                   (censused 2026-11-13)"}
 
   tup:
     name: Tupian
