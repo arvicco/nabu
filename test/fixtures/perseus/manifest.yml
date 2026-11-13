@@ -209,3 +209,14 @@ files:
       the local canonical snapshot 2026-10-18: full teiHeader + translation
       div kept; sections 8, 9, 14, 20 kept (tgn/perseus-keyed placeNames,
       Loeb notes with nested names and foreign, spoken q); the rest removed.
+  - path: latinLit/data/stoa0045/stoa001/__cts__.xml
+    url: https://raw.githubusercontent.com/PerseusDL/canonical-latinLit/master/data/stoa0045/stoa001/__cts__.xml
+    whole: true
+    trim: none (metadata file kept whole)
+  - path: latinLit/data/stoa0045/stoa001/stoa0045.stoa001.perseus-lat2.xml
+    url: https://raw.githubusercontent.com/PerseusDL/canonical-latinLit/master/data/stoa0045/stoa001/stoa0045.stoa001.perseus-lat2.xml
+    whole: true
+    trim: >-
+      none (Ausonius, De Bissula — the name-union replacementPattern step
+      "*[self::tei:p or self::tei:l]", the 2026-11-13 quarantine review;
+      copied whole from the local canonical snapshot)
