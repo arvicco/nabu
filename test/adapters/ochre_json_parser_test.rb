@@ -124,6 +124,55 @@ module Adapters
       assert_empty parser.sections(shell)
     end
 
+    # -- the line model: typed leaves, container paths, root-level leaves -----
+    # Every leaf under a rendering carries OCHRE's own node type (line /
+    # separator / region / a childless column-or-section header) and its
+    # condition qualities; nested containers (Column N under Recto, a join
+    # fragment's own section) ride as "divisions"; leaves at the rendering
+    # root (no surface) group under a nil surface. Classification is the
+    # adapter's call — the parser only normalizes.
+
+    def text_item(uuid)
+      JSON.parse(File.read(File.join(FIXTURES, "texts", "#{uuid}.json"))).dig("ochre", "text")
+    end
+
+    def test_sections_carry_node_type_and_condition_on_every_leaf
+      # RIH 77/01: Recto opens with a "broken" region, a ruling after 07'.
+      recto = parser.sections(text_item("e8e93bf6-c133-410c-9be2-9827d0db913c"))
+                    .fetch("transliteration").fetch(0)
+      assert_equal "Recto", recto.fetch("surface")
+      leaves = recto.fetch("lines")
+      assert_equal(%w[region line], leaves.first(2).map { |l| l.fetch("type") })
+      assert_equal "broken", leaves.fetch(0).fetch("label")
+      assert_equal({ "damage" => 100, "missingLines" => -1 }, leaves.fetch(0).fetch("condition"))
+      ruling = leaves.find { |l| l.fetch("type") == "separator" }
+      assert_equal "single", ruling.dig("condition", "separatorStyle")
+      line = leaves.fetch(1)
+      assert_equal ["01'", "[xxxx]⸢x x⸣[...]", []], line.values_at("label", "value", "divisions")
+      assert_nil line.fetch("condition")
+    end
+
+    def test_sections_descend_nested_containers_into_divisions
+      # RIH 77/25+: each surface holds one section per joined fragment.
+      surfaces = parser.sections(text_item("d9c1af5f-23dd-4869-a029-1bfe0a840c36")).fetch("transliteration")
+      assert_equal(%w[Recto Verso], surfaces.map { |s| s.fetch("surface") })
+      first = surfaces.fetch(0).fetch("lines").fetch(0)
+      assert_equal "01'", first.fetch("label")
+      assert_equal [{ "label" => "RIH 78/21", "type" => "section" }], first.fetch("divisions")
+      verso_labels = surfaces.fetch(1).fetch("lines").select { |l| l["type"] == "line" }.map { |l| l["label"] }
+      assert_equal (11..24).map { |n| format("%02d'", n) }, verso_labels
+    end
+
+    def test_sections_group_root_level_leaves_under_a_nil_surface
+      # RS 15.125: the transliteration's lines sit at the rendering root.
+      surfaces = parser.sections(text_item("8731a20f-5d0b-4067-8f5b-8158afc6c1ae")).fetch("transliteration")
+      assert_equal([nil], surfaces.map { |s| s.fetch("surface") })
+      leaves = surfaces.fetch(0).fetch("lines")
+      assert_equal "region", leaves.fetch(0).fetch("type")
+      assert_equal ["01'", "l . yı͗ḫd ṣṭqšlm"], leaves.fetch(1).values_at("label", "value")
+      assert_equal(15, leaves.count { |l| l["type"] == "line" })
+    end
+
     # -- graphemic values: {supplementary, content} --------------------------
 
     def test_graphemic_of_decodes_signs_and_carries_marks

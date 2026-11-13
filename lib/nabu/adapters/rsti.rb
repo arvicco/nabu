@@ -38,6 +38,33 @@ module Nabu
     # lower-edge.18). A record re-listed by an aggregate set ("Season
     # 1-11") is first-wins, censused via discovery_skips.
     #
+    # == The line model: FURNITURE creates no passage
+    #
+    # OCHRE types every leaf under a rendering (OchreJsonParser#sections
+    # keeps the type, its condition qualities and any nested container
+    # path). Only a "line" with a string value is text. The rest is
+    # furniture (censused live 2026-11-13 over the 217 resolving text
+    # items: 3,443 text lines beside 219 rulings, 131 lacunae, 7 bare
+    # headers, 4 empty rows), classified and never minted:
+    #
+    #   separator                  a scribal ruling → state "single ruling"
+    #   region / a line carrying   a lacuna → state "N lines missing" when
+    #     condition.missingLines     counted, else upstream's own label
+    #                                ("broken", "missing"), else "broken"
+    #   a childless column/section a header ("Column 4", "Vacat?") → state
+    #                                with its label
+    #   a line with no value       an empty row → counted only
+    #
+    # States ride the ATF precedent: "states" on the NEXT minted line,
+    # trailing ones as "states_after" on the last; the per-kind census is
+    # metadata "line_furniture". An edition is a text item with at least
+    # one text line (furniture-only items are shells). Nested containers
+    # (Column 1 under Recto; a joined fragment's own section under each
+    # surface) extend the passage urn (recto.rih-78/21.01') and ride
+    # "column"/"division"; lines at the rendering ROOT mint <doc>:<line>.
+    # A line whose value is not a string quarantines the document
+    # (MIXED_MARKUP); an unseen leaf type loud-stops.
+    #
     # == License (granted)
     #
     # CC BY-NC-SA 4.0 — the API's own availability.license on season sets
@@ -91,6 +118,37 @@ module Nabu
       # No Language property at all (121 of 1,070 sampled records): und,
       # never a guess.
       UNKNOWN_LANGUAGE = "und"
+
+      # OCHRE's explicit empty: a property value "<unassigned>" (one fixed
+      # vocabulary uuid, c4e4fd83-…) — witnessed live on Language (RS 8.220
+      # and four more, which loud-stopped as an unknown language) and on
+      # Object type. It is absence, filtered at property flattening: the
+      # no-Language rule (und) applies, no metadata key carries it.
+      UNASSIGNED = "<unassigned>"
+
+      # The resolver's other empty answer: a &format=json request answered
+      # by a bare XML declaration and nothing else (38 bytes, persisted
+      # verbatim by the fetch; RIH 83/02 and one more live). No record —
+      # the "empty-answer" metadata-only status, never a JSON error.
+      EMPTY_ANSWER = /\A<\?xml[^>]*\?>\z/
+
+      # A parallel-rendering value that is a pure content wrapper (vs mixed
+      # markup — MIXED_MARKUP).
+      PURE_CONTENT_KEYS = %w[content string lang languages].freeze
+
+      # The quarantine reason for a transliteration line whose value is not
+      # a string (81 lines in 7 live text items, RS 17.238's 19 among
+      # them): OCHRE's XML interleaves italic syllables, superscript
+      # determinatives and plain logograms inside one line, and its JSON
+      # transliteration flattens them into parallel lists ({"i" => [...],
+      # "content" => [...], "sup" => ...}) — the interleaving order is
+      # GONE. The XML rendition would keep it, but it is outside this
+      # adapter's delivery (OchreFetch fetches &format=json only; the only
+      # XML ever on disk is the empty-answer prologue), so the document
+      # quarantines rather than serve a reordered or printed-Hash reading.
+      MIXED_MARKUP = "OCHRE's JSON flattens this line's interleaved markup (i/sup/content " \
+                     "lists) and the piece order is unrecoverable; the XML rendition is outside " \
+                     "the json-only delivery"
 
       # Inventory-record properties carried into document metadata, by
       # their upstream label (single-valued; Language is handled apart).
@@ -254,14 +312,79 @@ module Nabu
         path = File.join(workdir, Nabu::OchreFetch::TEXTS_DIRNAME, "#{text_uuid}.json")
         return [nil, "unfetched"] unless File.file?(path)
 
-        parsed = JSON.parse(File.read(path))
-        item = parsed.dig("ochre", "text")
+        body = File.read(path)
+        return [nil, "empty-answer"] if body.strip.match?(EMPTY_ANSWER)
+
+        item = JSON.parse(body).dig("ochre", "text")
         return [nil, "unpublished"] if item.nil? # the {"result":[]} tombstone
 
-        lines = OchreJsonParser.sections(item)["transliteration"]&.any? { |surface| surface["lines"].any? }
-        [item, lines ? "edition" : "shell"]
+        [item, text_lines(item, context: "#{path}: #{document_ref.id}").any? ? "edition" : "shell"]
       rescue JSON::ParserError => e
         raise ParseError, "#{path}: text detail is not valid JSON: #{e.message}"
+      end
+
+      # -- the line model -------------------------------------------------------
+
+      # The transliteration leaves classified (class note on FURNITURE):
+      # [{ "kind" => :text | :ruling | :lacuna | :header | :empty,
+      #    "leaf" => <parser leaf>, "surface" => label-or-nil }, …] in
+      # document order. A mixed-markup line raises (MIXED_MARKUP note).
+      def classified_leaves(text_item, context:)
+        (OchreJsonParser.sections(text_item)["transliteration"] || []).flat_map do |surface|
+          surface["lines"].map do |leaf|
+            { "kind" => leaf_kind(leaf, surface: surface["surface"], context: context),
+              "leaf" => leaf, "surface" => surface["surface"] }
+          end
+        end
+      end
+
+      def text_lines(text_item, context:)
+        classified_leaves(text_item, context: context).select { |entry| entry["kind"] == :text }
+      end
+
+      def leaf_kind(leaf, surface:, context:)
+        case leaf["type"]
+        when "line" then line_kind(leaf, surface: surface, context: context)
+        when "separator" then :ruling
+        when "region" then :lacuna
+        when "column", "section" then :header
+        else
+          raise ParseError, "#{context}: unknown OCHRE leaf type #{leaf['type'].inspect} " \
+                            "(witnessed: line, separator, region, column, section) — extend " \
+                            "Rsti#leaf_kind deliberately, never silently"
+        end
+      end
+
+      def line_kind(leaf, surface:, context:)
+        value = leaf["value"]
+        return :lacuna if leaf["condition"].is_a?(Hash) && leaf["condition"].key?("missingLines")
+        return :empty if value.nil? || (value.is_a?(String) && value.strip.empty?)
+        return :text if value.is_a?(String) || value.is_a?(Integer)
+
+        where = [surface, *leaf["divisions"].map { |d| d["label"] }, leaf["label"]].compact.join(" ")
+        raise ParseError, "#{context}: #{MIXED_MARKUP} — mixed-markup line #{where} " \
+                          "(value keys #{value.is_a?(Hash) ? value.keys.join('/') : value.class})"
+      end
+
+      # The verbatim-ish state string a furniture leaf contributes.
+      def state_of(entry)
+        leaf = entry["leaf"]
+        condition = leaf["condition"].is_a?(Hash) ? leaf["condition"] : {}
+        case entry["kind"]
+        when :ruling then [condition["separatorStyle"], "ruling"].compact.join(" ")
+        when :lacuna then lacuna_state(leaf["label"], condition["missingLines"])
+        when :header then leaf["label"]
+        end
+      end
+
+      # A counted lacuna names its extent; otherwise upstream's own label
+      # ("broken", "missing") when it is not a line number; else "broken"
+      # (missingLines -1 is OCHRE's "extent unknown").
+      def lacuna_state(label, missing)
+        return "#{missing} line#{'s' unless missing == 1} missing" if missing.is_a?(Integer) && missing.positive?
+        return label if label.is_a?(String) && !label.strip.empty? && !label.match?(/\A\d/)
+
+        "broken"
       end
 
       # -- document assembly ----------------------------------------------------
@@ -278,11 +401,12 @@ module Nabu
         # anything short of an edition catalogues with zero passages. An
         # edition always yields lines (text_item_for's status rule).
         metadata["text_layer"] = "none" unless status == "edition"
+        lines = status == "edition" ? line_plan(text_item, urn: urn, metadata: metadata) : []
         document = Nabu::Document.new(
           urn: urn, language: language, canonical_path: document_ref.path,
           title: title_of(record, label), metadata: metadata
         )
-        append_passages(document, text_item, language: language) if status == "edition"
+        append_passages(document, lines, language: language)
         document
       end
 
@@ -351,7 +475,7 @@ module Nabu
       def flatten_properties(node)
         OchreJsonParser.wrap(node.is_a?(Hash) ? node["property"] : node).flat_map do |property|
           pair = [OchreJsonParser.content_of(property["label"]),
-                  OchreJsonParser.contents_of(property["value"])]
+                  OchreJsonParser.contents_of(property["value"]) - [UNASSIGNED]]
           [pair] + flatten_properties(property)
         end
       end
@@ -362,36 +486,94 @@ module Nabu
 
       # -- passages -------------------------------------------------------------
 
-      def append_passages(document, text_item, language:)
+      # Text leaves become passages; furniture becomes the NEXT passage's
+      # "states" (trailing furniture: the last passage's "states_after") and
+      # the document's "line_furniture" census — the ATF state-line
+      # precedent. Empty rows and headers count but carry no state text
+      # beyond a header's own label.
+      # The text leaves as [entry, annotations] pairs; the furniture
+      # census lands in +metadata+ (still mutable — the document is not
+      # built yet).
+      def line_plan(text_item, urn:, metadata:)
         renderings = OchreJsonParser.sections(text_item)
-        phonemic = lines_by_key(renderings["phonemic"])
-        graphemic = lines_by_key(renderings["graphemic"])
-        translation = lines_by_key(renderings["translation"])
-        sequence = 0
-        renderings.fetch("transliteration").each do |surface|
-          surface_label = surface.fetch("surface").to_s
-          surface["lines"].each do |line|
-            document << line_passage(document, line, surface_label: surface_label, language: language,
-                                                     sequence: sequence, phonemic: phonemic,
-                                                     graphemic: graphemic, translation: translation)
-            sequence += 1
+        parallels = %w[phonemic graphemic translation].to_h { |name| [name, lines_by_key(renderings[name])] }
+        furniture = Hash.new(0)
+        omitted = Hash.new(0)
+        lines = []
+        pending = []
+        classified_leaves(text_item, context: urn).each do |entry|
+          if entry["kind"] == :text
+            lines << [entry, line_annotations(entry, parallels: parallels, states: pending, omitted: omitted)]
+            pending = []
+          else
+            furniture[entry["kind"].to_s] += 1
+            state = state_of(entry)
+            pending << Normalize.nfc(state) if state
           end
+        end
+        lines.last[1]["states_after"] = pending unless pending.empty?
+        metadata["line_furniture"] = furniture.to_a.to_h unless furniture.empty?
+        metadata["mixed_markup_parallels_omitted"] = omitted["count"] if omitted["count"].positive?
+        lines
+      end
+
+      def append_passages(document, lines, language:)
+        lines.each_with_index do |(entry, annotations), sequence|
+          document << Nabu::Passage.new(urn: passage_urn(document.urn, entry["surface"], entry["leaf"]),
+                                        language: language, text: Normalize.nfc(entry["leaf"]["value"].to_s),
+                                        annotations: annotations, sequence: sequence)
         end
       end
 
-      def line_passage(document, line, surface_label:, language:, sequence:, phonemic:, graphemic:, translation:)
-        key = [surface_label, line["label"]]
-        annotations = { "surface" => surface_label, "line" => line["label"] }
-        annotate_scalar(annotations, "phonemic", phonemic[key])
-        annotate_graphemic(annotations, graphemic[key])
-        annotate_scalar(annotations, "translation", translation[key])
-        Nabu::Passage.new(
-          urn: "#{document.urn}:#{self.class.slug(surface_label)}.#{line['label']}",
-          language: language, text: Normalize.nfc(line["value"].to_s),
-          annotations: annotations, sequence: sequence
-        )
+      def line_annotations(entry, parallels:, states:, omitted:)
+        leaf = entry["leaf"]
+        key = leaf_key(entry["surface"], leaf)
+        annotations = {}
+        annotations["surface"] = entry["surface"] if entry["surface"]
+        division_annotations(annotations, leaf["divisions"])
+        annotations["line"] = leaf["label"]
+        annotations["states"] = states unless states.empty?
+        %w[phonemic translation].each do |name|
+          value = parallels[name][key]
+          next omitted["count"] += 1 if mixed_markup?(value)
+
+          annotate_scalar(annotations, name, value)
+        end
+        annotate_graphemic(annotations, parallels["graphemic"][key])
+        annotations
       end
 
+      # <doc>:<surface>.<division…>.<line> — a root-level line has no
+      # surface segment (<doc>:<line>). An unlabeled TEXT line cannot mint.
+      def passage_urn(document_urn, surface, leaf)
+        label = leaf["label"]
+        raise ParseError, "#{document_urn}: transliteration text line without a label" if label.to_s.strip.empty?
+
+        segments = [surface, *leaf["divisions"].map { |d| d["label"] }].compact.map { |s| self.class.slug(s) }
+        "#{document_urn}:#{(segments + [label]).join('.')}"
+      end
+
+      # Nested containers: a Column rides "column", anything else (a joined
+      # fragment's own section) "division"; several join with " / ".
+      def division_annotations(annotations, divisions)
+        divisions.group_by { |d| d["type"] == "column" ? "column" : "division" }.each do |key, group|
+          annotations[key] = group.map { |d| d["label"] }.compact.join(" / ")
+        end
+      end
+
+      def leaf_key(surface, leaf)
+        [surface, leaf["divisions"].map { |d| d["label"] }, leaf["label"]]
+      end
+
+      # A parallel rendering's MIXED-markup value (i/sup/b … beside
+      # content — order unrecoverable, MIXED_MARKUP note) is omitted, never
+      # a partial reading; the caller counts the omission.
+      def mixed_markup?(value)
+        value.is_a?(Hash) && !(value.keys - PURE_CONTENT_KEYS).empty?
+      end
+
+      # A plain string, or a pure content wrapper ({content}/{string}) →
+      # its scalar.
       def annotate_scalar(annotations, key, value)
         scalar = value.is_a?(String) ? value : OchreJsonParser.content_of(value)
         annotations[key] = Normalize.nfc(scalar) if scalar
@@ -409,8 +591,10 @@ module Nabu
       # renderings.
       def lines_by_key(surfaces)
         (surfaces || []).each_with_object({}) do |surface, lines|
-          surface["lines"].each do |line|
-            lines[[surface.fetch("surface").to_s, line["label"]]] = line["value"]
+          surface["lines"].each do |leaf|
+            next unless leaf["type"] == "line"
+
+            lines[leaf_key(surface["surface"], leaf)] = leaf["value"]
           end
         end
       end
