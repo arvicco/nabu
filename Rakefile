@@ -1034,3 +1034,29 @@ namespace :crawl do
     warn "chain complete — run bin/nabu sync #{slug} to load what the crawl stored"
   end
 end
+
+# The phase's paced-crawl plan, generated from the adapters' own Schedule
+# declarations and the ledger's measured slice times (Nabu::Ops::RailPlan;
+# the 2026-11-13 hand-assembled chain over-run). Parallel lanes, one per
+# source; slices_per_phase is a cap; no budget = the caps-only view. The
+# `lane <slug> step N: <command>` lines are the machine-consumable plan.
+namespace :rail do
+  desc "Print the phase's paced-crawl plan as parallel lanes (rail:plan[budget_minutes], budget optional)"
+  task :plan, %i[budget] do |_t, args|
+    $LOAD_PATH.unshift(File.expand_path("lib", __dir__))
+    require "nabu"
+    require "nabu/ops/rail_plan"
+
+    config = Nabu::Config.load
+    registry = Nabu::SourceRegistry.load(config.sources_path)
+    budget = args[:budget].to_s.strip
+    ledger = File.file?(config.history_path) ? Nabu::Store.connect(config.history_path, readonly: true) : nil
+    begin
+      plan = Nabu::Ops::RailPlan.new(registry: registry, ledger: ledger,
+                                     budget_minutes: budget.empty? ? nil : Float(budget)).plan
+      print Nabu::Ops::RailPlan.render(plan)
+    ensure
+      ledger&.disconnect
+    end
+  end
+end
