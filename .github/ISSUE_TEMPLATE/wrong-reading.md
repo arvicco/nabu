@@ -41,3 +41,8 @@ Which edition or witness is this (editor, year, siglum if relevant)? If
 you can tell, does the divergence originate upstream (source file differs
 from the print edition) or in nabu's parse (source file is correct, nabu's
 text is not)?
+
+## Where did you find Nabu? (optional)
+
+One line — a listing, a mailing list, a colleague, a search engine.
+It helps the project know which doors are worth keeping open.
