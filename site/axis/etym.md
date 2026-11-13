@@ -13,22 +13,30 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 ## The shelves
 
-A source wears every desk it serves — these fifteen answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
+A source wears every desk it serves — these twenty-three answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
 | Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 13 November 2026)</span> |
 |---|---|---|---|---|
+| `acd` | dictionary | attribution | not yet wired | not synced yet |
 | `calfa-lexicon` | dictionary | nc | wired · manual | 86,067 entries |
 | `cldf-spine` | feature module | attribution | wired · manual | nothing held yet |
 | `clics` | dictionary | attribution | wired · manual | 1,647 entries |
+| `csd` | dictionary | attribution | not yet wired | not synced yet |
 | `derom` | dictionary | nc | wired · manual | 233 entries |
+| `dyenindoeuropean` | dictionary | attribution | not yet wired | not synced yet |
 | `edl` | dictionary | nc | wired · manual | 2,860 entries |
 | `etruscan-loans` | dictionary | attribution | wired · frozen | 199 entries |
 | `iecor` | cognacy dataset | attribution | wired · manual | 4,981 entries |
 | `liv` | dictionary | attribution | wired · manual | 305 entries |
+| `mcd` | dictionary | attribution | not yet wired | not synced yet |
 | `meloniromance` | cognacy dataset | attribution | wired · manual | 5,419 entries |
 | `nabu-lects` | feature module | attribution | wired · manual | nothing held yet |
 | `sabellic-loans` | dictionary | attribution | wired · frozen | 85 entries |
+| `saenkoromance` | dictionary | attribution | not yet wired | not synced yet |
+| `sagartst` | dictionary | attribution | not yet wired | not synced yet |
 | `starling` | etymological bases | attribution | wired · manual | 146,798 entries |
+| `tlopo` | dictionary | attribution | not yet wired | not synced yet |
+| `uralex` | dictionary | attribution | not yet wired | not synced yet |
 | `westoldturkic` | dictionary | attribution | wired · manual | 480 entries |
 | `wiktionary-recon` | dictionary | attribution | wired · manual | 376,415 entries |
 | `wold` | dictionary | attribution | wired · manual | 64,289 entries |

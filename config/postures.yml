@@ -3705,3 +3705,99 @@ sources:
     script: {posture: implied, note: "the OCR's Latin type throughout; Greek passages in the
         bilingual prints ride as the OCR read them (often as Latin-letter noise) — uncorrected
         OCR, text_nature machine-ocr"}
+  # ── the lexibank-cldf wave 1: cognate-set dictionary shelves ─────────────
+  # Dictionary shelves (content_kind dictionary) — declared beside the
+  # wenhai/westoldturkic precedent. Shared reading: the kind axis folds
+  # documents only (a kind_map row would be inert; these are comparative
+  # dictionaries by their own titles); the datasets carry no dates (a
+  # reference dataset, no document timeline); languages.csv's per-variety
+  # coordinates are doculect reference points, not findspots (the iecor
+  # note) — no place claim at dictionary grain.
+  acd:
+    kind: {posture: unclassified, note: "a dictionary shelf — the Austronesian Comparative
+        Dictionary (comparative/etymological) by its own title; kind folds documents only"}
+    lect: {posture: identity, note: "map — the nabu-lects Austronesian anchor (no stages);
+        reflexes carry their varieties' ISO codes bare, and the reconstructed varieties the
+        registry resolves ride their codemap aliases (pqe-pro, poz-oce-pro, poz-mic-pro,
+        poz-pol-pro); PAn/PMP and the subgroup protos stay display-only until registry nodes
+        exist (map has no pro stage, poz none at all)"}
+    dating: {posture: undatable, note: "a reference dataset — the release carries no dates"}
+    places: {posture: unplaced, note: "variety coordinates are doculect reference points, not
+        findspots — no place claim at dictionary grain"}
+    script: {posture: implied, note: "Latin-script orthographies and Blust's reconstruction notation"}
+  csd:
+    kind: {posture: unclassified, note: "a dictionary shelf — the Comparative Siouan
+        Dictionary by its own title; kind folds documents only"}
+    lect: {posture: pending, note: "candidate: a sio (Siouan, ISO 639-5) nabu-lects anchor with
+        a pro stage — the dictionary language rides bare sio until it exists; upstream's
+        languages.csv carries no ISO or Glottocode for any of its 36 varieties, so the
+        members are display-only (csd-<variety>) whatever the registry holds"}
+    dating: {posture: undatable, note: "a reference dataset — the repository carries no dates"}
+    places: {posture: unplaced, note: "the varieties carry no coordinates at all"}
+    script: {posture: implied, note: "Siouanist Americanist notation"}
+  dyenindoeuropean:
+    kind: {posture: unclassified, note: "a dictionary shelf — lexicostatistical cognate
+        classes; kind folds documents only"}
+    lect: {posture: identity, note: "ine — the iecor collective; members carry their
+        varieties' ISO codes bare (modern IE languages, none staged), ISO-less lists their
+        Glottocode as a display-only lang_code"}
+    dating: {posture: undatable, note: "a reference dataset (Dyen et al. 1992) — no dates"}
+    places: {posture: unplaced, note: "variety coordinates are doculect reference points, not
+        findspots — no place claim at dictionary grain"}
+    script: {posture: implied, note: "Dyen's ASCII transcription throughout"}
+  mcd:
+    kind: {posture: unclassified, note: "a dictionary shelf — the Micronesian Comparative
+        Dictionary by its own title; kind folds documents only"}
+    lect: {posture: identity, note: "poz-mic — the nabu-lects Micronesian anchor; the
+        Proto-Micronesian/Proto-Oceanic/Proto-Polynesian members ride their codemap aliases
+        (poz-mic-pro, poz-oce-pro, poz-pol-pro); PMP/PAn and the sub-group protos stay
+        display-only until registry nodes exist"}
+    dating: {posture: undatable, note: "a reference dataset — the release carries no dates"}
+    places: {posture: unplaced, note: "variety coordinates are doculect reference points, not
+        findspots — no place claim at dictionary grain"}
+    script: {posture: implied, note: "Latin-script orthographies and phonemic notation"}
+  saenkoromance:
+    kind: {posture: unclassified, note: "a dictionary shelf — Swadesh-list cognate sets; kind
+        folds documents only"}
+    lect: {posture: identity, note: "roa — the nabu-lects Romance anchor (its pro stage is not
+        claimed: the sets carry no reconstructions); members carry their varieties' ISO codes
+        bare (modern dialects, none staged), ISO-less dialects display-only by Glottocode"}
+    dating: {posture: undatable, note: "a reference dataset (Saenko 2015) — no dates"}
+    places: {posture: unplaced, note: "variety coordinates are doculect reference points, not
+        findspots — no place claim at dictionary grain"}
+    script: {posture: implied, note: "the braced Latin-script orthographies, the IPA-style
+        transcription riding roman"}
+  sagartst:
+    kind: {posture: unclassified, note: "a dictionary shelf — a cognate database; kind folds
+        documents only"}
+    lect: {posture: identity, note: "sit — the nabu-lects Sino-Tibetan anchor (its pro stage is
+        not claimed: no reconstructed variety); members carry ISO codes bare — Old Chinese och
+        resolving through the codemap to zho:old, Old Tibetan xct, Old Burmese obr, Tangut txg
+        as their anchors — and ISO-less varieties (the Sinitic dialect points) display-only"}
+    dating: {posture: undatable, note: "a reference dataset (Sagart et al. 2019) — no dates"}
+    places: {posture: unplaced, note: "variety coordinates are doculect reference points, not
+        findspots — no place claim at dictionary grain"}
+    script: {posture: implied, note: "IPA-style transcriptions with tone digits; Old Chinese in
+        Baxter-Sagart notation"}
+  tlopo:
+    kind: {posture: unclassified, note: "a dictionary shelf — The lexicon of Proto Oceanic by
+        its own title; kind folds documents only"}
+    lect: {posture: identity, note: "poz-oce — the nabu-lects Oceanic anchor; POc/PEMP/PMic/
+        PCP/PPn/PNPn/PEPn members ride their codemap aliases (poz-oce-pro, pqe-pro,
+        poz-mic-pro, poz-pcc-pro, poz-pol-pro, poz-pnp-pro, poz-pep-pro); PAn/PMP and the
+        Oceanic sub-group protos (PWOc, PEOc, PROc, PNCV, PSV …) stay display-only until
+        registry nodes exist"}
+    dating: {posture: undatable, note: "a reference dataset — the release carries no dates"}
+    places: {posture: unplaced, note: "variety coordinates are doculect reference points, not
+        findspots — no place claim at dictionary grain"}
+    script: {posture: implied, note: "Latin-script orthographies and Oceanicist reconstruction notation"}
+  uralex:
+    kind: {posture: unclassified, note: "a dictionary shelf — basic-vocabulary cognate sets;
+        kind folds documents only"}
+    lect: {posture: identity, note: "urj — the nabu-lects Uralic anchor; members carry their
+        varieties' ISO codes bare; the Proto-Uralic heads ride the dictionary language (urj
+        has a pro stage, but the codemap carries no urj-pro alias for a member to name)"}
+    dating: {posture: undatable, note: "a reference dataset (UraLex 2.0) — no dates"}
+    places: {posture: unplaced, note: "variety coordinates are doculect reference points, not
+        findspots — no place claim at dictionary grain"}
+    script: {posture: implied, note: "Latin-script orthographies and UPA-style transcription"}

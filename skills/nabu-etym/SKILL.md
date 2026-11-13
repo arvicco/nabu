@@ -29,7 +29,7 @@ verbatim upstream terms are in `docs/02-sources.md` of the Nabu repository.
 | `derom` | DÉRom — Dictionnaire Étymologique Roman (ATILF/Ortolang) | nc |
 | `edl` | de Vaan — Etymological Dictionary of Latin (Brill 2008), LiLa LOD skeleton (CIRCSE) | nc |
 | `etruscan-loans` | Etruscan → Latin loans — en.wiktionary curation | attribution |
-| `iecor` | IE-CoR — Indo-European Cognate Relationships database (lexibank/iecor v1.2) | attribution |
+| `iecor` | IE-CoR — Indo-European Cognate Relationships database (lexibank/iecor v1.2.1) | attribution |
 | `liv` | LIV — Lexikon der indogermanischen Verben (Rix 2001), LiLa LOD (CIRCSE) | attribution |
 | `meloniromance` | Meloni et al. 2021 Romance cognate sets (lexibank/meloniromance CLDF) | attribution |
 | `nabu-lects` | nabu-lects — the lect registry (anchor x stage x variety x orthography resolver) | attribution |
