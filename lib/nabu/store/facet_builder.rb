@@ -14,7 +14,8 @@ module Nabu
     # re-parse. Wired into Rebuild#run after the timeline; facets = f(catalog) =
     # f(canonical), and `nabu rebuild` regenerates the table (the invariant).
     #
-    # Full-rebuild semantics: drop every row, re-project. Rows are skinny
+    # Full-rebuild semantics: drop every row we own (never FOREIGN_FACETS),
+    # re-project. Rows are skinny
     # (document_id, facet, value, raw) with no bookkeeping columns — the
     # drop-and-rebuild lifecycle of the derived indexes. Withdrawn documents
     # contribute no rows (facets feed corpus-facing filters, which never see
@@ -34,6 +35,17 @@ module Nabu
       # Documents per keyset page of the adapter-facet scan.
       PAGE = 1_000
 
+      # Facets another builder owns in document_facets, never ours to drop:
+      # "lect" is Store::LectFacets' materialized resolution, its lect_stats
+      # census derived in the same breath. Unscoped deletes here dropped it
+      # (the 2026-11-12 lect-stats drift class): every sync's per-source
+      # refresh darkened that source's lect rows while the census kept
+      # counting them, and a builders-only incremental re-run, which skips
+      # LectFacets, darkened the axis corpus-wide. (KindBuilder's "kind"
+      # stays ours to drop: it re-projects from our rows directly behind us
+      # in every flow, and an adapter may emit its own "kind" facet.)
+      FOREIGN_FACETS = %w[lect].freeze
+
       module_function
 
       # Drop and re-project. The cheap substring probe skips the JSON parse
@@ -43,7 +55,7 @@ module Nabu
       # rather than holding millions of rows in one transaction (measured
       # within ~15% of a single transaction, with a bounded WAL).
       def rebuild!(catalog:, facet_map: nil, page: PAGE)
-        catalog[:document_facets].delete
+        catalog[:document_facets].exclude(facet: FOREIGN_FACETS).delete
         seen = {}
         rows = RowBuffer.into(catalog[:document_facets], transaction: false) do |buffer|
           each_faceted_document(catalog[:documents].where(withdrawn: false), page) do |id, facets|
@@ -69,7 +81,7 @@ module Nabu
         return 0 if source_id.nil?
 
         doc_ids = catalog[:documents].where(source_id: source_id).select(:id)
-        catalog[:document_facets].where(document_id: doc_ids).delete
+        catalog[:document_facets].where(document_id: doc_ids).exclude(facet: FOREIGN_FACETS).delete
         rows = RowBuffer.into(catalog[:document_facets]) do |buffer|
           each_faceted_document(catalog[:documents].where(source_id: source_id, withdrawn: false), page) do |id, facets|
             insert_facets(buffer, id, facets)

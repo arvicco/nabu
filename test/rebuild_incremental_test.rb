@@ -262,6 +262,31 @@ class RebuildIncrementalTest < Minitest::Test
     assert_nil second.axes, "builders must not re-run once their digest is stamped"
   end
 
+  # The 2026-11-12 lect-stats drift class, rebuild flavor: a builders-only
+  # re-run (clean sources, unchanged journal) re-projects document_facets
+  # through FacetBuilder but skips LectFacets — so the facet builder must
+  # leave the lect rows alone, or the lect axis goes dark corpus-wide while
+  # lect_stats keeps claiming staged documents.
+  def test_a_builders_only_rerun_keeps_the_lect_axis
+    FileUtils.cp_r(Nabu::TestSupport.fixtures("nabu-lects"), File.join(@canonical, "nabu-lects"))
+    Nabu::LectRulings.append!(config.lect_rulings_path,
+                              urn: "urn:nabu:test_adapter:a", code: "grc", lect_id: "grc:koi")
+    full_rebuilder.run
+    before = with_db { |db| db[:document_facets].where(facet: "lect").select_map(%i[document_id value]) }
+    refute_empty before, "the rig stages one document (the ruling)"
+
+    result = with_changed_builder_file("metadata_dates.rb") { incremental_rebuilder.run }
+
+    assert_empty result.outcomes
+    refute_nil result.facets, "the facet builders re-ran"
+    with_db do |db|
+      assert_equal before, db[:document_facets].where(facet: "lect").select_map(%i[document_id value]),
+                   "a builders-only re-run must keep the lect axis"
+      facet = db[:document_facets].where(facet: "lect").group_and_count(:value).to_hash(:value, :count)
+      assert_equal facet, db[:lect_stats].where(kind: "lect").to_hash(:key, :documents)
+    end
+  end
+
   def test_dry_run_reports_builders_drift
     full_rebuilder.run
 
