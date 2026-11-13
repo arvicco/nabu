@@ -1,0 +1,12 @@
+ID,Local_ID,Language_ID,Parameter_ID,Value,Form,Segments,Comment,Source,Cognacy,Loan,Graphemes,Profile
+OldTibetan-1_above-1,19,OldTibetan,1_above,steŋ,s.t.e.ŋ,s t e ŋ,,Huang1992,20,false,^ s . t . e . ŋ $,default
+OldTibetan-218_thethunder-1,11096,OldTibetan,218_thethunder,tʰog,tʰ.o.g,tʰ o./o g,,Huang1992,2526,false,^ tʰ . o. g $,default
+Japhug-218_thethunder-1,11125,Japhug,218_thethunder,%thoʁ,tʰ.o.ʁ,tʰ o./o ʁ,,Jacques2015b,2526,true,^ tʰ . o. ʁ $,default
+Jingpho-172_thesea-1,16350,Jingpho,172_thesea,pa̱ŋ³³lai³³,p.a̱.ŋ.³³.◦.l.a.i.³³,p a̠ ŋ ³³ + l a i ³³,,Huang1992,3827,true,^ p . a̱ . ŋ . ³³ . ◦ . l . a. i . ³³ $,default
+Limbu-1_above-1,30320,Limbu,1_above,ɛtthaŋ,ɛ.t.th.a.ŋ,ɛ t tʰ a ŋ,,Jacques2017FN,20,false,^ ɛ . t . th . a. ŋ $,default
+OldChinese-1_above-1,30756,OldChinese,1_above,*daŋʔ-s,d.a.ŋ.ʔ.+.s,d a ŋ ʔ + s,,Baxter2014,20,false,^ d . a. ŋ . ʔ . + . s $,default
+OldBurmese-172_thesea-1,31191,OldBurmese,172_thesea,paṅ◦+lay,p.a.ṅ.◦.+.l.a.y,p a ṅ/n + l a y,,Hill2017,3827,false,^ p . a. ṅ .◦.+. l . a. y $,default
+Rangoon-172_thesea-1,34605,Rangoon,172_thesea,pĩ²²+lɛ²²,p.ĩ.²².+.l.ɛ.²²,p ĩ ²² + l ɛ ²²,,Huang1992;Hill2017,3827,false,^ p . ĩ . ²² . + . l . ɛ . ²² $,default
+Beijing-1_above-1,36182,Beijing,1_above,ʂɑŋ⁵¹tʰou⁰,ʂ.ɑ.ŋ.⁵¹.tʰ.o.u.⁰,ʂ ɑ ŋ ⁵¹ tʰ o./o u ⁰,"**remove**: remove the concept to be save. @lingulist, 6/2/2017, 10:04:09 AM",Lai2017FN,20,false,^ ʂ . ɑ . ŋ . ⁵¹ . tʰ . o. u . ⁰ $,default
+Guangzhou-1_above-1,36183,Guangzhou,1_above,sœŋ²²pin²²,s.œ.ŋ.²².p.i.n.²²,s œ ŋ ²² p i n ²²,,Lai2017FN,20,false,^ s . œ . ŋ . ²² . p . i . n . ²² $,default
+Xingning-1_above-1,36187,Xingning,1_above,ʂɔŋ⁵⁵pɔɛ⁵³,ʂ.ɔ.ŋ.⁵⁵.p.ɔ.ɛ.⁵³,ʂ ɔ ŋ ⁵⁵ p ɔ ɛ ⁵³,suffix is < Jieyang Min. ʂɔŋ⁵⁵ is regular for 上.,Lai2017FN,20,false,^ ʂ . ɔ . ŋ . ⁵⁵ . p . ɔ . ɛ . ⁵³ $,default

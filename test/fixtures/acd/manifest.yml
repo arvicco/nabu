@@ -1,0 +1,64 @@
+# Nabu fixture manifest (P5-4 "fixture sentinel"). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+# All files are trims of files INSIDE the versioned Zenodo zip — the zip is
+# the fetchable unit, so per-file raw GETs do not exist.
+source: acd
+adapter_test:
+retrieved: "2026-11-13"
+files:
+  - path: cldf/borrowings.csv
+    refetchable: false
+    provenance: local-trim
+    reason: extracted from the versioned Zenodo zip (10.5281/zenodo.14608975) — re-cut per README
+    copied: "2026-11-13"
+    whole: false
+    trim: 3 records kept — the README recipe
+  - path: cldf/cognates.csv
+    refetchable: false
+    provenance: local-trim
+    reason: extracted from the versioned Zenodo zip (10.5281/zenodo.14608975) — re-cut per README
+    copied: "2026-11-13"
+    whole: false
+    trim: 11 records kept — the README recipe
+  - path: cldf/cognatesets.csv
+    refetchable: false
+    provenance: local-trim
+    reason: extracted from the versioned Zenodo zip (10.5281/zenodo.14608975) — re-cut per README
+    copied: "2026-11-13"
+    whole: false
+    trim: 3 records kept — the README recipe
+  - path: cldf/etyma.csv
+    refetchable: false
+    provenance: local-trim
+    reason: extracted from the versioned Zenodo zip (10.5281/zenodo.14608975) — re-cut per README
+    copied: "2026-11-13"
+    whole: false
+    trim: 3 records kept — the README recipe
+  - path: cldf/forms.csv
+    refetchable: false
+    provenance: local-trim
+    reason: extracted from the versioned Zenodo zip (10.5281/zenodo.14608975) — re-cut per README
+    copied: "2026-11-13"
+    whole: false
+    trim: 11 records kept — the README recipe
+  - path: cldf/languages.csv
+    refetchable: false
+    provenance: local-trim
+    reason: extracted from the versioned Zenodo zip (10.5281/zenodo.14608975) — re-cut per README
+    copied: "2026-11-13"
+    whole: false
+    trim: 10 records kept — the README recipe
+  - path: cldf/parameters.csv
+    refetchable: false
+    provenance: local-trim
+    reason: extracted from the versioned Zenodo zip (10.5281/zenodo.14608975) — re-cut per README
+    copied: "2026-11-13"
+    whole: false
+    trim: 7 records kept — the README recipe
+  - path: raw/updates/2022-06-14_new_language_merap/metadata.tsv
+    refetchable: false
+    provenance: local-trim
+    reason: extracted from the versioned Zenodo zip (10.5281/zenodo.14608975) — re-cut per README
+    copied: "2026-11-13"
+    whole: true
+    trim: none

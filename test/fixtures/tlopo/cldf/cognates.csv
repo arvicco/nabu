@@ -1,0 +1,12 @@
+ID,Form_ID,Form,Cognateset_ID,Doubt,Cognate_Detection_Method,Source,Alignment,Alignment_Method,Alignment_Source
+pmp-sasahq-1-1,pmp-sasahq-1,sasa,1-3-3-4-55-POc-sajaq-a,false,expert,,,,
+poc-sajaq-1-1,poc-sajaq-1,saja,1-3-3-4-55-POc-sajaq-a,false,expert,,,,
+gela-sada-1-1,gela-sada-1,sada,1-3-3-4-55-POc-sajaq-a,false,expert,,,,
+poc-burua-1-1,poc-burua-1,buruŋ,1-4-2-2-76-POc-burua-a,false,expert,,,,
+drehet-napulu-1-1,drehet-napulu-1,puluŋ,1-4-2-2-76-POc-burua-a,false,expert,,,,
+patpatar-buru-1-1,patpatar-buru-1,buruŋ,1-4-2-2-76-POc-burua-a,false,expert,,,,
+ramoaaina-buruburu-1-1,ramoaaina-buruburu-1,buru-buruŋ,1-4-2-2-76-POc-burua-a,false,expert,,,,
+peoc-ibe-1-1,peoc-ibe-1,ibe,1-4-3-1-81-PEOc-ibe-a,false,expert,,,,
+gela-ibe-1-1,gela-ibe-1,ibe,1-4-3-1-81-PEOc-ibe-a,false,expert,,,,
+areare-ipe-1-1,areare-ipe-1,ipe,1-4-3-1-81-PEOc-ibe-a,false,expert,,,,
+bauanfijian-ibe-1-1,bauanfijian-ibe-1,ibe,1-4-3-1-81-PEOc-ibe-a,false,expert,,,,

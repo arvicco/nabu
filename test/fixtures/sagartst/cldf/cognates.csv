@@ -1,0 +1,12 @@
+ID,Form_ID,Form,Cognateset_ID,Doubt,Cognate_Detection_Method,Source,Alignment,Alignment_Method,Alignment_Source
+OldTibetan-1_above-1-1,OldTibetan-1_above-1,s.t.e.ŋ,20-above,false,expert,Sagart2018,,,
+OldTibetan-218_thethunder-1-1,OldTibetan-218_thethunder-1,tʰ.o.g,2526-thethunder,false,expert,Sagart2018,,,
+Japhug-218_thethunder-1-1,Japhug-218_thethunder-1,tʰ.o.ʁ,2526-thethunder,false,expert,Sagart2018,,,
+Jingpho-172_thesea-1-1,Jingpho-172_thesea-1,p.a̱.ŋ.³³.◦.l.a.i.³³,3827-thesea,false,expert,Sagart2018,,,
+Limbu-1_above-1-1,Limbu-1_above-1,ɛ.t.th.a.ŋ,20-above,false,expert,Sagart2018,,,
+OldChinese-1_above-1-1,OldChinese-1_above-1,d.a.ŋ.ʔ.+.s,20-above,false,expert,Sagart2018,,,
+OldBurmese-172_thesea-1-1,OldBurmese-172_thesea-1,p.a.ṅ.◦.+.l.a.y,3827-thesea,false,expert,Sagart2018,,,
+Rangoon-172_thesea-1-1,Rangoon-172_thesea-1,p.ĩ.²².+.l.ɛ.²²,3827-thesea,false,expert,Sagart2018,,,
+Beijing-1_above-1-1,Beijing-1_above-1,ʂ.ɑ.ŋ.⁵¹.tʰ.o.u.⁰,20-above,false,expert,Sagart2018,,,
+Guangzhou-1_above-1-1,Guangzhou-1_above-1,s.œ.ŋ.²².p.i.n.²²,20-above,false,expert,Sagart2018,,,
+Xingning-1_above-1-1,Xingning-1_above-1,ʂ.ɔ.ŋ.⁵⁵.p.ɔ.ɛ.⁵³,20-above,false,expert,Sagart2018,,,

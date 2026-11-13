@@ -1,0 +1,8 @@
+ID,Name,Glottocode,Glottolog_Name,ISO639P3code,Macroarea,Latitude,Longitude,Family,Description,Subgroup
+0,Proto-Uralic*,,,,,,,,,(reconstr.)
+208,Ingrian,ingr1248,Ingrian,izh,Eurasia,59.47403,29.71145,Uralic,,Finnic
+209,Western Votic,west2391,West Vod,,Eurasia,,,Uralic,Linguist list code: vot-wes,Finnic
+301,Erzya,erzy1239,Erzya,myv,Eurasia,52.8548,45.3901,Uralic,,Mordvin
+601,Hungarian,hung1274,Hungarian,hun,Eurasia,46.9068585714,19.6555271429,Uralic,,Ugric
+902,Tundra Nenets,nene1249,Tundra Nenets,,Eurasia,66.1775,71.0234,Uralic,Linguist list code: yrk-tun,Samoyed
+907,Selkup,tazz1244,Taz-Turukhan,,Eurasia,65.7035,82.4441,Uralic,Taz dialect of Selkup,Samoyed

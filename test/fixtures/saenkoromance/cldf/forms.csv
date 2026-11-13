@@ -1,0 +1,9 @@
+ID,Local_ID,Language_ID,Parameter_ID,Value,Form,Segments,Comment,Source,Cognacy,Loan,Graphemes,Profile
+meglenoromanian-7_bite-1,,meglenoromanian,7_bite,mˈučk-u {mútšcu},m.ˈu.tʃ.k.+.u,m ˈu tʃ k + u,,Saenko2015,,false,^ m . ˈu . tʃ . k . + . u $,default
+istroromanian-7_bite-1,,istroromanian,7_bite,mučk-ˈɒ {mučcå},m.u.tʃ.k.+.ˈɒ,m u tʃ k + ˈɒ,,Saenko2015,,false,^ m . u . tʃ . k . + . ˈɒ $,default
+aromanian-7_bite-1,,aromanian,7_bite,mˈɨšk-u {mî șcu} ~ mˈušk-u {mușcu},m.ˈɨ.š.k.+.u,m ˈɨ ʃ k + u,,Saenko2015,,false,^ m . ˈɨ . š . k . + . u $,default
+romanian-7_bite-1,,romanian,7_bite,a=mušk-ˈa {a mușca},a.+.m.u.š.k.+.ˈa,a + m u ʃ k + ˈa,,Saenko2015,,false,^ a . + . m . u . š . k . + . ˈa $,default
+carmagnolapiemontese-11_breast-1,,carmagnolapiemontese,11_breast,stˈɔmi {stòmi},s.t.ˈɔ.m.i,s t ˈɔ m i,,Saenko2015,,false,^ s . t . ˈɔ . m . i $,default
+vercellesepiemontese-11_breast-1,,vercellesepiemontese,11_breast,stˈɔːmik,s.t.ˈɔː.m.i.k,s t ˈɔː m i k,,Saenko2015,,false,^ s . t . ˈɔː . m . i . k $,default
+reggianoemiliano-11_breast-1,,reggianoemiliano,11_breast,stˈɔmeg {stòmegh},s.t.ˈɔ.m.e.ɡ,s t ˈɔ m e ɡ,,Saenko2015,,false,^ s . t . ˈɔ . m . e . ɡ $,default
+neapolitan-100_yellow-1,,neapolitan,100_yellow,ǯˈalː-ə {giallo} ~ ǯːˈalː-ə {ggiallo},dʒ.ˈa.lː.+.ə,dʒ ˈa lː + ə,,Saenko2015,,true,^ dʒ . ˈa . lː . + . ə $,default

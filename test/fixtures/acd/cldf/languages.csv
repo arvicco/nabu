@@ -1,0 +1,11 @@
+ID,Name,Glottocode,Glottolog_Name,ISO639P3code,Macroarea,Latitude,Longitude,Family,Abbr,Group,Source,Is_Proto,Description,Dialect_Of
+250,Bunun,bunu1267,Bunun,bnn,Papunesia,23.4116,121.025,Austronesian,,Form.,jeng1971,false,,
+252,Cebuano,cebu1242,Cebuano,ceb,Papunesia,8.38799,124.367,Austronesian,,PPH,wolff1972,false,,
+289,Kankanaey,kank1243,Kankanaey,kne,Papunesia,16.8548,120.689,Austronesian,,PPH,vanoverbergh1933,false,,
+326,Malay,mala1479,Central Malay,zlm,Eurasia,1.85856,103.0,Austronesian,,PWMP,wilkinson1959,false,,
+19072,Proto-Austronesian,aust1307,Austronesian,,,18.021904113884965,122.05700483729152,Austronesian,PAN,PAN,,true,,
+19081,Proto-Malayo-Polynesian,mala1545,Malayo-Polynesian,,,6.186509507000039,124.24577884200005,Austronesian,PMP,PMP,,true,Malayo-Polynesian = all AN languages outside Taiwan.,
+19083,Proto-Philippines,,,,,,,,PPH,PPH,,true,Philippine languages.,
+397,Rukai,ruka1240,Rukai,dru,Papunesia,22.7738,120.844,Austronesian,,Form.,li1977,false,,
+968,Rukai (Mantauran),ruka1240,Rukai,dru,Papunesia,22.7738,120.844,Austronesian,,Form.,,false,,397
+400,Saisiyat,sais1237,Saisiyat,xsy,Papunesia,24.6043,121.067,Austronesian,,Form.,li1978,false,,

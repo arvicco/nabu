@@ -1,0 +1,43 @@
+# Nabu fixture manifest (P5-4 "fixture sentinel"). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+# All files are trims of files INSIDE the versioned Zenodo zip — the zip is
+# the fetchable unit, so per-file raw GETs do not exist.
+source: sagartst
+adapter_test:
+retrieved: "2026-11-13"
+files:
+  - path: cldf/cognates.csv
+    refetchable: false
+    provenance: local-trim
+    reason: extracted from the versioned Zenodo zip (10.5281/zenodo.13162889) — re-cut per README
+    copied: "2026-11-13"
+    whole: false
+    trim: 11 records kept — the README recipe
+  - path: cldf/forms.csv
+    refetchable: false
+    provenance: local-trim
+    reason: extracted from the versioned Zenodo zip (10.5281/zenodo.13162889) — re-cut per README
+    copied: "2026-11-13"
+    whole: false
+    trim: 11 records kept — the README recipe
+  - path: cldf/languages.csv
+    refetchable: false
+    provenance: local-trim
+    reason: extracted from the versioned Zenodo zip (10.5281/zenodo.13162889) — re-cut per README
+    copied: "2026-11-13"
+    whole: false
+    trim: 10 records kept — the README recipe
+  - path: cldf/parameters.csv
+    refetchable: false
+    provenance: local-trim
+    reason: extracted from the versioned Zenodo zip (10.5281/zenodo.13162889) — re-cut per README
+    copied: "2026-11-13"
+    whole: false
+    trim: 3 records kept — the README recipe
+  - path: raw/README.md
+    refetchable: false
+    provenance: local-trim
+    reason: extracted from the versioned Zenodo zip (10.5281/zenodo.13162889) — re-cut per README
+    copied: "2026-11-13"
+    whole: true
+    trim: none

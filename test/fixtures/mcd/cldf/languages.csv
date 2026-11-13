@@ -1,0 +1,10 @@
+ID,Name,Glottocode,Glottolog_Name,ISO639P3code,Macroarea,Latitude,Longitude,Family,Abbr,Group,Source,Is_Proto
+protooceanic,Proto-Oceanic,ocea1241,Oceanic,,,-7.59343840899993,158.75171959700003,,POc,,ross1988;blust1970;blust1978,true
+protomicronesian,Proto-Micronesian,micr1243,Micronesian,,,5.599310614000046,168.10108483200008,,PMc,,benderetal1984;benderandwang1985;jackson1983;marck1991;marck1994,true
+protocentralmicronesian,Proto-Central Micronesian,cent2276,Central Micronesian,,,4.573797919000071,168.68539472700002,,PCMc,Micronesian,jackson1983;marck1994,true
+chuukese,Chuukese,chuu1238,Chuukese,chk,,7.346993,151.598607,,Chk,Micronesian,goodenough1963;goodenough1992;goodenoughandsugita1980;goodenoughandsugita1990,false
+fijian,Fijian,fiji1243,Fijian,fij,,-18.0,178.33,,Fij,Central Pacific linkage,capell1957;geraghty1983,false
+gilbertese,Gilbertese,gilb1244,Gilbertese,gil,,0.179,173.64,,Kir,Micronesian,bingham1908,false
+lakalai,Lakalai,naka1262,Nakanai,nak,,-5.59931,150.888,,Lak,Western Oceanic linkage,chowningandgoodenoughnd,false
+pingilapese,Pingilapese,ping1243,Pingelapese,pif,,6.20743,160.711,,Png,Micronesian,benderetal1984,false
+pohnpeian,Pohnpeian,pohn1238,Pohnpeian,pon,,6.87212,158.223,,Pon,Micronesian,rehgandsohl1979;sohlrehgandandreasnd,false
