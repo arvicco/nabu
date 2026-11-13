@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<alto xmlns="http://www.loc.gov/standards/alto/ns-v3#" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <Description>
+    <MeasurementUnit>pixel</MeasurementUnit>
+    <sourceImageInformation>
+      <fileName>DDD_010500649_001.jp2</fileName>
+    </sourceImageInformation>
+    <OCRProcessing ID="OCRPROCESSING_1">
+      <preProcessingStep>
+        <processingDateTime>2009-12-11</processingDateTime>
+        <processingAgency>CCS Content Conversion Specialists GmbH, www.content-conversion.com</processingAgency>
+        <processingStepDescription>align</processingStepDescription>
+        <processingStepSettings>CCS OCR Processing Filter</processingStepSettings>
+        <processingSoftware>
+          <softwareCreator>CCS Content Conversion Specialists GmbH, Germany</softwareCreator>
+          <softwareName>CCS docWORKS</softwareName>
+          <softwareVersion>6.3-0.96</softwareVersion>
+          <applicationDescription />
+        </processingSoftware>
+      </preProcessingStep>
+      <ocrProcessingStep>
+        <processingSoftware>
+          <softwareCreator>ABBYY (BIT Software), Russia</softwareCreator>
+          <softwareName>FineReader</softwareName>
+          <softwareVersion>8.1</softwareVersion>
+        </processingSoftware>
+      </ocrProcessingStep>
+      <postProcessingStep>
+        <processingDateTime>2015-04-24T15:16:01</processingDateTime>
+        <processingAgency>Meertens Instituut</processingAgency>
+        <processingStepDescription>Manual correction ocr</processingStepDescription>
+        <processingSoftware>
+          <softwareCreator>Meertens Instituut</softwareCreator>
+          <softwareName>nl.knaw.meertens.crowdsourcing.kb.AltoArticleAligner</softwareName>
+          <softwareVersion />
+        </processingSoftware>
+      </postProcessingStep>
+    </OCRProcessing>
+  </Description>
+  <Styles>
+    <TextStyle ID="TXT_0" FONTSIZE="16" FONTFAMILY="Fraktur" />
+    <TextStyle ID="TXT_1" FONTSIZE="11" FONTFAMILY="Fraktur" FONTSTYLE="italics" />
+    <TextStyle ID="TXT_2" FONTSIZE="10" FONTFAMILY="Fraktur" FONTSTYLE="italics" />
+    <TextStyle ID="TXT_3" FONTSIZE="9" FONTFAMILY="Fraktur" FONTSTYLE="italics" />
+    <ParagraphStyle ID="PAR_RIGHT" ALIGN="Right" />
+    <ParagraphStyle ID="PAR_LEFT" ALIGN="Left" />
+    <ParagraphStyle ID="PAR_BLOCK" ALIGN="Block" />
+  </Styles>
+  <Tags>
+    <StructureTag ID="PAR_START" LABEL="paragraph start" />
+    <StructureTag ID="ART_HEADING" LABEL="article heading" />
+  </Tags>
+  <Layout>
+    <Page ID="P1" PHYSICAL_IMG_NR="1" HEIGHT="4217" WIDTH="2362" POSITION="Right" PC="1.00">
+      <TopMargin ID="P1_TM00001" HPOS="0" VPOS="0" WIDTH="2362" HEIGHT="30" />
+      <LeftMargin ID="P1_LM00001" HPOS="0" VPOS="30" WIDTH="50" HEIGHT="4118" />
+      <RightMargin ID="P1_RM00001" HPOS="2309" VPOS="30" WIDTH="54" HEIGHT="4118" />
+      <BottomMargin ID="P1_BM00001" HPOS="0" VPOS="4148" WIDTH="2362" HEIGHT="69" />
+      <PrintSpace ID="P1_PS00001" HPOS="50" VPOS="30" WIDTH="2259" HEIGHT="4118">
+        <TextBlock ID="P1_TB00001" HPOS="605" VPOS="30" WIDTH="1348" HEIGHT="121" STYLEREFS="TXT_0 PAR_RIGHT">
+          <TextLine ID="P1_TL00001" HPOS="609" VPOS="39" WIDTH="1334" HEIGHT="107">
+            <String ID="P1_ST00001" HPOS="609" VPOS="55" WIDTH="306" HEIGHT="66" CONTENT="Courante" WC="0.97" CC="87878878" />
+            <SP ID="P1_SP00001" HPOS="915" VPOS="121" WIDTH="31" />
+            <String ID="P1_ST00002" HPOS="946" VPOS="72" WIDTH="101" HEIGHT="47" CONTENT="uyt" WC="0.95" CC="600" />
+            <SP ID="P1_SP00002" HPOS="1047" VPOS="121" WIDTH="38" />
+            <String ID="P1_ST00003" HPOS="1085" VPOS="55" WIDTH="247" HEIGHT="85" CONTENT="Italien," WC="0.95" CC="00878770" />
+            <SP ID="P1_SP00003" HPOS="1332" VPOS="140" WIDTH="57" />
+            <String ID="P1_ST00004" HPOS="1389" VPOS="39" WIDTH="405" HEIGHT="107" CONTENT="Duytslandt," WC="0.95" CC="87000000000" />
+            <SP ID="P1_SP00004" HPOS="1794" VPOS="146" WIDTH="39" />
+            <String ID="P1_ST00005" HPOS="1833" VPOS="60" WIDTH="36" HEIGHT="65" CONTENT="&amp;" WC="0.98" CC="0" />
+            <SP ID="P1_SP00005" HPOS="1869" VPOS="146" WIDTH="0" />
+            <String ID="P1_ST00006" HPOS="1869" VPOS="60" WIDTH="74" HEIGHT="65" CONTENT="c." WC="0.98" CC="00" />
+          </TextLine>
+        </TextBlock>
+      </PrintSpace>
+    </Page>
+  </Layout>
+</alto>
+
