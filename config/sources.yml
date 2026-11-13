@@ -3488,12 +3488,15 @@ iecor:
                    # iecor note, then flip). Projected: 4,981 entries /
                    # ~26.3k reflex rows (~2.3k loan-flagged) + ~144
                    # language notes accreted into the ledger.
-  # IE-CoR (lexibank/iecor v1.2, CC BY 4.0; .docs/surveys/pie-survey.md §1): the
+  # IE-CoR (lexibank/iecor v1.2.1, CC BY 4.0; .docs/surveys/pie-survey.md §1): the
   # cognacy-matrix dictionary shelf — one entry per expert-curated cognate
   # set under the collective `ine` tag, members as reflex edges, loans.csv
   # feeding the borrowed flag. The Zenodo versioned record is immutable; a
   # future release is a NEW DOI the owner re-pins (URL + RELEASE_SHA256,
-  # the Coptic RELEASE_TAG pattern) before firing a re-sync.
+  # the Coptic RELEASE_TAG pattern) before firing a re-sync. Re-pinned
+  # 2026-11-13 v1.2 → v1.2.1 (10.5281/zenodo.23183358): catalog-version
+  # refresh only — the data tables are byte-identical and the full parse
+  # is identical, so the re-sync re-reads and changes nothing.
 
 iedc:   # P107-2
   adapter: Nabu::Adapters::Iedc

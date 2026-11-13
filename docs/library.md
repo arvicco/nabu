@@ -402,7 +402,7 @@ quantitative object; fragment search (`--fuzzy`) over damaged stones.
 The three Phase-18 adapters were synced and flipped live by the owner on
 2026-07-14; every number below is a live catalog count:
 
-- **`iecor`** — IE-CoR (lexibank/iecor v1.2, CC BY 4.0, sha-pinned
+- **`iecor`** — IE-CoR (lexibank/iecor v1.2.1, CC BY 4.0, sha-pinned
   immutable Zenodo DOI): the expert-curated Indo-European cognacy matrix
   as a dictionary shelf — **4,981 cognate-set entries** under the
   collective `ine` tag / **26,325 reflex rows** (2,308 loan-flagged,

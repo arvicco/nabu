@@ -17,6 +17,18 @@ re-serialization introduced no drift); only the record SET was trimmed.
   (the adapter's `RELEASE_SHA256` pin). Full-file census at retrieval:
   160 varieties / 170 parameters / 25,731 forms / 25,741 judgments /
   5,039 cognate-set rows (4,981 with ≥1 judgment) / 1,036 loan events.
+- **Re-pinned 2026-11-13 to v1.2.1** — Zenodo record
+  <https://zenodo.org/records/23183358> (DOI 10.5281/zenodo.23183358,
+  2026-10-06, same concept DOI), file `lexibank/iecor-v1.2.1.zip` —
+  6,095,537 B, md5 `235e3c4672fdbe9165a2006964d2e084` (Zenodo's published
+  checksum, matched), sha256
+  `3076e9b31a52490e54ba471ee3101af4a3740b58c2e23e186456d931fa83966a`
+  (the new `RELEASE_SHA256`). Every kept record was re-compared against
+  v1.2.1: forms/cognates/cognatesets/loans and the 13 kept languages.csv
+  records are byte-identical; the 5 kept parameters.csv records were
+  re-cut (v1.2.1 rewrote every concept's `Description_md` against
+  Concepticon 3.4.0 — a column the parser never reads). The full-file
+  census is unchanged.
 - **License:** CC BY 4.0 — cldf/README.md verbatim: "This dataset is
   licensed under a https://creativecommons.org/licenses/by/4.0/ license";
   GitHub license field CC-BY-4.0; Zenodo record cc-by-4.0.
