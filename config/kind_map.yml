@@ -353,6 +353,65 @@ sources:
     # -- unmapped by design (50 documents): "Satire" — the title says satire, not whether
     #    in verse (Oldham, the Tory satyrs) or prose; the bare head waits for a ruling
     #    rather than forcing literary/poetry.
+  pleias-french-books: # the Gallica catalogue title's form noun, cut to ONE head at parse
+    #                   time (Adapters::PleiasTitleGenre — the blbooks precedent: no genre
+    #                   column, the title IS the label; the earliest form word wins, compounds
+    #                   before their parts). Counts = books, the pre-1700 cone's 6,477 titles
+    #                   through the extractor (census 2026-11-13): 3,304 carry a head, 3,173
+    #                   none (no claim — topic words like histoire/discours/traité never head).
+    #                   The cone is the royal print of the ancien régime: acts of state lead.
+    facet: genre
+    map:
+      # -- the crown's and the courts' acts (printed for publication, the law as promulgated)
+      "Édit": legal/law                          # 919 — Édict/Edict/Édit/Edits
+      "Déclaration": legal/law                   # 605 — the royal declaration (lettres de
+      #                                            déclaration included): a law instrument
+      "Lettres patentes": legal/law              # 249 — the crown's open letters granting or
+      #                                            ordering: the act, not correspondence
+      "Ordonnance": legal/law                    # 159
+      "Coutume": legal/law                       # 74 — the redacted customary law of a province
+      "Statuts": legal/law                       # 23 — guild and community statutes
+      "Règlement": legal/law                     # 15
+      "Mandement": legal/law                     # 14 — the royal mandement (convocations of the
+      #                                            ban, seizures) leads; a command, not a letter
+      "Arrêt": legal/court                       # 83 — Arrest/Arrêt of the Parlement or Conseil
+      "Factum": legal/court                      # 38 — the printed trial brief of a party
+      # -- written for performance
+      "Tragédie": literary/drama                 # 74
+      "Comédie": literary/drama                  # 69
+      "Ballet": literary/drama                   # 45 — the livret of the court ballet
+      "Tragi-comédie": literary/drama            # 39
+      "Pastorale": literary/drama                # 7 — the pastorale héroïque en musique
+      # -- verse as verse
+      "Ode": literary/poetry                     # 83
+      "Sonnet": literary/poetry                  # 61
+      "Poème": literary/poetry                   # 50 — Poëme/Poème
+      "Stances": literary/poetry                 # 33
+      "Triolet": literary/poetry                 # 28 — the Fronde's Mazarinade triolets
+      "Élégie": literary/poetry                  # 20
+      "Poésie": literary/poetry                  # 19
+      "Épithalame": literary/poetry              # 12
+      "Chanson": literary/poetry                 # 5
+      # -- address, the pulpit, instruction
+      "Harangue": oratory                        # 32
+      "Panégyrique": oratory                     # 21
+      "Oraison funèbre": sermon/funeral-sermon   # 28 — Bossuet's genre: the pulpit's funeral oration
+      "Sermon": sermon                           # 27
+      "Homélie": sermon/homily                   # 2
+      "Catéchisme": catechesis                   # 9
+      "Lettre": letter                           # 248 — printed letters (Balzac's, the open
+      #                                            letter of the Fronde)
+      "Épître": letter/literary                  # 54 — the verse/dedicatory épître
+      "Maximes": literary/wisdom                 # 41
+      "Dialogue": literary/wisdom                # 42 — the dialogue form (the house's wisdom/
+      #                                            dialogue reading, Fontenelle to the polemics)
+      "Annales": historiography/annals           # 12
+      "Chronique": historiography/chronicle      # 8
+      "Dictionnaire": lexical/word-list          # 18
+      "Grammaire": lexical/grammar               # 8
+    # -- unmapped by design (30 documents): "Satire" — the blbooks reading: the title says
+    #    satire, not whether in verse (the satyres du temps) or prose; the bare head waits
+    #    for a ruling rather than forcing literary/poetry.
   cantus:             # the chant record's genre — upstream's own abbreviation list
     #                   (cantusdatabase.org/genres/), the facet value = upstream's genre NAME,
     #                   the code raw (CantusCsvParser::GENRES). Counts = the 17-source sample
