@@ -200,7 +200,7 @@ bin/nabu sync perseus-greek     # fetch, load, index
 celtic` enables that whole desk's public members); a handful of
 grant-gated research sources are never swept in by an axis — each
 must be enabled by name and shows you its terms first. After that,
-`bin/nabu sync --all` re-syncs every enabled live-policy source in
+`bin/nabu sync --all` re-syncs the enabled `sync_policy: auto` sources in
 one pass. The full menu is `config/sources.yml`; real on-disk sizes
 for the larger shelves, measured {{ sizes.as_of }} (each row below
 assumes its `enable` ran first):

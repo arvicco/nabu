@@ -75,11 +75,12 @@ bin/nabu sync sblgnt
 ```
 
 This fetches the upstream snapshot into `canonical/sblgnt/` (~11 MB on
-disk) and loads it into the catalog. On the reference box the entire first
-run — fetch, parse, load — took **about 3 seconds** and ended with 27
-books / 7,939 verses loaded, plus a `discovery:` accounting line (selected
-· skipped-by-rule · quarantined · unrecognized) so nothing is silently
-dropped.
+disk) and loads it into the catalog. The sblgnt step itself — fetch,
+parse, load — takes a few seconds and ends with 27 books / 7,939 verses
+loaded, plus a `discovery:` accounting line (selected · skipped-by-rule
+· quarantined · unrecognized) so nothing is silently dropped. (The very
+first sync on a fresh box also pulls the shared reference core — place
+gazetteers and similar, ~130 MB — once; every later sync skips it.)
 
 Check the shelf:
 

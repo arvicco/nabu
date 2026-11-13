@@ -256,7 +256,7 @@ questions and never substitute for each other (owner semantics ruling
 | Flag | Question it answers | Who sets it |
 |---|---|---|
 | `wired` | **Is the sync link tested and declared working?** A verification FACT about the channel, for every kind — flipped `true` once, after the owner-verified first sync (adapter checklist §6). It says nothing about cadence or desirability. | the loop, at first-sync verification |
-| enabled (`nabu enable`, `config/profile.yml` + local overlay) | **Does THIS box work with this source?** The instance profile — `sync <slug>` refuses an un-enabled source; modules are pre-enabled by nature (they never gate on enablement). | the owner, per box |
+| enabled (`nabu enable`, `local/config/profile.yml`) | **Does THIS box work with this source?** The instance profile — `sync <slug>` refuses an un-enabled source; modules are pre-enabled by nature (they never gate on enablement). | the owner, per box |
 | `sync_policy` | **What cadence?** `auto` = swept by `sync --all` (living upstreams) · `manual` = owner-fired by name (size/pacing) · `frozen` = dead upstream, synced once. Shelves have none (kind implies local). | the registry, at adoption |
 | `grant_required` / `availability` | **May we, publicly?** Permission-bound sources are skipped by `--all` until the grant is acknowledged; `availability: blocked` rows never advertise on public surfaces. | owner rulings |
 
