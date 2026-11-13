@@ -67,6 +67,15 @@ module Nabu
     # flattens to nothing (the empty <p/> placeholders) emits nothing and
     # consumes no ordinal.
     #
+    # == Lists and tables (the 2026-11-13 quarantine review)
+    #
+    # A text whose body holds no reading unit at all — Marulić's argumenta
+    # to Catullus, one <list> per poem — cites its list <item>s ("i<k>")
+    # and table <row>s ("r<k>", cells space-joined) as blocks, counted per
+    # div like the l/p ordinals. The blocks are collected beside the
+    # ordinary units and used ONLY when those come out empty, so a list
+    # beside reading text stays out and no loaded document moves.
+    #
     # == Header metadata (the timeline feed)
     #
     # One streaming pass also mines the teiHeader: titleStmt/title (the
@@ -117,6 +126,8 @@ module Nabu
         private_constant :DROPPED_ELEMENTS, :SEPARATOR_ELEMENTS
 
         Result = Data.define(:units, :title, :metadata)
+        BLOCK_ELEMENTS = { "item" => "i", "row" => "r" }.freeze
+        private_constant :BLOCK_ELEMENTS
 
         def initialize(reader:, path:)
           super
@@ -128,6 +139,8 @@ module Nabu
           @div_frames = [{ component: nil, child_divs: 0, verse: 0, prose: 0, type: nil, met: nil }]
           @unit = nil # the open reading unit, or nil
           @units = []
+          @block = nil # the open list item / table row (the fallback grain)
+          @blocks = []
           # header capture
           @header = { title: nil, author: nil, date: nil, when: nil, not_before: nil,
                       period: nil, precision: nil, place: nil, genre: [] }
@@ -138,7 +151,7 @@ module Nabu
           @reader.each { |node| process(node) }
           raise ParseError, "#{@path}: no <text><body> found" unless @seen_body
 
-          Result.new(units: @units, title: presence(@header[:title]), metadata: metadata)
+          Result.new(units: @units.empty? ? @blocks : @units, title: presence(@header[:title]), metadata: metadata)
         end
 
         private
@@ -160,7 +173,8 @@ module Nabu
           case name
           when "div" then open_div(node)
           when *UNIT_ELEMENTS then open_unit(node, name)
-          when *SEPARATOR_ELEMENTS then separator
+          when *SEPARATOR_ELEMENTS, "cell" then separator
+          when *BLOCK_ELEMENTS.keys then open_block(node, name)
           end
         end
 
@@ -178,6 +192,7 @@ module Nabu
           when "body" then @in_body = false
           when "div" then close_div
           when *UNIT_ELEMENTS then close_unit(node, name)
+          when *BLOCK_ELEMENTS.keys then close_block(node, name)
           end
         end
 
@@ -185,8 +200,8 @@ module Nabu
           value = node.value.to_s
           if !@seen_body
             @capture << value if @capture
-          elsif @in_body && !dropping? && @unit
-            @unit[:text] << value
+          elsif @in_body && !dropping? && (@unit || @block)
+            (@unit || @block)[:text] << value
           end
         end
 
@@ -337,6 +352,29 @@ module Nabu
                              annotations: annotations_for(unit, frame))
         end
 
+        # -- body: list items / table rows (the empty-document fallback) -------
+
+        def open_block(node, name)
+          return if @unit || @block || node.empty_element? # nested blocks stay transparent
+
+          @block = { tag: name, depth: node.depth, n: presence(node.attribute("n")), text: +"" }
+        end
+
+        def close_block(node, name)
+          return unless @block && @block[:tag] == name && @block[:depth] == node.depth
+
+          block = @block
+          @block = nil
+          return if block[:text].strip.empty?
+
+          frame = @div_frames.last
+          key = :"block_#{name}"
+          token = "#{BLOCK_ELEMENTS.fetch(name)}#{frame[key] = frame.fetch(key, 0) + 1}"
+          path = div_path
+          @blocks << Unit.new(citation: path.empty? ? token : "#{path}.#{token}", text: block[:text],
+                              annotations: annotations_for(block, frame))
+        end
+
         def annotations_for(unit, frame)
           {
             "addressing" => "structural-ordinal",
@@ -348,7 +386,7 @@ module Nabu
         end
 
         def separator
-          @unit[:text] << " " if @unit
+          (@unit || @block)&.[](:text)&.<<(" ")
         end
       end
       private_constant :Extraction

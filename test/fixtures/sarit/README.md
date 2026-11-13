@@ -91,3 +91,12 @@ Trimmed REAL slices from the local canonical clone
   tulasidasa-ramayanasatika) that held one passage each — their epigraph
   `<p>` — while the `<ab>` text was dropped; those gain their pages (15, 31,
   39, 48 passages) and their existing `p1` stays put.
+- **`ayurvedasutram-c1c2.xml`** — the list-only text: per chapter `<div n>`
+  a `<list>` of `<label>1.1</label><item>sūtra</item>` pairs and nothing
+  else. TRIM: upstream lines 1..124 (teiHeader + chapter 1 sūtras 1.1-1.3),
+  `</list></div>`, lines 313..320 (chapter 2 sūtras 2.1-2.2), `</list></div>`,
+  lines 1155..1157 (closing tags) → passages `1.1 1.2 1.3 2.1 2.2`, the LIST
+  grain (addressing `label`). The grain is the empty-document fallback, so
+  the loaded editions whose lists sit beside lg/l/p (bhoja-rajamartanda,
+  caryamelapakapradipa, pujyapada-sarvarthasiddhi) are untouched. Grant:
+  CC BY-SA 4.0.

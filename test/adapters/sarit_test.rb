@@ -22,10 +22,11 @@ class SaritTest < Minitest::Test
   SAMANYA = "urn:nabu:sarit:samanyadusana"
   NYAYA = "urn:nabu:sarit:vatsyayana-nyayabhasya-s1-2"
   MBH = "urn:nabu:sarit:mahabharata-devanagari-adi1-svarga1"
-  # The 2026-11-13 quarantine review's lb-in-ab citation shape.
+  # The 2026-11-13 quarantine review's citation-unit shapes.
   TRISULI = "urn:nabu:sarit:trisuli-piyusalahari-p4p5p16" # lb-in-ab Braj print transcription
+  AYURVEDA = "urn:nabu:sarit:ayurvedasutram-c1c2" # label/item list
 
-  ALL_FIXTURES = [ASTAVAKRA, MBH, SAMANYA, TRISULI, NYAYA].freeze # discover order (sorted by urn)
+  ALL_FIXTURES = [ASTAVAKRA, AYURVEDA, MBH, SAMANYA, TRISULI, NYAYA].freeze # discover order (sorted by urn)
 
   # --- AdapterConformance hooks --------------------------------------------
 

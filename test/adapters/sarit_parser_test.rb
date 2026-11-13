@@ -26,6 +26,7 @@ class SaritParserTest < Minitest::Test
   NYAYA = File.join(FIXTURES, "vatsyayana-nyayabhasya-s1-2.xml")
   MBH = File.join(FIXTURES, "mahabharata-devanagari-adi1-svarga1.xml")
   TRISULI = File.join(FIXTURES, "trisuli-piyusalahari-p4p5p16.xml")
+  AYURVEDA = File.join(FIXTURES, "ayurvedasutram-c1c2.xml")
 
   def parser
     Nabu::Adapters::SaritParser.new
@@ -293,6 +294,42 @@ class SaritParserTest < Minitest::Test
           <pb n="1"/>
           <ab>anāgamaś ca so 'bhyāsaḥ</ab>
           <ab type="sūtra" n="1">āmnāyasya<lb/>kriyārthatvāt</ab>
+          <p>namaḥ</p>
+        </div></body></text>
+      </TEI>
+    XML
+    with_tempfile(xml) do |path|
+      doc = parse(path, language: "san-Latn")
+      assert_equal(%w[p1], doc.map { |p| p.urn.delete_prefix("#{doc.urn}:") })
+    end
+  end
+
+  # --- the label/item list grain (2026-11-13 review) --------------------------
+
+  # āyurvedasūtram is a pure list: per chapter div, <label>1.1</label>
+  # <item>sūtra</item> pairs and nothing else. Each item is a passage cited
+  # by its label verbatim (the upstream's own full sūtra address).
+  def test_ayurveda_list_items_cite_by_their_labels
+    doc = parse(AYURVEDA, language: "san-Latn")
+    assert_equal(%w[1.1 1.2 1.3 2.1 2.2], doc.map { |p| p.urn.delete_prefix("#{doc.urn}:") })
+    doc.each { |p| assert_equal "label", p.annotations["addressing"] }
+    assert_equal "athāto dhātusthadoṣagatyavikārahetubhūtārthavārdhakadravyāṇyadyāt", find(doc, "1.1").text
+    assert_equal "ṣaṭsahasratriṃśatsirāstriṃśacchalyāśśatadvayadaśottarasandhayo " \
+                 "navāśītisnāyupeśidharā bhavanti", find(doc, "2.2").text
+  end
+
+  # Guard: the list grain is the EMPTY-DOCUMENT fallback. A document that
+  # already cites through lg/l/p keeps its lists out (a bibliography or a
+  # table of contents set as a list is apparatus there, not text), so no
+  # already-loaded document gains a passage.
+  def test_lists_beside_citable_units_stay_out
+    xml = <<~XML
+      <TEI xmlns="http://www.tei-c.org/ns/1.0">
+        <teiHeader><fileDesc><publicationStmt><availability>
+          <p>This work is licensed under a Creative Commons Attribution-ShareAlike 4.0 licence.</p>
+        </availability></publicationStmt></fileDesc></teiHeader>
+        <text xml:lang="sa-Latn"><body><div>
+          <list><label>1</label><item>granthasūcī</item></list>
           <p>namaḥ</p>
         </div></body></text>
       </TEI>

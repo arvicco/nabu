@@ -25,6 +25,7 @@ class CroalaTest < Minitest::Test
   INSCR = "urn:nabu:croala:albert-i-inscr"
   DONATIO = "urn:nabu:croala:adam-radauanus-traditio"
   CARMINA = "urn:nabu:croala:andreis-f-carm-h46"
+  ARGUMENTA = "urn:nabu:croala:marul-mar-catull" # list-only text (the 2026-11-13 quarantine review)
 
   def conformance_adapter = Nabu::Adapters::Croala.new
 
@@ -36,11 +37,44 @@ class CroalaTest < Minitest::Test
 
   def workdir = conformance_workdir
 
+  # -- the list grain (the 2026-11-13 quarantine review) ---------------------
+
+  # Marulić's Argumenta carminum Catulli is a list-only text: per poem a
+  # <list> whose <head> (the Catullus reference, apparatus) drops and whose
+  # <item> carries the argument. With no l/p/opener/closer anywhere, each
+  # item is a block "i<k>" counted per div; the <add>/<bibl>/<q> inside stay
+  # transparent reading text, as everywhere in the family.
+  def test_a_list_only_text_cites_one_block_per_item
+    document = adapter.parse(adapter.discover(workdir).find { |ref| ref.id == ARGUMENTA })
+    assert_equal 43, document.count
+    assert_equal "#{ARGUMENTA}:d1.i1", document.first.urn
+    third = document.to_a[2]
+    assert_equal "#{ARGUMENTA}:d1.i3", third.urn
+    assert third.text.start_with?("Catullus Cornelium alloquitur Nepotem"), third.text
+    assert_equal "item", third.annotations["unit"]
+    # The <head> references drop; the one reference upstream set as an
+    # <item> instead ("Catull. 14-14b") is reading text by the markup's word.
+    assert_equal ["Catull. 14-14b"], document.map(&:text).grep(/\ACatull\./)
+  end
+
+  # Guard: the list grain is the EMPTY-DOCUMENT fallback — beside reading
+  # units a list stays out, so no already-loaded document gains a passage.
+  def test_lists_beside_reading_units_stay_out
+    Dir.mktmpdir("nabu-croala-list") do |dir|
+      xml = File.read(File.join(workdir, "txts", "marul-mar-catull.xml"))
+                .sub("<list>", "<p>Argumenta sequuntur.</p><list>")
+      path = File.join(dir, "marul-mar-catull.xml")
+      File.write(path, xml)
+      document = Nabu::Adapters::CroalaTeiParser.new.parse(path, urn: ARGUMENTA, language: "lat")
+      assert_equal ["#{ARGUMENTA}:d1.p1"], document.map(&:urn)
+    end
+  end
+
   # -- discover ---------------------------------------------------------------
 
   def test_discover_yields_one_ref_per_xml_file_sorted_by_urn
     refs = adapter.discover(workdir).to_a
-    assert_equal [DONATIO, CARMINA, INSCR].sort, refs.map(&:id),
+    assert_equal [DONATIO, CARMINA, INSCR, ARGUMENTA].sort, refs.map(&:id),
                  "one document per txts/<stem>.xml, urn urn:nabu:croala:<stem>, sorted"
     assert(refs.all? { |ref| ref.source_id == "croala" })
     assert(refs.all? { |ref| ref.id == adapter.parse(ref).urn },
@@ -174,14 +208,14 @@ class CroalaTest < Minitest::Test
     db = store_test_db
     source = create_source(db)
     first = Nabu::Store::Loader.new(db: db, source: source).load_from(adapter, workdir: workdir)
-    assert_equal 3, first.added
+    assert_equal 4, first.added
     assert_equal 0, first.errored
-    assert_equal 234, db[:passages].count, "1 inscription + 4 charter + 229 verse lines"
+    assert_equal 277, db[:passages].count, "1 inscription + 4 charter + 229 verse lines + 43 list items"
 
     second = Nabu::Store::Loader.new(db: db, source: source).load_from(adapter, workdir: workdir)
     assert_equal 0, second.errored
-    assert_equal 3, second.skipped, "a byte-identical reload skips every document"
-    assert_equal 234, db[:passages].count
+    assert_equal 4, second.skipped, "a byte-identical reload skips every document"
+    assert_equal 277, db[:passages].count
     assert_equal [1], db[:passages].distinct.select_map(:revision)
   ensure
     db&.disconnect

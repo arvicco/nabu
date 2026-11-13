@@ -71,3 +71,18 @@ reused freely (but non-commercially) as long as the source is indicated";
 most texts "either in the public domain or their use was granted us by their
 owners"; project goal: "Texts may be downloaded as TEI xml for non-commercial
 use" → source class `nc`.
+
+## List and table specimens (the 2026-11-13 quarantine review)
+
+Two WHOLE texts copied from the local canonical tree (`canonical/
+corpus-corporum/texts/`, the same download.php responses), 2026-11-13:
+
+- **`texts/9269.xml`** — Catalogus episcoporum Romanorum (PL 127): six
+  `<list>`s of 84 `<item>`s and nothing else; each item a block
+  `d1.i<k>` carrying its Migne column (`0145B`).
+- **`texts/8927.xml`** — Fragmentum glossarii Latino-Theotisci: two items,
+  then a `<table>` whose second cell nests a list — the row is ONE block
+  `d1.r1` with the nested items in its text.
+
+The grain is the empty-document fallback (15 such list/table-only texts in
+the 2026-11-13 census; no loaded text gains or moves a passage).

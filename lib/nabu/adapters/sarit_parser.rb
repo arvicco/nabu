@@ -190,14 +190,18 @@ module Nabu
           @para = nil       # open prose unit
           @page_block = nil # open lb-in-ab print block (the page grain)
           @last_page = nil  # @n of the latest <pb> in the body
+          @label = nil      # open list <label> text
+          @pending_label = nil
+          @item = nil       # open list <item> unit
           @units = []
+          @list_units = []  # the empty-document fallback (the list grain)
         end
 
         def call
           @reader.each { |node| process(node) }
           raise ParseError, "#{@path}: no <text><body> found" unless @seen_body
 
-          Result.new(units: @units, license: @license, authors: @authors)
+          Result.new(units: @units.empty? ? @list_units : @units, license: @license, authors: @authors)
         end
 
         private
@@ -221,6 +225,8 @@ module Nabu
           when "p" then open_paragraph(node)
           when "quote" then open_quote(node)
           when "ab" then open_page_block(node)
+          when "label" then open_label(node)
+          when "item" then open_item(node)
           when "lb" then line_break(node)
           when "pb" then page_break(node)
           when "milestone" then separator
@@ -246,6 +252,9 @@ module Nabu
           when "p" then close_paragraph
           when "quote" then close_quote
           when "ab" then close_page_block
+          when "label" then close_label
+          when "item" then close_item
+          when "list" then @pending_label = nil
           end
         end
 
@@ -263,10 +272,14 @@ module Nabu
             @para[:text] << value
           elsif @page_block
             @page_block[:segments].last[:text] << value
+          elsif @label
+            @label << value
+          elsif @item
+            @item[:text] << value
           end
         end
 
-        def in_unit? = !(@group || @para || @page_block).nil?
+        def in_unit? = !(@group || @para || @page_block || @item).nil?
 
         # -- header: availability + language + titleStmt authors ---------------
 
@@ -544,6 +557,55 @@ module Nabu
           @units << Unit.new(citation: citation, text: segment[:text], addressing: "page")
         end
 
+        # -- body: the list grain (the empty-document fallback) ----------------
+        #
+        # A text whose body is only a list (āyurvedasūtram's
+        # <label>1.1</label><item>sūtra</item> pairs): each item is a unit
+        # cited by the label before it, verbatim (addressing "label"), or by a
+        # div-scoped ordinal "i<k>". Collected beside the ordinary units and
+        # used ONLY when they come out empty — a list beside lg/l/p text is
+        # apparatus there (a bibliography, a contents list), and no loaded
+        # document gains a passage.
+
+        def open_label(node)
+          @label = +"" unless in_unit? || node.empty_element?
+        end
+
+        def close_label
+          return unless @label
+
+          @pending_label = flatten(@label)
+          @label = nil
+        end
+
+        def open_item(node)
+          return if in_unit? || node.empty_element?
+
+          @item = { label: @pending_label, text: +"" }
+          @pending_label = nil
+        end
+
+        def close_item
+          item = @item
+          return if item.nil? || @group || @para
+
+          @item = nil
+          return if item[:text].strip.empty?
+
+          @list_units << if item[:label]
+                           Unit.new(citation: item[:label], text: item[:text], addressing: "label")
+                         else
+                           list_ordinal(item[:text])
+                         end
+        end
+
+        def list_ordinal(text)
+          frame = @div_frames.last
+          token = "i#{frame[:item] = frame.fetch(:item, 0) + 1}"
+          path = div_path
+          Unit.new(citation: path.empty? ? token : "#{path}.#{token}", text: text, addressing: "ordinal")
+        end
+
         # -- emission ----------------------------------------------------------
 
         def citation_for(number:, id:)
@@ -579,7 +641,7 @@ module Nabu
         end
 
         def separator
-          target = @group ? @group[:current] : (@para || @page_block&.dig(:segments, -1))
+          target = @group ? @group[:current] : (@para || @page_block&.dig(:segments, -1) || @item)
           target[:text] << " " if target
         end
       end

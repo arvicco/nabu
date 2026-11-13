@@ -52,6 +52,18 @@ module Nabu
     # <persName> … keep their characters — OCR quirks reproduced, never
     # "cleaned"). Whitespace collapses, output is NFC (lat is not exempt).
     #
+    # == Lists and tables (the 2026-11-13 quarantine review)
+    #
+    # A text whose body is ONLY lists or tables — a papal catalogue, a
+    # glossary, a calendar, a table of notae — has no l/p unit at all. Each
+    # <item> is then a block "i<k>" and each table <row> a block "r<k>" (its
+    # cells space-joined; a list nested in a cell stays part of the row),
+    # counted per div like the l/p ordinals. The blocks are collected beside
+    # the ordinary units and used ONLY when those come out empty, so a list
+    # beside reading paragraphs (contents, sigla) stays out and no loaded
+    # document gains or moves a passage. A <note> inside a block is
+    # apparatus (excluded from the block text, the inline-note rule).
+    #
     # == Header metadata (the 80-1 provenance/license capture)
     #
     # The same pass mines the teiHeader: titleStmt title + author (name,
@@ -112,6 +124,8 @@ module Nabu
                          :SEPARATOR_ELEMENTS, :DROPPED_ELEMENTS
 
         Result = Data.define(:units, :title, :metadata)
+        BLOCK_ELEMENTS = { "item" => "i", "row" => "r" }.freeze
+        private_constant :BLOCK_ELEMENTS
 
         def initialize(reader:, path:)
           super
@@ -122,6 +136,9 @@ module Nabu
           @div_frames = [{ component: nil, child_divs: 0, verse: 0, prose: 0, type: nil, n: nil }]
           @unit = nil
           @units = []
+          @block = nil        # open list item / table row (the fallback grain)
+          @block_note = nil   # depth of a <note> excluded from the open block
+          @blocks = []
           @header = {}
           @capture = nil
           @contexts = []
@@ -131,7 +148,7 @@ module Nabu
           @reader.each { |node| process(node) }
           raise ParseError, "#{@path}: no <text><body> found" unless @seen_body
 
-          Result.new(units: @units, title: presence(@header[:title]), metadata: metadata)
+          Result.new(units: @units.empty? ? @blocks : @units, title: presence(@header[:title]), metadata: metadata)
         end
 
         private
@@ -154,6 +171,9 @@ module Nabu
           when *DIV_ELEMENTS then open_div(node)
           when *UNIT_ELEMENTS then open_unit(node, name)
           when *SEPARATOR_ELEMENTS then separator(node, name)
+          when *BLOCK_ELEMENTS.keys then open_block(node, name)
+          when "cell" then @block[:text] << " " if @block
+          when "note" then @block_note ||= node.depth if @block && !node.empty_element?
           end
         end
 
@@ -171,6 +191,8 @@ module Nabu
           when "body" then @in_body = false
           when *DIV_ELEMENTS then close_div
           when *UNIT_ELEMENTS then close_unit(node, name)
+          when *BLOCK_ELEMENTS.keys then close_block(node, name)
+          when "note" then @block_note = nil if @block_note == node.depth
           end
         end
 
@@ -178,8 +200,12 @@ module Nabu
           value = node.value.to_s
           if !@seen_body
             @capture << value if @capture
-          elsif @in_body && !dropping? && @unit
+          elsif !@in_body || dropping?
+            nil
+          elsif @unit
             @unit[:text] << value
+          elsif @block
+            @block[:text] << value unless @block_note
           end
         end
 
@@ -319,6 +345,31 @@ module Nabu
                              annotations: annotations_for(unit, frame))
         end
 
+        # -- body: list items / table rows (the empty-document fallback) -------
+
+        def open_block(node, name)
+          return if @unit || @block || node.empty_element? # nested blocks stay transparent
+
+          @block = { tag: name, depth: node.depth, n: presence(node.attribute("n")),
+                     text: +"", column: @column }
+        end
+
+        def close_block(node, name)
+          return unless @block && @block[:tag] == name && @block[:depth] == node.depth
+
+          block = @block
+          @block = nil
+          @block_note = nil
+          return if block[:text].strip.empty?
+
+          frame = @div_frames.last
+          key = :"block_#{name}"
+          token = "#{BLOCK_ELEMENTS.fetch(name)}#{frame[key] = frame.fetch(key, 0) + 1}"
+          path = div_path
+          @blocks << Unit.new(citation: path.empty? ? token : "#{path}.#{token}", text: block[:text],
+                              annotations: annotations_for(block, frame))
+        end
+
         def annotations_for(unit, frame)
           {
             "addressing" => "structural-ordinal",
@@ -336,10 +387,11 @@ module Nabu
         # n='0637A'/>Fraternae…"), otherwise at the column it opened in.
         def separator(node, name)
           if name == "pb" && (column = presence(node.attribute("n")))
-            @unit[:column] = column if @unit && @unit[:text].strip.empty?
+            open = @unit || @block
+            open[:column] = column if open && open[:text].strip.empty?
             @column = column
           end
-          @unit[:text] << " " if @unit
+          (@unit || @block)&.[](:text)&.<<(" ")
         end
 
         # -- helpers ----------------------------------------------------------
