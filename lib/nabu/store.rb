@@ -228,16 +228,44 @@ module Nabu
     # success. This narrows the window, it cannot close it — a writer can
     # still arrive mid-run, which is why write commands ALSO rescue the
     # busy shape into the same clean message.
-    def assert_writable!(path)
+    #
+    # == Cooperative peers queue (the late-launch collision, 2026-11-13)
+    #
+    # A busy catalog is not always a reason to fail: a parallel sync mid-load
+    # holds its write transaction INSIDE the catalog write window
+    # (Nabu::CatalogWriteLock), and a write command launched behind it would
+    # queue fine on that window — but the pre-flight used to fire first and
+    # kill it at startup. So a busy probe now takes the window (queueing,
+    # with the window's own "catalog write window: <waiter> waiting on ..."
+    # announcement, behind any cooperative holder) and RE-PROBES while
+    # holding it. With the window held no cooperative peer can be writing,
+    # so a still-busy catalog means a non-cooperating holder (a rebuild, a
+    # lect apply chain, a stray process) and CatalogBusyError fires as
+    # before — immediately when the window was free. The window is released
+    # as soon as the re-probe answers: the pre-flight only waits its turn,
+    # the command's own writes take the window again where they need it.
+    # +waiter+ names the command in the waiting line; +announce+ is the
+    # window's announce seam (stderr by default).
+    def assert_writable!(path, waiter: "pre-flight", announce: nil)
       return nil unless File.file?(path.to_s)
+      return nil unless write_probe_busy?(path)
 
+      CatalogWriteLock.hold(db_dir: File.dirname(path.to_s), slug: waiter, announce: announce) do
+        raise Nabu::CatalogBusyError, path if write_probe_busy?(path)
+      end
+      nil
+    end
+
+    # One BEGIN IMMEDIATE on a throwaway short-timeout connection, released
+    # at once: true when another connection holds the write lock.
+    def write_probe_busy?(path)
       db = Sequel.connect(sqlite_url(path), timeout: PROBE_TIMEOUT_MS)
       begin
         db.run("BEGIN IMMEDIATE")
         db.run("ROLLBACK")
-        nil
+        false
       rescue Sequel::DatabaseError => e
-        raise Nabu::CatalogBusyError, path if busy_error?(e)
+        return true if busy_error?(e)
 
         raise
       ensure

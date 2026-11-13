@@ -112,8 +112,10 @@ module Nabu
       config = Nabu::Config.load
       # P62 rider: the quarter-second write-lock pre-flight — a concurrent
       # sync/rebuild/apply fails HERE with one sentence, not minutes into a
-      # load with a BusyException stack.
-      Nabu::Store.assert_writable!(config.catalog_path)
+      # load with a BusyException stack. A COOPERATIVE peer (a parallel
+      # sync inside its catalog write window) is queued behind instead,
+      # announcing the wait like any queued window writer.
+      Nabu::Store.assert_writable!(config.catalog_path, waiter: slugs.empty? ? "sync" : slugs.join(","))
       registry = Nabu::SourceRegistry.load(config.sources_path)
       preflight_sync(config, registry, slugs)
       # Ledger FIRST: open_or_create_ledger lifts a pre-P7-1 catalog's history
