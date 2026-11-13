@@ -28,3 +28,8 @@ the smallest one that answers it.
 
 Anything that shapes the answer: license class of the material involved,
 offline use, output format needs.
+
+## Where did you find Nabu? (optional)
+
+One line — a listing, a mailing list, a colleague, a search engine.
+It helps the project know which doors are worth keeping open.

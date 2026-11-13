@@ -220,7 +220,7 @@ class SourceRegistryTest < Minitest::Test
   def test_shipped_registry_defers_only_the_paced_crawl_index_citizens
     registry = Nabu::SourceRegistry.load(File.expand_path("../config/sources.yml", __dir__))
     deferred = registry.each_source.select(&:index_deferred?).map(&:slug).sort
-    assert_equal %w[ndl-kotenseki wellcome], deferred
+    assert_equal %w[ndl-kotenseki pleias-french-books wellcome], deferred
   end
 
   def test_non_hash_entry_raises_naming_the_slug

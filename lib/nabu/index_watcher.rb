@@ -22,9 +22,11 @@ module Nabu
   # == What it does
   #
   #   - HEARTBEAT: once ticks stall for STALL_SECONDS it prints one line
-  #     ("no progress tick for 12m — inside one statement …; fts5 merge
-  #     suspected") and repeats it every HEARTBEAT_EVERY while the stall
-  #     lasts — a grind becomes a visible, timed event instead of a hang.
+  #     ("no progress tick for 12m — inside one statement …; last stage
+  #     marker: index slice: …; fts5 merge suspected" — the merge is
+  #     suspected only when the marker is an index stage) and repeats it
+  #     every HEARTBEAT_EVERY while the stall lasts — a grind becomes a
+  #     visible, timed event instead of a hang.
   #   - DEADLINE: at ~2× the stage ledger's estimate (deadline_for — never
   #     under MIN_DEADLINE_SECONDS; the command's --deadline flag
   #     overrides, 0 disables the kill; no history = heartbeats only) it
@@ -57,6 +59,20 @@ module Nabu
     HEARTBEAT_EVERY = 5 * 60
     # How often the watcher samples; small against any stall it reports.
     SAMPLE_SECONDS = 15
+    # The stage labels (and index-command openings) whose silence reads as
+    # an fts5 merge in the stall line: the indexer's slice/delta/heal/wave
+    # stages and shadow builds, the lanes, the closure, the governor and
+    # consolidation loops. Any other marker (a fetch, a parse) is quoted
+    # without the suspicion.
+    INDEX_MARKER = Regexp.union(
+      /\A(?:start )?index (?:slice|delta|heal|wave|refresh|maintain|doctor)/,
+      /\A(?:trigram lane|cjk bigram lane|reflex root closure|sign coverage|fts|passages_fts|consolidat)/
+    )
+    # A writer QUEUED at the catalog write window (its last heartbeat event
+    # is the window's waiting announcement) is waiting, not working — that
+    # time is excluded from the kill clock. The deadline prices the
+    # writer's OWN work; the holder it waits on runs under its own watcher.
+    WAITING_EVENT = /\Anote catalog write window: .+ waiting on /
     # The deadline is DEADLINE_FACTOR × the ledger estimate, floored: a
     # seconds-scale estimate must not arm a seconds-scale kill (statement
     # variance on a cold page cache alone exceeds it). The factor prices
@@ -201,18 +217,25 @@ module Nabu
     end
 
     # The writer's side of the heartbeat: the file's mtime IS the tick age
-    # the watcher reads, its content the last event (for the stall line).
-    # Stage/note events always write; per-document ticks are throttled to
-    # one write per +min_interval+ so a hot load loop pays nothing.
+    # the watcher reads, its content the last event (for the stall line)
+    # and, beneath it, the last STAGE marker ("start <label>" until the
+    # first stage) — so a stall after a stage's batch ticks still names
+    # the stage it is in. Stage/note events always write; per-document
+    # ticks are throttled to one write per +min_interval+ so a hot load
+    # loop pays nothing.
     class Heartbeat
+      MARKER = /\A(?:stage|start) /
+
       def initialize(path, min_interval: 1.0)
         @path = path
         @min_interval = min_interval
         @last = nil
+        @marker = nil
       end
 
       def beat!(line)
-        File.write(@path, "#{line}\n")
+        @marker = line if line.match?(MARKER)
+        File.write(@path, @marker.nil? || @marker == line ? "#{line}\n" : "#{line}\n#{@marker}\n")
         @last = Process.clock_gettime(Process::CLOCK_MONOTONIC)
       end
 
@@ -298,17 +321,28 @@ module Nabu
     def watch(stop_reader)
       started = now
       last_line = nil
+      waited = 0.0
+      last_sample = started
       loop do
         return if stopped?(stop_reader)
         return writer_died! unless self.class.alive?(@writer_pid)
 
+        sample = now
+        waited += sample - last_sample if waiting_at_write_window?
+        last_sample = sample
         age = tick_age(started)
         if age >= @stall && (last_line.nil? || now - last_line >= @heartbeat_every)
           say(stall_line(age))
           last_line = now
         end
-        return deadline! if @deadline && now - started >= @deadline
+        return deadline!(waited) if @deadline && now - started - waited >= @deadline
       end
+    end
+
+    def waiting_at_write_window?
+      File.open(@heartbeat_path) { |f| f.gets.to_s.match?(WAITING_EVENT) }
+    rescue Errno::ENOENT
+      false
     end
 
     # Wait one sample on the stop pipe: "stop" = clean finish; EOF without
@@ -331,17 +365,37 @@ module Nabu
       now - started
     end
 
+    # The stall line quotes the last stage marker the watcher observed in
+    # the heartbeat, and suspects an fts5 merge ONLY when that marker is an
+    # index stage (INDEX_MARKER) — a quiet fetch or parse is named as
+    # such, never misread as the engine grinding.
     def stall_line(age)
-      last = File.read(@heartbeat_path).strip
+      lines = File.read(@heartbeat_path).lines.map(&:strip).reject(&:empty?)
+      marker = stage_marker(lines.reverse.find { |line| line.match?(Heartbeat::MARKER) })
       "index watcher: no progress tick for #{format_duration(age)} — inside one statement " \
         "(#{@label}; writer pid #{@writer_pid}, state #{ProcessProbe.state(@writer_pid) || '?'}, " \
-        "last: #{last}); fts5 merge suspected"
+        "last: #{lines.first}); last stage marker: #{marker}#{merge_suspicion(marker)}"
     rescue Errno::ENOENT
-      "index watcher: no progress tick for #{format_duration(age)} (#{@label}); fts5 merge suspected"
+      marker = stage_marker(nil)
+      "index watcher: no progress tick for #{format_duration(age)} (#{@label}); " \
+        "last stage marker: #{marker}#{merge_suspicion(marker)}"
     end
 
-    def deadline!
-      say("index watcher: deadline #{format_duration(@deadline)} passed — killing the writer (pid #{@writer_pid})")
+    # A heartbeat marker as quoted: a stage's own label ("stage " dropped),
+    # the run's opening kept whole; no marker at all = the run's label.
+    def stage_marker(line)
+      return "start #{@label}" if line.nil?
+
+      line.delete_prefix("stage ")
+    end
+
+    def merge_suspicion(marker) = marker.match?(INDEX_MARKER) ? "; fts5 merge suspected" : ""
+
+    def deadline!(waited = 0)
+      excluded =
+        waited >= 1 ? " — #{format_duration(waited)} queued at the catalog write window excluded from the clock" : ""
+      say("index watcher: deadline #{format_duration(@deadline)} passed — " \
+          "killing the writer (pid #{@writer_pid})#{excluded}")
       kill_writer!
       hygiene!
     end
@@ -384,8 +438,10 @@ module Nabu
 
       db = Store.connect_fulltext(@fulltext_path) # replays the engine-config intent journal
       Store::Indexer.checkpoint_wal!(db)
-      Store::Indexer.mark_slice_pending!(db, @slug) if @slug
-      pending = @slug ? ", slice #{@slug} left pending" : ""
+      # +slug+ is one slug, or a wave's array of them (index refresh A B…).
+      slugs = Array(@slug)
+      slugs.each { |slug| Store::Indexer.mark_slice_pending!(db, slug) }
+      pending = slugs.empty? ? "" : ", slice#{'s' if slugs.size > 1} #{slugs.join(', ')} left pending"
       say("index watcher: hygiene: engine config restored, WAL truncated#{pending}")
     ensure
       db&.disconnect

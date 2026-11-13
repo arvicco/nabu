@@ -1732,6 +1732,7 @@ damos:   # 02-sources row 274
   axes: [epigraphy, classical]
   wired: true   # crawl complete 2026-10-18: 5,890 docs / 14,421 passages, 42 empty-ledgered (census closes at 5,932); KN B 822 eyeballed
   sync_policy: manual
+  index_policy: inline   # inline because: the crawl is complete and the whole slice (~14k passages) sits far under the in-place row budget
   # DĀMOS — Database of Mycenaean at Oslo (damos.hf.uio.no): the complete
   # Linear B corpus — Knossos 4,224 · Pylos 1,004 · Thebes 363 · Mycenae
   # 87 · Tiryns 27 · … plus the inscribed stirrup jars. Site footer,
@@ -1799,7 +1800,7 @@ delpher-newspapers:   # P173, 02-sources row 408
   adapter: Nabu::Adapters::DelpherNewspapers
   adopted: "2026-11-13"
   axes: [germanic]
-  wired: false   # until the first real sync (the 16xx cone: expect 8,559 docs / ~68,000 article passages)
+  wired: true   # flipped 2026-11-13: 16xx cone live-probed — 8,559 docs / 68,690 passages, 0 quarantined (the packaging gaps ride missing_articles), search + credit line verified
   sync_policy: manual   # one-time period zips (Last-Modified 2017; the 1877–79 zip 2020)
   # Delpher open krantenarchief (KB, Nationale Bibliotheek van
   # Nederland): every Delpher newspaper issue 1618–1879 as text (OCR per
@@ -3906,6 +3907,7 @@ korpus16:   # P160-6, 02-sources row 387
   wired: true    # first sync verified 2026-11-06: 45 docs / 12,902 page passages,
                  # 0 errored, 3 front-matter pages skipped by rule (the ~4 h paced crawl)
   sync_policy: manual
+  index_policy: inline   # inline because: a one-run corpus (45 books, ~13k page passages) far under the in-place row budget
   # Korpus 16 — the 16th-century Slovene Protestant writers (ZRC SAZU,
   # ed. Kozma Ahačič; fran.si/korpus16, v1.0 2019): 45 books / 12,945
   # pages, 1550–1595 — Trubar, Dalmatin, Krelj, Juričič, Tulščak, Trošt
@@ -4468,6 +4470,7 @@ mdz-protestant:   # 02-sources row 243
   axes: [slavic]
   wired: true    # Both crawl passes verified 2026-10-11: 6 docs complete / 1,54x page passages.
   sync_policy: manual
+  index_policy: inline   # inline because: six prints, ~1.5k page passages complete — a slice never nears the in-place row budget
   # MDZ (Bayerische Staatsbibliothek) page OCR of six 16th-century
   # Slovene/Croatian Protestant prints — Trubar 1562, Dalmatin 1575,
   # the 1584 Wittenberg catechism/hymnal + prayer book, Bohorič 1584,
@@ -5718,8 +5721,9 @@ pleias-french-books:   # P173-A, 02-sources row 408
   adopted: "2026-11-13"
   axes: [romance]   # French print to 1699 (census 2026-11-13: 166 books closing
                     # before 1600, 6,306 opening 1600 or later, 5 straddling)
-  wired: false   # first real sync (the shard rail's first slice) runs post-merge
+  wired: true   # flipped 2026-11-13: slice 1 live-probed — 1,141 docs / 212,656 passages, loaded AND searchable (the deferred index paid by the wave refresh), credit line verified; 5 cone slices remain
   sync_policy: manual
+  index_policy: deferred   # paced-crawl citizen: books load per shard slice, the index runs once per wave (index refresh)
   # PleIAs/French-PD-Books (Hugging Face) — Gallica/BnF public-domain
   # monographs as OCR text, 145 parquet shards at the pinned revision
   # 21abfb3f (60.5 GB; 289,577 books, randomly sharded). THIS era holds the

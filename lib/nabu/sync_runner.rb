@@ -189,18 +189,44 @@ module Nabu
     # count. An unknown slug is a ValidationError; an index-inert grain
     # (no passages, no dictionary entries) has no slice to refresh.
     def index_entry(slug, progress: nil)
-      entry = @registry[slug]
-      raise ValidationError, "unknown source #{slug.inspect}" if entry.nil?
-
-      adapter = entry.build_adapter
-      if index_inert?(adapter)
-        raise ValidationError, "source #{slug.inspect} is index-inert (#{adapter.class.content_kind}) — " \
-                               "it holds no fulltext slice"
+      entry, adapter = indexable_entry(slug)
+      # The standalone refresh writes the same window a sync's index slice
+      # does, so it queues behind any concurrent writer the same way.
+      catalog_write_window(slug, progress) do
+        indexed = reindex!(entry, adapter, progress)
+        refresh_lemma_rollups(entry, adapter, nil, indexed)
+        indexed
       end
+    end
 
-      indexed = reindex!(entry, adapter, progress)
-      refresh_lemma_rollups(entry, adapter, nil, indexed)
-      indexed
+    # The WAVE refresh (`nabu index refresh SLUG...` with several slugs):
+    # every slug validated before any write, then ONE writer open running
+    # Store::Indexer.refresh_sources! — an over-budget passages_fts write
+    # is paid once for the whole wave, not once per source — and each
+    # member's lemma rollups after. Returns { slug => live passage count }.
+    def index_entries(slugs, progress: nil)
+      members = slugs.uniq.map { |slug| indexable_entry(slug) }
+      require "fileutils"
+      FileUtils.mkdir_p(File.dirname(@config.fulltext_path))
+      # One write window for the whole wave: against any concurrent sync
+      # the wave is a single writer, exactly like a lone refresh.
+      catalog_write_window(members.map { _1.first.slug }.join("+"), progress) do
+        counts = nil
+        fulltext = Store.connect_fulltext(@config.fulltext_path, writer_profile: :index)
+        begin
+          member_opts = members.to_h do |entry, adapter|
+            [entry.slug, { reflexes_changed: adapter.class.content_kind == :dictionary }]
+          end
+          counts = Store::Indexer.refresh_sources!(catalog: @db, fulltext: fulltext,
+                                                   slugs: members.map { _1.first.slug },
+                                                   member_opts: member_opts, progress: progress,
+                                                   **refresh_options)
+        ensure
+          fulltext.disconnect
+        end
+        members.each { |entry, adapter| refresh_lemma_rollups(entry, adapter, nil, counts[entry.slug]) }
+        counts
+      end
     end
 
     private
@@ -306,10 +332,15 @@ module Nabu
       lane_report = nil
       module_before = module_ref_before(entry, source, workdir)
       module_held_before = module_held_before?(entry, workdir)
+      window = nil
 
       begin
         run = Store::RunRecorder.record_load(source_slug: entry.slug) do
           fetch_report = fetch(adapter, workdir, slug: entry.slug, force: force, progress: progress) unless parse_only
+          # The catalog write window opens AFTER the fetch (fetches stay fully
+          # parallel across sources) and stays open through the load and every
+          # post-load index/lane stage below — released in the ensure.
+          window = open_catalog_write_window(entry.slug, progress)
           guard_withdrawal!(adapter, source, workdir, force: force)
           load_report = load(source, adapter, workdir, progress)
           # P104-4: the secondary dictionary lane loads under the SAME run —
@@ -334,6 +365,33 @@ module Nabu
                           progress: progress, module_before: module_before,
                           module_held_before: module_held_before)
       end
+    ensure
+      window&.release
+    end
+
+    # The catalog write window (Nabu::CatalogWriteLock): concurrent syncs of
+    # different sources queue their catalog + fulltext writes here instead of
+    # one dying on SQLite's busy_timeout behind another's long transaction.
+    # A queued writer's waiting line rides the progress note seam (stderr
+    # when the reporter carries none). No db_dir (a config-less runner) means
+    # no window — nothing on disk to share.
+    def open_catalog_write_window(slug, progress)
+      return nil if @config&.db_dir.nil?
+
+      CatalogWriteLock.acquire(db_dir: @config.db_dir, slug: slug, announce: window_announcer(progress))
+    end
+
+    def catalog_write_window(slug, progress)
+      window = open_catalog_write_window(slug, progress)
+      yield
+    ensure
+      window&.release
+    end
+
+    def window_announcer(progress)
+      return ->(line) { warn(line) } if progress.nil? || progress.on_note.nil?
+
+      ->(line) { progress.note(line) }
     end
 
     # Everything a sync does after its load commits, up to the Outcome — run
@@ -806,18 +864,38 @@ module Nabu
       fulltext = Store.connect_fulltext(@config.fulltext_path, writer_profile: :index)
       Store::Indexer.refresh_source!(catalog: @db, fulltext: fulltext, slug: entry.slug,
                                      delta: delta,
-                                     alignments: AlignmentRegistry.load(@config.alignments_path),
-                                     fuzzy_slugs: @registry.fuzzy_slugs,
-                                     cjk_slugs: @registry.cjk_slugs,
-                                     lemma_tiers: @registry.lemma_tiers,
                                      reflexes_changed: adapter.class.content_kind == :dictionary,
-                                     sign_list: Nabu::SignList.load_default(config: @config),
                                      progress: progress,
-                                     ledger: @ledger,
-                                     lemma_shelf: lemma_shelf,
-                                     lemma_filter_slugs: @registry.lemma_filter_slugs)
+                                     **refresh_options)
     ensure
       fulltext&.disconnect
+    end
+
+    # The registry/config-derived kwargs every slice refresh takes — one
+    # list behind both reindex! and the wave (index_entries).
+    def refresh_options
+      { alignments: AlignmentRegistry.load(@config.alignments_path),
+        fuzzy_slugs: @registry.fuzzy_slugs,
+        cjk_slugs: @registry.cjk_slugs,
+        lemma_tiers: @registry.lemma_tiers,
+        sign_list: Nabu::SignList.load_default(config: @config),
+        ledger: @ledger,
+        lemma_shelf: lemma_shelf,
+        lemma_filter_slugs: @registry.lemma_filter_slugs }
+    end
+
+    # A registered, index-bearing source's [entry, adapter] — the
+    # explicit refresh's validation (unknown slug / index-inert grain).
+    def indexable_entry(slug)
+      entry = @registry[slug]
+      raise ValidationError, "unknown source #{slug.inspect}" if entry.nil?
+
+      adapter = entry.build_adapter
+      if index_inert?(adapter)
+        raise ValidationError, "source #{slug.inspect} is index-inert (#{adapter.class.content_kind}) — " \
+                               "it holds no fulltext slice"
+      end
+      [entry, adapter]
     end
 
     # The ONE seam every adapter's fetch flows through during a sync (the only

@@ -6,7 +6,7 @@ compatibility: "Requires the nabu MCP server (`bin/nabu mcp`, read-only, stdio) 
 metadata:
   desk: germanic
   origin: generated
-  sources: "aspr blbooks bosworth-toller cleasby-vigfusson cme corpus-gysseling corpus-oudfries corpus-oudnederlands dbnl dta ecco-tcp eebo-tcp emmo evans-tcp fornsvenska fsv-lexica grand-tour helipad iswoc leme menota menotec nb-no perseus-anglit ppchy proiel ref rem ren rundata runesdb stationers-register statutes-realm ud wellcome wiktionary-dum wiktionary-enm wiktionary-gmh wiktionary-gmq-osw wiktionary-got wiktionary-non wiktionary-ofs wiktionary-sco zoega"
+  sources: "aspr blbooks bosworth-toller cleasby-vigfusson cme corpus-gysseling corpus-oudfries corpus-oudnederlands dbnl delpher-newspapers dta ecco-tcp eebo-tcp emmo evans-tcp fornsvenska fsv-lexica grand-tour helipad iswoc leme menota menotec nb-no perseus-anglit ppchy proiel ref rem ren rundata runesdb stationers-register statutes-realm ud wellcome wiktionary-dum wiktionary-enm wiktionary-gmh wiktionary-gmq-osw wiktionary-got wiktionary-non wiktionary-ofs wiktionary-sco zoega"
 ---
 
 # The Germanicist — the `germanic` desk
@@ -32,6 +32,7 @@ verbatim upstream terms are in `docs/02-sources.md` of the Nabu repository.
 | `corpus-oudfries` | Corpus Oudfries — Old Frisian text witnesses c. 1200–1550, lemma+POS (INT/IvdNT) | research_private |
 | `corpus-oudnederlands` | Corpus Oudnederlands — Old Dutch word material 475–1200 (INT/IvdNT) | research_private |
 | `dbnl` | DBNL — Digitale Bibliotheek voor de Nederlandse Letteren, public-domain collection (KB) | attribution |
+| `delpher-newspapers` | Delpher open newspaper archive 1618–1879 (KB, Nationale Bibliotheek van Nederland) | attribution |
 | `dta` | Deutsches Textarchiv (BBAW) | attribution |
 | `ecco-tcp` | ECCO-TCP — Eighteenth Century Collections Online, Text Creation Partnership | open |
 | `eebo-tcp` | EEBO-TCP — Early English Books Online, Text Creation Partnership (Phases I–II) | open |

@@ -345,6 +345,66 @@ class SyncRunnerTest < Minitest::Test
     end
   end
 
+  # --- the catalog write window (parallel-sync collision, 2026-11-13) -----
+
+  # The fetch stays OUTSIDE the window (fully parallel with another source's
+  # writer); the load queues behind the held window — announced through the
+  # progress note seam — and, under a bounded wait, gives up before loading.
+  def test_sync_fetches_freely_but_queues_its_load_behind_the_catalog_write_window
+    BreakerAdapter.reset!(urns: %w[urn:cts:test:w1])
+    runner = make_runner(registry(entry("breaker", BreakerAdapter, wired: true)))
+    notes = []
+    reporter = Nabu::ProgressReporter.new(on_note: ->(line) { notes << line })
+
+    holder = hold_catalog_write_window("other-source")
+    with_catalog_lock_timeout("0.1") do
+      assert_raises(Nabu::CatalogWriteLock::Timeout) { runner.sync("breaker", progress: reporter) }
+    end
+    assert_equal 1, BreakerAdapter.fetch_count, "the fetch ran outside the window"
+    assert_equal 0, live_docs, "nothing loads while another writer holds the window"
+    assert(notes.any? { |l| l.include?("catalog write window: breaker waiting on other-source's writer") },
+           "the queued writer names the holder: #{notes.inspect}")
+  ensure
+    release_window(holder)
+  end
+
+  def test_sync_holds_the_window_through_the_index_slice_and_releases_it
+    BreakerAdapter.reset!(urns: %w[urn:cts:test:w1])
+    runner = make_runner(registry(entry("breaker", BreakerAdapter, wired: true)))
+    held_during_index = nil
+    probe = lambda do
+      held_during_index = !window_free?
+    end
+    original = Nabu::Store::Indexer.method(:refresh_source!)
+    Nabu::Store::Indexer.define_singleton_method(:refresh_source!) do |**kwargs|
+      probe.call
+      original.call(**kwargs)
+    end
+    begin
+      refute runner.sync("breaker").aborted?
+    ensure
+      Nabu::Store::Indexer.define_singleton_method(:refresh_source!, original)
+    end
+    assert held_during_index, "the index slice runs inside the write window"
+    assert window_free?, "the window is released once the sync returns"
+  end
+
+  def test_index_entry_takes_the_catalog_write_window
+    BreakerAdapter.reset!(urns: %w[urn:cts:test:w1])
+    runner = make_runner(registry(deferred_entry("breaker", BreakerAdapter)))
+    runner.sync("breaker")
+
+    holder = hold_catalog_write_window("other-source")
+    with_catalog_lock_timeout("0.1") do
+      assert_raises(Nabu::CatalogWriteLock::Timeout) { runner.index_entry("breaker") }
+    end
+    release_window(holder)
+    holder = nil
+    assert_equal 1, runner.index_entry("breaker")
+  ensure
+    release_window(holder)
+  end
+
   # --- the honkoku <- NDL catalog join -------------------------------------
 
   # A sync of EITHER side re-merges the NDL record onto honkoku rows and
@@ -1771,6 +1831,45 @@ class SyncRunnerTest < Minitest::Test
     file = File.open(File.join(locks, "#{slug}.lock"), File::RDWR | File::CREAT, 0o644) # rubocop:disable Style/FileOpen
     file.flock(File::LOCK_EX | File::LOCK_NB) or raise "could not pre-hold #{slug} lock"
     file
+  end
+
+  # Another writer holding the catalog write window: a real CatalogWriteLock
+  # held on its own thread (so its open file description contends with the
+  # runner's), stamping +slug+ for the waiting line. Returns [thread, release].
+  def hold_catalog_write_window(slug)
+    held = Queue.new
+    release = Queue.new
+    thread = Thread.new do
+      Nabu::CatalogWriteLock.hold(db_dir: config.db_dir, slug: slug) do
+        held << true
+        release.pop
+      end
+    end
+    held.pop
+    [thread, release]
+  end
+
+  def release_window(holder)
+    return unless holder
+
+    thread, release = holder
+    release << true
+    thread.join
+  end
+
+  def window_free?
+    Thread.new do
+      Nabu::CatalogWriteLock.hold(db_dir: config.db_dir, slug: "probe", timeout: 0, announce: ->(_) {}) { true }
+    rescue Nabu::CatalogWriteLock::Timeout
+      false
+    end.value
+  end
+
+  def with_catalog_lock_timeout(seconds)
+    ENV[Nabu::CatalogWriteLock::TIMEOUT_ENV] = seconds
+    yield
+  ensure
+    ENV.delete(Nabu::CatalogWriteLock::TIMEOUT_ENV)
   end
 
   def live_docs = Nabu::Store::Document.where(withdrawn: false).count
