@@ -167,6 +167,8 @@ module Nabu
       # phase (~90 min of paced requests), and a chained run stops after
       # three consecutive zero-yield slices (the deferred ProQuest tail is
       # a 404 desert by design; the phase that reaches it re-samples first).
+      # Basis: cap copied from the NDL book lane's default; not a measured
+      # or ratified cadence.
       ZIP_CRAWL = Nabu::PacedCrawl::Spec.new(
         name: "zips", ledger_file: LEDGER_FILE,
         classes: { denied: "denied", empty: "empty", timeout: STUCK },

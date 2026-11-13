@@ -716,6 +716,18 @@ sources:
     entries_display: '300,763'
     holdings: 15,900 documents / 769,373 passages · 300,763 entries
     canonical_display: 1.5 GB
+  delpher-newspapers:
+    name: Delpher open newspaper archive 1618–1879 (KB, Nationale Bibliotheek van
+      Nederland)
+    license_class: attribution
+    documents: 8559
+    documents_display: '8,559'
+    passages: 68690
+    passages_display: '68,690'
+    entries: 0
+    entries_display: '0'
+    holdings: 8,559 documents / 68,690 passages
+    canonical_display: 5.5 GB
   derge-kangyur:
     name: Digital Derge Kangyur (Esukhia/Barom proofreading of the UVA-SOAS 2013 eKangyur)
     license_class: open
@@ -2090,13 +2102,13 @@ sources:
   ndl-kotenseki:
     name: NDL 次世代デジタルライブラリー — 古典籍 OCR full text (bulk API)
     license_class: open
-    documents: 67003
-    documents_display: '67,003'
-    passages: 3774334
-    passages_display: '3,774,334'
+    documents: 68105
+    documents_display: '68,105'
+    passages: 3805531
+    passages_display: '3,805,531'
     entries: 0
     entries_display: '0'
-    holdings: 67,003 documents / 3,774,334 passages
+    holdings: 68,105 documents / 3,805,531 passages
     canonical_display: 18 GB
   ninjal-textdb:
     name: NINJAL Text Data Sets for Research on the History of Japanese — the Kirishitan
@@ -2413,6 +2425,17 @@ sources:
     entries_display: '5,711'
     holdings: 1,228 documents / 15,823 passages · 5,711 entries
     canonical_display: 34 MB
+  pleias-french-books:
+    name: French Public Domain Books — Gallica OCR via PleIAs (pre-1700 cone)
+    license_class: open
+    documents: 1141
+    documents_display: '1,141'
+    passages: 212656
+    passages_display: '212,656'
+    entries: 0
+    entries_display: '0'
+    holdings: 1,141 documents / 212,656 passages
+    canonical_display: 158 MB
   ponomar:
     name: Ponomar — Church Slavonic service texts (the Hours kit)
     license_class: attribution
@@ -3291,14 +3314,14 @@ sources:
   wellcome:
     name: Wellcome Collection — digitised printed books, OCR full text (pre-1800 cone)
     license_class: open
-    documents: 434
-    documents_display: '434'
-    passages: 237406
-    passages_display: '237,406'
+    documents: 527
+    documents_display: '527'
+    passages: 264213
+    passages_display: '264,213'
     entries: 0
     entries_display: '0'
-    holdings: 434 documents / 237,406 passages
-    canonical_display: 763 MB
+    holdings: 527 documents / 264,213 passages
+    canonical_display: 792 MB
   wenhai:
     name: 'The Digital Wenhai v1.1: Phonology (Beaudouin 2026) — the Tangut rhyme
       dictionary 文海'
@@ -3901,11 +3924,11 @@ shelves:
     - mazarinades
     - socinian-letters
     - wellcome
-    documents: 25574
-    documents_display: '25,574'
-    passages: 5845218
-    passages_display: '5,845,218'
-    size_display: 25,574 / 5,845,218
+    documents: 25667
+    documents_display: '25,667'
+    passages: 5872025
+    passages_display: '5,872,025'
+    size_display: 25,667 / 5,872,025
   papyri:
     sources:
     - papyri-ddbdp
@@ -4296,11 +4319,11 @@ shelves:
     - kouigenji
     - ninjal-textdb
     - oncoj
-    documents: 96105
-    documents_display: '96,105'
-    passages: 7057954
-    passages_display: '7,057,954'
-    size_display: 96,105 / 7,057,954
+    documents: 97207
+    documents_display: '97,207'
+    passages: 7089151
+    passages_display: '7,089,151'
+    size_display: 97,207 / 7,089,151
   southeast-asia:
     sources:
     - dharma-khmer
@@ -4363,6 +4386,6 @@ shelves:
     passages_display: '7,014'
     size_display: 1,282 / 7,014
 disk:
-  canonical_display: 155 GB
-  derived_display: 234 GB
+  canonical_display: 160 GB
+  derived_display: 236 GB
   starter_display: 693 MB

@@ -143,9 +143,11 @@ module Nabu
       TIMEOUT_BACKOFF = 5.0
       STUCK = "timeout-stuck"
       # The book lane's declared schedule (read by the phase slate): one
-      # cadence per phase, three slices a phase (~30 min of paced
+      # cadence per phase, at most three slices a phase (~30 min of paced
       # requests), and a chained run stops after three consecutive
       # zero-yield slices (a refusal desert measured ~1.5 slices deep).
+      # Basis: 3 is the upstream-politeness CAP, never ratified as a
+      # cadence; the practiced cadence is 1 slice per phase.
       BOOK_CRAWL = Nabu::PacedCrawl::Spec.new(
         name: "books", ledger_file: LEDGER_FILE,
         classes: { denied: "denied", empty: "empty", timeout: STUCK },

@@ -21,7 +21,7 @@ A source wears every desk it serves — these five answer this desk. Holdings ar
 | `local-lemmas` | silver lemmas | open | wired · manual | 36,155,944 lemma rows |
 | `local-library` | texts | research_private | wired · manual | 159 docs / 44,871 passages |
 | `local-notes` | owner notes | open | wired · manual | 2 notes |
-| `local-source` | source records | open | wired · manual | 378 dossiers |
+| `local-source` | source records | open | wired · manual | 386 dossiers |
 
 **Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 13 November 2026)</span>: `eng` 27 · `phn` 16 · `egy` 11 · `arc` 8 · `osc` 8 · `orv` 7 · `sga` 7 · `cel` 5 · `akk` 4 · `lav` 4 … and 40 more (`nabu axis local` lists all).
 
