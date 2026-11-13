@@ -14,6 +14,10 @@ class PleiasTitleGenreTest < Minitest::Test
     assert_equal "Déclaration", G.head("Declaration du roy sur le fait des monnoyes . Verifiée par arrest")
     assert_equal "Arrêt", G.head("Arrest de la cour de Parlement, portant defenses à toutes personnes")
     assert_equal "Coutume", G.head("Les coustumes générales des pays et duché de Bretagne")
+    # All-caps titles exercise the uppercase accented letters listed inside
+    # the character classes — the case fold Ruby <= 3.3 never applies there.
+    assert_equal "Édit", G.head("ÉDICT DV ROY, PORTANT CREATION DES OFFICES")
+    assert_equal "Arrêt", G.head("ARRÊT DE LA COUR DE PARLEMENT")
   end
 
   def test_the_earliest_keyword_wins_and_compounds_beat_their_parts
