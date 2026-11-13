@@ -9,7 +9,7 @@ module Nabu
 
     desc "enable AXIS|SOURCE...|all", "Enable sources or axes on this box — `all` is every ungated source in one move"
     long_desc <<~HELP, wrap: false
-      Add axes and/or sources to config/profile.yml — this box's ENABLEMENT
+      Add axes and/or sources to local/config/profile.yml — this box's ENABLEMENT
       CONFIG (P44-r3b). The entries govern BOTH what `nabu sync` / `sync --all`
       acquires AND the default row set of `nabu list` / `status` / `health` and
       the MCP nabu_status sources array. `nabu search` / `show` / `export` stay
@@ -93,7 +93,7 @@ module Nabu
 
     desc "disable AXIS|SOURCE...", "Disable sources or axes on this box (synced data stays)"
     long_desc <<~HELP, wrap: false
-      Remove axes and/or sources from config/profile.yml (the enablement
+      Remove axes and/or sources from local/config/profile.yml (the enablement
       config). The synced data STAYS on disk — disabling only drops the entries
       from the enabled set, so `sync`/`list`/`status` stop touching/showing them
       by default (--all still reveals them). Withdrawal of data is a different,
@@ -206,7 +206,7 @@ module Nabu
         return nil if present.empty?
 
         profile = Nabu::Profile.new(present).save(config.profile_path)
-        warn "enablement: wrote config/profile.yml enabling your #{pluralize(present.size, 'synced source')} " \
+        warn "enablement: wrote local/config/profile.yml enabling your #{pluralize(present.size, 'synced source')} " \
              "(the profile is now this box's enabled set — nabu enable/disable to adjust)."
         profile
       end
