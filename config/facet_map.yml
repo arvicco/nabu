@@ -836,3 +836,12 @@ sources:
       #                         Italien, Duytslandt, &c. 744 · La gazette d'Amsterdam 676 · …
       publisher: publisher    # the printer-publisher verbatim (Caspar van Hilten, Abraham Casteleyn,
       #                         La veuve de Saint Glain …)
+    passage_fields:
+      subject: genre          # the article's DIDL dc:subject verbatim — upstream's own per-ARTICLE
+      #                         type (artikel · advertentie · familiebericht · illustratie met
+      #                         onderschrift; the fixture: artikel 49, advertentie 4, illustratie
+      #                         met onderschrift 2 in its five DIDLs). The claim is per article, never
+      #                         per issue, so it rides the passage grain (the itkc genre_classes
+      #                         stance); the issue's own kind is the source_kind periodical/newspaper
+      #                         (kind_map.yml) — an advertisement inside a newspaper is no kind of
+      #                         the issue, and the house class list has no advertisement head

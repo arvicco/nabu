@@ -104,7 +104,11 @@ module Nabu
     #   "distribution".
     # - kind — the whole source is the periodical press: kind_map
     #   source_kind periodical/newspaper. Article subjects (artikel,
-    #   advertentie, familiebericht, …) ride each passage's annotations.
+    #   advertentie, familiebericht, …) ride each passage's annotations
+    #   verbatim and project as the passage genre facet (facet_map.yml
+    #   passage_fields) — a per-article claim, never the issue's kind; the
+    #   per-issue tally in metadata "subjects" is declared a summary in
+    #   Health::Invariants::MINING_EXEMPT.
     # - lect — dc:language per issue (ISO 639-1, any case) → the house code;
     #   an issue listing two languages (the bilingual Napoleonic-era
     #   Groningen sheet: fr + nl) claims the FIRST as upstream orders them,
