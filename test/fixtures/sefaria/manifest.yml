@@ -191,3 +191,7 @@ files:
     url: https://storage.googleapis.com/sefaria-export/json/Second%20Temple/Megillat%20Ta%27anit/English/Rabbi%20Mike%20Feuer%2C%20Jerusalem%20Anthology.json
     whole: true
     trim: none (complete file, copied whole; CC-BY -> attribution)
+  - path: empty-version/Kabbalah/Zohar/Idra Zuta/English/Sefaria Community Translation.json
+    url: https://storage.googleapis.com/sefaria-export/json/Kabbalah/Zohar/Idra%20Zuta/English/Sefaria%20Community%20Translation.json
+    whole: true
+    trim: none (complete file, copied whole; CC0; "text" is an empty array)

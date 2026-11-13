@@ -98,3 +98,9 @@ files:
     copied: 2026-10-18
     whole: true
     trim: none (北越雪譜 二編凡例, 山東京山 — PD; 4.0 KB)
+  - path: legacy/47984_txt_30917.zip
+    refetchable: false
+    provenance: local-trim
+    reason: copied whole from the local canonical; a 2008-era zip with a proprietary trailer past its
+      EOCD record (the quarantine review 2026-11-13 trailing-bytes shape)
+    canonical: canonical/aozora/cards/000355/files/47984_txt_30917.zip
