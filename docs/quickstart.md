@@ -143,7 +143,7 @@ search`, `help show`, `help align`, `help export`.
 ## 5. Grow the library
 
 **Growth is a deliberate two-step: enable, then sync.** Your library
-carries an enablement profile (`config/profile.yml`, local to your box,
+carries an enablement profile (`local/config/profile.yml`, local to your box,
 never committed) — the explicit list of shelves it has chosen to carry.
 `nabu sync` refuses a source that is not on it, so nothing large ever
 downloads by accident, and the profile also sets the default rows

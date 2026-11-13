@@ -287,10 +287,10 @@ steps:
     run: bin/nabu enable celtic
     claim:
       page: site/quickstart.md
-      quote: "carries an *enablement profile* (`config/profile.yml`, local to your box, never committed)"
+      quote: "carries an *enablement profile* (`local/config/profile.yml`, local to your box, never committed)"
     expect:
       exit: 0
-      path_exists: config/profile.yml
+      path_exists: local/config/profile.yml
 
   - id: axis-celtic
     run: bin/nabu axis celtic
@@ -353,7 +353,7 @@ steps:
     expect:
       exit: 0
       file_includes:
-        path: config/profile.yml
+        path: local/config/profile.yml
         text: perseus-greek
 
   - id: list-axis
