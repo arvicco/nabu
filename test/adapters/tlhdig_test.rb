@@ -150,16 +150,20 @@ class TlhdigTest < Minitest::Test
 
   # -- parse: quarantine honesty (the Beta reality) ---------------------------
 
-  def test_parse_quarantines_the_malformed_and_line_less_upstream_shapes
-    { "KUB 10.7.xml" => "urn:nabu:tlhdig:612:tlh:kub.10.7",
-      "304_e.xml" => "urn:nabu:tlhdig:222:tlh:304_e" }.each do |file, urn|
-      ref = Nabu::DocumentRef.new(
-        source_id: "tlhdig", id: urn,
-        path: File.join(workdir, "quarantine", file),
-        metadata: { "cth" => "999", "project" => "TLH" }
-      )
-      assert_raises(Nabu::ParseError, "#{file} must quarantine") { adapter.parse(ref) }
+  def test_parse_quarantines_the_malformed_upstream_shape
+    assert_raises(Nabu::ParseError, "a malformed file must quarantine") do
+      adapter.parse(quarantine_ref("KUB 10.7.xml", "urn:nabu:tlhdig:612:tlh:kub.10.7"))
     end
+  end
+
+  # The line-less stub (witness block + a <gap> description, no line, no
+  # word) is upstream's placeholder grain: skipped BY RULE, never quarantined
+  # (quarantine review 2026-11-13).
+  def test_parse_skips_the_line_less_stub_by_rule
+    error = assert_raises(Nabu::DocumentSkipped) do
+      adapter.parse(quarantine_ref("304_e.xml", "urn:nabu:tlhdig:222:tlh:304_e"))
+    end
+    refute_kind_of Nabu::ParseError, error
   end
 
   def test_parses_the_merged_manuscript_with_header_docid_and_facets
@@ -307,6 +311,14 @@ class TlhdigTest < Minitest::Test
 
   def ref_for(urn)
     adapter.discover(workdir).to_a.find { |ref| ref.id == urn } || flunk("no ref #{urn}")
+  end
+
+  def quarantine_ref(file, urn)
+    Nabu::DocumentRef.new(
+      source_id: "tlhdig", id: urn,
+      path: File.join(workdir, "quarantine", file),
+      metadata: { "cth" => "999", "project" => "TLH" }
+    )
   end
 
   def fixture_bytes(relative)

@@ -201,11 +201,18 @@ class AoxmlParserTest < Minitest::Test
     assert_match(/not well-formed/, error.message)
   end
 
-  def test_a_line_less_stub_raises_parse_error
-    error = assert_raises(Nabu::ParseError) do
+  # A line-less stub — the witness block plus a <gap> description ("the
+  # preserved part carries the seal impression of Alluwamna"), no <lb>, no
+  # <w> anywhere — is upstream's placeholder record for an untransliterated
+  # fragment, not damage: skipped BY RULE (quarantine review 2026-11-13: 220
+  # of the 226 "no renderable lines" quarantines were this shape).
+  def test_a_line_less_stub_is_skipped_by_rule
+    error = assert_raises(Nabu::DocumentSkipped) do
       parse_fixture("quarantine/304_e.xml", urn: "urn:nabu:tlhdig:222:tlh:304_e",
                                             cth: "222", project: "TLH")
     end
-    assert_match(/no renderable transliteration lines/, error.message)
+    refute_kind_of Nabu::ParseError, error
+    assert_equal Nabu::Adapters::AoxmlParser::STUB_REASON, error.reason
+    assert_match(/line-less stub/, error.message)
   end
 end
