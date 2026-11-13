@@ -291,6 +291,33 @@ class IndexWatcherTest < Minitest::Test
            "the WAL was truncated"
   end
 
+  # A writer QUEUED at the catalog write window is waiting, not working:
+  # while the heartbeat's last event is the window's waiting line the kill
+  # clock pauses — the deadline prices the writer's own work, and the
+  # holder it waits on runs under its own watcher. Once real work ticks
+  # again the clock resumes and the deadline fires on work time alone.
+  def test_the_deadline_clock_pauses_while_the_writer_waits_at_the_write_window
+    @writer = spawn_stuck_writer
+    seed_killed_bulk_state(@writer)
+    w = watcher(writer_pid: @writer, deadline: 0.6, slug: "pap") # (re)writes the heartbeat file
+    File.write(@heartbeat,
+               "note catalog write window: pap waiting on lit's writer (pid 1, held 2s)\nstage index slice: pap\n")
+    @watcher_pid = w.start!
+    sleep 1.4 # over twice the nominal deadline — the clock must be paused
+    assert_nil Process.wait(@watcher_pid, Process::WNOHANG),
+               "the watcher must still be running: its deadline clock pauses while the writer is queued"
+
+    File.write(@heartbeat, "stage index slice: pap\n") # work resumes — so does the clock
+    Process.wait(@watcher_pid)
+    _, status = Process.wait2(@writer)
+    @writer = nil
+    @watcher_pid = nil
+
+    assert_equal Signal.list.fetch("KILL"), status.termsig, "the resumed clock still kills the stuck writer"
+    assert_match(/queued at the catalog write window excluded from the clock/, File.read(@log),
+                 "the kill line accounts for the excluded queue time")
+  end
+
   # A wave refresh (index refresh A B) supervises several slugs: a killed
   # wave leaves every member's slice pending for the next refresh to heal.
   def test_the_hygiene_after_a_killed_wave_leaves_every_member_pending
