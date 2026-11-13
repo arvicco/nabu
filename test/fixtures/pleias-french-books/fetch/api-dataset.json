@@ -1,0 +1,52 @@
+{
+ "_id": "65aea7089956dd771ab67c7e",
+ "id": "PleIAs/French-PD-Books",
+ "author": "PleIAs",
+ "sha": "21abfb3f646a0f1846175c63709913a51abc9bcb",
+ "lastModified": "2024-03-19T15:18:40.000Z",
+ "private": false,
+ "gated": false,
+ "disabled": false,
+ "tags": [
+  "task_categories:text-generation",
+  "language:fr",
+  "size_categories:100K<n<1M",
+  "format:parquet",
+  "modality:tabular",
+  "modality:text",
+  "library:datasets",
+  "library:dask",
+  "library:mlcroissant",
+  "library:polars",
+  "region:us",
+  "ocr"
+ ],
+ "cardData": {
+  "task_categories": [
+   "text-generation"
+  ],
+  "language": [
+   "fr"
+  ],
+  "tags": [
+   "ocr"
+  ],
+  "pretty_name": "French-Public Domain-Book"
+ },
+ "createdAt": "2024-01-22T17:34:00.000Z",
+ "usedStorage": 76376725111,
+ "siblings": [
+  {
+   "rfilename": ".gitattributes"
+  },
+  {
+   "rfilename": "README.md"
+  },
+  {
+   "rfilename": "gallica_mono_1.parquet"
+  },
+  {
+   "rfilename": "gallica_mono_100.parquet"
+  }
+ ]
+}

@@ -3209,6 +3209,26 @@ sources:
         publication rides beside, unprojected"}
     script: {posture: implied, note: "Latin type (roman, blackletter, a few Fraktur
         prints) read by uncorrected Microsoft-era OCR (text_nature machine-ocr)"}
+  pleias-french-books:   # 02-sources row 408
+    # kind machine-postured — the pleias-french-books title fold in kind_map.yml (the
+    # blbooks precedent: no upstream genre column, the Gallica title's form noun is the label).
+    lect: {posture: identity, note: "fra on every book — the dataset card's own claim
+        (language: fr, \"French monographies\"); no language column exists, so Latin or
+        bilingual prints Gallica catalogued among them stay fra (declared, unchecked).
+        The code stays BARE deliberately: the only date is the imprint year, class
+        edition, which the inference law excludes from the hull (the P164 rule; the
+        blbooks posture). The cone's vernacular prints are overwhelmingly contemporary
+        with their print (166 books closing before 1600 → frm by band, 6,306 from 1600 →
+        fr:cls), but staging by print year is a per-source contemporaneity ruling, not a
+        transcription — escalated, not assumed"}
+    dating: {posture: dated, note: "the Gallica catalogue's imprint year on every row
+        (\"1626\"; ranges \"1633-1742\"; the abbreviated close \"1607-16\" → 1607–1616),
+        class edition on the :structured lane"}
+    places: {posture: unplaced, note: "no column carries the imprint place — it lives only
+        in the OCR'd title page (\"A PARIS. Par ANTOINE ESTIENE\"); the BnF record behind
+        each ark carries it, a metadata-expansion lane rather than a column — declared"}
+    script: {posture: implied, note: "Latin type (roman, italic, a few blackletter
+        prints) read by Gallica's uncorrected OCR (text_nature machine-ocr)"}
   mdz-protestant:   # 02-sources row 243
     kind: {posture: unclassified, note: "MDZ manifests carry no genre field (catechism,
         hymnal, prayer book, grammar, confession, sapiential book live in the titles only)"}

@@ -1,0 +1,15 @@
+{
+  "revision": "21abfb3f646a0f1846175c63709913a51abc9bcb",
+  "shards": {
+    "1": {
+      "path": "gallica_mono_1.parquet",
+      "size": 17298,
+      "sha256": "a8838ae5210dd6b3b588b7d4b5d0321937d4c82f02af88c8ed3e20d0e8bcfcdd"
+    },
+    "100": {
+      "path": "gallica_mono_100.parquet",
+      "size": 2615,
+      "sha256": "1ef6feebaa12f6785812eb02eb45dda1b2d795f6c54b26689aa4b6c7df461de8"
+    }
+  }
+}

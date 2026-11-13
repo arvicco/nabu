@@ -179,7 +179,7 @@ class PosturesTest < Minitest::Test
   def test_the_lect_migration_kept_the_p59_4_census
     lect = postures.declarations.select { |d| d.layer == "lect" }
     by_posture = lect.group_by(&:posture).transform_values(&:size)
-    assert_equal 198, lect.size,
+    assert_equal 199, lect.size,
                  "the P59-4 declarations survive the move (61 at migration; itant retired P61-3," \
                  "oracc retired P62-2, etcsl/ccmh/freising/coptic-scriptorium retired P64-6, " \
                  "titus-avestan retired P66-1, osta+fornsvenska retired P77-r8, achemenet " \
@@ -445,7 +445,9 @@ class PosturesTest < Minitest::Test
                  "titus-old-frisian ADDED — identity ofs (the bare " \
                  "Old Frisian anchor; the East/West split stays registry prose): 196→197; " \
                  "delpher-newspapers ADDED — dates (dc:language per issue; the French gazettes " \
-                 "band onto fr:cls by issue date, Dutch bare — nl has no stages): 197→198"
+                 "band onto fr:cls by issue date, Dutch bare — nl has no stages): 197→198; " \
+                 "pleias-french-books ADDED — identity fra (edition-class print years never " \
+                 "stage; the print-year staging is an escalated ruling): 198→199"
     # The epigraphic-belt registry package (merged + canonical-synced
     # 2026-10-18, the add-then-retire shape within one phase) retires both
     # P130 pendings, and the ociana-script rule + the ig-cyprus override
@@ -542,7 +544,9 @@ class PosturesTest < Minitest::Test
     # ruled 2026-11-12 — the shadowing rule): 143→142.
     # titus-old-frisian joins identity (ofs, the bare Old Frisian anchor): 142→143.
     # delpher-newspapers joins dates (the issue day bands the French gazettes onto
-    # fr:cls; Dutch stays bare nl — no stages): 32→33.
-    assert_equal({ "dates" => 33, "codemap" => 22, "identity" => 143 }, by_posture)
+    # fr:cls; Dutch stays bare nl — no stages): 32→33. pleias-french-books joins
+    # identity (bare fra; the imprint year is class edition, the blbooks
+    # posture): 143→144.
+    assert_equal({ "dates" => 33, "codemap" => 22, "identity" => 144 }, by_posture)
   end
 end

@@ -5713,6 +5713,31 @@ pleiades:
   # dump is large + version-pinned; the Zenodo URL-pin stays optional).
   sync_policy: manual
 
+pleias-french-books:   # P173-A, 02-sources row 408
+  adapter: Nabu::Adapters::PleiasFrenchBooks
+  adopted: "2026-11-13"
+  axes: [romance]   # French print to 1699 (census 2026-11-13: 166 books closing
+                    # before 1600, 6,306 opening 1600 or later, 5 straddling)
+  wired: false   # first real sync (the shard rail's first slice) runs post-merge
+  sync_policy: manual
+  # PleIAs/French-PD-Books (Hugging Face) — Gallica/BnF public-domain
+  # monographs as OCR text, 145 parquet shards at the pinned revision
+  # 21abfb3f (60.5 GB; 289,577 books, randomly sharded). THIS era holds the
+  # PRE-1700 CONE: the imprint envelope closes ≤ 1699 — 6,477 books / 1.82 G
+  # characters of OCR (25–64 per shard). Because the split is random, the
+  # cone streams EVERY shard once (sha256-pinned per shard from the
+  # revision's LFS oids), keeps every row's catalogue line and only the
+  # cone's texts (books/<ark>.json.gz, ~0.7 GB gzipped est.). Paced-crawl
+  # rail: 25 shards a slice (an ESTIMATED ~15–25 min each: ~417 MB a shard
+  # + pure-Ruby snappy), six slices, declared schedule per_phase × 6.
+  # Document = book (urn:…:<Gallica ark name>), passage = page segment
+  # (upstream's "\n \n" page joins); text_nature machine-ocr. License: the
+  # card prose "The entire collection is in the public domain everywhere"
+  # (no YAML license field) → open; credit Gallica/BnF and PleIAs.
+  # EXPECTED at cone completion: 6,477 documents + 283,100 rows skipped by
+  # rule (282,992 after 1699, 92 straddling 1700, 16 reversed ranges) =
+  # the 289,577 rows upstream ships.
+
 pna:   # 02-sources row 311
   adapter: Nabu::Adapters::Pna
   adopted: "2026-10-28"
