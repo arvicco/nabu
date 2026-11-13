@@ -1,0 +1,19 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# Format specimens for Nabu::Parquet, re-written from the pleias-french-books
+# trimmed shard by two real parquet writers; no upstream serves them.
+source: parquet
+adapter_test:
+retrieved: "2026-11-13"
+files:
+  - path: multipage.parquet
+    whole: false
+    trim: the pleias-french-books four-row trim re-written by pyarrow 26.0.1 with 1 KiB v1 pages
+    refetchable: false
+    reason: a writer-made format specimen, never served upstream
+  - path: empty.parquet
+    whole: false
+    trim: a zero-row file with the upstream schema, written by fastparquet 2023.10.1
+    refetchable: false
+    reason: a writer-made format specimen, never served upstream
