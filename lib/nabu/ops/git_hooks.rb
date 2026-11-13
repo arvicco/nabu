@@ -296,11 +296,36 @@ module Nabu
 
       # -- the hook entry points (exit codes) ---------------------------------
 
+      # The author-identity allowlist (the hygiene family's email half,
+      # 2026-11-13): commits are public and their author field is scraped —
+      # an MCP-directory promoter reached the owner's private address
+      # harvested from this repo's history. Only the project's public
+      # identities may author a commit; the allowlist names DOMAINS so no
+      # private address ever appears in this tracked file.
+      PUBLIC_AUTHOR_EMAIL = /@(?:users\.noreply\.github\.com|nabu\.ac)\z/
+
+      def author_email_offense(email)
+        return nil if email.to_s.match?(PUBLIC_AUTHOR_EMAIL)
+
+        <<~MSG
+          pre-commit: REFUSED — this commit would stamp a private address (#{email}) into public history.
+            Why: author emails are public and scraped; house commits carry only the
+            public identities (the GitHub noreply address, users.noreply.github.com).
+            Fix: git config user.email "<id>+<login>@users.noreply.github.com"
+            #{OVERRIDE}
+        MSG
+      end
+
       def pre_commit(err: $stderr, git: method(:git), process_table: method(:ps_output),
                      cwd_of: method(:process_cwd), utc_offset: Time.now.utc_offset)
         tz = timezone_offense(utc_offset)
         if tz
           err.puts tz
+          return 1
+        end
+        email = author_email_offense(git.call("config", "user.email").strip)
+        if email
+          err.puts email
           return 1
         end
         toplevel = git.call("rev-parse", "--show-toplevel").strip
