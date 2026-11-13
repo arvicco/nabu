@@ -123,19 +123,38 @@ module Nabu
     # most EOCD_MIN_SIZE + MAX_COMMENT bytes from the end. Take the LAST match
     # whose declared comment length reaches exactly end-of-file — guarding the
     # rare case where the signature's four bytes recur inside the comment.
+    #
+    # Failing an exact fit, the LAST record that fits inside the file wins:
+    # trailing bytes AFTER the EOCD are tolerated exactly as `unzip` tolerates
+    # them (the quarantine review 2026-11-13 found 74 aozora works — 2008-era
+    # zips carrying a proprietary "ZPIT…" trailer past a zero-length comment —
+    # that `unzip -p` reads cleanly). The central directory's own signatures
+    # and every member's CRC still guard the read.
     def find_eocd
       window = EOCD_MIN_SIZE + MAX_COMMENT
       search_from = [@bytes.bytesize - window, 0].max
       scan = @bytes.byteslice(search_from, @bytes.bytesize - search_from)
-      position = scan.bytesize
-      loop do
-        position = scan.rindex(EOCD_SIGNATURE, position - 1)
-        raise Error, "end-of-central-directory signature not found (not a zip archive?)" if position.nil?
-
+      fitting = nil
+      eocd_candidates(scan).each do |position|
         eocd = search_from + position
-        comment_len = u16(eocd + 20)
-        return eocd if eocd + EOCD_MIN_SIZE + comment_len == @bytes.bytesize
+        next if eocd + EOCD_MIN_SIZE > @bytes.bytesize
+
+        record_end = eocd + EOCD_MIN_SIZE + u16(eocd + 20)
+        return eocd if record_end == @bytes.bytesize
+
+        fitting ||= eocd if record_end < @bytes.bytesize
       end
+      fitting or raise Error, "end-of-central-directory signature not found (not a zip archive?)"
+    end
+
+    # Every EOCD signature offset in +scan+, last first.
+    def eocd_candidates(scan)
+      positions = []
+      position = scan.bytesize
+      while position.positive? && (position = scan.rindex(EOCD_SIGNATURE, position - 1))
+        positions << position
+      end
+      positions
     end
 
     def parse_central_entries(offset, total, base)

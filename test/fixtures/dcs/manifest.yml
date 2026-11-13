@@ -59,3 +59,9 @@ files:
     url: https://raw.githubusercontent.com/OliverHellwig/sanskrit/master/dcs/data/conllu/lookup/sembank-attestations.xml
     whole: false
     trim: five whole concept blocks (568, 569, 574, 127090, the closing 147806), lexicalizations cut to the cited lemmas, <n> lines capped at 3 (14 MB -> 1,989 B)
+  - path: "header-only/Bhāgavatapurāṇa-0088-BhāgPur, 4, 28-9000.conllu"
+    refetchable: false
+    provenance: local-trim
+    reason: copied whole from the canonical clone's working tree; a declared chapter file with no
+      sentence block (the quarantine review 2026-11-13 header-only shape)
+    canonical: "canonical/dcs/dcs/data/conllu/files/Bhāgavatapurāṇa/Bhāgavatapurāṇa-0088-BhāgPur, 4, 28-9000.conllu"

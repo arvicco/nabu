@@ -1,0 +1,399 @@
+# The documented-command verification plan — what `rake docs:verify` runs
+# (lib/nabu/ops/docs_verify.rb; extraction in lib/nabu/ops/doc_commands.rb).
+#
+# The walkthrough pages teach commands; this plan EXECUTES them in a
+# throwaway sandbox (a fresh clone of the repo's committed HEAD) and checks
+# each documented claim against what actually happens. One verdict line per
+# step: OK, FAIL (what the doc says against what happened), or NET (a
+# network step, run only under `rake "docs:verify[network]"`).
+#
+# THE COVERAGE CONVENTION (enforced by test/docs_verify_coverage_test.rb):
+# every fenced command, every inline `bin/nabu …` span and every content
+# block (json, python…) in the pages below must be either
+#   - verified by a step — its `run`, or listed under the step's `covers`
+#     (command texts, whitespace-insensitive) / `blocks` (content blocks,
+#     matched by page + a distinctive `contains` substring), or
+#   - listed under `ignore` with a `reason`.
+# A newly documented command therefore fails the suite until it is placed.
+# A step's `claim.quote` must still appear verbatim (whitespace-insensitive)
+# in its page, so rewording a claim forces its expectation to be revisited;
+# plan entries naming commands no page documents any more fail the same test.
+#
+# Step fields: id, run (a /bin/sh line, run at the sandbox root; {root}
+# expands to the sandbox's absolute path), mode (offline — the default — or
+# network), covers, blocks, claim {page, quote}, stdin, expect.
+# Expectations: exit (0 or "nonzero"), output_includes, output_matches,
+# max_seconds, path_exists, path_absent, file_includes {path, text},
+# json_file_equals_block {path, page, contains}, mcp_tools (the tools/list
+# count), transcript (a page whose `$ <run>` transcript lines, trims marked
+# … excepted, must each appear in the output).
+#
+# ORDER MATTERS: steps run in plan order in one sandbox, following the
+# reader's path. Offline mode never runs the quickstart sync, so the desk
+# step `bin/nabu enable celtic` is what first writes the enablement profile
+# there — the refusal steps after it rely on a configured box (a box with
+# neither a profile nor a catalog is deliberately ungated: bootstrap).
+
+pages:
+  - path: site/quickstart.md
+  - path: docs/quickstart.md
+  - path: README.md
+    sections: ["Quickstart"]
+  - path: docs/mcp.md
+    sections: ["3. Registration — Claude Code", "4. Registration — Claude Desktop"]
+
+# Checked against every executed step's output: a user-facing warning or a
+# Ruby backtrace in a taught command's output is a defect in itself (the
+# sqlite3 fork-safety warning once printed on every sync).
+forbid_output:
+  - "(?i)warning: "
+  - "(?i)\\bfork(ed)? process"
+  - "\\.rb:\\d+:in "
+
+steps:
+  # -- install --------------------------------------------------------------
+  - id: bundle-install
+    run: bundle install
+    expect:
+      exit: 0
+      output_includes: ["Bundle complete!"]
+
+  # -- the starter shelf, previewed -----------------------------------------
+  - id: quickstart-dry-run
+    run: bin/nabu quickstart --dry-run
+    claim:
+      page: site/quickstart.md
+      quote: "`bin/nabu quickstart --dry-run` prints the set without syncing anything."
+    expect:
+      exit: 0
+      output_includes: [sblgnt, proiel, iswoc, lexica]
+      path_absent: canonical
+
+  - id: status-fresh
+    run: bin/nabu status
+    claim:
+      page: docs/quickstart.md
+      quote: "One dense row per source"
+    expect:
+      exit: 0
+      output_includes: [sblgnt]
+
+  - id: help-search
+    run: bin/nabu help search
+    claim:
+      page: docs/quickstart.md
+      quote: "Every query command documents itself with worked examples: `bin/nabu help search`, `help show`, `help align`, `help export`."
+    expect:
+      exit: 0
+      output_includes: ["Examples:"]
+  - id: help-show
+    run: bin/nabu help show
+    covers: []
+    claim:
+      page: docs/quickstart.md
+      quote: "`help show`"
+    expect:
+      exit: 0
+      output_includes: ["Examples:"]
+  - id: help-align
+    run: bin/nabu help align
+    covers: []
+    claim:
+      page: docs/quickstart.md
+      quote: "`help align`"
+    expect:
+      exit: 0
+      output_includes: ["Examples:"]
+  - id: help-export
+    run: bin/nabu help export
+    covers: []
+    claim:
+      page: docs/quickstart.md
+      quote: "`help export`"
+    expect:
+      exit: 0
+      output_includes: ["Examples:"]
+
+  # -- the starter shelf, synced (network) ----------------------------------
+  - id: quickstart
+    run: bin/nabu quickstart
+    mode: network
+    claim:
+      page: docs/quickstart.md
+      quote: "allow ten to fifteen minutes end to end on an ordinary connection"
+    expect:
+      exit: 0
+      max_seconds: 900
+      output_includes: ["try these:", "bin/nabu align \"MARK 2.3\""]
+
+  - id: align-mark
+    run: bin/nabu align "MARK 2.3"
+    mode: network
+    claim:
+      page: site/quickstart.md
+      quote: "On a fresh quickstart library the same command shows the seven starter witnesses"
+    expect:
+      exit: 0
+      # The hub registers 16 witnesses; a fresh quickstart library holds
+      # text for the seven starter ones (sandbox-verified 2026-11-13).
+      output_includes: ["7 of 16 witnesses attest"]
+
+  - id: search-lemma-lego
+    run: bin/nabu search --lemma λέγω
+    mode: network
+    claim:
+      page: site/quickstart.md
+      quote: "finds every inflected attestation over the gold treebank annotations"
+    expect:
+      exit: 0
+      output_includes: ["λέγω →"]
+
+  - id: define-logos
+    run: bin/nabu define λόγος
+    mode: network
+    claim:
+      page: site/quickstart.md
+      quote: "`bin/nabu define λόγος` prints the whole LSJ entry"
+    expect:
+      exit: 0
+      output_includes: ["Liddell-Scott-Jones"]
+
+  - id: define-virtus
+    run: bin/nabu define virtus
+    mode: network
+    claim:
+      page: site/quickstart.md
+      quote: "define virtus` does the same in Lewis &amp; Short"
+    expect:
+      exit: 0
+      output_includes: ["Lewis"]
+
+  - id: search-logos
+    run: bin/nabu search "λογος" --limit 3
+    mode: network
+    claim:
+      page: docs/quickstart.md
+      quote: "Search is diacritic-insensitive (type `λογος` bare and still hit the polytonic editions)"
+    expect:
+      exit: 0
+      output_includes: ["3 hits"]
+
+  - id: show-john
+    run: bin/nabu show urn:nabu:sblgnt:john:1.1-1.3
+    mode: network
+    claim:
+      page: docs/quickstart.md
+      quote: "`show` renders a passage, a whole document, or a citation range"
+    expect:
+      exit: 0
+      transcript: docs/quickstart.md
+
+  - id: status-after
+    run: bin/nabu status
+    mode: network
+    covers: []
+    claim:
+      page: docs/quickstart.md
+      quote: "your first run shows the same `+27`"
+    expect:
+      exit: 0
+      output_includes: ["27/7.9K", "+27"]
+
+  - id: define-agape
+    run: bin/nabu define ἀγάπη
+    mode: network
+    claim:
+      page: docs/quickstart.md
+      quote: "With the dictionaries on board:"
+    expect:
+      exit: 0
+      output_includes: ["Liddell-Scott-Jones", "urn:nabu:dict:lsj:n347", "gloss: love,"]
+
+  - id: search-lemma-agapao
+    run: bin/nabu search --lemma ἀγαπάω --lang grc --limit 3
+    mode: network
+    claim:
+      page: docs/quickstart.md
+      quote: "search by dictionary form instead of surface string"
+    expect:
+      exit: 0
+      output_includes: ["ἀγαπάω →", "3 hits (exact lemma match"]
+
+  - id: sync-sblgnt
+    run: bin/nabu sync sblgnt
+    mode: network
+    claim:
+      page: docs/quickstart.md
+      quote: "plus a `discovery:` accounting line"
+    expect:
+      exit: 0
+      output_includes: ["discovery:"]
+
+  - id: sync-core
+    run: bin/nabu sync core
+    mode: network
+    claim:
+      page: site/quickstart.md
+      quote: "`bin/nabu sync core` re-runs just that sweep any time"
+    expect:
+      exit: 0
+      output_includes: ["core group"]
+
+  # -- talk to your library: the MCP registration recipes -------------------
+  - id: mcp-json
+    run: "true"
+    covers: []
+    blocks:
+      - page: docs/mcp.md
+        contains: '"args": ["exec", "bin/nabu", "mcp"]'
+    claim:
+      page: docs/mcp.md
+      quote: "This repo ships **`.mcp.json`** in its root:"
+    expect:
+      json_file_equals_block:
+        path: .mcp.json
+        page: docs/mcp.md
+        contains: '"args": ["exec", "bin/nabu", "mcp"]'
+
+  - id: mcp-project-scope
+    run: bundle exec bin/nabu mcp
+    covers: []
+    stdin: &mcp_handshake |
+      {"jsonrpc":"2.0","id":1,"method":"initialize","params":{"protocolVersion":"2024-11-05","capabilities":{},"clientInfo":{"name":"docs-verify","version":"1"}}}
+      {"jsonrpc":"2.0","method":"notifications/initialized"}
+      {"jsonrpc":"2.0","id":2,"method":"tools/list"}
+    claim:
+      page: docs/mcp.md
+      quote: "## 2. The fourteen tools"
+    expect:
+      exit: 0
+      mcp_tools: 14
+
+  - id: mcp-user-scope
+    run: cd / && BUNDLE_GEMFILE={root}/Gemfile bundle exec {root}/bin/nabu mcp
+    covers:
+      - claude mcp add --scope user nabu --env BUNDLE_GEMFILE=/Users/vb/Dev/nabu/Gemfile -- bundle exec /Users/vb/Dev/nabu/bin/nabu mcp
+    blocks:
+      - page: docs/mcp.md
+        contains: '"BUNDLE_GEMFILE": "/Users/vb/Dev/nabu/Gemfile"'
+    stdin: *mcp_handshake
+    claim:
+      page: docs/mcp.md
+      quote: "`bundle exec` both read `BUNDLE_GEMFILE`, so the corpus resolves from any directory."
+    expect:
+      exit: 0
+      mcp_tools: 14
+
+  # -- grow the library: enable, then sync ----------------------------------
+  - id: enable-celtic
+    run: bin/nabu enable celtic
+    claim:
+      page: site/quickstart.md
+      quote: "carries an *enablement profile* (`local/config/profile.yml`, local to your box, never committed)"
+    expect:
+      exit: 0
+      path_exists: local/config/profile.yml
+
+  - id: axis-celtic
+    run: bin/nabu axis celtic
+    claim:
+      page: site/quickstart.md
+      quote: "bin/nabu axis celtic # one desk's card: members, holdings, gold coverage"
+    expect:
+      exit: 0
+      output_includes: ["celtic —", "members ("]
+
+  - id: refuse-perseus-greek
+    run: bin/nabu sync perseus-greek
+    claim:
+      page: site/quickstart.md
+      quote: "`nabu sync` refuses a source that is not on it"
+    expect:
+      exit: nonzero
+      output_includes: ["not enabled", "enable perseus-greek"]
+
+  - id: refuse-vulgate
+    run: bin/nabu sync vulgate
+    claim:
+      page: site/quickstart.md
+      quote: "(each row below assumes its `enable` ran first)"
+    expect:
+      exit: nonzero
+      output_includes: ["not enabled", "enable vulgate"]
+  - id: refuse-eng-web
+    run: bin/nabu sync eng-web
+    covers: []
+    expect:
+      exit: nonzero
+      output_includes: ["not enabled", "enable eng-web"]
+  - id: refuse-perseus-latin
+    run: bin/nabu sync perseus-latin
+    expect:
+      exit: nonzero
+      output_includes: ["not enabled", "enable perseus-latin"]
+  - id: refuse-gretil
+    run: bin/nabu sync gretil
+    expect:
+      exit: nonzero
+      output_includes: ["not enabled", "enable gretil"]
+  - id: refuse-papyri-ddbdp
+    run: bin/nabu sync papyri-ddbdp
+    expect:
+      exit: nonzero
+      output_includes: ["not enabled", "enable papyri-ddbdp"]
+  - id: refuse-oracc
+    run: bin/nabu sync oracc
+    expect:
+      exit: nonzero
+      output_includes: ["not enabled", "enable oracc"]
+
+  - id: enable-perseus-greek
+    run: bin/nabu enable perseus-greek
+    claim:
+      page: site/quickstart.md
+      quote: "bin/nabu enable perseus-greek # add the shelf to your profile"
+    expect:
+      exit: 0
+      file_includes:
+        path: local/config/profile.yml
+        text: perseus-greek
+
+  - id: list-axis
+    run: bin/nabu list --axis
+    claim:
+      page: site/quickstart.md
+      quote: "`bin/nabu list --axis` prints the shelf census grouped under"
+    expect:
+      exit: 0
+
+ignore:
+  - command: git clone https://github.com/arvicco/nabu
+    reason: the sandbox itself is a fresh clone (of the local repo's committed HEAD); every step runs at its root
+  - command: git clone https://github.com/arvicco/nabu && cd nabu
+    reason: the sandbox itself is a fresh clone (of the local repo's committed HEAD); every step runs at its root
+  - command: git clone <this repo> && cd nabu
+    reason: a placeholder clone; the sandbox itself is a fresh clone
+  - command: cd nabu
+    reason: every step already runs at the sandbox clone's root
+  - command: bin/nabu show
+    reason: the glossary names the command without arguments; show is verified by the show-john transcript step
+  - command: bin/nabu sync <anything>
+    reason: a placeholder; its concrete forms (sync sblgnt, sync core) are steps
+  - command: bin/nabu enable <source>
+    reason: a placeholder; its concrete form (enable perseus-greek) is a step
+  - command: bin/nabu sync celtic
+    reason: a whole desk's download, outside the verification budget; the enable half is verified offline
+  - command: bin/nabu enable celtic && bin/nabu sync celtic
+    reason: a whole desk's download, outside the verification budget; the enable half is verified offline
+  - command: bin/nabu sync --all
+    reason: sweeps whichever auto-policy sources the box enabled; no fixed fresh-box outcome to check
+  - command: bin/nabu align "JON 2.1"
+    reason: needs the first1k-greek, vulgate and eng-web growth shelves; the transcript is the reference box's seven-witness view
+  - block:
+      page: docs/mcp.md
+      contains: langchain_mcp_adapters
+    reason: a third-party framework (pip) driving the published demo image (docker), outside the repo's own command surface
+  - block:
+      page: docs/mcp.md
+      contains: llama_index
+    reason: a third-party framework (pip) driving the published demo image (docker), outside the repo's own command surface

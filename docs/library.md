@@ -2397,8 +2397,8 @@ van Nederland), credited on every hit. `nld` bare, the French
 gazettes `fr:cls`. The eighteenth- and nineteenth-century zips stay
 enumerated future slices.
 
-**`pleias-french-books`** — **1,141 documents / 212,656 passages**
-(first slice; the pre-1700 cone holds 6,477 books): French books
+**`pleias-french-books`** — **6,477 documents / 1,107,938 passages**
+(the complete pre-1700 cone): French books
 printed to 1699 from the BnF's public-domain shelves, as digitized by
 Gallica and re-hosted by PleIAs — the royal print of the ancien
 régime (édits, déclarations, lettres patentes, ordonnances, arrêts,
@@ -2408,5 +2408,5 @@ before 1600. Machine OCR as upstream ships it (long s as f, u/v as
 printed), never an edition; the page segment is the passage, cited
 by ordinal. Credit Gallica / Bibliothèque nationale de France and
 PleIAs on every hit; kind read from the title's form noun where one
-speaks. The remaining five slices of the cone ride the acquisition
-rail.
+speaks. The cone is complete; the post-1700 widens stay deliberate
+future calls.

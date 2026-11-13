@@ -856,7 +856,7 @@ module Nabu
         Nabu::Profile.new(merged).save(config.profile_path)
         # stderr, the r3b enablement-honesty convention: data stdout stays
         # byte-identical/pipe-clean.
-        warn "enabled the starter shelf: #{slugs.join(', ')} (config/profile.yml)"
+        warn "enabled the starter shelf: #{slugs.join(', ')} (local/config/profile.yml)"
       end
 
       def print_starter_list

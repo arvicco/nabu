@@ -2400,7 +2400,7 @@ class CLITest < Minitest::Test
     with_axis_corpus do |config|
       refute Nabu::Profile.exist?(config.profile_path), "no config to start"
       migrated_out, err, = with_config(config) { run_cli(%w[status]) }
-      assert_match(%r{wrote config/profile\.yml enabling your 3 synced sources}, err)
+      assert_match(%r{wrote local/config/profile\.yml enabling your 3 synced sources}, err)
       assert_equal %w[lex library shelf], Nabu::Profile.load(config.profile_path).entries
       all_out, = with_config(config) { run_cli(%w[status --all]) }
       assert_equal all_out, migrated_out, "the migrated enabled set shows the whole built library"

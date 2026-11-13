@@ -244,6 +244,20 @@ module Ops
       assert_nil H.timezone_offense(0)
     end
 
+    # -- (e) the author-identity guard -------------------------------------------
+
+    def test_a_private_author_email_is_refused_with_the_fix_line
+      offense = H.author_email_offense("someone@gmail.com")
+      assert_match(/someone@gmail\.com/, offense)
+      assert_match(/users\.noreply\.github\.com/, offense)
+      assert_match(/--no-verify/, offense)
+    end
+
+    def test_the_public_identities_pass_the_author_guard
+      assert_nil H.author_email_offense("39557+arvicco@users.noreply.github.com")
+      assert_nil H.author_email_offense("arvicco@nabu.ac")
+    end
+
     def test_a_plain_technical_message_passes
       message = "Mine kaikki etymology templates into typed reflex rows\n\n" \
                 "The P133 lane (docs/architecture.md section 10) keeps Q-shaped words like Quran.\n"
@@ -262,7 +276,8 @@ module Ops
     # pre-commit hook now enforces; the refusal e2e passes its own zone.
     def git!(dir, *, zone: "UTC")
       out, err, status = Open3.capture3({ "TZ" => zone }, "git", "-C", dir, "-c", "user.name=t",
-                                        "-c", "user.email=t@example.org", "-c", "commit.gpgsign=false", *)
+                                        "-c", "user.email=1+t@users.noreply.github.com",
+                                        "-c", "commit.gpgsign=false", *)
       [status.success?, out + err]
     end
 

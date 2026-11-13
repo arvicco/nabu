@@ -63,7 +63,9 @@ hand-built refs). `unzip` the artifact and `cp` the six paths below.
 - `quarantine/304_e.xml` (1,004 B, sha256 `44b0d475…`; upstream path
   `CTH 222_XML_TLH/304_e.xml`) — well-formed but LINE-LESS (a seal-
   impression stub: gap only, zero `<lb>`). One of **226** zero-line
-  files — ParseError quarantine, pinned.
+  files; since the 2026-11-13 quarantine review the 220 of them with no
+  `<lb>` and no `<w>` at all (this shape) are SKIPPED BY RULE as
+  line-less stubs (DocumentSkipped), not quarantined — pinned.
 
 ## The extensionless re-annotation (P118-R4 — under `edits/`, NOT discoverable from the root)
 

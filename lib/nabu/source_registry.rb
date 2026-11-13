@@ -103,7 +103,7 @@ module Nabu
 
     # The quickstart starter tag (P44-r3b). `quickstart: true` marks a source as
     # part of the CURATED starter set a fresh box meets first: when
-    # config/profile.yml is ABSENT and no library has been built yet, the
+    # local/config/profile.yml is ABSENT and no library has been built yet, the
     # enablement default is exactly these rows (Profile.default_entries). Absent
     # = false (an ordinary source is not in the starter set). r3c seeds the tags;
     # r3b only parses the field and wires the default seam — with zero rows

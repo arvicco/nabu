@@ -34,8 +34,12 @@ module Nabu
     # surface). Lines whose words render to nothing (pure <space>
     # indentation, bracket-only stubs) mint no passage; a document with
     # ZERO renderable lines is a ParseError (quarantine — honest damage;
-    # 226 upstream files are line-less conversion casualties, and 224 more
-    # are not well-formed XML — both quarantine loudly, censused by sync).
+    # 224 upstream files are not well-formed XML, and a few dozen more hold
+    # line anchors whose content renders to nothing). The exception is the
+    # line-less STUB — no <lb> and no <w> anywhere, just the witness block
+    # and a <gap> describing an untransliterated fragment: upstream's
+    # placeholder record, skipped BY RULE (DocumentSkipped, #stub?; 220
+    # files at the 2026-11-13 quarantine review).
     #
     # == Rendering (the in-file conventions, made plain text)
     #
@@ -134,13 +138,30 @@ module Nabu
       def parse(path, urn:, cth: nil, project: nil)
         doc = read_xml(path)
         lines = extract_lines(doc, path)
-        raise ParseError, "#{path}: no renderable transliteration lines (AOxml damage or a line-less stub)" if
-          lines.empty?
+        if lines.empty?
+          raise DocumentSkipped.new("#{path}: #{STUB_REASON}", reason: STUB_REASON) if stub?(doc)
+
+          raise ParseError, "#{path}: no renderable transliteration lines (AOxml damage)"
+        end
 
         build_document(doc, lines, path: path, urn: urn, cth: cth, project: project)
       end
 
+      # The skip note for upstream's placeholder grain (class note).
+      STUB_REASON = "line-less stub — no transliteration yet (upstream placeholder record)"
+
       private
+
+      # A line-less STUB: no <lb> and no <w> anywhere in the body — only the
+      # witness block and at most <gap> descriptions of an untransliterated
+      # fragment ("only a few fragmentary traces are extant"). Censused at
+      # the quarantine review 2026-11-13: 220 of the 226 "no renderable
+      # lines" files are exactly this shape (216 witness block + gap, 4 an
+      # empty <text>); none carries a word. A body holding words but no line
+      # anchor is damage, never a stub — it stays a ParseError.
+      def stub?(doc)
+        doc.at_xpath("//body//*[local-name()='w' or local-name()='lb']").nil?
+      end
 
       # Strict parse: 224 upstream files are not well-formed (broken
       # attribute syntax, mismatched tags — Beta reality, admitted by the

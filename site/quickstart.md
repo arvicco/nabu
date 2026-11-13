@@ -180,7 +180,7 @@ clients, the tool reference, and the quoting etiquette are in
 ## Grow the library
 
 **Growth is a deliberate two-step: enable, then sync.** Your library
-carries an *enablement profile* (`config/profile.yml`, local to your
+carries an *enablement profile* (`local/config/profile.yml`, local to your
 box, never committed): the explicit list of shelves this library has
 chosen to carry. `nabu sync` refuses a source that is not on it — so
 nothing large ever downloads by accident — and the profile also sets
@@ -200,7 +200,7 @@ bin/nabu sync perseus-greek     # fetch, load, index
 celtic` enables that whole desk's public members); a handful of
 grant-gated research sources are never swept in by an axis — each
 must be enabled by name and shows you its terms first. After that,
-`bin/nabu sync --all` re-syncs every enabled live-policy source in
+`bin/nabu sync --all` re-syncs the enabled `sync_policy: auto` sources in
 one pass. The full menu is `config/sources.yml`; real on-disk sizes
 for the larger shelves, measured {{ sizes.as_of }} (each row below
 assumes its `enable` ran first):

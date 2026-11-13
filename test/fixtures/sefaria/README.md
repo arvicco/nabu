@@ -290,3 +290,14 @@ Whole-file sha256:
 7e016967cee407dfe842c0268ae4d705b755e244c33d513516aa293c868376e6  Ben Sira (Kahana) — original, before trim
 816c29908252005804a07671f9bf537e2eac1406d0a5c7d0f19f7e3ede13ad77  Megillat Ta'anit (Warsaw 1874) — original, before trim
 ```
+
+## Empty version (added 2026-11-13, under `empty-version/`)
+
+- `empty-version/Kabbalah/Zohar/Idra Zuta/English/Sefaria Community Translation.json`
+  — whole (473 B), copied byte-identical from the owner's live canonical
+  (upstream path `json/` + the same relative path). License CC0; its
+  `"text": []` holds no leaf at all — an English version not yet begun.
+  One of 12 such files at the 2026-11-13 quarantine review, formerly
+  quarantined as "no non-empty text leaves"; now SKIPPED BY RULE as an
+  empty version. Kept outside `json/` so the discovery census of the main
+  fixture tree is unchanged; the parser test reads it by path.

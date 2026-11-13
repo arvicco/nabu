@@ -126,6 +126,36 @@ class PapyriTest < Minitest::Test
     assert refs.first.path.end_with?("DDbDP/25/25457.xml")
   end
 
+  # --- text-less editions that slip the discover probe (review 2026-11-13) ---
+  #
+  # The <lb> (DDbDP) and text-node (DCLP) probes let through editions whose
+  # only content is a pointer <note> ("reprinted in Chrest.Wilck. 327"), a
+  # <figure> ("drawing") or a <head>: upstream's text-less stubs all the
+  # same. They skip BY RULE at parse; a <g> symbol still counts as content
+  # and stays a quarantine.
+  TEXTLESS = File.join(EXEMPLARS, "textless")
+
+  def test_a_pointer_note_only_edition_is_skipped_by_rule
+    error = assert_raises(Nabu::DocumentSkipped) do
+      Nabu::Adapters::Papyri.new.parse(textless_ref("Historical/p.tebt/1/210.xml", "urn:nabu:ddbdp:p.tebt:1:210"))
+    end
+    refute_kind_of Nabu::ParseError, error
+    assert_equal Nabu::Adapters::Papyri::TEXTLESS_REASON, error.reason
+  end
+
+  def test_a_figure_only_dclp_edition_is_skipped_by_rule
+    assert_raises(Nabu::DocumentSkipped) do
+      Nabu::Adapters::Papyri.new.parse(textless_ref("DCLP/109/109580.xml", "urn:nabu:dclp:109580"))
+    end
+  end
+
+  def test_a_glyph_only_edition_still_quarantines
+    error = assert_raises(Nabu::ParseError) do
+      Nabu::Adapters::Papyri.new.parse(textless_ref("DDbDP/31/31692.xml", "urn:nabu:ddbdp:p.leipz::19v"))
+    end
+    assert_match(/no citable lines/, error.message)
+  end
+
   def test_discover_no_longer_walks_the_pre_switchover_layout
     # The single-layout decision: DDB_EpiDoc_XML/ is gone upstream and is not
     # tolerated as a further root. (The DCLP/ root kept its name — only its
@@ -450,6 +480,11 @@ class PapyriTest < Minitest::Test
   end
 
   private
+
+  def textless_ref(relative, urn)
+    Nabu::DocumentRef.new(source_id: "papyri-ddbdp", id: urn, path: File.join(TEXTLESS, relative),
+                          metadata: { "language" => "grc", "title" => File.basename(relative, ".xml") })
+  end
 
   # An adapter whose repo_url resolves to a local git tmpdir (house test
   # pattern), keeping fetch entirely off the network.

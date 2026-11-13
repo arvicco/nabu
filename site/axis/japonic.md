@@ -24,7 +24,7 @@ A source wears every desk it serves — these sixteen answer this desk. Holdings
 
 | Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 13 November 2026)</span> |
 |---|---|---|---|---|
-| `aozora` | texts | open | wired · manual | 17,121 docs / 2,983,332 passages |
+| `aozora` | texts | open | wired · manual | 17,195 docs / 2,991,807 passages |
 | `edrdg` | dictionary | attribution | wired · manual | 231,322 entries |
 | `haga-jinmei` | dictionary | open | wired · manual | 54,558 entries |
 | `hdic` | dictionary | attribution | wired · manual | 96,414 entries |
@@ -33,7 +33,7 @@ A source wears every desk it serves — these sixteen answer this desk. Holdings
 | `kokubunken` | texts | attribution | wired · manual | 3 docs / 1,723 passages |
 | `kouigenji` | texts | attribution | wired · manual | 54 docs / 25,065 passages |
 | `kradfile` | dictionary | attribution | wired · manual | 6,355 entries |
-| `ndl-kotenseki` | texts | open | wired · manual | 68,105 docs / 3,805,531 passages |
+| `ndl-kotenseki` | texts | open | wired · manual | 69,640 docs / 3,842,562 passages |
 | `ninjal-textdb` | texts | attribution | wired · manual | 3 docs / 22,105 passages / 32,878 entries |
 | `nrct` | feature module | attribution | wired · manual | nothing held yet |
 | `oncoj` | annotated corpus | attribution | wired · frozen | 4,991 docs / 33,192 passages |
@@ -41,7 +41,7 @@ A source wears every desk it serves — these sixteen answer this desk. Holdings
 | `unihan` | dictionary | open | wired · manual | 102,998 entries |
 | `wiktionary-recon` | dictionary | attribution | wired · manual | 376,415 entries |
 
-**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 13 November 2026)</span>: `jpn` 449,915 · `zho` 430,294 · `lzh` 63,807 · `ojp` 11,413.
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 13 November 2026)</span>: `jpn` 451,524 · `zho` 430,294 · `lzh` 63,807 · `ojp` 11,413.
 
 **Carried in by multilingual packs** (`wiktionary-recon` — whole-source members whose other languages ride along, as of 13 November 2026): `xcl` 8,541 · `sga` 6,688 · `gem-pro` 5,749 · `gmw-pro` 5,578 · `sla-pro` 5,461 … and 18 more (`nabu axis japonic` lists all).
 

@@ -4,7 +4,7 @@ require "yaml"
 require "fileutils"
 
 module Nabu
-  # The local enablement config (config/profile.yml, promoted from the P40-f
+  # The local enablement config (local/config/profile.yml, promoted from the P40-f
   # focus profile at P44-r3b) — a plain list of AXIS NAMES and/or SOURCE SLUGS
   # naming the sources ENABLED on this box. The entries govern (a) what `nabu
   # sync`/`sync --all` will acquire and (b) the DEFAULT row set of every read
@@ -44,7 +44,7 @@ module Nabu
     end
 
     HEADER = <<~YAML
-      # nabu enablement config (config/profile.yml) — the sources ENABLED on this box.
+      # nabu enablement config (local/config/profile.yml) — the sources ENABLED on this box.
       #
       # A plain list of AXIS NAMES and/or SOURCE SLUGS. These entries govern BOTH
       # what `nabu sync` / `sync --all` acquires AND the default row set of

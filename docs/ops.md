@@ -256,7 +256,7 @@ questions and never substitute for each other (owner semantics ruling
 | Flag | Question it answers | Who sets it |
 |---|---|---|
 | `wired` | **Is the sync link tested and declared working?** A verification FACT about the channel, for every kind — flipped `true` once, after the owner-verified first sync (adapter checklist §6). It says nothing about cadence or desirability. | the loop, at first-sync verification |
-| enabled (`nabu enable`, `config/profile.yml` + local overlay) | **Does THIS box work with this source?** The instance profile — `sync <slug>` refuses an un-enabled source; modules are pre-enabled by nature (they never gate on enablement). | the owner, per box |
+| enabled (`nabu enable`, `local/config/profile.yml`) | **Does THIS box work with this source?** The instance profile — `sync <slug>` refuses an un-enabled source; modules are pre-enabled by nature (they never gate on enablement). | the owner, per box |
 | `sync_policy` | **What cadence?** `auto` = swept by `sync --all` (living upstreams) · `manual` = owner-fired by name (size/pacing) · `frozen` = dead upstream, synced once. Shelves have none (kind implies local). | the registry, at adoption |
 | `grant_required` / `availability` | **May we, publicly?** Permission-bound sources are skipped by `--all` until the grant is acknowledged; `availability: blocked` rows never advertise on public surfaces. | owner rulings |
 
@@ -650,6 +650,7 @@ On this box run them as `bundle exec rake …` (§2).
 | `rake site:preview` | Serve the site locally for staged-change review (port 4747). | Read-only. |
 | `rake site:axes` | Regenerate the per-axis site pages (one per registry axis — 28 as of October 2026) + index from registry, fragments, and LIVE catalog counts. | Run only where the catalog exists (main checkout) — a catalog-less run degrades holdings. |
 | `rake site:check` | Drift check: source-dossier descriptions vs docs/library.md. | Exit 1 on drift; never generates. |
+| `rake docs:verify` / `rake "docs:verify[network]"` | Run the taught command flows (both quickstarts, the README install block, the MCP recipes) in a fresh-clone sandbox; one OK/FAIL verdict line per documented claim. Plan: `config/docs_verify.yml`. | Offline by default (network steps print NET; an unroutable proxy guards the rest); `[network]` adds the real starter-shelf sync (~690 MB). Exit 1 on any FAIL. Verifies the committed HEAD. |
 | `rake ops:drill` | Fresh-machine restore drill against a throwaway copy (§9). | Long; owner-fired. |
 | `rake "bless[<attestation>]"` (alias: `stamps:rebless`) | Rewrite EVERY source's derivation stamp to assert current code — WITHOUT re-deriving. Escape hatch for fingerprint-formula or output-identical code changes, so a multi-hour rebuild isn't triggered by bookkeeping. | **Owner-only, dangerous.** Valid ONLY when the catalog's derived rows already match what current code would produce: right after a verified full rebuild, or after individually re-syncing every source whose output actually changed. Misuse = stamps that lie = silent under-derivation. The attestation argument (`i-verified-current-full-rebuild`) is the claim you must be able to make truthfully; the task refuses anything else. |
 
