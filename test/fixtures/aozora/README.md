@@ -82,3 +82,14 @@ meet real values (the original trim's works carry no 初出):
 - `004333` クリトン (Plato, trans. sogo) — in-copyright (=あり) with an
   external, non-zip text URL: skipped by discovery, but its persons feed
   the authority (Plato's 前427/前347 BCE dates; sogo's blank dates).
+
+## Trailing bytes past the EOCD (added 2026-11-13, copied from the owner's live canonical)
+
+- `legacy/47984_txt_30917.zip` — 舞じたく (上村松園; index row 047984,
+  作品著作権フラグ=なし, PD). REAL, WHOLE, 884 B. A 2008-era zip whose
+  End-Of-Central-Directory record (comment length 0) is followed by a
+  proprietary "ZPIT…" trailer, so no EOCD candidate ends exactly at
+  end-of-file. `unzip -p` reads it cleanly; the in-process ZipReader
+  quarantined it (and 73 more works of the same shape) as "unreadable
+  zip" until the 2026-11-13 quarantine review. Under legacy/ so the
+  discovery-skip census over `cards/*/files/` is undisturbed.

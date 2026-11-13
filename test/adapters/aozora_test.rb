@@ -265,6 +265,16 @@ class AozoraTest < Minitest::Test
     end
   end
 
+  # The quarantine review 2026-11-13: 74 works quarantined "unreadable zip"
+  # though `unzip` reads them — 2008-era zips carrying trailing bytes past
+  # the EOCD record. This REAL, WHOLE zip (舞じたく, 上村松園; PD) pins the
+  # shape end to end.
+  def test_zip_with_trailing_bytes_past_the_eocd_parses
+    document = parse_zip("legacy/47984_txt_30917.zip", "urn:nabu:aozora:047984")
+    assert_equal "舞じたく", document.title
+    refute_empty document.passages
+  end
+
   def test_no_legend_ruby_variant_parses_via_the_legacy_shape
     document = parse_zip(LEGACY_RUBY, "urn:nabu:aozora:004356")
     assert_equal "五所川原", document.title

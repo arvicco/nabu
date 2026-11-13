@@ -59,6 +59,27 @@ class ZipReaderTest < Minitest::Test
     assert_match(/central-directory/i, error.message)
   end
 
+  # The trailing-bytes shape (quarantine review 2026-11-13: 74 aozora works,
+  # all 2008-era zips): a proprietary "ZPIT…" trailer sits AFTER the EOCD,
+  # whose comment length is 0, so no candidate ends exactly at end-of-file.
+  # `unzip -p` reads them cleanly; so must we (the CRC still guards the data).
+  def test_trailing_bytes_after_the_eocd_are_tolerated_like_unzip
+    path = File.expand_path("fixtures/aozora/legacy/47984_txt_30917.zip", __dir__)
+    bytes = File.binread(path)
+    eocd = bytes.rindex(Nabu::ZipReader::EOCD_SIGNATURE)
+    assert_operator bytes.bytesize, :>, eocd + 22 + bytes.byteslice(eocd + 20, 2).unpack1("v"),
+                    "the specimen must carry bytes past its EOCD record"
+    reader = Nabu::ZipReader.new(bytes)
+    txt = reader.entries.find { |entry| entry.name.match?(/\.txt\z/in) }
+    assert_equal Nabu::Shell.run("unzip", "-p", path).b, reader.extract(txt).b
+  end
+
+  def test_trailing_bytes_on_a_built_archive_are_tolerated
+    zip = build_zip([member("x.txt", "tail junk follows\n", deflate: true)]) + "ZPIT trailer junk".b
+    reader = Nabu::ZipReader.new(zip)
+    assert_equal "tail junk follows\n".b, reader.extract(reader.entries.first).b
+  end
+
   def test_error_is_a_nabu_error_so_callers_can_map_it
     assert_operator Nabu::ZipReader::Error, :<, Nabu::Error
   end
