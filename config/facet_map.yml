@@ -829,3 +829,10 @@ sources:
       author: author          # the register's named persons (anonymous titles name none)
       printing: printing      # the register's druk: 1ste druk 3,068 · ? 180 · 2de druk 132 ·
       #                         3de druk 61 · 6de druk 42 · handschrift 20 · … (the date class reads it)
+  delpher-newspapers:         # P173 — the 16xx cone: 8,559 issues (index census 2026-11-13)
+    fields:
+      paper: series           # the newspaper title (DIDL dc:title), 22 in the cone: Oprechte
+      #                         Haerlemsche courant 4,025 · Amsterdamse courant 774 · Courante uyt
+      #                         Italien, Duytslandt, &c. 744 · La gazette d'Amsterdam 676 · …
+      publisher: publisher    # the printer-publisher verbatim (Caspar van Hilten, Abraham Casteleyn,
+      #                         La veuve de Saint Glain …)

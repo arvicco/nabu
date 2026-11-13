@@ -1,0 +1,30 @@
+Het bestand "kranten_pd_16xx.zip" bevat de teksten (OCR, ALTO, XML) van 8.559 krantenafleveringen uit de 17e eeuw, van 14-06-1618 t/m 31-12-1699
+
+Permantente URL van dit zip-bestand: http://resolver.kb.nl/resolve?urn=DATA:kranten:kranten_pd_16xx.zip
+
+=== Delpher open krantenarchief ===
+Het zip-bestand is onderdeel van het Delpher open krantenarchief. Meer informatie over dit archief en de daarin opgenomen zip-bestanden vindt u op http:///www.delpher.nl/data (ingang "Download teksten als zip-bestanden --> Delpher open krantenarchief"). 
+Daar leest u ook de gebruiksvoorwaarden en hoe u de dataset kunt citeren.
+
+=== De data verkennen ===
+* De in dit zip-bestand opgenomen krantenafleveringen zijn te bekijken op Delpher via de URL : http://www.delpher.nl/nl/kranten/results?query=&page=1&sortfield=date&cql%5B%5D=(date+_gte_+%2201-01-1618%22)&cql%5B%5D=(date+_lte_+%2231-12-1699%22)&coll=dddtitel 
+Let op: Het Kranten zip-archief wordt minder vaak bijgewerkt dan Delpher. De data in dit zip-bestand kan daarom verschillen van de actuele inhoud van Delpher.
+
+* Het bestand "index_kranten_pd_16xx.tsv" bevat de exacte titels, uitgavedatums en identifiers van de 8.559 krantenafleveringen in dit zip-bestand (tsv = tab seperated value).
+
+===Structuur zip-bestand ===
+De kranten in het bestand "kranten_pd_16xx.zip" zijn als volgt geordend:
+ * Folder per jaartal 1618-1699 
+ * * Folder per maand (o.b.v. maandnummer, 01=januari, 12=december)
+ * * * Folder per dag (o.b.v. dagnummer)
+ * * * * Folder o.b.v. unieke identifier, meestal beginnend met "DDD_ddd_" of "KRANTEN_MMKB". In het bestand "index_kranten_pd_16xx.tsv" kunt u opzoeken welke krantentitel en datum bij deze unieke identifier hoort. In de folder treft u aan: 
+ * * * * * Metadata in de vorm van een MPEG21-DIDL-bestand, per kranteneditie (didl.xml)
+ * * * * * Tekst in de vorm van een ongecorrigeerd OCR-bestand, per krantenartikel (bestandsnaam eindigt op _articletext.xml). 
+ * * * * * Woordcoördinaten in de vorm van een ALTO-bestand, per krantenpagina (bestandsnaam eindigt op  _alto.xml). 
+
+Om de downloadgrootte hanteerbaar te houden bevat dit zip-bestand niet de scans van krantenpagina's (JP2-bestanden) en krantenedities in PDF-formaat die u wel op Delpher aantreft. In de metadata (didl.xml) worden de persistente URLs van de JP2s (syntax: http://resolver.kb.nl/resolve?urn=<identifier>:<paginanummer>:image) en PDFs (syntax: http://resolver.kb.nl/resolve?urn=<identifier>:pdf) gegeven. Via deze links kunt u de bestanden zelf downloaden.
+
+=== Vragen, opmerkingen, suggesties? ===  
+Delpher hoort die graag van u via dataservices@kb.nl
+
+Laatste update: 13-01-2017

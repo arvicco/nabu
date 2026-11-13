@@ -1289,7 +1289,15 @@ sources:
     # and offerings; the inscribed stirrup jars are transport labels.
     # A whole-source declaration, the parse-time mapping call.
     source_kind: administrative
-  sigla:               # census 2026-10-22: 787 inscriptions with signs, 20 typology values
+  delpher-newspapers:  # P173 — census 2026-11-13: the 16xx cone, 8,559 issues of 22 papers
+    # The Delpher open newspaper archive IS the periodical press: every
+    # document is one issue of a newspaper (courantes, gazettes, the
+    # Groningen advertentieblad), catalogued by the KB as such. The
+    # per-article subjects (artikel / advertentie / familiebericht) ride
+    # the passages — a newspaper's sections, not the document's kind.
+    # A whole-source declaration, the parse-time mapping call.
+    source_kind: periodical/newspaper
+  sigla:              # census 2026-10-22: 787 inscriptions with signs, 20 typology values
     facet: object      # SigLA's own document typology (the paper's "document typology")
     map:
       "Tablet": administrative       # 438 — the Linear A accounts (word + logogram + fraction entries)

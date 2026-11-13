@@ -3630,6 +3630,29 @@ sources:
     script: {posture: implied, note: "Latin script; quotations in other scripts ride verbatim
         (Greek characters in 821 of the 3,654 members, Hebrew in 123, Cyrillic in 74 — the
         2026-11-08 census; the nl-rus titles among the last)"}
+  delpher-newspapers:   # P173
+    # kind machine-postured — kind_map.yml source_kind periodical/newspaper.
+    lect:
+      posture: dates
+      note: "per issue the DIDL dc:language, transcribed (nl → nld, fr → fra; a bilingual issue
+        claims upstream's first, every code riding languages); every issue carries its own day,
+        so the date × band inference stages what the registry bands: the French gazettes of the
+        16xx cone (La gazette d'Amsterdam, Gazette de Rotterdam, Nouvelles extraordinaires … —
+        ~1,900 of 8,559 issues) fall wholly inside fr:cls [1600, 1789]. Dutch stays bare nl: the
+        anchor carries no stages (no early-modern / 19th-c. Dutch nodes exist — the gap the dbnl
+        posture recorded), so the ~6,600 Dutch issues 1618–1699 wait on a stage mint for the
+        lect-scope review (candidate: an early-modern Dutch stage under nl)"
+    dating: {posture: dated, note: "every issue's own dc:date (YYYY-MM-DD) → a one-year envelope,
+        :structured, the ISO day riding raw; no class — the newspaper's issue date IS the text's
+        publication (neither composition nor edition)"}
+    places: {posture: named, note: "the DIDL's place of publication (dcterms:spatial xsi:type
+        dcx:creation) verbatim on every issue — Amsterdam, Haerlem, Rotterdam, 's-Gravenhage …
+        (upstream's period spellings kept); the untyped spatial (Landelijk / Regionaal/lokaal) is
+        the paper's distribution scope, riding distribution, never a place claim. No gazetteer
+        refs in the asset"}
+    script: {posture: implied, note: "Latin script; uncorrected OCR (gothic-type pages read
+        badly — the MMKB08 Courante pages at confidence 0.33), the hand-corrected 17th-c. pages
+        (DIDL OCRConfidencelevel 1.00) marked text_nature hand-corrected"}
   wellcome:   # P165
     # kind machine-postured — kind_map.yml folds the catalogue's genre labels (the
     # facet genre; open vocabulary: only ~a quarter of the cone carries one).
