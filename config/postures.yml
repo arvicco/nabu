@@ -3209,6 +3209,26 @@ sources:
         publication rides beside, unprojected"}
     script: {posture: implied, note: "Latin type (roman, blackletter, a few Fraktur
         prints) read by uncorrected Microsoft-era OCR (text_nature machine-ocr)"}
+  pleias-french-books:   # 02-sources row 408
+    # kind machine-postured — the pleias-french-books title fold in kind_map.yml (the
+    # blbooks precedent: no upstream genre column, the Gallica title's form noun is the label).
+    lect: {posture: identity, note: "fra on every book — the dataset card's own claim
+        (language: fr, \"French monographies\"); no language column exists, so Latin or
+        bilingual prints Gallica catalogued among them stay fra (declared, unchecked).
+        The code stays BARE deliberately: the only date is the imprint year, class
+        edition, which the inference law excludes from the hull (the P164 rule; the
+        blbooks posture). The cone's vernacular prints are overwhelmingly contemporary
+        with their print (166 books closing before 1600 → frm by band, 6,306 from 1600 →
+        fr:cls), but staging by print year is a per-source contemporaneity ruling, not a
+        transcription — escalated, not assumed"}
+    dating: {posture: dated, note: "the Gallica catalogue's imprint year on every row
+        (\"1626\"; ranges \"1633-1742\"; the abbreviated close \"1607-16\" → 1607–1616),
+        class edition on the :structured lane"}
+    places: {posture: unplaced, note: "no column carries the imprint place — it lives only
+        in the OCR'd title page (\"A PARIS. Par ANTOINE ESTIENE\"); the BnF record behind
+        each ark carries it, a metadata-expansion lane rather than a column — declared"}
+    script: {posture: implied, note: "Latin type (roman, italic, a few blackletter
+        prints) read by Gallica's uncorrected OCR (text_nature machine-ocr)"}
   mdz-protestant:   # 02-sources row 243
     kind: {posture: unclassified, note: "MDZ manifests carry no genre field (catechism,
         hymnal, prayer book, grammar, confession, sapiential book live in the titles only)"}
@@ -3630,6 +3650,29 @@ sources:
     script: {posture: implied, note: "Latin script; quotations in other scripts ride verbatim
         (Greek characters in 821 of the 3,654 members, Hebrew in 123, Cyrillic in 74 — the
         2026-11-08 census; the nl-rus titles among the last)"}
+  delpher-newspapers:   # P173
+    # kind machine-postured — kind_map.yml source_kind periodical/newspaper.
+    lect:
+      posture: dates
+      note: "per issue the DIDL dc:language, transcribed (nl → nld, fr → fra; a bilingual issue
+        claims upstream's first, every code riding languages); every issue carries its own day,
+        so the date × band inference stages what the registry bands: the French gazettes of the
+        16xx cone (La gazette d'Amsterdam, Gazette de Rotterdam, Nouvelles extraordinaires … —
+        ~1,900 of 8,559 issues) fall wholly inside fr:cls [1600, 1789]. Dutch stays bare nl: the
+        anchor carries no stages (no early-modern / 19th-c. Dutch nodes exist — the gap the dbnl
+        posture recorded), so the ~6,600 Dutch issues 1618–1699 wait on a stage mint for the
+        lect-scope review (candidate: an early-modern Dutch stage under nl)"
+    dating: {posture: dated, note: "every issue's own dc:date (YYYY-MM-DD) → a one-year envelope,
+        :structured, the ISO day riding raw; no class — the newspaper's issue date IS the text's
+        publication (neither composition nor edition)"}
+    places: {posture: named, note: "the DIDL's place of publication (dcterms:spatial xsi:type
+        dcx:creation) verbatim on every issue — Amsterdam, Haerlem, Rotterdam, 's-Gravenhage …
+        (upstream's period spellings kept); the untyped spatial (Landelijk / Regionaal/lokaal) is
+        the paper's distribution scope, riding distribution, never a place claim. No gazetteer
+        refs in the asset"}
+    script: {posture: implied, note: "Latin script; uncorrected OCR (gothic-type pages read
+        badly — the MMKB08 Courante pages at confidence 0.33), the hand-corrected 17th-c. pages
+        (DIDL OCRConfidencelevel 1.00) marked text_nature hand-corrected"}
   wellcome:   # P165
     # kind machine-postured — kind_map.yml folds the catalogue's genre labels (the
     # facet genre; open vocabulary: only ~a quarter of the cone carries one).

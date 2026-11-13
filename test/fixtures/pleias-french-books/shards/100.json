@@ -1,0 +1,9 @@
+{
+  "revision": "21abfb3f646a0f1846175c63709913a51abc9bcb",
+  "path": "gallica_mono_100.parquet",
+  "sha256": "1ef6feebaa12f6785812eb02eb45dda1b2d795f6c54b26689aa4b6c7df461de8",
+  "bytes": 2615,
+  "rows": 1,
+  "cone": "imprint-envelope<=1699",
+  "kept": 0
+}

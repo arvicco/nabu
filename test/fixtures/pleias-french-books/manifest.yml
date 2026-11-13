@@ -1,0 +1,79 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# The two shards are trims of 336–474 MB parquet files re-written by
+# upstream's writer; the API listings are trimmed and re-pinned; the
+# workdir tree is the adapter's own fetch output over fetch/. Only the
+# dataset card is a whole upstream file. adapter_test stays null (trims).
+source: pleias-french-books
+adapter_test:
+retrieved: "2026-11-13"
+files:
+  - path: fetch/README.md
+    url: https://huggingface.co/datasets/PleIAs/French-PD-Books/resolve/21abfb3f646a0f1846175c63709913a51abc9bcb/README.md
+    whole: true
+    trim: none
+  - path: dataset-card.md
+    url: https://huggingface.co/datasets/PleIAs/French-PD-Books/resolve/21abfb3f646a0f1846175c63709913a51abc9bcb/README.md
+    whole: true
+    trim: none (the fetch lands the card under this name)
+  - path: fetch/gallica_mono_1.parquet
+    whole: false
+    trim: four real rows (upstream indexes 22, 66, 545, 1415) re-written by fastparquet 2023.10.1, SNAPPY
+    refetchable: false
+    reason: a raw GET returns the whole 390 MB shard, never the trim
+  - path: fetch/gallica_mono_100.parquet
+    whole: false
+    trim: one real row (upstream index 392), its complete_text cut to three page segments, fastparquet 2023.10.1
+    refetchable: false
+    reason: a raw GET returns the whole shard, never the trim
+  - path: fetch/tree.json
+    whole: false
+    trim: the revision tree listing cut to four files; the parquet pins swapped for the trimmed shards'
+    refetchable: false
+    reason: the pins are deliberately the trimmed files' own — a re-fetch would carry upstream's
+  - path: fetch/api-dataset.json
+    whole: false
+    trim: the dataset API response cut to its scalar fields and four siblings
+    refetchable: false
+    reason: a raw GET returns the whole response with live counters (downloads, likes)
+  - path: tree.json
+    whole: false
+    trim: the adapter's fetch output over fetch/
+    refetchable: false
+    reason: materialized by the adapter's own fetch from the trimmed shards, never served upstream
+  - path: shards/1.json
+    whole: false
+    trim: the adapter's fetch output (shard stamp)
+    refetchable: false
+    reason: materialized by the adapter's own fetch from the trimmed shards, never served upstream
+  - path: shards/1.jsonl
+    whole: false
+    trim: the adapter's fetch output (shard catalogue)
+    refetchable: false
+    reason: materialized by the adapter's own fetch from the trimmed shards, never served upstream
+  - path: shards/100.json
+    whole: false
+    trim: the adapter's fetch output (shard stamp)
+    refetchable: false
+    reason: materialized by the adapter's own fetch from the trimmed shards, never served upstream
+  - path: shards/100.jsonl
+    whole: false
+    trim: the adapter's fetch output (shard catalogue)
+    refetchable: false
+    reason: materialized by the adapter's own fetch from the trimmed shards, never served upstream
+  - path: books/bpt6k9671998b.json.gz
+    whole: false
+    trim: the adapter's fetch output (one cone row with its text, gzip mtime 0)
+    refetchable: false
+    reason: materialized by the adapter's own fetch from the trimmed shards, never served upstream
+  - path: books/bpt6k54293789.json.gz
+    whole: false
+    trim: the adapter's fetch output (one cone row with its text, gzip mtime 0)
+    refetchable: false
+    reason: materialized by the adapter's own fetch from the trimmed shards, never served upstream
+  - path: books/bpt6k96930955.json.gz
+    whole: false
+    trim: the adapter's fetch output (one cone row with its text, gzip mtime 0)
+    refetchable: false
+    reason: materialized by the adapter's own fetch from the trimmed shards, never served upstream

@@ -156,6 +156,9 @@ module Nabu
           "dbnl" => :structured, # P165: the register's jaar — the transcribed witness's date (a
           #                        manuscript or first print: no class; a later printing: class
           #                        edition, or the header's first-print year as composition); no place
+          "delpher-newspapers" => :structured, # P173: the issue's own dc:date (no class — the
+          #                                      print IS the publication); place = the DIDL's
+          #                                      place of publication (dcx:creation spatial)
 
           "dharma-deccan" => :structured, # P118-2: Ollett's origDate + the Vengī metadata TSV;
           #                                 place = the origPlace placeName (findspot)
@@ -308,6 +311,8 @@ module Nabu
           "perseus-greek" => :edition_year_text,
           "perseus-latin" => :edition_year_text,
           "pl-wikisource" => :era_band_key,
+          "pleias-french-books" => :structured, # the Gallica catalogue's imprint year (ranges and
+          #                                       "1607-16" closes widen it), class edition
           "ppchy" => :structured, # P152: each text's sources-page Date (a year, Approx., Between,
           #                         19xx, the court testimony's range); place = the dialect's
           #                         town/region localization (Regensburg, Cracow, Prague …)
