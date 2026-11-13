@@ -1749,6 +1749,12 @@ source's facet and metadata-timeline slices post-load
 then `ItkcAuthorDates.refresh_source!`, not load-gated since its module
 mints no documents — mirroring the Indexer's per-source
 refresh) — only the canonical-walking extractors stay rebuild-scoped.
+The refresh is load-gated (a no-op load skips it) with one heal exception,
+the twin of the index slice's never-started probe: when the source's live
+documents carry structured date bounds or facet metadata that
+`document_axes` / `document_facets` hold no row for (a sync that died
+after its load landed, before the lanes ran — cllg-freed, 2026-11-12),
+the no-op re-sync refreshes the lanes anyway.
 The whole-library chronological views over this table are `nabu list
 --by-date` (century census, earliest-bound buckets with the announced
 multi-century count) and the generated `/dates/` site page (P81-1, C-6).

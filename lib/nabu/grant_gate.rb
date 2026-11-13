@@ -5,10 +5,9 @@ require "fileutils"
 
 module Nabu
   # The fetch-grant gate (P42-r1, owner-approved design 2026-07-23). Some
-  # sources carry a right to fetch that a PUBLIC clone of nabu does NOT convey:
-  # StarLing (a written e-mail grant to this project's author), the future TITUS
-  # Avestan (granted personally, non-commercial + credit). A future user's
-  # `nabu sync starling` must not scrape under someone else's grant — so a
+  # sources carry a right to fetch that a PUBLIC clone of nabu does NOT convey
+  # (no public license covers the retrieval). A future user's sync of such a
+  # source must not fetch under someone else's grant — so a
   # `grant_required: true` source demands an explicit, recorded acknowledgment
   # before its first fetch.
   #
@@ -97,19 +96,28 @@ module Nabu
     end
 
     # The review block the gate prints before the prompt AND embeds in every
-    # refusal/skip — the terms verbatim, who granted them and when, the
-    # criterion, and the request scaffold. Pure text so it is testable without
+    # refusal/skip — the terms verbatim, the criterion, and the request
+    # scaffold. The provenance line (who granted, when, which channel) renders
+    # ONLY on a box whose local/config/grants-provenance.yml holds it — the
+    # public registry never carries it. Pure text so it is testable without
     # any IO. +entry+ carries the Grant block (grant_required guaranteed).
     def self.notice(entry)
       grant = entry.grant
-      <<~TEXT.chomp
-        #{entry.slug}: fetch requires a GRANT this public clone does not carry.
-          terms: #{grant.terms}
-          granted by #{grant.grantor}, #{grant.date} · #{grant.thread}
-          This right was granted personally to the project author — you need your own.
-          request your own: #{grant.request_hint}
-      TEXT
+      lines = ["#{entry.slug}: fetch requires a GRANT this public clone does not carry.",
+               "  terms: #{grant.terms}"]
+      lines << "  on this box: #{provenance_text(grant)}" if grant.provenance?
+      lines << "  The right to fetch is not conveyed by a public license — you need your own grant."
+      lines << "  request your own: #{grant.request_hint}"
+      lines.join("\n")
     end
+
+    # "granted by <grantor>, <date> · <thread>", rendering whichever fields
+    # the instance row carries.
+    def self.provenance_text(grant)
+      who = ["granted by #{grant.grantor || 'the grantor'}", grant.date].compact.join(", ")
+      [who, grant.thread].compact.join(" · ")
+    end
+    private_class_method :provenance_text
 
     # The one line the prompt shows to solicit the typed word.
     def self.prompt_line(entry)

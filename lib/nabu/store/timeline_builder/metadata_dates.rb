@@ -387,6 +387,11 @@ module Nabu
           "ticha" => :structured,
           "titus-bactrian" => :structured,
           "titus-manichaica" => :place_only,
+          "titus-old-albanian" => :structured, # the edition's own stated year — Blanchus's title
+          #                                      page 1635 (class edition, Rome rides "place"),
+          #                                      Matrënga's header "(1592)" (class composition)
+          "titus-old-lithuanian" => :structured, # the catechisms' print year in TITUS's own text
+          #                                        siglum (Kat.1579 / Kat.1595 / Kat.1719), edition
           "titus-old-prussian" => :structured, # each catechism's title-page print year (class
           #                                      edition — 1545 / 1545 / 1561); the Enchiridion's
           #                                      stated Königsberg rides "place"

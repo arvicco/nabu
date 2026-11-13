@@ -65,8 +65,8 @@ module Nabu
     SETS_DIRNAME = "sets"
     TEXTS_DIRNAME = "texts"
 
-    # Seconds between HTTP requests (sequential, polite — a library
-    # resolver under a personal grant).
+    # Seconds between HTTP requests (sequential, polite — a university
+    # library resolver).
     # const: crawl politeness pause, not a corpus claim
     DELAY = 1.0
 

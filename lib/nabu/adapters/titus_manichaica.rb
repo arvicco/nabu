@@ -30,9 +30,9 @@ module Nabu
     # Middle Persian `pal`, Parthian `xpr`, Sogdian `sog`, and the Sermon's
     # Turkic appendix `oui` (see TitusManichaicaParser).
     #
-    # == The grant (by email, 2026-10-06) and the credit duty
+    # == The terms and the credit duty
     #
-    # Fetched under the owner's PERSONAL grant (Gippert): the Middle Iranian
+    # Fetched under a license grant (no public license): the Middle Iranian
     # families on TITUS, ONE retrieval per corpus, local personal research use
     # only, no redistribution, TITUS and the editors credited wherever
     # displayed — the titus-pahlavi mechanisms verbatim (`grant_required`,
@@ -107,9 +107,8 @@ module Nabu
                                  credit_name: "Sundermann/Zieme")
       }.freeze
 
-      LICENSE = "personal grant, Gippert (by email, 2026-10-06): one retrieval per corpus, local " \
-                "personal research use only, no redistribution; TITUS and the editors clearly " \
-                "indicated wherever displayed"
+      LICENSE = "restricted: one retrieval per corpus, local personal research use only, no " \
+                "redistribution; TITUS and the editors clearly indicated wherever displayed"
 
       CREDIT = "TITUS (J. Gippert, Frankfurt) — Manichaean Middle Iranian texts, editors " \
                "#{CORPORA.values.map(&:credit_name).join(', ')} " \

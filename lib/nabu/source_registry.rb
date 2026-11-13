@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require "yaml"
+require "date"
 
 require_relative "credentials"
 
@@ -91,7 +92,7 @@ module Nabu
     # PUBLIC holding — it appears on the generated site axis pages, in
     # docs/axes.md memberships, and its holdings count toward public census
     # surfaces. `blocked` means grant-gated PRIVATE research material (the
-    # fetch right is a personal grant): the public repo may keep a
+    # fetch right is not conveyed by a public license): the public repo may keep a
     # license/scouting record of it, but must NOT advertise it as a library
     # holding — the public-doc/site generators exclude it and public counts
     # never include it. Orthogonal to `grant_required` (the sync-time gate) and
@@ -139,19 +140,37 @@ module Nabu
     DEFAULT_INDEX_POLICY = "inline"
 
     # The fetch-grant block (P42-r1): a permission-bound source whose right to
-    # fetch is NOT conveyed by a public license (StarLing's personal e-mail
-    # grant to the project author, the future TITUS Avestan). A public clone of
-    # nabu must not scrape under someone else's grant, so `grant_required: true`
-    # arms the sync-time gate and this block carries what the gate renders — the
-    # terms verbatim, who granted them and when, the thread reference, and a
-    # request_hint (whom a new user should ask + what to promise). DISTINCT from
-    # ordinary public-license obligations (CC BY-NC-SA needs no gate — the
-    # license-class machinery handles attribution/redistribution); the gate
-    # criterion is solely "the right to FETCH is not conveyed by a public
-    # license." All five fields are required, non-empty strings (quote the date
-    # in YAML so it stays a String, not a parsed Date).
-    Grant = Data.define(:grantor, :date, :terms, :thread, :request_hint)
-    GRANT_FIELDS = %w[grantor date terms thread request_hint].freeze
+    # fetch is NOT conveyed by a public license. A public clone of nabu must
+    # not fetch under someone else's grant, so `grant_required: true` arms the
+    # sync-time gate and this block carries what the gate renders. DISTINCT
+    # from ordinary public-license obligations (CC BY-NC-SA needs no gate —
+    # the license-class machinery handles attribution/redistribution); the
+    # gate criterion is solely "the right to FETCH is not conveyed by a public
+    # license."
+    #
+    # The PUBLIC/INSTANCE seam (owner-ruled privacy extension, 2026-11-12):
+    # config/sources.yml carries only the class-level half — +terms+ (the
+    # obligations: retrieval scope, use, redistribution, the required credit)
+    # and +request_hint+ (whom a new user contacts for a license grant). Who
+    # granted it, when, and through which channel (+grantor+/+date+/+thread+)
+    # is the box's own provenance: local/config/grants-provenance.yml, keyed
+    # by slug, merged in at load WHEN PRESENT (GRANTS_PROVENANCE). Absent (any
+    # public clone) the provenance fields are nil and the gate renders the
+    # public fields alone. A provenance key in sources.yml fails the load,
+    # naming the slug — nobody re-adds provenance publicly by habit.
+    Grant = Data.define(:terms, :request_hint, :grantor, :date, :thread) do
+      def initialize(terms:, request_hint:, grantor: nil, date: nil, thread: nil)
+        super
+      end
+
+      # Does this box hold any provenance for the grant?
+      def provenance? = !(grantor.nil? && date.nil? && thread.nil?)
+    end
+    GRANT_FIELDS = %w[terms request_hint].freeze
+    GRANT_PROVENANCE_FIELDS = %w[grantor date thread].freeze
+    # The instance file, relative to the project root (the sources file's
+    # config/ parent) — the default wiring, like the sibling axes.yml.
+    GRANTS_PROVENANCE = File.join("local", "config", "grants-provenance.yml")
 
     # One registry line. adapter_class_name is a String resolved on demand.
     # +translations+ (P7-4): per-source opt-in to ingesting parallel
@@ -207,7 +226,8 @@ module Nabu
     # up= column reads structurally as local/module).
     # +grant_required+ / +grant+ (P42-r1): a permission-bound source arms the
     # sync-time grant gate (grant_required: true) and carries the Grant block
-    # the gate renders (grantor/date/terms/thread/request_hint). The two travel
+    # the gate renders (terms/request_hint; instance provenance merged in from
+    # local/config/grants-provenance.yml when the box holds it). The two travel
     # together — a grant block without the flag, or the flag without a block, is
     # a configuration error caught at load. Absent on every ordinary source.
     # +lemma_dictionary_filter+ (P84-1): arms the silver-lemma epigraphy
@@ -350,8 +370,12 @@ module Nabu
     # Nabu::ValidationError naming the offending slug. Axis definitions load
     # from the SIBLING axes.yml by default (override via +axes_path+, tests
     # only) — every call site keeps passing just the sources path, and a
-    # redirected registry brings its own axes file or none.
-    def self.load(path, axes_path: nil)
+    # redirected registry brings its own axes file or none. Grant provenance
+    # loads from <root>/local/config/grants-provenance.yml by default (the
+    # sources file's config/ parent is the root; a sources file outside a
+    # config/ dir has no default); +provenance_path+ overrides it, and
+    # `false` reads the PUBLIC view only (tests pinning the shipped rows).
+    def self.load(path, axes_path: nil, provenance_path: nil)
       axes = AxisRegistry.load(axes_path || File.join(File.dirname(path.to_s), "axes.yml"))
       data = File.exist?(path) ? (YAML.safe_load_file(path) || {}) : {}
       unless data.is_a?(Hash)
@@ -359,6 +383,8 @@ module Nabu
       end
 
       entries = data.map { |slug, config| build_entry(slug, config, axis_registry: axes) }
+      provenance_path = default_provenance_path(path) if provenance_path.nil?
+      entries = merge_grant_provenance(entries, provenance_path) if provenance_path
       collisions = axes.names & entries.map(&:slug)
       unless collisions.empty?
         raise ValidationError, "axis name #{collisions.first.inspect} collides with a source slug — " \
@@ -516,8 +542,9 @@ module Nabu
     # The flag and the block travel together: grant_required without a grant
     # block is a config error (the gate would have nothing to render), and a
     # grant block without the flag is a config error too (dead config that
-    # would gate nothing). A present block must carry every GRANT_FIELDS key as
-    # a non-empty String (quote the date in YAML so it is not parsed to a Date).
+    # would gate nothing). A present block carries exactly the PUBLIC
+    # GRANT_FIELDS as non-empty Strings; a provenance key (grantor/date/
+    # thread) is refused naming the instance file it belongs in.
     def self.grant!(slug, config)
       required = boolean!(slug, config, "grant_required")
       block = config.fetch("grant", nil)
@@ -534,11 +561,26 @@ module Nabu
         raise ValidationError, "source #{slug.inspect}: grant must be a mapping, got #{block.class}"
       end
 
+      grant_keys!(slug, block)
       values = GRANT_FIELDS.map { |key| grant_field!(slug, block, key) }
-      [true, Grant.new(grantor: values[0], date: values[1], terms: values[2],
-                       thread: values[3], request_hint: values[4])]
+      [true, Grant.new(terms: values[0], request_hint: values[1])]
     end
     private_class_method :grant!
+
+    def self.grant_keys!(slug, block)
+      block.each_key do |key|
+        if GRANT_PROVENANCE_FIELDS.include?(key)
+          raise ValidationError,
+                "source #{slug.inspect}: grant.#{key} is instance provenance — it never rides the " \
+                "public registry; move it to #{GRANTS_PROVENANCE} (keyed by slug)"
+        end
+        next if GRANT_FIELDS.include?(key)
+
+        raise ValidationError,
+              "source #{slug.inspect}: unknown grant key #{key.inspect} (#{GRANT_FIELDS.join('/')})"
+      end
+    end
+    private_class_method :grant_keys!
 
     def self.grant_field!(slug, block, key)
       value = block[key]
@@ -548,6 +590,58 @@ module Nabu
             "source #{slug.inspect}: grant.#{key} must be a non-empty string, got #{value.inspect}"
     end
     private_class_method :grant_field!
+
+    def self.default_provenance_path(sources_path)
+      dir = File.dirname(File.expand_path(sources_path.to_s))
+      return false unless File.basename(dir) == "config"
+
+      File.join(File.dirname(dir), GRANTS_PROVENANCE)
+    end
+    private_class_method :default_provenance_path
+
+    # Merge the box's grant provenance (local/config/grants-provenance.yml:
+    # slug => {grantor, date, thread}, every key optional) into the matching
+    # grant-gated entries. Absent file = the public view, unchanged. A row
+    # naming a retired or ungated slug is inert (an instance memo must never
+    # take every command down); a malformed row fails loudly, naming the file
+    # and slug. An unquoted date (YAML Date) is tolerated and stringified.
+    def self.merge_grant_provenance(entries, provenance_path)
+      return entries unless File.file?(provenance_path)
+
+      rows = YAML.safe_load_file(provenance_path, permitted_classes: [Date]) || {}
+      unless rows.is_a?(Hash)
+        raise ValidationError, "#{provenance_path}: must be a mapping of slug => provenance, got #{rows.class}"
+      end
+
+      entries.map do |entry|
+        row = rows[entry.slug]
+        next entry if row.nil? || !entry.grant_required?
+
+        entry.with(grant: entry.grant.with(**provenance_row!(provenance_path, entry.slug, row)))
+      end
+    end
+    private_class_method :merge_grant_provenance
+
+    def self.provenance_row!(provenance_path, slug, row)
+      unless row.is_a?(Hash)
+        raise ValidationError, "#{provenance_path}: #{slug.inspect} must be a mapping, got #{row.class}"
+      end
+
+      row.to_h do |key, value|
+        unless GRANT_PROVENANCE_FIELDS.include?(key)
+          raise ValidationError, "#{provenance_path}: #{slug.inspect}: unknown key #{key.inspect} " \
+                                 "(#{GRANT_PROVENANCE_FIELDS.join('/')})"
+        end
+        value = value.to_s if value.is_a?(Date)
+        unless value.is_a?(String) && !value.strip.empty?
+          raise ValidationError,
+                "#{provenance_path}: #{slug.inspect}: #{key} must be a non-empty string, got #{value.inspect}"
+        end
+
+        [key.to_sym, value]
+      end
+    end
+    private_class_method :provenance_row!
 
     # The three P35-0 membership rules, at load like every other invariant:
     # once definitions exist, absent/empty axes is an error (every source

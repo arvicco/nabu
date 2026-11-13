@@ -46,10 +46,11 @@ module Nabu
     #   project's dictionary of charter vocabulary, a modern German
     #   reference work, not a charter. Rejected by textgroup, whatever its
     #   licence (every entry is CC BY 4.0);
-    # - unlicensed files (the 6 luzern charters, Schiess 1933): their
-    #   <availability> holds only the comment "To be filled in when a
-    #   decision is made by the team." No grant in the header is no grant at
-    #   all (the pta law) — they wait for upstream's decision;
+    # - (the 6 luzern charters, Schiess 1933, carried no per-file grant —
+    #   only upstream's "to be filled in" placeholder — and skipped until
+    #   ruled 2026-11-12: they now admit under the whole deposit's CC BY,
+    #   DEPOSIT_LICENCES below; any other unlicensed file still skips —
+    #   no grant is no grant, the pta law);
     # - regest-only records (37: langobardisch_1 12, hersfeld 11,
     #   marmoutier_manceau 9, freising 2, three singletons): the printed
     #   edition gives only a summary (a lost charter, or a register note —
@@ -64,8 +65,9 @@ module Nabu
     # Reconciliation against upstream's own index (the readable editions the
     # __capitains__.xml catalogs list, 5,496): 5,207 Latin edition files +
     # 289 E-Lexicon catalog editions (259 files) = 5,496. Through the
-    # adapter over the 2ce73416 clone (2026-11-08): 5,164 accepted (5,281
-    # passages, 0 errored) + 6 unlicensed + 37 regest-only + 259 E-Lexicon
+    # adapter over the 2ce73416 clone (2026-11-08; luzern ruling applied
+    # 2026-11-12): 5,170 accepted (5,164 per-file-licensed + the 6
+    # deposit-licensed luzern) + 37 regest-only + 259 E-Lexicon
     # files = the 5,466 TEI files under data/, residue 0.
     #
     # == The licence law (per document)
@@ -75,8 +77,9 @@ module Nabu
     # list. Census over the 5,207 Latin files: CC BY 4.0 5,096 (→ the
     # source class, attribution; 5,059 accepted); CC BY-NC-ND 4.0 105 (the
     # eudes 34 and marmoutier_pour_le_perche 71 collections, all accepted →
-    # license_override "nc", the house class for NC-ND —
-    # pedecerto/traces/e84000); none 6 (luzern, skipped above). An UNKNOWN target stops discovery loudly
+    # license_override "nc", the house class for NC-ND, kept by the same
+    # ruling — the project's own per-file choice, not a digitizer's
+    # pretension); none 6 (luzern, deposit-licensed above). An UNKNOWN target stops discovery loudly
     # (Nabu::FetchError): a new grant is classed deliberately, never guessed.
     #
     # == Dedupe (checked 2026-11-08)
@@ -150,6 +153,20 @@ module Nabu
         "https://creativecommons.org/licenses/by/4.0/" => "attribution",
         "https://creativecommons.org/licenses/by-nc-nd/4.0/" => "nc"
       }.freeze
+
+      # Textgroups whose files carry NO per-file grant but whose WHOLE
+      # Zenodo deposit is licensed: the luzern six (Schiess 1933) sit in
+      # the deposit recorded cc-by-4.0 (10.5281/zenodo.10082515) while
+      # their <availability> holds upstream's "to be filled in when a
+      # decision is made by the team" placeholder. Ruled 2026-11-12: the
+      # deposit is upstream's own grant over the entire set, so these
+      # admit under the deposit licence with the basis declared — any
+      # OTHER unlicensed file still skips (no grant is no grant).
+      DEPOSIT_LICENCES = {
+        "luzern" => "https://creativecommons.org/licenses/by/4.0/"
+      }.freeze
+      DEPOSIT_BASIS = "deposit licence (Zenodo 10.5281/zenodo.10082515; per-file availability " \
+                      "is an upstream placeholder)"
 
       # Textgroups rejected as a whole grain, with the note's label.
       REJECTED_TEXTGROUPS = {
@@ -254,7 +271,7 @@ module Nabu
       def skip_reason(candidate)
         return candidate.textgroup.to_sym if REJECTED_TEXTGROUPS.key?(candidate.textgroup)
         return :language unless candidate.language == LANGUAGE
-        return :unlicensed if licence_target(candidate.path).nil?
+        return :unlicensed if licence_target(candidate.path).nil? && !DEPOSIT_LICENCES.key?(candidate.textgroup)
         return :textless if peek(candidate.path).textless
 
         nil
@@ -275,6 +292,8 @@ module Nabu
 
       def document_ref(candidate)
         licence = licence_target(candidate.path)
+        deposit = licence.nil? && DEPOSIT_LICENCES[candidate.textgroup]
+        licence = deposit if deposit
         klass = LICENCE_CLASSES[licence]
         unless klass
           raise Nabu::FetchError, "#{candidate.path}: unrecognized licence #{licence.inspect} — class it in " \
@@ -288,6 +307,7 @@ module Nabu
             "title" => read_header(candidate.path)[:title] || candidate.name,
             "language" => LANGUAGE,
             "license" => licence,
+            "license_basis" => (DEPOSIT_BASIS if deposit),
             "license_override" => (klass unless klass == manifest.license_class),
             "collection" => candidate.textgroup,
             "cts_textgroup" => candidate.textgroup,

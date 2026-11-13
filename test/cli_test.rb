@@ -2469,11 +2469,8 @@ class CLITest < Minitest::Test
         availability: blocked
       #{axes_line}  grant_required: true
         grant:
-          grantor: G. Starostin
-          date: "2026-07-15"
           terms: any use, per-base attribution required
-          thread: "by email, 2026-07-15"
-          request_hint: write to George Starostin for your own grant
+          request_hint: contact the source (example.org) for a license grant
     YAML
   end
 
@@ -2508,7 +2505,7 @@ class CLITest < Minitest::Test
           sync_policy: manual
           availability: blocked
           grant_required: true
-          grant: {grantor: "the member desk", date: "2026-10-06", terms: "personal research", thread: "by email, 2026-10-06", request_hint: "write to the member desk"}
+          grant: {terms: "local research use only", request_hint: "contact the member desk for a license grant"}
           axes: [classical]
       YAML
       out, err, status = with_config(config) { run_cli(%w[enable all]) }
@@ -2572,7 +2569,7 @@ class CLITest < Minitest::Test
         with_stdin("no\n", tty: true) { run_cli(%w[enable secret]) }
       end
       assert_equal 1, status
-      assert_match(/write to George Starostin/, err, "the request scaffold")
+      assert_match(/contact the source \(example\.org\)/, err, "the request scaffold")
       assert_predicate Nabu::Profile.load(config.profile_path), :empty?, "a refused grant enables nothing"
       assert_equal 0, grant_ack_count(config, "secret")
     end
@@ -3670,7 +3667,7 @@ class CLITest < Minitest::Test
         with_stdin("no thanks\n", tty: true) { run_cli(%w[sync starling --parse-only]) }
       end
       assert_equal 1, status
-      assert_match(/write to George Starostin/, err, "the request scaffold pointer")
+      assert_match(/contact the source \(example\.org\)/, err, "the request scaffold pointer")
       assert_match(/Nothing was fetched/, err)
       assert_equal 0, grant_ack_count(config, "starling"), "a refusal records nothing"
     end
@@ -10744,11 +10741,8 @@ class CLITest < Minitest::Test
         sync_policy: #{policy}
       #{axes_line}  grant_required: true
         grant:
-          grantor: G. Starostin
-          date: "2026-07-15"
           terms: any use, per-base attribution required
-          thread: "by email, 2026-07-15"
-          request_hint: write to George Starostin for your own grant
+          request_hint: contact the source (example.org) for a license grant
     YAML
   end
 

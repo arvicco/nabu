@@ -3,6 +3,7 @@
 require "json"
 
 require_relative "../normalize"
+require_relative "../lemma_keys"
 
 module Nabu
   module Store

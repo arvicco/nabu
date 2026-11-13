@@ -194,6 +194,19 @@ sources:
   # date (the D57-f mixed-at-source-grain class). The vernacular rows
   # (eng, vie, pol, grc …) stay bare. Tier certain: the register claim is
   # the database's definition, not an inference.
+  cantus:
+    # The CANTUS records are the chants of the Latin Office and Mass —
+    # the same register claim the gregobase/divinum-officium rows make
+    # (ruled 2026-11-12 after the lect-scope review): chant is
+    # register-classed, never period-classed. The date on a cantus
+    # record is the WITNESS's copying date (basis "source" in the
+    # posture) over texts that are mostly far older liturgy, and the
+    # automatic date-band staging it fed made lat:ren 98.6% chant
+    # manuscripts — a 15th-century antiphoner is not the humanists'
+    # Latin. This override replaces that band staging wholesale;
+    # stageless like its two precedents. Tier certain: the register
+    # claim is the database's own definition.
+    lat: { lect: "lat/ecc", tier: certain }
   gregobase:
     lat: { lect: "lat/ecc", tier: certain }
   divinum-officium:
@@ -446,3 +459,27 @@ sources:
     # print (short German/Latin/Italian title blocks ride the same sl code,
     # declared coarse in the adapter header).
     sl: { lect: "sl:emod", tier: certain }
+  titus-old-lithuanian:
+    # The TITUS Old Lithuanian editions ARE the Old Lithuanian record the
+    # registry's lt:old node names — its own note lists them (Mažvydas,
+    # Vilentas, Daukša, Sirvydas, Donelaitis), and every edition falls in
+    # the stage band [1547, 1800]: the prints from Mažvydas's catechism to
+    # Lysius 1719 (the Wolfenbüttel Postil, Vilentas 1579, Daukša 1595,
+    # Szyrwid's Punktai sakymų, Engel's catechism), the SLIEKKAS Dzūkian
+    # prayers, and Donelaitis's Metai. The adapter tags the corpus bare lit
+    # (every text lane is Lithuanian); this row transcribes the
+    # collection's identity onto the existing node — parse-time work, the
+    # 2026-10-18 generalization. Tier certain: the collection is the
+    # stage's own named corpus.
+    lit: { lect: "lt:old", tier: certain }
+  titus-old-albanian:
+    # The TITUS Old Albanian editions are the early written tradition the
+    # registry's sq:old node names — its note lists Buzuku 1555, Bardhi's
+    # (Blanchus's) Dictionarium 1635, Bogdani's Cuneus 1685 and Matrënga
+    # 1592 — with Casasi's catechism beside them. The adapter tags the
+    # corpus bare sqi (→ sq by the universal codemap); this row transcribes
+    # the collection's identity onto the existing node — parse-time work,
+    # the 2026-10-18 generalization. Tier approximation: Casasi's imprint
+    # is read from the held pages after the first retrieval, so that one
+    # edition's place inside the band [1462, 1800] is a reading until then.
+    sqi: { lect: "sq:old", tier: approximation }

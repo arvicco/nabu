@@ -269,7 +269,7 @@ class PosturesTest < Minitest::Test
                  "2026-10-12) RETIRES all five P118 pendings to identity — te/kn/pka minted, " \
                  "ta re-parented, the tam/tel/kan codemap rows live (the add-then-retire " \
                  "shape, five at once); titus-tocharian-b ADDED — identity txb (a real " \
-                 "anchor; the members-only B corpus on the titus-tocharian-a family) and " \
+                 "anchor; the login-gated B corpus on the titus-tocharian-a family) and " \
                  "ban-wikisource ADDED P120-2 — pending on the ban/sas nodes of the " \
                  "nabu-lects mint (kaw resolves on the held node): 133→135; " \
                  "P120-3 ADDS gu/ms/th-wikisource as PENDING on the hub-side gu/ms/th " \
@@ -439,7 +439,11 @@ class PosturesTest < Minitest::Test
                  "cllg-sc ADDED — identity grc + lat " \
                  "(the Apostolic-Fathers-to-Cabasilas span, 7 of 368 works dated): 195→196; " \
                  "cllg-freed ADDED — dates (the TLG canon's century datings band the works onto " \
-                 "grc:hom/cla/koi/byz): 196→197"
+                 "grc:hom/cla/koi/byz): 196→197; " \
+                 "cantus RETIRED — the lat → lat/ecc override machine-postures it (ruled 2026-11-12, " \
+                 "the gregobase stageless-register precedent; the shadowing rule): 197→196; " \
+                 "titus-old-frisian ADDED — identity ofs (the bare " \
+                 "Old Frisian anchor; the East/West split stays registry prose): 196→197"
     # The epigraphic-belt registry package (merged + canonical-synced
     # 2026-10-18, the add-then-retire shape within one phase) retires both
     # P130 pendings, and the ociana-script rule + the ig-cyprus override
@@ -532,6 +536,9 @@ class PosturesTest < Minitest::Test
     # cllg-sc joins identity (bare grc + lat; the patristic span is undated upstream
     # but for 7 works, and edition-class years never stage): 142→143.
     # cllg-freed joins dates (the TLG canon centuries band onto grc:hom/cla/koi/byz): 31→32.
+    # cantus leaves identity (the lat → lat/ecc override machine-postures it,
+    # ruled 2026-11-12 — the shadowing rule): 143→142.
+    # titus-old-frisian joins identity (ofs, the bare Old Frisian anchor): 142→143.
     assert_equal({ "dates" => 32, "codemap" => 22, "identity" => 143 }, by_posture)
   end
 end

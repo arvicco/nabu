@@ -10,12 +10,12 @@ module Nabu
     # advance instead of a hunt across assertion literals (the P152
     # consolidation; the 2026-10-30 third cut broke nine assertions in
     # four files by moving 272 → 284; the 2026-11-02 fourth cut moved it to
-    # 312; the 2026-11-04 fifth cut to 317).
+    # 312; the 2026-11-04 fifth cut to 317; the 2026-11-12 sixth cut to 323).
     module RegistryCensus
-      ANCHORS = 317
-      STAGES = 169
+      ANCHORS = 323
+      STAGES = 172
       VARIETIES = 33
-      CODEMAP_ROWS = 231
+      CODEMAP_ROWS = 238
 
       # The one-line census rendering shared by status/list surfaces.
       LINE = [

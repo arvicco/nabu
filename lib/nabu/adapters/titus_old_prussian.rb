@@ -14,10 +14,10 @@ module Nabu
     # kalbos paminklai (Vilnius 1966/1981), data entry W. Euler (München
     # 1997-1998), TITUS version J. Gippert.
     #
-    # == The grant (by email, 2026-11-12) and the credit duty
+    # == The terms and the credit duty
     #
-    # Fetched under the owner's PERSONAL grant on the terms of the TITUS
-    # family: one retrieval, local personal research use, no
+    # Fetched under a license grant (no public license) on the terms of the
+    # TITUS family: one retrieval, local personal research use, no
     # redistribution, TITUS and the editors credited wherever displayed.
     # Same two mechanisms as titus-avestan: `grant_required: true` guards
     # the fetch right; license_class `nc` + the manifest +credit+ line
@@ -58,9 +58,8 @@ module Nabu
 
       ENTRY_URL = "https://titus.uni-frankfurt.de/texte/etcs/balt/apreuss/apreuss/apreu.htm"
 
-      LICENSE = "personal grant, Gippert (by email, 2026-11-12, on the TITUS family terms): " \
-                "one retrieval, local personal research use, no redistribution; TITUS and " \
-                "the editors clearly indicated wherever displayed"
+      LICENSE = "restricted (the TITUS family terms): one retrieval, local personal research " \
+                "use, no redistribution; TITUS and the editors clearly indicated wherever displayed"
 
       CREDIT = "TITUS (J. Gippert, Frankfurt) — Old Prussian Corpus after V. Mažiulis, " \
                "Prūsų kalbos paminklai, data entry W. Euler."

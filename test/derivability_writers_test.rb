@@ -184,7 +184,7 @@ class DerivabilityWritersTest < Minitest::Test
   # census.tsv (tmp + rename, a declared materialization), the text zips
   # (zips/<bnumber>.zip, .part + rename); its .wellcome-crawl.json ledger
   # is written by the paced-crawl engine — the ndl-kotenseki crawl law kind.
-  # credentials (the credentials seam) writes ONE instance file,
+  # credentials (Nabu::Credentials) writes ONE instance file,
   # local/config/credentials.yml (tmp born mode 600 + chmod + rename),
   # driven only by the `nabu creds set` gateway — the local/config
   # write-through law kind (grant_gate's grants.yml sibling); never db/.
