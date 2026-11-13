@@ -113,6 +113,25 @@ map:
   # language — the same №11 logic, opposite spelling.
   ar:      ara
   is:      isl
+  # The 2026-11-13 sitting's mirror wave: the wiktextract shelves emit
+  # 639-1 spellings in their etymology/descendant lines by the tens of
+  # thousands (la 27,147 · sa 15,634 · cu 4,654 · zh 2,405 · he 894 …
+  # reflex rows censused that day), all naming languages the registry
+  # anchors under their 639-2/3 codes.
+  la:      lat
+  sa:      san
+  cu:      chu
+  zh:      zho
+  pi:      pli
+  he:      heb
+  km:      khm
+  # 639-2/3 spellings of newly anchored codes (the №11 suite's shape)
+  hun:     hu
+  fry:     fy
+  ell:     el   # the 639-2/T twin of Modern Greek (gre, the /B spelling, is above)
+  # Old Hungarian: an ISO 639-3 period code of an anchored language
+  # (the oty/omr shape)
+  ohu:     hu:old
 
   # 639-2 Syriac, read as the classical literary language: historical text
   # collections use syr in its pre-2007 scope (syc was split out of syr in
@@ -291,6 +310,10 @@ map:
   poz-pep-pro: poz-pep:pro
   poz-mic-pro: poz-mic:pro
   mkh-vie-pro: mkh-vie:pro
+  urj-pro:     urj:pro
+  map-pro:     map:pro
+  poz-pro:     poz:pro
+  sio-pro:     sio:pro
 
   # The script-suffix suite (P61): BCP-47-style tags whose script subtag
   # is used per the standard's own semantics -- it describes the CONTENT.
@@ -356,3 +379,21 @@ map:
   osn-Latn: "osn~latn"
   pyx-Latn: "pyx~latn"
   osc-Grek: "osc~grek"
+  # The 2026-11-13 sitting's script-suffix additions, same standard
+  # semantics (the subtag describes the held content's script; each
+  # row's consuming collection byte-censused that day). The deviant
+  # artifact-claim tags (egy-Egyd, the -Ital-x- transliteration
+  # forms) stay OUT per the standing rule above — per-collection
+  # overrides, never universal rows.
+  ara-Syrc: "ara~syrc"  # Garshuni — Arabic in Syriac script (hmml-reading-room, 2,595 docs)
+  kaw-Bali: "kaw~bali"  # Kawi in Balinese script (ban-wikisource lontar copies, 701 docs)
+  ban-Bali: "ban~bali"  # Balinese-script Balinese (ban-wikisource, 542 docs)
+  ban-Latn: "ban~latn"  # the romanized Leiden copies (ban-wikisource)
+  sas-Bali: "sas~bali"  # Sasak lontar in Balinese script (ban-wikisource)
+  jav-Java: "jv~java"   # aksara-Jawa Javanese (jv-wikisource)
+  sun-Java: "su~java"   # Javanese-script (cacarakan) Sundanese (su-wikisource)
+  ecy-Latn: "ecy~latn"  # romanized Eteocypriot (ig-cyprus, 22 docs)
+  nld-Latn: "nl~latn"   # sii-clean's explicit-script Dutch rows
+  fas-Latn: "fa~latn"   # romanized Persian (sii-clean)
+  ara-Latn: "ara~latn"  # romanized Arabic (sii-clean)
+  hbo-Grek: "hbo~grek"  # the Secunda shape — Hebrew in Greek transcription (hexapla)
