@@ -19,12 +19,12 @@ A source wears every desk it serves — these four answer this desk. Holdings ar
 |---|---|---|---|---|
 | `senie` | texts | attribution | wired · manual | 183 docs / 48,995 passages |
 | `vakk` | texts | nc | wired · manual | 3,052 docs / 148,875 passages |
-| `vks` | texts | attribution | wired · manual | 128 docs / 65,311 passages |
+| `vks` | texts | attribution | wired · manual | 134 docs / 73,404 passages |
 | `wiktionary-et` | dictionary | attribution | wired · manual | 13,549 entries |
 
 Private research materials are not listed.
 
-**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 13 November 2026)</span>: `et` 16,601 · `lv` 172 · `fi` 128 · `de` 10 · `lat` 1.
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 13 November 2026)</span>: `et` 16,601 · `lv` 172 · `fi` 134 · `de` 10 · `lat` 1.
 
 ## The desk's instruments
 

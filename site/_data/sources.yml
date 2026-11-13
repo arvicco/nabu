@@ -96,13 +96,13 @@ sources:
   aozora:
     name: Aozora Bunko 青空文庫 — Japanese public-domain library (ruby-annotated text)
     license_class: open
-    documents: 17121
-    documents_display: '17,121'
-    passages: 2983332
-    passages_display: '2,983,332'
+    documents: 17195
+    documents_display: '17,195'
+    passages: 2991807
+    passages_display: '2,991,807'
     entries: 0
     entries_display: '0'
-    holdings: 17,121 documents / 2,983,332 passages
+    holdings: 17,195 documents / 2,991,807 passages
     canonical_display: 2.2 GB
   aranese:
     name: ES-OC Parallel Corpus — Spanish–Aranese (BSC projecte-aina, WMT24)
@@ -2102,13 +2102,13 @@ sources:
   ndl-kotenseki:
     name: NDL 次世代デジタルライブラリー — 古典籍 OCR full text (bulk API)
     license_class: open
-    documents: 68105
-    documents_display: '68,105'
-    passages: 3805531
-    passages_display: '3,805,531'
+    documents: 69640
+    documents_display: '69,640'
+    passages: 3842562
+    passages_display: '3,842,562'
     entries: 0
     entries_display: '0'
-    holdings: 68,105 documents / 3,805,531 passages
+    holdings: 69,640 documents / 3,842,562 passages
     canonical_display: 18 GB
   ninjal-textdb:
     name: NINJAL Text Data Sets for Research on the History of Japanese — the Kirishitan
@@ -2428,14 +2428,14 @@ sources:
   pleias-french-books:
     name: French Public Domain Books — Gallica OCR via PleIAs (pre-1700 cone)
     license_class: open
-    documents: 1141
-    documents_display: '1,141'
-    passages: 212656
-    passages_display: '212,656'
+    documents: 6477
+    documents_display: '6,477'
+    passages: 1107938
+    passages_display: '1,107,938'
     entries: 0
     entries_display: '0'
-    holdings: 1,141 documents / 212,656 passages
-    canonical_display: 158 MB
+    holdings: 6,477 documents / 1,107,938 passages
+    canonical_display: 825 MB
   ponomar:
     name: Ponomar — Church Slavonic service texts (the Hours kit)
     license_class: attribution
@@ -3280,13 +3280,13 @@ sources:
     name: VKS — Vanhan kirjasuomen korpus, the Corpus of Old Literary Finnish (Kotus,
       via Kielipankki Korp)
     license_class: attribution
-    documents: 128
-    documents_display: '128'
-    passages: 65311
-    passages_display: '65,311'
+    documents: 134
+    documents_display: '134'
+    passages: 73404
+    passages_display: '73,404'
     entries: 0
     entries_display: '0'
-    holdings: 128 documents / 65,311 passages
+    holdings: 134 documents / 73,404 passages
     canonical_display: 145 MB
   vuk-danicic:
     name: The Vuk–Daničić Serbian Bible (NT 1847, OT 1865) — ijekavian text, via Rs1Bible
@@ -3314,14 +3314,14 @@ sources:
   wellcome:
     name: Wellcome Collection — digitised printed books, OCR full text (pre-1800 cone)
     license_class: open
-    documents: 527
-    documents_display: '527'
-    passages: 264213
-    passages_display: '264,213'
+    documents: 703
+    documents_display: '703'
+    passages: 319304
+    passages_display: '319,304'
     entries: 0
     entries_display: '0'
-    holdings: 527 documents / 264,213 passages
-    canonical_display: 792 MB
+    holdings: 703 documents / 319,304 passages
+    canonical_display: 835 MB
   wenhai:
     name: 'The Digital Wenhai v1.1: Phonology (Beaudouin 2026) — the Tangut rhyme
       dictionary 文海'
@@ -3922,13 +3922,14 @@ shelves:
     - typikon-bible
     - noscemus
     - mazarinades
+    - pleias-french-books
     - socinian-letters
     - wellcome
-    documents: 25667
-    documents_display: '25,667'
-    passages: 5872025
-    passages_display: '5,872,025'
-    size_display: 25,667 / 5,872,025
+    documents: 32320
+    documents_display: '32,320'
+    passages: 7035054
+    passages_display: '7,035,054'
+    size_display: 32,320 / 7,035,054
   papyri:
     sources:
     - papyri-ddbdp
@@ -4257,11 +4258,11 @@ shelves:
     - vakk
     - vks
     - bim-sahcoba
-    documents: 3378
-    documents_display: '3,378'
-    passages: 282542
-    passages_display: '282,542'
-    size_display: 3,378 / 282,542
+    documents: 3384
+    documents_display: '3,384'
+    passages: 290635
+    passages_display: '290,635'
+    size_display: 3,384 / 290,635
   chinese:
     sources:
     - kanripo
@@ -4319,11 +4320,11 @@ shelves:
     - kouigenji
     - ninjal-textdb
     - oncoj
-    documents: 97207
-    documents_display: '97,207'
-    passages: 7089151
-    passages_display: '7,089,151'
-    size_display: 97,207 / 7,089,151
+    documents: 98816
+    documents_display: '98,816'
+    passages: 7134657
+    passages_display: '7,134,657'
+    size_display: 98,816 / 7,134,657
   southeast-asia:
     sources:
     - dharma-khmer
@@ -4360,12 +4361,13 @@ shelves:
     - runesdb
     - grand-tour
     - dbnl
+    - delpher-newspapers
     - nb-no
-    documents: 44414
-    documents_display: '44,414'
-    passages: 3486874
-    passages_display: '3,486,874'
-    size_display: 44,414 / 3,486,874
+    documents: 52973
+    documents_display: '52,973'
+    passages: 3555564
+    passages_display: '3,555,564'
+    size_display: 52,973 / 3,555,564
   africa:
     sources:
     - africa-pd
@@ -4386,6 +4388,6 @@ shelves:
     passages_display: '7,014'
     size_display: 1,282 / 7,014
 disk:
-  canonical_display: 160 GB
-  derived_display: 236 GB
+  canonical_display: 161 GB
+  derived_display: 241 GB
   starter_display: 693 MB
