@@ -28,7 +28,7 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 A source wears every desk it serves — these 44 answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
-| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 12 November 2026)</span> |
+| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 13 November 2026)</span> |
 |---|---|---|---|---|
 | `aspr` | texts | attribution | wired · manual | 349 docs / 30,550 passages |
 | `blbooks` | texts | open | wired · manual | 2,497 docs / 230,206 passages |
@@ -77,9 +77,9 @@ A source wears every desk it serves — these 44 answer this desk. Holdings are 
 
 Private research materials are not listed.
 
-**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 12 November 2026)</span>: `en` 601,236 · `ita` 167,236 · `lat` 138,709 · `non` 97,017 · `ang` 71,142 · `enm` 60,521 · `fra` 59,833 · `sv` 53,406 · `spa` 28,346 · `got` 23,038 … and 46 more (`nabu axis germanic` lists all).
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 13 November 2026)</span>: `en` 601,236 · `ita` 167,236 · `lat` 138,709 · `non` 97,017 · `ang` 71,142 · `enm` 60,521 · `fra` 59,833 · `sv` 53,406 · `spa` 28,346 · `got` 23,038 … and 46 more (`nabu axis germanic` lists all).
 
-**Carried in by multilingual packs** (`ud` — whole-source members whose other languages ride along, as of 12 November 2026): `orv` 9 · `ota` 5 · `lzh` 4 · `cop` 3 · `egy` 3 … and 12 more (`nabu axis germanic` lists all).
+**Carried in by multilingual packs** (`ud` — whole-source members whose other languages ride along, as of 13 November 2026): `orv` 9 · `ota` 5 · `lzh` 4 · `cop` 3 · `egy` 3 … and 12 more (`nabu axis germanic` lists all).
 
 ## The desk's instruments
 

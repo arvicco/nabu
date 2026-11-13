@@ -179,8 +179,11 @@ class CllgFreedTest < Minitest::Test
                              map_path: File.expand_path("../../config/kind_map.yml", __dir__))
     assert_equal ["literary/narrative/epic"], kinds.normalize("cllg-freed", "Epic.")
     assert_equal ["literary/drama"], kinds.normalize("cllg-freed", parsed(AESCHYLUS).metadata["genre"])
-    assert_equal [Nabu::Kinds::UNMAPPED], kinds.normalize("cllg-freed", "Phil.")
-    assert_equal %w[historiography unmapped], kinds.normalize("cllg-freed", "Hist.|Phil.")
+    assert_equal ["philosophy"], kinds.normalize("cllg-freed", "Phil."),
+                 "the philosophy head ruled 2026-11-13 (unmapped before it)"
+    assert_equal %w[historiography philosophy], kinds.normalize("cllg-freed", "Hist.|Phil.")
+    assert_equal [Nabu::Kinds::UNMAPPED], kinds.normalize("cllg-freed", "Biogr."),
+                 "the unmapped-by-design tail still counts honestly"
   end
 
   # -- store: idempotent load -----------------------------------------------------
