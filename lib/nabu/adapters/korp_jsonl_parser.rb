@@ -34,6 +34,11 @@ module Nabu
     # dated text elements — the decree and sermon collections), and
     # "expansions" [{form, completed, marked}] for every token whose
     # abbreviation the corpus completed (sinu → sinun, marked sinun~).
+    #
+    # A run whose word layer renders to nothing (upstream's all-null token
+    # sentence, [[null, null, null]]) mints no passage — the house rule for
+    # lines that render empty; the quarantine review 2026-11-13 found six
+    # VKS texts quarantined whole over one or two such sentences.
     class KorpJsonlParser
       Unit = Data.define(:citation, :text, :annotations)
 
@@ -49,7 +54,7 @@ module Nabu
 
         dated = rows.map { |r| date_span(r["structs"]) }.uniq.size > 1
         runs = rows.chunk_while { |a, b| code(a) == code(b) }
-        units = runs.map { |run| unit(run, dated: dated) }
+        units = runs.map { |run| unit(run, dated: dated) }.reject { |unit| unit.text.empty? }
         [disambiguate(units), rows]
       end
 

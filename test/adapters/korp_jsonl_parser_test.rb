@@ -23,6 +23,20 @@ class KorpJsonlParserTest < Minitest::Test
                  "40 Korp sentences fold into the corpus's own 8 codes"
   end
 
+  # A Korp sentence whose only token is all-null ([[null, null, null]])
+  # renders to nothing: it mints no passage — one empty sentence must never
+  # quarantine a whole text (quarantine review 2026-11-13: six VKS texts,
+  # each with one or two such sentences among 1,200–2,500). Three real
+  # consecutive rows of VKS_BIBLIA rekisteri1 (sentence_ids 416–418).
+  def test_an_all_null_token_sentence_mints_no_passage
+    path = File.join(Nabu::TestSupport.fixtures("vks"), "empty-sentence", "rekisteri1.jsonl")
+    units, rows = Nabu::Adapters::KorpJsonlParser.new.parse(File.read(path, encoding: "UTF-8"), label: path)
+    assert_equal 3, rows.size
+    assert_equal %w[1rek-0.0-A3a50 1rek-0.0-A3b4], units.map(&:citation),
+                 "the empty 1rek-0:0-A3a51 sentence is dropped; its neighbours stand"
+    assert(units.none? { |unit| unit.text.empty? })
+  end
+
   def test_verse_codes_cite_with_the_colon_read_as_a_dot
     citations = units("VKS_BIBLIA", "ut1_ev").map(&:citation)
     assert_equal "Jh-19.38-623c", citations.first

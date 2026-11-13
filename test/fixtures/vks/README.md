@@ -51,3 +51,15 @@ first harvest.
     chapter summaries `Jh-20:0`, `Jh-20:00`).
   - `VKS_LAIT/as1800.jsonl` — a 40-sentence window of the 1800s decrees
     crossing the 1805 → 1806 text elements.
+
+## The all-null-token sentence (added 2026-11-13, under `empty-sentence/`)
+
+- `empty-sentence/rekisteri1.jsonl` — three CONSECUTIVE lines copied
+  verbatim from the owner's live landing of `texts/VKS_BIBLIA/rekisteri1.jsonl`
+  (sentence_ids 416–418, lines 48–50). The middle sentence
+  (`1rek-0:0-A3a51`) carries `"tokens": [[null, null, null]]` — a Korp
+  sentence with no word. Six VKS texts carried one or two such sentences
+  and quarantined WHOLE ("text must not be empty") until the 2026-11-13
+  quarantine review; the parser now mints no passage for an empty run.
+  Kept outside `texts/` so the adapter's discovery over the fixture tree is
+  unchanged; the parser test reads it by path.
