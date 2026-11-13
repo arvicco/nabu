@@ -42,3 +42,12 @@ files:
   - path: tfb-satavahana-epigraphy/satavahana-inscriptions-data_Ollett/Bha13.xml
     url: https://raw.githubusercontent.com/erc-dharma/tfb-satavahana-epigraphy/master/satavahana-inscriptions-data_Ollett/Bha13.xml
     whole: true
+  - path: tfb-satavahana-epigraphy/satavahana-inscriptions-data_Ollett/Ju10.xml
+    url: https://raw.githubusercontent.com/erc-dharma/tfb-satavahana-epigraphy/master/satavahana-inscriptions-data_Ollett/Ju10.xml
+    whole: true
+  - path: tfb-eiad-epigraphy/texts/xml/DHARMA_INSEIAD00129.xml
+    url: https://raw.githubusercontent.com/erc-dharma/tfb-eiad-epigraphy/master/texts/xml/DHARMA_INSEIAD00129.xml
+    whole: true
+  - path: tfb-eiad-epigraphy/texts/xml/DHARMA_INSEIAD00134.xml
+    url: https://raw.githubusercontent.com/erc-dharma/tfb-eiad-epigraphy/master/texts/xml/DHARMA_INSEIAD00134.xml
+    whole: true

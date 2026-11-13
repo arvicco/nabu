@@ -7,13 +7,18 @@ require "test_helper"
 # Deśavarṇana trimmed to chapter 1 (nested chapter > canto(met) > lg > l
 # verse), Bhīma Svarga trimmed to its first ten paragraphs (lb-less prose
 # apparatus → paragraph mode), and one whole diplomatic transcription
-# (folio-line lb grain).
+# (folio-line lb grain). The Kidung Surajaya MS D, trimmed to its opening
+# colophon, three stanzas of canto 1 and its closing colophon, is one of
+# the repo's five editions tagged "und" (the template's "update the
+# language code" left unanswered) — admitted as undetermined under the
+# und-admission ruling, 2026-11-13.
 class DharmaJavaneseTextsTest < Minitest::Test
   include AdapterConformance
 
   DESA = "urn:nabu:dharma-javanese-texts:CritEdKakavinDesavarnana"
   BHIMA = "urn:nabu:dharma-javanese-texts:CritEdBhimaSvarga"
   DIPL = "urn:nabu:dharma-javanese-texts:DiplEdDurgastakaPerpusnasL128"
+  SURAJAYA = "urn:nabu:dharma-javanese-texts:CritEdKidungSurajayaMSD"
 
   def conformance_adapter = Nabu::Adapters::DharmaJavaneseTexts.new
 
@@ -98,5 +103,17 @@ class DharmaJavaneseTextsTest < Minitest::Test
     urns = document.passages.map { |p| p.urn.split(":").last }
     assert_includes urns, "1r1", "the manuscript's own folio-line numbers are the citation"
     assert_includes urns, "1r2"
+  end
+
+  # -- the undetermined lane (the und-admission ruling, 2026-11-13) -----------
+
+  def test_an_und_tagged_edition_admits_as_undetermined
+    document = adapter.parse(ref_for(SURAJAYA))
+    assert_equal "und", document.language, "upstream's own und — searchable, no language claim"
+    assert_equal ["und"], document.passages.map(&:language).uniq
+    refute document.metadata.key?("language_raw"), "the raw tag IS und — nothing differs to keep"
+    stanza = document.passages.find { |p| p.urn == "#{SURAJAYA}:1v.1.001.1" }
+    refute_nil stanza, "folio 1v > canto 1 > stanza 001 > line 1"
+    assert_equal "apasaṁ tabe kamy amariñci", stanza.text
   end
 end

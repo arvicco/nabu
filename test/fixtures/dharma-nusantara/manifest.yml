@@ -18,3 +18,6 @@ files:
   - path: xml/DHARMA_INSIDENKPasrujambe28.xml
     url: https://raw.githubusercontent.com/erc-dharma/tfc-nusantara-epigraphy/65b4a426af7dd546790210e60d1b6e3410f507eb/xml/DHARMA_INSIDENKPasrujambe28.xml
     whole: true
+  - path: xml/DHARMA_INSIDENKRabvan.xml
+    url: https://raw.githubusercontent.com/erc-dharma/tfc-nusantara-epigraphy/master/xml/DHARMA_INSIDENKRabvan.xml
+    whole: true

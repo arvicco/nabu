@@ -17,5 +17,10 @@ Three whole real files from github.com/erc-dharma/tfc-nusantara-epigraphy
   edition div NESTS an English `<div type="translation">` ("Lord
   Indra"). Before the shared parser pruned nested editorial divs, the
   translation glued onto line 3 — the pin that it no longer mints.
+- `xml/DHARMA_INSIDENKRabvan.xml` — added 2026-11-13, copied whole and
+  unmodified from the hub's synced canonical tree (upstream `master`):
+  the Rabvan bell (Śaka 827), real Old Javanese text with NO `xml:lang`
+  anywhere in the edition — one of the repo's 16 lang-less editions,
+  admitted as `und` under the und-admission ruling (2026-11-13).
 
-License: in-file `<licence>` CC BY-SA 4.0 in all four.
+License: in-file `<licence>` CC BY-SA 4.0 in all five.

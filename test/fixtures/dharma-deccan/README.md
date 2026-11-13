@@ -37,6 +37,18 @@ name and path, mirroring `canonical/dharma-deccan/<repo>/<path>`:
   TRIMMED: the repo's metadata table cut to its four header rows plus
   the data rows for INSVengiCalukya00001 and 00099 (the date join).
 
+- The undetermined-language lane (added 2026-11-13, copied whole and
+  unmodified from the synced canonical tree; admitted as `und` under the
+  und-admission ruling, 2026-11-13):
+  - `tfb-satavahana-epigraphy/satavahana-inscriptions-data_Ollett/Ju10.xml`
+    — Junnar 10: edition `xml:lang="und"` ("No translation is offered
+    because the language is unknown"); licence-less (repo fallback);
+  - `tfb-eiad-epigraphy/texts/xml/DHARMA_INSEIAD00129.xml` — EIAD 129,
+    doorjamb from Ghantasala: edition `xml:lang="unknown-Latn"` (the raw
+    tag rides metadata `language_raw`);
+  - `tfb-eiad-epigraphy/texts/xml/DHARMA_INSEIAD00134.xml` — EIAD 134,
+    floorslab from Nagarjunakonda: no `xml:lang` on the edition at all.
+
 ## Delivery grains
 
 Upstream serves one TEI file per inscription (the accepted grain), plus

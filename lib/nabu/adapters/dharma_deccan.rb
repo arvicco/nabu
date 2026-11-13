@@ -43,9 +43,12 @@ module Nabu
     # as a withdrawal. Reconciliation (canonical census 2026-11-05): 1,737
     # xml files = 1,702 parsed + 9 quarantined + 26 rule-skips (5 non-
     # edition files; 21 skeletons: Nandodbhava 1–5/7/8, Tuṅga 4–11, EIAD
-    # 128-B, Kanheri 47, Ollett Bha13, KanB2-44/45/47). The quarantines are
-    # true defects only: lang-less EIAD 104/134/159/162 and Kalyāṇa
-    # Cālukya 45, EIAD 129's "unknown-Latn", Ollett Ju10–12's "und".
+    # 128-B, Kanheri 47, Ollett Bha13, KanB2-44/45/47). The 9 quarantines
+    # then were undetermined-language editions over real text: lang-less
+    # EIAD 104/134/159/162 and Kalyāṇa Cālukya 45, EIAD 129's
+    # "unknown-Latn", Ollett Ju10–12's "und" ("the language is unknown").
+    # Under the und-admission ruling (2026-11-13) all 9 ADMIT as "und"
+    # (expected: 1,711 parsed + 0 quarantined at that canonical).
     #
     # == Parse (the dharma-epidoc family)
     #
@@ -58,8 +61,10 @@ module Nabu
     #
     # Languages: per-repo measured allowlists (REPOS[:languages], the
     # full-estate census of every minted xml:lang) plus censused tag dirt
-    # (REPOS[:aliases]). Anything else — "unknown-Latn", "und", lang-less
-    # editions in these multilingual repos — quarantines loudly.
+    # (REPOS[:aliases]). Tags that declare NO language — "und",
+    # "unknown-Latn", none at all — admit as "und" (the family's
+    # undetermined lane, opted in estate-wide; the raw tag rides metadata
+    # "language_raw" where it differs). Anything else quarantines loudly.
     #
     # == License
     #
@@ -197,9 +202,11 @@ module Nabu
         doc = Nokogiri::XML(File.read(path, encoding: "UTF-8"), &:noblanks)
         doc.remove_namespaces!
         result = DharmaEpidocParser.parse_doc(doc, path: path, allowed_languages: config[:languages],
-                                                   aliases: config.fetch(:aliases, {}), names: true)
+                                                   aliases: config.fetch(:aliases, {}), names: true,
+                                                   admit_undetermined: true)
         metadata = header_metadata(doc, path, repo, config, document_ref.metadata["stem"])
         metadata["maturity"] = result.maturity if result.maturity
+        metadata["language_raw"] = result.language_raw if result.language_raw
         document = Nabu::Document.new(
           urn: document_ref.id, language: result.language, canonical_path: path,
           title: result.title || document_ref.metadata["stem"], metadata: metadata

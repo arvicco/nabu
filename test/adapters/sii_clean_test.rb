@@ -20,7 +20,8 @@ require "fileutils"
 # set of 2026-10-12 plus, at HEAD 76608102 (2026-10-21), a grant-less clean
 # edition, a range edition (Nos. 290-293), a bare-"tam" and a Dutch edition,
 # a Marathi edition, the raw layer's Telugu / Kannada / Persian conversions
-# and its true-defect quarantine ("und" over real text), and the rejected
+# and its "und" over real text (admitted as undetermined under the
+# und-admission ruling, 2026-11-13), and the rejected
 # grains: a raw file superseded by an exact clean stem, one superseded by a
 # clean range, a clean ~DHARMA_ in-progress file, and three upstream
 # skeletons (a clean edition-less stub, a clean empty edition div, a raw
@@ -53,8 +54,8 @@ class SiiCleanTest < Minitest::Test
   RAW_UND = "#{PREFIX}INSSIIv42p0i0226".freeze
   CLEAN = [SAKA, AD, TELUGU, VILLAGE_FIRST, SUMMARY, AT_SHAPE, SAME,
            GRANTLESS, RANGE, BARE_TAM, DUTCH].freeze
-  RAW = [RAW_TELUGU, RAW_SAKA_ABBR, RAW_KANNADA, RAW_SAKA, RAW_PERSIAN].freeze
-  QUARANTINED = [MARATHI, RAW_UND].freeze
+  RAW = [RAW_TELUGU, RAW_SAKA_ABBR, RAW_KANNADA, RAW_SAKA, RAW_PERSIAN, RAW_UND].freeze
+  QUARANTINED = [MARATHI].freeze
   SKELETONS = [STUB, EMPTY_EDITION, RAW_TEXTLESS].freeze
   SKELETON_NOTE = "skeleton — no citable text yet (upstream placeholder)"
 
@@ -266,9 +267,16 @@ class SiiCleanTest < Minitest::Test
     assert_equal "DHARWAR", meta["district"]
   end
 
-  def test_the_raw_true_defect_quarantine_stays
-    error = assert_raises(Nabu::ParseError) { adapter.parse(ref_for(RAW_UND)) }
-    assert_match(/und/, error.message)
+  # The und-admission ruling, 2026-11-13: the raw layer's "und" over real
+  # text (400 raw + 6 clean, plus 2 lang-less clean) admits as undetermined
+  # — searchable, no language claim; the heading mining still runs.
+  def test_the_raw_und_conversion_admits_as_undetermined
+    document = adapter.parse(ref_for(RAW_UND))
+    assert_equal "und", document.language
+    assert_equal ["und"], document.passages.map(&:language).uniq
+    refute_empty document.passages
+    refute document.metadata.key?("language_raw"), "the raw tag IS und — nothing differs"
+    assert_equal "raw", document.metadata["layer"]
   end
 
   # -- header mining ----------------------------------------------------------

@@ -2418,7 +2418,9 @@ sources:
     lect: {posture: identity, note: "the P118-2 pending retired 2026-10-12: the Indic
         registry package minted te (under dra-tel) and kn (under dra-sou) with the
         tel → te / kan → kn codemap rows, so tel-Latn and kan-Latn resolve; pra/san
-        -Latn as before — the estate's four codes all land on registry nodes"}
+        -Latn as before — the estate's four codes all land on registry nodes; the 9
+        editions upstream tags \"und\"/\"unknown-Latn\" or leaves lang-less read \"und\" — no
+        lect claim, declared (the und-admission ruling, 2026-11-13)"}
     dating: {posture: partial, note: "Ollett's origDate (363 Sātavāhana editions) + the
         Vengī Cālukya metadata TSV (106); the DHARMA working files carry no origDate"}
     places: {posture: named, note: "Ollett's origPlace findspot names (445; no gazetteer
@@ -2433,7 +2435,8 @@ sources:
   dharma-nusantara:
     kind: {posture: unclassified}
     lect: {posture: identity, note: "kaw/omy/osn/san -Latn — all resolve on the
-        canonical v1.6.0 rows (pending retired at the P92 gate)"}
+        canonical v1.6.0 rows (pending retired at the P92 gate); the 16 lang-less editions
+        read \"und\" — no lect claim, declared (the und-admission ruling, 2026-11-13)"}
     dating: {posture: undatable, note: "no machine date field; Śaka years live in the
         edition TEXT (svasti śaka-varṣātīta 1208 …), a future extractor story"}
     places: {posture: unplaced}
@@ -2499,7 +2502,8 @@ sources:
         ara-Latn (ara) and fas-Latn (upstream's 639-2/B per-Latn, aliased; fas → fa) on
         held anchors; Tamil stages unminted, the bare anchor declared coarse; mar-Latn (4)
         and sin-Latn (1) resolve on mr/si since the 2026-10-21 mint (mar/sin codemap
-        rows held; the adapter admits both codes)"}
+        rows held; the adapter admits both codes); the 408 \"und\"/lang-less editions read
+        \"und\" — no lect claim, declared (the und-admission ruling, 2026-11-13)"}
     dating: {posture: partial, note: "no origDate in any header; the SII headings' own
         dating is mined in both layers: the editor's A.D. conversion, else a Śaka year via
         config/eras.yml (spelled out or SII 10's 'Ś. NNNN'), else the summary's single
@@ -2564,7 +2568,9 @@ sources:
   dharma-javanese-texts:
     kind: {posture: unclassified}
     lect: {posture: identity, note: "kaw/osn/san -Latn — all resolve on the
-        canonical v1.6.0 rows (pending retired at the P92 gate)"}
+        canonical v1.6.0 rows (pending retired at the P92 gate); the 5 editions upstream
+        tags \"und\" read \"und\" — no lect claim, declared (the und-admission ruling,
+        2026-11-13)"}
     dating: {posture: undatable, note: "no machine date field; composition dates are
         scholarship, not header fields"}
     places: {posture: unplaced}

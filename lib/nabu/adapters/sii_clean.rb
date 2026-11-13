@@ -119,8 +119,10 @@ module Nabu
     # 3,749 · pra-Latn 23 (Aśokan and Nāgārjunakoṇḍa Prakrit) · nld-Latn 9 ·
     # per-Latn 2 (aliased: ISO 639-2/B "per" = 639-3 "fas") · ara-Latn 1 ·
     # san-Latn 1. Every admitted code resolves on a held registry anchor.
-    # QUARANTINED LOUDLY (the family stance): "und" (6 clean / 400 raw), the
-    # 2 lang-less clean files. mar-Latn (4 clean — Maratha-period Tanjore
+    # Once quarantined (the family stance), now ADMITTED as "und" under the
+    # und-admission ruling (2026-11-13) — searchable, no language claim:
+    # "und" (6 clean / 400 raw) and the 2 lang-less clean files, the 408
+    # true defects of the 2026-11-06 re-census. mar-Latn (4 clean — Maratha-period Tanjore
     # records) and sin-Latn (1 raw — the Rāmēśvaram Sinhala record)
     # quarantined until the registry carried the anchors; the mr/si mint
     # merged 2026-10-21 and both codes are admitted since.
@@ -189,6 +191,8 @@ module Nabu
       # Censused upstream tag dirt → the held codes (class comment).
       ALIASES = { "tam" => "tam-Latn", "san" => "san-Latn", "lat" => "lat-Latn",
                   "per-Latn" => "fas-Latn" }.freeze
+      # The corpus's documented "und" stance (class comment, "Languages").
+      ADMIT_UNDETERMINED = true
 
       BY_SA = "https://creativecommons.org/licenses/by-sa/4.0/"
       IN_FILE = "in-file <licence>"
