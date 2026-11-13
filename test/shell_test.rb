@@ -182,4 +182,24 @@ class ShellTest < Minitest::Test
       Nabu::Shell.duplex("/nonexistent/nabu-definitely-not-here", &:read_line)
     end
   end
+
+  # capture: the verdict-taking form (docs:verify) — a nonzero exit is an
+  # outcome to judge, not an error; output is stdout+stderr merged; stdin,
+  # cwd and env overrides (nil unsets) are honored.
+  def test_capture_returns_merged_output_and_status_without_raising
+    Dir.mktmpdir do |dir|
+      result = Nabu::Shell.capture("/bin/sh", "-c", 'pwd; echo "$NABU_X|$HOME_X"; cat; echo err >&2; exit 3',
+                                   chdir: dir, stdin_data: "piped\n",
+                                   env: { "NABU_X" => "set", "HOME_X" => nil })
+
+      assert_equal 3, result.status
+      lines = result.output.lines.map(&:chomp)
+      assert_equal File.realpath(dir), File.realpath(lines[0])
+      assert_equal ["set|", "piped", "err"], lines[1..]
+    end
+  end
+
+  def test_capture_of_a_missing_program_raises
+    assert_raises(Nabu::Shell::Error) { Nabu::Shell.capture("/nonexistent/nabu-not-here") }
+  end
 end

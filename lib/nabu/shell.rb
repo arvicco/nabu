@@ -83,6 +83,28 @@ module Nabu
       raise Error.new("command not found: #{argv.first} (#{e.message})", status: nil, stderr: "")
     end
 
+    # The outcome of #capture: merged stdout+stderr and the exit status.
+    Capture = Data.define(:output, :status) do
+      def success? = status.zero?
+    end
+
+    # Like run, but a nonzero exit is an OUTCOME to judge rather than an
+    # error (the docs:verify executor expects refusal paths to fail): returns
+    # a Capture with stdout and stderr merged in arrival order. +env+ merges
+    # over the inherited environment (a nil value unsets the variable),
+    # +chdir+ sets the working directory, +stdin_data+ is fed then closed.
+    # Only a program that cannot be spawned raises.
+    def self.capture(*argv, env: {}, chdir: nil, stdin_data: nil)
+      raise ArgumentError, "Shell.capture requires a command" if argv.empty?
+
+      opts = { stdin_data: stdin_data.to_s }
+      opts[:chdir] = chdir if chdir
+      output, status = Open3.capture2e(forced_env(argv).merge(env), *argv, **opts)
+      Capture.new(output: output, status: status.exitstatus || 1)
+    rescue Errno::ENOENT => e
+      raise Error.new("command not found: #{argv.first} (#{e.message})", status: nil, stderr: "")
+    end
+
     # A line-oriented REQUEST/RESPONSE session with one long-lived
     # subprocess (P84-1: the stanza lemma worker — model load costs ~10s,
     # so the enricher keeps ONE worker alive and feeds it batches). The
