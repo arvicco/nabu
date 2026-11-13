@@ -177,7 +177,8 @@ module Nabu
       end
 
       # The lanes' declared schedule: the rail's default (two syncs cover
-      # the census; a phase spends at most a few slices).
+      # the census; a phase spends at most a few slices). Basis: the
+      # rail's default cap (3), not a measured or ratified cadence.
       PAGE_SCHEDULE = Nabu::PacedCrawl::Schedule.new(cadence: :per_phase, slices_per_phase: 3,
                                                      stop_after_zero_slices: 3)
 

@@ -121,6 +121,7 @@ module Nabu
       # answer cone-exhausted until the listing grows. Undeclared before
       # the rail, so the citizens' default: per phase, three slices, and a
       # chained run stops after three consecutive zero-yield slices.
+      # Basis: the rail citizens' default cap (3), no cadence of its own.
       ITEM_CRAWL = Nabu::PacedCrawl::Spec.new(
         name: "items", ledger_file: LEDGER_FILE,
         classes: { denied: "denied", empty: "empty", timeout: STUCK },
