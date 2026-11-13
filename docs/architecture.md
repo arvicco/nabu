@@ -2896,7 +2896,15 @@ which an `Outcome` names through its `ledger_class`, so an upstream with
 two kinds of refusal keeps them apart), delay, slice, timeout policy
 (attempts, doubling backoff) and a
 `Schedule` (cadence, slices per phase, consecutive zero-yield slices that
-stop a chained run — the declaration the phase slate reads). It supplies
+stop a chained run — the declaration the phase slate reads; slices per
+phase is an upstream-politeness CAP, never a quota). The phase's crawl
+plan is generated from these declarations, never hand-assembled: `rake
+"rail:plan[BUDGET_MINUTES]"` (`Nabu::Ops::RailPlan`) reads every
+registered adapter's Schedule and each source's measured slice time (the
+newest complete `sync` step in the ledger's stage timings — fetch through
+load), and prints parallel lanes (one per source, slices sequential within
+a lane) sized so the longest lane fits the budget, ending in `lane <slug>
+step N: <command>` lines a chain runner parses. It supplies
 three lambdas: `universe` (the ordered census ids — order IS crawl order),
 `held` (id → payload already on disk) and `fetch_one` (id → an `Outcome`
 of `:ok` / `:denied` / `:empty` / `:timeout` with its evidence,
