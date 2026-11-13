@@ -126,6 +126,25 @@ class DcsTest < Minitest::Test
     end
   end
 
+  # A DECLARED chapter whose file holds only the `##` file-level comments and
+  # no sentence block is upstream's empty chapter, not a defect: skipped BY
+  # RULE (quarantine review 2026-11-13 — 107 such files had quarantined as
+  # "missing mandatory `# sent_id`").
+  def test_a_header_only_chapter_file_is_skipped_by_rule
+    path = File.join(workdir, "header-only", "Bhāgavatapurāṇa-0088-BhāgPur, 4, 28-9000.conllu")
+    ref = Nabu::DocumentRef.new(
+      source_id: "dcs", id: "urn:nabu:dcs:119:9000", path: File.expand_path(path),
+      metadata: { "chapter_info" => {
+        "text" => "Bhāgavatapurāṇa", "text_id" => "119", "chapter" => "BhāgPur, 4, 28",
+        "chapter_id" => "9000", "chapter_position" => "89", "dcs_time_slot" => "4",
+        "gold_layers" => %w[morpho-syntax lexicon]
+      } }
+    )
+    error = assert_raises(Nabu::DocumentSkipped) { adapter.parse(ref) }
+    refute_kind_of Nabu::ParseError, error
+    assert_equal Nabu::Adapters::Dcs::HEADER_ONLY_REASON, error.reason
+  end
+
   # -- store: idempotent double-load + the tier/join pins ----------------------
 
   def test_loads_idempotently_into_the_store

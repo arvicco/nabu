@@ -83,3 +83,16 @@ after any refresh.
 
 Re-cut with the same line numbers after a refresh (re-census first: the
 line numbers are commit-bound).
+
+## Header-only chapter file (added 2026-11-13, copied whole from the owner's live canonical)
+
+- `header-only/Bhāgavatapurāṇa-0088-BhāgPur, 4, 28-9000.conllu` (93 B) —
+  upstream path `files/Bhāgavatapurāṇa/` + this name; declared in
+  `lookup/chapter-info.xml` (textId 119, chapterId 9000, gold
+  morpho-syntax + lexicon) yet the file holds only the four `##`
+  file-level comment lines (text, text_id, chapter, chapter_id) and no
+  sentence block. One of 107 such files at the 2026-11-13 quarantine
+  review, all formerly quarantined as "missing mandatory `# sent_id`";
+  now SKIPPED BY RULE as a header-only chapter. Kept outside `files/`
+  so discovery over the main fixture tree is unchanged; the test builds
+  its ref with the declaration's values verbatim.

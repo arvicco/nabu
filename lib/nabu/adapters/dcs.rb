@@ -33,6 +33,15 @@ module Nabu
     # (7,227 upstream) are the automatic layers and are never discovered at
     # all (the `*.conllu` glob cannot match them; pinned in tests).
     #
+    # == Header-only chapter files (skip by rule)
+    #
+    # Upstream ships DECLARED chapter files that hold only the four `##`
+    # file-level comments and no sentence block (107 at the 2026-11-13
+    # quarantine review, all formerly quarantined as "missing mandatory
+    # `# sent_id`"): an empty chapter, nothing to verify or ingest. They
+    # skip BY RULE (DocumentSkipped, counted as skipped_by_rule) after the
+    # gold gate; an undeclared file still quarantines at the gate first.
+    #
     # == Identity (FROZEN minting)
     #
     # One document per chapter FILE — the corpus's own unit (`each chapter
@@ -101,6 +110,9 @@ module Nabu
 
       URN_PREFIX = "urn:nabu:dcs:"
 
+      # The skip note for a declared chapter file with no sentence block.
+      HEADER_ONLY_REASON = "header-only chapter file — declared, but no sentence block upstream"
+
       def self.manifest
         MANIFEST
       end
@@ -136,6 +148,7 @@ module Nabu
       def parse(document_ref)
         info = document_ref.metadata["chapter_info"]
         gate_gold!(document_ref, info)
+        skip_header_only!(document_ref)
         ConlluParser.new.parse(
           document_ref.path,
           urn: document_ref.id, language: LANGUAGE,
@@ -213,6 +226,20 @@ module Nabu
               "#{document_ref.path}: chapter-info.xml declares no <layer type=\"gold\">lexicon" \
               "</layer> for this chapter (gold layers: #{info.fetch('gold_layers', []).inspect}) " \
               "— the machine-readable gold gate refuses automatic lexicon layers"
+      end
+
+      # A declared chapter FILE carrying only its `##` file-level comment
+      # lines (text / text_id / chapter / chapter_id) and no sentence block
+      # is upstream's empty chapter: skipped BY RULE, never quarantined
+      # (class note). Any other line — a `# sent_id` comment, a token row —
+      # leaves the file to the parser, so a real defect still quarantines.
+      def skip_header_only!(document_ref)
+        body = File.foreach(document_ref.path, chomp: true).reject do |line|
+          line.strip.empty? || line.start_with?("##")
+        end
+        return unless body.empty?
+
+        raise DocumentSkipped.new("#{document_ref.path}: #{HEADER_ONLY_REASON}", reason: HEADER_ONLY_REASON)
       end
 
       def document_metadata(info)
