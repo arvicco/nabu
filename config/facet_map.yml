@@ -850,3 +850,22 @@ sources:
       #                         stance); the issue's own kind is the source_kind periodical/newspaper
       #                         (kind_map.yml) — an advertisement inside a newspaper is no kind of
       #                         the issue, and the house class list has no advertisement head
+  pgp-geniza:                 # the PGP document fields (live census over the 7,784 text-bearing
+    fields:                   # documents, 2026-11-16 — the axes ride one document per pgpid)
+      document_type: genre    # the PGP type: Letter 3,861 · Legal document 2,518 · State document
+      #                         515 · List or table 498 · Literary text 130 · Paraliterary text 104
+      #                         · Legal query or responsum 97 · Credit instrument or private receipt
+      #                         59 (kind_map folds)
+      tags: subject           # research-assistant topic tags on 5,703 docs, 1,842 values verbatim
+      #                         (trade, India Book, ketubba, medical …)
+      library: repository     # the holding library's PGP abbreviation (CUL 5,141 · JTS 871 ·
+      #                         Bodl. 402 · NLR 356 · Mosseri 283 · BL 221 …)
+      collection: collection  # the shelfmark collection (CUL, T-S · JTS · Bodl. …), 43 values
+      languages: language     # the registry codes of the tagged languages (jrb 4,703 · heb 2,035 ·
+      #                         ara 1,380 · arc 364 · lad 18 · ota 13 …), array
+      provenance: provenance  # fragments.csv provenance class: Geniza 3,577 · Probably Geniza 228 ·
+      #                         Not Geniza 17 — the find context, upstream's own label
+      material: material      # fragments.csv material_support: Paper 174 · Parchment 17
+      mentioned: place_mentioned  # places named in the text (1,968 docs, 355 places)
+      possibly_mentioned: place_mentioned  # upstream's hedged mention relation (126 docs)
+      location: location      # PGP's "location" place relation verbatim (1,185 docs, 67 places)

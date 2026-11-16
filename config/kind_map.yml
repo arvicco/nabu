@@ -3323,3 +3323,22 @@ sources:
     deliberate:
       "non-fictie": "DBNL's catch-all for everything outside literature (history, religion, travel, natural
         science, law, letters) — a negative label, not a genre claim (750)"
+  pgp-geniza:         # the Princeton Geniza Project's closed 9-type list (README: "the PGP divides
+    facet: genre      # its material into 9 document types"); counts = text-bearing documents,
+    #                   census through the adapter 2026-11-16 (7,784 docs; 2 untyped)
+    map:
+      "Letter": letter                           # 3,861 — private, business and communal letters
+      "Legal document": legal                    # 2,518 — court records, contracts, deeds, marriage
+      #                                            and divorce documents, testimonies
+      "State document": administrative           # 515 — the chancery and fiscal paperwork of the
+      #                                            Fatimid/Ayyubid/Mamluk state: decrees, petitions,
+      #                                            tax receipts — the institutions' paperwork head
+      "List or table": administrative/list       # 498 — accounts, lists of names and goods
+      "Literary text": literary                  # 130
+      "Legal query or responsum": legal          # 97 — a question put to a legal authority and its
+      #                                            answer: law and its instruments, no finer sub
+      "Credit instrument or private receipt": administrative/receipt  # 59 — receipts, IOUs, suftajas
+      "Paraliterary text": unknown               # 104 — upstream's residual class (amulets,
+      #                                            calendars, exercises, prayers): no single head
+    deliberate:
+      "Inscription": "a medium (writing on an object), not a function — 5 documents corpus-wide, none text-bearing"

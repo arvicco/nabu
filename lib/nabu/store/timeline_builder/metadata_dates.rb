@@ -310,6 +310,10 @@ module Nabu
           # composition eras come from the TLG concordance lane instead
           "perseus-greek" => :edition_year_text,
           "perseus-latin" => :edition_year_text,
+          "pgp-geniza" => :structured, # the document's own dating (doc_date_standard, the CE
+          #                              conversion of its AM/Seleucid/Hijri date), else the
+          #                              scholar's inferred date (basis in raw); place = the
+          #                              origin + its places.csv point; destination = a role row
           "pl-wikisource" => :era_band_key,
           "pleias-french-books" => :structured, # the Gallica catalogue's imprint year (ranges and
           #                                       "1607-16" closes widen it), class edition
@@ -501,7 +505,13 @@ module Nabu
         # correspAction[received] place rides place_received + its
         # register GeoNames URL (1,291 of 1,869 letters, 1,260 with the
         # URL — census 2026-11-06), verbatim like the sent ref.
+        # pgp-geniza: the main row is the ORIGIN (where the document was
+        # written); PGP's "destination" place relation (1,271 documents,
+        # census 2026-11-16) rides its own role row, name only.
         ROLE_PLACES = {
+          "pgp-geniza" => [
+            { axis_source: "pgp-geniza-destination", name: "destination", ref: "destination_ref" }.freeze
+          ].freeze,
           "socinian-letters" => [
             { axis_source: "socinian-letters-received", name: "place_received", ref: "place_received_ref" }.freeze
           ].freeze
@@ -691,7 +701,9 @@ module Nabu
         # the record's axis fields on exactly one document (the Greek when
         # AIO edits one, else the translation), so a row can never double
         # an inscription. Every other source keeps the default exclusion.
-        TRANSLATION_ROWS = %w[aio].freeze
+        # pgp-geniza follows the aio convention: the axis fields ride the
+        # edition document, else the FIRST translation sibling only.
+        TRANSLATION_ROWS = %w[aio pgp-geniza].freeze
 
         def build_source(catalog, slug, canonical_dir: nil)
           shape = SHAPES.fetch(slug)

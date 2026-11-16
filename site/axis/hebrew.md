@@ -28,6 +28,7 @@ A source wears every desk it serves — these fifteen answer this desk. Holdings
 | `hexapla` | texts | nc | wired · manual | 19 docs / 16,302 passages |
 | `iip` | inscriptions | nc | wired · manual | 5,499 docs / 17,823 passages |
 | `oshb` | texts | open | wired · manual | 39 docs / 23,213 passages |
+| `pgp-geniza` | texts | nc | not yet wired | nothing held yet |
 | `sdbh` | dictionary | attribution | wired · manual | 7,932 entries |
 | `sefaria` | texts | open | wired · manual | 1,983 docs / 1,073,004 passages |
 | `ud` | treebank | nc | wired · manual | 83 docs / 329,980 passages |

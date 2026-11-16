@@ -19,7 +19,7 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 ## The shelves
 
-A source wears every desk it serves — these seven answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
+A source wears every desk it serves — these eight answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
 | Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 13 November 2026)</span> |
 |---|---|---|---|---|
@@ -29,6 +29,7 @@ A source wears every desk it serves — these seven answer this desk. Holdings a
 | `kitab-reuse` | feature module | nc | wired · manual | nothing held yet |
 | `ociana` | inscriptions | research_private | wired · frozen | 36,794 docs / 36,794 passages |
 | `openiti` | texts | nc | wired · manual | 9,079 docs / 34,631,499 passages |
+| `pgp-geniza` | texts | nc | not yet wired | nothing held yet |
 | `wiktionary-ar` | dictionary | attribution | wired · manual | 36,974 entries |
 
 **Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 13 November 2026)</span>: `ara` 45,712 · `xna` 36,758 · `fas` 351 · `grc` 22 · `inm` 8 · `arc` 4 · `lat` 1 · `xsa` 1.
