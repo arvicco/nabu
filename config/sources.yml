@@ -8386,6 +8386,29 @@ ud:
   # precedent). EXPECTED SYNC DELTA at the next `bin/nabu sync ud`: +2
   # repo clones / +2 docs / +178 passages (151 + 27). The fetch-breaker
   # minimum tripping count moves 7 → 8 (0.2 × 36 = 7.2).
+  # 2026-11-16: TREEBANKS grew to FORTY-TWO — the UD v2.19 bundle
+  # (released 2026-11-15; every fact read at the r2.19 tag):
+  #   old-georgian-oglauro (oge; Book of Ezra, Oshki Bible — 652 sent.;
+  #     CONFLICTING GRANTS, LICENSE.txt BY-SA 4.0 vs README BY-NC-SA 4.0 →
+  #     conservative nc, the PROFITEROLE/UDante fork shape),
+  #   old-georgian-midglauro (oge as UD files it — Middle Georgian novels,
+  #     12th/17th c.; 422 sent.; BY-SA 4.0 → attribution),
+  #   pali-palicanon (pli; DN 14, 225 sent.; BY-SA 4.0 → attribution),
+  #   tangut-mica (txg; Lotus + Avataṃsaka sūtra chapters, 503 sent.;
+  #     BY-SA 4.0 → attribution),
+  #   old-occitan-cronoc (pro; the Roman de Lagrasse, 1,848 sent. over
+  #     train/dev/test; BY-SA 4.0 → attribution),
+  #   avestan-old (ave; Gatha Yasna 28, 24 sent.; BY-SA 4.0 →
+  #     attribution). AXIS CANDIDATE, not taken here: iranian (Avestan) —
+  #     joining it re-projects the desk's site pages and skill lanes, so it
+  #     rides a gate with those regenerations.
+  # The r2.19 license sweep over the 36 previously held treebanks found no
+  # drift (LICENSE.txt full text + README metadata, r2.18 vs r2.19) — the
+  # two PROFITEROLE forks and UDante's stand unchanged at r2.19.
+  # EXPECTED SYNC DELTA at the next `bin/nabu sync ud`: +6 repo clones /
+  # +8 docs (CronOc ships three splits) / +3,674 passages
+  # (652 + 422 + 225 + 503 + 1,848 + 24). The fetch-breaker minimum
+  # tripping count moves 8 → 9 (0.2 × 42 = 8.4).
 
 uk-wikisource:   # P116-3, 02-sources row 241
   adapter: Nabu::Adapters::UkWikisource

@@ -1,0 +1,769 @@
+# sent_id = lotus_sutra_0001
+# text_lzh = 妙法蓮華經觀世音菩薩普門品。
+# text_en = The Universal Gate of World-Voice-Perceiver Bodhisattva
+# text = 𗤓𗹙𗤻𗑗𗖰𗚩𗯨𗙏𘝯𘋢𗥤𗫡𘗠𘄿。
+1	𗤓	𗤓	ADJ	_	_	2	amod	_	Gloss=beautiful, wonderful|LTranslit=ntho¹|SpaceAfter=No
+2	𗹙	𗹙	NOUN	_	_	6	nmod	_	Gloss=law|LTranslit=rtser¹|SpaceAfter=No
+3	𗤻	𗤻	NOUN	_	_	6	nmod	_	Gloss=flower, blossom|LTranslit=vah¹|SpaceAfter=No
+4	𗑗	𗑗	ADJ	_	_	3	amod	_	Gloss=clean, quiet|LTranslit=se̱¹|SpaceAfter=No
+5	𗖰	𗖰	NOUN	_	_	6	compound	_	Gloss=sutra|LTranslit=rlwə̱r²|SpaceAfter=No
+6	𗚩	𗚩	NOUN	_	_	14	nmod	_	Gloss=road, way|LTranslit=re̱r²|SpaceAfter=No
+7	𗯨	𗯨	PROPN	_	_	10	compound	_	Gloss=world; the capital of a country|LTranslit=rur¹|SpaceAfter=No
+8	𗙏	𗙏	PROPN	_	_	7	flat	_	Gloss=sound, voice|LTranslit=ġhai̱h²|SpaceAfter=No
+9	𘝯	𘝯	PROPN	_	_	7	flat	_	Gloss=lookat, watch, observe|LTranslit=mbao̱¹|SpaceAfter=No
+10	𘋢	𘋢	NOUN	_	_	14	nmod	_	Gloss=Bodhisattva|LTranslit=dẓaa̱ṃ²|SpaceAfter=No
+11	𗥤	𗥤	VERB	_	_	10	acl	_	Gloss=realise, know|LTranslit=tse²|SpaceAfter=No
+12	𗫡	𗫡	ADJ	_	_	13	amod	_	Gloss=arrive|LTranslit=nə²|SpaceAfter=No
+13	𘗠	𘗠	NOUN	_	_	14	nmod	_	Gloss=door, gate, room|LTranslit=ġha̱¹|SpaceAfter=No
+14	𘄿	𘄿	NOUN	_	_	0	root	_	Gloss=class|LTranslit=te¹|SpaceAfter=No
+15	。	。	PUNCT	_	_	14	punct	_	Orig=_
+
+# sent_id = lotus_sutra_0002
+# text_lzh = 爾時無盡意菩薩。即從座起。偏袒右肩合掌向佛而作是言。世尊。觀世音菩薩。以何因緣。名觀世音。
+# text_en = Thereupon Endless-Intent Bodhisattva rose from his seat, bared his right shoulder, joined his hands together towards the Buddha, and said, World-Honored One! Why is World-Voice-Perceiver Bodhisattva called World-Voice-Perceiver? 
+# text = 𗉘𘝨𗉣𗅋𗋃𘋢𗥤𗶠𘏚𗈪𗢵𗂈𘏈𘊱𗔛𗢳𗏣𘃎𘜼𘌽𗍊𘒣𘘥𗯨𗖻𗯨𗙏𘝯𘋢𗥤𘕣𗦫𘔼𗖵𗯨𗙏𘝯𘘥𘃞。
+1	𗉘	𗉘	DET	_	PronType=Dem	2	det	_	Gloss=pronoun|LTranslit=tśhə¹|SpaceAfter=No
+2	𘝨	𘝨	NOUN	_	_	23	obl	_	Gloss=time|LTranslit=zoh²|SpaceAfter=No
+3	𗉣	𗉣	PROPN	_	_	6	compound	_	Gloss=meaning, idea|LTranslit=phi¹|SpaceAfter=No
+4	𗅋	𗅋	PROPN	_	_	3	flat	_	Gloss=no, not|LTranslit=mi¹|SpaceAfter=No
+5	𗋃	𗋃	PROPN	_	_	3	flat	_	Gloss=limit, end|LTranslit=si¹|SpaceAfter=No
+6	𘋢	𘋢	NOUN	_	_	23	nsubj	_	Gloss=Bodhisattva|LTranslit=dẓaa̱ṃ²|SpaceAfter=No
+7	𗥤	𗥤	VERB	_	_	6	acl	_	Gloss=realise, know|LTranslit=tse²|SpaceAfter=No
+8	𗶠	𗶠	NOUN	_	_	9	nmod	_	Gloss=sit|LTranslit=ndzu̱²|SpaceAfter=No
+9	𘏚	𘏚	NOUN	_	_	11	obl	_	Gloss=place; used in possible/impossible constructions|LTranslit=tih²|SpaceAfter=No
+10	𗈪	𗈪	ADP	_	_	9	case	_	Gloss=a, one, big; verb prefix directional marker - upwards|LTranslit=a¹|SpaceAfter=No
+11	𗢵	𗢵	VERB	_	_	23	advcl	_	Gloss=stand up|LTranslit=rvwo̱r¹|SpaceAfter=No
+12	𗂈	𗂈	ADJ	_	_	13	amod	_	Gloss=the left|LTranslit=ẓaə̱h¹|SpaceAfter=No
+13	𘏈	𘏈	NOUN	_	_	15	obj	_	Gloss=shoulder|LTranslit=vwa̱h¹|SpaceAfter=No
+14	𘊱	𘊱	ADV	_	_	15	advmod	_	Gloss=half, side|LTranslit=pha̱¹|SpaceAfter=No
+15	𗔛	𗔛	VERB	_	_	23	advcl	_	Gloss=dress, apparel|LTranslit=gwi²|SpaceAfter=No
+16	𗢳	𗢳	NOUN	_	_	19	obl	_	Gloss=Buddha|LTranslit=tha̱¹|SpaceAfter=No
+17	𗏣	𗏣	ADP	_	_	16	case	_	Gloss=in the direction of, towards; side|LTranslit=rer²|SpaceAfter=No
+18	𘃎	𘃎	NOUN	_	_	19	obj	_	Gloss=palm|LTranslit=pah¹|SpaceAfter=No
+19	𘜼	𘜼	VERB	_	_	23	advcl	_	Gloss=gentle, mild, close|LTranslit=mpho²|SpaceAfter=No
+20	𘌽	𘌽	PRON	_	PronType=Dem	22	nmod	_	Gloss=this|LTranslit=thə²|SpaceAfter=No
+21	𗍊	𗍊	ADP	_	_	20	case	_	Gloss=as|LTranslit=su²|SpaceAfter=No
+22	𘒣	𘒣	NOUN	_	_	23	obj	_	Gloss=speech, word|LTranslit=da̱h²|SpaceAfter=No
+23	𘘥	𘘥	VERB	_	_	0	root	_	Gloss=say, call|LTranslit=yə¹|SpaceAfter=No
+24	𗯨	𗯨	NOUN	_	_	25	compound	_	Gloss=world; the capital of a country|LTranslit=rur¹|SpaceAfter=No
+25	𗖻	𗖻	NOUN	_	_	38	vocative	_	Gloss=respect|LTranslit=puh¹|SpaceAfter=No
+26	𗯨	𗯨	PROPN	_	_	29	compound	_	Gloss=world; the capital of a country|LTranslit=rur¹|SpaceAfter=No
+27	𗙏	𗙏	PROPN	_	_	26	flat	_	Gloss=sound, voice|LTranslit=ġhai̱h²|SpaceAfter=No
+28	𘝯	𘝯	PROPN	_	_	26	flat	_	Gloss=lookat, watch, observe|LTranslit=mbao̱¹|SpaceAfter=No
+29	𘋢	𘋢	NOUN	_	_	38	nsubj	_	Gloss=Bodhisattva|LTranslit=dẓaa̱ṃ²|SpaceAfter=No
+30	𗥤	𗥤	VERB	_	_	29	acl	_	Gloss=realise, know|LTranslit=tse²|SpaceAfter=No
+31	𘕣	𘕣	DET	_	PronType=Int	33	det	_	Gloss=how, what|LTranslit=vwa̱²|SpaceAfter=No
+32	𗦫	𗦫	NOUN	_	_	33	compound	_	Gloss=cause|LTranslit=yiw¹|SpaceAfter=No
+33	𘔼	𘔼	NOUN	_	_	38	obl	_	Gloss=cause, principal and subsidiary causes|LTranslit=nuo¹|SpaceAfter=No
+34	𗖵	𗖵	ADP	_	_	33	case	_	Gloss=rely, obey; postposition; according to, based on; because of, given that|LTranslit=bu¹|SpaceAfter=No
+35	𗯨	𗯨	PROPN	_	_	38	xcomp	_	Gloss=world; the capital of a country|LTranslit=rur¹|SpaceAfter=No
+36	𗙏	𗙏	PROPN	_	_	35	flat	_	Gloss=sound, voice|LTranslit=ġhai̱h²|SpaceAfter=No
+37	𘝯	𘝯	PROPN	_	_	35	flat	_	Gloss=lookat, watch, observe|LTranslit=mbao̱¹|SpaceAfter=No
+38	𘘥	𘘥	VERB	_	_	23	parataxis	_	Gloss=say, call|LTranslit=yə¹|SpaceAfter=No
+39	𘃞	𘃞	PART	_	_	38	discourse:sp	_	Gloss=one, one-by-one; sentence-final particle|LTranslit=lə¹|SpaceAfter=No
+40	。	。	PUNCT	_	_	23	punct	_	Orig=_
+
+# sent_id = lotus_sutra_0003
+# text_lzh = 佛告無盡意菩薩。善男子。若有無量百千萬億眾生。受諸苦惱。聞是觀世音菩薩。一心稱名。觀世音菩薩。即時觀其音聲。皆得解脫。
+# text_en = The Buddha said to Endless-Intent Bodhisattva: Good man! If many hundreds of thousands of billions of living beings hear [the name of] World-Voice-Perceiver Bodhisattva and call his name with all their hearts when they are under various sufferings, World-Voice-Perceiver Bodhisattva will immediately perceive their voices, and cause them to emancipate themselves [from the sufferings].
+# text = 𗢳𗉣𗅋𗋃𘋢𗥤𗗙𘘥𗩴𗾖𘈷𗓱𘖑𗆄𘊝𗡞𗕑𗦲𘋢𗋐𗱕𘍔𗉛𗨙𘅍𗋕𗯨𗙏𘝯𘋢𗥤𗗙𗦻𗓁𗤶𗨳𗳒𘆖𗌭𗉘𗿳𗯨𗙏𘝯𘋢𗥤𗋕𗙏𘝯𗖵𗄊𗧐𗇘𗟻。
+1	𗢳	𗢳	NOUN	_	_	8	nsubj	_	Gloss=Buddha|LTranslit=tha̱¹|SpaceAfter=No
+2	𗉣	𗉣	PROPN	_	_	5	compound	_	Gloss=meaning, idea|LTranslit=phi¹|SpaceAfter=No
+3	𗅋	𗅋	PROPN	_	_	2	flat	_	Gloss=no, not|LTranslit=mi¹|SpaceAfter=No
+4	𗋃	𗋃	PROPN	_	_	2	flat	_	Gloss=limit, end|LTranslit=si¹|SpaceAfter=No
+5	𘋢	𘋢	NOUN	_	_	8	iobj	_	Gloss=Bodhisattva|LTranslit=dẓaa̱ṃ²|SpaceAfter=No
+6	𗥤	𗥤	VERB	_	_	5	acl	_	Gloss=realise, know|LTranslit=tse²|SpaceAfter=No
+7	𗗙	𗗙	ADP	_	_	5	case	_	Gloss=... of - genitive particle; object marker for trans. verb|LTranslit=ye¹|SpaceAfter=No
+8	𘘥	𘘥	VERB	_	_	0	root	_	Gloss=say, call|LTranslit=yə¹|SpaceAfter=No
+9	𗩴	𗩴	ADJ	_	_	11	amod	_	Gloss=good, mercy|LTranslit=nni̱w²|SpaceAfter=No
+10	𗾖	𗾖	NOUN	_	_	11	nmod	_	Gloss=man, male|LTranslit=rgor¹|SpaceAfter=No
+11	𘈷	𘈷	NOUN	_	_	8	vocative	_	Gloss=son, child|LTranslit=gi²|SpaceAfter=No
+12	𗓱	𗓱	ADV	_	_	34	advmod	_	Gloss=if, perhaps|LTranslit=te¹|SpaceAfter=No
+13	𘖑	𘖑	DET	_	PronType=Neg	14	det	_	Gloss=no, not; no need|LTranslit=mə¹|SpaceAfter=No
+14	𗆄	𗆄	NOUN	_	_	20	nmod	_	Gloss=measure, price|LTranslit=puh¹|SpaceAfter=No
+15	𘊝	𘊝	NUM	_	_	20	nummod	_	Gloss=hundred|LTranslit=ryir²|SpaceAfter=No
+16	𗡞	𗡞	NUM	_	_	20	nummod	_	Gloss=thousand|LTranslit=tu̱h¹|SpaceAfter=No
+17	𗕑	𗕑	NUM	_	_	20	nummod	_	Gloss=ten thousand|LTranslit=khə²|SpaceAfter=No
+18	𗦲	𗦲	NUM	_	_	20	nummod	_	Gloss=a hundred million|LTranslit=rir²|SpaceAfter=No
+19	𘋢	𘋢	NOUN	_	_	20	compound	_	Gloss=being, sentient being|LTranslit=dẓaa̱ṃ²|SpaceAfter=No
+20	𗋐	𗋐	NOUN	_	_	38	nsubj	_	Gloss=life|LTranslit=tśhu¹|SpaceAfter=No
+21	𗱕	𗱕	DET	_	PronType=Tot	23	det	_	Gloss=all, various|LTranslit=rur¹|SpaceAfter=No
+22	𘍔	𘍔	NOUN	_	_	23	compound	_	Gloss=bitter, hardship|LTranslit=tśih¹|SpaceAfter=No
+23	𗉛	𗉛	NOUN	_	_	24	obj	_	Gloss=vexed, worried|LTranslit=źih¹|SpaceAfter=No
+24	𗨙	𗨙	VERB	_	_	25	acl	_	Gloss=bear, suffer; to receive|LTranslit=lheh²|SpaceAfter=No
+25	𘅍	𘅍	NOUN	_	_	34	obl	_	Gloss=time, times|LTranslit=zeh¹|SpaceAfter=No
+26	𗋕	𗋕	DET	_	PronType=Ind	30	det	_	Gloss=other, else, that|LTranslit=tha¹|SpaceAfter=No
+27	𗯨	𗯨	PROPN	_	_	30	compound	_	Gloss=world; the capital of a country|LTranslit=rur¹|SpaceAfter=No
+28	𗙏	𗙏	PROPN	_	_	27	flat	_	Gloss=sound, voice|LTranslit=ġhai̱h²|SpaceAfter=No
+29	𘝯	𘝯	PROPN	_	_	27	flat	_	Gloss=lookat, watch, observe|LTranslit=mbao̱¹|SpaceAfter=No
+30	𘋢	𘋢	NOUN	_	_	33	nmod	_	Gloss=Bodhisattva|LTranslit=dẓaa̱ṃ²|SpaceAfter=No
+31	𗥤	𗥤	VERB	_	_	30	acl	_	Gloss=realise, know|LTranslit=tse²|SpaceAfter=No
+32	𗗙	𗗙	ADP	_	_	30	case	_	Gloss=... of - genitive particle; object marker for trans. verb|LTranslit=ye¹|SpaceAfter=No
+33	𗦻	𗦻	NOUN	_	_	34	obj	_	Gloss=name; reputation|LTranslit=mme²|SpaceAfter=No
+34	𗓁	𗓁	VERB	_	_	53	advcl	_	Gloss=listen, hear|LTranslit=mi¹|SpaceAfter=No
+35	𗤶	𗤶	NOUN	_	_	38	obl	_	Gloss=heart, mind|LTranslit=nne¹|SpaceAfter=No
+36	𗨳	𗨳	ADJ	_	_	35	amod	_	Gloss=return|LTranslit=tih¹|SpaceAfter=No
+37	𗳒	𗳒	ADP	_	_	35	case	_	Gloss=auxiliary word - instrumental particle|LTranslit=ŋwu̱²|SpaceAfter=No
+38	𘆖	𘆖	VERB	_	_	34	conj	_	Gloss=ranks, read aloud, chant|LTranslit=ntshə¹|SpaceAfter=No
+39	𗌭	𗌭	ADV	_	_	49	advmod	_	Gloss=so; conditional conjunction|LTranslit=qu̱¹|SpaceAfter=No
+40	𗉘	𗉘	DET	_	PronType=Dem	41	det	_	Gloss=pronoun|LTranslit=tśhə¹|SpaceAfter=No
+41	𗿳	𗿳	NOUN	_	_	49	obl	_	Gloss=time, days|LTranslit=dzeṃ¹|SpaceAfter=No
+42	𗯨	𗯨	PROPN	_	_	45	compound	_	Gloss=world; the capital of a country|LTranslit=rur¹|SpaceAfter=No
+43	𗙏	𗙏	PROPN	_	_	42	flat	_	Gloss=sound, voice|LTranslit=ġhai̱h²|SpaceAfter=No
+44	𘝯	𘝯	PROPN	_	_	42	flat	_	Gloss=lookat, watch, observe|LTranslit=mbao̱¹|SpaceAfter=No
+45	𘋢	𘋢	NOUN	_	_	49	nsubj	_	Gloss=Bodhisattva|LTranslit=dẓaa̱ṃ²|SpaceAfter=No
+46	𗥤	𗥤	VERB	_	_	45	acl	_	Gloss=realise, know|LTranslit=tse²|SpaceAfter=No
+47	𗋕	𗋕	DET	_	PronType=Ind	48	det	_	Gloss=other, else, that|LTranslit=tha¹|SpaceAfter=No
+48	𗙏	𗙏	NOUN	_	_	49	obj	_	Gloss=sound, voice|LTranslit=ġhai̱h²|SpaceAfter=No
+49	𘝯	𘝯	VERB	_	_	53	advcl	_	Gloss=lookat, watch, observe|LTranslit=mbao̱¹|SpaceAfter=No
+50	𗖵	𗖵	SCONJ	_	_	49	mark	_	Gloss=rely, obey; postposition; according to, based on; because of, given that|LTranslit=bu¹|SpaceAfter=No
+51	𗄊	𗄊	PRON	_	PronType=Tot	53	obj	_	Gloss=all|LTranslit=zi²|SpaceAfter=No
+52	𗧐	𗧐	VERB	_	_	53	compound	_	Gloss=untie|LTranslit=bai̱²|SpaceAfter=No
+53	𗇘	𗇘	VERB	_	_	8	parataxis	_	Gloss=extricate|LTranslit=lhi̱w²|SpaceAfter=No
+54	𗟻	𗟻	AUX	_	_	53	aux	_	Gloss=make; marker of causative construction|LTranslit=phi¹|SpaceAfter=No
+55	。	。	PUNCT	_	_	8	punct	_	Orig=_
+
+# sent_id = lotus_sutra_0004
+# text_lzh = 若有持是觀世音菩薩名者。設入大火。火不能燒。由是菩薩威神力故。
+# text_en = Those who keep the name of this World-Voice-Perceiver Bodhisattva will not be burned when they are put into a conflagration [because they are protected] by, the supernatural powers of this Bodhisattva.
+# text = 𗓱𘓐𗯨𗙏𘝯𘋢𗥤𗗙𗦻𗧯𗩱𗌭𗋕𘋢𗥤𗗙𘉡𗾈𗪺𗖵𗜐𘜶𘂤𘜪𘅍𗜐𗄨𘖑𗩱。
+1	𗓱	𗓱	ADV	_	_	10	advmod	_	Gloss=if, perhaps|LTranslit=te¹|SpaceAfter=No
+2	𘓐	𘓐	NOUN	_	_	10	nsubj	_	Gloss=man|LTranslit=dzwo²|SpaceAfter=No
+3	𗯨	𗯨	PROPN	_	_	6	compound	_	Gloss=world; the capital of a country|LTranslit=rur¹|SpaceAfter=No
+4	𗙏	𗙏	PROPN	_	_	3	flat	_	Gloss=sound, voice|LTranslit=ġhai̱h²|SpaceAfter=No
+5	𘝯	𘝯	PROPN	_	_	3	flat	_	Gloss=lookat, watch, observe|LTranslit=mbao̱¹|SpaceAfter=No
+6	𘋢	𘋢	NOUN	_	_	9	nmod	_	Gloss=Bodhisattva|LTranslit=dẓaa̱ṃ²|SpaceAfter=No
+7	𗥤	𗥤	VERB	_	_	6	acl	_	Gloss=realise, know|LTranslit=tse²|SpaceAfter=No
+8	𗗙	𗗙	ADP	_	_	6	case	_	Gloss=... of - genitive particle; object marker for trans. verb|LTranslit=ye¹|SpaceAfter=No
+9	𗦻	𗦻	NOUN	_	_	10	obj	_	Gloss=name; reputation|LTranslit=mme²|SpaceAfter=No
+10	𗧯	𗧯	VERB	_	_	27	advcl	_	Gloss=hold|LTranslit=nye¹|SpaceAfter=No
+11	𗩱	𗩱	AUX	_	_	10	aux	_	Gloss=can, be able to|LTranslit=nwi²|SpaceAfter=No
+12	𗌭	𗌭	ADV	_	_	25	advmod	_	Gloss=so; conditional conjunction|LTranslit=qu̱¹|SpaceAfter=No
+13	𗋕	𗋕	DET	_	PronType=Ind	14	det	_	Gloss=other, else, that|LTranslit=tha¹|SpaceAfter=No
+14	𘋢	𘋢	NOUN	_	_	19	nmod	_	Gloss=Bodhisattva|LTranslit=dẓaa̱ṃ²|SpaceAfter=No
+15	𗥤	𗥤	VERB	_	_	14	acl	_	Gloss=realise, know|LTranslit=tse²|SpaceAfter=No
+16	𗗙	𗗙	ADP	_	_	14	case	_	Gloss=... of - genitive particle; object marker for trans. verb|LTranslit=ye¹|SpaceAfter=No
+17	𘉡	𘉡	NOUN	_	_	19	compound	_	Gloss=power, might|LTranslit=puh¹|SpaceAfter=No
+18	𗾈	𗾈	ADJ	_	_	19	amod	_	Gloss=worthy, virtue|LTranslit=mmi̱²|SpaceAfter=No
+19	𗪺	𗪺	NOUN	_	_	27	obl	_	Gloss=power, strength|LTranslit=ġhai̱¹|SpaceAfter=No
+20	𗖵	𗖵	ADP	_	_	19	case	_	Gloss=rely, obey; postposition; according to, based on; because of, given that|LTranslit=bu¹|SpaceAfter=No
+21	𗜐	𗜐	NOUN	_	_	24	obl	_	Gloss=fire|LTranslit=mmə̱¹|SpaceAfter=No
+22	𘜶	𘜶	ADJ	_	_	21	amod	_	Gloss=big, great, large|LTranslit=lleh²|SpaceAfter=No
+23	𘂤	𘂤	ADP	_	_	21	case	_	Gloss=centre, among, middle; locative particle in (the book, the water)|LTranslit=qha̱¹|SpaceAfter=No
+24	𘜪	𘜪	VERB	_	_	25	acl	_	Gloss=to fall; to sink; to drown|LTranslit=ryer¹|SpaceAfter=No
+25	𘅍	𘅍	NOUN	_	_	27	obl	_	Gloss=time, times|LTranslit=zeh¹|SpaceAfter=No
+26	𗜐	𗜐	NOUN	_	_	27	nsubj	_	Gloss=fire|LTranslit=mmə̱¹|SpaceAfter=No
+27	𗄨	𗄨	VERB	_	_	0	root	_	Gloss=burn, ignite, light|LTranslit=lu̱²|SpaceAfter=No
+28	𘖑	𘖑	PART	_	Polarity=Neg	27	advmod	_	Gloss=no, not; no need|LTranslit=mə¹|SpaceAfter=No
+29	𗩱	𗩱	AUX	_	_	27	aux	_	Gloss=can, be able to|LTranslit=nwi²|SpaceAfter=No
+30	。	。	PUNCT	_	_	27	punct	_	Orig=_
+
+# sent_id = lotus_sutra_0005
+# text_lzh = 若為大水所漂。稱其名號。即得淺處。
+# text_en = Those who call his name will be able to take ground when they are washed by an inundation.
+# text = 𗓱𗋽𘜶𘂤𗛧𗋭𘅍𗋕𗦻𘆖𗌭𗋽𗼗𗯩𗬁𘜘。
+1	𗓱	𗓱	ADV	_	_	10	advmod	_	Gloss=if, perhaps|LTranslit=te¹|SpaceAfter=No
+2	𗋽	𗋽	NOUN	_	_	5	obl	_	Gloss=water; river|LTranslit=rzər²|SpaceAfter=No
+3	𘜶	𘜶	ADJ	_	_	2	amod	_	Gloss=big, great, large|LTranslit=lleh²|SpaceAfter=No
+4	𘂤	𘂤	ADP	_	_	2	case	_	Gloss=centre, among, middle; locative particle in (the book, the water)|LTranslit=qha̱¹|SpaceAfter=No
+5	𗛧	𗛧	VERB	_	_	7	acl	_	Gloss=float, drift, flow|LTranslit=lluh¹|SpaceAfter=No
+6	𗋭	𗋭	VERB	_	_	5	conj	_	Gloss=sink|LTranslit=dih¹|SpaceAfter=No
+7	𘅍	𘅍	NOUN	_	_	10	obl	_	Gloss=time, times|LTranslit=zeh¹|SpaceAfter=No
+8	𗋕	𗋕	DET	_	PronType=Ind	9	det	_	Gloss=other, else, that|LTranslit=tha¹|SpaceAfter=No
+9	𗦻	𗦻	NOUN	_	_	10	obj	_	Gloss=name; reputation|LTranslit=mme²|SpaceAfter=No
+10	𘆖	𘆖	VERB	_	_	15	advcl	_	Gloss=ranks, read aloud, chant|LTranslit=ntshə¹|SpaceAfter=No
+11	𗌭	𗌭	ADV	_	_	15	advmod	_	Gloss=so; conditional conjunction|LTranslit=qu̱¹|SpaceAfter=No
+12	𗋽	𗋽	NOUN	_	_	14	nmod	_	Gloss=water; river|LTranslit=rzər²|SpaceAfter=No
+13	𗼗	𗼗	ADJ	_	_	14	amod	_	Gloss=shallow|LTranslit=deṃ¹|SpaceAfter=No
+14	𗯩	𗯩	NOUN	_	_	15	obl	_	Gloss=each, place; nominaliser|LTranslit=twu̱h¹|SpaceAfter=No
+15	𗬁	𗬁	VERB	_	_	0	root	_	Gloss=stop, cease|LTranslit=deṃ²|SpaceAfter=No
+16	𘜘	𘜘	VERB	_	_	15	compound	_	Gloss=get, obtain, gain|LTranslit=rir¹|SpaceAfter=No
+17	。	。	PUNCT	_	_	15	punct	_	Orig=_
+
+# sent_id = lotus_sutra_0006
+# text_lzh = 若有百千萬億眾生。為求金、銀、琉璃、硨磲、瑪瑙、珊瑚、琥珀、真珠等寶。入於大海。假使黑風吹其船舫。飄墮羅剎鬼國。
+# text_en = Suppose hundreds of thousands of billions of living beings are crossing an ocean in order to obtain gold, silver, lapis lazuli, shell, agate, coral, amber pearl, and other treasures, and suppose the ship carrying them is blown to the country of rākṣasa-devils by a storm.
+# text = 𘎤𗓱𘊝𗡞𗕑𗦲𘋢𗋐𗵒𘊟𗋡𗍥𘙮𘁫𗊏𘛩𗻤𗅎𘚰𗿠𗊏𗒘𘆄𘏨𗴿𘔼𘜶𗗚𗅁𗶷𘚶𗰞𘝦𘃡𗛚𗊂𘔶𗂹𗓽𗽇𗢛𗂧𗅁𗈀。
+1	𘎤	𘎤	ADV	_	ExtPos=ADV	30	advmod	_	Gloss=if, supposing; one|LTranslit=tə¹|SpaceAfter=No
+2	𗓱	𗓱	ADV	_	_	1	fixed	_	Gloss=if, perhaps|LTranslit=te¹|SpaceAfter=No
+3	𘊝	𘊝	NUM	_	_	8	nummod	_	Gloss=hundred|LTranslit=ryir²|SpaceAfter=No
+4	𗡞	𗡞	NUM	_	_	8	nummod	_	Gloss=thousand|LTranslit=tu̱h¹|SpaceAfter=No
+5	𗕑	𗕑	NUM	_	_	8	nummod	_	Gloss=ten thousand|LTranslit=khə²|SpaceAfter=No
+6	𗦲	𗦲	NUM	_	_	8	nummod	_	Gloss=a hundred million|LTranslit=rir²|SpaceAfter=No
+7	𘋢	𘋢	NOUN	_	_	8	compound	_	Gloss=being, sentient being|LTranslit=dẓaa̱ṃ²|SpaceAfter=No
+8	𗋐	𗋐	NOUN	_	_	30	nsubj	_	Gloss=life|LTranslit=tśhu¹|SpaceAfter=No
+9	𗵒	𗵒	NOUN	_	_	24	nmod	_	Gloss=gold|LTranslit=qai̱h¹|SpaceAfter=No
+10	𘊟	𘊟	NOUN	_	_	9	conj	_	Gloss=silver (Ag)|LTranslit=ŋwo̱²|SpaceAfter=No
+11	𗋡	𗋡	NOUN	_	_	12	compound	_	Gloss=coloured glaze|LTranslit=nnaa̱²|SpaceAfter=No
+12	𗍥	𗍥	NOUN	_	_	9	conj	_	Gloss=ore|LTranslit=ghəh¹|SpaceAfter=No
+13	𘙮	𘙮	NOUN	_	_	14	compound	_	Gloss=white|LTranslit=li̱w²|SpaceAfter=No
+14	𘁫	𘁫	NOUN	_	_	9	conj	_	Gloss=tridacna, giant clam|LTranslit=nne¹|SpaceAfter=No
+15	𗊏	𗊏	NOUN	_	_	16	compound	_	Gloss=pearl|LTranslit=nwih²|SpaceAfter=No
+16	𘛩	𘛩	NOUN	_	_	9	conj	_	Gloss=heterogeneous|LTranslit=ŋqaə̱¹|SpaceAfter=No
+17	𗻤	𗻤	NOUN	_	_	18	compound	_	Gloss=coral|LTranslit=ṣwaə̱¹|SpaceAfter=No
+18	𗅎	𗅎	NOUN	_	_	9	conj	_	Gloss=coral|LTranslit=qhwaə̱¹|SpaceAfter=No
+19	𘚰	𘚰	NOUN	_	_	20	compound	_	Gloss=amber|LTranslit=lə¹|SpaceAfter=No
+20	𗿠	𗿠	NOUN	_	_	9	conj	_	Gloss=amber|LTranslit=tświw²|SpaceAfter=No
+21	𗊏	𗊏	NOUN	_	_	22	compound	_	Gloss=pearl|LTranslit=nwih²|SpaceAfter=No
+22	𗒘	𗒘	NOUN	_	_	9	conj	_	Gloss=true, real, authentic|LTranslit=ġhae̱¹|SpaceAfter=No
+23	𘆄	𘆄	PRON	_	PronType=Ind	9	conj	_	Gloss=etc.|LTranslit=nə²|SpaceAfter=No
+24	𘏨	𘏨	NOUN	_	_	25	obj	_	Gloss=treasure|LTranslit=llaə̱h¹|SpaceAfter=No
+25	𗴿	𗴿	VERB	_	_	30	advcl	_	Gloss=pray|LTranslit=kuh¹|SpaceAfter=No
+26	𘔼	𘔼	SCONJ	_	_	25	mark	_	Gloss=cause, principal and subsidiary causes|LTranslit=nuo¹|SpaceAfter=No
+27	𘜶	𘜶	ADJ	_	_	28	amod	_	Gloss=big, great, large|LTranslit=lleh²|SpaceAfter=No
+28	𗗚	𗗚	NOUN	_	_	30	obl	_	Gloss=sea|LTranslit=goṃ²|SpaceAfter=No
+29	𗅁	𗅁	ADP	_	_	28	case	_	Gloss=inner, inside, locative particle in (the garden)|LTranslit=wu̱²|SpaceAfter=No
+30	𗶷	𗶷	VERB	_	_	0	root	_	Gloss=go, toward|LTranslit=śə¹|SpaceAfter=No
+31	𘚶	𘚶	NOUN	_	_	38	nsubj	_	Gloss=wind|LTranslit=lə¹|SpaceAfter=No
+32	𗰞	𗰞	ADJ	_	_	31	amod	_	Gloss=dark; black|LTranslit=naw¹|SpaceAfter=No
+33	𘝦	𘝦	SCONJ	_	ExtPos=SCONJ	38	mark	_	Gloss=skill, art; ergative marker|LTranslit=dźə?|SpaceAfter=No
+34	𘃡	𘃡	SCONJ	_	_	33	fixed	_	Gloss=do, make; ergative marker|LTranslit=vi¹|SpaceAfter=No
+35	𗛚	𗛚	NOUN	_	_	36	compound	_	Gloss=boat, ship|LTranslit=dzeh²|SpaceAfter=No
+36	𗊂	𗊂	NOUN	_	_	38	obj	_	Gloss=boat, ship|LTranslit=dzwəh¹|SpaceAfter=No
+37	𘔶	𘔶	VERB	_	_	38	compound	_	Gloss=blow|LTranslit=qhwu̱h²|SpaceAfter=No
+38	𗂹	𗂹	VERB	_	_	30	parataxis	_	Gloss=strike, knock|LTranslit=lhəh¹|SpaceAfter=No
+39	𗓽𗽇	𗓽𗽇	NOUN	_	_	40	compound	_	Gloss=Rakshasa|LTranslit=lo̱¹-tṣhaa̱¹|OrigLang=sa|SpaceAfter=No
+40	𗢛	𗢛	NOUN	_	_	41	nmod	_	Gloss=ghost, spirit|LTranslit=yu¹|SpaceAfter=No
+41	𗂧	𗂧	NOUN	_	_	43	obl	_	Gloss=country, national|LTranslit=lheh²|SpaceAfter=No
+42	𗅁	𗅁	ADP	_	_	41	case	_	Gloss=inner, inside, locative particle in (the garden)|LTranslit=wu̱²|SpaceAfter=No
+43	𗈀	𗈀	VERB	_	_	38	parataxis	_	Gloss=fall, sink|LTranslit=lə¹|SpaceAfter=No
+44	。	。	PUNCT	_	_	30	punct	_	Orig=_
+
+# sent_id = lotus_sutra_0007
+# text_lzh = 其中若有乃至一人。稱觀世音菩薩名者。是諸人等。皆得解脫羅剎之難。以是因緣。名觀世音。
+# text_en = If one of the crew calls the name of World-Voice-Perceiver Bodhisattva, all the crew will be saved from the attacks of the rākṣasas. Because of this, [this Bodhisattva] is called World-Voice-Perceiver.
+# text = 𗳱𘂤𘙇𗫡𗈪𘓐𗰣𗯨𗙏𘝯𘋢𗥤𗗙𗦻𘆖𗌭𗋕𗱕𘓐𘆄𗓽𗽇𗢛𗧹𗄊𗧐𗇘𘜘𘌽𗦫𘔼𗖵𘘦𗯨𗙏𘝯𘘥𘃞。
+1	𗳱	𗳱	PRON	_	PronType=Prs	15	obl	_	Gloss=it, he (third person pronoun)|LTranslit=tha²|SpaceAfter=No
+2	𘂤	𘂤	ADP	_	_	1	case	_	Gloss=centre, among, middle; locative particle in (the book, the water)|LTranslit=qha̱¹|SpaceAfter=No
+3	𘙇	𘙇	ADV	_	ExtPos=ADV	15	advmod	_	Gloss=verb prefix directional marker - direction not found|LTranslit=rər²|SpaceAfter=No
+4	𗫡	𗫡	ADV	_	_	3	fixed	_	Gloss=arrive|LTranslit=nə²|SpaceAfter=No
+5	𗈪	𗈪	NUM	_	_	6	nummod	_	Gloss=a, one, big; verb prefix directional marker - upwards|LTranslit=a¹|SpaceAfter=No
+6	𘓐	𘓐	NOUN	_	_	15	nsubj	_	Gloss=man|LTranslit=dzwo²|SpaceAfter=No
+7	𗰣	𗰣	ADJ	_	_	6	amod	_	Gloss=how many, how much, approx. indicator|LTranslit=zeh¹|SpaceAfter=No
+8	𗯨	𗯨	PROPN	_	_	11	compound	_	Gloss=world; the capital of a country|LTranslit=rur¹|SpaceAfter=No
+9	𗙏	𗙏	PROPN	_	_	8	flat	_	Gloss=sound, voice|LTranslit=ġhai̱h²|SpaceAfter=No
+10	𘝯	𘝯	PROPN	_	_	8	flat	_	Gloss=lookat, watch, observe|LTranslit=mbao̱¹|SpaceAfter=No
+11	𘋢	𘋢	NOUN	_	_	14	nmod	_	Gloss=Bodhisattva|LTranslit=dẓaa̱ṃ²|SpaceAfter=No
+12	𗥤	𗥤	VERB	_	_	11	acl	_	Gloss=realise, know|LTranslit=tse²|SpaceAfter=No
+13	𗗙	𗗙	ADP	_	_	11	case	_	Gloss=... of - genitive particle; object marker for trans. verb|LTranslit=ye¹|SpaceAfter=No
+14	𗦻	𗦻	NOUN	_	_	15	obj	_	Gloss=name; reputation|LTranslit=mme²|SpaceAfter=No
+15	𘆖	𘆖	VERB	_	_	26	advcl	_	Gloss=ranks, read aloud, chant|LTranslit=ntshə¹|SpaceAfter=No
+16	𗌭	𗌭	ADV	_	_	26	advmod	_	Gloss=so; conditional conjunction|LTranslit=qu̱¹|SpaceAfter=No
+17	𗋕	𗋕	DET	_	PronType=Ind	19	det	_	Gloss=other, else, that|LTranslit=tha¹|SpaceAfter=No
+18	𗱕	𗱕	DET	_	PronType=Tot	19	det	_	Gloss=all, various|LTranslit=rur¹|SpaceAfter=No
+19	𘓐	𘓐	NOUN	_	_	26	nsubj	_	Gloss=man|LTranslit=dzwo²|SpaceAfter=No
+20	𘆄	𘆄	PRON	_	PronType=Ind	19	conj	_	Gloss=etc.|LTranslit=nə²|SpaceAfter=No
+21	𗓽𗽇	𗓽𗽇	NOUN	_	_	22	compound	_	Gloss=Rakshasa|LTranslit=lo̱¹-tṣhaa̱¹|OrigLang=sa|SpaceAfter=No
+22	𗢛	𗢛	NOUN	_	_	23	nmod	_	Gloss=ghost, spirit|LTranslit=yu¹|SpaceAfter=No
+23	𗧹	𗧹	NOUN	_	_	26	obl	_	Gloss=disaster, calamity|LTranslit=rgir¹|SpaceAfter=No
+24	𗄊	𗄊	ADV	_	_	26	advmod	_	Gloss=all|LTranslit=zi²|SpaceAfter=No
+25	𗧐	𗧐	VERB	_	_	26	compound	_	Gloss=untie|LTranslit=bai̱²|SpaceAfter=No
+26	𗇘	𗇘	VERB	_	_	0	root	_	Gloss=extricate|LTranslit=lhi̱w²|SpaceAfter=No
+27	𘜘	𘜘	VERB	_	_	26	compound	_	Gloss=get, obtain, gain|LTranslit=rir¹|SpaceAfter=No
+28	𘌽	𘌽	DET	_	PronType=Dem	30	det	_	Gloss=this|LTranslit=thə²|SpaceAfter=No
+29	𗦫	𗦫	NOUN	_	_	30	compound	_	Gloss=cause|LTranslit=yiw¹|SpaceAfter=No
+30	𘔼	𘔼	NOUN	_	_	36	obl	_	Gloss=cause, principal and subsidiary causes|LTranslit=nuo¹|SpaceAfter=No
+31	𗖵	𗖵	ADP	_	ExtPos=ADP	30	case	_	Gloss=rely, obey; postposition; according to, based on; because of, given that|LTranslit=bu¹|SpaceAfter=No
+32	𘘦	𘘦	NOUN	_	_	31	fixed	_	Gloss=an auxiliary word that indicates mood|LTranslit=tśhow¹|SpaceAfter=No
+33	𗯨	𗯨	PROPN	_	_	36	xcomp	_	Gloss=world; the capital of a country|LTranslit=rur¹|SpaceAfter=No
+34	𗙏	𗙏	PROPN	_	_	33	flat	_	Gloss=sound, voice|LTranslit=ġhai̱h²|SpaceAfter=No
+35	𘝯	𘝯	PROPN	_	_	33	flat	_	Gloss=lookat, watch, observe|LTranslit=mbao̱¹|SpaceAfter=No
+36	𘘥	𘘥	VERB	_	_	26	parataxis	_	Gloss=say, call|LTranslit=yə¹|SpaceAfter=No
+37	𘃞	𘃞	PART	_	_	36	discourse:sp	_	Gloss=one, one-by-one; sentence-final particle|LTranslit=lə¹|SpaceAfter=No
+38	。	。	PUNCT	_	_	26	punct	_	Orig=_
+
+# sent_id = lotus_sutra_0008
+# text_lzh = 若復有人。臨當被害。稱觀世音菩薩名者。彼所執刀杖。尋段段壞。而得解脫。
+# text_en = If anyone calls the name of World-Voice-Perceiver Bodhisattva when he is about to be killed, the sword or stick raised against him will suddenly break asunder, and he will be saved.
+# text = 𘎤𗓱𘓐𗖌𘉑𘝦𘃡𗜍𗈙𗗟𘅍𗋕𗯨𗙏𘝯𘋢𗥤𗗙𗦻𘆖𗌭𗈙𗭪𘟞𘐬𗷷𗺴𗺴𗨻𗉮𘃛𗧐𗇘。
+1	𘎤	𘎤	ADV	_	_	20	advmod	_	Gloss=if, supposing; one|LTranslit=tə¹|SpaceAfter=No
+2	𗓱	𗓱	ADV	_	_	1	advmod	_	Gloss=if, perhaps|LTranslit=te¹|SpaceAfter=No
+3	𘓐	𘓐	NOUN	_	_	20	nsubj	_	Gloss=man|LTranslit=dzwo²|SpaceAfter=No
+4	𗖌	𗖌	NUM	_	_	3	nummod	_	Gloss=one; indefinite article|LTranslit=gə²|SpaceAfter=No
+5	𘉑	𘉑	PRON	_	PronType=Ind	9	nsubj:pass	_	Gloss=he, it|LTranslit=mə¹|SpaceAfter=No
+6	𘝦	𘝦	NOUN	_	_	7	compound	_	Gloss=skill, art; ergative marker|LTranslit=dźə?|SpaceAfter=No
+7	𘃡	𘃡	VERB	_	_	5	acl	_	Gloss=do, make; ergative marker|LTranslit=vi¹|SpaceAfter=No
+8	𗜍	𗜍	VERB	_	_	9	compound	_	Gloss=kill, slaughter|LTranslit=sa¹|SpaceAfter=No
+9	𗈙	𗈙	VERB	_	_	11	acl	_	Gloss=evil, envy|LTranslit=ntśu¹|SpaceAfter=No
+10	𗗟	𗗟	AUX	_	_	9	aux	_	Gloss=will, shall; future tense marker|LTranslit=ye¹|SpaceAfter=No
+11	𘅍	𘅍	NOUN	_	_	20	obl	_	Gloss=time, times|LTranslit=zeh¹|SpaceAfter=No
+12	𗋕	𗋕	DET	_	PronType=Ind	16	det	_	Gloss=other, else, that|LTranslit=tha¹|SpaceAfter=No
+13	𗯨	𗯨	PROPN	_	_	16	compound	_	Gloss=world; the capital of a country|LTranslit=rur¹|SpaceAfter=No
+14	𗙏	𗙏	PROPN	_	_	13	flat	_	Gloss=sound, voice|LTranslit=ġhai̱h²|SpaceAfter=No
+15	𘝯	𘝯	PROPN	_	_	13	flat	_	Gloss=lookat, watch, observe|LTranslit=mbao̱¹|SpaceAfter=No
+16	𘋢	𘋢	NOUN	_	_	19	nmod	_	Gloss=Bodhisattva|LTranslit=dẓaa̱ṃ²|SpaceAfter=No
+17	𗥤	𗥤	VERB	_	_	16	acl	_	Gloss=realise, know|LTranslit=tse²|SpaceAfter=No
+18	𗗙	𗗙	ADP	_	_	16	case	_	Gloss=... of - genitive particle; object marker for trans. verb|LTranslit=ye¹|SpaceAfter=No
+19	𗦻	𗦻	NOUN	_	_	20	obj	_	Gloss=name; reputation|LTranslit=mme²|SpaceAfter=No
+20	𘆖	𘆖	VERB	_	_	29	advcl	_	Gloss=ranks, read aloud, chant|LTranslit=ntshə¹|SpaceAfter=No
+21	𗌭	𗌭	ADV	_	_	29	advmod	_	Gloss=so; conditional conjunction|LTranslit=qu̱¹|SpaceAfter=No
+22	𗈙	𗈙	NOUN	_	_	23	nmod	_	Gloss=evil, envy|LTranslit=ntśu¹|SpaceAfter=No
+23	𗭪	𗭪	NOUN	_	_	29	nsubj	_	Gloss=instrument, implement|LTranslit=si²|SpaceAfter=No
+24	𘟞	𘟞	NOUN	_	_	23	appos	_	Gloss=knife, sword|LTranslit=rbər¹|SpaceAfter=No
+25	𘐬	𘐬	NOUN	_	_	24	conj	_	Gloss=cane, stick|LTranslit=bo̱²|SpaceAfter=No
+26	𗷷	𗷷	ADJ	_	_	29	xcomp	_	Gloss=break, snap|LTranslit=lhih²|SpaceAfter=No
+27	𗺴	𗺴	NOUN	_	_	28	compound	_	Gloss=section, break|LTranslit=tho̱ṃh¹|SpaceAfter=No
+28	𗺴	𗺴	NOUN	_	_	29	obl	_	Gloss=section, break|LTranslit=tho̱ṃh¹|SpaceAfter=No
+29	𗨻	𗨻	VERB	_	_	0	root	_	Gloss=do|LTranslit=vwi̱²|SpaceAfter=No
+30	𗉮	𗉮	ADV	_	_	31	compound	_	Gloss=immediately|LTranslit=tśhə²|SpaceAfter=No
+31	𘃛	𘃛	ADV	_	_	33	advmod	_	Gloss=immediate, rapid|LTranslit=rar²|SpaceAfter=No
+32	𗧐	𗧐	VERB	_	_	33	compound	_	Gloss=untie|LTranslit=bai̱²|SpaceAfter=No
+33	𗇘	𗇘	VERB	_	_	29	parataxis	_	Gloss=extricate|LTranslit=lhi̱w²|SpaceAfter=No
+34	。	。	PUNCT	_	_	29	punct	_	Orig=_
+
+# sent_id = lotus_sutra_0009
+# text_lzh = 若三千大千國土。滿中夜叉羅剎。欲來惱人。聞其稱觀世音菩薩名者。是諸惡鬼。尚不能以惡眼視之。況復加害。
+# text_en = If as many yakṣas and rākṣasas as to fill one thousand million Sumeru worlds hear a person call the name of World-Voice-Perceiver Bodhisattva when they come to him with the intention of killing him, those devils will not be able even to see him with their malicious eyes, and needless to say, kill him.
+# text = 𘎤𗓱𘕕𗡞𘜶𗡞𗂧𘍞𗅁𗥫𘀺𗓽𗽇𗱠𘏋𘓐𗗙𗈙𗄼𗧠𘅍𗯨𗙏𘝯𘋢𗥤𗗙𗦻𘆖𗢼𗓁𗌭𗱕𗢛𘊄𘆄𗋕𘓐𗏣𗑉𘝱𘂆𘖑𘜕𗅉𗈙𗰓𘃦。
+1	𘎤	𘎤	ADV	_	_	2	compound	_	Gloss=if, supposing; one|LTranslit=tə¹|SpaceAfter=No
+2	𗓱	𗓱	ADV	_	_	27	advmod	_	Gloss=if, perhaps|LTranslit=te¹|SpaceAfter=No
+3	𘕕	𘕕	NUM	_	_	4	nummod	_	Gloss=three|LTranslit=so̱ṃh¹|SpaceAfter=No
+4	𗡞	𗡞	NUM	_	_	8	nummod	_	Gloss=thousand|LTranslit=tu̱h¹|SpaceAfter=No
+5	𘜶	𘜶	ADJ	_	_	6	amod	_	Gloss=big, great, large|LTranslit=lleh²|SpaceAfter=No
+6	𗡞	𗡞	NUM	_	_	8	nummod	_	Gloss=thousand|LTranslit=tu̱h¹|SpaceAfter=No
+7	𗂧	𗂧	NOUN	_	_	8	compound	_	Gloss=country, national|LTranslit=lheh²|SpaceAfter=No
+8	𘍞	𘍞	NOUN	_	_	13	obl	_	Gloss=round, ring, courtyard, all|LTranslit=wo̱h¹|SpaceAfter=No
+9	𗅁	𗅁	ADP	_	_	8	case	_	Gloss=inner, inside, locative particle in (the garden)|LTranslit=wu̱²|SpaceAfter=No
+10	𗥫𘀺	𗥫𘀺	NOUN	_	_	13	nsubj	_	Gloss=yaksa|LTranslit=ye¹-kha²|OrigLang=sa|SpaceAfter=No
+11	𗓽𗽇	𗓽𗽇	NOUN	_	_	10	conj	_	Gloss=Rakshasa|LTranslit=lo̱¹-tṣhaa̱¹|OrigLang=sa|SpaceAfter=No
+12	𗱠	𗱠	ADV	_	_	13	advmod	_	Gloss=pure, refined|LTranslit=dźe¹|SpaceAfter=No
+13	𘏋	𘏋	VERB	_	_	19	acl	_	Gloss=full, filled, packed|LTranslit=sə̱¹|SpaceAfter=No
+14	𘓐	𘓐	NOUN	_	_	16	obj	_	Gloss=man|LTranslit=dzwo²|SpaceAfter=No
+15	𗗙	𗗙	ADP	_	_	14	case	_	Gloss=... of - genitive particle; object marker for trans. verb|LTranslit=ye¹|SpaceAfter=No
+16	𗈙	𗈙	VERB	_	_	17	xcomp	_	Gloss=evil, envy|LTranslit=ntśu¹|SpaceAfter=No
+17	𗄼	𗄼	VERB	_	_	13	advcl	_	Gloss=come|LTranslit=la¹|SpaceAfter=No
+18	𗧠	𗧠	AUX	_	_	17	aux	_	Gloss=desire, wish, lust, to want|LTranslit=qae̱h²|SpaceAfter=No
+19	𘅍	𘅍	NOUN	_	_	27	obl	_	Gloss=time, times|LTranslit=zeh¹|SpaceAfter=No
+20	𗯨	𗯨	PROPN	_	_	23	compound	_	Gloss=world; the capital of a country|LTranslit=rur¹|SpaceAfter=No
+21	𗙏	𗙏	PROPN	_	_	20	flat	_	Gloss=sound, voice|LTranslit=ġhai̱h²|SpaceAfter=No
+22	𘝯	𘝯	PROPN	_	_	20	flat	_	Gloss=lookat, watch, observe|LTranslit=mbao̱¹|SpaceAfter=No
+23	𘋢	𘋢	NOUN	_	_	26	nmod	_	Gloss=Bodhisattva|LTranslit=dẓaa̱ṃ²|SpaceAfter=No
+24	𗥤	𗥤	VERB	_	_	23	acl	_	Gloss=realise, know|LTranslit=tse²|SpaceAfter=No
+25	𗗙	𗗙	ADP	_	_	23	case	_	Gloss=... of - genitive particle; object marker for trans. verb|LTranslit=ye¹|SpaceAfter=No
+26	𗦻	𗦻	NOUN	_	_	27	obj	_	Gloss=name; reputation|LTranslit=mme²|SpaceAfter=No
+27	𘆖	𘆖	VERB	_	_	29	ccomp	_	Gloss=ranks, read aloud, chant|LTranslit=ntshə¹|SpaceAfter=No
+28	𗢼	𗢼	ADV	_	_	29	advmod	_	Gloss=honest, upright|LTranslit=zeh²|SpaceAfter=No
+29	𗓁	𗓁	VERB	_	_	39	advcl	_	Gloss=listen, hear|LTranslit=mi¹|SpaceAfter=No
+30	𗌭	𗌭	ADV	_	_	39	advmod	_	Gloss=so; conditional conjunction|LTranslit=qu̱¹|SpaceAfter=No
+31	𗱕	𗱕	DET	_	PronType=Tot	32	det	_	Gloss=all, various|LTranslit=rur¹|SpaceAfter=No
+32	𗢛	𗢛	NOUN	_	_	39	nsubj	_	Gloss=ghost, spirit|LTranslit=yu¹|SpaceAfter=No
+33	𘊄	𘊄	ADJ	_	_	32	amod	_	Gloss=evil, vice|LTranslit=ṇoṃ²|SpaceAfter=No
+34	𘆄	𘆄	PRON	_	PronType=Ind	32	conj	_	Gloss=etc.|LTranslit=nə²|SpaceAfter=No
+35	𗋕	𗋕	DET	_	PronType=Ind	36	det	_	Gloss=other, else, that|LTranslit=tha¹|SpaceAfter=No
+36	𘓐	𘓐	NOUN	_	_	37	nmod	_	Gloss=man|LTranslit=dzwo²|SpaceAfter=No
+37	𗏣	𗏣	NOUN	_	_	39	obl	_	Gloss=in the direction of, towards; side|LTranslit=rer²|SpaceAfter=No
+38	𗑉	𗑉	NOUN	_	_	39	obj	_	Gloss=eye|LTranslit=me̱¹|SpaceAfter=No
+39	𘝱	𘝱	VERB	_	_	0	root	_	Gloss=open|LTranslit=ŋqhao̱¹|SpaceAfter=No
+40	𘂆	𘂆	ADV	_	_	39	advmod	_	Gloss=small, little, too|LTranslit=tsə¹|SpaceAfter=No
+41	𘖑	𘖑	PART	_	Polarity=Neg	39	advmod	_	Gloss=no, not; no need|LTranslit=mə¹|SpaceAfter=No
+42	𘜕	𘜕	AUX	_	_	39	aux	_	Gloss=dare|LTranslit=rkir²|SpaceAfter=No
+43	𗅉	𗅉	ADV	_	_	46	advmod	_	Gloss=conjunction; behind|LTranslit=nuo¹|SpaceAfter=No
+44	𗈙	𗈙	NOUN	_	_	46	obj	_	Gloss=evil, envy|LTranslit=ntśu¹|SpaceAfter=No
+45	𗰓	𗰓	ADV	_	_	46	advmod	_	Gloss=how, where; rhetorical question particle|LTranslit=lloh²|SpaceAfter=No
+46	𘃦	𘃦	VERB	_	_	39	parataxis	_	Gloss=do, act|LTranslit=nllə¹|SpaceAfter=No
+47	。	。	PUNCT	_	_	39	punct	_	Orig=_
+
+# sent_id = lotus_sutra_0010
+# text_lzh = 設復有人。若有罪。若無罪。杻械枷鎖。檢繫其身。稱觀世音菩薩名者。皆悉斷壞。即得解脫。
+# text_en = If anyone, guilty or not, calls the name of World-Voice-Perceiver Bodhisattva when he is bound up in manacles, fetters, pillories or chains, those things [in which he is bound up] will break asunder, and he will be saved.
+# text = 𗓱𘓐𘕋𘂬𗅋𘂬𗦇𗤋𗝠𗒕𘟪𘅩𗭑𗁂𗳒𘛽𗆂𗇖𘅍𗯨𗙏𘝯𘋢𗥤𗗙𗦻𘆖𗌭𗋕𗡶𘝪𗈜𗄊𗺴𗺴𗈀𗉮𘃛𗧐𗇘。
+1	𗓱	𗓱	ADV	_	_	27	advmod	_	Gloss=if, perhaps|LTranslit=te¹|SpaceAfter=No
+2	𘓐	𘓐	NOUN	_	_	27	nsubj	_	Gloss=man|LTranslit=dzwo²|SpaceAfter=No
+3	𘕋	𘕋	NOUN	_	_	4	obj	_	Gloss=fault, crime, guilt|LTranslit=dźih²|SpaceAfter=No
+4	𘂬	𘂬	VERB	_	_	2	acl	_	Gloss=hang, join; to be|LTranslit=wo̱¹|SpaceAfter=No
+5	𗅋	𗅋	PART	_	Polarity=Neg	6	advmod	_	Gloss=no, not|LTranslit=mi¹|SpaceAfter=No
+6	𘂬	𘂬	VERB	_	_	4	conj	_	Gloss=hang, join; to be|LTranslit=wo̱¹|SpaceAfter=No
+7	𗦇	𗦇	AUX	_	_	6	aux	_	Gloss=must|LTranslit=lli̱w²|SpaceAfter=No
+8	𗤋	𗤋	PART	_	Polarity=Neg	6	advmod	_	Gloss=not, nothing, to not have|LTranslit=me¹|SpaceAfter=No
+9	𗝠	𗝠	NOUN	_	_	10	nmod	_	Gloss=tree|LTranslit=si¹|SpaceAfter=No
+10	𗒕	𗒕	NOUN	_	_	18	obl	_	Gloss=neck|LTranslit=llweh¹|SpaceAfter=No
+11	𘟪	𘟪	NOUN	_	_	12	nmod	_	Gloss=iron (Fe)|LTranslit=śoṃ¹|SpaceAfter=No
+12	𘅩	𘅩	NOUN	_	_	10	conj	_	Gloss=rope|LTranslit=tśeh¹|SpaceAfter=No
+13	𗭑	𗭑	NOUN	_	_	10	conj	_	Gloss=fetters|LTranslit=śu¹|SpaceAfter=No
+14	𗁂	𗁂	NOUN	_	_	10	conj	_	Gloss=wooden handcuffs|LTranslit=dziw²|SpaceAfter=No
+15	𗳒	𗳒	ADP	_	_	10	case	_	Gloss=auxiliary word - instrumental particle|LTranslit=ŋwu̱²|SpaceAfter=No
+16	𘛽	𘛽	NOUN	_	_	18	obj	_	Gloss=body|LTranslit=lluh²|SpaceAfter=No
+17	𗆂	𗆂	VERB	_	_	18	compound	_	Gloss=tie up, truss up, bind|LTranslit=phe̱¹|SpaceAfter=No
+18	𗇖	𗇖	VERB	_	_	19	acl	_	Gloss=twine, wind|LTranslit=rtśər²|SpaceAfter=No
+19	𘅍	𘅍	NOUN	_	_	27	obl	_	Gloss=time, times|LTranslit=zeh¹|SpaceAfter=No
+20	𗯨	𗯨	PROPN	_	_	23	compound	_	Gloss=world; the capital of a country|LTranslit=rur¹|SpaceAfter=No
+21	𗙏	𗙏	PROPN	_	_	20	flat	_	Gloss=sound, voice|LTranslit=ġhai̱h²|SpaceAfter=No
+22	𘝯	𘝯	PROPN	_	_	20	flat	_	Gloss=lookat, watch, observe|LTranslit=mbao̱¹|SpaceAfter=No
+23	𘋢	𘋢	NOUN	_	_	26	nmod	_	Gloss=Bodhisattva|LTranslit=dẓaa̱ṃ²|SpaceAfter=No
+24	𗥤	𗥤	VERB	_	_	23	acl	_	Gloss=realise, know|LTranslit=tse²|SpaceAfter=No
+25	𗗙	𗗙	ADP	_	_	23	case	_	Gloss=... of - genitive particle; object marker for trans. verb|LTranslit=ye¹|SpaceAfter=No
+26	𗦻	𗦻	NOUN	_	_	27	obj	_	Gloss=name; reputation|LTranslit=mme²|SpaceAfter=No
+27	𘆖	𘆖	VERB	_	_	40	advcl	_	Gloss=ranks, read aloud, chant|LTranslit=ntshə¹|SpaceAfter=No
+28	𗌭	𗌭	ADV	_	_	40	advmod	_	Gloss=so; conditional conjunction|LTranslit=qu̱¹|SpaceAfter=No
+29	𗋕	𗋕	PRON	_	PronType=Ind	31	nsubj	_	Gloss=other, else, that|LTranslit=tha¹|SpaceAfter=No
+30	𗡶	𗡶	ADV	_	_	31	advmod	_	Gloss=along, along the surface|LTranslit=śe¹|SpaceAfter=No
+31	𘝪	𘝪	VERB	_	_	40	advcl	_	Gloss=separate|LTranslit=dźoṃ¹|SpaceAfter=No
+32	𗈜	𗈜	VERB	_	_	31	conj	_	Gloss=sever|LTranslit=qa̱²|SpaceAfter=No
+33	𗄊	𗄊	ADV	_	_	36	advmod	_	Gloss=all|LTranslit=zi²|SpaceAfter=No
+34	𗺴	𗺴	NOUN	_	_	35	compound	_	Gloss=section, break|LTranslit=tho̱ṃh¹|SpaceAfter=No
+35	𗺴	𗺴	NOUN	_	_	36	obl	_	Gloss=section, break|LTranslit=tho̱ṃh¹|SpaceAfter=No
+36	𗈀	𗈀	VERB	_	_	31	conj	_	Gloss=fall, sink|LTranslit=lə¹|SpaceAfter=No
+37	𗉮	𗉮	ADV	_	_	38	compound	_	Gloss=immediately|LTranslit=tśhə²|SpaceAfter=No
+38	𘃛	𘃛	ADV	_	_	40	advmod	_	Gloss=immediate, rapid|LTranslit=rar²|SpaceAfter=No
+39	𗧐	𗧐	VERB	_	_	40	compound	_	Gloss=untie|LTranslit=bai̱²|SpaceAfter=No
+40	𗇘	𗇘	VERB	_	_	0	root	_	Gloss=extricate|LTranslit=lhi̱w²|SpaceAfter=No
+41	。	。	PUNCT	_	_	40	punct	_	Orig=_
+
+# sent_id = lotus_sutra_0011
+# text_lzh = 若三千大千國土。滿中怨賊。有一商主。將諸商人。齎持重寶。經過險路。
+# text_en = Suppose the chief of a party of merchants is leading his party carrying invaluable treasures along a dangerous road haunted by as many bandits as to fill one thousand million Sumeru-worlds,
+# text = 𘎤𗓱𘕕𗡞𘜶𗡞𗂧𘍞𗅁𘂭𘝚𗱠𘏋𗿳𗗥𗦳𗖌𗱕𗗥𗇋𗀚𘏨𘔮𘄽𗝿𗲐𗵘𗅁𗦎。
+1	𘎤	𘎤	ADV	_	_	2	compound	_	Gloss=if, supposing; one|LTranslit=tə¹|SpaceAfter=No
+2	𗓱	𗓱	ADV	_	_	21	advmod	_	Gloss=if, perhaps|LTranslit=te¹|SpaceAfter=No
+3	𘕕	𘕕	NUM	_	_	4	nummod	_	Gloss=three|LTranslit=so̱ṃh¹|SpaceAfter=No
+4	𗡞	𗡞	NUM	_	_	8	nummod	_	Gloss=thousand|LTranslit=tu̱h¹|SpaceAfter=No
+5	𘜶	𘜶	ADJ	_	_	6	amod	_	Gloss=big, great, large|LTranslit=lleh²|SpaceAfter=No
+6	𗡞	𗡞	NUM	_	_	8	nummod	_	Gloss=thousand|LTranslit=tu̱h¹|SpaceAfter=No
+7	𗂧	𗂧	NOUN	_	_	8	compound	_	Gloss=country, national|LTranslit=lheh²|SpaceAfter=No
+8	𘍞	𘍞	NOUN	_	_	13	obl	_	Gloss=round, ring, courtyard, all|LTranslit=wo̱h¹|SpaceAfter=No
+9	𗅁	𗅁	ADP	_	_	8	case	_	Gloss=inner, inside, locative particle in (the garden)|LTranslit=wu̱²|SpaceAfter=No
+10	𘂭	𘂭	NOUN	_	_	13	nsubj	_	Gloss=resentment|LTranslit=llweh¹|SpaceAfter=No
+11	𘝚	𘝚	NOUN	_	_	10	conj	_	Gloss=steal, pilfer, bottom LHS has two extra strokes filled in LFW|LTranslit=rkwər¹|SpaceAfter=No
+12	𗱠	𗱠	ADV	_	_	13	advmod	_	Gloss=pure, refined|LTranslit=dźe¹|SpaceAfter=No
+13	𘏋	𘏋	VERB	_	_	14	acl	_	Gloss=full, filled, packed|LTranslit=sə̱¹|SpaceAfter=No
+14	𗿳	𗿳	NOUN	_	_	21	obl	_	Gloss=time, days|LTranslit=dzeṃ¹|SpaceAfter=No
+15	𗗥	𗗥	NOUN	_	_	16	compound	_	Gloss=market, sell, marry|LTranslit=źi²|SpaceAfter=No
+16	𗦳	𗦳	NOUN	_	_	21	nsubj	_	Gloss=host|LTranslit=dzu²|SpaceAfter=No
+17	𗖌	𗖌	NUM	_	_	16	nummod	_	Gloss=one; indefinite article|LTranslit=gə²|SpaceAfter=No
+18	𗱕	𗱕	DET	_	PronType=Tot	20	det	_	Gloss=all, various|LTranslit=rur¹|SpaceAfter=No
+19	𗗥	𗗥	NOUN	_	_	20	nmod	_	Gloss=market, sell, marry|LTranslit=źi²|SpaceAfter=No
+20	𗇋	𗇋	NOUN	_	_	21	obj	_	Gloss=S/A nominalizer, usually human; -er; the one/those who ...; s/he who ...|LTranslit=rmer²|SpaceAfter=No
+21	𗀚	𗀚	VERB	_	_	0	root	_	Gloss=guide, lead|LTranslit=ṣao̱¹|SpaceAfter=No
+22	𘏨	𘏨	NOUN	_	_	25	obj	_	Gloss=treasure|LTranslit=llaə̱h¹|SpaceAfter=No
+23	𘔮	𘔮	NOUN	_	_	22	conj	_	Gloss=wealth, property, thing|LTranslit=rġhwa̱r²|SpaceAfter=No
+24	𘄽	𘄽	ADJ	_	_	22	amod	_	Gloss=good, kind|LTranslit=ŋa̱h²|SpaceAfter=No
+25	𗝿	𗝿	VERB	_	_	21	conj	_	Gloss=hold, grasp; to take away|LTranslit=tśhe¹|SpaceAfter=No
+26	𗲐	𗲐	ADJ	_	_	27	amod	_	Gloss=dangerous, perilous|LTranslit=beh¹|SpaceAfter=No
+27	𗵘	𗵘	NOUN	_	_	29	obl	_	Gloss=road; way|LTranslit=tśa¹|SpaceAfter=No
+28	𗅁	𗅁	ADP	_	_	27	case	_	Gloss=inner, inside, locative particle in (the garden)|LTranslit=wu̱²|SpaceAfter=No
+29	𗦎	𗦎	VERB	_	_	21	conj	_	Gloss=flow|LTranslit=ra̱r²|SpaceAfter=No
+30	。	。	PUNCT	_	_	21	punct	_	Orig=_
+
+# sent_id = lotus_sutra_0012
+# text_lzh = 其中一人作是唱言。諸善男子。勿得恐怖。汝等應當一心稱觀世音菩薩名號。是菩薩能以無畏。施於眾生。汝等若稱名者。於此怨賊當得解脫。
+# text_en = and suppose one of the members of the party says [to others], Good men! Do not be afraid! Call the name of World-Voice-Perceiver Bodhisattva with all your hearts! This Bodhisattva gives fearlessness to all living beings. If you call his name, you will be saved from [the attacks of] these bandits.
+# text = 𗳱𘂤𘓐𗖌𘌽𗍊𘒣𘘥𗱕𗩴𗾖𘈷𗞞𘅇𗃬𗐱𗍳𘆄𗤶𗨳𗳒𗯨𗙏𘝯𘋢𗥤𗗙𗦻𘆖𗦇𗋕𘋢𗥤𗫂𘋢𗋐𗗙𗃬𗤋𘈈𗩱𗍳𘆄𘎤𗓱𗳱𗗙𗦻𘆖𗩱𗌭𘌽𘂭𘝚𘂤𘙌𗅆𗧐𗇘𘜘𗐱𘘣。
+1	𗳱	𗳱	PRON	_	PronType=Prs	8	obl	_	Gloss=it, he (third person pronoun)|LTranslit=tha²|SpaceAfter=No
+2	𘂤	𘂤	ADP	_	_	1	case	_	Gloss=centre, among, middle; locative particle in (the book, the water)|LTranslit=qha̱¹|SpaceAfter=No
+3	𘓐	𘓐	NOUN	_	_	8	nsubj	_	Gloss=man|LTranslit=dzwo²|SpaceAfter=No
+4	𗖌	𗖌	NUM	_	_	3	nummod	_	Gloss=one; indefinite article|LTranslit=gə²|SpaceAfter=No
+5	𘌽	𘌽	PRON	_	PronType=Dem	7	nmod	_	Gloss=this|LTranslit=thə²|SpaceAfter=No
+6	𗍊	𗍊	ADP	_	_	5	case	_	Gloss=as|LTranslit=su²|SpaceAfter=No
+7	𘒣	𘒣	NOUN	_	_	8	obj	_	Gloss=speech, word|LTranslit=da̱h²|SpaceAfter=No
+8	𘘥	𘘥	VERB	_	_	0	root	_	Gloss=say, call|LTranslit=yə¹|SpaceAfter=No
+9	𗱕	𗱕	DET	_	PronType=Tot	12	det	_	Gloss=all, various|LTranslit=rur¹|SpaceAfter=No
+10	𗩴	𗩴	ADJ	_	_	12	amod	_	Gloss=good, mercy|LTranslit=nni̱w²|SpaceAfter=No
+11	𗾖	𗾖	NOUN	_	_	12	nmod	_	Gloss=man, male|LTranslit=rgor¹|SpaceAfter=No
+12	𘈷	𘈷	NOUN	_	_	8	vocative	_	Gloss=son, child|LTranslit=gi²|SpaceAfter=No
+13	𗞞	𗞞	ADV	_	_	15	advmod	_	Gloss=as; verb prefix directional marker - away from the speaker|LTranslit=da²|SpaceAfter=No
+14	𘅇	𘅇	PART	_	Polarity=Neg	15	advmod	_	Gloss=verb negator: prohibitive, do not; verb negator: optative|LTranslit=ti¹|SpaceAfter=No
+15	𗃬	𗃬	VERB	_	_	8	parataxis	_	Gloss=fear, dread|LTranslit=lli̱²|SpaceAfter=No
+16	𗐱	𗐱	AUX	_	Number=Plur|Person=2	15	aux	_	Gloss=collective plural indicator|LTranslit=ni²|SpaceAfter=No
+17	𗍳	𗍳	PRON	_	PronType=Prs	29	nsubj	_	Gloss=you (formal)|LTranslit=ni²|SpaceAfter=No
+18	𘆄	𘆄	PRON	_	PronType=Ind	17	conj	_	Gloss=etc.|LTranslit=nə²|SpaceAfter=No
+19	𗤶	𗤶	NOUN	_	_	29	obl	_	Gloss=heart, mind|LTranslit=nne¹|SpaceAfter=No
+20	𗨳	𗨳	ADJ	_	_	19	amod	_	Gloss=return|LTranslit=tih¹|SpaceAfter=No
+21	𗳒	𗳒	ADP	_	_	19	case	_	Gloss=auxiliary word - instrumental particle|LTranslit=ŋwu̱²|SpaceAfter=No
+22	𗯨	𗯨	PROPN	_	_	25	compound	_	Gloss=world; the capital of a country|LTranslit=rur¹|SpaceAfter=No
+23	𗙏	𗙏	PROPN	_	_	22	flat	_	Gloss=sound, voice|LTranslit=ġhai̱h²|SpaceAfter=No
+24	𘝯	𘝯	PROPN	_	_	22	flat	_	Gloss=lookat, watch, observe|LTranslit=mbao̱¹|SpaceAfter=No
+25	𘋢	𘋢	NOUN	_	_	28	nmod	_	Gloss=Bodhisattva|LTranslit=dẓaa̱ṃ²|SpaceAfter=No
+26	𗥤	𗥤	VERB	_	_	25	acl	_	Gloss=realise, know|LTranslit=tse²|SpaceAfter=No
+27	𗗙	𗗙	ADP	_	_	25	case	_	Gloss=... of - genitive particle; object marker for trans. verb|LTranslit=ye¹|SpaceAfter=No
+28	𗦻	𗦻	NOUN	_	_	29	obj	_	Gloss=name; reputation|LTranslit=mme²|SpaceAfter=No
+29	𘆖	𘆖	VERB	_	_	15	parataxis	_	Gloss=ranks, read aloud, chant|LTranslit=ntshə¹|SpaceAfter=No
+30	𗦇	𗦇	AUX	_	_	29	aux	_	Gloss=must|LTranslit=lli̱w²|SpaceAfter=No
+31	𗋕	𗋕	DET	_	PronType=Ind	32	det	_	Gloss=other, else, that|LTranslit=tha¹|SpaceAfter=No
+32	𘋢	𘋢	NOUN	_	_	40	nsubj	_	Gloss=Bodhisattva|LTranslit=dẓaa̱ṃ²|SpaceAfter=No
+33	𗥤	𗥤	VERB	_	_	32	acl	_	Gloss=realise, know|LTranslit=tse²|SpaceAfter=No
+34	𗫂	𗫂	ADP	_	_	32	case	_	Gloss=topic marker 者; as for ...; concerning ...|LTranslit=ta¹|SpaceAfter=No
+35	𘋢	𘋢	NOUN	_	_	36	compound	_	Gloss=being, sentient being|LTranslit=dẓaa̱ṃ²|SpaceAfter=No
+36	𗋐	𗋐	NOUN	_	_	40	iobj	_	Gloss=life|LTranslit=tśhu¹|SpaceAfter=No
+37	𗗙	𗗙	ADP	_	_	36	case	_	Gloss=... of - genitive particle; object marker for trans. verb|LTranslit=ye¹|SpaceAfter=No
+38	𗃬	𗃬	NOUN	_	_	40	obj	_	Gloss=fear, dread|LTranslit=lli̱²|SpaceAfter=No
+39	𗤋	𗤋	DET	_	PronType=Neg	38	det	_	Gloss=not, nothing, to not have|LTranslit=me¹|SpaceAfter=No
+40	𘈈	𘈈	VERB	_	_	29	parataxis	_	Gloss=grant, bestow|LTranslit=mmi¹|SpaceAfter=No
+41	𗩱	𗩱	AUX	_	_	40	aux	_	Gloss=can, be able to|LTranslit=nwi²|SpaceAfter=No
+42	𗍳	𗍳	PRON	_	PronType=Prs	49	nsubj	_	Gloss=you (formal)|LTranslit=ni²|SpaceAfter=No
+43	𘆄	𘆄	PRON	_	PronType=Ind	42	conj	_	Gloss=etc.|LTranslit=nə²|SpaceAfter=No
+44	𘎤	𘎤	ADV	_	_	45	compound	_	Gloss=if, supposing; one|LTranslit=tə¹|SpaceAfter=No
+45	𗓱	𗓱	ADV	_	_	49	advmod	_	Gloss=if, perhaps|LTranslit=te¹|SpaceAfter=No
+46	𗳱	𗳱	PRON	_	PronType=Prs	48	nmod	_	Gloss=it, he (third person pronoun)|LTranslit=tha²|SpaceAfter=No
+47	𗗙	𗗙	ADP	_	_	46	case	_	Gloss=... of - genitive particle; object marker for trans. verb|LTranslit=ye¹|SpaceAfter=No
+48	𗦻	𗦻	NOUN	_	_	49	obj	_	Gloss=name; reputation|LTranslit=mme²|SpaceAfter=No
+49	𘆖	𘆖	VERB	_	_	59	advcl	_	Gloss=ranks, read aloud, chant|LTranslit=ntshə¹|SpaceAfter=No
+50	𗩱	𗩱	AUX	_	_	49	aux	_	Gloss=can, be able to|LTranslit=nwi²|SpaceAfter=No
+51	𗌭	𗌭	ADV	_	_	59	advmod	_	Gloss=so; conditional conjunction|LTranslit=qu̱¹|SpaceAfter=No
+52	𘌽	𘌽	DET	_	PronType=Dem	53	det	_	Gloss=this|LTranslit=thə²|SpaceAfter=No
+53	𘂭	𘂭	NOUN	_	_	59	obl	_	Gloss=resentment|LTranslit=llweh¹|SpaceAfter=No
+54	𘝚	𘝚	NOUN	_	_	53	conj	_	Gloss=steal, pilfer, bottom LHS has two extra strokes filled in LFW|LTranslit=rkwər¹|SpaceAfter=No
+55	𘂤	𘂤	ADP	_	_	53	case	_	Gloss=centre, among, middle; locative particle in (the book, the water)|LTranslit=qha̱¹|SpaceAfter=No
+56	𘙌	𘙌	ADV	_	_	59	advmod	_	Gloss=verb prefix directional marker - here, inside, closer|LTranslit=kə¹|SpaceAfter=No
+57	𗅆	𗅆	ADV	_	_	59	advmod	_	Gloss=calm|LTranslit=deṃ²|SpaceAfter=No
+58	𗧐	𗧐	VERB	_	_	59	compound	_	Gloss=untie|LTranslit=bai̱²|SpaceAfter=No
+59	𗇘	𗇘	VERB	_	_	40	parataxis	_	Gloss=extricate|LTranslit=lhi̱w²|SpaceAfter=No
+60	𘜘	𘜘	VERB	_	_	59	compound	_	Gloss=get, obtain, gain|LTranslit=rir¹|SpaceAfter=No
+61	𗐱	𗐱	AUX	_	Number=Plur|Person=2	59	aux	_	Gloss=collective plural indicator|LTranslit=ni²|SpaceAfter=No
+62	𘘣	𘘣	VERB	_	_	8	conj	_	Gloss=say; to call|LTranslit=yə²|SpaceAfter=No
+63	。	。	PUNCT	_	_	8	punct	_	Orig=_
+
+# sent_id = lotus_sutra_0013
+# text_lzh = 眾商人聞。俱發聲言。南無觀世音菩薩。稱其名故。即得解脫。
+# text_en = If the other members of the party hear this and say simultaneously, Namas to World-Voice-Perceiver Bodhisattva, all of them will be saved because of their calling of his name.
+# text = 𗱕𗗥𗇋𘆄𗋕𘒣𗓁𗅉𗳦𗳦𗙏𗧊𗢰𘓩𗯨𗙏𘝯𘋢𗥤𘘣𗋕𗦻𘆖𗖵𗄊𗧐𗇘𘜘。
+1	𗱕	𗱕	DET	_	PronType=Tot	3	det	_	Gloss=all, various|LTranslit=rur¹|SpaceAfter=No
+2	𗗥	𗗥	NOUN	_	_	3	nmod	_	Gloss=market, sell, marry|LTranslit=źi²|SpaceAfter=No
+3	𗇋	𗇋	NOUN	_	_	12	nsubj	_	Gloss=S/A nominalizer, usually human; -er; the one/those who ...; s/he who ...|LTranslit=rmer²|SpaceAfter=No
+4	𘆄	𘆄	PRON	_	PronType=Ind	3	conj	_	Gloss=etc.|LTranslit=nə²|SpaceAfter=No
+5	𗋕	𗋕	PRON	_	PronType=Ind	6	nmod	_	Gloss=other, else, that|LTranslit=tha¹|SpaceAfter=No
+6	𘒣	𘒣	NOUN	_	_	7	obj	_	Gloss=speech, word|LTranslit=da̱h²|SpaceAfter=No
+7	𗓁	𗓁	VERB	_	_	12	advcl	_	Gloss=listen, hear|LTranslit=mi¹|SpaceAfter=No
+8	𗅉	𗅉	SCONJ	_	_	7	mark	_	Gloss=conjunction; behind|LTranslit=nuo¹|SpaceAfter=No
+9	𗳦	𗳦	ADV	_	_	10	compound	_	Gloss=alike|LTranslit=qa̱¹|SpaceAfter=No
+10	𗳦	𗳦	ADV	_	_	12	advmod	_	Gloss=alike|LTranslit=qa̱¹|SpaceAfter=No
+11	𗙏	𗙏	NOUN	_	_	12	obj	_	Gloss=sound, voice|LTranslit=ġhai̱h²|SpaceAfter=No
+12	𗧊	𗧊	VERB	_	_	0	root	_	Gloss=be born; to grow (of plants and trees); to rise (of the sun or moon)|LTranslit=to̱²|SpaceAfter=No
+13	𗢰𘓩	𗢰𘓩	VERB	_	_	12	parataxis	_	Gloss=Namo, take refuge in|LTranslit=na̱¹-mu̱²|OrigLang=sa|SpaceAfter=No
+14	𗯨	𗯨	PROPN	_	_	17	compound	_	Gloss=world; the capital of a country|LTranslit=rur¹|SpaceAfter=No
+15	𗙏	𗙏	PROPN	_	_	14	flat	_	Gloss=sound, voice|LTranslit=ġhai̱h²|SpaceAfter=No
+16	𘝯	𘝯	PROPN	_	_	14	flat	_	Gloss=lookat, watch, observe|LTranslit=mbao̱¹|SpaceAfter=No
+17	𘋢	𘋢	NOUN	_	_	13	obj	_	Gloss=Bodhisattva|LTranslit=dẓaa̱ṃ²|SpaceAfter=No
+18	𗥤	𗥤	VERB	_	_	17	acl	_	Gloss=realise, know|LTranslit=tse²|SpaceAfter=No
+19	𘘣	𘘣	VERB	_	_	12	conj	_	Gloss=say; to call|LTranslit=yə²|SpaceAfter=No
+20	𗋕	𗋕	PRON	_	PronType=Ind	21	nmod	_	Gloss=other, else, that|LTranslit=tha¹|SpaceAfter=No
+21	𗦻	𗦻	NOUN	_	_	22	obj	_	Gloss=name; reputation|LTranslit=mme²|SpaceAfter=No
+22	𘆖	𘆖	VERB	_	_	26	advcl	_	Gloss=ranks, read aloud, chant|LTranslit=ntshə¹|SpaceAfter=No
+23	𗖵	𗖵	SCONJ	_	_	22	mark	_	Gloss=rely, obey; postposition; according to, based on; because of, given that|LTranslit=bu¹|SpaceAfter=No
+24	𗄊	𗄊	ADV	_	_	26	advmod	_	Gloss=all|LTranslit=zi²|SpaceAfter=No
+25	𗧐	𗧐	VERB	_	_	26	compound	_	Gloss=untie|LTranslit=bai̱²|SpaceAfter=No
+26	𗇘	𗇘	VERB	_	_	12	conj	_	Gloss=extricate|LTranslit=lhi̱w²|SpaceAfter=No
+27	𘜘	𘜘	VERB	_	_	26	compound	_	Gloss=get, obtain, gain|LTranslit=rir¹|SpaceAfter=No
+28	。	。	PUNCT	_	_	12	punct	_	Orig=_
+
+# sent_id = lotus_sutra_0014
+# text_lzh = 佛告無盡意菩薩。觀世音菩薩摩訶薩。威神之力。巍巍如是。
+# text_en = Endless-Intent! The supernatural powers of World-Voice-Perceiver Bodhisattva-mahāsattva are as great as previously stated.
+# text = 𗢳𗉣𗅋𗋃𘋢𗥤𗗙𘘣𘌽𗯨𗙏𘝯𘏞𗢈𗓚𘄽𗢈𘉡𗾈𗪺𗫂𘌽𗍊𗾟𘜶𘃞。
+1	𗢳	𗢳	NOUN	_	_	8	nsubj	_	Gloss=Buddha|LTranslit=tha̱¹|SpaceAfter=No
+2	𗉣	𗉣	PROPN	_	_	5	compound	_	Gloss=meaning, idea|LTranslit=phi¹|SpaceAfter=No
+3	𗅋	𗅋	PROPN	_	_	2	flat	_	Gloss=no, not|LTranslit=mi¹|SpaceAfter=No
+4	𗋃	𗋃	PROPN	_	_	2	flat	_	Gloss=limit, end|LTranslit=si¹|SpaceAfter=No
+5	𘋢	𘋢	NOUN	_	_	8	iobj	_	Gloss=Bodhisattva|LTranslit=dẓaa̱ṃ²|SpaceAfter=No
+6	𗥤	𗥤	VERB	_	_	5	acl	_	Gloss=realise, know|LTranslit=tse²|SpaceAfter=No
+7	𗗙	𗗙	ADP	_	_	5	case	_	Gloss=... of - genitive particle; object marker for trans. verb|LTranslit=ye¹|SpaceAfter=No
+8	𘘣	𘘣	VERB	_	_	0	root	_	Gloss=say; to call|LTranslit=yə²|SpaceAfter=No
+9	𘌽	𘌽	DET	_	PronType=Dem	14	det	_	Gloss=this|LTranslit=thə²|SpaceAfter=No
+10	𗯨	𗯨	PROPN	_	_	13	compound	_	Gloss=world; the capital of a country|LTranslit=rur¹|SpaceAfter=No
+11	𗙏	𗙏	PROPN	_	_	10	flat	_	Gloss=sound, voice|LTranslit=ġhai̱h²|SpaceAfter=No
+12	𘝯	𘝯	PROPN	_	_	10	flat	_	Gloss=lookat, watch, observe|LTranslit=mbao̱¹|SpaceAfter=No
+13	𘏞𗢈	𘏞𗢈	NOUN	_	_	14	compound	_	Gloss=Bodhisattva|LTranslit=po̱¹-tsa̱¹|OrigLang=sa|SpaceAfter=No
+14	𗓚𘄽𗢈	𗓚𘄽𗢈	NOUN	_	_	17	nmod	_	Gloss=mahāsattva|LTranslit=ma̱²-ŋa̱h²-tsa̱¹|OrigLang=sa|SpaceAfter=No
+15	𘉡	𘉡	NOUN	_	_	17	compound	_	Gloss=power, might|LTranslit=puh¹|SpaceAfter=No
+16	𗾈	𗾈	ADJ	_	_	17	amod	_	Gloss=worthy, virtue|LTranslit=mmi̱²|SpaceAfter=No
+17	𗪺	𗪺	NOUN	_	_	22	nsubj	_	Gloss=power, strength|LTranslit=ġhai̱¹|SpaceAfter=No
+18	𗫂	𗫂	ADP	_	_	17	case	_	Gloss=topic marker 者; as for ...; concerning ...|LTranslit=ta¹|SpaceAfter=No
+19	𘌽	𘌽	PRON	_	PronType=Dem	22	obl	_	Gloss=this|LTranslit=thə²|SpaceAfter=No
+20	𗍊	𗍊	ADP	_	_	19	case	_	Gloss=as|LTranslit=su²|SpaceAfter=No
+21	𗾟	𗾟	ADJ	_	_	22	compound	_	Gloss=vast, wide, extensive|LTranslit=vwa̱h²|SpaceAfter=No
+22	𘜶	𘜶	ADJ	_	_	8	parataxis	_	Gloss=big, great, large|LTranslit=lleh²|SpaceAfter=No
+23	𘃞	𘃞	PART	_	_	22	discourse:sp	_	Gloss=one, one-by-one; sentence-final particle|LTranslit=lə¹|SpaceAfter=No
+24	。	。	PUNCT	_	_	8	punct	_	Orig=_
+
+# sent_id = lotus_sutra_0015
+# text_lzh = 若有眾生。爱生贪欲时。常念恭敬觀世音菩薩。便得離欲。
+# text_en = Those who have much lust will be saved from lust if they constantly think of World-Voice-Perceiver Bodhisattva and respect him.
+# text = 𘎤𗓱𘋢𗋐𗅴𗧠𗄈𘟠𘅍𗏹𗯨𗙏𘝯𘋢𗥤𗗙𗦻𘆖𗅉𗼋𗧋𗌭𗉮𘃛𗧠𗈜。
+1	𘎤	𘎤	ADV	_	_	2	compound	_	Gloss=if, supposing; one|LTranslit=tə¹|SpaceAfter=No
+2	𗓱	𗓱	ADV	_	_	18	advmod	_	Gloss=if, perhaps|LTranslit=te¹|SpaceAfter=No
+3	𘋢	𘋢	NOUN	_	_	4	compound	_	Gloss=being, sentient being|LTranslit=dẓaa̱ṃ²|SpaceAfter=No
+4	𗋐	𗋐	NOUN	_	_	18	nsubj	_	Gloss=life|LTranslit=tśhu¹|SpaceAfter=No
+5	𗅴	𗅴	NOUN	_	_	6	compound	_	Gloss=corrupt, vena?|LTranslit=lle̱h²|SpaceAfter=No
+6	𗧠	𗧠	NOUN	_	_	8	obj	_	Gloss=desire, wish, lust, to want|LTranslit=qae̱h²|SpaceAfter=No
+7	𗄈	𗄈	VERB	_	_	8	compound	_	Gloss=appear, raise|LTranslit=śow¹|SpaceAfter=No
+8	𘟠	𘟠	VERB	_	_	9	acl	_	Gloss=love, like|LTranslit=dzu̱¹|SpaceAfter=No
+9	𘅍	𘅍	NOUN	_	_	18	obl	_	Gloss=time, times|LTranslit=zeh¹|SpaceAfter=No
+10	𗏹	𗏹	ADV	_	_	18	advmod	_	Gloss=frequently, often; continually|LTranslit=yu²|SpaceAfter=No
+11	𗯨	𗯨	PROPN	_	_	14	compound	_	Gloss=world; the capital of a country|LTranslit=rur¹|SpaceAfter=No
+12	𗙏	𗙏	PROPN	_	_	11	flat	_	Gloss=sound, voice|LTranslit=ġhai̱h²|SpaceAfter=No
+13	𘝯	𘝯	PROPN	_	_	11	flat	_	Gloss=lookat, watch, observe|LTranslit=mbao̱¹|SpaceAfter=No
+14	𘋢	𘋢	NOUN	_	_	17	nmod	_	Gloss=Bodhisattva|LTranslit=dẓaa̱ṃ²|SpaceAfter=No
+15	𗥤	𗥤	VERB	_	_	14	acl	_	Gloss=realise, know|LTranslit=tse²|SpaceAfter=No
+16	𗗙	𗗙	ADP	_	_	14	case	_	Gloss=... of - genitive particle; object marker for trans. verb|LTranslit=ye¹|SpaceAfter=No
+17	𗦻	𗦻	NOUN	_	_	18	obj	_	Gloss=name; reputation|LTranslit=mme²|SpaceAfter=No
+18	𘆖	𘆖	VERB	_	_	26	advcl	_	Gloss=ranks, read aloud, chant|LTranslit=ntshə¹|SpaceAfter=No
+19	𗅉	𗅉	CCONJ	_	_	21	cc	_	Gloss=conjunction; behind|LTranslit=nuo¹|SpaceAfter=No
+20	𗼋	𗼋	VERB	_	_	21	compound	_	Gloss=respectful, reverent|LTranslit=dzwəh¹|SpaceAfter=No
+21	𗧋	𗧋	VERB	_	_	18	conj	_	Gloss=respectful|LTranslit=re̱r²|SpaceAfter=No
+22	𗌭	𗌭	ADV	_	_	26	advmod	_	Gloss=so; conditional conjunction|LTranslit=qu̱¹|SpaceAfter=No
+23	𗉮	𗉮	ADV	_	_	24	compound	_	Gloss=immediately|LTranslit=tśhə²|SpaceAfter=No
+24	𘃛	𘃛	ADV	_	_	26	advmod	_	Gloss=immediate, rapid|LTranslit=rar²|SpaceAfter=No
+25	𗧠	𗧠	NOUN	_	_	26	obj	_	Gloss=desire, wish, lust, to want|LTranslit=qae̱h²|SpaceAfter=No
+26	𗈜	𗈜	VERB	_	_	0	root	_	Gloss=sever|LTranslit=qa̱²|SpaceAfter=No
+27	。	。	PUNCT	_	_	26	punct	_	Orig=_
+
+# sent_id = lotus_sutra_0016
+# text_lzh = 若多瞋恚。常念恭敬觀世音菩薩。便得離瞋。
+# text_en = Those who have much anger will be saved from anger if they constantly think of World-Voice-Perceiver Bodhisattva and respect him.
+# text = 𗓱𗕣𗔊𗄈𘟠𘅍𗏹𗯨𗙏𘝯𘋢𗥤𗗙𗦻𘆖𗅉𗼋𗧋𗌭𗉮𘃛𗕣𗈜。
+1	𗓱	𗓱	ADV	_	_	15	advmod	_	Gloss=if, perhaps|LTranslit=te¹|SpaceAfter=No
+2	𗕣	𗕣	NOUN	_	_	3	compound	_	Gloss=angry|LTranslit=tshah¹|SpaceAfter=No
+3	𗔊	𗔊	NOUN	_	_	5	obj	_	Gloss=anger, rage, fury|LTranslit=qwo̱ṃ²|SpaceAfter=No
+4	𗄈	𗄈	VERB	_	_	5	compound	_	Gloss=appear, raise|LTranslit=śow¹|SpaceAfter=No
+5	𘟠	𘟠	VERB	_	_	6	acl	_	Gloss=love, like|LTranslit=dzu̱¹|SpaceAfter=No
+6	𘅍	𘅍	NOUN	_	_	15	obl	_	Gloss=time, times|LTranslit=zeh¹|SpaceAfter=No
+7	𗏹	𗏹	ADV	_	_	15	advmod	_	Gloss=frequently, often; continually|LTranslit=yu²|SpaceAfter=No
+8	𗯨	𗯨	PROPN	_	_	11	compound	_	Gloss=world; the capital of a country|LTranslit=rur¹|SpaceAfter=No
+9	𗙏	𗙏	PROPN	_	_	8	flat	_	Gloss=sound, voice|LTranslit=ġhai̱h²|SpaceAfter=No
+10	𘝯	𘝯	PROPN	_	_	8	flat	_	Gloss=lookat, watch, observe|LTranslit=mbao̱¹|SpaceAfter=No
+11	𘋢	𘋢	NOUN	_	_	14	nmod	_	Gloss=Bodhisattva|LTranslit=dẓaa̱ṃ²|SpaceAfter=No
+12	𗥤	𗥤	VERB	_	_	11	acl	_	Gloss=realise, know|LTranslit=tse²|SpaceAfter=No
+13	𗗙	𗗙	ADP	_	_	11	case	_	Gloss=... of - genitive particle; object marker for trans. verb|LTranslit=ye¹|SpaceAfter=No
+14	𗦻	𗦻	NOUN	_	_	15	obj	_	Gloss=name; reputation|LTranslit=mme²|SpaceAfter=No
+15	𘆖	𘆖	VERB	_	_	23	advcl	_	Gloss=ranks, read aloud, chant|LTranslit=ntshə¹|SpaceAfter=No
+16	𗅉	𗅉	CCONJ	_	_	18	cc	_	Gloss=conjunction; behind|LTranslit=nuo¹|SpaceAfter=No
+17	𗼋	𗼋	VERB	_	_	18	compound	_	Gloss=respectful, reverent|LTranslit=dzwəh¹|SpaceAfter=No
+18	𗧋	𗧋	VERB	_	_	15	conj	_	Gloss=respectful|LTranslit=re̱r²|SpaceAfter=No
+19	𗌭	𗌭	ADV	_	_	23	advmod	_	Gloss=so; conditional conjunction|LTranslit=qu̱¹|SpaceAfter=No
+20	𗉮	𗉮	ADV	_	_	21	compound	_	Gloss=immediately|LTranslit=tśhə²|SpaceAfter=No
+21	𘃛	𘃛	ADV	_	_	23	advmod	_	Gloss=immediate, rapid|LTranslit=rar²|SpaceAfter=No
+22	𗕣	𗕣	NOUN	_	_	23	obj	_	Gloss=angry|LTranslit=tshah¹|SpaceAfter=No
+23	𗈜	𗈜	VERB	_	_	0	root	_	Gloss=sever|LTranslit=qa̱²|SpaceAfter=No
+24	。	。	PUNCT	_	_	23	punct	_	Orig=_
+
+# sent_id = lotus_sutra_0017
+# text_lzh = 若多愚癡。常念恭敬觀世音菩薩。便得離癡。
+# text_en = Those who have much stupidity will be saved from stupidity if they constantly think of World-Voice-Perceiver Bodhisattva and respect him.
+# text = 𗓱𗭩𘚠𗄈𘟠𘅍𗏹𗯨𗙏𘝯𘋢𗥤𗗙𗦻𘆖𗅉𗼋𗧋𗌭𗉮𘃛𗭩𘚠𗈜𘃞。
+1	𗓱	𗓱	ADV	_	_	15	advmod	_	Gloss=if, perhaps|LTranslit=te¹|SpaceAfter=No
+2	𗭩	𗭩	NOUN	_	_	3	compound	_	Gloss=foolish, stupid|LTranslit=vwi̱h¹|SpaceAfter=No
+3	𘚠	𘚠	NOUN	_	_	5	obj	_	Gloss=foolish, stupid|LTranslit=lə?|SpaceAfter=No
+4	𗄈	𗄈	VERB	_	_	5	compound	_	Gloss=appear, raise|LTranslit=śow¹|SpaceAfter=No
+5	𘟠	𘟠	VERB	_	_	6	acl	_	Gloss=love, like|LTranslit=dzu̱¹|SpaceAfter=No
+6	𘅍	𘅍	NOUN	_	_	15	obl	_	Gloss=time, times|LTranslit=zeh¹|SpaceAfter=No
+7	𗏹	𗏹	ADV	_	_	15	advmod	_	Gloss=frequently, often; continually|LTranslit=yu²|SpaceAfter=No
+8	𗯨	𗯨	PROPN	_	_	11	compound	_	Gloss=world; the capital of a country|LTranslit=rur¹|SpaceAfter=No
+9	𗙏	𗙏	PROPN	_	_	8	flat	_	Gloss=sound, voice|LTranslit=ġhai̱h²|SpaceAfter=No
+10	𘝯	𘝯	PROPN	_	_	8	flat	_	Gloss=lookat, watch, observe|LTranslit=mbao̱¹|SpaceAfter=No
+11	𘋢	𘋢	NOUN	_	_	14	nmod	_	Gloss=Bodhisattva|LTranslit=dẓaa̱ṃ²|SpaceAfter=No
+12	𗥤	𗥤	VERB	_	_	11	acl	_	Gloss=realise, know|LTranslit=tse²|SpaceAfter=No
+13	𗗙	𗗙	ADP	_	_	11	case	_	Gloss=... of - genitive particle; object marker for trans. verb|LTranslit=ye¹|SpaceAfter=No
+14	𗦻	𗦻	NOUN	_	_	15	obj	_	Gloss=name; reputation|LTranslit=mme²|SpaceAfter=No
+15	𘆖	𘆖	VERB	_	_	24	advcl	_	Gloss=ranks, read aloud, chant|LTranslit=ntshə¹|SpaceAfter=No
+16	𗅉	𗅉	CCONJ	_	_	18	cc	_	Gloss=conjunction; behind|LTranslit=nuo¹|SpaceAfter=No
+17	𗼋	𗼋	VERB	_	_	18	compound	_	Gloss=respectful, reverent|LTranslit=dzwəh¹|SpaceAfter=No
+18	𗧋	𗧋	VERB	_	_	15	conj	_	Gloss=respectful|LTranslit=re̱r²|SpaceAfter=No
+19	𗌭	𗌭	ADV	_	_	24	advmod	_	Gloss=so; conditional conjunction|LTranslit=qu̱¹|SpaceAfter=No
+20	𗉮	𗉮	ADV	_	_	21	compound	_	Gloss=immediately|LTranslit=tśhə²|SpaceAfter=No
+21	𘃛	𘃛	ADV	_	_	24	advmod	_	Gloss=immediate, rapid|LTranslit=rar²|SpaceAfter=No
+22	𗭩	𗭩	NOUN	_	_	23	compound	_	Gloss=foolish, stupid|LTranslit=vwi̱h¹|SpaceAfter=No
+23	𘚠	𘚠	NOUN	_	_	24	obj	_	Gloss=foolish, stupid|LTranslit=lə?|SpaceAfter=No
+24	𗈜	𗈜	VERB	_	_	0	root	_	Gloss=sever|LTranslit=qa̱²|SpaceAfter=No
+25	𘃞	𘃞	PART	_	_	24	discourse:sp	_	Gloss=one, one-by-one; sentence-final particle|LTranslit=lə¹|SpaceAfter=No
+26	。	。	PUNCT	_	_	24	punct	_	Orig=_
+
+# sent_id = lotus_sutra_0018
+# text_lzh = 無盡意。觀世音菩薩。有如是等大威神力。多所饒益。是故眾生。常應心念。
+# text_en = Endless-Intent! World-Voice-Perceiver Bodhisattva has these great supernatural powers. He gives many benefits to all living beings. Therefore, they should constantly think of him.
+# text = 𗉣𗅋𗋃𗋕𗯨𗙏𘝯𘋢𗥤𘌽𗍊𘆄𘜶𘉡𗾈𗪺𗿷𗖵𗮅𘇚𗼜𗩱𘌽𘔼𘋢𗋐𗏹𗤶𗨳𗳒𗆫𗦇。
+1	𗉣	𗉣	PROPN	_	_	22	vocative	_	Gloss=meaning, idea|LTranslit=phi¹|SpaceAfter=No
+2	𗅋	𗅋	PROPN	_	_	1	flat	_	Gloss=no, not|LTranslit=mi¹|SpaceAfter=No
+3	𗋃	𗋃	PROPN	_	_	1	flat	_	Gloss=limit, end|LTranslit=si¹|SpaceAfter=No
+4	𗋕	𗋕	DET	_	PronType=Ind	8	det	_	Gloss=other, else, that|LTranslit=tha¹|SpaceAfter=No
+5	𗯨	𗯨	PROPN	_	_	8	compound	_	Gloss=world; the capital of a country|LTranslit=rur¹|SpaceAfter=No
+6	𗙏	𗙏	PROPN	_	_	5	flat	_	Gloss=sound, voice|LTranslit=ġhai̱h²|SpaceAfter=No
+7	𘝯	𘝯	PROPN	_	_	5	flat	_	Gloss=lookat, watch, observe|LTranslit=mbao̱¹|SpaceAfter=No
+8	𘋢	𘋢	NOUN	_	_	22	nsubj	_	Gloss=Bodhisattva|LTranslit=dẓaa̱ṃ²|SpaceAfter=No
+9	𗥤	𗥤	VERB	_	_	8	acl	_	Gloss=realise, know|LTranslit=tse²|SpaceAfter=No
+10	𘌽	𘌽	PRON	_	PronType=Dem	16	nmod	_	Gloss=this|LTranslit=thə²|SpaceAfter=No
+11	𗍊	𗍊	ADP	_	_	10	case	_	Gloss=as|LTranslit=su²|SpaceAfter=No
+12	𘆄	𘆄	PRON	_	PronType=Ind	10	conj	_	Gloss=etc.|LTranslit=nə²|SpaceAfter=No
+13	𘜶	𘜶	ADJ	_	_	16	amod	_	Gloss=big, great, large|LTranslit=lleh²|SpaceAfter=No
+14	𘉡	𘉡	ADJ	_	_	16	amod	_	Gloss=power, might|LTranslit=puh¹|SpaceAfter=No
+15	𗾈	𗾈	ADJ	_	_	16	amod	_	Gloss=worthy, virtue|LTranslit=mmi̱²|SpaceAfter=No
+16	𗪺	𗪺	NOUN	_	_	17	obj	_	Gloss=power, strength|LTranslit=ġhai̱¹|SpaceAfter=No
+17	𗿷	𗿷	VERB	_	_	22	advcl	_	Gloss=have, possess|LTranslit=dźe²|SpaceAfter=No
+18	𗖵	𗖵	SCONJ	_	_	17	mark	_	Gloss=rely, obey; postposition; according to, based on; because of, given that|LTranslit=bu¹|SpaceAfter=No
+19	𗮅	𗮅	ADJ	_	_	21	amod	_	Gloss=many, much, more|LTranslit=re̱r²|SpaceAfter=No
+20	𘇚	𘇚	ADJ	_	_	21	amod	_	Gloss=administer, manage|LTranslit=mmi²|SpaceAfter=No
+21	𗼜	𗼜	NOUN	_	_	22	obj	_	Gloss=interests, benefit|LTranslit=ġhai̱²|SpaceAfter=No
+22	𗩱	𗩱	VERB	_	_	0	root	_	Gloss=can, be able to|LTranslit=nwi²|SpaceAfter=No
+23	𘌽	𘌽	PRON	_	PronType=Dem	31	obl	_	Gloss=this|LTranslit=thə²|SpaceAfter=No
+24	𘔼	𘔼	ADP	_	_	23	case	_	Gloss=cause, principal and subsidiary causes|LTranslit=nuo¹|SpaceAfter=No
+25	𘋢	𘋢	NOUN	_	_	26	compound	_	Gloss=being, sentient being|LTranslit=dẓaa̱ṃ²|SpaceAfter=No
+26	𗋐	𗋐	NOUN	_	_	31	nsubj	_	Gloss=life|LTranslit=tśhu¹|SpaceAfter=No
+27	𗏹	𗏹	ADV	_	_	31	advmod	_	Gloss=frequently, often; continually|LTranslit=yu²|SpaceAfter=No
+28	𗤶	𗤶	NOUN	_	_	31	obl	_	Gloss=heart, mind|LTranslit=nne¹|SpaceAfter=No
+29	𗨳	𗨳	ADJ	_	_	28	amod	_	Gloss=return|LTranslit=tih¹|SpaceAfter=No
+30	𗳒	𗳒	ADP	_	_	28	case	_	Gloss=auxiliary word - instrumental particle|LTranslit=ŋwu̱²|SpaceAfter=No
+31	𗆫	𗆫	VERB	_	_	22	parataxis	_	Gloss=think, think of; thought|LTranslit=rlər²|SpaceAfter=No
+32	𗦇	𗦇	AUX	_	_	31	aux	_	Gloss=must|LTranslit=lli̱w²|SpaceAfter=No
+33	。	。	PUNCT	_	_	22	punct	_	Orig=_
+
+# sent_id = lotus_sutra_0019
+# text_lzh = 若有女人。設欲求男。禮拜供養觀世音菩薩。便生福德智慧之男。
+# text_en = A woman who, wishing to have a boy, bows and makes offerings to World-Voice-Perceiver Bodhisattva, will be able to give birth to a boy endowed with merits, virtues and wisdom.
+# text = 𘎤𗓱𗡸𘓐𘄄𗴿𗧠𘅍𗋕𗯨𗙏𘝯𘋢𗥤𗗙𗍺𘐔𗴿𗒀𗌭𗉮𘃛𗼕𗣼𘄡𘟛𘈷𘎳。
+1	𘎤	𘎤	ADV	_	_	2	compound	_	Gloss=if, supposing; one|LTranslit=tə¹|SpaceAfter=No
+2	𗓱	𗓱	ADV	_	_	17	advmod	_	Gloss=if, perhaps|LTranslit=te¹|SpaceAfter=No
+3	𗡸	𗡸	NOUN	_	_	4	nmod	_	Gloss=son's wife; woman|LTranslit=si²|SpaceAfter=No
+4	𘓐	𘓐	NOUN	_	_	17	nsubj	_	Gloss=man|LTranslit=dzwo²|SpaceAfter=No
+5	𘄄	𘄄	NOUN	_	_	6	obj	_	Gloss=man, male|LTranslit=zi¹|SpaceAfter=No
+6	𗴿	𗴿	VERB	_	_	8	acl	_	Gloss=pray|LTranslit=kuh¹|SpaceAfter=No
+7	𗧠	𗧠	AUX	_	_	6	aux	_	Gloss=desire, wish, lust, to want|LTranslit=qae̱h²|SpaceAfter=No
+8	𘅍	𘅍	NOUN	_	_	17	obl	_	Gloss=time, times|LTranslit=zeh¹|SpaceAfter=No
+9	𗋕	𗋕	DET	_	PronType=Ind	13	det	_	Gloss=other, else, that|LTranslit=tha¹|SpaceAfter=No
+10	𗯨	𗯨	PROPN	_	_	13	compound	_	Gloss=world; the capital of a country|LTranslit=rur¹|SpaceAfter=No
+11	𗙏	𗙏	PROPN	_	_	10	flat	_	Gloss=sound, voice|LTranslit=ġhai̱h²|SpaceAfter=No
+12	𘝯	𘝯	PROPN	_	_	10	flat	_	Gloss=lookat, watch, observe|LTranslit=mbao̱¹|SpaceAfter=No
+13	𘋢	𘋢	NOUN	_	_	17	obj	_	Gloss=Bodhisattva|LTranslit=dẓaa̱ṃ²|SpaceAfter=No
+14	𗥤	𗥤	VERB	_	_	13	acl	_	Gloss=realise, know|LTranslit=tse²|SpaceAfter=No
+15	𗗙	𗗙	ADP	_	_	13	case	_	Gloss=... of - genitive particle; object marker for trans. verb|LTranslit=ye¹|SpaceAfter=No
+16	𗍺	𗍺	VERB	_	_	17	compound	_	Gloss=ceremony, courtesy|LTranslit=tśa¹|SpaceAfter=No
+17	𘐔	𘐔	VERB	_	_	28	advcl	_	Gloss=salute, bow|LTranslit=tshwi̱w¹|SpaceAfter=No
+18	𗴿	𗴿	VERB	_	_	19	compound	_	Gloss=pray|LTranslit=kuh¹|SpaceAfter=No
+19	𗒀	𗒀	VERB	_	_	17	conj	_	Gloss=make offerings to|LTranslit=tshwi̱w¹|SpaceAfter=No
+20	𗌭	𗌭	ADV	_	_	28	advmod	_	Gloss=so; conditional conjunction|LTranslit=qu̱¹|SpaceAfter=No
+21	𗉮	𗉮	ADV	_	_	22	compound	_	Gloss=immediately|LTranslit=tśhə²|SpaceAfter=No
+22	𘃛	𘃛	ADV	_	_	28	advmod	_	Gloss=immediate, rapid|LTranslit=rar²|SpaceAfter=No
+23	𗼕	𗼕	ADJ	_	_	27	amod	_	Gloss=good fortune|LTranslit=lo¹|SpaceAfter=No
+24	𗣼	𗣼	ADJ	_	_	23	conj	_	Gloss=morals, virtue|LTranslit=tśha²|SpaceAfter=No
+25	𘄡	𘄡	ADJ	_	_	26	compound	_	Gloss=wisdom|LTranslit=seh²|SpaceAfter=No
+26	𘟛	𘟛	ADJ	_	_	23	conj	_	Gloss=wisdom, intelligent|LTranslit=rźər¹|SpaceAfter=No
+27	𘈷	𘈷	NOUN	_	_	28	obj	_	Gloss=son, child|LTranslit=gi²|SpaceAfter=No
+28	𘎳	𘎳	VERB	_	_	0	root	_	Gloss=give birth to, bear|LTranslit=nvwi̱¹|SpaceAfter=No
+29	。	。	PUNCT	_	_	28	punct	_	Orig=_
+
+# sent_id = lotus_sutra_0020
+# text_lzh = 設欲求女。便生端正有相之女。宿植德本。眾人愛敬。
+# text_en = [A woman] who, wishing to have a girl, [does the same,] will be able to give birth to a beautiful girl who will be loved and respected by many people because of the roots of virtue which the [newly-born] girl planted in her previous existence.
+# text = 𗓱𗕪𗴿𗧠𘅍𗉮𘃛𗡮𗵽𘍦𘄽𗕪𘎳𗖏𗣼𗰜𗽈𗖵𗿷𘓐𘟠𗼋𘃞。
+1	𗓱	𗓱	ADV	_	_	13	advmod	_	Gloss=if, perhaps|LTranslit=te¹|SpaceAfter=No
+2	𗕪	𗕪	NOUN	_	_	3	obj	_	Gloss=woman, female|LTranslit=meh¹|SpaceAfter=No
+3	𗴿	𗴿	VERB	_	_	5	acl	_	Gloss=pray|LTranslit=kuh¹|SpaceAfter=No
+4	𗧠	𗧠	AUX	_	_	3	aux	_	Gloss=desire, wish, lust, to want|LTranslit=qae̱h²|SpaceAfter=No
+5	𘅍	𘅍	NOUN	_	_	13	obl	_	Gloss=time, times|LTranslit=zeh¹|SpaceAfter=No
+6	𗉮	𗉮	ADV	_	_	7	compound	_	Gloss=immediately|LTranslit=tśhə²|SpaceAfter=No
+7	𘃛	𘃛	ADV	_	_	13	advmod	_	Gloss=immediate, rapid|LTranslit=rar²|SpaceAfter=No
+8	𗡮	𗡮	ADJ	_	_	9	compound	_	Gloss=dignify|LTranslit=śwo²|SpaceAfter=No
+9	𗵽	𗵽	ADJ	_	_	12	amod	_	Gloss=beautiful|LTranslit=nllu²|SpaceAfter=No
+10	𘍦	𘍦	NOUN	_	_	11	nmod	_	Gloss=look, appearance|LTranslit=ye¹|SpaceAfter=No
+11	𘄽	𘄽	ADJ	_	_	12	amod	_	Gloss=good, kind|LTranslit=ŋa̱h²|SpaceAfter=No
+12	𗕪	𗕪	NOUN	_	_	13	obj	_	Gloss=woman, female|LTranslit=meh¹|SpaceAfter=No
+13	𘎳	𘎳	VERB	_	_	0	root	_	Gloss=give birth to, bear|LTranslit=nvwi̱¹|SpaceAfter=No
+14	𗖏	𗖏	ADV	_	_	17	advmod	_	Gloss=former times|LTranslit=nwo²|SpaceAfter=No
+15	𗣼	𗣼	NOUN	_	_	16	nmod	_	Gloss=morals, virtue|LTranslit=tśha²|SpaceAfter=No
+16	𗰜	𗰜	NOUN	_	_	17	obj	_	Gloss=basic, cardinal|LTranslit=rmə̱r²|SpaceAfter=No
+17	𗽈	𗽈	VERB	_	_	21	advcl	_	Gloss=till, cultivate|LTranslit=llih¹|SpaceAfter=No
+18	𗖵	𗖵	SCONJ	_	_	17	mark	_	Gloss=rely, obey; postposition; according to, based on; because of, given that|LTranslit=bu¹|SpaceAfter=No
+19	𗿷	𗿷	DET	_	PronType=Ind	20	det	_	Gloss=have, possess|LTranslit=dźe²|SpaceAfter=No
+20	𘓐	𘓐	NOUN	_	_	21	nsubj	_	Gloss=man|LTranslit=dzwo²|SpaceAfter=No
+21	𘟠	𘟠	VERB	_	_	12	acl	_	Gloss=love, like|LTranslit=dzu̱¹|SpaceAfter=No
+22	𗼋	𗼋	VERB	_	_	21	conj	_	Gloss=respectful, reverent|LTranslit=dzwəh¹|SpaceAfter=No
+23	𘃞	𘃞	PART	_	_	13	discourse:sp	_	Gloss=one, one-by-one; sentence-final particle|LTranslit=lə¹|SpaceAfter=No
+24	。	。	PUNCT	_	_	13	punct	_	Orig=_
+

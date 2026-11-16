@@ -212,3 +212,53 @@ files:
     url: https://raw.githubusercontent.com/UniversalDependencies/UD_Middle_Armenian-ArmTDP/master/README.md
     whole: false
     trim: the machine-readable metadata block only (15 lines; Genre legal medical)
+  # The UD v2.19 bundle (released 2026-11-15), cut 2026-11-16 from the r2.19
+  # TAG of each repo (not master), byte-verbatim block heads; see README.
+  - path: old-georgian-oglauro/oge_oglauro-ud-test-head20.conllu
+    url: https://raw.githubusercontent.com/UniversalDependencies/UD_Old_Georgian-OGLauRo/r2.19/oge_oglauro-ud-test.conllu
+    whole: false
+    trim: first 20 complete sentence blocks of oge_oglauro-ud-test.conllu (652 blocks upstream, 1,311,061 B -> 48,301 B)
+  - path: old-georgian-midglauro/oge_midglauro-ud-test-head20.conllu
+    url: https://raw.githubusercontent.com/UniversalDependencies/UD_Old_Georgian-MidGLauRo/r2.19/oge_midglauro-ud-test.conllu
+    whole: false
+    trim: first 20 complete sentence blocks of oge_midglauro-ud-test.conllu (422 blocks upstream, 709,628 B -> 27,263 B)
+  - path: pali-palicanon/pi_palicanon-ud-test-head20.conllu
+    url: https://raw.githubusercontent.com/UniversalDependencies/UD_Pali-PaliCanon/r2.19/pi_palicanon-ud-test.conllu
+    whole: false
+    trim: first 20 complete sentence blocks of pi_palicanon-ud-test.conllu (225 blocks upstream, 178,301 B -> 17,683 B)
+  - path: tangut-mica/txg_mica-ud-test-head20.conllu
+    url: https://raw.githubusercontent.com/UniversalDependencies/UD_Tangut-MiCA/r2.19/txg_mica-ud-test.conllu
+    whole: false
+    trim: first 20 complete sentence blocks of txg_mica-ud-test.conllu (503 blocks upstream, 1,434,953 B -> 68,927 B)
+  - path: old-occitan-cronoc/pro_cronoc-ud-test-head20.conllu
+    url: https://raw.githubusercontent.com/UniversalDependencies/UD_Old_Occitan-CronOc/r2.19/pro_cronoc-ud-test.conllu
+    whole: false
+    trim: first 20 complete sentence blocks of pro_cronoc-ud-test.conllu (452 blocks upstream, 547,713 B -> 23,582 B)
+  - path: avestan-old/ae_old-ud-test.conllu
+    url: https://raw.githubusercontent.com/UniversalDependencies/UD_Avestan-Old/r2.19/ae_old-ud-test.conllu
+    whole: true
+    trim: none
+  - path: old-georgian-oglauro/README.md
+    url: https://raw.githubusercontent.com/UniversalDependencies/UD_Old_Georgian-OGLauRo/r2.19/README.md
+    whole: false
+    trim: the machine-readable metadata block only (15 lines; Genre bible; License CC BY-NC-SA 4.0)
+  - path: old-georgian-midglauro/README.md
+    url: https://raw.githubusercontent.com/UniversalDependencies/UD_Old_Georgian-MidGLauRo/r2.19/README.md
+    whole: false
+    trim: the machine-readable metadata block only (15 lines; Genre fiction)
+  - path: pali-palicanon/README.md
+    url: https://raw.githubusercontent.com/UniversalDependencies/UD_Pali-PaliCanon/r2.19/README.md
+    whole: false
+    trim: the machine-readable metadata block only (15 lines; Genre nonfiction)
+  - path: tangut-mica/README.md
+    url: https://raw.githubusercontent.com/UniversalDependencies/UD_Tangut-MiCA/r2.19/README.md
+    whole: false
+    trim: the machine-readable metadata block only (15 lines; Genre nonfiction poetry)
+  - path: old-occitan-cronoc/README.md
+    url: https://raw.githubusercontent.com/UniversalDependencies/UD_Old_Occitan-CronOc/r2.19/README.md
+    whole: false
+    trim: the machine-readable metadata block only (15 lines; Genre fiction)
+  - path: avestan-old/README.md
+    url: https://raw.githubusercontent.com/UniversalDependencies/UD_Avestan-Old/r2.19/README.md
+    whole: false
+    trim: the machine-readable metadata block only (15 lines; Genre poetry)

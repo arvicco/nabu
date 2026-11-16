@@ -515,6 +515,101 @@ module Nabu
         "middle-armenian-armtdp" => {
           repo: "https://github.com/UniversalDependencies/UD_Middle_Armenian-ArmTDP",
           language: "axm", license: "CC BY-SA 4.0", license_class: "attribution"
+        },
+        # == The UD v2.19 bundle (released 2026-11-15) — six treebanks,
+        # every one "Initial release in Universal Dependencies" at v2.19.
+        # All facts below read first-hand at the r2.19 TAG on 2026-11-16
+        # (LICENSE.txt, README prose + machine-readable metadata, stats.xml);
+        # the fixture README carries the longer record.
+        #
+        # Old Georgian — OGLauRo (Chia-Wei Lin, Diego Luinetti): the Book
+        # of Ezra in the Oshki Bible (TITUS text), 652 sentences / 11,817
+        # words / 403 MWT ranges, test split only. The annotation is an
+        # LLM-drafted, manually corrected pass (README: UD_Georgian-GNC as
+        # few-shot examples) — stated, not hidden. `# parallel_id`
+        # (bible/ezra-…) on 320 sentences, plus two `# gk_text`/`# arm_text`
+        # Septuagint/Armenian parallels — NOT on the ConlluParser comment
+        # whitelist, so they do not ride (declared coarseness). Language
+        # `oge` (ISO 639-3 Old Georgian, UD's own file prefix).
+        # CONFLICTING GRANTS, the PROFITEROLE/UDante fork shape: LICENSE.txt
+        # verbatim "The treebank is licensed under the Creative Commons
+        # License Attribution-ShareAlike 4.0 International" but the README
+        # metadata reads `License: CC BY-NC-SA 4.0`. Conservative ruling:
+        # the NC reading controls (it can never over-share) → explicit nc,
+        # re-read at the next UD release, never from memory.
+        "old-georgian-oglauro" => {
+          repo: "https://github.com/UniversalDependencies/UD_Old_Georgian-OGLauRo",
+          language: "oge", license: "CC BY-NC-SA 4.0", license_class: "nc"
+        },
+        # Middle Georgian — MidGLauRo (same team, same LLM-draft + manual
+        # correction workflow, OGLauRo as the few-shot examples): the novels
+        # Amirandarejaniani V (12th c.) and Rusudaniani III (17th c.), GNC
+        # text; 422 sentences / 6,384 words / 441 MWT ranges, test only.
+        # DIACHRONIC HONESTY: Middle Georgian filed by UD under the Old
+        # Georgian repo and the `oge` file prefix — the RNC-under-orv
+        # one-tag precedent; the tag rides verbatim (the registry's ka:mid
+        # stage claim is the postures step's business, and ud is
+        # deliberately unstaged). LICENSE.txt verbatim BY-SA 4.0, README
+        # metadata `License: CC BY-SA 4.0` agrees → attribution.
+        "old-georgian-midglauro" => {
+          repo: "https://github.com/UniversalDependencies/UD_Old_Georgian-MidGLauRo",
+          language: "oge", license: "CC BY-SA 4.0", license_class: "attribution"
+        },
+        # Pali — PaliCanon (Chia-Wei Lin, Jasvinder Singh, Khemarato
+        # Bhikkhu): the Mahāpadānasutta (DN 14) from the PD Mahāsaṅgīti
+        # edition, IAST, punctuation stripped; SuttaCentral segment ids as
+        # sent_ids (dn14:1.4.1) plus a `# gretil_sent_id`. stats.xml: 225
+        # sentences / 2,051 words / 274 MWT ranges (the compounds), test
+        # only — the README prose still says 222 sentences (upstream's own
+        # lag; the file is the count). Language: UD's `pi` (639-1) carried
+        # as `pli`, the library's Pali lane (the sa_vedic → san precedent;
+        # nabu-lects maps pi → pli anyway). LICENSE.txt verbatim BY-SA 4.0
+        # + README metadata agrees → attribution.
+        "pali-palicanon" => {
+          repo: "https://github.com/UniversalDependencies/UD_Pali-PaliCanon",
+          language: "pli", license: "CC BY-SA 4.0", license_class: "attribution"
+        },
+        # Tangut — MiCA (Wenjie Hua, Chia-Wei Lin et al., Amir Zeldes;
+        # Georgetown): Lotus Sūtra ch. 25 (Chen Bingying 1985 images) and
+        # Avataṃsaka Sūtra vol. 77 (Arakawa 2011, the Princeton
+        # manuscript), 503 sentences / 13,868 words in Unicode Tangut, test
+        # only; MISC carries Gloss= and LTranslit=. Each block carries
+        # `# text_en` (on the whitelist → rides "translations") and
+        # `# text_lzh`, the Chinese source line (not whitelisted — declared
+        # coarseness). Language `txg`. LICENSE.txt verbatim BY-SA 4.0 +
+        # README metadata agrees → attribution. (The README notes Xun
+        # Gong's pronunciation/glossary work used "subject to its own
+        # Limited Public Use License" — a third-party input, not the
+        # treebank's grant, which is BY-SA throughout.)
+        "tangut-mica" => {
+          repo: "https://github.com/UniversalDependencies/UD_Tangut-MiCA",
+          language: "txg", license: "CC BY-SA 4.0", license_class: "attribution"
+        },
+        # Old Occitan — CronOc (Natasha Romanova, Rayan Ziane; CRISCO,
+        # Caen, BREAKTHROUGH project): the late-13th-c. Old Languedocian
+        # Roman de Lagrasse (Gesta Karoli Magni ad Carcassonam et
+        # Narbonam), BL Add. 21218 via the COMETA transcription; 1,848
+        # sentences / 37,227 words across train/dev/test (the first ud
+        # newcomer since Italian-Old to ship all three splits). Language
+        # `pro` (ISO 639-3 Old Provençal/Occitan, UD's own file prefix).
+        # LICENSE.txt verbatim BY-SA 4.0 + README metadata agrees →
+        # attribution. (Its siblings UD_Old_Occitan-CorAG and -OOT are not
+        # in scope here.)
+        "old-occitan-cronoc" => {
+          repo: "https://github.com/UniversalDependencies/UD_Old_Occitan-CronOc",
+          language: "pro", license: "CC BY-SA 4.0", license_class: "attribution"
+        },
+        # Old Avestan — Avestan-Old (Peter Dirix, KU Leuven): Gatha Yasna
+        # 28 from the Corpus Avesticum Berolinense, aiming at Yasna 28–34.
+        # stats.xml: 24 sentences / 317 words, test only — the README prose
+        # still says 18 sentences (upstream's own lag). `# translation` on
+        # every block rides "translations"; MISC Gloss=. Language: UD's `ae`
+        # (639-1) carried as `ave`, the library's Avestan lane (the san
+        # precedent; nabu-lects maps ae → ave). LICENSE.txt verbatim BY-SA
+        # 4.0 + README metadata agrees → attribution.
+        "avestan-old" => {
+          repo: "https://github.com/UniversalDependencies/UD_Avestan-Old",
+          language: "ave", license: "CC BY-SA 4.0", license_class: "attribution"
         }
       }.freeze
 
