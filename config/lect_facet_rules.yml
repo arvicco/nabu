@@ -452,6 +452,27 @@ rules:
       "tur": "heb:med"
       "shulchan-arukh": "heb:med"
 
+  # ── The Dicta library's own era label. Upstream classifies every book's
+  # AUTHOR by the rabbinic periodization in its subcategory (Rishonim /
+  # Acharonim / Geonim, English or Hebrew), which the adapter mines onto the
+  # era facet. Rishonim — the medieval authorities, 11th–15th c. (the Ritva,
+  # the Ran, the Ramban …) — IS the registry's Medieval Hebrew stage, the
+  # node the sefaria Rishonim shelves resolve to (transcription of upstream's
+  # own classification — parse-time work, the 2026-10-18 generalization).
+  # Tier certain on the composition: the print years (1844–1912 among them)
+  # are editions, never the stage evidence. Deliberately unmatched (bare heb,
+  # declared): acharonim — the post-1500 rabbinic mass (the registry carries
+  # no early-modern rabbinic stage; a lect-scope review item, not a guess
+  # here) — and geonim (2 responsa volumes, c. 600–1040: a pre-medieval
+  # register the label-based heb:med does not name).
+  - id: dicta-library-era
+    tier: certain
+    sources: [dicta-library]
+    code: heb
+    facet: era
+    map:
+      "rishonim": "heb:med"
+
   # ── The extrabiblical book grid (the fixed BOOKS-table names ride the
   # book facet). Each book IS one artifact group with a known register, so
   # the assignment is parse-grade transcription of the corpus's own

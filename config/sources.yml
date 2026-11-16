@@ -2108,6 +2108,49 @@ diccas:   # P95-4
   # tagged disaster terminology. Embedded English translation glosses
   # ride annotations (gloss_en), never the Arabic text. FileFetch.
 
+dicta-bavli:   # 02-sources row 420
+  adapter: Nabu::Adapters::DictaBavli
+  adopted: "2026-11-16"
+  axes: [hebrew]
+  wired: false   # until the first real sync is verified: bin/nabu enable dicta-bavli,
+                 # bin/nabu sync dicta-bavli (one ~10 MB git clone, 38 tractate dirs) —
+                 # expect 37 documents / 78,782 passages, 2 skipped by rule (the Meila
+                 # duplicate dir + 2 .docx = 3 skip notes), 0 quarantined; eyeball
+                 # nabu show urn:nabu:dicta-bavli:berakhot:2a.1 (מֵאֵימָתַי קוֹרִין אֶת שְׁמַע)
+  sync_policy: manual   # a finished project (last push 2024-01-08)
+  # Dicta's vocalized Babylonian Talmud (Talmud-Bavli-with-Nikud): the
+  # whole Bavli, 37 tractates, pointed by Dicta's rabbinic Nakdan and
+  # human-reviewed, shipped in ktiv male and ktiv haser. Document =
+  # tractate, passage = paragraph line cited <daf><a|b>.<n>; the male file
+  # is the text, the line-aligned haser line rides annotations. README
+  # grant verbatim: "This vocalized text of the Babylonian Talmud is
+  # released under a CC BY-SA license. If you make use of the text, please
+  # attribute as follows: This text of the Babylonian Talmud was vocalized
+  # by Dicta: The Israel Center for Text Analysis (www.dicta.org.il)" →
+  # attribution (unversioned BY-SA, admitted with the credit). Bare arc,
+  # the house Bavli code (lect override → arc:mid, the sefaria ruling).
+
+dicta-library:   # 02-sources row 421
+  adapter: Nabu::Adapters::DictaLibrary
+  adopted: "2026-11-16"
+  axes: [hebrew]
+  wired: false   # until the first real sync is verified: bin/nabu enable dicta-library,
+                 # bin/nabu sync dicta-library — the manifest repo clone, then 1,205
+                 # book zips (~536 MB text zips + 2 vocalized fallbacks ~1.4 MB) from
+                 # files.dicta.org.il, sequential and resumable (~20–30 min at the
+                 # measured ~0.5 MB/s); expect 1,204 documents / ~238k page passages,
+                 # 1 skipped by rule (chidusheiharadad: both zips empty upstream)
+  sync_policy: manual   # versioned file paths (library-1-0); upstream grows by releases
+  index_policy: deferred   # ~1.6 GB of page text: index once per wave (nabu index refresh)
+  # Dicta's library (Dicta-Library-Download): the books.json manifest of
+  # 1,205 AI-OCR'd rabbinic printed books, 1726–1982 — responsa (the
+  # library's first responsa shelf), Talmud/Tanakh/Rambam/Shulchan Arukh
+  # commentaries, halakha, derashot, Chassidut, Kabbalah — each a per-page
+  # text zip at files.dicta.org.il. Document = book, passage = scanned
+  # page. Upstream's own warning: automatic processes, so the text and
+  # vocalization may carry errors (text_nature machine-ocr). README ends
+  # with the CC BY-SA 4.0 link → attribution, credit Dicta.
+
 digiliblt:   # P45-3
   adapter: Nabu::Adapters::Digiliblt
   adopted: "2026-07-25"
@@ -5783,7 +5826,7 @@ peshitta:
   # archived/unsupported (repostatus badge) → effectively frozen.
   sync_policy: manual
 
-pgp-geniza:   # 02-sources row 418
+pgp-geniza:   # 02-sources row 419
   adapter: Nabu::Adapters::PgpGeniza
   adopted: "2026-11-16"
   # epigraphy: documentary letters, court records and accounts at the

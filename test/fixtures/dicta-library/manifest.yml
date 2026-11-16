@@ -1,0 +1,84 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# The fetched shape of dicta-library: the books.json manifest trimmed to six
+# entries, each entry's sidecar, and real book zips from files.dicta.org.il
+# (whole, or trimmed to leading page members). adapter_test stays null.
+source: dicta-library
+adapter_test:
+retrieved: '2026-11-16'
+files:
+- path: books.json
+  url: https://raw.githubusercontent.com/Dicta-Israel-Center-for-Text-Analysis/Dicta-Library-Download/main/books.json
+  whole: false
+  trim: 6 of 1,205 entries, each element block byte-identical to upstream's
+- path: books/birkatcohen.json
+  whole: false
+  trim: the book's manifest entry as DictaLibraryFetch writes it (pretty JSON)
+  refetchable: false
+  reason: a fetch-materialized sidecar (books/<fileName>.json), not an upstream file
+- path: books/birkatcohen__nikud_meteg_files.zip
+  url: https://files.dicta.org.il/library-1-0/birkatcohen/birkatcohen__nikud_meteg_files.zip
+  whole: true
+  trim: none
+- path: books/birkatcohen__ocr_data_html_files.zip
+  url: https://files.dicta.org.il/library-1-0/birkatcohen/birkatcohen__ocr_data_html_files.zip
+  whole: true
+  trim: none
+- path: books/birkatcohen__text_files.zip
+  url: https://files.dicta.org.il/library-1-0/birkatcohen/birkatcohen__text_files.zip
+  whole: true
+  trim: none
+- path: books/chidusheiharadad.json
+  whole: false
+  trim: the book's manifest entry as DictaLibraryFetch writes it (pretty JSON)
+  refetchable: false
+  reason: a fetch-materialized sidecar (books/<fileName>.json), not an upstream file
+- path: books/chidusheiharadad__nikud_meteg_files.zip
+  url: https://files.dicta.org.il/library-1-0/chidusheiharadad/chidusheiharadad__nikud_meteg_files.zip
+  whole: true
+  trim: none
+- path: books/chidusheiharadad__text_files.zip
+  url: https://files.dicta.org.il/library-1-0/chidusheiharadad/chidusheiharadad__text_files.zip
+  whole: true
+  trim: none
+- path: books/hilchotberakhotritba.json
+  whole: false
+  trim: the book's manifest entry as DictaLibraryFetch writes it (pretty JSON)
+  refetchable: false
+  reason: a fetch-materialized sidecar (books/<fileName>.json), not an upstream file
+- path: books/hilchotberakhotritba__text_files.zip
+  url: https://files.dicta.org.il/library-1-0/hilchotberakhotritba/hilchotberakhotritba__text_files.zip
+  whole: false
+  trim: leading 2 of 14 page members (200–201), member bytes verbatim, re-zipped
+- path: books/maharamlublin.json
+  whole: false
+  trim: the book's manifest entry as DictaLibraryFetch writes it (pretty JSON)
+  refetchable: false
+  reason: a fetch-materialized sidecar (books/<fileName>.json), not an upstream file
+- path: books/maharamlublin__nikud_meteg_files.zip
+  url: https://files.dicta.org.il/library-1-0/maharamlublin/maharamlublin__nikud_meteg_files.zip
+  whole: false
+  trim: leading 2 of 136 page members (009–010), member bytes verbatim, re-zipped
+- path: books/maharamlublin__text_files.zip
+  url: https://files.dicta.org.il/library-1-0/maharamlublin/maharamlublin__text_files.zip
+  whole: true
+  trim: none
+- path: books/rishonletziontaanit.json
+  whole: false
+  trim: the book's manifest entry as DictaLibraryFetch writes it (pretty JSON)
+  refetchable: false
+  reason: a fetch-materialized sidecar (books/<fileName>.json), not an upstream file
+- path: books/rishonletziontaanit__text_files.zip
+  url: https://files.dicta.org.il/library-1-0/rishonletziontaanit/rishonletziontaanit__text_files.zip
+  whole: true
+  trim: none
+- path: books/sefatemetmoed1.json
+  whole: false
+  trim: the book's manifest entry as DictaLibraryFetch writes it (pretty JSON)
+  refetchable: false
+  reason: a fetch-materialized sidecar (books/<fileName>.json), not an upstream file
+- path: books/sefatemetmoed1__text_files.zip
+  url: https://files.dicta.org.il/library-1-0/sefatemetmoed1/sefatemetmoed1__text_files.zip
+  whole: false
+  trim: leading 3 of 324 page members (003–005), member bytes verbatim, re-zipped

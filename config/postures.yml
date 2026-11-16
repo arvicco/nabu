@@ -3881,3 +3881,32 @@ sources:
         documents; Arabic script for the Arabic ones; Latin for the translations — the
         language tag does not fix the script (Arabic-language lines occur in Hebrew script and
         vice versa within one document)"}
+  dicta-bavli:   # 02-sources row 420
+    # kind machine-postured — kind_map.yml metadata genre "Talmud Bavli" → exegesis.
+    # lect machine-postured — lect_overrides.yml arc → arc:mid (approximation): the
+    # Jewish Babylonian Aramaic / Rabbinic Hebrew mix rides arc whole (declared coarse).
+    dating: {posture: undatable, note: "the asset carries no date — no edition year beyond the
+        Vilna pagination the files follow, no composition era per tractate (the sefaria Bavli
+        stance). The Bavli's redaction era (c. 500–600 CE, Amoraic/Savoraic) is an attributed
+        composition date, a work_eras row — a separate call, not made here; Dicta's
+        vocalization (completed 2020s) is the layer's date, not the text's"}
+    places: {posture: unplaced, note: "no place field — the Babylonian academies of the
+        Talmud's composition are the work's setting, not an artifact findspot"}
+    script: {posture: implied, note: "Hebrew square script with full niqqud (Dicta's Nakdan,
+        human-reviewed), stored byte-verbatim on the NFC-exempt arc code; ktiv male as text,
+        ktiv haser in annotations"}
+  dicta-library:   # 02-sources row 421
+    # kind machine-postured — kind_map.yml metadata genre (category -- subcategory).
+    # lect machine-postured — lect_facet_rules.yml dicta-library-era (era rishonim →
+    # heb:med); the Acharonim mass (~1,150 books) and the 2 Geonim volumes stay bare heb
+    # deliberately — no early-modern rabbinic stage exists in the registry, and the print
+    # year (class edition) never stages (the blbooks/P164 rule). The rabbinic
+    # Hebrew-Aramaic mix of responsa and novellae rides heb whole (declared coarse).
+    dating: {posture: dated, note: "the manifest's printYear on every book (1726–1982; one
+        range \"1925-1931\" widens the envelope), class edition on the :structured lane —
+        the PRINT, not the composition (the 1881 Warsaw print of the Maharam of Lublin, d. 1616)"}
+    places: {posture: named, note: "printLocationEnglish, the imprint town (Warsaw, Vilna,
+        Jerusalem, Lemberg … 93 distinct), on every book; the Hebrew spelling rides place_he"}
+    script: {posture: implied, note: "Hebrew square script read by Dicta's AI OCR (Rashi
+        script rendered in square letters), unpointed; the two vocalized fallbacks carry
+        Dicta's machine niqqud, NFC-composed at the boundary (text_nature machine-ocr)"}

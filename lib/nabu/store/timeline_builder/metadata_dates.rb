@@ -170,6 +170,8 @@ module Nabu
           "diccas" => :structured, # each book's byline author-life span (AH/CE pairs read
           #                          by magnitude), its own class composition; the
           #                          Qurʾān book has no byline and stays undated
+          "dicta-library" => :structured, # the manifest's printYear (one "1925-1931" range),
+          #                                 class edition; place = printLocationEnglish
           "diorisis" => :signed_year_key,
           "disco" => :author_century_band,
           "divinum-officium" => :place_only, # no dating (undatable); the local-calendar proper's

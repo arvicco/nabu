@@ -1,0 +1,19 @@
+{
+  "fileName": "hilchotberakhotritba",
+  "author": "רבי יום טוב בן אברהם אשבילי (ריטב”א)",
+  "authorEnglish": "Rabbi Yom Tov ben Avraham Ishbili (the Ritva)",
+  "category": "הלכה ומנהג",
+  "categoryEnglish": "Halakha and Minhaggim",
+  "subcategory": "ספרי פסיקה (ראשונים)",
+  "subcategoryEnglish": "Halakha Books - Rishonim",
+  "displayName": "הלכות ברכות לריטב”א",
+  "displayNameEnglish": "Hilchot Berachot (Ritba)",
+  "printLocation": "ליוורנו",
+  "printLocationEnglish": "Livorno (Leghorn)",
+  "printYear": 1844,
+  "source": "ספריית דיקטה",
+  "ocrFeDir": "hilchotberakhotritba",
+  "textFileURL": "https://files.dicta.org.il/library-1-0/hilchotberakhotritba/hilchotberakhotritba__text_files.zip",
+  "nikudMetegFileURL": "https://files.dicta.org.il/library-1-0/hilchotberakhotritba/hilchotberakhotritba__nikud_meteg_files.zip",
+  "OCRDataURL": "https://files.dicta.org.il/library-1-0/hilchotberakhotritba/hilchotberakhotritba__ocr_data_html_files.zip"
+}
