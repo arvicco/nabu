@@ -2092,6 +2092,23 @@ sources:
     script: {posture: implied, note: "Hebrew square script; Tiberian pointing where the
         edition vocalizes (Onqelos, some Genizah fragments), consonantal elsewhere — the
         cons_utf8 / voc_utf8 lanes ride every token"}
+  dtucph-sp:
+    # kind: machine-postured — kind_map.yml source_kind scripture.
+    lect: {posture: pending, note: "candidate: smp (Samaritan Hebrew, ISO 639-3) — a new
+        nabu-lects anchor under hbo for the Hebrew of the Samaritan Pentateuch and its
+        reading tradition (Ben-Hayyim's grammar; the Tal–Florentin edition), then a whole-source
+        hbo → smp override in config/lect_overrides.yml. Until the mint lands the adapter's
+        bare hbo (bhsa's code; the two Aramaic words of Gen 31:47 ride arc per token) is the
+        held claim; the phono_transcr lane is the reading tradition itself"}
+    dating: {posture: undatable, note: "the asset carries no date feature; the manuscripts'
+        own dates (MS Dublin CBL 751, MS Garizim 1) are not in the data and the
+        text's composition era is not the edition's claim — the bhsa/oshb stance"}
+    places: {posture: unplaced, note: "no place field; the manuscripts are named per range
+        (document/passage metadata manuscripts) — repository witnesses, never a place claim"}
+    script: {posture: qualified, note: "the Samaritan-script manuscripts are TRANSCRIBED into
+        Hebrew square script: the text is the consonant stream (27 letters + space, no
+        shin/sin dots); the ETCBC lanes add dotted shin/sin (U+FB2A/FB2B presentation forms,
+        kept verbatim) and phono_transcr the Latin phonetic transcription"}
   jaschke-1881:   # P150-A
     # kind: machine-postured — kind_map.yml source_kind lexical (a dictionary).
     lect: {posture: identity, note: "the reference-shelf posture (africa-pd, slavistics-pd): eng,
