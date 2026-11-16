@@ -15,6 +15,7 @@ module Adapters
   # {"result":[]} tombstone.
   class RstiTest < Minitest::Test
     include AdapterConformance
+    include StoreTestDB
 
     FIXTURES = Nabu::TestSupport.fixtures("rsti")
     SEASON01 = "2a414954-e077-496b-8b06-a9d0cd417eba"
@@ -183,6 +184,52 @@ module Adapters
       assert_equal "Ritual", metadata["genre"]
       assert_equal "alphabetic", metadata["text_type"]
       assert_equal "de32293f-9b4b-435e-bf02-c4894863035b", metadata["text_uuid"]
+    end
+
+    # -- the genre axis: the text item's OCHRE Genre (aggressive-mining law) ----
+
+    def facet_map = Nabu::FacetMap.load(File.join(Nabu::Config::PROJECT_ROOT, "config", "facet_map.yml"))
+
+    def kinds
+      Nabu::Kinds.load(classes_path: File.join(Nabu::Config::PROJECT_ROOT, "config", "kind_classes.yml"),
+                       map_path: File.join(Nabu::Config::PROJECT_ROOT, "config", "kind_map.yml"))
+    end
+
+    # The text item's Genre property (metadata "genre") projects verbatim
+    # as the document genre facet — the fixture's editions: Ritual 3,
+    # Letter 2, Administrative 1, Legal 1; the inventory-only records
+    # carry none.
+    def test_the_ochre_genre_projects_as_the_document_genre_facet
+      assert_equal "genre", facet_map.fields_for("rsti")&.fetch("genre", nil),
+                   "the OCHRE Genre is ruled for the document facet lane"
+      genres = refs.map { |ref| adapter.parse(ref).metadata["genre"] }.compact.tally
+      assert_equal({ "Administrative" => 1, "Legal" => 1, "Letter" => 2, "Ritual" => 3 }, genres.sort.to_h)
+    end
+
+    # The genre facet folds onto the kind axis: the whole witnessed
+    # vocabulary (the fixture's four values plus the live corpus's Myth,
+    # Schooltext, Treaty, Economic) — never unmapped.
+    def test_the_ochre_genre_folds_onto_the_kind_axis
+      kinds = self.kinds
+      assert_equal "genre", kinds.facet_for("rsti")
+      { "Letter" => ["letter"], "Administrative" => ["administrative"], "Ritual" => ["ritual"],
+        "Legal" => ["legal"], "Treaty" => ["legal/treaty"], "Myth" => ["literary/narrative/myth"],
+        "Schooltext" => ["school"], "Economic" => ["administrative"] }.each do |value, paths|
+        assert_equal paths, kinds.normalize("rsti", value), value
+      end
+    end
+
+    # The health census (Invariants#unmined_axis_metadata) over the loaded
+    # fixture, once the ordinary facet builder ran: no rsti key is dark.
+    def test_the_mining_census_finds_no_dark_ore_after_the_builders
+      catalog = store_test_db
+      source = Nabu::Store::Source.create(slug: "rsti", name: "RSTI", adapter_class: Nabu::Adapters::Rsti.name,
+                                          license_class: "nc")
+      Nabu::Store::Loader.new(db: catalog, source: source).load_from(adapter, workdir: FIXTURES, full: true)
+      Nabu::Store::FacetBuilder.refresh_source!(catalog: catalog, slug: "rsti", facet_map: facet_map)
+      invariants = Nabu::Health::Invariants.new(registry: nil, catalog: catalog, fulltext: nil, ledger: nil)
+      finding = invariants.send(:unmined_axis_metadata)
+      assert_nil finding, finding&.message
     end
 
     # -- the three no-text shapes ---------------------------------------------

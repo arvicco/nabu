@@ -1348,6 +1348,25 @@ sources:
     # and offerings; the inscribed stirrup jars are transport labels.
     # A whole-source declaration, the parse-time mapping call.
     source_kind: administrative
+  rsti:                # census 2026-11-16 (canonical, every record through the adapter): 184 of
+    #                    the inventory's docs carry the text item's OCHRE "Genre" property — the
+    #                    editions and shells; the inventory-only records (unpublished, no-text)
+    #                    carry none and stay kind-less, never guessed. A closed eight-value list.
+    facet: genre
+    map:
+      "Letter": letter                    # 115 — the Ugarit and Ras Ibn Hani correspondence; private
+      #                                     vs official is not stated upstream, so the head only
+      "Administrative": administrative    # 44
+      "Economic": administrative          # 1 — upstream's one "Economic" text: commodity
+      #                                     bookkeeping, the house administrative head (accounts,
+      #                                     receipts, lists); the house has no separate economic class
+      "Ritual": ritual                    # 8 — the sacrificial lists and cult prescriptions (RS 1.001
+      #                                     = KTU 1.39); no festival/liturgy sub is claimed upstream
+      "Myth": literary/narrative/myth     # 7 — upstream's own label for the mythological tablets;
+      #                                     the house myth sub IS this claim
+      "Schooltext": school                # 6 — scribal exercises, the schoolroom's own products
+      "Legal": legal                      # 2
+      "Treaty": legal/treaty              # 1 — the treaty is the house legal sub by name
   delpher-newspapers:  # P173 — census 2026-11-13: the 16xx cone, 8,559 issues of 22 papers
     # The Delpher open newspaper archive IS the periodical press: every
     # document is one issue of a newspaper (courantes, gazettes, the

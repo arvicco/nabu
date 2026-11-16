@@ -1133,7 +1133,6 @@ sources:
         (censused 2026-10-22)"}
     script: {posture: implied}
   rsti:
-    kind: {posture: unclassified}
     lect: {posture: identity, note: catalog records across nine codes; uga has no stages}
     dating: {posture: undatable, note: no typed date fields — declared, the mining census agrees}
     places: {posture: named, note: "P108-8: the findspot field joins the place lane (4,662

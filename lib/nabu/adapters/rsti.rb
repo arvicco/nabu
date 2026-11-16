@@ -65,6 +65,15 @@ module Nabu
     # A line whose value is not a string quarantines the document
     # (MIXED_MARKUP); an unseen leaf type loud-stops.
     #
+    # == Genre
+    #
+    # The text item's OCHRE "Genre" property rides metadata "genre"
+    # verbatim (184 docs, the editions and shells: Letter · Administrative
+    # · Ritual · Myth · Schooltext · Legal · Treaty · Economic) and projects
+    # as the document genre facet (config/facet_map.yml), folded onto the
+    # kind axis in config/kind_map.yml. Inventory-only records carry no
+    # Genre and stay kind-less.
+    #
     # == License (granted)
     #
     # CC BY-NC-SA 4.0 — the API's own availability.license on season sets

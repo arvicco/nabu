@@ -30,6 +30,11 @@ sources:
       set: set                # 35 TEO season/collection sets
       findspot: findspot      # TEO findspot text incl. "Not listed in TEO" (a claim)
       museum_number: museum   # Louvre AE / RS sigla — the museum shelf join
+      genre: genre            # the text item's OCHRE "Genre" property verbatim (canonical census
+      #                         2026-11-16, 184 bearing docs — editions and shells; inventory-only
+      #                         records carry none): Letter 115 · Administrative 44 · Ritual 8 ·
+      #                         Myth 7 · Schooltext 6 · Legal 2 · Treaty 1 · Economic 1 — folded
+      #                         onto the kind axis in config/kind_map.yml
   ociana:                     # census: 36,794 text-bearing records (full deposit, 2026-10-18)
     fields:
       script: script          # Safaitic 30,795 · Hismaic 3,624 · Dadanitic 1,704 · Taymanitic
