@@ -390,7 +390,6 @@ map:
   ban-Bali: "ban~bali"  # Balinese-script Balinese (ban-wikisource, 542 docs)
   ban-Latn: "ban~latn"  # the romanized Leiden copies (ban-wikisource)
   sas-Bali: "sas~bali"  # Sasak lontar in Balinese script (ban-wikisource)
-  jav-Java: "jv~java"   # aksara-Jawa Javanese (jv-wikisource)
   sun-Java: "su~java"   # Javanese-script (cacarakan) Sundanese (su-wikisource)
   ecy-Latn: "ecy~latn"  # romanized Eteocypriot (ig-cyprus, 22 docs)
   nld-Latn: "nl~latn"   # sii-clean's explicit-script Dutch rows

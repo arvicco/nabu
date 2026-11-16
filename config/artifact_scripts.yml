@@ -56,6 +56,12 @@ sources:
     xzh:
       script: tibt
       note: Zhangzhung from Tibetan-script sources, held romanized
+  jv-wikisource:
+    jav-Java:
+      script: java
+      note: "aksara-Jawa scan pages (the Index's own script claim), held in
+        Latin romanization — surface byte-measured 100% latn by the
+        2026-11-14 post-rebuild guard (the jv~java repair)"
   titus-avestan:
     ave:
       script: avst

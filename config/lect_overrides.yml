@@ -298,6 +298,17 @@ sources:
     # band [1600, 1800] is the guaraní jesuítico convention); revisit if
     # a modern gn-coded treebank ever registers.
     gn: { lect: "gn:old", tier: certain }
+  jv-wikisource:
+    # The jv~java repair (2026-11-16, the nabu-lects PR #49 merge tail):
+    # the post-rebuild surface byte guard measured the jav-Java-tagged
+    # pages 100% LATIN as held — the scan Index declares aksara Jawa,
+    # but the transcribed text is Latin romanization. The universal
+    # jav-Java → jv~java codemap row was removed upstream as
+    # surface-dishonest; the per-collection truth lands here instead:
+    # surface claim ~latn, the artifact's aksara-Jawa claim riding
+    # config/artifact_scripts.yml (the D60-b split, the itant/elephantine
+    # precedent).
+    jav-Java: { lect: "jv~latn", tier: certain }
   te-wikisource:
     # The Telugu Wikisource cone is composition-bounded by construction
     # (73 works of pre-1800 classical poets, Nannaya onward — the scan
