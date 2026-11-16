@@ -1059,7 +1059,9 @@ end
 # declarations and the ledger's measured slice times (Nabu::Ops::RailPlan;
 # the 2026-11-13 hand-assembled chain over-run). Parallel lanes, one per
 # source; slices_per_phase is a cap; no budget = the caps-only view. The
-# `lane <slug> step N: <command>` lines are the machine-consumable plan.
+# `lane <slug> step N: <command>` lines are the machine-consumable plan;
+# each step is rail:step (the yield-guarded sync), and sources the crawl
+# ledger marks exhausted are skipped.
 namespace :rail do
   desc "Print the phase's paced-crawl plan as parallel lanes (rail:plan[budget_minutes], budget optional)"
   task :plan, %i[budget] do |_t, args|
@@ -1072,11 +1074,35 @@ namespace :rail do
     budget = args[:budget].to_s.strip
     ledger = File.file?(config.history_path) ? Nabu::Store.connect(config.history_path, readonly: true) : nil
     begin
-      plan = Nabu::Ops::RailPlan.new(registry: registry, ledger: ledger,
+      plan = Nabu::Ops::RailPlan.new(registry: registry, ledger: ledger, canonical_dir: config.canonical_dir,
                                      budget_minutes: budget.empty? ? nil : Float(budget)).plan
       print Nabu::Ops::RailPlan.render(plan)
     ensure
       ledger&.disconnect
     end
+  end
+
+  # One plan step (Nabu::Ops::RailStep): `bin/nabu sync SLUG` between two
+  # offline diagnoses of the source's paced lanes. Exit 3 = the lane stops
+  # (zero yield, or the cone is exhausted), so the plan's && chain breaks.
+  desc "Run one yield-guarded rail step: sync SOURCE, stop the lane (exit 3) on zero yield (rail:step[slug])"
+  task :step, %i[slug] do |_t, args|
+    $LOAD_PATH.unshift(File.expand_path("lib", __dir__))
+    require "nabu"
+    require "nabu/ops/rail_step"
+
+    slug = args[:slug].to_s.strip
+    abort "rail:step[slug] — name a source slug" if slug.empty?
+    config = Nabu::Config.load
+    registry = Nabu::SourceRegistry.load(config.sources_path)
+    entry = registry[slug] or abort "unknown source: #{slug}"
+    adapter = entry.build_adapter
+    abort "#{slug} does not ride the paced-crawl rail (no paced_crawls lanes)" unless adapter.respond_to?(:paced_crawls)
+
+    engines = adapter.paced_crawls(File.join(config.canonical_dir, slug))
+    sync = -> { Nabu::Shell.stream(File.expand_path("bin/nabu", __dir__), "sync", slug) { |line| $stdout.print(line) } }
+    verdict = Nabu::Ops::RailStep.new(slug: slug, engines: engines, sync: sync).run!
+    puts verdict.line
+    exit 3 if verdict.stop?
   end
 end

@@ -45,12 +45,27 @@ module Nabu
     #
     #   lane <slug> step <N>: <command>
     #
-    # (N counts from 1 within the lane; STEP_LINE matches it). A chain
-    # runner takes the lines whose first token is "lane", runs each lane's
-    # steps in N order, and the lanes concurrently.
+    # (N counts from 1 within the lane; STEP_LINE matches it), then one
+    # ready-to-run serial chain per lane, exactly:
+    #
+    #   chain <slug>: <command> && <command> ...
+    #
+    # (CHAIN_LINE matches it). A chain runner takes the lines whose first
+    # token is "lane", runs each lane's steps in N order, and the lanes
+    # concurrently — STOPPING a lane at its first nonzero step exit, which
+    # is how the step command (`rake "rail:step[SLUG]"`, Ops::RailStep)
+    # reports a zero-yield or exhausted step; the `chain` lines bake that
+    # stop in with `&&`.
+    #
+    # EXHAUSTED — given the canonical dir, a source whose every paced lane's
+    # persisted last slice (the crawl ledger's last_slice section) records
+    # the cone's end (classification cone_exhausted, or nothing left
+    # selectable after it) is skipped whole and listed: no step could
+    # yield. A source never crawled (no ledger file) makes no such claim.
     class RailPlan
       STEP_LINE = /\Alane (?<slug>[a-z0-9][a-z0-9-]*) step (?<step>[1-9]\d*): (?<command>\S.*)\z/
-      COMMAND = "bin/nabu sync %<slug>s"
+      CHAIN_LINE = /\Achain (?<slug>[a-z0-9][a-z0-9-]*): (?<chain>\S.*)\z/
+      COMMAND = 'bundle exec rake "rail:step[%<slug>s]"'
 
       Source = Data.define(:slug, :cap, :slice_seconds, :slices) do
         def measured? = !slice_seconds.nil?
@@ -58,16 +73,22 @@ module Nabu
         def command = format(COMMAND, slug: slug)
       end
 
-      # lanes: the measured sources; unmeasured: the rest. budget_seconds
-      # nil = the caps-only view.
-      Plan = Data.define(:budget_seconds, :lanes, :unmeasured) do
+      # lanes: the measured sources; unmeasured: the rest; exhausted: the
+      # sources the crawl ledger marks done (skipped). budget_seconds nil =
+      # the caps-only view.
+      Plan = Data.define(:budget_seconds, :lanes, :unmeasured, :exhausted) do
+        def initialize(budget_seconds:, lanes:, unmeasured:, exhausted: [])
+          super
+        end
+
         def all_sources = lanes + unmeasured
         def wall_seconds = lanes.map(&:lane_seconds).max || 0.0
       end
 
-      def initialize(registry:, ledger:, budget_minutes: nil)
+      def initialize(registry:, ledger:, budget_minutes: nil, canonical_dir: nil)
         @registry = registry
         @ledger = ledger
+        @canonical_dir = canonical_dir
         unless budget_minutes.nil? || budget_minutes.to_f.positive?
           raise ArgumentError, "budget must be a positive number of minutes (got #{budget_minutes.inspect})"
         end
@@ -76,9 +97,11 @@ module Nabu
       end
 
       def plan
-        sources = roster.map { |slug, cap| size(slug, cap, slice_seconds(slug)) }
-        Plan.new(budget_seconds: @budget_seconds, lanes: sources.select(&:measured?),
-                 unmeasured: sources.reject(&:measured?))
+        sources = roster.map { |entry, cap| size(entry.slug, cap, slice_seconds(entry.slug)) }
+        done = roster.filter_map { |entry, _| entry.slug if exhausted?(entry) }
+        exhausted, live = sources.partition { |source| done.include?(source.slug) }
+        Plan.new(budget_seconds: @budget_seconds, lanes: live.select(&:measured?),
+                 unmeasured: live.reject(&:measured?), exhausted: exhausted)
       end
 
       def self.render(plan)
@@ -87,8 +110,12 @@ module Nabu
           verdict = plan.budget_seconds ? "excluded from the budget math" : "planned at their caps, wall unknown"
           out << "unmeasured (#{verdict}): #{plan.unmeasured.map(&:slug).join(', ')}"
         end
+        unless plan.exhausted.empty?
+          out << "exhausted (the crawl ledger marks the cone done — skipped): #{plan.exhausted.map(&:slug).join(', ')}"
+        end
         out << "plan wall time (parallel lanes): #{Eta.format_seconds(plan.wall_seconds)}"
         out << steps(plan)
+        out << chains(plan)
         "#{out.reject(&:empty?).join("\n")}\n"
       end
 
@@ -114,13 +141,20 @@ module Nabu
       end
 
       def self.steps(plan)
-        planned = plan.budget_seconds ? plan.lanes : plan.all_sources
-        planned.flat_map do |source|
+        planned(plan).flat_map do |source|
           (1..source.slices).map { |n| "lane #{source.slug} step #{n}: #{source.command}" }
         end.join("\n")
       end
 
-      private_class_method :header, :table, :steps
+      def self.chains(plan)
+        planned(plan).select { |source| source.slices.positive? }.map do |source|
+          "chain #{source.slug}: #{([source.command] * source.slices).join(' && ')}"
+        end.join("\n")
+      end
+
+      def self.planned(plan) = plan.budget_seconds ? plan.lanes : plan.all_sources
+
+      private_class_method :header, :table, :steps, :chains, :planned
 
       private
 
@@ -135,15 +169,34 @@ module Nabu
         Source.new(slug: slug, cap: cap, slice_seconds: seconds, slices: slices)
       end
 
-      # [[slug, cap]] for every schedule-declaring adapter, registration order.
+      # [[entry, cap]] for every schedule-declaring adapter, registration order.
       def roster
-        @registry.each_source.filter_map do |entry|
+        @roster ||= @registry.each_source.filter_map do |entry|
           klass = adapter_class(entry)
           next unless klass
 
           caps = schedules(klass).map(&:slices_per_phase)
-          [entry.slug, caps.min] unless caps.empty?
+          [entry, caps.min] unless caps.empty?
         end
+      end
+
+      # Every paced lane's persisted last slice records the cone's end.
+      # Offline: building the engines reads nothing upstream, and
+      # #last_slice reads only the on-disk ledger.
+      def exhausted?(entry)
+        return false unless @canonical_dir
+
+        adapter = entry.build_adapter
+        return false unless adapter.respond_to?(:paced_crawls)
+
+        engines = adapter.paced_crawls(File.join(@canonical_dir, entry.slug)).values
+        !engines.empty? && engines.all? { |engine| cone_done?(engine.last_slice) }
+      end
+
+      def cone_done?(last_slice)
+        return false unless last_slice.is_a?(Hash)
+
+        last_slice["classification"] == "cone_exhausted" || last_slice.dig("remaining", "after") == 0 # rubocop:disable Style/NumericPredicate
       end
 
       def adapter_class(entry)
