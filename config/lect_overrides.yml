@@ -534,3 +534,15 @@ sources:
     # is read from the held pages after the first retrieval, so that one
     # edition's place inside the band [1462, 1800] is a reading until then.
     sqi: { lect: "sq:old", tier: approximation }
+  dtucph-sp:
+    # The Samaritan Pentateuch corpus IS the Samaritan Hebrew record the
+    # registry's smp anchor names (minted with the 2026-11-17 Hebrew-wave
+    # registry package: Ben-Hayyim's grammar, the Tal–Florentin edition,
+    # Schorch's editio maior — the anchor's own notes). The adapter tags
+    # the text-fabric consonant stream bare hbo (bhsa's code; the two
+    # Aramaic words of Gen 31:47 ride arc per token, untouched by this
+    # whole-source row); this row transcribes the corpus's identity onto
+    # the new node — parse-time work, the 2026-10-18 generalization.
+    # Tier certain: the source is the anchor's own named corpus, and the
+    # phono_transcr lane carries the reading tradition itself.
+    hbo: { lect: "smp", tier: certain }

@@ -1166,6 +1166,25 @@ anchors:
            Corpus: extrabiblical's epigraphic books (Arad, Lachish, Ajrud,
            Siloam, Ketef Hinnom, Mesad Hashavyahu; censused 2026-10-22)"
 
+  smp:
+    name: Samaritan Hebrew
+    glottocode: sama1313
+    parent: hbo
+    note: "the Hebrew of the Samaritan Pentateuch and its living liturgical
+           reading tradition (Glottolog: Northwest Semitic > Canaanite >
+           Hebrewic > Samaritan). Extinct as a vernacular since antiquity
+           but preserved in Torah recitation on Mount Gerizim. The
+           consonantal text is a Second Temple-era Pentateuch recension —
+           plene spellings and harmonistic expansions against the MT —
+           written in the Samaritan script, a descendant of Paleo-Hebrew.
+           Phonology and morphology of the reading tradition: Ben-Hayyim,
+           A Grammar of Samaritan Hebrew (2000). Editions: Tal & Florentin,
+           The Samaritan Pentateuch (2010; English 2024, OBP); Schorch,
+           editio maior (de Gruyter 2018-). Corpus: dtucph-sp (5 books /
+           114,891 words, the CACCHT Text-Fabric edition; its phono_transcr
+           lane is the reading tradition after Ben-Hayyim). ISO 639-3 smp
+           (sam is Samaritan ARAMAIC, a separate anchor candidate)"
+
   heb:
     name: Hebrew
     parent: hbo
@@ -2670,6 +2689,23 @@ anchors:
     parent: sem
     stages:
       cla: {name: Classical Arabic, ord: 10}
+
+  jrb:
+    name: Judeo-Arabic
+    parent: ara
+    note: "the Arabic of Jewish communities, written in Hebrew script —
+           ISO 639-3 macrolanguage jrb spanning the regional varieties
+           (Judeo-Iraqi yhd, Judeo-Moroccan aju, Judeo-Tunisian ajt,
+           Judeo-Tripolitanian yud, Judeo-Yemeni jye), which the anchor
+           deliberately does not split. Classical Judeo-Arabic (10th-15th c.)
+           is the written register of Saadia Gaon, Maimonides' Guide and
+           the Cairo Geniza's documentary record: Middle Arabic in
+           phonetic-cum-Rabbinic Hebrew orthography, with Hebrew/Aramaic
+           lexical embedding. Reference: Blau, The Emergence and Linguistic
+           Background of Judaeo-Arabic (3rd ed. 1999); Hary, Multiglossia
+           in Judeo-Arabic (1992). Corpus: pgp-geniza (the PGP digital
+           editions, 4,068 of 7,669 edition documents tagged Judaeo-Arabic;
+           censused 2026-11-16)"
 
   # ── Bare anchors forced by the script axis (P61) ─────────────────────────
   #
