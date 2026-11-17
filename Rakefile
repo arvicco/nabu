@@ -619,6 +619,7 @@ namespace :boards do
     require_relative "lib/nabu/ops/phase_register_check"
     require_relative "lib/nabu/ops/acquisition_check"
     require_relative "lib/nabu/ops/queue_groom_check"
+    require_relative "lib/nabu/ops/source_readiness_check"
     dir = ENV.fetch("BOARDS_DIR", File.expand_path(".docs", __dir__))
     report = Nabu::Ops::BoardCheck.new(boards_dir: dir).run
     if report.skipped
@@ -644,12 +645,19 @@ namespace :boards do
     groom = Nabu::Ops::QueueGroomCheck.new(boards_dir: dir).run
     groom.findings.each { |finding| puts "STALE  #{finding}" }
 
+    readiness = Nabu::Ops::SourceReadinessCheck.new(
+      sources_path: File.expand_path("config/sources.yml", __dir__),
+      ledger_path: File.expand_path("local/history.sqlite3", __dir__)
+    ).run
+    readiness.findings.each { |finding| puts "STALE  readiness #{finding}" }
+
     failures = []
     failures << "#{report.findings.size} stale register header(s)" unless report.clean?
     failures << "#{watch.findings.size} stale GH watch row(s)" unless watch.clean?
     failures << "phase register behind the merged phases" unless phases.clean?
     failures << "#{acquisition.findings.size} acquisition-duty finding(s)" unless acquisition.clean?
     failures << "#{groom.findings.size} ungroomed queue row(s)" unless groom.clean?
+    failures << "#{readiness.findings.size} never-synced source(s)" unless readiness.clean?
     abort "boards:check — #{failures.join(', ')}" unless failures.empty?
 
     puts "boards:check — #{report.registers.size} register header(s) current: #{report.registers.join(', ')}"
@@ -667,6 +675,7 @@ namespace :boards do
     end
     puts "boards:check — acquisition duties current (segment named, rail fresh)" if acquisition.clean?
     puts "boards:check — #{groom.summary} (phase-register cross-check clean)" unless groom.skipped
+    puts "boards:check — every registered source has ledger runs (readiness probe clean)" unless readiness.skipped
   end
 end
 
