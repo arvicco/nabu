@@ -164,7 +164,8 @@ class ReconstructionBookTest < Minitest::Test
     verification = section(rendered, SECTIONS[5])
     assert_includes verification, census.fetch("documents_display")
     assert_includes verification, census.fetch("as_of")
-    refute_includes rendered, "nabu reconstruct", "no command that does not exist"
+    assert_includes verification, "reconstruct verify", "the verification section names the probe card"
+    assert_includes verification, "reconstruct plan", "and the plan card"
   end
 
   def test_manual_class_links_each_recipe
