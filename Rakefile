@@ -1115,3 +1115,20 @@ namespace :rail do
     exit 3 if verdict.stop?
   end
 end
+
+# The reconstruction census (Nabu::Ops::Reconstruction::SourceClass): how
+# each registered source's canonical asset would come back with canonical/
+# lost and no backup — per-class counts, the attic-flagged sources (upstream
+# deletions only a backup holds), and the local/ inventory by role.
+namespace :reconstruction do
+  desc "Print the reconstruction census: sources per re-acquisition class, attic list, local/ inventory"
+  task :census do
+    $LOAD_PATH.unshift(File.expand_path("lib", __dir__))
+    require "nabu"
+    require "nabu/ops/reconstruction/source_class"
+
+    config = Nabu::Config.load
+    source_class = Nabu::Ops::Reconstruction::SourceClass
+    print source_class.render(source_class.from_config(config).census, local_dir: config.local_dir)
+  end
+end
