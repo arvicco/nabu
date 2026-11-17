@@ -266,7 +266,7 @@ layers:
     producer: rebuild
     cost: derived
   reflex_closure:
-    home: db/fulltext.sqlite3 (reflex_roots_index, reflex_root_stats)
+    home: db/fulltext.sqlite3 (reflex_roots, reflex_root_stats)
     producer: rebuild
     cost: derived
 
