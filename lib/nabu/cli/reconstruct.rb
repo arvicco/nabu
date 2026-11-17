@@ -142,9 +142,14 @@ module Nabu
         ledger: ledger, canonical_dir: config.canonical_dir, local_dir: config.local_dir,
         vectors_path: config.vectors_path, sizes: false
       ).build
+      absent = Nabu::Ops::Reconstruction::Verify.absent_layers(
+        capabilities: YAML.safe_load_file(CAPABILITIES_PATH),
+        homes: Nabu::Ops::Reconstruction::Verify::Homes.from_config(config)
+      )
       manifest = Nabu::Ops::Reconstruction::Manifest.new(
         registry: registry, catalog: catalog, entry_paths: set.entries.map(&:path), root: Config::PROJECT_ROOT,
         canonical_dir: config.canonical_dir, trees: options[:trees], as_of: Date.today.iso8601,
+        absent_layers: absent,
         commit: Nabu::Shell.run("git", "-C", Config::PROJECT_ROOT, "rev-parse", "HEAD").strip
       ).build
       if options[:out]

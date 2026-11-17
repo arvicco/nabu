@@ -195,6 +195,33 @@ class ReconstructionVerifyTest < Minitest::Test
                homes: nil, against: manifest_hash).run
   end
 
+  # A capability home absent on BOTH boxes is parity, not failure: the
+  # reference records its own absent layers, and strict fails only on a
+  # gap the reference did not share — otherwise a box that perfectly
+  # reproduces a reference which never ran an enrichment could never go
+  # strict-green.
+  def test_a_capability_gap_shared_with_the_reference_is_parity_not_failure
+    capabilities = { "capabilities" => { "search" => { "surfaces" => { "mcp" => ["nabu_search"] },
+                                                       "layers" => %w[shelf] } },
+                     "layers" => { "shelf" => { "home" => "local/shelves/local-notes/" } } }
+    homes = Verify::Homes.new(project_root: @tmp, db_dir: File.join(@tmp, "db"),
+                              local_dir: File.join(@tmp, "local"), canonical_dir: File.join(@tmp, "canonical"))
+    run = lambda do |manifest_hash|
+      Verify.new(registry: @registry, catalog: @catalog, fulltext: @fulltext, census_path: nil,
+                 capabilities: capabilities, tools: { "nabu_search" => {} }, homes: homes,
+                 against: manifest_hash).run
+    end
+
+    shared = run.call(manifest.merge("capability_homes" => { "absent" => ["shelf"] }))
+    refute shared.failed?(strict: true), "a gap the reference shares is parity"
+    assert_empty shared.capability_gaps
+    assert_match(/absent on the reference too/, Verify.render(shared))
+
+    unshared = run.call(manifest)
+    assert unshared.failed?(strict: true), "a gap the reference did not share stays failure-class"
+    refute_empty unshared.capability_gaps
+  end
+
   def test_against_an_exact_carried_reference_passes_strict
     result = against
     assert_equal({ "greek" => :exact, "chinese" => :exact, "empty" => :exact, "dict" => :exact },

@@ -61,9 +61,10 @@ class ReconstructionManifestTest < Minitest::Test
     path
   end
 
-  def build(entry_paths: [], trees: true)
+  def build(entry_paths: [], trees: true, absent_layers: [])
     Manifest.new(registry: @registry, catalog: @catalog, entry_paths: entry_paths, root: @tmp,
-                 canonical_dir: @canonical, commit: "abc123", as_of: "2026-11-17", trees: trees).build
+                 canonical_dir: @canonical, commit: "abc123", as_of: "2026-11-17", trees: trees,
+                 absent_layers: absent_layers).build
   end
 
   # --- digests --------------------------------------------------------------
@@ -124,6 +125,18 @@ class ReconstructionManifestTest < Minitest::Test
     assert_equal 3, manifest["sources"]["greek"]["passages"]
     assert_equal 0, manifest["sources"]["dict"]["documents"]
     assert_nil manifest["sources"]["dict"]["canary"], "a dictionary shelf has no passage to sample"
+  end
+
+  # The reference's own absent capability layers ride the manifest so the
+  # receiving box's verify can tell a shared gap (parity) from a fresh one.
+  def test_the_manifest_records_the_references_absent_capability_layers
+    assert_equal({ "absent" => [] }, build["capability_homes"])
+    manifest = build(absent_layers: %w[meter_shelf dates_shelf])
+
+    assert_equal({ "absent" => %w[dates_shelf meter_shelf] }, manifest["capability_homes"])
+    text = Manifest.render(manifest)
+    assert_match(/^capability_homes: \{absent: \["dates_shelf", "meter_shelf"\]\}$/, text)
+    assert_equal manifest, YAML.safe_load(text)
   end
 
   def test_canaries_are_verifys_own_sample_and_phrase

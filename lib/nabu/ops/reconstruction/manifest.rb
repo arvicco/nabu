@@ -20,6 +20,7 @@ module Nabu
       #   schema: 1
       #   reference: {commit: "<git HEAD sha>", as_of: "YYYY-MM-DD"}
       #   census: {documents: N, passages: N, language_codes: N, live_sources: N}
+      #   capability_homes: {absent: ["<layer>", ...]}   # the reference's own gaps
       #   sources:
       #     <slug>:
       #       transport: carried | resynced
@@ -55,7 +56,8 @@ module Nabu
         # One line of the arrival check: :ok, :mismatch or :absent.
         CheckRow = Data.define(:path, :status, :expected, :actual)
 
-        def initialize(registry:, catalog:, entry_paths:, root:, canonical_dir:, commit:, as_of:, trees: true)
+        def initialize(registry:, catalog:, entry_paths:, root:, canonical_dir:, commit:, as_of:, trees: true,
+                       absent_layers: [])
           @registry = registry
           @catalog = catalog
           @entry_paths = entry_paths.map { |path| File.expand_path(path) }
@@ -64,6 +66,7 @@ module Nabu
           @commit = commit
           @as_of = as_of
           @trees = trees
+          @absent_layers = absent_layers
         end
 
         def build
@@ -71,6 +74,9 @@ module Nabu
             "schema" => SCHEMA,
             "reference" => { "commit" => @commit, "as_of" => @as_of },
             "census" => census,
+            # The reference's own gaps, so the receiving verify can tell a
+            # shared gap (parity) from one the reconstruction introduced.
+            "capability_homes" => { "absent" => @absent_layers.sort },
             "sources" => live_slugs.to_h { |slug| [slug, source_row(slug)] },
             "trees" => @trees ? trees : []
           }
@@ -81,6 +87,8 @@ module Nabu
           lines = ["schema: #{manifest['schema']}",
                    "reference: #{flow(manifest['reference'])}",
                    "census: #{flow(manifest['census'])}"]
+          absent = manifest.dig("capability_homes", "absent")
+          lines << "capability_homes: {absent: [#{Array(absent).map { |layer| JSON.generate(layer) }.join(', ')}]}"
           sources = manifest["sources"] || {}
           lines << (sources.empty? ? "sources: {}" : "sources:")
           sources.each do |slug, row|

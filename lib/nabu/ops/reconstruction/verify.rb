@@ -105,9 +105,11 @@ module Nabu
         end
 
         Result = Data.define(:census_path, :as_of, :census, :live_sources, :missing_sources, :canaries,
-                             :capability_gaps, :tools_checked, :reference, :source_rows, :new_sources) do
+                             :capability_gaps, :tools_checked, :reference, :source_rows, :new_sources,
+                             :shared_gaps) do
           def initialize(census_path:, as_of:, census:, live_sources:, missing_sources:, canaries:,
-                         capability_gaps:, tools_checked:, reference: nil, source_rows: [], new_sources: [])
+                         capability_gaps:, tools_checked:, reference: nil, source_rows: [], new_sources: [],
+                         shared_gaps: {})
             super
           end
 
@@ -203,6 +205,35 @@ module Nabu
           raise ManifestError, "#{path}: unreadable manifest (#{e.message})"
         end
 
+        # Every capability layer whose home is missing (or lacks a table)
+        # on this box — the reference records these in its manifest so the
+        # receiving verify can tell parity from a fresh gap.
+        def self.absent_layers(capabilities:, homes:)
+          dbs = {}
+          capabilities.fetch("layers", {}).keys.select { |layer| layer_gap(capabilities, homes, layer, dbs) }
+        ensure
+          dbs.each_value { |db| db&.disconnect }
+        end
+
+        # "layer: why" for a layer whose home is absent or incomplete; nil
+        # when the home stands. dbs caches readonly connections per path.
+        def self.layer_gap(capabilities, homes, layer, dbs)
+          home = capabilities.dig("layers", layer, "home")
+          return "#{layer}: undeclared layer" if home.nil?
+
+          path, tables = Homes.parse(home)
+          absolute = homes.resolve(path)
+          unless File.exist?(absolute)
+            note = capabilities.dig("layers", layer, "producer") == "enrichment" ? " (enrichment never run here)" : ""
+            return "#{layer}: #{path} absent#{note}"
+          end
+          return nil if tables.empty?
+
+          db = dbs[absolute] ||= Store.connect(absolute, readonly: true)
+          absent = tables.reject { |table| db.table_exists?(table.to_sym) }
+          absent.empty? ? nil : "#{layer}: #{path} lacks table#{'s' if absent.size > 1} #{absent.join(', ')}"
+        end
+
         # The probe phrase for a passage's indexed search text, as an FTS5
         # column-filtered phrase query; nil when the text carries no token.
         def self.phrase(text)
@@ -294,12 +325,29 @@ module Nabu
 
         def run_against
           sources = @against["sources"] || {}
+          fresh, shared = partition_gaps(capability_gaps)
           Result.new(census_path: nil, as_of: @against.dig("reference", "as_of")&.to_s,
                      census: census(@against["census"] || {}), live_sources: live_slugs.size,
                      missing_sources: missing_sources, canaries: manifest_canaries(sources),
-                     capability_gaps: capability_gaps, tools_checked: @homes ? @tools.size : 0,
+                     capability_gaps: fresh, tools_checked: @homes ? @tools.size : 0,
                      reference: @against["reference"] || {}, source_rows: source_rows(sources),
-                     new_sources: live_slugs - sources.keys)
+                     new_sources: live_slugs - sources.keys, shared_gaps: shared)
+        end
+
+        # A gap on a layer the reference records as absent on ITSELF is
+        # parity, not failure: both boxes lack it, which is exactly what a
+        # faithful reconstruction reproduces. Only gaps the reference did
+        # not share stay failure-class.
+        def partition_gaps(gaps)
+          absent = Array(@against.dig("capability_homes", "absent"))
+          fresh = {}
+          shared = {}
+          gaps.each do |tool, list|
+            mine, theirs = list.partition { |gap| !absent.include?(gap[/\A[a-z_]+/]) }
+            fresh[tool] = mine unless mine.empty?
+            shared[tool] = theirs unless theirs.empty?
+          end
+          [fresh, shared]
         end
 
         def source_rows(sources)
@@ -356,6 +404,7 @@ module Nabu
         def capability_gaps
           return {} if @homes.nil?
 
+          @dbs = {}
           by_tool = @capabilities.fetch("capabilities", {}).each_with_object({}) do |(_, cap), map|
             Array(cap.dig("surfaces", "mcp")).each { |tool| map[tool] = Array(cap["layers"]) }
           end
@@ -369,28 +418,7 @@ module Nabu
           @dbs = nil
         end
 
-        def home_gap(layer)
-          home = @capabilities.dig("layers", layer, "home")
-          return "#{layer}: undeclared layer" if home.nil?
-
-          path, tables = Homes.parse(home)
-          absolute = @homes.resolve(path)
-          return "#{layer}: #{path} absent#{never_run_note(layer)}" unless File.exist?(absolute)
-          return nil if tables.empty?
-
-          db = open_db(absolute)
-          absent = tables.reject { |table| db.table_exists?(table.to_sym) }
-          absent.empty? ? nil : "#{layer}: #{path} lacks table#{'s' if absent.size > 1} #{absent.join(', ')}"
-        end
-
-        def never_run_note(layer)
-          @capabilities.dig("layers", layer, "producer") == "enrichment" ? " (enrichment never run here)" : ""
-        end
-
-        def open_db(path)
-          @dbs ||= {}
-          @dbs[path] ||= Store.connect(path, readonly: true)
-        end
+        def home_gap(layer) = self.class.layer_gap(@capabilities, @homes, layer, @dbs)
 
         # The card's text (Verify.render).
         class Render
@@ -538,8 +566,12 @@ module Nabu
 
           def capabilities
             gaps = @result.capability_gaps
-            ["capability homes: #{@result.tools_checked} MCP tools checked; #{gaps.size} with missing homes"] +
-              gaps.flat_map { |tool, list| list.map { |gap| "  #{tool}: #{gap}" } }
+            shared = @result.shared_gaps
+            head = "capability homes: #{@result.tools_checked} MCP tools checked; #{gaps.size} with missing homes"
+            head += "; #{shared.size} with gaps absent on the reference too (parity)" unless shared.empty?
+            [head] +
+              gaps.flat_map { |tool, list| list.map { |gap| "  #{tool}: #{gap}" } } +
+              shared.flat_map { |tool, list| list.map { |gap| "  #{tool}: #{gap} — absent on the reference too" } }
           end
 
           def summary
