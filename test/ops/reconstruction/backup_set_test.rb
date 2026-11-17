@@ -136,6 +136,26 @@ class ReconstructionBackupSetTest < Minitest::Test
     assert_includes text, "restore order:"
   end
 
+  def test_export_materializes_the_set_at_repo_relative_paths_and_is_rerunnable
+    File.write(File.join(@local, "ledger.txt"), "rows")
+    File.write(File.join(@canonical, "rail", "page.xml"), "<p/>")
+    dest = File.join(@tmp, "drive")
+    result = build
+
+    seen = []
+    BackupSet.export(result, root: @tmp, dest: dest) { |rel| seen << rel }
+
+    assert_includes seen, "local"
+    assert_equal "rows", File.read(File.join(dest, "local", "ledger.txt"))
+    assert_equal "<p/>", File.read(File.join(dest, "canonical", "rail", "page.xml"))
+    assert_path_exists File.join(dest, "vectors.sqlite3")
+    assert_path_exists File.join(dest, "canonical", "gamma", ".attic")
+
+    File.write(File.join(@local, "ledger.txt"), "rows2")
+    BackupSet.export(result, root: @tmp, dest: dest)
+    assert_equal "rows2", File.read(File.join(dest, "local", "ledger.txt")), "a re-run refreshes in place"
+  end
+
   def test_sizes_come_from_du_when_asked
     File.write(File.join(@canonical, "rail", "blob"), "x" * 10)
     result = BackupSet.new(registry: @registry, verdicts: @verdicts, ledger: @ledger,

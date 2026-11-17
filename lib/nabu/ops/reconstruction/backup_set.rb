@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require "fileutils"
+require "pathname"
 require_relative "source_class"
 require_relative "../../eta"
 
@@ -82,6 +84,23 @@ module Nabu
                    "3. enable + sync the remainder (the Book's command path)  4. the rebuild  " \
                    "5. reconstruct verify"
           "#{lines.join("\n")}\n"
+        end
+
+        # Materialize the computed set under dest at its repo-relative
+        # paths (rsync per entry, so a re-run refreshes in place and an
+        # interrupted copy resumes): the restore on the receiving box is
+        # one rsync back. Yields each entry's relative path before copying.
+        def self.export(result, root:, dest:)
+          root = File.expand_path(root)
+          result.entries.each do |entry|
+            rel = Pathname(File.expand_path(entry.path)).relative_path_from(Pathname(root)).to_s
+            yield rel, entry.bytes if block_given?
+            # Per entry, into its own parent under dest: portable where
+            # rsync --relative's /./ anchor is not (macOS openrsync).
+            target = File.join(dest, File.dirname(rel))
+            FileUtils.mkdir_p(target)
+            Nabu::Shell.run("rsync", "-a", File.join(root, rel), "#{target}/")
+          end
         end
 
         def self.human(bytes)
