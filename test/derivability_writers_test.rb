@@ -363,7 +363,8 @@ class DerivabilityWritersTest < Minitest::Test
   # reader or a pass-through to the gateway.
   MINED_PATH_ALLOWLIST = %w[
     nabu/cli/admin.rb nabu/cli/links.rb nabu/config.rb nabu/health/invariants.rb nabu/health/local_check.rb
-    nabu/links_mine_commands.rb nabu/mined_layers.rb nabu/rebuild.rb nabu/store/link_layers.rb
+    nabu/links_mine_commands.rb nabu/mined_layers.rb nabu/rebuild.rb nabu/store/index_maintenance.rb
+    nabu/store/link_layers.rb
   ].freeze
 
   def test_the_mined_layers_store_writes_only_through_its_gateway

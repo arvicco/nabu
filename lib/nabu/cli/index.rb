@@ -161,8 +161,7 @@ module Nabu
         end
         narrator.finish_progress
         aux = Nabu::Store::IndexMaintenance.checkpoint_aux!(
-          { "links" => config.links_path, "lects" => config.lects_journal_path,
-            "vectors" => config.vectors_path },
+          Nabu::Store::IndexMaintenance.aux_wal_paths(config),
           progress: narrator.progress_reporter
         )
         print_maintain(report, Process.clock_gettime(Process::CLOCK_MONOTONIC) - started, aux: aux)
