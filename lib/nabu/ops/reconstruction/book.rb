@@ -296,11 +296,18 @@ module Nabu
            "- `db/vectors.sqlite3` — the time-heavy semantic-vector enrichment (the cost law's documented " \
            "exception living in `db/`);",
            "- the paced-rail trees — months-class to re-crawl politely;",
+           "- the manual-class trees — human-hours to re-acquire, no unattended route;",
            "- every tree whose last re-sync measured at or past #{minutes} minutes — re-syncable, but worth " \
            "carrying;",
            "- the `.attic/` subtrees of everything else — upstream-deleted bytes no re-fetch restores.", "",
-           "Restore order: the set first, then clone and tools (section 1), then enable and sync the " \
-           "remainder (section 3), then the rebuild (section 4), then `bin/nabu reconstruct verify`."]
+           "`bin/nabu reconstruct backupset --export DEST` materializes the set under DEST at its " \
+           "repo-relative paths and writes the reference manifest beside it — the private file carrying the " \
+           "reference's census, per-source counts and canaries, and a sha256 content digest of every carried " \
+           "tree (`bin/nabu reconstruct manifest` prints it on its own).", "",
+           "Restore order, on the receiving box: restore the set (one rsync back), prove the bytes arrived " \
+           "with `bin/nabu reconstruct check DEST/reconstruction-manifest.yml`, then clone and tools " \
+           "(section 1), then enable and sync the remainder (section 3), then the rebuild (section 4), then " \
+           "`bin/nabu reconstruct verify --against` the same manifest."]
         end
 
         def verification
@@ -313,7 +320,11 @@ module Nabu
            "`bin/nabu reconstruct verify` probes a rebuilt instance against them in one command: the census " \
            "diff, every live source's presence, one full-text search canary per source (loaded-but-unsearchable " \
            "is the failure it catches) and each tool's data homes; `--strict` turns any drift into a nonzero " \
-           "exit. `bin/nabu reconstruct plan` prints this book's order as a live card with measured time " \
+           "exit. Against a reference box's manifest, `bin/nabu reconstruct verify --against MANIFEST` " \
+           "compares per source instead: carried trees must match the reference's counts exactly, re-synced " \
+           "trees may drift (upstream moved), the manifest's own canaries are resolved by URN in the rebuilt " \
+           "catalog and probed there, and a capability gap the reference itself shares is parity, not " \
+           "failure. `bin/nabu reconstruct plan` prints this book's order as a live card with measured time " \
            "estimates from the instance's own history, and `rake reconstruction:census` its per-class source " \
            "counts, attic list and `local/` inventory."]
         end

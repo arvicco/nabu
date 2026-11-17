@@ -219,8 +219,12 @@ class ReconstructionBookTest < Minitest::Test
     assert_includes combined, "reconstruct backupset"
     assert_includes combined, "`local/` whole"
     assert_includes combined, "paced-rail trees"
+    assert_includes combined, "manual-class trees"
     assert_includes combined, ".attic/"
-    assert_includes combined, "Restore order:"
+    assert_includes combined, "--export DEST"
+    assert_includes combined, "reconstruct check"
+    assert_includes combined, "verify --against"
+    assert_includes combined, "Restore order,"
     minutes = Nabu::Ops::Reconstruction::BackupSet::HUGE_SYNC_SECONDS / 60
     assert_includes combined, "at or past #{minutes} minutes", "the threshold prose tracks the constant"
     refute_match(/`[a-z0-9-]+-[a-z0-9-]+`,/, combined, "no source inventory creeps into the strategy section")
