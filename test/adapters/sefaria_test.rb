@@ -27,6 +27,13 @@ class SefariaTest < Minitest::Test
   TOSEFTA_URN = "urn:nabu:sefaria:tosefta-chagigah-lieberman:he:the-tosefta-according-to-to-" \
                 "codex-vienna-third-augmented-edition-jts-2001"
   MISHNAH_REL = "json/Mishnah/Seder Kodashim/Mishnah Tamid/Hebrew/V.json"
+  MISHNEH_TORAH_FIXTURE = File.join(FIXTURES, "json/Halakhah/Mishneh Torah/Sefer Nashim/" \
+                                              "Mishneh Torah, Virgin Maiden/Hebrew/Mechon Mamre.json")
+  MISHNEH_TORAH_REL = "json/Halakhah/Mishneh Torah/Sefer Nashim/Mishneh Torah, Virgin Maiden/" \
+                      "Hebrew/V.json"
+  LITURGY_FIXTURE = File.join(FIXTURES, "json/Liturgy/Piyutim/Shalom Aleichem/Hebrew/" \
+                                        "Shalom Alechem.json")
+  LITURGY_REL = "json/Liturgy/Piyutim/Shalom Aleichem/Hebrew/V.json"
   RUTH_SMR_URN = "urn:nabu:sefaria:ruth-rabbah:en:the-sefaria-midrash-rabbah-2022"
   SIFREI_ZUTA_URN = "urn:nabu:sefaria:sifrei-zuta:he:leipzig-1917"
   # The commentaries/halakhah/Zohar/liturgy wave: one real specimen per shelf.
@@ -249,6 +256,30 @@ class SefariaTest < Minitest::Test
       error = assert_raises(Nabu::ParseError) { adapter.parse(yid_refs.first) }
       assert_match(/actualLanguage "yi"/, error.message)
       assert_match(/D46-e/, error.message, "the error names the ruling to extend — an owner decision")
+    end
+  end
+
+  def test_the_ruled_translation_languages_map_on_their_shelves
+    # The 2026-11-17 widen of the D46-e map: the quarantine census showed
+    # all 13 held-out files were the SAME thing — German translations on
+    # the Mishneh Torah and Rishonim-on-Tanakh shelves (Mandelstamm 1851,
+    # Bamberger 1922, re-ed. Itkin) and one Hungarian siddur on liturgy.
+    # Ruled: de and hu join those shelves' maps; the per-version license
+    # gate keeps policing each file individually. An unmapped language
+    # (yi, ar, …) still quarantines loudly — the rule itself is unchanged.
+    with_version({ "actualLanguage" => "de" }, fixture: MISHNEH_TORAH_FIXTURE, rel: MISHNEH_TORAH_REL) do |dir|
+      adapter = conformance_adapter
+      refs = adapter.discover(dir).to_a
+      assert_equal 1, refs.size
+      assert_equal "deu", refs.first.metadata.fetch("language"),
+                   "a German version on the Mishneh Torah shelf now loads like the English ones"
+      assert_nil refs.first.metadata["unmapped_language"]
+    end
+    with_version({ "actualLanguage" => "hu" }, fixture: LITURGY_FIXTURE, rel: LITURGY_REL) do |dir|
+      refs = conformance_adapter.discover(dir).to_a
+      assert_equal 1, refs.size
+      assert_equal "hun", refs.first.metadata.fetch("language"),
+                   "the Hungarian siddur translation on the liturgy shelf now loads"
     end
   end
 

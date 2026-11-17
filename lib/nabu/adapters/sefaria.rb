@@ -114,10 +114,13 @@ module Nabu
     #
     # Licence classes of the 1,073 refs: open 651 · attribution 314 · nc
     # 108. "no-grant" = license "unknown" (420) or absent (35) — skipped by
-    # rule, censused. The 24 quarantines are the standing rules, loud: 13
+    # rule, censused. The 24 quarantines were the standing rules, loud: 13
     # foreign-language versions on the English axis (de ×12 — the Itkin
     # German Mishneh Torah and Bamberger's Rashi — and one hu siddur;
-    # D46-e) and 11 SCT stubs with zero text leaves. NB the Zohar proper
+    # D46-e) and 11 SCT stubs with zero text leaves. The 2026-11-17 ruling
+    # mapped de (tanakh-rishonim, mishneh-torah) and hu (liturgy) onto
+    # those shelves, so the 13 load at the next sync and the standing
+    # quarantine census drops to the 11 stubs. NB the Zohar proper
     # ships ENGLISH ONLY: both its Aramaic versions (Sulam Aramaic Text,
     # Zohar Menukad) say "unknown"; the Aramaic arrives via Tikkunei Zohar
     # (×2) and Zohar Chadash.
@@ -404,16 +407,22 @@ module Nabu
         # subtree (Rashi, Ibn Ezra, Ramban, Radak, Rashbam, Sforno,
         # Abarbanel, Chizkuni, Ralbag, Minchat Shai …); subshelf = the
         # commentator, division = Torah/Prophets/Writings.
+        # de joined 2026-11-17: the quarantine census showed the shelf's one
+        # held-out file was Bamberger's 1922 German Rashi on Genesis (PD,
+        # re-ed. Itkin) — ruled onto the map; the license gate still rules
+        # each version file.
         Shelf.new(id: "tanakh-rishonim", prefix: ["Tanakh", "Rishonim on Tanakh"], division_index: nil,
                   division: nil,
-                  languages: { "he" => "hbo", "en" => "eng" }, ruled_by: :actual_language,
+                  languages: { "he" => "hbo", "en" => "eng", "de" => "deu" }, ruled_by: :actual_language,
                   urn_axis: true, fetch_versions: nil),
         # Maimonides' code: the fourteen books + the Introduction volume;
         # the Commentary subtree (3,639 entries — Kesef Mishneh, Maggid
         # Mishneh, Lechem Mishneh …) is out.
+        # de joined 2026-11-17: the 11 held-out files were all Mandelstamm's
+        # 1851 German Mishneh Torah (PD, re-ed. Itkin) — ruled onto the map.
         Shelf.new(id: "mishneh-torah", prefix: ["Halakhah", "Mishneh Torah"], division_index: 2,
                   division: /\A(?!Commentary\z)./,
-                  languages: { "he" => "hbo", "en" => "eng" }, ruled_by: :actual_language,
+                  languages: { "he" => "hbo", "en" => "eng", "de" => "deu" }, ruled_by: :actual_language,
                   urn_axis: true, fetch_versions: nil),
         # The Shulchan Arukh: its four parts + the Introduction by title
         # (the flat category also files Peri Megadim, a commentary); the
@@ -444,8 +453,10 @@ module Nabu
         # Haggadah — EXACTLY one level past "Liturgy" (/\A\z/ at index 2
         # keeps the Haggadah Commentary subtree out); the three "Rabbi Sacks
         # on …" modern commentary volumes are EXCLUDED_TITLES.
+        # hu joined 2026-11-17: the shelf's one held-out file was Balla's
+        # Hungarian siddur translation — ruled onto the map.
         Shelf.new(id: "liturgy", prefix: ["Liturgy"], division_index: 2, division: /\A\z/,
-                  languages: { "he" => "hbo", "en" => "eng" }, ruled_by: :actual_language,
+                  languages: { "he" => "hbo", "en" => "eng", "hu" => "hun" }, ruled_by: :actual_language,
                   urn_axis: true, fetch_versions: nil),
         # THE P152 SECOND TEMPLE SHELF (class note): the two Second Temple
         # works whose Hebrew/Aramaic text is an ancient witness, by EXACT
