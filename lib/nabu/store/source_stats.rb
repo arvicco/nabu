@@ -105,6 +105,13 @@ module Nabu
         row.transform_values(&:to_i)
       end
 
+      # The distinct language codes carrying live documents (the per-language
+      # rows' documents column is documents.language-grained) — the census'
+      # language_codes figure at O(#language rows), not a documents scan.
+      def language_codes(db)
+        db[LANG_TABLE].exclude(documents: 0).distinct.select(:language).count
+      end
+
       # -- wholesale derivation ------------------------------------------------
 
       # Re-derive the whole table from the loaded catalog (rebuild, and the

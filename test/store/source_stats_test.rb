@@ -98,6 +98,15 @@ module Store
       assert_equal [["chu", 1, 1], ["grc", 1, 1], ["lat", 0, 1]], lang_rows
     end
 
+    # The census' language-code figure off the per-language rows: codes
+    # carrying live DOCUMENTS (documents.language), never passage-only ones
+    # — the same definition SiteData#census counts off the documents table.
+    def test_language_codes_counts_document_languages_only
+      loader.load([alpha, beta])
+
+      assert_equal 2, Nabu::Store::SourceStats.language_codes(@db), "grc + chu; lat is passage-only"
+    end
+
     def test_derive_makes_no_row_for_a_documentless_source
       Nabu::Store::SourceStats.derive!(@db, note: "test")
       assert_nil stats_row, "a source with no documents has no stats row"
