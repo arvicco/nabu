@@ -65,6 +65,16 @@ class CLITest < Minitest::Test
     assert_nil status, "version should not signal failure"
   end
 
+  def test_reconstruct_verify_against_rejects_a_foreign_manifest_schema
+    Dir.mktmpdir do |dir|
+      path = File.join(dir, "manifest.yml")
+      File.write(path, "schema: 2\nsources: {}\n")
+      _out, err, status = run_cli(["reconstruct", "verify", "--against", path])
+      assert_equal 1, status
+      assert_match(/--against: .*manifest schema 2 — reconstruct verify expects schema 1/, err)
+    end
+  end
+
   def test_dash_dash_help_after_a_command_shows_its_help_not_execution
     # Owner report 2026-07-18: `nabu search --help` reached FTS5 as the
     # literal query (raw backtrace). A help flag right after a command name

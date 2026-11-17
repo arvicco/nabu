@@ -30,18 +30,23 @@ class ReconstructionBackupSetTest < Minitest::Test
     @vectors = File.join(@tmp, "vectors.sqlite3")
     FileUtils.mkdir_p(@local)
     File.write(@vectors, "v")
-    %w[alpha huge rail gamma].each { |slug| FileUtils.mkdir_p(File.join(@canonical, slug)) }
+    %w[alpha huge rail gamma byhand slowhand].each { |slug| FileUtils.mkdir_p(File.join(@canonical, slug)) }
     FileUtils.mkdir_p(File.join(@canonical, "gamma", ".attic"))
     FileUtils.mkdir_p(File.join(@canonical, "huge", ".attic"))
+    FileUtils.mkdir_p(File.join(@canonical, "slowhand", ".attic"))
     @ledger = Nabu::Store::Ledger.migrate!(Sequel.sqlite)
     @registry = Nabu::SourceRegistry.new([entry("lects", kind: "module"), entry("alpha"), entry("huge"),
-                                          entry("rail"), entry("gamma"), entry("cold", wired: false)])
+                                          entry("rail"), entry("gamma"), entry("cold", wired: false),
+                                          entry("byhand"), entry("slowhand")])
     @verdicts = [verdict("lects", :public_stable), verdict("alpha", :public_stable),
                  verdict("huge", :public_stable, attic: true), verdict("rail", :rail_paced),
-                 verdict("gamma", :public_stable, attic: true), verdict("cold", :public_stable)]
+                 verdict("gamma", :public_stable, attic: true), verdict("cold", :public_stable),
+                 verdict("byhand", :manual), verdict("slowhand", :manual, attic: true)]
     sync_run("alpha", 100)
     sync_run("huge", 3_600)
     sync_run("gamma", 50)
+    sync_run("byhand", 50)
+    sync_run("slowhand", 3_600)
   end
 
   def teardown
@@ -80,6 +85,19 @@ class ReconstructionBackupSetTest < Minitest::Test
                     "a whole-tree entry already covers its attic"
   end
 
+  def test_manual_trees_join_the_set_by_class_exactly_once
+    result = build
+
+    byhand = result.entries.find { |e| e.path == File.join(@canonical, "byhand") }
+    refute_nil byhand, "a fast manual tree still rides the set — the route is human-hours, not compute"
+    assert_match(/human/, byhand.reason)
+    slow = result.entries.select { |e| e.path == File.join(@canonical, "slowhand") }
+    assert_equal 1, slow.size, "a manual tree past the threshold appears once, as manual"
+    assert_match(/human/, slow.first.reason)
+    refute_includes paths(result), File.join(@canonical, "slowhand", ".attic"),
+                    "a whole-tree manual entry already covers its attic"
+  end
+
   def test_the_remainder_counts_only_wired_unbacked_sources
     result = build
 
@@ -116,6 +134,26 @@ class ReconstructionBackupSetTest < Minitest::Test
     assert_includes text, "upstream-deleted bytes"
     assert_includes text, "re-sync remainder: 3 wired sources"
     assert_includes text, "restore order:"
+  end
+
+  def test_export_materializes_the_set_at_repo_relative_paths_and_is_rerunnable
+    File.write(File.join(@local, "ledger.txt"), "rows")
+    File.write(File.join(@canonical, "rail", "page.xml"), "<p/>")
+    dest = File.join(@tmp, "drive")
+    result = build
+
+    seen = []
+    BackupSet.export(result, root: @tmp, dest: dest) { |rel| seen << rel }
+
+    assert_includes seen, "local"
+    assert_equal "rows", File.read(File.join(dest, "local", "ledger.txt"))
+    assert_equal "<p/>", File.read(File.join(dest, "canonical", "rail", "page.xml"))
+    assert_path_exists File.join(dest, "vectors.sqlite3")
+    assert_path_exists File.join(dest, "canonical", "gamma", ".attic")
+
+    File.write(File.join(@local, "ledger.txt"), "rows2")
+    BackupSet.export(result, root: @tmp, dest: dest)
+    assert_equal "rows2", File.read(File.join(dest, "local", "ledger.txt")), "a re-run refreshes in place"
   end
 
   def test_sizes_come_from_du_when_asked

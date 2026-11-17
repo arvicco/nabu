@@ -1,9 +1,11 @@
 # frozen_string_literal: true
 
+require "date"
 require "yaml"
 require_relative "../ops/reconstruction/plan"
 require_relative "../ops/reconstruction/verify"
 require_relative "../ops/reconstruction/backup_set"
+require_relative "../ops/reconstruction/manifest"
 
 # Nabu::CLI — the `nabu reconstruct` subcommand family (ReconstructCLI).
 # Carved out of lib/nabu/cli.rb, the registry that loads it.
@@ -52,21 +54,29 @@ module Nabu
       every tree whose last re-sync measured at/past the threshold, and the
       attic subtrees of everything else — and re-sync the rest from
       upstream. Prints the set with reasons and sizes, the remainder's
-      summed measured compute, and the restore order. Read-only.
+      summed measured compute, and the restore order. Read-only — except
+      --export DEST, which materializes the set under DEST at its
+      repo-relative paths (rsync per entry: re-runnable, resumes) and
+      writes DEST/reconstruction-manifest.yml, digesting every carried
+      byte. The restore on the receiving box is one rsync back, proven by
+      `reconstruct check` there.
     HELP
     option :threshold, type: :numeric, default: 30,
                        desc: "minutes of last-sync time that put a tree in the set"
     option :sizes, type: :boolean, default: true, desc: "size each entry with du (skip for an instant card)"
+    option :export, type: :string, desc: "materialize the set here, with the reference manifest beside it"
     def backupset
       config = Nabu::Config.load
       ledger = open_readonly(config.history_path)
+      registry = Nabu::SourceRegistry.load(config.sources_path)
       classes = Nabu::Ops::Reconstruction::SourceClass.from_config(config)
       result = Nabu::Ops::Reconstruction::BackupSet.new(
-        registry: Nabu::SourceRegistry.load(config.sources_path), verdicts: classes.verdicts, ledger: ledger,
+        registry: registry, verdicts: classes.verdicts, ledger: ledger,
         canonical_dir: config.canonical_dir, local_dir: config.local_dir, vectors_path: config.vectors_path,
         threshold: (options[:threshold] * 60).to_i, sizes: options[:sizes]
       ).build
       say Nabu::Ops::Reconstruction::BackupSet.render(result)
+      export(config, registry, result, options[:export]) if options[:export]
     ensure
       ledger&.disconnect
     end
@@ -81,9 +91,18 @@ module Nabu
       failure it catches), and every MCP tool's data homes on disk.
       Exits 0; --strict exits 1 on any drift, empty source, canary miss
       or missing home.
+
+      --against MANIFEST verifies against a reference box's manifest
+      (schema 1) instead of the census: per-source counts (carried trees
+      must match exactly; resynced trees may drift), the manifest's own
+      canaries resolved by urn, and the reference census. With --strict,
+      only failure-class findings exit 1 (carried mismatch, missing
+      source, failing canary, missing home) — never resynced drift.
     HELP
     option :strict, type: :boolean, default: false, desc: "exit 1 on any drift, miss or gap"
+    option :against, type: :string, banner: "MANIFEST", desc: "verify against a reference box's manifest"
     def verify
+      manifest = load_against_manifest(options[:against])
       config = Nabu::Config.load
       unless File.exist?(config.catalog_path)
         say "reconstruct verify: no catalog at #{config.catalog_path} — a bare clone; sync, then rebuild, then verify"
@@ -95,7 +114,7 @@ module Nabu
       result = Nabu::Ops::Reconstruction::Verify.new(
         registry: Nabu::SourceRegistry.load(config.sources_path), catalog: catalog, fulltext: fulltext,
         census_path: CENSUS_PATH, capabilities: YAML.safe_load_file(CAPABILITIES_PATH),
-        homes: Nabu::Ops::Reconstruction::Verify::Homes.from_config(config)
+        homes: Nabu::Ops::Reconstruction::Verify::Homes.from_config(config), against: manifest
       ).run
       say Nabu::Ops::Reconstruction::Verify.render(result)
       strict = options[:strict]
@@ -105,9 +124,109 @@ module Nabu
       fulltext&.disconnect
     end
 
+    desc "manifest", "The portable reference manifest: census, per-source canaries, carried-tree digests"
+    long_desc <<~HELP, wrap: false
+      Prints (or writes with --out) the schema-1 reference manifest a second
+      box proves its arrival against: the git commit and date, the census,
+      every live public source's transport (carried in the backup set, or
+      resynced), counts and its verify canary, and a content digest of every
+      backup-set path. The manifest is PRIVATE (it names access-gated
+      holdings) — write it outside the repo tree. Digesting reads every
+      carried byte; --no-trees skips it for an instant manifest.
+    HELP
+    option :out, type: :string, desc: "write the manifest here instead of stdout"
+    option :trees, type: :boolean, default: true, desc: "digest the backup-set trees (reads every carried byte)"
+    def manifest
+      config = Nabu::Config.load
+      unless File.exist?(config.catalog_path)
+        raise Thor::Error, "reconstruct manifest: no catalog at #{config.catalog_path} — nothing to describe"
+      end
+
+      catalog = Nabu::Store.connect(config.catalog_path, readonly: true)
+      ledger = open_readonly(config.history_path)
+      registry = Nabu::SourceRegistry.load(config.sources_path)
+      set = Nabu::Ops::Reconstruction::BackupSet.new(
+        registry: registry, verdicts: Nabu::Ops::Reconstruction::SourceClass.from_config(config).verdicts,
+        ledger: ledger, canonical_dir: config.canonical_dir, local_dir: config.local_dir,
+        vectors_path: config.vectors_path, sizes: false
+      ).build
+      manifest = build_manifest(config, registry, catalog, set, trees: options[:trees])
+      if options[:out]
+        Nabu::Ops::Reconstruction::Manifest.write(manifest, options[:out])
+        say "reconstruct manifest: wrote #{options[:out]} (private — keep it out of the repo tree)"
+      else
+        say Nabu::Ops::Reconstruction::Manifest.render(manifest)
+      end
+    ensure
+      catalog&.disconnect
+      ledger&.disconnect
+    end
+
+    desc "check MANIFEST", "Re-digest a manifest's carried trees here: did the transported bytes arrive intact?"
+    long_desc <<~HELP, wrap: false
+      Loads a reference manifest (reconstruct manifest --out) and re-digests
+      each trees[] path under --root (default: the project root), comparing
+      bytes and sha256. One line per tree — ok / MISMATCH / ABSENT — and a
+      nonzero exit on any mismatch or absence. Read-only.
+    HELP
+    option :root, type: :string, desc: "the tree the manifest's paths resolve against (default: the project root)"
+    def check(path)
+      manifest = Nabu::Ops::Reconstruction::Manifest.load(path)
+      rows = Nabu::Ops::Reconstruction::Manifest.check(manifest, root: options[:root] || Config::PROJECT_ROOT)
+      say Nabu::Ops::Reconstruction::Manifest.render_check(rows, reference: manifest["reference"])
+      bad = rows.count { |row| row.status != :ok }
+      raise Thor::Error, "reconstruct check: #{bad} tree(s) mismatched or absent (above)" if bad.positive?
+    end
+
     no_commands do
       def open_readonly(path)
         File.exist?(path) ? Nabu::Store.connect(path, readonly: true) : nil
+      end
+
+      def build_manifest(config, registry, catalog, set, trees:)
+        absent = Nabu::Ops::Reconstruction::Verify.absent_layers(
+          capabilities: YAML.safe_load_file(CAPABILITIES_PATH),
+          homes: Nabu::Ops::Reconstruction::Verify::Homes.from_config(config)
+        )
+        Nabu::Ops::Reconstruction::Manifest.new(
+          registry: registry, catalog: catalog, entry_paths: set.entries.map(&:path),
+          root: Config::PROJECT_ROOT, canonical_dir: config.canonical_dir, trees: trees,
+          as_of: Date.today.iso8601, absent_layers: absent,
+          commit: Nabu::Shell.run("git", "-C", Config::PROJECT_ROOT, "rev-parse", "HEAD").strip
+        ).build
+      end
+
+      # The owner-fired transport step: materialize the set, then digest
+      # it into the manifest riding beside it (two passes over the carried
+      # bytes — the copy, then the sha record `reconstruct check` proves
+      # arrival against).
+      def export(config, registry, result, dest)
+        unless File.exist?(config.catalog_path)
+          raise Thor::Error, "reconstruct backupset --export: no catalog at #{config.catalog_path}"
+        end
+
+        total = result.entries.size
+        Nabu::Ops::Reconstruction::BackupSet.export(result, root: Config::PROJECT_ROOT, dest: dest) do |rel, bytes|
+          sized = bytes ? " (#{Nabu::Ops::Reconstruction::BackupSet.human(bytes)})" : ""
+          say "  exporting #{rel}#{sized}"
+        end
+        say "exported #{total} path(s) to #{dest}; digesting into the manifest (reads every carried byte)…"
+        catalog = Nabu::Store.connect(config.catalog_path, readonly: true)
+        manifest = build_manifest(config, registry, catalog, result, trees: true)
+        out = File.join(dest, "reconstruction-manifest.yml")
+        Nabu::Ops::Reconstruction::Manifest.write(manifest, out)
+        say "reconstruct backupset: wrote #{out} — on the receiving box: restore with one rsync back, " \
+            "then `nabu reconstruct check #{File.basename(out)}`"
+      ensure
+        catalog&.disconnect
+      end
+
+      def load_against_manifest(path)
+        return nil if path.nil?
+
+        Nabu::Ops::Reconstruction::Verify.load_manifest(path)
+      rescue Nabu::Ops::Reconstruction::Verify::ManifestError => e
+        raise Thor::Error, "reconstruct verify --against: #{e.message}"
       end
     end
   end
