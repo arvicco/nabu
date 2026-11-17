@@ -610,6 +610,9 @@ end
 # And the phase-register freshness probe (Nabu::Ops::PhaseRegisterCheck):
 # the register's newest `## P<N>` row must reach the highest phase merged
 # on the local main branch (git log, offline); no register file skips.
+# And the declared-rule liveness probe (Nabu::Ops::RuleLivenessCheck): a
+# lect facet rule whose source holds live documents but which never
+# compiled a journal row fails, named; no catalog/journal skips.
 namespace :boards do
   desc "Gate check: register 'Next number' headers vs minted numbers + GH watch-list staleness " \
        "+ phase-register freshness vs merged phases (stale = exit 1)"
@@ -620,6 +623,7 @@ namespace :boards do
     require_relative "lib/nabu/ops/acquisition_check"
     require_relative "lib/nabu/ops/queue_groom_check"
     require_relative "lib/nabu/ops/source_readiness_check"
+    require_relative "lib/nabu/ops/rule_liveness_check"
     dir = ENV.fetch("BOARDS_DIR", File.expand_path(".docs", __dir__))
     report = Nabu::Ops::BoardCheck.new(boards_dir: dir).run
     if report.skipped
@@ -651,6 +655,14 @@ namespace :boards do
     ).run
     readiness.findings.each { |finding| puts "STALE  readiness #{finding}" }
 
+    liveness = Nabu::Ops::RuleLivenessCheck.new(
+      rules_paths: [File.expand_path("config/lect_facet_rules.yml", __dir__),
+                    File.expand_path("local/config/lect_facet_rules.yml", __dir__)],
+      catalog_path: File.expand_path("db/catalog.sqlite3", __dir__),
+      journal_path: File.expand_path("db/lects.sqlite3", __dir__)
+    ).run
+    liveness.findings.each { |finding| puts "STALE  rule liveness #{finding}" }
+
     failures = []
     failures << "#{report.findings.size} stale register header(s)" unless report.clean?
     failures << "#{watch.findings.size} stale GH watch row(s)" unless watch.clean?
@@ -658,6 +670,7 @@ namespace :boards do
     failures << "#{acquisition.findings.size} acquisition-duty finding(s)" unless acquisition.clean?
     failures << "#{groom.findings.size} ungroomed queue row(s)" unless groom.clean?
     failures << "#{readiness.findings.size} never-synced source(s)" unless readiness.clean?
+    failures << "#{liveness.findings.size} never-compiled lect rule(s)" unless liveness.clean?
     abort "boards:check — #{failures.join(', ')}" unless failures.empty?
 
     puts "boards:check — #{report.registers.size} register header(s) current: #{report.registers.join(', ')}"
@@ -676,6 +689,11 @@ namespace :boards do
     puts "boards:check — acquisition duties current (segment named, rail fresh)" if acquisition.clean?
     puts "boards:check — #{groom.summary} (phase-register cross-check clean)" unless groom.skipped
     puts "boards:check — every registered source has ledger runs (readiness probe clean)" unless readiness.skipped
+    if liveness.skipped
+      puts "boards:check — no catalog/lect journal/rules on this box; rule-liveness probe skipped"
+    else
+      puts "boards:check — #{liveness.rules} declared lect rule(s) live (rule-liveness probe clean)"
+    end
   end
 end
 
