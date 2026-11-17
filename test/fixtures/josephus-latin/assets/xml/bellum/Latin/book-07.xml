@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0">
+	<teiHeader xml:id="header">
+		<fileDesc>
+			<titleStmt>
+				<title>bellum-book-7</title>
+			</titleStmt>
+			<publicationStmt>
+				<p/>
+			</publicationStmt>
+			<sourceDesc>
+				<listWit>
+					<witness xml:id="FlaviusJosephusBellum">Flavius Josephus, War</witness>
+					<witness xml:id="BernBBMs50">Bern BB Ms. 50</witness>
+					<witness xml:id="BernBBMs183">Bern BB Ms. 183</witness>
+					<witness xml:id="ChartresBMMs29">Chartres BM Ms. 29</witness>
+					<witness xml:id="ColognyBodmer99">Cologny Bodmer 99</witness>
+					<witness xml:id="MonteCassino123">Monte Cassino Casin. 123</witness>
+					<witness xml:id="RomeBAVPallat1992">Rome BAV Pal. lat. 1992</witness>
+					<witness xml:id="StGallSBcod627">St. Gall SB cod. 627</witness>
+				</listWit>
+			</sourceDesc>
+		</fileDesc>
+	</teiHeader>
+	<text xml:id="bellum-book-7-text">
+		<body>
+			<div1 n="7" subtype="Latin" type="book" xml:id="latin-bellum7">
+				<div2 n="1" type="chapter" xml:id="latin-bellum7-chapter1">
+					<p xml:id="latin-bellum7-num1">[1] CAP. I. POSTQUAM vero quos occideret quidve raperet, non habebat exercitus, quod iratis animis omnia deerant (nec enim parcendo si esset quod agerent, abstinuissent) jubet eos Caesar totam funditus jam eruere civitatem ac templum : relictis quidem turribus, quae praeter alias eminebant, Phasaelo, et Hippico, et Mariamne, murique tanto, quantum civitatem ab Occidente cingebat. <milestone unit="niese" n="2"/>Id quidem, ut esset castrum illic custodiae causa relinquendis: turres autem, ut posteris indicarent qualem civitatem, quamve munitissimam, Romanorum virtus obtinuisset. <milestone unit="niese" n="3"/>Alium vero totum ambitum civitatis ita complanavere diruentes, ut qui ad eam accessissent, habitatam aliquando esse vix crederent. <milestone unit="niese" n="4"/>Hic quidem finis eorum dementia, qui novas res movere tentaverunt, Hierosolymis fuit, clarissimae civitati, et apud omnes homines praedicatissimae.</p>
+					<p xml:id="latin-bellum7-num5">[5] 2. Caesar autem praesidio quidem illic statuit relinquere decimam legionem, nonnullasque alas equitum, ac peditum cohortes. Omnibus autem belli partibus administratis, et laudare universum cupiebat exercitum pro rebus fortiter gestis, et debita viris fortibus praemia persolvere. <milestone unit="niese" n="6"/>Composito autem in medio ante castra magno tribunali, stans in eo cum procerum eminentissimis, unde ab omni milite posset audiri, magnam illis ait habere se gratiam, quod benevolentia erga se utendo perseverassent. <milestone unit="niese" n="7"/>Laudabat autem, quod per omnia bella morigeri fuissent, quodque praeliando fortitudinem in multis magnisque periculis monstrassent, patriae per se amplificantes imperium : omnibusque planum facientes hominibus, quia neque hostium multitudo, neque munitiones regionum, neque magnitudines civitatum, vel audacia inconsulta, et immanitates efferae adversantium, possint unquam Romanorum vires vel manus effugere, quamvis in multis rebus aliqui fortunaum opitulantem habuerint. <milestone unit="niese" n="8"/>Pulchrum quidem esse, ait, illos etiam bello finem imponere, quod multo tempore gestum sit. nec enim optasse his quicquam melius, cum id ingrederentur. <milestone unit="niese" n="9"/>Hoc autem pulchrius atque praeclarius, quod duces Romani et administratores imperii, ab his declaratos ac praemissos in imperium cuncti libenter suscipiunt: et his quae ipsi decrevere, standum putant, agentes his gratias, qui legissent. <milestone unit="niese" n="10"/>Mirari autem se eos ac diligere omnes, quia nemo viribus alacritatem habuit tardiorem. <milestone unit="niese" n="11"/>Et illis tamen, qui pro majore vi clarius decertassent, vitamque suam condecorassent fortibus factis, et re bene gesta militiam suam nobiliorem fecissent, dixit se et honores et praemia redditurum: nec ullum eorum, qui plus alio laborare voluisset, justa vicissitudine cariturum : <milestone unit="niese" n="12"/>magnamque sibi hujus rei fore diligentiam, quod magis vellet honorare virtutes eorum, qui militiae socii fuissent, quam punire peccata.</p>
+					<p xml:id="latin-bellum7-num13">[13] 3. Confestim ergo jussit eos quorum partes sunt, indicare, quosnam scirent fortiter aliquid in bello fecisse: <milestone unit="niese" n="14"/>et nominatim singulos appellans, praesentes collaudabat, quasi qui domesticis recte gestis nimium laetaretur : et coronas eis aureas imponebat, et torques longasque hastas, et signa ex argento facta donabat, <milestone unit="niese" n="15"/>et uniuscujusque ordinem mutabat in melius. Quin et ex manubiis aurum et argentum, itemque vestes, aliamque praedam largiter distribuebat. <milestone unit="niese" n="16"/>Omnibus autem ita donatis, ut quisque se meritum praebuerat, votisque cum universo exercitu factis, magno favore descendit vertitque se ad sacra pro victoria celebranda : magnaque astante boum multitudine circum aras, immolatos omnes exercitui dedit ad epulas, <milestone unit="niese" n="17"/>ipse vero cum honoratis per triduum laetatus, milites quidem alios quo quenque conveniret, dimittit. Hierosolymorum autem custodiam decimae legioni credit : neque ad Euphratem, ubi pridem fuerat, eam remisit. <milestone unit="niese" n="18"/>Duodecimam vero legionem, memor quod Cestio duce Judaeis cesserat, totam Syria pepulit: erat enim olim apud Raphanaeas : ad Meliten autem, quae sic vocatur, misit : haec ad Euphratem in confinio Armeniae et Cappadociae sita est. <milestone unit="niese" n="19"/>duas vero sibi obsequi satis esse duxit, donec ad AEgyptum perveniret, quintam et quintamdecimam legiones. <milestone unit="niese" n="20"/>Deinde cum ad maritimam Caesaream cum exercitu descendisset, in eam manubiarum multitudinem reposuit, captivosque ibi asservari praecepit, quod ad Italiam navigare tempus hyemis prohibebat.</p>
+				</div2>
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+			</div1>
+		</body>
+	</text>
+	<standOff xml:id="annotations">
+		<listApp>
+			<app>
+				<rdg source="#latin-bellum7-num1">[1] CAP. I. POSTQUAM vero quos</rdg>
+				<rdg source="#BernBBMs50">[¤214r] (£1) talem fuit finis hiersolimis</rdg>
+			</app>
+			<app>
+				<rdg source="#latin-bellum7-num5">[5] 2. Caesar autem praesidio</rdg>
+				<rdg source="#BernBBMs50">[¤214v] (³1 dans une main gothique) liber paris (£2) deus meus</rdg>
+				<rdg source="#BernBBMs183">[¤147r] (@1) laudantur milites a tito [¤147v] (@1) honorantur milites (@2) uespasianus (@3) luditique (@4) calliditas symonis</rdg>
+				<rdg source="#RomeBAVPallat1992">[¤156r] (@1) laudantur milites a tito [¤156v] (@1) honorantur milites</rdg>
+				<rdg source="#StGallSBcod627">[¤227] (#1 require)</rdg>
+			</app>
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+		</listApp>
+	</standOff>
+</TEI>

@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0">
+	<teiHeader xml:id="header">
+		<fileDesc>
+			<titleStmt>
+				<title>book-11</title>
+			</titleStmt>
+			<publicationStmt>
+				<p/>
+			</publicationStmt>
+			<sourceDesc>
+				<listWit>
+					<witness xml:id="FlaviusJosephusAntiquities">Flavius Josephus, Antiquities (Bamberg Msc. Class. 78)</witness>
+					<witness xml:id="BernBBMs50">Bern BB Ms. 50 (Ant. I–XII &amp; Guerre)</witness>
+					<witness xml:id="BernBBMs118">Bern BB Ms. 118 (Ant. I–XII)</witness>
+					<witness xml:id="ChartresBMMs29">Chartres BM Ms. 29 (Ant. I–XII, XVII–XX, &amp; Guerre)</witness>
+					<witness xml:id="ColognyBodmer98">Cologny Bodmer 98 (Ant. I–VI)</witness>
+					<witness xml:id="CopenhagenGKS1572o">Copenhagen GKS 157 2o (Ant. I–XII, XVII–XX)</witness>
+					<witness xml:id="LeidenUBVLF17">Leiden UB VLF 17 (Ant. I–XII, XVII–XX)</witness>
+					<witness xml:id="MilanBACimelioSP">Milan BA Cimelio S.P. 11/1 (Ant. V–X)</witness>
+					<witness xml:id="MonzaBCMsb20">Monza BC Ms. b 20/136 (Ant. I–VI)</witness>
+					<witness xml:id="RomeBAVPalLat814">Rome BAV Pal. Lat. 814 (Ant. I–XII)</witness>
+				</listWit>
+			</sourceDesc>
+		</fileDesc>
+	</teiHeader>
+	<text xml:id="book-11-text">
+		<body>
+			<note>Bamberg Msc. Class. 78</note>
+			<div1 n="XI" subtype="Latin" type="book" xml:id="latin-book11">
+				
+				<argument>
+					<head><milestone n="sbb00000114_00253.jpg"/> <pb n="123r"/><cb n="1/2"/>INCIPIT LIBER UNDECIMUS IOSEPHI HISTORIARUM ANTIQUITATIS IUDAEI CAE CONTINET HIC LIBER TEMPUS ANNO RUM DUCENTORUM QUINQUAGINTATRIUM, MENSIUM V.</head>
+					<floatingText>
+						<body>
+							<div1>
+								<div2 n="1" type="chapter" xml:id="latin-book11-chapter1">
+									<p xml:id="latin-book11-num1"><num>[I.i.1]</num> PRIMO IMPERII ANNO REGIS PERSARUM cyri septuagesimum<add hand="post" place="topmargin">s</add> concurrebat ex die quo nostrum populum contigit ex propriis finibus ad babyloniam migrare, miseratus est captiuitatis deus et illius calamitatis infelicium iudaeorum, et sicut per hieremiam prophetam ante praedixerat quam ciuitas euerteretur <milestone unit="niese" n="2" xml:id="latin-book11-niese-2"/>post quam seruierunt nabuchodonosor nepotibus eius, et hanc sustinuerunt seruitutem per annos fere septuaginta, rursus eos ad propriam restituit terram et templum reaedificare et praeterita frui felicitate decreuit. <milestone unit="niese" n="3" xml:id="latin-book11-niese-3"/>Concitans ergo animum cyri fecit eum per omnem asiam scribere. Cyrus rex haec dicit quoniam me maximus orbis terrarum deus regem contistuit, credo hunc esse quem gens israel adorat, <milestone unit="niese" n="4" xml:id="latin-book11-niese-4"/>his enim et meum praedixit nomen per prophetas quoniam templum eius aedificaturus essem in hierosolimis in terra iudaea.</p>
+									<p xml:id="latin-book11-num5"><num>[I.ii.5]</num> Haec autem cognouerat tyrus legens librum quem inter suas praedicationes esaias relinquerat ante cc et x annum, sic enim in arcano praedicauerat dixisse deum, quoniam uolo cyrum quem multarum et mag<cb n="2/2"/>narum gentium regem constitui mittere populum meum ad propriam terram et templum mihi reconstruere. <milestone unit="niese" n="6" xml:id="latin-book11-niese-6"/>Haec esaias praedicauerat aute annos cxl desctructionis templi, quem dum legeret cyrus et miraretur nomen dei impetus quidam eum accepit ut munifica scriptura impleret. Conuocans autem clarissimos iudaeorum qui ba bilon habitabant dixit se concedere ad propriam iudaeos remeare prouinciam et ciuitatem hierosolimam et templum dei reconstruere <milestone unit="niese" n="7" xml:id="latin-book11-niese-7"/>se eo scilicet adiuuante. Tunc scriptis suis ducibus illius terrae uicinis ut aurum conserrent et argentum ad templi renouationem in super ad immolanda pecora,</p>
+									<p xml:id="latin-book11-num8"><num>[I.iii.8]</num> haec cyrus cum isralhelitis dixisset. Egressi duarum principes tribuum iudae a beniamin una cum leuitis et sacerdotibus ad hierosolomam peruenerunt. Multi ergo residerunt babylone minime passi possessiones suas relinquere, <milestone unit="niese" n="9" xml:id="latin-book11-niese-9"/>quodum uenissent omnes amici regis adiuuabant eos et conferebant ad templi renouationem, alii aurum alii argentum quidam autem et aequos ac iumentorum multitudinem et uota deo reddebant et constitutas secundum ueterem consuetudinem immolationes caela brabant tamquam creatam et antiquam religionis consuetudinem rediuiuam. <milestone unit="niese" n="10" xml:id="latin-book11-niese-10"/>Transmisit etiam cyrus uasa dei quae auferent a templo nabuchodonosor ad babyloniam usque portauerat <milestone unit="niese" n="11" xml:id="latin-book11-niese-11"/>quae reuehenda tradidit mitridati custodi suorum thesaurorum praecipiens ea dari seruanda <unclear reason="uncertainty">ab assaro</unclear> donec templum reaedificaretur, perfecto autem eo traderet sacerdotibus et principibus uulgi reponenda in templo. <milestone unit="niese" n="12" xml:id="latin-book11-niese-12"/>Dixerit etiam epistolam cyrus assyriae satrapis haec continente. Rex cyrus <unclear reason="uncertainty">sismio</unclear> <note type="uncertainty">sisinio</note> et sarabasne salutem iudeos terram meam inhabitantes qui uoluerunt ad suam patriam redire permisi et ciuitatem renouari templumque dei in hierosolimam rursus aedificare in eodem loco in quo prius fuerat constitutum, <milestone unit="niese" n="13" xml:id="latin-book11-niese-13"/>misi autem et mitridatim pecuniarum rerum custodem, et zorobabel principem iudaeorum <milestone n="sbb00000114_00254.jpg"/><pb n="125v"/><cb n="1/2"/> ut fundamenta restituant templumque recondant. Cuius altitudo sit cubitorum sexaginta eorundem et latitudo, et faciant tres parietes lapideos ex lapide polito, et unum parietem ligneum ex materiis ipsius prouinciae. Similiter et altare super quod immolant deo, <milestone unit="niese" n="14" xml:id="latin-book11-niese-14"/>sumptus uero dum eis in his omnibus uolo fieri. Transmisi etiam uasa quae templo rex nabuchodonosor abstulerat tradens ea mitridati pecuniarum custodi et zorobabel principi iudaeorum quatenus ea ad hierosolimam reportarent et templo dei restituant <milestone unit="niese" n="15" xml:id="latin-book11-niese-15"/>quo numero est tantus, refrigratoria aurea l argentea xl situlae aureae l argenteae l libatoria aurea triginta patere aureae triginta. Argenteae duo milia quadringenti, et uasa alia maxima mille, <milestone unit="niese" n="16" xml:id="latin-book11-niese-16"/>concede etiam eis honorem quo potiebantur parentes eorum proprerea piu mentis et uenditioni oleum dragmas cc quinque milia qungentis <corr>quingentis</corr> et ad similiam tritici <unclear reason="fading">xxv</unclear> milia quingentas satrapas quae iubeo praeberi detributis samariae, <milestone unit="niese" n="17" xml:id="latin-book11-niese-17"/>faciantque ei immolationes in hierosolimis sacerdotes secundum leges mosaicas offerentes supplicant deo pro saluit regis et generis eius, ut regnum persarum permaneat eos uero qui haec contempserint uel infirmauerint iudaeo crucifigi, substantias eorum esse regales, <milestone unit="niese" n="18" xml:id="latin-book11-niese-18"/>et epistola quidem haec habuit, hu <corr>hi</corr> autem qui ex captiuitate ad hierosolimam conuenerunt fuerunt milia quadraginta duo, et quadringenti sexaginta.</p>
+									
+									
+									
+									
+									
+									
+									
+									
+									
+									
+									
+									
+									
+									
+									
+									
+									
+									
+									
+									
+									
+									
+									
+									
+									
+									
+									
+									
+									
+									
+									
+									
+									
+									
+									
+									
+									
+									
+									
+									
+									
+									
+									
+									
+									
+									
+									
+									
+									
+									
+									
+									
+									
+									
+									
+								</div2>
+								<trailer>EXPLICIT LIBER UNDECIMUS</trailer>
+							</div1>
+						</body>
+					</floatingText>
+				</argument>
+			</div1>
+		</body>
+	</text>
+	<standOff xml:id="annotations">
+		<listApp>
+			<app>
+				<rdg source="#latin-book11-num8">[I.iii.8] haec cyrus cum isralhelitis dixisset</rdg>
+				<rdg source="#LeidenUBVLF17">[¤108v](obelus)(¢1)uel uenditioni (#frontis)</rdg>
+				<rdg source="#RomeBAVPalLat814">[¤123r](#obelus)(£1)milia</rdg>
+			</app>
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+		</listApp>
+	</standOff>
+</TEI>

@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0">
+  <teiHeader>
+    <fileDesc>
+      <titleStmt>
+        <title>LatinJosephus verified source contents index</title>
+        <respStmt>
+          <resp>Transcription and import authority</resp>
+          <name>Richard M. Pollard; source import documented in the review packet</name>
+        </respStmt>
+      </titleStmt>
+      <publicationStmt>
+        <p>LatinJosephus source paratext; working integration, 2026-10-08.</p>
+      </publicationStmt>
+      <sourceDesc>
+        <p>Source-specific contents; no navigation correspondence is asserted.</p>
+      </sourceDesc>
+    </fileDesc>
+  </teiHeader>
+  <text>
+    <body>
+      <list type="source-contents">
+        <item xml:id="contents-antiquities-niese-05">
+          <fs type="source-contents">
+            <f name="work">
+              <string>antiquities</string>
+            </f>
+            <f name="book">
+              <string>5</string>
+            </f>
+            <f name="language">
+              <string>Greek</string>
+            </f>
+            <f name="witness">
+              <string>niese</string>
+            </f>
+            <f name="status">
+              <string>VERIFIED</string>
+            </f>
+            <f name="path">
+              <string>assets/xml/antiquities/Greek/book-05.xml</string>
+            </f>
+            <f name="selectors">
+              <vColl org="list">
+                <string>tei-div2[n="0"]</string>
+              </vColl>
+            </f>
+            <f name="note">
+              <string/>
+            </f>
+            <f name="authority">
+              <string>Production source contents formula and capitula; accepted Phase-A census. Existing transcription retained without source revision.</string>
+            </f>
+          </fs>
+        </item>
+        <item xml:id="contents-antiquities-niese-11">
+          <fs type="source-contents">
+            <f name="work">
+              <string>antiquities</string>
+            </f>
+            <f name="book">
+              <string>11</string>
+            </f>
+            <f name="language">
+              <string>Greek</string>
+            </f>
+            <f name="witness">
+              <string>niese</string>
+            </f>
+            <f name="status">
+              <string>VERIFIED</string>
+            </f>
+            <f name="path">
+              <string>assets/xml/antiquities/Greek/book-11.xml</string>
+            </f>
+            <f name="selectors">
+              <vColl org="list">
+                <string>tei-div2[n="0"]</string>
+              </vColl>
+            </f>
+            <f name="note">
+              <string/>
+            </f>
+            <f name="authority">
+              <string>Production source contents formula and capitula; accepted Phase-A census. Existing transcription retained without source revision.</string>
+            </f>
+          </fs>
+        </item>
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+      
+        
+        
+        
+        
+        
+        
+        
+        
+        
+          
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+      </list>
+    </body>
+  </text>
+</TEI>

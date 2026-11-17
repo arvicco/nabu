@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0">
+	<teiHeader xml:id="header">
+		<fileDesc>
+			<titleStmt>
+				<title>Latin Josephus</title>
+			</titleStmt>
+			<publicationStmt>
+				<p/>
+			</publicationStmt>
+			<sourceDesc>
+				<listWit>
+					<witness xml:id="FlaviusJosephusAntiquities">Flavius Josephus, Antiquities (Bamberg Msc. Class. 78)</witness>
+					<witness xml:id="BernBBMs50">Bern BB Ms. 50 (Ant. I–XII &amp; Guerre)</witness>
+					<witness xml:id="BernBBMs118">Bern BB Ms. 118 (Ant. I–XII)</witness>
+					<witness xml:id="ChartresBMMs29">Chartres BM Ms. 29 (Ant. I–XII, XVII–XX, &amp; Guerre)</witness>
+					<witness xml:id="ColognyBodmer98">Cologny Bodmer 98 (Ant. I–VI)</witness>
+					<witness xml:id="CopenhagenGKS1572o">Copenhagen GKS 157 2o (Ant. I–XII, XVII–XX)</witness>
+					<witness xml:id="LeidenUBVLF17">Leiden UB VLF 17 (Ant. I–XII, XVII–XX)</witness>
+					<witness xml:id="MilanBACimelioSP">Milan BA Cimelio S.P. 11/1 (Ant. V–X)</witness>
+					<witness xml:id="MonzaBCMsb20">Monza BC Ms. b 20/136 (Ant. I–VI)</witness>
+					<witness xml:id="RomeBAVPalLat814">Rome BAV Pal. Lat. 814 (Ant. I–XII)</witness>
+				</listWit>
+			</sourceDesc>
+		</fileDesc>
+	</teiHeader>
+	<text xml:id="book-01-text">
+		<body>
+			<note>Bamberg Msc. Class. 78</note>
+			<div1 n="I" subtype="Latin" type="book" xml:id="latin-book01">
+				<div2 n="0" type="chapter" xml:id="latin-book01-chapter0">
+					<p><ref target="note_e9dd3996b6b4421398bd6417cbf51300"><pb n="2r"/></ref> INCIP. LIB. ANTIQVITATIS IOSEPHI HISTOGRAFI</p>
+				</div2>
+				<div2 n="1" type="chapter" xml:id="latin-book01-chapter1">
+					<p xml:id="latin-book01-num27"><note source="#BernBBMs50" type="certainty">[5r] (£1) arcam dicit</note><note source="#LeidenUBVLF17" type="uncertainty">[2r](§ annotation illisible en marge à gauche)</note><note source="#MonzaBCMsb20" type="certainty">[¤7v] (£1) de arca dicit</note><num>[I.i.27]</num> In principio creauit deus caelum et terram. Sed dum terra ad aspectum non ueniret, et profunditate tenebris celaretur, et spiritus dei desuper portaretur, deus fieri lumen iussit: <milestone unit="niese" n="28"/>Quo facto, considerans omnem materiam, separauit lumen et tenebras: Et aliae quidem rei nomen inposuit noctem <del hand="orig" rend="strikethrough">et</del> aliud uero uocauit diem uespere et mane appellans initium lucis et requiem. <milestone unit="niese" n="29"/>Et is quidem est primus dies. Moyses autem eum unum dixit. Et licet sufficiam causam huius rei etiam nunc dicere tamen quia pollicitus sum rationem causarum singularum seorsum tradere, et illud tempus ad huius rei interpraetationem me necessarium est differre. <milestone unit="niese" n="30"/>Post hoc secund<add>o</add> die caelum super omnia collocauit [<del>eumque</del>] [<add hand="post" place="interlinear">ipsumque</add>] ab aliis distinguens, in semetipso constitutum esse praecepit: et ei christallum circum figens humidum [id] eum et pluuiale circum ad utilitatem quae fit ex imbribus terrae, congrue fabricatus est. <milestone unit="niese" n="31"/>Tertia uero die statuit terram, circa eam mare diffundens. Ipsa uero die repente uirens herba, et semina de terra sunt orta. Quarta autem die ornauit caelum sole et luna, aliisque sideribus motus ei[<add>s</add>] tribuens atque cursus quibus orarum distinctiones manifeste designarentur. <milestone unit="niese" n="32"/>Quinta die animalia natatilia et uolatilia. Alia quidem in profundo, alia uero in aere constituit: copulans ea ad communionem atque permixtionem causa s<del>o</del>[<add>u</add>]bolis profuturae et ut eorum natura multiplicari potuisset et crescere. Sexta uero die creauit quadrupedium genus masculum faciens atque: feminam: in qua etiam homin[<add>u</add>]em finxit. <milestone unit="niese" n="33"/>Ita ergo mundum cunctis sex diebus et omnia quae in eo sunt, facta moyses ait: septimo die d<del>omin</del>eum ab operibus manuum suarum requieuisse dicens. Unde etiam nos eo die laboribus propriis uacare dinoscimur, eum sabbatum appellantes quod nomen hebraica lingua requiem significat.</p>
+					<p xml:id="latin-book01-num34"><note source="#BernBBMs118" type="certainty">[¤2v] (§) dicit (@1) issa (#2 nota NT)</note><note source="#RomeBAVPalLat814">[¤2r](¬1)mulier</note><num>[I.ii.34]</num> Post septima<del>m</del> uero die<del>m</del> coepit de hominis natura moyses reddere rationem ita dicens: [<add>F</add>]inxit deus hominem puluerem de terra sumens et in eum spiritum inspirauit et animam. Hic autem homo adam uocatus est: quod nomen hebraica lingua significat rubeus: quem&lt;<del><ref target="note_837e454f963d4cd5b8428a0b985d64a8 note_1848bd9ae426435f94ce4bf1ed09c961">.</ref><ref target="note_837e454f963d4cd5b8428a0b985d64a8 note_1848bd9ae426435f94ce4bf1ed09c961 note_5e738419cb1e4ad3a8b566ed1ed83808">.</ref><ref target="note_837e454f963d4cd5b8428a0b985d64a8 note_1848bd9ae426435f94ce4bf1ed09c961">.</ref></del>&gt; consparsa rubea terra factus est. Talis est enim uirgo tellus et uera. <milestone unit="niese" n="35"/>Praesentauit autem deus adȩ animalia secundum genus femina<del>inum</del> masculumque: demonstrans et his nomina[<add>tim</add>] <del>in</del>posuit quibus etiam nunc uocantur. Videns autem deus Adam non habentem societatem ad feminam neque: cohabitationem cum utique non esset delectatus autem in aliis animalibus quae copulata uidebantur, una die eo dormiente auferens costam eius finxit ei mulierem: <milestone unit="niese" n="36"/>et Adam sibi iunctam cognouit de se fuisse plasmatam. Issa uero hebraica lingua mulier appellatur. Nomen uero mulieris illius erat eua: quod significat omnium uiuentium matrem.</p>
+					
+					
+				</div2>
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				<trailer xml:id="latin-1-trailer">[FLAVII IOSEPPI ANTIQUITATIS IUDAICAE]EXPLICIT LIBER PRIMUS</trailer>
+			</div1>
+		</body>
+	</text>
+	<standOff xml:id="annotations">
+		<listApp>
+			<app>
+				<rdg source="#latin-book01-num27">[I.i.27] In principio creauit ...</rdg>
+				<rdg source="#BernBBMs118">[¤2r] (@1 correction avec signe) lucem</rdg>
+			</app>
+			<app>
+				<rdg source="#latin-book01-num34">[I.ii.34] Post septimam uero ...</rdg>
+				<rdg source="#BernBBMs118">[¤2v] (§) dicit (@1) issa (#2 nota NT)</rdg>
+				<rdg source="#RomeBAVPalLat814">[¤2r](¬1)mulier</rdg>
+			</app>
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+		</listApp>
+	</standOff>
+</TEI>

@@ -1,0 +1,381 @@
+{
+  "schema": 1,
+  "book": "preface",
+  "range": [
+    1,
+    26
+  ],
+  "label": "Proem (Antiquities I.1–26)",
+  "suppressedLatinLabels": [],
+  "relatedPassage": {
+    "book": 1,
+    "niese": 27,
+    "label": "Begin Book I narrative at I.27"
+  },
+  "sections": [
+    {
+      "number": 1,
+      "Latin": {
+        "available": true,
+        "correspondence": "PRESENT",
+        "note": null
+      },
+      "contextTarget": "latin-preface-num1",
+      "English": {
+        "contextTargets": [
+          "english-preface-num1"
+        ]
+      }
+    },
+    {
+      "number": 2,
+      "Latin": {
+        "available": true,
+        "correspondence": "PRESENT",
+        "note": null
+      },
+      "contextTarget": "latin-preface-num1",
+      "English": {
+        "contextTargets": [
+          "english-preface-num1"
+        ]
+      }
+    },
+    {
+      "number": 3,
+      "Latin": {
+        "available": true,
+        "correspondence": "PRESENT",
+        "note": null
+      },
+      "contextTarget": "latin-preface-num1",
+      "English": {
+        "contextTargets": [
+          "english-preface-num1"
+        ]
+      }
+    },
+    {
+      "number": 4,
+      "Latin": {
+        "available": true,
+        "correspondence": "PRESENT",
+        "note": null
+      },
+      "contextTarget": "latin-preface-num1",
+      "English": {
+        "contextTargets": [
+          "english-preface-num1"
+        ]
+      }
+    },
+    {
+      "number": 5,
+      "Latin": {
+        "available": true,
+        "correspondence": "PRESENT",
+        "note": null
+      },
+      "contextTarget": "latin-preface-num5",
+      "English": {
+        "contextTargets": [
+          "english-preface-num5"
+        ]
+      }
+    },
+    {
+      "number": 6,
+      "Latin": {
+        "available": true,
+        "correspondence": "PRESENT",
+        "note": null
+      },
+      "contextTarget": "latin-preface-num5",
+      "English": {
+        "contextTargets": [
+          "english-preface-num5"
+        ]
+      }
+    },
+    {
+      "number": 7,
+      "Latin": {
+        "available": true,
+        "correspondence": "PRESENT",
+        "note": null
+      },
+      "contextTarget": "latin-preface-num5",
+      "English": {
+        "contextTargets": [
+          "english-preface-num5"
+        ]
+      }
+    },
+    {
+      "number": 8,
+      "Latin": {
+        "available": true,
+        "correspondence": "PRESENT",
+        "note": null
+      },
+      "contextTarget": "latin-preface-num5",
+      "English": {
+        "contextTargets": [
+          "english-preface-num5"
+        ]
+      }
+    },
+    {
+      "number": 9,
+      "Latin": {
+        "available": true,
+        "correspondence": "PRESENT",
+        "note": null
+      },
+      "contextTarget": "latin-preface-num5",
+      "English": {
+        "contextTargets": [
+          "english-preface-num5"
+        ]
+      }
+    },
+    {
+      "number": 10,
+      "Latin": {
+        "available": true,
+        "correspondence": "PRESENT",
+        "note": null
+      },
+      "contextTarget": "latin-preface-num10",
+      "English": {
+        "contextTargets": [
+          "english-preface-num10"
+        ]
+      }
+    },
+    {
+      "number": 11,
+      "Latin": {
+        "available": true,
+        "correspondence": "PRESENT",
+        "note": null
+      },
+      "contextTarget": "latin-preface-num10",
+      "English": {
+        "contextTargets": [
+          "english-preface-num10"
+        ]
+      }
+    },
+    {
+      "number": 12,
+      "Latin": {
+        "available": true,
+        "correspondence": "PRESENT",
+        "note": null
+      },
+      "contextTarget": "latin-preface-num10",
+      "English": {
+        "contextTargets": [
+          "english-preface-num10"
+        ]
+      }
+    },
+    {
+      "number": 13,
+      "Latin": {
+        "available": true,
+        "correspondence": "PRESENT",
+        "note": null
+      },
+      "contextTarget": "latin-preface-num10",
+      "English": {
+        "contextTargets": [
+          "english-preface-num10"
+        ]
+      }
+    },
+    {
+      "number": 14,
+      "Latin": {
+        "available": true,
+        "correspondence": "PRESENT",
+        "note": null
+      },
+      "contextTarget": "latin-preface-num10",
+      "English": {
+        "contextTargets": [
+          "english-preface-num10"
+        ]
+      }
+    },
+    {
+      "number": 15,
+      "Latin": {
+        "available": true,
+        "correspondence": "PRESENT",
+        "note": null
+      },
+      "contextTarget": "latin-preface-num10",
+      "English": {
+        "contextTargets": [
+          "english-preface-num10"
+        ]
+      }
+    },
+    {
+      "number": 16,
+      "Latin": {
+        "available": true,
+        "correspondence": "PRESENT",
+        "note": null
+      },
+      "contextTarget": "latin-preface-num10",
+      "English": {
+        "contextTargets": [
+          "english-preface-num10"
+        ]
+      }
+    },
+    {
+      "number": 17,
+      "Latin": {
+        "available": true,
+        "correspondence": "PRESENT",
+        "note": null
+      },
+      "contextTarget": "latin-preface-num10",
+      "English": {
+        "contextTargets": [
+          "english-preface-num10"
+        ]
+      }
+    },
+    {
+      "number": 18,
+      "Latin": {
+        "available": true,
+        "correspondence": "PRESENT",
+        "note": null
+      },
+      "contextTarget": "latin-preface-num18",
+      "English": {
+        "contextTargets": [
+          "english-preface-num18"
+        ]
+      }
+    },
+    {
+      "number": 19,
+      "Latin": {
+        "available": true,
+        "correspondence": "PRESENT",
+        "note": null
+      },
+      "contextTarget": "latin-preface-num18",
+      "English": {
+        "contextTargets": [
+          "english-preface-num18"
+        ]
+      }
+    },
+    {
+      "number": 20,
+      "Latin": {
+        "available": true,
+        "correspondence": "PRESENT",
+        "note": null
+      },
+      "contextTarget": "latin-preface-num18",
+      "English": {
+        "contextTargets": [
+          "english-preface-num18"
+        ]
+      }
+    },
+    {
+      "number": 21,
+      "Latin": {
+        "available": true,
+        "correspondence": "PRESENT",
+        "note": null
+      },
+      "contextTarget": "latin-preface-num18",
+      "English": {
+        "contextTargets": [
+          "english-preface-num18"
+        ]
+      }
+    },
+    {
+      "number": 22,
+      "Latin": {
+        "available": true,
+        "correspondence": "PRESENT",
+        "note": null
+      },
+      "contextTarget": "latin-preface-num18",
+      "English": {
+        "contextTargets": [
+          "english-preface-num18"
+        ]
+      }
+    },
+    {
+      "number": 23,
+      "Latin": {
+        "available": true,
+        "correspondence": "PRESENT",
+        "note": null
+      },
+      "contextTarget": "latin-preface-num18",
+      "English": {
+        "contextTargets": [
+          "english-preface-num18"
+        ]
+      }
+    },
+    {
+      "number": 24,
+      "Latin": {
+        "available": true,
+        "correspondence": "PRESENT",
+        "note": null
+      },
+      "contextTarget": "latin-preface-num18",
+      "English": {
+        "contextTargets": [
+          "english-preface-num18"
+        ]
+      }
+    },
+    {
+      "number": 25,
+      "Latin": {
+        "available": true,
+        "correspondence": "PRESENT",
+        "note": "The future-treatise promise is not independently identifiable in the present Bamberg transcription. The surviving opening “Quod ego nunc quidem” is retained."
+      },
+      "contextTarget": "latin-preface-num18",
+      "English": {
+        "contextTargets": [
+          "english-preface-num18"
+        ]
+      }
+    },
+    {
+      "number": 26,
+      "Latin": {
+        "available": true,
+        "correspondence": "PRESENT",
+        "note": "The present Bamberg transcription has no separately identifiable equivalent of the Greek opening verb or final transition formula; its surviving narrative text is retained."
+      },
+      "contextTarget": "latin-preface-num18",
+      "English": {
+        "contextTargets": [
+          "english-preface-num18"
+        ]
+      }
+    }
+  ]
+}

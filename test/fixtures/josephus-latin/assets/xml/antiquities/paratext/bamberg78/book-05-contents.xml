@@ -1,0 +1,48 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0">
+  <teiHeader>
+    <fileDesc>
+      <titleStmt>
+        <title>Bamberg Msc.Class.78 Antiquities 5: source capitula</title>
+        <respStmt xml:id="human-editor">
+          <resp>Transcription and import authority</resp>
+          <name>Richard M. Pollard; source import documented in the review packet</name>
+        </respStmt>
+      </titleStmt>
+      <publicationStmt>
+        <p>LatinJosephus source paratext; working integration, 2026-10-08.</p>
+      </publicationStmt>
+      <sourceDesc>
+        <listBibl>
+          <bibl xml:id="bamberg78">Bamberg, Staatsbibliothek, Msc.Class.78<ref target="https://www.digitale-sammlungen.de/en/view/bsb00140762?page=104">[Image 104, f. 50v, col. B, original text: https://www.digitale-sammlungen.de/en/view/bsb00140762?page=104] </ref></bibl>
+          <bibl xml:id="word-transcription">Bamberg Msc. Class. 78 - TOC - bks. 2, 3, 4, 5.docx; human-edited working transcription supplied 8 October 2026. SHA-256 2726e418ce518f964261a98d02e9a94b736a4f584208b6844d606e012eb683c9</bibl>
+          <bibl xml:id="blatt">Franz Blatt, ed., The Latin Josephus (Aarhus, 1958), Antiquities I–V. Citation as recorded in the project’s _pages/about.md. Identified by the human editor as the source of italicized supplements; precise supplement page references were not supplied.</bibl>
+        </listBibl>
+      </sourceDesc>
+    </fileDesc>
+  </teiHeader>
+  <text>
+    <body>
+      <div type="contents" subtype="main-text-capitula" source="#bamberg78 #word-transcription" xml:id="bamberg78-ant-05-contents">
+        <head>HAEC INSUNT IN QUINTO 
+LIBRO IOSEPPI HISTORIARUM
+IUDAICAE ANTIQUITATIS</head>
+        <list type="capitula">
+          <item n="I">I Quomodo ihesus dux hebraeorum dum pugnasset contra chananeos et defecisset eos alios quidem interfecit terram uero per sortes tribubus est partitus.</item>
+          <item n="II">II Quomodo morientes duae transcendentes israhelitae parias leges ad grandes aerumnas adducti et seditione a finibus beniamin interempta sit praeter sexcentos uiros.</item>
+          <item n="III">III Quomodo post hanc afflictionem impiae gentes deus in seruitutem dedit assyriorum.</item>
+          <item n="IIII">IIII Quem ammodum ei libertas per cene seniheli filium sit collata principante annis quadraginta qui apud graecos et phynicas dicitur iudex.</item>
+          <item n="V">V Quia rursus populus noster annis et octo seruierint moabitis et a quodam hiud nomine seruitute priuatus sit eo principatum annis octoginta detinentes.</item>
+          <item n="VI">VI Quomodo chananaeis eos in seruitutem redigentibus per annos uiginti liberati sint per barachum et debbora qui eorum principes fuerunt annis quadraginta.</item>
+          <item n="VII">VII Quia pugnantes a malechitae contra israhelitas uicerunt eorumque prouinciam afflixerunt annis septem.</item>
+          <item n="VIII">VIII Quomodo eos a\b/ malechitis liberauerit gedeon et supra populum fuerit annis quadraginta.</item>
+          <item n="VIIII">VIIII Qui\a/ post eum multi successores cum gentibus in circuitu positis plurimo tempore pugnauerunt.</item>
+          <item n="X">X Fortitudo samson et quantorum malorum auctor fuerit palestinis.</item>
+          <item n="XI">XI Quomodo filii heli sacerdotis in pugna contra palestinos occisi sint.</item>
+          <item n="XII">XII Quomodo pater eorum audiens calamitatem factam proiciens semetipsum de sella defunctus est.</item>
+          <item n="XIII">XIII Quomodo hoc bello palestini uincentes hebreos etiam arcam eorum abstulere captiuam</item>
+        </list>
+      </div>
+    </body>
+  </text>
+</TEI>

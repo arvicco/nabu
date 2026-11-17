@@ -246,6 +246,10 @@ module Nabu
           "jaschke-1881" => :structured, # P152: the 1881 London edition year on every page
           #                                (the reference-shelf mold; the imprint rides
           #                                "imprint" — the printing place, no place claim)
+          "josephus-latin" => :structured, # the LATIN version's era per work (De excidio c. 370,
+          #                                  Bellum c. 400, Antiquities/Apion mid-6th c. — the
+          #                                  project's own datings), class composition; the Greek
+          #                                  originals ride metadata "original", undated; no place
           "ja-wikisource" => :header_year_or_era_band, # the page {{header}} year= (the work's
           #                                               own year, composition class) else the
           #                                               era-category band (precision era)

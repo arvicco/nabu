@@ -69,6 +69,17 @@ sources:
   digiliblt:
     # The corpus is defined as "testi latini tardoantichi" — certain.
     lat: { lect: "lat:late", tier: certain }
+  josephus-latin:
+    # The late-antique Latin Josephus: upstream's own datings place every
+    # held version inside the registry's lat:late band [200, 600] — De
+    # excidio c. 370, the literal Bellum c. 400, the Cassiodoran Antiquities
+    # and Contra Apionem mid-6th century (latinjosephus.org Background).
+    # Transcription onto an existing node, tier certain (the digiliblt
+    # shape). The witnesses' spelling is younger — the Antiquities is a
+    # Carolingian manuscript (Bamberg, s. IX med.), the Bellum Cardwell's
+    # 1837 print — but the stage is the language of the translations;
+    # no lat/ecc register claim is made.
+    lat: { lect: "lat:late", tier: certain }
   vedaweb:
     # The corpus IS the Rigveda — Vedic Sanskrit by definition (the D57-f
     # certain class; the same claim the dcs "rv" facet rule makes per text).
