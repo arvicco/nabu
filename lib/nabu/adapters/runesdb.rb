@@ -159,7 +159,10 @@ module Nabu
                  "21788307, v1.0.0, 2026-08-01) and every file's <availability> (\"CC BY-SA 4.0 - " \
                  "Attribution-ShareAlike 4.0 International\"). Cite: Göttingen Academy of Sciences " \
                  "and Humanities in Lower Saxony, Project Runic writing in the Germanic languages " \
-                 "(RuneS), RuneSDB.de inscription data, doi:10.5281/zenodo.21788307",
+                 "(RuneS), RuneSDB.de inscription data, doi:10.5281/zenodo.21788307. The " \
+                 "Scandinavian English translations descend from the Samnordisk " \
+                 "runtextdatabas/Rundata, Uppsala, under the Open Database License (ODbL) — " \
+                 "credit Rundata for that layer",
         license_class: "attribution",
         upstream_url: RECORD_URL,
         parser_family: "runesdb-tei"
