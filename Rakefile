@@ -8,6 +8,10 @@ $stdout.sync = true
 
 require "rake/testtask"
 
+# Keep every task's `desc` on the task object (rake records them only under
+# -T/-D otherwise): `reconstruction:book` lists the tools:* tasks with them.
+Rake::TaskManager.record_task_metadata = true
+
 # `rake test` runs the suite across worker processes (test/parallel/runner.rb:
 # N = Etc.nprocessors, NABU_TEST_WORKERS overrides) and prints ONE merged
 # Minitest-shaped report. The single-process path stays: `rake test TEST=path`
@@ -1148,5 +1152,24 @@ namespace :reconstruction do
     config = Nabu::Config.load
     source_class = Nabu::Ops::Reconstruction::SourceClass
     print source_class.render(source_class.from_config(config).census, local_dir: config.local_dir)
+  end
+
+  # The Reconstruction Book (Nabu::Ops::Reconstruction::Book): reads the
+  # instance (grants, the canonical/ attic) through Nabu::Config — so run it
+  # on the reference instance — and writes docs/reconstruction.md into this
+  # checkout. Byte-freshness rides the gate ritual, like site:refresh; the
+  # suite guards shape and coverage only.
+  desc "Regenerate docs/reconstruction.md (the Reconstruction Book) on the reference instance — a gate step"
+  task :book do
+    $LOAD_PATH.unshift(File.expand_path("lib", __dir__))
+    require "nabu"
+    require "nabu/ops/reconstruction/book"
+
+    tool_tasks = Rake::Task.tasks.select { |task| task.name.start_with?("tools:") }
+    tool_tasks = tool_tasks.map { |task| [task.name_with_args, task.comment] }
+    book = Nabu::Ops::Reconstruction::Book.from_config(Nabu::Config.load, tool_tasks: tool_tasks)
+    path = File.join(__dir__, Nabu::Ops::Reconstruction::Book::OUTPUT_FILE)
+    File.write(path, book.render)
+    puts "wrote #{path}"
   end
 end
