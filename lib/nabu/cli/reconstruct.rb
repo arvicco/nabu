@@ -3,6 +3,7 @@
 require "yaml"
 require_relative "../ops/reconstruction/plan"
 require_relative "../ops/reconstruction/verify"
+require_relative "../ops/reconstruction/backup_set"
 
 # Nabu::CLI — the `nabu reconstruct` subcommand family (ReconstructCLI).
 # Carved out of lib/nabu/cli.rb, the registry that loads it.
@@ -39,6 +40,33 @@ module Nabu
         local_dir: config.local_dir, mined_layers: Nabu::Store::MinedLinks.layers_at(config.mined_links_path)
       ).build
       say Nabu::Ops::Reconstruction::Plan.render(report)
+    ensure
+      ledger&.disconnect
+    end
+
+    desc "backupset", "The combined path: the computed set to back up, with the re-sync remainder summed"
+    long_desc <<~HELP, wrap: false
+      Between a full backup and the bare-clone rebuild sits the practical
+      strategy: back up only what is expensive or impossible to re-acquire —
+      local/ (the instance), the vectors enrichment, every paced-rail tree,
+      every tree whose last re-sync measured at/past the threshold, and the
+      attic subtrees of everything else — and re-sync the rest from
+      upstream. Prints the set with reasons and sizes, the remainder's
+      summed measured compute, and the restore order. Read-only.
+    HELP
+    option :threshold, type: :numeric, default: 30,
+                       desc: "minutes of last-sync time that put a tree in the set"
+    option :sizes, type: :boolean, default: true, desc: "size each entry with du (skip for an instant card)"
+    def backupset
+      config = Nabu::Config.load
+      ledger = open_readonly(config.history_path)
+      classes = Nabu::Ops::Reconstruction::SourceClass.from_config(config)
+      result = Nabu::Ops::Reconstruction::BackupSet.new(
+        registry: Nabu::SourceRegistry.load(config.sources_path), verdicts: classes.verdicts, ledger: ledger,
+        canonical_dir: config.canonical_dir, local_dir: config.local_dir, vectors_path: config.vectors_path,
+        threshold: (options[:threshold] * 60).to_i, sizes: options[:sizes]
+      ).build
+      say Nabu::Ops::Reconstruction::BackupSet.render(result)
     ensure
       ledger&.disconnect
     end

@@ -31,7 +31,8 @@ class ReconstructionBookTest < Minitest::Test
     "## 3 · The sources, by how they come back",
     "## 4 · Derivation",
     "## 5 · Enrichments",
-    "## 6 · Verification"
+    "## 6 · Verification",
+    "## 7 · The combined path"
   ].freeze
 
   def registry
@@ -211,6 +212,18 @@ class ReconstructionBookTest < Minitest::Test
     assert_includes verification, census.fetch("as_of")
     assert_includes verification, "reconstruct verify", "the verification section names the probe card"
     assert_includes verification, "reconstruct plan", "and the plan card"
+  end
+
+  def test_combined_path_teaches_the_strategy_and_points_at_the_card
+    combined = section(committed, SECTIONS[6])
+    assert_includes combined, "reconstruct backupset"
+    assert_includes combined, "`local/` whole"
+    assert_includes combined, "paced-rail trees"
+    assert_includes combined, ".attic/"
+    assert_includes combined, "Restore order:"
+    minutes = Nabu::Ops::Reconstruction::BackupSet::HUGE_SYNC_SECONDS / 60
+    assert_includes combined, "at or past #{minutes} minutes", "the threshold prose tracks the constant"
+    refute_match(/`[a-z0-9-]+-[a-z0-9-]+`,/, combined, "no source inventory creeps into the strategy section")
   end
 
   def test_manual_class_links_each_recipe

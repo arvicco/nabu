@@ -2,6 +2,7 @@
 
 require "yaml"
 require_relative "source_class"
+require_relative "backup_set"
 require_relative "../../axis_registry"
 
 module Nabu
@@ -96,7 +97,7 @@ module Nabu
 
         def render
           parts = [GENERATED_NOTE, "", "# Reconstruction Book", "", *intro, "", *prerequisites, "", *sisters, "",
-                   *sources, "", *derivation, "", *enrichments, "", *verification, "",
+                   *sources, "", *derivation, "", *enrichments, "", *verification, "", *combined_path, "",
                    "Instance-specific steps (credentials, correspondence with sources) live outside the public " \
                    "tree."]
           "#{parts.join("\n")}\n"
@@ -276,6 +277,30 @@ module Nabu
                      "#{code(layer['home'])} |"
           end
           lines
+        end
+
+        # The combined path (owner ruling 2026-11-17): the book TEACHES the
+        # strategy and the card COMPUTES the live set — per-source lists
+        # stay out (the no-inventory rule), and the threshold prose stays
+        # single-sourced on the BackupSet constant.
+        def combined_path
+          minutes = BackupSet::HUGE_SYNC_SECONDS / 60
+          ["## 7 · The combined path", "",
+           "A full reconstruction is the honest worst case; a full backup is the fastest restore. Between " \
+           "them sits the practical strategy: back up only what is expensive or impossible to re-acquire, " \
+           "and re-sync everything else from upstream with the commands of section 3. The set — computed " \
+           "from the instance's own records by `bin/nabu reconstruct backupset`, with sizes, reasons and " \
+           "the re-sync remainder — holds:", "",
+           "- `local/` whole — the instance: rulings, grants, the shelves, the ledger and the mined layers " \
+           "(nothing upstream serves them);",
+           "- `db/vectors.sqlite3` — the time-heavy semantic-vector enrichment (the cost law's documented " \
+           "exception living in `db/`);",
+           "- the paced-rail trees — months-class to re-crawl politely;",
+           "- every tree whose last re-sync measured at or past #{minutes} minutes — re-syncable, but worth " \
+           "carrying;",
+           "- the `.attic/` subtrees of everything else — upstream-deleted bytes no re-fetch restores.", "",
+           "Restore order: the set first, then clone and tools (section 1), then enable and sync the " \
+           "remainder (section 3), then the rebuild (section 4), then `bin/nabu reconstruct verify`."]
         end
 
         def verification
