@@ -105,7 +105,7 @@ class ReconstructionBookTest < Minitest::Test
       SourceClass.new(sources_path: SOURCES_PATH, manual_dir: File.join(ROOT, "docs", "manual"),
                       grants_path: File.join(tmp, "grants.yml"), canonical_dir: File.join(tmp, "canonical"))
                  .verdicts.select { |verdict| %i[manual rail_paced restricted].include?(verdict.klass) }
-                 .map(&:slug).select { |slug| registry[slug].public? }.sort
+                          .map(&:slug).select { |slug| registry[slug].public? }.sort
     end
   end
 
@@ -134,8 +134,10 @@ class ReconstructionBookTest < Minitest::Test
     refute_empty axes
     axes.each { |name| assert_includes stable, "[`#{name}`](axes.md##{name})" }
     slugs = stable.scan(/`([a-z0-9][a-z0-9-]*)`/).flatten - axes - %w[core signs public_stable]
-    stray = slugs.select { |slug| registry[slug] && !(registry[slug].blocked? || registry[slug].grant_required? ||
-                                                     registry[slug].credentials) }
+    stray = slugs.select do |slug|
+      registry[slug] && !(registry[slug].blocked? || registry[slug].grant_required? ||
+                                             registry[slug].credentials)
+    end
     assert_empty stray, "the public_stable section lists ungated sources instead of the command path: #{stray}"
   end
 

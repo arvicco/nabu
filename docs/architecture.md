@@ -62,6 +62,9 @@ nabu/
 │   └── *.rb                     # normalization, fetch arms, gateways, runners (flat files)
 ├── config/
 │   ├── sources.yml              # registry: adapter class, upstream, license, wired, translations opt-in
+│   ├── capabilities.yml         # capability registry: every CLI/MCP/skill/site capability → the data
+│   │                            #   layers it reads → each layer's producer and cost class
+│   │                            #   (suite-guarded complete: test/capability_registry_test.rb)
 │   └── nabu.yml               # paths, models, API settings
 ├── canonical/                   # the asset — a plain directory, NOT itself a git repo:
 │   ├── perseus-greek/           #   one clone/tree per source (git clones carry their own .git)
