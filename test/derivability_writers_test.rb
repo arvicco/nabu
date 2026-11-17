@@ -287,8 +287,15 @@ class DerivabilityWritersTest < Minitest::Test
   # the tick age the forked watcher reads), removed when the supervised
   # command ends, plus its lines into a caller-named log file when one is
   # given (the suite) — run-scoped scratch, never persistent state.
+  # ops/reconstruction/manifest writes ONE file, the portable reference
+  # manifest, only to a caller-named path (--out, or the export
+  # destination beside the materialized backup set) — an EXPORT, derived
+  # on demand from the catalog + source_stats + the backup-set digests,
+  # never written into db/, local/ or canonical/ and never read back as
+  # state by this box (the receiving box's verify/check consume it).
   WRITER_ALLOWLIST = %w[
     nabu/index_watcher.rb
+    nabu/ops/reconstruction/manifest.rb
     nabu/demo_build.rb
     nabu/adapters/hmml_reading_room.rb
     nabu/adapters/dprr.rb nabu/adapters/pna.rb
