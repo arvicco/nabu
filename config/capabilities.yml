@@ -142,6 +142,10 @@ capabilities:
     desc: build the publishable nabu-data datasets
     surfaces: {cli: [data list, data build]}
     layers: [catalog, passage_lemmas, dictionaries, language_dossiers]
+  reconstruction:
+    desc: the bare-clone bootstrap plan with measured estimates, and the probe battery against the published census
+    surfaces: {cli: [reconstruct plan, reconstruct verify]}
+    layers: [catalog, passages_fts, ledger, mined_links, site_data, project_config, instance_config, canonical]
   mcp_server:
     desc: serve the read-only tool set to an AI client over MCP
     surfaces: {cli: [mcp]}
@@ -266,7 +270,7 @@ layers:
     producer: rebuild
     cost: derived
   reflex_closure:
-    home: db/fulltext.sqlite3 (reflex_roots_index, reflex_root_stats)
+    home: db/fulltext.sqlite3 (reflex_roots, reflex_root_stats)
     producer: rebuild
     cost: derived
 
