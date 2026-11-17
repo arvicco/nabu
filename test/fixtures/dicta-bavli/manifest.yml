@@ -1,0 +1,48 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# Leading-lines trims of the Dicta Talmud-Bavli-with-Nikud repo's tractate
+# files (both spellings, line-aligned), plus the Berakhot corrections .docx
+# whole. adapter_test stays null (trimmed files).
+source: dicta-bavli
+adapter_test:
+retrieved: '2026-11-16'
+files:
+- path: Berakhot/ברכות.combinedfullhaser.txt
+  url: https://raw.githubusercontent.com/Dicta-Israel-Center-for-Text-Analysis/Talmud-Bavli-with-Nikud/master/Berakhot/%D7%91%D7%A8%D7%9B%D7%95%D7%AA.combinedfullhaser.txt
+  whole: false
+  trim: 'leading 28 lines: the opening blank, then dapim 2a, 2b, 3a whole (header
+    + paragraph lines byte-identical)'
+- path: Berakhot/ברכות.combinedfullmaleh.txt
+  url: https://raw.githubusercontent.com/Dicta-Israel-Center-for-Text-Analysis/Talmud-Bavli-with-Nikud/master/Berakhot/%D7%91%D7%A8%D7%9B%D7%95%D7%AA.combinedfullmaleh.txt
+  whole: false
+  trim: 'leading 28 lines: the opening blank, then dapim 2a, 2b, 3a whole (header
+    + paragraph lines byte-identical)'
+- path: Berakhot/תיקונים - מסכת ברכות.docx
+  url: https://raw.githubusercontent.com/Dicta-Israel-Center-for-Text-Analysis/Talmud-Bavli-with-Nikud/master/Berakhot/%D7%AA%D7%99%D7%A7%D7%95%D7%A0%D7%99%D7%9D%20-%20%D7%9E%D7%A1%D7%9B%D7%AA%20%D7%91%D7%A8%D7%9B%D7%95%D7%AA.docx
+  whole: true
+  trim: none (binary Word file, the rejected-grain specimen)
+- path: Meila/מעילה.combinedfullhaser.txt
+  url: https://raw.githubusercontent.com/Dicta-Israel-Center-for-Text-Analysis/Talmud-Bavli-with-Nikud/master/Meila/%D7%9E%D7%A2%D7%99%D7%9C%D7%94.combinedfullhaser.txt
+  whole: false
+  trim: 'leading 18 lines: daf 2a whole'
+- path: Meila/מעילה.combinedfullmaleh.txt
+  url: https://raw.githubusercontent.com/Dicta-Israel-Center-for-Text-Analysis/Talmud-Bavli-with-Nikud/master/Meila/%D7%9E%D7%A2%D7%99%D7%9C%D7%94.combinedfullmaleh.txt
+  whole: false
+  trim: 'leading 18 lines: daf 2a whole'
+- path: Meilah/מעילה.combinedfullhaser.txt
+  url: https://raw.githubusercontent.com/Dicta-Israel-Center-for-Text-Analysis/Talmud-Bavli-with-Nikud/master/Meilah/%D7%9E%D7%A2%D7%99%D7%9C%D7%94.combinedfullhaser.txt
+  whole: false
+  trim: 'leading 18 lines: daf 2a whole'
+- path: Meilah/מעילה.combinedfullmaleh.txt
+  url: https://raw.githubusercontent.com/Dicta-Israel-Center-for-Text-Analysis/Talmud-Bavli-with-Nikud/master/Meilah/%D7%9E%D7%A2%D7%99%D7%9C%D7%94.combinedfullmaleh.txt
+  whole: false
+  trim: 'leading 18 lines: daf 2a whole'
+- path: Tamid/תמיד.combinedfullhaser.txt
+  url: https://raw.githubusercontent.com/Dicta-Israel-Center-for-Text-Analysis/Talmud-Bavli-with-Nikud/master/Tamid/%D7%AA%D7%9E%D7%99%D7%93.combinedfullhaser.txt
+  whole: false
+  trim: 'leading 20 lines: dapim 25a and 26a whole (upstream''s own first two headers)'
+- path: Tamid/תמיד.combinedfullmaleh.txt
+  url: https://raw.githubusercontent.com/Dicta-Israel-Center-for-Text-Analysis/Talmud-Bavli-with-Nikud/master/Tamid/%D7%AA%D7%9E%D7%99%D7%93.combinedfullmaleh.txt
+  whole: false
+  trim: 'leading 20 lines: dapim 25a and 26a whole (upstream''s own first two headers)'

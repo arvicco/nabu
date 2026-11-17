@@ -647,3 +647,71 @@ Attribution-ShareAlike 4.0 International. The complete license text is
 available at: http://creativecommons.org/licenses/by-sa/4.0/legalcode";
 README machine-readable metadata — "License: CC BY-SA 4.0", "Includes
 text: yes" → the per-document attribution override.
+
+## The UD v2.19 bundle (retrieved 2026-11-16)
+
+Six treebanks, each an "Initial release in Universal Dependencies" at
+v2.19 (released 2026-11-15). Cut from the **r2.19 tag** of each repo
+(`raw.githubusercontent.com/UniversalDependencies/<repo>/r2.19/<file>`),
+not master; block heads byte-verbatim (the house trim procedure above).
+Each `<dir>/README.md` is the machine-readable metadata block only (the
+2026-10-19 recipe). Counts are stats.xml at the tag, re-censused on the
+file itself.
+
+| Dir / file | Repo (tag commit) | Upstream | Fixture |
+|---|---|---|---|
+| `old-georgian-oglauro/oge_oglauro-ud-test-head20.conllu` | `UD_Old_Georgian-OGLauRo` (1706d607) | 652 blocks, 11,817 words, 403 MWT; 1,311,061 B, sha256 `6a2d3611…bb85e42` | first 20 blocks, 48,301 B |
+| `old-georgian-midglauro/oge_midglauro-ud-test-head20.conllu` | `UD_Old_Georgian-MidGLauRo` (eb5921cf) | 422 blocks, 6,384 words, 441 MWT; 709,628 B, sha256 `2fa8e913…22f41a` | first 20 blocks, 27,263 B |
+| `pali-palicanon/pi_palicanon-ud-test-head20.conllu` | `UD_Pali-PaliCanon` (35bba879) | 225 blocks, 2,051 words, 274 MWT; 178,301 B, sha256 `00a33fba…1adca9` | first 20 blocks, 17,683 B |
+| `tangut-mica/txg_mica-ud-test-head20.conllu` | `UD_Tangut-MiCA` (6ce941f3) | 503 blocks, 13,868 words, no MWT; 1,434,953 B, sha256 `6a308567…7f22a` | first 20 blocks, 68,927 B |
+| `old-occitan-cronoc/pro_cronoc-ud-test-head20.conllu` | `UD_Old_Occitan-CronOc` (879d1712) | test 452 blocks / 10,001 words / 90 MWT (train 1,229, dev 167; 1,848 total); test 547,713 B, sha256 `3403e8be…3cf` | first 20 test blocks, 23,582 B |
+| `avestan-old/ae_old-ud-test.conllu` | `UD_Avestan-Old` (7d3d23c7) | 24 blocks, 317 words, no MWT; 35,452 B, sha256 `a13cd265…aafeaee` | WHOLE file |
+
+- **OGLauRo** (Chia-Wei Lin, Diego Luinetti): the Book of Ezra in the
+  Oshki Bible (TITUS text); LLM-drafted, manually corrected annotation
+  (README). Opens `Ezra_1_1`; `# parallel_id` (bible/ezra-…) on 320
+  blocks and one block (in the head-20) carrying `# gk_text`/`# arm_text`
+  Septuagint/Armenian parallels — neither on the ConlluParser whitelist.
+  Genre `bible`. Language `oge`.
+- **MidGLauRo** (same team and workflow): Amirandarejaniani V (12th c.)
+  and Rusudaniani III (17th c.), GNC text — Middle Georgian under UD's
+  `oge` prefix. Opens `amirandarejaniani_5_1`. Genre `fiction`.
+- **PaliCanon** (Lin, Singh, Khemarato Bhikkhu): DN 14 (Mahāpadānasutta),
+  PD Mahāsaṅgīti edition, IAST, punctuation stripped; SuttaCentral
+  segment ids + `# gretil_sent_id`. The README prose says "222
+  sentences" — the file holds 225 (upstream's own lag). Genre
+  `nonfiction`. UD `pi` → library `pli`.
+- **MiCA** (Hua, Lin, Zheng, Ji, Zhang, Jiang, Zeldes): Lotus Sūtra
+  ch. 25 and Avataṃsaka vol. 77 in Unicode Tangut; `# text_lzh` (the
+  Chinese source line, not whitelisted) and `# text_en` (rides
+  "translations") per block; MISC Gloss=/LTranslit=. Genre `nonfiction
+  poetry`. Language `txg`.
+- **CronOc** (Natasha Romanova, Rayan Ziane; CRISCO Caen): the
+  late-13th-c. Old Languedocian Roman de Lagrasse, BL Add. 21218 via the
+  COMETA transcription; MISC `wordform=` (and, outside the head-20,
+  `original=` on 17 test-split tokens — the editors' manuscript
+  corrections). Genre
+  `fiction`. Language `pro`.
+- **Avestan-Old** (Peter Dirix, KU Leuven): Gatha Yasna 28 from the
+  Corpus Avesticum Berolinense; `# translation` per block (rides
+  "translations"), `# org_sent_id`, MISC Gloss=. README prose says "18
+  sentences" — the file holds 24. Genre `poetry`. UD `ae` → library `ave`.
+
+Licenses (read verbatim at the r2.19 tag, 2026-11-16). All six
+LICENSE.txt files are the identical BY-SA grant — "The treebank is
+licensed under the Creative Commons License Attribution-ShareAlike 4.0
+International. The complete license text is available at:
+http://creativecommons.org/licenses/by-sa/4.0/legalcode". README
+machine-readable metadata: "License: CC BY-SA 4.0" for MidGLauRo,
+PaliCanon, MiCA, CronOc and Avestan-Old (consistent → attribution
+override); **"License: CC BY-NC-SA 4.0" for OGLauRo** — a substantive
+fork against its LICENSE.txt, ruled conservatively nc (the PROFITEROLE /
+UDante shape). MiCA's README also notes third-party inputs (Xun Gong's
+pronunciation/glossary work "subject to its own Limited Public Use
+License"; the Lotus English from 500 Yojanas under CC BY) — inputs, not
+the treebank's own grant.
+
+r2.19 license sweep 2026-11-16: no drift — LICENSE.txt (full text) and
+README `License:` metadata compared r2.18 vs r2.19 for all 36 previously
+held treebanks, identical; the PROFITEROLE (Old and Middle French) and
+UDante forks stand unchanged at r2.19.

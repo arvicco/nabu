@@ -1,0 +1,30 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+source: pgp-geniza
+adapter_test: null
+retrieved: 2026-11-16
+files:
+  - path: data/documents.csv
+    url: https://raw.githubusercontent.com/princetongenizalab/pgp-metadata/refs/heads/main/data/documents.csv
+    whole: false
+    trim: header + the 9 rows of pgpid 723, 1071, 4737, 8339, 8742, 16766, 28363, 30423, 36492 (of 36,512); BOM kept, rows re-serialized unedited
+  - path: data/footnotes.csv
+    url: https://raw.githubusercontent.com/princetongenizalab/pgp-metadata/refs/heads/main/data/footnotes.csv
+    whole: false
+    trim: header + every row naming those pgpids, the three rows of the absent pgpid 3513, and the one content-bearing row of goitein-s-d-unpublished-editions-7 with no document_id (31 of 25,591)
+  - path: data/fragments.csv
+    url: https://raw.githubusercontent.com/princetongenizalab/pgp-metadata/refs/heads/main/data/fragments.csv
+    whole: false
+    trim: header + the 10 rows whose pgpids list names a fixture document (of 36,778)
+  - path: data/sources.csv
+    url: https://raw.githubusercontent.com/princetongenizalab/pgp-metadata/refs/heads/main/data/sources.csv
+    whole: false
+    trim: header + the 20 sources the fixture footnotes cite (of 756)
+  - path: data/places.csv
+    url: https://raw.githubusercontent.com/princetongenizalab/pgp-metadata/refs/heads/main/data/places.csv
+    whole: false
+    trim: header + the 7 places the fixture documents' place relations name (of 565)
+  - path: data/people.csv
+    url: https://raw.githubusercontent.com/princetongenizalab/pgp-metadata/refs/heads/main/data/people.csv
+    whole: false
+    trim: header + the first 2 rows (the unjoined authority grain's specimen)

@@ -2,6 +2,7 @@
 
 require "test_helper"
 require "nabu/ops/rail_plan"
+require "tmpdir"
 
 # `rake rail:plan` (the 2026-11-13 chain over-run class: a crawl chain
 # hand-assembled from a board table over-ran a source's intended cadence).
@@ -17,25 +18,50 @@ class RailPlanTest < Minitest::Test
                  schedule: PC::Schedule.new(cadence: :per_phase, slices_per_phase: cap, stop_after_zero_slices: 3))
   end
 
+  # The adapter's paced-lane seam (#paced_crawls), over every declared
+  # Spec: real engines, so the plan reads the real on-disk ledger shape.
+  module PacedLanes
+    def paced_crawls(workdir, progress: nil)
+      specs = self.class.constants(false).map { |name| self.class.const_get(name, false) }.grep(PC::Spec)
+      specs.to_h do |spec|
+        [spec.name, PC::Engine.new(spec: spec, dir: workdir, progress: progress, universe: -> { [] },
+                                   held: ->(_) { false }, fetch_one: ->(_) { raise "no network" })]
+      end
+    end
+  end
+
+  def write_last_slice(canonical, slug, file, last_slice)
+    FileUtils.mkdir_p(File.join(canonical, slug))
+    File.write(File.join(canonical, slug, file), JSON.generate("denied" => [], "last_slice" => last_slice))
+  end
+
   # A lane declared through a Spec constant (the common shape).
   class AlphaAdapter
+    include PacedLanes
+
     LANE = RailPlanTest.spec("alpha", 3)
   end
 
   # A bare Schedule constant beside a Spec that shares it (the per-object
   # lane shape): one declaration, counted once.
   class BetaAdapter
+    include PacedLanes
+
     SCHEDULE = PC::Schedule.new(cadence: :per_phase, slices_per_phase: 3, stop_after_zero_slices: 3)
     LANE = PC::Spec.new(name: "beta", ledger_file: ".beta.json", classes: { denied: "denied" }, delay: 0,
                         slice: 1, schedule: SCHEDULE)
   end
 
   class GammaAdapter
+    include PacedLanes
+
     LANE = RailPlanTest.spec("gamma", 1)
   end
 
   # Declares a schedule but has never been measured.
   class DeltaAdapter
+    include PacedLanes
+
     LANE = RailPlanTest.spec("delta", 6)
   end
 
@@ -145,13 +171,58 @@ class RailPlanTest < Minitest::Test
     measure_all
     out = Nabu::Ops::RailPlan.render(plan(budget_minutes: 60))
     steps = out.lines.map(&:chomp).grep(/\Alane /)
-    assert_equal ["lane alpha step 1: bin/nabu sync alpha",
-                  "lane alpha step 2: bin/nabu sync alpha",
-                  "lane alpha step 3: bin/nabu sync alpha",
-                  "lane beta step 1: bin/nabu sync beta",
-                  "lane beta step 2: bin/nabu sync beta",
-                  "lane gamma step 1: bin/nabu sync gamma"], steps
+    assert_equal ['lane alpha step 1: bundle exec rake "rail:step[alpha]"',
+                  'lane alpha step 2: bundle exec rake "rail:step[alpha]"',
+                  'lane alpha step 3: bundle exec rake "rail:step[alpha]"',
+                  'lane beta step 1: bundle exec rake "rail:step[beta]"',
+                  'lane beta step 2: bundle exec rake "rail:step[beta]"',
+                  'lane gamma step 1: bundle exec rake "rail:step[gamma]"'], steps,
+                 "every step is the yield-guarded sync (rail:step), never a bare bin/nabu sync"
     steps.each { |line| assert_match Nabu::Ops::RailPlan::STEP_LINE, line }
+  end
+
+  # The per-lane serial chain, ready to run: steps joined by && so a step
+  # that exits nonzero — rail:step's zero-yield / exhausted stop — ends
+  # the lane (the P177 lanes ran three identical zero-added syncs each).
+  def test_each_lane_renders_as_an_and_chain_that_a_zero_yield_step_breaks
+    measure_all
+    out = Nabu::Ops::RailPlan.render(plan(budget_minutes: 60))
+    chains = out.lines.map(&:chomp).grep(/\Achain /)
+    step = ->(slug) { %(bundle exec rake "rail:step[#{slug}]") }
+    assert_equal ["chain alpha: #{([step['alpha']] * 3).join(' && ')}",
+                  "chain beta: #{([step['beta']] * 2).join(' && ')}",
+                  "chain gamma: #{step['gamma']}"], chains
+    chains.each { |line| assert_match Nabu::Ops::RailPlan::CHAIN_LINE, line }
+  end
+
+  # A source whose crawl ledger already records the cone's end is skipped
+  # whole — no step would yield — and named, never silently dropped.
+  def test_a_source_the_crawl_ledger_marks_exhausted_is_skipped
+    measure_all
+    Dir.mktmpdir("nabu-rail-plan") do |canonical|
+      write_last_slice(canonical, "alpha", ".alpha.json", "classification" => "cone_exhausted",
+                                                          "remaining" => { "before" => 0, "after" => 0 })
+      write_last_slice(canonical, "beta", ".beta.json", "classification" => "yield",
+                                                        "remaining" => { "before" => 9, "after" => 0 })
+      write_last_slice(canonical, "gamma", ".gamma.json", "classification" => "yield",
+                                                          "remaining" => { "before" => 9, "after" => 4 })
+      result = Nabu::Ops::RailPlan.new(registry: @registry, ledger: @ledger, budget_minutes: 60,
+                                       canonical_dir: canonical).plan
+      assert_equal %w[alpha beta], result.exhausted.map(&:slug),
+                   "cone_exhausted, or a last slice that left nothing selectable"
+      assert_equal %w[gamma], result.lanes.map(&:slug)
+      out = Nabu::Ops::RailPlan.render(result)
+      assert_match(/^exhausted \(the crawl ledger marks the cone done — skipped\): alpha, beta$/, out)
+      refute_match(/^lane (alpha|beta) /, out)
+      refute_match(/^chain (alpha|beta)/, out)
+    end
+  end
+
+  def test_a_source_never_crawled_is_not_exhausted
+    Dir.mktmpdir("nabu-rail-plan") do |canonical|
+      result = Nabu::Ops::RailPlan.new(registry: @registry, ledger: @ledger, canonical_dir: canonical).plan
+      assert_empty result.exhausted, "no ledger file = no exhaustion claim"
+    end
   end
 
   def test_the_table_names_cap_slice_time_plan_and_lane_wall
@@ -168,7 +239,7 @@ class RailPlanTest < Minitest::Test
   def test_the_no_budget_view_says_so_and_plans_unmeasured_sources_at_their_cap
     out = Nabu::Ops::RailPlan.render(plan)
     assert_match(/no budget — the declared caps alone size the plan/, out)
-    assert_match(%r{^lane delta step 6: bin/nabu sync delta$}, out)
+    assert_match(/^lane delta step 6: bundle exec rake "rail:step\[delta\]"$/, out)
   end
 
   def test_a_negative_or_zero_budget_is_refused

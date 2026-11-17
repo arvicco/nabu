@@ -1,0 +1,496 @@
+# sent_id = Ezra_1_1
+# text = პირველსა მას წელსა კჳროს მეფისა სპარსთაჲსა, აღსრულებასა სიტყჳსა უფლისაჲსა პირითა იერემია წინაწარმეტყუელისაჲთა განაღჳძა უფალმან სული კჳროსისი, მეფისა სპარსთაჲსაჲ, და მისცა ბრძანებაჲ მცნებისაჲ ყოველსა საშარავანდედოსა თჳსსა და მიწერა ყოველთა მიმართ სახე ესე:
+# parallel_id = bible/ezra-1-1
+1	პირველსა	პირველი	NUM	A_Ord_Dat_Sg	Case=Dat|Number=Sing|NumType=Ord	3	amod	_	_
+2	მას	იგი	PRON	Pron_Dem_Dat_Sg	Case=Dat|Number=Sing|PronType=Dem	3	det	_	_
+3	წელსა	წელი	NOUN	N_Dat_Sg	Case=Dat|Number=Sing	14	obl	_	_
+4	კჳროს	კჳროს	PROPN	N_Prop	NameType=Prs	5	nmod	_	_
+5	მეფისა	მეფე	NOUN	N_Gen_Sg	Case=Gen|Number=Sing	3	nmod	_	_
+6	სპარსთაჲსა	სპარსი	PROPN	N_Prop_Obl_Pl_Gen_Sg	Case=Gen|Case[sauf]=Gen|NameType=Geo|Number=Plur|Number[sauf]=Sing	5	nmod	_	SpaceAfter=No
+7	,	,	PUNCT	Punct_Comma	_	8	punct	_	_
+8	აღსრულებასა	აღსრულება	NOUN	N_Dat_Sg	Case=Dat|Number=Sing	14	obl	_	_
+9	სიტყჳსა	სიტყუა	NOUN	N_Gen_Sg	Case=Gen|Number=Sing	8	nmod	_	_
+10	უფლისაჲსა	უფალი	NOUN	N_Gen_Sg_Nom_Sg	Case=Gen|Case[sauf]=Nom|Number=Sing|Number[sauf]=Sing	9	nmod	_	_
+11	პირითა	პირი	NOUN	N_Ins_Sg	Case=Ins|Number=Sing	8	nmod	_	_
+12	იერემია	იერემია	PROPN	N_Prop_Gen_Sg	Case=Gen|NameType=Prs|Number=Sing	13	nmod	_	_
+13	წინაწარმეტყუელისაჲთა	წინაწარმეტყუელი	NOUN	N_Gen_Sg_Ins_Sg	Case=Gen|Case[sauf]=Ins|Number=Sing|Number[sauf]=Sing	11	nmod	_	_
+14	განაღჳძა	განღჳძება	VERB	V_Act_Aor_Pv_AV_S:3Sg_O:3	Mood=Ind|Number[subj]=Sing|Person[subj]=3|Tense=Past|VerbForm=Fin	0	root	_	Preverb=Yes|Version=A
+15	უფალმან	უფალი	NOUN	N_Erg_Sg	Case=Erg|Number=Sing	14	nsubj	_	_
+16	სული	სული	NOUN	N_Nom_Sg	Case=Nom|Number=Sing	14	obj	_	_
+17	კჳროსისი	კჳროსი	PROPN	N_Prop_Gen_Sg_Nom_Sg	Case=Gen|Case[sauf]=Nom|NameType=Prs|Number=Sing|Number[sauf]=Sing	16	nmod	_	SpaceAfter=No
+18	,	,	PUNCT	Punct_Comma	_	19	punct	_	_
+19	მეფისა	მეფე	NOUN	N_Gen_Sg	Case=Gen|Number=Sing	17	appos	_	_
+20	სპარსთაჲსაჲ	სპარსი	PROPN	N_Prop_Obl_Pl_Gen_Sg_Nom_Sg	Case=Gen|Case[dsauf]=Nom|Case[sauf]=Gen|NameType=Geo|Number=Plur|Number[dsauf]=Sing|Number[sauf]=Sing	19	nmod	_	SpaceAfter=No
+21	,	,	PUNCT	Punct_Comma	_	23	punct	_	_
+22	და	და	CCONJ	Cj_Coord	_	23	cc	_	_
+23	მისცა	მიცემა	VERB	V_Act_Aor_Pv_S:3Sg_IO:3Sg	Mood=Ind|Number[io]=Sing|Number[subj]=Sing|Person[io]=3|Person[subj]=3|Tense=Past|VerbForm=Fin	14	conj	_	Preverb=Yes
+24	ბრძანებაჲ	ბრძანებაჲ	NOUN	N_Nom_Sg	Case=Nom|Number=Sing	23	obj	_	_
+25	მცნებისაჲ	მცნებაჲ	NOUN	N_Gen_Sg_Nom_Sg	Case=Gen|Case[sauf]=Nom|Number=Sing|Number[sauf]=Sing	24	nmod	_	_
+26	ყოველსა	ყოველი	PRON	Pron_Tot_Dat_Sg	Case=Dat|Number=Sing|PronType=Tot	27	det	_	_
+27	საშარავანდედოსა	საშარავანდედო	NOUN	N_Dat_Sg	Case=Dat|Number=Sing	23	iobj	_	_
+28	თჳსსა	თჳსი	PRON	Pron_Poss_Dat_Sg	Case=Dat|Number=Sing|Poss=Yes|PronType=Prs	27	nmod	_	_
+29	და	და	CCONJ	Cj_Coord	_	30	cc	_	_
+30	მიწერა	მიწერა	VERB	V_Act_Aor_Pv_S:3Sg	Mood=Ind|Number[subj]=Sing|Person[subj]=3|Tense=Past|VerbForm=Fin	23	conj	_	Preverb=Yes
+31	ყოველთა	ყოველი	PRON	Pron_Tot_Obl_Pl	Case=Dat|Number=Plur|PronType=Tot	30	obl	_	_
+32	მიმართ	მიმართ	ADP	Post	AdpType=Post|Case=Dat	31	case	_	_
+33	სახე	სახე	NOUN	N_Nom_Sg	Case=Nom|Number=Sing	30	obj	_	_
+34	ესე	ესე	PRON	Pron_Dem_Nom_Sg	Case=Nom|Number=Sing|PronType=Dem	33	det	_	SpaceAfter=No
+35	:	:	PUNCT	Punct_Colon	_	34	punct	_	_
+
+# sent_id = Ezra_1_2
+# text = ესრე იტყჳს კჳროს, მეფჱ სპარსთაჲ: ყოველი შარავანდედებაჲ ქუეყანისაჲ მომცა მე უფალმან, ღმერთმან ზეცისამან, და მან მიბრძანა მე მოძიებად, რაჲთა უშჱნო მას ტაძარი იერუსალემს ჰურიასტანისასა.
+# parallel_id = bible/ezra-1-2
+1	ესრე	ესრე	ADV	Adv	_	2	advmod	_	_
+2	იტყჳს	თქუმა	VERB	V_Act_Pres_IV_S:3Sg	Mood=Ind|Number[subj]=Sing|Person[subj]=3|Tense=Pres|VerbForm=Fin	0	root	_	Preverb=No|Version=I
+3	კჳროს	კჳროსი	PROPN	N_Prop	NameType=Prs	2	nsubj	_	SpaceAfter=No
+4	,	,	PUNCT	Punct_Comma	_	5	punct	_	_
+5	მეფჱ	მეფე	NOUN	N_Nom_Sg	Case=Nom|Number=Sing	3	appos	_	_
+6	სპარსთაჲ	სპარსი	PROPN	N_Prop_Obl_Pl_Nom_Sg	Case=Gen|Case[sauf]=Nom|NameType=Geo|Number=Plur|Number[sauf]=Sing	5	nmod	_	SpaceAfter=No
+7	:	:	PUNCT	Punct_Colon	_	2	punct	_	_
+8	ყოველი	ყოველი	PRON	Pron_Tot_Nom_Sg	Case=Nom|Number=Sing|PronType=Tot	9	det	_	_
+9	შარავანდედებაჲ	შარავანდედება	NOUN	N_Nom_Sg	Case=Nom|Number=Sing	11	obj	_	_
+10	ქუეყანისაჲ	ქუეყანა	NOUN	N_Gen_Sg_Nom_Sg	Case=Gen|Case[sauf]=Nom|Number=Sing|Number[sauf]=Sing	9	nmod	_	_
+11	მომცა	მოცემა	VERB	V_Act_Aor_Pv_S:3Sg_IO:1	Mood=Ind|Number[io]=Sing|Number[subj]=Sing|Person[io]=1|Person[subj]=3|Tense=Past|VerbForm=Fin	2	parataxis	_	Preverb=Yes
+12	მე	მე	PRON	Pron_Pers_1Sg	Number=Sing|Person=1|PronType=Prs	11	iobj	_	_
+13	უფალმან	უფალი	NOUN	N_Erg_Sg	Case=Erg|Number=Sing	11	nsubj	_	SpaceAfter=No
+14	,	,	PUNCT	Punct_Comma	_	15	punct	_	_
+15	ღმერთმან	ღმერთი	NOUN	N_Erg_Sg	Case=Erg|Number=Sing	13	appos	_	_
+16	ზეცისამან	ზეცა	NOUN	N_Gen_Sg_Erg_Sg	Case=Gen|Case[sauf]=Erg|Number=Sing|Number[sauf]=Sing	15	nmod	_	SpaceAfter=No
+17	,	,	PUNCT	Punct_Comma	_	20	punct	_	_
+18	და	და	CCONJ	Cj_Coord	_	20	cc	_	_
+19	მან	იგი	PRON	Pron_Dem_Erg_Sg	Case=Erg|Number=Sing|PronType=Dem	20	nsubj	_	_
+20	მიბრძანა	ბრძანება	VERB	V_Act_Aor_IV_S:3Sg_IO:1	Mood=Ind|Number[io]=Sing|Number[subj]=Sing|Person[io]=1|Person[subj]=3|Tense=Past|VerbForm=Fin	11	conj	_	Preverb=Yes
+21	მე	მე	PRON	Pron_Pers_1Sg	Number=Sing|Person=1|PronType=Prs	20	iobj	_	_
+22	მოძიებად	მოძიება	NOUN	N_Adv	Case=Ess	20	xcomp	_	SpaceAfter=No
+23	,	,	PUNCT	Punct_Comma	_	25	punct	_	_
+24	რაჲთა	რაჲთა	SCONJ	Cj_Sub	_	25	mark	_	_
+25	უშჱნო	შჱნება	VERB	V_Act_Subj_UV_S:1Sg_IO:3Sg	Mood=Sub|Number[io]=Sing|Number[subj]=Sing|Person[io]=3|Person[subj]=1|Tense=Past|VerbForm=Fin	20	advcl	_	Preverb=No|Version=U
+26	მას	იგი	PRON	Pron_Dem_Dat_Sg	Case=Dat|Number=Sing|PronType=Dem	25	iobj	_	_
+27	ტაძარი	ტაძარი	NOUN	N_Nom_Sg	Case=Nom|Number=Sing	25	obj	_	_
+28	იერუსალემს	იერუსალემი	PROPN	N_Prop_Dat_Sg	Case=Dat|NameType=Geo|Number=Sing	25	obl	_	_
+29	ჰურიასტანისასა	ჰურიასტანი	PROPN	N_Prop_Gen_Sg_Dat_Sg	Case=Gen|Case[sauf]=Dat|NameType=Geo|Number=Sing|Number[sauf]=Sing	28	nmod	_	SpaceAfter=No
+30	.	.	PUNCT	Punct_FullStop	_	2	punct	_	_
+
+# sent_id = Ezra_1_3
+# text = თუ ვინმე იყოს თქუენგანი ყოველსა მაგას ერსა უფლისასა, რომელსა თანა იყოს ღმერთი მისი, მის თანა აღვედინ იერუსალემს ჰურიასტანისასა და აღაშჱნენ სახლი იგი უფლისა ღმრთისა ისრაელისაჲ.
+# parallel_id = bible/ezra-1-3
+1	თუ	თუ	SCONJ	Cj_Sub	_	3	mark	_	_
+2	ვინმე	ვინმე	PRON	Pron_Ind_Nom_Sg	Case=Nom|Number=Sing|PronType=Ind	3	nsubj	_	_
+3	იყოს	ყოფა	VERB	V_Act_Subj_IV_S:3Sg	Mood=Sub|Number[subj]=Sing|Person[subj]=3|Tense=Past|VerbForm=Fin	19	advcl	_	Preverb=No|Version=I
+4-5	თქუენგანი	_	_	_	_	_	_	_	_
+4	თქუენ	თქუენი	PRON	Pron_Pers_2Pl	Number=Plur|Person=2|PronType=Prs	2	nmod	_	_
+5	განი	გან	ADP	Post	AdpType=Post|Case[sauf]=Nom	4	case	_	_
+6	ყოველსა	ყოველი	PRON	Pron_Tot_Dat_Sg	Case=Dat|Number=Sing|PronType=Tot	8	det	_	_
+7	მაგას	ეგე	PRON	Pron_Dem_Dat_Sg	Case=Dat|Number=Sing|PronType=Dem	8	det	_	_
+8	ერსა	ერი	NOUN	N_Dat_Sg	Case=Dat|Number=Sing	3	obl	_	_
+9	უფლისასა	უფალი	NOUN	N_Gen_Sg_Dat_Sg	Case=Gen|Case[sauf]=Dat|Number=Sing|Number[sauf]=Sing	8	nmod	_	SpaceAfter=No
+10	,	,	PUNCT	Punct_Comma	_	13	punct	_	_
+11	რომელსა	რომელი	PRON	Pron_Rel_Dat_Sg	Case=Dat|Number=Sing|PronType=Rel	13	obl	_	_
+12	თანა	თანა	ADP	Post	AdpType=Post|Case=Dat	11	case	_	_
+13	იყოს	ყოფა	VERB	V_Act_Subj_IV_S:3Sg	Mood=Sub|Number[subj]=Sing|Person[subj]=3|Tense=Past|VerbForm=Fin	8	acl:relcl	_	Preverb=No|Version=I
+14	ღმერთი	ღმერთი	NOUN	N_Nom_Sg	Case=Nom|Number=Sing	13	nsubj	_	_
+15	მისი	მისი	PRON	Pron_Poss_3Sg_Nom_Sg	Case=Nom|Number=Sing|Person=3|Poss=Yes|PronType=Prs	14	nmod	_	SpaceAfter=No
+16	,	,	PUNCT	Punct_Comma	_	19	punct	_	_
+17	მის	იგი	PRON	Pron_Dem_Dat_Sg	Case=Dat|Number=Sing|PronType=Dem	19	obl	_	_
+18	თანა	თანა	ADP	Post	AdpType=Post|Case=Dat	17	case	_	_
+19	აღვედინ	აღსლვა	VERB	V_Act_Imp_Pv_S:3Sg	Mood=Imp|Number[subj]=Sing|Person[subj]=3|Tense=Past|VerbForm=Fin	0	root	_	Preverb=Yes
+20	იერუსალემს	იერუსალემი	PROPN	N_Prop_Dat_Sg	Case=Dat|NameType=Geo|Number=Sing	19	obl	_	_
+21	ჰურიასტანისასა	ჰურიასტანი	PROPN	N_Prop_Gen_Sg_Dat_Sg	Case=Gen|Case[sauf]=Dat|NameType=Geo|Number=Sing|Number[sauf]=Sing	20	nmod	_	_
+22	და	და	CCONJ	Cj_Coord	_	23	cc	_	_
+23	აღაშჱნენ	აღშენება	VERB	V_Act_Imp_Pv_AV_S:3Sg_O:3	Mood=Imp|Number[subj]=Sing|Person[subj]=3|Tense=Past|VerbForm=Fin	19	conj	_	Preverb=Yes|Version=A
+24	სახლი	სახლი	NOUN	N_Nom_Sg	Case=Nom|Number=Sing	23	obj	_	_
+25	იგი	იგი	PRON	Pron_Dem_Nom_Sg	Case=Nom|Number=Sing|PronType=Dem	24	det	_	_
+26	უფლისა	უფალი	NOUN	N_Gen_Sg	Case=Gen|Number=Sing	24	nmod	_	_
+27	ღმრთისა	ღმერთი	NOUN	N_Gen_Sg	Case=Gen|Number=Sing	26	appos	_	_
+28	ისრაელისაჲ	ისრაელი	PROPN	N_Prop_Gen_Sg_Nom_Sg	Case=Gen|Case[sauf]=Nom|NameType=Geo|Number=Sing|Number[sauf]=Sing	27	nmod	_	SpaceAfter=No
+29	.	.	PUNCT	Punct_FullStop	_	19	punct	_	_
+
+# sent_id = Ezra_1_4_1
+# text = და თავადი ღმერთი, რომელი-იგი დამკჳდრებულ არს იერუსალემს, იყავნ მის თანა; და ყოველი განმზადებულებაჲ მის თანა წარიღენ ადგილსა მას, სადა-იგი თჳთ დამკჳდრებულ არს. და თანა-წარიღენ ყოველივე აღსაგებელი თჳსი, რომელ-რაჲ იყოს ოქროჲსაჲ და ვეცხლისაჲ.
+# parallel_id = bible/ezra-1-4/part1
+1	და	და	CCONJ	Cj_Coord	_	10	cc	_	_
+2	თავადი	თავადი	ADJ	A_Nom_Sg	Case=Nom|Number=Sing	3	amod	_	_
+3	ღმერთი	ღმერთი	NOUN	N_Nom_Sg	Case=Nom|Number=Sing	10	nsubj	_	SpaceAfter=No
+4	,	,	PUNCT	Punct_Comma	_	6	punct	_	_
+5	რომელი-იგი	რომელი-იგი	PRON	Pron_Rel_Nom_Sg	Case=Nom|Number=Sing|PronType=Rel	6	nsubj	_	_
+6	დამკჳდრებულ	დამკჳდრება	VERB	V_Part_Pv_Abs	Case=Abs|Tense=Past|VerbForm=Part	3	acl:relcl	_	Preverb=Yes
+7	არს	ყოფა	AUX	V_Act_Pres_S:3Sg	Mood=Ind|Number[subj]=Sing|Person[subj]=3|Tense=Pres|VerbForm=Fin	6	aux	_	_
+8	იერუსალემს	იერუსალემი	PROPN	N_Prop_Dat_Sg	Case=Dat|NameType=Geo|Number=Sing	6	obl	_	SpaceAfter=No
+9	,	,	PUNCT	Punct_Comma	_	6	punct	_	_
+10	იყავნ	ყოფა	VERB	V_Act_Imp_IV_S:3Sg	Mood=Imp|Number[subj]=Sing|Person[subj]=3|Tense=Pres|VerbForm=Fin	0	root	_	Preverb=No|Version=I
+11	მის	იგი	PRON	Pron_Dem_Gen_Sg	Case=Gen|Number=Sing|PronType=Dem	10	obl	_	_
+12	თანა	თანა	ADP	Post	AdpType=Post|Case=Gen	11	case	_	SpaceAfter=No
+13	;	;	PUNCT	Punct_SemiColon	_	19	punct	_	_
+14	და	და	CCONJ	Cj_Coord	_	19	cc	_	_
+15	ყოველი	ყოველი	PRON	A_Nom_Sg	Case=Nom|Number=Sing|PronType=Tot	16	det	_	_
+16	განმზადებულებაჲ	განმზადებულება	NOUN	N_Nom_Sg	Case=Nom|Number=Sing	19	obj	_	_
+17	მის	იგი	PRON	Pron_Dem_Gen_Sg	Case=Gen|Number=Sing|PronType=Dem	19	obl	_	_
+18	თანა	თანა	ADP	Post	AdpType=Post|Case=Gen	17	case	_	_
+19	წარიღენ	წარღება	VERB	V_Act_Imp_Pv_IV_S:3Sg	Mood=Imp|Number[subj]=Sing|Person[subj]=3|Tense=Pres|VerbForm=Fin	10	conj	_	Preverb=Yes
+20	ადგილსა	ადგილი	NOUN	N_Dat_Sg	Case=Dat|Number=Sing	19	obl	_	_
+21	მას	იგი	PRON	Pron_Dem_Dat_Sg	Case=Dat|Number=Sing|PronType=Dem	20	det	_	SpaceAfter=No
+22	,	,	PUNCT	Punct_Comma	_	21	punct	_	_
+23	სადა-იგი	სადა-იგი	ADV	Adv_Rel	_	25	advmod	_	_
+24	თჳთ	თჳთ	ADV	Adv	_	25	advmod	_	_
+25	დამკჳდრებულ	დამკჳდრება	VERB	V_Part_Pv_Abs	Case=Abs|Tense=Past|VerbForm=Part	20	acl:relcl	_	Preverb=Yes
+26	არს	ყოფა	AUX	V_Act_Pres_S:3Sg	Mood=Ind|Number[subj]=Sing|Person[subj]=3|Tense=Pres|VerbForm=Fin	25	aux	_	SpaceAfter=No
+27	.	.	PUNCT	Punct_FullStop	_	19	punct	_	_
+28	და	და	CCONJ	Cj_Coord	_	29	cc	_	_
+29	თანა-წარიღენ	თანაწარღება	VERB	V_Act_Aor_Imp_Pv_IV_S:2Sg_O:3Pl	Mood=Imp|Number[subj]=Plur|Person[subj]=3|Tense=Pres|VerbForm=Fin	19	conj	_	Preverb=Yes|Version=I
+30	ყოველივე	ყოველივე	PRON	Pron_Ind_Nom_Sg	Case=Nom|Number=Sing|PronType=Ind	31	det	_	_
+31	აღსაგებელი	აღსაგებელი	NOUN	N_Nom_Sg	Case=Nom|Number=Sing	29	obj	_	_
+32	თჳსი	თჳსი	PRON	Pron_Poss_3Sg_Nom_Sg	Case=Nom|Number=Sing|Person=3|Poss=Yes|PronType=Prs	31	nmod	_	SpaceAfter=No
+33	,	,	PUNCT	Punct_Comma	_	35	punct	_	_
+34	რომელ-რაჲ	რომელ-რაჲ	PRON	Pron_Rel_Nom_Sg	Case=Nom|Number=Sing|PronType=Rel	35	nsubj	_	_
+35	იყოს	ყოფა	VERB	V_Act_Subj_IV_S:3Sg	Mood=Sub|Number[subj]=Sing|Person[subj]=3|Tense=Pres|VerbForm=Fin	31	acl:relcl	_	Preverb=No|Version=I
+36	ოქროჲსაჲ	ოქრო	NOUN	N_Gen_Sg_Nom_Sg	Case=Gen|Case[sauf]=Nom|Number=Sing|Number[sauf]=Sing	35	xcomp	_	_
+37	და	და	CCONJ	Cj_Coord	_	38	cc	_	_
+38	ვეცხლისაჲ	ვეცხლი	NOUN	N_Gen_Sg_Nom_Sg	Case=Gen|Case[sauf]=Nom|Number=Sing|Number[sauf]=Sing	36	conj	_	SpaceAfter=No
+39	.	.	PUNCT	Punct_FullStop	_	35	punct	_	_
+
+# sent_id = Ezra_1_4_2
+# text = სხუაჲ ჭურჭერი და საცხოვარი მოყუასთა თჳსთა თანა წარიღენ განსაგებელად ტაძრისა მის ღმრთისა იერუსალემდ.
+# parallel_id = bible/ezra-1-4/part2
+1	სხუაჲ	სხუა	ADJ	A_Nom_Sg	Case=Nom|Number=Sing	2	amod	_	_
+2	ჭურჭერი	ჭურჭერი	NOUN	N_Nom_Sg	Case=Nom|Number=Sing	8	obj	_	_
+3	და	და	CCONJ	Cj_Coord	_	4	cc	_	_
+4	საცხოვარი	საცხოვარი	NOUN	N_Nom_Sg	Case=Nom|Number=Sing	2	conj	_	_
+5	მოყუასთა	მოყუასი	NOUN	N_Obl_Pl	Case=Gen|Number=Plur	8	obl	_	_
+6	თჳსთა	თჳსი	PRON	Pron_Poss_Obl_Pl	Case=Gen|Number=Plur|Poss=Yes|PronType=Prs	5	nmod	_	_
+7	თანა	თანა	ADP	Post	AdpType=Post|Case=Gen	5	case	_	_
+8	წარიღენ	წარღება	VERB	V_Act_Imp_Pv_IV_S:3Sg	Mood=Imp|Number[subj]=Sing|Person[subj]=3|Tense=Pres|VerbForm=Fin	0	root	_	Preverb=Yes|Version=I
+9	განსაგებელად	განსაგებელი	NOUN	N_Adv	Case=Ess	8	advcl	_	_
+10	ტაძრისა	ტაძარი	NOUN	N_Gen_Sg	Case=Gen|Number=Sing	9	obj	_	_
+11	მის	იგი	PRON	Pron_Dem_Gen_Sg	Case=Gen|Number=Sing|PronType=Dem	10	det	_	_
+12	ღმრთისა	ღმერთი	NOUN	N_Gen_Sg	Case=Gen|Number=Sing	10	nmod	_	_
+13	იერუსალემდ	იერუსალემი	PROPN	N_Prop_Adv_Sg	Case=Ess|NameType=Geo|Number=Sing	9	obl	_	SpaceAfter=No
+14	.	.	PUNCT	Punct_FullStop	_	8	punct	_	_
+
+# sent_id = Ezra_1_5
+# text = და აღდგეს მფლობელნი იგი მამათმთავართაჲ მათ იუდაჲსთაჲ და ბენიამენისთაჲ და მღდელნი იგი და ლევიტელნი და ყოველნივე, რომელთაჲ განაღჳძა უფალმან ღმერთმან სული მათი აღსლვად და აღშჱნებად ტაძრისა მის უფლისა იერუსალემდ.
+# parallel_id = bible/ezra-1-5
+1	და	და	CCONJ	Cj_Coord	_	2	cc	_	_
+2	აღდგეს	აღდგომა	VERB	V_Act_Aor_Pv_S:3Pl	Mood=Ind|Number[subj]=Plur|Person[subj]=3|Tense=Past|VerbForm=Fin	0	root	_	Preverb=Yes
+3	მფლობელნი	მფლობელი	NOUN	N_Nom_Pl	Case=Nom|Number=Plur	2	nsubj	_	_
+4	იგი	იგი	PRON	Pron_Dem_Nom_Sg	Case=Nom|Number=Sing|PronType=Dem	3	det	_	_
+5	მამათმთავართაჲ	მამათმთავარი	NOUN	N_Obl_Pl_Nom_Sg	Case=Gen|Case[sauf]=Nom|Number=Plur|Number[sauf]=Sing	3	nmod	_	_
+6	მათ	იგი	PRON	Pron_Dem_Obl_Pl	Case=Gen|Number=Plur|PronType=Dem	5	det	_	_
+7	იუდაჲსთაჲ	იუდა	PROPN	N_Prop_Gen_Sg_Obl_Pl_Nom_Sg	Case=Gen|Case[dsauf]=Nom|Case[sauf]=Gen|NameType=Prs|Number=Sing|Number[dsauf]=Sing|Number[sauf]=Plur	5	nmod	_	_
+8	და	და	CCONJ	Cj_Coord	_	9	cc	_	_
+9	ბენიამენისთაჲ	ბენიამენი	PROPN	N_Prop_Gen_Sg_Obl_Pl_Nom_Sg	Case=Gen|Case[dsauf]=Nom|Case[sauf]=Gen|NameType=Prs|Number=Sing|Number[dsauf]=Sing	7	conj	_	_
+10	და	და	CCONJ	Cj_Coord	_	11	cc	_	_
+11	მღდელნი	მღდელი	NOUN	N_Nom_Pl	Case=Nom|Number=Plur	3	conj	_	_
+12	იგი	იგი	PRON	Pron_Dem_Nom_Sg	Case=Nom|Number=Sing|PronType=Dem	11	det	_	_
+13	და	და	CCONJ	Cj_Coord	_	14	cc	_	_
+14	ლევიტელნი	ლევიტელი	NOUN	N_Nom_Pl	Case=Nom|Number=Plur	3	conj	_	_
+15	და	და	CCONJ	Cj_Coord	_	16	cc	_	_
+16	ყოველნივე	ყოველი	PRON	Pron_Tot_Nom_Pl	Case=Nom|Number=Plur|PronType=Tot	3	conj	_	SpaceAfter=No
+17	,	,	PUNCT	Punct_Comma	_	19	punct	_	_
+18	რომელთაჲ	რომელი	PRON	Pron_Rel_Obl_Pl_Nom_Sg	Case=Gen|Case[sauf]=Nom|Number=Plur|Number[sauf]=Sing|PronType=Rel	22	nmod	_	_
+19	განაღჳძა	განღჳძება	VERB	V_Act_Aor_Pv_AV_S:3Sg_O:3	Mood=Ind|Number[subj]=Sing|Person[subj]=3|Tense=Past|VerbForm=Fin	16	acl:relcl	_	Preverb=Yes|Version=A
+20	უფალმან	უფალი	NOUN	N_Erg_Sg	Case=Erg|Number=Sing	19	nsubj	_	_
+21	ღმერთმან	ღმერთი	NOUN	N_Erg_Sg	Case=Erg|Number=Sing	20	appos	_	_
+22	სული	სული	NOUN	N_Nom_Sg	Case=Nom|Number=Sing	19	obj	_	_
+23	მათი	მათი	PRON	Pron_Poss_Obl_Pl	Case=Gen|Number=Plur|Poss=Yes|PronType=Prs	22	nmod	_	_
+24	აღსლვად	აღსლვა	NOUN	N_Adv	Case=Ess	19	advcl	_	_
+25	და	და	CCONJ	Cj_Coord	_	26	cc	_	_
+26	აღშჱნებად	აღშჱნება	NOUN	N_Adv	Case=Ess	24	conj	_	_
+27	ტაძრისა	ტაძარი	NOUN	N_Gen_Sg	Case=Gen|Number=Sing	26	obj	_	_
+28	მის	იგი	PRON	Pron_Dem_Gen_Sg	Case=Gen|Number=Sing|PronType=Dem	27	det	_	_
+29	უფლისა	უფალი	NOUN	N_Gen_Sg	Case=Gen|Number=Sing	27	nmod	_	_
+30	იერუსალემდ	იერუსალემი	PROPN	N_Prop_Adv_Sg	Case=Ess|NameType=Geo|Number=Sing	26	obl	_	SpaceAfter=No
+31	.	.	PUNCT	Punct_FullStop	_	2	punct	_	_
+
+# sent_id = Ezra_1_6
+# text = და ყოველნი იგი, რომელნი იყვნეს გარემოჲს მათსა, შემწე ეყოფოდეს და განაძლიერებდეს, ჴელთა მათთა მისცემდეს ოქროსა და ვეცხლსა და ჭურჭერსა და საცხოვარსა და ძღუნითა და შესაწირავითა აღავსებდეს.
+# parallel_id = bible/ezra-1-6
+1	და	და	CCONJ	Cj_Coord	_	11	cc	_	_
+2	ყოველნი	ყოველი	PRON	Pron_Tot_Nom_Pl	Case=Nom|Number=Plur|PronType=Tot	11	nsubj	_	_
+3	იგი	იგი	PRON	Pron_Dem_Nom_Sg	Case=Nom|Number=Sing|PronType=Dem	2	det	_	SpaceAfter=No
+4	,	,	PUNCT	Punct_Comma	_	6	punct	_	_
+5	რომელნი	რომელი	PRON	Pron_Rel_Nom_Pl	Case=Nom|Number=Plur|PronType=Rel	6	nsubj	_	_
+6	იყვნეს	ყოფა	VERB	V_Act_Aor_IV_S:3Pl	Mood=Ind|Number[subj]=Plur|Person[subj]=3|Tense=Past|VerbForm=Fin	2	acl:relcl	_	Preverb=No|Version=I
+7	გარემოჲს	გარემო	ADV	Adv	_	6	advmod	_	_
+8	მათსა	მათი	PRON	Pron_Poss_Dat_Sg	Case=Dat|Number=Sing|Poss=Yes|PronType=Prs	7	nmod	_	SpaceAfter=No
+9	,	,	PUNCT	Punct_Comma	_	11	punct	_	_
+10	შემწე	შემწე	NOUN	N_Abs_Sg	Case=Abs|Number=Sing	11	xcomp	_	_
+11	ეყოფოდეს	ყოფა	VERB	V_Act_Imp_EV_IO:3_S:3Pl	Mood=Ind|Number[subj]=Plur|Person[io]=3|Person[subj]=3|Tense=Imp|VerbForm=Fin	0	root	_	Preverb=No|Version=E
+12	და	და	CCONJ	Cj_Coord	_	13	cc	_	_
+13	განაძლიერებდეს	განძლიერება	VERB	V_Act_Imp_Pv_AV_S:3Pl_O:3	Mood=Ind|Number[subj]=Plur|Person[subj]=3|Tense=Imp|VerbForm=Fin	11	conj	_	SpaceAfter=No|Preverb=Yes|Version=A
+14	,	,	PUNCT	Punct_Comma	_	17	punct	_	_
+15	ჴელთა	ჴელი	NOUN	N_Obl_Pl	Case=Dat|Number=Plur	17	obl	_	_
+16	მათთა	მათი	PRON	Pron_Poss_Obl_Pl	Case=Dat|Number=Plur|Poss=Yes|PronType=Prs	15	nmod	_	_
+17	მისცემდეს	მიცემა	VERB	V_Act_Imp_Pv_S:3Pl_IO:3	Mood=Ind|Number[subj]=Plur|Person[subj]=3|Tense=Imp|VerbForm=Fin	11	conj	_	Preverb=No
+18	ოქროსა	ოქრო	NOUN	N_Dat_Sg	Case=Dat|Number=Sing	17	obj	_	_
+19	და	და	CCONJ	Cj_Coord	_	20	cc	_	_
+20	ვეცხლსა	ვეცხლი	NOUN	N_Dat_Sg	Case=Dat|Number=Sing	18	conj	_	_
+21	და	და	CCONJ	Cj_Coord	_	22	cc	_	_
+22	ჭურჭერსა	ჭურჭერი	NOUN	N_Dat_Sg	Case=Dat|Number=Sing	18	conj	_	_
+23	და	და	CCONJ	Cj_Coord	_	24	cc	_	_
+24	საცხოვარსა	საცხოვარი	NOUN	N_Dat_Sg	Case=Dat|Number=Sing	18	conj	_	_
+25	და	და	CCONJ	Cj_Coord	_	29	cc	_	_
+26	ძღუნითა	ძღუენი	NOUN	N_Ins_Sg	Case=Ins|Number=Sing	29	obl	_	_
+27	და	და	CCONJ	Cj_Coord	_	28	cc	_	_
+28	შესაწირავითა	შესაწირავი	NOUN	N_Ins_Sg	Case=Ins|Number=Sing	26	conj	_	_
+29	აღავსებდეს	აღვსება	VERB	V_Act_Imp_Pv_AV_S:3Pl_O:3	Mood=Ind|Number[subj]=Plur|Person[subj]=3|Tense=Imp|VerbForm=Fin	11	conj	_	SpaceAfter=No|Preverb=Yes|Version=A
+30	.	.	PUNCT	Punct_FullStop	_	11	punct	_	_
+
+# sent_id = Ezra_1_7
+# text = და მეფემან კჳროს მღებად სცა ყოველი იგი სამსახურებელი სახლისა მის უფლისაჲ რომელ გამოიღო ნაბუქოდონოსორ მეფემან იერუსალემით და მისცა დამარხვად სახლსა ღმრთისა თჳსისასა.
+# parallel_id = bible/ezra-1-7
+1	და	და	CCONJ	Cj_Coord	_	5	cc	_	_
+2	მეფემან	მეფე	NOUN	N_Erg_Sg	Case=Erg|Number=Sing	5	nsubj	_	_
+3	კჳროს	კჳროს	PROPN	N_Prop	NameType=Prs	2	appos	_	_
+4	მღებად	ღება	NOUN	N_Adv	Case=Ess	5	xcomp	_	_
+5	სცა	ცემა	VERB	V_Act_Aor_S:3Sg_IO:3Sg	Mood=Ind|Number[io]=Sing|Number[subj]=Sing|Person[io]=3|Person[subj]=3|Tense=Past|VerbForm=Fin	0	root	_	Preverb=No
+6	ყოველი	ყოველი	PRON	Pron_Tot_Nom_Sg	Case=Nom|Number=Sing|PronType=Tot	8	det	_	_
+7	იგი	იგი	PRON	Pron_Dem_Nom_Sg	Case=Nom|Number=Sing|PronType=Dem	8	det	_	_
+8	სამსახურებელი	სამსახურებელი	NOUN	N_Nom_Sg	Case=Nom|Number=Sing	5	obj	_	_
+9	სახლისა	სახლი	NOUN	N_Gen_Sg	Case=Gen|Number=Sing	8	nmod	_	_
+10	მის	იგი	PRON	Pron_Dem_Gen_Sg	Case=Gen|Number=Sing|PronType=Dem	9	det	_	_
+11	უფლისაჲ	უფალი	NOUN	N_Gen_Sg_Nom_Sg	Case=Gen|Case[sauf]=Nom|Number=Sing|Number[sauf]=Sing	9	nmod	_	_
+12	რომელ	რომელი	PRON	Pron_Rel_Abs_Sg	Case=Abs|Number=Sing|PronType=Rel	13	obj	_	_
+13	გამოიღო	გამოღება	VERB	V_Act_Aor_Pv_IV_S:3Sg	Mood=Ind|Number[subj]=Sing|Person[subj]=3|Tense=Past|VerbForm=Fin	8	acl:relcl	_	Preverb=Yes|Version=I
+14	ნაბუქოდონოსორ	ნაბუქოდონოსორ	PROPN	N_Prop	NameType=Prs	13	nsubj	_	_
+15	მეფემან	მეფე	NOUN	N_Erg_Sg	Case=Erg|Number=Sing	14	appos	_	_
+16	იერუსალემით	იერუსალემი	PROPN	N_Prop_Ins_Sg	Case=Ins|NameType=Geo|Number=Sing	13	obl	_	_
+17	და	და	CCONJ	Cj_Coord	_	18	cc	_	_
+18	მისცა	მიცემა	VERB	V_Act_Aor_Pv_S:3Sg_IO:3Sg	Mood=Ind|Number[io]=Sing|Number[subj]=Sing|Person[io]=3|Person[subj]=3|Tense=Past|VerbForm=Fin	5	conj	_	Preverb=Yes
+19	დამარხვად	დამარხვა	NOUN	N_Adv	Case=Ess	18	xcomp	_	_
+20	სახლსა	სახლი	NOUN	N_Dat_Sg	Case=Dat|Number=Sing	18	obl	_	_
+21	ღმრთისა	ღმერთი	NOUN	N_Gen_Sg	Case=Gen|Number=Sing	20	nmod	_	_
+22	თჳსისასა	თჳსი	PRON	Pron_Poss_Gen_Sg_Dat_Sg	Case=Gen|Case[sauf]=Dat|Number=Sing|Number[sauf]=Sing|Poss=Yes|PronType=Prs	21	nmod	_	SpaceAfter=No
+23	.	.	PUNCT	Punct_FullStop	_	5	punct	_	_
+
+# sent_id = Ezra_1_8
+# text = მოღებად სცა ყოველი იგი კჳროს, მეფემან სპარსთამან, ჴელითა მითრდატ მეფასისაჲთა და მიუთუალა და მისცა სამნასარს, მთავარსა იუდაჲსსა.
+# parallel_id = bible/ezra-1-8
+1	მოღებად	მოღება	NOUN	N_Adv	Case=Ess	2	xcomp	_	_
+2	სცა	ცემა	VERB	V_Act_Aor_S:3Sg_IO:3Sg	Mood=Ind|Number[io]=Sing|Number[subj]=Sing|Person[io]=3|Person[subj]=3|Tense=Past|VerbForm=Fin	0	root	_	Preverb=No
+3	ყოველი	ყოველი	PRON	Pron_Tot_Nom_Sg	Case=Nom|Number=Sing|PronType=Tot	4	det	_	_
+4	იგი	იგი	PRON	Pron_Dem_Nom_Sg	Case=Nom|Number=Sing|PronType=Dem	2	obj	_	_
+5	კჳროს	კჳროს	PROPN	N_Prop	NameType=Prs	2	nsubj	_	SpaceAfter=No
+6	,	,	PUNCT	Punct_Comma	_	7	punct	_	_
+7	მეფემან	მეფე	NOUN	N_Erg_Sg	Case=Erg|Number=Sing	5	appos	_	_
+8	სპარსთამან	სპარსი	PROPN	N_Prop_Obl_Pl_Erg_Sg	Case=Gen|Case[sauf]=Erg|NameType=Geo|Number=Plur|Number[sauf]=Sing	7	nmod	_	SpaceAfter=No
+9	,	,	PUNCT	Punct_Comma	_	10	punct	_	_
+10	ჴელითა	ჴელი	NOUN	N_Ins_Sg	Case=Ins|Number=Sing	2	obl	_	_
+11	მითრდატ	მითრდატ	PROPN	N_Prop	NameType=Prs	10	nmod	_	_
+12	მეფასისაჲთა	მეფასი	NOUN	N_Gen_Sg_Ins_Sg	Case=Gen|Case[sauf]=Ins|Number=Sing|Number[sauf]=Sing	11	appos	_	_
+13	და	და	CCONJ	Cj_Coord	_	14	cc	_	_
+14	მიუთუალა	მითუალვა	VERB	V_Act_Aor_Pv_UV_S:3Sg_IO:3Sg	Mood=Ind|Number[io]=Sing|Number[subj]=Sing|Person[io]=3|Person[subj]=3|Tense=Past|VerbForm=Fin	2	conj	_	Preverb=Yes|Version=U
+15	და	და	CCONJ	Cj_Coord	_	16	cc	_	_
+16	მისცა	მიცემა	VERB	V_Act_Aor_Pv_S:3Sg_IO:3Sg	Mood=Ind|Number[io]=Sing|Number[subj]=Sing|Person[io]=3|Person[subj]=3|Tense=Past|VerbForm=Fin	2	conj	_	Preverb=Yes
+17	სამნასარს	სამნასარ	PROPN	N_Prop_Dat_Sg	Case=Dat|NameType=Prs|Number=Sing	16	iobj	_	SpaceAfter=No
+18	,	,	PUNCT	Punct_Comma	_	19	punct	_	_
+19	მთავარსა	მთავარი	NOUN	N_Dat_Sg	Case=Dat|Number=Sing	17	appos	_	_
+20	იუდაჲსსა	იუდა	PROPN	N_Prop_Gen_Sg_Dat_Sg	Case=Gen|Case[sauf]=Dat|NameType=Prs|Number=Sing|Number[sauf]=Sing	19	nmod	_	SpaceAfter=No
+21	.	.	PUNCT	Punct_FullStop	_	2	punct	_	_
+
+# sent_id = Ezra_1_9
+# text = და ესე არს რიცხჳ აღთუალვისაჲ მის: საზორველნი იგი ოქროჲსანი ოცდაათ და საზორველნი სამსახურებელთა მათ ვეცხლისათანი ათას ოცდაცხრა
+# parallel_id = bible/ezra-1-9
+1	და	და	CCONJ	Cj_Coord	_	3	cc	_	_
+2	ესე	ესე	PRON	Pron_Dem_Nom_Sg	Case=Nom|Number=Sing|PronType=Dem	3	nsubj	_	_
+3	არს	ყოფა	VERB	V_Act_Pres_S:3Sg	Mood=Ind|Number[subj]=Sing|Person[subj]=3|Tense=Pres|VerbForm=Fin	0	root	_	Preverb=No
+4	რიცხჳ	რიცხჳ	NOUN	N_Nom_Sg	Case=Nom|Number=Sing	3	xcomp	_	_
+5	აღთუალვისაჲ	აღთუალვა	NOUN	N_Gen_Sg_Nom_Sg	Case=Gen|Case[sauf]=Nom|Number=Sing|Number[sauf]=Sing	4	nmod	_	_
+6	მის	იგი	PRON	Pron_Dem_Gen_Sg	Case=Gen|Number=Sing|PronType=Dem	5	det	_	SpaceAfter=No
+7	:	:	PUNCT	Punct_Colon	_	8	punct	_	_
+8	საზორველნი	საზორველი	NOUN	N_Nom_Pl	Case=Nom|Number=Plur	4	appos	_	_
+9	იგი	იგი	PRON	Pron_Dem_Nom_Sg	Case=Nom|Number=Sing|PronType=Dem	8	det	_	_
+10	ოქროჲსანი	ოქრო	NOUN	N_Gen_Sg_Nom_Pl	Case=Gen|Case[sauf]=Nom|Number=Sing|Number[sauf]=Plur	8	nmod	_	_
+11	ოცდაათ	ოცდაათი	NUM	Num_Nom	Case=Nom|NumType=Card	8	nummod	_	_
+12	და	და	CCONJ	Cj_Coord	_	13	cc	_	_
+13	საზორველნი	საზორველი	NOUN	N_Nom_Pl	Case=Nom|Number=Plur	8	conj	_	_
+14	სამსახურებელთა	სამსახურებელი	NOUN	N_Obl_Pl	Case=Gen|Number=Plur	13	nmod	_	_
+15	მათ	იგი	PRON	Pron_Dem_Obl_Pl	Case=Gen|Number=Plur|PronType=Dem	14	det	_	_
+16	ვეცხლისათანი	ვეცხლი	NOUN	N_Gen_Sg_Nom_Pl	Case=Gen|Case[dsauf]=Nom|Case[sauf]=Gen|Number=Sing|Number[dsauf]=Plur|Number[sauf]=Plur	13	nmod	_	_
+17	ათას	ათასი	NUM	Num_Abs	Case=Abs|NumType=Card	13	nummod	_	_
+18	ოცდაცხრა	ოცდაცხრა	NUM	Num_Abs	Case=Abs|NumType=Card	17	compound	_	_
+
+# sent_id = Ezra_1_10
+# text = და პინაკები ოქროჲსაჲ ოცდაათ და ვეცხლისანი მერმე ათას.
+# parallel_id = bible/ezra-1-10
+1	და	და	CCONJ	Cj_Coord	_	2	cc	_	_
+2	პინაკები	პინაკი	NOUN	N_Nom_Pl	Case=Nom|Number=Plur	0	root	_	_
+3	ოქროჲსაჲ	ოქრო	NOUN	N_Gen_Sg_Nom_Sg	Case=Gen|Case[sauf]=Nom|Number=Sing|Number[sauf]=Sing	2	nmod	_	_
+4	ოცდაათ	ოცდაათი	NUM	Num_Abs	Case=Abs|NumType=Card	2	nummod	_	_
+5	და	და	CCONJ	Cj_Coord	_	6	cc	_	_
+6	ვეცხლისანი	ვეცხლი	NOUN	N_Gen_Sg_Nom_Pl	Case=Gen|Case[sauf]=Nom|Number=Sing|Number[sauf]=Plur	2	conj	_	_
+7	მერმე	მერმე	ADV	Adv	_	6	advmod	_	_
+8	ათას	ათასი	NUM	Num_Abs	Case=Abs|NumType=Card	6	nummod	_	SpaceAfter=No
+9	.	.	PUNCT	Punct_FullStop	_	2	punct	_	_
+
+# sent_id = Ezra_1_11
+# text = და ყოველი ჭურჭერი ოქროჲსაჲ და ვეცხლსაჲ ხუთ ათას ოთხას ყოვლითურთ, რომელნი გამოვიდოდეს სამნასარის თანა ბაბილონით იერუსალემდ.
+# parallel_id = bible/ezra-1-11
+1	და	და	CCONJ	Cj_Coord	_	3	cc	_	_
+2	ყოველი	ყოველი	PRON	Pron_Tot_Nom_Sg	Case=Nom|Number=Sing|PronType=Tot	3	det	_	_
+3	ჭურჭერი	ჭურჭერი	NOUN	N_Nom_Sg	Case=Nom|Number=Sing	0	root	_	_
+4	ოქროჲსაჲ	ოქრო	NOUN	N_Gen_Sg_Nom_Sg	Case=Gen|Case[sauf]=Nom|Number=Sing|Number[sauf]=Sing	3	nmod	_	_
+5	და	და	CCONJ	Cj_Coord	_	6	cc	_	_
+6	ვეცხლსაჲ	ვეცხლი	NOUN	N_Dat_Sg_Nom_Sg	Case=Dat|Case[sauf]=Nom|Number=Sing|Number[sauf]=Sing	4	conj	_	_
+7	ხუთ	ხუთი	NUM	Num_Nom	Case=Nom|NumType=Card	8	nummod	_	_
+8	ათას	ათასი	NUM	Num_Nom	Case=Nom|NumType=Card	3	nummod	_	_
+9	ოთხას	ოთხასი	NUM	Num_Nom	Case=Nom|NumType=Card	8	compound	_	_
+10	ყოვლითურთ	ყოვლითურთ	ADV	Adv	_	3	advmod	_	SpaceAfter=No
+11	,	,	PUNCT	Punct_Comma	_	13	punct	_	_
+12	რომელნი	რომელი	PRON	Pron_Rel_Nom_Pl	Case=Nom|Number=Plur|PronType=Rel	13	nsubj	_	_
+13	გამოვიდოდეს	გამოსლვა	VERB	V_Act_Imp_Pv_S:3Pl	Mood=Ind|Number[subj]=Plur|Person[subj]=3|Tense=Imp|VerbForm=Fin	3	acl:relcl	_	Preverb=Yes
+14	სამნასარის	სამნასარ	PROPN	N_Prop_Gen_Sg	Case=Gen|NameType=Prs|Number=Sing	13	obl	_	_
+15	თანა	თანა	ADP	Post	AdpType=Post|Case=Gen	14	case	_	_
+16	ბაბილონით	ბაბილონი	PROPN	N_Prop_Ins_Sg	Case=Ins|NameType=Geo|Number=Sing	13	obl	_	_
+17	იერუსალემდ	იერუსალემი	PROPN	N_Prop_Adv_Sg	Case=Ess|NameType=Geo|Number=Sing	13	obl	_	SpaceAfter=No
+18	.	.	PUNCT	Punct_FullStop	_	3	punct	_	_
+
+# sent_id = Ezra_2_1
+# text = და ესე არიან ძენი თითოეულად ადგილთაგან თჳსთა, რომელნი გამოვიდოდეს ტყუეობისა მისგან, რომელნი წარტყუენნა ნაბუქოდონოსორ, მეფემან ბაბილონისამან, ბაბილონდ, რომელნი მიაქცინა კჳროს ბაბილონით იერუსალემდ ჰურიასტანდ, კაცი თითოეულად ქალაქსა თჳსსა,
+# parallel_id = bible/ezra-2-1
+1	და	და	CCONJ	Cj_Coord	_	3	cc	_	_
+2	ესე	ესე	PRON	Pron_Dem_Nom_Sg	Case=Nom|Number=Sing|PronType=Dem	3	nsubj	_	_
+3	არიან	ყოფა	VERB	V_Act_Pres_S:3Pl	Mood=Ind|Number[subj]=Plur|Person[subj]=3|Tense=Pres|VerbForm=Fin	0	root	_	Preverb=No
+4	ძენი	ძე	NOUN	N_Nom_Pl	Case=Nom|Number=Plur	3	xcomp	_	_
+5	თითოეულად	თითოეულად	ADV	Adv	_	6	advmod	_	_
+6-7	ადგილთაგან	_	_	_	_	_	_	_	_
+6	ადგილთა	ადგილი	NOUN	N_Obl_Pl	Case=Gen|Number=Plur	4	nmod	_	_
+7	გან	გან	ADP	Post	AdpType=Post|Case=Gen	6	case	_	_
+8	თჳსთა	თჳსი	PRON	Pron_Poss_Obl_Pl	Case=Dat|Number=Plur|Poss=Yes|PronType=Prs	6	nmod	_	SpaceAfter=No
+9	,	,	PUNCT	Punct_Comma	_	11	punct	_	_
+10	რომელნი	რომელი	PRON	Pron_Rel_Nom_Pl	Case=Nom|Number=Plur|PronType=Rel	11	nsubj	_	_
+11	გამოვიდოდეს	გამოსლვა	VERB	V_Act_Imp_Pv_S:3Pl	Mood=Ind|Number[subj]=Plur|Person[subj]=3|Tense=Imp|VerbForm=Fin	4	acl:relcl	_	Preverb=Yes
+12	ტყუეობისა	ტყუეობა	NOUN	N_Gen_Sg	Case=Gen|Number=Sing	11	obl	_	_
+13-14	მისგან	_	_	_	_	_	_	_	SpaceAfter=No
+13	მის	იგი	PRON	Pron_Dem_Gen_Sg	Case=Gen|Number=Sing|PronType=Dem	12	det	_	_
+14	გან	გან	ADP	Post	AdpType=Post|Case=Gen	12	case	_	_
+15	,	,	PUNCT	Punct_Comma	_	17	punct	_	_
+16	რომელნი	რომელი	PRON	Pron_Rel_Abs_Pl	Case=Abs|Number=Plur|PronType=Rel	17	obj	_	_
+17	წარტყუენნა	წარტყუენვა	VERB	V_Act_Aor_Pv_S:3Sg_O:3Pl	Mood=Ind|Number[obj]=Plur|Number[subj]=Sing|Person[obj]=3|Person[subj]=3|Tense=Past|VerbForm=Fin	12	acl:relcl	_	Preverb=Yes
+18	ნაბუქოდონოსორ	ნაბუქოდონოსორ	PROPN	N_Prop	NameType=Prs	17	nsubj	_	SpaceAfter=No
+19	,	,	PUNCT	Punct_Comma	_	20	punct	_	_
+20	მეფემან	მეფე	NOUN	N_Erg_Sg	Case=Erg|Number=Sing	18	appos	_	_
+21	ბაბილონისამან	ბაბილონი	PROPN	N_Prop_Gen_Sg_Erg_Sg	Case=Gen|Case[sauf]=Erg|NameType=Geo|Number=Sing|Number[sauf]=Sing	20	nmod	_	SpaceAfter=No
+22	,	,	PUNCT	Punct_Comma	_	23	punct	_	_
+23	ბაბილონდ	ბაბილონი	PROPN	N_Prop_Adv_Sg	Case=Ess|NameType=Geo|Number=Sing	17	obl	_	SpaceAfter=No
+24	,	,	PUNCT	Punct_Comma	_	26	punct	_	_
+25	რომელნი	რომელი	PRON	Pron_Rel_Abs_Pl	Case=Abs|Number=Plur|PronType=Rel	26	obj	_	_
+26	მიაქცინა	მიქცევა	VERB	V_Act_Aor_Pv_AV_S:3Sg_O:3Pl	Mood=Ind|Number[obj]=Plur|Number[subj]=Sing|Person[obj]=3|Person[subj]=3|Tense=Past|VerbForm=Fin	4	acl:relcl	_	Preverb=Yes|Version=A
+27	კჳროს	კჳროს	PROPN	N_Prop	NameType=Prs	26	nsubj	_	_
+28	ბაბილონით	ბაბილონი	PROPN	N_Prop_Ins_Sg	Case=Ins|NameType=Geo|Number=Sing	26	obl	_	_
+29	იერუსალემდ	იერუსალემი	PROPN	N_Prop_Adv_Sg	Case=Ess|NameType=Geo|Number=Sing	26	obl	_	_
+30	ჰურიასტანდ	ჰურიასტანი	PROPN	N_Prop_Adv_Sg	Case=Ess|NameType=Geo|Number=Sing	29	appos	_	SpaceAfter=No
+31	,	,	PUNCT	Punct_Comma	_	32	punct	_	_
+32	კაცი	კაცი	NOUN	N_Nom_Sg	Case=Nom|Number=Sing	4	appos	_	_
+33	თითოეულად	თითოეულად	ADV	Adv	_	34	advmod	_	_
+34	ქალაქსა	ქალაქი	NOUN	N_Dat_Sg	Case=Dat|Number=Sing	32	nmod	_	_
+35	თჳსსა	თჳსი	PRON	Pron_Poss_Dat_Sg	Case=Dat|Number=Sing|Poss=Yes|PronType=Prs	34	nmod	_	SpaceAfter=No
+36	,	,	PUNCT	Punct_Comma	_	3	punct	_	_
+
+# sent_id = Ezra_2_2
+# text = რომელნი-იგი გამოსრულ იყვნეს ზორობაბელის თანა: ისუ, ნეემია, სარეა, ზრიელია, მარდოქეა, ბალაასან, მასაფარ, გაგუვარ, ჰრეუმ, ბაანა, ესე არს რიცხჳ კრებულისაჲ მის ისრაელისაჲ:
+# parallel_id = bible/ezra-2-2
+1	რომელნი-იგი	რომელი	PRON	Pron_Rel_Nom_Pl	Case=Nom|Number=Plur|PronType=Rel	2	nsubj	_	_
+2	გამოსრულ	გამოსლვა	VERB	V_Part_Pv_Abs	Case=Abs|Tense=Past|VerbForm=Part	0	root	_	Preverb=Yes
+3	იყვნეს	ყოფა	AUX	V_Act_Aor_IV_S:3Pl	Mood=Ind|Number[subj]=Plur|Person[subj]=3|Tense=Past|VerbForm=Fin	2	aux	_	_
+4	ზორობაბელის	ზორობაბელი	PROPN	N_Prop_Gen_Sg	Case=Gen|NameType=Prs|Number=Sing	2	obl	_	_
+5	თანა	თანა	ADP	Post	AdpType=Post|Case=Gen	4	case	_	SpaceAfter=No
+6	:	:	PUNCT	Punct_Colon	_	7	punct	_	_
+7	ისუ	ისუ	PROPN	N_Prop	NameType=Prs	2	appos	_	SpaceAfter=No
+8	,	,	PUNCT	Punct_Comma	_	9	punct	_	_
+9	ნეემია	ნეემია	PROPN	N_Prop	NameType=Prs	7	conj	_	SpaceAfter=No
+10	,	,	PUNCT	Punct_Comma	_	11	punct	_	_
+11	სარეა	სარეა	PROPN	N_Prop	NameType=Prs	7	conj	_	SpaceAfter=No
+12	,	,	PUNCT	Punct_Comma	_	13	punct	_	_
+13	ზრიელია	ზრიელია	PROPN	N_Prop	NameType=Prs	7	conj	_	SpaceAfter=No
+14	,	,	PUNCT	Punct_Comma	_	15	punct	_	_
+15	მარდოქეა	მარდოქეა	PROPN	N_Prop	NameType=Prs	7	conj	_	SpaceAfter=No
+16	,	,	PUNCT	Punct_Comma	_	17	punct	_	_
+17	ბალაასან	ბალაასან	PROPN	N_Prop	NameType=Prs	7	conj	_	SpaceAfter=No
+18	,	,	PUNCT	Punct_Comma	_	19	punct	_	_
+19	მასაფარ	მასაფარ	PROPN	N_Prop	NameType=Prs	7	conj	_	SpaceAfter=No
+20	,	,	PUNCT	Punct_Comma	_	21	punct	_	_
+21	გაგუვარ	გაგუვარ	PROPN	N_Prop	NameType=Prs	7	conj	_	SpaceAfter=No
+22	,	,	PUNCT	Punct_Comma	_	23	punct	_	_
+23	ჰრეუმ	ჰრეუმ	PROPN	N_Prop	NameType=Prs	7	conj	_	SpaceAfter=No
+24	,	,	PUNCT	Punct_Comma	_	25	punct	_	_
+25	ბაანა	ბაანა	PROPN	N_Prop	NameType=Prs	7	conj	_	SpaceAfter=No
+26	,	,	PUNCT	Punct_Comma	_	27	punct	_	_
+27	ესე	ესე	PRON	Pron_Dem_Nom_Sg	Case=Nom|Number=Sing|PronType=Dem	28	nsubj	_	_
+28	არს	ყოფა	VERB	V_Act_Pres_S:3Sg	Mood=Ind|Number[subj]=Sing|Person[subj]=3|Tense=Pres|VerbForm=Fin	2	parataxis	_	Preverb=No
+29	რიცხჳ	რიცხჳ	NOUN	N_Nom_Sg	Case=Nom|Number=Sing	28	xcomp	_	_
+30	კრებულისაჲ	კრებული	NOUN	N_Gen_Sg_Nom_Sg	Case=Gen|Case[sauf]=Nom|Number=Sing|Number[sauf]=Sing	29	nmod	_	_
+31	მის	იგი	PRON	Pron_Dem_Gen_Sg	Case=Gen|Number=Sing|PronType=Dem	30	det	_	_
+32	ისრაელისაჲ	ისრაელი	PROPN	N_Prop_Gen_Sg_Nom_Sg	Case=Gen|Case[sauf]=Nom|NameType=Geo|Number=Sing|Number[sauf]=Sing	30	nmod	_	SpaceAfter=No
+33	:	:	PUNCT	Punct_Colon	_	28	punct	_	_
+
+# sent_id = Ezra_2_3
+# text = ძენი ფურსისნი ორ ათას ას სამეოცდათორმეტ,
+# parallel_id = bible/ezra-2-3
+1	ძენი	ძე	NOUN	N_Nom_Pl	Case=Nom|Number=Plur	0	root	_	_
+2	ფურსისნი	ფურსი	PROPN	N_Prop_Gen_Sg_Nom_Pl	Case=Gen|Case[sauf]=Nom|NameType=Prs|Number=Sing|Number[sauf]=Plur	1	nmod	_	_
+3	ორ	ორი	NUM	Num_Abs	Case=Abs|NumType=Card	1	nummod	_	_
+4	ათას	ათასი	NUM	Num_Abs	Case=Abs|NumType=Card	3	compound	_	_
+5	ას	ასი	NUM	Num_Abs	Case=Abs|NumType=Card	3	compound	_	_
+6	სამეოცდათორმეტ	სამეოცდათორმეტი	NUM	Num_Abs	Case=Abs|NumType=Card	3	compound	_	SpaceAfter=No
+7	,	,	PUNCT	Punct_Comma	_	1	punct	_	_
+
+# sent_id = Ezra_2_4
+# text = ძენი არისისნი შჳდას სამეოცდაათექუსმეტ,
+# parallel_id = bible/ezra-2-4
+1	ძენი	ძე	NOUN	N_Nom_Pl	Case=Nom|Number=Plur	0	root	_	_
+2	არისისნი	არისი	PROPN	N_Prop_Gen_Sg_Nom_Pl	Case=Gen|Case[sauf]=Nom|NameType=Prs|Number=Sing|Number[sauf]=Plur	1	nmod	_	_
+3	შჳდას	შჳდასი	NUM	Num_Abs	Case=Abs|NumType=Card	1	nummod	_	_
+4	სამეოცდაათექუსმეტ	სამეოცდაათექუსმეტი	NUM	Num_Abs	Case=Abs|NumType=Card	3	compound	_	SpaceAfter=No
+5	,	,	PUNCT	Punct_Comma	_	1	punct	_	_
+
+# sent_id = Ezra_2_5
+# text = ძენი არისისნი შჳდას სამეოცდაათექუსმეტ,
+# parallel_id = bible/ezra-2-5
+1	ძენი	ძე	NOUN	N_Nom_Pl	Case=Nom|Number=Plur	0	root	_	_
+2	არისისნი	არისი	PROPN	N_Prop_Gen_Sg_Nom_Pl	Case=Gen|Case[sauf]=Nom|NameType=Prs|Number=Sing|Number[sauf]=Plur	1	nmod	_	_
+3	შჳდას	შჳდასი	NUM	Num_Nom	Case=Abs|NumType=Card	1	nummod	_	_
+4	სამეოცდაათექუსმეტ	სამეოცდაათექუსმეტი	NUM	Num_Abs	Case=Abs|NumType=Card	3	compound	_	SpaceAfter=No
+5	,	,	PUNCT	Punct_Comma	_	1	punct	_	_
+
+# sent_id = Ezra_2_6
+# text = ძენი ლეფთალემისნი მოაბელისანი და ძეთა ისუისთაჲ და ჰროაბისთაჲ ორ ათას რვაას და ათორმეტ,
+# parallel_id = bible/ezra-2-6
+1	ძენი	ძე	NOUN	N_Nom_Pl	Case=Nom|Number=Plur	0	root	_	_
+2	ლეფთალემისნი	ლეფთალემი	PROPN	N_Prop_Gen_Sg_Nom_Pl	Case=Gen|Case[sauf]=Nom|NameType=Prs|Number=Sing|Number[sauf]=Plur	1	nmod	_	_
+3	მოაბელისანი	მოაბელი	PROPN	N_Prop_Gen_Sg_Nom_Pl	Case=Gen|Case[sauf]=Nom|NameType=Geo|Number=Sing|Number[sauf]=Plur	2	appos	_	_
+4	და	და	CCONJ	Cj_Coord	_	5	cc	_	_
+5	ძეთა	ძე	NOUN	N_Obl_Pl	Case=Gen|Number=Plur	2	conj	_	_
+6	ისუისთაჲ	ისუი	PROPN	N_Prop_Gen_Sg_Obl_Pl_Nom_Sg	Case=Gen|Case[dsauf]=Nom|Case[sauf]=Gen|NameType=Prs|Number=Sing|Number[dsauf]=Sing|Number[sauf]=Plur	5	nmod	_	_
+7	და	და	CCONJ	Cj_Coord	_	8	cc	_	_
+8	ჰროაბისთაჲ	ჰროაბი	PROPN	N_Prop_Gen_Sg_Obl_Pl_Nom_Sg	Case=Gen|Case[dsauf]=Nom|Case[sauf]=Gen|NameType=Prs|Number=Sing|Number[dsauf]=Sing|Number[sauf]=Plur	6	conj	_	_
+9	ორ	ორი	NUM	Num_Abs	Case=Abs|NumType=Card	1	nummod	_	_
+10	ათას	ათასი	NUM	Num_Abs	Case=Abs|NumType=Card	9	compound	_	_
+11	რვაას	რვაასი	NUM	Num_Abs	Case=Abs|NumType=Card	9	compound	_	_
+12	და	და	CCONJ	Cj_Coord	_	13	cc	_	_
+13	ათორმეტ	ათორმეტი	NUM	Num_Abs	Case=Abs|NumType=Card	9	compound	_	SpaceAfter=No
+14	,	,	PUNCT	Punct_Comma	_	1	punct	_	_
+
+# sent_id = Ezra_2_7
+# text = ძენი ელამისნი ორ ათას ორას ერგასის და ოთხ,
+# parallel_id = bible/ezra-2-7
+1	ძენი	ძე	NOUN	N_Nom_Pl	Case=Nom|Number=Plur	0	root	_	_
+2	ელამისნი	ელამი	PROPN	N_Prop_Gen_Sg_Nom_Pl	Case=Gen|Case[sauf]=Nom|NameType=Prs|Number=Sing|Number[sauf]=Plur	1	nmod	_	_
+3	ორ	ორი	NUM	Num_Abs	Case=Abs|NumType=Card	1	nummod	_	_
+4	ათას	ათასი	NUM	Num_Abs	Case=Abs|NumType=Card	3	compound	_	_
+5	ორას	ორასი	NUM	Num_Abs	Case=Abs|NumType=Card	3	compound	_	_
+6	ერგასის	ერგასისი	NUM	Num_Abs	Case=Abs|NumType=Card	3	compound	_	_
+7	და	და	CCONJ	Cj_Coord	_	8	cc	_	_
+8	ოთხ	ოთხი	NUM	Num_Abs	Case=Abs|NumType=Card	3	compound	_	SpaceAfter=No
+9	,	,	PUNCT	Punct_Comma	_	1	punct	_	_
+
+# sent_id = Ezra_2_8
+# text = ძენი ზატუნაჲსნი ცხრაას ოცდახუთ,
+# gk_text = υἱοὶ Ζαθουα ἐννακόσιοι τεσσαράκοντα πέντε.
+# arm_text = որդիք զատոնայ՝ ինն հարիւր քառասուն եւ հինգ։
+# parallel_id = bible/ezra-2-8
+1	ძენი	ძე	NOUN	N_Nom_Pl	Case=Nom|Number=Plur	0	root	_	_
+2	ზატუნაჲსნი	ზატუნაჲ	PROPN	N_Prop_Gen_Sg_Nom_Pl	Case=Gen|Case[sauf]=Nom|NameType=Prs|Number=Sing|Number[sauf]=Plur	1	nmod	_	_
+3	ცხრაას	ცხრაასი	NUM	Num_Abs	Case=Abs|NumType=Card	1	nummod	_	_
+4	ოცდახუთ	ოცდახუთი	NUM	Num_Abs	Case=Abs|NumType=Card	3	compound	_	SpaceAfter=No
+5	,	,	PUNCT	Punct_Comma	_	1	punct	_	_
+

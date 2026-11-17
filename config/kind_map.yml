@@ -1149,6 +1149,45 @@ sources:
       "Chasidut": literary/wisdom                # the Musar precedent
       "Jewish Thought": literary/essay           # the dta Philosophie precedent
       "Second Temple": scripture                 # deuterocanon/pseudepigrapha
+  dicta-bavli:        # every document is a Bavli tractate (the adapter's constant genre)
+    metadata: genre
+    map:
+      "Talmud Bavli": exegesis                   # 37 — the sefaria "Talmud" fold: the Gemara is
+      #   the discussion OF the Mishnah, the house class for commentary on a canonical text
+  dicta-library:      # genre = "categoryEnglish -- subcategoryEnglish" from the manifest
+    metadata: genre   # (census 2026-11-16, 1,205 books; counts are books per head). First-hit
+    #                   prefix rules, so the deeper exceptions precede their head; the folds
+    #                   follow the sefaria heads wherever the categories coincide.
+    map:
+      "General Topics": literary/narrative/fable # 1 — the bare head is Mishlei Yaakov, the Dubno
+      #   Maggid's parables (upstream's Hebrew subcategory משלים)
+    prefix_map:
+      "Responsa": legal                          # 415 — the sefaria Responsa fold (legal opinions)
+      "Talmud and Commentaries": exegesis        # 252 — novellae and commentaries on the Talmud,
+      #   the Rif and the Rosh (the sefaria "Talmud" fold)
+      "Rabbinic Literature": exegesis            # 21 — commentaries on the Mishnah, Yerushalmi, Avot
+      "Tanakh and Commentaries": exegesis        # 56 — Torah/Nakh/Megillot commentaries and Rashi
+      #   supercommentaries (the sefaria Rishonim-on-Tanakh fold)
+      "Halakha and Minhaggim": legal/law         # 205 — codes, compilations and Shulchan Arukh
+      #   commentaries (the sefaria Halakhah fold)
+      "Rambam": legal/law                        # 43 — commentaries on the Mishneh Torah, a legal
+      #   code: commentary on law stays law (the Shulchan Arukh commentaries' fold)
+      "Derashot (Homilies)": sermon              # 49 — preached homilies on the parasha, the
+      #   festivals and general topics: composed for delivery
+      "Chassidut": literary/wisdom               # 64 — the sefaria Chasidut fold
+      "Kabbala": exegesis                        # 18 — the sefaria Kabbalah fold
+      "Jewish Thought and Ethics -- Mussar": literary/wisdom  # 5 — the sefaria Musar fold
+      "Jewish Thought and Ethics": literary/essay  # 7 — the sefaria Jewish Thought fold
+      "Miscellaneous -- Prayer": ritual/liturgy  # 2 — Berit Avraham, Yesod veShoresh haAvodah:
+      #   the order and kavanot of prayer and rite (the sefaria Liturgy fold)
+      "Miscellaneous -- The 613 Mitzvot": legal/law  # 5 — enumerations of the commandments
+      "General Topics -- Nature and Science": scholarly  # 2
+      "General Topics -- Bibliography": scholarly  # 1 — Koreh haDorot (the noscemus Bibliography fold)
+      "General Topics -- Biography": literary/narrative/tale  # 1 — HaOtzar meSipurei Tzadikim,
+      #   tales of the tzaddikim
+    deliberate:
+      "Miscellaneous -- Assorted Topics": "upstream's own catch-all, not a genre (58 books:
+        novellae, responsa and derashot collections filed together)"
   kanripo:            # census: 5,122 docs over 54 held subclasses, 2026-09-26 —
     walk: kr-subclass # P104-1: the KR-Catalog 部類 taxonomy, fine grain. The KR id's
     #                   4-char prefix IS the subclass; the walker feeds "KR1a 易類"
@@ -1348,6 +1387,25 @@ sources:
     # and offerings; the inscribed stirrup jars are transport labels.
     # A whole-source declaration, the parse-time mapping call.
     source_kind: administrative
+  rsti:                # census 2026-11-16 (canonical, every record through the adapter): 184 of
+    #                    the inventory's docs carry the text item's OCHRE "Genre" property — the
+    #                    editions and shells; the inventory-only records (unpublished, no-text)
+    #                    carry none and stay kind-less, never guessed. A closed eight-value list.
+    facet: genre
+    map:
+      "Letter": letter                    # 115 — the Ugarit and Ras Ibn Hani correspondence; private
+      #                                     vs official is not stated upstream, so the head only
+      "Administrative": administrative    # 44
+      "Economic": administrative          # 1 — upstream's one "Economic" text: commodity
+      #                                     bookkeeping, the house administrative head (accounts,
+      #                                     receipts, lists); the house has no separate economic class
+      "Ritual": ritual                    # 8 — the sacrificial lists and cult prescriptions (RS 1.001
+      #                                     = KTU 1.39); no festival/liturgy sub is claimed upstream
+      "Myth": literary/narrative/myth     # 7 — upstream's own label for the mythological tablets;
+      #                                     the house myth sub IS this claim
+      "Schooltext": school                # 6 — scribal exercises, the schoolroom's own products
+      "Legal": legal                      # 2
+      "Treaty": legal/treaty              # 1 — the treaty is the house legal sub by name
   delpher-newspapers:  # P173 — census 2026-11-13: the 16xx cone, 8,559 issues of 22 papers
     # The Delpher open newspaper archive IS the periodical press: every
     # document is one issue of a newspaper (courantes, gazettes, the
@@ -1575,6 +1633,8 @@ sources:
     source_kind: scripture
   etcbc-targum:
     source_kind: scripture   # P153: the Pentateuch targums — every text is a Bible translation
+  dtucph-sp:
+    source_kind: scripture   # the Samaritan Pentateuch — every document is a book of the Torah
   typikon-bible:
     source_kind: scripture   # P153: whole Bible editions (the 1688 Bucharest Bible; since 2026-11-03
     #                          also the Elizabeth Bible and the Old Georgian Bible — every document a Bible book)
@@ -3302,3 +3362,22 @@ sources:
     deliberate:
       "non-fictie": "DBNL's catch-all for everything outside literature (history, religion, travel, natural
         science, law, letters) — a negative label, not a genre claim (750)"
+  pgp-geniza:         # the Princeton Geniza Project's closed 9-type list (README: "the PGP divides
+    facet: genre      # its material into 9 document types"); counts = text-bearing documents,
+    #                   census through the adapter 2026-11-16 (7,784 docs; 2 untyped)
+    map:
+      "Letter": letter                           # 3,861 — private, business and communal letters
+      "Legal document": legal                    # 2,518 — court records, contracts, deeds, marriage
+      #                                            and divorce documents, testimonies
+      "State document": administrative           # 515 — the chancery and fiscal paperwork of the
+      #                                            Fatimid/Ayyubid/Mamluk state: decrees, petitions,
+      #                                            tax receipts — the institutions' paperwork head
+      "List or table": administrative/list       # 498 — accounts, lists of names and goods
+      "Literary text": literary                  # 130
+      "Legal query or responsum": legal          # 97 — a question put to a legal authority and its
+      #                                            answer: law and its instruments, no finer sub
+      "Credit instrument or private receipt": administrative/receipt  # 59 — receipts, IOUs, suftajas
+      "Paraliterary text": unknown               # 104 — upstream's residual class (amulets,
+      #                                            calendars, exercises, prayers): no single head
+    deliberate:
+      "Inscription": "a medium (writing on an object), not a function — 5 documents corpus-wide, none text-bearing"

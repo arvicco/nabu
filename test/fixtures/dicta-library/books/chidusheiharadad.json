@@ -1,0 +1,19 @@
+{
+  "fileName": "chidusheiharadad",
+  "author": "רבי דוד דב מייזלש",
+  "authorEnglish": "Rabbi David Dov Meiselis",
+  "category": "תלמוד ומפרשיו",
+  "categoryEnglish": "Talmud and Commentaries",
+  "subcategory": "אחרונים - מערב",
+  "subcategoryEnglish": "Acharonim (West)",
+  "displayName": "חידושי הרד\"ד",
+  "displayNameEnglish": "Chidushei haRadad",
+  "printLocation": "ורשה",
+  "printLocationEnglish": "Warsaw",
+  "printYear": 1890,
+  "source": "ספריית דיקטה",
+  "ocrFeDir": "chidusheiharadad",
+  "textFileURL": "https://files.dicta.org.il/library-1-0/chidusheiharadad/chidusheiharadad__text_files.zip",
+  "nikudMetegFileURL": "https://files.dicta.org.il/library-1-0/chidusheiharadad/chidusheiharadad__nikud_meteg_files.zip",
+  "OCRDataURL": "https://files.dicta.org.il/library-1-0/chidusheiharadad/chidusheiharadad__ocr_data_html_files.zip"
+}

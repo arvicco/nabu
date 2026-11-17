@@ -15,7 +15,7 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 A source wears every desk it serves — these nine answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
-| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 13 November 2026)</span> |
+| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 17 November 2026)</span> |
 |---|---|---|---|---|
 | `aed` | dictionary | attribution | wired · manual | 35,052 entries |
 | `aes` | texts | attribution | wired · manual | 26,011 docs / 202,426 passages |
@@ -24,12 +24,12 @@ A source wears every desk it serves — these nine answer this desk. Holdings ar
 | `edubba-overlay` | feature module | attribution | wired · manual | nothing held yet |
 | `elephantine` | papyri & ostraca | attribution | wired · manual | 15,539 docs / 69,350 passages |
 | `tla-hf` | texts | attribution | wired · manual | 6 docs / 59,524 passages |
-| `ud` | treebank | nc | wired · manual | 83 docs / 329,980 passages |
+| `ud` | treebank | nc | wired · manual | 93 docs / 338,638 passages |
 | `unikemet` | feature module | open | wired · manual | nothing held yet |
 
-**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 13 November 2026)</span>: `egy` 51,131 · `ger` 12,985 · `cop` 12,242 · `eng` 4,861 · `grc` 3,311 · `egy-Egyd` 1,424 · `arc` 1,189 · `ara` 962 · `und` 168 · `phn` 94 … and 5 more (`nabu axis egyptian` lists all).
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 17 November 2026)</span>: `egy` 51,131 · `ger` 12,985 · `cop` 12,242 · `eng` 4,861 · `grc` 3,311 · `egy-Egyd` 1,424 · `arc` 1,189 · `ara` 962 · `und` 168 · `phn` 94 … and 5 more (`nabu axis egyptian` lists all).
 
-**Carried in by multilingual packs** (`ud` — whole-source members whose other languages ride along, as of 13 November 2026): `orv` 9 · `ota` 5 · `lzh` 4 · `frm` 3 · `fro` 3 … and 16 more (`nabu axis egyptian` lists all).
+**Carried in by multilingual packs** (`ud` — whole-source members whose other languages ride along, as of 17 November 2026): `orv` 9 · `oge` 5 · `ota` 5 · `lzh` 4 · `frm` 3 … and 20 more (`nabu axis egyptian` lists all).
 
 ## The desk's instruments
 

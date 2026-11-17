@@ -2443,3 +2443,51 @@ Proto-Siouan reconstructions with subgroup protoforms. **`dyenindoeuropean`** �
 of 95 modern languages. **`saenkoromance`** — **465 sets / 5,092
 reflexes**: Saenko's Romance Swadesh wordlists over 43 varieties,
 Dalmatian and Ladin beside the dialect continua.
+
+## 8bm. The Hebrew wave, leg 1 — the documentary Geniza, the pointed Bavli, the responsa shelf, the Samaritan witness
+
+Four arrivals that open two registers the library never held — the
+everyday documentary record of a medieval Jewish society, and the
+responsa genre — beside a second, fully pointed Talmud and a third
+independent Pentateuch witness.
+
+**`pgp-geniza`** — **9,848 documents / 303,860 passages**: the
+Princeton Geniza Project's digital editions of the Cairo Geniza's
+everyday documents — letters of merchants and scholars, court
+records, marriage and sale contracts, accounts and lists, petitions
+and tax receipts of the Fatimid-to-Mamluk state, 10th–19th century —
+Judaeo-Arabic above all, beside Hebrew, Aramaic and Arabic, with
+English and Hebrew translations as sibling documents, dates
+(calendar-converted), origin and destination places with
+coordinates, and shelfmarks across the Geniza's scattered libraries.
+A register nothing held covers: not literature but life. CC BY-NC
+4.0 (Princeton Geniza Lab; Rustow, Koeser), credited on every hit.
+
+**`dicta-bavli`** — **37 tractates / 78,782 passages**: the complete
+Babylonian Talmud with full niqqud — Dicta's machine vocalization,
+human-reviewed — in the Vilna pagination, cited by daf and amud; the
+Vilna print's plene spelling as the text, the defective spelling
+riding each paragraph where it differs. The first fully pointed
+Bavli in the library, a second witness beside the Sefaria shelf.
+CC BY-SA, Dicta's requested credit on every hit.
+
+**`dicta-library`** — **1,204 books / 193,335 page passages**: the
+Dicta library's AI-OCR'd rabbinic printed books, the library's first
+responsa shelf — over four hundred volumes of questions-and-answers
+from the Geonim and Rishonim to the Acharonim of Europe and the
+Ottoman East — beside Talmud novellae, halakhic codes, Torah
+commentaries, derashot, Hasidic books and musar, each with author,
+category, and the imprint town and year (Warsaw, Vilna, Jerusalem,
+Lemberg, Livorno among ninety-three). Machine OCR read as a
+searchable rendering of the printed page, never an edition —
+upstream's own warning, declared. CC BY-SA 4.0, credit Dicta.
+
+**`dtucph-sp`** — **5 books / 5,841 passages**: the Samaritan
+Pentateuch as the CACCHT project's Text-Fabric edition (release
+v7.5.0) — the Torah of the Gerizim community, a Second Temple-era
+recension independent of the Masoretic tradition, from MS Dublin
+Chester Beatty 751 and MS Garizim 1, in square-script
+transcription with BHSA-modelled morphology, the phonetic reading
+tradition after Ben-Hayyim, and the Tal–Florentin readings as word
+annotations. A third Pentateuch witness beside oshb and bhsa.
+CC BY-NC 4.0 (cite the Zenodo dataset).

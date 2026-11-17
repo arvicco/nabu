@@ -21,6 +21,7 @@ class UniversalDependenciesTest < Minitest::Test
     "urn:nabu:ud:akkadian-pisandub:akk_pisandub-ud-test-head50",
     "urn:nabu:ud:akkadian-riao:akk_riao-ud-test-head50",
     "urn:nabu:ud:ancient-greek-perseus:grc_perseus-ud-test-head50",
+    "urn:nabu:ud:avestan-old:ae_old-ud-test",
     "urn:nabu:ud:classical-armenian-caval:xcl_caval-ud-test-head50",
     "urn:nabu:ud:classical-chinese-kyoto:lzh_kyoto-ud-dev-slices",
     "urn:nabu:ud:classical-chinese-kyoto:lzh_kyoto-ud-test-head50",
@@ -46,14 +47,19 @@ class UniversalDependenciesTest < Minitest::Test
     "urn:nabu:ud:old-east-slavic-ruthenian:orv_ruthenian-ud-test-head50",
     "urn:nabu:ud:old-french-profiterole:fro_profiterole-ud-test-head50",
     "urn:nabu:ud:old-georgian-glc:oge_glc-ud-test-head20",
+    "urn:nabu:ud:old-georgian-midglauro:oge_midglauro-ud-test-head20",
+    "urn:nabu:ud:old-georgian-oglauro:oge_oglauro-ud-test-head20",
     "urn:nabu:ud:old-irish-dipsgg:incomplete-head10",
     "urn:nabu:ud:old-irish-dipsgg:sga_dipsgg-ud-test-head50",
     "urn:nabu:ud:old-irish-dipwbg:sga_dipwbg-ud-test",
+    "urn:nabu:ud:old-occitan-cronoc:pro_cronoc-ud-test-head20",
     "urn:nabu:ud:ottoman-boun:ota_boun-ud-test-head50",
     "urn:nabu:ud:ottoman-dudu:ota_dudu-ud-test-head50",
+    "urn:nabu:ud:pali-palicanon:pi_palicanon-ud-test-head20",
     "urn:nabu:ud:phrygian-kul:xpg_kul-ud-test-head50",
     "urn:nabu:ud:romanian-nonstandard:ro_nonstandard-ud-test-head50",
     "urn:nabu:ud:sanskrit-vedic:sa_vedic-ud-test-head50",
+    "urn:nabu:ud:tangut-mica:txg_mica-ud-test-head20",
     "urn:nabu:ud:tupinamba-tudet:tpn_tudet-ud-test-head50"
   ].freeze
 
@@ -483,6 +489,76 @@ class UniversalDependenciesTest < Minitest::Test
     assert_equal "Դատաստանագիրք", document.passages[1].annotations["title"], "document-scoped, not block-scoped"
   end
 
+  # The UD v2.19 bundle (released 2026-11-15; every fact read at the r2.19
+  # tag 2026-11-16): six treebanks, all test split only except CronOc
+  # (train/dev/test). slug => [repo, language, license, license_class,
+  # fixture urn, blocks in the fixture, README Genre line, opening sent_id,
+  # opening text prefix]. OGLauRo's grants FORK (LICENSE.txt BY-SA 4.0 vs
+  # README metadata BY-NC-SA 4.0) — the PROFITEROLE/UDante conservative nc
+  # ruling; the other five agree on BY-SA 4.0 → attribution. Languages:
+  # UD's own tags, with pi/ae carried as the library's 639-3 pli/ave lanes
+  # (the sa → san precedent); MidGLauRo is Middle Georgian filed by UD
+  # under oge (the RNC-under-orv one-tag precedent).
+  UD_219 = {
+    "old-georgian-oglauro" => ["UD_Old_Georgian-OGLauRo", "oge", "CC BY-NC-SA 4.0", "nc",
+                               "oge_oglauro-ud-test-head20", 20, %w[bible], "Ezra_1_1",
+                               "პირველსა მას წელსა კჳროს მეფისა სპარსთაჲსა"],
+    "old-georgian-midglauro" => ["UD_Old_Georgian-MidGLauRo", "oge", "CC BY-SA 4.0", "attribution",
+                                 "oge_midglauro-ud-test-head20", 20, %w[fiction], "amirandarejaniani_5_1",
+                                 "ისმენდი, მეფეთ-მეფეო, ცხოვნდი უკუნისამდე!"],
+    "pali-palicanon" => ["UD_Pali-PaliCanon", "pli", "CC BY-SA 4.0", "attribution",
+                         "pi_palicanon-ud-test-head20", 20, %w[nonfiction], "dn14:1.4.1",
+                         "Ito so bhikkhave ekanavutikappe yaṃ vipassī bhagavā"],
+    "tangut-mica" => ["UD_Tangut-MiCA", "txg", "CC BY-SA 4.0", "attribution",
+                      "txg_mica-ud-test-head20", 20, %w[nonfiction poetry], "lotus_sutra_0001",
+                      "𗤓𗹙𗤻𗑗𗖰𗚩𗯨𗙏𘝯𘋢𗥤𗫡𘗠𘄿。"],
+    "old-occitan-cronoc" => ["UD_Old_Occitan-CronOc", "pro", "CC BY-SA 4.0", "attribution",
+                             "pro_cronoc-ud-test-head20", 20, %w[fiction], "13th_Lagrasse_1397",
+                             "e encara mays Borrelh cuiec a Rotlan tolre"],
+    "avestan-old" => ["UD_Avestan-Old", "ave", "CC BY-SA 4.0", "attribution",
+                      "ae_old-ud-test", 24, %w[poetry], "GY28.0.0",
+                      "yānīm. manō. yānīm. vacō. yānīm."]
+  }.freeze
+
+  def test_ud_219_bundle_registers_and_round_trips_all_six
+    treebanks = Nabu::Adapters::UniversalDependencies::TREEBANKS
+    adapter = Nabu::Adapters::UniversalDependencies.new
+    UD_219.each do |slug, (repo, language, license, license_class, stem, blocks, genres, sent_id, opening)|
+      assert_equal ["https://github.com/UniversalDependencies/#{repo}", language, license, license_class],
+                   treebanks.fetch(slug).values_at(:repo, :language, :license, :license_class), slug
+      urn = "urn:nabu:ud:#{slug}:#{stem}"
+      document = adapter.parse(ud_ref(urn))
+      assert_equal blocks, document.size, "#{slug}: sentence blocks in the fixture"
+      assert_equal language, document.language, slug
+      assert_equal license_class, document.license_override, slug
+      assert_equal genres, document.metadata["genres"], "#{slug}: the README Genre line"
+      first = document.passages.first
+      assert_equal "#{urn}:#{sent_id}", first.urn, slug
+      assert first.text.start_with?(Nabu::Normalize.nfc(opening)), "#{slug}: #{first.text}"
+    end
+    assert_equal "nc", Nabu::Adapters::UniversalDependencies.manifest.license_class
+  end
+
+  # The translation comments already on the ConlluParser whitelist ride
+  # through: MiCA's `# text_en` and the Avestan `# translation`. Pali's MWT
+  # compounds (ekanavutikappe → ekanavuti + kappe) split like the ITTB
+  # essetque case. (OGLauRo's gk_text/arm_text parallels and MiCA's
+  # text_lzh are NOT on the whitelist — declared coarseness on the entries.)
+  def test_ud_219_translations_and_mwt_ride_through
+    adapter = Nabu::Adapters::UniversalDependencies.new
+    lotus = adapter.parse(ud_ref("urn:nabu:ud:tangut-mica:txg_mica-ud-test-head20")).passages.first
+    assert_equal "The Universal Gate of World-Voice-Perceiver Bodhisattva",
+                 lotus.annotations.dig("translations", "text_en")
+
+    gatha = adapter.parse(ud_ref("urn:nabu:ud:avestan-old:ae_old-ud-test")).passages.first
+    assert gatha.annotations.dig("translations", "translation").start_with?("The thought to request")
+
+    pali = adapter.parse(ud_ref("urn:nabu:ud:pali-palicanon:pi_palicanon-ud-test-head20")).passages.first
+    forms = pali.annotations["tokens"].map { |token| token["form"] }
+    assert_includes forms, "ekanavuti"
+    assert_includes forms, "kappe"
+  end
+
   # The Romance pack flows through the same unchanged annotation→index
   # plumbing: the two Latin treebanks contribute rows to the ALREADY
   # lemma-indexed lat lane (filtered by urn — latin-ittb/latin-perseus also
@@ -565,7 +641,9 @@ class UniversalDependenciesTest < Minitest::Test
                       old-east-slavic-birchbark old-east-slavic-rnc
                       old-east-slavic-ruthenian old-irish-dipwbg
                       tupinamba-tudet guarani-oldtudet phrygian-kul
-                      old-georgian-glc middle-armenian-armtdp].freeze
+                      old-georgian-glc middle-armenian-armtdp
+                      old-georgian-midglauro pali-palicanon tangut-mica
+                      old-occitan-cronoc avestan-old].freeze
   BARE_SLUGS = %w[ancient-greek-perseus gothic-proiel greek-proiel latin-ittb latin-perseus
                   sanskrit-vedic old-irish-dipsgg].freeze
 
@@ -610,7 +688,7 @@ class UniversalDependenciesTest < Minitest::Test
 
   # --- discover -----------------------------------------------------------
 
-  def test_discover_finds_exactly_thirty_seven_files_sorted_by_urn
+  def test_discover_finds_exactly_forty_three_files_sorted_by_urn
     refs = Nabu::Adapters::UniversalDependencies.new.discover(FIXTURES).to_a
     assert_equal EXPECTED_URNS, refs.map(&:id)
   end
@@ -1052,14 +1130,14 @@ class UniversalDependenciesTest < Minitest::Test
       adapter = ud_pointing_at(upstreams)
       adapter.fetch(workdir)
 
-      # First repo gains a file; the LAST EIGHT repos each lose their only
-      # treebank file. Re-derived at THIRTY-SIX treebanks (old-georgian-glc
-      # + middle-armenian-armtdp): the guard trips on strictly greater,
-      # `doomed > 0.2 × ingestible`, so 8 > 0.2 × 36 = 7.2 trips while 7
-      # does not — 8 is the new minimum tripping count (it was 7 from
-      # thirty through thirty-four treebanks).
+      # First repo gains a file; the LAST NINE repos each lose their only
+      # treebank file. Re-derived at FORTY-TWO treebanks (the six of the
+      # UD v2.19 bundle): the guard trips on strictly greater,
+      # `doomed > 0.2 × ingestible`, so 9 > 0.2 × 42 = 8.4 trips while 8
+      # does not — 9 is the new minimum tripping count (it was 8 at
+      # thirty-six treebanks).
       first = slugs.first
-      doomed = slugs.last(8)
+      doomed = slugs.last(9)
       File.write(File.join(upstreams[first], "new.txt"), "new\n")
       git(upstreams[first], "add", ".")
       git(upstreams[first], "-c", "user.email=t@t", "-c", "user.name=t", "commit", "-q", "-m", "grow")
@@ -1077,7 +1155,7 @@ class UniversalDependenciesTest < Minitest::Test
       refute Dir.exist?(File.join(workdir, ".attic"))
 
       report = adapter.fetch(workdir, force: true)
-      assert_includes report.notes, "atticked 8"
+      assert_includes report.notes, "atticked 9"
       doomed.each do |slug|
         assert File.file?(File.join(workdir, ".attic", slug, "#{slug}.conllu")),
                "the attic preserves the <treebank>/<file> shape discover expects"

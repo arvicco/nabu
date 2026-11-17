@@ -7,6 +7,17 @@ already small (340 + 40 lines) and the module's read seam
 full codemap to be exercised honestly (a trimmed slice would hide
 referential-integrity gaps the drift guard exists to catch).
 
+- **Retrieved 2026-11-16 (ninth cut)** — the jv~java row repair
+  (nabu-lects PR #49, merged 2026-11-14): the jav-Java → jv~java
+  universal codemap row removed after the surface byte guard showed
+  the held jv-wikisource text 100% Latin-script (the row violated
+  the surface-honest rule; the per-collection truth moved to Nabu's
+  config/lect_overrides.yml instead). lects.yml unchanged from the
+  eighth cut. Copied verbatim from canonical/nabu-lects (commit
+  `d805f12`, synced 2026-11-16). `lects.yml` 286,121 B, sha256
+  `1ef7f8ea3e51977562eda1b902c4a513e4459b424efd3a34f435ec28f991231d`;
+  `codemap.yml` 16,014 B, sha256
+  `18125c8c7f559797a7170ea2fee4e5bc8d0e1907c5d6476c9c23b27717cace27`.
 - **Retrieved 2026-11-13 (eighth cut)** — the big registry sitting
   (nabu-lects PR #48, merged this day): the ancient epigraphic
   anchors (xrr, cms, xmr, xcr, xlc), amh, hu with anc/old, ota, the

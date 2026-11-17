@@ -298,6 +298,17 @@ sources:
     # band [1600, 1800] is the guaraní jesuítico convention); revisit if
     # a modern gn-coded treebank ever registers.
     gn: { lect: "gn:old", tier: certain }
+  jv-wikisource:
+    # The jv~java repair (2026-11-16, the nabu-lects PR #49 merge tail):
+    # the post-rebuild surface byte guard measured the jav-Java-tagged
+    # pages 100% LATIN as held — the scan Index declares aksara Jawa,
+    # but the transcribed text is Latin romanization. The universal
+    # jav-Java → jv~java codemap row was removed upstream as
+    # surface-dishonest; the per-collection truth lands here instead:
+    # surface claim ~latn, the artifact's aksara-Jawa claim riding
+    # config/artifact_scripts.yml (the D60-b split, the itant/elephantine
+    # precedent).
+    jav-Java: { lect: "jv~latn", tier: certain }
   te-wikisource:
     # The Telugu Wikisource cone is composition-bounded by construction
     # (73 works of pre-1800 classical poets, Nannaya onward — the scan
@@ -390,6 +401,23 @@ sources:
     # files Targum Jerusalem under arc:mid/jud too, and re-filing would be
     # a classification change.
     arc: { lect: "arc:mid/jud", tier: certain }
+  dicta-bavli:
+    # Dicta's vocalized Babylonian Talmud — the same text the sefaria bavli
+    # shelf holds, coded bare arc the same way (the house Bavli code; NFC-
+    # exempt, so the pointing stays byte-verbatim). This row files it on the
+    # node the sefaria Bavli resolves to (the sefaria-arc-subshelf rule,
+    # D59-b: the Talmud side → arc:mid) — transcription of the corpus's
+    # identity onto the existing node, parse-time work (the 2026-10-18
+    # generalization). Tier APPROXIMATION, the D59-b tier: the Mishnah,
+    # baraitot and much of the halakhic discourse interleave Rabbinic
+    # Hebrew with the Jewish Babylonian Aramaic at sub-paragraph grain,
+    # and the whole tractate rides arc (declared coarseness — no
+    # per-passage split exists upstream). The finer tmr anchor (Jewish
+    # Babylonian Aramaic, minted 2026-08-09) is deliberately NOT drawn
+    # here: re-filing one Bavli edition off the node the other resolves to
+    # would split the same text across two nodes — a classification change
+    # for both sources together, not this row.
+    arc: { lect: "arc:mid", tier: approximation }
   ppchy:
     # The Penn Parsed Corpus of Historical Yiddish holds its texts
     # ROMANIZED ("more or less according to the YIVO system" — upstream's

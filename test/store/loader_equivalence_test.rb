@@ -51,7 +51,9 @@ module Store
     # Re-taken again when the ud fixture tree gained the Old Georgian GLC
     # and Middle Armenian ArmTDP treebanks (two new documents, 47
     # passages, the ArmTDP `doc_title` work titles riding as "title").
-    FIXTURE_DIGEST = "3b183ea63cc5072a56f103348b16229501c00f930d666f78b87d304e490d4e3e"
+    # Re-taken again when it gained the six UD v2.19 treebanks (six new
+    # documents, 124 passages; no loader change).
+    FIXTURE_DIGEST = "f0405d3ea13f5e10a085ecc8b13f3642f4add85060fed189cc473846df7698f2"
     WALK_DIGEST = "cf74dd259cfabc229a7828f6e8dc1c662aaf6eba4bb06dd3221af04eefe0fbcb"
 
     def test_fixture_corpora_load_byte_identically_on_both_grains

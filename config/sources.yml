@@ -2108,6 +2108,49 @@ diccas:   # P95-4
   # tagged disaster terminology. Embedded English translation glosses
   # ride annotations (gloss_en), never the Arabic text. FileFetch.
 
+dicta-bavli:   # 02-sources row 420
+  adapter: Nabu::Adapters::DictaBavli
+  adopted: "2026-11-16"
+  axes: [hebrew]
+  wired: true   # first sync verified 2026-11-16: +37 docs / 78,782 passages, 0 errored (Meila duplicate + 2 .docx skipped by rule); Berakhot 2a shown + search probed with credit
+                 # bin/nabu sync dicta-bavli (one ~10 MB git clone, 38 tractate dirs) —
+                 # expect 37 documents / 78,782 passages, 2 skipped by rule (the Meila
+                 # duplicate dir + 2 .docx = 3 skip notes), 0 quarantined; eyeball
+                 # nabu show urn:nabu:dicta-bavli:berakhot:2a.1 (מֵאֵימָתַי קוֹרִין אֶת שְׁמַע)
+  sync_policy: manual   # a finished project (last push 2024-01-08)
+  # Dicta's vocalized Babylonian Talmud (Talmud-Bavli-with-Nikud): the
+  # whole Bavli, 37 tractates, pointed by Dicta's rabbinic Nakdan and
+  # human-reviewed, shipped in ktiv male and ktiv haser. Document =
+  # tractate, passage = paragraph line cited <daf><a|b>.<n>; the male file
+  # is the text, the line-aligned haser line rides annotations. README
+  # grant verbatim: "This vocalized text of the Babylonian Talmud is
+  # released under a CC BY-SA license. If you make use of the text, please
+  # attribute as follows: This text of the Babylonian Talmud was vocalized
+  # by Dicta: The Israel Center for Text Analysis (www.dicta.org.il)" →
+  # attribution (unversioned BY-SA, admitted with the credit). Bare arc,
+  # the house Bavli code (lect override → arc:mid, the sefaria ruling).
+
+dicta-library:   # 02-sources row 421
+  adapter: Nabu::Adapters::DictaLibrary
+  adopted: "2026-11-16"
+  axes: [hebrew]
+  wired: true   # first sync verified 2026-11-16: +1,204 books / 193,335 page passages, 0 errored (chidusheiharadad skipped by rule); index refresh run (54m39s), search probed with credit
+                 # bin/nabu sync dicta-library — the manifest repo clone, then 1,205
+                 # book zips (~536 MB text zips + 2 vocalized fallbacks ~1.4 MB) from
+                 # files.dicta.org.il, sequential and resumable (~20–30 min at the
+                 # measured ~0.5 MB/s); expect 1,204 documents / ~238k page passages,
+                 # 1 skipped by rule (chidusheiharadad: both zips empty upstream)
+  sync_policy: manual   # versioned file paths (library-1-0); upstream grows by releases
+  index_policy: deferred   # ~1.6 GB of page text: index once per wave (nabu index refresh)
+  # Dicta's library (Dicta-Library-Download): the books.json manifest of
+  # 1,205 AI-OCR'd rabbinic printed books, 1726–1982 — responsa (the
+  # library's first responsa shelf), Talmud/Tanakh/Rambam/Shulchan Arukh
+  # commentaries, halakha, derashot, Chassidut, Kabbalah — each a per-page
+  # text zip at files.dicta.org.il. Document = book, passage = scanned
+  # page. Upstream's own warning: automatic processes, so the text and
+  # vocalization may carry errors (text_nature machine-ocr). README ends
+  # with the CC BY-SA 4.0 link → attribution, credit Dicta.
+
 digiliblt:   # P45-3
   adapter: Nabu::Adapters::Digiliblt
   adopted: "2026-07-25"
@@ -2319,6 +2362,36 @@ dta:   # P94-1
   # page), class attribution. Page-grain passages, orthography AS
   # PRINTED (sic/abbr halves; DTA's corr/expan normalization layers are
   # deliberately not ingested v1 — corrections are enrichments).
+
+dtucph-sp:   # 02-sources row 418
+  adapter: Nabu::Adapters::DtucphSp
+  adopted: "2026-11-16"
+  axes: [biblical, hebrew]
+  wired: true   # first sync verified 2026-11-16: +5 docs / 5,841 passages, 0 errored; Gen 1:1 + Deut 32:36 shown, search probed
+                 # dtucph-sp (GitFetch at tag v7.5.0, sparse cone tf/7.5.0 +
+                 # README.md + LICENSE, 50 feature files ≈ 20 MB). EXPECT 5 docs
+                 # / 5,841 passages / 114,891 tokens, 0 errored, 0 skipped
+                 # (Genesis 1,533 · Exodus 1,203 · Leviticus 859 · Numbers
+                 # 1,289 · Deuteronomy 957). Eyeball nabu show
+                 # urn:nabu:dtucph-sp:gen:1.1 and urn:nabu:dtucph-sp:deut:32.36
+                 # (both manuscripts), 5 random verses, probe nabu search with
+                 # a Samaritan plene spelling, then flip.
+  sync_policy: manual
+  # The CACCHT Samaritan Pentateuch (Højgaard, Naaijer & Schorch; github.com/
+  # DT-UCPH/sp, Zenodo 10.5281/zenodo.7734632): the Samaritanus-project
+  # (Halle, S. Schorch) transcription of MS Dublin Chester Beatty Library
+  # 751 (Gen 1–Deut 32:36a) + MS Garizim 1 (Deut 32:36b–34) as Text-Fabric,
+  # BHSA-modelled word morphology/lexemes/glosses, the reading tradition's
+  # phonetic transcription, clause/phrase constituency, and the Tal &
+  # Florentin (2024) readings as word annotations. Text-fabric registrant on
+  # the cuc shape (sign slots, word tokens). Document = book (OSIS stems,
+  # the oshb/bhsa hub tokens), passage = verse; text = the corpus's own
+  # {sign} rendering. LICENSE: README badge CC BY-NC 4.0 + LICENSE legal
+  # code + every .tf header "@licence=Creative Commons Attribution-
+  # NonCommercial 4.0 International License" → class nc. Credit: the CACCHT
+  # project (Højgaard, Naaijer, Ehrensvärd, Rezetko, Glanz, van Peursen) and
+  # the Samaritanus project. PINNED to release tag v7.5.0 + its tf/7.5.0
+  # directory (upstream is work in progress) — a re-pin is an owner decision.
 
 dyenindoeuropean:
   adapter: Nabu::Adapters::Dyenindoeuropean
@@ -5753,6 +5826,35 @@ peshitta:
   # archived/unsupported (repostatus badge) → effectively frozen.
   sync_policy: manual
 
+pgp-geniza:   # 02-sources row 419
+  adapter: Nabu::Adapters::PgpGeniza
+  adopted: "2026-11-16"
+  # epigraphy: documentary letters, court records and accounts at the
+  # artifact (shelfmark) grain; hebrew: Hebrew-script Judaeo-Arabic,
+  # Hebrew and Aramaic documents; arabic: the Arabic-script state and
+  # legal documents + the Judaeo-Arabic vernacular.
+  axes: [epigraphy, hebrew, arabic]
+  siblings: ["-(en|heb|ara|fr|de)"]  # the closed minted-tail set — pgpids are digits-only
+  wired: true   # first sync verified 2026-11-16: +9,848 docs / 303,860 passages, 0 errored, 14 footnote skips by rule as predicted; document 446 shown + search probed with credit
+                 # 2234d35e): 9,848 docs (7,669 editions + 2,179 translation
+                 # siblings) / 303,860 passages, 0 errors; 28,728 metadata-only
+                 # documents + 14 undecidable/orphan text footnotes skipped by rule.
+  # The Princeton Geniza Project's own data export
+  # (github.com/princetongenizalab/pgp-metadata; Zenodo concept DOI
+  # 10.5281/zenodo.15839055): documents.csv (36,512 PGP documents) joined
+  # to footnotes.csv, whose Digital Edition / Digital Translation rows
+  # carry the PGP transcriptions and translations as plain text.
+  # Document = PGP document with ≥1 digital edition
+  # (urn:nabu:pgp-geniza:<pgpid>), translations as -<lang> siblings; the
+  # metadata-only majority skips by rule. LICENSE nc: CC BY-NC 4.0 — the
+  # README ("released under the noncommercial Creative Commons Attribution
+  # 4.0 license (CC-BY-NC.4.0)"), pgp_datapackage.json and the Zenodo
+  # record agree; no LICENSE file (the openiti precedent). The pgp-text
+  # repository (no license file) is deliberately NOT used. main is a
+  # rolling automated export (several commits a day; history ~2 GB,
+  # depth-1 GitFetch) → manual.
+  sync_policy: manual
+
 pl-wikisource:   # P116-3, 02-sources row 238
   adapter: Nabu::Adapters::PlWikisource
   adopted: "2026-10-10"
@@ -8386,6 +8488,29 @@ ud:
   # precedent). EXPECTED SYNC DELTA at the next `bin/nabu sync ud`: +2
   # repo clones / +2 docs / +178 passages (151 + 27). The fetch-breaker
   # minimum tripping count moves 7 → 8 (0.2 × 36 = 7.2).
+  # 2026-11-16: TREEBANKS grew to FORTY-TWO — the UD v2.19 bundle
+  # (released 2026-11-15; every fact read at the r2.19 tag):
+  #   old-georgian-oglauro (oge; Book of Ezra, Oshki Bible — 652 sent.;
+  #     CONFLICTING GRANTS, LICENSE.txt BY-SA 4.0 vs README BY-NC-SA 4.0 →
+  #     conservative nc, the PROFITEROLE/UDante fork shape),
+  #   old-georgian-midglauro (oge as UD files it — Middle Georgian novels,
+  #     12th/17th c.; 422 sent.; BY-SA 4.0 → attribution),
+  #   pali-palicanon (pli; DN 14, 225 sent.; BY-SA 4.0 → attribution),
+  #   tangut-mica (txg; Lotus + Avataṃsaka sūtra chapters, 503 sent.;
+  #     BY-SA 4.0 → attribution),
+  #   old-occitan-cronoc (pro; the Roman de Lagrasse, 1,848 sent. over
+  #     train/dev/test; BY-SA 4.0 → attribution),
+  #   avestan-old (ave; Gatha Yasna 28, 24 sent.; BY-SA 4.0 →
+  #     attribution). AXIS CANDIDATE, not taken here: iranian (Avestan) —
+  #     joining it re-projects the desk's site pages and skill lanes, so it
+  #     rides a gate with those regenerations.
+  # The r2.19 license sweep over the 36 previously held treebanks found no
+  # drift (LICENSE.txt full text + README metadata, r2.18 vs r2.19) — the
+  # two PROFITEROLE forks and UDante's stand unchanged at r2.19.
+  # EXPECTED SYNC DELTA at the next `bin/nabu sync ud`: +6 repo clones /
+  # +8 docs (CronOc ships three splits) / +3,674 passages
+  # (652 + 422 + 225 + 503 + 1,848 + 24). The fetch-breaker minimum
+  # tripping count moves 8 → 9 (0.2 × 42 = 8.4).
 
 uk-wikisource:   # P116-3, 02-sources row 241
   adapter: Nabu::Adapters::UkWikisource

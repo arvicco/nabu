@@ -179,7 +179,7 @@ class PosturesTest < Minitest::Test
   def test_the_lect_migration_kept_the_p59_4_census
     lect = postures.declarations.select { |d| d.layer == "lect" }
     by_posture = lect.group_by(&:posture).transform_values(&:size)
-    assert_equal 206, lect.size,
+    assert_equal 207, lect.size,
                  "the P59-4 declarations survive the move (61 at migration; itant retired P61-3," \
                  "oracc retired P62-2, etcsl/ccmh/freising/coptic-scriptorium retired P64-6, " \
                  "titus-avestan retired P66-1, osta+fornsvenska retired P77-r8, achemenet " \
@@ -454,7 +454,13 @@ class PosturesTest < Minitest::Test
                  "the big registry sitting (nabu-lects PR #48, merged + canonical-synced 2026-11-13) " \
                  "RETIRES csd's pending to identity (sio + sio:pro minted — the add-then-retire shape) " \
                  "and RETIRES westoldturkic's declaration (the WOT/EAH/LAH overrides machine-posture " \
-                 "it; the shadowing rule): 207→206"
+                 "it; the shadowing rule): 207→206; " \
+                 "jv-wikisource's declaration RETIRED (the jv~java repair's jav-Java → jv~latn " \
+                 "override machine-postures it; the shadowing rule): 206→205; " \
+                 "dtucph-sp ADDED — PENDING on an smp (Samaritan Hebrew) anchor under hbo (nothing " \
+                 "Samaritan-Hebrew exists in nabu-lects; bare hbo held meanwhile): 205→206; " \
+                 "pgp-geniza ADDED — PENDING on the jrb (Judeo-Arabic) anchor mint (no node exists; " \
+                 "the Hebrew/Aramaic/Arabic tags ride bare held codes): 206→207"
     # The epigraphic-belt registry package (merged + canonical-synced
     # 2026-10-18, the add-then-retire shape within one phase) retires both
     # P130 pendings, and the ociana-script rule + the ig-cyprus override
@@ -562,6 +568,8 @@ class PosturesTest < Minitest::Test
     # csd pending → identity (sio + sio:pro live), and westoldturkic's
     # identity declaration retires to its overrides — identity 151+1-1=151,
     # pending 1→0.
-    assert_equal({ "dates" => 33, "codemap" => 22, "identity" => 151 }, by_posture)
+    # dtucph-sp joins pending on an smp (Samaritan Hebrew) anchor mint, and
+    # pgp-geniza on the jrb (Judeo-Arabic) one — the pending ledger reopens: 0→2.
+    assert_equal({ "dates" => 33, "codemap" => 21, "identity" => 151, "pending" => 2 }, by_posture)
   end
 end

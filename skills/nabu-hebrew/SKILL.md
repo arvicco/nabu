@@ -6,7 +6,7 @@ compatibility: "Requires the nabu MCP server (`bin/nabu mcp`, read-only, stdio) 
 metadata:
   desk: hebrew
   origin: hand-tuned
-  sources: "bhsa bridging dss elephantine etcbc-targum extrabiblical hebrew-lexicon hexapla iip oshb sdbh sefaria ud wiktionary-arc"
+  sources: "bhsa bridging dicta-bavli dicta-library dss dtucph-sp elephantine etcbc-targum extrabiblical hebrew-lexicon hexapla iip oshb pgp-geniza sdbh sefaria ud wiktionary-arc"
 ---
 
 # The Hebraist — the `hebrew` desk
@@ -25,7 +25,10 @@ verbatim upstream terms are in `docs/02-sources.md` of the Nabu repository.
 | --- | --- | --- |
 | `bhsa` | BHSA — Biblia Hebraica Stuttgartensia Amstelodamensis (ETCBC, Text-Fabric tf/2021) | nc |
 | `bridging` | ETCBC bridging — OSHB↔BHSA word-level crosswalk (Text-Fabric tf/2021 module) | attribution |
+| `dicta-bavli` | Dicta — the vocalized Babylonian Talmud (Talmud Bavli with Nikud, ktiv male + haser) | attribution |
+| `dicta-library` | Dicta — the Dicta library: AI-OCR'd rabbinic printed books (responsa, commentaries, halakha, derashot, Chassidut) | attribution |
 | `dss` | DSS — Dead Sea Scrolls (Abegg/ETCBC, Text-Fabric tf/2.0) | nc |
+| `dtucph-sp` | The CACCHT Samaritan Pentateuch (DT-UCPH, Text-Fabric tf/7.5.0) | nc |
 | `elephantine` | Elephantine — the Berlin ERC papyri and ostraca database | attribution |
 | `etcbc-targum` | ETCBC Targum Corpus — Jewish Aramaic Pentateuch targums (Text-Fabric tf/0.1) | nc |
 | `extrabiblical` | ETCBC extrabiblical — Non-Masoretic texts related to the Hebrew Bible (Text-Fabric tf/0.2) | nc |
@@ -33,6 +36,7 @@ verbatim upstream terms are in `docs/02-sources.md` of the Nabu repository.
 | `hexapla` | Göttingen Hexapla Database (NAWG) — 2 Samuel and the Psalms (Text-Fabric tf/0.1) | nc |
 | `iip` | Inscriptions of Israel/Palestine (Brown University) | nc |
 | `oshb` | Open Scriptures Hebrew Bible (Westminster Leningrad Codex + OSHM morphology) | open |
+| `pgp-geniza` | Princeton Geniza Project — documentary Geniza editions and translations (pgp-metadata) | nc |
 | `sdbh` | UBS Dictionary of Biblical Hebrew (Semantic Dictionary of Biblical Hebrew) | attribution |
 | `sefaria` | Sefaria — Targum shelf + Rabbinic core (Mishnah, Bavli, Minor Tractates, Yerushalmi, Tosefta) + Midrash (Rabbah, halakhic midrashim, Aggadah) + medieval Bible commentaries, Mishneh Torah, Shulchan Arukh, Tur, Zohar and liturgy + Ben Sira and Megillat Ta'anit | open |
 | `ud` | Universal Dependencies — ancient treebanks | nc |

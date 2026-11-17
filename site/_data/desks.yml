@@ -11,7 +11,7 @@
 - slug: epigraphy
   persona: The Papyrologist-Epigraphist
   blurb: reads what survives on stone, sherd, papyrus and tablet, lacunae and all
-  members: 40
+  members: 41
 - slug: slavic
   persona: The Slavicist
   blurb: Cyril and Methodius to the damaskini, canon to vernacular
@@ -36,11 +36,11 @@
 - slug: biblical
   persona: The Biblical scholar
   blurb: one text across Hebrew, Greek, Latin, Syriac, Coptic and English witnesses
-  members: 22
+  members: 23
 - slug: hebrew
   persona: The Hebraist
   blurb: Masoretic vowels, Qumran consonants, the Aramaic of the Targums
-  members: 14
+  members: 18
 - slug: syriac
   persona: The Syriacist
   blurb: the Peshitta and the estrangela bookshelf
@@ -52,7 +52,7 @@
 - slug: arabic
   persona: The Arabist
   blurb: the Islamicate library whole, Quran and hadith to falsafa and adab
-  members: 7
+  members: 8
 - slug: hittite
   persona: The Hittitologist
   blurb: Anatolia in cuneiform, KBo and KUB by tablet and line

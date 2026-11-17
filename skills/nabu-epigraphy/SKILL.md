@@ -6,7 +6,7 @@ compatibility: "Requires the nabu MCP server (`bin/nabu mcp`, read-only, stdio) 
 metadata:
   desk: epigraphy
   origin: hand-tuned
-  sources: "aio armepic ceipom damos dharma-campa dharma-deccan dharma-khmer dharma-nusantara dharma-pyu dharma-tamil edh edr elephantine extrabiblical ig-cyprus iip isicily itant lexlep lexlep-words memis nabu-places obi-burmese ociana ogham open-etruscan papyri-ddbdp paramara pleiades riig rundata runesdb siddham sigla sii-clean tir tlhdig trismegistos trismegistos-geo ucd"
+  sources: "aio armepic ceipom damos dharma-campa dharma-deccan dharma-khmer dharma-nusantara dharma-pyu dharma-tamil edh edr elephantine extrabiblical ig-cyprus iip isicily itant lexlep lexlep-words memis nabu-places obi-burmese ociana ogham open-etruscan papyri-ddbdp paramara pgp-geniza pleiades riig rundata runesdb siddham sigla sii-clean tir tlhdig trismegistos trismegistos-geo ucd"
 ---
 
 # The Papyrologist-Epigraphist — the `epigraphy` desk
@@ -51,6 +51,7 @@ verbatim upstream terms are in `docs/02-sources.md` of the Nabu repository.
 | `open-etruscan` | OpenEtruscan — Etruscan Machine Learning Corpus (Zenodo 20075836) | attribution |
 | `papyri-ddbdp` | Papyri.info — Duke Databank of Documentary Papyri + Digital Corpus of Literary Papyri | attribution |
 | `paramara` | Paramāra epigraphy — the Siddham network's Zenodo community (PennGlobal PMR texts) | attribution |
+| `pgp-geniza` | Princeton Geniza Project — documentary Geniza editions and translations (pgp-metadata) | nc |
 | `pleiades` | Pleiades — ancient-world gazetteer (place resolver instrument) | attribution |
 | `riig` | RIIG — Recueil informatisé des inscriptions gauloises (Ausonius/ANR) | attribution |
 | `rundata` | Rundata — Scandinavian Runic-text Database (SRDB, via rundata.info) | odbl |

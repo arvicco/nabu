@@ -1,0 +1,215 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# otype.tf and otext.tf are byte-verbatim WHOLES (drift there is real
+# drift); every other file is a documented TRIM of a larger upstream
+# feature file (whole: false — a fresh GET returns the full file and is
+# fetched for URL-liveness only, never byte-compared). adapter_test is null:
+# the adapter test asserts slice-level counts, which untrimmed upstream
+# files would false-fail. Re-trim per the README recipe after any refresh.
+# Pinned upstream release: tag v7.5.0 =
+# e8a120f2e92b6558fd39bbe72f830ded871a0a47 (retrieved 2026-11-16).
+source: dtucph-sp
+adapter_test:
+retrieved: 2026-11-16
+files:
+  - path: tf/7.5.0/ETCBC_parsing.tf
+    url: https://raw.githubusercontent.com/DT-UCPH/sp/v7.5.0/tf/7.5.0/ETCBC_parsing.tf
+    whole: false
+    trim: slice word entries, gap-anchored (608786 B -> 3403 B)
+  - path: tf/7.5.0/book.tf
+    url: https://raw.githubusercontent.com/DT-UCPH/sp/v7.5.0/tf/7.5.0/book.tf
+    whole: false
+    trim: slice book entries, gap-anchored (712 B -> 694 B)
+  - path: tf/7.5.0/chapter.tf
+    url: https://raw.githubusercontent.com/DT-UCPH/sp/v7.5.0/tf/7.5.0/chapter.tf
+    whole: false
+    trim: slice chapter entries, gap-anchored (1187 B -> 737 B)
+  - path: tf/7.5.0/function.tf
+    url: https://raw.githubusercontent.com/DT-UCPH/sp/v7.5.0/tf/7.5.0/function.tf
+    whole: false
+    trim: slice phrase entries, gap-anchored (330448 B -> 1896 B)
+  - path: tf/7.5.0/g_cons.tf
+    url: https://raw.githubusercontent.com/DT-UCPH/sp/v7.5.0/tf/7.5.0/g_cons.tf
+    whole: false
+    trim: slice word entries, gap-anchored (432637 B -> 2597 B)
+  - path: tf/7.5.0/g_cons_raw.tf
+    url: https://raw.githubusercontent.com/DT-UCPH/sp/v7.5.0/tf/7.5.0/g_cons_raw.tf
+    whole: false
+    trim: slice word entries, gap-anchored (432686 B -> 2646 B)
+  - path: tf/7.5.0/g_cons_utf8.tf
+    url: https://raw.githubusercontent.com/DT-UCPH/sp/v7.5.0/tf/7.5.0/g_cons_utf8.tf
+    whole: false
+    trim: slice word entries, gap-anchored (765572 B -> 3990 B)
+  - path: tf/7.5.0/g_lex.tf
+    url: https://raw.githubusercontent.com/DT-UCPH/sp/v7.5.0/tf/7.5.0/g_lex.tf
+    whole: false
+    trim: slice word entries, gap-anchored (377810 B -> 2372 B)
+  - path: tf/7.5.0/g_lex_utf8.tf
+    url: https://raw.githubusercontent.com/DT-UCPH/sp/v7.5.0/tf/7.5.0/g_lex_utf8.tf
+    whole: false
+    trim: slice word entries, gap-anchored (655914 B -> 3583 B)
+  - path: tf/7.5.0/g_nme.tf
+    url: https://raw.githubusercontent.com/DT-UCPH/sp/v7.5.0/tf/7.5.0/g_nme.tf
+    whole: false
+    trim: slice word entries, gap-anchored (184390 B -> 2286 B)
+  - path: tf/7.5.0/g_nme_utf8.tf
+    url: https://raw.githubusercontent.com/DT-UCPH/sp/v7.5.0/tf/7.5.0/g_nme_utf8.tf
+    whole: false
+    trim: slice word entries, gap-anchored (363429 B -> 2395 B)
+  - path: tf/7.5.0/g_pfm.tf
+    url: https://raw.githubusercontent.com/DT-UCPH/sp/v7.5.0/tf/7.5.0/g_pfm.tf
+    whole: false
+    trim: slice word entries, gap-anchored (147951 B -> 1310 B)
+  - path: tf/7.5.0/g_pfm_utf8.tf
+    url: https://raw.githubusercontent.com/DT-UCPH/sp/v7.5.0/tf/7.5.0/g_pfm_utf8.tf
+    whole: false
+    trim: slice word entries, gap-anchored (132262 B -> 1378 B)
+  - path: tf/7.5.0/g_prs.tf
+    url: https://raw.githubusercontent.com/DT-UCPH/sp/v7.5.0/tf/7.5.0/g_prs.tf
+    whole: false
+    trim: slice word entries, gap-anchored (143350 B -> 1062 B)
+  - path: tf/7.5.0/g_prs_utf8.tf
+    url: https://raw.githubusercontent.com/DT-UCPH/sp/v7.5.0/tf/7.5.0/g_prs_utf8.tf
+    whole: false
+    trim: slice word entries, gap-anchored (139694 B -> 1125 B)
+  - path: tf/7.5.0/g_uvf.tf
+    url: https://raw.githubusercontent.com/DT-UCPH/sp/v7.5.0/tf/7.5.0/g_uvf.tf
+    whole: false
+    trim: slice word entries, gap-anchored (117662 B -> 694 B)
+  - path: tf/7.5.0/g_uvf_utf8.tf
+    url: https://raw.githubusercontent.com/DT-UCPH/sp/v7.5.0/tf/7.5.0/g_uvf_utf8.tf
+    whole: false
+    trim: slice word entries, gap-anchored (12116 B -> 713 B)
+  - path: tf/7.5.0/g_vbe.tf
+    url: https://raw.githubusercontent.com/DT-UCPH/sp/v7.5.0/tf/7.5.0/g_vbe.tf
+    whole: false
+    trim: slice word entries, gap-anchored (140747 B -> 1460 B)
+  - path: tf/7.5.0/g_vbe_utf8.tf
+    url: https://raw.githubusercontent.com/DT-UCPH/sp/v7.5.0/tf/7.5.0/g_vbe_utf8.tf
+    whole: false
+    trim: slice word entries, gap-anchored (175274 B -> 1491 B)
+  - path: tf/7.5.0/g_vbs.tf
+    url: https://raw.githubusercontent.com/DT-UCPH/sp/v7.5.0/tf/7.5.0/g_vbs.tf
+    whole: false
+    trim: slice word entries, gap-anchored (124159 B -> 836 B)
+  - path: tf/7.5.0/g_vbs_utf8.tf
+    url: https://raw.githubusercontent.com/DT-UCPH/sp/v7.5.0/tf/7.5.0/g_vbs_utf8.tf
+    whole: false
+    trim: slice word entries, gap-anchored (37787 B -> 857 B)
+  - path: tf/7.5.0/gloss.tf
+    url: https://raw.githubusercontent.com/DT-UCPH/sp/v7.5.0/tf/7.5.0/gloss.tf
+    whole: false
+    trim: slice word entries, gap-anchored (684746 B -> 3586 B)
+  - path: tf/7.5.0/gn.tf
+    url: https://raw.githubusercontent.com/DT-UCPH/sp/v7.5.0/tf/7.5.0/gn.tf
+    whole: false
+    trim: slice word entries, gap-anchored (357124 B -> 2249 B)
+  - path: tf/7.5.0/grammar_note.tf
+    url: https://raw.githubusercontent.com/DT-UCPH/sp/v7.5.0/tf/7.5.0/grammar_note.tf
+    whole: false
+    trim: slice word/phrase entries, gap-anchored (7610 B -> 988 B)
+  - path: tf/7.5.0/language.tf
+    url: https://raw.githubusercontent.com/DT-UCPH/sp/v7.5.0/tf/7.5.0/language.tf
+    whole: false
+    trim: slice word entries, gap-anchored (804904 B -> 4258 B)
+  - path: tf/7.5.0/lex.tf
+    url: https://raw.githubusercontent.com/DT-UCPH/sp/v7.5.0/tf/7.5.0/lex.tf
+    whole: false
+    trim: slice word entries, gap-anchored (460690 B -> 2779 B)
+  - path: tf/7.5.0/lex_utf8.tf
+    url: https://raw.githubusercontent.com/DT-UCPH/sp/v7.5.0/tf/7.5.0/lex_utf8.tf
+    whole: false
+    trim: slice word entries, gap-anchored (754238 B -> 4054 B)
+  - path: tf/7.5.0/mt_feat.tf
+    url: https://raw.githubusercontent.com/DT-UCPH/sp/v7.5.0/tf/7.5.0/mt_feat.tf
+    whole: false
+    trim: slice word entries, gap-anchored (538904 B -> 2919 B)
+  - path: tf/7.5.0/nu.tf
+    url: https://raw.githubusercontent.com/DT-UCPH/sp/v7.5.0/tf/7.5.0/nu.tf
+    whole: false
+    trim: slice word entries, gap-anchored (356153 B -> 2261 B)
+  - path: tf/7.5.0/oslots.tf
+    url: https://raw.githubusercontent.com/DT-UCPH/sp/v7.5.0/tf/7.5.0/oslots.tf
+    whole: false
+    trim: slice book/chapter/verse/word/clause/phrase entries, gap-anchored (3683221 B -> 9918 B)
+  - path: tf/7.5.0/otext.tf
+    url: https://raw.githubusercontent.com/DT-UCPH/sp/v7.5.0/tf/7.5.0/otext.tf
+    whole: true
+    trim:
+  - path: tf/7.5.0/otype.tf
+    url: https://raw.githubusercontent.com/DT-UCPH/sp/v7.5.0/tf/7.5.0/otype.tf
+    whole: true
+    trim:
+  - path: tf/7.5.0/phono_transcr.tf
+    url: https://raw.githubusercontent.com/DT-UCPH/sp/v7.5.0/tf/7.5.0/phono_transcr.tf
+    whole: false
+    trim: slice word entries, gap-anchored (765470 B -> 3890 B)
+  - path: tf/7.5.0/prediction.tf
+    url: https://raw.githubusercontent.com/DT-UCPH/sp/v7.5.0/tf/7.5.0/prediction.tf
+    whole: false
+    trim: slice word entries, gap-anchored (595593 B -> 3350 B)
+  - path: tf/7.5.0/prs_gn.tf
+    url: https://raw.githubusercontent.com/DT-UCPH/sp/v7.5.0/tf/7.5.0/prs_gn.tf
+    whole: false
+    trim: slice word entries, gap-anchored (342915 B -> 2256 B)
+  - path: tf/7.5.0/prs_nu.tf
+    url: https://raw.githubusercontent.com/DT-UCPH/sp/v7.5.0/tf/7.5.0/prs_nu.tf
+    whole: false
+    trim: slice word entries, gap-anchored (345354 B -> 2252 B)
+  - path: tf/7.5.0/prs_ps.tf
+    url: https://raw.githubusercontent.com/DT-UCPH/sp/v7.5.0/tf/7.5.0/prs_ps.tf
+    whole: false
+    trim: slice word entries, gap-anchored (345354 B -> 2252 B)
+  - path: tf/7.5.0/ps.tf
+    url: https://raw.githubusercontent.com/DT-UCPH/sp/v7.5.0/tf/7.5.0/ps.tf
+    whole: false
+    trim: slice word entries, gap-anchored (365028 B -> 2326 B)
+  - path: tf/7.5.0/sign.tf
+    url: https://raw.githubusercontent.com/DT-UCPH/sp/v7.5.0/tf/7.5.0/sign.tf
+    whole: false
+    trim: slice sign entries, gap-anchored (1116417 B -> 5472 B)
+  - path: tf/7.5.0/sp.tf
+    url: https://raw.githubusercontent.com/DT-UCPH/sp/v7.5.0/tf/7.5.0/sp.tf
+    whole: false
+    trim: slice word entries, gap-anchored (567322 B -> 3213 B)
+  - path: tf/7.5.0/trailer.tf
+    url: https://raw.githubusercontent.com/DT-UCPH/sp/v7.5.0/tf/7.5.0/trailer.tf
+    whole: false
+    trim: slice word entries, gap-anchored (197901 B -> 2362 B)
+  - path: tf/7.5.0/typ.tf
+    url: https://raw.githubusercontent.com/DT-UCPH/sp/v7.5.0/tf/7.5.0/typ.tf
+    whole: false
+    trim: slice phrase entries, gap-anchored (214940 B -> 1308 B)
+  - path: tf/7.5.0/var_ft.tf
+    url: https://raw.githubusercontent.com/DT-UCPH/sp/v7.5.0/tf/7.5.0/var_ft.tf
+    whole: false
+    trim: slice word entries, gap-anchored (14867 B -> 616 B)
+  - path: tf/7.5.0/var_ft_span.tf
+    url: https://raw.githubusercontent.com/DT-UCPH/sp/v7.5.0/tf/7.5.0/var_ft_span.tf
+    whole: false
+    trim: slice word entries, gap-anchored (10223 B -> 651 B)
+  - path: tf/7.5.0/var_ft_type.tf
+    url: https://raw.githubusercontent.com/DT-UCPH/sp/v7.5.0/tf/7.5.0/var_ft_type.tf
+    whole: false
+    trim: slice word entries, gap-anchored (23660 B -> 677 B)
+  - path: tf/7.5.0/var_ft_utf8.tf
+    url: https://raw.githubusercontent.com/DT-UCPH/sp/v7.5.0/tf/7.5.0/var_ft_utf8.tf
+    whole: false
+    trim: slice word entries, gap-anchored (20716 B -> 741 B)
+  - path: tf/7.5.0/verse.tf
+    url: https://raw.githubusercontent.com/DT-UCPH/sp/v7.5.0/tf/7.5.0/verse.tf
+    whole: false
+    trim: slice verse entries, gap-anchored (16521 B -> 784 B)
+  - path: tf/7.5.0/verse_ft.tf
+    url: https://raw.githubusercontent.com/DT-UCPH/sp/v7.5.0/tf/7.5.0/verse_ft.tf
+    whole: false
+    trim: slice verse entries, gap-anchored (1019 B -> 613 B)
+  - path: tf/7.5.0/vs.tf
+    url: https://raw.githubusercontent.com/DT-UCPH/sp/v7.5.0/tf/7.5.0/vs.tf
+    whole: false
+    trim: slice word entries, gap-anchored (131353 B -> 1478 B)
+  - path: tf/7.5.0/vt.tf
+    url: https://raw.githubusercontent.com/DT-UCPH/sp/v7.5.0/tf/7.5.0/vt.tf
+    whole: false
+    trim: slice word entries, gap-anchored (380474 B -> 2411 B)

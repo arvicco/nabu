@@ -107,10 +107,12 @@ class ArtifactScriptsTest < Minitest::Test
       end
     end
     tags = shipped.values.flat_map { |langs| langs.values.map { |row| row["script"] } }.uniq.sort
-    assert_equal %w[avst cprt egyd hant ital lina linb phnx runr tibt ugar xsux], tags,
+    assert_equal %w[avst cprt egyd hant ital java lina linb phnx runr tibt ugar xsux], tags,
                  "the owner-ruled census set (2026-08-28; the Aegean-syllabary tags joined " \
                  "with the 2026-10-22 registry package that minted them for exactly this layer; " \
-                 "runr for Menota's two runic manuscripts)"
+                 "runr for Menota's two runic manuscripts; java joined 2026-11-16 with the " \
+                 "jv~java repair — the aksara-Jawa scan claim over jv-wikisource's Latin " \
+                 "transliterations, the byte-guard-measured D60-b split)"
   end
 
   # Menota's dan holdings are exactly its two RUNIC manuscripts (Codex

@@ -325,21 +325,34 @@ sources:
         Sinhala script, the bare si default"}
   ud:
     kind: {posture: unclassified, note: "every treebank README's Genre line (UD genre tags,
-        all 36 treebanks) rides each split document as the genre facet, verbatim — never
+        all 42 treebanks) rides each split document as the genre facet, verbatim — never
         kind-folded: a split file mixes whatever its treebank mixes, so one kind over the
-        union would misstate each text (census 2026-10-19)"}
+        union would misstate each text (census 2026-10-19; the six UD v2.19 newcomers'
+        lines read at the r2.19 tag 2026-11-16)"}
     # lect machine-postured (codemap + the 2026-10-11 gn → gn:old override,
     # the ruled narrow exception to D57-f: the Old Guaraní treebank is a
     # stage witness and the only gn-claiming document); the lzh treebanks →
     # zho/lit via codemap; the rest stays DELIBERATELY unstaged (D57-f).
     # axm (middle-armenian-armtdp) resolves by identity on the held
-    # xcl → axm → hy chain; oge (old-georgian-glc) stays bare until the
-    # Kartvelian registry nodes (oge + ka under ccs) land in nabu-lects.
+    # xcl → axm → hy chain; oge (old-georgian-glc, and the v2.19
+    # old-georgian-oglauro + old-georgian-midglauro) resolves by identity
+    # now that the Kartvelian nodes are in the registry (oge, parent
+    # ccs-gzn). The other v2.19 codes resolve by identity too (checked
+    # against canonical/nabu-lects 2026-11-16): pli (Pali, parent san),
+    # txg (Tangut, parent tbq), pro (Old Occitan, parent roa), ave
+    # (Avestan, parent iir:pro). Two stage candidates stay bare under
+    # D57-f, unclaimed: midglauro is MIDDLE Georgian filed by UD under
+    # oge (the registry's ka:mid is the honest node; an oge-wide override
+    # would mislabel GLC/OGLauRo, so only a per-document ruling fits),
+    # and avestan-old is Gathic (Yasna 28 → ave:old).
     dating: {posture: partial, note: "the sentence-comment dates of four treebanks (census
         2026-10-19): birchbark date_created on 1,203 letters (25 bands), rnc created on 56
         documents, ruthenian date/created on 83, egyptian-pc date on 3,089 sentences (5th/6th
         Dynasty, banded by the TLA thesaurus nodes in period_bands.yml) — passage-grain runs +
-        a document envelope (UdSentenceDates). The other 32 treebanks state no date"}
+        a document envelope (UdSentenceDates). The other 38 treebanks state no date (the six
+        v2.19 newcomers' sentence comments carry none — their works' eras, e.g. CronOc's
+        late-13th-c. Roman de Lagrasse or MidGLauRo's 12th/17th-c. novels, live only in
+        README prose: curated-band candidates, declared not faked)"}
     places: {posture: named, note: "egyptian-pc's place comment (Saqqara, all 3,089 sentences)
         rides the UdSentenceDates rows; no other treebank states a place"}
     script: {posture: implied}
@@ -1053,16 +1066,21 @@ sources:
     script: {posture: implied}
   jv-wikisource:
     kind: {posture: unclassified}
-    lect: {posture: codemap, note: "jav → jv (the registry's 2026-10-22 anchor + alias);
-        the Wretansacaya page keeps its kaw claim (Old Javanese, INDEX_LECTS)"}
+    # lect declaration RETIRED 2026-11-16 (the shadowing rule): the jv~java
+    # repair landed a lect_overrides row for this source (jav-Java → jv~latn),
+    # which is now the machine posture of record. The registry's jav → jv
+    # alias still routes the plain-jav pages; the Wretansacaya page keeps
+    # its kaw claim (Old Javanese, INDEX_LECTS).
     dating: {posture: dated, note: "P140: the Indhèks Year= print year, else the Index
         file name's year (Kern 1875) → source_date → MetadataDates :edition_year_text,
         date_class edition"}
     places: {posture: unplaced, note: "the Indhèks Address= (Batavia, Amsterdam, Surakarta)
         is the print's imprint place — declared, never a text place"}
-    script: {posture: mixed, note: "aksara Jawa (jav-Java) and Latin pages, MEASURED per
-        page from the text (metadata script), the Index Language= riding verbatim as
-        index_language"}
+    script: {posture: mixed, note: "aksara Jawa (jav-Java) and Latin pages per the scan
+        Index, the Index Language= riding verbatim as index_language; 2026-11-16 repair:
+        the jav-Java pages byte-measure 100% latn AS HELD (Latin romanization of the
+        aksara-Jawa scans) — surface ~latn via lect_overrides, the artifact's java claim
+        via artifact_scripts (D60-b)"}
   su-wikisource:
     kind: {posture: unclassified}
     lect: {posture: codemap, note: "sun → su (the registry's 2026-10-22 anchor + alias);
@@ -1128,7 +1146,6 @@ sources:
         (censused 2026-10-22)"}
     script: {posture: implied}
   rsti:
-    kind: {posture: unclassified}
     lect: {posture: identity, note: catalog records across nine codes; uga has no stages}
     dating: {posture: undatable, note: no typed date fields — declared, the mining census agrees}
     places: {posture: named, note: "P108-8: the findspot field joins the place lane (4,662
@@ -2075,6 +2092,23 @@ sources:
     script: {posture: implied, note: "Hebrew square script; Tiberian pointing where the
         edition vocalizes (Onqelos, some Genizah fragments), consonantal elsewhere — the
         cons_utf8 / voc_utf8 lanes ride every token"}
+  dtucph-sp:
+    # kind: machine-postured — kind_map.yml source_kind scripture.
+    lect: {posture: pending, note: "candidate: smp (Samaritan Hebrew, ISO 639-3) — a new
+        nabu-lects anchor under hbo for the Hebrew of the Samaritan Pentateuch and its
+        reading tradition (Ben-Hayyim's grammar; the Tal–Florentin edition), then a whole-source
+        hbo → smp override in config/lect_overrides.yml. Until the mint lands the adapter's
+        bare hbo (bhsa's code; the two Aramaic words of Gen 31:47 ride arc per token) is the
+        held claim; the phono_transcr lane is the reading tradition itself"}
+    dating: {posture: undatable, note: "the asset carries no date feature; the manuscripts'
+        own dates (MS Dublin CBL 751, MS Garizim 1) are not in the data and the
+        text's composition era is not the edition's claim — the bhsa/oshb stance"}
+    places: {posture: unplaced, note: "no place field; the manuscripts are named per range
+        (document/passage metadata manuscripts) — repository witnesses, never a place claim"}
+    script: {posture: qualified, note: "the Samaritan-script manuscripts are TRANSCRIBED into
+        Hebrew square script: the text is the consonant stream (27 letters + space, no
+        shin/sin dots); the ETCBC lanes add dotted shin/sin (U+FB2A/FB2B presentation forms,
+        kept verbatim) and phono_transcr the Latin phonetic transcription"}
   jaschke-1881:   # P150-A
     # kind: machine-postured — kind_map.yml source_kind lexical (a dictionary).
     lect: {posture: identity, note: "the reference-shelf posture (africa-pd, slavistics-pd): eng,
@@ -3820,3 +3854,59 @@ sources:
     places: {posture: unplaced, note: "variety coordinates are doculect reference points, not
         findspots — no place claim at dictionary grain"}
     script: {posture: implied, note: "Latin-script orthographies and UPA-style transcription"}
+  pgp-geniza:
+    # kind: machine-postured by the kind_map.yml PGP type fold (no row here —
+    # the shadowing rule). The axes ride ONE document per pgpid: the edition
+    # document when held, else the first translation sibling (the aio rule).
+    lect: {posture: pending, note: "candidate jrb (Judeo-Arabic, ISO 639-3) — the majority
+        claim (4,068 of 7,669 edition documents; 4,703 text documents tag it) has no
+        nabu-lects node yet; the mint rides its own nabu-lects PR, and the passages carry
+        the bare jrb code until it lands. The other tags transcribe upstream's own labels
+        onto existing nodes as bare codes (heb, arc, ara, lad, jpr, ota, cop, grc, syc, it):
+        DELIBERATELY not staged — heb:med / arc:jud are judgment-grade refinements over a
+        corpus that runs from the 10th to the 19th century (a date-band rule is the
+        candidate). 898 edition documents carry no language tag upstream → und. Hebrew-script
+        translations are bare heb (modern scholarly Hebrew), English en, French fr, German de"}
+    dating: {posture: partial, note: "2,861 of 7,784 text-bearing documents dated: 2,017 by
+        the document's own dating (doc_date_standard, upstream's CE conversion of the
+        Anno Mundi / Seleucid / Hijri / Kharaji date; original + calendar ride raw) and 844
+        by the scholar's inferred date (basis inferred, rationale kept); the rest carry no
+        date upstream (census 2026-11-16)"}
+    places: {posture: named, note: "the ORIGIN relation (where written; 930 documents, 921
+        with the places.csv point as WGS84) is the main row; DESTINATION rides its own role
+        row (pgp-geniza-destination, 863); location / mentioned / possibly_mentioned facet
+        verbatim. Upstream carries no gazetteer ids (only its own place pages), so nothing
+        links yet — a nabu-places matching pass is the candidate"}
+    script: {posture: mixed, note: "Hebrew script for the Judeo-Arabic, Hebrew and Aramaic
+        documents; Arabic script for the Arabic ones; Latin for the translations — the
+        language tag does not fix the script (Arabic-language lines occur in Hebrew script and
+        vice versa within one document)"}
+  dicta-bavli:   # 02-sources row 420
+    # kind machine-postured — kind_map.yml metadata genre "Talmud Bavli" → exegesis.
+    # lect machine-postured — lect_overrides.yml arc → arc:mid (approximation): the
+    # Jewish Babylonian Aramaic / Rabbinic Hebrew mix rides arc whole (declared coarse).
+    dating: {posture: undatable, note: "the asset carries no date — no edition year beyond the
+        Vilna pagination the files follow, no composition era per tractate (the sefaria Bavli
+        stance). The Bavli's redaction era (c. 500–600 CE, Amoraic/Savoraic) is an attributed
+        composition date, a work_eras row — a separate call, not made here; Dicta's
+        vocalization (completed 2020s) is the layer's date, not the text's"}
+    places: {posture: unplaced, note: "no place field — the Babylonian academies of the
+        Talmud's composition are the work's setting, not an artifact findspot"}
+    script: {posture: implied, note: "Hebrew square script with full niqqud (Dicta's Nakdan,
+        human-reviewed), stored byte-verbatim on the NFC-exempt arc code; ktiv male as text,
+        ktiv haser in annotations"}
+  dicta-library:   # 02-sources row 421
+    # kind machine-postured — kind_map.yml metadata genre (category -- subcategory).
+    # lect machine-postured — lect_facet_rules.yml dicta-library-era (era rishonim →
+    # heb:med); the Acharonim mass (~1,150 books) and the 2 Geonim volumes stay bare heb
+    # deliberately — no early-modern rabbinic stage exists in the registry, and the print
+    # year (class edition) never stages (the blbooks/P164 rule). The rabbinic
+    # Hebrew-Aramaic mix of responsa and novellae rides heb whole (declared coarse).
+    dating: {posture: dated, note: "the manifest's printYear on every book (1726–1982; one
+        range \"1925-1931\" widens the envelope), class edition on the :structured lane —
+        the PRINT, not the composition (the 1881 Warsaw print of the Maharam of Lublin, d. 1616)"}
+    places: {posture: named, note: "printLocationEnglish, the imprint town (Warsaw, Vilna,
+        Jerusalem, Lemberg … 93 distinct), on every book; the Hebrew spelling rides place_he"}
+    script: {posture: implied, note: "Hebrew square script read by Dicta's AI OCR (Rashi
+        script rendered in square letters), unpointed; the two vocalized fallbacks carry
+        Dicta's machine niqqud, NFC-composed at the boundary (text_nature machine-ocr)"}

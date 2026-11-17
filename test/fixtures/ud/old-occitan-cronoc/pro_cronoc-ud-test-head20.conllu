@@ -1,0 +1,489 @@
+# sent_id = 13th_Lagrasse_1397
+# text = e encara mays Borrelh cuiec a Rotlan tolre 'l pe am la spasa .
+1	e	e	CCONJ	_	_	5	cc	_	_
+2	encara	ancar	ADV	_	_	5	advmod	_	_
+3	mays	mais	ADV	_	_	5	advmod	_	_
+4	Borrelh	_	PROPN	_	_	5	nsubj	_	_
+5	cuiec	cuidar	VERB	_	Mood=Ind|Number=Sing|Person=3|Tense=Past|VerbForm=Fin	0	root	_	_
+6	a	a	ADP	_	_	8	mark	_	_
+7	Rotlan	_	PROPN	_	_	8	obl	_	wordform=Rolant
+8	tolre	tolre	VERB	_	VerbForm=Inf	5	xcomp	_	_
+9	'l	lo	DET	_	Definite=Def|Number=Sing|PronType=Art	10	det	_	_
+10	pe	pe	NOUN	_	_	8	obj	_	_
+11	am	ab	ADP	_	_	13	case	_	_
+12	la	lo	DET	_	Definite=Def|Gender=Fem|Number=Sing|PronType=Art	13	det	_	_
+13	spasa	espaza	NOUN	_	_	8	obl	_	_
+14	.	.	PUNCT	_	_	5	punct	_	_
+
+# sent_id = 13th_Lagrasse_1398
+# text = E Rotlan sautec areyre .II. stadis .
+1	E	e	CCONJ	_	_	3	cc	_	_
+2	Rotlan	_	PROPN	_	_	3	nsubj	_	wordform=Rolant
+3	sautec	sautar	VERB	_	Mood=Ind|Number=Sing|Person=3|Tense=Past|VerbForm=Fin	0	root	_	_
+4	areyre	areire	ADV	_	_	3	advmod	_	_
+5	.II.	dos	NUM	_	NumType=Card	6	nummod	_	_
+6	stadis	estadi	NOUN	_	_	3	obl	_	_
+7	.	.	PUNCT	_	_	3	punct	_	_
+
+# sent_id = 13th_Lagrasse_1399
+# text = E la spasa de Borrelh intrec per terra la maitat .
+1	E	e	CCONJ	_	_	6	cc	_	_
+2	la	lo	DET	_	Definite=Def|Gender=Fem|Number=Sing|PronType=Art	3	det	_	_
+3	spasa	espaza	NOUN	_	_	6	nsubj	_	_
+4	de	de	ADP	_	_	5	case	_	_
+5	Borrelh	_	PROPN	_	_	3	nmod	_	_
+6	intrec	intrar	VERB	_	Mood=Ind|Number=Sing|Person=3|Tense=Past|VerbForm=Fin	0	root	_	_
+7	per	per	ADP	_	_	8	case	_	_
+8	terra	terra	NOUN	_	_	6	obl	_	_
+9	la	lo	DET	_	Definite=Def|Gender=Fem|Number=Sing|PronType=Art	10	det	_	_
+10	maitat	meitat	NOUN	_	_	6	obl	_	_
+11	.	.	PUNCT	_	_	6	punct	_	_
+
+# sent_id = 13th_Lagrasse_1400
+# text = E Rotlan fe s' en vais elh , e preguec lo que 's bateies .
+1	E	e	CCONJ	_	_	3	cc	_	_
+2	Rotlan	_	PROPN	_	_	3	nsubj	_	wordform=Rolant
+3	fe	faire	VERB	_	Mood=Ind|Number=Sing|Person=3|Tense=Past|VerbForm=Fin	0	root	_	_
+4	s'	se	PRON	_	Person=3|PronType=Prs|Reflex=Yes	3	expl	_	_
+5	en	en	PRON	_	PronType=Prs	3	obl	_	_
+6	vais	vas	ADP	_	_	7	case	_	_
+7	elh	el	PRON	_	Gender=Masc|Number=Sing|Person=3|PronType=Prs	3	obl	_	_
+8	,	,	PUNCT	_	_	3	punct	_	_
+9	e	e	CCONJ	_	_	10	cc	_	_
+10	preguec	pregar	VERB	_	Mood=Ind|Number=Sing|Person=3|Tense=Past|VerbForm=Fin	3	conj	_	_
+11	lo	el	PRON	_	Gender=Masc|Number=Sing|Person=3|PronType=Prs	10	obj	_	_
+12	que	que	SCONJ	_	_	14	mark	_	_
+13	's	se	PRON	_	Person=3|PronType=Prs|Reflex=Yes	14	expl	_	_
+14	bateies	batejar	VERB	_	Mood=Sub|Number=Sing|Person=3|Tense=Imp|VerbForm=Fin	10	ccomp	_	_
+15	.	.	PUNCT	_	_	3	punct	_	_
+
+# sent_id = 13th_Lagrasse_1401
+# text = Et elh disx li que pauc li agra valgut son babtisme si l' agues acosseguit de pla , et autra veguada feric lo tan fort que la maitat del celcle de l' elme e la maitat del scut li partic entro a terra .
+1	Et	e	CCONJ	_	_	3	cc	_	_
+2	elh	el	PRON	_	Gender=Masc|Number=Sing|Person=3|PronType=Prs	3	nsubj	_	_
+3	disx	dire	VERB	_	Mood=Ind|Number=Sing|Person=3|Tense=Past|VerbForm=Fin	0	root	_	_
+4	li	el	PRON	_	Number=Sing|Person=3|PronType=Prs	3	iobj	_	_
+5	que	que	SCONJ	_	_	9	mark	_	_
+6	pauc	pauc	ADV	_	_	9	advmod	_	_
+7	li	el	PRON	_	Number=Sing|Person=3|PronType=Prs	9	iobj	_	_
+8	agra	aver	AUX	_	Mood=Cnd|Number=Sing|Person=3|Tense=Pres|VerbForm=Fin	9	aux	_	_
+9	valgut	valer	VERB	_	Tense=Past|VerbForm=Part	3	ccomp	_	_
+10	son	son	DET	_	Poss=Yes	11	det	_	_
+11	babtisme	baptisme	NOUN	_	_	9	obj	_	_
+12	si	si	SCONJ	_	_	15	mark	_	_
+13	l'	el	PRON	_	Number=Sing|Person=3|PronType=Prs	15	obj	_	_
+14	agues	aver	AUX	_	Mood=Sub|Number=Sing|Person=3|Tense=Imp|VerbForm=Fin	15	aux	_	_
+15	acosseguit	aconsegre	VERB	_	Tense=Past|VerbForm=Part	9	advcl	_	_
+16	de	de	ADP	_	_	17	case	_	_
+17	pla	plan	ADV	_	_	15	advmod	_	_
+18	,	,	PUNCT	_	_	3	punct	_	_
+19	et	e	CCONJ	_	_	22	cc	_	_
+20	autra	autre	ADJ	_	_	21	amod	_	_
+21	veguada	vegada	NOUN	_	_	22	obl	_	_
+22	feric	ferir	VERB	_	Mood=Ind|Number=Sing|Person=3|Tense=Past|VerbForm=Fin	3	conj	_	_
+23	lo	el	PRON	_	Gender=Masc|Number=Sing|Person=3|PronType=Prs	22	obj	_	_
+24	tan	tan	ADV	_	_	25	advmod	_	_
+25	fort	fort	ADV	_	_	22	advmod	_	_
+26	que	que	SCONJ	_	_	42	mark	_	_
+27	la	lo	DET	_	Definite=Def|Gender=Fem|Number=Sing|PronType=Art	28	det	_	_
+28	maitat	meitat	NOUN	_	_	42	nsubj	_	_
+29-30	del	_	_	_	_	_	_	_	_
+29	de	de	ADP	_	_	31	case	_	_
+30	lo	lo	DET	_	Definite=Def|Gender=Masc|Number=Sing|PronType=Art	31	det	_	_
+31	celcle	celcle	NOUN	_	_	28	nmod	_	_
+32	de	de	ADP	_	_	34	case	_	_
+33	l'	lo	DET	_	Definite=Def|Number=Sing|PronType=Art	34	det	_	_
+34	elme	elm	NOUN	_	_	31	nmod	_	_
+35	e	e	CCONJ	_	_	37	cc	_	_
+36	la	lo	DET	_	Definite=Def|Gender=Fem|Number=Sing|PronType=Art	37	det	_	_
+37	maitat	meitat	NOUN	_	_	28	conj	_	_
+38-39	del	_	_	_	_	_	_	_	_
+38	de	de	ADP	_	_	40	case	_	_
+39	lo	lo	DET	_	Definite=Def|Gender=Masc|Number=Sing|PronType=Art	40	det	_	_
+40	scut	escut	NOUN	_	_	37	nmod	_	_
+41	li	el	PRON	_	Number=Sing|Person=3|PronType=Prs	42	iobj	_	_
+42	partic	partir	VERB	_	Mood=Ind|Number=Sing|Person=3|Tense=Past|VerbForm=Fin	22	advcl	_	_
+43	entro	entro	ADP	_	ExtPos=ADP	45	case	_	_
+44	a	a	ADP	_	_	43	fixed	_	_
+45	terra	terra	NOUN	_	_	42	obl	_	_
+46	.	.	PUNCT	_	_	3	punct	_	_
+
+# sent_id = 13th_Lagrasse_1402
+# text = E Rotlan c' aisso vi e que no 'l volia tocar , mais que 'l fera bateiar si pogues e non podia , donec li tal colp am Durendarda que 'l muscle e la spalla li partic del cors de Borrelh , pueis tolc li 'l cap .
+1	E	e	CCONJ	_	_	24	cc	_	_
+2	Rotlan	_	PROPN	_	_	24	nsubj	_	wordform=Rolant
+3	c'	que	PRON	_	PronType=Rel	5	nsubj	_	_
+4	aisso	aisso	PRON	_	PronType=Dem	5	obj	_	_
+5	vi	vezer	VERB	_	Mood=Ind|Number=Sing|Person=3|Tense=Past|VerbForm=Fin	2	acl:relcl	_	_
+6	e	e	CCONJ	_	_	10	cc	_	_
+7	que	que	PRON	_	PronType=Rel	10	nsubj	_	_
+8	no	non	ADV	_	Polarity=Neg	10	advmod	_	_
+9	'l	el	PRON	_	Number=Sing|Person=3|PronType=Prs	11	obj	_	_
+10	volia	voler	VERB	_	Mood=Ind|Number=Sing|Person=3|Tense=Imp|VerbForm=Fin	5	conj	_	_
+11	tocar	tocar	VERB	_	VerbForm=Inf	10	xcomp	_	_
+12	,	,	PUNCT	_	_	16	punct	_	_
+13	mais	mais	ADV	_	ExtPos=SCONJ	16	mark	_	_
+14	que	que	SCONJ	_	_	13	fixed	_	_
+15	'l	el	PRON	_	Number=Sing|Person=3|PronType=Prs	17	obj	_	_
+16	fera	faire	VERB	_	Mood=Ind|Number=Sing|Person=3|Tense=Fut|VerbForm=Fin	10	advcl	_	_
+17	bateiar	batejar	VERB	_	VerbForm=Inf	16	xcomp	_	_
+18	si	si	SCONJ	_	_	19	mark	_	_
+19	pogues	poder	VERB	_	Mood=Sub|Number=Sing|Person=3|Tense=Imp|VerbForm=Fin	16	advcl	_	_
+20	e	e	CCONJ	_	_	22	cc	_	_
+21	non	non	ADV	_	Polarity=Neg	22	advmod	_	_
+22	podia	poder	VERB	_	Mood=Ind|Number=Sing|Person=3|Tense=Imp|VerbForm=Fin	19	conj	_	_
+23	,	,	PUNCT	_	_	24	punct	_	_
+24	donec	donar	VERB	_	Mood=Ind|Number=Sing|Person=3|Tense=Past|VerbForm=Fin	0	root	_	_
+25	li	el	PRON	_	Number=Sing|Person=3|PronType=Prs	24	iobj	_	_
+26	tal	tal	DET	_	PronType=Ind	27	det	_	_
+27	colp	colp	NOUN	_	_	24	obj	_	_
+28	am	ab	ADP	_	_	29	case	_	_
+29	Durendarda	_	PROPN	_	_	24	obl	_	_
+30	que	que	SCONJ	_	_	37	mark	_	_
+31	'l	lo	DET	_	Definite=Def|Number=Sing|PronType=Art	32	det	_	_
+32	muscle	muscle	NOUN	_	_	37	obj	_	_
+33	e	e	CCONJ	_	_	35	cc	_	_
+34	la	lo	DET	_	Definite=Def|Gender=Fem|Number=Sing|PronType=Art	35	det	_	_
+35	spalla	espala	NOUN	_	_	32	conj	_	_
+36	li	el	PRON	_	Number=Sing|Person=3|PronType=Prs	37	iobj	_	_
+37	partic	partir	VERB	_	Mood=Ind|Number=Sing|Person=3|Tense=Past|VerbForm=Fin	24	advcl	_	_
+38-39	del	_	_	_	_	_	_	_	_
+38	de	de	ADP	_	_	40	case	_	_
+39	lo	lo	DET	_	Definite=Def|Gender=Masc|Number=Sing|PronType=Art	40	det	_	_
+40	cors	cors	NOUN	_	_	37	obl	_	_
+41	de	de	ADP	_	_	42	case	_	_
+42	Borrelh	_	PROPN	_	_	40	nmod	_	_
+43	,	,	PUNCT	_	_	24	punct	_	_
+44	pueis	pois	ADV	_	_	45	advmod	_	_
+45	tolc	tolir	VERB	_	Mood=Ind|Number=Sing|Person=3|Tense=Past|VerbForm=Fin	24	conj	_	_
+46	li	el	PRON	_	Number=Sing|Person=3|PronType=Prs	45	iobj	_	_
+47	'l	lo	DET	_	Definite=Def|Number=Sing|PronType=Art	48	det	_	_
+48	cap	cap	NOUN	_	_	45	obj	_	_
+49	.	.	PUNCT	_	_	24	punct	_	_
+
+# sent_id = 13th_Lagrasse_1403
+# text = Et Olivier et Amedon venc la us vais l' autre .
+1	Et	e	CCONJ	_	_	5	cc	_	_
+2	Olivier	_	PROPN	_	_	5	nsubj	_	_
+3	et	e	CCONJ	_	_	4	cc	_	_
+4	Amedon	_	PROPN	_	_	2	conj	_	_
+5	venc	venir	VERB	_	Mood=Ind|Number=Sing|Person=3|Tense=Past|VerbForm=Fin	0	root	_	_
+6	la	lai	ADV	_	_	5	advmod	_	_
+7	us	un	PRON	_	Gender=Masc|Number=Sing|PronType=Ind	5	obl	_	_
+8	vais	vas	ADP	_	_	10	case	_	_
+9	l'	lo	DET	_	Definite=Def|Number=Sing|PronType=Art	10	det	_	_
+10	autre	autre	PRON	_	PronType=Ind	7	nmod	_	_
+11	.	.	PUNCT	_	_	5	punct	_	_
+
+# sent_id = 13th_Lagrasse_1404
+# text = Et Amedon donec tal colp ad Olivier que l' escut e l' ausberc li trauquec el cors e trenquec la lanssa .
+1	Et	e	CCONJ	_	_	3	cc	_	_
+2	Amedon	_	PROPN	_	_	3	nsubj	_	_
+3	donec	donar	VERB	_	Mood=Ind|Number=Sing|Person=3|Tense=Past|VerbForm=Fin	0	root	_	_
+4	tal	tal	DET	_	PronType=Ind	5	det	_	_
+5	colp	colp	NOUN	_	_	3	obj	_	_
+6	ad	a	ADP	_	_	7	case	_	_
+7	Olivier	_	PROPN	_	_	3	obl	_	_
+8	que	que	SCONJ	_	_	15	mark	_	_
+9	l'	lo	DET	_	Definite=Def|Number=Sing|PronType=Art	10	det	_	_
+10	escut	escut	NOUN	_	_	15	obj	_	_
+11	e	e	CCONJ	_	_	13	cc	_	_
+12	l'	lo	DET	_	Definite=Def|Number=Sing|PronType=Art	13	det	_	_
+13	ausberc	alberc	NOUN	_	_	10	conj	_	_
+14	li	el	PRON	_	Number=Sing|Person=3|PronType=Prs	15	iobj	_	_
+15	trauquec	traucar	VERB	_	Mood=Ind|Number=Sing|Person=3|Tense=Past|VerbForm=Fin	3	advcl	_	_
+16	el	lo	DET	_	Definite=Def|Gender=Masc|Number=Sing|PronType=Art	17	det	_	_
+17	cors	cors	NOUN	_	_	15	obl	_	_
+18	e	e	CCONJ	_	_	19	cc	_	_
+19	trenquec	trencar	VERB	_	Mood=Ind|Number=Sing|Person=3|Tense=Past|VerbForm=Fin	15	conj	_	_
+20	la	lo	DET	_	Definite=Def|Gender=Fem|Number=Sing|PronType=Art	21	det	_	_
+21	lanssa	lansa	NOUN	_	_	19	obj	_	_
+22	.	.	PUNCT	_	_	3	punct	_	_
+
+# sent_id = 13th_Lagrasse_1405
+# text = Et Olivier feric elh de tal guisa que l' escut e l' ausberc e 'l cors li trauquec per mieg e gitec lo en terra mort .
+1	Et	e	CCONJ	_	_	3	cc	_	_
+2	Olivier	_	PROPN	_	_	3	nsubj	_	_
+3	feric	ferir	VERB	_	Mood=Ind|Number=Sing|Person=3|Tense=Past|VerbForm=Fin	0	root	_	_
+4	elh	el	PRON	_	Gender=Masc|Number=Sing|Person=3|PronType=Prs	3	obj	_	_
+5	de	de	ADP	_	_	7	case	_	_
+6	tal	tal	DET	_	PronType=Ind	7	det	_	_
+7	guisa	guisa	NOUN	_	_	3	obl	_	_
+8	que	que	SCONJ	_	_	18	mark	_	_
+9	l'	lo	DET	_	Definite=Def|Number=Sing|PronType=Art	10	det	_	_
+10	escut	escut	NOUN	_	_	18	obj	_	_
+11	e	e	CCONJ	_	_	13	cc	_	_
+12	l'	lo	DET	_	Definite=Def|Number=Sing|PronType=Art	13	det	_	_
+13	ausberc	alberc	NOUN	_	_	10	conj	_	_
+14	e	e	CCONJ	_	_	16	cc	_	_
+15	'l	lo	DET	_	Definite=Def|Number=Sing|PronType=Art	16	det	_	_
+16	cors	cors	NOUN	_	_	10	conj	_	_
+17	li	el	PRON	_	Number=Sing|Person=3|PronType=Prs	18	iobj	_	_
+18	trauquec	traucar	VERB	_	Mood=Ind|Number=Sing|Person=3|Tense=Past|VerbForm=Fin	3	advcl	_	_
+19	per	per	ADP	_	_	20	case	_	_
+20	mieg	meg	NOUN	_	_	18	obl	_	_
+21	e	e	CCONJ	_	_	22	cc	_	_
+22	gitec	gitar	VERB	_	Mood=Ind|Number=Sing|Person=3|Tense=Past|VerbForm=Fin	18	conj	_	_
+23	lo	el	PRON	_	Gender=Masc|Number=Sing|Person=3|PronType=Prs	22	obj	_	_
+24	en	en	ADP	_	_	25	case	_	_
+25	terra	terra	NOUN	_	_	22	obl	_	_
+26	mort	morir	ADJ	_	Tense=Past|VerbForm=Part	22	xcomp	_	_
+27	.	.	PUNCT	_	_	3	punct	_	_
+
+# sent_id = 13th_Lagrasse_1406
+# text = Pueis fe 'l desmembrar et am manguanels fe 'l gitar en la ciutat .
+1	Pueis	pois	ADV	_	_	2	advmod	_	_
+2	fe	faire	VERB	_	Mood=Ind|Number=Sing|Person=3|Tense=Past|VerbForm=Fin	0	root	_	_
+3	'l	el	PRON	_	Number=Sing|Person=3|PronType=Prs	2	obj	_	_
+4	desmembrar	desmembrar	VERB	_	VerbForm=Inf	2	xcomp	_	_
+5	et	e	CCONJ	_	_	8	cc	_	_
+6	am	ab	ADP	_	_	7	case	_	_
+7	manguanels	manganel	NOUN	_	_	10	obl	_	_
+8	fe	faire	VERB	_	Mood=Ind|Number=Sing|Person=3|Tense=Past|VerbForm=Fin	2	conj	_	_
+9	'l	el	PRON	_	Number=Sing|Person=3|PronType=Prs	8	obj	_	_
+10	gitar	gitar	VERB	_	VerbForm=Inf	8	xcomp	_	_
+11	en	en	ADP	_	_	13	case	_	_
+12	la	lo	DET	_	Definite=Def|Gender=Fem|Number=Sing|PronType=Art	13	det	_	_
+13	ciutat	ciutat	NOUN	_	_	10	obl	_	_
+14	.	.	PUNCT	_	_	2	punct	_	_
+
+# sent_id = 13th_Lagrasse_1407
+# text = E la regina , can vic son frayre mort , fo escomauguda de gran dol , e fo trista e marrida .
+1	E	e	CCONJ	_	_	12	cc	_	_
+2	la	lo	DET	_	Definite=Def|Gender=Fem|Number=Sing|PronType=Art	3	det	_	_
+3	regina	regina	NOUN	_	_	12	nsubj	_	_
+4	,	,	PUNCT	_	_	12	punct	_	_
+5	can	can	SCONJ	_	_	6	mark	_	_
+6	vic	vezer	VERB	_	Mood=Ind|Number=Sing|Person=3|Tense=Past|VerbForm=Fin	12	advcl	_	_
+7	son	son	DET	_	Poss=Yes	8	det	_	_
+8	frayre	fraire	NOUN	_	_	6	obj	_	_
+9	mort	morir	ADJ	_	Tense=Past|VerbForm=Part	6	xcomp	_	_
+10	,	,	PUNCT	_	_	12	punct	_	_
+11	fo	eser	AUX	_	Mood=Ind|Number=Sing|Person=3|Tense=Past|VerbForm=Fin	12	cop	_	_
+12	escomauguda	escomoure	ADJ	_	Tense=Past|VerbForm=Part	0	root	_	_
+13	de	de	ADP	_	_	15	case	_	_
+14	gran	gran	ADJ	_	_	15	amod	_	_
+15	dol	dol	NOUN	_	_	12	obl	_	_
+16	,	,	PUNCT	_	_	12	punct	_	_
+17	e	e	CCONJ	_	_	19	cc	_	_
+18	fo	eser	AUX	_	Mood=Ind|Number=Sing|Person=3|Tense=Past|VerbForm=Fin	19	cop	_	_
+19	trista	trist	ADJ	_	_	12	conj	_	_
+20	e	e	CCONJ	_	_	21	cc	_	_
+21	marrida	marrir	ADJ	_	Tense=Past|VerbForm=Part	19	conj	_	_
+22	.	.	PUNCT	_	_	12	punct	_	_
+
+# sent_id = 13th_Lagrasse_1408
+# text = E Matran e totz cels de la ciutat de paor e de dol foro totz espaventatz .
+1	E	e	CCONJ	_	_	16	cc	_	_
+2	Matran	_	PROPN	_	_	16	nsubj	_	_
+3	e	e	CCONJ	_	_	5	cc	_	_
+4	totz	tot	DET	_	Number=Plur|PronType=Ind	5	det	_	_
+5	cels	cel	PRON	_	Number=Plur|PronType=Dem	2	conj	_	_
+6	de	de	ADP	_	_	8	case	_	_
+7	la	lo	DET	_	Definite=Def|Gender=Fem|Number=Sing|PronType=Art	8	det	_	_
+8	ciutat	ciutat	NOUN	_	_	5	nmod	_	_
+9	de	de	ADP	_	_	10	case	_	_
+10	paor	paor	NOUN	_	_	16	obl	_	_
+11	e	e	CCONJ	_	_	13	cc	_	_
+12	de	de	ADP	_	_	13	case	_	_
+13	dol	dol	NOUN	_	_	10	conj	_	_
+14	foro	eser	AUX	_	Mood=Ind|Number=Plur|Person=3|Tense=Past|VerbForm=Fin	16	aux:pass	_	_
+15	totz	tot	PRON	_	Number=Plur|PronType=Ind	16	obl	_	_
+16	espaventatz	espaventar	VERB	_	Tense=Past|VerbForm=Part	0	root	_	_
+17	.	.	PUNCT	_	_	16	punct	_	_
+
+# sent_id = 13th_Lagrasse_1409
+# text = E Matran per cofortar les autres iurec que veniaria la mort cruselment dels sieus , e cofortec los al miels que poc .
+1	E	e	CCONJ	_	_	7	cc	_	_
+2	Matran	_	PROPN	_	_	7	nsubj	_	_
+3	per	per	ADP	_	_	4	mark	_	_
+4	cofortar	confortar	VERB	_	VerbForm=Inf	7	advcl	_	_
+5	les	lo	DET	_	Definite=Def|Gender=Masc|Number=Plur|PronType=Art	6	det	_	_
+6	autres	autre	PRON	_	PronType=Ind	4	obj	_	_
+7	iurec	jurar	VERB	_	Mood=Ind|Number=Sing|Person=3|Tense=Past|VerbForm=Fin	0	root	_	_
+8	que	que	SCONJ	_	_	9	mark	_	_
+9	veniaria	venjar	VERB	_	Mood=Cnd|Number=Sing|Person=3|Tense=Pres|VerbForm=Fin	7	ccomp	_	_
+10	la	lo	DET	_	Definite=Def|Gender=Fem|Number=Sing|PronType=Art	11	det	_	_
+11	mort	mort	NOUN	_	_	9	nsubj	_	_
+12	cruselment	cruzelmen	ADV	_	_	9	advmod	_	_
+13-14	dels	_	_	_	_	_	_	_	_
+13	de	de	ADP	_	_	15	case	_	_
+14	los	lo	DET	_	Definite=Def|Gender=Masc|Number=Plur|PronType=Art	15	det	_	_
+15	sieus	seu	PRON	_	Gender=Masc|Number=Plur|Number[psor]=Sing|Person[psor]=3|Poss=Yes	11	nmod	_	_
+16	,	,	PUNCT	_	_	7	punct	_	_
+17	e	e	CCONJ	_	_	18	cc	_	_
+18	cofortec	confortar	VERB	_	Mood=Ind|Number=Sing|Person=3|Tense=Past|VerbForm=Fin	7	conj	_	_
+19	los	el	PRON	_	Gender=Masc|Number=Plur|Person=3|PronType=Prs	18	obj	_	_
+20-21	al	_	_	_	_	_	_	_	_
+20	a	a	ADP	_	_	22	case	_	_
+21	lo	lo	DET	_	Definite=Def|Gender=Masc|Number=Sing|PronType=Art	22	det	_	_
+22	miels	melhs	ADV	_	_	18	advmod	_	_
+23	que	que	SCONJ	_	_	24	mark	_	_
+24	poc	poder	VERB	_	Mood=Ind|Number=Sing|Person=3|Tense=Past|VerbForm=Fin	18	advcl	_	_
+25	.	.	PUNCT	_	_	7	punct	_	_
+
+# sent_id = 13th_Lagrasse_1410
+# text = Mais la regina disx a Matran :
+1	Mais	mais	CCONJ	_	_	4	cc	_	_
+2	la	lo	DET	_	Definite=Def|Gender=Fem|Number=Sing|PronType=Art	3	det	_	_
+3	regina	regina	NOUN	_	_	4	nsubj	_	_
+4	disx	dire	VERB	_	Mood=Ind|Number=Sing|Person=3|Tense=Past|VerbForm=Fin	0	root	_	_
+5	a	a	ADP	_	_	6	case	_	_
+6	Matran	_	PROPN	_	_	4	obl	_	_
+7	:	:	PUNCT	_	_	4	punct	_	_
+
+# sent_id = 13th_Lagrasse_1411
+# text = " Vostre cofortament es vas e niens .
+1	"	"	PUNCT	_	_	5	punct	_	Reported=Yes
+2	Vostre	vostre	DET	_	Poss=Yes	3	det	_	Reported=Yes
+3	cofortament	confortamen	NOUN	_	_	5	nsubj	_	Reported=Yes
+4	es	eser	AUX	_	Mood=Ind|Number=Sing|Person=3|Tense=Pres|VerbForm=Fin	5	cop	_	Reported=Yes
+5	vas	van	ADJ	_	_	0	root	_	Reported=Yes
+6	e	e	CCONJ	_	_	7	cc	_	Reported=Yes
+7	niens	nien	NOUN	_	_	5	conj	_	Reported=Yes
+8	.	.	PUNCT	_	_	5	punct	_	Reported=Yes
+
+# sent_id = 13th_Lagrasse_1412
+# text = No podetz ara conoysser que Mahomet vostre ni Dieus vostre non a poder ?
+1	No	non	ADV	_	Polarity=Neg	2	advmod	_	Reported=Yes
+2	podetz	poder	VERB	_	Mood=Ind|Number=Plur|Person=2|Tense=Pres|VerbForm=Fin	0	root	_	Reported=Yes
+3	ara	ar	ADV	_	_	2	advmod	_	Reported=Yes
+4	conoysser	conoiser	VERB	_	VerbForm=Inf	2	xcomp	_	Reported=Yes
+5	que	que	SCONJ	_	_	12	mark	_	Reported=Yes
+6	Mahomet	_	PROPN	_	_	12	nsubj	_	Reported=Yes
+7	vostre	vostre	ADJ	_	Number[psor]=Plur|Person[psor]=2|Poss=Yes	6	amod	_	Reported=Yes
+8	ni	ni	CCONJ	_	Polarity=Neg	9	cc	_	Reported=Yes
+9	Dieus	_	PROPN	_	_	6	conj	_	Reported=Yes
+10	vostre	vostre	ADJ	_	Number[psor]=Plur|Person[psor]=2|Poss=Yes	9	amod	_	Reported=Yes
+11	non	non	ADV	_	Polarity=Neg	12	advmod	_	Reported=Yes
+12	a	aver	VERB	_	Mood=Ind|Number=Sing|Person=3|Tense=Pres|VerbForm=Fin	4	ccomp	_	Reported=Yes
+13	poder	poder	NOUN	_	_	12	obj	_	Reported=Yes
+14	?	?	PUNCT	_	_	2	punct	_	Reported=Yes
+
+# sent_id = 13th_Lagrasse_1413
+# text = Per que cosselharia que rendessetz Narbona a Karles e que us bateiessetz " .
+1	Per	per	ADP	_	_	2	case	_	Reported=Yes
+2	que	que	PRON	_	PronType=Rel	3	obl	_	Reported=Yes
+3	cosselharia	conselhar	VERB	_	Mood=Cnd|Number=Sing|Person=1|Tense=Pres|VerbForm=Fin	0	root	_	Reported=Yes
+4	que	que	SCONJ	_	_	5	mark	_	Reported=Yes
+5	rendessetz	redre	VERB	_	Mood=Sub|Number=Plur|Person=2|Tense=Pres|VerbForm=Fin	3	ccomp	_	Reported=Yes
+6	Narbona	_	PROPN	_	_	5	obj	_	Reported=Yes
+7	a	a	ADP	_	_	8	case	_	Reported=Yes
+8	Karles	_	PROPN	_	_	5	obl	_	Reported=Yes
+9	e	e	CCONJ	_	_	12	cc	_	Reported=Yes
+10	que	que	SCONJ	_	_	12	mark	_	Reported=Yes
+11	us	vos	PRON	_	Number=Plur|Person=2|PronType=Prs|Reflex=Yes	12	expl	_	Reported=Yes
+12	bateiessetz	batejar	VERB	_	Mood=Sub|Number=Plur|Person=2|Tense=Pres|VerbForm=Fin	5	conj	_	Reported=Yes
+13	"	"	PUNCT	_	_	3	punct	_	Reported=Yes
+14	.	.	PUNCT	_	_	3	punct	_	Reported=Yes
+
+# sent_id = 13th_Lagrasse_1414
+# text = E Meleran aquo meteis cosselec .
+1	E	e	CCONJ	_	_	5	cc	_	_
+2	Meleran	_	PROPN	_	_	5	nsubj	_	_
+3	aquo	aco	PRON	_	PronType=Dem	5	obj	_	_
+4	meteis	mezeis	ADJ	_	_	3	amod	_	_
+5	cosselec	conselhar	VERB	_	Mood=Ind|Number=Sing|Person=3|Tense=Past|VerbForm=Fin	0	root	_	_
+6	.	.	PUNCT	_	_	5	punct	_	_
+
+# sent_id = 13th_Lagrasse_1415
+# text = Mais Matran blastomans els e reptan e lor cosselh tenc per malvat , e refudec lo .
+1	Mais	mais	CCONJ	_	_	10	cc	_	_
+2	Matran	_	PROPN	_	_	10	nsubj	_	_
+3	blastomans	blastemar	VERB	_	Tense=Pres|VerbForm=Part	10	advcl	_	_
+4	els	el	PRON	_	Gender=Masc|Number=Plur|Person=3|PronType=Prs	3	obj	_	_
+5	e	e	CCONJ	_	_	6	cc	_	_
+6	reptan	reptar	VERB	_	Tense=Pres|VerbForm=Part	3	conj	_	_
+7	e	e	CCONJ	_	_	10	cc	_	_
+8	lor	lor	DET	_	Number=Sing|Number[psor]=Plur|Person[psor]=3|Poss=Yes	9	det	_	_
+9	cosselh	conselh	NOUN	_	_	10	obj	_	_
+10	tenc	tener	VERB	_	Mood=Ind|Number=Sing|Person=3|Tense=Past|VerbForm=Fin	0	root	_	_
+11	per	per	ADP	_	_	12	mark	_	_
+12	malvat	malvatz	ADJ	_	Tense=Past|VerbForm=Part	10	xcomp	_	_
+13	,	,	PUNCT	_	_	10	punct	_	_
+14	e	e	CCONJ	_	_	15	cc	_	_
+15	refudec	refudar	VERB	_	Mood=Ind|Number=Sing|Person=3|Tense=Past|VerbForm=Fin	10	conj	_	_
+16	lo	el	PRON	_	Gender=Masc|Number=Sing|Person=3|PronType=Prs	15	obj	_	_
+17	.	.	PUNCT	_	_	10	punct	_	_
+
+# sent_id = 13th_Lagrasse_1416
+# text = Mays li iusieus que estavan en la ciutat conogro en lors sortz que Karles penria la ciutat e que seria senhors de tota la terra de sa mar , et agron entre elhs cossel , e vengron a Matran , e dixeron li que en calque guisa si pogues fes concordia ab Karles o , si no o fasia , saubes per cert que la ciutat perdria e que " auciria vos e totz vostres valedors " .
+1	Mays	mais	CCONJ	_	_	9	cc	_	_
+2	li	lo	DET	_	Definite=Def|Gender=Masc|Number=Plur|PronType=Art	3	det	_	_
+3	iusieus	juzeu	NOUN	_	_	9	nsubj	_	_
+4	que	que	PRON	_	PronType=Rel	5	nsubj	_	_
+5	estavan	estar	VERB	_	Mood=Ind|Number=Plur|Person=3|Tense=Imp|VerbForm=Fin	3	acl:relcl	_	_
+6	en	en	ADP	_	_	8	case	_	_
+7	la	lo	DET	_	Definite=Def|Gender=Fem|Number=Sing|PronType=Art	8	det	_	_
+8	ciutat	ciutat	NOUN	_	_	5	obl	_	_
+9	conogro	conoiser	VERB	_	Mood=Ind|Number=Plur|Person=3|Tense=Past|VerbForm=Fin	0	root	_	_
+10	en	en	ADP	_	_	12	case	_	_
+11	lors	lor	DET	_	Number=Plur|Number[psor]=Plur|Person[psor]=3|Poss=Yes	12	det	_	_
+12	sortz	sort	NOUN	_	_	9	obl	_	_
+13	que	que	SCONJ	_	_	15	mark	_	_
+14	Karles	_	PROPN	_	_	15	nsubj	_	_
+15	penria	prendre	VERB	_	Mood=Cnd|Number=Sing|Person=3|Tense=Pres|VerbForm=Fin	9	ccomp	_	_
+16	la	lo	DET	_	Definite=Def|Gender=Fem|Number=Sing|PronType=Art	17	det	_	_
+17	ciutat	ciutat	NOUN	_	_	15	obj	_	_
+18	e	e	CCONJ	_	_	21	cc	_	_
+19	que	que	SCONJ	_	_	21	mark	_	_
+20	seria	eser	AUX	_	Mood=Cnd|Number=Sing|Person=3|Tense=Pres|VerbForm=Fin	21	cop	_	_
+21	senhors	senhor	NOUN	_	_	15	conj	_	_
+22	de	de	ADP	_	_	25	case	_	_
+23	tota	tot	DET	_	Gender=Fem|Number=Sing|PronType=Ind	25	det	_	_
+24	la	lo	DET	_	Definite=Def|Gender=Fem|Number=Sing|PronType=Art	25	det	_	_
+25	terra	terra	NOUN	_	_	21	nmod	_	_
+26	de	de	ADP	_	ExtPos=ADP	28	case	_	_
+27	sa	sai	ADV	_	_	26	fixed	_	_
+28	mar	mar	NOUN	_	_	25	nmod	_	_
+29	,	,	PUNCT	_	_	9	punct	_	_
+30	et	e	CCONJ	_	_	31	cc	_	_
+31	agron	aver	VERB	_	Mood=Ind|Number=Plur|Tense=Past|VerbForm=Fin	9	conj	_	_
+32	entre	entre	ADP	_	_	33	case	_	_
+33	elhs	el	PRON	_	Gender=Masc|Number=Plur|Person=3|PronType=Prs	31	obl	_	_
+34	cossel	conselh	NOUN	_	_	31	obj	_	_
+35	,	,	PUNCT	_	_	9	punct	_	_
+36	e	e	CCONJ	_	_	37	cc	_	_
+37	vengron	venir	VERB	_	Mood=Ind|Number=Plur|Person=3|Tense=Past|VerbForm=Fin	9	conj	_	_
+38	a	a	ADP	_	_	39	case	_	_
+39	Matran	_	PROPN	_	_	37	obl	_	_
+40	,	,	PUNCT	_	_	9	punct	_	_
+41	e	e	CCONJ	_	_	42	cc	_	_
+42	dixeron	dire	VERB	_	Mood=Ind|Number=Plur|Person=3|Tense=Past|VerbForm=Fin	9	conj	_	_
+43	li	el	PRON	_	Number=Sing|Person=3|PronType=Prs	42	iobj	_	_
+44	que	que	SCONJ	_	_	50	mark	_	_
+45	en	en	ADP	_	_	47	case	_	_
+46	calque	calque	DET	_	Number=Sing|PronType=Ind	47	det	_	_
+47	guisa	guiza	NOUN	_	_	50	obl	_	_
+48	si	si	SCONJ	_	_	49	mark	_	_
+49	pogues	poder	VERB	_	Mood=Sub|Number=Sing|Person=3|Tense=Imp|VerbForm=Fin	50	advcl	_	_
+50	fes	faire	VERB	_	Mood=Sub|Number=Sing|Person=3|Tense=Pres|VerbForm=Fin	42	ccomp	_	_
+51	concordia	concordia	NOUN	_	_	50	obj	_	_
+52	ab	ab	ADP	_	_	53	case	_	_
+53	Karles	_	PROPN	_	_	50	obl	_	_
+54	o	o	CCONJ	_	_	61	cc	_	_
+55	,	,	PUNCT	_	_	61	punct	_	_
+56	si	si	SCONJ	_	_	59	mark	_	_
+57	no	non	ADV	_	Polarity=Neg	59	advmod	_	_
+58	o	o	PRON	_	Gender=Neut|Number=Sing|Person=3|PronType=Prs	59	obj	_	_
+59	fasia	faire	VERB	_	Mood=Ind|Number=Sing|Person=3|Tense=Imp|VerbForm=Fin	61	advcl	_	_
+60	,	,	PUNCT	_	_	61	punct	_	_
+61	saubes	saber	VERB	_	Mood=Sub|Number=Sing|Person=3|Tense=Pres|VerbForm=Fin	50	conj	_	_
+62	per	per	ADP	_	ExtPos=ADV	61	advmod	_	_
+63	cert	cert	ADJ	_	_	62	fixed	_	_
+64	que	que	SCONJ	_	_	67	mark	_	_
+65	la	lo	DET	_	Definite=Def|Gender=Fem|Number=Sing|PronType=Art	66	det	_	_
+66	ciutat	ciutat	NOUN	_	_	67	obj	_	_
+67	perdria	perdre	VERB	_	Mood=Cnd|Number=Sing|Person=3|Tense=Pres|VerbForm=Fin	61	ccomp	_	_
+68	e	e	CCONJ	_	_	71	cc	_	_
+69	que	que	SCONJ	_	_	71	mark	_	_
+70	"	"	PUNCT	_	_	71	punct	_	Reported=Yes
+71	auciria	aucir	VERB	_	Mood=Cnd|Number=Sing|Person=3|Tense=Pres|VerbForm=Fin	67	conj	_	Reported=Yes
+72	vos	vos	PRON	_	Number=Plur|Person=2|PronType=Prs	71	obj	_	Reported=Yes
+73	e	e	CCONJ	_	_	76	cc	_	Reported=Yes
+74	totz	tot	DET	_	PronType=Ind	76	det	_	Reported=Yes
+75	vostres	vostre	DET	_	Number=Plur|Number[psor]=Plur|Person[psor]=2|Poss=Yes	76	det	_	Reported=Yes
+76	valedors	valedor	NOUN	_	_	72	conj	_	Reported=Yes
+77	"	"	PUNCT	_	_	9	punct	_	Reported=Yes
+78	.	.	PUNCT	_	_	9	punct	_	_
+

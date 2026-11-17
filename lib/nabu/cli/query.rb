@@ -4,6 +4,11 @@
 # Carved out of lib/nabu/cli.rb, the registry that loads it.
 module Nabu
   class CLI < Thor
+    # The options `search --similar` honors (mirroring the MCP similar_to
+    # ruling): --lang pins the anchor's own language (Query::Similar refuses
+    # any other, never widens), --limit bounds the page, --display renders.
+    SIMILAR_OPTIONS = %w[similar limit lang display].freeze
+
     desc "search QUERY", "Full-text search the corpus (FTS5 over folded text)"
     long_desc <<~HELP, wrap: false
       Full-text search over every live passage, bm25-ranked. Matching is
@@ -422,7 +427,8 @@ module Nabu
                      desc: "Semantic neighbors of one embedded passage (P93-5): " \
                            "same-language cross-edition retrieval over the nabu-embed vectors, " \
                            "rendered in bands (close/near/loose), model named in the header — " \
-                           "IS the query (give no term); composes with --limit only"
+                           "IS the query (give no term); composes with --lang/--limit only " \
+                           "(--lang must be the anchor's own language; other filters are refused)"
     option :long, type: :boolean, default: false,
                   desc: "With --fuzzy: print the full folded passage instead of the windowed snippet"
     option :gold_only, type: :boolean, default: false,
@@ -454,6 +460,11 @@ module Nabu
     display_option
     def search(query = nil)
       query = query.to_s.strip
+      if options[:similar]
+        similar_lane_conflicts!(query)
+        display_mode
+        return similar_search(options[:similar])
+      end
       query = betacode_input(query) if options[:betacode]
       display_mode
       date_basis_filter
@@ -544,15 +555,6 @@ module Nabu
                              "--lemma/--near/--fuzzy/--morph (they compose with a plain text query)"
         end
         return char_structured_search(query)
-      end
-      if options[:similar]
-        unless query.empty? && !options[:fuzzy] && !options[:near] && !options[:lemma] &&
-               !options[:morph] && !options[:exact] && !options[:word] && !options[:scan] &&
-               !options[:withdrawn] && !char_filter_options? && !options[:sign]
-          raise Thor::Error, "search: --similar URN is the semantic-neighbors page — the urn IS " \
-                             "the query (give no term); it composes with --limit only"
-        end
-        return similar_search(options[:similar])
       end
       if options[:withdrawn]
         if query.empty? || options[:fuzzy] || options[:near] || options[:lemma] || options[:morph] ||
@@ -2710,6 +2712,20 @@ module Nabu
         say Nabu::Query::CatalogJoin::INCOMPLETE_PAGE_HINT if outcome.incomplete
       end
 
+      # Every option outside SIMILAR_OPTIONS set away from its default is a
+      # filter the similar lane cannot honor — refused by name, never
+      # silently dropped.
+      def similar_lane_conflicts!(query)
+        defaults = self.class.commands["search"].options.to_h { |name, opt| [name.to_s, opt.default] }
+        clash = options.reject { |name, value| SIMILAR_OPTIONS.include?(name) || value.nil? || value == defaults[name] }
+                       .keys.map { |name| "--#{name.tr('_', '-')}" }
+        clash.unshift("a search term") unless query.empty?
+        return if clash.empty?
+
+        raise Thor::Error, "search: --similar URN is the semantic-neighbors page — the urn IS the query " \
+                           "(give no term); --similar composes with --lang/--limit only (not #{clash.join(', ')})"
+      end
+
       # The semantic-neighbors page (P93-5): URN-anchored, no model
       # at query time — one sqlite-vec scan of the same-language subpool.
       # Every absent-machinery case surfaces as the query layer's honest
@@ -2721,7 +2737,7 @@ module Nabu
 
         vectors = Nabu::Store.connect(config.vectors_path)
         finder = Nabu::Query::Similar.new(catalog: catalog, vectors: vectors)
-        page = finder.run(urn, limit: options[:limit].to_i)
+        page = finder.run(urn, limit: options[:limit].to_i, language: options[:lang])
         say "similar to #{page.anchor_urn} [#{page.language}] — model #{page.model}, " \
             "same-language only (cross-language is not served: the P79-5 measurement)"
         if page.results.empty?
