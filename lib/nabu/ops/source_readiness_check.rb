@@ -2,7 +2,6 @@
 
 require "date"
 require "yaml"
-require "sequel"
 
 module Nabu
   module Ops
@@ -55,7 +54,7 @@ module Nabu
       end
 
       def synced_slugs
-        db = Sequel.connect("sqlite://#{@ledger_path}", readonly: true)
+        db = Nabu::Store.connect(@ledger_path, readonly: true)
         db[:runs].distinct.select_map(:source_slug).to_set
       ensure
         db&.disconnect

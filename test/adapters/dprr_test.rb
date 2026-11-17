@@ -31,7 +31,7 @@ class DprrTest < Minitest::Test
     entry = registry["dprr"]
     refute_nil entry
     assert entry.feature_module?
-    refute entry.wired, "wired: false until the first real sync is verified"
+    assert entry.wired, "wired flipped with the verified first sync (4,876 persons exactly on census)"
     adapter = Nabu::Adapters::Dprr.new
     assert_empty adapter.discover(".").to_a
     ref = Nabu::DocumentRef.new(source_id: "dprr", id: "urn:nabu:dprr:x", path: ".", metadata: {})
