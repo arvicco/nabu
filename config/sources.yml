@@ -6628,6 +6628,14 @@ sefaria:
                    # Eyeball urn:nabu:sefaria:ben-sira:he:ben-sira-david-
                    # kahana-ed-wikisource:1.1 and urn:nabu:sefaria:megillat-
                    # ta-anit:he:warsaw-1874:nisan.2.
+                   # The CLASSICAL-MIDRASH CUT (owner-ruled title list) widens
+                   # the aggadah allowlist by Yalkut Shimoni on Torah/Nach,
+                   # Otzar Midrashim and Ein Yaakov: +18 named files (≈31 MB)
+                   # → expected EXACTLY +10 documents / +16,123 passages, +8
+                   # rule skips ("unknown"), 0 quarantines (full parse,
+                   # 2026-11-17). Eyeball urn:nabu:sefaria:ein-yaakov:he:daat:
+                   # berakhot.1.1 and urn:nabu:sefaria:yalkut-shimoni-on-
+                   # torah:he:torat-emet:1.1 (nc).
   # Sefaria — Targum shelf (P30-3) + RABBINIC WAVE 1 (P46-1) + MIDRASH
   # WAVE 2 (P55-3). Upstream
   # restructured: the git repo is a monthly books.json index (19,705 version
@@ -6650,7 +6658,8 @@ sefaria:
   # Tannaim; the "Footnotes on Mekhilta…" apparatus title excluded). The
   # FLAT Midrash/Aggadah bucket (Pesikta, Tanchuma, PdRE … beside Yalkut
   # Shimoni, Otzar Midrashim, Ein Yaakov) is not category-separable → out of
-  # wave 2; cutting it is a title-level owner ruling.
+  # wave 2; the title-level rulings since cut it by exact-title allowlist
+  # (the aggadah shelf: wave 3's classical core + the classical-midrash cut).
   # Commentary/Rishonim/Acharonim/Guides subtrees and non-named editions
   # (Venice, Mechon-Mamre…) are out of the wave-1/2 shelves by rule. P140
   # opens the Rishonim-on-Tanakh subtree whole (tanakh-rishonim) plus the

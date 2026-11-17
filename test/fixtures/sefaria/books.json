@@ -1163,6 +1163,97 @@
    "txt_url": "https://storage.googleapis.com/sefaria-export/txt/Second%20Temple/Philo/On%20Abraham/English/Loeb%20Classical%20Library%2C%20Harvard%20University%20Press%2C%201935.txt",
    "cltk_full_url": "https://storage.googleapis.com/sefaria-export/cltk-full/Second%20Temple/Philo/On%20Abraham/English/Loeb%20Classical%20Library%2C%20Harvard%20University%20Press%2C%201935.json",
    "cltk_flat_url": "https://storage.googleapis.com/sefaria-export/cltk-flat/Second%20Temple/Philo/On%20Abraham/English/Loeb%20Classical%20Library%2C%20Harvard%20University%20Press%2C%201935.json"
+  },
+  {
+   "title": "Ein Yaakov",
+   "language": "Hebrew",
+   "versionTitle": "Daat",
+   "categories": [
+    "Midrash",
+    "Aggadah"
+   ],
+   "json_url": "https://storage.googleapis.com/sefaria-export/json/Midrash/Aggadah/Ein%20Yaakov/Hebrew/Daat.json",
+   "txt_url": "https://storage.googleapis.com/sefaria-export/txt/Midrash/Aggadah/Ein%20Yaakov/Hebrew/Daat.txt",
+   "cltk_full_url": "https://storage.googleapis.com/sefaria-export/cltk-full/Midrash/Aggadah/Ein%20Yaakov/Hebrew/Daat.json",
+   "cltk_flat_url": "https://storage.googleapis.com/sefaria-export/cltk-flat/Midrash/Aggadah/Ein%20Yaakov/Hebrew/Daat.json"
+  },
+  {
+   "title": "Otzar Midrashim",
+   "language": "Hebrew",
+   "versionTitle": "Otzar Midrashim, New York, 1915",
+   "categories": [
+    "Midrash",
+    "Aggadah"
+   ],
+   "json_url": "https://storage.googleapis.com/sefaria-export/json/Midrash/Aggadah/Otzar%20Midrashim/Hebrew/Otzar%20Midrashim%2C%20New%20York%2C%201915.json",
+   "txt_url": "https://storage.googleapis.com/sefaria-export/txt/Midrash/Aggadah/Otzar%20Midrashim/Hebrew/Otzar%20Midrashim%2C%20New%20York%2C%201915.txt",
+   "cltk_full_url": "https://storage.googleapis.com/sefaria-export/cltk-full/Midrash/Aggadah/Otzar%20Midrashim/Hebrew/Otzar%20Midrashim%2C%20New%20York%2C%201915.json",
+   "cltk_flat_url": "https://storage.googleapis.com/sefaria-export/cltk-flat/Midrash/Aggadah/Otzar%20Midrashim/Hebrew/Otzar%20Midrashim%2C%20New%20York%2C%201915.json"
+  },
+  {
+   "title": "Yalkut Shimoni on Torah",
+   "language": "Hebrew",
+   "versionTitle": "Torat Emet",
+   "categories": [
+    "Midrash",
+    "Aggadah"
+   ],
+   "json_url": "https://storage.googleapis.com/sefaria-export/json/Midrash/Aggadah/Yalkut%20Shimoni%20on%20Torah/Hebrew/Torat%20Emet.json",
+   "txt_url": "https://storage.googleapis.com/sefaria-export/txt/Midrash/Aggadah/Yalkut%20Shimoni%20on%20Torah/Hebrew/Torat%20Emet.txt",
+   "cltk_full_url": "https://storage.googleapis.com/sefaria-export/cltk-full/Midrash/Aggadah/Yalkut%20Shimoni%20on%20Torah/Hebrew/Torat%20Emet.json",
+   "cltk_flat_url": "https://storage.googleapis.com/sefaria-export/cltk-flat/Midrash/Aggadah/Yalkut%20Shimoni%20on%20Torah/Hebrew/Torat%20Emet.json"
+  },
+  {
+   "title": "Yalkut Shimoni on Nach",
+   "language": "Hebrew",
+   "versionTitle": "Yalkut Shimoni on Nach",
+   "categories": [
+    "Midrash",
+    "Aggadah"
+   ],
+   "json_url": "https://storage.googleapis.com/sefaria-export/json/Midrash/Aggadah/Yalkut%20Shimoni%20on%20Nach/Hebrew/Yalkut%20Shimoni%20on%20Nach.json",
+   "txt_url": "https://storage.googleapis.com/sefaria-export/txt/Midrash/Aggadah/Yalkut%20Shimoni%20on%20Nach/Hebrew/Yalkut%20Shimoni%20on%20Nach.txt",
+   "cltk_full_url": "https://storage.googleapis.com/sefaria-export/cltk-full/Midrash/Aggadah/Yalkut%20Shimoni%20on%20Nach/Hebrew/Yalkut%20Shimoni%20on%20Nach.json",
+   "cltk_flat_url": "https://storage.googleapis.com/sefaria-export/cltk-flat/Midrash/Aggadah/Yalkut%20Shimoni%20on%20Nach/Hebrew/Yalkut%20Shimoni%20on%20Nach.json"
+  },
+  {
+   "title": "Ein Yaakov (Glick Edition)",
+   "language": "English",
+   "versionTitle": "En Jacob, translated by SH Glick, 1916",
+   "categories": [
+    "Midrash",
+    "Aggadah"
+   ],
+   "json_url": "https://storage.googleapis.com/sefaria-export/json/Midrash/Aggadah/Ein%20Yaakov%20%28Glick%20Edition%29/English/En%20Jacob%2C%20translated%20by%20SH%20Glick%2C%201916.json",
+   "txt_url": "https://storage.googleapis.com/sefaria-export/txt/Midrash/Aggadah/Ein%20Yaakov%20%28Glick%20Edition%29/English/En%20Jacob%2C%20translated%20by%20SH%20Glick%2C%201916.txt",
+   "cltk_full_url": "https://storage.googleapis.com/sefaria-export/cltk-full/Midrash/Aggadah/Ein%20Yaakov%20%28Glick%20Edition%29/English/En%20Jacob%2C%20translated%20by%20SH%20Glick%2C%201916.json",
+   "cltk_flat_url": "https://storage.googleapis.com/sefaria-export/cltk-flat/Midrash/Aggadah/Ein%20Yaakov%20%28Glick%20Edition%29/English/En%20Jacob%2C%20translated%20by%20SH%20Glick%2C%201916.json"
+  },
+  {
+   "title": "Otzar Midrashim",
+   "language": "Hebrew",
+   "versionTitle": "merged",
+   "categories": [
+    "Midrash",
+    "Aggadah"
+   ],
+   "json_url": "https://storage.googleapis.com/sefaria-export/json/Midrash/Aggadah/Otzar%20Midrashim/Hebrew/merged.json",
+   "txt_url": "https://storage.googleapis.com/sefaria-export/txt/Midrash/Aggadah/Otzar%20Midrashim/Hebrew/merged.txt",
+   "cltk_full_url": "https://storage.googleapis.com/sefaria-export/cltk-full/Midrash/Aggadah/Otzar%20Midrashim/Hebrew/merged.json",
+   "cltk_flat_url": "https://storage.googleapis.com/sefaria-export/cltk-flat/Midrash/Aggadah/Otzar%20Midrashim/Hebrew/merged.json"
+  },
+  {
+   "title": "Legends of the Jews",
+   "language": "English",
+   "versionTitle": "Sefaria Community Translation",
+   "categories": [
+    "Midrash",
+    "Aggadah"
+   ],
+   "json_url": "https://storage.googleapis.com/sefaria-export/json/Midrash/Aggadah/Legends%20of%20the%20Jews/English/Sefaria%20Community%20Translation.json",
+   "txt_url": "https://storage.googleapis.com/sefaria-export/txt/Midrash/Aggadah/Legends%20of%20the%20Jews/English/Sefaria%20Community%20Translation.txt",
+   "cltk_full_url": "https://storage.googleapis.com/sefaria-export/cltk-full/Midrash/Aggadah/Legends%20of%20the%20Jews/English/Sefaria%20Community%20Translation.json",
+   "cltk_flat_url": "https://storage.googleapis.com/sefaria-export/cltk-flat/Midrash/Aggadah/Legends%20of%20the%20Jews/English/Sefaria%20Community%20Translation.json"
   }
  ]
 }

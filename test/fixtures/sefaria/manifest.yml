@@ -191,6 +191,25 @@ files:
     url: https://storage.googleapis.com/sefaria-export/json/Second%20Temple/Megillat%20Ta%27anit/English/Rabbi%20Mike%20Feuer%2C%20Jerusalem%20Anthology.json
     whole: true
     trim: none (complete file, copied whole; CC-BY -> attribution)
+  # The classical-midrash cut (Yalkut Shimoni, Otzar Midrashim, Ein Yaakov on
+  # the aggadah allowlist), retrieved 2026-11-17 from the bucket (the
+  # 2026-10-02 index generation's json_url).
+  - path: json/Midrash/Aggadah/Ein Yaakov/Hebrew/Daat.json
+    url: https://storage.googleapis.com/sefaria-export/json/Midrash/Aggadah/Ein%20Yaakov/Hebrew/Daat.json
+    whole: false
+    trim: Berakhot chapter 1 sliced to 3 leaves + chapter 2 to 2, the other 43 tractate nodes emptied; metadata keys byte-identical (original sha256 743bb39e..., 5,994,100 B; see README.md midrash-cut table)
+  - path: json/Midrash/Aggadah/Otzar Midrashim/Hebrew/Otzar Midrashim, New York, 1915.json
+    url: https://storage.googleapis.com/sefaria-export/json/Midrash/Aggadah/Otzar%20Midrashim/Hebrew/Otzar%20Midrashim%2C%20New%20York%2C%201915.json
+    whole: false
+    trim: Midrash Abba Gorion whole (2 leaves) + the nested Avraham our Father node (Introduction and the Nimrod story sliced to 2 leaves each, its other sub-nodes emptied), every other node emptied; metadata keys byte-identical (original sha256 2893d722..., 4,828,668 B; see README.md midrash-cut table)
+  - path: json/Midrash/Aggadah/Yalkut Shimoni on Torah/Hebrew/Torat Emet.json
+    url: https://storage.googleapis.com/sefaria-export/json/Midrash/Aggadah/Yalkut%20Shimoni%20on%20Torah/Hebrew/Torat%20Emet.json
+    whole: false
+    trim: remez 1 whole (3 paragraphs) + remez 2 sliced to 2 paragraphs; metadata keys byte-identical (original sha256 f13f344c..., 14,726,608 B; see README.md midrash-cut table)
+  - path: json/Midrash/Aggadah/Yalkut Shimoni on Nach/Hebrew/Yalkut Shimoni on Nach.json
+    url: https://storage.googleapis.com/sefaria-export/json/Midrash/Aggadah/Yalkut%20Shimoni%20on%20Nach/Hebrew/Yalkut%20Shimoni%20on%20Nach.json
+    whole: false
+    trim: remez 1 only (2 paragraphs); metadata keys byte-identical (original sha256 d08c0314..., 4,873,300 B; license "unknown" -> rule skip)
   - path: empty-version/Kabbalah/Zohar/Idra Zuta/English/Sefaria Community Translation.json
     url: https://storage.googleapis.com/sefaria-export/json/Kabbalah/Zohar/Idra%20Zuta/English/Sefaria%20Community%20Translation.json
     whole: true
