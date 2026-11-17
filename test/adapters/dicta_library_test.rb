@@ -193,12 +193,14 @@ class DictaLibraryTest < Minitest::Test
 
   # --- registry round-trip -------------------------------------------------------
 
-  def test_registry_resolves_dicta_library_unwired
+  def test_registry_resolves_dicta_library_wired
     registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources.yml", __dir__))
     entry = registry["dicta-library"]
     refute_nil entry
     assert_equal Nabu::Adapters::DictaLibrary, entry.adapter_class
-    refute entry.wired, "wired: false until the first real sync is verified"
+    assert entry.wired,
+           "wired: true since the verified first sync " \
+           "(+1,204 books / 193,335 passages, 0 errored; deferred index refreshed + search probed)"
   end
 
   private

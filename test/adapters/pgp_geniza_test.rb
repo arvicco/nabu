@@ -259,12 +259,14 @@ module Adapters
       assert_equal "https://github.com/princetongenizalab/pgp-metadata", captured[:repo_url]
     end
 
-    def test_registry_row_is_unwired_manual
+    def test_registry_row_is_wired_manual
       registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources.yml", __dir__))
       entry = registry["pgp-geniza"]
       refute_nil entry, "pgp-geniza must be registered in config/sources.yml"
       assert_equal KLASS, entry.adapter_class
-      refute entry.wired, "wired flips at the verified first sync"
+      assert entry.wired,
+             "wired: true since the verified first sync " \
+             "(+9,848 docs / 303,860 passages, 0 errored; shown + search probed with credit)"
       assert_equal "manual", entry.sync_policy
     end
   end

@@ -35,11 +35,12 @@ module Adapters
 
     # -- registry / manifest --------------------------------------------------
 
-    def test_registry_resolves_dtucph_sp_unwired_until_its_first_sync
+    def test_registry_resolves_dtucph_sp_wired
       registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources.yml", __dir__))
       entry = registry["dtucph-sp"]
       refute_nil entry, "dtucph-sp must be registered in config/sources.yml"
-      refute entry.wired, "wired: false until the first real sync is verified (checklist step 6)"
+      assert entry.wired,
+             "wired: true since the verified first sync (+5 books / 5,841 passages, 0 errored; shown + search probed)"
       assert_equal "manual", entry.sync_policy
       assert_equal "dtucph-sp", entry.adapter_class.manifest.id
     end

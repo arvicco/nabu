@@ -198,12 +198,14 @@ class DictaBavliTest < Minitest::Test
 
   # --- registry round-trip -------------------------------------------------------
 
-  def test_registry_resolves_dicta_bavli_unwired
+  def test_registry_resolves_dicta_bavli_wired
     registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources.yml", __dir__))
     entry = registry["dicta-bavli"]
     refute_nil entry
     assert_equal Nabu::Adapters::DictaBavli, entry.adapter_class
-    refute entry.wired, "wired: false until the first real sync is verified"
+    assert entry.wired,
+           "wired: true since the verified first sync " \
+           "(+37 tractates / 78,782 passages, 0 errored; shown + search probed with credit)"
   end
 
   private

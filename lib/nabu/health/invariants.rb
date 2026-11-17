@@ -478,7 +478,19 @@ module Nabu
                                                 "({\"artikel\" => 4, \"advertentie\" => 1}: the " \
                                                 "names are hash keys, the leaves counts) — a " \
                                                 "summary of the per-article claim, which projects " \
-                                                "as the passage genre facet" }
+                                                "as the passage genre facet" },
+        # The manifest's Hebrew-spelling MIRRORS of fields that already
+        # project in their English form: printLocationEnglish → the named
+        # place lane, category/subcategory → the kind folds + genre facet.
+        # The Hebrew spellings stay verbatim metadata for display/search
+        # at the document surface — projecting them would double-count
+        # the same claims onto the axes.
+        "dicta-library" => { "place_he" => "the Hebrew spelling of printLocationEnglish, which " \
+                                           "projects as the named place — a display mirror, not " \
+                                           "a second place claim",
+                             "genre_he" => "the Hebrew spelling of the category/subcategory, " \
+                                           "which projects via the kind folds — a display " \
+                                           "mirror, not a second genre claim" }
       }.freeze
 
       MINING_SAMPLE = 40

@@ -2112,7 +2112,7 @@ dicta-bavli:   # 02-sources row 420
   adapter: Nabu::Adapters::DictaBavli
   adopted: "2026-11-16"
   axes: [hebrew]
-  wired: false   # until the first real sync is verified: bin/nabu enable dicta-bavli,
+  wired: true   # first sync verified 2026-11-16: +37 docs / 78,782 passages, 0 errored (Meila duplicate + 2 .docx skipped by rule); Berakhot 2a shown + search probed with credit
                  # bin/nabu sync dicta-bavli (one ~10 MB git clone, 38 tractate dirs) —
                  # expect 37 documents / 78,782 passages, 2 skipped by rule (the Meila
                  # duplicate dir + 2 .docx = 3 skip notes), 0 quarantined; eyeball
@@ -2134,7 +2134,7 @@ dicta-library:   # 02-sources row 421
   adapter: Nabu::Adapters::DictaLibrary
   adopted: "2026-11-16"
   axes: [hebrew]
-  wired: false   # until the first real sync is verified: bin/nabu enable dicta-library,
+  wired: true   # first sync verified 2026-11-16: +1,204 books / 193,335 page passages, 0 errored (chidusheiharadad skipped by rule); index refresh run (54m39s), search probed with credit
                  # bin/nabu sync dicta-library — the manifest repo clone, then 1,205
                  # book zips (~536 MB text zips + 2 vocalized fallbacks ~1.4 MB) from
                  # files.dicta.org.il, sequential and resumable (~20–30 min at the
@@ -2367,7 +2367,7 @@ dtucph-sp:   # 02-sources row 418
   adapter: Nabu::Adapters::DtucphSp
   adopted: "2026-11-16"
   axes: [biblical, hebrew]
-  wired: false   # checklist §6: bin/nabu enable dtucph-sp, then bin/nabu sync
+  wired: true   # first sync verified 2026-11-16: +5 docs / 5,841 passages, 0 errored; Gen 1:1 + Deut 32:36 shown, search probed
                  # dtucph-sp (GitFetch at tag v7.5.0, sparse cone tf/7.5.0 +
                  # README.md + LICENSE, 50 feature files ≈ 20 MB). EXPECT 5 docs
                  # / 5,841 passages / 114,891 tokens, 0 errored, 0 skipped
@@ -5835,7 +5835,7 @@ pgp-geniza:   # 02-sources row 419
   # legal documents + the Judaeo-Arabic vernacular.
   axes: [epigraphy, hebrew, arabic]
   siblings: ["-(en|heb|ara|fr|de)"]  # the closed minted-tail set — pgpids are digits-only
-  wired: false   # first sync pending. Expected (full dry parse 2026-11-16, main
+  wired: true   # first sync verified 2026-11-16: +9,848 docs / 303,860 passages, 0 errored, 14 footnote skips by rule as predicted; document 446 shown + search probed with credit
                  # 2234d35e): 9,848 docs (7,669 editions + 2,179 translation
                  # siblings) / 303,860 passages, 0 errors; 28,728 metadata-only
                  # documents + 14 undecidable/orphan text footnotes skipped by rule.

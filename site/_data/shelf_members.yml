@@ -87,7 +87,7 @@ ancient-near-east:
   - hmml-reading-room
   - ociana
 ugarit: [rsti]
-hebrew-aramaic: [oshb, bhsa, dss, extrabiblical, etcbc-targum, sefaria, iip]
+hebrew-aramaic: [oshb, bhsa, dss, extrabiblical, etcbc-targum, sefaria, iip, dtucph-sp, dicta-bavli, dicta-library, pgp-geniza]
 elephantine: [elephantine]
 arabic-persian: [openiti, ganjoor, diccas]
 iranian-silk-road: [iedc, skjaervo-khotanese, shkz, perseus-farsilit]
