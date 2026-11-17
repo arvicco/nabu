@@ -74,6 +74,24 @@ class ShellTest < Minitest::Test
     refute error.stderr.valid_encoding?, "the raw stderr bytes still ride the error object untouched"
   end
 
+  # The STREAM path's twin (the wellcome rail live crash, 2026-11-17):
+  # stream's captured buffer takes IO chunks, and one binary chunk
+  # re-tags the whole buffer ASCII-8BIT — on which String#scrub is a
+  # NO-OP (every byte is "valid" in BINARY), so the message builder
+  # crashed with Encoding::CompatibilityError while REPORTING a lock
+  # refusal, masking it. The detail lane must force UTF-8 before the
+  # scrub, whatever encoding the captured bytes arrived under.
+  def test_stream_with_invalid_utf8_output_never_crashes_the_message_builder
+    error = assert_raises(Nabu::Shell::Error) do
+      lines = []
+      Nabu::Shell.stream(RbConfig.ruby, "-e",
+                         'STDOUT.write("locked: \xB0\xED\xB7\xC1\n".b); exit 7') { |line| lines << line }
+    end
+    assert_includes error.message, "command failed (exit 7)"
+    assert_includes error.message, "locked:", "the readable part of the detail survives"
+    assert error.message.valid_encoding?, "the MESSAGE is always valid UTF-8"
+  end
+
   def test_multiline_stderr_flattens_to_one_bounded_message_line
     script = "i=0; while [ $i -lt 99 ]; do printf 'line %s of noise\\n' $i >&2; i=$((i+1)); done; exit 2"
     error = assert_raises(Nabu::Shell::Error) do
