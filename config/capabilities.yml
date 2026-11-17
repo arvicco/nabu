@@ -143,8 +143,8 @@ capabilities:
     surfaces: {cli: [data list, data build]}
     layers: [catalog, passage_lemmas, dictionaries, language_dossiers]
   reconstruction:
-    desc: the bare-clone bootstrap plan with measured estimates, the combined-path backup set, and the probe battery against the published census
-    surfaces: {cli: [reconstruct plan, reconstruct backupset, reconstruct verify]}
+    desc: the bare-clone bootstrap plan with measured estimates, the combined-path backup set, the probe battery against the published census, and the portable reference manifest with its arrival check
+    surfaces: {cli: [reconstruct plan, reconstruct backupset, reconstruct verify, reconstruct manifest, reconstruct check]}
     layers: [catalog, passages_fts, ledger, mined_links, vectors, site_data, project_config, instance_config, canonical]
   mcp_server:
     desc: serve the read-only tool set to an AI client over MCP

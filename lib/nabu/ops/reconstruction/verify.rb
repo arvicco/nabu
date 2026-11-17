@@ -139,6 +139,21 @@ module Nabu
           %("#{parts.join(' ')}"#{' *' if prefix})
         end
 
+        # The deterministic canary sample for a source (probe 3's rule): the
+        # first live passage with > MIN_SAMPLE characters of search text
+        # among its first SAMPLE_DOCUMENTS live documents by id, else the
+        # first live passage; nil when there is none. A row carrying :id,
+        # :urn and :text_search. Shared with the reference manifest.
+        def self.sample_passage(catalog, source_id)
+          documents = catalog[:documents].where(source_id: source_id, withdrawn: false)
+                                         .order(:id).limit(SAMPLE_DOCUMENTS).select_map(:id)
+          return nil if documents.empty?
+
+          live = catalog[:passages].where(document_id: documents, withdrawn: false)
+                                   .order(:document_id, :sequence).select(:id, :urn, :text_search)
+          live.where { length(text_search) > MIN_SAMPLE }.first || live.first
+        end
+
         private
 
         def live_slugs = @live_slugs ||= SiteData.live_public_slugs(@registry)
@@ -193,15 +208,7 @@ module Nabu
           @catalog[:documents].where(source_id: source_id, withdrawn: false).empty? ? :no_documents : :no_passages
         end
 
-        def sample_passage(source_id)
-          documents = @catalog[:documents].where(source_id: source_id, withdrawn: false)
-                                          .order(:id).limit(SAMPLE_DOCUMENTS).select_map(:id)
-          return nil if documents.empty?
-
-          live = @catalog[:passages].where(document_id: documents, withdrawn: false)
-                                    .order(:document_id, :sequence).select(:id, :urn, :text_search)
-          live.where { length(text_search) > MIN_SAMPLE }.first || live.first
-        end
+        def sample_passage(source_id) = self.class.sample_passage(@catalog, source_id)
 
         def probe(passage_id, phrase, contentless)
           match = Sequel.lit("passages_fts MATCH ?", "text_normalized : #{phrase}")
