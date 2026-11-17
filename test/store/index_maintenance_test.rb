@@ -142,5 +142,28 @@ module Store
       error = assert_raises(Nabu::Error) { run_rail }
       assert_match(/no recompute for stale aggregate "mystery"/, error.message)
     end
+
+    # The non-fulltext WALs (links/lects/vectors) grow unbounded between
+    # their writers' runs — a 2.4 GB links WAL aged from a "no action"
+    # note into a defect. The rail's aux pass folds them under the same
+    # checkpoint discipline: TRUNCATE per existing file, absent files
+    # skipped honestly, the engine's answer row reported per db.
+    def test_the_aux_pass_truncates_every_named_wal_and_skips_absent_files
+      wal_db_path = File.join(@dir, "links.sqlite3")
+      db = Sequel.connect("sqlite://#{wal_db_path}")
+      db.run("PRAGMA journal_mode=WAL")
+      db.create_table(:rows) { Integer :n }
+      50.times { |i| db[:rows].insert(n: i) }
+      assert File.exist?("#{wal_db_path}-wal"), "the setup must leave WAL frames behind"
+
+      results = Rail.checkpoint_aux!({ "links" => wal_db_path,
+                                       "lects" => File.join(@dir, "absent.sqlite3") })
+      assert_equal %w[links], results.keys, "an absent file is skipped, never created"
+      assert_equal 0, results.fetch("links")[:busy]
+      assert_equal 0, File.size("#{wal_db_path}-wal"),
+                   "TRUNCATE empties the WAL file"
+    ensure
+      db&.disconnect
+    end
   end
 end

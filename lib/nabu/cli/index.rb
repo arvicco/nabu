@@ -160,14 +160,19 @@ module Nabu
                                              progress: tee.call(narrator.progress_reporter))
         end
         narrator.finish_progress
-        print_maintain(report, Process.clock_gettime(Process::CLOCK_MONOTONIC) - started)
+        aux = Nabu::Store::IndexMaintenance.checkpoint_aux!(
+          { "links" => config.links_path, "lects" => config.lects_journal_path,
+            "vectors" => config.vectors_path },
+          progress: narrator.progress_reporter
+        )
+        print_maintain(report, Process.clock_gettime(Process::CLOCK_MONOTONIC) - started, aux: aux)
       ensure
         fulltext&.disconnect
         catalog&.disconnect
         ledger&.disconnect
       end
 
-      def print_maintain(report, seconds)
+      def print_maintain(report, seconds, aux: {})
         recomputed = report.recomputed.empty? ? "no stale aggregates" : "recomputed #{report.recomputed.join(', ')}"
         say "index maintain: #{recomputed}; #{report.merge_chunks} merge chunks; WAL truncated " \
             "(#{format_duration(seconds)})"
@@ -175,6 +180,15 @@ module Nabu
           was = report.gauges_before[table]
           say "  #{table}: #{"#{was[:segments]} → " if was}#{gauges[:segments]} segments · " \
               "tombstones #{gauges[:tombstone_pages]} (#{format('%.1f%%', gauges[:tombstone_share] * 100)})"
+        end
+        aux.each do |label, row|
+          state = if row[:busy].positive?
+                    "reader pinning — #{[row[:log] - row[:checkpointed],
+                                         0].max} frames remain"
+                  else
+                    "truncated"
+                  end
+          say "  #{label} WAL: #{state}"
         end
       end
 
