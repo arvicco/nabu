@@ -3830,10 +3830,12 @@ josephus-latin:   # 02-sources row 422
   adopted: "2026-11-17"
   axes: [classical, romance]  # late-antique Latin: the digiliblt precedent (the classical
                               # desk's late band AND the romance desk's ancestor shelf)
-  wired: false   # EXPECT (full dry parse of the v3.0 core, 2026-11-17): 35 docs /
-                 # 3,526 passages, 0 errored, 145 files skipped by rule, 0
-                 # unrecognized; ~8.4 MB download. Probe `nabu search` with
-                 # "In principio creauit deus caelum et terram" (Antiquities I.27).
+  wired: true    # first sync 2026-11-17 exactly on the build census: 35 docs /
+                 # 3,526 passages, 0 errored, 145 files skipped by rule
+                 # (incl. the 5 AI-drafted De excidio English), 0
+                 # unrecognized; FTS probed live — "In principio creauit
+                 # deus caelum et terram" answers at Antiquities I.27; the
+                 # whole source stages lat:late via its override (35/35).
   sync_policy: manual
   # The Latin Josephus (latinjosephus.org v3.0; Zenodo record 24120761,
   # DOI 10.5281/zenodo.24120761): the late-antique Latin Antiquitates (21
