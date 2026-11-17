@@ -68,13 +68,23 @@ module Nabu
                    gauges_after: gauges(fulltext), checkpoint: checkpoint)
       end
 
-      # The non-fulltext WALs (links/lects/vectors) have no maintenance
-      # owner of their own and grow unbounded between their writers'
-      # runs — a 2.4 GB links WAL aged from a "no action" note into a
-      # defect. One TRUNCATE checkpoint per EXISTING file (absent files
-      # skipped, never created), the engine's answer row reported per db
-      # under the same reader-pinning caveat as the fulltext checkpoint.
-      # +paths+ is { label => db path }.
+      # Every non-fulltext WAL the rail checkpoints, { label => db path }
+      # from the instance config. The list lives HERE so a new sibling db
+      # joins the rail or nowhere: the mined layer sat outside the CLI's
+      # inline map and its first batch mine left a 216 MB WAL no pass
+      # covered (2026-11-17).
+      def aux_wal_paths(config)
+        { "links" => config.links_path, "lects" => config.lects_journal_path,
+          "vectors" => config.vectors_path, "mined" => config.mined_links_path }
+      end
+
+      # The non-fulltext WALs (links/lects/vectors/mined) have no
+      # maintenance owner of their own and grow unbounded between their
+      # writers' runs — a 2.4 GB links WAL aged from a "no action" note
+      # into a defect. One TRUNCATE checkpoint per EXISTING file (absent
+      # files skipped, never created), the engine's answer row reported
+      # per db under the same reader-pinning caveat as the fulltext
+      # checkpoint. +paths+ is { label => db path }.
       def checkpoint_aux!(paths, progress: nil)
         paths.each_with_object({}) do |(label, path), results|
           next unless File.exist?(path)

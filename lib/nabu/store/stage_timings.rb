@@ -59,6 +59,18 @@ module Nabu
                      .first
       end
 
+      # The governing row of EVERY (scope, stage) recorded under +kind+ —
+      # [{scope:, stage:, seconds:, rows:, finished_at:}] — the whole-run
+      # view a summed estimate reads (the reconstruction plan's rebuild
+      # line). Empty without history.
+      def latest_per_stage(ledger, kind:)
+        return [] unless table?(ledger)
+
+        latest = ledger[TABLE].where(kind: kind).group(:scope, :stage).select { max(id) }
+        ledger[TABLE].where(id: latest).order(:scope, :stage)
+                     .select(:scope, :stage, :seconds, :rows, :finished_at).all
+      end
+
       def table?(ledger)
         !ledger.nil? && ledger.table_exists?(TABLE)
       end

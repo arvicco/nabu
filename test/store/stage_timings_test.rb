@@ -66,5 +66,23 @@ class StageTimingsTest < Minitest::Test
 
   def test_a_nil_ledger_reads_as_no_history
     assert_nil Nabu::Store::StageTimings.last(nil, kind: "rebuild", scope: "corpus", stage: "timeline")
+    assert_empty Nabu::Store::StageTimings.latest_per_stage(nil, kind: "rebuild")
+  end
+
+  # The whole-run view (the reconstruction plan's rebuild estimate): the
+  # governing row of every (scope, stage) under one kind, nothing else.
+  def test_latest_per_stage_keeps_the_governing_row_of_each_scope_and_stage
+    record = lambda do |scope, stage, seconds, kind: "rebuild"|
+      Nabu::Store::StageTimings.record!(@ledger, kind: kind, scope: scope, stage: stage, seconds: seconds)
+    end
+    record.call("corpus", "timeline", 10.0)
+    record.call("corpus", "timeline", 12.0)
+    record.call("kanripo", "load", 30.0)
+    record.call("corpus", "fts_lemma", 100.0)
+    record.call("kanripo", "load", 40.0, kind: "sync")
+
+    rows = Nabu::Store::StageTimings.latest_per_stage(@ledger, kind: "rebuild")
+    assert_equal [["corpus", "fts_lemma", 100.0], ["corpus", "timeline", 12.0], ["kanripo", "load", 30.0]],
+                 rows.map { |row| [row[:scope], row[:stage], row[:seconds]] }.sort
   end
 end

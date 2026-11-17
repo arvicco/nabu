@@ -148,6 +148,17 @@ module Store
     # note into a defect. The rail's aux pass folds them under the same
     # checkpoint discipline: TRUNCATE per existing file, absent files
     # skipped honestly, the engine's answer row reported per db.
+    # The rail owns the aux list itself so a new sibling db joins HERE or
+    # nowhere — the mined layer sat outside the CLI's inline map and its
+    # first batch mine left a 216 MB WAL no pass covered.
+    def test_the_aux_list_names_every_non_fulltext_wal_including_the_mined_layer
+      config = Nabu::Config.load(root: @dir)
+      paths = Rail.aux_wal_paths(config)
+
+      assert_equal %w[lects links mined vectors], paths.keys.sort
+      assert_equal config.mined_links_path, paths.fetch("mined")
+    end
+
     def test_the_aux_pass_truncates_every_named_wal_and_skips_absent_files
       wal_db_path = File.join(@dir, "links.sqlite3")
       db = Sequel.connect("sqlite://#{wal_db_path}")

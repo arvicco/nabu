@@ -12,6 +12,7 @@ require_relative "cli/index"
 require_relative "cli/creds"
 require_relative "cli/export"
 require_relative "cli/runs"
+require_relative "cli/reconstruct"
 require_relative "links_mine_commands"
 
 # CLI flag conventions (P90-3 standing rules, applied whenever a command is
@@ -113,6 +114,13 @@ module Nabu
     # --format jsonl ...` is byte-unchanged (ExportCLI).
     desc "runs SUBCOMMAND ...ARGS", "The ledger's run rows: close-stale (killed runs nobody closed)"
     subcommand "runs", RunsCLI
+
+    # P180: the bare-clone story as two read-only cards — the ordered
+    # bootstrap plan with measured ETAs, and the probe battery against the
+    # published census.
+    desc "reconstruct SUBCOMMAND ...ARGS",
+         "Bare-clone reconstruction: plan (ordered bootstrap with measured ETAs), verify (census probes)"
+    subcommand "reconstruct", ReconstructCLI
 
     desc "export SUBCOMMAND ...ARGS",
          "Research exports — documents/links tables with a license manifest — and the passage stream"

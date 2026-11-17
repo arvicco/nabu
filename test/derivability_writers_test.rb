@@ -360,10 +360,14 @@ class DerivabilityWritersTest < Minitest::Test
   # through its gateway's two verbs (Store::MinedLinks.mine!/migrate!),
   # which only Nabu::MinedLayers calls; its schema track is named nowhere
   # else; and every file that names the store's path is a deliberate
-  # reader or a pass-through to the gateway.
+  # reader or a pass-through to the gateway. (nabu/cli/reconstruct.rb:
+  # reader — the plan card's measured mine times via MinedLinks.layers_at,
+  # a read-only open.)
   MINED_PATH_ALLOWLIST = %w[
-    nabu/cli/admin.rb nabu/cli/links.rb nabu/config.rb nabu/health/invariants.rb nabu/health/local_check.rb
-    nabu/links_mine_commands.rb nabu/mined_layers.rb nabu/rebuild.rb nabu/store/link_layers.rb
+    nabu/cli/admin.rb nabu/cli/links.rb nabu/cli/reconstruct.rb nabu/config.rb nabu/health/invariants.rb
+    nabu/health/local_check.rb
+    nabu/links_mine_commands.rb nabu/mined_layers.rb nabu/rebuild.rb nabu/store/index_maintenance.rb
+    nabu/store/link_layers.rb
   ].freeze
 
   def test_the_mined_layers_store_writes_only_through_its_gateway

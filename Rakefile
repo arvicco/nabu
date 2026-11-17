@@ -8,6 +8,10 @@ $stdout.sync = true
 
 require "rake/testtask"
 
+# Keep every task's `desc` on the task object (rake records them only under
+# -T/-D otherwise): `reconstruction:book` lists the tools:* tasks with them.
+Rake::TaskManager.record_task_metadata = true
+
 # `rake test` runs the suite across worker processes (test/parallel/runner.rb:
 # N = Etc.nprocessors, NABU_TEST_WORKERS overrides) and prints ONE merged
 # Minitest-shaped report. The single-process path stays: `rake test TEST=path`
@@ -610,6 +614,9 @@ end
 # And the phase-register freshness probe (Nabu::Ops::PhaseRegisterCheck):
 # the register's newest `## P<N>` row must reach the highest phase merged
 # on the local main branch (git log, offline); no register file skips.
+# And the declared-rule liveness probe (Nabu::Ops::RuleLivenessCheck): a
+# lect facet rule whose source holds live documents but which never
+# compiled a journal row fails, named; no catalog/journal skips.
 namespace :boards do
   desc "Gate check: register 'Next number' headers vs minted numbers + GH watch-list staleness " \
        "+ phase-register freshness vs merged phases (stale = exit 1)"
@@ -620,6 +627,7 @@ namespace :boards do
     require_relative "lib/nabu/ops/acquisition_check"
     require_relative "lib/nabu/ops/queue_groom_check"
     require_relative "lib/nabu/ops/source_readiness_check"
+    require_relative "lib/nabu/ops/rule_liveness_check"
     dir = ENV.fetch("BOARDS_DIR", File.expand_path(".docs", __dir__))
     report = Nabu::Ops::BoardCheck.new(boards_dir: dir).run
     if report.skipped
@@ -651,6 +659,14 @@ namespace :boards do
     ).run
     readiness.findings.each { |finding| puts "STALE  readiness #{finding}" }
 
+    liveness = Nabu::Ops::RuleLivenessCheck.new(
+      rules_paths: [File.expand_path("config/lect_facet_rules.yml", __dir__),
+                    File.expand_path("local/config/lect_facet_rules.yml", __dir__)],
+      catalog_path: File.expand_path("db/catalog.sqlite3", __dir__),
+      journal_path: File.expand_path("db/lects.sqlite3", __dir__)
+    ).run
+    liveness.findings.each { |finding| puts "STALE  rule liveness #{finding}" }
+
     failures = []
     failures << "#{report.findings.size} stale register header(s)" unless report.clean?
     failures << "#{watch.findings.size} stale GH watch row(s)" unless watch.clean?
@@ -658,6 +674,7 @@ namespace :boards do
     failures << "#{acquisition.findings.size} acquisition-duty finding(s)" unless acquisition.clean?
     failures << "#{groom.findings.size} ungroomed queue row(s)" unless groom.clean?
     failures << "#{readiness.findings.size} never-synced source(s)" unless readiness.clean?
+    failures << "#{liveness.findings.size} never-compiled lect rule(s)" unless liveness.clean?
     abort "boards:check — #{failures.join(', ')}" unless failures.empty?
 
     puts "boards:check — #{report.registers.size} register header(s) current: #{report.registers.join(', ')}"
@@ -676,6 +693,11 @@ namespace :boards do
     puts "boards:check — acquisition duties current (segment named, rail fresh)" if acquisition.clean?
     puts "boards:check — #{groom.summary} (phase-register cross-check clean)" unless groom.skipped
     puts "boards:check — every registered source has ledger runs (readiness probe clean)" unless readiness.skipped
+    if liveness.skipped
+      puts "boards:check — no catalog/lect journal/rules on this box; rule-liveness probe skipped"
+    else
+      puts "boards:check — #{liveness.rules} declared lect rule(s) live (rule-liveness probe clean)"
+    end
   end
 end
 
@@ -1113,5 +1135,41 @@ namespace :rail do
     verdict = Nabu::Ops::RailStep.new(slug: slug, engines: engines, sync: sync).run!
     puts verdict.line
     exit 3 if verdict.stop?
+  end
+end
+
+# The reconstruction census (Nabu::Ops::Reconstruction::SourceClass): how
+# each registered source's canonical asset would come back with canonical/
+# lost and no backup — per-class counts, the attic-flagged sources (upstream
+# deletions only a backup holds), and the local/ inventory by role.
+namespace :reconstruction do
+  desc "Print the reconstruction census: sources per re-acquisition class, attic list, local/ inventory"
+  task :census do
+    $LOAD_PATH.unshift(File.expand_path("lib", __dir__))
+    require "nabu"
+    require "nabu/ops/reconstruction/source_class"
+
+    config = Nabu::Config.load
+    source_class = Nabu::Ops::Reconstruction::SourceClass
+    print source_class.render(source_class.from_config(config).census, local_dir: config.local_dir)
+  end
+
+  # The Reconstruction Book (Nabu::Ops::Reconstruction::Book): reads the
+  # instance (grants, the canonical/ attic) through Nabu::Config — so run it
+  # on the reference instance — and writes docs/reconstruction.md into this
+  # checkout. Byte-freshness rides the gate ritual, like site:refresh; the
+  # suite guards shape and coverage only.
+  desc "Regenerate docs/reconstruction.md (the Reconstruction Book) on the reference instance — a gate step"
+  task :book do
+    $LOAD_PATH.unshift(File.expand_path("lib", __dir__))
+    require "nabu"
+    require "nabu/ops/reconstruction/book"
+
+    tool_tasks = Rake::Task.tasks.select { |task| task.name.start_with?("tools:") }
+    tool_tasks = tool_tasks.map { |task| [task.name_with_args, task.comment] }
+    book = Nabu::Ops::Reconstruction::Book.from_config(Nabu::Config.load, tool_tasks: tool_tasks)
+    path = File.join(__dir__, Nabu::Ops::Reconstruction::Book::OUTPUT_FILE)
+    File.write(path, book.render)
+    puts "wrote #{path}"
   end
 end
