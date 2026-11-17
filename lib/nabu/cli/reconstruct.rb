@@ -81,9 +81,18 @@ module Nabu
       failure it catches), and every MCP tool's data homes on disk.
       Exits 0; --strict exits 1 on any drift, empty source, canary miss
       or missing home.
+
+      --against MANIFEST verifies against a reference box's manifest
+      (schema 1) instead of the census: per-source counts (carried trees
+      must match exactly; resynced trees may drift), the manifest's own
+      canaries resolved by urn, and the reference census. With --strict,
+      only failure-class findings exit 1 (carried mismatch, missing
+      source, failing canary, missing home) — never resynced drift.
     HELP
     option :strict, type: :boolean, default: false, desc: "exit 1 on any drift, miss or gap"
+    option :against, type: :string, banner: "MANIFEST", desc: "verify against a reference box's manifest"
     def verify
+      manifest = load_against_manifest(options[:against])
       config = Nabu::Config.load
       unless File.exist?(config.catalog_path)
         say "reconstruct verify: no catalog at #{config.catalog_path} — a bare clone; sync, then rebuild, then verify"
@@ -95,7 +104,7 @@ module Nabu
       result = Nabu::Ops::Reconstruction::Verify.new(
         registry: Nabu::SourceRegistry.load(config.sources_path), catalog: catalog, fulltext: fulltext,
         census_path: CENSUS_PATH, capabilities: YAML.safe_load_file(CAPABILITIES_PATH),
-        homes: Nabu::Ops::Reconstruction::Verify::Homes.from_config(config)
+        homes: Nabu::Ops::Reconstruction::Verify::Homes.from_config(config), against: manifest
       ).run
       say Nabu::Ops::Reconstruction::Verify.render(result)
       strict = options[:strict]
@@ -108,6 +117,14 @@ module Nabu
     no_commands do
       def open_readonly(path)
         File.exist?(path) ? Nabu::Store.connect(path, readonly: true) : nil
+      end
+
+      def load_against_manifest(path)
+        return nil if path.nil?
+
+        Nabu::Ops::Reconstruction::Verify.load_manifest(path)
+      rescue Nabu::Ops::Reconstruction::Verify::ManifestError => e
+        raise Thor::Error, "reconstruct verify --against: #{e.message}"
       end
     end
   end

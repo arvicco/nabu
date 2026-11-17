@@ -166,4 +166,136 @@ class ReconstructionVerifyTest < Minitest::Test
                  result.capability_gaps)
     assert result.failed?(strict: true)
   end
+
+  # --- against: the reference box's private manifest -------------------
+
+  def phrase_of(urn)
+    Verify.phrase(@catalog[:passages].first(urn: urn)[:text_search])
+  end
+
+  def manifest_source(transport, documents, passages, canary_urn = nil, phrase: nil)
+    row = { "transport" => transport, "documents" => documents, "passages" => passages }
+    row["canary"] = { "urn" => canary_urn, "phrase" => phrase || phrase_of(canary_urn) } if canary_urn
+    row
+  end
+
+  def manifest(sources = nil)
+    sources ||= { "greek" => manifest_source("carried", 1, 2, "urn:g:1:0"),
+                  "chinese" => manifest_source("resynced", 1, 1, "urn:c:1:0"),
+                  "empty" => manifest_source("carried", 0, 0),
+                  "dict" => manifest_source("carried", 0, 0) }
+    { "schema" => 1, "reference" => { "commit" => "abc1234def", "as_of" => "2026-11-10" },
+      "census" => { "documents" => 2, "passages" => 3, "language_codes" => 2, "live_sources" => 4 },
+      "sources" => sources, "trees" => [] }
+  end
+
+  def against(manifest_hash = manifest)
+    Verify.new(registry: @registry, catalog: @catalog, fulltext: @fulltext, census_path: nil,
+               capabilities: { "capabilities" => {}, "layers" => {} }, tools: { "nabu_search" => {} },
+               homes: nil, against: manifest_hash).run
+  end
+
+  def test_against_an_exact_carried_reference_passes_strict
+    result = against
+    assert_equal({ "greek" => :exact, "chinese" => :exact, "empty" => :exact, "dict" => :exact },
+                 result.source_rows.to_h { |row| [row.slug, row.status] })
+    assert_equal({ "greek" => :hit, "chinese" => :hit }, result.canaries.to_h { |c| [c.slug, c.status] })
+    refute result.failed?(strict: true)
+    card = Verify.render(result)
+    assert_match(/against reference abc1234def \(as of 2026-11-10\)/, card)
+    assert_match(/documents\s+2\s+2\s+=/, card, "the census diffs the manifest's census")
+    assert_match(/summary: 0 failure-class finding\(s\).*0 expected drift\(s\)/, card)
+  end
+
+  def test_a_carried_count_mismatch_is_failure_class
+    result = against(manifest("greek" => manifest_source("carried", 1, 5, "urn:g:1:0")))
+    row = result.source_rows.first
+    assert_equal :mismatch, row.status
+    assert row.failure?
+    refute result.failed?(strict: false)
+    assert result.failed?(strict: true)
+    assert_match(/greek\s+carried\s+documents 1 → 1 =, passages 5 → 2 MISMATCH -3/, Verify.render(result))
+  end
+
+  def test_resynced_drift_passes_strict_and_renders_the_delta
+    result = against(manifest("greek" => manifest_source("resynced", 3, 2, "urn:g:1:0"),
+                              "chinese" => manifest_source("resynced", 1, 1, "urn:c:1:0")))
+    assert_equal :drift, result.source_rows.first.status
+    refute result.failed?(strict: true), "upstream moved since the stamp — expected, never a strict failure"
+    card = Verify.render(result)
+    assert_match(/greek\s+resynced\s+documents 3 → 1 drift -2, passages 2 → 2 =/, card)
+    assert_match(/summary: 0 failure-class finding\(s\).*1 expected drift\(s\)/, card)
+  end
+
+  def test_canaries_resolve_the_urn_to_the_targets_own_passage
+    # The chinese phrase does occur in the index — but on another passage.
+    # Pinned to greek's own passage id, it must miss.
+    result = against(manifest("greek" => manifest_source("carried", 1, 2, "urn:g:1:0",
+                                                         phrase: phrase_of("urn:c:1:0"))))
+    canary = result.canaries.first
+    assert_equal :miss, canary.status
+    assert result.failed?(strict: true), "a carried canary miss is failure-class"
+    assert_match(/canary MISS \(carried — failure\): greek urn:g:1:0/, Verify.render(result))
+  end
+
+  def test_canaries_probe_by_the_targets_rowid_not_the_references
+    @catalog[:passages].where(urn: "urn:g:1:0").update(id: 9001)
+    @fulltext[:passages_fts].delete
+    Nabu::Store::Indexer.rebuild!(catalog: @catalog, fulltext: @fulltext)
+    manifest_hash = manifest("greek" => manifest_source("carried", 1, 2, "urn:g:1:0").tap do |row|
+      row["canary"]["id"] = 1 # a reference box's rowid travelling along is never trusted
+    end)
+    assert_equal :hit, against(manifest_hash).canaries.first.status
+  end
+
+  def test_an_absent_urn_is_its_own_status
+    result = against(manifest("greek" => manifest_source("carried", 1, 2).merge(
+      "canary" => { "urn" => "urn:g:gone", "phrase" => "\"a b c d\"" }
+    )))
+    assert_equal :absent, result.canaries.first.status
+    assert result.failed?(strict: true)
+    assert_match(/canary ABSENT \(carried — failure\): greek urn:g:gone/, Verify.render(result))
+  end
+
+  def test_a_resynced_canary_miss_is_reported_drift_not_failure
+    result = against(manifest("chinese" => manifest_source("resynced", 1, 1, "urn:c:1:0",
+                                                           phrase: phrase_of("urn:g:1:0"))))
+    assert_equal :miss, result.canaries.first.status
+    refute result.failed?(strict: true)
+    card = Verify.render(result)
+    assert_match(/canary MISS \(resynced — drift\): chinese urn:c:1:0/, card)
+    assert_match(/summary: 0 failure-class finding\(s\).*1 expected drift\(s\)/, card)
+  end
+
+  def test_missing_sources_fail_and_new_sources_inform
+    result = against(manifest("greek" => manifest_source("carried", 1, 2, "urn:g:1:0"),
+                              "vanished" => manifest_source("resynced", 4, 9, "urn:v:1:0", phrase: "\"x\"")))
+    assert_equal :missing, result.source_rows.find { |row| row.slug == "vanished" }.status
+    assert_equal %w[chinese dict empty], result.new_sources.sort
+    assert_equal ["greek"], result.canaries.map(&:slug), "a missing source probes no canary"
+    assert result.failed?(strict: true), "a missing source fails even when resynced"
+    card = Verify.render(result)
+    assert_match(/vanished\s+resynced\s+missing/, card)
+    assert_match(/new since the reference: chinese, dict, empty/, card)
+  end
+
+  def test_against_mode_does_not_fail_strict_on_census_drift_or_empty_presence
+    hash = manifest
+    hash["census"]["documents"] = 99
+    result = against(hash)
+    assert(result.census.any?(&:drift?))
+    assert_equal ["empty"], result.missing_sources
+    refute result.failed?(strict: true)
+  end
+
+  def test_manifest_loading_rejects_other_schemas
+    path = File.join(@tmp, "manifest.yml")
+    File.write(path, YAML.dump(manifest.merge("schema" => 2)))
+    error = assert_raises(Verify::ManifestError) { Verify.load_manifest(path) }
+    assert_match(/schema 2.*expects schema 1/, error.message)
+
+    File.write(path, YAML.dump(manifest))
+    assert_equal "abc1234def", Verify.load_manifest(path).dig("reference", "commit")
+    assert_raises(Verify::ManifestError) { Verify.load_manifest(File.join(@tmp, "absent.yml")) }
+  end
 end
