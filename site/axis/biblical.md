@@ -35,13 +35,13 @@ A source wears every desk it serves — these twenty-three answer this desk. Hol
 | `peshitta` | texts | nc | wired · manual | 65 docs / 31,341 passages |
 | `sblgnt` | texts | attribution | wired · manual | 27 docs / 7,939 passages |
 | `sdbh` | dictionary | attribution | wired · manual | 7,932 entries |
-| `sefaria` | texts | open | wired · manual | 1,983 docs / 1,073,004 passages |
+| `sefaria` | texts | open | wired · manual | 2,033 docs / 1,111,873 passages |
 | `syriac-corpus` | texts | attribution | wired · manual | 632 docs / 134,726 passages |
 | `typikon-bible` | texts | attribution | wired · manual | 229 docs / 105,698 passages |
 | `ud` | treebank | nc | wired · manual | 93 docs / 338,638 passages |
 | `vulgate` | texts | open | wired · manual | 73 docs / 35,809 passages |
 
-**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 17 November 2026)</span>: `hbo` 30,744 · `gez` 3,803 · `eng` 1,135 · `syc` 728 · `cop` 505 · `arc` 411 · `chu` 153 · `lat` 85 · `ron-Cyrl` 79 · `oge` 78 … and 8 more (`nabu axis biblical` lists all).
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 17 November 2026)</span>: `hbo` 30,774 · `gez` 3,803 · `eng` 1,142 · `syc` 728 · `cop` 505 · `arc` 411 · `chu` 153 · `lat` 85 · `ron-Cyrl` 79 · `oge` 78 … and 10 more (`nabu axis biblical` lists all).
 
 **Carried in by multilingual packs** (`ud` — whole-source members whose other languages ride along, as of 17 November 2026): `orv` 9 · `ota` 5 · `lzh` 4 · `egy` 3 · `frm` 3 … and 19 more (`nabu axis biblical` lists all).
 
