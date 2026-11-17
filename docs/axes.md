@@ -59,7 +59,7 @@ registry currently tags to it.
 
 The Greco-Roman literary lane: the Perseus canons and First1KGreek, Diorisis, LSJ and Lewis & Short, the grc/lat treebanks, and the Vulgate wearing its Latin-literature hat beside its scripture one.
 
-**Members** (32): `aio`, `analecta-hymnica`, `cgpg`, `cllg-freed`, `cllg-sc`, `corpus-corporum`, `croala`, `damos`, `digiliblt`, `diorisis`, `dprr`, `first1k-greek`, `formulae-open`, `glaux`, `glt`, `hypotactic`, `ig-cyprus`, `lasla`, `lexica`, `lila`, `noscemus`, `openmgh`, `pedecerto`, `perseus-greek`, `perseus-latin`, `proiel`, `pta`, `sigla`, `suda-translations`, `ud`, `vulgate`, `wellcome`
+**Members** (33): `aio`, `analecta-hymnica`, `cgpg`, `cllg-freed`, `cllg-sc`, `corpus-corporum`, `croala`, `damos`, `digiliblt`, `diorisis`, `dprr`, `first1k-greek`, `formulae-open`, `glaux`, `glt`, `hypotactic`, `ig-cyprus`, `josephus-latin`, `lasla`, `lexica`, `lila`, `noscemus`, `openmgh`, `pedecerto`, `perseus-greek`, `perseus-latin`, `proiel`, `pta`, `sigla`, `suda-translations`, `ud`, `vulgate`, `wellcome`
 
 ### romance
 
@@ -67,7 +67,7 @@ The Greco-Roman literary lane: the Perseus canons and First1KGreek, Diorisis, LS
 
 The Latin-to-vernacular continuum: CroALa's medieval and neo-Latin opens the desk; late-antique prose, the MGH critical editions, and the Old French treebanks and texts join as their shelves land.
 
-**Members** (41): `analecta-hymnica`, `aranese`, `bdcamoes`, `bfm`, `bim-sahcoba`, `cantigas`, `cantus`, `corpus-corporum`, `croala`, `ctilc`, `cv-sardinian`, `derom`, `digiliblt`, `disco`, `divinum-officium`, `formulae-open`, `gregobase`, `littre`, `llct1`, `lo-congres`, `mazarinades`, `meloniromance`, `memis`, `nb-no`, `noscemus`, `openmgh`, `osta`, `pleias-french-books`, `saenkoromance`, `salom`, `socinian-letters`, `theatre-classique`, `typikon-bible`, `ud`, `wellcome`, `wiktionary-ca`, `wiktionary-frm`, `wiktionary-fro`, `wiktionary-oc`, `wiktionary-osp`, `wiktionary-pro`
+**Members** (42): `analecta-hymnica`, `aranese`, `bdcamoes`, `bfm`, `bim-sahcoba`, `cantigas`, `cantus`, `corpus-corporum`, `croala`, `ctilc`, `cv-sardinian`, `derom`, `digiliblt`, `disco`, `divinum-officium`, `formulae-open`, `gregobase`, `josephus-latin`, `littre`, `llct1`, `lo-congres`, `mazarinades`, `meloniromance`, `memis`, `nb-no`, `noscemus`, `openmgh`, `osta`, `pleias-french-books`, `saenkoromance`, `salom`, `socinian-letters`, `theatre-classique`, `typikon-bible`, `ud`, `wellcome`, `wiktionary-ca`, `wiktionary-frm`, `wiktionary-fro`, `wiktionary-oc`, `wiktionary-osp`, `wiktionary-pro`
 
 ### epigraphy
 

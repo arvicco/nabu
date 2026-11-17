@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0">
+	<teiHeader xml:id="header">
+		<fileDesc>
+			<titleStmt>
+				<title>book-09</title>
+			</titleStmt>
+			<publicationStmt>
+				<p/>
+			</publicationStmt>
+			<sourceDesc>
+				<listWit>
+					<witness xml:id="FlaviusJosephusAntiquities">Flavius Josephus, Antiquities (Bamberg Msc. Class. 78)</witness>
+					<witness xml:id="BernBBMs50">Bern BB Ms. 50 (Ant. I–XII &amp; Guerre)</witness>
+					<witness xml:id="BernBBMs118">Bern BB Ms. 118 (Ant. I–XII)</witness>
+					<witness xml:id="ChartresBMMs29">Chartres BM Ms. 29 (Ant. I–XII, XVII–XX, &amp; Guerre)</witness>
+					<witness xml:id="ColognyBodmer98">Cologny Bodmer 98 (Ant. I–VI)</witness>
+					<witness xml:id="CopenhagenGKS1572o">Copenhagen GKS 157 2o (Ant. I–XII, XVII–XX)</witness>
+					<witness xml:id="LeidenUBVLF17">Leiden UB VLF 17 (Ant. I–XII, XVII–XX)</witness>
+					<witness xml:id="MilanBACimelioSP">Milan BA Cimelio S.P. 11/1 (Ant. V–X)</witness>
+					<witness xml:id="MonzaBCMsb20">Monza BC Ms. b 20/136 (Ant. I–VI)</witness>
+					<witness xml:id="RomeBAVPalLat814">Rome BAV Pal. Lat. 814 (Ant. I–XII)</witness>
+				</listWit>
+			</sourceDesc>
+		</fileDesc>
+	</teiHeader>
+	<text xml:id="book-09-text">
+		<body>
+			<note>Bamberg Msc. Class. 78</note>
+			<div1 n="VIIII" subtype="Latin" type="book" xml:id="latin-book09">
+				<div2 n="0" type="chapter" xml:id="latin-book09-chapter0">
+					<p><milestone n="sbb00000114_00215.jpg"/> <pb n="106r"/> <cb n="1/2"/></p>
+					<p>Incipit liber nonus iosepphi historiarum iudaeicae antiquitatis continet hic liber tempus annorum CL et mensium VI</p>
+				</div2>
+				<div2 n="1" type="chapter" xml:id="latin-book09-chapter1">
+					<p xml:id="latin-book09-num1"><num>[I.i.1]</num> Iosaphat itaque rege ad ierosolimam remeanti post bellum quo solacium prebuerat achab contra adabum regem syrorum sicut praediximus, occurrens hieus propheta culpauit eum, cur achaph solacia prebuisset hominum <unclear reason="faded">inpio</unclear> pariter et maligno, deum dicens moleste quidem hoc pertulisse, sed cilicet ualde peccasset, tamen propter naturam eius optimam ab incursu hostium pepercisse, <milestone unit="niese" n="2"/>et tunc equidem ad gratiarum actionem rex et ad sacrificia dei conuersus est. Post hęc autem coepit omnem suam prouinciam circuire ut leges per moysen a deo datas omnino seruarent, et pietatem circa deum nihil ominus exhiberent. <milestone unit="niese" n="3"/>Constituens que iudices in una quae fui imperii ciuitatem precepit ut pro nulla re ita agerent quam ut iustitiam populis exhiberent, et neque munera nec cuiuspiam dignitatem propter iudicalem fastum aut diuitias aut genus considerarent sed omnibus ęqua iura tribuerent, scientes quia etiam quę occulta geruntur ad omni ignorant, <milestone unit="niese" n="4"/>haec cum docuisset in una quaque civitate duarum tribuum in hierosolima denuo remeauit. Constituit etiam ibi iudices a sacerdotibus et leuitis atque primatibus monens ut diligenter et iuste iudicia cuncta disponerent. <milestone unit="niese" n="5"/>Si hoc de rebus de tribus maioribus quidam tribulorum ex aliis ciuitatibus eos consulerent, cum maximo studio eius et iustissime responderint quando rectum deberet esse iudicium in ea civitate constitutum, ubi et templum dei et habitaculum dei erat imperatores, <milestone unit="niese" n="6"/>horum autem principes constituit amasiam sacerdotem et sabadiam qui erat de tribu iuda. Rex igitur hoc modo cuncta disposuit.</p>
+					
+					
+					
+				</div2>
+				
+				
+			</div1>
+		</body>
+	</text>
+	<standOff xml:id="annotations">
+		<listApp>
+			<app>
+				<rdg source="#latin-book09-num1">[I.i.1] Iosaphat itaque rege ...</rdg>
+				<rdg source="#BernBBMs50">[¤98v] (#1 trigon)</rdg>
+				<rdg source="#LeidenUBVLF17">[¤92v](#frontis)</rdg>
+			</app>
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+		</listApp>
+	</standOff>
+</TEI>

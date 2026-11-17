@@ -15,9 +15,10 @@ module Nabu
     # 172 stages → 173; the same day's eighth cut carried the big sitting
     # (PR #48): 323 → 349 anchors, 173 → 178 stages, 238 → 265 codemap;
     # the 2026-11-16 ninth cut carried the jv~java row repair (PR #49),
-    # 265 → 264 codemap).
+    # 265 → 264 codemap; the 2026-11-17 tenth cut carried the Hebrew-wave
+    # package (PR #50): 349 → 351 anchors — jrb, smp).
     module RegistryCensus
-      ANCHORS = 349
+      ANCHORS = 351
       STAGES = 178
       VARIETIES = 33
       CODEMAP_ROWS = 264

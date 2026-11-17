@@ -184,7 +184,10 @@ module Nabu
       # P78-r4: stderr is UNTRUSTED BYTES (unzip echoes junk-named zip
       # members raw — the goryeosa-jeoryo CP949 crash); scrub before any
       # string surgery or the message builder masks the real failure.
-      detail = stderr.to_s.scrub("�").strip.gsub(/\s+/, " ")
+      # The 2026-11-17 twin: stream's captured buffer can arrive tagged
+      # ASCII-8BIT (one binary chunk re-tags it), and scrub on BINARY is
+      # a NO-OP — force UTF-8 first so the scrub actually fires.
+      detail = stderr.to_s.dup.force_encoding(Encoding::UTF_8).scrub("�").strip.gsub(/\s+/, " ")
       message << " — #{detail[0, DETAIL_CHARS]}" unless detail.empty?
       Error.new(message, status: exitstatus, stderr: stderr)
     end

@@ -3381,3 +3381,14 @@ sources:
       #                                            calendars, exercises, prayers): no single head
     deliberate:
       "Inscription": "a medium (writing on an object), not a function — 5 documents corpus-wide, none text-bearing"
+  josephus-latin:     # the work title IS the genre label (upstream's FILE_LICENCE_MANIFEST "work"
+    facet: genre      # column: four works); counts = the 35 Latin book documents (2026-11-17)
+    map:
+      "Antiquitates Judaicae": historiography     # 21 — the history of the Jews from Creation to
+      #                                            the eve of the Revolt (Josephus' own term: archaiologia)
+      "Bellum Judaicum": historiography           # 7 — the history of the war of 66–73/74 CE
+      "De excidio Hierosolymitano": historiography  # 5 — the free late-antique Latin reworking of the
+      #                                            Bellum, still narrative history (with Christian framing)
+      "Contra Apionem": theology/apologetics      # 2 — Josephus' defence of the Jews' antiquity and laws
+      #                                            against Apion and other Greek detractors: the faith
+      #                                            and its people defended outward — the head's own sense

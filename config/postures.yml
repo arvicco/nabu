@@ -2094,12 +2094,11 @@ sources:
         cons_utf8 / voc_utf8 lanes ride every token"}
   dtucph-sp:
     # kind: machine-postured — kind_map.yml source_kind scripture.
-    lect: {posture: pending, note: "candidate: smp (Samaritan Hebrew, ISO 639-3) — a new
-        nabu-lects anchor under hbo for the Hebrew of the Samaritan Pentateuch and its
-        reading tradition (Ben-Hayyim's grammar; the Tal–Florentin edition), then a whole-source
-        hbo → smp override in config/lect_overrides.yml. Until the mint lands the adapter's
-        bare hbo (bhsa's code; the two Aramaic words of Gen 31:47 ride arc per token) is the
-        held claim; the phono_transcr lane is the reading tradition itself"}
+    # lect: machine-postured — lect_overrides.yml hbo → smp (the Samaritan
+    # Hebrew anchor landed with the 2026-11-17 Hebrew-wave registry
+    # package; the shadowing rule — the pending declaration retired, the
+    # add-then-retire shape). The two Aramaic words of Gen 31:47 ride arc
+    # per token, untouched by the whole-source row.
     dating: {posture: undatable, note: "the asset carries no date feature; the manuscripts'
         own dates (MS Dublin CBL 751, MS Garizim 1) are not in the data and the
         text's composition era is not the edition's claim — the bhsa/oshb stance"}
@@ -3858,10 +3857,11 @@ sources:
     # kind: machine-postured by the kind_map.yml PGP type fold (no row here —
     # the shadowing rule). The axes ride ONE document per pgpid: the edition
     # document when held, else the first translation sibling (the aio rule).
-    lect: {posture: pending, note: "candidate jrb (Judeo-Arabic, ISO 639-3) — the majority
-        claim (4,068 of 7,669 edition documents; 4,703 text documents tag it) has no
-        nabu-lects node yet; the mint rides its own nabu-lects PR, and the passages carry
-        the bare jrb code until it lands. The other tags transcribe upstream's own labels
+    lect: {posture: identity, note: "jrb (Judeo-Arabic) — the majority claim (4,068 of 7,669
+        edition documents; 4,703 text documents tag it) rides the registry anchor the
+        2026-11-17 Hebrew-wave package minted (parent ara; Blau's grammar, Hary's
+        continuum — the anchor's notes): the bare code IS the claim, an honest
+        answer. The other tags transcribe upstream's own labels
         onto existing nodes as bare codes (heb, arc, ara, lad, jpr, ota, cop, grc, syc, it):
         DELIBERATELY not staged — heb:med / arc:jud are judgment-grade refinements over a
         corpus that runs from the 10th to the 19th century (a date-band rule is the
@@ -3910,3 +3910,21 @@ sources:
     script: {posture: implied, note: "Hebrew square script read by Dicta's AI OCR (Rashi
         script rendered in square letters), unpointed; the two vocalized fallbacks carry
         Dicta's machine niqqud, NFC-composed at the boundary (text_nature machine-ocr)"}
+  josephus-latin:
+    # kind machine-postured — kind_map.yml facet genre (the work title: three histories,
+    # Contra Apionem → theology/apologetics).
+    # lect machine-postured — lect_overrides.yml lat → lat:late (certain): every held
+    # Latin version falls inside the stage band by upstream's own datings.
+    dating: {posture: dated, note: "every document carries its Latin version's attributed era
+        (class composition, :structured, the project's own Background datings, circa = ±10
+        years): De excidio c. 370 → 360–380, Bellum c. 400 → 390–410, Antiquities and Contra
+        Apionem mid-6th century under Cassiodorus → 530–570. Josephus' Greek originals (c.
+        75–79, 93–94, 94–100 CE) ride metadata original, never the row — a translation is not
+        dated by its source; the Antiquities witness (Bamberg, s. IX med.) is not dated either
+        (the manuscript catalogue sits in the supplementary zip, not fetched)"}
+    places: {posture: unplaced, note: "the deposit names no place for the texts; upstream's
+        Background places the Cassiodoran translation only as 'Italy or perhaps
+        Constantinople' — a hedge, not a claim. The annotation witnesses' shelfmarks
+        (Bern, Leiden, Monza …) are present-day holdings, metadata only"}
+    script: {posture: implied, note: "Latin script throughout; three short Greek quotations in
+        Contra Apionem (foreign lang grc) ride verbatim in their own script"}

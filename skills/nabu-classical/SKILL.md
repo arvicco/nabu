@@ -6,7 +6,7 @@ compatibility: "Requires the nabu MCP server (`bin/nabu mcp`, read-only, stdio) 
 metadata:
   desk: classical
   origin: hand-tuned
-  sources: "aio analecta-hymnica cgpg cllg-freed cllg-sc corpus-corporum croala damos digiliblt diorisis dprr first1k-greek formulae-open glaux glt hypotactic ig-cyprus lasla lexica lila noscemus openmgh pedecerto perseus-greek perseus-latin proiel pta sigla suda-translations ud vulgate wellcome"
+  sources: "aio analecta-hymnica cgpg cllg-freed cllg-sc corpus-corporum croala damos digiliblt diorisis dprr first1k-greek formulae-open glaux glt hypotactic ig-cyprus josephus-latin lasla lexica lila noscemus openmgh pedecerto perseus-greek perseus-latin proiel pta sigla suda-translations ud vulgate wellcome"
 ---
 
 # The Classicist — the `classical` desk
@@ -40,6 +40,7 @@ verbatim upstream terms are in `docs/02-sources.md` of the Nabu repository.
 | `glt` | GLT — Greek Orthodox Liturgical Texts (glt.goarch.org): the Byzantine service books in Greek | open |
 | `hypotactic` | Hypotactic — Greek metrical scansions (D. Chamberlain) | attribution |
 | `ig-cyprus` | IG XV 1,1 — Inscriptiones Cypri syllabicae (BBAW Inscriptiones Graecae digital edition) | attribution |
+| `josephus-latin` | The Latin Josephus — Antiquitates, Bellum, Contra Apionem, De excidio (latinjosephus.org v3.0) | attribution |
 | `lasla` | LASLA — Latin corpus of the Laboratoire d'Analyse Statistique des Langues Anciennes (Liège), CIRCSE LiLa-linked CoNLL-U release | nc |
 | `lexica` | Perseus Lexica — LSJ + Lewis & Short | attribution |
 | `lila` | LiLa Lemma Bank — Latin canonical forms (lemma-spine instrument) | attribution |

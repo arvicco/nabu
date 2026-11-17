@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0">
+  <teiHeader>
+    <fileDesc>
+      <titleStmt>
+        <title>Flavius Josephus, Contra Apionem — Latin Book 2</title>
+        <author>Flavius Josephus</author>
+        <editor>Karl Boysen</editor>
+        <respStmt>
+          <resp>LatinJosephus.org publication-candidate preparation</resp>
+          <name>Latin Josephus Project</name>
+        </respStmt>
+      </titleStmt>
+      <publicationStmt>
+        <p>Publication candidate only; not yet frozen or installed in the public website.</p>
+        <availability>
+          <licence target="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0 digital encoding.</licence>
+        </availability>
+      </publicationStmt>
+      <sourceDesc>
+        <bibl>Karl Boysen (ed.), Flavii Iosephi Opera ex Versione Latina Antiqua, Pars VI, De Iudaeorum vetustate sive Contra Apionem libri II, CSEL 37 (1898); OpenGreekAndLatin/csel-dev.</bibl>
+      <p>Latin text resegmented in certified Boysen/Niese repair v0.7; repaired authority SHA-256 8ca405ce5f35d630ec19ce3a22ab951717ba4384540536a4311faa3fb664efee.</p></sourceDesc>
+    </fileDesc>
+    <encodingDesc>
+      <p>Chapter/division and Niese section hierarchies overlap and are represented independently with milestones.</p>
+    </encodingDesc>
+    <revisionDesc>
+      <change when="2026-09-25">Generated as Contra Apionem publication candidate v0.5.</change>
+    <change when="2026-09-25">v0.7: exhaustive Niese-boundary repair; 68 approved moves, two lacuna-spanning special cases, II.68 printed is restored, II.278 documented as non-linear overlap; five mechanical split-word repairs retained.</change></revisionDesc>
+  </teiHeader>
+  <text xml:id="apion-latin-book-2-text" xml:lang="lat">
+    <body>
+      <note type="source">Boysen, CSEL 37 (1898), Contra Apionem Book 2.</note>
+      <pb n="73"/>
+      <div1 n="II" subtype="Latin" type="book" xml:id="latin-apion2">
+        <p n="1" xml:id="latin-apion2-num1"> <milestone n="1" unit="chapter" subtype="boysen"/> Priori quidem uolumine, karissime mihi Epaphrodite, de antiquitate nostra monstraui Phoenicum et Chaldaeorum Aegyptiorumque litteris satisfaciens ueritati multosque Graecorum conscriptores adducens et meam e diuerso disputationem aduersus Manethonem et Chaeremonem et alios quosdam exhibui.</p><p n="2" xml:id="latin-apion2-num2">nunc autem inchoabo reliquos arguere, qui ! contra nos aliqua conscripsere: inpulsus enim sum contra I Apionem respondere grammaticum, si tamen assumi hoc oportet officium.</p><p n="3" xml:id="latin-apion2-num3">horum igitur, quae ab eo conscripta sunt, alia quidem similia sunt dictis aliorum, alia, ualde frigida, plurima uero quandam tantummodo detractionem habentia, et multam, ut ita dixerim, ineruditi probationem, tamquam ab <pb n="74"/> homine composita et moribus prauo et totius uitae suae temporibus importune.</p></div1>
+    </body>
+  </text>
+</TEI>

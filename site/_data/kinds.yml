@@ -3,28 +3,28 @@
 as_of: 17 November 2026
 classes:
 - head: literary
-  documents: 807945
-  documents_display: '807,945'
+  documents: 807946
+  documents_display: '807,946'
   sources: 61
 - head: administrative
   documents: 501270
   documents_display: '501,270'
   sources: 27
 - head: historiography
-  documents: 359254
-  documents_display: '359,254'
-  sources: 36
+  documents: 359287
+  documents_display: '359,287'
+  sources: 37
 - head: ritual
-  documents: 194702
-  documents_display: '194,702'
+  documents: 194703
+  documents_display: '194,703'
   sources: 22
 - head: funerary
   documents: 115146
   documents_display: '115,146'
   sources: 13
 - head: legal
-  documents: 54956
-  documents_display: '54,956'
+  documents: 54967
+  documents_display: '54,967'
   sources: 41
 - head: letter
   documents: 41763
@@ -51,12 +51,12 @@ classes:
   documents_display: '21,092'
   sources: 29
 - head: lexical
-  documents: 18843
-  documents_display: '18,843'
+  documents: 18848
+  documents_display: '18,848'
   sources: 28
 - head: scholarly
-  documents: 16120
-  documents_display: '16,120'
+  documents: 16209
+  documents_display: '16,209'
   sources: 30
 - head: mark
   documents: 12298
@@ -79,9 +79,9 @@ classes:
   documents_display: '8,061'
   sources: 8
 - head: theology
-  documents: 6783
-  documents_display: '6,783'
-  sources: 10
+  documents: 6785
+  documents_display: '6,785'
+  sources: 11
 - head: school
   documents: 5292
   documents_display: '5,292'
@@ -91,8 +91,8 @@ classes:
   documents_display: '3,411'
   sources: 10
 - head: exegesis
-  documents: 3330
-  documents_display: '3,330'
+  documents: 3368
+  documents_display: '3,368'
   sources: 17
 - head: boundary
   documents: 3009
@@ -121,7 +121,7 @@ classes:
 unclassified_sources: 132
 unknown_documents: 47162
 unknown_documents_display: '47,162'
-unmapped_documents: 14234
-unmapped_documents_display: '14,234'
-unclassified_documents: 556972
-unclassified_documents_display: '556,972'
+unmapped_documents: 14247
+unmapped_documents_display: '14,247'
+unclassified_documents: 558028
+unclassified_documents_display: '558,028'

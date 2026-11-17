@@ -27,6 +27,13 @@ class SefariaTest < Minitest::Test
   TOSEFTA_URN = "urn:nabu:sefaria:tosefta-chagigah-lieberman:he:the-tosefta-according-to-to-" \
                 "codex-vienna-third-augmented-edition-jts-2001"
   MISHNAH_REL = "json/Mishnah/Seder Kodashim/Mishnah Tamid/Hebrew/V.json"
+  MISHNEH_TORAH_FIXTURE = File.join(FIXTURES, "json/Halakhah/Mishneh Torah/Sefer Nashim/" \
+                                              "Mishneh Torah, Virgin Maiden/Hebrew/Mechon Mamre.json")
+  MISHNEH_TORAH_REL = "json/Halakhah/Mishneh Torah/Sefer Nashim/Mishneh Torah, Virgin Maiden/" \
+                      "Hebrew/V.json"
+  LITURGY_FIXTURE = File.join(FIXTURES, "json/Liturgy/Piyutim/Shalom Aleichem/Hebrew/" \
+                                        "Shalom Alechem.json")
+  LITURGY_REL = "json/Liturgy/Piyutim/Shalom Aleichem/Hebrew/V.json"
   RUTH_SMR_URN = "urn:nabu:sefaria:ruth-rabbah:en:the-sefaria-midrash-rabbah-2022"
   SIFREI_ZUTA_URN = "urn:nabu:sefaria:sifrei-zuta:he:leipzig-1917"
   # The commentaries/halakhah/Zohar/liturgy wave: one real specimen per shelf.
@@ -45,6 +52,15 @@ class SefariaTest < Minitest::Test
     "megillat-en" => "urn:nabu:sefaria:megillat-ta-anit:en:rabbi-mike-feuer-jerusalem-anthology"
   }.freeze
   BEN_SIRA_BST_FIXTURE = File.join(FIXTURES, "json/Second Temple/Apocrypha/Ben Sira/English/BST.json")
+  # The classical-midrash cut: the anthology titles joining the aggadah
+  # allowlist (Yalkut Shimoni ×2 index titles, Otzar Midrashim, Ein Yaakov).
+  MIDRASH_CUT_URNS = {
+    "ein-yaakov" => "urn:nabu:sefaria:ein-yaakov:he:daat",
+    "otzar" => "urn:nabu:sefaria:otzar-midrashim:he:otzar-midrashim-new-york-1915",
+    "yalkut-torah" => "urn:nabu:sefaria:yalkut-shimoni-on-torah:he:torat-emet"
+  }.freeze
+  YALKUT_NACH_UNKNOWN_FIXTURE = File.join(FIXTURES, "json/Midrash/Aggadah/Yalkut Shimoni on Nach/Hebrew/" \
+                                                    "Yalkut Shimoni on Nach.json")
   TUR_UNKNOWN_FIXTURE = File.join(FIXTURES, "json/Halakhah/Tur/Tur/Hebrew/rp.json")
   ESTHER_TE_FIXTURE = File.join(FIXTURES, "json/Midrash/Aggadah/Midrash Rabbah/Esther Rabbah/Hebrew/" \
                                           "Midrash Rabbah -- TE.json")
@@ -84,8 +100,8 @@ class SefariaTest < Minitest::Test
       urn:nabu:sefaria:tanna-debei-eliyahu-zuta:en:sefaria-community-translation
       #{SIFREI_ZUTA_URN}
       #{TOSEFTA_URN}
-    ] + WAVE_URNS.values + SECOND_TEMPLE_URNS.values).sort, urns,
-                 "26 licensed named versions; merged, unlicensed and excluded titles never mint"
+    ] + WAVE_URNS.values + SECOND_TEMPLE_URNS.values + MIDRASH_CUT_URNS.values).sort, urns,
+                 "29 licensed named versions; merged, unlicensed and excluded titles never mint"
   end
 
   # --- the Targum regression (P46-1: URNs FROZEN — the wave must not re-mint) -
@@ -243,6 +259,30 @@ class SefariaTest < Minitest::Test
     end
   end
 
+  def test_the_ruled_translation_languages_map_on_their_shelves
+    # The 2026-11-17 widen of the D46-e map: the quarantine census showed
+    # all 13 held-out files were the SAME thing — German translations on
+    # the Mishneh Torah and Rishonim-on-Tanakh shelves (Mandelstamm 1851,
+    # Bamberger 1922, re-ed. Itkin) and one Hungarian siddur on liturgy.
+    # Ruled: de and hu join those shelves' maps; the per-version license
+    # gate keeps policing each file individually. An unmapped language
+    # (yi, ar, …) still quarantines loudly — the rule itself is unchanged.
+    with_version({ "actualLanguage" => "de" }, fixture: MISHNEH_TORAH_FIXTURE, rel: MISHNEH_TORAH_REL) do |dir|
+      adapter = conformance_adapter
+      refs = adapter.discover(dir).to_a
+      assert_equal 1, refs.size
+      assert_equal "deu", refs.first.metadata.fetch("language"),
+                   "a German version on the Mishneh Torah shelf now loads like the English ones"
+      assert_nil refs.first.metadata["unmapped_language"]
+    end
+    with_version({ "actualLanguage" => "hu" }, fixture: LITURGY_FIXTURE, rel: LITURGY_REL) do |dir|
+      refs = conformance_adapter.discover(dir).to_a
+      assert_equal 1, refs.size
+      assert_equal "hun", refs.first.metadata.fetch("language"),
+                   "the Hungarian siddur translation on the liturgy shelf now loads"
+    end
+  end
+
   def test_the_targum_shelf_ruling_stays_axis_keyed
     # The one on-disk Targum file whose actualLanguage differs from the
     # axis ([fr], license-unknown) predates the wave; the Targum shelf's
@@ -327,7 +367,10 @@ class SefariaTest < Minitest::Test
                    WAVE_URNS["liturgy"] => 4,
                    SECOND_TEMPLE_URNS["ben-sira"] => 51,
                    SECOND_TEMPLE_URNS["megillat-he"] => 8,
-                   SECOND_TEMPLE_URNS["megillat-en"] => 6
+                   SECOND_TEMPLE_URNS["megillat-en"] => 6,
+                   MIDRASH_CUT_URNS["ein-yaakov"] => 5,
+                   MIDRASH_CUT_URNS["otzar"] => 6,
+                   MIDRASH_CUT_URNS["yalkut-torah"] => 5
                  }, counts)
   end
 
@@ -461,10 +504,10 @@ class SefariaTest < Minitest::Test
      "Seder Olam Zutta"].each do |title|
       assert select.call(flat.merge("title" => title)), "#{title} is on the ruled allowlist"
     end
-    ["Yalkut Shimoni on Torah", "Ein Yaakov", "Otzar Midrashim", "Legends of the Jews",
-     "Midrash Sekhel Tov", "Buber footnotes on Midrash Mishlei"].each do |title|
+    ["Legends of the Jews", "Midrash Sekhel Tov", "Buber footnotes on Midrash Mishlei",
+     "Ein Yaakov (Glick Edition)"].each do |title|
       refute select.call(flat.merge("title" => title)),
-             "#{title}: anthology tier / modern authorship / apparatus — deliberately out"
+             "#{title}: later anthology / modern authorship / apparatus / duplicate edition — deliberately out"
     end
     subtree = flat.merge("title" => "Vilna Gaon on Seder Olam Rabbah",
                          "categories" => ["Midrash", "Aggadah", "Seder Olam Rabbah"])
@@ -475,8 +518,76 @@ class SefariaTest < Minitest::Test
     assert_equal "seder-olam",
                  Nabu::Adapters::Sefaria.shelf_for(["Midrash", "Aggadah", "Seder Olam Rabbah"],
                                                    title: "Seder Olam Rabbah").id
-    assert_nil Nabu::Adapters::Sefaria.shelf_for(%w[Midrash Aggadah], title: "Yalkut Shimoni on Nach"),
+    assert_nil Nabu::Adapters::Sefaria.shelf_for(%w[Midrash Aggadah], title: "Midrash Sekhel Tov"),
                "an off-allowlist flat title has NO shelf — never a fetch, never a parse"
+  end
+
+  # --- the classical-midrash cut (owner-ruled title list) --------------------
+
+  # The ruled cut names seven works: Midrash Tanchuma (standard + Buber
+  # recensions, two index titles), Pesikta DeRav Kahana, Pesikta Rabbati,
+  # Pirkei DeRabbi Eliezer, Yalkut Shimoni (two index titles — on Torah, on
+  # Nach), Otzar Midrashim and Ein Yaakov. Upstream's EXACT index titles.
+  MIDRASH_CUT_TITLES = ["Midrash Tanchuma", "Midrash Tanchuma Buber", "Pesikta DeRav Kahana",
+                        "Pesikta Rabbati", "Pirkei DeRabbi Eliezer", "Yalkut Shimoni on Torah",
+                        "Yalkut Shimoni on Nach", "Otzar Midrashim", "Ein Yaakov"].freeze
+
+  def test_the_classical_midrash_cut_selects_the_seven_ruled_works
+    select = Nabu::Adapters::Sefaria.method(:shelf_entry?)
+    flat = { "language" => "Hebrew", "versionTitle" => "Any Named Edition",
+             "categories" => %w[Midrash Aggadah], "json_url" => "https://b/x.json" }
+    MIDRASH_CUT_TITLES.each do |title|
+      assert select.call(flat.merge("title" => title)), "#{title} is in the ruled cut"
+      assert select.call(flat.merge("title" => title, "language" => "English")), "#{title}: both axes fetch"
+      assert_equal "aggadah", Nabu::Adapters::Sefaria.shelf_for(%w[Midrash Aggadah], title: title).id
+      refute select.call(flat.merge("title" => title, "versionTitle" => "merged")), "merged never fetches"
+    end
+    refute select.call(flat.merge("title" => "Yalkut Shimoni on Torah",
+                                  "categories" => %w[Midrash Aggadah Commentary])),
+           "the title allowlist never reaches into the Aggadah Commentary subtree"
+  end
+
+  def test_the_midrash_cut_leaves_talmud_commentary_responsa_and_chasidut_out
+    select = Nabu::Adapters::Sefaria.method(:shelf_entry?)
+    base = { "language" => "Hebrew", "versionTitle" => "Any Named Edition", "json_url" => "https://b/x.json" }
+    [
+      ["Rashi on Arakhin", ["Talmud", "Bavli", "Rishonim on Talmud", "Rashi", "Seder Kodashim"]],
+      ["Tosafot on Berakhot", ["Talmud", "Bavli", "Rishonim on Talmud", "Tosafot", "Seder Zeraim"]],
+      ["Teshuvot HaRadbaz Volume 1", %w[Responsa Acharonim Radbaz]],
+      ["Iggerot HaRambam", %w[Responsa Rishonim Rambam]],
+      ["Ben Porat Yosef", ["Chasidut", "Early Works"]],
+      ["Derekh Mitzvotekha", %w[Chasidut Chabad]]
+    ].each do |title, categories|
+      refute select.call(base.merge("title" => title, "categories" => categories)),
+             "#{title}: Talmud commentary / Responsa / Chasidut — outside the ruled cut"
+      assert_nil Nabu::Adapters::Sefaria.shelf_for(categories, title: title)
+    end
+  end
+
+  def test_the_midrash_cut_keeps_the_per_version_license_gate
+    yalkut = conformance_adapter.parse(ref(MIDRASH_CUT_URNS["yalkut-torah"]))
+    assert_equal "nc", yalkut.license_override,
+                 "the Torat Emet Yalkut Shimoni says CC-BY-NC in its file — nc, never redistributed"
+    assert_equal "CC-BY-NC", yalkut.metadata["license"]
+    assert_equal "#{MIDRASH_CUT_URNS['yalkut-torah']}:1.1", yalkut.first.urn, "Remez.Paragraph"
+
+    ein_yaakov = conformance_adapter.parse(ref(MIDRASH_CUT_URNS["ein-yaakov"]))
+    assert_nil ein_yaakov.license_override, "the Daat Ein Yaakov is Public Domain — the open source class"
+    assert_equal "hbo", ein_yaakov.language, "the aggadah shelf's he→hbo ruling (Aramaic stretches ride it)"
+    assert_equal "#{MIDRASH_CUT_URNS['ein-yaakov']}:berakhot.1.1", ein_yaakov.first.urn,
+                 "the tractate-keyed schema cites its node, then chapter.paragraph"
+
+    otzar = conformance_adapter.parse(ref(MIDRASH_CUT_URNS["otzar"]))
+    assert_nil otzar.license_override
+    assert_equal({ "shelf" => "aggadah" }, otzar.metadata["facets"], "flat [Midrash, Aggadah] — no subshelf")
+    assert_includes otzar.passages.map { |p| p.urn.delete_prefix("#{MIDRASH_CUT_URNS['otzar']}:") },
+                    "avraham-our-father.introduction.1",
+                    "the nested schema-node shape stacks its slug segments"
+
+    assert_equal "unknown", JSON.parse(File.read(YALKUT_NACH_UNKNOWN_FIXTURE))["license"],
+                 "the Hebrew Yalkut Shimoni on Nach carries no grant upstream"
+    assert_empty(refs.select { |r| r.path == YALKUT_NACH_UNKNOWN_FIXTURE },
+                 "an in-cut title with no grant is skipped by rule — the cut never widens the license gate")
   end
 
   # --- the P140 wave: commentaries, halakhah, Zohar, liturgy ----------------
@@ -596,9 +707,9 @@ class SefariaTest < Minitest::Test
 
   def test_discovery_skips_census_the_gate
     skips = conformance_adapter.discovery_skips(FIXTURES)
-    assert_equal 7, skips.skipped_by_rule,
-                 "1 merged + 1 absent-license + 4 unknown-license (Lenihan, Esther TE, Tur rp, Ben Sira BST) " \
-                 "+ 1 excluded title"
+    assert_equal 8, skips.skipped_by_rule,
+                 "1 merged + 1 absent-license + 5 unknown-license (Lenihan, Esther TE, Tur rp, Ben Sira BST, " \
+                 "Yalkut Shimoni on Nach) + 1 excluded title"
     assert_predicate skips, :clean?
   end
 
@@ -664,16 +775,22 @@ class SefariaTest < Minitest::Test
     index = JSON.parse(File.read(File.join(FIXTURES, "books.json")))
     selected = index.fetch("books").select { |e| Nabu::Adapters::Sefaria.shelf_entry?(e) }
     grouped = selected.group_by { |e| e["categories"].first }.transform_values(&:size)
-    assert_equal({ "Tanakh" => 11, "Mishnah" => 7, "Talmud" => 12, "Tosefta" => 2, "Midrash" => 16,
+    assert_equal({ "Tanakh" => 11, "Mishnah" => 7, "Talmud" => 12, "Tosefta" => 2, "Midrash" => 20,
                    "Halakhah" => 4, "Kabbalah" => 1, "Liturgy" => 1, "Second Temple" => 4 },
                  grouped)
     rejected = index.fetch("books").reject { |e| Nabu::Adapters::Sefaria.shelf_entry?(e) }
-    assert_equal 26, rejected.size,
+    assert_equal 29, rejected.size,
                  "16 earlier negatives + the P140 wave's 7: a Tur merged sibling, Peri Megadim (a commentary " \
                  "filed flat beside the Shulchan Arukh), Sulam on Zohar (off the Zohar allowlist), Rabbi " \
                  "Sacks on Siddur (excluded title), and one entry from each excluded Commentary subtree " \
                  "(Mishneh Torah, Tur, Haggadah) + the P152 shelf's 3: a Ben Sira merged sibling, the " \
-                 "Book of Jubilees (a modern Hebrew retroversion — off the allowlist) and Philo's On Abraham"
+                 "Book of Jubilees (a modern Hebrew retroversion — off the allowlist) and Philo's On Abraham " \
+                 "+ the midrash cut's 3: Ein Yaakov (Glick Edition) (off the allowlist), an Otzar Midrashim " \
+                 "merged sibling, Legends of the Jews (modern English authorship)"
+    # The midrash cut selects BEFORE the license gate (fetch_versions nil):
+    # the license-unknown Yalkut Shimoni on Nach Hebrew is fetched, then
+    # skipped by rule at discovery.
+    assert_includes selected.map { |e| e["title"] }, "Yalkut Shimoni on Nach"
     assert_includes rejected.map { |e| e["versionTitle"] }, "Venice Edition",
                     "license-unknown Yerushalmi editions are not even fetched — not named"
     assert_includes rejected.map { |e| e["title"] }, "Introductions to the Babylonian Talmud",

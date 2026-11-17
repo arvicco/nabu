@@ -2491,3 +2491,21 @@ transcription with BHSA-modelled morphology, the phonetic reading
 tradition after Ben-Hayyim, and the Tal–Florentin readings as word
 annotations. A third Pentateuch witness beside oshb and bhsa.
 CC BY-NC 4.0 (cite the Zenodo dataset).
+
+## 8bn. The Latin Josephus
+
+**`josephus-latin`** — **35 books / 3,526 passages** (the census of
+the v3.0 deposit; registered, first sync pending): the late-antique
+Latin Josephus whole, from the Latin Josephus Project
+(latinjosephus.org, R. M. Pollard). It holds the *Jewish Antiquities*
+and *Against Apion* as translated under Cassiodorus in the
+mid-sixth century, and the anonymous literal *Jewish War* of c. 400.
+Beside them stands the *De excidio Hierosolymitano* of
+"Pseudo-Hegesippus" (c. 370), the free Christian reworking of the
+War. The Antiquities are read from the Carolingian Bamberg
+manuscript, with the early-medieval marginal annotations of ten
+further manuscripts riding each paragraph, cited by book and Niese
+section. The deposit's English translation of the De excidio is
+AI-drafted by the project's own statement and is not taken. Mixed
+terms, file by file: PDM + CC BY 4.0, CC BY 4.0 and CC BY-SA 4.0
+(attribution), CC BY-NC-SA 3.0 Italy for the De excidio.

@@ -68,6 +68,26 @@ module Nabu
                    gauges_after: gauges(fulltext), checkpoint: checkpoint)
       end
 
+      # The non-fulltext WALs (links/lects/vectors) have no maintenance
+      # owner of their own and grow unbounded between their writers'
+      # runs — a 2.4 GB links WAL aged from a "no action" note into a
+      # defect. One TRUNCATE checkpoint per EXISTING file (absent files
+      # skipped, never created), the engine's answer row reported per db
+      # under the same reader-pinning caveat as the fulltext checkpoint.
+      # +paths+ is { label => db path }.
+      def checkpoint_aux!(paths, progress: nil)
+        paths.each_with_object({}) do |(label, path), results|
+          next unless File.exist?(path)
+
+          db = Nabu::Store.connect(path)
+          begin
+            results[label] = Indexer.checkpoint_wal!(db, progress: progress)
+          ensure
+            db.disconnect
+          end
+        end
+      end
+
       # The recompute for one flag (announced, ledgered); returns its label.
       def recompute!(catalog:, fulltext:, flag:, ledger:, progress:)
         label = "#{flag[:aggregate]} (#{flag[:scope]})"

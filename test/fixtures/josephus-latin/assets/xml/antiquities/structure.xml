@@ -1,0 +1,2549 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0">
+  <teiHeader>
+    <fileDesc>
+      <titleStmt>
+        <title>Josephus, Antiquities: certified traditional Chapter/Subchapter registry</title>
+      </titleStmt>
+      <publicationStmt>
+        <p>Pre-publication structural navigation data, 2026-10-06.</p>
+      </publicationStmt>
+      <sourceDesc>
+        <listBibl>
+          <bibl>Traditional Hudson–Havercamp hierarchy retained by Niese and substantially reproduced by Loeb; independent citation and current physical-copy evidence remain distinct.</bibl>
+          <bibl xml:id="reconciliation-v1.1">antiquities-structure-reconciliation-v1.1; recovery commit 41e817680549767d36e3f80dbc825682908ea5e6.</bibl>
+          <bibl xml:id="verification-v1.0">antiquities-loeb-niese-verification-v1.0; recovery commit 19308a8ed937525c540827205b0c763768f5ce44.</bibl>
+        </listBibl>
+      </sourceDesc>
+    </fileDesc>
+  </teiHeader>
+  <text>
+    <body>
+      <list type="traditional-boundaries">
+        <item xml:id="LOEB-01-Subchapter-Proem-1" n="1" corresp="#reconciliation-v1.1 #verification-v1.0">
+          <label>Subchapter 1</label>
+          <fs type="traditional-boundary">
+            <f name="scheme">
+              <string>subchapter</string>
+            </f>
+            <f name="book">
+              <string>1</string>
+            </f>
+            <f name="context">
+              <string>Proem</string>
+            </f>
+            <f name="chapter">
+              <string/>
+            </f>
+            <f name="subchapter">
+              <string>1</string>
+            </f>
+            <f name="parent">
+              <string>ANT-Proem</string>
+            </f>
+            <f name="display">
+              <string>1</string>
+            </f>
+            <f name="literal-label">
+              <string>(Proem 1)</string>
+            </f>
+            <f name="raw-loeb-associated-niese">
+              <string>1</string>
+            </f>
+            <f name="canonical-niese">
+              <string>1</string>
+            </f>
+            <f name="niese-original">
+              <string>1</string>
+            </f>
+            <f name="verification-status">
+              <string>CONFIRMED_NIESE_START</string>
+            </f>
+            <f name="confidence">
+              <string>HIGH</string>
+            </f>
+            <f name="physical-point">
+              <string>batch-01|1:1</string>
+            </f>
+            <f name="end">
+              <string>LOEB-01-Subchapter-Proem-2</string>
+            </f>
+            <f name="lower1-status">
+              <string>NOT_APPLICABLE</string>
+            </f>
+            <f name="Greek">
+              <fs type="text-locator">
+                <f name="available">
+                  <string>true</string>
+                </f>
+                <f name="file">
+                  <string>Greek/preface.xml</string>
+                </f>
+                <f name="paragraph">
+                  <string>greek-preface-num1</string>
+                </f>
+                <f name="offset">
+                  <string>0</string>
+                </f>
+                <f name="anchor">
+                  <string>Τοῖς τὰς ἱστορίας συγγράφειν βουλομένοις οὐ μίαν οὐδὲ τὴν αὐτὴν ὁρῶ τῆςσπουδῆς γινομένην αἰτίαν, ἀλλὰ πολλὰς κ</string>
+                </f>
+                <f name="kind">
+                  <string>paragraph</string>
+                </f>
+                <f name="target">
+                  <string>greek-preface-num1</string>
+                </f>
+              </fs>
+            </f>
+            <f name="Latin">
+              <fs type="text-locator">
+                <f name="available">
+                  <string>true</string>
+                </f>
+                <f name="file">
+                  <string>Latin/preface.xml</string>
+                </f>
+                <f name="paragraph">
+                  <string>latin-preface-num1</string>
+                </f>
+                <f name="offset">
+                  <string>0</string>
+                </f>
+                <f name="anchor">
+                  <string>Historiam conscribere disponentibus non unam nec eandem uideo eiusdem studii causam sed multas existere et ab alterutro plurimum d</string>
+                </f>
+                <f name="kind">
+                  <string>paragraph</string>
+                </f>
+                <f name="target">
+                  <string>latin-preface-num1</string>
+                </f>
+              </fs>
+            </f>
+            <f name="English">
+              <fs type="text-locator">
+                <f name="available">
+                  <string>true</string>
+                </f>
+                <f name="file">
+                  <string>English/preface.xml</string>
+                </f>
+                <f name="paragraph">
+                  <string>english-preface-num1</string>
+                </f>
+                <f name="offset">
+                  <string>0</string>
+                </f>
+                <f name="anchor">
+                  <string>THOSE who undertake to write histories, do not, I perceive, take that trouble on one and the same account, but for many reasons, a</string>
+                </f>
+                <f name="kind">
+                  <string>paragraph</string>
+                </f>
+                <f name="target">
+                  <string>english-preface-num1</string>
+                </f>
+              </fs>
+            </f>
+          </fs>
+          <note type="source-evidence">
+            <p>{"frozen_loeb":{"book":1,"chapter":null,"subchapter":1,"printed_label":"(Proem 1)","niese_section":1,"boundary_at_niese_start":true,"loeb_volume":4,"printed_page":3,"incipit":"","confidence":"HIGH","notes":"Printed Proem subdivision; no chapter number is supplied or invented. Section 1 is implicit at the opening; established from the supplied volume sequence, not a fabricated marginal numeral. English PDF page 27; Greek PDF page 26, printed 2. PDF indices are 1-based.","division_level":"Subchapter","source_evidence":{"source_boundary_id":"v4-p27-y153.2","inspection_key":"1:1","english_pdf_page":27,"english_printed_page":3,"english_label":"(Proem 1)","english_label_ocr":"(Proem 1)","english_label_position_pt":{"x":33.98787,"y":153.20376396880005},"greek_pdf_page":26,"greek_printed_page":2,"greek_label":"(Proem 1)","greek_label_ocr":"(Proem l)","greek_label_position_pt":{"x":45.856649999999995,"y":141.29170248440005},"printed_niese":null,"anchor_reading":"source verified","visible_source_inspected":true,"evidence_sheet":"sheets/book01_1.jpg","evidence_position":1,"boundary_within_niese":false,"printed_niese_at_boundary":null},"printed_chapter_label":"Proem","printed_subchapter_label":"1"},"independent_verification":{"batch":"batch-01","niese_volume":"I","niese_pdf_filename":"operajosephus01joseuoft.pdf","niese_pdf_sha256":"7e627e6704ca5e42368d7b86889a8ac021b3415739917d2f557d9df3febf79a2","antiquities_book":1,"loeb_boundary_id":"I.Proem.1","loeb_level":"Subchapter","loeb_chapter":null,"loeb_lower_division":1,"loeb_associated_niese":1,"niese_printed_section":1,"preceding_niese_section":null,"following_niese_section":null,"verification_status":"CONFIRMED_NIESE_START","same_physical_start":true,"niese_printed_page":4,"niese_pdf_page":94,"loeb_printed_page":3,"greek_text_anchor":"Τοῖς τὰς","textual_variant_at_boundary":null,"niese_structural_signal":"Printed Arabic Proem lower division 1.; no Roman chapter at this position.","confidence":"HIGH","evidence_note":"Visually inspected Niese original scan and frozen Loeb print-evidence crop; physical inspection 1:1; working/compare_book01_1.jpg, panel 1. PDF pages are one-based. Citation 1 is established at the book opening by the printed running-head section range; an unprinted marginal 1 is not invented.","review_note":null,"niese_older_chapter_label":null,"niese_older_lower_division_label":"1.","chapter_opening_lower1_status":"NOT_APPLICABLE","consolidated_field_basis":"Derived only from completed Batch01 structural-signal text and nine chapter-only observations.","physical_boundary_id":"batch-01|1:1","inspection_key":"1:1","loeb_source_boundary_id":"v4-p27-y153.2","original_primary_status":"CONFIRMED_NIESE_START","source_batch_json":"C:\\Users\\Pollard_R\\Mon disque\\Latin Josephus Project\\LatinJosephus-Recovery\\latinjosephus-next\\review\\Antiquities_Loeb_Niese_Verification_2026-10-05\\batch-01\\Loeb_Niese_Batch01.json","source_batch_json_sha256":"017c57414dadbe8d1982aab5c464c3f78a8878ba18b186bfd463401b1b3d511d","original_batch_audit_record":{"batch":"batch-01","niese_volume":"I","niese_pdf_filename":"operajosephus01joseuoft.pdf","niese_pdf_sha256":"7e627e6704ca5e42368d7b86889a8ac021b3415739917d2f557d9df3febf79a2","antiquities_book":1,"loeb_boundary_id":"I.Proem.1","loeb_level":"Subchapter","loeb_chapter":null,"loeb_lower_division":1,"loeb_associated_niese":1,"niese_printed_section":1,"preceding_niese_section":null,"following_niese_section":null,"verification_status":"CONFIRMED_NIESE_START","same_physical_start":true,"niese_printed_page":4,"niese_pdf_page":94,"loeb_printed_page":3,"greek_text_anchor":"Τοῖς τὰς","textual_variant_at_boundary":null,"niese_structural_signal":"Printed Arabic Proem lower division 1.; no Roman chapter at this position.","confidence":"HIGH","evidence_note":"Visually inspected Niese original scan and frozen Loeb print-evidence crop; physical inspection 1:1; working/compare_book01_1.jpg, panel 1. PDF pages are one-based. Citation 1 is established at the book opening by the printed running-head section range; an unprinted marginal 1 is not invented.","review_note":null},"frozen_extraction_record":{"book":1,"chapter":null,"subchapter":1,"printed_label":"(Proem 1)","niese_section":1,"boundary_at_niese_start":true,"loeb_volume":4,"printed_page":3,"incipit":"","confidence":"HIGH","notes":"Printed Proem subdivision; no chapter number is supplied or invented. Section 1 is implicit at the opening; established from the supplied volume sequence, not a fabricated marginal numeral. English PDF page 27; Greek PDF page 26, printed 2. PDF indices are 1-based.","division_level":"Subchapter","source_evidence":{"source_boundary_id":"v4-p27-y153.2","inspection_key":"1:1","english_pdf_page":27,"english_printed_page":3,"english_label":"(Proem 1)","english_label_ocr":"(Proem 1)","english_label_position_pt":{"x":33.98787,"y":153.20376396880005},"greek_pdf_page":26,"greek_printed_page":2,"greek_label":"(Proem 1)","greek_label_ocr":"(Proem l)","greek_label_position_pt":{"x":45.856649999999995,"y":141.29170248440005},"printed_niese":null,"anchor_reading":"source verified","visible_source_inspected":true,"evidence_sheet":"sheets/book01_1.jpg","evidence_position":1,"boundary_within_niese":false,"printed_niese_at_boundary":null},"printed_chapter_label":"Proem","printed_subchapter_label":"1"},"raw_loeb_associated_niese":1,"niese_original_printed_section":1,"frozen_metadata_printed_niese_transcription":null,"frozen_loeb_boundary_at_niese_start":true,"frozen_loeb_boundary_within_niese":false,"human_physical_copy_observation":null,"recommended_niese_association":1,"recommendation_status":"ACCEPT_FROZEN","recommendation_reason":"Completed batch confirms the associated citation and physical start; preserve the frozen value."},"human_physical_copy_checks":[]}</p>
+          </note>
+        </item>
+        <item xml:id="LOEB-01-Subchapter-Proem-2" n="2" corresp="#reconciliation-v1.1 #verification-v1.0">
+          <label>Subchapter 2</label>
+          <fs type="traditional-boundary">
+            <f name="scheme">
+              <string>subchapter</string>
+            </f>
+            <f name="book">
+              <string>1</string>
+            </f>
+            <f name="context">
+              <string>Proem</string>
+            </f>
+            <f name="chapter">
+              <string/>
+            </f>
+            <f name="subchapter">
+              <string>2</string>
+            </f>
+            <f name="parent">
+              <string>ANT-Proem</string>
+            </f>
+            <f name="display">
+              <string>2</string>
+            </f>
+            <f name="literal-label">
+              <string>(2)</string>
+            </f>
+            <f name="raw-loeb-associated-niese">
+              <string>6</string>
+            </f>
+            <f name="canonical-niese">
+              <string>5</string>
+            </f>
+            <f name="niese-original">
+              <string>5</string>
+            </f>
+            <f name="verification-status">
+              <string>LOEB_NIESE_NUMBER_DISAGREEMENT</string>
+            </f>
+            <f name="confidence">
+              <string>HIGH</string>
+            </f>
+            <f name="physical-point">
+              <string>batch-01|1:2</string>
+            </f>
+            <f name="end">
+              <string>LOEB-01-Subchapter-Proem-3</string>
+            </f>
+            <f name="lower1-status">
+              <string>NOT_APPLICABLE</string>
+            </f>
+            <f name="Greek">
+              <fs type="text-locator">
+                <f name="available">
+                  <string>true</string>
+                </f>
+                <f name="file">
+                  <string>Greek/preface.xml</string>
+                </f>
+                <f name="paragraph">
+                  <string>greek-preface-num5</string>
+                </f>
+                <f name="offset">
+                  <string>0</string>
+                </f>
+                <f name="anchor">
+                  <string>ταύτην δὲ τὴν ἐνεστῶσαν ἐγκεχείρισμαι πραγματείαν νομίζωνἅπασι φανεῖσθαι τοῖς Ἕλλησιν ἀξίαν σπουδῆς: μέλλει γὰρ περιέξειν ἅπασαν τ</string>
+                </f>
+                <f name="kind">
+                  <string>paragraph</string>
+                </f>
+                <f name="target">
+                  <string>greek-preface-num5</string>
+                </f>
+              </fs>
+            </f>
+            <f name="Latin">
+              <fs type="text-locator">
+                <f name="available">
+                  <string>true</string>
+                </f>
+                <f name="file">
+                  <string>Latin/preface.xml</string>
+                </f>
+                <f name="paragraph">
+                  <string>latin-preface-num5</string>
+                </f>
+                <f name="offset">
+                  <string>0</string>
+                </f>
+                <f name="anchor">
+                  <string>praesens autem opus assumpsi credens etiam dignum studium graecis omnibus apparere. Continebit itaque omnem antiquitatem nostram e</string>
+                </f>
+                <f name="kind">
+                  <string>paragraph</string>
+                </f>
+                <f name="target">
+                  <string>latin-preface-num5</string>
+                </f>
+              </fs>
+            </f>
+            <f name="English">
+              <fs type="text-locator">
+                <f name="available">
+                  <string>true</string>
+                </f>
+                <f name="file">
+                  <string>English/preface.xml</string>
+                </f>
+                <f name="paragraph">
+                  <string>english-preface-num5</string>
+                </f>
+                <f name="offset">
+                  <string>0</string>
+                </f>
+                <f name="anchor">
+                  <string>. Now I have undertaken the present work, as thinking it will appear to all the Greeks worthy of their study; for it will contain </string>
+                </f>
+                <f name="kind">
+                  <string>paragraph</string>
+                </f>
+                <f name="target">
+                  <string>english-preface-num5</string>
+                </f>
+              </fs>
+            </f>
+          </fs>
+          <note type="source-evidence">
+            <p>{"frozen_loeb":{"book":1,"chapter":null,"subchapter":2,"printed_label":"(2)","niese_section":6,"boundary_at_niese_start":true,"loeb_volume":4,"printed_page":5,"incipit":"","confidence":"HIGH","notes":"Printed Proem subdivision; no chapter number is supplied or invented. English PDF page 29; Greek PDF page 28, printed 4. PDF indices are 1-based.","division_level":"Subchapter","source_evidence":{"source_boundary_id":"v4-p29-y51.5","inspection_key":"1:2","english_pdf_page":29,"english_printed_page":5,"english_label":"(2)","english_label_ocr":"(2)","english_label_position_pt":{"x":27.51399,"y":51.453662531199996},"greek_pdf_page":28,"greek_printed_page":4,"greek_label":"(2)","greek_label_ocr":"(2)","greek_label_position_pt":{"x":80.74367,"y":50.97639730780003},"printed_niese":"6","anchor_reading":"source verified","visible_source_inspected":true,"evidence_sheet":"sheets/book01_1.jpg","evidence_position":2,"boundary_within_niese":false,"printed_niese_at_boundary":"6"},"printed_chapter_label":"Proem","printed_subchapter_label":"2"},"independent_verification":{"batch":"batch-01","niese_volume":"I","niese_pdf_filename":"operajosephus01joseuoft.pdf","niese_pdf_sha256":"7e627e6704ca5e42368d7b86889a8ac021b3415739917d2f557d9df3febf79a2","antiquities_book":1,"loeb_boundary_id":"I.Proem.2","loeb_level":"Subchapter","loeb_chapter":null,"loeb_lower_division":2,"loeb_associated_niese":6,"niese_printed_section":5,"preceding_niese_section":4,"following_niese_section":6,"verification_status":"LOEB_NIESE_NUMBER_DISAGREEMENT","same_physical_start":true,"niese_printed_page":5,"niese_pdf_page":95,"loeb_printed_page":5,"greek_text_anchor":"ταύτην δὲ","textual_variant_at_boundary":null,"niese_structural_signal":"Printed Arabic Proem lower division 2.; no Roman chapter at this position.","confidence":"HIGH","evidence_note":"Visually inspected Niese original scan and frozen Loeb print-evidence crop; physical inspection 1:2; working/compare_book01_1.jpg, panel 2. PDF pages are one-based. Frozen Loeb associated number and frozen printed-number transcription are 6; Niese prints 5 beside 2. ταύτην δὲ. Niese 6 occurs later beside ἤδη. Both readings are retained.","review_note":"Frozen Loeb associated number and frozen printed-number transcription are 6; Niese prints 5 beside 2. ταύτην δὲ. Niese 6 occurs later beside ἤδη. Both readings are retained.","niese_older_chapter_label":null,"niese_older_lower_division_label":"2.","chapter_opening_lower1_status":"NOT_APPLICABLE","consolidated_field_basis":"Derived only from completed Batch01 structural-signal text and nine chapter-only observations.","physical_boundary_id":"batch-01|1:2","inspection_key":"1:2","loeb_source_boundary_id":"v4-p29-y51.5","original_primary_status":"LOEB_NIESE_NUMBER_DISAGREEMENT","source_batch_json":"C:\\Users\\Pollard_R\\Mon disque\\Latin Josephus Project\\LatinJosephus-Recovery\\latinjosephus-next\\review\\Antiquities_Loeb_Niese_Verification_2026-10-05\\batch-01\\Loeb_Niese_Batch01.json","source_batch_json_sha256":"017c57414dadbe8d1982aab5c464c3f78a8878ba18b186bfd463401b1b3d511d","original_batch_audit_record":{"batch":"batch-01","niese_volume":"I","niese_pdf_filename":"operajosephus01joseuoft.pdf","niese_pdf_sha256":"7e627e6704ca5e42368d7b86889a8ac021b3415739917d2f557d9df3febf79a2","antiquities_book":1,"loeb_boundary_id":"I.Proem.2","loeb_level":"Subchapter","loeb_chapter":null,"loeb_lower_division":2,"loeb_associated_niese":6,"niese_printed_section":5,"preceding_niese_section":4,"following_niese_section":6,"verification_status":"LOEB_NIESE_NUMBER_DISAGREEMENT","same_physical_start":true,"niese_printed_page":5,"niese_pdf_page":95,"loeb_printed_page":5,"greek_text_anchor":"ταύτην δὲ","textual_variant_at_boundary":null,"niese_structural_signal":"Printed Arabic Proem lower division 2.; no Roman chapter at this position.","confidence":"HIGH","evidence_note":"Visually inspected Niese original scan and frozen Loeb print-evidence crop; physical inspection 1:2; working/compare_book01_1.jpg, panel 2. PDF pages are one-based. Frozen Loeb associated number and frozen printed-number transcription are 6; Niese prints 5 beside 2. ταύτην δὲ. Niese 6 occurs later beside ἤδη. Both readings are retained.","review_note":"Frozen Loeb associated number and frozen printed-number transcription are 6; Niese prints 5 beside 2. ταύτην δὲ. Niese 6 occurs later beside ἤδη. Both readings are retained."},"frozen_extraction_record":{"book":1,"chapter":null,"subchapter":2,"printed_label":"(2)","niese_section":6,"boundary_at_niese_start":true,"loeb_volume":4,"printed_page":5,"incipit":"","confidence":"HIGH","notes":"Printed Proem subdivision; no chapter number is supplied or invented. English PDF page 29; Greek PDF page 28, printed 4. PDF indices are 1-based.","division_level":"Subchapter","source_evidence":{"source_boundary_id":"v4-p29-y51.5","inspection_key":"1:2","english_pdf_page":29,"english_printed_page":5,"english_label":"(2)","english_label_ocr":"(2)","english_label_position_pt":{"x":27.51399,"y":51.453662531199996},"greek_pdf_page":28,"greek_printed_page":4,"greek_label":"(2)","greek_label_ocr":"(2)","greek_label_position_pt":{"x":80.74367,"y":50.97639730780003},"printed_niese":"6","anchor_reading":"source verified","visible_source_inspected":true,"evidence_sheet":"sheets/book01_1.jpg","evidence_position":2,"boundary_within_niese":false,"printed_niese_at_boundary":"6"},"printed_chapter_label":"Proem","printed_subchapter_label":"2"},"raw_loeb_associated_niese":6,"niese_original_printed_section":5,"frozen_metadata_printed_niese_transcription":"6","frozen_loeb_boundary_at_niese_start":true,"frozen_loeb_boundary_within_niese":false,"human_physical_copy_observation":{"case":"I.Proem.2","observer":"Richard M. Pollard","workbook":"C:\\Users\\Pollard_R\\Mon disque\\Latin Josephus Project\\LatinJosephus-Recovery\\latinjosephus-next\\review\\Antiquities_Loeb_Niese_Verification_2026-10-05\\human-checks\\Antiquities divisions - Loeb Checks.xlsx","workbook_sha256":"c140fff326a93333669934d00fb34ef1cd81054cdbd191893e7f94d9974bcdfd","sheet":"Sheet1","observation_cell":"H2","case_cell":"B2","row":2,"recorded_loeb_volume":"1930 [1998: vol. V]","recorded_printed_page":4,"verbatim_observation":"Beginning Proem 2 = Beginning Niese section 5","frozen_loeb_reading":"Frozen print/association 6","current_physical_loeb_reading":"Current print and lower 2 start at citation 5","niese_original_reading":"Niese 5 at Proem2","adjudication":"LIKELY_PRINTING_STATE_CORRECTION","effect_on_recommended_niese_association":"Use 5 for a Niese navigation field; retain historical6.","effect_on_structural_boundary_interpretation":"Physical start at citation 5 remains supported; historical Loeb reading is preserved.","changes_batch_primary_status":false,"raw_workbook_cells":{"A2":1,"B2":"I.Proem.2","C2":"1930 [1998: vol. V]","D2":"At the start of Proem division (2), what Niese number is printed in the Greek margin: 5 or 6?","E2":"Frozen Loeb PDF reads 6","F2":"Niese reads 5 at the same boundary","G2":4,"H2":"Beginning Proem 2 = Beginning Niese section 5"},"fixed_evidence_basis":"Supplied workbook observation plus fixed human evidence in consolidation request"},"recommended_niese_association":5,"recommendation_status":"PRESERVE_SOURCE_DISAGREEMENT","recommendation_reason":"Historical Loeb print and association 6 differ from original Niese 5; current physical Loeb prints 5. Niese navigation should use 5 while retaining historical6 and the printing-state distinction."},"human_physical_copy_checks":[{"case":"I.Proem.2","observer":"Richard M. Pollard","workbook":"C:\\Users\\Pollard_R\\Mon disque\\Latin Josephus Project\\LatinJosephus-Recovery\\latinjosephus-next\\review\\Antiquities_Loeb_Niese_Verification_2026-10-05\\human-checks\\Antiquities divisions - Loeb Checks.xlsx","workbook_sha256":"c140fff326a93333669934d00fb34ef1cd81054cdbd191893e7f94d9974bcdfd","sheet":"Sheet1","observation_cell":"H2","case_cell":"B2","row":2,"recorded_loeb_volume":"1930 [1998: vol. V]","recorded_printed_page":4,"verbatim_observation":"Beginning Proem 2 = Beginning Niese section 5","frozen_loeb_reading":"Frozen print/association 6","current_physical_loeb_reading":"Current print and lower 2 start at citation 5","niese_original_reading":"Niese 5 at Proem2","adjudication":"LIKELY_PRINTING_STATE_CORRECTION","effect_on_recommended_niese_association":"Use 5 for a Niese navigation field; retain historical6.","effect_on_structural_boundary_interpretation":"Physical start at citation 5 remains supported; historical Loeb reading is preserved.","changes_batch_primary_status":false,"raw_workbook_cells":{"A2":1,"B2":"I.Proem.2","C2":"1930 [1998: vol. V]","D2":"At the start of Proem division (2), what Niese number is printed in the Greek margin: 5 or 6?","E2":"Frozen Loeb PDF reads 6","F2":"Niese reads 5 at the same boundary","G2":4,"H2":"Beginning Proem 2 = Beginning Niese section 5"},"fixed_evidence_basis":"Supplied workbook observation plus fixed human evidence in consolidation request"}]}</p>
+          </note>
+        </item>
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+      </list>
+    <list type="alignment-ranges"><head>Explicit current-corpus alignment corrections; no source hierarchy change</head><item xml:id="ALIGN-06-262-Greek" corresp="Latin/book-06.xml#latin-book06-num262"><label>Greek range for alignment unit 262</label><fs type="alignment-range"><f name="canonical-target"><string>latin-book06-num262</string></f><f name="language"><string>Greek</string></f><f name="source"><string>VI_xii8_XIII_locator_adjudication</string></f><f name="base-commit"><string>f7d9142cad998e8a005adea1a22532b9a78592db</string></f><f name="availability"><string>true</string></f><f name="start"><fs type="text-locator"><f name="available"><string>true</string></f><f name="file"><string>Greek/book-06.xml</string></f><f name="paragraph"><string>greek-book06-num262</string></f><f name="kind"><string>paragraph</string></f><f name="target"><string>greek-book06-num262</string></f></fs></f><f name="end"><fs type="text-locator"><f name="available"><string>true</string></f><f name="file"><string>Greek/book-06.xml</string></f><f name="paragraph"><string>greek-book06-num262</string></f><f name="kind"><string>element-edge</string></f><f name="target"><string>greek-book06-num262</string></f><f name="edge"><string>num[8]</string></f></fs></f></fs><note type="alignment-adjudication"><p>User-authorized current alignment metadata correction based on literal base XML, true Niese milestones and parallel text. Original xml:id, sameAs and paragraphs are retained. Canonical unit suffix is an alignment identity, not a Niese citation number.</p></note></item><item xml:id="ALIGN-06-271-Greek" corresp="Latin/book-06.xml#latin-book06-num271"><label>Greek range for alignment unit 271</label><fs type="alignment-range"><f name="canonical-target"><string>latin-book06-num271</string></f><f name="language"><string>Greek</string></f><f name="source"><string>VI_xii8_XIII_locator_adjudication</string></f><f name="base-commit"><string>f7d9142cad998e8a005adea1a22532b9a78592db</string></f><f name="availability"><string>true</string></f><f name="start"><fs type="text-locator"><f name="available"><string>true</string></f><f name="file"><string>Greek/book-06.xml</string></f><f name="paragraph"><string>greek-book06-num262</string></f><f name="kind"><string>element-edge</string></f><f name="target"><string>greek-book06-num262</string></f><f name="edge"><string>num[8]</string></f></fs></f><f name="end"><fs type="text-locator"><f name="available"><string>true</string></f><f name="file"><string>Greek/book-06.xml</string></f><f name="paragraph"><string>greek-book06-num271</string></f><f name="kind"><string>paragraph</string></f><f name="target"><string>greek-book06-num271</string></f></fs></f></fs><note type="alignment-adjudication"><p>User-authorized current alignment metadata correction based on literal base XML, true Niese milestones and parallel text. Original xml:id, sameAs and paragraphs are retained. Canonical unit suffix is an alignment identity, not a Niese citation number.</p></note></item>
+      
+</list>
+      <list xmlns="http://www.tei-c.org/ns/1.0" type="bamberg-boundaries">
+        <head>Bamberg, Staatsbibliothek, Msc.Class.78: independent manuscript divisions</head>
+        <item xml:id="B78-table1-row005" corresp="#reconciliation-v1.1">
+          <label>Bamberg division [I]</label>
+          <fs type="bamberg-boundary">
+            <f name="scheme">
+              <string>bamberg</string>
+            </f>
+            <f name="book">
+              <string>1</string>
+            </f>
+            <f name="context">
+              <string>1</string>
+            </f>
+            <f name="source-record">
+              <string>B78-table1-row005</string>
+            </f>
+            <f name="source-order">
+              <string>1</string>
+            </f>
+            <f name="display">
+              <string>[I]</string>
+            </f>
+            <f name="manuscript-label-as-recorded">
+              <string>[I]</string>
+            </f>
+            <f name="literal-label">
+              <string>[I]</string>
+            </f>
+            <f name="label-status">
+              <string>SUPPLIED</string>
+            </f>
+            <f name="canonical-niese">
+              <string>27</string>
+            </f>
+            <f name="niese-relationship">
+              <string>EXACT_NIESE_START</string>
+            </f>
+            <f name="at-niese-start">
+              <string>true</string>
+            </f>
+            <f name="confidence">
+              <string>HUMAN_AUDITED_BOOK_OPENING</string>
+            </f>
+            <f name="verification-status">
+              <string>BOOK_OPENING_INFERRED_FROM_AUDIT_AND_CURRENT_TEXT</string>
+            </f>
+            <f name="physical-point">
+              <string>B78-table1-row005</string>
+            </f>
+            <f name="image">
+              <string>7</string>
+            </f>
+            <f name="manuscript-image-column-line">
+              <string/>
+            </f>
+            <f name="visible-numeral-or-initial">
+              <string/>
+            </f>
+            <f name="certified-latin-incipit">
+              <string>In principio creauit deus caelum et terram. Sed dum terra ad aspectum non ueniret, et profunditate tenebris celaretur, et spiritus</string>
+            </f>
+            <f name="traditional-relationship">
+              <string>EXACT_MATCH</string>
+            </f>
+            <f name="traditional-exact-identities">
+              <string>LOEB-01-Chapter-1-0</string>
+            </f>
+            <f name="traditional-different-position-identities">
+              <string/>
+            </f>
+            <f name="end">
+              <string>B78-table1-row006</string>
+            </f>
+            <f name="Greek">
+              <fs type="text-locator">
+                <f name="available">
+                  <string>true</string>
+                </f>
+                <f name="file">
+                  <string>Greek/book-01.xml</string>
+                </f>
+                <f name="paragraph">
+                  <string>greek-book01-num27</string>
+                </f>
+                <f name="offset">
+                  <string>0</string>
+                </f>
+                <f name="anchor">
+                  <string>Ἐν ἀρχῇ ἔκτισεν ὁ θεὸς τὸν οὐρανὸν καὶ τὴν γῆν. ταύτης δ᾽ ὑπ᾽ ὄψιν οὐκ ἐρχομένης, ἀλλὰ βαθεῖ μὲν κρυπτομένης σκότει, πνεύματος δ᾽ </string>
+                </f>
+                <f name="kind">
+                  <string>paragraph</string>
+                </f>
+                <f name="target">
+                  <string>greek-book01-num27</string>
+                </f>
+              </fs>
+            </f>
+            <f name="Latin">
+              <fs type="text-locator">
+                <f name="available">
+                  <string>true</string>
+                </f>
+                <f name="file">
+                  <string>Latin/book-01.xml</string>
+                </f>
+                <f name="paragraph">
+                  <string>latin-book01-num27</string>
+                </f>
+                <f name="offset">
+                  <string>0</string>
+                </f>
+                <f name="anchor">
+                  <string>In principio creauit deus caelum et terram. Sed dum terra ad aspectum non ueniret, et profunditate tenebris celaretur, et spiritus</string>
+                </f>
+                <f name="kind">
+                  <string>paragraph</string>
+                </f>
+                <f name="target">
+                  <string>latin-book01-num27</string>
+                </f>
+              </fs>
+            </f>
+            <f name="English">
+              <fs type="text-locator">
+                <f name="available">
+                  <string>true</string>
+                </f>
+                <f name="file">
+                  <string>English/book-01.xml</string>
+                </f>
+                <f name="paragraph">
+                  <string>english-book01-num27</string>
+                </f>
+                <f name="offset">
+                  <string>0</string>
+                </f>
+                <f name="anchor">
+                  <string>In the beginning God created the heaven and the earth. But when the earth did not come into sight, but was covered with thick dark</string>
+                </f>
+                <f name="kind">
+                  <string>paragraph</string>
+                </f>
+                <f name="target">
+                  <string>english-book01-num27</string>
+                </f>
+                <f name="boundary-start">
+                  <fs type="text-locator">
+                    <f name="available">
+                      <string>true</string>
+                    </f>
+                    <f name="kind">
+                      <string>element-edge</string>
+                    </f>
+                    <f name="target">
+                      <string>english-book01-chapter1</string>
+                    </f>
+                    <f name="edge">
+                      <string>p[1]</string>
+                    </f>
+                  </fs>
+                </f>
+              </fs>
+            </f>
+          </fs>
+          <note type="frozen-bamberg-evidence">
+            <p>{"id":"B78-table1-row005","row":5,"book":1,"image":"7","numeral":"[I]","snippet":"In principio creauit deus caelum et terram","notes":"","candidates":[{"id":"latin-book01-num27","score":1.0,"norm_offset":0,"direct":true}],"latin_location":{"paragraph_id":"latin-book01-num27","offset":0,"at_paragraph_start":true,"anchor":"In principio creauit deus caelum et terram. Sed dum terra ad aspectum non ueniret, et profunditate tenebris celaretur, et spiritus","path":"/TEI[1]/text[1]/body[1]/div1[1]/div2[2]/p[1]","location_role":"BOUNDARY_CORROBORATED_IN_CURRENT_ENCODING"},"niese_section":27,"greek_location":{"paragraph_id":"greek-book01-num27","offset":0,"path":"/TEI[1]/text[1]/body[1]/div1[1]/div2[2]/p[1]","anchor":"Ἐν ἀρχῇ ἔκτισεν ὁ θεὸς τὸν οὐρανὸν καὶ τὴν γῆν. ταύτης δ᾽ ὑπ᾽ ὄψιν οὐκ ἐρχομένης, ἀλλὰ βαθεῖ μὲν κρυπτομένης σκότει, πνεύματος δ᾽ ","location_role":"BOUNDARY_CORROBORATED_IN_CURRENT_ENCODING"},"boundary_at_niese_start":true,"mapping_method":"CURRENT_LATIN_NIESE_POSITION","bamberg_chapter":"[I]","source_audit_file":"C:\\Users\\Pollard_R\\Mon disque\\Latin Josephus Project\\LatinJosephus-Recovery\\Bamberg Msc Class 78 - Chapter Nos for Ant..docx","source_audit_row":5,"source_audit_sha256":"13b593dc176c7c57a9234344174129e1401e49db07e6be293f618742c8836586","human_review_status":"HUMAN_AUDIT_INFERRED_INITIAL_OR_BOOK_OPENING","audit_identifier_uncertain":false,"source_notes":"","source_snippet_is_exact_boundary":false,"physical_position_status":"BOOK_OPENING_INFERRED_FROM_AUDIT_AND_CURRENT_TEXT","confidence":"HUMAN_AUDITED_BOOK_OPENING","candidate_niese_sections":[27],"nearby_niese_section":null,"niese_relationship":"EXACT_NIESE_START","english_location":{"paragraph_id":"english-book01-num27","offset":0,"path":"/TEI[1]/text[1]/body[1]/div1[1]/div2[2]/p[2]","anchor":"In the beginning God created the heaven and the earth. But when the earth did not come into sight, but was covered with thick dark"},"greek_feasibility":{"category":"EXISTING_ELEMENT_BOUNDARY","coincides_element_boundary":true,"coincides_paragraph_start":true,"coincides_niese_marker":true,"niese_encoding":"num","reason":"Existing paragraph or child-element edge; no aligned paragraph split needed.","source_review_pending":false},"latin_feasibility":{"category":"EXISTING_ELEMENT_BOUNDARY","coincides_element_boundary":true,"coincides_paragraph_start":true,"coincides_niese_marker":false,"niese_encoding":null,"reason":"Existing paragraph or child-element edge; no aligned paragraph split needed.","source_review_pending":false},"english_feasibility":{"category":"EXISTING_ELEMENT_BOUNDARY","coincides_element_boundary":true,"coincides_paragraph_start":true,"coincides_niese_marker":false,"niese_encoding":null,"reason":"Existing paragraph or child-element edge; no aligned paragraph split needed.","source_review_pending":false},"loeb_exact_ids":["LOEB-01-Chapter-1-0"],"loeb_different_position_ids":[],"loeb_unresolved_ids":[],"chapter_relationship":"EXACT_MATCH"}</p>
+          </note>
+        </item>
+        <item xml:id="B78-table1-row006" corresp="#reconciliation-v1.1">
+          <label>Bamberg division III</label>
+          <fs type="bamberg-boundary">
+            <f name="scheme">
+              <string>bamberg</string>
+            </f>
+            <f name="book">
+              <string>1</string>
+            </f>
+            <f name="context">
+              <string>1</string>
+            </f>
+            <f name="source-record">
+              <string>B78-table1-row006</string>
+            </f>
+            <f name="source-order">
+              <string>2</string>
+            </f>
+            <f name="display">
+              <string>III</string>
+            </f>
+            <f name="manuscript-label-as-recorded">
+              <string>III</string>
+            </f>
+            <f name="literal-label">
+              <string>III</string>
+            </f>
+            <f name="label-status">
+              <string>LITERAL</string>
+            </f>
+            <f name="canonical-niese">
+              <string>40</string>
+            </f>
+            <f name="niese-relationship">
+              <string>EXACT_NIESE_START</string>
+            </f>
+            <f name="at-niese-start">
+              <string>true</string>
+            </f>
+            <f name="confidence">
+              <string>HUMAN_EXACT_START_CHECKED_NIESE_PARALLEL_TEXT_VERIFIED</string>
+            </f>
+            <f name="verification-status">
+              <string>HUMAN_CHECKED_EXACT_START</string>
+            </f>
+            <f name="physical-point">
+              <string>B78-table1-row006</string>
+            </f>
+            <f name="image">
+              <string>8</string>
+            </f>
+            <f name="manuscript-image-column-line">
+              <string> _____Image 8, column A, line 7______________</string>
+            </f>
+            <f name="visible-numeral-or-initial">
+              <string> ____III, left margin_</string>
+            </f>
+            <f name="certified-latin-incipit">
+              <string>Deus igitur adam et mulierem</string>
+            </f>
+            <f name="traditional-relationship">
+              <string>BAMBERG_ONLY</string>
+            </f>
+            <f name="traditional-exact-identities">
+              <string/>
+            </f>
+            <f name="traditional-different-position-identities">
+              <string/>
+            </f>
+            <f name="end">
+              <string>B78-table1-row007</string>
+            </f>
+            <f name="Greek">
+              <fs type="text-locator">
+                <f name="available">
+                  <string>true</string>
+                </f>
+                <f name="file">
+                  <string>Greek/book-01.xml</string>
+                </f>
+                <f name="paragraph">
+                  <string>greek-book01-num40</string>
+                </f>
+                <f name="offset">
+                  <string>0</string>
+                </f>
+                <f name="anchor">
+                  <string>Ὁ δὴ τοίνυν θεὸς τὸν Ἄδαμον καὶ τὴν γυναῖκα τῶν μὲν ἄλλων φυτῶν ἐκέλευε γεύεσθαι, τοῦ δὲ τῆς φρονήσεως ἀπέχεσθαι, προειπὼν ἁψαμένο</string>
+                </f>
+                <f name="kind">
+                  <string>paragraph</string>
+                </f>
+                <f name="target">
+                  <string>greek-book01-num40</string>
+                </f>
+              </fs>
+            </f>
+            <f name="Latin">
+              <fs type="text-locator">
+                <f name="available">
+                  <string>true</string>
+                </f>
+                <f name="file">
+                  <string>Latin/book-01.xml</string>
+                </f>
+                <f name="paragraph">
+                  <string>latin-book01-num40</string>
+                </f>
+                <f name="offset">
+                  <string>0</string>
+                </f>
+                <f name="anchor">
+                  <string>Deus igitur Adam et mulierem ex aliis quidem plantationibus gustare praecepit, de prudentiae uero plantatione uoluit abstinere; pr</string>
+                </f>
+                <f name="kind">
+                  <string>paragraph</string>
+                </f>
+                <f name="target">
+                  <string>latin-book01-num40</string>
+                </f>
+              </fs>
+            </f>
+            <f name="English">
+              <fs type="text-locator">
+                <f name="available">
+                  <string>true</string>
+                </f>
+                <f name="file">
+                  <string>English/book-01.xml</string>
+                </f>
+                <f name="paragraph">
+                  <string>english-book01-num40</string>
+                </f>
+                <f name="offset">
+                  <string>0</string>
+                </f>
+                <f name="anchor">
+                  <string>God therefore commanded that Adam and his wife should eat of all the rest of the plants, but to abstain from the tree of knowledge</string>
+                </f>
+                <f name="kind">
+                  <string>paragraph</string>
+                </f>
+                <f name="target">
+                  <string>english-book01-num40</string>
+                </f>
+              </fs>
+            </f>
+          </fs>
+          <note type="frozen-bamberg-evidence">
+            <p>{"id":"B78-table1-row006","row":6,"book":1,"image":"8","numeral":"III","snippet":"Deus igitur adam et mulier","notes":"Exact incipit, preceding words and visible numeral/initial supplied in completed checklist check 1. Prior candidate notes are retained only in prior_reconciliation_record. ","candidates":[{"id":"latin-book01-num40","score":1.0,"norm_offset":0,"direct":true}],"latin_location":{"paragraph_id":"latin-book01-num40","offset":0,"path":"/TEI[1]/text[1]/body[1]/div1[1]/div2[2]/p[4]","anchor":"Deus igitur Adam et mulierem ex aliis quidem plantationibus gustare praecepit, de prudentiae uero plantatione uoluit abstinere; pr","first_letter_offset":1,"location_role":"HUMAN_CHECKED_BOUNDARY_CURRENT_TEXT_LOCATED"},"niese_section":40,"greek_location":{"paragraph_id":"greek-book01-num40","offset":0,"path":"/TEI[1]/text[1]/body[1]/div1[1]/div2[2]/p[4]","anchor":"Ὁ δὴ τοίνυν θεὸς τὸν Ἄδαμον καὶ τὴν γυναῖκα τῶν μὲν ἄλλων φυτῶν ἐκέλευε γεύεσθαι, τοῦ δὲ τῆς φρονήσεως ἀπέχεσθαι, προειπὼν ἁψαμένο","location_role":"PARALLEL_CLAUSE_FROM_HUMAN_CHECKED_LATIN_START"},"boundary_at_niese_start":true,"mapping_method":"HUMAN_EXACT_LATIN_INCIPIT_AND_PREDECESSOR_WITH_CURRENT_PARALLEL_GREEK","bamberg_chapter":"III","source_audit_file":"C:\\Users\\Pollard_R\\Mon disque\\Latin Josephus Project\\LatinJosephus-Recovery\\Bamberg Msc Class 78 - Chapter Nos for Ant..docx","source_audit_row":6,"source_audit_sha256":"13b593dc176c7c57a9234344174129e1401e49db07e6be293f618742c8836586","human_review_status":"HUMAN_COMPLETED_EXACT_POSITION_CHECK","audit_identifier_uncertain":false,"source_notes":"","source_snippet_is_exact_boundary":false,"physical_position_status":"HUMAN_CHECKED_EXACT_START","confidence":"HUMAN_EXACT_START_CHECKED_NIESE_PARALLEL_TEXT_VERIFIED","nearby_niese_section":null,"candidate_niese_sections":[40],"niese_relationship":"EXACT_NIESE_START","english_location":{"paragraph_id":"english-book01-num40","offset":0,"path":"/TEI[1]/text[1]/body[1]/div1[1]/div2[2]/p[5]","anchor":"God therefore commanded that Adam and his wife should eat of all the rest of the plants, but to abstain from the tree of knowledge","location_role":"CURRENT_TRANSLATED_COUNTERPART_FROM_HUMAN_CHECKED_LATIN_START"},"greek_feasibility":{"category":"EXISTING_ELEMENT_BOUNDARY","coincides_element_boundary":true,"coincides_paragraph_start":true,"coincides_niese_marker":true,"niese_encoding":"num","reason":"Existing paragraph or child-element edge; no aligned paragraph split needed.","source_review_pending":false},"latin_feasibility":{"category":"EXISTING_ELEMENT_BOUNDARY","coincides_element_boundary":true,"coincides_paragraph_start":true,"coincides_niese_marker":false,"niese_encoding":null,"reason":"Existing paragraph or child-element edge; no aligned paragraph split needed.","source_review_pending":false},"english_feasibility":{"category":"EXISTING_ELEMENT_BOUNDARY","coincides_element_boundary":true,"coincides_paragraph_start":true,"coincides_niese_marker":false,"niese_encoding":null,"reason":"Existing paragraph or child-element edge; no aligned paragraph split needed.","source_review_pending":false},"loeb_exact_ids":[],"loeb_different_position_ids":[],"loeb_unresolved_ids":[],"chapter_relationship":"BAMBERG_ONLY","prior_reconciliation_record":{"id":"B78-table1-row006","row":6,"book":1,"image":"8","numeral":"III","snippet":"Deus igitur adam et mulier","notes":"Audit snippet is nearby text, not a certified start. Exact Niese-start/within-section classification awaits a physical-position decision or facsimile check. ","candidates":[{"id":"latin-book01-num40","score":1.0,"norm_offset":0,"direct":true}],"latin_location":{"paragraph_id":"latin-book01-num40","offset":0,"at_paragraph_start":true,"anchor":"Deus igitur Adam et mulierem ex aliis quidem plantationibus gustare praecepit, de prudentiae uero plantatione uoluit abstinere; pr","path":"/TEI[1]/text[1]/body[1]/div1[1]/div2[2]/p[4]","location_role":"CANDIDATE_NEARBY_TEXT"},"niese_section":null,"greek_location":{"paragraph_id":"greek-book01-num40","offset":0,"path":"/TEI[1]/text[1]/body[1]/div1[1]/div2[2]/p[4]","anchor":"Ὁ δὴ τοίνυν θεὸς τὸν Ἄδαμον καὶ τὴν γυναῖκα τῶν μὲν ἄλλων φυτῶν ἐκέλευε γεύεσθαι, τοῦ δὲ τῆς φρονήσεως ἀπέχεσθαι, προειπὼν ἁψαμένο","location_role":"CANDIDATE_NEARBY_TEXT"},"boundary_at_niese_start":null,"mapping_method":"CURRENT_LATIN_NIESE_POSITION","bamberg_chapter":"III","source_audit_file":"C:\\Users\\Pollard_R\\Mon disque\\Latin Josephus Project\\LatinJosephus-Recovery\\Bamberg Msc Class 78 - Chapter Nos for Ant..docx","source_audit_row":6,"source_audit_sha256":"13b593dc176c7c57a9234344174129e1401e49db07e6be293f618742c8836586","human_review_status":"HUMAN_AUDIT_PRESENT_NUMERAL","audit_identifier_uncertain":false,"source_notes":"","source_snippet_is_exact_boundary":false,"physical_position_status":"UNRESOLVED_NEARBY_SNIPPET","confidence":"HUMAN_AUDITED_EXISTENCE_POSITION_UNRESOLVED","nearby_niese_section":40,"candidate_niese_sections":[39,40,41,42,43,44,45,46,47,48,49,50,51],"boundary_at_niese_start_candidate":true,"niese_relationship":"UNRESOLVED","english_location":null,"greek_feasibility":{"category":"UNRESOLVED","reason":"Audit snippet is nearby text; the exact manuscript boundary has not been established.","coincides_element_boundary":null,"coincides_niese_marker":null},"latin_feasibility":{"category":"UNRESOLVED","reason":"Audit snippet is nearby text; the exact manuscript boundary has not been established.","coincides_element_boundary":null,"coincides_niese_marker":null},"english_feasibility":{"category":"UNRESOLVED","reason":"Audit snippet is nearby text; the exact manuscript boundary has not been established.","coincides_element_boundary":null,"coincides_niese_marker":null},"loeb_exact_ids":[],"loeb_different_position_ids":[],"loeb_unresolved_ids":[],"chapter_relationship":"UNRESOLVED"},"human_exact_position_check":{"check_number":1,"record_id":"B78-table1-row006","heading":"Book I / III / image 8","fields_verbatim":{"Original nearby snippet":" Deus igitur adam et mulier","Nearby Niese section":" 40","Candidate search sections":" [39,40,41,42,43,44,45,46,47,48,49,50,51]","Source audit table row":" 6","Reconciliation record":" B78-table1-row006","Exact division begins":" __Deus igitur adam et mulierem____________________","Immediately preceding words":" ___quem greci appellant nilum____________","Visible numeral/initial and its position":" ____III, left margin_","Image/column/line":" _____Image 8, column A, line 7______________"},"exact_start":"Deus igitur adam et mulierem","preceding_words":"quem greci appellant nilum","raw_block":"[ ] 01. Book I / III / image 8\n    Original nearby snippet: Deus igitur adam et mulier\n    Nearby Niese section: 40\n    Candidate search sections: [39,40,41,42,43,44,45,46,47,48,49,50,51]\n    Source audit table row: 6\n    Reconciliation record: B78-table1-row006\n    Exact division begins: __Deus igitur adam et mulierem____________________\n    Immediately preceding words: ___quem greci appellant nilum____________\n    Visible numeral/initial and its position: ____III, left margin_\n    Image/column/line: _____Image 8, column A, line 7______________\n\n","source_file":"C:\\Users\\Pollard_R\\Git\\Segmentation resources\\Bamberg78_55_unresolved_starts_checklist_20261005.txt","source_sha256":"648b84f62611d821eceae1f9ba13eadc69e3138fec4c50305776391cf2a0f67a"},"certified_start":"Deus igitur adam et mulierem","certified_preceding_words":"quem greci appellant nilum","current_anchor_search_score":1.0,"predecessor_corroboration":{"source_words":"quem greci appellant nilum","current_preceding_text":"onem seu flos. Tygris autem diglath quod indicat acutum aliquid et angustum. Geon autem per aegyptum fluens ostendit eum qui nobis ab oriente redditur quem greci appellant nilum.","normalized_best_similarity":1.0,"normalization_scope":"Read-only matching only; source wording and XML unchanged."}}</p>
+          </note>
+        </item>
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+      </list>
+      <list xmlns="http://www.tei-c.org/ns/1.0" type="bamberg-coverage">
+        <item xml:id="B78-coverage-book01">
+          <fs type="audited-coverage">
+            <f name="book">
+              <string>1</string>
+            </f>
+            <f name="division-count">
+              <string>18</string>
+            </f>
+            <f name="evidence-status">
+              <string>AUDITED_DIVISIONS_PRESENT</string>
+            </f>
+            <f name="source">
+              <string>reconciliation-v1.1</string>
+            </f>
+          </fs>
+        </item>
+        <item xml:id="B78-coverage-book02">
+          <fs type="audited-coverage">
+            <f name="book">
+              <string>2</string>
+            </f>
+            <f name="division-count">
+              <string>3</string>
+            </f>
+            <f name="evidence-status">
+              <string>AUDITED_DIVISIONS_PRESENT</string>
+            </f>
+            <f name="source">
+              <string>reconciliation-v1.1</string>
+            </f>
+          </fs>
+        </item>
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+      </list>
+</body>
+  </text>
+</TEI>

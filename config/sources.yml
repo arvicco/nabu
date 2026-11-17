@@ -2296,7 +2296,11 @@ dprr:   # 02-sources row 310
   adopted: "2026-10-27"
   kind: module   # person authority — zero document rows, the cbdb shape
   axes: [classical]
-  wired: false   # until the first real sync is verified
+  wired: true   # first sync 2026-11-17 exactly on census: 4,876 persons in
+                 # the person-index slice (authority dprr), both SPARQL
+                 # answers landed verbatim (persons.json + dates.json,
+                 # fetch 4.8 s); rows eyeballed (L. Iunius Brutus with the
+                 # exact-year [-540, -509] envelope; entity-URI refs)
   sync_policy: manual
   # DPRR — Digital Prosopography of the Roman Republic (King's College
   # London; Mouritsen, Robb, Bradley): the Republican elite from
@@ -3820,6 +3824,29 @@ jaschke-1881:   # P150-A, 02-sources row 314
   # SYNC: 696 docs / 0 passages (front matter 24, dictionary pp. 1–608,
   # vocabulary pp. 609–668, corrections pp. 669–671, colophon) + 6 binding
   # leaves skipped by rule; ~81 MB download.
+
+josephus-latin:   # 02-sources row 422
+  adapter: Nabu::Adapters::JosephusLatin
+  adopted: "2026-11-17"
+  axes: [classical, romance]  # late-antique Latin: the digiliblt precedent (the classical
+                              # desk's late band AND the romance desk's ancestor shelf)
+  wired: true    # first sync 2026-11-17 exactly on the build census: 35 docs /
+                 # 3,526 passages, 0 errored, 145 files skipped by rule
+                 # (incl. the 5 AI-drafted De excidio English), 0
+                 # unrecognized; FTS probed live — "In principio creauit
+                 # deus caelum et terram" answers at Antiquities I.27; the
+                 # whole source stages lat:late via its override (35/35).
+  sync_policy: manual
+  # The Latin Josephus (latinjosephus.org v3.0; Zenodo record 24120761,
+  # DOI 10.5281/zenodo.24120761): the late-antique Latin Antiquitates (21
+  # files) and Contra Apionem (2), the literal Bellum (7) and De excidio
+  # Hierosolymitano (5). Core zip only, sha256-pinned; a later version is a
+  # new record the owner re-pins (URL + RELEASE_SHA256) before a re-sync.
+  # Rejected grains counted by rule: Greek / Whiston / Lodge (held by
+  # perseus-greek and eebo-tcp), the AI-drafted De excidio English, the
+  # capitula paratext, registries. License per file from the deposit's
+  # FILE_LICENCE_MANIFEST.csv: PDM 1.0 + CC BY 4.0 / CC BY 4.0 / CC BY-SA
+  # 4.0 → attribution; De excidio CC BY-NC-SA 3.0 Italy → per-document nc.
 
 jv-wikisource:   # P140, 02-sources row 285
   adapter: Nabu::Adapters::JvWikisource
@@ -6628,6 +6655,14 @@ sefaria:
                    # Eyeball urn:nabu:sefaria:ben-sira:he:ben-sira-david-
                    # kahana-ed-wikisource:1.1 and urn:nabu:sefaria:megillat-
                    # ta-anit:he:warsaw-1874:nisan.2.
+                   # The CLASSICAL-MIDRASH CUT (owner-ruled title list) widens
+                   # the aggadah allowlist by Yalkut Shimoni on Torah/Nach,
+                   # Otzar Midrashim and Ein Yaakov: +18 named files (≈31 MB)
+                   # → expected EXACTLY +10 documents / +16,123 passages, +8
+                   # rule skips ("unknown"), 0 quarantines (full parse,
+                   # 2026-11-17). Eyeball urn:nabu:sefaria:ein-yaakov:he:daat:
+                   # berakhot.1.1 and urn:nabu:sefaria:yalkut-shimoni-on-
+                   # torah:he:torat-emet:1.1 (nc).
   # Sefaria — Targum shelf (P30-3) + RABBINIC WAVE 1 (P46-1) + MIDRASH
   # WAVE 2 (P55-3). Upstream
   # restructured: the git repo is a monthly books.json index (19,705 version
@@ -6650,7 +6685,8 @@ sefaria:
   # Tannaim; the "Footnotes on Mekhilta…" apparatus title excluded). The
   # FLAT Midrash/Aggadah bucket (Pesikta, Tanchuma, PdRE … beside Yalkut
   # Shimoni, Otzar Midrashim, Ein Yaakov) is not category-separable → out of
-  # wave 2; cutting it is a title-level owner ruling.
+  # wave 2; the title-level rulings since cut it by exact-title allowlist
+  # (the aggadah shelf: wave 3's classical core + the classical-midrash cut).
   # Commentary/Rishonim/Acharonim/Guides subtrees and non-named editions
   # (Venice, Mechon-Mamre…) are out of the wave-1/2 shelves by rule. P140
   # opens the Rishonim-on-Tanakh subtree whole (tanakh-rishonim) plus the

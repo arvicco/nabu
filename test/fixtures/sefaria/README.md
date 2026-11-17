@@ -291,6 +291,48 @@ Whole-file sha256:
 816c29908252005804a07671f9bf537e2eac1406d0a5c7d0f19f7e3ede13ad77  Megillat Ta'anit (Warsaw 1874) — original, before trim
 ```
 
+## The classical-midrash cut (retrieved 2026-11-17)
+
+An owner-ruled title list widens the `aggadah` allowlist. Of its seven
+works, Midrash Tanchuma (+ Buber), Pesikta DeRav Kahana, Pesikta Rabbati
+and Pirkei DeRabbi Eliezer were already on the list; the cut adds four
+EXACT index titles — `Yalkut Shimoni on Torah`, `Yalkut Shimoni on Nach`
+(upstream splits the one work in two), `Otzar Midrashim`, `Ein Yaakov`.
+Census against the held **2026-10-02 index generation**, full GET of all
+**18 named files** (merged siblings excluded; ≈31 MB):
+
+| title | named | licences in the files | docs | passages |
+|---|---|---|---|---|
+| Yalkut Shimoni on Torah | 5 | he Torat Emet **CC-BY-NC**; en Feuer **CC-BY**, SCT **CC0**, Seidenberg "unknown", "[es]" (actualLanguage es) "unknown" | 3 | 4,872 |
+| Yalkut Shimoni on Nach | 3 | he (versionTitle = the title) **"unknown"**; en Feuer **CC-BY**, SCT **CC0** | 2 | 55 |
+| Otzar Midrashim | 6 | he New York 1915 **Public Domain**, he "Zohar Ruth - Midrash HaNe'elam" "unknown"; en SCT **CC0**, British library / New York 1915 / Feuer "unknown" | 2 | 7,945 |
+| Ein Yaakov | 4 | he Daat **Public Domain**, he "Ein Yaakov temp" "unknown"; en Glick 1916–1921 **Public Domain**, SCT **CC0** | 3 | 3,251 |
+| total | 18 | | **10** | **16,123** |
+
+8 rule skips, 0 quarantines (a full parse of every file through the
+adapter). Every string sits in `LICENSE_CLASSES` or the non-grant set.
+
+Upstream delivery grains under these titles: the per-version JSON file
+(the document), plus the `merged` sibling per title/axis (rejected — no
+license field, never fetched). `Ein Yaakov (Glick Edition)` is a second
+index title over Glick's English translation — off the allowlist.
+
+Trims follow the house rule (metadata keys byte-identical, only `text`
+sliced, `json.dumps(indent=4, ensure_ascii=False)` round-trip verified
+byte-identical on each untouched file first).
+
+| fixture | whole? | exercises |
+|---|---|---|
+| `json/Midrash/Aggadah/Ein Yaakov/Hebrew/Daat.json` | TRIM | **Public Domain** (open), `hbo` — the aggadah shelf's ruling; the Bavli-aggadah Aramaic stretches ride it (declared coarse); tractate-keyed schema → `berakhot.1.1`; Berakhot ch. 1 → 3 leaves + ch. 2 → 2, the other 43 tractates emptied → 5 passages (original sha256 `743bb39e…`, 5,994,100 B) |
+| `json/Midrash/Aggadah/Otzar Midrashim/Hebrew/Otzar Midrashim, New York, 1915.json` | TRIM | **Public Domain**, `hbo`; 203 schema nodes, some NESTED (`Avraham our Father` → five sub-nodes) → `avraham-our-father.introduction.1`; Abba Gorion whole (2) + Avraham's Introduction and Nimrod story sliced to 2 each, every other node emptied → 6 passages (original sha256 `2893d722…`, 4,828,668 B; the trim keeps the full schema, hence ≈98 KB) |
+| `json/Midrash/Aggadah/Yalkut Shimoni on Torah/Hebrew/Torat Emet.json` | TRIM | the cut's **per-version licence variation**: **CC-BY-NC** → `license_override: nc` (beside CC-BY/CC0 English versions of the same title); `Remez/Paragraph` → `1.1`; remez 1 whole + remez 2 sliced to 2 → 5 passages (original sha256 `f13f344c…`, 14,726,608 B) |
+| `json/Midrash/Aggadah/Yalkut Shimoni on Nach/Hebrew/Yalkut Shimoni on Nach.json` | TRIM | the cut's **rejected-licence specimen**: an in-cut title whose only Hebrew says `"license": "unknown"` → skipped by rule, censused; remez 1 only (original sha256 `d08c0314…`, 4,873,300 B) |
+
+`books.json` gained 7 entry blocks (indent=1, verbatim from the 2026-10-02
+generation): the four fixture files and three census negatives — Ein Yaakov
+(Glick Edition) English (off the allowlist), an Otzar Midrashim Hebrew
+merged sibling, and Legends of the Jews (modern English authorship).
+
 ## Empty version (added 2026-11-13, under `empty-version/`)
 
 - `empty-version/Kabbalah/Zohar/Idra Zuta/English/Sefaria Community Translation.json`

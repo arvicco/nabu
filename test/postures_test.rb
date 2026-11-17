@@ -179,7 +179,7 @@ class PosturesTest < Minitest::Test
   def test_the_lect_migration_kept_the_p59_4_census
     lect = postures.declarations.select { |d| d.layer == "lect" }
     by_posture = lect.group_by(&:posture).transform_values(&:size)
-    assert_equal 207, lect.size,
+    assert_equal 206, lect.size,
                  "the P59-4 declarations survive the move (61 at migration; itant retired P61-3," \
                  "oracc retired P62-2, etcsl/ccmh/freising/coptic-scriptorium retired P64-6, " \
                  "titus-avestan retired P66-1, osta+fornsvenska retired P77-r8, achemenet " \
@@ -460,7 +460,11 @@ class PosturesTest < Minitest::Test
                  "dtucph-sp ADDED — PENDING on an smp (Samaritan Hebrew) anchor under hbo (nothing " \
                  "Samaritan-Hebrew exists in nabu-lects; bare hbo held meanwhile): 205→206; " \
                  "pgp-geniza ADDED — PENDING on the jrb (Judeo-Arabic) anchor mint (no node exists; " \
-                 "the Hebrew/Aramaic/Arabic tags ride bare held codes): 206→207"
+                 "the Hebrew/Aramaic/Arabic tags ride bare held codes): 206→207; " \
+                 "the Hebrew-wave registry package (nabu-lects PR #50, merged + canonical-synced " \
+                 "2026-11-17) RETIRES dtucph-sp's declaration (the hbo → smp override " \
+                 "machine-postures it; the shadowing rule, the add-then-retire shape) and " \
+                 "flips pgp-geniza's pending to identity (the jrb anchor landed): 207→206"
     # The epigraphic-belt registry package (merged + canonical-synced
     # 2026-10-18, the add-then-retire shape within one phase) retires both
     # P130 pendings, and the ociana-script rule + the ig-cyprus override
@@ -570,6 +574,10 @@ class PosturesTest < Minitest::Test
     # pending 1→0.
     # dtucph-sp joins pending on an smp (Samaritan Hebrew) anchor mint, and
     # pgp-geniza on the jrb (Judeo-Arabic) one — the pending ledger reopens: 0→2.
-    assert_equal({ "dates" => 33, "codemap" => 21, "identity" => 151, "pending" => 2 }, by_posture)
+    # The Hebrew-wave package (PR #50, canonical-synced 2026-11-17) closes it
+    # again: pgp-geniza's pending flips to identity (jrb live): 151→152, and
+    # dtucph-sp's retires to its hbo → smp override (the shadowing rule):
+    # pending 2→0.
+    assert_equal({ "dates" => 33, "codemap" => 21, "identity" => 152 }, by_posture)
   end
 end

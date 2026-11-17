@@ -7,6 +7,16 @@ already small (340 + 40 lines) and the module's read seam
 full codemap to be exercised honestly (a trimmed slice would hide
 referential-integrity gaps the drift guard exists to catch).
 
+- **Retrieved 2026-11-17 (tenth cut)** — the Hebrew-wave registry
+  package (nabu-lects PR #50, merged 2026-11-17): the jrb (Judeo-Arabic,
+  parent ara — Blau/Hary notes) and smp (Samaritan Hebrew, parent hbo,
+  glottocode sama1313 — Ben-Hayyim/Tal–Florentin/Schorch notes) anchors,
+  349 → 351. codemap.yml unchanged from the ninth cut. Copied verbatim
+  from canonical/nabu-lects (commit `2ac4410`, synced 2026-11-17).
+  `lects.yml` 288,177 B, sha256
+  `9cb06c0bb7f0732c5b7fa5b0aab9c56a5b7d3ddd931ff5626804400d79f9f8d3`;
+  `codemap.yml` 16,014 B, sha256
+  `18125c8c7f559797a7170ea2fee4e5bc8d0e1907c5d6476c9c23b27717cace27`.
 - **Retrieved 2026-11-16 (ninth cut)** — the jv~java row repair
   (nabu-lects PR #49, merged 2026-11-14): the jav-Java → jv~java
   universal codemap row removed after the surface byte guard showed

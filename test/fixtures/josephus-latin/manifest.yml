@@ -1,0 +1,80 @@
+# Nabu fixture manifest. Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# Every fixture is a MEMBER of the v3.0 core zip
+# (Latin_Josephus_v3.0_Corrected_XML_ZENODO_RC.zip, 8,359,339 B; a raw GET
+# of the url returns the zip, not the member), so whole: false throughout —
+# fetched for URL-liveness only, never byte-compared. The byte-for-byte
+# members and the trim recipe are recorded in README.md.
+source: josephus-latin
+adapter_test: test/adapters/josephus_latin_test.rb
+retrieved: 2026-11-17
+files:
+  - path: FILE_LICENCE_MANIFEST.csv
+    url: https://zenodo.org/api/records/24120761/files/Latin_Josephus_v3.0_Corrected_XML_ZENODO_RC.zip/content
+    whole: false
+    trim: zip member FILE_LICENCE_MANIFEST.csv, header + the fixture paths' rows
+  - path: assets/xml/antiquities/English/Lodge1602/preface.xml
+    url: https://zenodo.org/api/records/24120761/files/Latin_Josephus_v3.0_Corrected_XML_ZENODO_RC.zip/content
+    whole: false
+    trim: structural trim of zip member assets/xml/antiquities/English/Lodge1602/preface.xml (README recipe)
+  - path: assets/xml/antiquities/English/preface.xml
+    url: https://zenodo.org/api/records/24120761/files/Latin_Josephus_v3.0_Corrected_XML_ZENODO_RC.zip/content
+    whole: false
+    trim: zip member assets/xml/antiquities/English/preface.xml, byte-for-byte
+  - path: assets/xml/antiquities/Greek/preface.xml
+    url: https://zenodo.org/api/records/24120761/files/Latin_Josephus_v3.0_Corrected_XML_ZENODO_RC.zip/content
+    whole: false
+    trim: zip member assets/xml/antiquities/Greek/preface.xml, byte-for-byte
+  - path: assets/xml/antiquities/Latin/book-01.xml
+    url: https://zenodo.org/api/records/24120761/files/Latin_Josephus_v3.0_Corrected_XML_ZENODO_RC.zip/content
+    whole: false
+    trim: structural trim of zip member assets/xml/antiquities/Latin/book-01.xml (README recipe)
+  - path: assets/xml/antiquities/Latin/book-03.xml
+    url: https://zenodo.org/api/records/24120761/files/Latin_Josephus_v3.0_Corrected_XML_ZENODO_RC.zip/content
+    whole: false
+    trim: structural trim of zip member assets/xml/antiquities/Latin/book-03.xml (README recipe)
+  - path: assets/xml/antiquities/Latin/book-09.xml
+    url: https://zenodo.org/api/records/24120761/files/Latin_Josephus_v3.0_Corrected_XML_ZENODO_RC.zip/content
+    whole: false
+    trim: structural trim of zip member assets/xml/antiquities/Latin/book-09.xml (README recipe)
+  - path: assets/xml/antiquities/Latin/book-11.xml
+    url: https://zenodo.org/api/records/24120761/files/Latin_Josephus_v3.0_Corrected_XML_ZENODO_RC.zip/content
+    whole: false
+    trim: structural trim of zip member assets/xml/antiquities/Latin/book-11.xml (README recipe)
+  - path: assets/xml/antiquities/Latin/preface.xml
+    url: https://zenodo.org/api/records/24120761/files/Latin_Josephus_v3.0_Corrected_XML_ZENODO_RC.zip/content
+    whole: false
+    trim: zip member assets/xml/antiquities/Latin/preface.xml, byte-for-byte
+  - path: assets/xml/antiquities/niese/preface.json
+    url: https://zenodo.org/api/records/24120761/files/Latin_Josephus_v3.0_Corrected_XML_ZENODO_RC.zip/content
+    whole: false
+    trim: zip member assets/xml/antiquities/niese/preface.json, byte-for-byte
+  - path: assets/xml/antiquities/paratext/bamberg78/book-05-contents.xml
+    url: https://zenodo.org/api/records/24120761/files/Latin_Josephus_v3.0_Corrected_XML_ZENODO_RC.zip/content
+    whole: false
+    trim: zip member assets/xml/antiquities/paratext/bamberg78/book-05-contents.xml, byte-for-byte
+  - path: assets/xml/antiquities/structure.xml
+    url: https://zenodo.org/api/records/24120761/files/Latin_Josephus_v3.0_Corrected_XML_ZENODO_RC.zip/content
+    whole: false
+    trim: structural trim of zip member assets/xml/antiquities/structure.xml (README recipe)
+  - path: assets/xml/bellum/Latin/book-07.xml
+    url: https://zenodo.org/api/records/24120761/files/Latin_Josephus_v3.0_Corrected_XML_ZENODO_RC.zip/content
+    whole: false
+    trim: structural trim of zip member assets/xml/bellum/Latin/book-07.xml (README recipe)
+  - path: assets/xml/contra-apionem/Latin/book-02.xml
+    url: https://zenodo.org/api/records/24120761/files/Latin_Josephus_v3.0_Corrected_XML_ZENODO_RC.zip/content
+    whole: false
+    trim: structural trim of zip member assets/xml/contra-apionem/Latin/book-02.xml (README recipe)
+  - path: assets/xml/deh/English/book-02.xml
+    url: https://zenodo.org/api/records/24120761/files/Latin_Josephus_v3.0_Corrected_XML_ZENODO_RC.zip/content
+    whole: false
+    trim: structural trim of zip member assets/xml/deh/English/book-02.xml (README recipe)
+  - path: assets/xml/deh/Latin/book-02.xml
+    url: https://zenodo.org/api/records/24120761/files/Latin_Josephus_v3.0_Corrected_XML_ZENODO_RC.zip/content
+    whole: false
+    trim: structural trim of zip member assets/xml/deh/Latin/book-02.xml (README recipe)
+  - path: assets/xml/source-contents.xml
+    url: https://zenodo.org/api/records/24120761/files/Latin_Josephus_v3.0_Corrected_XML_ZENODO_RC.zip/content
+    whole: false
+    trim: structural trim of zip member assets/xml/source-contents.xml (README recipe)

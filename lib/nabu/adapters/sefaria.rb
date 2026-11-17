@@ -70,6 +70,30 @@ module Nabu
     # both shelves fetch every named version and let the per-file license
     # gate sift — the flat bucket's index rows carry no license field.
     #
+    # == The classical-midrash cut (owner-ruled title list; census
+    #    2026-11-17 against the 2026-10-02 index)
+    #
+    # The ruling names seven works — Midrash Tanchuma (standard + Buber),
+    # Pesikta DeRav Kahana, Pesikta Rabbati, Pirkei DeRabbi Eliezer,
+    # Yalkut Shimoni, Otzar Midrashim, Ein Yaakov. The first five were
+    # already on the aggadah allowlist; the cut adds four index titles
+    # (Yalkut Shimoni on Torah / on Nach, Otzar Midrashim, Ein Yaakov) =
+    # 18 named files (≈31 MB). Full GET + parse of all 18:
+    #
+    #   title                    named  no-grant  docs  passages  classes
+    #   Yalkut Shimoni on Torah      5         2     3     4,872  nc 1 (TE he), attribution 1, open 1
+    #   Yalkut Shimoni on Nach       3         1     2        55  attribution 1, open 1 (he "unknown")
+    #   Otzar Midrashim              6         4     2     7,945  open 2
+    #   Ein Yaakov                   4         1     3     3,251  open 3
+    #   total                       18         8    10    16,123  0 quarantined
+    #
+    # The no-grant files ("unknown") include the only Hebrew Yalkut on
+    # Nach and the Spanish "[es]" Yalkut file (skipped before its language
+    # is consulted). Ein Yaakov (Glick Edition), a second index title
+    # over Glick's translation, is off the allowlist. LANGUAGE: the shelf's
+    # he→hbo ruling; Ein Yaakov's Bavli-aggadah Aramaic stretches ride hbo
+    # wholesale (declared coarseness — the Megillat Ta'anit stance).
+    #
     # == The commentaries/halakhah/Zohar/liturgy wave (P140; census
     #    2026-10-21 against the 2026-10-02 index — 19,815 entries)
     #
@@ -90,10 +114,13 @@ module Nabu
     #
     # Licence classes of the 1,073 refs: open 651 · attribution 314 · nc
     # 108. "no-grant" = license "unknown" (420) or absent (35) — skipped by
-    # rule, censused. The 24 quarantines are the standing rules, loud: 13
+    # rule, censused. The 24 quarantines were the standing rules, loud: 13
     # foreign-language versions on the English axis (de ×12 — the Itkin
     # German Mishneh Torah and Bamberger's Rashi — and one hu siddur;
-    # D46-e) and 11 SCT stubs with zero text leaves. NB the Zohar proper
+    # D46-e) and 11 SCT stubs with zero text leaves. The 2026-11-17 ruling
+    # mapped de (tanakh-rishonim, mishneh-torah) and hu (liturgy) onto
+    # those shelves, so the 13 load at the next sync and the standing
+    # quarantine census drops to the 11 stubs. NB the Zohar proper
     # ships ENGLISH ONLY: both its Aramaic versions (Sulam Aramaic Text,
     # Zohar Menukad) say "unknown"; the Aramaic arrives via Tikkunei Zohar
     # (×2) and Zohar Chadash.
@@ -327,30 +354,41 @@ module Nabu
                                   "Sifrei by Rabbi Shraga Silverstein",
                                   "Trans. by Marty Jaffee, 2015"]
                   }),
-        # THE P59-5 AGGADAH WAVE (wave 3; queue Q1, owner-ruled 2026-08-02).
-        # The flat Midrash/Aggadah bucket is NOT category-separable (wave-2
-        # note above), so this wave is TITLE-scoped: the classical/
-        # late-antique core by explicit allowlist — 13 flat titles verified
-        # VERBATIM against the pinned index (75 files) — plus the one
-        # category-scoped subtree below. The anthology tier (Yalkut
-        # Shimoni, Ein Yaakov, Otzar Midrashim, Lekach Tov, Sekhel Tov,
-        # Bereshit Rabbati, Midrash Aggadah, Yelamdenu, Sefer HaYashar,
-        # Sifrei Aggadah on Esther) stays DELIBERATELY out — re-compilations
-        # of material already held or being ingested (the CLTK
-        # don't-republish-repackagings instinct; counter-argument on file:
-        # Yalkut as a witness to lost midrashim). Legends of the Jews
+        # THE P59-5 AGGADAH WAVE (wave 3; owner-ruled 2026-08-02), WIDENED
+        # by the classical-midrash cut (owner-ruled; census 2026-11-17
+        # against the 2026-10-02 index). The flat Midrash/Aggadah bucket is
+        # NOT category-separable (wave-2 note above), so the shelf is
+        # TITLE-scoped: an explicit allowlist of EXACT index titles, plus
+        # the one category-scoped subtree below. The cut names seven works;
+        # five were already on the wave-3 list (Tanchuma ×2 recensions,
+        # both Pesiktas, PdRE) and it adds the three anthologies the wave
+        # had held back — Yalkut Shimoni (two index titles), Otzar
+        # Midrashim, Ein Yaakov (+18 files, 10 licensed; class note).
+        # Still out: the rest of the anthology tier (Lekach Tov, Sekhel
+        # Tov, Bereshit Rabbati, Midrash Aggadah, Yelamdenu, Sefer
+        # HaYashar, Sifrei Aggadah on Esther), Ein Yaakov (Glick Edition)
+        # (a second title over Glick's English, beside the Glick version
+        # the Ein Yaakov title already carries), Legends of the Jews
         # (Ginzberg 1909 — modern English authorship) and the two apparatus
-        # titles are excluded outright. fetch_versions nil = every named
-        # version (the targum stance): the flat bucket's index rows carry
-        # no license field, so the per-FILE license gate does the sifting
-        # (TE "unknown" skips expected at sync).
+        # titles. fetch_versions nil = every named version (the targum
+        # stance): the flat bucket's index rows carry no license field, so
+        # the per-FILE license gate does the sifting.
         Shelf.new(id: "aggadah", prefix: %w[Midrash Aggadah], division_index: 2,
                   division: /\A\z/,
-                  titles: ["Pesikta DeRav Kahana", "Pesikta Rabbati", "Midrash Tanchuma",
-                           "Midrash Tanchuma Buber", "Pirkei DeRabbi Eliezer", "Midrash Tehillim",
-                           "Midrash Mishlei", "Midrash Shmuel", "Tanna DeBei Eliyahu Rabbah",
-                           "Tanna DeBei Eliyahu Zuta", "Aggadat Bereshit", "Mishnat Rabbi Eliezer",
-                           "Seder Olam Zutta"].freeze,
+                  titles: [
+                    # the wave-3 classical/late-antique core (13 titles; the
+                    # cut re-affirms Tanchuma ×2, both Pesiktas and PdRE)
+                    "Pesikta DeRav Kahana", "Pesikta Rabbati", "Midrash Tanchuma",
+                    "Midrash Tanchuma Buber", "Pirkei DeRabbi Eliezer", "Midrash Tehillim",
+                    "Midrash Mishlei", "Midrash Shmuel", "Tanna DeBei Eliyahu Rabbah",
+                    "Tanna DeBei Eliyahu Zuta", "Aggadat Bereshit", "Mishnat Rabbi Eliezer",
+                    "Seder Olam Zutta",
+                    # the classical-midrash cut's anthologies:
+                    "Yalkut Shimoni on Torah", # 13th-c. thesaurus of midrash on the Torah — a witness to lost midrashim
+                    "Yalkut Shimoni on Nach",  # its Prophets/Writings half (upstream splits the one work in two titles)
+                    "Otzar Midrashim",         # Eisenstein 1915: the minor midrashim collected, many held nowhere else
+                    "Ein Yaakov"               # ibn Habib's 16th-c. Bavli-aggadah anthology (not the Glick Edition)
+                  ].freeze,
                   languages: { "he" => "hbo", "en" => "eng" }, ruled_by: :actual_language,
                   urn_axis: true, fetch_versions: nil),
         # The Seder Olam Rabbah SUBTREE — the ruling's one category-scoped
@@ -369,16 +407,22 @@ module Nabu
         # subtree (Rashi, Ibn Ezra, Ramban, Radak, Rashbam, Sforno,
         # Abarbanel, Chizkuni, Ralbag, Minchat Shai …); subshelf = the
         # commentator, division = Torah/Prophets/Writings.
+        # de joined 2026-11-17: the quarantine census showed the shelf's one
+        # held-out file was Bamberger's 1922 German Rashi on Genesis (PD,
+        # re-ed. Itkin) — ruled onto the map; the license gate still rules
+        # each version file.
         Shelf.new(id: "tanakh-rishonim", prefix: ["Tanakh", "Rishonim on Tanakh"], division_index: nil,
                   division: nil,
-                  languages: { "he" => "hbo", "en" => "eng" }, ruled_by: :actual_language,
+                  languages: { "he" => "hbo", "en" => "eng", "de" => "deu" }, ruled_by: :actual_language,
                   urn_axis: true, fetch_versions: nil),
         # Maimonides' code: the fourteen books + the Introduction volume;
         # the Commentary subtree (3,639 entries — Kesef Mishneh, Maggid
         # Mishneh, Lechem Mishneh …) is out.
+        # de joined 2026-11-17: the 11 held-out files were all Mandelstamm's
+        # 1851 German Mishneh Torah (PD, re-ed. Itkin) — ruled onto the map.
         Shelf.new(id: "mishneh-torah", prefix: ["Halakhah", "Mishneh Torah"], division_index: 2,
                   division: /\A(?!Commentary\z)./,
-                  languages: { "he" => "hbo", "en" => "eng" }, ruled_by: :actual_language,
+                  languages: { "he" => "hbo", "en" => "eng", "de" => "deu" }, ruled_by: :actual_language,
                   urn_axis: true, fetch_versions: nil),
         # The Shulchan Arukh: its four parts + the Introduction by title
         # (the flat category also files Peri Megadim, a commentary); the
@@ -409,8 +453,10 @@ module Nabu
         # Haggadah — EXACTLY one level past "Liturgy" (/\A\z/ at index 2
         # keeps the Haggadah Commentary subtree out); the three "Rabbi Sacks
         # on …" modern commentary volumes are EXCLUDED_TITLES.
+        # hu joined 2026-11-17: the shelf's one held-out file was Balla's
+        # Hungarian siddur translation — ruled onto the map.
         Shelf.new(id: "liturgy", prefix: ["Liturgy"], division_index: 2, division: /\A\z/,
-                  languages: { "he" => "hbo", "en" => "eng" }, ruled_by: :actual_language,
+                  languages: { "he" => "hbo", "en" => "eng", "hu" => "hun" }, ruled_by: :actual_language,
                   urn_axis: true, fetch_versions: nil),
         # THE P152 SECOND TEMPLE SHELF (class note): the two Second Temple
         # works whose Hebrew/Aramaic text is an ancient witness, by EXACT

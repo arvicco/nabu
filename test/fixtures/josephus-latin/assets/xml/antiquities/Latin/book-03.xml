@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0">
+	<teiHeader xml:id="header">
+		<fileDesc>
+			<titleStmt>
+				<title>book-03</title>
+			</titleStmt>
+			<publicationStmt>
+				<p/>
+			</publicationStmt>
+			<sourceDesc>
+				<listWit>
+					<witness xml:id="FlaviusJosephusAntiquities">Flavius Josephus, Antiquities (Bamberg Msc. Class. 78)</witness>
+					<witness xml:id="BernBBMs50">Bern BB Ms. 50 (Ant. I–XII &amp; Guerre)</witness>
+					<witness xml:id="BernBBMs118">Bern BB Ms. 118 (Ant. I–XII)</witness>
+					<witness xml:id="ChartresBMMs29">Chartres BM Ms. 29 (Ant. I–XII, XVII–XX, &amp; Guerre)</witness>
+					<witness xml:id="ColognyBodmer98">Cologny Bodmer 98 (Ant. I–VI)</witness>
+					<witness xml:id="CopenhagenGKS1572o">Copenhagen GKS 157 2o (Ant. I–XII, XVII–XX)</witness>
+					<witness xml:id="LeidenUBVLF17">Leiden UB VLF 17 (Ant. I–XII, XVII–XX)</witness>
+					<witness xml:id="MilanBACimelioSP">Milan BA Cimelio S.P. 11/1 (Ant. V–X)</witness>
+					<witness xml:id="MonzaBCMsb20">Monza BC Ms. b 20/136 (Ant. I–VI)</witness>
+					<witness xml:id="RomeBAVPalLat814">Rome BAV Pal. Lat. 814 (Ant. I–XII)</witness>
+				</listWit>
+			</sourceDesc>
+		</fileDesc>
+	</teiHeader>
+	<text xml:id="book-03-text">
+		<body>
+			<note>Bamberg Msc. Class. 78</note>
+			<div1 n="III" subtype="Latin" type="book" xml:id="latin-book03">
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				<div2 n="10" type="chapter" xml:id="latin-book03-chapter10">
+					
+					<p xml:id="latin-book03-num239"><num>[X.ii.239]</num> Septimo uero mense quem macedones hyperueretheum uocant adicientes his quae praedicta sunt taurum et arietem, et septem agnas immolant et hedum pro peccatis.<milestone unit="niese" n="240"/><gap reason="omitted"/></p>
+					
+					
+					
+					
+					
+				</div2>
+				
+				
+				
+				
+				
+				<trailer xml:id="latin-3-trailer">FLAVII IOSEPPI IUDAICAE ANTIQUITATIS. EXPLICIT LIBER TERTIUS.</trailer>
+			</div1>
+		</body>
+	</text>
+	<standOff xml:id="annotations">
+		<listApp>
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			<app>
+				<rdg source="#latin-book03-num239">[ii.239] Septimo uero mense</rdg>
+			</app>
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+		</listApp>
+	</standOff>
+</TEI>

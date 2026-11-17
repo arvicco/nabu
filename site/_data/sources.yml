@@ -1701,6 +1701,18 @@ sources:
     entries_display: '0'
     holdings: 696 documents / 0 passages
     canonical_display: 77 MB
+  josephus-latin:
+    name: The Latin Josephus — Antiquitates, Bellum, Contra Apionem, De excidio (latinjosephus.org
+      v3.0)
+    license_class: attribution
+    documents: 35
+    documents_display: '35'
+    passages: 3526
+    passages_display: '3,526'
+    entries: 0
+    entries_display: '0'
+    holdings: 35 documents / 3,526 passages
+    canonical_display: 46 MB
   jv-wikisource:
     name: Javanese Wikisource — the dated 19th-century cone (manuscripts and prints
       to 1900)
@@ -2184,13 +2196,13 @@ sources:
   ndl-kotenseki:
     name: NDL 次世代デジタルライブラリー — 古典籍 OCR full text (bulk API)
     license_class: open
-    documents: 70840
-    documents_display: '70,840'
-    passages: 3907533
-    passages_display: '3,907,533'
+    documents: 71838
+    documents_display: '71,838'
+    passages: 3979810
+    passages_display: '3,979,810'
     entries: 0
     entries_display: '0'
-    holdings: 70,840 documents / 3,907,533 passages
+    holdings: 71,838 documents / 3,979,810 passages
     canonical_display: 19 GB
   ninjal-textdb:
     name: NINJAL Text Data Sets for Research on the History of Japanese — the Kirishitan
@@ -2838,13 +2850,13 @@ sources:
       Bible commentaries, Mishneh Torah, Shulchan Arukh, Tur, Zohar and liturgy +
       Ben Sira and Megillat Ta'anit
     license_class: open
-    documents: 1983
-    documents_display: '1,983'
-    passages: 1073004
-    passages_display: '1,073,004'
+    documents: 2033
+    documents_display: '2,033'
+    passages: 1111873
+    passages_display: '1,111,873'
     entries: 0
     entries_display: '0'
-    holdings: 1,983 documents / 1,073,004 passages
+    holdings: 2,033 documents / 1,111,873 passages
     canonical_display: 1.3 GB
   senie:
     name: SENIE — the Corpus of Early Written Latvian (AiLab IMCS UL / Latvian Language
@@ -3456,14 +3468,14 @@ sources:
   wellcome:
     name: Wellcome Collection — digitised printed books, OCR full text (pre-1800 cone)
     license_class: open
-    documents: 879
-    documents_display: '879'
-    passages: 353551
-    passages_display: '353,551'
+    documents: 1044
+    documents_display: '1,044'
+    passages: 376918
+    passages_display: '376,918'
     entries: 0
     entries_display: '0'
-    holdings: 879 documents / 353,551 passages
-    canonical_display: 867 MB
+    holdings: 1,044 documents / 376,918 passages
+    canonical_display: 887 MB
   wenhai:
     name: 'The Digital Wenhai v1.1: Phonology (Beaudouin 2026) — the Tangut rhyme
       dictionary 文海'
@@ -4045,6 +4057,7 @@ shelves:
   latin-romance:
     sources:
     - digiliblt
+    - josephus-latin
     - openmgh
     - formulae-open
     - llct1
@@ -4067,11 +4080,11 @@ shelves:
     - pleias-french-books
     - socinian-letters
     - wellcome
-    documents: 32512
-    documents_display: '32,512'
-    passages: 7074788
-    passages_display: '7,074,788'
-    size_display: 32,512 / 7,074,788
+    documents: 32712
+    documents_display: '32,712'
+    passages: 7101681
+    passages_display: '7,101,681'
+    size_display: 32,712 / 7,101,681
   papyri:
     sources:
     - papyri-ddbdp
@@ -4237,11 +4250,11 @@ shelves:
     - dicta-bavli
     - dicta-library
     - pgp-geniza
-    documents: 19715
-    documents_display: '19,715'
-    passages: 1798681
-    passages_display: '1,798,681'
-    size_display: 19,715 / 1,798,681
+    documents: 19765
+    documents_display: '19,765'
+    passages: 1837550
+    passages_display: '1,837,550'
+    size_display: 19,765 / 1,837,550
   elephantine:
     sources:
     - elephantine
@@ -4466,11 +4479,11 @@ shelves:
     - kouigenji
     - ninjal-textdb
     - oncoj
-    documents: 100016
-    documents_display: '100,016'
-    passages: 7199628
-    passages_display: '7,199,628'
-    size_display: 100,016 / 7,199,628
+    documents: 101014
+    documents_display: '101,014'
+    passages: 7271905
+    passages_display: '7,271,905'
+    size_display: 101,014 / 7,271,905
   southeast-asia:
     sources:
     - dharma-khmer
@@ -4534,6 +4547,6 @@ shelves:
     passages_display: '7,014'
     size_display: 1,282 / 7,014
 disk:
-  canonical_display: 163 GB
+  canonical_display: 164 GB
   derived_display: 247 GB
   starter_display: 693 MB
