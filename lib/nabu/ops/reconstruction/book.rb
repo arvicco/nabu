@@ -2,6 +2,7 @@
 
 require "yaml"
 require_relative "source_class"
+require_relative "../../axis_registry"
 
 module Nabu
   module Ops
@@ -43,10 +44,9 @@ module Nabu
 
         CLASS_SECTIONS = {
           public_stable: ["Re-fetched from stable public URLs",
-                          "The adapter fetches each of these unattended from stable public URLs. Enable, then " \
-                          "sync: `bin/nabu enable SLUG && bin/nabu sync SLUG` (a group or axis name expands for " \
-                          "both commands). The work is network-bound, so syncs run in parallel across sources " \
-                          "and serially within one."],
+                          "The adapter fetches each of these unattended from stable public URLs, and the " \
+                          "enable/sync commands expand axis and group names — so pick the grain you actually " \
+                          "want, from one source to the whole library; no per-source inventory is needed here."],
           rail_paced: ["Re-crawled on the paced rail",
                        "Each upstream is harvested by a polite paced crawl that resumes slice by slice: a full " \
                        "re-crawl is months-class wall clock. `rake rail:plan` prints the lanes and " \
@@ -74,7 +74,8 @@ module Nabu
           new(registry: SourceRegistry.load(sources_path), verdicts: classifier.verdicts,
               capabilities: YAML.safe_load_file(File.join(root, "config", "capabilities.yml")),
               tool_tasks: tool_tasks, manual_dir: manual_dir,
-              census: YAML.safe_load_file(File.join(root, "site", "_data", "census.yml")))
+              census: YAML.safe_load_file(File.join(root, "site", "_data", "census.yml")),
+              axes: AxisRegistry.load(File.join(root, "config", "axes.yml")).names)
         end
 
         # The kind: module sources whose upstream is a sister repository.
@@ -83,13 +84,14 @@ module Nabu
           modules.select { |entry| entry.manifest.upstream_url.match?(SISTER_URL) }.sort_by(&:slug)
         end
 
-        def initialize(registry:, verdicts:, capabilities:, tool_tasks:, manual_dir:, census:)
+        def initialize(registry:, verdicts:, capabilities:, tool_tasks:, manual_dir:, census:, axes:)
           @registry = registry
           @verdicts = verdicts
           @capabilities = capabilities
           @tool_tasks = tool_tasks
           @manual_dir = manual_dir
           @census = census
+          @axes = axes
         end
 
         def render
@@ -150,6 +152,8 @@ module Nabu
         end
 
         def class_list(klass, members)
+          return stable_path(members) if klass == :public_stable
+
           listed, hidden = members.map { |verdict| @registry[verdict.slug] }.partition(&:public?)
           items = listed.map { |entry| item(klass, entry) }
           return ["None."] if items.empty? && hidden.empty?
@@ -161,6 +165,59 @@ module Nabu
           return wrap(items) unless klass == :manual
 
           items.map { |text| "- #{text}" } + further_recipes
+        end
+
+        # The minimal command path at three grains, never a source inventory
+        # (owner rulings 2026-11-17): one source, one desk (the axis/group
+        # vocabulary, linked to the desks page for what each holds), the
+        # whole library — and only the access-gated exceptions `enable all`
+        # skips are named.
+        def stable_path(members)
+          counts = axis_counts
+          ["**One source** — find its slug in the [source catalog](02-sources.md) (or `bin/nabu list --axis " \
+           "<axis>`), then:", "", "```", "bin/nabu enable SLUG && bin/nabu sync SLUG", "```", "",
+           "**One desk** — a research axis bundles the sources a tradition reads (what each desk holds: " \
+           "[the desks page](axes.md)); both commands expand the axis name, and members already in place " \
+           "are skipped:", "", "```", "bin/nabu enable korean && bin/nabu sync korean", "```", "",
+           *wrap(@axes.map { |name| "[`#{name}`](axes.md##{name}) (#{counts.fetch(name, 0)})" }),
+           "",
+           "The groups `core` (the registry instruments) and `signs` (the sign/char shelves) expand the " \
+           "same way — `bin/nabu enable signs && bin/nabu sync signs` restores the whole sign/char " \
+           "capability.", "",
+           "**The whole library:**", "", "```", "bin/nabu enable all", "bin/nabu sync --all", "```", "",
+           "`enable all` covers every ungated source; `sync --all` is network-bound and runs in parallel " \
+           "across sources, serially within one.",
+           *stable_exceptions(members)]
+        end
+
+        # Public members per axis — the number each desk link carries. Axis
+        # membership is a tag, so the counts deliberately sum past the
+        # source total (multi-membership is the point, docs/axes.md).
+        def axis_counts
+          @registry.each_source.select(&:public?).each_with_object(Hash.new(0)) do |entry, counts|
+            entry.axes.each { |axis| counts[axis] += 1 }
+          end
+        end
+
+        # The members `enable all` skips: each must be enabled BY NAME so
+        # its own grant or credential flow runs. Blocked holdings are
+        # counted, never named (the public-surface rule).
+        def stable_exceptions(members)
+          entries = members.map { |verdict| @registry[verdict.slug] }
+          gated = entries.select { |e| e.blocked? || e.grant_required? || e.credentials }
+          return [] if gated.empty?
+
+          named, hidden = gated.partition(&:public?)
+          items = named.map { |e| "`#{e.slug}` (#{gated_reason(e)})" }
+          note = "plus #{hidden.size} not listed (grant-gated holdings that are not public)"
+          items << note unless hidden.empty?
+          ["", "The exceptions `enable all` skips — enable each by name so its access flow runs:", "",
+           *wrap(items)]
+        end
+
+        def gated_reason(entry)
+          [entry.blocked? ? "blocked" : nil, entry.grant_required? ? "grant-gated" : nil,
+           entry.credentials ? "credentials: #{entry.credentials}" : nil].compact.join(", ")
         end
 
         # Acquisition recipes that serve no single registered slug (a family

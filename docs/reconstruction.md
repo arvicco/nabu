@@ -36,60 +36,45 @@ Every registered source falls in exactly one class: the route by which its canon
 
 ### Re-fetched from stable public URLs — `public_stable`, 355 sources
 
-The adapter fetches each of these unattended from stable public URLs. Enable, then sync: `bin/nabu enable SLUG && bin/nabu sync SLUG` (a group or axis name expands for both commands). The work is network-bound, so syncs run in parallel across sources and serially within one.
+The adapter fetches each of these unattended from stable public URLs, and the enable/sync commands expand axis and group names — so pick the grain you actually want, from one source to the whole library; no per-source inventory is needed here.
 
-`acd`, `actib`, `aed`, `aes`, `africa-pd`, `aio`, `altaica-shm`, `althurayya`,
-`analecta-hymnica`, `aozora`, `aranese`, `archiv-slav-phil`, `armepic`, `aspr`, `atmo`,
-`babelstone-ids`, `baley-manuscripts`, `ban-wikisource`, `baxter-sagart`, `bdcamoes`,
-`bdrc-transcriptions`, `betamasaheft-works`, `bfm`, `bg-wikisource`, `bhsa`, `bim-sahcoba`,
-`blbooks`, `bosworth-toller`, `br-wikisource`, `bridging`, `bu-ajami`, `calfa-lexicon`,
-`cantigas`, `cantus`, `cbdb`, `cbeta`, `ccl`, `ccmh`, `cdli`, `ceipom`, `cgpg`, `chgis`, `cigs`,
-`classical-modern`, `cldf-spine`, `cleasby-vigfusson`, `clics`, `cllg-freed`, `cllg-sc`, `cme`,
-`comenius`, `coptic-scriptorium`, `corph`, `corpus-corporum`, `croala`, `cs-wikisource`, `csd`,
-`ctilc`, `cuc`, `cv-sardinian`, `cy-wikisource`, `dacon`, `damaskini`, `dbnl`, `dcs`,
-`delpher-newspapers`, `derge-kangyur`, `derge-tengyur`, `derom`, `dharma-campa`,
-`dharma-deccan`, `dharma-javanese-texts`, `dharma-khmer`, `dharma-mdt`, `dharma-nusantara`,
-`dharma-pyu`, `dharma-tamil`, `diccas`, `dicta-bavli`, `dicta-library`, `digiliblt`, `dillmann`,
-`diorisis`, `disco`, `divinum-officium`, `dpd`, `dprr`, `dss`, `dta`, `dtucph-sp`,
-`dyenindoeuropean`, `e84000`, `ebible-pacific`, `ebl`, `ecco-tcp`, `edh`, `edl`, `edr`, `edrdg`,
-`edubba-overlay`, `eebo-tcp`, `elektire`, `elephantine`, `elizabeth-bible`, `eltec-srp`, `emmo`,
-`eng-web`, `etcbc-syriac`, `etcbc-targum`, `etcsl`, `etruscan-loans`, `evans-tcp`,
-`extrabiblical`, `first1k-greek`, `formulae-open`, `fornsvenska`, `fsv-lexica`, `gams-zrcalo`,
-`ganjoor`, `glaux`, `glt`, `goo300k`, `grand-tour`, `gregobase`, `gretil`, `gretil-legacy`,
-`gu-wikisource`, `guaman-poma`, `haga-jinmei`, `hdic`, `hebrew-lexicon`, `helipad`, `hexapla`,
-`hittite-glossed`, `hmml-reading-room`, `honkoku`, `hr-wikisource`, `hypotactic`, `iecor`,
-`iedc`, `ig-cyprus`, `iip`, `imp`, `isicily`, `iswoc`, `itant`, `itkc-catalog`, `ja-wikisource`,
-`jaschke-1881`, `josephus-latin`, `jv-wikisource`, `kannada-texts`, `kanripo`, `kdsp`, `kitab`,
-`kitab-reuse`, `ko-wikisource-mk`, `kokubunken`, `korba`, `kouigenji`, `kr-gaiji`, `kradfile`,
-`larth-etp`, `lasla`, `leme`, `lexica`, `lexicon-itant`, `lexlep`, `lexlep-words`, `lila`,
-`litopys`, `littre`, `liv`, `llct1`, `lo-congres`, `lotsawa-house`, `lzh-collection`, `madurai`,
-`mahan-kosh`, `mazarinades`, `mcd`, `meloniromance`, `memis`, `menggu-ziyun`, `menota`,
-`menotec`, `mk-wikisource`, `mnc-wikisource`, `mongolic-pd`, `monlam-lexicon`, `ms-wikisource`,
-`mvp`, `mw`, `nabu-data`, `nabu-lects`, `nabu-places`, `nb-no`, `ninjal-textdb`, `noscemus`,
-`nrct`, `obi-burmese`, `obimd`, `ogham`, `ojw`, `okhc`, `old-nubian-ud`, `old-tibetan`, `oncoj`,
-`oncoj-lexicon`, `open-etruscan`, `openiti`, `openmgh`, `oracc`, `osbct`, `oshb`, `osl`, `osta`,
-`otdo`, `papyri-ddbdp`, `paramara`, `pedecerto`, `perseus-anglit`, `perseus-farsilit`,
-`perseus-greek`, `perseus-latin`, `peshitta`, `pgp-geniza`, `pl-wikisource`, `pleiades`, `pna`,
-`ponomar`, `ppchy`, `prague-bible-1488`, `prakrit-texts`, `prilit`, `proiel`, `pta`, `ptg`,
-`qieyun-restored`, `ref`, `rem`, `ren`, `riig`, `rsti`, `ru-wikisource`, `rundata`, `runesdb`,
-`sabellic-loans`, `saenkoromance`, `sagartst`, `salom`, `sarit`, `sblgnt`, `scat`,
-`scripta-bulgarica`, `sdbh`, `sefaria`, `senie`, `shabados`, `shiratori-shm`, `shkz`, `shuowen`,
-`siddham`, `sigla`, `sii-clean`, `skjaervo-khotanese`, `sl-lexica`, `sl-wikisource`,
-`slavistics-pd`, `slouniki-nasovic`, `soas-tibetan`, `socinian-letters`, `sr-wikisource`,
-`stationers-register`, `statutes-realm`, `stgall-priscian`, `su-wikisource`, `suttacentral`,
-`syriac-corpus`, `tamilex`, `te-wikisource`, `th-wikisource`, `theatre-classique`, `tianyige`,
-`tibetan-verbs`, `ticha`, `tir`, `tla-hf`, `tlhdig`, `tlopo`, `tls`, `torot`, `traces`,
-`trismegistos`, `tshet-uinh`, `typikon-bible`, `ucd`, `ud`, `uk-wikisource`, `unihan`,
-`unikemet`, `uralex`, `vakk`, `vedaweb`, `viet-wikisource`, `vks`, `vuk-danicic`, `vulgate`,
-`wenhai`, `westoldturkic`, `wiktionary-akk`, `wiktionary-ar`, `wiktionary-arc`, `wiktionary-bo`,
-`wiktionary-br`, `wiktionary-ca`, `wiktionary-cu`, `wiktionary-dum`, `wiktionary-dv`,
-`wiktionary-enm`, `wiktionary-et`, `wiktionary-fa`, `wiktionary-frm`, `wiktionary-fro`,
-`wiktionary-gmh`, `wiktionary-gmq-osw`, `wiktionary-got`, `wiktionary-hit`, `wiktionary-kn`,
-`wiktionary-ko`, `wiktionary-ml`, `wiktionary-non`, `wiktionary-oc`, `wiktionary-ofs`,
-`wiktionary-okm`, `wiktionary-osp`, `wiktionary-pa`, `wiktionary-pra`, `wiktionary-pro`,
-`wiktionary-recon`, `wiktionary-sco`, `wiktionary-sh`, `wiktionary-si`, `wiktionary-sux`,
-`wiktionary-syc`, `wiktionary-ta`, `wiktionary-te`, `wiktionary-tyz`, `wiktionary-vi`,
-`wiktionary-za`, `wilkens-oui`, `wold`, `zh-wikisource`, `zhongyuan`, `zoega`.
+**One source** — find its slug in the [source catalog](02-sources.md) (or `bin/nabu list --axis <axis>`), then:
+
+```
+bin/nabu enable SLUG && bin/nabu sync SLUG
+```
+
+**One desk** — a research axis bundles the sources a tradition reads (what each desk holds: [the desks page](axes.md)); both commands expand the axis name, and members already in place are skipped:
+
+```
+bin/nabu enable korean && bin/nabu sync korean
+```
+
+[`classical`](axes.md#classical) (33), [`romance`](axes.md#romance) (42),
+[`epigraphy`](axes.md#epigraphy) (41), [`slavic`](axes.md#slavic) (41),
+[`germanic`](axes.md#germanic) (45), [`celtic`](axes.md#celtic) (12),
+[`italic`](axes.md#italic) (13), [`etym`](axes.md#etym) (23),
+[`biblical`](axes.md#biblical) (23), [`hebrew`](axes.md#hebrew) (18),
+[`syriac`](axes.md#syriac) (5), [`ethiopic`](axes.md#ethiopic) (4),
+[`arabic`](axes.md#arabic) (8), [`hittite`](axes.md#hittite) (5),
+[`cuneiform`](axes.md#cuneiform) (17), [`egyptian`](axes.md#egyptian) (9),
+[`iranian`](axes.md#iranian) (8), [`indic`](axes.md#indic) (35),
+[`buddhist`](axes.md#buddhist) (14), [`tibetan`](axes.md#tibetan) (15),
+[`korean`](axes.md#korean) (11), [`sea`](axes.md#sea) (12), [`sinitic`](axes.md#sinitic) (30),
+[`japonic`](axes.md#japonic) (16), [`turkic`](axes.md#turkic) (5),
+[`mongolic`](axes.md#mongolic) (6), [`americas`](axes.md#americas) (3),
+[`africa`](axes.md#africa) (3), [`baltic`](axes.md#baltic) (4), [`local`](axes.md#local) (5).
+
+The groups `core` (the registry instruments) and `signs` (the sign/char shelves) expand the same way — `bin/nabu enable signs && bin/nabu sync signs` restores the whole sign/char capability.
+
+**The whole library:**
+
+```
+bin/nabu enable all
+bin/nabu sync --all
+```
+
+`enable all` covers every ungated source; `sync --all` is network-bound and runs in parallel across sources, serially within one.
 
 ### Re-crawled on the paced rail — `rail_paced`, 6 sources
 

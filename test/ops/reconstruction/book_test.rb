@@ -11,11 +11,13 @@ require "nabu/ops/reconstruction/book"
 # grants and canonical/ attic, which public clones lack), committed, and
 # byte-refreshed at the gate like site/_data. This suite therefore guards
 # its SHAPE and COVERAGE from TRACKED inputs only, never a byte diff and
-# never local/ or canonical/: every public registered source appears
-# exactly once across the class sections (a new source turns this red
-# until the book is regenerated), no blocked holding is named, every
-# section stands, every non-derived capability layer has its row, and no
-# internal id leaks.
+# never local/ or canonical/: the public_stable class is the minimal
+# command path (enable all / sync --all + the axis vocabulary), every
+# exception-class source computable from tracked inputs appears exactly
+# once (a new manual/rail/restricted source turns this red until the book
+# is regenerated), no blocked holding is named, every section stands,
+# every non-derived capability layer has its row, and no internal id
+# leaks.
 class ReconstructionBookTest < Minitest::Test
   Book = Nabu::Ops::Reconstruction::Book
   SourceClass = Nabu::Ops::Reconstruction::SourceClass
@@ -58,8 +60,13 @@ class ReconstructionBookTest < Minitest::Test
   end
 
   # Headings name the class key in code (`manual`); only list lines count.
+  # The axis/group vocabulary of the public_stable command path is not a
+  # slug list (axis names can never equal source slugs — the load-time
+  # guarantee), so it is subtracted.
   def listed_slugs(text)
-    class_lists(text).lines.reject { |line| line.start_with?("#") }.join.scan(/`([a-z0-9][a-z0-9-]*)`/).flatten
+    vocabulary = Nabu::AxisRegistry.load(File.join(ROOT, "config", "axes.yml")).names + %w[core signs]
+    class_lists(text).lines.reject { |line| line.start_with?("#") }.join
+                     .scan(/`([a-z0-9][a-z0-9-]*)`/).flatten - vocabulary
   end
 
   # A public-clone render: no grants, no canonical/ — tracked inputs only.
@@ -71,7 +78,8 @@ class ReconstructionBookTest < Minitest::Test
       Book.new(registry: registry, verdicts: classifier.verdicts, capabilities: capabilities,
                tool_tasks: [["tools:embed", "Install the embed stack"], ["tools:hooks", "Install the hooks"]],
                manual_dir: File.join(ROOT, "docs", "manual"),
-               census: YAML.safe_load_file(File.join(ROOT, "site", "_data", "census.yml"))).render
+               census: YAML.safe_load_file(File.join(ROOT, "site", "_data", "census.yml")),
+               axes: Nabu::AxisRegistry.load(File.join(ROOT, "config", "axes.yml")).names).render
     end
   end
 
@@ -85,15 +93,50 @@ class ReconstructionBookTest < Minitest::Test
     assert_includes committed, Book::GENERATED_NOTE
   end
 
-  def test_committed_book_lists_every_public_source_exactly_once
+  # The public_stable class is the minimal COMMAND path (owner ruling
+  # 2026-11-17: never a source inventory — `enable all` + the axis/group
+  # expansion cover it); only the exception classes list slugs. So the
+  # coverage guard is: every public source whose class is computable from
+  # TRACKED inputs alone (manual / rail_paced / restricted — grants and
+  # canonical/ are box-local) appears exactly once, nothing is listed
+  # twice, and nothing listed is unregistered or non-public.
+  def tracked_input_listed
+    @tracked_input_listed ||= Dir.mktmpdir("nabu-book-classes") do |tmp|
+      SourceClass.new(sources_path: SOURCES_PATH, manual_dir: File.join(ROOT, "docs", "manual"),
+                      grants_path: File.join(tmp, "grants.yml"), canonical_dir: File.join(tmp, "canonical"))
+                 .verdicts.select { |verdict| %i[manual rail_paced restricted].include?(verdict.klass) }
+                 .map(&:slug).select { |slug| registry[slug].public? }.sort
+    end
+  end
+
+  def test_committed_book_lists_every_exception_class_source_exactly_once
     listed = listed_slugs(committed)
-    public = registry.each_source.select(&:public?).map(&:slug).sort
+    public = registry.each_source.select(&:public?).map(&:slug)
     dupes = listed.tally.select { |_slug, n| n > 1 }.keys
     assert_empty dupes, "sources listed more than once across the class sections: #{dupes}"
-    missing = public - listed
+    missing = tracked_input_listed - listed
     assert_empty missing, "docs/reconstruction.md is stale — sources missing from the class sections " \
                           "(run `rake reconstruction:book` on the reference instance): #{missing}"
     assert_empty listed - public, "the class sections name a source that is not a public registered one"
+  end
+
+  def test_committed_book_gives_the_minimal_sync_path_not_an_inventory
+    stable = class_lists(committed)[/### [^\n]*`public_stable`.*?(?=^### )/m]
+    refute_nil stable, "the public_stable section is missing"
+    assert_includes stable, "**One source**"
+    assert_includes stable, "bin/nabu enable SLUG && bin/nabu sync SLUG"
+    assert_includes stable, "**One desk**"
+    assert_includes stable, "bin/nabu enable korean && bin/nabu sync korean"
+    assert_includes stable, "**The whole library:**"
+    assert_includes stable, "bin/nabu enable all"
+    assert_includes stable, "bin/nabu sync --all"
+    axes = Nabu::AxisRegistry.load(File.join(ROOT, "config", "axes.yml")).names
+    refute_empty axes
+    axes.each { |name| assert_includes stable, "[`#{name}`](axes.md##{name})" }
+    slugs = stable.scan(/`([a-z0-9][a-z0-9-]*)`/).flatten - axes - %w[core signs public_stable]
+    stray = slugs.select { |slug| registry[slug] && !(registry[slug].blocked? || registry[slug].grant_required? ||
+                                                     registry[slug].credentials) }
+    assert_empty stray, "the public_stable section lists ungated sources instead of the command path: #{stray}"
   end
 
   def test_committed_book_names_no_blocked_holding
@@ -144,9 +187,9 @@ class ReconstructionBookTest < Minitest::Test
     assert_equal sisters, Book::SISTER_SEAMS.keys.sort, "every sister repository needs its seam named"
   end
 
-  def test_public_clone_render_covers_every_public_source_and_hides_blocked_ones
+  def test_public_clone_render_covers_the_exception_classes_and_hides_blocked_ones
     listed = listed_slugs(rendered)
-    assert_equal registry.each_source.select(&:public?).map(&:slug).sort, listed.sort
+    assert_empty tracked_input_listed - listed
     assert_includes rendered, "plus 13 not listed"
   end
 
