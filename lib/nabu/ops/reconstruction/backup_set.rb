@@ -19,6 +19,9 @@ module Nabu
       #     db/ (the cost law's documented exception);
       #   * every paced-rail source's canonical tree — months-class to
       #     re-crawl politely;
+      #   * every manual-class source's canonical tree — upstream serves it
+      #     only to a human, so re-acquisition costs human hours whatever
+      #     the tree's size;
       #   * every EXTRA-HUGE source's canonical tree — wired, re-syncable,
       #     but measured at or past the threshold on its last sync
       #     (HUGE_SYNC_SECONDS; --threshold overrides): re-syncing is
@@ -53,7 +56,7 @@ module Nabu
         end
 
         def build
-          entries = instance_entries + rail_entries + huge_entries + attic_entries
+          entries = instance_entries + rail_entries + manual_entries + huge_entries + attic_entries
           count, seconds, unmeasured = resync_remainder(entries)
           Result.new(entries: entries, threshold: @threshold, resync_count: count,
                      resync_seconds: seconds, resync_unmeasured: unmeasured)
@@ -119,9 +122,22 @@ module Nabu
           end
         end
 
+        # Manual-class trees ride the set whatever their size (owner ruling
+        # 2026-11-17): "the rest re-synced from source" cannot cover a
+        # source upstream serves only to a human — re-acquisition costs
+        # human hours, not compute, so the tree is carried by class.
+        def manual_entries
+          by_class(:manual).filter_map do |slug|
+            tree = File.join(@canonical_dir, slug)
+            next unless Dir.exist?(tree)
+
+            entry(tree, "manual acquisition — human-hours to re-acquire, no unattended route")
+          end
+        end
+
         def huge_entries
           wired_slugs = @registry.each_source.select(&:wired).map(&:slug)
-          (wired_slugs - by_class(:rail_paced)).sort.filter_map do |slug|
+          (wired_slugs - by_class(:rail_paced) - by_class(:manual)).sort.filter_map do |slug|
             seconds = Eta.last_sync(@ledger, slug: slug)&.seconds
             next unless seconds && seconds >= @threshold
 
@@ -135,7 +151,7 @@ module Nabu
         # Attic subtrees of sources whose whole tree is not already in the
         # set: the only strictly backup-only bytes a re-syncable source has.
         def attic_entries
-          covered = by_class(:rail_paced) + huge_slugs
+          covered = by_class(:rail_paced) + manual_entries.map { |e| File.basename(e.path) } + huge_slugs
           @verdicts.select(&:attic).map(&:slug).sort.filter_map do |slug|
             next if covered.include?(slug)
 
