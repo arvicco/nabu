@@ -88,7 +88,7 @@ ancient-near-east:
   - hmml-reading-room
   - ociana
 ugarit: [rsti]
-hebrew-aramaic: [oshb, bhsa, dss, extrabiblical, etcbc-targum, sefaria, iip, dtucph-sp, dicta-bavli, dicta-library, pgp-geniza]
+hebrew-aramaic: [oshb, bhsa, dss, extrabiblical, etcbc-targum, sefaria, iip, dtucph-sp, dicta-bavli, dicta-library, pgp-geniza, ben-yehuda]
 elephantine: [elephantine]
 arabic-persian: [openiti, ganjoor, diccas]
 iranian-silk-road: [iedc, skjaervo-khotanese, shkz, perseus-farsilit]
@@ -97,7 +97,7 @@ egyptian: [aes, tla-hf]
 ethiopic: [betamasaheft-works, traces]
 pre-roman-italy: [ceipom, itant, open-etruscan, tir, lexlep, isicily]
 aegean: [damos, sigla, ig-cyprus]
-biblical-editions: [vulgate, sblgnt, eng-web, ebible-pacific]
+biblical-editions: [vulgate, sblgnt, stepbible-tagnt, opengnt, macula-greek, eng-web, ebible-pacific]
 old-english: [aspr, perseus-anglit]
 middle-early-modern-english: [cme, eebo-tcp, evans-tcp, ecco-tcp, emmo, stationers-register, statutes-realm, blbooks]
 slavic:

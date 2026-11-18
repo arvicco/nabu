@@ -252,12 +252,12 @@ class MaculaGreekTest < Minitest::Test
 
   # --- registry -----------------------------------------------------------------
 
-  def test_registry_row_exists_unwired_with_manual_sync_policy
+  def test_registry_row_exists_wired_with_manual_sync_policy
     registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources.yml", __dir__))
     entry = registry["macula-greek"]
     refute_nil entry, "config/sources.yml must register macula-greek"
     assert_equal Nabu::Adapters::MaculaGreek, entry.adapter_class
-    refute entry.wired, "unwired until the first real sync is verified"
+    assert entry.wired, "wired after the verified first sync"
     assert_equal "manual", entry.sync_policy
     assert_equal Nabu::Adapters::MaculaGreek.manifest, entry.manifest
   end

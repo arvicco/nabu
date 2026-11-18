@@ -271,12 +271,12 @@ class OpengntTest < Minitest::Test
 
   # --- registry round-trip -------------------------------------------------------
 
-  def test_registry_row_is_unwired_manual_on_the_biblical_axis
+  def test_registry_row_is_wired_manual_on_the_biblical_axis
     registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources.yml", __dir__))
     entry = registry["opengnt"]
     refute_nil entry, "opengnt must be registered in config/sources.yml"
     assert_equal Nabu::Adapters::Opengnt, entry.adapter_class
-    refute entry.wired, "unwired until the first real sync is verified"
+    assert entry.wired, "wired after the verified first sync"
     assert_equal "manual", entry.sync_policy
     assert_equal ["biblical"], entry.axes
     assert_equal Nabu::Adapters::Opengnt.manifest, entry.manifest

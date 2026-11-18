@@ -277,12 +277,12 @@ class BenYehudaTest < Minitest::Test
     assert_equal revisions, catalog[:documents].select_hash(:urn, :revision)
   end
 
-  def test_registry_resolves_ben_yehuda_unwired
+  def test_registry_resolves_ben_yehuda_wired
     registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources.yml", __dir__))
     entry = registry["ben-yehuda"]
     refute_nil entry
     assert_equal ADAPTER, entry.adapter_class
-    refute entry.wired, "wired: false until the first real sync is verified"
+    assert entry.wired, "wired after the verified first sync"
   end
 
   private
