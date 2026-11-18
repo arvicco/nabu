@@ -1,0 +1,103 @@
+TAHOT Gen-Deu - Translators Amalgamated Hebrew OT - STEPBible.org CC BY.txt
+TAHOT Jos-Est - Translators Amalgamated Hebrew OT - STEPBible.org CC BY.txt
+TAHOT Job-Sng - Translators Amalgamated Hebrew OT - STEPBible.org CC BY.txt
+TAHOT Isa-Mal - Translators Amalgamated Hebrew OT - STEPBible.org CC BY.txt
+(This is saved as 4  files because a single file too large for Github)																
+=================================================																
+																
+	==============================================================															
+	Data created by www.STEPBible.org based on work at Tyndale House Cambridge (CC BY 4.0)															
+	==============================================================												
+	This licence allows you to:												
+	* Include any part of this data in software or publications and send it to AI servers  without requesting permission 												
+	* Download the data and reformat it for your application												
+	* Send any proposed corrections to STEPBible@Gmail.com to be verified 												
+	  (You MAY make changes yourself, but you should include a note of changes that can be viewed by those who use your new data)												
+	* Attribute the data to Tyndale House and STEPBible.org, and include a link to STEPBible.github.io/STEPBible-Data as the source of this data. 												
+	 Please do not post copies of this data file elsewhere, so that this remains the single up-to-date source"												
+	* We'd love to hear about your project and add it to our Partners Page when you make it available. Email us at STEPBible@Gmail.com.												
+	==============================================================												
+																
+Translators Amalgamated Hebrew OT tagged with disambiguated Strongs extended for BDB including tags for prefixes & suffixes, with ETCBC morphology																
+This data is based on the exact Leningrad codex. Divergences from other important Hebrew manuscripts are recorded as variants. (see the list of abbreviaitons below). Each verse is displayed as word-per-line and also in  interlinear format. 
+This data aims to represents the text actually used by Bible translators, which is occasionally is different to that found in the Leningrad codex. Therefore this text deviates from Leningrad when it 1) follows the Qere, 2) Restores missing text and 3) Adds words preserved in the LXX if they are used by translators.  																
+1) The Qere ('spoken') is the scribal marginal corrections which are generally followed by the KJV and all subsequent translators. The Ketiv (ie the text that  the Qere replaces) is recorded as a variant.  These are recorded as "Q" & "K", with "L" recording the actual text of Leningrad which consists of the letters of K with the pointing of Q																
+The Qere recorded here are all those in the Leningrad condex plus some from others manuscripts that are listed in the BHS apparatus (ie Gen.9.21#07; Gen.12.8#08; Gen.33.4#07; Gen.35.21#04; Exo.32.17#06; Exo.35.11#12; Lev.23.13#11; Num.3.51#05; Deu.27.10#07; Jdg.19.13#03; Jdg.19.21#03; 1Sa.18.14#04; 1Sa.18.22#04; 2Sa.13.33#15; 1Ki.17.15; 2Ki.19.23#21; 2Ki.20.13#08; 2Ch.35.4#01; 2Ch.36.14#07; Ezr.4.11#10; Est.4.4#01; Psa.21.2#07; Psa.123.4#08; Pro.6.13#02; Pro.6.13#04; Pro.23.3#02; Isa.58.14#07; Jer.2.3#05; Jer.15.8#03; Jer.22.18#24; Jer.27.20; Lam.3.25#03; Ezk.3.20#18; Ezk.31.18#25; Ezk.32.32#15; Ezk.39.11#24; Ezk.40.31#01; Ezk.43.11#12; Ezk.43.15#04; Ezk.44.3#07; Dan.2.29#01; Dan.2.31#01; Dan.2.37#01; Dan.2.38#14; Dan.4.22#21; Dan.4.22#27; Dan.4.29#22; Dan.6.1#02; Hab.3.4#09; Zec.2.8#02)
+2) Restoration of text is necessary at Jos.21.36-37 & Neh.7.67b because these are missing in the Leningrad codex. They are restored from the text of 1Ch.6.63-64 and Ezr.2.66. They are marked as "R". 
+3) Additional words or phrases preserved in the LXX are converted back to Hebrew as in the apparatus of BHS & BHK. These are marked as "X". They occur at Gen.4.8; Num.26.40; Deu.30.16; Jdg.16.13,14; 1Sa.10.1; 13.1; 13.15; 1Sa.14.41; 2Sa.12.16; 13.34; 2Sa.15.8; 23.33; 2Sa.24.17; 2Ki.25.3; 1Ch.4.13; 6.27; 1Ch.6.28,59; 1Ch.6.60,77; 1Ch.7.25; 8.29; 1Ch.8.30; 9.41; 1Ch.21.17; 25.9; 2Ch.15.8; Ezr.8.5,10; Est.3.7; Psa.25.21; 56.7; Psa.145.13; Ecc.9.2;    																
+									
+																
+FIELD DESCRIPTIONS:																
+==============																
+Ref: Eng (+Heb)#Heb.words	Bible reference in English Bibles, as defined by the NRSV (with Heb refs in brackets when they are different). Word numbers of the Hebrew Ketiv text, dividing words by spaces and metheg. [Exception: at Gen.014.017#09 the name Kedorlaomer is uncharacteristically divided as Kedorlaomer ( כְּדָרְ\־לָעֹ֔מֶר ) except in Aleppo, so this is counted as one word despite the metheg.]
+	English verses occasionally start a verse on a different word - i.e. Num.26.1; 1Sa.21.1; 1Ki.18.33; 20.3; 22.22; 22.43; 1Ch.12.4; Isa.64.1; and Psalm Titles (v.0).															
+Text type: 	L=Leningrad text; Q=Qere scribal corrections; K=original text; R=Restored text (ie Jos.21.36-37; Neh.7.67b); X=extra text from LXX as reconstructed in BHS or BHK. Other letters are used for variants - see the list below. Brackets indicate a variant  which is in lower case if it might not affect the translation.  
+	Translators normally follow L, and when this presents a choice between Q and K they follow Q, so K is presented as a variant. If there is more than one variant they are separated by "+" - eg:Neh.2.13#17=Q(K+B) indicates that this Hebrew word follows the Qere and has two variants: the Ketiv (which in this case is upper case "K" to indicate it is different enough to affect the translation), and the BHS which records the Leningrad text differently than Tyndale scholars, and this affects the translation.  If two sources record the same variant they simply follow each other - eg "=LA(HC+b) indicates the text follows Leningrad which is identical to Aleppo while there is a significant variant that is found in both Ben Haim and Cairensis and a different variant in BHS that is non-significant - ie it isn't sufficiently different to change the meaning so it is recorded in lower case. 
+Hebrew	Full Hebrew including pointing, cantillation and punctuation  with forward slash ( / ) separating prefixes and suffixes from the root word and backward slash ( \ ) separating punctuation. 															
+	This Hebrew was derived from Westminster Leningrad text WLC 4.20 via OpenScriptures, checked against the Stugartensia electronic text, then occasionally corrections towards the Leningrad Codex by BHS or by Tyndale scholars. It is, essentially, a corrected version of BHS. 															
+English translation:  	Forward slash ( / ) separates the translation to mirror the prefixes, root and suffixes in Hebrew. This means the order of English words follows the order within the Hebrew word.  															
+	Words in <angle brackets> are in the Hebrew but are best not  included in a translation. Words in [square brackets] aren't in the Hebrew but are implied and are best included in a translation. 															
+dStrongs	Lexical tags for each element of the Hebrew words, including prefixes and suffixes, with the Root in {curly brackets}. A "+" indicates the same tag also covers the next Hebrew word. These disambiguated Strong numbers (dStrong)  are defined at TinyURL.com/STEP-Disambiguated. 
+Grammar	Morphology is from ETCBC, with Ketiv forms parsed by Tyndale scholars - see e.g. Deu.33.2-15.   For the source of ETCBC and conversion method by Tyndale House, see https://goo.gl/yKaXQq#HebMorph2															
+	Morphology codes follow the form defined by OpenScriptures at http://openscriptures.github.io/morphhb/parsing/HebrewMorphologyCodes.html#vt with some adaptations - see TinyURL.com/HebMorph															
+Meaning variant	These are significant variants that are adopted by standard Bible translations which can result in a different translation.  															
+	The difference may not be reflected in translations. For example, Ruth 3.14 has Ketiv "his foot" replaced by Qere "his feet" (because single 'foot' is a euphamism for penis). This verse also has "before" spelled as בִּ/טְרוֹם in Ketiv and בְּ/טֶ֛רֶם in Qere. Both are recorded in detail even though they make little or no difference in most translations.  															
+Spelling variants	These spelling differences have no effect on the meaning, and are not recorded in the Interlinear layout. 															
+sStrong+Instance	Simple Strongs (sStrongs) are the original Strong numbers in 4-digits, without the appended "A", "B" etc for by which OpenScripture.org mirrored the BDB lexicon, and without the "A", "B" etc of disambiguation.  
+	They are appended with Instance markerss (eg  "_A" etc) to allow these to be upgraded to disambiguated tags with full morphology - see the methodology at www.TinyURL.com/UpgradingTags															
+Alt Strongs	Alternate ways to tag the same word using Strongs tags. Differences are usually due to different interpretations of the Hebrew root. The purpose of this and the sStrong+Instance is to help line up this data with other tagged Bibles.  														
+Conjoin word	Not yet implemented															
+Expanded Strong tags 	A copy of the dStrong tags with additional tags for punctuation elements. Each tag is accompanied by the lexical form in Heberew, an English gloss, and its sub-meaning after " » " where appropriate. 															
+	People and place names have unique IDs such as "Abram»Abraham@Gen.11.26-1Pe" which means: in this location the name given is Abram but the most common name is Abraham. This individual occurs first at Gen.11.26 and last in 1Peter. The ID and the accompanying dStrong number belongs to only one individual who is distinct from anyone else who shares any of their names. 															
+
+Abbreviations for sources of each word: 																
+=========================																
+L= Leningrad manuscript																
+R= restored text based on Leningrad parallels - ie Jos.21.36-37 from 1Ch.6.63-64 and Neh.7.67b from Ezr.2.66																
+X= "based on Greek sources" - ie extra words based on LXX, expressed in Hebrew as in the apparatus of BHS pr BHK - eg 1Sa.13.1 Saul was שְׁלֹשִׁים שָׁנָ֖ה ('a thirty year-old') not שָׁנָ֖ה ('a year-old') 																
+Q= "a Scribal corrections" ie the Qere ('spoken') corrections by scribes. This is made up of the letters in the margin and the pointing in the text.																
+    K= "the uncorrected text" - ie the Ketiv  ('written') is noted as a variant. This is made up of the letters in the text, pointed by Tyndale scholars. 																
+    L - the letters of K with pointing of Q, as found in Leningrad is recorded as a spelling variant. 																
+ - eg Gen.27.3 L= צָיִדה, K= צֵידָה ('food'), Q= צָיִד ('wild game')																
+																
+Abbreviations for other variants - in brackets after the source. If the variant doesn't change the meaning, it is noted in lower case, eg L(a) means this is the form found in Leningrad, where Aleppo is different but still has the same meaning. 																
+====================																
+A= "in the Aleppo manuscript" - eg Isa.27.2 חֶ֖מֶר ('wine') for חֶ֖מֶד ('delight')																
+B= "in the Biblia Hebraica Stuttgartensia" - ie BHS edition when it deviates from MT - eg Num.7.59 פְּדָה־צֽוּר (Pedah-zur') for פְּדָהצֽוּר ('Pedahzur')																
+C= "in the Cairensis manuscript" - eg 2Sa.11.1 הַמְּלָכִ֗ים ('kings') for הַמַּלְאֿכִ֗ים ('messengers')																
+D= "in a Dead Sea or Judean Desert manuscript"  - eg Psa.22.16(17) כָּ֝אֲרוּ ('they dug') for כָּ֝אֲרִ֗י ('like a lion')																
+E=  "an emendation of ancient sources" - ie a scholarly guess at the original when the Hebrew looks garbled  - eg Gen.37.36 וְהַמִדְיָנִים (and the Midianites) for וְהַמְּדָנִים ('and the Medanites)																
+F= "formatting the text differently" - ie changing  pointing or word divisions without changing any letters - eg 1Ch.24.26,27 בְנוֹ ('his son') for בְנוֹ ('Beno')																
+H= "in the Ben Chaim edtion" - ie the Second Rabbinic Bible - eg Gen.25.15 חֲדַ֣ר ('Hadar') for חֲדַ֣ד ('Hadad')																
+P= "with alternate punctuation" - as marked in major manuscripts  - eg in Gen.35.22  "Israel heard of it; and Jacob had 12 son" for "the concubine of his father; and Israel heard of it. And Jacob had 12 sons. 																
+S= "in Scribal traditions" - ie  in Itture Sopherim, Tiqqune Sopherim, Masora etc based on On the correction of the text of the Hebrew Scriptures by Heimann Jolowicz at https://www.google.co.uk/books/edition/On_the_Correction_of_the_Text_of_the_Heb/fmfE-R0b2UgC - eg Gen.18.22 "Yahweh.. before Abraham" for "Abraham... before Yahweh". 																
+V = "a variant in some manuscripts" - ie variants in Hebrew manuscripts other than those above - eg Zep.3.15 תִרְאִי ('you will see') for תִירְאִי ('you will fear')																
+(Most of these variants are yet to be added. )																
+																
+																
+# Job.1.1	'ish (אִ֛ישׁ)	ha.Yah (הָיָ֥ה)	ve.'e.retz- (בְאֶֽרֶץ־)	'utz (ע֖וּץ)	'i.Yov (אִיּ֣וֹב)	she.Mo (שְׁמ֑וֹ)	ve.ha.Yah (וְהָיָ֣ה׀)	ha.'Ish (הָאִ֣ישׁ)	ha.Hu' (הַה֗וּא)	tam (תָּ֧ם)						
+#_Translation	a man	he was	in/ [the] land of	Uz	[was] Job	name/ his	and/ he was	the/ man	<the>/ that	blameless						
+#_Word+Grammar	H0376G=HNcmsa	H1961=HVqp3ms	H9003/H0776G=HR/Ncfsc	H5780J=HNpl	H0347=HNpm	H8034/H9023=HNcmsc/Sp3ms	H9001/H1961=Hc/Vqq3ms	H9009/H0376G=HTd/Ncmsa	H9009/H1931=HTd/Pp3ms	H8535=HAamsa						
+#_Significant variant																
+#_Job.1.1	ve.ya.Shar (וְיָשָׁ֛ר)	vi.Re' (וִירֵ֥א)	'E.lo.Him (אֱלֹהִ֖ים)	ve.Sar (וְסָ֥ר)	me.Ra' (מֵרָֽע׃)											
+#_Translation	and/ upright	and/ fearing	<of> God	and/ turning aside	from/ evil											
+#_Word+Grammar	H9002/H3477G=HC/Aamsa	H9002/H3373=HC/Aamsc	H0430G=HNcmpa	H9002/H5493I=HC/Vqrmsa	H9006/H7451B=HR/Aamsa											
+#_Significant variant																
+																
+Eng (Heb) Ref & Type	Hebrew	Transliteration	Translation	dStrongs	Grammar	Meaning Variants	Spelling Variants	Root dStrong+Instance	Alternative Strongs+Instance	Conjoin word	Expanded Strong tags					
+Job.1.1#01=L	אִ֛ישׁ	'ish	a man	{H0376G}	HNcmsa			H0376G_A			{H0376G=אִישׁ=: man»man:1_man}					
+Job.1.1#02=L	הָיָ֥ה	ha.Yah	he was	{H1961}	HVqp3ms			H1961_A			{H1961=הָיָה=to be}					
+Job.1.1#03=L	בְ/אֶֽרֶץ\־	ve./'e.retz-	in/ [the] land of	H9003/{H0776G}\H9014	HR/Ncfsc			H0776G			H9003=ב=in/{H0776G=אֶ֫רֶץ=: country;_planet»land:2_country;_planet}\H9014=־=link					
+Job.1.1#04=L	ע֖וּץ	'utz	Uz	{H5780J}	HNpl			H5780J			{H5780J=עוּץ=Uz»Uz@Job.1.1-Lam}					
+Job.1.1#05=L	אִיּ֣וֹב	'i.Yov	[was] Job	{H0347}	HNpm			H0347			{H0347=אִיּוֹב=Job»Job@Job.1.1-Jas}					
+Job.1.1#06=L	שְׁמ֑/וֹ	she.M/o	name/ his	{H8034}/H9023	HNcmsc/Sp3ms			H8034			{H8034=שֵׁם=name}/H9023=Ps3m=his					
+Job.1.1#07=L	וְ/הָיָ֣ה\׀	ve./ha.Yah	and/ he was	H9001/{H1961}\H9015	Hc/Vqq3ms			H1961_B			H9001=ו=&/{H1961=הָיָה=to be}\H9015=׀=separate					
+Job.1.1#08=L	הָ/אִ֣ישׁ	ha./'Ish	the/ man	H9009/{H0376G}	HTd/Ncmsa			H0376G_B			H9009=ה=the/{H0376G=אִישׁ=: man»man:1_man}					
+Job.1.1#09=L	הַ/ה֗וּא	ha./Hu'	<the>/ that	H9009/{H1931}	HTd/Pp3ms			H1931			H9009=ה=the/{H1931=הוּא=he;_she;_it}					
+Job.1.1#10=L	תָּ֧ם	tam	blameless	{H8535}	HAamsa			H8535			{H8535=תָּם=complete}					
+Job.1.1#11=L	וְ/יָשָׁ֛ר	ve./ya.Shar	and/ upright	H9002/{H3477G}	HC/Aamsa			H3477G			H9002=ו=and/{H3477G=יָשָׁר=: upright»upright:1_right}					
+Job.1.1#12=L	וִ/ירֵ֥א	vi./Re'	and/ fearing	H9002/{H3373}	HC/Aamsc			H3373			H9002=ו=and/{H3373=יָרֵא=afraid}					
+Job.1.1#13=L	אֱלֹהִ֖ים	'E.lo.Him	<of> God	{H0430G}	HNcmpa			H0430G			{H0430G=אֱלֹהִים=God»LORD@Gen.1.1-Heb}					
+Job.1.1#14=L	וְ/סָ֥ר	ve./Sar	and/ turning aside	H9002/{H5493I}	HC/Vqrmsa			H5493I			H9002=ו=and/{H5493I=סוּר=: turn_aside»to turn aside:3_turn_aside;_deflect}					
+Job.1.1#15=L	מֵ/רָֽע\׃	me./Ra'	from/ evil	H9006/{H7451B}\H9016	HR/Aamsa			H7451B			H9006=מ=from/{H7451B=רַע=evil}\H9016=׃=verseEnd					
+																

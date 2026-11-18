@@ -15,7 +15,8 @@ class GlossLinesTest < Minitest::Test
   # language — never sniffed from the data.
   def test_the_lane_reads_the_token_gloss_declarations
     assert_equal TG.sources, GL.slugs
-    assert_equal({ "bhsa" => "en", "aes" => "de", "achemenet" => "en", "tlhdig" => "de", "ceipom" => "en" },
+    assert_equal({ "bhsa" => "en", "aes" => "de", "achemenet" => "en", "tlhdig" => "de", "ceipom" => "en",
+                   "macula-greek" => "en" },
                  GL.slugs.to_h { |slug| [slug, GL.language(slug)] })
     assert GL.registered?("bhsa")
     refute GL.registered?("tla-hf"), "grammatical Leipzig labels are not a gloss line"

@@ -1,0 +1,30 @@
+# Nabu fixture manifest. Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+source: stepbible-tagnt
+# adapter_test is null: every fixture is a documented TRIM (whole: false) —
+# a count-based adapter test re-run against the untrimmed upstream files
+# would false-fail.
+adapter_test: null
+retrieved: 2026-11-18
+files:
+  - path: Mat-Jhn/TAGNT Mat-Jhn - Translators Amalgamated Greek NT - STEPBible.org CC-BY.txt
+    url: https://raw.githubusercontent.com/STEPBible/STEPBible-Data/5de0a47f35f0fc13dfe1430d104e5db8a4285f9c/Translators%20Amalgamated%20OT%2BNT/TAGNT%20Mat-Jhn%20-%20Translators%20Amalgamated%20Greek%20NT%20-%20STEPBible.org%20CC-BY.txt
+    whole: false
+    trim: >-
+      byte-identical excerpt in upstream line order — the header (lines
+      1-88) + the verse blocks of Mat 1:1-2, 6:13, 15:6, 17:20-21 and
+      John 1:1-2. Pinned at commit 5de0a47f35f0fc13dfe1430d104e5db8a4285f9c.
+  - path: Act-Rev/TAGNT Act-Rev - Translators Amalgamated Greek NT - STEPBible.org CC-BY.txt
+    url: https://raw.githubusercontent.com/STEPBible/STEPBible-Data/5de0a47f35f0fc13dfe1430d104e5db8a4285f9c/Translators%20Amalgamated%20OT%2BNT/TAGNT%20Act-Rev%20-%20Translators%20Amalgamated%20Greek%20NT%20-%20STEPBible.org%20CC-BY.txt
+    whole: false
+    trim: >-
+      byte-identical excerpt in upstream line order — the header (lines
+      1-90) + the verse blocks of Act 1:1, 5:39, Jas 5:3, 3 John whole and
+      Rev 22:21 (through end of file). Same pin.
+  - path: TAHOT-Job-Sng/TAHOT Job-Sng - Translators Amalgamated Hebrew OT - STEPBible.org CC BY.txt
+    url: https://raw.githubusercontent.com/STEPBible/STEPBible-Data/5de0a47f35f0fc13dfe1430d104e5db8a4285f9c/Translators%20Amalgamated%20OT%2BNT/TAHOT%20Job-Sng%20-%20Translators%20Amalgamated%20Hebrew%20OT%20-%20STEPBible.org%20CC%20BY.txt
+    whole: false
+    trim: >-
+      the rejected-grain specimen — the first 103 lines (header + Job 1:1)
+      of the TAHOT Job-Song file, kept so the adapter test asserts the OT
+      Hebrew grain is skipped by rule. Same pin.

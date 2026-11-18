@@ -1,0 +1,326 @@
+﻿TAGNT Mat-Jhn - Translators Amalgamated Greek NT -  STEPBible.org CC BY 4.0																
+TAGNT Act-Rev - Translators Amalgamated Greek NT -  STEPBible.org CC BY 4.0																
+(This is saved as 2  files because a single file too large for Hithub)																
+=================================================																
+All the words from standard Greek editions (NA27/28, TR, SBL, TH, Byz, WH, Treg) with translations, grammar, sources & variants that affect translation																
+=================================================================================================																
+Introduction & Abbreviations at: 	TinyURL.com/TAGNT-Intro															
+Spreadsheet version at: 	https://docs.google.com/spreadsheets/d/1Uri4ehqXnzUa97uvH-1-C022708HhLQ1a541Hsnlt70/edit															
+																
+	==============================================================															
+	Data created by www.STEPBible.org based on work at Tyndale House Cambridge (CC BY 4.0)															
+	==============================================================												
+	This licence allows you to:												
+	* Include any part of this data in software or publications and send it to AI servers  without requesting permission 												
+	* Download the data and reformat it for your application												
+	* Send any proposed corrections to STEPBible@Gmail.com to be verified 												
+	  (You MAY make changes yourself, but you should include a note of changes that can be viewed by those who use your new data)												
+	* Attribute the data to Tyndale House and STEPBible.org, and include a link to STEPBible.github.io/STEPBible-Data as the source of this data. 												
+	 Please do not post copies of this data file elsewhere, so that this remains the single up-to-date source"												
+	* We'd love to hear about your project and add it to our Partners Page when you make it available. Email us at STEPBible@Gmail.com.												
+	==============================================================												
+																
+==============================================================																
+Translators Amalgamated Greek New Testament - with translations, grammar, editions & variants																
+==============================================================																
+All the words from different Greek editions, reflecting all the translations of the Bible, 																
+with all the variants having a difference that affect translation.																
+																
+																
+																
+Summary of words included in the Amalgamated Greek NT:																
+Types of words	NUMBERS FOUND IN TYPES OF MANUSCRIPTS	USAGE IN TYPES OF BIBLES	SIGNIFICANCE	OTHER VARIANTS
+NKO / NK(O) / NK(o)	133608 words that are identical in virtually all manuscripts 	Translated in almost all Bibles	94% of the total words	714 of which differ in Other manuscripts 
+N(K)(O) / N(k)(o) ...	3084 words that are different in Traditional manuscripts. 	Might be translated differently	470 of which alter the translation 	14 of which differ in Other manuscripts
+K(O) / k(o)	4164 words found in Traditional but not Ancient manuscripts	Translated in KJV-style Bibles	2347 of which alter the translation	33 of which differ in Other manuscripts 
+N(O) / n(o)	896 words found in Ancient but not Traditional manuscripts	Translated in modern Bibles	274 of which alter the translation 	3 of which differ in Other manuscripts 
+O / o	284 words in manuscripts different from Ancient and Traditional. 	Rarely translated in any Bible	111 of which alter the translation 
+
+N / "Ancient" = Greek in Nesté-Aland, translated by most Bibles.  	K / "Traditional" = Greek of the KJV or "Textus Receptus" based on Scrivener 1894.	O / "Others" = any different Greek in major editions or used by translations.
+Lower case "n" "k", "o" are differences that are too minor  to entail a different translation. Spelling differences and word order differences that don't affect the translation are recorded below but are not counted in these totals.
+																
+																
+																
+FIELD DESCRIPTIONS:																
+==============																
+																
+Reference:	Versification as used by NRSV. Differences are marked in square brackets for KJV, bround brackets for NA and curley brackets for others. NA is rarely different (Mrk.12.15; Act.13.39; Rom.3.26), but KJV often differs (Mat.17.14; 20.4; Mrk.3.19; Luk.1.74; 6.17; 7.19; Act.2.10; 3.19; 4.6; 5.40; 9.29; 19.41; 24.18; Rom.7.9; 9.11; 2Co.1.6; 8.13; 10.5; 13.13; 13.14; Gal.2.20; Eph.1.11; 2.15; 5.13; Php.2.8; Col.1.21; 1Th.1.3; 2.6; 2.11; Heb.3.9; 7.21; 12.23; 1Pe.3.15; Rev.2.27; 13.1; 17.10). Those for "others" are mostly from the Majority text (ie the NT of the Greek-speaking Orthodox church - at Mat.15.6; Rom.16.25-27; 2Co.1.7; Eph.1.10; Col.1.12 ) and a few modern Bibles (John.8.1; Col.1.12; 2Th.8.7; 1Tim.6.21);
+Word Type	Indicates where the word is found: N=Greek in Nestlé-Aland editions which as used by most modern translators, K=Greek used by the KJV translators based on Scrivener 1894; O=other Greek found in major editions but rarely translated. 
+	See Abbreviations below for more details.  															
+Greek: 	Spelling comes from NA28 when available, then from TR or the Other edition that has the word. Cases and final accents are based on the punctuation which follows THGHT. Text follows NA27 which is followed by almost all translations, as tested by the significant variant οὐχ, “not” at the end of 2Pet.3.10 															
+English 	Based on Berean Study Bible, with permission, as at 1-July02019 and adapted for this work. 															
+dStrong	Backwardly compatible with standard Strongs and NASB tagging, as defined in the Brief Lexicon at https://STEPBible.github.io/STEPBible-Data/. Disambiguated as described at TinyURL.com/STEP-Disambiguated															
+Grammar	Based on James Tuaber, with addtional details by Tyndale scholars: persons added to Personal, Reflexive and Possessive pronouns; distinguish 2nd verbal forms (e.g. 2nd Aorist); distinguished betweeen "Passive", "Either middle or Passive", "Deponent"															
+ - some changes have been made, including: 																
+	ἐμοῦ  A-GSMN => P-1GS @ Jhn.016.015															
+	ευθυς =G2117 A-MNSM "straight" => G2112 ADV "immediately" @ Mat.003.016; Mat.013.20; Mat.013.21; Mrk.001.012; Mrk.001.028; Jhn.013.032; Jhn.019.034; Jhn.021.003															
+	V-PAI-3P changed to V-PAP-DPM except for  εισι[ν] (G1510) which is V-PAI-3P while οὖσι[ν] (G1510) is V-PAP-DPM															
+	τίς etc changed from I-NSM etc to X-MNSM etc at Act.025.014; 1Co.010.019; Heb.010.025, 27, 28; 11.040; 12.15x2, 16; 13.002; Jas.001.005, 7, 18, 23, 26; 2.014, 16, 18; 3.002; 5.013x2, 14x2; 5.019x2; 1Pe.002.019															
+	G4302 changed to G4277 when προειπον  is used, ie 45_Act.001.016-A, 49_Gal.005.021-A, 53_1Th.004.006-A															
+	G4302 changed to G4280 when προερέω is used, ie 41_Mat.024.025-A, 42_Mrk.013.023-INSTW, 42_Mrk.013.023-B, 46_Rom.009.029-A, 48_2Co.007.003-A, 48_2Co.013.002-A, 49_Gal.001.009-A, 59_Heb.004.007-IMNSTW, 59_Heb.010.015-B, 62_2Pe.003.002-A, 66_Jud.001.017-A, 															
+	ποῦ =G4225 => G4226 at 42_Mrk.015.047-A, 44_Jhn.001.039-A, 63_1Jn.002.011-A															
+Dictionary form & Gloss	From the TBESG - Tyndale Brief lexicon of Extended Strongs for Greek at https://STEPBible.github.io/STEPBible-Data/															
+Editions	Byz=Byzantine based on RP 2005;  NA27=Nestle-Aland 27th ed; NA28 2012 (not the same as ECM Acts - see eg Act.1.10 ἐσθῆτι in ECM); TR= Scrivener’s 1894; SBL= Holmes 2010; Treg= Tregelles 1879+Jongkind 2009; WH= Westcott+Hort 1881;  Tyn= Tyndale House GNT 2017. 															
+	Editions that have words in a different order are listed with the amount of displacement - eg  "moved »2: Treg"  indates displacement forward, by 2 words in the edition of Tregelles 1879. 															
+Variants	Includes every variant in the major editions and manuscript variants before AD 500 that are used by translators  															
+Spanish 	Based on  Marvel Bible Project as on 9-Jan-2019 from https://github.com/eliranwong/OpenGNT/blob/master/OpenGNT_BASE_TEXT.zip &  OpenGNT_keyedFeatures.csv.zip. This is expanded from the source which was available only for words in NA28. 															
+Sub-meanings: 	Words with more than one meaning are supplied with a context-sensitive sub-meaning. Individuals and Places are identified as in TIPNR. Other are based on CSG (Context Sensitive Gloss) from Marvel Bible Project as at 9-Jan-2019 from https://github.com/eliranwong/OpenGNT/blob/master/OpenGNT_BASE_TEXT.zip &  OpenGNT_keyedFeatures.csv.zip															
+Conjoined data: 	Links for words that might not be translated (eg articles and particles) to the word they are gramatically connected to, which may precede them (marked as «) or succeed them (marked »). sometimes with several intervening words. 															
+sStrong+Instance	Simple Strongs (sStrongs) are the numbers found in simpler tagged BIbles - ie without the letters added by NASB tagging or STEPBible disambiguation. 															
+	Instances mark more than one occurrence of the same sStrong in the same verse: "_A" is appended for the 1st instance  (eg G1234_A), "_B" for the 2nd instance etc. A lower case (eg "_b") indicates the word may not be included in some tagged Bibles, because it is not found in all manuscripts or because there is also an alternate way to tag this word. 															
+Alt Strongs	Alternate ways to tag the same word using Strongs tags. Differences can be due to variants, joined words (eg κἀγώ can be tagged as G2532 + G1473 or G2504) or tags for common forms of the same word (eg 'he is' and 'they are' instead of 'to be')															
+	Instances here and for sStrong help line up this data with other tagged Bibles - see https://docs.google.com/document/d/1wVZPX1ROtUt53Ur5bkzKcDjKwwynbqOl-ZMpokX0R3Q/preview															
+Variant Notes	"v"=Variant - when some manuscripts have significantly different wording. "^"=Extra text - when some manuscripts have text not found in others. Manuscript readings that are translated by the KJV are labelled "traditional"; those that agree with NA27 are labelled "older"; and others are labelled as "a few". 															
+	Insignificant manuscript differences are not noted - ie those which only change spelling, or re-order of the words without changing the meaning, or don't change the way the text is translated, or the editions consider to be a scribal error or eccentricity and therefore not a possible reading of the original text. 															
+	When more than one word is involved, a "v" or "^" marks each word and the note is placed on the last one. 															
+																
+Abbreviations for sources of each word: 																
+=========================																
+NKO indicates that all editions include the same vocabulary and grammar, though the spelling may sometimes vary
+N=words found in NA27 expressed in the spelling of NA28, which is used by most modern translators																
+K=KJV translators' text based on the 'Textus Receptus' (TR) of Scrivener’s 1894 with some corrections when the KJV translation sometimes follows a different Greek text. 																
+O=Other extra words and variants that are used by neither the KJV nor most modern translations. 																
+Brackets indicate a variant. Lower case is used when a difference in vocabulary or grammar is too minor to necessarily affect the translation - 
+eg N(k)O indicates NA27/28 has the same Greek as other editions, though the text behind the KJV is different in a minor way that may not be evident as a different translation
+																
+																
+==================================================================================================================================================================================================================================================================================================================================																
+																
+# Mat.1.1	Βίβλος 	γενέσεως 	Ἰησοῦ 	Χριστοῦ 	υἱοῦ 	Δαυὶδ 	υἱοῦ 	Ἀβραάμ. 								
+#_Translation	[The] book	of [the] genealogy	of Jesus	Christ	son	of David	son	of Abraham.								
+#_Word=Grammar	G0976=N-NSF	G1078=N-GSF	G2424G=N-GSM-P	G5547=N-GSM-T	G5207=N-GSM	H1732|G1138«G1138=N-GSM-P	G5207=N-GSM	H0085|G0011«G0011=N-GSM-P								
+#_Significant variant																
+																
+Word & Type	Greek	English translation	dStrongs = Grammar	Dictionary form =  Gloss	editions	Meaning variants	Spelling variants	Spanish translation	Sub-meaning	Conjoin word	sStrong+Instance	Alt Strongs				
+Mat.1.1#01=NKO	Βίβλος (Biblos)	[The] book	G0976=N-NSF	βίβλος=book	NA28+NA27+Tyn+SBL+WH+Treg+TR+Byz			Libro	book	#01	G0976					
+Mat.1.1#02=NKO	γενέσεως (geneseōs)	of [the] genealogy	G1078=N-GSF	γένεσις=origin	NA28+NA27+Tyn+SBL+WH+Treg+TR+Byz			de origen	origin	#02	G1078					
+Mat.1.1#03=NKO	Ἰησοῦ (Iēsou)	of Jesus	G2424G=N-GSM-P	Ἰησοῦς=Jesus/Joshua	NA28+NA27+Tyn+SBL+WH+Treg+TR+Byz			de Jesús	Jesus»Jesus|Jesus@Mat.1.1	#03	G2424					
+Mat.1.1#04=NKO	Χριστοῦ (Christou)	Christ	G5547=N-GSM-T	Χριστός=Christ	NA28+NA27+Tyn+SBL+WH+Treg+TR+Byz			Ungido	Christ»Christ|Jesus@Mat.1.1	#04	G5547					
+Mat.1.1#05=NKO	υἱοῦ (huiou)	son	G5207=N-GSM	υἱός=son	NA28+NA27+Tyn+SBL+WH+Treg+TR+Byz			hijo	son	#05	G5207_A					
+Mat.1.1#06=NKO	Δαυὶδ (Dauid)	of David	G1138=N-GSM-P	Δαυείδ, Δαυίδ, Δαβίδ=David	NA28+NA27+Tyn+SBL+WH+Treg+TR+Byz		Tyn+WH: Δαυεὶδ ; +TR: Δαβὶδ ; 	de David	David»David|David@Rut.4.17	#06	G1138					
+Mat.1.1#07=NKO	υἱοῦ (huiou)	son	G5207=N-GSM	υἱός=son	NA28+NA27+Tyn+SBL+WH+Treg+TR+Byz			hijo	son	#07	G5207_B					
+Mat.1.1#08=NKO	Ἀβραάμ. (Abraam)	of Abraham.	G0011=N-GSM-P	Ἀβραάμ=Abraham	NA28+NA27+Tyn+SBL+WH+Treg+TR+Byz		Tyn: Ἁβραάμ ; 	de Abrahán	Abraham»Abraham|Abraham@Gen.11.26	#08	G0011					
+																
+# Mat.1.2	Ἀβραὰμ 	ἐγέννησεν 	τὸν 	Ἰσαάκ· 	Ἰσαὰκ 	δὲ 	ἐγέννησεν 	τὸν 	Ἰακώβ· 	Ἰακὼβ 						
+#_Translation	Abraham	begat	<the>	Isaac;	Isaac	then	begat	<the>	Jacob;	Jacob						
+#_Word=Grammar	H0085|G0011«G0011=N-NSM-P	G1080=V-AAI-3S	G3588=T-ASM	H3327|G2464«G2464=N-ASM-P	H3327|G2464«G2464=N-NSM-P	G1161=CONJ	G1080=V-AAI-3S	G3588=T-ASM	H3478|G2384H«G2384=N-ASM-P	H3478|G2384H«G2384=N-NSM-P						
+#_Significant variant																
+#_Mat.1.2	δὲ 	ἐγέννησεν 	τὸν 	Ἰούδαν 	καὶ 	τοὺς 	ἀδελφοὺς 	αὐτοῦ· 								
+#_Translation	then	begat	<the>	Judah	and	the	brothers	of him;								
+#_Word=Grammar	G1161=CONJ	G1080=V-AAI-3S	G3588=T-ASM	H3063G|G2455N«G2455=N-ASM-P	G2532=CONJ	G3588=T-APM	G0080=N-APM	G0846=P-GSM								
+#_Significant variant																
+																
+Word & Type	Greek	English translation	dStrongs = Grammar	Dictionary form =  Gloss	editions	Meaning variants	Spelling variants	Spanish translation	Sub-meaning	Conjoin word	sStrong+Instance	Alt Strongs				
+Mat.1.2#01=NKO	Ἀβραὰμ (Abraam)	Abraham	G0011=N-NSM-P	Ἀβραάμ=Abraham	NA28+NA27+Tyn+SBL+WH+Treg+TR+Byz		Tyn: Ἁβραὰμ ; 	Abrahán	Abraham»Abraham|Abraham@Gen.11.26	#01	G0011					
+Mat.1.2#02=NKO	ἐγέννησεν (egennēsen)	begat	G1080=V-AAI-3S	γεννάω=to beget	NA28+NA27+Tyn+SBL+WH+Treg+TR+Byz			generó	to beget	#02	G1080_A					
+Mat.1.2#03=NKO	τὸν (ton)	<the>	G3588=T-ASM	ὁ=the/this/who	NA28+NA27+Tyn+SBL+WH+Treg+TR+Byz			a el	the	#03»04:G2464	G3588_A					
+Mat.1.2#04=NKO	Ἰσαάκ· (Isaak)	Isaac;	G2464=N-ASM-P	Ἰσαάκ=Isaac	NA28+NA27+Tyn+SBL+WH+Treg+TR+Byz			Isaac	Isaac»Isaac|Isaac@Gen.17.19	#04	G2464_A					
+Mat.1.2#05=NKO	Ἰσαὰκ (Isaak)	Isaac	G2464=N-NSM-P	Ἰσαάκ=Isaac	NA28+NA27+Tyn+SBL+WH+Treg+TR+Byz			Isaac	Isaac»Isaac|Isaac@Gen.17.19	#05	G2464_B					
+Mat.1.2#06=NKO	δὲ (de)	then	G1161=CONJ	δέ=but/and	NA28+NA27+Tyn+SBL+WH+Treg+TR+Byz			pero	and	#06	G1161_A					
+Mat.1.2#07=NKO	ἐγέννησεν (egennēsen)	begat	G1080=V-AAI-3S	γεννάω=to beget	NA28+NA27+Tyn+SBL+WH+Treg+TR+Byz			generó	to beget	#07	G1080_B					
+Mat.1.2#08=NKO	τὸν (ton)	<the>	G3588=T-ASM	ὁ=the/this/who	NA28+NA27+Tyn+SBL+WH+Treg+TR+Byz			a el	the	#08»09:G2384	G3588_B					
+Mat.1.2#09=NKO	Ἰακώβ· (Iakōb)	Jacob;	G2384H=N-ASM-P	Ἰακώβ=Jacob	NA28+NA27+Tyn+SBL+WH+Treg+TR+Byz			Jacob	Israel»Israel|Israel@Gen.25.26	#09	G2384_A					
+Mat.1.2#10=NKO	Ἰακὼβ (Iakōb)	Jacob	G2384H=N-NSM-P	Ἰακώβ=Jacob	NA28+NA27+Tyn+SBL+WH+Treg+TR+Byz			Jacob	Israel»Israel|Israel@Gen.25.26	#10	G2384_B					
+Mat.1.2#11=NKO	δὲ (de)	then	G1161=CONJ	δέ=but/and	NA28+NA27+Tyn+SBL+WH+Treg+TR+Byz			pero	and	#11	G1161_B					
+Mat.1.2#12=NKO	ἐγέννησεν (egennēsen)	begat	G1080=V-AAI-3S	γεννάω=to beget	NA28+NA27+Tyn+SBL+WH+Treg+TR+Byz			generó	to beget	#12	G1080_C					
+Mat.1.2#13=NKO	τὸν (ton)	<the>	G3588=T-ASM	ὁ=the/this/who	NA28+NA27+Tyn+SBL+WH+Treg+TR+Byz			a el	the	#13»14:G2455	G3588_C					
+Mat.1.2#14=NKO	Ἰούδαν (Ioudan)	Judah	G2455N=N-ASM-P	Ἰούδας=Judah/Judas/Jude	NA28+NA27+Tyn+SBL+WH+Treg+TR+Byz			Judá	Judah»Judah|Judah@Gen.29.35	#14	G2455					
+Mat.1.2#15=NKO	καὶ (kai)	and	G2532=CONJ	καί=and	NA28+NA27+Tyn+SBL+WH+Treg+TR+Byz			y	and	#15	G2532					
+Mat.1.2#16=NKO	τοὺς (tous)	the	G3588=T-APM	ὁ=the/this/who	NA28+NA27+Tyn+SBL+WH+Treg+TR+Byz			a los	the	#16»17:G0080	G3588_D					
+Mat.1.2#17=NKO	ἀδελφοὺς (adelphous)	brothers	G0080=N-APM	ἀδελφός=brother	NA28+NA27+Tyn+SBL+WH+Treg+TR+Byz			hermanos	brother	#17	G0080					
+Mat.1.2#18=NKO	αὐτοῦ· (autou)	of him;	G0846=P-GSM	αὐτός=he/she/it/self	NA28+NA27+Tyn+SBL+WH+Treg+TR+Byz			de él	his	#18«17:G0080	G0846	G3778				
+																
+# Mat.6.13	καὶ 	μὴ 	εἰσενέγκῃς 	ἡμᾶς 	εἰς 	πειρασμόν, 	ἀλλὰ 	ῥῦσαι 	ἡμᾶς 	ἀπὸ 						
+#_Translation	And	not	may you lead	us	into	temptation,	but	do deliver	us	from						
+#_Word=Grammar	G2532=CONJ	G3361=PRT-N	G1533=V-2AAS-2S	G3165=P-1AP	G1519=PREP	G3986G=N-ASM	G0235=CONJ	G4506=V-ADM-2S	G3165=P-1AP	G0575=PREP						
+#_Significant variant																
+#_Mat.6.13	τοῦ 	πονηροῦ 	ὅτι 	σοῦ 	ἐστιν 	ἡ 	βασιλεία 	καὶ 	ἡ 	δύναμις 						
+#_Translation	the	evil’	ˍˍSince	ˍˍof you	ˍˍis	ˍˍthe	ˍˍkingdom	ˍˍand	ˍˍthe	ˍˍpower						
+#_Word=Grammar	G3588=T-GSN	G4190=A-GSN	G3754H=CONJ	G4771=P-2GS	G1510=V-PAI-3S	G3588=T-NSF	G0932=N-NSF	G2532=CONJ	G3588=T-NSF	G1411=N-NSF						
+#_Significant variant																
+#_Mat.6.13	καὶ 	ἡ 	δόξα 	εἰς 	τοῦς 	αἰῶνας 	ἀμήν. 									
+#_Translation	ˍˍand	ˍˍthe	ˍˍglory	ˍˍinto	ˍˍthe	ˍˍages	ˍˍAmen.									
+#_Word=Grammar	G2532=CONJ	G3588=T-NSF	G1391=N-NSF	G1519=PREP	G3588=T-APM	G0165H=N-APM	G0281=INJ-HEB									
+#_Significant variant																
+																
+Word & Type	Greek	English translation	dStrongs = Grammar	Dictionary form =  Gloss	editions	Meaning variants	Spelling variants	Spanish translation	Sub-meaning	Conjoin word	sStrong+Instance	Alt Strongs				
+Mat.6.13#01=NKO	καὶ (kai)	And	G2532=CONJ	καί=and	NA28+NA27+Tyn+SBL+WH+Treg+TR+Byz			Y	and	#01	G2532_A					
+Mat.6.13#02=NKO	μὴ (mē)	not	G3361=PRT-N	μή=not	NA28+NA27+Tyn+SBL+WH+Treg+TR+Byz			no	not	#02»03:G1533	G3361					
+Mat.6.13#03=NKO	εἰσενέγκῃς (eisenegkēs)	may you lead	G1533=V-2AAS-2S	εἰσφέρω=to bring in	NA28+NA27+Tyn+SBL+WH+Treg+TR+Byz			lleves hacia dentro	to bring in	#03	G1533					
+Mat.6.13#04=NKO	ἡμᾶς (hēmas)	us	G3165=P-1AP	ἐγώ=I/we	NA28+NA27+Tyn+SBL+WH+Treg+TR+Byz			a nosotros	us	#04«03:G1533	G3165_A	G2248				
+Mat.6.13#05=NKO	εἰς (eis)	into	G1519=PREP	εἰς=toward	NA28+NA27+Tyn+SBL+WH+Treg+TR+Byz			hacia dentro	toward	#05	G1519_A					
+Mat.6.13#06=NKO	πειρασμόν, (peirasmon)	temptation,	G3986G=N-ASM	πειρασμός=temptation/testing	NA28+NA27+Tyn+SBL+WH+Treg+TR+Byz			puesta a prueba	: temptation»temptation/testing|1_temptation	#06	G3986					
+Mat.6.13#07=NKO	ἀλλὰ (alla)	but	G0235=CONJ	ἀλλά=but	NA28+NA27+Tyn+SBL+WH+Treg+TR+Byz			sino	but	#07	G0235					
+Mat.6.13#08=NKO	ῥῦσαι (rhusai)	do deliver	G4506=V-ADM-2S	ῥύομαι=to deliver	NA28+NA27+Tyn+SBL+WH+Treg+TR+Byz			libra rescatando	to deliver	#08	G4506					
+Mat.6.13#09=NKO	ἡμᾶς (hēmas)	us	G3165=P-1AP	ἐγώ=I/we	NA28+NA27+Tyn+SBL+WH+Treg+TR+Byz			a nosotros	us	#09«08:G4506	G3165_B	G2248				
+Mat.6.13#10=NKO	ἀπὸ (apo)	from	G0575=PREP	ἀπό=away from	NA28+NA27+Tyn+SBL+WH+Treg+TR+Byz			desde	from	#10	G0575					
+Mat.6.13#11=NKO	τοῦ (tou)	the	G3588=T-GSN	ὁ=the/this/who	NA28+NA27+Tyn+SBL+WH+Treg+TR+Byz			el	the	#11»12:G4190	G3588_A					
+Mat.6.13#12=NKO	πονηροῦ (ponērou)	evil’	G4190=A-GSN	πονηρός=evil/bad	NA28+NA27+Tyn+SBL+WH+Treg+TR+Byz			Maligno	evil	#12	G4190					
+Mat.6.13#13=K	ὅτι (hoti)	Since	G3754H=CONJ	ὅτι=that/since	TR+Byz			que	: since»that/since|2_since	#13	G3754		^ 			
+Mat.6.13#14=K	σοῦ (sou)	of you	G4771=P-2GS	σύ=you	TR+Byz			de ti	you	#14»15:G1510	G4771	G4675	^ 			
+Mat.6.13#15=K	ἐστιν (estin)	is	G1510=V-PAI-3S	εἰμί=to be	TR+Byz			está siendo	to be	#15	G1510	G2076	^ 			
+Mat.6.13#16=K	ἡ (hē)	the	G3588=T-NSF	ὁ=the/this/who	TR+Byz			la	the	#16»17:G0932	G3588_b		^ 			
+Mat.6.13#17=K	βασιλεία (basileia)	kingdom	G0932=N-NSF	βασιλεία=kingdom	TR+Byz			reino	kingdom	#17	G0932		^ 			
+Mat.6.13#18=K	καὶ (kai)	and	G2532=CONJ	καί=and	TR+Byz			y	and	#18	G2532_b		^ 			
+Mat.6.13#19=K	ἡ (hē)	the	G3588=T-NSF	ὁ=the/this/who	TR+Byz			la	the	#19»20:G1411	G3588_c		^ 			
+Mat.6.13#20=K	δύναμις (dunamis)	power	G1411=N-NSF	δύναμις=power	TR+Byz			poder	power	#20	G1411		^ 			
+Mat.6.13#21=K	καὶ (kai)	and	G2532=CONJ	καί=and	TR+Byz			y	and	#21	G2532_c		^ 			
+Mat.6.13#22=K	ἡ (hē)	the	G3588=T-NSF	ὁ=the/this/who	TR+Byz			la	the	#22»23:G1391	G3588_d		^ 			
+Mat.6.13#23=K	δόξα (doxa)	glory	G1391=N-NSF	δόξα=glory	TR+Byz			esplendor	glory	#23	G1391		^ 			
+Mat.6.13#24=K	εἰς (eis)	into	G1519=PREP	εἰς=toward	TR+Byz			hacia dentro	toward	#24	G1519_b		^ 			
+Mat.6.13#25=K	τοῦς (tous)	the	G3588=T-APM	ὁ=the/this/who	TR+Byz			a los	the	#25»26:G0165	G3588_e		^ 			
+Mat.6.13#26=K	αἰῶνας (aiōnas)	ages	G0165H=N-APM	αἰών=an age	TR+Byz			edades	: eternity»an age|2_eternity	#26	G0165		^ 			
+Mat.6.13#27=KO	ἀμήν. (amēn)	Amen.	G0281=INJ-HEB	ἀμήν=amen	TR+Byz			amén	amen	#27	G0281		^ ὅτι   σοῦ    ἐστιν    ἡ    βασιλεία    καὶ    ἡ    δύναμις    καὶ    ἡ    δόξα    εἰς    τοῦς    αἰῶνας    ἀμήν.   (<i>hoti sou estin hē basileia kai hē dunamis kai hē doxa eis tous aiōnas amēn</i>) 'Since of you is the kingdom and the power and the glory into the ages Amen.' is only in traditional manuscripts (TR+Byz)			
+																
+# Mat.15.6{15.5}	καὶ 	οὐ 	μὴ 	τιμήσει 	τὸν 	πατέρα 	αὐτοῦ 	ἢ 	τὴν 	μητέρα 						
+#_Translation	ˍand	certainly	not	he will honor	the	father	of himself	ˍˍor	ˍˍthe	ˍˍmother						
+#_Word=Grammar	G2532=CONJ	G3756=PRT-N	G3361=PRT-N	G5091=V-FAI-3S	G3588=T-ASM	G3962=N-ASM	G0846=P-GSM	G2228=CONJ	G3588=T-ASF	G3384=N-ASF						
+#_Significant variant																
+#_Mat.15.6{15.5}	αὐτοῦ, 	καὶ 	ἠκυρώσατε 	τὸν 	λόγον 	τοῦ 	θεοῦ 	διὰ 	τὴν 	παράδοσιν 						
+#_Translation	ˍˍof him	{6} And	you made void	the	word	<the>	of God	on account of	the	tradition						
+#_Word=Grammar	G0846=P-GSM	G2532=CONJ	G0208=V-AAI-2P	G3588=T-ASM	G3056=N-ASM	G3588=T-GSM	G2316=N-GSM-T	G1223=PREP	G3588=T-ASF	G3862=N-ASF						
+#_Significant variant					ἐντολὴν (ˍˍcommandment) - G1785=N-ASF											
+#_Mat.15.6{15.5}	ὑμῶν.¶ 															
+#_Translation	of you!															
+#_Word=Grammar	G4771=P-2GP															
+#_Significant variant																
+																
+Word & Type	Greek	English translation	dStrongs = Grammar	Dictionary form =  Gloss	editions	Meaning variants	Spelling variants	Spanish translation	Sub-meaning	Conjoin word	sStrong+Instance	Alt Strongs				
+Mat.15.6{15.5}#01=k	καὶ (kai)	and	G2532=CONJ	καί=and	TR+Byz			y	and	#01	G2532_a					
+Mat.15.6{15.5}#02=NKO	οὐ (ou)	certainly	G3756=PRT-N	οὐ=no	NA28+NA27+Tyn+SBL+WH+Treg+TR+Byz			No	no	#02»04:G5091	G3756					
+Mat.15.6{15.5}#03=NKO	μὴ (mē)	not	G3361=PRT-N	μή=not	NA28+NA27+Tyn+SBL+WH+Treg+TR+Byz			no	not	#03»04:G5091	G3361					
+Mat.15.6{15.5}#04=N(k)O	τιμήσει (timēsei)	he will honor	G5091=V-FAI-3S	τιμάω=to honor	NA28+NA27+Tyn+SBL+WH+Treg	τιμήσῃ (t=timēsē) he may honor - G5091=V-AAS-3S in: TR+Byz		honrará	to honor	#04	G5091					
+Mat.15.6{15.5}#05=NKO	τὸν (ton)	the	G3588=T-ASM	ὁ=the/this/who	NA28+NA27+Tyn+SBL+WH+Treg+TR+Byz			a el	the	#05»06:G3962	G3588_A					
+Mat.15.6{15.5}#06=NKO	πατέρα (patera)	father	G3962=N-ASM	πατήρ=father	NA28+NA27+Tyn+SBL+WH+Treg+TR+Byz			padre	father	#06	G3962					
+Mat.15.6{15.5}#07=NKO	αὐτοῦ (autou)	of himself	G0846=P-GSM	αὐτός=he/she/it/self	NA28+NA27+Tyn+SBL+WH+Treg+TR+Byz			de él	his	#07«06:G3962	G0846_A	G3778				
+Mat.15.6{15.5}#08=KO	ἢ (ē)	or	G2228=CONJ	ἤ=or/than	Treg+TR+Byz			o	or	#08	G2228		^ 			
+Mat.15.6{15.5}#09=KO	τὴν (tēn)	the	G3588=T-ASF	ὁ=the/this/who	Treg+TR+Byz			la	the	#09»10:G3384	G3588_b		^ 			
+Mat.15.6{15.5}#10=KO	μητέρα (mētera)	mother	G3384=N-ASF	μήτηρ=mother	Treg+TR+Byz			madre	mother	#10	G3384		^ 			
+Mat.15.6{15.5}#11=KO	αὐτοῦ, (autou)	of him	G0846=P-GSM	αὐτός=he/she/it/self	Treg+TR+Byz			de él	of him	#11«10:G3384	G0846_b	G3778	^ ἢ   τὴν    μητέρα    αὐτοῦ,   (<i>ē tēn mētera autou</i>) 'or the mother of him' is only in traditional manuscripts (Treg+TR+Byz)			
+Mat.15.6#12=NKO	καὶ (kai)	{6} And	G2532=CONJ	καί=and	NA28+NA27+Tyn+SBL+WH+Treg+TR+Byz			E	and	#12	G2532_B					
+Mat.15.6#13=NKO	ἠκυρώσατε (ēkurōsate)	you made void	G0208=V-AAI-2P	ἀκυρόω=to nullify	NA28+NA27+Tyn+SBL+WH+Treg+TR+Byz			invalidaron	to nullify	#13	G0208					
+Mat.15.6#14=N(k)O	τὸν (ton)	the	G3588=T-ASM	ὁ=the/this/who	NA28+NA27+Tyn+SBL+WH+Treg	τὴν (t=tēn) the - G3588=T-ASF in: TR+Byz		la	the	#14»15:G3056	G3588_C					
+Mat.15.6#15=N(K)O	λόγον (logon)	word	G3056=N-ASM	λόγος=word	NA28+NA27+Tyn+SBL+WH+Treg	ἐντολὴν (T=entolēn) commandment - G1785=N-ASF in: TR+Byz		palabra	word	#15	G3056	G1785	v ἐντολὴν  (<i>entolēn</i>) 'commandment' occurs in traditional manuscripts (TR+Byz) instead of λόγον  (<i>logon</i>) 'word' in older manuscripts (NA28+NA27+Tyn+SBL+WH+Treg)			
+Mat.15.6#16=NKO	τοῦ (tou)	<the>	G3588=T-GSM	ὁ=the/this/who	NA28+NA27+Tyn+SBL+WH+Treg+TR+Byz			de el	the	#16»17:G2316	G3588_D					
+Mat.15.6#17=NKO	θεοῦ (theou)	of God	G2316=N-GSM-T	θεός=God	NA28+NA27+Tyn+SBL+WH+Treg+TR+Byz			Dios	God	#17	G2316					
+Mat.15.6#18=NKO	διὰ (dia)	on account of	G1223=PREP	διά=through/because of	NA28+NA27+Tyn+SBL+WH+Treg+TR+Byz			por	because of	#18	G1223					
+Mat.15.6#19=NKO	τὴν (tēn)	the	G3588=T-ASF	ὁ=the/this/who	NA28+NA27+Tyn+SBL+WH+Treg+TR+Byz			la	the	#19»20:G3862	G3588_E					
+Mat.15.6#20=NKO	παράδοσιν (paradosin)	tradition	G3862=N-ASF	παράδοσις=tradition	NA28+NA27+Tyn+SBL+WH+Treg+TR+Byz			tradición	tradition	#20	G3862					
+Mat.15.6#21=NKO	ὑμῶν.¶ (humōn)	of you!	G4771=P-2GP	σύ=you	NA28+NA27+Tyn+SBL+WH+Treg+TR+Byz			de ustedes	your	#21«20:G3862	G4771	G5216				
+																
+# Mat.17.20	Ὁ 	δὲ 	Ἰησοῦς 	λέγει 	αὐτοῖς· 	διὰ 	τὴν 	ὀλιγοπιστίαν 	ὑμῶν. 	ἀμὴν 						
+#_Translation	<the>	And	ˍJesus	spoke	to them;	Because of	the	little faith	of you.	Amen						
+#_Word=Grammar	G3588=T-NSM	G1161=CONJ	G2424G=N-NSM-P	G3004G=V-PAI-3S	G0846=P-DPM	G1223=PREP	G3588=T-ASF	G6066=N-ASF	G4771=P-2GP	G0281=INJ-HEB						
+#_Significant variant								ἀπιστίαν (ˍˍunbelief) - G0570=N-ASF								
+#_Mat.17.20	γὰρ 	λέγω 	ὑμῖν· 	ἐὰν 	ἔχητε 	πίστιν 	ὡς 	κόκκον 	σινάπεως, 	ἐρεῖτε 						
+#_Translation	for	I say	to you;	If	you shall have	faith	as	a seed	of mustard,	you will say						
+#_Word=Grammar	G1063=CONJ	G3004G=V-PAI-1S	G4771=P-2DP	G1437=COND	G2192=V-PAS-2P	G4102G=N-ASF	G5613=PRT	G2848=N-ASM	G4615=N-GSN	G4483=V-FAI-2P						
+#_Significant variant																
+#_Mat.17.20	τῷ 	ὄρει 	τούτῳ· 	μετάβα 	ἔνθεν 	ἐκεῖ, 	καὶ 	μεταβήσεται· 	καὶ 	οὐδὲν 						
+#_Translation	to the	mountain	to this;	do move	from here	to there,	and	it will move;	And	no [thing]						
+#_Word=Grammar	G3588=T-DSN	G3735=N-DSN	G3778=D-DSN	G3327=V-2AAM-2S	G6033=ADV	G1563=ADV	G2532=CONJ	G3327=V-FDI-3S	G2532=CONJ	G3762=A-NSN						
+#_Significant variant																
+#_Mat.17.20	ἀδυνατήσει 	ὑμῖν.¶ 														
+#_Translation	will be impossible	for you.														
+#_Word=Grammar	G0101=V-FAI-3S	G4771=P-2DP														
+#_Significant variant																
+																
+Word & Type	Greek	English translation	dStrongs = Grammar	Dictionary form =  Gloss	editions	Meaning variants	Spelling variants	Spanish translation	Sub-meaning	Conjoin word	sStrong+Instance	Alt Strongs				
+Mat.17.20#01=NKO	Ὁ (Ho)	<the>	G3588=T-NSM	ὁ=the/this/who	NA28+NA27+Tyn+SBL+WH+Treg+TR+Byz			El	the	#01»04:G3004	G3588_A					
+Mat.17.20#02=NKO	δὲ (de)	And	G1161=CONJ	δέ=but/and	NA28+NA27+Tyn+SBL+WH+Treg+TR+Byz			pero	and	#02	G1161					
+Mat.17.20#03=k	Ἰησοῦς (Iēsous)	Jesus	G2424G=N-NSM-P	Ἰησοῦς=Jesus/Joshua	TR+Byz			Jesús	Jesus»Jesus|Jesus@Mat.1.1	#03	G2424					
+Mat.17.20#04=N(k)O	λέγει (legei)	spoke	G3004G=V-PAI-3S	λέγω=to speak	NA28+NA27+Tyn+SBL+WH+Treg	εἶπεν (t=eipen) said - G2036=V-2AAI-3S in: TR+Byz		está diciendo	: speak»to speak|1_speak/ask	#04	G3004_a	G2036				
+Mat.17.20#05=NKO	αὐτοῖς· (autois)	to them;	G0846=P-DPM	αὐτός=he/she/it/self	NA28+NA27+Tyn+SBL+WH+Treg+TR+Byz			a ellos	to them	#05«04:G3004	G0846	G3778				
+Mat.17.20#06=NKO	διὰ (dia)	Because of	G1223=PREP	διά=through/because of	NA28+NA27+Tyn+SBL+WH+Treg+TR+Byz			Por	because of	#06	G1223					
+Mat.17.20#07=NKO	τὴν (tēn)	the	G3588=T-ASF	ὁ=the/this/who	NA28+NA27+Tyn+SBL+WH+Treg+TR+Byz			la	the	#07»08:G6066	G3588_B					
+Mat.17.20#08=N(K)O	ὀλιγοπιστίαν (oligopistian)	little faith	G6066=N-ASF	ὀλιγοπιστία=little faith	NA28+NA27+Tyn+SBL+WH+Treg	ἀπιστίαν (T=apistian) unbelief - G0570=N-ASF in: TR+Byz		poca confianza	little faith	#08	G6066	G0570	v ἀπιστίαν  (<i>apistian</i>) 'unbelief' occurs in traditional manuscripts (TR+Byz) instead of ὀλιγοπιστίαν  (<i>oligopistian</i>) 'little faith' in older manuscripts (NA28+NA27+Tyn+SBL+WH+Treg)			
+Mat.17.20#09=NKO	ὑμῶν. (humōn)	of you.	G4771=P-2GP	σύ=you	NA28+NA27+Tyn+SBL+WH+Treg+TR+Byz			de ustedes	your	#09«08:G6066	G4771_A	G5216				
+Mat.17.20#10=NKO	ἀμὴν (amēn)	Amen	G0281=INJ-HEB	ἀμήν=amen	NA28+NA27+Tyn+SBL+WH+Treg+TR+Byz			amén	amen	#10	G0281					
+Mat.17.20#11=NKO	γὰρ (gar)	for	G1063=CONJ	γάρ=for	NA28+NA27+Tyn+SBL+WH+Treg+TR+Byz			porque	for	#11	G1063					
+Mat.17.20#12=NKO	λέγω (legō)	I say	G3004G=V-PAI-1S	λέγω=to speak	NA28+NA27+Tyn+SBL+WH+Treg+TR+Byz			estoy diciendo	: speak»to speak|1_speak/ask	#12	G3004_B					
+Mat.17.20#13=NKO	ὑμῖν· (humin)	to you;	G4771=P-2DP	σύ=you	NA28+NA27+Tyn+SBL+WH+Treg+TR+Byz			a ustedes	to you	#13«12:G3004	G4771_B	G5213				
+Mat.17.20#14=NKO	ἐὰν (ean)	If	G1437=COND	ἐάν=if	NA28+NA27+Tyn+SBL+WH+Treg+TR+Byz			si alguna vez	if	#14	G1437					
+Mat.17.20#15=NKO	ἔχητε (echēte)	you shall have	G2192=V-PAS-2P	ἔχω=to have/be	NA28+NA27+Tyn+SBL+WH+Treg+TR+Byz			estén teniendo	to have	#15	G2192					
+Mat.17.20#16=NKO	πίστιν (pistin)	faith	G4102G=N-ASF	πίστις=faith	NA28+NA27+Tyn+SBL+WH+Treg+TR+Byz			confianza	: faith»faith|1_faith	#16	G4102					
+Mat.17.20#17=NKO	ὡς (hōs)	as	G5613=PRT	ὡς=which/how	NA28+NA27+Tyn+SBL+WH+Treg+TR+Byz			como	as	#17	G5613					
+Mat.17.20#18=NKO	κόκκον (kokkon)	a seed	G2848=N-ASM	κόκκος=seed	NA28+NA27+Tyn+SBL+WH+Treg+TR+Byz			grano	seed	#18	G2848					
+Mat.17.20#19=NKO	σινάπεως, (sinapeōs)	of mustard,	G4615=N-GSN	σίναπι=mustard	NA28+NA27+Tyn+SBL+WH+Treg+TR+Byz			de mostaza	mustard	#19	G4615					
+Mat.17.20#20=NKO	ἐρεῖτε (ereite)	you will say	G4483=V-FAI-2P	ἔπω, ἐρῶ, εἶπον=to say	NA28+NA27+Tyn+SBL+WH+Treg+TR+Byz			dirán	to say	#20	G4483					
+Mat.17.20#21=NKO	τῷ (tō)	to the	G3588=T-DSN	ὁ=the/this/who	NA28+NA27+Tyn+SBL+WH+Treg+TR+Byz			a la	the	#21»22:G3735	G3588_C					
+Mat.17.20#22=NKO	ὄρει (orei)	mountain	G3735=N-DSN	ὄρος=mountain	NA28+NA27+Tyn+SBL+WH+Treg+TR+Byz			montaña	mountain	#22	G3735					
+Mat.17.20#23=NKO	τούτῳ· (toutō)	to this;	G3778=D-DSN	οὗτος=this/he/she/it	NA28+NA27+Tyn+SBL+WH+Treg+TR+Byz			esta	to this	#23«22:G3735	G3778	G5129				
+Mat.17.20#24=NKO	μετάβα (metaba)	do move	G3327=V-2AAM-2S	μεταβαίνω=to depart	NA28+NA27+Tyn+SBL+WH+Treg+TR+Byz		TR+Byz: Μετάβηθι ; 	Desplaza	to depart	#24	G3327_A					
+Mat.17.20#25=N(k)O	ἔνθεν (enthen)	from here	G6033=ADV	ἔνθεν=hence	NA28+NA27+Tyn+SBL+WH+Treg	ἔντεῦθεν (t=enteuthen) from here - G1782=ADV in: TR+Byz		desde aquí	hence	#25	G6033	G1782				
+Mat.17.20#26=NKO	ἐκεῖ, (ekei)	to there,	G1563=ADV	ἐκεῖ=there	NA28+NA27+Tyn+SBL+WH+Treg+TR+Byz			allí	there	#26	G1563					
+Mat.17.20#27=NKO	καὶ (kai)	and	G2532=CONJ	καί=and	NA28+NA27+Tyn+SBL+WH+Treg+TR+Byz			Y	and	#27	G2532_A					
+Mat.17.20#28=NKO	μεταβήσεται· (metabēsetai)	it will move;	G3327=V-FDI-3S	μεταβαίνω=to depart	NA28+NA27+Tyn+SBL+WH+Treg+TR+Byz			(se) desplazará	to depart	#28	G3327_B					
+Mat.17.20#29=NKO	καὶ (kai)	And	G2532=CONJ	καί=and	NA28+NA27+Tyn+SBL+WH+Treg+TR+Byz			y	and	#29	G2532_B					
+Mat.17.20#30=NKO	οὐδὲν (ouden)	no [thing]	G3762=A-NSN	οὐδείς=none	NA28+NA27+Tyn+SBL+WH+Treg+TR+Byz			nada	no one	#30	G3762					
+Mat.17.20#31=NKO	ἀδυνατήσει (adunatēsei)	will be impossible	G0101=V-FAI-3S	ἀδυνατέω=not to be able	NA28+NA27+Tyn+SBL+WH+Treg+TR+Byz			será imposible	not to be able	#31	G0101					
+Mat.17.20#32=NKO	ὑμῖν.¶ (humin)	for you.	G4771=P-2DP	σύ=you	NA28+NA27+Tyn+SBL+WH+Treg+TR+Byz			a ustedes	to you	#32«31:G0101	G4771_C	G5213				
+																
+# Mat.17.21	Τοῦτο 	δὲ 	τὸ 	γένος 	οὐκ 	ἐκπορεύεται 	εἰ 	μὴ 	ἐν 	προσευχῇ 						
+#_Translation	ˍˍthis	ˍˍnow	ˍˍ<the>	ˍˍkind	ˍˍnot	ˍˍgoes out	ˍˍonly	ˍˍexcept	ˍˍwith	ˍˍprayer						
+#_Word=Grammar	G3778=D-NSN	G1161=CONJ	G3588=T-NSN	G1085H=N-NSN	G3756=PRT-N	G1607=V-PNI-3S	G1487G=COND	G3361=PRT-N	G1722=PREP	G4335=N-DSF						
+#_Significant variant																
+#_Mat.17.21	καὶ 	νηστείᾳ.¶ 														
+#_Translation	ˍˍand	ˍˍwith fastings.														
+#_Word=Grammar	G2532=CONJ	G3521=N-DSF														
+#_Significant variant																
+																
+Word & Type	Greek	English translation	dStrongs = Grammar	Dictionary form =  Gloss	editions	Meaning variants	Spelling variants	Spanish translation	Sub-meaning	Conjoin word	sStrong+Instance	Alt Strongs				
+Mat.17.21#01=KO	Τοῦτο (Touto)	this	G3778=D-NSN	οὗτος=this/he/she/it	Treg+TR+Byz			esto	this	#01»06:G1607	G3778	G5124	^ 			
+Mat.17.21#02=KO	δὲ (de)	now	G1161=CONJ	δέ=but/and	Treg+TR+Byz			pero	and	#02	G1161		^ 			
+Mat.17.21#03=KO	τὸ (to)	<the>	G3588=T-NSN	ὁ=the/this/who	Treg+TR+Byz			el	the	#03»04:G1085	G3588		^ 			
+Mat.17.21#04=KO	γένος (genos)	kind	G1085H=N-NSN	γένος=family	Treg+TR+Byz			raza	: kind»family|2_kind	#04	G1085		^ 			
+Mat.17.21#05=KO	οὐκ (ouk)	not	G3756=PRT-N	οὐ=no	Treg+TR+Byz			no	no	#05»06:G1607	G3756		^ 			
+Mat.17.21#06=KO	ἐκπορεύεται (ekporeuetai)	goes out	G1607=V-PNI-3S	ἐκπορεύω=to depart	Treg+TR+Byz			está yendo en camino hacia fuera?	to go out	#06	G1607		^ 			
+Mat.17.21#07=KO	εἰ (ei)	only	G1487G=COND	εἰ=if	Treg+TR+Byz			si	: if»if|1_if/whether	#07	G1487		^ 			
+Mat.17.21#08=KO	μὴ (mē)	except	G3361=PRT-N	μή=not	Treg+TR+Byz			no	not	#08«07:G1487	G3361		^ 			
+Mat.17.21#09=KO	ἐν (en)	with	G1722=PREP	ἐν=in/on/among	Treg+TR+Byz			en	in	#09	G1722		^ 			
+Mat.17.21#10=KO	προσευχῇ (proseuchē)	prayer	G4335=N-DSF	προσευχή=prayer	Treg+TR+Byz			oración	prayer	#10	G4335		^ 			
+Mat.17.21#11=KO	καὶ (kai)	and	G2532=CONJ	καί=and	Treg+TR+Byz			y	and	#11	G2532		^ 			
+Mat.17.21#12=KO	νηστείᾳ.¶ (nēsteia)	with fastings.	G3521=N-DSF	νηστεία=fasting	Treg+TR+Byz			a ayunos	fasting	#12	G3521		^ Τοῦτο   δὲ    τὸ    γένος    οὐκ    ἐκπορεύεται    εἰ    μὴ    ἐν    προσευχῇ    καὶ    νηστείᾳ.¶   (<i>Touto de to genos ouk ekporeuetai ei mē en proseuchē kai nēsteia</i>) 'this now <the> kind not goes out only except with prayer and with fastings.' is only in traditional manuscripts (Treg+TR+Byz)			
+																
+# Jhn.1.1	Ἐν 	ἀρχῇ 	ἦν 	ὁ 	λόγος, 	καὶ 	ὁ 	λόγος 	ἦν 	πρὸς 						
+#_Translation	In [the]	beginning	was	the	Word,	and	the	Word	was	with						
+#_Word=Grammar	G1722=PREP	G0746=N-DSF	G1510=V-IAI-3S	G3588=T-NSM	G3056=N-NSM	G2532=CONJ	G3588=T-NSM	G3056=N-NSM	G1510=V-IAI-3S	G4314=PREP						
+#_Significant variant																
+#_Jhn.1.1	τὸν 	θεόν, 	καὶ 	θεὸς 	ἦν 	ὁ 	λόγος. 									
+#_Translation	<the>	God,	and	God	was	the	Word.									
+#_Word=Grammar	G3588=T-ASM	G2316=N-ASM-T	G2532=CONJ	G2316=N-NSM-T	G1510=V-IAI-3S	G3588=T-NSM	G3056=N-NSM									
+#_Significant variant																
+																
+Word & Type	Greek	English translation	dStrongs = Grammar	Dictionary form =  Gloss	editions	Meaning variants	Spelling variants	Spanish translation	Sub-meaning	Conjoin word	sStrong+Instance	Alt Strongs				
+Jhn.1.1#01=NKO	Ἐν (En)	In [the]	G1722=PREP	ἐν=in/on/among	NA28+NA27+Tyn+SBL+WH+Treg+TR+Byz			En	in	#01	G1722					
+Jhn.1.1#02=NKO	ἀρχῇ (archē)	beginning	G0746=N-DSF	ἀρχή=beginning	NA28+NA27+Tyn+SBL+WH+Treg+TR+Byz			principio	beginning	#02	G0746					
+Jhn.1.1#03=NKO	ἦν (ēn)	was	G1510=V-IAI-3S	εἰμί=to be	NA28+NA27+Tyn+SBL+WH+Treg+TR+Byz			estaba siendo	to be	#03	G1510_A	G2258				
+Jhn.1.1#04=NKO	ὁ (ho)	the	G3588=T-NSM	ὁ=the/this/who	NA28+NA27+Tyn+SBL+WH+Treg+TR+Byz			la	the	#04»05:G3056	G3588_A					
+Jhn.1.1#05=NKO	λόγος, (logos)	Word,	G3056=N-NSM	λόγος=word	NA28+NA27+Tyn+SBL+WH+Treg+TR+Byz			Palabra	word	#05	G3056_A					
+Jhn.1.1#06=NKO	καὶ (kai)	and	G2532=CONJ	καί=and	NA28+NA27+Tyn+SBL+WH+Treg+TR+Byz			y	and	#06	G2532_A					
+Jhn.1.1#07=NKO	ὁ (ho)	the	G3588=T-NSM	ὁ=the/this/who	NA28+NA27+Tyn+SBL+WH+Treg+TR+Byz			la	the	#07»08:G3056	G3588_B					
+Jhn.1.1#08=NKO	λόγος (logos)	Word	G3056=N-NSM	λόγος=word	NA28+NA27+Tyn+SBL+WH+Treg+TR+Byz			Palabra	word	#08	G3056_B					
+Jhn.1.1#09=NKO	ἦν (ēn)	was	G1510=V-IAI-3S	εἰμί=to be	NA28+NA27+Tyn+SBL+WH+Treg+TR+Byz			estaba siendo	to be	#09	G1510_B	G2258				
+Jhn.1.1#10=NKO	πρὸς (pros)	with	G4314=PREP	πρός=to/with	NA28+NA27+Tyn+SBL+WH+Treg+TR+Byz			hacia	with	#10	G4314					
+Jhn.1.1#11=NKO	τὸν (ton)	<the>	G3588=T-ASM	ὁ=the/this/who	NA28+NA27+Tyn+SBL+WH+Treg+TR+Byz			el	the	#11»12:G2316	G3588_C					
+Jhn.1.1#12=NKO	θεόν, (theon)	God,	G2316=N-ASM-T	θεός=God	NA28+NA27+Tyn+SBL+WH+Treg+TR+Byz			Dios	God	#12	G2316_A					
+Jhn.1.1#13=NKO	καὶ (kai)	and	G2532=CONJ	καί=and	NA28+NA27+Tyn+SBL+WH+Treg+TR+Byz			y	and	#13	G2532_B					
+Jhn.1.1#14=NKO	θεὸς (theos)	God	G2316=N-NSM-T	θεός=God	NA28+NA27+Tyn+SBL+WH+Treg+TR+Byz			dios	God	#14	G2316_B					
+Jhn.1.1#15=NKO	ἦν (ēn)	was	G1510=V-IAI-3S	εἰμί=to be	NA28+NA27+Tyn+SBL+WH+Treg+TR+Byz			estaba siendo	to be	#15	G1510_C	G2258				
+Jhn.1.1#16=NKO	ὁ (ho)	the	G3588=T-NSM	ὁ=the/this/who	NA28+NA27+Tyn+SBL+WH+Treg+TR+Byz			la	the	#16»17:G3056	G3588_D					
+Jhn.1.1#17=NKO	λόγος. (logos)	Word.	G3056=N-NSM	λόγος=word	NA28+NA27+Tyn+SBL+WH+Treg+TR+Byz			Palabra	word	#17	G3056_C					
+																
+# Jhn.1.2	οὗτος 	ἦν 	ἐν 	ἀρχῇ 	πρὸς 	τὸν 	θεόν. 									
+#_Translation	He	was	in [the]	beginning	with	<the>	God.									
+#_Word=Grammar	G3778=D-NSM	G1510=V-IAI-3S	G1722=PREP	G0746=N-DSF	G4314=PREP	G3588=T-ASM	G2316=N-ASM-T									
+#_Significant variant																
+																
+Word & Type	Greek	English translation	dStrongs = Grammar	Dictionary form =  Gloss	editions	Meaning variants	Spelling variants	Spanish translation	Sub-meaning	Conjoin word	sStrong+Instance	Alt Strongs				
+Jhn.1.2#01=NKO	οὗτος (houtos)	He	G3778=D-NSM	οὗτος=this/he/she/it	NA28+NA27+Tyn+SBL+WH+Treg+TR+Byz			Este	this	#01»02:G1510	G3778					
+Jhn.1.2#02=NKO	ἦν (ēn)	was	G1510=V-IAI-3S	εἰμί=to be	NA28+NA27+Tyn+SBL+WH+Treg+TR+Byz			estaba siendo	to be	#02	G1510	G2258				
+Jhn.1.2#03=NKO	ἐν (en)	in [the]	G1722=PREP	ἐν=in/on/among	NA28+NA27+Tyn+SBL+WH+Treg+TR+Byz			en	in	#03	G1722					
+Jhn.1.2#04=NKO	ἀρχῇ (archē)	beginning	G0746=N-DSF	ἀρχή=beginning	NA28+NA27+Tyn+SBL+WH+Treg+TR+Byz			principio	beginning	#04	G0746					
+Jhn.1.2#05=NKO	πρὸς (pros)	with	G4314=PREP	πρός=to/with	NA28+NA27+Tyn+SBL+WH+Treg+TR+Byz			hacia	with	#05	G4314					
+Jhn.1.2#06=NKO	τὸν (ton)	<the>	G3588=T-ASM	ὁ=the/this/who	NA28+NA27+Tyn+SBL+WH+Treg+TR+Byz			el	the	#06»07:G2316	G3588					
+Jhn.1.2#07=NKO	θεόν. (theon)	God.	G2316=N-ASM-T	θεός=God	NA28+NA27+Tyn+SBL+WH+Treg+TR+Byz			Dios	God	#07	G2316					
+																

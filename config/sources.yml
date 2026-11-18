@@ -598,6 +598,33 @@ bdrc-transcriptions:   # P153, 02-sources row 332
   # marker) → manual.
   sync_policy: manual
 
+ben-yehuda:   # 02-sources row 426
+  adapter: Nabu::Adapters::BenYehuda
+  adopted: "2026-11-18"
+  axes: [hebrew]
+  wired: true    # first sync verified 2026-11-18, EXACTLY the dump census at the pin:
+                 # +6,043 docs / 171,359 passages / 0 errored, 20,412 out-of-band
+                 # works skipped by rule, 0 unrecognized (band walk 4 GETs, then the
+                 # sparse GitFetch at tag 2026-03). Halevi m2245 + Yannai m34427
+                 # eyeballed (nikud verbatim, credit on every hit), search probed
+                 # with the pointed Halevi line, ancient band dates ≤ 900 CE.
+  sync_policy: manual   # release-pinned; a re-pin to a later release is an owner decision
+  # Project Ben-Yehuda's public-domain dump (github.com/projectbenyehuda/
+  # public_domain_dump): the volunteer library of Hebrew literature, taken
+  # for its PRE-MODERN layer only — the ruled cut: upstream's own period
+  # taxonomy's two pre-modern bands, antiquity + piyyut (to 900 CE) and the
+  # Middle Ages + Renaissance (900–1700) — about 217 authors / 6,591 works
+  # on the site (13 + 202 listed authors on 2026-11-18): Yannai, Qillir,
+  # Shmuel HaNagid, Ibn Gabirol, Yehuda Halevi, the Ibn Ezras, Alharizi,
+  # Shabazi … Everything else (the modern bulk of 26,455 works) is skipped
+  # by rule and counted. The dump has no period field, so the fetch reads
+  # the site's keyless author browse by period into periods.json (declared
+  # materialization). Document = manifestation (txt/ with nikud, hbo —
+  # NFC-exempt, byte-verbatim), passage = upstream's blank-line block (the
+  # verse in the Andalusian/piyyut layout). LICENSE: "The data files in this
+  # repository are in the public domain" → open; credit "Project Ben-Yehuda
+  # volunteers" (requested, not required — carried anyway).
+
 betamasaheft-works:   # P46-2, 02-sources row 123
   adapter: Nabu::Adapters::BetamasaheftWorks
   adopted: "2026-07-26"
@@ -4552,6 +4579,39 @@ lzh-collection:   # 02-sources row 316
   # 2023-02 → manual.
   sync_policy: manual
 
+macula-greek:   # 02-sources row 423
+  adapter: Nabu::Adapters::MaculaGreek
+  adopted: "2026-11-18"
+  axes: [biblical]
+  wired: true    # first sync verified 2026-11-18: +27 docs / 7,939 passages / 0 errored,
+                 # sha256 exactly the pin, 0 skipped; search probed ("Ἀρχὴ τοῦ εὐαγγελίου
+                 # Ἰησοῦ" answers at mark:1.1), show card eyeballed beside sblgnt's.
+                 # Reconciliation exact: 27 documents = upstream's 27 NT book codes;
+                 # 7,939 passages = sblgnt's verse count; tokens = the TSV's 137,741 rows.
+  # MACULA Greek Linguistic Datasets (Clear-Bible/macula-greek, Biblica):
+  # the SBLGNT word-level TSV (SBLGNT/tsv/macula-greek-SBLGNT.tsv) — per
+  # word: syntax role, lemma, Robinson-style morph + spelled-out features,
+  # Strong's number, semantic frames, participant referents, the Berean
+  # interlinear gloss, the Cherith English and Mandarin glosses.
+  # DELIBERATE OVERLAP with sblgnt: this is an ANNOTATION EDITION of the
+  # same held text, landed as its own source because the word layers are
+  # the value; urns mirror sblgnt's book stems, verse for verse. Verse
+  # text is reassembled from the word rows (text + after).
+  # LICENSE (LICENSE.md, verified first-hand at the pin): CC BY 4.0, "©
+  # 2022-2024 by Biblica, Inc", attribution "MACULA Greek Linguistic
+  # Datasets, available at https://github.com/Clear-Bible/macula-greek/" →
+  # attribution. COLUMN-LEVEL CAVEAT, verbatim: "Word sense data from the
+  # United Bible Societies MARBLE project. (`@ln`, `@domain`) Used with
+  # permission." — a permission to MACULA, not a CC BY grant onward, so the
+  # domain/ln columns are EXCLUDED AT PARSE (pinned by test) and the
+  # caveat rides the manifest license string verbatim. Constituents:
+  # SBLGNT (CC BY 4.0), Berean Interlinear glosses (public domain since
+  # 2023-04-30), Cherith glosses (CC BY 4.0, Andi Wu).
+  # PIN: main @ 8423afe4 (2026-07-07); the TSV blob there (542e91a2) was
+  # last regenerated at 076282a3 (2026-04-22) — later tree fixes on main
+  # are not yet in the TSV. Re-pinning is an owner decision → manual.
+  sync_policy: manual
+
 madurai:   # P122-3, 02-sources row 268
   adapter: Nabu::Adapters::Madurai
   adopted: "2026-10-12"
@@ -5389,6 +5449,25 @@ open-etruscan:
   # would false-alarm the sha compare (the diorisis figshare lesson); the
   # record page is an SPA shell. The in-record license field re-reads at
   # any real refetch, and the deposit is immutable.
+
+opengnt:   # 02-sources row 424
+  adapter: Nabu::Adapters::Opengnt
+  adopted: "2026-11-18"
+  axes: [biblical]
+  wired: true    # first sync verified 2026-11-18: +27 docs / 7,941 passages / 0 errored,
+                 # exactly the dry-parse census (138,013 tokens; the zip's AppleDouble the
+                 # 1 skip-by-rule); search probed (Βίβλος γενέσεως answers at matt:1.1)
+  # The Open Greek New Testament (eliranwong/OpenGNT, Eliran Wong): OGNT v3,
+  # an NA28-equivalent Greek NT compiled from the Berean Greek Bible data,
+  # word-tagged with lexeme, Robinson morphology, extended Strong's and
+  # Louw-Nida keys plus the NA28-comparison columns. One base-text zip
+  # (8.35 MB) raw-fetched at the pinned commit 0029589 (2022-04-21; the
+  # repo has no releases and has been dormant since). License: the core
+  # database is CC BY-SA 4.0 → class attribution, share-alike noted; the
+  # bundled glosses/translations (TBESG, Berean IT/LT/ST, Spanish) and the
+  # SIL Levinsohn discourse columns carry other terms and are excluded at
+  # parse. One document per book on the sblgnt stems (urn:nabu:opengnt:mark).
+  sync_policy: manual
 
 openiti:
   adapter: Nabu::Adapters::Openiti
@@ -7209,6 +7288,41 @@ statutes-realm:   # P160-7, 02-sources row 388
   # the act's section. Dating: the title's reign + session label, met with
   # vol. 7's Rot. Parl. regnal citation. Overlap: eebo-tcp's contemporary
   # printed statute collections are a different edition — both kept.
+
+stepbible-tagnt:
+  adapter: Nabu::Adapters::StepbibleTagnt
+  adopted: "2026-11-18"
+  axes: [biblical]
+  wired: true    # first sync verified 2026-11-18: +27 docs / 7,958 passages / 0 errored,
+                 # exactly the dry-parse census (142,095 word tokens; the two TAGNT
+                 # files only — TAHOT/TOTHT never fetched); matt:6.13 shows the TR
+                 # doxology as expected, search probed (Βίβλος γενέσεως at matt:1.1).
+  sync_policy: manual   # pinned to one commit; upstream pushes most weeks, a re-pin is deliberate
+  # TAGNT — the Translators Amalgamated Greek New Testament (STEPBible.org,
+  # based on work at Tyndale House Cambridge; github.com/STEPBible/
+  # STEPBible-Data, "Translators Amalgamated OT+NT", pinned at commit
+  # 5de0a47f35f0fc13dfe1430d104e5db8a4285f9c of 2026-11-02): every word of
+  # NA27/NA28, the Tyndale House GNT, SBL, Tregelles, the Byzantine text,
+  # Westcott-Hort and the TR in one word-per-row amalgam — the free
+  # cross-edition NT variant apparatus. Each word carries its editions, its
+  # word-type class (NKO / N(K)O / K / k / KO / O …), meaning and spelling
+  # variants with their editions, Strong's number, morphology, dictionary
+  # form and English gloss: all landed as passage "tokens" (the apparatus
+  # IS the source's value); the Spanish, sub-meaning, conjoin, sStrong and
+  # alt-Strongs columns are declared-deferred in the parser comment.
+  # Document = book (urn tails mirror sblgnt's: matt … phlm … rev); passage
+  # = NRSV verse; text = upstream's amalgamated verse verbatim (the union of
+  # the editions' words). Reconciliation plan: 27 books; upstream claims
+  # 142,036 words, the files carry 142,095 word rows — the 59-row residue is
+  # upstream's own (spelling/order-only differences are listed but "not
+  # counted in these totals"). License: CC BY 4.0 (repo README + every file
+  # header) → attribution; credit "STEP Bible" linked to www.STEPBible.org.
+  # The header also asks, verbatim: "Please do not post copies of this data
+  # file elsewhere, so that this remains the single up-to-date source" — a
+  # courtesy request about reposting the FILES; serving passages from the
+  # library is not reposting them. lemma_tier ABSENT = gold: the dictionary
+  # forms are Tyndale House's curated Strong's/TBESG tagging, not automatic
+  # lemmatization; joined words (μήποτε = μή + πότε) mint no single lemma.
 
 stgall-priscian:
   adapter: Nabu::Adapters::StgallPriscian
