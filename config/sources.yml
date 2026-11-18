@@ -4556,13 +4556,11 @@ macula-greek:   # 02-sources row 423
   adapter: Nabu::Adapters::MaculaGreek
   adopted: "2026-11-18"
   axes: [biblical]
-  wired: false   # CLAUDE.md checklist §6: bin/nabu enable macula-greek && bin/nabu sync
-                 # macula-greek (one 20.8 MB raw TSV, sha256-pinned). Reconcile: 27 documents
-                 # = upstream's 27 NT book codes; Σ tokens = the TSV's 137,741 word rows;
-                 # 7,939 passages = sblgnt's verse count; 0 skipped (fetch takes the TSV
-                 # alone — upstream's XML grains never land). Eyeball nabu show urn:nabu:macula-greek:mark:1.1 beside
-                 # urn:nabu:sblgnt:mark:1.1, probe nabu search with a known Greek string,
-                 # then flip.
+  wired: true    # first sync verified 2026-11-18: +27 docs / 7,939 passages / 0 errored,
+                 # sha256 exactly the pin, 0 skipped; search probed ("Ἀρχὴ τοῦ εὐαγγελίου
+                 # Ἰησοῦ" answers at mark:1.1), show card eyeballed beside sblgnt's.
+                 # Reconciliation exact: 27 documents = upstream's 27 NT book codes;
+                 # 7,939 passages = sblgnt's verse count; tokens = the TSV's 137,741 rows.
   # MACULA Greek Linguistic Datasets (Clear-Bible/macula-greek, Biblica):
   # the SBLGNT word-level TSV (SBLGNT/tsv/macula-greek-SBLGNT.tsv) — per
   # word: syntax role, lemma, Robinson-style morph + spelled-out features,
