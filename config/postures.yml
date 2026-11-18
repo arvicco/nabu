@@ -3514,6 +3514,9 @@ sources:
   opengnt:
     # Mirrors sblgnt (the same 27 books): the base-text CSV carries no date
     # or place field — only book/chapter/verse refs and word tags.
+  stepbible-tagnt:
+    # The sblgnt pattern: a whole-source Greek NT; the files carry no dating
+    # or place fields (the word rows are text, tagging and editions only).
     dating: {posture: undatable}
     places: {posture: unplaced}
     script: {posture: implied}

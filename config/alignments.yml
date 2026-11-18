@@ -326,6 +326,41 @@ nt:
         3JOHN: urn:nabu:elizabeth-bible:3john
         JUDE: urn:nabu:elizabeth-bible:jude
         REV: urn:nabu:elizabeth-bible:rev
+    # TAGNT (STEPBible / Tyndale House, CC BY 4.0) — the cross-edition
+    # Greek amalgam (NA/SBL/Tyndale/WH/Treg/Byz/TR words in one verse, each
+    # word's editions in its tokens). Per-book documents with sblgnt's urn
+    # tails; NRSV versification. "Not synced" until the first
+    # `nabu sync stepbible-tagnt`.
+    - label: TAGNT (amalgamated)
+      extractor: cts-verse
+      documents:
+        MATT: urn:nabu:stepbible-tagnt:matt
+        MARK: urn:nabu:stepbible-tagnt:mark
+        LUKE: urn:nabu:stepbible-tagnt:luke
+        JOHN: urn:nabu:stepbible-tagnt:john
+        ACTS: urn:nabu:stepbible-tagnt:acts
+        ROM: urn:nabu:stepbible-tagnt:rom
+        1COR: urn:nabu:stepbible-tagnt:1cor
+        2COR: urn:nabu:stepbible-tagnt:2cor
+        GAL: urn:nabu:stepbible-tagnt:gal
+        EPH: urn:nabu:stepbible-tagnt:eph
+        PHIL: urn:nabu:stepbible-tagnt:phil
+        COL: urn:nabu:stepbible-tagnt:col
+        1THESS: urn:nabu:stepbible-tagnt:1thess
+        2THESS: urn:nabu:stepbible-tagnt:2thess
+        1TIM: urn:nabu:stepbible-tagnt:1tim
+        2TIM: urn:nabu:stepbible-tagnt:2tim
+        TIT: urn:nabu:stepbible-tagnt:titus
+        PHILEM: urn:nabu:stepbible-tagnt:phlm
+        HEB: urn:nabu:stepbible-tagnt:heb
+        JAS: urn:nabu:stepbible-tagnt:jas
+        1PET: urn:nabu:stepbible-tagnt:1pet
+        2PET: urn:nabu:stepbible-tagnt:2pet
+        1JOHN: urn:nabu:stepbible-tagnt:1john
+        2JOHN: urn:nabu:stepbible-tagnt:2john
+        3JOHN: urn:nabu:stepbible-tagnt:3john
+        JUDE: urn:nabu:stepbible-tagnt:jude
+        REV: urn:nabu:stepbible-tagnt:rev
 
 # P11-5: the Old Testament work — Septuagint (Swete, already in the catalog
 # under first1k-greek's tlg0527) beside the Clementine Vulgate's OT books.
