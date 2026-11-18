@@ -13,9 +13,9 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 ## The shelves
 
-A source wears every desk it serves — these twenty-six answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
+A source wears every desk it serves — these 26 answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
-| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 17 November 2026)</span> |
+| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 18 November 2026)</span> |
 |---|---|---|---|---|
 | `betamasaheft-works` | texts | attribution | wired · auto | 3,825 docs / 66,940 passages |
 | `bhsa` | texts | nc | wired · manual | 39 docs / 23,213 passages |
@@ -31,22 +31,22 @@ A source wears every desk it serves — these twenty-six answer this desk. Holdi
 | `extrabiblical` | texts | nc | wired · manual | 13 docs / 1,800 passages |
 | `hebrew-lexicon` | dictionary | attribution | wired · manual | 21,144 entries |
 | `hexapla` | texts | nc | wired · manual | 19 docs / 16,302 passages |
-| `macula-greek` | texts | attribution | not yet wired | nothing held yet |
-| `opengnt` | texts | attribution | not yet wired | nothing held yet |
+| `macula-greek` | texts | attribution | wired · manual | 27 docs / 7,939 passages |
+| `opengnt` | texts | attribution | wired · manual | 27 docs / 7,941 passages |
 | `oshb` | texts | open | wired · manual | 39 docs / 23,213 passages |
 | `peshitta` | texts | nc | wired · manual | 65 docs / 31,341 passages |
 | `sblgnt` | texts | attribution | wired · manual | 27 docs / 7,939 passages |
 | `sdbh` | dictionary | attribution | wired · manual | 7,932 entries |
 | `sefaria` | texts | open | wired · manual | 2,033 docs / 1,111,873 passages |
-| `stepbible-tagnt` | texts | attribution | not yet wired | nothing held yet |
+| `stepbible-tagnt` | texts | attribution | wired · manual | 27 docs / 7,958 passages |
 | `syriac-corpus` | texts | attribution | wired · manual | 632 docs / 134,726 passages |
 | `typikon-bible` | texts | attribution | wired · manual | 229 docs / 105,698 passages |
 | `ud` | treebank | nc | wired · manual | 93 docs / 338,638 passages |
 | `vulgate` | texts | open | wired · manual | 73 docs / 35,809 passages |
 
-**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 17 November 2026)</span>: `hbo` 30,774 · `gez` 3,803 · `eng` 1,142 · `syc` 728 · `cop` 505 · `arc` 411 · `chu` 153 · `lat` 85 · `ron-Cyrl` 79 · `oge` 78 … and 10 more (`nabu axis biblical` lists all).
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 18 November 2026)</span>: `hbo` 30,774 · `gez` 3,803 · `eng` 1,142 · `syc` 728 · `cop` 505 · `arc` 411 · `chu` 153 · `grc` 132 · `lat` 85 · `ron-Cyrl` 79 … and 10 more (`nabu axis biblical` lists all).
 
-**Carried in by multilingual packs** (`ud` — whole-source members whose other languages ride along, as of 17 November 2026): `orv` 9 · `ota` 5 · `lzh` 4 · `egy` 3 · `frm` 3 … and 19 more (`nabu axis biblical` lists all).
+**Carried in by multilingual packs** (`ud` — whole-source members whose other languages ride along, as of 18 November 2026): `orv` 9 · `ota` 5 · `lzh` 4 · `egy` 3 · `frm` 3 … and 19 more (`nabu axis biblical` lists all).
 
 ## The desk's instruments
 
