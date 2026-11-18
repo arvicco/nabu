@@ -90,6 +90,9 @@ sources:
   macula-greek:
     # MACULA Greek's word-level annotation edition of the same SBLGNT
     # text — certain, the sblgnt claim verbatim.
+  opengnt:
+    # The Open Greek New Testament (NA28-equivalent text) — the same Koine
+    # scripture as sblgnt, certain.
     grc: { lect: "grc:koi", tier: certain }
   papyri-ddbdp:
     # Documentary papyri, Ptolemaic through Roman — approximation.

@@ -1627,6 +1627,8 @@ sources:
     source_kind: scripture
   macula-greek:
     source_kind: scripture   # the SBLGNT annotation edition — every document an NT book
+  opengnt:
+    source_kind: scripture   # the Greek New Testament, one document per book
   oshb:
     source_kind: scripture
   bhsa:

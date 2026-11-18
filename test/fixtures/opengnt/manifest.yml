@@ -1,0 +1,22 @@
+# Nabu fixture manifest. Schema documented in test/fixtures/perseus/manifest.yml.
+# Built from this directory's README.md.
+source: opengnt
+# adapter_test is null: the CSV is a documented trim of a zip member.
+adapter_test: null
+retrieved: "2026-11-18"
+files:
+  - path: OpenGNT_version3_3.csv
+    refetchable: false
+    provenance: local-trim
+    reason: >-
+      a member of OpenGNT_BASE_TEXT.zip (raw blob at commit
+      0029589cccd50bd48b1941aa041a956de6c29ac4), not raw-GETtable on its own —
+      re-cut per README
+    copied: "2026-11-18"
+    whole: false
+    trim: >-
+      the real header row + the word rows of Matt 1:1, 1:2, 1:23, 2:16, 4:16,
+      8:8; Mark 1:1-3, 6:33, 16:20; 3 John whole — byte-identical, upstream order
+# The zip's AppleDouble member __MACOSX/._OpenGNT_version3_3.csv (whole,
+# byte-identical) is a dotfile the orphan check does not glob; it is
+# recorded in README.md.

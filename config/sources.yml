@@ -5423,6 +5423,24 @@ open-etruscan:
   # record page is an SPA shell. The in-record license field re-reads at
   # any real refetch, and the deposit is immutable.
 
+opengnt:   # 02-sources row 424
+  adapter: Nabu::Adapters::Opengnt
+  adopted: "2026-11-18"
+  axes: [biblical]
+  wired: false   # pending the first real sync: expect 27 docs / 7,941 passages /
+                 # 138,013 tokens, 1 skipped by rule (the zip's AppleDouble), 0 unrecognized
+  # The Open Greek New Testament (eliranwong/OpenGNT, Eliran Wong): OGNT v3,
+  # an NA28-equivalent Greek NT compiled from the Berean Greek Bible data,
+  # word-tagged with lexeme, Robinson morphology, extended Strong's and
+  # Louw-Nida keys plus the NA28-comparison columns. One base-text zip
+  # (8.35 MB) raw-fetched at the pinned commit 0029589 (2022-04-21; the
+  # repo has no releases and has been dormant since). License: the core
+  # database is CC BY-SA 4.0 → class attribution, share-alike noted; the
+  # bundled glosses/translations (TBESG, Berean IT/LT/ST, Spanish) and the
+  # SIL Levinsohn discourse columns carry other terms and are excluded at
+  # parse. One document per book on the sblgnt stems (urn:nabu:opengnt:mark).
+  sync_policy: manual
+
 openiti:
   adapter: Nabu::Adapters::Openiti
   adopted: "2026-07-22"
