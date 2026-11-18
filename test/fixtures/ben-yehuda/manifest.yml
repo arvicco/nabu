@@ -1,0 +1,79 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# Whole real files of Project Ben-Yehuda's public-domain dump at release tag
+# 2026-03 (txt/ works, the rejected-grain specimens, LICENSE, VERSION), a
+# row excerpt of its catalogue, trims of the site's author browse pages, and
+# the sidecar the adapter's period fetch wrote from those trims.
+# adapter_test stays null (trimmed files present).
+source: ben-yehuda
+adapter_test:
+retrieved: '2026-11-18'
+files:
+- path: LICENSE
+  url: https://raw.githubusercontent.com/projectbenyehuda/public_domain_dump/2026-03/LICENSE
+  whole: true
+  trim: none
+- path: VERSION
+  url: https://raw.githubusercontent.com/projectbenyehuda/public_domain_dump/2026-03/VERSION
+  whole: true
+  trim: none
+- path: pseudocatalogue.csv
+  url: https://raw.githubusercontent.com/projectbenyehuda/public_domain_dump/2026-03/pseudocatalogue.csv
+  whole: false
+  trim: 'the header line + the five rows naming the fixture works (IDs 19, 2245, 8750, 34421,
+    34427), byte-identical lines in upstream order'
+- path: txt/p1470/m34421.txt
+  url: https://raw.githubusercontent.com/projectbenyehuda/public_domain_dump/2026-03/txt/p1470/m34421.txt
+  whole: true
+  trim: none (Yannai, a qerova with section numerals and a lone-rafe line)
+- path: txt/p1470/m34427.txt
+  url: https://raw.githubusercontent.com/projectbenyehuda/public_domain_dump/2026-03/txt/p1470/m34427.txt
+  whole: true
+  trim: none (Yannai, superscription + six verse blocks)
+- path: txt/p161/m2245.txt
+  url: https://raw.githubusercontent.com/projectbenyehuda/public_domain_dump/2026-03/txt/p161/m2245.txt
+  whole: true
+  trim: none (Yehuda Halevi, a four-verse poem; non-NFC pointing)
+- path: txt/p161/m8750.txt
+  url: https://raw.githubusercontent.com/projectbenyehuda/public_domain_dump/2026-03/txt/p161/m8750.txt
+  whole: true
+  trim: none (an anonymous Arabic poem in Halevi's Hebrew — a translation under its translator)
+- path: txt/p141/m19.txt
+  url: https://raw.githubusercontent.com/projectbenyehuda/public_domain_dump/2026-03/txt/p141/m19.txt
+  whole: true
+  trim: none (Rachel Bluwstein — the out-of-band specimen, skipped by rule)
+- path: txt_stripped/p161/m2245.txt
+  url: https://raw.githubusercontent.com/projectbenyehuda/public_domain_dump/2026-03/txt_stripped/p161/m2245.txt
+  whole: true
+  trim: none (rejected grain — the unpointed variant)
+- path: html/p161/m2245.html
+  url: https://raw.githubusercontent.com/projectbenyehuda/public_domain_dump/2026-03/html/p161/m2245.html
+  whole: true
+  trim: none (rejected grain — the HTML variant)
+- path: site/authors-ancient.html
+  url: https://benyehuda.org/authors?ckb_periods%5B%5D=ancient
+  whole: false
+  trim: 'page chrome dropped: the head title, the browse list cut to 2 of its 13 entries
+    (1457, 1470) byte-identical; the one-page band prints no paging row'
+- path: site/authors-medieval-1.html
+  url: https://benyehuda.org/authors?ckb_periods%5B%5D=medieval
+  whole: false
+  trim: 'page chrome dropped: the head title, the browse list cut to 2 of its 100 entries
+    (161, 49) byte-identical, the first paging row (buttons + "דף 1 מתוך 3") verbatim'
+- path: site/authors-medieval-2.html
+  url: https://benyehuda.org/authors?ckb_periods%5B%5D=medieval&search_after_id=2852&page=2&reverse=false&search_after_value=%D7%94%D7%A0%D7%95%D7%91%D7%A8%2C+%D7%A0%D7%AA%D7%9F+%D7%A0%D7%98%D7%A2+
+  whole: false
+  trim: 'page chrome dropped: the browse list cut to 2 of its 100 entries (1903, 606)
+    byte-identical, the first paging row ("דף 2 מתוך 3") verbatim'
+- path: site/authors-medieval-3.html
+  url: https://benyehuda.org/authors?ckb_periods%5B%5D=medieval&search_after_id=1423&page=3&reverse=false&search_after_value=%D7%A9%D7%A0%D7%99%D7%A8%D7%99%2C+%D7%99%D7%A6%D7%97%D7%A7+
+  whole: false
+  trim: 'page chrome dropped: both entries (210, 223) byte-identical, the paging row
+    ("דף 3 מתוך 3", no next button) verbatim'
+- path: periods.json
+  refetchable: false
+  reason: 'materialized by Nabu::BenYehudaPeriodFetch from the four site/ trims above
+    (retrieved 2026-11-18) — the adapter''s own sidecar, not an upstream file'
+  whole: true
+  trim: none

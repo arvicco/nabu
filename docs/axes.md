@@ -131,7 +131,7 @@ The cross-language scripture hat: the Masoretic shelves and the Scrolls, the Gre
 
 The Hebrew-and-Aramaic language desk beside the cross-language biblical hat: OSHB, BHSA, DSS, SDBH and the lexicon shelf, the Sefaria Targums, the bridging crosswalk, and IIP's inscriptions of Israel/Palestine.
 
-**Members** (18): `bhsa`, `bridging`, `dicta-bavli`, `dicta-library`, `dss`, `dtucph-sp`, `elephantine`, `etcbc-targum`, `extrabiblical`, `hebrew-lexicon`, `hexapla`, `iip`, `oshb`, `pgp-geniza`, `sdbh`, `sefaria`, `ud`, `wiktionary-arc`
+**Members** (19): `ben-yehuda`, `bhsa`, `bridging`, `dicta-bavli`, `dicta-library`, `dss`, `dtucph-sp`, `elephantine`, `etcbc-targum`, `extrabiblical`, `hebrew-lexicon`, `hexapla`, `iip`, `oshb`, `pgp-geniza`, `sdbh`, `sefaria`, `ud`, `wiktionary-arc`
 
 ### syriac
 

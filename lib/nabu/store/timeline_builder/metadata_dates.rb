@@ -104,6 +104,9 @@ module Nabu
           #                                   (radiocarbon / burial terminus; an edition inherits its
           #                                   manuscript's); place = the excavated findspot when provenanced
           "bdcamoes" => :structured,
+          "ben-yehuda" => :structured, # upstream's period band of the person whose Hebrew it is
+          #                               (900–1700; the ancient band open below, to 900), class
+          #                               composition — the dump carries no finer date
           "bfm" => :iso_keys,
           "bg-wikisource" => :structured,
           "bim-sahcoba" => :structured, # the work's imprint year read from the stream's title

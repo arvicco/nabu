@@ -598,6 +598,38 @@ bdrc-transcriptions:   # P153, 02-sources row 332
   # marker) → manual.
   sync_policy: manual
 
+ben-yehuda:   # 02-sources row 423
+  adapter: Nabu::Adapters::BenYehuda
+  adopted: "2026-11-18"
+  axes: [hebrew]
+  wired: false   # pending the first real sync:
+                 # bin/nabu enable ben-yehuda, then bin/nabu sync ben-yehuda —
+                 # the period band walk (4 GETs of benyehuda.org/authors) then a
+                 # sparse GitFetch at tag 2026-03 (catalogue + the ~206 band
+                 # authors' txt/ dirs). EXPECT ~6,043 docs (census at the pin:
+                 # ancient 9 dirs / 84 works, medieval 197 / 5,959), ~20,412
+                 # catalogued works skipped by rule (out of band), 0 unrecognized;
+                 # record the real counts in the class comment. Eyeball nabu show
+                 # urn:nabu:ben-yehuda:m2245 (Halevi, דּוֹד מָתְקוּ מִלָּיו) and
+                 # urn:nabu:ben-yehuda:m34427 (Yannai), 5 random, probe nabu search
+                 # with a known Halevi line, then flip.
+  sync_policy: manual   # release-pinned; a re-pin to a later release is an owner decision
+  # Project Ben-Yehuda's public-domain dump (github.com/projectbenyehuda/
+  # public_domain_dump): the volunteer library of Hebrew literature, taken
+  # for its PRE-MODERN layer only — the ruled cut: upstream's own period
+  # taxonomy's two pre-modern bands, antiquity + piyyut (to 900 CE) and the
+  # Middle Ages + Renaissance (900–1700) — about 217 authors / 6,591 works
+  # on the site (13 + 202 listed authors on 2026-11-18): Yannai, Qillir,
+  # Shmuel HaNagid, Ibn Gabirol, Yehuda Halevi, the Ibn Ezras, Alharizi,
+  # Shabazi … Everything else (the modern bulk of 26,455 works) is skipped
+  # by rule and counted. The dump has no period field, so the fetch reads
+  # the site's keyless author browse by period into periods.json (declared
+  # materialization). Document = manifestation (txt/ with nikud, hbo —
+  # NFC-exempt, byte-verbatim), passage = upstream's blank-line block (the
+  # verse in the Andalusian/piyyut layout). LICENSE: "The data files in this
+  # repository are in the public domain" → open; credit "Project Ben-Yehuda
+  # volunteers" (requested, not required — carried anyway).
+
 betamasaheft-works:   # P46-2, 02-sources row 123
   adapter: Nabu::Adapters::BetamasaheftWorks
   adopted: "2026-07-26"

@@ -1188,6 +1188,29 @@ sources:
     deliberate:
       "Miscellaneous -- Assorted Topics": "upstream's own catch-all, not a genre (58 books:
         novellae, responsa and derashot collections filed together)"
+  ben-yehuda:         # genre = upstream's genre enum key, cut from the catalogue's leaked i18n
+    metadata: genre   # string ("Translation missing: he.poetry" → poetry; the key set IS the
+    #                   site API's genre enum). Counts = the in-band catalogue rows at tag
+    #                   2026-03 (6,043 works, census 2026-11-18); the modern bulk never enters.
+    map:
+      "poetry": literary/poetry                  # 5,837 — the piyyut and Andalusian verse canon:
+      #   upstream files the liturgical piyyut and the secular qasida alike as poetry, and the
+      #   fold keeps upstream's one label (a piyyut/secular split is no upstream field)
+      "fables": literary/narrative/fable         # 128 — Berechiah ha-Nakdan's fables (122), Ibn
+      #   Sahula, Ibn Zabara
+      "prose": literary                          # 35 — maqamot (Tahkemoni, Immanuel's Mahberot,
+      #   Hai ben Meqitz) beside short prose pieces: upstream's form label names no one genre
+      #   (the bare head)
+      "reference": scholarly                     # 23 — upstream's עיון (study / non-fiction): the
+      #   Kuzari, Ibn Sahula's Meshal haQadmoni, Ben Sira, Emeq haBakha (the sefaria Reference fold)
+      "article": literary/essay                  # 12 — Kalonymus ben Kalonymus, Leon Modena's
+      #   treatises, Contra Apionem in Shullam's Hebrew
+      "drama": literary/drama                    # 4 — Sommo, Modena, Frances
+      "memoir": literary/diary/memoir            # 3 — Basola's travels, Catalano's plague
+      #   chronicle, Modena's Hayyei Yehuda
+      "letters": letter                          # 1 — a letter of Shmuel HaNagid
+      "lexicon": lexical                         # 0 in band — the enum's dictionary key, mapped so
+      #   a later band member cannot surface unmapped
   kanripo:            # census: 5,122 docs over 54 held subclasses, 2026-09-26 —
     walk: kr-subclass # P104-1: the KR-Catalog 部類 taxonomy, fine grain. The KR id's
     #                   4-char prefix IS the subclass; the walker feeds "KR1a 易類"
