@@ -2494,8 +2494,8 @@ CC BY-NC 4.0 (cite the Zenodo dataset).
 
 ## 8bn. The Latin Josephus
 
-**`josephus-latin`** — **35 books / 3,526 passages** (the census of
-the v3.0 deposit; registered, first sync pending): the late-antique
+**`josephus-latin`** — **35 books / 3,526 passages** (synced live
+2026-11-17, exactly on the deposit census): the late-antique
 Latin Josephus whole, from the Latin Josephus Project
 (latinjosephus.org, R. M. Pollard). It holds the *Jewish Antiquities*
 and *Against Apion* as translated under Cassiodorus in the
@@ -2509,3 +2509,44 @@ section. The deposit's English translation of the De excidio is
 AI-drafted by the project's own statement and is not taken. Mixed
 terms, file by file: PDM + CC BY 4.0, CC BY 4.0 and CC BY-SA 4.0
 (attribution), CC BY-NC-SA 3.0 Italy for the De excidio.
+
+
+## 8bo. The Greek NT apparatus belt, and the piyyut canon
+
+Three word-level editions that put the apparatus AROUND the Greek
+New Testament the library already reads, and the pre-modern layer of
+Hebrew's largest volunteer digitization.
+
+**`stepbible-tagnt`** — **27 books / 7,958 verses / 142,095 tagged
+words**: Tyndale House's Translators Amalgamated Greek NT, the only
+free cross-edition apparatus — the union text of NA27/28, Tyndale
+House, SBL, Tregelles, Byzantine, Westcott–Hort and the Textus
+Receptus, every word tagged with exactly which editions attest it
+(the TR-only verses included, so Matthew's doxology is here with its
+attestation on it), plus Strong's numbers, morphology and English
+glosses on each word. CC BY 4.0, credit STEP Bible.
+
+**`opengnt`** — **27 books / 7,941 verses / 138,013 tagged words**:
+Eliran Wong's Open Greek New Testament, an NA28-equivalent text
+whose every word carries lemma, Robinson morphology, extended
+Strong's and Louw–Nida numbers, with the NA28-versus-majority
+readings noted word by word. Core database CC BY-SA 4.0; the bundled
+translation and discourse layers carry other terms and are not
+taken.
+
+**`macula-greek`** — **27 books / 7,939 verses / 137,741 tagged
+words**: the MACULA Greek Linguistic Datasets (Clear Bible /
+Biblica) over the same SBLGNT text the library already serves — a
+deliberate annotation edition beside `sblgnt`, word for word: syntax
+roles, semantic frames, participant referents, morphology, Strong's
+numbers and a lexical English gloss on every word. CC BY 4.0; the
+UBS MARBLE word-sense columns are permission-only upstream and are
+not taken.
+
+**`ben-yehuda`** — the piyyut and Andalusian canon (registered; the
+dump cut censuses ~6,043 works by ~206 authors to 1700): Project
+Ben-Yehuda's public-domain dump, pre-modern layer only — Yannai and
+Qillir's piyyut through the Andalusian golden age (Shmuel HaNagid,
+Ibn Gabirol, Yehuda Halevi, the Ibn Ezras) to Alharizi's maqamas and
+Shabazi, in pointed Hebrew with the nikud byte-verbatim. Public
+domain; credit Project Ben-Yehuda volunteers.
