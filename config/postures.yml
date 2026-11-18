@@ -3509,6 +3509,11 @@ sources:
     dating: {posture: undatable}
     places: {posture: unplaced}
     script: {posture: implied}
+  macula-greek:
+    # the annotation edition of the sblgnt text — sblgnt's postures verbatim
+    dating: {posture: undatable}
+    places: {posture: unplaced}
+    script: {posture: implied}
   sefaria:
     dating: {posture: undatable}
     places: {posture: unplaced}
