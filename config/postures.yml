@@ -3511,9 +3511,15 @@ sources:
     script: {posture: implied}
   macula-greek:
     # the annotation edition of the sblgnt text — sblgnt's postures verbatim
+    dating: {posture: undatable}
+    places: {posture: unplaced}
+    script: {posture: implied}
   opengnt:
     # Mirrors sblgnt (the same 27 books): the base-text CSV carries no date
     # or place field — only book/chapter/verse refs and word tags.
+    dating: {posture: undatable}
+    places: {posture: unplaced}
+    script: {posture: implied}
   stepbible-tagnt:
     # The sblgnt pattern: a whole-source Greek NT; the files carry no dating
     # or place fields (the word rows are text, tagging and editions only).
@@ -3921,7 +3927,7 @@ sources:
     script: {posture: implied, note: "Hebrew square script read by Dicta's AI OCR (Rashi
         script rendered in square letters), unpointed; the two vocalized fallbacks carry
         Dicta's machine niqqud, NFC-composed at the boundary (text_nature machine-ocr)"}
-  ben-yehuda:   # 02-sources row 423
+  ben-yehuda:   # 02-sources row 426
     # kind machine-postured — kind_map.yml metadata genre (upstream's genre enum key).
     # lect machine-postured — lect_facet_rules.yml ben-yehuda-period (period medieval →
     # heb:med, approximation); the ancient band (antiquity + piyyut) stays bare hbo
