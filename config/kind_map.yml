@@ -1625,6 +1625,8 @@ sources:
     source_kind: scripture   # P152: the Elizabeth Bible, the whole source is the Bible
   sblgnt:
     source_kind: scripture
+  macula-greek:
+    source_kind: scripture   # the SBLGNT annotation edition — every document an NT book
   oshb:
     source_kind: scripture
   bhsa:

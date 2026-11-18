@@ -30,6 +30,11 @@ module Nabu
     #   equivalence hit (LemmaSearch#lemma_reading). 32,193 glossed tokens
     #   carry a Latin equivalent; the other 724 (glossed, no equivalent)
     #   are unreachable through --lemma.
+    # - macula-greek "english": the Cherith English gloss (CC BY 4.0, Andi
+    #   Wu), lexical ("genealogy"), on 133,104 of 137,741 SBLGNT words. The
+    #   same tokens also carry upstream's Berean interlinear "gloss" — a
+    #   CONTEXTUAL rendering ("of [the] genealogy") — and the Cherith
+    #   "mandarin"; one key per source, so the lexical English is the row.
     #
     # Deliberately NOT rows:
     # - tla-hf "gloss" is GRAMMATICAL (Leipzig labels, 259 distinct values
@@ -53,7 +58,8 @@ module Nabu
         "aes" => Field.new(key: "gloss", language: "de"),
         "achemenet" => Field.new(key: "eng", language: "en"),
         "tlhdig" => Field.new(key: "gloss", language: "de"),
-        "ceipom" => Field.new(key: "meaning", language: "en")
+        "ceipom" => Field.new(key: "meaning", language: "en"),
+        "macula-greek" => Field.new(key: "english", language: "en")
       }.freeze
 
       module_function
