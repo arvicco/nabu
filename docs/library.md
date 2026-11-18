@@ -2543,8 +2543,8 @@ numbers and a lexical English gloss on every word. CC BY 4.0; the
 UBS MARBLE word-sense columns are permission-only upstream and are
 not taken.
 
-**`ben-yehuda`** — the piyyut and Andalusian canon (registered; the
-dump cut censuses ~6,043 works by ~206 authors to 1700): Project
+**`ben-yehuda`** — **6,043 works / 171,359 passages** by the 206
+pre-modern authors the dump carries (to 1700): Project
 Ben-Yehuda's public-domain dump, pre-modern layer only — Yannai and
 Qillir's piyyut through the Andalusian golden age (Shmuel HaNagid,
 Ibn Gabirol, Yehuda Halevi, the Ibn Ezras) to Alharizi's maqamas and

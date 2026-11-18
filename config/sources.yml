@@ -602,17 +602,12 @@ ben-yehuda:   # 02-sources row 426
   adapter: Nabu::Adapters::BenYehuda
   adopted: "2026-11-18"
   axes: [hebrew]
-  wired: false   # pending the first real sync:
-                 # bin/nabu enable ben-yehuda, then bin/nabu sync ben-yehuda —
-                 # the period band walk (4 GETs of benyehuda.org/authors) then a
-                 # sparse GitFetch at tag 2026-03 (catalogue + the ~206 band
-                 # authors' txt/ dirs). EXPECT ~6,043 docs (census at the pin:
-                 # ancient 9 dirs / 84 works, medieval 197 / 5,959), ~20,412
-                 # catalogued works skipped by rule (out of band), 0 unrecognized;
-                 # record the real counts in the class comment. Eyeball nabu show
-                 # urn:nabu:ben-yehuda:m2245 (Halevi, דּוֹד מָתְקוּ מִלָּיו) and
-                 # urn:nabu:ben-yehuda:m34427 (Yannai), 5 random, probe nabu search
-                 # with a known Halevi line, then flip.
+  wired: true    # first sync verified 2026-11-18, EXACTLY the dump census at the pin:
+                 # +6,043 docs / 171,359 passages / 0 errored, 20,412 out-of-band
+                 # works skipped by rule, 0 unrecognized (band walk 4 GETs, then the
+                 # sparse GitFetch at tag 2026-03). Halevi m2245 + Yannai m34427
+                 # eyeballed (nikud verbatim, credit on every hit), search probed
+                 # with the pointed Halevi line, ancient band dates ≤ 900 CE.
   sync_policy: manual   # release-pinned; a re-pin to a later release is an owner decision
   # Project Ben-Yehuda's public-domain dump (github.com/projectbenyehuda/
   # public_domain_dump): the volunteer library of Hebrew literature, taken
