@@ -473,6 +473,27 @@ rules:
     map:
       "rishonim": "heb:med"
 
+  # ── Project Ben-Yehuda's own period taxonomy (the ben-yehuda period facet
+  # — the site's band of the person whose Hebrew the work is). "medieval"
+  # IS upstream's "Middle Ages and Renaissance (900–1700)" band: the
+  # Andalusian school (HaNagid, Ibn Gabirol, Halevi, the Ibn Ezras), the
+  # Provençal and Italian poets, the medieval translators — the registry's
+  # Medieval Hebrew, the label-based stage the sefaria Rishonim shelves and
+  # the Dicta Rishonim resolve to. Tier approximation, not certain: the
+  # band runs to 1700, so its Renaissance and early-modern tail (Sommo,
+  # Modena, Frances, Shabazi) rides the medieval stage the way the 1563
+  # Shulchan Arukh does — no early-modern Hebrew stage exists. Deliberately
+  # unmatched (bare hbo, declared): "ancient" — the antiquity-and-piyyut
+  # band (Yannai, Qillir, Yose ben Yose, Ben Sira, Josippon) is not one
+  # stage (the sefaria liturgy precedent: piyyut stays bare hbo).
+  - id: ben-yehuda-period
+    tier: approximation
+    sources: [ben-yehuda]
+    code: hbo
+    facet: period
+    map:
+      "medieval": "heb:med"
+
   # ── The extrabiblical book grid (the fixed BOOKS-table names ride the
   # book facet). Each book IS one artifact group with a known register, so
   # the assignment is parse-grade transcription of the corpus's own

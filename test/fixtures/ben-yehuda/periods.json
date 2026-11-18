@@ -1,0 +1,62 @@
+{
+  "source": "https://benyehuda.org/authors?ckb_periods[]=<band> — Project Ben-Yehuda's author browse filtered by the site's own period taxonomy",
+  "retrieved": "2026-11-18",
+  "bands": {
+    "ancient": {
+      "label": "עת עתיקה ופיוט (עד 900 לספירה)",
+      "not_before": null,
+      "not_after": 900,
+      "authors": 2,
+      "pages": 1
+    },
+    "medieval": {
+      "label": "ימי הביניים והרנסאנס (900 עד 1700)",
+      "not_before": 900,
+      "not_after": 1700,
+      "authors": 6,
+      "pages": 3
+    }
+  },
+  "authors": {
+    "49": {
+      "band": "medieval",
+      "name": "הנגיד, שמואל",
+      "works": 1857
+    },
+    "161": {
+      "band": "medieval",
+      "name": "הלוי, יהודה",
+      "works": 586
+    },
+    "210": {
+      "band": "medieval",
+      "name": "ששת, יוסף אבן",
+      "works": 2
+    },
+    "223": {
+      "band": "medieval",
+      "name": "תיבון, יהודה אבן",
+      "works": 8
+    },
+    "606": {
+      "band": "medieval",
+      "name": "שולם, שמואל",
+      "works": 1
+    },
+    "1457": {
+      "band": "ancient",
+      "name": "אלעזר בירבי קליר",
+      "works": 26
+    },
+    "1470": {
+      "band": "ancient",
+      "name": "יניי",
+      "works": 33
+    },
+    "1903": {
+      "band": "medieval",
+      "name": "הנקדן, ברכיה",
+      "works": 123
+    }
+  }
+}
