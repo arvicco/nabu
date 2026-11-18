@@ -251,13 +251,13 @@ class AlignmentRegistryTest < Minitest::Test
     assert_equal ["wscp", "sblgnt", "vulgate (Clementine)", "WEB (English)",
                   "CCMH Assemanianus", "CCMH Marianus", "CCMH Savvina", "CCMH Zographensis",
                   "sahidica NT (Sahidic Coptic)", "bohairic NT (Bohairic Coptic)",
-                  "Elizabeth Bible (Church Slavonic)"],
+                  "Elizabeth Bible (Church Slavonic)", "TAGNT (amalgamated)"],
                  work.witnesses.drop(5).map(&:label),
                  "P12-1 adds the OE Mark witness (ISWOC wscp); P11-5 the SBLGNT and " \
                  "Vulgate NT witnesses; P11-8 the WEB English witness; P14-2 the four " \
                  "CCMH Old Church Slavonic gospel manuscripts; P17-1 the two Coptic " \
                  "NT witnesses (#14 sahidica nc, #15 bohairic attribution); P152 the " \
-                 "Synodal Church Slavonic NT"
+                 "Synodal Church Slavonic NT; then the TAGNT cross-edition Greek amalgam"
     assert_equal "urn:nabu:proiel:wscp", work.witnesses[5].document_urn,
                  "the P12-1 OE Gospel of Mark rides the shared urn:nabu:proiel: namespace"
     assert_includes work.witnesses[6].document_urns, "urn:nabu:sblgnt:mark"

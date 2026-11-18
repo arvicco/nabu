@@ -1625,6 +1625,8 @@ sources:
     source_kind: scripture   # P152: the Elizabeth Bible, the whole source is the Bible
   sblgnt:
     source_kind: scripture
+  stepbible-tagnt:
+    source_kind: scripture   # the Greek NT amalgam — every document a NT book
   oshb:
     source_kind: scripture
   bhsa:

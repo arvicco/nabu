@@ -3509,6 +3509,12 @@ sources:
     dating: {posture: undatable}
     places: {posture: unplaced}
     script: {posture: implied}
+  stepbible-tagnt:
+    # The sblgnt pattern: a whole-source Greek NT; the files carry no dating
+    # or place fields (the word rows are text, tagging and editions only).
+    dating: {posture: undatable}
+    places: {posture: unplaced}
+    script: {posture: implied}
   sefaria:
     dating: {posture: undatable}
     places: {posture: unplaced}
