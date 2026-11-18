@@ -123,7 +123,7 @@ The reconstruction shelves: the kaikki proto-extracts, IE-CoR cognacy, LIV, the 
 
 The cross-language scripture hat: the Masoretic shelves and the Scrolls, the Greek NT, Vulgate and WEB, Peshitta and the Syriac corpus, Coptic Scriptorium, the Targums, and the OSHB-BHSA bridging module. The hebrew and syriac language desks coexist with this hat by design.
 
-**Members** (23): `betamasaheft-works`, `bhsa`, `bridging`, `coptic-scriptorium`, `dss`, `dtucph-sp`, `ebible-pacific`, `elizabeth-bible`, `eng-web`, `etcbc-syriac`, `etcbc-targum`, `extrabiblical`, `hebrew-lexicon`, `hexapla`, `oshb`, `peshitta`, `sblgnt`, `sdbh`, `sefaria`, `syriac-corpus`, `typikon-bible`, `ud`, `vulgate`
+**Members** (24): `betamasaheft-works`, `bhsa`, `bridging`, `coptic-scriptorium`, `dss`, `dtucph-sp`, `ebible-pacific`, `elizabeth-bible`, `eng-web`, `etcbc-syriac`, `etcbc-targum`, `extrabiblical`, `hebrew-lexicon`, `hexapla`, `opengnt`, `oshb`, `peshitta`, `sblgnt`, `sdbh`, `sefaria`, `syriac-corpus`, `typikon-bible`, `ud`, `vulgate`
 
 ### hebrew
 

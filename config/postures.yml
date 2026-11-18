@@ -3509,6 +3509,12 @@ sources:
     dating: {posture: undatable}
     places: {posture: unplaced}
     script: {posture: implied}
+  opengnt:
+    # Mirrors sblgnt (the same 27 books): the base-text CSV carries no date
+    # or place field — only book/chapter/verse refs and word tags.
+    dating: {posture: undatable}
+    places: {posture: unplaced}
+    script: {posture: implied}
   sefaria:
     dating: {posture: undatable}
     places: {posture: unplaced}
