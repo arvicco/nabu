@@ -5427,8 +5427,9 @@ opengnt:   # 02-sources row 424
   adapter: Nabu::Adapters::Opengnt
   adopted: "2026-11-18"
   axes: [biblical]
-  wired: false   # pending the first real sync: expect 27 docs / 7,941 passages /
-                 # 138,013 tokens, 1 skipped by rule (the zip's AppleDouble), 0 unrecognized
+  wired: true    # first sync verified 2026-11-18: +27 docs / 7,941 passages / 0 errored,
+                 # exactly the dry-parse census (138,013 tokens; the zip's AppleDouble the
+                 # 1 skip-by-rule); search probed (Βίβλος γενέσεως answers at matt:1.1)
   # The Open Greek New Testament (eliranwong/OpenGNT, Eliran Wong): OGNT v3,
   # an NA28-equivalent Greek NT compiled from the Berean Greek Bible data,
   # word-tagged with lexeme, Robinson morphology, extended Strong's and
@@ -7265,15 +7266,10 @@ stepbible-tagnt:
   adapter: Nabu::Adapters::StepbibleTagnt
   adopted: "2026-11-18"
   axes: [biblical]
-  wired: false   # pending the first real sync. Expected (full-file dry parse of
-                 # the pinned commit, 2026-11-18): 27 documents (one per NT book) /
-                 # 7,958 passages (NRSV verses) / 142,095 word tokens; the two
-                 # TAGNT files only (TAHOT/TOTHT never fetched; skipped by rule
-                 # if present). CLAUDE.md checklist §6: bin/nabu sync
-                 # stepbible-tagnt (~30 MB, two pinned raw files), then
-                 # nabu show urn:nabu:stepbible-tagnt:matt:6.13 (the TR doxology
-                 # words carry editions TR+Byz) + 5 random verses, search a known
-                 # string, then flip.
+  wired: true    # first sync verified 2026-11-18: +27 docs / 7,958 passages / 0 errored,
+                 # exactly the dry-parse census (142,095 word tokens; the two TAGNT
+                 # files only — TAHOT/TOTHT never fetched); matt:6.13 shows the TR
+                 # doxology as expected, search probed (Βίβλος γενέσεως at matt:1.1).
   sync_policy: manual   # pinned to one commit; upstream pushes most weeks, a re-pin is deliberate
   # TAGNT — the Translators Amalgamated Greek New Testament (STEPBible.org,
   # based on work at Tyndale House Cambridge; github.com/STEPBible/
