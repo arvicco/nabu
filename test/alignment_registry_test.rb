@@ -252,7 +252,7 @@ class AlignmentRegistryTest < Minitest::Test
                   "CCMH Assemanianus", "CCMH Marianus", "CCMH Savvina", "CCMH Zographensis",
                   "sahidica NT (Sahidic Coptic)", "bohairic NT (Bohairic Coptic)",
                   "Elizabeth Bible (Church Slavonic)", "TAGNT (amalgamated)"],
-                 work.witnesses.drop(5).map(&:label),
+                 work.witnesses.drop(5).take(12).map(&:label),
                  "P12-1 adds the OE Mark witness (ISWOC wscp); P11-5 the SBLGNT and " \
                  "Vulgate NT witnesses; P11-8 the WEB English witness; P14-2 the four " \
                  "CCMH Old Church Slavonic gospel manuscripts; P17-1 the two Coptic " \
@@ -285,6 +285,20 @@ class AlignmentRegistryTest < Minitest::Test
     bohairic = work.witnesses[14]
     assert_equal "MARK", bohairic.book_for("urn:nabu:coptic-scriptorium:nt.mark.bohairic")
     assert_equal 27, bohairic.document_urns.size
+  end
+
+  # The CNTR witness layer: after the TAGNT amalgam, one single-document
+  # witness per CNTR manuscript (130 class 1 + 47 class 2 + 12 class 3), all
+  # on the default proiel-citation extractor (per-word citation_part tokens).
+  def test_shipped_nt_work_carries_the_cntr_witnesses
+    path = File.join(Nabu::Config::PROJECT_ROOT, "config", "alignments.yml")
+    cntr = Nabu::AlignmentRegistry.load(path).work("nt").witnesses.drop(17)
+    assert_equal 189, cntr.size
+    assert(cntr.all? { |w| w.document_urn.start_with?("urn:nabu:cntr:") && w.extractor == "proiel-citation" })
+    assert_equal ["CNTR P1", "urn:nabu:cntr:p1"], [cntr.first.label, cntr.first.document_urn]
+    assert_equal "urn:nabu:cntr:p52", cntr.find { |w| w.label == "CNTR P52" }.document_urn
+    assert_equal "urn:nabu:cntr:61709", cntr.find { |w| w.label == "CNTR TM 61709" }.document_urn
+    assert_equal "urn:nabu:cntr:orig", cntr.find { |w| w.label == "CNTR Orig" }.document_urn
   end
 
   def test_shipped_registry_loads_the_ot_work

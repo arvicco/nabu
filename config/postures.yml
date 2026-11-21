@@ -3526,6 +3526,21 @@ sources:
     dating: {posture: undatable}
     places: {posture: unplaced}
     script: {posture: implied}
+  cntr:   # 02-sources row 429
+    # kind machine-postured (kind_map source_kind scripture); lect by override
+    # (grc → grc:koi, certain).
+    dating: {posture: undatable, note: "the repo carries no date field — each file is verse
+        lines only; CNTR's paleographic and historical datings (25-year-boundary spans,
+        the fathers' working lives) live on the greekcntr.org witness pages, which are NOT
+        under the repo's CC BY-SA (the site reserves copying), so v1 mines nothing. The
+        collection's own scope bounds every witness at the fourth century or earlier
+        (included when at least one expert dates it so) — a selection rule, not a per-
+        witness date, so no envelope is minted"}
+    places: {posture: unplaced, note: "no provenance or findspot in the repo — the TGN-keyed
+        provenance is on the same reserved site pages"}
+    script: {posture: implied, note: "Greek, as upstream transcribes it: lowercase, unaccented,
+        unpunctuated, one sigma (σ), with the overline ¯, the kai and staurogram ligatures, a
+        private-use μου ligature (U+E001) and U+FFFD for an undecipherable letter"}
   sefaria:
     dating: {posture: undatable}
     places: {posture: unplaced}
