@@ -220,7 +220,7 @@ class SourceRegistryTest < Minitest::Test
   def test_shipped_registry_defers_only_the_paced_crawl_index_citizens
     registry = Nabu::SourceRegistry.load(File.expand_path("../config/sources.yml", __dir__))
     deferred = registry.each_source.select(&:index_deferred?).map(&:slug).sort
-    assert_equal %w[dicta-library ndl-kotenseki pleias-french-books wellcome], deferred
+    assert_equal %w[dicta-library ndl-kotenseki niupepa pleias-french-books wellcome], deferred
   end
 
   def test_non_hash_entry_raises_naming_the_slug
@@ -1194,7 +1194,7 @@ class SourceRegistryTest < Minitest::Test
 
     assert_equal %w[classical romance epigraphy slavic germanic celtic italic etym biblical hebrew
                     syriac ethiopic arabic hittite cuneiform egyptian iranian indic buddhist tibetan
-                    korean sea sinitic japonic turkic mongolic americas africa baltic local],
+                    korean sea sinitic japonic turkic mongolic americas africa baltic pacific local],
                  registry.axes.names,
                  "the ratified axes, in render order (18 ratified D35 + arabic minted P41-2 with " \
                  "the openiti row + iranian minted P44-r2/D43-d, the Avesta desk between egyptian " \
@@ -1208,7 +1208,8 @@ class SourceRegistryTest < Minitest::Test
                  "ruled (a) 2026-09-01 per the P47-s3 survey, after korean — the Indic " \
                  "cosmopolis's eastern edge beside the sinoverse + americas minted P117-5 with " \
                  "ticha/guaman-poma + africa minted P124-1 with bu-ajami, after americas + baltic " \
-                 "minted 2026-10-21 with senie, after africa — the early-vernacular littoral)"
+                 "minted 2026-10-21 with senie, after africa — the early-vernacular littoral + " \
+                 "pacific minted 2026-11-21 with niupepa, after baltic — the Polynesian prints)"
 
     registry.each_source do |entry|
       refute_empty entry.axes, "#{entry.slug} must declare at least one research axis"
@@ -1656,7 +1657,7 @@ class SourceRegistryTest < Minitest::Test
     registry = Nabu::SourceRegistry.load(File.expand_path("../config/sources.yml", __dir__),
                                          provenance_path: false)
     gated = registry.each_source.select(&:grant_required?)
-    assert_equal %w[aclt ceipp-rongorongo starling titus-avestan titus-bactrian titus-khotanese titus-manichaica
+    assert_equal %w[aclt ceipp-rongorongo niupepa starling titus-avestan titus-bactrian titus-khotanese titus-manichaica
                     titus-old-albanian titus-old-frisian titus-old-lithuanian
                     titus-old-prussian titus-osco-umbrian titus-pahlavi titus-sogdian titus-tocharian-a
                     titus-tocharian-b], gated.map(&:slug).sort

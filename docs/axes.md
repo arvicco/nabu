@@ -286,6 +286,14 @@ The early vernaculars of the eastern Baltic shore, where the Reformation and the
 
 **Members** (4): `senie`, `vakk`, `vks`, `wiktionary-et`
 
+### pacific
+
+> The Pacific philologist — the Polynesian languages in their first prints, the Māori press to the mission Bibles.
+
+The languages of the Pacific in their own historical texts, opening on the Niupepa collection: the Māori-language newspapers of 1842–1932 at the page grain, with the island print shelves joining as their packets land.
+
+**Members** (1): `niupepa`
+
 ### local
 
 > The Librarian — the owner's own shelves: dossiers, library, notes, and the sources' own records.

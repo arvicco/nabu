@@ -295,6 +295,9 @@ module Nabu
           "ninjal-textdb" => :structured, # each work page's Publication Date (1592/1593/1596,
           #                                 class edition); place = the title page's imprint
           #                                 (Collegio Amacuſa → Amakusa) on amhk/amis
+          "niupepa" => :structured, # the issue's own Greenstone Date (YYYYMMDD / YYYYMM / YYYY)
+          #                           → a one-year envelope, the ISO day/month raw; no class
+          #                           (the print IS the publication); no place in the record
           "noscemus" => :structured, # P160: the copy's imprint year from its Transkribus Title
           #                            label (the print IS the document), else the typed Created
           #                            From/To year, else the joined wiki work's Year; place = the
