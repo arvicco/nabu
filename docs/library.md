@@ -2576,3 +2576,13 @@ Spaelti's corpus on kohaumotu.org. Codes, not readings — the script
 is undeciphered, and its Rapa Nui attribution is held as the
 default assumption, not a fact. Non-commercial; credit the CEIPP
 corpus and kohaumotu.org.
+
+**`niupepa`** — **134 issues held of 1,818 / 1,313 page passages**
+(the paced harvest continues across phases): the Māori-language
+newspapers of 1842–1932 from the New Zealand Digital Library's
+Niupepa collection — Te Karere O Nui Tireni through the government
+Maori Messenger, the Kīngitanga press (Te Hokioi, Te Wananga), the
+church papers, to Te Toa Takitini — page by page in the collection's
+OCR text, period spelling kept. The largest Māori-language text
+corpus online, held for local research with the collection and the
+NZDL credited on every passage.

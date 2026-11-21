@@ -295,12 +295,12 @@ class NiupepaTest < Minitest::Test
     assert_equal revisions, catalog[:documents].select_hash(:urn, :revision)
   end
 
-  def test_registry_resolves_niupepa_unwired_and_grant_gated
+  def test_registry_resolves_niupepa_wired_and_grant_gated
     registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources.yml", __dir__))
     entry = registry[SLUG]
     refute_nil entry
     assert_equal ADAPTER, entry.adapter_class
-    refute entry.wired, "wired only after the verified first slice"
+    assert entry.wired, "wired after the verified first slices (134 issues / 1,313 pages, 2026-11-21)"
     assert entry.grant_required?, "a granted source arms the sync-time grant gate"
     assert entry.index_deferred?, "a paced-crawl citizen indexes once per wave"
   end
