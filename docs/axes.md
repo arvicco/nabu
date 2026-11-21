@@ -292,7 +292,7 @@ The early vernaculars of the eastern Baltic shore, where the Reformation and the
 
 The languages of the Pacific in their own historical texts, opening on the Niupepa collection: the Māori-language newspapers of 1842–1932 at the page grain, with the island print shelves joining as their packets land.
 
-**Members** (1): `niupepa`
+**Members** (3): `ceipp-rongorongo`, `ebible-pacific`, `niupepa`
 
 ### local
 

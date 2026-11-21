@@ -1200,8 +1200,8 @@ ceipom:
 ceipp-rongorongo:   # 02-sources row 428
   adapter: Nabu::Adapters::CeippRongorongo
   adopted: "2026-11-21"
-  axes: [epigraphy]   # no Pacific/Oceania desk exists — the artifact-grain epigraphy desk
-  #                     is the nearest home for an inscription corpus
+  axes: [epigraphy, pacific]   # epigraphy for the artifact grain; pacific joined
+  #                              2026-11-21 when the desk was minted with niupepa
   wired: true    # first sync verified 2026-11-21: +25 docs / 314 passages / 0 errored —
                  # exactly the lane's census of the live corpus.xml; both sha256 pins exact
                  # (two FileFetch GETs over plain http — the host's TLS certificate expired
@@ -2556,7 +2556,9 @@ e84000:   # P48-2, 02-sources row 133
 ebible-pacific:   # P154, 02-sources row 336
   adapter: Nabu::Adapters::EbiblePacific
   adopted: "2026-11-02"
-  axes: [biblical]
+  axes: [biblical, pacific]   # pacific joined 2026-11-21 when the desk was minted
+                              # with niupepa — the mission Bibles are the desk's
+                              # own persona line
   wired: true   # first sync verified 2026-11-03: 100 docs / 48,762 passages, 15 rule skips
   # eBible.org's public-domain Pacific Bibles as USFM (the usfm family):
   # Hawaiian 1868 revision (haw), the ABS Chamorro Gospels/Acts/Psalms
