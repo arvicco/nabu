@@ -140,6 +140,10 @@ baltic:   # minted with its first member (senie)
   persona: "The Balticist — the Lutheran-print littoral, Mancelius' Latvian to Agricola's Finnish."
   desc: "The early vernaculars of the eastern Baltic shore, where the Reformation and the Counter-Reformation first put Baltic and Finnic languages into print: SENIE's Old Latvian (1507–1800 — the catechisms, Mancelius, Glück's Bible, the manuscript dictionaries), with the Old Literary Finnish and the Old Lithuanian, Old Prussian and Old Estonian shelves joining as their packets land."
 
+pacific:   # minted with its first member (niupepa)
+  persona: "The Pacific philologist — the Polynesian languages in their first prints, the Māori press to the mission Bibles."
+  desc: "The languages of the Pacific in their own historical texts, opening on the Niupepa collection: the Māori-language newspapers of 1842–1932 at the page grain, with the island print shelves joining as their packets land."
+
 # P45-3: minted with digilibLT, the first shelf of the Latin→Romance band the
 local:
   persona: "The Librarian — the owner's own shelves: dossiers, library, notes, and the sources' own records."

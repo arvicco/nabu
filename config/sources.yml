@@ -5124,6 +5124,41 @@ ninjal-textdb:   # P156, 02-sources row 379
   # Every other dataset dir (Edo share-bon, the dictionaries, the Hawaii
   # readers) skips by rule — Adapters::NinjalTextdb::DATASETS.
 
+niupepa:   # P183, 02-sources row 427
+  adapter: Nabu::Adapters::Niupepa
+  adopted: "2026-11-21"
+  axes: [pacific]
+  wired: false   # adapter merged; first paced slices pending. FIRST SLICE: bin/nabu enable niupepa,
+                 # then bundle exec rake "rail:step[niupepa]" (or bin/nabu sync niupepa): 35 census
+                 # GETs (~6 min at the 10 s robots delay) + 150 issue GETs (~28 min). EXPECT the
+                 # census note "34 series / 1840 listed documents = 1818 issues + 22 commentaries",
+                 # then held + no-text = 150 (2 of 7 sampled issues serve no text). Eyeball nabu show
+                 # urn:nabu:niupepa:01_1_1:p1, probe nabu search "Karere" (after index refresh),
+                 # then flip.
+  sync_policy: manual   # a closed historical collection; the crawl is owner-paced by slices
+  index_policy: deferred   # paced-crawl citizen: issues load per slice, the index runs once per wave (index refresh)
+  # Niupepa — Māori Newspapers (New Zealand Digital Library, University of
+  # Waikato), served by the Greenstone 3 Showcase on www.greenstone.org
+  # (niupepa.natlib.govt.nz does not resolve; www.nzdl.org answers a bot
+  # challenge). 34 series, 1,840 listed documents = 1,818 issues (1842–1932)
+  # + 22 modern series commentaries (rejected grain). Document = issue (one
+  # GET of document/<oid>?ed=1&o=xml — Greenstone's page XML), passage =
+  # page. Paced at robots.txt's Crawl-delay 10, 150 issues per slice,
+  # resumable via .niupepa-crawl.json (denied / no-text / timeout-stuck /
+  # server-error). Language mri (codemap → mi), dated by the issue's own
+  # Date. research_private: local only, never redistributed.
+  grant_required: true
+  grant:
+    terms: >-
+      a personal single-user research library, held locally only, nothing
+      redistributed; a polite harvest paced over several days; the Niupepa
+      collection and the New Zealand Digital Library, University of Waikato,
+      credited on every passage
+    request_hint: >-
+      Contact the New Zealand Digital Library (University of Waikato,
+      greenstone@waikato.ac.nz) for a license grant; promise local-only
+      single-user use, a slow paced harvest, and the collection + NZDL credit.
+
 noscemus:   # P160, 02-sources row 386
   adapter: Nabu::Adapters::Noscemus
   adopted: "2026-11-05"

@@ -63,7 +63,8 @@ bin/nabu enable korean && bin/nabu sync korean
 [`korean`](axes.md#korean) (11), [`sea`](axes.md#sea) (12), [`sinitic`](axes.md#sinitic) (30),
 [`japonic`](axes.md#japonic) (16), [`turkic`](axes.md#turkic) (5),
 [`mongolic`](axes.md#mongolic) (6), [`americas`](axes.md#americas) (3),
-[`africa`](axes.md#africa) (3), [`baltic`](axes.md#baltic) (4), [`local`](axes.md#local) (5).
+[`africa`](axes.md#africa) (3), [`baltic`](axes.md#baltic) (4), [`pacific`](axes.md#pacific) (1),
+[`local`](axes.md#local) (5).
 
 The groups `core` (the registry instruments) and `signs` (the sign/char shelves) expand the same way — `bin/nabu enable signs && bin/nabu sync signs` restores the whole sign/char capability.
 
@@ -106,11 +107,11 @@ Further acquisition recipes that serve no single registered source:
 - [IvdNT corpora (Gysseling, Oudnederlands) — acquisition](manual/ivdnt-corpora.md)
 - [Steingass 1892 — acquisition (library-shelf reference scan)](manual/steingass-1892.md)
 
-### Re-fetched under a recorded license grant — `granted`, 15 sources
+### Re-fetched under a recorded license grant — `granted`, 16 sources
 
 Access rides a license grant from the source, recorded in the instance config; with it in place the adapter re-fetches like any other. Obtaining a grant is a matter between the instance holder and the source, outside this public page.
 
-`aclt`, `starling`, plus 13 not listed (grant-gated holdings that are not public).
+`aclt`, `niupepa`, `starling`, plus 13 not listed (grant-gated holdings that are not public).
 
 ### Re-obtained under the source's terms — `restricted`, 4 sources
 

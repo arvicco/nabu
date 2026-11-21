@@ -3961,3 +3961,18 @@ sources:
         (Bern, Leiden, Monza …) are present-day holdings, metadata only"}
     script: {posture: implied, note: "Latin script throughout; three short Greek quotations in
         Contra Apionem (foreign lang grc) ride verbatim in their own script"}
+  niupepa:   # 02-sources row 427
+    # kind machine-postured — kind_map.yml source_kind periodical/newspaper.
+    lect: {posture: codemap, note: "mri → mi through the held codemap alias (the registry's Māori
+        anchor, which names the niupepa corpus among its consumers). No stage is claimed — mi
+        carries no stages; declared coarse. The bilingual issues (Māori with English columns)
+        carry no per-page or per-issue language mark upstream, so no eng claim is made"}
+    dating: {posture: dated, note: "every issue's own Greenstone Date (YYYYMMDD, YYYYMM or YYYY)
+        → a one-year envelope, :structured, the ISO day or month riding raw; no class — the
+        newspaper's issue date IS the text's publication (the delpher-newspapers precedent)"}
+    places: {posture: unplaced, note: "the issue records name no place of publication; the
+        series commentaries do, in modern English prose, but they are the rejected grain and
+        never fetched — a per-series imprint-place table would be a curation call, not
+        parse-time mining"}
+    script: {posture: implied, note: "Latin script in each print's period orthography — the early
+        papers write w for wh and carry no macrons; uncorrected machine OCR, kept as served"}
