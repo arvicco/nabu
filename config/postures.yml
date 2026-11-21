@@ -3509,6 +3509,23 @@ sources:
     dating: {posture: undatable}
     places: {posture: unplaced}
     script: {posture: implied}
+  macula-greek:
+    # the annotation edition of the sblgnt text — sblgnt's postures verbatim
+    dating: {posture: undatable}
+    places: {posture: unplaced}
+    script: {posture: implied}
+  opengnt:
+    # Mirrors sblgnt (the same 27 books): the base-text CSV carries no date
+    # or place field — only book/chapter/verse refs and word tags.
+    dating: {posture: undatable}
+    places: {posture: unplaced}
+    script: {posture: implied}
+  stepbible-tagnt:
+    # The sblgnt pattern: a whole-source Greek NT; the files carry no dating
+    # or place fields (the word rows are text, tagging and editions only).
+    dating: {posture: undatable}
+    places: {posture: unplaced}
+    script: {posture: implied}
   sefaria:
     dating: {posture: undatable}
     places: {posture: unplaced}
@@ -3910,6 +3927,22 @@ sources:
     script: {posture: implied, note: "Hebrew square script read by Dicta's AI OCR (Rashi
         script rendered in square letters), unpointed; the two vocalized fallbacks carry
         Dicta's machine niqqud, NFC-composed at the boundary (text_nature machine-ocr)"}
+  ben-yehuda:   # 02-sources row 426
+    # kind machine-postured — kind_map.yml metadata genre (upstream's genre enum key).
+    # lect machine-postured — lect_facet_rules.yml ben-yehuda-period (period medieval →
+    # heb:med, approximation); the ancient band (antiquity + piyyut) stays bare hbo
+    # deliberately — no single stage names it.
+    dating: {posture: dated, note: "every document carries upstream's period band as a
+        composition-era envelope (class composition, :structured): 900–1700 for the Middle
+        Ages + Renaissance band, ≤900 (no lower bound stated) for antiquity + piyyut — the
+        band of the person whose Hebrew it is. Coarse by upstream's own grain, declared: the
+        dump carries no per-work or per-author date; source_edition (the modern print the
+        volunteers transcribed, free prose) rides metadata verbatim, never as a date"}
+    places: {posture: unplaced, note: "the dump names no place — no origin, no findspot; the
+        source_edition imprint town is the modern print's, not the text's"}
+    script: {posture: implied, note: "Hebrew square script with the edition's nikud (the txt/
+        variant), stored byte-verbatim on the NFC-exempt hbo code; some prose and
+        superscriptions unpointed upstream"}
   josephus-latin:
     # kind machine-postured — kind_map.yml facet genre (the work title: three histories,
     # Contra Apionem → theology/apologetics).

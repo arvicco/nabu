@@ -105,6 +105,11 @@ class DerivabilityWritersTest < Minitest::Test
   # when the text zip is empty), tmp+rename, never re-fetched or deleted —
   # + its .dicta-library-fetch.json ledger inside Adapter#fetch — the
   # poma_fetch law kind, its manifest-driven sibling.
+  # ben_yehuda_period_fetch writes ONE file, canonical/ben-yehuda/
+  # periods.json (tmp+rename, rewritten only when the band lists change) —
+  # upstream's period taxonomy read off the site's author browse inside
+  # Adapter#fetch, declared in the adapter's materialized_paths — the
+  # file_fetch law kind, a pinned sidecar beside the git tree.
   # korp_fetch (vks, 2026-10-21) writes
   # canonical/vks/texts/<CORPUS>/*.jsonl (a .korp-staging tree swapped in
   # whole) + attic copies + its .korp-fetch.json ledger inside
@@ -314,6 +319,7 @@ class DerivabilityWritersTest < Minitest::Test
     nabu/lotsawa_fetch.rb nabu/glt_fetch.rb nabu/cantus_fetch.rb nabu/hf_rows_fetch.rb nabu/zip_range_fetch.rb
     nabu/pleias_shard_fetch.rb
     nabu/poma_fetch.rb nabu/bu_ajami_fetch.rb nabu/adapters/leme_fetch.rb nabu/dicta_library_fetch.rb
+    nabu/ben_yehuda_period_fetch.rb
     nabu/seal_fetch.rb nabu/aio_fetch.rb nabu/adapters/runesdb_lido_fetch.rb
     nabu/statutes_realm_fetch.rb
     nabu/sefaria_fetch.rb nabu/titus_fetch.rb nabu/url_download.rb

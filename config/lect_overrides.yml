@@ -87,6 +87,18 @@ sources:
   sblgnt:
     # The SBL Greek New Testament — certain.
     grc: { lect: "grc:koi", tier: certain }
+  macula-greek:
+    # MACULA Greek's word-level annotation edition of the same SBLGNT
+    # text — certain, the sblgnt claim verbatim.
+    grc: { lect: "grc:koi", tier: certain }
+  opengnt:
+    # The Open Greek New Testament (NA28-equivalent text) — the same Koine
+    # scripture as sblgnt, certain.
+    grc: { lect: "grc:koi", tier: certain }
+  stepbible-tagnt:
+    # The Greek New Testament across its printed editions (TAGNT) — Koine
+    # by definition, certain (the sblgnt claim).
+    grc: { lect: "grc:koi", tier: certain }
   papyri-ddbdp:
     # Documentary papyri, Ptolemaic through Roman — approximation.
     grc: { lect: "grc:koi", tier: approximation }

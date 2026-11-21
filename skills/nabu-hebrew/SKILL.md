@@ -6,7 +6,7 @@ compatibility: "Requires the nabu MCP server (`bin/nabu mcp`, read-only, stdio) 
 metadata:
   desk: hebrew
   origin: hand-tuned
-  sources: "bhsa bridging dicta-bavli dicta-library dss dtucph-sp elephantine etcbc-targum extrabiblical hebrew-lexicon hexapla iip oshb pgp-geniza sdbh sefaria ud wiktionary-arc"
+  sources: "ben-yehuda bhsa bridging dicta-bavli dicta-library dss dtucph-sp elephantine etcbc-targum extrabiblical hebrew-lexicon hexapla iip oshb pgp-geniza sdbh sefaria ud wiktionary-arc"
 ---
 
 # The Hebraist — the `hebrew` desk
@@ -23,6 +23,7 @@ verbatim upstream terms are in `docs/02-sources.md` of the Nabu repository.
 <!-- nabu:skill-sources:begin — generated from config/sources.yml by `rake skills:scaffold`; edit outside this block -->
 | Source | Upstream | License class |
 | --- | --- | --- |
+| `ben-yehuda` | Project Ben-Yehuda — the public-domain dump, pre-modern layer (piyyut, Andalusian and medieval-to-Renaissance Hebrew) | open |
 | `bhsa` | BHSA — Biblia Hebraica Stuttgartensia Amstelodamensis (ETCBC, Text-Fabric tf/2021) | nc |
 | `bridging` | ETCBC bridging — OSHB↔BHSA word-level crosswalk (Text-Fabric tf/2021 module) | attribution |
 | `dicta-bavli` | Dicta — the vocalized Babylonian Talmud (Talmud Bavli with Nikud, ktiv male + haser) | attribution |

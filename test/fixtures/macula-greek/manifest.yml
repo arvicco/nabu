@@ -1,0 +1,19 @@
+# Nabu fixture manifest. Schema documented in
+# test/fixtures/perseus/manifest.yml.
+#
+# The TSV is a documented TRIM (real header + whole verse row-runs, the
+# MARBLE domain/ln cells blanked — see README.md) of the sha-pinned
+# upstream file, so adapter_test stays null (a re-run against the full
+# artifact would false-fail the fixture-count assertions; drift is caught
+# by the adapter's sha pin at any real fetch). The TEI specimen is whole.
+source: macula-greek
+adapter_test:
+retrieved: 2026-11-18
+files:
+  - path: SBLGNT/tsv/macula-greek-SBLGNT.tsv
+    url: https://raw.githubusercontent.com/Clear-Bible/macula-greek/8423afe47b9e8f24b7772e808af45c7159a6fe7e/SBLGNT/tsv/macula-greek-SBLGNT.tsv
+    whole: false
+    trim: header + the word rows of Mark 1:1-3, John 1:1-2 and 21:23, 3 John whole (315 rows), domain/ln cells blanked — 20,843,282 B -> ~44 KB; recipe in README.md
+  - path: SBLGNT/tei/25-3john.xml
+    url: https://raw.githubusercontent.com/Clear-Bible/macula-greek/8423afe47b9e8f24b7772e808af45c7159a6fe7e/SBLGNT/tei/25-3john.xml
+    whole: true
