@@ -6,7 +6,7 @@ compatibility: "Requires the nabu MCP server (`bin/nabu mcp`, read-only, stdio) 
 metadata:
   desk: pacific
   origin: generated
-  sources: ""
+  sources: "ceipp-rongorongo ebible-pacific niupepa"
 ---
 
 # The Pacific philologist — the `pacific` desk
@@ -23,6 +23,9 @@ verbatim upstream terms are in `docs/02-sources.md` of the Nabu repository.
 <!-- nabu:skill-sources:begin — generated from config/sources.yml by `rake skills:scaffold`; edit outside this block -->
 | Source | Upstream | License class |
 | --- | --- | --- |
+| `ceipp-rongorongo` | CEIPP rongorongo corpus — the Barthel-code transliteration of the Easter Island inscriptions (kohaumotu.org) | nc |
+| `ebible-pacific` | eBible.org Pacific Bibles — Hawaiian 1868, Chamorro (ABS 1908), Pohnpeian (old alphabet) | open |
+| `niupepa` | Niupepa — Māori Newspapers 1842–1932 (New Zealand Digital Library, University of Waikato) | research_private |
 <!-- nabu:skill-sources:end -->
 
 ## What the shelves hold

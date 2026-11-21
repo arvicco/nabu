@@ -94,6 +94,7 @@ instruments, CLI recipes and terminal setup, are the
 | <span id="shelf-germanic"></span>[Germanic](#the-germanic-shelves) | Menotec and Menota Old Norse, Old Swedish, the Old Saxon *Heliand*, ReM, ReN and ReF (Middle High, Middle Low and Early New High German), the Deutsches Textarchiv, Old and Middle Dutch, the Rundata runic corpus | c. 200 – 1969 CE | {{ shelves["germanic"].size_display }} | nc / CC BY / CC BY-SA / ODbL / `research_private` |
 | <span id="shelf-africa"></span>[Africa](#africa) | Boston University's African Ajami Library (Hausa, Mandinka, Fula and Wolof manuscripts in Arabic script), the Old Nubian treebank, a public-domain shelf of nineteenth-century African-language grammars and texts | medieval Nubia – 20th c. | {{ shelves["africa"].size_display }} | PD / NC per source |
 | <span id="shelf-americas"></span>[The Americas](#the-americas) | Ticha's colonial Valley Zapotec, Guaman Poma's *Nueva corónica* | 16th – 18th c. CE | {{ shelves["americas"].size_display }} | PD / CC BY-SA |
+| <span id="shelf-pacific"></span>[The Pacific](#the-pacific) | The Niupepa Māori newspapers (1842–1932) page by page, the rongorongo inscriptions of Easter Island as CEIPP sign codes | the rongorongo tablets – 1932 | {{ shelves["pacific"].size_display }} | `research_private` / nc |
 | <span id="shelf-reference"></span>[Reference shelf](#reference-shelf) | LSJ, Lewis &amp; Short, Bosworth-Toller, Monier-Williams, LEME's early modern English word-books, Wiktionary lexica and reconstruction dictionaries, the IE-CoR, LIV, and de Vaan etymological witnesses, the StarLing / Tower of Babel databases, three Slovenian historical dictionaries, Brückner and Nasovič, the Welsh GPC, the Hebrew and Egyptian lexica, the Sino-Japanese desk (Unihan, KANJIDIC2/JMdict, HDIC, the Chinese rime books), the Tibetan rack (Mahāvyutpatti, the Verbs Database, the Monlam headwords), Dillmann's Gǝʿǝz lexicon, DÉRom, CLICS and WOLD | — | {{ census.dictionary_entries_display }} entries | CC BY-SA / CC BY / CC BY-NC-SA / written grant |
 
 ## Classical Greek literature
@@ -525,6 +526,19 @@ each marked as original or period translation. The Royal Danish Library's
 public-domain Guaman Poma, *Nueva corónica y buen gobierno*, page by page in
 Spanish with Quechua and Aymara passages. The Tupinambá and Old Guaraní
 treebanks ride the Universal Dependencies shelf.
+
+## The Pacific
+
+The Niupepa collection (New Zealand Digital Library, University of
+Waikato): the Māori-language newspapers of 1842–1932, read page by page
+in the collection's OCR text with the period orthography kept — Te
+Karere O Nui Tireni through the government and Kīngitanga press to Te
+Toa Takitini; a paced harvest held for local research with the
+collection and the NZDL credited. Beside it, the rongorongo
+inscriptions of Easter Island: every surviving inscribed object as
+Barthel-system sign codes from the CEIPP corpus on kohaumotu.org —
+codes, not readings; the script is undeciphered. The Pacific mission
+Bibles ride the biblical-editions shelf (ebible-pacific).
 
 ## Reference shelf
 

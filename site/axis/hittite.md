@@ -15,7 +15,7 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 A source wears every desk it serves — these five answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
-| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 18 November 2026)</span> |
+| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 21 November 2026)</span> |
 |---|---|---|---|---|
 | `aclt` | texts | research_private | wired · manual | 266 docs / 2,682 passages |
 | `hittite-glossed` | texts | open | wired · manual | 7,099 docs / 72,507 passages |
@@ -23,9 +23,9 @@ A source wears every desk it serves — these five answer this desk. Holdings ar
 | `ud` | treebank | nc | wired · manual | 93 docs / 338,638 passages |
 | `wiktionary-hit` | dictionary | attribution | wired · manual | 481 entries |
 
-**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 18 November 2026)</span>: `hit` 28,790 · `akk` 936 · `xhu` 698 · `xht` 326 · `hlu` 266 · `xlu` 206 · `sux` 80 · `plq` 30 · `und` 3.
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 21 November 2026)</span>: `hit` 28,790 · `akk` 936 · `xhu` 698 · `xht` 326 · `hlu` 266 · `xlu` 206 · `sux` 80 · `plq` 30 · `und` 3.
 
-**Carried in by multilingual packs** (`ud` — whole-source members whose other languages ride along, as of 18 November 2026): `lat` 11 · `grc` 9 · `orv` 9 · `oge` 5 · `ota` 5 … and 22 more (`nabu axis hittite` lists all).
+**Carried in by multilingual packs** (`ud` — whole-source members whose other languages ride along, as of 21 November 2026): `lat` 11 · `grc` 9 · `orv` 9 · `oge` 5 · `ota` 5 … and 22 more (`nabu axis hittite` lists all).
 
 ## The desk's instruments
 
@@ -74,4 +74,4 @@ The full guidance, per script, is on the [display page](https://github.com/arvic
 
 ---
 
-One of the [30 research desks]({{ '/axis/' | relative_url }}); the flat shelf map is [The Library]({{ '/library/' | relative_url }}) and the reasoning is [docs/axes.md](https://github.com/arvicco/nabu/blob/main/docs/axes.md).
+One of the [31 research desks]({{ '/axis/' | relative_url }}); the flat shelf map is [The Library]({{ '/library/' | relative_url }}) and the reasoning is [docs/axes.md](https://github.com/arvicco/nabu/blob/main/docs/axes.md).

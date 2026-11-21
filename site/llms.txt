@@ -1,6 +1,6 @@
 # Nabu
 
-> Nabu is a local, license-honest library of the ancient world: 2,920,008 documents and 134,264,410 citable passages in 289 language codes from 357 live public sources, with 5,309,936 dictionary entries, 26.1 million gold-standard lemma annotations in 57 languages (36.2 million more machine-suggested), and 30 research desks; 88% of documents are public-domain or attribution-class (census of 18 November 2026). It is a pipeline and SQLite store that runs on the researcher's own disk — this site describes it; it does not serve the texts.
+> Nabu is a local, license-honest library of the ancient world: 2,921,684 documents and 134,417,291 citable passages in 291 language codes from 360 live public sources, with 5,309,936 dictionary entries, 26.1 million gold-standard lemma annotations in 57 languages (36.2 million more machine-suggested), and 31 research desks; 88% of documents are public-domain or attribution-class (census of 21 November 2026). It is a pipeline and SQLite store that runs on the researcher's own disk — this site describes it; it does not serve the texts.
 
 Do not crawl this site page by page to inventory the library — use the lookup files below: the source and language indexes and the desk dossiers answer what is held, and the source registry answers it machine-readably.
 
@@ -56,6 +56,7 @@ Do not crawl this site page by page to inventory the library — use the lookup 
 - [The Americanist](https://arvicco.github.io/nabu/axis/americas/): the colonial record of the indigenous Americas, Zapotec testaments to the Andean chronicle
 - [The Africanist](https://arvicco.github.io/nabu/axis/africa/): Ajami manuscripts beyond the Nile–Ethiopia axis, Hausa praise poems to Wolof Murid verse
 - [The Balticist](https://arvicco.github.io/nabu/axis/baltic/): the Lutheran-print littoral, Mancelius' Latvian to Agricola's Finnish
+- [The Pacific philologist](https://arvicco.github.io/nabu/axis/pacific/): the Polynesian languages in their first prints, the Māori press to the mission Bibles
 - [The Librarian](https://arvicco.github.io/nabu/axis/local/): the owner's own shelves: dossiers, library, notes, and the sources' own records
 
 ## Optional

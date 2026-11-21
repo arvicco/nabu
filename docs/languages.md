@@ -1,10 +1,10 @@
 # Languages of the library
 
-**As of 2026-11-03** (~121.7M live passages across the 344-row
+**As of 2026-11-21** (~134.4M live passages across the 406-row
 registry; live inventory: every code below appears in the catalog, the
 lemma index, or the reference shelf). This page explains the code
 system once, then lists the significant codes with one sentence each
-(the corpus now carries 273 document language codes; the long tail of
+(the corpus now carries 291 document language codes; the long tail of
 single-inscription script variants is folded into grouped rows).
 Figures quoted inside individual rows are dated where they were
 measured; the headline figures are held to `site/_data/census.yml` by

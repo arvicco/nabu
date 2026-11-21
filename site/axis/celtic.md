@@ -15,7 +15,7 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 A source wears every desk it serves — these twelve answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
-| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 18 November 2026)</span> |
+| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 21 November 2026)</span> |
 |---|---|---|---|---|
 | `br-wikisource` | texts | attribution | wired · manual | 3,155 docs / 137,115 passages |
 | `corph` | texts | attribution | wired · manual | 76 docs / 17,942 passages |
@@ -30,9 +30,9 @@ A source wears every desk it serves — these twelve answer this desk. Holdings 
 | `wiktionary-br` | dictionary | attribution | wired · manual | 2,336 entries |
 | `wiktionary-recon` | dictionary | attribution | wired · manual | 376,415 entries |
 
-**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 18 November 2026)</span>: `cy` 89,386 · `sga` 6,838 · `bre` 5,491 · `mga` 796 · `xlp` 633 · `pgl` 547 · `ett` 502 · `xtg-Grek` 402 · `cym` 321 · `cel` 286 … and 20 more (`nabu axis celtic` lists all).
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 21 November 2026)</span>: `cy` 89,386 · `sga` 6,838 · `bre` 5,491 · `mga` 796 · `xlp` 633 · `pgl` 547 · `ett` 502 · `xtg-Grek` 402 · `cym` 321 · `cel` 286 … and 20 more (`nabu axis celtic` lists all).
 
-**Carried in by multilingual packs** (`ud`, `wiktionary-recon` — whole-source members whose other languages ride along, as of 18 November 2026): `zho` 327,296 · `xcl` 8,544 · `gem-pro` 5,749 · `gmw-pro` 5,578 · `sla-pro` 5,461 … and 40 more (`nabu axis celtic` lists all).
+**Carried in by multilingual packs** (`ud`, `wiktionary-recon` — whole-source members whose other languages ride along, as of 21 November 2026): `zho` 327,296 · `xcl` 8,544 · `gem-pro` 5,749 · `gmw-pro` 5,578 · `sla-pro` 5,461 … and 40 more (`nabu axis celtic` lists all).
 
 ## The desk's instruments
 
@@ -88,4 +88,4 @@ The full guidance, per script, is on the [display page](https://github.com/arvic
 
 ---
 
-One of the [30 research desks]({{ '/axis/' | relative_url }}); the flat shelf map is [The Library]({{ '/library/' | relative_url }}) and the reasoning is [docs/axes.md](https://github.com/arvicco/nabu/blob/main/docs/axes.md).
+One of the [31 research desks]({{ '/axis/' | relative_url }}); the flat shelf map is [The Library]({{ '/library/' | relative_url }}) and the reasoning is [docs/axes.md](https://github.com/arvicco/nabu/blob/main/docs/axes.md).

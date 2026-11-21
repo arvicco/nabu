@@ -15,7 +15,7 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 A source wears every desk it serves — these twenty-three answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
-| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 18 November 2026)</span> |
+| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 21 November 2026)</span> |
 |---|---|---|---|---|
 | `acd` | dictionary | attribution | wired · manual | 10,857 entries |
 | `calfa-lexicon` | dictionary | nc | wired · manual | 86,067 entries |
@@ -43,9 +43,9 @@ A source wears every desk it serves — these twenty-three answer this desk. Hol
 
 Private research materials are not listed.
 
-**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 18 November 2026)</span>: `xcl` 94,608 · `ine` 19,815 · `rus` 18,239 · `tbq` 12,950 · `map` 10,857 · `ine-pro` 9,140 · `gem-pro` 7,743 · `tut` 5,756 · `lat` 5,419 · `sit` 5,120 … and 77 more (`nabu axis etym` lists all).
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 21 November 2026)</span>: `xcl` 94,608 · `ine` 19,815 · `rus` 18,239 · `tbq` 12,950 · `map` 10,857 · `ine-pro` 9,140 · `gem-pro` 7,743 · `tut` 5,756 · `lat` 5,419 · `sit` 5,120 … and 77 more (`nabu axis etym` lists all).
 
-**Carried in by multilingual packs** (`wiktionary-recon`, `wold` — whole-source members whose other languages ride along, as of 18 November 2026): `zho` 327,296 · `sga` 6,688 · `gmw-pro` 5,578 · `sla-pro` 5,461 · `mnc` 2,577 … and 55 more (`nabu axis etym` lists all).
+**Carried in by multilingual packs** (`wiktionary-recon`, `wold` — whole-source members whose other languages ride along, as of 21 November 2026): `zho` 327,296 · `sga` 6,688 · `gmw-pro` 5,578 · `sla-pro` 5,461 · `mnc` 2,577 … and 55 more (`nabu axis etym` lists all).
 
 ## The desk's instruments
 
@@ -100,4 +100,4 @@ The full guidance, per script, is on the [display page](https://github.com/arvic
 
 ---
 
-One of the [30 research desks]({{ '/axis/' | relative_url }}); the flat shelf map is [The Library]({{ '/library/' | relative_url }}) and the reasoning is [docs/axes.md](https://github.com/arvicco/nabu/blob/main/docs/axes.md).
+One of the [31 research desks]({{ '/axis/' | relative_url }}); the flat shelf map is [The Library]({{ '/library/' | relative_url }}) and the reasoning is [docs/axes.md](https://github.com/arvicco/nabu/blob/main/docs/axes.md).

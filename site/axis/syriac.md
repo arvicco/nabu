@@ -15,7 +15,7 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 A source wears every desk it serves — these five answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
-| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 18 November 2026)</span> |
+| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 21 November 2026)</span> |
 |---|---|---|---|---|
 | `etcbc-syriac` | texts | nc | wired · manual | 31 docs / 18,132 passages |
 | `hmml-reading-room` | texts | attribution | wired · manual | 18,892 docs / 11,196 passages |
@@ -23,7 +23,7 @@ A source wears every desk it serves — these five answer this desk. Holdings ar
 | `syriac-corpus` | texts | attribution | wired · manual | 632 docs / 134,726 passages |
 | `wiktionary-syc` | dictionary | attribution | wired · manual | 3,911 entries |
 
-**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 18 November 2026)</span>: `syc` 12,851 · `gez` 6,945 · `ara-Syrc` 2,595 · `ara` 797 · `amh` 343.
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 21 November 2026)</span>: `syc` 12,851 · `gez` 6,945 · `ara-Syrc` 2,595 · `ara` 797 · `amh` 343.
 
 ## The desk's instruments
 
@@ -73,4 +73,4 @@ The full guidance, per script, is on the [display page](https://github.com/arvic
 
 ---
 
-One of the [30 research desks]({{ '/axis/' | relative_url }}); the flat shelf map is [The Library]({{ '/library/' | relative_url }}) and the reasoning is [docs/axes.md](https://github.com/arvicco/nabu/blob/main/docs/axes.md).
+One of the [31 research desks]({{ '/axis/' | relative_url }}); the flat shelf map is [The Library]({{ '/library/' | relative_url }}) and the reasoning is [docs/axes.md](https://github.com/arvicco/nabu/blob/main/docs/axes.md).

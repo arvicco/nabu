@@ -15,7 +15,7 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 A source wears every desk it serves — these fourteen answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
-| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 18 November 2026)</span> |
+| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 21 November 2026)</span> |
 |---|---|---|---|---|
 | `bdrc-transcriptions` | texts | open | wired · manual | 1,160 docs / 99,571 passages |
 | `cbeta` | texts | nc | wired · manual | 4,323 docs / 10,867,827 passages |
@@ -34,9 +34,9 @@ A source wears every desk it serves — these fourteen answer this desk. Holding
 
 Private research materials are not listed.
 
-**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 18 November 2026)</span>: `pli` 97,454 · `xct` 64,867 · `san` 10,449 · `eng` 7,152 · `lzh` 5,602 · `cmg` 1,069 · `mnc` 1,068 · `san-Latn` 822 · `en` 389 · `cmn` 279 … and 8 more (`nabu axis buddhist` lists all).
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 21 November 2026)</span>: `pli` 97,454 · `xct` 64,867 · `san` 10,449 · `eng` 7,152 · `lzh` 5,602 · `cmg` 1,069 · `mnc` 1,068 · `san-Latn` 822 · `en` 389 · `cmn` 279 … and 8 more (`nabu axis buddhist` lists all).
 
-**Carried in by multilingual packs** (`lotsawa-house` — whole-source members whose other languages ride along, as of 18 November 2026): `fra` 624 · `spa` 333 · `deu` 277 · `por` 142 · `ita` 74 … and 1 more (`nabu axis buddhist` lists all).
+**Carried in by multilingual packs** (`lotsawa-house` — whole-source members whose other languages ride along, as of 21 November 2026): `fra` 624 · `spa` 333 · `deu` 277 · `por` 142 · `ita` 74 … and 1 more (`nabu axis buddhist` lists all).
 
 ## The desk's instruments
 
@@ -88,4 +88,4 @@ The full guidance, per script, is on the [display page](https://github.com/arvic
 
 ---
 
-One of the [30 research desks]({{ '/axis/' | relative_url }}); the flat shelf map is [The Library]({{ '/library/' | relative_url }}) and the reasoning is [docs/axes.md](https://github.com/arvicco/nabu/blob/main/docs/axes.md).
+One of the [31 research desks]({{ '/axis/' | relative_url }}); the flat shelf map is [The Library]({{ '/library/' | relative_url }}) and the reasoning is [docs/axes.md](https://github.com/arvicco/nabu/blob/main/docs/axes.md).
