@@ -1431,6 +1431,35 @@ cme:
   # (May 2026): refresh = delete stale canonical files, re-sync.
   sync_policy: manual
 
+cntr:   # 02-sources row 429
+  adapter: Nabu::Adapters::Cntr
+  adopted: "2026-11-21"
+  axes: [biblical]
+  wired: false   # until the verified first sync:
+                 # bin/nabu sync cntr — one 4.5 MB commit archive (codeload, sha256-pinned);
+                 # expect 189 documents / 42,228 passages, 11 skipped by rule (5 critical
+                 # texts + 2 class READMEs + 4 root documentation files), 0 errored; eyeball
+                 # nabu show urn:nabu:cntr:p52:john.18.31 (οι ιουδαιοι ημειν …)
+  sync_policy: manual   # pinned to one commit; upstream re-exports its whole database in place
+  # CNTR — the Center for New Testament Restoration's electronic
+  # transcriptions (Alan Bunning; github.com/Center-for-New-Testament-
+  # Restoration/transcriptions, commit 4e743a41a4b2ca010ece53229cd272aa59b1efe6
+  # of 2026-10-01): the early Greek NT WITNESSES themselves in the
+  # Manuscript Encoding Specification — 130 continuous-text papyri and
+  # majuscules to the fourth century (P52, P66, P75, P46; 01 Sinaiticus, 02, 03
+  # Vaticanus, 04, 05 …), 47 extant manuscripts quoting the NT (amulets,
+  # letters, lectionary/commentary fragments; Trismegistos numbers) and
+  # 12 church fathers' reconstructed exemplars. New family cntr-mes.
+  # Document = witness (urn:nabu:cntr:p52), passage = verse
+  # (…:john.18.31); text = the first hand's reading with restorations read
+  # through and lacunae as […]; verbatim MES, extant-only reading, later
+  # hands and word marks ride annotations. The 5 critical texts (KJTR, RP,
+  # SR, ST, WH) are skipped by rule (editions, not witnesses). License:
+  # CC BY-SA 4.0 (LICENSE.md) → attribution, credit "Alan Bunning and the
+  # Center for New Testament Restoration"; README.md/README.txt print the
+  # BY name beside the BY-SA code — LICENSE.md governs. Every witness joins
+  # the nt alignment hub. Expected first sync: 189 docs / 42,228 passages.
+
 comenius:   # P153, 02-sources row 326
   adapter: Nabu::Adapters::Comenius
   adopted: "2026-11-02"

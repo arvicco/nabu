@@ -99,6 +99,12 @@ sources:
     # The Greek New Testament across its printed editions (TAGNT) — Koine
     # by definition, certain (the sblgnt claim).
     grc: { lect: "grc:koi", tier: certain }
+  cntr:
+    # The early Greek NT witnesses (CNTR transcriptions): papyri and
+    # majuscules to the fourth century, manuscripts quoting the NT, and the
+    # second- to fourth-century fathers' quotations — the Koine NT text in its own
+    # manuscripts, certain (the sblgnt claim, at the witness layer).
+    grc: { lect: "grc:koi", tier: certain }
   papyri-ddbdp:
     # Documentary papyri, Ptolemaic through Roman — approximation.
     grc: { lect: "grc:koi", tier: approximation }

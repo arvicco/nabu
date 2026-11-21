@@ -361,6 +361,204 @@ nt:
         3JOHN: urn:nabu:stepbible-tagnt:3john
         JUDE: urn:nabu:stepbible-tagnt:jude
         REV: urn:nabu:stepbible-tagnt:rev
+    # CNTR (Center for New Testament Restoration, CC BY-SA 4.0 → attribution) —
+    # the early WITNESSES themselves, one document per manuscript (MES
+    # transcriptions): 130 class-1 continuous-text papyri and majuscules in
+    # Gregory-Aland order, 47 class-2 manuscripts quoting the NT (Trismegistos
+    # numbers), 12 class-3 church fathers. Single-document form: each verse
+    # passage carries per-word tokens with the work-vocabulary citation_part
+    # ("JOHN 18.31"), read by the default proiel-citation extractor. Coverage is
+    # fragmentary by nature (P52 attests five verses) and renders "not
+    # attested" per verse. "Not synced" until the first `nabu sync cntr`.
+    - { label: "CNTR P1", document: "urn:nabu:cntr:p1" }
+    - { label: "CNTR P4", document: "urn:nabu:cntr:p4" }
+    - { label: "CNTR P5", document: "urn:nabu:cntr:p5" }
+    - { label: "CNTR P6", document: "urn:nabu:cntr:p6" }
+    - { label: "CNTR P8", document: "urn:nabu:cntr:p8" }
+    - { label: "CNTR P9", document: "urn:nabu:cntr:p9" }
+    - { label: "CNTR P13", document: "urn:nabu:cntr:p13" }
+    - { label: "CNTR P15", document: "urn:nabu:cntr:p15" }
+    - { label: "CNTR P17", document: "urn:nabu:cntr:p17" }
+    - { label: "CNTR P18", document: "urn:nabu:cntr:p18" }
+    - { label: "CNTR P19", document: "urn:nabu:cntr:p19" }
+    - { label: "CNTR P20", document: "urn:nabu:cntr:p20" }
+    - { label: "CNTR P21", document: "urn:nabu:cntr:p21" }
+    - { label: "CNTR P22", document: "urn:nabu:cntr:p22" }
+    - { label: "CNTR P23", document: "urn:nabu:cntr:p23" }
+    - { label: "CNTR P24", document: "urn:nabu:cntr:p24" }
+    - { label: "CNTR P25", document: "urn:nabu:cntr:p25" }
+    - { label: "CNTR P27", document: "urn:nabu:cntr:p27" }
+    - { label: "CNTR P28", document: "urn:nabu:cntr:p28" }
+    - { label: "CNTR P29", document: "urn:nabu:cntr:p29" }
+    - { label: "CNTR P30", document: "urn:nabu:cntr:p30" }
+    - { label: "CNTR P32", document: "urn:nabu:cntr:p32" }
+    - { label: "CNTR P35", document: "urn:nabu:cntr:p35" }
+    - { label: "CNTR P37", document: "urn:nabu:cntr:p37" }
+    - { label: "CNTR P38", document: "urn:nabu:cntr:p38" }
+    - { label: "CNTR P39", document: "urn:nabu:cntr:p39" }
+    - { label: "CNTR P40", document: "urn:nabu:cntr:p40" }
+    - { label: "CNTR P45", document: "urn:nabu:cntr:p45" }
+    - { label: "CNTR P46", document: "urn:nabu:cntr:p46" }
+    - { label: "CNTR P47", document: "urn:nabu:cntr:p47" }
+    - { label: "CNTR P48", document: "urn:nabu:cntr:p48" }
+    - { label: "CNTR P49", document: "urn:nabu:cntr:p49" }
+    - { label: "CNTR P51", document: "urn:nabu:cntr:p51" }
+    - { label: "CNTR P52", document: "urn:nabu:cntr:p52" }
+    - { label: "CNTR P53", document: "urn:nabu:cntr:p53" }
+    - { label: "CNTR P57", document: "urn:nabu:cntr:p57" }
+    - { label: "CNTR P64", document: "urn:nabu:cntr:p64" }
+    - { label: "CNTR P66", document: "urn:nabu:cntr:p66" }
+    - { label: "CNTR P69", document: "urn:nabu:cntr:p69" }
+    - { label: "CNTR P70", document: "urn:nabu:cntr:p70" }
+    - { label: "CNTR P71", document: "urn:nabu:cntr:p71" }
+    - { label: "CNTR P72", document: "urn:nabu:cntr:p72" }
+    - { label: "CNTR P75", document: "urn:nabu:cntr:p75" }
+    - { label: "CNTR P77", document: "urn:nabu:cntr:p77" }
+    - { label: "CNTR P81", document: "urn:nabu:cntr:p81" }
+    - { label: "CNTR P82", document: "urn:nabu:cntr:p82" }
+    - { label: "CNTR P85", document: "urn:nabu:cntr:p85" }
+    - { label: "CNTR P86", document: "urn:nabu:cntr:p86" }
+    - { label: "CNTR P87", document: "urn:nabu:cntr:p87" }
+    - { label: "CNTR P88", document: "urn:nabu:cntr:p88" }
+    - { label: "CNTR P89", document: "urn:nabu:cntr:p89" }
+    - { label: "CNTR P90", document: "urn:nabu:cntr:p90" }
+    - { label: "CNTR P91", document: "urn:nabu:cntr:p91" }
+    - { label: "CNTR P92", document: "urn:nabu:cntr:p92" }
+    - { label: "CNTR P95", document: "urn:nabu:cntr:p95" }
+    - { label: "CNTR P98", document: "urn:nabu:cntr:p98" }
+    - { label: "CNTR P100", document: "urn:nabu:cntr:p100" }
+    - { label: "CNTR P101", document: "urn:nabu:cntr:p101" }
+    - { label: "CNTR P102", document: "urn:nabu:cntr:p102" }
+    - { label: "CNTR P104", document: "urn:nabu:cntr:p104" }
+    - { label: "CNTR P106", document: "urn:nabu:cntr:p106" }
+    - { label: "CNTR P107", document: "urn:nabu:cntr:p107" }
+    - { label: "CNTR P108", document: "urn:nabu:cntr:p108" }
+    - { label: "CNTR P109", document: "urn:nabu:cntr:p109" }
+    - { label: "CNTR P110", document: "urn:nabu:cntr:p110" }
+    - { label: "CNTR P111", document: "urn:nabu:cntr:p111" }
+    - { label: "CNTR P113", document: "urn:nabu:cntr:p113" }
+    - { label: "CNTR P114", document: "urn:nabu:cntr:p114" }
+    - { label: "CNTR P115", document: "urn:nabu:cntr:p115" }
+    - { label: "CNTR P116", document: "urn:nabu:cntr:p116" }
+    - { label: "CNTR P117", document: "urn:nabu:cntr:p117" }
+    - { label: "CNTR P118", document: "urn:nabu:cntr:p118" }
+    - { label: "CNTR P119", document: "urn:nabu:cntr:p119" }
+    - { label: "CNTR P120", document: "urn:nabu:cntr:p120" }
+    - { label: "CNTR P121", document: "urn:nabu:cntr:p121" }
+    - { label: "CNTR P122", document: "urn:nabu:cntr:p122" }
+    - { label: "CNTR P123", document: "urn:nabu:cntr:p123" }
+    - { label: "CNTR P125", document: "urn:nabu:cntr:p125" }
+    - { label: "CNTR P126", document: "urn:nabu:cntr:p126" }
+    - { label: "CNTR P129", document: "urn:nabu:cntr:p129" }
+    - { label: "CNTR P130", document: "urn:nabu:cntr:p130" }
+    - { label: "CNTR P131", document: "urn:nabu:cntr:p131" }
+    - { label: "CNTR P132", document: "urn:nabu:cntr:p132" }
+    - { label: "CNTR P133", document: "urn:nabu:cntr:p133" }
+    - { label: "CNTR P134", document: "urn:nabu:cntr:p134" }
+    - { label: "CNTR P135", document: "urn:nabu:cntr:p135" }
+    - { label: "CNTR P137", document: "urn:nabu:cntr:p137" }
+    - { label: "CNTR P138", document: "urn:nabu:cntr:p138" }
+    - { label: "CNTR P139", document: "urn:nabu:cntr:p139" }
+    - { label: "CNTR P141", document: "urn:nabu:cntr:p141" }
+    - { label: "CNTR 01", document: "urn:nabu:cntr:01" }
+    - { label: "CNTR 02", document: "urn:nabu:cntr:02" }
+    - { label: "CNTR 03", document: "urn:nabu:cntr:03" }
+    - { label: "CNTR 04", document: "urn:nabu:cntr:04" }
+    - { label: "CNTR 05", document: "urn:nabu:cntr:05" }
+    - { label: "CNTR 029", document: "urn:nabu:cntr:029" }
+    - { label: "CNTR 032", document: "urn:nabu:cntr:032" }
+    - { label: "CNTR 057", document: "urn:nabu:cntr:057" }
+    - { label: "CNTR 058", document: "urn:nabu:cntr:058" }
+    - { label: "CNTR 059", document: "urn:nabu:cntr:059" }
+    - { label: "CNTR 0160", document: "urn:nabu:cntr:0160" }
+    - { label: "CNTR 0162", document: "urn:nabu:cntr:0162" }
+    - { label: "CNTR 0169", document: "urn:nabu:cntr:0169" }
+    - { label: "CNTR 0171", document: "urn:nabu:cntr:0171" }
+    - { label: "CNTR 0173", document: "urn:nabu:cntr:0173" }
+    - { label: "CNTR 0176", document: "urn:nabu:cntr:0176" }
+    - { label: "CNTR 0181", document: "urn:nabu:cntr:0181" }
+    - { label: "CNTR 0185", document: "urn:nabu:cntr:0185" }
+    - { label: "CNTR 0188", document: "urn:nabu:cntr:0188" }
+    - { label: "CNTR 0189", document: "urn:nabu:cntr:0189" }
+    - { label: "CNTR 0206", document: "urn:nabu:cntr:0206" }
+    - { label: "CNTR 0207", document: "urn:nabu:cntr:0207" }
+    - { label: "CNTR 0214", document: "urn:nabu:cntr:0214" }
+    - { label: "CNTR 0219", document: "urn:nabu:cntr:0219" }
+    - { label: "CNTR 0220", document: "urn:nabu:cntr:0220" }
+    - { label: "CNTR 0221", document: "urn:nabu:cntr:0221" }
+    - { label: "CNTR 0228", document: "urn:nabu:cntr:0228" }
+    - { label: "CNTR 0230", document: "urn:nabu:cntr:0230" }
+    - { label: "CNTR 0231", document: "urn:nabu:cntr:0231" }
+    - { label: "CNTR 0232", document: "urn:nabu:cntr:0232" }
+    - { label: "CNTR 0242", document: "urn:nabu:cntr:0242" }
+    - { label: "CNTR 0252", document: "urn:nabu:cntr:0252" }
+    - { label: "CNTR 0258", document: "urn:nabu:cntr:0258" }
+    - { label: "CNTR 0270", document: "urn:nabu:cntr:0270" }
+    - { label: "CNTR 0308", document: "urn:nabu:cntr:0308" }
+    - { label: "CNTR 0312", document: "urn:nabu:cntr:0312" }
+    - { label: "CNTR 0315", document: "urn:nabu:cntr:0315" }
+    - { label: "CNTR 0323", document: "urn:nabu:cntr:0323" }
+    - { label: "CNTR 0326", document: "urn:nabu:cntr:0326" }
+    - { label: "CNTR O23", document: "urn:nabu:cntr:o23" }
+    - { label: "CNTR TM 18004", document: "urn:nabu:cntr:18004" }
+    - { label: "CNTR TM 33368", document: "urn:nabu:cntr:33368" }
+    - { label: "CNTR TM 59453", document: "urn:nabu:cntr:59453" }
+    - { label: "CNTR TM 61617", document: "urn:nabu:cntr:61617" }
+    - { label: "CNTR TM 61645", document: "urn:nabu:cntr:61645" }
+    - { label: "CNTR TM 61695", document: "urn:nabu:cntr:61695" }
+    - { label: "CNTR TM 61709", document: "urn:nabu:cntr:61709" }
+    - { label: "CNTR TM 61710", document: "urn:nabu:cntr:61710" }
+    - { label: "CNTR TM 61715", document: "urn:nabu:cntr:61715" }
+    - { label: "CNTR TM 61795", document: "urn:nabu:cntr:61795" }
+    - { label: "CNTR TM 61839", document: "urn:nabu:cntr:61839" }
+    - { label: "CNTR TM 61840", document: "urn:nabu:cntr:61840" }
+    - { label: "CNTR TM 61868", document: "urn:nabu:cntr:61868" }
+    - { label: "CNTR TM 61871", document: "urn:nabu:cntr:61871" }
+    - { label: "CNTR TM 61873", document: "urn:nabu:cntr:61873" }
+    - { label: "CNTR TM 61914", document: "urn:nabu:cntr:61914" }
+    - { label: "CNTR TM 62312", document: "urn:nabu:cntr:62312" }
+    - { label: "CNTR TM 62324", document: "urn:nabu:cntr:62324" }
+    - { label: "CNTR TM 62325", document: "urn:nabu:cntr:62325" }
+    - { label: "CNTR TM 63017", document: "urn:nabu:cntr:63017" }
+    - { label: "CNTR TM 63820", document: "urn:nabu:cntr:63820" }
+    - { label: "CNTR TM 63857", document: "urn:nabu:cntr:63857" }
+    - { label: "CNTR TM 63986", document: "urn:nabu:cntr:63986" }
+    - { label: "CNTR TM 64007", document: "urn:nabu:cntr:64007" }
+    - { label: "CNTR TM 64206", document: "urn:nabu:cntr:64206" }
+    - { label: "CNTR TM 64243", document: "urn:nabu:cntr:64243" }
+    - { label: "CNTR TM 64348", document: "urn:nabu:cntr:64348" }
+    - { label: "CNTR TM 64372", document: "urn:nabu:cntr:64372" }
+    - { label: "CNTR TM 64399", document: "urn:nabu:cntr:64399" }
+    - { label: "CNTR TM 64404", document: "urn:nabu:cntr:64404" }
+    - { label: "CNTR TM 64491", document: "urn:nabu:cntr:64491" }
+    - { label: "CNTR TM 64522", document: "urn:nabu:cntr:64522" }
+    - { label: "CNTR TM 64596", document: "urn:nabu:cntr:64596" }
+    - { label: "CNTR TM 64605", document: "urn:nabu:cntr:64605" }
+    - { label: "CNTR TM 64663", document: "urn:nabu:cntr:64663" }
+    - { label: "CNTR TM 64670", document: "urn:nabu:cntr:64670" }
+    - { label: "CNTR TM 64692", document: "urn:nabu:cntr:64692" }
+    - { label: "CNTR TM 64853", document: "urn:nabu:cntr:64853" }
+    - { label: "CNTR TM 102798", document: "urn:nabu:cntr:102798" }
+    - { label: "CNTR TM 119961", document: "urn:nabu:cntr:119961" }
+    - { label: "CNTR TM 120128", document: "urn:nabu:cntr:120128" }
+    - { label: "CNTR TM 120527", document: "urn:nabu:cntr:120527" }
+    - { label: "CNTR TM 120528", document: "urn:nabu:cntr:120528" }
+    - { label: "CNTR TM 120532", document: "urn:nabu:cntr:120532" }
+    - { label: "CNTR TM 140277", document: "urn:nabu:cntr:140277" }
+    - { label: "CNTR TM 145321", document: "urn:nabu:cntr:145321" }
+    - { label: "CNTR TM 641699", document: "urn:nabu:cntr:641699" }
+    - { label: "CNTR AthA", document: "urn:nabu:cntr:atha" }
+    - { label: "CNTR Barn", document: "urn:nabu:cntr:barn" }
+    - { label: "CNTR ClmA", document: "urn:nabu:cntr:clma" }
+    - { label: "CNTR ClmP", document: "urn:nabu:cntr:clmp" }
+    - { label: "CNTR ClmR", document: "urn:nabu:cntr:clmr" }
+    - { label: "CNTR Iren", document: "urn:nabu:cntr:iren" }
+    - { label: "CNTR Meli", document: "urn:nabu:cntr:meli" }
+    - { label: "CNTR MrcA", document: "urn:nabu:cntr:mrca" }
+    - { label: "CNTR Orig", document: "urn:nabu:cntr:orig" }
+    - { label: "CNTR Tati", document: "urn:nabu:cntr:tati" }
+    - { label: "CNTR TheA", document: "urn:nabu:cntr:thea" }
+    - { label: "CNTR Theo", document: "urn:nabu:cntr:theo" }
 
 # P11-5: the Old Testament work — Septuagint (Swete, already in the catalog
 # under first1k-greek's tlg0527) beside the Clementine Vulgate's OT books.
