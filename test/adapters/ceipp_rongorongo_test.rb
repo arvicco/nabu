@@ -277,12 +277,12 @@ class CeippRongorongoTest < Minitest::Test
 
   # --- registry round-trip (runs in CI) -------------------------------------------
 
-  def test_registry_resolves_the_source_unwired_manual_and_grant_gated
+  def test_registry_resolves_the_source_wired_manual_and_grant_gated
     registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources.yml", __dir__))
     entry = registry[SLUG]
     refute_nil entry, "#{SLUG} must be registered in config/sources.yml"
     assert_equal ADAPTER, entry.adapter_class
-    refute entry.wired, "wired: false until the first real sync is verified"
+    assert entry.wired, "wired after the verified first sync (25 docs / 314 passages, 2026-11-21)"
     assert_equal "manual", entry.sync_policy
     assert_includes entry.axes, "epigraphy"
     assert_predicate entry, :grant_required?, "the fetch right is a grant, not a public license"

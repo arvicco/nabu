@@ -163,12 +163,12 @@ class CntrTest < Minitest::Test
 
   # --- registry round-trip -------------------------------------------------------
 
-  def test_registry_resolves_the_source_unwired
+  def test_registry_resolves_the_source_wired
     registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources.yml", __dir__))
     entry = registry["cntr"]
     refute_nil entry, "cntr must be registered in config/sources.yml"
     assert_equal ADAPTER, entry.adapter_class
-    refute entry.wired, "wired: false until the first real sync is verified"
+    assert entry.wired, "wired after the verified first sync (189 docs / 42,228 passages, 2026-11-21)"
     assert_equal ADAPTER.manifest, entry.manifest
   end
 

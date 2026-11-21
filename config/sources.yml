@@ -1202,13 +1202,13 @@ ceipp-rongorongo:   # 02-sources row 428
   adopted: "2026-11-21"
   axes: [epigraphy]   # no Pacific/Oceania desk exists — the artifact-grain epigraphy desk
   #                     is the nearest home for an inscription corpus
-  wired: false   # checklist §6: bin/nabu sync ceipp-rongorongo — two FileFetch GETs over
-                 # plain http (corpus.xml 5.6 MB + tablets.html, sha256-pinned; the host's
-                 # TLS certificate expired 2018-06-27). Expect 25 docs / 314 passages, 0
-                 # skipped by rule, 2,132 image-only glyph slots noted, the object table's
-                 # Z (Poike) named as upstream's own residue. Eyeball nabu show
-                 # urn:nabu:ceipp-rongorongo:A (Tahua, Aa01 "430!.040-320.009-…") and
-                 # search a code run before flipping.
+  wired: true    # first sync verified 2026-11-21: +25 docs / 314 passages / 0 errored —
+                 # exactly the lane's census of the live corpus.xml; both sha256 pins exact
+                 # (two FileFetch GETs over plain http — the host's TLS certificate expired
+                 # 2018-06-27); 2,132 image-only glyph slots dropped by the codes-only scope
+                 # (counted), the object table's Z (Poike) named as upstream's own residue.
+                 # Show probe (urn:nabu:ceipp-rongorongo:A — Tahua, Aa01 "430!.040-320.009-…",
+                 # the CEIPP credit on the card) and the FTS probe ("430" → O/M/T hits) both live.
   # The CEIPP rongorongo corpus (kohaumotu.org): Thomas Barthel's numeric
   # transliteration of the 25 surviving inscribed objects of Easter Island
   # (20 tablets, the Santiago Staff, two reimiro, the tangata manu, the
@@ -1478,11 +1478,12 @@ cntr:   # 02-sources row 429
   adapter: Nabu::Adapters::Cntr
   adopted: "2026-11-21"
   axes: [biblical]
-  wired: false   # until the verified first sync:
-                 # bin/nabu sync cntr — one 4.5 MB commit archive (codeload, sha256-pinned);
-                 # expect 189 documents / 42,228 passages, 11 skipped by rule (5 critical
-                 # texts + 2 class READMEs + 4 root documentation files), 0 errored; eyeball
-                 # nabu show urn:nabu:cntr:p52:john.18.31 (οι ιουδαιοι ημειν …)
+  wired: true    # first sync verified 2026-11-21: +189 documents / 42,228 passages /
+                 # 11 skipped by rule (5 critical texts + 2 class READMEs + 4 root
+                 # documentation files) / 0 errored — exactly the lane's dry-parse census;
+                 # sha256 exactly the pin; show probe (urn:nabu:cntr:p52:john.18.31 —
+                 # "[…] οι ιουδαιοι ημειν ουκ εξεστιν αποκτειναι ουδενα") and the FTS
+                 # probe ("εξεστιν αποκτειναι" --source cntr → p52/03/04 hits) both live
   sync_policy: manual   # pinned to one commit; upstream re-exports its whole database in place
   # CNTR — the Center for New Testament Restoration's electronic
   # transcriptions (Alan Bunning; github.com/Center-for-New-Testament-
