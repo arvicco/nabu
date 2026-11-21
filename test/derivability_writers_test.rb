@@ -194,6 +194,12 @@ class DerivabilityWritersTest < Minitest::Test
   # census.tsv (tmp + rename, a declared materialization), the text zips
   # (zips/<bnumber>.zip, .part + rename); its .wellcome-crawl.json ledger
   # is written by the paced-crawl engine — the ndl-kotenseki crawl law kind.
+  # The niupepa adapter writes canonical/niupepa/ inside Adapter#fetch: the
+  # Greenstone census pages under map/ (the series classifier + one listing
+  # per series, each written only after its truncation defense) and the
+  # issue page XML under issues/<oid>.xml (tmp+rename); its
+  # .niupepa-crawl.json ledger is written by the paced-crawl engine — the
+  # same crawl law kind.
   # credentials (Nabu::Credentials) writes ONE instance file,
   # local/config/credentials.yml (tmp born mode 600 + chmod + rename),
   # driven only by the `nabu creds set` gateway — the local/config
@@ -343,7 +349,7 @@ class DerivabilityWritersTest < Minitest::Test
     nabu/adapters/damos.rb nabu/adapters/itkc_catalog.rb
     nabu/adapters/aclt.rb nabu/adapters/ia_scan_shelf.rb
     nabu/adapters/mnc_wikisource.rb nabu/adapters/shiratori_shm.rb nabu/adapters/nb_no.rb
-    nabu/adapters/wellcome.rb nabu/paced_crawl.rb
+    nabu/adapters/wellcome.rb nabu/paced_crawl.rb nabu/adapters/niupepa.rb
     nabu/language_shelf.rb nabu/lemma_shelf.rb nabu/date_shelf.rb nabu/meter_shelf.rb
     nabu/library_shelf.rb nabu/note_shelf.rb
     nabu/source_shelf.rb nabu/ingest.rb
