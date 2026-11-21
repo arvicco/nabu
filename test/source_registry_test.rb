@@ -1656,7 +1656,7 @@ class SourceRegistryTest < Minitest::Test
     registry = Nabu::SourceRegistry.load(File.expand_path("../config/sources.yml", __dir__),
                                          provenance_path: false)
     gated = registry.each_source.select(&:grant_required?)
-    assert_equal %w[aclt starling titus-avestan titus-bactrian titus-khotanese titus-manichaica
+    assert_equal %w[aclt ceipp-rongorongo starling titus-avestan titus-bactrian titus-khotanese titus-manichaica
                     titus-old-albanian titus-old-frisian titus-old-lithuanian
                     titus-old-prussian titus-osco-umbrian titus-pahlavi titus-sogdian titus-tocharian-a
                     titus-tocharian-b], gated.map(&:slug).sort
