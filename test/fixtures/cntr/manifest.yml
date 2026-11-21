@@ -1,0 +1,61 @@
+# Nabu fixture manifest. Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+source: cntr
+# adapter_test is null: 03, Orig and SR are documented TRIMS (whole: false)
+# — a count-based adapter test re-run against the untrimmed upstream files
+# would false-fail.
+adapter_test: null
+retrieved: 2026-11-21
+files:
+  - path: LICENSE.md
+    url: https://raw.githubusercontent.com/Center-for-New-Testament-Restoration/transcriptions/4e743a41a4b2ca010ece53229cd272aa59b1efe6/LICENSE.md
+    whole: true
+    trim: none (the CC BY-SA 4.0 legal code; a rejected-grain specimen — repository documentation)
+  - path: MES.g4
+    url: https://raw.githubusercontent.com/Center-for-New-Testament-Restoration/transcriptions/4e743a41a4b2ca010ece53229cd272aa59b1efe6/MES.g4
+    whole: true
+    trim: none (the ANTLR grammar the parser follows; rejected-grain specimen)
+  - path: README.txt
+    url: https://raw.githubusercontent.com/Center-for-New-Testament-Restoration/transcriptions/4e743a41a4b2ca010ece53229cd272aa59b1efe6/README.txt
+    whole: true
+    trim: none (the export's license notice; rejected-grain specimen)
+  - path: class 1/0171.txt
+    url: https://raw.githubusercontent.com/Center-for-New-Testament-Restoration/transcriptions/4e743a41a4b2ca010ece53229cd272aa59b1efe6/class%201/0171.txt
+    whole: true
+    trim: none
+  - path: class 1/03.txt
+    url: https://raw.githubusercontent.com/Center-for-New-Testament-Restoration/transcriptions/4e743a41a4b2ca010ece53229cd272aa59b1efe6/class%201/03.txt
+    whole: false
+    trim: >-
+      byte-identical lines in upstream order — the 11 lines keyed 40001001,
+      40001002, 43010025, 45004003-45004006 (the two repeated refs
+      45004004/45004005 both times) and 50001016/50001017 (the alternate-
+      verse markers).
+  - path: class 1/P52.txt
+    url: https://raw.githubusercontent.com/Center-for-New-Testament-Restoration/transcriptions/4e743a41a4b2ca010ece53229cd272aa59b1efe6/class%201/P52.txt
+    whole: true
+    trim: none
+  - path: class 2/62312.txt
+    url: https://raw.githubusercontent.com/Center-for-New-Testament-Restoration/transcriptions/4e743a41a4b2ca010ece53229cd272aa59b1efe6/class%202/62312.txt
+    whole: true
+    trim: none
+  - path: class 2/README.txt
+    url: https://raw.githubusercontent.com/Center-for-New-Testament-Restoration/transcriptions/4e743a41a4b2ca010ece53229cd272aa59b1efe6/class%202/README.txt
+    whole: true
+    trim: none (rejected-grain specimen — the class folder's license notice)
+  - path: class 3/Meli.txt
+    url: https://raw.githubusercontent.com/Center-for-New-Testament-Restoration/transcriptions/4e743a41a4b2ca010ece53229cd272aa59b1efe6/class%203/Meli.txt
+    whole: true
+    trim: none
+  - path: class 3/Orig.txt
+    url: https://raw.githubusercontent.com/Center-for-New-Testament-Restoration/transcriptions/4e743a41a4b2ca010ece53229cd272aa59b1efe6/class%203/Orig.txt
+    whole: false
+    trim: >-
+      byte-identical lines — the file's first line (40004005) and its line
+      36 (62003002, 1 John 3:2, the stray ^ before a word's first letter).
+  - path: critical texts/SR.txt
+    url: https://raw.githubusercontent.com/Center-for-New-Testament-Restoration/transcriptions/4e743a41a4b2ca010ece53229cd272aa59b1efe6/critical%20texts/SR.txt
+    whole: false
+    trim: >-
+      the rejected-grain specimen — the first 3 lines (Matt 1:1-3) of the
+      Statistical Restoration; the adapter counts it skipped by rule.
