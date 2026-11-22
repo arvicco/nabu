@@ -129,12 +129,12 @@ class SedraTest < Minitest::Test
 
   # --- registry ----------------------------------------------------------------
 
-  def test_registry_row_is_unwired_and_manual
+  def test_registry_row_is_wired_and_manual
     registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources", __dir__))
     entry = registry["sedra"]
     refute_nil entry, "config/sources/ must register sedra"
     assert_equal ADAPTER, entry.adapter_class
-    refute entry.wired, "wired: false until the first real sync is verified"
+    assert entry.wired, "wired after the verified first sync (35,891 entries, 2026-11-22)"
     assert_equal "manual", entry.sync_policy
   end
 

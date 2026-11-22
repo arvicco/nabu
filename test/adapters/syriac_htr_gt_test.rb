@@ -152,11 +152,11 @@ module Adapters
       assert_equal "page-xml", manifest.parser_family
     end
 
-    def test_registry_row_is_unwired_and_manual
+    def test_registry_row_is_wired_and_manual
       registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources", __dir__))
       entry = registry["syriac-htr-gt"]
       refute_nil entry
-      refute entry.wired, "wired: false until the first real sync is verified"
+      assert entry.wired, "wired after the verified first sync (273 pages / 20,706 lines, 2026-11-22)"
       assert_equal "manual", entry.sync_policy
       assert_equal ADAPTER, entry.adapter_class
     end

@@ -35,9 +35,9 @@ classes:
   documents_display: '30,136'
   sources: 6
 - head: scripture
-  documents: 28055
-  documents_display: '28,055'
-  sources: 43
+  documents: 28355
+  documents_display: '28,355'
+  sources: 45
 - head: dedicatory
   documents: 24250
   documents_display: '24,250'
@@ -55,8 +55,8 @@ classes:
   documents_display: '18,848'
   sources: 28
 - head: scholarly
-  documents: 16345
-  documents_display: '16,345'
+  documents: 16467
+  documents_display: '16,467'
   sources: 31
 - head: mark
   documents: 12298
@@ -67,8 +67,8 @@ classes:
   documents_display: '11,692'
   sources: 6
 - head: periodical
-  documents: 11125
-  documents_display: '11,125'
+  documents: 11608
+  documents_display: '11,608'
   sources: 8
 - head: sermon
   documents: 8099
@@ -123,5 +123,5 @@ unknown_documents: 47162
 unknown_documents_display: '47,162'
 unmapped_documents: 14247
 unmapped_documents_display: '14,247'
-unclassified_documents: 559267
-unclassified_documents_display: '559,267'
+unclassified_documents: 559425
+unclassified_documents_display: '559,425'

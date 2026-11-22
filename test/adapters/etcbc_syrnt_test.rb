@@ -32,11 +32,11 @@ module Adapters
 
     # -- registry / manifest --------------------------------------------------
 
-    def test_registry_resolves_etcbc_syrnt_unwired_until_its_first_sync
+    def test_registry_resolves_etcbc_syrnt_wired
       registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources", __dir__))
       entry = registry["etcbc-syrnt"]
       refute_nil entry, "etcbc-syrnt must be registered in config/sources/"
-      refute entry.wired, "wired: false until the first real sync is verified"
+      assert entry.wired, "wired after the verified first sync (27 books / 7,957 verses, 2026-11-22)"
       assert_equal "manual", entry.sync_policy
       assert_equal Nabu::Adapters::EtcbcSyrnt, entry.adapter_class
     end

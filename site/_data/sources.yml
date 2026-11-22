@@ -1241,6 +1241,17 @@ sources:
     entries_display: '0'
     holdings: 31 documents / 18,132 passages
     canonical_display: 38 MB
+  etcbc-syrnt:
+    name: ETCBC SyrNT — the Syriac New Testament (SEDRA III export, Text-Fabric tf/0.1)
+    license_class: nc
+    documents: 27
+    documents_display: '27'
+    passages: 7957
+    passages_display: '7,957'
+    entries: 0
+    entries_display: '0'
+    holdings: 27 documents / 7,957 passages
+    canonical_display: 18 MB
   etcbc-targum:
     name: ETCBC Targum Corpus — Jewish Aramaic Pentateuch targums (Text-Fabric tf/0.1)
     license_class: nc
@@ -2244,13 +2255,13 @@ sources:
   ndl-kotenseki:
     name: NDL 次世代デジタルライブラリー — 古典籍 OCR full text (bulk API)
     license_class: open
-    documents: 72983
-    documents_display: '72,983'
-    passages: 4061997
-    passages_display: '4,061,997'
+    documents: 73090
+    documents_display: '73,090'
+    passages: 4069077
+    passages_display: '4,069,077'
     entries: 0
     entries_display: '0'
-    holdings: 72,983 documents / 4,061,997 passages
+    holdings: 73,090 documents / 4,069,077 passages
     canonical_display: 20 GB
   ninjal-textdb:
     name: NINJAL Text Data Sets for Research on the History of Japanese — the Kirishitan
@@ -2268,14 +2279,14 @@ sources:
     name: Niupepa — Māori Newspapers 1842–1932 (New Zealand Digital Library, University
       of Waikato)
     license_class: research_private
-    documents: 134
-    documents_display: '134'
-    passages: 1313
-    passages_display: '1,313'
+    documents: 617
+    documents_display: '617'
+    passages: 5658
+    passages_display: '5,658'
     entries: 0
     entries_display: '0'
-    holdings: 134 documents / 1,313 passages
-    canonical_display: 11 MB
+    holdings: 617 documents / 5,658 passages
+    canonical_display: 49 MB
   noscemus:
     name: NOSCEMUS Digital Sourcebook — early modern scientific Latin (Transkribus
       HTR)
@@ -2915,6 +2926,17 @@ sources:
     entries_display: '0'
     holdings: 408 documents / 14,953 passages
     canonical_display: 141 MB
+  sedra:
+    name: Sedra — the Syriac lexical database of Beth Mardutho (data release 5.0)
+    license_class: nc
+    documents: 0
+    documents_display: '0'
+    passages: 0
+    passages_display: '0'
+    entries: 35891
+    entries_display: '35,891'
+    holdings: 35,891 entries
+    canonical_display: 13 MB
   sefaria:
     name: Sefaria — Targum shelf + Rabbinic core (Mishnah, Bavli, Minor Tractates,
       Yerushalmi, Tosefta) + Midrash (Rabbah, halakhic midrashim, Aggadah) + medieval
@@ -3239,6 +3261,18 @@ sources:
     entries_display: '0'
     holdings: 632 documents / 134,726 passages
     canonical_display: 47 MB
+  syriac-htr-gt:
+    name: Syriac HTR ground truth — ÖNB Cod. Syr. 1 and St Mark's Monastery MS 36
+      (HTR Winter School, Vienna)
+    license_class: attribution
+    documents: 273
+    documents_display: '273'
+    passages: 20706
+    passages_display: '20,706'
+    entries: 0
+    entries_display: '0'
+    holdings: 273 documents / 20,706 passages
+    canonical_display: 14 MB
   tamilex:
     name: TAMILEX — critical editions of the classical Tamil corpus (Universität Hamburg)
     license_class: nc
@@ -3551,14 +3585,14 @@ sources:
   wellcome:
     name: Wellcome Collection — digitised printed books, OCR full text (pre-1800 cone)
     license_class: open
-    documents: 1227
-    documents_display: '1,227'
-    passages: 403757
-    passages_display: '403,757'
+    documents: 1400
+    documents_display: '1,400'
+    passages: 421233
+    passages_display: '421,233'
     entries: 0
     entries_display: '0'
-    holdings: 1,227 documents / 403,757 passages
-    canonical_display: 912 MB
+    holdings: 1,400 documents / 421,233 passages
+    canonical_display: 927 MB
   wenhai:
     name: 'The Digital Wenhai v1.1: Phonology (Beaudouin 2026) — the Tangut rhyme
       dictionary 文海'
@@ -4163,11 +4197,11 @@ shelves:
     - pleias-french-books
     - socinian-letters
     - wellcome
-    documents: 32895
-    documents_display: '32,895'
-    passages: 7128520
-    passages_display: '7,128,520'
-    size_display: 32,895 / 7,128,520
+    documents: 33068
+    documents_display: '33,068'
+    passages: 7145996
+    passages_display: '7,145,996'
+    size_display: 33,068 / 7,145,996
   papyri:
     sources:
     - papyri-ddbdp
@@ -4567,11 +4601,11 @@ shelves:
     - kouigenji
     - ninjal-textdb
     - oncoj
-    documents: 102159
-    documents_display: '102,159'
-    passages: 7354092
-    passages_display: '7,354,092'
-    size_display: 102,159 / 7,354,092
+    documents: 102266
+    documents_display: '102,266'
+    passages: 7361172
+    passages_display: '7,361,172'
+    size_display: 102,266 / 7,361,172
   southeast-asia:
     sources:
     - dharma-khmer
@@ -4638,12 +4672,12 @@ shelves:
     sources:
     - niupepa
     - ceipp-rongorongo
-    documents: 159
-    documents_display: '159'
-    passages: 1627
-    passages_display: '1,627'
-    size_display: 159 / 1,627
+    documents: 642
+    documents_display: '642'
+    passages: 5972
+    passages_display: '5,972'
+    size_display: 642 / 5,972
 disk:
-  canonical_display: 164 GB
+  canonical_display: 165 GB
   derived_display: 249 GB
   starter_display: 693 MB
