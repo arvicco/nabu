@@ -617,9 +617,12 @@ end
 # And the declared-rule liveness probe (Nabu::Ops::RuleLivenessCheck): a
 # lect facet rule whose source holds live documents but which never
 # compiled a journal row fails, named; no catalog/journal skips.
+# And the incident-register status probe (Nabu::Ops::IncidentRegisterCheck):
+# every incident row's (`## <sigil>I-n ·`) bracketed suffix must carry OPEN, CLOSED,
+# FIX-STAGED or MITIGATED — a row without one fails, named; no register skips.
 namespace :boards do
   desc "Gate check: register 'Next number' headers vs minted numbers + GH watch-list staleness " \
-       "+ phase-register freshness vs merged phases (stale = exit 1)"
+       "+ phase-register freshness vs merged phases + incident-row status tokens (stale = exit 1)"
   task :check do
     require_relative "lib/nabu/ops/board_check"
     require_relative "lib/nabu/ops/watch_list_check"
@@ -628,6 +631,7 @@ namespace :boards do
     require_relative "lib/nabu/ops/queue_groom_check"
     require_relative "lib/nabu/ops/source_readiness_check"
     require_relative "lib/nabu/ops/rule_liveness_check"
+    require_relative "lib/nabu/ops/incident_register_check"
     dir = ENV.fetch("BOARDS_DIR", File.expand_path(".docs", __dir__))
     report = Nabu::Ops::BoardCheck.new(boards_dir: dir).run
     if report.skipped
@@ -643,6 +647,11 @@ namespace :boards do
       register_path: File.join(dir, Nabu::Ops::PhaseRegisterCheck::FILE), repo: __dir__
     ).run
     phases.findings.each { |finding| puts "STALE  phase register #{finding}" }
+
+    incidents = Nabu::Ops::IncidentRegisterCheck.new(
+      register_path: File.join(dir, Nabu::Ops::IncidentRegisterCheck::FILE)
+    ).run
+    incidents.findings.each { |finding| puts "STALE  incident register #{finding}" }
 
     acquisition = Nabu::Ops::AcquisitionCheck.new(
       boards_dir: dir, adapters_dir: File.expand_path("lib/nabu/adapters", __dir__),
@@ -671,6 +680,7 @@ namespace :boards do
     failures << "#{report.findings.size} stale register header(s)" unless report.clean?
     failures << "#{watch.findings.size} stale GH watch row(s)" unless watch.clean?
     failures << "phase register behind the merged phases" unless phases.clean?
+    failures << "#{incidents.findings.size} status-less incident row(s)" unless incidents.clean?
     failures << "#{acquisition.findings.size} acquisition-duty finding(s)" unless acquisition.clean?
     failures << "#{groom.findings.size} ungroomed queue row(s)" unless groom.clean?
     failures << "#{readiness.findings.size} never-synced source(s)" unless readiness.clean?
@@ -689,6 +699,11 @@ namespace :boards do
     else
       merged = phases.highest_merged ? "P#{phases.highest_merged}" : "none"
       puts "boards:check — phase register current: newest row P#{phases.newest_row}, highest merged phase #{merged}"
+    end
+    if incidents.skipped
+      puts "boards:check — no #{Nabu::Ops::IncidentRegisterCheck::FILE} on the boards; incident-status probe skipped"
+    else
+      puts "boards:check — #{incidents.rows} incident row(s) each carry a status token"
     end
     puts "boards:check — acquisition duties current (segment named, rail fresh)" if acquisition.clean?
     puts "boards:check — #{groom.summary} (phase-register cross-check clean)" unless groom.skipped
@@ -773,6 +788,20 @@ def adapter_test_label(adapter_test)
 end
 
 task default: :test
+
+# The one-command phase gate (Nabu::Ops::GatePipeline): site:refresh →
+# skills:scaffold → test → lint → boards:check → site:check, each step its
+# own child rake process whose real exit status decides; the first red step
+# stops the run, named with its exit code. One flushed line per step with
+# its elapsed seconds. The step tasks stay runnable on their own.
+desc "The phase gate in one command: site:refresh, skills:scaffold, test, lint, boards:check, " \
+     "site:check (first red stops, exit 1)"
+task :gate do
+  require_relative "lib/nabu/ops/gate_pipeline"
+  gate = Nabu::Ops::GatePipeline
+  report = gate.new(runner: gate.rake_runner(rakefile: File.expand_path("Rakefile", __dir__))).run
+  abort "gate: RED at #{report.failed_step} (exit #{report.exit_status})" unless report.green?
+end
 
 # The single-source-of-truth site data projection (P58 rider): registry +
 # live-census facts into site/_data/*.yml, read by the pages through Liquid —
