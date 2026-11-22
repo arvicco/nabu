@@ -126,7 +126,8 @@ class RebuildProfileTest < Minitest::Test
   def test_every_measured_corpus_stage_has_a_label
     lib = File.expand_path("../lib/nabu", __dir__)
     source = File.read(File.join(lib, "rebuild.rb")) +
-             File.read(File.join(lib, "store", "indexer.rb"))
+             File.read(File.join(lib, "store", "indexer.rb")) +
+             Dir[File.join(lib, "store", "indexer", "*.rb")].map { |path| File.read(path) }.join
     measured = source.scan(/(?:CORPUS, stage: :|timed\(profile, :)(\w+)/).flatten.map(&:to_sym).uniq
     refute_empty measured
     unlabelled = measured - Nabu::RebuildProfile::CORPUS_STAGE_LABELS.keys
