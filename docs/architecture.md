@@ -605,7 +605,8 @@ decision: the field moves fast, we keep control; the conformant core is
   injected IO/lines; the real stdin/stdout wiring (and stderr logging) is the
   `bin/nabu mcp` entrypoint's job (P8-2). stdout carries protocol messages
   ONLY.
-- **Tools** (`mcp/tools.rb`): thirteen read-only tools as of P78 — the
+- **Tools** (`mcp/tools.rb`, the explicit registry, plus one partial per
+  tool under `mcp/tools/`): thirteen read-only tools as of P78 — the
   founding trio `nabu_search` (full-text XOR lemma, lang/license/limit),
   `nabu_show` (passage/document/range urn, `parallel`), `nabu_status`
   (coverage: sources, counts, languages, license classes, last-sync
