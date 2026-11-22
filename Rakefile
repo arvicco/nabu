@@ -789,6 +789,20 @@ end
 
 task default: :test
 
+# The one-command phase gate (Nabu::Ops::GatePipeline): site:refresh →
+# skills:scaffold → test → lint → boards:check → site:check, each step its
+# own child rake process whose real exit status decides; the first red step
+# stops the run, named with its exit code. One flushed line per step with
+# its elapsed seconds. The step tasks stay runnable on their own.
+desc "The phase gate in one command: site:refresh, skills:scaffold, test, lint, boards:check, " \
+     "site:check (first red stops, exit 1)"
+task :gate do
+  require_relative "lib/nabu/ops/gate_pipeline"
+  gate = Nabu::Ops::GatePipeline
+  report = gate.new(runner: gate.rake_runner(rakefile: File.expand_path("Rakefile", __dir__))).run
+  abort "gate: RED at #{report.failed_step} (exit #{report.exit_status})" unless report.green?
+end
+
 # The single-source-of-truth site data projection (P58 rider): registry +
 # live-census facts into site/_data/*.yml, read by the pages through Liquid —
 # a new desk or a fresh census lands everywhere by regeneration, never by
