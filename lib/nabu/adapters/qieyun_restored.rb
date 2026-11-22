@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require_relative "flat_csv_parser"
-require_relative "../qieyun_crosswalk"
+require_relative "../crosswalks/qieyun_crosswalk"
 
 module Nabu
   module Adapters

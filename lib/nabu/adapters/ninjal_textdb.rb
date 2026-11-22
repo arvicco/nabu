@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 require "digest"
-require_relative "../file_fetch"
-require_relative "../zip_fetch"
+require_relative "../fetch/file_fetch"
+require_relative "../fetch/zip_fetch"
 require_relative "../normalize"
 require_relative "ninjal_txt_parser"
 require_relative "ninjal_nippo_lane"

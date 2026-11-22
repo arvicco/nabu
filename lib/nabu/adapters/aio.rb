@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require_relative "aio_record_parser"
-require_relative "../aio_fetch"
+require_relative "../fetch/aio_fetch"
 
 module Nabu
   module Adapters

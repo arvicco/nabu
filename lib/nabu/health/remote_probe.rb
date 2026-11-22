@@ -3,7 +3,7 @@
 require "digest"
 require "json"
 require "faraday"
-require_relative "../zip_fetch"
+require_relative "../fetch/zip_fetch"
 
 module Nabu
   # Source-health probes (the early backlog's Phase 5 record). The remote probe here is

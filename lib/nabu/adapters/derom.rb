@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require_relative "derom_xml_parser"
-require_relative "../derom_fetch"
+require_relative "../fetch/derom_fetch"
 
 module Nabu
   module Adapters

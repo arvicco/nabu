@@ -2,7 +2,7 @@
 
 require "json"
 
-require_relative "../dicta_library_fetch"
+require_relative "../fetch/dicta_library_fetch"
 require_relative "../zip_reader"
 require_relative "source_read"
 

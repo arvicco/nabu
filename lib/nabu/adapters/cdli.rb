@@ -2,7 +2,7 @@
 
 require_relative "atf_parser"
 require_relative "flat_csv_parser"
-require_relative "../lfs_fetch"
+require_relative "../fetch/lfs_fetch"
 require_relative "cuneiform_concordance"
 
 module Nabu

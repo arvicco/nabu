@@ -3,7 +3,7 @@
 require "json"
 
 require_relative "corpus_corporum_tei_parser"
-require_relative "../corpus_corporum_fetch"
+require_relative "../fetch/corpus_corporum_fetch"
 
 module Nabu
   module Adapters

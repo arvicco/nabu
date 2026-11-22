@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require_relative "etcsl_tei_parser"
-require_relative "../zip_fetch"
+require_relative "../fetch/zip_fetch"
 
 module Nabu
   module Adapters

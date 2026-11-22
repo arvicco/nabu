@@ -2,7 +2,7 @@
 
 require_relative "siddham_epidoc_parser"
 require_relative "../eras"
-require_relative "../zip_fetch"
+require_relative "../fetch/zip_fetch"
 
 module Nabu
   module Adapters

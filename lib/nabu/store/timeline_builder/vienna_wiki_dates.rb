@@ -3,7 +3,7 @@
 require "json"
 
 require_relative "../../timeline"
-require_relative "../../wiki_fetch"
+require_relative "../../fetch/wiki_fetch"
 require_relative "../../adapters/wiki_template_parser"
 require_relative "../../adapters/vienna_wiki"
 

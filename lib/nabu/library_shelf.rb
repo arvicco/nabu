@@ -4,7 +4,7 @@ require "digest"
 require "fileutils"
 require "yaml"
 require_relative "library_manifest"
-require_relative "local_fetch"
+require_relative "fetch/local_fetch"
 
 module Nabu
   # The SANCTIONED write gateway to the canonical/local-library shelf

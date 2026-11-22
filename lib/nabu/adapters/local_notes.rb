@@ -2,7 +2,7 @@
 
 require_relative "../note_file"
 require_relative "../note_shelf"
-require_relative "../local_fetch"
+require_relative "../fetch/local_fetch"
 
 module Nabu
   module Adapters

@@ -7,8 +7,8 @@ require "pathname"
 
 require_relative "bfm_tei_parser"
 require_relative "../redirect_follow"
-require_relative "../zip_fetch"
-require_relative "../git_fetch"
+require_relative "../fetch/zip_fetch"
+require_relative "../fetch/git_fetch"
 
 module Nabu
   module Adapters

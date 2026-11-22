@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require_relative "elephantine_tei_parser"
-require_relative "../elephantine_fetch"
+require_relative "../fetch/elephantine_fetch"
 
 module Nabu
   module Adapters

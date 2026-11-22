@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative "../kyoto_kanripo_crosswalk"
+require_relative "../crosswalks/kyoto_kanripo_crosswalk"
 
 module Nabu
   module Adapters

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require_relative "../lemma_shelf"
-require_relative "../local_fetch"
+require_relative "../fetch/local_fetch"
 
 module Nabu
   module Adapters

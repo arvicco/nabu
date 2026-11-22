@@ -2,7 +2,7 @@
 
 require "json"
 require "digest"
-require_relative "../hf_rows_fetch"
+require_relative "../fetch/hf_rows_fetch"
 require_relative "source_read"
 
 module Nabu

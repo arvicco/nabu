@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require "nokogiri"
-require_relative "../scripta_bulgarica_fetch"
+require_relative "../fetch/scripta_bulgarica_fetch"
 
 module Nabu
   module Adapters

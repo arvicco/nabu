@@ -3,7 +3,7 @@
 require "digest"
 
 require_relative "dacon_pos_parser"
-require_relative "../file_fetch"
+require_relative "../fetch/file_fetch"
 
 module Nabu
   module Adapters

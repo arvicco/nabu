@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative "../zip_fetch"
+require_relative "../fetch/zip_fetch"
 require_relative "gretil_legacy_parser"
 
 module Nabu

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require_relative "../library_manifest"
-require_relative "../local_fetch"
+require_relative "../fetch/local_fetch"
 require_relative "../pdf_text"
 
 module Nabu

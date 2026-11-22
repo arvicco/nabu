@@ -3,7 +3,7 @@
 require "digest"
 require "json"
 
-require_relative "../litopys_fetch"
+require_relative "../fetch/litopys_fetch"
 
 module Nabu
   module Adapters

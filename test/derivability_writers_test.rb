@@ -315,26 +315,27 @@ class DerivabilityWritersTest < Minitest::Test
     nabu/adapters/kitab.rb nabu/adapters/oracc.rb
     nabu/adapters/riig.rb nabu/adapters/rundata.rb nabu/adapters/paramara.rb
     nabu/adapters/sabellic_loans.rb nabu/adapters/trismegistos.rb
-    nabu/cantigas_fetch.rb nabu/cme_fetch.rb
-    nabu/corpus_corporum_fetch.rb nabu/eebo_tcp_fetch.rb nabu/adapters/tcp_box_fetch.rb
-    nabu/derom_fetch.rb nabu/elephantine_fetch.rb
-    nabu/file_fetch.rb nabu/git_fetch.rb nabu/iness_fetch.rb
-    nabu/kanripo_fetch.rb nabu/lfs_fetch.rb nabu/local_fetch.rb
-    nabu/menota_fetch.rb
-    nabu/manual_drop.rb nabu/ochre_fetch.rb nabu/otdo_fetch.rb
-    nabu/lotsawa_fetch.rb nabu/glt_fetch.rb nabu/cantus_fetch.rb nabu/hf_rows_fetch.rb nabu/zip_range_fetch.rb
-    nabu/pleias_shard_fetch.rb
-    nabu/poma_fetch.rb nabu/bu_ajami_fetch.rb nabu/adapters/leme_fetch.rb nabu/dicta_library_fetch.rb
-    nabu/ben_yehuda_period_fetch.rb
-    nabu/seal_fetch.rb nabu/aio_fetch.rb nabu/adapters/runesdb_lido_fetch.rb
-    nabu/statutes_realm_fetch.rb
-    nabu/sefaria_fetch.rb nabu/titus_fetch.rb nabu/url_download.rb
-    nabu/litopys_fetch.rb
-    nabu/wiki_fetch.rb nabu/zip_fetch.rb
-    nabu/korp_fetch.rb
+    nabu/fetch/cantigas_fetch.rb nabu/fetch/cme_fetch.rb
+    nabu/fetch/corpus_corporum_fetch.rb nabu/fetch/eebo_tcp_fetch.rb nabu/adapters/tcp_box_fetch.rb
+    nabu/fetch/derom_fetch.rb nabu/fetch/elephantine_fetch.rb
+    nabu/fetch/file_fetch.rb nabu/fetch/git_fetch.rb nabu/fetch/iness_fetch.rb
+    nabu/fetch/kanripo_fetch.rb nabu/fetch/lfs_fetch.rb nabu/fetch/local_fetch.rb
+    nabu/fetch/menota_fetch.rb
+    nabu/manual_drop.rb nabu/fetch/ochre_fetch.rb nabu/fetch/otdo_fetch.rb
+    nabu/fetch/lotsawa_fetch.rb nabu/fetch/glt_fetch.rb nabu/fetch/cantus_fetch.rb nabu/fetch/hf_rows_fetch.rb
+    nabu/fetch/zip_range_fetch.rb
+    nabu/fetch/pleias_shard_fetch.rb
+    nabu/fetch/poma_fetch.rb nabu/fetch/bu_ajami_fetch.rb nabu/adapters/leme_fetch.rb nabu/fetch/dicta_library_fetch.rb
+    nabu/fetch/ben_yehuda_period_fetch.rb
+    nabu/fetch/seal_fetch.rb nabu/fetch/aio_fetch.rb nabu/adapters/runesdb_lido_fetch.rb
+    nabu/fetch/statutes_realm_fetch.rb
+    nabu/fetch/sefaria_fetch.rb nabu/fetch/titus_fetch.rb nabu/url_download.rb
+    nabu/fetch/litopys_fetch.rb
+    nabu/fetch/wiki_fetch.rb nabu/fetch/zip_fetch.rb
+    nabu/fetch/korp_fetch.rb
     nabu/adapters/altaica_shm.rb nabu/adapters/atmo.rb
     nabu/adapters/iedc.rb nabu/adapters/shkz.rb
-    nabu/scripta_bulgarica_fetch.rb nabu/elektire_fetch.rb
+    nabu/fetch/scripta_bulgarica_fetch.rb nabu/fetch/elektire_fetch.rb
     nabu/adapters/kouigenji.rb nabu/adapters/kokubunken.rb
     nabu/adapters/nrct.rb
     nabu/adapters/burman_concordance.rb nabu/adapters/cbdb.rb

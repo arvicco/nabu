@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require_relative "otdo_html_parser"
-require_relative "../otdo_fetch"
+require_relative "../fetch/otdo_fetch"
 
 module Nabu
   module Adapters
