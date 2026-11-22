@@ -1,0 +1,14 @@
+wiktionary-te:   # 02-sources row 284
+  adapter: Nabu::Adapters::WiktionaryTe
+  adopted: "2026-10-21"
+  axes: [indic]
+  wired: true    # first sync verified 2026-10-21: 23,325 entries (the lane census exactly)
+                 # eyeball nabu define నాలుగు ("four", ← Proto-Dravidian *nāl), then flip.
+  # The kaikki Telugu extraction (23,325 records / "21803 distinct words",
+  # census 2026-10-21): the wave's largest headword count; Sanskrit and
+  # Proto-Dravidian etymons (1,546 sa / 477 dra-pro edges) beside the
+  # Persian/Arabic donors. Language tel (→ te through the held codemap
+  # alias). The wiktionary-akk mold on the shared WiktionaryKaikki base:
+  # per-language JSONL (deprecated upstream — fallback = filter the full
+  # extract by lang_code te), CC BY-SA + GFDL → attribution, FileFetch.
+  sync_policy: manual

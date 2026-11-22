@@ -191,9 +191,9 @@ class AraneseTest < Minitest::Test
   # --- registry round-trip ----------------------------------------------------
 
   def test_registry_resolves_aranese_and_manifest_agrees
-    registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources.yml", __dir__))
+    registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources", __dir__))
     entry = registry["aranese"]
-    refute_nil entry, "aranese must be registered in config/sources.yml"
+    refute_nil entry, "aranese must be registered in config/sources/"
     assert_equal Nabu::Adapters::Aranese, entry.adapter_class
     assert entry.wired, "flipped 2026-08-21 — first sync owner-round-verified (839,816 passages)"
     assert entry.translations, "the Spanish side is the point of a parallel corpus — -es rides"

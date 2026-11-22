@@ -1,0 +1,46 @@
+titus-avestan:
+  adapter: Nabu::Adapters::TitusAvestan
+  adopted: "2026-07-24"
+  axes: [etym, iranian]  # P44-r2 (D43-d): the Avesta is the anchor of the new `iranian`
+                         # desk (ave, the Old Iranian liturgy). It keeps `etym` too — its
+                         # forms feed the comparative shelves. availability: blocked still
+                         # drops it from the PUBLIC iranian membership (the site page + docs
+                         # list only oracc/cdli and carry the private-materials footnote).
+  # P44-r3a: grant-gated PRIVATE research material (the fetch right is not
+  # conveyed by a public license, so not by a public clone). The public repo keeps
+  # this license/scouting record, but must NOT advertise it as a library holding:
+  # `availability: blocked` excludes it from the generated site axis pages, the
+  # docs/axes.md memberships, and every public census (owner ruling 2026-07-24).
+  # Distinct from grant_required (the sync-time gate) and wired — this governs
+  # PUBLIC VISIBILITY only; local fetch/serve are unaffected.
+  availability: blocked
+  wired: true    # Owner flip 2026-07-25 (the grant acknowledged on this box,
+                   # synced: 248 docs; status reads `granted` per P44-i2).
+                   # `nabu sync titus-avestan` still REFUSES on any box until
+                   # its owner types `granted` (the grant gate is per-box and
+                   # untouched by wired); parse-only works offline once pages
+                   # land under canonical/titus-avestan/.
+  # TITUS Avestan Corpus (titus.uni-frankfurt.de) — the Avesta as a preliminary
+  # electronic edition on the basis of K.F. Geldner and N.L. Westergaard,
+  # prepared by Sonja Fritz (Berlin 1985-88), corrected by J. Gippert et al.
+  # One document per text page (avest001.htm …); verses (and chapter/paragraph
+  # ritual rubrics) are the passages, keyed off the <A NAME="Avest._…"> anchors.
+  # Terms: non-commercial use, "TITUS and the editors clearly indicated
+  # wherever displayed." license_class `nc` (servable, NOT hidden — the grant
+  # wants it DISPLAYED, credited); the manifest carries the verbatim credit line,
+  # threaded onto every serving surface (show cards, search hits, MCP payloads).
+  sync_policy: manual
+  # P43-2: THE FETCH RIGHT is not conveyed by a public license — a public clone
+  # does NOT carry it, so `nabu sync titus-avestan` demands an explicit, recorded
+  # acknowledgment before its first fetch (the grant gate — DISTINCT from the nc
+  # license's per-display credit duty).
+  grant_required: true
+  grant:
+    terms: >-
+      one retrieval, local non-commercial use, no redistribution; TITUS and the
+      editors clearly indicated wherever displayed
+    request_hint: >-
+      Contact TITUS (titus.uni-frankfurt.de) for a license grant, and promise
+      to credit TITUS and the editors (Avesta ed. Geldner/Westergaard; electronic text Sonja Fritz;
+      corrections Gippert et al.)
+      wherever any text is displayed.

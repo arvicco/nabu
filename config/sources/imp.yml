@@ -1,0 +1,9 @@
+imp:
+  adapter: Nabu::Adapters::Imp
+  adopted: "2026-07-11"
+  axes: [slavic]
+  wired: true    # OWNER SIGN-OFF 2026-07-11: synced, 658 docs / 404,897 passages
+                   # (silver annotation, text-only), eyeballed.
+  # license_watch candidate (P16-5, owner decision — the CC BY-SA 4.0 grant
+  # lives on the CLARIN.SI record page, hdl 11356/1031):
+  # license_watch: https://www.clarin.si/repository/xmlui/handle/11356/1031

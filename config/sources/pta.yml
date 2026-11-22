@@ -1,0 +1,16 @@
+pta:   # P154, 02-sources row 341
+  adapter: Nabu::Adapters::Pta
+  adopted: "2026-11-03"
+  axes: [classical]
+  siblings: cts
+  wired: true   # first sync verified 2026-11-03: 113 docs / 8,778 passages, 423 rule skips
+  sync_policy: manual
+  # PTA — the Patristic Text Archive (BBAW): CapiTainS TEI editions of early
+  # Christian Greek authors (the Perseus layout; a Perseus subclass). The
+  # Greek editions only, every edition of a work (PTA's versions are
+  # distinct printed editions). LICENCE PER DOCUMENT: each file's own
+  # teiHeader <licence> — by-sa/by → attribution, by-nc(-sa) →
+  # license_override nc, no licence → never ingested; an unknown target
+  # stops discovery. Rahlfs LXX (row 44) and SBLGNT (held) skip by rule.
+  # Witness overlap, not duplication: some works also sit in first1k-greek
+  # or cgpg's Migne volumes in other prints.

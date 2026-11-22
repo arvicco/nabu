@@ -1,0 +1,38 @@
+titus-manichaica:   # 02-sources row 226
+  adapter: Nabu::Adapters::TitusManichaica
+  adopted: "2026-10-10"
+  axes: [etym, iranian]  # the Manichaean Middle Iranian literature (Middle Persian,
+                         # Parthian, Sogdian) beside the Pahlavi books on the iranian desk;
+                         # etym because the forms feed the comparative shelves.
+  # Grant-gated PRIVATE research material, the titus-avestan posture verbatim
+  # (the fetch right is not conveyed by a public license, so not by a clone):
+  availability: blocked
+  wired: true    # First retrieval + recovery verified 2026-10-10: 542 docs / 3,089 passages / 0 quarantines / 41 header-page skips.
+  # TITUS Manichaean Middle Iranian corpora (titus.uni-frankfurt.de/texte/etcs/iran/
+  # miran/manich/, framesets probed 2026-10-10): the Manichaean Reader arranged by texts
+  # (M. Boyce, A Reader in Manichaean Middle Persian and Parthian, Leiden 1975; entered
+  # by J. Gippert 1989, corrections D.N. MacKenzie 1993, interlinear transcription
+  # J. Gippert), the Corpus of Manichaean Texts arranged by editions (22 editions,
+  # Mir.Man. … GL; prepared by D. Durkin-Meisterernst, D.N. MacKenzie, N. Sims-Williams,
+  # W. Sundermann and others), and the Sermon of the Soul (W. Sundermann 1988, Parthian
+  # and Sogdian, with P. Zieme's Turkish fragments). One document per text page
+  # (canonical/titus-manichaica/<corpus>/<prefix>NNN.htm); passages at the deepest
+  # CITATION level the page reaches (keyed by the <!Level N> header VALUES — the
+  # anchors' components carry underscores), the manuscript/page/line locations and the
+  # Corpus's Reader cross-references riding as annotations. Languages are the edition's
+  # own lane claims per passage: pal (Manichaean Middle Persian), xpr (Parthian), sog
+  # (Sogdian), oui (the Sermon's Turkic appendix); the Reader keeps the transcription as
+  # text and the transliteration as an annotation.
+  sync_policy: manual
+  grant_required: true
+  grant:
+    terms: >-
+      the Middle Iranian families on TITUS, to whatever extent TITUS hosts them as
+      retrievable text: one retrieval per corpus, local personal research use only,
+      no redistribution; TITUS and the editors credited wherever displayed
+    request_hint: >-
+      Contact TITUS (titus.uni-frankfurt.de) for a license grant, and promise
+      to credit TITUS and the editors (M. Boyce, J. Gippert, D.N. MacKenzie;
+      D. Durkin-Meisterernst, N. Sims-Williams, W. Sundermann and the Corpus's
+      edition editors; P. Zieme)
+      wherever any text is displayed.

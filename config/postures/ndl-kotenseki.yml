@@ -1,0 +1,32 @@
+sources:
+  # Variety-less languages as held (no registry stages to refine into):
+  ndl-kotenseki:
+    # kind: machine-postured — the NDL Search bib join's NDC codes fold in
+    # config/kind_map.yml (ndc facet). Census 2026-10-19 (500 random held
+    # PIDs): 6.6% of books carry an NDC, ~79% of those fold; books without
+    # an NDC (or with a subject-only class) carry no kind row, honestly.
+    lect: {posture: identity, note: "jpn — DELIBERATELY COARSE, declared: the 古典籍
+        mass mixes Japanese and kanbun and the bibliography carries no per-item
+        language field; a finer claim would be invented"}
+    dating: {posture: dated, note: "P109-2: the census 出版日（W3CDTF） year envelope
+        (||-multi values span; the bare '1000' unknown-date sentinel — 5,388 rows,
+        censused — mints nothing, declared); prose 出版日 rides as raw. Where the census
+        mints no year, the NDL Search bib record's W3CDTF issued years fill the
+        envelope, the raw labeled 'NDL Search record (pid N): …' (the print's own
+        date — artifact class). Census 2026-10-19, 500 random held PIDs: 41% census-
+        typed, +1.2% from the record (6 of 294 undated — the record mostly restates
+        the census, which is cut from the same bibliography); the remaining ~57% carry
+        no year in either. The census prose nengō (寛政4刊, 弘化4-嘉永6) is the LAST
+        rung (owner-ruled 2026-10-20, config/eras.yml): 4,622 of the 56,484 census rows
+        without a W3CDTF year carry an era-year shape; Chinese print-era homonyms
+        (Ming 正徳 / 弘治, Qing 嘉慶 — the collection holds their imprints), the one-year
+        eras, year-less era spans (慶長元和年間) and pre-Taika dates stay unparsed,
+        declared"}
+    places: {posture: named, note: "no place fields in the census bibliography; the bib
+        record's 出版地 list (publication_places, 6,037 docs) names the digitized item's
+        own production place — the print or manuscript IS the document (the eebo
+        imprint stance) — and projects onto the axis on ~5,040 docs: catalog brackets
+        stripped, the unknown markers ([出版地不明] / [製作地不明] / [書写地不明]) mint
+        nothing, the historical spellings (京 · 東都 · 浪華 · 京城) ride verbatim. No
+        gazetteer refs yet: resolution (the nrct lane) is a nabu-places section, declared"}
+    script: {posture: implied}

@@ -7,7 +7,7 @@ Do not crawl this site page by page to inventory the library — use the lookup 
 ## Agent flow
 
 1. Read this file for the census and the map; every figure above is regenerated from the live catalog at each release gate.
-2. To learn what is held, read the [Sources](https://arvicco.github.io/nabu/sources/) index (every corpus, its upstream and its license class) and the [Languages](https://arvicco.github.io/nabu/languages/) index — or the machine-readable [source registry](https://github.com/arvicco/nabu/blob/main/config/sources.yml).
+2. To learn what is held, read the [Sources](https://arvicco.github.io/nabu/sources/) index (every corpus, its upstream and its license class) and the [Languages](https://arvicco.github.io/nabu/languages/) index — or the machine-readable [source registry](https://github.com/arvicco/nabu/tree/main/config/sources).
 3. To work one field, open its desk dossier below: the shelves, instruments and commands of that scholarly hat.
 4. To search, read or cite the texts themselves, install Nabu locally ([Quickstart](https://arvicco.github.io/nabu/quickstart/)) and connect the read-only MCP server ([Tools](https://arvicco.github.io/nabu/tools/)); citations resolve to stable URNs at verse or tablet-line grain.
 5. Respect each text's license class as the Sources page states it; derived datasets carry their own terms in nabu-data.

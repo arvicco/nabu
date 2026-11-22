@@ -1,0 +1,23 @@
+tipitaka-lk:   # 02-sources row 308
+  adapter: Nabu::Adapters::TipitakaLk
+  adopted: "2026-10-22"
+  axes: [indic, buddhist]
+  siblings: ["-si"]   # census claim: no upstream filename ends in -si (285 files, 2026-10-22)
+  wired: true    # first sync 2026-10-23 @ 4fe56eb: 563 docs EXACTLY on the census
+                 # (285 pli roots + 278 si siblings; the 7 ap-pat files Pali-only),
+                 # 456,967 passages indexed, 0 errored / 0 unrecognized; eyeballed
+                 # kn-khp:2.7 --parallel si (buddham saranam gacchami ↔ its Sinhala)
+                 # and random passages incl. an atta- paragraph's annotations;
+                 # an atta- paragraph's bold/footnote annotations and 5 random passages.
+  # tipitaka.lk (Path Nirvana): the proofread Buddha Jayanthi Tripitaka in
+  # Sinhala-script Pali with its facing Sinhala translation, and the CST
+  # atthakatha + Visuddhimagga with their Sinhala translation
+  # (github.com/pathnirvana/tipitaka.lk, public/static/text/*.json).
+  # Document = upstream file x layer: the pli root + its -si sibling,
+  # passage = one printed-page entry, cited <page>.<entry> on both layers.
+  # License: CC BY-ND 4.0 + upstream's sync condition (LICENSE.md, the
+  # Pali text); the Sinhala translation and the atthakatha layers by Path
+  # Nirvana's grant on the same terms (by email, 2026-10-22) →
+  # research_private (ND). The sync condition asks for regular automated
+  # re-pulls (errors are corrected upstream, never locally) → auto.
+  sync_policy: auto

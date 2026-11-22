@@ -1,0 +1,14 @@
+sources:
+  africa-pd:   # P124-1
+    # kind: machine-postured — kind_map.yml source_kind scholarly.
+    lect: {posture: identity, note: "the Africa package merged + canonical-synced 2026-10-14
+        (the add-then-retire shape): the sw anchor now exists for Velten's Swahili reader, the
+        one object-language claim; the other nine works claim their PROSE language — eng 6,
+        deu 1, fra 2, all real anchors (the reference-shelf posture); the African languages
+        presented (onw, sw, ha, tmh, kab, vai) ride metadata object_language, never a claim"}
+    dating: {posture: dated, note: "every work carries its edition year — :structured lane"}
+    places: {posture: unplaced, note: "imprint places (London, Berlin, Paris, Cambridge) ride
+        metadata 'imprint' — the printing place, not a text place"}
+    script: {posture: implied, note: "Latin-script prose and Latin transcription of the African
+        languages; Old Nubian, Ajami facsimiles, Tifinagh and the Vai syllabary are uncorrected
+        OCR, garbled (declared per document)"}

@@ -1,0 +1,7 @@
+sources:
+  traces:
+    kind: {posture: unclassified}
+    lect: {posture: identity, note: gez}
+    dating: {posture: undatable}
+    places: {posture: unplaced}
+    script: {posture: implied}

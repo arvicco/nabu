@@ -1,0 +1,17 @@
+sources:
+  kannada-texts:   # P118-3
+    kind: {posture: unclassified, note: "no class field in the TEI (campū purāṇas, śatakas,
+        a sāṅgatya, a nighaṇṭu, a poetics and a grammar) — a kind_map fold would be a ruled
+        table"}
+    lect: {posture: identity, note: "kan IS Kannada — the P118-3 pending retired
+        2026-10-12: the Indic registry package (merged 2026-10-11) minted the kn anchor
+        with kn:old/kn:mid stages and the kan → kn codemap row, so kan-Latn resolves;
+        per-work staging onto the Old/Middle bands is a future facet-rule look (the
+        corpus spans Pampa 941 to Honnamma); san-Latn resolves as before"}
+    dating: {posture: partial, note: "6 of 16 works dated by the repository README (941 ×2,
+        953, ca. 1042 ×3) — attributed COMPOSITION class on the :structured lane; the TEI
+        headers carry only edition years; the other ten works stay undated, declared"}
+    places: {posture: unplaced, note: "the headers name only the modern editions' imprint
+        places (Hampi, Mysore, Bengaluru) — never the works'"}
+    script: {posture: qualified, note: "ISO-15919 romanization of Kannada-script editions;
+        the Kannada script itself is not carried"}

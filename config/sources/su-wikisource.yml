@@ -1,0 +1,15 @@
+su-wikisource:   # P140, 02-sources row 286
+  adapter: Nabu::Adapters::SuWikisource
+  adopted: "2026-10-21"
+  axes: [sea]
+  wired: true    # first sync verified 2026-10-21: 78 docs / 8,351 passages (the lane census exactly)
+  sync_policy: manual
+  # The dated 19th-century Sundanese cone (the owner-ruled wikisource
+  # posture, the Macedonian precedent), census 2026-10-21 — drawn at every
+  # fetch from the Indéks Year= of all 171 Indexes: 53 Indexes ≤ 1900 (20
+  # with pages) + the censused EXTRA (TBG LXVI, 1926: the Carita
+  # Parahyangan, Old Sundanese → osn) → 79 cone pages. Out: 1901–1930 (38
+  # Indexes / 65 pages — the Poesaka Soenda 1922–24 issues), > 1930 (18 /
+  # 60), unstated (6 / 6). Census fetch: 78 docs / 8,351 passages (sun 56
+  # · sun-Java 21 · osn 1), 1 Dutch introduction measured out. Texts PD;
+  # transcription layer CC BY-SA 4.0.

@@ -466,9 +466,9 @@ class TitusManichaicaTest < Minitest::Test
   # --- registry round-trip (runs in CI) --------------------------------------
 
   def test_registry_row_is_grant_gated_blocked_and_unwired
-    registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources.yml", __dir__))
+    registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources", __dir__))
     entry = registry[SLUG]
-    refute_nil entry, "titus-manichaica must be registered in config/sources.yml"
+    refute_nil entry, "titus-manichaica must be registered in config/sources/"
     assert_equal ADAPTER, entry.adapter_class
     assert entry.wired, "wired: true — the first retrieval + recovery round verified 2026-10-10 " \
                         "(542 docs / 3,089 passages / 0 quarantines)"

@@ -1,0 +1,19 @@
+sources:
+  shabados:
+    # P122-3: Shabad OS — the Gurmukhī primary text (type = primary only).
+    kind: {posture: unclassified, note: "scripture and the Panthic canon; the source/
+        section names ride metadata (source_name, section_name, section_description)"}
+    lect: {posture: identity, note: "the Punjabi package merged + canonical-synced
+        2026-10-13 (the add-then-retire shape within ONE phase): pan resolves through the
+        codemap onto the pa anchor, bra-Guru/fas-Guru onto bra and fa with the script
+        fact on the ~ axis; pa:old (granthic, [1450, 1708]) is the NAMED refinement for
+        the scriptural corpus, not defaulted. The per-source/section language table in
+        the adapter is declared coarse"}
+    dating: {posture: pending, note: "candidate: a ruled author-floruit table over the
+        database's author records (the Gurus, the bhagats, Bhāī Gurdās, Bhāī Nand Lāl —
+        each line group names its author) as the composition class; the records carry no
+        date field of their own"}
+    places: {posture: unplaced, note: "no place field in any record"}
+    script: {posture: mixed, note: "Gurmukhī throughout: native for the Punjabi lanes
+        (pan, implied) and a transliteration surface for Braj and Persian (bra-Guru,
+        fas-Guru, qualified)"}

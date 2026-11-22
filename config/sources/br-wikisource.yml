@@ -1,0 +1,19 @@
+br-wikisource:   # P140, 02-sources row 287
+  adapter: Nabu::Adapters::BrWikisource
+  adopted: "2026-10-21"
+  axes: [celtic]
+  wired: true    # first sync verified 2026-10-22: 3,155 docs / 137,115 passages, 100 skips-by-rule (the lane's ~3,150 estimate held)
+  sync_policy: manual
+  # The dated 19th-century Breton cone (the owner-ruled wikisource posture,
+  # the Macedonian precedent), census 2026-10-21 — the cone is drawn at
+  # every fetch from the Meneger (Index) Year= of all 613 Indexes:
+  #   band          Indexes  with pages  pages   verdict
+  #   ≤ 1800            4         4        125   cone
+  #   1800–1900       238       144      3,130   cone (the mechanical band)
+  #   1901–1930       276       276      2,293   after_cone (20th-c. compositions)
+  #   > 1930           63        63        819   edition_taint
+  #   unstated          9         9         49   edition_unstated
+  # Cone: 242 Indexes → 3,255 pages; minus the /a-bezh whole-book
+  # aggregates (62) and the measured French apparatus (the Quellien /
+  # Bourgault-Ducoudray roots) → ≈ 3,150 docs / ≈ 87k passages (60-page sample). Language bre (Modern
+  # Breton). Texts PD; transcription layer CC BY-SA 4.0.

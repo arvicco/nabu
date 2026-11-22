@@ -1,0 +1,16 @@
+sources:
+  vks:
+    # kind: machine-postured — the vks fold in kind_map.yml over the Korp
+    # subcorpus (the collection facet).
+    lect: {posture: dates, note: "fi:old (Old Literary Finnish, vanha kirjasuomi) by
+        date-band inference off the Korp date envelopes (the registry's 2026-10-21 mint;
+        every text falls inside the [1540, 1810] band, verified live). Swedish and Latin
+        runs inside the works read fi — the Korp kwic carries no foreign spans (declared
+        coarse)"}
+    dating: {posture: dated, note: "every Korp text element's text_datefrom/text_dateto — the
+        file's envelope on the :structured lane; the collection files (decrees, sermons,
+        almanacs) also date each passage by its own element"}
+    places: {posture: unplaced, note: "VKS carries no place field (imprint towns stay inside the
+        title pages' text)"}
+    script: {posture: implied, note: "Latin script; the corpus's word layer is the text (the
+        abbreviation completions ride as expansions)"}

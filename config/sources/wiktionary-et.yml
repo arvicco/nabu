@@ -1,0 +1,14 @@
+wiktionary-et:   # P154, 02-sources row 364
+  adapter: Nabu::Adapters::WiktionaryEt
+  adopted: "2026-11-02"
+  axes: [baltic]
+  wired: true   # first sync verified 2026-11-03: 13,549 entries
+  # The kaikki Estonian extraction (13,549 records / "12657 distinct words",
+  # census 2026-11-02): the library's first Estonian dictionary:
+  # Proto-Finnic (1,532) and Proto-Uralic (138) etymons beside the German
+  # and Middle Low German donor lanes (433 de, 226 gml) that shaped the
+  # written language vakk holds. Language et. The wiktionary-fa mold on the
+  # shared WiktionaryKaikki base: per-language JSONL (deprecated upstream —
+  # fallback = filter the full extract by lang_code et), CC BY-SA + GFDL →
+  # attribution, FileFetch.
+  sync_policy: manual

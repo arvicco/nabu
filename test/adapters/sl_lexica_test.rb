@@ -338,9 +338,9 @@ class SlLexicaTest < Minitest::Test
   # --- registry --------------------------------------------------------------------------
 
   def test_registry_row_is_live_with_manual_sync_policy
-    registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources.yml", __dir__))
+    registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources", __dir__))
     entry = registry["sl-lexica"]
-    refute_nil entry, "config/sources.yml must register sl-lexica"
+    refute_nil entry, "config/sources/ must register sl-lexica"
     assert_equal Nabu::Adapters::SlLexica, entry.adapter_class
     assert entry.wired, "live (owner sign-off 2026-07-16: synced 139,405 entries, eyeballed, flipped)"
     assert_equal "manual", entry.sync_policy

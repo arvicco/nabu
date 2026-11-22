@@ -1,0 +1,19 @@
+sources:
+  siddham:
+    # P118-4: the Siddham EpiDoc archive (427 editions, blank TEI headers —
+    # the English title is the only metadata the asset carries).
+    kind: {posture: unclassified, note: "the titles name the object (Charter / Pillar
+        Inscription / Seal Legend / Graffito …) in free English prose — no typed genre
+        field; a title-vocabulary fold is a recorded future look"}
+    lect: {posture: identity, note: "san-Latn on all 427 editions (census 2026-10-11) — the
+        bare san anchor is the claim; deliberately coarse (no epigraphic-Sanskrit stage)"}
+    dating: {posture: partial, note: "title-mined only (headers blank): 9 era-typed 'GE N'
+        years via config/eras.yml (Gupta–Valabhī, GE Y → CE [Y+319, Y+320]) + 4 century
+        attributions (401–500 / 501–600); 88 untyped 'year N' titles ride raw as
+        title_year, never converted (the title names no era); the editions' own dating
+        formulae are a future extractor story — rows via MetadataDates :structured"}
+    places: {posture: unplaced, note: "no origPlace (headers blank); the findspot leads
+        the English title in prose (Eran / Gadhwa / Khoh …) but no structured field
+        carries it — the offline metadata spreadsheets are not in the deposit"}
+    script: {posture: qualified, note: "romanized (san-Latn IAST); the Brāhmī-derived
+        scripts of the objects are the artifact facts"}

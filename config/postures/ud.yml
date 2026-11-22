@@ -1,0 +1,34 @@
+sources:
+  ud:
+    kind: {posture: unclassified, note: "every treebank README's Genre line (UD genre tags,
+        all 42 treebanks) rides each split document as the genre facet, verbatim — never
+        kind-folded: a split file mixes whatever its treebank mixes, so one kind over the
+        union would misstate each text (census 2026-10-19; the six UD v2.19 newcomers'
+        lines read at the r2.19 tag 2026-11-16)"}
+    # lect machine-postured (codemap + the 2026-10-11 gn → gn:old override,
+    # the ruled narrow exception to D57-f: the Old Guaraní treebank is a
+    # stage witness and the only gn-claiming document); the lzh treebanks →
+    # zho/lit via codemap; the rest stays DELIBERATELY unstaged (D57-f).
+    # axm (middle-armenian-armtdp) resolves by identity on the held
+    # xcl → axm → hy chain; oge (old-georgian-glc, and the v2.19
+    # old-georgian-oglauro + old-georgian-midglauro) resolves by identity
+    # now that the Kartvelian nodes are in the registry (oge, parent
+    # ccs-gzn). The other v2.19 codes resolve by identity too (checked
+    # against canonical/nabu-lects 2026-11-16): pli (Pali, parent san),
+    # txg (Tangut, parent tbq), pro (Old Occitan, parent roa), ave
+    # (Avestan, parent iir:pro). Two stage candidates stay bare under
+    # D57-f, unclaimed: midglauro is MIDDLE Georgian filed by UD under
+    # oge (the registry's ka:mid is the honest node; an oge-wide override
+    # would mislabel GLC/OGLauRo, so only a per-document ruling fits),
+    # and avestan-old is Gathic (Yasna 28 → ave:old).
+    dating: {posture: partial, note: "the sentence-comment dates of four treebanks (census
+        2026-10-19): birchbark date_created on 1,203 letters (25 bands), rnc created on 56
+        documents, ruthenian date/created on 83, egyptian-pc date on 3,089 sentences (5th/6th
+        Dynasty, banded by the TLA thesaurus nodes in period_bands.yml) — passage-grain runs +
+        a document envelope (UdSentenceDates). The other 38 treebanks state no date (the six
+        v2.19 newcomers' sentence comments carry none — their works' eras, e.g. CronOc's
+        late-13th-c. Roman de Lagrasse or MidGLauRo's 12th/17th-c. novels, live only in
+        README prose: curated-band candidates, declared not faked)"}
+    places: {posture: named, note: "egyptian-pc's place comment (Saqqara, all 3,089 sentences)
+        rides the UdSentenceDates rows; no other treebank states a place"}
+    script: {posture: implied}

@@ -23,7 +23,7 @@ researcher's own disk — it is not a hosted service.
 - `docs/README.md` — the index and suggested reading order.
 - `docs/architecture.md` — the system design (stores, pipeline, MCP server).
 - `docs/conventions.md` — URNs, NFC, language codes, licensing, dates.
-- `docs/02-sources.md` and `config/sources.yml` — every source, its
+- `docs/02-sources.md` and `config/sources/` — every source, its
   upstream and its `license_class` (the registry is machine-readable).
 - `docs/mcp.md` — the MCP server contract, tool by tool.
 - `docs/manual/` — per-source and per-tool operating notes.
@@ -72,6 +72,6 @@ Every passage the tools return carries `urn`, `language` and
 
 Agents must respect each text's class: preserve `urn`, `source`,
 `license_class` and any `credit` field when quoting, check the source's
-exact license line (`docs/02-sources.md`, `config/sources.yml`) before
+exact license line (`docs/02-sources.md`, `config/sources/`) before
 reuse, and never strip attribution or mix classes in an export without
 filtering. Derived datasets published in nabu-data carry their own terms.

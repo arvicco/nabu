@@ -1,0 +1,24 @@
+sources:
+  sillok:
+    lect:
+      posture: codemap
+      note: lzh → zho/lit (the kanripo precedent — Literary Chinese as read
+        in Korea; a ko-tradition lect claim stays DELIBERATELY coarse until
+        a use case needs it, P78-1)
+    dating: {posture: dated, note: "per-volume 서기 year via MetadataDates :structured; P81-1: the
+        per-day entry dates also project as passage-grain year runs (NikhEntryDates), and undated
+        volumes (prefaces/indexes) gain leaf-derived envelopes"}
+    places: {posture: unplaced, note: "the 531,956 지명 index tags ride passage annotations + the
+        passage 'place' facet as tag-grain MENTIONS (no upstream ref on any) — where a text was
+        made or found is not what they say, so no axis claim is minted"}
+    script: {posture: implied}
+    # The index markup (NikhXmlParser entities): 1,572,270 이름 person tags
+    # (1,352,152 carrying M_ ids → the "sillok" person-index slice, 68,285
+    # persons; `nabu person sillok:M_… | nikh:M_…`), 51,261 서명 books and
+    # 6,382 연호 eras ride passage annotations and the person/book/era
+    # passage facets (facet_map.yml) — mentions with refs, never claims
+    # about the article's own author, date or place.
+    # The per-article 분류 subject classes (413,102 of 414,321 passages,
+    # 216 labels) are a passage-grain facet (facet_map.yml passage_fields
+    # → "subject"), reachable by `search --facet subject=…`; they are
+    # topical classes, not a document kind, so no kind fold rides them.

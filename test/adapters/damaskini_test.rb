@@ -296,9 +296,9 @@ class DamaskiniTest < Minitest::Test
   # --- registry round-trip -------------------------------------------------------------
 
   def test_registry_resolves_damaskini_and_manifest_agrees
-    registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources.yml", __dir__))
+    registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources", __dir__))
     entry = registry["damaskini"]
-    refute_nil entry, "damaskini must be registered in config/sources.yml"
+    refute_nil entry, "damaskini must be registered in config/sources/"
     assert_equal Nabu::Adapters::Damaskini, entry.adapter_class
     assert entry.wired, "live (owner sign-off 2026-07-16: synced 46 docs, eyeballed, flipped)"
     assert entry.translations, "text_en coverage is 100% — -en siblings ride the same parse"

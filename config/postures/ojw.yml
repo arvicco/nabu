@@ -1,0 +1,8 @@
+sources:
+  ojw:
+    lect: {posture: identity, note: "kaw — the v1.6.0 anchor, shared with the kakawin
+        corpora (pending retired at the P92 gate)"}
+    dating: {posture: undatable, note: "a lexicon shelf; OJED's attestation dates do not
+        ship in the tab"}
+    places: {posture: unplaced}
+    script: {posture: qualified, note: "romanized headwords (the OJED transliteration)"}

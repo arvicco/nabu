@@ -1,0 +1,18 @@
+traces:   # P46-2, 02-sources row 125
+  adapter: Nabu::Adapters::Traces
+  adopted: "2026-07-26"
+  axes: [ethiopic]
+  wired: true    # flipped 2026-07-26 (owner ruling "flip all wired"; first sync verified on the live box)
+  # TraCES TEI-Ling export (ERC Advanced Grant 338756, Hamburg): 15 files /
+  # 75,440 morphologically analyzed Gǝʿǝz word tokens — Matthew 12,212,
+  # Kebra nagast prologue+25 chs 3,784, ʿAmda Ṣǝyon chronicle 10,704,
+  # Testamentum Domini 12,471, "MM" 18,685, "AK" 15,599, Gadla Libānos
+  # excerpts, seven Aksumite royal inscriptions (RIE 187-232). One passage
+  # per word token (fidäl text; translit + morphology + Dillmann-entry lemma
+  # link in annotations) — the gold lemma lane of the Geʿez shelf. LICENSE =
+  # D46-b: no in-repo license; the official archive deposit governs —
+  # CC BY-NC-ND 4.0 (fdr.uni-hamburg.de record 707, DOI 10.25592/uhhfdm.707)
+  # -> nc (never redistributed). EXPECTED FIRST SYNC (~137 MB clone): 15
+  # docs / 75,440 passages; the stray Alpheios export skips by rule.
+  # Project ended, export effectively frozen -> manual.
+  sync_policy: manual

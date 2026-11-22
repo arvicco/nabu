@@ -1,0 +1,12 @@
+perseus-greek:
+  adapter: Nabu::Adapters::Perseus
+  adopted: "2026-07-03"
+  embed_index: true   # P93-4: the semantic-vector literary core
+  axes: [classical]
+  siblings: cts  # P34-0: the dotted-version form (perseus-eng<n> editions of one work)
+  wired: true   # first real sync verified + owner sign-off 2026-07-03 (P2-5)
+  sync_policy: auto   # P39-0: was `live` — swept by sync --all (PerseusDL updates continuously)
+  # P7-4, owner-approved strategic review: ingest the English editions already
+  # in the cloned repo as aligned parallel documents (highest perseus-eng<n>
+  # per work, language eng, CC BY-SA unchanged). Recovery: parse-only resync.
+  translations: true

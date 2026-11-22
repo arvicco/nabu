@@ -1,0 +1,10 @@
+iswoc:
+  adapter: Nabu::Adapters::Iswoc
+  adopted: "2026-07-10"
+  quickstart: true   # the starter shelf (P44-r3c) — a fresh box's default enabled set
+  axes: [germanic]
+  wired: true    # OWNER SIGN-OFF 2026-07-11 ("merged, flip"): synced, 5 OE texts /
+                   # 2,536 sentences, OE Mark live as hub witness #9 (9-of-9 eyeballed).
+  sync_policy: frozen
+  # license_watch candidate (P16-5, owner decision — README-licensed repo):
+  # license_watch: https://raw.githubusercontent.com/iswoc/iswoc-treebank/master/README.md

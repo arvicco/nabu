@@ -1,0 +1,19 @@
+sources:
+  itkc:
+    # The per-article 문체분류 genre classes (37,182 of 37,184 passages, 29
+    # labels: 詩類 23,207 · 書簡類 12,832 · 其他類 · 雜著類 …) are a
+    # passage-grain facet (facet_map.yml passage_fields → "genre"),
+    # reachable by `search --facet genre=…`. They
+    # classify ARTICLES inside a collected-works fascicle, so the
+    # document-grain kind stays unclassified: a fascicle mixes genres and
+    # a kind fold over its articles would misstate the whole.
+    kind: {posture: unclassified}
+    lect: {posture: codemap, note: lzh → zho/lit (the kanripo precedent; upstream's 언어 "coc" is ITKC-internal, P78-7)}
+    dating: {posture: dated, note: "per-work 원문간행년 original print year via MetadataDates :structured;
+        fascicles of a work without one join the itkc-catalog 서지 record by work id
+        (ItkcAuthorDates, axis_source itkc-authors — the author's life band,
+        date_class composition): census 2026-10-19 at the volume grain, 608 of 758
+        print-year dated + 78 author-banded (총쇄, 농산집, 임하필기); 72 stay undated
+        (국조인물고 — compiler, years and print all unknown)"}
+    places: {posture: unplaced}
+    script: {posture: implied}

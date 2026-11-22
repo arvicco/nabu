@@ -1,0 +1,9 @@
+# P80-8
+ctilc:
+  adapter: Nabu::Adapters::Ctilc
+  adopted: "2026-08-19"
+  axes: [romance]
+  wired: true   # flipped 2026-08-21 (owner: "wire everything on"; first sync owner-round-verified)
+  # New works enter the public domain each January (Llei 21/2014 rolling
+  # horizon) — a yearly owner-fired re-sync re-diffs the listing.
+  sync_policy: manual

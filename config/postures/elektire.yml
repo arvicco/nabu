@@ -1,0 +1,19 @@
+sources:
+  elektire:   # P117-2
+    # kind machine-postured since 2026-10-18 — the genre fold in
+    # kind_map.yml (the portal's 23 knjizevna_vrsta term slugs onto
+    # literary/*, letter/literary for pisma). The pending row retired
+    # under the shadowing rule.
+    lect: {posture: identity, note: "hrv → the hr anchor (nabu-lects 2026-10-10), declared
+        coarse: the cone spans Marulić's Čakavian (Judita, written 1501), Dubrovnik
+        Štokavian (Držić, Gundulić), Kajkavian (Brezovački, Domjanić, Galović) and the
+        modern Neo-Štokavian standard; hr deliberately mints no stages (its own note) and
+        none is claimed — a dialect-base or Old Croatian rung would be a registry ruling"}
+    dating: {posture: dated, note: "the portal's century-of-origin terms (stoljece_nastanka)
+        as a century envelope — attributed composition era, COMPOSITION class; declared
+        coarse (a century, not a year); the three anonymous folk anthologies carry the
+        portal's 21st century — the anthology's, declared"}
+    places: {posture: unplaced, note: "the works carry no place field; the author note's
+        birth/death places are the author's, not the work's"}
+    script: {posture: implied, note: "Latin script throughout (modern Croatian orthography
+        of the e-editions, the base edition's bracketed restorations kept)"}

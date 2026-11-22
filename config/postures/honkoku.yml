@@ -1,0 +1,22 @@
+sources:
+  honkoku:   # P108-5
+    # The v3 translations/ layer (55,441 en + 55,915 modern-ja pages) is
+    # DECLINED: the platform's large-language-model output, unattributable
+    # (evidence in the adapter header, Honkoku::DECLINED_LAYERS). Zero
+    # translation documents by design.
+    kind: {posture: unclassified, note: per-material genre lives in project labels/prose —
+        a future facet look over the project taxonomy}
+    lect: {posture: identity, note: jpn declared honest-coarse — the mass is largely Edo
+        (jpn:emod once the p108-japonic-stages mint merges and a date/staging story exists);
+        kanbun materials ride jpn coarse too, declared}
+    dating: {posture: dated, note: "the NDL-held materials only (867 of the 918 whose IIIF
+        manifest is a dl.ndl.go.jp item, census 2026-10-18): the item's NDL catalog record
+        joined from the held ndl-kotenseki census (Nabu::HonkokuNdlCatalog, metadata
+        ndl_catalog) dates the row via its 出版日 envelope, the raw labeled as the NDL
+        record's claim. Without a record, the label's own nengō date (天保十一年…, owner-ruled
+        2026-10-20 — 329 of 12,841 v3 labels carry an era year) converts at parse through
+        config/eras.yml; Chinese-homonym / one-year eras and era-less labels mint
+        nothing — declared"}
+    places: {posture: unplaced}
+    script: {posture: implied, note: kuzushiji-transcribed kanji-kana with the platform's
+        aozora-like notation verbatim}

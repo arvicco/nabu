@@ -1,0 +1,13 @@
+sr-wikisource:   # P116-2, 02-sources row 233
+  adapter: Nabu::Adapters::SrWikisource
+  adopted: "2026-10-10"
+  axes: [slavic]
+  wired: true    # First sync verified 2026-10-11 (post the batch-length fix): 4,607 docs / 581,423 verse-line passages.
+  sync_policy: manual
+  # The Serbian Wikisource oral-tradition cone (owner ruling): the 2,505
+  # epic songs (+ their cycle subcategories), the Erlangen manuscript
+  # (216, in the Detelić/Samardžija/Delić rendering — its editorial
+  # interventions ride declared) and Vuk's collections. Bulgarian-
+  # source collections and the НОБ songs are out by rule; Latin-script
+  # (Croatian-collected) pages claim hrv. Verse at line grain. Texts
+  # PD; layer CC BY-SA 4.0.

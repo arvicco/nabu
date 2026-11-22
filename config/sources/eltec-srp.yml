@@ -1,0 +1,13 @@
+eltec-srp:   # P117-2, 02-sources row 246
+  adapter: Nabu::Adapters::EltecSrp
+  adopted: "2026-10-11"
+  axes: [slavic]
+  wired: true    # First sync verified 2026-10-11: 96 docs / 150,794 passages / 4 rule-skips.
+  sync_policy: manual
+  # ELTeC-srp (COST Action CA16204; ed. Cvetana Krstev, JeRTeH):
+  # Serbian novels, first editions 1852–1920, level-1 TEI (the eltec-tei
+  # family). Texts PD, markup CC BY 4.0 (README verbatim) → attribution.
+  # Sparse cone level1 + README (the 519 MB level2 annotated twin stays
+  # out). 100 files; 4 excluded by the life+70 rule (authors d. 1956–1987)
+  # → expected first sync 96 docs / 150,794 passages (census 2026-10-11).
+  # srpELTeC-ijk is NOT fetched: no license statement anywhere upstream.

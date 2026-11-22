@@ -1,0 +1,13 @@
+zoega:   # P153, 02-sources row 323
+  adapter: Nabu::Adapters::Zoega
+  adopted: "2026-11-02"
+  axes: [germanic]
+  wired: true   # first sync 2026-11-02 exactly on census (29,951 entries, 0 errored, 1 rule skip); define abbadis green
+                 # ~5 MB). EXPECT 1 dictionary doc → 29,951 non entries, 0 errored,
+                 # 1 skipped by rule (the no-markup twin); eyeball nabu define abbadis
+                 # ("abbess", beside the cleasby-vigfusson entry), then flip.
+  # Zoëga, A Concise Dictionary of Old Icelandic (1910), the stscoundrel
+  # JSON edition (MIT; the text PD → attribution). Beside
+  # cleasby-vigfusson, deliberately unmerged (two witnesses, one fold).
+  # Language non, declared coarse. Family definitions-json.
+  sync_policy: manual

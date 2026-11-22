@@ -1,0 +1,20 @@
+kradfile:
+  adapter: Nabu::Adapters::Kradfile
+  adopted: "2026-07-20"
+  group: signs  # P68-4: the sign-restore sweep (nabu enable signs && nabu sync signs)
+  axes: [japonic]
+  wired: true    # P38: owner-flipped 2026-07-21 with aozora
+                   # (checklist §6: bin/nabu sync kradfile — one ~46 KB gz
+                   # GET, 6,355 kanji — then eyeball nabu char 棄's component
+                   # index and search --char-component 木, flip).
+  # KRADFILE (Raine, Breen & EDRDG) — the kanji→component decomposition
+  # index behind Jisho's multi-radical search, feeding `nabu char`'s
+  # component-index row + `search --char-component` flat containment over
+  # its JIS X 0208 span (6,355 kanji; BabelStone IDS supplies the pan-CJK
+  # transitive span it cannot reach). SAME EDRDG CC BY-SA 4.0 document the
+  # edrdg row already quotes → attribution, zero new licence surface (P37-0
+  # survey, citing the edrdg-row precedent verbatim). Historically EUC-JP,
+  # transcoded to UTF-8 NFC at the boundary; single-file sha-pinned
+  # FileFetch; low cadence (last revision Aug 2021). The base pair only —
+  # the KRADFILE2/RADKFILE2 JIS X 0212 extension (© Jim Rose) is OUT of v1.
+  sync_policy: manual

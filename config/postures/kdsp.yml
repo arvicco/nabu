@@ -1,0 +1,13 @@
+sources:
+  kdsp:   # 02-sources row 242
+    # kind machine-postured since 2026-10-12 — the ruled genre fold in
+    # kind_map.yml (roman → novel, povest/novela → tale, črtica → narrative,
+    # drugo → unknown). The pending row retired under the shadowing rule.
+    lect: {posture: dates, note: "as prilit/imp — the sl stage bands stage the
+        print year on every text (1836–1849 → sl:emod, 1850–1918 → sl:mod)"}
+    dating: {posture: dated, note: "the sourceDesc bibl's publication year (@when on
+        all 262), a one-year envelope (MetadataDates :structured)"}
+    places: {posture: unplaced, note: "the deposit carries no place field (bibl,
+        personography and taxonomies censused) — declared"}
+    script: {posture: implied, note: "Latin (gajica) as the digital sources transcribe
+        it; no bohoričica censused"}

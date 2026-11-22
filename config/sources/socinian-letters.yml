@@ -1,0 +1,21 @@
+socinian-letters:   # P160, 02-sources row 390
+  adapter: Nabu::Adapters::SocinianLetters
+  adopted: "2026-11-05"
+  axes: [romance]
+  wired: true    # first sync verified 2026-11-06, exactly as censused at 5d91807:
+                 # 1,869 docs / 18,067 passages, 0 errored; 348 metadata-only
+                 # letters + indices.csv + the two fetch state pins skipped by
+                 # rule; eyeball (MAIN_ckw_qlm_zdb:2, Rautenstein to Lubieniecki
+                 # 1665) + search "Luculenta et succi plena" pass.
+  sync_policy: manual   # the folder zip is generated from the main branch (no release)
+  # Die sozinianischen Briefwechsel (AdW Mainz / Johannes a Lasco Bibliothek
+  # Emden, ed. Daugirdas and Kuczera): the correspondence of the Socinians
+  # (the Polish Brethren) and their circle, 1545–1744 — the Sozzinis, Schmalz,
+  # Ruarus, and Stanisław Lubieniecki's comet correspondence of the 1660s.
+  # 2,217 teiCorpus letter files (cover letter + attachments + witnesses).
+  # Per-TEI licences CC BY 4.0 / CC BY-SA 3.0 → attribution, the chosen
+  # witness's own riding each document. Document = cover letter + the
+  # attachments it holds (deduped by TEI id); passage = text block of the
+  # reference witness (else the first transcribed witness); the editors'
+  # German commentary rides each block's "notes". Places/persons joined
+  # through upstream's indices.csv register (GeoNames, GND).

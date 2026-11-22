@@ -1,0 +1,17 @@
+etruscan-loans:   # 02-sources row 307
+  adapter: Nabu::Adapters::EtruscanLoans
+  adopted: "2026-10-22"
+  axes: [italic, etym]
+  wired: true    # first sync verified 2026-10-22: 199 entries, 69 loan-flagged
+                   # eyeball `nabu etym persona` for the 𐌘𐌄𐌓𐌔𐌖 edge, then flip)
+  # Etruscan → Latin curated loan edges (the sabellic-loans recipe, the
+  # P17-3 borrowed pattern from a non-IE donor). config/etruscan_loans.yml
+  # IS the artifact — curated 2026-10-22 from the en.wiktionary "Latin
+  # terms borrowed/derived from Etruscan" category pages (69 borrowed ⊂
+  # 200 derived pages; Reconstruction:Latin/piltrum excluded) through the
+  # MediaWiki API, etyma read by Nabu::WiktionaryLoanCuration from each
+  # Latin entry's own template. EXPECTED: 199 entries (69 loan-flagged);
+  # 76 cite an Etruscan form, 119 unstated + 4 no-template declared row by
+  # row. CC BY-SA + GFDL → attribution. No upstream fetch: en.wiktionary
+  # is cited provenance, re-curation is a repo change.
+  sync_policy: frozen

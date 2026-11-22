@@ -158,9 +158,9 @@ class KradfileTest < Minitest::Test
   end
 
   def test_registry_row_exists_enabled_with_manual_sync_policy
-    registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources.yml", __dir__))
+    registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources", __dir__))
     entry = registry["kradfile"]
-    refute_nil entry, "config/sources.yml must register kradfile"
+    refute_nil entry, "config/sources/ must register kradfile"
     assert_equal Nabu::Adapters::Kradfile, entry.adapter_class
     assert entry.wired, "owner-fired first sync verified + flipped 2026-07-21"
     assert_equal "manual", entry.sync_policy

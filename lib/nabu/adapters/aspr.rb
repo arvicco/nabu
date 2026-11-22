@@ -42,7 +42,7 @@ module Nabu
     # sibling — same Last-Modified conditional GET, sha256 pin, attic
     # contract) GETs the DSpace bitstream, auth-free. Upstream is
     # effectively frozen (Last-Modified 2019-07-19, header normalised 2010)
-    # → sync_policy: manual (config/sources.yml), enabled: false until the
+    # → sync_policy: manual (config/sources/), enabled: false until the
     # owner-fired first real sync. The remote-health probe rides the
     # :http_zip HEAD path (reachability + Last-Modified drift against the
     # .file-fetch.json pin); there is NO metadata endpoint — the license

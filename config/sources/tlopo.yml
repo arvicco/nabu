@@ -1,0 +1,14 @@
+tlopo:
+  adapter: Nabu::Adapters::Tlopo
+  adopted: "2026-11-13"
+  axes: [etym]
+  wired: true    # first sync 2026-11-13: +2,821 sets / 38,139 reflexes
+                 # (318 MB Zenodo zip, ~10 MB of it CLDF, the rest the
+                 # OCR'd volumes and rendered book; sha-pinned); raw/ and
+                 # out/ skipped by rule.
+  sync_policy: manual
+  # The lexicon of Proto Oceanic (Ross, Pawley & Osmond, vols 1–6) in the
+  # lexibank CLDF edition v0.1.1 (Zenodo 10.5281/zenodo.23688418,
+  # CC BY 4.0): 2,821 sets headed by their reconstruction (POc and its
+  # daughters, PAn/PMP antecedents), 755 varieties. Dictionary language
+  # `poz-oce` (the nabu-lects Oceanic anchor).

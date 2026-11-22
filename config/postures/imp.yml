@@ -1,0 +1,8 @@
+sources:
+  imp:
+    kind: {posture: unclassified}
+    lect: {posture: dates, note: "owner-ruled 2026-08-09: sl stage bands minted
+        (old/emod/mod) — infer-dates stages the 100%-dated corpus"}
+    dating: {posture: dated}
+    places: {posture: unplaced}
+    script: {posture: implied}

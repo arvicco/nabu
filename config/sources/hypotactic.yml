@@ -1,0 +1,31 @@
+hypotactic:
+  adapter: Nabu::Adapters::Hypotactic
+  adopted: "2026-07-24"
+  kind: module   # P44-6: machinery-only — a METER enrichment instrument, zero catalog rows, up=module
+  requires: [perseus-greek, first1k-greek]   # owner-ruled 2026-08-13 (option a,
+                   # as recommended): the instrument joins urn:cts:greekLit:*
+                   # documents both sources hold; the true relation is "any
+                   # greekLit holder" but requires: is conjunctive — declaring
+                   # both over-pulls harmlessly (core classical holdings a
+                   # fresh box wants anyway). An `any_of:` syntax waits for a
+                   # second any-of edge.
+  axes: [classical]
+  wired: true    # channel verified (first fetch landed; canonical present). `--all`
+                   # participation is governed by kind + sync_policy, NEVER by wired
+                   # (owner semantics ruling 2026-08-18, reaffirming 2026-07-24:
+                   # wired = the sync link is tested and declared working).
+  # P44-6: Hypotactic — David Chamberlain's metrical scansions of GREEK verse
+  # (hypotactic.com). The meter enrichment layer's Greek lane (the P44-7
+  # pedecerto seam): each matched line writes ONE enrichments row, payload
+  # {meter, pattern, caesura?, credit} verbatim from the TSV columns. `nabu
+  # show` renders "meter: dactylic hexameter -u u… (hypotactic)" — the shared
+  # line names the model; the FULL Chamberlain reference rides every payload's
+  # credit key (the show line cannot carry it — recorded here and in
+  # docs/02-sources.md). LICENSE: the fetched mirror
+  # (github.com/Urdatorn/hypotactic) is CC BY 4.0, WITH Chamberlain's own
+  # README statement verbatim: "you can use it as you wish, but if you make
+  # significant or extensive use of it in published work you should reference me
+  # (David Chamberlain) and this site (hypotactic.com)" → class attribution.
+  # GREEK lane only (the Latin lane on hypotactic.com is JS-blocked; Pedecerto
+  # covers Latin meter on this same seam).
+  sync_policy: manual

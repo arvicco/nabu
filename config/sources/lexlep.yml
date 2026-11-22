@@ -1,0 +1,22 @@
+lexlep:
+  adapter: Nabu::Adapters::Lexlep
+  adopted: "2026-07-18"
+  axes: [epigraphy, celtic, italic]
+  wired: true # flipped 2026-07-18 (owner order: all pre-P30 sources on, riding the P30 PR)
+                   # checklist §6: bin/nabu sync lexlep — ~1,050 pages in
+                   # 50-title api.php batches, minutes at the polite delay —
+                   # then eyeball nabu show urn:nabu:lexlep:bi-8 ("sipiu
+                   # koil[ ]ios", the Cerrione stela) and 5 random
+                   # inscriptions before flipping).
+  # P29-3: Lexicon Leponticum (lexlep.univie.ac.at, Stifter/Salomon/Braun
+  # et al.) — the digital edition of Cisalpine Celtic: 494 Inscription
+  # pages (+ 419 Objects / 134 Sites joined into facets, place and the
+  # timeline; api.php categoryinfo census 2026-07-18). NEW wiki-template
+  # family over Nabu::WikiFetch (MediaWiki api.php category crawl,
+  # revid-driven, UA-identified, throttled). LICENSE CONFLICT held at the
+  # restrictive reading: Project:Terms of use grants CC BY-SA 3.0 + GFDL
+  # but scopes "for scientific use only", and the wiki's own rightsinfo
+  # footer says CC BY-NC-SA 4.0 → class nc, confirmed by the maintainer's
+  # reply by email (C. Salomon, 2026-07-20); P10-4 override mechanics.
+  # A living wiki → re-syncs are owner-fired.
+  sync_policy: manual

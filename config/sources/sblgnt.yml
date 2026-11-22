@@ -1,0 +1,15 @@
+sblgnt:
+  adapter: Nabu::Adapters::Sblgnt
+  adopted: "2026-07-09"
+  embed_index: true   # P93-4: the semantic-vector literary core
+  quickstart: true   # the starter shelf (P44-r3c) — a fresh box's default enabled set
+  axes: [biblical]
+  wired: true    # OWNER SIGN-OFF 2026-07-10: synced, 27 books / 7,939 verses,
+                   # NT witness live in align; show --random eyeballed.
+                   # (CLAUDE.md checklist §6: bin/nabu sync sblgnt — ~2.3 MB
+                   # clone — then spot-check nabu show urn:nabu:sblgnt:mark:2.3)
+  # P11-5: the SBL Greek New Testament (Faithlife/SBLGNT, CC BY 4.0), 27
+  # per-book verse-per-line text files. The nt alignment work's second Greek
+  # witness (beside PROIEL greek-nt). Upstream edits are rare (v1.2 2023):
+  # re-syncable, not on a live schedule.
+  sync_policy: manual

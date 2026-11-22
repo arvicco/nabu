@@ -201,7 +201,7 @@ module Adapters
     end
 
     def test_registry_row
-      entry = YAML.safe_load_file(File.join(Nabu::Config::PROJECT_ROOT, "config", "sources.yml"))["vakk"]
+      entry = Nabu::RegistryTree.load(File.join(Nabu::Config::PROJECT_ROOT, "config", "sources"))["vakk"]
       assert_equal "Nabu::Adapters::Vakk", entry["adapter"]
       assert_equal true, entry["wired"], "wired 2026-10-28: crawl complete, first full parse on census"
       assert_equal "manual", entry["sync_policy"]

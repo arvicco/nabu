@@ -457,9 +457,9 @@ class GretilTest < Minitest::Test
   # --- registry round-trip --------------------------------------------------
 
   def test_registry_resolves_gretil_and_manifest_agrees
-    registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources.yml", __dir__))
+    registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources", __dir__))
     entry = registry["gretil"]
-    refute_nil entry, "gretil must be registered in config/sources.yml"
+    refute_nil entry, "gretil must be registered in config/sources/"
     assert_equal Nabu::Adapters::Gretil, entry.adapter_class
     assert_equal "manual", entry.sync_policy
     assert entry.wired, "gretil is live (owner sign-off 2026-07-08 after first real sync + P9-4c recovery)"

@@ -166,9 +166,9 @@ class MeloniromanceTest < Minitest::Test
   # --- registry ---------------------------------------------------------------------------
 
   def test_registry_row_is_unwired_manual
-    registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources.yml", __dir__))
+    registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources", __dir__))
     entry = registry["meloniromance"]
-    refute_nil entry, "meloniromance must be registered in config/sources.yml"
+    refute_nil entry, "meloniromance must be registered in config/sources/"
     assert_equal Nabu::Adapters::Meloniromance, entry.adapter_class
     assert entry.wired, "wired flipped at the first sync: 5,419 entries / 15,931 reflex rows"
     assert_equal "manual", entry.sync_policy

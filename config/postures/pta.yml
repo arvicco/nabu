@@ -1,0 +1,17 @@
+sources:
+  pta:   # P154
+    lect: {posture: dates, note: "the date-band inference stages the editions from the archive's
+        own per-work dct:created spans (composition class): Severian's homilies (401–404) and
+        Athanasius' treatises fall inside grc:byz [330, 1453]; Hippolytus, Hermas and Origen
+        (100–235) inside grc:koi [-300, 330]; spans crossing 330 and the works whose span is
+        upstream's unfilled 0030–0800 default stay bare grc. No facet rule: a label map would
+        only repeat the band"}
+    dating: {posture: partial, note: "the work __cts__.xml dct:created span, transcribed → metadata
+        date, class composition (MetadataDates :structured): 92 of 113 editions. The 21 others
+        carry a bare dash or the catalog's unfilled 0030–0800 default (kept as created_raw,
+        never a date) and fall back to their edition's print year, date_class edition
+        (MetadataDates::EDITION_FALLBACK)"}
+    places: {posture: linked, note: "the work __cts__.xml dct:spatial Pleiades URI → place
+        {pleiades, ref}: 88 of 113 editions, every id in the held gazetteer; the XXXXX
+        placeholder and empty values mint nothing"}
+    script: {posture: implied}

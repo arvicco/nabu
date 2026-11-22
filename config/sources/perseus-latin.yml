@@ -1,0 +1,9 @@
+perseus-latin:
+  adapter: Nabu::Adapters::PerseusLatin
+  adopted: "2026-07-07"
+  embed_index: true   # P93-4: the semantic-vector literary core
+  axes: [classical]
+  siblings: cts  # P34-0: the dotted-version form (same mechanism as perseus-greek)
+  wired: true   # first real sync + owner sign-off 2026-07-07: 290 docs / 264,555 passages (+85 eng editions, 75,921 passages), Aeneid 1.1 eyeballed grc+eng
+  sync_policy: auto   # P39-0 (was `live`): same as its greekLit sibling — PerseusDL updates continuously
+  translations: true  # owner 2026-07-07: aligned English editions, same mechanism as perseus-greek (P7-4)

@@ -1,0 +1,31 @@
+syriac-corpus:
+  adapter: Nabu::Adapters::SyriacCorpus
+  adopted: "2026-07-19"
+  axes: [biblical, syriac]
+  wired: true   # flipped 2026-07-19 (owner: rebuild verified, all P31 sources on for release)
+                   # bin/nabu sync syriac-corpus — sparse GitFetch cone
+                   # data/tei, 632 TEI files ≈ 39 MB — then eyeball
+                   # nabu show urn:nabu:syriac-corpus:1:2 (Aphrahat Dem. 1
+                   # §1), a hymn line of a memra doc and 5 random passages,
+                   # then flip).
+  # P31-4: the Digital Syriac Corpus (srophe/syriac-corpus; BYU/Oxford/
+  # Vanderbilt/Texas A&M) — 632 TEI documents of classical Syriac
+  # literature (Aphrahat, Ephrem, Jacob of Serugh, the Peshitta NT
+  # letters…), the survey's "lowest-friction big win". NEW srophe-tei
+  # family (their own TEI application, NOT EpiDoc — censused over all 632
+  # files: body divs of 16 types carrying p/ab/lg/l/head blocks; 1,958 of
+  # 6,801 divs unnumbered, block numbering partial → passages minted by
+  # document-order block ordinal with the div path + block tag/@n riding
+  # annotations as the citation lane — the ADDRESSABILITY VERDICT: no
+  # uniform upstream citation scheme exists). Document = file
+  # (urn:nabu:syriac-corpus:<file number> — the syriaccorpus.org id;
+  # 69.xml and 126.xml carry MISMATCHED <idno> URIs (61, 125 — one a
+  # duplicate, one a filename gap), so the FILENAME mints identity and
+  # idno rides metadata verbatim). Language syc (langUsage censused
+  # uniformly "syr"); per-block xml:lang syr/en/ar → syc/eng/ara.
+  # Apparatus <note>s stripped from text, riding annotations verbatim.
+  # LICENSE: per-file <availability> censused over ALL 632 files —
+  # uniformly "Creative Commons — Attribution 4.0 International — CC BY
+  # 4.0" (base texts PD per the availability note) → class attribution.
+  # Upstream drifts slowly (last commit 2026-03) → re-syncs owner-fired.
+  sync_policy: manual

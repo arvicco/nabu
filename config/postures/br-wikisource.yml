@@ -1,0 +1,11 @@
+sources:
+  br-wikisource:
+    kind: {posture: unclassified}
+    lect: {posture: codemap, note: "bre → br (the registry's 2026-10-22 alias); every
+        page is post-1650 Modern Breton — bare br, the Middle Breton node (xbm) never
+        claimed"}
+    dating: {posture: dated, note: "P140: the Meneger Year= print year (≤ 1900, the dated
+        cone) → source_date → MetadataDates :edition_year_text, date_class edition"}
+    places: {posture: unplaced, note: "the Meneger Address= (Kemper, Montroulez, An
+        Oriant) is the print's imprint place — declared, never a text place"}
+    script: {posture: implied}

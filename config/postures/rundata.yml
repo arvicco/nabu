@@ -1,0 +1,7 @@
+sources:
+  rundata:
+    kind: {posture: unclassified}
+    dating: {posture: dated, note: "P62-3: lane siblings inherit their stone's band via signum —
+        30,647 rows, 0 undated (the P40-6 exclusion reversed)"}
+    places: {posture: named}
+    script: {posture: implied}

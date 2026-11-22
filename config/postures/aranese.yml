@@ -1,0 +1,10 @@
+sources:
+  aranese:
+    kind: {posture: unclassified}
+    # lect: machine-postured by the aranese override (oci → oc/aranes,
+    # owner-ruled 2026-08-21, nabu-lects PR #6 minted oc/aranes) — the
+    # identity row retired. The synthetic-corpus caveat stays on the
+    # card and the spa siblings stay bare (the override keys oci only).
+    dating: {posture: undatable, note: modern MT-oriented sentence pairs, no dates upstream}
+    places: {posture: unplaced}
+    script: {posture: implied}

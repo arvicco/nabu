@@ -1,0 +1,56 @@
+cbeta:
+  adapter: Nabu::Adapters::Cbeta
+  adopted: "2026-07-20"
+  cjk_index: true   # P93-3: the CJK bigram substring lane
+  axes: [buddhist, sinitic]
+  wired: true   # flipped 2026-07-20 (owner order, post-P34 gate: P32+P33 sources on)
+                   # P108-7 (owner-ruled 2026-09-26, next-in-line): + the K canon — the
+                   # Tripiṭaka Koreana's 10 Koreana-only XMLs (texts without
+                   # Taishō parallels; Category A like T/X). Sync verified
+                   # 2026-09-29: 10 K docs / 60,178 passages; the +7
+                   # quarantine delta is upstream T/X drift in the same pull
+                   # (509 files updated, 3 withdrawn), K contributed zero.
+                   # P126 (owner-ruled next step): + J (嘉興藏, Ming–Qing
+                   # Jiaxing canon, 287 XMLs / 105 MB, lzh) and N (漢譯南傳
+                   # 大藏經, Yuan Heng Temple Chinese translation of the Pāli
+                   # canon, 83 XMLs / 56 MB, cmn — NOT lzh; Pāli source in
+                   # metadata) — both Category A on cbeta.org/copyright
+                   # (re-read 2026-10-14). PENDING FIRST FETCH: the next
+                   # sync widens the existing sparse cone (≈161 MB working
+                   # tree) and expects ≈370 new documents / ≈1.1M passages
+                   # (census at 2026.R2; estimate from sampled bytes/line).
+                   # P140: + the ten historical canons of the copyright
+                   # page's Category A 歷代藏經補輯 group — A 趙城金藏, C 中華藏,
+                   # D 國圖善本佛典, F 房山石經, G 佛教大藏經, L 乾隆藏, M 卍正藏,
+                   # P 永樂北藏, S 宋藏遺珍, U 洪武南藏 (copyright page re-read
+                   # 2026-10-21, A/B lists unchanged). PENDING FIRST FETCH:
+                   # the next sync widens the cone by ≈138 MB (236 XMLs) and
+                   # expects EXACTLY +236 documents / +836,777 passages
+                   # (full parse of every file at dbdea41, 0 errors; per-canon
+                   # counts in the adapter class note). B/GA/GB/I/ZW/ZS/CC
+                   # stay skipped by rule (574 files).
+                   # GitFetch cone [T/, X/, K/, canons.json, schema/] ≈ 1.43 GiB
+                   # working tree (T 2,471 files / 816 MB + X 1,236 files /
+                   # 645 MB at upstream 2026.R1) — expect 3,707 documents at
+                   # print-line grain (LARGE: T01n0001 alone is 13,072 lb
+                   # lines; budget the load accordingly); eyeball
+                   # nabu show urn:nabu:cbeta:T85n2884:1390a24, an X passage
+                   # and 5 random lines, then flip.
+  # P33-2: CBETA xml-p5 (github.com/cbeta-org/xml-p5, release 2026.R1),
+  # scoped to the two central canons T (Taishō, vols 1–85) + X
+  # (Xuzangjing, vols 1–88); the other 24 Category A canon dirs are a
+  # future scope decision (skipped by rule, censused). LICENSE — the
+  # canon-level gate: Category A = CC BY-NC-SA 4.0 (cbeta.org/copyright
+  # 「Creative Commons 姓名標示-非商業性-相同方式分享 4.0 國際授權條款」 +
+  # every file's own header grant, re-verified at parse) → class nc,
+  # never redistributed; the four named Category B corpora (Y 印順法師佛學著作集,
+  # LC 呂澂佛學著作集, TX 太虛大師全書, YP 演培法師全集 — 類別 B：不屬於
+  # 創用 CC 條款授權之文獻) are NEVER ingested: outside the sparse cone
+  # AND refused by canon dir at discover (test-pinned). license_watch on
+  # cbeta.org/copyright is a candidate — OWNER decision before enabling
+  # (the P16-5 no-redirect rule must be verified first). Upstream ships
+  # dated releases (2026.R1, 2026-05-10) → a fresh sync is an owner
+  # decision: manual. OVERLAP: SuttaCentral's 272 lzh Āgama docs re-edit
+  # SEVEN Taishō numbers (T26/T99/T125/T765/T1536/T1537/T1548, all in T)
+  # — provenance-distinct witnesses, never deduped.
+  sync_policy: manual

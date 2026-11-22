@@ -134,7 +134,7 @@ class EtruscanLoansTest < Minitest::Test
   # --- registry -----------------------------------------------------------------
 
   def test_registry_row_is_unwired_frozen
-    registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources.yml", __dir__))
+    registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources", __dir__))
     entry = registry["etruscan-loans"]
     refute_nil entry
     assert_equal Nabu::Adapters::EtruscanLoans, entry.adapter_class

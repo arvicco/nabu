@@ -1,0 +1,11 @@
+bosworth-toller:
+  adapter: Nabu::Adapters::BosworthToller
+  adopted: "2026-07-11"
+  axes: [germanic]
+  wired: true    # OWNER SIGN-OFF 2026-07-11: synced, 62,815 entries; define
+                   # aethele/thaet folding + lemma-gloss bridge eyeballed.
+  sync_policy: manual
+  # license_watch candidate (P16-5, owner decision — dc.rights lives on the
+  # LINDAT deposit record hdl 11234/1-3532; verify the direct record URL
+  # serves the terms without a redirect before enabling):
+  # license_watch: https://lindat.mff.cuni.cz/repository/handle/11234/1-3532

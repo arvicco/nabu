@@ -1,0 +1,16 @@
+eng-web:
+  adapter: Nabu::Adapters::EngWeb
+  adopted: "2026-07-10"
+  embed_index: true   # P93-4: the semantic-vector literary core
+  axes: [biblical]
+  wired: true    # OWNER SIGN-OFF 2026-07-10: synced, 84 books / 37,624 verses,
+                   # FRT/GLO skip-by-rule; trilingual JON 1 eyeballed.
+                   # (CLAUDE.md checklist §6: bin/nabu sync eng-web — ~76 MB
+                   # open-bibles clone, shared with vulgate — then spot-check
+                   # nabu show urn:nabu:eng-web:jon:1.1 and 5 random verses)
+  # P11-8: the World English Bible (WEB, eBible.org; public domain). One USFX
+  # file in the same open-bibles collection as the Clementine Vulgate; one
+  # document per book. The readable English witness of both alignment-hub works
+  # (nt + ot). Upstream is curated and occasionally updated: re-syncable, not on
+  # a live schedule.
+  sync_policy: manual

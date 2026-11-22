@@ -39,7 +39,7 @@ this project has already observed such drift, the doc says so.
 ## What does NOT belong here
 
 - **Owner-fired but automated syncs.** Most `sync_policy: manual` rows
-  in `config/sources.yml` are ordinary unattended fetches that a human
+  in `config/sources/` are ordinary unattended fetches that a human
   merely *initiates* (multi-GB clones, rarely-changing upstreams).
   No human steps, no doc.
 - **Automated click-through consent.** bdcamoes and the CIPM-class

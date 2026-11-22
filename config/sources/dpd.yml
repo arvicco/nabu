@@ -1,0 +1,12 @@
+dpd:   # P154, 02-sources row 367
+  adapter: Nabu::Adapters::Dpd
+  adopted: "2026-11-02"
+  axes: [indic, buddhist]
+  wired: true   # first sync verified 2026-11-03: 1 dictionary doc / 89,763 entries
+  # The Digital Pāḷi Dictionary (Bodhirasa Bhikkhu), the dpd-db release's
+  # plain-text headword export, for the held Pāḷi canon (suttacentral,
+  # tipitaka-lk) — the library's first Pāḷi dictionary: meaning, grammar,
+  # root (37,132), construction and the Sanskrit parallel per headword.
+  # New family dpd-txt; entry id = the DPD id. CC BY-NC-SA 4.0 (LICENSE)
+  # → nc (MCP-excluded by class). Latest-release URL, ZipFetch.
+  sync_policy: manual

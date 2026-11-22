@@ -198,9 +198,9 @@ class GanjoorTest < Minitest::Test
   # --- registry + fetch --------------------------------------------------------
 
   def test_registry_resolves_ganjoor_with_the_manifest
-    registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources.yml", __dir__))
+    registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources", __dir__))
     entry = registry["ganjoor"]
-    refute_nil entry, "ganjoor must be registered in config/sources.yml"
+    refute_nil entry, "ganjoor must be registered in config/sources/"
     assert_equal Nabu::Adapters::Ganjoor, entry.adapter_class
     assert_equal Nabu::Adapters::Ganjoor.manifest, entry.manifest
     assert_equal "manual", entry.sync_policy

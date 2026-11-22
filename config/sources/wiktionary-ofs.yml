@@ -1,0 +1,13 @@
+wiktionary-ofs:   # P154, 02-sources row 359
+  adapter: Nabu::Adapters::WiktionaryOfs
+  adopted: "2026-11-02"
+  axes: [germanic]
+  wired: true   # first sync verified 2026-11-03: 654 entries
+  # The kaikki Old Frisian extraction (654 records / "610 distinct words",
+  # census 2026-11-02): the library's first Old Frisian dictionary:
+  # Proto-West-Germanic (304) and Proto-Germanic (207) etymons, descendants
+  # into North, West and Saterland Frisian. Language ofs. The wiktionary-fa
+  # mold on the shared WiktionaryKaikki base: per-language JSONL (deprecated
+  # upstream — fallback = filter the full extract by lang_code ofs), CC
+  # BY-SA + GFDL → attribution, FileFetch.
+  sync_policy: manual

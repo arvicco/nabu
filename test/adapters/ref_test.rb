@@ -188,7 +188,7 @@ class RefTest < Minitest::Test
                                         license_class: "attribution")
     Nabu::Store::Loader.new(db: catalog, source: source)
                        .load_from(Nabu::Adapters::Ref.new, workdir: FIXTURES, full: true)
-    registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources.yml", __dir__))
+    registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources", __dir__))
     Nabu::Store::Indexer.rebuild!(catalog: catalog, fulltext: fulltext,
                                   lemma_tiers: registry.lemma_tiers)
 

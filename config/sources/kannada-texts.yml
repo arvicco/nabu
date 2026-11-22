@@ -1,0 +1,18 @@
+kannada-texts:   # P118-3
+  adapter: Nabu::Adapters::KannadaTexts
+  adopted: "2026-10-11"
+  axes: [indic]
+  wired: true    # first sync verified 2026-10-11: 16 docs / 16,151 passages, 0 quarantined
+  sync_policy: auto   # promoted 2026-10-13: actively-edited upstream,
+                       # git-incremental fetch — rides the sync --all sweep
+  # Kannada Digital Texts Project (Andrew Ollett; text entry Krishnaprasada
+  # G. / Adishila Publications; github.com/aso2101/kannada_texts): 16 TEI
+  # editions, ISO-15919 romanized — Pampa (941), Ponna (953), Ranna,
+  # Nagavarma II (ca. 1042), Janna, Harihara, Raghavanka, Kanakadasa,
+  # Ratnakaravarni, Honnamma. Sparse GitFetch of tei/ + README.md
+  # (~5 MB). `ollett-tei` family: passage = stanza (lg, @met carried) /
+  # prose block / colophon, cited <div n>.<lg n>. License: every file
+  # "Distributed under a Creative Commons Attribution-ShareAlike 4.0
+  # license." (the in-file grant governs over the README's CC-BY 4.0
+  # default) -> attribution. Census 2026-10-11: 16 docs / 16,151
+  # passages, 0 quarantines.

@@ -1,0 +1,40 @@
+old-tibetan:
+  adapter: Nabu::Adapters::OldTibetan
+  adopted: "2026-07-28"
+  axes: [tibetan]
+  siblings: ["-en"]  # the elephantine/damaskini mold — text stems are
+                     # otannals/otchronicle, so the literal -en tail is
+                     # unambiguous; show --parallel pairs otannals ↔
+                     # otannals-en by identical <section>:<brat-id> suffixes.
+  translations: true  # Dotson 2009's aligned English of the Annals rides
+                      # `# text_en` per sentence → the -en sibling document;
+                      # the Chronicle has no translation lane and its -en
+                      # ref skips by rule (DocumentSkipped).
+  wired: true   # flipped 2026-07-28 (owner ruling "flip them all wired"; first sync verified live: 3 / 2,669 (exact))
+                   # CLAUDE.md checklist §6: bin/nabu enable old-tibetan &&
+                   # bin/nabu sync old-tibetan — expect 3 documents / 2,669
+                   # passages (otannals 546 otb + otannals-en 546 eng +
+                   # otchronicle 1,577 otb; ~17.5k syllable-tokens), eyeball
+                   # nabu show urn:nabu:old-tibetan:otannals:000:T55
+                   # --parallel (the Dotson pairing) + 5 random passages,
+                   # then flip.
+  # Old Tibetan Corpus (github.com/tibetan-nlp/old-tibetan-corpus): the Old
+  # Tibetan ANNALS (OTDO Pt_1288) + CHRONICLE (Pt_1287) — Tibet's first
+  # history and its epic companion, Dunhuang manuscripts, Unicode-converted
+  # from OTDO's Wylie, language otb. Gold by upstream's claim: segmentation,
+  # POS and the verb-argument dependency layer (arg1/arg2/arg2:lvc…),
+  # hand-corrected in BRAT (Faggionato/Garrett/Meelen, AHRC "Lexicography
+  # in Motion" 2017–2020). NOT gold: the LEMMA column is the ot2ct
+  # constraint-grammar NORMALIZED Classical Tibetan citation form
+  # (√-marked) — a pipeline product → lemma_tier: silver, every hit labeled
+  # (the cdli/ebl defensive-honesty shape). Composes the shared ConlluParser
+  # (clean 10-column files; citation hook strips the `<stem>:` sent_id
+  # prefix). archive/*.conllu legacy normalized exports are censused
+  # discovery skips (they would double-load in the wrong orthography).
+  # LICENSE, recorded choice: repo LICENSE is MIT (© 2018 Tibetan NLP) →
+  # attribution — the license basis for this lane; the Zenodo twin lists
+  # only "Other (Open)", and the README's per-text tables additionally
+  # stamp CC BY 4.0 (both attribution-class, no conflict). Upstream dormant
+  # since 2021 → manual.
+  sync_policy: manual
+  lemma_tier: silver

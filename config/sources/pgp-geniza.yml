@@ -1,0 +1,28 @@
+pgp-geniza:   # 02-sources row 419
+  adapter: Nabu::Adapters::PgpGeniza
+  adopted: "2026-11-16"
+  # epigraphy: documentary letters, court records and accounts at the
+  # artifact (shelfmark) grain; hebrew: Hebrew-script Judaeo-Arabic,
+  # Hebrew and Aramaic documents; arabic: the Arabic-script state and
+  # legal documents + the Judaeo-Arabic vernacular.
+  axes: [epigraphy, hebrew, arabic]
+  siblings: ["-(en|heb|ara|fr|de)"]  # the closed minted-tail set — pgpids are digits-only
+  wired: true   # first sync verified 2026-11-16: +9,848 docs / 303,860 passages, 0 errored, 14 footnote skips by rule as predicted; document 446 shown + search probed with credit
+                 # 2234d35e): 9,848 docs (7,669 editions + 2,179 translation
+                 # siblings) / 303,860 passages, 0 errors; 28,728 metadata-only
+                 # documents + 14 undecidable/orphan text footnotes skipped by rule.
+  # The Princeton Geniza Project's own data export
+  # (github.com/princetongenizalab/pgp-metadata; Zenodo concept DOI
+  # 10.5281/zenodo.15839055): documents.csv (36,512 PGP documents) joined
+  # to footnotes.csv, whose Digital Edition / Digital Translation rows
+  # carry the PGP transcriptions and translations as plain text.
+  # Document = PGP document with ≥1 digital edition
+  # (urn:nabu:pgp-geniza:<pgpid>), translations as -<lang> siblings; the
+  # metadata-only majority skips by rule. LICENSE nc: CC BY-NC 4.0 — the
+  # README ("released under the noncommercial Creative Commons Attribution
+  # 4.0 license (CC-BY-NC.4.0)"), pgp_datapackage.json and the Zenodo
+  # record agree; no LICENSE file (the openiti precedent). The pgp-text
+  # repository (no license file) is deliberately NOT used. main is a
+  # rolling automated export (several commits a day; history ~2 GB,
+  # depth-1 GitFetch) → manual.
+  sync_policy: manual

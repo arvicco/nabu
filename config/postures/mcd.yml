@@ -1,0 +1,14 @@
+sources:
+  mcd:
+    kind: {posture: unclassified, note: "a dictionary shelf — the Micronesian Comparative
+        Dictionary by its own title; kind folds documents only"}
+    lect: {posture: identity, note: "poz-mic — the nabu-lects Micronesian anchor; the
+        Proto-Micronesian/Proto-Oceanic/Proto-Polynesian members ride their codemap aliases
+        (poz-mic-pro, poz-oce-pro, poz-pol-pro); PMP/PAn now land on poz:pro / map:pro and
+        the core daughters (chk, woe, puw, cal, gil, mah, yap, pau) on their 2026-11-13
+        anchors (PR #48); the sub-group protos and the dialect-chain tail (mkj, stw, mrl …)
+        stay display-only per the recorded depth ruling"}
+    dating: {posture: undatable, note: "a reference dataset — the release carries no dates"}
+    places: {posture: unplaced, note: "variety coordinates are doculect reference points, not
+        findspots — no place claim at dictionary grain"}
+    script: {posture: implied, note: "Latin-script orthographies and phonemic notation"}

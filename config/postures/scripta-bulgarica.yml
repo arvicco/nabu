@@ -1,0 +1,8 @@
+sources:
+  scripta-bulgarica:   # P107-8
+    kind: {posture: unclassified, note: genre lives in prose descriptions only — a future terms-field look}
+    lect: {posture: identity, note: whole-source bul, deliberately coarse — the span reaches Old
+        Bulgarian inscriptions; per-text chu-recension refinement is a recorded future lect look}
+    dating: {posture: undatable, note: dates live in free prose, no typed field — declared, not silent}
+    places: {posture: unplaced, note: same — findspots in prose only}
+    script: {posture: implied}

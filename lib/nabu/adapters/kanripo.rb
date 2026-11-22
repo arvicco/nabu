@@ -10,7 +10,7 @@ module Nabu
     # per-text shallow GitFetch, polite pacing, resumable per-text ledger
     # pins — the design note lives on that class and architecture §8).
     #
-    # == Scope: classes (config/sources.yml `classes:`)
+    # == Scope: classes (config/sources/ `classes:`)
     #
     # The KR id's prefix is its 四部-style class: KR1 經 classics, KR2 史
     # histories, KR3 子 masters, KR4 集 belles-lettres, KR5 道 Daoist canon,
@@ -43,7 +43,7 @@ module Nabu
     # master only. The edition rides document metadata and the verbatim
     # anchors, so a future multi-edition wave can mint edition-qualified
     # documents WITHOUT touching these urns. Declared edition refs
-    # (config/sources.yml `edition_refs:`, e.g. [SBCK]) are ACQUIRED now —
+    # (config/sources/ `edition_refs:`, e.g. [SBCK]) are ACQUIRED now —
     # objects plus a remote-tracking ref per catalog member, master tree
     # untouched (KanripoFetch, design note item 5) — but discover/parse
     # still read master only; the edition-qualified mint is future work.

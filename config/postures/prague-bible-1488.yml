@@ -1,0 +1,14 @@
+sources:
+  prague-bible-1488:   # P116-1
+    # kind: machine-postured — kind_map.yml source_kind scripture (the
+    # whole-source Bible precedent: vulgate/eng-web/sblgnt).
+    # lect: machine-postured since 2026-10-11 — the whole-source cs → cs:old
+    # override in config/lect_overrides.yml (the Slavic nabu-lects package
+    # minted cs:old [1100, 1500]; the P116-1 pending retired at the flip,
+    # the shadowing rule).
+    dating: {posture: dated, note: "every page carries the edition's 1488 (the record and the
+        htr-united yml: notBefore/notAfter 1488) — the artifact date, :structured lane"}
+    places: {posture: named, note: "Prague — the edition's own name (Bible pražská), the
+        imprint place; declared coarse"}
+    script: {posture: implied, note: "Latin script, semi-diplomatic (long s, ¬, superscript
+        marks verbatim)"}

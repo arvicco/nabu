@@ -1,0 +1,21 @@
+unikemet:
+  adapter: Nabu::Adapters::Unikemet
+  adopted: "2026-08-09"
+  group: signs  # P68-4: the sign-restore sweep (nabu enable signs && nabu sync signs)
+  kind: module   # P65-2: machinery-only — an Egyptian sign-spine instrument, zero document rows
+  axes: [egyptian]
+  wired: true    # channel verified (first fetch landed; canonical present). `--all`
+                   # participation is governed by kind + sync_policy, NEVER by wired
+                   # (owner semantics ruling 2026-08-18, reaffirming 2026-07-24:
+                   # wired = the sync link is tested and declared working).
+  # P65-2: Unikemet — Unicode's normative Egyptian Hieroglyph data file
+  # (UCD; 5,067 signs at 17.0: kEH_Cat Gardiner-plus catalog codes,
+  # kEH_Desc descriptions 4,380, kEH_Func functions 4,378, kEH_FVal
+  # phonetic values 4,212, kEH_JSesh/kEH_HG/kEH_IFAO concordances,
+  # kEH_Core core-vs-legacy). Fetch = ONE flat file on the VERSIONED
+  # release URL (unicode.org/Public/17.0.0/ucd/Unikemet.txt — immutable,
+  # the cigs pin posture, deliberately NOT /latest/); a new Unicode release
+  # is a new pin, owner call. LICENSE: UNICODE LICENSE V3
+  # (unicode.org/license.txt, MIT-style, quoted in the adapter manifest)
+  # → class open, the Unihan class.
+  sync_policy: manual

@@ -1,0 +1,21 @@
+sources:
+  dharma-tamil:
+    kind: {posture: unclassified}
+    lect: {posture: identity, note: "the P118-1 pending retired 2026-10-12: the Indic
+        registry package added the tam → ta codemap row (ta re-parented onto dra-sou)
+        and minted te for the tel-Latn passages, so every claimed code resolves;
+        ta:old/ta:mid exist since 2026-10-27 (note refreshed 2026-11-13) but the
+        epigraphic corpus claims the bare anchor, declared coarse — the inscriptions
+        span the stages and carry no per-document stage data"}
+    dating: {posture: partial, note: "no origDate in any header; title-mined: the titles'
+        attributed statements ride metadata title_dating verbatim on 965 of the 1,267 parsed
+        docs, and the 112 ERA-TYPED ones convert via config/eras.yml (109 Śaka Y → Y+78, 3
+        Kollam Y → [Y+824, Y+825]; census 2026-10-12) — rows via MetadataDates :structured;
+        the 853 regnal-only titles ('time of Rājakesarivarman, year 9') stay verbatim-only
+        pending a ruled South-Indian regnal table"}
+    places: {posture: pending, note: "no origPlace in any header (findspots live in DHARMA's
+        separate metadata repos); candidate: that join, or the house-style titles' leading
+        toponym once a gazetteer match is ruled"}
+    script: {posture: qualified, note: "romanized (tam-Latn/san-Latn); Tamil, Grantha and
+        Vaṭṭeḻuttu are the artifact facts — the edition rendition rides metadata
+        script_rendition verbatim"}

@@ -984,7 +984,7 @@ Each file is YAML front matter (`name`, `description`, `license`,
 - **Managed** — `metadata.sources` and the sources table between the
   `nabu:skill-sources` markers: the desk's live public sources with their
   upstream names and license classes, projected from `config/axes.yml`,
-  `config/sources.yml` and the adapter manifests. `rake skills:scaffold`
+  `config/sources/` and the adapter manifests. `rake skills:scaffold`
   re-projects them; `rake skills:check` reports drift. Grant-gated private
   holdings and unwired sources never appear.
 - **Prose** — everything else. `rake skills:scaffold` seeds a missing

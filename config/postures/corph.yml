@@ -1,0 +1,7 @@
+sources:
+  corph:
+    kind: {posture: unclassified}
+    lect: {posture: dates}
+    dating: {posture: partial}
+    places: {posture: unplaced}
+    script: {posture: implied}

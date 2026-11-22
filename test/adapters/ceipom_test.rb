@@ -330,9 +330,9 @@ class CeipomTest < Minitest::Test
   # -- registry ----------------------------------------------------------------
 
   def test_registry_row_exists_disabled_with_frozen_sync_policy
-    registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources.yml", __dir__))
+    registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources", __dir__))
     entry = registry["ceipom"]
-    refute_nil entry, "config/sources.yml must register ceipom"
+    refute_nil entry, "config/sources/ must register ceipom"
     assert_equal Nabu::Adapters::Ceipom, entry.adapter_class
     assert entry.wired, "live (owner order 2026-07-18: all pre-P30 sources flipped, riding the P30 PR)"
     assert_equal "frozen", entry.sync_policy, "Zenodo versions are immutable — a frozen deposit"

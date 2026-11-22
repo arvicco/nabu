@@ -1,0 +1,13 @@
+wiktionary-sh:   # P154, 02-sources row 361
+  adapter: Nabu::Adapters::WiktionarySh
+  adopted: "2026-11-02"
+  axes: [slavic]
+  wired: true   # first sync verified 2026-11-03: 70,466 entries
+  # The kaikki Serbo-Croatian extraction (70,466 records / "66998 distinct
+  # words", census 2026-11-02): the library's first Serbo-Croatian
+  # dictionary, Latin and Cyrillic headwords both: Proto-Slavic (7,327),
+  # German (1,708) and Ottoman Turkish (1,483) etymons. Language srp. The
+  # wiktionary-fa mold on the shared WiktionaryKaikki base: per-language
+  # JSONL (deprecated upstream — fallback = filter the full extract by
+  # lang_code sh), CC BY-SA + GFDL → attribution, FileFetch.
+  sync_policy: manual

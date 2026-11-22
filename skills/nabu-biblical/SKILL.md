@@ -20,7 +20,7 @@ The cross-language scripture hat: the Masoretic shelves and the Scrolls, the Gre
 The class is the machine-actionable reading of each source's data license; the
 verbatim upstream terms are in `docs/02-sources.md` of the Nabu repository.
 
-<!-- nabu:skill-sources:begin — generated from config/sources.yml by `rake skills:scaffold`; edit outside this block -->
+<!-- nabu:skill-sources:begin — generated from config/sources/ by `rake skills:scaffold`; edit outside this block -->
 | Source | Upstream | License class |
 | --- | --- | --- |
 | `betamasaheft-works` | Beta maṣāḥǝft Works — Ethiopic literature (Hiob-Ludolf-Zentrum, Hamburg) | attribution |

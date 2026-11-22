@@ -27,7 +27,7 @@ class DprrTest < Minitest::Test
   end
 
   def test_registry_module_row_and_module_shape
-    registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources.yml", __dir__))
+    registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources", __dir__))
     entry = registry["dprr"]
     refute_nil entry
     assert entry.feature_module?

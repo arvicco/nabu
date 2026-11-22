@@ -38,7 +38,7 @@ module Nabu
     # == fetch / sync policy
     #
     # Single upstream repo, so the inherited clone/ff-only-pull fetch applies
-    # verbatim. Registered sync_policy: manual (config/sources.yml) — unlike the
+    # verbatim. Registered sync_policy: manual (config/sources/) — unlike the
     # frozen proiel-treebank, TOROT still gets occasional releases, so it is
     # re-syncable but not on a live schedule.
     class Torot < Proiel

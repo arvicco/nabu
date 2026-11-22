@@ -1,0 +1,14 @@
+wiktionary-sux:
+  adapter: Nabu::Adapters::WiktionarySux
+  adopted: "2026-08-10"
+  group: signs  # P68-4: the sign-restore sweep — the cuneiform card's sense lane
+  axes: [cuneiform]
+  wired: true    # P68-1: first sync 2026-08-10 — 2,499 entries (1,315
+                   # cuneiform headwords), 247 reflexes (43 sux→akk);
+                   # define 𒊬 eyeballed ("orchard").
+  # The kaikki Sumerian extraction (2,499 entries; 1,314 pure-cuneiform
+  # headwords — the P65 sign card's sense join; sux→akk descendant chains
+  # → reflexes). The wiktionary-cu mold: per-language JSONL (deprecated
+  # upstream — fallback = filter the full extract by lang_code sux),
+  # CC BY-SA + GFDL → attribution, FileFetch, re-syncs owner-fired.
+  sync_policy: manual

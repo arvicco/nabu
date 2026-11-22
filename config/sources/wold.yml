@@ -1,0 +1,33 @@
+wold:
+  adapter: Nabu::Adapters::Wold
+  adopted: "2026-07-26"
+  axes: [etym]
+  # soft edge, not requires: (architecture §5): parameters cite
+  # Concepticon ids the cldf-spine module can resolve; the donor
+  # glottocode table is transcribed into the adapter, never read from
+  # the spine, so the shelf is whole without it.
+  # P49-r4 audit: 41 vocabulary shelves in 41 recipient languages sampled
+  # worldwide by typological design (eng/goh/jpn/vie/yaq/…) — structurally
+  # unbounded, dictionary-side. Whole-grain attribution put "axes: etym" on
+  # every recipient code's language card and folded all 41 codes into the
+  # etym desk's gold-lemma language set (claiming e.g. goh gold rows held
+  # by the germanic desk's sources); excluded from count-less surfaces.
+  multilingual: true
+  wired: true    # flipped 2026-07-26 (owner ruling "flip all wired"; first sync verified on the live box)
+                 # P46-6 pre-flip runbook (16 MB Zenodo
+                   # zip, sha-pinned; CLAUDE.md checklist §6: bin/nabu sync
+                   # wold, eyeball `nabu define wine --lang eng` for the
+                   # donor apparatus and `nabu etym vinum` for the Latin→
+                   # English loan edge, then flip). Projected: 64,289 entries
+                   # across 41 vocabulary shelves (wold-english,
+                   # wold-oldhighgerman, …) / ~20.6k borrowed donor edges.
+  # WOLD — World Loanword Database (lexibank/wold v4.2, CC BY 4.0; cite
+  # Haspelmath & Tadmor eds. 2009, MPI-EVA). The etym desk's loanword-FLOW
+  # layer: every lexeme carries a curated five-point borrowed status;
+  # borrowing events mint donor reflex edges (Latin/Sanskrit/Old Norse/
+  # Classical Arabic… — the ancient donors are the held join surface). The
+  # Zenodo versioned record is immutable; a future release is a NEW DOI the
+  # owner re-pins (URL + RELEASE_SHA256, the iecor pattern) before re-sync.
+  # Donor map keys on languoid NAMES — WOLD's own glottocodes are unreliable
+  # (its "Old Norse" is noon1243 = Glottolog's Noone; see cldf-spine row).
+  sync_policy: manual

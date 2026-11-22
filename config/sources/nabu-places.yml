@@ -1,0 +1,29 @@
+nabu-places:
+  adapter: Nabu::Adapters::NabuPlaces
+  adopted: "2026-08-08"
+  group: core   # P63 rider: pre-enabled registry instrument, swept by `nabu sync core`
+  kind: module   # P63-7: machinery-only — the place-matching decisions registry seam, zero document rows
+  requires: [cigs, pleiades, trismegistos-geo]   # P77-r3 (owner 2026-08-13): the
+                   # decision rows mint cigs:/pleiades:/tm: refs — resolving them
+                   # (names, coordinates, crosswalk, --place/--within) reads the
+                   # gazetteer slices those three produce; without them the
+                   # registry's refs are bare strings. Enabling/syncing
+                   # nabu-places pulls the chain (pleiades ~129 MB dump;
+                   # trismegistos-geo is a ManualDrop — the sweep prints its
+                   # acquisition card honestly).
+  axes: [epigraphy]
+  wired: true    # channel verified (first fetch landed; canonical present). `--all`
+                   # participation is governed by kind + sync_policy, NEVER by wired
+                   # (owner semantics ruling 2026-08-18, reaffirming 2026-07-24:
+                   # wired = the sync link is tested and declared working).
+  # P63-6/7: nabu-places — the third sister repo (nabu-lects pattern applied
+  # to places): names.yml (source → verbatim place-name string → decision
+  # row: matched refs [cigs:GIR, pleiades:912855] · unlocatable · region ·
+  # ghost · rejected · alias_of) + namespaces.yml (pleiades/tm/cigs/geonames
+  # + id shapes) + bin/validate (dup-key refusal — the P61-3 shadowing
+  # class). Seed wave: cdli 133 rows (250,484 docs) + oracc 131 (87,706),
+  # generated from CIGS v1.7's own keys. LICENSE: repo LICENSE verbatim
+  # CC BY 4.0 → attribution. OWNER QUEUE (P63 gate): gh repo create
+  # arvicco/nabu-places + push ~/Dev/nabu-places, then bin/nabu enable
+  # nabu-places + bin/nabu sync nabu-places + bin/nabu place apply.
+  sync_policy: manual

@@ -1,0 +1,6 @@
+sources:
+  dss:
+    kind: {posture: unclassified}
+    dating: {posture: undatable}
+    places: {posture: unplaced}
+    script: {posture: implied}

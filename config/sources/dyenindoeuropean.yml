@@ -1,0 +1,15 @@
+dyenindoeuropean:
+  adapter: Nabu::Adapters::Dyenindoeuropean
+  adopted: "2026-11-13"
+  axes: [etym]
+  wired: true    # first sync 2026-11-13: +2,388 sets / 14,752 reflexes.
+                 # Expected: 2,388 entries / 14,752 reflex rows; 6,854
+                 # forms outside the CognateTable mint nothing (counted).
+  sync_policy: manual
+  # Dyen, Kruskal & Black 1992, An Indoeuropean Classification (TAPS
+  # 82/5), in the lexibank CLDF edition — CC BY 4.0. 95 modern IE
+  # Swadesh-200 lists in Dyen's ASCII transcription, 2,388 cognate
+  # classes; no reconstructions, so each class is headed by its concept.
+  # Never released (no tag, no Zenodo record): sparse GitFetch of the
+  # default branch (head cd1ad5f8, last upstream commit 2021-04-27).
+  # Dictionary language `ine` (the iecor collective).

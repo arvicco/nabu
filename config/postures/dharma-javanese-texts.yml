@@ -1,0 +1,12 @@
+sources:
+  dharma-javanese-texts:
+    kind: {posture: unclassified}
+    lect: {posture: identity, note: "kaw/osn/san -Latn — all resolve on the
+        canonical v1.6.0 rows (pending retired at the P92 gate); the 5 editions upstream
+        tags \"und\" read \"und\" — no lect claim, declared (the und-admission ruling,
+        2026-11-13)"}
+    dating: {posture: undatable, note: "no machine date field; composition dates are
+        scholarship, not header fields"}
+    places: {posture: unplaced}
+    script: {posture: qualified, note: "romanized (kaw-Latn/osn-Latn/san-Latn); Kawi and
+        Old Sundanese scripts are the artifact facts"}

@@ -61,7 +61,7 @@ class BurmanCrosswalkTest < Minitest::Test
   # -- the instrument adapter ------------------------------------------------
 
   def test_registry_resolves_the_instrument_unwired
-    registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources.yml", __dir__))
+    registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources", __dir__))
     entry = registry["burman-concordance"]
     refute_nil entry
     assert entry.wired, "channel verified (the 2026-08-18 wired-semantics ruling)"

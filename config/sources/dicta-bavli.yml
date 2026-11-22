@@ -1,0 +1,21 @@
+dicta-bavli:   # 02-sources row 420
+  adapter: Nabu::Adapters::DictaBavli
+  adopted: "2026-11-16"
+  axes: [hebrew]
+  wired: true   # first sync verified 2026-11-16: +37 docs / 78,782 passages, 0 errored (Meila duplicate + 2 .docx skipped by rule); Berakhot 2a shown + search probed with credit
+                 # bin/nabu sync dicta-bavli (one ~10 MB git clone, 38 tractate dirs) —
+                 # expect 37 documents / 78,782 passages, 2 skipped by rule (the Meila
+                 # duplicate dir + 2 .docx = 3 skip notes), 0 quarantined; eyeball
+                 # nabu show urn:nabu:dicta-bavli:berakhot:2a.1 (מֵאֵימָתַי קוֹרִין אֶת שְׁמַע)
+  sync_policy: manual   # a finished project (last push 2024-01-08)
+  # Dicta's vocalized Babylonian Talmud (Talmud-Bavli-with-Nikud): the
+  # whole Bavli, 37 tractates, pointed by Dicta's rabbinic Nakdan and
+  # human-reviewed, shipped in ktiv male and ktiv haser. Document =
+  # tractate, passage = paragraph line cited <daf><a|b>.<n>; the male file
+  # is the text, the line-aligned haser line rides annotations. README
+  # grant verbatim: "This vocalized text of the Babylonian Talmud is
+  # released under a CC BY-SA license. If you make use of the text, please
+  # attribute as follows: This text of the Babylonian Talmud was vocalized
+  # by Dicta: The Israel Center for Text Analysis (www.dicta.org.il)" →
+  # attribution (unversioned BY-SA, admitted with the credit). Bare arc,
+  # the house Bavli code (lect override → arc:mid, the sefaria ruling).

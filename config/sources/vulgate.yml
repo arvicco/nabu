@@ -1,0 +1,16 @@
+vulgate:
+  adapter: Nabu::Adapters::Vulgate
+  adopted: "2026-07-09"
+  embed_index: true   # P93-4: the semantic-vector literary core
+  axes: [classical, biblical]
+  wired: true    # OWNER SIGN-OFF 2026-07-10: synced, 73 books / 35,809 verses
+                   # (complete Clementine canon), align OT witness eyeballed
+                   # (GEN 1.1, JON 1 trilingual).
+                   # (CLAUDE.md checklist §6: bin/nabu sync vulgate — ~76 MB
+                   # open-bibles clone — then spot-check nabu show
+                   # urn:nabu:vulgate:mrk:2.3 and 5 random verses)
+  # P11-5: the FULL Clementine Latin bible (one USFX file in the open-bibles
+  # collection; public domain). One document per book; both alignment-hub
+  # works (nt + ot) list its books as witnesses. open-bibles is curated and
+  # occasionally updated: re-syncable, not on a live schedule.
+  sync_policy: manual

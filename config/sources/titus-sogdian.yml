@@ -1,0 +1,34 @@
+titus-sogdian:   # 02-sources row 227
+  adapter: Nabu::Adapters::TitusSogdian
+  adopted: "2026-10-10"
+  axes: [etym, iranian]  # the Eastern Middle Iranian stage of the iranian desk (Sogdian, the
+                         # Silk Road lingua franca, beside the Avestan anchor and the Pahlavi
+                         # books); etym because the Sogdian forms feed the comparative shelves.
+                         # A buddhist/manichaean tag would be per-text, not whole-source.
+  # Grant-gated PRIVATE research material, the titus-avestan posture verbatim
+  # (the fetch right is not conveyed by a public license, so not by a clone):
+  availability: blocked
+  wired: true    # First retrieval + recovery verified 2026-10-10: 364 docs / 21,354 passages / 0 quarantines / 29 declared skips.
+  # TITUS Sogdian corpora (titus.uni-frankfurt.de/texte/etcs/iran/miran/sogd/): the
+  # Sogdian Corpus "arranged by texts" (sogdnswc — N. Sims-Williams, data entry and the
+  # 2005 text revision; 29 texts on 392 pages: the Christian texts in Syriac script, the
+  # Manichaean-script corpus, the Buddhist texts, the Mug documents, the Ancient Letters,
+  # the Upper Indus inscriptions) and Morano's Stellung-Jesu hymns (sogdmor — one page
+  # reachable from the frameset). Out of scope: the external Sogdian-letters page TITUS's
+  # index links on depts.washington.edu (not TITUS-hosted, not under the grant). One
+  # document per text page (canonical/titus-sogdian/<corpus>/<prefix>NNN.htm); passages
+  # are MANUSCRIPT LINES, keyed by the header values (chapter.paragraph.manuscript.page.
+  # line), every header value + the script + a declared-coarse findspot riding as
+  # annotations. Language sog (embedded Parthian runs annotated; Turkic fragments oui).
+  sync_policy: manual
+  grant_required: true
+  grant:
+    terms: >-
+      the Middle Iranian families on TITUS, to whatever extent TITUS hosts them as
+      retrievable text: one retrieval per corpus, local personal research use only,
+      no redistribution; TITUS and the editors credited wherever displayed
+    request_hint: >-
+      Contact TITUS (titus.uni-frankfurt.de) for a license grant, and promise
+      to credit TITUS and the editors (N. Sims-Williams for the Sogdian corpus, E. Morano
+      for the Stellung-Jesu hymns)
+      wherever any text is displayed.

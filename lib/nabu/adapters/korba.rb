@@ -10,7 +10,7 @@ module Nabu
     # 18th-century Polish texts transcribed in the KORBA 1/2 projects, with
     # MANUAL morphosyntactic annotation (the reference set the corpus's
     # tagger was trained on). Language: Middle Polish, `pl` (the stage claim
-    # waits on the nabu-lects mint — config/postures.yml).
+    # waits on the nabu-lects mint — config/postures/).
     #
     # == Shape (censused 2026-10-14 on the live v2.0 tree)
     #

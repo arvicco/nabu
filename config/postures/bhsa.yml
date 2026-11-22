@@ -1,0 +1,6 @@
+sources:
+  bhsa:
+    lect: {posture: identity, note: hbo/arc, as oshb}
+    dating: {posture: undatable}
+    places: {posture: unplaced}
+    script: {posture: implied}

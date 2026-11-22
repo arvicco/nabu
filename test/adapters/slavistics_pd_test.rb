@@ -125,7 +125,7 @@ module Adapters
     end
 
     def test_registry_row_is_registered_unwired_and_manual
-      registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources.yml", __dir__))
+      registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources", __dir__))
       entry = registry["slavistics-pd"]
       refute_nil entry
       assert entry.wired, "wired: true — first sync verified 2026-10-11 (21 docs / 5,833 passages, 2 mirror stragglers)"

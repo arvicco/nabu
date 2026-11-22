@@ -1,0 +1,13 @@
+sources:
+  hr-wikisource:
+    kind: {posture: unclassified, note: "genre categories ride verbatim in metadata
+        categories — a kind_map candidate"}
+    lect: {posture: identity, note: "hrv → hr through the Slavic-package codemap row (the
+        2026-10-10 mint; note refreshed 2026-11-13 — the 'no node yet' premise was stale).
+        Povaljska listina (1250) mixes Croatian and Church Slavonic in Croatian Cyrillic
+        — a chu/cro candidate, censused, not claimed"}
+    dating: {posture: dated, note: "P116-2: the century categories (srednji vijek, 15.–18.
+        stoljeće) band the era envelope (era_band → MetadataDates :era_band_key,
+        precision era — an attribution)"}
+    places: {posture: unplaced, note: "no place fields in the cone pages"}
+    script: {posture: implied}

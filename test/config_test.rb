@@ -98,7 +98,7 @@ class ConfigTest < Minitest::Test
   def test_sources_path_defaults_under_config
     Dir.mktmpdir do |root|
       config = Nabu::Config.load(path: File.join(root, "config", "nabu.yml"), root: root)
-      assert_equal File.join(root, "config", "sources.yml"), config.sources_path
+      assert_equal File.join(root, "config", "sources"), config.sources_path
     end
   end
 

@@ -330,7 +330,7 @@ class FacetMapTest < Minitest::Test
     path = File.join(Nabu::Config::PROJECT_ROOT, "config", "facet_map.yml")
     map = Nabu::FacetMap.load(path)
     refute_nil map
-    slugs = YAML.safe_load_file(File.join(Nabu::Config::PROJECT_ROOT, "config", "sources.yml")).keys
+    slugs = Nabu::RegistryTree.load(File.join(Nabu::Config::PROJECT_ROOT, "config", "sources")).keys
     (map.sources + map.passage_sources).each do |slug|
       assert_includes slugs, slug, "facet_map.yml names #{slug}, which is not a registered source"
     end

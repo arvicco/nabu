@@ -1,0 +1,16 @@
+sources:
+  perseus-greek:
+    kind: {posture: pending, note: "candidate: TEI textClass ingestion (unruled)"}
+    dating: {posture: dated, note: "two labeled classes: the sourceDesc imprint year of the
+        printed edition (metadata source_date → date_class edition, 767 of 770 grc editions)
+        and the TLG concordance lane — 760 grc editions join a glaux/diorisis composition
+        envelope by their CTS author.work id (axis_source tlg-concordance, date_class
+        composition, the witness named in date_raw)"}
+    places: {posture: unplaced, note: "the header names only the PRINTING place (imprint
+        pubPlace), never an origin; the passage-grain inline layer (EpidocParser
+        annotations entities: placeName @key verbatim — tgn,<id> Getty TGN and
+        perseus,<Name> gazetteer keys) records places MENTIONED in the work, not
+        where it was made or found; TGN is no held gazetteer (Pleiades carries
+        ~49 TGN crosswalks), so nothing joins the axis — the keys ride for a
+        future join"}
+    script: {posture: implied}

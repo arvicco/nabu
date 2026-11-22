@@ -114,7 +114,7 @@ module Nabu
 
       # ENHG has no ISO code: documents ride the bare de anchor; the
       # de:early stage refinement is the pending nabu-lects mint
-      # (config/postures.yml).
+      # (config/postures/).
       LANGUAGE = "de"
 
       # The per-file language pin (censused 190/190; drift quarantines).

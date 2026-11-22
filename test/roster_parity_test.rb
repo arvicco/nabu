@@ -21,7 +21,7 @@ require "test_helper"
 # and enrichment_producer? have no roster to drift from (both rebuild
 # paths enumerate the predicate directly).
 class RosterParityTest < Minitest::Test
-  SOURCES = File.expand_path("../config/sources.yml", __dir__)
+  SOURCES = File.expand_path("../config/sources", __dir__)
 
   # Every adapter the registry wires plus every Adapter subclass loaded —
   # an adapter not yet registered still counts as a producer.

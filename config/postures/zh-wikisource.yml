@@ -1,0 +1,11 @@
+sources:
+  zh-wikisource:
+    kind: {posture: unclassified}
+    lect: {posture: codemap, note: "lzh → zho/lit (the kanripo posture); 元朝秘史
+        claims bare zho — its hosted layer is the Ming 總譯 vernacular, censused
+        (no Early-Mandarin stage exists to claim; no Mongolic claim anywhere)"}
+    dating: {posture: dated, note: "P109-1: the work-level dynasty claim (全唐文 →
+        唐 via the ruled period table, precision era); 續資治通鑑 (Qing compilation
+        about Song–Yuan) and 元朝秘史 deliberately claim nothing — declared"}
+    places: {posture: unplaced, note: "no place fields in the cone pages"}
+    script: {posture: implied}

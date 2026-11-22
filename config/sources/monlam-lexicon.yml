@@ -1,0 +1,18 @@
+monlam-lexicon:   # P88-A3, 02-sources row 183
+  adapter: Nabu::Adapters::MonlamLexicon
+  adopted: "2026-08-29"
+  axes: [tibetan]
+  wired: true   # first real sync verified + owner sign-off 2026-08-30: 449,829 entries
+  # The Monlam headword lists (MonlamIT/Tibetan-Lexicon, Apache-2.0
+  # in-repo verified 2026-08-29) — the ONLY licensed machine-readable
+  # slice of the Monlam dictionary world: two lanes under one
+  # `monlam-lexicon` shelf, language bod. HEADWORDS ONLY (gloss nil, the
+  # tibetan-verbs honesty); every definitions-bearing Monlam artifact
+  # found is UNLICENSED and parked (the app SQLite, the scraped CSVs) —
+  # definitions need an upstream ask, never the scrape. The Grand list's
+  # file carries a censused 24,295-line blank hole (the late-འ…ཡ band;
+  # reported upstream) — README's 367,011 counts raw lines.
+  # EXPECTED FIRST SYNC (~29 MB clone): 449,829 bod entries — monlam
+  # 107,113 + grand 342,716 — the desk's largest lexical shelf by two
+  # orders of magnitude, glossless, complementary to wiktionary-bo.
+  sync_policy: manual

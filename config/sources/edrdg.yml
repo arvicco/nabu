@@ -1,0 +1,21 @@
+# ============ P46-2: the Geʿez shelf (D46-a/b/c, owner-ratified 2026-07-26) ============
+
+edrdg:
+  adapter: Nabu::Adapters::Edrdg
+  adopted: "2026-07-19"
+  group: signs  # P68-4: the sign-restore sweep (nabu enable signs && nabu sync signs)
+  axes: [japonic]
+  wired: true   # flipped 2026-07-20 (owner order, post-P34 gate: P32+P33 sources on)
+                   # bin/nabu sync edrdg — 1.5 MB + 10.5 MB gz GETs,
+                   # 13,108 + 217,951 entries — then eyeball nabu define 愛
+                   # and 5 random jmdict entries, flip).
+  # KANJIDIC2 + JMdict_e (EDRDG, CC BY-SA 4.0 verbatim from the licence
+  # page → attribution). SCALE/CHURN HONESTY: upstream REBUILDS BOTH FILES
+  # NIGHTLY (verified Last-Modified 2026-07-19 03:30 GMT, in-file build
+  # stamps 2026-07-19) — sync_policy manual means each owner-fired sync
+  # adopts the LATEST NIGHTLY build and every re-sync WILL rewrite canonical;
+  # the per-dictionary .file-fetch.json pins + in-file build stamps
+  # (<date_of_creation>, "JMdict created:") date what canonical holds.
+  # ~218k jmdict entries make this the largest dictionary shelf after a
+  # sync (lexica is 168k).
+  sync_policy: manual

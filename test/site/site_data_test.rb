@@ -20,14 +20,14 @@ module Site
     DATA_DIR = File.join(ROOT, "site", "_data")
 
     def registry
-      @registry ||= Nabu::SourceRegistry.load(File.join(ROOT, "config", "sources.yml"))
+      @registry ||= Nabu::SourceRegistry.load(File.join(ROOT, "config", "sources"))
     end
 
     def test_committed_desks_data_matches_the_registry_projection
       committed = YAML.safe_load_file(File.join(DATA_DIR, "desks.yml"))
       fresh = Nabu::Ops::SiteData.new(registry: registry, data_dir: DATA_DIR).desks
       assert_equal fresh, committed,
-                   "site/_data/desks.yml is stale against config/axes.yml + config/sources.yml — " \
+                   "site/_data/desks.yml is stale against config/axes.yml + config/sources/ — " \
                    "run `rake site:data` (a new desk is invisible on the home page until you do)"
     end
 

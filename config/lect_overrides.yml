@@ -23,14 +23,14 @@
 # approximation"). The comments keep the ruling's own wording.
 sources:
   derom:
-    # DÉRom (config/sources.yml `derom`) files its etymon articles under the
+    # DÉRom (config/sources/ `derom`) files its etymon articles under the
     # Wiktionary Vulgar-Latin code la-vul, but DÉRom's own doctrine is that
     # these ARE comparative-method reconstructions (the whole point of the
     # dictionary) — the reconstructed roa:pro lect, not the universal
     # codemap's attested-register default (lat/vul). Owner ruling, P57-3.
     la-vul: { lect: "roa:pro", tier: certain }
   rundata:
-    # Rundata (config/sources.yml `rundata`) tags urnordisk-dated
+    # Rundata (config/sources/ `rundata`) tags urnordisk-dated
     # inscriptions gmq-pro (the wiktionary-recon proto-language convention —
     # no ISO code exists), but the inscriptions themselves are ATTESTED
     # runic epigraphy (the Elder Futhark span), not the universal codemap's

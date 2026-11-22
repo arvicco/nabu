@@ -155,9 +155,9 @@ class SillokTest < Minitest::Test
   # --- registry -------------------------------------------------------------
 
   def test_registry_row_exists_on_the_korean_axis
-    registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources.yml", __dir__))
+    registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources", __dir__))
     entry = registry["sillok"]
-    refute_nil entry, "config/sources.yml must register sillok"
+    refute_nil entry, "config/sources/ must register sillok"
     assert_equal Nabu::Adapters::Sillok, entry.adapter_class
     assert entry.wired, "first sync owner-verified; flipped 2026-08-19 (r20 semantics)"
     assert_equal "manual", entry.sync_policy

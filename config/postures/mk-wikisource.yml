@@ -1,0 +1,12 @@
+sources:
+  mk-wikisource:
+    kind: {posture: unclassified}
+    lect: {posture: identity, note: "mkd → mk through the Slavic-package codemap row (the
+        2026-10-10 mint; note refreshed 2026-11-13 — the 'no node yet' premise was stale); the
+        Miladinov collection is in MODERNIZED orthography (metadata orthography, per
+        page). Pejčinović/Krčovski's CS-tinged vernacular is the bul:emod/damaskini
+        neighbourhood — censused, not staged"}
+    dating: {posture: partial, note: "the забелешки print year where stated (Krčovski
+        1817 …); the collections carry none at page grain"}
+    places: {posture: unplaced, note: "no place fields in the cone pages"}
+    script: {posture: implied}

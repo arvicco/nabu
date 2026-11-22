@@ -1,0 +1,22 @@
+trismegistos-geo:
+  adapter: Nabu::Adapters::TrismegistosGeo
+  adopted: "2026-08-08"
+  kind: module   # P63-1: machinery-only — a gazetteer instrument, zero document rows, up=module
+  axes: [epigraphy]
+  wired: true    # channel verified (first fetch landed; canonical present). `--all`
+                   # participation is governed by kind + sync_policy, NEVER by wired
+                   # (owner semantics ruling 2026-08-18, reaffirming 2026-07-24:
+                   # wired = the sync link is tested and declared working).
+  # P63-1: the FIRST Manual Adapter source (ruling Dp-a) — TM's dump service
+  # fails the automation bar (captcha interstitial + POST form, measured
+  # 2026-08-08), so `nabu sync trismegistos-geo` prints the acquisition
+  # instruction card until the owner drops the browser-downloaded dump into
+  # incoming/trismegistos-geo/ (TM_geo.csv required, TM_geo.json optional),
+  # then validates, attics, ingests into canonical/trismegistos-geo/ and
+  # stamps .manual-fetch.json provenance. NOTE: the dump carries NO
+  # Pleiades/GeoNames ids (the form's crosswalk checkboxes are commented out
+  # upstream — verified 2026-08-08); crosswalks come from CIGS + the Wikidata
+  # harvest. LICENSE: dataservices page verbatim "We offer you open access to
+  # our data on a CC BY-SA 4.0 license" → attribution (the house BY-SA class,
+  # the trismegistos-links precedent).
+  sync_policy: manual

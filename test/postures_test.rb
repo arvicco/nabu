@@ -5,7 +5,7 @@ require "tmpdir"
 require "yaml"
 
 # The consolidated core-layer posture record (P61-0, the D59-f wave-1
-# frame): config/postures.yml nests per-layer declarations under each
+# frame): config/postures/ nests per-layer declarations under each
 # source (lect: today's 60 rows migrated verbatim; dating:/places:/
 # script: arm in the P61-1 sweep). The lect layer keeps the P59-4
 # contract byte-for-byte: machine grains (rules/overrides files) stay the
@@ -14,10 +14,10 @@ require "yaml"
 # lives here; dating/places/script existence arms once the sweep
 # declares them.
 class PosturesTest < Minitest::Test
-  POSTURES_PATH = File.join(Nabu::Config::PROJECT_ROOT, "config", "postures.yml")
+  POSTURES_PATH = File.join(Nabu::Config::PROJECT_ROOT, "config", "postures")
   RULES_PATH = File.join(Nabu::Config::PROJECT_ROOT, "config", "lect_facet_rules.yml")
   OVERRIDES_PATH = File.join(Nabu::Config::PROJECT_ROOT, "config", "lect_overrides.yml")
-  SOURCES_PATH = File.join(Nabu::Config::PROJECT_ROOT, "config", "sources.yml")
+  SOURCES_PATH = File.join(Nabu::Config::PROJECT_ROOT, "config", "sources")
 
   def postures
     @postures ||= Nabu::Postures.load(POSTURES_PATH)
@@ -49,6 +49,46 @@ class PosturesTest < Minitest::Test
                    "the local declaration wins its (slug, layer)"
       assert_equal "identity", merged.declared("beta", layer: "lect").posture
     end
+  end
+
+  # P185: the shipped record is the split tree (config/postures/<slug>.yml,
+  # each file keeping the `sources:` wrapper) — it loads like the monolith
+  # did, and still overlays a single-file local/config/postures.yml.
+  def test_load_reads_a_split_directory_and_overlays_a_local_file
+    Dir.mktmpdir do |dir|
+      tree = File.join(dir, "postures")
+      FileUtils.mkdir_p(tree)
+      File.write(File.join(tree, "_header.yml"), "# the record\n")
+      File.write(File.join(tree, "alpha.yml"), "sources:\n  alpha:\n    lect: {posture: identity}\n    " \
+                                               "dating: {posture: undatable}\n")
+      File.write(File.join(tree, "beta.yml"), "sources:\n  beta:\n    lect: {posture: dates}\n")
+      local = File.join(dir, "local.yml")
+      File.write(local, "sources:\n  alpha:\n    dating: {posture: dated}\n")
+      merged = Nabu::Postures.load([tree, local])
+      assert_equal "identity", merged.declared("alpha", layer: "lect").posture
+      assert_equal "dated", merged.declared("alpha", layer: "dating").posture
+      assert_equal "dates", merged.declared("beta", layer: "lect").posture
+    end
+  end
+
+  def test_a_split_file_whose_slug_mismatches_its_name_is_refused
+    Dir.mktmpdir do |dir|
+      File.write(File.join(dir, "alpha.yml"), "sources:\n  alfa:\n    lect: {posture: identity}\n")
+      error = assert_raises(Nabu::ValidationError) { Nabu::Postures.load(dir) }
+      assert_match(/alpha\.yml.*"alfa"/, error.message)
+    end
+  end
+
+  def test_the_shipped_record_is_split_and_the_monolith_is_gone
+    assert File.directory?(POSTURES_PATH), "config/postures/ is the shipped record"
+    refute_path_exists File.join(Nabu::Config::PROJECT_ROOT, "config", "postures.yml"),
+                       "no double structure: the monolith left with the split"
+  end
+
+  def test_config_postures_paths_pair_the_tree_with_the_local_file
+    config = Nabu::Config.new(canonical_dir: "/r/canonical", db_dir: "/r/db", local_dir: "/r/local",
+                              sources_path: "/r/config/sources", config_path: "/r/config/nabu.yml")
+    assert_equal ["/r/config/postures", "/r/local/config/postures.yml"], config.postures_paths
   end
 
   def rules
@@ -85,13 +125,13 @@ class PosturesTest < Minitest::Test
   # --- the lect layer: the P59-4 contract, unchanged through the move ---
 
   def test_every_passage_serving_source_has_a_lect_posture
-    refute_nil postures, "config/postures.yml must exist — it is the judgment record"
+    refute_nil postures, "config/postures/ must exist — it is the judgment record"
     coverage = postures.lect_coverage(rules: rules, overrides: overrides)
     missing = passage_slugs.reject { |slug| coverage.key?(slug) }
     assert_empty missing,
                  "sources with NO lect posture (machine or declared): #{missing.join(', ')} — " \
                  "run `nabu layer suggest <slug>`, then wire a rule/override or declare a row " \
-                 "(identity is an honest answer) in config/postures.yml"
+                 "(identity is an honest answer) in config/postures/"
   end
 
   # --- the P61-1 sweep: every layer, every source — ARMED ----------------
@@ -103,7 +143,7 @@ class PosturesTest < Minitest::Test
       assert_empty missing,
                    "sources with NO #{layer} posture: #{missing.join(', ')} — run " \
                    "`nabu layer suggest <slug>`, then declare (undatable/unplaced/implied " \
-                   "are honest answers) in config/postures.yml"
+                   "are honest answers) in config/postures/"
     end
   end
 
@@ -121,7 +161,7 @@ class PosturesTest < Minitest::Test
     assert_empty missing,
                  "sources with NO kind posture (machine or declared): #{missing.join(', ')} — " \
                  "add a config/kind_map.yml rule or declare kind: {posture: unclassified} " \
-                 "(honest) / pending (naming its candidate) in config/postures.yml"
+                 "(honest) / pending (naming its candidate) in config/postures/"
   end
 
   def test_kind_declarations_never_shadow_kind_map_rules
@@ -153,7 +193,7 @@ class PosturesTest < Minitest::Test
                       "#{declaration.slug}/#{declaration.layer}: unknown posture " \
                       "#{declaration.posture.inspect} (ruled set: #{vocabulary.join('/')})"
       assert_includes slugs, declaration.slug,
-                      "#{declaration.slug}: declared but not in config/sources.yml (a ghost row)"
+                      "#{declaration.slug}: declared but not in config/sources/ (a ghost row)"
     end
   end
 

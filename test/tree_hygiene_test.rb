@@ -22,7 +22,7 @@ class TreeHygieneTest < Minitest::Test
     assert_empty hits, "conflict markers committed:\n  #{hits.first(20).join("\n  ")}"
   end
 
-  # Anchor: a registry slug entered twice in config/sources.yml — YAML
+  # Anchor: a registry slug entered twice in config/sources/ — YAML
   # silently keeps the LATER mapping, so the first entry was shadowed with
   # no error and no merge conflict ever raised. Every config YAML, every
   # mapping level.

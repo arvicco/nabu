@@ -1,0 +1,6 @@
+fornsvenska:
+  adapter: Nabu::Adapters::Fornsvenska
+  adopted: "2026-08-13"
+  axes: [germanic]
+  wired: true    # P77 first sync owner-verified (155 docs), flipped 2026-08-18 (owner: "wire on all recent sources")
+  sync_policy: manual

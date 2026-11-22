@@ -69,7 +69,7 @@ class KitabReuseTest < Minitest::Test
   end
 
   def test_module_shape_and_producer_seam
-    registry = Nabu::SourceRegistry.load(File.expand_path("../config/sources.yml", __dir__))
+    registry = Nabu::SourceRegistry.load(File.expand_path("../config/sources", __dir__))
     entry = registry["kitab-reuse"]
     refute_nil entry
     assert entry.feature_module?

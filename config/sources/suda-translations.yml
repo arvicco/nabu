@@ -1,0 +1,17 @@
+suda-translations:   # P154, 02-sources row 339
+  adapter: Nabu::Adapters::SudaTranslations
+  adopted: "2026-11-02"
+  axes: [classical]
+  wired: true   # first sync verified 2026-11-03: 27 docs / 31,341 passages, 28 rule skips
+  sync_policy: manual
+  # Suda On Line: the collaborative English translation of the Suda,
+  # entry by entry, with notes, bibliography, keywords and the full
+  # translator/vetter history. Banked export: the SOL's maintainer's own
+  # solEntries.zip (31,371 saved CGI answers, 2025-07-24), supplied by
+  # email 2026-11-02 for this use; the zip is the canonical asset
+  # (ManualDrop, docs/manual/suda-translations.md). Document = Adler
+  # letter (27), passage = entry keyed by Adler number; each passage of
+  # the 17 letters the First1K Greek carries holds a first1k_candidate
+  # join key (26,041 of 31,341). LICENSE: the SOL home + rights pages
+  # (read 2026-11-02): CC BY-NC-SA 1.0 over "all our entries, including
+  # translations and annotations" → nc.

@@ -14,8 +14,7 @@ class TimelineRegistrationGuardTest < Minitest::Test
   SHAPES = Nabu::Store::TimelineBuilder::MetadataDates::SHAPES
 
   def sources
-    @sources ||= YAML.safe_load_file(File.join(Nabu::Config::PROJECT_ROOT, "config", "sources.yml"),
-                                     aliases: true).keys
+    @sources ||= Nabu::RegistryTree.load(File.join(Nabu::Config::PROJECT_ROOT, "config", "sources")).keys
   end
 
   # -- the detector -----------------------------------------------------------

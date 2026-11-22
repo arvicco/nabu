@@ -1,0 +1,31 @@
+titus-old-albanian:   # 02-sources row 406
+  adapter: Nabu::Adapters::TitusOldAlbanian
+  adopted: "2026-11-12"
+  axes: [etym]  # Albanian is its own branch and no desk holds it; etym because the
+                # early Gheg/Tosk forms (Buzuku, Bogdani, the Blanchus dictionary)
+                # feed the comparative shelves.
+  # Grant-gated PRIVATE research material, the titus-avestan posture verbatim
+  # (the fetch right is not conveyed by a clone):
+  availability: blocked
+  wired: true    # flipped 2026-11-13: first retrieval verified — 286 pages -> 283 docs / 25,748 passages, 0 errored
+  # TITUS Old Albanian texts (titus.uni-frankfurt.de/texte/etcs/alban/): Buzuku's
+  # Missale (data entry W. Hock), Blanchus's Dictionarium Latino-Epiroticum (Rome 1635)
+  # and Bogdani's Cuneus Prophetarum (M. de Vaan), Casasi's Breve compendio della
+  # dottrina christiana (B. Demiraj), Matrënga's Dottrina christiana of 1592 (M. de
+  # Vaan). Five editions, 286 pages by the index frames' census (2026-11-12) — one
+  # TitusFetch walk per edition into canonical/titus-old-albanian/<edition>/. One
+  # document per page carrying an Albanian lane; passages at the titus_levels unit
+  # (Buzuku's printed line, the paragraphs, Matrënga's line), the Latin riding the
+  # `latin` annotation. Language sqi (staged sq:old by lect_overrides).
+  # EXPECTED FIRST SYNC: 286 pages, crawl ≈ 10 min at the polite 2s pace (~15 MB —
+  # Bogdani's pages run to 0.7 MB).
+  sync_policy: manual
+  grant_required: true
+  grant:
+    terms: >-
+      the TITUS family terms: one retrieval per corpus, local personal research use
+      only, no redistribution; TITUS and the editors credited wherever displayed
+    request_hint: >-
+      Contact TITUS (titus.uni-frankfurt.de) for a license grant, and promise
+      to credit TITUS and the editors (data entry
+      W. Hock, M. de Vaan, B. Demiraj) wherever any text is displayed.

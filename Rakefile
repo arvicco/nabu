@@ -663,7 +663,7 @@ namespace :boards do
     groom.findings.each { |finding| puts "STALE  #{finding}" }
 
     readiness = Nabu::Ops::SourceReadinessCheck.new(
-      sources_path: File.expand_path("config/sources.yml", __dir__),
+      sources_path: File.expand_path("config/sources", __dir__),
       ledger_path: File.expand_path("local/history.sqlite3", __dir__)
     ).run
     readiness.findings.each { |finding| puts "STALE  readiness #{finding}" }
@@ -988,7 +988,7 @@ namespace :demo do
   task :build do
     $LOAD_PATH.unshift(File.expand_path("lib", __dir__))
     require "nabu"
-    registry = Nabu::SourceRegistry.load(File.join(__dir__, "config", "sources.yml"))
+    registry = Nabu::SourceRegistry.load(File.join(__dir__, "config", "sources"))
     census = Nabu::DemoBuild.from_env(ENV, registry: registry).build!
     puts JSON.pretty_generate(census.except(:files))
   end
@@ -997,7 +997,7 @@ namespace :demo do
   task :plan do
     $LOAD_PATH.unshift(File.expand_path("lib", __dir__))
     require "nabu"
-    registry = Nabu::SourceRegistry.load(File.join(__dir__, "config", "sources.yml"))
+    registry = Nabu::SourceRegistry.load(File.join(__dir__, "config", "sources"))
     demo = Nabu::DemoBuild.from_env(ENV, registry: registry)
     demo.guard!.each do |slug|
       puts format("%<slug>-20s %<klass>s", slug: slug, klass: registry[slug].manifest.license_class)

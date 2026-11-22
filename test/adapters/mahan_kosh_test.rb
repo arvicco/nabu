@@ -81,7 +81,7 @@ class MahanKoshTest < Minitest::Test
   end
 
   def test_registry_row_exists_unwired_with_manual_sync_policy
-    entry = Nabu::SourceRegistry.load(File.join(Nabu::Config::PROJECT_ROOT, "config", "sources.yml"))["mahan-kosh"]
+    entry = Nabu::SourceRegistry.load(File.join(Nabu::Config::PROJECT_ROOT, "config", "sources"))["mahan-kosh"]
     refute_nil entry
     assert_equal ADAPTER, entry.adapter_class
     assert_equal "manual", entry.sync_policy

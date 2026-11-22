@@ -1,0 +1,7 @@
+sources:
+  open-etruscan:
+    kind: {posture: unclassified}
+    lect: {posture: identity, note: ett — no minted stages}
+    dating: {posture: partial}
+    places: {posture: named}
+    script: {posture: implied}

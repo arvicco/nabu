@@ -1,0 +1,15 @@
+sources:
+  goryeosa-jeoryo:
+    lect:
+      posture: codemap
+      note: lzh → zho/lit (hanmun — the kanripo/sillok precedent, P78-3)
+    dating: {posture: dated, note: "P81-1: the per-article 음 machine dates (918–1434) project via
+        NikhEntryDates — document envelopes + passage-grain year runs; root fronts still carry only
+        coveragePeriod prose, so the envelope IS the document claim"}
+    places: {posture: unplaced, note: "the 6,965 지명 index tags (6,149 with NIKH t-ids) ride passage
+        annotations + the passage 'place' facet as tag-grain MENTIONS — no findspot/creation claim"}
+    script: {posture: implied}
+    # The index markup: 31,997 이름 persons (23,941 with p-ids — goryeosa's
+    # own id space, 6,924 of 6,937 ids shared; this source's own slice,
+    # 6,937 persons), 13,419 관직 offices, 596 단체 orgs, 283 서명 books —
+    # passage annotations + facets as for goryeosa; id-less tags ride bare.

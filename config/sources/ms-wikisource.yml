@@ -1,0 +1,22 @@
+ms-wikisource:   # P120-3, 02-sources row 263
+  adapter: Nabu::Adapters::MsWikisource
+  adopted: "2026-10-12"
+  axes: [sea]
+  wired: true    # first sync verified 2026-10-12: 64 docs / 5,081 passages, 0 quarantined; Jawi + 1823 date eyeballed
+  sync_policy: manual
+  # The Jawi manuscript cone (the owner-ruled wikisource posture), census
+  # 2026-10-12: 74 MANUSCRIPT Index pages (shelfmarked names — Leiden
+  # Or. NNNN, MSS Malay, BnF Malayo-polynésien, NBG-Kl., Harvard MS Indo,
+  # Garrett, Schoemann, WM ID 010) → 45 carry transcluding ns-0 pages →
+  # 99 cone pages:
+  #   class                                         pages
+  #   admitted (text)                                  64   (5,081 passages)
+  #   excluded_index — WM ID 010 series (Syakur)       34
+  #   edition_taint — the 1949 tafsir root               1
+  # Transcribed straight from the manuscripts (no edition layer). The
+  # WATCH-THE-RATCHET cone: Page: levels behind the 64 admitted pages —
+  # 0:75 · 1:235 · 2:2 · 3:189 · 4:9 · not yet created 3,052; 50 docs'
+  # lowest text level is 1 (unproofread), 14 reach 3. Script measured per
+  # page: Arab 62 (msa-Arab), Latn 1, Rencong+Latin 1 (msa). Dated 37/64
+  # (header year= / Index Year=, "abad ke-N" → the century). Texts PD;
+  # transcription layer CC BY-SA 4.0.

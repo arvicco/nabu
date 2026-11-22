@@ -1,0 +1,19 @@
+tir:
+  adapter: Nabu::Adapters::Tir
+  adopted: "2026-07-18"
+  axes: [epigraphy, italic]
+  wired: true # flipped 2026-07-18 (owner order: all pre-P30 sources on, riding the P30 PR)
+                   # checklist §6: bin/nabu sync tir — ~770 pages — then
+                   # eyeball nabu show urn:nabu:tir:bz-10.1 (tnake p̣iθamu /
+                   # laþe?) and 5 random inscriptions before flipping).
+  # P29-3: Thesaurus Inscriptionum Raeticarum (tir.univie.ac.at,
+  # Schumacher/Salomon/Kluge/Bajc/Braun) — the Raetic (xrr, Tyrsenian per
+  # the wiki's own Main Page) corpus of record, actively edited: 389
+  # Inscription pages (+ 294 Objects / 82 Sites; api.php categoryinfo
+  # census 2026-07-18 — the brief's "155" was the Word category, journaled
+  # v2 as a tir-words sibling). Same wiki-template family and fetch path
+  # as lexlep. "Scientific use only" scoping over the CC BY-SA 3.0 + GFDL
+  # Terms-of-Use grant, empty rightsinfo footer → class nc, confirmed
+  # by the maintainer's reply by email (C. Salomon, 2026-07-20). Trismegistos sigla → tm:
+  # reference edges.
+  sync_policy: manual

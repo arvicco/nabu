@@ -96,7 +96,7 @@ module Nabu
           "no passage #{urn} in the catalog"
         else
           "#{urn} has no vector — outside the embed scope (`embed_index: true` sources in " \
-            "config/sources.yml) or not yet embedded (`nabu embed` catches the store up)"
+            "config/sources/) or not yet embedded (`nabu embed` catches the store up)"
         end
       end
 

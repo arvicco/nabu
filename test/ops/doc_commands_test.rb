@@ -46,7 +46,7 @@ class DocCommandsTest < Minitest::Test
     assert_includes inline, "bin/nabu define virtus" # broken across two source lines
     assert_includes inline, "bin/nabu enable celtic && bin/nabu sync celtic"
     assert_includes inline, "bin/nabu sync papyri-ddbdp" # a table cell
-    refute_includes inline, "config/sources.yml"
+    refute_includes inline, "config/sources/"
     refute_includes inline, "nabu show <urn>" # not a bin/nabu invocation
     refute(page.inline_commands.any?(&:fenced))
   end

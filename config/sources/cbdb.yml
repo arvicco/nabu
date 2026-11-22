@@ -1,0 +1,16 @@
+cbdb:   # P96-4
+  adapter: Nabu::Adapters::Cbdb
+  adopted: "2026-09-04"
+  kind: module   # machinery-only — the prosopography instrument, zero document rows
+  axes: [sinitic]
+  wired: true    # first sync 2026-09-10: cbdb_20260905.sqlite3 (559 MB) sha-verified against the pin
+  sync_policy: manual
+  # CBDB — the China Biographical Database (Harvard/AS/Peking; ~658k
+  # persons, 7th–19th c.). Self-pinning channel: the project's
+  # latest.json (GitHub) carries filename + sha256 + the direct HF URL;
+  # fetch verifies the pin, a mismatch refuses. License: CC BY-NC-SA
+  # 4.0 — project site verbatim, owner-read at first sync 2026-09-11
+  # (the page 403s non-browsers); the HF dataset card concurs; the
+  # JOHD 2022 paper's BY-NC-ND is the outlier. Mainland commercial
+  # rights carved out to ChineseAll. v1 = acquisition + verification
+  # only; an owner ruling on the persons-layer scout decides any derived surface.

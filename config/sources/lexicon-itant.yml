@@ -1,0 +1,22 @@
+lexicon-itant:   # 02-sources row 315
+  adapter: Nabu::Adapters::LexiconItant
+  adopted: "2026-10-29"
+  axes: [italic]
+  wired: true    # first sync 2026-10-29 on census (809 entries / 16
+                   # lexicons / 6 skipped-by-rule = the 1,301 lime:entry
+                   # count); meddíss eyeballed with its PIE etyma.
+                 # lexicon-itant (git clone ~6 MB; parse ~1 s). EXPECT 16 dictionary
+                 # docs → 809 entries (osc 419 · xve 85 · xum 82 · xfa 75 · pgn 31 ·
+                 # xcg 27 · spx 23 · umc 17 · ett 16 · xvo 10 · ims 9 · xvs 8 ·
+                 # sbv 3 · snt 2 · xhr 1 · xca 1), 0 errored, 6 skipped by rule
+                 # (the lat/grc/PIE/PIT/PUM auxiliary lexicons + the standalone SKOS
+                 # file); eyeball nabu define meddiss / mego / apolo, then flip.
+  # Lexicon ItAnt (github.com/DigItAnt/Lexicon_ItAnt; DigItAnt, PRIN 2017,
+  # CNR-ILC + Università di Firenze) — the OntoLex-Lemon lexicon of the
+  # languages of ancient Italy, the Corpus ItAnt (itant) sibling. One
+  # dictionary slug per language (itant-lexicon-<code>); the Latin/Greek
+  # comparanda and the PIE/Proto-Italic etyma ride the entries as typed
+  # reflexes. LICENSE: README verbatim "Lexicon_ItAnt  is licensed under
+  # CC-BY-NC-SA" (no version, no LICENSE file; verified 2026-10-29) → nc.
+  # Dormant since 2024-10 → manual.
+  sync_policy: manual

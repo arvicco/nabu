@@ -1,0 +1,9 @@
+sources:
+  diorisis:
+    kind: {posture: unclassified}
+    lect: {posture: identity, note: ruled deliberately unstaged (D57-f)}
+    dating: {posture: dated, note: "P104-1 (the aggressive-mining law's attributed-era grade, owner-ruled 2026-09-26): the per-work
+        creation_date signed year (all 767 docs) via MetadataDates
+        :signed_year_key — composition-class rows (date_class 'composition')"}
+    places: {posture: unplaced}
+    script: {posture: implied}

@@ -1,0 +1,14 @@
+sources:
+  dacon:
+    kind: {posture: unclassified}
+    # P88-A4: minted as pending on the nwc anchor (censused absent
+    # 2026-08-29); the P88-B3 aggregated mint (nabu-lects PR #11, v1.4.0)
+    # merged and reached canonical 2026-08-30 — nwc + new now anchor the
+    # xct/bod two-anchor mold, so the bare code IS the claim.
+    lect: {posture: identity}
+    dating: {posture: dated, note: "the deposit's own century attributions
+        (cnew<cc> stems) as per-document envelopes via MetadataDates
+        :structured"}
+    places: {posture: unplaced}
+    script: {posture: qualified, note: "IAST romanization (Latn) throughout —
+        the deposit carries no native Newa/Devanagari surface"}

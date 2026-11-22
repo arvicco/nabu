@@ -1,0 +1,20 @@
+th-wikisource:   # P120-3, 02-sources row 264
+  adapter: Nabu::Adapters::ThWikisource
+  adopted: "2026-10-12"
+  axes: [sea]
+  wired: true    # first sync verified 2026-10-12: 92 docs / 11,006 passages, 0 quarantined; 1914 chronicle part eyeballed
+  sync_policy: manual
+  # The ประชุมพงศาวดาร cone (the owner-ruled wikisource posture), census
+  # 2026-10-12 — the three work trees, 267 cone pages:
+  #   tree                                    pages  admitted  taint  unstated  apparatus
+  #   ประชุมพงศาวดาร (Prachum Phongsawadan)      235      92      102     16        25
+  #   ประมวลกฎหมายรัชกาลที่ 1 (Lingat, BE 2482)    30       0       30      0         0
+  #   กฎหมายตราสามดวง (Khurusapha, BE 2505)        2       0        1      1         0
+  # Every year is BUDDHIST ERA (ปี=, header year=, Thai-digit Index
+  # names) → CE by −543; EDITION_TAINT_POST_1930 keeps the parts printed
+  # to BE 2473. The 54 named Indexes split 30 clean / 24 tainted (18
+  # chronicle parts reprinted BE 2475–2510 + the 6 Three Seals Law
+  # Indexes — the law code has NO pre-1930 edition on the wiki).
+  # Admitted: 92 docs / 11,006 passages, all tha; Page: levels 1:1,759 ·
+  # 3:1,265 · 4:196 (+0:3, 2:1). Publisher (ผู้เผยแพร่=) verbatim. Texts
+  # PD; transcription layer CC BY-SA 4.0.

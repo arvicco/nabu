@@ -1,0 +1,21 @@
+sources:
+  ppchy:   # P152
+    # kind machine-postured — the ppchy fold in kind_map.yml over the sources
+    # page's Genre (Letter/Verse/Prose; Vernacular reviewed as a register label).
+    # lect machine-postured since 2026-11-02 — the yi → yi~latn override
+    # (config/lect_overrides.yml; the romanized surface) and the
+    # ppchy-dialect-west/east compose rules (config/lect_facet_rules.yml;
+    # the Dialect head onto yi/west, yi/east over the date-banded stages).
+    # The P152 pending retired at the registry mint, the shadowing rule.
+    dating: {posture: dated, note: "all 63 texts: the sources page's Date — a year, Approx. YYYY
+        (the year, qualifier raw), Between A and B, 19xx (the century), the court testimony's
+        c1413–1686 range (its items carry their own c-years in passage annotations); a file
+        without a record falls back to its own name's year (:structured)"}
+    places: {posture: named, note: "17 of 63: the dialect localization when it names a town or
+        region (Cracow 7 · Regensburg 2 · Volina 2 · Prague · Lublin · Lvov · Vilna · Holland ·
+        Northern Germany) — a dialect localization standing in for the place of writing/print;
+        the adjectival areas (Moravian, Bohemian, Polish, Lithuanian) ride the region facet only,
+        declared"}
+    script: {posture: qualified, note: "ROMANIZED: upstream transliterates the Hebrew-script
+        originals \"more or less according to the YIVO system\" (Hebrew words without
+        diacritics); every passage is Latin-script yi, never a Hebrew-script witness"}

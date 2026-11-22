@@ -1,0 +1,15 @@
+sources:
+  classical-modern:
+    # kind machine-postured: config/kind_map.yml folds metadata.book (the
+    # 97 works by their Siku seat — all 14,608 documents incl. siblings).
+    lect: {posture: codemap, note: lzh → zho/lit (the kanripo precedent; the
+        cmn translation siblings are modern-Chinese apparatus, no lect claim)}
+    dating: {posture: dated, note: "the chapter units carry no dates, but the WORK is known:
+        config/work_eras.yml rules each of the 97 works' attributed composition era (class
+        composition, precision era) — 7,241 of the 7,304 classical chapters band; the 3
+        contested works declared undated (将苑, 素书, 文昌孝经 — 63 chapters) and the 7,304
+        modern-translation siblings (axis-exempt by design) mint nothing"}
+    places: {posture: unplaced}
+    script: {posture: qualified, note: "SIMPLIFIED script on BOTH sides
+        (censused 2026-08-29 — 岂/国/宪 on the 古文 side too): a modern-web
+        re-encoding of classical text, never traditional-script witness"}

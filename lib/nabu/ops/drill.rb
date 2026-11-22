@@ -358,7 +358,7 @@ module Nabu
           canonical_dir: File.join(machine, "canonical"),
           db_dir: File.join(machine, "db"),
           local_dir: File.join(machine, "local"),
-          sources_path: File.join(machine, "config", "sources.yml"),
+          sources_path: File.join(machine, Config::DEFAULT_SOURCES_PATH),
           config_path: File.join(machine, "config", "nabu.yml")
         )
       end

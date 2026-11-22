@@ -1,0 +1,15 @@
+ticha:   # P117-5, 02-sources row 254
+  adapter: Nabu::Adapters::Ticha
+  adopted: "2026-10-11"
+  axes: [americas]
+  wired: true    # First sync verified 2026-10-11: 93 docs / 1,103 passages / 4 rule-skips.
+  sync_policy: manual
+  # Ticha — colonial Valley Zapotec texts in TEI (Haverford College;
+  # github.com/HCDigitalScholarship/ticha-xml-tei, CC BY-SA 4.0 by the
+  # repo's license.txt → attribution). One git repo; the ticha-tei family
+  # repairs the hand-encoded files (unclosed <br>, truncation, stray end
+  # tags — counted per document). Document = file, passage = page.
+  # Córdova's Arte (1578), Agüero's Miscelaneo (1666, Zapotec), Levanto's
+  # Arte and Cathecismo, the 1744 Teitipac testament, and the manuscript
+  # transcriptions — mostly the period Spanish translations (Ticha's *T
+  # ids) of Zapotec testaments and bills of sale; text_role per document.

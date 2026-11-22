@@ -1,0 +1,13 @@
+wiktionary-okm:   # P154, 02-sources row 360
+  adapter: Nabu::Adapters::WiktionaryOkm
+  adopted: "2026-11-02"
+  axes: [korean]
+  wired: true   # first sync verified 2026-11-03: 1,033 entries
+  # The kaikki Middle Korean extraction (1,033 records / "965 distinct
+  # words", census 2026-11-02): the library's first Middle Korean
+  # dictionary: hangul headwords with Old Korean (71 oko) etymons and
+  # descendants into Korean and Jeju. Language okm. The wiktionary-fa mold
+  # on the shared WiktionaryKaikki base: per-language JSONL (deprecated
+  # upstream — fallback = filter the full extract by lang_code okm), CC
+  # BY-SA + GFDL → attribution, FileFetch.
+  sync_policy: manual

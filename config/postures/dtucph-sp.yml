@@ -1,0 +1,17 @@
+sources:
+  dtucph-sp:
+    # kind: machine-postured — kind_map.yml source_kind scripture.
+    # lect: machine-postured — lect_overrides.yml hbo → smp (the Samaritan
+    # Hebrew anchor landed with the 2026-11-17 Hebrew-wave registry
+    # package; the shadowing rule — the pending declaration retired, the
+    # add-then-retire shape). The two Aramaic words of Gen 31:47 ride arc
+    # per token, untouched by the whole-source row.
+    dating: {posture: undatable, note: "the asset carries no date feature; the manuscripts'
+        own dates (MS Dublin CBL 751, MS Garizim 1) are not in the data and the
+        text's composition era is not the edition's claim — the bhsa/oshb stance"}
+    places: {posture: unplaced, note: "no place field; the manuscripts are named per range
+        (document/passage metadata manuscripts) — repository witnesses, never a place claim"}
+    script: {posture: qualified, note: "the Samaritan-script manuscripts are TRANSCRIBED into
+        Hebrew square script: the text is the consonant stream (27 letters + space, no
+        shin/sin dots); the ETCBC lanes add dotted shin/sin (U+FB2A/FB2B presentation forms,
+        kept verbatim) and phono_transcr the Latin phonetic transcription"}

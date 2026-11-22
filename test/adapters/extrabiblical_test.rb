@@ -41,9 +41,9 @@ module Adapters
     # -- registry / manifest --------------------------------------------------
 
     def test_registry_resolves_extrabiblical_unwired_until_the_first_real_sync
-      registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources.yml", __dir__))
+      registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources", __dir__))
       entry = registry["extrabiblical"]
-      refute_nil entry, "extrabiblical must be registered in config/sources.yml"
+      refute_nil entry, "extrabiblical must be registered in config/sources/"
       assert entry.wired, "wired flipped at the gate first sync: 13 documents / 1,800 passages"
       assert_equal "manual", entry.sync_policy
       assert_equal ADAPTER, entry.adapter_class

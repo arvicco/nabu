@@ -131,9 +131,9 @@ class SblgntTest < Minitest::Test
   # --- registry round-trip -------------------------------------------------------
 
   def test_registry_resolves_sblgnt_and_manifest_agrees
-    registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources.yml", __dir__))
+    registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources", __dir__))
     entry = registry["sblgnt"]
-    refute_nil entry, "sblgnt must be registered in config/sources.yml"
+    refute_nil entry, "sblgnt must be registered in config/sources/"
     assert_equal Nabu::Adapters::Sblgnt, entry.adapter_class
     assert entry.wired, "sblgnt is live (owner sign-off 2026-07-10 after first sync + eyeball)"
     assert_equal Nabu::Adapters::Sblgnt.manifest, entry.manifest

@@ -1,0 +1,21 @@
+baxter-sagart:
+  adapter: Nabu::Adapters::BaxterSagart
+  adopted: "2026-07-19"
+  group: signs  # P68-4: the sign-restore sweep (nabu enable signs && nabu sync signs)
+  axes: [sinitic]
+  wired: true   # flipped 2026-07-20 (owner order, post-P34 gate: P32+P33 sources on)
+                  # sha-pinned; CLAUDE.md checklist §6: bin/nabu sync
+                  # baxter-sagart, eyeball `nabu define 天` / `define 馬` on
+                  # both lanes, then flip). Expect 4,959 rows → 9,918 entries
+                  # (each row mints in BOTH lanes: baxter-sagart-oc och +
+                  # baxter-sagart-mc ltc — the EDL two-lanes precedent).
+  # The Baxter & Sagart 2014 OC reconstruction via the yawnoc TSV dump
+  # (commit-pinned a448f53a, sha256-verified before the tree mutates).
+  # LICENSE = THE PROVENANCE CHAIN (recorded whole in the manifest): the
+  # authors' University of Michigan host is DEAD (403); its CC BY 4.0 grant
+  # survives verbatim in the Wayback capture 2025-03-12
+  # (web.archive.org/web/20250312164901/http://ocbaxtersagart.lsait.lsa.umich.edu/);
+  # the TSV repo is license-less — the content license governs; attribution
+  # to Baxter & Sagart 2014. Stands BESIDE the kaikki wiktionary-zh B-S
+  # readings as a provenance-distinct witness — never deduped.
+  sync_policy: manual

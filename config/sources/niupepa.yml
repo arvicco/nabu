@@ -1,0 +1,35 @@
+niupepa:   # P183, 02-sources row 427
+  adapter: Nabu::Adapters::Niupepa
+  adopted: "2026-11-21"
+  axes: [pacific]
+  wired: true    # first two paced slices verified 2026-11-21: census 34 series / 1,818 issues
+                 # (+ 22 series commentaries skipped by rule), 134 issues held / 1,313 page
+                 # passages / 0 errored; the ledger reconciles exactly — 134 held + 166 no-text
+                 # (upstream serves no OCR text for those issues; ledgered, never re-asked)
+                 # + 1,518 remaining = 1,818. Show probe (urn:nabu:niupepa:01_1_1:p1 — the 1842
+                 # Te Karere front page) and the FTS probe ("Karere" → hits across series 03)
+                 # both live after index refresh. The remaining ~12 slices ride future odd
+                 # phases per the declared schedule (the grant's own several-days pacing).
+  sync_policy: manual   # a closed historical collection; the crawl is owner-paced by slices
+  index_policy: deferred   # paced-crawl citizen: issues load per slice, the index runs once per wave (index refresh)
+  # Niupepa — Māori Newspapers (New Zealand Digital Library, University of
+  # Waikato), served by the Greenstone 3 Showcase on www.greenstone.org
+  # (niupepa.natlib.govt.nz does not resolve; www.nzdl.org answers a bot
+  # challenge). 34 series, 1,840 listed documents = 1,818 issues (1842–1932)
+  # + 22 modern series commentaries (rejected grain). Document = issue (one
+  # GET of document/<oid>?ed=1&o=xml — Greenstone's page XML), passage =
+  # page. Paced at robots.txt's Crawl-delay 10, 150 issues per slice,
+  # resumable via .niupepa-crawl.json (denied / no-text / timeout-stuck /
+  # server-error). Language mri (codemap → mi), dated by the issue's own
+  # Date. research_private: local only, never redistributed.
+  grant_required: true
+  grant:
+    terms: >-
+      a personal single-user research library, held locally only, nothing
+      redistributed; a polite harvest paced over several days; the Niupepa
+      collection and the New Zealand Digital Library, University of Waikato,
+      credited on every passage
+    request_hint: >-
+      Contact the New Zealand Digital Library (University of Waikato,
+      greenstone@waikato.ac.nz) for a license grant; promise local-only
+      single-user use, a slow paced harvest, and the collection + NZDL credit.

@@ -1,0 +1,7 @@
+# P77-4
+disco:
+  adapter: Nabu::Adapters::Disco
+  adopted: "2026-08-13"
+  axes: [romance]
+  wired: true    # P77 first sync owner-verified (1,215 docs), flipped 2026-08-18 (owner: "wire on all recent sources")
+  sync_policy: manual

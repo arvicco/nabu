@@ -1,0 +1,17 @@
+prakrit-texts:   # P118-3
+  adapter: Nabu::Adapters::PrakritTexts
+  adopted: "2026-10-11"
+  axes: [indic]
+  wired: true    # first sync verified 2026-10-11: 22 docs / 27,124 passages, 1 honest quarantine (malformed upstream)
+  sync_policy: auto   # promoted 2026-10-13: actively-edited upstream,
+                       # git-incremental fetch — rides the sync --all sweep
+  # Prakrit Digital Texts Project (Andrew Ollett; github.com/aso2101/
+  # prakrit_texts): 33 TEI files, ISO-15919 romanized. Ingests ONLY the
+  # 23 files whose availability reads "Prakrit Digital Texts Project.
+  # Distributed under a Creative Commons Attribution-ShareAlike 4.0
+  # license." -> attribution; the 9 Svetambara Agama files with the
+  # template comment "add whatever license you like" are skipped by rule
+  # (no grant), and the Setubandha is SARIT's edition, already held via
+  # sarit (declared overlap). Sparse GitFetch of tei/ + README.md.
+  # `ollett-tei` family. Census 2026-10-11: 22 docs / 27,124 passages;
+  # 1 quarantine (acaraniryukti.xml is not well-formed upstream).

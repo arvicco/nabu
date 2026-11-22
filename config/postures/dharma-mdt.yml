@@ -1,0 +1,22 @@
+sources:
+  dharma-mdt:
+    # P118-4: the DHARMA metadata-row sidecar (zero-passage documents).
+    kind: {posture: unclassified, note: "the row's own text typology rides metadata
+        text_types verbatim (donative-religious_land_grant, commemorative-memorial-
+        hero_memorial …); a kind_map fold over it is a recorded future look after the
+        first live census"}
+    lect: {posture: identity, note: "the P118-4 pending retired 2026-10-12: the Indic
+        registry package minted te and the tam → ta row, so the Telugu 97 and the one
+        Tamil row resolve; Sanskrit rows on bare san as before, no-language rows carry
+        und honestly"}
+    dating: {posture: partial, note: "the rows' own CE dating: Date CE / Date range CE
+        (61 of 734 documents — Telugu 60, Pallava 1; census 2026-10-11) with certainty and
+        evidence (reign / palaeography / internal date) riding the envelope; all CE
+        already — no era-typed years, config/eras.yml unconsumed; rows via MetadataDates
+        :structured"}
+    places: {posture: unplaced, note: "no findspot column: the 'Location on the artefact
+        /conglomerate artefact/monument' cell (96 rows) is free prose ('On a stone lying
+        in a field at Addanki'), recorded verbatim as artefact_location, never a place
+        claim"}
+    script: {posture: qualified, note: "no text surface — the rows' script classification
+        and maturity ride metadata verbatim"}

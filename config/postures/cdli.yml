@@ -1,0 +1,18 @@
+sources:
+  cdli:
+    dating: {posture: partial}
+    places: {posture: named}
+    script: {posture: implied}
+    # 2026-10-18: subgenre (71,814 rows) rides metadata + the subgenre facet and is
+    # deliberately not kind-folded (a mixed series/archive/role vocabulary — genre
+    # stays the kind source); seal_id S-numbers mint seal-composite hubs.
+    # 2026-10-19: the archaeological context rides metadata (excavation_no +
+    # accession_no facet); accounting_period spans band through the ruled reign
+    # table where both ends resolve (3,718 of 4,468); findspot_square/remarks stay
+    # sub-site metadata below the place axis — the provenience is the place claim.
+    # 2026-10-19 (dating): date_of_origin (147,383 rows; restates dates_referenced on
+    # 142,921, the account's closing date on 4,462) dates below the explicit datings
+    # (+18); a broken year under a ruled ruler bands the reign, a doubted year
+    # converts (+730 to regnal grain in all, ~94.4k of 353k); the "(us2-us2 year)" mark is a year-name formula,
+    # not a +2 shift, and stays period-banded. Still partial: unruled rulers (18k)
+    # and letter-years/eponyms/Seleucid-era shapes stay period-banded.

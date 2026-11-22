@@ -1,0 +1,13 @@
+wiktionary-osp:   # P154, 02-sources row 356
+  adapter: Nabu::Adapters::WiktionaryOsp
+  adopted: "2026-11-02"
+  axes: [romance]
+  wired: true   # first sync verified 2026-11-03: 1,501 entries
+  # The kaikki Old Spanish extraction (1,501 records / "1429 distinct
+  # words", census 2026-11-02): the library's first Old Spanish dictionary:
+  # Latin (640) and Arabic (36) etymons, descendants into Spanish and
+  # Ladino. Language osp. The wiktionary-fa mold on the shared
+  # WiktionaryKaikki base: per-language JSONL (deprecated upstream —
+  # fallback = filter the full extract by lang_code osp), CC BY-SA + GFDL →
+  # attribution, FileFetch.
+  sync_policy: manual

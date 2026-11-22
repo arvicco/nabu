@@ -1,0 +1,15 @@
+wiktionary-si:   # 02-sources row 289
+  adapter: Nabu::Adapters::WiktionarySi
+  adopted: "2026-10-21"
+  axes: [indic]
+  wired: true    # first sync verified 2026-10-21: 1,281 entries (the lane census exactly)
+                 # eyeball nabu define අම්මා ("mother", ← Tamil அம்மா), then flip.
+  # The kaikki Sinhala extraction ("Sinhalese" in kaikki's naming —
+  # 1,281 records / "1231 distinct words", census 2026-10-21): Indo-Aryan
+  # descent through Prakrit and Sanskrit (514 sa / 52 pra edges) beside
+  # the Tamil borrowings (150 ta edges into the wiktionary-ta headword
+  # space). Language sin (→ si through the held codemap alias). The
+  # wiktionary-akk mold on the shared WiktionaryKaikki base: per-language
+  # JSONL (deprecated upstream — fallback = filter the full extract by
+  # lang_code si), CC BY-SA + GFDL → attribution, FileFetch.
+  sync_policy: manual

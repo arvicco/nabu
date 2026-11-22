@@ -1,0 +1,22 @@
+gregobase:   # 02-sources row 382
+  adapter: Nabu::Adapters::Gregobase
+  adopted: "2026-11-04"
+  axes: [romance]   # the Latin continuum's liturgical side (the corpus-corporum precedent)
+  wired: true    # first sync verified 2026-11-04: 18,422 docs / 20,810 passages, 340
+                 # skipped by rule (332 pre-skips + 8 notation-only), 0 errored — exactly the
+                 # dump census (18,762 rows). Hartker eyeball carries its 990–1000 date;
+                 # fold-aware search hits adjútor.
+  sync_policy: manual   # the dump is re-committed in place, irregularly (17 dumps 2016-01-13
+                        # → 2024-01-05); a new dump is new content under the same statement
+  # GregoBase (gregobase.selapa.net, Olivier Berten et al.): the community-
+  # transcribed Gregorian chant database in GABC (Gregorio) notation, from
+  # upstream's own MySQL export gregobase_online.sql in the site's code repo
+  # github.com/gregorio-project/GregoBase. License, the site's About page
+  # (gregobase.selapa.net/?page_id=2) verbatim: "All chant transcriptions are
+  # released under CC0 (a.k.a. Public Domain) license." (linked to
+  # creativecommons.org/publicdomain/zero/1.0/; checked 2026-11-04) → open.
+  # The 33 rows upstream itself flags copyrighted ("This tune is still under
+  # copyright.", no download offered) are skipped by rule. Document = chant,
+  # passage = score element / verses block; text = the sung text, the raw
+  # GABC rides each passage. Language lat by default, the vernacular rows by
+  # upstream's version field (eng 722, vie 183, grc 21, pol 17 …).

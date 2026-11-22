@@ -1,0 +1,10 @@
+sources:
+  uk-wikisource:
+    kind: {posture: unclassified}
+    lect: {posture: identity, note: "orv — DELIBERATELY COARSE, declared: the
+        17th–18th-c. Cossack-era chronicles are the Ruthenian register; the orv:ruth
+        stage is the NAMED refinement candidate, not defaulted"}
+    dating: {posture: dated, note: "P116-3: the section's own year (рік_секції — the
+        chronicle's terminal year) → era_band → MetadataDates :era_band_key"}
+    places: {posture: unplaced}
+    script: {posture: implied}

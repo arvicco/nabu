@@ -1,0 +1,13 @@
+sources:
+  csd:
+    kind: {posture: unclassified, note: "a dictionary shelf — the Comparative Siouan
+        Dictionary by its own title; kind folds documents only"}
+    lect: {posture: identity, note: "sio — the nabu-lects Siouan family anchor with its pro
+        stage (the 2026-11-13 sitting, PR #48: the pending retired, the add-then-retire
+        shape); the Proto-Siouan heads ride the dictionary language, the subgroup protos
+        stay display-only per the registry's recorded depth ruling; upstream's
+        languages.csv carries no ISO or Glottocode for any of its 36 varieties, so the
+        members stay display-only (csd-<variety>)"}
+    dating: {posture: undatable, note: "a reference dataset — the repository carries no dates"}
+    places: {posture: unplaced, note: "the varieties carry no coordinates at all"}
+    script: {posture: implied, note: "Siouanist Americanist notation"}
