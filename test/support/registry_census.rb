@@ -16,7 +16,8 @@ module Nabu
     # (PR #48): 323 → 349 anchors, 173 → 178 stages, 238 → 265 codemap;
     # the 2026-11-16 ninth cut carried the jv~java row repair (PR #49),
     # 265 → 264 codemap; the 2026-11-17 tenth cut carried the Hebrew-wave
-    # package (PR #50): 349 → 351 anchors — jrb, smp).
+    # package (PR #50): 349 → 351 anchors — jrb, smp; the 2026-11-22
+    # eleventh cut added only the roro scripts-table row, census unmoved).
     module RegistryCensus
       ANCHORS = 351
       STAGES = 178
