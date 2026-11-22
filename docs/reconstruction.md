@@ -150,6 +150,7 @@ These are the layers `bin/nabu rebuild` deliberately does not regenerate (the co
 | `instance_config` | ruled | write_through | `nabu enable\|disable, nabu creds set, nabu model-budget, nabu health --accept-*` | `local/config/` |
 | `lect_rulings` | ruled | write_through | `nabu lect assign \| withdraw \| apply-rules` | `local/config/lect_rulings.yml` |
 | `mined_links` | time_heavy | enrichment | `nabu links mine SCOPE \| nabu parallels --batch SCOPE` | `local/mined-links.sqlite3` |
+| `reuse_postings` | time_heavy | enrichment | `nabu reuse build SCOPE` | `local/reuse/<build>/ (manifest + gram-hash shards)` |
 | `vectors` | time_heavy | enrichment | `nabu embed` | `db/vectors.sqlite3` |
 | `notes_shelf` | ruled | write_through | `nabu note URN\|CODE TEXT` | `local/shelves/local-notes/` |
 | `language_dossiers` | ruled | write_through | `nabu ingest --shelf language CODE \| nabu language --export-dossiers \| nabu lect dossiers` | `local/shelves/local-language/` |

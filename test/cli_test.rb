@@ -6692,6 +6692,58 @@ class CLITest < Minitest::Test
     end
   end
 
+  # -- the postings engine: nabu reuse + parallels --engine postings ----------
+
+  def test_reuse_build_then_postings_batch_mints_the_fts_edges
+    with_parallels_corpus do |config|
+      out, err, status = with_config(config) { run_cli(%w[reuse build urn:h:od --workers 1 --shards 2]) }
+      assert_nil status, err
+      assert_match(/reuse build urn:h:od: urn_h_od\.g4 in /, out)
+      assert_match(/1 anchors · \d+ wanted grams attested \(\d+ under the cap 500\) · \d+ postings/, out)
+      assert_path_exists File.join(config.local_dir, "reuse", "urn_h_od.g4", "manifest.sqlite3")
+
+      out, err, status = with_config(config) { run_cli(%w[reuse status]) }
+      assert_nil status, err
+      assert_match(/urn_h_od\.g4: urn:h:od · 4-grams · built \d{4}-\d{2}-\d{2}/, out)
+      assert_match(/CURRENT/, out)
+
+      out, err, status = with_config(config) do
+        run_cli(%w[parallels --batch urn:h:od --engine postings --workers 1])
+      end
+      assert_nil status, err
+      assert_match(/batch parallels over urn:h:od: 1 edge written/, out)
+      assert_match(/engine postings · 1 scoring worker · one committer/, out)
+      store = Nabu::Store::MinedLinks.open_readonly(config.mined_links_path)
+      assert_equal [%w[urn:h:od:1.1 urn:q:full:1]], store[:links].select_map(%i[from_urn to_urn])
+      assert_equal "postings", JSON.parse(store[:link_runs].first[:params_json])["engine"]
+      store.disconnect
+      recorded = Nabu::LinkScopes.load(config.link_scopes_path).first
+      assert_equal "postings", recorded.dig("params", "engine"), "the re-mine replays on the postings engine"
+    end
+  end
+
+  def test_postings_batch_without_a_store_refuses_with_the_build_command
+    with_parallels_corpus do |config|
+      _out, err, status = with_config(config) { run_cli(%w[parallels --batch urn:h:od --engine postings]) }
+      assert_equal 1, status
+      assert_match(/nabu reuse build urn:h:od --gram-size 4/, err)
+    end
+  end
+
+  def test_engine_flags_are_checked
+    with_parallels_corpus do |config|
+      _out, err, status = with_config(config) { run_cli(%w[parallels --batch urn:h:od --engine fast]) }
+      assert_equal 1, status
+      assert_match(/--engine must be fts or postings/, err)
+      _out, err, status = with_config(config) { run_cli(%w[parallels --batch urn:h:od --workers 2]) }
+      assert_equal 1, status
+      assert_match(/--workers only applies with --engine postings/, err)
+      _out, err, status = with_config(config) { run_cli(%w[parallels urn:h:od:1.1 --engine postings]) }
+      assert_equal 1, status
+      assert_match(/--engine only applies with --batch/, err)
+    end
+  end
+
   # -- parallels --batch: profiles + chunks (P122-2) ---------------------------
 
   def test_parallels_batch_profile_loads_and_flags_override_it

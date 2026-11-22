@@ -93,6 +93,16 @@ module Nabu
       are never re-mined, no edge is duplicated); --restart discards an
       unfinished run instead.
 
+      ENGINES (the reuse-batch redesign): --engine fts (the default) probes
+      every anchor gram as its own FTS phrase query — fine for a work or a
+      Latin shelf, weeks at CJK scale. --engine postings scores from the
+      scope's gram-postings store instead (build it first: `nabu reuse
+      build SCOPE`, same --gram-size/--lang or --profile), in --workers N
+      forked scoring workers with one committer; the edges are IDENTICAL to
+      the fts engine's (parity-tested), only the time differs. A missing or
+      stale store refuses with the build command; the run records the
+      engine and the store build it read.
+
       Examples:
         nabu parallels urn:nabu:sblgnt:john:1.1          # John 1:1 across the Fathers
         nabu parallels urn:cts:greekLit:tlg0012.tlg002.perseus-grc2:1.1
@@ -106,6 +116,8 @@ module Nabu
         nabu parallels --batch sblgnt --min-score 0.1    # a whole source, stricter floor
         nabu parallels --batch corpus-corporum --profile latin --chunk-size 5000 2> pl.log
                                                          # Patrologia, resumable, logged
+        nabu parallels --batch kanripo --profile chinese --engine postings --workers 8 --chunk-size 5000
+                                                         # the CJK leg on the postings engine
 
       Use cases: trace a verse's reception; find the source a Father is quoting;
       seed the citation graph one batch scope at a time.
@@ -140,6 +152,12 @@ module Nabu
                               "resumes at its cursor when rerun with the same flags"
     option :restart, type: :boolean, default: false,
                      desc: "With --batch: supersede an unfinished chunked run instead of resuming it"
+    option :engine, type: :string, banner: "fts|postings",
+                    desc: "With --batch: fts (default, per-gram FTS probes) or postings (score from the " \
+                          "scope's `nabu reuse build` store — identical edges, hours not weeks at CJK scale)"
+    option :workers, type: :numeric, banner: "N",
+                     desc: "With --batch --engine postings: forked scoring workers " \
+                           "(default #{Nabu::ReusePool.default_workers})"
     option :lect, type: :string, banner: "LECT-ID",
                   desc: "Restrict candidates to a lect (P59-3, nabu-lects module): keep only hits " \
                         "whose resolution is this lect id or a more specific one under it — the " \
@@ -157,7 +175,7 @@ module Nabu
       end
       return batch_parallels(urn) if options[:batch]
 
-      %i[min_score per_anchor db profile gram_size chunk_size restart].each do |flag|
+      %i[min_score per_anchor db profile gram_size chunk_size restart engine workers].each do |flag|
         next unless options[flag]
 
         raise Thor::Error, "parallels: --#{flag.to_s.tr('_', '-')} only applies with --batch " \
@@ -595,21 +613,35 @@ module Nabu
 
         profile = batch_profile
         chunk_size = batch_chunk_size
+        postings = batch_engine == Nabu::BatchParallelsPostings::ENGINE
+        if options[:workers] && !postings
+          raise Thor::Error, "parallels --batch: --workers only applies with --engine postings " \
+                             "(the fts engine is one process)"
+        end
         mine = lambda do |journal|
-          Nabu::BatchParallels.new(catalog: catalog, fulltext: fulltext, journal: journal)
-                              .run(scope, profile: profile, lang: options[:lang], license: options[:license],
-                                          chunk_size: chunk_size, restart: options[:restart],
-                                          progress: chunk_size ? nil : batch_progress,
-                                          on_chunk: chunk_size ? batch_chunk_progress : nil,
-                                          **batch_thresholds)
+          producer = if postings
+                       Nabu::BatchParallelsPostings.new(catalog: catalog, fulltext: fulltext, journal: journal,
+                                                        root: Nabu::Store::ReusePostings.root(config),
+                                                        workers: batch_workers)
+                     else
+                       Nabu::BatchParallels.new(catalog: catalog, fulltext: fulltext, journal: journal)
+                     end
+          producer.run(scope, profile: profile, lang: options[:lang], license: options[:license],
+                              chunk_size: chunk_size, restart: options[:restart],
+                              progress: chunk_size ? nil : batch_progress,
+                              on_chunk: chunk_size ? batch_chunk_progress : nil,
+                              **batch_thresholds)
         end
         # P70-3b: the batch scope is config-durable (P122-2: the profile
         # NAME and chunk size ride along, re-resolved from config/ on a
         # re-mine). The cost law: a HEAVY producer's run is a mined layer —
         # written through the mined-layers gateway with its provenance,
         # never into db/links.sqlite3.
+        # The engine rides along too: a postings-recorded scope re-mines on
+        # the postings engine (LinkScopeReplay), never silently on probes.
         params = { "lang" => options[:lang], "license" => options[:license],
-                   "profile" => options[:profile], "chunk_size" => chunk_size }
+                   "profile" => options[:profile], "chunk_size" => chunk_size,
+                   "engine" => (Nabu::BatchParallelsPostings::ENGINE if postings) }
                  .merge(batch_thresholds.transform_keys(&:to_s)).compact
         recorded = { "producer" => "parallels", "scope" => scope, "params" => params }
         result = mined = nil
@@ -626,6 +658,7 @@ module Nabu
         Nabu::LinkScopes.record!(config.link_scopes_path, producer: "parallels", scope: scope, params: params) \
           unless options[:db]
         print_batch_parallels(result)
+        say "  engine postings · #{plural(batch_workers, 'scoring worker')} · one committer" if postings
         say "  mined layer #{config.mined_links_path}: #{mine_verdict(mined)}" if mined
       rescue Nabu::Error => e
         raise Thor::Error, e.message
@@ -648,6 +681,23 @@ module Nabu
         thresholds[:per_anchor] = options[:per_anchor].to_i if options[:per_anchor]
         thresholds[:gram_size] = options[:gram_size].to_i if options[:gram_size]
         thresholds
+      end
+
+      # --engine: fts (the default) or postings; anything else refuses.
+      def batch_engine
+        engine = options[:engine] || "fts"
+        return engine if ["fts", Nabu::BatchParallelsPostings::ENGINE].include?(engine)
+
+        raise Thor::Error, "parallels --batch: --engine must be fts or postings (got #{engine.inspect})"
+      end
+
+      def batch_workers
+        return Nabu::ReusePool.default_workers unless options[:workers]
+
+        workers = options[:workers].to_i
+        raise Thor::Error, "parallels --batch: --workers must be a positive integer" unless workers.positive?
+
+        workers
       end
 
       # The --profile lookup (P122-2): a ReuseProfiles::Profile, nil when

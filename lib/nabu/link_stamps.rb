@@ -149,8 +149,12 @@ module Nabu
     PLACE_CARVED = %w[pleiades.rb].freeze
 
     PRODUCERS = {
+      # batch_parallels_postings.rb: the opt-in postings engine a scope
+      # recorded with engine: postings replays on (its closure brings the
+      # census, the postings gateway and the engine subclass).
       "parallels" => Producer.new(kinds: %w[parallel],
-                                  roots: %w[batch_parallels.rb reuse_profiles.rb store/cjk_bigrams.rb],
+                                  roots: %w[batch_parallels.rb batch_parallels_postings.rb reuse_profiles.rb
+                                            store/cjk_bigrams.rb],
                                   membership: :global),
       "formulas" => Producer.new(kinds: %w[formula], roots: %w[batch_formulas.rb], carved: FORMULAS_CARVED),
       "place-mine" => Producer.new(kinds: %w[place-candidate], roots: %w[place_mine.rb], carved: PLACE_CARVED),

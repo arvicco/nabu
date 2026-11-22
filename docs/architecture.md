@@ -75,8 +75,10 @@ nabu/
 │   │                            #   credentials.yml (mode 600; written only by `nabu creds set`)
 │   ├── shelves/<slug>/          # the owner shelves (§16)
 │   ├── history.sqlite3          # LEDGER (P7-1): runs, pins, revisions — never derived, never dropped
-│   └── mined-links.sqlite3      # (the cost law, §1/§15): HEAVY mined link layers — written only by their
-│                                #   mine command through Store::MinedLinks; rebuild never touches it
+│   ├── mined-links.sqlite3      # (the cost law, §1/§15): HEAVY mined link layers — written only by their
+│   │                            #   mine command through Store::MinedLinks; rebuild never touches it
+│   └── reuse/<build>/           # (§15, the postings engine): per-scope gram-postings stores — written only
+│                                #   by `nabu reuse build` through Store::ReusePostings; rebuild never touches it
 ├── db/                          # DERIVED — all of it; `nabu rebuild` re-mints every file but vectors
 │   ├── catalog.sqlite3          # sources, documents, passages, provenance, licenses
 │   ├── fulltext.sqlite3         # FTS5 + passage_lemmas + aggregates (all keyed by passage id)
@@ -2091,6 +2093,49 @@ elapsed · run elapsed`), readable live under `2> log`. Without
 `--chunk-size` a run stays one atomic transaction (the P16-1 contract).
 The recorded link scope keeps the profile NAME and chunk size; the
 rebuild replay re-resolves the profile from `config/`.
+
+**The postings engine (the reuse-batch redesign).** The probe loop above
+is O(anchors × grams) FTS round-trips — measured at ~7 weeks for the
+Kanripo + CBETA legs (the run was killed). A profiling spike found the FTS
+probes at 92% of engine time and proved the flip, with exact parity on a
+1,000-anchor slice. So the batch has a second, opt-in engine
+(`parallels --batch SCOPE --engine postings [--workers N]`,
+`Nabu::BatchParallelsPostings`); the probe engine stays the default and
+the two mint IDENTICAL edges (parity-tested: pair, direction, score,
+chunk rows, per-anchor hits). Its input is a per-scope GRAM-POSTINGS
+STORE — heavy derived data under the cost law: `local/reuse/<build>/`
+(a manifest plus gram-hash-partitioned SQLite shards: `grams(gram, df)`
+for every wanted key, `postings(gram, passage_id, lanes)` for the keys
+under the build's common-gram cap), written ONLY by `nabu reuse build
+SCOPE` through its one gateway (`Store::ReusePostings`), never by a
+rebuild or sync. The census (`Nabu::ReuseCensus`) is fold-both-sides
+against the index: pass 1 grams the scope's anchors with the engine's own
+code and keys each gram as a phrase MATCH folds it (SQLite's own
+unicode61 tokenizer, read back through an fts5vocab table —
+`Store::Fts5Tokens`); pass 2 windows every live passage's indexed token
+stream (the main lane) and, for the CJK lane's sources, every Han run's
+character windows (the lane's bigram phrase matches a run substring),
+pruned exactly by the anchor vocabulary and its scripts; finalize keeps
+the wanted keys, sums per-worker distinct counts into df, and drops the
+postings of common keys (their df stays, so they read as common, not
+absent). The store keeps FULL postings below the cap — the spike measured
+that scoring from rare grams only is not exact. Scoring reuses
+Query::Parallels' code through a subclass (`Query::ParallelsPostings`)
+that swaps two seams only: the per-gram probe (now a lookup returning the
+FTS probe's exact rows and order — lane matches, then main) and the
+per-anchor catalog join (now one CatalogJoin query per chunk over the
+union of pool candidates). Fork workers (`Nabu::ReusePool`) score
+urn-ordered slices of each chunk; ONE committer assembles hits and writes
+the chunk's edges, chunk row and cursor in one transaction through the
+bulk first-found writer (`LinksJournal.write_edges_first_found!` —
+`write_edge!`'s `first_in_run` rule keyed on the sorted pair), so
+supersede, resume and refusal are the base contract. The build stamps
+its inputs (scope, lang, gram size, cap, census and index code digests,
+SQLite version, the CJK lane's sources, every source's content slice);
+`nabu reuse status` reads staleness against them, and the engine refuses
+a missing or stale store rather than fall back to probes. The run row
+records `engine: postings` and the store build it read; a recorded scope
+carrying `engine: postings` replays on it (`LinkScopeReplay`).
 
 **Producers #2/#3 (P16-2).** `nabu formulas --batch SCOPE`
 (`Nabu::BatchFormulas`): the whole-tradition formula sweep (§13's miner, one
