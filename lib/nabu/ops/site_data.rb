@@ -340,7 +340,7 @@ module Nabu
             "https://vscode.dev/redirect/mcp/install?name=nabu&config=#{ERB::Util.url_encode(launch_json)}",
           "cursor_install_url" => "cursor://anysphere.cursor-deeplink/mcp/install?name=nabu&config=#{cursor_config}",
           "cursor_redirect_url" => "https://cursor.com/install-mcp?name=nabu&config=#{cursor_config}",
-          "koyeb_deploy_url" => "https://app.koyeb.com/deploy?type=docker&name=nabu-demo&image=#{image}" \
+          "koyeb_deploy_url" => "https://app.koyeb.com/deploy?type=docker&name=nabu-ancient-texts&image=#{image}" \
                                 "&instance_type=free&ports=8080;http;/&env[PORT]=8080" \
                                 "&command=bin/nabu&args=mcp&args=--http",
           "demo_sources" => demo_license_rows

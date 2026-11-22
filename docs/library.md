@@ -1724,8 +1724,8 @@ This document goes stale the moment a sync or a phase lands. Standing plan:
    number from the live db, re-examine the "research uses" claims against
    what actually got used (MCP query logs are a signal once they exist),
    prune sections describing capabilities that changed, cross-check against
-   docs/improvements.md so the two documents don't diverge on what's planned
-   vs. shipped.
+   the development planning so this document doesn't diverge on what's
+   planned vs. shipped (the capability history: docs/history/improvements.md).
 4. **Trigger-based**: a license-baseline probe alarm (health §) or a
    quarantine-count change on any source obliges an immediate spot-update of
    the affected section.

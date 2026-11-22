@@ -147,6 +147,38 @@ class AdapterConformanceMetaTest < Minitest::Test
     end
   end
 
+  # A parser stringified a Hash / object instead of extracting from it:
+  # the first passage of every document carries an inspect() shape. Both
+  # Hash#inspect spellings (pre-3.4 `{"k"=>` and 3.4+ `{"k" => `) and an
+  # object inspect (`#<Nokogiri::…`) must trip the check.
+  class InspectedObjectTextAdapter < TestAdapter
+    LEAKS = ['{"lemma"=>"μῆνις", "pos"=>"n"}', '{"lemma" => "θεά"}', "#<Nokogiri::XML::Element:0x1 name=\"l\">"].freeze
+
+    def parse(document_ref)
+      original = super
+      leak = LEAKS[document_ref.id.sum % LEAKS.size]
+      document = Nabu::Document.new(urn: original.urn, language: original.language, title: original.title,
+                                    canonical_path: original.canonical_path)
+      original.each_with_index do |passage, index|
+        text = index.zero? ? leak : passage.text
+        document << Nabu::Passage.new(urn: passage.urn, language: passage.language, text: text,
+                                      sequence: passage.sequence)
+      end
+      document
+    end
+  end
+
+  # Discover yields every ref twice within ONE pass (a glob over two
+  # overlapping patterns, a dedupe-less index walk). Two independent
+  # passes still agree, so the stability check cannot see it.
+  class DuplicateDiscoverAdapter < TestAdapter
+    def discover(workdir)
+      return enum_for(:discover, workdir) unless block_given?
+
+      super { |ref| 2.times { yield ref } }
+    end
+  end
+
   # self.manifest returns the wrong type entirely.
   class WrongManifestAdapter < TestAdapter
     def self.manifest
@@ -210,6 +242,32 @@ class AdapterConformanceMetaTest < Minitest::Test
     # The undated base adapter passes unregistered: only date-shaped ore needs a lane.
     assert_passes_conformance TestAdapter, :test_conformance_date_metadata_reaches_the_timeline
     assert_passes_conformance DatedUnregisteredAdapter, :test_conformance_urns_are_unique_across_the_discover_set
+  end
+
+  def test_inspected_object_text_fails_the_extraction_assertion
+    assert_fails_conformance InspectedObjectTextAdapter,
+                             :test_conformance_passage_text_is_never_an_inspected_ruby_object,
+                             /inspected Ruby object/
+    # The clean rig passes, and the leak is invisible to the NFC/non-empty check.
+    assert_passes_conformance TestAdapter, :test_conformance_passage_text_is_never_an_inspected_ruby_object
+    assert_passes_conformance InspectedObjectTextAdapter, :test_conformance_passages_are_nfc_and_non_empty
+  end
+
+  def test_inspected_object_shapes_are_matched_and_real_text_is_not
+    shape = AdapterConformance::INSPECTED_OBJECT_TEXT
+    ['{"a"=>1}', '{"a" => 1}', '  {"a"=>1}', '[{"a"=>1}]', "{:a=>1}", "#<Nokogiri::XML::Element:0x1>",
+     "#<struct Foo a=1>", "#<data Foo a=1>"].each { |text| assert_match shape, text }
+    ["μῆνιν ἄειδε θεὰ", "{restored} text", "<damaged> line", "# a heading", "#<sic", "a => b",
+     'he said {"so"}'].each { |text| refute_match shape, text }
+  end
+
+  def test_duplicate_discover_ids_fail_the_single_pass_assertion
+    assert_fails_conformance DuplicateDiscoverAdapter,
+                             :test_conformance_discover_ids_are_unique_within_one_pass,
+                             /duplicate DocumentRef ids within ONE discover pass.*alpha/m
+    assert_passes_conformance TestAdapter, :test_conformance_discover_ids_are_unique_within_one_pass
+    # Two passes still agree with each other — the stability check is blind to it.
+    assert_passes_conformance DuplicateDiscoverAdapter, :test_conformance_urns_are_stable_across_independent_parses
   end
 
   def test_wrong_manifest_type_fails_the_manifest_assertion

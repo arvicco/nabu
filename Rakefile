@@ -940,6 +940,18 @@ namespace :tools do
   end
 end
 
+# Lane worktrees run the STRICT suite: link the main checkout's
+# local/{fixtures,shelves,config} into this worktree's local/ so the
+# StrictSkips gate binds as on the main checkout. Idempotent; a no-op on
+# the main checkout. All logic in Nabu::Ops::WorktreePrep.
+namespace :worktree do
+  desc "Link the main checkout's local/{fixtures,shelves,config} into this worktree; idempotent"
+  task :prepare do
+    require_relative "lib/nabu/ops/worktree_prep"
+    Nabu::Ops::WorktreePrep.new(root: __dir__).prepare!
+  end
+end
+
 # The standalone corpus-wide builder pass (P104; owner rule 2026-09-26:
 # rebuilds are owner-fired INTER-PHASE steps — a phase's builder-side
 # changes refresh projections through this task, never via a rebuild).
@@ -1070,7 +1082,7 @@ namespace :demo do
   # The MCP stdio smoke on its own (initialize → tools/list → nabu_status).
   # IMAGE defaults to the public :latest; DEMO_SMOKE_ARGS adds docker run
   # flags (e.g. "--memory=512m --pull=always").
-  desc "MCP stdio smoke against the demo image (IMAGE, default ghcr.io/arvicco/nabu-demo:latest)"
+  desc "MCP stdio smoke against the demo image (IMAGE, default ghcr.io/arvicco/nabu-ancient-texts:latest)"
   task :smoke do
     require_relative "lib/nabu/ops/demo_publish"
     smoke = Nabu::Ops::DemoPublish::Smoke

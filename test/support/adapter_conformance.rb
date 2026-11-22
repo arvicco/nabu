@@ -41,7 +41,19 @@
 #     round-trips DictionaryDocuments — same source id, unique ref ids and
 #     (dictionary, entry_id) pairs, stable across two passes; no-op for
 #     lane-less adapters
+#   - no passage text is an inspected Ruby object (a Hash or object was
+#     stringified instead of extracted — `{"key"=>…` / `#<Class…`)
+#   - discover yields no duplicate DocumentRef id within ONE pass (the
+#     stability check compares two passes and cannot see an in-pass repeat)
 module AdapterConformance
+  # The text shape of Hash#inspect (both the pre-3.4 `{"k"=>` and the 3.4+
+  # `{"k" => ` spellings, string or symbol keys, optionally inside an
+  # Array) or of an object inspect (`#<Nokogiri::XML::Element…`,
+  # `#<struct …`, `#<data …`) at the start of a passage. Anchored and
+  # key-shaped on purpose: editorial braces/brackets (`{restored}`,
+  # `<damaged>`) and an upstream `#` are real text, never matched.
+  INSPECTED_OBJECT_TEXT = /\A\s*\[?\{\s*(?:"(?:[^"\\]|\\.)*"|:\w+)\s*=>|\A\s*#<(?:[A-Z][\w:]*|struct |data )/
+
   # Hook defaults: flunk with instructions rather than NoMethodError.
   def conformance_adapter
     flunk "#{self.class} must define #conformance_adapter returning a fresh adapter instance per call"
@@ -184,6 +196,36 @@ module AdapterConformance
     end
     assert_empty duplicates(document_urns), "duplicate document urns across the discover set"
     assert_empty duplicates(passage_urns), "duplicate passage urns across the discover set"
+  end
+
+  # Incident-born: a parser that interpolates a Hash or a node object
+  # where it meant one of its fields stores `{"lemma"=>"…"}` or
+  # `#<Nokogiri::XML::Element…>` as the passage text — valid NFC, non-empty,
+  # deterministic, so every other check passes and the garbage ships into
+  # search. The shape is never real upstream text.
+  def test_conformance_passage_text_is_never_an_inspected_ruby_object
+    leaks = []
+    each_parsed_document(conformance_adapter) do |_ref, document|
+      document.each do |passage|
+        leaks << "#{passage.urn}: #{passage.text[0, 80].inspect}" if INSPECTED_OBJECT_TEXT.match?(passage.text)
+      end
+    end
+    assert_empty leaks, "passage text is an inspected Ruby object (a Hash/object was stringified instead " \
+                        "of extracted — fix the parse seam):\n  #{leaks.first(5).join("\n  ")}"
+  end
+
+  # Within-pass id uniqueness, distinct from the two-pass stability check
+  # below: an adapter whose discover repeats a ref (overlapping globs, a
+  # dedupe-less index walk) is perfectly stable — both passes repeat it —
+  # yet the loader upserts the same urn twice and the sync breaker's
+  # discover-id count overstates the source. Skipped-by-rule refs count:
+  # discover owns the id space whether or not parse later declines a ref.
+  def test_conformance_discover_ids_are_unique_within_one_pass
+    ids = conformance_adapter.discover(conformance_workdir).map(&:id)
+    refute_empty ids, "discover must yield at least one DocumentRef from #{conformance_workdir}"
+    repeated = duplicates(ids)
+    assert_empty repeated, "duplicate DocumentRef ids within ONE discover pass " \
+                           "(#{repeated.size} repeated): #{repeated.first(5).join(', ')}"
   end
 
   # Urn stability is what the loader's upsert-on-urn (P1-4) rests on, and

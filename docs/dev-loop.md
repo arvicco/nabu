@@ -26,6 +26,8 @@ The loop's job is therefore mostly *dispatch and verify*, not *judge* — which 
 
 **Only Fable and Opus write code.** Sonnet/Haiku are restricted to simple non-coding tasks. Heuristic for tagging a coding packet: **first-of-kind → Fable; everything else → Opus.** When in doubt, tag Opus and rely on the escalation rule (§4) — a wrongly-tagged packet fails verification and gets bumped up, costing one retry, not a bad foundation.
 
+*Amended 2026-07-09 (owner re-ruling; canonical in the owner's dev-loop tooling): tiers are ROLES, not fixed model names. The "only the top two tiers write code" restriction above is the original proposal's and was lifted — any capable current model is a first-class coding agent for work with a written spec and a machine-checkable oracle; the orchestrating tier keeps design, first-of-family patterns, reviews, and adjudication, and each top-tier tag carries a one-line justification. The table above stands as the record of the original division.*
+
 ## 3. Work packets and the backlog
 
 The backlog lived in a flat, human-editable file of packets
@@ -245,6 +247,17 @@ is the division of labor.
 2. **Push policy:** the loop pushes `phase-N` branches and opens PRs on `arvicco/nabu`; `main` stays owner-merged.
 3. **Stage A attendance:** Phase 0 runs interactively (Fable orchestrating, Opus implementing); `/loop` from Phase 1 onward.
 4. In effect: the phase plan doc (`.docs/p<N>-plan.md`) carries the elaborated packets (the early backlog file carried them through P43), `.claude/settings.json` carries the permission profile, work proceeds on `phase-N` branches — and independent packets dispatch as parallel agents in worktrees off the phase branch (routine practice since P78), with the loop integrating the merges.
+
+   **A lane worktree runs the strict suite — `bundle exec rake worktree:prepare` first.**
+   `local/` is gitignored, so a fresh worktree has no `local/fixtures/`: the
+   test helper's StrictSkips gate never binds, restricted-source tests skip
+   quietly, and the lane reports green on a suite the main checkout would
+   fail. The task symlinks the main checkout's `local/fixtures`,
+   `local/shelves` and `local/config` into the worktree's `local/`
+   (resolving the main checkout from git, never a hardcoded path); it is
+   idempotent, never replaces anything already there, and is a no-op on the
+   main checkout itself (`Nabu::Ops::WorktreePrep`,
+   `test/ops/worktree_prep_test.rb`).
 
 ### §4 addendum — gate waits don't block the loop (owner, 2026-07-11)
 

@@ -1,7 +1,7 @@
 # Demo eval pack
 
 `pack.yml` is a deterministic tool-use eval over the **frozen demo slice**
-baked into the public image `ghcr.io/arvicco/nabu-demo` (see the
+baked into the public image `ghcr.io/arvicco/nabu-ancient-texts` (see the
 `Dockerfile` `demo` target and `Nabu::DemoBuild`): the SBL Greek New
 Testament, the Clementine Vulgate, the World English Bible, the Open
 Scriptures Hebrew Bible, the LSJ + Lewis & Short lexica, the Achemenet
@@ -32,14 +32,14 @@ task plus a summary; the exit status is 0 only when every task passes.
 Against the published image over stdio (the default target):
 
 ```
-docker pull ghcr.io/arvicco/nabu-demo:latest
-ruby script/demo-eval --image ghcr.io/arvicco/nabu-demo:latest
+docker pull ghcr.io/arvicco/nabu-ancient-texts:latest
+ruby script/demo-eval --image ghcr.io/arvicco/nabu-ancient-texts:latest
 ```
 
 Against the image in HTTP mode:
 
 ```
-docker run --rm -p 8080:8080 ghcr.io/arvicco/nabu-demo:latest bin/nabu mcp --http
+docker run --rm -p 8080:8080 ghcr.io/arvicco/nabu-ancient-texts:latest bin/nabu mcp --http
 ruby script/demo-eval --url http://localhost:8080/mcp
 ```
 

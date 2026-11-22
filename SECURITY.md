@@ -3,7 +3,7 @@
 ## Reporting a vulnerability
 
 Report suspected vulnerabilities in Nabu, the published demo image
-(`ghcr.io/arvicco/nabu-demo`), or the MCP server by email to
+(`ghcr.io/arvicco/nabu-ancient-texts`), or the MCP server by email to
 **arvicco@nabu.ac**. Please do not open a public issue for a
 security report.
 
