@@ -361,6 +361,41 @@ nt:
         3JOHN: urn:nabu:stepbible-tagnt:3john
         JUDE: urn:nabu:stepbible-tagnt:jude
         REV: urn:nabu:stepbible-tagnt:rev
+    # The Syriac New Testament (ETCBC/syrnt, a SEDRA III export; class nc) —
+    # the Syriac leg: per-book documents minted from the corpus's own book
+    # names downcased. The SEDRA versification follows the Western NT grid
+    # (3 John 15 verses, Revelation 22 chapters); absent verses attest
+    # per-witness. "Not synced" until the first `nabu sync etcbc-syrnt`.
+    - label: SyrNT (Syriac, SEDRA)
+      extractor: cts-verse
+      documents:
+        MATT: urn:nabu:etcbc-syrnt:matt
+        MARK: urn:nabu:etcbc-syrnt:mark
+        LUKE: urn:nabu:etcbc-syrnt:luke
+        JOHN: urn:nabu:etcbc-syrnt:john
+        ACTS: urn:nabu:etcbc-syrnt:acts
+        ROM: urn:nabu:etcbc-syrnt:rom
+        1COR: urn:nabu:etcbc-syrnt:1cor
+        2COR: urn:nabu:etcbc-syrnt:2cor
+        GAL: urn:nabu:etcbc-syrnt:gal
+        EPH: urn:nabu:etcbc-syrnt:eph
+        PHIL: urn:nabu:etcbc-syrnt:phil
+        COL: urn:nabu:etcbc-syrnt:col
+        1THESS: urn:nabu:etcbc-syrnt:1thess
+        2THESS: urn:nabu:etcbc-syrnt:2thess
+        1TIM: urn:nabu:etcbc-syrnt:1tim
+        2TIM: urn:nabu:etcbc-syrnt:2tim
+        TIT: urn:nabu:etcbc-syrnt:titus
+        PHILEM: urn:nabu:etcbc-syrnt:phlm
+        HEB: urn:nabu:etcbc-syrnt:heb
+        JAS: urn:nabu:etcbc-syrnt:james
+        1PET: urn:nabu:etcbc-syrnt:1peter
+        2PET: urn:nabu:etcbc-syrnt:2peter
+        1JOHN: urn:nabu:etcbc-syrnt:1john
+        2JOHN: urn:nabu:etcbc-syrnt:2john
+        3JOHN: urn:nabu:etcbc-syrnt:3john
+        JUDE: urn:nabu:etcbc-syrnt:jude
+        REV: urn:nabu:etcbc-syrnt:rev
     # CNTR (Center for New Testament Restoration, CC BY-SA 4.0 → attribution) —
     # the early WITNESSES themselves, one document per manuscript (MES
     # transcriptions): 130 class-1 continuous-text papyri and majuscules in

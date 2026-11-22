@@ -1590,6 +1590,8 @@ sources:
     source_kind: scripture
   prague-bible-1488:
     source_kind: scripture   # P116-1: GT pages of the 1488 Czech Bible print
+  etcbc-syrnt:
+    source_kind: scripture   # the Syriac New Testament — every document is an NT book
   slavistics-pd:
     source_kind: scholarly   # the PD Slavistics reference shelf — grammars,
     #                          etymological dictionaries, Academy monographs
