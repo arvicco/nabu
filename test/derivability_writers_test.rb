@@ -397,6 +397,19 @@ class DerivabilityWritersTest < Minitest::Test
                  "a new file naming the mined store's path is a deliberate allowlist decision"
   end
 
+  # The gram-postings store (local/reuse/, the cost law): ONE gateway
+  # (Store::ReusePostings) owns the directory and its writes, and only the
+  # census drives its build verb.
+  def test_the_reuse_postings_store_writes_only_through_its_gateway
+    assert_equal %w[nabu/reuse_census.rb], grep_files(/ReusePostings\.build!/),
+                 "the store's build verb is reached only through Nabu::ReuseCensus"
+    assert_equal %w[nabu/store/reuse_postings.rb], grep_files(%r{DIRNAME = "reuse"|"local/reuse}),
+                 "only the gateway names the store's directory"
+    assert_equal %w[nabu/reuse_census.rb nabu/store/reuse_postings.rb],
+                 grep_files(/\b(wanted|raw)_writer\(|finalize_shard!/),
+                 "the build's writers run only inside the census"
+  end
+
   private
 
   def grep_files(pattern)

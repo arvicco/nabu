@@ -26,7 +26,11 @@ module Nabu
       shown once, labeled with everything it covers. Honesty rules: a witness
       that simply lacks the verse (the Armenian sample holds only scattered
       chapters; Gothic is fragmentary) reads "not attested"; a registered
-      witness whose source was never synced reads "not synced". Adding a
+      witness whose source was never synced reads "not synced". Compact
+      output folds those witnesses into one header line, named and grouped
+      by reason ("not attested at this ref: …; not synced: …") — the range
+      view's fold, so a hub of mostly-fragmentary manuscripts keeps its
+      attesting rows readable; --long lists every witness in full. Adding a
       witness (say, the ISWOC Old English Mark) is a registry entry, not code.
 
       --work names the work explicitly. Without it, a ref resolves through
@@ -56,8 +60,9 @@ module Nabu
                         "against (default: the first witness in registry order)"
     option :long, type: :boolean, default: false,
                   desc: "Lift the #{Nabu::Query::Align::MAX_REFS}-ref range ceiling and render every ref " \
-                        "(compact clips a huge range by default); with --collate, also print each " \
-                        "witness's full tokens instead of only its divergences"
+                        "(compact clips a huge range by default); on a single ref, list every witness " \
+                        "in full instead of folding the absent ones into one summary line; with " \
+                        "--collate, also print each witness's full tokens instead of only its divergences"
     display_option
     def align(*ref_parts)
       ref = ref_parts.join(" ").strip
@@ -79,7 +84,7 @@ module Nabu
 
         result = Nabu::Query::Align.new(catalog: catalog, fulltext: fulltext, registry: registry)
                                    .run(ref, work: options[:work], long: options[:long])
-        print_align(result)
+        print_align(result, long: options[:long])
       end
       print_display_footer
     rescue Nabu::Query::Align::Error, Nabu::ValidationError => e
@@ -468,13 +473,24 @@ module Nabu
       # honest attestation count, then one block per witness in registry
       # order — title, language, license label, and the sentences (urn line,
       # text line), a multi-verse sentence labeled with its full span.
-      def print_align(result)
+      # A single ref: the header count, then — compact — the witnesses with
+      # nothing at this ref folded into the range view's summary line (the
+      # 189-manuscript nt hub is mostly absent at any verse); --long lists
+      # every witness in full, misses and all.
+      def print_align(result, long: false)
         return print_align_range(result) if result.is_a?(Nabu::Query::Align::RangeResult)
 
         attesting = result.witnesses.count { |witness| witness.status == :ok }
         say "#{result.ref} — #{result.title}"
         say "  #{attesting} of #{result.witnesses.size} witnesses attest this ref"
-        result.witnesses.each { |witness| print_align_witness(witness, result.ref) }
+        shown = result.witnesses
+        unless long
+          group = Nabu::Query::Align::RefGroup.new(ref: result.ref, witnesses: shown)
+          (present,), absent = Nabu::Query::Align.lift_absent_witnesses([group])
+          say "  #{absent_range_summary(absent, scope: 'at this ref')}" unless absent.empty?
+          shown = present.witnesses
+        end
+        shown.each { |witness| print_align_witness(witness, result.ref) }
       end
 
       # A range/chapter query (P11-8): the query header, a one-line witness
@@ -495,11 +511,13 @@ module Nabu
       # P11-9: witnesses absent from every rendered ref are summarized here once
       # (grouped by reason) rather than dashed on every ref line — the owner's
       # readability fix. Partially-attested witnesses stay in the per-ref blocks.
-      def absent_range_summary(absent)
+      # +scope+ names the slice ("in this range"; the single-verse fold passes
+      # "at this ref").
+      def absent_range_summary(absent, scope: "in this range")
         by_reason = absent.group_by(&:reason)
         parts = []
         if (rows = by_reason[:not_attested])
-          parts << "not attested in this range: #{rows.map(&:label).join(', ')}"
+          parts << "not attested #{scope}: #{rows.map(&:label).join(', ')}"
         end
         if (rows = by_reason[:not_synced])
           parts << "not synced: #{rows.map(&:label).join(', ')}"

@@ -7,6 +7,16 @@ already small (340 + 40 lines) and the module's read seam
 full codemap to be exercised honestly (a trimmed slice would hide
 referential-integrity gaps the drift guard exists to catch).
 
+- **Retrieved 2026-11-22 (eleventh cut)** — the roro (Rongorongo,
+  ISO 15924 Roro 620, unencoded in Unicode) scripts-table row, minted
+  for the artifact-script field of the CEIPP rongorongo corpus (held as
+  Barthel numeric transliteration). Anchors, stages, varieties and
+  codemap.yml unchanged from the tenth cut. Copied verbatim from
+  canonical/nabu-lects (commit `e71a1a5`, synced 2026-11-21).
+  `lects.yml` 289,034 B, sha256
+  `c276c67546d53d1fcbdcd7ec7e5e0fe2ee10b27e65048a824eaccbeb9240f7c6`;
+  `codemap.yml` 16,014 B, sha256
+  `18125c8c7f559797a7170ea2fee4e5bc8d0e1907c5d6476c9c23b27717cace27`.
 - **Retrieved 2026-11-17 (tenth cut)** — the Hebrew-wave registry
   package (nabu-lects PR #50, merged 2026-11-17): the jrb (Judeo-Arabic,
   parent ara — Blau/Hary notes) and smp (Samaritan Hebrew, parent hbo,

@@ -34,12 +34,21 @@ module Nabu
         # config/reuse_profiles.yml (the project definition — retuning a
         # profile retunes its replay); recorded flags still override it.
         profile = params["profile"] && ReuseProfiles.default.fetch(params["profile"])
-        BatchParallels.new(catalog: db, fulltext: fulltext, journal: journal)
-                      .run(scope["scope"], profile: profile,
-                                           **{ lang: params["lang"], license: params["license"],
-                                               min_score: params["min_score"], per_anchor: params["per_anchor"],
-                                               gram_size: params["gram_size"],
-                                               chunk_size: params["chunk_size"], on_chunk: on_chunk }.compact)
+        # A scope recorded under the postings engine replays on it (its
+        # store under local/reuse/, the default worker count) — never
+        # silently on the FTS probes, the hour-to-week path it was moved off.
+        producer = if params["engine"] == BatchParallelsPostings::ENGINE
+                     BatchParallelsPostings.new(catalog: db, fulltext: fulltext, journal: journal,
+                                                root: Store::ReusePostings.root(config),
+                                                workers: ReusePool.default_workers)
+                   else
+                     BatchParallels.new(catalog: db, fulltext: fulltext, journal: journal)
+                   end
+        producer.run(scope["scope"], profile: profile,
+                                     **{ lang: params["lang"], license: params["license"],
+                                         min_score: params["min_score"], per_anchor: params["per_anchor"],
+                                         gram_size: params["gram_size"],
+                                         chunk_size: params["chunk_size"], on_chunk: on_chunk }.compact)
       when "cognates"
         BatchCognates.new(catalog: db, fulltext: fulltext, journal: journal,
                           registry: AlignmentRegistry.load(config.alignments_path))

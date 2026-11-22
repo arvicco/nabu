@@ -380,6 +380,19 @@ batch run at a time.
 only alongside/after the first batch producer (realistically a rider on
 the batch mode of item 1 or 6). Not a Phase 15 headline.
 
+**Later: the batch outgrew the per-gram probe.** §1's option (b) — no
+n-gram table, one FTS phrase probe per anchor gram — holds for the
+interactive surface (milliseconds per passage) but not for corpus-wide
+batch mining at CJK scale: the Kanripo + CBETA legs measured ~7 weeks
+(O(anchors × grams) round-trips, FTS probes 92% of the time). The batch
+therefore gained the materialized index this section once declined, in
+its cheapest honest form: a per-SCOPE gram-postings store built by its
+own command (`nabu reuse build`, heavy derived data under local/reuse/),
+holding for the scope's anchor grams exactly what the FTS probes would
+return, and an opt-in postings engine that scores from it with the SAME
+scoring code and identical edges (architecture §15, "The postings
+engine"). The interactive `parallels <urn>` keeps §1's probe engine.
+
 ## What waits for the cluster — the symbolic/embeddings line, drawn
 
 Everything above is symbolic and local, and the probes show the symbolic

@@ -216,6 +216,31 @@ class LinkStampsTest < Minitest::Test
     fulltext&.disconnect
   end
 
+  # The postings engine's replay (a scope recorded with engine: postings)
+  # runs only closure code too — the census that built its store included
+  # in the trace, since its digest stamps the store the replay reads.
+  def test_a_postings_replay_executes_only_closure_code
+    fulltext = Nabu::Store.connect_fulltext("sqlite::memory:")
+    Nabu::Store::Indexer.rebuild!(catalog: @catalog, fulltext: fulltext, cjk_slugs: ["kanripo"])
+    local = Struct.new(:canonical_dir, :local_dir).new(File.join(@root, "canonical"), File.join(@root, "local"))
+    scope = PARALLELS.merge("params" => PARALLELS["params"].merge("engine" => "postings"))
+    executed = executed_lib_files do
+      Nabu::ReuseCensus.new(catalog: @catalog, fulltext: fulltext, root: Nabu::Store::ReusePostings.root(local))
+                       .run("kanripo", gram_size: 4, lang: "lzh", shards: 2)
+      Nabu::LinkScopeReplay.replay!(scope, db: @catalog, fulltext: fulltext, journal: @journal, config: local)
+    end
+    assert_equal "postings", JSON.parse(@journal[:link_runs].first[:params_json])["engine"]
+    missing = (executed - Nabu::LinkStamps.code_files("parallels"))
+              .map { |file| file.delete_prefix("#{Nabu::LinkStamps::LIB_DIR}/") }
+    # store.rb runs only as the connection gate (Store.connect: WAL,
+    # timeouts, pragmas) for the postings files — no edge-shaping logic,
+    # the errors.rb footing; requiring it would pull every store/ file into
+    # the parallels closure.
+    assert_empty missing - %w[store.rb], "the postings engine executes code outside the parallels closure"
+  ensure
+    fulltext&.disconnect
+  end
+
   # The carve-outs' honesty bound: a carved file leaves the closure only
   # because the producer's real replay never runs it. Run with a REAL
   # nabu-places registry (the place pair's decisions path), so a carve

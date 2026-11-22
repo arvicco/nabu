@@ -32,6 +32,12 @@ module Nabu
   #     overrides, 0 disables the kill; no history = heartbeats only) it
   #     SIGTERMs the writer, and SIGKILLs it after KILL_GRACE_SECONDS — a
   #     GVL-held statement never runs the TERM handler, which is the point.
+  #     The estimate must price EVERY stage the run will pay, not just the
+  #     ones its delta engages: an `index refresh` whose slices priced
+  #     ~13m ran an hour-long whole-index shadow build the estimate never
+  #     named, and the kill — three times — discarded the whole build. So
+  #     the refresh adds the preflight's priced shadow forecast
+  #     (IndexPreflight's shadow note) to the slice estimate it arms from.
   #   - HYGIENE, after a kill or after the writer died on its own without a
   #     clean finish: the work its ensure-blocks never ran — a read-write
   #     connect (which replays the engine-config intent journal, restoring
@@ -167,8 +173,10 @@ module Nabu
 
     # The sync stages an index refresh runs (Indexer.refresh_source!'s
     # timed stages; a dictionary sync's closure re-walk included). The
-    # shadow builds are arrival events sized by the load, never planned
-    # from history (Store::IndexCostClasses).
+    # shadow builds are arrival events (Store::IndexCostClasses), never
+    # summed in from history here: a sync cannot know before its load
+    # whether one fires, and an `index refresh` prices the one it will
+    # pay from its forecast instead (IndexPreflight.gate!'s return).
     REFRESH_STAGES = %w[index_slice postings_swaps fts_merge reflex_closure reflex_rewalk].freeze
 
     # Run the block as the supervised writer: a watcher forked over THIS

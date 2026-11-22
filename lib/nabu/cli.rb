@@ -13,6 +13,7 @@ require_relative "cli/creds"
 require_relative "cli/export"
 require_relative "cli/runs"
 require_relative "cli/reconstruct"
+require_relative "cli/reuse"
 require_relative "links_mine_commands"
 
 # CLI flag conventions (P90-3 standing rules, applied whenever a command is
@@ -125,6 +126,13 @@ module Nabu
     desc "export SUBCOMMAND ...ARGS",
          "Research exports — documents/links tables with a license manifest — and the passage stream"
     subcommand "export", ExportCLI
+
+    # The reuse-batch redesign: the parallels postings engine's store —
+    # build (the census, the only trigger) and status (provenance +
+    # staleness).
+    desc "reuse SUBCOMMAND ...ARGS",
+         "Gram-postings stores for parallels --engine postings: build SCOPE, status"
+    subcommand "reuse", ReuseCLI
   end
 end
 

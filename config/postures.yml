@@ -4011,5 +4011,5 @@ sources:
     script: {posture: implied, note: "the held text is the CEIPP extended-Barthel
         TRANSLITERATION — three-digit sign codes with Latin-letter affixes and link marks,
         Latin-script/numeric by construction; the artifact script is rongorongo (ISO 15924
-        Roro, unencoded in Unicode). The config/artifact_scripts.yml row is queued on the
-        registry scripts-table mint (no roro tag exists yet)"}
+        Roro, unencoded in Unicode), recorded as the config/artifact_scripts.yml rap → roro
+        row"}

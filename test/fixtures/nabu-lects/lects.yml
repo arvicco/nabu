@@ -5706,3 +5706,15 @@ scripts:
   tang: {name: Tangut,                               iso15924: Tang,
          note: "the Xi Xia logographic script (promulgated 1036), some
                 6,000 characters; Unicode-encoded since 9.0"}
+  roro: {name: Rongorongo,                           iso15924: Roro,
+         note: "the Easter Island glyph system, incised on ~26 surviving
+                wooden objects (the Barthel sigla A–Z corpus); recorded
+                from the 1860s (Eyraud 1864, Jaussen), UNDECIPHERED —
+                whether it is writing proper or a mnemonic/proto-writing
+                system is itself debated (Fischer 1997 vs Pozdniakov
+                2007). ISO 15924 Roro (code 620), NOT encoded in Unicode
+                (proposals stall on the undecipherment). Held text is
+                Barthel-system numeric transliteration riding ~latn; roro
+                exists for the consumer's ARTIFACT field (the rap anchor's
+                note carries the language-attribution caveat). Consumer:
+                the CEIPP corpus codes (granted 2026-11-18)"}

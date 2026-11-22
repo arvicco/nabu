@@ -487,3 +487,24 @@ tang:
     Tangut text is held in the Unicode Tangut block where the source
     carries it; character readings follow the reconstruction the source
     names.
+
+roro:
+  name: Rongorongo
+  context: >-
+    The glyph system of Easter Island (Rapa Nui), incised in lines on
+    some two dozen surviving wooden objects — tablets, a staff, pectorals
+    (reimiro), birdman figures — that reached museums from the 1860s on,
+    after the missionary Eugène Eyraud first reported them (1864) and
+    Bishop Tepano Jaussen of Tahiti collected several. The lines run in
+    reverse boustrophedon (the object is turned at each line end, so
+    alternate lines stand upside down). It remains UNDECIPHERED: whether
+    it is writing proper or a mnemonic or proto-writing system is itself
+    debated, and the Rapa Nui language behind it is an assumption, not a
+    demonstrated fact. Thomas Barthel's 1958 catalogue gave the corpus its
+    object sigla (A–Z) and the three-digit sign numbers later studies
+    cite. Unicode does not encode it.
+  desk: >-
+    Codes only: the rongorongo shelf holds the CEIPP extended-Barthel
+    transliteration (sign numbers with affixes and link marks — a surface
+    of Latin numerals and punctuation), with the artifact script recorded
+    as roro; the glyphs themselves ride no held surface.

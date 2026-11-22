@@ -5995,6 +5995,113 @@ class CLITest < Minitest::Test
     end
   end
 
+  # The predicted shadow build (IndexPreflight's shadow note): the
+  # refresh's slices price ~12m, but the wave's passages_fts shadow — the
+  # whole index — took an hour last time. The fixture is far under the
+  # real 100k-row budget, so the forecast is pinned (the forecast itself
+  # is tested against real runs in the indexer suite).
+  def with_forecast_shadow(rows: 95_000_000)
+    real = Nabu::Store::Indexer.method(:fts_shadow_forecasts)
+    seen = []
+    Nabu::Store::Indexer.define_singleton_method(:fts_shadow_forecasts) do |slugs:, **|
+      seen << slugs
+      [Nabu::Store::Indexer::ShadowForecast.new(scope: "corpus", slugs: slugs, rows: rows)]
+    end
+    yield seen
+  ensure
+    Nabu::Store::Indexer.define_singleton_method(:fts_shadow_forecasts, real)
+  end
+
+  def plant_wave_history(config, shadow_seconds: 3_600)
+    ledger = Nabu::Store::Ledger.open!(config.history_path)
+    %w[pap lit].each do |slug|
+      Nabu::Store::StageTimings.record!(ledger, kind: "sync", scope: slug, stage: "index_slice", seconds: 6 * 60)
+    end
+    if shadow_seconds
+      Nabu::Store::StageTimings.record!(ledger, kind: "sync", scope: "corpus", stage: "fts_shadow",
+                                                seconds: shadow_seconds)
+    end
+  ensure
+    ledger&.disconnect
+  end
+
+  def test_index_refresh_prices_the_forecast_shadow_into_the_watcher_deadline
+    with_two_source_wave do |config|
+      plant_wave_history(config)
+      with_forecast_shadow do |seen|
+        out, err, status = with_config(config) { run_cli(%w[index refresh pap lit --accept-long]) }
+
+        assert_nil status, err
+        assert_equal [%w[pap lit]], seen, "the forecast reads the wave's members"
+        assert_match(/predicted fts_shadow \(corpus — pap \+ lit\)/, err)
+        # 12m of slices + the 60m shadow, at 2.5x — never the slices' 30m.
+        assert_match(/index watcher: armed — kills the writer at 180m00s/, err)
+        assert_match(/wave of 2 sources/, out)
+      end
+    end
+  end
+
+  def test_index_refresh_refuses_a_forecast_shadow_past_the_budget_before_touching_the_index
+    with_two_source_wave do |config|
+      plant_wave_history(config)
+      before = File.mtime(config.fulltext_path)
+      with_forecast_shadow do
+        _out, err, status = with_config(config) { run_cli(%w[index refresh pap lit]) }
+
+        assert_equal 1, status
+        assert_match(/index refresh: index preflight: this refresh will run the passages_fts shadow build/, err)
+        assert_match(/stage fts_shadow \(corpus — pap \+ lit\)/, err)
+        assert_match(/--deadline 180 --accept-long/, err)
+        assert_match(/--deadline 0 --accept-long/, err)
+      end
+      assert_equal before, File.mtime(config.fulltext_path), "the refused run never opened the index"
+    end
+  end
+
+  def test_index_refresh_refuses_a_deadline_that_cannot_cover_the_forecast_shadow
+    with_two_source_wave do |config|
+      plant_wave_history(config)
+      with_forecast_shadow do
+        _out, err, status = with_config(config) { run_cli(%w[index refresh pap lit --accept-long --deadline 60]) }
+
+        assert_equal 1, status
+        assert_match(/--deadline 60 cannot cover it/, err)
+      end
+    end
+  end
+
+  # The incident's third kill: 75m against a 73m33s run. Against this
+  # 72m priced total a 75m deadline is above the estimate but under the
+  # 1.25x cover margin (90m), so it refuses; 90m proceeds.
+  def test_index_refresh_refuses_a_deadline_just_above_the_forecast_total
+    with_two_source_wave do |config|
+      plant_wave_history(config)
+      with_forecast_shadow do
+        _out, err, status = with_config(config) { run_cli(%w[index refresh pap lit --accept-long --deadline 75]) }
+
+        assert_equal 1, status
+        assert_match(/--deadline 75 cannot cover it \(under the 90-minute minimum/, err)
+        _out, err, status = with_config(config) { run_cli(%w[index refresh pap lit --accept-long --deadline 90]) }
+
+        assert_nil status, err
+        assert_match(/index watcher: armed — kills the writer at 90m00s/, err)
+      end
+    end
+  end
+
+  def test_index_refresh_names_an_unpriced_forecast_shadow
+    with_deferred_wave do |config|
+      plant_wave_history(config, shadow_seconds: nil)
+      with_forecast_shadow(rows: 2_000_000) do
+        _out, err, status = with_config(config) { run_cli(%w[index refresh pap]) }
+
+        assert_equal 1, status
+        assert_match(/UNPRICED — no fts_shadow row in the ledger/, err)
+        assert_match(/no ledger row prices it yet/, err)
+      end
+    end
+  end
+
   def test_sync_refuses_a_predicted_long_index_run
     with_deferred_wave do |config|
       File.write(config.sources_path, <<~YAML)
@@ -6689,6 +6796,58 @@ class CLITest < Minitest::Test
       assert_equal 1, status
       assert_match(/--min-score only applies with --batch/, err)
       assert_match(/never persisted/, err, "the no-caching stance is stated, not just enforced")
+    end
+  end
+
+  # -- the postings engine: nabu reuse + parallels --engine postings ----------
+
+  def test_reuse_build_then_postings_batch_mints_the_fts_edges
+    with_parallels_corpus do |config|
+      out, err, status = with_config(config) { run_cli(%w[reuse build urn:h:od --workers 1 --shards 2]) }
+      assert_nil status, err
+      assert_match(/reuse build urn:h:od: urn_h_od\.g4 in /, out)
+      assert_match(/1 anchors · \d+ wanted grams attested \(\d+ under the cap 500\) · \d+ postings/, out)
+      assert_path_exists File.join(config.local_dir, "reuse", "urn_h_od.g4", "manifest.sqlite3")
+
+      out, err, status = with_config(config) { run_cli(%w[reuse status]) }
+      assert_nil status, err
+      assert_match(/urn_h_od\.g4: urn:h:od · 4-grams · built \d{4}-\d{2}-\d{2}/, out)
+      assert_match(/CURRENT/, out)
+
+      out, err, status = with_config(config) do
+        run_cli(%w[parallels --batch urn:h:od --engine postings --workers 1])
+      end
+      assert_nil status, err
+      assert_match(/batch parallels over urn:h:od: 1 edge written/, out)
+      assert_match(/engine postings · 1 scoring worker · one committer/, out)
+      store = Nabu::Store::MinedLinks.open_readonly(config.mined_links_path)
+      assert_equal [%w[urn:h:od:1.1 urn:q:full:1]], store[:links].select_map(%i[from_urn to_urn])
+      assert_equal "postings", JSON.parse(store[:link_runs].first[:params_json])["engine"]
+      store.disconnect
+      recorded = Nabu::LinkScopes.load(config.link_scopes_path).first
+      assert_equal "postings", recorded.dig("params", "engine"), "the re-mine replays on the postings engine"
+    end
+  end
+
+  def test_postings_batch_without_a_store_refuses_with_the_build_command
+    with_parallels_corpus do |config|
+      _out, err, status = with_config(config) { run_cli(%w[parallels --batch urn:h:od --engine postings]) }
+      assert_equal 1, status
+      assert_match(/nabu reuse build urn:h:od --gram-size 4/, err)
+    end
+  end
+
+  def test_engine_flags_are_checked
+    with_parallels_corpus do |config|
+      _out, err, status = with_config(config) { run_cli(%w[parallels --batch urn:h:od --engine fast]) }
+      assert_equal 1, status
+      assert_match(/--engine must be fts or postings/, err)
+      _out, err, status = with_config(config) { run_cli(%w[parallels --batch urn:h:od --workers 2]) }
+      assert_equal 1, status
+      assert_match(/--workers only applies with --engine postings/, err)
+      _out, err, status = with_config(config) { run_cli(%w[parallels urn:h:od:1.1 --engine postings]) }
+      assert_equal 1, status
+      assert_match(/--engine only applies with --batch/, err)
     end
   end
 
@@ -7535,9 +7694,11 @@ class CLITest < Minitest::Test
     end
   end
 
+  # The per-witness miss blocks below render under --long: compact folds
+  # them into the summary line (test_align_single_verse_folds_…).
   def test_align_unsynced_witness_reads_not_synced
     with_aligned_corpus(extra_witness: "urn:nabu:proiel:wscp") do |config|
-      out, _err, status = with_config(config) { run_cli(["align", "MARK", "2.3"]) }
+      out, _err, status = with_config(config) { run_cli(["align", "MARK", "2.3", "--long"]) }
       assert_nil status
       assert_match(/wscp — not synced/, out)
       assert_match(/2 of 3 witnesses/, out)
@@ -7558,7 +7719,7 @@ class CLITest < Minitest::Test
               JOHN: urn:nabu:sblgnt:john
     YAML
     with_aligned_corpus(registry: registry) do |config|
-      out, _err, status = with_config(config) { run_cli(["align", "MARK", "2.3"]) }
+      out, _err, status = with_config(config) { run_cli(["align", "MARK", "2.3", "--long"]) }
       assert_nil status
       assert_match(/^verses \[chu\] {3}license: nc/, out)
       assert_match(/not attested/, out)
@@ -7581,10 +7742,50 @@ class CLITest < Minitest::Test
               ACTS: urn:nabu:sblgnt:acts
     YAML
     with_aligned_corpus(registry: registry) do |config|
-      out, _err, status = with_config(config) { run_cli(["align", "MARK", "2.3"]) }
+      out, _err, status = with_config(config) { run_cli(["align", "MARK", "2.3", "--long"]) }
       assert_nil status
       assert_match(/verses — not synced \(its registered documents are not in the catalog\)/, out)
       refute_match(/urn:nabu:sblgnt/, out, "no unrelated book urn is named")
+    end
+  end
+
+  # The single-verse fold (the 189-manuscript nt hub, most witnesses absent
+  # at any verse): witnesses with nothing to show collapse into the range
+  # view's summary line — named and grouped by reason, never silently
+  # dropped — so the attesting rows stay readable. --long restores the full
+  # per-witness listing.
+  FOLD_REGISTRY = <<~YAML
+    nt:
+      witnesses:
+        - document: urn:nabu:proiel:greek-nt
+        - label: verses
+          extractor: cts-verse
+          documents:
+            MARK: urn:nabu:proiel:marianus
+        - document: urn:nabu:proiel:wscp
+  YAML
+
+  def test_align_single_verse_folds_absent_witnesses_into_one_summary_line
+    with_aligned_corpus(registry: FOLD_REGISTRY) do |config|
+      out, _err, status = with_config(config) { run_cli(["align", "MARK", "2.3"]) }
+      assert_nil status
+      assert_match(/^  1 of 3 witnesses attest this ref$/, out, "the count stays in the header")
+      assert_match(/^  not attested at this ref: verses; not synced: wscp$/, out,
+                   "absent witnesses are named once, grouped by reason")
+      assert_equal 1, out.scan("verses").length, "a folded witness gets no block of its own"
+      assert_equal 1, out.scan("wscp").length, "nor does a folded unsynced one"
+      assert_match(/greek-nt — Greek NT \[grc\] {3}license: nc/, out, "attesting witnesses render as before")
+      assert_match(/παραλυτικὸν/, out)
+    end
+  end
+
+  def test_align_single_verse_long_lists_every_witness_in_full
+    with_aligned_corpus(registry: FOLD_REGISTRY) do |config|
+      out, _err, status = with_config(config) { run_cli(["align", "MARK", "2.3", "--long"]) }
+      assert_nil status
+      refute_match(/not attested at this ref:/, out, "--long does not fold")
+      assert_match(/^verses — Codex Marianus \[chu\] {3}license: nc\n  not attested/, out)
+      assert_match(/wscp — not synced/, out)
     end
   end
 
