@@ -5995,6 +5995,94 @@ class CLITest < Minitest::Test
     end
   end
 
+  # The predicted shadow build (IndexPreflight's shadow note): the
+  # refresh's slices price ~12m, but the wave's passages_fts shadow — the
+  # whole index — took an hour last time. The fixture is far under the
+  # real 100k-row budget, so the forecast is pinned (the forecast itself
+  # is tested against real runs in the indexer suite).
+  def with_forecast_shadow(rows: 95_000_000)
+    real = Nabu::Store::Indexer.method(:fts_shadow_forecasts)
+    seen = []
+    Nabu::Store::Indexer.define_singleton_method(:fts_shadow_forecasts) do |slugs:, **|
+      seen << slugs
+      [Nabu::Store::Indexer::ShadowForecast.new(scope: "corpus", slugs: slugs, rows: rows)]
+    end
+    yield seen
+  ensure
+    Nabu::Store::Indexer.define_singleton_method(:fts_shadow_forecasts, real)
+  end
+
+  def plant_wave_history(config, shadow_seconds: 3_600)
+    ledger = Nabu::Store::Ledger.open!(config.history_path)
+    %w[pap lit].each do |slug|
+      Nabu::Store::StageTimings.record!(ledger, kind: "sync", scope: slug, stage: "index_slice", seconds: 6 * 60)
+    end
+    if shadow_seconds
+      Nabu::Store::StageTimings.record!(ledger, kind: "sync", scope: "corpus", stage: "fts_shadow",
+                                                seconds: shadow_seconds)
+    end
+  ensure
+    ledger&.disconnect
+  end
+
+  def test_index_refresh_prices_the_forecast_shadow_into_the_watcher_deadline
+    with_two_source_wave do |config|
+      plant_wave_history(config)
+      with_forecast_shadow do |seen|
+        out, err, status = with_config(config) { run_cli(%w[index refresh pap lit --accept-long]) }
+
+        assert_nil status, err
+        assert_equal [%w[pap lit]], seen, "the forecast reads the wave's members"
+        assert_match(/predicted fts_shadow \(corpus — pap \+ lit\)/, err)
+        # 12m of slices + the 60m shadow, at 2.5x — never the slices' 30m.
+        assert_match(/index watcher: armed — kills the writer at 180m00s/, err)
+        assert_match(/wave of 2 sources/, out)
+      end
+    end
+  end
+
+  def test_index_refresh_refuses_a_forecast_shadow_past_the_budget_before_touching_the_index
+    with_two_source_wave do |config|
+      plant_wave_history(config)
+      before = File.mtime(config.fulltext_path)
+      with_forecast_shadow do
+        _out, err, status = with_config(config) { run_cli(%w[index refresh pap lit]) }
+
+        assert_equal 1, status
+        assert_match(/index refresh: index preflight: this refresh will run the passages_fts shadow build/, err)
+        assert_match(/stage fts_shadow \(corpus — pap \+ lit\)/, err)
+        assert_match(/--deadline 180 --accept-long/, err)
+        assert_match(/--deadline 0 --accept-long/, err)
+      end
+      assert_equal before, File.mtime(config.fulltext_path), "the refused run never opened the index"
+    end
+  end
+
+  def test_index_refresh_refuses_a_deadline_that_cannot_cover_the_forecast_shadow
+    with_two_source_wave do |config|
+      plant_wave_history(config)
+      with_forecast_shadow do
+        _out, err, status = with_config(config) { run_cli(%w[index refresh pap lit --accept-long --deadline 60]) }
+
+        assert_equal 1, status
+        assert_match(/--deadline 60 cannot cover it/, err)
+      end
+    end
+  end
+
+  def test_index_refresh_names_an_unpriced_forecast_shadow
+    with_deferred_wave do |config|
+      plant_wave_history(config, shadow_seconds: nil)
+      with_forecast_shadow(rows: 2_000_000) do
+        _out, err, status = with_config(config) { run_cli(%w[index refresh pap]) }
+
+        assert_equal 1, status
+        assert_match(/UNPRICED — no fts_shadow row in the ledger/, err)
+        assert_match(/no ledger row prices it yet/, err)
+      end
+    end
+  end
+
   def test_sync_refuses_a_predicted_long_index_run
     with_deferred_wave do |config|
       File.write(config.sources_path, <<~YAML)

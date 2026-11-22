@@ -73,6 +73,15 @@ module Nabu
       of one full-corpus pass per source. Name every deferred source due
       in the same command.
 
+      The preflight forecasts that shadow pass before the writer starts
+      and prices it as its own stage (fts_shadow, from the ledger, else a
+      conservative floor from the shadow's size): the kill deadline then
+      covers slices + shadow. A refresh whose deadline cannot cover the
+      forecast shadow — or whose total is past the inline budget, or
+      whose shadow has no ledger row yet — refuses up front, naming the
+      flags that proceed (--deadline N --accept-long sized to the
+      estimate, or --deadline 0 --accept-long).
+
       Examples:
         nabu index refresh ndl-kotenseki
         nabu index refresh ndl-kotenseki wellcome pleias-french-books
@@ -98,10 +107,19 @@ module Nabu
       end
 
       # The proportionality law's preflight (Nabu::IndexPreflight): the
-      # plan prints and a long one refuses BEFORE any db is opened.
-      Nabu::IndexPreflight.gate!(history_path: config.history_path, slugs: slugs,
-                                 accept_long: options[:accept_long])
-      slugs.one? ? run_refresh(config, registry, slugs.first) : run_wave_refresh(config, registry, slugs)
+      # plan prints and a long one refuses BEFORE any db is opened for
+      # writing. The forecast shadow build (read-only handles) is priced
+      # as its own stage, and its seconds join the watcher's estimate —
+      # the refreshed slices are the delta, the shadow the whole index.
+      shadow = Nabu::IndexPreflight.gate!(history_path: config.history_path, slugs: slugs,
+                                          accept_long: options[:accept_long],
+                                          shadows: shadow_forecasts(config, slugs),
+                                          deadline_minutes: options[:deadline]).sum(&:seconds)
+      if slugs.one?
+        run_refresh(config, registry, slugs.first, shadow: shadow)
+      else
+        run_wave_refresh(config, registry, slugs, shadow: shadow)
+      end
     rescue Nabu::Error => e
       raise Thor::Error, "index refresh: #{e.message}"
     end
@@ -203,10 +221,34 @@ module Nabu
         end
       end
 
+      # The refresh's predicted passages_fts shadow builds
+      # (Store::Indexer.fts_shadow_forecasts), read through short
+      # read-only handles before the writer opens; none without an index.
+      def shadow_forecasts(config, slugs)
+        return [] unless File.exist?(config.fulltext_path)
+
+        catalog = Nabu::Store.connect(config.catalog_path, readonly: true)
+        fulltext = Nabu::Store.connect_fulltext(config.fulltext_path, readonly: true)
+        Nabu::Store::Indexer.fts_shadow_forecasts(catalog: catalog, fulltext: fulltext, slugs: slugs)
+      ensure
+        fulltext&.disconnect
+        catalog&.disconnect
+      end
+
+      # The watcher's estimate: the ledger's slice stages plus the priced
+      # shadow (+shadow+ seconds, 0 when none is forecast); nil when
+      # neither has history.
+      def refresh_estimate(ledger, scopes, shadow)
+        slices = Nabu::IndexWatcher.ledger_estimate(ledger, kind: "sync", scopes: scopes,
+                                                            stages: Nabu::IndexWatcher::REFRESH_STAGES)
+        total = slices.to_f + shadow
+        total.positive? ? total : nil
+      end
+
       # The refresh rides SyncRunner#index_entry (the sync path's own
       # reindex! wiring) and the main CLI's progress reporter, so the
       # stages read exactly as they do inside a sync.
-      def run_refresh(config, registry, slug)
+      def run_refresh(config, registry, slug, shadow: 0)
         Nabu::Store.assert_writable!(config.catalog_path)
         ledger = Nabu::Store::Ledger.open!(config.history_path)
         catalog = Nabu::Store.connect(config.catalog_path)
@@ -214,8 +256,7 @@ module Nabu
         runner = Nabu::SyncRunner.new(config: config, registry: registry, db: catalog, ledger: ledger)
         narrator = Nabu::CLI.new
         started = Process.clock_gettime(Process::CLOCK_MONOTONIC)
-        estimate = Nabu::IndexWatcher.ledger_estimate(ledger, kind: "sync", scopes: [slug, "corpus"],
-                                                              stages: Nabu::IndexWatcher::REFRESH_STAGES)
+        estimate = refresh_estimate(ledger, [slug, "corpus"], shadow)
         covered = Nabu::IndexWatcher.evidence_covers?(ledger, kind: "sync", scopes: [slug, "corpus"],
                                                               stages: Nabu::IndexWatcher::REFRESH_STAGES)
         indexed = supervise(config, label: "index refresh #{slug}", estimate: estimate, slug: slug,
@@ -235,7 +276,7 @@ module Nabu
       # over-budget passages_fts write is ONE shadow pass for the wave.
       # The estimate and the kill's evidence span every member; the
       # watcher's hygiene leaves every member pending if the writer dies.
-      def run_wave_refresh(config, registry, slugs)
+      def run_wave_refresh(config, registry, slugs, shadow: 0)
         Nabu::Store.assert_writable!(config.catalog_path)
         ledger = Nabu::Store::Ledger.open!(config.history_path)
         catalog = Nabu::Store.connect(config.catalog_path)
@@ -244,8 +285,7 @@ module Nabu
         narrator = Nabu::CLI.new
         started = Process.clock_gettime(Process::CLOCK_MONOTONIC)
         scopes = slugs + ["corpus"]
-        estimate = Nabu::IndexWatcher.ledger_estimate(ledger, kind: "sync", scopes: scopes,
-                                                              stages: Nabu::IndexWatcher::REFRESH_STAGES)
+        estimate = refresh_estimate(ledger, scopes, shadow)
         covered = Nabu::IndexWatcher.evidence_covers?(ledger, kind: "sync", scopes: scopes,
                                                               stages: Nabu::IndexWatcher::REFRESH_STAGES)
         counts = supervise(config, label: "index refresh #{slugs.join(' ')}", estimate: estimate, slug: slugs,
