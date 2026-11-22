@@ -4339,13 +4339,15 @@ shelves:
     - peshitta
     - syriac-corpus
     - etcbc-syriac
+    - etcbc-syrnt
+    - syriac-htr-gt
     - hmml-reading-room
     - ociana
-    documents: 467945
-    documents_display: '467,945'
-    passages: 3290110
-    passages_display: '3,290,110'
-    size_display: 467,945 / 3,290,110
+    documents: 468245
+    documents_display: '468,245'
+    passages: 3318773
+    passages_display: '3,318,773'
+    size_display: 468,245 / 3,318,773
   ugarit:
     sources:
     - rsti
