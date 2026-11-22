@@ -2,7 +2,7 @@
 
 require_relative "cantus_source_index"
 require_relative "cantus_csv_parser"
-require_relative "../cantus_fetch"
+require_relative "../fetch/cantus_fetch"
 
 module Nabu
   module Adapters

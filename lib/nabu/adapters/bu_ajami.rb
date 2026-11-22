@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative "../bu_ajami_fetch"
+require_relative "../fetch/bu_ajami_fetch"
 require_relative "../pdf_text"
 require_relative "bu_ajami_item_parser"
 

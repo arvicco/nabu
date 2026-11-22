@@ -3,7 +3,7 @@
 require "fileutils"
 
 require_relative "delpher_didl_parser"
-require_relative "../zip_fetch"
+require_relative "../fetch/zip_fetch"
 
 module Nabu
   module Adapters

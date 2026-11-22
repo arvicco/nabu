@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require_relative "menota_tei_parser"
-require_relative "../menota_fetch"
+require_relative "../fetch/menota_fetch"
 
 module Nabu
   module Adapters

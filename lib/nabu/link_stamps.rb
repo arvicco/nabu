@@ -162,7 +162,7 @@ module Nabu
                                    carved: PLACE_CARVED),
       # The capitalized-word recipe reads its slice's passage text and
       # nothing else (no authority, no registry): members + code suffice.
-      "person-candidates" => Producer.new(kinds: %w[person-name-candidate], roots: %w[person_candidates.rb]),
+      "person-candidates" => Producer.new(kinds: %w[person-name-candidate], roots: %w[persons/person_candidates.rb]),
       "cognates" => Producer.new(kinds: %w[cognate],
                                  volatile: "reads the lect facets, lemma tiers and alignment/reflex " \
                                            "index — inputs no member identity covers; re-mines in seconds")

@@ -3,7 +3,7 @@
 require "digest"
 
 require_relative "soas_pos_parser"
-require_relative "../zip_fetch"
+require_relative "../fetch/zip_fetch"
 
 module Nabu
   module Adapters

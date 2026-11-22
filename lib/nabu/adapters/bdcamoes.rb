@@ -2,8 +2,8 @@
 
 require "nokogiri"
 
-require_relative "../zip_fetch"
-require_relative "../license_agree_fetch"
+require_relative "../fetch/zip_fetch"
+require_relative "../fetch/license_agree_fetch"
 
 module Nabu
   module Adapters

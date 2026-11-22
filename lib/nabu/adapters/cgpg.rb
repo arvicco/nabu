@@ -3,8 +3,8 @@
 require_relative "cgpg_vert_parser"
 require_relative "cgpg_carve_plan"
 require_relative "cgpg_title_genre"
-require_relative "../zip_fetch"
-require_relative "../file_fetch"
+require_relative "../fetch/zip_fetch"
+require_relative "../fetch/file_fetch"
 
 module Nabu
   module Adapters

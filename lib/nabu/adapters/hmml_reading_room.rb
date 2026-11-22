@@ -5,7 +5,7 @@ require "fileutils"
 require "json"
 require "tmpdir"
 
-require_relative "../file_fetch"
+require_relative "../fetch/file_fetch"
 require_relative "source_read"
 
 module Nabu

@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-require_relative "../litopys_fetch"
+require_relative "../fetch/litopys_fetch"
 require_relative "../redirect_follow"
-require_relative "../zip_fetch"
+require_relative "../fetch/zip_fetch"
 require_relative "madurai_fetch"
 require_relative "madurai_html_parser"
 

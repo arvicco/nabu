@@ -3,7 +3,7 @@
 require "fileutils"
 require_relative "../normalize"
 require_relative "../shell"
-require_relative "../file_fetch"
+require_relative "../fetch/file_fetch"
 require_relative "../stext_layout"
 require_relative "../wilkens_oui"
 

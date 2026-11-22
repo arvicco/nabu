@@ -2,7 +2,7 @@
 
 require "json"
 
-require_relative "../file_fetch"
+require_relative "../fetch/file_fetch"
 require_relative "../suttacentral_parallels"
 require_relative "pts_concordance"
 

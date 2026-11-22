@@ -2,7 +2,7 @@
 
 require "digest"
 require_relative "../url_download"
-require_relative "../burman_crosswalk"
+require_relative "../crosswalks/burman_crosswalk"
 
 module Nabu
   module Adapters

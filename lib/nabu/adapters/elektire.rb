@@ -4,7 +4,7 @@ require "cgi"
 require "json"
 
 require_relative "elektire_epub_parser"
-require_relative "../elektire_fetch"
+require_relative "../fetch/elektire_fetch"
 
 module Nabu
   module Adapters

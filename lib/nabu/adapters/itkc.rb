@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 require_relative "itkc_xml_parser"
-require_relative "../zip_fetch"
-require_relative "../data_go_kr_fetch"
+require_relative "../fetch/zip_fetch"
+require_relative "../fetch/data_go_kr_fetch"
 
 module Nabu
   module Adapters

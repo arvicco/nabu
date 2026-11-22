@@ -2,7 +2,7 @@
 
 require "json"
 require "strscan"
-require_relative "../file_fetch"
+require_relative "../fetch/file_fetch"
 require_relative "../normalize"
 require_relative "source_read"
 

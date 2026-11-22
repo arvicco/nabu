@@ -7,7 +7,7 @@ require "json"
 
 require_relative "../url_download"
 require_relative "../xlsx"
-require_relative "../zip_fetch"
+require_relative "../fetch/zip_fetch"
 require_relative "../redirect_follow"
 require_relative "../normalize"
 require_relative "../paced_crawl"
