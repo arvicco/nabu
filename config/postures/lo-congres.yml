@@ -1,0 +1,12 @@
+sources:
+  # ── P80-6: the small-languages pack (modern-text corpora) ──────────────
+  lo-congres:
+    kind: {posture: unclassified}
+    # lect: machine-postured by the oci-dialect rule (owner-ruled
+    # 2026-08-21, nabu-lects PR #6 minted the oc dialect varieties +
+    # the oci→oc alias) — the identity row retired, the ref
+    # add-then-retire shape. "DELIBERATELY COARSE" was forced, not
+    # chosen; no longer either.
+    dating: {posture: undatable, note: modern news sentences, no per-item dates upstream}
+    places: {posture: unplaced}
+    script: {posture: implied}

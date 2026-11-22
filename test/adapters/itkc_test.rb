@@ -176,7 +176,7 @@ class ItkcTest < Minitest::Test
   # --- registry -------------------------------------------------------------
 
   def test_registry_row_exists_on_the_korean_axis
-    registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources.yml", __dir__))
+    registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources", __dir__))
     entry = registry["itkc"]
     refute_nil entry, "config/sources.yml must register itkc"
     assert_equal Nabu::Adapters::Itkc, entry.adapter_class

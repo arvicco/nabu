@@ -13,7 +13,7 @@ module Adapters
     FIXTURES = Nabu::TestSupport.fixtures("osl")
 
     def registry
-      Nabu::SourceRegistry.load(File.expand_path("../../config/sources.yml", __dir__))
+      Nabu::SourceRegistry.load(File.expand_path("../../config/sources", __dir__))
     end
 
     # --- the module row / manifest --------------------------------------------

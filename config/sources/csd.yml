@@ -1,0 +1,17 @@
+csd:
+  adapter: Nabu::Adapters::Csd
+  adopted: "2026-11-13"
+  axes: [etym]
+  wired: true    # first sync 2026-11-13: +1,193 sets / 17,902 reflexes.
+                 # Expected: 1,193 entries / 17,902 reflex rows; 11 set
+                 # records without any judgment skipped by rule.
+  sync_policy: manual
+  # The Comparative Siouan Dictionary (Rankin, Carter, Jones, Koontz,
+  # Rood & Hartmann eds. 2015; csd.clld.org) in the lexibank CLDF
+  # edition — CC BY 4.0. The repository has never cut a release (no tag,
+  # no Zenodo record): the house GitFetch of the default branch, sparse
+  # to cldf/ + LICENSE + README.md (head 91756e90 at intake). Sets
+  # head with their Proto-Siouan (or sub-group) reconstruction.
+  # Upstream's languages.csv carries no ISO code or Glottocode for any of
+  # its 36 varieties, so every member is display-only (csd-<variety>).
+  # Dictionary language `sio` (ISO 639-5 Siouan).

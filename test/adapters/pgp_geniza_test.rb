@@ -260,7 +260,7 @@ module Adapters
     end
 
     def test_registry_row_is_wired_manual
-      registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources.yml", __dir__))
+      registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources", __dir__))
       entry = registry["pgp-geniza"]
       refute_nil entry, "pgp-geniza must be registered in config/sources.yml"
       assert_equal KLASS, entry.adapter_class

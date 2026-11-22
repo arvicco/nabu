@@ -212,7 +212,7 @@ class DivinumOfficiumTest < Minitest::Test
   # --- registry + fetch --------------------------------------------------------
 
   def test_registry_resolves_divinum_officium
-    registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources.yml", __dir__))
+    registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources", __dir__))
     entry = registry["divinum-officium"]
     refute_nil entry, "divinum-officium must be registered in config/sources.yml"
     assert_equal Nabu::Adapters::DivinumOfficium, entry.adapter_class

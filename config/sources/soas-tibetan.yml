@@ -1,0 +1,28 @@
+soas-tibetan:
+  adapter: Nabu::Adapters::SoasTibetan
+  adopted: "2026-07-28"
+  axes: [tibetan]
+  wired: true   # flipped 2026-07-28 (owner ruling "flip them all wired"; first sync verified live: 4 / 991 (exact))
+                   # sha-pinned; CLAUDE.md checklist §6: bin/nabu enable
+                   # soas-tibetan && bin/nabu sync soas-tibetan — expect 4
+                   # documents / 991 passages (mdzangsblun 310, buston 309,
+                   # mila 192, marpa 180; 318,230 form|tag tokens), eyeball
+                   # nabu show urn:nabu:soas-tibetan:mdzangsblun:1 ("།མཛངས་
+                   # བླུན་ཞེས་བྱ་བའི་མདོ།…", gold pos tokens) + 5 random
+                   # passages, then flip.
+  # SOAS Classical Tibetan gold POS corpus — "A part-of-speech (POS) tagged
+  # corpus of Classical Tibetan" (Hill, Garrett et al.; AHRC "Tibetan in
+  # Digital Communication", SOAS 2012–2015; Zenodo record 574878, DOI
+  # 10.5281/zenodo.574878, VERIFIED CC BY 4.0 on the record). Four texts
+  # with HAND-CORRECTED gold segmentation + gold POS (tag set Garrett et
+  # al. 2014/2015): Mdzaṅs blun (9th c., canonical), Bu ston chos ḥbyuṅ
+  # (13th c.), Mi la ras paḥi rnam thar + Mar paḥi rnam thar (15th c.) —
+  # the Tibetan desk's quality anchor, language xct all four. Format is its
+  # own small family (`soas-pos`): one line = one passage, space-separated
+  # form|tag tokens, NO lemma column anywhere → the source mints ZERO lemma
+  # rows (honest absence — no lemma_tier posture, nothing exists to label);
+  # the -lex renderings (undisambiguated lexicon tags) are censused
+  # discovery skips. Fetch: ONE versioned-immutable Texts.zip via ZipFetch,
+  # hard sha256 pin (RELEASE_SHA256, the wold/ren mold; md5 cross-checked
+  # against Zenodo's). A future release is a NEW DOI the owner re-pins.
+  sync_policy: manual

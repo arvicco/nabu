@@ -1,0 +1,20 @@
+zh-wikisource:   # P109-1
+  adapter: Nabu::Adapters::ZhWikisource
+  adopted: "2026-09-29"
+  cjk_index: true
+  axes: [sinitic]
+  wired: true    # first sync 2026-09-29: 1,238 docs, 0 quarantined
+                   # (全唐文 1,001 juan composed from their piece pages ·
+                   # 續資治通鑑 221 · 元朝秘史 16); 卷0001 + 卷15 cards
+                   # eyeballed (唐 era band live). P110-3 scrub re-parse
+                   # 2026-09-30: 71,547 passages — magic-word junk gone
+                   # (958 __NOEDITSECTION__ + the __TOC__ shapes), stacked
+                   # leading templates split (the 續資治通鑑 header2 layer:
+                   # author 畢沅 now in metadata)
+  sync_policy: manual
+  # Censused works, prefix-expanded (owner-ruled posture; census in
+  # the P109 phase plan): 全唐文 1,001 juan (transclusion shells — the
+  # fetch expands the ~20k piece pages offline into juan envelopes) ·
+  # 續資治通鑑 221 · 元朝秘史 16 (complete; the hosted layer is the
+  # Ming 總譯 → language zho, NO Mongolic claim — censused). 皇朝經世文編
+  # failed census (front matter only). Texts PD; layer CC BY-SA 4.0.

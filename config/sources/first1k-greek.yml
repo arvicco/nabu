@@ -1,0 +1,13 @@
+first1k-greek:
+  adapter: Nabu::Adapters::First1kGreek
+  adopted: "2026-07-03"
+  embed_index: true   # P93-4: the semantic-vector literary core
+  axes: [classical]
+  siblings: cts  # P34-0: the dotted-version form (the -eng<n> editions, P9-1)
+  wired: true   # first real sync verified + owner sign-off 2026-07-04
+  sync_policy: auto   # P39-0: was `live` — swept by sync --all (OGL/First1K updates continuously)
+  # P9-1, owner-directed 2026-07-08 (Phase 9): ingest the ~45 English editions
+  # already in the cloned repo as aligned parallel documents (highest -eng<n>
+  # per work, language eng, CC BY-SA unchanged; same mechanism as perseus-greek
+  # P7-4). Recovery: parse-only resync.
+  translations: true

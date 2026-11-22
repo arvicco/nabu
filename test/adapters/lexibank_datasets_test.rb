@@ -44,7 +44,7 @@ class LexibankDatasetsTest < Minitest::Test
     adapter.parse(adapter.discover(fixtures(expect)).first)
   end
 
-  def registry = @registry ||= Nabu::SourceRegistry.load(File.expand_path("../../config/sources.yml", __dir__))
+  def registry = @registry ||= Nabu::SourceRegistry.load(File.expand_path("../../config/sources", __dir__))
 
   # --- declarations -------------------------------------------------------------------
 

@@ -1,0 +1,17 @@
+mw:
+  adapter: Nabu::Adapters::Mw
+  adopted: "2026-07-13"
+  axes: [indic]
+  # soft edge, not requires: (architecture §5): held-work citations
+  # (MwSigla) name urn:nabu:gretil:* documents — they resolve when gretil
+  # is synced; the dictionary itself is whole without it.
+  wired: true    # owner sign-off 2026-07-13: synced 193,890 entries, flipped.
+                   # Original gate note (P17-4): first real sync owner-fired — 11 MB
+                   # zip fetch, 286,525 records / 193,890 grouped entries,
+                   # ~100-130 MB catalog growth (CLAUDE.md checklist §6:
+                   # bin/nabu sync mw, eyeball the per-siglum citation coverage
+                   # + `nabu define aṃśa` / `define bhāṣ`, then flip).
+  # Cologne CDSL Monier-Williams 1899 (CC BY-NC-SA 3.0, class nc — the GRETIL
+  # class; license inside the zip, mwheader.xml). Upstream is ACTIVELY
+  # corrected (Last-Modified 2026-07) but a refetch is an owner decision.
+  sync_policy: manual

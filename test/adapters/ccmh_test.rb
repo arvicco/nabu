@@ -295,7 +295,7 @@ class CcmhTest < Minitest::Test
   # --- registry round-trip -------------------------------------------------------
 
   def test_registry_resolves_ccmh_and_manifest_agrees
-    registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources.yml", __dir__))
+    registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources", __dir__))
     entry = registry["ccmh"]
     refute_nil entry, "ccmh must be registered in config/sources.yml"
     assert_equal Nabu::Adapters::Ccmh, entry.adapter_class

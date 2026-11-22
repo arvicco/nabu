@@ -1,0 +1,6 @@
+sources:
+  peshitta:
+    lect: {posture: identity, note: syc}
+    dating: {posture: undatable}
+    places: {posture: unplaced}
+    script: {posture: implied}

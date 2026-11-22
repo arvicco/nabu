@@ -1,0 +1,21 @@
+sources:
+  ociana:
+    kind: {posture: unclassified, note: "no genre field upstream — overwhelmingly signature
+        graffiti (\"By N son of N\"), with prayers, laments and tomb texts unmarked"}
+    # lect machine-postured since 2026-10-18 — the ociana-script facet
+    # rule stages the four big ANA script traditions onto their xna
+    # varieties; minor/mixed classes stay bare xna and the 36 non-ANA
+    # records carry their own codes (the shadowing rule).
+    dating: {posture: dated, note: "the script TRADITION bands through the ruled ANA rows of
+        config/period_bands.yml (basis ana — Macdonald 2000 + OCIANA's corpus introductions):
+        Safaitic 30,795 · Hismaic 3,624 · Dadanitic 1,704 · Taymanitic 482 · Mixed
+        Safaitic/Hismaic 46 = 36,651 of 36,794 documents carry an attributed tradition span
+        (precision era, never a per-inscription date); the 143 minor-class and non-ANA records
+        (Hasaitic, Thamudic B/C/D, Dispersed ONA, Greek …) stay honestly undated. findDate
+        (17,681 records) is the DISCOVERY / survey date — metadata find_date, never a dating
+        claim"}
+    places: {posture: named, note: "site/region/country on the place hash (32,670 of 36,794
+        docs) via MetadataDates :place_only; WGS84 points on 21,178 — no gazetteer refs upstream"}
+    script: {posture: qualified, note: "the per-record script field (Safaitic, Hismaic,
+        Dadanitic, Taymanitic, …) over a romanized ANA transliteration (Latn); Greek records
+        in Greek capitals"}

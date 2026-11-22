@@ -1,0 +1,57 @@
+titus-tocharian-b:   # 02-sources row 224 (the B half)
+  adapter: Nabu::Adapters::TitusTocharianB
+  adopted: "2026-10-12"
+  axes: [etym, buddhist]  # the titus-tocharian-a axes: the West Tocharian
+                          # manuscripts are Buddhist literature and feed the
+                          # comparative shelves.
+  # Grant-gated PRIVATE research material, the titus-avestan posture verbatim
+  # (the fetch right is not conveyed by a public license, so not by a clone):
+  availability: blocked
+  wired: true    # first sync verified 2026-10-12: 866 docs / 13,809 passages (the Berlin tochbNNN series only; 133 baseline quarantines recorded); THT 1 eyeballed, txb
+                 # Scope widened 2026-10-12 (the terms read corpus-level): the
+                 # whole 4,349-page chain parses — the toch1000-toch4349 pages
+                 # continue Berlin THT, then Berlin SHT, London IOL Toch. and
+                 # Paris PK (census in the adapter note). Re-parse verified
+                 # same day: 4,138 docs / 42,243 passages (+3,272 docs; THT
+                 # continued 2,469, SHT 10, London 778 incl. 28 xto passages,
+                 # Paris 9; 6 old Berlin quarantines recovered), 2 pages
+                 # catalogue-only by rule. Tidy rounds 2026-10-13: pre-anchor
+                 # catalogue notes recovered (+112 docs), note-only pages and
+                 # the London editorial header skip by rule, the two ts-lane
+                 # leaves classify as Tumshuqese xtq (Maue's handlist; the
+                 # Araṇemijātaka leaf) — re-parse verified 4,252 docs /
+                 # 43,499 passages, quarantine baseline 15 (14 pages carrying
+                 # real unanchored text, ruled honest + 1 iotk16 page);
+                 # IOL Toch 162 card eyeballed xtq.
+                 # Post-widening tidy (P122-4, ruled 2026-10-12; re-parse
+                 # pending — the hub trues the exact counts): a pre-anchor
+                 # catalogue note now lands in the manuscript catalogue / part
+                 # label (worktree census: +112 docs / +1,237 passages,
+                 # all txb); note-only pages skip by rule "nothing legible
+                 # (note-only page)" (79); the five London Tocharian A
+                 # manuscripts (toch3846/3847/3855/3856/3857) are xto
+                 # documents. Expected quarantines ~18: the 2 ts-lane pages
+                 # and the 1 iotk16 page (unclassified, ruled to stay), 14
+                 # pages with B-lane TEXT (not a note) before a line anchor,
+                 # and the London collection header page toch3560.
+  # TITUS Tocharian B Corpus (authenticated area,
+  # titus.fkidg1.uni-frankfurt.de/texte/etcc/toch/tochb/tochb.htm — HTTP
+  # Basic auth): the Berlin Turfan West Tocharian texts (data entry P.
+  # Olivier, Chr. Schaefer, T. Tamai, K. Kupfer) and the London / partial
+  # Paris collections (P. Widmer, K. Kupfer, M. Peyrot) behind one frameset.
+  # The titus-tocharian-a family with its own constants; the stored
+  # credential rides the fetch as Basic auth (Nabu::Credentials).
+  credentials: titus
+  sync_policy: manual
+  grant_required: true
+  grant:
+    terms: >-
+      the Tocharian A and B texts of the Berlin Turfan collection as TITUS presents
+      them: one retrieval per corpus, local personal research use only, no
+      redistribution; TITUS and the editors clearly indicated wherever displayed
+    request_hint: >-
+      Contact TITUS (titus.uni-frankfurt.de) for a license grant and a TITUS login (the Tocharian B texts
+      sit behind TITUS's authenticated area), and promise
+      to credit TITUS and the editors (data entry P. Olivier, Chr. Schaefer, T. Tamai,
+      K. Kupfer; P. Widmer, M. Peyrot)
+      wherever any text is displayed.

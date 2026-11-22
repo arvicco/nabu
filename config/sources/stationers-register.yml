@@ -1,0 +1,16 @@
+stationers-register:   # P160, 02-sources row 386
+  adapter: Nabu::Adapters::StationersRegister
+  adopted: "2026-11-05"
+  axes: [germanic]
+  wired: true    # first sync verified 2026-11-06, exactly as censused at 562db001:
+                 # 10,453 docs / 26,047 passages, 0 errored, 60 files skipped by
+                 # rule (Arber/, OLD Register, schema/stylesheet, README +
+                 # change-list, .DS_Store); eyeball (SRO1 "a Ryse and wake" 1557,
+                 # SRO10453 1640) + search "ephemerydes" pass.
+  sync_policy: manual   # last upstream push 2019-08-27; no release tags
+  # Stationers' Register Online (Bergel & Gadd, CREATe, Glasgow): the copy
+  # entries of the Stationers' Company Registers A–D, 1557–1640, as TEI —
+  # enterer, copy-title, licensers, fee, Master and Wardens per entry.
+  # Licence: in-file CC BY 4.0 vs the site's "CC-BY-SA" — BY-SA taken →
+  # attribution. Document = entry (SRO id), passage = register-text block.
+  # Family sro-tei (streamed). Arber/ and OLD Register/ skip by rule.

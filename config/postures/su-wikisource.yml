@@ -1,0 +1,11 @@
+sources:
+  su-wikisource:
+    kind: {posture: unclassified}
+    lect: {posture: codemap, note: "sun → su (the registry's 2026-10-22 anchor + alias);
+        the 1926 Carita Parahyangan keeps its osn claim (Old Sundanese, INDEX_LECTS)"}
+    dating: {posture: dated, note: "P140: the Indéks Year= print year → source_date →
+        MetadataDates :edition_year_text, date_class edition"}
+    places: {posture: unplaced, note: "the Indéks Address= (Batavia, Leiden) is the
+        print's imprint place — declared, never a text place"}
+    script: {posture: mixed, note: "Latin, Cacarakan (Sundanese in Javanese script →
+        sun-Java) and Sundanese-script pages, MEASURED per page (metadata script)"}

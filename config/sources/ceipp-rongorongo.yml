@@ -1,0 +1,42 @@
+ceipp-rongorongo:   # 02-sources row 428
+  adapter: Nabu::Adapters::CeippRongorongo
+  adopted: "2026-11-21"
+  axes: [epigraphy, pacific]   # epigraphy for the artifact grain; pacific joined
+  #                              2026-11-21 when the desk was minted with niupepa
+  wired: true    # first sync verified 2026-11-21: +25 docs / 314 passages / 0 errored —
+                 # exactly the lane's census of the live corpus.xml; both sha256 pins exact
+                 # (two FileFetch GETs over plain http — the host's TLS certificate expired
+                 # 2018-06-27); 2,132 image-only glyph slots dropped by the codes-only scope
+                 # (counted), the object table's Z (Poike) named as upstream's own residue.
+                 # Show probe (urn:nabu:ceipp-rongorongo:A — Tahua, Aa01 "430!.040-320.009-…",
+                 # the CEIPP credit on the card) and the FTS probe ("430" → O/M/T hits) both live.
+  # The CEIPP rongorongo corpus (kohaumotu.org): Thomas Barthel's numeric
+  # transliteration of the 25 surviving inscribed objects of Easter Island
+  # (20 tablets, the Santiago Staff, two reimiro, the tangata manu, the
+  # snuff box) as extended and edited by the Rongorongo Commission of the
+  # C.E.I.P.P. (Cercle d'Études sur l'Île de Pâques et la Polynésie), in
+  # P. Spaelti's corpus XML (database_version 1.0.1). TERMS (no public
+  # license): the transliteration codes ONLY — never the glyph tracings or
+  # any image — non-commercial, the CEIPP corpus + kohaumotu.org credited
+  # wherever displayed → license_class nc. NO bytes in the public repo:
+  # fixtures live under gitignored local/fixtures/ceipp-rongorongo/, the
+  # suite skips when absent. Document = object (Barthel siglum), passage =
+  # line (…:A:Aa01), text = the site's own codes-only rendering. The
+  # script is undeciphered; lect rap at tier approximation (the registry's
+  # own caveat). The site is dormant (corpus Last-Modified 2018-03-28) —
+  # re-syncs are owner-fired:
+  sync_policy: manual
+  # The fetch right is not conveyed by a public license, so a public clone
+  # does not carry it — the grant gate demands a recorded acknowledgment
+  # before the first fetch.
+  grant_required: true
+  grant:
+    terms: >-
+      the transliteration codes only (never the glyph tracings or any image);
+      non-commercial use; the CEIPP corpus and kohaumotu.org credited wherever
+      displayed
+    request_hint: >-
+      Contact the site's maintainer (kohaumotu.org; the address on its pages)
+      for a license grant, and promise to take the codes only, to make no
+      commercial use, and to credit the CEIPP corpus and kohaumotu.org
+      wherever any code is displayed.

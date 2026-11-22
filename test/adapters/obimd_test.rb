@@ -53,7 +53,7 @@ class ObimdTest < Minitest::Test
   end
 
   def test_registry_resolves_obimd_unwired
-    registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources.yml", __dir__))
+    registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources", __dir__))
     entry = registry["obimd"]
     refute_nil entry
     assert_equal Obimd, entry.adapter_class

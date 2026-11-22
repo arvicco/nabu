@@ -1,0 +1,11 @@
+sources:
+  fornsvenska:
+    kind: {posture: unclassified}
+    # lect declaration retired P77-r8: the fsv-old rule (owner-ruled 2026-08-13, the sv:old
+    # whole-source claim) machine-postures fornsvenska now (the shadowing
+    # rule; nabu-lects PR #4 minted the target).
+    dating: {posture: dated, note: "P104-1: upstream's own per-text
+        datefrom/dateto compact bounds (all 155 docs carry them) via
+        MetadataDates :compact_date_keys; the display date string rides raw"}
+    places: {posture: unplaced}
+    script: {posture: implied}

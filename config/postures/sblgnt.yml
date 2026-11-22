@@ -1,0 +1,5 @@
+sources:
+  sblgnt:
+    dating: {posture: undatable}
+    places: {posture: unplaced}
+    script: {posture: implied}

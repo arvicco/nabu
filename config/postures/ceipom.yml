@@ -1,0 +1,8 @@
+sources:
+  # ── dates: the dating-inferred epigraphic/documentary corpora ──────────
+  ceipom:
+    kind: {posture: unclassified}
+    lect: {posture: dates}
+    dating: {posture: dated}
+    places: {posture: linked, note: "refs on 27% — names reach 100%"}
+    script: {posture: implied}

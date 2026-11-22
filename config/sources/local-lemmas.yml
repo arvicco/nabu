@@ -1,0 +1,18 @@
+local-lemmas:
+  adapter: Nabu::Adapters::LocalLemmas
+  adopted: "2026-08-27"
+  kind: shelf   # P84-1: the model-output shelf — local fetch, no network, up=local
+  axes: [local]
+  wired: true    # the local-shelf argument verbatim (see local-notes): no
+                 # network cost, no upstream license; populates only through
+                 # `bin/nabu lemma-enrich <language>` (the sanctioned front
+                 # door: Nabu::LemmaShelf gateway). Empty until the owner
+                 # fires the first campaign — an absent tree loads nothing.
+  # The FIFTH canonical-memory shelf (P84-1, owner ruling, architecture §16): the
+  # silver-lemma enricher's raw model output (venv-managed Stanza; la:ittb
+  # for the Latin wave), JSONL shards per language lane. NON-DERIVABLE
+  # (hours of CPU), hence a shelf, never db/. UNLIKE the other shelves its
+  # derived product is fulltext-side: Store::SilverLemmaIndexer projects
+  # shards into passage_lemmas as tier-silver rows (never beside gold) at
+  # every rebuild/sync and on `lemma-enrich --index`; the loader lane only
+  # validates (a malformed shard quarantines loudly).

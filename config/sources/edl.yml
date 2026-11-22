@@ -1,0 +1,11 @@
+edl:
+  adapter: Nabu::Adapters::Edl
+  adopted: "2026-07-14"
+  axes: [etym]
+  wired: true    # P18-6: same gate (3.9 MB GET → 2,860 staged etymons /
+                   # owner sign-off 2026-07-14: synced 2,860 entries / 2,653 edges, eyeballed, flipped.
+                   # ~2,653 reflex edges across two shelves; eyeball
+                   # `nabu etym rodo` — the lat → PIt → PIE Leiden chain).
+  # CIRCSE/EtymologicalDictionaryLatin LiLa LOD skeleton (CC BY-NC-SA 4.0 →
+  # nc: never redistributed — the GRETIL/MW posture).
+  sync_policy: manual

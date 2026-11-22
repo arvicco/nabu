@@ -1,0 +1,14 @@
+sources:
+  dharma-khmer:
+    kind: {posture: unclassified}
+    # P92 gate: v1.6.0 AND the v1.6.1 census mint both merged and
+    # reached canonical 2026-09-02 — pending retired same-phase (the
+    # xum shape, twice over).
+    lect: {posture: identity, note: "okz/san/khm/xhm/pli/pra -Latn — all six lanes
+        resolve on the canonical v1.6.0+v1.6.1 rows"}
+    dating: {posture: undatable, note: "no machine date field in the editions (working-repo
+        headers carry no origDate); the titles' century prose is not an extractor"}
+    places: {posture: unplaced, note: "no origPlace in the editions; findspots live in the
+        project's separate metadata repos, a future join"}
+    script: {posture: qualified, note: "romanized editions (okz-Latn/san-Latn); the stones'
+        Khmer script is the artifact fact, not the held surface"}

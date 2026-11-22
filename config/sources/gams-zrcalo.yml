@@ -1,0 +1,13 @@
+gams-zrcalo:   # 02-sources row 244
+  adapter: Nabu::Adapters::GamsZrcalo
+  adopted: "2026-10-11"
+  axes: [slavic]
+  wired: true    # First sync verified 2026-10-11: 1 doc / 199 passages.
+  sync_policy: manual
+  # Zrcalo člověčaskago spasenja (1445) — the Croatian Glagolitic
+  # Speculum humanae salvationis of the deacon Luka (Vatican, Borg.
+  # illirico 9), in the GAMS digital edition (Kramarić & Schneider,
+  # Graz 2022; CC BY 4.0 in the TEI availability → attribution). One
+  # TEI datastream (509 KB), one document; passage per chapter head/p;
+  # the witness reading (sic kept, corrections/notes as annotations).
+  # Latin-script transliteration of the Glagolitic, declared.

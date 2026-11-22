@@ -299,7 +299,7 @@ class PerseusTest < Minitest::Test
   # --- registry round-trip ------------------------------------------------
 
   def test_registry_resolves_perseus_and_manifest_agrees
-    registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources.yml", __dir__))
+    registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources", __dir__))
     entry = registry["perseus-greek"]
     refute_nil entry, "perseus-greek must be registered in config/sources.yml"
     assert_equal Nabu::Adapters::Perseus, entry.adapter_class

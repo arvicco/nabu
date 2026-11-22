@@ -20,7 +20,7 @@ module Site
     DATA_DIR = File.join(ROOT, "site", "_data")
 
     def registry
-      @registry ||= Nabu::SourceRegistry.load(File.join(ROOT, "config", "sources.yml"))
+      @registry ||= Nabu::SourceRegistry.load(File.join(ROOT, "config", "sources"))
     end
 
     def test_committed_desks_data_matches_the_registry_projection

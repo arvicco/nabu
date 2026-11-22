@@ -17,7 +17,7 @@ class ShippedSkillsTest < Minitest::Test
   REQUIRED_KEYS = %w[name description license compatibility metadata].freeze
 
   def registry
-    @registry ||= Nabu::SourceRegistry.load(File.join(ROOT, "config", "sources.yml"))
+    @registry ||= Nabu::SourceRegistry.load(File.join(ROOT, "config", "sources"))
   end
 
   def pack

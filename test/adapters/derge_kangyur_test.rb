@@ -35,7 +35,7 @@ module Adapters
     # -- registry -------------------------------------------------------------
 
     def test_registry_resolves_derge_kangyur_and_manifest_agrees
-      registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources.yml", __dir__))
+      registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources", __dir__))
       entry = registry["derge-kangyur"]
       refute_nil entry, "derge-kangyur must be registered in config/sources.yml"
       assert entry.wired, "flipped 2026-07-28 (owner ruling; first sync verified live)"
@@ -49,7 +49,7 @@ module Adapters
     end
 
     def test_the_tibetan_axis_is_minted_once_and_serves_both_derge_sources
-      registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources.yml", __dir__))
+      registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources", __dir__))
       axis = registry.axes.each_axis.find { |a| a.name == "tibetan" }
       refute_nil axis, "config/axes.yml must mint the tibetan axis"
       assert_includes axis.persona, "Tibetologist"

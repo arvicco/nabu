@@ -1,0 +1,34 @@
+stepbible-tagnt:
+  adapter: Nabu::Adapters::StepbibleTagnt
+  adopted: "2026-11-18"
+  axes: [biblical]
+  wired: true    # first sync verified 2026-11-18: +27 docs / 7,958 passages / 0 errored,
+                 # exactly the dry-parse census (142,095 word tokens; the two TAGNT
+                 # files only — TAHOT/TOTHT never fetched); matt:6.13 shows the TR
+                 # doxology as expected, search probed (Βίβλος γενέσεως at matt:1.1).
+  sync_policy: manual   # pinned to one commit; upstream pushes most weeks, a re-pin is deliberate
+  # TAGNT — the Translators Amalgamated Greek New Testament (STEPBible.org,
+  # based on work at Tyndale House Cambridge; github.com/STEPBible/
+  # STEPBible-Data, "Translators Amalgamated OT+NT", pinned at commit
+  # 5de0a47f35f0fc13dfe1430d104e5db8a4285f9c of 2026-11-02): every word of
+  # NA27/NA28, the Tyndale House GNT, SBL, Tregelles, the Byzantine text,
+  # Westcott-Hort and the TR in one word-per-row amalgam — the free
+  # cross-edition NT variant apparatus. Each word carries its editions, its
+  # word-type class (NKO / N(K)O / K / k / KO / O …), meaning and spelling
+  # variants with their editions, Strong's number, morphology, dictionary
+  # form and English gloss: all landed as passage "tokens" (the apparatus
+  # IS the source's value); the Spanish, sub-meaning, conjoin, sStrong and
+  # alt-Strongs columns are declared-deferred in the parser comment.
+  # Document = book (urn tails mirror sblgnt's: matt … phlm … rev); passage
+  # = NRSV verse; text = upstream's amalgamated verse verbatim (the union of
+  # the editions' words). Reconciliation plan: 27 books; upstream claims
+  # 142,036 words, the files carry 142,095 word rows — the 59-row residue is
+  # upstream's own (spelling/order-only differences are listed but "not
+  # counted in these totals"). License: CC BY 4.0 (repo README + every file
+  # header) → attribution; credit "STEP Bible" linked to www.STEPBible.org.
+  # The header also asks, verbatim: "Please do not post copies of this data
+  # file elsewhere, so that this remains the single up-to-date source" — a
+  # courtesy request about reposting the FILES; serving passages from the
+  # library is not reposting them. lemma_tier ABSENT = gold: the dictionary
+  # forms are Tyndale House's curated Strong's/TBESG tagging, not automatic
+  # lemmatization; joined words (μήποτε = μή + πότε) mint no single lemma.

@@ -1,0 +1,20 @@
+coptic-scriptorium:
+  adapter: Nabu::Adapters::CopticScriptorium
+  adopted: "2026-07-13"
+  axes: [egyptian, biblical]
+  wired: true    # owner sign-off 2026-07-13: synced 482 docs / 74,169 passages
+                   # (P18-1 coverage pass, 1 honest quarantine), eyeballed, flipped.
+                   # Original gate note (~2.8 GB clone; CLAUDE.md
+                   # checklist §6: bin/nabu sync coptic-scriptorium, eyeball
+                   # nabu show urn:nabu:coptic-scriptorium:nt.mark.sahidica:1.1
+                   # + 5 random passages, then flip)
+  # P17-1 (.docs/surveys/coptic-survey.md): the survey's verdict is "versioned" —
+  # semiannual tagged releases, Zenodo-archived. In registry vocabulary that
+  # is `manual` + the adapter's fetch PINNED to CopticScriptorium::RELEASE_TAG
+  # (v6.3.0, re-pinned from v6.2.0; GitFetch ref:) — never master. Owner re-pins per release by
+  # bumping the constant, then fires the re-sync.
+  sync_policy: auto   # promoted 2026-10-13: actively-edited upstream,
+                       # git-incremental fetch — rides the sync --all sweep
+  # license_watch candidate (P16-5, owner decision — the license section
+  # lives in the repo README):
+  # license_watch: https://raw.githubusercontent.com/CopticScriptorium/corpora/master/README.md

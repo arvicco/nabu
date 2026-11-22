@@ -1,0 +1,9 @@
+sources:
+  prilit:   # P95-1
+    kind: {posture: unclassified}
+    lect: {posture: dates, note: "as goo300k/imp — the sl stage bands stage
+        the dated corpus via infer-dates (print years on every work)"}
+    dating: {posture: dated, note: "sourceDesc printSource date @when on
+        every work, cert carried"}
+    places: {posture: unplaced}
+    script: {posture: implied}

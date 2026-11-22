@@ -1,0 +1,14 @@
+wiktionary-enm:   # P154, 02-sources row 345
+  adapter: Nabu::Adapters::WiktionaryEnm
+  adopted: "2026-11-02"
+  axes: [germanic]
+  wired: true   # first sync verified 2026-11-03: 56,687 entries
+  # The kaikki Middle English extraction (56,687 records / "49377 distinct
+  # words", census 2026-11-02): the library's first Middle English
+  # dictionary: senses for 49,377 words and an etymon layer back through Old
+  # English (4,403 ang edges), Proto-Germanic (2,204) and the
+  # Anglo-Norman/Old French donor lane (2,180 fro, 652 xno). Language enm.
+  # The wiktionary-fa mold on the shared WiktionaryKaikki base: per-language
+  # JSONL (deprecated upstream — fallback = filter the full extract by
+  # lang_code enm), CC BY-SA + GFDL → attribution, FileFetch.
+  sync_policy: manual

@@ -1,0 +1,30 @@
+titus-old-frisian:   # 02-sources row 407
+  adapter: Nabu::Adapters::TitusOldFrisian
+  adopted: "2026-11-12"
+  axes: [etym, germanic]  # the North Sea Germanic member of the germanic desk; etym
+                          # because the law texts' vocabulary feeds the comparative shelves.
+  # Grant-gated PRIVATE research material, the titus-avestan posture verbatim
+  # (the fetch right is not conveyed by a clone):
+  availability: blocked
+  wired: true    # flipped 2026-11-13: first retrieval verified — 248 docs / 2,581 passages, 0 errored
+  # TITUS Old Frisian texts (titus.uni-frankfurt.de/texte/etcs/germ/afries/): Thomas F.
+  # Shannon's Corpus of Old East and West Frisian Texts (the Ten Commandments and the
+  # Seventeen Statutes after the Hunsingo manuscripts, the Londriucht, Fon alra Fresena
+  # fridome, Thet Freske Riim, the Skeltana Riucht — one text per page) and the Brokmer
+  # Recht after Buma/Ebel (data entry: Forschungsstelle des Deutschen Rechtswörterbuchs,
+  # Heidelberg — one paragraph per page). Two editions, 248 pages by the index frames'
+  # census (2026-11-12). Passages at the SENTENCE; the Latin incipits ride the `latin`
+  # annotation. Language ofs throughout. The separately served Brokmer edition carrying
+  # the editors' (protected) German translation is NOT walked.
+  # EXPECTED FIRST SYNC: 248 pages, crawl ≈ 9 min at the polite 2s pace (~1.5 MB).
+  sync_policy: manual
+  grant_required: true
+  grant:
+    terms: >-
+      the TITUS family terms: one retrieval per corpus, local personal research use
+      only, no redistribution; TITUS and the editors credited wherever displayed
+    request_hint: >-
+      Contact TITUS (titus.uni-frankfurt.de) for a license grant, and promise
+      to credit TITUS and the editors (data entry
+      T. F. Shannon; the Forschungsstelle des Deutschen Rechtswörterbuchs, after
+      W. J. Buma and W. Ebel's edition) wherever any text is displayed.

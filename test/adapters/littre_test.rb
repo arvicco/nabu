@@ -94,7 +94,7 @@ class LittreTest < Minitest::Test
   end
 
   def test_registry_row_exists_unwired_with_manual_sync_policy
-    entry = Nabu::SourceRegistry.load(File.join(Nabu::Config::PROJECT_ROOT, "config", "sources.yml"))["littre"]
+    entry = Nabu::SourceRegistry.load(File.join(Nabu::Config::PROJECT_ROOT, "config", "sources"))["littre"]
     refute_nil entry
     assert_equal ADAPTER, entry.adapter_class
     assert_equal "manual", entry.sync_policy

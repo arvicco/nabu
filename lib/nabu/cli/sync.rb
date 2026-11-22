@@ -31,7 +31,7 @@ module Nabu
       real sync request, any never-synced core member (the registry
       instruments) syncs automatically before the requested work. The
       same sweep covers the requested source's `requires:` chain (the
-      package-manager rule: sources.yml declares hard functional
+      package-manager rule: the source registry declares hard functional
       dependencies — nabu-places needs its three gazetteers — and
       syncing a dependent syncs its never-synced requirements first;
       `nabu status <slug>` shows requires/needed-by). --parse-only never

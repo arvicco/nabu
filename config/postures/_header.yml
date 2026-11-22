@@ -1,0 +1,30 @@
+# config/postures/ — per-source CORE-LAYER posture declarations
+# (P61-0 consolidation of the P59-4 config/lect_posture.yml; the D59-f
+# wave-1 frame of the ratified core-layers design; usage in
+# docs/operating-library.md §2).
+#
+# One row per source, one key per layer (lect / dating / places /
+# script), each holding what pure JUDGMENT can state — machine-knowable
+# postures are NEVER declared here (a source named by a
+# lect_facet_rules.yml rule or a lect_overrides.yml row is lect-postured
+# by those files; an artifact_scripts.yml row states its own machine
+# fact). The suite (test/postures_test.rb) fails when a passage-serving
+# source lacks a required layer's posture; pending rows must name their
+# candidate. Vocabularies (ratified):
+#
+#   lect    identity / pending / dates / codemap   (P59-4, verbatim)
+#   dating  dated / partial / undatable / pending
+#   places  linked / named / unplaced / pending
+#   script  implied / qualified / mixed
+#
+# The record is SPLIT, one file per source (P185): config/postures/<slug>.yml
+# keeps the `sources:` wrapper around exactly that slug's row (so every
+# file is itself a valid postures file), and the filename must spell the
+# slug. Nabu::RegistryTree reads the directory in sorted slug order and
+# refuses a slug defined twice, a key mismatching its filename, or data in
+# this _-prefixed, comment-only header. A section comment of the old
+# monolith (a group banner) rides in the file of the group's first member.
+#
+# New-adapter duty (the front-door checklist): run `nabu layer suggest
+# <slug>`, then wire the machine files or declare the rows in a new
+# config/postures/<slug>.yml. A missing row fails the suite.

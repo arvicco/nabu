@@ -1,0 +1,7 @@
+sources:
+  old-tibetan:
+    kind: {posture: unclassified}
+    lect: {posture: identity, note: otb}
+    dating: {posture: undatable}
+    places: {posture: unplaced}
+    script: {posture: implied}

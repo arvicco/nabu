@@ -1,0 +1,13 @@
+wiktionary-frm:   # P154, 02-sources row 349
+  adapter: Nabu::Adapters::WiktionaryFrm
+  adopted: "2026-11-02"
+  axes: [romance]
+  wired: true   # first sync verified 2026-11-03: 4,956 entries
+  # The kaikki Middle French extraction (4,956 records / "4714 distinct
+  # words", census 2026-11-02): the library's first Middle French
+  # dictionary, chained to Old French (1,597 fro etymons) and Latin (1,043).
+  # Language frm. The wiktionary-fa mold on the shared WiktionaryKaikki
+  # base: per-language JSONL (deprecated upstream — fallback = filter the
+  # full extract by lang_code frm), CC BY-SA + GFDL → attribution,
+  # FileFetch.
+  sync_policy: manual

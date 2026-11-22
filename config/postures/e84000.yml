@@ -1,0 +1,6 @@
+sources:
+  e84000:
+    lect: {posture: identity, note: English translations of the Kangyur}
+    dating: {posture: undatable}
+    places: {posture: unplaced}
+    script: {posture: implied}

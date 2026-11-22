@@ -449,7 +449,7 @@ class DeromTest < Minitest::Test
   # --- registry ---------------------------------------------------------------------
 
   def test_registry_row_exists_wired_with_manual_sync_policy
-    registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources.yml", __dir__))
+    registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources", __dir__))
     entry = registry["derom"]
     refute_nil entry, "config/sources.yml must register derom"
     assert_equal Nabu::Adapters::Derom, entry.adapter_class

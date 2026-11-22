@@ -1,0 +1,27 @@
+betamasaheft-works:   # P46-2, 02-sources row 123
+  adapter: Nabu::Adapters::BetamasaheftWorks
+  adopted: "2026-07-26"
+  # ethiopic: the shelf mints the axis (D46-c); biblical: it carries the Gǝʿǝz
+  # Bible — near-complete OT (Genesis..Ezekiel, Psalms), all four Gospels,
+  # Acts/Epistles/Revelation. FOLLOW-UP (not this packet): the Gǝʿǝz Mark can
+  # join the nt alignment hub as a witness (config/alignments.yml untouched).
+  axes: [ethiopic, biblical]
+  wired: true    # flipped 2026-07-26 (owner ruling "flip all wired"; first sync verified on the live box)
+  # Beta maṣāḥǝft Works (Hiob-Ludolf-Zentrum, Univ. Hamburg): 6,548 TEI work
+  # records, one file per work; MOST are catalog-only (no transcription) and
+  # skip BY RULE, quietly. Text-bearing selection = in-file BY-SA licence +
+  # edition div + Ethiopic script (censused in discovery_skips; a non-BY-SA
+  # licence would render UNRECOGNIZED, loudly). LICENSE = D46-a: the
+  # per-document in-file <licence> CC BY-SA 4.0 grant governs (6,545 of 6,548
+  # files) -> attribution; the betamasaheft.eu WEBSITE blankets its pages
+  # CC BY-NC-SA — a recorded discrepancy, the site statement does not govern
+  # these files. Per-document transcription credits (Ran HaCohen's Octateuch)
+  # ride document metadata. EXPECTED FIRST SYNC (~69 MB shallow, sparse
+  # **/*.xml cone): ~3.9k text-bearing docs at verse/prose grain (census
+  # 2026-07-26: 3,923 records show Ethiopic in their edition region; 272 are
+  # substantial transcriptions >= 1,000 chars — near-complete OT, the four
+  # Gospels, 1 Enoch 179k chars, Jubilees 188k, Kebra nagast 174k, royal
+  # chronicles; the long tail is incipit/explicit-only mini-documents, honest
+  # and small). Living edition -> manual re-syncs.
+  sync_policy: auto   # promoted 2026-10-13: actively-edited upstream,
+                       # git-incremental fetch — rides the sync --all sweep

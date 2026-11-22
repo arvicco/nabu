@@ -1,0 +1,17 @@
+local-language:
+  adapter: Nabu::Adapters::LocalLanguage
+  adopted: "2026-07-14"
+  kind: shelf   # P39-0: a memory shelf — local fetch, no network, up=local (no sync_policy)
+  axes: [local]
+  wired: true    # P19-1: wired by DEFAULT, deliberately -- the checklist's
+                   # "wired: false until first real sync" guards network cost
+                   # and unverified licenses, and a LOCAL shelf has neither
+                   # (no upstream, owner-authored data already on disk; rebuild
+                   # replays it regardless of this flag, and `sync --all` skips
+                   # non-live policies anyway). The shelf populates when the
+                   # owner fires `nabu language --export-dossiers` and then
+                   # `bin/nabu sync local-language`.
+  # The canonical-memory shelf (architecture §16): canonical/local-language/
+  # <code>.md dossiers, owner-edited + accreted through Nabu::LanguageShelf.
+  # kind: shelf = no upstream, no network; sync re-scans the tree (LocalFetch,
+  # per-file sha pins); the drift probe reads "local".

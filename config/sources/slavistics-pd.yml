@@ -1,0 +1,18 @@
+slavistics-pd:   # 02-sources row 250
+  adapter: Nabu::Adapters::SlavisticsPd
+  adopted: "2026-10-11"
+  axes: [slavic]
+  wired: true    # First sync verified 2026-10-11: 21/23 docs / 5,833 passages (2 items on archive.org mirror retries — they land on a later sync).
+  sync_policy: manual
+  # The PD German-Slavistics reference canon as archive.org scans — 23
+  # census items: Miklosich (Etym. Wb. 1886, Vergl. Grammatik I–IV),
+  # Berneker SEW I, Leskien's Handbuch (1905), Vondrák (AKSl. Grammatik
+  # 1900, Frisinské památky 1896), the Glagolita Clozianus in Kopitar's
+  # (1836) and Vondrák's (1893) editions, and 12 Vienna Academy
+  # Sitzungsberichte/Denkschriften Slavistics monographs. Page grain over
+  # each item's hOCR derivative pair (_hocr_searchtext + _hocr_pageindex,
+  # ~1 MB per volume). UNCORRECTED OCR — the archive's machine text,
+  # never proofread; Cyrillic/Glagolitic portions are garbled — declared
+  # on every document (text_nature + ocr_note + a measured wordlike
+  # share). Language = the prose's (deu; lat/ces for three items):
+  # scholarship ABOUT Slavic. Public domain (authors †1844–1952).

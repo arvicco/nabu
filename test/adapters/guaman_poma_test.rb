@@ -114,7 +114,7 @@ module Adapters
     end
 
     def test_registry_row_is_ready_unwired_and_manual_on_the_americas_axis
-      registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources.yml", __dir__))
+      registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources", __dir__))
       entry = registry["guaman-poma"]
       refute_nil entry
       assert entry.wired, "wired: true — first sync verified 2026-10-11 (1,189 docs / 5,911 passages)"

@@ -183,7 +183,7 @@ module Nabu
       def source_refs(feature, input_shas)
         feature.inputs.map do |slug|
           entry = @registry[slug]
-          raise Error, "input source #{slug.inspect} is not registered in sources.yml" if entry.nil?
+          raise Error, "input source #{slug.inspect} is not registered in config/sources/" if entry.nil?
 
           manifest = entry.manifest
           Manifest::SourceRef.new(title: manifest.name, path: manifest.upstream_url,

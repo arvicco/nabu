@@ -1,0 +1,15 @@
+delpher-newspapers:   # P173, 02-sources row 408
+  adapter: Nabu::Adapters::DelpherNewspapers
+  adopted: "2026-11-13"
+  axes: [germanic]
+  wired: true   # flipped 2026-11-13: 16xx cone live-probed — 8,559 docs / 68,690 passages, 0 quarantined (the packaging gaps ride missing_articles), search + credit line verified
+  sync_policy: manual   # one-time period zips (Last-Modified 2017; the 1877–79 zip 2020)
+  # Delpher open krantenarchief (KB, Nationale Bibliotheek van
+  # Nederland): every Delpher newspaper issue 1618–1879 as text (OCR per
+  # article + ALTO per page + an MPEG-21 DIDL record per issue), 23
+  # period zips / 111 GB. Issue texts PD, the archive CC BY 4.0 →
+  # attribution. Cone: kranten_pd_16xx (1.07 GB zip, 5.3 GB unpacked,
+  # 8,559 issues 1618–1699); the 18th/19th-century zips are one CONE line
+  # each. Document = issue, passage = article; dated by the issue's own
+  # day, placed by its place of publication; lect from dc:language (nld,
+  # with the French gazettes fra).

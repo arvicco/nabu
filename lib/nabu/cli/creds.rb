@@ -91,7 +91,7 @@ module Nabu
     # { name => [slugs] } for credentials the registry declares but this
     # box has not stored — the honest "what still needs a set" line.
     def missing_declared(config, stored_names)
-      return {} unless File.file?(config.sources_path)
+      return {} unless Nabu::RegistryTree.exist?(config.sources_path)
 
       registry = Nabu::SourceRegistry.load(config.sources_path)
       registry.each_source.reject { |entry| entry.credentials.nil? || stored_names.include?(entry.credentials) }

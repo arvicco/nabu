@@ -1,0 +1,15 @@
+siddham:   # P118-4, 02-sources row 256
+  adapter: Nabu::Adapters::Siddham
+  adopted: "2026-10-11"
+  axes: [indic, epigraphy]
+  wired: true    # first sync verified 2026-10-11: 427 docs / 6,334 passages, 0 quarantined; GE-era dates live (417-418 CE eyeballed)
+                 # verified 2026-10-11: sha pin holds, 427 docs / 6,334 line passages)
+  sync_policy: manual
+  # The Siddham Epigraphic Archive texts (Dániel Balogh; Zenodo 2574901, the
+  # 2019-02-21 EpiDoc deposit, one sha-pinned zip): 427 editions of Gupta-age
+  # Sanskrit epigraphy, san-Latn at physical-line grain (siddham-epidoc). The
+  # TEI headers are deliberately blank — the RECORD's CC BY-SA 4.0 is the
+  # grant, recorded at source level and per document; class attribution.
+  # Dating mines the English titles only: 9 era-typed "GE N" years via
+  # config/eras.yml (Gupta–Valabhī envelope) + 4 century attributions;
+  # 88 untyped "year N" titles ride raw, never converted.

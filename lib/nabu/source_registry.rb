@@ -365,8 +365,11 @@ module Nabu
       end
     end
 
-    # Parse config/sources.yml at +path+. A missing or empty file is a valid,
-    # empty registry. Any structural or per-entry problem raises
+    # Parse the source registry at +path+: the split tree config/sources/
+    # (one <slug>.yml per source, read in sorted slug order with the
+    # duplicate-slug guards — Nabu::RegistryTree, P185) or a single
+    # registry file (redirected trees, test fixtures). A missing or empty
+    # registry is a valid, empty registry. Any structural or per-entry problem raises
     # Nabu::ValidationError naming the offending slug. Axis definitions load
     # from the SIBLING axes.yml by default (override via +axes_path+, tests
     # only) — every call site keeps passing just the sources path, and a
@@ -377,7 +380,7 @@ module Nabu
     # `false` reads the PUBLIC view only (tests pinning the shipped rows).
     def self.load(path, axes_path: nil, provenance_path: nil)
       axes = AxisRegistry.load(axes_path || File.join(File.dirname(path.to_s), "axes.yml"))
-      data = File.exist?(path) ? (YAML.safe_load_file(path) || {}) : {}
+      data = RegistryTree.load(path)
       unless data.is_a?(Hash)
         raise ValidationError, "sources registry must be a mapping of slug => entry, got #{data.class}"
       end
@@ -411,7 +414,7 @@ module Nabu
           raise ValidationError,
                 "source #{entry.slug.inspect}: requires unknown source #{dep.inspect} — " \
                 "drop #{dep.inspect} from #{entry.slug.inspect}'s requires:, or restore the " \
-                "#{dep.inspect} row (config/sources.yml)"
+                "#{dep.inspect} row (config/sources/#{dep}.yml)"
         end
       end
       state = {}

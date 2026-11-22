@@ -1,0 +1,18 @@
+sources:
+  jv-wikisource:
+    kind: {posture: unclassified}
+    # lect declaration RETIRED 2026-11-16 (the shadowing rule): the jv~java
+    # repair landed a lect_overrides row for this source (jav-Java → jv~latn),
+    # which is now the machine posture of record. The registry's jav → jv
+    # alias still routes the plain-jav pages; the Wretansacaya page keeps
+    # its kaw claim (Old Javanese, INDEX_LECTS).
+    dating: {posture: dated, note: "P140: the Indhèks Year= print year, else the Index
+        file name's year (Kern 1875) → source_date → MetadataDates :edition_year_text,
+        date_class edition"}
+    places: {posture: unplaced, note: "the Indhèks Address= (Batavia, Amsterdam, Surakarta)
+        is the print's imprint place — declared, never a text place"}
+    script: {posture: mixed, note: "aksara Jawa (jav-Java) and Latin pages per the scan
+        Index, the Index Language= riding verbatim as index_language; 2026-11-16 repair:
+        the jav-Java pages byte-measure 100% latn AS HELD (Latin romanization of the
+        aksara-Jawa scans) — surface ~latn via lect_overrides, the artifact's java claim
+        via artifact_scripts (D60-b)"}

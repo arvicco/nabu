@@ -1,0 +1,6 @@
+sources:
+  eng-web:
+    lect: {posture: identity, note: a modern English translation shelf}
+    dating: {posture: undatable}
+    places: {posture: unplaced}
+    script: {posture: implied}

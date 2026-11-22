@@ -3780,7 +3780,7 @@ class CLITest < Minitest::Test
   # STARTER_SOURCES is registered AND enabled in the shipped config/sources.yml
   # (a renamed/retired source would otherwise fail only at a live quickstart).
   def test_quickstart_starter_sources_are_registered_in_the_shipped_registry
-    registry = Nabu::SourceRegistry.load(File.expand_path("../config/sources.yml", __dir__))
+    registry = Nabu::SourceRegistry.load(File.expand_path("../config/sources", __dir__))
     Nabu::CLI.starter_sources.each do |starter|
       entry = registry[starter.slug]
       refute_nil entry, "starter source #{starter.slug} must be registered in config/sources.yml"

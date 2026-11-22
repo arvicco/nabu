@@ -50,7 +50,7 @@ module Nabu
       private
 
       def registry
-        YAML.safe_load_file(@sources_path) || {}
+        RegistryTree.load(@sources_path)
       end
 
       def synced_slugs

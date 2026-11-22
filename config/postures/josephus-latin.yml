@@ -1,0 +1,19 @@
+sources:
+  josephus-latin:
+    # kind machine-postured — kind_map.yml facet genre (the work title: three histories,
+    # Contra Apionem → theology/apologetics).
+    # lect machine-postured — lect_overrides.yml lat → lat:late (certain): every held
+    # Latin version falls inside the stage band by upstream's own datings.
+    dating: {posture: dated, note: "every document carries its Latin version's attributed era
+        (class composition, :structured, the project's own Background datings, circa = ±10
+        years): De excidio c. 370 → 360–380, Bellum c. 400 → 390–410, Antiquities and Contra
+        Apionem mid-6th century under Cassiodorus → 530–570. Josephus' Greek originals (c.
+        75–79, 93–94, 94–100 CE) ride metadata original, never the row — a translation is not
+        dated by its source; the Antiquities witness (Bamberg, s. IX med.) is not dated either
+        (the manuscript catalogue sits in the supplementary zip, not fetched)"}
+    places: {posture: unplaced, note: "the deposit names no place for the texts; upstream's
+        Background places the Cassiodoran translation only as 'Italy or perhaps
+        Constantinople' — a hedge, not a claim. The annotation witnesses' shelfmarks
+        (Bern, Leiden, Monza …) are present-day holdings, metadata only"}
+    script: {posture: implied, note: "Latin script throughout; three short Greek quotations in
+        Contra Apionem (foreign lang grc) ride verbatim in their own script"}

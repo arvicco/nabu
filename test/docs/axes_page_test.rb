@@ -25,7 +25,7 @@ class AxesPageTest < Minitest::Test
   PAGE = File.join(ROOT, "docs", "axes.md")
 
   def registry
-    @registry ||= Nabu::SourceRegistry.load(File.join(ROOT, "config", "sources.yml"))
+    @registry ||= Nabu::SourceRegistry.load(File.join(ROOT, "config", "sources"))
   end
 
   # The "## The desks" section body — from that heading to the next H2.

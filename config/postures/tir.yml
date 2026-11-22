@@ -1,0 +1,7 @@
+sources:
+  tir:
+    kind: {posture: unclassified}
+    lect: {posture: identity, note: xrr Raetic}
+    dating: {posture: partial}
+    places: {posture: named}
+    script: {posture: implied}

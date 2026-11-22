@@ -1,0 +1,17 @@
+prilit:   # P95-1
+  adapter: Nabu::Adapters::Prilit
+  adopted: "2026-09-03"
+  axes: [slavic]
+  wired: true    # P95 gate: first sync owner-verified 2026-09-04 (43 docs /
+                 # 8,526 passages, 0 quarantined after the schema-dir discover
+                 # fix; sl-stage-band staging applied (the 2026-08-09 ruling's mold): 29 → sl:emod + 8 → sl:mod),
+                 # owner-flipped
+  sync_policy: manual
+  # PriLit — older Slovenian narrative prose (ZRC SAZU/JSI; CLARIN.SI
+  # hdl 11356/1319, CC BY 4.0 → attribution): 43 texts / 37 works / 12
+  # authors, 1643–1866, the earliest Slovenian narrative prose — the sl
+  # axis's Early Modern narrative extension (Sreča v nesreči in multiple
+  # editions = a ready collation case, provenance-distinct documents).
+  # v1 = the plain TEI edition (pure <ab> blocks); the deposit's .ana
+  # silver layer deliberately not ingested (its schema is NOT imp-tei —
+  # a future silver wave needs its own family).

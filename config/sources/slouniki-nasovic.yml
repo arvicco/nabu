@@ -1,0 +1,18 @@
+# P48-3: the Tibetan gold-annotation lane — two rows (the wold/clics shape:
+# one row per upstream artifact/license/fetch posture), one new axis tag.
+# LANGUAGE RULING (P48-3): Classical Tibetan texts are `xct` (the gretil
+# xct_ precedent), Old Tibetan is `otb`; `bo` stays kaikki's modern
+# dictionary shelf. The codes become held-language cards after first sync.
+slouniki-nasovic:   # P117, 02-sources row 253
+  adapter: Nabu::Adapters::SlounikiNasovic
+  adopted: "2026-10-11"
+  axes: [slavic]
+  wired: true    # First sync verified 2026-10-11: 35,159 entries.
+  sync_policy: manual
+  # Насовіч, Словарь бѣлорусскаго нарѣчія (СПб., 1870) — the library's
+  # FIRST Belarusian (be) shelf, dictionary-shaped: one SlounikPlus XML
+  # article per file from github.com/Belarus/Slouniki-Nasovic (declared
+  # "Public domain."; last push 2026-02-16 → manual). Sparse GitFetch of
+  # data/*.xml (~155 MB working tree — the per-file rtf blobs). EXPECTED
+  # FIRST SYNC: 35,159 entries, 0 parse errors (census run 2026-10-11),
+  # 2,967 gloss-less (cross-references).

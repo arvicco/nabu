@@ -158,7 +158,7 @@ class KradfileTest < Minitest::Test
   end
 
   def test_registry_row_exists_enabled_with_manual_sync_policy
-    registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources.yml", __dir__))
+    registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources", __dir__))
     entry = registry["kradfile"]
     refute_nil entry, "config/sources.yml must register kradfile"
     assert_equal Nabu::Adapters::Kradfile, entry.adapter_class

@@ -1,0 +1,20 @@
+larth-etp:
+  adapter: Nabu::Adapters::LarthEtp
+  adopted: "2026-07-18"
+  axes: [italic]
+  wired: true # flipped 2026-07-18 (owner order: all pre-P30 sources on, riding the P30 PR)
+                   # (checklist §6: bin/nabu sync larth-etp — one 164,566 B
+                   # GET; expect 1,122 entries; eyeball `nabu define avil`
+                   # (year), `nabu define acil` (the 643/644 homograph
+                   # pair) and 5 random entries, then flip).
+  # Larth ETP glossary — Data/ETP_POS.csv @ pinned commit daf49721
+  # (github.com/GianlucaVico/Larth-Etruscan-NLP, LICENSE CC BY 4.0
+  # re-verified 2026-07-18): 1,122 Etruscan vocabulary rows (952 certain +
+  # 59 uncertain translations, POS + grammatical categories) — the
+  # ETP/Wallace-project scholarly lineage, the SECOND Etruscan dictionary
+  # beside the kaikki ett extract. The sibling raw lists ETPWords/
+  # ETPNames/ETPSuff are the same material pre-merge — journaled, not
+  # ingested. Gold-join censused at fixture time: 649/992 distinct folded
+  # headwords attested in the OpenEtruscan corpus (65.4%), covering
+  # 2,471/10,783 corpus word tokens (22.9%). Upstream still moves
+  # occasionally → manual; a re-pin is an owner decision.

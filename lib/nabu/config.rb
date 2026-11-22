@@ -18,7 +18,10 @@ module Nabu
     DEFAULT_CANONICAL_DIR = "canonical"
     DEFAULT_DB_DIR = "db"
     DEFAULT_LOCAL_DIR = "local"
-    DEFAULT_SOURCES_PATH = File.join("config", "sources.yml")
+    # The source registry is a split tree, one file per slug (P185;
+    # Nabu::RegistryTree reads it — a single sources file still loads,
+    # for redirected trees and fixtures).
+    DEFAULT_SOURCES_PATH = File.join("config", "sources")
     DEFAULT_ALIGNMENTS_PATH = File.join("config", "alignments.yml")
     DEFAULT_DISPLAY_PATH = File.join("config", "display.yml")
     DEFAULT_PROFILE_PATH = File.join("config", "profile.yml")
@@ -202,8 +205,10 @@ module Nabu
       overlay_pair("lect_facet_rules.yml")
     end
 
+    # The project half is the split tree config/postures/ (P185); the
+    # instance overlay stays one file, local/config/postures.yml.
     def postures_paths
-      overlay_pair("postures.yml")
+      [File.join(config_dir, "postures"), File.join(local_config_dir, "postures.yml")]
     end
 
     # The mirror direction (same ruling): lect rulings' HOME is the

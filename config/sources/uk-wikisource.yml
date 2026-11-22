@@ -1,0 +1,12 @@
+uk-wikisource:   # P116-3, 02-sources row 241
+  adapter: Nabu::Adapters::UkWikisource
+  adopted: "2026-10-10"
+  axes: [slavic]
+  wired: true    # First sync verified 2026-10-10: 7 chronicles / 541 passages / 10 skips.
+  sync_policy: manual
+  # The chronicles of Категорія:Літописи (census 2026-10-10: 13 members,
+  # the four {{версії}} shells followed one level → 17 envelopes): 7
+  # admitted (Сборник летописей 1888 ×4, Лѣтопись Самовидца 1878 ×2,
+  # Кіевская старина 1890); Бевзо's 1971 Львівський/Острозький edition
+  # excluded by EDITION_TAINT_POST_1930; four modern-Ukrainian
+  # retellings excluded (censused). Texts PD; layer CC BY-SA 4.0.

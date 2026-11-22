@@ -194,7 +194,7 @@ module Adapters
     # -- registry --------------------------------------------------------------------------
 
     def test_registry_row_is_wired_and_manual
-      registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources.yml", __dir__))
+      registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources", __dir__))
       entry = registry["dbnl"]
       refute_nil entry
       assert_equal ADAPTER, entry.adapter_class

@@ -1,0 +1,9 @@
+sources:
+  salom:
+    kind: {posture: unclassified}
+    lect: {posture: identity, note: bare lad — modern Judeo-Spanish press,
+        Latin-script Turkish-style orthography}
+    dating: {posture: undatable, note: sentences segmented and shuffled upstream —
+        the 2022-01 extraction stamp rides the urn, per-article dates unrecoverable}
+    places: {posture: unplaced}
+    script: {posture: implied}

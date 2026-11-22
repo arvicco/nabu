@@ -27,7 +27,7 @@ module Adapters
     # -- registry -------------------------------------------------------------
 
     def test_registry_row_exists_wired_with_manual_sync_policy
-      registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources.yml", __dir__))
+      registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources", __dir__))
       entry = registry["gregobase"]
       refute_nil entry, "config/sources.yml must register gregobase"
       assert_equal ADAPTER, entry.adapter_class

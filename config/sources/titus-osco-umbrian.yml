@@ -1,0 +1,36 @@
+titus-osco-umbrian:   # P90-2, 02-sources row 188
+  adapter: Nabu::Adapters::TitusOscoUmbrian
+  adopted: "2026-08-31"
+  axes: [etym, italic]  # the Sabellic branch of the Italic desk — the Iguvine
+                        # Tables complete (the only complete digital edition)
+                        # plus the Oscan/minor-dialect inscriptions; the forms
+                        # feed the comparative shelves (CEIPoM's equivalence
+                        # keys already reach the Tables — this is the text).
+  # Grant-gated PRIVATE research material, the titus-avestan posture verbatim
+  # (the fetch right is not conveyed by a public license, so not by a clone):
+  availability: blocked
+  wired: true    # first real sync 2026-08-31 (owner-fired, 390 pages); verified after the
+                   # census fixes: 386 docs / 1,697 passages (osc 323 · xum 62 · lat 1) /
+                   # 0 quarantines / 4 photo-only stubs skipped-by-rule / 0 unrecognized
+  # TITUS Osco-Umbrian Corpus (titus.uni-frankfurt.de/texte/etcs/ital/oskumb/):
+  # text entry J. Gippert (Frankfurt 1991) and V. Slunečko (Praha 1995), TITUS
+  # version with Gippert's synoptical arrangement of the original scripts. One
+  # document per text page (oskum001.htm … oskum390.htm, censused 2026-08-31);
+  # inscription LINES are the passages, keyed off the <A NAME="Inscr.OU_…">
+  # anchors — the edition's unified Latin transliteration as text, the
+  # original-script lane (native Italic / Latin capitals / Greek) riding as
+  # the "original" annotation. Language claims are the edition's own lane
+  # split: Umbrian-type lanes mint `xum`, Oscan-type `osc` (deliberately
+  # coarse — minor Sabellic dialects like Paelignian/Marsian ride their
+  # nearest lane; the posture records it). EXPECTED FIRST SYNC: ~390 pages,
+  # crawl ≈ 15 min at the polite 2s pace.
+  sync_policy: manual
+  grant_required: true
+  grant:
+    terms: >-
+      the TITUS family terms: one-time download, local non-commercial use, no
+      redistribution; TITUS and the editors clearly indicated wherever displayed
+    request_hint: >-
+      Contact TITUS (titus.uni-frankfurt.de) for a license grant, and promise
+      to credit TITUS and the editors (text entry J. Gippert / V. Slunečko)
+      wherever any text is displayed.

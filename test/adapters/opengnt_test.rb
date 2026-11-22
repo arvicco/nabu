@@ -272,7 +272,7 @@ class OpengntTest < Minitest::Test
   # --- registry round-trip -------------------------------------------------------
 
   def test_registry_row_is_wired_manual_on_the_biblical_axis
-    registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources.yml", __dir__))
+    registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources", __dir__))
     entry = registry["opengnt"]
     refute_nil entry, "opengnt must be registered in config/sources.yml"
     assert_equal Nabu::Adapters::Opengnt, entry.adapter_class

@@ -249,7 +249,7 @@ class FreisingTest < Minitest::Test
   # --- registry round-trip ---------------------------------------------------------------
 
   def test_registry_resolves_freising_and_manifest_agrees
-    registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources.yml", __dir__))
+    registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources", __dir__))
     entry = registry["freising"]
     refute_nil entry, "freising must be registered in config/sources.yml"
     assert_equal Nabu::Adapters::Freising, entry.adapter_class

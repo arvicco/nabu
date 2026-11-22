@@ -1,0 +1,23 @@
+sources:
+  ceipp-rongorongo:   # 02-sources row 428
+    # lect machine-postured — lect_overrides.yml rap → rap at tier APPROXIMATION:
+    # the script is undeciphered, and the registry's own rap note says the
+    # tablets writing Rapa Nui "is the default assumption, not a demonstrated
+    # fact".
+    kind: {posture: unclassified, note: "undeciphered — the content of no object is known, so
+        no genre claim is honest (the Mamari 'lunar calendar' and the Small Santiago
+        'genealogy' are modern interpretations, not upstream labels); the object types
+        (tablet, staff, reimiro, tangata manu, snuff box) are artifact forms, not genres"}
+    dating: {posture: undatable, note: "the corpus and the object table carry no date for any
+        object; the tablets are pre-missionary artifacts (collected from the 1860s on) with no
+        per-object dating upstream — undatable at object grain, declared rather than faked"}
+    places: {posture: unplaced, note: "the asset carries no per-object place: every object is
+        from Easter Island (Rapa Nui) by the corpus's own definition, but that is a
+        corpus-level claim, not a mined field — a place-only row would need a timeline
+        registration, not an adapter field. The present holdings (museums, the site's map
+        page, not fetched) are present locations, never origin"}
+    script: {posture: implied, note: "the held text is the CEIPP extended-Barthel
+        TRANSLITERATION — three-digit sign codes with Latin-letter affixes and link marks,
+        Latin-script/numeric by construction; the artifact script is rongorongo (ISO 15924
+        Roro, unencoded in Unicode), recorded as the config/artifact_scripts.yml rap → roro
+        row"}

@@ -1,0 +1,18 @@
+cy-wikisource:   # P140, 02-sources row 284
+  adapter: Nabu::Adapters::CyWikisource
+  adopted: "2026-10-21"
+  axes: [celtic]
+  wired: true    # first sync verified 2026-10-21: 321 docs / 40,126 passages, 0 quarantined (the lane census exactly)
+  sync_policy: manual
+  # The early-modern Welsh cone (the owner-ruled wikisource posture),
+  # census 2026-10-21 — drawn at every fetch from the Indecs Year= of all
+  # 641 Indexes: the prints ≤ 1800 (Salesbury 1547, the 1588 and 1620
+  # Bibles, the 1735–1800 ballads — 12 Indexes, 9 with pages, ~96 pages)
+  # + 8 censused EXTRA_INDEXES (1897–1924 editions of pre-1800 works:
+  # Gwaith Dafydd ap Gwilym, Gwaith yr Hen Ficer, Beirdd y Berwyn, Brut y
+  # Tywysogion — Cyfres y Fil, modernized spelling — the J. M. Edwards
+  # Mabinogion I–II, Goronwy Owen 1924, Clasuron Rhyddiaith Cymru 1897):
+  # 346 cone pages; the "(testun cyfansawdd)" composites (aggregate) and
+  # the Rhagymadrodd/Cynhwysiad apparatus skip → census fetch 321 docs / 40,126 passages. Language
+  # cym; metadata orthography original / modernized (Cyfres y Fil) /
+  # unstated. Texts PD; transcription layer CC BY-SA 4.0.

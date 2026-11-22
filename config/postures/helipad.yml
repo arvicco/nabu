@@ -1,0 +1,7 @@
+sources:
+  helipad:
+    kind: {posture: unclassified}
+    lect: {posture: identity, note: osx IS Old Saxon}
+    dating: {posture: undatable}
+    places: {posture: unplaced}
+    script: {posture: implied}

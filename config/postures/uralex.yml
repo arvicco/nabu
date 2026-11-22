@@ -1,0 +1,12 @@
+sources:
+  uralex:
+    kind: {posture: unclassified, note: "a dictionary shelf — basic-vocabulary cognate sets;
+        kind folds documents only"}
+    lect: {posture: identity, note: "urj — the nabu-lects Uralic anchor; members carry their
+        varieties' ISO codes bare; the Proto-Uralic heads ride the dictionary language and
+        members naming urj-pro resolve through the codemap alias onto urj:pro (the
+        2026-11-13 sitting, PR #48); Hungarian members meet the new hu anchor"}
+    dating: {posture: undatable, note: "a reference dataset (UraLex 2.0) — no dates"}
+    places: {posture: unplaced, note: "variety coordinates are doculect reference points, not
+        findspots — no place claim at dictionary grain"}
+    script: {posture: implied, note: "Latin-script orthographies and UPA-style transcription"}

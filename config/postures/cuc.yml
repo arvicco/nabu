@@ -1,0 +1,7 @@
+sources:
+  cuc:
+    kind: {posture: unclassified}
+    lect: {posture: identity, note: uga}
+    dating: {posture: undatable}
+    places: {posture: unplaced}
+    script: {posture: implied}

@@ -1,0 +1,12 @@
+dharma-pyu:   # P92-2
+  adapter: Nabu::Adapters::DharmaPyu
+  adopted: "2026-09-01"
+  axes: [sea, epigraphy]
+  wired: true    # first sync verified 2026-09-02: 145 docs / 629 passages, 17 text-less stubs
+  sync_policy: auto   # promoted 2026-10-13: actively-edited upstream,
+                       # git-incremental fetch — rides the sync --all sweep
+  # DHARMA Corpus of Pyu Inscriptions (Griffiths et al.) — 161 editions
+  # of the extinct Sino-Tibetan language of the Irrawaddy city-states,
+  # romanized (pyx-Latn), flat repo layout. No repo-level LICENSE: the
+  # per-file <licence> CC BY-SA 4.0 is the whole grant, recorded
+  # verbatim; class attribution.

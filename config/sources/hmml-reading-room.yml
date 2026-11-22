@@ -1,0 +1,19 @@
+hmml-reading-room:   # P154, 02-sources row 340
+  adapter: Nabu::Adapters::HmmlReadingRoom
+  adopted: "2026-11-02"
+  axes: [syriac, ethiopic]
+  wired: true   # first sync verified 2026-11-03: 18,892 docs / 11,196 passages, 245,098 outside the slice
+  sync_policy: manual
+  # vHMML Reading Room (Hill Museum & Manuscript Library): the full
+  # Reading Room dataset (263,989 records, vHMML Schema JSON), regenerated
+  # weekly at one URL (stated by HMML by email, 2026-11-02; no OAI or bulk
+  # API). The fetch pins what it took: the zip's sha256 + Last-Modified in
+  # dataset/.file-fetch.json, repeated in scope/census.json beside the
+  # slice counts. Slice: Syriac/Ethiopic writing system or Syriac/Ge'ez/
+  # Amharic items — 18,892 records; the rest is a later slice, counted.
+  # Document = catalogue record (parts, items, repository, dates, origin,
+  # genres in metadata); passage = an item's incipit (syc / gez / amh /
+  # ara-Syrc Garshuni / ara). LICENSE (data portal + vhmml.org/terms, read
+  # 2026-11-02): "The manuscript metadata in vHMML Reading Room is available
+  # for reuse under ... (CC BY 4.0)" → attribution; images never taken.
+  # Weekly regeneration = the drift channel → re-syncs are owner-fired.

@@ -45,7 +45,7 @@ module Adapters
     # Lifecycle pin: the row ships wired: false and the gate's first real
     # sync flips it — flip this assertion together with the row.
     def test_registry_row_is_registered_unwired_manual_gold_on_the_classical_desk
-      registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources.yml", __dir__))
+      registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources", __dir__))
       entry = registry["lasla"]
       refute_nil entry, "lasla must be registered in config/sources.yml"
       assert entry.wired, "wired since the verified first sync (2026-10-21)"

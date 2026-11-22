@@ -1,0 +1,16 @@
+pleiades:
+  adapter: Nabu::Adapters::Pleiades
+  adopted: "2026-07-24"
+  kind: module   # P43-3: machinery-only — a place resolver seam, zero document rows, up=module
+  axes: [epigraphy]
+  wired: true    # channel verified (first fetch landed; canonical present). `--all`
+                   # participation is governed by kind + sync_policy, NEVER by wired
+                   # (owner semantics ruling 2026-08-18, reaffirming 2026-07-24:
+                   # wired = the sync link is tested and declared working).
+  # P43-3: Pleiades — the ancient-world gazetteer over the numbered
+  # quarterly archival release (Zenodo 4.1, 2025-05-28), the openiti Zenodo
+  # posture; first-synced 2026-07-24 (container confirmed @graph, 42,242
+  # places). LICENSE: downloads page verbatim "Creative Commons Attribution
+  # 3.0 License (cc-by)" → attribution. Fetch is an owner decision (the
+  # dump is large + version-pinned; the Zenodo URL-pin stays optional).
+  sync_policy: manual

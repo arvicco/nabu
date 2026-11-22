@@ -210,7 +210,7 @@ class First1kGreekTest < Minitest::Test
   # --- registry round-trip ------------------------------------------------
 
   def test_registry_resolves_first1k_greek_and_manifest_agrees
-    registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources.yml", __dir__))
+    registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources", __dir__))
     entry = registry["first1k-greek"]
     refute_nil entry, "first1k-greek must be registered in config/sources.yml"
     assert_equal Nabu::Adapters::First1kGreek, entry.adapter_class
@@ -221,7 +221,7 @@ class First1kGreekTest < Minitest::Test
   # The registry now opts First1KGreek into translations (P9-1); the built
   # adapter must actually discover eng editions.
   def test_registry_builds_a_translations_on_adapter
-    registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources.yml", __dir__))
+    registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources", __dir__))
     adapter = registry["first1k-greek"].build_adapter
     langs = adapter.discover(GREEK_WORKDIR).map { |ref| ref.metadata["language"] }
     assert_includes langs, "eng", "registry-built first1k-greek must discover eng editions"

@@ -303,7 +303,7 @@ class MazarinadesTest < Minitest::Test
   # --- registry + fetch --------------------------------------------------------
 
   def test_registry_resolves_mazarinades
-    registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources.yml", __dir__))
+    registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources", __dir__))
     entry = registry["mazarinades"]
     refute_nil entry, "mazarinades must be registered in config/sources.yml"
     assert_equal Nabu::Adapters::Mazarinades, entry.adapter_class

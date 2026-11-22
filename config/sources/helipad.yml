@@ -1,0 +1,20 @@
+helipad:
+  adapter: Nabu::Adapters::Helipad
+  adopted: "2026-07-22"
+  axes: [germanic]
+  wired: true    # P40: first sync verified 2026-07-22 (1 doc / 3,549 passages — the fixture-predicted count exactly), owner-flipped
+                   # bin/nabu sync helipad, expect 1 document / 3,549 passages, eyeball
+                   # `nabu show urn:nabu:helipad:OSHeliandC:1.1-5` + 5 random, then flip)
+  # HeliPaD — the Heliand Parsed Database (Walkden): the Old Saxon Heliand
+  # (~46K words, MS C) syntactically parsed in Penn labeled bracketing, with
+  # gold form-lemma pairs, ^-separated morphology on the tags, and metre/
+  # codicology as in-tree CODE markers (<R_n> verse lines, <C> caesurae,
+  # <F_n> fitts). First composition of the penn-psd family (YCOE/IcePaHC
+  # siblings planned). One document, one passage per tree block
+  # (urn:nabu:helipad:OSHeliandC:<n>.<lines>); language osx (NEW — no
+  # code-level registry row needed; dossiers are owner-authored).
+  # CC BY 4.0 (Zenodo record 4395040 license field; no in-file header) →
+  # attribution. Single-file FileFetch of the Zenodo v0.9 artifact,
+  # sha256-pinned in the adapter — the deposit is versioned-immutable, a
+  # new version is an owner re-pin decision → manual.
+  sync_policy: manual

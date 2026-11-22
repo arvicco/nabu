@@ -1,0 +1,19 @@
+# P77-1 + P77-2
+osta:
+  adapter: Nabu::Adapters::Osta
+  adopted: "2026-08-13"
+  axes: [romance]
+  siblings: ["-vrt"]   # P77-2: the verticalized lemma lane rides as -vrt
+                         # sibling documents of the same works (two
+                         # editions are two versions, never a dedupe)
+  lemma_tier: silver   # P77-2 RULING ON EVIDENCE: the archive's own
+                         # methodology paper (Gago Jover & Pueyo Mena,
+                         # "El Old Spanish Textual Archive ...:
+                         # lematización y etiquetado gramatical",
+                         # Scriptum Digital 7) documents FreeLing +
+                         # HSMS-app — AUTOMATIC lemmatization/tagging
+                         # with expanded lexical resources → silver,
+                         # the GLAUx precedent. Only the -vrt documents
+                         # carry tokens, so only they mint lemma rows.
+  wired: true    # P77 first sync owner-verified (740 docs / 5,177 passages), flipped 2026-08-18 (owner: "wire on all recent sources")
+  sync_policy: manual

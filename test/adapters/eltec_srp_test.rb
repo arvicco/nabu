@@ -121,7 +121,7 @@ module Adapters
     end
 
     def test_registry_row_is_ready_unwired_and_manual
-      registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources.yml", __dir__))
+      registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources", __dir__))
       entry = registry["eltec-srp"]
       refute_nil entry
       assert entry.wired, "wired: true — first sync verified 2026-10-11 (96 docs / 150,794 passages)"

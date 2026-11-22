@@ -1,0 +1,16 @@
+unihan:
+  adapter: Nabu::Adapters::Unihan
+  adopted: "2026-07-19"
+  group: signs  # P68-4: the sign-restore sweep (nabu enable signs && nabu sync signs)
+  axes: [sinitic, japonic]
+  wired: true   # flipped 2026-07-20 (owner order, post-P34 gate: P32+P33 sources on)
+                   # bin/nabu sync unihan — 8.5 MB zip GET, ~65k entries —
+                   # then eyeball nabu define 一 / nabu show
+                   # urn:nabu:dict:unihan:U+4E00 and 5 random entries, flip).
+  # The Unicode Han Database (Unicode License V3 → open), Unihan.zip at
+  # /Public/UCD/latest/ (8.5 MB, Last-Modified 2025-08-18 = Unicode 17.0.0).
+  # One entry per codepoint carrying a carried field: 65,092 of 102,999
+  # total Unihan codepoints (census on UnihanTxtParser). /latest/ moves at
+  # each annual Unicode release; re-adopting a new major version is an
+  # owner decision.
+  sync_policy: manual

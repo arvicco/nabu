@@ -15,7 +15,7 @@ class ManualAcquisitionDocsTest < Minitest::Test
   MANUAL_DIR = File.join(ROOT, "docs", "manual")
 
   def registry
-    @registry ||= Nabu::SourceRegistry.load(File.join(ROOT, "config", "sources.yml"))
+    @registry ||= Nabu::SourceRegistry.load(File.join(ROOT, "config", "sources"))
   end
 
   # Every registered source whose adapter declares a ManualDrop Spec.

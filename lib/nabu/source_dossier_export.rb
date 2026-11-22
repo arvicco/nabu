@@ -171,9 +171,9 @@ module Nabu
     end
 
     def yml_lines
-      return [] unless @sources_yml && File.file?(@sources_yml)
+      return [] unless @sources_yml && RegistryTree.exist?(@sources_yml)
 
-      File.read(@sources_yml, encoding: "UTF-8").lines.map(&:chomp)
+      RegistryTree.text(@sources_yml).lines.map(&:chomp)
     end
 
     # -- prose shaping ----------------------------------------------------------

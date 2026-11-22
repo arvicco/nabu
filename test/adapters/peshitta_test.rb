@@ -32,7 +32,7 @@ module Adapters
     # -- registry / manifest --------------------------------------------------
 
     def test_registry_resolves_peshitta_disabled_until_first_real_sync
-      registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources.yml", __dir__))
+      registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources", __dir__))
       entry = registry["peshitta"]
       refute_nil entry, "peshitta must be registered in config/sources.yml"
       assert entry.wired, "flipped 2026-07-19 (owner sign-off: rebuild verified, all P31 sources on)"

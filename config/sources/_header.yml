@@ -1,0 +1,119 @@
+# Nabu source registry (see docs/architecture.md §5).
+#
+# The registry is SPLIT, one file per corpus (P185): config/sources/<slug>.yml
+# holds exactly that slug's entry, and the filename must spell the slug.
+# Nabu::RegistryTree reads the directory in sorted slug order (the
+# processing order) and refuses a slug defined twice, a key mismatching
+# its filename, or data in this _-prefixed, comment-only header. Shape of
+# each file (lowercase [a-z0-9_-] slug):
+#
+#   <slug>:
+#     adapter: Nabu::Adapters::Perseus   # adapter class name (resolved lazily)
+#     kind: source                       # source (default, omit) | shelf | module
+#                                        #   (P39-0) — what the row IS. shelf =
+#                                        #   the four local-* memory shelves
+#                                        #   (local fetch, no network, up=local,
+#                                        #   NO sync_policy). module = machinery
+#                                        #   (kr-gaiji/bridging): sanctioned
+#                                        #   fetch, zero catalog rows, MUST be
+#                                        #   wired: false.
+#     wired: false                     # THE REGISTRY is authoritative — flips
+#                                        #   here reach the db on any
+#                                        #   sync/rebuild/health reconcile
+#     sync_policy: auto                  # auto | manual | frozen (default:
+#                                        #   manual). auto = swept by sync --all;
+#                                        #   manual = owner-fired by name
+#                                        #   (upstream may be very much alive);
+#                                        #   frozen = immutable snapshot. Omit
+#                                        #   on kind: shelf rows (kind implies it).
+#     index_policy: deferred             # inline | deferred (default: inline,
+#                                        #   P168). inline = the sync refreshes
+#                                        #   the source's fulltext slice;
+#                                        #   deferred = the sync loads documents
+#                                        #   and SKIPS index work (announced),
+#                                        #   `nabu index refresh <slug>` runs it
+#                                        #   — paced-crawl citizens index once
+#                                        #   per wave, never once per slice
+#     translations: true                 # ALSO ingest parallel translations
+#                                        #   (perseus-eng*) as aligned documents
+#                                        #   (P7-4; default false — original-only)
+#     license_watch: <url>               # OPTIONAL (P16-5): health --remote GETs
+#                                        #   THIS url (any host) and sha256-compares
+#                                        #   the body against the pin baseline —
+#                                        #   license drift for upstreams whose terms
+#                                        #   live in a README / record page, not a
+#                                        #   github LICENSE file. First sight records
+#                                        #   the baseline; a later mismatch renders
+#                                        #   "license: CHANGED" naming the url.
+#                                        #   Flipping one on is an OWNER decision:
+#                                        #   verify the url serves the terms directly
+#                                        #   (no redirect — the probe does not follow
+#                                        #   them) before enabling.
+#     fuzzy_index: true                  # include in the trigram fragment index
+#                                        #   (search --fuzzy; P16-4, design §4 —
+#                                        #   documentary sources only, index
+#                                        #   economics; default false)
+#     cjk_index: true                    # include in the CJK bigram substring
+#                                        #   lane (P93-3, owner ruling, option b — the
+#                                        #   Han/kana-run sources; measured
+#                                        #   ~22M CJK passages 2026-09-02;
+#                                        #   default false)
+#     embed_index: true                  # include in the semantic-vector scope
+#                                        #   (nabu embed / search --similar;
+#                                        #   P93-4, owner ruling — the literary core:
+#                                        #   17 slugs / 4.94M passages measured
+#                                        #   2026-09-02; full library was a
+#                                        #   measured NO; default false)
+#     axes: [classical, ...]             # research-axis memberships (P35-0) —
+#                                        #   REQUIRED, >= 1, names defined in
+#                                        #   config/axes.yml. Axes are TAGS
+#                                        #   (multi-membership deliberate,
+#                                        #   whole-source grain); an axis name
+#                                        #   never equals a slug (validated)
+#     multilingual: true                 # P49-r4: this source is a PACK whose
+#                                        #   language list is structurally
+#                                        #   UNBOUNDED (per-language sub-corpora;
+#                                        #   upstream can add any language), so
+#                                        #   its whole-grain axes union describes
+#                                        #   no single held language. Count-less
+#                                        #   attribution surfaces (the language
+#                                        #   card's axes: line, the axis card's
+#                                        #   gold-lemma language set) EXCLUDE it;
+#                                        #   counts-bearing surfaces (the axis
+#                                        #   card's languages: line) keep it —
+#                                        #   there the counts are the honesty.
+#                                        #   Default false: a bounded spread (a
+#                                        #   site archive, a script corpus) is
+#                                        #   its desks' own subject matter.
+#     grant_required: true               # P42-r1: the right to FETCH is a
+#                                        #   permission NOT conveyed by a
+#                                        #   public license — so `sync <slug>`
+#                                        #   demands a typed `granted` before the
+#                                        #   first fetch (recorded in the ledger,
+#                                        #   survives rebuild; --grant-acknowledged
+#                                        #   for scripts; batch/axis paths SKIP an
+#                                        #   un-acknowledged grant source). NOT the
+#                                        #   license machinery (CC BY-NC-SA needs
+#                                        #   no gate). Requires a grant: block.
+#     grant:                             # the PUBLIC block the gate renders (both
+#       terms: ...                       #   required, non-empty strings). terms =
+#       request_hint: ...                #   the obligations (retrieval, use,
+#                                        #   redistribution, the required credit);
+#                                        #   request_hint = whom a new user contacts
+#                                        #   for a license grant + what to promise.
+#                                        #   Who granted, when and how is instance
+#                                        #   provenance: local/config/grants-
+#                                        #   provenance.yml (grantor/date/thread
+#                                        #   here FAIL the load).
+#
+# Registered sources: one <slug>.yml beside this header. `wired: false`
+# until a first real sync is verified by hand (CLAUDE.md "add a new
+# adapter" checklist).
+
+# Template for the next source (a new config/sources/<slug>.yml, written
+# once its adapter exists):
+#
+# <slug>:
+#   adapter: Nabu::Adapters::SomeAdapter
+#   wired: false
+#   sync_policy: manual   # auto | manual | frozen (omit on kind: shelf rows)

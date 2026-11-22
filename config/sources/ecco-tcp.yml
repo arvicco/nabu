@@ -1,0 +1,22 @@
+ecco-tcp:   # 02-sources row 371
+  adapter: Nabu::Adapters::EccoTcp
+  adopted: "2026-11-03"
+  axes: [germanic]   # the eebo-tcp precedent (the English line rides germanic)
+  classes: [released, unedited]  # both of upstream's P4 zips; the class rides each
+                     # document's metadata (tcp_class) — narrowing is an edit here
+  wired: true   # first sync verified 2026-11-03: 3,101 docs / 2,697,714 passages, 0 skips
+  # ECCO-TCP: the Text Creation Partnership's keyed selection from
+  # Eighteenth Century Collections Online — English books of 1700–1800,
+  # on the eebo-tcp shape (tcp-xml P4 family; Nabu::Adapters::TcpBoxFetch
+  # over the TCP's own ECCO Box folder: p4/ecco_p4_released.zip 2,473
+  # texts + ecco_p4_unedited.zip 628, census 2026-11-03 — the P3 SGML and
+  # Oxford P5 folders carry the same texts and are never walked). Identity
+  # = filename stem = IDG@ID (K041165.000; 0 mismatches ×3,101). Language
+  # per document from LANGUSAGE (eng → en; one fre, one wel ride verbatim).
+  # Dating: the BIBLFULL imprint year (EeboTcp's molds + the later-print
+  # molds). The Gale subject module (ContentSet) folds onto the kind axis.
+  # LICENSE: the per-file CC0 1.0 waiver (censused ×3,101) → open; the
+  # 2026-08-20 grant additionally covers the TCP files. Expected first sync
+  # 3,101 docs / 2,697,714 passages (parse census 2026-11-03 over the real
+  # zips), 0 errored; ≈243 MB zipped.
+  sync_policy: manual

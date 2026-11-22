@@ -168,7 +168,7 @@ class TibetanVerbsTest < Minitest::Test
   end
 
   def test_registry_row_exists_unwired_with_manual_sync_policy
-    registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources.yml", __dir__))
+    registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources", __dir__))
     entry = registry["tibetan-verbs"]
     refute_nil entry, "config/sources.yml must register tibetan-verbs"
     assert_equal Nabu::Adapters::TibetanVerbs, entry.adapter_class

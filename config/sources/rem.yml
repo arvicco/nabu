@@ -1,0 +1,13 @@
+# P40-5: Referenzkorpus Mittelhochdeutsch (1050-1350) v2.1, ~400 texts /
+# ~2M word forms of manually annotated MHG — the first cora-tei registrant
+# (ReA/ReN ride the family when their license replies land, backlog
+# asked by email 2026-07-22). Two immutable Zenodo artifacts (record 13982324,
+# ReM-v2.1_tei.zip + the ReM-v2.1_coraxml.zip pos/msd sibling, hard sha256
+# pins — the iecor mold) → manual. CC BY-SA
+# 4.0 (in-file <licence>, zip README and Zenodo record agree; parse
+# re-verifies per file and quarantines drift).
+rem:
+  adapter: Nabu::Adapters::Rem
+  adopted: "2026-07-22"
+  axes: [germanic]
+  wired: true    # P40: first sync verified 2026-07-22 (360 docs / 290,242 passages; 46 quarantined — gate-eyeball triage), owner-flipped

@@ -140,7 +140,7 @@ class SabellicLoansTest < Minitest::Test
   # --- registry ---------------------------------------------------------------
 
   def test_registry_row_is_disabled_local
-    registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources.yml", __dir__))
+    registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources", __dir__))
     entry = registry["sabellic-loans"]
     refute_nil entry, "sabellic-loans must be registered in config/sources.yml"
     assert_equal Nabu::Adapters::SabellicLoans, entry.adapter_class

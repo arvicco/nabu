@@ -1,0 +1,14 @@
+mcd:
+  adapter: Nabu::Adapters::Mcd
+  adopted: "2026-11-13"
+  axes: [etym]
+  wired: true    # first sync 2026-11-13: +1,707 sets / 16,592 reflexes.
+                 # Expected: 1,707 entries / 16,592 reflex rows (61
+                 # uncertain); raw/ skipped by rule.
+  sync_policy: manual
+  # The Micronesian Comparative Dictionary — Bender, Goodenough, Jackson,
+  # Marck, Rehg, Sohn, Trussel & Wang 2003, Proto-Micronesian
+  # Reconstructions 1–2 (Oceanic Linguistics 42) — in the lexibank CLDF
+  # edition v2.0 (Zenodo 10.5281/zenodo.14608119, CC BY 4.0): 1,707 sets
+  # headed by their PMc / sub-group reconstruction over 60 varieties.
+  # Dictionary language `poz-mic` (the nabu-lects Micronesian anchor).

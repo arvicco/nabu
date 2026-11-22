@@ -1,0 +1,26 @@
+sources:
+  cme:
+    kind: {posture: unclassified}
+    lect:
+      posture: identity
+      note: "enm IS Middle English (registry band 1100–1500, parent ang;
+        P82-2) — the corpus's own definition is the claim; upstream
+        LANGUSAGE declarations are inconsistent (censused 2026-08-23: 150
+        files declare enm, 61 'eng', others list only their FOREIGN
+        languages) and ride document metadata verbatim, never the claim"
+    dating:
+      posture: dated
+      note: "P109-4 (the unmined-metadata drain): the SOURCE EDITION's print year(s)
+        project with date_class 'edition' — an 1886 edition of a 1200
+        text is still not a composition claim, and the class label says
+        exactly that; the e-text pub_date stays machinery (declared,
+        Invariants::MINING_EXEMPT). Real per-text composition/MS dates
+        live in the MED HyperBibliography stencils, not publicly
+        downloadable — 'exceptions ... on request' (an owner ask via the
+        existing upstream contact, a future instrument, deliberately NOT
+        a pending commitment)"
+    places: {posture: unplaced, note: "P109-4: both place keys are
+        edition/publisher lineage (Ann Arbor; mixed modern/early imprint
+        publishers), never the Middle English text's origin — declared,
+        Invariants::MINING_EXEMPT"}
+    script: {posture: implied}

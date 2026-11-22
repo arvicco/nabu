@@ -17,7 +17,7 @@ module Adapters
     FIXTURES = Nabu::TestSupport.fixtures("trismegistos-geo")
 
     def test_registry_carries_the_module_row_manual_drop
-      registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources.yml", __dir__))
+      registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources", __dir__))
       entry = registry["trismegistos-geo"]
       refute_nil entry, "trismegistos-geo must be registered in config/sources.yml"
       assert entry.feature_module?, "a gazetteer instrument is a kind: module row"

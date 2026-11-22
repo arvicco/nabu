@@ -34,7 +34,7 @@ module Adapters
     # -- registry -------------------------------------------------------------
 
     def test_registry_resolves_bdcamoes_unwired_until_first_real_sync
-      registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources.yml", __dir__))
+      registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources", __dir__))
       entry = registry["bdcamoes"]
       refute_nil entry, "bdcamoes must be registered in config/sources.yml"
       assert entry.wired, "flipped 2026-08-21 — first sync owner-round-verified (69,812 passages)"

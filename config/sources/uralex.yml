@@ -1,0 +1,14 @@
+uralex:
+  adapter: Nabu::Adapters::Uralex
+  adopted: "2026-11-13"
+  axes: [etym]
+  wired: true    # first sync 2026-11-13: +3,792 sets / 9,614 reflexes.
+                 # Expected: 3,792 entries / 9,614 reflex rows (2,180
+                 # loan-flagged); raw/ skipped by rule.
+  sync_policy: manual
+  # UraLex 2.0 — Uralic basic vocabulary with cognate and loanword
+  # information (Syrjänen et al.; de Heer et al.), lexibank CLDF v2.0
+  # (Zenodo 10.5281/zenodo.4777568, CC BY 4.0): 27 varieties × 313
+  # meanings, 3,792 cognate sets; the Proto-Uralic rows (no Is_Proto
+  # column upstream — declared) head their sets; curated loan records
+  # name the donor languoid and likelihood. Dictionary language `urj`.

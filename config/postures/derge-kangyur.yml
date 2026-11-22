@@ -1,0 +1,6 @@
+sources:
+  derge-kangyur:
+    lect: {posture: identity, note: xct}
+    dating: {posture: undatable}
+    places: {posture: unplaced}
+    script: {posture: implied}

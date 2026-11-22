@@ -25,7 +25,7 @@ module Adapters
     # --- the module row / manifest --------------------------------------------
 
     def test_registry_carries_the_module_row_disabled_and_manual
-      registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources.yml", __dir__))
+      registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources", __dir__))
       entry = registry["pleiades"]
       refute_nil entry, "pleiades must be registered in config/sources.yml"
       assert entry.feature_module?, "a resolver instrument is a kind: module row"

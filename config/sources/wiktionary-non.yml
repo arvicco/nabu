@@ -1,0 +1,14 @@
+wiktionary-non:   # P154, 02-sources row 346
+  adapter: Nabu::Adapters::WiktionaryNon
+  adopted: "2026-11-02"
+  axes: [germanic]
+  wired: true   # first sync verified 2026-11-03: 11,403 entries
+  # The kaikki Old Norse extraction (11,403 records / "10103 distinct
+  # words", census 2026-11-02): a third Old Norse shelf beside
+  # Cleasby-Vigfusson and Zoëga, its weight in the descendant trees (38,535
+  # reflex rows into Icelandic, Faroese, Norwegian, Swedish, Danish) and the
+  # Proto-Germanic etymons (2,736). Language non. The wiktionary-fa mold on
+  # the shared WiktionaryKaikki base: per-language JSONL (deprecated
+  # upstream — fallback = filter the full extract by lang_code non), CC
+  # BY-SA + GFDL → attribution, FileFetch.
+  sync_policy: manual

@@ -632,7 +632,7 @@ class AozoraTest < Minitest::Test
   # --- registry round-trip ----------------------------------------------------
 
   def test_registry_resolves_aozora_enabled_manual
-    registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources.yml", __dir__))
+    registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources", __dir__))
     entry = registry["aozora"]
     refute_nil entry, "aozora must be registered in config/sources.yml"
     assert_equal Nabu::Adapters::Aozora, entry.adapter_class

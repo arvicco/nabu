@@ -23,7 +23,7 @@ require "test_helper"
 # slice to approach the in-place row budget…). A paced source silently
 # inline — no declaration, or `inline` without the reason — fails here.
 class IndexPolicyConformanceTest < Minitest::Test
-  SOURCES_PATH = File.join(Nabu::Config::PROJECT_ROOT, "config", "sources.yml")
+  SOURCES_PATH = File.join(Nabu::Config::PROJECT_ROOT, "config", "sources")
   PACED = /PacedCrawl::Schedule\.new/
   INLINE_REASON = /^\s+index_policy:\s*inline\s+#\s*inline because:\s*\S/
 
@@ -39,15 +39,16 @@ class IndexPolicyConformanceTest < Minitest::Test
     false
   end
 
-  # The source's row in sources.yml: its top-level key line through the
-  # line before the next top-level key.
+  # The source's row: its own config/sources/<slug>.yml (P185 split),
+  # from the top-level key line on (a preamble comment above the key is
+  # not the row).
   def row_text(slug)
-    lines = File.readlines(SOURCES_PATH, encoding: Encoding::UTF_8)
-    start = lines.index { |line| line.match?(/\A#{Regexp.escape(slug)}:(\s|\z)/) }
-    return "" if start.nil?
+    path = File.join(SOURCES_PATH, "#{slug}.yml")
+    return "" unless File.file?(path)
 
-    tail = lines[(start + 1)..].take_while { |line| !line.match?(/\A[^\s#]/) }
-    ([lines[start]] + tail).join
+    lines = File.readlines(path, encoding: Encoding::UTF_8)
+    start = lines.index { |line| line.match?(/\A#{Regexp.escape(slug)}:(\s|\z)/) }
+    start.nil? ? "" : lines[start..].join
   end
 
   def paced_entries

@@ -123,7 +123,7 @@ class ItantTest < Minitest::Test
   # --- registry ---------------------------------------------------------------
 
   def test_registry_row_is_disabled_manual_with_translations
-    registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources.yml", __dir__))
+    registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources", __dir__))
     entry = registry["itant"]
     refute_nil entry, "itant must be registered in config/sources.yml"
     assert_equal Nabu::Adapters::Itant, entry.adapter_class

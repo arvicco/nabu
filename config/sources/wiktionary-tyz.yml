@@ -1,0 +1,17 @@
+wiktionary-tyz:   # P156, 02-sources row 375
+  adapter: Nabu::Adapters::WiktionaryTyz
+  adopted: "2026-11-04"
+  axes: [sinitic]
+  wired: true    # first sync verified 2026-11-04: 1,501 entries / 14 stubs skipped — exact.
+                 # define "ải chải" answers.
+  # The kaikki Tày extraction (2,024,890 B / 1,515 records / "1203
+  # distinct words", census 2026-11-04): the library's first Tày
+  # dictionary — 138 Nôm Tày character records (150 senses, "Nôm form of
+  # …") and 100 Nôm Tày spellings on 82 word records, Proto-Tai etymons.
+  # Language tyz (the registry anchor). The WiktionaryScriptShelf base:
+  # the WiktionaryKaikki mold + the script-form layer (body lines + typed
+  # crossrefs) + the empty-stub skip rule (14 skipped). EXPECTED first
+  # sync: 1,501 entries (exact, whole-file census through the adapter).
+  # Per-language JSONL (deprecated upstream — fallback = filter the full
+  # extract by lang_code tyz), CC BY-SA + GFDL → attribution, FileFetch.
+  sync_policy: manual

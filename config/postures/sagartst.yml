@@ -1,0 +1,13 @@
+sources:
+  sagartst:
+    kind: {posture: unclassified, note: "a dictionary shelf — a cognate database; kind folds
+        documents only"}
+    lect: {posture: identity, note: "sit — the nabu-lects Sino-Tibetan anchor (its pro stage is
+        not claimed: no reconstructed variety); members carry ISO codes bare — Old Chinese och
+        resolving through the codemap to zho:old, Old Tibetan xct, Old Burmese obr, Tangut txg
+        as their anchors — and ISO-less varieties (the Sinitic dialect points) display-only"}
+    dating: {posture: undatable, note: "a reference dataset (Sagart et al. 2019) — no dates"}
+    places: {posture: unplaced, note: "variety coordinates are doculect reference points, not
+        findspots — no place claim at dictionary grain"}
+    script: {posture: implied, note: "IPA-style transcriptions with tone digits; Old Chinese in
+        Baxter-Sagart notation"}

@@ -533,7 +533,7 @@ class OpenitiTest < Minitest::Test
   # --- registry round-trip ------------------------------------------------------
 
   def test_registry_resolves_openiti_and_manifest_agrees
-    registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources.yml", __dir__))
+    registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources", __dir__))
     entry = registry["openiti"]
     refute_nil entry, "openiti must be registered in config/sources.yml"
     assert_equal Nabu::Adapters::Openiti, entry.adapter_class

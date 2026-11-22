@@ -143,7 +143,7 @@ class CorpusOudnederlandsTest < Minitest::Test
   # --- registry round-trip (runs in CI) ----------------------------------------
 
   def test_registry_resolves_the_source_wired_live
-    registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources.yml", __dir__))
+    registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources", __dir__))
     entry = registry[SLUG]
     refute_nil entry, "#{SLUG} must be registered in config/sources.yml"
     assert_equal Nabu::Adapters::CorpusOudnederlands, entry.adapter_class

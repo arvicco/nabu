@@ -1,0 +1,6 @@
+sources:
+  digiliblt:
+    kind: {posture: unclassified}
+    dating: {posture: undatable}
+    places: {posture: unplaced}
+    script: {posture: implied}

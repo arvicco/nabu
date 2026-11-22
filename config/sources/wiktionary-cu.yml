@@ -1,0 +1,7 @@
+wiktionary-cu:
+  adapter: Nabu::Adapters::WiktionaryCu
+  adopted: "2026-07-11"
+  axes: [slavic]
+  wired: true    # OWNER SIGN-OFF 2026-07-11: synced, 4,615 entries; define
+                   # богъ → god with Proto-Slavic chain eyeballed.
+  sync_policy: manual

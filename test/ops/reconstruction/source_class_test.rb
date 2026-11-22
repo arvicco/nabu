@@ -13,7 +13,7 @@ require "nabu/ops/reconstruction/source_class"
 class ReconstructionSourceClassTest < Minitest::Test
   SourceClass = Nabu::Ops::Reconstruction::SourceClass
   ROOT = Nabu::Config::PROJECT_ROOT
-  SOURCES_PATH = File.join(ROOT, "config", "sources.yml")
+  SOURCES_PATH = File.join(ROOT, "config", "sources")
   MANUAL_DIR = File.join(ROOT, "docs", "manual")
 
   def setup

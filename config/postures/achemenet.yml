@@ -1,0 +1,24 @@
+sources:
+  # ── P61-1: sources whose lect posture is MACHINE grain (rules/
+  # overrides files) — no lect key here by the single-source-of-truth
+  # rule; the three new layers still declare (coverage-derived, the
+  # sweep of 2026-08-07). ────────────────────────────────────────────
+  achemenet:
+    kind: {posture: unclassified}
+    # lect row RETIRED 2026-08-18: an owner ruling chose the blanket akk:nb rule
+    # (achemenet-nb, the archive-facet total map) — the machine grain
+    # machine-postures achemenet now (the shadowing rule; same-phase
+    # add-then-retire, the osta/fornsvenska shape).
+    dating:
+      posture: dated
+      note: "config/archive_axes.yml over the archive + designation: Strassmaier's reign
+        volumes (Cyrus/Cambyses/Darius/Nabonidus/Nebuchadnezzar, 1,373) band to the held
+        regnal table's whole-reign span; YOS 7 (192) to its title's 538–521 BCE; CT55,
+        Bēl-rēmanni and Murašû (1,209) to the Achaemenid corpus band — all 2,774 dated. The
+        1,139 cdli_p documents also assert reference edges onto their held CDLI artifacts"
+    places:
+      posture: linked
+      note: "archive-grain findspots with the held cigs/pleiades refs: CT55 + Bēl-rēmanni =
+        Sippar, Murašû = Nippur, YOS 7 = Uruk (1,401 of 2,774); Strassmaier's reign volumes
+        gather many sites and stay deliberately unplaced"
+    script: {posture: implied}

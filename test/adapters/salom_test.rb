@@ -167,7 +167,7 @@ class SalomTest < Minitest::Test
   # --- registry round-trip ----------------------------------------------------
 
   def test_registry_resolves_salom_and_manifest_agrees
-    registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources.yml", __dir__))
+    registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources", __dir__))
     entry = registry["salom"]
     refute_nil entry, "salom must be registered in config/sources.yml"
     assert_equal Nabu::Adapters::Salom, entry.adapter_class

@@ -1,0 +1,18 @@
+opengnt:   # 02-sources row 424
+  adapter: Nabu::Adapters::Opengnt
+  adopted: "2026-11-18"
+  axes: [biblical]
+  wired: true    # first sync verified 2026-11-18: +27 docs / 7,941 passages / 0 errored,
+                 # exactly the dry-parse census (138,013 tokens; the zip's AppleDouble the
+                 # 1 skip-by-rule); search probed (Βίβλος γενέσεως answers at matt:1.1)
+  # The Open Greek New Testament (eliranwong/OpenGNT, Eliran Wong): OGNT v3,
+  # an NA28-equivalent Greek NT compiled from the Berean Greek Bible data,
+  # word-tagged with lexeme, Robinson morphology, extended Strong's and
+  # Louw-Nida keys plus the NA28-comparison columns. One base-text zip
+  # (8.35 MB) raw-fetched at the pinned commit 0029589 (2022-04-21; the
+  # repo has no releases and has been dormant since). License: the core
+  # database is CC BY-SA 4.0 → class attribution, share-alike noted; the
+  # bundled glosses/translations (TBESG, Berean IT/LT/ST, Spanish) and the
+  # SIL Levinsohn discourse columns carry other terms and are excluded at
+  # parse. One document per book on the sblgnt stems (urn:nabu:opengnt:mark).
+  sync_policy: manual

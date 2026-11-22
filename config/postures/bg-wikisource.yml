@@ -1,0 +1,12 @@
+sources:
+  # ── P116-2: the South Slavic wikisource cone (owner ruling) ──────────────────
+  bg-wikisource:
+    kind: {posture: unclassified}
+    # lect machine-postured since 2026-10-12 — the bg-charter-recension facet
+    # rule (ruled the same day) stages the charters onto the Middle Bulgarian
+    # and Serbian recensions; Paisiy's modern-literary bul rendering rides its
+    # own stored language. The declaration retired under the shadowing rule.
+    dating: {posture: partial, note: "the charters' issuance years (бележки, typed);
+        Paisiy's rendering carries none"}
+    places: {posture: unplaced, note: "no place fields; grantee places live in prose notes"}
+    script: {posture: implied}

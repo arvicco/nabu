@@ -1,0 +1,29 @@
+dtucph-sp:   # 02-sources row 418
+  adapter: Nabu::Adapters::DtucphSp
+  adopted: "2026-11-16"
+  axes: [biblical, hebrew]
+  wired: true   # first sync verified 2026-11-16: +5 docs / 5,841 passages, 0 errored; Gen 1:1 + Deut 32:36 shown, search probed
+                 # dtucph-sp (GitFetch at tag v7.5.0, sparse cone tf/7.5.0 +
+                 # README.md + LICENSE, 50 feature files ≈ 20 MB). EXPECT 5 docs
+                 # / 5,841 passages / 114,891 tokens, 0 errored, 0 skipped
+                 # (Genesis 1,533 · Exodus 1,203 · Leviticus 859 · Numbers
+                 # 1,289 · Deuteronomy 957). Eyeball nabu show
+                 # urn:nabu:dtucph-sp:gen:1.1 and urn:nabu:dtucph-sp:deut:32.36
+                 # (both manuscripts), 5 random verses, probe nabu search with
+                 # a Samaritan plene spelling, then flip.
+  sync_policy: manual
+  # The CACCHT Samaritan Pentateuch (Højgaard, Naaijer & Schorch; github.com/
+  # DT-UCPH/sp, Zenodo 10.5281/zenodo.7734632): the Samaritanus-project
+  # (Halle, S. Schorch) transcription of MS Dublin Chester Beatty Library
+  # 751 (Gen 1–Deut 32:36a) + MS Garizim 1 (Deut 32:36b–34) as Text-Fabric,
+  # BHSA-modelled word morphology/lexemes/glosses, the reading tradition's
+  # phonetic transcription, clause/phrase constituency, and the Tal &
+  # Florentin (2024) readings as word annotations. Text-fabric registrant on
+  # the cuc shape (sign slots, word tokens). Document = book (OSIS stems,
+  # the oshb/bhsa hub tokens), passage = verse; text = the corpus's own
+  # {sign} rendering. LICENSE: README badge CC BY-NC 4.0 + LICENSE legal
+  # code + every .tf header "@licence=Creative Commons Attribution-
+  # NonCommercial 4.0 International License" → class nc. Credit: the CACCHT
+  # project (Højgaard, Naaijer, Ehrensvärd, Rezetko, Glanz, van Peursen) and
+  # the Samaritanus project. PINNED to release tag v7.5.0 + its tf/7.5.0
+  # directory (upstream is work in progress) — a re-pin is an owner decision.

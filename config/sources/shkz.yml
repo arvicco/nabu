@@ -1,0 +1,13 @@
+shkz:   # P107-3b
+  adapter: Nabu::Adapters::Shkz
+  adopted: "2026-09-28"
+  kind: source
+  axes: [iranian]
+  wired: true   # first sync verified 2026-09-28 (3 version docs / 153 aligned lines)
+  sync_policy: manual
+  # P107-3b: the trilingual Kaaba-ye Zartosht inscription of Shabuhr I
+  # (Shamsian & Berti; Zenodo doi 10.5281/zenodo.15050878, CC BY 4.0):
+  # three version documents (grc/xpr/pal) over 50 SHARED :l<n> line
+  # citations — the first real Parthian document in the library. The
+  # 1,012-word alignment-pairs table fetches into canonical as a
+  # DECLARED v1 residue (the alignment-hub look is the future packet).

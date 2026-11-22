@@ -1,0 +1,18 @@
+dharma-khmer:   # P92-1, the SEA desk anchor
+  adapter: Nabu::Adapters::DharmaKhmer
+  adopted: "2026-09-01"
+  axes: [sea, epigraphy]
+  wired: true    # first sync verified 2026-09-02: 1,219 docs / 50,165 passages, 34 honest quarantines
+  sync_policy: auto   # promoted 2026-10-13: actively-edited upstream,
+                       # git-incremental fetch — rides the sync --all sweep
+  # DHARMA Corpus des inscriptions khmères (EFEO/ERC no. 809994;
+  # github.com/erc-dharma/tfc-khmer-epigraphy, scouted P47-s3 2026-07-26,
+  # re-verified 2026-09-01): the Cœdès K-number corpus digitized — 1,187
+  # live editions of pre-Angkorian and Angkorian epigraphy, Old Khmer
+  # (okz-Latn) and Sanskrit (san-Latn), romanized. In-file <licence>
+  # CC BY-SA 4.0 governs (repo badge CC BY), recorded verbatim per
+  # document; class attribution either way. Sparse GitFetch on the
+  # texts/xml cone; a WORKING repo (maturity codes ride metadata, the
+  # attic earns its keep). Line-grain prose / pada-grain verse; the
+  # unknown-language net quarantines new codes loudly. First sync
+  # owner-fired; ~150 MB repo, texts/xml cone far smaller.

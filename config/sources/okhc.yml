@@ -1,0 +1,28 @@
+okhc:   # P91-1, 02-sources row 189
+  adapter: Nabu::Adapters::Okhc
+  adopted: "2026-09-01"
+  cjk_index: true   # P93-3: the CJK bigram substring lane
+  axes: [korean]
+  wired: true    # first sync + recovery re-parse verified 2026-09-01: 1,198,779 docs / 3,542,662 passages
+  sync_policy: manual
+  # OKHC — the Open Korean Historical Corpus (Song et al., KAIST; the HF
+  # deposit seyoungsong/Open-Korean-Historical-Corpus, public, ungated —
+  # scouted 2026-09-01). THIS source holds the curated HISTORICAL slice
+  # (the adapter's FILES map, 16 files ≈ 4.2 GB): sagi (Samguk sagi,
+  # 1145 — the oldest Korean history) · ilseongnok · klc (the ITKC munjip
+  # mass) · gaksa · gongu · aks_kyu_nhm · jpn_records. Held out, recorded
+  # in the adapter: the four archives already first-class here (sillok/
+  # sjw/bibyeonsa/goryeosa — duplication), the modern-newspaper mass
+  # (newslibrary 17.6 GB + news_archive/magazine/gaksa_modern — an
+  # early-modern widening is one FILES line away, an owner call), and the
+  # All-Rights-Reserved contemporary North Korean files (license floor).
+  # License: CC BY-NC 4.0 confirmed by the author (by email, 2026-08-31;
+  # personal-research use welcomed; cite the OKHC paper — the manifest
+  # credit carries it). Per-record "Public Domain" rows relabel open
+  # (the ud split-licensing seam). One record = one document (titled,
+  # dated, URL-addressable); body lines are passages. EXPECTED FIRST
+  # SYNC: ≈4.2 GB download; document count measured at first sync (the
+  # deposit publishes no per-file record counts — a multi-hour load at
+  # this scale; the sync announces stages per the no-silent-passes rule).
+  # Re-syncs owner-fired (the deposit versions via HF; conditional GETs
+  # make an unchanged re-sync cheap).

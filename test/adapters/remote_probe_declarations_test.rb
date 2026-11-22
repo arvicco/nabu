@@ -9,7 +9,7 @@ module Adapters
   # family + achemenet shipped wired with exactly that gap, and the sweep
   # below found six older sources in the same state).
   class RemoteProbeDeclarationsTest < Minitest::Test
-    REGISTRY = Nabu::SourceRegistry.load(File.expand_path("../../config/sources.yml", __dir__))
+    REGISTRY = Nabu::SourceRegistry.load(File.expand_path("../../config/sources", __dir__))
 
     # The tripwire: an adapter that inherits the :git default must actually
     # fetch through git. The fetch METHOD's defining file is the honest

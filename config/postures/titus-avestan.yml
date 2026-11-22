@@ -1,0 +1,10 @@
+sources:
+  titus-avestan:
+    # lect row RETIRED P66-1 (the machine grain arrived): the adapter now
+    # derives the avestan-stage facet from the verse anchors (Gathic
+    # chapter set) and the ave-stage rule covers all 248 docs (old 24 —
+    # exactly the Gathic chapters — young 224, mixed 0). The LAST lect
+    # pending closes.
+    dating: {posture: undatable}
+    places: {posture: unplaced}
+    script: {posture: implied}

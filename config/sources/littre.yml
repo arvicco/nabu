@@ -1,0 +1,14 @@
+littre:   # P154, 02-sources row 343
+  adapter: Nabu::Adapters::Littre
+  adopted: "2026-11-02"
+  axes: [romance]
+  wired: true   # first sync verified 2026-11-03: 26 dictionary docs / 78,483 entries, 3 rule skips
+  # Littré's Dictionnaire de la langue française (1863–1877) in the
+  # oeuvres/littre TEI P5 (XMLittré v1.3 lineage), for the held French
+  # text (theatre-classique's 17th-century stage; the HISTORIQUE sections
+  # quote Old and Middle French). New family littre-tei; entry id = the
+  # article's xml:id (2 in-file repeats numbered, 4 off-letter articles
+  # @-suffixed); gram → word_class, first HISTORIQUE century →
+  # first_attested entry facets. CC BY-SA 2.0 FR per teiHeader →
+  # attribution. Language fra, bare.
+  sync_policy: manual

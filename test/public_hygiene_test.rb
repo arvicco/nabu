@@ -182,7 +182,7 @@ class PublicHygieneTest < Minitest::Test
   end
 
   def test_no_redistribution_grant_sources_ship_no_public_fixture_bytes
-    registry = Nabu::SourceRegistry.load(File.join(ROOT, "config", "sources.yml"))
+    registry = Nabu::SourceRegistry.load(File.join(ROOT, "config", "sources"))
     restricted = []
     registry.each_source do |entry|
       next unless entry.grant_required?

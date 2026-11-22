@@ -1,0 +1,14 @@
+wiktionary-got:   # P154, 02-sources row 347
+  adapter: Nabu::Adapters::WiktionaryGot
+  adopted: "2026-11-02"
+  axes: [germanic]
+  wired: true   # first sync verified 2026-11-03: 23,034 entries
+  # The kaikki Gothic extraction (23,034 records / "22781 distinct words",
+  # census 2026-11-02): the library's first Gothic dictionary: 23,034
+  # entries (Gothic-script headwords, many of them inflected-form entries
+  # pointing to their lemma) with Proto-Germanic (1,755) and Greek (166)
+  # etymons. Language got. The wiktionary-fa mold on the shared
+  # WiktionaryKaikki base: per-language JSONL (deprecated upstream —
+  # fallback = filter the full extract by lang_code got), CC BY-SA + GFDL →
+  # attribution, FileFetch.
+  sync_policy: manual

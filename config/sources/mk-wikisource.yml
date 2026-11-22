@@ -1,0 +1,15 @@
+mk-wikisource:   # P116-2, 02-sources row 236
+  adapter: Nabu::Adapters::MkWikisource
+  adopted: "2026-10-10"
+  axes: [slavic]
+  wired: true    # First sync verified 2026-10-11 (post the batch-length fix): 836 docs / 31,114 passages.
+  sync_policy: manual
+  # The Macedonian Wikisource 19th-century cone (owner ruling): the Miladinov
+  # collection (687), Шапкарев, Цепенков's tales and the pre-1900
+  # authors (Пејчиновиќ, Крчовски, Пулевски, the Miladinovs,
+  # Жинзифов). The Miladinov collection is hosted in MODERNIZED
+  # orthography ("на современ македонски правопис", the wiki's own
+  # note) — declared per page in metadata "orthography", never
+  # silent. Partisan/modern-reworked songs, Prličev (Greek originals)
+  # and modern-orthography duplicates are out by rule. Texts PD;
+  # layer CC BY-SA 4.0.

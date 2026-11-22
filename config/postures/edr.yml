@@ -1,0 +1,7 @@
+sources:
+  edr:
+    lect: {posture: dates}
+    dating: {posture: partial}
+    places: {posture: linked, note: "P64-1 apply: refs on 99,249/115,590 axis rows (86%) — registry
+        pleiades:/tm: mints incl. 28 homonym rulings"}
+    script: {posture: implied}

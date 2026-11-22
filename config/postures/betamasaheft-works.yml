@@ -1,0 +1,7 @@
+sources:
+  betamasaheft-works:
+    kind: {posture: unclassified}
+    lect: {posture: identity, note: gez/amh — no minted stages}
+    dating: {posture: undatable}
+    places: {posture: unplaced}
+    script: {posture: implied}

@@ -338,7 +338,7 @@ class SlLexicaTest < Minitest::Test
   # --- registry --------------------------------------------------------------------------
 
   def test_registry_row_is_live_with_manual_sync_policy
-    registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources.yml", __dir__))
+    registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources", __dir__))
     entry = registry["sl-lexica"]
     refute_nil entry, "config/sources.yml must register sl-lexica"
     assert_equal Nabu::Adapters::SlLexica, entry.adapter_class

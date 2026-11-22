@@ -485,7 +485,7 @@ module Adapters
     end
 
     def test_registry_row
-      entry = YAML.safe_load_file(File.join(Nabu::Config::PROJECT_ROOT, "config", "sources.yml"))["damos"]
+      entry = Nabu::RegistryTree.load(File.join(Nabu::Config::PROJECT_ROOT, "config", "sources"))["damos"]
       assert_equal "Nabu::Adapters::Damos", entry["adapter"]
       assert_equal true, entry["wired"] # wired at the completed crawl (5,890 docs, 2026-10-18)
       assert_equal "manual", entry["sync_policy"]

@@ -18,7 +18,7 @@ class HieroglyphsTest < Minitest::Test
   # --- registry / module shape ---------------------------------------------
 
   def test_registry_carries_the_module_row_manual
-    registry = Nabu::SourceRegistry.load(File.expand_path("../config/sources.yml", __dir__))
+    registry = Nabu::SourceRegistry.load(File.expand_path("../config/sources", __dir__))
     entry = registry["unikemet"]
     refute_nil entry, "unikemet must be registered in config/sources.yml"
     assert entry.feature_module?

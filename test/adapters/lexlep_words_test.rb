@@ -238,7 +238,7 @@ class LexlepWordsTest < Minitest::Test
   # --- registry --------------------------------------------------------------
 
   def test_registry_rows_exist_disabled_with_manual_sync_policy
-    registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources.yml", __dir__))
+    registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources", __dir__))
     { "lexlep" => Nabu::Adapters::Lexlep, "lexlep-words" => Nabu::Adapters::LexlepWords,
       "tir" => Nabu::Adapters::Tir }.each do |slug, adapter_class|
       entry = registry[slug]

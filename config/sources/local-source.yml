@@ -1,0 +1,21 @@
+local-source:
+  adapter: Nabu::Adapters::LocalSource
+  adopted: "2026-07-16"
+  kind: shelf   # P39-0: a memory shelf — local fetch, no network, up=local (no sync_policy)
+  axes: [local]
+  wired: true    # P24-0: wired by DEFAULT — the P19-1 local-language
+                   # argument verbatim: the checklist's "wired: false until
+                   # first real sync" guards network cost and unverified
+                   # licenses, and a LOCAL shelf has neither (no upstream,
+                   # owner-authored data already on disk; rebuild replays it
+                   # regardless of this flag, and `sync --all` skips non-live
+                   # policies anyway). The shelf populates when the owner
+                   # fires `nabu list --export-source-dossiers` and then
+                   # `bin/nabu sync local-source`.
+  # The third canonical-memory shelf (architecture §16): canonical/
+  # local-source/<slug>.md dossiers — one per REGISTERED SOURCE (what each
+  # shelf holds: description/themes/key_works + owner prose + accretion
+  # sections), owner-edited + accreted through Nabu::SourceShelf. kind: shelf =
+  # no upstream, no network; sync re-scans the tree (LocalFetch, per-file
+  # sha pins); the drift probe reads "local". Gate rider: `rake site:check`
+  # flags dossier-vs-docs/library.md drift.

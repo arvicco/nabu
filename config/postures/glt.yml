@@ -1,0 +1,18 @@
+sources:
+  glt:
+    # kind: machine-postured — kind_map.yml metadata book.
+    # lect machine-postured — config/lect_overrides.yml grc → grc:byz, tier
+    # approximation (the corpus-level Byzantine reading; adopted from the
+    # pending candidate 2026-11-05 — the override comment carries the full
+    # reasoning incl. the post-Byzantine Menaia services).
+    dating: {posture: undatable, note: "received liturgical tradition in a modern editorial
+        form: no page carries a composition or edition date. What the pages DO carry is
+        mined, but none is a dating claim — the Menaion commemoration (month from the
+        shelf, day from the page name → metadata commemoration) is a calendar day, and the
+        hymnographers' names in the rubrics (Ἰωάννου Μοναχοῦ, Ἀνατολίου, Θεοφάνους) ride
+        the rubric passages verbatim, unmapped to floruits"}
+    places: {posture: unplaced, note: "the books name no place of composition or use; the
+        site's publisher (the Archdiocese, New York) is an imprint of the digital edition,
+        not the texts' locus"}
+    script: {posture: implied, note: "polytonic Greek (Grek) throughout; the site's Greek
+        Extended oxia vowels and ano teleia fold to their NFC canonical forms at the boundary"}

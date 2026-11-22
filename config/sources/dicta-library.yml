@@ -1,0 +1,20 @@
+dicta-library:   # 02-sources row 421
+  adapter: Nabu::Adapters::DictaLibrary
+  adopted: "2026-11-16"
+  axes: [hebrew]
+  wired: true   # first sync verified 2026-11-16: +1,204 books / 193,335 page passages, 0 errored (chidusheiharadad skipped by rule); index refresh run (54m39s), search probed with credit
+                 # bin/nabu sync dicta-library — the manifest repo clone, then 1,205
+                 # book zips (~536 MB text zips + 2 vocalized fallbacks ~1.4 MB) from
+                 # files.dicta.org.il, sequential and resumable (~20–30 min at the
+                 # measured ~0.5 MB/s); expect 1,204 documents / ~238k page passages,
+                 # 1 skipped by rule (chidusheiharadad: both zips empty upstream)
+  sync_policy: manual   # versioned file paths (library-1-0); upstream grows by releases
+  index_policy: deferred   # ~1.6 GB of page text: index once per wave (nabu index refresh)
+  # Dicta's library (Dicta-Library-Download): the books.json manifest of
+  # 1,205 AI-OCR'd rabbinic printed books, 1726–1982 — responsa (the
+  # library's first responsa shelf), Talmud/Tanakh/Rambam/Shulchan Arukh
+  # commentaries, halakha, derashot, Chassidut, Kabbalah — each a per-page
+  # text zip at files.dicta.org.il. Document = book, passage = scanned
+  # page. Upstream's own warning: automatic processes, so the text and
+  # vocalization may carry errors (text_nature machine-ocr). README ends
+  # with the CC BY-SA 4.0 link → attribution, credit Dicta.

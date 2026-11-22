@@ -1,0 +1,13 @@
+ccmh:
+  adapter: Nabu::Adapters::Ccmh
+  adopted: "2026-07-11"
+  embed_index: true   # P93-4: the semantic-vector literary core
+  axes: [slavic]
+  wired: true    # OWNER SIGN-OFF 2026-07-11: synced, 16 gospel docs / 11,082
+                   # verses, Assemanianus Mt 1:1 eyeballed.
+                   # P14-5 (2026-07-12): +3 txt docs (Suprasliensis + the
+                   # Vitae, ccmh-txt family) land at the next owner-fired sync.
+  sync_policy: manual
+  # license_watch candidate (P16-5, owner decision — the CC-BY grant lives
+  # in the bundle README, the adapter's verbatim license source):
+  # license_watch: https://www.kielipankki.fi/download/ccmh-src/README.txt

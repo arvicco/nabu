@@ -1,0 +1,14 @@
+ko-wikisource-mk:
+  adapter: Nabu::Adapters::KoWikisourceMk
+  adopted: "2026-08-18"
+  cjk_index: true   # P93-3: the CJK bigram substring lane
+  axes: [korean]   # P78-4: the korean axis's vernacular leg — the first hangul print
+  wired: true     # P78-4 first sync owner-verified (1 work doc / 159 passages, okm 125); flipped 2026-08-19 (owner: 'wire everything on')
+  # 용비어천가 (1447) from Korean Wikisource — curated title list, ONE page
+  # carries all 125 cantos (census 2026-08-18). PD text + CC BY-SA 4.0
+  # transcription layer → attribution, credit the contributors. Middle
+  # Korean (okm) passages per canto + the hanmun ruby verse (lzh); the
+  # modern rendering rides as annotation, never as passage text.
+  # 월인천강지곡/석보상절 stay OUT until a completeness census passes
+  # (scan transclusions / fragmentary — the P78-4 audit).
+  license_watch: https://ko.wikisource.org/wiki/%EC%9A%A9%EB%B9%84%EC%96%B4%EC%B2%9C%EA%B0%80

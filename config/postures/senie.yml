@@ -1,0 +1,14 @@
+sources:
+  senie:
+    # kind: machine-postured — the senie fold in kind_map.yml over the
+    # header <domain> genre facet.
+    lect: {posture: dates, note: "lv:old by date-band inference off the header dates (the
+        registry's 2026-10-21 mint; all 183 documents fall inside the [1500, 1800] band,
+        verified live) — run-majority de/lat/pol passages stay on their own anchors"}
+    dating: {posture: dated, note: "the TEI header <date> on all 183 documents — the print's or
+        manuscript's year, a \"1681_90\" span as its envelope (:structured lane)"}
+    places: {posture: unplaced, note: "the headers name no imprint or writing place; title-page
+        imprints (\"Riga/ bey Georg Matth. Nöller\", \"BRVNSBERGAE\") stay inside the page text —
+        a title-page imprint miner is a recorded future look, declared coarse until then"}
+    script: {posture: implied, note: "Latin script; the Fraktur-era letter forms are transcribed
+        verbatim (ſ, ẜ, Ꞩ, ß, the macron and tilde marks)"}

@@ -1,0 +1,12 @@
+sources:
+  westoldturkic:   # P108-7
+    kind: {posture: unclassified}
+    # lect machine-postured 2026-11-13 (the big-sitting merge tail): the
+    # Róna-Tas & Berta sigla ride config/lect_overrides.yml (WOT → trk
+    # approximation — still no Oghur node, the finer call stands; EAH/LAH
+    # → hu:anc), so the declaration row is retired (machine files are the
+    # single source of truth).
+    dating: {posture: undatable, note: Hungarian first-attestation years ride entry
+        bodies — a dictionary shelf, no document timeline}
+    places: {posture: unplaced}
+    script: {posture: implied}

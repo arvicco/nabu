@@ -1,0 +1,15 @@
+sources:
+  bibyeonsa:
+    lect:
+      posture: codemap
+      note: lzh → zho/lit (hanmun — the kanripo/sillok precedent, P78-3)
+    dating: {posture: dated, note: "P81-1: the untyped per-entry machine dates (1616–1892,
+        '1617-01-00L0') project via NikhEntryDates — document envelopes + passage-grain year runs
+        (bb_001's interleaved years stay separate runs, never merged); book fronts still carry only
+        the 1959 print-edition data, so the envelope IS the document claim"}
+    places: {posture: unplaced, note: "the deposit carries no 지명 index tags at all (census 2026-10-18)"}
+    script: {posture: implied}
+    # The index markup is thin here: 998 이름 person tags (923 mentions
+    # once upstream's 75 double-tags fold, 26 persons by their
+    # cross-database pid) ride passage annotations + the person facet; no
+    # person-key ids, so no authority is minted.

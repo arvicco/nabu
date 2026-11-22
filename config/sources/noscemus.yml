@@ -1,0 +1,17 @@
+noscemus:   # P160, 02-sources row 386
+  adapter: Nabu::Adapters::Noscemus
+  adopted: "2026-11-05"
+  axes: [classical, romance]  # the croala/corpus-corporum precedent: the Latin continuum's early-modern side
+  wired: true    # first sync verified 2026-11-06, exactly as censused: 1,038 docs /
+                 # 555,797 region passages, 0 errored, 12 skipped by rule (empty
+                 # text); eyeball (1031760:6, Bacon) + search "Instauratio" pass.
+  sync_policy: frozen   # two immutable Zenodo records; a new version = an owner re-pin
+  # NOSCEMUS Digital Sourcebook (Zathammer, Universität Innsbruck; Zenodo
+  # 15040256, cc-by-4.0) — the UNCORRECTED Transkribus HTR of 1,050 early-
+  # modern scientific Latin prints (text_nature machine-htr on every
+  # document), joined on the Transkribus id to the Noscemus Wiki backup
+  # (Zenodo 7855322, cc-by-4.0: works + authors XML) for genre, discipline,
+  # authors and fallback dating → attribution. Document = Transkribus
+  # document (one copy), passage = HTR text region; letterless regions (page
+  # numbers, signatures) ride the next passage as marks. A witness beside
+  # eebo-tcp's keyed London prints (Bacon's Instauratio magna 1620).

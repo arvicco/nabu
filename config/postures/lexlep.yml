@@ -1,0 +1,6 @@
+sources:
+  lexlep:
+    lect: {posture: dates}
+    dating: {posture: partial}
+    places: {posture: named}
+    script: {posture: implied}

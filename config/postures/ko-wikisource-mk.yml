@@ -1,0 +1,10 @@
+sources:
+  ko-wikisource-mk:
+    kind: {posture: unclassified}
+    lect: {posture: identity, note: "okm IS Middle Korean, now staged okm:lmk by its
+        1447 date through the registry's ladder (journaled rule:date-band); the hanmun
+        ruby passages ride lzh, sillok's codemap precedent, no separate claim"}
+    dating: {posture: dated, note: "P78-4: 머리말 연도 = 1447 (the print year, upstream's
+        machine date) via MetadataDates :structured — one envelope per work page"}
+    places: {posture: unplaced}
+    script: {posture: implied}

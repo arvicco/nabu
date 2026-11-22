@@ -1,0 +1,23 @@
+vakk:
+  adapter: Nabu::Adapters::Vakk
+  adopted: "2026-10-21"
+  axes: [baltic]
+  wired: true    # crawl COMPLETED 2026-10-28 (3,052/3,052 texts held,
+                 # ledger empty); first full parse the same day exactly on
+                 # census — 3,052 discovered / 0 skipped-by-rule / 0
+                 # errors, 148,875 passages indexed; passages eyeballed
+                 # (a 1651 sermon, dated + nc on the card).
+  sync_policy: manual
+  # VAKK — Vana kirjakeele korpus, the Corpus of Old Written Estonian
+  # (University of Tartu, vakk.ut.ee): every surviving Estonian text of
+  # the 15th–16th centuries, most 17th-century prints and Müller's
+  # manuscript sermons, a selection of 18th–19th-century prints (the 1739
+  # Bible, Stahl, the 1715 New Testament), German metatexts on Estonian,
+  # the Moravian Brethren manuscripts, and the hosted 19th-century
+  # parish-court protocols — 3,052 texts / 3,374,325 tokens (census
+  # 2026-10-21). Original spelling; the older texts carry Vakker's
+  # modern-Estonian lemma/POS/form annotation → lemma_tier silver
+  # (semi-automatic by upstream's own account). META-SHARE licence "CC -
+  # BY - NC, Academic - Non Commercial Use" → nc. No bulk download: the
+  # reading view is crawled page by page (gzip-stored verbatim, ~70 MB).
+  lemma_tier: silver

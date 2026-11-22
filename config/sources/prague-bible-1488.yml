@@ -1,0 +1,12 @@
+prague-bible-1488:   # P116-1
+  adapter: Nabu::Adapters::PragueBible1488
+  adopted: "2026-10-10"
+  axes: [slavic]
+  wired: true    # First sync verified 2026-10-10: 31 docs / 2,939 GT lines.
+  sync_policy: manual
+  # The HTR Winter School 2024 Medieval Czech ground truth over the
+  # Prague Bible (1488; ÖNB Ink 13.C.5) — Zenodo 10.5281/zenodo.14524858,
+  # cc-by-4.0 on the record (the deposited CITATION.cff says CC-BY-SA-4.0;
+  # both attribution-class). One zip: 31 PAGE-XML GT pages, Old Czech,
+  # semi-diplomatic; document = page, passage = TextLine (page-xml family),
+  # abbreviation expansions as annotations.

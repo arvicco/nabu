@@ -30,7 +30,7 @@ module Adapters
     # -- registry -------------------------------------------------------------
 
     def test_registry_resolves_derge_tengyur_and_manifest_agrees
-      registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources.yml", __dir__))
+      registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources", __dir__))
       entry = registry["derge-tengyur"]
       refute_nil entry, "derge-tengyur must be registered in config/sources.yml"
       assert entry.wired, "flipped 2026-07-28 (owner ruling; first sync verified live)"

@@ -1,0 +1,9 @@
+sources:
+  cv-sardinian:
+    kind: {posture: unclassified}
+    lect: {posture: identity, note: "srd — a real nabu-lects anchor since the 2026-11-13
+        sitting (PR #48; it had been the codemap header's identity-fallback example);
+        modern Sardinian sentence text on the bare anchor"}
+    dating: {posture: undatable, note: crowd-collected modern sentences, no per-item dates}
+    places: {posture: unplaced}
+    script: {posture: implied}

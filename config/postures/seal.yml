@@ -1,0 +1,13 @@
+sources:
+  seal:
+    # P89-3: akk is a real nabu-lects anchor, so the bare code IS the
+    # claim; OB/OA/MB refinement is a future date-band story, never a
+    # blanket rule over a corpus this period-mixed.
+    lect: {posture: identity, note: akk — Old/Middle Babylonian literature under the coarse anchor}
+    dating: {posture: dated, note: "P104-1 (the P89-3 pending, served): the Texts Hierarchy
+        period strings (on all 408 docs) band via config/period_bands.yml through
+        MetadataDates :period_label — the five censused labels all ruled"}
+    places: {posture: named, note: "P104-1: the Provenance field rides place_name on the same
+        MetadataDates rows (upstream's explicit Unknown mints nothing); also a facet
+        via facet_map.yml — no gazetteer matching yet"}
+    script: {posture: qualified, note: romanized transliteration (Latn)}

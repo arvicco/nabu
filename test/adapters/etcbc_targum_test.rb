@@ -34,7 +34,7 @@ module Adapters
     # -- registry / manifest --------------------------------------------------
 
     def test_registry_resolves_etcbc_targum_wired_on_its_first_sync_evidence
-      registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources.yml", __dir__))
+      registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources", __dir__))
       entry = registry["etcbc-targum"]
       refute_nil entry, "etcbc-targum must be registered in config/sources.yml"
       assert entry.wired, "wired on the first-sync evidence (landed exactly on census, 2026-11-02)"

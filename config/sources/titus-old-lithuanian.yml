@@ -1,0 +1,34 @@
+titus-old-lithuanian:   # 02-sources row 405
+  adapter: Nabu::Adapters::TitusOldLithuanian
+  adopted: "2026-11-12"
+  axes: [etym, baltic, slavic]  # the East Baltic member of the baltic desk (the Balto-Slavic
+                                # lineage dual-tag, the senie ruling); etym because the
+                                # Old Lithuanian forms feed the comparative shelves.
+  # Grant-gated PRIVATE research material, the titus-avestan posture verbatim
+  # (the fetch right is not conveyed by a clone):
+  availability: blocked
+  wired: true    # flipped 2026-11-13: first retrieval verified — 188 pages -> 186 docs / 52,748 passages, 0 errored
+  # TITUS Old Lithuanian texts (titus.uni-frankfurt.de/texte/etcs/balt/lit/): Mažvydas's
+  # Katekizmas, his Ambrosian hymn and Forma Chrikstima (data entry D. Ardoino,
+  # J. Gelumbeckaitė, P.U. Dini), the Wolfenbüttel Postil (J. Gelumbeckaitė), Szyrwid's
+  # Punktai sakymų, Lithuanian text (F. Thies), the catechisms of Daukša 1595
+  # (S. Young), Vilentas 1579 (R.P. Ritter), Lysius 1719 (P.U. Dini) and Engel
+  # (D. Ardoino), the Dzūkian prayers (J. Gelumbeckaitė) and Donelaitis's Metai
+  # (G. Keydana). Eleven editions, 188 pages by the index frames' census (2026-11-12);
+  # Szyrwid's Polish text and Latin notes are rejected editions. One document per page
+  # carrying a Lithuanian lane (notes pages skip by rule); passages at the titus_levels
+  # unit (the printed line, Donelaitis's verse, the catechisms' paragraph). Language lit
+  # (staged lt:old by lect_overrides).
+  # EXPECTED FIRST SYNC: 188 pages, crawl ≈ 7 min at the polite 2s pace (~20 MB — the
+  # Postil's pages run to 0.2 MB, Donelaitis's to 0.4 MB).
+  sync_policy: manual
+  grant_required: true
+  grant:
+    terms: >-
+      the TITUS family terms: one retrieval per corpus, local personal research use
+      only, no redistribution; TITUS and the editors credited wherever displayed
+    request_hint: >-
+      Contact TITUS (titus.uni-frankfurt.de) for a license grant, and promise
+      to credit TITUS and the editors (data entry
+      D. Ardoino, J. Gelumbeckaitė, P.U. Dini, F. Thies, S. Young, R.P. Ritter,
+      G. Keydana) wherever any text is displayed.

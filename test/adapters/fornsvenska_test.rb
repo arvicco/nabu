@@ -33,7 +33,7 @@ module Adapters
     # -- registry / manifest --------------------------------------------------
 
     def test_registry_resolves_fornsvenska_unwired_until_first_real_sync
-      registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources.yml", __dir__))
+      registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources", __dir__))
       entry = registry["fornsvenska"]
       refute_nil entry, "fornsvenska must be registered in config/sources.yml"
       assert entry.wired, "first sync owner-verified; flipped 2026-08-18"

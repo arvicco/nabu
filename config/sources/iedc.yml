@@ -1,0 +1,18 @@
+iedc:   # P107-2
+  adapter: Nabu::Adapters::Iedc
+  adopted: "2026-09-28"
+  kind: source
+  axes: [iranian]
+  wired: true   # first sync verified 2026-09-28 (1,316 docs / 5,493 passages; 155 timeline rows)
+  sync_policy: manual
+  # P107-2: the Invisible East Digital Corpus (invisible-east.org,
+  # University of Oxford; Zenodo doi 10.5281/zenodo.20490276, ONE
+  # versioned XML, CC BY 4.0) — 1,316 documentary items of the medieval
+  # Islamicate East: Khotanese 552 / New Persian 358 / Middle Persian
+  # 158 / Sogdian 111 / Arabic 63 / Judeo-Persian 27 / Bactrian 26 (+
+  # heb/san/oui/zho). 481 items carry folio transcriptions (embedded
+  # HTML line lists -> f<n>.l<n> passages); the rest are metadata-only
+  # catalog records (text_state facet-able), ingested for their typed
+  # dates (parenthesized ISO -> date_iso), toponym lists, editorial
+  # grades (Gold/Silver/Bronze facet) and shelfmarks. Folio TRANSLATIONS
+  # are a declared v1 residue. DH Awards 2025 winner.

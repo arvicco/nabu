@@ -1,0 +1,16 @@
+sources:
+  osta:
+    kind: {posture: unclassified}
+    # lect declaration retired P77-r8: the osta-leones/osta-aragones lengua
+    # rules machine-posture osta now (the shadowing rule; nabu-lects PR #3
+    # minted ast:old/an:old). The castellano/gallego/latín majority rides
+    # bare-anchor identity codes (osp/roa-opt/lat) from the works table
+    # (P77-r6, owner-ruled 2026-08-13 — OstaTables::LENGUA_CODES, majority per codex).
+    dating: {posture: pending, note: "candidate: the works-table OPDT (per work)
+        and codex SPDT (per copy) date texts, riding metadata verbatim since
+        P77-r6 ('1252 a quo', '1510 ca. ad quem' — upstream text); the
+        timeline extractor over that vocabulary is the future packet"}
+    places: {posture: unplaced, note: "the header repository line (City | Library |
+        Shelfmark) is a holding-library fact, not a composition place — it rides
+        document metadata verbatim"}
+    script: {posture: implied}

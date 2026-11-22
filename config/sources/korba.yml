@@ -1,0 +1,15 @@
+korba:   # P116-1
+  adapter: Nabu::Adapters::Korba
+  adopted: "2026-10-10"
+  axes: [slavic]
+  wired: true    # first retrieval 2026-10-14 (the server back after 4 days of 502):
+                 # 2,091 texts / 10,281 passages / 855,904 tokens, 0 errors —
+                 # the edition-2.0 stage folders, counts verified + eyeballed
+  sync_policy: manual
+  # KorBa — the manually annotated subcorpus 2.0 of the Electronic Corpus
+  # of 17th- and 18th-century Polish Texts (to 1772; IJP PAN). One zip
+  # from the project's download page, CC BY-SA 4.0 verbatim there →
+  # attribution. NKJP TEI P5 stand-off packages (nkjp-tei family):
+  # document = text, passage = <ab> block, the manual morphosyntax as
+  # gold token annotations (translit form, modernized orth, lemma, tag);
+  # header date/place/region/genre mined.

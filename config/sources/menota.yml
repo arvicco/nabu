@@ -1,0 +1,27 @@
+menota:
+  adapter: Nabu::Adapters::Menota
+  adopted: "2026-08-23"
+  axes: [germanic]
+  wired: true    # flipped 2026-08-26 (owner: "wire everything on"; first sync
+                 # owner-fired 2026-08-24, 91/91 after the P82-r1 recovery
+                 # re-parse — 241,628 passages; e.g.
+                 # nabu show urn:nabu:menota:am-1056-ix-4to:1rB.1)
+  # Menota — the Medieval Nordic Text Archive (P82-1, granted by email 2026-08-20):
+  # 91 manuscripts / ~2.1M words in Menota-TEI (multi-level facs/dipl/norm
+  # word markup, MUFI entities), served through the Corpuscle (korpuskel)
+  # REST API behind clarino.uib.no/menota/catalogue/menota (get-session →
+  # list-catalogue-documents → download-document, session-gated like its
+  # INESS cousin) + the stable menota.org entity table. NEW `menota-tei`
+  # streaming family: stored text = per-token DIPLOMATIC reading (the
+  # ReF/ReM precedent), facs/norm fallback for the 5 facs-only texts; all
+  # levels + lemma/me:msa ride annotations; passage = manuscript line
+  # (<page><column>.<line>). Languages per file (isl/nor/swe/dan/non),
+  # riding verbatim + as the `language` facet — lect posture pending.
+  # LICENSE: CC BY-SA 4.0 — the catalogue license column (quotable record,
+  # in the grant reply; censused 2026-08-23 on all 91) + per-file <licence>; stranger
+  # grants map restricted, never silently BY-SA. The crawl is
+  # upstream-blessed (Stegmann 2026-08-20, "we will not keep you from
+  # scraping 😉" — robots.txt alone would forbid it) and RETIRES when
+  # Menota's bulk endpoint lands.
+  license_watch: https://clarino.uib.no/menota/catalogue/menota
+  sync_policy: manual

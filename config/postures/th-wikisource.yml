@@ -1,0 +1,13 @@
+sources:
+  th-wikisource:
+    kind: {posture: unclassified}
+    lect: {posture: identity, note: "tha resolves through the codemap onto the th anchor
+        under the tai family (merged + synced 2026-10-12). The chronicles'
+        Ayutthaya/early-Bangkok register stays the named refinement (an early-Thai
+        stage), never defaulted"}
+    dating: {posture: dated, note: "P120-3: the Index ปี= print year, Buddhist Era
+        converted −543 to CE (source_date → MetadataDates :edition_year_text, date_class
+        edition — never the chronicles' composition); every admitted page carries one"}
+    places: {posture: unplaced, note: "the Index สถานที่= (พระนคร) is the print's imprint
+        place — declared, never a text place"}
+    script: {posture: implied}

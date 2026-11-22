@@ -1,0 +1,10 @@
+sources:
+  sl-wikisource:
+    kind: {posture: unclassified}
+    lect: {posture: dates, note: "as imp/prilit — the sl stage bands stage the typed
+        Dela-leta years (1584 Dalmatin → emod; the 19th-century mass → emod/mod)"}
+    dating: {posture: dated, note: "the Dela leta N year category, typed (MetadataDates
+        :structured)"}
+    places: {posture: unplaced, note: "no place fields in the cone pages"}
+    script: {posture: implied, note: "Latin; bohoričica declared per page in metadata
+        orthography"}

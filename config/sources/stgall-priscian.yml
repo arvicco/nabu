@@ -1,0 +1,23 @@
+stgall-priscian:
+  adapter: Nabu::Adapters::StgallPriscian
+  adopted: "2026-10-14"
+  axes: [celtic]
+  wired: true    # first sync verified 2026-10-14: 239 documents / 13,395 passages
+                 # (sga 3,524 · lat 9,871), 0 errors, 4s — the expected counts
+                 # exactly; eyeballed (p1:9 ".i. libardaib" renders sga)
+  sync_policy: manual
+  # The St Gall Priscian glosses (St Gallen, Stiftsbibliothek 904, copied
+  # AD 850–1): the edition v2.1 (2023) of Rijcklof Hofman, Pádraic Moran
+  # and Bernhard Bauer (stgallpriscian.ie) — 9,400+ Latin and Old Irish
+  # glosses plus ~3,700 construe marks, with English translations of the
+  # Old Irish, word-by-word morphological analysis and the gloss typology.
+  # Per-gloss language (upstream's irish flag, plus Latin-flagged glosses
+  # whose words are mostly analysed Old Irish forms — the adapter's class
+  # note); construe-mark glosses read through their anchor words.
+  # One phpMyAdmin dump (db_priscian_v2.sql) in the edition's website repo
+  # github.com/padraicmoran/stgallpriscian, SPARSE-fetched (the dump, the
+  # LICENSE/README and the edition's prose pages; the ~200 MB of page scans
+  # stay out). Document = MS page, passage = gloss by the edition's gloss id.
+  # LICENSE verbatim: "MIT License / Copyright (c) 2023 Pádraic Moran" —
+  # the repo LICENSE covers the repository including the dump → class
+  # attribution (verified 2026-10-14).

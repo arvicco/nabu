@@ -1,0 +1,17 @@
+sources:
+  freising:
+    kind: {posture: unclassified}
+    # lect declaration retired P64-6 (owner-ruled 2026-08-09): the freising sl→sl:old
+    # override machine-postures it now (the shadowing rule).
+    # dating corrected 2026-10-22 from a noteless `undatable`: the edition itself
+    # dates the record — bsBK-ovr.xml (Kos's findings, "čas zapisa BS – 972–1039")
+    # and bsIN §135–137 (terminus post quem Otto I's charter of 28 May 972,
+    # ante quem bishop Egilbert's death 1039). It dates the WRITING of Clm 6426,
+    # not the texts' composition, so Adapters::Freising::WITNESS_DATING rides the
+    # transcription layers as an artifact date (MetadataDates :structured).
+    dating: {posture: dated, note: "the edition's witness dating 972–1039 (Kos) on the 9
+        transcription documents (critical/diplomatic/phonetic × BS I–III); the 18 modern
+        translation siblings stay undated by design"}
+    places: {posture: unplaced, note: "the edition leaves the place of writing open — Freising or
+        Upper Carinthia (bsBK-ovr, Kos's finding 2) — so there is no single claim to carry"}
+    script: {posture: implied}

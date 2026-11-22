@@ -1,0 +1,28 @@
+nabu-lects:
+  adapter: Nabu::Adapters::NabuLects
+  adopted: "2026-08-02"
+  group: core   # P63 rider: pre-enabled registry instrument, swept by `nabu sync core`
+  kind: module   # P57-3: machinery-only — the lect (anchor x stage x variety x ortho) resolver seam, zero document rows
+  axes: [etym]
+  wired: true    # channel verified (first fetch landed; canonical present). `--all`
+                   # participation is governed by kind + sync_policy, NEVER by wired
+                   # (owner semantics ruling 2026-08-18, reaffirming 2026-07-24:
+                   # wired = the sync link is tested and declared working).
+  # P57-3: nabu-lects — a sister repo to nabu (github.com/arvicco/nabu-lects),
+  # born from nabu's own holdings but universal by construction: gives
+  # under-described standard codes (lat spans Plautus to charters, grc spans
+  # Homer to 1453, lzh codes a written register as a stage, la-vul names both
+  # an attested register and a reconstruction) a stable identifier without
+  # replacing the standard codes. Two files: lects.yml (the anchor registry)
+  # + codemap.yml (universal code -> lect-id defaults; identity is the
+  # default rule — any code absent maps to itself as a bare anchor).
+  # Nabu-specific per-source knowledge (never a universal codemap fact)
+  # lives in config/lect_overrides.yml, seeded with the two ratified
+  # overrides: derom la-vul -> roa:pro (DÉRom's articles ARE the
+  # comparative-method reconstruction, not the universal attested-register
+  # default) and rundata gmq-pro -> gmq:run (Rundata's urnordisk inscriptions
+  # are ATTESTED runic epigraphy, not the universal reconstructed default).
+  # LICENSE: repo LICENSE verbatim CC BY 4.0 → attribution. Pre-1.0
+  # instability window upstream (identifiers may still be renamed) — the
+  # owner may pin `ref:` once a tagged release exists.
+  sync_policy: manual

@@ -1,0 +1,12 @@
+torot:
+  adapter: Nabu::Adapters::Torot
+  adopted: "2026-07-04"
+  embed_index: true   # P93-4: the semantic-vector literary core
+  axes: [slavic]
+  wired: true   # first real sync verified + owner sign-off 2026-07-04
+  # TOROT (Tromsø Old Russian + OCS) is the same PROIEL 2.1 XML as proiel, but
+  # unlike the frozen proiel-treebank it still gets occasional releases:
+  # re-syncable, just not on a live schedule.
+  sync_policy: manual
+  # license_watch candidate (P16-5, owner decision — README-licensed repo):
+  # license_watch: https://raw.githubusercontent.com/torottreebank/treebank-releases/master/README.md

@@ -1,0 +1,20 @@
+sources:
+  dharma-deccan:
+    kind: {posture: unclassified}
+    lect: {posture: identity, note: "the P118-2 pending retired 2026-10-12: the Indic
+        registry package minted te (under dra-tel) and kn (under dra-sou) with the
+        tel → te / kan → kn codemap rows, so tel-Latn and kan-Latn resolve; pra/san
+        -Latn as before — the estate's four codes all land on registry nodes; the 9
+        editions upstream tags \"und\"/\"unknown-Latn\" or leaves lang-less read \"und\" — no
+        lect claim, declared (the und-admission ruling, 2026-11-13)"}
+    dating: {posture: partial, note: "Ollett's origDate (363 Sātavāhana editions) + the
+        Vengī Cālukya metadata TSV (106); the DHARMA working files carry no origDate"}
+    places: {posture: named, note: "Ollett's origPlace findspot names (445; no gazetteer
+        refs) — his pl: site keys facet as findspot (35 keys folding name variants:
+        Karle/Kārle → pl:Valūraka, Amarāvatī/Dharanikota → pl:Dhānyakaṭaka); Vengī's artefact findspots carry no text id — unjoined. The
+        inline persName/placeName layer (passage annotations entities: 881 persons,
+        240 places in 382 editions — kings, donors, granted villages; Ollett's
+        pers:/pl: lemma keys verbatim) names places MENTIONED in the grant, not the
+        findspot, so it rides the passages and never the axis"}
+    script: {posture: qualified, note: "romanized editions (pra/san/tel/kan -Latn); Brāhmī
+        and its southern descendants are the artifact facts"}

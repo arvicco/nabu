@@ -1,0 +1,19 @@
+ru-wikisource:   # P116-3, 02-sources row 240
+  adapter: Nabu::Adapters::RuWikisource
+  adopted: "2026-10-10"
+  axes: [slavic]
+  wired: true    # First sync verified 2026-10-10: 12 docs / 429 passages / 60 skips (31 edition-tainted).
+  sync_policy: manual
+  # The Old East Slavic cone (census 2026-10-10): direct ns-0 members of
+  # eight categories, 72 pages. PER-PAGE EDITION FILTER — every page's
+  # ИСТОЧНИК/ДАТАПУБЛИКАЦИИ statement AND body-head imprint is censused;
+  # EDITION_TAINT_POST_1930 excludes 31: by header 8 (the ПВЛ 1997 page,
+  # Изборник 1969 ×3, Робинсон 1963, Виршевая поэзия 1989, BLDR by
+  # series name ×2), by body head 23 (the az.lib.ru imports of the 1989
+  # «Виршевая поэзия» ×20, Полоцкий 1990, Котов 1938, a BLDR «Подготовка
+  # текста» credit). Translations (10), 13 censused exclusions,
+  # encyclopedia articles (2), modern-orthography duplicates (2),
+  # apparatus (1) skip too → 12 admitted (the 1800 Слово, Костомаров
+  # 1862, Бычков 1897, the 1893 Мономах text, Кожанчиков 1861/1862, and
+  # web-sourced pages whose statement names no edition — verbatim).
+  # Texts PD; transcription layer CC BY-SA 4.0.

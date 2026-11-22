@@ -1,0 +1,72 @@
+oracc:
+  adapter: Nabu::Adapters::Oracc
+  adopted: "2026-07-09"
+  axes: [cuneiform, iranian]  # P44-r2: the `ario` project (Achaemenid Royal Inscriptions
+                              # online) carries the peo (Old Persian) column of the royal
+                              # trilinguals — whole-source, only that lane is Iranian.
+  siblings: ["-[a-z]+"]  # P34-0 (was P13-4 frozen): any lowercase run — P/Q textids are hyphen-free
+  wired: true    # OWNER SIGN-OFF 2026-07-09: first real sync fired and
+                   # eyeballed ("Enable oracc pls"). 1,794 docs / 21,080
+                   # passages, 0 errors; akk (qēmu) + sux (lugal) lemma
+                   # search verified live. Scope: rimanum + etcsri; P11-6
+                   # extended to five (adds saao/saa01, rinap/rinap1, dcclt);
+                   # P13-3 (owner-approved 2026-07-11) extended to 33 — the
+                   # FULL SAA (saa01–saa21 + saas2), riao, ribo, blms, the
+                   # four dcclt subprojects (~159 MB of new zips) — the
+                   # owner-fired re-sync after merge pulls the new projects.
+                   # P31-0 (owner-approved 2026-07-19) extended to 38: ario
+                   # (2.7 MB — Achaemenid trilinguals; Old Persian peo +
+                   # Elamite elx enter the library, tagged per l-node by
+                   # upstream; elx honestly unlemmatized — no gloss-elx)
+                   # and the four ePSD2 corpora epsd2/literary (39.5 MB),
+                   # epsd2/royal (15.1 MB), epsd2/earlylit (1.3 MB),
+                   # epsd2/admin/ur3 (561.8 MB — registered under its TRUE
+                   # three-segment path; the zip unpacks DOUBLY nested,
+                   # epsd2-admin-ur3/admin/ur3/…). All five CC0 verbatim at
+                   # fixture time; the per-project gate re-reads at sync.
+                   # EXPECTED SYNC DELTAS (owner-fired, no wired flip —
+                   # the projects ride this existing source): ~618 MB of
+                   # new zips; ~82,900 new tablet docs (ario 173 of 175
+                   # non-empty + literary 1,022 + royal 1,928 + earlylit 43
+                   # + admin/ur3 80,181 — the Ur III mass will DOMINATE
+                   # library counts; lem on 79,664 of its texts) plus ~365
+                   # crawled -en siblings (tr-en: ario 173, literary 90,
+                   # royal 101, earlylit 1, admin/ur3 0); a handful of
+                   # catalog-only skeletons skip by rule (census honestly,
+                   # quarantine loudly — the standing unknown-node guard).
+                   # P46-3 (2026-07-26) extended to 102: the CC0 extension
+                   # pack, +64 projects — ecut (URARTIAN xur enters, gold-
+                   # lemmatized), aemw/amarna + aemw/alalakh/idrimi, the 22
+                   # ATAE and 27 TCMA site subprojects (their parents are
+                   # proxy PORTALS owning no texts — not registered; atae's
+                   # saao-hosted 5,233 stay saao's), cmawro/cmawr1-3+maqlu,
+                   # hbtin, cams/gkab (overlap vs held blms+dcclt = 4 texts,
+                   # ruled immaterial — see Oracc::PROJECTS), dccmt, ccpo,
+                   # obmc, obta, akklove, suhu. ALL 64 CC0 verbatim, read
+                   # from each zip's metadata.json 2026-07-26 via the LMU
+                   # mirror (primary DOWN for days → the same packet wires
+                   # ZipFetch's fallback host: primary → mirror, pins stay
+                   # primary). EXCLUDED: tcma/bderi + ctij (broken builds,
+                   # HTTP 500), oimea (aggregator, parked pending a dedup
+                   # audit vs held rinap/riao/ribo). EXPECTED SYNC DELTAS
+                   # (owner-fired, no wired flip): ≈185 MB of new zips,
+                   # ~7,712 new tablet docs + ~6,339 crawled -en siblings.
+  # Per-project HTTP zips (the first non-git fetch path); re-syncing is an
+  # owner decision, not a scheduled one.
+  sync_policy: manual
+  # license_watch candidate (P16-5, owner decision — the project-level
+  # metadata.json license field is already probed, but the site-wide terms
+  # live on the licensing doc page):
+  # license_watch: https://oracc.museum.upenn.edu/doc/about/licensing/index.html
+  # P16-4: trigram fragment index (search --fuzzy) — the second documentary
+  # shelf inside the 250–270 MB line (intertext design §4).
+  fuzzy_index: true
+  # P13-4 (owner-approved 2026-07-11, "Two-stage SAA-first crawl"): the
+  # running English is crawled from the official per-text HTML fragments
+  # (no public bulk ATF carries it) and ingested as -en sibling documents —
+  # `show <tablet> --parallel` renders SAA like the Homers. Stage 1 crawls
+  # the saao projects (Oracc::TRANSLATION_PROJECTS, ~250 MB, owner-fired);
+  # stage 2 extends that list. Translation prose is CC BY-SA 3.0 project
+  # content → per-document license_override "attribution" (source stays
+  # open/CC0).
+  translations: true

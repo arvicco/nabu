@@ -68,7 +68,7 @@ module Nabu
 
         def self.from_config(config, tool_tasks:)
           root = Config::PROJECT_ROOT
-          sources_path = File.join(root, "config", "sources.yml")
+          sources_path = File.join(root, Config::DEFAULT_SOURCES_PATH)
           manual_dir = File.join(root, "docs", "manual")
           classifier = SourceClass.new(sources_path: sources_path, manual_dir: manual_dir,
                                        grants_path: config.grants_path, canonical_dir: config.canonical_dir)

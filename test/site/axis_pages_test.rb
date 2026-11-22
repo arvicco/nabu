@@ -26,7 +26,7 @@ class AxisPagesTest < Minitest::Test
     "sets up the library in minutes."
 
   def registry
-    @registry ||= Nabu::SourceRegistry.load(File.join(ROOT, "config", "sources.yml"))
+    @registry ||= Nabu::SourceRegistry.load(File.join(ROOT, "config", "sources"))
   end
 
   def axes

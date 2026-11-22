@@ -1,0 +1,13 @@
+bibyeonsa:
+  adapter: Nabu::Adapters::Bibyeonsa
+  adopted: "2026-08-18"
+  cjk_index: true   # P93-3: the CJK bigram substring lane
+  axes: [korean]   # P78-3: the goryeosa family — the state council's daily register
+  wired: true     # P78-3 first sync owner-verified (273 docs / 93,528 passages); flipped 2026-08-19 (owner: 'wire everything on')
+  # 비변사등록 원문 (NIKH via data.go.kr 15053636; 제한 없음 → D47-a
+  # attribution). Hanmun only. Fetch resolves the CURRENT atchFileId
+  # (DataGoKrFetch), then one ZipFetch into the flat workdir. 273 members
+  # bb_001..bb_273 (~180 MB unpacked — the family's bulk sibling);
+  # nikh-xml family, DTD ver 1.4.
+  license_watch: https://www.data.go.kr/data/15053636/fileData.do
+  sync_policy: manual

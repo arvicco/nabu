@@ -350,7 +350,7 @@ class WilkensOuiAdapterTest < Minitest::Test
   # -- registry -------------------------------------------------------------
 
   def test_registry_row_exists_wired_with_manual_sync_policy
-    registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources.yml", __dir__))
+    registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources", __dir__))
     entry = registry["wilkens-oui"]
     refute_nil entry, "config/sources.yml must register wilkens-oui"
     assert_equal Adapter, entry.adapter_class

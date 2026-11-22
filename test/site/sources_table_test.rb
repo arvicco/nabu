@@ -16,7 +16,7 @@ module Site
     SITE = File.join(ROOT, "site")
 
     def registry
-      @registry ||= Nabu::SourceRegistry.load(File.join(ROOT, "config", "sources.yml"))
+      @registry ||= Nabu::SourceRegistry.load(File.join(ROOT, "config", "sources"))
     end
 
     def generator = Nabu::Ops::SourcesTable.load(registry: registry, site_dir: SITE)

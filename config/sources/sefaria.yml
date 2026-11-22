@@ -1,0 +1,109 @@
+sefaria:
+  adapter: Nabu::Adapters::Sefaria
+  adopted: "2026-07-18"
+  embed_index: true   # P93-4: the semantic-vector literary core
+  axes: [biblical, hebrew]
+  wired: true # flipped 2026-07-19 (Targum shelf synced, owner sign-off);
+                   # P46-1 adds the Rabbinic wave-1 shelves to the SAME wired
+                   # source — the wave sync is OWNER-FIRED: bin/nabu sync
+                   # sefaria refetches the index and pulls ≈864 named files
+                   # (118 targum ≈ 15 MB re-pinned, 634 wave-1 open-lane
+                   # ≈ 78 MB, 112 Davidson nc ≈ 99 MB), then eyeball
+                   # urn:nabu:sefaria:tamid:he:wikisource-talmud-bavli:25b.1
+                   # (the frozen daf start), a Kaufmann Mishnah passage, and
+                   # 5 randoms. Expected ≈848 documents: ≈104 targum
+                   # (unchanged, urns FROZEN) + 744 wave-1 (746 fetched − the
+                   # 2 file-level "unknown"s: Kaufmann Pirkei Avot, Davidson
+                   # Yerushalmi Shekalim English — censused at discovery).
+                   # P55-3 adds the MIDRASH wave-2 shelves to the same sync:
+                   # +48 named files (30 rabbah + 18 midrash-halakhah; the
+                   # probed files run 0.2-1.3 MB each) → expected wave-2
+                   # documents ≤46: the he TE lane is per-file MIXED (probes:
+                   # Esther + Bereshit TE "unknown", Ruth TE PD) so the gate
+                   # censuses the unknowns among the 44 unprobed files at
+                   # discovery, and any UNSEEN license string still
+                   # loud-stops the sync for an owner mapping. Eyeball
+                   # urn:nabu:sefaria:ruth-rabbah:en:the-sefaria-midrash-
+                   # rabbah-2022:petichta.1 (the default-node citation) and a
+                   # sifrei-zuta passage (5.2.1 = its real opening).
+                   # P140 adds the commentaries/halakhah/Zohar/liturgy wave
+                   # (six shelves, Sefaria::SHELVES): +1,528 named files
+                   # (≈385 MB) on the 2026-10-02 index → expected EXACTLY
+                   # +1,049 documents / +591,400 passages, 455 rule skips
+                   # (licence "unknown"/absent) and 24 quarantines (13
+                   # de/hu versions, 11 zero-leaf SCT stubs) — a full parse
+                   # of the census tree, per-shelf table in the class note.
+                   # Eyeball urn:nabu:sefaria:minchat-shai-on-jonah:he:
+                   # minchat-shai:1.1.1, a tur:he:onyourway passage, and a
+                   # zohar-chadash:he:zohar-chadash passage (arc).
+                   # P150 adds the LINKS LAYER to the same sync: the index's
+                   # special files links/links0..16.csv (≈680 MB, 5,069,488
+                   # rows; the links_by_book* aggregates stay in the bucket)
+                   # → Nabu::SefariaLinks, kind=reference edges between held
+                   # passages (Tanakh refs → the oshb verse). Expected at the
+                   # 2026-10-02 generation against the current catalog:
+                   # 622,476 edges from 625,102 both-sides-held rows; the
+                   # 4,444,269 rows with an unheld side are censused on the
+                   # run row. Eyeball `nabu links urn:nabu:oshb:jonah:1.1`.
+                   # P152 adds the SECOND TEMPLE shelf (Ben Sira + Megillat
+                   # Ta'anit, title-allowlisted): +10 named files (≈0.4 MB)
+                   # → expected EXACTLY +7 documents / +1,885 passages, +3
+                   # rule skips (BST, Zeitlin and YU English say "unknown").
+                   # Eyeball urn:nabu:sefaria:ben-sira:he:ben-sira-david-
+                   # kahana-ed-wikisource:1.1 and urn:nabu:sefaria:megillat-
+                   # ta-anit:he:warsaw-1874:nisan.2.
+                   # The CLASSICAL-MIDRASH CUT (owner-ruled title list) widens
+                   # the aggadah allowlist by Yalkut Shimoni on Torah/Nach,
+                   # Otzar Midrashim and Ein Yaakov: +18 named files (≈31 MB)
+                   # → expected EXACTLY +10 documents / +16,123 passages, +8
+                   # rule skips ("unknown"), 0 quarantines (full parse,
+                   # 2026-11-17). Eyeball urn:nabu:sefaria:ein-yaakov:he:daat:
+                   # berakhot.1.1 and urn:nabu:sefaria:yalkut-shimoni-on-
+                   # torah:he:torat-emet:1.1 (nc).
+  # Sefaria — Targum shelf (P30-3) + RABBINIC WAVE 1 (P46-1) + MIDRASH
+  # WAVE 2 (P55-3). Upstream
+  # restructured: the git repo is a monthly books.json index (19,705 version
+  # entries at the pinned 2026-07-02 generation), texts live in the public
+  # gs://sefaria-export bucket (~26 GB, never wholesale). Fetch shape
+  # (Nabu::SefariaFetch): GET index → the PINNED SHELF TABLE
+  # (Sefaria::SHELVES) selects NAMED versions → named-file GETs staged via a
+  # tempdir spool; the index rides in canonical so scope is reproducible.
+  # Wave-1 shelves (owner-ratified): Mishnah (he Vilna 1913 + Torat Emet 357
+  # + Kaufmann MS; en Kulp + SCT + Open Mishnah), Bavli (he Wikisource; en
+  # SCT partials; + the Davidson nc lane en/arc/vocalized), Minor Tractates
+  # (Vilna 1883 + Cohen Soncino + SCT), Yerushalmi (Guggenheimer he+en +
+  # Davidson Shekalim en), Tosefta (Lieberman codex-Vienna + SCT).
+  # Wave-2 shelves (P55-3): rabbah — Midrash/Aggadah/Midrash Rabbah EXACTLY,
+  # the ten classical collections (he Torat Emet; en The Sefaria Midrash
+  # Rabbah 2022 CC-BY + SCT; "Ruth Rabbah (Lerner)" excluded as a duplicate
+  # title) — and midrash-halakhah — Midrash/Halakhah EXACTLY (both
+  # Mekhiltas, Sifra en-only: its lone Hebrew, Venice 1545, is file-level
+  # license-unknown and NOT NAMED; Sifrei Bamidbar/Devarim/Zuta, Midrash
+  # Tannaim; the "Footnotes on Mekhilta…" apparatus title excluded). The
+  # FLAT Midrash/Aggadah bucket (Pesikta, Tanchuma, PdRE … beside Yalkut
+  # Shimoni, Otzar Midrashim, Ein Yaakov) is not category-separable → out of
+  # wave 2; the title-level rulings since cut it by exact-title allowlist
+  # (the aggadah shelf: wave 3's classical core + the classical-midrash cut).
+  # Commentary/Rishonim/Acharonim/Guides subtrees and non-named editions
+  # (Venice, Mechon-Mamre…) are out of the wave-1/2 shelves by rule. P140
+  # opens the Rishonim-on-Tanakh subtree whole (tanakh-rishonim) plus the
+  # Mishneh Torah, Shulchan Arukh, Tur, Zohar and Liturgy shelves, every
+  # named version, their own Commentary subtrees out. THE LICENSE GATE per version
+  # FILE (the index carries no license field): PD (both spellings, D46-f)/
+  # CC0 → open, CC-BY/CC-BY-SA → attribution override, CC-BY-NC(-SA) → nc
+  # override (P10-4, never redistributed — the Davidson lane); "unknown"/absent →
+  # never ingested; merged.json never fetched or ingested (pinned in tests).
+  # LANGUAGE RULINGS (D46-e, per shelf on actualLanguage): Targum he→arc
+  # (axis-keyed, frozen); Mishnah + Tosefta + both midrash shelves he→hbo;
+  # Bavli + Minor +
+  # Yerushalmi he→arc; en→eng; hbo/arc NFC-exempt byte-verbatim; an unmapped
+  # actualLanguage (he-axis ar/yi, en-axis de/fr/pt/es/ru/hu) quarantines
+  # loudly at parse. URNs: targum <title>:<version> (FROZEN); later shelves
+  # <title>:<he|en>:<version> (3 corpus-wide title/version collisions across
+  # the axis). Bavli passages cite daf.amud (25b.1 — positional from daf 1a,
+  # frozen arithmetic); midrash cites its own upstream grain (Rabbah:
+  # petichta.N + bare chapter.paragraph via the default "" schema node;
+  # halakhic midrash: chapter.verse.paragraph — never daf). Tafsir Rasag
+  # (Judeo-Arabic) excluded by rule. The ot
+  # alignment hub's Aramaic leg (config/alignments.yml). Index regenerates
+  # monthly; a re-sync is an owner decision → manual.

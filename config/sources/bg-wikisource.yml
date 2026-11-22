@@ -1,0 +1,15 @@
+bg-wikisource:   # P116-2, 02-sources row 237
+  adapter: Nabu::Adapters::BgWikisource
+  adopted: "2026-10-10"
+  axes: [slavic]
+  wired: true    # First sync verified 2026-10-10: 26 docs / 220 passages / 3 declared skips.
+  sync_policy: manual
+  # The Bulgarian Wikisource premodern cone (owner-ruled posture; census in the
+  # adapter header): the 19 medieval charters (Средновековни
+  # български/сръбски текстове) read through their ORIGINAL-script
+  # {{Script/Slavonic}} text only (chu, the wiki's grouping as
+  # "recension", the issuance year typed) — pages hosting only a
+  # modern rendering skip by rule — plus Paisiy's История
+  # славянобългарска (10 subpages), hosted as a modern-literary-
+  # Bulgarian rendering after Ivanov 1914 and DECLARED so (bul,
+  # metadata "rendering"). Texts PD; layer CC BY-SA 4.0.

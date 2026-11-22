@@ -1,0 +1,13 @@
+wiktionary-ko:   # P154, 02-sources row 363
+  adapter: Nabu::Adapters::WiktionaryKo
+  adopted: "2026-11-02"
+  axes: [korean]
+  wired: true   # first sync verified 2026-11-03: 64,457 entries
+  # The kaikki Korean extraction (64,457 records / "57810 distinct words",
+  # census 2026-11-02): the library's first Korean dictionary: modern hangul
+  # headwords, Sino-Korean words with their hanja, and Middle Korean (183
+  # oko) etymons beside the loan lanes. Language ko. The wiktionary-fa mold
+  # on the shared WiktionaryKaikki base: per-language JSONL (deprecated
+  # upstream — fallback = filter the full extract by lang_code ko), CC BY-SA
+  # + GFDL → attribution, FileFetch.
+  sync_policy: manual

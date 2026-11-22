@@ -1,0 +1,15 @@
+cleasby-vigfusson:   # P153, 02-sources row 322
+  adapter: Nabu::Adapters::CleasbyVigfusson
+  adopted: "2026-11-02"
+  axes: [germanic]
+  wired: true   # first sync 2026-11-02 exactly on census (35,207 entries, 0 errored, 1 rule skip); define abbadis green
+                 # (git clone, ~12 MB). EXPECT 1 dictionary doc → 35,207 non entries,
+                 # 0 errored, 1 skipped by rule (the no-markup twin); eyeball
+                 # nabu define abbadis ("abbess"), then flip.
+  # Cleasby & Vigfusson, An Icelandic-English Dictionary (1874), the
+  # stscoundrel JSON edition (MIT; the text PD by age → attribution, the
+  # house MIT precedent). The first Old Norse dictionary shelf, for the
+  # held West Norse text (menota, menotec, rundata, UD Icelandic).
+  # Language non, declared coarse (the book's object is Old Icelandic).
+  # Family definitions-json; 7 homograph words numbered word:n.
+  sync_policy: manual

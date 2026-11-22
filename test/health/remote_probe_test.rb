@@ -1105,7 +1105,7 @@ class RemoteProbeTest < Minitest::Test
   # The real-registry pin (P39-0): every local shelf adapter row MUST be
   # kind: shelf, or `health --remote` routes it at the network.
   def test_every_local_shelf_in_the_real_registry_is_kind_shelf
-    registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources.yml", __dir__))
+    registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources", __dir__))
     registry.each_source do |entry|
       next unless entry.adapter_class_name.start_with?("Nabu::Adapters::Local")
 

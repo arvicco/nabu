@@ -1,0 +1,25 @@
+riig:
+  adapter: Nabu::Adapters::Riig
+  adopted: "2026-07-17"
+  axes: [epigraphy, celtic]
+  siblings: ["-fr"]  # P34-0 (was P25-1/P30 frozen): literal tail — no upstream id ends in -fr
+  wired: true    # flipped 2026-07-18 (owner sign-off: 477 docs live; sibling-peek quarantine noise = open hotfix)
+                   # corpus map + 428 EpiDoc records, polite sequential;
+                   # CLAUDE.md checklist §6 — bin/nabu sync riig, eyeball
+                   # nabu show urn:nabu:riig:vau-13-01 --parallel (the
+                   # Segomaros dedication, σεγομαρος … νεμητον + the French
+                   # sibling) and 5 random records, then flip). Expect the
+                   # ~5 "Indéterminé" map records to quarantine honestly if
+                   # their editions are empty — triage at first sync (the
+                   # EDH precedent).
+  # RIIG — Recueil informatisé des inscriptions gauloises (ANR, Ausonius/
+  # Bordeaux): 428 Gaulish inscriptions, Gallo-Greek (xtg-Grek) + Gallo-
+  # Latin (xtg-Latn). CC BY 4.0 per-record in-file grant (governs — the
+  # project page's CC BY-NC-ND covers site documentation only, never
+  # fetched) → attribution. The project is a completed ANR edition with
+  # occasional revisions: re-crawls are an owner decision.
+  sync_policy: manual
+  # P25-1: French translation divs ride as -fr sibling documents where
+  # records carry them (partial coverage upstream — the per-file peek, not
+  # a blanket flag, decides). Same CC BY grant, no license override.
+  translations: true

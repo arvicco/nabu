@@ -349,7 +349,7 @@ class WoldTest < Minitest::Test
   # --- registry --------------------------------------------------------------------
 
   def test_registry_row_is_unwired_manual_on_the_etym_axis
-    registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources.yml", __dir__))
+    registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources", __dir__))
     entry = registry["wold"]
     refute_nil entry, "config/sources.yml must register wold"
     assert_equal Nabu::Adapters::Wold, entry.adapter_class

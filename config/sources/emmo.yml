@@ -1,0 +1,21 @@
+emmo:   # P155, 02-sources row 368
+  adapter: Nabu::Adapters::Emmo
+  adopted: "2026-11-03"
+  axes: [germanic]
+  wired: true   # first sync verified 2026-11-03: 100 docs / 196 passages, 2 rule skips
+                 # emmo.folger.edu/zip/emmo.zip; seconds). EXPECT 100 docs / 196
+                 # passages, 0 errored, 1 skipped by rule (emmo.xsl) + the
+                 # fetcher's .zip-fetch.json pin (census through the adapter over
+                 # the 2026-05-31 zip, 2026-11-03). Eyeball nabu show
+                 # urn:nabu:emmo:La13:1r (Yeldard Alvey to Walter Bagot, Oxford
+                 # 1620) and urn:nabu:emmo:Lb526:1r (Donne to Sir George More,
+                 # 1602), probe nabu search "daunceinge schoole", then flip.
+  sync_policy: manual   # the zip is rebuilt in place (no versioned release)
+  # Early Modern Manuscripts Online (Folger Shakespeare Library): 100
+  # word-tokenized TEI P5 transcriptions of English manuscripts, 1552–1697
+  # — the Bagot family letters of Blithfield, the More family of Loseley
+  # (John Donne's letters of 1602 among them), Bacon-Townshend, Ferrers,
+  # Rich, Cavendish-Talbot papers. CC BY-SA 4.0 in every file's licence →
+  # attribution (images excluded, never fetched). Document = file,
+  # passage = page; text = the original spelling with expansions, upstream's
+  # regularized spelling as the "regularized" annotation (the ticha seam).

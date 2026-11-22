@@ -1,0 +1,7 @@
+sources:
+  sarit:
+    kind: {posture: unclassified}
+    lect: {posture: identity, note: classical Sanskrit editions; no school tags like DCS's}
+    dating: {posture: undatable}
+    places: {posture: unplaced}
+    script: {posture: qualified}

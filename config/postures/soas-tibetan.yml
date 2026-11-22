@@ -1,0 +1,8 @@
+sources:
+  soas-tibetan:
+    kind: {posture: unclassified}
+    lect: {posture: identity, note: xct IS Classical Tibetan}
+    dating: {posture: dated, note: "P108-8: the period strings ('13th century, …') band via
+        the century-prose grammar — 4/4 docs"}
+    places: {posture: unplaced}
+    script: {posture: implied}

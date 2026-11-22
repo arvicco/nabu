@@ -1,0 +1,16 @@
+wiktionary-hit:
+  adapter: Nabu::Adapters::WiktionaryHit
+  adopted: "2026-09-13"
+  group: signs  # the wiktionary-sux precedent — the cuneiform card's sense lane
+  axes: [hittite, cuneiform]
+  wired: true   # P99-7; first sync verified 2026-09-14 (481 entries; define 𒉿𒀀𒋻 → "water")
+  # The kaikki Hittite extraction (481 records / "466 distinct words"
+  # censused 2026-09-13; 414 pure-cuneiform headwords — 𒉿𒀀𒋻 wātar —
+  # the P65 sign card's sense join beside TLHdig; descendant chains →
+  # reflexes incl. the hit→akk lane 𒋻𒌑𒍣 → 𒅴𒁄; ~100 romanization
+  # pointer entries keep the fold's romanized reach). The wiktionary-sux
+  # mold on the shared WiktionaryKaikki base: per-language JSONL
+  # (deprecated upstream — fallback = filter the full extract by
+  # lang_code hit), CC BY-SA + GFDL → attribution, FileFetch, re-syncs
+  # owner-fired.
+  sync_policy: manual

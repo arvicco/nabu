@@ -1,0 +1,7 @@
+sources:
+  bfm:
+    kind: {posture: unclassified}
+    lect: {posture: identity, note: fro IS Old French}
+    dating: {posture: dated}
+    places: {posture: unplaced}
+    script: {posture: implied}

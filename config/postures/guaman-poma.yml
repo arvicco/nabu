@@ -1,0 +1,18 @@
+sources:
+  guaman-poma:   # P117-5
+    # kind: machine-postured — kind_map.yml source_kind historiography/
+    # chronicle (one work, the whole-source declaration precedent).
+    lect: {posture: identity, note: "bare spa is the honest one-tag claim — the edition tags
+        NO language: its Quechua, Aymara and Latin passages are italicized alike, so a qwc
+        (Classical Quechua) or aym lane would need a per-run language decision the markup
+        cannot carry (declared coarse; the italic runs and the edition's normalized
+        Andean-terms lines ride as annotations/metadata). Early-17th-c. colonial Spanish
+        is unstaged (es has no early-modern stage)"}
+    dating: {posture: dated, note: "the autograph's 1615 (the edition's own title) on every
+        page — the artifact date, :structured lane"}
+    places: {posture: unplaced, note: "the chronicle names its Andean places in prose only;
+        the edition's onomastic index is a separate site section (not crawled) — a future
+        place-mining pass, not a field"}
+    script: {posture: implied, note: "Latin script, the 1987 transcription's conventions
+        (in-word editorial brackets S[EÑ]OR kept, the editors' bracketed glosses moved to
+        annotations)"}

@@ -1,0 +1,17 @@
+sources:
+  titus-old-frisian:
+    # kind machine-postured — the titus-old-frisian fold in kind_map.yml over the
+    # corpus page's Text header and the Brokmer edition (the law texts → legal/law,
+    # the Ten Commandments → catechesis, the Riim → literary/poetry).
+    lect: {posture: identity, note: "ofs — the bare Old Frisian anchor (nabu-lects, band
+        1200-1550), deliberately coarse: the registry draws the East/West Frisian split
+        as prose, not a stage or variety pair; the Latin incipits mint no claim (they
+        ride the `latin` annotation)"}
+    dating: {posture: undatable, note: "the headers state only the modern editions' years
+        (Steller 1928, Heuser 1903, Buma/Ebel 1965) — never a manuscript or composition
+        date; the Hunsingo and Brokmer codices' dates are scholarship, not a header"}
+    places: {posture: unplaced, note: "no place field; the law texts name their lands
+        (the Brokmerland, Hunsingo) in title and text only — a ruled text→region table
+        would be a future overlay"}
+    script: {posture: implied, note: "Latin-script manuscripts in normalized critical
+        editions"}

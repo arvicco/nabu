@@ -13,7 +13,7 @@ module Adapters
     FIXTURES = Nabu::TestSupport.fixtures("edubba-overlay")
 
     def registry
-      Nabu::SourceRegistry.load(File.expand_path("../../config/sources.yml", __dir__))
+      Nabu::SourceRegistry.load(File.expand_path("../../config/sources", __dir__))
     end
 
     def test_registry_carries_the_module_row_in_the_signs_group

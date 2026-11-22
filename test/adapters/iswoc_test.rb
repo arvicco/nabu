@@ -145,7 +145,7 @@ class IswocTest < Minitest::Test
   # --- registry round-trip ------------------------------------------------
 
   def test_registry_resolves_iswoc_frozen_and_disabled_until_first_sync
-    registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources.yml", __dir__))
+    registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources", __dir__))
     entry = registry["iswoc"]
     refute_nil entry, "iswoc must be registered in config/sources.yml"
     assert_equal Nabu::Adapters::Iswoc, entry.adapter_class
