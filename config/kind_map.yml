@@ -1590,6 +1590,10 @@ sources:
     source_kind: scripture
   prague-bible-1488:
     source_kind: scripture   # P116-1: GT pages of the 1488 Czech Bible print
+  syriac-htr-gt:
+    source_kind: scripture   # GT pages of two Syriac New Testament manuscripts (ÖNB Cod. Syr. 1,
+    #                          the Gospels; SMMJ 36, Matthew to the Epistles) — margins and folio
+    #                          numbers ride their own regions; the book is the New Testament whole
   etcbc-syrnt:
     source_kind: scripture   # the Syriac New Testament — every document is an NT book
   slavistics-pd:

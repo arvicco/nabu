@@ -391,6 +391,8 @@ module Nabu
           "su-wikisource" => :edition_year_text, # P140: the scan Index Year= print year
           #                                         (date_class edition)
           "syriac-corpus" => :when_key,
+          "syriac-htr-gt" => :structured, # each manuscript's own date (the ÖNB colophon's 1554;
+          #                                 SMMJ 36's 1100–1399); place = Vienna for the ÖNB codex
           "te-wikisource" => :edition_year_text, # P140: the scan Index సంవత్సరం= print year,
           #                                         else the header's (date_class edition —
           #                                         never the poets' composition era)

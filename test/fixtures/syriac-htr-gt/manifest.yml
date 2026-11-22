@@ -1,0 +1,48 @@
+# Nabu fixture manifest (P5-4 "fixture sentinel"). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# The page files are whole, verbatim members of the two records' page.zip
+# archives — not individually GET-able, so every entry is a local copy of
+# the unpacked artifact (provenance local-trim, whole: true). The zip's
+# onb-cod-syr-1/.DS_Store (whole, byte-identical — the rejected grain's
+# specimen) is a dotfile the orphan check does not glob; it is recorded in
+# README.md.
+source: syriac-htr-gt
+adapter_test:
+retrieved: "2026-11-22"
+files:
+  - path: onb-cod-syr-1/0001_00000016.xml
+    refetchable: false
+    provenance: local-trim
+    reason: member of the Zenodo 14714089 page.zip (page/) — not individually fetchable; re-cut per README
+    copied: "2026-11-22"
+    whole: true
+    trim: none
+  - path: onb-cod-syr-1/0159_00000174.xml
+    refetchable: false
+    provenance: local-trim
+    reason: member of the Zenodo 14714089 page.zip (page/) — not individually fetchable; re-cut per README
+    copied: "2026-11-22"
+    whole: true
+    trim: none
+  - path: onb-cod-syr-1/0179_00000194.xml
+    refetchable: false
+    provenance: local-trim
+    reason: member of the Zenodo 14714089 page.zip (page/) — not individually fetchable; re-cut per README
+    copied: "2026-11-22"
+    whole: true
+    trim: none
+  - path: onb-cod-syr-1/0319_00000334.xml
+    refetchable: false
+    provenance: local-trim
+    reason: member of the Zenodo 14714089 page.zip (page/) — not individually fetchable; re-cut per README
+    copied: "2026-11-22"
+    whole: true
+    trim: none
+  - path: smmj-36/0071_SMMJ_00036__076.xml
+    refetchable: false
+    provenance: local-trim
+    reason: member of the Zenodo 18157525 page.zip — not individually fetchable; re-cut per README
+    copied: "2026-11-22"
+    whole: true
+    trim: none

@@ -123,7 +123,7 @@ The reconstruction shelves: the kaikki proto-extracts, IE-CoR cognacy, LIV, the 
 
 The cross-language scripture hat: the Masoretic shelves and the Scrolls, the Greek NT, Vulgate and WEB, Peshitta and the Syriac corpus, Coptic Scriptorium, the Targums, and the OSHB-BHSA bridging module. The hebrew and syriac language desks coexist with this hat by design.
 
-**Members** (28): `betamasaheft-works`, `bhsa`, `bridging`, `cntr`, `coptic-scriptorium`, `dss`, `dtucph-sp`, `ebible-pacific`, `elizabeth-bible`, `eng-web`, `etcbc-syriac`, `etcbc-syrnt`, `etcbc-targum`, `extrabiblical`, `hebrew-lexicon`, `hexapla`, `macula-greek`, `opengnt`, `oshb`, `peshitta`, `sblgnt`, `sdbh`, `sefaria`, `stepbible-tagnt`, `syriac-corpus`, `typikon-bible`, `ud`, `vulgate`
+**Members** (29): `betamasaheft-works`, `bhsa`, `bridging`, `cntr`, `coptic-scriptorium`, `dss`, `dtucph-sp`, `ebible-pacific`, `elizabeth-bible`, `eng-web`, `etcbc-syriac`, `etcbc-syrnt`, `etcbc-targum`, `extrabiblical`, `hebrew-lexicon`, `hexapla`, `macula-greek`, `opengnt`, `oshb`, `peshitta`, `sblgnt`, `sdbh`, `sefaria`, `stepbible-tagnt`, `syriac-corpus`, `syriac-htr-gt`, `typikon-bible`, `ud`, `vulgate`
 
 ### hebrew
 
@@ -139,7 +139,7 @@ The Hebrew-and-Aramaic language desk beside the cross-language biblical hat: OSH
 
 The Syriac language desk: the ETCBC Peshitta and the Digital Syriac Corpus, riding beside the biblical hat by design.
 
-**Members** (6): `etcbc-syriac`, `etcbc-syrnt`, `hmml-reading-room`, `peshitta`, `syriac-corpus`, `wiktionary-syc`
+**Members** (7): `etcbc-syriac`, `etcbc-syrnt`, `hmml-reading-room`, `peshitta`, `syriac-corpus`, `syriac-htr-gt`, `wiktionary-syc`
 
 ### ethiopic
 
