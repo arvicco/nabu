@@ -1,0 +1,14 @@
+sillok:
+  adapter: Nabu::Adapters::Sillok
+  adopted: "2026-08-18"
+  cjk_index: true   # P93-3: the CJK bigram substring lane
+  axes: [korean]   # P78-1: MINTS the korean axis — the hanmun state record's anchor
+  wired: true     # P78-1 first sync owner-verified (743 docs / 414,321 passages, both datasets); flipped 2026-08-19 (owner: 'wire everything on')
+  # 조선왕조실록 원문 (NIKH via data.go.kr 15053647 Taejo–Cheoljong +
+  # 15053646 Gojong/Sunjong; 제한 없음 → D47-a attribution). Hanmun only —
+  # the modern Korean translation layer is NOT in the dumps, never fetched.
+  # Fetch resolves the CURRENT atchFileId per dataset (DataGoKrFetch —
+  # the id bumps on upstream file replacement; resolved by the P78
+  # acquisition round), then normal ZipFetch per dataset subdir.
+  license_watch: https://www.data.go.kr/data/15053647/fileData.do
+  sync_policy: manual

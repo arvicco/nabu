@@ -6,8 +6,8 @@ require "json"
 require "uri"
 
 require_relative "ko_wikisource_mk_parser"
-require_relative "../wiki_fetch"
-require_relative "../zip_fetch"
+require_relative "../fetch/wiki_fetch"
+require_relative "../fetch/zip_fetch"
 require_relative "../redirect_follow"
 require_relative "../normalize"
 

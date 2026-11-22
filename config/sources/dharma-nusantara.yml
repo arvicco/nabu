@@ -1,0 +1,13 @@
+dharma-nusantara:   # P92-2
+  adapter: Nabu::Adapters::DharmaNusantara
+  adopted: "2026-09-01"
+  axes: [sea, epigraphy]
+  wired: true    # first sync verified 2026-09-02: 291 docs / 5,893 passages, 19 quarantined (16 lang-less upstream)
+  sync_policy: auto   # promoted 2026-10-13: actively-edited upstream,
+                       # git-incremental fetch — rides the sync --all sweep
+  # DHARMA Nusantara epigraphy (~309 editions): Old Javanese sīma
+  # charters, Borobudur, Old Sundanese (Kawali, Batutulis), Old Malay
+  # (Sojomerto, the Laguna copperplate) and Sanskrit. Full-repo language
+  # census 2026-09-01: 345 san-Latn · 196 kaw-Latn · 21 omy-Latn ·
+  # 15 osn-Latn divs; the one "languageb-Latn" template-placeholder div
+  # (INSIDENK00050) quarantines loudly by design.

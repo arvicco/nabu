@@ -1,0 +1,13 @@
+dharma-campa:   # P92-2
+  adapter: Nabu::Adapters::DharmaCampa
+  adopted: "2026-09-01"
+  axes: [sea, epigraphy]
+  wired: true    # first sync verified 2026-09-02: 121 docs / 2,728 passages, 0 quarantined
+  sync_policy: auto   # promoted 2026-10-13: actively-edited upstream,
+                       # git-incremental fetch — rides the sync --all sweep
+  # DHARMA Campā corpus (~121 editions, xml/ cone): Old Cham (ocm-Latn —
+  # the Đông Yên Châu inscription is the oldest attested Austronesian
+  # text) and Sanskrit epigraphy of the Cham polities; absorbs the
+  # ISAW–EFEO CIC corpus. In-file <licence> CC BY-SA 4.0 governs,
+  # recorded verbatim; class attribution. The xml/ dir also carries
+  # upstream's BROUILLON-LISTE.xml worklist — censused, never parsed.

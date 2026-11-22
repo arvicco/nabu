@@ -117,7 +117,7 @@ At **every phase gate**, alongside the README/library.md truthfulness pass
    docs/ops.md §12 (CITATION.cff version/date bump, GitHub release, DOI).
 7. **Per-axis pages** (P37-9): the `site/axis/<name>.md` desk pages and the
    `/axis/` index are GENERATED — `bundle exec rake site:axes` reprojects
-   them from the live registry (`config/axes.yml` + `config/sources.yml`),
+   them from the live registry (`config/axes.yml` + `config/sources/`),
    the curated `site/axis/_fragments.yml` (recipes, display notes, the
    desk's instruments — HAND-EDITED, never overwritten), and the live
    catalog counts (read-only, stamped with today's as-of date). Re-run it

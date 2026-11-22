@@ -1,0 +1,13 @@
+sources:
+  dcs:
+    kind: {posture: unclassified}
+    dating: {posture: dated, note: "the corpus's five composition time slots (early · epic ·
+        classical · medieval · late) band through the ruled 'DCS time slot N' rows of
+        config/period_bands.yml — attributed composition-era dates (class composition,
+        precision era): 15,883 of 15,900 chapters (slot 1 7,094 · 2 2,940 · 3 2,315 · 4 2,041
+        · 5 1,493); the 17 'None' chapters stay honestly undated. The corpus publishes no
+        per-slot boundary table, so each bound cites its own basis (Hellwig 2020's Vedic
+        priors for slot 1, the corpus's 500 BCE–1900 CE span, the conventional handbook
+        periodization) — slots overlap as envelopes, never a partition"}
+    places: {posture: unplaced}
+    script: {posture: implied}

@@ -1,0 +1,25 @@
+sabellic-loans:
+  adapter: Nabu::Adapters::SabellicLoans
+  adopted: "2026-07-18"
+  axes: [italic, etym]
+  wired: true # flipped 2026-07-18 (owner order: all pre-P30 sources on, riding the P30 PR)
+                   # (bin/nabu sync sabellic-loans — no network, vendored
+                   # copy + LocalFetch pin; eyeball `nabu etym rufus` for
+                   # the osc 𐌓𐌖𐌚𐌓𐌉𐌉𐌔 / xum 𐌓𐌖𐌚𐌓𐌖 loan pair and
+                   # `nabu define '𐌖𐌌𐌄𐌍'`, then flip). Expect 85 entries
+                   # across three shelves: sabellic-osc 48 / sabellic-xum
+                   # 11 / sabellic-sbv 26.
+  # P29-2 rider: Sabellic → Latin curated loan edges (the P17-3 borrowed
+  # pattern). config/sabellic_loans.yml IS the artifact — word lists from
+  # the en.wiktionary "Latin terms borrowed/derived from Oscan/Umbrian/
+  # Sabine" category pages (retrieved 2026-07-18; borrowed 23/6/13,
+  # derived supersets 48/11/26), etyma from each entry's own {{bor}}/
+  # {{der}} template, Old Italic script verbatim. CC BY-SA + GFDL →
+  # attribution. No upstream, no network: en.wiktionary is the cited
+  # provenance, re-curation is a repo change.
+  # P39-0: a real kind: source (mints 85 dictionary entries), but with NO live
+  # upstream — the vendored config/sabellic_loans.yml IS the immutable artifact,
+  # refreshed only by a repo edit. That is `frozen` (was `local`, now gone). The
+  # adapter declares no git repo (upstream_repo_urls = []), so the remote probe
+  # reads it as vendored, never ls-remotes the provenance page.
+  sync_policy: frozen

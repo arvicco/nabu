@@ -35,9 +35,9 @@ module Adapters
     # -- registry / manifest --------------------------------------------------
 
     def test_registry_resolves_ctilc_unwired_until_first_real_sync
-      registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources.yml", __dir__))
+      registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources", __dir__))
       entry = registry["ctilc"]
-      refute_nil entry, "ctilc must be registered in config/sources.yml"
+      refute_nil entry, "ctilc must be registered in config/sources/"
       assert entry.wired, "flipped 2026-08-21 — first sync owner-round-verified (967 docs), owner: wire everything on"
       assert_equal "manual", entry.sync_policy
       assert_includes entry.axes, "romance"

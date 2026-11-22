@@ -1,0 +1,16 @@
+wiktionary-pra:   # 02-sources row 287
+  adapter: Nabu::Adapters::WiktionaryPra
+  adopted: "2026-10-21"
+  axes: [indic]
+  wired: true    # first sync verified 2026-10-21: 2,712 entries, 20,311 reflex rows (the lane census exactly)
+                 # eyeball nabu define 𑀫𑀳𑀼 ("honey") and its NIA descendants, then flip.
+  # The kaikki Prakrit extraction (2,712 records / "2452 distinct words",
+  # census 2026-10-21): Brāhmī headwords; 1,131 records carry
+  # descendants trees into New Indo-Aryan (pa/hi/mr/ur/sd/gu/omr …) —
+  # the wave's reflex engine — and the inheritance chains reach back
+  # through Sanskrit to Proto-Indo-European. Language pra (the
+  # collective anchor, held coarse). The wiktionary-akk mold on the
+  # shared WiktionaryKaikki base: per-language JSONL (deprecated
+  # upstream — fallback = filter the full extract by lang_code pra),
+  # CC BY-SA + GFDL → attribution, FileFetch.
+  sync_policy: manual

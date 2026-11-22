@@ -9,7 +9,7 @@ module Nabu
     # committed Jekyll page per research axis (site/axis/<name>.md, permalink
     # /axis/<name>/) plus the /axis/ index — the site rendition of
     # docs/axes.md. Every page is a PROJECTION of the live registry
-    # (config/axes.yml + config/sources.yml) merged with a HAND-CURATED
+    # (config/axes.yml + config/sources/) merged with a HAND-CURATED
     # fragments file (site/axis/_fragments.yml — recipes, display notes, the
     # desk's instruments) that this generator READS and NEVER writes.
     #

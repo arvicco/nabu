@@ -1,0 +1,18 @@
+sources:
+  # P140: the wikisource wave-3 cones (te / cy and the dated 19th-century
+  # jv / su / br cones). Every lect row is PENDING on the ONE aggregated
+  # nabu-lects package of the phase (te:cls, cy:emod, the jv and su
+  # anchors, the jav/sun/bre codemap aliases).
+  te-wikisource:
+    kind: {posture: unclassified}
+    # lect machine-postured: the lect_overrides.yml source row → te:cls
+    # (the registry's 2026-10-22 mint; the cone is composition-bounded —
+    # 73 works of pre-1800 classical poets — so the override states the
+    # collection fact the print year cannot).
+    dating: {posture: dated, note: "P140: the scan Index సంవత్సరం= print year (else the
+        header's) → source_date → MetadataDates :edition_year_text, date_class edition —
+        never the poets' composition era; every admitted page carries one
+        (REQUIRE_EDITION_YEAR)"}
+    places: {posture: unplaced, note: "the Index చిరునామా= (చెన్నపురి, పిఠాపురము) is the
+        print's imprint place — declared, never a text place"}
+    script: {posture: implied}

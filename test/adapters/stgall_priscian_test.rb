@@ -31,9 +31,9 @@ module Adapters
     # -- registry ---------------------------------------------------------------
 
     def test_registry_resolves_the_source_wired_on_the_celtic_desk
-      registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources.yml", __dir__))
+      registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources", __dir__))
       entry = registry["stgall-priscian"]
-      refute_nil entry, "stgall-priscian must be registered in config/sources.yml"
+      refute_nil entry, "stgall-priscian must be registered in config/sources/"
       assert entry.wired, "first real sync verified 2026-10-14 (239 docs / 13,395 passages)"
       assert_equal "manual", entry.sync_policy
       assert_includes entry.axes, "celtic"

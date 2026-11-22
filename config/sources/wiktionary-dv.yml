@@ -1,0 +1,15 @@
+wiktionary-dv:   # 02-sources row 288
+  adapter: Nabu::Adapters::WiktionaryDv
+  adopted: "2026-10-21"
+  axes: [indic]
+  wired: true    # first sync verified 2026-10-21: 2,047 entries (the lane census exactly)
+                 # eyeball nabu define ފޮތް ("book", ← Prakrit 𑀧𑀼𑀢𑁆𑀣), then flip.
+  # The kaikki Dhivehi extraction (2,047 records / "1882 distinct words",
+  # census 2026-10-21): Thaana headwords, etymons through Prakrit and
+  # Sanskrit (768 sa / 103 pra edges) beside the Arabic/Persian donors.
+  # Language div carried verbatim — no Dhivehi node in nabu-lects yet
+  # (the dv anchor + div alias are a named mint candidate). The
+  # wiktionary-akk mold on the shared WiktionaryKaikki base: per-language
+  # JSONL (deprecated upstream — fallback = filter the full extract by
+  # lang_code dv), CC BY-SA + GFDL → attribution, FileFetch.
+  sync_policy: manual

@@ -1,0 +1,32 @@
+macula-greek:   # 02-sources row 423
+  adapter: Nabu::Adapters::MaculaGreek
+  adopted: "2026-11-18"
+  axes: [biblical]
+  wired: true    # first sync verified 2026-11-18: +27 docs / 7,939 passages / 0 errored,
+                 # sha256 exactly the pin, 0 skipped; search probed ("Ἀρχὴ τοῦ εὐαγγελίου
+                 # Ἰησοῦ" answers at mark:1.1), show card eyeballed beside sblgnt's.
+                 # Reconciliation exact: 27 documents = upstream's 27 NT book codes;
+                 # 7,939 passages = sblgnt's verse count; tokens = the TSV's 137,741 rows.
+  # MACULA Greek Linguistic Datasets (Clear-Bible/macula-greek, Biblica):
+  # the SBLGNT word-level TSV (SBLGNT/tsv/macula-greek-SBLGNT.tsv) — per
+  # word: syntax role, lemma, Robinson-style morph + spelled-out features,
+  # Strong's number, semantic frames, participant referents, the Berean
+  # interlinear gloss, the Cherith English and Mandarin glosses.
+  # DELIBERATE OVERLAP with sblgnt: this is an ANNOTATION EDITION of the
+  # same held text, landed as its own source because the word layers are
+  # the value; urns mirror sblgnt's book stems, verse for verse. Verse
+  # text is reassembled from the word rows (text + after).
+  # LICENSE (LICENSE.md, verified first-hand at the pin): CC BY 4.0, "©
+  # 2022-2024 by Biblica, Inc", attribution "MACULA Greek Linguistic
+  # Datasets, available at https://github.com/Clear-Bible/macula-greek/" →
+  # attribution. COLUMN-LEVEL CAVEAT, verbatim: "Word sense data from the
+  # United Bible Societies MARBLE project. (`@ln`, `@domain`) Used with
+  # permission." — a permission to MACULA, not a CC BY grant onward, so the
+  # domain/ln columns are EXCLUDED AT PARSE (pinned by test) and the
+  # caveat rides the manifest license string verbatim. Constituents:
+  # SBLGNT (CC BY 4.0), Berean Interlinear glosses (public domain since
+  # 2023-04-30), Cherith glosses (CC BY 4.0, Andi Wu).
+  # PIN: main @ 8423afe4 (2026-07-07); the TSV blob there (542e91a2) was
+  # last regenerated at 076282a3 (2026-04-22) — later tree fixes on main
+  # are not yet in the TSV. Re-pinning is an owner decision → manual.
+  sync_policy: manual

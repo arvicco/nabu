@@ -1,0 +1,20 @@
+damos:   # 02-sources row 274
+  adapter: Nabu::Adapters::Damos
+  adopted: "2026-10-18"
+  axes: [epigraphy, classical]
+  wired: true   # crawl complete 2026-10-18: 5,890 docs / 14,421 passages, 42 empty-ledgered (census closes at 5,932); KN B 822 eyeballed
+  sync_policy: manual
+  index_policy: inline   # inline because: the crawl is complete and the whole slice (~14k passages) sits far under the in-place row budget
+  # DĀMOS — Database of Mycenaean at Oslo (damos.hf.uio.no): the complete
+  # Linear B corpus — Knossos 4,224 · Pylos 1,004 · Thebes 363 · Mycenae
+  # 87 · Tiryns 27 · … plus the inscribed stirrup jars. Site footer,
+  # verbatim (2026-10-18): "Content: CC BY-NC-SA 4.0" → nc. Crawl: ONE
+  # POST /ajaxgetfilter listing (the item id space; 7,687 designation
+  # rows over 5,932 unique items — joined fragments share their host's
+  # id; the unique count must equal the summed collection counts) +
+  # GET /ajaxitem/<id>/ per item at 1 req/s, 1,500 per sync, resumable
+  # at the file grain, refusals/timeouts/5xx ledgered in
+  # .damos-crawl.json. EXPECTED: 5,932 documents after four slices
+  # (~25 min each); passages = the transliteration's own labelled lines.
+  # Language gmy (identity); the ceramic-phase chronology rides as a
+  # period label banded by the ruled Aegean rows (config/period_bands.yml).

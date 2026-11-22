@@ -24,7 +24,7 @@ module Nabu
     # 2025.1.9). The GitHub mirror this fetch reads (kitab-project-org/
     # pairwise-light) carries NO in-repo license file; it is the SAME dataset's
     # per-file access path (the license is the Zenodo record's, not the
-    # mirror's). Both facts are recorded here and in config/sources.yml so a
+    # mirror's). Both facts are recorded here and in config/sources/ so a
     # public clone can never mistake the mirror's silence for permission.
     #
     # == fetch: the pilot pairwise fan (owner-run, sequential, resumable)
@@ -60,7 +60,7 @@ module Nabu
       REQUEST_PAUSE_SECONDS = 1.0
 
       # The pilot allowlist — one held book's complete pairwise fan per folder.
-      # Seeded with the P43-4 exemplar; the owner extends it in config/sources.yml
+      # Seeded with the P43-4 exemplar; the owner extends it in config/sources/
       # (classes: [...]) as more held books' fans are wanted.
       DEFAULT_PILOT_FOLDERS = %w[ALCorpus00001-ara2].freeze
 

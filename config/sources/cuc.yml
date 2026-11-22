@@ -1,0 +1,30 @@
+cuc:
+  adapter: Nabu::Adapters::Cuc
+  adopted: "2026-07-19"
+  axes: [cuneiform]
+  wired: true   # flipped 2026-07-19 (owner: rebuild verified, all P31 sources on for release)
+                   # bin/nabu sync cuc — sparse GitFetch cone tf/0.2.8 +
+                   # README.md, 19 files ≈ 3.5 MB — then eyeball
+                   # nabu show urn:nabu:cuc:ktu-1.14:I.1 (Keret),
+                   # urn:nabu:cuc:ktu-1.4:V.1 (Baal) and 5 random lines,
+                   # then flip).
+  # P31-4: CUC — the Copenhagen Ugaritic Corpus (CACCHT project,
+  # github.com/DT-UCPH/cuc), THIRD text-fabric registrant and the FIRST
+  # uga source — a NEW axis language (dossier: `bin/nabu ingest --shelf
+  # language uga`, family lane "Northwest Semitic"). Census verified
+  # against otype.tf at the pinned commit 0408967b (2026-07-19): 146,017
+  # signs / 27,770 words / 7,616 lines / 334 columns / 279 tablets (the
+  # upstream README's "278" undercounts its own otype). Document =
+  # tablet (urn:nabu:cuc:ktu-<n>.<n> from the censused-uniform "KTU
+  # <n>.<n>" names), passage = column.line — the corpus's own citation
+  # grain. Text = the corpus's own {sign} transliteration stream; the
+  # cuneiform lane (usign) + per-sign text-critical flags (cert, emen
+  # restored/redundant/excised/missing/remark, alt, cont) ride each
+  # token's "signs" entries verbatim. 72 whitespace-only lines skipped +
+  # listed in document metadata (never faked). LICENSE: every .tf header
+  # verbatim — British spelling — "@licence=Creative Commons
+  # Attribution-NonCommercial 4.0 International License" → class nc,
+  # never redistributed. Version PINNED tf/0.2.8 (the sparse cone IS the pin);
+  # upstream is work-in-progress, new versions land in new dirs →
+  # re-pin is an owner decision.
+  sync_policy: manual

@@ -1,0 +1,5 @@
+sources:
+  sefaria:
+    dating: {posture: undatable}
+    places: {posture: unplaced}
+    script: {posture: implied}

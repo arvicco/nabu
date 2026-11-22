@@ -1,0 +1,20 @@
+# P28-3: the Coptic dictionary shelf (Comprehensive Coptic Lexicon v1.2,
+# Refubium fub188/27813, CC BY-SA 4.0 in-file) + ORAEC's CC0 egy↔cop
+# crosswalk riding as the second fetched artifact (crosswalk/ subdir; the
+# kind=etymology producer Nabu::CclEtymologies refreshes the links journal
+# after every sync). P89-2 (owner-ruled (a)+(c) 2026-08-30): the KELLIA
+# etymologies tab (CC BY-SA 4.0) rides as the THIRD artifact (kellia/
+# subdir), fetched PINNED at release tag v3.0.0 — a strict superset of the
+# ORAEC crosswalk (+134 C-ids, 127 blank-fills, transcriptions + EN/DE
+# glosses); the lexicon stays on the frozen Refubium deposit. Next
+# owner-fired `sync ccl` fetches the tab and revises matched entries.
+# All upstreams effectively frozen (2020 deposit; crosswalk last moved
+# 2024-08; kellia tag-pinned) → manual.
+ccl:
+  adapter: Nabu::Adapters::Ccl
+  adopted: "2026-07-18"
+  axes: [egyptian]
+  wired: true # flipped 2026-07-18 (owner order: all pre-P30 sources on, riding the P30 PR)
+                   # (checklist §6: bin/nabu sync ccl; nabu define ⲕⲁϩ;
+                   # nabu links urn:nabu:dict:ccl:C1494)
+  sync_policy: manual

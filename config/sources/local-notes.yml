@@ -1,0 +1,23 @@
+local-notes:
+  adapter: Nabu::Adapters::LocalNotes
+  adopted: "2026-07-16"
+  kind: shelf   # P39-0: a memory shelf — local fetch, no network, up=local (no sync_policy)
+  axes: [local]
+  wired: true    # P24-1: wired by DEFAULT -- the P19-1 local-shelf argument
+                   # verbatim: the checklist's "wired: false until first real
+                   # sync" guards network cost and unverified licenses, and a
+                   # LOCAL shelf has neither (no upstream; the notes are the
+                   # owner's own annotations, class open; rebuild replays it
+                   # regardless of this flag, and `sync --all` skips non-live
+                   # policies anyway). The shelf populates through
+                   # `bin/nabu note URN "TEXT"` (the sanctioned front door:
+                   # resolution-checked append through Nabu::NoteShelf + sync),
+                   # or by hand-editing canonical/local-notes/<topic>.yml and
+                   # firing `bin/nabu sync local-notes`.
+  # The third canonical-memory shelf (architecture §16): owner notes on ANY
+  # urn the corpus knows (documents, passages, ranges, dictionary entries) --
+  # scholia of one's own, one YAML list per topic file, indexed into the
+  # derived urn_notes and rendered on show/define/links (MCP serves notes by
+  # default, withheld wherever the target document is withheld).
+  # (P39-0: kind: shelf replaces the P31 sync_policy: local rider — kind now
+  # routes this upstream-less shelf at the local probe, never the git one.)

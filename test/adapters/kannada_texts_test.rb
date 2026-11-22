@@ -137,7 +137,7 @@ class KannadaTextsTest < Minitest::Test
   end
 
   def test_registered_and_wired
-    registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources.yml", __dir__))
+    registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources", __dir__))
     entry = registry["kannada-texts"]
     refute_nil entry
     assert_equal Nabu::Adapters::KannadaTexts, entry.adapter_class

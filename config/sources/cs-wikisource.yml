@@ -1,0 +1,13 @@
+cs-wikisource:   # P116-3, 02-sources row 239
+  adapter: Nabu::Adapters::CsWikisource
+  adopted: "2026-10-10"
+  axes: [slavic]
+  wired: true    # First sync verified 2026-10-10: 330 docs / 4,748 passages / 6 skips.
+  sync_policy: manual
+  # Censused premodern works, prefix-expanded (Wikizdroje has no epoch
+  # category tree; census 2026-10-10, 336 cone pages): Dalimil (Jireček
+  # 1877, 112) · Bible kralická 1613 (10, the print's own orthography) +
+  # 1918 (66, modernized) + the 1613 deuterocanon in modern spelling (3)
+  # · Komenský, Labyrint světa (1663, 57) · Harant, Cesta (80).
+  # Hospodine, pomiluj ny! keys to the 1959 kancionál → excluded by
+  # EDITION_TAINT_POST_1930. Texts PD; transcription layer CC BY-SA 4.0.

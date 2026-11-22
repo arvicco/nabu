@@ -4,7 +4,7 @@ require "json"
 
 require_relative "ebl_atf_parser"
 require_relative "cdli"
-require_relative "../file_fetch"
+require_relative "../fetch/file_fetch"
 
 module Nabu
   module Adapters

@@ -1,0 +1,16 @@
+lexlep-words:
+  adapter: Nabu::Adapters::LexlepWords
+  adopted: "2026-07-18"
+  # P35-0: absent from the D35 draft — mirrors lexlep (two grains of one wiki share their desks)
+  axes: [epigraphy, celtic, italic]
+  wired: true # flipped 2026-07-18 (owner order: all pre-P30 sources on, riding the P30 PR)
+                   # checklist §6: bin/nabu sync lexlep-words — 628 Word
+                   # pages — then eyeball nabu define uvamokozis / define
+                   # --lang xlp and 5 random entries before flipping).
+  # P29-3: LexLep's "Dictionary of Attested Forms" — the 628-word
+  # etymological lexicon of Lepontic / Cisalpine Gaulish (the packet
+  # brief's "202" was the Morpheme category, journaled v2) as the lep
+  # dictionary shelf row. SIBLING of lexlep: content_kind is one closed
+  # routing per adapter (aes/aed precedent), so the wiki's two grains are
+  # two rows sharing WikiFetch + wiki-template + the nc posture above.
+  sync_policy: manual

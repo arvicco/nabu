@@ -301,9 +301,9 @@ class SealTest < Minitest::Test
   # --- registry round-trip (runs in CI) --------------------------------------
 
   def test_registry_resolves_seal_wired_manual_on_the_cuneiform_axis
-    registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources.yml", __dir__))
+    registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources", __dir__))
     entry = registry[SLUG]
-    refute_nil entry, "seal must be registered in config/sources.yml"
+    refute_nil entry, "seal must be registered in config/sources/"
     assert_equal Nabu::Adapters::Seal, entry.adapter_class
     assert entry.wired, "live (first sync 2026-08-30, re-parse verified + flip 2026-08-31)"
     assert_equal "manual", entry.sync_policy

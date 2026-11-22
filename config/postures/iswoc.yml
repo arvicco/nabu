@@ -1,0 +1,7 @@
+sources:
+  iswoc:
+    kind: {posture: unclassified}
+    lect: {posture: identity, note: ang/fro — both stage-coded}
+    dating: {posture: undatable}
+    places: {posture: unplaced}
+    script: {posture: implied}

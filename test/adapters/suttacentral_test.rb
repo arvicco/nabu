@@ -506,9 +506,9 @@ class SuttacentralTest < Minitest::Test
   # --- registry round-trip ----------------------------------------------------
 
   def test_registry_resolves_suttacentral_and_manifest_agrees
-    registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources.yml", __dir__))
+    registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources", __dir__))
     entry = registry["suttacentral"]
-    refute_nil entry, "suttacentral must be registered in config/sources.yml"
+    refute_nil entry, "suttacentral must be registered in config/sources/"
     assert_equal Nabu::Adapters::Suttacentral, entry.adapter_class
     assert entry.wired, "live (owner sign-off 2026-07-18: synced, parallel siblings eyeballed, flipped)"
     assert_equal "auto", entry.sync_policy # promoted 2026-10-13: actively-edited upstream rides the sync --all sweep

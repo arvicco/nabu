@@ -18,7 +18,7 @@ module Nabu
     #     between the BEGIN/END markers (the desk's live sources: slug,
     #     upstream name, license class; the verbatim terms keep their one
     #     home in docs/02-sources.md) — are a projection of
-    #     the tracked registry (config/sources.yml + config/axes.yml + the
+    #     the tracked registry (config/sources/ + config/axes.yml + the
     #     adapter manifests). #sync! rewrites them in place; #stale reports
     #     any file whose managed lanes have drifted from the registry.
     #   * everything else is PROSE, seeded once by #scaffold (persona, desc,
@@ -38,7 +38,7 @@ module Nabu
       Skill = Data.define(:front, :body)
       Result = Data.define(:path, :action)
 
-      BEGIN_MARK = "<!-- nabu:skill-sources:begin — generated from config/sources.yml by " \
+      BEGIN_MARK = "<!-- nabu:skill-sources:begin — generated from config/sources/ by " \
                    "`rake skills:scaffold`; edit outside this block -->"
       END_MARK = "<!-- nabu:skill-sources:end -->"
       MANAGED_BLOCK = /<!-- nabu:skill-sources:begin[^\n]*-->\n.*?<!-- nabu:skill-sources:end -->/m

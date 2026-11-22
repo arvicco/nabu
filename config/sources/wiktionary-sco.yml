@@ -1,0 +1,13 @@
+wiktionary-sco:   # P154, 02-sources row 350
+  adapter: Nabu::Adapters::WiktionarySco
+  adopted: "2026-11-02"
+  axes: [germanic]
+  wired: true   # first sync verified 2026-11-03: 6,042 entries
+  # The kaikki Scots extraction (6,042 records / "5127 distinct words",
+  # census 2026-11-02): the library's first Scots dictionary: etymons
+  # through Middle English (888), Old English (750) and Old Norse (196).
+  # Language sco. The wiktionary-fa mold on the shared WiktionaryKaikki
+  # base: per-language JSONL (deprecated upstream — fallback = filter the
+  # full extract by lang_code sco), CC BY-SA + GFDL → attribution,
+  # FileFetch.
+  sync_policy: manual

@@ -1,0 +1,20 @@
+edubba-overlay:
+  adapter: Nabu::Adapters::EdubbaOverlay
+  adopted: "2026-08-11"
+  group: signs   # the sign-restore sweep: enable signs && sync signs makes the hiero card whole
+  kind: module   # P72-6: machinery-only — the sister school's didactic overlay, zero document rows
+  requires: [unikemet]   # P77-r3: the overlay joins onto Unikemet sign entries
+                   # (their gardiner = our kEH_JSesh) — without the sign spine
+                   # there is no card to overlay. The CUNEIFORM lanes (P77-8)
+                   # join the OSL sign card by name/osl_name instead — OSL is
+                   # a signs-group sibling, not a requires edge (the card
+                   # exists without the overlay and vice versa at load).
+  axes: [egyptian, cuneiform]   # P77-8: the cuneiform didactic lanes
+                   # (sign_teaching.yml + pool-102/103 + both addenda codex
+                   # dirs) now extract and render on the OSL sign card —
+                   # axes follow capability.
+  wired: true    # channel verified (first fetch landed; canonical present). `--all`
+                   # participation is governed by kind + sync_policy, NEVER by wired
+                   # (owner semantics ruling 2026-08-18, reaffirming 2026-07-24:
+                   # wired = the sync link is tested and declared working).
+  sync_policy: manual   # course releases, not a nightly feed

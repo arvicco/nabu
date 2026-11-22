@@ -8,8 +8,8 @@ require "uri"
 require_relative "manchu_wikisource_parser"
 require_relative "source_read"
 require_relative "../redirect_follow"
-require_relative "../wiki_fetch"
-require_relative "../zip_fetch"
+require_relative "../fetch/wiki_fetch"
+require_relative "../fetch/zip_fetch"
 require_relative "../normalize"
 
 module Nabu

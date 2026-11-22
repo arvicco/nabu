@@ -1,0 +1,15 @@
+sources:
+  titus-old-albanian:
+    # kind machine-postured — the titus-old-albanian fold in kind_map.yml over the
+    # page's edition (the Missal → ritual/liturgy, the dictionary → lexical/glossary,
+    # the Cuneus → theology/treatise, the two doctrinae → catechesis). Lect
+    # machine-postured: the lect_overrides.yml row stages sqi → sq:old.
+    dating: {posture: partial, note: "only what a page states — Blanchus's title page
+        \"Romae … 1635\" (class edition) and Matrënga's TITUS header \"Dottrina Christiana
+        (1592)\" (the autograph, class composition); Buzuku's only copy lacks its title
+        page; Bogdani's and Casasi's title pages are read from the held pages after the
+        first retrieval (the titus-old-prussian precedent), never supplied from scholarship"}
+    places: {posture: named, note: "Blanchus's stated print place (\"Romae\") as Rome on its
+        pages; the other editions name none in the census — declared coarse"}
+    script: {posture: implied, note: "Latin type and hands transcribed diplomatically (ſ, ξ,
+        ɛ, ћ, ɣ — Buzuku's and Bogdani's special letters kept as printed)"}

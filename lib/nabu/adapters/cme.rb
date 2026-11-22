@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require_relative "tcp_xml_parser"
-require_relative "../cme_fetch"
+require_relative "../fetch/cme_fetch"
 
 module Nabu
   module Adapters

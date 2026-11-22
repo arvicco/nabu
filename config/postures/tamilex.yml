@@ -1,0 +1,22 @@
+sources:
+  tamilex:
+    # kind machine-postured since 2026-10-18 — the work fold in
+    # kind_map.yml (prefix rules over the 21 works and the devotional
+    # canons' sub-works: Caṅkam akam → poetry/love, puṟam → poetry/praise,
+    # Tirukkuṟaḷ → wisdom, the grammars and poetics → lexical/grammar,
+    # Tivākaram → lexical/word-list, the epics → narrative/epic, the
+    # Āḻvār and Tirumuṟai hymns → hymn-prayer/hymn). The pending row
+    # retired under the shadowing rule.
+    lect: {posture: identity, note: "tam-Latn → ta (the codemap tam row); ta:old and ta:mid
+        exist (the 2026-10-27 South Asian stage suite — the old 'no Tamil stage' premise
+        was stale, refreshed 2026-11-13), but the corpus SPANS them (the Caṅkam anthologies
+        to the medieval devotional canons), so the bare anchor stays the honest source-grain
+        claim; a per-work staging rule is the next review's candidate"}
+    dating: {posture: undatable, note: "no origDate or composition date in any header
+        (census 2026-10-12); the years inside the listWit witness descriptions date
+        manuscripts and printed editions, ride metadata verbatim, and are never the
+        work's date"}
+    places: {posture: unplaced, note: "no origPlace or place field in any header; places
+        live only in the poems and commentaries as prose"}
+    script: {posture: qualified, note: "romanized (ISO 15919 transliteration, tam-Latn);
+        the Tamil script of the manuscripts is the artifact fact"}

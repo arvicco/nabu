@@ -9,7 +9,7 @@ require "uri"
 require "zlib"
 
 require_relative "../redirect_follow"
-require_relative "../zip_fetch"
+require_relative "../fetch/zip_fetch"
 require_relative "../normalize"
 require_relative "source_read"
 

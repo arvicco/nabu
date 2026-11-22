@@ -1,0 +1,13 @@
+wiktionary-br:   # P154, 02-sources row 353
+  adapter: Nabu::Adapters::WiktionaryBr
+  adopted: "2026-11-02"
+  axes: [celtic]
+  wired: true   # first sync verified 2026-11-03: 2,336 entries
+  # The kaikki Breton extraction (2,336 records / "2245 distinct words",
+  # census 2026-11-02): the library's first Breton dictionary, with Middle
+  # Breton (230 xbm) and Old Breton (158 obt) etymons and the Proto-Celtic
+  # and Proto-Brythonic chains (385 / 381). Language bre. The wiktionary-fa
+  # mold on the shared WiktionaryKaikki base: per-language JSONL (deprecated
+  # upstream — fallback = filter the full extract by lang_code br), CC BY-SA
+  # + GFDL → attribution, FileFetch.
+  sync_policy: manual

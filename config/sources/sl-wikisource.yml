@@ -1,0 +1,14 @@
+sl-wikisource:   # P116-2, 02-sources row 235
+  adapter: Nabu::Adapters::SlWikisource
+  adopted: "2026-10-10"
+  axes: [slavic]
+  wired: true    # First sync verified 2026-10-10: 1,539 docs / 145,035 passages / 134 skips.
+  sync_policy: manual
+  # Wikivir (the Slovene Wikisource) through its "Dela leta N" year
+  # categories to 1899 (owner ruling): the Hladnik-corrected 19th-century
+  # prose + the 1584 Dalmatin/Trubar pages; the year is a typed date.
+  # Translations, non-Slovene works and permission-licensed pages are
+  # out by rule. OVERLAP with the held imp/prilit (25 works censused):
+  # ingested WITH provenance — different editions; dedupe is a
+  # catalog-side concern (adapter header). Bohoričica declared in
+  # metadata "orthography". Texts PD; layer CC BY-SA 4.0.

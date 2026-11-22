@@ -3,7 +3,7 @@
 require "json"
 require_relative "grand_tour_tei_parser"
 require_relative "source_read"
-require_relative "../zip_range_fetch"
+require_relative "../fetch/zip_range_fetch"
 
 module Nabu
   module Adapters

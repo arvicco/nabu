@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require "json"
-require_relative "../zip_range_fetch"
+require_relative "../fetch/zip_range_fetch"
 require_relative "source_read"
 
 module Nabu

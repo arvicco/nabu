@@ -26,7 +26,7 @@ class LectsDriftTest < Minitest::Test
   LECT_OVERRIDES_PATH = File.join(Nabu::Config::PROJECT_ROOT, "config", "lect_overrides.yml")
 
   # A small representative seeded set — codes real sources actually carry
-  # (config/sources.yml's own language: commentary for perseus-latin/grc,
+  # (config/sources/'s own language: commentary for perseus-latin/grc,
   # rundata, cantigas), the two ratified-override codes under their owning
   # source, and one code with NO registry entry anywhere (srd — honest
   # coarseness, never a drift).

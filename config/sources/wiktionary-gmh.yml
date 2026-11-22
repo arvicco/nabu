@@ -1,0 +1,13 @@
+wiktionary-gmh:   # P154, 02-sources row 355
+  adapter: Nabu::Adapters::WiktionaryGmh
+  adopted: "2026-11-02"
+  axes: [germanic]
+  wired: true   # first sync verified 2026-11-03: 2,142 entries
+  # The kaikki Middle High German extraction (2,142 records / "1958 distinct
+  # words", census 2026-11-02): the library's first Middle High German
+  # dictionary, with Old High German (460 goh) etymons and descendants into
+  # German, Alemannic, Bavarian, Cimbrian and Yiddish. Language gmh. The
+  # wiktionary-fa mold on the shared WiktionaryKaikki base: per-language
+  # JSONL (deprecated upstream — fallback = filter the full extract by
+  # lang_code gmh), CC BY-SA + GFDL → attribution, FileFetch.
+  sync_policy: manual

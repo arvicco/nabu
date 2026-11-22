@@ -1,0 +1,15 @@
+sources:
+  sr-wikisource:
+    kind: {posture: unclassified, note: "song-type and collection categories ride verbatim
+        in metadata categories — a kind_map candidate"}
+    lect: {posture: identity, note: "srp (Cyrillic pages) + hrv (the Latin-script,
+        Croatian-collected pages, censused 136) — both resolve through the Slavic-package
+        codemap rows onto sr / hr (the 2026-10-10 mint; note refreshed 2026-11-13 — the
+        'no node yet' premise was stale)"}
+    dating: {posture: pending, note: "no page-grain date exists; candidate: the Vuk
+        volume publication year inside the verbatim base_edition (Избор) line — an
+        edition-class envelope, the openmgh printed_year_text precedent — awaiting a
+        ruling (recording year ≠ composition)"}
+    places: {posture: unplaced, note: "provenance subtitles ((Из Црне Горе)) ride as
+        section annotations, not place claims"}
+    script: {posture: mixed, note: "Cyrillic + Latin pages; metadata script per page"}

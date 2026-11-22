@@ -1,0 +1,12 @@
+sources:
+  dharma-pyu:
+    kind: {posture: unclassified}
+    # P92 gate: v1.6.1 (omx/pli anchors + the -Latn rows) on canonical
+    # — pending retired; the corpus's six lanes all resolve, Old Mon's
+    # first digital text among them.
+    lect: {posture: identity, note: "pyx/san/pli/obr/pra/omx -Latn — all resolve on
+        the canonical v1.6.0+v1.6.1 rows"}
+    dating: {posture: undatable}
+    places: {posture: unplaced}
+    script: {posture: qualified, note: "romanized (pyx-Latn); the Pyu script is the
+        artifact fact"}

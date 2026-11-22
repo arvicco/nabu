@@ -104,8 +104,8 @@ module DefinitionsShelfChecks
   end
 
   def test_registry_row_exists_unwired_with_manual_sync_policy
-    entry = Nabu::SourceRegistry.load(File.join(Nabu::Config::PROJECT_ROOT, "config", "sources.yml"))[shelf_slug]
-    refute_nil entry, "config/sources.yml registers #{shelf_slug}"
+    entry = Nabu::SourceRegistry.load(File.join(Nabu::Config::PROJECT_ROOT, "config", "sources"))[shelf_slug]
+    refute_nil entry, "config/sources/ registers #{shelf_slug}"
     assert_equal shelf_adapter_class, entry.adapter_class
     assert_equal "manual", entry.sync_policy
   end

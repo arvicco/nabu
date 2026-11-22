@@ -184,7 +184,7 @@ class DrillTest < Minitest::Test
   # -- P77-r10: a failing drill RETAINS its evidence ------------------------
 
   def test_a_failing_drill_persists_uncapped_evidence_into_the_workspace
-    File.write(File.join(@root, "config", "sources.yml"),
+    File.write(File.join(@root, "config", "sources", "corpus.yml"),
                "corpus:\n  adapter: CollidingDrillAdapter\n  wired: true\n")
     Nabu::Rebuild.new(config: live_config, registry: registry).run
     Dir.mktmpdir("nabu-drill-work") do |workspace|
@@ -390,14 +390,14 @@ class DrillTest < Minitest::Test
   end
 
   def registry
-    Nabu::SourceRegistry.load(File.join(@root, "config", "sources.yml"))
+    Nabu::SourceRegistry.load(File.join(@root, "config", "sources"))
   end
 
   def live_config
     Nabu::Config.new(
       canonical_dir: File.join(@root, "canonical"),
       db_dir: File.join(@root, "db"),
-      sources_path: File.join(@root, "config", "sources.yml"),
+      sources_path: File.join(@root, "config", "sources"),
       config_path: File.join(@root, "config", "nabu.yml")
     )
   end
@@ -408,9 +408,11 @@ class DrillTest < Minitest::Test
     File.write(File.join(corpus, "one.txt"), ILIAD)
     File.write(File.join(corpus, "two.txt"), ODYSSEY)
 
+    # The shipped split-registry shape (P185): the drill restores the
+    # tree and reads it at the default config/sources/ path.
     cfg = File.join(@root, "config")
-    FileUtils.mkdir_p(cfg)
-    File.write(File.join(cfg, "sources.yml"), "corpus:\n  adapter: TestAdapter\n  wired: true\n")
+    FileUtils.mkdir_p(File.join(cfg, "sources"))
+    File.write(File.join(cfg, "sources", "corpus.yml"), "corpus:\n  adapter: TestAdapter\n  wired: true\n")
     File.write(File.join(cfg, "nabu.yml"), "# nabu config\n")
   end
 

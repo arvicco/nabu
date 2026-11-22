@@ -2,7 +2,7 @@
 
 require_relative "../source_dossier"
 require_relative "../source_shelf"
-require_relative "../local_fetch"
+require_relative "../fetch/local_fetch"
 
 module Nabu
   module Adapters

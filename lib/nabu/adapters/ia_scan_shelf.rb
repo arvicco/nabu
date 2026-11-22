@@ -5,7 +5,7 @@ require "fileutils"
 
 require_relative "ia_hocr_text"
 require_relative "../redirect_follow"
-require_relative "../zip_fetch"
+require_relative "../fetch/zip_fetch"
 
 module Nabu
   module Adapters

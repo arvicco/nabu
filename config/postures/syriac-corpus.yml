@@ -1,0 +1,9 @@
+sources:
+  syriac-corpus:
+    kind: {posture: unclassified}
+    lect: {posture: identity, note: syc IS Classical Syriac}
+    dating: {posture: dated, note: "P108-8 (the unmined-metadata slice): orig_date.when years (24 docs) +
+        the century-prose grammar over orig_date.text — 627/632 banded, 574
+        composition-classed by the per-doc type field"}
+    places: {posture: unplaced}
+    script: {posture: implied}

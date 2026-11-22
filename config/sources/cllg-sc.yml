@@ -1,0 +1,19 @@
+cllg-sc:   # 02-sources row 403
+  adapter: Nabu::Adapters::CllgSc
+  adopted: "2026-11-12"
+  axes: [classical]
+  siblings: cts
+  wired: true    # flipped 2026-11-12: first sync verified EXACT on the census —
+                 # 366 docs (360 grc + 6 lat) / 94,713 passages, 0 errored,
+                 # 5 skipped by rule. Probes green: show tlg2042…:1.1 ("Πρῶτον
+                 # τῷ Κέλσῳ κεφάλαιόν ἐστι"), search "ψευδομαρτυρούμενος",
+                 # 5 random sections. ~118 MB shallow clone, ~30 s parse.
+  # The Inria CLLG Sources Chrétiennes corpus: the Greek (and 6 Latin)
+  # texts of the Cerf series as citeStructure TEI (the cllg-tei family).
+  # CC-BY floor; the texts ride the French critical-edition case law.
+  # Witness overlap, not duplication: ~225 SC works are also in the TLG
+  # canon (cllg-freed) and 42 in perseus/first1k — the newer Cerf text,
+  # a different edition urn (sc-cllg-grc1). sc_tlg.csv (the SC↔TLG
+  # alignment) rides the reference seam: Adapters::CllgTlgAlignment mints
+  # SC edition → tlg:<id> (reference) + → freed edition (parallel-witness).
+  sync_policy: manual

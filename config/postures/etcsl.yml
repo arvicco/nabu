@@ -1,0 +1,11 @@
+sources:
+  etcsl:
+    # kind declaration retired P104-1: the composition-number prefix map
+    # in kind_map.yml machine-postures it now (the shadowing rule).
+    # lect declaration retired P64-6 (owner-ruled 2026-08-09): the etcsl sux→sux:post
+    # override machine-postures it now (the shadowing rule).
+    dating: {posture: undatable}
+    places: {posture: unplaced, note: "a composite has no single place: the per-witness provenance
+        scopes of the header's tablet list (345 of 3,960 witnesses, Nippur 292 …) ride metadata
+        \"witnesses\" beside each museum number, deliberately not projected as the composite's place"}
+    script: {posture: implied}

@@ -1,0 +1,13 @@
+sources:
+  tlopo:
+    kind: {posture: unclassified, note: "a dictionary shelf — The lexicon of Proto Oceanic by
+        its own title; kind folds documents only"}
+    lect: {posture: identity, note: "poz-oce — the nabu-lects Oceanic anchor; POc/PEMP/PMic/
+        PCP/PPn/PNPn/PEPn members ride their codemap aliases (poz-oce-pro, pqe-pro,
+        poz-mic-pro, poz-pcc-pro, poz-pol-pro, poz-pnp-pro, poz-pep-pro); PAn/PMP now land
+        on map:pro / poz:pro (the 2026-11-13 sitting, PR #48); the Oceanic sub-group protos
+        (PWOc, PEOc, PROc, PNCV, PSV …) stay display-only per the recorded depth ruling"}
+    dating: {posture: undatable, note: "a reference dataset — the release carries no dates"}
+    places: {posture: unplaced, note: "variety coordinates are doculect reference points, not
+        findspots — no place claim at dictionary grain"}
+    script: {posture: implied, note: "Latin-script orthographies and Oceanicist reconstruction notation"}

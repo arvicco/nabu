@@ -147,8 +147,15 @@ module Nabu
     # lane files (store/lanes.rb) decide only WHERE the cjk/trigram lane
     # rows live, never what they hold; the engine-config intent journal
     # (store/engine_intents.rb) only restores fts5 merge settings.
+    # The indexer's partials (store/indexer/) are named one by one beside
+    # store/indexer.rb, so every carved file stays under the index digest.
     INDEX_FILES = %w[
-      store/indexer.rb store/alignment_indexer.rb store/lemma_frequencies.rb
+      store/indexer.rb
+      store/indexer/refresh.rb store/indexer/shadow.rb store/indexer/lanes.rb store/indexer/census.rb
+      store/indexer/bulk_slice.rb store/indexer/governor.rb store/indexer/row_shas.rb
+      store/indexer/char_postings.rb store/indexer/signs.rb store/indexer/stage_stamps.rb
+      store/indexer/clarify.rb
+      store/alignment_indexer.rb store/lemma_frequencies.rb
       store/reflex_roots_indexer.rb store/silver_lemma_indexer.rb
       store/cjk_bigrams.rb store/index_delta.rb store/lanes.rb store/engine_intents.rb
       store/stale_aggregates.rb store/index_maintenance.rb
@@ -203,8 +210,8 @@ module Nabu
       scansion.rb meter_scan.rb
       suttacentral_parallels.rb library_references.rb corph_dil_references.rb
       ccl_etymologies.rb
-      git_fetch.rb zip_fetch.rb file_fetch.rb lfs_fetch.rb wiki_fetch.rb
-      kanripo_fetch.rb sefaria_fetch.rb local_fetch.rb url_download.rb
+      fetch/git_fetch.rb fetch/zip_fetch.rb fetch/file_fetch.rb fetch/lfs_fetch.rb fetch/wiki_fetch.rb
+      fetch/kanripo_fetch.rb fetch/sefaria_fetch.rb fetch/local_fetch.rb url_download.rb
       redirect_follow.rb paced_crawl.rb paced_crawl_chain.rb
       sync_runner.rb source_registry.rb axis_registry.rb config.rb
       ingest.rb language_shelf.rb library_shelf.rb source_shelf.rb

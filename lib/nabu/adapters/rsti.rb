@@ -3,7 +3,7 @@
 require "json"
 
 require_relative "ochre_json_parser"
-require_relative "../ochre_fetch"
+require_relative "../fetch/ochre_fetch"
 
 module Nabu
   module Adapters

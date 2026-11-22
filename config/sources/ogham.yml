@@ -1,0 +1,18 @@
+ogham:
+  adapter: Nabu::Adapters::Ogham
+  adopted: "2026-07-17"
+  axes: [epigraphy, celtic]
+  wired: true    # flipped 2026-07-18 (owner sign-off: 834 docs live; empty-layer quarantine noise = open hotfix; class stays nc pending registry #14)
+                   # git clone; CLAUDE.md checklist §6 — bin/nabu sync
+                   # ogham, eyeball nabu show urn:nabu:ogham:i-may-010
+                   # (ᚇᚑᚈᚐᚌᚅᚔ) beside its -translit sibling and 5 random
+                   # stones, then flip).
+  # OG(H)AM — Ogham in 3D v2.0 (DIAS/Maynooth), ~500 EpiDoc records of
+  # ogham stones (Primitive Irish pgl in real Ogham codepoints; layer
+  # siblings -translit/-roman/…). LICENSE CONFLICT held at the restrictive
+  # reading: site about-page says CC-BY-NC-SA, every sampled record's
+  # in-file <licence> says CC BY 4.0, repo has no LICENSE file → class nc
+  # until upstream clarifies; relabel then via license_class. The live
+  # project still updates (v2.0 2025) → re-syncs are
+  # owner-fired.
+  sync_policy: manual

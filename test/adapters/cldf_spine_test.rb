@@ -15,9 +15,9 @@ module Adapters
     def adapter = Nabu::Adapters::CldfSpine.new
 
     def test_registry_carries_the_module_row_disabled_and_manual
-      registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources.yml", __dir__))
+      registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources", __dir__))
       entry = registry["cldf-spine"]
-      refute_nil entry, "cldf-spine must be registered in config/sources.yml"
+      refute_nil entry, "cldf-spine must be registered in config/sources/"
       assert entry.feature_module?, "a reference resolver instrument is a kind: module row"
       assert entry.wired, "channel verified (the 2026-08-18 wired-semantics ruling)"
       assert_equal "manual", entry.sync_policy

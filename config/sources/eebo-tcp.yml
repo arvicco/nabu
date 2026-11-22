@@ -1,0 +1,36 @@
+# P83-1
+eebo-tcp:
+  adapter: Nabu::Adapters::EeboTcp
+  adopted: "2026-08-26"
+  axes: [germanic]   # the cme precedent; NOTE for the owner: with cme + aspr +
+                     # iswoc + eng-web + eebo-tcp the English line is now five
+                     # sources riding `germanic` — whether an `english` desk/axis
+                     # should be minted is a future owner question, not a P83 call
+  classes: [phase1, phase2]  # P84-2 (owner cut 2026-08-27): the stated follow-on
+                     # lands — both phases, all 60,326 texts. Phase I zips skip
+                     # free at the sync; Phase II ≈1.57 GB / ≈35k docs. Wave 1
+                     # was the owner ruling's option (b), Phase I, synced 2026-08-27.
+  wired: true        # flipped 2026-08-27 (owner: "wire on eebo"; the verification
+                     # sync landed 25,367 docs / 14,702,780 passages 2026-08-27,
+                     # +A15970's 13,948 after its recovery)
+  # EEBO-TCP (P83-1): Early English Books Online, Text Creation Partnership
+  # — 60,326 hand-keyed early-modern English texts (Phase I 25,368 /
+  # Phase II 34,958; census 2026-08-26), THE wave the tcp-xml family
+  # (P82-2, CME first rider) was built for: same P4 <ETS> schema, 100%
+  # parse success on the 3,325-file scout sample. Channel: the TCP's own
+  # Box folder (28 P4 zips ≈3.3 GB zipped / ≈10 GB unpacked, per-phase ID
+  # lists + DTD landed beside texts/), server-side postStreamData listing,
+  # per-zip download endpoint verified live 2026-08-26. Fetch:
+  # Nabu::EeboTcpFetch — zip-grain skip-if-unchanged (a steady-state
+  # re-sync costs ~5 listing GETs), member-grain attic via ZipFetch
+  # staging, mass-deletion breaker. Identity = filename stem = IDG@ID
+  # (0 mismatches censused ×3,325 — unlike CME's placeholder IDG).
+  # Language per-document from LANGUSAGE: eng→en (97.6%), foreign
+  # minority (lat 1.4%, wel/fre/dut/…) claims its upstream code verbatim.
+  # Dating: BIBLFULL imprint year through the censused molds (85.7%
+  # dated), MetadataDates :structured. LICENSE: uniform per-file CC0 1.0
+  # Public Domain Dedication (two variants, both explicit; censused
+  # ×3,325) → open; the license_mapper maps a stranger availability
+  # restricted, never silently open. The 2026-08-20 grant additionally covers TCP
+  # files. Median text 35 KB, max 17.6 MB — Reader streaming throughout.
+  sync_policy: manual

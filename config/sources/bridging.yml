@@ -1,0 +1,27 @@
+bridging:
+  adapter: Nabu::Adapters::Bridging
+  adopted: "2026-07-20"
+  kind: module   # P39-0: machinery-only — sanctioned fetch, zero catalog rows, up=module
+  # P35-0: the feature module rides its host bhsa's desks (D35 spec: hebrew+biblical)
+  axes: [biblical, hebrew]
+  wired: true    # channel verified (first fetch landed; canonical present). `--all`
+                   # participation is governed by kind + sync_policy, NEVER by wired
+                   # (owner semantics ruling 2026-08-18, reaffirming 2026-07-24:
+                   # wired = the sync link is tested and declared working).
+  # P34-1: ETCBC/bridging — the OSHB↔BHSA word-level crosswalk (the sibling
+  # journaled at P30-4, now wired). Two Text-Fabric node features over the
+  # BHSA tf/2021 slot space: osm = the OSHB morph tag of the first OSM
+  # morpheme aligned to each BHSA word, osm_sf = the second (pronominal
+  # suffix); alignment computed upstream by consonantal matching. Census at
+  # commit 324598bb: osm covers 420,108/426,590 BHSA words (98.5%), 259
+  # honest "*" problem markers, osm_sf 49,376; BHSA side pinned hard
+  # (@coreData=BHSA @version=2021, max node = 426,590 = our tf/2021 pin);
+  # OSHB side is morphhb master ~2021-12-09 (no commit recorded upstream) —
+  # measured against our morphhb 3d15126 (2024-08-27): 99.05% of verses
+  # carry identical per-verse OSM tag sequences, 80 verses of in-place
+  # single-tag retagging (HR/HRd mostly), zero ordering drift, so the
+  # word alignment stays fully valid. LICENSE MIT verbatim ("Copyright (c)
+  # 2019 Dirk Roorda") → attribution, the corph posture; the values surface
+  # only on bhsa passages whose nc class governs serving. Upstream is a
+  # completed comparison build → re-syncs are an owner decision.
+  sync_policy: manual

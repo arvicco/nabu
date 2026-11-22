@@ -1,0 +1,18 @@
+sources:
+  prakrit-texts:   # P118-3
+    kind: {posture: unclassified, note: "no class field in the TEI (kāvya, kathā, gāhā
+        anthologies, lexica, grammars, a metrics, canonical Āgamas) — a kind_map fold would
+        be a ruled table"}
+    lect: {posture: identity, note: "the P118-3 pending retired 2026-10-12: the Indic
+        registry package minted pka (Ardhamāgadhī) under pra — the first individual
+        Prakrit a consumer distinguishes — so pka-Latn resolves on its own node;
+        pra-Latn stays deliberately coarse on the collective anchor, san-Latn as
+        before"}
+    dating: {posture: partial, note: "the headers carry modern edition years only
+        (source_edition.date — Weber 1881, Bühler 1879 …), never the works'; the README
+        dates nothing — no composition date is minted, declared. The edition years
+        project as date_class edition (MetadataDates :source_edition_year): 18 of 22
+        documents (census 2026-11-04)"}
+    places: {posture: unplaced, note: "only the editions' imprint places are named"}
+    script: {posture: qualified, note: "ISO-15919 romanization (Dēvanāgarī-printed
+        editions); the source script is not carried"}

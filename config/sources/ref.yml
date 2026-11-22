@@ -1,0 +1,36 @@
+# P32-4: the Sinoxenic character bridge — three dictionary-kind registrants.
+# The shelf keys speak one join language: Unihan entry ids are "U+XXXX"
+# codepoints, KANJIDIC2 mints the same key (13,043 of its 13,108 kanji land
+# in Unihan's carried set — 99.5%), and the HDIC headword characters map to
+# codepoints (95.9–99.9% of single-character headwords per database resolve
+# into Unihan's carried set). All three wired: false until the owner-fired
+# first sync (CLAUDE.md checklist §6).
+
+# P80-5: Referenzkorpus Frühneuhochdeutsch (1350-1650) v1.0.2, 190 texts /
+# ~3.1M tokens of diplomatically transcribed ENHG — the first cora-xml
+# registrant (the RAW CorA export; the deposit ships NO TEI, so the
+# family the ReM/ReN siblings ride does not apply). Ingests the two
+# CorA-XML subcorpora (ref-mlu + ref-rub = all 190 texts); the ref-up
+# TigerXML syntax overlay (26 excerpt duplicates) is a documented
+# follow-up. One immutable Zenodo artifact (record 5793616,
+# ReF-v1.0.2.tar.gz, hard sha256 pin — the rem/iecor mold, tar.gz
+# flavor) → manual. CC BY-SA 4.0 (rub.de statement + in-deposit
+# README/LICENSE; the Zenodo record FIELD says cc-by-4.0 — recorded
+# discrepancy, the deposit's own grant governs, the tls precedent).
+ref:
+  adapter: Nabu::Adapters::Ref
+  adopted: "2026-08-19"
+  axes: [germanic]
+  wired: true   # flipped 2026-08-21 (owner: "wire everything on"; first sync owner-round-verified)
+                 # owner-fired. Checklist §6: bin/nabu sync ref — expect 190
+                 # documents (~447K physical lines / ~3.42M anno records
+                 # censused across the deposit), eyeball nabu show
+                 # urn:nabu:ref:f011:001r.01 ("AUs der geometrey ettliche
+                 # nuczpere ſtucklē…", manual lemma/pos/morph tokens) + 5
+                 # random passages, then flip.
+  license_watch: https://www.linguistics.rub.de/ref/access/index.en.html
+  # SILVER lemmas (the achemenet rule): CorA auto-annotation carries the
+  # corpus (censused 2,874,451 auto vs 544,520 manual anno units); the
+  # manual minority rides anno_type on each token record.
+  lemma_tier: silver
+  sync_policy: manual

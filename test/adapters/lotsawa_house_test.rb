@@ -40,7 +40,7 @@ class LotsawaHouseTest < Minitest::Test
   end
 
   def test_registry_resolves_lotsawa_house_unwired_with_translations
-    registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources.yml", __dir__))
+    registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources", __dir__))
     entry = registry["lotsawa-house"]
     refute_nil entry
     assert_equal House, entry.adapter_class

@@ -213,9 +213,9 @@ class SaritTest < Minitest::Test
   # --- registry round-trip ----------------------------------------------------
 
   def test_registry_resolves_sarit_and_manifest_agrees
-    registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources.yml", __dir__))
+    registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources", __dir__))
     entry = registry["sarit"]
-    refute_nil entry, "sarit must be registered in config/sources.yml"
+    refute_nil entry, "sarit must be registered in config/sources/"
     assert_equal Nabu::Adapters::Sarit, entry.adapter_class
     assert_equal "manual", entry.sync_policy
     assert entry.wired, "live (owner sign-off 2026-07-18: synced; 5 quarantines = the documented floor, flipped)"

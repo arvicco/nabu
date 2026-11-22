@@ -1,0 +1,17 @@
+corpus-gysseling:
+  adapter: Nabu::Adapters::CorpusGysseling
+  adopted: "2026-08-27"
+  axes: [germanic]
+  wired: true    # P84-7 (owner-fired sync 2026-08-27): synced 2,226 docs /
+                   # 207,793 passages, 2 honest quarantines (0032a, 0644TEST —
+                   # no citable lines), eyeballed (0016 mint ordinance, dum),
+                   # flipped.
+  sync_policy: manual
+  # P84-7: the INT/IvdNT Corpus Gysseling — the 13th-c. originals that
+  # sourced the Vroegmiddelnederlands Woordenboek, ~2,228 .fromdb documents of
+  # Early Middle Dutch (dum), GOLD lemma+POS. LICENSE + posture identical to
+  # corpus-oudnederlands (INT-NC, no redistribution grant → research_private,
+  # no bytes in git). ACQUISITION: Manual Adapter — the owner drops
+  # corpus-gysseling.zip (the .fromdb documents plus plaats.txt/regio.txt, the
+  # place/region code tables the adapter resolves) into incoming/
+  # corpus-gysseling/. See docs/manual/corpus-gysseling.md.

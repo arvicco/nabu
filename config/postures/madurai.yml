@@ -1,0 +1,16 @@
+sources:
+  madurai:
+    # P122-3: Project Madurai's classical-Tamil cone (the works list's genre rule).
+    kind: {posture: pending, note: "candidate: a kind_map fold over the works list's own
+        Genre column (riding metadata genres verbatim — சங்ககாலம், நீதிநெறி, சமயம் - சைவம்,
+        பிரபந்தம் - …, புராணம், காப்பியம், இலக்கணம் …); one ruling"}
+    lect: {posture: identity, note: "tam (Tamil script) → ta through the held codemap row;
+        ta:old/ta:mid exist (refreshed 2026-11-13 — the 'no Tamil stage' premise was stale)
+        but the Caṅkam-to-prabandha span CROSSES them, so the bare anchor stays the honest
+        source-grain claim (the tamilex shape; per-work staging is the review candidate)"}
+    dating: {posture: undatable, note: "the works list carries no date column and the
+        e-texts no composition date; the footers' first-put-up / revised dates date the
+        e-text, never the work — they ride metadata pm_footer verbatim"}
+    places: {posture: unplaced, note: "no place field anywhere in the asset"}
+    script: {posture: implied, note: "Tamil script, the native surface (Unicode HTML);
+        lines without Tamil script are counted (non_tamil_lines), never minted"}

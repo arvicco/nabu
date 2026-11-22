@@ -1,0 +1,18 @@
+tibetan-verbs:
+  adapter: Nabu::Adapters::TibetanVerbs
+  adopted: "2026-07-28"
+  axes: [tibetan]
+  wired: true   # flipped 2026-07-28 (owner ruling "flip them all wired"; first sync verified live: 2,491 entries (exact))
+                   # bin/nabu sync tibetan-verbs (a ~150 KB git clone),
+                   # expect 2,491 entries; eyeball `nabu define ཀློག` (the
+                   # classic "read" paradigm) and 5 random entries, then
+                   # flip.
+  # The Tibetan Verbs Database (github.com/tibetan-nlp/tibetan-verbs-database):
+  # 2,491 rows of verb tense stems — present/past/future/imperative in
+  # Tibetan script — each attributed to its lexicographic sources (TDC/PH/
+  # GT/KN columns; upstream deliberately preserves the grammarians'
+  # disagreements as separate rows, uncollapsed). The tense stems ARE the
+  # entry apparatus (body lanes); no glosses upstream — gloss nil is
+  # honest. LICENSE: CC0-1.0 (repo LICENSE file, verified 2026-07-28) →
+  # class open. Small and occasionally edited: re-syncs are an owner call.
+  sync_policy: manual

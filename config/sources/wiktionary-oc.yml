@@ -1,0 +1,12 @@
+wiktionary-oc:   # P154, 02-sources row 366
+  adapter: Nabu::Adapters::WiktionaryOc
+  adopted: "2026-11-02"
+  axes: [romance]
+  wired: true   # first sync verified 2026-11-03: 7,521 entries
+  # The kaikki Occitan extraction (7,521 records / "7175 distinct words",
+  # census 2026-11-02): the library's first Occitan dictionary: Latin
+  # (1,714) and Old Occitan (495 pro) etymons. Language oci. The
+  # wiktionary-fa mold on the shared WiktionaryKaikki base: per-language
+  # JSONL (deprecated upstream — fallback = filter the full extract by
+  # lang_code oc), CC BY-SA + GFDL → attribution, FileFetch.
+  sync_policy: manual

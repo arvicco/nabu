@@ -167,9 +167,9 @@ class StepbibleTagntTest < Minitest::Test
   # --- registry round-trip -------------------------------------------------------
 
   def test_registry_resolves_the_source_wired
-    registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources.yml", __dir__))
+    registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources", __dir__))
     entry = registry["stepbible-tagnt"]
-    refute_nil entry, "stepbible-tagnt must be registered in config/sources.yml"
+    refute_nil entry, "stepbible-tagnt must be registered in config/sources/"
     assert_equal ADAPTER, entry.adapter_class
     assert entry.wired, "wired after the verified first sync"
     assert_equal ADAPTER.manifest, entry.manifest

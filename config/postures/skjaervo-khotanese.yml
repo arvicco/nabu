@@ -1,0 +1,10 @@
+sources:
+  skjaervo-khotanese:   # P107-3a
+    kind: {posture: unclassified, note: msItem @type (Doc./lit. classes) is a natural kind_map
+        follow-up}
+    lect: {posture: identity, note: kho (the Central Asia registry wave anchors it at merge);
+        the q-lang guard maps any future chi-* transliteration to zho}
+    dating: {posture: undatable, note: regnal-year datings live in English prose notes only —
+        declared, a future extraction look}
+    places: {posture: unplaced, note: findspots in prose notes only}
+    script: {posture: implied, note: khot-Latn transliteration is the served text form}

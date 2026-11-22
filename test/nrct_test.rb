@@ -24,7 +24,7 @@ class NrctTest < Minitest::Test
   end
 
   def test_registry_carries_the_module_row_manual
-    registry = Nabu::SourceRegistry.load(File.expand_path("../config/sources.yml", __dir__))
+    registry = Nabu::SourceRegistry.load(File.expand_path("../config/sources", __dir__))
     entry = registry["nrct"]
     refute_nil entry
     assert_equal "module", entry.kind

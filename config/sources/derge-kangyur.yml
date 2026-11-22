@@ -1,0 +1,29 @@
+derge-kangyur:
+  adapter: Nabu::Adapters::DergeKangyur
+  adopted: "2026-07-28"
+  axes: [tibetan, buddhist]  # P48-1: mints the tibetan desk; the buddhist axis
+                             # gains its fourth canon leg (Pali/Sanskrit/Chinese
+                             # → now the Tibetan Kangyur+Tengyur)
+  wired: true   # flipped 2026-07-28 (owner ruling "flip them all wired"; first sync verified live: 1,200 docs / 461,304 passages)
+                 # bin/nabu enable derge-kangyur, bin/nabu sync derge-kangyur —
+                 # git clone ~300 MB text / 103 volumes, expect ~1,100+ Toh
+                 # documents at page.line grain — eyeball
+                 # nabu show urn:nabu:derge-kangyur:toh846:1b.1 and 5 random
+                 # passages, then flip).
+  # Digital Derge Kangyur — Esukhia/Barom Theksum Choling proofreading
+  # (2014–2018) of the UVA-SOAS 2013 eKangyur; exact-representation of the
+  # LoC Derge woodblocks (spelling/carving mistakes preserved on purpose).
+  # 103 volume files, 300,157,458 bytes UTF-8 plain text, Toh 1–1108.
+  # Repo ARCHIVED June 2022 (frozen) — the adapter PINS the archival HEAD
+  # a582cf471b7c (2022-06-24) and aborts loudly on drift; the OpenPecha
+  # successor is deliberately NOT followed (per-pecha licensing minefield,
+  # P47-s2 survey — the CC0 org claim was refuted there).
+  # LICENSE verbatim (README §License, README-ONLY declaration — no LICENSE
+  # file, recorded honestly): "This work is a mechanical reproduction of a
+  # Public Domain work, and as such is also in the Public Domain." → open.
+  # Language xct (Classical Tibetan); text NFD-by-convention upstream, the
+  # standard NFC boundary is deterministic (Tibetan precomposed chars are
+  # composition-excluded). Document per {D<toh>} marker (the e84000
+  # crosswalk key); multi-volume documents volume-prefix passage refs —
+  # the adapter/family headers carry the full doctrine.
+  sync_policy: manual

@@ -1,0 +1,17 @@
+sigla:   # P142, 02-sources row 302
+  adapter: Nabu::Adapters::Sigla
+  adopted: "2026-10-22"
+  axes: [epigraphy, classical]
+  wired: true   # awaiting the first real sync (one GET of database.js, ~2.5 MB)
+  sync_policy: manual
+  # SigLA — The Signs of Linear A (Salgarella & Castellan, sigla.phis.me):
+  # the Linear A corpus sign by sign. The whole database ships as ONE
+  # file, database.js — two OCaml Marshal payloads in JS string literals
+  # (the ocaml-marshal parser family). Footer, verbatim (2026-10-22):
+  # "Dataset and drawings are available under the CC BY-NC-SA 4.0
+  # license." → nc. EXPECTED at the first sync: 802 inscriptions in the
+  # 2026-06-26 database → 787 documents (15 with no sign attestation
+  # skipped by rule), 5,144 sign attestations in 1,401 words + the
+  # standalone signs. Language lab (no nabu-lects anchor yet — lect
+  # pending); the Minoan ceramic-phase period bands through
+  # config/period_bands.yml.

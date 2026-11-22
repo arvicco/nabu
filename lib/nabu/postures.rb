@@ -4,7 +4,7 @@ require "yaml"
 
 module Nabu
   # The consolidated core-layer posture record (P61-0, D59-f wave 1):
-  # config/postures.yml declares per-source JUDGMENT for each core layer —
+  # config/postures/ declares per-source JUDGMENT for each core layer —
   # lect (the P59-4 record, migrated verbatim), dating, places, script —
   # one file, per-layer keys, so "no adapter without a posture" is one
   # mechanism instead of four.
@@ -37,21 +37,26 @@ module Nabu
 
     Declaration = Data.define(:slug, :layer, :posture, :note)
 
-    # nil when the file is absent (feature-module posture) — the suite
+    # nil when the record is absent (feature-module posture) — the suite
     # check then reports every non-machine source as unpostured. An
     # unknown layer key raises: a typo must never read as "no posture".
-    # +path+ may be one file or an overlay pair (P71-0, owner-ruled
+    # +path+ may be one path or an overlay pair (P71-0, owner-ruled
     # 2026-08-11): declarations merge per (slug, layer), later path wins.
+    # Each path is a single postures file (the local/config/postures.yml
+    # overlay, test fixtures) or a split tree — the shipped record is
+    # config/postures/<slug>.yml, one file per source keeping the
+    # `sources:` wrapper (P185; Nabu::RegistryTree holds the glob order
+    # and the duplicate-slug guards).
     def self.load(path)
-      paths = Array(path).select { |p| File.file?(p) }
+      paths = Array(path).select { |p| RegistryTree.exist?(p) }
       return nil if paths.empty?
 
       merged = paths.each_with_object({}) do |file, by_key|
-        raw = YAML.safe_load_file(file) || {}
+        raw = RegistryTree.load(file, wrapper: "sources")
         (raw["sources"] || {}).each do |slug, layers|
           (layers || {}).each do |layer, entry|
             unless LAYERS.key?(layer)
-              raise Nabu::Error, "postures.yml: #{slug}: unknown layer #{layer.inspect} " \
+              raise Nabu::Error, "postures: #{slug}: unknown layer #{layer.inspect} " \
                                  "(ruled layers: #{LAYERS.keys.join('/')})"
             end
 

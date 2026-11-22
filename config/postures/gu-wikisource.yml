@@ -1,0 +1,14 @@
+sources:
+  # P120-3: the scan-indexed wikisource cones (the owner-ruled wikisource posture).
+  gu-wikisource:
+    kind: {posture: unclassified}
+    lect: {posture: identity, note: "guj resolves through the codemap onto the gu anchor
+        (the SEA/Gujarat package merged + synced 2026-10-12). Deliberately coarse at
+        source grain: the cone spans Narsinh Mehta (15th c.) to Dayaram (19th c.) —
+        staging Old/Middle Gujarati is a recorded future look"}
+    dating: {posture: dated, note: "P120-3: the scan Index's verbatim વર્ષ= print year
+        (source_date → MetadataDates :edition_year_text, date_class edition — never the
+        poets' composition era); every admitted page carries one (REQUIRE_EDITION_YEAR)"}
+    places: {posture: unplaced, note: "the Index place field (સરનામું) is empty on the
+        cone's Indexes and would be the edition's imprint — never a text place"}
+    script: {posture: implied}

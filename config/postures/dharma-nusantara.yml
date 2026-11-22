@@ -1,0 +1,11 @@
+sources:
+  dharma-nusantara:
+    kind: {posture: unclassified}
+    lect: {posture: identity, note: "kaw/omy/osn/san -Latn — all resolve on the
+        canonical v1.6.0 rows (pending retired at the P92 gate); the 16 lang-less editions
+        read \"und\" — no lect claim, declared (the und-admission ruling, 2026-11-13)"}
+    dating: {posture: undatable, note: "no machine date field; Śaka years live in the
+        edition TEXT (svasti śaka-varṣātīta 1208 …), a future extractor story"}
+    places: {posture: unplaced}
+    script: {posture: qualified, note: "romanized; Kawi and Old Sundanese scripts are the
+        artifact facts"}

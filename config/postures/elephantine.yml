@@ -1,0 +1,6 @@
+sources:
+  elephantine:
+    dating: {posture: partial}
+    places: {posture: linked, note: "P64-1 apply: refs on 3,690/7,973 axis rows (46%); composite-name
+        tail stays named"}
+    script: {posture: qualified}

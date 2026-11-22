@@ -1,0 +1,7 @@
+aozora:
+  adapter: Nabu::Adapters::Aozora
+  adopted: "2026-07-21"
+  cjk_index: true   # P93-3: the CJK bigram substring lane
+  axes: [japonic]
+  wired: true    # P38: first sync verified 2026-07-21 (16,004 works / 2.98M passages), owner-flipped
+  sync_policy: manual

@@ -1,0 +1,20 @@
+ponomar:   # 02-sources row 380
+  adapter: Nabu::Adapters::Ponomar
+  adopted: "2026-11-04"
+  axes: [slavic]
+  wired: true    # first sync verified 2026-11-04: 246 docs / 246 passages, 101 skipped
+                 # by rule, 0 errored — exactly the adapter census (347 files = 246 + 101).
+                 # Creed + TUES7 troparion eyeballed verbatim; scoped FTS hit confirmed.
+  sync_policy: manual
+  # Ponomar (Aleksandr Andreev and others), the Orthodox liturgics suite:
+  # its Church Slavonic Services tree — the kit the program assembles the
+  # Hours from: fixed prayers and responses, the Octoechos weekday/Sunday
+  # troparia and kontakia, the Lenten troparia, rubric words, service
+  # titles. Document = file, passage = its TEXT. LICENSE: the repo's
+  # LICENSE is the GNU GPL v3; README.md verbatim "Copyright 2006-2018
+  # Aleksandr Andreev and others. Ponomar is free software: you can
+  # redistribute it and/or modify it under the terms of the GNU General
+  # Public License as published by the Free Software Foundation, either
+  # version 3 of the License, or (at your option) any later version." →
+  # attribution (the copyleft class of the CC BY-SA/GFDL holdings: carried
+  # verbatim, license and source named). Lect chu → chu:ncs.

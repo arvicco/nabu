@@ -1,0 +1,18 @@
+cigs:
+  adapter: Nabu::Adapters::Cigs
+  adopted: "2026-08-08"
+  group: core   # P63 rider: pre-enabled registry instrument, swept by `nabu sync core`
+  kind: module   # P63-5: machinery-only — a gazetteer instrument, zero document rows, up=module
+  axes: [cuneiform]
+  wired: true    # channel verified (first fetch landed; canonical present). `--all`
+                   # participation is governed by kind + sync_policy, NEVER by wired
+                   # (owner semantics ruling 2026-08-18, reaffirming 2026-07-24:
+                   # wired = the sync link is tested and declared working).
+  # P63-5: CIGS — the Cuneiform Inscriptions Geographical Site Index
+  # (Uppsala "Geomapping Landscapes of Writing"; CDLJ 2021-1 — CDLI's place
+  # authority in practice). 597 sites / 158 kB, one Zenodo-version-pinned
+  # CSV (v1.7 2024-12-31; a new release is a new URL the owner re-pins).
+  # legacy_name is EXACTLY the CDLI house composite ("Girsu (mod. Tello)")
+  # — the nabu-places cdli seed key. LICENSE: Zenodo record verbatim
+  # "Creative Commons Attribution 4.0 International" → attribution.
+  sync_policy: manual

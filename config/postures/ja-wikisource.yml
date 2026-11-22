@@ -1,0 +1,20 @@
+sources:
+  ja-wikisource:
+    kind: {posture: unclassified}
+    lect: {posture: identity, note: "jpn (prose/kundoku layers) + ojp (万葉集 原文
+        man'yōgana) — both honest bare codes. Staging jpn docs onto the minted
+        emj/lmj/emod stages via the era_band envelopes (the dta de:early date-band
+        precedent) is a NAMED candidate awaiting an owner ruling — not defaulted"}
+    dating: {posture: dated, note: "P109-1: the era-category envelope
+        (era_band → MetadataDates :era_band_key), precision era — an attribution,
+        never a typed date. The page {{header}} year= (133 pages carry a bare CE
+        year, census 2026-10-18) outranks the band as a one-year envelope of its own
+        class composition (the work's year as the wiki states it); the era year=
+        「寛政2」 converts through config/eras.yml (owner-ruled 2026-10-20, raw kept
+        verbatim), the unexpanded template default deliberately mints nothing"}
+    places: {posture: unplaced, note: "no DOCUMENT-grain place fields in the cone pages.
+        The 万葉集 poems' [事項] keyword bag names places at poem grain — mentions in
+        the poem, never a findspot or origin claim — riding passage annotations
+        (\"matters\" verbatim; \"places\" only for the closed prefecture/municipal-suffix
+        rule; historic names stay in the verbatim bag until a gazetteer join)"}
+    script: {posture: implied}

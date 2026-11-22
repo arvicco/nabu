@@ -1,0 +1,143 @@
+{
+	"ObjectReference": {
+		"type": "object",
+		"description": "",
+		"required": ["id", "uri"],
+		"properties": {
+			"id": {
+				"type": "integer",
+				"description": "The SEDRA 'Id' used for referencing this object."
+			},
+			"uri": {
+				"type": "string",
+				"description": "Full URI of the SEDRA API reference for this object."
+			}
+		}
+	},
+	"LocalizedStrings": {
+		"type": "object",
+		"description": "A hashmap with language name as a key and and array of text strings in that language",
+		"additionalProperties": {
+			"type": "array",
+			"items": {
+				"type": "string"
+			}
+		}
+	},
+	"State": {
+		"type": "string",
+		"description": "The state of a Syriac substantive or adjective.",
+		"enum": [
+			"absolute",
+			"emphatic",
+			"construct"
+		]
+	},
+	"Tense": {
+		"type": "string",
+		"description": "The tense of a Syriac verb.",
+		"enum": [
+			"active participle",
+			"imperative",
+			"imperfect",
+			"infinitive",
+			"participle",
+			"passive participle",
+			"perfect"
+		]
+	},
+	"Kaylo": {
+		"type": "string",
+		"description": "The Kaylo or conjugation of a Syriac verb.",
+		"enum": [
+			"ettaphʿal (pass. of Taphʿel)",
+			"IVa",
+			"IVp",
+			"pʿal",
+			"paʿʿel",
+			"shaphʿel",
+			"palpel",
+			"ethpaʿʿal",
+			"aphʿel",
+			"ettaphʿal",
+			"saphʿel",
+			"ethpʿel",
+			"p",
+			"ethp",
+			"ethpalpal",
+			"payʿel",
+			"ethpayʿal",
+			"ethparʿal",
+			"eshtaphʿal",
+			"ethpawʿal",
+			"pawʿel",
+			"palpal",
+			"pamʿel",
+			"taphʿel",
+			"parʿel",
+			"estaphʿal",
+			"ethpaʿli",
+			"paʿli"
+		]
+	},
+	"Number": {
+		"type": "string",
+		"description": "The number of a Syriac adjective, noun, suffix, or verb.",
+		"enum": [
+			"plural",
+			"singular"
+		]
+	},
+	"Gender": {
+		"type": "string",
+		"description": "The gender of a Syriac adjective, noun, numeral, pronoun, suffix, or verb.",
+		"enum": [
+			"common",
+			"feminine",
+			"masculine"
+		]
+	},
+	"Person": {
+		"type": "string",
+		"description": "The person of a Syriac verb.",
+		"enum": [
+			"first",
+			"second",
+			"third"
+		]
+	},
+	"SuffixType": {
+		"type": "string",
+		"description": "The type of suffix attached to the Syriac word.",
+		"enum": [
+			"contraction",
+			"suffix"
+		]
+	},
+	"CategoryType": {
+		"type": "string",
+		"description": "The category of the Syriac lexeme or word.",
+		"enum": [
+			"adjective",
+			"adjective of place",
+			"adverb",
+			"adverb ending with aiyt",
+			"denominative",
+			"idiom",
+			"noun",
+			"numeral",
+			"participle adjective",
+			"particle",
+			"pronoun",
+			"proper noun",
+			"substantive",
+			"verb",
+			"proper noun (individual&#039;s name; e.g. Ephrem)",
+			"proper noun (place name)",
+			"proper noun (nations; e.g. Huns)",
+			"demonym",
+			"preposition",
+			"interjection"
+		]
+	},
+}

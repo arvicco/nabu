@@ -1,0 +1,7 @@
+sources:
+  local-library:
+    kind: {posture: unclassified}
+    lect: {posture: identity, note: the owner's own shelf — codes as curated}
+    dating: {posture: dated, note: "P108-8: the shelf's own integer year field (62/62 docs)"}
+    places: {posture: unplaced}
+    script: {posture: implied}

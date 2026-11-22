@@ -86,7 +86,7 @@ What each command does and its exit contract:
   whether an upstream had moved.
 
   **`license_watch` (P16-5):** a source with `license_watch: <url>` in
-  `config/sources.yml` has its license checked against THAT url instead of
+  `config/sources/` has its license checked against THAT url instead of
   the strategy default — the escape hatch for upstreams whose terms live in
   a README or a repository record page (kielipankki `README.txt`, clarin.si
   records, the PROIEL-family repo READMEs) that the github-only LICENSE
@@ -242,7 +242,7 @@ reads.
 
 ### The registry vocabulary — kinds and flags (who syncs, when, and why)
 
-Every row in `config/sources.yml` is one of three **kinds**, and four
+Every row in `config/sources/` is one of three **kinds**, and four
 orthogonal switches govern what happens to it. These answer different
 questions and never substitute for each other (owner semantics ruling
 2026-08-18, reaffirming the 2026-07-24 nomenclature ruling).
@@ -530,7 +530,7 @@ reason for, not a blind weekly ritual.
   source, or a non-200/non-redirect HEAD on a project zip for an HTTP-zip
   source (ORACC). Check the URL/repo by hand: did the org rename, the repo
   move, or the project die? If it's dead, set `sync_policy: frozen` in
-  `config/sources.yml` (stop hitting it; keep what you have — retained docs
+  `config/sources/` (stop hitting it; keep what you have — retained docs
   stay live and searchable). If it moved, update the `upstream_url` (git) or
   the project list / URL shape (HTTP-zip).
 - **MOVED** — best-effort redirect signal; the stored URL may be stale. Update

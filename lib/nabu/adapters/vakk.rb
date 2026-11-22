@@ -7,7 +7,7 @@ require "json"
 require "nokogiri"
 require "zlib"
 
-require_relative "../zip_fetch"
+require_relative "../fetch/zip_fetch"
 require_relative "../redirect_follow"
 require_relative "../normalize"
 require_relative "source_read"

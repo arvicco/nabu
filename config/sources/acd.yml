@@ -1,0 +1,16 @@
+acd:
+  adapter: Nabu::Adapters::Acd
+  adopted: "2026-11-13"
+  axes: [etym]
+  wired: true    # first sync 2026-11-13: +10,857 sets / 110,825 reflexes.
+                 # Expected (full-scale dry parse): 10,857 entries /
+                 # 110,825 reflex rows (99 loan-flagged); raw/ skipped by rule.
+  sync_policy: manual
+  # The Austronesian Comparative Dictionary (Blust, Trussel & Smith) in
+  # the lexibank CLDF edition v2.0 (Zenodo 10.5281/zenodo.14608975,
+  # CC BY 4.0): 10,857 cognate sets headed by their reconstruction (PAn,
+  # PMP and the subgroup protos), 1,063 varieties, acd's etymon records
+  # in the body, borrowings.csv targets flagged borrowed. Dictionary
+  # language `map` (the Austronesian collective). The lexibank-cldf
+  # family (lib/nabu/adapters/lexibank_cldf.rb); proto varieties map onto
+  # registry codes only where nabu-lects resolves them (POc, PEMP, PMc, PPn).

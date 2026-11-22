@@ -1,0 +1,22 @@
+oncoj-lexicon:
+  adapter: Nabu::Adapters::OncojLexicon
+  adopted: "2026-07-19"
+  axes: [japonic]
+  wired: true   # flipped 2026-07-20 (owner order, post-P34 gate: P32+P33 sources on)
+                   # sparse GitFetch (lexicon.xml + README, 3.4 MB, same
+                   # pinned tag) — expect 5,868 entries (5,871 upstream − 3 empty-orth bound stems, skip-by-rule censused); eyeball nabu
+                   # define titipapa / define --lang ojp atwo and 5 random
+                   # entries, then flip.
+  # P32-2: the ONCOJ lexicon — "the dictionary database for the corpus"
+  # (upstream README §B) as the ojp dictionary shelf: 5,871 entries /
+  # 5,527 superEntries (censused; the ONE upstream duplicate id l090819
+  # re-mints "-b", the starling collision precedent). SIBLING of oncoj:
+  # content_kind is one closed routing per adapter (the lexlep/
+  # lexlep-words precedent), so the repo's two grains are two rows
+  # sharing the pinned "release" tag, each with its own sparse cone.
+  # Entry ids are exactly the w/@lemma space corpus tokens speak
+  # (5,793/5,871 entries corpus-cited = 98.7%); headword = first orth =
+  # the very form the corpus adapter mints as token lemma, so define
+  # meets search --lemma on identical folds. Same §D CC BY 4.0 grant
+  # and §C citation as oncoj. Frozen with the tag; owner re-pins.
+  sync_policy: frozen

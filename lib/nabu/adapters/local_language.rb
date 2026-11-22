@@ -2,7 +2,7 @@
 
 require_relative "../language_dossier"
 require_relative "../language_shelf"
-require_relative "../local_fetch"
+require_relative "../fetch/local_fetch"
 
 module Nabu
   module Adapters

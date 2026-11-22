@@ -21,9 +21,9 @@ module Adapters
     # --- registry / module shape ------------------------------------------------
 
     def test_registry_carries_the_module_row_manual_and_unwired
-      registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources.yml", __dir__))
+      registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources", __dir__))
       entry = registry["itkc-catalog"]
-      refute_nil entry, "itkc-catalog must be registered in config/sources.yml"
+      refute_nil entry, "itkc-catalog must be registered in config/sources/"
       assert entry.feature_module?
       assert_equal "manual", entry.sync_policy
     end

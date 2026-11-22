@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require_relative "cantigas_html_parser"
-require_relative "../cantigas_fetch"
+require_relative "../fetch/cantigas_fetch"
 
 module Nabu
   module Adapters

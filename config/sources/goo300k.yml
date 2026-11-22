@@ -1,0 +1,10 @@
+goo300k:
+  adapter: Nabu::Adapters::Goo300k
+  adopted: "2026-07-11"
+  axes: [slavic]
+  wired: true    # OWNER SIGN-OFF 2026-07-11: synced, 89 docs / 8,397 passages,
+                   # gold Early Modern Slovenian eyeballed.
+  sync_policy: manual
+  # license_watch candidate (P16-5, owner decision — the CC BY 4.0 grant
+  # lives on the CLARIN.SI record page, hdl 11356/1025):
+  # license_watch: https://www.clarin.si/repository/xmlui/handle/11356/1025

@@ -27,9 +27,9 @@ module Adapters
     # --- the module row / manifest --------------------------------------------
 
     def test_registry_carries_the_module_row_disabled_manual_and_seeded
-      registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources.yml", __dir__))
+      registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources", __dir__))
       entry = registry["kitab"]
-      refute_nil entry, "kitab must be registered in config/sources.yml"
+      refute_nil entry, "kitab must be registered in config/sources/"
       assert entry.feature_module?, "a links instrument is a kind: module row"
       assert entry.wired, "channel verified (the 2026-08-18 wired-semantics ruling)"
       assert_equal "manual", entry.sync_policy, "the sweep is owner-fired"
@@ -65,7 +65,7 @@ module Adapters
     # The registry builds the adapter with the entry's classes: (pilot folders)
     # — the construction seam sync/rebuild use.
     def test_registry_builds_the_adapter_with_the_pilot_allowlist
-      registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources.yml", __dir__))
+      registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources", __dir__))
       adapter = registry["kitab"].build_adapter
       assert_instance_of Nabu::Adapters::Kitab, adapter
     end

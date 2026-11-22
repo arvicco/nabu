@@ -1,0 +1,10 @@
+sources:
+  otdo:
+    kind: {posture: unclassified}
+    lect: {posture: identity, note: otb IS Old Tibetan}
+    dating: {posture: partial, note: "the header's free-prose Date (\"ca. 797 …\", \"780-800?\",
+        \"post 763\", \"late 9th-10th century\") read into an envelope by MetadataDates
+        :date_text_prose, the prose as raw: 22 of 413 documents (census 2026-11-04); the
+        rest carry no Date or \"undatable\"/\"unknown\""}
+    places: {posture: unplaced}
+    script: {posture: implied}

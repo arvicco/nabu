@@ -470,9 +470,9 @@ class PapyriTest < Minitest::Test
   # --- registry round-trip ----------------------------------------------------
 
   def test_registry_resolves_papyri_ddbdp_and_manifest_agrees
-    registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources.yml", __dir__))
+    registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources", __dir__))
     entry = registry["papyri-ddbdp"]
-    refute_nil entry, "papyri-ddbdp must be registered in config/sources.yml"
+    refute_nil entry, "papyri-ddbdp must be registered in config/sources/"
     assert_equal Nabu::Adapters::Papyri, entry.adapter_class
     assert_equal "papyri-ddbdp", entry.manifest.id
     assert_equal "auto", entry.sync_policy, "re-promoted to the auto sweep after the switchover migration"
@@ -620,7 +620,7 @@ class PapyriTranslationsTest < Minitest::Test
   end
 
   def test_registry_builds_a_translations_on_adapter
-    registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources.yml", __dir__))
+    registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources", __dir__))
     built = registry["papyri-ddbdp"].build_adapter
     assert(built.discover(FIXTURES).any? { |ref| ref.id.include?("-trans-") })
   end

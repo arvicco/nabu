@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative "../litopys_fetch"
+require_relative "../fetch/litopys_fetch"
 require_relative "litopys_html_parser"
 require_relative "litopys_glossary_lane"
 

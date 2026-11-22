@@ -1,0 +1,13 @@
+wiktionary-gmq-osw:   # P154, 02-sources row 357
+  adapter: Nabu::Adapters::WiktionaryGmqOsw
+  adopted: "2026-11-02"
+  axes: [germanic]
+  wired: true   # first sync verified 2026-11-03: 1,440 entries
+  # The kaikki Old Swedish extraction (1,440 records / "1404 distinct
+  # words", census 2026-11-02): an English-glossed Old Swedish shelf beside
+  # the Swedish-language fsv-lexica: Old Norse (871) and Proto-Germanic
+  # (791) etymons. Language sv. The wiktionary-fa mold on the shared
+  # WiktionaryKaikki base: per-language JSONL (deprecated upstream —
+  # fallback = filter the full extract by lang_code gmq-osw), CC BY-SA +
+  # GFDL → attribution, FileFetch.
+  sync_policy: manual

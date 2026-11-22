@@ -1,0 +1,20 @@
+cldf-spine:
+  adapter: Nabu::Adapters::CldfSpine
+  adopted: "2026-07-26"
+  kind: module   # P46-6: machinery-only — a concept/languoid resolver seam, zero document rows
+  axes: [etym]
+  wired: true    # channel verified (first fetch landed; canonical present). `--all`
+                   # participation is governed by kind + sync_policy, NEVER by wired
+                   # (owner semantics ruling 2026-08-18, reaffirming 2026-07-24:
+                   # wired = the sync link is tested and declared working).
+  # P46-6: the CLDF reference spine — Concepticon (4,033 concepts) +
+  # Glottolog (27,177 languoids), THIN by design: the id-and-name spine plus
+  # what WOLD/CLICS rows need to resolve, never the full datasets. LICENSE:
+  # both CC BY 4.0 verbatim (Concepticon .zenodo.json at v3.4.0; the
+  # glottolog-cldf bundle's own dc:license at v5.3) → attribution. A new
+  # upstream release is a new tag: owner re-pins the two URL constants in
+  # lib/nabu/adapters/cldf_spine.rb and re-syncs. Known upstream quirk,
+  # pinned in tests: WOLD tags its "Old Norse" donor glottocode noon1243,
+  # which Glottolog resolves to Noone (Atlantic-Congo) — real Old Norse is
+  # oldn1244; the WOLD donor map therefore keys on languoid NAMES.
+  sync_policy: manual

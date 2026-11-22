@@ -1,0 +1,13 @@
+goryeosa-jeoryo:
+  adapter: Nabu::Adapters::GoryeosaJeoryo
+  adopted: "2026-08-18"
+  cjk_index: true   # P93-3: the CJK bigram substring lane
+  axes: [korean]   # P78-3: the goryeosa family — the chronological digest sibling
+  wired: true     # P78-3 first sync owner-verified (36 docs / 11,226 passages; the junk-named .jpg salvage-skipped, P78-r4); flipped 2026-08-19 (owner: 'wire everything on')
+  # 고려사절요 원문 (NIKH via data.go.kr 15115521; 제한 없음 → D47-a
+  # attribution). Hanmun only. Fetch resolves the CURRENT atchFileId
+  # (DataGoKrFetch), then one ZipFetch into the flat workdir. 36 members
+  # kj_000..kj_035 (~22 MB unpacked) + one stray mojibake .jpg the census
+  # counts loudly; nikh-xml family.
+  license_watch: https://www.data.go.kr/data/15115521/fileData.do
+  sync_policy: manual

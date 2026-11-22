@@ -1,0 +1,17 @@
+lila:
+  adapter: Nabu::Adapters::Lila
+  adopted: "2026-07-24"
+  kind: module   # P44-8: machinery-only — a Latin lemma-spine read seam, zero catalog rows, up=module
+  axes: [classical]
+  wired: true    # channel verified (first fetch landed; canonical present). `--all`
+                   # participation is governed by kind + sync_policy, NEVER by wired
+                   # (owner semantics ruling 2026-08-18, reaffirming 2026-07-24:
+                   # wired = the sync link is tested and declared working).
+  # P44-8: LiLa Lemma Bank (CIRCSE, "LiLa: Linking Latin") — 215,102 Latin
+  # canonical forms, the Latin analogue of the CJK character-desk crosswalks.
+  # v1 is a pure read seam over the repo's rdf/lemmaBank.ttl (84 MB D2RQ
+  # Turtle; the 11 MB SQL mirror is outside the sparse cone). LICENSE: in-repo
+  # LICENSE verbatim "Attribution-ShareAlike 4.0 International" (CC BY-SA 4.0;
+  # citable Zenodo DOI 10.5281/zenodo.4017229) → attribution. Fetch is an
+  # owner decision (the clone is large + version-pinned).
+  sync_policy: manual

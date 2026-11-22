@@ -1,0 +1,7 @@
+aspr:
+  adapter: Nabu::Adapters::Aspr
+  adopted: "2026-07-10"
+  axes: [germanic]
+  wired: true    # OWNER SIGN-OFF 2026-07-11: synced, 349 poems / 30,550 lines,
+                   # Beowulf canonical ordinals eyeballed (A4.1:1-5).
+  sync_policy: manual

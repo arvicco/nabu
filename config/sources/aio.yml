@@ -1,0 +1,34 @@
+aio:   # P154, 02-sources row 335
+  adapter: Nabu::Adapters::Aio
+  adopted: "2026-11-02"
+  axes: [classical, epigraphy]
+  wired: true    # first sync verified 2026-11-04 (resumable crawl, 3 attempts —
+                 # upstream TCP drops mid-crawl twice, resumed at the file grain):
+                 # 4,002 docs / 67,429 passages / 35 listing pages skipped by
+                 # rule / 11 quarantined. Reconciliation EXACT against the
+                 # listing's advertised count: 3,457 translation docs + 9
+                 # quarantined -en = 3,466 records; 545 Greek docs + 2
+                 # quarantined = 547 AIO/AIUK-edited records. All 11 quarantines
+                 # are upstream's own malformed EpiDoc (tag mismatches, premature
+                 # ends — e.g. <placeName>…</placename> in aio-2801) — parser
+                 # quarantine by design, not a regression. Eyeballed
+                 # urn:nabu:aio:2586-en ("Gods." / "In the archonship of
+                 # Nikomachos (341/0)…"), urn:nabu:aio:2103 (Greek, "ἐπὶ ἄρχοντος
+                 # Κλαυδίου Ἡρακλεί"), 5 random records (both layers, dates,
+                 # Pleiades findspots, facets); FTS probe "Halaians" → 953-en,
+                 # 2588-en, 986-en.
+  sync_policy: manual
+  # AIO — Attic Inscriptions Online (British School at Athens; ed. Stephen
+  # Lambert): English translations of the inscriptions of Attica, with AIO's
+  # own Greek editions for the AIO/AIUK papers. CC BY-SA 3.0 — the CC badge
+  # on every inscription page (translation AND Greek view), first-hand
+  # 2026-11-02 → attribution. Fetched through upstream's own REST API
+  # (/api/ Swagger: list_all_inscriptions + per-inscription JSON with Base64
+  # EpiDoc) plus the inscription page (Date, Monument/Inscription type,
+  # Original location, Findspot, footnotes — fields the API omits). Images
+  # never fetched. Document = record layer: urn:nabu:aio:<n>-en (translation,
+  # kind translation, translation_of the base urn) always; urn:nabu:aio:<n>
+  # (the Greek) where AIO publishes its own text. The record's date/place/
+  # genre ride the primary doc (the Greek, else the translation — whose
+  # axes never row on the timeline, the house translation rule: declared in
+  # the postures).

@@ -1,0 +1,13 @@
+wiktionary-dum:   # P154, 02-sources row 354
+  adapter: Nabu::Adapters::WiktionaryDum
+  adopted: "2026-11-02"
+  axes: [germanic]
+  wired: true   # first sync verified 2026-11-03: 2,342 entries
+  # The kaikki Middle Dutch extraction (2,342 records / "2031 distinct
+  # words", census 2026-11-02): the library's first Middle Dutch dictionary:
+  # Old Dutch (1,301 odt) and Proto-Germanic etymons, descendants into
+  # Dutch, Afrikaans, Limburgish. Language dum. The wiktionary-fa mold on
+  # the shared WiktionaryKaikki base: per-language JSONL (deprecated
+  # upstream — fallback = filter the full extract by lang_code dum), CC
+  # BY-SA + GFDL → attribution, FileFetch.
+  sync_policy: manual

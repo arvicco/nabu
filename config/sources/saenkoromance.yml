@@ -1,0 +1,15 @@
+saenkoromance:
+  adapter: Nabu::Adapters::Saenkoromance
+  adopted: "2026-11-13"
+  axes: [etym, romance]
+  wired: true    # first sync 2026-11-13: +465 sets / 5,092 reflexes.
+                 # Expected: 465 entries / 5,092 reflex rows (174
+                 # loan-flagged); raw/ skipped by rule.
+  sync_policy: manual
+  # Saenko 2015, Annotated Swadesh wordlists for the Romance group (The
+  # Global Lexicostatistical Database), lexibank CLDF edition v1.1
+  # (Zenodo 10.5281/zenodo.13163492, CC BY 4.0): 43 Romance varieties ×
+  # 110 concepts, 465 cognate sets headed by their concept. The Value
+  # column carries "transcription {orthography}" variants joined by "~":
+  # the orthography is the reflex word, the transcription its roman.
+  # Dictionary language `roa`.

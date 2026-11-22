@@ -1,0 +1,18 @@
+te-wikisource:   # P140, 02-sources row 283
+  adapter: Nabu::Adapters::TeWikisource
+  adopted: "2026-10-21"
+  axes: [indic]
+  wired: true    # first sync verified 2026-10-21: 453 docs / 208,794 passages, 112 skips-by-rule (the lane census exactly)
+  sync_policy: manual
+  # The classical Telugu cone (the owner-ruled wikisource posture), census
+  # 2026-10-21: 12,635 pages carry the {{తలకట్టు}} header (సంవత్సరం=
+  # 7,121 after 1930 · 3,097 in 1800–1930 · 2,311 none); the 1800–1930
+  # slice is mostly modern composition, so the cone is the 73 censused
+  # work trees of pre-1800 classical poets in their 1891–1930 prints (+ the
+  # Bhāminīvilāsa Sanskrit specimen) — 565 cone pages. Census fetch
+  # 2026-10-21 (21 min at a 0.5 s delay): 453 docs / 208,794 passages, all
+  # tel; skipped 112 (60 edition_taint — Index years after 1930 — 25
+  # edition_unstated, 21 apparatus, 5 translation, 1 sanskrit_overlap).
+  # The Sanskrit-in-Telugu-script overlap (ఋగ్వేదము 1,035 ·
+  # వ్యాస మహాభారతము 2,016 · the Yajur/Sāma/Atharva trees) is excluded by
+  # rule (sanskrit_overlap). Texts PD; transcription layer CC BY-SA 4.0.

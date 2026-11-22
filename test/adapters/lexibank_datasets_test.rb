@@ -44,7 +44,7 @@ class LexibankDatasetsTest < Minitest::Test
     adapter.parse(adapter.discover(fixtures(expect)).first)
   end
 
-  def registry = @registry ||= Nabu::SourceRegistry.load(File.expand_path("../../config/sources.yml", __dir__))
+  def registry = @registry ||= Nabu::SourceRegistry.load(File.expand_path("../../config/sources", __dir__))
 
   # --- declarations -------------------------------------------------------------------
 
@@ -218,7 +218,7 @@ class LexibankDatasetsTest < Minitest::Test
     EXPECTED.each do |expect|
       slug = expect.klass.dataset.slug
       entry = registry[slug]
-      refute_nil entry, "#{slug} must be registered in config/sources.yml"
+      refute_nil entry, "#{slug} must be registered in config/sources/"
       assert_equal expect.klass, entry.adapter_class
       assert entry.wired, "#{slug}: first sync verified — the registry row stays wired"
       assert_equal "manual", entry.sync_policy

@@ -1,0 +1,13 @@
+wiktionary-pa:   # P154, 02-sources row 365
+  adapter: Nabu::Adapters::WiktionaryPa
+  adopted: "2026-11-02"
+  axes: [indic]
+  wired: true   # first sync verified 2026-11-03: 10,749 entries
+  # The kaikki Punjabi extraction (10,749 records / "9533 distinct words",
+  # census 2026-11-02): an English-glossed Punjabi shelf beside the
+  # Punjabi-language mahan-kosh: Sanskrit (2,192), Classical Persian
+  # (1,225), Arabic (702) and Prakrit (612) etymons. Language pan. The
+  # wiktionary-fa mold on the shared WiktionaryKaikki base: per-language
+  # JSONL (deprecated upstream — fallback = filter the full extract by
+  # lang_code pa), CC BY-SA + GFDL → attribution, FileFetch.
+  sync_policy: manual

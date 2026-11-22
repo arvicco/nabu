@@ -1,0 +1,5 @@
+sources:
+  vulgate:
+    dating: {posture: undatable}
+    places: {posture: unplaced}
+    script: {posture: implied}

@@ -1,0 +1,37 @@
+bhsa:
+  adapter: Nabu::Adapters::Bhsa
+  adopted: "2026-07-18"
+  requires: [bridging]   # P77-r4 (survey-confirmed): the ONE parse-time
+                   # cross-source canonical read in the tree — load_bridging
+                   # reads canonical/bridging/.../osm.tf; a late-arriving
+                   # bridging leaves the osm lane silently dark until a
+                   # manual re-parse, exactly what the chain sweep prevents.
+  axes: [biblical, hebrew]
+  wired: true # flipped 2026-07-19 (owner sign-off: Hebrew shelf synced, flip ordered)
+                   # checklist §6: bin/nabu sync bhsa — sparse GitFetch cone
+                   # tf/2021 + README.md, 118 files ≈ 173 MB of the 1.6 GB
+                   # repo — then eyeball nabu show urn:nabu:bhsa:gen:1.1,
+                   # urn:nabu:bhsa:ruth:1.8 --display reading (qere
+                   # substitution) and 5 random verses, `align "GEN 1.1"`
+                   # (now FOUR-legged: MT×2 ↔ LXX ↔ Vulgate), then flip).
+  # P30-4: BHSA — Biblia Hebraica Stuttgartensia Amstelodamensis (ETCBC),
+  # the FIRST text-fabric source and nabu's first constituency data.
+  # SECOND Masoretic witness beside oshb at a deliberately different grain
+  # (ETCBC glosses/frequencies/H-A language + clause/phrase spans vs oshb's
+  # Strong's/OSHM) — never merged, the MW-beside-kaikki precedent. Census
+  # verified against otype.tf at fixture time: 426,590 words / 39 books /
+  # 929 chapters / 23,213 verses / 88,131 clauses / 253,203 phrases /
+  # 9,230 lexemes. LICENSE: README.md verbatim CC BY-NC 4.0 citing DOI
+  # 10.17026/dans-z6y-skyh (the GitHub MIT badge covers code only) → class
+  # nc, the proiel/gretil posture — CONFIRMED by the ETCBC directorate
+  # (W. van Peursen, by email, 2026-10-15): all ETCBC-created data CC
+  # BY-NC 4.0, software MIT, the BHSA one indivisible package (base text
+  # + annotations), commercial use negotiated via the Deutsche
+  # Bibelgesellschaft. Version PINNED to the frozen tf/2021
+  # dataset (the sparse cone IS the pin); upstream moves rarely and only
+  # in other version dirs → re-syncs are an owner decision.
+  # Sibling repo ETCBC/bridging (MIT, the OSHB↔BHSA word-level crosswalk)
+  # is WIRED as of P34-1: the bridging feature-module row below lands
+  # canonical/bridging, and this adapter's tokens carry osm/osm_sf when the
+  # module is present (re-parse after the module sync lights the lane up).
+  sync_policy: manual

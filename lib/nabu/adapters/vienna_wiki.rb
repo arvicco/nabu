@@ -3,7 +3,7 @@
 require "json"
 
 require_relative "wiki_template_parser"
-require_relative "../wiki_fetch"
+require_relative "../fetch/wiki_fetch"
 require_relative "../normalize"
 
 module Nabu

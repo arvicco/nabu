@@ -1,0 +1,15 @@
+sources:
+  dicta-bavli:   # 02-sources row 420
+    # kind machine-postured — kind_map.yml metadata genre "Talmud Bavli" → exegesis.
+    # lect machine-postured — lect_overrides.yml arc → arc:mid (approximation): the
+    # Jewish Babylonian Aramaic / Rabbinic Hebrew mix rides arc whole (declared coarse).
+    dating: {posture: undatable, note: "the asset carries no date — no edition year beyond the
+        Vilna pagination the files follow, no composition era per tractate (the sefaria Bavli
+        stance). The Bavli's redaction era (c. 500–600 CE, Amoraic/Savoraic) is an attributed
+        composition date, a work_eras row — a separate call, not made here; Dicta's
+        vocalization (completed 2020s) is the layer's date, not the text's"}
+    places: {posture: unplaced, note: "no place field — the Babylonian academies of the
+        Talmud's composition are the work's setting, not an artifact findspot"}
+    script: {posture: implied, note: "Hebrew square script with full niqqud (Dicta's Nakdan,
+        human-reviewed), stored byte-verbatim on the NFC-exempt arc code; ktiv male as text,
+        ktiv haser in annotations"}

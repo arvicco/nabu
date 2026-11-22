@@ -1,0 +1,11 @@
+sources:
+  kouigenji:   # P108-3
+    kind: {posture: unclassified, note: one work — monogatari; a kind facet would be a
+        single-value stamp, deferred}
+    # lect: machine-postured since P110 — the jpn → jpn:emj override in
+    # config/lect_overrides.yml (the P108 pending retired at the flip).
+    dating: {posture: undatable, note: Genji's composition dating (c. 1008) is a future
+        curated-band candidate, declared not faked}
+    places: {posture: unplaced}
+    script: {posture: implied, note: kana-heavy hentaigana-normalized transcription per the
+        project's own conventions}

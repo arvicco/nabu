@@ -1,0 +1,14 @@
+wiktionary-kn:   # 02-sources row 286
+  adapter: Nabu::Adapters::WiktionaryKn
+  adopted: "2026-10-21"
+  axes: [indic]
+  wired: true    # first sync verified 2026-10-21: 2,741 entries (the lane census exactly)
+                 # eyeball nabu define ಒಂದು ("one", ← Proto-Dravidian *onṯu), then flip.
+  # The kaikki Kannada extraction (2,741 records / "2495 distinct words",
+  # census 2026-10-21): Sanskrit, Proto-Dravidian and Old Kannada etymons
+  # (961 sa / 294 dra-pro / 143 dra-okn edges). Language kan (→ kn through
+  # the held codemap alias). The wiktionary-akk mold on the shared
+  # WiktionaryKaikki base: per-language JSONL (deprecated upstream —
+  # fallback = filter the full extract by lang_code kn), CC BY-SA + GFDL →
+  # attribution, FileFetch.
+  sync_policy: manual

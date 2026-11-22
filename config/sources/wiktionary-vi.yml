@@ -1,0 +1,21 @@
+wiktionary-vi:   # P156, 02-sources row 373
+  adapter: Nabu::Adapters::WiktionaryVi
+  adopted: "2026-11-04"
+  axes: [sinitic]
+  wired: true    # first sync verified 2026-11-04: 52,107 entries / 60 empty stubs skipped
+                 # by rule (5,435 glossless kept for readings/forms) — exactly the census.
+                 # define ngựa answers with the mkh-pro etymon chain.
+  # The kaikki Vietnamese extraction (83,424,329 B / 52,167 records /
+  # "45519 distinct words", census 2026-11-04): the library's first
+  # Vietnamese dictionary and its chữ Nôm lexicon — 9,112 Han/Nôm
+  # character records (11,850 senses) with 11,299 nom-/Hán-Việt reading
+  # relations + 9,698 Hán-Nôm-tagged readings, and 13,537 Hán-Nôm
+  # spellings on word records. Language vi (the registry anchor; vie
+  # aliases). The WiktionaryScriptShelf base: the WiktionaryKaikki mold +
+  # the script-form layer (body lines + typed crossrefs) + the empty-stub
+  # skip rule (60 skipped; the 5,435 glossless records carrying readings
+  # are KEPT). EXPECTED first sync: 52,107 entries (exact, whole-file
+  # census through the adapter). Per-language JSONL (deprecated upstream
+  # — fallback = filter the full extract by lang_code vi), CC BY-SA +
+  # GFDL → attribution, FileFetch.
+  sync_policy: manual

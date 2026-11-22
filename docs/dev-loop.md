@@ -198,7 +198,7 @@ Build order follows `docs/02-sources.md` synthesis (1 → 2 → 4 → 3/5 → 10
 - P1-3 Store: Sequel migrations for the catalog schema (architecture §5), models [fable design → opus implement]
 - P1-4 Loader: upsert-by-URN, content hashing, revision journal, withdrawal [fable]
 - P1-5 `nabu rebuild` + in-memory-SQLite store tests + idempotency tests [opus]
-- P1-6 `config/sources.yml` registry + `runs` table + `nabu status` [opus]
+- P1-6 `config/sources/` registry + `runs` table + `nabu status` [opus]
 
 **Phase 2 — Reference adapter (Perseus)** *(the pattern-setter)*
 - P2-1 Perseus fixtures: acquisition plan → owner approval → loop fetches (§8)

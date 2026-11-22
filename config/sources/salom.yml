@@ -1,0 +1,19 @@
+salom:
+  adapter: Nabu::Adapters::Salom
+  adopted: "2026-08-19"
+  axes: [romance]
+  wired: true   # flipped 2026-08-21 (owner: "wire everything on"; first sync owner-round-verified)
+                   # ~1 MB; then eyeball urn:nabu:salom:articles-2022:1 and 5 random
+                   # passages)
+  # Şalom Ladino articles text corpus (P80-6): Hugging Face
+  # collectivat/salom-ladino-articles — 10,685 Ladino (lad, Judeo-Spanish)
+  # sentences from 397 articles of Şalom newspaper's Judeo-Espanyol
+  # section (Col·lectivaT + Sephardic Center of Istanbul; the EURALI 2022
+  # corpus), censused 2026-08-19. Upstream ships the sentences SEGMENTED
+  # AND SHUFFLED — article structure unrecoverable, so ONE document at
+  # sentence grain is the honest shape; passage identity = 1-based line
+  # number (upstream's `\n\n` tail mints nothing — a pinned fixture
+  # quirk). Latin-script Turkish-style orthography. LICENSE: card
+  # frontmatter verbatim `license: cc-by-4.0`, citation requested →
+  # attribution. A revised corpus is a new filename — an owner re-pin.
+  sync_policy: manual

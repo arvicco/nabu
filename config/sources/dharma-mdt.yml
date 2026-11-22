@@ -1,0 +1,17 @@
+dharma-mdt:   # P118-4, 02-sources row 257
+  adapter: Nabu::Adapters::DharmaMdt
+  adopted: "2026-10-11"
+  axes: [indic]
+  wired: true    # first sync verified 2026-10-11: 734 metadata-row docs, 0 quarantined
+                 # verified 2026-10-11: 734 metadata docs, 94 placeholder rows skipped)
+  sync_policy: auto   # promoted 2026-10-13: actively-edited upstream,
+                       # git-incremental fetch — rides the sync --all sweep
+  # DHARMA text metadata (github.com/erc-dharma/mdt-texts): four per-corpus
+  # CSVs (DaksinaKosala / Pallava / Somavamsin / Telugu, header at row 3) as
+  # a METADATA-ROW source — one zero-passage document per INS<Corpus>NNNNN
+  # row (text_layer none, the rsti precedent), carrying Date CE / range /
+  # certainty / evidence, typology, languages and scripts, physical form,
+  # bibliography and location prose. dharma_text_id is the explicit join
+  # key onto the DHARMA edition urns (urn:nabu:dharma-*:<INS id>). Rows
+  # declare CC0 for the metadata (verbatim per document); repo LICENCE CC BY
+  # 4.0 → class attribution. Sparse GitFetch on csv/.

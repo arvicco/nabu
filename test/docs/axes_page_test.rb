@@ -6,7 +6,7 @@ require "test_helper"
 # of the research axes). docs/axes.md is written FROM the live registry, never
 # hand-duplicated: this test parses the page's "## The desks" section and pins
 # every rendered fact to Nabu::AxisRegistry / SourceRegistry, so the page can
-# never silently drift from config/axes.yml + config/sources.yml.
+# never silently drift from config/axes.yml + config/sources/.
 #
 # What it parses (the deterministic page format the page commits to):
 #   ### <axis-name>        — one H3 heading per desk, in ratified file order
@@ -25,7 +25,7 @@ class AxesPageTest < Minitest::Test
   PAGE = File.join(ROOT, "docs", "axes.md")
 
   def registry
-    @registry ||= Nabu::SourceRegistry.load(File.join(ROOT, "config", "sources.yml"))
+    @registry ||= Nabu::SourceRegistry.load(File.join(ROOT, "config", "sources"))
   end
 
   # The "## The desks" section body — from that heading to the next H2.

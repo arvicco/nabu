@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require_relative "flat_csv_parser"
-require_relative "../file_fetch"
+require_relative "../fetch/file_fetch"
 
 module Nabu
   module Adapters

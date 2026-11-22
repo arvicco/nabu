@@ -1,0 +1,18 @@
+sources:
+  korba:   # P116-1
+    kind: {posture: pending, note: "candidate: a kind_map fold over the header's genre catRefs
+        (the facets genre/kind/subject carry KorBa's own codes verbatim — kanc, dydakt, …);
+        the fold is a ruled table, not a default"}
+    lect: {posture: identity, note: "pl IS Polish — the P116-1 pending retired 2026-10-11:
+        the Slavic nabu-lects package minted pl with pl:old [1136, 1500] and pl:mid
+        [1500, 1780], and the standing date-band inference (lect infer-dates over the
+        print-year envelopes — the dta/de:early mold) stages every closed interval of the
+        corpus's 1601–1775 span onto pl:mid at document grain; open intervals stay
+        honestly bare. No facet rule, so the declaration stays (the dta precedent)"}
+    dating: {posture: dated, note: "the header's original-bibl date on every text (@when, or
+        @notBefore/@notAfter with the prose kept raw)"}
+    places: {posture: named, note: "pubPlace role=place (the print/writing place) + the corpus's
+        own region classification (role=region), faceted, answering at REGION grain for the 117
+        town-less texts (declared coarse; zagranica/inny name no place)"}
+    script: {posture: implied, note: "Latin script; the transcribed spelling is the text, the
+        modernized orth rides per token"}

@@ -2,7 +2,7 @@
 
 require "csv"
 
-require_relative "../ben_yehuda_period_fetch"
+require_relative "../fetch/ben_yehuda_period_fetch"
 require_relative "source_read"
 
 module Nabu

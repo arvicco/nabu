@@ -1,0 +1,7 @@
+sources:
+  proiel:
+    kind: {posture: unclassified}
+    lect: {posture: identity, note: mixed treebank collection — the ud/D57-f stance}
+    dating: {posture: undatable}
+    places: {posture: unplaced}
+    script: {posture: implied}

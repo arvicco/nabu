@@ -1,0 +1,23 @@
+burman-concordance:
+  adapter: Nabu::Adapters::BurmanConcordance
+  adopted: "2026-08-17"
+  kind: module   # P77-r19: a links instrument (the trismegistos shape) — zero catalog rows, up=module
+  axes: [italic]
+  wired: true    # channel verified (first fetch landed; canonical present). `--all`
+                   # participation is governed by kind + sync_policy, NEVER by wired
+                   # (owner semantics ruling 2026-08-18, reaffirming 2026-07-24:
+                   # wired = the sync link is tested and declared working).
+  # P77-r19 (owner-ruled 2026-08-17, package 1): Annie Burman's Digital Concordance of
+  # Etruscan, Faliscan and Early Latin Inscriptions from Etruria
+  # (Uppsala; Zenodo 7801485 v1.0.0, PUBLIC DOMAIN/CC0) — 14,986 rows
+  # crosswalking TM, CIE, Rix ET1, Meiser ET2, TLE, Bakkum, CIL and
+  # CII ids, one row per inscription. A LINKS INSTRUMENT (the
+  # trismegistos shape): zero documents; Nabu::BurmanCrosswalk mints
+  # kind=reference edges urn:nabu:open-etruscan:cie-<n> → tm:<id>
+  # (verified live 2026-08-17: open-etruscan CIE ids are unpadded,
+  # 1,838 CIE-keyed docs; Burman's zero-padding stripped at the join),
+  # the full concordance line riding each edge's detail. Rows without
+  # the CIE+TM pair are unmapped-counted (ET-only rows wait for an
+  # ET-keyed held corpus), never guessed.
+  license_watch: https://zenodo.org/records/7801485
+  sync_policy: manual

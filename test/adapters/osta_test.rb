@@ -48,9 +48,9 @@ module Adapters
     # -- registry / manifest --------------------------------------------------
 
     def test_registry_resolves_osta_unwired_until_first_real_sync
-      registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources.yml", __dir__))
+      registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources", __dir__))
       entry = registry["osta"]
-      refute_nil entry, "osta must be registered in config/sources.yml"
+      refute_nil entry, "osta must be registered in config/sources/"
       assert entry.wired, "first sync owner-verified; flipped 2026-08-18"
       assert_equal "manual", entry.sync_policy
       assert_equal "osta", entry.adapter_class.manifest.id
@@ -127,7 +127,7 @@ module Adapters
       tokens = section.annotations["tokens"]
       refute_nil tokens, "the tokens annotation is the Indexer's lemma contract"
       assert_includes tokens, { "form" => "fizo", "lemma" => "hacer", "pos" => "VMIS3S0" }
-      registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources.yml", __dir__))
+      registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources", __dir__))
       assert_equal "silver", registry.lemma_tiers["osta"],
                    "FreeLing + HSMS-app lemmatization (Gago Jover & Pueyo Mena, Scriptum " \
                    "Digital 7) is automatic — silver, the GLAUx precedent"

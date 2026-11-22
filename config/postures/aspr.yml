@@ -1,0 +1,7 @@
+sources:
+  aspr:
+    kind: {posture: unclassified}
+    lect: {posture: identity, note: ang IS Old English}
+    dating: {posture: undatable}
+    places: {posture: unplaced}
+    script: {posture: implied}

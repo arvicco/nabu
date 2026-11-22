@@ -199,7 +199,7 @@ class DictaBavliTest < Minitest::Test
   # --- registry round-trip -------------------------------------------------------
 
   def test_registry_resolves_dicta_bavli_wired
-    registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources.yml", __dir__))
+    registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources", __dir__))
     entry = registry["dicta-bavli"]
     refute_nil entry
     assert_equal Nabu::Adapters::DictaBavli, entry.adapter_class

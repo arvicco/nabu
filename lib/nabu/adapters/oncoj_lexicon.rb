@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require_relative "oncoj_lexicon_parser"
-require_relative "../git_fetch"
+require_relative "../fetch/git_fetch"
 
 module Nabu
   module Adapters

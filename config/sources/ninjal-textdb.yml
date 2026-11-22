@@ -1,0 +1,24 @@
+ninjal-textdb:   # P156, 02-sources row 379
+  adapter: Nabu::Adapters::NinjalTextdb
+  adopted: "2026-11-04"
+  axes: [japonic]
+  wired: true    # first sync verified 2026-11-04: 3 docs / 22,105 passages + 32,878
+                 # nippo-jisho entries, 0 errored — exactly the lane census (20 datasets
+                 # + readme/xlsx skipped by rule). Eyeballed amhk-001:3.9; FTS probe
+                 # "historia uo narai" answers through the long-s fold; define abaqi hits.
+                 # paced ~1 req/s; seconds). EXPECT 3 docs / 22,105 line passages
+                 # (amhk-001 9,681 · amis-001 2,251 · cmhab-001 10,173), 0 errored,
+                 # + 1 dictionary (nippo-jisho) / 32,878 entries; 20 out-of-slice
+                 # datasets + readme + xlsx + 7 state pins skipped by rule (census
+                 # 2026-11-04). Eyeball nabu show urn:nabu:ninjal-textdb:amhk-001:3.9
+                 # (the Feiqe opening, kanji-kana layer beside it), probe nabu search
+                 # "historia uo narai" (the long-ſ fold) and nabu define abaqi, then flip.
+  sync_policy: manual   # static files re-published in place (Last-Modified pins)
+  # NINJAL's Text Data Sets for Research on the History of Japanese — the
+  # Kirishitan slice: the Amakusa Feiqe no monogatari (1592) and Esopo no
+  # fabulas (1593), the HAB Contemptus Mundi (1596), and the Nippo Jisho
+  # (1603) entry-word data as the dictionary lane. CC BY 4.0 on every work
+  # page → attribution. Text = the original romanization (Latin script);
+  # the kanji-kana / normalized layers ride each line as annotations.
+  # Every other dataset dir (Edo share-bon, the dictionaries, the Hawaii
+  # readers) skips by rule — Adapters::NinjalTextdb::DATASETS.

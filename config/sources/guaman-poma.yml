@@ -1,0 +1,18 @@
+guaman-poma:   # P117-5, 02-sources row 255
+  adapter: Nabu::Adapters::GuamanPoma
+  adopted: "2026-10-11"
+  axes: [americas]
+  wired: true    # First sync verified 2026-10-11: 1,189 docs / 5,911 passages.
+  sync_policy: manual
+  # Guaman Poma, El primer nueva corónica y buen gobierno (1615; Royal
+  # Danish Library GKS 2232 4º) — the KB's digital edition (Murra/Adorno/
+  # Urioste 1987 transcription, corrected by Adorno and Boserup), one
+  # static XHTML page per manuscript page at poma.kb.dk permalinks.
+  # Public Domain Mark per the KB's project page → open. Paced crawl
+  # (1 s), resumable at the page grain. Document = page, passage =
+  # paragraph; Spanish with Quechua and Aymara passages (italic, untagged).
+  # PD Mark coverage of the searchable Adorno-Boserup transcription (not
+  # only the images) CONFIRMED by the Royal Danish Library (by email,
+  # 2026-10-13): "You are welcome to use the transcribed text for your
+  # projects." A second digitisation (jpeg) exists in their Digital
+  # Collections (object852735) — images only, recorded as reference.

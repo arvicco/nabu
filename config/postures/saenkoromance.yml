@@ -1,0 +1,12 @@
+sources:
+  saenkoromance:
+    kind: {posture: unclassified, note: "a dictionary shelf — Swadesh-list cognate sets; kind
+        folds documents only"}
+    lect: {posture: identity, note: "roa — the nabu-lects Romance anchor (its pro stage is not
+        claimed: the sets carry no reconstructions); members carry their varieties' ISO codes
+        bare (modern dialects, none staged), ISO-less dialects display-only by Glottocode"}
+    dating: {posture: undatable, note: "a reference dataset (Saenko 2015) — no dates"}
+    places: {posture: unplaced, note: "variety coordinates are doculect reference points, not
+        findspots — no place claim at dictionary grain"}
+    script: {posture: implied, note: "the braced Latin-script orthographies, the IPA-style
+        transcription riding roman"}

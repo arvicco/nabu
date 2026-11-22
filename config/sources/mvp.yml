@@ -1,0 +1,32 @@
+mvp:
+  adapter: Nabu::Adapters::Mvp
+  adopted: "2026-07-28"
+  # Dual-tagged like sdbh (domain + language desk): the 9th-c. glossary IS
+  # the Tibetan translators' instrument AND a Buddhist-studies reference.
+  # NOT indic — mw itself rides [indic] alone; MVP's Sanskrit side serves
+  # the crosswalk, and whole-source membership here is the Tibetan and
+  # Buddhist desks' (multi-tagging is dual, not maximal — the house rule).
+  axes: [tibetan, buddhist]
+  wired: true   # flipped 2026-07-28 (owner ruling "flip them all wired"; first sync verified live: 9,379 entries (exact))
+                   # sync mvp (one ~600 KiB sha-pinned zip GET), expect
+                   # 9,379 entries; eyeball `nabu define bodhisattvaḥ`
+                   # (Mvy. 625 beside MW's entry), `define dharmaḥ`, and 5
+                   # random entries, then flip.
+  # The Mahāvyutpatti (bye brag rtog byed), early 9th c. — THE imperial
+  # Sanskrit→Tibetan translation glossary (Chinese added later), in the
+  # DILA / Dharma Drum TEI P5 digital edition (glossaries.dila.edu.tw/
+  # glossaries/MVP). 9,379 entries / 308 sections censused 2026-07-28;
+  # every entry = IAST + Devanāgarī orth pair, Wylie + Tibetan-script +
+  # Chinese translation cits. Dictionary language "san" (the glossary's own
+  # Sanskrit-headed organization — sits beside mw, so `define` aggregates
+  # both); Tibetan/Chinese equivalents ride gloss/body lanes, and the
+  # crosswalk (Nabu::Adapters::MvpCrosswalk, refreshed after every load)
+  # mints kind=equivalent edges onto dcs-lexicon (san) and the 84000
+  # glossaries (bod) — exact joins only. Mvy. numbers are the standard scholarly citation → entry ids =
+  # upstream keys (urn:nabu:dict:mvp:625 is a citable address). LICENSE,
+  # verbatim from the glossary page (the honest-license doctrine): "We
+  # believe this text is in the public domain." — the digitizer's PD-belief
+  # assertion on a 9th-century text → class open. Upstream zip is frozen
+  # (2017-03-20; sha256-pinned in the adapter): re-fetches are expected
+  # no-ops, a drift is an owner re-pin decision.
+  sync_policy: manual

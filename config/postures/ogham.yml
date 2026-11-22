@@ -1,0 +1,12 @@
+sources:
+  ogham:
+    lect: {posture: identity, note: pgl/sga/mga — the Irish ladder is already stage-coded}
+    dating: {posture: partial, note: "P108-8 REVISES the unparsed posture: the century-prose
+        grammar bands 128 of the 132 date-bearing docs (halves, ranges, early/mid/late);
+        the 4 odd shapes ('1890s', a Neolithic span, bare 'A.D.') stay declared residue"}
+    places: {posture: named, note: "P104-1: the stone-grain place hash
+        (townland/county/country + WGS84 geo + logainm refs, ~500 of 873
+        docs) projects via MetadataDates :place_only — coordinates ride
+        place_lat/lon, logainm URLs ride place_ref verbatim; layer
+        siblings without the primary's hash stay honestly bare"}
+    script: {posture: qualified}

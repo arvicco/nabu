@@ -1,0 +1,19 @@
+babelstone-ids:
+  adapter: Nabu::Adapters::BabelstoneIds
+  adopted: "2026-07-20"
+  group: signs  # P68-4: the sign-restore sweep (nabu enable signs && nabu sync signs)
+  axes: [sinitic]
+  wired: true    # P38: owner-flipped 2026-07-21 with aozora
+                   # (checklist §6: bin/nabu sync babelstone-ids — one 3.1 MB
+                   # UTF-8 file GET, 97,680 entries — then eyeball
+                   # nabu char 棄 and nabu show urn:nabu:dict:babelstone-ids:U+68C4,
+                   # flip).
+  # BabelStone IDS (Andrew West) — Ideographic Description Sequences for
+  # every CJK Unified Ideograph, the decomposition spine behind `nabu char`
+  # and `search --char-component` (Unicode 16.0, 97,680 entries). PD-style
+  # dedication verbatim in the file header §2 → license_class open (the
+  # P37-0 survey reversed the display note's cjkvi-ids seed guess: cjkvi-ids
+  # is GPLv2-on-data + stale-since-2019, OUT; West's independent
+  # re-derivation inherits no copyleft, IN). Single-file sha-pinned
+  # FileFetch from babelstone.co.uk; actively maintained, low cadence.
+  sync_policy: manual

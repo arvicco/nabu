@@ -1,0 +1,13 @@
+hr-wikisource:   # P116-2, 02-sources row 234
+  adapter: Nabu::Adapters::HrWikisource
+  adopted: "2026-10-10"
+  axes: [slavic]
+  wired: true    # First sync verified 2026-10-10: 1,390 docs / 132,052 passages / 11 skips.
+  sync_policy: manual
+  # The Croatian Wikisource premodern CENTURY cone (owner ruling): every page
+  # reachable (depth 2) from Hrvatski srednji vijek + Hrvatsko 15.–18.
+  # stoljeće — Marulić's Judita, Držić's plays, Vetranović, Bunić
+  # Vučić, Gundulić's Osman, Razgovor ugodni … The century categories
+  # band the grade-2 era envelope (era_band, precision era); 19th
+  # century onward and header-declared translations are out by rule.
+  # Texts PD; layer CC BY-SA 4.0.

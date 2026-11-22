@@ -9,7 +9,7 @@ module Nabu
     # matching over the trigram index — the papyrologist's `]μηνιν αει[` on a
     # damaged scrap, where FTS5's word/prefix tokens cannot reach into the
     # middle of a word. Documentary scope only (the Indexer's trigram pass;
-    # config/sources.yml `fuzzy_index: true`).
+    # config/sources/ `fuzzy_index: true`).
     #
     # == The two-phase shape: trigram candidates, then verify
     #

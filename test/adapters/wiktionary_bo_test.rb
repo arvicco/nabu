@@ -218,9 +218,9 @@ class WiktionaryBoTest < Minitest::Test
   end
 
   def test_registry_row_exists_unwired_with_manual_sync_policy
-    registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources.yml", __dir__))
+    registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources", __dir__))
     entry = registry["wiktionary-bo"]
-    refute_nil entry, "config/sources.yml must register wiktionary-bo"
+    refute_nil entry, "config/sources/ must register wiktionary-bo"
     assert_equal Nabu::Adapters::WiktionaryBo, entry.adapter_class
     assert entry.wired, "flipped 2026-07-28 (owner ruling; first sync verified live)"
     assert_equal "manual", entry.sync_policy

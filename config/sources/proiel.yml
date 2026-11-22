@@ -1,0 +1,13 @@
+proiel:
+  adapter: Nabu::Adapters::Proiel
+  adopted: "2026-07-04"
+  embed_index: true   # P93-4: the semantic-vector literary core
+  quickstart: true   # the starter shelf (P44-r3c) — a fresh box's default enabled set
+  axes: [classical, slavic, germanic]
+  wired: true   # first real sync verified + owner sign-off 2026-07-04
+  # Upstream proiel-treebank is frozen at release 20180408; its successor is
+  # proiel/syntacticus-treebank-data. Frozen = one-shot snapshot, no re-sync.
+  sync_policy: frozen
+  # license_watch candidate (P16-5, owner decision — the repo has no LICENSE
+  # file; the terms live in the README):
+  # license_watch: https://raw.githubusercontent.com/proiel/proiel-treebank/master/README.md

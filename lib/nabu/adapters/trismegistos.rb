@@ -44,7 +44,7 @@ module Nabu
     #
     # "open access to our data on a CC BY-SA 4.0 license" → class
     # attribution (the house BY-SA posture — every CC BY-SA source in
-    # config/sources.yml classes attribution; share-alike is a
+    # config/sources/ classes attribution; share-alike is a
     # downstream-relicensing duty, not a serving gate).
     class Trismegistos < Nabu::Adapter
       API_BASE = "https://www.trismegistos.org/dataservices/texrelations"

@@ -1,0 +1,13 @@
+sources:
+  analecta-hymnica:
+    # kind: machine-postured — kind_map.yml source_kind hymn-prayer/hymn.
+    # lect: machine-postured — lect_overrides.yml lat → lat:med (approximation).
+    dating: {posture: dated, note: "each volume's title-page print year (1886–1922), labeled date
+        class 'edition' — the hymns themselves are 4th–16th-century and their per-hymn dating
+        sits in the uncorrected German apparatus, not mined (declared coarse) — :structured lane"}
+    places: {posture: unplaced, note: "the imprint (Leipzig: Reisland) rides metadata 'imprint' —
+        the printing place; the provenance some special titles name (Moissac, Limoges, Bohemia,
+        Spain, Naples, Wessobrunn, Lilienfeld) stays in the title, never a place claim beside a
+        print year"}
+    script: {posture: implied, note: "Latin script (Antiqua) throughout; the occasional music
+        notation is OCR noise"}

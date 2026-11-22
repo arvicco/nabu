@@ -5,7 +5,7 @@ require "fileutils"
 require "json"
 
 require_relative "../redirect_follow"
-require_relative "../zip_fetch"
+require_relative "../fetch/zip_fetch"
 require_relative "../version"
 require_relative "source_read"
 

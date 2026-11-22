@@ -1,0 +1,17 @@
+tianyige:   # P154, 02-sources row 338
+  adapter: Nabu::Adapters::Tianyige
+  adopted: "2026-11-02"
+  axes: [sinitic]
+  cjk_index: true   # the CJK bigram substring lane (the kanripo / okhc shelves)
+  wired: true   # first sync verified 2026-11-03: 312 docs / 38,711 passages, 1,750 blank pages rule-skipped in parse
+  sync_policy: frozen   # an immutable Zenodo version; a new release = an owner re-pin
+  # The Tianyige Ming examination records (Joshua Snider; Zenodo 23817595
+  # v1.0): uncorrected vision-model transcription of the Tianyi Pavilion
+  # Museum's 312 printed 科舉錄 (236 provincial, 37 metropolitan, 39
+  # palace; 1371–1684), ~10M characters. README verbatim "The
+  # transcriptions and metadata are released under CC0 1.0" → open.
+  # Document = record, passage = page image; text_nature uncorrected-ocr
+  # on every document (no lemma layer, so no lemma_tier). The machine
+  # punctuation, the machine English translation and the second OCR
+  # reading are DECLINED (the Honkoku precedent) and never surface. Dates
+  # from the reign era + year via config/eras.yml's nianhao rows.

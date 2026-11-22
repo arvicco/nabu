@@ -1,0 +1,12 @@
+sources:
+  tlhdig:
+    lect: {posture: identity, note: the cuneiform micro-shelves (hit/xhu/xlu…) — no minted stages}
+    dating: {posture: undatable, note: "the AOxml header's only dates are editorial workflow stamps
+        (creation-date, annot/kor/val editor dates, 2016–2025) — the corpus edition's history, never
+        a dating of the tablet; no script/period field is carried (censused 2026-10-22)"}
+    places: {posture: unplaced, note: "no findspot field in the asset — the AOxml header carries the
+        docID (publication siglum) and workflow stamps only. The series sigla imply a site (KBo/KUB
+        Boğazköy, HKM Maşat, Or. Ortaköy …) but that is an inference over the publication, not an
+        upstream place claim; a siglum→site fold through nabu-places is a recorded future look
+        (censused 2026-10-22)"}
+    script: {posture: implied}

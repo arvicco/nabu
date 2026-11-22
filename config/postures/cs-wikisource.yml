@@ -1,0 +1,13 @@
+sources:
+  cs-wikisource:
+    kind: {posture: unclassified}
+    lect: {posture: identity, note: "cs — the anchor minted 2026-10-11 (the Slavic
+        package); documents claim bare ces → cs via codemap. Deliberately coarse:
+        the cone mixes Dalimil's Old Czech with Kralice/Komenský Middle Czech and
+        per-work edition layers — per-work staging a recorded future look"}
+    dating: {posture: partial, note: "P116-3: the Textinfo VYDÁNO/ZDROJ edition
+        statement → MetadataDates :edition_year_text (date_class edition, never
+        composition); the 1613 print's Roman-numeral year (M.DC.XIII) mints nothing —
+        declared"}
+    places: {posture: unplaced, note: "edition imprint places only — declared"}
+    script: {posture: implied}

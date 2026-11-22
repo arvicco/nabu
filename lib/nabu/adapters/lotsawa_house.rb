@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require_relative "lotsawa_html_parser"
-require_relative "../lotsawa_fetch"
+require_relative "../fetch/lotsawa_fetch"
 
 module Nabu
   module Adapters

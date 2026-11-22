@@ -1,0 +1,16 @@
+wiktionary-akk:
+  adapter: Nabu::Adapters::WiktionaryAkk
+  adopted: "2026-09-13"
+  group: signs  # the wiktionary-sux precedent — the cuneiform card's sense lane
+  axes: [cuneiform]
+  wired: true   # P99-7; first sync verified 2026-09-14 (1,348 entries; define šarrum → "king")
+  # The kaikki Akkadian extraction (1,348 records / "1236 distinct words"
+  # censused 2026-09-13; 540 pure-cuneiform Sumerogram headwords — the
+  # P65 sign card's sense join; descendant chains → reflexes, ṭuppum →
+  # Elamite 𒁾 and the Aramaic/Arabic loan lanes; the sux shelf's 43
+  # sux→akk edges point into this headword space). The wiktionary-sux
+  # mold on the shared WiktionaryKaikki base: per-language JSONL
+  # (deprecated upstream — fallback = filter the full extract by
+  # lang_code akk), CC BY-SA + GFDL → attribution, FileFetch, re-syncs
+  # owner-fired.
+  sync_policy: manual

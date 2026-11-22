@@ -1,0 +1,8 @@
+sources:
+  coptic-scriptorium:
+    kind: {posture: unclassified}
+    # lect declaration retired P64-6 (owner-ruled 2026-08-09): cop/sah+boh minted and the
+    # cop-dialect rule machine-postures it now (the shadowing rule).
+    dating: {posture: partial}
+    places: {posture: named}
+    script: {posture: mixed, note: "Greek loans inside Coptic text"}

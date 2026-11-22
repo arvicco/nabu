@@ -1,0 +1,15 @@
+sources:
+  titus-old-lithuanian:
+    # kind machine-postured — the titus-old-lithuanian fold in kind_map.yml over the
+    # page's edition (the catechisms → catechesis, the postils → sermon, the Forma →
+    # ritual/liturgy, the hymn and prayers → hymn-prayer, the Metai → poetry). Lect
+    # machine-postured: the lect_overrides.yml row stages lit → lt:old.
+    dating: {posture: partial, note: "the print year three catechisms carry in TITUS's own
+        text siglum (Daukša Kat.1595, Vilentas Kat.1579, Lysius Kat.1719), class edition;
+        the other editions' title pages are read from the held pages after the first
+        retrieval (the titus-old-prussian precedent), never supplied from scholarship"}
+    places: {posture: unplaced, note: "no place in the census pages; the title-page imprint
+        places (Königsberg, Vilnius) are read from the held pages after the first
+        retrieval — until then no claim"}
+    script: {posture: implied, note: "Latin type and hands transcribed diplomatically (ſ, ʒ,
+        the prints' hyphen breaks and drop capitals kept)"}

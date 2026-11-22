@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative "../eebo_tcp_fetch"
+require_relative "../fetch/eebo_tcp_fetch"
 
 module Nabu
   module Adapters

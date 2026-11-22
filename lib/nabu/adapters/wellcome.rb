@@ -6,7 +6,7 @@ require "json"
 require "zlib"
 
 require_relative "../redirect_follow"
-require_relative "../zip_fetch"
+require_relative "../fetch/zip_fetch"
 require_relative "../zip_reader"
 require_relative "../normalize"
 require_relative "../paced_crawl"

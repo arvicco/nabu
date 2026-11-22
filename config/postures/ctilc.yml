@@ -1,0 +1,16 @@
+sources:
+  ctilc:
+    kind: {posture: unclassified}
+    lect: {posture: identity, note: "P80-8: bare Catalan is the honest one-tag claim
+        for 19th-20th c. printed Catalan — cat → ca through the alias suite (note
+        refreshed 2026-11-13: the 'no Catalan node' premise was stale, the ca anchor
+        stands); the CLASSIFICACIÓ_TEXTUAL variant=
+        dialect attr (baleàric/central/valencià…) rides metadata AND the
+        variant facet — the future lect seam, no rules ruled yet"}
+    dating: {posture: dated, note: "the ANY publication year per work, riding
+        the :structured MetadataDates one-year envelope (the sillok mold);
+        a work without a clean YYYY skips honestly"}
+    places: {posture: unplaced, note: "the listing citation's imprint place
+        (Barcelona, Vic…) is publication metadata, riding the citation string
+        verbatim — never a composition-place claim"}
+    script: {posture: implied}

@@ -2,7 +2,7 @@
 
 require_relative "tcp_xml_parser"
 require_relative "eebo_imprint_place"
-require_relative "../eebo_tcp_fetch"
+require_relative "../fetch/eebo_tcp_fetch"
 
 module Nabu
   module Adapters

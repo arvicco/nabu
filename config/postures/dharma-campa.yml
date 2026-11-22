@@ -1,0 +1,11 @@
+sources:
+  dharma-campa:
+    kind: {posture: unclassified}
+    # P92 gate: the v1.6.0 SEA mint merged and reached canonical
+    # 2026-09-02 — pending retired to identity (the xum shape).
+    lect: {posture: identity, note: "ocm-Latn/san-Latn — both resolve on the
+        canonical v1.6.0 rows"}
+    dating: {posture: undatable, note: "no machine date field in the editions"}
+    places: {posture: unplaced}
+    script: {posture: qualified, note: "romanized (ocm-Latn/san-Latn); the Cham script is
+        the artifact fact"}

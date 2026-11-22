@@ -1,0 +1,35 @@
+glaux:
+  adapter: Nabu::Adapters::Glaux
+  adopted: "2026-07-24"
+  embed_index: true   # P93-4: the semantic-vector literary core
+  axes: [classical]
+  wired: true    # Owner flip 2026-07-25. First-sync proof 2026-07-24 (the
+                   # from-scratch `sync glaux --redownload`: wipe → staged
+                   # sparse clone → announced materialization → 1,421 docs /
+                   # 968,578 passages, 0 errored). Known silver artifact,
+                   # verified upstream: words split at source-edition page
+                   # boundaries ride as split tokens with per-fragment lemmas
+                   # (ψυ|χροῖς, div_ed2page 77→78) — canonical means canonical.
+  # GLAUx — "the Greek Language Automated" (Keersmaekers): ~20M tokens of
+  # Ancient Greek (8th c. BC – ~4th c. AD), AUTOMATICALLY annotated for
+  # morphology, syntax, lemmas, animacy and word senses (AGDT guidelines).
+  # The analysis-side complement to the held Perseus/First1K editions (the
+  # DCS-beside-GRETIL pattern): corpus-scale grc lemma coverage beyond the
+  # hand-treebanked canon. SILVER: every sentence carries analysis="auto"
+  # (the README accuracy table — lemmas 98.8%, syntax ~80% — is machine
+  # output), so lemma_tier: silver — every count renders labeled, never gold
+  # (the diorisis/CDLI/TLHdig precedent); the per-passage analysis attribute
+  # rides for a future gold-subset promotion. LICENSE (D44-a census over all
+  # 1,421 metadata.txt rows): SOURCE_LICENSE dominated by CC BY-SA 4.0 ×999 +
+  # CC-BY-SA 3.0 ×227 (share-alike) → class attribution; the restrictive
+  # slice = {7 NC/ND source texts} ∪ {25 PROIEL-annotated, CC BY-NC-SA 3.0} ∪
+  # {40 Gorman-annotated, CC BY-NC-SA 4.0} = 72/1,421 (5.1%), each minted a
+  # per-document license_override: nc so filters never over-share (the P43-1
+  # UD idiom). XML is Unicode-NFD → NFC at the boundary (house rule). The
+  # AGDT 9-place postag rides tokens but is NOT wired into --morph (the
+  # façade speaks UD/PROIEL; honest absence over a wrong mapping — the
+  # diorisis prose-morph precedent). Cite Keersmaekers 2021,
+  # doi:10.18653/v1/2021.lchange-1.6. Upstream releases occasionally →
+  # sync_policy manual.
+  sync_policy: manual
+  lemma_tier: silver

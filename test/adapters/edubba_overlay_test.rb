@@ -13,12 +13,12 @@ module Adapters
     FIXTURES = Nabu::TestSupport.fixtures("edubba-overlay")
 
     def registry
-      Nabu::SourceRegistry.load(File.expand_path("../../config/sources.yml", __dir__))
+      Nabu::SourceRegistry.load(File.expand_path("../../config/sources", __dir__))
     end
 
     def test_registry_carries_the_module_row_in_the_signs_group
       entry = registry["edubba-overlay"]
-      refute_nil entry, "edubba-overlay must be registered in config/sources.yml"
+      refute_nil entry, "edubba-overlay must be registered in config/sources/"
       assert entry.feature_module?, "a didactic instrument is a kind: module row"
       assert entry.wired, "channel verified (the 2026-08-18 wired-semantics ruling)"
       assert_equal "manual", entry.sync_policy, "course releases, owner-fired"

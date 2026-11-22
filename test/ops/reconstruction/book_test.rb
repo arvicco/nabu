@@ -22,7 +22,7 @@ class ReconstructionBookTest < Minitest::Test
   Book = Nabu::Ops::Reconstruction::Book
   SourceClass = Nabu::Ops::Reconstruction::SourceClass
   ROOT = Nabu::Config::PROJECT_ROOT
-  SOURCES_PATH = File.join(ROOT, "config", "sources.yml")
+  SOURCES_PATH = File.join(ROOT, "config", "sources")
   BOOK_PATH = File.join(ROOT, Book::OUTPUT_FILE)
 
   SECTIONS = [

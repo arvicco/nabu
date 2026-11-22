@@ -114,9 +114,9 @@ class EngWebTest < Minitest::Test
   # --- registry round-trip -------------------------------------------------------
 
   def test_registry_resolves_eng_web_and_manifest_agrees
-    registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources.yml", __dir__))
+    registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources", __dir__))
     entry = registry["eng-web"]
-    refute_nil entry, "eng-web must be registered in config/sources.yml"
+    refute_nil entry, "eng-web must be registered in config/sources/"
     assert_equal Nabu::Adapters::EngWeb, entry.adapter_class
     assert entry.wired, "eng-web is live (owner sign-off 2026-07-10 after first sync + eyeball)"
     assert_equal Nabu::Adapters::EngWeb.manifest, entry.manifest

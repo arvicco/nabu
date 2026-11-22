@@ -4,7 +4,7 @@ require "digest"
 require "json"
 require "zlib"
 
-require_relative "../zip_fetch"
+require_relative "../fetch/zip_fetch"
 require_relative "../normalize"
 require_relative "source_read"
 require_relative "blbooks_title_genre"

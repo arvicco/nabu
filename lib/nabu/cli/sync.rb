@@ -31,7 +31,7 @@ module Nabu
       real sync request, any never-synced core member (the registry
       instruments) syncs automatically before the requested work. The
       same sweep covers the requested source's `requires:` chain (the
-      package-manager rule: sources.yml declares hard functional
+      package-manager rule: the source registry declares hard functional
       dependencies — nabu-places needs its three gazetteers — and
       syncing a dependent syncs its never-synced requirements first;
       `nabu status <slug>` shows requires/needed-by). --parse-only never
@@ -333,7 +333,7 @@ module Nabu
       prompts (flags --description/--themes/--key-works) with the
       description prefilled from the registered source's name, writes
       canonical/local-source/SLUG.md through Nabu::SourceShelf, and syncs.
-      SLUG must be registered in config/sources.yml — dossiers describe
+      SLUG must be registered in config/sources/ — dossiers describe
       held shelves.
 
       Examples:
@@ -1000,7 +1000,7 @@ module Nabu
         say "  bin/nabu search --lemma λέγω    # every inflection over the gold treebanks: λέγουσι, εἶπας, εἰπεῖν…"
         say "  bin/nabu define λόγος           # the whole LSJ entry, citations resolved (Latin: define virtus)"
         say "grow the library: bin/nabu enable <slug> then sync <slug> (enable writes this box's profile; " \
-            "sync refuses what is not on it) — the menu is config/sources.yml, the shelf map docs/library.md"
+            "sync refuses what is not on it) — the menu is config/sources/, the shelf map docs/library.md"
       end
 
       # -- ingest (P19-5): the canonical-memory intake front door ---------------
@@ -1067,7 +1067,7 @@ module Nabu
         entry = registry_entry(config, slug)
         if entry.nil?
           raise Thor::Error, "ingest --shelf source: #{slug.inspect} is not a registered source " \
-                             "(config/sources.yml) — dossiers describe held shelves"
+                             "(config/sources/) — dossiers describe held shelves"
         end
         shelf = Nabu::SourceShelf.new(dir: Nabu::SourceShelf.dir(config))
         engine = Nabu::Ingest.new(resolver: ingest_resolver, assist_command: options[:assist],

@@ -1,0 +1,13 @@
+mahan-kosh:   # P154, 02-sources row 344
+  adapter: Nabu::Adapters::MahanKosh
+  adopted: "2026-11-02"
+  axes: [indic]
+  wired: true   # first sync verified 2026-11-03: 1 dictionary doc / 64,218 entries
+  # Bhai Kahan Singh Nabha's Gurushabad Ratnakar Mahan Kosh (1930), the
+  # Sikh encyclopedic dictionary of the Gurbani vocabulary, for the held
+  # shabados Gurbani text. The Sikhi.io JSON packaging (CC BY 4.0; the
+  # 1930 text PD) — the GURMUKHI LANE ONLY: the Patiala-edition English
+  # (rights not shown) and the 25 machine-translated columns are never
+  # fetched. New family mahan-kosh-json; entry id = the grid id
+  # (vol-page-seq). Language pan.
+  sync_policy: manual

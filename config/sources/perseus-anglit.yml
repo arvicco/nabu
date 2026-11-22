@@ -1,0 +1,16 @@
+perseus-anglit:   # P95-4
+  adapter: Nabu::Adapters::PerseusAnglit
+  adopted: "2026-09-03"
+  axes: [germanic]
+  translations: true   # the point of the repo: Beowulf's aligned English rides as a parallel doc
+  wired: true    # P95 gate: first sync owner-verified 2026-09-04 (2 docs /
+                 # 86 passages after the refState-alternatives fix — the eng
+                 # translation card-aligned 43↔43, --parallel proven live),
+                 # owner-flipped
+  sync_policy: manual
+  # PerseusDL canonical-angLit — one work: Beowulf (Klaeber 1922) + the
+  # aligned English translation. License read 2026-09-04: the standard
+  # PerseusDL repo grant, CC BY-SA 3.0 US → attribution. The OE original
+  # is a provenance-distinct SECOND EDITION beside the held ASPR witness
+  # (the diorisis stance — never merged); no __cts__.xml upstream, so
+  # titles fall back to the urn tail honestly.

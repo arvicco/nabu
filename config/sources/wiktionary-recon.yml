@@ -1,0 +1,58 @@
+wiktionary-recon:
+  adapter: Nabu::Adapters::WiktionaryRecon
+  adopted: "2026-07-12"
+  # P35-0 vs the D35 draft: +celtic/italic/sinitic/japonic — the manifest's own attested extracts
+  # (sga/mga/wlm Celtic, xum/ett Italic-Etruscan, zho, ojp); etym stays the primary desk
+  # P107-6: +turkic/mongolic — the attested otk/oui/chg and mnc extracts (same precedent)
+  axes: [etym, celtic, italic, sinitic, japonic, turkic, mongolic]
+  # P49-r4 audit: a pack of per-language kaikki extracts (13 shelves and
+  # counting — P17-3/P32-3/P32-5 each added more; any kaikki language can
+  # join), whose five-desk axes union is the ud disease in miniature: the
+  # sla-pro card claimed celtic/italic/sinitic/japonic off shelves that
+  # have nothing to do with Proto-Slavic. Excluded from count-less
+  # attribution; the etym desk's languages: line keeps every shelf's counts.
+  multilingual: true
+  wired: true    # OWNER SIGN-OFF 2026-07-12 ("w-recon scanned, etym works,
+                   # flip it on"): synced, 13,053 entries across the three
+                   # proto-extracts; etym walk eyeballed by owner.
+                   # P17-3 (2026-07-13): the adapter now ships SEVEN extracts
+                   # (added ine-bsl-pro/gmw-pro/itc-pro/iir-pro); the four new
+                   # ~60 MB GETs + closure rebuild are OWNER-FIRED (+7,586
+                   # entries → ~20,639). Same source row, no registry change.
+                   # P32-5 (2026-07-19): + attested Old Japanese ojp (532
+                   # entries, ~1.26 MB, sha256 67ca3b02… at fixture time);
+                   # the GET is OWNER-FIRED at the next sync. Same row, no
+                   # registry change.
+  # P32-3 (2026-07-19): THIRTEENTH extract wiktionary-zh — LOUD SCALE
+  # WARNING: the kaikki Chinese extract is ~1.1 GB IN ONE GET
+  # (1,181,142,520 B, 323,840 records — ~9x the other twelve extracts
+  # COMBINED) and the next owner-fired `bin/nabu sync wiktionary-recon`
+  # will download it. Owner approved the disk call (P32 plan 2026-07-19).
+  # Expect +323,840 zho entries (23,484 with Middle Chinese readings,
+  # 19,382 with OC reconstructions — 8,158 Baxter-Sagart / 19,273
+  # Zhengzhang; 8,098 with Sino-Xenic descendants) and a matching
+  # catalog-growth step. The extract stays canonical-verbatim (never
+  # trimmed); censuses in test/fixtures/wiktionary-recon/README.md.
+  # P107-6 (2026-09-28): SIX more extracts — the Central Asia seed pack
+  # (otk 470, oui 446, chg 599, mnc 2,577, txb 2,484, xto 502 entries;
+  # sync-verified counts). The oui first sync also surfaced the
+  # mark-only-headword fold edge (U+10F82; parser regression pinned).
+  # 20 extracts, 365,213 entries total.
+  # 2026-10-18: TWENTY-FIRST extract wiktionary-gmy — attested Mycenaean
+  # Greek (the xum rider shape; Linear B headwords in real U+10000-block
+  # codepoints). Full-download census 2026-10-18: 542 records / 481
+  # distinct words / 669 senses, 713,109 B (Last-Modified 2026-10-03).
+  # EXPECTED SYNC DELTA at the next `bin/nabu sync wiktionary-recon`:
+  # +1 GET (~0.7 MB) / +542 entries (481 words, 669 senses; a handful of
+  # grc/el/omn reflex edges from the 4 records with descendants).
+  # 2026-10-21: FOUR more ATTESTED extracts — the Caucasus four, the
+  # library's first dictionary rows for these lects: wiktionary-xcl Old
+  # Armenian (8,541 records / 7,706 words / 12,881 senses, 48.2 MB),
+  # wiktionary-axm Middle Armenian (478 / 459 / 546, 1.2 MB),
+  # wiktionary-oge Old Georgian (728 / 694 / 930, 1.5 MB), wiktionary-os
+  # Ossetian (913 / 872 / 1,105, 1.3 MB). Full-download censuses
+  # 2026-10-21 (Last-Modified 2026-10-03). EXPECTED SYNC DELTA at the
+  # next `bin/nabu sync wiktionary-recon`: +4 GETs (~52 MB) / +10,660
+  # entries (8,541 + 478 + 728 + 913), the xcl → axm → hy descendant
+  # ladder (~11.7k nodes across the four) and the Caucasus loan lanes.
+  sync_policy: manual

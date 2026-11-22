@@ -1,0 +1,28 @@
+sources:
+  titus-bactrian:
+    # The Corpus of Bactrian Texts (Sims-Williams; 126 pages, censused
+    # 2026-10-10). The corpus's six genres ride the `genre` facet
+    # verbatim (Dated documents / Letters / Lists and accounts / …); the
+    # kind declaration retired P116: the config/kind_map.yml
+    # genre-facet fold machine-postures the source (the shadowing rule).
+    lect: {posture: identity, note: "xbc — the bare Bactrian anchor (nabu-lects, band
+        100-850); deliberately coarse: no Kushan/late-Bactrian staging is attempted"}
+    dating: {posture: partial, note: "the ruled Bactrian-era ENVELOPE (owner ruling
+        2026-10-11): era year Y → CE [Y+222, Y+228], covering de Blois's Nawroz 223
+        epoch and Schindel / de la Vaissière's 227/228, each era year straddling two CE
+        years (Sims-Williams & de Blois, Studies in the Chronology of the Bactrian
+        Documents, Vienna: ÖAW 2018, pp. 9-11) — a ruled range, never a picked epoch.
+        Mined from every text carrying the year formula (\"χϸονο ρʹ ιʹ\" = year 110):
+        39 of 123 pages (re-parse 2026-10-11) — 31 of the 32 dated documents A–Y (m's
+        page transcribes no formula), the dated
+        letters' sealing clause (cr da dd de ea ed), fragment aa and the Tang-i
+        Safedak inscription (TiS, year 492); damaged numerals widen by the adapter's
+        rank rule. The rest carry no era formula (undated letters, lists, fragments,
+        Buddhist texts) — partial is the honest class, rows via MetadataDates
+        :structured"}
+    places: {posture: unplaced, note: "no per-document provenance on the pages — 'Northern
+        Afghanistan' is the edition's book title (bibliography metadata), not a findspot;
+        the Tang-i Safedak inscription (TiS) is named only by its siglum"}
+    script: {posture: implied, note: "Greek script (Grek) — the edition's Greek-letter
+        transcription of the cursive Bactrian alphabet (ϸ for š), the language's own
+        script tradition"}

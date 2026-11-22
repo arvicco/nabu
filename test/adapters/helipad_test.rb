@@ -142,7 +142,7 @@ class HelipadTest < Minitest::Test
   # --- registration -----------------------------------------------------------
 
   def test_registered_in_sources_yml_disabled_manual_germanic
-    config = YAML.safe_load_file(File.expand_path("../../config/sources.yml", __dir__))
+    config = Nabu::RegistryTree.load(File.expand_path("../../config/sources", __dir__))
     row = config.fetch("helipad")
     assert_equal "Nabu::Adapters::Helipad", row.fetch("adapter")
     assert_equal true, row.fetch("wired"),

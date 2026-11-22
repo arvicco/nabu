@@ -1,0 +1,16 @@
+dillmann:   # P46-2, 02-sources row 124
+  adapter: Nabu::Adapters::Dillmann
+  adopted: "2026-07-26"
+  axes: [ethiopic]
+  wired: true    # flipped 2026-07-26 (owner ruling "flip all wired"; first sync verified on the live box)
+  # The Gǝʿǝz dictionary shelf: Dillmann, Lexicon linguae aethiopicae (1865)
+  # in the TraCES TEI digitization — 13,727 entry files, one <entry> each
+  # (github.com/BetaMasaheft/DillmannData; the sibling `Dillmann` repo is
+  # only the eXist-db app). content_kind :dictionary, language gez, urns
+  # urn:nabu:dict:dillmann:<L-id> — the ids the traces corpus's lemma links
+  # point at. LICENSE QUIRK (recorded): every file's licence target URL is
+  # MALFORMED ("…/licenses/by-sa-nc/4.0/", a slug CC does not serve; http
+  # x12,453 + https x1,274); the prose names Attribution-ShareAlike Non
+  # Commercial 4.0 -> CC BY-NC-SA 4.0, class nc (never redistributed).
+  # EXPECTED FIRST SYNC (~15 MB, sparse **/*.xml cone): 13,727 entries.
+  sync_policy: manual

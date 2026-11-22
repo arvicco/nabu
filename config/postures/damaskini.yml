@@ -1,0 +1,7 @@
+sources:
+  damaskini:
+    kind: {posture: unclassified}
+    lect: {posture: identity, note: early-modern Bulgarian damaskini + chu apparatus}
+    dating: {posture: partial}
+    places: {posture: named}
+    script: {posture: implied}

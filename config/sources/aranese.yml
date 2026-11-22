@@ -1,0 +1,24 @@
+aranese:
+  adapter: Nabu::Adapters::Aranese
+  adopted: "2026-08-19"
+  axes: [romance]
+  siblings: ["-es"]  # P34-0: literal tail — the one base id is "corpus", it does not end in -es
+  translations: true # the Spanish side is the point of a parallel corpus — -es rides
+  wired: true   # flipped 2026-08-21 (owner: "wire everything on"; first sync owner-round-verified)
+                   # ~103 MB total → 2 docs / ~840k passages, the pack's largest load;
+                   # then eyeball urn:nabu:aranese:corpus:1 --parallel --lang spa)
+  # ES-OC (Spanish–Aranese) Parallel Corpus (P80-6): Hugging Face
+  # projecte-aina/ES-OC_Parallel_Corpus (BSC LangTech, WMT24 low-resource
+  # shared task) — 419,908 line-aligned pairs censused 2026-08-19, the
+  # largest openly licensed Aranese text mass there is. PROVENANCE
+  # HONESTY (the card's own words): "mainly synthetic" —
+  # Apertium-generated (synthetic Spanish from the authentic Aranese
+  # PILAR set, synthetic Aranese from OPUS Spanish), rows unmarked
+  # upstream, possible misalignments — the caveat rides the manifest
+  # license field AND every parsed document's metadata, never presented
+  # as an attested corpus. Aranese side bare `oci` (a Gascon variety —
+  # the lo-congres coarseness stance); Spanish rides as spa -es siblings,
+  # line-aligned (equal counts ARE the format; a mismatch is ParseError).
+  # LICENSE: card verbatim "Attribution-Share Alike 4.0 International"
+  # (frontmatter cc-by-sa-4.0) → attribution (the house BY-SA class).
+  sync_policy: manual

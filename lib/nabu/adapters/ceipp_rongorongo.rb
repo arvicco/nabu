@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require "nokogiri"
-require_relative "../file_fetch"
+require_relative "../fetch/file_fetch"
 require_relative "source_read"
 
 module Nabu

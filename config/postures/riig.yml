@@ -1,0 +1,6 @@
+sources:
+  riig:
+    lect: {posture: identity, note: xtg Gaulish}
+    dating: {posture: partial}
+    places: {posture: linked}
+    script: {posture: qualified}

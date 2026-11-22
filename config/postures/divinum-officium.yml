@@ -1,0 +1,22 @@
+sources:
+  divinum-officium:
+    # kind: machine-postured by the kind_map.yml divinum-officium book_part fold.
+    # lect declaration retired P157 (2026-11-04, same phase as the add): the
+    # lat → lat/ecc override machine-postures it now (the shadowing rule) —
+    # the stageless-register precedent landed with this same wave's
+    # gregobase row, so the named candidate stopped waiting.
+    dating: {posture: undatable, note: "no file carries a date of composition or edition: the
+        rubrical years in the conditionals (rubrica 1955 / 1960, Divino Afflatu) name rubrical
+        regimes, not texts, and the necrology's 'Anno 1746' years date the deaths it records
+        (passage entry_years, never a document date). The edition base (the 1888 Ratisbon
+        Breviarium, the 1943–1962 printings the team collated) is stated once on the credits
+        page for the whole tree — a source-level fact on the dossier, not a per-text claim"}
+    places: {posture: named, note: "the local-calendar directories name the jurisdiction whose
+        proper the file is — Urbis → Rome (116 docs), Bavaria (32) and its dioceses Monacensis
+        → Munich (36), Passaviensis → Passau (29), Ratisbonensis → Regensburg (22),
+        Spirensis → Speyer (15), Brasilia → Brazil (11), Neerlandia → Netherlands (18),
+        Groningen (2), Ultrajectum → Utrecht (29): 310 of 4,003 documents, the place_only
+        lane. The universal Roman, Monastic, Cistercian and Dominican trees name no place
+        (deliberately unplaced — a rite is not a locality); 'aliquibus locis' ('in some
+        places') names none"}
+    script: {posture: implied}

@@ -1,0 +1,23 @@
+ndl-kotenseki:   # P109-2
+  adapter: Nabu::Adapters::NdlKotenseki
+  adopted: "2026-09-29"
+  # cjk_index 2026-11-11: the bigram lane is rebuild-cadence — written
+  # only at rebuilds (one linear corpus stage), never on the sync path —
+  # so this source's 3.77M-passage scale rides no refresh.
+  cjk_index: true
+  axes: [japonic]
+  wired: true    # first slice 2026-09-29: 398 books / 24,568 koma passages,
+                   # 0 errored, oldest PIDs first; 葬祭考/玉篇 cards eyeballed
+                   # (date envelopes + multi collection facets live). 400
+                   # newest PIDs 403-ledgered (no OCR served yet); the crawl
+                   # resumes per phase
+  sync_policy: manual
+  index_policy: deferred   # paced-crawl citizen: books load per slice, the index runs once per wave (index refresh)
+  # The NDL 次世代デジタルライブラリー 古典籍 OCR mass over the bulk
+  # route NDL Lab granted (by email, 2026-09-29): per-book
+  # fulltext-json API + the open-dataset PID census (97,731 PD-expired
+  # PIDs at the 2026-02 snapshot). Resumable paced crawl at the
+  # COMMITTED ~1 req/s (never lower): SLICE books per sync, refused/
+  # empty PIDs ledgered, the mass continues across phases.
+  # OCR-nature label + per-item permalink on every document (both
+  # promised in the ask). Language jpn — deliberately coarse, declared.

@@ -1,0 +1,14 @@
+wiktionary-arc:   # P154, 02-sources row 352
+  adapter: Nabu::Adapters::WiktionaryArc
+  adopted: "2026-11-02"
+  axes: [hebrew]
+  wired: true   # first sync verified 2026-11-03: 2,396 entries
+  # The kaikki Aramaic extraction (2,396 records / "2072 distinct words",
+  # census 2026-11-02): a first dedicated Aramaic dictionary (the held
+  # BDB/OSHB shelves carry Biblical Aramaic only inside Hebrew lexica):
+  # Proto-Semitic (92), Akkadian (44) and Old Persian (17) etymons,
+  # descendants into Syriac and Neo-Aramaic. Language arc. The wiktionary-fa
+  # mold on the shared WiktionaryKaikki base: per-language JSONL (deprecated
+  # upstream — fallback = filter the full extract by lang_code arc), CC
+  # BY-SA + GFDL → attribution, FileFetch.
+  sync_policy: manual

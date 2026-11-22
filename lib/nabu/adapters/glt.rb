@@ -2,7 +2,7 @@
 
 require "uri"
 
-require_relative "../glt_fetch"
+require_relative "../fetch/glt_fetch"
 require_relative "glt_html_parser"
 require_relative "source_read"
 

@@ -1,0 +1,23 @@
+pedecerto:
+  adapter: Nabu::Adapters::Pedecerto
+  adopted: "2026-07-24"
+  kind: module   # P44-7: machinery-only — a meter-enrichment instrument, zero catalog rows, up=module
+  requires: [perseus-latin]   # P77-r4 (survey-confirmed): PedecertoScansions
+                   # joins perseus-latin's loaded catalog rows and produces
+                   # nothing without them (lib/nabu/pedecerto_scansions.rb).
+  axes: [classical]
+  wired: true    # channel verified (first fetch landed; canonical present). `--all`
+                   # participation is governed by kind + sync_policy, NEVER by wired
+                   # (owner semantics ruling 2026-08-18, reaffirming 2026-07-24:
+                   # wired = the sync link is tested and declared working).
+  # P44-7: Pedecerto (Udine / Ca' Foscari) — Digital Latin Metre. XML metrical
+  # scansions of the Latin verse corpus (227,791 hexameter lines + pentameter/
+  # other verse), one file per author-work. NOT a text source: the passages
+  # already exist (held Perseus-Latin phi texts); the meter attaches as a
+  # per-passage enrichment (kind=meter) over the classical desk. LICENSE:
+  # per-file <rights> + site, verbatim CC BY-NC-ND 4.0 ("non ne è consentito
+  # alcun uso a scopi commerciali… purché i documenti non vengano alterati in
+  # alcun modo sostanziale… data, paternità e fonte originale") → nc,
+  # attribution + no substantial alteration (satisfied by canonical-means-
+  # canonical). Fetch is an owner decision (a 12 MB bulk zip).
+  sync_policy: manual

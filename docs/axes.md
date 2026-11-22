@@ -14,7 +14,7 @@ accident to be tidied away.
 
 Everything below documents **shipped behaviour** — the twenty-nine desks
 defined in `config/axes.yml`, their memberships declared per source in
-`config/sources.yml`, and the three command surfaces that read them. The
+`config/sources/`, and the three command surfaces that read them. The
 desk listing on this page is not hand-maintained: it is a projection of the
 live registry, and a gate test (`test/docs/axes_page_test.rb`) fails the
 build if the page and the registry ever disagree.
@@ -123,7 +123,7 @@ The reconstruction shelves: the kaikki proto-extracts, IE-CoR cognacy, LIV, the 
 
 The cross-language scripture hat: the Masoretic shelves and the Scrolls, the Greek NT, Vulgate and WEB, Peshitta and the Syriac corpus, Coptic Scriptorium, the Targums, and the OSHB-BHSA bridging module. The hebrew and syriac language desks coexist with this hat by design.
 
-**Members** (27): `betamasaheft-works`, `bhsa`, `bridging`, `cntr`, `coptic-scriptorium`, `dss`, `dtucph-sp`, `ebible-pacific`, `elizabeth-bible`, `eng-web`, `etcbc-syriac`, `etcbc-targum`, `extrabiblical`, `hebrew-lexicon`, `hexapla`, `macula-greek`, `opengnt`, `oshb`, `peshitta`, `sblgnt`, `sdbh`, `sefaria`, `stepbible-tagnt`, `syriac-corpus`, `typikon-bible`, `ud`, `vulgate`
+**Members** (29): `betamasaheft-works`, `bhsa`, `bridging`, `cntr`, `coptic-scriptorium`, `dss`, `dtucph-sp`, `ebible-pacific`, `elizabeth-bible`, `eng-web`, `etcbc-syriac`, `etcbc-syrnt`, `etcbc-targum`, `extrabiblical`, `hebrew-lexicon`, `hexapla`, `macula-greek`, `opengnt`, `oshb`, `peshitta`, `sblgnt`, `sdbh`, `sefaria`, `stepbible-tagnt`, `syriac-corpus`, `syriac-htr-gt`, `typikon-bible`, `ud`, `vulgate`
 
 ### hebrew
 
@@ -139,7 +139,7 @@ The Hebrew-and-Aramaic language desk beside the cross-language biblical hat: OSH
 
 The Syriac language desk: the ETCBC Peshitta and the Digital Syriac Corpus, riding beside the biblical hat by design.
 
-**Members** (5): `etcbc-syriac`, `hmml-reading-room`, `peshitta`, `syriac-corpus`, `wiktionary-syc`
+**Members** (8): `etcbc-syriac`, `etcbc-syrnt`, `hmml-reading-room`, `peshitta`, `sedra`, `syriac-corpus`, `syriac-htr-gt`, `wiktionary-syc`
 
 ### ethiopic
 
@@ -377,7 +377,7 @@ and the **desk card** (`nabu axis`), the reference page for one desk.
   line names the desks whose shelves hold the code.
 
   **Multilingual packs and attribution.** A source marked
-  `multilingual: true` in `config/sources.yml` (UD's ~40 treebanks, WOLD's
+  `multilingual: true` in `config/sources/` (UD's ~40 treebanks, WOLD's
   41 vocabularies, the per-language Wiktionary reconstruction extracts) is
   a pack whose language list is structurally unbounded — its whole-source
   `axes:` union describes no single held language. The count-less

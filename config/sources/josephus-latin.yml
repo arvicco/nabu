@@ -1,0 +1,22 @@
+josephus-latin:   # 02-sources row 422
+  adapter: Nabu::Adapters::JosephusLatin
+  adopted: "2026-11-17"
+  axes: [classical, romance]  # late-antique Latin: the digiliblt precedent (the classical
+                              # desk's late band AND the romance desk's ancestor shelf)
+  wired: true    # first sync 2026-11-17 exactly on the build census: 35 docs /
+                 # 3,526 passages, 0 errored, 145 files skipped by rule
+                 # (incl. the 5 AI-drafted De excidio English), 0
+                 # unrecognized; FTS probed live — "In principio creauit
+                 # deus caelum et terram" answers at Antiquities I.27; the
+                 # whole source stages lat:late via its override (35/35).
+  sync_policy: manual
+  # The Latin Josephus (latinjosephus.org v3.0; Zenodo record 24120761,
+  # DOI 10.5281/zenodo.24120761): the late-antique Latin Antiquitates (21
+  # files) and Contra Apionem (2), the literal Bellum (7) and De excidio
+  # Hierosolymitano (5). Core zip only, sha256-pinned; a later version is a
+  # new record the owner re-pins (URL + RELEASE_SHA256) before a re-sync.
+  # Rejected grains counted by rule: Greek / Whiston / Lodge (held by
+  # perseus-greek and eebo-tcp), the AI-drafted De excidio English, the
+  # capitula paratext, registries. License per file from the deposit's
+  # FILE_LICENCE_MANIFEST.csv: PDM 1.0 + CC BY 4.0 / CC BY 4.0 / CC BY-SA
+  # 4.0 → attribution; De excidio CC BY-NC-SA 3.0 Italy → per-document nc.

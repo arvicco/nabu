@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require_relative "menota_tei_parser"
-require_relative "../menota_fetch"
+require_relative "../fetch/menota_fetch"
 
 module Nabu
   module Adapters
@@ -33,7 +33,7 @@ module Nabu
     # save the one deprecated legacy code LANGUAGE_MAP corrects) and
     # the value also rides as the `language` document facet the future lect
     # rule keys on; the lect posture is pending on that rule
-    # (config/postures.yml — nor/dan have no registry nodes yet).
+    # (config/postures/ — nor/dan have no registry nodes yet).
     #
     # == License (the 2026-08-20 grant record)
     #

@@ -1,0 +1,26 @@
+gu-wikisource:   # P120-3, 02-sources row 262
+  adapter: Nabu::Adapters::GuWikisource
+  adopted: "2026-10-12"
+  axes: [indic]
+  wired: true    # first sync verified 2026-10-12: 207 docs / 1,462 passages, 0 quarantined (the lane census exactly)
+  sync_policy: manual
+  # The Gujarati bhakti cone (the owner-ruled wikisource posture), census
+  # 2026-10-12 — 466 cone pages (union):
+  #   cone entry                                 pages  admitted  unstated  excl
+  #   શ્રેણી:નરસિંહ મહેતા (Narsinh Mehta)          122      53        69       0
+  #   શ્રેણી:મીરાંબાઈ (Mirabai)                     165       6       159       0
+  #   શ્રેણી:દયારામ (Dayaram)                        27       6        21       0
+  #   શ્રેણી:અખો (Akho)                               8       4         4       0
+  #   શ્રેણી:પ્રેમાનંદ (Premanand)                     8       2         5       1
+  #   index Bruhad Kavyadohan Granth 1 (1908)      192     192         0       0
+  #   index Bruhad Kavyadohan Granth 3 (1888)        2       2         0       0
+  #   index Bruhat Kavyadohan Granth 2 (1913)       11      11         0       0
+  #   (Granth X / Granth 8 / Granth 1 1890: no transcluding pages)
+  #   TOTAL (union)                                466     207       258       1
+  # The edition is the scan Index's વર્ષ= (verbatim). The large Meerabai
+  # Lekhan / Narasinh lekhan 2 / Mira Ane Narsinh / Bhajan Sar Sindhu /
+  # Dayaram Lekhan scans state NO year → edition_unstated (an undated
+  # edition cannot pass EDITION_TAINT_POST_1930); Mameru.pdf's વર્ષ=1683
+  # is the composition year → censused exclusion. Admitted: 207 docs /
+  # 1,462 passages, all guj; Page: levels 1 (379) and 3 (55). Texts PD;
+  # transcription layer CC BY-SA 4.0.

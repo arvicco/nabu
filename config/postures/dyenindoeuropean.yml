@@ -1,0 +1,11 @@
+sources:
+  dyenindoeuropean:
+    kind: {posture: unclassified, note: "a dictionary shelf — lexicostatistical cognate
+        classes; kind folds documents only"}
+    lect: {posture: identity, note: "ine — the iecor collective; members carry their
+        varieties' ISO codes bare (modern IE languages, none staged), ISO-less lists their
+        Glottocode as a display-only lang_code"}
+    dating: {posture: undatable, note: "a reference dataset (Dyen et al. 1992) — no dates"}
+    places: {posture: unplaced, note: "variety coordinates are doculect reference points, not
+        findspots — no place claim at dictionary grain"}
+    script: {posture: implied, note: "Dyen's ASCII transcription throughout"}

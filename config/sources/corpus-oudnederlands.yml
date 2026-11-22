@@ -1,0 +1,21 @@
+corpus-oudnederlands:
+  adapter: Nabu::Adapters::CorpusOudnederlands
+  adopted: "2026-08-27"
+  axes: [germanic]
+  wired: true    # P84-7 (owner-fired sync 2026-08-27): synced 89 docs / 5,745
+                   # passages, 1 honest quarantine (lex.sal.xml — duplicate
+                   # xml:id upstream), eyeballed (Kam van Toornwerd → "kobu"),
+                   # flipped.
+  sync_policy: manual
+  # P84-7: the INT/IvdNT Corpus Oudnederlands — all surviving Old-Dutch
+  # (odt) word material 475–1200, 90 TEI works, GOLD lemma+POS. LICENSE: INT
+  # "Niet-commercieel (non-commercial)" with NO explicit redistribution grant
+  # → the owner's strictest reading: research_private (never served to third
+  # parties, never redistributed). The repo is PUBLIC, so NO corpus bytes are
+  # committed — fixtures live under gitignored local/fixtures/, the suite skips
+  # when absent. ACQUISITION: behind the taalmaterialen registration wall (a
+  # one-time personal license acceptance) → the Manual Adapter pattern (ruling
+  # Dp-a): the owner drops corpus-oudnederlands.zip into incoming/
+  # corpus-oudnederlands/; the ZIP is the canonical asset (discover/parse read
+  # members in-process, rebuild stays pure). See docs/manual/
+  # corpus-oudnederlands.md.

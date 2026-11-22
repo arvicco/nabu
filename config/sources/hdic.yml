@@ -1,0 +1,20 @@
+hdic:
+  adapter: Nabu::Adapters::Hdic
+  adopted: "2026-07-19"
+  group: signs  # P68-4: the sign-restore sweep (nabu enable signs && nabu sync signs)
+  axes: [sinitic, japonic]
+  wired: true    # flipped 2026-07-20 (D36-d owner ruling: license GO;
+                   # first sync owner-fired as usual)
+                   # (checklist §6: bin/nabu sync hdic — git clone
+                   # ~50 MB — then eyeball nabu define 天 across tsj/syp,
+                   # urn:nabu:dict:ktb:1_016_A51, flip).
+  # HDIC — Heian-period hanzi dictionaries (github.com/shikeda/HDIC, the
+  # ACTIVE upstream, pushed 2026-07-15; nk2028/HDIC is a stale 2022 mirror,
+  # never fetched). Five published databases → five dictionaries: yyp/ktb/
+  # tsj/syp/krm (96,415 upstream rows total). License: CC BY-SA 4.0 —
+  # the old LICENSE-file BY-NC-SA legalcode contradiction RESOLVED
+  # UPSTREAM 2026-08-30 (Prof. Ikeda confirmed by email: BY-SA
+  # governs, no NC; repos unified, Zenodo refresh to follow). The
+  # attribution class stands. Upstream actively maintained → re-syncs
+  # owner-fired.
+  sync_policy: manual

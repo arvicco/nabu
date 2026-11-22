@@ -90,7 +90,7 @@ module Adapters
     end
 
     def test_registry_row_is_ready_unwired_and_manual
-      registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources.yml", __dir__))
+      registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources", __dir__))
       entry = registry["vuk-danicic"]
       refute_nil entry
       assert entry.wired, "wired: true — first sync verified 2026-10-11 (66 docs / 31,102 passages)"

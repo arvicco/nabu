@@ -1,0 +1,14 @@
+freising:
+  adapter: Nabu::Adapters::Freising
+  adopted: "2026-07-11"
+  axes: [slavic]
+  siblings: ["-[a-z-]+"]  # P34-0 (was P13-11 frozen): multi-segment layer tails — works are bs<digits>
+  wired: true    # OWNER SIGN-OFF 2026-07-11: synced, 27 docs / 2,037 lines,
+                   # GLAGOLITE eyeballed; MCP default-exclusion verified live
+                   # (research_private, CC BY-ND 2.5 SI).
+  sync_policy: manual
+  # license_watch candidate (P16-5, owner decision — the governing CC BY-ND
+  # grant lives in bs.xml's <availability> INSIDE the zip; the nearest
+  # watchable page is the e-ZRC edition landing page — verify it carries
+  # the terms before enabling):
+  # license_watch: https://nl.ijs.si/e-zrc/bs/

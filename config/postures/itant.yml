@@ -1,0 +1,5 @@
+sources:
+  itant:
+    dating: {posture: partial}
+    places: {posture: named}
+    script: {posture: qualified}

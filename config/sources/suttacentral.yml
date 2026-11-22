@@ -1,0 +1,47 @@
+suttacentral:
+  adapter: Nabu::Adapters::Suttacentral
+  adopted: "2026-07-18"
+  cjk_index: true   # P93-3: the CJK bigram substring lane
+  # P35-0 vs the D35 draft: +sinitic — the P32-1 lzh Agamas ride this same row (whole-source tagging)
+  axes: [indic, buddhist, sinitic]
+  siblings: ["-en"]  # P34-0 (was P26-1 frozen): literal tail — stems like dhp21-32 are hyphen-rich, none ends in -en
+  wired: true    # flipped 2026-07-18 (owner sign-off: synced, --parallel eyeballed)
+                   # bilara-data at census time; expected ≈7,310 root docs /
+                   # ≈445,600 pli+pra passages + ≈4,712 -en siblings —
+                   # CLAUDE.md checklist §6: eyeball
+                   # nabu show urn:nabu:suttacentral:mn1:1.1 --parallel,
+                   # a dhp verse and 5 random passages, then flip).
+                   # P32-1 lzh scope flip (2026-07-19): the NEXT parse mints
+                   # +272 lzh root docs (≈38,644 passages — 38,646 segments,
+                   # 2 empty skipped by rule) + 54 patton -en siblings
+                   # (≈4,032 passages) = +326 docs / ≈+42,676 passages over
+                   # the live counts. ZERO FETCH — root/lzh/sct is already
+                   # in the synced tree; land the delta with
+                   # `bin/nabu sync suttacentral --parse-only`.
+  # SuttaCentral bilara-data, branch `published` (P26-1) — the whole
+  # Tipiṭaka in roman-script Pali (root/pli/ms, Mahāsaṅgīti; 7,289 files)
+  # plus the Patna Dhammapada (root/pra/pts, `pra`) plus, since P32-1,
+  # the Literary Chinese Āgamas (root/lzh/sct, "SuttaCentral Taisho",
+  # 272 files, `lzh` — scpub39 CC0; patton's English sa/ma siblings
+  # scpub20/scpub35 CC0). License read PER PUBLICATION from the repo's
+  # own _publication.json (censused 138 CC0 +
+  # 1 Public Domain root + 1 CC BY-SA 3.0 — Ānandajoti's English pdhp,
+  # whose -en documents carry license_override: attribution, P10-4);
+  # the legacy NC-ND html_text layer (separate sc-data repo) is EXCLUDED
+  # and never fetched — EXCEPT its parallels graph (P32-6): fetch stage 2
+  # lands sc-data's relationship/parallels.json (commit-pinned raw URL,
+  # sha256-verified; SuttaCentral declares the parallels reference data
+  # non-copyrightable, and its original material CC0) beside the clone,
+  # and the suttacentral producer refreshes ~195k document-grain
+  # kind=reference edges after every sync. The graph refresh is
+  # OWNER-FIRED with the ordinary sync — a newer graph means bumping
+  # PARALLELS_COMMIT + PARALLELS_SHA256 in the adapter (a parse-only sync
+  # without the fetched file leaves standing edges untouched). Live
+  # upstream, but a ~350 MB pull is an owner decision → manual.
+  sync_policy: auto   # promoted 2026-10-13: actively-edited upstream,
+                       # git-incremental fetch — rides the sync --all sweep
+  # Aligned English rides the SAME segment ids (the ORACC precedent):
+  # -en siblings from translation/en/<translator>/, translator-priority
+  # pick on the 104 double-covered stems, orphans skipped by rule
+  # (125 orphan stems since the lzh flip un-orphaned patton's 54).
+  translations: true

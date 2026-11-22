@@ -1,0 +1,21 @@
+sources:
+  # ── the lexibank-cldf wave 1: cognate-set dictionary shelves ─────────────
+  # Dictionary shelves (content_kind dictionary) — declared beside the
+  # wenhai/westoldturkic precedent. Shared reading: the kind axis folds
+  # documents only (a kind_map row would be inert; these are comparative
+  # dictionaries by their own titles); the datasets carry no dates (a
+  # reference dataset, no document timeline); languages.csv's per-variety
+  # coordinates are doculect reference points, not findspots (the iecor
+  # note) — no place claim at dictionary grain.
+  acd:
+    kind: {posture: unclassified, note: "a dictionary shelf — the Austronesian Comparative
+        Dictionary (comparative/etymological) by its own title; kind folds documents only"}
+    lect: {posture: identity, note: "map — the nabu-lects Austronesian anchor; the PAn/PMP
+        set heads ride map:pro / poz:pro (the 2026-11-13 sitting, PR #48) and the other
+        reconstructed varieties their codemap aliases (pqe-pro, poz-oce-pro, poz-mic-pro,
+        poz-pol-pro); reflexes carry their varieties' ISO codes bare; the subgroup protos
+        (PWMP, PCEMP, PPh …) stay display-only per the registry's recorded depth ruling"}
+    dating: {posture: undatable, note: "a reference dataset — the release carries no dates"}
+    places: {posture: unplaced, note: "variety coordinates are doculect reference points, not
+        findspots — no place claim at dictionary grain"}
+    script: {posture: implied, note: "Latin-script orthographies and Blust's reconstruction notation"}

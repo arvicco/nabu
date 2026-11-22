@@ -87,7 +87,7 @@ homonyms inside corpus scope) · edh 73,507 (upstream) · papyri-ddbdp
 elephantine 3,690 · iip 1,828 · ceipom 1,036 (float-mangled TM GeoIDs
 restored to `tm:` at the axis) · itant 502 · riig 421 · ogham 241.
 
-Postures (config/postures.yml, places layer): linked with measured
+Postures (config/postures/, places layer): linked with measured
 notes for the applied sources; named where only strings exist; region
 bins (aes) recorded as registry `region` rows.
 

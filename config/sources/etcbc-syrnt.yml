@@ -1,0 +1,24 @@
+etcbc-syrnt:   # 02-sources row 430
+  adapter: Nabu::Adapters::EtcbcSyrnt
+  adopted: "2026-11-22"
+  axes: [biblical, syriac]
+  wired: true
+                 # (sparse GitFetch cone tf/0.1 + docs/about.md, 43 feature
+                 # files ≈ 15 MB). EXPECT 27 docs / 7,957 passages / 109,640
+                 # tokens, 0 errored, 1 file skipped by rule (tf/0.1/__checkout__.txt)
+                 # (census 2026-11-22 at master dae3eb6f): Luke 1,151 · Matt 1,071 ·
+                 # Acts 1,007 · John 879 · Mark 678 … 2 John 13. Eyeball
+                 # nabu show urn:nabu:etcbc-syrnt:matt:1.1, nabu align "MATT 1.1"
+                 # (the Syriac leg beside the Greek/Latin/Gothic), 5 random verses,
+                 # probe nabu search with ܟܬܒܐ ܕܝܠܝܕܘܬܗ, then flip.
+  sync_policy: manual
+  # The Syriac New Testament in Text-Fabric (ETCBC/syrnt; Vlaardingerbroek
+  # and Roorda; Zenodo 10.5281/zenodo.1464787): a SEDRA III database export
+  # (Kiraz and Bennett, version 3.0, March 1996) of all 27 NT books, every
+  # word with its lexeme, root, stem, affixes and morphology. Document =
+  # book, passage = verse; syc NFC at the boundary; the fifth text-fabric
+  # registrant and the NT sibling of `peshitta`. Joins the nt alignment hub.
+  # LICENSE — class nc conservatively: the repository LICENSE is MIT (a
+  # software grant); the data carries no explicit license (provenance SEDRA,
+  # whose data is CC BY-NC 4.0 today). Upstream unsupported since 2023 →
+  # effectively frozen; tf/0.1 is the only version.

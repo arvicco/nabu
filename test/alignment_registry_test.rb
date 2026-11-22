@@ -287,12 +287,15 @@ class AlignmentRegistryTest < Minitest::Test
     assert_equal 27, bohairic.document_urns.size
   end
 
-  # The CNTR witness layer: after the TAGNT amalgam, one single-document
-  # witness per CNTR manuscript (130 class 1 + 47 class 2 + 12 class 3), all
-  # on the default proiel-citation extractor (per-word citation_part tokens).
+  # The CNTR witness layer: after the TAGNT amalgam and the Syriac SyrNT,
+  # one single-document witness per CNTR manuscript (130 class 1 + 47 class 2
+  # + 12 class 3), all on the default proiel-citation extractor (per-word
+  # citation_part tokens).
   def test_shipped_nt_work_carries_the_cntr_witnesses
     path = File.join(Nabu::Config::PROJECT_ROOT, "config", "alignments.yml")
-    cntr = Nabu::AlignmentRegistry.load(path).work("nt").witnesses.drop(17)
+    witnesses = Nabu::AlignmentRegistry.load(path).work("nt").witnesses
+    assert_equal "SyrNT (Syriac, SEDRA)", witnesses[17].label, "the last edition witness before the CNTR layer"
+    cntr = witnesses.drop(18)
     assert_equal 189, cntr.size
     assert(cntr.all? { |w| w.document_urn.start_with?("urn:nabu:cntr:") && w.extractor == "proiel-citation" })
     assert_equal ["CNTR P1", "urn:nabu:cntr:p1"], [cntr.first.label, cntr.first.document_urn]

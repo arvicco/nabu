@@ -151,7 +151,7 @@ module Nabu
         end
 
         def raw_rows
-          @raw_rows ||= File.exist?(@sources_path) ? (YAML.safe_load_file(@sources_path) || {}) : {}
+          @raw_rows ||= RegistryTree.load(@sources_path)
         end
       end
     end

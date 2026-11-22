@@ -218,7 +218,7 @@ class SourceRegistryTest < Minitest::Test
   end
 
   def test_shipped_registry_defers_only_the_paced_crawl_index_citizens
-    registry = Nabu::SourceRegistry.load(File.expand_path("../config/sources.yml", __dir__))
+    registry = Nabu::SourceRegistry.load(File.expand_path("../config/sources", __dir__))
     deferred = registry.each_source.select(&:index_deferred?).map(&:slug).sort
     assert_equal %w[dicta-library ndl-kotenseki niupepa pleias-french-books wellcome], deferred
   end
@@ -833,7 +833,7 @@ class SourceRegistryTest < Minitest::Test
   end
 
   def test_the_live_registry_core_group_is_the_three_instruments
-    registry = Nabu::SourceRegistry.load(File.expand_path("../config/sources.yml", __dir__))
+    registry = Nabu::SourceRegistry.load(File.expand_path("../config/sources", __dir__))
     assert_equal %w[cigs nabu-lects nabu-places], registry.core_members.sort
     registry.core_members.each do |slug|
       assert_predicate registry[slug], :feature_module?,
@@ -977,7 +977,7 @@ class SourceRegistryTest < Minitest::Test
   end
 
   def test_the_live_registry_seeds_the_place_layer_chain
-    registry = Nabu::SourceRegistry.load(File.expand_path("../config/sources.yml", __dir__))
+    registry = Nabu::SourceRegistry.load(File.expand_path("../config/sources", __dir__))
     assert_equal %w[cigs pleiades trismegistos-geo], registry["nabu-places"].requires.sort,
                  "the place-decisions registry resolves refs through all three gazetteer slices"
     assert_equal %w[unikemet], registry["edubba-overlay"].requires,
@@ -1009,7 +1009,7 @@ class SourceRegistryTest < Minitest::Test
   end
 
   def test_the_live_signs_group_is_the_full_sign_shelf_census
-    registry = Nabu::SourceRegistry.load(File.expand_path("../config/sources.yml", __dir__))
+    registry = Nabu::SourceRegistry.load(File.expand_path("../config/sources", __dir__))
     # The census pin IS the restore guarantee: a new sign/char shelf must
     # join the group or this pin fires. Modules (osl, unikemet) carry the
     # identity spines; the sources carry the Han card's shelves, the
@@ -1162,35 +1162,32 @@ class SourceRegistryTest < Minitest::Test
   # P44-r3c: the shipped starter shelf carries the quickstart tags — a
   # fresh box's default enabled set is exactly the quickstart four.
   def test_shipped_quickstart_tags_are_the_starter_shelf
-    registry = Nabu::SourceRegistry.load(File.expand_path("../config/sources.yml", __dir__))
+    registry = Nabu::SourceRegistry.load(File.expand_path("../config/sources", __dir__))
     assert_equal %w[iswoc lexica proiel sblgnt], registry.quickstart_slugs.sort
   end
 
   # Owner ruling 2026-09-27: the shipped registry stays in
   # ALPHABETIC key order — every enumeration surface (rebuild replay,
-  # sync --all, listings) reads registry order, so the file order IS
+  # sync --all, listings) reads registry order, so the registry order IS
   # the processing order. Recentness moved to the per-entry adopted:
-  # field (validated required at load). A justified deviation joins
-  # ORDER_EXCEPTIONS with its reason — never a silent reorder.
-  ORDER_EXCEPTIONS = [].freeze
-
+  # field (validated required at load). Since the P185 split the order
+  # holds by construction (Nabu::RegistryTree reads config/sources/ in
+  # sorted slug order) — this pins that the shipped registry, as loaded,
+  # still enumerates alphabetically.
   def test_shipped_registry_keys_are_alphabetic
-    keys = File.read(File.join(Nabu::Config::PROJECT_ROOT, "config", "sources.yml"))
-               .scan(/^([a-z0-9-]+):/).flatten
-    unruly = keys.each_cons(2).select { |a, b| (a <=> b) == 1 }
-                              .reject { |pair| ORDER_EXCEPTIONS.include?(pair) }
-    assert_empty unruly, "sources.yml keys out of alphabetic order (adopted: carries recentness)"
+    slugs = Nabu::SourceRegistry.load(File.join(Nabu::Config::PROJECT_ROOT, "config", "sources")).slugs
+    assert_equal slugs.sort, slugs, "registry slugs out of alphabetic order (adopted: carries recentness)"
   end
 
   def test_every_shipped_entry_carries_its_adoption_date
-    registry = Nabu::SourceRegistry.load(File.join(Nabu::Config::PROJECT_ROOT, "config", "sources.yml"))
+    registry = Nabu::SourceRegistry.load(File.join(Nabu::Config::PROJECT_ROOT, "config", "sources"))
     registry.each_source do |entry|
       assert_match(/\A\d{4}-\d{2}-\d{2}\z/, entry.adopted, "#{entry.slug} lost its adopted date")
     end
   end
 
   def test_shipped_registry_mapping_is_valid_and_ratified
-    registry = Nabu::SourceRegistry.load(File.expand_path("../config/sources.yml", __dir__))
+    registry = Nabu::SourceRegistry.load(File.expand_path("../config/sources", __dir__))
 
     assert_equal %w[classical romance epigraphy slavic germanic celtic italic etym biblical hebrew
                     syriac ethiopic arabic hittite cuneiform egyptian iranian indic buddhist tibetan
@@ -1268,7 +1265,7 @@ class SourceRegistryTest < Minitest::Test
   # P43-2: the shipped TITUS Avestan row is fetch-gated, and its refusal
   # notice is the on-ramp (terms + whom to contact), never a bare wall.
   def test_shipped_titus_avestan_is_grant_gated_with_the_on_ramp
-    registry = Nabu::SourceRegistry.load(File.expand_path("../config/sources.yml", __dir__),
+    registry = Nabu::SourceRegistry.load(File.expand_path("../config/sources", __dir__),
                                          provenance_path: false)
     entry = registry["titus-avestan"]
 
@@ -1285,7 +1282,7 @@ class SourceRegistryTest < Minitest::Test
   # grant-gated on the TITUS family terms, blocked from public surfaces,
   # and wired since the verified 2026-10-10 first retrieval + recovery.
   def test_shipped_titus_tocharian_a_is_grant_gated_blocked_and_wired
-    registry = Nabu::SourceRegistry.load(File.expand_path("../config/sources.yml", __dir__))
+    registry = Nabu::SourceRegistry.load(File.expand_path("../config/sources", __dir__))
     entry = registry["titus-tocharian-a"]
 
     assert_predicate entry, :grant_required?
@@ -1302,7 +1299,7 @@ class SourceRegistryTest < Minitest::Test
   # excludes it from public docs/site/census, and etym's public membership
   # drops it (while the full axis_members list keeps it for CLI/sync scopes).
   def test_shipped_titus_avestan_is_blocked_and_dropped_from_public_etym
-    registry = Nabu::SourceRegistry.load(File.expand_path("../config/sources.yml", __dir__))
+    registry = Nabu::SourceRegistry.load(File.expand_path("../config/sources", __dir__))
 
     assert_predicate registry["titus-avestan"], :blocked?
     assert registry.blocked?("titus-avestan")
@@ -1320,7 +1317,7 @@ class SourceRegistryTest < Minitest::Test
   # The manifest's display posture: nc (servable + credited, not hidden) and a
   # verbatim credit line the serving surfaces render (the grant's display duty).
   def test_shipped_titus_avestan_manifest_is_nc_and_credited
-    registry = Nabu::SourceRegistry.load(File.expand_path("../config/sources.yml", __dir__))
+    registry = Nabu::SourceRegistry.load(File.expand_path("../config/sources", __dir__))
     manifest = registry["titus-avestan"].manifest
 
     assert_equal "nc", manifest.license_class
@@ -1503,6 +1500,44 @@ class SourceRegistryTest < Minitest::Test
     assert_predicate entry.grant, :provenance?
   end
 
+  # P185: the shipped shape is the split tree <root>/config/sources/ —
+  # the sibling axes.yml and the box's grant provenance still resolve
+  # from it exactly as from the monolith (both sit beside / above the
+  # config/ dir the tree lives in), and the registry reads in slug order.
+  def test_a_split_tree_loads_with_sibling_axes_and_box_provenance
+    Dir.mktmpdir do |root|
+      tree = File.join(root, "config", "sources")
+      FileUtils.mkdir_p(tree)
+      FileUtils.mkdir_p(File.join(root, "local", "config"))
+      File.write(File.join(root, "config", "axes.yml"), "classical:\n  persona: \"P\"\n  desc: \"D\"\n")
+      File.write(File.join(tree, "_header.yml"), "# schema notes\n")
+      File.write(File.join(tree, "zeta.yml"), "zeta:\n  adapter: FakeAdapter\n  wired: true\n  axes: [classical]\n")
+      File.write(File.join(tree, "src.yml"), "src:\n  adapter: FakeAdapter\n  wired: true\n  axes: [classical]\n  " \
+                                             "grant_required: true\n  grant:\n    terms: t\n    request_hint: ask\n")
+      File.write(File.join(root, "local", "config", "grants-provenance.yml"), "src:\n  grantor: A. Grantor\n")
+      registry = Nabu::SourceRegistry.load(tree)
+      assert_equal %w[src zeta], registry.slugs
+      assert_equal %w[classical], registry.axes.names
+      assert_equal "A. Grantor", registry["src"].grant.grantor
+    end
+  end
+
+  def test_a_split_tree_refuses_a_slug_mismatching_its_filename
+    Dir.mktmpdir do |dir|
+      File.write(File.join(dir, "acd.yml"), "acx:\n  adapter: FakeAdapter\n")
+      error = assert_raises(Nabu::ValidationError) { Nabu::SourceRegistry.load(dir) }
+      assert_match(/acd\.yml.*"acx"/, error.message)
+    end
+  end
+
+  def test_the_shipped_registry_is_split_and_the_monolith_is_gone
+    tree = File.join(Nabu::Config::PROJECT_ROOT, "config", "sources")
+    assert File.directory?(tree), "config/sources/ is the shipped registry"
+    refute_path_exists File.join(Nabu::Config::PROJECT_ROOT, "config", "sources.yml"),
+                       "no double structure: the monolith left with the split"
+    assert_equal tree, Nabu::Config.load.sources_path
+  end
+
   def test_a_malformed_provenance_row_names_the_file_and_slug
     error = assert_raises(Nabu::ValidationError) do
       load_registry_with_provenance(<<~SOURCES, <<~PROVENANCE)
@@ -1641,7 +1676,7 @@ class SourceRegistryTest < Minitest::Test
   end
 
   def test_shipped_starling_row_carries_the_grant
-    registry = Nabu::SourceRegistry.load(File.expand_path("../config/sources.yml", __dir__),
+    registry = Nabu::SourceRegistry.load(File.expand_path("../config/sources", __dir__),
                                          provenance_path: false)
     starling = registry["starling"]
     assert_predicate starling, :grant_required?, "starling arms the grant gate"
@@ -1654,7 +1689,7 @@ class SourceRegistryTest < Minitest::Test
   # no grantor, date or channel (those are local/config/grants-provenance.yml
   # rows; the loader refuses them here, this pins the rendered text too).
   def test_shipped_grant_blocks_carry_no_provenance
-    registry = Nabu::SourceRegistry.load(File.expand_path("../config/sources.yml", __dir__),
+    registry = Nabu::SourceRegistry.load(File.expand_path("../config/sources", __dir__),
                                          provenance_path: false)
     gated = registry.each_source.select(&:grant_required?)
     assert_equal %w[aclt ceipp-rongorongo niupepa starling titus-avestan titus-bactrian titus-khotanese titus-manichaica

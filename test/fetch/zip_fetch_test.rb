@@ -1,0 +1,612 @@
+# frozen_string_literal: true
+
+require "test_helper"
+
+# Nabu::ZipFetch (P10-1): the first NON-git fetch path — download a zip over
+# HTTP, unpack, and honor the same retention contract as Nabu::GitFetch
+# (upstream-dropped files land in the attic with a sha manifest, first copy
+# wins, guard runs BEFORE any tree mutation). No network: HTTP responses are
+# WebMock stubs whose zip bodies are assembled here with the system `zip`
+# (the payload files are trivial — the REAL-data zip round-trip is covered by
+# the Oracc adapter fetch tests, which zip the checked-in fixtures).
+class ZipFetchTest < Minitest::Test
+  URL = "https://example.org/json/proj.zip"
+  MIRROR = "https://s3.mirror.example.net/pfiles/proj.zip"
+  LAST_MODIFIED = "Sat, 01 Mar 2026 10:00:00 GMT"
+
+  def setup
+    @root = Dir.mktmpdir("zip-fetch-test")
+    @dir = File.join(@root, "proj")
+    @attic = File.join(@root, ".attic", "proj")
+  end
+
+  def teardown
+    FileUtils.remove_entry(@root)
+    # webmock/minitest chains WebMock.reset! via alias_method :teardown — a
+    # custom teardown MUST call super or the request registry accumulates
+    # across tests (silently, until an assert_requested count lies).
+    super
+  end
+
+  # Build a zip whose single top-level dir is proj/ containing +files+
+  # (relative path => content), and stub +url+ with it.
+  def stub_zip(files, last_modified: LAST_MODIFIED, url: URL)
+    headers = { "Content-Type" => "application/zip" }
+    headers["Last-Modified"] = last_modified if last_modified
+    stub_request(:get, url).to_return(status: 200, body: zip_body(files), headers: headers)
+  end
+
+  def zip_body(files)
+    Dir.mktmpdir("zip-fetch-upstream") do |staging|
+      files.each do |rel, content|
+        path = File.join(staging, "proj", rel)
+        FileUtils.mkdir_p(File.dirname(path))
+        File.write(path, content)
+      end
+      zip = File.join(staging, "proj.zip")
+      Nabu::Shell.run("zip", "-q", "-r", zip, "proj", chdir: staging)
+      File.binread(zip)
+    end
+  end
+
+  # P78-r4: a zip carrying a member whose NAME is invalid UTF-8 (the live
+  # goryeosa-jeoryo dump's CP949-mojibake .jpg — APFS cannot even hold the
+  # filename, unzip dies exit 50). Hand-assembled stored-method zip: the
+  # `zip` CLI cannot build one because the junk-named file cannot exist on
+  # disk to be zipped.
+  def junk_named_zip_body(valid_name, valid_content, junk_name_bytes, junk_content)
+    require "zlib"
+    members = [[valid_name.b, valid_content.b], [junk_name_bytes.b, junk_content.b]]
+    locals = +""
+    centrals = +""
+    members.each do |name, content|
+      offset = locals.bytesize
+      crc = Zlib.crc32(content)
+      locals << "PK\x03\x04".b << [20, 0, 0, 0, 0, crc, content.bytesize, content.bytesize,
+                                   name.bytesize, 0].pack("vvvvvVVVvv") << name << content
+      centrals << "PK\x01\x02".b << [20, 20, 0, 0, 0, 0, crc, content.bytesize, content.bytesize,
+                                     name.bytesize, 0, 0, 0, 0, 0, offset].pack("vvvvvvVVVvvvvvVV") << name
+    end
+    eocd = "PK\x05\x06".b + [0, 0, members.size, members.size, centrals.bytesize,
+                             locals.bytesize, 0].pack("vvvvVVv")
+    locals + centrals + eocd
+  end
+
+  def sync!(guard: nil)
+    Nabu::ZipFetch.sync!(url: URL, dir: @dir, attic_dir: @attic, guard: guard)
+  end
+
+  # P78-r4 (the goryeosa-jeoryo live crash): when `unzip` fails on a
+  # member whose name the filesystem cannot hold, the fetch falls back to
+  # the in-process ZipReader, extracts every extractable member, SKIPS
+  # the impossible one loudly, and completes. The salvage MACHINERY is
+  # tested directly (platform-independent — the CI Linux lesson: ext4
+  # ACCEPTS raw-byte names, so the unzip-failure trigger is APFS-specific
+  # and end-to-end coverage rides the darwin-only test below).
+  def salvage_rig(body)
+    fetch = Nabu::ZipFetch.new(url: URL, dir: @dir, attic_dir: @attic,
+                               progress: ->(line) { (@lines ||= []) << line })
+    File.binwrite(fetch.send(:download_path), body)
+    fetch
+  end
+
+  def test_the_salvage_reader_extracts_valid_members_and_skips_junk_names
+    body = junk_named_zip_body("proj/a.xml", "alpha", "proj/\xB0\xED\xB7\xC1.jpg".b, "junk")
+    fetch = salvage_rig(body)
+    unpacked = File.join(@root, "unpacked")
+    fetch.send(:salvage_unpack!, unpacked, Nabu::Shell::Error.new("unzip died", status: 50, stderr: ""))
+    assert_equal "alpha", File.read(File.join(unpacked, "proj", "a.xml")), "the valid member lands"
+    assert_equal %w[a.xml], Dir.children(File.join(unpacked, "proj")).sort, "the junk member never lands"
+    assert(@lines.any? { |line| line.include?("salvage") && line.include?("skipped") },
+           "the skip is SPOKEN, never silent: #{@lines.inspect}")
+  ensure
+    fetch&.cleanup!
+  end
+
+  def test_a_zip_where_salvage_extracts_nothing_still_raises
+    body = junk_named_zip_body("proj/\xB0\xED.jpg".b, "junk", "proj/\xB7\xC1.jpg".b, "junk2")
+    fetch = salvage_rig(body)
+    assert_raises(Nabu::ZipFetch::Error) do
+      fetch.send(:salvage_unpack!, File.join(@root, "unpacked"),
+                 Nabu::Shell::Error.new("unzip died", status: 50, stderr: ""))
+    end
+  ensure
+    fetch&.cleanup!
+  end
+
+  def test_end_to_end_junk_named_sync_survives_on_apfs
+    skip "APFS-specific: this filesystem accepts raw-byte names, so unzip never fails here" unless
+      RUBY_PLATFORM.include?("darwin")
+    body = junk_named_zip_body("proj/a.xml", "alpha", "proj/\xB0\xED\xB7\xC1.jpg".b, "junk")
+    stub_request(:get, URL).to_return(
+      status: 200, body: body,
+      headers: { "Content-Type" => "application/zip", "Last-Modified" => LAST_MODIFIED }
+    )
+    lines = []
+    Nabu::ZipFetch.sync!(url: URL, dir: @dir, attic_dir: @attic, progress: ->(line) { lines << line })
+    assert_equal "alpha", File.read(File.join(@dir, "a.xml")), "the valid member lands"
+    assert_equal %w[a.xml], Dir.children(@dir).grep_v(/\A\./).sort, "the junk member never lands"
+    assert(lines.any? { |line| line.include?("salvage") && line.include?("skipped") })
+  end
+
+  def test_fresh_fetch_unpacks_the_tree_and_pins_the_zip_sha256
+    stub_zip({ "a.json" => "alpha", "sub/b.json" => "beta" })
+    result = sync!
+    assert_equal "alpha", File.read(File.join(@dir, "a.json"))
+    assert_equal "beta", File.read(File.join(@dir, "sub", "b.json"))
+    assert_match(/\A\h{64}\z/, result.sha)
+    assert_empty result.atticked
+    refute result.not_modified
+  end
+
+  # P46-6 (the starling second package): a sibling fetch's subtree declared
+  # via keep: survives this zip's retention sweep — sync! passes it through
+  # to the constructor exactly like the streaming path does.
+  def test_sync_keep_shields_a_sibling_subtree_from_the_attic_sweep
+    kart = File.join(@dir, "kart", "kartet.dbf")
+    FileUtils.mkdir_p(File.dirname(kart))
+    File.write(kart, "sibling package")
+    stub_zip({ "a.json" => "alpha" })
+    seen = nil
+    result = Nabu::ZipFetch.sync!(url: URL, dir: @dir, attic_dir: @attic, keep: ["kart"],
+                                  guard: ->(doomed) { seen = doomed })
+    assert_empty seen, "the kept subtree must never be offered as doomed"
+    assert_empty result.atticked
+    assert_equal "sibling package", File.read(kart), "the kept subtree survives the sweep"
+  end
+
+  def test_second_fetch_sends_if_modified_since_and_304_means_untouched
+    stub_zip({ "a.json" => "alpha" })
+    first = sync!
+
+    stub_request(:get, URL)
+      .with(headers: { "If-Modified-Since" => LAST_MODIFIED })
+      .to_return(status: 304)
+    second = sync!
+
+    assert second.not_modified
+    assert_equal first.sha, second.sha, "a 304 keeps the previously pinned sha"
+    assert_equal "alpha", File.read(File.join(@dir, "a.json"))
+  end
+
+  def test_upstream_dropped_files_move_to_the_attic_with_a_sha_manifest
+    stub_zip({ "a.json" => "alpha", "gone.json" => "doomed" })
+    sync!
+
+    stub_zip({ "a.json" => "alpha v2" })
+    result = sync!
+
+    assert_equal ["gone.json"], result.atticked
+    refute File.exist?(File.join(@dir, "gone.json")), "dropped upstream → removed from the live tree"
+    assert_equal "doomed", File.read(File.join(@attic, "gone.json")), "…but preserved in the attic"
+    assert_equal "alpha v2", File.read(File.join(@dir, "a.json"))
+    manifest = JSON.parse(File.read(File.join(@attic, Nabu::GitFetch::ATTIC_MANIFEST)))
+    assert_equal result.sha, manifest.fetch("gone.json"),
+                 "the manifest records the zip sha the file vanished at"
+  end
+
+  def test_first_attic_copy_wins
+    stub_zip({ "a.json" => "alpha", "gone.json" => "original" })
+    sync!
+    stub_zip({ "a.json" => "alpha", "gone.json" => "changed upstream" })
+    sync!
+    stub_zip({ "a.json" => "alpha" })
+    sync!
+    # gone.json was atticked when first dropped… and if upstream re-adds and
+    # re-drops it, the attic keeps the FIRST retained copy.
+    assert_equal "changed upstream", File.read(File.join(@attic, "gone.json"))
+    stub_zip({ "a.json" => "alpha", "gone.json" => "resurrected" })
+    sync!
+    stub_zip({ "a.json" => "alpha" })
+    sync!
+    assert_equal "changed upstream", File.read(File.join(@attic, "gone.json"))
+  end
+
+  def test_guard_sees_doomed_paths_before_any_mutation_and_may_abort
+    stub_zip({ "a.json" => "alpha", "gone.json" => "doomed" })
+    sync!
+
+    stub_zip({ "a.json" => "alpha v2" })
+    seen = nil
+    error = Class.new(StandardError)
+    assert_raises(error) do
+      sync!(guard: lambda { |doomed|
+        seen = doomed
+        raise error
+      })
+    end
+
+    assert_equal [File.join(@dir, "gone.json")], seen
+    assert_equal "alpha", File.read(File.join(@dir, "a.json")), "aborted → tree byte-unchanged"
+    assert File.exist?(File.join(@dir, "gone.json"))
+    refute Dir.exist?(@attic), "aborted → no attic writes"
+  end
+
+  def test_state_file_and_attic_are_never_reported_doomed
+    stub_zip({ "a.json" => "alpha" })
+    sync!
+    stub_zip({ "a.json" => "alpha v2" })
+    seen = nil
+    sync!(guard: ->(doomed) { seen = doomed })
+    assert_empty seen, "the .zip-fetch.json state file must not read as an upstream deletion"
+  end
+
+  def test_http_failure_raises_zip_fetch_error
+    stub_request(:get, URL).to_return(status: 500)
+    assert_raises(Nabu::ZipFetch::Error) { sync! }
+  end
+
+  # -- redirects (the figshare ndownloader shape: EVERY download 302s) --------
+
+  def test_follows_a_302_to_the_mirror_and_keys_state_off_the_original_url
+    stub_request(:get, URL).to_return(status: 302, headers: { "Location" => MIRROR })
+    stub_zip({ "a.json" => "alpha" }, url: MIRROR)
+    result = sync!
+    assert_equal "alpha", File.read(File.join(@dir, "a.json"))
+    assert_requested :get, MIRROR
+    refute result.not_modified
+    state = JSON.parse(File.read(File.join(@dir, Nabu::ZipFetch::STATE_FILE)))
+    assert_equal URL, state["url"], "state keys off the ORIGINAL url — mirror targets rotate"
+  end
+
+  def test_relative_redirect_location_resolves_against_the_current_url
+    stub_request(:get, URL).to_return(status: 302, headers: { "Location" => "../files/proj.zip" })
+    stub_zip({ "a.json" => "alpha" }, url: "https://example.org/files/proj.zip")
+    sync!
+    assert_equal "alpha", File.read(File.join(@dir, "a.json"))
+  end
+
+  def test_redirect_loop_errors_honestly_at_the_hop_cap
+    stub_request(:get, URL).to_return(status: 302, headers: { "Location" => URL })
+    error = assert_raises(Nabu::ZipFetch::Error) { sync! }
+    assert_match(/more than 5 hops/, error.message, "the cap is named")
+    assert_requested :get, URL, times: 6 # the original request + 5 followed hops
+  end
+
+  def test_redirect_without_location_is_an_honest_error
+    stub_request(:get, URL).to_return(status: 302)
+    error = assert_raises(Nabu::ZipFetch::Error) { sync! }
+    assert_match(/Location/, error.message)
+  end
+
+  def test_conditional_get_rides_the_redirect_and_a_mirror_304_means_untouched
+    stub_zip({ "a.json" => "alpha" })
+    first = sync!
+
+    stub_request(:get, URL)
+      .with(headers: { "If-Modified-Since" => LAST_MODIFIED })
+      .to_return(status: 302, headers: { "Location" => MIRROR })
+    stub_request(:get, MIRROR)
+      .with(headers: { "If-Modified-Since" => LAST_MODIFIED })
+      .to_return(status: 304)
+    second = sync!
+
+    assert second.not_modified, "a 304 from the mirror (post-redirect) is honored"
+    assert_equal first.sha, second.sha, "a 304 keeps the previously pinned sha"
+    assert_equal "alpha", File.read(File.join(@dir, "a.json"))
+  end
+
+  def test_missing_last_modified_means_next_fetch_is_unconditional
+    stub_zip({ "a.json" => "alpha" }, last_modified: nil)
+    sync!
+    stub_zip({ "a.json" => "alpha v2" }, last_modified: nil)
+    result = sync!
+    refute result.not_modified
+    assert_equal "alpha v2", File.read(File.join(@dir, "a.json"))
+  end
+
+  # -- fallback host (P46-3: oracc.museum.upenn.edu down for days; the LMU
+  # mirror serves the same per-project zips) -----------------------------------
+  #
+  # Distinct from the redirect follow above: upstream never POINTS at the
+  # mirror — the CALLER registers a known-good fallback URL, tried only after
+  # the primary hard-fails (5xx status or transport error/timeout). Identity
+  # (state file, sha pins, FetchReport.repos keys) stays keyed to the primary
+  # URL, so a mirror-served sync pins exactly like a primary-served one.
+
+  FALLBACK = "http://mirror.example.de/json/proj.zip"
+
+  def sync_with_fallback!(failover: nil)
+    Nabu::ZipFetch.sync!(url: URL, dir: @dir, attic_dir: @attic,
+                         fallback_url: FALLBACK, failover: failover)
+  end
+
+  def test_primary_500_falls_back_to_the_mirror_and_keys_state_off_the_primary
+    stub_request(:get, URL).to_return(status: 500)
+    stub_zip({ "a.json" => "alpha" }, url: FALLBACK)
+
+    result = sync_with_fallback!
+
+    assert_equal "alpha", File.read(File.join(@dir, "a.json"))
+    refute result.not_modified
+    state = JSON.parse(File.read(File.join(@dir, Nabu::ZipFetch::STATE_FILE)))
+    assert_equal URL, state["url"], "state keys off the PRIMARY url — the mirror is a stand-in"
+  end
+
+  def test_primary_timeout_falls_back_to_the_mirror
+    stub_request(:get, URL).to_timeout
+    stub_zip({ "a.json" => "alpha" }, url: FALLBACK)
+
+    sync_with_fallback!
+
+    assert_equal "alpha", File.read(File.join(@dir, "a.json"))
+  end
+
+  def test_a_healthy_primary_never_touches_the_fallback
+    stub_zip({ "a.json" => "alpha" })
+    stub_zip({ "a.json" => "mirror copy" }, url: FALLBACK)
+
+    sync_with_fallback!
+
+    assert_equal "alpha", File.read(File.join(@dir, "a.json"))
+    assert_not_requested :get, FALLBACK
+  end
+
+  def test_both_hosts_failing_is_an_honest_error
+    stub_request(:get, URL).to_return(status: 500)
+    stub_request(:get, FALLBACK).to_return(status: 502)
+
+    error = assert_raises(Nabu::ZipFetch::Error) { sync_with_fallback! }
+    assert_match(/502/, error.message)
+    assert_match(/mirror\.example\.de/, error.message, "the failing fallback host is named")
+  end
+
+  def test_a_shared_failover_memo_skips_the_primary_for_the_rest_of_the_run
+    # The multi-project shape (Oracc, 100+ zips): once the primary host has
+    # hard-failed for ONE project, sibling fetches sharing the memo go
+    # straight to the mirror — a fully-down primary costs one timeout, not
+    # one per project.
+    failover = Nabu::ZipFetch::Failover.new
+    stub_request(:get, URL).to_return(status: 500)
+    stub_zip({ "a.json" => "alpha" }, url: FALLBACK)
+    sync_with_fallback!(failover: failover)
+    assert_predicate failover, :primary_down?
+
+    # Second project: its primary URL is deliberately UNSTUBBED — WebMock
+    # fails the test if the memo-aware fetch were to touch it.
+    url2 = "https://example.org/json/proj2.zip"
+    fallback2 = "http://mirror.example.de/json/proj2.zip"
+    stub_zip({ "b.json" => "beta" }, url: fallback2)
+    dir2 = File.join(@root, "proj2")
+    Nabu::ZipFetch.sync!(url: url2, dir: dir2, attic_dir: File.join(@root, ".attic", "proj2"),
+                         fallback_url: fallback2, failover: failover)
+
+    assert_equal "beta", File.read(File.join(dir2, "b.json")),
+                 "the memo-aware fetch is served entirely by the mirror"
+  end
+
+  # -- streaming + keep (P41-2, the OpenITI 5.9 GB artifact) -------------------
+
+  def streamed_fetch(keep: [])
+    Nabu::ZipFetch.new(url: URL, dir: @dir, attic_dir: @attic, stream: true, keep: keep)
+  end
+
+  def drive!(fetch, guard: nil)
+    fetch.prepare!
+    guard&.call(fetch.doomed_paths)
+    fetch.complete!
+  ensure
+    fetch.cleanup!
+  end
+
+  def test_streamed_fetch_unpacks_and_pins_both_sha256_and_md5
+    body = zip_body({ "a.json" => "alpha", "sub/b.json" => "beta" })
+    stub_request(:get, URL).to_return(status: 200, body: body,
+                                      headers: { "Last-Modified" => LAST_MODIFIED })
+    fetch = streamed_fetch
+    drive!(fetch)
+    assert_equal "alpha", File.read(File.join(@dir, "a.json"))
+    assert_equal "beta", File.read(File.join(@dir, "sub", "b.json"))
+    assert_equal Digest::SHA256.hexdigest(body), fetch.sha,
+                 "the sha256 pin is computed incrementally off the streamed bytes"
+    assert_equal Digest::MD5.hexdigest(body), fetch.md5,
+                 "stream mode also mints the body md5 (upstream-published-md5 pins, P41-2)"
+  end
+
+  def test_streamed_fetch_survives_a_redirect_with_the_terminal_body_pinned
+    body = zip_body({ "a.json" => "alpha" })
+    stub_request(:get, URL).to_return(status: 302, headers: { "Location" => MIRROR })
+    stub_request(:get, MIRROR).to_return(status: 200, body: body)
+    fetch = streamed_fetch
+    drive!(fetch)
+    assert_equal "alpha", File.read(File.join(@dir, "a.json"))
+    assert_equal Digest::SHA256.hexdigest(body), fetch.sha,
+                 "per-hop sink reset: only the terminal artifact's bytes reach the digest"
+    assert_equal Digest::MD5.hexdigest(body), fetch.md5
+  end
+
+  def test_streamed_304_replays_the_stored_pin_and_touches_nothing
+    stub_zip({ "a.json" => "alpha" })
+    first = streamed_fetch
+    drive!(first)
+    stub_request(:get, URL)
+      .with(headers: { "If-Modified-Since" => LAST_MODIFIED })
+      .to_return(status: 304)
+    second = streamed_fetch
+    drive!(second)
+    assert second.not_modified?
+    assert_equal first.sha, second.sha, "a 304 replays the previously pinned sha"
+    assert_nil second.md5, "no body → no md5; callers skip the pin check on 304"
+    assert_equal "alpha", File.read(File.join(@dir, "a.json"))
+  end
+
+  def test_kept_prefixes_are_never_doomed_and_survive_the_tree_swap
+    stub_zip({ "a.json" => "alpha" })
+    drive!(streamed_fetch)
+    # A sibling fetch arm owns metadata/ inside the same workdir (the OpenITI
+    # TSV): the zip swap must neither attic nor delete it.
+    FileUtils.mkdir_p(File.join(@dir, "metadata"))
+    File.write(File.join(@dir, "metadata", "index.tsv"), "kept")
+    stub_zip({ "a.json" => "alpha v2" })
+    seen = nil
+    drive!(streamed_fetch(keep: ["metadata"]), guard: ->(doomed) { seen = doomed })
+    assert_empty seen, "kept prefixes never read as upstream deletions"
+    assert_equal "kept", File.read(File.join(@dir, "metadata", "index.tsv"))
+    assert_equal "alpha v2", File.read(File.join(@dir, "a.json"))
+    refute Dir.exist?(@attic), "nothing was atticked"
+  end
+
+  # --- tar.gz archives (P80-5: the ReF Zenodo deposit ships .tar.gz) --------
+
+  # Build a tar.gz whose single top-level dir is proj/ containing +files+
+  # and stub +url+ with it (the zip_body mirror, via the system `tar`).
+  def stub_tar_gz(files, last_modified: LAST_MODIFIED, url: URL)
+    body = Dir.mktmpdir("tar-fetch-upstream") do |staging|
+      files.each do |rel, content|
+        path = File.join(staging, "proj", rel)
+        FileUtils.mkdir_p(File.dirname(path))
+        File.write(path, content)
+      end
+      tarball = File.join(staging, "proj.tar.gz")
+      Nabu::Shell.run("tar", "-czf", tarball, "proj", chdir: staging)
+      File.binread(tarball)
+    end
+    headers = { "Content-Type" => "application/gzip" }
+    headers["Last-Modified"] = last_modified if last_modified
+    stub_request(:get, url).to_return(status: 200, body: body, headers: headers)
+  end
+
+  def test_tar_gz_archive_unpacks_with_the_single_top_dir_stripped
+    stub_tar_gz({ "a.xml" => "<text/>", "sub/b.xml" => "<text2/>" })
+    result = Nabu::ZipFetch.sync!(url: URL, dir: @dir, attic_dir: @attic, archive: :tar_gz)
+    assert_equal "<text/>", File.read(File.join(@dir, "a.xml"))
+    assert_equal "<text2/>", File.read(File.join(@dir, "sub", "b.xml"))
+    refute result.not_modified
+    assert_equal 64, result.sha.length, "the tarball body sha256 is the pin"
+  end
+
+  def test_tar_gz_archive_honors_retention_and_304_replay
+    stub_tar_gz({ "a.xml" => "v1", "doomed.xml" => "old" })
+    Nabu::ZipFetch.sync!(url: URL, dir: @dir, attic_dir: @attic, archive: :tar_gz)
+    stub_tar_gz({ "a.xml" => "v2" }, last_modified: "Sun, 02 Mar 2026 10:00:00 GMT")
+    result = Nabu::ZipFetch.sync!(url: URL, dir: @dir, attic_dir: @attic, archive: :tar_gz)
+    assert_equal "v2", File.read(File.join(@dir, "a.xml"))
+    refute File.exist?(File.join(@dir, "doomed.xml")), "upstream deletion applies after retention"
+    assert_equal "old", File.read(File.join(@attic, "doomed.xml")), "the dropped file is atticked"
+    assert_equal ["doomed.xml"], result.atticked
+    stub_request(:get, URL).to_return(status: 304)
+    replay = Nabu::ZipFetch.sync!(url: URL, dir: @dir, attic_dir: @attic, archive: :tar_gz)
+    assert replay.not_modified
+    assert_equal result.sha, replay.sha, "a 304 replays the stored pin"
+  end
+
+  def test_a_corrupt_tar_gz_raises_without_salvage
+    stub_request(:get, URL).to_return(status: 200, body: "not a tarball",
+                                      headers: { "Content-Type" => "application/gzip" })
+    error = assert_raises(Nabu::ZipFetch::Error, Nabu::Shell::Error) do
+      Nabu::ZipFetch.sync!(url: URL, dir: @dir, attic_dir: @attic, archive: :tar_gz)
+    end
+    refute_empty error.message
+    refute File.exist?(@dir), "a failed unpack never touches the live tree"
+  end
+
+  # :zip_bsdtar (the NOSCEMUS Digital Sourcebook, Zenodo 15040256): 183 of
+  # its members carry a CP437 name in the header (no UTF-8 flag) plus the
+  # Info-ZIP Unicode Path extra field (0x7075) holding the real UTF-8 name.
+  # unzip ignores the extra field and dies on APFS (exit 50) — the salvage
+  # reader would then drop every such member; bsdtar (libarchive) honors
+  # the extra field and lands the member under its Unicode name.
+  def unicode_path_zip_body(cp437_name, utf8_name, content)
+    require "zlib"
+    name = cp437_name.b
+    unicode = utf8_name.b
+    extra = [0x7075, 5 + unicode.bytesize, 1, Zlib.crc32(name)].pack("vvCV") + unicode
+    crc = Zlib.crc32(content)
+    local = "PK\x03\x04".b + [20, 0, 0, 0, 0, crc, content.bytesize, content.bytesize,
+                              name.bytesize, extra.bytesize].pack("vvvvvVVVvv") + name + extra + content.b
+    central = "PK\x01\x02".b + [20, 20, 0, 0, 0, 0, crc, content.bytesize, content.bytesize,
+                                name.bytesize, extra.bytesize, 0, 0, 0, 0, 0].pack("vvvvvvVVVvvvvvVV") + name + extra
+    local + central + "PK\x05\x06".b + [0, 0, 1, 1, central.bytesize, local.bytesize, 0].pack("vvvvVVv")
+  end
+
+  def test_zip_bsdtar_lands_a_cp437_member_under_its_unicode_path_name
+    body = unicode_path_zip_body("proj/1285855/Denisot,_G\x82rard.txt", "proj/1285855/Denisot,_Gérard.txt", "text")
+    headers = { "Content-Type" => "application/zip", "Last-Modified" => LAST_MODIFIED }
+    stub_request(:get, URL).to_return(status: 200, body: body, headers: headers)
+    result = Nabu::ZipFetch.sync!(url: URL, dir: @dir, attic_dir: @attic, archive: :zip_bsdtar)
+    names = Dir.children(File.join(@dir, "1285855"))
+    assert_equal 1, names.size
+    assert_equal "Denisot,_Gérard.txt", names.first.unicode_normalize(:nfc), "the 0x7075 name, never the CP437 bytes"
+    assert_equal "text", File.read(File.join(@dir, "1285855", names.first))
+    assert_equal Digest::SHA256.hexdigest(body), result.sha
+  end
+
+  def test_zip_bsdtar_honors_retention_and_304_replay
+    stub_request(:get, URL).to_return(status: 200, body: zip_body({ "a.xml" => "v1", "doomed.xml" => "old" }),
+                                      headers: { "Last-Modified" => LAST_MODIFIED })
+    Nabu::ZipFetch.sync!(url: URL, dir: @dir, attic_dir: @attic, archive: :zip_bsdtar)
+    stub_request(:get, URL).to_return(status: 200, body: zip_body({ "a.xml" => "v2" }),
+                                      headers: { "Last-Modified" => "Sun, 02 Mar 2026 10:00:00 GMT" })
+    result = Nabu::ZipFetch.sync!(url: URL, dir: @dir, attic_dir: @attic, archive: :zip_bsdtar)
+    assert_equal "v2", File.read(File.join(@dir, "a.xml"))
+    assert_equal "old", File.read(File.join(@attic, "doomed.xml")), "the dropped file is atticked"
+    stub_request(:get, URL).to_return(status: 304)
+    assert Nabu::ZipFetch.sync!(url: URL, dir: @dir, attic_dir: @attic, archive: :zip_bsdtar).not_modified
+    assert_equal ["doomed.xml"], result.atticked
+  end
+
+  def test_a_corrupt_zip_under_bsdtar_raises_without_salvage
+    stub_request(:get, URL).to_return(status: 200, body: "not a zip", headers: { "Content-Type" => "application/zip" })
+    assert_raises(Nabu::ZipFetch::Error) do
+      Nabu::ZipFetch.sync!(url: URL, dir: @dir, attic_dir: @attic, archive: :zip_bsdtar)
+    end
+    refute File.exist?(@dir), "a failed unpack never touches the live tree"
+  end
+
+  def test_unknown_archive_kind_is_rejected_loudly
+    assert_raises(ArgumentError) do
+      Nabu::ZipFetch.new(url: URL, dir: @dir, attic_dir: @attic, archive: :seven_zip)
+    end
+  end
+end
+
+# Vendored-intermediate contract: the default store must verify every PEM in
+# config/certs/ against the SYSTEM roots alone — proving each is a public
+# intermediate that closes a chain, not a new trust anchor. (The oracc
+# upstream serves a leaf-only chain; see config/certs/README.md.)
+class ZipFetchExtraCertsTest < Minitest::Test
+  def test_extra_certs_chain_to_default_roots
+    pems = Dir.glob(File.join(Nabu::ZipFetch::EXTRA_CERTS_DIR, "*.pem"))
+    refute_empty pems, "expected at least the InCommon intermediate"
+    defaults = OpenSSL::X509::Store.new.tap(&:set_default_paths)
+    pems.each do |pem|
+      cert = OpenSSL::X509::Certificate.new(File.read(pem))
+      assert defaults.verify(cert),
+             "#{File.basename(pem)} does not chain to a default root (#{defaults.error_string}) — " \
+             "vendored certs must never introduce new trust anchors"
+      assert cert.not_after > Time.now, "#{File.basename(pem)} is expired"
+    end
+  end
+
+  def test_default_http_uses_verify_peer_with_the_extra_store
+    conn = Nabu::ZipFetch.default_http
+    assert_equal true, conn.ssl.verify
+    assert_kind_of OpenSSL::X509::Store, conn.ssl.cert_store
+  end
+
+  # The trismegistos regression (P81-4, defect found by P79-2 2026-08-19):
+  # www.trismegistos.org serves a Let's Encrypt gen-Y chain — leaf ←
+  # intermediate YR2 — and stops there. YR2's issuer, ISRG "Root YR", is not
+  # yet in the major trust stores, so without the ISRG cross-sign
+  # (Root YR ← ISRG Root X1, the chain Let's Encrypt marks Default)
+  # verification dies with code 20, "unable to get local issuer certificate".
+  # The vendored config/certs/isrg-root-yr-by-x1.pem closes exactly that
+  # link. Fixture chain: the live chain as served 2026-08-21 (see
+  # test/fixtures/certs/README.md); the store's verification time is pinned
+  # just inside the leaf's validity so the fixture never expires the test.
+  def test_trismegistos_served_chain_closes_through_the_vendored_cross_sign
+    fixtures = File.expand_path("../fixtures/certs", __dir__)
+    leaf = OpenSSL::X509::Certificate.new(File.read(File.join(fixtures, "trismegistos-leaf.pem")))
+    served = OpenSSL::X509::Certificate.new(
+      File.read(File.join(fixtures, "trismegistos-intermediate-yr2.pem"))
+    )
+    store = Nabu::ZipFetch.extra_cert_store
+    store.time = leaf.not_before + 60
+    assert store.verify(leaf, [served]),
+           "leaf + served YR2 must verify against the extra store (#{store.error_string}) — " \
+           "the vendored ISRG Root YR cross-sign closes the link upstream omits"
+    subjects = store.chain.map { |cert| cert.subject.to_s }
+    assert_includes subjects, "/C=US/O=ISRG/CN=Root YR",
+                    "the verified path must run through the Root YR link the server fails to send"
+  end
+end

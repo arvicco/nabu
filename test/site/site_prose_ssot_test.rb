@@ -242,7 +242,7 @@ module Site
           phase_code_hits(text).each { |hit| offenders << "#{path.delete_prefix(SITE)}: #{hit}" }
         end
       end
-      registry = Nabu::SourceRegistry.load(File.join(ROOT, "config", "sources.yml"))
+      registry = Nabu::SourceRegistry.load(File.join(ROOT, "config", "sources"))
       registry.axes.each_axis do |axis|
         phase_code_hits("#{axis.persona} #{axis.desc}").each do |hit|
           offenders << "config/axes.yml #{axis.name}: #{hit}"

@@ -1,0 +1,16 @@
+jv-wikisource:   # P140, 02-sources row 285
+  adapter: Nabu::Adapters::JvWikisource
+  adopted: "2026-10-21"
+  axes: [sea]
+  wired: true    # first sync verified 2026-10-21: 36 docs / 2,855 passages (the lane census exactly)
+  sync_policy: manual
+  # The dated 19th-century Javanese cone (the owner-ruled wikisource
+  # posture, the Macedonian precedent), census 2026-10-21 — drawn at every
+  # fetch from the Indhèks Year= (else the file-name year) of all 837
+  # Indexes: 104 Indexes ≤ 1900 (most OCR-only) + 3 censused EXTRA prints
+  # (Pararaton 1912, Wulangreh 1929, Wirit Hidayat Jati 1916) → 38 cone
+  # pages (the wiki renders a WHOLE BOOK per page). Out: 1901–1930 (30
+  # Indexes / 33 pages — the Kajawen 1927 issues, the 1920s schoolbooks),
+  # > 1930 (72 / 128), unstated (84 / 230). Measured: Dutch apparatus
+  # (foreign_language); script jav-Java / jav; Wretansacaya (Kern 1875) →
+  # kaw. Census fetch: 36 docs / 2,855 passages. Texts PD; transcription layer CC BY-SA 4.0.

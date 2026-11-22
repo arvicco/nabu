@@ -1,0 +1,10 @@
+achemenet:
+  adapter: Nabu::Adapters::Achemenet
+  adopted: "2026-08-17"
+  axes: [cuneiform]
+  wired: true    # P77-r18 first sync owner-verified (2,774 docs + 56 zero-word rule-skips), flipped 2026-08-18 (owner: "wire on all recent sources")
+  license_watch: https://zenodo.org/records/19067652
+  # SILVER lemmas (the GLAUx rule): BabyLemmatizer semi-automatic with
+  # partial manual correction, upstream's own account.
+  lemma_tier: silver
+  sync_policy: manual

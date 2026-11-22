@@ -1,0 +1,14 @@
+sagartst:
+  adapter: Nabu::Adapters::Sagartst
+  adopted: "2026-11-13"
+  axes: [etym, sinitic]
+  wired: true    # first sync 2026-11-13: +5,120 sets / 12,179 reflexes.
+                 # Expected: 5,120 entries / 12,179 reflex rows (540
+                 # loan-flagged); raw/ skipped by rule.
+  sync_policy: manual
+  # Sagart, Jacques, Lai & List 2019, Sino-Tibetan Database of Lexical
+  # Cognates, lexibank CLDF edition v2.1 (Zenodo 10.5281/zenodo.13162889,
+  # CC BY 4.0): 50 varieties × 250 concepts incl. Old Chinese (Baxter-
+  # Sagart), Old Tibetan, Old Burmese and Tangut; 5,120 cognate sets
+  # headed by their concept. Form is a segmentation artifact, so the
+  # source Value is the reflex word. Dictionary language `sit`.

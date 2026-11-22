@@ -20,7 +20,7 @@ class GrantGateTest < Minitest::Test
     )
   end
 
-  # The PUBLIC grant (what config/sources.yml carries on every clone).
+  # The PUBLIC grant (what config/sources/ carries on every clone).
   def sample_grant
     Nabu::SourceRegistry::Grant.new(
       terms: "any use, per-base attribution required",

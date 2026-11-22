@@ -1,0 +1,13 @@
+sources:
+  lasla:
+    kind: {posture: unclassified, note: "the conllup lane carries no genre field — only the
+        filename's author/work/code (mined: author + work facets); a per-work genre table
+        would be a curated overlay, not extraction"}
+    # lect machine-postured — config/lect_overrides.yml lat → lat:cla, tier
+    # approximation (the corpus-level classical reading; adopted from the
+    # pending candidate 2026-11-05).
+    dating: {posture: pending, note: "candidate: a ruled author-floruit table over the
+        24 filename authors (Plautus … Juvenal) as the composition class; the asset
+        carries no date field of its own"}
+    places: {posture: unplaced, note: "no place field in the asset"}
+    script: {posture: implied}

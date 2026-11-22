@@ -203,9 +203,9 @@ class TshetUinhTest < Minitest::Test
   # --- registry ---------------------------------------------------------------
 
   def test_registry_row_exists_disabled_with_manual_sync_policy
-    registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources.yml", __dir__))
+    registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources", __dir__))
     entry = registry["tshet-uinh"]
-    refute_nil entry, "config/sources.yml must register tshet-uinh"
+    refute_nil entry, "config/sources/ must register tshet-uinh"
     assert_equal Nabu::Adapters::TshetUinh, entry.adapter_class
     assert entry.wired, "live (owner order 2026-07-20: P32+P33 sources flipped, post-P34 gate)"
     assert_equal "manual", entry.sync_policy

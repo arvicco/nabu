@@ -1,0 +1,33 @@
+sources:
+  leme:   # P160 — a dictionary source (313 shelves, one per lexical work)
+    kind: {posture: unclassified, note: "a dictionary shelf — the kind axis classifies
+        documents; LEME's own genre spread (dictionaries, hard-word glossaries, spelling
+        lists, herbals, glossed texts, antiquarian essays) lives only in the items'
+        free-text dc.subject headings, not a typed field"}
+    lect:
+      posture: dates
+      note: "per-entry headword language from the <form>'s own LEME @lang (LemeXmlParser::
+        LANGUAGES; lang-less forms read LEME's English default), the shelf taking its
+        entries' majority — en 233 shelves, lat 28, und 16, ita 6, fra 6, enm 5, hbo/grc/ang 3 …
+        The English shelves stage PER SHELF by date band off their own lexicon_year (the
+        leme-lexicon-year dictionary_date_bands rule in lect_facet_rules.yml — a source-wide
+        en → en:early row would mislabel the 1700–1755 lexicons): 215 shelves 1500–1699 →
+        en:early, 12 shelves 1702–1755 (Kersey, Bailey, Johnson, Scott-Bailey) → en:late,
+        census 2026-11-06; the six pre-1500 incunable prints stay bare en (below every en
+        band). The other shelf languages stay identity deliberately — their headwords are
+        the language described, not the compiler's own, so the year is no stage evidence"
+    dating:
+      posture: dated
+      note: "every entry carries its work's typed year (lexicon_year) — the item's
+        dc.date.created, four-digit on 314 of 314 (1477–1755 bar one), the base edition LEME
+        transcribes; one erratum by upstream's own data (1807/139760, the lost Nominale:
+        dc.date.created gives Wright–Wülcker's 1884 edition, LEME's head note 'ca.
+        1475-1500'). Shelf grain only: entries carry no dates of their own beyond the
+        editors' OED antedating notes (editor_notes)"
+    places: {posture: unplaced, note: "the imprint town sits only inside the free-text
+        dc.identifier.citation ('London: Samuel Lee and Benjamin Alsop, 1680.'), declared
+        unmined; the dialect glossaries' county labels ride the dialect / leme_lang
+        annotations, never a place claim"}
+    script: {posture: implied, note: "the print's Latin-script spelling (u/v, i/j, long s
+        normalized per LEME's editorial rules); Greek and Hebrew headwords in their own
+        scripts (Martinez's pointed Hebrew)"}

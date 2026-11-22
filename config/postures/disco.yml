@@ -1,0 +1,13 @@
+sources:
+  disco:
+    kind: {posture: unclassified}
+    lect: {posture: identity, note: "P77-4: bare spa is the honest one-tag claim
+        across the 15th-20th c. span — the period band rides document metadata;
+        a stage split (Golden Age Spanish) would need a ruled rule"}
+    dating: {posture: dated, note: "P104-1 (the aggressive-mining law's attributed-era grade, owner-ruled 2026-09-26): the author's own
+        birth/death centuries band every doc via MetadataDates
+        :author_century_band — composition-class rows (date_class
+        'composition'), never passed off as artifact dates"}
+    places: {posture: unplaced, note: "birthplace is author biography, not
+        composition place — rides metadata verbatim"}
+    script: {posture: implied}

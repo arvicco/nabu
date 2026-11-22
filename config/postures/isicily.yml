@@ -1,0 +1,6 @@
+sources:
+  isicily:
+    lect: {posture: dates}
+    dating: {posture: partial}
+    places: {posture: linked}
+    script: {posture: qualified}

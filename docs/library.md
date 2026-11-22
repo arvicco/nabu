@@ -1132,6 +1132,21 @@ the Countries, Ephrem's Prose Refutation against Mani and Sermon on
 Nineveh and Jonah, Pseudo-Methodius and three apocalypses (31 books /
 18,132 verses; nc) — are registered but not yet wired.
 
+**The Syriac deepening (synced live 2026-11-22).** `etcbc-syrnt` — the
+complete Syriac New Testament (the SEDRA III database export of the
+1996 BFBS-lineage text, Text-Fabric format): 27 books / 7,957 verses
+with word-level morphology on every token (nc). `sedra` — Sedra, Beth
+Mardutho's Classical Syriac lexical database (data release 5.0):
+35,891 dictionary entries under 3,465 roots, with vocalized spellings,
+65,000 attested word forms, glosses in five languages and ~3,000
+etymologies, Greek above all (CC BY-NC 4.0, credit Sedra and Beth
+Mardutho). `syriac-htr-gt` — two handwritten-text-recognition ground
+truths: ÖNB Cod. Syr. 1 (a Serto Pentateuch dated by its own colophon,
+140 folios) and St Mark's Monastery ms 36 (an Estrangelo manuscript of
+the 12th–14th centuries, 133 bifolios) — 273 page documents / 20,706
+transcribed lines, the library's first Syriac manuscript
+transcriptions (CC BY 4.0).
+
 **The Hexapla.** `hexapla` — the Göttingen Hexapla Database for 2 Samuel
 and the Psalms: the LXX, the MT, the Secunda, Aquila, Symmachus,
 Theodotion, Quinta, Sexta and Field's columns, every reading with its
@@ -1670,7 +1685,7 @@ and P84 added a fifth:
   read BEHIND from a 15-hour-old cache). A
   `license_watch:` registry key (P16-5) lets `health --remote` watch a
   source's upstream license page for changes — candidates are recorded
-  commented-out in `config/sources.yml`, none enabled yet (owner decision).
+  commented-out in `config/sources/`, none enabled yet (owner decision).
   P18-7 folds the mechanical **postcondition invariants** into every
   `health` run: failed-run and partial-load surfacing, flag-vs-artifact
   and synced-vs-populated mismatches, pending migrations, and a

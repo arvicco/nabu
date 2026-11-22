@@ -132,9 +132,9 @@ class CorpusGysselingTest < Minitest::Test
   # --- registry round-trip ------------------------------------------------------
 
   def test_registry_resolves_the_source_wired_live
-    registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources.yml", __dir__))
+    registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources", __dir__))
     entry = registry[SLUG]
-    refute_nil entry, "#{SLUG} must be registered in config/sources.yml"
+    refute_nil entry, "#{SLUG} must be registered in config/sources/"
     assert_equal Nabu::Adapters::CorpusGysseling, entry.adapter_class
     assert entry.wired, "flipped after the owner-fired first sync + eyeball (2026-08-27: 2,226 docs / 207,793 passages)"
     assert_equal "manual", entry.sync_policy

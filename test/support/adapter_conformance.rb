@@ -16,7 +16,7 @@
 # Optional hook:
 #
 #   conformance_expected_source_id -> the id this source is registered under
-#                           (config/sources.yml, once P1-6 lands). Default
+#                           (config/sources/, once P1-6 lands). Default
 #                           nil skips the check; the manifest-id ↔ ref
 #                           source_id agreement is asserted regardless.
 #

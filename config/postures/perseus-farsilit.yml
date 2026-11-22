@@ -1,0 +1,12 @@
+sources:
+  perseus-farsilit:   # P95-4
+    kind: {posture: pending, note: "candidate: TEI textClass ingestion (unruled)"}
+    lect: {posture: identity, note: "fas IS Persian (codemap → the bare fa
+        anchor) — Hafez; fa:cls [1200, 1906] exists (PR #45), and Hafez
+        sits squarely inside it — the stage claim is a one-rule candidate
+        for the next review, the bare code honest meanwhile (note
+        refreshed 2026-11-13; the old 'no Persian stages' premise was
+        stale)"}
+    dating: {posture: undatable}
+    places: {posture: unplaced}
+    script: {posture: implied}

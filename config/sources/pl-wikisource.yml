@@ -1,0 +1,15 @@
+pl-wikisource:   # P116-3, 02-sources row 238
+  adapter: Nabu::Adapters::PlWikisource
+  adopted: "2026-10-10"
+  axes: [slavic]
+  wired: true    # First sync verified 2026-10-10: 1,228 docs / 15,823 passages + the Brueckner shelf (5,711 entries).
+  sync_policy: manual
+  # The premodern Polish-literature cone (census 2026-10-10): the four
+  # Polish-literature categories of the epoch tree at depth 2 + the two
+  # Old Polish sermon collections — 1,295 cone pages, 1,167 of them
+  # ProofreadPage transclusions (rendered via action=parse at fetch).
+  # Rules: 25 całość aggregates, 33 apparatus pages, 7 pages of the 1932
+  # Apologeticus edition (EDITION_TAINT_POST_1930). Brückner's Słownik
+  # etymologiczny (1927) rides the declared dictionary lane: 5,715 entry
+  # stubs over 828 proofread scan pages → shelf "bruckner". Texts PD;
+  # transcription layer CC BY-SA 4.0.

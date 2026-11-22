@@ -6,7 +6,7 @@ require_relative "source_read"
 require_relative "statutes_realm_dating"
 require_relative "statutes_realm_toc"
 require_relative "statutes_realm_page_parser"
-require_relative "../statutes_realm_fetch"
+require_relative "../fetch/statutes_realm_fetch"
 
 module Nabu
   module Adapters

@@ -178,9 +178,9 @@ class OghamTest < Minitest::Test
   # --- registry ---------------------------------------------------------------
 
   def test_registry_row_is_disabled_manual
-    registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources.yml", __dir__))
+    registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources", __dir__))
     entry = registry["ogham"]
-    refute_nil entry, "ogham must be registered in config/sources.yml"
+    refute_nil entry, "ogham must be registered in config/sources/"
     assert_equal Nabu::Adapters::Ogham, entry.adapter_class
     assert entry.wired, "live (owner sign-off 2026-07-18: 834 docs, flipped; still nc pending registry #14)"
     assert_equal "manual", entry.sync_policy

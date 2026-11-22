@@ -296,7 +296,7 @@ class NiupepaTest < Minitest::Test
   end
 
   def test_registry_resolves_niupepa_wired_and_grant_gated
-    registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources.yml", __dir__))
+    registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources", __dir__))
     entry = registry[SLUG]
     refute_nil entry
     assert_equal ADAPTER, entry.adapter_class

@@ -1,0 +1,22 @@
+kr-gaiji:
+  adapter: Nabu::Adapters::KrGaiji
+  adopted: "2026-07-20"
+  kind: module   # P39-0: machinery-only — sanctioned fetch, zero catalog rows, up=module
+  axes: [sinitic]
+  wired: true    # channel verified (first fetch landed; canonical present). `--all`
+                   # participation is governed by kind + sync_policy, NEVER by wired
+                   # (owner semantics ruling 2026-08-18, reaffirming 2026-07-24:
+                   # wired = the sync link is tested and declared working).
+  # P37-3: KR-Gaiji — the Kanseki Repository's not-yet-encoded characters
+  # (github.com/kanripo/KR-Gaiji). charlist.org.txt lists 5,254 `&KR\d+;`
+  # gaiji refs; census (commit 662fd61d) found only 972 (36.4% of the
+  # 1,751,360 occurrences) carry a single real Unicode codepoint — those are
+  # curated into config/gaiji/kanripo.tsv and resolved to real glyphs by the
+  # `reading` mode; the 707 refs with only a lossy "normalized" substitute
+  # (51.8% of occurrences) and the 3,564 image-only refs (11.2%) stay the ⬚
+  # placeholder — placeholder, never a fake glyph (owner honesty gate).
+  # License rides the kanripo org grant verbatim (no per-repo LICENSE):
+  # "Comprehensive collection of premodern Chinese texts. Licensed as CC BY
+  # SA 4.0." → attribution. The sparse cone [charlist.org.txt, README.md]
+  # skips the 5,232-PNG images/ tree the resolution never needs.
+  sync_policy: manual

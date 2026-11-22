@@ -1,0 +1,19 @@
+glt:   # 02-sources row 381
+  adapter: Nabu::Adapters::Glt
+  adopted: "2026-11-04"
+  axes: [classical]
+  wired: true    # first sync verified 2026-11-04: 725 docs / 186,442 line passages, the
+                 # 2 catalog pages skipped by rule, 0 errored, 0 upstream 404s — every page
+                 # the census listed. sep05:8 (the Zacharias sticheron) eyeballed verbatim;
+                 # FTS probe hits.
+  sync_policy: manual   # hand-maintained static pages, revised in place (Last-Modified pins)
+  # Greek Orthodox Liturgical Texts (glt.goarch.org, Greek Orthodox
+  # Archdiocese of America; maintained by Fr. Leo Schefe): the Byzantine
+  # service books in Greek — the twelve Menaia, Octoechos, Triodion,
+  # Pentecostarion, Horologion, Euchologion, one page per service. License:
+  # permission by email from the site maintainer, 2026-11-02 (the texts are
+  # in the public domain; "you are welcome to use them"; error reports
+  # invited) → open. Document = service page, passage = page line, rubrics
+  # role-marked from the site's red ink. The weekly-compiled daily services,
+  # the misc/ scripture books and anthology, and every non-HTML rendering
+  # are rejected grains (Adapters::Glt class comment).

@@ -1,0 +1,13 @@
+goryeosa:
+  adapter: Nabu::Adapters::Goryeosa
+  adopted: "2026-08-18"
+  cjk_index: true   # P93-3: the CJK bigram substring lane
+  axes: [korean]   # P78-3: the goryeosa family — the pre-Joseon dynastic history
+  wired: true     # P78-3 first sync owner-verified (138 docs / 31,207 passages); flipped 2026-08-19 (owner: 'wire everything on')
+  # 고려사 원문 (NIKH via data.go.kr 15053637; 제한 없음 → D47-a
+  # attribution). Hanmun only — no modern Korean translation layer in the
+  # dump. Fetch resolves the CURRENT atchFileId (DataGoKrFetch), then one
+  # ZipFetch into the flat workdir. 138 members kr_000..kr_137 (~50 MB
+  # unpacked), nikh-xml family, DTD ver 1.4.
+  license_watch: https://www.data.go.kr/data/15053637/fileData.do
+  sync_policy: manual

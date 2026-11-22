@@ -1,0 +1,8 @@
+sources:
+  tla-hf:
+    kind: {posture: unclassified}
+    lect: {posture: identity, note: "owner-ruled 2026-08-09: 4 docs total — the
+        pending cost more than the corpus; bare egy/deu are the honest claim"}
+    dating: {posture: partial}
+    places: {posture: unplaced}
+    script: {posture: implied}

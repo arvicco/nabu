@@ -85,6 +85,8 @@ ancient-near-east:
   - peshitta
   - syriac-corpus
   - etcbc-syriac
+  - etcbc-syrnt
+  - syriac-htr-gt
   - hmml-reading-room
   - ociana
 ugarit: [rsti]

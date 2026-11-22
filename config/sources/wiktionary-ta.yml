@@ -1,0 +1,14 @@
+wiktionary-ta:   # 02-sources row 283
+  adapter: Nabu::Adapters::WiktionaryTa
+  adopted: "2026-10-21"
+  axes: [indic]
+  wired: true    # first sync verified 2026-10-21: 13,855 entries (the lane census exactly)
+                 # eyeball nabu define கோடி ("very", ← Sanskrit कोटि), then flip.
+  # The kaikki Tamil extraction (13,855 records / "11180 distinct words",
+  # census 2026-10-21): Sanskrit and Proto-Dravidian etymons (1,803 sa /
+  # 773 dra-pro edges) and descendants trees into Sinhala, Malay and
+  # English. Language tam (→ ta through the held codemap alias). The
+  # wiktionary-akk mold on the shared WiktionaryKaikki base: per-language
+  # JSONL (deprecated upstream — fallback = filter the full extract by
+  # lang_code ta), CC BY-SA + GFDL → attribution, FileFetch.
+  sync_policy: manual

@@ -1,0 +1,29 @@
+sources:
+  pgp-geniza:
+    # kind: machine-postured by the kind_map.yml PGP type fold (no row here —
+    # the shadowing rule). The axes ride ONE document per pgpid: the edition
+    # document when held, else the first translation sibling (the aio rule).
+    lect: {posture: identity, note: "jrb (Judeo-Arabic) — the majority claim (4,068 of 7,669
+        edition documents; 4,703 text documents tag it) rides the registry anchor the
+        2026-11-17 Hebrew-wave package minted (parent ara; Blau's grammar, Hary's
+        continuum — the anchor's notes): the bare code IS the claim, an honest
+        answer. The other tags transcribe upstream's own labels
+        onto existing nodes as bare codes (heb, arc, ara, lad, jpr, ota, cop, grc, syc, it):
+        DELIBERATELY not staged — heb:med / arc:jud are judgment-grade refinements over a
+        corpus that runs from the 10th to the 19th century (a date-band rule is the
+        candidate). 898 edition documents carry no language tag upstream → und. Hebrew-script
+        translations are bare heb (modern scholarly Hebrew), English en, French fr, German de"}
+    dating: {posture: partial, note: "2,861 of 7,784 text-bearing documents dated: 2,017 by
+        the document's own dating (doc_date_standard, upstream's CE conversion of the
+        Anno Mundi / Seleucid / Hijri / Kharaji date; original + calendar ride raw) and 844
+        by the scholar's inferred date (basis inferred, rationale kept); the rest carry no
+        date upstream (census 2026-11-16)"}
+    places: {posture: named, note: "the ORIGIN relation (where written; 930 documents, 921
+        with the places.csv point as WGS84) is the main row; DESTINATION rides its own role
+        row (pgp-geniza-destination, 863); location / mentioned / possibly_mentioned facet
+        verbatim. Upstream carries no gazetteer ids (only its own place pages), so nothing
+        links yet — a nabu-places matching pass is the candidate"}
+    script: {posture: mixed, note: "Hebrew script for the Judeo-Arabic, Hebrew and Aramaic
+        documents; Arabic script for the Arabic ones; Latin for the translations — the
+        language tag does not fix the script (Arabic-language lines occur in Hebrew script and
+        vice versa within one document)"}

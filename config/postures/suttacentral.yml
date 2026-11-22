@@ -1,0 +1,6 @@
+sources:
+  suttacentral:
+    lect: {posture: codemap, note: the lzh slice → zho/lit; pli is identity}
+    dating: {posture: undatable}
+    places: {posture: unplaced}
+    script: {posture: implied}

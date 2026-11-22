@@ -1,0 +1,31 @@
+titus-bactrian:   # 02-sources row 229
+  adapter: Nabu::Adapters::TitusBactrian
+  adopted: "2026-10-10"
+  axes: [etym, iranian]  # the Eastern Middle Iranian stage of the iranian desk (beside the
+                         # Avestan anchor and the Pahlavi books); etym because the Bactrian
+                         # forms feed the comparative shelves.
+  # Grant-gated PRIVATE research material, the titus-avestan posture verbatim
+  # (the fetch right is not conveyed by a public license, so not by a clone):
+  availability: blocked
+  wired: true    # First retrieval + recovery verified 2026-10-10: 123 docs / 3,537 passages / 0 quarantines / 3 illegible-text skips.
+  # TITUS Bactrian Corpus (titus.uni-frankfurt.de/texte/etcs/iran/miran/baktr/baktcorp/):
+  # the Corpus of Bactrian Texts electronically prepared by N. Sims-Williams (Bactrian
+  # Documents from Northern Afghanistan I-II, London 2000-2007, and other editions; TITUS
+  # version J. Gippert 2010) — dated documents, documents of uncertain date, lists and
+  # accounts, letters, fragments, Buddhist texts, and the Tang-i Safedak inscription;
+  # 126 index entries (the six genre index frames, censused 2026-10-10). One document per
+  # text page (canonical/titus-bactrian/baktcNNN.htm); passages at the MANUSCRIPT LINE
+  # (the <!Level 4> "Line" headers), the edition's own labels verbatim (A.1, Aa.1',
+  # Aa.(2), am.5+6A). Language xbc throughout, in the edition's Greek-letter
+  # transcription; the dated documents' Bactrian-era year formula rides metadata.
+  sync_policy: manual
+  grant_required: true
+  grant:
+    terms: >-
+      the Middle Iranian families on TITUS, to whatever extent TITUS hosts them as
+      retrievable text: one retrieval per corpus, local personal research use only,
+      no redistribution; TITUS and the editors credited wherever displayed
+    request_hint: >-
+      Contact TITUS (titus.uni-frankfurt.de) for a license grant, and promise
+      to credit TITUS and the editors (N. Sims-Williams, who prepared the Bactrian corpus)
+      wherever any text is displayed.

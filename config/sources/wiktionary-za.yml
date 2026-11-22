@@ -1,0 +1,17 @@
+wiktionary-za:   # P156, 02-sources row 374
+  adapter: Nabu::Adapters::WiktionaryZa
+  adopted: "2026-11-04"
+  axes: [sinitic]
+  wired: true    # first sync verified 2026-11-04: 3,577 entries / 2 stubs skipped — exact.
+                 # define gvaq answers with the MC 過 loan etymology.
+  # The kaikki Zhuang extraction (7,486,225 B / 3,579 records / "2981
+  # distinct words", census 2026-11-04): the library's first Zhuang
+  # dictionary and its one structured Sawndip lexicon — 813 Sawcuengh
+  # headwords carrying 3,659 Sawndip spellings (IDS for the unencoded
+  # characters, verbatim). Language za (the registry anchor; zha
+  # aliases; the macrolanguage's member codes stay identity). The
+  # WiktionaryScriptShelf base (see wiktionary-vi); 2 empty stubs
+  # skipped. EXPECTED first sync: 3,577 entries (exact). Per-language
+  # JSONL (deprecated upstream — fallback = filter the full extract by
+  # lang_code za), CC BY-SA + GFDL → attribution, FileFetch.
+  sync_policy: manual
