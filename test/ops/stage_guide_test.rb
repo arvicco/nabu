@@ -22,7 +22,8 @@ class StageGuideTest < Minitest::Test
 
   # Files whose stage labels may satisfy a registry entry (the reverse,
   # orphan guard) without being guarded themselves.
-  SAMPLED = (GUARDED + %w[store/indexer.rb]).freeze
+  SAMPLED = (GUARDED + %w[store/indexer.rb] +
+             Dir[File.join(LIB, "store", "indexer", "*.rb")].map { |path| path.delete_prefix("#{LIB}/") }).freeze
 
   # Non-literal stage arguments the guard accepts, each with what it
   # carries: a replayed source's slug (explained by the source-replay

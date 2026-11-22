@@ -19,7 +19,9 @@ class IndexProportionalityTest < Minitest::Test
 
   Indexer = Nabu::Store::Indexer
   Classes = Nabu::Store::IndexCostClasses
-  INDEXER_SOURCE = File.expand_path("../lib/nabu/store/indexer.rb", __dir__)
+  # The indexer plus its partials (lib/nabu/store/indexer/).
+  INDEXER_SOURCES = [File.expand_path("../lib/nabu/store/indexer.rb", __dir__),
+                     *Dir[File.expand_path("../lib/nabu/store/indexer/*.rb", __dir__)]].freeze
 
   SMALL = 100
   LARGE = 6_000
@@ -55,7 +57,8 @@ class IndexProportionalityTest < Minitest::Test
   # -- the declaration ---------------------------------------------------------
 
   def test_every_timed_index_stage_declares_its_cost_class
-    timed = File.read(INDEXER_SOURCE).scan(/timed_sync_stage\(ledger, [^,]+, "([a-z_]+)"/).flatten.uniq
+    source = INDEXER_SOURCES.map { |path| File.read(path) }.join
+    timed = source.scan(/timed_sync_stage\(ledger, [^,]+, "([a-z_]+)"/).flatten.uniq
 
     refute_empty timed
     timed.each { |stage| Classes.for("sync", stage) } # raises UndeclaredStage
