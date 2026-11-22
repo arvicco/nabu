@@ -118,3 +118,18 @@ sources:
         Menota's diplomatic transcription (Latin letters); the runes ride
         the facsimile level. Covers every menota dan document: the two
         are the whole dan holding"
+  # The Easter Island inscriptions. The census reading: the held text is
+  # CODES ONLY — the CEIPP extended-Barthel transliteration, three-digit
+  # sign numbers with Latin-letter affixes and link marks, Latin digits
+  # and punctuation by construction (no glyph surface exists to hold:
+  # Rongorongo is unencoded in Unicode). Every object files under rap
+  # (lect_overrides.yml's approximation-tier row carries the
+  # language-attribution caveat). The registry's roro tag landed in its
+  # scripts table 2026-11-21 for exactly this row.
+  ceipp-rongorongo:
+    rap:
+      script: roro
+      note: "Rongorongo glyphs incised on the wooden objects (tablets,
+        staff, reimiro, birdman, snuff box) — UNDECIPHERED, and held only
+        as Barthel-system numeric transliteration (sign codes, no glyph
+        surface). Covers every ceipp-rongorongo document"

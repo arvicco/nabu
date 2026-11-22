@@ -7535,9 +7535,11 @@ class CLITest < Minitest::Test
     end
   end
 
+  # The per-witness miss blocks below render under --long: compact folds
+  # them into the summary line (test_align_single_verse_folds_…).
   def test_align_unsynced_witness_reads_not_synced
     with_aligned_corpus(extra_witness: "urn:nabu:proiel:wscp") do |config|
-      out, _err, status = with_config(config) { run_cli(["align", "MARK", "2.3"]) }
+      out, _err, status = with_config(config) { run_cli(["align", "MARK", "2.3", "--long"]) }
       assert_nil status
       assert_match(/wscp — not synced/, out)
       assert_match(/2 of 3 witnesses/, out)
@@ -7558,7 +7560,7 @@ class CLITest < Minitest::Test
               JOHN: urn:nabu:sblgnt:john
     YAML
     with_aligned_corpus(registry: registry) do |config|
-      out, _err, status = with_config(config) { run_cli(["align", "MARK", "2.3"]) }
+      out, _err, status = with_config(config) { run_cli(["align", "MARK", "2.3", "--long"]) }
       assert_nil status
       assert_match(/^verses \[chu\] {3}license: nc/, out)
       assert_match(/not attested/, out)
@@ -7581,10 +7583,50 @@ class CLITest < Minitest::Test
               ACTS: urn:nabu:sblgnt:acts
     YAML
     with_aligned_corpus(registry: registry) do |config|
-      out, _err, status = with_config(config) { run_cli(["align", "MARK", "2.3"]) }
+      out, _err, status = with_config(config) { run_cli(["align", "MARK", "2.3", "--long"]) }
       assert_nil status
       assert_match(/verses — not synced \(its registered documents are not in the catalog\)/, out)
       refute_match(/urn:nabu:sblgnt/, out, "no unrelated book urn is named")
+    end
+  end
+
+  # The single-verse fold (the 189-manuscript nt hub, most witnesses absent
+  # at any verse): witnesses with nothing to show collapse into the range
+  # view's summary line — named and grouped by reason, never silently
+  # dropped — so the attesting rows stay readable. --long restores the full
+  # per-witness listing.
+  FOLD_REGISTRY = <<~YAML
+    nt:
+      witnesses:
+        - document: urn:nabu:proiel:greek-nt
+        - label: verses
+          extractor: cts-verse
+          documents:
+            MARK: urn:nabu:proiel:marianus
+        - document: urn:nabu:proiel:wscp
+  YAML
+
+  def test_align_single_verse_folds_absent_witnesses_into_one_summary_line
+    with_aligned_corpus(registry: FOLD_REGISTRY) do |config|
+      out, _err, status = with_config(config) { run_cli(["align", "MARK", "2.3"]) }
+      assert_nil status
+      assert_match(/^  1 of 3 witnesses attest this ref$/, out, "the count stays in the header")
+      assert_match(/^  not attested at this ref: verses; not synced: wscp$/, out,
+                   "absent witnesses are named once, grouped by reason")
+      assert_equal 1, out.scan("verses").length, "a folded witness gets no block of its own"
+      assert_equal 1, out.scan("wscp").length, "nor does a folded unsynced one"
+      assert_match(/greek-nt — Greek NT \[grc\] {3}license: nc/, out, "attesting witnesses render as before")
+      assert_match(/παραλυτικὸν/, out)
+    end
+  end
+
+  def test_align_single_verse_long_lists_every_witness_in_full
+    with_aligned_corpus(registry: FOLD_REGISTRY) do |config|
+      out, _err, status = with_config(config) { run_cli(["align", "MARK", "2.3", "--long"]) }
+      assert_nil status
+      refute_match(/not attested at this ref:/, out, "--long does not fold")
+      assert_match(/^verses — Codex Marianus \[chu\] {3}license: nc\n  not attested/, out)
+      assert_match(/wscp — not synced/, out)
     end
   end
 

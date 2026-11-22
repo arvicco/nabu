@@ -107,12 +107,14 @@ class ArtifactScriptsTest < Minitest::Test
       end
     end
     tags = shipped.values.flat_map { |langs| langs.values.map { |row| row["script"] } }.uniq.sort
-    assert_equal %w[avst cprt egyd hant ital java lina linb phnx runr tibt ugar xsux], tags,
+    assert_equal %w[avst cprt egyd hant ital java lina linb phnx roro runr tibt ugar xsux], tags,
                  "the owner-ruled census set (2026-08-28; the Aegean-syllabary tags joined " \
                  "with the 2026-10-22 registry package that minted them for exactly this layer; " \
                  "runr for Menota's two runic manuscripts; java joined 2026-11-16 with the " \
                  "jv~java repair — the aksara-Jawa scan claim over jv-wikisource's Latin " \
-                 "transliterations, the byte-guard-measured D60-b split)"
+                 "transliterations, the byte-guard-measured D60-b split; roro joined " \
+                 "2026-11-22 with the registry's scripts-table mint for the CEIPP " \
+                 "rongorongo corpus, held as Barthel numeric codes)"
   end
 
   # Menota's dan holdings are exactly its two RUNIC manuscripts (Codex
@@ -123,6 +125,20 @@ class ArtifactScriptsTest < Minitest::Test
       File.join(Nabu::Config::PROJECT_ROOT, "config", "artifact_scripts.yml")
     ).fetch("sources")
     assert_equal "runr", shipped.dig("menota", "dan", "script")
+  end
+
+  # The CEIPP rongorongo corpus is held as Barthel-system numeric
+  # transliteration (Latin digits and punctuation, every object filed
+  # under rap); the artifacts are incised in the undeciphered Rongorongo
+  # glyphs — the registry's roro tag, minted for exactly this row.
+  def test_ceipp_rongorongo_is_marked_rongorongo
+    shipped = YAML.safe_load_file(
+      File.join(Nabu::Config::PROJECT_ROOT, "config", "artifact_scripts.yml")
+    ).fetch("sources")
+    row = shipped.dig("ceipp-rongorongo", "rap")
+    refute_nil row, "ceipp-rongorongo files every object under rap — the row keys on that stored code"
+    assert_equal "roro", row["script"]
+    refute_empty row["note"].to_s, "the row carries its census reading"
   end
 
   # The 2026-08-29 regression class: YAML resolves a DUPLICATE source key by

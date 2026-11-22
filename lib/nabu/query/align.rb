@@ -104,6 +104,33 @@ module Nabu
       RangeSpec = Data.define(:book, :kind, :chapter, :start_cite, :end_cite, :query)
       private_constant :RangeSpec
 
+      # Partition the witnesses of +groups+ (RefGroups in document order) into
+      # those present somewhere (:ok in at least one ref — kept per-ref,
+      # "— not attested" lines and all) and those absent from EVERY ref
+      # (returned as AbsentWitness rows for a one-line summary and dropped
+      # from the groups). Witness order is the registry order the groups
+      # carry. The range view folds its whole slice through this; the CLI's
+      # single-verse render folds its one-group slice through it too (the
+      # 189-manuscript nt hub, most witnesses absent at any verse).
+      def self.lift_absent_witnesses(groups)
+        return [groups, []] if groups.empty?
+
+        absent = []
+        present_labels = groups.first.witnesses.filter_map do |column|
+          views = groups.map { |group| group.witnesses.find { |witness| witness.label == column.label } }
+          next column.label if views.any? { |witness| witness.status == :ok }
+
+          reason = views.all? { |witness| witness.status == :not_synced } ? :not_synced : :not_attested
+          absent << AbsentWitness.new(label: column.label, reason: reason)
+          nil
+        end
+        present_groups = groups.map do |group|
+          RefGroup.new(ref: group.ref,
+                       witnesses: group.witnesses.select { |witness| present_labels.include?(witness.label) })
+        end
+        [present_groups, absent]
+      end
+
       include CatalogJoin
 
       def initialize(catalog:, fulltext:, registry:)
@@ -175,32 +202,9 @@ module Nabu
           ref = "#{spec.book} #{cite}"
           RefGroup.new(ref: ref, witnesses: witnesses(target, ref, documents))
         end
-        present_groups, absent = lift_absent_witnesses(groups)
+        present_groups, absent = self.class.lift_absent_witnesses(groups)
         RangeResult.new(work: target.id, title: target.title, query: spec.query,
                         groups: present_groups, total: total, truncated: truncated, absent: absent)
-      end
-
-      # Partition the range's witnesses into those present somewhere (:ok in at
-      # least one ref — kept per-ref, "— not attested" lines and all) and those
-      # absent from EVERY ref (lifted to the header summary and dropped from the
-      # per-ref groups). Witness order is the registry order the groups carry.
-      def lift_absent_witnesses(groups)
-        return [groups, []] if groups.empty?
-
-        absent = []
-        present_labels = groups.first.witnesses.filter_map do |column|
-          views = groups.map { |group| group.witnesses.find { |witness| witness.label == column.label } }
-          next column.label if views.any? { |witness| witness.status == :ok }
-
-          reason = views.all? { |witness| witness.status == :not_synced } ? :not_synced : :not_attested
-          absent << AbsentWitness.new(label: column.label, reason: reason)
-          nil
-        end
-        present_groups = groups.map do |group|
-          RefGroup.new(ref: group.ref,
-                       witnesses: group.witnesses.select { |witness| present_labels.include?(witness.label) })
-        end
-        [present_groups, absent]
       end
 
       # A reversed verse range is a caller error, named as Query::Range names

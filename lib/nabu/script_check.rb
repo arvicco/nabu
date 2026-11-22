@@ -68,7 +68,11 @@ module Nabu
                 "collection grain, not per byte",
       "hani" => "the generic Han code for Nôm and Sawndip: the same CJK Unified " \
                 "characters byte-classify as hant, so a second \\p{Han} row would " \
-                "double-count — a ~hani surface is asserted at the collection grain"
+                "double-count — a ~hani surface is asserted at the collection grain",
+      "roro" => "Rongorongo has no Unicode encoding (the undecipherment stalls every " \
+                "proposal) — the held surface is Barthel-system numeric transliteration " \
+                "(latn numerals and punctuation); the ~roro claim is an artifact-script " \
+                "fact, not a byte-checkable surface"
     }.freeze
 
     # {tag => char count} over +text+, script-bearing characters only.
