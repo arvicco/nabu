@@ -13,7 +13,7 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 ## The shelves
 
-A source wears every desk it serves — these 27 answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
+A source wears every desk it serves — these 29 answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
 | Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 22 November 2026)</span> |
 |---|---|---|---|---|
@@ -28,6 +28,7 @@ A source wears every desk it serves — these 27 answer this desk. Holdings are 
 | `elizabeth-bible` | texts | open | wired · manual | 76 docs / 36,000 passages |
 | `eng-web` | texts | open | wired · manual | 84 docs / 37,624 passages |
 | `etcbc-syriac` | texts | nc | wired · manual | 31 docs / 18,132 passages |
+| `etcbc-syrnt` | texts | nc | not yet wired | not synced yet |
 | `etcbc-targum` | texts | nc | wired · manual | 47 docs / 25,430 passages |
 | `extrabiblical` | texts | nc | wired · manual | 13 docs / 1,800 passages |
 | `hebrew-lexicon` | dictionary | attribution | wired · manual | 21,144 entries |
@@ -41,6 +42,7 @@ A source wears every desk it serves — these 27 answer this desk. Holdings are 
 | `sefaria` | texts | open | wired · manual | 2,033 docs / 1,111,873 passages |
 | `stepbible-tagnt` | texts | attribution | wired · manual | 27 docs / 7,958 passages |
 | `syriac-corpus` | texts | attribution | wired · manual | 632 docs / 134,726 passages |
+| `syriac-htr-gt` | texts | attribution | not yet wired | not synced yet |
 | `typikon-bible` | texts | attribution | wired · manual | 229 docs / 105,698 passages |
 | `ud` | treebank | nc | wired · manual | 93 docs / 338,638 passages |
 | `vulgate` | texts | open | wired · manual | 73 docs / 35,809 passages |

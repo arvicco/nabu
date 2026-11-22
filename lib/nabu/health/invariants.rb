@@ -512,6 +512,10 @@ module Nabu
                                                 "(\"tr_1\") — a place on the page, not a geography",
                                  "region_type" => "the PAGE-XML region's layout class " \
                                                   "(\"paragraph\") — page structure, not a place" },
+        "syriac-htr-gt" => { "region_id" => "the PAGE-XML layout region of the scan " \
+                                            "(\"eSc_textblock_…\") — a place on the page, not a geography",
+                             "region_type" => "the SegmOnto region class (MainZone, MarginTextZone, " \
+                                              "NumberingZone) — page structure, not a place" },
         # The mining-law sweep, dates half (live census 2026-11-04).
         "divinum-officium" => { "entry_years" => "the necrology day's \"Anno 1746\" years — the death " \
                                                  "years of the people it commemorates, dates the text " \

@@ -1,0 +1,18 @@
+sources:
+  syriac-htr-gt:
+    # kind: machine-postured — kind_map.yml source_kind scripture (both
+    # manuscripts are New Testament books; margins and folio numbers ride
+    # their own regions).
+    lect: {posture: identity, note: "syc IS Classical Syriac — the scribes' biblical Syriac in
+        both manuscripts (the peshitta / etcbc-syriac posture); the deposits' own language tag
+        syr is the macro code"}
+    dating: {posture: dated, note: "every page carries its manuscript's date — ÖNB Cod. Syr. 1
+        1554 from its own colophon (the record's 1545 rides verbatim as record_date), SMMJ 36
+        1100–1399 (htr-united notBefore/notAfter) — the artifact date, :structured lane"}
+    places: {posture: named, note: "ÖNB Cod. Syr. 1 was written in Vienna (the record: scribed
+        by Moses of Mardin in Vienna); SMMJ 36 names no place of writing — Jerusalem is its
+        holding place, never claimed as origin"}
+    script: {posture: implied, note: "Syriac script as the hands wrote it — Serto (ÖNB, htr-united
+        Syrj) and Estrangelo with Serto and Eastern features (SMMJ 36, Syre), metadata
+        script_style per page; unvocalized by the transcription guidelines, syome and the
+        distinguishing dots kept"}

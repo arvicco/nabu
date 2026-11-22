@@ -1,0 +1,190 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# otype.tf, otext.tf and __checkout__.txt are byte-verbatim WHOLES (drift
+# there is real drift); every other file is a documented TRIM of a larger
+# upstream feature file (whole: false — fetched for URL-liveness only, never
+# byte-compared). adapter_test is null: the adapter test asserts slice-level
+# counts, which untrimmed upstream files would false-fail. Re-trim per the
+# README table after any refresh. Pinned upstream commit:
+# dae3eb6ff62b9b272fb503646796c25d248175ce (master, retrieved 2026-11-22).
+source: etcbc-syrnt
+adapter_test:
+retrieved: 2026-11-22
+files:
+  - path: tf/0.1/__checkout__.txt
+    url: https://raw.githubusercontent.com/ETCBC/syrnt/master/tf/0.1/__checkout__.txt
+    whole: true
+    trim: none
+  - path: tf/0.1/book.tf
+    url: https://raw.githubusercontent.com/ETCBC/syrnt/master/tf/0.1/book.tf
+    whole: false
+    trim: slice the fixture's kept nodes, gap-anchored (40991 B -> 987 B)
+  - path: tf/0.1/book@en.tf
+    url: https://raw.githubusercontent.com/ETCBC/syrnt/master/tf/0.1/book@en.tf
+    whole: false
+    trim: slice the fixture's kept nodes, gap-anchored (716 B -> 519 B)
+  - path: tf/0.1/chapter.tf
+    url: https://raw.githubusercontent.com/ETCBC/syrnt/master/tf/0.1/chapter.tf
+    whole: false
+    trim: slice the fixture's kept nodes, gap-anchored (20740 B -> 652 B)
+  - path: tf/0.1/demcat.tf
+    url: https://raw.githubusercontent.com/ETCBC/syrnt/master/tf/0.1/demcat.tf
+    whole: false
+    trim: slice the fixture's kept nodes, gap-anchored (336039 B -> 4080 B)
+  - path: tf/0.1/fmhdot.tf
+    url: https://raw.githubusercontent.com/ETCBC/syrnt/master/tf/0.1/fmhdot.tf
+    whole: false
+    trim: slice the fixture's kept nodes, gap-anchored (219703 B -> 2822 B)
+  - path: tf/0.1/gn.tf
+    url: https://raw.githubusercontent.com/ETCBC/syrnt/master/tf/0.1/gn.tf
+    whole: false
+    trim: slice the fixture's kept nodes, gap-anchored (255302 B -> 3282 B)
+  - path: tf/0.1/lexeme_etcbc.tf
+    url: https://raw.githubusercontent.com/ETCBC/syrnt/master/tf/0.1/lexeme_etcbc.tf
+    whole: false
+    trim: slice the fixture's kept nodes, gap-anchored (489802 B -> 5794 B)
+  - path: tf/0.1/lexeme_sedra.tf
+    url: https://raw.githubusercontent.com/ETCBC/syrnt/master/tf/0.1/lexeme_sedra.tf
+    whole: false
+    trim: slice the fixture's kept nodes, gap-anchored (489798 B -> 5790 B)
+  - path: tf/0.1/lexeme.tf
+    url: https://raw.githubusercontent.com/ETCBC/syrnt/master/tf/0.1/lexeme.tf
+    whole: false
+    trim: slice the fixture's kept nodes, gap-anchored (866148 B -> 9916 B)
+  - path: tf/0.1/nmtyp.tf
+    url: https://raw.githubusercontent.com/ETCBC/syrnt/master/tf/0.1/nmtyp.tf
+    whole: false
+    trim: slice the fixture's kept nodes, gap-anchored (339060 B -> 4066 B)
+  - path: tf/0.1/ntyp.tf
+    url: https://raw.githubusercontent.com/ETCBC/syrnt/master/tf/0.1/ntyp.tf
+    whole: false
+    trim: slice the fixture's kept nodes, gap-anchored (464205 B -> 5785 B)
+  - path: tf/0.1/nu.tf
+    url: https://raw.githubusercontent.com/ETCBC/syrnt/master/tf/0.1/nu.tf
+    whole: false
+    trim: slice the fixture's kept nodes, gap-anchored (258120 B -> 3309 B)
+  - path: tf/0.1/oslots.tf
+    url: https://raw.githubusercontent.com/ETCBC/syrnt/master/tf/0.1/oslots.tf
+    whole: false
+    trim: slice the fixture's kept nodes, gap-anchored (131173 B -> 1600 B)
+  - path: tf/0.1/otext.tf
+    url: https://raw.githubusercontent.com/ETCBC/syrnt/master/tf/0.1/otext.tf
+    whole: true
+    trim: none
+  - path: tf/0.1/otype.tf
+    url: https://raw.githubusercontent.com/ETCBC/syrnt/master/tf/0.1/otype.tf
+    whole: true
+    trim: none
+  - path: tf/0.1/prefix_etcbc.tf
+    url: https://raw.githubusercontent.com/ETCBC/syrnt/master/tf/0.1/prefix_etcbc.tf
+    whole: false
+    trim: slice the fixture's kept nodes, gap-anchored (148017 B -> 2746 B)
+  - path: tf/0.1/prefix_sedra.tf
+    url: https://raw.githubusercontent.com/ETCBC/syrnt/master/tf/0.1/prefix_sedra.tf
+    whole: false
+    trim: slice the fixture's kept nodes, gap-anchored (148013 B -> 2742 B)
+  - path: tf/0.1/prefix.tf
+    url: https://raw.githubusercontent.com/ETCBC/syrnt/master/tf/0.1/prefix.tf
+    whole: false
+    trim: slice the fixture's kept nodes, gap-anchored (185931 B -> 3136 B)
+  - path: tf/0.1/prtyp.tf
+    url: https://raw.githubusercontent.com/ETCBC/syrnt/master/tf/0.1/prtyp.tf
+    whole: false
+    trim: slice the fixture's kept nodes, gap-anchored (425972 B -> 4923 B)
+  - path: tf/0.1/ps.tf
+    url: https://raw.githubusercontent.com/ETCBC/syrnt/master/tf/0.1/ps.tf
+    whole: false
+    trim: slice the fixture's kept nodes, gap-anchored (296971 B -> 3719 B)
+  - path: tf/0.1/ptctyp.tf
+    url: https://raw.githubusercontent.com/ETCBC/syrnt/master/tf/0.1/ptctyp.tf
+    whole: false
+    trim: slice the fixture's kept nodes, gap-anchored (376080 B -> 4512 B)
+  - path: tf/0.1/root_etcbc.tf
+    url: https://raw.githubusercontent.com/ETCBC/syrnt/master/tf/0.1/root_etcbc.tf
+    whole: false
+    trim: slice the fixture's kept nodes, gap-anchored (419501 B -> 5197 B)
+  - path: tf/0.1/root_sedra.tf
+    url: https://raw.githubusercontent.com/ETCBC/syrnt/master/tf/0.1/root_sedra.tf
+    whole: false
+    trim: slice the fixture's kept nodes, gap-anchored (419497 B -> 5193 B)
+  - path: tf/0.1/root.tf
+    url: https://raw.githubusercontent.com/ETCBC/syrnt/master/tf/0.1/root.tf
+    whole: false
+    trim: slice the fixture's kept nodes, gap-anchored (728830 B -> 8727 B)
+  - path: tf/0.1/seyame.tf
+    url: https://raw.githubusercontent.com/ETCBC/syrnt/master/tf/0.1/seyame.tf
+    whole: false
+    trim: slice the fixture's kept nodes, gap-anchored (219694 B -> 2813 B)
+  - path: tf/0.1/sfcontract.tf
+    url: https://raw.githubusercontent.com/ETCBC/syrnt/master/tf/0.1/sfcontract.tf
+    whole: false
+    trim: slice the fixture's kept nodes, gap-anchored (405849 B -> 4841 B)
+  - path: tf/0.1/sfgn.tf
+    url: https://raw.githubusercontent.com/ETCBC/syrnt/master/tf/0.1/sfgn.tf
+    whole: false
+    trim: slice the fixture's kept nodes, gap-anchored (314928 B -> 3871 B)
+  - path: tf/0.1/sfnu.tf
+    url: https://raw.githubusercontent.com/ETCBC/syrnt/master/tf/0.1/sfnu.tf
+    whole: false
+    trim: slice the fixture's kept nodes, gap-anchored (322821 B -> 3940 B)
+  - path: tf/0.1/sfps.tf
+    url: https://raw.githubusercontent.com/ETCBC/syrnt/master/tf/0.1/sfps.tf
+    whole: false
+    trim: slice the fixture's kept nodes, gap-anchored (311482 B -> 3811 B)
+  - path: tf/0.1/sp.tf
+    url: https://raw.githubusercontent.com/ETCBC/syrnt/master/tf/0.1/sp.tf
+    whole: false
+    trim: slice the fixture's kept nodes, gap-anchored (721765 B -> 8220 B)
+  - path: tf/0.1/st.tf
+    url: https://raw.githubusercontent.com/ETCBC/syrnt/master/tf/0.1/st.tf
+    whole: false
+    trim: slice the fixture's kept nodes, gap-anchored (535425 B -> 6133 B)
+  - path: tf/0.1/stem_etcbc.tf
+    url: https://raw.githubusercontent.com/ETCBC/syrnt/master/tf/0.1/stem_etcbc.tf
+    whole: false
+    trim: slice the fixture's kept nodes, gap-anchored (499158 B -> 6020 B)
+  - path: tf/0.1/stem_sedra.tf
+    url: https://raw.githubusercontent.com/ETCBC/syrnt/master/tf/0.1/stem_sedra.tf
+    whole: false
+    trim: slice the fixture's kept nodes, gap-anchored (499154 B -> 6016 B)
+  - path: tf/0.1/stem.tf
+    url: https://raw.githubusercontent.com/ETCBC/syrnt/master/tf/0.1/stem.tf
+    whole: false
+    trim: slice the fixture's kept nodes, gap-anchored (888140 B -> 10373 B)
+  - path: tf/0.1/suffix_etcbc.tf
+    url: https://raw.githubusercontent.com/ETCBC/syrnt/master/tf/0.1/suffix_etcbc.tf
+    whole: false
+    trim: slice the fixture's kept nodes, gap-anchored (144170 B -> 2084 B)
+  - path: tf/0.1/suffix_sedra.tf
+    url: https://raw.githubusercontent.com/ETCBC/syrnt/master/tf/0.1/suffix_sedra.tf
+    whole: false
+    trim: slice the fixture's kept nodes, gap-anchored (144166 B -> 2080 B)
+  - path: tf/0.1/suffix.tf
+    url: https://raw.githubusercontent.com/ETCBC/syrnt/master/tf/0.1/suffix.tf
+    whole: false
+    trim: slice the fixture's kept nodes, gap-anchored (178237 B -> 2412 B)
+  - path: tf/0.1/verse.tf
+    url: https://raw.githubusercontent.com/ETCBC/syrnt/master/tf/0.1/verse.tf
+    whole: false
+    trim: slice the fixture's kept nodes, gap-anchored (21959 B -> 675 B)
+  - path: tf/0.1/vs.tf
+    url: https://raw.githubusercontent.com/ETCBC/syrnt/master/tf/0.1/vs.tf
+    whole: false
+    trim: slice the fixture's kept nodes, gap-anchored (402686 B -> 4738 B)
+  - path: tf/0.1/vt.tf
+    url: https://raw.githubusercontent.com/ETCBC/syrnt/master/tf/0.1/vt.tf
+    whole: false
+    trim: slice the fixture's kept nodes, gap-anchored (520826 B -> 5734 B)
+  - path: tf/0.1/word_etcbc.tf
+    url: https://raw.githubusercontent.com/ETCBC/syrnt/master/tf/0.1/word_etcbc.tf
+    whole: false
+    trim: slice the fixture's kept nodes, gap-anchored (571158 B -> 6763 B)
+  - path: tf/0.1/word_sedra.tf
+    url: https://raw.githubusercontent.com/ETCBC/syrnt/master/tf/0.1/word_sedra.tf
+    whole: false
+    trim: slice the fixture's kept nodes, gap-anchored (571154 B -> 6759 B)
+  - path: tf/0.1/word.tf
+    url: https://raw.githubusercontent.com/ETCBC/syrnt/master/tf/0.1/word.tf
+    whole: false
+    trim: slice the fixture's kept nodes, gap-anchored (1032135 B -> 11854 B)

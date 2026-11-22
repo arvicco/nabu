@@ -1,0 +1,26 @@
+syriac-htr-gt:   # 02-sources row 431
+  adapter: Nabu::Adapters::SyriacHtrGt
+  adopted: "2026-11-22"
+  axes: [biblical, syriac]
+  wired: false   # bin/nabu enable syriac-htr-gt, then bin/nabu sync syriac-htr-gt
+                 # (two md5-pinned page.zip downloads, 1.1 MB + 2.5 MB; the image
+                 # zips are never fetched). EXPECT 273 docs / 20,706 passages
+                 # (onb-cod-syr-1 140 pages / 2,870 lines — 5 empty lines mint
+                 # nothing; smmj-36 133 pages / 17,836 lines), 0 errored, 1 file
+                 # skipped by rule (the .DS_Store). Eyeball nabu show
+                 # urn:nabu:syriac-htr-gt:onb-cod-syr-1:p0001 (the gold incipit +
+                 # Matthew 1:1) and urn:nabu:syriac-htr-gt:onb-cod-syr-1:p0319 (the
+                 # 1554 colophon), 5 random lines, probe nabu search with
+                 # ܥܠ ܚܝܠܗ ܕܡܪܢ, then flip.
+  sync_policy: manual
+  # The Syriac ground truth of the Vienna HTR Winter Schools 2024/2025
+  # (ÖAW Institut für Mittelalterforschung): two Syriac New Testament
+  # manuscripts transcribed line by line in PAGE XML — Vienna, ÖNB Cod.
+  # Syr. 1 (Zenodo 10.5281/zenodo.14714089; 140 folios, Serto, the Gospels,
+  # written in Vienna by Moses of Mardin — the colophon dates it 1554, the
+  # record says 1545) and Jerusalem, St Mark's Monastery MS 36 (Zenodo
+  # 10.5281/zenodo.18157525; 133 bifolio images, Estrangelo, 12th–14th c.).
+  # One adapter, the page-xml family: document = page image, passage =
+  # TextLine. cc-by-4.0 on both records + the htr-united yml; the deposited
+  # CITATION.cff files say CC-BY-SA-4.0 — both attribution-class, share-alike
+  # honored as the stricter. The records are versioned deposits → manual.

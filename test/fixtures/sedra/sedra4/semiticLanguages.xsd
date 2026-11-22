@@ -1,0 +1,297 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema targetNamespace="/api/semiticLanguages.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+
+	<xs:element name="words" type="WordsType"/>
+
+	<xs:complexType name="WordsType" >
+		<xs:sequence>
+			<xs:element name="word" type="BaseWordType"/>
+		</xs:sequence>
+	</xs:complexType>
+	
+	<xs:complexType name="BaseWordType" >
+        <xs:sequence>
+            <xs:element name="id" type="xs:integer" />
+            <xs:element name="syriac" type="SyriacString" />
+            <xs:element name="easternVocalization" type="EastSyriacString" minOccurs="0" />
+            <xs:element name="westernVocalization" type="WestSyriacString" minOccurs="0" />
+            <xs:element name="uri" type="xs:anyURI" />
+            <xs:element name="gloss" type="InternationalizedString" minOccurs="0" maxOccurs="unbounded" />
+        </xs:sequence>
+        <xs:attribute name="theoretical" type="xs:boolean" use="optional" default="false" />
+        <xs:attribute name="enclitic" type="xs:boolean" use="optional" default="false" />
+        <xs:attribute name="lexicalform" type="xs:boolean" use="optional" default="false" />
+        <xs:attribute name="seyame" type="xs:boolean" use="optional" default="false" />
+    </xs:complexType>
+    
+    <xs:complexType name="SyriacString">
+        <xs:complexContent>
+            <xs:restriction base="InternationalizedString">
+                <xs:attribute name="language" type="xs:string" use="required" fixed="syr-Syre"/>
+            </xs:restriction>
+        </xs:complexContent>
+    </xs:complexType>
+    
+    <xs:complexType name="EastSyriacString">
+        <xs:complexContent>
+            <xs:restriction base="InternationalizedString">
+                <xs:attribute name="language" type="xs:string" use="required" fixed="syr-Syrn"/>
+            </xs:restriction>
+        </xs:complexContent>
+    </xs:complexType>
+    
+    <xs:complexType name="WestSyriacString">
+        <xs:complexContent>
+            <xs:restriction base="InternationalizedString">
+                <xs:attribute name="language" type="xs:string" use="required" fixed="syr-Syrj"/>
+            </xs:restriction>
+        </xs:complexContent>
+    </xs:complexType>
+    
+    <xs:complexType name="InternationalizedString">
+        <xs:simpleContent>
+            <xs:extension base="xs:string">
+                <xs:attribute name="language" type="xs:string" use="optional" default="EN"/>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+    
+    <xs:complexType name="PronounType">
+        <xs:complexContent>
+            <xs:extension base="BaseWordType">
+                <xs:attribute name="gender" type="GenderType" use="optional" default="unspecified"/>
+                <xs:attribute name="number" type="NumberType" use="optional" default="unspecified"/>
+                <xs:attribute name="person" type="PersonType" use="optional" default="unspecified"/>
+                <xs:attribute name="function" type="PronounPosType" use="optional" default="unspecified"/>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    
+    <xs:complexType name="NumeralType">
+        <xs:complexContent>
+            <xs:extension base="BaseWordType">
+                <xs:attribute name="gender" type="GenderType" use="optional" default="unspecified"/>
+                <xs:attribute name="number" type="NumberType" use="optional" default="unspecified"/>
+                <xs:attribute name="state" type="StateType" default="unspecified"/>
+                <xs:attribute name="function" type="NumeralPosType" use="optional" default="unspecified"/>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    
+    <xs:complexType name="VerbType">
+        <xs:complexContent>
+            <xs:extension base="BaseWordType">
+                <xs:sequence>
+                    <xs:choice>
+                        <xs:element name="kaylo" type="KayloType" minOccurs="0"></xs:element>
+                        <xs:element name="binyanim" type="BinyanimType" minOccurs="0"></xs:element>
+                        <xs:element name="conjugations" type="ConjugationType" minOccurs="0"></xs:element>
+                    </xs:choice>
+                </xs:sequence>
+            	<xs:attribute name="tense" type="TenseType" use="optional" default="unspecified"/>
+                <xs:attribute name="gender" type="GenderType" use="optional" default="unspecified"/>
+                <xs:attribute name="number" type="NumberType" use="optional" default="unspecified"/>
+                <xs:attribute name="person" type="PersonType" use="optional" default="unspecified"/>
+                <xs:attribute name="function" type="VerbPosType" use="optional" default="verb"/>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    
+    <xs:complexType name="NameType">
+        <xs:complexContent>
+            <xs:extension base="BaseWordType">
+                <xs:attribute name="gender" type="GenderType" use="optional" default="unspecified"/>
+                <xs:attribute name="number" type="NumberType" use="optional" default="unspecified"/>
+                <xs:attribute name="function" type="NamePosType" use="optional" default="individual's name"/>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    
+    <xs:complexType name="GenderNumberPersonType">
+        <xs:complexContent>
+            <xs:extension base="BaseWordType">
+                <xs:attribute name="gender" type="GenderType" use="optional" default="unspecified"/>
+                <xs:attribute name="number" type="NumberType" use="optional" default="unspecified"/>
+                <xs:attribute name="person" type="PersonType" use="optional" default="unspecified"/>
+                <xs:attribute name="function" type="GenderNumberPersonPosType" use="optional" default="preposition"/>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    
+    <xs:complexType name="GenderNumberStateType">
+        <xs:complexContent>
+            <xs:extension base="BaseWordType">
+                <xs:attribute name="gender" type="GenderType" use="optional" default="unspecified"/>
+                <xs:attribute name="number" type="NumberType" use="optional" default="unspecified"/>
+                <xs:attribute name="state" type="StateType" use="optional" default="unspecified"/>
+                <xs:attribute name="function" type="GenderNumberStatePosType" use="optional" default="adjective"/>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    
+    <xs:simpleType name="PronounPosType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="demonstrative"/>
+            <xs:enumeration value="interrogative"/>
+            <xs:enumeration value="personal"/>
+            <xs:enumeration value="relative"/>
+            <xs:enumeration value="unspecified"/>
+        </xs:restriction>
+    </xs:simpleType>
+    
+    <xs:simpleType name="NumeralPosType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="numeral ordinal"/>
+            <xs:enumeration value="numeral cardinal"/>
+            <xs:enumeration value="literal number"/>
+            <xs:enumeration value="unspecified"/>
+        </xs:restriction>
+    </xs:simpleType>
+    
+    <xs:simpleType name="VerbPosType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="denominative"/>
+            <xs:enumeration value="verb"/>
+        </xs:restriction>
+    </xs:simpleType>
+    
+    <xs:simpleType name="NamePosType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="demonym"/>
+            <xs:enumeration value="individual's name"/>
+            <xs:enumeration value="nation"/>
+            <xs:enumeration value="place name"/>
+        </xs:restriction>
+    </xs:simpleType>
+    
+    <xs:simpleType name="GenderNumberStatePosType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="adjective"/>
+            <xs:enumeration value="adjective of place"/>
+            <xs:enumeration value="noun"/>
+            <xs:enumeration value="participle adjective"/>
+            <xs:enumeration value="substantive"/>
+        </xs:restriction>
+    </xs:simpleType>
+    
+    <xs:simpleType name="GenderNumberPersonPosType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="adverb"/>
+            <xs:enumeration value="preposition"/>
+        </xs:restriction>
+    </xs:simpleType>
+    
+    <xs:simpleType name="GenderType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="masculine"/>
+            <xs:enumeration value="feminine"/>
+            <xs:enumeration value="common"/>
+            <xs:enumeration value="unspecified"/>
+        </xs:restriction>
+    </xs:simpleType>
+    
+    <xs:simpleType name="NumberType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="singular"/>
+            <xs:enumeration value="plural"/>
+            <xs:enumeration value="dual"/>
+            <xs:enumeration value="dual and plural"/>
+            <xs:enumeration value="singular and plural"/>
+            <xs:enumeration value="unspecified"/>
+        </xs:restriction>
+    </xs:simpleType>
+    
+    <xs:simpleType name="StateType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="absolute"/>
+            <xs:enumeration value="construct"/>
+            <xs:enumeration value="determined"/>
+            <xs:enumeration value="absolute and construct"/>
+            <xs:enumeration value="unspecified"/>
+        </xs:restriction>
+    </xs:simpleType>
+    
+    <xs:simpleType name="KayloType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="pʿal"/>
+            <xs:enumeration value="ethpʿel"/>
+            <xs:enumeration value="paʿʿel"/>
+            <xs:enumeration value="ethpaʿʿal"/>
+            <xs:enumeration value="aphʿel"/>
+            <xs:enumeration value="ettaphʿal"/>
+            <xs:enumeration value="saphʿel"/>
+            <xs:enumeration value="estaphʿal"/>
+            <xs:enumeration value="shaphʿel"/>
+            <xs:enumeration value="eshtaphʿal"/>
+            <xs:enumeration value="taphʿel"/>
+            <xs:enumeration value="ettaphʿal (pass. of Taphʿel)"/>
+            <xs:enumeration value="palpel"/>
+            <xs:enumeration value="pawʿel"/>
+            <xs:enumeration value="ethpawʿal"/>
+            <xs:enumeration value="payʿel"/>
+            <xs:enumeration value="ethpayʿal"/>
+            <xs:enumeration value="pamʿel"/>
+            <xs:enumeration value="parʿel"/>
+            <xs:enumeration value="ethparʿal"/>
+            <xs:enumeration value="palpal"/>
+            <xs:enumeration value="ethpalpal"/>
+            <xs:enumeration value="p"/>
+            <xs:enumeration value="ethp"/>
+            <xs:enumeration value="paʿli"/>
+            <xs:enumeration value="ethpaʿli"/>
+            <xs:enumeration value="unspecified"/>
+        </xs:restriction>
+    </xs:simpleType>
+    
+    <xs:simpleType name="BinyanimType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="paʿal"/>
+            <xs:enumeration value="piʿel"/>
+            <xs:enumeration value="hifʿil"/>
+            <xs:enumeration value="nifʿal"/>
+            <xs:enumeration value="puʿal"/>
+            <xs:enumeration value="hufʿal"/>
+            <xs:enumeration value="hitpaʿel"/>
+            <xs:enumeration value="hitpuʿal"/>
+            <xs:enumeration value="unspecified"/>
+        </xs:restriction>
+    </xs:simpleType>
+    
+    <xs:simpleType name="ConjugationType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="peʿal"/>
+            <xs:enumeration value="paʿʿel"/>
+            <xs:enumeration value="hafʿel"/>
+            <xs:enumeration value="peʿil"/>
+            <xs:enumeration value="puʿʿal"/>
+            <xs:enumeration value="hofʿal"/>
+            <xs:enumeration value="hitpeʿel"/>
+            <xs:enumeration value="hitpaʿʿal"/>
+            <xs:enumeration value="hitafʿal"/>
+            <xs:enumeration value="unspecified"/>
+        </xs:restriction>
+    </xs:simpleType>
+    
+    <xs:simpleType name="TenseType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="active participle"/>
+            <xs:enumeration value="imperative"/>
+            <xs:enumeration value="imperfect"/>
+            <xs:enumeration value="infinitive"/>
+            <xs:enumeration value="participle"/>
+            <xs:enumeration value="passive participle"/>
+            <xs:enumeration value="perfect"/>
+            <xs:enumeration value="unspecified"/>
+        </xs:restriction>
+    </xs:simpleType>
+    
+    <xs:simpleType name="PersonType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="first"/>
+            <xs:enumeration value="second"/>
+            <xs:enumeration value="third"/>
+            <xs:enumeration value="unspecified"/>
+        </xs:restriction>
+    </xs:simpleType>
+        
+</xs:schema>

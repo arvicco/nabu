@@ -764,6 +764,13 @@ sources:
       #                         verb 100 · adjective 78 · preposition 23 … (17 entries carry none)
       semantic_field: semantic_field  # the Buck (1949) concepts lexicalizing the entry's senses:
       #                         187 entries, 33 fields — Religion & Beliefs 33 · Social Relations 30 …
+  sedra:                      # census 2026-11-22 (release 5.0, 35,891 entries)
+    entry_fields:
+      pos: word_class         # category_types name verbatim: noun 5,644 · verb 4,351 · proper noun
+      #                         1,236 · adjective 866 · proper noun (place name) 862 · proper noun
+      #                         (individual's name …) 613 … (21,344 entries carry none)
+      etymon_languages: etymon_language  # the etymology rows' iso_code verbatim: grc · lat · ara ·
+      #                         heb · per · syr · akk · pal · eng · fre · spa · san (2,995 named etymons)
   wilkens-oui:                # the book's own tradition/script marks (Abkürzungen, PDF pp. 13–14),
     entry_fields:             # mapped by WilkensOui::MARK_FACETS; Buddhist terms go unmarked upstream
       tradition: tradition    # (m) manichäisch → Manichaean 611 · (c) christlich → Christian 119

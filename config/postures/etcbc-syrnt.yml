@@ -1,0 +1,12 @@
+sources:
+  etcbc-syrnt:
+    # kind: machine-postured — kind_map.yml source_kind scripture (every
+    # document is a New Testament book).
+    lect: {posture: identity, note: "syc IS Classical Syriac — the Peshitta NT and the later
+        books SEDRA carries (the peshitta / etcbc-syriac posture)"}
+    dating: {posture: undatable, note: "the asset carries only edition-class dates — the SEDRA
+        database version (3.0, March 1996, docs/about.md) and the TF conversion stamp (2018) —
+        and no composition-date feature; the peshitta posture"}
+    places: {posture: unplaced, note: "no place feature in tf/0.1 — nothing to mine"}
+    script: {posture: implied, note: "Syriac script, consonantal (word.tf), unpointed; seyame
+        rides the token as a flag, the ETCBC and SEDRA transliterations as word_etcbc/word_sedra"}
