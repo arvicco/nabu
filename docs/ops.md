@@ -1112,7 +1112,7 @@ automatically; no per-release action.
 6. **DOI badge** (first release only, after Zenodo mints): copy the
    concept-DOI badge into README and the site About page.
 7. **Demo image, RELEASE-SYNCED ONLY (owner ruling 2026-11-02):** the
-   public demo image (ghcr.io/arvicco/nabu-demo) is re-published only
+   public demo image (ghcr.io/arvicco/nabu-ancient-texts) is re-published only
    as part of a release — never per phase gate. **The image is built
    and pushed LOCALLY**: the demo slice needs this box's full library,
    which a GitHub-hosted runner never has, so the order is

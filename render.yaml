@@ -16,10 +16,10 @@
 # about a minute while the instance wakes.
 services:
   - type: web
-    name: nabu-demo
+    name: nabu-ancient-texts
     runtime: image
     image:
-      url: ghcr.io/arvicco/nabu-demo:1.8.0
+      url: ghcr.io/arvicco/nabu-ancient-texts:1.8.0
     plan: free
     autoDeployTrigger: "off"
     autoDeploy: false

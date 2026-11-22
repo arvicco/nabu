@@ -27,7 +27,7 @@ on:
       image:
         description: "Image the smoke pulls"
         type: string
-        default: ghcr.io/arvicco/nabu-demo:latest
+        default: ghcr.io/arvicco/nabu-ancient-texts:latest
 
 permissions:
   contents: read
@@ -45,7 +45,7 @@ jobs:
         runner: [ubuntu-latest, ubuntu-24.04-arm]
     runs-on: ${{ matrix.runner }}
     env:
-      IMAGE: ${{ inputs.image || 'ghcr.io/arvicco/nabu-demo:latest' }}
+      IMAGE: ${{ inputs.image || 'ghcr.io/arvicco/nabu-ancient-texts:latest' }}
     steps:
       # On a release the smoke must prove the RELEASE's own image, not
       # whatever :latest held before the local push — a premature trigger
@@ -54,7 +54,7 @@ jobs:
         if: github.event_name == 'release'
         env:
           TAG: ${{ github.event.release.tag_name }}
-        run: echo "IMAGE=ghcr.io/arvicco/nabu-demo:${TAG#v}" >> "$GITHUB_ENV"
+        run: echo "IMAGE=ghcr.io/arvicco/nabu-ancient-texts:${TAG#v}" >> "$GITHUB_ENV"
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       # Bare Ruby, no bundle: script/demo-smoke loads only the stdlib and
       # lib/nabu/ops/demo_publish.rb.
