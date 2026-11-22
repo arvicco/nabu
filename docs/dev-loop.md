@@ -26,6 +26,8 @@ The loop's job is therefore mostly *dispatch and verify*, not *judge* — which 
 
 **Only Fable and Opus write code.** Sonnet/Haiku are restricted to simple non-coding tasks. Heuristic for tagging a coding packet: **first-of-kind → Fable; everything else → Opus.** When in doubt, tag Opus and rely on the escalation rule (§4) — a wrongly-tagged packet fails verification and gets bumped up, costing one retry, not a bad foundation.
 
+*Amended 2026-07-09 (owner re-ruling; canonical in the owner's dev-loop tooling): tiers are ROLES, not fixed model names. The "only the top two tiers write code" restriction above is the original proposal's and was lifted — any capable current model is a first-class coding agent for work with a written spec and a machine-checkable oracle; the orchestrating tier keeps design, first-of-family patterns, reviews, and adjudication, and each top-tier tag carries a one-line justification. The table above stands as the record of the original division.*
+
 ## 3. Work packets and the backlog
 
 The backlog lived in a flat, human-editable file of packets
