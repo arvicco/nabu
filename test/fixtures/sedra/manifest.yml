@@ -1,0 +1,117 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# Every file is a member of the Sedra V data release 5.0 (also served one by
+# one under https://sedra.bethmardutho.org/releases/v5.0/). The lookup tables
+# and the small rejected-grain files are byte-identical copies (whole: true);
+# the joined tables and the large rejected ones are ROW TRIMS — the kept JSON
+# Lines verbatim, re-gzipped (whole: false — fetched for URL-liveness only).
+# adapter_test is null: the adapter test asserts slice-level counts.
+source: sedra
+adapter_test:
+retrieved: 2026-11-22
+files:
+  - path: authors.jsonl.gz
+    url: https://sedra.bethmardutho.org/releases/v5.0/authors.jsonl.gz
+    whole: true
+    trim: none
+  - path: category_types.jsonl.gz
+    url: https://sedra.bethmardutho.org/releases/v5.0/category_types.jsonl.gz
+    whole: true
+    trim: none
+  - path: conjugation_templates.jsonl.gz
+    url: https://sedra.bethmardutho.org/releases/v5.0/conjugation_templates.jsonl.gz
+    whole: false
+    trim: 2 of 2559 rows kept verbatim (see README), re-gzipped
+  - path: conjugations.jsonl.gz
+    url: https://sedra.bethmardutho.org/releases/v5.0/conjugations.jsonl.gz
+    whole: true
+    trim: none
+  - path: etymologies.jsonl.gz
+    url: https://sedra.bethmardutho.org/releases/v5.0/etymologies.jsonl.gz
+    whole: false
+    trim: 3 of 3078 rows kept verbatim (see README), re-gzipped
+  - path: genders.jsonl.gz
+    url: https://sedra.bethmardutho.org/releases/v5.0/genders.jsonl.gz
+    whole: true
+    trim: none
+  - path: glosses.jsonl.gz
+    url: https://sedra.bethmardutho.org/releases/v5.0/glosses.jsonl.gz
+    whole: false
+    trim: 24 of 67692 rows kept verbatim (see README), re-gzipped
+  - path: kaylos.jsonl.gz
+    url: https://sedra.bethmardutho.org/releases/v5.0/kaylos.jsonl.gz
+    whole: true
+    trim: none
+  - path: languages.jsonl.gz
+    url: https://sedra.bethmardutho.org/releases/v5.0/languages.jsonl.gz
+    whole: true
+    trim: none
+  - path: lexemes.jsonl.gz
+    url: https://sedra.bethmardutho.org/releases/v5.0/lexemes.jsonl.gz
+    whole: false
+    trim: 7 of 35892 rows kept verbatim (see README), re-gzipped
+  - path: numbers.jsonl.gz
+    url: https://sedra.bethmardutho.org/releases/v5.0/numbers.jsonl.gz
+    whole: true
+    trim: none
+  - path: persons.jsonl.gz
+    url: https://sedra.bethmardutho.org/releases/v5.0/persons.jsonl.gz
+    whole: true
+    trim: none
+  - path: roots.jsonl.gz
+    url: https://sedra.bethmardutho.org/releases/v5.0/roots.jsonl.gz
+    whole: false
+    trim: 5 of 3465 rows kept verbatim (see README), re-gzipped
+  - path: sedra4/definitions.json
+    url: https://sedra.bethmardutho.org/releases/v5.0/sedra4/definitions.json
+    whole: true
+    trim: none
+  - path: sedra4/lexemes.jsonl.gz
+    url: https://sedra.bethmardutho.org/releases/v5.0/sedra4/lexemes.jsonl.gz
+    whole: false
+    trim: 7 of 35892 rows kept verbatim (see README), re-gzipped
+  - path: sedra4/roots.jsonl.gz
+    url: https://sedra.bethmardutho.org/releases/v5.0/sedra4/roots.jsonl.gz
+    whole: false
+    trim: 5 of 3465 rows kept verbatim (see README), re-gzipped
+  - path: sedra4/semiticLanguages.xsd
+    url: https://sedra.bethmardutho.org/releases/v5.0/sedra4/semiticLanguages.xsd
+    whole: true
+    trim: none
+  - path: sedra4/words.jsonl.gz
+    url: https://sedra.bethmardutho.org/releases/v5.0/sedra4/words.jsonl.gz
+    whole: false
+    trim: 2 of 64774 rows kept verbatim (see README), re-gzipped
+  - path: sources.jsonl.gz
+    url: https://sedra.bethmardutho.org/releases/v5.0/sources.jsonl.gz
+    whole: true
+    trim: none
+  - path: states.jsonl.gz
+    url: https://sedra.bethmardutho.org/releases/v5.0/states.jsonl.gz
+    whole: true
+    trim: none
+  - path: stems.jsonl.gz
+    url: https://sedra.bethmardutho.org/releases/v5.0/stems.jsonl.gz
+    whole: true
+    trim: none
+  - path: tenses.jsonl.gz
+    url: https://sedra.bethmardutho.org/releases/v5.0/tenses.jsonl.gz
+    whole: true
+    trim: none
+  - path: transliteration_patterns.jsonl.gz
+    url: https://sedra.bethmardutho.org/releases/v5.0/transliteration_patterns.jsonl.gz
+    whole: true
+    trim: none
+  - path: transliteration_schemes.jsonl.gz
+    url: https://sedra.bethmardutho.org/releases/v5.0/transliteration_schemes.jsonl.gz
+    whole: true
+    trim: none
+  - path: vowels.jsonl.gz
+    url: https://sedra.bethmardutho.org/releases/v5.0/vowels.jsonl.gz
+    whole: true
+    trim: none
+  - path: words.jsonl.gz
+    url: https://sedra.bethmardutho.org/releases/v5.0/words.jsonl.gz
+    whole: false
+    trim: 20 of 65000 rows kept verbatim (see README), re-gzipped

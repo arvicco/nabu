@@ -139,7 +139,7 @@ The Hebrew-and-Aramaic language desk beside the cross-language biblical hat: OSH
 
 The Syriac language desk: the ETCBC Peshitta and the Digital Syriac Corpus, riding beside the biblical hat by design.
 
-**Members** (7): `etcbc-syriac`, `etcbc-syrnt`, `hmml-reading-room`, `peshitta`, `syriac-corpus`, `syriac-htr-gt`, `wiktionary-syc`
+**Members** (8): `etcbc-syriac`, `etcbc-syrnt`, `hmml-reading-room`, `peshitta`, `sedra`, `syriac-corpus`, `syriac-htr-gt`, `wiktionary-syc`
 
 ### ethiopic
 

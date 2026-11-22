@@ -1,0 +1,26 @@
+sedra:   # 02-sources row 432
+  adapter: Nabu::Adapters::Sedra
+  adopted: "2026-11-22"
+  axes: [syriac]
+  wired: false   # bin/nabu enable sedra, then bin/nabu sync sedra (ONE 13.6 MB
+                 # zip, the numbered release 5.0, sha256-pinned). EXPECT 1 doc →
+                 # 35,891 entries, 0 errored, 12 files skipped by rule (sedra4/ ×5,
+                 # conjugation_templates, conjugations, stems, vowels, authors,
+                 # transliteration_schemes, transliteration_patterns) + the
+                 # headwordless lexeme row 28521 named in the notes (dry parse
+                 # 2026-11-22). Eyeball nabu define ܓܢܣܐ (Greek γένος etymon) and
+                 # nabu show urn:nabu:dict:sedra:1, then flip.
+  sync_policy: manual
+  # Sedra — the Syriac lexical database of Beth Mardutho: The Syriac
+  # Institute (ed. George A. Kiraz and James Bennett): 35,892 lexemes with
+  # their roots (3,465), word forms with morphology and vocalization
+  # (65,000), glosses in English/French/Arabic/Latin/Greek (67,692) and
+  # etymologies (3,078), drawn from Sedra III, Brock & Kiraz, Margoliouth,
+  # Payne Smith, Brockelmann, Audo, Costaz, Bar Bahlul and others. The
+  # library's first Syriac lexicon proper (beside wiktionary-syc). One
+  # dictionary slug `sedra`, language syc; etymologies as derived reflexes.
+  # LICENSE: release README verbatim "licensed under the Creative Commons
+  # Attribution-NonCommercial 4.0 International licence (CC BY-NC 4.0)",
+  # credit Sedra and Beth Mardutho (read 2026-11-22) → nc. Pinned to the
+  # numbered release 5.0 (files never change); the weekly releases move,
+  # so a re-pin is a conscious step → manual.
