@@ -56,7 +56,7 @@ ENV NABU_ROOT=/demo NABU_CONFIG=/demo/config/nabu.yml
 LABEL org.opencontainers.image.source="https://github.com/arvicco/nabu" \
       org.opencontainers.image.description="Nabu demo: an ancient-text research library slice behind an MCP server (stdio + streamable HTTP). Code MIT; baked data per-source open licenses (demo-census.json). Full library is a local build." \
       org.opencontainers.image.licenses="MIT" \
-      io.modelcontextprotocol.server.name="io.github.arvicco/nabu-demo"
+      io.modelcontextprotocol.server.name="io.github.arvicco/nabu-ancient-texts"
 CMD ["bin/nabu", "mcp"]
 
 # The default target stays last: `docker build .` builds the plain image.

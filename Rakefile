@@ -1070,7 +1070,7 @@ namespace :demo do
   # The MCP stdio smoke on its own (initialize → tools/list → nabu_status).
   # IMAGE defaults to the public :latest; DEMO_SMOKE_ARGS adds docker run
   # flags (e.g. "--memory=512m --pull=always").
-  desc "MCP stdio smoke against the demo image (IMAGE, default ghcr.io/arvicco/nabu-demo:latest)"
+  desc "MCP stdio smoke against the demo image (IMAGE, default ghcr.io/arvicco/nabu-ancient-texts:latest)"
   task :smoke do
     require_relative "lib/nabu/ops/demo_publish"
     smoke = Nabu::Ops::DemoPublish::Smoke

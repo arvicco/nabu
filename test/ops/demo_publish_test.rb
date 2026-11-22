@@ -127,6 +127,23 @@ module Ops
       end
     end
 
+    # The public name (owner ruling): the registry id and the GHCR image
+    # both carry nabu-ancient-texts; the retired nabu-demo id survives only
+    # in a dated news post. The listing and image re-mint at the next
+    # release, so every in-tree surface must already agree on this name.
+    def test_the_public_name_is_nabu_ancient_texts
+      assert_equal "ghcr.io/arvicco/nabu-ancient-texts", P::IMAGE
+      assert_equal "io.github.arvicco/nabu-ancient-texts", P::SERVER_NAME
+      workflow = File.read(File.join(ROOT, ".github", "workflows", "demo-release.yml"))
+      surfaces = %w[server.json Dockerfile render.yaml site/docker-mcp-catalog.yaml]
+                 .to_h { |path| [path, File.read(File.join(ROOT, path))] }
+      surfaces["demo-release.yml"] = workflow
+      surfaces.each do |name, text|
+        refute_includes text, "nabu-demo", "#{name} still names the retired public id"
+      end
+      assert_includes workflow, "ghcr.io/arvicco/nabu-ancient-texts:latest"
+    end
+
     def test_the_repo_server_json_names_the_published_image_and_label
       server = JSON.parse(File.read(File.join(ROOT, "server.json")))
       assert_equal P::SERVER_NAME, server.fetch("name")
