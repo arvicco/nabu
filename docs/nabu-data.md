@@ -488,7 +488,7 @@ Maps every lemmatized Ancient Greek word form of the GLAUx corpus (8th c. BC –
 ## The loop closes: nabu-data as a source
 
 Since P51-W6 the published repo is also a REGISTERED SOURCE (`nabu-data`
-in config/sources.yml, `kind: module` — docs/02-sources.md row 141): `nabu
+in config/sources/, `kind: module` — docs/02-sources.md row 141): `nabu
 sync nabu-data` clones the publication back under `canonical/nabu-data/`
 through the sanctioned GitFetch gateway, where THREE read seams consume
 it (P54 widened the original one):

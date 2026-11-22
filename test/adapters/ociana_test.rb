@@ -254,7 +254,7 @@ class OcianaTest < Minitest::Test
   def test_registry_resolves_ociana_wired_frozen_on_the_epigraphy_axis
     registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources", __dir__))
     entry = registry[SLUG]
-    refute_nil entry, "ociana must be registered in config/sources.yml"
+    refute_nil entry, "ociana must be registered in config/sources/"
     assert_equal Nabu::Adapters::Ociana, entry.adapter_class
     assert entry.wired, "wired at the verified first sync (36,794 docs, 2026-10-18)"
     assert_equal "frozen", entry.sync_policy

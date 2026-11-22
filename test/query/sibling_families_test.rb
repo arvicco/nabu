@@ -111,7 +111,7 @@ module Query
     # -- the shipped registry (the migration guard) ---------------------------
 
     # The ten frozen work patterns retired at P34-0 must all be reproduced by
-    # the SHIPPED config/sources.yml declarations — a yaml edit that silently
+    # the SHIPPED config/sources/ declarations — a yaml edit that silently
     # drops a family fails HERE, not in a live --parallel session.
     def test_shipped_registry_declares_every_retired_family
       families = Nabu::Query::SiblingFamilies.default

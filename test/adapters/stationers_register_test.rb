@@ -38,7 +38,7 @@ module Adapters
     def test_registered_and_wired_after_the_first_real_sync
       registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources", __dir__))
       entry = registry["stationers-register"]
-      refute_nil entry, "stationers-register must be registered in config/sources.yml"
+      refute_nil entry, "stationers-register must be registered in config/sources/"
       assert entry.wired, "first real sync verified (10,453 docs / 26,047 passages)"
       assert_equal "Nabu::Adapters::StationersRegister", entry.adapter_class_name
       assert_equal "manual", entry.sync_policy

@@ -134,7 +134,7 @@ class TorotTest < Minitest::Test
   def test_registry_resolves_torot_and_manifest_agrees
     registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources", __dir__))
     entry = registry["torot"]
-    refute_nil entry, "torot must be registered in config/sources.yml"
+    refute_nil entry, "torot must be registered in config/sources/"
     assert_equal Nabu::Adapters::Torot, entry.adapter_class
     assert_equal "torot", entry.manifest.id
     assert_equal "manual", entry.sync_policy

@@ -238,7 +238,7 @@ module Nabu
       config = Nabu::Config.load
       registry = Nabu::SourceRegistry.load(config.sources_path)
       slugs = registry.embed_slugs
-      raise Thor::Error, "no sources flagged embed_index: true in config/sources.yml" if slugs.empty?
+      raise Thor::Error, "no sources flagged embed_index: true in config/sources/" if slugs.empty?
 
       catalog = Nabu::Store.connect(config.catalog_path, readonly: true)
       vectors = Nabu::Store.connect(config.vectors_path)

@@ -441,7 +441,7 @@ class RenTest < Minitest::Test
   def test_registry_resolves_ren_and_manifest_agrees
     registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources", __dir__))
     entry = registry["ren"]
-    refute_nil entry, "ren must be registered in config/sources.yml"
+    refute_nil entry, "ren must be registered in config/sources/"
     assert_equal Nabu::Adapters::Ren, entry.adapter_class
     assert entry.wired, "flipped 2026-07-26 (owner ruling \"flip all wired\"; first sync verified)"
     assert_equal Nabu::Adapters::Ren.manifest, entry.manifest

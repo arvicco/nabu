@@ -8,7 +8,7 @@
 #
 # NB the exact raw branch/path on the mirror is confirmed at the owner's
 # first real sync (the license authority is the Zenodo record, not the
-# mirror — see config/sources.yml and README.md).
+# mirror — see config/sources/ and README.md).
 source: kitab
 adapter_test: null
 retrieved: 2026-07-24

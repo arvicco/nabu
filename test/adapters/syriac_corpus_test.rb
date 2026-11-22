@@ -35,7 +35,7 @@ module Adapters
     def test_registry_resolves_syriac_corpus_disabled_until_first_real_sync
       registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources", __dir__))
       entry = registry["syriac-corpus"]
-      refute_nil entry, "syriac-corpus must be registered in config/sources.yml"
+      refute_nil entry, "syriac-corpus must be registered in config/sources/"
       assert entry.wired, "flipped 2026-07-19 (owner sign-off: rebuild verified, all P31 sources on)"
       assert_equal "manual", entry.sync_policy
       assert_equal "syriac-corpus", entry.adapter_class.manifest.id

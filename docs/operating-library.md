@@ -46,7 +46,7 @@ quarantine at first sync is a parser gap or an upstream quirk worth
 knowing, never a shrug. Read the upstream's license terms verbatim at
 this round (the page can differ from the survey that scoped the
 source; drift is caught exactly here). Only then flip `wired: true`
-in `config/sources.yml` — the registry's "this source's first sync
+in `config/sources/` — the registry's "this source's first sync
 was verified" bit. `nabu list wired|unwired|enabled|disabled|locked|unlocked`
 filters the registry by any of the three state axes.
 
@@ -59,7 +59,7 @@ nabu layer suggest <slug>     # one report: lect / dating / places / script cens
 
 The report's numbers drive the declarations: a lect rule in
 `config/lect_facet_rules.yml` or a posture row in
-`config/postures.yml` (`identity` — the bare language code is the
+`config/postures/` (`identity` — the bare language code is the
 claim — is an honest answer; so are `undatable` and `unplaced`).
 Dating lanes can be projected without a re-parse:
 

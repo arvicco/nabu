@@ -161,7 +161,7 @@ module Adapters
     def test_registry_row_resolves_the_adapter_on_a_manual_policy
       registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources", __dir__))
       entry = registry["elizabeth-bible"]
-      refute_nil entry, "elizabeth-bible must be registered in config/sources.yml"
+      refute_nil entry, "elizabeth-bible must be registered in config/sources/"
       assert_equal Nabu::Adapters::ElizabethBible, entry.adapter_class
       assert_equal "manual", entry.sync_policy
     end

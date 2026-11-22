@@ -20,7 +20,7 @@ The Latin-to-vernacular continuum: CroALa's medieval and neo-Latin opens the des
 The class is the machine-actionable reading of each source's data license; the
 verbatim upstream terms are in `docs/02-sources.md` of the Nabu repository.
 
-<!-- nabu:skill-sources:begin — generated from config/sources.yml by `rake skills:scaffold`; edit outside this block -->
+<!-- nabu:skill-sources:begin — generated from config/sources/ by `rake skills:scaffold`; edit outside this block -->
 | Source | Upstream | License class |
 | --- | --- | --- |
 | `analecta-hymnica` | Analecta Hymnica Medii Aevi, Bd. 1–55 (Dreves, Blume, Bannister; archive.org scans, uncorrected OCR) | open |

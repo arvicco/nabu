@@ -113,7 +113,7 @@ class ProielTest < Minitest::Test
   def test_registry_resolves_proiel_and_manifest_agrees
     registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources", __dir__))
     entry = registry["proiel"]
-    refute_nil entry, "proiel must be registered in config/sources.yml"
+    refute_nil entry, "proiel must be registered in config/sources/"
     assert_equal Nabu::Adapters::Proiel, entry.adapter_class
     assert_equal "proiel", entry.manifest.id
     assert_equal "frozen", entry.sync_policy

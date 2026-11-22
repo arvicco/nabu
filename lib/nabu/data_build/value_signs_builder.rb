@@ -294,7 +294,7 @@ module Nabu
         end
       end
 
-      # OSL cited as config/sources.yml records it; the CC0 dedication
+      # OSL cited as config/sources/ records it; the CC0 dedication
       # quoted verbatim from the osl.asl header.
       def citations
         [Citation.new(

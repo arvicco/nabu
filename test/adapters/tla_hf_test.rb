@@ -292,7 +292,7 @@ class TlaHfTest < Minitest::Test
   def test_registry_resolves_tla_hf_and_manifest_agrees
     registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources", __dir__))
     entry = registry["tla-hf"]
-    refute_nil entry, "tla-hf must be registered in config/sources.yml"
+    refute_nil entry, "tla-hf must be registered in config/sources/"
     assert_equal Nabu::Adapters::TlaHf, entry.adapter_class
     assert entry.wired, "live (owner order 2026-07-18: all pre-P30 sources flipped, riding the P30 PR)"
     assert entry.translations, "translation coverage is 100% — -de siblings ride the same parse"

@@ -22,7 +22,7 @@ responses (~6 KB each).
 License (quoted from the dataservices page, 2026-07-24): "open access to
 our data on a CC BY-SA 4.0 license" → class `attribution` (the house
 BY-SA posture — share-alike is a downstream-licensing duty, not a serving
-gate; see `config/sources.yml`).
+gate; see `config/sources/`).
 
 - `143394.json` — TM's unknown-id answer (HTTP 200 + Message object),
   byte-identical to the live sweep's response (P43-i1, 2026-07-24):

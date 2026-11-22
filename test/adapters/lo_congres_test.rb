@@ -200,7 +200,7 @@ class LoCongresTest < Minitest::Test
   def test_registry_resolves_lo_congres_and_manifest_agrees
     registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources", __dir__))
     entry = registry["lo-congres"]
-    refute_nil entry, "lo-congres must be registered in config/sources.yml"
+    refute_nil entry, "lo-congres must be registered in config/sources/"
     assert_equal Nabu::Adapters::LoCongres, entry.adapter_class
     assert entry.wired, "flipped 2026-08-21 — first sync owner-round-verified (12 docs)"
     assert entry.translations, "french coverage is 100% (censused) — -fr siblings ride the same parse"

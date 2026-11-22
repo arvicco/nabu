@@ -36,7 +36,7 @@ module Adapters
     def test_registry_resolves_hexapla_wired_on_its_first_sync_evidence
       registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources", __dir__))
       entry = registry["hexapla"]
-      refute_nil entry, "hexapla must be registered in config/sources.yml"
+      refute_nil entry, "hexapla must be registered in config/sources/"
       assert entry.wired, "wired on the first-sync evidence (landed exactly on census, 2026-11-02)"
       assert_equal "manual", entry.sync_policy
     end

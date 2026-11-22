@@ -3668,7 +3668,7 @@ module Nabu
 
         registry = resolve(@registry)
         unless registry
-          raise InvalidArguments, "axis needs the source registry (config/sources.yml + config/axes.yml), " \
+          raise InvalidArguments, "axis needs the source registry (config/sources/ + config/axes.yml), " \
                                   "which this server was started without — scope by source instead"
         end
         _names, sources = Query::SourceScope.axis_membership(registry, axis, command: "search")

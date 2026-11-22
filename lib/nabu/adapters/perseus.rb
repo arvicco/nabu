@@ -194,7 +194,7 @@ module Nabu
       # - work: the work title discover resolved (the document title).
       #
       # The header carries no origin place (pubPlace is the PRINTING
-      # place) — places stay unplaced, declared in config/postures.yml.
+      # place) — places stay unplaced, declared in config/postures/.
       def edition_metadata(document_ref)
         textgroup, work = cts_ids(document_ref.id)
         header = tei_header(document_ref.path)

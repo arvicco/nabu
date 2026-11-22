@@ -1670,7 +1670,7 @@ and P84 added a fifth:
   read BEHIND from a 15-hour-old cache). A
   `license_watch:` registry key (P16-5) lets `health --remote` watch a
   source's upstream license page for changes — candidates are recorded
-  commented-out in `config/sources.yml`, none enabled yet (owner decision).
+  commented-out in `config/sources/`, none enabled yet (owner decision).
   P18-7 folds the mechanical **postcondition invariants** into every
   `health` run: failed-run and partial-load surfacing, flag-vs-artifact
   and synced-vs-populated mismatches, pending migrations, and a

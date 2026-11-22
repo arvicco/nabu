@@ -212,7 +212,7 @@ class First1kGreekTest < Minitest::Test
   def test_registry_resolves_first1k_greek_and_manifest_agrees
     registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources", __dir__))
     entry = registry["first1k-greek"]
-    refute_nil entry, "first1k-greek must be registered in config/sources.yml"
+    refute_nil entry, "first1k-greek must be registered in config/sources/"
     assert_equal Nabu::Adapters::First1kGreek, entry.adapter_class
     assert_equal "first1k-greek", entry.manifest.id
     assert_equal Nabu::Adapters::First1kGreek.manifest, entry.manifest

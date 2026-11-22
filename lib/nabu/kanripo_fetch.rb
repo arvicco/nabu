@@ -32,7 +32,7 @@ module Nabu
   #   3. POLITE PACING — every network operation (catalog pull, text clone
   #      or fetch, even a failed clone probe) is followed by +delay+
   #      seconds (DEFAULT_DELAY, conservative; the owner-adjustable knob is
-  #      config/sources.yml documentation → Kanripo adapter). Skipped texts
+  #      config/sources/ documentation → Kanripo adapter). Skipped texts
   #      cost no network and no pause, so a resumed or unchanged wave is
   #      fast.
   #   4. RESUMABLE WAVES, PER-TEXT PINS — the fetch ledger

@@ -11,7 +11,7 @@ require "test_helper"
 # index to `nabu index refresh` once per wave (several deferred sources
 # in one command share ONE shadow pass).
 #
-# So every paced source in config/sources.yml either declares
+# So every paced source in config/sources/ either declares
 #
 #   index_policy: deferred
 #

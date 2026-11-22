@@ -224,7 +224,7 @@ class IgCyprusTest < Minitest::Test
   def test_registry_row_is_wired_manual_with_its_layers
     registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources", __dir__))
     entry = registry["ig-cyprus"]
-    refute_nil entry, "ig-cyprus must be registered in config/sources.yml"
+    refute_nil entry, "ig-cyprus must be registered in config/sources/"
     assert_equal Nabu::Adapters::IgCyprus, entry.adapter_class
     assert entry.wired, "wired at the verified first sync (982 docs, 2026-10-18)"
     assert_equal "manual", entry.sync_policy

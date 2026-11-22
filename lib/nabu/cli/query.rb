@@ -2260,7 +2260,7 @@ module Nabu
               "(fuzzy substring; highlights are diacritic-folded)#{facet_footer(facets, loans: loans, axis: axis)}"
         end
         say "note: #{incomplete}" if incomplete
-        covered = scope&.any? ? scope.join(", ") : "no sources (flag fuzzy_index: true in config/sources.yml)"
+        covered = scope&.any? ? scope.join(", ") : "no sources (flag fuzzy_index: true in config/sources/)"
         say "fuzzy index covers: #{covered}"
       end
 

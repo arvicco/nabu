@@ -136,7 +136,7 @@ class ImpTest < Minitest::Test
   def test_registry_resolves_imp_and_manifest_agrees
     registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources", __dir__))
     entry = registry["imp"]
-    refute_nil entry, "imp must be registered in config/sources.yml"
+    refute_nil entry, "imp must be registered in config/sources/"
     assert_equal Nabu::Adapters::Imp, entry.adapter_class
     assert entry.wired, "live (owner sign-off 2026-07-11 after first sync + eyeball)"
     assert_equal Nabu::Adapters::Imp.manifest, entry.manifest

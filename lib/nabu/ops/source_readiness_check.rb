@@ -6,7 +6,7 @@ require "yaml"
 module Nabu
   module Ops
     # The registered-never-synced probe (`rake boards:check`): a source
-    # registered in config/sources.yml whose first sync never ran leaves
+    # registered in config/sources/ whose first sync never ran leaves
     # no mark anywhere a gate reads — the run ledger is the only surface
     # a sync writes — so a build-complete adapter can hang unattended
     # indefinitely (one module sat three weeks until the owner happened

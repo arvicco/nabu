@@ -6,7 +6,7 @@ require "date"
 require_relative "credentials"
 
 module Nabu
-  # The source registry (architecture §5, config/sources.yml): the authoritative
+  # The source registry (architecture §5, config/sources/): the authoritative
   # list of corpora Nabu knows about — which adapter class ingests each, whether
   # it is WIRED (adapter exists and is verified to sync), and its sync policy.
   # NOMENCLATURE (owner ruling 2026-07-24): this registry marker was named
@@ -149,7 +149,7 @@ module Nabu
     # license."
     #
     # The PUBLIC/INSTANCE seam (owner-ruled privacy extension, 2026-11-12):
-    # config/sources.yml carries only the class-level half — +terms+ (the
+    # config/sources/ carries only the class-level half — +terms+ (the
     # obligations: retrieval scope, use, redistribution, the required credit)
     # and +request_hint+ (whom a new user contacts for a license grant). Who
     # granted it, when, and through which channel (+grantor+/+date+/+thread+)

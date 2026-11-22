@@ -410,7 +410,7 @@ class TitusPahlaviTest < Minitest::Test
   def test_registry_row_is_grant_gated_blocked_and_wired
     registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources", __dir__))
     entry = registry[SLUG]
-    refute_nil entry, "titus-pahlavi must be registered in config/sources.yml"
+    refute_nil entry, "titus-pahlavi must be registered in config/sources/"
     assert_equal ADAPTER, entry.adapter_class
     assert entry.wired, "wired: true — the owner-fired first retrieval was verified 2026-10-10 " \
                         "(1,572 docs / 20,302 passages / 0 quarantines)"

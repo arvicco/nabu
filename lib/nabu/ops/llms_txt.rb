@@ -78,7 +78,7 @@ module Nabu
           ## Agent flow
 
           1. Read this file for the census and the map; every figure above is regenerated from the live catalog at each release gate.
-          2. To learn what is held, read the [Sources](#{page('/sources/')}) index (every corpus, its upstream and its license class) and the [Languages](#{page('/languages/')}) index — or the machine-readable [source registry](#{REPOSITORY}/blob/main/config/sources.yml).
+          2. To learn what is held, read the [Sources](#{page('/sources/')}) index (every corpus, its upstream and its license class) and the [Languages](#{page('/languages/')}) index — or the machine-readable [source registry](#{REPOSITORY}/tree/main/config/sources).
           3. To work one field, open its desk dossier below: the shelves, instruments and commands of that scholarly hat.
           4. To search, read or cite the texts themselves, install Nabu locally ([Quickstart](#{page('/quickstart/')})) and connect the read-only MCP server ([Tools](#{page('/tools/')})); citations resolve to stable URNs at verse or tablet-line grain.
           5. Respect each text's license class as the Sources page states it; derived datasets carry their own terms in nabu-data.

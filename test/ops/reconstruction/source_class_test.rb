@@ -8,7 +8,7 @@ require "nabu/ops/reconstruction/source_class"
 # The reconstruction-class guard: every registered source answers "how would
 # this source's canonical asset come back if canonical/ were lost, with no
 # backup?" with exactly one known class — so no source can ever be
-# unclassifiable. Runs against the REAL config/sources.yml (the registry
+# unclassifiable. Runs against the REAL config/sources/ (the registry
 # census pattern of test/docs/manual_acquisition_docs_test.rb).
 class ReconstructionSourceClassTest < Minitest::Test
   SourceClass = Nabu::Ops::Reconstruction::SourceClass

@@ -1,7 +1,7 @@
 # HAND-CURATED (not generated): the per-row prose of the /sources/ corpus
 # table, keyed by source slug. `rake site:sources` (Nabu::Ops::SourcesTable)
 # READS this file and never writes it; the table's MEMBERSHIP comes from
-# config/sources.yml (every live public source gets a row), its holdings
+# config/sources/ (every live public source gets a row), its holdings
 # column from the generated sources.yml.
 #
 # Each note carries three cells, rendered verbatim (Markdown, no Liquid —

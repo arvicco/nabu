@@ -1172,7 +1172,7 @@ class UniversalDependenciesTest < Minitest::Test
   def test_registry_resolves_ud_and_manifest_agrees
     registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources", __dir__))
     entry = registry["ud"]
-    refute_nil entry, "ud must be registered in config/sources.yml"
+    refute_nil entry, "ud must be registered in config/sources/"
     assert_equal Nabu::Adapters::UniversalDependencies, entry.adapter_class
     assert_equal "ud", entry.manifest.id
     assert_equal Nabu::Adapters::UniversalDependencies.manifest, entry.manifest

@@ -155,7 +155,7 @@ class PerseusLatinTest < Minitest::Test
   def test_registry_resolves_perseus_latin_and_manifest_agrees
     registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources", __dir__))
     entry = registry["perseus-latin"]
-    refute_nil entry, "perseus-latin must be registered in config/sources.yml"
+    refute_nil entry, "perseus-latin must be registered in config/sources/"
     assert_equal Nabu::Adapters::PerseusLatin, entry.adapter_class
     assert_equal "perseus-latin", entry.manifest.id
     assert_equal Nabu::Adapters::PerseusLatin.manifest, entry.manifest

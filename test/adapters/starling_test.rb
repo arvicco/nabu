@@ -1127,7 +1127,7 @@ class StarlingTest < Minitest::Test
   def test_registry_row_is_live_with_manual_sync_policy
     registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources", __dir__))
     entry = registry["starling"]
-    refute_nil entry, "config/sources.yml must register starling"
+    refute_nil entry, "config/sources/ must register starling"
     assert_equal Nabu::Adapters::Starling, entry.adapter_class
     assert entry.wired, "live (owner sign-off 2026-07-16: synced incl. piet 574-b, eyeballed, flipped)"
     assert_equal "manual", entry.sync_policy

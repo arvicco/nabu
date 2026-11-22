@@ -122,7 +122,7 @@ class SjwTest < Minitest::Test
   def test_registry_row_exists_on_the_korean_axis
     registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources", __dir__))
     entry = registry["sjw"]
-    refute_nil entry, "config/sources.yml must register sjw"
+    refute_nil entry, "config/sources/ must register sjw"
     assert_equal Nabu::Adapters::Sjw, entry.adapter_class
     assert entry.wired, "first sync owner-verified; flipped 2026-08-19 (r20 semantics)"
     assert_equal "manual", entry.sync_policy

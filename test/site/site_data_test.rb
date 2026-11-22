@@ -27,7 +27,7 @@ module Site
       committed = YAML.safe_load_file(File.join(DATA_DIR, "desks.yml"))
       fresh = Nabu::Ops::SiteData.new(registry: registry, data_dir: DATA_DIR).desks
       assert_equal fresh, committed,
-                   "site/_data/desks.yml is stale against config/axes.yml + config/sources.yml — " \
+                   "site/_data/desks.yml is stale against config/axes.yml + config/sources/ — " \
                    "run `rake site:data` (a new desk is invisible on the home page until you do)"
     end
 

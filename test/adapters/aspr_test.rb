@@ -126,7 +126,7 @@ class AsprTest < Minitest::Test
   def test_registry_resolves_aspr_and_manifest_agrees
     registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources", __dir__))
     entry = registry["aspr"]
-    refute_nil entry, "aspr must be registered in config/sources.yml"
+    refute_nil entry, "aspr must be registered in config/sources/"
     assert_equal Nabu::Adapters::Aspr, entry.adapter_class
     assert entry.wired, "aspr is live (owner sign-off 2026-07-11 after first sync + eyeball)"
     assert_equal Nabu::Adapters::Aspr.manifest, entry.manifest

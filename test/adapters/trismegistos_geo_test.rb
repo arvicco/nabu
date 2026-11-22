@@ -19,7 +19,7 @@ module Adapters
     def test_registry_carries_the_module_row_manual_drop
       registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources", __dir__))
       entry = registry["trismegistos-geo"]
-      refute_nil entry, "trismegistos-geo must be registered in config/sources.yml"
+      refute_nil entry, "trismegistos-geo must be registered in config/sources/"
       assert entry.feature_module?, "a gazetteer instrument is a kind: module row"
       assert_equal "manual", entry.sync_policy
     end

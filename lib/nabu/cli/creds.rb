@@ -26,7 +26,7 @@ module Nabu
       Re-setting identical values is a no-op ("unchanged" — the recorded
       age stays the secret's age); a changed password is "updated". A
       source names its credential with `credentials: NAME` in
-      config/sources.yml; its sync refuses until the credential exists.
+      config/sources/; its sync refuses until the credential exists.
 
       Examples:
         bin/nabu creds set titus

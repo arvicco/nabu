@@ -61,7 +61,7 @@ class PublicHygieneTest < Minitest::Test
   # members-gate grants, the public sources table named grantors with
   # email dates, a news post described the credentials seam — and
   # widened the same day to every tracked file once the machine-read
-  # carriers were excised: config/sources.yml's grant blocks keep only
+  # carriers were excised: config/sources/'s grant blocks keep only
   # the public half (terms + request_hint; grantor/date/thread live in
   # the untracked local/config/grants-provenance.yml and fail the
   # registry load if re-added), and adapter LICENSE strings state terms +
@@ -222,7 +222,7 @@ class PublicHygieneTest < Minitest::Test
       assert SHOWCASE_FORBIDDEN.any? { |pattern, _| leak.match?(pattern) }, "the guard must catch #{leak.inspect}"
     end
     assert "lib/nabu/credentials.rb".match?(COMPONENT_NAME_SCOPE), "the component name is legal in lib/"
-    refute "config/sources.yml".match?(COMPONENT_NAME_SCOPE), "…but nowhere outside docs/ and lib/"
+    refute "config/sources/".match?(COMPONENT_NAME_SCOPE), "…but nowhere outside docs/ and lib/"
     refute scanned?("test/fixtures/perseus/data/tlg0012.xml"), "upstream fixture bytes stay verbatim"
     assert scanned?("test/fixtures/perseus/README.md"), "our fixture provenance notes are prose"
   end

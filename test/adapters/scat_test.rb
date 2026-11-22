@@ -142,7 +142,7 @@ class ScatTest < Minitest::Test
   def test_registry_resolves_scat_and_manifest_agrees
     registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources", __dir__))
     entry = registry["scat"]
-    refute_nil entry, "scat must be registered in config/sources.yml"
+    refute_nil entry, "scat must be registered in config/sources/"
     assert_equal Nabu::Adapters::Scat, entry.adapter_class
     assert_equal Nabu::Adapters::Scat.manifest, entry.manifest
     assert entry.wired, "live: first sync verified 2026-10-20 (24 docs / 2,446 passages)"

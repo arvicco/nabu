@@ -205,7 +205,7 @@ class OldTibetanTest < Minitest::Test
   def test_registry_resolves_old_tibetan_with_the_full_posture
     registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources", __dir__))
     entry = registry["old-tibetan"]
-    refute_nil entry, "old-tibetan must be registered in config/sources.yml"
+    refute_nil entry, "old-tibetan must be registered in config/sources/"
     assert_equal "Nabu::Adapters::OldTibetan", entry.adapter_class_name
     assert entry.wired, "flipped 2026-07-28 (owner ruling; first sync verified live)"
     assert_equal "manual", entry.sync_policy

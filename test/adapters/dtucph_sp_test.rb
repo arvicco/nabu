@@ -38,7 +38,7 @@ module Adapters
     def test_registry_resolves_dtucph_sp_wired
       registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources", __dir__))
       entry = registry["dtucph-sp"]
-      refute_nil entry, "dtucph-sp must be registered in config/sources.yml"
+      refute_nil entry, "dtucph-sp must be registered in config/sources/"
       assert entry.wired,
              "wired: true since the verified first sync (+5 books / 5,841 passages, 0 errored; shown + search probed)"
       assert_equal "manual", entry.sync_policy

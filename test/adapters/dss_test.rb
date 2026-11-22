@@ -35,7 +35,7 @@ module Adapters
     def test_registry_resolves_dss_disabled_until_first_real_sync
       registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources", __dir__))
       entry = registry["dss"]
-      refute_nil entry, "dss must be registered in config/sources.yml"
+      refute_nil entry, "dss must be registered in config/sources/"
       assert entry.wired, "live (owner sign-off 2026-07-19: Hebrew shelf synced, flip ordered)"
       assert_equal "auto", entry.sync_policy # promoted 2026-10-13: actively-edited upstream rides the sync --all sweep
       assert_equal "dss", entry.adapter_class.manifest.id

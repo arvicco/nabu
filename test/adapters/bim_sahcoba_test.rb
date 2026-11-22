@@ -92,7 +92,7 @@ class BimSahcobaTest < Minitest::Test
   def test_registry_resolves_bim_sahcoba_and_manifest_agrees
     registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources", __dir__))
     entry = registry["bim-sahcoba"]
-    refute_nil entry, "bim-sahcoba must be registered in config/sources.yml"
+    refute_nil entry, "bim-sahcoba must be registered in config/sources/"
     assert_equal Nabu::Adapters::BimSahcoba, entry.adapter_class
     assert_equal Nabu::Adapters::BimSahcoba.manifest, entry.manifest
     assert entry.wired, "wired since the verified first sync (2026-10-21)"

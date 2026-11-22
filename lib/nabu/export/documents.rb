@@ -39,7 +39,7 @@ module Nabu
 
       BASE_COLUMNS = [
         Column.new(name: "urn", description: "the document urn (stable across rebuilds)"),
-        Column.new(name: "source", description: "source slug (config/sources.yml)"),
+        Column.new(name: "source", description: "source slug (config/sources/)"),
         Column.new(name: "language", description: "the stored language code, as the adapter emitted it"),
         Column.new(name: "title", description: "document title as stored"),
         Column.new(name: "license_class",

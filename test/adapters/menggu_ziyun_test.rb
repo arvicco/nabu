@@ -91,7 +91,7 @@ class MengguZiyunTest < Minitest::Test
   def test_registry_row_exists_disabled_with_manual_sync_policy
     registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources", __dir__))
     entry = registry["menggu-ziyun"]
-    refute_nil entry, "config/sources.yml must register menggu-ziyun"
+    refute_nil entry, "config/sources/ must register menggu-ziyun"
     assert_equal Nabu::Adapters::MengguZiyun, entry.adapter_class
     assert entry.wired, "live (first sync verified + owner sign-off 2026-08-30; flipped 2026-08-31)"
     assert_equal "manual", entry.sync_policy

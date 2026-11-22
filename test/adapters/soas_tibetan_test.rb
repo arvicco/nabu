@@ -169,7 +169,7 @@ class SoasTibetanTest < Minitest::Test
   def test_registry_resolves_soas_tibetan_and_manifest_agrees
     registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources", __dir__))
     entry = registry["soas-tibetan"]
-    refute_nil entry, "soas-tibetan must be registered in config/sources.yml"
+    refute_nil entry, "soas-tibetan must be registered in config/sources/"
     assert_equal "Nabu::Adapters::SoasTibetan", entry.adapter_class_name
     assert entry.wired, "flipped 2026-07-28 (owner ruling; first sync verified live)"
     assert_equal "manual", entry.sync_policy, "a versioned-immutable Zenodo record"

@@ -185,7 +185,7 @@ class CorpusOudfriesTest < Minitest::Test
   def test_registry_resolves_the_source_wired_after_the_first_sync
     registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources", __dir__))
     entry = registry[SLUG]
-    refute_nil entry, "#{SLUG} must be registered in config/sources.yml"
+    refute_nil entry, "#{SLUG} must be registered in config/sources/"
     assert_equal Nabu::Adapters::CorpusOudfries, entry.adapter_class
     assert entry.wired, "wired flipped at the first sync: 177 docs / 14,136 passages, exactly on the census"
     assert_equal "manual", entry.sync_policy

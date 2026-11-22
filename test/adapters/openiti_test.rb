@@ -535,7 +535,7 @@ class OpenitiTest < Minitest::Test
   def test_registry_resolves_openiti_and_manifest_agrees
     registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources", __dir__))
     entry = registry["openiti"]
-    refute_nil entry, "openiti must be registered in config/sources.yml"
+    refute_nil entry, "openiti must be registered in config/sources/"
     assert_equal Nabu::Adapters::Openiti, entry.adapter_class
     assert entry.wired, "flipped 2026-07-23 after the owner-verified first sync (9,079 docs)"
     assert_equal Nabu::Adapters::Openiti.manifest, entry.manifest

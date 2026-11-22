@@ -286,7 +286,7 @@ class DerivabilityWritersTest < Minitest::Test
   # canonical/hmml-reading-room/ inside Adapter#fetch — the aclt
   # extraction law kind (a pure function of the held zip + code).
   # sources_table writes the tracked site include
-  # site/_includes/sources_table.md — a pure projection of config/sources.yml
+  # site/_includes/sources_table.md — a pure projection of config/sources/
   # + the hand notes it only reads (the DERIVED law kind, like axis_pages).
   # paced_crawl (the paced-crawl engine, architecture §19) writes ONE file:
   # its lane's crawl ledger (the terminal-class id arrays + the last_slice

@@ -451,7 +451,7 @@ class DeromTest < Minitest::Test
   def test_registry_row_exists_wired_with_manual_sync_policy
     registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources", __dir__))
     entry = registry["derom"]
-    refute_nil entry, "config/sources.yml must register derom"
+    refute_nil entry, "config/sources/ must register derom"
     assert_equal Nabu::Adapters::Derom, entry.adapter_class
     assert entry.wired, "first sync owner-verified 2026-08-02 (513 docs / 233 entries) — the flip is the ruled state"
     assert_equal "manual", entry.sync_policy

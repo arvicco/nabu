@@ -142,7 +142,7 @@ class SabellicLoansTest < Minitest::Test
   def test_registry_row_is_disabled_local
     registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources", __dir__))
     entry = registry["sabellic-loans"]
-    refute_nil entry, "sabellic-loans must be registered in config/sources.yml"
+    refute_nil entry, "sabellic-loans must be registered in config/sources/"
     assert_equal Nabu::Adapters::SabellicLoans, entry.adapter_class
     assert entry.wired, "enabled (owner order 2026-07-18: all pre-P30 sources flipped, riding the P30 PR)"
     assert_equal "source", entry.kind, "a real source (mints dictionary entries), not a shelf"

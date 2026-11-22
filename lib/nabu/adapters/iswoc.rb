@@ -44,7 +44,7 @@ module Nabu
     # Single upstream repo, so the inherited clone/ff-only-pull fetch applies
     # verbatim — pinned to the ORIGINAL iswoc/iswoc-treebank, which is
     # GitHub-archived (read-only) at its final commit 574c81c (2023-05-02):
-    # genuinely frozen, hence sync_policy: frozen (config/sources.yml), the
+    # genuinely frozen, hence sync_policy: frozen (config/sources/), the
     # proiel-treebank precedent. NOTE FOR THE FUTURE: releases moved to
     # syntacticus/syntacticus-treebank-data (per the README), but as of
     # 2026-07 that repo's HEAD *predates* the original's final commit and

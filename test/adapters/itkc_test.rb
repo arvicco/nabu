@@ -178,7 +178,7 @@ class ItkcTest < Minitest::Test
   def test_registry_row_exists_on_the_korean_axis
     registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources", __dir__))
     entry = registry["itkc"]
-    refute_nil entry, "config/sources.yml must register itkc"
+    refute_nil entry, "config/sources/ must register itkc"
     assert_equal Nabu::Adapters::Itkc, entry.adapter_class
     assert entry.wired, "first sync owner-verified; flipped 2026-08-19 (r20 semantics)"
     assert_equal "manual", entry.sync_policy

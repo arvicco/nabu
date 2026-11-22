@@ -203,7 +203,7 @@ class LexiconItantTest < Minitest::Test
   def test_registry_row_exists_unwired_with_manual_sync_policy
     registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources", __dir__))
     entry = registry["lexicon-itant"]
-    refute_nil entry, "config/sources.yml must register lexicon-itant"
+    refute_nil entry, "config/sources/ must register lexicon-itant"
     assert_equal Nabu::Adapters::LexiconItant, entry.adapter_class
     assert entry.wired, "wired 2026-10-29: first sync verified on census (809 entries / 16 lexicons)"
     assert_equal "manual", entry.sync_policy

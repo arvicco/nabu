@@ -42,7 +42,7 @@ module Adapters
     def test_registry_row_is_registered_unwired_manual_gold_on_the_indic_desk
       registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources", __dir__))
       entry = registry["vedaweb"]
-      refute_nil entry, "vedaweb must be registered in config/sources.yml"
+      refute_nil entry, "vedaweb must be registered in config/sources/"
       assert entry.wired, "wired since the verified first sync (2026-10-21)"
       assert_equal "manual", entry.sync_policy
       assert_includes entry.axes, "indic"

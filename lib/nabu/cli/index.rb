@@ -61,7 +61,7 @@ module Nabu
       Runs the full slice refresh for one or more registered sources — the
       same index step a sync runs inline, with the same announced stages
       and recorded stage timings. A source declared `index_policy:
-      deferred` in config/sources.yml (the paced-crawl citizens) loads its
+      deferred` in config/sources/ (the paced-crawl citizens) loads its
       documents at sync time and skips the index; this command pays it,
       once per wave. Any source may be refreshed: a pending (crashed) or
       behind slice heals here too. `index doctor` lists the deferred

@@ -141,7 +141,7 @@ module Nabu
           "documents" => documents, "documents_display" => self.class.commas(documents),
           "passages" => passages, "passages_display" => self.class.commas(passages),
           "language_codes" => languages,
-          # The registry shape (config/sources.yml): rows split by kind, and
+          # The registry shape (config/sources/): rows split by kind, and
           # the wired-source count the "N sources live" prose cites.
           "registry_rows" => reg[:rows],
           "corpus_sources" => reg[:sources],
@@ -191,7 +191,7 @@ module Nabu
         fulltext&.disconnect
       end
 
-      # The registry shape as counts (config/sources.yml): total rows split
+      # The registry shape as counts (config/sources/): total rows split
       # by kind (source / shelf / feature module), plus the wired-source
       # count. Pure registry data — deterministic, no catalog read.
       # The dictionary_stats read with the pre-036 guard: 0 when the

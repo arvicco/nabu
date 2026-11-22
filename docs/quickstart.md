@@ -166,7 +166,7 @@ box, so you know what you're signing up for:
 (`lexica` and `proiel` — the dictionary shelf and the 5-way parallel NT
 with lemma search — are already on board from the starter shelf.)
 
-The full menu is `config/sources.yml`; the full shelf map with research
+The full menu is `config/sources/`; the full shelf map with research
 uses is [library.md](library.md). `enable` is additive and takes an
 axis name too (`bin/nabu enable celtic` puts that whole desk's public
 members on the profile); grant-gated research sources are never swept

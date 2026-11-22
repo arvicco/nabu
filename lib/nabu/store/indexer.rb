@@ -110,7 +110,7 @@ module Nabu
     # deliberately NOT corpus-wide: at ~6 bytes/char the whole corpus costs
     # 3.6–4.1 GB, the documentary shelves ~250–270 MB (intertext design §4,
     # the owner-approved line). Which sources are in is an owner posture in
-    # config/sources.yml (`fuzzy_index: true` — see SourceRegistry::Entry for
+    # config/sources/ (`fuzzy_index: true` — see SourceRegistry::Entry for
     # the where-does-the-flag-live argument); callers thread the resulting
     # slug list in as +fuzzy_slugs+. The companion passages_trigram_scope
     # table records the slugs THIS build actually indexed, so the query
@@ -640,7 +640,7 @@ module Nabu
       # "no rows", never "index missing".
       #
       # +fuzzy_slugs+ (P16-4) scopes the trigram fragment index — callers pass
-      # SourceRegistry#fuzzy_slugs (config/sources.yml `fuzzy_index: true`).
+      # SourceRegistry#fuzzy_slugs (config/sources/ `fuzzy_index: true`).
       # Empty/nil still creates the (empty) trigram + scope tables, so
       # `search --fuzzy` degrades to "no rows + honest scope line", never
       # "index missing".

@@ -11,7 +11,7 @@ module Nabu
     # LexibankCldfParser). A dataset joins the library as a tiny subclass
     # declaring ONE value — DATASET, a LexibankCldf::Dataset naming its
     # slug, title, dictionary language, license grant, pinned release and
-    # word strategy — plus its config/sources.yml row. Everything else —
+    # word strategy — plus its config/sources/ row. Everything else —
     # manifest, discovery, parse, fetch choreography, probe — lives here.
     #
     # Why a subclass per dataset rather than one class parameterized by the

@@ -330,7 +330,7 @@ class CbetaTest < Minitest::Test
   def test_registry_resolves_cbeta_and_stays_disabled_manual
     registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources", __dir__))
     entry = registry["cbeta"]
-    refute_nil entry, "cbeta must be registered in config/sources.yml"
+    refute_nil entry, "cbeta must be registered in config/sources/"
     assert_equal Nabu::Adapters::Cbeta, entry.adapter_class
     assert_equal "manual", entry.sync_policy
     assert entry.wired, "live (owner order 2026-07-20: P32+P33 sources flipped, post-P34 gate)"

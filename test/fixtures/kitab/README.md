@@ -40,4 +40,4 @@ AUTHORITATIVE: the Zenodo record **"KITAB Text Reuse Data"**, DOI
 release (the current version matches our held OpenITI 2025.1.9) → class
 `nc`. The GitHub mirror (`kitab-project-org/pairwise-light`) carries NO
 in-repo license file; it is the same dataset's per-file access path. Both
-facts are recorded verbatim in `config/sources.yml` and the adapter.
+facts are recorded verbatim in `config/sources/` and the adapter.

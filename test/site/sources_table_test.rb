@@ -24,7 +24,7 @@ module Site
 
     def test_committed_table_matches_the_registry_projection
       assert_equal generator.render, committed,
-                   "site/_includes/sources_table.md is stale against config/sources.yml + " \
+                   "site/_includes/sources_table.md is stale against config/sources/ + " \
                    "site/_data/source_notes.yml — run `rake site:sources` (a live source is missing " \
                    "from /sources/, or prose was hand-edited into the generated table)"
     end

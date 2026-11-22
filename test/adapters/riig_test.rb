@@ -194,7 +194,7 @@ class RiigTest < Minitest::Test
   def test_registry_row_is_disabled_manual_with_translations
     registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources", __dir__))
     entry = registry["riig"]
-    refute_nil entry, "riig must be registered in config/sources.yml"
+    refute_nil entry, "riig must be registered in config/sources/"
     assert_equal Nabu::Adapters::Riig, entry.adapter_class
     assert entry.wired, "live (owner sign-off 2026-07-18: 477 docs, flipped; sibling-noise hotfix open)"
     assert_equal "manual", entry.sync_policy

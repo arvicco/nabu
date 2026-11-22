@@ -20,7 +20,7 @@ The Hebrew-and-Aramaic language desk beside the cross-language biblical hat: OSH
 The class is the machine-actionable reading of each source's data license; the
 verbatim upstream terms are in `docs/02-sources.md` of the Nabu repository.
 
-<!-- nabu:skill-sources:begin — generated from config/sources.yml by `rake skills:scaffold`; edit outside this block -->
+<!-- nabu:skill-sources:begin — generated from config/sources/ by `rake skills:scaffold`; edit outside this block -->
 | Source | Upstream | License class |
 | --- | --- | --- |
 | `ben-yehuda` | Project Ben-Yehuda — the public-domain dump, pre-modern layer (piyyut, Andalusian and medieval-to-Renaissance Hebrew) | open |

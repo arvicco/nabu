@@ -20,7 +20,7 @@ The early vernaculars of the eastern Baltic shore, where the Reformation and the
 The class is the machine-actionable reading of each source's data license; the
 verbatim upstream terms are in `docs/02-sources.md` of the Nabu repository.
 
-<!-- nabu:skill-sources:begin — generated from config/sources.yml by `rake skills:scaffold`; edit outside this block -->
+<!-- nabu:skill-sources:begin — generated from config/sources/ by `rake skills:scaffold`; edit outside this block -->
 | Source | Upstream | License class |
 | --- | --- | --- |
 | `senie` | SENIE — the Corpus of Early Written Latvian (AiLab IMCS UL / Latvian Language Institute, University of Latvia) | attribution |

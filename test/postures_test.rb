@@ -5,7 +5,7 @@ require "tmpdir"
 require "yaml"
 
 # The consolidated core-layer posture record (P61-0, the D59-f wave-1
-# frame): config/postures.yml nests per-layer declarations under each
+# frame): config/postures/ nests per-layer declarations under each
 # source (lect: today's 60 rows migrated verbatim; dating:/places:/
 # script: arm in the P61-1 sweep). The lect layer keeps the P59-4
 # contract byte-for-byte: machine grains (rules/overrides files) stay the
@@ -125,13 +125,13 @@ class PosturesTest < Minitest::Test
   # --- the lect layer: the P59-4 contract, unchanged through the move ---
 
   def test_every_passage_serving_source_has_a_lect_posture
-    refute_nil postures, "config/postures.yml must exist — it is the judgment record"
+    refute_nil postures, "config/postures/ must exist — it is the judgment record"
     coverage = postures.lect_coverage(rules: rules, overrides: overrides)
     missing = passage_slugs.reject { |slug| coverage.key?(slug) }
     assert_empty missing,
                  "sources with NO lect posture (machine or declared): #{missing.join(', ')} — " \
                  "run `nabu layer suggest <slug>`, then wire a rule/override or declare a row " \
-                 "(identity is an honest answer) in config/postures.yml"
+                 "(identity is an honest answer) in config/postures/"
   end
 
   # --- the P61-1 sweep: every layer, every source — ARMED ----------------
@@ -143,7 +143,7 @@ class PosturesTest < Minitest::Test
       assert_empty missing,
                    "sources with NO #{layer} posture: #{missing.join(', ')} — run " \
                    "`nabu layer suggest <slug>`, then declare (undatable/unplaced/implied " \
-                   "are honest answers) in config/postures.yml"
+                   "are honest answers) in config/postures/"
     end
   end
 
@@ -161,7 +161,7 @@ class PosturesTest < Minitest::Test
     assert_empty missing,
                  "sources with NO kind posture (machine or declared): #{missing.join(', ')} — " \
                  "add a config/kind_map.yml rule or declare kind: {posture: unclassified} " \
-                 "(honest) / pending (naming its candidate) in config/postures.yml"
+                 "(honest) / pending (naming its candidate) in config/postures/"
   end
 
   def test_kind_declarations_never_shadow_kind_map_rules
@@ -193,7 +193,7 @@ class PosturesTest < Minitest::Test
                       "#{declaration.slug}/#{declaration.layer}: unknown posture " \
                       "#{declaration.posture.inspect} (ruled set: #{vocabulary.join('/')})"
       assert_includes slugs, declaration.slug,
-                      "#{declaration.slug}: declared but not in config/sources.yml (a ghost row)"
+                      "#{declaration.slug}: declared but not in config/sources/ (a ghost row)"
     end
   end
 

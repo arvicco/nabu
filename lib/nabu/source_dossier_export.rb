@@ -17,7 +17,7 @@ module Nabu
   #    table row names the slug in backticks contributes its first prose
   #    paragraph; a `- **`slug`** — …` bullet (the §8h shape) contributes
   #    its own text and, being slug-specific, WINS over section prose.
-  # 2. config/sources.yml standalone comment lines inside the slug's block
+  # 2. config/sources/ standalone comment lines inside the slug's block
   #    (the shelf-description comments; inline flag comments and
   #    license_watch lines are process notes, excluded).
   # 3. Nothing found → the HONEST STUB: a dossier with the slug and a
@@ -149,7 +149,7 @@ module Nabu
       nil
     end
 
-    # -- config/sources.yml ---------------------------------------------------
+    # -- config/sources/ ---------------------------------------------------
 
     # { slug => joined standalone comments } from each slug's block. Inline
     # comments (after a value) never match the line-start rule; commented

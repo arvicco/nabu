@@ -242,7 +242,7 @@ class LexlepWordsTest < Minitest::Test
     { "lexlep" => Nabu::Adapters::Lexlep, "lexlep-words" => Nabu::Adapters::LexlepWords,
       "tir" => Nabu::Adapters::Tir }.each do |slug, adapter_class|
       entry = registry[slug]
-      refute_nil entry, "config/sources.yml must register #{slug}"
+      refute_nil entry, "config/sources/ must register #{slug}"
       assert_equal adapter_class, entry.adapter_class
       assert entry.wired, "#{slug}: live (owner order 2026-07-18: all pre-P30 sources flipped)"
       assert_equal "manual", entry.sync_policy
