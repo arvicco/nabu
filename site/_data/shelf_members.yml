@@ -97,7 +97,7 @@ egyptian: [aes, tla-hf]
 ethiopic: [betamasaheft-works, traces]
 pre-roman-italy: [ceipom, itant, open-etruscan, tir, lexlep, isicily]
 aegean: [damos, sigla, ig-cyprus]
-biblical-editions: [vulgate, sblgnt, stepbible-tagnt, opengnt, macula-greek, eng-web, ebible-pacific]
+biblical-editions: [vulgate, sblgnt, stepbible-tagnt, opengnt, macula-greek, cntr, eng-web, ebible-pacific]
 old-english: [aspr, perseus-anglit]
 middle-early-modern-english: [cme, eebo-tcp, evans-tcp, ecco-tcp, emmo, stationers-register, statutes-realm, blbooks]
 slavic:
@@ -189,3 +189,4 @@ germanic:
   - nb-no
 africa: [africa-pd, bu-ajami, old-nubian-ud]
 americas: [ticha, guaman-poma]
+pacific: [niupepa, ceipp-rongorongo]

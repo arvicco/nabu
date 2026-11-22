@@ -99,6 +99,12 @@ sources:
     # The Greek New Testament across its printed editions (TAGNT) — Koine
     # by definition, certain (the sblgnt claim).
     grc: { lect: "grc:koi", tier: certain }
+  cntr:
+    # The early Greek NT witnesses (CNTR transcriptions): papyri and
+    # majuscules to the fourth century, manuscripts quoting the NT, and the
+    # second- to fourth-century fathers' quotations — the Koine NT text in its own
+    # manuscripts, certain (the sblgnt claim, at the witness layer).
+    grc: { lect: "grc:koi", tier: certain }
   papyri-ddbdp:
     # Documentary papyri, Ptolemaic through Roman — approximation.
     grc: { lect: "grc:koi", tier: approximation }
@@ -569,3 +575,14 @@ sources:
     # Tier certain: the source is the anchor's own named corpus, and the
     # phono_transcr lane carries the reading tradition itself.
     hbo: { lect: "smp", tier: certain }
+  ceipp-rongorongo:
+    # The rongorongo inscriptions are UNDECIPHERED. The registry's rap
+    # anchor states the claim this row makes, in its own words: "that they
+    # write Rapa Nui is the default assumption, not a demonstrated fact,
+    # and a consumer filing them under rap makes that claim" — and names
+    # the CEIPP code streams as the consumer it was minted ahead of. The
+    # adapter files every object under rap; this row promotes that filing
+    # to a machine tier so every render surface glosses it as probable,
+    # never certain. Tier APPROXIMATION: a default assumption, not the
+    # corpus's own definition (the armepic self-row shape, other tier).
+    rap: { lect: "rap", tier: approximation }

@@ -1437,6 +1437,14 @@ sources:
     # the passages — a newspaper's sections, not the document's kind.
     # A whole-source declaration, the parse-time mapping call.
     source_kind: periodical/newspaper
+  niupepa:  # census 2026-11-21: 1,818 issues of 34 Māori-language papers, 1842–1932
+    # The Niupepa collection IS the Māori-language periodical press: every
+    # document is one issue of a newspaper (the government Karere and Waka
+    # Maori papers, the Kīngitanga and tribal press, the church papers),
+    # catalogued by upstream as DocType "Niupepa". The series commentaries
+    # (the one non-newspaper grain) are rejected, never documents. A
+    # whole-source declaration (the delpher-newspapers precedent).
+    source_kind: periodical/newspaper
   sigla:              # census 2026-10-22: 787 inscriptions with signs, 20 typology values
     facet: object      # SigLA's own document typology (the paper's "document typology")
     map:
@@ -1654,6 +1662,8 @@ sources:
     source_kind: scripture   # the Greek New Testament, one document per book
   stepbible-tagnt:
     source_kind: scripture   # the Greek NT amalgam — every document a NT book
+  cntr:
+    source_kind: scripture   # NT witnesses — every passage a verse of the Greek NT (class 2/3 carry only the quoted verses)
   oshb:
     source_kind: scripture
   bhsa:

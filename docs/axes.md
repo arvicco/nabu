@@ -75,7 +75,7 @@ The Latin-to-vernacular continuum: CroALa's medieval and neo-Latin opens the des
 
 Documentary corpora at the artifact grain: papyri, the Latin/Greek and Levantine and Sicilian inscription databases, the Continental Celtic, Italic and Tyrsenian editions, ogham stones, Hittite tablets — the shelves where fragment search and findspots earn their keep.
 
-**Members** (41): `aio`, `armepic`, `ceipom`, `damos`, `dharma-campa`, `dharma-deccan`, `dharma-khmer`, `dharma-nusantara`, `dharma-pyu`, `dharma-tamil`, `edh`, `edr`, `elephantine`, `extrabiblical`, `ig-cyprus`, `iip`, `isicily`, `itant`, `lexlep`, `lexlep-words`, `memis`, `nabu-places`, `obi-burmese`, `ociana`, `ogham`, `open-etruscan`, `papyri-ddbdp`, `paramara`, `pgp-geniza`, `pleiades`, `riig`, `rundata`, `runesdb`, `siddham`, `sigla`, `sii-clean`, `tir`, `tlhdig`, `trismegistos`, `trismegistos-geo`, `ucd`
+**Members** (42): `aio`, `armepic`, `ceipom`, `ceipp-rongorongo`, `damos`, `dharma-campa`, `dharma-deccan`, `dharma-khmer`, `dharma-nusantara`, `dharma-pyu`, `dharma-tamil`, `edh`, `edr`, `elephantine`, `extrabiblical`, `ig-cyprus`, `iip`, `isicily`, `itant`, `lexlep`, `lexlep-words`, `memis`, `nabu-places`, `obi-burmese`, `ociana`, `ogham`, `open-etruscan`, `papyri-ddbdp`, `paramara`, `pgp-geniza`, `pleiades`, `riig`, `rundata`, `runesdb`, `siddham`, `sigla`, `sii-clean`, `tir`, `tlhdig`, `trismegistos`, `trismegistos-geo`, `ucd`
 
 ### slavic
 
@@ -123,7 +123,7 @@ The reconstruction shelves: the kaikki proto-extracts, IE-CoR cognacy, LIV, the 
 
 The cross-language scripture hat: the Masoretic shelves and the Scrolls, the Greek NT, Vulgate and WEB, Peshitta and the Syriac corpus, Coptic Scriptorium, the Targums, and the OSHB-BHSA bridging module. The hebrew and syriac language desks coexist with this hat by design.
 
-**Members** (26): `betamasaheft-works`, `bhsa`, `bridging`, `coptic-scriptorium`, `dss`, `dtucph-sp`, `ebible-pacific`, `elizabeth-bible`, `eng-web`, `etcbc-syriac`, `etcbc-targum`, `extrabiblical`, `hebrew-lexicon`, `hexapla`, `macula-greek`, `opengnt`, `oshb`, `peshitta`, `sblgnt`, `sdbh`, `sefaria`, `stepbible-tagnt`, `syriac-corpus`, `typikon-bible`, `ud`, `vulgate`
+**Members** (27): `betamasaheft-works`, `bhsa`, `bridging`, `cntr`, `coptic-scriptorium`, `dss`, `dtucph-sp`, `ebible-pacific`, `elizabeth-bible`, `eng-web`, `etcbc-syriac`, `etcbc-targum`, `extrabiblical`, `hebrew-lexicon`, `hexapla`, `macula-greek`, `opengnt`, `oshb`, `peshitta`, `sblgnt`, `sdbh`, `sefaria`, `stepbible-tagnt`, `syriac-corpus`, `typikon-bible`, `ud`, `vulgate`
 
 ### hebrew
 
@@ -285,6 +285,14 @@ Africa beyond the Egyptian and Ethiopic desks: the NEH Ajami collection's Hausa,
 The early vernaculars of the eastern Baltic shore, where the Reformation and the Counter-Reformation first put Baltic and Finnic languages into print: SENIE's Old Latvian (1507–1800 — the catechisms, Mancelius, Glück's Bible, the manuscript dictionaries), with the Old Literary Finnish and the Old Lithuanian, Old Prussian and Old Estonian shelves joining as their packets land.
 
 **Members** (4): `senie`, `vakk`, `vks`, `wiktionary-et`
+
+### pacific
+
+> The Pacific philologist — the Polynesian languages in their first prints, the Māori press to the mission Bibles.
+
+The languages of the Pacific in their own historical texts, opening on the Niupepa collection: the Māori-language newspapers of 1842–1932 at the page grain, with the island print shelves joining as their packets land.
+
+**Members** (3): `ceipp-rongorongo`, `ebible-pacific`, `niupepa`
 
 ### local
 

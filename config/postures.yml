@@ -3526,6 +3526,21 @@ sources:
     dating: {posture: undatable}
     places: {posture: unplaced}
     script: {posture: implied}
+  cntr:   # 02-sources row 429
+    # kind machine-postured (kind_map source_kind scripture); lect by override
+    # (grc → grc:koi, certain).
+    dating: {posture: undatable, note: "the repo carries no date field — each file is verse
+        lines only; CNTR's paleographic and historical datings (25-year-boundary spans,
+        the fathers' working lives) live on the greekcntr.org witness pages, which are NOT
+        under the repo's CC BY-SA (the site reserves copying), so v1 mines nothing. The
+        collection's own scope bounds every witness at the fourth century or earlier
+        (included when at least one expert dates it so) — a selection rule, not a per-
+        witness date, so no envelope is minted"}
+    places: {posture: unplaced, note: "no provenance or findspot in the repo — the TGN-keyed
+        provenance is on the same reserved site pages"}
+    script: {posture: implied, note: "Greek, as upstream transcribes it: lowercase, unaccented,
+        unpunctuated, one sigma (σ), with the overline ¯, the kai and staurogram ligatures, a
+        private-use μου ligature (U+E001) and U+FFFD for an undecipherable letter"}
   sefaria:
     dating: {posture: undatable}
     places: {posture: unplaced}
@@ -3961,3 +3976,40 @@ sources:
         (Bern, Leiden, Monza …) are present-day holdings, metadata only"}
     script: {posture: implied, note: "Latin script throughout; three short Greek quotations in
         Contra Apionem (foreign lang grc) ride verbatim in their own script"}
+  niupepa:   # 02-sources row 427
+    # kind machine-postured — kind_map.yml source_kind periodical/newspaper.
+    lect: {posture: codemap, note: "mri → mi through the held codemap alias (the registry's Māori
+        anchor, which names the niupepa corpus among its consumers). No stage is claimed — mi
+        carries no stages; declared coarse. The bilingual issues (Māori with English columns)
+        carry no per-page or per-issue language mark upstream, so no eng claim is made"}
+    dating: {posture: dated, note: "every issue's own Greenstone Date (YYYYMMDD, YYYYMM or YYYY)
+        → a one-year envelope, :structured, the ISO day or month riding raw; no class — the
+        newspaper's issue date IS the text's publication (the delpher-newspapers precedent)"}
+    places: {posture: unplaced, note: "the issue records name no place of publication; the
+        series commentaries do, in modern English prose, but they are the rejected grain and
+        never fetched — a per-series imprint-place table would be a curation call, not
+        parse-time mining"}
+    script: {posture: implied, note: "Latin script in each print's period orthography — the early
+        papers write w for wh and carry no macrons; uncorrected machine OCR, kept as served"}
+  ceipp-rongorongo:   # 02-sources row 428
+    # lect machine-postured — lect_overrides.yml rap → rap at tier APPROXIMATION:
+    # the script is undeciphered, and the registry's own rap note says the
+    # tablets writing Rapa Nui "is the default assumption, not a demonstrated
+    # fact".
+    kind: {posture: unclassified, note: "undeciphered — the content of no object is known, so
+        no genre claim is honest (the Mamari 'lunar calendar' and the Small Santiago
+        'genealogy' are modern interpretations, not upstream labels); the object types
+        (tablet, staff, reimiro, tangata manu, snuff box) are artifact forms, not genres"}
+    dating: {posture: undatable, note: "the corpus and the object table carry no date for any
+        object; the tablets are pre-missionary artifacts (collected from the 1860s on) with no
+        per-object dating upstream — undatable at object grain, declared rather than faked"}
+    places: {posture: unplaced, note: "the asset carries no per-object place: every object is
+        from Easter Island (Rapa Nui) by the corpus's own definition, but that is a
+        corpus-level claim, not a mined field — a place-only row would need a timeline
+        registration, not an adapter field. The present holdings (museums, the site's map
+        page, not fetched) are present locations, never origin"}
+    script: {posture: implied, note: "the held text is the CEIPP extended-Barthel
+        TRANSLITERATION — three-digit sign codes with Latin-letter affixes and link marks,
+        Latin-script/numeric by construction; the artifact script is rongorongo (ISO 15924
+        Roro, unencoded in Unicode). The config/artifact_scripts.yml row is queued on the
+        registry scripts-table mint (no roro tag exists yet)"}

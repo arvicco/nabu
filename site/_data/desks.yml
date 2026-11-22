@@ -11,7 +11,7 @@
 - slug: epigraphy
   persona: The Papyrologist-Epigraphist
   blurb: reads what survives on stone, sherd, papyrus and tablet, lacunae and all
-  members: 41
+  members: 42
 - slug: slavic
   persona: The Slavicist
   blurb: Cyril and Methodius to the damaskini, canon to vernacular
@@ -36,7 +36,7 @@
 - slug: biblical
   persona: The Biblical scholar
   blurb: one text across Hebrew, Greek, Latin, Syriac, Coptic and English witnesses
-  members: 26
+  members: 27
 - slug: hebrew
   persona: The Hebraist
   blurb: Masoretic vowels, Qumran consonants, the Aramaic of the Targums
@@ -122,6 +122,11 @@
   persona: The Balticist
   blurb: the Lutheran-print littoral, Mancelius' Latvian to Agricola's Finnish
   members: 4
+- slug: pacific
+  persona: The Pacific philologist
+  blurb: the Polynesian languages in their first prints, the Māori press to the mission
+    Bibles
+  members: 3
 - slug: local
   persona: The Librarian
   blurb: 'the owner''s own shelves: dossiers, library, notes, and the sources'' own

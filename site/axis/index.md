@@ -2,7 +2,7 @@
 title: Research desks
 permalink: /axis/
 description: >-
-  The 30 research desks of the Nabu library — tags over the
+  The 31 research desks of the Nabu library — tags over the
   source list, each a scholarly hat with its own shelves, instruments
   and commands.
 ---
@@ -29,9 +29,9 @@ and terminal setup live.
 
 New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the library in minutes.
 
-## The 30 desks
+## The 31 desks
 
-Jump to a desk: [classical](#classical) · [romance](#romance) · [epigraphy](#epigraphy) · [slavic](#slavic) · [germanic](#germanic) · [celtic](#celtic) · [italic](#italic) · [etym](#etym) · [biblical](#biblical) · [hebrew](#hebrew) · [syriac](#syriac) · [ethiopic](#ethiopic) · [arabic](#arabic) · [hittite](#hittite) · [cuneiform](#cuneiform) · [egyptian](#egyptian) · [iranian](#iranian) · [indic](#indic) · [buddhist](#buddhist) · [tibetan](#tibetan) · [korean](#korean) · [sea](#sea) · [sinitic](#sinitic) · [japonic](#japonic) · [turkic](#turkic) · [mongolic](#mongolic) · [americas](#americas) · [africa](#africa) · [baltic](#baltic) · [local](#local)
+Jump to a desk: [classical](#classical) · [romance](#romance) · [epigraphy](#epigraphy) · [slavic](#slavic) · [germanic](#germanic) · [celtic](#celtic) · [italic](#italic) · [etym](#etym) · [biblical](#biblical) · [hebrew](#hebrew) · [syriac](#syriac) · [ethiopic](#ethiopic) · [arabic](#arabic) · [hittite](#hittite) · [cuneiform](#cuneiform) · [egyptian](#egyptian) · [iranian](#iranian) · [indic](#indic) · [buddhist](#buddhist) · [tibetan](#tibetan) · [korean](#korean) · [sea](#sea) · [sinitic](#sinitic) · [japonic](#japonic) · [turkic](#turkic) · [mongolic](#mongolic) · [americas](#americas) · [africa](#africa) · [baltic](#baltic) · [pacific](#pacific) · [local](#local)
 
 ### classical
 
@@ -264,6 +264,14 @@ Africa beyond the Egyptian and Ethiopic desks: the NEH Ajami collection's Hausa,
 The early vernaculars of the eastern Baltic shore, where the Reformation and the Counter-Reformation first put Baltic and Finnic languages into print: SENIE's Old Latvian (1507–1800 — the catechisms, Mancelius, Glück's Bible, the manuscript dictionaries), with the Old Literary Finnish and the Old Lithuanian, Old Prussian and Old Estonian shelves joining as their packets land.
 
 [Open the baltic desk]({{ '/axis/baltic/' | relative_url }})
+
+### pacific
+
+> The Pacific philologist — the Polynesian languages in their first prints, the Māori press to the mission Bibles.
+
+The languages of the Pacific in their own historical texts, opening on the Niupepa collection: the Māori-language newspapers of 1842–1932 at the page grain, with the island print shelves joining as their packets land.
+
+[Open the pacific desk]({{ '/axis/pacific/' | relative_url }})
 
 ### local
 

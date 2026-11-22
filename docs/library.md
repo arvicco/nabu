@@ -2550,3 +2550,39 @@ Qillir's piyyut through the Andalusian golden age (Shmuel HaNagid,
 Ibn Gabirol, Yehuda Halevi, the Ibn Ezras) to Alharizi's maqamas and
 Shabazi, in pointed Hebrew with the nikud byte-verbatim. Public
 domain; credit Project Ben-Yehuda volunteers.
+
+## 8bp. The manuscripts behind the editions, and the signs of Easter Island
+
+The witness layer under section 8bo's apparatus belt, and the
+library's first undeciphered script.
+
+**`cntr`** — **189 witnesses / 42,228 verse passages / 717,544 word
+tokens**: the Center for New Testament Restoration's transcriptions
+of the early Greek NT manuscripts themselves — 130 continuous-text
+papyri and majuscules to the fourth century (P52, P46, P66, P75,
+Sinaiticus, Vaticanus, Bezae), 47 manuscripts that quote the NT
+(amulets, letters, the earliest lectionary) and 12 church fathers'
+quoted texts, verse by verse as the scribes wrote them: unaccented,
+nomina sacra contracted, lacunae marked, every hand of correction
+kept. All 189 join the NT alignment hub beside the held editions.
+CC BY-SA 4.0; credit Alan Bunning and the CNTR.
+
+**`ceipp-rongorongo`** — **25 objects / 314 lines / 15,273 coded
+glyphs**: the rongorongo inscriptions of Easter Island — every
+surviving inscribed object (twenty tablets, the Santiago Staff, two
+reimiro, the tangata manu, a snuff box) as Barthel-system sign
+codes edited by the C.E.I.P.P.'s Rongorongo Commission, from Philip
+Spaelti's corpus on kohaumotu.org. Codes, not readings — the script
+is undeciphered, and its Rapa Nui attribution is held as the
+default assumption, not a fact. Non-commercial; credit the CEIPP
+corpus and kohaumotu.org.
+
+**`niupepa`** — **134 issues held of 1,818 / 1,313 page passages**
+(the paced harvest continues across phases): the Māori-language
+newspapers of 1842–1932 from the New Zealand Digital Library's
+Niupepa collection — Te Karere O Nui Tireni through the government
+Maori Messenger, the Kīngitanga press (Te Hokioi, Te Wananga), the
+church papers, to Te Toa Takitini — page by page in the collection's
+OCR text, period spelling kept. The largest Māori-language text
+corpus online, held for local research with the collection and the
+NZDL credited on every passage.

@@ -6,7 +6,7 @@ compatibility: "Requires the nabu MCP server (`bin/nabu mcp`, read-only, stdio) 
 metadata:
   desk: biblical
   origin: hand-tuned
-  sources: "betamasaheft-works bhsa bridging coptic-scriptorium dss dtucph-sp ebible-pacific elizabeth-bible eng-web etcbc-syriac etcbc-targum extrabiblical hebrew-lexicon hexapla macula-greek opengnt oshb peshitta sblgnt sdbh sefaria stepbible-tagnt syriac-corpus typikon-bible ud vulgate"
+  sources: "betamasaheft-works bhsa bridging cntr coptic-scriptorium dss dtucph-sp ebible-pacific elizabeth-bible eng-web etcbc-syriac etcbc-targum extrabiblical hebrew-lexicon hexapla macula-greek opengnt oshb peshitta sblgnt sdbh sefaria stepbible-tagnt syriac-corpus typikon-bible ud vulgate"
 ---
 
 # The Biblical scholar — the `biblical` desk
@@ -26,6 +26,7 @@ verbatim upstream terms are in `docs/02-sources.md` of the Nabu repository.
 | `betamasaheft-works` | Beta maṣāḥǝft Works — Ethiopic literature (Hiob-Ludolf-Zentrum, Hamburg) | attribution |
 | `bhsa` | BHSA — Biblia Hebraica Stuttgartensia Amstelodamensis (ETCBC, Text-Fabric tf/2021) | nc |
 | `bridging` | ETCBC bridging — OSHB↔BHSA word-level crosswalk (Text-Fabric tf/2021 module) | attribution |
+| `cntr` | CNTR — Center for New Testament Restoration electronic transcriptions (early Greek NT witnesses, MES) | attribution |
 | `coptic-scriptorium` | Coptic Scriptorium corpora (release v6.3.0) | nc |
 | `dss` | DSS — Dead Sea Scrolls (Abegg/ETCBC, Text-Fabric tf/2.0) | nc |
 | `dtucph-sp` | The CACCHT Samaritan Pentateuch (DT-UCPH, Text-Fabric tf/7.5.0) | nc |

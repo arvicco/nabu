@@ -15,7 +15,7 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 A source wears every desk it serves — these 33 answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
-| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 18 November 2026)</span> |
+| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 21 November 2026)</span> |
 |---|---|---|---|---|
 | `aio` | inscriptions | attribution | wired · manual | 4,002 docs / 67,429 passages |
 | `analecta-hymnica` | texts | open | wired · manual | 55 docs / 17,211 passages |
@@ -49,11 +49,11 @@ A source wears every desk it serves — these 33 answer this desk. Holdings are 
 | `suda-translations` | texts | nc | wired · manual | 27 docs / 31,341 passages |
 | `ud` | treebank | nc | wired · manual | 93 docs / 338,638 passages |
 | `vulgate` | texts | open | wired · manual | 73 docs / 35,809 passages |
-| `wellcome` | texts | open | wired · manual | 1,044 docs / 376,918 passages |
+| `wellcome` | texts | open | wired · manual | 1,227 docs / 403,757 passages |
 
-**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 18 November 2026)</span>: `grc` 129,050 · `lat` 66,069 · `gmy` 5,890 · `eng` 4,335 · `lab` 787 · `grc-Latn` 510 · `deu` 225 · `en` 27 · `ecy-Latn` 22 · `gmh` 11 … and 5 more (`nabu axis classical` lists all).
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 21 November 2026)</span>: `grc` 129,050 · `lat` 66,252 · `gmy` 5,890 · `eng` 4,335 · `lab` 787 · `grc-Latn` 510 · `deu` 225 · `en` 27 · `ecy-Latn` 22 · `gmh` 11 … and 5 more (`nabu axis classical` lists all).
 
-**Carried in by multilingual packs** (`ud` — whole-source members whose other languages ride along, as of 18 November 2026): `orv` 9 · `oge` 5 · `ota` 5 · `lzh` 4 · `egy` 3 … and 19 more (`nabu axis classical` lists all).
+**Carried in by multilingual packs** (`ud` — whole-source members whose other languages ride along, as of 21 November 2026): `orv` 9 · `oge` 5 · `ota` 5 · `lzh` 4 · `egy` 3 … and 19 more (`nabu axis classical` lists all).
 
 ## The desk's instruments
 
@@ -118,4 +118,4 @@ The full guidance, per script, is on the [display page](https://github.com/arvic
 
 ---
 
-One of the [30 research desks]({{ '/axis/' | relative_url }}); the flat shelf map is [The Library]({{ '/library/' | relative_url }}) and the reasoning is [docs/axes.md](https://github.com/arvicco/nabu/blob/main/docs/axes.md).
+One of the [31 research desks]({{ '/axis/' | relative_url }}); the flat shelf map is [The Library]({{ '/library/' | relative_url }}) and the reasoning is [docs/axes.md](https://github.com/arvicco/nabu/blob/main/docs/axes.md).

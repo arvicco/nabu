@@ -13,13 +13,14 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 ## The shelves
 
-A source wears every desk it serves — these 41 answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
+A source wears every desk it serves — these 42 answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
-| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 18 November 2026)</span> |
+| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 21 November 2026)</span> |
 |---|---|---|---|---|
 | `aio` | inscriptions | attribution | wired · manual | 4,002 docs / 67,429 passages |
 | `armepic` | inscriptions | nc | wired · manual | 50 docs / 374 passages |
 | `ceipom` | inscriptions | attribution | wired · frozen | 3,871 docs / 5,303 passages |
+| `ceipp-rongorongo` | texts | nc | wired · manual | 25 docs / 314 passages |
 | `damos` | texts | nc | wired · manual | 5,890 docs / 14,421 passages |
 | `dharma-campa` | texts | attribution | wired · auto | 122 docs / 2,740 passages |
 | `dharma-deccan` | texts | attribution | wired · auto | 1,711 docs / 28,391 passages |
@@ -59,7 +60,7 @@ A source wears every desk it serves — these 41 answer this desk. Holdings are 
 | `trismegistos-geo` | feature module | attribution | wired · manual | nothing held yet |
 | `ucd` | feature module | open | wired · manual | nothing held yet |
 
-**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 18 November 2026)</span>: `lat` 195,110 · `grc` 77,312 · `xna` 36,758 · `eng` 26,155 · `hit` 21,209 · `non` 20,442 · `tam-Latn` 10,706 · `ett` 6,259 · `gmy` 5,890 · `tel-Latn` 5,104 … and 101 more (`nabu axis epigraphy` lists all).
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 21 November 2026)</span>: `lat` 195,110 · `grc` 77,312 · `xna` 36,758 · `eng` 26,155 · `hit` 21,209 · `non` 20,442 · `tam-Latn` 10,706 · `ett` 6,259 · `gmy` 5,890 · `tel-Latn` 5,104 … and 102 more (`nabu axis epigraphy` lists all).
 
 ## The desk's instruments
 
@@ -133,4 +134,4 @@ The full guidance, per script, is on the [display page](https://github.com/arvic
 
 ---
 
-One of the [30 research desks]({{ '/axis/' | relative_url }}); the flat shelf map is [The Library]({{ '/library/' | relative_url }}) and the reasoning is [docs/axes.md](https://github.com/arvicco/nabu/blob/main/docs/axes.md).
+One of the [31 research desks]({{ '/axis/' | relative_url }}); the flat shelf map is [The Library]({{ '/library/' | relative_url }}) and the reasoning is [docs/axes.md](https://github.com/arvicco/nabu/blob/main/docs/axes.md).
