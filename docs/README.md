@@ -62,7 +62,7 @@ summaries of several pages below.
 |---|---|
 | [dev-loop.md](dev-loop.md) | How Nabu is built: phases, packets, gates, model tiering, releases. |
 | [maintenance-and-extension.md](maintenance-and-extension.md) | Where truth lives for every aspect of the project, the maintenance cadence, and the source-adoption decision procedure. |
-| [improvements.md](improvements.md) | The improvement catalogue: known gaps and candidate directions. |
+| [history/improvements.md](history/improvements.md) | The retired improvement catalogue (2026-07 → 2026-11): how each capability was weighed, and where it landed. |
 
 ## History
 

@@ -149,7 +149,7 @@ MCP server is the rehearsal: the tool contract that would face outward
 runs locally first, against the real corpus, under the same license gates.
 The register of candidate capabilities, each argued with the case against,
 is
-[docs/improvements.md](https://github.com/arvicco/nabu/blob/main/docs/improvements.md).
+[docs/history/improvements.md](https://github.com/arvicco/nabu/blob/main/docs/history/improvements.md).
 
 ## Licensing
 

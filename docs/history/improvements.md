@@ -1,4 +1,12 @@
-# Improvements register
+# Improvements register  [RETIRED 2026-11-22 — historical]
+
+*This register is retired as a planning surface. Its graduation sweep
+of 2026-11-22 found every shipped entry recorded, carried the live
+remainders into the development loop's internal planning, and left
+this file as the historical record of how each capability was weighed.
+The permission points in §4.3 remain the live reference for any future
+external-access feature.*
+
 
 *A living register of candidate capabilities, born from the strategic reviews
 of 2026-07-06 and 2026-07-08. This is NOT the backlog: nothing here is
