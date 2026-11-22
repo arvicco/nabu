@@ -184,6 +184,11 @@ module Nabu
     # scan-meter --run`, writing the local-meter shelf, never a db/ row —
     # what reaches db/ is the shelf's projection (store/silver_meter.rb,
     # a builder file above), which reads shelf records, not scanner code.
+    # The reuse-postings engine (the census, its local/reuse/ gateway, the
+    # fork pool, the postings producer and its bulk first-found writer) is
+    # out on the same footing: heavy producer code run only by `nabu reuse
+    # build` / `parallels --batch --engine postings`, writing local/ and
+    # the mined-links layer, never a db/ row.
     EXCLUDED_DIRS = (%w[adapters mcp query health ops data_build export cli scansion] + BUILDER_DIRS).freeze
     EXCLUDED_FILES = (BUILDER_FILES + INDEX_FILES + %w[
       store/fts_structure.rb store/lane_coverage.rb store/rebuild_runs.rb
@@ -193,6 +198,8 @@ module Nabu
       batch_cognates.rb batch_formulas.rb batch_parallels.rb
       link_stamps.rb store/source_content_identity.rb
       mined_layers.rb store/mined_links.rb store/link_layers.rb links_mine_commands.rb
+      batch_parallels_postings.rb reuse_census.rb reuse_pool.rb store/reuse_postings.rb store/fts5_tokens.rb
+      store/links_journal_first_found.rb
       scansion.rb meter_scan.rb
       suttacentral_parallels.rb library_references.rb corph_dil_references.rb
       ccl_etymologies.rb

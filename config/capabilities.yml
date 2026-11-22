@@ -71,8 +71,8 @@ capabilities:
     layers: [dictionaries, reflex_closure, alignment_refs, facets_timeline, catalog]
   intertext:
     desc: parallels, repeated formulas and the mined cross-reference graph around a passage
-    surfaces: {cli: [parallels, formulas, links], mcp: [nabu_parallels, nabu_links]}
-    layers: [catalog, passages_fts, passage_lemmas, cjk_lane, links_journal, mined_links]
+    surfaces: {cli: [parallels, formulas, links, reuse build, reuse status], mcp: [nabu_parallels, nabu_links]}
+    layers: [catalog, passages_fts, passage_lemmas, cjk_lane, links_journal, mined_links, reuse_postings]
   character_desk:
     desc: Han / cuneiform / hieroglyph character cards and sign-by-sign ATF reading
     surfaces: {cli: [char, signs], mcp: [nabu_char, nabu_signs]}
@@ -290,6 +290,12 @@ layers:
     producer: enrichment
     cost: time_heavy
     command: "nabu links mine SCOPE | nabu parallels --batch SCOPE"
+  reuse_postings:
+    home: local/reuse/<build>/ (manifest + gram-hash shards)
+    producer: enrichment
+    cost: time_heavy
+    command: "nabu reuse build SCOPE"
+    desc: per-scope gram postings the parallels postings engine scores from; stamped, staleness in nabu reuse status
   vectors:
     home: db/vectors.sqlite3
     producer: enrichment
