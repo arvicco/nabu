@@ -248,6 +248,17 @@ is the division of labor.
 3. **Stage A attendance:** Phase 0 runs interactively (Fable orchestrating, Opus implementing); `/loop` from Phase 1 onward.
 4. In effect: the phase plan doc (`.docs/p<N>-plan.md`) carries the elaborated packets (the early backlog file carried them through P43), `.claude/settings.json` carries the permission profile, work proceeds on `phase-N` branches — and independent packets dispatch as parallel agents in worktrees off the phase branch (routine practice since P78), with the loop integrating the merges.
 
+   **A lane worktree runs the strict suite — `bundle exec rake worktree:prepare` first.**
+   `local/` is gitignored, so a fresh worktree has no `local/fixtures/`: the
+   test helper's StrictSkips gate never binds, restricted-source tests skip
+   quietly, and the lane reports green on a suite the main checkout would
+   fail. The task symlinks the main checkout's `local/fixtures`,
+   `local/shelves` and `local/config` into the worktree's `local/`
+   (resolving the main checkout from git, never a hardcoded path); it is
+   idempotent, never replaces anything already there, and is a no-op on the
+   main checkout itself (`Nabu::Ops::WorktreePrep`,
+   `test/ops/worktree_prep_test.rb`).
+
 ### §4 addendum — gate waits don't block the loop (owner, 2026-07-11)
 
 When a packet stops at an owner approval gate (fixture plan, design pick),
