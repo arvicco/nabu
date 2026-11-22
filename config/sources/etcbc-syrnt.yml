@@ -2,7 +2,7 @@ etcbc-syrnt:   # 02-sources row 430
   adapter: Nabu::Adapters::EtcbcSyrnt
   adopted: "2026-11-22"
   axes: [biblical, syriac]
-  wired: false   # bin/nabu enable etcbc-syrnt, then bin/nabu sync etcbc-syrnt
+  wired: true
                  # (sparse GitFetch cone tf/0.1 + docs/about.md, 43 feature
                  # files ≈ 15 MB). EXPECT 27 docs / 7,957 passages / 109,640
                  # tokens, 0 errored, 1 file skipped by rule (tf/0.1/__checkout__.txt)

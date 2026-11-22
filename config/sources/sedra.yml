@@ -2,7 +2,7 @@ sedra:   # 02-sources row 432
   adapter: Nabu::Adapters::Sedra
   adopted: "2026-11-22"
   axes: [syriac]
-  wired: false   # bin/nabu enable sedra, then bin/nabu sync sedra (ONE 13.6 MB
+  wired: true
                  # zip, the numbered release 5.0, sha256-pinned). EXPECT 1 doc →
                  # 35,891 entries, 0 errored, 12 files skipped by rule (sedra4/ ×5,
                  # conjugation_templates, conjugations, stems, vowels, authors,

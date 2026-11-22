@@ -2,7 +2,7 @@ syriac-htr-gt:   # 02-sources row 431
   adapter: Nabu::Adapters::SyriacHtrGt
   adopted: "2026-11-22"
   axes: [biblical, syriac]
-  wired: false   # bin/nabu enable syriac-htr-gt, then bin/nabu sync syriac-htr-gt
+  wired: true
                  # (two md5-pinned page.zip downloads, 1.1 MB + 2.5 MB; the image
                  # zips are never fetched). EXPECT 273 docs / 20,706 passages
                  # (onb-cod-syr-1 140 pages / 2,870 lines — 5 empty lines mint
