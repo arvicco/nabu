@@ -919,9 +919,11 @@ module Nabu
         if build_shadow
           timed_sync_stage(ledger, slug, "fts_shadow",
                            "index slice: #{slug} — passages_fts shadow build (#{ids.size} rows over the " \
-                           "#{row_budget}-row in-place budget: append-only, swapped in whole)", progress) do
-            build_fts_shadow!(catalog: catalog, fulltext: fulltext, source_id: source_id, progress: progress)
+                           "#{row_budget}-row in-place budget: append-only, swapped in whole)", progress,
+                           rows_of: :itself.to_proc) do
+            written = build_fts_shadow!(catalog: catalog, fulltext: fulltext, source_id: source_id, progress: progress)
             swap_fts_shadow!(fulltext)
+            written
           end
         end
         with_bulk_write_mode(fulltext, governed) do
@@ -1294,11 +1296,82 @@ module Nabu
         timed_sync_stage(ledger, "corpus", "fts_shadow",
                          "index wave: #{plans.keys.join(', ')} — passages_fts shadow build (#{volume} rows " \
                          "over the #{row_budget}-row in-place budget: ONE append-only pass for the wave, " \
-                         "swapped in whole)", progress) do
-          build_fts_shadow!(catalog: catalog, fulltext: fulltext, source_id: plans.keys.map { |slug| source_ids[slug] },
-                            progress: progress)
+                         "swapped in whole)", progress, rows_of: :itself.to_proc) do
+          written = build_fts_shadow!(catalog: catalog, fulltext: fulltext,
+                                      source_id: plans.keys.map { |slug| source_ids[slug] }, progress: progress)
           swap_fts_shadow!(fulltext)
+          written
         end
+      end
+
+      # == The shadow forecast: delta-engaged is not delta-priced
+      #
+      # MEASURED (2026-11-21): a two-source `index refresh` whose ledger
+      # priced its per-source slices at ~13 min was killed three times at
+      # its watcher deadline — each time deep inside the passages_fts
+      # shadow build, a ~95M-row append into a fresh table with the fts
+      # governor consolidating the shadow's level-0 segments as it grew.
+      # The refreshed slices were the DELTA; the shadow is the whole
+      # index, so the stage that dominated the run was the one the
+      # deadline never priced, and a kill inside it discards everything
+      # (the orphan shadow is dropped at the next entry; the governor's
+      # relief chunks run inside the build's commit groups) — kill + retry
+      # restarted from zero. A clean never-kill run took 73m33s.
+      #
+      # So the refresh PREDICTS the shadow before it starts, from the very
+      # state refresh_source!/refresh_sources! decide on: each member's
+      # slice volume (slice_plan's key set — the source's every passage on
+      # the whole-slice grain, the exact heal diff over a pending marker)
+      # against +row_budget+, the contentless shape, and shadow_ready?'s
+      # sidecar completeness; a wave over budget takes ONE corpus-scoped
+      # shadow, else each member decides alone. Returns one ShadowForecast
+      # per predicted build — +scope+ the ledger scope the build records
+      # under (the slug, or "corpus" for a wave), +slugs+ the refreshed
+      # sources it serves, +rows+ the rows the
+      # shadow will hold (the sidecar's rows outside the members plus the
+      # members' live rows: exactly what build_fts_shadow! writes). Empty
+      # when no shadow is coming. Read-only; whole-slice grain only (the
+      # `index refresh` shape — a sync's load delta is not known before
+      # its load, so the sync preflight never forecasts).
+      ShadowForecast = Data.define(:scope, :slugs, :rows)
+
+      def fts_shadow_forecasts(catalog:, fulltext:, slugs:, row_budget: IN_PLACE_ROW_BUDGET)
+        return [] unless incremental_ready?(fulltext) && fts_contentless?(fulltext)
+
+        source_ids = catalog[:sources].where(slug: slugs.uniq).to_hash(:slug, :id)
+        members = slugs.uniq.select { |slug| source_ids[slug] }
+        volumes = members.to_h { |slug| [slug, forecast_volume(catalog, fulltext, slug, source_ids[slug])] }
+        ids_of = ->(group) { group.map { |slug| source_ids[slug] } }
+        if members.size > 1 && volumes.values.sum > row_budget && shadow_ready?(catalog, fulltext, ids_of.call(members))
+          return [shadow_forecast(catalog, fulltext, "corpus", members, ids_of.call(members))]
+        end
+
+        members.filter_map do |slug|
+          next unless volumes[slug] > row_budget && shadow_ready?(catalog, fulltext, source_ids[slug])
+
+          shadow_forecast(catalog, fulltext, slug, [slug], ids_of.call([slug]))
+        end
+      end
+
+      # A member's slice volume as slice_plan would measure it — the
+      # source's every passage (withdrawn included) on the rewrite path,
+      # counted rather than loaded; the exact heal diff when a pending
+      # marker makes the run a heal.
+      def forecast_volume(catalog, fulltext, slug, source_id)
+        if slice_pending?(fulltext, slug)
+          return slice_plan(catalog, fulltext, slug: slug, source_id: source_id).ids.size
+        end
+
+        catalog[:passages].join(:documents, id: Sequel[:passages][:document_id])
+                          .where(Sequel[:documents][:source_id] => source_id).count
+      end
+
+      def shadow_forecast(catalog, fulltext, scope, members, member_ids)
+        recorded = fulltext[ROW_SHAS_TABLE].exclude(source_id: member_ids).count
+        live = shadow_catalog_rows(catalog)
+               .where(Sequel[:passages][:withdrawn] => false, Sequel[:documents][:withdrawn] => false)
+               .where(Sequel[:documents][:source_id] => member_ids).count
+        ShadowForecast.new(scope: scope, slugs: members, rows: recorded + live)
       end
 
       # P78-r3: announce with the last sync's estimate, run, record the
@@ -1306,7 +1379,10 @@ module Nabu
       # nothing — the rebuild path keeps its own profiler lane. The stage
       # must DECLARE its cost class first (Store::IndexCostClasses — the
       # proportionality law): an undeclared stage refuses to time.
-      def timed_sync_stage(ledger, scope, stage, label, progress, &)
+      # +rows_of+ (optional) maps the block's result to the stage's work
+      # size, recorded beside the seconds so a later estimate scales by
+      # drift (the shadow builds: the rows they wrote).
+      def timed_sync_stage(ledger, scope, stage, label, progress, rows_of: nil, &)
         IndexCostClasses.for("sync", stage)
         eta = ledger && Nabu::Eta.for(ledger, kind: "sync", scope: scope, stage: stage)
         progress&.stage(label, eta: eta)
@@ -1314,7 +1390,8 @@ module Nabu
         result = yield
         if ledger
           StageTimings.record!(ledger, kind: "sync", scope: scope, stage: stage,
-                                       seconds: Process.clock_gettime(Process::CLOCK_MONOTONIC) - started)
+                                       seconds: Process.clock_gettime(Process::CLOCK_MONOTONIC) - started,
+                                       rows: rows_of&.call(result))
         end
         result
       end

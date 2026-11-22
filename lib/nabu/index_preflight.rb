@@ -30,10 +30,31 @@ module Nabu
   # are deliberately not read. Prediction is honest about its basis: a
   # source with no history plans nothing and passes (first run — no
   # estimate; refusing every first sync would make the gate a wall), and
-  # the plan never invents stages it has no row for. The shadow build
-  # (Indexer's above-budget path) is deliberately NOT planned: it is an
-  # arrival event that fires on the load's size, which the preflight —
-  # running before the load — cannot know; it announces and ticks itself.
+  # the plan never invents stages it has no row for.
+  #
+  # == The shadow build: delta-engaged is not delta-priced
+  #
+  # A sync's shadow build (Indexer's above-budget path) is an arrival
+  # event that fires on the load's size, which the sync preflight —
+  # running before the load — cannot know; there it announces and ticks
+  # itself. An `index refresh` is different: its load already landed, so
+  # the shadow is PREDICTABLE (Indexer.fts_shadow_forecasts reads the
+  # state the run decides on), and it must be — the refreshed slices are
+  # the delta, but the shadow is the whole index (MEASURED 2026-11-21: a
+  # wave whose slices priced ~13m ran an hour-long ~95M-row shadow build,
+  # the fts governor consolidating the fresh shadow inside it; the
+  # watcher's slice-priced deadline killed it three times, and every kill
+  # discarded the whole build — kill + retry restarted from zero). So
+  # the refresh hands its forecast to gate!, which prices each predicted
+  # build as its own stage, "fts_shadow" — the latest fts_shadow row of
+  # ANY scope (the cost is the shadow's size, not whose refresh triggered
+  # it), scaled by the rows it recorded when it recorded them; with no
+  # row at all, a conservative floor from the forecast's row count
+  # (SHADOW_FLOOR_ROWS_PER_SECOND) — and returns the priced stages so the
+  # watcher's deadline covers slices + shadow together. And it refuses
+  # up front (check_shadow!) whenever a kill would land inside the stage
+  # or the run is long and unaccepted, naming the stage, its price, and
+  # the flags that proceed.
   module IndexPreflight
     extend DurationFormat
 
@@ -42,7 +63,31 @@ module Nabu
     # heavy line, architecture §1, applied per run).
     BUDGET_SECONDS = 15 * 60
 
-    Stage = Data.define(:scope, :stage, :seconds)
+    # +ledgered+/+basis+ describe a PRICED stage (the forecast shadow):
+    # whether a ledger row priced it, and the one-clause account of how.
+    Stage = Data.define(:scope, :stage, :seconds, :ledgered, :basis) do
+      def initialize(scope:, stage:, seconds:, ledgered: true, basis: nil) = super
+    end
+
+    # The forecast shadow's ledger stage (Indexer's timed fts_shadow).
+    SHADOW_STAGE = "fts_shadow"
+
+    # The first-run floor for a shadow build with no ledger row: rows per
+    # second, deliberately slow. MEASURED: the clean 2026-11-22 wave wrote
+    # a ~95M-row shadow in about an hour on a quiet box (its 73m33s less
+    # the ~13m its slices priced — ~26k rows/s);
+    # the floor sits well under that so contention (a parallel suite
+    # shared the box at one of the kills) cannot outrun it.
+    SHADOW_FLOOR_ROWS_PER_SECOND = 15_000
+
+    # The least an explicit --deadline may be against a forecast shadow:
+    # COVER_MARGIN × the priced total, in whole minutes rounded up. A
+    # deadline merely above the estimate is no cover — MEASURED: a 75m
+    # deadline against a run whose clean quiet-box wall was 73m33s still
+    # died at the deadline, the box shared with a parallel test suite.
+    # Contention is the margin's job; the 2.5× the refusal suggests
+    # (IndexWatcher::DEADLINE_FACTOR) stays the comfortable value.
+    COVER_MARGIN = 1.25
 
     # +total+ is nil when nothing was planned (no history).
     Plan = Data.define(:slug, :stages) do
@@ -58,19 +103,119 @@ module Nabu
     # The CLI's one call: read the plan for each of +slugs+ through a
     # short read-only ledger handle (no ledger = a fresh box = no
     # history), print every plan to +out+, then refuse the first one past
-    # the budget. Runs before the command opens the catalog or the index.
-    def gate!(history_path:, slugs:, accept_long:, out: $stderr)
-      return if slugs.empty?
+    # the budget. Runs before the command opens the catalog or the index
+    # for writing (the shadow forecast reads them through read-only handles).
+    #
+    # +shadows+ (Indexer::ShadowForecast list — `index refresh` only) are
+    # priced as stages of their own, printed with the plans, and checked
+    # against +deadline_minutes+ (the command's --deadline; nil = none)
+    # by check_shadow!. Returns the priced shadow stages (empty without a
+    # forecast), whose seconds the caller adds to the watcher's estimate.
+    def gate!(history_path:, slugs:, accept_long:, out: $stderr, shadows: [], deadline_minutes: nil)
+      return [] if slugs.empty?
 
       ledger = Store.connect(history_path, readonly: true) if File.exist?(history_path)
       plans = slugs.map { |slug| plan(ledger, slug: slug) }
+      priced = shadows.map { |forecast| price_shadow(ledger, forecast) }
       # Every plan prints before the first refusal: the owner sees the
       # whole batch's cost, not just the stage that tripped.
       out.puts(plans.flat_map { |each_plan| lines(each_plan) }) if plans.any?(&:total)
+      out.puts(shadows.zip(priced).map { |forecast, stage| shadow_line(forecast, stage) }) unless priced.empty?
+      check_shadow!(plans, shadows, priced, accept_long: accept_long, deadline_minutes: deadline_minutes)
       plans.each { |each_plan| check!(each_plan, accept_long: accept_long) }
-      nil
+      priced
     ensure
       ledger&.disconnect
+    end
+
+    # One forecast shadow priced as a Stage (class note): the latest
+    # fts_shadow row of any scope — scaled by the forecast's rows when the
+    # row recorded its own — else the floor from the forecast's size.
+    def price_shadow(ledger, forecast)
+      last = latest_shadow_row(ledger)
+      if last.nil?
+        return Stage.new(scope: forecast.scope, stage: SHADOW_STAGE,
+                         seconds: forecast.rows.to_f / SHADOW_FLOOR_ROWS_PER_SECOND, ledgered: false,
+                         basis: "UNPRICED — no #{SHADOW_STAGE} row in the ledger; conservative floor at " \
+                                "#{Eta.commas(SHADOW_FLOOR_ROWS_PER_SECOND)} rows/s")
+      end
+
+      scalable = last[:rows]&.positive?
+      seconds = scalable ? last[:seconds] * forecast.rows / last[:rows].to_f : last[:seconds].to_f
+      basis = "ledger: last run #{format_duration(last[:seconds])}"
+      basis += " over #{Eta.commas(last[:rows])} rows; scaled for #{Eta.commas(forecast.rows)}" if scalable
+      Stage.new(scope: forecast.scope, stage: SHADOW_STAGE, seconds: seconds, ledgered: true, basis: basis)
+    end
+
+    def latest_shadow_row(ledger)
+      return nil unless Store::StageTimings.table?(ledger)
+
+      ledger[Store::StageTimings::TABLE].where(kind: "sync", stage: SHADOW_STAGE)
+                                        .order(Sequel.desc(:id)).select(:seconds, :rows).first
+    end
+
+    def shadow_line(forecast, stage)
+      "index preflight: predicted #{describe_shadow(forecast)} — the passages_fts shadow build over " \
+        "~#{Eta.commas(forecast.rows)} rows: ~#{format_duration(stage.seconds)} (#{stage.basis})"
+    end
+
+    def describe_shadow(forecast)
+      members = forecast.scope == "corpus" ? " — #{forecast.slugs.join(' + ')}" : ""
+      "#{SHADOW_STAGE} (#{forecast.scope}#{members})"
+    end
+
+    # The honest refusal for a forecast shadow (class note). A kill inside
+    # the stage discards the whole build, so the run refuses when:
+    #   - an explicit positive --deadline is under cover_minutes — the
+    #     priced total (slices + shadow) with COVER_MARGIN on top: the
+    #     kill would land inside the stage, --accept-long or not;
+    #   - without --accept-long, the priced total passes +budget+, or the
+    #     shadow is UNPRICED (no ledger row — the floor is a guess, not
+    #     evidence) and no explicit --deadline sized the run.
+    # Otherwise it proceeds; a computed deadline (DEADLINE_FACTOR × the
+    # priced total) covers the total by construction.
+    def check_shadow!(plans, shadows, priced, accept_long:, deadline_minutes:, budget: BUDGET_SECONDS)
+      return nil if priced.empty?
+
+      total = plans.sum { |each_plan| each_plan.total || 0 } + priced.sum(&:seconds)
+      reason =
+        if deadline_minutes.to_f.positive? && deadline_minutes.to_f < cover_minutes(total)
+          "--deadline #{format_minutes(deadline_minutes)} cannot cover it (under the #{cover_minutes(total)}-minute " \
+            "minimum, #{COVER_MARGIN}x the priced total: the kill would land inside the stage)"
+        elsif accept_long
+          nil
+        elsif total > budget
+          "the total is past the #{format_duration(budget)} inline budget"
+        elsif deadline_minutes.nil? && priced.any? { |stage| !stage.ledgered }
+          "no ledger row prices it yet"
+        end
+      return nil if reason.nil?
+
+      raise Refused, shadow_refusal(shadows, priced, total, reason, long: total > budget)
+    end
+
+    def shadow_refusal(shadows, priced, total, reason, long:)
+      stages = shadows.zip(priced).map do |forecast, stage|
+        price = stage.ledgered ? "priced ~#{format_duration(stage.seconds)} (#{stage.basis})" : stage.basis
+        "stage #{describe_shadow(forecast)}, the whole index rewritten append-only over " \
+          "~#{Eta.commas(forecast.rows)} rows with the fts governor's consolidation inside it — #{price}"
+      end
+      minutes = [(total * IndexWatcher::DEADLINE_FACTOR / 60).ceil, IndexWatcher::MIN_DEADLINE_SECONDS / 60].max
+      sized = "--deadline #{minutes}#{' --accept-long' if long}"
+      "index preflight: this refresh will run the passages_fts shadow build — #{stages.join('; ')}; " \
+        "predicted total with the slices ~#{format_duration(total)}, and #{reason}. A kill inside the " \
+        "stage discards the whole build (the retry restarts it from zero), so refusing to start. " \
+        "Proceed with #{sized} (#{IndexWatcher::DEADLINE_FACTOR}x the priced total; no explicit deadline " \
+        "under #{cover_minutes(total)} is accepted — #{COVER_MARGIN}x), or " \
+        "--deadline 0 --accept-long (never kill)"
+    end
+
+    # The least explicit --deadline (minutes) that covers +total+ seconds.
+    def cover_minutes(total) = (total * COVER_MARGIN / 60).ceil
+
+    def format_minutes(minutes)
+      value = minutes.to_f
+      value == value.floor ? value.to_i.to_s : value.to_s
     end
 
     def plan(ledger, slug:, stages: IndexWatcher::REFRESH_STAGES)

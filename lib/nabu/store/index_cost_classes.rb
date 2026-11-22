@@ -23,7 +23,10 @@ module Nabu
     #   - ARRIVAL: O(source)/O(corpus), but an arrival event BY
     #     CONSTRUCTION — it fires only on the size of the write that
     #     triggers it (the shadow builds past the in-place budget), once
-    #     per such write, announced and ticked.
+    #     per such write, announced and ticked. Not O(Δ) for being
+    #     triggered by a delta: an `index refresh` forecasts the shadow it
+    #     will pay and prices it before the writer starts
+    #     (Indexer.fts_shadow_forecasts, IndexPreflight's shadow note).
     #   - RAIL: corpus-scale work owned by the maintenance rail
     #     (`nabu index maintain`), never the sync path.
     module IndexCostClasses

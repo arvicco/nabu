@@ -2949,5 +2949,79 @@ module Store
       refute Nabu::Store::Indexer.slice_pending?(@fulltext, "lit")
       assert_identical_to_a_fresh_rebuild
     end
+
+    # -- the shadow forecast: what the index refresh preflight prices ------
+    # The shadow build (and the fts governor's consolidation of the fresh
+    # shadow inside it) is corpus-sized whatever the refreshed slice's
+    # size. The forecast predicts it from the very state the run decides
+    # on — slice volumes against the budget, the sidecar's completeness —
+    # so the deadline can price it before the writer starts. Each test
+    # pins the forecast to what the run then actually does.
+
+    def forecast(slugs, row_budget:)
+      Nabu::Store::Indexer.fts_shadow_forecasts(catalog: @catalog, fulltext: @fulltext, slugs: slugs,
+                                                row_budget: row_budget)
+    end
+
+    def test_the_forecast_predicts_a_single_sources_shadow_and_its_size
+      doc = shadow_fixture
+      mutate_shadow_fixture(doc)
+      predicted = forecast(%w[s], row_budget: 3)
+
+      assert_equal [["s", %w[s], 5]], predicted.map { |f| [f.scope, f.slugs, f.rows] },
+                   "lit's 2 recorded rows + s's 3 live rows (the withdrawn one excluded)"
+      with_ledger do |ledger|
+        refresh!(row_budget: 3, ledger: ledger)
+
+        assert_equal [["s", 5]], shadow_stage_rows(ledger).map { |row| [row[:scope], row[:rows]] },
+                     "the run took the predicted shadow and ledgered its row count"
+      end
+    end
+
+    def test_the_forecast_predicts_no_shadow_at_the_budget
+      doc = shadow_fixture
+      mutate_shadow_fixture(doc)
+
+      assert_empty forecast(%w[s], row_budget: 4)
+      with_ledger do |ledger|
+        refresh!(row_budget: 4, ledger: ledger)
+
+        assert_empty shadow_stage_rows(ledger)
+      end
+    end
+
+    def test_the_forecast_predicts_no_shadow_when_the_sidecar_cannot_name_the_membership
+      doc = shadow_fixture
+      mutate_shadow_fixture(doc)
+      row_shas.where(source_id: literary_source.id).delete
+
+      assert_empty forecast(%w[s], row_budget: 0), "the run writes in place under the governor instead"
+    end
+
+    def test_the_forecast_predicts_the_waves_one_corpus_scoped_shadow
+      wave_fixture
+      predicted = forecast(%w[s lit], row_budget: 5)
+
+      assert_equal([["corpus", %w[s lit], 6]], predicted.map { |f| [f.scope, f.slugs, f.rows] })
+      with_ledger do |ledger|
+        refresh_wave!(%w[s lit], row_budget: 5, ledger: ledger)
+
+        assert_equal([["corpus", 6]], shadow_stage_rows(ledger).map { |row| [row[:scope], row[:rows]] })
+      end
+    end
+
+    def test_the_forecast_predicts_no_shadow_for_a_wave_under_budget
+      wave_fixture
+
+      assert_empty forecast(%w[s lit], row_budget: 7)
+    end
+
+    def test_the_forecast_reads_a_pending_members_heal_volume
+      wave_fixture
+      Nabu::Store::Indexer.mark_slice_pending!(@fulltext, "lit", shape: "atomic")
+      # lit heals by its exact diff (one unindexed row), s rewrites its 4 keys.
+      assert_empty forecast(%w[s lit], row_budget: 5), "4 + 1 heal rows stay under the 5-row budget"
+      assert_equal %w[corpus], forecast(%w[s lit], row_budget: 4).map(&:scope)
+    end
   end
 end
