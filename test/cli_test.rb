@@ -6070,6 +6070,25 @@ class CLITest < Minitest::Test
     end
   end
 
+  # The incident's third kill: 75m against a 73m33s run. Against this
+  # 72m priced total a 75m deadline is above the estimate but under the
+  # 1.25x cover margin (90m), so it refuses; 90m proceeds.
+  def test_index_refresh_refuses_a_deadline_just_above_the_forecast_total
+    with_two_source_wave do |config|
+      plant_wave_history(config)
+      with_forecast_shadow do
+        _out, err, status = with_config(config) { run_cli(%w[index refresh pap lit --accept-long --deadline 75]) }
+
+        assert_equal 1, status
+        assert_match(/--deadline 75 cannot cover it \(under the 90-minute minimum/, err)
+        _out, err, status = with_config(config) { run_cli(%w[index refresh pap lit --accept-long --deadline 90]) }
+
+        assert_nil status, err
+        assert_match(/index watcher: armed — kills the writer at 90m00s/, err)
+      end
+    end
+  end
+
   def test_index_refresh_names_an_unpriced_forecast_shadow
     with_deferred_wave do |config|
       plant_wave_history(config, shadow_seconds: nil)

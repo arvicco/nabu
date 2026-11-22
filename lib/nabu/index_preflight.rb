@@ -80,6 +80,15 @@ module Nabu
     # shared the box at one of the kills) cannot outrun it.
     SHADOW_FLOOR_ROWS_PER_SECOND = 15_000
 
+    # The least an explicit --deadline may be against a forecast shadow:
+    # COVER_MARGIN × the priced total, in whole minutes rounded up. A
+    # deadline merely above the estimate is no cover — MEASURED: a 75m
+    # deadline against a run whose clean quiet-box wall was 73m33s still
+    # died at the deadline, the box shared with a parallel test suite.
+    # Contention is the margin's job; the 2.5× the refusal suggests
+    # (IndexWatcher::DEADLINE_FACTOR) stays the comfortable value.
+    COVER_MARGIN = 1.25
+
     # +total+ is nil when nothing was planned (no history).
     Plan = Data.define(:slug, :stages) do
       def total = stages.empty? ? nil : stages.sum(&:seconds)
@@ -157,9 +166,9 @@ module Nabu
 
     # The honest refusal for a forecast shadow (class note). A kill inside
     # the stage discards the whole build, so the run refuses when:
-    #   - an explicit positive --deadline is shorter than the priced
-    #     total (slices + shadow) — the kill would land inside the stage,
-    #     --accept-long or not;
+    #   - an explicit positive --deadline is under cover_minutes — the
+    #     priced total (slices + shadow) with COVER_MARGIN on top: the
+    #     kill would land inside the stage, --accept-long or not;
     #   - without --accept-long, the priced total passes +budget+, or the
     #     shadow is UNPRICED (no ledger row — the floor is a guess, not
     #     evidence) and no explicit --deadline sized the run.
@@ -170,8 +179,9 @@ module Nabu
 
       total = plans.sum { |each_plan| each_plan.total || 0 } + priced.sum(&:seconds)
       reason =
-        if deadline_minutes.to_f.positive? && deadline_minutes.to_f * 60 < total
-          "--deadline #{format_minutes(deadline_minutes)} cannot cover it (the kill would land inside the stage)"
+        if deadline_minutes.to_f.positive? && deadline_minutes.to_f < cover_minutes(total)
+          "--deadline #{format_minutes(deadline_minutes)} cannot cover it (under the #{cover_minutes(total)}-minute " \
+            "minimum, #{COVER_MARGIN}x the priced total: the kill would land inside the stage)"
         elsif accept_long
           nil
         elsif total > budget
@@ -195,9 +205,13 @@ module Nabu
       "index preflight: this refresh will run the passages_fts shadow build — #{stages.join('; ')}; " \
         "predicted total with the slices ~#{format_duration(total)}, and #{reason}. A kill inside the " \
         "stage discards the whole build (the retry restarts it from zero), so refusing to start. " \
-        "Proceed with #{sized} (#{IndexWatcher::DEADLINE_FACTOR}x the priced total), or " \
+        "Proceed with #{sized} (#{IndexWatcher::DEADLINE_FACTOR}x the priced total; no explicit deadline " \
+        "under #{cover_minutes(total)} is accepted — #{COVER_MARGIN}x), or " \
         "--deadline 0 --accept-long (never kill)"
     end
+
+    # The least explicit --deadline (minutes) that covers +total+ seconds.
+    def cover_minutes(total) = (total * COVER_MARGIN / 60).ceil
 
     def format_minutes(minutes)
       value = minutes.to_f

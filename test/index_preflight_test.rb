@@ -172,6 +172,7 @@ class IndexPreflightTest < Minitest::Test
     assert_match(/predicted total with the slices ~73m03s/, error.message)
     assert_match(/past the 15m00s inline budget/, error.message)
     assert_match(/--deadline 183 --accept-long/, error.message, "2.5x the priced total, rounded up")
+    assert_match(/no explicit deadline under 92 is accepted — 1.25x/, error.message, "the margined minimum")
     assert_match(/--deadline 0 --accept-long/, error.message)
   end
 
@@ -180,6 +181,18 @@ class IndexPreflightTest < Minitest::Test
 
     error = assert_raises(Preflight::Refused) { gate(accept_long: true, deadline: 60) }
     assert_match(/--deadline 60 cannot cover it/, error.message)
+  end
+
+  # The margined boundary (COVER_MARGIN): a deadline above the priced
+  # total but under 1.25x of it is no cover — the 75m-vs-73m33s kill.
+  # Here the total is 73m03s, so the minimum is ceil(91.3) = 92 minutes.
+  def test_a_deadline_above_the_total_but_under_the_cover_margin_is_refused
+    plant_the_incident_ledger
+
+    error = assert_raises(Preflight::Refused) { gate(accept_long: true, deadline: 75) }
+    assert_match(/--deadline 75 cannot cover it \(under the 92-minute minimum, 1.25x the priced total/, error.message)
+    assert_raises(Preflight::Refused) { gate(accept_long: true, deadline: 91) }
+    assert_equal 1, gate(accept_long: true, deadline: 92).first.size, "the margined minimum itself covers"
   end
 
   def test_a_covering_deadline_or_zero_proceeds_with_accept_long
