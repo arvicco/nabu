@@ -632,6 +632,7 @@ namespace :boards do
     require_relative "lib/nabu/ops/source_readiness_check"
     require_relative "lib/nabu/ops/rule_liveness_check"
     require_relative "lib/nabu/ops/incident_register_check"
+    require_relative "lib/nabu/ops/decision_register_check"
     dir = ENV.fetch("BOARDS_DIR", File.expand_path(".docs", __dir__))
     report = Nabu::Ops::BoardCheck.new(boards_dir: dir).run
     if report.skipped
@@ -652,6 +653,11 @@ namespace :boards do
       register_path: File.join(dir, Nabu::Ops::IncidentRegisterCheck::FILE)
     ).run
     incidents.findings.each { |finding| puts "STALE  incident register #{finding}" }
+
+    decisions = Nabu::Ops::DecisionRegisterCheck.new(
+      register_path: File.join(dir, Nabu::Ops::DecisionRegisterCheck::FILE)
+    ).run
+    decisions.findings.each { |finding| puts "STALE  decision register #{finding}" }
 
     acquisition = Nabu::Ops::AcquisitionCheck.new(
       boards_dir: dir, adapters_dir: File.expand_path("lib/nabu/adapters", __dir__),
@@ -681,6 +687,7 @@ namespace :boards do
     failures << "#{watch.findings.size} stale GH watch row(s)" unless watch.clean?
     failures << "phase register behind the merged phases" unless phases.clean?
     failures << "#{incidents.findings.size} status-less incident row(s)" unless incidents.clean?
+    failures << "#{decisions.findings.size} parked ruled decision row(s)" unless decisions.clean?
     failures << "#{acquisition.findings.size} acquisition-duty finding(s)" unless acquisition.clean?
     failures << "#{groom.findings.size} ungroomed queue row(s)" unless groom.clean?
     failures << "#{readiness.findings.size} never-synced source(s)" unless readiness.clean?
