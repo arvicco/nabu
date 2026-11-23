@@ -455,8 +455,47 @@ module Nabu
       # measured minutes-class in-place writes (the 17.5k-row ndl delta;
       # the ~35-document heals) and the hours-class ones (3.77M, 8.75M) —
       # comfortably above routine sync deltas, two orders below the grinds.
-      # A named constant so a re-measurement moves it in one place.
+      # A named constant so a re-measurement moves it in one place. It now
+      # governs the TRIGRAM lane only (rows written — that lane carries no
+      # sidecar to count deletions by); passages_fts is classified by the
+      # rows it DELETES (REWRITE_CEILING below).
       IN_PLACE_ROW_BUDGET = 100_000
+
+      # == passages_fts classifies its write by rows DELETED (the mid-delta design)
+      #
+      # The row budget above classified the main index's write by rows
+      # WRITTEN, while the pathology it guards against — tombstones plus
+      # merge debt the engine repays on its own clock — is caused by rows
+      # DELETED into a built structure. MEASURED (2026-11): a 580,254-row
+      # NEW source, deleting nothing, paid a ~135M-row shadow (~55 min) for
+      # what is a pure tail append — the very write shape the shadow itself
+      # uses and proves fast (~41k rows/s). So per run, counting the doomed
+      # rowids the index actually holds (fts_deleted_rows — the row-sha
+      # sidecar's membership, conservative wherever it cannot vouch):
+      #
+      #   1. deleted == 0 → APPEND: no row cap; the batch-ticked governed
+      #      writer appends at the rowid tail (no delete statement at all),
+      #      then the EAGER consolidation (eager_consolidate! — the merge
+      #      governor's own bounded chunks and stall detection) runs until
+      #      every level is back under the governor's limit;
+      #   2. 0 < deleted ≤ REWRITE_CEILING → REWRITE: delete + append in
+      #      place as the small path always did, then the same eager loop —
+      #      the debt is repaid on OUR clock, ticked and watcher-visible,
+      #      never inside a later statement;
+      #   3. above the ceiling — or when the ledger-priced rewrite forecast
+      #      exceeds the full-shadow one (fts_path_forecast) — the SHADOW,
+      #      unchanged. A shadow the sidecar cannot support (shadow_ready?
+      #      false) keeps the pre-classifier contract: written in place,
+      #      announced, until a full rebuild backfills the sidecar.
+      #
+      # Each run logs its decision in one line (fts_path_line: path, rows
+      # written, rows deleted, forecast) and the append/rewrite unit is
+      # ledgered under its path's stage (fts_append / fts_rewrite, the rows
+      # it touched), so the ceiling — CONSERVATIVE at 1M deleted rows — is
+      # raised from measured timings, never guessed. Bucket-sharded fts5
+      # tables were rejected: bm25 corpus statistics are per table, so
+      # ranked results would reorder across shards.
+      REWRITE_CEILING = 1_000_000
       SHADOW_TABLE = :passages_fts_shadow
       # Shadow batches commit in groups: per-batch autocommit would flush a
       # level-0 segment per 2,000 rows, one wrapping transaction would hold
@@ -1198,3 +1237,4 @@ require_relative "indexer/char_postings"
 require_relative "indexer/signs"
 require_relative "indexer/stage_stamps"
 require_relative "indexer/clarify"
+require_relative "indexer/write_path"

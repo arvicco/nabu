@@ -71,6 +71,19 @@ module Nabu
                      .select(:scope, :stage, :seconds, :rows, :finished_at).all
       end
 
+      # Seconds per row of the latest +stage+ row of ANY scope that
+      # recorded a positive row count (the cost of a corpus-shaped stage is
+      # its size, not whose run paid it) — nil without such a row. The
+      # fts write-path classifier prices its rewrite-vs-shadow comparison
+      # from it (Indexer.fts_path_forecast).
+      def rate(ledger, kind:, stage:)
+        return nil unless table?(ledger)
+
+        row = ledger[TABLE].where(kind: kind, stage: stage).where(Sequel[:rows] >= 1)
+                           .order(Sequel.desc(:id)).select(:seconds, :rows).first
+        row && (row[:seconds].to_f / row[:rows])
+      end
+
       def table?(ledger)
         !ledger.nil? && ledger.table_exists?(TABLE)
       end
