@@ -4552,11 +4552,12 @@ shelves:
     - vakk
     - vks
     - bim-sahcoba
-    documents: 3384
-    documents_display: '3,384'
-    passages: 290635
-    passages_display: '290,635'
-    size_display: 3,384 / 290,635
+    - digar-corpora
+    documents: 6261
+    documents_display: '6,261'
+    passages: 870889
+    passages_display: '870,889'
+    size_display: 6,261 / 870,889
   chinese:
     sources:
     - kanripo
