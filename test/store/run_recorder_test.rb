@@ -264,5 +264,44 @@ module Store
       assert_match(/superseded/, old.refresh.notes)
       assert_equal "running", lone.refresh.status, "no pid, no newer run — nothing honest to conclude"
     end
+
+    # == The lanes-ran marker (ledger migration 015)
+    #
+    # A load that moved rows leaves the source's catalog lanes pending
+    # until a run stamps lanes_at after them; a fetch-only or no-op row
+    # moves nothing and leaves the verdict where it was.
+    def test_lanes_pending_after_a_row_moving_load_with_no_lane_stamp
+      Nabu::Store::RunRecorder.record_load(source_slug: "s") { load_report(added: 2) } # died before its lanes
+      current = Nabu::Store::RunRecorder.record_load(source_slug: "s") { load_report }
+
+      assert Nabu::Store::RunRecorder.lanes_pending?(source_slug: "s", current: current),
+             "the dead load's lanes never ran"
+      refute Nabu::Store::RunRecorder.lanes_pending?(source_slug: "other", current: current)
+    end
+
+    def test_a_lane_stamp_after_the_load_reads_lit_and_fetch_only_rows_change_nothing
+      loaded = Nabu::Store::RunRecorder.record_load(source_slug: "s") { load_report(updated: 1) }
+      Nabu::Store::RunRecorder.stamp_lanes!([loaded])
+      Nabu::Store::RunRecorder.record(source_slug: "s") { nil } # a fetch-only row
+      current = Nabu::Store::RunRecorder.record_load(source_slug: "s") { load_report }
+
+      refute_nil loaded.refresh.lanes_at
+      refute Nabu::Store::RunRecorder.lanes_pending?(source_slug: "s", current: current)
+    end
+
+    def test_a_later_row_moving_load_reopens_the_pending_verdict
+      lit = Nabu::Store::RunRecorder.record_load(source_slug: "s") { load_report(added: 1) }
+      Nabu::Store::RunRecorder.stamp_lanes!([lit])
+      Nabu::Store::RunRecorder.record_load(source_slug: "s") { load_report(added: 1) } # died before its lanes
+      current = Nabu::Store::RunRecorder.record_load(source_slug: "s") { load_report }
+
+      assert Nabu::Store::RunRecorder.lanes_pending?(source_slug: "s", current: current)
+    end
+
+    private
+
+    def load_report(added: 0, updated: 0)
+      Nabu::Store::LoadReport.new(added: added, updated: updated, skipped: 0, withdrawn: 0, errored: 0)
+    end
   end
 end

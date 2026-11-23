@@ -72,6 +72,35 @@ module Store
       db&.disconnect
     end
 
+    # 015: the lanes-ran marker. A row that closed "succeeded" after a
+    # row-moving load ran its post-load lanes (the row closes at operation
+    # end, migration 011), so the backfill stamps it; a dead row, a no-op
+    # or fetch-only row, and a pre-011 row (no loaded_at) stay unmarked.
+    def test_migration_015_backfills_lanes_at_only_for_completed_row_moving_loads
+      db = Nabu::Store::Ledger.connect("sqlite::memory:")
+      require "sequel/extensions/migration"
+      Sequel::Migrator.run(db, Nabu::Store::Ledger::MIGRATIONS_DIR, target: 14)
+      done = Time.utc(2026, 11, 1)
+      rows = {
+        ok: { added: 3, status: "succeeded", loaded_at: done, finished_at: done },
+        dead: { added: 3, status: "abandoned", loaded_at: done, finished_at: done },
+        noop: { added: 0, status: "succeeded", loaded_at: done, finished_at: done },
+        legacy: { added: 3, status: "succeeded", loaded_at: nil, finished_at: done }
+      }.transform_values do |fields|
+        db[:runs].insert(source_slug: "s", kind: "sync", started_at: done, **fields)
+      end
+
+      Nabu::Store::Ledger.migrate!(db)
+
+      lanes = db[:runs].to_hash(:id, :lanes_at)
+      refute_nil lanes.fetch(rows[:ok])
+      assert_nil lanes.fetch(rows[:dead])
+      assert_nil lanes.fetch(rows[:noop])
+      assert_nil lanes.fetch(rows[:legacy])
+    ensure
+      db&.disconnect
+    end
+
     def test_pins_composite_unique_index_enforced
       @ledger[:pins].insert(source_slug: "ud", repo_url: "https://github.com/acme/one", last_sync_sha: "a")
       assert_raises(Sequel::DatabaseError) do
@@ -230,7 +259,8 @@ module Store
       # reason (P93-2) + 011 runs.loaded_at (the row closes at operation end)
       # + 012 the "abandoned" run status (runs close-stale) + 013 runs.pid
       # (the dead-row sweep) + 014 rebuild_runs (machine-visible rebuilds)
-      assert_equal 14, db[:schema_info].get(:version)
+      # + 015 runs.lanes_at (the lanes-ran marker)
+      assert_equal 15, db[:schema_info].get(:version)
       assert_includes db[:runs].columns, :loaded_at
       assert db.table_exists?(:stage_timings)
       assert db.table_exists?(:quarantine_baselines)

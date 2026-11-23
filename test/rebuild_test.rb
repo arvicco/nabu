@@ -835,6 +835,23 @@ class RebuildTest < Minitest::Test
     assert_equal [%w[alpha rebuild succeeded], %w[beta rebuild succeeded]], runs
   end
 
+  # The lanes-ran marker (ledger migration 015): the corpus lane stages
+  # (timeline, facets, kinds…) ran for every replayed source, so each
+  # replay row is stamped — the next no-op sync reads its lanes lit.
+  def test_a_completed_rebuild_stamps_every_replay_row_lanes_ran
+    write_sources(<<~YAML)
+      alpha:
+        adapter: TestAdapter
+    YAML
+    write_canonical("alpha", "a.txt" => ILIAD)
+
+    rebuilder.run
+
+    stamps = with_ledger { Nabu::Store::Run.where(kind: "rebuild").select_map(:lanes_at) }
+    assert_equal 1, stamps.size
+    refute_nil stamps.first
+  end
+
   # A rebuild killed in its corpus stages (the fulltext index here) must not
   # leave a ledger of "succeeded" replay rows over a half-built library: every
   # source's row stays open (running, loaded_at stamped) until the WHOLE
@@ -861,6 +878,7 @@ class RebuildTest < Minitest::Test
       Nabu::Store::Run.order(:id).all.map { |run| [run.source_slug, run.status, !run.loaded_at.nil?, run.finished_at] }
     end
     assert_equal [["alpha", "running", true, nil], ["beta", "running", true, nil]], rows
+    assert_equal([nil, nil], with_ledger { Nabu::Store::Run.order(:id).select_map(:lanes_at) })
   end
 
   def test_a_rebuild_whose_corpus_stage_raises_closes_every_replay_row_failed

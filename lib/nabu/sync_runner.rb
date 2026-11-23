@@ -455,7 +455,11 @@ module Nabu
       # --verbose still explains them as one step (Ops::StageGuide).
       progress&.explain("post-load lanes: #{entry.slug}")
       refresh_honkoku_ndl_catalog(entry)
-      refresh_catalog_lanes(entry, load_report)
+      refresh_catalog_lanes(entry, load_report, run)
+      # The lanes-ran marker: from here on this run's lanes are current
+      # (refreshed, or probed lit) — a death before this line leaves the
+      # row unstamped, which the next sync's dark probe reads.
+      Store::RunRecorder.stamp_lanes!([run])
       refresh_itkc_author_dates(entry)
       refresh_dictionary_stats(entry, combined_report)
       refresh_derge_titles(entry)
@@ -492,7 +496,7 @@ module Nabu
     # synced source's slice post-load, mirroring Indexer.refresh_source!.
     # Canonical-walking timeline extractors (HGV, EDH…) stay rebuild-scoped
     # — their sources' syncs are rare and their walks are not cheap.
-    def refresh_catalog_lanes(entry, load_report)
+    def refresh_catalog_lanes(entry, load_report, run = nil)
       # The AED hiero postings census follows the CONE, not the
       # dictionary load (P103-2): a fetch can change the per-text
       # stand-off files while the dictionary entries stay identical, so
@@ -506,7 +510,7 @@ module Nabu
         Store::SignConcordances.rebuild!(catalog: @db, canonical_dir: @config.canonical_dir)
       end
       return if load_report.nil?
-      return if load_report.added.zero? && load_report.updated.zero? && !catalog_lanes_dark?(entry.slug)
+      return if load_report.added.zero? && load_report.updated.zero? && !catalog_lanes_dark?(entry.slug, run)
 
       facet_map = Nabu::FacetMap.load_default(config: @config)
       Store::FacetBuilder.refresh_source!(catalog: @db, slug: entry.slug, facet_map: facet_map)
@@ -546,9 +550,17 @@ module Nabu
     # source's live documents carry lane ore — structured date bounds or
     # facet metadata — that its lane tables hold no row for: the same two
     # probes `nabu health`'s drift twins read (Dataset#empty? — a LIMIT 1 probe).
-    def catalog_lanes_dark?(slug)
+    #
+    # The ore probes are blind to a source whose documents carry no such
+    # ore (its kind/entity lanes still project from the rows), so the
+    # lanes-ran marker answers first: a prior load that moved rows with no
+    # lane stamp at or after it (RunRecorder.lanes_pending?, ledger
+    # migration 015) means the lanes never ran — dark, whatever the ore.
+    # +run+ is this sync's own open row, excluded from the verdict.
+    def catalog_lanes_dark?(slug, run = nil)
       source_id = @db[:sources].where(slug: slug).get(:id)
       return false if source_id.nil?
+      return true if Store::RunRecorder.lanes_pending?(source_slug: slug, current: run)
 
       live = @db[:documents].where(source_id: source_id, withdrawn: false)
       ids = @db[:documents].where(source_id: source_id).select(:id)

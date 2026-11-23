@@ -126,6 +126,7 @@ class RebuildIncrementalTest < Minitest::Test
     assert_equal "running", killed[:status], "a run killed in its index stage never reads succeeded"
     refute_nil killed[:loaded_at]
     assert_nil killed[:finished_at]
+    assert_nil killed[:lanes_at], "a killed run never claims its lanes ran"
 
     write_canonical("alpha", "a.txt" => "Iliad\nμῆνιν ἄειδε θεά\n")
     incremental_rebuilder.run
@@ -133,6 +134,7 @@ class RebuildIncrementalTest < Minitest::Test
     assert_equal "running", rows.find { |row| row[:id] == killed[:id] }[:status]
     assert_equal "succeeded", rows.last[:status], "the healthy run's row closes at its end"
     assert_equal "alpha", rows.last[:source_slug]
+    refute_nil rows.last[:lanes_at], "the corpus lane stages ran: the replay row carries the lanes-ran marker"
   end
 
   def test_incremental_with_nothing_dirty_is_a_no_op_on_rows_and_index

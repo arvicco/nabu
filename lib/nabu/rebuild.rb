@@ -397,6 +397,9 @@ module Nabu
       # timings survive it by construction.
       Store::StageTimings.denominate!(ledger, flushed, rows: indexed)
       # Every stage returned: NOW the replay rows close "succeeded".
+      # The corpus lane stages ran for every replayed source: stamp the
+      # lanes-ran marker so the next no-op sync reads its lanes lit.
+      Store::RunRecorder.stamp_lanes!(open_runs)
       Store::RunRecorder.finish(open_runs)
       # The LAST act: the run row reads completed.
       Store::RebuildRuns.complete!(ledger, run_id)
