@@ -520,24 +520,42 @@ the P7-1 ledger defined the identity scheme. The first real enricher (3.1
 or 3.3) must implement replay — flagged here so it is costed into that
 packet, not discovered during it.
 
-### 4.5 Small parser-debt register  [register-only — batch opportunistically; re-checked 2026-10-11: no commit resolves any item below, so all six stand as written. Parser debt found since Phase 19 is recorded per source in `docs/02-sources.md` rather than here]
+### 4.5 Small parser-debt register  [re-checked 2026-11-23 against the code and the current upstream trees: five of six items closed (verdicts inline); the ⟦⟧-for-ALL-dels question stands. Parser debt found since Phase 19 is recorded per source in `docs/02-sources.md` rather than here]
 
 - **Union-xpath refsDecls** (7 perseus-latin files, P9-2 census): extend
   the P6-1 structural retry's step grammar with `*[self::tei:l or tei:p]`
-  union leaf steps.
+  union leaf steps. **Overtaken (2026-11-13):** the structural retry's
+  step parser reads `*[self::tei:a or self::tei:b]` name unions; all 13
+  union-xpath files in the current perseus-latin tree (stoa0045, Ausonius)
+  parse (census 2026-11-23).
 - **o.trim.2.783-style papyri** (P5-1 census): line numbers as plain text
   ("1.") with no `<lb>` — a tiny DDbDP pre-pass could recover them.
+  **Overtaken upstream:** the restructured idp.data tree (`DDbDP/<n>/`)
+  carries o.trim.2.783 as a text-less stub ("not been added to
+  papyri.info yet"), and all 6,178 `<lb>`-less DDbDP files are such stubs,
+  already skipped by rule at discover — the plain-text-numbered class no
+  longer exists (census 2026-11-23).
 - **tlg0527.tlg048 mis-slugged commentary** (P9-1): upstream labels an
   appendix `1st1K-eng1b`, outranking the real translation — could special-
-  case, better reported upstream.
+  case, better reported upstream. **Fixed 2026-11-23:** upstream's own
+  `__cts__.xml` types eng1a/eng1b `ti:commentary`, so no special case was
+  needed — First1KGreek's apparatus rule (commentary-bodied translation-tag
+  files skip by rule before the highest-version selection) now covers
+  English too; Ottley's English Isaiah (`1st1K-eng1`) lands and the two
+  commentary files are censused skips.
 - **heb0001 in greekLit** (P9-1): upstream mis-filing, correctly
-  quarantined; report upstream.
+  quarantined; report upstream. **Re-verified 2026-11-23:** the
+  quarantine holds (`div[@type="translation"]/@n` is
+  `urn:cts:hebrewlit:heb0001.heb010.1st1K-eng1` against the greekLit urn
+  discover mints); stays an upstream-report candidate.
 - **The ⟦⟧-for-ALL-dels question** (P6-2, conventions §5): rendering every
   `<del>` in Leiden brackets is papyrologically righter but rewrites
   loaded passage text — a corpus-wide journaled revision needing an owner
   decision and a deliberate migration, not a parser patch.
 - **UD overlap posture** (P9-6): any future UD expansion must explicitly
   exclude the chu-PROIEL/orv-TOROT conversions (re-loads of native syncs).
+  **Folded 2026-11-23** into the UD row of `docs/02-sources.md` as its
+  standing expansion rule.
 
 ### 4.6 Open-sourcing the tooling  [SHIPPED incrementally — public repo, MIT, site, contribution rails]
 

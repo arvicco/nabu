@@ -363,6 +363,9 @@ module Nabu
       analyzed = analyze_after_incremental(db, fulltext) if builders_ran
       # Every stage returned: NOW the dirty replays' rows close "succeeded"
       # (Rebuild#replay leaves them open past the load).
+      # The corpus lane stages ran for every replayed source: stamp the
+      # lanes-ran marker so the next no-op sync reads its lanes lit.
+      Store::RunRecorder.stamp_lanes!(open_runs)
       Store::RunRecorder.finish(open_runs)
       # The LAST act: the run row reads completed.
       Store::RebuildRuns.complete!(ledger, run_id)

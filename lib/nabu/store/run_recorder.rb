@@ -146,6 +146,37 @@ module Nabu
       end
       private_class_method :dead_note
 
+      # == The lanes-ran marker (ledger migration 015)
+      #
+      # Stamp lanes_at on every row of +runs+: the operation's catalog lanes
+      # (facets, kinds, entities, the metadata timeline rows) have run for
+      # it. A sync stamps the moment its lane step returns — whether it
+      # refreshed or found the lanes lit — and a rebuild stamps its replay
+      # rows once the corpus lane stages ran.
+      def self.stamp_lanes!(runs, clock: DEFAULT_CLOCK)
+        return unless Run.columns.include?(:lanes_at)
+
+        ids = runs.compact.map(&:id)
+        Run.where(id: ids).update(lanes_at: clock.call) unless ids.empty?
+      end
+
+      # Did a load of +source_slug+ move rows (added/updated — the lane
+      # gate's own trigger) with no lane stamp at or after it? That is the
+      # "lanes never ran" state a sync that died between its load and its
+      # lanes leaves, whatever ore the documents carry. +current+ (the
+      # caller's own still-open row) is excluded. Fetch-only and no-op rows
+      # move nothing, so they never flip the verdict either way. A ledger
+      # without the column reads false (the ore probes still stand).
+      def self.lanes_pending?(source_slug:, current:)
+        return false unless Run.columns.include?(:lanes_at)
+
+        prior = Run.where(source_slug: source_slug).exclude(id: current&.id)
+        last_lit = prior.exclude(lanes_at: nil).max(:id)
+        moved = prior.exclude((Sequel[:added] + Sequel[:updated]) => 0) # counts are never negative
+        moved = moved.where { id > last_lit } if last_lit
+        !moved.empty?
+      end
+
       def self.settle(runs, **fields)
         ids = runs.compact.map(&:id)
         Run.where(id: ids, status: "running").update(fields) unless ids.empty?
