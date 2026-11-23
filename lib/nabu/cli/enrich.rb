@@ -2,6 +2,8 @@
 
 # Nabu::CLI — enrichment lanes: lemma-enrich, silver-dates, embed. Carved out
 # of lib/nabu/cli.rb, the registry that loads it.
+require_relative "../ops/embed_timings"
+
 module Nabu
   class CLI < Thor
     desc "lemma-enrich LANGUAGE", "Run the silver-lemma enricher over the uncovered slice (P84-1)"
@@ -249,7 +251,9 @@ module Nabu
           batch_size: options[:batch_size].to_i, limit: options[:limit]&.to_i,
           progress: progress_reporter
         )
+        census_started = Process.clock_gettime(Process::CLOCK_MONOTONIC)
         census = embedder.census
+        census_seconds = Process.clock_gettime(Process::CLOCK_MONOTONIC) - census_started
         say "embed scope: #{slugs.size} sources, #{commas(census.total)} live passages — " \
             "#{commas(census.fresh)} fresh, #{commas(census.stale)} stale, " \
             "#{commas(census.missing)} missing"
@@ -259,6 +263,14 @@ module Nabu
         return if options[:status]
 
         result = embedder.run!
+        # The stage ledger (kind "embed"): opened only now, so a day-long
+        # campaign never holds it (Ops::EmbedTimings).
+        ledger = Nabu::Store::Ledger.open!(config.history_path)
+        begin
+          Nabu::Ops::EmbedTimings.record!(ledger, census: census, census_seconds: census_seconds, result: result)
+        ensure
+          ledger.disconnect
+        end
         say "embedded #{commas(result.embedded)} passages in " \
             "#{Nabu::Eta.format_seconds(result.elapsed_seconds)} " \
             "(#{result.rate.round(1)}/s); skipped: #{commas(result.skipped_fresh)} fresh, " \
