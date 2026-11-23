@@ -347,6 +347,16 @@ not attested), `not_synced` (registered, no data yet), or `withheld`
 and source — the five NT witnesses are all `nc`, so the labels matter when
 quoting.
 
+A single ref is **folded** by default, mirroring the CLI's compact render:
+witnesses with nothing at the ref (`no_match` / `not_synced`) are lifted out of
+`witnesses` into `absent_witnesses` (each `{label, reason}`, the range shape
+below; reason `not_attested` or `not_synced`) with `absent_counts`
+(`{not_attested, not_synced, total}`), so the nt hub's ~189 registered
+manuscripts do not drown the few attesting ones. Attesting (and `withheld`)
+witnesses keep their full blocks, and the note's attestation count still names
+the whole roster. `long: true` restores every witness column (both summary
+fields then read empty/zero).
+
 `ref` also accepts a whole **chapter** (`"JON 1"`) or an inclusive same-book
 **verse range** (`"JON 1.1-1.16"`) — the range separator is the last hyphen,
 its tail a bare end suffix against the start's book (the `nabu show` range
