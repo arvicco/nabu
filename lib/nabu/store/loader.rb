@@ -83,7 +83,9 @@ module Nabu
     #   and counted (LoadReport#collided), the first file's content preserved.
     # - Nothing is ever hard-deleted. A full load (full: true) asserts batch
     #   completeness: this source's documents absent from the batch are marked
-    #   withdrawn (+ provenance); partial loads never infer deletions. Within
+    #   withdrawn (+ provenance), and so is a held document whose parse now
+    #   quarantines (reason QUARANTINED — a full rebuild would not mint it);
+    #   partial loads never infer deletions. Within
     #   a revised document, passages missing from the new parse are withdrawn
     #   the same way. Withdrawn rows that reappear are restored (+ provenance
     #   "restored"), bumping revision only if content also changed.
@@ -131,6 +133,16 @@ module Nabu
       # retired_upstream (architecture §8).
       UPSTREAM_GONE = "upstream-gone"
       REVISION_PRUNED = "revision-pruned"
+      # The third document-grain reason: a held (live) document whose parse
+      # now raises Nabu::ParseError. Present upstream, but a fresh full
+      # rebuild would never mint it, so a full load takes it out of the live
+      # set too — incremental ≡ full (architecture §3). Withdrawn, never
+      # deleted: the first load that parses it again restores it.
+      QUARANTINED = "quarantined"
+
+      # What a document withdrawal needs of its row, in #withdraw_document's
+      # positional order.
+      WITHDRAWAL_COLUMNS = %i[id urn content_sha256 language license_override retired_upstream].freeze
 
       # The outcomes that move a row in or out of the live passage set the
       # fulltext index serves — LoadReport#passages_changed?'s grain (the
@@ -365,16 +377,20 @@ module Nabu
           end
         end
         # A quarantined ref's document is still PRESENT upstream — only its
-        # parse failed — so its urn shields any held row from the withdrawal
-        # sweep (P37-r2: the KR5-wave incident withdrew 102 held kanripo
-        # texts because a stricter parser quarantined them; recognition
-        # getting stricter must never unserve held content). ref.id is the
-        # document urn by the adapter contract (Adapter#discover_with_attic).
+        # parse failed — so it is never swept as "upstream-gone". But a fresh
+        # full rebuild would never mint it, so a FULL load that finds its
+        # held row live withdraws it, reason "quarantined" (incremental ≡
+        # full; a long-quarantined row is already out — nothing to do), and
+        # the quarantine record notes the withdrawal. Partial loads never
+        # withdraw. ref.id is the document urn by the adapter contract
+        # (Adapter#discover_with_attic).
         quarantine = lambda do |ref, error|
           flush.call
           counts[:errored] += 1
           seen_urns.add(ref.id)
-          journal(event: "quarantined", params: { "ref_id" => ref.id, "error" => error.message })
+          params = { "ref_id" => ref.id, "error" => error.message }
+          params["withdrawn"] = true if full && withdraw_quarantined(ref.id, counts)
+          journal(event: "quarantined", params: params)
           tick.call
         end
         # A discovered ref the parser declined by rule (Nabu::DocumentSkipped):
@@ -883,33 +899,53 @@ module Nabu
       # one final transaction of their own.
       def sweep_withdrawn(seen_urns, counts)
         @db.transaction do
-          Document.where(source_id: @source.id, withdrawn: false)
-                  .select_map(%i[id urn content_sha256 language license_override retired_upstream])
-                  .each do |id, urn, sha, language, license_override, retired|
-            next if seen_urns.include?(urn)
+          live_documents.select_map(WITHDRAWAL_COLUMNS).each do |document|
+            next if seen_urns.include?(document[1])
 
             # P93-2: the sweep is the "upstream-gone" reason — the
-            # urn vanished from a FULL load's output. Stamped on the row
-            # (queryable projection) and the durable event (the record
-            # that survives rebuild).
-            Document.where(id: id).update(withdrawn: true, withdrawn_reason: UPSTREAM_GONE,
-                                          withdrawn_at: Time.now)
-            # P112-1: the document's live passages leave the live set with it
-            # (their own flags stay false — the document flag hides them).
-            # Direct, not staged: the sweep is one transaction, and a failure
-            # here aborts the load before any report escapes.
-            Passage.where(document_id: id, withdrawn: false)
-                   .select_map(%i[id urn])
-                   .each { |pid, purn| @index_delta.remove(pid, purn) }
-            journal(event: "withdrawn", document_id: id, params: { "reason" => UPSTREAM_GONE })
-            durable(event: "withdrawn", urn: urn, old_sha: sha, reason: UPSTREAM_GONE)
-            # P42-0: the withdrawn doc's live contribution leaves the stats.
-            @stats&.swept(id: id, language: language, license_override: license_override, retired: retired)
-            @aggregates&.mark_behind!
-            counts[:withdrawn] += 1
+            # urn vanished from a FULL load's output.
+            withdraw_document(*document, reason: UPSTREAM_GONE, counts: counts)
           end
         end
         @aggregates&.commit!
+      end
+
+      # A full load's quarantine of +urn+: withdraw its held row when it is
+      # still live, in a transaction of its own (the batch buffer was
+      # flushed first). Returns whether it withdrew anything — false for a
+      # never-loaded or long-quarantined document.
+      def withdraw_quarantined(urn, counts)
+        withdrew = @db.transaction do
+          document = live_documents.where(urn: urn).select_map(WITHDRAWAL_COLUMNS).first
+          next false unless document
+
+          withdraw_document(*document, reason: QUARANTINED, counts: counts)
+          true
+        end
+        @aggregates&.commit!
+        withdrew
+      end
+
+      def live_documents = Document.where(source_id: @source.id, withdrawn: false)
+
+      # Withdraw one live document (inside the caller's transaction): the
+      # reason is stamped on the row (queryable projection) and the durable
+      # event (the record that survives rebuild).
+      def withdraw_document(id, urn, sha, language, license_override, retired, reason:, counts:)
+        Document.where(id: id).update(withdrawn: true, withdrawn_reason: reason, withdrawn_at: Time.now)
+        # P112-1: the document's live passages leave the live set with it
+        # (their own flags stay false — the document flag hides them).
+        # Direct, not staged: the withdrawal is its own transaction, and a
+        # failure here aborts the load before any report escapes.
+        Passage.where(document_id: id, withdrawn: false)
+               .select_map(%i[id urn])
+               .each { |pid, purn| @index_delta.remove(pid, purn) }
+        journal(event: "withdrawn", document_id: id, params: { "reason" => reason })
+        durable(event: "withdrawn", urn: urn, old_sha: sha, reason: reason)
+        # P42-0: the withdrawn doc's live contribution leaves the stats.
+        @stats&.swept(id: id, language: language, license_override: license_override, retired: retired)
+        @aggregates&.mark_behind!
+        counts[:withdrawn] += 1
       end
 
       def journal(event:, document_id: nil, passage_id: nil, params: nil)

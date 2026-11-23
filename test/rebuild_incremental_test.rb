@@ -107,6 +107,36 @@ class RebuildIncrementalTest < Minitest::Test
     assert_incremental_state_equals_fresh_full_rebuild
   end
 
+  # A loaded document whose file stops parsing (the rig raises ParseError
+  # on an empty file): a fresh full rebuild never mints it, so the
+  # incremental replay must take its passages out of the live set and the
+  # index too — kept only as a withdrawn tombstone, reason "quarantined".
+  # When the file parses again, the round trip lands back on the full
+  # rebuild's state exactly.
+  def test_incremental_withdraws_a_newly_quarantined_document_like_a_full_rebuild
+    full_rebuilder.run
+    good = File.read(File.join(@canonical, "beta", "b.txt"))
+
+    write_canonical("beta", "b.txt" => "")
+    result = incremental_rebuilder.run
+
+    assert_equal %w[beta], result.outcomes.map(&:slug)
+    report = result.outcomes.first.report
+    assert_equal [1, 1], [report.errored, report.withdrawn]
+    assert_equal [[true, Nabu::Store::Loader::QUARANTINED]], beta_withdrawal_state
+    assert_incremental_state_equals_fresh_full_rebuild(live: true)
+
+    write_canonical("beta", "b.txt" => good)
+    incremental_rebuilder.run
+
+    assert_equal [[false, nil]], beta_withdrawal_state
+    assert_incremental_state_equals_fresh_full_rebuild
+  end
+
+  def beta_withdrawal_state
+    raw_rows(:documents, source: "beta").map { |row| row.values_at(:withdrawn, :withdrawn_reason) }
+  end
+
   # The dirty replay's run row stays open past its load: a kill in the
   # index refresh that follows leaves it running (loaded_at stamped) — and
   # a later run never retro-closes it: the dead run's row stays the record
@@ -1102,30 +1132,55 @@ class RebuildIncrementalTest < Minitest::Test
   # Content-equivalence comparator (modulo re-minted ids/revisions): urn-keyed
   # content columns for documents, passages and dictionary entries, plus the
   # index, axes and facet projections.
-  def content_state(db_dir)
+  #
+  # +live+: compare the LIVE set only (withdrawn documents and their
+  # passages left out) — for transitions whose incremental result honestly
+  # keeps a withdrawn tombstone a fresh full rebuild never mints. The
+  # caller pins the tombstone itself separately.
+  def content_state(db_dir, live: false)
     state = with_db(db_dir: db_dir) do |db|
+      documents = db[:documents]
+      passages = db[:passages]
+      if live
+        documents = documents.where(Sequel[:documents][:withdrawn] => false)
+        passages = passages.where(Sequel[:passages][:withdrawn] => false,
+                                  document_id: db[:documents].where(withdrawn: false).select(:id))
+      end
       {
-        documents: db[:documents].join(:sources, id: :source_id)
-                                 .select_order_map(%i[slug urn language title content_sha256 withdrawn]),
-        passages: db[:passages].select_order_map(%i[urn sequence language text text_normalized
-                                                    content_sha256 withdrawn]),
+        documents: documents.join(:sources, id: :source_id)
+                            .select_order_map(%i[slug urn language title content_sha256 withdrawn]),
+        passages: passages.select_order_map(%i[urn sequence language text text_normalized
+                                               content_sha256 withdrawn]),
         dictionary_entries: db[:dictionary_entries].select_order_map(%i[urn entry_id headword gloss
                                                                         body content_sha256 withdrawn]),
         axes: db[:document_axes].count,
         facets: db[:document_facets].count,
         # Migration 054: the O(1) accounting (timestamps are bookkeeping).
-        aggregates: db[:source_aggregates].join(:sources, id: :source_id)
-                                          .select_order_map(%i[slug documents_count passages_count
-                                                               fts_member_count fts_behind])
+        aggregates: aggregates_state(db, live: live)
       }
     end
     state.merge(fts: fts_snapshot(db_dir: db_dir))
   end
 
-  def assert_incremental_state_equals_fresh_full_rebuild
+  # The source_aggregates projection. +live+ also drops an all-zero row
+  # (no live documents, passages or index members): a source whose every
+  # document was withdrawn keeps its row at zero, which reads exactly as a
+  # fresh rebuild's absent row does (SourceAggregates.fetch's empty).
+  def aggregates_state(db, live:)
+    rows = db[:source_aggregates].join(:sources, id: :source_id)
+                                 .select_order_map(%i[slug documents_count passages_count fts_member_count fts_behind])
+    return rows unless live
+
+    rows.reject do |_slug, documents, passages, members, behind|
+      [documents, passages, members.to_i].all?(&:zero?) && !behind
+    end
+  end
+
+  def assert_incremental_state_equals_fresh_full_rebuild(live: false)
     fresh_dir = File.join(@root, "db-fresh")
+    FileUtils.rm_rf(fresh_dir)
     full_rebuilder(db_dir: fresh_dir).run
-    assert_equal content_state(fresh_dir), content_state(@db_dir),
+    assert_equal content_state(fresh_dir, live: live), content_state(@db_dir, live: live),
                  "incremental result must be content-equivalent to a fresh full rebuild"
   end
 end

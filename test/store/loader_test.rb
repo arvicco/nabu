@@ -627,28 +627,153 @@ module Store
       assert_empty provenance_events(event: "quarantined")
     end
 
-    # P37-r2 — the KR5-wave incident: a held document whose files STOP
-    # parsing (a stricter parser, upstream corruption) quarantines loudly,
-    # but must NEVER be withdrawn by the full-sync sweep — the text is still
-    # present upstream; recognition failed, not the text. The held revision
-    # stays served untouched.
-    def test_quarantined_ref_shields_its_held_row_from_the_withdrawal_sweep
+    # -- quarantine vs the live set (incremental ≡ full) ---------------------
+    #
+    # A held document whose file STOPS parsing is withdrawn by a full load,
+    # reason "quarantined": a fresh full rebuild would never mint it (its
+    # parse raises), so an incremental pass that kept serving the old
+    # passages would diverge from the full rebuild for exactly the content
+    # judged bad. Withdrawn, never deleted: the row keeps its revision and
+    # content, and the first load that parses it again restores it. The
+    # quarantine stays loud and distinct from an upstream deletion — the
+    # reason column and the durable ledger say which it was.
+
+    BETA_URN = "urn:nabu:test_adapter:beta"
+
+    def beta_row = Nabu::Store::Document.first(urn: BETA_URN)
+
+    # Passages a reader can see: live passage in a live document.
+    def live_passage_urns
+      Nabu::Store::Passage.join(:documents, id: :document_id)
+                          .where(Sequel[:passages][:withdrawn] => false, Sequel[:documents][:withdrawn] => false)
+                          .select_order_map(Sequel[:passages][:urn])
+    end
+
+    # The O(1) accounting at a waypoint: the maintained aggregates and stats
+    # agree with the recounted truth and with a wholesale re-derive.
+    def assert_accounting!(documents:, passages:, context:)
+      aggregates = Nabu::Store::SourceAggregates
+      row = aggregates.fetch(@db, @source.id)
+      assert_equal [documents, passages], [row.documents_count, row.passages_count], "aggregates #{context}"
+      assert_empty aggregates.drift(@db, [@source.id]), "aggregates truth drift #{context}"
+      stats = @db[:source_stats].where(source_id: @source.id).select_map(%i[live_documents live_passages])
+      Nabu::Store::SourceStats.derive!(@db, note: "test wholesale")
+      assert_equal @db[:source_stats].where(source_id: @source.id).select_map(%i[live_documents live_passages]),
+                   stats, "incremental vs wholesale stats #{context}"
+    end
+
+    def test_newly_quarantined_document_is_withdrawn_by_a_full_load
       @loader.load_from(TestAdapter.new, workdir: FIXTURES)
-      row = Nabu::Store::Document.first(urn: "urn:nabu:test_adapter:beta")
+      row = beta_row
       held_revision = row.revision
       held_sha = row.content_sha256
 
       report = @loader.load_from(QuarantiningAdapter.new, workdir: FIXTURES, full: true)
 
-      assert_equal 1, report.errored
-      assert_equal 0, report.withdrawn, "a quarantined ref is present upstream — never withdrawn"
+      assert_report report, skipped: 2, errored: 1, withdrawn: 1
       row.refresh
-      refute row.withdrawn, "quarantine must not withdraw the held document"
-      assert_equal held_revision, row.revision, "quarantine must not touch the held revision"
-      assert_equal held_sha, row.content_sha256, "quarantine must not touch the held content"
-      assert_empty provenance_events(event: "withdrawn")
-      # The quarantine itself is journaled loudly, as before.
-      assert_equal 1, provenance_events(event: "quarantined").size
+      assert row.withdrawn, "a newly quarantined document leaves the live set"
+      assert_equal Nabu::Store::Loader::QUARANTINED, row.withdrawn_reason
+      refute_nil row.withdrawn_at
+      assert_equal held_revision, row.revision, "withdrawal never revises the held row"
+      assert_equal held_sha, row.content_sha256, "withdrawal never touches the held content"
+      assert_equal 2, Nabu::Store::Passage.where(document_id: row.id).count, "withdrawn, never hard-deleted"
+      assert(live_passage_urns.none? { |urn| urn.start_with?(BETA_URN) }, "no beta passage stays served")
+      # The quarantine record notes the withdrawal; the withdrawal is
+      # journaled with its reason, catalog and durable ledger alike.
+      params = JSON.parse(provenance_events(event: "quarantined").last.params_json)
+      assert_equal true, params.fetch("withdrawn")
+      withdrawn = provenance_events(event: "withdrawn", document_id: row.id)
+      assert_equal([{ "reason" => "quarantined" }], withdrawn.map { |event| JSON.parse(event.params_json) })
+      durable = revisions(urn: BETA_URN, event: "withdrawn")
+      assert_equal([["quarantined", held_sha]], durable.map { |rev| [rev.reason, rev.old_sha] })
+    end
+
+    def test_newly_quarantined_document_leaves_the_index_delta
+      @loader.load_from(TestAdapter.new, workdir: FIXTURES)
+      beta_ids = Nabu::Store::Passage.where(document_id: beta_row.id).select_map(:id).to_set
+
+      delta = @loader.load_from(QuarantiningAdapter.new, workdir: FIXTURES).index_delta
+
+      assert_equal beta_ids, delta.removed_ids.to_set
+      assert_empty delta.upserted_ids
+      assert @loader.load_from(QuarantiningAdapter.new, workdir: FIXTURES).index_delta.empty?,
+             "a long-quarantined document moves nothing in the index"
+    end
+
+    def test_long_quarantined_document_is_a_no_op
+      @loader.load_from(TestAdapter.new, workdir: FIXTURES)
+      @loader.load_from(QuarantiningAdapter.new, workdir: FIXTURES)
+      documents = snapshot(Nabu::Store::Document)
+      passages = snapshot(Nabu::Store::Passage)
+      ledger_rows = revisions.size
+
+      report = @loader.load_from(QuarantiningAdapter.new, workdir: FIXTURES)
+
+      assert_report report, skipped: 2, errored: 1
+      assert_equal documents, snapshot(Nabu::Store::Document), "the second quarantine pass writes no row"
+      assert_equal passages, snapshot(Nabu::Store::Passage)
+      assert_equal ledger_rows, revisions.size
+      assert_equal 1, provenance_events(event: "withdrawn").size, "re-withdrawals stay silent"
+      refute JSON.parse(provenance_events(event: "quarantined").last.params_json).key?("withdrawn")
+    end
+
+    def test_never_loaded_quarantine_withdraws_nothing
+      report = @loader.load_from(QuarantiningAdapter.new, workdir: FIXTURES)
+
+      assert_equal 0, report.withdrawn
+      assert_nil beta_row
+      refute JSON.parse(provenance_events(event: "quarantined").first.params_json).key?("withdrawn")
+    end
+
+    def test_partial_load_never_withdraws_a_quarantined_document
+      @loader.load_from(TestAdapter.new, workdir: FIXTURES)
+
+      report = @loader.load_from(QuarantiningAdapter.new, workdir: FIXTURES, full: false)
+
+      assert_equal 0, report.withdrawn
+      refute beta_row.withdrawn, "partial loads never withdraw (architecture §3)"
+    end
+
+    def test_quarantine_round_trip_restores_cleanly_with_exact_accounting
+      @loader.load_from(TestAdapter.new, workdir: FIXTURES)
+      assert_accounting!(documents: 3, passages: 7, context: "after the first load")
+      revision = beta_row.revision
+      passage_ids = Nabu::Store::Passage.where(document_id: beta_row.id).select_order_map(:id)
+
+      @loader.load_from(QuarantiningAdapter.new, workdir: FIXTURES)
+      assert_accounting!(documents: 2, passages: 5, context: "after the quarantine")
+
+      report = @loader.load_from(TestAdapter.new, workdir: FIXTURES)
+
+      assert_report report, skipped: 2, updated: 1, revised: 1
+      assert_accounting!(documents: 3, passages: 7, context: "after the parse recovered")
+      row = beta_row
+      refute row.withdrawn
+      assert_nil row.withdrawn_reason
+      assert_nil row.withdrawn_at
+      assert_equal revision, row.revision, "same content back: a restore, not a revision"
+      assert_equal passage_ids, Nabu::Store::Passage.where(document_id: row.id).select_order_map(:id),
+                   "the held passages return — no duplicate urns minted"
+      assert_equal 1, Nabu::Store::Document.where(urn: BETA_URN).count
+      assert_equal 7, live_passage_urns.size
+      assert_equal live_passage_urns.uniq, live_passage_urns
+      assert_equal passage_ids.to_set, report.index_delta.upserted_ids.to_set, "the restore re-enters the index"
+      assert_equal %w[withdrawn restored], revisions(urn: BETA_URN).map(&:event)
+
+      again = @loader.load_from(TestAdapter.new, workdir: FIXTURES)
+      assert_report again, skipped: 3
+    end
+
+    def test_quarantine_withdrawal_holds_in_batch_mode
+      @loader.load_from(TestAdapter.new, workdir: FIXTURES)
+      batched = Nabu::Store::Loader.new(db: @db, source: @source, ledger: @ledger, tx_batch: 2)
+
+      report = batched.load_from(QuarantiningAdapter.new, workdir: FIXTURES)
+
+      assert_report report, skipped: 2, errored: 1, withdrawn: 1
+      assert_equal Nabu::Store::Loader::QUARANTINED, beta_row.withdrawn_reason
+      assert_accounting!(documents: 2, passages: 5, context: "after the batched quarantine")
     end
 
     def test_skipped_ref_shields_its_row_from_the_withdrawal_sweep
