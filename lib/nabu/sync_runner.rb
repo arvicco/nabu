@@ -33,7 +33,9 @@ module Nabu
   # covers what the fetch breaker cannot see: --parse-only over a damaged
   # snapshot, discover regressions, and future non-git adapters. If it would
   # withdraw more than WITHDRAWAL_THRESHOLD of the source, we raise
-  # Nabu::SyncAborted and write NOTHING. `--force` overrides both breakers.
+  # Nabu::SyncAborted and write NOTHING. `--force` overrides both breakers,
+  # and the loader's parse breaker too (Store::Loader::ParseBreaker — held
+  # documents that no longer parse are kept, not withdrawn, past its limit).
   # The prediction is exact for adapters whose DocumentRef#id IS the document
   # urn (Perseus, the reference case); that identity is why discover can stand
   # in for a parse here.
@@ -348,7 +350,7 @@ module Nabu
           # post-load index/lane stage below — released in the ensure.
           window = open_catalog_write_window(entry.slug, progress)
           guard_withdrawal!(adapter, source, workdir, force: force)
-          load_report = load(source, adapter, workdir, progress)
+          load_report = load(source, adapter, workdir, progress, force: force)
           # P104-4: the secondary dictionary lane loads under the SAME run —
           # the block's return (the run row's counts) covers both shapes.
           lane_report = load_dictionary_lane(entry, source, workdir, progress)
@@ -799,7 +801,8 @@ module Nabu
       # count too — errored is file-grained either way); the withdrawal
       # trend below stays document-grained, so it reads the PRIMARY report.
       errored = load_report.errored + (lane_report&.errored || 0)
-      delta = [Health::QuarantineBaseline.delta_finding(@ledger, source.slug, errored: errored)]
+      delta = [Health::QuarantineBaseline.delta_finding(@ledger, source.slug, errored: errored)] +
+              parse_withdrawal_findings(source, load_report)
       # Dictionary and language sources (P11-4/P19-1): entry-/record-grained
       # counts against a document-count baseline would be apples-to-oranges —
       # the quarantine delta still applies (errored counts files either way),
@@ -808,6 +811,17 @@ module Nabu
 
       total = Store::Document.where(source_id: source.id).count
       (delta + [Health::TrendRules.sync_withdrawal(withdrawn: load_report.withdrawn, total: total)]).compact
+    end
+
+    # The parse settlement's lines (Store::LoadReport#parse_withdrawal_messages):
+    # held documents withdrawn because their file no longer yields one —
+    # named apart from the errored-files count — and, loudest, a tripped
+    # parse breaker (rows KEPT, with the accept command).
+    def parse_withdrawal_findings(source, load_report)
+      load_report.parse_withdrawal_messages(source.slug).map do |message|
+        kind = message.start_with?("PARSE BREAKER") ? :parse_breaker : :parse_withdrawal
+        Health::Finding.new(kind: kind, severity: :loud, message: message)
+      end
     end
 
     def index_inert?(adapter)
@@ -964,8 +978,10 @@ module Nabu
     # dossier shelves through Store::LanguageDossierLoader, the owner-notes
     # shelf through Store::NoteLoader (P24-1) — same call shape, same
     # LoadReport.
-    def load(source, adapter, workdir, progress)
-      loader = build_loader(adapter, source)
+    # +force+ (the sync's --force) also accepts the passage loader's parse
+    # breaker — the house rule that --force overrides every breaker.
+    def load(source, adapter, workdir, progress, force: false)
+      loader = build_loader(adapter, source, force: force)
       # P78-r3: the parse+load phase announces with its estimate (the tick
       # counter then carries the label AND — once the recorded document
       # total is known — the CLI's in-stage "~Nm left" extrapolation), and
@@ -1013,7 +1029,7 @@ module Nabu
       result
     end
 
-    def build_loader(adapter, source)
+    def build_loader(adapter, source, force: false)
       case adapter.class.content_kind
       when :dictionary
         Store::DictionaryLoader.new(db: @db, source: source, ledger: @ledger,
@@ -1027,7 +1043,7 @@ module Nabu
       when :source
         Store::SourceDossierLoader.new(db: @db, source: source, ledger: @ledger)
       else
-        Store::Loader.new(db: @db, source: source, ledger: @ledger)
+        Store::Loader.new(db: @db, source: source, ledger: @ledger, accept_parse_withdrawals: force)
       end
     end
 

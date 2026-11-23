@@ -47,12 +47,21 @@ module Nabu
     # the errored count matches the recorded ledger baseline, so a standing
     # (audited) quarantine population no longer shouts "parser regression?" at
     # every rebuild while a CHANGE still does, loudly, with the delta.
+    # #warning_lines adds the loader's parse-settlement lines
+    # (LoadReport#parse_withdrawal_messages): the held documents a failing
+    # parse withdrew, and a tripped parse breaker — never folded into the
+    # errored count. An incremental replay can meet both; a fresh full
+    # rebuild holds no rows, so there they stay empty.
     Outcome = Data.define(:slug, :report, :quarantine) do
       def initialize(slug:, report:, quarantine: nil)
         super
       end
 
-      def warning? = !quarantine.nil?
+      def warning_lines
+        [quarantine&.message, *report&.parse_withdrawal_messages(slug)].compact
+      end
+
+      def warning? = warning_lines.any?
     end
 
     # A source left untouched because it has no local canonical data yet.

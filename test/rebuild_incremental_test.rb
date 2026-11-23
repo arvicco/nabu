@@ -18,6 +18,20 @@ class RebuildIncrementalTest < Minitest::Test
   MEMO_ANY_TREES = /memo: trees \d+ hit \d+ miss, repos 0 hit 0 miss/
   THEOGONY = "Theogony\nμουσάων\n"
 
+  # The rig declining a document BY RULE (Nabu::DocumentSkipped) when its
+  # title line is SKIP_TITLE — the loaded → rule-skipped transition.
+  class RuleSkipAdapter < TestAdapter
+    SKIP_TITLE = "CATALOG-ONLY"
+
+    def parse(document_ref)
+      if File.foreach(document_ref.path, encoding: Encoding::UTF_8).first&.strip == SKIP_TITLE
+        raise Nabu::DocumentSkipped.new("catalog-only #{document_ref.id}", reason: "catalog-only")
+      end
+
+      super
+    end
+  end
+
   def setup
     @root = Dir.mktmpdir("nabu-incremental")
     @canonical = File.join(@root, "canonical")
@@ -122,8 +136,11 @@ class RebuildIncrementalTest < Minitest::Test
 
     assert_equal %w[beta], result.outcomes.map(&:slug)
     report = result.outcomes.first.report
-    assert_equal [1, 1], [report.errored, report.withdrawn]
+    assert_equal [1, 1, 1], [report.errored, report.withdrawn, report.parse_withdrawn]
     assert_equal [[true, Nabu::Store::Loader::QUARANTINED]], beta_withdrawal_state
+    assert_includes result.warnings, result.outcomes.first
+    assert(result.outcomes.first.warning_lines.any? { |line| line.start_with?("withdrew 1 held document(s)") },
+           "the rebuild output names the withdrawn-by-parse count")
     assert_incremental_state_equals_fresh_full_rebuild(live: true)
 
     write_canonical("beta", "b.txt" => good)
@@ -131,6 +148,77 @@ class RebuildIncrementalTest < Minitest::Test
 
     assert_equal [[false, nil]], beta_withdrawal_state
     assert_incremental_state_equals_fresh_full_rebuild
+  end
+
+  # The rule-skip twin: a loaded document the adapter now declines by rule
+  # is withdrawn ("skipped-by-rule") exactly as a full rebuild would not
+  # mint it, and comes back when the rule lets it through.
+  def test_incremental_withdraws_a_newly_rule_skipped_document_like_a_full_rebuild
+    write_sources(<<~YAML)
+      alpha:
+        adapter: TestAdapter
+      beta:
+        adapter: RebuildIncrementalTest::RuleSkipAdapter
+      lexica:
+        adapter: Nabu::Adapters::Lexica
+    YAML
+    full_rebuilder.run
+    good = File.read(File.join(@canonical, "beta", "b.txt"))
+
+    write_canonical("beta", "b.txt" => "#{RuleSkipAdapter::SKIP_TITLE}\nἄνδρα\n")
+    report = incremental_rebuilder.run.outcomes.first.report
+
+    assert_equal [1, 1, 1], [report.skipped_by_rule, report.withdrawn, report.parse_withdrawn]
+    assert_equal [[true, Nabu::Store::Loader::SKIPPED_BY_RULE]], beta_withdrawal_state
+    assert_incremental_state_equals_fresh_full_rebuild(live: true)
+
+    write_canonical("beta", "b.txt" => good)
+    incremental_rebuilder.run
+
+    assert_equal [[false, nil]], beta_withdrawal_state
+    assert_incremental_state_equals_fresh_full_rebuild
+  end
+
+  # The parse breaker on the incremental path: eleven of thirteen held beta
+  # documents newly failing exceeds the limit (max(10, 20% of 13) = 10), so
+  # NOTHING is withdrawn and the state deliberately differs from a full
+  # rebuild until the operator decides. The source stays unstamped, so the
+  # next incremental replays it and warns again. A fresh full rebuild holds
+  # no rows, so the breaker never trips there.
+  def test_incremental_parse_breaker_keeps_rows_unstamped_until_the_parse_recovers
+    files = (1..12).to_h { |i| ["b#{i}.txt", "Odyssey #{i}\nστίχος #{i}\n"] }
+    write_canonical("beta", files)
+    full_rebuilder.run
+
+    write_canonical("beta", files.keys.first(11).to_h { |name| [name, ""] })
+    result = incremental_rebuilder.run
+
+    outcome = result.outcomes.find { |o| o.slug == "beta" }
+    assert_equal [11, 0, 0], outcome.report.to_h.values_at(:parse_held, :withdrawn, :parse_withdrawn)
+    assert outcome.report.parse_breaker_tripped?
+    breaker = outcome.warning_lines.find { |line| line.start_with?("PARSE BREAKER") }
+    assert breaker, "the rebuild output names the tripped breaker"
+    assert_includes breaker, "bin/nabu sync beta --parse-only --force"
+    assert_equal 13, raw_rows(:documents, source: "beta").count { |row| !row[:withdrawn] },
+                 "every held beta row stays served"
+    refute_equal content_state(fresh_full_dir, live: true), content_state(@db_dir, live: true),
+                 "under the breaker the incremental state deliberately differs from a full rebuild"
+    assert_equal [:dirty], incremental_rebuilder.plan.verdicts.select { |v| v.slug == "beta" }.map(&:state),
+                 "a tripped breaker leaves the source unstamped"
+    fresh = Nabu::Rebuild.new(config: config(db_dir: fresh_full_dir), registry: registry).run
+    refute(fresh.outcomes.any? { |o| o.report.parse_breaker_tripped? }, "inert on a fresh catalog")
+
+    write_canonical("beta", files)
+    incremental_rebuilder.run
+
+    assert_incremental_state_equals_fresh_full_rebuild
+  end
+
+  def fresh_full_dir
+    dir = File.join(@root, "db-fresh")
+    FileUtils.rm_rf(dir)
+    full_rebuilder(db_dir: dir).run
+    dir
   end
 
   def beta_withdrawal_state

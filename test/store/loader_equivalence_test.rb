@@ -249,9 +249,14 @@ module Store
       dataset.order(:id).all.map { |row| row.except(*VOLATILE).to_a }
     end
 
+    # The parse-settlement counts postdate the pins: a ZERO count is left out
+    # so the pinned digests stay valid, while any non-zero one still lands in
+    # the payload and fails the pin loudly.
     def report_payload(report)
       delta = report.index_delta
-      report.to_h.except(:index_delta).merge(
+      counts = report.to_h.except(:index_delta)
+                     .reject { |key, value| %i[parse_withdrawn parse_held].include?(key) && value.zero? }
+      counts.merge(
         upserted: [delta.upserted_ids.to_a.sort, delta.upserted_urns.to_a.sort],
         removed: [delta.removed_ids.to_a.sort, delta.removed_urns.to_a.sort],
         overflowed: delta.overflowed?

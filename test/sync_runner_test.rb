@@ -59,6 +59,20 @@ class SyncRunnerTest < Minitest::Test
     end
   end
 
+  # BreakerAdapter whose parse raises for the urns in +failing+ — held
+  # documents whose file stops parsing (the parse breaker's rig).
+  class FailingParseAdapter < BreakerAdapter
+    class << self
+      attr_accessor :failing
+    end
+
+    def parse(ref)
+      raise Nabu::ParseError, "now unparseable" if Array(self.class.failing).include?(ref.id)
+
+      super
+    end
+  end
+
   # A one-document source with a per-subclass fetch counter, for --all policy
   # filtering. Each subclass names its own slug and gets its own @fetches.
   class CountingSource < Nabu::Adapter
@@ -1541,6 +1555,68 @@ class SyncRunnerTest < Minitest::Test
                  "the withdrawn document's passage must leave the index"
   ensure
     fulltext&.disconnect
+  end
+
+  # --- the parse settlement and its breaker --------------------------------
+
+  def failing_runner(count)
+    urns = (1..count).map { |i| "urn:cts:test:p#{i}" }
+    FailingParseAdapter.reset!(urns: urns)
+    FailingParseAdapter.failing = []
+    FileUtils.mkdir_p(File.join(@canonical, "failing"))
+    [make_runner(registry(entry("failing", FailingParseAdapter, wired: true))), urns]
+  end
+
+  # A held document whose file stops parsing is withdrawn, and the sync
+  # names that count apart from the errored-files count.
+  def test_sync_withdraws_a_newly_unparseable_held_document_and_says_so
+    runner, urns = failing_runner(5)
+    runner.sync("failing", parse_only: true)
+    FailingParseAdapter.failing = urns.first(1)
+
+    outcome = runner.sync("failing", parse_only: true)
+
+    assert_equal [1, 1, 0], outcome.load_report.to_h.values_at(:withdrawn, :parse_withdrawn, :parse_held)
+    assert_equal 4, live_docs
+    finding = outcome.warnings.find { |w| w.kind == :parse_withdrawal }
+    assert finding, "the withdrawal-by-parse count must be named"
+    assert_match(/withdrew 1 held document\(s\) whose file no longer parses .*1 file\(s\) errored/, finding.message)
+  end
+
+  # Thirteen of sixty held documents newly failing exceeds the limit
+  # (max(10, 20% of 60) = 12): nothing is withdrawn, the sync says so
+  # loudly with the accept command, and --force accepts.
+  def test_sync_parse_breaker_keeps_rows_and_force_accepts
+    runner, urns = failing_runner(60)
+    runner.sync("failing", parse_only: true)
+    FailingParseAdapter.failing = urns.first(13)
+
+    tripped = runner.sync("failing", parse_only: true)
+
+    refute tripped.aborted?, "the parse breaker keeps rows; it never aborts the sync"
+    assert_equal [0, 13], tripped.load_report.to_h.values_at(:withdrawn, :parse_held)
+    assert_equal 60, live_docs, "the held rows stay served"
+    finding = tripped.warnings.find { |w| w.kind == :parse_breaker }
+    assert finding, "a tripped parse breaker must be named"
+    assert_predicate finding, :loud?
+    assert_match(/PARSE BREAKER: 13 held document\(s\) now fail to parse/, finding.message)
+    assert_includes finding.message, "bin/nabu sync failing --parse-only --force"
+
+    accepted = runner.sync("failing", parse_only: true, force: true)
+
+    assert_equal [13, 13, 0], accepted.load_report.to_h.values_at(:withdrawn, :parse_withdrawn, :parse_held)
+    assert_equal 47, live_docs
+  end
+
+  def test_twelve_of_sixty_newly_failing_stays_under_the_parse_breaker
+    runner, urns = failing_runner(60)
+    runner.sync("failing", parse_only: true)
+    FailingParseAdapter.failing = urns.first(12)
+
+    outcome = runner.sync("failing", parse_only: true)
+
+    assert_equal [12, 0], outcome.load_report.to_h.values_at(:parse_withdrawn, :parse_held)
+    assert_equal 48, live_docs
   end
 
   # --- inline deviation warnings (P5-5, delta-aware since P18-7) ------------

@@ -506,9 +506,7 @@ module Nabu
         result.trusted.each { |item| say "  #{item.slug} trusted (re-stamped #{item.stamp_short} — no replay)" }
         result.outcomes.each { |outcome| say "  #{format_report(outcome.slug, outcome.report)}" }
         result.skips.each { |skip| say "  skip    #{skip.slug} (no canonical data — never synced)" }
-        result.warnings.each do |outcome|
-          say "  WARNING: #{outcome.slug} #{outcome.quarantine.message}", :yellow
-        end
+        print_outcome_warnings(result)
         summary = "  re-derived #{result.outcomes.size}, clean #{result.cleans.size}, " \
                   "skipped #{result.skips.size}"
         summary += ", trusted #{result.trusted.size}" if result.trusted.any?
@@ -549,9 +547,7 @@ module Nabu
         result.skips.each { |skip| say "  skip    #{skip.slug} (no canonical data — never synced)" }
         # DELTA-aware (P18-7): silence when a source's errored count matches its
         # recorded ledger baseline; a change (or first recording) speaks.
-        result.warnings.each do |outcome|
-          say "  WARNING: #{outcome.slug} #{outcome.quarantine.message}", :yellow
-        end
+        print_outcome_warnings(result)
         say "  #{format_report('TOTAL', total_report(result))}"
         say "  indexed #{result.indexed} passages"
         if result.axes
@@ -600,6 +596,17 @@ module Nabu
         say format("  %-#{width}s  %10s", "GRAND TOTAL", format_duration(profile.grand_total))
         say "  note: fts+lemma is one fused pass; parse/insert are per-document samples inside load."
         say "  note: text-normalization/fold (search_form) runs at Passage build, so it is inside parse."
+      end
+
+      # One WARNING line per Rebuild::Outcome#warning_lines entry: the
+      # quarantine delta and the parse settlement (withdrawn-by-parse count,
+      # a tripped parse breaker in red).
+      def print_outcome_warnings(result)
+        result.warnings.each do |outcome|
+          outcome.warning_lines.each do |line|
+            say "  WARNING: #{outcome.slug} #{line}", line.start_with?("PARSE BREAKER") ? :red : :yellow
+          end
+        end
       end
 
       def format_report(label, report)
