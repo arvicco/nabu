@@ -115,16 +115,23 @@ module Nabu
         )
       end
 
-      # One transaction per dictionary file; every entry present upstream
-      # shields its row from the withdrawal sweep even if persisting fails
-      # mid-file (the transaction rolls the file back as one unit).
+      # One transaction per dictionary file; every entry of a file that lands
+      # shields its row from the withdrawal sweep. A file that fails to
+      # persist rolls back as ONE unit and shields nothing: a fresh full
+      # rebuild would hold none of its entries (the write fails the same
+      # way), so the entries reached before the failing one must not stay
+      # served either — the full load's sweep withdraws them (incremental ≡
+      # full), and the next clean load restores them.
       def load_document(document, counts, seen)
+        reached = []
         time_insert do
           @db.transaction do
             dictionary = upsert_dictionary(document)
             census = Hash.new(0)
             document.each do |entry|
-              seen.add([document.slug, entry.entry_id])
+              key = [document.slug, entry.entry_id]
+              reached << key unless seen.include?(key)
+              seen.add(key)
               counts[upsert_entry(dictionary, document, entry)] += 1
               entry.reflexes.each { |reflex| census[[reflex.lang_code, reflex.lang_name]] += 1 if reflex.lang_name }
             end
@@ -138,6 +145,7 @@ module Nabu
         # busy timeout, full disk or I/O error is the environment's and
         # aborts the load instead of being laundered into a quarantine.
         counts[:errored] += 1
+        reached.each { |key| seen.delete(key) }
         journal(event: "quarantined", params: { "path" => document.canonical_path, "error" => e.message })
       end
 
