@@ -2807,6 +2807,45 @@ module Store
       end
     end
 
+    EtaSpy = Struct.new(:etas) do
+      def stage(label, eta: nil, **) = ((self.etas ||= {})[label] = eta)
+      def load_tick(*); end
+    end
+
+    # The trigram lane's shadow is rebuild_trigram! whole — the very pass
+    # the rebuild ledgers as its corpus "trigram" stage — so a sync that
+    # never ran one before prices it from that row, scaled by the indexed
+    # row count; with no row of either kind it stays an honest first run.
+    def test_an_over_budget_trigram_lane_is_priced_from_the_rebuilds_trigram_stage
+      doc = shadow_fixture
+      mutate_shadow_fixture(doc)
+      with_ledger do |ledger|
+        Nabu::Store::StageTimings.record!(ledger, kind: "rebuild", scope: "corpus", stage: "trigram",
+                                                  seconds: 30.0, rows: 1000)
+        spy = EtaSpy.new
+        refresh!(row_budget: 3, fuzzy_slugs: %w[s lit], progress: spy, ledger: ledger)
+
+        label, eta = spy.etas.find { |line, _| line.start_with?("trigram lane: shadow build") }
+        refute_nil label, "the trigram lane's shadow is announced (#{spy.etas.keys.inspect})"
+        rows = Nabu::Store::FtsStructure.total_rows(@fulltext, :passages_fts)
+        assert eta.real?, "priced from the rebuild's trigram row, not a first run"
+        assert_in_delta 30.0 * rows / 1000, eta.seconds, 1e-9
+        assert_includes eta.render, "over 1,000 rows; scaled for #{rows}"
+      end
+    end
+
+    def test_an_unledgered_trigram_lane_shadow_stays_a_first_run
+      doc = shadow_fixture
+      mutate_shadow_fixture(doc)
+      with_ledger do |ledger|
+        spy = EtaSpy.new
+        refresh!(row_budget: 3, fuzzy_slugs: %w[s lit], progress: spy, ledger: ledger)
+
+        _label, eta = spy.etas.find { |line, _| line.start_with?("trigram lane: shadow build") }
+        assert_predicate eta, :none?
+      end
+    end
+
     # -- the wave refresh: one shadow pass for many deferred sources --------
     # A >budget slice pays a full-corpus shadow pass; N deferred sources
     # refreshed one by one pay N corpus passes. refresh_sources! plans the
