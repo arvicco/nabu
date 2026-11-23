@@ -1162,6 +1162,35 @@ namespace :crawl do
   end
 end
 
+# The acquisition plan's park / re-check conditions as one batch of HTTP
+# state checks (Nabu::Ops::AcquisitionProbe — row shape in its class doc):
+# the probe list is the gitignored .docs/acquisition/probes.yml (absent =
+# announced skip; ACQUISITION_PROBES=path overrides). One request per row,
+# short timeout, no retries, ≤3 redirects; then the held-vs-searchable line
+# from the live dbs, read-only. Network; informational (never exits 1 on a
+# CHANGED row).
+namespace :acquisition do
+  desc "Probe the acquisition plan's park/re-check URLs (.docs/acquisition/probes.yml rows: " \
+       "name, url, expect = status code | any | body substring, note) + the held-vs-searchable delta"
+  task :probe do
+    $LOAD_PATH.unshift(File.expand_path("lib", __dir__))
+    require "nabu"
+    require "nabu/ops/acquisition_probe"
+
+    path = ENV.fetch("ACQUISITION_PROBES", File.expand_path(".docs/acquisition/probes.yml", __dir__))
+    if File.file?(path)
+      Nabu::Ops::AcquisitionProbe.new(rows: Nabu::Ops::AcquisitionProbe.load(path)).run
+    else
+      puts "acquisition:probe — no probe list at #{path} (a public clone or a worktree); probes skipped"
+    end
+    config = Nabu::Config.load
+    puts Nabu::Ops::AcquisitionProbe.searchable_delta(catalog_path: config.catalog_path,
+                                                      fulltext_path: config.fulltext_path)
+  rescue Nabu::Ops::AcquisitionProbe::Invalid => e
+    abort "acquisition:probe — #{e.message}"
+  end
+end
+
 # The phase's paced-crawl plan, generated from the adapters' own Schedule
 # declarations and the ledger's measured slice times (Nabu::Ops::RailPlan;
 # the 2026-11-13 hand-assembled chain over-run). Parallel lanes, one per
