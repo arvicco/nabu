@@ -24,7 +24,7 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 A source wears every desk it serves — these 42 answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
-| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 22 November 2026)</span> |
+| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 23 November 2026)</span> |
 |---|---|---|---|---|
 | `analecta-hymnica` | texts | open | wired · manual | 55 docs / 17,211 passages |
 | `aranese` | texts | attribution | wired · manual | 2 docs / 839,816 passages |
@@ -61,7 +61,7 @@ A source wears every desk it serves — these 42 answer this desk. Holdings are 
 | `theatre-classique` | texts | nc | wired · manual | 1,939 docs / 1,601,085 passages |
 | `typikon-bible` | texts | attribution | wired · manual | 229 docs / 105,698 passages |
 | `ud` | treebank | nc | wired · manual | 93 docs / 338,638 passages |
-| `wellcome` | texts | open | wired · manual | 1,400 docs / 421,233 passages |
+| `wellcome` | texts | open | wired · manual | 1,570 docs / 450,905 passages |
 | `wiktionary-ca` | dictionary | attribution | wired · manual | 198,685 entries |
 | `wiktionary-frm` | dictionary | attribution | wired · manual | 4,956 entries |
 | `wiktionary-fro` | dictionary | attribution | wired · manual | 9,280 entries |
@@ -69,9 +69,9 @@ A source wears every desk it serves — these 42 answer this desk. Holdings are 
 | `wiktionary-osp` | dictionary | attribution | wired · manual | 1,501 entries |
 | `wiktionary-pro` | dictionary | attribution | wired · manual | 695 entries |
 
-**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 22 November 2026)</span>: `cat` 199,652 · `lat` 199,613 · `fra` 90,157 · `fro` 9,502 · `oci` 7,530 · `frm` 4,959 · `osp` 2,185 · `roa-opt` 1,682 · `spa` 1,217 · `eng` 722 … and 27 more (`nabu axis romance` lists all).
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 23 November 2026)</span>: `lat` 199,783 · `cat` 199,652 · `fra` 90,157 · `fro` 9,502 · `oci` 7,530 · `frm` 4,959 · `osp` 2,185 · `roa-opt` 1,682 · `spa` 1,217 · `eng` 722 … and 27 more (`nabu axis romance` lists all).
 
-**Carried in by multilingual packs** (`ud` — whole-source members whose other languages ride along, as of 22 November 2026): `orv` 9 · `ota` 5 · `lzh` 4 · `cop` 3 · `egy` 3 … and 18 more (`nabu axis romance` lists all).
+**Carried in by multilingual packs** (`ud` — whole-source members whose other languages ride along, as of 23 November 2026): `orv` 9 · `ota` 5 · `lzh` 4 · `cop` 3 · `egy` 3 … and 18 more (`nabu axis romance` lists all).
 
 ## The desk's instruments
 

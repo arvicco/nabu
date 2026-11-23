@@ -15,9 +15,9 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 A source wears every desk it serves — these five answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
-| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 22 November 2026)</span> |
+| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 23 November 2026)</span> |
 |---|---|---|---|---|
-| `digar-corpora` | texts | attribution | not yet wired | not synced yet |
+| `digar-corpora` | texts | attribution | wired · manual | 2,877 docs / 580,254 passages |
 | `senie` | texts | attribution | wired · manual | 183 docs / 48,995 passages |
 | `vakk` | texts | nc | wired · manual | 3,052 docs / 148,875 passages |
 | `vks` | texts | attribution | wired · manual | 134 docs / 73,404 passages |
@@ -25,7 +25,7 @@ A source wears every desk it serves — these five answer this desk. Holdings ar
 
 Private research materials are not listed.
 
-**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 22 November 2026)</span>: `et` 16,601 · `lv` 172 · `fi` 134 · `de` 10 · `lat` 1.
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 23 November 2026)</span>: `et` 19,478 · `lv` 172 · `fi` 134 · `de` 10 · `lat` 1.
 
 ## The desk's instruments
 
