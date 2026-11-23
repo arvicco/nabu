@@ -1,0 +1,34 @@
+# Nabu fixture manifest. Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# Every entry is refetchable: false — the API path is disallowed by the
+# host's robots.txt, so the sentinel never walks it; a re-cut happens only
+# under the INTF's permission (README "Re-cut"). adapter_test stays null.
+source: ntvmr
+adapter_test: null
+files:
+  - path: liste.xml
+    refetchable: false
+    reason: robots.txt disallows /community/vmr/api/ — metadata/liste/get/ is re-fetched only under INTF permission
+    whole: false
+    trim: 24 of the 7,772 <manuscript/> elements, byte-identical in upstream order, root count="7772" verbatim
+  - path: transcripts/10052.xml
+    refetchable: false
+    reason: robots.txt disallows /community/vmr/api/ — transcript/get/?docID=10052&pageID=ALL&format=teiraw
+    whole: true
+    trim: none
+  - path: transcripts/20189.xml
+    refetchable: false
+    reason: robots.txt disallows /community/vmr/api/ — transcript/get/?docID=20189&pageID=ALL&format=teiraw
+    whole: true
+    trim: none
+  - path: transcripts/20001.xml
+    refetchable: false
+    reason: robots.txt disallows /community/vmr/api/ — transcript/get/?docID=20001&indexContent=Phlm&format=teiraw
+    whole: true
+    trim: none (the whole answer of a verse-range query)
+  - path: transcripts/20059.xml
+    refetchable: false
+    reason: robots.txt disallows /community/vmr/api/ — transcript/get/?docID=20059&pageID=ALL&format=teiraw
+    whole: true
+    trim: none (the no-transcript error answer — the rejected-grain specimen)

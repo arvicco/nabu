@@ -105,6 +105,12 @@ sources:
     # second- to fourth-century fathers' quotations — the Koine NT text in its own
     # manuscripts, certain (the sblgnt claim, at the witness layer).
     grc: { lect: "grc:koi", tier: certain }
+  ntvmr:
+    # The Greek NT manuscripts of the INTF Virtual Manuscript Room (papyri,
+    # majuscules, minuscules, lectionaries, II–XIX c.): the Koine NT text in
+    # its own manuscripts, certain (the cntr claim — the copy's date is the
+    # artifact's, the text's lect is the NT's).
+    grc: { lect: "grc:koi", tier: certain }
   papyri-ddbdp:
     # Documentary papyri, Ptolemaic through Roman — approximation.
     grc: { lect: "grc:koi", tier: approximation }

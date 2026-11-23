@@ -305,6 +305,10 @@ module Nabu
           #                            label (the print IS the document), else the typed Created
           #                            From/To year, else the joined wiki work's Year; place = the
           #                            imprint's first town
+          "ntvmr" => :structured, # the INTF Liste's century field (III, IV/V, '1291/92') → the
+          #                         envelope of every century/year it names; no class (the
+          #                         manuscript's own date); the holding library rides metadata
+          #                         country/settlement/repository, never "place"
           "obi-burmese" => :ce_year_text,
           "ociana" => :script_band, # the record's script TRADITION banded through the ruled
           #                           ANA period_bands rows (precision era); site + region/
