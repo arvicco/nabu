@@ -72,6 +72,11 @@ module Nabu
           # rebuild (a fresh box's bootstrap — the first sync builds the
           # index this way) it stays quiet: "first run — no estimate" on
           # a tiny bootstrap is log noise (the P78-r3 non-tty rule).
+          # Deliberately UNRECORDED: the fallback's wall time is a whole-
+          # index build, and ledgering it under any sync stage would inflate
+          # every estimate that sums that stage's rows (an all-scope read
+          # would price a slice as the whole index). Its price is the
+          # rebuild's own corpus index rows, read above.
           fallback_eta = rebuild_fallback_eta(ledger)
           if fallback_eta&.real?
             progress&.stage("index: #{slug} — fulltext index not incremental-ready (a table missing or " \
@@ -402,33 +407,56 @@ module Nabu
             ReflexRootsIndexer.apply_language_moves!(catalog: catalog, fulltext: fulltext, **census_moves)
           end
         end
+        # The tail lanes below each ledger their wall time (rows = the
+        # count the lane returns) ONLY when they did work: unannounced, as
+        # before, and a hands-off nil records nothing, so a no-op never
+        # governs the next estimate.
         # The clarify lane's slice (names only — cheap; skipped on a
         # fulltext predating the lane, which the reconcile/rake path builds).
-        refresh_clarify_source!(catalog: catalog, fulltext: fulltext, slug: slug)
+        timed_sync_stage(ledger, slug, "clarify_slice", nil, progress, rows_of: :itself.to_proc, skip_nil: true) do
+          refresh_clarify_source!(catalog: catalog, fulltext: fulltext, slug: slug)
+        end
         # The translations lane's slice (registry sources only; hands-off
         # on a fulltext predating the lane — no bootstrap, the clarify
         # stance). Rides the load's delta when this refresh does.
-        TranslationIndex.refresh_source!(catalog: catalog, fulltext: fulltext, slug: slug,
-                                         delta: (delta if use_delta))
+        timed_sync_stage(ledger, slug, "translations_slice", nil, progress, rows_of: :itself.to_proc,
+                                                                            skip_nil: true) do
+          TranslationIndex.refresh_source!(catalog: catalog, fulltext: fulltext, slug: slug,
+                                           delta: (delta if use_delta))
+        end
         # The token-gloss lane's slice (registry sources only, whole-slice
         # grain — a word row aggregates across passages; hands-off on a
         # fulltext predating the lane).
-        GlossIndex.refresh_source!(catalog: catalog, fulltext: fulltext, slug: slug)
+        timed_sync_stage(ledger, slug, "glosses_slice", nil, progress, rows_of: :itself.to_proc, skip_nil: true) do
+          GlossIndex.refresh_source!(catalog: catalog, fulltext: fulltext, slug: slug)
+        end
         # The annotations lane's slice (declared sources only; delta grain
         # like translations; hands-off on a fulltext predating the lane).
-        AnnotationIndex.refresh_source!(catalog: catalog, fulltext: fulltext, slug: slug,
-                                        delta: (delta if use_delta))
+        timed_sync_stage(ledger, slug, "annotations_slice", nil, progress, rows_of: :itself.to_proc,
+                                                                           skip_nil: true) do
+          AnnotationIndex.refresh_source!(catalog: catalog, fulltext: fulltext, slug: slug,
+                                          delta: (delta if use_delta))
+        end
         # The gloss-lines lane's slice (declared gloss sources only;
         # passage-keyed, so delta grain like annotations).
-        GlossLineIndex.refresh_source!(catalog: catalog, fulltext: fulltext, slug: slug,
-                                       delta: (delta if use_delta))
+        timed_sync_stage(ledger, slug, "gloss_lines_slice", nil, progress, rows_of: :itself.to_proc,
+                                                                           skip_nil: true) do
+          GlossLineIndex.refresh_source!(catalog: catalog, fulltext: fulltext, slug: slug,
+                                         delta: (delta if use_delta))
+        end
         # P112-3: the finish stamp records the catalog state this slice now
         # serves — health's freshness cross-check reads it back.
         live_rows, max_id = source_live_stats(catalog, slug)
         mark_slice_finished!(fulltext, slug, live_rows: live_rows, max_passage_id: max_id)
         # The bulk pass's final reclaim — AFTER the last write, so the WAL
         # file ends the refresh truncated, not holding the postings swaps.
-        checkpoint_wal!(fulltext, progress: progress) if bulk
+        # Ledgered (unannounced, as before) with the frames it checkpointed.
+        if bulk
+          timed_sync_stage(ledger, slug, "wal_checkpoint", nil, progress,
+                           rows_of: ->(result) { result[:checkpointed] }) do
+            checkpoint_wal!(fulltext, progress: progress)
+          end
+        end
         # The slice rewrite's insert count IS the source's live total; the
         # delta grain inserts only the changed rows, so the honest
         # "indexed N" is counted from the catalog instead.
@@ -605,13 +633,19 @@ module Nabu
       # drift (the shadow builds: the rows they wrote).
       # Split note: also times the bulk-slice merge stage; kept with its primary user (refresh_source!).
       # +eta+ (optional) overrides the stage's own-row estimate.
-      def timed_sync_stage(ledger, scope, stage, label, progress, rows_of: nil, eta: nil, &)
+      # A nil +label+ records without announcing (a sub-step that always
+      # ran silent stays silent); +skip_nil+ records nothing when the block
+      # returns nil — the lane was hands-off, and a no-op's ~0 s must not
+      # govern the next estimate.
+      def timed_sync_stage(ledger, scope, stage, label, progress, rows_of: nil, eta: nil, skip_nil: false, &)
         IndexCostClasses.for("sync", stage)
-        eta ||= ledger && Nabu::Eta.for(ledger, kind: "sync", scope: scope, stage: stage)
-        progress&.stage(label, eta: eta)
+        if label
+          eta ||= ledger && Nabu::Eta.for(ledger, kind: "sync", scope: scope, stage: stage)
+          progress&.stage(label, eta: eta)
+        end
         started = Process.clock_gettime(Process::CLOCK_MONOTONIC)
         result = yield
-        if ledger
+        if ledger && !(skip_nil && result.nil?)
           StageTimings.record!(ledger, kind: "sync", scope: scope, stage: stage,
                                        seconds: Process.clock_gettime(Process::CLOCK_MONOTONIC) - started,
                                        rows: rows_of&.call(result))

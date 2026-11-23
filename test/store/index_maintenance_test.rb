@@ -100,6 +100,31 @@ module Store
       assert_includes stages, %w[passages_fts fts_merge]
     end
 
+    # The WAL reclaim is a rail stage of its own: rows = the frames the
+    # TRUNCATE checkpoint moved (the report's own number, no extra read).
+    def test_the_rail_ledgers_its_wal_checkpoint_with_the_frames_it_moved
+      report = run_rail
+
+      row = Nabu::Store::StageTimings.last(@ledger, kind: Rail::KIND, scope: "corpus", stage: "wal_checkpoint")
+      refute_nil row
+      assert_equal report.checkpoint[:checkpointed], row[:rows]
+    end
+
+    # Recording only: a ledger-less rail does the same work.
+    def test_the_recorder_leaves_the_rail_unchanged
+      plant_stale_postings("s")
+      plant_merge_debt
+      unrecorded = Rail.run!(catalog: @catalog, fulltext: @fulltext, ledger: nil)
+      plant_stale_postings("s")
+      plant_merge_debt
+      recorded = run_rail
+
+      assert_equal [unrecorded.recomputed, unrecorded.checkpoint[:busy]],
+                   [recorded.recomputed, recorded.checkpoint[:busy]]
+      assert_operator recorded.merge_chunks, :>=, 2
+      assert_operator unrecorded.merge_chunks, :>=, 2
+    end
+
     # Resumability: a run killed after its first recompute leaves only the
     # unfinished flag; the next run continues there instead of restarting.
     def test_a_killed_run_resumes_with_only_the_unfinished_work

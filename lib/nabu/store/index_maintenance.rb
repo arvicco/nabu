@@ -63,7 +63,10 @@ module Nabu
             Indexer.consolidate_merges!(fulltext, table, progress: progress)
           end
         end
-        checkpoint = Indexer.checkpoint_wal!(fulltext, progress: progress)
+        checkpoint = timed(ledger, "corpus", "wal_checkpoint", "maintain: wal checkpoint (TRUNCATE)", progress,
+                           rows_of: ->(result) { result[:checkpointed] }) do
+          Indexer.checkpoint_wal!(fulltext, progress: progress)
+        end
         Report.new(recomputed: recomputed, merge_chunks: chunks, gauges_before: before,
                    gauges_after: gauges(fulltext), checkpoint: checkpoint)
       end
@@ -160,7 +163,8 @@ module Nabu
       end
 
       # Announce with the ledger's estimate, run, record (kind "maintain").
-      def timed(ledger, scope, stage, label, progress)
+      # +rows_of+ (optional) maps the block's value to the stage's work size.
+      def timed(ledger, scope, stage, label, progress, rows_of: nil)
         IndexCostClasses.for(KIND, stage)
         eta = ledger && Nabu::Eta.for(ledger, kind: KIND, scope: scope, stage: stage)
         progress&.stage(label, eta: eta)
@@ -168,7 +172,8 @@ module Nabu
         result = yield
         if ledger
           StageTimings.record!(ledger, kind: KIND, scope: scope, stage: stage,
-                                       seconds: Process.clock_gettime(Process::CLOCK_MONOTONIC) - started)
+                                       seconds: Process.clock_gettime(Process::CLOCK_MONOTONIC) - started,
+                                       rows: rows_of&.call(result))
         end
         result
       end
