@@ -56,11 +56,20 @@ namespace :fixtures do
     $LOAD_PATH.unshift(File.expand_path("lib", __dir__))
     require "nabu"
 
+    require_relative "lib/nabu/ops/proof_cadence"
     sentinel = Nabu::FixtureSentinel.new
     sources = args[:source] ? [args[:source]] : sentinel.sources
     results = sources.map { |source| sentinel.check(source) }
     results.each { |result| print_check_report(result) }
     abort "fixtures:check found drift or fetch/adapter-test failures" unless results.all?(&:ok?)
+
+    # The cadence stamp (Nabu::Ops::ProofCadence): only a clean FULL run
+    # re-proves the sentinel — a single-source check stamps nothing.
+    next if args[:source]
+
+    stamp = Nabu::Ops::ProofCadence.record!(local_dir: Nabu::Config.load.local_dir, proof: "fixtures-check",
+                                            detail: "#{results.size} source(s) clean")
+    puts "fixtures:check — all #{results.size} source(s) clean; cadence stamped at #{stamp}"
   end
 
   desc "Re-fetch and OVERWRITE checked-in fixtures for a source (explicit adoption)"
@@ -110,6 +119,7 @@ def run_drill
   $LOAD_PATH.unshift(File.expand_path("lib", __dir__))
   require "nabu"
   require "tmpdir"
+  require_relative "lib/nabu/ops/proof_cadence"
 
   log_path = drill_log_path
   File.open(log_path, "w") do |log_file|
@@ -155,6 +165,11 @@ def run_drill
       say.call "drill workspace kept at #{workspace} (report.txt · verify-issues.tsv · the restored machine/)"
     end
     abort "ops:drill FAILED — db/ does NOT fully derive from the three folders (see #{log_path})" unless report.ok?
+
+    # The cadence stamp (Nabu::Ops::ProofCadence): a passing drill only.
+    stamp = Nabu::Ops::ProofCadence.record!(local_dir: config.local_dir, proof: "ops-drill",
+                                            detail: "derivation proven; log #{log_path}")
+    say.call "drill cadence stamped at #{stamp}"
   end
 end
 
@@ -639,6 +654,9 @@ end
 # And the declared-rule liveness probe (Nabu::Ops::RuleLivenessCheck): a
 # lect facet rule whose source holds live documents but which never
 # compiled a journal row fails, named; no catalog/journal skips.
+# And the standing-proof cadence probe (Nabu::Ops::ProofCadence): ops:drill
+# and a full fixtures:check each stamp local/proofs/<proof>.yml on success;
+# either unstamped or older than 60 days fails, named; no local/proofs/ skips.
 # And the incident-register status probe (Nabu::Ops::IncidentRegisterCheck):
 # every incident row's (`## <sigil>I-n ·`) bracketed suffix must carry OPEN, CLOSED,
 # FIX-STAGED or MITIGATED — a row without one fails, named; no register skips.
@@ -655,6 +673,7 @@ namespace :boards do
     require_relative "lib/nabu/ops/rule_liveness_check"
     require_relative "lib/nabu/ops/incident_register_check"
     require_relative "lib/nabu/ops/decision_register_check"
+    require_relative "lib/nabu/ops/proof_cadence"
     dir = ENV.fetch("BOARDS_DIR", File.expand_path(".docs", __dir__))
     report = Nabu::Ops::BoardCheck.new(boards_dir: dir).run
     if report.skipped
@@ -704,6 +723,9 @@ namespace :boards do
     ).run
     liveness.findings.each { |finding| puts "STALE  rule liveness #{finding}" }
 
+    cadence = Nabu::Ops::ProofCadence::Check.new(local_dir: File.expand_path("local", __dir__)).run
+    cadence.findings.each { |finding| puts "STALE  proof cadence #{finding}" }
+
     failures = []
     failures << "#{report.findings.size} stale register header(s)" unless report.clean?
     failures << "#{watch.findings.size} stale GH watch row(s)" unless watch.clean?
@@ -714,6 +736,7 @@ namespace :boards do
     failures << "#{groom.findings.size} ungroomed queue row(s)" unless groom.clean?
     failures << "#{readiness.findings.size} never-synced source(s)" unless readiness.clean?
     failures << "#{liveness.findings.size} never-compiled lect rule(s)" unless liveness.clean?
+    failures << "#{cadence.findings.size} overdue standing proof(s)" unless cadence.clean?
     abort "boards:check — #{failures.join(', ')}" unless failures.empty?
 
     puts "boards:check — #{report.registers.size} register header(s) current: #{report.registers.join(', ')}"
@@ -741,6 +764,12 @@ namespace :boards do
       puts "boards:check — no catalog/lect journal/rules on this box; rule-liveness probe skipped"
     else
       puts "boards:check — #{liveness.rules} declared lect rule(s) live (rule-liveness probe clean)"
+    end
+    if cadence.skipped
+      puts "boards:check — no local/#{Nabu::Ops::ProofCadence::DIRNAME}/ on this box; proof-cadence probe skipped"
+    else
+      stamps = cadence.stamps.map { |proof, date| "#{proof} #{date.iso8601}" }.join(", ")
+      puts "boards:check — standing proofs run within #{Nabu::Ops::ProofCadence::MAX_AGE_DAYS} days: #{stamps}"
     end
   end
 end
