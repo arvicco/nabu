@@ -1,0 +1,25 @@
+ntvmr:   # 02-sources row 434
+  adapter: Nabu::Adapters::Ntvmr
+  adopted: "2026-11-23"
+  axes: [biblical]
+  wired: false   # the crawl is SUSPENDED by declaration (Ntvmr::TRANSCRIPT_CRAWL):
+                 # robots.txt disallows /community/vmr/api/ — the Liste and transcript/get
+                 # both live there — and asks bulk consumers to contact the INTF. #fetch
+                 # refuses until the INTF grants bulk access or names an export; then the
+                 # first sync = the Liste (one ~1 MB GET, 7,772 records → 6,200 GA
+                 # manuscripts + 1,572 non-GA records skipped by rule) + SLICE 60
+                 # transcript GETs at one per 30 s (~30 min). Eyeball nabu show on a
+                 # held verse; probe nabu search with a word from it; then flip.
+  sync_policy: manual   # a paced crawl; the Liste is a held snapshot (dated manifest
+                        # .ntvmr-census.json), re-censused only by deleting liste.xml
+  index_policy: deferred   # paced-crawl citizen: manuscripts load per slice, the index runs once per wave
+  # NTVMR — the INTF New Testament Virtual Manuscript Room (Münster): the
+  # Gregory-Aland Liste (7,772 catalogued records, 6,200 of them the Greek NT
+  # papyri, majuscules, minuscules and lectionaries) and the PUBLISHED ECM
+  # transcriptions (transcript/get, TEI, CC BY 4.0 stamped in every header).
+  # New family ntvmr-tei. Document = manuscript (urn:nabu:ntvmr:p52), passage
+  # = verse (…:john.18.31; the page where an ab carries no verse key); text =
+  # the first hand's reading with restorations read through; corrections,
+  # the extant reading, Leiden counts and hub-ready per-word tokens ride
+  # annotations. Untranscribed manuscripts ledger no-transcript. Images are
+  # restricted and out of scope. Dated by the Liste's century field.

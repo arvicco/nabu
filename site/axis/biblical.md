@@ -13,7 +13,7 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 ## The shelves
 
-A source wears every desk it serves — these 29 answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
+A source wears every desk it serves — these 30 answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
 | Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 23 November 2026)</span> |
 |---|---|---|---|---|
@@ -34,6 +34,7 @@ A source wears every desk it serves — these 29 answer this desk. Holdings are 
 | `hebrew-lexicon` | dictionary | attribution | wired · manual | 21,144 entries |
 | `hexapla` | texts | nc | wired · manual | 19 docs / 16,302 passages |
 | `macula-greek` | texts | attribution | wired · manual | 27 docs / 7,939 passages |
+| `ntvmr` | texts | attribution | not yet wired | not synced yet |
 | `opengnt` | texts | attribution | wired · manual | 27 docs / 7,941 passages |
 | `oshb` | texts | open | wired · manual | 39 docs / 23,213 passages |
 | `peshitta` | texts | nc | wired · manual | 65 docs / 31,341 passages |

@@ -1,0 +1,18 @@
+sources:
+  ntvmr:   # 02-sources row 434
+    # kind machine-postured (kind_map source_kind scripture); lect by override
+    # (grc → grc:koi, certain — the cntr claim at the witness layer).
+    dating: {posture: dated, note: "the Liste's orig century field → the envelope of every
+        century or year it names, :structured, no class (the manuscript's own date): Roman
+        centuries (III, IV/V, XI-XII, 'E III - A IV'), years ('1292', '1291/92', 'ca. 1043-55');
+        a '?' rides date_uncertain. Census 2026-11-23: 5,835 of the 6,200 GA manuscripts read,
+        365 carry nothing (343 blank, 21 '?', 1 '[reserved]'). Declared coarse: the A/M/E
+        (Anfang/Mitte/Ende) qualifiers and per-part datings ('r: XII; ap: XIII') widen to whole
+        centuries; origEarly/origLate are 0 on every record and carry nothing"}
+    places: {posture: unplaced, note: "the Liste carries no place field; the transcript TEI's
+        msIdentifier (country, settlement, repository, idno) is the PRESENT holding library,
+        which rides metadata only — the rundata/menota origin-axis stance. No origin or
+        findspot is served on the public API"}
+    script: {posture: implied, note: "Greek as the INTF transcribes it: lowercase, unaccented,
+        nomina sacra contracted as written (the overline is markup and drops), punctuation as
+        written (· and the like)"}

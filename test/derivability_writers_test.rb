@@ -200,6 +200,11 @@ class DerivabilityWritersTest < Minitest::Test
   # issue page XML under issues/<oid>.xml (tmp+rename); its
   # .niupepa-crawl.json ledger is written by the paced-crawl engine — the
   # same crawl law kind.
+  # The ntvmr adapter writes canonical/ntvmr/ inside Adapter#fetch: the
+  # INTF Liste (liste.xml, written only after its truncation defense) with
+  # its dated .ntvmr-census.json manifest, and the transcript TEI under
+  # transcripts/<docID>.xml (tmp+rename); its .ntvmr-crawl.json ledger is
+  # written by the paced-crawl engine — the same crawl law kind.
   # credentials (Nabu::Credentials) writes ONE instance file,
   # local/config/credentials.yml (tmp born mode 600 + chmod + rename),
   # driven only by the `nabu creds set` gateway — the local/config
@@ -365,7 +370,7 @@ class DerivabilityWritersTest < Minitest::Test
     nabu/adapters/damos.rb nabu/adapters/itkc_catalog.rb
     nabu/adapters/aclt.rb nabu/adapters/ia_scan_shelf.rb
     nabu/adapters/mnc_wikisource.rb nabu/adapters/shiratori_shm.rb nabu/adapters/nb_no.rb
-    nabu/adapters/wellcome.rb nabu/paced_crawl.rb nabu/adapters/niupepa.rb
+    nabu/adapters/wellcome.rb nabu/paced_crawl.rb nabu/adapters/niupepa.rb nabu/adapters/ntvmr.rb
     nabu/language_shelf.rb nabu/lemma_shelf.rb nabu/date_shelf.rb nabu/meter_shelf.rb
     nabu/library_shelf.rb nabu/note_shelf.rb
     nabu/source_shelf.rb nabu/ingest.rb
