@@ -56,4 +56,29 @@ class ReusePoolTest < Minitest::Test
       pool(2, work: ->(_state, task) { task == 3 ? exit!(3) : task }).map(1..6) { |_result| nil }
     end
   end
+
+  # The worker-death race: a worker that dies BEFORE reading leaves the
+  # parent's request write to hit a closed pipe. A task larger than the
+  # pipe buffer makes it deterministic — the write must wait on the
+  # reader, so it fails with EPIPE whenever the reader is gone. The death
+  # must surface as WorkerError, never a bare Errno::EPIPE.
+  def test_a_worker_dying_before_its_first_read_raises_worker_error
+    big = "x" * 300_000
+    dying = Nabu::ReusePool.new(workers: 2, setup: ->(index) { index.zero? ? exit!(3) : index },
+                                work: ->(_state, task) { task.bytesize })
+    error = assert_raises(Nabu::ReusePool::WorkerError) { dying.map(Array.new(6) { big }) { |_result| nil } }
+    assert_match(/reuse worker 0 \(pid \d+\) died/, error.message)
+  end
+
+  # Same race, but the worker dies of a setup EXCEPTION: its own
+  # diagnostics frame is already in flight, so the EPIPE must not
+  # pre-empt it — the WorkerError carries the worker's actual failure.
+  def test_a_setup_failure_racing_the_first_write_keeps_its_diagnostics
+    big = "x" * 300_000
+    failing = Nabu::ReusePool.new(workers: 2,
+                                  setup: ->(index) { index.zero? ? raise(ArgumentError, "no handle") : index },
+                                  work: ->(_state, task) { task.bytesize })
+    error = assert_raises(Nabu::ReusePool::WorkerError) { failing.map(Array.new(6) { big }) { |_result| nil } }
+    assert_match(/reuse worker 0 failed on task -1: ArgumentError: no handle/, error.message)
+  end
 end

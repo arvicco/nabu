@@ -43,7 +43,12 @@ module Nabu
     # ParsePool ceiling applied.
     def self.default_workers(nprocessors: Etc.nprocessors) = (nprocessors - 1).clamp(1, 8)
 
-    Worker = Struct.new(:index, :pid, :requests, :results, :outstanding)
+    Worker = Struct.new(:index, :pid, :requests, :results, :outstanding, :dead)
+
+    # The request-write errnos that mean "the worker is gone": its read end
+    # closed under us (EPIPE; ECONNRESET is the same death on platforms that
+    # report it so).
+    WORKER_GONE = [Errno::EPIPE, Errno::ECONNRESET].freeze
 
     # A task's failure, buffered at its slot until delivery reaches it.
     Failure = Data.define(:message)
@@ -72,6 +77,7 @@ module Nabu
     def forked(tasks, &)
       @pool = Array.new(@workers) { |index| fork_worker(index) }
       @queue = Thread::Queue.new
+      @held = []
       @pumps = @pool.map { |worker| Thread.new { pump(worker) } }
       clean = false
       drive(tasks.each_entry, &)
@@ -106,12 +112,16 @@ module Nabu
     end
 
     def fill(enum, sent)
-      @pool.sort_by(&:outstanding).each do |worker|
+      @pool.reject(&:dead).sort_by(&:outstanding).each do |worker|
         while worker.outstanding < IN_FLIGHT
           more, task = next_task(enum)
           return [true, sent] unless more
 
-          write_frame(worker.requests, Marshal.dump([sent, task]))
+          unless dispatch(worker, sent, task)
+            @held.push(task)
+            break
+          end
+
           worker.outstanding += 1
           sent += 1
         end
@@ -119,7 +129,27 @@ module Nabu
       [false, sent]
     end
 
+    # Write one task; false when the worker is already gone. The
+    # worker-death race: a worker dying under load closes its request pipe
+    # before its pump has queued the death, so the write fails first. The
+    # write error is NOT the failure report — the worker is marked dead
+    # (never written to again) and its pump still delivers what it left
+    # (its own error frame, then EOF) through take_result/collect_finals,
+    # which raise the WorkerError with the worker's real diagnostics. A
+    # dead worker never sends a final, so the raise is guaranteed.
+    def dispatch(worker, seq, task)
+      write_frame(worker.requests, Marshal.dump([seq, task]))
+      true
+    rescue *WORKER_GONE
+      worker.dead = true
+      false
+    end
+
+    # A task a dead worker's write bounced is re-offered first (its seq is
+    # unspent, so the order bookkeeping is untouched).
     def next_task(enum)
+      return [true, @held.shift] unless @held.empty?
+
       [true, enum.next]
     rescue StopIteration
       [false, nil]
@@ -189,7 +219,7 @@ module Nabu
       end
       requests_r.close
       results_w.close
-      Worker.new(index, pid, requests_w, results_r, 0).tap { |worker| @forked << worker }
+      Worker.new(index, pid, requests_w, results_r, 0, false).tap { |worker| @forked << worker }
     end
 
     # The child's whole life. exit! — never the parent's at_exit handlers.
