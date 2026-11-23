@@ -2,7 +2,7 @@ digar-corpora:   # 02-sources row 433
   adapter: Nabu::Adapters::DigarCorpora
   adopted: "2026-11-23"
   axes: [baltic]
-  wired: false   # adapter + fixtures; flips after the first real sync (FTS-probed)
+  wired: true   # flipped 2026-11-23 after the verified first sync (2,877 docs / 580,254 passages, FTS-probed)
   sync_policy: manual   # two frozen 2018 zips (Last-Modified 2018-10-09)
   # DIGAR corpus of freely usable publications (Eesti Rahvusraamatukogu,
   # the National Library of Estonia; data.digar.ee): 3,416 Estonian-
