@@ -138,6 +138,25 @@ class RebuildTest < Minitest::Test
     end
   end
 
+  # Migration 054: the O(1) accounting is derived — a rebuild lands every
+  # source's counts and its fulltext membership, nothing behind.
+  def test_rebuild_lands_correct_source_aggregates
+    write_sources(<<~YAML)
+      corpus:
+        adapter: TestAdapter
+        wired: true
+    YAML
+    write_canonical("corpus", "one.txt" => ILIAD, "two.txt" => ODYSSEY)
+
+    rebuilder.run
+
+    with_db do |db|
+      row = db[:source_aggregates].first || flunk("rebuild left no source_aggregates row")
+      assert_equal [2, 3, 3, false], row.values_at(:documents_count, :passages_count, :fts_member_count, :fts_behind)
+      assert_empty Nabu::Store::SourceAggregates.drift(db, [row[:source_id]])
+    end
+  end
+
   # P121-2: the lemma attestation rollups are derived — the rebuild re-mints
   # them from the fresh catalog + index (the language-mix rows prove the
   # stage ran; lemma_rollup's own math lives in the store test).

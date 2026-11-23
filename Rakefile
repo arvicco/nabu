@@ -962,6 +962,38 @@ end
 # The standalone corpus-wide builder pass (P104; owner rule 2026-09-26:
 # rebuilds are owner-fired INTER-PHASE steps — a phase's builder-side
 # changes refresh projections through this task, never via a rebuild).
+# The O(1) library accounting (Store::SourceAggregates, migration 054):
+# the one-time population of an existing live catalog. Counts are
+# recounted from the catalog (one documents scan + one passages-join scan
+# — minutes at full-library scale, the migration-019 backfill's price);
+# the fulltext columns come from the index file's own finish stamps,
+# pending markers and O(1) behind probes (read-only on the index). Every
+# later write keeps the table current; `nabu rebuild` re-derives it.
+namespace :aggregates do
+  desc "Backfill the per-source O(1) accounting table (source_aggregates) from the live catalog + index"
+  task :backfill do
+    $LOAD_PATH.unshift(File.expand_path("lib", __dir__))
+    require "nabu"
+
+    config = Nabu::Config.load
+    catalog = Nabu::Store.connect(config.catalog_path)
+    abort "aggregates:backfill — catalog predates migration 054 (run a sync or rebuild first)" \
+      unless Nabu::Store::SourceAggregates.available?(catalog)
+
+    fulltext = (Nabu::Store.connect_fulltext(config.fulltext_path, readonly: true) if File.exist?(config.fulltext_path))
+    started = Process.clock_gettime(Process::CLOCK_MONOTONIC)
+    rows = Nabu::Store::SourceAggregates.backfill!(catalog: catalog, fulltext: fulltext)
+    totals = Nabu::Store::SourceAggregates.rollup(catalog)
+    elapsed = Process.clock_gettime(Process::CLOCK_MONOTONIC) - started
+    puts "aggregates:backfill done — #{rows} sources · #{totals.fetch(:documents_count)} documents · " \
+         "#{totals.fetch(:passages_count)} passages · #{totals.fetch(:behind_sources)} behind in " \
+         "#{Object.new.extend(Nabu::DurationFormat).format_duration(elapsed)}"
+  ensure
+    catalog&.disconnect
+    fulltext&.disconnect
+  end
+end
+
 namespace :builders do
   # Verbose (Ops::StageGuide — the intro + one green line per stage):
   # `rake builders:refresh[verbose]` or `rake --verbose builders:refresh`.

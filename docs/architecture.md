@@ -225,6 +225,20 @@ source_stats_languages(id, source_id, language, documents, passages)
    -- global row: the roll-up is SUM over per-source rows. Readers
    -- feature-detect the table (pre-019 catalogs fall back to live
    -- aggregates unchanged).
+source_aggregates(id, source_id, documents_count, passages_count,
+                  fts_member_count, fts_behind, last_index_refresh_at,
+                  vector_coverage_count, updated_at)
+   -- Migration 054 (Store::SourceAggregates): O(1) per-source accounting.
+   -- Counts move by the source_stats maintainer's own delta in the same
+   -- document transaction (and re-derive with SourceStats.derive!);
+   -- fts_behind is set by the Loader inside the transaction that moves an
+   -- index-visible row and cleared, with fts_member_count, by the index
+   -- refresh CALL SITES (sync reindex, the wave, incremental refresh, and
+   -- after every full Indexer.rebuild!) — never inside the index-core
+   -- files, which write no catalog row. Derived: rebuild re-derives every
+   -- column; `rake aggregates:backfill` populates a pre-054 catalog.
+   -- vector_coverage_count is reserved (NULL — the embed lane has no
+   -- per-source tally, and vectors.sqlite3 outlives rebuild).
 place_index(gazetteer, place_id PK, title, lat, lon, place_types_json,
             time_periods_json, position, accuracy)
 place_index_names(gazetteer, place_id, name_key)

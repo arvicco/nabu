@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require "json"
+require_relative "source_aggregates"
 
 module Nabu
   module Store
@@ -124,6 +125,9 @@ module Nabu
         stats = aggregate(db)
         now = Time.now
         db.transaction do
+          # Migration 054: the O(1) accounting counts re-derive from the
+          # same aggregation, in the same transaction (SourceAggregates).
+          SourceAggregates.set_counts!(db, stats.transform_values { |s| [s[:live], s[:passages]] })
           db[LANG_TABLE].delete
           db[TABLE].delete
           stats.each do |source_id, source|
@@ -206,6 +210,8 @@ module Nabu
         def initialize(db:, source_id:)
           @db = db
           @source_id = source_id
+          # Migration 054: the O(1) accounting row moves by the same delta.
+          @aggregates = SourceAggregates.available?(db)
         end
 
         # The contribution a stored document row currently makes (queries the
@@ -273,6 +279,10 @@ module Nabu
 
           apply_totals(before, after)
           apply_languages(before, after)
+          return unless @aggregates
+
+          SourceAggregates.move_counts!(@db, @source_id, documents: after[:live] - before[:live],
+                                                         passages: after[:passages] - before[:passages])
         end
 
         def apply_totals(before, after)

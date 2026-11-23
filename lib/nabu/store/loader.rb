@@ -3,6 +3,7 @@
 require "json"
 require_relative "content_hash"
 require_relative "source_stats"
+require_relative "source_aggregates"
 
 module Nabu
   module Store
@@ -131,6 +132,11 @@ module Nabu
       UPSTREAM_GONE = "upstream-gone"
       REVISION_PRUNED = "revision-pruned"
 
+      # The outcomes that move a row in or out of the live passage set the
+      # fulltext index serves — LoadReport#passages_changed?'s grain (the
+      # sweep's withdrawals mark in #sweep_withdrawn).
+      INDEX_VISIBLE_OUTCOMES = %i[added updated_content].freeze
+
       # The row-aware batch cap (P37-7): in tx_batch mode a batch also flushes
       # once its buffered documents carry this many PASSAGES, so the grain is
       # bounded in rows, not just documents. Why: the P36-2 doc-count grain
@@ -206,6 +212,10 @@ module Nabu
         # the read surfaces stop aggregating the corpus per invocation. nil on
         # a catalog predating migration 019 — every hook is then a no-op.
         @stats = SourceStats.maintainer(db: db, source: source)
+        # Migration 054: the O(1) accounting's fts_behind flag, set inside
+        # the transaction that moves an index-visible row (once per load);
+        # nil on a catalog predating the table.
+        @aggregates = SourceAggregates.tracker(db: db, source: source)
       end
 
       # Load an enumerable of Nabu::Document. Streams: only urns are retained
@@ -312,6 +322,7 @@ module Nabu
         # P112-1: one fresh delta per load — the report describes this pass,
         # never an accumulation across a reused loader.
         @index_delta = IndexDelta.new(cap: @index_delta_cap)
+        @aggregates&.reset!
         seen_urns = Set.new
         # P39-4: urns this pass has already PERSISTED a document for (insert,
         # revise or skip). A re-encounter of one is a within-pass collision, not
@@ -409,11 +420,16 @@ module Nabu
       # batch the enclosing #flush_batch already does. +retained+ is nil for live
       # documents, or the "retired" provenance params for attic rediscoveries.
       def load_document(document, counts, retained = nil, pass_urns:, savepoint: false)
-        txn = -> { @db.transaction(savepoint: savepoint) { upsert_document(document, retained, pass_urns) } }
+        txn = lambda do
+          @db.transaction(savepoint: savepoint) do
+            mark_index_behind(upsert_document(document, retained, pass_urns))
+          end
+        end
         outcome = savepoint ? txn.call : time_insert(&txn)
         # P112-1: the document landed (its transaction/savepoint committed or
         # will commit with the batch) — its staged delta entries are real.
         @index_delta.commit!
+        @aggregates&.commit!
         # Both update flavors count as :updated; only the content-bearing one
         # also feeds the revised counter (see LoadReport#revised).
         if %i[updated_content updated_metadata].include?(outcome)
@@ -433,8 +449,16 @@ module Nabu
         # sync report success over a catalog it did not finish writing.
         # The rolled-back document's staged rows never happened (P112-1).
         @index_delta.discard!
+        @aggregates&.discard!
         counts[:errored] += 1
         journal(event: "quarantined", params: { "urn" => document.urn, "error" => e.message })
+      end
+
+      # Migration 054: flag the source's slice behind, in the document's own
+      # transaction, when its outcome is index-visible. Returns +outcome+.
+      def mark_index_behind(outcome)
+        @aggregates&.mark_behind! if INDEX_VISIBLE_OUTCOMES.include?(outcome)
+        outcome
       end
 
       def upsert_document(document, retained, pass_urns)
@@ -854,9 +878,11 @@ module Nabu
             durable(event: "withdrawn", urn: urn, old_sha: sha, reason: UPSTREAM_GONE)
             # P42-0: the withdrawn doc's live contribution leaves the stats.
             @stats&.swept(id: id, language: language, license_override: license_override, retired: retired)
+            @aggregates&.mark_behind!
             counts[:withdrawn] += 1
           end
         end
+        @aggregates&.commit!
       end
 
       def journal(event:, document_id: nil, passage_id: nil, params: nil)

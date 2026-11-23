@@ -18,6 +18,9 @@ class DerivabilityManifestTest < Minitest::Test
   # fulltext.sqlite3 carries no migration track at all — the Indexer
   # mints every table inside a rebuild, so it is derived BY CONSTRUCTION
   # and a new fulltext table cannot land outside a rebuild stage.
+  # source_aggregates (migration 054): the O(1) accounting — counts move
+  # with the replay's loader deltas and re-derive in SourceStats.derive!;
+  # the fulltext columns re-mint right after the rebuild's Indexer.rebuild!.
   MANIFEST = {
     catalog: {
       kind: :derived, stage: "the whole corpus replay + derived lanes",
@@ -29,7 +32,7 @@ class DerivabilityManifestTest < Minitest::Test
         passage_entities passage_entity_names passage_facets passages person_index person_index_names
         person_index_texts
         place_crosswalk place_index
-        place_index_names provenance sign_concordances source_records source_stats
+        place_index_names provenance sign_concordances source_aggregates source_records source_stats
         source_stats_languages sources urn_notes
       ]
     },
