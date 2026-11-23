@@ -355,16 +355,31 @@ module Nabu
           plan = @stamps_plan.call
           next Check.new(name: "stamps", status: :fail, detail: "planner refused: #{plan.refusal}") if plan.refusal
 
-          dirty = plan.verdicts.select { |verdict| verdict.state == :dirty }
-          lines = dirty.map { |verdict| "#{verdict.slug}: #{verdict.reason}" }
-          lines.unshift("the corpus builders read dirty (builder code changed since the stamp)") if plan.builders_dirty
-          lines.unshift("the fulltext index reads dirty (index code changed since the stamp)") if plan.index_dirty
-          clean = plan.verdicts.count { |verdict| verdict.state == :clean }
-          Check.new(name: "stamps", status: lines.empty? ? :pass : :fail,
-                    detail: "#{clean} clean, #{dirty.size} dirty, " \
-                            "#{plan.verdicts.count { |verdict| verdict.state == :skip }} without canonical",
-                    lines: capped(lines))
+          stamps_verdict(plan)
         end
+      end
+
+      # A weak-identity source can never carry a stamp (its tree cannot be
+      # proven unchanged — it re-derives on every incremental by design),
+      # so it WARNs; every other dirty verdict means a stamp the rebuild
+      # should have minted does not match current code — a FAIL.
+      def stamps_verdict(plan)
+        dirty = plan.verdicts.select { |verdict| verdict.state == :dirty }
+        weak, drifted = dirty.partition { |verdict| verdict.reason == :weak_identity }
+        lines = drifted.map { |verdict| "#{verdict.slug}: #{verdict.reason}" }
+        lines.unshift("the corpus builders read dirty (builder code changed since the stamp)") if plan.builders_dirty
+        lines.unshift("the fulltext index reads dirty (index code changed since the stamp)") if plan.index_dirty
+        failed = !lines.empty?
+        lines.concat(weak.map { |verdict| "#{verdict.slug}: weak identity — never stampable, re-derives every time" })
+        clean = plan.verdicts.count { |verdict| verdict.state == :clean }
+        status = if failed then :fail
+                 elsif weak.any? then :warn
+                 else :pass
+                 end
+        Check.new(name: "stamps", status: status,
+                  detail: "#{clean} clean, #{drifted.size} dirty, #{weak.size} weak identity, " \
+                          "#{plan.verdicts.count { |verdict| verdict.state == :skip }} without canonical",
+                  lines: capped(lines))
       end
 
       # -- fold ---------------------------------------------------------------

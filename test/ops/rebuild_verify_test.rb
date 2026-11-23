@@ -207,6 +207,12 @@ module Ops
       assert_equal :fail, stamps.status
       assert_equal ["the fulltext index reads dirty (index code changed since the stamp)", "texts: parser drift"],
                    stamps.lines
+      @plan = Plan.new(refusal: nil, verdicts: [Verdict.new(slug: "texts", state: :dirty, reason: :weak_identity),
+                                                Verdict.new(slug: "other", state: :clean, reason: nil)],
+                       builders_dirty: false, index_dirty: false)
+      weak = check(verify, "stamps")
+      assert_equal :warn, weak.status, "a weak-identity source is never stampable — a warning, not a failed rebuild"
+      assert_equal "1 clean, 0 dirty, 1 weak identity, 0 without canonical", weak.detail.sub(/ \(.*\)\z/, "")
       @plan = Plan.new(refusal: "schema drift", verdicts: [], builders_dirty: false, index_dirty: false)
       assert_match(/planner refused: schema drift/, check(verify, "stamps").detail)
       assert_equal :skip, check(verify(stamps_plan: nil), "stamps").status
