@@ -221,6 +221,7 @@ module Nabu
                                                    slugs: members.map { _1.first.slug },
                                                    member_opts: member_opts, progress: progress,
                                                    **refresh_options)
+          counts.each { |slug, members| Store::SourceAggregates.index_refreshed!(@db, slug: slug, members: members) }
         ensure
           fulltext.disconnect
         end
@@ -874,11 +875,15 @@ module Nabu
       require "fileutils"
       FileUtils.mkdir_p(File.dirname(@config.fulltext_path))
       fulltext = Store.connect_fulltext(@config.fulltext_path, writer_profile: :index)
-      Store::Indexer.refresh_source!(catalog: @db, fulltext: fulltext, slug: entry.slug,
-                                     delta: delta,
-                                     reflexes_changed: adapter.class.content_kind == :dictionary,
-                                     progress: progress,
-                                     **refresh_options)
+      members = Store::Indexer.refresh_source!(catalog: @db, fulltext: fulltext, slug: entry.slug,
+                                               delta: delta,
+                                               reflexes_changed: adapter.class.content_kind == :dictionary,
+                                               progress: progress,
+                                               **refresh_options)
+      # Migration 054: the O(1) accounting row records the finished slice
+      # (the refresh's return IS its live membership) and clears fts_behind.
+      Store::SourceAggregates.index_refreshed!(@db, slug: entry.slug, members: members)
+      members
     ensure
       fulltext&.disconnect
     end

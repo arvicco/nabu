@@ -1112,7 +1112,11 @@ class RebuildIncrementalTest < Minitest::Test
         dictionary_entries: db[:dictionary_entries].select_order_map(%i[urn entry_id headword gloss
                                                                         body content_sha256 withdrawn]),
         axes: db[:document_axes].count,
-        facets: db[:document_facets].count
+        facets: db[:document_facets].count,
+        # Migration 054: the O(1) accounting (timestamps are bookkeeping).
+        aggregates: db[:source_aggregates].join(:sources, id: :source_id)
+                                          .select_order_map(%i[slug documents_count passages_count
+                                                               fts_member_count fts_behind])
       }
     end
     state.merge(fts: fts_snapshot(db_dir: db_dir))
