@@ -1,0 +1,18 @@
+sources:
+  # ── the lexibank-cldf wave 2 (nc): cognate-set dictionary shelves ────────
+  # The wave-1 shared reading holds (config/postures/acd.yml): kind folds
+  # documents only, a reference dataset carries no dates, variety
+  # coordinates are doculect reference points.
+  kitchensemitic:
+    kind: {posture: unclassified, note: "a dictionary shelf — basic-vocabulary cognate sets;
+        kind folds documents only"}
+    lect: {posture: identity, note: "sem — the nabu-lects Semitic anchor (no sem stage is
+        claimed: the dataset carries no reconstructed variety); members carry upstream's ISO
+        codes bare — akk, uga, gez and heb on their anchors, the Aramaic row on bare oar
+        (Old Aramaic, no registry node; the paper's sources name it Biblical Aramaic and the
+        Hebrew row ancient Hebrew — stage refinement left to the registry), the modern
+        Ethiosemitic/MSA/Arabic codes bare; the four ISO-less varieties display-only"}
+    dating: {posture: undatable, note: "a reference dataset (Kitchen et al. 2009) — no dates"}
+    places: {posture: unplaced, note: "variety coordinates are doculect reference points, not
+        findspots — no place claim at dictionary grain"}
+    script: {posture: implied, note: "IPA-style phonemic transcriptions throughout"}

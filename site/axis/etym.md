@@ -13,7 +13,7 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 ## The shelves
 
-A source wears every desk it serves — these twenty-three answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
+A source wears every desk it serves — these 26 answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
 | Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 23 November 2026)</span> |
 |---|---|---|---|---|
@@ -27,10 +27,12 @@ A source wears every desk it serves — these twenty-three answer this desk. Hol
 | `edl` | dictionary | nc | wired · manual | 2,860 entries |
 | `etruscan-loans` | dictionary | attribution | wired · frozen | 199 entries |
 | `iecor` | cognacy dataset | attribution | wired · manual | 4,981 entries |
+| `kitchensemitic` | dictionary | nc | not yet wired | nothing held yet |
 | `liv` | dictionary | attribution | wired · manual | 305 entries |
 | `mcd` | dictionary | attribution | wired · manual | 1,707 entries |
 | `meloniromance` | cognacy dataset | attribution | wired · manual | 5,419 entries |
 | `nabu-lects` | feature module | attribution | wired · manual | nothing held yet |
+| `peirosst` | dictionary | nc | not yet wired | nothing held yet |
 | `sabellic-loans` | dictionary | attribution | wired · frozen | 85 entries |
 | `saenkoromance` | dictionary | attribution | wired · manual | 465 entries |
 | `sagartst` | dictionary | attribution | wired · manual | 5,120 entries |
@@ -40,6 +42,7 @@ A source wears every desk it serves — these twenty-three answer this desk. Hol
 | `westoldturkic` | dictionary | attribution | wired · manual | 480 entries |
 | `wiktionary-recon` | dictionary | attribution | wired · manual | 376,415 entries |
 | `wold` | dictionary | attribution | wired · manual | 64,289 entries |
+| `zhangrgyalrong` | dictionary | nc | not yet wired | nothing held yet |
 
 Private research materials are not listed.
 

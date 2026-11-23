@@ -1,0 +1,16 @@
+ID,Local_ID,Language_ID,Parameter_ID,Value,Form,Segments,Comment,Source,Cognacy,Loan,Graphemes,Profile
+MiddleChinese-232_theaxe-1,,MiddleChinese,232_theaxe,pjuX,pjuX,p j u X/¹⁵,,Zhang2019,,,^p j u X$,default
+OldChinese-232_theaxe-1,,OldChinese,232_theaxe,*praʔ,praʔ,p r a ʔ,,Baxter2014,,,^p r a ʔ$,default
+CogtseSitu-232_theaxe-1,,CogtseSitu,232_theaxe,ʃa-rpâ,ʃa+rpâ,ʃ a + r p â,,Zhang2019,,,^ʃ a + r p â$,default
+BragbarSitu-232_theaxe-1,,BragbarSitu,232_theaxe,ɕa-rpiɛ̂,ɕa+rpiɛ̂,ɕ a + r p i ɛ̂,,Zhang2019,,,^ɕ a + r p i ɛ̂$,default
+Japhug-232_theaxe-1,,Japhug,232_theaxe,tɯ-rpa,tɯ+rpa,t ɯ + r p a,,Zhang2019,,,^t ɯ + r p a$,default
+MiddleChinese-253_thebovine-1,,MiddleChinese,253_thebovine,ŋjuw,ŋjuw,ŋ j u w,,Zhang2019,,,^ŋ j u w$,default
+OldChinese-253_thebovine-1,,OldChinese,253_thebovine,*ŋʷə,ŋʷə,ŋʷ ə,,Baxter2014,,,^ŋʷ ə$,default
+CogtseSitu-253_thebovine-1,,CogtseSitu,253_thebovine,nəŋâ,nəŋâ,n ə ŋ â,,Zhang2019,,,^n ə ŋ â$,default
+BragbarSitu-253_thebovine-1,,BragbarSitu,253_thebovine,nəŋiɛ̂,nəŋiɛ̂,n ə ŋ i ɛ̂,,Zhang2019,,,^n ə ŋ i ɛ̂$,default
+Japhug-253_thebovine-1,,Japhug,253_thebovine,nɯŋa,nɯŋa,n ɯ ŋ a,,Zhang2019,,,^n ɯ ŋ a$,default
+Zbu-253_thebovine-1,,Zbu,253_thebovine,ŋwéʔ,ŋwéʔ,ŋ w é ʔ,,Zhang2019,,,^ŋw é ʔ$,default
+MiddleChinese-197_toprotect-1,,MiddleChinese,197_toprotect,pawX,pawX,p a w X/¹⁵,,Zhang2019,,,^p a w X$,default
+OldChinese-197_toprotect-1,,OldChinese,197_toprotect,*pˤuʔ,pˤuʔ,pˤ u ʔ,,Baxter2014,,,^pˤ u ʔ$,default
+BragbarSitu-197_toprotect-1,,BragbarSitu,197_toprotect,u-pû ka-viɛ̂,u+pû ka+viɛ̂,u + p û + k a + v i ɛ̂,,Zhang2019,,,^u + p û + k a + v i ɛ̂$,default
+Japhug-197_toprotect-1,,Japhug,197_toprotect,ɯ-pɯ kɤ-pa,ɯ+pɯ kɤ+pa,ɯ + p ɯ + k ɤ + p a,,Zhang2019,,,^ɯ + p ɯ + k ɤ + p a$,default
