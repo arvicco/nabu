@@ -4,7 +4,7 @@ date: 2026-11-23 00:00:00 +0000
 description: >-
   Five development windows: a batch engine for text-reuse discovery,
   the codebase restructured in one sitting, the public name settled
-  as nabu-ancient-texts, Syriac and Estonian sources on the shelves,
+  as nabu-ancient-corpora, Syriac and Estonian sources on the shelves,
   the crawl rail learning to drip politely for weeks at a time, and
   the store hardened under the hood.
 ---
@@ -31,7 +31,7 @@ surface survived byte-identical. A one-command gate now runs the
 whole verification pipeline with honest per-step exit codes.
 
 **One name on every door.** The public MCP identity is now
-**nabu-ancient-texts** everywhere — the registry id, the container
+**nabu-ancient-corpora** everywhere — the registry id, the container
 image, the badges and the catalog entries — taking live effect at
 the next release. The library's entry in the official MCP Registry
 has been live since early November, and the directories that ingest

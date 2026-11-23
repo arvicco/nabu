@@ -128,8 +128,9 @@ module Ops
     end
 
     # The public name (owner ruling): the registry id and the GHCR image
-    # both carry nabu-ancient-corpora; the retired nabu-demo and
-    # nabu-ancient-texts ids survive only in dated news posts. The listing
+    # both carry nabu-ancient-corpora; the retired nabu-demo id survives
+    # only in a dated news post, the never-released nabu-ancient-texts
+    # nowhere but this guard. The listing
     # and image re-mint at the next release, so every in-tree surface must
     # already agree on this name.
     def test_the_public_name_is_nabu_ancient_corpora
