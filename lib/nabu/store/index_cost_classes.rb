@@ -29,11 +29,17 @@ module Nabu
     #     (Indexer.fts_shadow_forecasts, IndexPreflight's shadow note).
     #   - RAIL: corpus-scale work owned by the maintenance rail
     #     (`nabu index maintain`), never the sync path.
+    #   - SOURCE: O(source) — a lane with no delta grain re-derives the
+    #     refreshed source's WHOLE slice on every refresh (bounded by that
+    #     one source, never the corpus). Not O(Δ): declared so the
+    #     exemption is visible rather than silent, and outside the
+    #     empirical O(Δ) suite by construction.
     module IndexCostClasses
       DELTA = :delta
       REGISTRY = :registry
       ARRIVAL = :arrival
       RAIL = :rail
+      SOURCE = :source
 
       # The sync path's timed stages (kind "sync" in the stage ledger).
       SYNC = {
@@ -64,7 +70,23 @@ module Nabu
         # when a level (or the total) crosses the governor's line, once
         # per crossing, sized by that level's pages — recorded with them
         # so the ledger prices a big write's relief debt.
-        "fts_relief" => ARRIVAL
+        "fts_relief" => ARRIVAL,
+        # A bulk slice's final WAL reclaim (TRUNCATE checkpoint): fires only
+        # on a run past BULK_SLICE_THRESHOLD, sized by the WAL that write
+        # left — rows = the frames it checkpointed.
+        "wal_checkpoint" => ARRIVAL,
+        # The tail lanes' slices (refresh_source!), recorded only when the
+        # lane did work (a source outside its registry is hands-off). The
+        # clarify slice rewrites the source's names whole; the token-gloss
+        # lane aggregates word rows across the source's passages, so it has
+        # no delta grain either. Translations / annotations / gloss lines
+        # ride the load's delta (their whole-slice rewrite is the fallback,
+        # as index_slice's is).
+        "clarify_slice" => SOURCE,
+        "glosses_slice" => SOURCE,
+        "translations_slice" => DELTA,
+        "annotations_slice" => DELTA,
+        "gloss_lines_slice" => DELTA
       }.freeze
 
       # Every stage the maintenance rail times is rail-owned by definition.
