@@ -72,6 +72,15 @@ class RailPlanTest < Minitest::Test
     PAGES = RailPlanTest.spec("pages", 2)
   end
 
+  # A lane parked by declaration (the ratified suspension posture).
+  class ZetaAdapter
+    include PacedLanes
+
+    LANE = PC::Spec.new(name: "zeta", ledger_file: ".zeta.json", classes: { denied: "denied" }, delay: 0, slice: 1,
+                        schedule: PC::Schedule.new(cadence: :per_phase, slices_per_phase: 3, stop_after_zero_slices: 3,
+                                                   suspended: "await upstream OCR serving"))
+  end
+
   # Not on the rail at all.
   class PlainAdapter
     NAME = "plain"
@@ -216,6 +225,37 @@ class RailPlanTest < Minitest::Test
       refute_match(/^lane (alpha|beta) /, out)
       refute_match(/^chain (alpha|beta)/, out)
     end
+  end
+
+  def test_a_suspended_source_is_skipped_with_its_reason
+    registry = Nabu::SourceRegistry.new([entry("alpha", AlphaAdapter), entry("zeta", ZetaAdapter)])
+    measure_all
+    result = plan(registry: registry)
+    assert_equal [["zeta", "await upstream OCR serving"]], result.suspended
+    refute_includes result.all_sources.map(&:slug), "zeta", "a suspended source plans no step"
+    out = Nabu::Ops::RailPlan.render(result)
+    assert_match(/^suspended \(declared in code — skipped\): zeta \(await upstream OCR serving\)$/, out)
+    refute_match(/rail:step\[zeta\]/, out)
+  end
+
+  def test_the_suspension_map_names_every_schedule_declaring_source
+    registry = Nabu::SourceRegistry.new([entry("alpha", AlphaAdapter), entry("zeta", ZetaAdapter),
+                                         entry("plain", PlainAdapter)])
+    assert_equal({ "alpha" => nil, "zeta" => "await upstream OCR serving" },
+                 Nabu::Ops::RailPlan.suspensions(registry))
+  end
+
+  def test_a_suspension_must_name_its_reason
+    assert_raises(ArgumentError) do
+      PC::Schedule.new(cadence: :per_phase, slices_per_phase: 1, stop_after_zero_slices: 1, suspended: " ")
+    end
+    refute_predicate PC::Schedule.new(cadence: :per_phase, slices_per_phase: 1, stop_after_zero_slices: 1),
+                     :suspended?
+  end
+
+  def test_ndl_kotenseki_declares_the_ratified_suspension
+    registry = Nabu::SourceRegistry.new([entry("ndl-kotenseki", Nabu::Adapters::NdlKotenseki)])
+    assert_equal({ "ndl-kotenseki" => "await upstream OCR serving" }, Nabu::Ops::RailPlan.suspensions(registry))
   end
 
   def test_a_source_never_crawled_is_not_exhausted

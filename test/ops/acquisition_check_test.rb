@@ -82,6 +82,70 @@ class AcquisitionCheckTest < Minitest::Test
     end
   end
 
+  ROSTER = <<~MD
+    # Source Acquisition Plan
+
+    ## Appendix · The rail roster (mechanics, not the segment)
+
+    | Source | Schedule | Position | Next |
+    |---|---|---|---|
+    | ndl-kotenseki | SUSPENDED (terminal desert) | zero yield | re-probe |
+    | **wellcome** | per_phase ×3 | 3 clean slices | next odd phase |
+
+    ## Later section
+    | other | SUSPENDED | table |
+  MD
+
+  def roster_check(dir, adapters, ledger, suspensions, roster: ROSTER)
+    FileUtils.mkdir_p(File.join(dir, "acquisition"))
+    File.write(File.join(dir, "acquisition", "plan.md"), roster) if roster
+    Nabu::Ops::AcquisitionCheck.new(boards_dir: dir, adapters_dir: adapters, ledger_path: ledger,
+                                    suspensions: suspensions).run
+  end
+
+  def test_roster_suspensions_matching_the_declarations_pass
+    with_board(plan_name: "p173-plan.md", plan_text: "Acquisition segment.\n") do |dir, adapters, ledger, db|
+      db[:runs].insert(source_slug: "wellcome", started_at: Time.now, status: "succeeded")
+      report = roster_check(dir, adapters, ledger, { "ndl-kotenseki" => "await upstream OCR serving",
+                                                     "wellcome" => nil })
+      assert_predicate report, :clean?, report.findings.join("\n")
+    end
+  end
+
+  def test_a_roster_suspension_mismatch_is_a_finding_both_ways
+    with_board(plan_name: "p173-plan.md", plan_text: "Acquisition segment.\n") do |dir, adapters, ledger, db|
+      db[:runs].insert(source_slug: "wellcome", started_at: Time.now, status: "succeeded")
+      report = roster_check(dir, adapters, ledger, { "ndl-kotenseki" => nil, "wellcome" => "upstream down",
+                                                     "damos" => "gone quiet" })
+      findings = report.findings.join("\n")
+      assert_equal 3, report.findings.size, findings
+      assert_match(/roster row ndl-kotenseki is marked SUSPENDED but its Schedule declaration is not suspended/,
+                   findings)
+      assert_match(/wellcome declares suspended: "upstream down" in code but its rail roster row is not marked/,
+                   findings)
+      assert_match(/damos declares suspended: "gone quiet" in code but it has no rail roster row/, findings)
+    end
+  end
+
+  def test_a_suspended_rail_source_owes_no_slices
+    plan = "# P173\nAcquisition segment: slices below.\n"
+    with_board(plan_name: "p173-plan.md", plan_text: plan) do |dir, adapters, ledger, db|
+      db[:runs].insert(source_slug: "wellcome", started_at: Time.utc(2026, 11, 1), status: "succeeded")
+      roster = ROSTER.sub("| **wellcome** | per_phase ×3", "| **wellcome** | SUSPENDED")
+      report = roster_check(dir, adapters, ledger, { "ndl-kotenseki" => "await upstream OCR serving",
+                                                     "wellcome" => "parked" }, roster: roster)
+      assert_predicate report, :clean?, report.findings.join("\n")
+    end
+  end
+
+  def test_the_roster_probe_skips_without_the_board_or_the_declarations
+    with_board(plan_name: "p173-plan.md", plan_text: "Acquisition segment.\n") do |dir, adapters, ledger, db|
+      db[:runs].insert(source_slug: "wellcome", started_at: Time.now, status: "succeeded")
+      assert_predicate roster_check(dir, adapters, ledger, { "wellcome" => "x" }, roster: nil), :clean?
+      assert_predicate roster_check(dir, adapters, ledger, nil), :clean?
+    end
+  end
+
   def test_missing_boards_or_ledger_skip_cleanly
     Dir.mktmpdir do |dir|
       report = Nabu::Ops::AcquisitionCheck.new(boards_dir: File.join(dir, "none"),

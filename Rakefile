@@ -104,6 +104,31 @@ namespace :ops do
   task drill_pure: :drill
 end
 
+# The online db snapshot (Nabu::Ops::DbSnapshot — its class comment holds
+# the WAL reasoning and the RESTORE procedure): every db/*.sqlite3 through
+# VACUUM INTO, never a file copy. Owner-fired; refuses a missing/non-writable
+# or occupied target and an in-progress rebuild.
+namespace :db do
+  desc "Snapshot every db/*.sqlite3 into TARGET_DIR via VACUUM INTO (online, WAL-safe; " \
+       "a CACHE of derived state — restore per Nabu::Ops::DbSnapshot) (db:snapshot[target_dir])"
+  task :snapshot, %i[target_dir] do |_t, args|
+    $LOAD_PATH.unshift(File.expand_path("lib", __dir__))
+    require "nabu"
+    require "nabu/ops/db_snapshot"
+
+    config = Nabu::Config.load
+    rebuild_check = lambda do
+      ledger = File.file?(config.history_path) ? Nabu::Store.connect(config.history_path, readonly: true) : nil
+      Nabu::Ops::DbSnapshot.rebuild_in_progress(ledger: ledger, ps_output: Nabu::Ops::GitHooks.ps_output)
+    ensure
+      ledger&.disconnect
+    end
+    Nabu::Ops::DbSnapshot.new(db_dir: config.db_dir, target: args[:target_dir], rebuild_check: rebuild_check).run!
+  rescue Nabu::Ops::DbSnapshot::Refused => e
+    abort "db:snapshot refused — #{e.message}"
+  end
+end
+
 # The drill's harness discipline (P77-r12, after the 2026-08-15 night the
 # owner reconstructed from a 724-byte log and 521 GB of leaked tmp):
 # - every run logs to its OWN timestamped file under ~/Library/Logs/nabu/
@@ -722,9 +747,11 @@ namespace :boards do
     ).run
     decisions.findings.each { |finding| puts "STALE  decision register #{finding}" }
 
+    require_relative "lib/nabu/ops/rail_plan"
     acquisition = Nabu::Ops::AcquisitionCheck.new(
       boards_dir: dir, adapters_dir: File.expand_path("lib/nabu/adapters", __dir__),
-      ledger_path: File.expand_path("local/history.sqlite3", __dir__)
+      ledger_path: File.expand_path("local/history.sqlite3", __dir__),
+      suspensions: Nabu::Ops::RailPlan.suspensions(Nabu::SourceRegistry.load(Nabu::Config.load.sources_path))
     ).run
     acquisition.findings.each { |finding| puts "STALE  acquisition #{finding}" }
 
@@ -779,7 +806,8 @@ namespace :boards do
     else
       puts "boards:check — #{incidents.rows} incident row(s) each carry a status token"
     end
-    puts "boards:check — acquisition duties current (segment named, rail fresh)" if acquisition.clean?
+    puts "boards:check — acquisition duties current (segment named, rail fresh, roster suspensions match)" if
+      acquisition.clean?
     puts "boards:check — #{groom.summary} (phase-register cross-check clean)" unless groom.skipped
     puts "boards:check — every registered source has ledger runs (readiness probe clean)" unless readiness.skipped
     if liveness.skipped
@@ -1239,13 +1267,43 @@ namespace :crawl do
   end
 end
 
+# The acquisition plan's park / re-check conditions as one batch of HTTP
+# state checks (Nabu::Ops::AcquisitionProbe — row shape in its class doc):
+# the probe list is the gitignored .docs/acquisition/probes.yml (absent =
+# announced skip; ACQUISITION_PROBES=path overrides). One request per row,
+# short timeout, no retries, ≤3 redirects; then the held-vs-searchable line
+# from the live dbs, read-only. Network; informational (never exits 1 on a
+# CHANGED row).
+namespace :acquisition do
+  desc "Probe the acquisition plan's park/re-check URLs (.docs/acquisition/probes.yml rows: " \
+       "name, url, expect = status code | any | body substring, note) + the held-vs-searchable delta"
+  task :probe do
+    $LOAD_PATH.unshift(File.expand_path("lib", __dir__))
+    require "nabu"
+    require "nabu/ops/acquisition_probe"
+
+    path = ENV.fetch("ACQUISITION_PROBES", File.expand_path(".docs/acquisition/probes.yml", __dir__))
+    if File.file?(path)
+      Nabu::Ops::AcquisitionProbe.new(rows: Nabu::Ops::AcquisitionProbe.load(path)).run
+    else
+      puts "acquisition:probe — no probe list at #{path} (a public clone or a worktree); probes skipped"
+    end
+    config = Nabu::Config.load
+    puts Nabu::Ops::AcquisitionProbe.searchable_delta(catalog_path: config.catalog_path,
+                                                      fulltext_path: config.fulltext_path)
+  rescue Nabu::Ops::AcquisitionProbe::Invalid => e
+    abort "acquisition:probe — #{e.message}"
+  end
+end
+
 # The phase's paced-crawl plan, generated from the adapters' own Schedule
 # declarations and the ledger's measured slice times (Nabu::Ops::RailPlan;
 # the 2026-11-13 hand-assembled chain over-run). Parallel lanes, one per
 # source; slices_per_phase is a cap; no budget = the caps-only view. The
 # `lane <slug> step N: <command>` lines are the machine-consumable plan;
 # each step is rail:step (the yield-guarded sync), and sources the crawl
-# ledger marks exhausted are skipped.
+# ledger marks exhausted, or whose Schedule declares `suspended:`, are
+# skipped (listed, the suspension with its reason).
 namespace :rail do
   desc "Print the phase's paced-crawl plan as parallel lanes (rail:plan[budget_minutes], budget optional)"
   task :plan, %i[budget] do |_t, args|
@@ -1335,7 +1393,18 @@ namespace :trickle do
     require "nabu/ops/trickle"
 
     config = Nabu::Config.load
-    Nabu::Ops::Trickle::Control.status(dir: File.join(config.local_dir, Nabu::Ops::Trickle::DIRNAME))
+    registry = Nabu::SourceRegistry.load(config.sources_path)
+    # held/remaining from DISK (the offline diagnosis the SUMMARY takes),
+    # never the log's last slice line — that freezes for a whole slice.
+    counts = lambda do |slug|
+      adapter = registry[slug]&.build_adapter
+      next nil unless adapter.respond_to?(:paced_crawls)
+
+      Nabu::Ops::Trickle::Control.disk_counts(adapter.paced_crawls(File.join(config.canonical_dir, slug)))
+    rescue Nabu::Error
+      nil
+    end
+    Nabu::Ops::Trickle::Control.status(dir: File.join(config.local_dir, Nabu::Ops::Trickle::DIRNAME), counts: counts)
   end
 end
 

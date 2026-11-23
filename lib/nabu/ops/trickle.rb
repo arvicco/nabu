@@ -23,6 +23,18 @@ module Nabu
     # error. It is resumable by construction — the engine's ledger and the
     # held payloads are the state; a re-start picks up at the frontier.
     #
+    # TRANSIENT UPSTREAM FAILURES do not end it: a slice that raises a
+    # FetchError Trickle.transient? classifies (a non-429 HTTP 5xx, or a
+    # RedirectFollow "transport error" that is a timeout / reset / refused
+    # / dropped connection — the message shapes the adapters' own
+    # TIMEOUT_PATTERN reads) waits a backoff (BACKOFF_START doubling to
+    # BACKOFF_CAP, back to the start after any request that answers) and
+    # resumes the SAME lane: the engine ledgers per request, so the retried
+    # slice re-selects from the frontier. MAX_TRANSIENT consecutive failures
+    # stop it with the fatal SUMMARY as before; a 429 (the adapters'
+    # RateLimited) and every other error stay fatal at once. A stop
+    # request interrupts a backoff wait at once.
+    #
     # The runner only CRAWLS: it fetches into canonical/<slug>/ through the
     # engine's fetch_one (the adapter's sanctioned fetch arm) and never
     # loads, syncs or touches db/ — loading stays with normal syncs
@@ -36,9 +48,12 @@ module Nabu
     # created on demand):
     #
     #   <slug>.pid   the live runner's pid (written at spawn, removed on exit)
-    #   <slug>.log   append-only progress: START per lane, one SLICE line per
-    #                slice (+N held, held, remaining) with the slice report
-    #                indented under it, STOP + SUMMARY when it ends
+    #   <slug>.log   append-only progress: START per lane, a BEAT line every
+    #                HEARTBEAT_EVERY requests inside a slice (a slice at a
+    #                slow pace is half an hour of requests — never silence),
+    #                one SLICE line per slice (+N held, held, remaining) with
+    #                the slice report indented under it, a RETRY line per
+    #                transient-failure backoff, STOP + SUMMARY when it ends
     #   <slug>.stop  the stop flag (`trickle:stop`), checked before every
     #                request, consumed on exit
     module Trickle
@@ -49,6 +64,32 @@ module Nabu
       # ledgered) — so a stop never cuts a request in half.
       STOP_REASON = "trickle stop requested"
       DIRNAME = "trickle"
+
+      # const: the first transient-failure backoff (seconds), doubling per
+      # consecutive failure up to BACKOFF_CAP
+      BACKOFF_START = 60
+      # const: the backoff ceiling (seconds) — 15 min
+      BACKOFF_CAP = 900
+      # const: consecutive transient failures that end the run (fatal)
+      MAX_TRANSIENT = 10
+      # const: a progress BEAT line every this many requests inside a slice
+      HEARTBEAT_EVERY = 10
+      TRANSIENT_HTTP = /\bHTTP 5\d\d\b/
+      RATE_LIMITED = /\bHTTP 429\b/
+      TRANSIENT_TRANSPORT = Regexp.new(
+        "transport error for .*(?:#{['timeout', 'timed out', 'execution expired', 'reset', 'refused', 'broken pipe',
+                                     'end of file', 'EOFError', 'Failed to open TCP connection'].join('|')})", Regexp::IGNORECASE
+      )
+
+      # Is +error+ a transient upstream failure the runner waits out?
+      def self.transient?(error)
+        return false unless error.is_a?(Nabu::FetchError)
+
+        message = error.message
+        return false if message.match?(RATE_LIMITED)
+
+        message.match?(TRANSIENT_HTTP) || message.match?(TRANSIENT_TRANSPORT)
+      end
 
       # One source's state files under local/trickle/.
       Paths = Data.define(:dir, :slug) do
@@ -146,8 +187,9 @@ module Nabu
           @stop = false
           # Every request goes through the stop check: a requested stop
           # answers the engine's clean stop instead of the next request.
-          @engines = engines.transform_values do |engine|
-            engine.rewire(fetch_one: ->(id, original) { stop_requested? ? stop_outcome : original.call(id) })
+          @engines = engines.to_h do |lane, engine|
+            fetch = ->(id, original) { stop_requested? ? stop_outcome : ask(lane, id, original) }
+            [lane, engine.rewire(fetch_one: fetch)]
           end
         end
 
@@ -182,6 +224,32 @@ module Nabu
         private
 
         def stop_outcome = PacedCrawl::Outcome.halt(reason: STOP_REASON)
+
+        # One request through the adapter's fetch_one: an answer (any
+        # Outcome) resets the transient-failure streak, and every
+        # HEARTBEAT_EVERY-th request of a slice writes a BEAT line. Held
+        # and remaining are counted from the slice's starting state and
+        # this slice's answers (an ok lands a payload; a refusal is
+        # ledgered) — no mid-slice scan of the engine's state.
+        def ask(lane, id, original)
+          outcome = original.call(id)
+          @failures = 0
+          beat(lane, outcome)
+          outcome
+        end
+
+        def beat(lane, outcome)
+          @beat ||= { requests: 0, ok: 0, settled: 0 }
+          @beat[:requests] += 1
+          @beat[:ok] += 1 if outcome.ok?
+          @beat[:settled] += 1 if outcome.ok? || %i[denied empty].include?(outcome.status)
+          return unless (@beat[:requests] % HEARTBEAT_EVERY).zero?
+
+          held, remaining = @state.fetch(lane)
+          line("BEAT #{@slug}/#{lane} ##{@slices + 1}: #{@beat[:requests]} request(s) this slice, " \
+               "#{format('%+d', @beat[:ok])} held this slice, held #{held + @beat[:ok]}, " \
+               "remaining #{[remaining - @beat[:settled], 0].max}")
+        end
 
         def open_log!
           FileUtils.mkdir_p(@paths.dir)
@@ -221,7 +289,10 @@ module Nabu
           loop do
             return "stop requested" if stop_requested?
 
-            report = engine.slice!
+            @beat = nil
+            report = slice_or_wait(lane, engine)
+            next if report.nil?
+
             record_slice(lane, report)
             return nil if report.classification == :cone_exhausted
 
@@ -234,6 +305,26 @@ module Nabu
             return "#{zero_streak} consecutive zero-yield slice(s) — the declared budget " \
                    "(stop_after_zero_slices: #{budget}); read the last slice report before restarting"
           end
+        end
+
+        # The slice's Report, or nil after a transient failure's backoff
+        # (the caller loops: the stop check first, then the same lane).
+        # The MAX_TRANSIENT-th consecutive failure re-raises — fatal.
+        def slice_or_wait(lane, engine)
+          engine.slice!
+        rescue Nabu::FetchError => e
+          raise unless Trickle.transient?(e)
+
+          @failures = @failures.to_i + 1
+          if @failures >= MAX_TRANSIENT
+            raise e.class, "#{e.message} (#{@failures} consecutive transient failures — giving up)"
+          end
+
+          wait = [BACKOFF_START * (2**(@failures - 1)), BACKOFF_CAP].min
+          line("RETRY #{@slug}/#{lane}: transient failure #{@failures}/#{MAX_TRANSIENT} (#{e.message}) — " \
+               "waiting #{format_duration(wait)}, then resuming the lane")
+          pause(wait)
+          nil
         end
 
         def stop_reason(report)
@@ -379,28 +470,52 @@ module Nabu
         end
 
         # One line per local/trickle/ entry: RUNNING / finished / DIED.
-        def self.status(dir:, out: $stdout, alive: ProcessProbe.method(:alive?))
+        # +counts+ (slug → [held, remaining], nil when unknowable) is the
+        # OFFLINE disk count — the same diagnosis the SUMMARY line takes
+        # (Control.disk_counts over the adapter's lanes); a running slice
+        # writes its SLICE line only at slice end, so the log's numbers
+        # freeze for the whole slice while the disk moves. Without a disk
+        # count the newest logged numbers stand, marked "(as logged)".
+        def self.status(dir:, out: $stdout, alive: ProcessProbe.method(:alive?), counts: ->(_slug) {})
           slugs = Dir.glob(File.join(dir, "*.{pid,log}")).map { |path| File.basename(path, ".*") }.uniq.sort
           if slugs.empty?
             out.puts("no trickles (#{dir} holds no runner state)")
             return
           end
 
-          slugs.each { |slug| out.puts(status_line(Paths.new(dir: dir, slug: slug), alive)) }
+          slugs.each { |slug| out.puts(status_line(Paths.new(dir: dir, slug: slug), alive, counts)) }
         end
 
-        def self.status_line(paths, alive)
+        # [held, remaining] summed over +engines+' offline diagnoses (no
+        # request), nil when there are none or one fails.
+        def self.disk_counts(engines)
+          return nil if engines.nil? || engines.empty?
+
+          diagnoses = engines.values.map(&:diagnose)
+          [diagnoses.sum(&:held_count), diagnoses.sum(&:remaining_count)]
+        rescue Nabu::Error
+          nil
+        end
+
+        def self.status_line(paths, alive, counts = ->(_slug) {})
           pid = Trickle.read_pid(paths.pid)
           summary = last_line(paths.log, /SUMMARY/)
           state = if pid && alive.call(pid) then "RUNNING (pid #{pid})"
                   elsif summary || pid.nil? then "finished"
                   else "DIED (pid #{pid} gone, no SUMMARY line)"
                   end
-          counts = last_line(paths.log, HELD_RE)&.match(HELD_RE)
-          numbers = counts ? " — held #{counts[1]}, remaining #{counts[2]}" : ""
           last = last_line(paths.log, /\A\S/) || "(empty log)"
-          "#{paths.slug}: #{state}#{numbers}; last: #{last}"
+          "#{paths.slug}: #{state}#{numbers(paths, counts)}; last: #{last}"
         end
+
+        def self.numbers(paths, counts)
+          held, remaining = counts.call(paths.slug)
+          return " — held #{held}, remaining #{remaining} (on disk)" if held
+
+          logged = last_line(paths.log, HELD_RE)&.match(HELD_RE)
+          logged ? " — held #{logged[1]}, remaining #{logged[2]} (as logged)" : ""
+        end
+        private_class_method :numbers
 
         # The log's last line matching +pattern+ (report lines are indented
         # and skipped by an anchored pattern), nil when none.

@@ -147,12 +147,17 @@ module Nabu
       # requests), and a chained run stops after three consecutive
       # zero-yield slices (a refusal desert measured ~1.5 slices deep).
       # Basis: 3 is the upstream-politeness CAP, never ratified as a
-      # cadence; the practiced cadence is 1 slice per phase.
+      # cadence; the practiced cadence is 1 slice per phase. SUSPENDED
+      # (the ratified posture after the 2026-11-22 slice returned zero
+      # yield at 73,090 held / 13,591 remaining — the tail is a refusal
+      # desert until NDL serves OCR text for it): the rail skips the lane
+      # until upstream changes; a re-probe un-suspends it.
       BOOK_CRAWL = Nabu::PacedCrawl::Spec.new(
         name: "books", ledger_file: LEDGER_FILE,
         classes: { denied: "denied", empty: "empty", timeout: STUCK },
         delay: DELAY, slice: SLICE, timeout_attempts: TIMEOUT_ATTEMPTS, timeout_backoff: TIMEOUT_BACKOFF,
-        schedule: Nabu::PacedCrawl::Schedule.new(cadence: :per_phase, slices_per_phase: 3, stop_after_zero_slices: 3)
+        schedule: Nabu::PacedCrawl::Schedule.new(cadence: :per_phase, slices_per_phase: 3, stop_after_zero_slices: 3,
+                                                 suspended: "await upstream OCR serving")
       )
       LEDGER_CLASSES = BOOK_CRAWL.class_names.freeze
       # The refusals a book GET answers itself (403 "This PID is not
