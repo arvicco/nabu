@@ -1,0 +1,6 @@
+fileplusdir	filesize	filename	nrows	nrows_unsolved	prop_unsolved	nrows_nopunct	nrows_nopunct_unsolved	prop_nopunct_unsolved
+../../corpus/processed/ocr_digar_pub//b10014949.pdf.txt.tsv	186	b10014949.pdf.txt.tsv	1	0		0	0	0
+../../corpus/processed/ocr_digar_pub//b1275075x.pdf.txt.tsv	44601	b1275075x.pdf.txt.tsv	799	96	0.120300751879699	311	14	0.0451612903225806
+../../corpus/processed/ocr_digar_pub//b1623912x.pdf.txt.tsv	12280	b1623912x.pdf.txt.tsv	108	27	0.252336448598131	108	27	0.252336448598131
+../../corpus/processed/ocr_digar_pub//b17885899.pdf.txt.tsv	14054	b17885899.pdf.txt.tsv	255	177	0.696850393700787	125	92	0.741935483870968
+../../corpus/processed/ocr_digar_pub//b20396119.pdf.txt.tsv	23317	b20396119.pdf.txt.tsv	441	50	0.113636363636364	115	12	0.105263157894737

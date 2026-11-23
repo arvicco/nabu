@@ -1,0 +1,185 @@
+RecordNumber	Tags	Indicators	Content
+1	LDR		01585nam a22005532i 4500
+1	001		b10000306
+1	003		ErRR
+1	008		981110s1993\\\\dk\a\\\|\||||||||\0|est\\
+1	020	\\	$a8788563235
+1	035	\\	$a.b16198098 (Tartu-L)
+1	040	\\	$aErRR$best$cErRR$dErEAR
+1	041	1\	$aest$hdan
+1	042	\\	$anbr
+1	072	\7	$a94(474.2)$2udkrb
+1	080	\\	$a94$x(474.2)$2est
+1	080	\\	$a94$x(489)$2est
+1	080	\\	$a929.921$x(489)$2est
+1	245	00	$a1219. Dannebrog ja Eestimaa /$cNils G. Bartholdy, Toomas Tamla, Kai Hørby, Toomas Riis ; tõlkinud Vello Helk.
+1	260	\\	$a[Roskilde] :$bRoskilde Muuseum,$c1993.
+1	300	\\	$a43 lk. :$bill.
+1	504	\\	$aSisaldab bibliograafiat.
+1	650	\9	$aheraldika.
+1	650	\9	$apoliitiline ajalugu.
+1	650	\9	$amedievistika.
+1	650	\9	$ariigilipud.
+1	651	\9	$aEesti.
+1	651	\9	$aTaani.
+1	653	\9	$a12. saj.
+1	653	\9	$a13. saj.
+1	700	1\	$aBartholdy, Nils G.
+1	700	1\	$aTamla, Toomas,$d1951-
+1	700	1\	$aHørby, Kai,$d1935-1993.
+1	700	1\	$aRiis, Thomas,$d1941-
+1	700	1\	$aHelk, Vello,$d1923-2014,$etõlkija.
+1	910	0\	$aRMT 1993
+1	912	\\	$aVE
+1	945	\\	$likmr1$aA 72.237
+1	945	\\	$lr1hdl$a502.155
+1	945	\\	$lr1hdl$a502.156
+1	945	\\	$lrarkh$aAr 993/93
+1	945	\\	$lrhums$aEesti muinasaeg A$a502.154
+1	945	\\	$lvtla $aVIII-1405
+1	945	\\	$lvmuus$aAjalugu: Eesti
+1	945	\\	$labalt$aErar 14327
+1	945	\\	$labalt$aErar 14327
+1	945	\\	$labalt$aGS 11
+1	945	\\	$lttho1$aEA-51905
+1	945	\\	$lyyf30$aA-89911
+1	945	\\	$lyyarh$aARH A-89911$nAnnetaja: Lili Kaelas
+			
+7	LDR		00897nam a2200301 i 4500
+7	001		b10014949
+7	003		ErRR
+7	006		m\\\\|\\\d\|\\\\\\
+7	007		cr\|n|||||||||
+7	008		011204s1938\\\\er\\\\\|\||||||||\1|est\\
+7	040	\\	$aErRR$best$cErRR
+7	072	\7	$a821.511.113$2udkrb
+7	100	1\	$aVaigur, Enn,$d1910-1988.
+7	245	10	$aLõukoerte koopas :$bnäidend kolmes vaatuses, neljas pildis /$cEnn Vaigur.
+7	260	\\	$aTallinn :$b[s.n.],$c1938.
+7	300	\\	$a84 l. ;$c22 cm.
+7	500	\\	$aMimeograafpaljundus. - Tekst lehe ühel küljel.
+7	530	\\	$aKättesaadav ka digiteerituna.
+7	650	\9	$aeesti.
+7	655	\9	$ailukirjandus.
+7	655	\9	$anäidendid.
+7	856	4\	$uhttp://digar.nlib.ee/show/nlib-digar:50171$zTÄISTEKST RR arhiivis DIGAR
+7	910	0\	$aRMT 1918-1944
+7	945	\\	$lrarkh$aAr 938/Vaigur
+7	945	\\	$lr2hdl$a2-66.800
+7	945	\\	$lwww  
+7	945	\\	$lwww  
+7	945	\\	$lwww  
+			
+51696	LDR		01121nam a2200301 i 4500
+51696	001		b1275075x
+51696	003		ErRR
+51696	006		m\\\\|\\\d\|\\\\\\
+51696	007		cr\|n|||||||||
+51696	008		990826s1923\\\\er\a\\\|\||||||||\1|est\\
+51696	020	\\	$a9789949796021$q(pdf)
+51696	040	\\	$aErRR$best$cErRR
+51696	072	\7	$a821.511.113-93$2udkrb
+51696	100	1\	$aGrünfeldt, Peeter,$d1865-1937.
+51696	245	10	$aKodulinnud lastele :$b[luuletused] /$cP. Grünfeldt'i tekst ; Th. Awendt'i puulõiked.
+51696	260	\\	$a[Tallinn? :$bs.n.,$c1923]$e(Tallinn :$fÜhiselu)
+51696	300	\\	$a[8] lk. :$bill., ill. kaas ;$c21 cm.
+51696	500	\\	$aIlmumisaasta allikas: Eesti raamatute üldnimestik 1918-1923.
+51696	533	\\	$aElektrooniline reproduktsioon.$bTallinn :$cEesti Rahvusraamatukogu,$d2016$nISBN 978-9949-796-02-1 (pdf)
+51696	650	\9	$aeesti.
+51696	655	\9	$alastekirjandus.
+51696	655	\9	$aluuletused.
+51696	700	1\	$aAwendt, Theodor,$d1889-,$eillustreerija.
+51696	856	4\	$uhttp://www.digar.ee/id/nlib-digar:283467$zTÄISTEKST RR arhiivis DIGAR
+51696	910	0\	$aRMT 1918-1944
+51696	945	\\	$labalt$aErar 7524$nbroš.,ill.trükikaas
+51696	945	\\	$lrarkh$aS 6.594
+51696	945	\\	$lwww  $aWWW
+			
+112719	LDR		01779nam a2200457 i 4500
+112719	001		b1623912x
+112719	003		ErRR
+112719	006		m\\\\|\\\d\|\\\\\\
+112719	007		cr\|n|||||||||
+112719	008		020314s1841\\\\er\\\\\|\||||||||\j|est\\
+112719	020	\\	$a9789949266692$q(pdf)
+112719	035	\\	$a.b17232314 (Tartu-L)
+112719	040	\\	$aErEAR$best$cErEAR$dErRR
+112719	041	1\	$aest$hger
+112719	072	\7	$a821$2udkrb
+112719	080	\\	$a821.112.2-32$2est
+112719	080	\\	$a244$2est
+112719	100	1\	$aSchmid, Christoph von,$d1768-1854.
+112719	245	10	$aJenowewa, üks wägga armas ja halle luggeminne wannemate ja lastele /$c[Chr. v. Schmid'i järgi tõlkinud C. F. Lorenzsonn]
+112719	246	13	$aJenoveva.
+112719	246	19	$aGenovefa.$gEesti keeles.
+112719	250	\\	$a[2.] uuesti läbi vaadatud ja parandatud tr.
+112719	260	\\	$aPerno :$bF. W. Borm,$c1841$e(Perno :$fF. W. Borm)
+112719	300	\\	$a24 lk. ;$c18 cm.
+112719	500	\\	$aAutori ja tõlkija nimed raamatus märkimata.
+112719	534	\\	$pEsitrükk:$cPerno : J. G. Marquardt, 1839.$nIlmus pealkirja all:$tJenowewa ellust.
+112719	533	\\	$aElektrooniline reproduktsioon.$bTallinn :$cEesti Rahvusraamatukogu,$d2012.
+112719	542	\\	$lVabakasutus$qErRR$o20161209$uhttps://creativecommons.org/publicdomain/mark/1.0/
+112719	650	\9	$asaksa.
+112719	655	\9	$avaimulik ilukirjandus.
+112719	655	\9	$ajutustused.
+112719	700	1\	$aLorenzsonn, Caspar Franz,$d1811-1880,$etõlkija.
+112719	752	\\	$dPärnu.
+112719	856	4\	$uhttp://digar.nlib.ee/show/nlib-digar:102065$zTÄISTEKST RR arhiivis DIGAR
+112719	912	\\	$aRB$b947
+112719	945	\\	$lr6mf $aMF-00573$uMikrofilm
+112719	945	\\	$lrrari$aREB-841/Lorenzsonn$nIluraamiga trükikaas
+112719	945	\\	$lwww  
+112719	945	\\	$likmr1$aA 6267$nTempel: Biblioth. D. Ges. F. Gesch. U. A. Ostseeprov
+112719	945	\\	$likmr1$aA 6267$nKöites, originaalkaaned pd.
+112719	945	\\	$likmr7$aÕES 547$nPappköide
+			
+125114	LDR		01165nam a2200301 i 4500
+125114	001		b17885899
+125114	003		ErRR
+125114	006		m\\\\|\\\d\|\\\\\\
+125114	007		cr\cn\||||||||
+125114	008		030616s1819\\\\lv\\\\\|\||||||||\0|est\\
+125114	020	\\	$a9789949542277$q(pdf)
+125114	035	\\	$a.b17240050 (Tartu)
+125114	040	\\	$aErEAR$best$cErEAR$dErRR
+125114	245	00	$aEnne pihti :$bPärrast pühha öhtosöma-aega 
+125114	246	13	$aEnne pihti.
+125114	260	\\	$a[Riia :$bs. n.,$c1819$e(Riia :$fW. F. Häcker)].
+125114	300	\\	$a2 eraldi lehte ;$c163x100  mm.
+125114	500	\\	$aFraktuur.
+125114	500	\\	$aKirikulaulud, mida laskis trükkida eesti soldatitele Liivimaa kindralsuperintendent Karl Gottlob Sonntag.
+125114	533	\\	$aElektrooniline reproduktsioon.$bTallinn :$cEesti Rahvusraamatukogu,$d2014.
+125114	545	\\	$aAinueksemplar.
+125114	547	1\	$aPR - Eesti Kirjandusmuuseumi Arhiivraamatukogu [1]
+125114	542	\\	$lVabakasutus$qErRR$o20170405$uhttps://creativecommons.org/publicdomain/mark/1.0/
+125114	740	\\	$aEesti trükise punane raamat I, 1535-1850.
+125114	856	4\	$uhttp://digar.nlib.ee/show/nlib-digar:136499$zTÄISTEKST RR arhiivis DIGAR
+125114	912	\\	$aRB$b620
+125114	945	\\	$lwww  
+125114	945	\\	$likmr7$aÕES 1383$nPappköide
+			
+133445	LDR		01055nam a2200301 i 4500
+133445	001		b20396119
+133445	003		ErRR
+133445	006		m\\\\|\\\d\|\\\\\\
+133445	007		cr\|n|||||||||
+133445	008		050509s193u\\\\xx\a\\\|\||||||||\1|est\\
+133445	020	\\	$a9789949768974$q(pdf)
+133445	040	\\	$aErRR$best$cErRR
+133445	072	\7	$a821.511.113-93$2udkrb
+133445	100	1\	$aOro, Julius,$cpseud.,$d1901-1941.
+133445	245	10	$aNuku majake :$b[värsid lastele /$cJ. Oro]
+133445	260	\\	$a[S.l. :$bs.n.,$c193-?]
+133445	300	\\	$a[12] lk. koos kaanega :$bill., ill. kaas ;$c20 cm.
+133445	500	\\	$aAutor näidatud teksti lõpus.
+133445	533	\\	$aElektrooniline reproduktsioon.$bTallinn :$cEesti Rahvusraamatukogu,$d2016$nISBN 978-9949-768-97-4 (pdf)
+133445	542	\\	$lVabakasutus$qErRR$o20180126$uhttps://creativecommons.org/publicdomain/mark/1.0/
+133445	650	\9	$aeesti.
+133445	655	\9	$alastekirjandus.
+133445	655	\9	$aluuletused.
+133445	655	\9	$apildiraamatud.
+133445	856	4\	$uhttp://www.digar.ee/id/nlib-digar:270342$zTÄISTEKST RR arhiivis DIGAR
+133445	910	0\	$aRMT 1918-1944
+133445	945	\\	$lrarkh$aAR1-05-00734
+133445	945	\\	$lwww  $aWWW
+			

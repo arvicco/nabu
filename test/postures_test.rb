@@ -219,7 +219,7 @@ class PosturesTest < Minitest::Test
   def test_the_lect_migration_kept_the_p59_4_census
     lect = postures.declarations.select { |d| d.layer == "lect" }
     by_posture = lect.group_by(&:posture).transform_values(&:size)
-    assert_equal 209, lect.size,
+    assert_equal 210, lect.size,
                  "the P59-4 declarations survive the move (61 at migration; itant retired P61-3," \
                  "oracc retired P62-2, etcsl/ccmh/freising/coptic-scriptorium retired P64-6, " \
                  "titus-avestan retired P66-1, osta+fornsvenska retired P77-r8, achemenet " \
@@ -510,7 +510,9 @@ class PosturesTest < Minitest::Test
                  "etcbc-syrnt ADDED — identity syc (the Syriac New Testament; the peshitta / etcbc-syriac " \
                  "posture): 207→208; " \
                  "syriac-htr-gt ADDED — identity syc (the Vienna HTR Winter School ground truth of two Syriac " \
-                 "NT manuscripts; the peshitta posture): 208→209"
+                 "NT manuscripts; the peshitta posture): 208→209; " \
+                 "digar-corpora ADDED — identity et (the DIGAR book corpus; edition-class print " \
+                 "years never stage, the blbooks posture): 209→210"
     # The epigraphic-belt registry package (merged + canonical-synced
     # 2026-10-18, the add-then-retire shape within one phase) retires both
     # P130 pendings, and the ociana-script rule + the ig-cyprus override
@@ -627,6 +629,8 @@ class PosturesTest < Minitest::Test
     # niupepa joins codemap (mri → mi, the ebible-pacific precedent): 21→22.
     # etcbc-syrnt joins identity (syc, the peshitta posture): 152→153.
     # syriac-htr-gt joins identity (syc, the peshitta posture): 153→154.
-    assert_equal({ "dates" => 33, "codemap" => 22, "identity" => 154 }, by_posture)
+    # digar-corpora joins identity (et; the print year is class edition, the
+    # blbooks posture): 154→155.
+    assert_equal({ "dates" => 33, "codemap" => 22, "identity" => 155 }, by_posture)
   end
 end

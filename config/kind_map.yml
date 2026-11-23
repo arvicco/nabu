@@ -2037,6 +2037,82 @@ sources:
       "Avhandlinger": "dissertation/treatise — an academic FORM, its subject any discipline"
       "Almanakker": "almanac — calendar, astronomy, prognostication and household lore in one
         annual; no one house class holds it"
+  digar-corpora:      # the ERB record's MARC 655 genre/form headings (Estonian,
+    #                   verbatim, trailing period dropped), 0–5 per book. Census 2026-11-23
+    #                   over the 3,410 books Tinits's processed ERB table joins (the same 655
+    #                   values): 284 distinct headings, 604 books carry none; counts below are
+    #                   books. The headings mix FORM with audience and topic, so the
+    #                   vocabulary is open: an unruled heading mints nothing (uncovered).
+    facet: genre
+    vocabulary: open
+    map:
+      "ilukirjandus": literary                   # 382 — belles-lettres (the form rides beside it)
+      "vaimulik ilukirjandus": literary          # 44 — religious fiction
+      "näidendid": literary/drama                # 152 — plays
+      "komöödiad": literary/drama                # 61
+      "libretod": literary/drama                 # 17 — opera/operetta libretti
+      "luuletused": literary/poetry              # 79 — poems
+      "laulud": literary/poetry                  # 14 — songs (secular; the hymn headings below)
+      "laulutekstid": literary/poetry            # 11 — song lyrics
+      "jutud": literary/narrative                # 86 — stories
+      "jutustused": literary/narrative           # 54 — tales, narratives
+      "romaanid": literary/narrative             # 35 — novels
+      "kriminaalromaanid": literary/narrative    # 15 — crime novels
+      "muinasjutud": literary/narrative/tale     # 29 — fairy tales
+      "mälestused": literary/diary/memoir        # 28 — memoirs
+      "kirjad": letter                           # 14 — letters
+      "biograafiad": historiography              # 23 — the house vita fold (wellcome Biographies)
+      "kõned": oratory                           # 22 — speeches
+      "loengud": scholarly                       # 151 — published lectures (the wellcome fold)
+      "käsiraamatud": scholarly                  # 71 — handbooks (wellcome Manuals)
+      "teatmikud": scholarly                     # 26 — reference works
+      "bibliograafiad": scholarly                # 22
+      "tabelid": scholarly                       # 14 — tables (the wellcome/noscemus fold)
+      "kommentaarid": scholarly/commentary       # 13
+      "sõnastikud": lexical                      # 17 — dictionaries
+      "aabitsad": school                         # 46 — ABC-books, primers
+      "õpikud": school                           # 35 — textbooks
+      "kooliõpikud": school                      # 33 — school textbooks
+      "õppematerjalid": school                   # 187 — teaching materials
+      "lugemikud": school                        # 12 — readers
+      "ülesanded": school                        # 17 — exercise books
+      "õppekavad": school                        # 83 — curricula
+      "seadused": legal/law                      # 56 — laws
+      "õigusaktid": legal/law                    # 51 — legal acts
+      "publikaadid": legal/law                   # 15 — published decrees (the governorate's
+      #                                            Kuulutus/Kulutus broadsides)
+      "eeskirjad": legal/law                     # 82 — regulations
+      "sõjaväemäärustikud": legal/law            # 42 — military regulations
+      "põhikirjad": legal                        # 174 — statutes of societies, companies, co-ops
+      "kodukorrad": legal                        # 22 — house rules of institutions
+      "käskkirjad": administrative               # 45 — orders of the day, directives
+      "aruanded": administrative                 # 22 — reports
+      "stenogrammid": administrative             # 13 — verbatim proceedings
+      "statistilised andmed": administrative     # 13
+      "nimestikud": administrative/list          # 36 — lists, rolls
+      "aadressiraamatud": administrative/list    # 88 — address books
+      "telefoniraamatud": administrative/list    # 12 — telephone directories
+      "hinnakirjad": administrative/list         # 24 — price lists
+      "sõiduplaanid": administrative/list        # 29 — timetables
+      "tootekataloogid": administrative/list     # 28 — product catalogues
+      "katekismused": catechesis                 # 49 — catechisms
+      "jutlused": sermon                         # 33 — sermons
+      "palveraamatud": hymn-prayer/prayer        # 40 — prayer books
+      "palved": hymn-prayer/prayer               # 12
+      "vaimulikud laulud": hymn-prayer/hymn      # 27 — spiritual songs
+      "kirikulaulud": hymn-prayer/hymn           # 11 — church hymns
+      "evangeeliumid": scripture                 # 31 — gospel books
+      "piiblid": scripture                       # 12 — bibles
+    deliberate:
+      "lastekirjandus": "children's literature — an AUDIENCE, not a form; the book's form heading
+        (luuletused, jutud, muinasjutud) rides beside it (156)"
+      "lauluraamatud": "songbook — hymnals and secular choir books alike (52); no one house class"
+      "harduskirjandus": "devotional literature — prayer, meditation and sermon mixed (47); the
+        nb-no 'Oppbyggelig litteratur' reading"
+      "kalendrid": "almanac — calendar, household lore and reading matter in one annual (16); the
+        nb-no 'Almanakker' reading"
+      "separaadid": "offprint — a print FORMAT, not a genre (50)"
+      "e-raamatud": "e-book — a carrier, not a genre (13)"
   ndl-kotenseki:      # the NDL Search bib join's NDC codes (dc:subject NDC, verbatim:
     facet: ndc        # "813.2", "291.36", "221"). Census 2026-10-19, 500 random held
     #                   PIDs: 33 carry an NDC (6.6% → ~2.6k of 38.7k books), 26 of them

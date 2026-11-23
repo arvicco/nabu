@@ -1,0 +1,81 @@
+# Nabu fixture manifest (P5-4 "fixture sentinel"). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# Every entry is a member of one of the two data.digar.ee zips (972 MB /
+# 122 MB); members are not addressable by a raw GET, so nothing here is
+# refetchable — re-cut per the README recipe (HTTP range reads of the zip's
+# central directory and local entries, or unzip of one download; the text
+# zip is Deflate64).
+source: digar-corpora
+adapter_test: null
+files:
+- path: processed_pdf_tsv/b10014949.pdf.txt.tsv
+  refetchable: false
+  provenance: local-trim
+  reason: member b10014949.pdf.txt.tsv of https://data.digar.ee/processed_pdf_tsv.zip (Last-Modified 2018-10-09) — read by HTTP range; no per-member URL
+  copied: "2026-11-23"
+  whole: true
+  trim: none
+- path: processed_pdf_tsv/b1275075x.pdf.txt.tsv
+  refetchable: false
+  provenance: local-trim
+  reason: member b1275075x.pdf.txt.tsv of https://data.digar.ee/processed_pdf_tsv.zip (Last-Modified 2018-10-09) — read by HTTP range; no per-member URL
+  copied: "2026-11-23"
+  whole: false
+  trim: "the header + the first 300 token rows (rows 0-299 of 798)"
+- path: processed_pdf_tsv/b1623912x.pdf.txt.tsv
+  refetchable: false
+  provenance: local-trim
+  reason: member b1623912x.pdf.txt.tsv of https://data.digar.ee/processed_pdf_tsv.zip (Last-Modified 2018-10-09) — read by HTTP range; no per-member URL
+  copied: "2026-11-23"
+  whole: true
+  trim: none
+- path: processed_pdf_tsv/b17885899.pdf.txt.tsv
+  refetchable: false
+  provenance: local-trim
+  reason: member b17885899.pdf.txt.tsv of https://data.digar.ee/processed_pdf_tsv.zip (Last-Modified 2018-10-09) — read by HTTP range; no per-member URL
+  copied: "2026-11-23"
+  whole: true
+  trim: none
+- path: processed_pdf_tsv/b20396119.pdf.txt.tsv
+  refetchable: false
+  provenance: local-trim
+  reason: member b20396119.pdf.txt.tsv of https://data.digar.ee/processed_pdf_tsv.zip (Last-Modified 2018-10-09) — read by HTTP range; no per-member URL
+  copied: "2026-11-23"
+  whole: true
+  trim: none
+- path: processed_txt_tsv/ERB_eestikeelne_raamat_July_2018.tsv
+  refetchable: false
+  provenance: local-trim
+  reason: member ERB_eestikeelne_raamat_July_2018.tsv of https://data.digar.ee/processed_txt_tsv.zip (Last-Modified 2018-10-09) — read by HTTP range; no per-member URL
+  copied: "2026-11-23"
+  whole: false
+  trim: "the header + the complete MARC rows of records 1, 7, 51696, 112719, 125114, 133445 (b10000306 + the five fixture books), each record closed by its blank row"
+- path: processed_txt_tsv/ERB_genres_processed_v_29.07.2018.tsv
+  refetchable: false
+  provenance: local-trim
+  reason: member ERB_genres_processed_v_29.07.2018.tsv of https://data.digar.ee/processed_txt_tsv.zip (Last-Modified 2018-10-09) — read by HTTP range; no per-member URL
+  copied: "2026-11-23"
+  whole: false
+  trim: "the header + the first 2 rows"
+- path: processed_txt_tsv/ERB_works_processed_v_29.07.2018.tsv
+  refetchable: false
+  provenance: local-trim
+  reason: member ERB_works_processed_v_29.07.2018.tsv of https://data.digar.ee/processed_txt_tsv.zip (Last-Modified 2018-10-09) — read by HTTP range; no per-member URL
+  copied: "2026-11-23"
+  whole: false
+  trim: "the header + the rows of b10000306, b10014949, b1275075x, b1623912x, b17885899 (b20396119 has none)"
+- path: processed_txt_tsv/ERB_works_v_29.07.2018.tsv
+  refetchable: false
+  provenance: local-trim
+  reason: member ERB_works_v_29.07.2018.tsv of https://data.digar.ee/processed_txt_tsv.zip (Last-Modified 2018-10-09) — read by HTTP range; no per-member URL
+  copied: "2026-11-23"
+  whole: false
+  trim: "the header + the first 2 rows"
+- path: processed_txt_tsv/fileinfo_stored_pub.tsv
+  refetchable: false
+  provenance: local-trim
+  reason: member fileinfo_stored_pub.tsv of https://data.digar.ee/processed_txt_tsv.zip (Last-Modified 2018-10-09) — read by HTTP range; no per-member URL
+  copied: "2026-11-23"
+  whole: false
+  trim: "the header + the five fixture books' rows"
