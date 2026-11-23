@@ -3190,6 +3190,46 @@ class CLITest < Minitest::Test
     end
   end
 
+  # The owner's whole sequence on a real (fixture-scale) library: census →
+  # `nabu rebuild` → verify. The verify's unit tests hand-build their
+  # catalogs; this is the one proof that what a REAL rebuild leaves behind —
+  # aggregates, index membership, stamps, the slim stored forms — is what
+  # the verify expects, so a clean rebuild can never read FAIL.
+  def test_a_real_rebuild_passes_its_own_verify_against_the_census_taken_before
+    require "nabu/ops/rebuild_census"
+    require "nabu/ops/rebuild_verify"
+    with_rebuild_env do |config|
+      with_config(config) { run_cli(%w[rebuild]) }
+      census_catalog = Nabu::Store.connect(config.catalog_path, readonly: true)
+      census_ledger = Nabu::Store.connect(config.history_path, readonly: true)
+      Nabu::Ops::RebuildCensus.capture!(catalog: census_catalog, db_dir: config.db_dir,
+                                        local_dir: config.local_dir, ledger: census_ledger, now: Time.now - 60)
+      [census_catalog, census_ledger].each(&:disconnect)
+      with_config(config) { run_cli(%w[rebuild]) }
+
+      registry = Nabu::SourceRegistry.load(config.sources_path)
+      catalog = Nabu::Store.connect(config.catalog_path, readonly: true)
+      fulltext = Nabu::Store.connect_fulltext(config.fulltext_path, readonly: true)
+      ledger = Nabu::Store.connect(config.history_path, readonly: true)
+      out = StringIO.new
+      report = Nabu::Ops::RebuildVerify.new(
+        catalog: catalog, fulltext: fulltext, ledger: ledger, db_dir: config.db_dir, local_dir: config.local_dir,
+        cjk_slugs: registry.cjk_slugs, fuzzy_slugs: registry.fuzzy_slugs,
+        stamps_plan: -> { Nabu::IncrementalRebuild.new(config: config, registry: registry).plan },
+        deleted_holders: -> { [] }, out: out
+      ).run!
+      [catalog, fulltext, ledger].each(&:disconnect)
+
+      failed = report.checks.select { |check| check.status == :fail }.map(&:name)
+      assert_empty failed, "a clean rebuild failed its own verify:\n#{out.string}"
+      skipped = report.checks.select { |check| check.status == :skip }.map(&:name)
+      assert_empty skipped, "with a census in hand nothing is skipped:\n#{out.string}"
+      assert_equal 32_768, Nabu::Store.connect(config.catalog_path, readonly: true).then { |db|
+        db.fetch("PRAGMA page_size").single_value.tap { db.disconnect }
+      }, "the fresh catalog carries the catalog page size"
+    end
+  end
+
   # The real run opens its own flushed log first and tees every stage into it;
   # the last line says it completed and names the verify step.
   def test_rebuild_writes_a_run_log_with_its_stages
