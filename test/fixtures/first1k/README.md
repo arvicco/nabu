@@ -37,6 +37,9 @@ manifest.yml.
 | `tlg0527/__cts__.xml` | 164 | textgroup metadata (Septuaginta; fetched 2026-07-09 at pinned HEAD `4c9c843`, P11-5) |
 | `tlg0527/tlg001/__cts__.xml` | 629 | work metadata (Genesis; Swete edition label Γένεσις) |
 | `tlg0527/tlg001/tlg0527.tlg001.1st1K-grc1.xml` | 16062 | *Genesis* (LXX, Swete 1901; **trimmed**, P11-5): teiHeader whole + chapter 1 whole (verses 1–31, `chapter`/`verse` textparts), chapters 2–50 removed, document closed to the upstream shape. Ranged-fetched 2026-07-09 at pinned HEAD `4c9c843d80ee94b4371f52add5f7d68bbfe7ba4c`. The alignment hub's LXX witness exemplar (cts-verse extractor, P11-5) |
+| `tlg0527/tlg048/__cts__.xml` | 3318 | work metadata (Isaias) — copied whole from the local canonical snapshot (upstream commit `ed91552`); types eng1 `ti:translation` and eng1a/eng1b/mul1/mul2 `ti:commentary` |
+| `tlg0527/tlg048/tlg0527.tlg048.1st1K-eng1.xml` | 4477 | Ottley's English *Isaiah* (**trimmed** 2026-11-23 from the local canonical snapshot): teiHeader whole, chapter 1 verses 1–3 kept, the rest removed, document closed to the upstream shape. The accepted translation |
+| `tlg0527/tlg048/tlg0527.tlg048.1st1K-eng1b.xml` | 4627 | Ottley's *Appendix* (**trimmed** 2026-11-23, same snapshot): teiHeader whole, `div[@type="commentary"][@subtype="appendix"]` paragraphs 1–3 kept. The REJECTED grain: a commentary body under a higher eng version token, skipped by rule |
 
 The `tlg2959` set was **conditional** in the approved plan (fetch the edition only
 if both `__cts__.xml` probes returned 200). Both returned 200 on 2026-07-03, so all
@@ -67,12 +70,15 @@ three files were fetched.
   rule and matches any `-eng<version>` tail.
 - All eng editions anchor on `div[@type="translation"]` (no `edition`-typed eng
   file exists in the corpus). Of the 43 eng works a real `--parse-only` sync
-  discovers, 41 parse cleanly; two quarantine **honestly** (upstream oddities,
-  not adapter bugs):
+  discovers, 41 parse cleanly; two quarantined at the first census (upstream
+  oddities, not adapter bugs) — one of them since resolved:
   - `tlg0527.tlg048` ships letter-suffixed `1st1K-eng1a`/`1b` slugs that are
     `div[@type="commentary"]` (notes / appendix), not translations —
-    highest-version selection picks the appendix (`eng1b`) and it quarantines
-    (zero citable passages), rather than being folded in as a translation.
+    highest-version selection used to pick the appendix (`eng1b`), which
+    quarantined (zero citable passages) and kept the real translation out.
+    Since 2026-11-23 the apparatus rule covers English: both commentary files
+    skip by rule at discover and `1st1K-eng1` lands. The checked-in
+    `tlg0527/tlg048` trim pins the pair (see the table).
   - `heb0001.heb010.1st1K-eng1` is a Hebrew-namespace work mis-filed in the
     greekLit repo: its `div[@type="translation"]/@n` is `urn:cts:hebrewlit:…`,
     so the inherited edition-urn cross-check rejects the greekLit urn discover

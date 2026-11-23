@@ -43,6 +43,11 @@ class First1kGreekTest < Minitest::Test
   SEXTUS_LAT_URN = "urn:cts:greekLit:tlg0544.tlg001.opp-lat1"
   METHODIUS_DEU_URN = "urn:cts:greekLit:tlg2959.tlg002.opp-ger1"
   PREFACE_LAT_URN = "urn:cts:greekLit:tlg0643.opp002.1st1K-lat1"
+  # Ottley's English Isaiah (LXX): the real translation (1st1K-eng1) beside
+  # a letter-suffixed appendix (1st1K-eng1b) upstream's own __cts__.xml types
+  # ti:commentary — the higher version token, but apparatus, not a text.
+  ISAIAH_ENG_URN = "urn:cts:greekLit:tlg0527.tlg048.1st1K-eng1"
+  ISAIAH_APPENDIX_URN = "urn:cts:greekLit:tlg0527.tlg048.1st1K-eng1b"
 
   # All six original-language editions the fixture tree carries (flag-off).
   GRC_URNS = [NICOMACHUS_URN, ANUBION_URN, SEIKILOS_URN, METHODIUS_URN,
@@ -249,13 +254,14 @@ class First1kGreekTranslationsTest < Minitest::Test
 
   def test_discover_adds_the_translation_editions_alongside_originals_sorted_by_urn
     refs = adapter.discover(GREEK_WORKDIR).to_a
-    expected = GRC_URNS + [ENG_URN, First1kGreekTest::SEXTUS_LAT_URN, First1kGreekTest::METHODIUS_DEU_URN]
+    expected = GRC_URNS + [ENG_URN, First1kGreekTest::SEXTUS_LAT_URN, First1kGreekTest::METHODIUS_DEU_URN,
+                           First1kGreekTest::ISAIAH_ENG_URN]
     assert_equal expected.sort, refs.map(&:id)
     assert_equal refs.map(&:id).sort, refs.map(&:id), "discover stays urn-sorted"
   end
 
   def test_translation_ref_carries_eng_language_title_and_source_id
-    ref = adapter.discover(GREEK_WORKDIR).find { |r| r.metadata["language"] == "eng" }
+    ref = adapter.discover(GREEK_WORKDIR).find { |r| r.metadata["language"] == "eng" && r.id.include?("tlg4037") }
     refute_nil ref
     assert_equal ENG_URN, ref.id
     assert_equal "first1k-greek", ref.source_id
@@ -291,8 +297,27 @@ class First1kGreekTranslationsTest < Minitest::Test
 
   def test_commentary_bodied_editions_are_censused_skips
     skips = adapter.discovery_skips(GREEK_WORKDIR)
-    assert_equal 1, skips.skipped_by_rule
+    assert_equal 2, skips.skipped_by_rule
     assert(skips.notes.any? { |note| note.include?("tlg0643.opp002.1st1K-lat1") })
+    assert(skips.notes.any? { |note| note.include?("tlg0527.tlg048.1st1K-eng1b") })
+  end
+
+  # An English commentary body is apparatus too: the appendix's higher
+  # version token (eng1b > eng1) must not displace the real translation
+  # in the highest-version-per-work selection — it is skipped by rule
+  # BEFORE selection, so the translation is the work's English edition.
+  def test_an_english_appendix_never_outranks_the_real_translation
+    ids = adapter.discover(GREEK_WORKDIR).map(&:id)
+    assert_includes ids, First1kGreekTest::ISAIAH_ENG_URN
+    refute_includes ids, First1kGreekTest::ISAIAH_APPENDIX_URN
+  end
+
+  def test_parse_yields_the_english_isaiah_translation
+    document = parse_ref(First1kGreekTest::ISAIAH_ENG_URN)
+    assert_equal "eng", document.language
+    assert_equal "translation", document.metadata["kind"]
+    assert_equal(%w[:1.1 :1.2 :1.3], document.map { |p| p.urn.delete_prefix(document.urn) })
+    assert_includes document.first.text, "The vision which Isaiah the son of Amoz saw"
   end
 
   def test_flag_off_censuses_nothing
