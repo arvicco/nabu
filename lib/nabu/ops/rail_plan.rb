@@ -62,6 +62,12 @@ module Nabu
     # the cone's end (classification cone_exhausted, or nothing left
     # selectable after it) is skipped whole and listed: no step could
     # yield. A source never crawled (no ledger file) makes no such claim.
+    #
+    # SUSPENDED — a source any of whose Schedules declares +suspended:+
+    # (a reason; one sync step runs every lane, so one parked lane parks
+    # the source) is skipped whole and listed with its reason, before any
+    # sizing: the suspension is a ratified posture written in code, never
+    # a board note the plan might miss.
     class RailPlan
       STEP_LINE = /\Alane (?<slug>[a-z0-9][a-z0-9-]*) step (?<step>[1-9]\d*): (?<command>\S.*)\z/
       CHAIN_LINE = /\Achain (?<slug>[a-z0-9][a-z0-9-]*): (?<chain>\S.*)\z/
@@ -74,10 +80,11 @@ module Nabu
       end
 
       # lanes: the measured sources; unmeasured: the rest; exhausted: the
-      # sources the crawl ledger marks done (skipped). budget_seconds nil =
+      # sources the crawl ledger marks done (skipped); suspended: [slug,
+      # reason] pairs declared suspended (skipped). budget_seconds nil =
       # the caps-only view.
-      Plan = Data.define(:budget_seconds, :lanes, :unmeasured, :exhausted) do
-        def initialize(budget_seconds:, lanes:, unmeasured:, exhausted: [])
+      Plan = Data.define(:budget_seconds, :lanes, :unmeasured, :exhausted, :suspended) do
+        def initialize(budget_seconds:, lanes:, unmeasured:, exhausted: [], suspended: [])
           super
         end
 
@@ -97,12 +104,21 @@ module Nabu
       end
 
       def plan
-        sources = roster.map { |entry, cap| size(entry.slug, cap, slice_seconds(entry.slug)) }
-        done = roster.filter_map { |entry, _| entry.slug if exhausted?(entry) }
+        parked, active = roster.partition { |_entry, _cap, reason| reason }
+        sources = active.map { |entry, cap, _| size(entry.slug, cap, slice_seconds(entry.slug)) }
+        done = active.filter_map { |entry, _, _| entry.slug if exhausted?(entry) }
         exhausted, live = sources.partition { |source| done.include?(source.slug) }
         Plan.new(budget_seconds: @budget_seconds, lanes: live.select(&:measured?),
-                 unmeasured: live.reject(&:measured?), exhausted: exhausted)
+                 unmeasured: live.reject(&:measured?), exhausted: exhausted,
+                 suspended: parked.map { |entry, _, reason| [entry.slug, reason] })
       end
+
+      # {slug => suspension reason (nil = live)} for every registered
+      # source declaring a Schedule — the declarations the boards'
+      # roster-suspension probe (AcquisitionCheck) compares against.
+      def self.suspensions(registry) = new(registry: registry, ledger: nil).suspensions
+
+      def suspensions = roster.to_h { |entry, _cap, reason| [entry.slug, reason] }
 
       def self.render(plan)
         out = [header(plan), table(plan)]
@@ -112,6 +128,10 @@ module Nabu
         end
         unless plan.exhausted.empty?
           out << "exhausted (the crawl ledger marks the cone done — skipped): #{plan.exhausted.map(&:slug).join(', ')}"
+        end
+        unless plan.suspended.empty?
+          parked = plan.suspended.map { |slug, reason| "#{slug} (#{reason})" }.join(", ")
+          out << "suspended (declared in code — skipped): #{parked}"
         end
         out << "plan wall time (parallel lanes): #{Eta.format_seconds(plan.wall_seconds)}"
         out << steps(plan)
@@ -169,14 +189,17 @@ module Nabu
         Source.new(slug: slug, cap: cap, slice_seconds: seconds, slices: slices)
       end
 
-      # [[entry, cap]] for every schedule-declaring adapter, registration order.
+      # [[entry, cap, suspension reason or nil]] for every
+      # schedule-declaring adapter, registration order.
       def roster
         @roster ||= @registry.each_source.filter_map do |entry|
           klass = adapter_class(entry)
           next unless klass
 
-          caps = schedules(klass).map(&:slices_per_phase)
-          [entry, caps.min] unless caps.empty?
+          schedules = PacedCrawl.schedules_of(klass)
+          next if schedules.empty?
+
+          [entry, schedules.map(&:slices_per_phase).min, schedules.find(&:suspended?)&.suspended]
         end
       end
 
@@ -203,16 +226,6 @@ module Nabu
         entry.adapter_class
       rescue Nabu::ValidationError
         nil
-      end
-
-      def schedules(klass)
-        klass.constants(false).filter_map do |name|
-          case klass.const_get(name, false)
-          in PacedCrawl::Schedule => schedule then schedule
-          in PacedCrawl::Spec => spec then spec.schedule
-          else nil
-          end
-        end.compact.uniq
       end
 
       def slice_seconds(slug)

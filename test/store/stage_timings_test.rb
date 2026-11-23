@@ -25,6 +25,19 @@ class StageTimingsTest < Minitest::Test
     assert_equal at.strftime("%F %T"), row[:finished_at].strftime("%F %T")
   end
 
+  # The write-path forecast's rate: the latest ROWED row of any scope.
+  def test_rate_is_the_latest_rowed_rows_seconds_per_row_of_any_scope
+    timings = Nabu::Store::StageTimings
+    assert_nil timings.rate(nil, kind: "sync", stage: "fts_shadow"), "no ledger, no rate"
+    assert_nil timings.rate(@ledger, kind: "sync", stage: "fts_shadow"), "no row, no rate"
+    timings.record!(@ledger, kind: "sync", scope: "ndl", stage: "fts_shadow", seconds: 3_000, rows: 100_000_000)
+    timings.record!(@ledger, kind: "sync", scope: "corpus", stage: "fts_shadow", seconds: 1_000, rows: 50_000_000)
+    timings.record!(@ledger, kind: "sync", scope: "x", stage: "fts_shadow", seconds: 9, rows: nil)
+
+    assert_in_delta 1_000 / 50_000_000.0, timings.rate(@ledger, kind: "sync", stage: "fts_shadow"), 1e-15,
+                    "the latest row that recorded its size governs, whatever its scope"
+  end
+
   def test_history_appends_and_the_latest_row_governs
     2.times do |i|
       Nabu::Store::StageTimings.record!(@ledger, kind: "rebuild", scope: "corpus",

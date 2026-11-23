@@ -26,28 +26,42 @@ module Nabu
     #    remembered list) must have a sync run in the ledger NEWER than
     #    the previous phase's merge date (the second-newest "merged
     #    YYYY-MM-DD" in the phase register): a source quiet across a whole
-    #    phase cycle owes slices and flags.
+    #    phase cycle owes slices and flags. A source whose Schedule is
+    #    declared suspended owes nothing (given +suspensions+).
+    #
+    # 3. ROSTER SUSPENSION — given +suspensions+ ({slug => reason or nil},
+    #    the code's Schedule declarations: Ops::RailPlan.suspensions), the
+    #    rail roster table on the acquisition board (acquisition/plan.md,
+    #    the "rail roster" section's table) must agree with them both
+    #    ways: a row whose Schedule cell says SUSPENDED needs a declaration
+    #    carrying `suspended:`, and a suspended declaration needs a
+    #    SUSPENDED row. Either mismatch is a finding; no board file, no
+    #    roster section or no suspensions map skips the probe.
     class AcquisitionCheck
       PLAN = /\Ap(\d+)-plan\.md\z/
       MERGED = /merged (\d{4}-\d{2}-\d{2})/
       PER_PHASE = /cadence:\s*:per_phase/
       JUSTIFIED = { odd: /carries no acquisition/i, even: /carries no outreach/i }.freeze
       SEGMENT = { odd: /acquisition segment/i, even: /outreach segment/i }.freeze
+      ACQUISITION_PLAN = File.join("acquisition", "plan.md")
+      ROSTER_HEADING = /\A#+ .*rail roster/i
+      SUSPENDED = /\bSUSPENDED\b/
 
       Report = Data.define(:skipped, :findings) do
         def clean? = findings.empty?
       end
 
-      def initialize(boards_dir:, adapters_dir:, ledger_path:)
+      def initialize(boards_dir:, adapters_dir:, ledger_path:, suspensions: nil)
         @boards_dir = boards_dir
         @adapters_dir = adapters_dir
         @ledger_path = ledger_path
+        @suspensions = suspensions
       end
 
       def run
         return Report.new(skipped: true, findings: []) unless File.directory?(@boards_dir)
 
-        Report.new(skipped: false, findings: segment_findings + rail_findings)
+        Report.new(skipped: false, findings: segment_findings + rail_findings + roster_findings)
       end
 
       private
@@ -87,8 +101,49 @@ module Nabu
 
       def rail_slugs
         Dir.glob(File.join(@adapters_dir, "*.rb")).filter_map do |path|
-          File.basename(path, ".rb").tr("_", "-") if File.read(path, encoding: Encoding::UTF_8).match?(PER_PHASE)
+          slug = File.basename(path, ".rb").tr("_", "-")
+          next if @suspensions&.fetch(slug, nil)
+
+          slug if File.read(path, encoding: Encoding::UTF_8).match?(PER_PHASE)
         end.sort
+      end
+
+      def roster_findings
+        rows = roster_rows
+        return [] if @suspensions.nil? || rows.nil?
+
+        marked = rows.select { |_, suspended| suspended }.keys
+        declared = @suspensions.select { |_, reason| reason }.keys
+        (marked - declared).map do |slug|
+          "rail roster row #{slug} is marked SUSPENDED but its Schedule declaration is not suspended " \
+            "(declare suspended: \"<reason>\" in code, or re-mark the row)"
+        end + (declared - marked).map do |slug|
+          seen = rows.key?(slug) ? "its rail roster row is not marked SUSPENDED" : "it has no rail roster row"
+          "#{slug} declares suspended: #{@suspensions[slug].inspect} in code but #{seen}"
+        end
+      end
+
+      # {slug => marked SUSPENDED?} from the roster section's table, nil
+      # when the board or the section is absent.
+      def roster_rows
+        path = File.join(@boards_dir, ACQUISITION_PLAN)
+        return nil unless File.file?(path)
+
+        lines = File.readlines(path, chomp: true, encoding: Encoding::UTF_8)
+        start = lines.index { |line| line.match?(ROSTER_HEADING) }
+        return nil unless start
+
+        section = lines[(start + 1)..].take_while { |line| !line.match?(/\A#+ /) }
+        table = section.drop_while { |line| !line.start_with?("|") }.take_while { |line| line.start_with?("|") }
+        return nil if table.size < 2
+
+        cells = ->(line) { line.delete_prefix("|").delete_suffix("|").split("|").map(&:strip) }
+        column = cells.call(table.first).index { |cell| cell.match?(/\Aschedule\z/i) }
+        table.drop(2).to_h do |line|
+          row = cells.call(line)
+          slug = row.first.to_s.delete("*`").strip
+          [slug, (column ? row[column].to_s : row.drop(1).join(" ")).match?(SUSPENDED)]
+        end
       end
 
       def rail_findings

@@ -573,6 +573,39 @@ under-derivation with no error anywhere, discovered only when a query
 returns stale text. When in any doubt, run `nabu rebuild` instead; a wasted
 full rebuild costs hours, a false blessing costs correctness.
 
+### Derivation stamps read all-dirty after a no-op refactor (by proof)
+
+A pure move or file fold under `lib/nabu/` re-hashes the shared derivation
+core, so every stamp reads `parser` dirty although no derived row would
+change. Rather than bless on your word alone, make current code prove it:
+
+```sh
+rake "stamps:rebless_by_proof[i-verified-canonical-unchanged-since-stamping]"
+rake "stamps:rebless_by_proof[i-verified-canonical-unchanged-since-stamping,50]"   # larger sample
+```
+
+Per dirty source whose drift is code-only (parser/fold/config — the stamp's
+canonical identity and migration level must still match), it walks the
+source's discovery in full (every live catalog document must still be
+discovered), then parses a deterministic stratified sample of the
+discovered documents — the first, the last and evenly spaced between, 20 by
+default — through current code, writing nothing, and byte-compares each
+against the catalog: passage count, each passage's urn and text, then the
+passage and document content shas, metadata, license override and
+retirement flag. Identical ⇒ that source is reblessed (the `stamps:rebless`
+write path); any divergence ⇒ the stamp is untouched and the line names the
+first diverging urn and what differed. Canonical/migration drift, unstamped
+or weak sources, non-passage kinds and sources with a dictionary lane are
+named "not provable" and stay dirty — the incremental replays them. The run
+prints a ledger estimate first (each source's last rebuild load time scaled
+to the sample) and never fetches.
+
+The proof covers **code, not data** — hence the attestation that canonical
+is unchanged since the stamps were minted — and a sample is evidence, not
+exhaustion: a change that alters only documents the sample misses passes.
+Use it for uniform no-op refactors; for anything that targets a subset of
+documents, run the incremental.
+
 ---
 
 ## 7. Notifications (optional, owner-configured)
@@ -652,7 +685,10 @@ On this box run them as `bundle exec rake …` (§2).
 | `rake site:check` | Drift check: source-dossier descriptions vs docs/library.md. | Exit 1 on drift; never generates. |
 | `rake docs:verify` / `rake "docs:verify[network]"` | Run the taught command flows (both quickstarts, the README install block, the MCP recipes) in a fresh-clone sandbox; one OK/FAIL verdict line per documented claim. Plan: `config/docs_verify.yml`. | Offline by default (network steps print NET; an unroutable proxy guards the rest); `[network]` adds the real starter-shelf sync (~690 MB). Exit 1 on any FAIL. Verifies the committed HEAD. |
 | `rake ops:drill` | Fresh-machine restore drill against a throwaway copy (§9). | Long; owner-fired. |
+| `rake "db:snapshot[TARGET_DIR]"` | Online snapshot of every `db/*.sqlite3` into an existing, empty-of-those-names dir, one `VACUUM INTO` per file (WAL-safe; a plain copy under WAL is the corruption trap). Prints per-file size + elapsed and a SUMMARY line. A CACHE of derived state — it saves a rebuild's hours, never unique data. | Owner-fired. Refuses a missing/non-writable/occupied target and a running rebuild. Restore procedure (sidecars removed first, the stamp note): the `Nabu::Ops::DbSnapshot` class comment. |
+| `rake acquisition:probe` | Batch HTTP state checks for the acquisition plan's park / re-check conditions, from the instance board's `.docs/acquisition/probes.yml` (rows: `name`, `url`, `expect` = a status code, `any`, or a body substring, `note`); one `name → state (expect …) — as expected / CHANGED` line each, then the held-vs-searchable line (catalog passages vs `passages_fts`, both dbs read-only). | Network; informational (never exits 1 on CHANGED). One request per row, 10 s timeout, no retries, ≤3 redirects. No probe list = announced skip; `ACQUISITION_PROBES=path` overrides. |
 | `rake "bless[<attestation>]"` (alias: `stamps:rebless`) | Rewrite EVERY source's derivation stamp to assert current code — WITHOUT re-deriving. Escape hatch for fingerprint-formula or output-identical code changes, so a multi-hour rebuild isn't triggered by bookkeeping. | **Owner-only, dangerous.** Valid ONLY when the catalog's derived rows already match what current code would produce: right after a verified full rebuild, or after individually re-syncing every source whose output actually changed. Misuse = stamps that lie = silent under-derivation. The attestation argument (`i-verified-current-full-rebuild`) is the claim you must be able to make truthfully; the task refuses anything else. |
+| `rake "stamps:rebless_by_proof[<attestation>,<sample>]"` | Rebless only the DIRTY sources whose code-only drift current code PROVES harmless: a deterministic stratified sample (default 20 per source) re-parsed without writing and byte-compared against the catalog; divergent sources stay dirty, named with the first diverging urn. For no-op refactors (pure moves) that dirty every stamp. | **Owner-only.** Attestation `i-verified-canonical-unchanged-since-stamping`: the proof covers code, not data, and a sample can miss a change aimed at a few documents. Never fetches. See §6 "Derivation stamps read all-dirty after a no-op refactor". |
 
 ---
 

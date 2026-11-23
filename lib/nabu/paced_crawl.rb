@@ -105,8 +105,35 @@ module Nabu
 
     # The declared cadence the phase slate reads off the adapter: how
     # often the lane runs, how many slices a phase spends, and how many
-    # consecutive zero-yield slices stop a chained run.
-    Schedule = Data.define(:cadence, :slices_per_phase, :stop_after_zero_slices)
+    # consecutive zero-yield slices stop a chained run. +suspended+ (a
+    # reason string, nil = live) parks the lane by declaration: the
+    # ratified posture of a source whose crawl waits on upstream (e.g.
+    # "await upstream OCR serving") — `rail:plan` skips it, printing the
+    # reason, and the boards' rail roster must mark it SUSPENDED.
+    Schedule = Data.define(:cadence, :slices_per_phase, :stop_after_zero_slices, :suspended) do
+      def initialize(cadence:, slices_per_phase:, stop_after_zero_slices:, suspended: nil)
+        unless suspended.nil? || (suspended.is_a?(String) && !suspended.strip.empty?)
+          raise ArgumentError, "suspended names its reason (a non-empty String) or is nil"
+        end
+
+        super
+      end
+
+      def suspended? = !suspended.nil?
+    end
+
+    # Every Schedule +klass+ declares — a bare Schedule constant or a
+    # Spec constant's — distinct, in constant order (the rail roster rule
+    # Ops::RailPlan and the boards' suspension probe share).
+    def self.schedules_of(klass)
+      klass.constants(false).filter_map do |name|
+        case klass.const_get(name, false)
+        in Schedule => schedule then schedule
+        in Spec => spec then spec.schedule
+        else nil
+        end
+      end.compact.uniq
+    end
 
     # One crawl lane's knobs. +classes+ maps each terminal Outcome status
     # (:denied / :empty / :timeout) to its ledger class name; +subclasses+

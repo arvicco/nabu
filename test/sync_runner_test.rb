@@ -974,6 +974,41 @@ class SyncRunnerTest < Minitest::Test
     fulltext&.disconnect
   end
 
+  # Migration 054: the O(1) accounting row after a sync — counts moved in
+  # the load's transactions, the slice's membership recorded by the reindex
+  # hook, nothing behind; an idempotent resync (reindex skipped) leaves the
+  # row byte-identical.
+  def test_sync_maintains_the_source_aggregates_row
+    BreakerAdapter.reset!(urns: %w[urn:cts:test:w1 urn:cts:test:w2])
+    runner = make_runner(registry(entry("breaker", BreakerAdapter, wired: true)))
+    runner.sync("breaker")
+
+    source_id = Nabu::Store::Source.first(slug: "breaker").id
+    row = Nabu::Store::SourceAggregates.fetch(@db, source_id)
+    assert_equal [2, 2, 2, false], [row.documents_count, row.passages_count, row.fts_member_count, row.fts_behind]
+    refute_nil row.last_index_refresh_at
+    before = @db[:source_aggregates].all
+
+    runner.sync("breaker")
+
+    assert_equal before, @db[:source_aggregates].all, "an idempotent resync moves nothing"
+  end
+
+  # A deferred-index source's sync lands rows and skips the slice: the row
+  # reads behind (no probe needed) until `nabu index refresh` clears it.
+  def test_deferred_sync_reads_behind_until_the_index_refresh
+    BreakerAdapter.reset!(urns: %w[urn:cts:test:w1])
+    runner = make_runner(registry(deferred_entry("breaker", BreakerAdapter)))
+    runner.sync("breaker")
+    source_id = Nabu::Store::Source.first(slug: "breaker").id
+    assert Nabu::Store::SourceAggregates.fetch(@db, source_id).fts_behind
+
+    runner.index_entries(["breaker"])
+
+    row = Nabu::Store::SourceAggregates.fetch(@db, source_id)
+    assert_equal [1, false], [row.fts_member_count, row.fts_behind]
+  end
+
   # The sync's index writer (and `nabu index refresh`, which rides the
   # same reindex!) opens the fulltext with the index-writer cache profile.
   def test_reindex_opens_the_fulltext_with_the_index_writer_profile

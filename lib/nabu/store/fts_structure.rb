@@ -32,6 +32,10 @@ module Nabu
     # surface for this record.
     module FtsStructure
       STRUCTURE_ROWID = 10
+      # The averages record (fts5_index.c FTS5_AVERAGES_ROWID): varint
+      # nTotalRow, then one varint token total per column — the engine's
+      # own bm25 corpus statistic, kept exact across inserts and deletes.
+      AVERAGES_ROWID = 1
       V2_MARKER = "\xFF\x00\x00\x01".b
 
       # The health thresholds against the hard cap of 2000 (P111-1c):
@@ -66,6 +70,19 @@ module Nabu
         return nil if blob.nil?
 
         decode(blob.to_s.b)
+      end
+
+      # +table+'s total row count from its averages record — O(1), where a
+      # count(*) over a contentless index walks every segment — or nil
+      # when the table (or the record) is absent.
+      def total_rows(fulltext, table)
+        shadow = :"#{table}_data"
+        return nil unless fulltext.table_exists?(shadow)
+
+        blob = fulltext[shadow].where(id: AVERAGES_ROWID).get(:block)
+        return nil if blob.nil? || blob.to_s.empty?
+
+        varint(blob.to_s.b, 0).first
       end
 
       # The health summary: segment/page/tombstone counts plus the share

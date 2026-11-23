@@ -132,12 +132,112 @@ class TrickleTest < Minitest::Test
   end
 
   def test_a_fatal_error_stops_the_runner_with_the_summary_and_no_pidfile
-    eng = engine(universe: %w[a b c], hook: ->(id) { raise Nabu::FetchError, "HTTP 503 at #{id}" if id == "b" })
+    eng = engine(universe: %w[a b c], hook: ->(id) { raise Nabu::FetchError, "HTTP 400 for #{id}" if id == "b" })
     summary = runner({ "books" => eng }).run!
 
-    assert_match(/\Afatal: Nabu::FetchError: HTTP 503 at b/, summary.stop_reason)
+    assert_match(/\Afatal: Nabu::FetchError: HTTP 400 for b/, summary.stop_reason)
+    assert_match(/SUMMARY alpha: .* — fatal: Nabu::FetchError/, log_lines.last)
+    assert_empty log_lines.grep(/ RETRY /), "a non-transient error is fatal at once"
+    refute File.exist?(@paths.pid)
+  end
+
+  # -- transient upstream failures (the retry rider) ------------------------
+
+  # A hook raising +message+ at +id+ the first +times+ times it is asked.
+  def flaky(id, times, message = "HTTP 503 for https://up.example/#{id}")
+    left = { id => times }
+    lambda do |asked|
+      next unless left.fetch(asked, 0).positive?
+
+      left[asked] -= 1
+      raise Nabu::FetchError, message
+    end
+  end
+
+  def test_a_transient_failure_backs_off_and_resumes_the_same_lane
+    slept = []
+    summary = runner({ "books" => engine(universe: %w[a b c d], hook: flaky("b", 2)) },
+                     sleeper: ->(seconds) { slept << seconds }).run!
+
+    assert_equal "cone end — every lane exhausted", summary.stop_reason
+    assert_equal %w[a b c d], @held.keys.sort, "the lane resumed and finished the cone"
+    retries = log_lines.grep(/ RETRY /)
+    assert_equal 2, retries.size
+    assert_match(%r{RETRY alpha/books: transient failure 1/10 \(HTTP 503 for https://up\.example/b\) — waiting 1m00s},
+                 retries[0])
+    assert_match(%r{transient failure 2/10 .* waiting 2m00s, then resuming the lane}, retries[1])
+    assert_in_delta 180.0, slept.sum - 0.01, 1e-6, "60 s then 120 s of backoff (plus the lane-opening pace)"
+  end
+
+  def test_the_backoff_resets_after_a_request_that_answers
+    hook_b = flaky("b", 2)
+    hook_d = flaky("d", 1)
+    runner({ "books" => engine(universe: %w[a b c d e f], hook: ->(id) { hook_b.call(id) || hook_d.call(id) }) }).run!
+    waits = log_lines.grep(/ RETRY /).map { |text| text[/waiting (\S+),/, 1] }
+    assert_equal %w[1m00s 2m00s 1m00s], waits, "b's answer reset the streak before d failed"
+  end
+
+  def test_ten_consecutive_transient_failures_are_fatal_and_the_wait_caps_at_fifteen_minutes
+    slept = []
+    summary = runner({ "books" => engine(universe: %w[a b c], hook: flaky("b", 99)) },
+                     sleeper: ->(seconds) { slept << seconds }).run!
+
+    assert_match(/\Afatal: Nabu::FetchError: HTTP 503 for .*b \(10 consecutive transient failures — giving up\)/,
+                 summary.stop_reason)
+    waits = log_lines.grep(/ RETRY /).map { |text| text[/waiting (\S+),/, 1] }
+    assert_equal %w[1m00s 2m00s 4m00s 8m00s 15m00s 15m00s 15m00s 15m00s 15m00s], waits
     assert_match(/SUMMARY alpha: .* — fatal: Nabu::FetchError/, log_lines.last)
     refute File.exist?(@paths.pid)
+  end
+
+  def test_a_rate_limit_stays_fatal_at_once
+    summary = runner({ "books" => engine(universe: %w[a b], hook: flaky("b", 1, "HTTP 429 for https://up.example/b")) })
+              .run!
+    assert_match(/\Afatal: Nabu::FetchError: HTTP 429/, summary.stop_reason)
+    assert_empty log_lines.grep(/ RETRY /)
+  end
+
+  def test_a_stop_request_interrupts_a_backoff_wait_at_once
+    slept = []
+    sleeper = lambda do |seconds|
+      slept << seconds
+      File.write(@paths.stop, "") if slept.size == 4 # inside the 60 s backoff
+    end
+    summary = runner({ "books" => engine(universe: %w[a b c], hook: flaky("b", 5)) }, sleeper: sleeper).run!
+
+    assert_equal "stop requested", summary.stop_reason
+    assert_equal 4, slept.size, "the wait ended at the first step after the stop flag"
+    assert_equal 1, log_lines.grep(/ RETRY /).size
+  end
+
+  def test_the_transient_classifier
+    transient = ["HTTP 503 for https://x/1", "HTTP 502 for https://x/1",
+                 "transport error for https://x/1: Connection reset by peer",
+                 "transport error for https://x/1: execution expired",
+                 "transport error for https://x/1: Failed to open TCP connection to x:443 (Connection refused)",
+                 "transport error for https://x/1: end of file reached"]
+    fatal = ["HTTP 429 for https://x/1", "HTTP 404 for https://x/1", "HTTP 403 for https://x/1",
+             "unreadable census: bad tsv"]
+    transient.each { |message| assert T.transient?(Nabu::FetchError.new(message)), message }
+    fatal.each { |message| refute T.transient?(Nabu::FetchError.new(message)), message }
+    refute T.transient?(Nabu::ParseError.new("HTTP 503 for https://x/1")), "only fetch errors are upstream's"
+  end
+
+  # -- the progress heartbeat ------------------------------------------------
+
+  def test_a_beat_line_every_ten_requests_inside_a_slice
+    universe = (1..25).map { |n| format("id%02d", n) }
+    runner({ "books" => engine(universe: universe, refused: %w[id03 id04], slice: 25) }).run!
+
+    beats = log_lines.grep(/ BEAT /)
+    assert_equal 2, beats.size, "requests 10 and 20 of the 25-request slice"
+    assert_match(/\A\S+Z BEAT /, beats[0])
+    assert_match(%r{BEAT alpha/books #1: 10 request\(s\) this slice, \+8 held this slice, held 8, remaining 15\z},
+                 beats[0])
+    assert_match(%r{BEAT alpha/books #1: 20 request\(s\) this slice, \+18 held this slice, held 18, remaining 5\z},
+                 beats[1])
+    slice = log_lines.index { |text| text.include?(" SLICE ") }
+    assert(log_lines.index(beats[1]) < slice, "the beats land before the slice's own line")
   end
 
   def test_every_lane_is_crawled_in_turn
@@ -272,8 +372,23 @@ class TrickleTest < Minitest::Test
     out = StringIO.new
     T::Control.status(dir: dir, out: out, alive: ->(pid) { pid == 777 })
     lines = out.string.lines(chomp: true)
-    assert_match(/\Aalpha: RUNNING \(pid 777\) — held 2, remaining 4; last: t2 SLICE/, lines[0])
-    assert_match(/\Abeta: finished — held 6, remaining 0; last: t3 SUMMARY beta/, lines[1])
-    assert_match(/\Agamma: DIED \(pid 888 gone, no SUMMARY line\) — held 1, remaining 9; last: t4 SLICE/, lines[2])
+    assert_match(/\Aalpha: RUNNING \(pid 777\) — held 2, remaining 4 \(as logged\); last: t2 SLICE/, lines[0])
+    assert_match(/\Abeta: finished — held 6, remaining 0 \(as logged\); last: t3 SUMMARY beta/, lines[1])
+    assert_match(/\Agamma: DIED \(pid 888 gone, no SUMMARY line\) — held 1, remaining 9 \(as logged\); last: t4 SLICE/,
+                 lines[2])
+  end
+
+  def test_status_counts_held_and_remaining_from_disk_not_the_last_log_line
+    FileUtils.mkdir_p(@paths.dir)
+    File.write(@paths.pid, "777")
+    File.write(@paths.log, "t1 START alpha/books (pid 777): held 1, remaining 5 — delay 30.0s/request, slice 60\n")
+    @held.merge!("a" => true, "b" => true, "c" => true) # the running slice has landed two more since START
+    engines = { "books" => engine(universe: %w[a b c d e f]) }
+    out = StringIO.new
+    T::Control.status(dir: @paths.dir, out: out, alive: ->(pid) { pid == 777 },
+                      counts: ->(slug) { T::Control.disk_counts(engines) if slug == "alpha" })
+    assert_equal "alpha: RUNNING (pid 777) — held 3, remaining 3 (on disk); last: t1 START alpha/books (pid 777): " \
+                 "held 1, remaining 5 — delay 30.0s/request, slice 60\n", out.string
+    assert_nil T::Control.disk_counts({})
   end
 end

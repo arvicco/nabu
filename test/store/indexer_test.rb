@@ -1537,8 +1537,14 @@ module Store
         mod.define_singleton_method(:merge_chunk!, original)
       end
 
-      assert_equal Nabu::Store::Indexer.governed_fts_tables(@fulltext).size, chunks,
-                   "the sync path runs exactly one probe chunk per governed table"
+      # The probe: one chunk per governed table. Before it, the eager
+      # consolidation (REWRITE_CEILING note) saw passages_fts's level 0
+      # past the governor's limit and ran the governor's relief — whose
+      # stall detection stops at the first chunk that reports no work.
+      assert_equal Nabu::Store::Indexer.governed_fts_tables(@fulltext).size + 1, chunks,
+                   "one stalled eager-relief chunk, then exactly one probe chunk per governed table"
+      assert(spy.stages.any? { |label| label.match?(/fts governor: passages_fts — level 0 at \d+ segments/) },
+             "the eager relief is announced (#{spy.stages.inspect})")
       line = spy.notes.find { |note| note.include?("passages_fts") }
       assert_match(/merge debt.*run nabu index maintain/, line.to_s, "the debt is reported (#{spy.notes.inspect})")
     end
@@ -2670,9 +2676,11 @@ module Store
     # -- above-budget rewrites become shadow builds (the incrementality review)
     # In-place fts churn is what the engine is pathological at: tombstones
     # plus re-inserts leave merge debt it repays inside arbitrary later
-    # statements. Past IN_PLACE_ROW_BUDGET rows, a lane's new content is
+    # statements. Past REWRITE_CEILING rows DELETED (passages_fts) or
+    # IN_PLACE_ROW_BUDGET rows written (trigram), a lane's new content is
     # built as an APPEND-ONLY shadow and swapped in whole — the old
-    # structure is dropped, never churned. Below it, in place as before.
+    # structure is dropped, never churned. Below it, in place as before
+    # (test/store/fts_write_path_test.rb pins the classifier itself).
 
     # Two sources, both indexed; "s" then mutates (add + revise + withdraw).
     def shadow_fixture(also: nil)
@@ -2697,8 +2705,9 @@ module Store
       Nabu::Store::Passage.first(urn: "urn:d:s:3").update(withdrawn: true)
     end
 
-    # The slice key set of "s" is 4 rows after the mutation.
-    def test_a_rewrite_at_the_budget_stays_in_place
+    # The slice key set of "s" is 4 rows after the mutation, 3 of them
+    # indexed: the run deletes 3 rows and writes 3 (s:1, s:2, s:4).
+    def test_a_rewrite_at_the_ceiling_stays_in_place
       doc = shadow_fixture
       mutate_shadow_fixture(doc)
       # The discriminator: a tampered row of ANOTHER source. In place, the
@@ -2706,13 +2715,16 @@ module Store
       tampered = passage_id_of("urn:d:lit:2")
       fts.where(rowid: tampered).delete
       spy = BulkSpy.new
-      refresh!(row_budget: 4, fuzzy_slugs: %w[s lit], progress: spy)
+      refresh!(rewrite_ceiling: 3, fuzzy_slugs: %w[s lit], progress: spy)
 
-      refute_includes fts_rowids(@fulltext), tampered, "at the budget the write stays in place"
-      refute(spy.stages.any? { |line| line.include?("shadow") }, "no shadow is announced (#{spy.stages.inspect})")
+      refute_includes fts_rowids(@fulltext), tampered, "at the ceiling the write stays in place"
+      refute(spy.stages.any? { |line| line.include?("shadow build") },
+             "no shadow build is announced (#{spy.stages.inspect})")
+      assert_includes spy.stages, "fts write path: s — rewrite (3 written, 3 deleted; forecast rewrite unpriced " \
+                                  "vs shadow unpriced)"
     end
 
-    def test_a_rewrite_over_the_budget_builds_a_shadow_identical_to_the_in_place_run
+    def test_a_rewrite_over_the_ceiling_builds_a_shadow_identical_to_the_in_place_run
       in_place = Nabu::Store.connect_fulltext("sqlite::memory:")
       begin
         doc = shadow_fixture(also: in_place)
@@ -2720,7 +2732,7 @@ module Store
         Nabu::Store::Indexer.refresh_source!(catalog: @catalog, fulltext: in_place, slug: "s",
                                              fuzzy_slugs: %w[s lit])
         spy = BulkSpy.new
-        refresh!(row_budget: 3, fuzzy_slugs: %w[s lit], progress: spy)
+        refresh!(row_budget: 3, rewrite_ceiling: 2, fuzzy_slugs: %w[s lit], progress: spy)
 
         assert(spy.stages.any? { |line| line.include?("shadow build") },
                "the shadow is announced (#{spy.stages.inspect})")
@@ -2745,7 +2757,7 @@ module Store
       mutate_shadow_fixture(doc)
       tampered = passage_id_of("urn:d:lit:2")
       fts.where(rowid: tampered).delete
-      refresh!(row_budget: 0)
+      refresh!(row_budget: 0, rewrite_ceiling: 0)
 
       assert_includes fts_rowids(@fulltext), tampered,
                       "the shadow indexes every sidecar-recorded row, not just the refreshed source's"
@@ -2768,7 +2780,7 @@ module Store
       mutate_shadow_fixture(doc)
       row_shas.where(source_id: literary_source.id).delete # a slice indexed before the sidecar existed
       spy = BulkSpy.new
-      refresh!(row_budget: 0, progress: spy)
+      refresh!(row_budget: 0, rewrite_ceiling: 0, progress: spy)
 
       assert(spy.stages.any? { |line| line.include?("sidecar incomplete") },
              "the fallback is announced (#{spy.stages.inspect})")
@@ -2834,7 +2846,7 @@ module Store
       wave_fixture
       with_ledger do |ledger|
         spy = BulkSpy.new([])
-        counts = refresh_wave!(%w[s lit], row_budget: 2, ledger: ledger, progress: spy)
+        counts = refresh_wave!(%w[s lit], row_budget: 2, rewrite_ceiling: 1, ledger: ledger, progress: spy)
 
         assert_equal({ "s" => 3, "lit" => 3 }, counts, "each member reports its own live count")
         assert_equal 1, shadow_stage_rows(ledger).size, "ONE fts_shadow stage for the whole wave"
@@ -2853,10 +2865,11 @@ module Store
     def test_a_wave_whose_union_is_over_budget_takes_the_one_shadow_path
       wave_fixture
       with_ledger do |ledger|
-        # s writes 4 slice keys, lit 3: each under the 5-row budget, 7 together over it.
-        refresh_wave!(%w[s lit], row_budget: 5, ledger: ledger)
+        # s deletes its 3 indexed rows, lit its 2: each at or under the
+        # 4-row ceiling, 5 together past it.
+        refresh_wave!(%w[s lit], rewrite_ceiling: 4, ledger: ledger)
 
-        assert_equal 1, shadow_stage_rows(ledger).size, "the union crossed the budget — one shadow"
+        assert_equal 1, shadow_stage_rows(ledger).size, "the union crossed the ceiling — one shadow"
       end
       assert_identical_to_a_fresh_rebuild
     end
@@ -2865,9 +2878,9 @@ module Store
       wave_fixture
       tampered = passage_id_of("urn:d:s:1")
       with_ledger do |ledger|
-        refresh_wave!(%w[s lit], row_budget: 7, ledger: ledger)
+        refresh_wave!(%w[s lit], rewrite_ceiling: 5, ledger: ledger)
 
-        assert_empty shadow_stage_rows(ledger), "7 rows at the 7-row budget stay in place"
+        assert_empty shadow_stage_rows(ledger), "5 deleted rows at the 5-row ceiling stay in place"
       end
       assert_equal %w[urn:d:lit:3], match_urns("τριηρησ")
       assert_includes fts_rowids(@fulltext), tampered
@@ -2876,7 +2889,7 @@ module Store
     def test_a_one_slug_wave_is_the_plain_refresh
       wave_fixture
       with_ledger do |ledger|
-        counts = refresh_wave!(%w[s], row_budget: 2, ledger: ledger)
+        counts = refresh_wave!(%w[s], rewrite_ceiling: 2, ledger: ledger)
 
         assert_equal({ "s" => 3 }, counts)
         assert_equal ["s"], shadow_stage_rows(ledger).map { |row| row[:scope] },
@@ -2890,7 +2903,7 @@ module Store
       xdoc = make_document(urn: "urn:d:x", source: third)
       make_passage(xdoc, urn: "urn:d:x:1", text_normalized: "ξενοσ", sequence: 0, sha: sha_hex("ξ"))
       refresh!(slug: "x")
-      refresh_wave!(%w[s lit], row_budget: 2)
+      refresh_wave!(%w[s lit], rewrite_ceiling: 2)
 
       assert_equal %w[urn:d:x:1], match_urns("ξενοσ"), "a non-member's recorded rows survive the swap"
       assert_identical_to_a_fresh_rebuild
@@ -2905,7 +2918,7 @@ module Store
       row_shas.where(source_id: third.id).delete # a slice indexed before the sidecar existed
       spy = BulkSpy.new([])
       with_ledger do |ledger|
-        refresh_wave!(%w[s lit], row_budget: 2, ledger: ledger, progress: spy)
+        refresh_wave!(%w[s lit], rewrite_ceiling: 2, ledger: ledger, progress: spy)
 
         assert_empty shadow_stage_rows(ledger), "no shadow could name x's membership"
       end
@@ -2929,7 +2942,7 @@ module Store
         real.call(**kwargs)
       end
       begin
-        assert_raises(Nabu::Error) { refresh_wave!(%w[s lit], row_budget: 2) }
+        assert_raises(Nabu::Error) { refresh_wave!(%w[s lit], rewrite_ceiling: 2) }
       ensure
         Nabu::Store::Indexer.define_singleton_method(:refresh_source!, real)
       end
@@ -2937,14 +2950,14 @@ module Store
       assert_equal %w[urn:d:lit:3], match_urns("τριηρησ"),
                    "the swapped index is AHEAD for the member that never ran — never behind"
       assert Nabu::Store::Indexer.slice_pending?(@fulltext, "lit"), "the unrun member reads pending"
-      refresh_wave!(%w[s lit], row_budget: 2)
+      refresh_wave!(%w[s lit], rewrite_ceiling: 2)
       assert_identical_to_a_fresh_rebuild
     end
 
     def test_a_wave_member_already_pending_heals_inside_the_wave
       wave_fixture
       Nabu::Store::Indexer.mark_slice_pending!(@fulltext, "lit", shape: "atomic")
-      refresh_wave!(%w[s lit], row_budget: 2)
+      refresh_wave!(%w[s lit], rewrite_ceiling: 2)
 
       refute Nabu::Store::Indexer.slice_pending?(@fulltext, "lit")
       assert_identical_to_a_fresh_rebuild
@@ -2958,33 +2971,33 @@ module Store
     # so the deadline can price it before the writer starts. Each test
     # pins the forecast to what the run then actually does.
 
-    def forecast(slugs, row_budget:)
+    def forecast(slugs, rewrite_ceiling:, ledger: nil)
       Nabu::Store::Indexer.fts_shadow_forecasts(catalog: @catalog, fulltext: @fulltext, slugs: slugs,
-                                                row_budget: row_budget)
+                                                rewrite_ceiling: rewrite_ceiling, ledger: ledger)
     end
 
     def test_the_forecast_predicts_a_single_sources_shadow_and_its_size
       doc = shadow_fixture
       mutate_shadow_fixture(doc)
-      predicted = forecast(%w[s], row_budget: 3)
+      predicted = forecast(%w[s], rewrite_ceiling: 2)
 
       assert_equal [["s", %w[s], 5]], predicted.map { |f| [f.scope, f.slugs, f.rows] },
                    "lit's 2 recorded rows + s's 3 live rows (the withdrawn one excluded)"
       with_ledger do |ledger|
-        refresh!(row_budget: 3, ledger: ledger)
+        refresh!(rewrite_ceiling: 2, ledger: ledger)
 
         assert_equal [["s", 5]], shadow_stage_rows(ledger).map { |row| [row[:scope], row[:rows]] },
                      "the run took the predicted shadow and ledgered its row count"
       end
     end
 
-    def test_the_forecast_predicts_no_shadow_at_the_budget
+    def test_the_forecast_predicts_no_shadow_at_the_ceiling
       doc = shadow_fixture
       mutate_shadow_fixture(doc)
 
-      assert_empty forecast(%w[s], row_budget: 4)
+      assert_empty forecast(%w[s], rewrite_ceiling: 3)
       with_ledger do |ledger|
-        refresh!(row_budget: 4, ledger: ledger)
+        refresh!(rewrite_ceiling: 3, ledger: ledger)
 
         assert_empty shadow_stage_rows(ledger)
       end
@@ -2995,33 +3008,34 @@ module Store
       mutate_shadow_fixture(doc)
       row_shas.where(source_id: literary_source.id).delete
 
-      assert_empty forecast(%w[s], row_budget: 0), "the run writes in place under the governor instead"
+      assert_empty forecast(%w[s], rewrite_ceiling: 0), "the run writes in place under the governor instead"
     end
 
     def test_the_forecast_predicts_the_waves_one_corpus_scoped_shadow
       wave_fixture
-      predicted = forecast(%w[s lit], row_budget: 5)
+      predicted = forecast(%w[s lit], rewrite_ceiling: 4)
 
       assert_equal([["corpus", %w[s lit], 6]], predicted.map { |f| [f.scope, f.slugs, f.rows] })
       with_ledger do |ledger|
-        refresh_wave!(%w[s lit], row_budget: 5, ledger: ledger)
+        refresh_wave!(%w[s lit], rewrite_ceiling: 4, ledger: ledger)
 
         assert_equal([["corpus", 6]], shadow_stage_rows(ledger).map { |row| [row[:scope], row[:rows]] })
       end
     end
 
-    def test_the_forecast_predicts_no_shadow_for_a_wave_under_budget
+    def test_the_forecast_predicts_no_shadow_for_a_wave_under_the_ceiling
       wave_fixture
 
-      assert_empty forecast(%w[s lit], row_budget: 7)
+      assert_empty forecast(%w[s lit], rewrite_ceiling: 5)
     end
 
     def test_the_forecast_reads_a_pending_members_heal_volume
       wave_fixture
       Nabu::Store::Indexer.mark_slice_pending!(@fulltext, "lit", shape: "atomic")
-      # lit heals by its exact diff (one unindexed row), s rewrites its 4 keys.
-      assert_empty forecast(%w[s lit], row_budget: 5), "4 + 1 heal rows stay under the 5-row budget"
-      assert_equal %w[corpus], forecast(%w[s lit], row_budget: 4).map(&:scope)
+      # lit heals by its exact diff (one never-indexed row — nothing to
+      # delete), s deletes its 3 indexed rows.
+      assert_empty forecast(%w[s lit], rewrite_ceiling: 3), "3 + 0 deleted rows stay at the 3-row ceiling"
+      assert_equal %w[corpus], forecast(%w[s lit], rewrite_ceiling: 2).map(&:scope)
     end
   end
 end

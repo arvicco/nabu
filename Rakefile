@@ -56,11 +56,20 @@ namespace :fixtures do
     $LOAD_PATH.unshift(File.expand_path("lib", __dir__))
     require "nabu"
 
+    require_relative "lib/nabu/ops/proof_cadence"
     sentinel = Nabu::FixtureSentinel.new
     sources = args[:source] ? [args[:source]] : sentinel.sources
     results = sources.map { |source| sentinel.check(source) }
     results.each { |result| print_check_report(result) }
     abort "fixtures:check found drift or fetch/adapter-test failures" unless results.all?(&:ok?)
+
+    # The cadence stamp (Nabu::Ops::ProofCadence): only a clean FULL run
+    # re-proves the sentinel — a single-source check stamps nothing.
+    next if args[:source]
+
+    stamp = Nabu::Ops::ProofCadence.record!(local_dir: Nabu::Config.load.local_dir, proof: "fixtures-check",
+                                            detail: "#{results.size} source(s) clean")
+    puts "fixtures:check — all #{results.size} source(s) clean; cadence stamped at #{stamp}"
   end
 
   desc "Re-fetch and OVERWRITE checked-in fixtures for a source (explicit adoption)"
@@ -95,6 +104,31 @@ namespace :ops do
   task drill_pure: :drill
 end
 
+# The online db snapshot (Nabu::Ops::DbSnapshot — its class comment holds
+# the WAL reasoning and the RESTORE procedure): every db/*.sqlite3 through
+# VACUUM INTO, never a file copy. Owner-fired; refuses a missing/non-writable
+# or occupied target and an in-progress rebuild.
+namespace :db do
+  desc "Snapshot every db/*.sqlite3 into TARGET_DIR via VACUUM INTO (online, WAL-safe; " \
+       "a CACHE of derived state — restore per Nabu::Ops::DbSnapshot) (db:snapshot[target_dir])"
+  task :snapshot, %i[target_dir] do |_t, args|
+    $LOAD_PATH.unshift(File.expand_path("lib", __dir__))
+    require "nabu"
+    require "nabu/ops/db_snapshot"
+
+    config = Nabu::Config.load
+    rebuild_check = lambda do
+      ledger = File.file?(config.history_path) ? Nabu::Store.connect(config.history_path, readonly: true) : nil
+      Nabu::Ops::DbSnapshot.rebuild_in_progress(ledger: ledger, ps_output: Nabu::Ops::GitHooks.ps_output)
+    ensure
+      ledger&.disconnect
+    end
+    Nabu::Ops::DbSnapshot.new(db_dir: config.db_dir, target: args[:target_dir], rebuild_check: rebuild_check).run!
+  rescue Nabu::Ops::DbSnapshot::Refused => e
+    abort "db:snapshot refused — #{e.message}"
+  end
+end
+
 # The drill's harness discipline (P77-r12, after the 2026-08-15 night the
 # owner reconstructed from a 724-byte log and 521 GB of leaked tmp):
 # - every run logs to its OWN timestamped file under ~/Library/Logs/nabu/
@@ -110,6 +144,7 @@ def run_drill
   $LOAD_PATH.unshift(File.expand_path("lib", __dir__))
   require "nabu"
   require "tmpdir"
+  require_relative "lib/nabu/ops/proof_cadence"
 
   log_path = drill_log_path
   File.open(log_path, "w") do |log_file|
@@ -155,6 +190,11 @@ def run_drill
       say.call "drill workspace kept at #{workspace} (report.txt · verify-issues.tsv · the restored machine/)"
     end
     abort "ops:drill FAILED — db/ does NOT fully derive from the three folders (see #{log_path})" unless report.ok?
+
+    # The cadence stamp (Nabu::Ops::ProofCadence): a passing drill only.
+    stamp = Nabu::Ops::ProofCadence.record!(local_dir: config.local_dir, proof: "ops-drill",
+                                            detail: "derivation proven; log #{log_path}")
+    say.call "drill cadence stamped at #{stamp}"
   end
 end
 
@@ -266,6 +306,28 @@ namespace :stamps do
     begin
       Nabu::Ops::StampRebless.new(config: config, registry: registry)
                              .run(attestation: args[:attestation])
+    rescue Nabu::Error => e
+      abort e.message
+    end
+  end
+
+  # The BY-PROOF sibling (Nabu::Ops::StampProof): for semantic no-op
+  # refactors (pure moves) that dirty every stamp. Each DIRTY source whose
+  # drift is code-only re-parses a deterministic stratified sample through
+  # current code WITHOUT writing the catalog; byte-identical => that
+  # source's stamp is reblessed, any divergence => it stays dirty, named.
+  # Never fetches. Its own attestation: canonical unchanged since stamping.
+  desc "Rebless dirty stamps proven by a re-parse sample (owner-only; requires attestation[,sample])"
+  task :rebless_by_proof, %i[attestation sample] do |_task, args|
+    $LOAD_PATH.unshift(File.expand_path("lib", __dir__))
+    require "nabu"
+
+    $stdout.sync = true
+    config = Nabu::Config.load
+    registry = Nabu::SourceRegistry.load(config.sources_path)
+    begin
+      Nabu::Ops::StampProof.new(config: config, registry: registry)
+                           .run(attestation: args[:attestation], sample: args[:sample])
     rescue Nabu::Error => e
       abort e.message
     end
@@ -587,6 +649,28 @@ namespace :outreach do
 
     puts "outreach:swh — #{report.rows.size} repos saved/queued at archive.softwareheritage.org"
   end
+
+  # The channel-surface probe (Nabu::Ops::OutreachProbe): informational,
+  # never fails on an unmet expectation — the table IS the product.
+  desc "Probe the outreach channel surfaces from .docs/outreach/probes.yml; one delta line per probe. " \
+       "Rows (a top-level `probes:` list): {name, kind: http, url, expect: 200|\"substring\"} · " \
+       "{name, kind: registry, q, expect?: \"name substring\"} · " \
+       "{name, kind: gh_pr|gh_issue, repo: owner/repo, number, expect?: OPEN|MERGED|CLOSED}; " \
+       "the previous run's observations live beside it in probes-last.yml (the delta)"
+  task :probe do
+    require_relative "lib/nabu/ops/outreach_probe"
+    dir = ENV.fetch("BOARDS_DIR", File.expand_path(".docs", __dir__))
+    report = Nabu::Ops::OutreachProbe.new(boards_dir: dir).run
+    if report.skipped
+      puts "outreach:probe — no #{Nabu::Ops::OutreachProbe::FILE} under #{dir} (a public clone or a worktree); skipped"
+      next
+    end
+    report.results.each { |result| puts "  #{result.line}" }
+    puts "outreach:probe — #{report.results.size} probe(s): #{report.changed} changed, " \
+         "#{report.unmet} expectation(s) not met"
+  rescue Nabu::Ops::OutreachProbe::ProbeError => e
+    abort "outreach:probe — #{e.message}"
+  end
 end
 
 # The documented command flows EXECUTED, not proofread
@@ -617,6 +701,9 @@ end
 # And the declared-rule liveness probe (Nabu::Ops::RuleLivenessCheck): a
 # lect facet rule whose source holds live documents but which never
 # compiled a journal row fails, named; no catalog/journal skips.
+# And the standing-proof cadence probe (Nabu::Ops::ProofCadence): ops:drill
+# and a full fixtures:check each stamp local/proofs/<proof>.yml on success;
+# either unstamped or older than 60 days fails, named; no local/proofs/ skips.
 # And the incident-register status probe (Nabu::Ops::IncidentRegisterCheck):
 # every incident row's (`## <sigil>I-n ·`) bracketed suffix must carry OPEN, CLOSED,
 # FIX-STAGED or MITIGATED — a row without one fails, named; no register skips.
@@ -633,6 +720,7 @@ namespace :boards do
     require_relative "lib/nabu/ops/rule_liveness_check"
     require_relative "lib/nabu/ops/incident_register_check"
     require_relative "lib/nabu/ops/decision_register_check"
+    require_relative "lib/nabu/ops/proof_cadence"
     dir = ENV.fetch("BOARDS_DIR", File.expand_path(".docs", __dir__))
     report = Nabu::Ops::BoardCheck.new(boards_dir: dir).run
     if report.skipped
@@ -659,9 +747,11 @@ namespace :boards do
     ).run
     decisions.findings.each { |finding| puts "STALE  decision register #{finding}" }
 
+    require_relative "lib/nabu/ops/rail_plan"
     acquisition = Nabu::Ops::AcquisitionCheck.new(
       boards_dir: dir, adapters_dir: File.expand_path("lib/nabu/adapters", __dir__),
-      ledger_path: File.expand_path("local/history.sqlite3", __dir__)
+      ledger_path: File.expand_path("local/history.sqlite3", __dir__),
+      suspensions: Nabu::Ops::RailPlan.suspensions(Nabu::SourceRegistry.load(Nabu::Config.load.sources_path))
     ).run
     acquisition.findings.each { |finding| puts "STALE  acquisition #{finding}" }
 
@@ -682,6 +772,9 @@ namespace :boards do
     ).run
     liveness.findings.each { |finding| puts "STALE  rule liveness #{finding}" }
 
+    cadence = Nabu::Ops::ProofCadence::Check.new(local_dir: File.expand_path("local", __dir__)).run
+    cadence.findings.each { |finding| puts "STALE  proof cadence #{finding}" }
+
     failures = []
     failures << "#{report.findings.size} stale register header(s)" unless report.clean?
     failures << "#{watch.findings.size} stale GH watch row(s)" unless watch.clean?
@@ -692,6 +785,7 @@ namespace :boards do
     failures << "#{groom.findings.size} ungroomed queue row(s)" unless groom.clean?
     failures << "#{readiness.findings.size} never-synced source(s)" unless readiness.clean?
     failures << "#{liveness.findings.size} never-compiled lect rule(s)" unless liveness.clean?
+    failures << "#{cadence.findings.size} overdue standing proof(s)" unless cadence.clean?
     abort "boards:check — #{failures.join(', ')}" unless failures.empty?
 
     puts "boards:check — #{report.registers.size} register header(s) current: #{report.registers.join(', ')}"
@@ -712,13 +806,20 @@ namespace :boards do
     else
       puts "boards:check — #{incidents.rows} incident row(s) each carry a status token"
     end
-    puts "boards:check — acquisition duties current (segment named, rail fresh)" if acquisition.clean?
+    puts "boards:check — acquisition duties current (segment named, rail fresh, roster suspensions match)" if
+      acquisition.clean?
     puts "boards:check — #{groom.summary} (phase-register cross-check clean)" unless groom.skipped
     puts "boards:check — every registered source has ledger runs (readiness probe clean)" unless readiness.skipped
     if liveness.skipped
       puts "boards:check — no catalog/lect journal/rules on this box; rule-liveness probe skipped"
     else
       puts "boards:check — #{liveness.rules} declared lect rule(s) live (rule-liveness probe clean)"
+    end
+    if cadence.skipped
+      puts "boards:check — no local/#{Nabu::Ops::ProofCadence::DIRNAME}/ on this box; proof-cadence probe skipped"
+    else
+      stamps = cadence.stamps.map { |proof, date| "#{proof} #{date.iso8601}" }.join(", ")
+      puts "boards:check — standing proofs run within #{Nabu::Ops::ProofCadence::MAX_AGE_DAYS} days: #{stamps}"
     end
   end
 end
@@ -962,6 +1063,38 @@ end
 # The standalone corpus-wide builder pass (P104; owner rule 2026-09-26:
 # rebuilds are owner-fired INTER-PHASE steps — a phase's builder-side
 # changes refresh projections through this task, never via a rebuild).
+# The O(1) library accounting (Store::SourceAggregates, migration 054):
+# the one-time population of an existing live catalog. Counts are
+# recounted from the catalog (one documents scan + one passages-join scan
+# — minutes at full-library scale, the migration-019 backfill's price);
+# the fulltext columns come from the index file's own finish stamps,
+# pending markers and O(1) behind probes (read-only on the index). Every
+# later write keeps the table current; `nabu rebuild` re-derives it.
+namespace :aggregates do
+  desc "Backfill the per-source O(1) accounting table (source_aggregates) from the live catalog + index"
+  task :backfill do
+    $LOAD_PATH.unshift(File.expand_path("lib", __dir__))
+    require "nabu"
+
+    config = Nabu::Config.load
+    catalog = Nabu::Store.connect(config.catalog_path)
+    abort "aggregates:backfill — catalog predates migration 054 (run a sync or rebuild first)" \
+      unless Nabu::Store::SourceAggregates.available?(catalog)
+
+    fulltext = (Nabu::Store.connect_fulltext(config.fulltext_path, readonly: true) if File.exist?(config.fulltext_path))
+    started = Process.clock_gettime(Process::CLOCK_MONOTONIC)
+    rows = Nabu::Store::SourceAggregates.backfill!(catalog: catalog, fulltext: fulltext)
+    totals = Nabu::Store::SourceAggregates.rollup(catalog)
+    elapsed = Process.clock_gettime(Process::CLOCK_MONOTONIC) - started
+    puts "aggregates:backfill done — #{rows} sources · #{totals.fetch(:documents_count)} documents · " \
+         "#{totals.fetch(:passages_count)} passages · #{totals.fetch(:behind_sources)} behind in " \
+         "#{Object.new.extend(Nabu::DurationFormat).format_duration(elapsed)}"
+  ensure
+    catalog&.disconnect
+    fulltext&.disconnect
+  end
+end
+
 namespace :builders do
   # Verbose (Ops::StageGuide — the intro + one green line per stage):
   # `rake builders:refresh[verbose]` or `rake --verbose builders:refresh`.
@@ -1134,13 +1267,43 @@ namespace :crawl do
   end
 end
 
+# The acquisition plan's park / re-check conditions as one batch of HTTP
+# state checks (Nabu::Ops::AcquisitionProbe — row shape in its class doc):
+# the probe list is the gitignored .docs/acquisition/probes.yml (absent =
+# announced skip; ACQUISITION_PROBES=path overrides). One request per row,
+# short timeout, no retries, ≤3 redirects; then the held-vs-searchable line
+# from the live dbs, read-only. Network; informational (never exits 1 on a
+# CHANGED row).
+namespace :acquisition do
+  desc "Probe the acquisition plan's park/re-check URLs (.docs/acquisition/probes.yml rows: " \
+       "name, url, expect = status code | any | body substring, note) + the held-vs-searchable delta"
+  task :probe do
+    $LOAD_PATH.unshift(File.expand_path("lib", __dir__))
+    require "nabu"
+    require "nabu/ops/acquisition_probe"
+
+    path = ENV.fetch("ACQUISITION_PROBES", File.expand_path(".docs/acquisition/probes.yml", __dir__))
+    if File.file?(path)
+      Nabu::Ops::AcquisitionProbe.new(rows: Nabu::Ops::AcquisitionProbe.load(path)).run
+    else
+      puts "acquisition:probe — no probe list at #{path} (a public clone or a worktree); probes skipped"
+    end
+    config = Nabu::Config.load
+    puts Nabu::Ops::AcquisitionProbe.searchable_delta(catalog_path: config.catalog_path,
+                                                      fulltext_path: config.fulltext_path)
+  rescue Nabu::Ops::AcquisitionProbe::Invalid => e
+    abort "acquisition:probe — #{e.message}"
+  end
+end
+
 # The phase's paced-crawl plan, generated from the adapters' own Schedule
 # declarations and the ledger's measured slice times (Nabu::Ops::RailPlan;
 # the 2026-11-13 hand-assembled chain over-run). Parallel lanes, one per
 # source; slices_per_phase is a cap; no budget = the caps-only view. The
 # `lane <slug> step N: <command>` lines are the machine-consumable plan;
 # each step is rail:step (the yield-guarded sync), and sources the crawl
-# ledger marks exhausted are skipped.
+# ledger marks exhausted, or whose Schedule declares `suspended:`, are
+# skipped (listed, the suspension with its reason).
 namespace :rail do
   desc "Print the phase's paced-crawl plan as parallel lanes (rail:plan[budget_minutes], budget optional)"
   task :plan, %i[budget] do |_t, args|
@@ -1230,7 +1393,18 @@ namespace :trickle do
     require "nabu/ops/trickle"
 
     config = Nabu::Config.load
-    Nabu::Ops::Trickle::Control.status(dir: File.join(config.local_dir, Nabu::Ops::Trickle::DIRNAME))
+    registry = Nabu::SourceRegistry.load(config.sources_path)
+    # held/remaining from DISK (the offline diagnosis the SUMMARY takes),
+    # never the log's last slice line — that freezes for a whole slice.
+    counts = lambda do |slug|
+      adapter = registry[slug]&.build_adapter
+      next nil unless adapter.respond_to?(:paced_crawls)
+
+      Nabu::Ops::Trickle::Control.disk_counts(adapter.paced_crawls(File.join(config.canonical_dir, slug)))
+    rescue Nabu::Error
+      nil
+    end
+    Nabu::Ops::Trickle::Control.status(dir: File.join(config.local_dir, Nabu::Ops::Trickle::DIRNAME), counts: counts)
   end
 end
 

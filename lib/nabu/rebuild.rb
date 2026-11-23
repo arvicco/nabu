@@ -355,6 +355,10 @@ module Nabu
                                         progress: progress,
                                         lemma_shelf: lemma_shelf,
                                         lemma_filter_slugs: @registry.lemma_filter_slugs)
+      # Migration 054: every live passage is indexed now — the O(1)
+      # accounting rows take their fulltext membership from the counts the
+      # replay + SourceStats.derive! just settled, and nothing is behind.
+      Store::SourceAggregates.index_rebuilt!(db)
       # P112-4: the index just rebuilt under the current index-core
       # code — mint its sentinel so an incremental run can skip the whole
       # index honestly until an index file actually changes.

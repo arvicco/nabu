@@ -391,6 +391,23 @@ module Nabu
       db&.disconnect
     end
 
+    # Write a transactionally consistent copy of the SQLite file at
+    # +source+ to +target+ with VACUUM INTO, through a READ-ONLY connect:
+    # the snapshot is one read transaction, so it sees committed pages
+    # only — whatever sits in the -wal included, nothing half-written —
+    # while live writers keep appending (the WAL verdict, class doc). A
+    # plain file copy of a WAL db is the documented trap: the main file
+    # alone lacks the frames still in the -wal, and a main file beside an
+    # outdated -wal replays old frames over it. +target+ must not exist
+    # (SQLite refuses a non-empty output file). The copy comes out in
+    # rollback-journal mode; the first read-write Store.connect re-arms WAL.
+    def vacuum_into!(source, target)
+      db = Sequel.connect(sqlite_url(source), readonly: true, timeout: BUSY_TIMEOUT_MS)
+      db.run("VACUUM INTO #{db.literal(target)}")
+    ensure
+      db&.disconnect
+    end
+
     # Refresh +db+'s query-planner statistics with a BOUNDED ANALYZE (class
     # doc / ops §10, P42-4): PRAGMA analysis_limit caps per-index sampling so
     # the pass stays bounded on a huge table, then ANALYZE rewrites
@@ -530,6 +547,7 @@ require_relative "store/lect_journal"
 require_relative "store/lect_facets"
 require_relative "store/artifact_scripts"
 require_relative "store/source_stats"
+require_relative "store/source_aggregates"
 require_relative "store/place_index"
 require_relative "store/person_index"
 require_relative "store/fts_structure"

@@ -109,9 +109,12 @@ At **every phase gate**, alongside the README/library.md truthfulness pass
    re-running the idempotent seed (`bin/nabu list
    --export-source-dossiers`), writing the missing description, or adding
    the shelf's library.md row.
-6. **News entry** (P19-3): every gate adds one dated post to
+6. **News entry** (P19-3; scope corrected 2026-11-23): a news post is
+   always the compression of EVERYTHING shipped since the PREVIOUS
+   post — never a single window's summary. Posts land at
    `site/news/_posts/` (`YYYY-MM-DD-slug.md`) — what shipped, honest
-   numbers with as-of dates, distilled from the gate's worklog line. The
+   numbers with as-of dates (headline figures through the census
+   SSOT, never literals). The
    Atom feed (`/feed.xml`, jekyll-feed) carries it on deploy; nothing else
    to do. Gates that cut a tagged release follow the fuller checklist in
    docs/ops.md §12 (CITATION.cff version/date bump, GitHub release, DOI).

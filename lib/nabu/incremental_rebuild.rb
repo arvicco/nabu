@@ -595,7 +595,7 @@ module Nabu
     # the full Indexer.rebuild! internally if the index file predates the
     # incremental tables (self-healing, still ≡ full).
     def refresh_index(db, fulltext, entry, progress = nil)
-      Store::Indexer.refresh_source!(
+      members = Store::Indexer.refresh_source!(
         catalog: db, fulltext: fulltext, slug: entry.slug,
         alignments: alignments, fuzzy_slugs: @registry.fuzzy_slugs,
         cjk_slugs: @registry.cjk_slugs,
@@ -604,6 +604,9 @@ module Nabu
         sign_list: Nabu::SignList.load_default(config: @config),
         progress: progress
       )
+      # Migration 054: the finished slice's membership, fts_behind cleared.
+      Store::SourceAggregates.index_refreshed!(db, slug: entry.slug, members: members)
+      members
     end
 
     # Timeline + facets have no per-source seam (class doc): whole-table
@@ -659,7 +662,7 @@ module Nabu
                               fuzzy_slugs: @registry.fuzzy_slugs, cjk_slugs: @registry.cjk_slugs,
                               lemma_tiers: @registry.lemma_tiers,
                               sign_list: Nabu::SignList.load_default(config: @config),
-                              progress: progress)
+                              progress: progress).tap { Store::SourceAggregates.index_rebuilt!(db) }
     end
 
     def alignments

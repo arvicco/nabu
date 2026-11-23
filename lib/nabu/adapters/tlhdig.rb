@@ -250,8 +250,11 @@ module Nabu
       HEADER_DATE = /\bdate="(\d{4}-\d\d-\d\d[^"]*)"/
       private_constant :HEADER_DATE
 
+      # The fixed-size prefix can end inside a multibyte character (and the
+      # BINARY read must be re-tagged before the scrub can fire): scrub the
+      # severed tail — the probe reads only ASCII dates, never the text.
       def latest_header_date(path)
-        header = File.open(path, "rb") { |io| io.read(8192).to_s }.force_encoding(Encoding::UTF_8)
+        header = File.open(path, "rb") { |io| io.read(8192).to_s }.force_encoding(Encoding::UTF_8).scrub("")
         header = header[%r{<AOHeader>.*?</AOHeader>}m] || ""
         header.scan(HEADER_DATE).flatten.max.to_s
       end

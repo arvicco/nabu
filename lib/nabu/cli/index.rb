@@ -68,10 +68,11 @@ module Nabu
       sources and whether their slice is behind the catalog.
 
       Several slugs refresh as ONE WAVE: one preflight, one supervised
-      writer, and — when the wave's slices together pass the in-place
-      row budget — ONE passages_fts shadow pass for all of them, instead
-      of one full-corpus pass per source. Name every deferred source due
-      in the same command.
+      writer, and — when the rows the wave's slices delete from the
+      index together pass the rewrite ceiling (1M) — ONE passages_fts
+      shadow pass for all of them, instead of one full-corpus pass per
+      source. A slice that deletes nothing (a new source) appends without
+      any shadow. Name every deferred source due in the same command.
 
       The preflight forecasts that shadow pass before the writer starts
       and prices it as its own stage (fts_shadow, from the ledger, else a
@@ -224,13 +225,18 @@ module Nabu
       # The refresh's predicted passages_fts shadow builds
       # (Store::Indexer.fts_shadow_forecasts), read through short
       # read-only handles before the writer opens; none without an index.
+      # The history ledger rides along so the write-path classifier's
+      # ledger-priced rewrite-vs-shadow flip is forecast as the run will
+      # decide it.
       def shadow_forecasts(config, slugs)
         return [] unless File.exist?(config.fulltext_path)
 
         catalog = Nabu::Store.connect(config.catalog_path, readonly: true)
         fulltext = Nabu::Store.connect_fulltext(config.fulltext_path, readonly: true)
-        Nabu::Store::Indexer.fts_shadow_forecasts(catalog: catalog, fulltext: fulltext, slugs: slugs)
+        ledger = Nabu::Store.connect(config.history_path, readonly: true) if File.exist?(config.history_path)
+        Nabu::Store::Indexer.fts_shadow_forecasts(catalog: catalog, fulltext: fulltext, slugs: slugs, ledger: ledger)
       ensure
+        ledger&.disconnect
         fulltext&.disconnect
         catalog&.disconnect
       end
@@ -272,8 +278,8 @@ module Nabu
       end
 
       # The wave (several slugs): one supervised writer over
-      # SyncRunner#index_entries — Store::Indexer.refresh_sources!, so an
-      # over-budget passages_fts write is ONE shadow pass for the wave.
+      # SyncRunner#index_entries — Store::Indexer.refresh_sources!, so a
+      # shadow-classified passages_fts write is ONE shadow pass for the wave.
       # The estimate and the kill's evidence span every member; the
       # watcher's hygiene leaves every member pending if the writer dies.
       def run_wave_refresh(config, registry, slugs, shadow: 0)
