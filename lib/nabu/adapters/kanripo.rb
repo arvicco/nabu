@@ -300,6 +300,7 @@ module Nabu
                 "cloned #{result.cloned.size} · refreshed #{result.refreshed.size} · " \
                 "skipped #{result.skipped} · absent #{result.absent.size}"
         notes += " · atticked #{result.atticked.size} upstream-deleted file(s)" unless result.atticked.empty?
+        notes += " · reset #{result.reset.size} rewritten-history text(s)" unless result.reset.empty?
         result.editions.each do |pass|
           notes += " · edition #{pass.ref}: in-scope #{pass.in_scope} · fetched #{pass.fetched.size} · " \
                    "absent #{pass.absent.size} · skipped #{pass.skipped} · missing #{pass.missing}"
