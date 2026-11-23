@@ -23,50 +23,52 @@ module Nabu
       #
       # So the refresh PREDICTS the shadow before it starts, from the very
       # state refresh_source!/refresh_sources! decide on: each member's
-      # slice volume (slice_plan's key set — the source's every passage on
-      # the whole-slice grain, the exact heal diff over a pending marker)
-      # against +row_budget+, the contentless shape, and shadow_ready?'s
-      # sidecar completeness; a wave over budget takes ONE corpus-scoped
-      # shadow, else each member decides alone. Returns one ShadowForecast
-      # per predicted build — +scope+ the ledger scope the build records
-      # under (the slug, or "corpus" for a wave), +slugs+ the refreshed
-      # sources it serves, +rows+ the rows the
-      # shadow will hold (the sidecar's rows outside the members plus the
-      # members' live rows: exactly what build_fts_shadow! writes). Empty
-      # when no shadow is coming. Read-only; whole-slice grain only (the
-      # `index refresh` shape — a sync's load delta is not known before
-      # its load, so the sync preflight never forecasts).
+      # write counts (fts_write_counts — rows written, rows the index holds
+      # among the doomed; the exact heal diff over a pending marker) run
+      # through the same classifier (fts_write_path) against
+      # +rewrite_ceiling+ and +ledger+'s priced forecast; a wave whose
+      # summed counts classify :shadow takes ONE corpus-scoped shadow, else
+      # each member decides alone. Returns one ShadowForecast per predicted
+      # build — +scope+ the ledger scope the build records under (the slug,
+      # or "corpus" for a wave), +slugs+ the refreshed sources it serves,
+      # +rows+ the rows the shadow will hold (the sidecar's rows outside the
+      # members plus the members' live rows: exactly what build_fts_shadow!
+      # writes). Empty when no shadow is coming. Read-only; whole-slice
+      # grain only (the `index refresh` shape — a sync's load delta is not
+      # known before its load, so the sync preflight never forecasts).
       ShadowForecast = Data.define(:scope, :slugs, :rows)
 
-      def fts_shadow_forecasts(catalog:, fulltext:, slugs:, row_budget: IN_PLACE_ROW_BUDGET)
+      def fts_shadow_forecasts(catalog:, fulltext:, slugs:, rewrite_ceiling: REWRITE_CEILING, ledger: nil)
         return [] unless incremental_ready?(fulltext) && fts_contentless?(fulltext)
 
         source_ids = catalog[:sources].where(slug: slugs.uniq).to_hash(:slug, :id)
         members = slugs.uniq.select { |slug| source_ids[slug] }
-        volumes = members.to_h { |slug| [slug, forecast_volume(catalog, fulltext, slug, source_ids[slug])] }
+        counts = members.to_h { |slug| [slug, forecast_counts(catalog, fulltext, slug, source_ids[slug])] }
         ids_of = ->(group) { group.map { |slug| source_ids[slug] } }
-        if members.size > 1 && volumes.values.sum > row_budget && shadow_ready?(catalog, fulltext, ids_of.call(members))
+        path_of = lambda do |group|
+          fts_write_path(catalog, fulltext, member_ids: ids_of.call(group), written: group.sum do |slug|
+            counts[slug][0]
+          end,
+                                            deleted: group.sum { |slug| counts[slug][1] }, ceiling: rewrite_ceiling,
+                                            ledger: ledger).path
+        end
+        if members.size > 1 && path_of.call(members) == :shadow
           return [shadow_forecast(catalog, fulltext, "corpus", members, ids_of.call(members))]
         end
 
         members.filter_map do |slug|
-          next unless volumes[slug] > row_budget && shadow_ready?(catalog, fulltext, source_ids[slug])
+          next unless path_of.call([slug]) == :shadow
 
           shadow_forecast(catalog, fulltext, slug, [slug], ids_of.call([slug]))
         end
       end
 
-      # A member's slice volume as slice_plan would measure it — the
-      # source's every passage (withdrawn included) on the rewrite path,
-      # counted rather than loaded; the exact heal diff when a pending
-      # marker makes the run a heal.
-      def forecast_volume(catalog, fulltext, slug, source_id)
-        if slice_pending?(fulltext, slug)
-          return slice_plan(catalog, fulltext, slug: slug, source_id: source_id).ids.size
-        end
-
-        catalog[:passages].join(:documents, id: Sequel[:passages][:document_id])
-                          .where(Sequel[:documents][:source_id] => source_id).count
+      # A member's [written, deleted] as its refresh would count them — the
+      # whole slice by query on the rewrite grain; the exact heal diff when
+      # a pending marker makes the run a heal.
+      def forecast_counts(catalog, fulltext, slug, source_id)
+        plan = (slice_plan(catalog, fulltext, slug: slug, source_id: source_id) if slice_pending?(fulltext, slug))
+        fts_write_counts(catalog, fulltext, source_id, plan: plan)
       end
 
       def shadow_forecast(catalog, fulltext, scope, members, member_ids)
@@ -79,35 +81,13 @@ module Nabu
 
       # -- the shadow build (SHADOW_TABLE note) -----------------------------
 
-      # Whether this run's main-index write goes to a shadow: over the
-      # budget, contentless shape (a legacy contentful file keeps its old
-      # path, like every recipe of this family), and a sidecar complete
-      # enough to name the old table's membership — else in place,
-      # announced.
-      def shadow_main?(catalog, fulltext, ids, row_budget, source_id:, slug:, progress: nil)
-        return false unless ids.size > row_budget && fts_contentless?(fulltext)
-        return true if shadow_ready?(catalog, fulltext, source_id)
-
-        progress&.stage("index slice: #{slug} — #{ids.size} rows over the #{row_budget}-row in-place budget, " \
-                        "but the row-sha sidecar incomplete (a slice predating it): writing in place " \
-                        "under the governor until a full rebuild backfills it")
-        false
-      end
-
-      # The sidecar names every OTHER source's indexed membership: each
-      # source either has sidecar rows, or no indexed rows at all (its
-      # first and last live passages probed in the index — a slice that
-      # predates the sidecar was written whole, so both would be there).
-      # O(sources) point lookups.
+      # The sidecar names every OTHER source's indexed membership
+      # (fts_membership_recorded? per source). O(sources) point lookups.
       def shadow_ready?(catalog, fulltext, source_id)
         return false unless fulltext.table_exists?(ROW_SHAS_TABLE)
 
         catalog[:sources].exclude(id: source_id).select_map(:id).all? do |other|
-          next true unless fulltext[ROW_SHAS_TABLE].where(source_id: other).empty?
-
-          scope = live_passages(catalog).where(Sequel[:documents][:source_id] => other)
-          probes = [scope.min(Sequel[:passages][:id]), scope.max(Sequel[:passages][:id])].compact
-          probes.empty? || fulltext[TABLE].where(rowid: probes).empty?
+          fts_membership_recorded?(catalog, fulltext, other)
         end
       end
 

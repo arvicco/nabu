@@ -32,6 +32,18 @@ module Store
       assert_empty(structure.levels.flat_map { |l| l[:segments] })
     end
 
+    # The averages record's row total — the O(1) size the write-path
+    # forecast prices a shadow by — tracks inserts AND contentless deletes.
+    def test_total_rows_reads_the_engines_own_row_count
+      assert_nil Nabu::Store::FtsStructure.total_rows(@db, :absent)
+      5.times { |i| @db[:t].insert(rowid: i + 1, body: "word#{i} shared") }
+      assert_equal 5, Nabu::Store::FtsStructure.total_rows(@db, :t)
+
+      @db[:t].where(rowid: [2, 4]).delete
+      assert_equal 3, Nabu::Store::FtsStructure.total_rows(@db, :t), "a contentless delete moves the total"
+      assert_equal @db[:t].select_map(Sequel.lit("rowid")).size, Nabu::Store::FtsStructure.total_rows(@db, :t)
+    end
+
     def test_counts_segments_as_transactions_accumulate
       # automerge off: every committed write flushes its own level-0
       # segment and nothing consolidates — the count is deterministic.

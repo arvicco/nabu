@@ -50,7 +50,14 @@ module Nabu
         "reflex_closure" => DELTA,
         # A dictionary sync's closure re-walk: O(crosswalk).
         "reflex_rewalk" => REGISTRY,
-        # Past IN_PLACE_ROW_BUDGET: the append-only shadows.
+        # The passages_fts in-place write paths (Indexer::REWRITE_CEILING
+        # note): the append-only tail write of a run that deletes nothing,
+        # and the delete + append of one at or under the ceiling — each
+        # with its eager consolidation, sized by the rows the run touches.
+        "fts_append" => DELTA,
+        "fts_rewrite" => DELTA,
+        # Past REWRITE_CEILING (passages_fts) / IN_PLACE_ROW_BUDGET
+        # (trigram): the append-only shadows.
         "fts_shadow" => ARRIVAL,
         "trigram_shadow" => ARRIVAL
       }.freeze

@@ -5998,7 +5998,7 @@ class CLITest < Minitest::Test
   # The predicted shadow build (IndexPreflight's shadow note): the
   # refresh's slices price ~12m, but the wave's passages_fts shadow — the
   # whole index — took an hour last time. The fixture is far under the
-  # real 100k-row budget, so the forecast is pinned (the forecast itself
+  # real 1M-row rewrite ceiling, so the forecast is pinned (the forecast itself
   # is tested against real runs in the indexer suite).
   def with_forecast_shadow(rows: 95_000_000)
     real = Nabu::Store::Indexer.method(:fts_shadow_forecasts)
