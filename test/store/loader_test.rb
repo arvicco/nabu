@@ -1323,6 +1323,61 @@ module Store
       assert_equal "大道甚夷", stored[:text_search]
     end
 
+    # -- sentinel class 2: the lowercase transform (the diet) ----------------
+    # A search form equal to SQLite's own lower(text) — ASCII-only
+    # downcase, byte for byte — stores the one-byte "\u0001" sentinel and
+    # text_search recomputes it (migration 055).
+
+    def test_ascii_lowercase_fold_stores_the_lower_sentinel
+      @loader.load([build_document("latin", [["1", "Arma Virumque CANO"]])])
+      stored = @db[:passages].where(urn: "#{doc_urn('latin')}:1").first
+
+      assert_equal "\u0001", stored[:text_normalized], "the fold is SQLite lower(text): one sentinel byte"
+      assert_equal "arma virumque cano", stored[:text_search], "the virtual column recomputes lower(text)"
+      assert_equal "Arma Virumque CANO", stored[:text]
+    end
+
+    def test_lowercase_fold_beyond_ascii_still_stores
+      # Ruby's Unicode downcase folds É; SQLite's ASCII lower() does not —
+      # the sentinel would serve "École", so the true fold stays stored.
+      @loader.load([build_document("fr", [["1", "ÉCOLE Abc"]])])
+      stored = @db[:passages].where(urn: "#{doc_urn('fr')}:1").first
+
+      assert_equal "école abc", stored[:text_normalized]
+      assert_equal "école abc", stored[:text_search]
+    end
+
+    def test_caseless_ascii_text_keeps_the_empty_sentinel
+      # Equal to text AND to lower(text): the empty class wins (zero bytes).
+      @loader.load([build_document("plain", [["1", "arma virumque"]])])
+      stored = @db[:passages].where(urn: "#{doc_urn('plain')}:1").first
+
+      assert_equal "", stored[:text_normalized]
+      assert_equal "arma virumque", stored[:text_search]
+    end
+
+    def test_revision_to_a_lowercase_fold_stores_the_lower_sentinel
+      @loader.load([build_document("latin", [%w[1 μῆνιν]])])
+      report = fresh_loader.load([build_document("latin", [["1", "Gallia Est"]])])
+
+      assert_report report, updated: 1, revised: 1
+      stored = @db[:passages].where(urn: "#{doc_urn('latin')}:1").first
+
+      assert_equal "\u0001", stored[:text_normalized]
+      assert_equal "gallia est", stored[:text_search]
+    end
+
+    def test_lower_sentinel_rows_stay_idempotent
+      document = -> { build_document("latin", [["1", "Arma Virumque"], ["2", "Μῆνιν"]]) }
+      @loader.load([document.call])
+      passages_before = snapshot(Nabu::Store::Passage)
+
+      report = fresh_loader.load([document.call])
+
+      assert_report report, skipped: 1
+      assert_equal passages_before, snapshot(Nabu::Store::Passage)
+    end
+
     def test_sentinel_rows_stay_idempotent
       @loader.load([han_document])
       passages_before = snapshot(Nabu::Store::Passage)

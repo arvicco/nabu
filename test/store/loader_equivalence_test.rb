@@ -53,7 +53,11 @@ module Store
     # passages, the ArmTDP `doc_title` work titles riding as "title").
     # Re-taken again when it gained the six UD v2.19 treebanks (six new
     # documents, 124 passages; no loader change).
-    FIXTURE_DIGEST = "f0405d3ea13f5e10a085ecc8b13f3642f4add85060fed189cc473846df7698f2"
+    # Re-taken again for the text_normalized diet: rows whose search
+    # form is SQLite's lower(text) now store the one-byte "\u0001"
+    # sentinel — the stored column changes, the served text_search does
+    # not (pinned by text_normalized_diet_test's oracle).
+    FIXTURE_DIGEST = "def9d62d074c246f0e5e6edf98a57af2bb7688112c516e495951540bc1edf115"
     WALK_DIGEST = "cf74dd259cfabc229a7828f6e8dc1c662aaf6eba4bb06dd3221af04eefe0fbcb"
 
     def test_fixture_corpora_load_byte_identically_on_both_grains

@@ -162,8 +162,8 @@ module Nabu
       # number of rows deleted.
       # Governed tables tick the merge governor per batch: contentless
       # deletes write tombstones and flush segments like inserts do.
-      def delete_fts_rows_by_rowid(fulltext, table, ids, progress: nil)
-        governor = fts_governor(fulltext, table, progress: progress)
+      def delete_fts_rows_by_rowid(fulltext, table, ids, progress: nil, ledger: nil)
+        governor = fts_governor(fulltext, table, progress: progress, ledger: ledger)
         ids.to_a.each_slice(BATCH_SIZE).sum do |batch|
           deleted = fulltext[table].where(rowid: batch).delete
           governor&.tick!

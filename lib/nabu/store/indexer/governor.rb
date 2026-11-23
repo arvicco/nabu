@@ -13,10 +13,10 @@ module Nabu
       # governed (governed_fts_tables: the contentless shape only — a
       # legacy contentful file keeps the old untouched path, like every
       # other recipe of this family).
-      def fts_governor(fulltext, table, progress: nil)
+      def fts_governor(fulltext, table, progress: nil, ledger: nil)
         return nil unless governed_fts_tables(fulltext).include?(table)
 
-        FtsGovernor.new(fulltext: fulltext, table: table, progress: progress)
+        FtsGovernor.new(fulltext: fulltext, table: table, progress: progress, ledger: ledger)
       end
 
       # The governor's decision over a decoded FtsStructure::Structure:
@@ -46,14 +46,28 @@ module Nabu
       # slice's atomic swap) the chunks still run — they keep the structure
       # bounded either way — but the checkpoint is skipped: a checkpoint
       # cannot reclaim an open transaction's frames.
+      #
+      # +ledger+ (optional): each relief is RECORDED as the sync stage
+      # "fts_relief" (scope: the table) with rows = the pressure's page
+      # count — the over-limit level's pages, or the whole structure's on
+      # the total line — taken from the very structure record the pressure
+      # decision read before relief started (no extra read: the fts5
+      # structure record is O(1)). StageTimings then holds a real
+      # seconds-per-page rate, so a big append's relief debt is priced from
+      # the ledger instead of discovered mid-run. Recording only: the
+      # relief itself — its chunks, stall detection, ticks and
+      # checkpoints — is exactly the ledger-less one.
       class FtsGovernor
-        attr_reader :table, :batches, :checks, :relief_chunks
+        RELIEF_STAGE = "fts_relief"
+
+        attr_reader :table, :batches, :checks, :relief_chunks, :ledger
 
         def initialize(fulltext:, table:, progress: nil, cadence: GOVERNOR_CHECK_EVERY_BATCHES,
-                       level_limit: GOVERNOR_LEVEL_LIMIT, total_limit: FtsStructure::SEGMENT_WARN)
+                       level_limit: GOVERNOR_LEVEL_LIMIT, total_limit: FtsStructure::SEGMENT_WARN, ledger: nil)
           @fulltext = fulltext
           @table = table
           @progress = progress
+          @ledger = ledger
           @cadence = cadence
           @level_limit = level_limit
           @total_limit = total_limit
@@ -82,7 +96,24 @@ module Nabu
         # thousands of chunks, and a long silent relief would be the very
         # single-announcement opacity the governor exists to end.
         def relieve!(found)
-          @progress&.stage("fts governor: #{@table} — #{describe(found)}, consolidating")
+          pages = pressure_pages(found)
+          label = "fts governor: #{@table} — #{describe(found)}, consolidating"
+          return relief_loop(label) unless ledger
+
+          Indexer.timed_sync_stage(ledger, @table.to_s, "fts_relief", label, @progress,
+                                   rows_of: ->(_) { pages },
+                                   eta: Nabu::Eta.for(ledger, kind: "sync", scope: @table.to_s,
+                                                              stage: RELIEF_STAGE, rows: pages)) do
+            relief_loop(nil)
+          end
+        end
+
+        private
+
+        # The relief proper. +label+ is announced here when no recorder
+        # announced it (the ledger-less governor).
+        def relief_loop(label)
+          @progress&.stage(label) if label
           chunks = 0
           loop do
             chunks += 1
@@ -98,11 +129,17 @@ module Nabu
           chunks
         end
 
-        private
-
+        # The structure the latest pressure decision read is kept, so the
+        # recorder's page count costs no second read.
         def pressure
-          Indexer.governor_pressure(FtsStructure.read(@fulltext, @table),
-                                    level_limit: @level_limit, total_limit: @total_limit)
+          @structure = FtsStructure.read(@fulltext, @table)
+          Indexer.governor_pressure(@structure, level_limit: @level_limit, total_limit: @total_limit)
+        end
+
+        def pressure_pages(found)
+          return @structure.pages unless found.key?(:level)
+
+          @structure.levels[found[:level]][:segments].sum { |seg| seg[:pgno_last] - seg[:pgno_first] + 1 }
         end
 
         def describe(found)

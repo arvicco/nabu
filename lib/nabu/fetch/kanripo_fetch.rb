@@ -96,9 +96,12 @@ module Nabu
 
     # What one wave did: the catalog pin, the per-outcome text id lists
     # (cloned/refreshed/absent), the count skipped via standing pins, the
-    # attic activity ("<id>/<relpath>" entries), and one EditionPass per
-    # declared edition ref ([] when none are declared).
-    Result = Data.define(:catalog_sha, :cloned, :refreshed, :skipped, :absent, :atticked, :editions)
+    # attic activity ("<id>/<relpath>" entries), the text ids whose
+    # upstream history was rewritten and attic-and-reset (the catalog
+    # repo is not listed), and one EditionPass per declared edition ref
+    # ([] when none are declared).
+    Result = Data.define(:catalog_sha, :cloned, :refreshed, :skipped, :absent, :atticked, :reset,
+                         :editions)
 
     # One declared ref's pass: +in_scope+ = catalog membership ∩ wave scope;
     # fetched/absent are id lists; skipped (standing pins) and missing (no
@@ -129,6 +132,7 @@ module Nabu
       @absent = []
       @skipped = 0
       @atticked = []
+      @reset = []
     end
 
     def sync!
@@ -138,18 +142,22 @@ module Nabu
       scope.each { |id| sync_text!(id) }
       editions = memberships.map { |ref, members| sync_edition!(ref, (members & scope).sort) }
       Result.new(catalog_sha: @catalog_sha, cloned: @cloned, refreshed: @refreshed,
-                 skipped: @skipped, absent: @absent, atticked: @atticked, editions: editions)
+                 skipped: @skipped, absent: @absent, atticked: @atticked, reset: @reset, editions: editions)
     end
 
     private
 
     # The discovery index rides the standard GitFetch contract (attic under
     # <attic_dir>/KR-Catalog); no guard — the catalog is scope metadata, not
-    # ingestible content, and its deletions are atticked regardless.
+    # ingestible content, and its deletions are atticked regardless. Like
+    # every kanripo repo it opts into attic-and-reset (owner ruling
+    # 2026-11-12): the org rewrites histories, and a hard stop would park
+    # the whole source.
     def sync_catalog!
       result = GitFetch.sync!(
         repo_url: @catalog_url, dir: catalog_dir,
-        attic_dir: File.join(@attic_dir, CATALOG_DIRNAME), progress: @progress
+        attic_dir: File.join(@attic_dir, CATALOG_DIRNAME), progress: @progress,
+        reset_on_divergence: true
       )
       pace!
       result.sha
@@ -178,8 +186,13 @@ module Nabu
       # destructive-fetch sin; re-clone fresh below and re-judge (upstream
       # may have gained commits since).
       FileUtils.rm_rf(dir) if Dir.exist?(File.join(dir, ".git")) && empty_clone?(dir)
+      # Attic-and-reset (owner ruling 2026-11-12): a text whose upstream
+      # history was rewritten (~17% of the org at the 2026-11-12 census,
+      # almost all with an identical tree) attics-and-resets instead of
+      # parking the wave forever.
       pull = GitFetch.new(repo_url: "#{@repo_base}/#{id}", dir: dir,
-                          attic_dir: File.join(@attic_dir, id), progress: @progress)
+                          attic_dir: File.join(@attic_dir, id), progress: @progress,
+                          reset_on_divergence: true)
       fresh = !Dir.exist?(File.join(dir, ".git"))
       return unless prepare_text!(pull, id, fresh: fresh)
       return record_empty!(id, dir) if empty_clone?(dir)
@@ -187,6 +200,7 @@ module Nabu
       @guard&.call(dir, pull.doomed_paths)
       pull.complete!
       @atticked.concat(pull.atticked.map { |rel| "#{id}/#{rel}" })
+      @reset << id if pull.reset
       pin_text!(id, pull.head_sha)
       (fresh ? @cloned : @refreshed) << id
       pace!

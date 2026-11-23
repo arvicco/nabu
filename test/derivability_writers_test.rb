@@ -324,7 +324,14 @@ class DerivabilityWritersTest < Minitest::Test
   # local/proofs/ (<proof>.yml: the last successful ops:drill / full
   # fixtures:check, UTC) — loop-written operational state on the
   # local/trickle/ pattern, read only by boards:check, never by a rebuild.
+  # store/text_normalized_diet (`rake "diet:text_normalized"`) writes ONE
+  # file: its resume cursor (db/text_normalized_diet.cursor — the last
+  # committed rowid window + the catalog file's inode), removed when the
+  # pass completes — TRANSIENT run-state beside the derived catalog it
+  # slims, ignored once a rebuild recreates the catalog, never read by a
+  # rebuild (the index_watcher heartbeat law kind).
   WRITER_ALLOWLIST = %w[
+    nabu/store/text_normalized_diet.rb
     nabu/index_watcher.rb
     nabu/ops/reconstruction/manifest.rb
     nabu/demo_build.rb

@@ -217,11 +217,16 @@ module Nabu
           member_opts = members.to_h do |entry, adapter|
             [entry.slug, { reflexes_changed: adapter.class.content_kind == :dictionary }]
           end
+          full_build = !Store::Indexer.incremental_ready?(fulltext)
           counts = Store::Indexer.refresh_sources!(catalog: @db, fulltext: fulltext,
                                                    slugs: members.map { _1.first.slug },
                                                    member_opts: member_opts, progress: progress,
                                                    **refresh_options)
-          counts.each { |slug, members| Store::SourceAggregates.index_refreshed!(@db, slug: slug, members: members) }
+          if full_build
+            Store::SourceAggregates.index_rebuilt!(@db)
+          else
+            counts.each { |slug, members| Store::SourceAggregates.index_refreshed!(@db, slug: slug, members: members) }
+          end
         ensure
           fulltext.disconnect
         end
@@ -473,7 +478,7 @@ module Nabu
                   enrichments: refresh_enrichments(entry),
                   place_index: refresh_place_index(entry),
                   person_index: refresh_person_index(entry),
-                  analyzed: analyze_after_load(combined_report, adapter),
+                  analyzed: analyze_after_load(combined_report, adapter, entry.slug),
                   lect_staging: lect_staging_census(entry),
                   dictionary_lane: lane_report,
                   module_delta: module_delta(entry, adapter, workdir, module_before, fetch_report,
@@ -607,7 +612,13 @@ module Nabu
                                     combined_report.withdrawn).positive?
       return unless indexed || changed
 
+      # Timed into the stage ledger (it reads the fulltext index — an
+      # index-adjacent pass no estimate may silently omit). It announces no
+      # stage of its own, so it records bare.
+      started = Process.clock_gettime(Process::CLOCK_MONOTONIC)
       Store::LemmaRollup.refresh_source!(catalog: @db, fulltext_path: @config.fulltext_path, slug: entry.slug)
+      Store::StageTimings.record!(@ledger, kind: "sync", scope: entry.slug, stage: "lemma_rollups",
+                                           seconds: Process.clock_gettime(Process::CLOCK_MONOTONIC) - started)
     end
 
     # P106-5: the 84000→Derge title crosswalk re-fills after any sync of
@@ -662,7 +673,7 @@ module Nabu
     # table carries three b-tree indexes the lemma/etym/vocab joins choose
     # between, so its stats plan too; ops §10). Returns a Store::AnalyzeReport,
     # or nil when the load was sub-threshold so the report line stays silent.
-    def analyze_after_load(load_report, adapter)
+    def analyze_after_load(load_report, adapter, slug)
       return nil unless bulk_load?(load_report)
 
       seconds = Store.analyze!(@db)
@@ -671,6 +682,10 @@ module Nabu
         seconds += analyze_fulltext!
         scope = "catalog + index"
       end
+      # The ANALYZE pass grows with the catalog/index, so its wall time
+      # lands in the stage ledger (the sync's estimate must not omit it).
+      Store::StageTimings.record!(@ledger, kind: "sync", scope: slug, stage: "analyze",
+                                           seconds: seconds)
       Store::AnalyzeReport.new(seconds: seconds, scope: scope)
     end
 
@@ -875,6 +890,11 @@ module Nabu
       require "fileutils"
       FileUtils.mkdir_p(File.dirname(@config.fulltext_path))
       fulltext = Store.connect_fulltext(@config.fulltext_path, writer_profile: :index)
+      # The first-ever-index fallback (refresh_source! runs the FULL
+      # Indexer.rebuild! when the file lacks the incremental tables) indexes
+      # every source, so every aggregates row is stamped — read BEFORE the
+      # refresh creates the tables.
+      full_build = !Store::Indexer.incremental_ready?(fulltext)
       members = Store::Indexer.refresh_source!(catalog: @db, fulltext: fulltext, slug: entry.slug,
                                                delta: delta,
                                                reflexes_changed: adapter.class.content_kind == :dictionary,
@@ -882,7 +902,11 @@ module Nabu
                                                **refresh_options)
       # Migration 054: the O(1) accounting row records the finished slice
       # (the refresh's return IS its live membership) and clears fts_behind.
-      Store::SourceAggregates.index_refreshed!(@db, slug: entry.slug, members: members)
+      if full_build
+        Store::SourceAggregates.index_rebuilt!(@db)
+      else
+        Store::SourceAggregates.index_refreshed!(@db, slug: entry.slug, members: members)
+      end
       members
     ensure
       fulltext&.disconnect

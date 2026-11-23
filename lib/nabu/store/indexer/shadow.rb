@@ -98,11 +98,11 @@ module Nabu
       # Returns the rows written. +source_id+ may be one id or a wave's
       # array of them (refresh_sources!): the refreshed set's live rows,
       # everyone else's recorded ones.
-      def build_fts_shadow!(catalog:, fulltext:, source_id:, progress: nil)
+      def build_fts_shadow!(catalog:, fulltext:, source_id:, progress: nil, ledger: nil)
         fulltext.drop_table?(SHADOW_TABLE)
         fulltext.run(CREATE_TABLE.sub("passages_fts", SHADOW_TABLE.to_s))
         slugs = source_slugs(catalog)
-        governor = FtsGovernor.new(fulltext: fulltext, table: SHADOW_TABLE, progress: progress)
+        governor = FtsGovernor.new(fulltext: fulltext, table: SHADOW_TABLE, progress: progress, ledger: ledger)
         count = 0
         shadow_rows(catalog, fulltext, source_id).each_slice(BATCH_SIZE * SHADOW_COMMIT_BATCHES) do |group|
           fulltext.transaction do

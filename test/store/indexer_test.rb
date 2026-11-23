@@ -1643,6 +1643,45 @@ module Store
       assert_equal "gold", lemmas.first.fetch(:tier), "the fallback rebuilt the tiered shape"
     end
 
+    # The fallback is the whole index rebuilt (hours on the live corpus) —
+    # never run silently: it announces itself with the measured total of
+    # the rebuild's corpus index stages (Eta.for_stages, the very read the
+    # rebuild's own "fulltext index" banner carries).
+    def test_the_full_rebuild_fallback_announces_with_the_rebuilds_measured_corpus_stages
+      doc = make_document(urn: "urn:d:s")
+      make_passage(doc, urn: "urn:d:s:1", text_normalized: "alpha", sequence: 0)
+      with_ledger do |ledger|
+        Nabu::Store::StageTimings.record!(ledger, kind: "rebuild", scope: "corpus", stage: "fts_lemma",
+                                                  seconds: 9_000.0)
+        Nabu::Store::StageTimings.record!(ledger, kind: "rebuild", scope: "corpus", stage: "trigram",
+                                                  seconds: 6_180.0)
+        spy = EtaSpy.new
+        refresh!(progress: spy, ledger: ledger)
+
+        label, eta = spy.etas.find { |line, _| line.include?("FULL index rebuild") }
+        refute_nil label, "the fallback is announced (#{spy.etas.keys.inspect})"
+        assert_includes label, "not incremental-ready"
+        assert eta.real?, "priced from the rebuild's corpus stages"
+        assert_in_delta 15_180.0, eta.seconds
+        assert_equal "~4h13m (last run 4h13m)", eta.render
+      end
+    end
+
+    # A fresh box's bootstrap (no rebuild ever measured) is the first
+    # sync building the index — tiny, and "first run — no estimate" there
+    # is log noise (the P78-r3 non-tty rule): no fallback line.
+    def test_an_unmeasured_full_rebuild_fallback_stays_quiet
+      doc = make_document(urn: "urn:d:s")
+      make_passage(doc, urn: "urn:d:s:1", text_normalized: "alpha", sequence: 0)
+      with_ledger do |ledger|
+        spy = EtaSpy.new
+        refresh!(progress: spy, ledger: ledger)
+
+        refute(Array(spy.etas&.keys).any? { |line| line.include?("FULL index rebuild") })
+      end
+      assert_equal %w[urn:d:s:1], fts_urns, "the fallback still ran"
+    end
+
     def test_refresh_updates_the_trigram_slice_of_a_fuzzy_source
       doc = make_document(urn: "urn:d:s")
       make_passage(doc, urn: "urn:d:s:1", text_normalized: "στρατηγοσ", sequence: 0)
@@ -2037,6 +2076,35 @@ module Store
                    "the sentinel row is searchable by its text"
       assert_equal 3, postings.exclude(char: "").where(source_id: @source.id).count,
                    "char postings read the coalesced form (王/道/蕩 distinct)"
+    end
+
+    # The lower sentinel (migration 055): a row storing "\u0001"
+    # serves SQLite's lower(text), so it must index token-for-token like
+    # the same passage with its form stored in full, and match identically.
+    def test_lower_sentinel_rows_index_and_match_like_stored_rows
+      text = "Gallia Est Omnis DIVISA in partes"
+      stored = make_document(urn: "urn:d:stored")
+      sentinel = make_document(urn: "urn:d:sentinel")
+      [[stored, "urn:d:stored:1", text.downcase], [sentinel, "urn:d:sentinel:1", "\u0001"]].each do |doc, urn, form|
+        Nabu::Store::Passage.create(
+          document_id: doc.id, urn: urn, sequence: 0, language: "lat", text: text, text_normalized: form,
+          content_sha256: "x", revision: 1, withdrawn: false, annotations_json: "{}"
+        )
+      end
+
+      assert_equal 2, rebuild!
+      ["gallia", "divisa", '"omnis divisa"', "partes AND est"].each do |query|
+        assert_equal %w[urn:d:sentinel:1 urn:d:stored:1], match_urns(query).sort,
+                     "#{query} matches the sentinel row exactly as the stored one"
+      end
+      @fulltext.run("CREATE VIRTUAL TABLE temp.fts_instances USING fts5vocab(main, passages_fts, instance)")
+      tokens = lambda do |urn|
+        @fulltext[:fts_instances].where(doc: passage_id_of(urn)).order(:offset, :col)
+                                 .select_map(%i[term col offset])
+      end
+      refute_empty tokens.call("urn:d:stored:1")
+      assert_equal tokens.call("urn:d:stored:1"), tokens.call("urn:d:sentinel:1"),
+                   "identical token instances (term, column, offset)"
     end
 
     # -- the delta grain (P112-1) --------------------------------------

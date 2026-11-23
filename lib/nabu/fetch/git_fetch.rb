@@ -2,6 +2,7 @@
 
 require "fileutils"
 require "json"
+require "time"
 
 module Nabu
   # Non-destructive git clone/pull — the ONE shared fetch path behind every
@@ -56,15 +57,64 @@ module Nabu
   # silently corrupt either side — an acceptable failure mode for a
   # theoretical collision.
   #
+  # == Attic-and-reset on a diverged upstream (owner ruling 2026-11-12)
+  #
+  # An upstream history REWRITE (force-push, re-rooted branch, rollback)
+  # leaves FETCH_HEAD unreachable from HEAD, so the ff-only merge can never
+  # succeed. By default that stays a hard stop (the merge's Shell::Error):
+  # an ordinary source never leaves its line unasked. A caller that opts in
+  # (+reset_on_divergence+; the kanripo wave, where ~17% of the text repos
+  # diverged — almost all rewrite-only with an identical tree) gets the
+  # ruled policy instead, decided in prepare! by
+  # `merge-base --is-ancestor HEAD FETCH_HEAD`:
+  #
+  #   zero delta   HEAD^{tree} == FETCH_HEAD^{tree} (one rev-parse of two
+  #                tree ids — no diff, no status, no file read): nothing
+  #                to attic, nothing for the guard; complete! moves the
+  #                branch with `reset --soft` (index and working tree are
+  #                already that tree), so the dominant kanripo case costs
+  #                three cheap ref-level git calls beyond the fetch
+  #                (ancestry, rev-parse, reset --soft), writes only the
+  #                event log line and touches no tracked file.
+  #   with delta   the tracked tree must be clean (`status --porcelain
+  #                --untracked-files=no`; a local edit is refused with
+  #                FetchError, never clobbered). The guard sees the same
+  #                find-renames deletion list an ff would — the breaker
+  #                stays in front of the reset, and a trip leaves tree,
+  #                HEAD and attic untouched. complete! then attics every
+  #                file the reset deletes OR changes in place (M/T —
+  #                the abandoned history is no longer there to recover
+  #                old bytes from), same relative path, first copy wins,
+  #                `.attic.json` vanished-at sha = FETCH_HEAD exactly as on
+  #                the ff path, and only THEN `reset --hard FETCH_HEAD`.
+  #                Renames stay non-scrapping, as on the ff path.
+  #
+  # Either way the event is appended to <attic_dir>/.attic-resets.json
+  # (UTC time, abandoned head, new head, zero_delta, atticked count — the
+  # abandoned sha lives only here once git gc's the old line) and reported
+  # as Result#reset. A modified file's attic copy shares its live path, so
+  # live-wins rediscovery supersedes it until upstream ever deletes the path
+  # — at which point first-copy-wins keeps the pre-reset bytes, the same
+  # ruled semantics as a delete → reappear → delete cycle.
+  #
   # All git invocations go through Nabu::Shell (argv semantics, Shell::Error
   # on nonzero exit); adapters wrap that in Nabu::FetchError as before.
   class GitFetch
     ATTIC_MANIFEST = ".attic.json"
+    # The append-only reset event log beside the manifest (class note).
+    RESET_LOG = ".attic-resets.json"
 
-    # What one completed sync did: the new HEAD and the relative paths
-    # newly copied into the attic this time (empty on fresh clones,
-    # up-to-date pulls, and re-deletions of already-atticked paths).
-    Result = Data.define(:sha, :atticked)
+    # What one completed sync did: the new HEAD, the relative paths newly
+    # copied into the attic this time (empty on fresh clones, up-to-date
+    # pulls, zero-delta resets, and re-deletions of already-atticked
+    # paths), and the Reset event when the sync took the divergence path
+    # (nil otherwise).
+    Result = Data.define(:sha, :atticked, :reset)
+
+    # One attic-and-reset: the abandoned head, the upstream head reset to,
+    # how many files were newly atticked, and whether the trees were
+    # identical (the fast path).
+    Reset = Data.define(:from, :to, :atticked, :zero_delta)
 
     # One-shot clone-or-pull for a single repo. +guard+, when given, is
     # called with the absolute working-tree paths upstream deleted — BEFORE
@@ -86,29 +136,42 @@ module Nabu
     # atticked. Local-path clones ignore --filter with a warning (git's
     # local-transport rule) — harmless: the sparse cone still governs the
     # working tree, which is the contract under test.
-    def self.sync!(repo_url:, dir:, attic_dir:, progress: nil, guard: nil, ref: nil, sparse: nil)
+    #
+    # +reset_on_divergence+ (owner ruling 2026-11-12) opts into
+    # attic-and-reset when upstream is not fast-forwardable (class note);
+    # off, a diverged upstream stays the merge's hard stop.
+    def self.sync!(repo_url:, dir:, attic_dir:, progress: nil, guard: nil, ref: nil, sparse: nil,
+                   reset_on_divergence: false)
       pull = new(repo_url: repo_url, dir: dir, attic_dir: attic_dir, progress: progress, ref: ref,
-                 sparse: sparse)
+                 sparse: sparse, reset_on_divergence: reset_on_divergence)
       pull.prepare!
       guard&.call(pull.doomed_paths)
       pull.complete!
-      Result.new(sha: pull.head_sha, atticked: pull.atticked)
+      Result.new(sha: pull.head_sha, atticked: pull.atticked, reset: pull.reset)
     end
 
-    def initialize(repo_url:, dir:, attic_dir:, progress: nil, ref: nil, sparse: nil)
+    def initialize(repo_url:, dir:, attic_dir:, progress: nil, ref: nil, sparse: nil,
+                   reset_on_divergence: false)
       @repo_url = repo_url
       @dir = dir
       @attic_dir = attic_dir
       @progress = progress
       @ref = ref
       @sparse = sparse&.then { |paths| Array(paths) }
+      @reset_on_divergence = reset_on_divergence
       @doomed_relpaths = []
+      @changed_relpaths = []
       @atticked = []
       @cloned = false
+      @diverged_from = nil
+      @reset = nil
     end
 
     # Relative paths copied into the attic by complete! (first copies only).
     attr_reader :atticked
+
+    # The Reset event complete! performed (nil unless the sync diverged).
+    attr_reader :reset
 
     # Phase 1 — objects only, working tree untouched. A fresh dir is cloned
     # ATOMICALLY (P44-i1, owner ruling "sync should be atomic": clone +
@@ -122,7 +185,11 @@ module Nabu
       sweep_stale_staging!
       if Dir.exist?(File.join(@dir, ".git"))
         git_fetch
-        @doomed_relpaths = deleted_relpaths
+        if @reset_on_divergence && diverged?
+          plan_reset!
+        else
+          @doomed_relpaths = deleted_relpaths
+        end
       else
         atomic_clone!
         @cloned = true
@@ -136,13 +203,18 @@ module Nabu
       @doomed_relpaths.map { |rel| File.expand_path(File.join(@dir, rel)) }
     end
 
-    # Phase 2 — attic the doomed files, then ff-merge FETCH_HEAD. A no-op
-    # after a fresh clone (already at the remote head).
+    # Phase 2 — attic the doomed files, then ff-merge FETCH_HEAD (or, on a
+    # planned divergence, attic-and-reset — class note). A no-op after a
+    # fresh clone (already at the remote head).
     def complete!
       return if @cloned
 
-      attic_doomed!
-      Shell.run("git", "-C", @dir, "merge", "--ff-only", "--quiet", "FETCH_HEAD")
+      if @diverged_from
+        complete_reset!
+      else
+        attic_doomed!
+        Shell.run("git", "-C", @dir, "merge", "--ff-only", "--quiet", "FETCH_HEAD")
+      end
       widen_sparse_cone!
     end
 
@@ -263,13 +335,17 @@ module Nabu
     # A sparse repo scopes the diff to its cone (class note): deletions
     # outside it are not this source's assets.
     def deleted_relpaths
-      # Sparse-checkout patterns admit a root-anchoring "/" ("/lexicon.xml"
-      # = the file at the repo root); a diff PATHSPEC does not — a leading
-      # slash is fatal there. Same cone, two grammars: translate at this
-      # boundary (the ONCOJ owner repro, 2026-07-20).
-      scope = @sparse ? ["--", *@sparse.map { |path| path.delete_prefix("/") }] : []
       Shell.run("git", "-C", @dir, "diff", "--name-only", "--diff-filter=D",
-                "--find-renames", "-z", "HEAD", "FETCH_HEAD", *scope).split("\0")
+                "--find-renames", "-z", "HEAD", "FETCH_HEAD", *cone_pathspec).split("\0")
+    end
+
+    # The cone as a diff pathspec. Sparse-checkout patterns admit a
+    # root-anchoring "/" ("/lexicon.xml" = the file at the repo root); a
+    # diff PATHSPEC does not — a leading slash is fatal there. Same cone,
+    # two grammars: translate at this boundary (the ONCOJ owner repro,
+    # 2026-07-20).
+    def cone_pathspec
+      @sparse ? ["--", *@sparse.map { |path| path.delete_prefix("/") }] : []
     end
 
     # A source may GROW its sparse cone across releases (P34-4: tls added
@@ -301,10 +377,79 @@ module Nabu
       nil
     end
 
+    # -- attic-and-reset (class note) -----------------------------------------
+
+    # HEAD is not an ancestor of FETCH_HEAD: `merge-base --is-ancestor`
+    # exits 1 for "no"; any other failure is git's own and propagates.
+    def diverged?
+      Shell.run("git", "-C", @dir, "merge-base", "--is-ancestor", "HEAD", "FETCH_HEAD")
+      false
+    rescue Shell::Error => e
+      raise unless e.status == 1
+
+      true
+    end
+
+    # Decide the reset BEFORE the guard. Identical trees (two tree ids, one
+    # call) need no file work at all; otherwise the clean-tree check, the
+    # guard's deletion list and the in-place changes the attic must keep.
+    def plan_reset!
+      head, fetched, head_tree, fetched_tree =
+        Shell.run("git", "-C", @dir, "rev-parse", "HEAD", "FETCH_HEAD", "HEAD^{tree}", "FETCH_HEAD^{tree}").split
+      @diverged_from = head
+      @reset_to = fetched
+      @zero_delta = head_tree == fetched_tree
+      return if @zero_delta
+
+      refuse_local_modifications!
+      @doomed_relpaths = deleted_relpaths
+      @changed_relpaths = changed_relpaths
+    end
+
+    # A reset --hard would silently discard local edits to tracked files;
+    # canonical trees carry none, so any is an anomaly to stop on.
+    def refuse_local_modifications!
+      dirty = Shell.run("git", "-C", @dir, "status", "--porcelain", "--untracked-files=no")
+      return if dirty.strip.empty?
+
+      raise Nabu::FetchError, "#{@dir}: upstream history was rewritten but the tracked tree has local " \
+                              "modifications; refusing to reset over them:\n#{dirty}"
+    end
+
+    # Files present at HEAD whose bytes (or type) change in place at
+    # FETCH_HEAD — scoped to the sparse cone like the deletion diff.
+    def changed_relpaths
+      Shell.run("git", "-C", @dir, "diff", "--name-only", "--diff-filter=MT", "--no-renames", "-z",
+                "HEAD", "FETCH_HEAD", *cone_pathspec).split("\0")
+    end
+
+    def complete_reset!
+      if @zero_delta
+        Shell.run("git", "-C", @dir, "reset", "--soft", "--quiet", "FETCH_HEAD")
+      else
+        attic_doomed!((@doomed_relpaths | @changed_relpaths).sort)
+        Shell.run("git", "-C", @dir, "reset", "--hard", "--quiet", "FETCH_HEAD")
+      end
+      @reset = Reset.new(from: @diverged_from, to: @reset_to, atticked: @atticked.size, zero_delta: @zero_delta)
+      record_reset!
+      @progress&.call("upstream history rewritten: reset #{@diverged_from[0, 12]}..#{@reset_to[0, 12]}" \
+                      "#{@zero_delta ? ' (identical tree)' : ", atticked #{@atticked.size} file(s)"}\n")
+    end
+
+    # Append the event to the attic's reset log (first write creates it).
+    def record_reset!
+      path = File.join(@attic_dir, RESET_LOG)
+      log = File.exist?(path) ? JSON.parse(File.read(path)) : []
+      log << { "at" => Time.now.utc.iso8601, "from" => @reset.from, "to" => @reset.to,
+               "zero_delta" => @reset.zero_delta, "atticked" => @reset.atticked }
+      FileUtils.mkdir_p(@attic_dir)
+      File.write(path, JSON.pretty_generate(log))
+    end
+
     # Copy each doomed file into the attic — first copy wins — and record the
     # upstream sha it vanished at in the attic manifest.
-    def attic_doomed!
-      @doomed_relpaths.each do |rel|
+    def attic_doomed!(relpaths = @doomed_relpaths)
+      relpaths.each do |rel|
         source = File.join(@dir, rel)
         destination = File.join(@attic_dir, rel)
         next unless File.file?(source)

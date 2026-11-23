@@ -910,7 +910,7 @@ module Nabu
       # counts onto the still-open parse+load stage.
       # +fts: false+ (the shadow path, SHADOW_TABLE note) skips each batch's
       # passages_fts half — the swapped-in shadow already holds those rows.
-      def insert_passage_batches(fulltext, dataset, tiers, slugs = nil, progress: nil, fts: true)
+      def insert_passage_batches(fulltext, dataset, tiers, slugs = nil, progress: nil, fts: true, ledger: nil)
         with_language = fts_language_column?(fulltext)
         with_source = slugs && fts_source_column?(fulltext) ? slugs : nil
         contentless = fts_contentless?(fulltext)
@@ -918,7 +918,7 @@ module Nabu
         count = 0
         lemma_count = 0
         chars = Hash.new(0)
-        governor = (fts_governor(fulltext, TABLE, progress: progress) if fts)
+        governor = (fts_governor(fulltext, TABLE, progress: progress, ledger: ledger) if fts)
         with_shas = contentless && fulltext.table_exists?(ROW_SHAS_TABLE)
         dataset.each_slice(BATCH_SIZE) do |batch|
           if fts
