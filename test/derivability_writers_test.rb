@@ -310,6 +310,11 @@ class DerivabilityWritersTest < Minitest::Test
   # progress log: operational scratch the loop reads, never library state
   # and never read by a rebuild. Its crawl writes go through the engine
   # (paced_crawl) and the adapter's fetch_one, already censused.
+  # ops/outreach_probe (`rake outreach:probe`) writes ONE file: its
+  # previous-run observations (probes-last.yml) beside the probe list in
+  # the gitignored boards dir (.docs/outreach/) — the delta baseline of a
+  # local instrument, outside the three permanent folders, never library
+  # state and never read by a rebuild.
   WRITER_ALLOWLIST = %w[
     nabu/index_watcher.rb
     nabu/ops/reconstruction/manifest.rb
@@ -365,7 +370,7 @@ class DerivabilityWritersTest < Minitest::Test
     nabu/health/shed_acceptance.rb
     nabu/ops/axis_pages.rb nabu/ops/site_data.rb nabu/ops/llms_txt.rb
     nabu/ops/sources_table.rb
-    nabu/ops/skill_pack.rb
+    nabu/ops/skill_pack.rb nabu/ops/outreach_probe.rb
     nabu/ops/drill.rb nabu/ops/trickle.rb
     nabu/data_build/runner.rb nabu/data_build/sources_bib.rb
     nabu/data_build/places_lpf_builder.rb nabu/data_build/readme_index.rb

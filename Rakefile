@@ -587,6 +587,28 @@ namespace :outreach do
 
     puts "outreach:swh — #{report.rows.size} repos saved/queued at archive.softwareheritage.org"
   end
+
+  # The channel-surface probe (Nabu::Ops::OutreachProbe): informational,
+  # never fails on an unmet expectation — the table IS the product.
+  desc "Probe the outreach channel surfaces from .docs/outreach/probes.yml; one delta line per probe. " \
+       "Rows (a top-level `probes:` list): {name, kind: http, url, expect: 200|\"substring\"} · " \
+       "{name, kind: registry, q, expect?: \"name substring\"} · " \
+       "{name, kind: gh_pr|gh_issue, repo: owner/repo, number, expect?: OPEN|MERGED|CLOSED}; " \
+       "the previous run's observations live beside it in probes-last.yml (the delta)"
+  task :probe do
+    require_relative "lib/nabu/ops/outreach_probe"
+    dir = ENV.fetch("BOARDS_DIR", File.expand_path(".docs", __dir__))
+    report = Nabu::Ops::OutreachProbe.new(boards_dir: dir).run
+    if report.skipped
+      puts "outreach:probe — no #{Nabu::Ops::OutreachProbe::FILE} under #{dir} (a public clone or a worktree); skipped"
+      next
+    end
+    report.results.each { |result| puts "  #{result.line}" }
+    puts "outreach:probe — #{report.results.size} probe(s): #{report.changed} changed, " \
+         "#{report.unmet} expectation(s) not met"
+  rescue Nabu::Ops::OutreachProbe::ProbeError => e
+    abort "outreach:probe — #{e.message}"
+  end
 end
 
 # The documented command flows EXECUTED, not proofread
