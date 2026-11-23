@@ -777,6 +777,10 @@ end
 # And the incident-register status probe (Nabu::Ops::IncidentRegisterCheck):
 # every incident row's (`## <sigil>I-n ·`) bracketed suffix must carry OPEN, CLOSED,
 # FIX-STAGED or MITIGATED — a row without one fails, named; no register skips.
+# And the embed-staleness probe (Nabu::Ops::EmbedStalenessCheck) —
+# INFORMATIONAL, never fails: the newest embed stamp in vectors.sqlite3
+# held against the newest source addition (first succeeded ledger run);
+# a gap past the threshold prints one NOTE line. No vectors/ledger skips.
 namespace :boards do
   desc "Gate check: register 'Next number' headers vs minted numbers + GH watch-list staleness " \
        "+ phase-register freshness vs merged phases + incident-row status tokens (stale = exit 1)"
@@ -845,6 +849,16 @@ namespace :boards do
     cadence = Nabu::Ops::ProofCadence::Check.new(local_dir: File.expand_path("local", __dir__)).run
     cadence.findings.each { |finding| puts "STALE  proof cadence #{finding}" }
 
+    # Informational (never joins the failures): the vectors' catch-up is an
+    # owner-fired run, so a lag is a fact to see, not a gate to fail.
+    require_relative "lib/nabu/ops/embed_staleness_check"
+    config = Nabu::Config.load
+    embed = Nabu::Ops::EmbedStalenessCheck.new(
+      vectors_path: config.vectors_path, ledger_path: config.history_path,
+      embed_slugs: Nabu::SourceRegistry.load(config.sources_path).embed_slugs
+    ).run
+    puts "NOTE  embed staleness: #{embed.finding}" unless embed.clean?
+
     failures = []
     failures << "#{report.findings.size} stale register header(s)" unless report.clean?
     failures << "#{watch.findings.size} stale GH watch row(s)" unless watch.clean?
@@ -890,6 +904,12 @@ namespace :boards do
     else
       stamps = cadence.stamps.map { |proof, date| "#{proof} #{date.iso8601}" }.join(", ")
       puts "boards:check — standing proofs run within #{Nabu::Ops::ProofCadence::MAX_AGE_DAYS} days: #{stamps}"
+    end
+    if embed.skipped
+      puts "boards:check — embed-staleness probe skipped (#{embed.skip_reason})"
+    elsif embed.clean?
+      puts "boards:check — vectors current: newest embed stamp #{embed.stamp.utc.to_date.iso8601} within " \
+           "#{Nabu::Ops::EmbedStalenessCheck::THRESHOLD_DAYS} days of the newest source addition"
     end
   end
 end
@@ -1162,6 +1182,53 @@ namespace :aggregates do
   ensure
     catalog&.disconnect
     fulltext&.disconnect
+  end
+
+  # The embed census (Nabu::Ops::EmbedCensus): fills the
+  # vector_coverage_count column — per source, the live passages holding a
+  # vector for the production model. EXPLICIT ONLY: never inside sync or
+  # rebuild (vectors.sqlite3 outlives rebuilds; the column reads NULL after
+  # one until this runs again). Presence only, no text hashing — an index
+  # walk over the vector rows (one catalog urn lookup per 1,000), read-only
+  # on the vectors file. The freshness verdict (stale vs fresh) stays with
+  # `nabu embed --status`. MODEL=name overrides the model.
+  desc "Fill source_aggregates.vector_coverage_count from vectors.sqlite3 (explicit; presence-only census)"
+  task :embed_census do
+    $LOAD_PATH.unshift(File.expand_path("lib", __dir__))
+    require "nabu"
+    require "nabu/ops/embed_census"
+
+    $stdout.sync = true
+    config = Nabu::Config.load
+    abort "aggregates:embed_census — no vectors file at #{config.vectors_path}" unless File.exist?(config.vectors_path)
+    catalog = Nabu::Store.connect(config.catalog_path)
+    abort "aggregates:embed_census — catalog predates migration 054 (run a sync or rebuild first)" \
+      unless Nabu::Store::SourceAggregates.available?(catalog)
+
+    vectors = Nabu::Store.connect(config.vectors_path, readonly: true)
+    model = ENV.fetch("MODEL", Nabu::Embed::MODEL)
+    puts "aggregates:embed_census — walking #{model} vector rows (one tick per 100,000)"
+    started = Process.clock_gettime(Process::CLOCK_MONOTONIC)
+    tick = ->(seen) { puts "  … #{seen} vector rows walked" if (seen % 100_000).zero? }
+    tally = Nabu::Ops::EmbedCensus.run!(catalog: catalog, vectors: vectors, model: model, progress: tick)
+    elapsed = Process.clock_gettime(Process::CLOCK_MONOTONIC) - started
+    rows = Nabu::Store::SourceAggregates.all(catalog)
+    slugs = catalog[:sources].select_hash(:id, :slug)
+    flagged = Nabu::SourceRegistry.load(config.sources_path).embed_slugs.to_set
+    rows.values.sort_by { |row| slugs[row.source_id].to_s }.each do |row|
+      slug = slugs[row.source_id]
+      next unless flagged.include?(slug) || row.vector_coverage_count.to_i.positive?
+
+      scope = flagged.include?(slug) ? "embed-flagged" : "not flagged"
+      puts format("  %<slug>-28s %<covered>10d / %<live>10d live passages (%<scope>s)",
+                  slug: slug, covered: row.vector_coverage_count.to_i, live: row.passages_count, scope: scope)
+    end
+    covered = tally.values.sum
+    puts "aggregates:embed_census done — #{covered} live passages embedded across #{tally.size} sources " \
+         "(#{flagged.size} embed-flagged) in #{Object.new.extend(Nabu::DurationFormat).format_duration(elapsed)}"
+  ensure
+    catalog&.disconnect
+    vectors&.disconnect
   end
 end
 

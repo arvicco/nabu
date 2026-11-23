@@ -497,8 +497,21 @@ class SyncRunnerTest < Minitest::Test
     assert @db.table_exists?(:sqlite_stat1), "the catalog was ANALYZEd (legal on in-memory)"
     ft = Nabu::Store.connect_fulltext(config.fulltext_path)
     assert ft.table_exists?(:sqlite_stat1), "the fulltext index was ANALYZEd too"
+    row = Nabu::Store::StageTimings.last(@ledger, kind: "sync", scope: "breaker", stage: "analyze")
+    refute_nil row, "the post-load ANALYZE lands its wall time in the stage ledger"
+    assert_in_delta outcome.analyzed.seconds, row[:seconds], 1e-6
   ensure
     ft&.disconnect
+  end
+
+  # The post-index lemma rollups (they read the fulltext index) time
+  # themselves into the stage ledger like every other index-adjacent pass.
+  def test_lemma_rollups_land_a_stage_row
+    BreakerAdapter.reset!(urns: %w[urn:cts:test:w1])
+    runner = make_runner(registry(entry("breaker", BreakerAdapter, wired: true)))
+    runner.sync("breaker")
+
+    refute_nil Nabu::Store::StageTimings.last(@ledger, kind: "sync", scope: "breaker", stage: "lemma_rollups")
   end
 
   # An index-inert grain touches no index, so a bulk inert load ANALYZEs the
@@ -1007,6 +1020,45 @@ class SyncRunnerTest < Minitest::Test
 
     row = Nabu::Store::SourceAggregates.fetch(@db, source_id)
     assert_equal [1, false], [row.fts_member_count, row.fts_behind]
+  end
+
+  # The first-ever-index fallback: a sync against a fulltext file without
+  # the incremental tables runs the FULL Indexer.rebuild!, which indexes
+  # every source — so every aggregates row is stamped current, not just
+  # the synced source's (a deferred source synced earlier stops reading
+  # behind once the full build has indexed it).
+  def test_the_full_rebuild_fallback_stamps_every_source_current
+    BreakerAdapter.reset!(urns: %w[urn:cts:test:w1 urn:cts:test:w2])
+    LiveEnabled.reset!
+    runner = make_runner(registry(deferred_entry("breaker", BreakerAdapter),
+                                  entry("live-enabled", LiveEnabled, wired: true)))
+    runner.sync("breaker")
+    deferred_id = Nabu::Store::Source.first(slug: "breaker").id
+    assert Nabu::Store::SourceAggregates.fetch(@db, deferred_id).fts_behind
+    refute File.exist?(config.fulltext_path), "no index yet: the next sync takes the fallback"
+
+    runner.sync("live-enabled")
+
+    deferred = Nabu::Store::SourceAggregates.fetch(@db, deferred_id)
+    assert_equal [2, false], [deferred.fts_member_count, deferred.fts_behind],
+                 "the full build indexed the deferred source too"
+    synced = Nabu::Store::SourceAggregates.fetch(@db, Nabu::Store::Source.first(slug: "live-enabled").id)
+    assert_equal [1, false], [synced.fts_member_count, synced.fts_behind]
+  end
+
+  # The same fallback behind `nabu index refresh` (index_entries).
+  def test_the_index_refresh_fallback_stamps_every_source_current
+    BreakerAdapter.reset!(urns: %w[urn:cts:test:w1 urn:cts:test:w2])
+    LiveEnabled.reset!
+    runner = make_runner(registry(deferred_entry("breaker", BreakerAdapter),
+                                  deferred_entry("live-enabled", LiveEnabled)))
+    runner.sync("breaker")
+    runner.sync("live-enabled")
+
+    runner.index_entries(["live-enabled"])
+
+    other = Nabu::Store::SourceAggregates.fetch(@db, Nabu::Store::Source.first(slug: "breaker").id)
+    assert_equal [2, false], [other.fts_member_count, other.fts_behind]
   end
 
   # The sync's index writer (and `nabu index refresh`, which rides the

@@ -245,8 +245,12 @@ source_aggregates(id, source_id, documents_count, passages_count,
    -- after every full Indexer.rebuild!) — never inside the index-core
    -- files, which write no catalog row. Derived: rebuild re-derives every
    -- column; `rake aggregates:backfill` populates a pre-054 catalog.
-   -- vector_coverage_count is reserved (NULL — the embed lane has no
-   -- per-source tally, and vectors.sqlite3 outlives rebuild).
+   -- vector_coverage_count is written ONLY by the explicit embed census
+   -- (`rake aggregates:embed_census`: live passages holding a vector for
+   -- the model, presence only) — never by sync or rebuild, since
+   -- vectors.sqlite3 outlives rebuild; NULL after a rebuild until the
+   -- census runs again. `rake boards:check` carries the embed-staleness
+   -- probe (newest embed stamp vs the newest source addition).
 place_index(gazetteer, place_id PK, title, lat, lon, place_types_json,
             time_periods_json, position, accuracy)
 place_index_names(gazetteer, place_id, name_key)
