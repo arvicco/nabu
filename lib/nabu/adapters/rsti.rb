@@ -63,7 +63,11 @@ module Nabu
     # surface) extend the passage urn (recto.rih-78/21.01') and ride
     # "column"/"division"; lines at the rendering ROOT mint <doc>:<line>.
     # A line whose value is not a string quarantines the document
-    # (MIXED_MARKUP); an unseen leaf type loud-stops.
+    # (MIXED_MARKUP); an unseen leaf type loud-stops. A mixed-markup value
+    # in a PARALLEL rendering (phonemic, translation, and graphemic beyond
+    # its {supplementary, content} shape) is omitted and counted in
+    # "mixed_markup_parallels_omitted" — no served string is ever a
+    # printed Ruby Hash.
     #
     # == Genre
     #
@@ -144,6 +148,10 @@ module Nabu
       # A parallel-rendering value that is a pure content wrapper (vs mixed
       # markup — MIXED_MARKUP).
       PURE_CONTENT_KEYS = %w[content string lang languages].freeze
+
+      # The witnessed graphemic line value: cuneiform entities + the
+      # parallel damage marks (OchreJsonParser#graphemic_of).
+      GRAPHEMIC_KEYS = %w[supplementary content].freeze
 
       # The quarantine reason for a transliteration line whose value is not
       # a string (81 lines in 7 live text items, RS 17.238's 19 among
@@ -548,7 +556,12 @@ module Nabu
 
           annotate_scalar(annotations, name, value)
         end
-        annotate_graphemic(annotations, parallels["graphemic"][key])
+        graphemic = parallels["graphemic"][key]
+        if graphemic_mixed_markup?(graphemic)
+          omitted["count"] += 1
+        else
+          annotate_graphemic(annotations, graphemic)
+        end
         annotations
       end
 
@@ -579,6 +592,21 @@ module Nabu
       # a partial reading; the caller counts the omission.
       def mixed_markup?(value)
         value.is_a?(Hash) && !(value.keys - PURE_CONTENT_KEYS).empty?
+      end
+
+      # The graphemic rendering's own rule: the witnessed value is
+      # {supplementary, content} of scalars (entities + damage marks). Any
+      # other key (RS 17.238's flattened {i, content, sup}) or a non-scalar
+      # member (sup's nested {"i" => …}) is mixed markup — reading it as
+      # signs/marks would serve a partial, mislabeled reading and print
+      # nested dicts as Ruby Hashes. Omitted and counted like the others.
+      def graphemic_mixed_markup?(value)
+        return false unless value.is_a?(Hash)
+        return true unless (value.keys - GRAPHEMIC_KEYS).empty?
+
+        GRAPHEMIC_KEYS.any? do |key|
+          OchreJsonParser.wrap(value[key]).any? { |member| !member.is_a?(String) && !member.is_a?(Integer) }
+        end
       end
 
       # A plain string, or a pure content wrapper ({content}/{string}) →

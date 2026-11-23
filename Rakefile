@@ -334,6 +334,37 @@ namespace :stamps do
   end
 end
 
+# The inspected-object text instrument (Nabu::Ops::InspectTextScrub): live
+# passages of one source whose text is a printed Ruby Hash/object, found
+# with the conformance invariant's own detector. Read-only, always: the
+# default scans (count + samples); SCRUB=1 re-parses the affected documents
+# in memory from canonical/ and prints the source-wide resync — there is no
+# per-document sync path, and a document that now quarantines keeps its
+# held rows until the next FULL rebuild (the loader's quarantine shield).
+namespace :scrub do
+  desc "Scan a source's live passages for inspect-shaped text; SCRUB=1 diagnoses the resync (read-only)"
+  task :inspect_text, [:slug] do |_task, args|
+    $LOAD_PATH.unshift(File.expand_path("lib", __dir__))
+    require "nabu"
+
+    slug = args[:slug] or abort 'usage: rake "scrub:inspect_text[slug]" (SCRUB=1 to diagnose)'
+    config = Nabu::Config.load
+    catalog = Nabu::Store.connect(config.catalog_path, readonly: true)
+    scrub = ENV["SCRUB"] == "1"
+    adapter = nil
+    if scrub
+      entry = Nabu::SourceRegistry.load(config.sources_path)[slug] or abort "scrub: unknown source #{slug}"
+      adapter = entry.build_adapter
+    end
+    puts Nabu::Ops::InspectTextScrub.new(catalog: catalog, slug: slug, adapter: adapter, scrub: scrub,
+                                         workdir: config.source_workdir(slug)).report
+  rescue Nabu::Error => e
+    abort e.message
+  ensure
+    catalog&.disconnect
+  end
+end
+
 # The clarify lane (nabu_clarify's title index) re-derived standalone over
 # the live catalog — a STAGE re-derive (the reconcile_stages! path the
 # incremental rebuild takes), never a full reindex: it reads only names

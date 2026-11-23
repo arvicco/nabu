@@ -46,13 +46,11 @@
 #   - discover yields no duplicate DocumentRef id within ONE pass (the
 #     stability check compares two passes and cannot see an in-pass repeat)
 module AdapterConformance
-  # The text shape of Hash#inspect (both the pre-3.4 `{"k"=>` and the 3.4+
-  # `{"k" => ` spellings, string or symbol keys, optionally inside an
-  # Array) or of an object inspect (`#<Nokogiri::XML::Element…`,
-  # `#<struct …`, `#<data …`) at the start of a passage. Anchored and
-  # key-shaped on purpose: editorial braces/brackets (`{restored}`,
-  # `<damaged>`) and an upstream `#` are real text, never matched.
-  INSPECTED_OBJECT_TEXT = /\A\s*\[?\{\s*(?:"(?:[^"\\]|\\.)*"|:\w+)\s*=>|\A\s*#<(?:[A-Z][\w:]*|struct |data )/
+  # The text shape of an inspected Ruby object at the start of a passage —
+  # the ONE detector lives in lib (Nabu::InspectedText, shape notes there)
+  # so the live-rows instrument `scrub:inspect_text` scans with the same
+  # pattern this invariant enforces.
+  INSPECTED_OBJECT_TEXT = Nabu::InspectedText::PATTERN
 
   # Hook defaults: flunk with instructions rather than NoMethodError.
   def conformance_adapter
