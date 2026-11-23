@@ -75,7 +75,7 @@ module Nabu
       def open_or_create_catalog(config)
         require "fileutils"
         FileUtils.mkdir_p(File.dirname(config.catalog_path))
-        db = Nabu::Store.connect(config.catalog_path)
+        db = Nabu::Store.connect_catalog(config.catalog_path) # a bare clone's first catalog: the catalog page size
         Nabu::Store.migrate!(db)
         Nabu::Store.setup!(db)
         db
