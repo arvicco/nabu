@@ -429,7 +429,7 @@ class LocalCheckTest < Minitest::Test
       # real corpus row would.
       text: text, text_normalized: Nabu::Normalize.search_form(text, language: "grc"),
       annotations_json: annotations ? JSON.generate(annotations) : "{}",
-      content_sha256: "x"
+      content_sha_raw: "x"
     )
     @fulltext = Nabu::Store.connect_fulltext("sqlite::memory:")
     Nabu::Store::Indexer.rebuild!(catalog: @db, fulltext: @fulltext)

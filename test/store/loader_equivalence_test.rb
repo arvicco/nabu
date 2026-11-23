@@ -246,7 +246,22 @@ module Store
     end
 
     def rows(dataset)
-      dataset.order(:id).all.map { |row| row.except(*VOLATILE).to_a }
+      dataset.order(:id).all.map { |row| pre_raw_shape(row.except(*VOLATILE)).to_a }
+    end
+
+    # Migration 056 stores the passage hash as 32 raw bytes (content_sha_raw)
+    # behind the virtual hex content_sha256. A passages row serializes in
+    # its pre-056 shape — the SERVED hex in the stored column's slot — so
+    # the pins above held unchanged across the storage change: proof on
+    # every fixture corpus that readers see the identical hex. (Blob and
+    # lower-case hex are a bijection, so grain equality loses nothing; the
+    # stored form itself is pinned by passage_sha_storage_test.)
+    def pre_raw_shape(row)
+      return row unless row.key?(:content_sha_raw)
+
+      row.except(:content_sha256).to_h do |key, value|
+        key == :content_sha_raw ? [:content_sha256, row.fetch(:content_sha256)] : [key, value]
+      end
     end
 
     def report_payload(report)

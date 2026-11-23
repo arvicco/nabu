@@ -194,7 +194,7 @@ class ExportCommandTest < Minitest::Test
                                           content_sha256: "x", revision: 1, withdrawn: false)
       tokens = toks.map { |token| token.merge("citation_part" => "MARK 2.3") }
       catalog[:passages].insert(document_id: doc_id, urn: "#{urn}:s0", sequence: 0, language: lang, text: text,
-                                text_normalized: text, content_sha256: "x", revision: 1, withdrawn: false,
+                                text_normalized: text, content_sha_raw: "x", revision: 1, withdrawn: false,
                                 annotations_json: JSON.generate("tokens" => tokens))
     end
     File.write(config.alignments_path, <<~YAML)
@@ -245,7 +245,7 @@ class ExportCommandTest < Minitest::Test
     doc = Nabu::Store::Document.create(source_id: source.id, urn: urn, title: urn, language: language,
                                        content_sha256: "x", revision: 1, withdrawn: false)
     Nabu::Store::Passage.create(document_id: doc.id, urn: "#{urn}:1", sequence: 1, language: language, text: "t",
-                                text_normalized: "t", content_sha256: "x", revision: 1, withdrawn: false)
+                                text_normalized: "t", content_sha_raw: "x", revision: 1, withdrawn: false)
     doc
   end
 

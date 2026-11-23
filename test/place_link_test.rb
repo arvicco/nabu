@@ -56,7 +56,7 @@ class PlaceLinkTest < Minitest::Test
      ["urn:nabu:kanripo:d1:2", "王入于王城"]].each_with_index do |(urn, text), i|
       Nabu::Store::Passage.create(document_id: doc.id, urn: urn, language: "lzh",
                                   text: text, text_normalized: text,
-                                  content_sha256: i.to_s * 64, sequence: i, revision: 1)
+                                  content_sha_raw: i.to_s * 64, sequence: i, revision: 1)
     end
   end
 

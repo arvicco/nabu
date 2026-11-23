@@ -23,7 +23,7 @@ class SignTableBuilderTest < Minitest::Test
                                          language: "sux", content_sha256: "x", revision: 1)
       Nabu::Store::Passage.create(document_id: doc.id, urn: "#{urn}:1", sequence: i,
                                   language: "sux", text: text, text_normalized: text,
-                                  content_sha256: "x", revision: 1)
+                                  content_sha_raw: "x", revision: 1)
     end
   end
 

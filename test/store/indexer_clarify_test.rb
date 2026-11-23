@@ -32,7 +32,7 @@ module Store
                                          content_sha256: "x", revision: 1, withdrawn: withdrawn)
       Nabu::Store::Passage.create(document_id: doc.id, urn: "#{urn}:1.1", sequence: 0, language: "grc",
                                   text: "μῆνιν ἄειδε", text_normalized: "μηνιν αειδε",
-                                  annotations_json: "{}", content_sha256: "x", revision: 1)
+                                  annotations_json: "{}", content_sha_raw: "x", revision: 1)
       doc
     end
 

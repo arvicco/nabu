@@ -19,7 +19,7 @@ class CharVocabTest < Minitest::Test
     %w[子曰學而 子曰不慍].each_with_index do |text, i|
       Nabu::Store::Passage.create(
         document_id: @doc.id, urn: "#{@doc.urn}:#{i}", sequence: i, language: "lzh",
-        text: text, text_normalized: text, content_sha256: "x", revision: 1
+        text: text, text_normalized: text, content_sha_raw: "x", revision: 1
       )
     end
     @vocab = Nabu::Query::CharVocab.new(catalog: @catalog)

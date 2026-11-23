@@ -21,7 +21,7 @@ module Store
       )
       passage = Nabu::Store::Passage.create(
         document_id: document.id, urn: "urn:cts:greekLit:tlg0012.tlg001:1.1",
-        sequence: 1, text: "μῆνιν", text_normalized: "μηνιν", content_sha256: "cafef00d"
+        sequence: 1, text: "μῆνιν", text_normalized: "μηνιν", content_sha_raw: "cafef00d"
       )
       enrichment = Nabu::Store::Enrichment.create(
         passage_id: passage.id, kind: "machine_gloss", at: Time.now
@@ -44,7 +44,7 @@ module Store
       document = Nabu::Store::Document.create(source_id: source.id, urn: "urn:doc", content_sha256: "a")
       passage = Nabu::Store::Passage.create(
         document_id: document.id, urn: "urn:p", sequence: 1,
-        text: "x", text_normalized: "x", content_sha256: "b"
+        text: "x", text_normalized: "x", content_sha_raw: "b"
       )
       prov = Nabu::Store::Provenance.create(passage_id: passage.id, event: "loaded", at: Time.now)
 

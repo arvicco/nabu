@@ -33,7 +33,7 @@ class PersonCandidatesTest < Minitest::Test
     lines.each_with_index do |text, i|
       Nabu::Store::Passage.create(document_id: doc.id, urn: "urn:nabu:edh:HD000001:#{i}", language: "lat",
                                   text: text, text_normalized: text.downcase,
-                                  content_sha256: Digest::SHA256.hexdigest("#{i}#{text}"), sequence: i, revision: 1)
+                                  content_sha_raw: Digest::SHA256.hexdigest("#{i}#{text}"), sequence: i, revision: 1)
     end
   end
 

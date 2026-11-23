@@ -327,7 +327,7 @@ class CLITest < Minitest::Test
                                        withdrawn: false)
     leaves.each do |leaf|
       Nabu::Store::Passage.create(document_id: doc.id, urn: "#{doc.urn}:p#{leaf}", sequence: leaf, language: "eng",
-                                  text: "p", text_normalized: "p", content_sha256: "x", revision: 1)
+                                  text: "p", text_normalized: "p", content_sha_raw: "x", revision: 1)
     end
     db.disconnect
   end
@@ -8052,7 +8052,7 @@ class CLITest < Minitest::Test
                                             language: lang, content_sha256: "x", revision: 1, withdrawn: false)
         catalog[:passages].insert(
           document_id: doc_id, urn: "#{urn}:s", sequence: 0, language: lang, text: text,
-          text_normalized: text, content_sha256: "x", revision: 1, withdrawn: false,
+          text_normalized: text, content_sha_raw: "x", revision: 1, withdrawn: false,
           annotations_json: JSON.generate("citation" => "MARK 2.3",
                                           "tokens" => [{ "citation_part" => "MARK 2.3", "form" => "x" }])
         )
@@ -9335,7 +9335,7 @@ class CLITest < Minitest::Test
     catalog[:passages].insert(
       document_id: doc_id, urn: "urn:x:bu:1", sequence: 0, language: "xct",
       text: BUSTON_OPENING, text_normalized: Nabu::Normalize.search_form(BUSTON_OPENING, language: "xct"),
-      content_sha256: "x", revision: 1, withdrawn: false, annotations_json: "{}"
+      content_sha_raw: "x", revision: 1, withdrawn: false, annotations_json: "{}"
     )
   end
 
@@ -9360,7 +9360,7 @@ class CLITest < Minitest::Test
         catalog[:passages].insert(
           document_id: doc_id, urn: "urn:t:#{slug}:#{doc}:1", sequence: 0, language: "grc",
           text: "χαῖρε", text_normalized: "χαιρε",
-          content_sha256: "x", revision: 1, withdrawn: false, annotations_json: "{}"
+          content_sha_raw: "x", revision: 1, withdrawn: false, annotations_json: "{}"
         )
       end
     end
@@ -9423,7 +9423,7 @@ class CLITest < Minitest::Test
       catalog[:passages].insert(
         document_id: doc_id, urn: "urn:jp:d:1", sequence: 0, language: "jpn",
         text: "学問。天下", text_normalized: Nabu::Normalize.search_form("学問。天下", language: "jpn"),
-        content_sha256: "x", revision: 1, withdrawn: false, annotations_json: "{}"
+        content_sha_raw: "x", revision: 1, withdrawn: false, annotations_json: "{}"
       )
       fulltext = Nabu::Store.connect_fulltext(config.fulltext_path)
       Nabu::Store::Indexer.rebuild!(catalog: catalog, fulltext: fulltext, alignments: nil)
@@ -9460,7 +9460,7 @@ class CLITest < Minitest::Test
         catalog[:passages].insert(
           document_id: doc_id, urn: "urn:nabu:aspr:riddle:#{i}", sequence: i, language: "ang",
           text: text, text_normalized: Nabu::Normalize.search_form(text, language: "ang"),
-          content_sha256: "x", revision: 1, withdrawn: false, annotations_json: "{}"
+          content_sha_raw: "x", revision: 1, withdrawn: false, annotations_json: "{}"
         )
       end
       catalog.disconnect
@@ -9582,7 +9582,7 @@ class CLITest < Minitest::Test
         texts.each_with_index do |(suffix, text), index|
           catalog[:passages].insert(
             document_id: doc, urn: "#{urn}:#{suffix}", sequence: index, language: language,
-            text: text, text_normalized: text, content_sha256: "x", revision: 1
+            text: text, text_normalized: text, content_sha_raw: "x", revision: 1
           )
         end
       end
@@ -9598,7 +9598,7 @@ class CLITest < Minitest::Test
       )
       catalog[:passages].insert(
         document_id: doc, urn: "urn:nabu:lone:solo:1", sequence: 0, language: "grc",
-        text: "t", text_normalized: "t", content_sha256: "x", revision: 1
+        text: "t", text_normalized: "t", content_sha_raw: "x", revision: 1
       )
       Nabu::Store::SourceStats.derive!(catalog, note: "test seed")
       catalog.disconnect
@@ -9785,7 +9785,7 @@ class CLITest < Minitest::Test
     lemmas.each_with_index do |lemma, i|
       catalog[:passages].insert(
         document_id: doc, urn: "#{urn}:#{i + 1}", sequence: i, language: language,
-        text: lemma, text_normalized: lemma, content_sha256: "x", revision: 1, withdrawn: false,
+        text: lemma, text_normalized: lemma, content_sha_raw: "x", revision: 1, withdrawn: false,
         annotations_json: JSON.generate({ "tokens" => [{ "lemma" => lemma, "form" => lemma }] })
       )
     end
@@ -9839,7 +9839,7 @@ class CLITest < Minitest::Test
     catalog[:passages].insert(
       document_id: doc_id, urn: urn, sequence: sequence, language: language,
       text: "text #{sequence}", text_normalized: "text #{sequence}",
-      content_sha256: "x", revision: 1, withdrawn: false, annotations_json: "{}"
+      content_sha_raw: "x", revision: 1, withdrawn: false, annotations_json: "{}"
     )
   end
 
@@ -9851,7 +9851,7 @@ class CLITest < Minitest::Test
     catalog[:passages].insert(
       document_id: doc_id, urn: passage_urn, sequence: 0, language: "grc",
       text: text, text_normalized: Nabu::Normalize.search_form(text, language: "grc"),
-      content_sha256: "x", revision: 1, withdrawn: false, annotations_json: "{}"
+      content_sha_raw: "x", revision: 1, withdrawn: false, annotations_json: "{}"
     )
   end
 
@@ -9921,7 +9921,7 @@ class CLITest < Minitest::Test
     catalog[:passages].insert(
       document_id: doc_id, urn: urn, sequence: sequence, language: language,
       text: text, text_normalized: Nabu::Normalize.search_form(text, language: language),
-      content_sha256: "x", revision: 1, withdrawn: false,
+      content_sha_raw: "x", revision: 1, withdrawn: false,
       annotations_json: JSON.generate({ "tokens" => tokens })
     )
   end
@@ -9992,7 +9992,7 @@ class CLITest < Minitest::Test
         catalog[:passages].insert(
           document_id: doc_id, urn: "#{urn}:1", sequence: 0, language: "sux", text: text,
           text_normalized: Nabu::Normalize.search_form(text, language: "sux"),
-          content_sha256: "x", revision: 1, withdrawn: false
+          content_sha_raw: "x", revision: 1, withdrawn: false
         )
       end
       fulltext = Nabu::Store.connect_fulltext(config.fulltext_path)
@@ -10051,7 +10051,7 @@ class CLITest < Minitest::Test
         document_id: doc_id, urn: "#{doc_urn}:#{seq + 1}", sequence: seq, language: "cop",
         text: text, text_normalized: Nabu::Normalize.search_form(text, language: "cop"),
         annotations_json: Nabu::Store::ContentHash.canonical_json(annotations),
-        content_sha256: "#{doc_urn}p#{seq}", revision: 1, withdrawn: false
+        content_sha_raw: "#{doc_urn}p#{seq}", revision: 1, withdrawn: false
       )
     end
   end
@@ -10094,7 +10094,7 @@ class CLITest < Minitest::Test
     catalog[:passages].insert(
       document_id: doc_id, urn: "#{doc_urn}:1", sequence: 0, language: "grc",
       text: text, text_normalized: Nabu::Normalize.search_form(text, language: "grc"),
-      content_sha256: "#{doc_urn}p", revision: 1, withdrawn: false, annotations_json: "{}"
+      content_sha_raw: "#{doc_urn}p", revision: 1, withdrawn: false, annotations_json: "{}"
     )
   end
 
@@ -10145,7 +10145,7 @@ class CLITest < Minitest::Test
     catalog[:passages].insert(
       document_id: doc_id, urn: "#{doc_urn}:1", sequence: 0, language: language,
       text: text, text_normalized: Nabu::Normalize.search_form(text, language: language),
-      content_sha256: "#{doc_urn}p", revision: 1, withdrawn: false, annotations_json: "{}"
+      content_sha_raw: "#{doc_urn}p", revision: 1, withdrawn: false, annotations_json: "{}"
     )
   end
 
@@ -10193,7 +10193,7 @@ class CLITest < Minitest::Test
     catalog[:passages].insert(
       document_id: doc_id, urn: "#{doc_urn}:1", sequence: 0, language: "grc",
       text: text, text_normalized: Nabu::Normalize.search_form(text, language: "grc"),
-      content_sha256: "#{doc_urn}p", revision: 1, withdrawn: false, annotations_json: "{}"
+      content_sha_raw: "#{doc_urn}p", revision: 1, withdrawn: false, annotations_json: "{}"
     )
     catalog[:document_axes].insert(
       document_id: doc_id, not_before: not_before, not_after: not_after,
@@ -10258,7 +10258,7 @@ class CLITest < Minitest::Test
       )
       catalog[:passages].insert(
         document_id: doc_id, urn: "#{doc_urn}:#{tail}", sequence: 0, language: lang,
-        text: text, text_normalized: text, content_sha256: "x", revision: 1, withdrawn: false,
+        text: text, text_normalized: text, content_sha_raw: "x", revision: 1, withdrawn: false,
         annotations_json: "{}"
       )
     end
@@ -10299,7 +10299,7 @@ class CLITest < Minitest::Test
       )
       catalog[:passages].insert(
         document_id: doc_id, urn: "urn:nabu:proiel:#{tail}:1", sequence: 0, language: lang,
-        text: text, text_normalized: text, content_sha256: "x", revision: 1, withdrawn: false,
+        text: text, text_normalized: text, content_sha_raw: "x", revision: 1, withdrawn: false,
         annotations_json: JSON.generate(
           "citation" => "MARK 2.3",
           "tokens" => [{ "citation_part" => "MARK 2.3", "form" => "x" }]
@@ -10390,7 +10390,7 @@ class CLITest < Minitest::Test
     verses.each_with_index do |(tail, text), sequence|
       catalog[:passages].insert(
         document_id: doc_id, urn: "#{urn}:#{tail}", sequence: sequence, language: lang,
-        text: text, text_normalized: text, content_sha256: "x", revision: 1,
+        text: text, text_normalized: text, content_sha_raw: "x", revision: 1,
         withdrawn: false, annotations_json: "{}"
       )
     end
@@ -10694,7 +10694,7 @@ class CLITest < Minitest::Test
       )
       Nabu::Store::Passage.create(
         document_id: lunyu.id, urn: "urn:nabu:kanripo:KR1h0004:005:22a", sequence: 0,
-        language: "lzh", text: "棄而違之。", text_normalized: "棄而違之。", content_sha256: "x", revision: 1
+        language: "lzh", text: "棄而違之。", text_normalized: "棄而違之。", content_sha_raw: "x", revision: 1
       )
       Nabu::Store::Document.create(
         source_id: kanripo.id, urn: "urn:nabu:kanripo:KR1h0001", title: "孟子", language: "lzh",
@@ -10847,7 +10847,7 @@ class CLITest < Minitest::Test
       document_id: document.id, urn: "urn:nabu:test:treebank:lat:1", sequence: 0,
       language: "lat", text: "hiemps", text_normalized: "hiemps",
       annotations_json: JSON.generate({ "tokens" => [{ "lemma" => "hiems", "form" => "hiemps" }] }),
-      content_sha256: "x", revision: 1
+      content_sha_raw: "x", revision: 1
     )
   end
 
@@ -10864,7 +10864,7 @@ class CLITest < Minitest::Test
         annotations_json: JSON.generate(
           { "tokens" => [{ "lemma_id" => "1a", "latin_equivalent" => cle, "form" => form }] }
         ),
-        content_sha256: "x", revision: 1
+        content_sha_raw: "x", revision: 1
       )
     end
   end
@@ -10892,7 +10892,7 @@ class CLITest < Minitest::Test
         document_id: document.id, urn: "#{urn_stem}:#{i + 1}", sequence: i,
         language: language, text: "зима", text_normalized: "зима",
         annotations_json: JSON.generate({ "tokens" => [{ "lemma" => "зима", "form" => "зима" }] }),
-        content_sha256: "x", revision: 1
+        content_sha_raw: "x", revision: 1
       )
     end
   end
@@ -11436,7 +11436,7 @@ class CLITest < Minitest::Test
       rows.each_with_index do |(ref, lemma, form), seq|
         catalog[:passages].insert(
           document_id: doc_id, urn: "urn:nabu:test:#{tail}:#{seq + 1}", sequence: seq,
-          language: lang, text: form, text_normalized: form, content_sha256: "x", revision: 1,
+          language: lang, text: form, text_normalized: form, content_sha_raw: "x", revision: 1,
           withdrawn: false,
           annotations_json: JSON.generate(
             "citation" => ref,
@@ -11552,7 +11552,7 @@ class CLITest < Minitest::Test
         catalog[:passages].insert(
           document_id: doc_id, urn: "#{doc_urn}:#{tail}", sequence: sequence, language: lang,
           text: text, text_normalized: Nabu::Normalize.search_form(text, language: lang),
-          content_sha256: "x", revision: 1, withdrawn: false,
+          content_sha_raw: "x", revision: 1, withdrawn: false,
           annotations_json: JSON.generate(annotations || {})
         )
       end
@@ -11617,7 +11617,7 @@ class CLITest < Minitest::Test
       )
       Nabu::Store::Passage.create(
         document_id: doc.id, urn: "urn:nabu:kanripo:KR1h0004:001:1a", sequence: 0,
-        language: "lzh", text: text, text_normalized: text, content_sha256: "x", revision: 1
+        language: "lzh", text: text, text_normalized: text, content_sha_raw: "x", revision: 1
       )
       catalog.disconnect
       yield config
@@ -11651,7 +11651,7 @@ class CLITest < Minitest::Test
       catalog[:passages].insert(
         document_id: doc_id, urn: passage_urn, sequence: sequence, language: lang,
         text: text, text_normalized: Nabu::Normalize.search_form(text, language: lang),
-        content_sha256: "x", revision: 1, withdrawn: false, annotations_json: annotations_json
+        content_sha_raw: "x", revision: 1, withdrawn: false, annotations_json: annotations_json
       )
     end
   end

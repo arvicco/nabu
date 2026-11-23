@@ -44,7 +44,7 @@ module AlignmentExportRig
     tokens ||= text.split.map { |form| { "form" => form } }
     tokens = tokens.map { |token| { "citation_part" => ref }.merge(token) }
     @catalog[:passages].insert(document_id: doc_id, urn: "#{urn}:s#{seq}", sequence: seq, language: language,
-                               text: text, text_normalized: text, content_sha256: "x", revision: 1,
+                               text: text, text_normalized: text, content_sha_raw: "x", revision: 1,
                                withdrawn: false,
                                annotations_json: JSON.generate("citation" => ref, "tokens" => tokens))
   end

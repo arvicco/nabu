@@ -70,7 +70,7 @@ module Query
       seq = @catalog[:passages].where(document_id: doc_id).count
       @catalog[:passages].insert(
         document_id: doc_id, urn: "#{urn}:s#{seq}", sequence: seq, language: language,
-        text: text, text_normalized: text, content_sha256: "x", revision: 1, withdrawn: false,
+        text: text, text_normalized: text, content_sha_raw: "x", revision: 1, withdrawn: false,
         annotations_json: JSON.generate(
           "citation" => ref, "tokens" => [{ "citation_part" => ref, "form" => "x" }]
         )

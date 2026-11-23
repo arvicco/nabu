@@ -47,7 +47,7 @@ module Query
         document_id: document.id, urn: urn, sequence: sequence, language: language,
         text: text, text_normalized: Nabu::Normalize.search_form(text, language: language),
         annotations_json: JSON.generate({ "tokens" => token_hashes }),
-        content_sha256: "x", revision: 1
+        content_sha_raw: "x", revision: 1
       )
     end
 
@@ -107,7 +107,7 @@ module Query
           document_id: doc.id, urn: urn, sequence: seq, language: "cop",
           text: "ⲡⲛⲟⲩⲧⲉ #{seq}", text_normalized: Nabu::Normalize.search_form("ⲡⲛⲟⲩⲧⲉ", language: "cop"),
           annotations_json: Nabu::Store::ContentHash.canonical_json(annotations),
-          content_sha256: "x", revision: 1
+          content_sha_raw: "x", revision: 1
         )
       end
       rebuild!

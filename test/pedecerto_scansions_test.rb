@@ -40,7 +40,7 @@ class PedecertoScansionsTest < Minitest::Test
     citations.each_with_index do |citation, index|
       Nabu::Store::Passage.create(document_id: document.id, urn: "#{doc_urn}:#{citation}",
                                   sequence: index, language: language, text: "verse #{citation}",
-                                  text_normalized: "verse #{citation}", content_sha256: "x",
+                                  text_normalized: "verse #{citation}", content_sha_raw: "x",
                                   revision: 1, withdrawn: false)
     end
   end
@@ -217,7 +217,7 @@ class PedecertoScansionsTest < Minitest::Test
                                    content_sha256: "x", revision: 1, withdrawn: false)
     GEOR_CITATIONS.each_with_index do |c, i|
       fresh[:passages].insert(document_id: doc, urn: "#{doc_urn}:#{c}", sequence: i, language: "lat",
-                              text: "v", text_normalized: "v", content_sha256: "x", revision: 1, withdrawn: false)
+                              text: "v", text_normalized: "v", content_sha_raw: "x", revision: 1, withdrawn: false)
     end
     Nabu::PedecertoScansions.new(catalog: fresh).run("pedecerto", workdir: FIXTURES)
     rebuilt = fresh[:enrichments].where(kind: "meter").order(:id).map { |r| JSON.parse(r[:payload_json]) }

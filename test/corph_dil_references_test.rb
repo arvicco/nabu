@@ -81,7 +81,7 @@ class CorphDilReferencesTest < Minitest::Test
     )
     Nabu::Store::Passage.create(
       document_id: doc.id, urn: "urn:other:doc:1", language: "sga", sequence: 0,
-      text: "x", text_normalized: "x", content_sha256: "x", revision: 1, withdrawn: false,
+      text: "x", text_normalized: "x", content_sha_raw: "x", revision: 1, withdrawn: false,
       annotations_json: JSON.generate({ "tokens" => [{ "lemma" => "caur", "dil" => ["8406"] }] })
     )
     producer.run("corph")

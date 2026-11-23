@@ -176,7 +176,7 @@ class LemmaCommandTest < Minitest::Test
     Nabu::Store::Passage.create(document_id: doc.id, urn: "#{doc.urn}:#{sequence}", sequence: sequence,
                                 language: language, text: text, text_normalized: text,
                                 annotations_json: lemmas.empty? ? "{}" : JSON.generate({ "tokens" => tokens }),
-                                content_sha256: "x", revision: 1)
+                                content_sha_raw: "x", revision: 1)
   end
 
   def axis(db, doc, not_before, not_after, date_class: nil)

@@ -79,7 +79,7 @@ module Store
         urn = "#{doc.urn}:#{seq}"
         text = text_for(seq)
         { document_id: doc.id, urn: urn, sequence: seq, language: seq.even? ? language : "lat", text: text,
-          text_normalized: text, content_sha256: Digest::SHA256.hexdigest("#{urn}|#{text}"), revision: 1,
+          text_normalized: text, content_sha_raw: Digest::SHA256.hexdigest("#{urn}|#{text}"), revision: 1,
           withdrawn: false, annotations_json: "{}" }
       end)
     end
@@ -91,7 +91,7 @@ module Store
       ids.first(count).each do |id|
         text = "revised #{id} λογοσ"
         @catalog[:passages].where(id: id).update(text_normalized: text, text: text,
-                                                 content_sha256: Digest::SHA256.hexdigest(text))
+                                                 content_sha_raw: Digest::SHA256.hexdigest(text))
       end
       @catalog[:passages].where(id: ids[count, withdraw]).update(withdrawn: true) if withdraw.positive?
     end

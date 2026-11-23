@@ -34,7 +34,7 @@ module Store
         document_id: doc.id, urn: "#{doc.urn}:#{seq + 1}", sequence: seq,
         language: "lzh", text: "文#{seq}", text_normalized: "文#{seq}",
         annotations_json: JSON.generate(annotations),
-        content_sha256: "#{doc.urn}:#{seq}", revision: 1, withdrawn: false
+        content_sha_raw: "#{doc.urn}:#{seq}", revision: 1, withdrawn: false
       )
     end
 

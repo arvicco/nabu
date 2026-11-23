@@ -130,7 +130,7 @@ class MinedLayersTest < Minitest::Test
     [["urn:pl:d:1", "lat", 1, false], ["urn:pl:d:2", "lat", 2, false], ["urn:pl:d:3", "lat", 5, true],
      ["urn:pl:d:4", "grc", 7, false]].each_with_index do |(urn, lang, revision, withdrawn), i|
       catalog[:passages].insert(document_id: doc, urn: urn, sequence: i, language: lang, text: "t",
-                                text_normalized: "t", content_sha256: "x", revision: revision, withdrawn: withdrawn)
+                                text_normalized: "t", content_sha_raw: "x", revision: revision, withdrawn: withdrawn)
     end
     catalog
   end
@@ -171,7 +171,7 @@ class MinedLayersTest < Minitest::Test
     refute staleness.stale?
 
     catalog[:passages].insert(document_id: pl_doc, urn: "urn:pl:d:5", sequence: 9, language: "lat", text: "t",
-                              text_normalized: "t", content_sha256: "x", revision: 1, withdrawn: false)
+                              text_normalized: "t", content_sha_raw: "x", revision: 1, withdrawn: false)
     grown = Nabu::MinedLayers.staleness(sliced, catalog: catalog)
     assert_equal %w[pl], grown.changed, "a member whose lane grew is stale"
     assert grown.stale?

@@ -96,7 +96,7 @@ class LectSuggestTest < Minitest::Test
         2.times do |i|
           catalog[:passages].insert(
             document_id: doc_id, urn: "urn:t:n:#{tag}:#{i}", sequence: i, text: "x",
-            text_normalized: "x", content_sha256: "#{tag}#{i}",
+            text_normalized: "x", content_sha_raw: "#{tag}#{i}",
             annotations_json: %({"date":"1617-01-0#{i}L0","title":"座目"})
           )
         end
@@ -133,7 +133,7 @@ class LectSuggestTest < Minitest::Test
                                        content_sha256: "x")
       catalog[:passages].insert(document_id: doc, urn: "urn:t:n:sgao1:1", sequence: 0,
                                 language: "sga-Ogam", text: "ᚉᚑᚏᚁᚔ ᚋᚐᚊᚔ", text_normalized: "x",
-                                content_sha256: "x")
+                                content_sha_raw: "x")
       report = suggest.run("newsource")
       row = report.script_layer.find { |r| r.code == "sga-Ogam" }
       assert_equal 1, row.docs

@@ -73,7 +73,7 @@ class ScansionGoldCheckTest < Minitest::Test
       seq += 1
       doc = catalog[:documents].insert(source_id: src, urn: "#{urn}-doc", language: language, content_sha256: "x")
       passage = catalog[:passages].insert(document_id: doc, urn: urn, sequence: seq, language: language, text: text,
-                                          text_normalized: text, content_sha256: "s#{seq}")
+                                          text_normalized: text, content_sha_raw: "s#{seq}")
       catalog[:enrichments].insert(passage_id: passage, kind: "meter", model: model, model_version: "t",
                                    payload_json: JSON.generate(payload), at: Time.now)
     end

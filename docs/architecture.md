@@ -186,7 +186,8 @@ sources(id, name, adapter_class, license, license_class, upstream_url,
 documents(id, source_id, urn, title, language, edition, license_override,
           canonical_path, content_sha256, revision, withdrawn, retired_upstream)
 passages(id, document_id, urn, sequence, language, text, text_normalized,
-         annotations_json, content_sha256, revision)
+         annotations_json, content_sha_raw, revision)
+   -- + VIRTUAL generated text_search and content_sha256 (below)
    -- text_normalized stores "" when byte-identical to text (P112-2: the
    -- CJK-majority corpus folds to itself — ~12-18 GB of duplication);
    -- readers use the text_search VIRTUAL generated column
@@ -200,6 +201,16 @@ passages(id, document_id, urn, sequence, language, text, text_normalized,
    -- derivability law is untouched; genuine Unicode folds (~53% of rows)
    -- stay stored. Older rows slim in place via the owner-fired
    -- `rake "diet:text_normalized"` (ops.md §8b)
+   -- content_sha256 is a VIRTUAL generated column too (migration 056):
+   -- the hash is STORED in content_sha_raw as 32 raw bytes (~3.3 GiB
+   -- saved against 64 hex chars at ~107M rows) and served as
+   -- CASE typeof(raw)='blob' → lower(hex(raw)), else the stored text —
+   -- so every reader sees the same lower-case hex, and rows still
+   -- holding the older hex TEXT keep serving it unchanged (mixed rows
+   -- are legal; the next full rebuild lands the file all-blob). The
+   -- loader writes content_sha_raw (Store::ContentHash.stored); a write
+   -- through the old name is refused by the engine. documents and
+   -- dictionary_entries keep their plain hex content_sha256 columns
 provenance(id, passage_id, event, tool, tool_version, model, params_json, at)
    -- "loaded" is journaled at DOCUMENT and dictionary-entry grain only
    -- (P112-2): the per-passage breadcrumb was 95% of the table (~11 GB

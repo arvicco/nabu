@@ -97,7 +97,7 @@ class DemoBuildTest < Minitest::Test
     doc = Nabu::Store::Document.create(source_id: source.id, urn: "urn:nabu:texts:a", title: "A", language: "grc",
                                        content_sha256: "x", revision: 1, license_override: override)
     Nabu::Store::Passage.create(document_id: doc.id, urn: "urn:nabu:texts:a:1", sequence: 0, language: "grc",
-                                text: "λόγος", text_normalized: "λογος", content_sha256: "x", revision: 1)
+                                text: "λόγος", text_normalized: "λογος", content_sha_raw: "x", revision: 1)
     fulltext = Nabu::Store.connect_fulltext(config.fulltext_path)
     Nabu::Store::Indexer.rebuild!(catalog: catalog, fulltext: fulltext)
     Nabu::Store::SourceStats.derive!(catalog, note: "test")

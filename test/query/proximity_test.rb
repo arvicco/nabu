@@ -41,7 +41,7 @@ module Query
         document_id: document.id, urn: urn, sequence: sequence, language: language,
         text: text, text_normalized: Nabu::Normalize.search_form(text, language: language),
         annotations_json: JSON.generate({ "tokens" => tokens }),
-        content_sha256: "x", revision: 1, withdrawn: withdrawn
+        content_sha_raw: "x", revision: 1, withdrawn: withdrawn
       )
     end
 

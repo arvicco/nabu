@@ -31,7 +31,7 @@ class BatchFormulasTest < Minitest::Test
       sequence: @catalog[:passages].where(document_id: document.id).count,
       language: language, text: text,
       text_normalized: Nabu::Normalize.search_form(text, language: language),
-      annotations_json: "{}", content_sha256: "x", revision: 1, withdrawn: false
+      annotations_json: "{}", content_sha_raw: "x", revision: 1, withdrawn: false
     )
   end
 

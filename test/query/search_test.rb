@@ -43,7 +43,7 @@ module Query
       Nabu::Store::Passage.create(
         document_id: document.id, urn: urn, sequence: sequence, language: language,
         text: text, text_normalized: Nabu::Normalize.search_form(text, language: language),
-        content_sha256: "x", revision: 1, withdrawn: withdrawn
+        content_sha_raw: "x", revision: 1, withdrawn: withdrawn
       )
     end
 
@@ -1499,7 +1499,7 @@ module Query
         annotations_json: Nabu::Store::ContentHash.canonical_json(
           { "tokens" => [], "loans" => loans }
         ),
-        content_sha256: "x", revision: 1
+        content_sha_raw: "x", revision: 1
       )
       doc
     end
@@ -1722,7 +1722,7 @@ module Query
         text = i < ceiling - 1 ? "aurora lux verbum#{i % 997}" : "aurora verbum#{i % 997}"
         { document_id: doc.id, urn: "urn:d:scale:#{i}", sequence: i, language: "lat", text: text,
           text_normalized: Nabu::Normalize.search_form(text, language: "lat"),
-          content_sha256: "x", revision: 1, withdrawn: false }
+          content_sha_raw: "x", revision: 1, withdrawn: false }
       end
       @catalog[:passages].multi_insert(rows)
       rebuild!

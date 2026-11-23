@@ -34,7 +34,7 @@ module Query
       Nabu::Store::Passage.create(
         document_id: document.id, urn: urn, sequence: sequence, language: language,
         text: text, text_normalized: text_normalized || text, annotations_json: annotations_json,
-        content_sha256: "x", revision: 1, withdrawn: withdrawn
+        content_sha_raw: "x", revision: 1, withdrawn: withdrawn
       )
     end
 

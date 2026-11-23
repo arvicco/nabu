@@ -178,7 +178,7 @@ class LexlepWordsTest < Minitest::Test
     doc = Nabu::Store::Document.create(source_id: library.id, urn: item, title: "Holder II", language: "deu",
                                        content_sha256: "x", revision: 1, withdrawn: false)
     Nabu::Store::Passage.create(document_id: doc.id, urn: "#{item}:p1007", sequence: 1007, language: "deu",
-                                text: "1779", text_normalized: "1779", content_sha256: "x", revision: 1)
+                                text: "1779", text_normalized: "1779", content_sha_raw: "x", revision: 1)
     table = Nabu::Query::ScanAnchors.load(File.expand_path("../../config/scan_anchors.yml", __dir__))
     result = Nabu::Query::Define.new(catalog: db, lects: nil, scan_anchors: table)
                                 .by_urn("urn:nabu:dict:lexlep-words:tekialui")
@@ -199,7 +199,7 @@ class LexlepWordsTest < Minitest::Test
                                        content_sha256: "x", revision: 1, withdrawn: false)
     # col 1247 → leaf ceil(1247/2) + 20 (the from_column 381 break) = 644
     Nabu::Store::Passage.create(document_id: doc.id, urn: "#{item}:p644", sequence: 644, language: "deu",
-                                text: "1247", text_normalized: "1247", content_sha256: "x", revision: 1)
+                                text: "1247", text_normalized: "1247", content_sha_raw: "x", revision: 1)
     table = Nabu::Query::ScanAnchors.load(File.expand_path("../../config/scan_anchors.yml", __dir__))
     result = Nabu::Query::Define.new(catalog: db, lects: nil, scan_anchors: table)
                                 .by_urn("urn:nabu:dict:lexlep-words:tekialui")

@@ -92,7 +92,7 @@ class ListModuleRowsTest < Minitest::Test
     doc = catalog[:documents].insert(source_id: plain, urn: "urn:nabu:plain:d", title: "d", language: "grc",
                                      content_sha256: "x", revision: 1)
     catalog[:passages].insert(document_id: doc, urn: "urn:nabu:plain:d:1", sequence: 0, language: "grc",
-                              text: "α", text_normalized: "α", content_sha256: "x", revision: 1)
+                              text: "α", text_normalized: "α", content_sha_raw: "x", revision: 1)
     catalog[:sources].insert(slug: "bare", name: "Bare", adapter_class: "TestAdapter",
                              license_class: "open", enabled: true)
     Nabu::Store::SourceStats.derive!(catalog, note: "test seed")

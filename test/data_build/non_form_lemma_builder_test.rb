@@ -65,7 +65,7 @@ class DataBuildNonFormLemmaBuilderTest < Minitest::Test
                                        title: "planted", language: language, content_sha256: "x",
                                        revision: 1, license_override: license_override)
     Nabu::Store::Passage.create(document_id: doc.id, urn: "#{doc.urn}:1", sequence: 0, language: language,
-                                text: "t", text_normalized: "t", content_sha256: "x", revision: 1,
+                                text: "t", text_normalized: "t", content_sha_raw: "x", revision: 1,
                                 annotations_json: tokens_json(tokens))
   end
 

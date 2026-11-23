@@ -35,7 +35,7 @@ module Export
       doc = Nabu::Store::Document.create(source_id: source.id, urn: urn, title: urn, language: "lat",
                                          content_sha256: "x", revision: 1, withdrawn: false)
       Nabu::Store::Passage.create(document_id: doc.id, urn: "#{urn}:1", sequence: 1, language: "lat", text: "t",
-                                  text_normalized: "t", content_sha256: "x", revision: 1, withdrawn: false)
+                                  text_normalized: "t", content_sha_raw: "x", revision: 1, withdrawn: false)
       @catalog[:document_axes].insert(document_id: doc.id, axis_source: "test", **dated) if dated
       doc
     end

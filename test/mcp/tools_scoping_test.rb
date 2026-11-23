@@ -52,7 +52,7 @@ module MCP
       annotations = lemmas ? JSON.generate({ "tokens" => lemmas.map { |l, f| { "lemma" => l, "form" => f } } }) : "{}"
       Nabu::Store::Passage.create(document_id: doc.id, urn: urn, sequence: 0, language: "grc", text: text,
                                   text_normalized: Nabu::Normalize.search_form(text, language: "grc"),
-                                  annotations_json: annotations, content_sha256: "x", revision: 1,
+                                  annotations_json: annotations, content_sha_raw: "x", revision: 1,
                                   withdrawn: false)
     end
 
