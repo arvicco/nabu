@@ -635,6 +635,51 @@ class RebuildTest < Minitest::Test
     end
   end
 
+  # Every stage the full rebuild runs lands a row: the producer replays,
+  # the deferred-index build, the silver/place projections, the code
+  # pinning, each index sub-stage (the five tail lanes included) — and
+  # each source's derivation stamp (its canonical-tree hash).
+  def test_rebuild_records_every_stage_it_runs
+    write_sources(<<~YAML)
+      hexameter:
+        adapter: TestAdapter
+    YAML
+    write_canonical("hexameter", "one.txt" => ILIAD)
+
+    result = rebuilder.run
+
+    with_ledger do |ledger|
+      corpus = ledger[:stage_timings].where(kind: "rebuild", scope: "corpus").select_map(:stage)
+      assert_empty Nabu::RebuildProfile::CORPUS_STAGE_LABELS.keys.map(&:to_s) - corpus,
+                   "every labelled corpus stage ran and recorded"
+      rows = ledger[:stage_timings].where(kind: "rebuild", scope: "corpus").select_map(:rows).uniq
+      assert_equal [result.indexed], rows, "corpus rows carry the indexed passage count"
+      stamp = Nabu::Store::StageTimings.last(ledger, kind: "rebuild", scope: "hexameter", stage: "stamp")
+      refute_nil stamp, "the per-source stamp (the tree hash) records"
+      assert_nil stamp[:rows], "no work-size denominator in hand for a tree hash"
+    end
+  end
+
+  # Recording only: the same rebuild with the recorder silenced lands the
+  # same passages and the same index count.
+  def test_the_recorder_leaves_the_rebuild_unchanged
+    write_sources(<<~YAML)
+      hexameter:
+        adapter: TestAdapter
+    YAML
+    write_canonical("hexameter", "one.txt" => ILIAD)
+    singleton = Nabu::Store::StageTimings.singleton_class
+    original = Nabu::Store::StageTimings.method(:record!)
+    singleton.define_method(:record!) { |*, **| nil }
+    silent = begin
+      [rebuilder.run.indexed, passage_snapshot]
+    ensure
+      singleton.define_method(:record!, original)
+    end
+
+    assert_equal silent, [rebuilder.run.indexed, passage_snapshot]
+  end
+
   # P78-r2: the announcements SPEAK the history — first run honestly empty,
   # second run estimating from the first's persisted timings.
   def test_a_second_rebuild_announces_stages_with_estimates_from_history
@@ -658,9 +703,9 @@ class RebuildTest < Minitest::Test
     assert_match(/\A~.+\(last run /, timeline.render)
     refute_predicate second.assoc("hexameter").fetch(1), :none?, "per-source load estimates too"
     refute_predicate second.assoc("fulltext index").fetch(1), :none?,
-                     "the umbrella stage sums the six recorded index sub-stages"
+                     "the umbrella stage sums the recorded index sub-stages"
     assert_nil second.assoc("place apply").fetch(1),
-               "an unprofiled stage carries no eta — the CLI stays quiet, never guesses"
+               "a stage announced without an estimate carries no eta — the CLI stays quiet, never guesses"
   end
 
   def test_a_second_rebuild_appends_timing_history_rather_than_overwriting
