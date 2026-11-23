@@ -150,10 +150,12 @@ module Nabu
       # transaction and after the deferral's defaults are restored (the
       # merge probe's crash-safe order); automerge/crisismerge untouched.
       # Returns the chunks run (0 on a calm structure — one record read).
-      def eager_consolidate!(fulltext, progress: nil, level_limit: GOVERNOR_LEVEL_LIMIT)
+      # +ledger+ records the relief (FtsGovernor's fts_relief note).
+      def eager_consolidate!(fulltext, progress: nil, level_limit: GOVERNOR_LEVEL_LIMIT, ledger: nil)
         return 0 unless governed_fts_tables(fulltext).include?(TABLE)
 
-        FtsGovernor.new(fulltext: fulltext, table: TABLE, progress: progress, level_limit: level_limit).check!
+        FtsGovernor.new(fulltext: fulltext, table: TABLE, progress: progress, level_limit: level_limit,
+                        ledger: ledger).check!
       end
     end
   end

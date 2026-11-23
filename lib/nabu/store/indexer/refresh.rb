@@ -178,7 +178,8 @@ module Nabu
                            "past the #{rewrite_ceiling}-row rewrite ceiling or its forecast: append-only, " \
                            "swapped in whole)", progress,
                            rows_of: :itself.to_proc) do
-            written = build_fts_shadow!(catalog: catalog, fulltext: fulltext, source_id: source_id, progress: progress)
+            written = build_fts_shadow!(catalog: catalog, fulltext: fulltext, source_id: source_id, progress: progress,
+                                        ledger: ledger)
             swap_fts_shadow!(fulltext)
             written
           end
@@ -209,7 +210,7 @@ module Nabu
                 if shadow || append
                   nil
                 elsif fts_contentless?(fulltext)
-                  delete_fts_rows_by_rowid(fulltext, TABLE, ids, progress: progress)
+                  delete_fts_rows_by_rowid(fulltext, TABLE, ids, progress: progress, ledger: ledger)
                 else
                   delete_fts_rows(fulltext, TABLE, ids)
                 end
@@ -224,7 +225,7 @@ module Nabu
                 count, inserted, chars = insert_passage_batches(
                   fulltext, insert_scope,
                   source_tiers(catalog, lemma_tiers || {}), source_slugs(catalog), progress: progress,
-                                                                                   fts: !shadow
+                                                                                   fts: !shadow, ledger: ledger
                 )
                 # P84-1: re-apply the silver-lemma slice — the delete above
                 # stripped any shelf-projected rows for these urns, and the
@@ -337,7 +338,9 @@ module Nabu
           end
           # The eager consolidation (REWRITE_CEILING note) — after the
           # deferral's defaults are restored, outside the write's transaction.
-          eager_consolidate!(fulltext, progress: progress, level_limit: consolidation_limit) unless shadow
+          unless shadow
+            eager_consolidate!(fulltext, progress: progress, level_limit: consolidation_limit, ledger: ledger)
+          end
         end
         # The append/rewrite unit is ledgered under its path's stage with
         # the rows it touched; its one-line decision log is the label.
@@ -585,7 +588,8 @@ module Nabu
                          "rows deleted: ONE append-only pass for the wave, swapped in whole)", progress,
                          rows_of: :itself.to_proc) do
           written = build_fts_shadow!(catalog: catalog, fulltext: fulltext,
-                                      source_id: plans.keys.map { |slug| source_ids[slug] }, progress: progress)
+                                      source_id: plans.keys.map { |slug| source_ids[slug] }, progress: progress,
+                                      ledger: ledger)
           swap_fts_shadow!(fulltext)
           written
         end

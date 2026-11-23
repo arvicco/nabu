@@ -3,6 +3,7 @@
 require "test_helper"
 require "logger"
 require "stringio"
+require "tmpdir"
 
 module Store
   # Nabu::Store::Indexer::FtsGovernor — our code owns the merge schedule
@@ -144,6 +145,102 @@ module Store
       assert_operator governor.relief_chunks, :>, 0
       assert_equal 0, checkpoints
       assert_operator Nabu::Store::FtsStructure.read(@fulltext, :passages_fts).total_segments, :<, 6
+    end
+
+    # -- the recorded fts_relief stage (the relief-debt forecast) ----------
+    # Each relief is ledgered as stage "fts_relief" (kind "sync", scope
+    # the table) with rows = the over-limit level's page count, read from
+    # the same O(1) structure record the pressure decision read BEFORE
+    # relief started — so StageTimings accumulates a seconds-per-page rate
+    # and a big append's relief debt becomes a priced line.
+
+    def with_ledger
+      dir = Dir.mktmpdir("nabu-relief")
+      ledger = Nabu::Store::Ledger.open!(File.join(dir, "history.sqlite3"))
+      yield ledger
+    ensure
+      ledger&.disconnect
+      FileUtils.rm_rf(dir) if dir
+    end
+
+    def relief_rows(ledger)
+      ledger[Nabu::Store::StageTimings::TABLE].where(stage: "fts_relief").order(:id).all
+    end
+
+    def test_a_relief_records_the_over_limit_levels_pages_read_before_it_started
+      create_flood_table
+      6.times { |i| @fulltext.transaction { @fulltext[:passages_fts].insert(flood_row(i + 1)) } }
+      before = Nabu::Store::FtsStructure.read(@fulltext, :passages_fts)
+      found = Indexer.governor_pressure(before, level_limit: 2, total_limit: 1200)
+      expected = before.levels[found[:level]][:segments].sum { |seg| seg[:pgno_last] - seg[:pgno_first] + 1 }
+      with_ledger do |ledger|
+        governor = Indexer::FtsGovernor.new(fulltext: @fulltext, table: :passages_fts, cadence: 1,
+                                            level_limit: 2, total_limit: 1200, ledger: ledger)
+        chunks = governor.check!
+
+        assert_operator chunks, :>, 0
+        rows = relief_rows(ledger)
+        assert_equal 1, rows.size, "one relief, one row"
+        assert_equal %w[sync passages_fts], [rows.first[:kind], rows.first[:scope]]
+        assert_equal expected, rows.first[:rows]
+        assert_operator expected, :>, 0
+        assert_operator rows.first[:seconds], :>=, 0
+        assert_in_delta rows.first[:seconds] / expected, Nabu::Store::StageTimings.rate(ledger, kind: "sync",
+                                                                                                stage: "fts_relief")
+      end
+    end
+
+    def test_the_total_line_relief_records_the_whole_structures_pages
+      create_flood_table
+      6.times { |i| @fulltext.transaction { @fulltext[:passages_fts].insert(flood_row(i + 1)) } }
+      expected = Nabu::Store::FtsStructure.read(@fulltext, :passages_fts).pages
+      with_ledger do |ledger|
+        Indexer::FtsGovernor.new(fulltext: @fulltext, table: :passages_fts, level_limit: 100, total_limit: 3,
+                                 ledger: ledger).check!
+
+        assert_equal([expected], relief_rows(ledger).map { |row| row[:rows] })
+      end
+    end
+
+    def test_a_calm_structure_records_no_relief
+      create_flood_table
+      2.times { |i| @fulltext.transaction { @fulltext[:passages_fts].insert(flood_row(i + 1)) } }
+      with_ledger do |ledger|
+        Indexer::FtsGovernor.new(fulltext: @fulltext, table: :passages_fts, ledger: ledger).check!
+
+        assert_empty relief_rows(ledger)
+      end
+    end
+
+    # Recording only: the relief a ledger-less governor runs is the very
+    # same merge sequence (no behavior change to relief itself).
+    def test_the_recorder_leaves_the_relief_itself_unchanged
+      runs = [nil, :ledger].map do |mode|
+        @fulltext.drop_table?(:passages_fts)
+        create_flood_table
+        6.times { |i| @fulltext.transaction { @fulltext[:passages_fts].insert(flood_row(i + 1)) } }
+        relieve = lambda do |ledger|
+          governor = Indexer::FtsGovernor.new(fulltext: @fulltext, table: :passages_fts, level_limit: 2,
+                                              total_limit: 1200, ledger: ledger)
+          log = sql_log { governor.check! }
+          [governor.relief_chunks, merge_statements(log).size,
+           Nabu::Store::FtsStructure.read(@fulltext, :passages_fts).levels.map { |level| level[:segments].size }]
+        end
+        mode ? with_ledger { |ledger| relieve.call(ledger) } : relieve.call(nil)
+      end
+
+      assert_equal runs.first, runs.last
+    end
+
+    # The refresh path's eager consolidation threads its ledger through.
+    def test_the_eager_consolidation_records_its_relief
+      create_flood_table
+      6.times { |i| @fulltext.transaction { @fulltext[:passages_fts].insert(flood_row(i + 1)) } }
+      with_ledger do |ledger|
+        Indexer.eager_consolidate!(@fulltext, level_limit: 2, ledger: ledger)
+
+        assert_equal 1, relief_rows(ledger).size
+      end
     end
 
     def test_small_writes_cost_one_structure_read_per_cadence_and_no_merges
