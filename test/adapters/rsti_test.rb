@@ -388,6 +388,58 @@ module Adapters
       assert document.passages.fetch(0).annotations.key?("phonemic"), "plain phonemic lines still ride"
     end
 
+    # The graphemic rendering takes the same mixed-markup rule: its
+    # witnessed shape is {supplementary, content} (cuneiform entities +
+    # damage marks); RS 17.238's graphemic lines are instead the flattened
+    # {i, content, sup} lists, whose `sup` carries nested {"i" => …} dicts.
+    # Reading such a value as signs/marks would serve the logograms alone
+    # as "graphemic_marks" (a partial, mislabeled reading) and stringify
+    # any nested dict as a printed Hash. Omitted and counted, never partial.
+    def test_a_mixed_markup_graphemic_value_is_omitted_and_counted_never_printed
+      text = JSON.parse(File.read(File.join(FIXTURES, "quarantine", "texts",
+                                            "39ba4c2f-6d82-4b6c-a13b-6ded30136c42.json")))
+      graphemic = Nabu::Adapters::OchreJsonParser.sections(text.dig("ochre", "text"))["graphemic"]
+      line7 = graphemic.first["lines"].find { |leaf| leaf["label"] == "7" }
+      assert_equal %w[content i sup], line7["value"].keys.sort, "the fixture's flattened mixed-markup shape"
+      leaf = { "label" => "7", "divisions" => [], "value" => "a-na", "type" => "line" }
+      key = ["Recto", [], "7"]
+      parallels = { "phonemic" => {}, "translation" => {}, "graphemic" => { key => line7["value"] } }
+      omitted = Hash.new(0)
+      annotations = adapter.send(:line_annotations, { "surface" => "Recto", "leaf" => leaf },
+                                 parallels: parallels, states: [], omitted: omitted)
+      refute annotations.key?("graphemic")
+      refute annotations.key?("graphemic_marks")
+      assert_equal 1, omitted["count"]
+    end
+
+    def test_the_witnessed_graphemic_shape_still_rides
+      line = parse("urn:nabu:rsti:rs-1.001").passages.fetch(0)
+      assert line.annotations.key?("graphemic"), "{supplementary, content} is the plain graphemic shape"
+    end
+
+    # The P188 invariant, widened over everything an rsti document serves:
+    # no passage text, annotation string or metadata string anywhere in the
+    # fixture corpus (quarantine specimen aside — it never parses) is an
+    # inspected Ruby object.
+    def test_no_served_string_is_an_inspected_object
+      strings = lambda do |value|
+        case value
+        when String then [value]
+        when Array then value.flat_map { |v| strings.call(v) }
+        when Hash then value.values.flat_map { |v| strings.call(v) }
+        else []
+        end
+      end
+      refs.each do |ref|
+        document = adapter.parse(ref)
+        served = strings.call(document.metadata) +
+                 document.passages.flat_map { |p| [p.text] + strings.call(p.annotations) }
+        served.each do |string|
+          refute_match AdapterConformance::INSPECTED_OBJECT_TEXT, string, "#{ref.id} serves #{string[0, 60]}"
+        end
+      end
+    end
+
     # -- language honesty -----------------------------------------------------
 
     def test_the_unassigned_placeholder_is_absence_never_a_language
