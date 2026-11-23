@@ -3171,6 +3171,66 @@ class CLITest < Minitest::Test
     end
   end
 
+  # The full rebuild's preflight (Ops::RebuildPreflight): the dry run
+  # announces the priced stage plan, the drop-first disk arithmetic and the
+  # writers verdict — and writes no run log.
+  def test_rebuild_dry_run_announces_the_preflight
+    with_rebuild_env do |config|
+      logs_before = Dir[File.join(ENV.fetch("NABU_LOG_DIR"), "rebuild-*.log")]
+      out, _err, status = with_config(config) { run_cli(%w[rebuild --dry-run]) }
+
+      assert_nil status
+      assert_match(/rebuild preflight — read before anything is dropped/, out)
+      assert_match(/price: ~0s summed over 0 of \d+ stages .* UNPRICED/, out, "a fresh box prices nothing, honestly")
+      assert_match(/load corpus\s+unpriced/, out)
+      assert_match(/disk: drop-first/, out)
+      assert_match(/available at the drop/, out, "free space is read off the nearest existing dir (no db/ yet)")
+      assert_match(/verdict: CLEAR/, out)
+      assert_equal logs_before, Dir[File.join(ENV.fetch("NABU_LOG_DIR"), "rebuild-*.log")], "a dry run logs nothing"
+    end
+  end
+
+  # The real run opens its own flushed log first and tees every stage into it;
+  # the last line says it completed and names the verify step.
+  def test_rebuild_writes_a_run_log_with_its_stages
+    with_rebuild_env do |config|
+      out, _err, status = with_config(config) { run_cli(%w[rebuild]) }
+
+      assert_nil status
+      path = out[/rebuild log → (\S+)/, 1]
+      refute_nil path, "the log path is printed before any work"
+      log = File.read(path)
+      assert_match(/Z  rebuild preflight — read before anything is dropped/, log)
+      assert_match(/Z  stage corpus — first run — no estimate/, log)
+      assert_match(/Z  done  corpus in /, log)
+      assert_match(/Z  stage fulltext index/, log)
+      assert_match(/Z  rebuild COMPLETED — 1 source\(s\) replayed.*next: bundle exec rake rebuild:verify\n\z/, log)
+
+      out, = with_config(config) { run_cli(%w[rebuild]) }
+      log = File.read(out[/rebuild log → (\S+)/, 1])
+      assert_match(/load corpus\s+~\d/, log, "the second run is priced from the first run's ledger rows")
+    end
+  end
+
+  # A writer holding the catalog write window refuses the run BEFORE the drop,
+  # naming the holder; nothing is dropped or built.
+  def test_rebuild_refuses_while_a_writer_holds_the_catalog_write_window
+    with_rebuild_env do |config|
+      handle = Nabu::CatalogWriteLock.acquire(db_dir: config.db_dir, slug: "pap", announce: ->(_) {})
+      out, err, status = with_config(config) { run_cli(%w[rebuild]) }
+
+      refute_nil status
+      assert_match(/verdict: BLOCKED — catalog write window: held by pap/, out)
+      assert_match(/rebuild REFUSED before anything was dropped — catalog write window: held by pap/, err)
+      refute File.exist?(config.catalog_path), "nothing dropped, nothing built"
+      log = File.read(out[/rebuild log → (\S+)/, 1])
+      assert_match(/REFUSED before anything was dropped/, log)
+      refute_match(/did NOT complete/, log, "a refusal is not a crash")
+    ensure
+      handle&.release
+    end
+  end
+
   # -- rebuild --incremental (P36-1) ---------------------------------------
 
   def test_rebuild_incremental_dry_run_reports_verdicts_and_changes_nothing

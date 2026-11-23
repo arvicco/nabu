@@ -186,6 +186,58 @@ class IndexWatcherTest < Minitest::Test
     assert_includes lines, "stage index slice: pap", "the stage marker survives the tick"
   end
 
+  # A stage opened with a ledger estimate carries its budget beneath the
+  # marker through later ticks; a stage opened without one clears it.
+  def test_a_budgeted_stage_carries_its_budget_until_the_next_stage
+    teed = Watcher.tee(Nabu::ProgressReporter.new, Watcher::Heartbeat.new(@heartbeat, min_interval: 0))
+    teed.stage("fts+lemma reindex", eta: Nabu::Eta::Estimate.new(seconds: 600.4, basis_seconds: 600.4))
+    teed.load_tick(2_000, 0)
+
+    lines = File.read(@heartbeat).lines.map(&:strip)
+    assert_equal "load_tick 2000", lines.first
+    assert_match(/\Abudget \d+ 600\z/, lines.last)
+
+    teed.stage("analyze", eta: Nabu::Eta::NONE)
+    refute_match(/budget/, File.read(@heartbeat), "a stage without an estimate carries no budget")
+  end
+
+  def overrun_watcher(log: nil, echo: false)
+    Watcher.new(writer_pid: Process.pid, heartbeat_path: @heartbeat, fulltext_path: @fulltext_path,
+                label: "rebuild", deadline: nil, log_path: log, echo: echo)
+  end
+
+  # Past OVERRUN_FACTOR × the stage's estimate (floored), the watcher says
+  # so ONCE per stage opening — informational, no kill.
+  def test_an_overrun_stage_earns_one_line_past_twice_its_estimate
+    opened = Time.now.to_i - (25 * 60)
+    File.write(@heartbeat, "load_tick 4000\nstage fts+lemma reindex\nbudget #{opened} 600\n")
+    w = overrun_watcher
+
+    line = w.send(:overrun_line)
+    assert_match(/OVERRUN — fts\+lemma reindex open 2\dm\d\ds, past 2× its ledger estimate \(~10m00s\)/, line)
+    assert_match(/still running, no kill \(rebuild; writer pid #{Process.pid}, last tick/, line)
+    assert_nil w.send(:overrun_line), "once per stage opening"
+
+    File.write(@heartbeat, "stage links re-mine\nbudget #{Time.now.to_i - (11 * 60)} 600\n")
+    assert_nil w.send(:overrun_line), "under twice the estimate stays quiet"
+  end
+
+  def test_the_overrun_floor_keeps_a_seconds_scale_estimate_quiet
+    File.write(@heartbeat, "stage analyze\nbudget #{Time.now.to_i - 120} 5\n")
+    assert_nil overrun_watcher.send(:overrun_line), "2m against a 5s estimate is under the 5m floor"
+    File.write(@heartbeat, "stage analyze\n")
+    assert_nil overrun_watcher.send(:overrun_line), "no budget, no clock"
+  end
+
+  def test_an_echoing_watcher_writes_its_lines_to_the_log_and_the_terminal
+    _out, err = capture_io { overrun_watcher(log: @log, echo: true).send(:say, "index watcher: hello") }
+
+    assert_match(/index watcher: hello/, err)
+    assert_match(/\A\d{4}-\d\d-\d\d \d\d:\d\d:\d\dZ  index watcher: hello\n\z/, File.read(@log))
+    _out, err = capture_io { overrun_watcher(log: @log).send(:say, "quiet") }
+    assert_empty err, "a log without echo keeps the terminal clean"
+  end
+
   def stall_line_for(heartbeat_text, label: "index refresh pap")
     File.write(@heartbeat, heartbeat_text)
     w = Watcher.new(writer_pid: Process.pid, heartbeat_path: @heartbeat, fulltext_path: @fulltext_path,

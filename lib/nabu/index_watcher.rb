@@ -88,6 +88,13 @@ module Nabu
     DEADLINE_FACTOR = 2.5
     MIN_DEADLINE_SECONDS = 15 * 60
     KILL_GRACE_SECONDS = 30
+    # The OVERRUN line: a stage that announced a ledger estimate and is
+    # still open at OVERRUN_FACTOR × it earns one line — informational,
+    # never a kill (the rebuild arms none by default; see deadline_for).
+    # const: a policy ratio and floor, not a corpus measurement — floored
+    # so a seconds-scale estimate cannot shout over cache noise.
+    OVERRUN_FACTOR = 2
+    OVERRUN_FLOOR_SECONDS = 5 * 60
 
     # The kill deadline in seconds, or nil (heartbeats only): the flag
     # wins (0 = never kill); else DEADLINE_FACTOR × +estimate+, floored.
@@ -183,13 +190,14 @@ module Nabu
     # process, the heartbeat file fed through the progress tee the block
     # receives (call it on the command's reporter), and a clean stop —
     # heartbeat file removed — however the block ends.
-    def self.supervise(label:, fulltext_path:, deadline:, heartbeat_path: nil, slug: nil, log_path: nil)
+    def self.supervise(label:, fulltext_path:, deadline:, heartbeat_path: nil, slug: nil, log_path: nil,
+                       echo: false)
       heartbeat_path ||= File.join(File.dirname(fulltext_path), ".index-writer-#{Process.pid}.heartbeat")
       FileUtils.mkdir_p(File.dirname(heartbeat_path))
       heartbeat = Heartbeat.new(heartbeat_path)
       heartbeat.beat!("start #{label}")
       watcher = new(writer_pid: Process.pid, heartbeat_path: heartbeat_path, fulltext_path: fulltext_path,
-                    label: label, deadline: deadline, slug: slug, log_path: log_path)
+                    label: label, deadline: deadline, slug: slug, log_path: log_path, echo: echo)
       watcher.start!
       begin
         yield ->(progress) { tee(progress, heartbeat) }
@@ -213,7 +221,7 @@ module Nabu
           progress.on_load_tick&.call(processed, errored)
         },
         on_stage: lambda { |label, eta|
-          heartbeat.beat!("stage #{label}")
+          heartbeat.beat!("stage #{label}", budget: eta&.real? ? eta.seconds : nil)
           progress.on_stage&.call(label, eta)
         },
         on_note: lambda { |line|
@@ -230,20 +238,29 @@ module Nabu
     # first stage) — so a stall after a stage's batch ticks still names
     # the stage it is in. Stage/note events always write; per-document
     # ticks are throttled to one write per +min_interval+ so a hot load
-    # loop pays nothing.
+    # loop pays nothing. A stage opened with a ledger estimate (+budget+,
+    # seconds) also carries a "budget <wall epoch at open> <seconds>" line
+    # beneath the marker — the watcher's overrun clock; a stage opened
+    # without one clears it, so a budget never outlives its stage.
     class Heartbeat
       MARKER = /\A(?:stage|start) /
+      BUDGET = /\Abudget (\d+) (\d+)\z/
 
       def initialize(path, min_interval: 1.0)
         @path = path
         @min_interval = min_interval
         @last = nil
         @marker = nil
+        @budget = nil
       end
 
-      def beat!(line)
-        @marker = line if line.match?(MARKER)
-        File.write(@path, @marker.nil? || @marker == line ? "#{line}\n" : "#{line}\n#{@marker}\n")
+      def beat!(line, budget: nil)
+        if line.match?(MARKER)
+          @marker = line
+          @budget = budget&.positive? ? "budget #{Time.now.to_i} #{budget.round}" : nil
+        end
+        lines = [line, (@marker unless @marker.nil? || @marker == line), @budget].compact
+        File.write(@path, "#{lines.join("\n")}\n")
         @last = Process.clock_gettime(Process::CLOCK_MONOTONIC)
       end
 
@@ -256,7 +273,7 @@ module Nabu
     end
 
     def initialize(writer_pid:, heartbeat_path:, fulltext_path:, label:, deadline:, slug: nil, log_path: nil,
-                   sample_seconds: SAMPLE_SECONDS, stall_seconds: STALL_SECONDS,
+                   echo: false, sample_seconds: SAMPLE_SECONDS, stall_seconds: STALL_SECONDS,
                    heartbeat_every: HEARTBEAT_EVERY, kill_grace: KILL_GRACE_SECONDS)
       @writer_pid = writer_pid
       @heartbeat_path = heartbeat_path
@@ -265,6 +282,7 @@ module Nabu
       @deadline = deadline
       @slug = slug
       @log_path = log_path
+      @echo = echo
       @sample = sample_seconds
       @stall = stall_seconds
       @heartbeat_every = heartbeat_every
@@ -343,6 +361,8 @@ module Nabu
           say(stall_line(age))
           last_line = now
         end
+        overrun = overrun_line
+        say(overrun) if overrun
         return deadline!(waited) if @deadline && now - started - waited >= @deadline
       end
     end
@@ -398,6 +418,26 @@ module Nabu
     end
 
     def merge_suspicion(marker) = marker.match?(INDEX_MARKER) ? "; fts5 merge suspected" : ""
+
+    # The one line a budgeted stage earns once it is still open at
+    # OVERRUN_FACTOR × its estimate (floored), or nil. Once per stage
+    # opening (keyed by the budget's open epoch); wall clock on both sides.
+    def overrun_line
+      lines = File.read(@heartbeat_path).lines.map(&:strip)
+      opened, seconds = lines.filter_map { |line| line.match(Heartbeat::BUDGET) }.last&.captures&.map(&:to_i)
+      return nil if opened.nil? || @overrun_announced == opened
+
+      elapsed = Time.now.to_i - opened
+      return nil if elapsed < [seconds * OVERRUN_FACTOR, OVERRUN_FLOOR_SECONDS].max
+
+      @overrun_announced = opened
+      marker = stage_marker(lines.reverse.find { |line| line.match?(Heartbeat::MARKER) })
+      "index watcher: OVERRUN — #{marker} open #{format_duration(elapsed)}, past #{OVERRUN_FACTOR}× its " \
+        "ledger estimate (~#{format_duration(seconds)}); still running, no kill (#{@label}; writer pid " \
+        "#{@writer_pid}, last tick #{format_duration(tick_age(now))} ago)"
+    rescue Errno::ENOENT
+      nil
+    end
 
     def deadline!(waited = 0)
       excluded =
@@ -455,12 +495,14 @@ module Nabu
       db&.disconnect
     end
 
+    # To the terminal, or to +log_path+ — and to BOTH when +echo+ (a
+    # command whose run log sits beside its terminal output: the rebuild's
+    # Ops::RunLog file), log lines stamped like the run log's own.
     def say(line)
-      if @log_path
-        File.open(@log_path, "a") { |file| file.puts(line) }
-      else
-        warn(line)
-      end
+      warn(line) if @log_path.nil? || @echo
+      return unless @log_path
+
+      File.open(@log_path, "a") { |file| file.puts("#{Time.now.utc.strftime('%Y-%m-%d %H:%M:%S')}Z  #{line}") }
     end
 
     def now = Process.clock_gettime(Process::CLOCK_MONOTONIC)

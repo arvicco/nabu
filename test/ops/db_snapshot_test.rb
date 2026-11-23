@@ -96,6 +96,60 @@ class DbSnapshotTest < Minitest::Test
     assert_nil S.rebuild_in_progress(ledger: nil, ps_output: "  124 ruby bin/nabu rebuild --dry-run\n")
   end
 
+  # -- the restore (snapshot → drift → restore, on scratch files) ----------
+
+  def rows_in(path)
+    db = Sequel.connect("sqlite://#{path}", readonly: true)
+    db[:t].count
+  ensure
+    db&.disconnect
+  end
+
+  def test_the_snapshot_restores_over_a_drifted_db_with_its_sidecars_dropped_first
+    live_wal_db("catalog.sqlite3", rows: 50)
+    snapshot
+    100.times { |i| @writer[:t].insert(x: i) } # the db moves on past the snapshot (a rebuild, a sync)
+    @writer.disconnect
+    @writer = nil
+    stale = Nabu::Store.connect(File.join(@db_dir, "catalog.sqlite3"))
+    stale[:t].insert(x: 0) # leaves a fresh -wal beside the main file
+    path = File.join(@db_dir, "catalog.sqlite3")
+    assert File.exist?("#{path}-wal")
+    stale.disconnect
+    File.binwrite("#{path}-wal", "stale frames") # a stale sidecar the restore must never sit beside
+
+    out = StringIO.new
+    entries = S.restore!(source: @target, db_dir: @db_dir, holders: ->(_) { [] }, out: out)
+
+    assert_equal ["catalog.sqlite3"], entries.map(&:name)
+    refute File.exist?("#{path}-wal"), "the stale sidecar went with the old file"
+    assert_equal 50, rows_in(path), "the db reads exactly the snapshot again"
+    reopened = Nabu::Store.connect(path)
+    assert_equal "ok", reopened.fetch("PRAGMA integrity_check").single_value
+    assert_equal "wal", reopened.fetch("PRAGMA journal_mode").single_value, "the first read-write connect re-arms WAL"
+    reopened.disconnect
+    assert_match(/SUMMARY db:restore — 1 file\(s\), .* \(sidecars dropped first\)\. Stamps are the snapshot's/,
+                 out.string)
+  end
+
+  def test_restore_refuses_open_holders_a_rebuild_and_an_empty_source_touching_nothing
+    live_wal_db("catalog.sqlite3", rows: 5)
+    snapshot
+    @writer[:t].insert(x: 99)
+    path = File.join(@db_dir, "catalog.sqlite3")
+    holders = ->(paths) { paths.include?(path) ? [[77, "nabu-mcp", path]] : [] }
+
+    error = assert_raises(S::Refused) { S.restore!(source: @target, db_dir: @db_dir, holders: holders, out: StringIO.new) }
+    assert_match(/stop these first: pid 77 \(nabu-mcp\) holds catalog\.sqlite3/, error.message)
+    error = assert_raises(S::Refused) do
+      S.restore!(source: @target, db_dir: @db_dir, holders: ->(_) { [] }, rebuild_check: -> { "pid 9" })
+    end
+    assert_match(/rebuild is in progress — pid 9/, error.message)
+    assert_raises(S::Refused) { S.restore!(source: File.join(@tmp, "empty"), db_dir: @db_dir) }
+    assert_raises(S::Refused) { S.restore!(source: "", db_dir: @db_dir) }
+    assert_equal 6, @writer[:t].count, "every refusal left the live db alone"
+  end
+
   def test_human_sizes
     assert_equal "512 B", S.human(512)
     assert_equal "1.5 KB", S.human(1536)

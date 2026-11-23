@@ -33,6 +33,12 @@ module Nabu
 end
 Nabu::TestSupport.isolate_git_background_work!
 
+# Run logs (Nabu::Ops::RunLog — every real `nabu rebuild` the suite drives
+# writes one) land in a per-process tmp dir, never ~/Library/Logs/nabu.
+require "tmpdir"
+ENV["NABU_LOG_DIR"] = Dir.mktmpdir("nabu-test-run-logs")
+Minitest.after_run { FileUtils.rm_rf(ENV.fetch("NABU_LOG_DIR")) }
+
 require "nabu"
 
 # Shared test support: the adapter conformance suite and its test rig.
