@@ -65,6 +65,19 @@ module Nabu
                           row_budget: IN_PLACE_ROW_BUDGET, rewrite_ceiling: REWRITE_CEILING,
                           consolidation_limit: GOVERNOR_LEVEL_LIMIT, plan: nil, fts_prebuilt: false)
         unless incremental_ready?(fulltext)
+          # The fallback is the WHOLE index (~4h on the live corpus) —
+          # announced with the rebuild's measured corpus index stages,
+          # never run silently (IndexPreflight prices the same read
+          # before an `index refresh` opens the writer). Without a measured
+          # rebuild (a fresh box's bootstrap — the first sync builds the
+          # index this way) it stays quiet: "first run — no estimate" on
+          # a tiny bootstrap is log noise (the P78-r3 non-tty rule).
+          fallback_eta = rebuild_fallback_eta(ledger)
+          if fallback_eta&.real?
+            progress&.stage("index: #{slug} — fulltext index not incremental-ready (a table missing or " \
+                            "predating its shape): FULL index rebuild fallback over the whole corpus",
+                            eta: fallback_eta)
+          end
           rebuild!(catalog: catalog, fulltext: fulltext, alignments: alignments,
                    fuzzy_slugs: fuzzy_slugs, cjk_slugs: cjk_slugs, lemma_tiers: lemma_tiers,
                    sign_list: sign_list,
@@ -615,6 +628,16 @@ module Nabu
 
         Nabu::Eta.for(ledger, kind: "rebuild", scope: "corpus", stage: "trigram",
                               rows: FtsStructure.total_rows(fulltext, TABLE))
+      end
+
+      # The full-rebuild fallback's estimate: the summed latest rows of the
+      # rebuild's corpus index stages (Rebuild::INDEX_ETA_STAGES — the
+      # sub-stages rebuild! itself times), NONE without history, nil
+      # without a ledger. The same read IndexPreflight prices the fallback by.
+      def rebuild_fallback_eta(ledger)
+        return nil if ledger.nil?
+
+        Nabu::Eta.for_stages(ledger, kind: "rebuild", scope: "corpus", stages: Nabu::Rebuild::INDEX_ETA_STAGES)
       end
 
       # -- refresh_source! internals (P26-5) ---------------------------------

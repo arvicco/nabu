@@ -217,4 +217,73 @@ class IndexPreflightTest < Minitest::Test
     assert_empty priced
     refute_match(/fts_shadow/, out)
   end
+
+  # -- the full-rebuild fallback (a not-incremental-ready fulltext) ---------
+  # A refresh against a fulltext missing a table (or predating its shape)
+  # falls back to Indexer.rebuild! — the whole index, ~4h on the live
+  # corpus. The gate prices it from the rebuild's measured corpus index
+  # stages (Eta.for_stages over Rebuild::INDEX_ETA_STAGES), announces it,
+  # and refuses it past the budget like any long inline run.
+
+  def record_rebuild(stage, seconds)
+    Nabu::Store::StageTimings.record!(@ledger, kind: "rebuild", scope: "corpus", stage: stage, seconds: seconds)
+  end
+
+  def fallback_gate(accept_long: false, deadline: nil, slugs: %w[ndl])
+    out = StringIO.new
+    priced = Preflight.gate!(history_path: history_path, slugs: slugs, accept_long: accept_long, out: out,
+                             deadline_minutes: deadline, fallback: true)
+    [priced, out.string]
+  end
+
+  def test_the_fallback_is_priced_from_the_rebuilds_corpus_index_stages
+    record_rebuild("fts_lemma", 9_000)
+    record_rebuild("trigram", 6_180)
+    record_rebuild("load", 99_999) # not an index stage — never summed
+
+    priced, out = fallback_gate(accept_long: true)
+
+    assert_equal([["corpus", "index_rebuild", 15_180.0]], priced.map { |row| [row.scope, row.stage, row.seconds] })
+    assert priced.first.ledgered
+    assert_match(/index preflight: predicted index_rebuild \(corpus\) — the fulltext index is not incremental-ready/,
+                 out)
+    assert_match(/FULL index rebuild.*~253m00s/, out)
+  end
+
+  def test_a_priced_fallback_past_the_budget_refuses_naming_the_flags
+    record_rebuild("fts_lemma", 15_180)
+
+    error = assert_raises(Preflight::Refused) { fallback_gate }
+    assert_match(/FULL index rebuild/, error.message)
+    assert_match(/priced ~253m00s/, error.message)
+    assert_match(/past the 15m00s inline budget/, error.message)
+    assert_match(/--deadline 633 --accept-long/, error.message, "2.5x the priced total, rounded up")
+    assert_match(/--deadline 0 --accept-long/, error.message)
+  end
+
+  def test_an_explicit_deadline_that_cannot_cover_the_fallback_refuses_even_with_accept_long
+    record_rebuild("fts_lemma", 15_180)
+
+    error = assert_raises(Preflight::Refused) { fallback_gate(accept_long: true, deadline: 60) }
+    assert_match(/--deadline 60 cannot cover it/, error.message)
+    assert_equal 1, fallback_gate(accept_long: true, deadline: 0).first.size
+    assert_equal 1, fallback_gate(accept_long: true, deadline: 400).first.size
+  end
+
+  def test_an_unledgered_fallback_announces_a_first_run_and_proceeds
+    priced, out = fallback_gate
+
+    assert_equal 1, priced.size
+    refute priced.first.ledgered
+    assert_in_delta 0.0, priced.first.seconds
+    assert_match(/index_rebuild \(corpus\).*first run — no estimate/, out)
+  end
+
+  def test_a_small_priced_fallback_inside_the_budget_passes_without_flags
+    record_rebuild("fts_lemma", 60)
+
+    priced, out = fallback_gate
+    assert_equal 1, priced.size
+    assert_match(/index_rebuild/, out)
+  end
 end
