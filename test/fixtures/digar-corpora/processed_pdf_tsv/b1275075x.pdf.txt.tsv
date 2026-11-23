@@ -1,0 +1,301 @@
+	word_texts_simple	lemmas_simple	postag_descriptions_simple	word_texts_guess	lemmas_guess	roots_guess	root_tokens_guess	forms_guess	endings_guess	postags_guess	postag_descriptions_guess
+0	Eesti	Eesti|eesti		Eesti	Eesti	Eesti	['Eesti']	sg g	0	H	pärisnimi
+1	Rahvusraamatukogu	rahvusraamatukogu	nimisõna	Rahvusraamatukogu	Rahvusraamatukogu	Rahvus_raamatu_kogu	[['Rahvus', 'raamatu', 'kogu'], ['Rahvus', 'raamatu', 'kogu']]	sg g	0	H	pärisnimi
+2	digitaalarhiiv	digitaalarhiiv	nimisõna	digitaalarhiiv	digitaalarhiiv	digitaal_arhiiv	['digitaal', 'arhiiv']	sg n	0	S	nimisõna
+3	DIGAR			DIGAR	Digar	Digar	['Digar']	sg n	0	H	pärisnimi
+4	Eesti	Eesti|eesti		Eesti	Eesti	Eesti	['Eesti']	sg g	0	H	pärisnimi
+5	Rahvusraamatukogu	rahvusraamatukogu	nimisõna	Rahvusraamatukogu	Rahvusraamatukogu	Rahvus_raamatu_kogu	[['Rahvus', 'raamatu', 'kogu'], ['Rahvus', 'raamatu', 'kogu']]	sg g	0	H	pärisnimi
+6	digitaalarhiiv	digitaalarhiiv	nimisõna	digitaalarhiiv	digitaalarhiiv	digitaal_arhiiv	['digitaal', 'arhiiv']	sg n	0	S	nimisõna
+7	DIGAR			DIGAR	Digar	Digar	['Digar']	sg n	0	H	pärisnimi
+8	9	9	põhiarvsõna	9	9	9	['9']	?	0	N	põhiarvsõna
+9	4	4	põhiarvsõna	4	4	4	['4']	?	0	N	põhiarvsõna
+10	.			.	.	.	['.']			Z	lausemärk
+11	-	-	lausemärk	-	-	-	['-']			Z	lausemärk
+12	3	3	põhiarvsõna	3	3	3	['3']	?	0	N	põhiarvsõna
+13	f	f	lühend	f	f	f	['f']	?	0	Y	lühend
+14	i	i	lühend	i	i	i	['i']	?	0	Y	lühend
+15	,			,	,	,	[',']			Z	lausemärk
+16	R	R	lühend	R	R	R	['R']	?	0	Y	lühend
+17	A	A	lühend	A	A	A	['A']	?	0	Y	lühend
+18	G	G	lühend	G	G	G	['G']	?	0	Y	lühend
+19	D	D		D	D	D	['D']	?	0	O	järgarvsõna
+20	v	v	lühend	v	v	v	['v']	?	0	Y	lühend
+21	I	I		I	I	I	['I']	?	0	Y	lühend
+22	i	i	lühend	i	i	i	['i']	?	0	Y	lühend
+23	i	i	lühend	i	i	i	['i']	?	0	Y	lühend
+24	h	h	lühend	h	h	h	['h']	?	0	Y	lühend
+25	r	r	lühend	r	r	r	['r']	?	0	Y	lühend
+26	a	a	lühend	a	a	a	['a']	?	0	Y	lühend
+27	l	l	lühend	l	l	l	['l']	?	0	Y	lühend
+28	i	i	lühend	i	i	i	['i']	?	0	Y	lühend
+29	a	a	lühend	a	a	a	['a']	?	0	Y	lühend
+30	a	a	lühend	a	a	a	['a']	?	0	Y	lühend
+31	t	t	lühend	t	t	t	['t']	?	0	Y	lühend
+32	i	i	lühend	i	i	i	['i']	?	0	Y	lühend
+33	g	g	lühend	g	g	g	['g']	?	0	Y	lühend
+34	d	d	lühend	d	d	d	['d']	?	0	Y	lühend
+35	u	u	lühend	u	u	u	['u']	?	0	Y	lühend
+36	g	g	lühend	g	g	g	['g']	?	0	Y	lühend
+37	o	o	lühend	o	o	o	['o']	?	0	Y	lühend
+38	k	k	lühend	k	k	k	['k']	?	0	Y	lühend
+39	u	u	lühend	u	u	u	['u']	?	0	Y	lühend
+40	t	t	lühend	t	t	t	['t']	?	0	Y	lühend
+41	a	a	lühend	a	a	a	['a']	?	0	Y	lühend
+42	m	m	lühend	m	m	m	['m']	?	0	Y	lühend
+43	I	I		I	I	I	['I']	?	0	Y	lühend
+44	5	5	põhiarvsõna	5	5	5	['5']	?	0	N	põhiarvsõna
+45	a	a	lühend	a	a	a	['a']	?	0	Y	lühend
+46	a	a	lühend	a	a	a	['a']	?	0	Y	lühend
+47	r	r	lühend	r	r	r	['r']	?	0	Y	lühend
+48	s	s	lühend	s	s	s	['s']	?	0	Y	lühend
+49	u	u	lühend	u	u	u	['u']	?	0	Y	lühend
+50	v	v	lühend	v	v	v	['v']	?	0	Y	lühend
+51	h	h	lühend	h	h	h	['h']	?	0	Y	lühend
+52	a	a	lühend	a	a	a	['a']	?	0	Y	lühend
+53	R	R	lühend	R	R	R	['R']	?	0	Y	lühend
+54	i	i	lühend	i	i	i	['i']	?	0	Y	lühend
+55	t	t	lühend	t	t	t	['t']	?	0	Y	lühend
+56	s	s	lühend	s	s	s	['s']	?	0	Y	lühend
+57	e	e	lühend	e	e	e	['e']	?	0	Y	lühend
+58	E	E	lühend	E	E	E	['E']	?	0	Y	lühend
+59	-	-	lausemärk	-	-	-	['-']			Z	lausemärk
+60	-	-	lausemärk	-	-	-	['-']			Z	lausemärk
+61	-	-	lausemärk	-	-	-	['-']			Z	lausemärk
+62	U	U	lühend	U	U	U	['U']	?	0	Y	lühend
+63	S	S	lühend	S	S	S	['S']	?	0	Y	lühend
+64	I	I		I	I	I	['I']	?	0	Y	lühend
+65	fcr			fcr	fcr	fcr	['fcr']	?	0	Y	lühend
+66	„			„	„	„	['„']			Z	lausemärk
+67	fcSH			fcSH	fcSH	fcSH	['fcSH']	sg n	0	S	nimisõna
+68	t	t	lühend	t	t	t	['t']	?	0	Y	lühend
+69	Kalkun	kalkuma|kalkun		Kalkun	Kalkun	Kalkun	[['Kalkun'], ['Kalkun']]	sg n	0	H	pärisnimi
+70	.			.	.	.	['.']			Z	lausemärk
+71	r	r	lühend	r	r	r	['r']	?	0	Y	lühend
+72	..	..	lausemärk	..	..	..	['..']			Z	lausemärk
+73	i	i	lühend	i	i	i	['i']	?	0	Y	lühend
+74	J	J	lühend	J	J	J	['J']	?	0	Y	lühend
+75	...........	...........	lausemärk	...........	...........	...........	['...........']			Z	lausemärk
+76	........	........	lausemärk	........	........	........	['........']			Z	lausemärk
+77	..	..	lausemärk	..	..	..	['..']			Z	lausemärk
+78	L	L		L	L	L	['L']	?	0	Y	lühend
+79	--------------			--------------	--------------	--------------	['', '', '', '', '', '', '', '', '', '', '', '', '', '', '']			Z	lausemärk
+80	Sü			Sü	Sü	Sü	['Sü']	?	0	Y	lühend
+81	ees	ees|esi		ees	ees	ees	['ees']		0	D	määrsõna
+82	siin	siin		siin	siin	siin	['siin']		0	D	määrsõna
+83	seisab	seisma	tegusõna	seisab	seisma	seis	['seis']	b	b	V	tegusõna
+84	uhke	uhke	omadussõna algvõrre	uhke	uhke	uhke	['uhke']	sg n	0	A	omadussõna algvõrre
+85	lind	lind	nimisõna	lind	lind	lind	['lind']	sg n	0	S	nimisõna
+86	.			.	.	.	['.']			Z	lausemärk
+87	7	7	põhiarvsõna	7	7	7	['7']	?	0	N	põhiarvsõna
+88	kes	kes	asesõna	kes	kes	kes	[['kes'], ['kes']]	pl n|sg n	0	P	asesõna
+89	vihastab	vihastama	tegusõna	vihastab	vihastama	vihasta	['vihasta']	b	b	V	tegusõna
+90	,			,	,	,	[',']			Z	lausemärk
+91	kui	kui		kui	kui	kui	[['kui'], ['kui']]		0	D|J	
+92	näeb	nägema	tegusõna	näeb	nägema	näge	['näge']	b	b	V	tegusõna
+93	sind	sina	asesõna	sind	sina	sina	['sina']	sg p	d	P	asesõna
+94	,			,	,	,	[',']			Z	lausemärk
+95	ja	ja	sidesõna	ja	ja	ja	['ja']		0	J	sidesõna
+96	eriti	eriti	määrsõna	eriti	eriti	eriti	['eriti']		0	D	määrsõna
+97	veel	veel|vesi		veel	veel	veel	['veel']		0	D	määrsõna
+98	,			,	,	,	[',']			Z	lausemärk
+99	kui	kui		kui	kui	kui	[['kui'], ['kui']]		0	D|J	
+100	su	sina	asesõna	su	sina	sina	['sina']	sg g	0	P	asesõna
+101	kätt	käsi	nimisõna	kätt	käsi	käsi	['käsi']	sg p	tt	S	nimisõna
+102	on	olema	tegusõna	on	olema	ole	[['ole'], ['ole']]	b|vad	0	V	tegusõna
+103	varjamas	varjama	tegusõna	varjamas	varjama	varja	['varja']	mas	mas	V	tegusõna
+104	kord	kord		kord	kord	kord	['kord']		0	D	määrsõna
+105	verev	verev	omadussõna algvõrre	verev	verev	verev	['verev']	sg n	0	A	omadussõna algvõrre
+106	rätt	rätt	nimisõna	rätt	rätt	rätt	['rätt']	sg n	0	S	nimisõna
+107	.			.	.	.	['.']			Z	lausemärk
+108	Siis	siis		Siis	siis	siis	['siis']		0	D	määrsõna
+109	venib	venima	tegusõna	venib	venima	veni	['veni']	b	b	V	tegusõna
+110	pikaks	pikk	omadussõna algvõrre	pikaks	pikk	pikk	['pikk']	sg tr	ks	A	omadussõna algvõrre
+111	tema	tema	asesõna	tema	tema	tema	['tema']	sg g	0	P	asesõna
+112	lott	lott	nimisõna	lott	lott	lott	['lott']	sg n	0	S	nimisõna
+113	ja	ja	sidesõna	ja	ja	ja	['ja']		0	J	sidesõna
+114	punaseks	punane		punaseks	punane	punane	['punane']	sg tr	ks	A	omadussõna algvõrre
+115	läeb			läeb	läeb	läeb	['läeb']	sg n	0	S	nimisõna
+116	nagu	nagu		nagu	nagu	nagu	[['nagu'], ['nagu']]		0	D|J	
+117	kott	kott	nimisõna	kott	kott	kott	[['kott'], ['kott']]	sg n	0	S	nimisõna
+118	:			:	:	:	[':']			Z	lausemärk
+119	ei	ei		ei	ei	ei	['ei']	neg	0	V	tegusõna
+120	ta	tema	asesõna	ta	tema	tema	['tema']	sg n	0	P	asesõna
+121	või	või|võima		või	võima	või	['või']	o	0	V	tegusõna
+122	sallida	sallima	tegusõna	sallida	sallima	salli	['salli']	da	da	V	tegusõna
+123	ju	ju	määrsõna	ju	ju	ju	['ju']		0	D	määrsõna
+124	seda	see	asesõna	seda	see	see	['see']	sg p	da	P	asesõna
+125	,			,	,	,	[',']			Z	lausemärk
+126	etpilgata			etpilgata	etpilgata	etpilgata	['etpilgata']	sg n	0	S	nimisõna
+127	kord	kord		kord	kord	kord	['kord']		0	D	määrsõna
+128	tahad	tahtma	tegusõna	tahad	tahtma	taht	['taht']	d	d	V	tegusõna
+129	teda	tema	asesõna	teda	tema	tema	['tema']	sg p	da	P	asesõna
+130	.			.	.	.	['.']			Z	lausemärk
+131	Kuid	kuid|kuu		Kuid	kuid	kuid	['kuid']		0	J	sidesõna
+132	muidu	muidu	määrsõna	muidu	muidu	muidu	['muidu']		0	D	määrsõna
+133	on	olema	tegusõna	on	olema	ole	[['ole'], ['ole']]	b|vad	0	V	tegusõna
+134	ta	tema	asesõna	ta	tema	tema	['tema']	sg g	0	P	asesõna
+135	hea	hea		hea	hea	hea	['hea']	sg n	0	A	omadussõna algvõrre
+136	lind	lind	nimisõna	lind	lind	lind	['lind']	sg n	0	S	nimisõna
+137	,			,	,	,	[',']			Z	lausemärk
+138	kes	kes	asesõna	kes	kes	kes	[['kes'], ['kes']]	pl n|sg n	0	P	asesõna
+139	armastab	armastama	tegusõna	armastab	armastama	armasta	['armasta']	b	b	V	tegusõna
+140	ja	ja	sidesõna	ja	ja	ja	['ja']		0	J	sidesõna
+141	hoiab	hoidma	tegusõna	hoiab	hoidma	hoid	['hoid']	b	b	V	tegusõna
+142	sind	sina	asesõna	sind	sina	sina	['sina']	sg p	d	P	asesõna
+143	R	R	lühend	R	R	R	['R']	?	0	Y	lühend
+144	A	A	lühend	A	A	A	['A']	?	0	Y	lühend
+145	G	G	lühend	G	G	G	['G']	?	0	Y	lühend
+146	D	D		D	D	D	['D']	?	0	O	järgarvsõna
+147	v	v	lühend	v	v	v	['v']	?	0	Y	lühend
+148	I	I		I	I	I	['I']	?	0	Y	lühend
+149	i	i	lühend	i	i	i	['i']	?	0	Y	lühend
+150	i	i	lühend	i	i	i	['i']	?	0	Y	lühend
+151	h	h	lühend	h	h	h	['h']	?	0	Y	lühend
+152	r	r	lühend	r	r	r	['r']	?	0	Y	lühend
+153	a	a	lühend	a	a	a	['a']	?	0	Y	lühend
+154	l	l	lühend	l	l	l	['l']	?	0	Y	lühend
+155	i	i	lühend	i	i	i	['i']	?	0	Y	lühend
+156	a	a	lühend	a	a	a	['a']	?	0	Y	lühend
+157	a	a	lühend	a	a	a	['a']	?	0	Y	lühend
+158	t	t	lühend	t	t	t	['t']	?	0	Y	lühend
+159	i	i	lühend	i	i	i	['i']	?	0	Y	lühend
+160	g	g	lühend	g	g	g	['g']	?	0	Y	lühend
+161	d	d	lühend	d	d	d	['d']	?	0	Y	lühend
+162	u	u	lühend	u	u	u	['u']	?	0	Y	lühend
+163	g	g	lühend	g	g	g	['g']	?	0	Y	lühend
+164	o	o	lühend	o	o	o	['o']	?	0	Y	lühend
+165	k	k	lühend	k	k	k	['k']	?	0	Y	lühend
+166	u	u	lühend	u	u	u	['u']	?	0	Y	lühend
+167	t	t	lühend	t	t	t	['t']	?	0	Y	lühend
+168	a	a	lühend	a	a	a	['a']	?	0	Y	lühend
+169	m	m	lühend	m	m	m	['m']	?	0	Y	lühend
+170	a	a	lühend	a	a	a	['a']	?	0	Y	lühend
+171	a	a	lühend	a	a	a	['a']	?	0	Y	lühend
+172	r	r	lühend	r	r	r	['r']	?	0	Y	lühend
+173	s	s	lühend	s	s	s	['s']	?	0	Y	lühend
+174	u	u	lühend	u	u	u	['u']	?	0	Y	lühend
+175	v	v	lühend	v	v	v	['v']	?	0	Y	lühend
+176	h	h	lühend	h	h	h	['h']	?	0	Y	lühend
+177	a	a	lühend	a	a	a	['a']	?	0	Y	lühend
+178	R	R	lühend	R	R	R	['R']	?	0	Y	lühend
+179	i	i	lühend	i	i	i	['i']	?	0	Y	lühend
+180	t	t	lühend	t	t	t	['t']	?	0	Y	lühend
+181	s	s	lühend	s	s	s	['s']	?	0	Y	lühend
+182	e	e	lühend	e	e	e	['e']	?	0	Y	lühend
+183	E	E	lühend	E	E	E	['E']	?	0	Y	lühend
+184	Kukk	kukk	nimisõna	Kukk	Kukk	Kukk	[['Kukk'], ['Kukk']]	sg n	0	H	pärisnimi
+185	ja	ja	sidesõna	ja	ja	ja	['ja']		0	J	sidesõna
+186	kana	kana	nimisõna	kana	kana	kana	['kana']	sg n	0	S	nimisõna
+187	.			.	.	.	['.']			Z	lausemärk
+188	Tore	tore	omadussõna algvõrre	Tore	tore	tore	['tore']	sg n	0	A	omadussõna algvõrre
+189	paar	paar		paar	paar	paar	['paar']	sg n	0	S	nimisõna
+190	on	olema	tegusõna	on	olema	ole	[['ole'], ['ole']]	b|vad	0	V	tegusõna
+191	kukk	kukk	nimisõna	kukk	kukk	kukk	['kukk']	sg n	0	S	nimisõna
+192	ja	ja	sidesõna	ja	ja	ja	['ja']		0	J	sidesõna
+193	kana	kana	nimisõna	kana	kana	kana	['kana']	sg n	0	S	nimisõna
+194	.			.	.	.	['.']			Z	lausemärk
+195	Kahekesi	kahekesi	määrsõna	Kahekesi	kahekesi	kahekesi	['kahekesi']		0	D	määrsõna
+196	mõnusana	mõnus	omadussõna algvõrre	mõnusana	mõnus	mõnus	['mõnus']	sg es	na	A	omadussõna algvõrre
+197	otsivad	otsima|otsiv		otsivad	otsima	otsi	['otsi']	vad	vad	V	tegusõna
+198	ju	ju	määrsõna	ju	ju	ju	['ju']		0	D	määrsõna
+199	enne	enne		enne	enne	enne	['enne']		0	K	kaassõna
+200	koitu	koit	nimisõna	koitu	koit	koit	['koit']	sg p	0	S	nimisõna
+201	enestele	ise	asesõna	enestele	ise	ise	['ise']	pl all	tele	P	asesõna
+202	ruttu	rutt|ruttu		ruttu	ruttu	ruttu	['ruttu']		0	D	määrsõna
+203	toitu	toit|toituma		toitu	toit	toit	['toit']	sg p	0	S	nimisõna
+204	.			.	.	.	['.']			Z	lausemärk
+205	Kukk	kukk	nimisõna	Kukk	Kukk	Kukk	[['Kukk'], ['Kukk']]	sg n	0	H	pärisnimi
+206	see	see	asesõna	see	see	see	['see']	sg n	0	P	asesõna
+207	äratab	äratama	tegusõna	äratab	äratama	ärata	['ärata']	b	b	V	tegusõna
+208	su	sina	asesõna	su	sina	sina	['sina']	sg g	0	P	asesõna
+209	üles	üles	määrsõna	üles	üles	üles	['üles']		0	D	määrsõna
+210	,			,	,	,	[',']			Z	lausemärk
+211	kana	kana	nimisõna	kana	kana	kana	['kana']	sg g	0	S	nimisõna
+212	aga	aga	sidesõna	aga	aga	aga	['aga']		0	J	sidesõna
+213	pesasüles	pesasüli	nimisõna	pesasüles	pesasüli	pesa_süli	['pesa', 'süli']	sg in	s	S	nimisõna
+214	,			,	,	,	[',']			Z	lausemärk
+215	kui	kui		kui	kui	kui	[['kui'], ['kui']]		0	D|J	
+216	on	olema	tegusõna	on	olema	ole	[['ole'], ['ole']]	b|vad	0	V	tegusõna
+217	peletanud	peletama|peletanu|peletanud		peletanud	peletama|peletanud	peleta|peleta=nud	[['peleta'], ['peletanud'], ['peletanud'], ['peletanud']]	|nud|pl n|sg n	0|d|nud	A|V	
+218	une	uni	nimisõna	une	uni	uni	['uni']	sg g	0	S	nimisõna
+219	,			,	,	,	[',']			Z	lausemärk
+220	muneb	munema	tegusõna	muneb	munema	mune	['mune']	b	b	V	tegusõna
+221	sulle	sina	asesõna	sulle	sina	sina	['sina']	sg all	lle	P	asesõna
+222	juba	juba	määrsõna	juba	juba	juba	['juba']		0	D	määrsõna
+223	mune	muna|munema		mune	muna	muna	['muna']	pl p	e	S	nimisõna
+224	.			.	.	.	['.']			Z	lausemärk
+225	Sest	see|sest		Sest	sest	sest	['sest']		0	J	sidesõna
+226	siis	siis		siis	siis	siis	['siis']		0	D	määrsõna
+227	võta	võtma	tegusõna	võta	võtma	võt	['võt']	o	0	V	tegusõna
+228	neid	neid|see|tema		neid	tema	tema	['tema']	pl p	d	P	asesõna
+229	siin	siin		siin	siin	siin	['siin']		0	D	määrsõna
+230	hoida	hoidma	tegusõna	hoida	hoidma	hoid	['hoid']	da	a	V	tegusõna
+231	ja	ja	sidesõna	ja	ja	ja	['ja']		0	J	sidesõna
+232	ka	ka	määrsõna	ka	ka	ka	['ka']		0	D	määrsõna
+233	hoolega	hool	nimisõna	hoolega	hool	hool	['hool']	sg kom	ga	S	nimisõna
+234	neid	neid|see|tema		neid	see	see	['see']	pl p	d	P	asesõna
+235	toida	toitma	tegusõna	toida	toitma	toit	['toit']	o	0	V	tegusõna
+236	R	R	lühend	R	R	R	['R']	?	0	Y	lühend
+237	A	A	lühend	A	A	A	['A']	?	0	Y	lühend
+238	G	G	lühend	G	G	G	['G']	?	0	Y	lühend
+239	D	D		D	D	D	['D']	?	0	O	järgarvsõna
+240	v	v	lühend	v	v	v	['v']	?	0	Y	lühend
+241	I	I		I	I	I	['I']	?	0	Y	lühend
+242	i	i	lühend	i	i	i	['i']	?	0	Y	lühend
+243	i	i	lühend	i	i	i	['i']	?	0	Y	lühend
+244	h	h	lühend	h	h	h	['h']	?	0	Y	lühend
+245	r	r	lühend	r	r	r	['r']	?	0	Y	lühend
+246	a	a	lühend	a	a	a	['a']	?	0	Y	lühend
+247	l	l	lühend	l	l	l	['l']	?	0	Y	lühend
+248	i	i	lühend	i	i	i	['i']	?	0	Y	lühend
+249	a	a	lühend	a	a	a	['a']	?	0	Y	lühend
+250	a	a	lühend	a	a	a	['a']	?	0	Y	lühend
+251	t	t	lühend	t	t	t	['t']	?	0	Y	lühend
+252	i	i	lühend	i	i	i	['i']	?	0	Y	lühend
+253	g	g	lühend	g	g	g	['g']	?	0	Y	lühend
+254	d	d	lühend	d	d	d	['d']	?	0	Y	lühend
+255	u	u	lühend	u	u	u	['u']	?	0	Y	lühend
+256	g	g	lühend	g	g	g	['g']	?	0	Y	lühend
+257	o	o	lühend	o	o	o	['o']	?	0	Y	lühend
+258	k	k	lühend	k	k	k	['k']	?	0	Y	lühend
+259	u	u	lühend	u	u	u	['u']	?	0	Y	lühend
+260	t	t	lühend	t	t	t	['t']	?	0	Y	lühend
+261	a	a	lühend	a	a	a	['a']	?	0	Y	lühend
+262	m	m	lühend	m	m	m	['m']	?	0	Y	lühend
+263	a	a	lühend	a	a	a	['a']	?	0	Y	lühend
+264	a	a	lühend	a	a	a	['a']	?	0	Y	lühend
+265	r	r	lühend	r	r	r	['r']	?	0	Y	lühend
+266	s	s	lühend	s	s	s	['s']	?	0	Y	lühend
+267	u	u	lühend	u	u	u	['u']	?	0	Y	lühend
+268	v	v	lühend	v	v	v	['v']	?	0	Y	lühend
+269	h	h	lühend	h	h	h	['h']	?	0	Y	lühend
+270	a	a	lühend	a	a	a	['a']	?	0	Y	lühend
+271	R	R	lühend	R	R	R	['R']	?	0	Y	lühend
+272	i	i	lühend	i	i	i	['i']	?	0	Y	lühend
+273	t	t	lühend	t	t	t	['t']	?	0	Y	lühend
+274	s	s	lühend	s	s	s	['s']	?	0	Y	lühend
+275	e	e	lühend	e	e	e	['e']	?	0	Y	lühend
+276	E	E	lühend	E	E	E	['E']	?	0	Y	lühend
+277	Kana	kana	nimisõna	Kana	kana	kana	['kana']	sg g	0	S	nimisõna
+278	ja	ja	sidesõna	ja	ja	ja	['ja']		0	J	sidesõna
+279	ta	tema	asesõna	ta	tema	tema	['tema']	sg g	0	P	asesõna
+280	pojad	poeg|poja	nimisõna	pojad	poeg|poja	poeg|poja	[['poeg'], ['poja']]	pl n	d	S	nimisõna
+281	.			.	.	.	['.']			Z	lausemärk
+282	Tibukesed	tibuke	nimisõna	Tibukesed	tibuke	tibuke	['tibuke']	pl n	d	S	nimisõna
+283	tillukesed	tilluke	omadussõna algvõrre	tillukesed	tilluke	tilluke	['tilluke']	pl n	d	A	omadussõna algvõrre
+284	,			,	,	,	[',']			Z	lausemärk
+285	illukesed			illukesed	illuke	illu=ke	['illuke']	pl n	d	S	nimisõna
+286	trillukesed			trillukesed	trilluke	trillu=ke	['trilluke']	pl n	d	S	nimisõna
+287	õnnelikult	õnnelik|õnnelikult		õnnelikult	õnnelikult	õnnelikult	['õnnelikult']		0	D	määrsõna
+288	ema	ema	nimisõna	ema	ema	ema	['ema']	sg n	0	S	nimisõna
+289	neid	neid|see|tema		neid	see	see	['see']	pl p	d	P	asesõna
+290	näeb	nägema	tegusõna	näeb	nägema	näge	['näge']	b	b	V	tegusõna
+291	mitmesuguseid	mitmesugune	asesõna	mitmesuguseid	mitmesugune	mitme_sugune	['mitme', 'sugune']	pl p	id	P	asesõna
+292	.			.	.	.	['.']			Z	lausemärk
+293	Kõik	kõik		Kõik	kõik	kõik	[['kõik'], ['kõik']]	pl n|sg n	0	P	asesõna
+294	nad	tema	asesõna	nad	tema	tema	['tema']	pl n	d	P	asesõna
+295	tema	tema	asesõna	tema	tema	tema	['tema']	sg g	0	P	asesõna
+296	ümber	ümber		ümber	ümber	ümber	['ümber']		0	K	kaassõna
+297	käivad	käima|käiv		käivad	käima	käi	['käi']	vad	vad	V	tegusõna
+298	kogu	kogu|koguma		kogu	kogu	kogu	['kogu']		0	A	omadussõna algvõrre
+299	tunnid	tund	nimisõna	tunnid	tund	tund	['tund']	pl n	d	S	nimisõna

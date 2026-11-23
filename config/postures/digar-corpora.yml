@@ -1,0 +1,22 @@
+sources:
+  digar-corpora:
+    # kind machine-postured — the digar-corpora fold in kind_map.yml over the ERB
+    # record's 655 genre/form headings (open vocabulary: unruled headings stay uncovered).
+    lect: {posture: identity, note: "et IS Estonian — the ERB 008 language reads est for all
+        3,416 books (the deposit is the Estonian-language book set by construction). No date
+        staging by design: the print year is class edition, which date-band inference
+        excludes, so the few dozen prints inside the et:old band (1620s–1739 by the ERB
+        works census) stay bare et — a lect-scope review item. Bilingual books
+        (041: est+rus, est+ger …) keep their codes in metadata languages; no per-passage
+        language"}
+    dating: {posture: dated, note: "every record's ERB 008 date1 (u-digits widen to the
+        decade or century: 193u → 1930–1939; a 008 range type closes on date2), class
+        edition on the :structured lane — the print's date, never the text's composition;
+        the 260 $c imprint date rides raw"}
+    places: {posture: named, note: "the 260 $a imprint place in the print's own form (Perno,
+        Riia, Tallinn), supplied brackets dropped, a cataloguer's '?' conjecture flagged
+        place_conjectural, s.l. minting nothing; the 752 $d normalized city (Pärnu) rides
+        place_normalized where the record carries one; no gazetteer link"}
+    script: {posture: implied, note: "Latin script, Fraktur and Antiqua type as pdf2txt
+        exported the DIGAR PDFs (500 notes say 'Fraktuur.'); uncorrected OCR, text_nature
+        machine-ocr; the digitizer's page stamp dropped as furniture"}
