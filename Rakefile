@@ -684,9 +684,11 @@ namespace :boards do
     ).run
     decisions.findings.each { |finding| puts "STALE  decision register #{finding}" }
 
+    require_relative "lib/nabu/ops/rail_plan"
     acquisition = Nabu::Ops::AcquisitionCheck.new(
       boards_dir: dir, adapters_dir: File.expand_path("lib/nabu/adapters", __dir__),
-      ledger_path: File.expand_path("local/history.sqlite3", __dir__)
+      ledger_path: File.expand_path("local/history.sqlite3", __dir__),
+      suspensions: Nabu::Ops::RailPlan.suspensions(Nabu::SourceRegistry.load(Nabu::Config.load.sources_path))
     ).run
     acquisition.findings.each { |finding| puts "STALE  acquisition #{finding}" }
 
@@ -737,7 +739,8 @@ namespace :boards do
     else
       puts "boards:check — #{incidents.rows} incident row(s) each carry a status token"
     end
-    puts "boards:check — acquisition duties current (segment named, rail fresh)" if acquisition.clean?
+    puts "boards:check — acquisition duties current (segment named, rail fresh, roster suspensions match)" if
+      acquisition.clean?
     puts "boards:check — #{groom.summary} (phase-register cross-check clean)" unless groom.skipped
     puts "boards:check — every registered source has ledger runs (readiness probe clean)" unless readiness.skipped
     if liveness.skipped
@@ -1165,7 +1168,8 @@ end
 # source; slices_per_phase is a cap; no budget = the caps-only view. The
 # `lane <slug> step N: <command>` lines are the machine-consumable plan;
 # each step is rail:step (the yield-guarded sync), and sources the crawl
-# ledger marks exhausted are skipped.
+# ledger marks exhausted, or whose Schedule declares `suspended:`, are
+# skipped (listed, the suspension with its reason).
 namespace :rail do
   desc "Print the phase's paced-crawl plan as parallel lanes (rail:plan[budget_minutes], budget optional)"
   task :plan, %i[budget] do |_t, args|

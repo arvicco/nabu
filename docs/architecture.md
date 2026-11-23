@@ -2979,7 +2979,11 @@ diagnoses of the source's paced lanes, exiting 3 — stopping the lane —
 when the step held nothing new or left nothing selectable (per-iteration
 yield, never a replay of the same empty slice). Sources whose crawl
 ledger's persisted last slice already records the cone's end are skipped
-and listed. An adapter supplies
+and listed; so are sources whose Schedule declares `suspended: "<reason>"`
+(a parked lane — the ratified posture of a crawl waiting on upstream,
+listed with its reason; `rake boards:check` cross-checks the acquisition
+board's rail-roster SUSPENDED rows against these declarations, both ways,
+and a suspended source owes no rail slices). An adapter supplies
 three lambdas: `universe` (the ordered census ids — order IS crawl order),
 `held` (id → payload already on disk) and `fetch_one` (id → an `Outcome`
 of `:ok` / `:denied` / `:empty` / `:timeout` with its evidence,
