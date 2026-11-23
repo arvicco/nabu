@@ -244,6 +244,84 @@ class SourceReadTest < Minitest::Test
     assert_match(/\Asrc: .*rows\.jsonl\.gz line 2 is not valid UTF-8\z/, error.message)
   end
 
+  # -- the offending-bytes matrix (the ASCII-8BIT-defeats-scrub class) ---------------
+  #
+  # Three incidents had bad bytes cross a text seam because the String
+  # arrived tagged ASCII-8BIT: on BINARY every byte is valid, so #scrub and
+  # #valid_encoding? no-op and the failure surfaces later as an encoding
+  # exception the loader's ParseError net does not catch. The belt's
+  # contract is tag-blind: every entry point decides UTF-8 from the BYTES,
+  # whatever the tag, and every offending pattern is a ParseError.
+  OFFENDING = {
+    # CP949 "한글" — the shape of the unzip-stderr incident (BINARY-tagged).
+    "ascii-8bit invalid utf-8" => "\xC7\xD1\xB1\xDB".b,
+    "utf-16le with bom" => "\xFF\xFE".b + "μῆνιν".encode(Encoding::UTF_16LE).b,
+    "utf-16be with bom" => "\xFE\xFF".b + "μῆνιν".encode(Encoding::UTF_16BE).b,
+    "latin-1 high byte" => "caf\xE9 au lait".b
+  }.freeze
+
+  TAGS = [Encoding::BINARY, Encoding::UTF_8, Encoding::ISO_8859_1].freeze
+
+  def belt_entry_points
+    belt = Nabu::Adapters::SourceRead
+    {
+      "utf8" => ->(bytes) { belt.utf8(bytes, label: "m") },
+      "utf8_file" => ->(bytes) { belt.utf8_file(write("f.txt", bytes), label: "m") },
+      "utf8_lines" => ->(bytes) { belt.utf8_lines(write("l.txt", "ok\n#{bytes.b}\n".b), label: "m").to_a },
+      "utf8_lines gzip" => lambda { |bytes|
+        belt.utf8_lines(write("l.gz", Zlib.gzip("ok\n#{bytes.b}\n".b)), label: "m", gzip: true).to_a
+      },
+      "utf8_gzip" => ->(bytes) { belt.utf8_gzip(write("g.gz", Zlib.gzip(bytes.b)), label: "m") },
+      "utf8_member" => lambda { |bytes|
+        zip = belt.zip_file(write("z.zip", stored_zip("m.txt" => bytes)))
+        belt.utf8_member(zip, zip.entries.first, label: "z")
+      },
+      "nfc" => ->(bytes) { belt.nfc(bytes, language: "grc") }
+    }
+  end
+
+  def test_every_offending_pattern_is_a_parse_error_at_every_belt_entry_point_whatever_its_tag
+    OFFENDING.each do |pattern, bytes|
+      TAGS.each do |tag|
+        tagged = bytes.dup.force_encoding(tag)
+        belt_entry_points.each do |entry, read|
+          next if entry == "nfc" && tag == Encoding::ISO_8859_1 # a DECLARED encoding: see below
+
+          assert_raises(Nabu::ParseError, "#{entry} / #{pattern} / #{tag}") { read.call(tagged) }
+        end
+      end
+    end
+  end
+
+  # Why the belt re-tags before it validates: on BINARY the scrub and the
+  # validity check are no-ops, so a guard written on the raw tag never fires.
+  # Valid UTF-8 bytes arriving BINARY-tagged come out tagged UTF-8, so every
+  # downstream guard is live again.
+  def test_binary_tag_defeats_scrub_and_the_belt_retags
+    bad = OFFENDING.fetch("ascii-8bit invalid utf-8")
+    assert_predicate bad, :valid_encoding?
+    assert_equal bad, bad.scrub, "scrub on BINARY is a no-op"
+
+    text = Nabu::Adapters::SourceRead.utf8("μῆνιν".b, label: "m")
+    assert_equal Encoding::UTF_8, text.encoding
+    assert_equal "μῆνιν", text
+  end
+
+  # Normalize.nfc (the NFC seam) refuses BINARY outright — even valid UTF-8
+  # bytes: BINARY means the encoding was never decided, and deciding it is
+  # the read seam's job (the belt above). A string tagged with a real
+  # declared encoding (ISO-8859-1 from an HTTP charset) is transcoded; the
+  # belt's nfc maps every refusal onto ParseError.
+  def test_the_nfc_seam_refuses_undecided_bytes_and_transcodes_declared_ones
+    ["\xC7\xD1\xB1\xDB".b, "caf\xE9".b, "caf\xC3\xA9".b].each do |bytes|
+      assert_raises(Nabu::Normalize::EncodingError, bytes.inspect) { Nabu::Normalize.nfc(bytes) }
+      assert_raises(Nabu::ParseError, bytes.inspect) { Nabu::Adapters::SourceRead.nfc(bytes, language: "lat") }
+    end
+    assert_raises(Nabu::Normalize::EncodingError) { Nabu::Normalize.nfc("caf\xE9".dup.force_encoding(Encoding::UTF_8)) }
+    assert_equal "café", Nabu::Normalize.nfc("caf\xE9".dup.force_encoding(Encoding::ISO_8859_1))
+    assert_equal "abc", Nabu::Normalize.nfc("abc".b), "ASCII-only BINARY is unambiguous"
+  end
+
   private
 
   # A minimal spec-conformant STORED zip (method 0) — the container only;

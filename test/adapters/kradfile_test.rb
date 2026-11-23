@@ -102,6 +102,23 @@ class KradfileTest < Minitest::Test
     end
   end
 
+  # The EUC-JP decode seam: a byte sequence EUC-JP cannot decode (here a
+  # lone lead byte \xA4 cut before the newline, appended to the real file)
+  # raised Encoding::InvalidByteSequenceError from inside the transcode —
+  # an exception the loader's ParseError net does not catch, so one bad
+  # byte aborted the whole sync. Both canonical shapes quarantine instead.
+  def test_undecodable_euc_jp_bytes_raise_parse_error_in_both_shapes
+    bad = File.binread(File.join(FIXTURES, "kradfile")) + "\xA4\n".b
+    { "kradfile" => bad, "kradfile.gz" => gzip(bad) }.each do |name, bytes|
+      Dir.mktmpdir do |workdir|
+        File.binwrite(File.join(workdir, name), bytes)
+        ref = adapter.discover(workdir).first
+        error = assert_raises(Nabu::ParseError, name) { adapter.parse(ref) }
+        assert_match(/not valid EUC-JP/, error.message)
+      end
+    end
+  end
+
   # --- fetch (WebMock only) --------------------------------------------------------
 
   def test_fetch_downloads_the_gz_and_pins_it

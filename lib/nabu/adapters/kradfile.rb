@@ -101,6 +101,10 @@ module Nabu
         raise Nabu::ParseError, "kradfile: #{document_ref.id}: #{e.message}"
       rescue Zlib::Error => e
         raise Nabu::ParseError, "kradfile: #{document_ref.id}: corrupt gzip: #{e.message}"
+      rescue EncodingError => e
+        # The EUC-JP transcode (each_line) meeting bytes it cannot decode —
+        # quarantine, never an encoding exception past the loader's net.
+        raise Nabu::ParseError, "kradfile: #{document_ref.id}: not valid EUC-JP: #{e.message}"
       end
 
       def fetch(workdir, progress: nil, force: false)

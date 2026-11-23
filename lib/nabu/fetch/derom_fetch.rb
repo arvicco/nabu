@@ -203,8 +203,15 @@ module Nabu
     # the manifest comes from the page's own claims. A listing without the
     # index shape or without a single article is what an auth gate (303 →
     # Keycloak login, followed transparently) or an upstream reshape
-    # serves — abort loudly BEFORE any write.
+    # serves — abort loudly BEFORE any write. The body arrives BINARY when
+    # the server names no charset, and verbatim names captured from it
+    # would stay BINARY (a non-ASCII one then breaks the first string it
+    # meets): the listing is read as UTF-8 here, or refused.
     def harvest!(collection, body)
+      body = body.dup.force_encoding(Encoding::UTF_8)
+      raise Error, "listing #{collection.inspect} is not valid UTF-8; abort before any write" unless
+        body.valid_encoding?
+
       pairs = body.scan(HREF_PATTERN)
       if pairs.empty? || !body.include?(INDEX_MARKER)
         raise Error,
