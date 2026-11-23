@@ -95,6 +95,31 @@ namespace :ops do
   task drill_pure: :drill
 end
 
+# The online db snapshot (Nabu::Ops::DbSnapshot — its class comment holds
+# the WAL reasoning and the RESTORE procedure): every db/*.sqlite3 through
+# VACUUM INTO, never a file copy. Owner-fired; refuses a missing/non-writable
+# or occupied target and an in-progress rebuild.
+namespace :db do
+  desc "Snapshot every db/*.sqlite3 into TARGET_DIR via VACUUM INTO (online, WAL-safe; " \
+       "a CACHE of derived state — restore per Nabu::Ops::DbSnapshot) (db:snapshot[target_dir])"
+  task :snapshot, %i[target_dir] do |_t, args|
+    $LOAD_PATH.unshift(File.expand_path("lib", __dir__))
+    require "nabu"
+    require "nabu/ops/db_snapshot"
+
+    config = Nabu::Config.load
+    rebuild_check = lambda do
+      ledger = File.file?(config.history_path) ? Nabu::Store.connect(config.history_path, readonly: true) : nil
+      Nabu::Ops::DbSnapshot.rebuild_in_progress(ledger: ledger, ps_output: Nabu::Ops::GitHooks.ps_output)
+    ensure
+      ledger&.disconnect
+    end
+    Nabu::Ops::DbSnapshot.new(db_dir: config.db_dir, target: args[:target_dir], rebuild_check: rebuild_check).run!
+  rescue Nabu::Ops::DbSnapshot::Refused => e
+    abort "db:snapshot refused — #{e.message}"
+  end
+end
+
 # The drill's harness discipline (P77-r12, after the 2026-08-15 night the
 # owner reconstructed from a 724-byte log and 521 GB of leaked tmp):
 # - every run logs to its OWN timestamped file under ~/Library/Logs/nabu/
