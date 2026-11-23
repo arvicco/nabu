@@ -191,7 +191,15 @@ passages(id, document_id, urn, sequence, language, text, text_normalized,
    -- CJK-majority corpus folds to itself — ~12-18 GB of duplication);
    -- readers use the text_search VIRTUAL generated column
    -- (coalesce(nullif(text_normalized,''), text), migration 037) —
-   -- usually selected AS text_normalized so row consumers are unchanged
+   -- usually selected AS text_normalized so row consumers are unchanged.
+   -- The text_normalized diet widens the rule by one class: the one-byte
+   -- sentinel "\u0001" when the search form equals SQLite's lower(text)
+   -- (ASCII-only, byte-exact); migration 055 re-adds text_search as
+   -- CASE '' → text, char(1) → lower(text), else the stored form. The
+   -- stored form narrows, the SERVED form is bit-identical, so the
+   -- derivability law is untouched; genuine Unicode folds (~53% of rows)
+   -- stay stored. Older rows slim in place via the owner-fired
+   -- `rake "diet:text_normalized"` (ops.md §8b)
 provenance(id, passage_id, event, tool, tool_version, model, params_json, at)
    -- "loaded" is journaled at DOCUMENT and dictionary-entry grain only
    -- (P112-2): the per-passage breadcrumb was 95% of the table (~11 GB

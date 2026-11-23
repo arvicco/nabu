@@ -129,6 +129,45 @@ namespace :db do
   end
 end
 
+# The text_normalized diet's reclaim pass (Nabu::Store::TextNormalizedDiet
+# holds the design): rows stored in full whose search form is text or SQLite's
+# lower(text) take the sentinel in place. Owner-fired; dry run first:
+#   rake "diet:text_normalized[dry_run]"   — counts + projected bytes, no writes
+#   rake "diet:text_normalized"            — the pass (resumes a saved cursor)
+# BATCH=<ids per window> overrides the window size.
+namespace :diet do
+  desc "Slim stored passages.text_normalized to the ''/lower sentinels in place (owner-fired; " \
+       "[dry_run] = count + projected bytes only; resumable; space returns at VACUUM/rebuild/db:snapshot)"
+  task :text_normalized, %i[mode] do |_t, args|
+    $LOAD_PATH.unshift(File.expand_path("lib", __dir__))
+    require "nabu"
+    require "nabu/ops/db_snapshot"
+    require "nabu/store/text_normalized_diet"
+
+    $stdout.sync = true
+    dry_run = args[:mode].to_s == "dry_run"
+    abort "diet:text_normalized — unknown mode #{args[:mode].inspect} (use [dry_run] or none)" \
+      unless dry_run || args[:mode].to_s.empty?
+
+    config = Nabu::Config.load
+    abort "diet:text_normalized — no catalog at #{config.catalog_path}" unless File.file?(config.catalog_path)
+    rebuild_check = lambda do
+      ledger = File.file?(config.history_path) ? Nabu::Store.connect(config.history_path, readonly: true) : nil
+      Nabu::Ops::DbSnapshot.rebuild_in_progress(ledger: ledger, ps_output: Nabu::Ops::GitHooks.ps_output)
+    ensure
+      ledger&.disconnect
+    end
+    catalog = Nabu::Store.connect(config.catalog_path)
+    batch = Integer(ENV.fetch("BATCH", Nabu::Store::TextNormalizedDiet::BATCH_ROWS))
+    Nabu::Store::TextNormalizedDiet.new(catalog: catalog, catalog_path: config.catalog_path, batch_rows: batch,
+                                        rebuild_check: rebuild_check).run!(dry_run: dry_run)
+  rescue Nabu::Store::TextNormalizedDiet::Refused => e
+    abort "diet:text_normalized refused — #{e.message}"
+  ensure
+    catalog&.disconnect
+  end
+end
+
 # The drill's harness discipline (P77-r12, after the 2026-08-15 night the
 # owner reconstructed from a 724-byte log and 521 GB of leaked tmp):
 # - every run logs to its OWN timestamped file under ~/Library/Logs/nabu/

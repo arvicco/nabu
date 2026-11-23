@@ -164,6 +164,12 @@ module Nabu
       PASSAGE_COLUMNS = %i[document_id urn sequence language text text_normalized annotations_json
                            content_sha256 revision withdrawn].freeze
 
+      # The stored text_normalized sentinels (#stored_normalized; the read
+      # seam is passages.text_search, migrations 037 + 055): "" = the
+      # search form IS text; "\u0001" = it is SQLite's lower(text).
+      EMPTY_SENTINEL = ""
+      LOWER_SENTINEL = "\u0001"
+
       # What revising a document needs to know about its existing passages
       # — text and annotations stay on disk (a mega-document's text would
       # otherwise be read back wholesale just to be compared by sha).
@@ -814,8 +820,29 @@ module Nabu
       # generated column (migration 037, edge case documented there).
       # ~12–18 GB reclaimed at the next rebuild; the in-memory Passage (and
       # therefore every content sha) is untouched.
+      #
+      # The text_normalized diet widens it by one class: a search
+      # form equal to SQLite's OWN lower(text) stores the one-byte
+      # LOWER_SENTINEL, and text_search recomputes lower(text) on read
+      # (migration 055). The check reproduces lower()'s semantics exactly —
+      # ASCII-only, byte for byte (tr A-Z, never Ruby's Unicode downcase) —
+      # because the virtual column must serve the true form bit-identically;
+      # an ASCII lower preserves bytesize, so a length mismatch rejects
+      # without allocating. Order matters: equal-to-text wins first ("" is
+      # zero bytes, the sentinel one).
+      #
+      # What stays STORED, deliberately: every row whose true fold differs
+      # from both text and ASCII-lower(text) — the Unicode folds (Greek
+      # accents and case, Cyrillic, É, ſ, the Han variant folds… ~53% of
+      # rows at the November 2026 measurement). That is the fold's real content, not
+      # duplication; no sentinel can recompute it in SQL.
       def stored_normalized(passage)
-        passage.text_normalized == passage.text ? "" : passage.text_normalized
+        normalized = passage.text_normalized
+        text = passage.text
+        return EMPTY_SENTINEL if normalized == text
+        return LOWER_SENTINEL if normalized.bytesize == text.bytesize && normalized == text.tr("A-Z", "a-z")
+
+        normalized
       end
 
       # Withdrawn row present again with unchanged content: clear the flag,

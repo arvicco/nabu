@@ -2039,6 +2039,35 @@ module Store
                    "char postings read the coalesced form (王/道/蕩 distinct)"
     end
 
+    # The lower sentinel (migration 055): a row storing "\u0001"
+    # serves SQLite's lower(text), so it must index token-for-token like
+    # the same passage with its form stored in full, and match identically.
+    def test_lower_sentinel_rows_index_and_match_like_stored_rows
+      text = "Gallia Est Omnis DIVISA in partes"
+      stored = make_document(urn: "urn:d:stored")
+      sentinel = make_document(urn: "urn:d:sentinel")
+      [[stored, "urn:d:stored:1", text.downcase], [sentinel, "urn:d:sentinel:1", "\u0001"]].each do |doc, urn, form|
+        Nabu::Store::Passage.create(
+          document_id: doc.id, urn: urn, sequence: 0, language: "lat", text: text, text_normalized: form,
+          content_sha256: "x", revision: 1, withdrawn: false, annotations_json: "{}"
+        )
+      end
+
+      assert_equal 2, rebuild!
+      ["gallia", "divisa", '"omnis divisa"', "partes AND est"].each do |query|
+        assert_equal %w[urn:d:sentinel:1 urn:d:stored:1], match_urns(query).sort,
+                     "#{query} matches the sentinel row exactly as the stored one"
+      end
+      @fulltext.run("CREATE VIRTUAL TABLE temp.fts_instances USING fts5vocab(main, passages_fts, instance)")
+      tokens = lambda do |urn|
+        @fulltext[:fts_instances].where(doc: passage_id_of(urn)).order(:offset, :col)
+                                 .select_map(%i[term col offset])
+      end
+      refute_empty tokens.call("urn:d:stored:1")
+      assert_equal tokens.call("urn:d:stored:1"), tokens.call("urn:d:sentinel:1"),
+                   "identical token instances (term, column, offset)"
+    end
+
     # -- the delta grain (P112-1) --------------------------------------
     # With the loader's IndexDelta on hand, refresh_source! refreshes exactly
     # the changed rows instead of rewriting the source's whole slice (the
