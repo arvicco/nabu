@@ -397,11 +397,225 @@ class GitFetchTest < Minitest::Test
     assert_equal "v2\n", File.read(File.join(@dir, "keep", "data.txt"))
   end
 
+  # --- attic-and-reset on a diverged upstream (owner ruling 2026-11-12) ------
+  # An upstream history REWRITE (force-push) leaves FETCH_HEAD unreachable
+  # from HEAD, so the ff-only merge can never succeed and the source would
+  # park forever (the kanripo case: ~17% of the text repos diverged, almost
+  # all rewrite-only with an IDENTICAL tree). The ruled policy, opt-in per
+  # caller: attic every file the reset would delete or change, THEN reset
+  # to the upstream tip, and record the event. Identical trees take a fast
+  # path that touches no working-tree file at all.
+
+  def test_diverged_upstream_without_the_opt_in_keeps_the_hard_stop
+    make_repo("alpha.txt" => "alpha v1\n")
+    sync!
+    before_head = head(@dir)
+    before = tree_snapshot(@dir)
+    rewrite_upstream("alpha.txt" => "alpha rewritten\n")
+
+    assert_raises(Nabu::Shell::Error) { sync! }
+
+    assert_equal before_head, head(@dir), "ordinary sources never move off their line"
+    assert_equal before, tree_snapshot(@dir)
+  end
+
+  def test_zero_delta_rewrite_moves_head_without_touching_any_file
+    make_repo("alpha.txt" => "alpha v1\n", "keep/beta.txt" => "beta\n")
+    sync!
+    old_head = head(@dir)
+    before = tree_snapshot(@dir)
+    git(@upstream, "-c", "user.email=t@t", "-c", "user.name=t", "commit", "-q", "--amend", "-m", "rewritten")
+    refute_equal old_head, head(@upstream), "the rewrite minted a new, unrelated tip"
+
+    argvs = record_git_argvs { @result = sync!(reset_on_divergence: true) }
+
+    assert_equal head(@upstream), @result.sha
+    assert_equal head(@upstream), head(@dir)
+    assert_empty @result.atticked
+    reset = @result.reset
+    assert reset.zero_delta, "identical trees take the fast path"
+    assert_equal old_head, reset.from
+    assert_equal head(@upstream), reset.to
+    assert_equal 0, reset.atticked
+    assert_equal before, tree_snapshot(@dir).reject { |rel, _| rel.start_with?(".attic") },
+                 "no live file is rewritten"
+    file_work = argvs.select { |argv| argv.include?("diff") || argv.include?("status") || argv.include?("--hard") }
+    assert_empty file_work, "tree identity is decided by tree ids alone: #{file_work.inspect}"
+    assert_equal "", git(@dir, "status", "--porcelain")
+    log = reset_log
+    assert_equal 1, log.size
+    assert_equal({ "from" => old_head, "to" => head(@upstream), "zero_delta" => true, "atticked" => 0 },
+                 log.first.slice("from", "to", "zero_delta", "atticked"))
+    assert_match(/\A\d{4}-\d{2}-\d{2}T/, log.first.fetch("at"))
+  end
+
+  def test_rewrite_with_changes_attics_every_changed_and_deleted_file_then_resets
+    make_repo("alpha.txt" => "alpha v1\n", "gone/beta.txt" => "beta\n",
+              "same.txt" => "same\n", "renamed.txt" => "moves intact\n")
+    sync!
+    old_head = head(@dir)
+    rewrite_upstream({ "alpha.txt" => "alpha v2\n", "same.txt" => "same\n",
+                       "new.txt" => "brand new\n", "moved/renamed.txt" => "moves intact\n" })
+    new_head = head(@upstream)
+
+    result = sync!(reset_on_divergence: true)
+
+    assert_equal new_head, result.sha
+    assert_equal new_head, head(@dir)
+    assert_equal %w[alpha.txt gone/beta.txt], result.atticked,
+                 "changed + deleted files are atticked; unchanged and renamed ones are not"
+    # attic verified file by file: the PRE-reset bytes at the same relative path
+    assert_equal "alpha v1\n", File.read(File.join(@attic, "alpha.txt"))
+    assert_equal "beta\n", File.read(File.join(@attic, "gone", "beta.txt"))
+    refute File.exist?(File.join(@attic, "same.txt"))
+    refute File.exist?(File.join(@attic, "renamed.txt")), "a rename is not a scrapping"
+    manifest = JSON.parse(File.read(File.join(@attic, ".attic.json")))
+    assert_equal({ "alpha.txt" => new_head, "gone/beta.txt" => new_head }, manifest)
+    # the live tree is upstream's rewritten line
+    assert_equal "alpha v2\n", File.read(File.join(@dir, "alpha.txt"))
+    refute File.exist?(File.join(@dir, "gone", "beta.txt"))
+    assert_equal "brand new\n", File.read(File.join(@dir, "new.txt"))
+    assert_equal "moves intact\n", File.read(File.join(@dir, "moved", "renamed.txt"))
+    assert_equal "", git(@dir, "status", "--porcelain")
+    reset = result.reset
+    refute reset.zero_delta
+    assert_equal [old_head, new_head, 2], [reset.from, reset.to, reset.atticked]
+    assert_equal [false, 2], reset_log.last.values_at("zero_delta", "atticked")
+
+    # the reset line is now the tracked line: the next pull is an ordinary no-op
+    again = sync!(reset_on_divergence: true)
+    assert_nil again.reset
+    assert_empty again.atticked
+  end
+
+  def test_reset_never_overwrites_an_existing_attic_copy
+    make_repo("alpha.txt" => "alpha v1\n", "beta.txt" => "beta\n")
+    sync!
+    FileUtils.mkdir_p(@attic)
+    File.write(File.join(@attic, "alpha.txt"), "first scrapped\n")
+    rewrite_upstream("alpha.txt" => "alpha v2\n", "beta.txt" => "beta\n")
+
+    result = sync!(reset_on_divergence: true)
+
+    assert_empty result.atticked
+    assert_equal "first scrapped\n", File.read(File.join(@attic, "alpha.txt")), "first copy wins"
+    assert_equal "alpha v2\n", File.read(File.join(@dir, "alpha.txt"))
+  end
+
+  def test_breaker_runs_before_a_reset_and_a_trip_leaves_everything_unchanged
+    make_repo("alpha.txt" => "alpha v1\n", "beta.txt" => "beta\n", "gamma.txt" => "gamma\n")
+    sync!
+    before_head = head(@dir)
+    before = tree_snapshot(@dir)
+    rewrite_upstream("gamma.txt" => "gamma rewritten\n") # a mass deletion riding a rewrite
+
+    seen = nil
+    boom = Nabu::SyncAborted.new(existing_count: 3, would_withdraw_count: 2, threshold: 0.2)
+    assert_raises(Nabu::SyncAborted) do
+      sync!(reset_on_divergence: true, guard: lambda { |doomed|
+        seen = doomed
+        raise boom
+      })
+    end
+
+    assert_equal %w[alpha.txt beta.txt].map { |rel| File.expand_path(File.join(@dir, rel)) }, seen,
+                 "the guard sees the reset's deletions"
+    assert_equal before_head, head(@dir), "no reset happened"
+    assert_equal before, tree_snapshot(@dir), "byte-unchanged"
+    refute Dir.exist?(@attic), "no attic writes, no event recorded"
+
+    result = sync!(reset_on_divergence: true) # the guard allows: the reset completes
+    assert_equal %w[alpha.txt beta.txt gamma.txt], result.atticked
+    assert_equal head(@upstream), head(@dir)
+  end
+
+  def test_reset_refuses_a_locally_modified_tracked_tree
+    make_repo("alpha.txt" => "alpha v1\n", "beta.txt" => "beta\n")
+    sync!
+    File.write(File.join(@dir, "beta.txt"), "local edit\n")
+    before_head = head(@dir)
+    rewrite_upstream("alpha.txt" => "alpha v2\n", "beta.txt" => "beta\n")
+
+    error = assert_raises(Nabu::FetchError) { sync!(reset_on_divergence: true) }
+
+    assert_match(/local modifications/, error.message)
+    assert_equal before_head, head(@dir)
+    assert_equal "local edit\n", File.read(File.join(@dir, "beta.txt")), "never clobbered"
+    refute Dir.exist?(@attic)
+  end
+
+  def test_plain_fast_forward_is_unchanged_under_the_opt_in
+    make_repo("alpha.txt" => "alpha v1\n", "beta.txt" => "beta\n")
+    sync!
+    commit_upstream("alpha.txt" => "alpha v2\n")
+    delete_upstream("beta.txt")
+
+    result = sync!(reset_on_divergence: true)
+
+    assert_nil result.reset, "an ff-able upstream merges as ever"
+    assert_equal ["beta.txt"], result.atticked, "modified files are not atticked on the ff path"
+    assert_equal head(@upstream), head(@dir)
+    assert_equal "alpha v2\n", File.read(File.join(@dir, "alpha.txt"))
+    refute File.exist?(File.join(@attic, Nabu::GitFetch::RESET_LOG))
+  end
+
+  def test_sparse_rewrite_scopes_the_attic_to_the_cone
+    make_repo("keep/data.txt" => "v1\n", "papers/big.pdf" => "outside\n")
+    sync!(sparse: ["keep"])
+    rewrite_upstream("keep/data.txt" => "v2\n", "papers/big.pdf" => "outside changed\n")
+
+    result = sync!(sparse: ["keep"], reset_on_divergence: true)
+
+    assert_equal ["keep/data.txt"], result.atticked
+    assert_equal "v1\n", File.read(File.join(@attic, "keep", "data.txt"))
+    assert_equal "v2\n", File.read(File.join(@dir, "keep", "data.txt"))
+    refute File.exist?(File.join(@dir, "papers", "big.pdf")), "the reset keeps the sparse cone"
+  end
+
   private
 
-  def sync!(guard: nil, progress: nil, ref: nil, sparse: nil)
+  def sync!(guard: nil, progress: nil, ref: nil, sparse: nil, reset_on_divergence: false)
     Nabu::GitFetch.sync!(repo_url: @upstream, dir: @dir, attic_dir: @attic,
-                         progress: progress, guard: guard, ref: ref, sparse: sparse)
+                         progress: progress, guard: guard, ref: ref, sparse: sparse,
+                         reset_on_divergence: reset_on_divergence)
+  end
+
+  # Upstream force-pushes a NEW ROOT commit carrying exactly +files+ (every
+  # other path is gone) — history unrelated to anything the clone holds.
+  def rewrite_upstream(files)
+    git(@upstream, "checkout", "-q", "--orphan", "rewritten")
+    git(@upstream, "rm", "-rq", "--cached", ".")
+    Dir.children(@upstream).sort.each do |entry|
+      FileUtils.rm_rf(File.join(@upstream, entry)) unless entry == ".git"
+    end
+    write_files(@upstream, files)
+    git(@upstream, "add", ".")
+    commit(@upstream, "rewritten history")
+    branch = git(@dir, "rev-parse", "--abbrev-ref", "HEAD")
+    git(@upstream, "branch", "-M", branch)
+  end
+
+  def reset_log
+    JSON.parse(File.read(File.join(@attic, Nabu::GitFetch::RESET_LOG)))
+  end
+
+  # The argv of every `git` command GitFetch issues inside the block AFTER
+  # the fetch (the post-fetch decision and tree work).
+  def record_git_argvs
+    seen = []
+    singleton = Nabu::Shell.singleton_class
+    originals = %i[run stream].to_h { |name| [name, Nabu::Shell.method(name)] }
+    originals.each do |name, original|
+      singleton.define_method(name) do |*argv, &blk|
+        seen << argv if argv.first == "git"
+        original.call(*argv, &blk)
+      end
+    end
+    yield
+    fetch_at = seen.index { |argv| argv.include?("fetch") }
+    fetch_at ? seen.drop(fetch_at + 1) : seen
+  ensure
+    originals&.each { |name, original| singleton.define_method(name, original) }
   end
 
   def make_repo(files)

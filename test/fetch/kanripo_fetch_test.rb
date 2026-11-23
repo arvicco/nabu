@@ -165,6 +165,28 @@ class KanripoFetchTest < Minitest::Test
     refute File.file?(File.join(@dir, "KR1a0170", "KR1a0170_000.txt"))
   end
 
+  # Attic-and-reset (owner ruling 2026-11-12): a text whose upstream
+  # history was REWRITTEN (force-push, tree identical — the dominant
+  # kanripo shape) used to park the whole wave on the ff-only merge. The wave opts into attic-and-reset: the text moves
+  # to the rewritten tip, nothing is atticked, and the result names it.
+  def test_rewritten_text_history_resets_instead_of_parking_the_wave
+    sync!
+    text = File.join(@upstream, "KR1a0170")
+    old_pin = head_of_clone("KR1a0170")
+    Nabu::Shell.run("git", "-C", text, "-c", "user.email=t@t", "-c", "user.name=t",
+                    "commit", "-q", "--amend", "-m", "rewritten history")
+    advance_catalog
+
+    result = sync!
+
+    assert_equal ["KR1a0170"], result.reset
+    assert_empty result.atticked, "an identical tree attics nothing"
+    refute_equal old_pin, head_of_clone("KR1a0170")
+    assert_equal head(text), head_of_clone("KR1a0170")
+    assert_equal head(text), read_ledger.dig("texts", "KR1a0170", "sha")
+    assert_includes result.refreshed, "KR3g0023", "the wave continues past the rewritten text"
+  end
+
   def test_per_text_guard_sees_doomed_paths_before_any_tree_change
     sync!
     Nabu::Shell.run("git", "-C", File.join(@upstream, "KR1a0170"), "rm", "-q", "KR1a0170_001.txt")
