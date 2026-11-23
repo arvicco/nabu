@@ -39,7 +39,7 @@ class PersonMineTest < Minitest::Test
     %w[王安石變法之議 東坡居士遊於赤壁 無關之文也].each_with_index do |text, i|
       Nabu::Store::Passage.create(document_id: doc.id, urn: "urn:nabu:kanripo:d1:#{i}",
                                   language: "lzh", text: text, text_normalized: text,
-                                  content_sha256: i.to_s * 64, sequence: i, revision: 1)
+                                  content_sha_raw: i.to_s * 64, sequence: i, revision: 1)
     end
   end
 
@@ -71,7 +71,7 @@ class PersonMineTest < Minitest::Test
      "Caius Iulius Cai filius Optatus", "Caius Sextius Paris", "Sextiusparis"].each_with_index do |text, i|
       Nabu::Store::Passage.create(document_id: doc.id, urn: "urn:nabu:edh:HD000001:#{i}", language: "lat",
                                   text: text, text_normalized: text.downcase,
-                                  content_sha256: Digest::SHA256.hexdigest(text), sequence: i, revision: 1)
+                                  content_sha_raw: Digest::SHA256.hexdigest(text), sequence: i, revision: 1)
     end
     persons = [
       edh_person("HD000001/2", "C. Iulio Artemoni", ["c. iulio artemoni", "c. iulius artemo", "iulius artemo"]),

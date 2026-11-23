@@ -34,7 +34,7 @@ module Query
     def make_passage(urn:, text:, sequence:, language: "grc")
       Nabu::Store::Passage.create(
         document_id: @doc.id, urn: urn, sequence: sequence, language: language,
-        text: text, text_normalized: text, content_sha256: "x", revision: 1, withdrawn: false
+        text: text, text_normalized: text, content_sha_raw: "x", revision: 1, withdrawn: false
       )
     end
 

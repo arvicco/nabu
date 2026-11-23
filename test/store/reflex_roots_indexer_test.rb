@@ -70,7 +70,7 @@ module Store
         document_id: document.id, urn: "#{urn_stem}:#{seq + 1}", sequence: seq,
         language: language, text: form, text_normalized: form,
         annotations_json: JSON.generate({ "tokens" => [{ "lemma" => lemma, "form" => form }] }),
-        content_sha256: "x", revision: 1
+        content_sha_raw: "x", revision: 1
       )
     end
 
@@ -305,7 +305,7 @@ module Store
         document_id: document.id, urn: "#{urn_stem}:#{seq + 1}", sequence: seq,
         language: language, text: form, text_normalized: form,
         annotations_json: JSON.generate({ "tokens" => [{ "lemma" => lemma, "form" => form }] }),
-        content_sha256: "x", revision: 1
+        content_sha_raw: "x", revision: 1
       )
     end
 

@@ -35,7 +35,7 @@ module Export
       passages.times do |seq|
         Nabu::Store::Passage.create(document_id: doc.id, urn: format("%<urn>s:%<seq>02d", urn: urn, seq: seq),
                                     sequence: seq, language: language, text: text, text_normalized: text,
-                                    content_sha256: "x", revision: 1, withdrawn: false,
+                                    content_sha_raw: "x", revision: 1, withdrawn: false,
                                     annotations_json: JSON.generate(annotations.call(seq)))
       end
       doc

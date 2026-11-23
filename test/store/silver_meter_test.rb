@@ -18,7 +18,7 @@ class SilverMeterTest < Minitest::Test
     doc = catalog[:documents].insert(source_id: src, urn: "urn:t:doc", language: "lat", content_sha256: "x")
     ids = %w[a b gold moved gone].each_with_index.to_h do |name, i|
       [name, catalog[:passages].insert(document_id: doc, urn: "urn:t:#{name}", sequence: i, language: "lat",
-                                       text: name, text_normalized: name, content_sha256: "sha-#{name}",
+                                       text: name, text_normalized: name, content_sha_raw: "sha-#{name}",
                                        withdrawn: name == "gone")]
     end
     catalog[:enrichments].insert(passage_id: ids["gold"], kind: "meter", model: "pedecerto", model_version: "p",
@@ -99,7 +99,7 @@ class SilverMeterTest < Minitest::Test
     with_world do |catalog, shelf, ids|
       shelf.append_batch!(records: [record("a"), record("b")])
       SilverMeter.project!(catalog: catalog, shelf: shelf)
-      catalog[:passages].where(id: ids["a"]).update(content_sha256: "re-parsed")
+      catalog[:passages].where(id: ids["a"]).update(content_sha_raw: "re-parsed")
       assert_equal 1, SilverMeter.drop_stale!(catalog: catalog, slug: "perseus")
       assert_equal([ids["b"]], silver(catalog).map { |r| r[:passage_id] })
       assert_equal 0, SilverMeter.drop_stale!(catalog: catalog, slug: "other")

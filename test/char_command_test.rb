@@ -685,7 +685,7 @@ class CharCommandTest < Minitest::Test
     )
     Nabu::Store::Passage.create(
       document_id: document.id, urn: "urn:nabu:test:#{slug}:1", sequence: 0,
-      language: "lzh", text: text, text_normalized: text, content_sha256: slug, revision: 1
+      language: "lzh", text: text, text_normalized: text, content_sha_raw: slug, revision: 1
     )
   end
 
@@ -740,7 +740,7 @@ class CharCommandTest < Minitest::Test
       )
       Nabu::Store::Passage.create(
         document_id: document.id, urn: "urn:nabu:kanripo:KR1h0004:005:22a", sequence: 0,
-        language: "lzh", text: "棄而違之。", text_normalized: "棄而違之。", content_sha256: "x", revision: 1
+        language: "lzh", text: "棄而違之。", text_normalized: "棄而違之。", content_sha_raw: "x", revision: 1
       )
       # A jpn holding carrying both reform spellings — so the card's corpus
       # column covers jpn (P38-4) and both 國 and 国 attest.
@@ -754,7 +754,7 @@ class CharCommandTest < Minitest::Test
       )
       Nabu::Store::Passage.create(
         document_id: jpn_doc.id, urn: "urn:nabu:aozora:000001:1", sequence: 0,
-        language: "jpn", text: "國語と国語。", text_normalized: "國語と國語。", content_sha256: "y", revision: 1
+        language: "jpn", text: "國語と国語。", text_normalized: "國語と國語。", content_sha_raw: "y", revision: 1
       )
       # P65: the corpus panel reads the precompiled char-postings index (the
       # desk never scans passages) — build the derived index like the live

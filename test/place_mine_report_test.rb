@@ -68,7 +68,7 @@ class PlaceMineReportTest < Minitest::Test
      [d2, "urn:nabu:kanripo:d2:2", "一路行至清水之濱而還"]].each_with_index do |(doc, urn, text), i|
       Nabu::Store::Passage.create(document_id: doc.id, urn: urn, language: "lzh",
                                   text: text, text_normalized: text,
-                                  content_sha256: i.to_s * 64, sequence: i, revision: 1)
+                                  content_sha_raw: i.to_s * 64, sequence: i, revision: 1)
     end
   end
 

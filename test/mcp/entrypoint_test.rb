@@ -42,7 +42,7 @@ module MCP
         document_id: doc.id, urn: "#{doc.urn}:1.1", sequence: 0, language: "grc",
         text: "μῆνιν ἄειδε θεά",
         text_normalized: Nabu::Normalize.search_form("μῆνιν ἄειδε θεά", language: "grc"),
-        content_sha256: "x", revision: 1
+        content_sha_raw: "x", revision: 1
       )
       fulltext = Nabu::Store.connect_fulltext(File.join(db_dir, "fulltext.sqlite3"))
       Nabu::Store::Indexer.rebuild!(catalog: catalog, fulltext: fulltext)

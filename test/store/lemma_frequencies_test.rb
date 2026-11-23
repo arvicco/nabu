@@ -49,7 +49,7 @@ module Store
         document_id: document.id, urn: urn, sequence: sequence, language: language,
         text: lemmas.join(" "), text_normalized: lemmas.join(" "),
         annotations_json: JSON.generate({ "tokens" => tokens }),
-        content_sha256: "x#{urn}#{lemmas.join}", revision: 1, withdrawn: withdrawn
+        content_sha_raw: "x#{urn}#{lemmas.join}", revision: 1, withdrawn: withdrawn
       )
     end
 

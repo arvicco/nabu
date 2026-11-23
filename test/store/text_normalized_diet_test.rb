@@ -223,7 +223,7 @@ module Store
       rows.each_with_index do |(text, stored), index|
         stored = "" if stored == text
         @db[:passages].insert(document_id: document.id, urn: "urn:d:#{index}", sequence: index, language: "lat",
-                              text: text, text_normalized: stored, content_sha256: "x", revision: 1,
+                              text: text, text_normalized: stored, content_sha_raw: "x", revision: 1,
                               withdrawn: false, annotations_json: "{}")
       end
     end

@@ -713,8 +713,9 @@ module Nabu
       # rebuild: true — the fast-and-unsafe rebuild-mode connection profile
       # (Store.rebuild_pragmas!): synchronous=OFF + big cache, sound only
       # because this db is regenerated from canonical/ (a crashed rebuild is
-      # re-run, never recovered).
-      db = Store.connect(db_path, rebuild: true)
+      # re-run, never recovered). connect_catalog: this is the catalog's
+      # from-scratch generation, minted at CATALOG_PAGE_SIZE.
+      db = Store.connect_catalog(db_path, rebuild: true)
       Store.migrate!(db)
       Store.setup!(db)
       db

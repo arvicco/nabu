@@ -54,7 +54,7 @@ class SefariaLinksTest < Minitest::Test
     verses.each_with_index do |verse, i|
       Nabu::Store::Passage.create(document_id: doc.id, urn: "urn:nabu:oshb:#{book}:#{verse}", language: "hbo",
                                   sequence: i, text: "v", text_normalized: "v", annotations_json: "{}",
-                                  content_sha256: Digest::SHA256.hexdigest("#{book}#{verse}"))
+                                  content_sha_raw: Digest::SHA256.hexdigest("#{book}#{verse}"))
     end
   end
 

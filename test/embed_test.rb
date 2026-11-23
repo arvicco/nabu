@@ -35,7 +35,7 @@ class EmbedTest < Minitest::Test
   def make_passage(document, urn:, text:, sequence:, language: "grc", withdrawn: false)
     Nabu::Store::Passage.create(
       document_id: document.id, urn: urn, sequence: sequence, language: language,
-      text: text, text_normalized: text, content_sha256: "x", revision: 1, withdrawn: withdrawn
+      text: text, text_normalized: text, content_sha_raw: "x", revision: 1, withdrawn: withdrawn
     )
   end
 

@@ -78,7 +78,7 @@ class BuilderRefreshTest < Minitest::Test
     doc = Nabu::Store::Document.create(source_id: perseus.id, urn: "urn:cts:greekLit:tlg0016.tlg001.perseus-grc2",
                                        title: "t", language: "grc", canonical_path: "x", content_sha256: "2" * 64)
     Nabu::Store::Passage.create(document_id: doc.id, urn: "#{doc.urn}:1.1", sequence: 1, language: "grc",
-                                text: "t", text_normalized: "t", content_sha256: "x", revision: 1,
+                                text: "t", text_normalized: "t", content_sha_raw: "x", revision: 1,
                                 annotations_json: JSON.generate("entities" => [{ "type" => "place",
                                                                                  "text" => "Hellas",
                                                                                  "key" => "tgn,1000074" }]))
@@ -97,7 +97,7 @@ class BuilderRefreshTest < Minitest::Test
     doc = Nabu::Store::Document.create(source_id: sillok.id, urn: "urn:nabu:sillok:waa_001", title: "t",
                                        language: "lzh", canonical_path: "x", content_sha256: "1" * 64)
     Nabu::Store::Passage.create(document_id: doc.id, urn: "urn:nabu:sillok:waa_001:1", sequence: 1,
-                                language: "lzh", text: "t", text_normalized: "t", content_sha256: "x",
+                                language: "lzh", text: "t", text_normalized: "t", content_sha_raw: "x",
                                 revision: 1, annotations_json: JSON.generate("subject_classes" => ["인물(人物)"]))
     summary = Dir.mktmpdir do |dir|
       Nabu::Ops::BuilderRefresh.run(catalog: @catalog, config: hybrid_config(dir))
@@ -126,7 +126,7 @@ class BuilderRefreshTest < Minitest::Test
   # the timeline they bucket by).
   def test_refresh_rebuilds_the_lemma_rollups
     Nabu::Store::Passage.create(document_id: @doc.id, urn: "urn:nabu:seal:1:1", sequence: 1,
-                                language: "akk", text: "t", text_normalized: "t", content_sha256: "x")
+                                language: "akk", text: "t", text_normalized: "t", content_sha_raw: "x")
     summary = Dir.mktmpdir { |dir| Nabu::Ops::BuilderRefresh.run(catalog: @catalog, config: hybrid_config(dir)) }
     assert_equal 1, summary.lemma_rollups.mix_rows
     assert_equal 0, summary.lemma_rollups.lemma_rows, "no fulltext file: the honest empty lemma rollup"
@@ -181,7 +181,7 @@ class BuilderRefreshTest < Minitest::Test
     doc = Nabu::Store::Document.create(source_id: source.id, urn: "urn:nabu:v:1", language: "lat",
                                        canonical_path: "x", content_sha256: "3" * 64)
     Nabu::Store::Passage.create(document_id: doc.id, urn: "urn:nabu:v:1:1", sequence: 0, language: "lat",
-                                text: "arma", text_normalized: "arma", content_sha256: "s1", revision: 1,
+                                text: "arma", text_normalized: "arma", content_sha_raw: "s1", revision: 1,
                                 withdrawn: false)
     Dir.mktmpdir do |dir|
       config = hybrid_config(dir)

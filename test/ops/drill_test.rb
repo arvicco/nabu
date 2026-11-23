@@ -134,7 +134,7 @@ class DrillTest < Minitest::Test
     doc_id = live[:documents].min(:id)
     live[:passages].insert(document_id: doc_id, urn: "urn:nabu:corpus:stray:9", sequence: 9,
                            language: "grc", text: "stray", text_normalized: "stray",
-                           content_sha256: "stray", revision: 1)
+                           content_sha_raw: "stray", revision: 1)
     live.disconnect
 
     Dir.mktmpdir("nabu-drill-work") do |workspace|

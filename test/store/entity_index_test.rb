@@ -42,7 +42,7 @@ module Store
       @sequence += 1
       Nabu::Store::Passage.create(
         document_id: document.id, urn: "#{document.urn}:#{@sequence}", sequence: @sequence,
-        language: "grc", text: "t", text_normalized: "t", content_sha256: "x", revision: 1,
+        language: "grc", text: "t", text_normalized: "t", content_sha_raw: "x", revision: 1,
         withdrawn: withdrawn, annotations_json: JSON.generate(annotations)
       )
     end

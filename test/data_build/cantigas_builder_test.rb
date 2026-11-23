@@ -123,7 +123,7 @@ class DataBuildCantigasBuilderTest < Minitest::Test
       Nabu::Store::Passage.create(
         document_id: doc.id, urn: "#{urn}:#{line}", sequence: sequence, language: "roa-opt",
         text: text, text_normalized: text, annotations_json: JSON.generate(annotations),
-        content_sha256: Digest::SHA256.hexdigest(text), revision: 1, withdrawn: false
+        content_sha_raw: Digest::SHA256.hexdigest(text), revision: 1, withdrawn: false
       )
     end
   end

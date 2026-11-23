@@ -39,7 +39,7 @@ module Query
       Nabu::Store::Passage.create(
         document_id: document.id, urn: urn, sequence: sequence, language: language,
         text: "text #{sequence}", text_normalized: "text #{sequence}",
-        content_sha256: "x", revision: 1, withdrawn: withdrawn
+        content_sha_raw: "x", revision: 1, withdrawn: withdrawn
       )
     end
 
@@ -656,7 +656,7 @@ module Query
         annotations_json: Nabu::Store::ContentHash.canonical_json(
           { "tokens" => [], "loans" => loans }
         ),
-        content_sha256: "x", revision: 1, withdrawn: withdrawn
+        content_sha_raw: "x", revision: 1, withdrawn: withdrawn
       )
     end
 

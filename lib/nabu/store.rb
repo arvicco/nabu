@@ -140,17 +140,36 @@ module Nabu
     # convention as the others.
     INDEX_WRITER_CACHE_KIB = -524_288
 
-    # == page_size 8192 at the NEXT from-scratch generation (P112-3)
+    # == page_size: a one-way door per file generation
     #
-    # The standing files were created at SQLite's 4096 default. 8192
-    # halves the page count on the ~100M-row B-trees (shallower interior
-    # paths, fewer page headers, better sequential IO on the big scans)
-    # and is the standard choice for large scan-heavy databases. The
-    # pragma below only takes effect on a FRESH file (before its first
+    # PRAGMA page_size only takes effect on a FRESH file (before its first
     # write and before WAL mode engages); on an existing database it is a
-    # documented no-op — each file adopts 8192 at its next from-scratch
-    # rebuild (a one-way door per file generation, decided P112).
+    # documented no-op. Every read-write connect issues it anyway, so each
+    # file adopts its page size at its next from-scratch creation and keeps
+    # whatever it was born with until then (pinned on scratch files in
+    # test/store/connection_profile_test.rb, both halves).
+    #
+    # PAGE_SIZE (8192, P112-3) is every file's size — the ledger, the
+    # journals, the vectors store, the fulltext index and its lanes. The
+    # first files were created at SQLite's 4096 default; 8192 halves the
+    # page count on the big B-trees (shallower interior paths, fewer page
+    # headers, better sequential IO on the big scans).
+    #
+    # CATALOG_PAGE_SIZE (32768) is the catalog file's alone, applied only
+    # through Store.connect_catalog — the from-scratch creators (the full
+    # rebuild's fresh_db and the CLI's first-sync open_or_create_catalog).
+    # Measured 2026-11-23 on a 500k-row sample of real passages loaded in
+    # id order: file size -9.1% against 8192 (table-leaf unused space
+    # 14.0% -> 5.0% — long passage records stop stranding the tail of
+    # every small page), urn-lookup speed unchanged, WAL bytes for
+    # scattered single-row updates x3.2 (each touched page is logged
+    # whole). The WAL cost is acceptable because catalog writes are bulk
+    # loads; 65536 bought only 2 more points for 1.6x more WAL, 16384 only
+    # -5.4%. Memory is unchanged: every cache_size here is negative KiB
+    # (a byte budget, not a page count) and LIVE_MMAP_BYTES is bytes.
+    # Snapshots keep the source's size (VACUUM INTO copies it, tested).
     PAGE_SIZE = 8192
+    CATALOG_PAGE_SIZE = 32_768
 
     # == Post-load ANALYZE (P42-4) — query-planner hygiene (ops §10)
     #
@@ -186,8 +205,9 @@ module Nabu
     # rebuild-mode pragmas ON TOP of WAL — for `nabu rebuild` ONLY.
     # +after_connect+ (a callable on each raw connection) is Sequel's
     # per-connection hook — the links union (Store::LinkLayers) installs
-    # its ATTACH and temp views with it.
-    def connect(url, readonly: false, rebuild: false, after_connect: nil)
+    # its ATTACH and temp views with it. +page_size+ is the fresh-file page
+    # size (class doc); only Store.connect_catalog passes a non-default one.
+    def connect(url, readonly: false, rebuild: false, after_connect: nil, page_size: PAGE_SIZE)
       opts = { readonly: readonly, timeout: BUSY_TIMEOUT_MS }
       opts[:after_connect] = after_connect if after_connect
       db = Sequel.connect(sqlite_url(url), **opts)
@@ -195,12 +215,19 @@ module Nabu
         db.run("PRAGMA foreign_keys = ON")
         live_pragmas!(db)
         unless readonly
-          db.run("PRAGMA page_size = #{PAGE_SIZE}") # fresh files only (class doc)
+          db.run("PRAGMA page_size = #{Integer(page_size)}") # fresh files only (class doc)
           write_ahead_log!(db)
           rebuild_pragmas!(db) if rebuild
         end
       end
       db
+    end
+
+    # The catalog file's own connect: Store.connect with the catalog page
+    # size (CATALOG_PAGE_SIZE, class doc). Used by the from-scratch
+    # creators; on an existing catalog it is exactly Store.connect.
+    def connect_catalog(url, **)
+      connect(url, page_size: CATALOG_PAGE_SIZE, **)
     end
 
     # The live-connection profile (class doc above): read-path knobs, safe

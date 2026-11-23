@@ -79,7 +79,7 @@ module MCP
                                          content_sha256: "x", revision: 1, withdrawn: false)
       Nabu::Store::Passage.create(document_id: doc.id, urn: urn, sequence: 0, language: "grc", text: text,
                                   text_normalized: Nabu::Normalize.search_form(text, language: "grc"),
-                                  content_sha256: "x", revision: 1, withdrawn: false)
+                                  content_sha_raw: "x", revision: 1, withdrawn: false)
     end
 
     def test_fuzzy_matches_an_infix_fragment_with_the_hit_contract

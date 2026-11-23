@@ -53,7 +53,7 @@ module Store
     def make_sentence(document, urn:, sequence:, parts:, withdrawn: false)
       Nabu::Store::Passage.create(
         document_id: document.id, urn: urn, sequence: sequence, language: "grc",
-        text: "t", text_normalized: "t", content_sha256: "x", revision: 1,
+        text: "t", text_normalized: "t", content_sha_raw: "x", revision: 1,
         withdrawn: withdrawn,
         annotations_json: JSON.generate(
           "citation" => parts.first,
@@ -141,7 +141,7 @@ module Store
       doc = make_document(urn: "urn:nabu:proiel:greek-nt")
       Nabu::Store::Passage.create(
         document_id: doc.id, urn: "urn:nabu:proiel:greek-nt:1", sequence: 0,
-        language: "grc", text: "t", text_normalized: "t", content_sha256: "x",
+        language: "grc", text: "t", text_normalized: "t", content_sha_raw: "x",
         revision: 1, annotations_json: JSON.generate("tokens" => [{ "form" => "x" }])
       )
 
@@ -163,7 +163,7 @@ module Store
     def make_verse(document, urn:, sequence:)
       Nabu::Store::Passage.create(
         document_id: document.id, urn: urn, sequence: sequence, language: "grc",
-        text: "t", text_normalized: "t", content_sha256: "x", revision: 1
+        text: "t", text_normalized: "t", content_sha_raw: "x", revision: 1
       )
     end
 

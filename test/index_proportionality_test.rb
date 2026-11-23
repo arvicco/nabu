@@ -117,7 +117,7 @@ class IndexProportionalityTest < Minitest::Test
     urn = "#{doc.urn}:#{seq}"
     text = "λογοσ αρετη #{seq} 天地"
     { document_id: doc.id, urn: urn, sequence: seq, language: "grc", text: text, text_normalized: text,
-      content_sha256: Digest::SHA256.hexdigest(urn), revision: 1, withdrawn: false, annotations_json: "{}" }
+      content_sha_raw: Digest::SHA256.hexdigest(urn), revision: 1, withdrawn: false, annotations_json: "{}" }
   end
 
   # TRIALS identical deltas (DELTA_ADDS new rows + DELTA_WITHDRAWALS

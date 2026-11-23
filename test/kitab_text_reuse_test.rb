@@ -224,7 +224,7 @@ class KitabTextReuseTest < Minitest::Test
       document_id: doc.id, urn: passage_urn, sequence: 0, language: "ara",
       text: "…", text_normalized: "…",
       annotations_json: Nabu::Store::ContentHash.canonical_json("milestones" => [milestone]),
-      content_sha256: "x", revision: 1, withdrawn: false
+      content_sha_raw: "x", revision: 1, withdrawn: false
     )
   end
 end

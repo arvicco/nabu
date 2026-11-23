@@ -39,7 +39,7 @@ class BatchParallelsTest < Minitest::Test
     Nabu::Store::Passage.create(
       document_id: document.id, urn: urn, sequence: sequence, language: language,
       text: text, text_normalized: Nabu::Normalize.search_form(text, language: language),
-      annotations_json: "{}", content_sha256: "x", revision: 1, withdrawn: false
+      annotations_json: "{}", content_sha_raw: "x", revision: 1, withdrawn: false
     )
   end
 

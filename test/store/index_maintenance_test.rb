@@ -30,7 +30,7 @@ module Store
                                            language: "grc", content_sha256: "x", revision: 1, withdrawn: false)
         Nabu::Store::Passage.create(document_id: doc.id, urn: "urn:d:#{source.slug}:1", sequence: 0,
                                     language: "grc", text: "λογοσ #{index}", text_normalized: "λογοσ #{index}",
-                                    content_sha256: "x", revision: 1, withdrawn: false, annotations_json: "{}")
+                                    content_sha_raw: "x", revision: 1, withdrawn: false, annotations_json: "{}")
       end
       Indexer.rebuild!(catalog: @catalog, fulltext: @fulltext)
     end

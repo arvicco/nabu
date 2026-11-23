@@ -345,6 +345,23 @@ class RebuildTest < Minitest::Test
     db&.disconnect
   end
 
+  # The full rebuild is the catalog's from-scratch generation: the fresh
+  # file is minted at the catalog page size, while the index beside it
+  # keeps the generic one (Store class doc, the page-size door).
+  def test_rebuild_mints_the_catalog_at_the_catalog_page_size
+    write_sources(<<~YAML)
+      corpus:
+        adapter: TestAdapter
+        wired: true
+    YAML
+    write_canonical("corpus", "one.txt" => ILIAD)
+
+    rebuilder.run
+
+    with_db { |db| assert_equal Nabu::Store::CATALOG_PAGE_SIZE, db.fetch("PRAGMA page_size").single_value }
+    with_fulltext { |ft| assert_equal Nabu::Store::PAGE_SIZE, ft.fetch("PRAGMA page_size").single_value }
+  end
+
   # -- fulltext index is rebuilt too (P4-1) --------------------------------
 
   def test_rebuild_populates_the_fulltext_index

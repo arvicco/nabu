@@ -265,7 +265,7 @@ module Store
       assert_raises(Sequel::DatabaseError) do
         @db[:passages].insert(
           document_id: 9999, urn: "urn:p:1", sequence: 1,
-          text: "x", text_normalized: "x", content_sha256: "abc"
+          text: "x", text_normalized: "x", content_sha_raw: "abc"
         )
       end
     end
@@ -292,7 +292,7 @@ module Store
     def passage_row(document_id, sequence:, urn:)
       {
         document_id: document_id, urn: urn, sequence: sequence,
-        text: "x", text_normalized: "x", content_sha256: "abc"
+        text: "x", text_normalized: "x", content_sha_raw: "abc"
       }
     end
   end

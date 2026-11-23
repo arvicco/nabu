@@ -23,7 +23,7 @@ module Store
       )
       Nabu::Store::Passage.create(
         document_id: doc.id, urn: "urn:d:1:1", sequence: 0, language: "grc",
-        text: "μῆνιν ἄειδε", text_normalized: "μῆνιν ἄειδε", content_sha256: "x",
+        text: "μῆνιν ἄειδε", text_normalized: "μῆνιν ἄειδε", content_sha_raw: "x",
         revision: 1, withdrawn: false, annotations_json: "{}"
       )
     end

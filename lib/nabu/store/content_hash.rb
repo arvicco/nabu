@@ -123,6 +123,19 @@ module Nabu
           "attested_year" => reflex.attested_year }.compact
       end
 
+      # The STORED form of a passage hash (migration 056): the 32 raw bytes
+      # behind +hex+, as a blob for passages.content_sha_raw. The table's
+      # virtual content_sha256 serves lower(hex(...)) back, so only the
+      # lower-case hex digest form is accepted — anything else could not
+      # read back bit-identically and is refused rather than stored.
+      def stored(hex)
+        unless hex.to_s.match?(/\A[0-9a-f]{64}\z/)
+          raise ArgumentError, "not a lower-case sha256 hex digest: #{hex.inspect}"
+        end
+
+        Sequel.blob([hex].pack("H*"))
+      end
+
       # JSON with hash keys sorted recursively (by string form), so
       # semantically equal structures serialize — and therefore hash — equal.
       # Also used for the stored annotations_json, keeping rows byte-stable

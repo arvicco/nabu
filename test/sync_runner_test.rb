@@ -1508,7 +1508,7 @@ class SyncRunnerTest < Minitest::Test
     doc = Nabu::Store::Document.create(source_id: other.id, urn: "urn:o:1", title: "t", language: "grc",
                                        content_sha256: "x", revision: 1, withdrawn: false)
     Nabu::Store::Passage.create(document_id: doc.id, urn: "urn:o:1:1", sequence: 0, language: "grc",
-                                text: "β", text_normalized: "β", content_sha256: "x", revision: 1,
+                                text: "β", text_normalized: "β", content_sha_raw: "x", revision: 1,
                                 withdrawn: false)
 
     # A content-bearing re-sync (one urn added — P110-1: an idempotent one

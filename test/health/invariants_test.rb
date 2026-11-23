@@ -241,7 +241,7 @@ class InvariantsTest < Minitest::Test
     doc = seed_docs(source, 1).first
     @db[:passages].insert(document_id: doc[:id], urn: "urn:t:perseus-greek:p2", sequence: 0,
                           language: "grc", text: "ἄνδρα μοι", text_normalized: "ανδρα μοι",
-                          content_sha256: "x", withdrawn: false)
+                          content_sha_raw: "x", withdrawn: false)
 
     finding = find(:index_slice_stale, entry("perseus-greek"))
 
@@ -519,7 +519,7 @@ class InvariantsTest < Minitest::Test
     doc = seed_docs(source, 1).first
     @db[:passages].insert(document_id: doc[:id], urn: "urn:t:texts:p1", sequence: 0,
                           language: "grc", text: "t", text_normalized: "t",
-                          content_sha256: "x", withdrawn: false)
+                          content_sha_raw: "x", withdrawn: false)
     Nabu::Store::SourceStats.derive!(@db, note: "test")
     @db[:source_stats].update(live_passages: 99)
 
@@ -706,7 +706,7 @@ class InvariantsTest < Minitest::Test
   def seed_lane_passage(doc_id, sequence, annotations)
     @db[:passages].insert(
       document_id: doc_id, urn: "#{doc_id}:#{sequence}", sequence: sequence, text: "t",
-      text_normalized: "t", annotations_json: JSON.generate(annotations), content_sha256: "x#{sequence}"
+      text_normalized: "t", annotations_json: JSON.generate(annotations), content_sha_raw: "x#{sequence}"
     )
   end
 
@@ -931,7 +931,7 @@ class InvariantsTest < Minitest::Test
     doc_id = seed_lane_doc("newsource", "urn:nabu:newsource:sc1", "{}")
     @db[:document_facets].insert(document_id: doc_id, facet: "lect", value: "grc~latn")
     @db[:passages].insert(document_id: doc_id, urn: "urn:nabu:newsource:sc1:1", sequence: 0,
-                          text: "μῆνιν ἄειδε θεά", text_normalized: "x", content_sha256: "x")
+                          text: "μῆνιν ἄειδε θεά", text_normalized: "x", content_sha_raw: "x")
     finding = global_finding(:script_surface_mismatch)
     refute_nil finding, "Greek bytes under a ~latn claim contradict the held-surface semantics"
     assert_equal :loud, finding.severity
@@ -1120,7 +1120,7 @@ class InvariantsTest < Minitest::Test
                                        content_sha256: "x", revision: 1, withdrawn: false)
     %w[urn:l:d:1 urn:l:d:2].each_with_index do |urn, i|
       Nabu::Store::Passage.create(document_id: doc.id, urn: urn, sequence: i, language: "lat", text: "t",
-                                  text_normalized: "t", content_sha256: "x", revision: 1, withdrawn: false)
+                                  text_normalized: "t", content_sha_raw: "x", revision: 1, withdrawn: false)
     end
   end
 
@@ -1528,7 +1528,7 @@ class InvariantsTest < Minitest::Test
     doc = seed_docs(source, 1).first
     @db[:passages].insert(document_id: doc[:id], urn: "urn:t:#{slug}:p1", sequence: 0,
                           language: "grc", text: "μῆνιν ἄειδε θεά", text_normalized: "μηνιν αειδε θεα",
-                          content_sha256: "x", withdrawn: false)
+                          content_sha_raw: "x", withdrawn: false)
     @fulltext = Nabu::Store.connect_fulltext("sqlite::memory:")
     Nabu::Store::Indexer.rebuild!(catalog: @db, fulltext: @fulltext, fuzzy_slugs: fuzzy_slugs)
     source

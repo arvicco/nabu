@@ -374,7 +374,7 @@ module Query
       )
       Nabu::Store::Passage.create(
         document_id: document.id, urn: "urn:d:1:1", sequence: 0, language: "grc",
-        text: "μῆνιν", text_normalized: "μηνιν", content_sha256: "x",
+        text: "μῆνιν", text_normalized: "μηνιν", content_sha_raw: "x",
         revision: 1, withdrawn: true
       )
 

@@ -56,7 +56,7 @@ module Query
           document_id: document.id, urn: "#{urn_stem}:#{i + 1}", sequence: i,
           language: language, text: form, text_normalized: form,
           annotations_json: JSON.generate({ "tokens" => [{ "lemma" => lemma, "form" => form }] }),
-          content_sha256: "x", revision: 1
+          content_sha_raw: "x", revision: 1
         )
       end
     end
@@ -141,7 +141,7 @@ module Query
           annotations_json: JSON.generate(
             { "tokens" => [{ "lemma_id" => "1a", "latin_equivalent" => cle, "form" => form }] }
           ),
-          content_sha256: "x", revision: 1
+          content_sha_raw: "x", revision: 1
         )
       end
     end

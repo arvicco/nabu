@@ -57,7 +57,7 @@ class DataBuildGrcFormLemmaBuilderTest < Minitest::Test
                                        content_sha256: "x", revision: 1, license_override: license_override)
     annotations = { "tokens" => tokens, "analysis" => analysis }.compact
     Nabu::Store::Passage.create(document_id: doc.id, urn: "#{urn}:1", sequence: 0, language: "grc",
-                                text: "t", text_normalized: "t", content_sha256: "x", revision: 1,
+                                text: "t", text_normalized: "t", content_sha_raw: "x", revision: 1,
                                 annotations_json: JSON.generate(annotations))
   end
 

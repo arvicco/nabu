@@ -208,7 +208,7 @@ class HieroFrequencyBuilderTest < Minitest::Test
     annotations = { "tokens" => tokens.map { |inv| { "form" => "w", "hiero_inventar" => inv } } }
     Nabu::Store::Passage.create(
       document_id: doc.id, urn: urn, sequence: 0, language: "egy",
-      text: "t", text_normalized: "t", content_sha256: "x", revision: 1,
+      text: "t", text_normalized: "t", content_sha_raw: "x", revision: 1,
       withdrawn: withdrawn, annotations_json: JSON.generate(annotations)
     )
   end

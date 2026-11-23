@@ -26,7 +26,7 @@ class GradedTest < Minitest::Test
     ].each_with_index do |(urn, text), i|
       Nabu::Store::Passage.create(
         document_id: @doc.id, urn: urn, sequence: i, language: "lzh",
-        text: text, text_normalized: text, content_sha256: "x", revision: 1
+        text: text, text_normalized: text, content_sha_raw: "x", revision: 1
       )
     end
     Nabu::Store::Indexer.rebuild!(catalog: @catalog, fulltext: @fulltext)

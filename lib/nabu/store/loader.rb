@@ -161,8 +161,10 @@ module Nabu
       INSERT_SLICE_BYTES = 4 * 1024 * 1024
 
       # The passage columns the bulk insert writes, in VALUES order.
+      # The hash lands in content_sha_raw as 32 raw bytes (ContentHash.stored,
+      # migration 056); content_sha256 is the virtual hex read seam.
       PASSAGE_COLUMNS = %i[document_id urn sequence language text text_normalized annotations_json
-                           content_sha256 revision withdrawn].freeze
+                           content_sha_raw revision withdrawn].freeze
 
       # The stored text_normalized sentinels (#stored_normalized; the read
       # seam is passages.text_search, migrations 037 + 055): "" = the
@@ -713,11 +715,13 @@ module Nabu
         old_sha = row.content_sha256
         was_withdrawn = row.withdrawn
         @index_delta.stage_upsert(row.id, row.urn)
-        row.update(
+        # A dataset update, not row.update: model typecasting would turn the
+        # stored blob into a text string (the raw column is declared String).
+        row.this.update(
           sequence: passage.sequence, language: passage.language,
           text: passage.text, text_normalized: stored_normalized(passage),
           annotations_json: annotations_json,
-          content_sha256: sha, revision: row.revision + 1, withdrawn: false
+          content_sha_raw: ContentHash.stored(sha), revision: row.revision + 1, withdrawn: false
         )
         journal(event: "revised", passage_id: row.id, params: { "old_sha" => old_sha, "new_sha" => sha })
         durable(event: "revised", urn: row.urn, old_sha: old_sha, new_sha: sha)
@@ -775,7 +779,8 @@ module Nabu
         each_insert_slice(passages) do |slice|
           values = slice.map do |passage|
             [document_id, passage.urn, passage.sequence, passage.language, passage.text,
-             stored_normalized(passage), annotations.fetch(passage.urn), passage_shas.fetch(passage.urn), 1, false]
+             stored_normalized(passage), annotations.fetch(passage.urn),
+             ContentHash.stored(passage_shas.fetch(passage.urn)), 1, false]
           end
           ids = insert_returning_ids(values)
           slice.each { |passage| @index_delta.stage_upsert(ids.fetch(passage.urn), passage.urn) }

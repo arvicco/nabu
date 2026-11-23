@@ -35,7 +35,7 @@ module Query
       Nabu::Store::Passage.create(document_id: document.id, urn: "urn:t:#{name}:1", sequence: (@seq += 1),
                                   language: "lat", text: body,
                                   text_normalized: Nabu::Normalize.search_form(body, language: "lat"),
-                                  content_sha256: "x", revision: 1)
+                                  content_sha_raw: "x", revision: 1)
       "urn:t:#{name}:1"
     end
 

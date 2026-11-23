@@ -41,7 +41,7 @@ module Store
       Nabu::Store::Passage.create(
         document_id: document.id, urn: urn, sequence: sequence, language: language,
         text: text_normalized, text_normalized: text_normalized,
-        content_sha256: sha, revision: 1, withdrawn: withdrawn,
+        content_sha_raw: sha, revision: 1, withdrawn: withdrawn,
         annotations_json: annotations ? JSON.generate(annotations) : "{}"
       )
     end
@@ -426,7 +426,7 @@ module Store
       doc = make_document(urn: "urn:d:1")
       rows = (0...Nabu::Store::Indexer::BATCH_SIZE).map do |i|
         { document_id: doc.id, urn: "urn:d:1:#{i}", sequence: i, language: "grc",
-          text: "alpha", text_normalized: "alpha", content_sha256: "x", revision: 1,
+          text: "alpha", text_normalized: "alpha", content_sha_raw: "x", revision: 1,
           withdrawn: false, annotations_json: "{}" }
       end
       @catalog[:passages].multi_insert(rows)
@@ -2067,7 +2067,7 @@ module Store
       doc = make_document(urn: "urn:d:1")
       Nabu::Store::Passage.create(
         document_id: doc.id, urn: "urn:d:1:1", sequence: 0, language: "lzh",
-        text: "王道蕩蕩", text_normalized: "", content_sha256: "x", revision: 1,
+        text: "王道蕩蕩", text_normalized: "", content_sha_raw: "x", revision: 1,
         withdrawn: false, annotations_json: "{}"
       )
 
@@ -2088,7 +2088,7 @@ module Store
       [[stored, "urn:d:stored:1", text.downcase], [sentinel, "urn:d:sentinel:1", "\u0001"]].each do |doc, urn, form|
         Nabu::Store::Passage.create(
           document_id: doc.id, urn: urn, sequence: 0, language: "lat", text: text, text_normalized: form,
-          content_sha256: "x", revision: 1, withdrawn: false, annotations_json: "{}"
+          content_sha_raw: "x", revision: 1, withdrawn: false, annotations_json: "{}"
         )
       end
 
@@ -2143,7 +2143,7 @@ module Store
                         annotations: token_annotations(%w[φέρω φέρει]))
       # A revision moves the content sha, exactly as the loader mints it.
       Nabu::Store::Passage.first(urn: "urn:d:s:2").update(
-        text_normalized: "revised 国", content_sha256: "ab12",
+        text_normalized: "revised 国", content_sha_raw: "ab12",
         annotations_json: JSON.generate(token_annotations(%w[ὁράω ὁρᾷ]))
       )
       Nabu::Store::Passage.first(urn: "urn:d:s:3").update(withdrawn: true)
@@ -2240,7 +2240,7 @@ module Store
       tampered = passage_id_of("urn:d:s:1")
       @fulltext[:passages_fts].where(rowid: tampered).delete
       @fulltext[Nabu::Store::Indexer::ROW_SHAS_TABLE].where(rowid: tampered).delete # the crash shape
-      Nabu::Store::Passage.first(urn: "urn:d:s:2").update(text_normalized: "revised", content_sha256: "ab12")
+      Nabu::Store::Passage.first(urn: "urn:d:s:2").update(text_normalized: "revised", content_sha_raw: "ab12")
 
       refresh!(delta: delta_of(upserted: %w[urn:d:s:2]))
 
@@ -2336,7 +2336,7 @@ module Store
       source_ids = @catalog[:passages].where(document_id: doc.id).select_map(:id)
       Nabu::Store::Indexer.write_census_baseline!(@fulltext, "s", source_ids)
       revised = Nabu::Store::Passage.first(urn: "urn:d:s:2")
-      revised.update(text_normalized: "revised", content_sha256: sha_hex("revised"),
+      revised.update(text_normalized: "revised", content_sha_raw: sha_hex("revised"),
                      annotations_json: JSON.generate(token_annotations(%w[revised revised])))
       row_shas.where(rowid: revised.id).delete
       lemmas.where(passage_id: revised.id).delete
@@ -2432,7 +2432,7 @@ module Store
       Nabu::Store::Indexer.rebuild!(catalog: @catalog, fulltext: @fulltext, cjk_slugs: ["s"])
 
       revised = Nabu::Store::Passage.first(urn: "urn:d:s:2")
-      revised.update(text_normalized: "乾坤一擲", content_sha256: sha_hex("乾坤一擲"))
+      revised.update(text_normalized: "乾坤一擲", content_sha_raw: sha_hex("乾坤一擲"))
       Nabu::Store::Indexer.mark_slice_pending!(@fulltext, "s")
       refresh!
 
@@ -2477,7 +2477,7 @@ module Store
 
     def test_the_sidecar_sha_is_written_last_and_removed_first
       doc = heal_fixture
-      Nabu::Store::Passage.first(urn: "urn:d:s:1").update(text_normalized: "changed", content_sha256: sha_hex("c"))
+      Nabu::Store::Passage.first(urn: "urn:d:s:1").update(text_normalized: "changed", content_sha_raw: sha_hex("c"))
       make_passage(doc, urn: "urn:d:s:6", text_normalized: "zeta", sequence: 5, sha: sha_hex("zeta"),
                         annotations: token_annotations(%w[zeta zeta]))
       io = StringIO.new
@@ -2587,8 +2587,8 @@ module Store
       make_passage(doc, urn: "urn:d:s:3", text_normalized: "plain ascii", sequence: 2, sha: sha_hex("3"))
       rebuild!
 
-      Nabu::Store::Passage.first(urn: "urn:d:s:2").update(text_normalized: "日月盈昃", content_sha256: sha_hex("2b"))
-      Nabu::Store::Passage.first(urn: "urn:d:s:3").update(text_normalized: "now 天", content_sha256: sha_hex("3b"))
+      Nabu::Store::Passage.first(urn: "urn:d:s:2").update(text_normalized: "日月盈昃", content_sha_raw: sha_hex("2b"))
+      Nabu::Store::Passage.first(urn: "urn:d:s:3").update(text_normalized: "now 天", content_sha_raw: sha_hex("3b"))
       refute_source_scan { refresh!(delta: delta_of(upserted: %w[urn:d:s:2 urn:d:s:3])) }
 
       refute stale_postings?, "a Han-pure source's revisions decrement exactly from passage_chars"
@@ -2602,7 +2602,7 @@ module Store
       rebuild!
       before = postings_rows
 
-      Nabu::Store::Passage.first(urn: "urn:d:s:2").update(text_normalized: "ναυσ", content_sha256: sha_hex("2b"))
+      Nabu::Store::Passage.first(urn: "urn:d:s:2").update(text_normalized: "ναυσ", content_sha_raw: sha_hex("2b"))
       refute_source_scan { refresh!(delta: delta_of(upserted: %w[urn:d:s:2])) }
 
       assert stale_postings?, "the old Greek of a revised row is unknowable — flagged, not guessed"
@@ -2671,7 +2671,7 @@ module Store
                         annotations: token_annotations(%w[gamma gamma]))
       rebuild!
       Nabu::Store::Passage.first(urn: "urn:d:s:2").update(
-        text_normalized: "revised", content_sha256: sha_hex("revised"),
+        text_normalized: "revised", content_sha_raw: sha_hex("revised"),
         annotations_json: JSON.generate(token_annotations(%w[revised revised]))
       )
       make_passage(doc, urn: "urn:d:s:3", text_normalized: "delta", sequence: 2, sha: sha_hex("delta"),
@@ -2769,7 +2769,7 @@ module Store
     def mutate_shadow_fixture(doc)
       make_passage(doc, urn: "urn:d:s:4", text_normalized: "delta 王", sequence: 3, sha: sha_hex("delta"),
                         annotations: token_annotations(%w[delta delta]))
-      Nabu::Store::Passage.first(urn: "urn:d:s:2").update(text_normalized: "revised", content_sha256: sha_hex("r"))
+      Nabu::Store::Passage.first(urn: "urn:d:s:2").update(text_normalized: "revised", content_sha_raw: sha_hex("r"))
       Nabu::Store::Passage.first(urn: "urn:d:s:3").update(withdrawn: true)
     end
 
