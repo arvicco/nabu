@@ -342,7 +342,8 @@ module Nabu
         if trigram_shadow
           timed_sync_stage(ledger, slug, "trigram_shadow",
                            "trigram lane: shadow build (#{trigram_ids.size} rows over the #{row_budget}-row " \
-                           "in-place budget — the lane file rebuilt whole)", progress) do
+                           "in-place budget — the lane file rebuilt whole)", progress,
+                           eta: trigram_shadow_eta(ledger, fulltext, slug)) do
             rebuild_trigram!(catalog: catalog, fulltext: fulltext, fuzzy_slugs: Array(fuzzy_slugs))
           end
         end
@@ -586,9 +587,10 @@ module Nabu
       # size, recorded beside the seconds so a later estimate scales by
       # drift (the shadow builds: the rows they wrote).
       # Split note: also times the bulk-slice merge stage; kept with its primary user (refresh_source!).
-      def timed_sync_stage(ledger, scope, stage, label, progress, rows_of: nil, &)
+      # +eta+ (optional) overrides the stage's own-row estimate.
+      def timed_sync_stage(ledger, scope, stage, label, progress, rows_of: nil, eta: nil, &)
         IndexCostClasses.for("sync", stage)
-        eta = ledger && Nabu::Eta.for(ledger, kind: "sync", scope: scope, stage: stage)
+        eta ||= ledger && Nabu::Eta.for(ledger, kind: "sync", scope: scope, stage: stage)
         progress&.stage(label, eta: eta)
         started = Process.clock_gettime(Process::CLOCK_MONOTONIC)
         result = yield
@@ -598,6 +600,21 @@ module Nabu
                                        rows: rows_of&.call(result))
         end
         result
+      end
+
+      # The trigram lane's shadow estimate: the source's own trigram_shadow
+      # row when it has one, else the rebuild's corpus "trigram" stage —
+      # the same rebuild_trigram! pass, denominated by the indexed row
+      # count — scaled to the index's current total (O(1)). NONE without
+      # either row; nil without a ledger.
+      def trigram_shadow_eta(ledger, fulltext, slug)
+        return nil if ledger.nil?
+
+        own = Nabu::Eta.for(ledger, kind: "sync", scope: slug, stage: "trigram_shadow")
+        return own unless own.none?
+
+        Nabu::Eta.for(ledger, kind: "rebuild", scope: "corpus", stage: "trigram",
+                              rows: FtsStructure.total_rows(fulltext, TABLE))
       end
 
       # -- refresh_source! internals (P26-5) ---------------------------------
