@@ -59,7 +59,12 @@ module Nabu
         # Past REWRITE_CEILING (passages_fts) / IN_PLACE_ROW_BUDGET
         # (trigram): the append-only shadows.
         "fts_shadow" => ARRIVAL,
-        "trigram_shadow" => ARRIVAL
+        "trigram_shadow" => ARRIVAL,
+        # The merge governor's relief (Indexer::FtsGovernor): fires only
+        # when a level (or the total) crosses the governor's line, once
+        # per crossing, sized by that level's pages — recorded with them
+        # so the ledger prices a big write's relief debt.
+        "fts_relief" => ARRIVAL
       }.freeze
 
       # Every stage the maintenance rail times is rail-owned by definition.

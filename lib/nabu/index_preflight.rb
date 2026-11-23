@@ -55,6 +55,22 @@ module Nabu
   # up front (check_shadow!) whenever a kill would land inside the stage
   # or the run is long and unaccepted, naming the stage, its price, and
   # the flags that proceed.
+  #
+  # == The full-rebuild fallback
+  #
+  # A refresh against a fulltext that is not incremental-ready (a table
+  # missing, or one predating its current shape — Indexer.incremental_ready?)
+  # does not refresh a slice at all: it falls back to Indexer.rebuild!,
+  # the WHOLE index (~4h13m on the live corpus). That path is as
+  # predictable as the shadow, so the caller says so (+fallback+) and the
+  # gate prices it as its own stage, "index_rebuild" — the summed latest
+  # rows of the rebuild's corpus index stages (Eta.for_stages over
+  # Rebuild::INDEX_ETA_STAGES, the read the rebuild's own banner
+  # carries). It refuses on the shadow's terms (check_fallback!): past the
+  # budget without --accept-long, or an explicit --deadline that cannot
+  # cover it. With no rebuild history it announces "first run — no
+  # estimate" and proceeds (a fresh box's first sync builds the index this
+  # way; refusing it would make the gate a wall).
   module IndexPreflight
     extend DurationFormat
 
@@ -71,6 +87,9 @@ module Nabu
 
     # The forecast shadow's ledger stage (Indexer's timed fts_shadow).
     SHADOW_STAGE = "fts_shadow"
+
+    # The full-rebuild fallback's priced stage (the fallback note).
+    FALLBACK_STAGE = "index_rebuild"
 
     # The first-run floor for a shadow build with no ledger row: rows per
     # second, deliberately slow. MEASURED: the clean 2026-11-22 wave wrote
@@ -109,23 +128,73 @@ module Nabu
     # +shadows+ (Indexer::ShadowForecast list — `index refresh` only) are
     # priced as stages of their own, printed with the plans, and checked
     # against +deadline_minutes+ (the command's --deadline; nil = none)
-    # by check_shadow!. Returns the priced shadow stages (empty without a
-    # forecast), whose seconds the caller adds to the watcher's estimate.
-    def gate!(history_path:, slugs:, accept_long:, out: $stderr, shadows: [], deadline_minutes: nil)
+    # by check_shadow!. +fallback+ (the fallback note): the run will take
+    # the full-rebuild fallback — priced, printed and checked
+    # (check_fallback!) as the "index_rebuild" stage. Returns the priced
+    # stages (shadows, then the fallback; empty without either), whose
+    # seconds the caller adds to the watcher's estimate.
+    def gate!(history_path:, slugs:, accept_long:, out: $stderr, shadows: [], deadline_minutes: nil,
+              fallback: false)
       return [] if slugs.empty?
 
       ledger = Store.connect(history_path, readonly: true) if File.exist?(history_path)
       plans = slugs.map { |slug| plan(ledger, slug: slug) }
       priced = shadows.map { |forecast| price_shadow(ledger, forecast) }
+      rebuild = price_fallback(ledger) if fallback
       # Every plan prints before the first refusal: the owner sees the
       # whole batch's cost, not just the stage that tripped.
       out.puts(plans.flat_map { |each_plan| lines(each_plan) }) if plans.any?(&:total)
       out.puts(shadows.zip(priced).map { |forecast, stage| shadow_line(forecast, stage) }) unless priced.empty?
+      out.puts(fallback_line(rebuild)) if rebuild
+      check_fallback!(rebuild, accept_long: accept_long, deadline_minutes: deadline_minutes) if rebuild
       check_shadow!(plans, shadows, priced, accept_long: accept_long, deadline_minutes: deadline_minutes)
       plans.each { |each_plan| check!(each_plan, accept_long: accept_long) }
-      priced
+      rebuild ? priced + [rebuild] : priced
     ensure
       ledger&.disconnect
+    end
+
+    # The fallback priced as a Stage (the fallback note): the rebuild's
+    # measured corpus index stages summed, or an unledgered zero-second
+    # stage when the ledger has none.
+    def price_fallback(ledger)
+      eta = Eta.for_stages(ledger, kind: "rebuild", scope: "corpus", stages: Rebuild::INDEX_ETA_STAGES)
+      if eta.none?
+        return Stage.new(scope: "corpus", stage: FALLBACK_STAGE, seconds: 0.0, ledgered: false, basis: eta.render)
+      end
+
+      Stage.new(scope: "corpus", stage: FALLBACK_STAGE, seconds: eta.seconds.to_f, ledgered: true,
+                basis: "ledger: the last rebuild's corpus index stages (#{Rebuild::INDEX_ETA_STAGES.join(' + ')})")
+    end
+
+    def fallback_line(stage)
+      price = stage.ledgered ? "~#{format_duration(stage.seconds)} (#{stage.basis})" : stage.basis
+      "index preflight: predicted #{FALLBACK_STAGE} (corpus) — the fulltext index is not incremental-ready " \
+        "(a table missing or predating its shape), so the refresh falls back to the FULL index rebuild: #{price}"
+    end
+
+    # The fallback's refusal (the fallback note): an explicit positive
+    # --deadline under the margined cover, or — without --accept-long — a
+    # priced total past +budget+. An unledgered fallback proceeds.
+    def check_fallback!(stage, accept_long:, deadline_minutes:, budget: BUDGET_SECONDS)
+      return nil unless stage.ledgered
+
+      total = stage.seconds
+      reason =
+        if deadline_minutes.to_f.positive? && deadline_minutes.to_f < cover_minutes(total)
+          "--deadline #{format_minutes(deadline_minutes)} cannot cover it (under the #{cover_minutes(total)}-minute " \
+            "minimum, #{COVER_MARGIN}x the priced total)"
+        elsif !accept_long && total > budget
+          "the total is past the #{format_duration(budget)} inline budget"
+        end
+      return nil if reason.nil?
+
+      minutes = [(total * IndexWatcher::DEADLINE_FACTOR / 60).ceil, IndexWatcher::MIN_DEADLINE_SECONDS / 60].max
+      raise Refused, "index preflight: this refresh falls back to the FULL index rebuild (the fulltext index is " \
+                     "not incremental-ready) — stage #{FALLBACK_STAGE} (corpus), the whole index rebuilt, priced " \
+                     "~#{format_duration(total)} (#{stage.basis}); #{reason}, so refusing to start. Proceed with " \
+                     "--deadline #{minutes} --accept-long (#{IndexWatcher::DEADLINE_FACTOR}x the priced total), " \
+                     "or --deadline 0 --accept-long (never kill) — or schedule it as an owner-fired rebuild"
     end
 
     # One forecast shadow priced as a Stage (class note): the latest

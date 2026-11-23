@@ -1643,6 +1643,45 @@ module Store
       assert_equal "gold", lemmas.first.fetch(:tier), "the fallback rebuilt the tiered shape"
     end
 
+    # The fallback is the whole index rebuilt (hours on the live corpus) —
+    # never run silently: it announces itself with the measured total of
+    # the rebuild's corpus index stages (Eta.for_stages, the very read the
+    # rebuild's own "fulltext index" banner carries).
+    def test_the_full_rebuild_fallback_announces_with_the_rebuilds_measured_corpus_stages
+      doc = make_document(urn: "urn:d:s")
+      make_passage(doc, urn: "urn:d:s:1", text_normalized: "alpha", sequence: 0)
+      with_ledger do |ledger|
+        Nabu::Store::StageTimings.record!(ledger, kind: "rebuild", scope: "corpus", stage: "fts_lemma",
+                                                  seconds: 9_000.0)
+        Nabu::Store::StageTimings.record!(ledger, kind: "rebuild", scope: "corpus", stage: "trigram",
+                                                  seconds: 6_180.0)
+        spy = EtaSpy.new
+        refresh!(progress: spy, ledger: ledger)
+
+        label, eta = spy.etas.find { |line, _| line.include?("FULL index rebuild") }
+        refute_nil label, "the fallback is announced (#{spy.etas.keys.inspect})"
+        assert_includes label, "not incremental-ready"
+        assert eta.real?, "priced from the rebuild's corpus stages"
+        assert_in_delta 15_180.0, eta.seconds
+        assert_equal "~4h13m (last run 4h13m)", eta.render
+      end
+    end
+
+    # A fresh box's bootstrap (no rebuild ever measured) is the first
+    # sync building the index — tiny, and "first run — no estimate" there
+    # is log noise (the P78-r3 non-tty rule): no fallback line.
+    def test_an_unmeasured_full_rebuild_fallback_stays_quiet
+      doc = make_document(urn: "urn:d:s")
+      make_passage(doc, urn: "urn:d:s:1", text_normalized: "alpha", sequence: 0)
+      with_ledger do |ledger|
+        spy = EtaSpy.new
+        refresh!(progress: spy, ledger: ledger)
+
+        refute(Array(spy.etas&.keys).any? { |line| line.include?("FULL index rebuild") })
+      end
+      assert_equal %w[urn:d:s:1], fts_urns, "the fallback still ran"
+    end
+
     def test_refresh_updates_the_trigram_slice_of_a_fuzzy_source
       doc = make_document(urn: "urn:d:s")
       make_passage(doc, urn: "urn:d:s:1", text_normalized: "στρατηγοσ", sequence: 0)

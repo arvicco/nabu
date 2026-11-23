@@ -65,6 +65,19 @@ module Nabu
                           row_budget: IN_PLACE_ROW_BUDGET, rewrite_ceiling: REWRITE_CEILING,
                           consolidation_limit: GOVERNOR_LEVEL_LIMIT, plan: nil, fts_prebuilt: false)
         unless incremental_ready?(fulltext)
+          # The fallback is the WHOLE index (~4h on the live corpus) —
+          # announced with the rebuild's measured corpus index stages,
+          # never run silently (IndexPreflight prices the same read
+          # before an `index refresh` opens the writer). Without a measured
+          # rebuild (a fresh box's bootstrap — the first sync builds the
+          # index this way) it stays quiet: "first run — no estimate" on
+          # a tiny bootstrap is log noise (the P78-r3 non-tty rule).
+          fallback_eta = rebuild_fallback_eta(ledger)
+          if fallback_eta&.real?
+            progress&.stage("index: #{slug} — fulltext index not incremental-ready (a table missing or " \
+                            "predating its shape): FULL index rebuild fallback over the whole corpus",
+                            eta: fallback_eta)
+          end
           rebuild!(catalog: catalog, fulltext: fulltext, alignments: alignments,
                    fuzzy_slugs: fuzzy_slugs, cjk_slugs: cjk_slugs, lemma_tiers: lemma_tiers,
                    sign_list: sign_list,
@@ -165,7 +178,8 @@ module Nabu
                            "past the #{rewrite_ceiling}-row rewrite ceiling or its forecast: append-only, " \
                            "swapped in whole)", progress,
                            rows_of: :itself.to_proc) do
-            written = build_fts_shadow!(catalog: catalog, fulltext: fulltext, source_id: source_id, progress: progress)
+            written = build_fts_shadow!(catalog: catalog, fulltext: fulltext, source_id: source_id, progress: progress,
+                                        ledger: ledger)
             swap_fts_shadow!(fulltext)
             written
           end
@@ -196,7 +210,7 @@ module Nabu
                 if shadow || append
                   nil
                 elsif fts_contentless?(fulltext)
-                  delete_fts_rows_by_rowid(fulltext, TABLE, ids, progress: progress)
+                  delete_fts_rows_by_rowid(fulltext, TABLE, ids, progress: progress, ledger: ledger)
                 else
                   delete_fts_rows(fulltext, TABLE, ids)
                 end
@@ -211,7 +225,7 @@ module Nabu
                 count, inserted, chars = insert_passage_batches(
                   fulltext, insert_scope,
                   source_tiers(catalog, lemma_tiers || {}), source_slugs(catalog), progress: progress,
-                                                                                   fts: !shadow
+                                                                                   fts: !shadow, ledger: ledger
                 )
                 # P84-1: re-apply the silver-lemma slice — the delete above
                 # stripped any shelf-projected rows for these urns, and the
@@ -324,7 +338,9 @@ module Nabu
           end
           # The eager consolidation (REWRITE_CEILING note) — after the
           # deferral's defaults are restored, outside the write's transaction.
-          eager_consolidate!(fulltext, progress: progress, level_limit: consolidation_limit) unless shadow
+          unless shadow
+            eager_consolidate!(fulltext, progress: progress, level_limit: consolidation_limit, ledger: ledger)
+          end
         end
         # The append/rewrite unit is ledgered under its path's stage with
         # the rows it touched; its one-line decision log is the label.
@@ -572,7 +588,8 @@ module Nabu
                          "rows deleted: ONE append-only pass for the wave, swapped in whole)", progress,
                          rows_of: :itself.to_proc) do
           written = build_fts_shadow!(catalog: catalog, fulltext: fulltext,
-                                      source_id: plans.keys.map { |slug| source_ids[slug] }, progress: progress)
+                                      source_id: plans.keys.map { |slug| source_ids[slug] }, progress: progress,
+                                      ledger: ledger)
           swap_fts_shadow!(fulltext)
           written
         end
@@ -615,6 +632,16 @@ module Nabu
 
         Nabu::Eta.for(ledger, kind: "rebuild", scope: "corpus", stage: "trigram",
                               rows: FtsStructure.total_rows(fulltext, TABLE))
+      end
+
+      # The full-rebuild fallback's estimate: the summed latest rows of the
+      # rebuild's corpus index stages (Rebuild::INDEX_ETA_STAGES — the
+      # sub-stages rebuild! itself times), NONE without history, nil
+      # without a ledger. The same read IndexPreflight prices the fallback by.
+      def rebuild_fallback_eta(ledger)
+        return nil if ledger.nil?
+
+        Nabu::Eta.for_stages(ledger, kind: "rebuild", scope: "corpus", stages: Nabu::Rebuild::INDEX_ETA_STAGES)
       end
 
       # -- refresh_source! internals (P26-5) ---------------------------------

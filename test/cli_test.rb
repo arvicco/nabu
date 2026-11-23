@@ -5995,6 +5995,54 @@ class CLITest < Minitest::Test
     end
   end
 
+  # The full-rebuild fallback (IndexPreflight's fallback note): a fulltext
+  # missing one of the refresh's tables sends the refresh into
+  # Indexer.rebuild! — the whole index. The preflight prices it from the
+  # rebuild's measured corpus index stages before the writer opens.
+  def break_incremental_readiness(config)
+    fulltext = Nabu::Store.connect_fulltext(config.fulltext_path)
+    fulltext.drop_table(Nabu::Store::ReflexRootsIndexer::STATS_TABLE)
+  ensure
+    fulltext&.disconnect
+  end
+
+  def plant_rebuild_index_history(config, seconds: 15_180)
+    ledger = Nabu::Store::Ledger.open!(config.history_path)
+    Nabu::Store::StageTimings.record!(ledger, kind: "rebuild", scope: "corpus", stage: "fts_lemma", seconds: seconds)
+  ensure
+    ledger&.disconnect
+  end
+
+  def test_index_refresh_refuses_a_priced_rebuild_fallback_before_touching_the_index
+    with_deferred_wave do |config|
+      break_incremental_readiness(config)
+      plant_rebuild_index_history(config)
+      before = File.mtime(config.fulltext_path)
+      _out, err, status = with_config(config) { run_cli(%w[index refresh pap]) }
+
+      assert_equal 1, status
+      assert_match(/predicted index_rebuild \(corpus\) — the fulltext index is not incremental-ready/, err)
+      assert_match(/FULL index rebuild/, err)
+      assert_match(/--deadline 633 --accept-long/, err)
+      assert_equal before, File.mtime(config.fulltext_path), "the refused run never opened the index"
+    end
+  end
+
+  def test_index_refresh_prices_the_rebuild_fallback_into_the_watcher_deadline
+    with_deferred_wave do |config|
+      break_incremental_readiness(config)
+      plant_rebuild_index_history(config)
+      out, err, status = with_config(config) { run_cli(%w[index refresh pap --accept-long]) }
+
+      assert_nil status, err
+      # 253m of measured rebuild index stages at 2.5x — armed on that
+      # evidence though pap has no sync history of its own.
+      assert_match(/index watcher: armed — kills the writer at 632m30s/, err)
+      assert_match(/FULL index rebuild/, err, "the run announces the fallback stage itself")
+      assert_match(/index refresh: pap — indexed 2 passages/, out)
+    end
+  end
+
   # The predicted shadow build (IndexPreflight's shadow note): the
   # refresh's slices price ~12m, but the wave's passages_fts shadow — the
   # whole index — took an hour last time. The fixture is far under the
