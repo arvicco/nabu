@@ -27,7 +27,7 @@ module Ops
                                          content_sha256: "x", revision: 1, withdrawn: false)
       %w[μῆνιν ἄειδε θεά].each_with_index do |text, seq|
         Nabu::Store::Passage.create(document_id: doc.id, urn: "urn:d:1:#{seq}", sequence: seq, language: "grc",
-                                    text: text, text_normalized: text, content_sha256: "x", revision: 1,
+                                    text: text, text_normalized: text, content_sha_raw: "x", revision: 1,
                                     withdrawn: false)
       end
     end

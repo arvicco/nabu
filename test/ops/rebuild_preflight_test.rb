@@ -28,9 +28,9 @@ class RebuildPreflightTest < Minitest::Test
   def catalog = File.join(@db_dir, "catalog.sqlite3")
   def fulltext = File.join(@db_dir, "fulltext.sqlite3")
 
-  def preflight(slugs: %w[pap cdli], free: 10_000_000, holders: [], ps_text: "")
+  def preflight(slugs: %w[pap cdli], free: 10_000_000, holders: [], ps_text: "", trickle_dir: nil)
     P.new(db_dir: @db_dir, catalog_path: catalog, fulltext_path: fulltext, canonical_dir: @canonical,
-          slugs: slugs, ledger: @ledger, free_bytes: ->(_dir) { free },
+          slugs: slugs, ledger: @ledger, trickle_dir: trickle_dir, free_bytes: ->(_dir) { free },
           holders: lambda { |paths|
             @holder_calls << paths
             holders
@@ -57,7 +57,8 @@ class RebuildPreflightTest < Minitest::Test
 
     corpus_count = Nabu::RebuildProfile::CORPUS_STAGE_LABELS.size
     assert_equal 2 + corpus_count, forecast.stages.size, "every load, then every profiled corpus stage"
-    assert_equal ["load pap", "load cdli", "timeline"], forecast.stages.first(3).map(&:label)
+    assert_equal ["load pap", "load cdli", "code identities"], forecast.stages.first(3).map(&:label)
+    assert_includes forecast.stages.map(&:label), "timeline"
     assert_in_delta 3_720.0, forecast.total, 0.001, "600 + 120 + 3000 — a sync row never prices a rebuild load"
     assert_includes forecast.unpriced.map(&:label), "load cdli"
     assert_equal 2 + corpus_count - 3, forecast.unpriced.size
@@ -164,6 +165,37 @@ class RebuildPreflightTest < Minitest::Test
     assert_equal ["fetch lock"], found.map(&:kind)
     assert_match(/ndl is being fetched \(a sync or trickle runner, pid #{Process.pid}\)/, found.first.detail)
     assert_empty preflight.writers, "released after the fetch"
+  end
+
+  # A trickle runner holds the fetch lock for days but only fetches — it
+  # never loads, so it is not a catalog writer and must not block an
+  # hours-long rebuild. It is named, with the consequence, and the verdict
+  # stays CLEAR; a fetching SYNC (no trickle pidfile) still blocks.
+  def test_a_trickle_runners_fetch_lock_is_named_but_does_not_block
+    trickle_dir = File.join(@dir, "trickle")
+    FileUtils.mkdir_p(trickle_dir)
+    File.write(File.join(trickle_dir, "ndl.pid"), "#{Process.pid}\n")
+    report = nil
+    Nabu::FetchLock.hold(canonical_dir: @canonical, slug: "ndl") do
+      report = preflight(trickle_dir: trickle_dir).report
+    end
+
+    assert_equal ["trickle crawl"], report.writers.map(&:kind)
+    refute report.writers.first.blocking
+    assert_match(/ndl .*only fetches, never loads/, report.writers.first.detail)
+    assert_empty report.blockers
+    refute_predicate report, :blocked?
+  end
+
+  def test_a_fetch_lock_without_its_trickle_pidfile_still_blocks
+    trickle_dir = File.join(@dir, "trickle")
+    FileUtils.mkdir_p(trickle_dir)
+    File.write(File.join(trickle_dir, "ndl.pid"), "999999\n") # some other pid: not this lock's holder
+    found = nil
+    Nabu::FetchLock.hold(canonical_dir: @canonical, slug: "ndl") { found = preflight(trickle_dir: trickle_dir).writers }
+
+    assert_equal ["fetch lock"], found.map(&:kind)
+    assert found.first.blocking
   end
 
   def test_writer_processes_come_from_the_process_table

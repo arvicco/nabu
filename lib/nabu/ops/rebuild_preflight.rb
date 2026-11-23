@@ -89,11 +89,15 @@ module Nabu
         def tight? = !available.nil? && !short? && need > available
       end
 
-      Writer = Data.define(:kind, :detail)
+      # +blocking+: false for a holder that never writes the catalog (a
+      # trickle runner only fetches) — named in the report, never a blocker.
+      Writer = Data.define(:kind, :detail, :blocking) do
+        def initialize(kind:, detail:, blocking: true) = super
+      end
 
       Report = Data.define(:forecast, :disk, :writers) do
         def blockers
-          lines = writers.map { |writer| "#{writer.kind}: #{writer.detail}" }
+          lines = writers.select(&:blocking).map { |writer| "#{writer.kind}: #{writer.detail}" }
           if disk.short?
             lines << "disk: the fresh build needs ≈ #{RebuildPreflight.human(disk.drop_bytes)} (what it replaces) " \
                      "but only #{RebuildPreflight.human(disk.available)} is available at the drop"
@@ -110,7 +114,7 @@ module Nabu
       # :replay items). +ledger+: the history ledger, nil on a fresh box.
       # The seams (+free_bytes+, +holders+, +ps_output+) default to the
       # real probes; tests hand in their own.
-      def initialize(db_dir:, catalog_path:, fulltext_path:, canonical_dir:, slugs:, ledger: nil,
+      def initialize(db_dir:, catalog_path:, fulltext_path:, canonical_dir:, slugs:, ledger: nil, trickle_dir: nil,
                      free_bytes: method(:df_free_bytes), holders: RebuildPreflight.method(:lsof_holders),
                      ps_output: -> { GitHooks.ps_output }, own_pids: [Process.pid, Process.ppid])
         @db_dir = db_dir
@@ -119,6 +123,7 @@ module Nabu
         @canonical_dir = canonical_dir
         @slugs = slugs
         @ledger = ledger
+        @trickle_dir = trickle_dir
         @free_bytes = free_bytes
         @holders = holders
         @ps_output = ps_output
@@ -228,11 +233,33 @@ module Nabu
           next if held_by(path).nil?
 
           pid = File.read(path).to_s.strip
+          slug = File.basename(path, ".lock")
+          next trickle_writer(slug, pid) if trickle_runner?(slug, pid)
+
           Writer.new(kind: "fetch lock", detail: "#{File.basename(path, '.lock')} is being fetched " \
                                                  "(a sync or trickle runner#{", pid #{pid}" unless pid.empty?})")
         rescue SystemCallError
           nil
         end
+      end
+
+      # A trickle runner (Ops::Trickle) holds its source's fetch lock for the
+      # whole drain — days — but only crawls into canonical/, never loads.
+      # It is recognised by its own pidfile naming the lock's holder; a
+      # fetching SYNC has no such pidfile and stays a blocker (it loads).
+      def trickle_runner?(slug, pid)
+        return false if @trickle_dir.nil? || pid.empty?
+
+        File.read(File.join(@trickle_dir, "#{slug}.pid")).to_s.strip == pid
+      rescue SystemCallError
+        false
+      end
+
+      def trickle_writer(slug, pid)
+        Writer.new(kind: "trickle crawl", blocking: false,
+                   detail: "#{slug} is being crawled by its trickle runner (pid #{pid}) — it only fetches, never " \
+                           "loads, so it does not block; the rebuild loads what is held when it reaches #{slug}, " \
+                           "and later arrivals land at that source's next sync")
       end
 
       # true when another process holds an exclusive flock on +path+ (a
@@ -341,7 +368,7 @@ module Nabu
             @report.writers.empty?
 
           ["  writers: #{@report.writers.size} found"] +
-            @report.writers.map { |writer| "    ⚠ #{writer.kind}: #{writer.detail}" }
+            @report.writers.map { |writer| "    #{writer.blocking ? '⚠' : '·'} #{writer.kind}: #{writer.detail}" }
         end
 
         def verdict

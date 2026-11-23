@@ -4,6 +4,7 @@
 # backup, mcp. Carved out of lib/nabu/cli.rb, the registry that loads it.
 require "English"
 require_relative "../ops/rebuild_preflight"
+require_relative "../ops/trickle"
 require_relative "../ops/run_log"
 
 module Nabu
@@ -375,7 +376,8 @@ module Nabu
         slugs = plan.items.select { |_, action| action == :replay }.map(&:first)
         Nabu::Ops::RebuildPreflight.new(db_dir: config.db_dir, catalog_path: config.catalog_path,
                                         fulltext_path: config.fulltext_path, canonical_dir: config.canonical_dir,
-                                        slugs: slugs, ledger: ledger).report
+                                        slugs: slugs, ledger: ledger,
+                                        trickle_dir: File.join(config.local_dir, Nabu::Ops::Trickle::DIRNAME)).report
       ensure
         ledger&.disconnect
       end

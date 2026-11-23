@@ -30,7 +30,7 @@ class RebuildPathsTest < Minitest::Test
   }.freeze
 
   ANNOUNCED = /progress&\.stage\("([^"#]+)"/
-  REPLAY_CALL = /^\s+(replay_\w+)\(db\b/
+  REPLAY_CALL = /(?:^\s+|\{ )(replay_\w+)\(db\b/ # bare, or inside a profiled block
 
   # A stage a path runs without announcing it, recognized by its call.
   EVIDENCE = {

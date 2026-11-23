@@ -163,7 +163,7 @@ module Nabu
       indexed = nil
       # P89-1: pin code identities before any replay (see Rebuild#run) —
       # the last verdict of a long dirty run happens hours after load time.
-      timed_stage(ledger, "code_identities", rows_of: :size.to_proc) do
+      ledgered_stage(ledger, "code_identities", rows_of: :size.to_proc) do
         warm_code_identities(progress).tap { warm_link_code }
       end
       # The trust horizon (owner ruling option b): the ELDEST per-source stamp, not each
@@ -214,7 +214,7 @@ module Nabu
         end
         progress&.stage(entry.slug)
         replayed = ->(outcome) { outcome.report.added + outcome.report.updated }
-        outcomes << timed_stage(ledger, "replay", scope: entry.slug, rows_of: replayed) do
+        outcomes << ledgered_stage(ledger, "replay", scope: entry.slug, rows_of: replayed) do
           replay(db, ledger, entry, progress)
         end
         # A tripped parse breaker KEPT rows a full rebuild would not hold:
@@ -239,22 +239,22 @@ module Nabu
       end
       # The producer replays record whether or not a producer found its
       # source clean (a skip is the stage's honest near-zero cost).
-      timed_stage(ledger, "enrichments") { replay_enrichments(db) }
+      ledgered_stage(ledger, "enrichments") { replay_enrichments(db) }
       # P45-6: re-derive the place index only when its source was dirty (the
       # dump changed) or the index is still unpopulated (self-heal after
       # migration 021) — a clean stamped dump with a populated index skips
       # the ~3 s / ~3.9 GB dump load, keeping clean incremental runs cheap
       # while staying content-equivalent to a full rebuild (derive! is a
       # pure function of the unchanged canonical bytes).
-      timed_stage(ledger, "place_index") { replay_place_index(db, dirty: outcomes.map(&:slug)) }
-      timed_stage(ledger, "person_index") { replay_person_index(db, dirty: outcomes.map(&:slug)) }
+      ledgered_stage(ledger, "place_index") { replay_place_index(db, dirty: outcomes.map(&:slug)) }
+      ledgered_stage(ledger, "person_index") { replay_person_index(db, dirty: outcomes.map(&:slug)) }
       # P42-0: the loader hooks maintained source_stats through each dirty
       # replay; re-deriving wholesale keeps the incremental run's stats
       # content-equivalent to a full rebuild's (the sacred invariant). A
       # skipped-everything run touched no rows, so stats need nothing.
       if outcomes.any?
         progress&.stage("source stats")
-        timed_stage(ledger, "stats") { Store::SourceStats.derive!(db, note: "derived (incremental rebuild)") }
+        ledgered_stage(ledger, "stats") { Store::SourceStats.derive!(db, note: "derived (incremental rebuild)") }
       end
       # P89-1 (owner ruling option c): the builders' own covering mechanism — a drifted
       # builders digest re-runs the corpus builders even when every source
@@ -264,7 +264,7 @@ module Nabu
         # The honkoku <- NDL catalog join re-merges onto replayed honkoku
         # rows (or a re-derived census) BEFORE the builders project it.
         progress&.stage("honkoku ndl catalog")
-        timed_stage(ledger, "honkoku_ndl_catalog") do
+        ledgered_stage(ledger, "honkoku_ndl_catalog") do
           HonkokuNdlCatalog.new(catalog: db, canonical_dir: @config.canonical_dir).run
         end
       end
@@ -288,7 +288,7 @@ module Nabu
       # rebuild or dirty incremental (stated in §1 and restore.md). When
       # it runs, clean scopes carry on their stamps (LinkStamps).
       progress&.stage("lect journal")
-      journal_changed = timed_stage(ledger, "lect_journal") do
+      journal_changed = ledgered_stage(ledger, "lect_journal") do
         journal = Store::LectJournal.open!(@config.lects_journal_path)
         begin
           before = journal_digest(journal)
@@ -301,7 +301,7 @@ module Nabu
       link_failures = []
       if outcomes.any? || journal_changed
         progress&.stage("lect facets")
-        timed_stage(ledger, "lect_facets") do
+        ledgered_stage(ledger, "lect_facets") do
           Store::LectFacets.rebuild!(catalog: db, registry: Nabu::Lects.load_default(config: @config),
                                      progress: progress)
         end
@@ -309,20 +309,20 @@ module Nabu
         # wholesale (few hundred rows, seconds), so replayed dictionary
         # sources and registry changes both land.
         progress&.stage("dictionary stats")
-        timed_stage(ledger, "dictionary_stats") do
+        ledgered_stage(ledger, "dictionary_stats") do
           Store::DictionaryStats.rebuild!(catalog: db, lects: Nabu::Lects.load_default(config: @config),
                                           shelf_dates: Nabu::LectShelfDates.load_default(config: @config))
         end
         # P106-5: replayed e84000/derge sources re-mint NULL titles — the
         # crosswalk re-fills in the same breath (seconds, no-op sans tree).
         progress&.stage("derge titles")
-        timed_stage(ledger, "derge_titles") do
+        ledgered_stage(ledger, "derge_titles") do
           E84000DergeTitles.new(catalog: db, canonical_dir: @config.canonical_dir).run
         end
         # A replayed aes source re-mints NULL titles the same way — the
         # AES <- AED header join re-fills them.
         progress&.stage("aes titles")
-        timed_stage(ledger, "aes_titles") { AesAedTitles.new(catalog: db, canonical_dir: @config.canonical_dir).run }
+        ledgered_stage(ledger, "aes_titles") { AesAedTitles.new(catalog: db, canonical_dir: @config.canonical_dir).run }
       end
       healed = false
       if index_dirty
@@ -371,7 +371,7 @@ module Nabu
       unless healed || redone_stages.include?("cjk")
         # Recorded only when the lane was rebuilt (rows = passages indexed);
         # an untouched lane returns nil and records nothing.
-        timed_stage(ledger, "cjk_lane", rows_of: :itself.to_proc, skip_nil: true) do
+        ledgered_stage(ledger, "cjk_lane", rows_of: :itself.to_proc, skip_nil: true) do
           Store::Indexer.refresh_cjk_lane!(
             catalog: db, fulltext: fulltext, cjk_slugs: @registry.cjk_slugs,
             replayed_slugs: outcomes.map(&:slug), progress: progress
@@ -385,7 +385,7 @@ module Nabu
       # re-derivation.
       if builders_ran || index_dirty || redone_stages.any?
         progress&.stage("lemma rollups")
-        timed_stage(ledger, "lemma_rollups") { Store::LemmaRollup.rebuild!(catalog: db, fulltext_path: fulltext_path) }
+        ledgered_stage(ledger, "lemma_rollups") { Store::LemmaRollup.rebuild!(catalog: db, fulltext_path: fulltext_path) }
       end
       # The links stage rides AFTER the index has settled (heal + stage
       # reconciliation), exactly as in the full rebuild: parallels mines
@@ -397,14 +397,14 @@ module Nabu
       links = nil
       if outcomes.any? || @full_links
         progress&.stage("links")
-        links = timed_stage(ledger, "links") { rederive_links!(db, fulltext, progress: progress) }
+        links = ledgered_stage(ledger, "links") { rederive_links!(db, fulltext, progress: progress) }
         link_failures = links.failures
       end
       # P42-4: refresh the planner stats when dirty sources re-derived — their
       # replays revised the catalog and (per source) the index, so the
       # sqlite_stat1 both carry may no longer match (ops §10). A clean-swept run
       # touched no rows, so the existing stats still describe them.
-      analyzed = timed_stage(ledger, "analyze") { analyze_after_incremental(db, fulltext) } if builders_ran
+      analyzed = ledgered_stage(ledger, "analyze") { analyze_after_incremental(db, fulltext) } if builders_ran
       # Every stage returned: NOW the dirty replays' rows close "succeeded"
       # (Rebuild#replay leaves them open past the load).
       # The corpus lane stages ran for every replayed source: stamp the
@@ -646,7 +646,7 @@ module Nabu
     def refresh_index(db, fulltext, entry, progress = nil, ledger = nil)
       return refresh_slice(db, fulltext, entry, progress) unless Store::Indexer.incremental_ready?(fulltext)
 
-      timed_stage(ledger, "index_refresh", scope: entry.slug, rows_of: :itself.to_proc) do
+      ledgered_stage(ledger, "index_refresh", scope: entry.slug, rows_of: :itself.to_proc) do
         refresh_slice(db, fulltext, entry, progress)
       end
     end
@@ -673,59 +673,59 @@ module Nabu
     # in hand here, so these rows read verbatim.
     def corpus_builders(db, progress, ledger = nil)
       progress&.stage("timeline")
-      axes = timed_stage(ledger, "timeline") do
+      axes = ledgered_stage(ledger, "timeline") do
         Store::TimelineBuilder.rebuild!(catalog: db, canonical_dir: @config.canonical_dir)
       end
       # P122-1: the armed silver-date lane re-projects behind the timeline.
       progress&.stage("silver dates")
-      timed_stage(ledger, "silver_dates") { Store::SilverDates.replay!(catalog: db, shelf: DateShelf.present(@config)) }
+      ledgered_stage(ledger, "silver_dates") { Store::SilverDates.replay!(catalog: db, shelf: DateShelf.present(@config)) }
       # P152: the armed silver-meter lane re-projects behind the gold
       # meter producers (replay_enrichments ran before the builders).
       progress&.stage("silver meter")
-      timed_stage(ledger, "silver_meter") { Store::SilverMeter.replay!(catalog: db, shelf: MeterShelf.present(@config)) }
+      ledgered_stage(ledger, "silver_meter") { Store::SilverMeter.replay!(catalog: db, shelf: MeterShelf.present(@config)) }
       # The timeline rebuild just dropped every document_axes row, the
       # nabu-places registry matches included — re-project them here like
       # the full path does, or they stay silently absent until the next
       # full rebuild or builders:refresh.
       progress&.stage("place apply")
-      timed_stage(ledger, "place_apply") { Nabu::PlaceApply.run(catalog: db, canonical_dir: @config.canonical_dir) }
+      ledgered_stage(ledger, "place_apply") { Nabu::PlaceApply.run(catalog: db, canonical_dir: @config.canonical_dir) }
       # The timeline rebuild drops EVERY axis row, this lane included —
       # before 2026-10-13 only a full rebuild restored it.
       progress&.stage("artifact scripts")
-      timed_stage(ledger, "artifact_scripts") do
+      ledgered_stage(ledger, "artifact_scripts") do
         Store::ArtifactScripts.derive!(db, config_path: @config.artifact_scripts_path,
                                            registry: Nabu::Lects.load_default(config: @config))
       end
       progress&.stage("facets")
-      facets = timed_stage(ledger, "facets") do
+      facets = ledgered_stage(ledger, "facets") do
         Store::FacetBuilder.rebuild!(catalog: db, facet_map: Nabu::FacetMap.load_default(config: @config))
       end
       # The kind axis (P99-2) projects FROM the facet rows just re-minted,
       # so it always rides directly behind FacetBuilder.
       progress&.stage("kind axis")
-      timed_stage(ledger, "kind_axis") do
+      ledgered_stage(ledger, "kind_axis") do
         Store::KindBuilder.rebuild!(catalog: db, kinds: Nabu::Kinds.load_default(config: @config),
                                     progress: progress, canonical_dir: @config.canonical_dir)
       end
       progress&.stage("passage facets")
-      timed_stage(ledger, "passage_facets") do
+      ledgered_stage(ledger, "passage_facets") do
         Store::PassageFacetBuilder.rebuild!(catalog: db, facet_map: Nabu::FacetMap.load_default(config: @config))
       end
       progress&.stage("entity index")
-      timed_stage(ledger, "entity_index") do
+      ledgered_stage(ledger, "entity_index") do
         Store::EntityIndex.rebuild!(catalog: db, sources: Store::EntityIndex.load_default(config: @config))
       end
       progress&.stage("entry facets")
-      timed_stage(ledger, "entry_facets") do
+      ledgered_stage(ledger, "entry_facets") do
         Store::EntryFacetBuilder.rebuild!(catalog: db, facet_map: Nabu::FacetMap.load_default(config: @config))
       end
       progress&.stage("hiero postings")
-      timed_stage(ledger, "hiero_postings") do
+      ledgered_stage(ledger, "hiero_postings") do
         Store::HieroPostingsBuilder.rebuild!(catalog: db, canonical_dir: @config.canonical_dir,
                                              progress: progress)
       end
       progress&.stage("sign concordances")
-      timed_stage(ledger, "sign_concordances") do
+      ledgered_stage(ledger, "sign_concordances") do
         Store::SignConcordances.rebuild!(catalog: db, canonical_dir: @config.canonical_dir)
       end
       [axes, facets]
@@ -738,7 +738,7 @@ module Nabu
     # price).
     def heal_index(db, fulltext, progress, ledger = nil)
       progress&.stage("fulltext index")
-      timed_stage(ledger, "fulltext_index", rows_of: :itself.to_proc) do
+      ledgered_stage(ledger, "fulltext_index", rows_of: :itself.to_proc) do
         Store::Indexer.rebuild!(catalog: db, fulltext: fulltext, alignments: alignments,
                                 fuzzy_slugs: @registry.fuzzy_slugs, cjk_slugs: @registry.cjk_slugs,
                                 lemma_tiers: @registry.lemma_tiers,
@@ -753,7 +753,7 @@ module Nabu
     # nothing for a nil value (the stage found nothing to do). A raise
     # propagates and records nothing — a half-run stage would be a lie
     # (RebuildProfile#measure's rule). Recording never alters the value.
-    def timed_stage(ledger, stage, scope: "corpus", rows_of: nil, skip_nil: false)
+    def ledgered_stage(ledger, stage, scope: "corpus", rows_of: nil, skip_nil: false)
       started = Process.clock_gettime(Process::CLOCK_MONOTONIC)
       result = yield
       unless skip_nil && result.nil?
