@@ -630,6 +630,42 @@ class SyncRunnerTest < Minitest::Test
     assert_equal 0, calls
   end
 
+  # The lanes-ran marker: a sync whose load landed rows but which died
+  # BEFORE its lanes finished leaves a source the ore probes cannot see
+  # when its documents carry no date or facet metadata (the kind and
+  # entity lanes still project from it). The run row's missing lanes_at
+  # says the lanes never ran, so the next no-op re-sync refreshes them —
+  # once: its own stamp reads lit from then on.
+  def test_resync_heals_lanes_a_dead_sync_never_ran_even_without_lane_ore
+    BreakerAdapter.reset!(urns: %w[urn:cts:test:w1 urn:cts:test:w2])
+    runner = make_runner(registry(entry("breaker", BreakerAdapter, wired: true)))
+    original = Nabu::Store::KindBuilder.method(:refresh_source!)
+    Nabu::Store::KindBuilder.define_singleton_method(:refresh_source!) { |**| raise "killed mid-lanes" }
+    begin
+      assert_raises(RuntimeError) { runner.sync("breaker", parse_only: true) }
+    ensure
+      Nabu::Store::KindBuilder.define_singleton_method(:refresh_source!, original)
+    end
+    assert_equal 2, @db[:documents].count, "the load landed"
+
+    assert_equal [1, 0], [counting_metadata_date_refreshes { runner.sync("breaker", parse_only: true) },
+                          counting_metadata_date_refreshes { runner.sync("breaker", parse_only: true) }],
+                 "the dead sync reads dark once; the healing sync's own stamp reads lit"
+  end
+
+  def counting_metadata_date_refreshes
+    calls = 0
+    original = Nabu::Store::TimelineBuilder::MetadataDates.method(:refresh_source!)
+    Nabu::Store::TimelineBuilder::MetadataDates.define_singleton_method(:refresh_source!) do |**kwargs|
+      calls += 1
+      original.call(**kwargs)
+    end
+    yield
+    calls
+  ensure
+    Nabu::Store::TimelineBuilder::MetadataDates.define_singleton_method(:refresh_source!, original)
+  end
+
   def test_parse_only_keeps_prior_last_sync_sha
     BreakerAdapter.reset!(urns: %w[urn:cts:test:w1])
     BreakerAdapter.fetch_sha = "sha-abc"

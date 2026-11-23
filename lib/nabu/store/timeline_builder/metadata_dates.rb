@@ -175,6 +175,9 @@ module Nabu
           #                          Qurʾān book has no byline and stays undated
           "dicta-library" => :structured, # the manifest's printYear (one "1925-1931" range),
           #                                 class edition; place = printLocationEnglish
+          "digar-corpora" => :structured, # the ERB record's 008 date1 (u-digits widen to
+          #                                 the decade), class edition; place = the 260 imprint
+          #                                 place in the print's own form (Perno, Riia)
           "diorisis" => :signed_year_key,
           "disco" => :author_century_band,
           "divinum-officium" => :place_only, # no dating (undatable); the local-calendar proper's

@@ -1,0 +1,21 @@
+digar-corpora:   # 02-sources row 433
+  adapter: Nabu::Adapters::DigarCorpora
+  adopted: "2026-11-23"
+  axes: [baltic]
+  wired: true   # flipped 2026-11-23 after the verified first sync (2,877 docs / 580,254 passages, FTS-probed)
+  sync_policy: manual   # two frozen 2018 zips (Last-Modified 2018-10-09)
+  # DIGAR corpus of freely usable publications (Eesti Rahvusraamatukogu,
+  # the National Library of Estonia; data.digar.ee): 3,416 Estonian-
+  # language books DIGAR serves without restriction, 1620s–2010s (most
+  # 1900–1949, a long Fraktur-era tail), as EstNLTK-processed token
+  # tables (processed_pdf_tsv.zip, 972 MB, Deflate64, 5.7 GB unpacked)
+  # plus the ERB national-bibliography MARC dump that describes them
+  # (processed_txt_tsv.zip, 122 MB). Built by Peeter Tinits (Tallinn
+  # University), 2018. License: the page-wide "Creative Commons Public
+  # Domain (CC BY-SA 3.0 EE)" statement conflates PD and BY-SA — the
+  # stricter reading → attribution, share-alike; each record's MARC 542
+  # rights field ("Vabakasutus", CC PDM 1.0) rides metadata. Document =
+  # book, passage = a deterministic token window (the tables carry no
+  # page/sentence boundary). Uncorrected OCR ("OCR-i kvaliteet võib olla
+  # ebaühtlane"). Expected first sync: 2,885 non-empty tables (531
+  # header-only skip at discovery; stamp-only tables skip at parse).

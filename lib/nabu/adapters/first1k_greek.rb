@@ -75,7 +75,7 @@ module Nabu
         with_metadata(document, edition_metadata(document_ref).merge("kind" => "translation"))
       end
 
-      # The non-English translation editions whose body is NOT a
+      # The translation-tag editions whose body is NOT a
       # translation or an edition (an editor's preface or index, typed
       # commentary upstream): skipped by rule at discover, named here.
       def discovery_skips(workdir)
@@ -155,13 +155,23 @@ module Nabu
         Perseus.instance_method(:candidates).bind_call(self, workdir).select { |candidate| apparatus?(candidate) }
       end
 
-      # A non-English translation-tag candidate whose body division is not
-      # a translation or an edition. English keeps its documented honest
-      # quarantine (the tlg0527.tlg048 eng1b appendix, see
-      # #translation_slug_pattern's history above) — unchanged here.
+      # A translation-tag candidate (any language but the Greek original)
+      # whose body division is not a translation or an edition. English is
+      # held to the same rule: the corpus's two commentary-bodied eng files
+      # (tlg0527.tlg048 1st1K-eng1a notes / 1st1K-eng1b appendix, typed
+      # ti:commentary in upstream's own __cts__.xml) would otherwise enter
+      # the highest-version selection and displace the real translation
+      # (see #translation_slug_pattern's note below). Census 2026-11-23:
+      # 43 eng bodies typed translation, those 2 typed commentary, none
+      # edition — so the rule moves exactly that one work. A file whose body
+      # division cannot be read at all is NOT proven apparatus: it stays a
+      # candidate, and its parse quarantines it visibly instead of a silent
+      # skip.
       def apparatus?(candidate)
-        ![LANGUAGES.fetch(NAMESPACE), TRANSLATION_LANGUAGE].include?(candidate.language) &&
-          !SERVED_BODY_TYPES.include?(body_division_type(candidate.path))
+        return false if candidate.language == LANGUAGES.fetch(NAMESPACE)
+
+        body_type = body_division_type(candidate.path)
+        !body_type.nil? && !SERVED_BODY_TYPES.include?(body_type)
       end
 
       # The @type of the first <div> inside <body>, read with a streaming
@@ -200,16 +210,15 @@ module Nabu
       # family segment is free. The :version capture feeds the inherited
       # highest-version-per-work selection (Perseus#version_key).
       #
-      # KNOWN honest quarantine (owner-directed 2026-07-08, P9-1): tlg0527.tlg048
-      # ships three eng slugs — 1st1K-eng1 (the real translation, a
-      # div[@type="translation"]), 1st1K-eng1a (a div[@type="commentary"]
-      # subtype=notes) and 1st1K-eng1b (a div[@type="commentary"]
-      # subtype=appendix). version_key picks the highest (eng1b), whose
-      # commentary body matches neither "translation" nor "edition"
-      # (TRANSLATION_DIVISION_TYPES), so it yields zero passages and quarantines
-      # as a ParseError. That is the honest reflection of a mis-slugged upstream
-      # appendix — not folded in as if it were a translation. All other eng
-      # files anchor on div[@type="translation"]; no "edition"-typed eng file
+      # tlg0527.tlg048 (Ottley's Isaiah) ships three eng slugs — 1st1K-eng1
+      # (the real translation, a div[@type="translation"]), 1st1K-eng1a (a
+      # div[@type="commentary"] subtype=notes) and 1st1K-eng1b (a
+      # div[@type="commentary"] subtype=appendix). Before the apparatus rule
+      # covered English, version_key picked the highest (eng1b), whose
+      # commentary body yields zero passages, so the work quarantined and its
+      # translation never landed. The two commentary files are now skipped
+      # by rule at discover (#apparatus?, censused in #discovery_skips) and
+      # eng1 is the work's English edition. No "edition"-typed eng file
       # exists in the corpus (the base fallback stays inert for eng).
     end
   end

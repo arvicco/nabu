@@ -632,6 +632,7 @@ namespace :boards do
     require_relative "lib/nabu/ops/source_readiness_check"
     require_relative "lib/nabu/ops/rule_liveness_check"
     require_relative "lib/nabu/ops/incident_register_check"
+    require_relative "lib/nabu/ops/decision_register_check"
     dir = ENV.fetch("BOARDS_DIR", File.expand_path(".docs", __dir__))
     report = Nabu::Ops::BoardCheck.new(boards_dir: dir).run
     if report.skipped
@@ -652,6 +653,11 @@ namespace :boards do
       register_path: File.join(dir, Nabu::Ops::IncidentRegisterCheck::FILE)
     ).run
     incidents.findings.each { |finding| puts "STALE  incident register #{finding}" }
+
+    decisions = Nabu::Ops::DecisionRegisterCheck.new(
+      register_path: File.join(dir, Nabu::Ops::DecisionRegisterCheck::FILE)
+    ).run
+    decisions.findings.each { |finding| puts "STALE  decision register #{finding}" }
 
     acquisition = Nabu::Ops::AcquisitionCheck.new(
       boards_dir: dir, adapters_dir: File.expand_path("lib/nabu/adapters", __dir__),
@@ -681,6 +687,7 @@ namespace :boards do
     failures << "#{watch.findings.size} stale GH watch row(s)" unless watch.clean?
     failures << "phase register behind the merged phases" unless phases.clean?
     failures << "#{incidents.findings.size} status-less incident row(s)" unless incidents.clean?
+    failures << "#{decisions.findings.size} parked ruled decision row(s)" unless decisions.clean?
     failures << "#{acquisition.findings.size} acquisition-duty finding(s)" unless acquisition.clean?
     failures << "#{groom.findings.size} ungroomed queue row(s)" unless groom.clean?
     failures << "#{readiness.findings.size} never-synced source(s)" unless readiness.clean?
@@ -1176,6 +1183,54 @@ namespace :rail do
     verdict = Nabu::Ops::RailStep.new(slug: slug, engines: engines, sync: sync).run!
     puts verdict.line
     exit 3 if verdict.stop?
+  end
+end
+
+# The trickle runner (Nabu::Ops::Trickle, architecture §19): an owner-fired
+# standing crawl of one paced-crawl source, detached from any session, its
+# slices back to back at the engine's declared pace until the cone ends, a
+# declared stop condition, a stop request or a fatal error. It only crawls;
+# loading stays with `bin/nabu sync SLUG --parse-only`. State and progress:
+# local/trickle/<slug>.{pid,log,stop}. Runbook: docs/manual/trickle-runner.md.
+namespace :trickle do
+  trickle_setup = lambda do |args, task|
+    $LOAD_PATH.unshift(File.expand_path("lib", __dir__))
+    require "nabu"
+    require "nabu/ops/trickle"
+
+    slug = args[:slug].to_s.strip
+    abort "trickle:#{task}[slug] — name a source slug" if slug.empty?
+    config = Nabu::Config.load
+    paths = Nabu::Ops::Trickle::Paths.for(local_dir: config.local_dir, slug: slug)
+    [slug, config, Nabu::Ops::Trickle::Control.new(paths: paths, canonical_dir: config.canonical_dir)]
+  end
+
+  desc "Detach a standing paced crawl of SOURCE at its declared pace (trickle:start[slug])"
+  task :start, %i[slug] do |_t, args|
+    slug, config, control = trickle_setup.call(args, "start")
+    entry = Nabu::SourceRegistry.load(config.sources_path)[slug] or abort "unknown source: #{slug}"
+    adapter = entry.build_adapter
+    engines = adapter.respond_to?(:paced_crawls) ? adapter.paced_crawls(File.join(config.canonical_dir, slug)) : {}
+    control.start!(engines: engines)
+  rescue Nabu::Ops::Trickle::Refused => e
+    abort "trickle:start refused — #{e.message}"
+  end
+
+  desc "Ask SOURCE's trickle to stop after its current request (trickle:stop[slug]; idempotent)"
+  task :stop, %i[slug] do |_t, args|
+    _slug, _config, control = trickle_setup.call(args, "stop")
+    wait = ENV.fetch("TRICKLE_STOP_WAIT", Nabu::Ops::Trickle::Control::DEFAULT_STOP_WAIT.to_s)
+    control.stop!(wait: Float(wait))
+  end
+
+  desc "List every trickle in local/trickle/: running or finished, held/remaining, last log line"
+  task :status do
+    $LOAD_PATH.unshift(File.expand_path("lib", __dir__))
+    require "nabu"
+    require "nabu/ops/trickle"
+
+    config = Nabu::Config.load
+    Nabu::Ops::Trickle::Control.status(dir: File.join(config.local_dir, Nabu::Ops::Trickle::DIRNAME))
   end
 end
 

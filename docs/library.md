@@ -1244,6 +1244,16 @@ segmented into glossed morphemes, with Russian or English sentence
 translations (one document, 124 passages by file census; CC BY-NC-SA
 4.0, the author credited).
 
+**The Estonian print mass (synced live 2026-11-23).** `digar-corpora`
+— the DIGAR corpus of freely usable publications from the Eesti
+Rahvusraamatukogu: 2,877 Estonian books, most printed 1900–1949 with
+an older Fraktur tail, as EstNLTK token tables processed by Peeter
+Tinits (Tallinn University, 2018); 580,254 page-scale passages,
+dated by print year and placed by imprint from the national
+bibliography's own MARC records. The OCR is uncorrected and uneven
+by upstream's own caveat; the text is read as printed. CC BY-SA
+3.0 EE; credit the National Library of Estonia and DIGAR.
+
 ## 8ao. The Baltic littoral and the Armenian lexicon (P139)
 
 Three historical corpora of languages the library never held, and

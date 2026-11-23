@@ -135,7 +135,7 @@ slavic:
   - slavistics-pd
   - archiv-slav-phil
   - korpus16
-baltic-finnic-basque: [senie, vakk, vks, bim-sahcoba]
+baltic-finnic-basque: [senie, vakk, vks, bim-sahcoba, digar-corpora]
 chinese:
   - kanripo
   - cbeta

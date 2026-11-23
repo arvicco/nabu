@@ -22,7 +22,10 @@ module Nabu
         "witness columns), capped at #{MAX_ALIGN_REFS} with an honest truncation note. Witnesses " \
         "absent from EVERY ref of a range are summarized once in `absent_witnesses` " \
         "(reason not_attested|not_synced) and omitted from the per-ref columns, so a chapter stays " \
-        "readable. `collate: true` returns a witness DIFF instead: a raw-token apparatus per " \
+        "readable. A SINGLE ref folds the same way by default: witnesses with nothing at the ref " \
+        "(no_match / not_synced) collapse into `absent_witnesses` (label + reason) with " \
+        "`absent_counts`, and only attesting/withheld witnesses keep full blocks; `long: true` " \
+        "restores every witness column. `collate: true` returns a witness DIFF instead: a raw-token apparatus per " \
         "(language, script) cell (base reading + each witness's divergences), with cross-script " \
         "witnesses rendered undiffed and labelled honestly — the fold cannot bridge e.g. the " \
         "Cyrillic Marianus and the Helsinki-ASCII CCMH codices.".freeze
@@ -46,6 +49,12 @@ module Nabu
           base: { type: "string",
                   description: "With collate: the base witness (label or document urn) each cell " \
                                "diffs against (default: the first witness in registry order)." },
+          long: { type: "boolean", default: false,
+                  description: "Single ref: list EVERY registered witness in full (no_match / " \
+                               "not_synced columns included) instead of folding the absent ones " \
+                               "into absent_witnesses + absent_counts (the default — the nt hub " \
+                               "registers ~189 manuscripts, most absent at any verse). Ranges " \
+                               "keep their own absent-from-every-ref summary either way." },
           include_restricted: INCLUDE_RESTRICTED_SCHEMA
         },
         required: ["ref"],
@@ -72,7 +81,7 @@ module Nabu
         json(if result.is_a?(Query::Align::RangeResult)
                align_range_payload(result, include_restricted: include_restricted)
              else
-               align_payload(result, include_restricted: include_restricted)
+               align_payload(result, include_restricted: include_restricted, long: args["long"] == true)
              end)
       rescue Query::Align::Error => e
         # Caller-fixable (unknown work, unaligned urn): isError so the model
@@ -94,15 +103,45 @@ module Nabu
 
       # -- align internals ---------------------------------------------------------
 
-      def align_payload(result, include_restricted:)
+      # A single ref (compact by default, mirroring `nabu align`): witnesses
+      # with nothing at the ref are folded through the SAME seam the CLI and
+      # the range view use (Query::Align.lift_absent_witnesses) into
+      # absent_witnesses (the range payload's row shape) + absent_counts;
+      # long: true keeps every column. The attestation count in the note
+      # always names the full registered roster.
+      def align_payload(result, include_restricted:, long: false)
         attesting = result.witnesses.count { |witness| witness.status == :ok }
+        shown, absent = fold_single_ref(result, long: long)
         {
           type: "alignment", work: result.work, title: result.title, ref: result.ref,
-          witnesses: result.witnesses.map { |witness| align_witness_payload(witness, include_restricted) },
+          witnesses: shown.map { |witness| align_witness_payload(witness, include_restricted) },
+          absent_witnesses: absent.map { |witness| { label: witness.label, reason: witness.reason.to_s } },
+          absent_counts: absent_counts(absent),
           note: "#{attesting} of #{result.witnesses.size} registered witnesses attest #{result.ref}; " \
                 "statuses: ok (sentences follow), no_match (verse absent from that witness), " \
-                "not_synced (registered, no data yet), withheld (license-excluded)"
+                "not_synced (registered, no data yet), withheld (license-excluded)#{single_fold_note(absent)}"
         }
+      end
+
+      def fold_single_ref(result, long:)
+        return [result.witnesses, []] if long
+
+        group = Query::Align::RefGroup.new(ref: result.ref, witnesses: result.witnesses)
+        (present,), absent = Query::Align.lift_absent_witnesses([group])
+        [present.witnesses, absent]
+      end
+
+      def absent_counts(absent)
+        { not_attested: absent.count { |witness| witness.reason == :not_attested },
+          not_synced: absent.count { |witness| witness.reason == :not_synced },
+          total: absent.size }
+      end
+
+      def single_fold_note(absent)
+        return "" if absent.empty?
+
+        "; #{absent.size} witness(es) with nothing at this ref are folded into absent_witnesses " \
+          "(reason: not_attested|not_synced) — pass long: true to list every witness column"
       end
 
       # A range/chapter query: the query string, the ref groups in document

@@ -1,0 +1,109 @@
+	word_texts_simple	lemmas_simple	postag_descriptions_simple	word_texts_guess	lemmas_guess	roots_guess	root_tokens_guess	forms_guess	endings_guess	postags_guess	postag_descriptions_guess
+0	Eesti	Eesti|eesti		Eesti	Eesti	Eesti	['Eesti']	sg g	0	H	pärisnimi
+1	Rahvusraamatukogu	rahvusraamatukogu	nimisõna	Rahvusraamatukogu	Rahvusraamatukogu	Rahvus_raamatu_kogu	[['Rahvus', 'raamatu', 'kogu'], ['Rahvus', 'raamatu', 'kogu']]	sg g	0	H	pärisnimi
+2	digitaalarhiiv	digitaalarhiiv	nimisõna	digitaalarhiiv	digitaalarhiiv	digitaal_arhiiv	['digitaal', 'arhiiv']	sg n	0	S	nimisõna
+3	DIGAR			DIGAR	Digar	Digar	['Digar']	sg n	0	H	pärisnimi
+4	Eesti	Eesti|eesti		Eesti	Eesti	Eesti	['Eesti']	sg g	0	H	pärisnimi
+5	Rahvusraamatukogu	rahvusraamatukogu	nimisõna	Rahvusraamatukogu	Rahvusraamatukogu	Rahvus_raamatu_kogu	[['Rahvus', 'raamatu', 'kogu'], ['Rahvus', 'raamatu', 'kogu']]	sg g	0	H	pärisnimi
+6	digitaalarhiiv	digitaalarhiiv	nimisõna	digitaalarhiiv	digitaalarhiiv	digitaal_arhiiv	['digitaal', 'arhiiv']	sg n	0	S	nimisõna
+7	DIGAR			DIGAR	Digar	Digar	['Digar']	sg n	0	H	pärisnimi
+8	Eesti	Eesti|eesti		Eesti	Eesti	Eesti	['Eesti']	sg g	0	H	pärisnimi
+9	Rahvusraamatukogu	rahvusraamatukogu	nimisõna	Rahvusraamatukogu	Rahvusraamatukogu	Rahvus_raamatu_kogu	[['Rahvus', 'raamatu', 'kogu'], ['Rahvus', 'raamatu', 'kogu']]	sg g	0	H	pärisnimi
+10	digitaalarhiiv	digitaalarhiiv	nimisõna	digitaalarhiiv	digitaalarhiiv	digitaal_arhiiv	['digitaal', 'arhiiv']	sg n	0	S	nimisõna
+11	DIGAR			DIGAR	Digar	Digar	['Digar']	sg n	0	H	pärisnimi
+12	Eesti	Eesti|eesti		Eesti	Eesti	Eesti	['Eesti']	sg g	0	H	pärisnimi
+13	Rahvusraamatukogu	rahvusraamatukogu	nimisõna	Rahvusraamatukogu	Rahvusraamatukogu	Rahvus_raamatu_kogu	[['Rahvus', 'raamatu', 'kogu'], ['Rahvus', 'raamatu', 'kogu']]	sg g	0	H	pärisnimi
+14	digitaalarhiiv	digitaalarhiiv	nimisõna	digitaalarhiiv	digitaalarhiiv	digitaal_arhiiv	['digitaal', 'arhiiv']	sg n	0	S	nimisõna
+15	DIGAR			DIGAR	Digar	Digar	['Digar']	sg n	0	H	pärisnimi
+16	Eesti	Eesti|eesti		Eesti	Eesti	Eesti	['Eesti']	sg g	0	H	pärisnimi
+17	Rahvusraamatukogu	rahvusraamatukogu	nimisõna	Rahvusraamatukogu	Rahvusraamatukogu	Rahvus_raamatu_kogu	[['Rahvus', 'raamatu', 'kogu'], ['Rahvus', 'raamatu', 'kogu']]	sg g	0	H	pärisnimi
+18	digitaalarhiiv	digitaalarhiiv	nimisõna	digitaalarhiiv	digitaalarhiiv	digitaal_arhiiv	['digitaal', 'arhiiv']	sg n	0	S	nimisõna
+19	DIGAR			DIGAR	Digar	Digar	['Digar']	sg n	0	H	pärisnimi
+20	Eesti	Eesti|eesti		Eesti	Eesti	Eesti	['Eesti']	sg g	0	H	pärisnimi
+21	Rahvusraamatukogu	rahvusraamatukogu	nimisõna	Rahvusraamatukogu	Rahvusraamatukogu	Rahvus_raamatu_kogu	[['Rahvus', 'raamatu', 'kogu'], ['Rahvus', 'raamatu', 'kogu']]	sg g	0	H	pärisnimi
+22	digitaalarhiiv	digitaalarhiiv	nimisõna	digitaalarhiiv	digitaalarhiiv	digitaal_arhiiv	['digitaal', 'arhiiv']	sg n	0	S	nimisõna
+23	DIGAR			DIGAR	Digar	Digar	['Digar']	sg n	0	H	pärisnimi
+24	Eesti	Eesti|eesti		Eesti	Eesti	Eesti	['Eesti']	sg g	0	H	pärisnimi
+25	Rahvusraamatukogu	rahvusraamatukogu	nimisõna	Rahvusraamatukogu	Rahvusraamatukogu	Rahvus_raamatu_kogu	[['Rahvus', 'raamatu', 'kogu'], ['Rahvus', 'raamatu', 'kogu']]	sg g	0	H	pärisnimi
+26	digitaalarhiiv	digitaalarhiiv	nimisõna	digitaalarhiiv	digitaalarhiiv	digitaal_arhiiv	['digitaal', 'arhiiv']	sg n	0	S	nimisõna
+27	DIGAR			DIGAR	Digar	Digar	['Digar']	sg n	0	H	pärisnimi
+28	Eesti	Eesti|eesti		Eesti	Eesti	Eesti	['Eesti']	sg g	0	H	pärisnimi
+29	Rahvusraamatukogu	rahvusraamatukogu	nimisõna	Rahvusraamatukogu	Rahvusraamatukogu	Rahvus_raamatu_kogu	[['Rahvus', 'raamatu', 'kogu'], ['Rahvus', 'raamatu', 'kogu']]	sg g	0	H	pärisnimi
+30	digitaalarhiiv	digitaalarhiiv	nimisõna	digitaalarhiiv	digitaalarhiiv	digitaal_arhiiv	['digitaal', 'arhiiv']	sg n	0	S	nimisõna
+31	DIGAR			DIGAR	Digar	Digar	['Digar']	sg n	0	H	pärisnimi
+32	Eesti	Eesti|eesti		Eesti	Eesti	Eesti	['Eesti']	sg g	0	H	pärisnimi
+33	Rahvusraamatukogu	rahvusraamatukogu	nimisõna	Rahvusraamatukogu	Rahvusraamatukogu	Rahvus_raamatu_kogu	[['Rahvus', 'raamatu', 'kogu'], ['Rahvus', 'raamatu', 'kogu']]	sg g	0	H	pärisnimi
+34	digitaalarhiiv	digitaalarhiiv	nimisõna	digitaalarhiiv	digitaalarhiiv	digitaal_arhiiv	['digitaal', 'arhiiv']	sg n	0	S	nimisõna
+35	DIGAR			DIGAR	Digar	Digar	['Digar']	sg n	0	H	pärisnimi
+36	Eesti	Eesti|eesti		Eesti	Eesti	Eesti	['Eesti']	sg g	0	H	pärisnimi
+37	Rahvusraamatukogu	rahvusraamatukogu	nimisõna	Rahvusraamatukogu	Rahvusraamatukogu	Rahvus_raamatu_kogu	[['Rahvus', 'raamatu', 'kogu'], ['Rahvus', 'raamatu', 'kogu']]	sg g	0	H	pärisnimi
+38	digitaalarhiiv	digitaalarhiiv	nimisõna	digitaalarhiiv	digitaalarhiiv	digitaal_arhiiv	['digitaal', 'arhiiv']	sg n	0	S	nimisõna
+39	DIGAR			DIGAR	Digar	Digar	['Digar']	sg n	0	H	pärisnimi
+40	Eesti	Eesti|eesti		Eesti	Eesti	Eesti	['Eesti']	sg g	0	H	pärisnimi
+41	Rahvusraamatukogu	rahvusraamatukogu	nimisõna	Rahvusraamatukogu	Rahvusraamatukogu	Rahvus_raamatu_kogu	[['Rahvus', 'raamatu', 'kogu'], ['Rahvus', 'raamatu', 'kogu']]	sg g	0	H	pärisnimi
+42	digitaalarhiiv	digitaalarhiiv	nimisõna	digitaalarhiiv	digitaalarhiiv	digitaal_arhiiv	['digitaal', 'arhiiv']	sg n	0	S	nimisõna
+43	DIGAR			DIGAR	Digar	Digar	['Digar']	sg n	0	H	pärisnimi
+44	Eesti	Eesti|eesti		Eesti	Eesti	Eesti	['Eesti']	sg g	0	H	pärisnimi
+45	Rahvusraamatukogu	rahvusraamatukogu	nimisõna	Rahvusraamatukogu	Rahvusraamatukogu	Rahvus_raamatu_kogu	[['Rahvus', 'raamatu', 'kogu'], ['Rahvus', 'raamatu', 'kogu']]	sg g	0	H	pärisnimi
+46	digitaalarhiiv	digitaalarhiiv	nimisõna	digitaalarhiiv	digitaalarhiiv	digitaal_arhiiv	['digitaal', 'arhiiv']	sg n	0	S	nimisõna
+47	DIGAR			DIGAR	Digar	Digar	['Digar']	sg n	0	H	pärisnimi
+48	Eesti	Eesti|eesti		Eesti	Eesti	Eesti	['Eesti']	sg g	0	H	pärisnimi
+49	Rahvusraamatukogu	rahvusraamatukogu	nimisõna	Rahvusraamatukogu	Rahvusraamatukogu	Rahvus_raamatu_kogu	[['Rahvus', 'raamatu', 'kogu'], ['Rahvus', 'raamatu', 'kogu']]	sg g	0	H	pärisnimi
+50	digitaalarhiiv	digitaalarhiiv	nimisõna	digitaalarhiiv	digitaalarhiiv	digitaal_arhiiv	['digitaal', 'arhiiv']	sg n	0	S	nimisõna
+51	DIGAR			DIGAR	Digar	Digar	['Digar']	sg n	0	H	pärisnimi
+52	Eesti	Eesti|eesti		Eesti	Eesti	Eesti	['Eesti']	sg g	0	H	pärisnimi
+53	Rahvusraamatukogu	rahvusraamatukogu	nimisõna	Rahvusraamatukogu	Rahvusraamatukogu	Rahvus_raamatu_kogu	[['Rahvus', 'raamatu', 'kogu'], ['Rahvus', 'raamatu', 'kogu']]	sg g	0	H	pärisnimi
+54	digitaalarhiiv	digitaalarhiiv	nimisõna	digitaalarhiiv	digitaalarhiiv	digitaal_arhiiv	['digitaal', 'arhiiv']	sg n	0	S	nimisõna
+55	DIGAR			DIGAR	Digar	Digar	['Digar']	sg n	0	H	pärisnimi
+56	Eesti	Eesti|eesti		Eesti	Eesti	Eesti	['Eesti']	sg g	0	H	pärisnimi
+57	Rahvusraamatukogu	rahvusraamatukogu	nimisõna	Rahvusraamatukogu	Rahvusraamatukogu	Rahvus_raamatu_kogu	[['Rahvus', 'raamatu', 'kogu'], ['Rahvus', 'raamatu', 'kogu']]	sg g	0	H	pärisnimi
+58	digitaalarhiiv	digitaalarhiiv	nimisõna	digitaalarhiiv	digitaalarhiiv	digitaal_arhiiv	['digitaal', 'arhiiv']	sg n	0	S	nimisõna
+59	DIGAR			DIGAR	Digar	Digar	['Digar']	sg n	0	H	pärisnimi
+60	Eesti	Eesti|eesti		Eesti	Eesti	Eesti	['Eesti']	sg g	0	H	pärisnimi
+61	Rahvusraamatukogu	rahvusraamatukogu	nimisõna	Rahvusraamatukogu	Rahvusraamatukogu	Rahvus_raamatu_kogu	[['Rahvus', 'raamatu', 'kogu'], ['Rahvus', 'raamatu', 'kogu']]	sg g	0	H	pärisnimi
+62	digitaalarhiiv	digitaalarhiiv	nimisõna	digitaalarhiiv	digitaalarhiiv	digitaal_arhiiv	['digitaal', 'arhiiv']	sg n	0	S	nimisõna
+63	DIGAR			DIGAR	Digar	Digar	['Digar']	sg n	0	H	pärisnimi
+64	Eesti	Eesti|eesti		Eesti	Eesti	Eesti	['Eesti']	sg g	0	H	pärisnimi
+65	Rahvusraamatukogu	rahvusraamatukogu	nimisõna	Rahvusraamatukogu	Rahvusraamatukogu	Rahvus_raamatu_kogu	[['Rahvus', 'raamatu', 'kogu'], ['Rahvus', 'raamatu', 'kogu']]	sg g	0	H	pärisnimi
+66	digitaalarhiiv	digitaalarhiiv	nimisõna	digitaalarhiiv	digitaalarhiiv	digitaal_arhiiv	['digitaal', 'arhiiv']	sg n	0	S	nimisõna
+67	DIGAR			DIGAR	Digar	Digar	['Digar']	sg n	0	H	pärisnimi
+68	Eesti	Eesti|eesti		Eesti	Eesti	Eesti	['Eesti']	sg g	0	H	pärisnimi
+69	Rahvusraamatukogu	rahvusraamatukogu	nimisõna	Rahvusraamatukogu	Rahvusraamatukogu	Rahvus_raamatu_kogu	[['Rahvus', 'raamatu', 'kogu'], ['Rahvus', 'raamatu', 'kogu']]	sg g	0	H	pärisnimi
+70	digitaalarhiiv	digitaalarhiiv	nimisõna	digitaalarhiiv	digitaalarhiiv	digitaal_arhiiv	['digitaal', 'arhiiv']	sg n	0	S	nimisõna
+71	DIGAR			DIGAR	Digar	Digar	['Digar']	sg n	0	H	pärisnimi
+72	Eesti	Eesti|eesti		Eesti	Eesti	Eesti	['Eesti']	sg g	0	H	pärisnimi
+73	Rahvusraamatukogu	rahvusraamatukogu	nimisõna	Rahvusraamatukogu	Rahvusraamatukogu	Rahvus_raamatu_kogu	[['Rahvus', 'raamatu', 'kogu'], ['Rahvus', 'raamatu', 'kogu']]	sg g	0	H	pärisnimi
+74	digitaalarhiiv	digitaalarhiiv	nimisõna	digitaalarhiiv	digitaalarhiiv	digitaal_arhiiv	['digitaal', 'arhiiv']	sg n	0	S	nimisõna
+75	DIGAR			DIGAR	Digar	Digar	['Digar']	sg n	0	H	pärisnimi
+76	Eesti	Eesti|eesti		Eesti	Eesti	Eesti	['Eesti']	sg g	0	H	pärisnimi
+77	Rahvusraamatukogu	rahvusraamatukogu	nimisõna	Rahvusraamatukogu	Rahvusraamatukogu	Rahvus_raamatu_kogu	[['Rahvus', 'raamatu', 'kogu'], ['Rahvus', 'raamatu', 'kogu']]	sg g	0	H	pärisnimi
+78	digitaalarhiiv	digitaalarhiiv	nimisõna	digitaalarhiiv	digitaalarhiiv	digitaal_arhiiv	['digitaal', 'arhiiv']	sg n	0	S	nimisõna
+79	DIGAR			DIGAR	Digar	Digar	['Digar']	sg n	0	H	pärisnimi
+80	Eesti	Eesti|eesti		Eesti	Eesti	Eesti	['Eesti']	sg g	0	H	pärisnimi
+81	Rahvusraamatukogu	rahvusraamatukogu	nimisõna	Rahvusraamatukogu	Rahvusraamatukogu	Rahvus_raamatu_kogu	[['Rahvus', 'raamatu', 'kogu'], ['Rahvus', 'raamatu', 'kogu']]	sg g	0	H	pärisnimi
+82	digitaalarhiiv	digitaalarhiiv	nimisõna	digitaalarhiiv	digitaalarhiiv	digitaal_arhiiv	['digitaal', 'arhiiv']	sg n	0	S	nimisõna
+83	DIGAR			DIGAR	Digar	Digar	['Digar']	sg n	0	H	pärisnimi
+84	Eesti	Eesti|eesti		Eesti	Eesti	Eesti	['Eesti']	sg g	0	H	pärisnimi
+85	Rahvusraamatukogu	rahvusraamatukogu	nimisõna	Rahvusraamatukogu	Rahvusraamatukogu	Rahvus_raamatu_kogu	[['Rahvus', 'raamatu', 'kogu'], ['Rahvus', 'raamatu', 'kogu']]	sg g	0	H	pärisnimi
+86	digitaalarhiiv	digitaalarhiiv	nimisõna	digitaalarhiiv	digitaalarhiiv	digitaal_arhiiv	['digitaal', 'arhiiv']	sg n	0	S	nimisõna
+87	DIGAR			DIGAR	Digar	Digar	['Digar']	sg n	0	H	pärisnimi
+88	Eesti	Eesti|eesti		Eesti	Eesti	Eesti	['Eesti']	sg g	0	H	pärisnimi
+89	Rahvusraamatukogu	rahvusraamatukogu	nimisõna	Rahvusraamatukogu	Rahvusraamatukogu	Rahvus_raamatu_kogu	[['Rahvus', 'raamatu', 'kogu'], ['Rahvus', 'raamatu', 'kogu']]	sg g	0	H	pärisnimi
+90	digitaalarhiiv	digitaalarhiiv	nimisõna	digitaalarhiiv	digitaalarhiiv	digitaal_arhiiv	['digitaal', 'arhiiv']	sg n	0	S	nimisõna
+91	DIGAR			DIGAR	Digar	Digar	['Digar']	sg n	0	H	pärisnimi
+92	Eesti	Eesti|eesti		Eesti	Eesti	Eesti	['Eesti']	sg g	0	H	pärisnimi
+93	Rahvusraamatukogu	rahvusraamatukogu	nimisõna	Rahvusraamatukogu	Rahvusraamatukogu	Rahvus_raamatu_kogu	[['Rahvus', 'raamatu', 'kogu'], ['Rahvus', 'raamatu', 'kogu']]	sg g	0	H	pärisnimi
+94	digitaalarhiiv	digitaalarhiiv	nimisõna	digitaalarhiiv	digitaalarhiiv	digitaal_arhiiv	['digitaal', 'arhiiv']	sg n	0	S	nimisõna
+95	DIGAR			DIGAR	Digar	Digar	['Digar']	sg n	0	H	pärisnimi
+96	Eesti	Eesti|eesti		Eesti	Eesti	Eesti	['Eesti']	sg g	0	H	pärisnimi
+97	Rahvusraamatukogu	rahvusraamatukogu	nimisõna	Rahvusraamatukogu	Rahvusraamatukogu	Rahvus_raamatu_kogu	[['Rahvus', 'raamatu', 'kogu'], ['Rahvus', 'raamatu', 'kogu']]	sg g	0	H	pärisnimi
+98	digitaalarhiiv	digitaalarhiiv	nimisõna	digitaalarhiiv	digitaalarhiiv	digitaal_arhiiv	['digitaal', 'arhiiv']	sg n	0	S	nimisõna
+99	DIGAR			DIGAR	Digar	Digar	['Digar']	sg n	0	H	pärisnimi
+100	Eesti	Eesti|eesti		Eesti	Eesti	Eesti	['Eesti']	sg g	0	H	pärisnimi
+101	Rahvusraamatukogu	rahvusraamatukogu	nimisõna	Rahvusraamatukogu	Rahvusraamatukogu	Rahvus_raamatu_kogu	[['Rahvus', 'raamatu', 'kogu'], ['Rahvus', 'raamatu', 'kogu']]	sg g	0	H	pärisnimi
+102	digitaalarhiiv	digitaalarhiiv	nimisõna	digitaalarhiiv	digitaalarhiiv	digitaal_arhiiv	['digitaal', 'arhiiv']	sg n	0	S	nimisõna
+103	DIGAR			DIGAR	Digar	Digar	['Digar']	sg n	0	H	pärisnimi
+104	Eesti	Eesti|eesti		Eesti	Eesti	Eesti	['Eesti']	sg g	0	H	pärisnimi
+105	Rahvusraamatukogu	rahvusraamatukogu	nimisõna	Rahvusraamatukogu	Rahvusraamatukogu	Rahvus_raamatu_kogu	[['Rahvus', 'raamatu', 'kogu'], ['Rahvus', 'raamatu', 'kogu']]	sg g	0	H	pärisnimi
+106	digitaalarhiiv	digitaalarhiiv	nimisõna	digitaalarhiiv	digitaalarhiiv	digitaal_arhiiv	['digitaal', 'arhiiv']	sg n	0	S	nimisõna
+107	DIGAR			DIGAR	Digar	Digar	['Digar']	sg n	0	H	pärisnimi

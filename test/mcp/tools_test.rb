@@ -3243,6 +3243,65 @@ module MCP
       assert_equal "PSA 23.1", sentence.fetch("native_ref"), "and reports its native Hebrew ref"
     end
 
+    # The single-ref fold (mirrors `nabu align`'s compact render): witnesses
+    # with nothing at the ref collapse into absent_witnesses + absent_counts;
+    # long: true restores every witness column, misses and all.
+    FOLD_REGISTRY_YAML = <<~YAML
+      nt:
+        title: "New Testament (parallel witnesses)"
+        witnesses:
+          - document: urn:nabu:proiel:greek-nt
+          - document: urn:nabu:proiel:lacunose
+          - document: urn:nabu:proiel:marianus
+          - document: urn:nabu:proiel:ghost
+    YAML
+
+    def seed_fold_corpus
+      seed_aligned_corpus
+      source = Nabu::Store::Source.first(slug: "proiel")
+      doc = make_document(source: source, urn: "urn:nabu:proiel:lacunose", title: "lacunose", language: "got")
+      Nabu::Store::Passage.create(
+        document_id: doc.id, urn: "#{doc.urn}:1", sequence: 0, language: "got",
+        text: "jah qemun at imma", text_normalized: "jah qemun at imma", content_sha256: "x", revision: 1,
+        annotations_json: JSON.generate("tokens" => [{ "citation_part" => "MARK 2.4", "form" => "x" }])
+      )
+      registry = align_registry(FOLD_REGISTRY_YAML)
+      Nabu::Store::Indexer.rebuild!(catalog: @catalog, fulltext: @fulltext, alignments: registry)
+      registry
+    end
+
+    def test_align_single_ref_folds_absent_witnesses_by_default
+      registry = seed_fold_corpus
+      body = payload(align_tools(registry).call("nabu_align", { "ref" => "MARK 2.3" }))
+
+      assert_equal(%w[greek-nt marianus], body.fetch("witnesses").map { |witness| witness.fetch("label") },
+                   "only attesting witnesses keep their full blocks")
+      assert_equal([{ "label" => "lacunose", "reason" => "not_attested" },
+                    { "label" => "ghost", "reason" => "not_synced" }],
+                   body.fetch("absent_witnesses"))
+      assert_equal({ "not_attested" => 1, "not_synced" => 1, "total" => 2 }, body.fetch("absent_counts"))
+      assert_match(/2 of 4/, body.fetch("note"), "the attestation count still names every witness")
+      assert_match(/absent_witnesses/, body.fetch("note"))
+      assert_match(/long/, body.fetch("note"), "the note names the opt-out")
+    end
+
+    def test_align_single_ref_long_restores_every_witness_column
+      registry = seed_fold_corpus
+      body = payload(align_tools(registry).call("nabu_align", { "ref" => "MARK 2.3", "long" => true }))
+
+      assert_equal(%w[greek-nt lacunose marianus ghost],
+                   body.fetch("witnesses").map { |witness| witness.fetch("label") })
+      assert_equal(%w[ok no_match ok not_synced], body.fetch("witnesses").map { |witness| witness.fetch("status") })
+      assert_empty body.fetch("absent_witnesses"), "nothing is folded under long"
+      assert_equal({ "not_attested" => 0, "not_synced" => 0, "total" => 0 }, body.fetch("absent_counts"))
+    end
+
+    def test_align_schema_declares_long_as_an_optional_boolean
+      schema = Nabu::MCP::Tools::ALIGN_SCHEMA
+      assert_equal({ type: "boolean", default: false }, schema.dig(:properties, :long).slice(:type, :default))
+      refute_includes schema[:required], "long"
+    end
+
     def test_align_missing_ref_is_invalid_arguments
       assert_raises(Nabu::MCP::Tools::InvalidArguments) { align_tools.call("nabu_align", {}) }
     end

@@ -6,7 +6,7 @@ compatibility: "Requires the nabu MCP server (`bin/nabu mcp`, read-only, stdio) 
 metadata:
   desk: baltic
   origin: generated
-  sources: "senie vakk vks wiktionary-et"
+  sources: "digar-corpora senie vakk vks wiktionary-et"
 ---
 
 # The Balticist — the `baltic` desk
@@ -23,6 +23,7 @@ verbatim upstream terms are in `docs/02-sources.md` of the Nabu repository.
 <!-- nabu:skill-sources:begin — generated from config/sources/ by `rake skills:scaffold`; edit outside this block -->
 | Source | Upstream | License class |
 | --- | --- | --- |
+| `digar-corpora` | DIGAR corpus of freely usable publications (National Library of Estonia) | attribution |
 | `senie` | SENIE — the Corpus of Early Written Latvian (AiLab IMCS UL / Latvian Language Institute, University of Latvia) | attribution |
 | `vakk` | VAKK — Vana kirjakeele korpus, the Corpus of Old Written Estonian (University of Tartu) | nc |
 | `vks` | VKS — Vanhan kirjasuomen korpus, the Corpus of Old Literary Finnish (Kotus, via Kielipankki Korp) | attribution |

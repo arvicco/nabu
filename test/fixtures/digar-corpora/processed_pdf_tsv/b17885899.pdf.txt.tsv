@@ -1,0 +1,255 @@
+	word_texts_simple	lemmas_simple	postag_descriptions_simple	word_texts_guess	lemmas_guess	roots_guess	root_tokens_guess	forms_guess	endings_guess	postags_guess	postag_descriptions_guess
+0	?			?	?	?	['?']			Z	lausemärk
+1	nF			nF	nF	nF	['nF']	?	0	Y	lühend
+2	,			,	,	,	[',']			Z	lausemärk
+3	N	N	lühend	N	N	N	['N']	?	0	Y	lühend
+4	/			/	/	/	['/']			Z	lausemärk
+5	.			.	.	.	['.']			Z	lausemärk
+6	e	e	lühend	e	e	e	['e']	?	0	Y	lühend
+7	„			„	„	„	['„']			Z	lausemärk
+8	.			.	.	.	['.']			Z	lausemärk
+9	.			.	.	.	['.']			Z	lausemärk
+10	MS	ms	lühend	MS	ms	ms	['ms']	?	0	Y	lühend
+11	"""'"			"""'"	"""’"	"""’"	"['""’']"			Z	lausemärk
+12	e	e	lühend	e	e	e	['e']	?	0	Y	lühend
+13	:			:	:	:	[':']			Z	lausemärk
+14	-	-	lausemärk	-	-	-	['-']			Z	lausemärk
+15	..	..	lausemärk	..	..	..	['..']			Z	lausemärk
+16	lllMlüN			lllMlüN	lllMlüN	lllMlüN	['lllMlüN']	sg n	0	S	nimisõna
+17	,			,	,	,	[',']			Z	lausemärk
+18	6	6	põhiarvsõna	6	6	6	['6']	?	0	N	põhiarvsõna
+19	-V	V		-V	V	V	['V']	?	0	Y	lühend
+20	.			.	.	.	['.']			Z	lausemärk
+21	-	-	lausemärk	-	-	-	['-']			Z	lausemärk
+22	-	-	lausemärk	-	-	-	['-']			Z	lausemärk
+23	5	5	põhiarvsõna	5	5	5	['5']	?	0	N	põhiarvsõna
+24	/			/	/	/	['/']			Z	lausemärk
+25	/			/	/	/	['/']			Z	lausemärk
+26	'			'	’	’	['’']			Z	lausemärk
+27	/			/	/	/	['/']			Z	lausemärk
+28	Enne	Enn|enne		Enne	enne	enne	['enne']		0	K	kaassõna
+29	pihti	piht	nimisõna	pihti	piht	piht	['piht']	sg p	0	S	nimisõna
+30	.			.	.	.	['.']			Z	lausemärk
+31	Is			Is	Is	Is	['Is']	?	0	Y	lühend
+32	.			.	.	.	['.']			Z	lausemärk
+33	110.	110.	järgarvsõna	110.	110.	110.	['110.']	?	0	O	järgarvsõna
+34	7.	7.	järgarvsõna	7.	7.	7.	['7.']	?	0	O	järgarvsõna
+35	Asus	asu|asuma		Asus	Asus	Asus	['Asus']	sg n	0	H	pärisnimi
+36	Mnno			Mnno	Mnno	Mnno	['Mnno']	sg n	0	H	pärisnimi
+37	Sjge			Sjge	Sjge	Sjge	['Sjge']	sg g	0	H	pärisnimi
+38	ello			ello	ello	ello	['ello']	sg n	0	S	nimisõna
+39	,			,	,	,	[',']			Z	lausemärk
+40	Jesus			Jesus	Jesus	Jesus	['Jesus']	sg n	0	H	pärisnimi
+41	minno			minno	minno	minno	['minno']	sg g	0	S	nimisõna
+42	rööm			rööm	rööm	rööm	['rööm']	sg n	0	S	nimisõna
+43	ja	ja	sidesõna	ja	ja	ja	['ja']		0	J	sidesõna
+44	illo			illo	illo	illo	['illo']	sg n	0	S	nimisõna
+45	,			,	,	,	[',']			Z	lausemärk
+46	Jesus			Jesus	Jesus	Jesus	['Jesus']	sg n	0	H	pärisnimi
+47	,			,	,	,	[',']			Z	lausemärk
+48	keigesurem			keigesurem	keigesurem	keigesurem	['keigesurem']	sg n	0	S	nimisõna
+49	warra			warra	warra	warra	['warra']	sg n	0	S	nimisõna
+50	.			.	.	.	['.']			Z	lausemärk
+51	Ärra			Ärra	Ärra	Ärra	['Ärra']	sg g	0	H	pärisnimi
+52	taggane			taggane	taggane	taggane	['taggane']	sg g	0	S	nimisõna
+53	must	mina|must		must	must	must	['must']	sg n	0	A	omadussõna algvõrre
+54	ärra			ärra	ärra	ärra	['ärra']	sg n	0	S	nimisõna
+55	.			.	.	.	['.']			Z	lausemärk
+56	Pölweli			Pölweli	Pölwel|Pölweli	Pölwel|Pölweli	[['Pölwel'], ['Pölweli']]	sg g	0	H	pärisnimi
+57	ma	mina	asesõna	ma	mina	mina	['mina']	sg n	0	P	asesõna
+58	langen	langema	tegusõna	langen	langema	lange	['lange']	n	n	V	tegusõna
+59	mahha			mahha	mahha	mahha	['mahha']	sg n	0	S	nimisõna
+60	,			,	,	,	[',']			Z	lausemärk
+61	Ihhaldan			Ihhaldan	Ihhaldan	Ihhaldan	['Ihhaldan']	sg n	0	H	pärisnimi
+62	ja	ja	sidesõna	ja	ja	ja	['ja']		0	J	sidesõna
+63	pallunsedda			pallunsedda	pallunsedda	pallunsedda	['pallunsedda']	sg n	0	S	nimisõna
+64	:			:	:	:	[':']			Z	lausemärk
+65	Lasse	lass	nimisõna	Lasse	Lasse	Lasse	['Lasse']	sg g	0	H	pärisnimi
+66	sedda			sedda	sedda	sedda	['sedda']	sg g	0	S	nimisõna
+67	kallist	kallis	omadussõna algvõrre	kallist	kallis	kallis	['kallis']	sg p	t	A	omadussõna algvõrre
+68	röga	röga	nimisõna	röga	röga	röga	['röga']	sg p	0	S	nimisõna
+69	Mind	mina	asesõna	Mind	mina	mina	['mina']	sg p	d	P	asesõna
+70	mo			mo	mo	mo	['mo']	?	0	Y	lühend
+71	heaks	hea|heaks		heaks	heaks	heaks	['heaks']		0	K	kaassõna
+72	,			,	,	,	[',']			Z	lausemärk
+73	so	so	lühend	so	so	so	['so']	?	0	Y	lühend
+74	auuks	auuks	nimisõna	auuks	auuks	au_uks	['au', 'uks']	sg n	0	S	nimisõna
+75	wõtta			wõtta	wõtta	wõtta	['wõtta']	sg n	0	S	nimisõna
+76	.			.	.	.	['.']			Z	lausemärk
+77	Pärrast			Pärrast	Pärra	Pärra	['Pärra']	sg el	st	H	pärisnimi
+78	pühha			pühha	pühha	pühha	['pühha']	sg g	0	S	nimisõna
+79	õhto-söma-aega			õhto-söma-aega	õhto-söma-aeg	õhto-söma-aeg	['õhto', 'söma', 'aeg']	sg p	0	S	nimisõna
+80	.			.	.	.	['.']			Z	lausemärk
+81	R.	R.	lühend	R.	R.	R.	['R.']	?	0	Y	lühend
+82	no	no	hüüdsõna	no	no	no	['no']		0	I	hüüdsõna
+83	.			.	.	.	['.']			Z	lausemärk
+84	4.	4.	järgarvsõna	4.	4.	4.	['4.']	?	0	O	järgarvsõna
+85	Õh			Õh	Õh	Õh	['Õh']	?	0	Y	lühend
+86	mis	mis	asesõna	mis	mis	mis	[['mis'], ['mis']]	pl n|sg n	0	P	asesõna
+87	himmo			himmo	himmo	himmo	['himmo']	sg n	0	S	nimisõna
+88	tulleb			tulleb	tullema	tulle	['tulle']	b	b	V	tegusõna
+89	peäle			peäle	peä	peä	['peä']	sg all	le	S	nimisõna
+90	,			,	,	,	[',']			Z	lausemärk
+91	Kui	kui		Kui	kui	kui	[['kui'], ['kui']]		0	D|J	
+92	so	so	lühend	so	so	so	['so']	?	0	Y	lühend
+93	hel			hel	hel	hel	['hel']	sg n	0	S	nimisõna
+94	(			(	(	(	['(']			Z	lausemärk
+95	cid			cid	cid	cid	['cid']	sg n	0	S	nimisõna
+96	:			:	:	:	[':']			Z	lausemärk
+97	173	173	põhiarvsõna	173	173	173	['173']	?	0	N	põhiarvsõna
+98	)			)	)	)	[')']			Z	lausemärk
+99	dus			dus	dus	dus	['dus']	sg n	0	S	nimisõna
+100	tulleb			tulleb	tullema	tulle	['tulle']	b	b	V	tegusõna
+101	mele			mele	mele	mele	['mele']	sg n	0	S	nimisõna
+102	,			,	,	,	[',']			Z	lausemärk
+103	Jesus			Jesus	Jesus	Jesus	['Jesus']	sg n	0	H	pärisnimi
+104	,			,	,	,	[',']			Z	lausemärk
+105	kallis	kallis	omadussõna algvõrre	kallis	kallis	kallis	['kallis']	sg n	0	A	omadussõna algvõrre
+106	hallastaja			hallastaja	hallastaja	hallasta=ja	['hallastaja']	sg n	0	S	nimisõna
+107	Innimeste			Innimeste	Innimes|Innimeste	Innimes|Innimeste	[['Innimes'], ['Innimeste']]	pl g|sg g	0|te	H	pärisnimi
+108	leppitaja			leppitaja	leppitaja	leppita=ja	['leppitaja']	sg g	0	S	nimisõna
+109	Hmma			Hmma	Hmma	Hmma	['Hmma']	sg g	0	H	pärisnimi
+110	ihhogamind			ihhogamind	ihhogamind	ihhogamind	['ihhogamind']	sg n	0	S	nimisõna
+111	södad			södad	söda|södad	söda|södad	[['söda'], ['södad']]	pl n|sg n	0|d	S	nimisõna
+112	.			.	.	.	['.']			Z	lausemärk
+113	Omma			Omma	Omma	Omma	['Omma']	sg g	0	H	pärisnimi
+114	werregamind			werregamind	werregamind	werregamind	['werregamind']	sg n	0	S	nimisõna
+115	jodad			jodad	joda|jodad	joda|jodad	[['joda'], ['jodad']]	pl n|sg n	0|d	S	nimisõna
+116	;			;	;	;	[';']			Z	lausemärk
+117	Jum			Jum	Jum	Jum	['Jum']	sg n	0	H	pärisnimi
+118	(			(	(	(	['(']			Z	lausemärk
+119	cid			cid	cid	cid	['cid']	sg n	0	S	nimisõna
+120	:			:	:	:	[':']			Z	lausemärk
+121	173	173	põhiarvsõna	173	173	173	['173']	?	0	N	põhiarvsõna
+122	)			)	)	)	[')']			Z	lausemärk
+123	mal			mal	mal	mal	['mal']	sg n	0	S	nimisõna
+124	tulleb			tulleb	tullema	tulle	['tulle']	b	b	V	tegusõna
+125	minnosisse			minnosisse	minnosiss	minno_siss	['minno', 'siss']	pl p	e	S	nimisõna
+126	,			,	,	,	[',']			Z	lausemärk
+127	Ellab			Ellab	Ellab	Ellab	['Ellab']	sg n	0	H	pärisnimi
+128	minno			minno	minno	minno	['minno']	sg g	0	S	nimisõna
+129	wai			wai	wai	wai	['wai']	sg n	0	S	nimisõna
+130	(			(	(	(	['(']			Z	lausemärk
+131	cid			cid	cid	cid	['cid']	sg n	0	S	nimisõna
+132	:			:	:	:	[':']			Z	lausemärk
+133	173	173	põhiarvsõna	173	173	173	['173']	?	0	N	põhiarvsõna
+134	)			)	)	)	[')']			Z	lausemärk
+135	mus	mina	asesõna	mus	mina	mina	['mina']	sg in	s	P	asesõna
+136	isse			isse	isse	isse	['isse']	sg n	0	S	nimisõna
+137	.			.	.	.	['.']			Z	lausemärk
+138	,			,	,	,	[',']			Z	lausemärk
+139	5	5	põhiarvsõna	5	5	5	['5']	?	0	N	põhiarvsõna
+140	-	-	lausemärk	-	-	-	['-']			Z	lausemärk
+141	2	2	põhiarvsõna	2	2	2	['2']	?	0	N	põhiarvsõna
+142	S	S	lühend	S	S	S	['S']	?	0	Y	lühend
+143	,			,	,	,	[',']			Z	lausemärk
+144	WWMl			WWMl	WWM	WWM	['WWM']	sg ad	l	Y	lühend
+145	Enne	Enn|enne		Enne	enne	enne	['enne']		0	K	kaassõna
+146	plhtt			plhtt	plhtt	plhtt	['plhtt']	?	0	Y	lühend
+147	.			.	.	.	['.']			Z	lausemärk
+148	V	V		V	V	V	['V']	?	0	O	järgarvsõna
+149	.			.	.	.	['.']			Z	lausemärk
+150	i	i	lühend	i	i	i	['i']	?	0	Y	lühend
+151	.			.	.	.	['.']			Z	lausemärk
+152	Minno			Minno	Minno	Minno	['Minno']	sg g	0	H	pärisnimi
+153	südda			südda	südda	südda	['südda']	sg n	0	S	nimisõna
+154	,			,	,	,	[',']			Z	lausemärk
+155	römustelle			römustelle	römustelle	römustelle	['römustelle']	sg n	0	S	nimisõna
+156	,			,	,	,	[',']			Z	lausemärk
+157	Jätta	jätma	tegusõna	Jätta	Jätta	Jätta	['Jätta']	sg g	0	H	pärisnimi
+158	patto			patto	patto	patto	['patto']	sg g	0	S	nimisõna
+159	kom			kom	kom	kom	['kom']	sg n	0	S	nimisõna
+160	(			(	(	(	['(']			Z	lausemärk
+161	cid			cid	cid	cid	['cid']	sg n	0	S	nimisõna
+162	:			:	:	:	[':']			Z	lausemärk
+163	173	173	põhiarvsõna	173	173	173	['173']	?	0	N	põhiarvsõna
+164	)			)	)	)	[')']			Z	lausemärk
+165	bed			bed	bed	bed	['bed']	sg n	0	S	nimisõna
+166	jälle	jälle	määrsõna	jälle	jälle	jälle	['jälle']		0	D	määrsõna
+167	,			,	,	,	[',']			Z	lausemärk
+168	Tötta			Tötta	Tötta	Tötta	['Tötta']	sg g	0	H	pärisnimi
+169	ärra			ärra	ärra	ärra	['ärra']	sg n	0	S	nimisõna
+170	pimmedussest			pimmedussest	pimmedusne	pimmedusne	['pimmedusne']	sg el	st	A	omadussõna algvõrre
+171	,			,	,	,	[',']			Z	lausemärk
+172	Minne			Minne	Minne	Minne	['Minne']	sg g	0	H	pärisnimi
+173	wälja			wälja	wälja	wälja	['wälja']	sg g	0	S	nimisõna
+174	rummalussest			rummalussest	rummalusne	rummalusne	['rummalusne']	sg el	st	A	omadussõna algvõrre
+175	,			,	,	,	[',']			Z	lausemärk
+176	Sest	see|sest		Sest	sest	sest	['sest']		0	J	sidesõna
+177	sind	sina	asesõna	sind	sina	sina	['sina']	sg p	d	P	asesõna
+178	laual	laud	nimisõna	laual	laud	laud	['laud']	sg ad	l	S	nimisõna
+179	'			'	’	’	['’']			Z	lausemärk
+180	kutsu	kutsu|kutsuma		kutsu	kutsuma	kutsu	['kutsu']	o	0	V	tegusõna
+181	(			(	(	(	['(']			Z	lausemärk
+182	cid			cid	cid	cid	['cid']	sg n	0	S	nimisõna
+183	:			:	:	:	[':']			Z	lausemärk
+184	173	173	põhiarvsõna	173	173	173	['173']	?	0	N	põhiarvsõna
+185	)			)	)	)	[')']			Z	lausemärk
+186	takse	taks	nimisõna	takse	taks	taks	['taks']	pl p	e	S	nimisõna
+187	,			,	,	,	[',']			Z	lausemärk
+188	Õnnistust	õnnistus	nimisõna	Õnnistust	õnnistus	õnnistus	['õnnistus']	sg p	t	S	nimisõna
+189	sull			sull	sull	sull	['sull']	sg n	0	S	nimisõna
+190	'			'	’	’	['’']			Z	lausemärk
+191	pakkutakse			pakkutakse	pakkutakse	pakkutakse	['pakkutakse']	sg n	0	S	nimisõna
+192	,			,	,	,	[',']			Z	lausemärk
+193	Jesus			Jesus	Jesus	Jesus	['Jesus']	sg n	0	H	pärisnimi
+194	,			,	,	,	[',']			Z	lausemärk
+195	maja	maja	nimisõna	maja	maja	maja	['maja']	sg g	0	S	nimisõna
+196	taewa			taewa	taewa	taewa	['taewa']	sg n	0	S	nimisõna
+197	Loja			Loja	Loja	Loja	['Loja']	sg n	0	H	pärisnimi
+198	,			,	,	,	[',']			Z	lausemärk
+199	Tahhab			Tahhab	Tahhab	Tahhab	['Tahhab']	sg n	0	H	pärisnimi
+200	so	so	lühend	so	so	so	['so']	?	0	Y	lühend
+201	sees	sees		sees	sees	sees	['sees']		0	K	kaassõna
+202	asset			asset	asse	asse	['asse']	sg p	t	S	nimisõna
+203	tehha			tehha	tehha	tehha	['tehha']	sg n	0	S	nimisõna
+204	,			,	,	,	[',']			Z	lausemärk
+205	Pärrast			Pärrast	Pärra	Pärra	['Pärra']	sg el	st	H	pärisnimi
+206	pühha			pühha	pühha	pühha	['pühha']	sg g	0	S	nimisõna
+207	öhtosömaaega			öhtosömaaega	öhtosömaaeg	öhtosöma_aeg	['öhtosöma', 'aeg']	adt	0	S	nimisõna
+208	.			.	.	.	['.']			Z	lausemärk
+209	V	V		V	V	V	['V']	?	0	O	järgarvsõna
+210	.			.	.	.	['.']			Z	lausemärk
+211	9.	9.	järgarvsõna	9.	9.	9.	['9.']	?	0	O	järgarvsõna
+212	Jesus			Jesus	Jesu	Jesu	['Jesu']	sg in	s	H	pärisnimi
+213	kallis	kallis	omadussõna algvõrre	kallis	kallis	kallis	['kallis']	sg n	0	A	omadussõna algvõrre
+214	hinge	hing|hinge	nimisõna	hinge	hing|hinge	hing|hinge	[['hing'], ['hinge']]	sg g	0	S	nimisõna
+215	toitja	toitja	nimisõna	toitja	toitja	toitja	['toitja']	sg g	0	S	nimisõna
+216	,			,	,	,	[',']			Z	lausemärk
+217	Jesus			Jesus	Jesus	Jesus	['Jesus']	sg n	0	H	pärisnimi
+218	patto			patto	patto	patto	['patto']	sg n	0	S	nimisõna
+219	är-			är-	är	är	['är']	?	0	Y	lühend
+220	rawoitja			rawoitja	rawoitja	rawoitja	['rawoitja']	sg n	0	S	nimisõna
+221	,			,	,	,	[',']			Z	lausemärk
+222	Te	sina	asesõna	Te	sina	sina	['sina']	pl n	0	P	asesõna
+223	,			,	,	,	[',']			Z	lausemärk
+224	et	et	sidesõna	et	et	et	['et']		0	J	sidesõna
+225	ei	ei		ei	ei	ei	['ei']	neg	0	V	tegusõna
+226	sa	sina	asesõna	sa	sina	sina	['sina']	sg n	0	P	asesõna
+227	hukkatusseks			hukkatusseks	hukkatusne	hukkatusne	['hukkatusne']	sg tr	ks	A	omadussõna algvõrre
+228	Ma	mina	asesõna	Ma	mina	mina	['mina']	sg n	0	P	asesõna
+229	so	so	lühend	so	so	so	['so']	?	0	Y	lühend
+230	laua	laud	nimisõna	laua	laud	laud	['laud']	sg g	0	S	nimisõna
+231	ossalisseks			ossalisseks	ossalisne	ossalisne	['ossalisne']	sg tr	ks	A	omadussõna algvõrre
+232	.			.	.	.	['.']			Z	lausemärk
+233	Sinno			Sinno	Sinno	Sinno	['Sinno']	sg g	0	H	pärisnimi
+234	arm	arm	nimisõna	arm	arm	arm	['arm']	sg n	0	S	nimisõna
+235	momeles			momeles	momeles	momeles	['momeles']	sg n	0	S	nimisõna
+236	olgo			olgo	olgo	olgo	['olgo']	sg n	0	S	nimisõna
+237	,			,	,	,	[',']			Z	lausemärk
+238	Ja	ja	sidesõna	Ja	ja	ja	['ja']		0	J	sidesõna
+239	mo			mo	mo	mo	['mo']	?	0	Y	lühend
+240	süddamesse			süddamesse	süddamess	südda_mess	['südda', 'mess']	pl p	e	S	nimisõna
+241	tulgo			tulgo	tulgo	tulgo	['tulgo']	sg n	0	S	nimisõna
+242	,			,	,	,	[',']			Z	lausemärk
+243	Et	et	sidesõna	Et	et	et	['et']		0	J	sidesõna
+244	ma	mina	asesõna	ma	mina	mina	['mina']	sg n	0	P	asesõna
+245	nenda			nenda	nenda	nenda	['nenda']	sg n	0	S	nimisõna
+246	,			,	,	,	[',']			Z	lausemärk
+247	kui	kui		kui	kui	kui	[['kui'], ['kui']]		0	D|J	
+248	siinwaewas			siinwaewas	siinwaewas	siinwaewas	['siinwaewas']	sg n	0	S	nimisõna
+249	,			,	,	,	[',']			Z	lausemärk
+250	Jään	jääma	tegusõna	Jään	jääma	jää	['jää']	n	n	V	tegusõna
+251	kasinnoommaks			kasinnoommaks	kasinnoommaks	kasinnoom_maks	['kasinnoom', 'maks']	sg n	0	S	nimisõna
+252	taewas			taewas	taewa	taewa	['taewa']	sg in	s	S	nimisõna
+253	.			.	.	.	['.']			Z	lausemärk
