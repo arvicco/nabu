@@ -21,7 +21,7 @@ Docker must be installed and running. Nothing else is needed.
 Every client starts the same server:
 
 ```
-docker run -i --rm ghcr.io/arvicco/nabu-ancient-texts:1.8.0
+docker run -i --rm ghcr.io/arvicco/nabu-ancient-corpora:1.8.0
 ```
 
 The first run pulls the image; later runs start instantly. The `-i`
@@ -36,7 +36,7 @@ flag is required (MCP speaks over stdin/stdout).
   "mcpServers": {
     "nabu": {
       "command": "docker",
-      "args": ["run", "-i", "--rm", "ghcr.io/arvicco/nabu-ancient-texts:1.8.0"]
+      "args": ["run", "-i", "--rm", "ghcr.io/arvicco/nabu-ancient-corpora:1.8.0"]
     }
   }
 }
@@ -45,7 +45,7 @@ flag is required (MCP speaks over stdin/stdout).
 **Claude Code**:
 
 ```
-claude mcp add nabu -- docker run -i --rm ghcr.io/arvicco/nabu-ancient-texts:1.8.0
+claude mcp add nabu -- docker run -i --rm ghcr.io/arvicco/nabu-ancient-corpora:1.8.0
 ```
 
 **Claude Desktop / Cursor / any generic MCP client** — the same

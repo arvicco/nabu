@@ -526,7 +526,7 @@ module Site
       end
       assert hand_count.match?("exposing fourteen tools"), "the guard must catch the retired phrasing"
       refute hand_count.match?("usually two or three tools"), "composition prose must pass"
-      refute mcp_page.include?("ghcr.io/arvicco/nabu-ancient-texts"),
+      refute mcp_page.include?("ghcr.io/arvicco/nabu-ancient-corpora"),
              "every image reference on the MCP page renders site.data.mcp (the pinned tag)"
     end
 
@@ -557,7 +557,7 @@ module Site
       readme = File.read(File.join(ROOT, "README.md"))
       { "README.md" => readme, "docs/mcp.md" => File.read(File.join(ROOT, "docs", "mcp.md")),
         "llms-install.md" => File.read(File.join(ROOT, "llms-install.md")) }.each do |name, text|
-        refs = text.scan(%r{ghcr\.io/arvicco/nabu-ancient-texts(?::[\w.]+)?})
+        refs = text.scan(%r{ghcr\.io/arvicco/nabu-ancient-(?:corpora|texts)(?::[\w.]+)?})
         refute_empty refs, "#{name} names the demo image"
         refs.each { |ref| assert_equal image, ref, "#{name} references the demo image off the released tag" }
       end

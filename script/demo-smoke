@@ -7,7 +7,7 @@
 # workflow runs it on a bare runner Ruby with no bundle.
 #
 #   script/demo-smoke [IMAGE] [-- DOCKER_RUN_ARGS...]
-#   script/demo-smoke ghcr.io/arvicco/nabu-ancient-texts:1.0.0 -- --memory=512m
+#   script/demo-smoke ghcr.io/arvicco/nabu-ancient-corpora:1.0.0 -- --memory=512m
 #
 # Exit 0 on a correct answer, 1 (with the reason on stderr) otherwise.
 
