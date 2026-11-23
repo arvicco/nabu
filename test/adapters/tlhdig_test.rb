@@ -122,6 +122,29 @@ class TlhdigTest < Minitest::Test
     assert_equal 5, document.count, "the edit parses whole (5 tablet lines)"
   end
 
+  # The header-date probe reads a fixed 8192-byte prefix; a cut that lands
+  # inside a multibyte character (here "š" = \xC5\xA1 straddling the
+  # boundary, behind ASCII padding in a comment after the real header)
+  # left an invalid UTF-8 tail that raised ArgumentError from the header
+  # regex — discovery died. The probe only reads ASCII dates, so the
+  # severed tail is dropped and the later edit still wins.
+  def test_a_header_probe_cut_mid_character_still_dates_the_twins
+    Dir.mktmpdir do |work|
+      dir = File.join(work, "CTH 832_XML_TLH")
+      FileUtils.mkdir_p(dir)
+      edit = fixture_bytes("edits/CTH 832_XML_TLH/KUB 31.116")
+      cut = edit.index("</AOHeader>".b) + "</AOHeader>".bytesize
+      head = edit.byteslice(0, cut) + "<!--".b
+      padded = head + (" " * (8191 - head.bytesize)).b + "š-->".b + edit.byteslice(cut..)
+      assert_equal 0xC5, padded.getbyte(8191), "the 8192-byte cut splits the character"
+      File.binwrite(File.join(dir, "KUB 31.116"), padded)
+      File.binwrite(File.join(dir, "KUB 31.116.xml"), fixture_bytes("edits/CTH 832_XML_TLH/KUB 31.116.xml"))
+
+      refs = adapter.discover(work).to_a
+      assert refs.first.path.end_with?("CTH 832_XML_TLH/KUB 31.116"), "the later edit still wins"
+    end
+  end
+
   def test_a_diverging_urn_collision_raises_instead_of_hiding_damage
     Dir.mktmpdir do |work|
       seed_twin(work, second: fixture_bytes("CTH 314_XML_TLH/KUB 4.8.xml"))

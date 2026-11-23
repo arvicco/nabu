@@ -137,6 +137,32 @@ class DeromFetchTest < Minitest::Test
     assert_match(/attempts/, error.message)
   end
 
+  # The listings arrive with no charset (a BINARY body). Hrefs carry the
+  # filename verbatim, so a non-ASCII name was captured BINARY-tagged and
+  # the first progress line ("DÉRom article …") raised
+  # Encoding::CompatibilityError joining it. The listing is read as UTF-8
+  # at the harvest seam; the name lands as UTF-8 on disk and in the log.
+  def test_a_non_ascii_filename_in_a_binary_listing_lands_as_utf8
+    listing = File.binread(File.join(FIXTURES, "fetch", "listing-1.html"))
+                  .gsub("'lakt-e.xml".b, "'lakt-é.xml".b)
+    stub_listings(COLLECTION_1 => listing)
+    stub_records
+    lines = []
+    Nabu::DeromFetch.sync!(base_url: BASE, dir: @dir, attic_dir: @attic, delay: 0,
+                           progress: ->(line) { lines << line })
+    assert File.file?(File.join(@dir, COLLECTION_1, "'lakt-é.xml"))
+    assert(lines.any? { |line| line.include?("'lakt-é.xml") })
+  end
+
+  def test_a_listing_that_is_not_utf8_aborts_before_any_write
+    listing = File.binread(File.join(FIXTURES, "fetch", "listing-1.html"))
+                  .gsub("'lakt-e.xml".b, "'lakt-\xE9.xml".b)
+    stub_listings(COLLECTION_1 => listing)
+    error = assert_raises(Nabu::DeromFetch::Error) { sync! }
+    assert_match(/not valid UTF-8/, error.message)
+    refute Dir.exist?(@dir), "abort with the tree untouched"
+  end
+
   def test_a_listed_404_is_fatal_never_censused
     stub_listings
     stub_request(:get, %r{#{Regexp.escape(BASE)}/.+\.xml\z}).to_return(status: 404)
