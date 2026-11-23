@@ -68,8 +68,14 @@ bundle exec rake trickle:status
 EXPECT one line per source that has ever trickled:
 
 ```
-wellcome: RUNNING (pid 12345) — held 1234, remaining 30064; last: 2026-11-23T10:30:02Z SLICE wellcome/zips #1 [yield]: +58 held, held 1234, remaining 30064 (60 asked, 60 request(s) in 30m01s)
+wellcome: RUNNING (pid 12345) — held 1240, remaining 30058 (on disk); last: 2026-11-23T10:33:02Z BEAT wellcome/zips #2: 10 request(s) this slice, +6 held this slice, held 1240, remaining 30058
 ```
+
+The held/remaining numbers are counted from DISK at the moment you ask
+(the same offline count the SUMMARY line takes), so they move while a
+slice runs; `last:` is only the newest log line. When the source's lanes
+cannot be counted (an unknown slug), the newest logged numbers stand,
+marked `(as logged)`.
 
 `finished` means the runner exited and wrote its SUMMARY line. `DIED`
 means its process is gone without one (killed hard, or the machine went
@@ -78,9 +84,12 @@ trickles at all: `no trickles (…/local/trickle holds no runner state)`.
 
 The full progress log is `local/trickle/<slug>.log`, written line by
 line as it happens (safe to `tail -f`): a `START` line per lane (held,
-remaining, the pace and slice size), one `SLICE` line per slice with
-that slice's full report indented under it, and at the end a `STOP`
-line with the reason and a `SUMMARY` line.
+remaining, the pace and slice size), a `BEAT` line every 10 requests
+inside a slice (requests so far, `+N held this slice`, held, remaining —
+a slice at wellcome's pace is half an hour of requests), one `SLICE`
+line per slice with that slice's full report indented under it, a
+`RETRY` line per transient-failure wait, and at the end a `STOP` line
+with the reason and a `SUMMARY` line.
 
 ## Stop
 
@@ -115,8 +124,16 @@ The SUMMARY line names the reason:
 - `clean stop at …` — upstream asked the crawl to stop (a quota floor).
 - `upstream outage — …` — the source's outage breaker tripped; restart
   once upstream answers again.
-- `fatal: …` — an error the engine does not classify (an HTTP 429 or
-  5xx, a network failure). Nothing learned is lost; start again later.
+- `fatal: …` — an error the runner does not wait out: an HTTP 429, any
+  other non-transient error, or the 10th consecutive transient failure
+  (`… (10 consecutive transient failures — giving up)`). Nothing learned
+  is lost; start again later.
+
+A transient upstream failure — an HTTP 5xx other than 429, a timeout, a
+reset or refused connection — does NOT end the run: the runner logs a
+`RETRY` line, waits (1 minute, doubling to a 15-minute cap; back to 1
+minute after any request upstream answers) and resumes the same lane.
+A stop request ends a wait at once.
 
 ## The pace
 

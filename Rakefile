@@ -1288,7 +1288,18 @@ namespace :trickle do
     require "nabu/ops/trickle"
 
     config = Nabu::Config.load
-    Nabu::Ops::Trickle::Control.status(dir: File.join(config.local_dir, Nabu::Ops::Trickle::DIRNAME))
+    registry = Nabu::SourceRegistry.load(config.sources_path)
+    # held/remaining from DISK (the offline diagnosis the SUMMARY takes),
+    # never the log's last slice line — that freezes for a whole slice.
+    counts = lambda do |slug|
+      adapter = registry[slug]&.build_adapter
+      next nil unless adapter.respond_to?(:paced_crawls)
+
+      Nabu::Ops::Trickle::Control.disk_counts(adapter.paced_crawls(File.join(config.canonical_dir, slug)))
+    rescue Nabu::Error
+      nil
+    end
+    Nabu::Ops::Trickle::Control.status(dir: File.join(config.local_dir, Nabu::Ops::Trickle::DIRNAME), counts: counts)
   end
 end
 
