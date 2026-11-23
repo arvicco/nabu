@@ -58,14 +58,14 @@ classes:
   documents: 16556
   documents_display: '16,556'
   sources: 31
+- head: periodical
+  documents: 12334
+  documents_display: '12,334'
+  sources: 8
 - head: mark
   documents: 12298
   documents_display: '12,298'
   sources: 11
-- head: periodical
-  documents: 11969
-  documents_display: '11,969'
-  sources: 8
 - head: honorific
   documents: 11692
   documents_display: '11,692'

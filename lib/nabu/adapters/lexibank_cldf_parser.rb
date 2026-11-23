@@ -73,6 +73,10 @@ module Nabu
     #   EXCEPT for a reconstructed variety, which never wears its family's
     #   Glottocode as a language code (ocea1241 is the Oceanic family, not
     #   Proto-Oceanic) and falls back to the namespaced "<slug>-<variety>".
+    # - CONCEPT NOTES: a dataset may declare extra parameters.csv columns
+    #   (+concept_notes+, column => label) that ride the body as labeled
+    #   lines — zhangrgyalrong's Gloss_in_Source carries the Chinese
+    #   character its Old/Middle Chinese rows read.
     #
     # == Word strategies (declared per dataset, never sniffed)
     #
@@ -102,9 +106,13 @@ module Nabu
       PLACEHOLDER = /\A[\s\-–—?]*\z/
 
       VARIANT_SPLIT = /\s*~\s*/
+      # pylexibank's Python-list serialization of a list cell ("['斧']").
+      PY_LIST = /\A\[\s*'[^']*'(?:\s*,\s*'[^']*')*\s*\]\z/
+
       BRACED = /\A(?<trans>[^{}]*?)\s*\{(?<orth>[^{}]*)\}\s*\z/
 
-      def initialize(slug:, language:, label:, word_from: :form, varieties: {}, proto_varieties: [])
+      def initialize(slug:, language:, label:, word_from: :form, varieties: {}, proto_varieties: [],
+                     concept_notes: {})
         unless WORD_STRATEGIES.include?(word_from)
           raise ArgumentError, "word_from must be one of #{WORD_STRATEGIES.join(', ')}"
         end
@@ -115,6 +123,7 @@ module Nabu
         @word_from = word_from
         @varieties = varieties
         @proto_varieties = proto_varieties.to_set
+        @concept_notes = concept_notes
       end
 
       def read(cldf_dir)
@@ -262,6 +271,7 @@ module Nabu
                   else
                     "no reconstruction in this dataset — the concept heads the set"
                   end)
+        lines.concat(concept_note_lines(head || members.first.last, tables))
         lines << "set: #{set['Name'].strip}" if informative_name?(set, set_id, head)
         lines.concat(etymon_lines(set, tables))
         lines << "comment: #{set['Comment'].strip}" unless blank?(set["Comment"])
@@ -269,6 +279,28 @@ module Nabu
         lines << "(doubtful set)" if set["Doubt"].to_s.casecmp?("true")
         lines.concat(loan_lines(members, tables))
         nfc(lines.join("\n"))
+      end
+
+      # A dataset's declared extra concept columns (+concept_notes+, column
+      # => label), read off the concept-bearing form's parameters.csv row.
+      # A cell spelled as a Python list literal (pylexibank serializes
+      # zhangrgyalrong's Gloss_in_Source as "['斧']") is decoded to its
+      # items — a serialization, not upstream text; any other cell rides
+      # verbatim.
+      def concept_note_lines(form, tables)
+        parameter = tables.fetch(:parameters)[form["Parameter_ID"]] or return []
+        @concept_notes.filter_map do |column, label|
+          value = parameter[column].to_s.strip
+          next nil if value.empty?
+
+          "#{label}: #{python_list_items(value) || value}"
+        end
+      end
+
+      def python_list_items(value)
+        return nil unless value.match?(PY_LIST)
+
+        value.scan(/'([^']*)'/).flatten.map(&:strip).reject(&:empty?).join(", ")
       end
 
       # The set's own Name earns a body line unless it merely repeats the

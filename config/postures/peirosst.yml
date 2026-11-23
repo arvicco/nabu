@@ -1,0 +1,14 @@
+sources:
+  # The lexibank-cldf wave 2 (nc) — the shared reading in kitchensemitic.yml.
+  peirosst:
+    kind: {posture: unclassified, note: "a dictionary shelf — comparative wordlists with cognate
+        classes; kind folds documents only"}
+    lect: {posture: identity, note: "sit — the nabu-lects Sino-Tibetan anchor (no reconstructed
+        variety); members carry upstream's ISO codes bare — Old Chinese och resolving through
+        the codemap to zho:old, Mandarin cmn to zho, Written Tibetan bod on its anchor, the
+        Tibeto-Burman codes bare — and the 39 ISO-less varieties display-only"}
+    dating: {posture: undatable, note: "a reference dataset (Peiros 2004) — no dates"}
+    places: {posture: unplaced, note: "variety coordinates are doculect reference points, not
+        findspots — no place claim at dictionary grain"}
+    script: {posture: implied, note: "Peiros's database transcriptions (tone digits, Starostin's
+        Old Chinese) with the Chinese characters the Sinitic rows carry"}

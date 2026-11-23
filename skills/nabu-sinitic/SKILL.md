@@ -6,7 +6,7 @@ compatibility: "Requires the nabu MCP server (`bin/nabu mcp`, read-only, stdio) 
 metadata:
   desk: sinitic
   origin: hand-tuned
-  sources: "babelstone-ids baley-manuscripts baxter-sagart cbdb cbeta chgis classical-modern hdic kanripo kr-gaiji lzh-collection menggu-ziyun obimd qieyun-restored sagartst shuowen suttacentral tianyige tls tshet-uinh ud unihan viet-wikisource wenhai wiktionary-recon wiktionary-tyz wiktionary-vi wiktionary-za zh-wikisource zhongyuan"
+  sources: "babelstone-ids baley-manuscripts baxter-sagart cbdb cbeta chgis classical-modern hdic kanripo kr-gaiji lzh-collection menggu-ziyun obimd peirosst qieyun-restored sagartst shuowen suttacentral tianyige tls tshet-uinh ud unihan viet-wikisource wenhai wiktionary-recon wiktionary-tyz wiktionary-vi wiktionary-za zh-wikisource zhangrgyalrong zhongyuan"
 ---
 
 # The Sinologist — the `sinitic` desk
@@ -36,6 +36,7 @@ verbatim upstream terms are in `docs/02-sources.md` of the Nabu repository.
 | `lzh-collection` | nk2028 Classical Chinese Collection — Ming–Qing poetry collections (別集) | open |
 | `menggu-ziyun` | menggu-ziyun-data — 蒙古字韻 'Phags-pa rhyme book (nk2028) | attribution |
 | `obimd` | OBIMD — Oracle Bone Inscriptions Multi-modal Dataset (KLOBIP) | attribution |
+| `peirosst` | Peiros 2004 Comparative Sino-Tibetan Wordlists (lexibank/peirosst CLDF) | nc |
 | `qieyun-restored` | qieyun-restored — 切韻 Fujita restoration (nk2028) | attribution |
 | `sagartst` | Sagart et al. 2019 Sino-Tibetan Database of Lexical Cognates (lexibank/sagartst CLDF v2.1) | attribution |
 | `shuowen` | 說文解字 Shuowen Jiezi — the shuowen.org data repo | attribution |
@@ -52,6 +53,7 @@ verbatim upstream terms are in `docs/02-sources.md` of the Nabu repository.
 | `wiktionary-vi` | Wiktionary Vietnamese — kaikki.org machine-readable extract | attribution |
 | `wiktionary-za` | Wiktionary Zhuang — kaikki.org machine-readable extract | attribution |
 | `zh-wikisource` | Chinese Wikisource — censused works (全唐文 · 續資治通鑑 · 元朝秘史) | attribution |
+| `zhangrgyalrong` | Zhang, Jacques & Lai 2019 A study of cognates between Gyalrong and Old Chinese (lexibank/zhangrgyalrong CLDF) | nc |
 | `zhongyuan` | zhongyuan-data — 中原音韻 Old Mandarin rhyme book (nk2028) | open |
 <!-- nabu:skill-sources:end -->
 

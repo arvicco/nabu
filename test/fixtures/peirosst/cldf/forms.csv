@@ -1,0 +1,15 @@
+ID,Local_ID,Language_ID,Parameter_ID,Value,Form,Segments,Comment,Source,Cognacy,Loan,Graphemes,Profile
+Bodo-1_all-1,,Bodo,1_all,boʔj,boʔj,b o ʔ j,,Peiros2004,,,^ b o ʔ j $,default
+Dimasa-1_all-1,,Dimasa,1_all,kurup (Tib.?),kurup_,k u r u p,,Peiros2004,,,^ k u r u p _$,default
+Chepang-1_all-1,,Chepang,1_all,sə.bay NEP,səbay,s ə b a y,,Peiros2004,,,^ s ə b a y $,default
+Tamang-1_all-1,,Tamang,1_all,cam.3=ma   NEP?,cam³ma,ts a m ³ m a,,Peiros2004,,,^ c a m ³ m a $,default
+Jiarug-1_all-1,,Jiarug,1_all,[kə] tʃet TIB,_tʃet,tʃ e t,,Peiros2004,,,^_ tʃ e t $,default
+Motuo-M-1_all-1,,Motuo-M,1_all,tham ćeʔ  TIB,tham_ćeʔ,tʰ a m _ tsʲ e ʔ,,Peiros2004,,,^ th a m _ ć e ʔ $,default
+JianchuanBai-1_all-1,,JianchuanBai,1_all,"ca5 kɛ7, ci1 [LB *s-ćat]",ca⁵_kɛ⁸,ts a ⁵ _ k ɛ <<⁸>>,,Peiros2004,,,^ c a ⁵ _ k ɛ <⁸> $,default
+Horpa-1_all-1,,Horpa,1_all,thəm ćɛ TIB,thəm_ćɛ,tʰ ə m _ tsʲ ɛ,,Peiros2004,,,^ th ə m _ ć ɛ $,default
+CuonaM-1_all-1,,CuonaM,1_all,chaŋ.55 ma.53,chaŋ⁵⁵_ma⁵³,tsʰ a ŋ ⁵⁵ _ m a ⁵³,,Peiros2004,,,^ ch a ŋ ⁵⁵ _ m a ⁵³ $,default
+OldChinese-3_bark-1,,OldChinese,3_bark,bhaj 皮,bhaj_,b h a j,,Peiros2004,,,^ b h a j _$,default
+Beijing-3_bark-1,,Beijing,3_bark,pí 皮,pí_,p i,,Peiros2004,,,^ p í _$,default
+CHN-3_bark-1,,CHN,3_bark,p`i 12 p`i 11 (樹 )皮皮,p`i_¹²_p`i_¹¹_,p <<`>> i _ ¹ ² _ p <<`>> i _ ¹¹,,Peiros2004,,,^ p <`> i _ ¹ ² _ p <`> i _ ¹¹ _$,default
+Fuzhou-3_bark-1,,Fuzhou,3_bark,phui52 (chiu31 phui52),phui⁵²_,pʰ u i ⁵²,,Peiros2004,,,^ ph u i ⁵² _$,default
+Hakka-3_bark-1,,Hakka,3_bark,pi2 (su4 pi2),pi²_,p i ²,,Peiros2004,,,^ p i ² _$,default

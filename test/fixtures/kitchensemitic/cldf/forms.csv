@@ -1,0 +1,16 @@
+ID,Local_ID,Language_ID,Parameter_ID,Value,Form,Segments,Comment,Source,Cognacy,Loan,Graphemes,Profile
+Argobba-1_all-1,,Argobba,1_all,diyyu,dijju,d i j j u,,Bender1971;Kitchen2009,,,^ d i j j u $,Argobba
+Aramaic-2_ashes-1,,Aramaic,2_ashes,k'et'ma/rmu:ʕa:,kˤetˤma,kˤ e tˤ m a,,Kitchen2009;Rabin1975,,,^ kˤ e tˤ m a $,Aramaic
+Akkadian-2_ashes-1,,Akkadian,2_ashes,tumru/dikme:nu,tumru,t u m r u,,Kitchen2009;Rabin1975,,,^ t u m r u $,Akkadian
+Akkadian-2_ashes-2,,Akkadian,2_ashes,tumru/dikme:nu,dikme:nu,d i k m eː n u,,Kitchen2009;Rabin1975,,,^ d i k m e: n u $,Akkadian
+Geez-17_dog-1,,Geez,17_dog,kɛlb,kɛlb,k ɛ l b,,Bender1971;Kitchen2009,,,^ k ɛ l b $,Geez
+Tigre-17_dog-1,,Tigre,17_dog,kalɨb,kalɨb,k a l ɨ b,,Bender1971;Kitchen2009,,,^ k a l ɨ b $,Tigre
+Tigrinya-17_dog-1,,Tigrinya,17_dog,kɛlbi,kɛlbi,k ɛ l b i,,Bender1971;Kitchen2009,,,^ k ɛ l b i $,Tigrinya
+Hebrew-17_dog-1,,Hebrew,17_dog,keleβ,keleβ,k e l e β,,Kitchen2009;Rabin1975,,,^ k e l e β $,Hebrew
+Ugaritic-17_dog-1,,Ugaritic,17_dog,klb,klb,k l b,,Kitchen2009;Rabin1975,,,^ k l b $,Ugaritic
+Aramaic-17_dog-1,,Aramaic,17_dog,kalba:,kalba:,k a l b aː,,Kitchen2009;Rabin1975,,,^ k a l b a: $,Aramaic
+Akkadian-17_dog-1,,Akkadian,17_dog,kalbu,kalbu,k a l b u,,Kitchen2009;Rabin1975,,,^ k a l b u $,Akkadian
+Gibbali-17_dog-1,,Gibbali,17_dog,kɔlɔb,kɔlɔb,k ɔ l ɔ b,,Johnstone1981;Kitchen2009,,,^ k ɔ l ɔ b $,Gibbali
+Soqotri-17_dog-1,,Soqotri,17_dog,kalb,kalb,k a l b,,Kitchen2009;Leslau1938,,,^ k a l b $,Soqotri
+MoroccanArabic-17_dog-1,,MoroccanArabic,17_dog,kelb,kelb,k e l b,,Kitchen2009;Sobelman1963,,,^ k e l b $,MoroccanArabic
+OgadenArabic-17_dog-1,,OgadenArabic,17_dog,kalb,kalb,k a l b,,Bender1971;Kitchen2009,,,^ k a l b $,OgadenArabic

@@ -6,7 +6,7 @@ compatibility: "Requires the nabu MCP server (`bin/nabu mcp`, read-only, stdio) 
 metadata:
   desk: etym
   origin: hand-tuned
-  sources: "acd calfa-lexicon cldf-spine clics csd derom dyenindoeuropean edl etruscan-loans iecor liv mcd meloniromance nabu-lects sabellic-loans saenkoromance sagartst starling tlopo uralex westoldturkic wiktionary-recon wold"
+  sources: "acd calfa-lexicon cldf-spine clics csd derom dyenindoeuropean edl etruscan-loans iecor kitchensemitic liv mcd meloniromance nabu-lects peirosst sabellic-loans saenkoromance sagartst starling tlopo uralex westoldturkic wiktionary-recon wold zhangrgyalrong"
 ---
 
 # The Comparative Indo-Europeanist — the `etym` desk
@@ -33,10 +33,12 @@ verbatim upstream terms are in `docs/02-sources.md` of the Nabu repository.
 | `edl` | de Vaan — Etymological Dictionary of Latin (Brill 2008), LiLa LOD skeleton (CIRCSE) | nc |
 | `etruscan-loans` | Etruscan → Latin loans — en.wiktionary curation | attribution |
 | `iecor` | IE-CoR — Indo-European Cognate Relationships database (lexibank/iecor v1.2.1) | attribution |
+| `kitchensemitic` | Kitchen et al. 2009 Bayesian phylogenetic analysis of Semitic languages (lexibank/kitchensemitic CLDF v2.1) | nc |
 | `liv` | LIV — Lexikon der indogermanischen Verben (Rix 2001), LiLa LOD (CIRCSE) | attribution |
 | `mcd` | Micronesian Comparative Dictionary (Bender et al. 2003; lexibank/mcd CLDF v2.0) | attribution |
 | `meloniromance` | Meloni et al. 2021 Romance cognate sets (lexibank/meloniromance CLDF) | attribution |
 | `nabu-lects` | nabu-lects — the lect registry (anchor x stage x variety x orthography resolver) | attribution |
+| `peirosst` | Peiros 2004 Comparative Sino-Tibetan Wordlists (lexibank/peirosst CLDF) | nc |
 | `sabellic-loans` | Sabellic → Latin loans — en.wiktionary curation (Oscan/Umbrian/Sabine) | attribution |
 | `saenkoromance` | Saenko 2015 annotated Swadesh wordlists for the Romance group (lexibank/saenkoromance CLDF v1.1) | attribution |
 | `sagartst` | Sagart et al. 2019 Sino-Tibetan Database of Lexical Cognates (lexibank/sagartst CLDF v2.1) | attribution |
@@ -46,6 +48,7 @@ verbatim upstream terms are in `docs/02-sources.md` of the Nabu repository.
 | `westoldturkic` | West Old Turkic — Turkic loanwords in Hungarian (Róna-Tas & Berta 2011, CLDF) | attribution |
 | `wiktionary-recon` | Wiktionary reconstructions + attested Celtic, Italic, Etruscan, Old Japanese and Chinese — kaikki.org machine-readable extracts (Proto-Slavic, PIE, Proto-Germanic, Proto-Balto-Slavic, Proto-West Germanic, Proto-Italic, Proto-Indo-Iranian; Old Irish, Middle Irish, Middle Welsh, Umbrian, Etruscan, Chinese) | attribution |
 | `wold` | WOLD — World Loanword Database (Haspelmath & Tadmor eds.; lexibank/wold v4.2) | attribution |
+| `zhangrgyalrong` | Zhang, Jacques & Lai 2019 A study of cognates between Gyalrong and Old Chinese (lexibank/zhangrgyalrong CLDF) | nc |
 <!-- nabu:skill-sources:end -->
 
 ## What the shelves hold

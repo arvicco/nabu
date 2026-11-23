@@ -115,7 +115,7 @@ The Sabellic, Etruscan, Venetic and Raetic epigraphic shelves (CEIPoM, ItAnt, th
 
 The reconstruction shelves: the kaikki proto-extracts, IE-CoR cognacy, LIV, the Leiden Latin dictionary, StarLing's bases, and the curated loan edges. Non-IE lanes of the same shelves ride their own axes too — dual-tagging, never folding.
 
-**Members** (23): `acd`, `calfa-lexicon`, `cldf-spine`, `clics`, `csd`, `derom`, `dyenindoeuropean`, `edl`, `etruscan-loans`, `iecor`, `liv`, `mcd`, `meloniromance`, `nabu-lects`, `sabellic-loans`, `saenkoromance`, `sagartst`, `starling`, `tlopo`, `uralex`, `westoldturkic`, `wiktionary-recon`, `wold`
+**Members** (26): `acd`, `calfa-lexicon`, `cldf-spine`, `clics`, `csd`, `derom`, `dyenindoeuropean`, `edl`, `etruscan-loans`, `iecor`, `kitchensemitic`, `liv`, `mcd`, `meloniromance`, `nabu-lects`, `peirosst`, `sabellic-loans`, `saenkoromance`, `sagartst`, `starling`, `tlopo`, `uralex`, `westoldturkic`, `wiktionary-recon`, `wold`, `zhangrgyalrong`
 
 ### biblical
 
@@ -123,7 +123,7 @@ The reconstruction shelves: the kaikki proto-extracts, IE-CoR cognacy, LIV, the 
 
 The cross-language scripture hat: the Masoretic shelves and the Scrolls, the Greek NT, Vulgate and WEB, Peshitta and the Syriac corpus, Coptic Scriptorium, the Targums, and the OSHB-BHSA bridging module. The hebrew and syriac language desks coexist with this hat by design.
 
-**Members** (29): `betamasaheft-works`, `bhsa`, `bridging`, `cntr`, `coptic-scriptorium`, `dss`, `dtucph-sp`, `ebible-pacific`, `elizabeth-bible`, `eng-web`, `etcbc-syriac`, `etcbc-syrnt`, `etcbc-targum`, `extrabiblical`, `hebrew-lexicon`, `hexapla`, `macula-greek`, `opengnt`, `oshb`, `peshitta`, `sblgnt`, `sdbh`, `sefaria`, `stepbible-tagnt`, `syriac-corpus`, `syriac-htr-gt`, `typikon-bible`, `ud`, `vulgate`
+**Members** (30): `betamasaheft-works`, `bhsa`, `bridging`, `cntr`, `coptic-scriptorium`, `dss`, `dtucph-sp`, `ebible-pacific`, `elizabeth-bible`, `eng-web`, `etcbc-syriac`, `etcbc-syrnt`, `etcbc-targum`, `extrabiblical`, `hebrew-lexicon`, `hexapla`, `macula-greek`, `ntvmr`, `opengnt`, `oshb`, `peshitta`, `sblgnt`, `sdbh`, `sefaria`, `stepbible-tagnt`, `syriac-corpus`, `syriac-htr-gt`, `typikon-bible`, `ud`, `vulgate`
 
 ### hebrew
 
@@ -236,7 +236,7 @@ Epigraphy-first, opening on the DHARMA corpora: the Old Khmer inscriptions (the 
 
 Literary and classical Chinese with its reconstruction instruments: Kanripo and CBETA, TLS, Baxter-Sagart and the Qieyun-system database, Unihan, the Heian hanzi dictionaries, the UD lzh treebanks, SuttaCentral's Agamas, the kaikki zh extract riding wiktionary-recon — the Đại Việt classical shelf (the sinographic cosmopolis reaching Vietnam, as sillok reaches Korea) — and the desk's instruments: the CHGIS historical gazetteer (TGAZ placenames, 221 BCE–1911) and the CBDB prosopography artifact (~658k persons, held for the persons-layer ruling).
 
-**Members** (30): `babelstone-ids`, `baley-manuscripts`, `baxter-sagart`, `cbdb`, `cbeta`, `chgis`, `classical-modern`, `hdic`, `kanripo`, `kr-gaiji`, `lzh-collection`, `menggu-ziyun`, `obimd`, `qieyun-restored`, `sagartst`, `shuowen`, `suttacentral`, `tianyige`, `tls`, `tshet-uinh`, `ud`, `unihan`, `viet-wikisource`, `wenhai`, `wiktionary-recon`, `wiktionary-tyz`, `wiktionary-vi`, `wiktionary-za`, `zh-wikisource`, `zhongyuan`
+**Members** (32): `babelstone-ids`, `baley-manuscripts`, `baxter-sagart`, `cbdb`, `cbeta`, `chgis`, `classical-modern`, `hdic`, `kanripo`, `kr-gaiji`, `lzh-collection`, `menggu-ziyun`, `obimd`, `peirosst`, `qieyun-restored`, `sagartst`, `shuowen`, `suttacentral`, `tianyige`, `tls`, `tshet-uinh`, `ud`, `unihan`, `viet-wikisource`, `wenhai`, `wiktionary-recon`, `wiktionary-tyz`, `wiktionary-vi`, `wiktionary-za`, `zh-wikisource`, `zhangrgyalrong`, `zhongyuan`
 
 ### japonic
 

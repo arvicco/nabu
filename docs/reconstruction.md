@@ -77,11 +77,11 @@ bin/nabu sync --all
 
 `enable all` covers every ungated source; `sync --all` is network-bound and runs in parallel across sources, serially within one.
 
-### Re-crawled on the paced rail — `rail_paced`, 6 sources
+### Re-crawled on the paced rail — `rail_paced`, 7 sources
 
 Each upstream is harvested by a polite paced crawl that resumes slice by slice: a full re-crawl is months-class wall clock. `rake rail:plan` prints the lanes and `rake rail:step[SLUG]` runs one yield-guarded slice; one slice proves the recipe, the rest is calendar time.
 
-`damos`, `korpus16`, `mdz-protestant`, `ndl-kotenseki`, `pleias-french-books`, `wellcome`.
+`damos`, `korpus16`, `mdz-protestant`, `ndl-kotenseki`, `ntvmr`, `pleias-french-books`, `wellcome`.
 
 ### Re-acquired by a manual recipe — `manual`, 14 sources
 

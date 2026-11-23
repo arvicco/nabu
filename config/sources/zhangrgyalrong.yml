@@ -1,0 +1,16 @@
+zhangrgyalrong:
+  adapter: Nabu::Adapters::Zhangrgyalrong
+  adopted: "2026-11-23"
+  axes: [etym, sinitic]
+  wired: true
+                 # Expected (full-scale dry parse 2026-11-23): 122 entries /
+                 # 603 reflex rows; no unjudged forms.
+  sync_policy: manual
+  # Zhang, Jacques & Lai 2019, A study of cognates between Gyalrong and
+  # Old Chinese (Journal of Language Relationship 17/1), lexibank CLDF
+  # edition (CC BY-NC 4.0): Old Chinese (Baxter-Sagart), Middle Chinese,
+  # Cogtse and Brag-bar Situ, Japhug, Zbu and Classical Tibetan — 122
+  # cognate sets headed by their concept, each carrying the Chinese
+  # character its Old/Middle Chinese rows read. Never released: sparse
+  # GitFetch of the default branch (head 51cdc519 at intake). The source
+  # Value is the reflex word. Dictionary language `sit`.

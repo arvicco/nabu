@@ -1,0 +1,22 @@
+# Nabu fixture manifest (P5-4 "fixture sentinel"). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+source: zhangrgyalrong
+adapter_test:
+retrieved: "2026-11-23"
+files:
+  - path: cldf/cognates.csv
+    url: https://raw.githubusercontent.com/lexibank/zhangrgyalrong/51cdc51964a9a3c0d194f01b6d1ab89c56db2613/cldf/cognates.csv
+    whole: false
+    trim: 15 records kept — the README recipe
+  - path: cldf/forms.csv
+    url: https://raw.githubusercontent.com/lexibank/zhangrgyalrong/51cdc51964a9a3c0d194f01b6d1ab89c56db2613/cldf/forms.csv
+    whole: false
+    trim: 15 records kept — the README recipe
+  - path: cldf/languages.csv
+    url: https://raw.githubusercontent.com/lexibank/zhangrgyalrong/51cdc51964a9a3c0d194f01b6d1ab89c56db2613/cldf/languages.csv
+    whole: false
+    trim: 6 records kept — the README recipe
+  - path: cldf/parameters.csv
+    url: https://raw.githubusercontent.com/lexibank/zhangrgyalrong/51cdc51964a9a3c0d194f01b6d1ab89c56db2613/cldf/parameters.csv
+    whole: false
+    trim: 3 records kept — the README recipe

@@ -19,9 +19,9 @@ A source wears every desk it serves — these three answer this desk. Holdings a
 |---|---|---|---|---|
 | `ceipp-rongorongo` | texts | nc | wired · manual | 25 docs / 314 passages |
 | `ebible-pacific` | texts | open | wired · manual | 100 docs / 48,762 passages |
-| `niupepa` | texts | research_private | wired · manual | 978 docs / 8,814 passages |
+| `niupepa` | texts | research_private | wired · manual | 1,343 docs / 12,635 passages |
 
-**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 23 November 2026)</span>: `mri` 978 · `haw` 66 · `pon` 28 · `rap` 25 · `cha` 6.
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 23 November 2026)</span>: `mri` 1,343 · `haw` 66 · `pon` 28 · `rap` 25 · `cha` 6.
 
 ## The desk's instruments
 

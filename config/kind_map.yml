@@ -1670,6 +1670,8 @@ sources:
     source_kind: scripture   # the Greek NT amalgam — every document a NT book
   cntr:
     source_kind: scripture   # NT witnesses — every passage a verse of the Greek NT (class 2/3 carry only the quoted verses)
+  ntvmr:
+    source_kind: scripture   # Greek NT manuscripts — every passage a verse (or a page) of a NT witness
   oshb:
     source_kind: scripture
   bhsa:
