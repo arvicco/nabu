@@ -81,4 +81,44 @@ class ReusePoolTest < Minitest::Test
     error = assert_raises(Nabu::ReusePool::WorkerError) { failing.map(Array.new(6) { big }) { |_result| nil } }
     assert_match(/reuse worker 0 failed on task -1: ArgumentError: no handle/, error.message)
   end
+
+  # A fork failing partway through the pool's start (EAGAIN on a loaded
+  # box) must still reap every worker already forked — they hold request
+  # pipes only the parent can close, and would otherwise block forever.
+  def test_a_fork_failure_mid_start_reaps_the_workers_already_forked
+    forked = []
+    calls = 0
+    partial = pool(3)
+    real = partial.method(:fork)
+    partial.define_singleton_method(:fork) do |&block|
+      calls += 1
+      raise Errno::EAGAIN, "fork" if calls == 2
+
+      real.call(&block).tap { |pid| forked << pid }
+    end
+    assert_raises(Errno::EAGAIN) { partial.map(1..4) { |_result| nil } }
+    assert_equal 1, forked.size
+    forked.each { |pid| assert_raises(Errno::ECHILD, "worker #{pid} reaped") { Process.wait(pid, Process::WNOHANG) } }
+  ensure
+    forked.each do |pid|
+      Process.kill("KILL", pid)
+      Process.wait(pid)
+    rescue Errno::ESRCH, Errno::ECHILD
+      nil
+    end
+  end
+
+  # A pump whose read fails with anything at all still posts its
+  # worker-gone sentinel — a silently dead pump would leave the parent
+  # blocked on the result queue forever.
+  def test_a_pump_read_error_still_posts_the_worker_gone_sentinel
+    subject = pool(2)
+    queue = Thread::Queue.new
+    subject.instance_variable_set(:@queue, queue)
+    broken = Object.new
+    def broken.read(*) = raise(Errno::EIO)
+    worker = Nabu::ReusePool::Worker.new(0, 0, nil, broken, 0, false)
+    subject.send(:pump, worker)
+    assert_equal [worker, nil], queue.pop(timeout: 1)
+  end
 end

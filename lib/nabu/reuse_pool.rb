@@ -74,10 +74,15 @@ module Nabu
       [@finish&.call(state)]
     end
 
+    # The pool is built one fork at a time so a fork failing partway (EAGAIN
+    # on a loaded box) leaves every worker already forked in @pool for the
+    # shutdown to reap.
     def forked(tasks, &)
-      @pool = Array.new(@workers) { |index| fork_worker(index) }
+      @pool = []
+      @pumps = []
       @queue = Thread::Queue.new
       @held = []
+      @workers.times { |index| @pool << fork_worker(index) }
       @pumps = @pool.map { |worker| Thread.new { pump(worker) } }
       clean = false
       drive(tasks.each_entry, &)
@@ -194,12 +199,15 @@ module Nabu
       finals.sort.map(&:last)
     end
 
+    # The worker-gone sentinel is posted on EVERY exit — a pump dying
+    # silently would leave the parent blocked on the queue forever.
     def pump(worker)
       while (frame = read_frame(worker.results))
         @queue << [worker, frame]
       end
-      @queue << [worker, nil]
-    rescue IOError
+    rescue IOError, SystemCallError
+      nil # the read end is gone; the sentinel below reports the worker
+    ensure
       @queue << [worker, nil]
     end
 
