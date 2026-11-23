@@ -44,6 +44,32 @@ module Nabu
         db&.disconnect
       end
 
+      # Rewrite ONE source's stamp against current code (the write path the
+      # by-proof mode, Ops::StampProof, reuses for each proven source).
+      def rebless_source(db, fingerprints, entry, out)
+        old_stamp = Store::DerivationStamp.fetch(db, entry.slug)
+        languages = Store::DerivationStamp.derived_languages(db, entry.slug)
+        fingerprint = fingerprints.for_source(entry, languages: languages)
+        Store::DerivationStamp.stamp!(db, slug: entry.slug, fingerprint: fingerprint)
+        old_short = old_stamp ? old_stamp[:fingerprint][0, 12] : "(unstamped)"
+        if fingerprint.weak?
+          out.puts "  cleared #{entry.slug} #{old_short} -> (weak identity — never skipped)"
+        else
+          out.puts "  rebless #{entry.slug} #{old_short} -> #{fingerprint.short}"
+        end
+      end
+
+      # Shared with Ops::StampProof: a landed migration means nothing to rebless.
+      def refuse_schema_drift!(db)
+        applied = db.table_exists?(:schema_info) ? db[:schema_info].get(:version).to_i : 0
+        latest = DerivationFingerprint.migration_level
+        return if applied == latest
+
+        raise Nabu::Error,
+              "catalog schema v#{applied} != code v#{latest} — a migration landed; " \
+              "there is nothing to rebless: full rebuild required"
+      end
+
       private
 
       def refuse_attestation!(attestation)
@@ -75,29 +101,6 @@ module Nabu
           rebless_source(db, fingerprints, entry, out)
         end
         report_orphans(db, out)
-      end
-
-      def rebless_source(db, fingerprints, entry, out)
-        old_stamp = Store::DerivationStamp.fetch(db, entry.slug)
-        languages = Store::DerivationStamp.derived_languages(db, entry.slug)
-        fingerprint = fingerprints.for_source(entry, languages: languages)
-        Store::DerivationStamp.stamp!(db, slug: entry.slug, fingerprint: fingerprint)
-        old_short = old_stamp ? old_stamp[:fingerprint][0, 12] : "(unstamped)"
-        if fingerprint.weak?
-          out.puts "  cleared #{entry.slug} #{old_short} -> (weak identity — never skipped)"
-        else
-          out.puts "  rebless #{entry.slug} #{old_short} -> #{fingerprint.short}"
-        end
-      end
-
-      def refuse_schema_drift!(db)
-        applied = db.table_exists?(:schema_info) ? db[:schema_info].get(:version).to_i : 0
-        latest = DerivationFingerprint.migration_level
-        return if applied == latest
-
-        raise Nabu::Error,
-              "catalog schema v#{applied} != code v#{latest} — a migration landed; " \
-              "there is nothing to rebless: full rebuild required"
       end
 
       # Stamps for slugs with no replayable canonical tree are left alone and

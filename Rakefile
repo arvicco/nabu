@@ -270,6 +270,28 @@ namespace :stamps do
       abort e.message
     end
   end
+
+  # The BY-PROOF sibling (Nabu::Ops::StampProof): for semantic no-op
+  # refactors (pure moves) that dirty every stamp. Each DIRTY source whose
+  # drift is code-only re-parses a deterministic stratified sample through
+  # current code WITHOUT writing the catalog; byte-identical => that
+  # source's stamp is reblessed, any divergence => it stays dirty, named.
+  # Never fetches. Its own attestation: canonical unchanged since stamping.
+  desc "Rebless dirty stamps proven by a re-parse sample (owner-only; requires attestation[,sample])"
+  task :rebless_by_proof, %i[attestation sample] do |_task, args|
+    $LOAD_PATH.unshift(File.expand_path("lib", __dir__))
+    require "nabu"
+
+    $stdout.sync = true
+    config = Nabu::Config.load
+    registry = Nabu::SourceRegistry.load(config.sources_path)
+    begin
+      Nabu::Ops::StampProof.new(config: config, registry: registry)
+                           .run(attestation: args[:attestation], sample: args[:sample])
+    rescue Nabu::Error => e
+      abort e.message
+    end
+  end
 end
 
 # The clarify lane (nabu_clarify's title index) re-derived standalone over
