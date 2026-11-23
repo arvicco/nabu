@@ -91,7 +91,8 @@ module Nabu
     # The OVERRUN line: a stage that announced a ledger estimate and is
     # still open at OVERRUN_FACTOR × it earns one line — informational,
     # never a kill (the rebuild arms none by default; see deadline_for).
-    # Floored so a seconds-scale estimate cannot shout over cache noise.
+    # const: a policy ratio and floor, not a corpus measurement — floored
+    # so a seconds-scale estimate cannot shout over cache noise.
     OVERRUN_FACTOR = 2
     OVERRUN_FLOOR_SECONDS = 5 * 60
 

@@ -34,12 +34,13 @@ module Nabu
     # drops and recreates these files, so a snapshot mid-run is a
     # snapshot of a half-built index.
     #
-    # RESTORE (documented, not automated): with nothing holding db/ open
-    # (no sync, MCP server or rebuild — `lsof +D db` is empty), remove each
-    # db's file AND its -wal/-shm sidecars (Store.drop_database_files!'s
-    # rule: a copied-back main file beside a stale -wal is the trap above),
-    # then copy the snapshot files back into db/. The first read-write
-    # connect re-arms WAL. Stamp sanity: the derivation stamps live INSIDE
+    # RESTORE (`rake "db:restore[SNAPSHOT_DIR]"`, .restore!): with nothing
+    # holding db/ open (no sync, MCP server or rebuild — refused otherwise,
+    # the holders named), remove each db's file AND its -wal/-shm sidecars
+    # (Store.drop_database_files!'s rule: a copied-back main file beside a
+    # stale -wal is the trap above), then copy the snapshot files back into
+    # db/. Only the files the snapshot holds are replaced. The first
+    # read-write connect re-arms WAL. Stamp sanity: the derivation stamps live INSIDE
     # the catalog, so a restored catalog carries the stamps of its
     # snapshot moment — any code merged since reads dirty to
     # `nabu rebuild --incremental --dry-run` (the honest answer, never a
@@ -84,6 +85,42 @@ module Nabu
         @out.puts("SUMMARY db:snapshot — #{entries.size} file(s), #{human(result.bytes)} into #{@target} " \
                   "in #{format_duration(result.seconds)} (a cache of derived state; restore: the task's comment)")
         result
+      end
+
+      # Put a snapshot back into +db_dir+ (the RESTORE above). Refuses —
+      # nothing touched — on a source without *.sqlite3 files, a rebuild in
+      # progress, or any process holding one of the db files it would
+      # replace (+holders+: [[pid, command, path]] for the paths; default
+      # the lsof probe). Returns the restored Entry list.
+      def self.restore!(source:, db_dir:, rebuild_check: -> {}, holders: nil, out: $stdout)
+        holders ||= RebuildPreflight.method(:lsof_holders)
+        source = source.to_s.strip
+        raise Refused, "name the snapshot dir: rake \"db:restore[SNAPSHOT_DIR]\"" if source.empty?
+
+        files = Dir.glob(File.join(source, "*.sqlite3"))
+        raise Refused, "no *.sqlite3 files in #{source}" if files.empty?
+
+        reason = rebuild_check.call
+        raise Refused, "a rebuild is in progress — #{reason}" if reason
+
+        targets = files.map { |path| File.join(db_dir, File.basename(path)) }
+        live = targets.flat_map { |path| [path, "#{path}-wal", "#{path}-shm"] }.select { |path| File.exist?(path) }
+        held = holders.call(live)
+        unless held.empty?
+          named = held.map { |pid, command, path| "pid #{pid} (#{command}) holds #{File.basename(path)}" }
+          raise Refused, "db files are open — stop these first: #{named.uniq.join('; ')}"
+        end
+
+        FileUtils.mkdir_p(db_dir)
+        entries = files.zip(targets).map do |from, to|
+          Store.drop_database_files!(to)
+          FileUtils.cp(from, to)
+          Entry.new(name: File.basename(to), bytes: File.size(to), seconds: 0.0)
+        end
+        out.puts("SUMMARY db:restore — #{entries.size} file(s), #{human(entries.sum(&:bytes))} from #{source} into " \
+                 "#{db_dir} (sidecars dropped first). Stamps are the snapshot's: code merged since reads dirty to " \
+                 "`bin/nabu rebuild --incremental --dry-run`; re-run syncs landed after the snapshot.")
+        entries
       end
 
       def self.human(bytes)

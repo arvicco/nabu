@@ -111,7 +111,7 @@ module Nabu
       # The seams (+free_bytes+, +holders+, +ps_output+) default to the
       # real probes; tests hand in their own.
       def initialize(db_dir:, catalog_path:, fulltext_path:, canonical_dir:, slugs:, ledger: nil,
-                     free_bytes: method(:df_free_bytes), holders: method(:lsof_holders),
+                     free_bytes: method(:df_free_bytes), holders: RebuildPreflight.method(:lsof_holders),
                      ps_output: -> { GitHooks.ps_output }, own_pids: [Process.pid, Process.ppid])
         @db_dir = db_dir
         @catalog_path = catalog_path
@@ -185,7 +185,8 @@ module Nabu
       # [[pid, command, path]] of processes holding any of +paths+ open.
       # One lsof per path: lsof exits 1 for a name nobody holds, and a
       # multi-name call would drop the holders of the others with it.
-      def lsof_holders(paths)
+      # Shared with DbSnapshot.restore!'s open-handle refusal.
+      def self.lsof_holders(paths)
         paths.flat_map do |path|
           Shell.run("lsof", "-nP", "-Fpc", "--", path).then { |out| holder_rows(out, path) }
         rescue Shell::Error
@@ -193,7 +194,7 @@ module Nabu
         end
       end
 
-      def holder_rows(output, path)
+      def self.holder_rows(output, path)
         rows = []
         output.each_line do |line|
           case line[0]

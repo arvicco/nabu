@@ -302,7 +302,8 @@ class DerivabilityWritersTest < Minitest::Test
   # (db/.index-writer-<pid>.heartbeat — the last progress event, its mtime
   # the tick age the forked watcher reads), removed when the supervised
   # command ends, plus its lines into a caller-named log file when one is
-  # given (the suite) — run-scoped scratch, never persistent state.
+  # given (the suite; the full rebuild's run log) — run-scoped scratch,
+  # never persistent state.
   # ops/reconstruction/manifest writes ONE file, the portable reference
   # manifest, only to a caller-named path (--out, or the export
   # destination beside the materialized backup set) — an EXPORT, derived
@@ -330,8 +331,21 @@ class DerivabilityWritersTest < Minitest::Test
   # pass completes — TRANSIENT run-state beside the derived catalog it
   # slims, ignored once a rebuild recreates the catalog, never read by a
   # rebuild (the index_watcher heartbeat law kind).
+  # ops/rebuild_census (`rake rebuild:census`) writes ONE file per capture
+  # under local/rebuild/ (census-<UTC stamp>.json: per-source counts, db
+  # file sizes, quarantine baselines — never overwritten) — the
+  # proof_cadence law kind: loop/owner-written operational state read only
+  # by `rake rebuild:verify`, never by a rebuild. ops/db_snapshot's
+  # restore (`rake "db:restore[DIR]"`) copies an owner-named snapshot's
+  # files back into db/ (FileUtils.cp after dropping each file with its
+  # sidecars) — derived data replacing derived data, the DERIVED law kind.
+  # (ops/run_log appends a run's own log in the drill's log home,
+  # ~/Library/Logs/nabu — disposable ops evidence outside the permanent
+  # folders, the ops/drill law kind; it opens with File.open, so the
+  # pattern below does not see it — named here so the census stays whole.)
   WRITER_ALLOWLIST = %w[
     nabu/store/text_normalized_diet.rb
+    nabu/ops/rebuild_census.rb nabu/ops/db_snapshot.rb
     nabu/index_watcher.rb
     nabu/ops/reconstruction/manifest.rb
     nabu/demo_build.rb

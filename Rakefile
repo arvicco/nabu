@@ -127,6 +127,93 @@ namespace :db do
   rescue Nabu::Ops::DbSnapshot::Refused => e
     abort "db:snapshot refused — #{e.message}"
   end
+
+  # The snapshot's restore (Nabu::Ops::DbSnapshot.restore!): drops each
+  # replaced db file WITH its -wal/-shm sidecars, then copies the snapshot
+  # back. Refuses while a rebuild runs or any process (an MCP server, a
+  # sync) holds one of those files open — the holders are named.
+  desc "Restore db/*.sqlite3 from a db:snapshot dir (sidecars dropped first; refuses open holders " \
+       "and a running rebuild) (db:restore[snapshot_dir])"
+  task :restore, %i[snapshot_dir] do |_t, args|
+    $LOAD_PATH.unshift(File.expand_path("lib", __dir__))
+    require "nabu"
+    require "nabu/ops/db_snapshot"
+    require "nabu/ops/rebuild_preflight"
+
+    config = Nabu::Config.load
+    rebuild_check = lambda do
+      ledger = File.file?(config.history_path) ? Nabu::Store.connect(config.history_path, readonly: true) : nil
+      Nabu::Ops::DbSnapshot.rebuild_in_progress(ledger: ledger, ps_output: Nabu::Ops::GitHooks.ps_output)
+    ensure
+      ledger&.disconnect
+    end
+    Nabu::Ops::DbSnapshot.restore!(source: args[:snapshot_dir], db_dir: config.db_dir, rebuild_check: rebuild_check)
+  rescue Nabu::Ops::DbSnapshot::Refused => e
+    abort "db:restore refused — #{e.message}"
+  end
+end
+
+# The full rebuild's before/after pair around the owner-fired `nabu rebuild`
+# (runbook: docs/ops.md "The full rebuild — census, rebuild, verify").
+# rebuild:census captures the BEFORE picture (Nabu::Ops::RebuildCensus — O(1)
+# reads, one JSON file under local/rebuild/); rebuild:verify is the ONE
+# read-only AFTER command (Nabu::Ops::RebuildVerify): every check a labeled
+# PASS/WARN/FAIL/SKIP line, heavy checks announced with their cost first,
+# exit 1 on any FAIL. QUICK=1 skips the heavy checks (integrity, inspect);
+# FULL_INTEGRITY=1 runs integrity_check instead of quick_check; SAMPLE/SEED
+# size the aggregates recount.
+namespace :rebuild do
+  desc "Capture the pre-rebuild census (per-source counts, db file sizes) into local/rebuild/ — before nabu rebuild"
+  task :census do
+    $LOAD_PATH.unshift(File.expand_path("lib", __dir__))
+    require "nabu"
+    require "nabu/ops/rebuild_census"
+
+    config = Nabu::Config.load
+    abort "rebuild:census — no catalog at #{config.catalog_path}" unless File.file?(config.catalog_path)
+    catalog = Nabu::Store.connect(config.catalog_path, readonly: true)
+    ledger = (Nabu::Store.connect(config.history_path, readonly: true) if File.file?(config.history_path))
+    path, census = Nabu::Ops::RebuildCensus.capture!(catalog: catalog, db_dir: config.db_dir,
+                                                     local_dir: config.local_dir, ledger: ledger)
+    totals = census.fetch("totals")
+    puts "SUMMARY rebuild:census — #{census.fetch('sources').size} sources · #{totals['documents_count']} documents " \
+         "· #{totals['passages_count']} passages · #{totals['behind_sources']} fulltext-behind · " \
+         "#{census.fetch('files').size} db file(s), " \
+         "#{Nabu::Ops::DbSnapshot.human(census.fetch('files').values.sum)} → #{path}"
+  rescue Nabu::Ops::RebuildCensus::Refused => e
+    abort "rebuild:census refused — #{e.message}"
+  ensure
+    catalog&.disconnect
+    ledger&.disconnect
+  end
+
+  desc "Verify the latest full rebuild against its census — one read-only command, PASS/WARN/FAIL/SKIP per " \
+       "check, exit 1 on FAIL (QUICK=1 skips the heavy checks; FULL_INTEGRITY=1)"
+  task :verify do
+    $LOAD_PATH.unshift(File.expand_path("lib", __dir__))
+    require "nabu"
+    require "nabu/ops/rebuild_verify"
+
+    $stdout.sync = true
+    config = Nabu::Config.load
+    registry = Nabu::SourceRegistry.load(config.sources_path)
+    abort "rebuild:verify — no catalog at #{config.catalog_path}" unless File.file?(config.catalog_path)
+    catalog = Nabu::Store.connect(config.catalog_path, readonly: true)
+    fulltext = (Nabu::Store.connect_fulltext(config.fulltext_path, readonly: true) if File.file?(config.fulltext_path))
+    ledger = (Nabu::Store.connect(config.history_path, readonly: true) if File.file?(config.history_path))
+    stamps_plan = -> { Nabu::IncrementalRebuild.new(config: config, registry: registry).plan }
+    report = Nabu::Ops::RebuildVerify.new(
+      catalog: catalog, fulltext: fulltext, ledger: ledger, db_dir: config.db_dir, local_dir: config.local_dir,
+      cjk_slugs: registry.cjk_slugs, fuzzy_slugs: registry.fuzzy_slugs, stamps_plan: stamps_plan,
+      quick: ENV["QUICK"] == "1", full_integrity: ENV["FULL_INTEGRITY"] == "1",
+      sample: Integer(ENV.fetch("SAMPLE", "8"), 10), seed: Integer(ENV.fetch("SEED", "1"), 10)
+    ).run!
+    abort "rebuild:verify FAILED — #{report.count(:fail)} check(s) failed (see above)" if report.failed?
+  ensure
+    catalog&.disconnect
+    fulltext&.disconnect
+    ledger&.disconnect
+  end
 end
 
 # The text_normalized diet's reclaim pass (Nabu::Store::TextNormalizedDiet

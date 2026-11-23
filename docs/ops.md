@@ -685,7 +685,10 @@ On this box run them as `bundle exec rake …` (§2).
 | `rake site:check` | Drift check: source-dossier descriptions vs docs/library.md. | Exit 1 on drift; never generates. |
 | `rake docs:verify` / `rake "docs:verify[network]"` | Run the taught command flows (both quickstarts, the README install block, the MCP recipes) in a fresh-clone sandbox; one OK/FAIL verdict line per documented claim. Plan: `config/docs_verify.yml`. | Offline by default (network steps print NET; an unroutable proxy guards the rest); `[network]` adds the real starter-shelf sync (~690 MB). Exit 1 on any FAIL. Verifies the committed HEAD. |
 | `rake ops:drill` | Fresh-machine restore drill against a throwaway copy (§9). | Long; owner-fired. |
-| `rake "db:snapshot[TARGET_DIR]"` | Online snapshot of every `db/*.sqlite3` into an existing, empty-of-those-names dir, one `VACUUM INTO` per file (WAL-safe; a plain copy under WAL is the corruption trap). Prints per-file size + elapsed and a SUMMARY line. A CACHE of derived state — it saves a rebuild's hours, never unique data. | Owner-fired. Refuses a missing/non-writable/occupied target and a running rebuild. Restore procedure (sidecars removed first, the stamp note): the `Nabu::Ops::DbSnapshot` class comment. |
+| `rake "db:snapshot[TARGET_DIR]"` | Online snapshot of every `db/*.sqlite3` into an existing, empty-of-those-names dir, one `VACUUM INTO` per file (WAL-safe; a plain copy under WAL is the corruption trap). Prints per-file size + elapsed and a SUMMARY line. A CACHE of derived state — it saves a rebuild's hours, never unique data. | Owner-fired. Refuses a missing/non-writable/occupied target and a running rebuild. Restore: `rake "db:restore[DIR]"` (next row). |
+| `rake "db:restore[SNAPSHOT_DIR]"` | Put a `db:snapshot` back: each db file the snapshot holds is dropped WITH its `-wal`/`-shm` sidecars, then the snapshot copy is copied in. Prints a SUMMARY line with the stamp note (the restored catalog carries the snapshot's stamps — code merged since reads dirty to `rebuild --incremental --dry-run`). | Owner-fired. Refuses (nothing touched) an empty source, a running rebuild, or any process holding one of the files open — the holders are named. Design: `Nabu::Ops::DbSnapshot.restore!`. |
+| `rake rebuild:census` | The full rebuild's BEFORE picture (§9a step 1): per-source documents/passages/fulltext membership, the library totals, every db file's size and the quarantine baselines, into `local/rebuild/census-<UTC stamp>.json` (never overwritten). | Seconds (O(1) aggregate reads). Refuses a pre-054 catalog (`aggregates:backfill` first). Design: `Nabu::Ops::RebuildCensus`. |
+| `rake rebuild:verify` | The full rebuild's AFTER proof (§9a step 3): ten labeled PASS/WARN/FAIL/SKIP checks — run, counts vs census, aggregates recount, fulltext coverage, stamps, fold storage, sizes, deleted-file readers, integrity, inspect-shaped text. Exit 1 on any FAIL. | Read-only. Heavy checks (integrity, inspect) announce their cost first; `QUICK=1` skips them, `FULL_INTEGRITY=1` swaps `quick_check` for `integrity_check`, `SAMPLE`/`SEED` size the recount. Design: `Nabu::Ops::RebuildVerify`. |
 | `rake "diet:text_normalized[dry_run]"` / `rake "diet:text_normalized"` | The text_normalized diet's reclaim pass: catalog rows that store their search form in full although it equals `text` or SQLite's `lower(text)` take the `""` / one-byte `\u0001` sentinel in place (the loader already writes the slim form for every row it touches — migration 055 widened the `text_search` read seam). Batched in-SQL UPDATE by rowid window, one progress line per window. Run `[dry_run]` first: row counts per class + projected payload bytes, nothing written. | Owner-fired; the dry run is a full read of `passages` (size it like any full-table scan). Served `text_search`, content shas, revisions and the FTS index are unchanged. Resumable (cursor `db/text_normalized_diet.cursor`, ignored after a rebuild); one run at a time; refuses during a rebuild or on a pre-055 catalog; batches take the catalog write window, so syncs interleave. **The file does not shrink**: freed space returns to the OS only at VACUUM, the next full rebuild, or `db:snapshot` (VACUUM INTO) — the summary says so. `BATCH=<ids>` overrides the window (default 50,000). Design: `Nabu::Store::TextNormalizedDiet`. |
 | `rake acquisition:probe` | Batch HTTP state checks for the acquisition plan's park / re-check conditions, from the instance board's `.docs/acquisition/probes.yml` (rows: `name`, `url`, `expect` = a status code, `any`, or a body substring, `note`); one `name → state (expect …) — as expected / CHANGED` line each, then the held-vs-searchable line (catalog passages vs `passages_fts`, both dbs read-only). | Network; informational (never exits 1 on CHANGED). One request per row, 10 s timeout, no retries, ≤3 redirects. No probe list = announced skip; `ACQUISITION_PROBES=path` overrides. |
 | `rake "bless[<attestation>]"` (alias: `stamps:rebless`) | Rewrite EVERY source's derivation stamp to assert current code — WITHOUT re-deriving. Escape hatch for fingerprint-formula or output-identical code changes, so a multi-hour rebuild isn't triggered by bookkeeping. | **Owner-only, dangerous.** Valid ONLY when the catalog's derived rows already match what current code would produce: right after a verified full rebuild, or after individually re-syncing every source whose output actually changed. Misuse = stamps that lie = silent under-derivation. The attestation argument (`i-verified-current-full-rebuild`) is the claim you must be able to make truthfully; the task refuses anything else. |
@@ -932,6 +935,88 @@ Because the guard exits 1 when the volume is detached, a nightly fire while the
 backup disk is unplugged lands as a clear failure in
 `log/backup-nightly.err.log` — exactly the signal you want. Wire an ntfy hook
 (§7) on that job if you want to be pushed the news.
+
+---
+
+## 9a. The full rebuild — census → rebuild → verify
+
+The full `nabu rebuild` drops `db/catalog.sqlite3` and the fulltext family
+(main file + lane files, each with its sidecars) and regenerates them from
+the three permanent folders — hours at library scale. It is always
+owner-fired. Three commands, in order, each with what to expect:
+
+1. **Capture the before picture.**
+   `bundle exec rake rebuild:census`
+   EXPECT: `SUMMARY rebuild:census — <N> sources · <D> documents · <P> passages · <B> fulltext-behind · <F> db file(s), <size> → local/rebuild/census-<UTC stamp>.json`.
+   Seconds (it reads the O(1) `source_aggregates` rows and stats the db
+   files). A pre-054 catalog is refused — run `bundle exec rake aggregates:backfill` first.
+
+2. **Run the rebuild.**
+   `bin/nabu rebuild`
+   EXPECT, before anything is dropped: `rebuild log → ~/Library/Logs/nabu/rebuild-<stamp>.log`,
+   then the preflight — the summed price over the ledger's latest rebuild
+   rows (`price: ~<total> summed over <n> of <m> stages`, unpriced stages
+   named, the last completed full run's wall time beside it), the disk
+   line (`need ≈ … available at the drop …`) and `writers: none`, ending
+   `verdict: CLEAR`. Then the usual stage lines until the result block.
+   Follow it from another terminal with `tail -f` on the printed log path:
+   every stage opens with its estimate and closes with its elapsed, and
+   the index watcher's lines (a stall heartbeat after 10 min without a
+   tick; one `OVERRUN` line when a stage passes 2× its estimate — no kill
+   is armed) land there too.
+   - `verdict: BLOCKED` refuses before the drop and names the blocker: a
+     writer (the catalog write window's holder, a fetch lock — a sync or
+     trickle runner — or a sync/rebuild/index process with its pid) or a
+     disk shortfall. Stop the writer, or free the space, and re-run step 2.
+   - A run that dies (crash, kill, power) leaves its ledger row open:
+     `nabu status` / `nabu index doctor` print the `⚠ rebuild … never
+     completed` line and the log's last line says so. There is no resume —
+     the rebuild is drop-first, so re-running step 2 starts clean.
+
+3. **Prove it landed.**
+   `bundle exec rake rebuild:verify`
+   EXPECT: one labeled line per check and
+   `SUMMARY rebuild:verify — 10 pass, 0 warn, 0 fail, 0 skip in <elapsed>`; exit 0.
+   The heavy checks announce their cost before they start (`integrity`:
+   `PRAGMA quick_check` reads every page of every db file; `inspect`: one
+   scan of the passages table) — `QUICK=1` skips both (SKIP lines), and
+   `FULL_INTEGRITY=1` runs `integrity_check` instead (far slower: it also
+   cross-checks every index). The checks: `run` (the latest full run
+   completed), `counts` (per source vs the census — a document loss is
+   explained only by the rebuild's own quarantines), `aggregates` (a seeded
+   live recount of `SAMPLE` sources, default 8), `fulltext` (held vs
+   searchable per source, the indexer's own count vs the held total, the
+   cjk/trigram lane coverage), `stamps` (the incremental planner's verdict
+   sweep: everything clean), `fold` (the `text_normalized` storage classes
+   on a rowid-window sample: no stored fold equal to `text`/`lower(text)`),
+   `sizes` (every db file vs the census), `readers` (no process still holds
+   a deleted pre-rebuild db file), `integrity`, `inspect`. Any FAIL exits 1
+   and names the source or file. A `readers` WARN is a long-lived `nabu
+   mcp` still pinning the old files' blocks: its watchdog vacates idle
+   handles — re-run the verify after a few minutes, or restart that client.
+   The verify writes nothing but the stamps sweep's identity memo
+   (`db/canonical_identities.json`, derived — the same memo
+   `rebuild --incremental --dry-run` refreshes).
+
+Afterwards, outside the proof: `bundle exec rake aggregates:embed_census`
+re-fills the per-source vector coverage (it reads NULL after a rebuild —
+vectors outlive rebuilds and are censused explicitly).
+
+**The disk model.** Drop-first, not shadow/swap-in: the old catalog and
+fulltext files are deleted, then fresh ones written, so the run needs about
+the size of what it replaces (the preflight prices 1.25× as a declared
+margin) and gets it from free space plus the freed files. A dropped file a
+process still holds open (a `nabu mcp` reader) frees nothing until it lets
+go — when the run depends on those bytes the preflight probes the holders
+and names them. Only a shortfall before the margin refuses.
+
+**The optional safety net.** `bundle exec rake "db:snapshot[/path/to/empty/dir]"`
+before step 2 keeps a VACUUM INTO copy of the derived dbs (it costs their
+size on the target volume); `bundle exec rake "db:restore[/path/to/that/dir]"` puts it
+back — refused while a rebuild runs or any process holds a db file open
+(holders named), each file dropped with its sidecars before the copy. The
+restored catalog carries the snapshot's stamps; a rebuild remains the
+reference restore path for db/.
 
 ---
 

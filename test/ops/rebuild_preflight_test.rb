@@ -123,6 +123,12 @@ class RebuildPreflightTest < Minitest::Test
     assert_match(/inside the margin/, P.render(tight).join("\n"))
   end
 
+  def test_lsof_field_output_parses_into_pid_command_path_rows
+    out = "p101\ncruby\nf12\np202\ncnabu-mcp\n"
+    assert_equal [[101, "ruby", "/db/catalog.sqlite3"], [202, "nabu-mcp", "/db/catalog.sqlite3"]],
+                 P.holder_rows(out, "/db/catalog.sqlite3")
+  end
+
   def test_unreadable_free_space_is_said_not_guessed
     write_bytes(catalog, 10)
     report = preflight(free: nil).report
