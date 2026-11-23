@@ -217,15 +217,22 @@ module Nabu
         outcomes << timed_stage(ledger, "replay", scope: entry.slug, rows_of: replayed) do
           replay(db, ledger, entry, progress)
         end
-        # P39-1: re-scope the fold digest AGAINST THE POST-REPLAY CENSUS
-        # before stamping. The pre-replay fingerprint's fold set describes
-        # the rows a dirty canonical/parser just replaced — stamping it could
-        # miss a language the replay introduced (silent under-rebuild).
-        fingerprint = fingerprint.with(
-          fold_digest: DerivationFingerprint.fold_digest(Store::DerivationStamp.derived_languages(db, entry.slug))
-        )
-        Store::DerivationStamp.stamp!(db, slug: entry.slug, fingerprint: fingerprint)
-        record_ingest_identity(db, entry, fingerprint)
+        # A tripped parse breaker KEPT rows a full rebuild would not hold:
+        # this source is deliberately NOT f(canonical) until the operator
+        # accepts, so it gets no stamp — it stays dirty, and every
+        # incremental run replays it and repeats the warning. Its index
+        # still refreshes (the rest of the load may have moved rows).
+        unless outcomes.last.report.parse_breaker_tripped?
+          # P39-1: re-scope the fold digest AGAINST THE POST-REPLAY CENSUS
+          # before stamping. The pre-replay fingerprint's fold set describes
+          # the rows a dirty canonical/parser just replaced — stamping it could
+          # miss a language the replay introduced (silent under-rebuild).
+          fingerprint = fingerprint.with(
+            fold_digest: DerivationFingerprint.fold_digest(Store::DerivationStamp.derived_languages(db, entry.slug))
+          )
+          Store::DerivationStamp.stamp!(db, slug: entry.slug, fingerprint: fingerprint)
+          record_ingest_identity(db, entry, fingerprint)
+        end
         unless index_inert?(entry) || index_dirty
           indexed = (indexed || 0) + refresh_index(db, fulltext, entry, progress, ledger)
         end

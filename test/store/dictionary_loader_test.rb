@@ -135,6 +135,38 @@ class DictionaryLoaderTest < Minitest::Test
     assert_match(/UNIQUE constraint failed/, JSON.parse(quarantined.first[:params_json]).fetch("error"))
   end
 
+  # A HELD file whose revision trips a constraint rolls back as one unit; a
+  # fresh full rebuild would hold none of its entries (the insert fails the
+  # same way), so none may stay shielded by having been reached before the
+  # failing entry — the full load's sweep withdraws them all, and the next
+  # clean load restores them.
+  def test_a_constraint_violating_held_file_leaves_none_of_its_entries_live
+    load!
+    parsed = @adapter.discover(@workdir).map { |ref| @adapter.parse(ref) }
+    target = parsed.find { |doc| doc.entries.any? { |e| e.entry_id == "n67485" } }
+    held_ids = target.entries.map(&:entry_id)
+    squatter = Nabu::Store::Dictionary.create(slug: "squatter", source_id: @source.id, title: "S", language: "grc")
+    @db[:dictionary_entries].insert(
+      dictionary_id: squatter.id, urn: "urn:nabu:dict:lsj:zz-new", entry_id: "zz", key_raw: "x",
+      headword: "x", headword_folded: "x", body: "x", content_sha256: "x", revision: 1, withdrawn: true
+    )
+    revised = Nabu::DictionaryDocument.new(slug: target.slug, language: target.language,
+                                           title: target.title, canonical_path: target.canonical_path)
+    target.entries.each { |entry| revised << entry }
+    revised << Nabu::DictionaryEntry.new(entry_id: "zz-new", key_raw: "νέος", language: "grc", headword: "νέος",
+                                         headword_folded: "νεοσ", gloss: "new", body: "νέος new", citations: [])
+
+    report = loader.load(parsed.map { |doc| doc.equal?(target) ? revised : doc }, full: true)
+
+    assert_equal 1, report.errored
+    live = @db[:dictionary_entries].where(entry_id: held_ids, withdrawn: false).select_map(:entry_id)
+    assert_empty live, "no entry of the rolled-back file stays served"
+    assert_equal held_ids.size, report.withdrawn
+
+    load!
+    assert_equal held_ids.size, @db[:dictionary_entries].where(entry_id: held_ids, withdrawn: false).count
+  end
+
   # Anything else is operational trouble: a busy catalog ABORTS the load
   # loudly — no file is quarantined, nothing is half-written.
   def test_a_busy_catalog_aborts_the_load_instead_of_quarantining
