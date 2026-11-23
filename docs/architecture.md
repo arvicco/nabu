@@ -82,8 +82,10 @@ nabu/
 │   ├── history.sqlite3          # LEDGER (P7-1): runs, pins, revisions — never derived, never dropped
 │   ├── mined-links.sqlite3      # (the cost law, §1/§15): HEAVY mined link layers — written only by their
 │   │                            #   mine command through Store::MinedLinks; rebuild never touches it
-│   └── reuse/<build>/           # (§15, the postings engine): per-scope gram-postings stores — written only
-│                                #   by `nabu reuse build` through Store::ReusePostings; rebuild never touches it
+│   ├── reuse/<build>/           # (§15, the postings engine): per-scope gram-postings stores — written only
+│   │                            #   by `nabu reuse build` through Store::ReusePostings; rebuild never touches it
+│   └── trickle/                 # (§19, the trickle runner): <slug>.pid / .log / .stop — a standing crawl's
+│                                #   run-state, written only by Ops::Trickle; never library state
 ├── db/                          # DERIVED — all of it; `nabu rebuild` re-mints every file but vectors
 │   ├── catalog.sqlite3          # sources, documents, passages, provenance, licenses
 │   ├── fulltext.sqlite3         # FTS5 + passage_lemmas + aggregates (all keyed by passage id)
@@ -3140,3 +3142,34 @@ engine
 is fetch-side code: it sits beside the fetch helpers outside the shared
 derivation digest (§5's derivation stamps — parse never reads it), and it joins the
 derivability writer census as a canonical/ crawl-ledger writer.
+
+**The trickle runner** (`Nabu::Ops::Trickle`, `rake trickle:start|stop|status`;
+runbook `docs/manual/trickle-runner.md`). A rail slice is a phase's capped
+allotment; a source whose cone is days of requests at its committed pace
+(wellcome: ~30k bnumbers at one request per 30 s) also gets an owner-fired
+STANDING crawl that runs outside phase work. `trickle:start[SLUG]` refuses a
+source without paced lanes or with a lane declaring no positive delay, a
+second trickle of the same source (a live pidfile), and a source whose
+`FetchLock` a sync or rail step holds; otherwise it spawns a fresh ruby that
+calls `setsid` (detached from the starting terminal or agent session) and
+holds the source's `FetchLock` for its whole life — so a fetching sync of
+the source fails fast instead of doubling the request rate, while
+`sync --parse-only`, which never takes the lock, loads what the trickle
+stored. The runner reuses each lane's ONE engine across slices, so the
+engine's own delay paces across slice boundaries, and pauses one delay
+before each lane's first request (a restart never hits upstream sooner than
+the declared pace after the previous run); it never chooses a pace of its
+own. Slices run back to back until the cone ends (every lane
+`cone-exhausted`), the lane's declared `stop_after_zero_slices` budget, an
+upstream clean stop or outage abort, a stop request, or a fatal error. The
+stop request (`trickle:stop`: the flag file `local/trickle/<slug>.stop`, or
+TERM/INT) is checked before EVERY request and answered through the engine's
+own clean stop (`Outcome.halt`), so the request in flight finishes and the
+next id stays selectable, never ledgered. Progress is append-only in
+`local/trickle/<slug>.log` (flushed per line): a START line per lane, a
+SLICE line per slice (`+N held, held H, remaining R`) with the slice report
+indented under it, then STOP and SUMMARY; a clean exit removes the pidfile
+and consumes the flag. `trickle:status` reads every entry (RUNNING /
+finished / DIED — a dead pid without a SUMMARY line). The runner only
+crawls: it never loads, never syncs, never touches db/; the loop reads the
+log and the crawl ledger and controls nothing in it.

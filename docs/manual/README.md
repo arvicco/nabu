@@ -120,6 +120,10 @@ class):
   the network, never data.
 - [embed-venv.md](embed-venv.md) — the Python/sentence-transformers
   venv `nabu embed` needs (P93-4); same class, same rules.
+- [trickle-runner.md](trickle-runner.md) — the standing paced crawl
+  (`rake trickle:start|stop|status`): one detached crawl of a large
+  slow-paced source at its declared pace, outside phase work; fire,
+  watch and stop commands with what to expect.
 - [git-hooks.md](git-hooks.md) — the local git hook pack
   (`rake tools:hooks`): conflict markers, the mid-rebuild hold, and
   commit-message hygiene; no network, symlinks only.

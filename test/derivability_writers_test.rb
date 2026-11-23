@@ -304,6 +304,12 @@ class DerivabilityWritersTest < Minitest::Test
   # on demand from the catalog + source_stats + the backup-set digests,
   # never written into db/, local/ or canonical/ and never read back as
   # state by this box (the receiving box's verify/check consume it).
+  # ops/trickle (the trickle runner, architecture §19) writes only its OWN
+  # run-state under local/trickle/ — the live runner's pidfile and the stop
+  # flag (both removed when the runner exits) beside its append-only
+  # progress log: operational scratch the loop reads, never library state
+  # and never read by a rebuild. Its crawl writes go through the engine
+  # (paced_crawl) and the adapter's fetch_one, already censused.
   WRITER_ALLOWLIST = %w[
     nabu/index_watcher.rb
     nabu/ops/reconstruction/manifest.rb
@@ -360,7 +366,7 @@ class DerivabilityWritersTest < Minitest::Test
     nabu/ops/axis_pages.rb nabu/ops/site_data.rb nabu/ops/llms_txt.rb
     nabu/ops/sources_table.rb
     nabu/ops/skill_pack.rb
-    nabu/ops/drill.rb
+    nabu/ops/drill.rb nabu/ops/trickle.rb
     nabu/data_build/runner.rb nabu/data_build/sources_bib.rb
     nabu/data_build/places_lpf_builder.rb nabu/data_build/readme_index.rb
     nabu/fixture_sentinel.rb nabu/local_migration.rb

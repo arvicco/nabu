@@ -53,7 +53,8 @@ module Nabu
           ["shelves/", "enrichment products (the owner shelves)"],
           ["fixtures/", "restricted test samples"],
           ["history.sqlite3", "operational ledger"],
-          ["mined-links.sqlite3", "time-heavy mined link layer"]
+          ["mined-links.sqlite3", "time-heavy mined link layer"],
+          ["trickle/", "standing-crawl runner state (pid, log, stop flag)"]
         ].freeze
 
         def self.from_config(config)
