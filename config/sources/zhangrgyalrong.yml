@@ -2,7 +2,7 @@ zhangrgyalrong:
   adapter: Nabu::Adapters::Zhangrgyalrong
   adopted: "2026-11-23"
   axes: [etym, sinitic]
-  wired: false   # until the first real sync is verified.
+  wired: true
                  # Expected (full-scale dry parse 2026-11-23): 122 entries /
                  # 603 reflex rows; no unjudged forms.
   sync_policy: manual

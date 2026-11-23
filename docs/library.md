@@ -2469,6 +2469,19 @@ of 95 modern languages. **`saenkoromance`** — **465 sets / 5,092
 reflexes**: Saenko's Romance Swadesh wordlists over 43 varieties,
 Dalmatian and Ladin beside the dialect continua.
 
+The second wave, three CC BY-NC 4.0 sets (each credited on every
+hit, nc-fenced like the library's other nc shelves). **`peirosst`**
+— **1,806 sets / 13,798 reflexes**: Peiros's *Comparative
+Sino-Tibetan Wordlists* (2004), 110 concepts over the family's
+breadth, upstream's own class numbering kept as given.
+**`kitchensemitic`** — **665 sets / 2,150 reflexes**: Kitchen,
+Ehret, Assefa & Mulligan's Semitic basic-vocabulary cognate sets
+(2009), twenty-five Semitic varieties from Akkadian to the modern
+vernaculars. **`zhangrgyalrong`** — **122 sets / 603 reflexes**:
+Zhang, Jacques & Lai's Gyalrong–Old Chinese cognates (2019), each
+set carrying the Chinese character its Old/Middle Chinese forms
+read.
+
 ## 8bm. The Hebrew wave, leg 1 — the documentary Geniza, the pointed Bavli, the responsa shelf, the Samaritan witness
 
 Four arrivals that open two registers the library never held — the

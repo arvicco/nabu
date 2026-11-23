@@ -2,7 +2,7 @@ peirosst:
   adapter: Nabu::Adapters::Peirosst
   adopted: "2026-11-23"
   axes: [etym, sinitic]
-  wired: false   # until the first real sync is verified.
+  wired: true
                  # Expected (full-scale dry parse 2026-11-23): 1,806 entries /
                  # 13,798 reflex rows; no unjudged forms.
   sync_policy: manual

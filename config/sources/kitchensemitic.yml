@@ -2,7 +2,7 @@ kitchensemitic:
   adapter: Nabu::Adapters::Kitchensemitic
   adopted: "2026-11-23"
   axes: [etym]
-  wired: false   # until the first real sync is verified.
+  wired: true
                  # Expected (full-scale dry parse 2026-11-23): 665 entries /
                  # 2,150 reflex rows (0 loan-flagged); 246 forms outside the
                  # CognateTable mint nothing (counted); raw/ skipped by rule.

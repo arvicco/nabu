@@ -27,12 +27,12 @@ A source wears every desk it serves — these 26 answer this desk. Holdings are 
 | `edl` | dictionary | nc | wired · manual | 2,860 entries |
 | `etruscan-loans` | dictionary | attribution | wired · frozen | 199 entries |
 | `iecor` | cognacy dataset | attribution | wired · manual | 4,981 entries |
-| `kitchensemitic` | dictionary | nc | not yet wired | nothing held yet |
+| `kitchensemitic` | dictionary | nc | wired · manual | 665 entries |
 | `liv` | dictionary | attribution | wired · manual | 305 entries |
 | `mcd` | dictionary | attribution | wired · manual | 1,707 entries |
 | `meloniromance` | cognacy dataset | attribution | wired · manual | 5,419 entries |
 | `nabu-lects` | feature module | attribution | wired · manual | nothing held yet |
-| `peirosst` | dictionary | nc | not yet wired | nothing held yet |
+| `peirosst` | dictionary | nc | wired · manual | 1,806 entries |
 | `sabellic-loans` | dictionary | attribution | wired · frozen | 85 entries |
 | `saenkoromance` | dictionary | attribution | wired · manual | 465 entries |
 | `sagartst` | dictionary | attribution | wired · manual | 5,120 entries |
@@ -42,11 +42,11 @@ A source wears every desk it serves — these 26 answer this desk. Holdings are 
 | `westoldturkic` | dictionary | attribution | wired · manual | 480 entries |
 | `wiktionary-recon` | dictionary | attribution | wired · manual | 376,415 entries |
 | `wold` | dictionary | attribution | wired · manual | 64,289 entries |
-| `zhangrgyalrong` | dictionary | nc | not yet wired | nothing held yet |
+| `zhangrgyalrong` | dictionary | nc | wired · manual | 122 entries |
 
 Private research materials are not listed.
 
-**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 23 November 2026)</span>: `xcl` 94,608 · `ine` 19,815 · `rus` 18,239 · `tbq` 12,950 · `map` 10,857 · `ine-pro` 9,140 · `gem-pro` 7,743 · `tut` 5,756 · `lat` 5,419 · `sit` 5,120 … and 77 more (`nabu axis etym` lists all).
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 23 November 2026)</span>: `xcl` 94,608 · `ine` 19,815 · `rus` 18,239 · `tbq` 12,950 · `map` 10,857 · `ine-pro` 9,140 · `gem-pro` 7,743 · `sit` 7,048 · `tut` 5,756 · `lat` 5,419 … and 78 more (`nabu axis etym` lists all).
 
 **Carried in by multilingual packs** (`wiktionary-recon`, `wold` — whole-source members whose other languages ride along, as of 23 November 2026): `zho` 327,296 · `sga` 6,688 · `gmw-pro` 5,578 · `sla-pro` 5,461 · `mnc` 2,577 … and 55 more (`nabu axis etym` lists all).
 

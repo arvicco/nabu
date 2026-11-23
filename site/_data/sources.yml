@@ -1818,6 +1818,18 @@ sources:
     entries_display: '0'
     holdings: 262 documents / 290,394 passages
     canonical_display: 78 MB
+  kitchensemitic:
+    name: Kitchen et al. 2009 Bayesian phylogenetic analysis of Semitic languages
+      (lexibank/kitchensemitic CLDF v2.1)
+    license_class: nc
+    documents: 0
+    documents_display: '0'
+    passages: 0
+    passages_display: '0'
+    entries: 665
+    entries_display: '665'
+    holdings: 665 entries
+    canonical_display: 1 MB
   ko-wikisource-mk:
     name: 용비어천가 — Middle Korean vernacular shelf (Korean Wikisource)
     license_class: attribution
@@ -2290,14 +2302,14 @@ sources:
     name: Niupepa — Māori Newspapers 1842–1932 (New Zealand Digital Library, University
       of Waikato)
     license_class: research_private
-    documents: 978
-    documents_display: '978'
-    passages: 8814
-    passages_display: '8,814'
+    documents: 1343
+    documents_display: '1,343'
+    passages: 12635
+    passages_display: '12,635'
     entries: 0
     entries_display: '0'
-    holdings: 978 documents / 8,814 passages
-    canonical_display: 77 MB
+    holdings: 1,343 documents / 12,635 passages
+    canonical_display: 106 MB
   noscemus:
     name: NOSCEMUS Digital Sourcebook — early modern scientific Latin (Transkribus
       HTR)
@@ -2545,6 +2557,17 @@ sources:
     entries_display: '0'
     holdings: 114 documents / 2,373 passages
     canonical_display: 2 MB
+  peirosst:
+    name: Peiros 2004 Comparative Sino-Tibetan Wordlists (lexibank/peirosst CLDF)
+    license_class: nc
+    documents: 0
+    documents_display: '0'
+    passages: 0
+    passages_display: '0'
+    entries: 1806
+    entries_display: '1,806'
+    holdings: 1,806 entries
+    canonical_display: 5 MB
   perseus-anglit:
     name: Perseus Digital Library — canonical Old English literature (Beowulf)
     license_class: attribution
@@ -3603,7 +3626,7 @@ sources:
     entries: 0
     entries_display: '0'
     holdings: 1,570 documents / 450,905 passages
-    canonical_display: 966 MB
+    canonical_display: 1019 MB
   wenhai:
     name: 'The Digital Wenhai v1.1: Phonology (Beaudouin 2026) — the Tangut rhyme
       dictionary 文海'
@@ -4106,6 +4129,18 @@ sources:
     entries_display: '0'
     holdings: 1,238 documents / 71,547 passages
     canonical_display: 41 MB
+  zhangrgyalrong:
+    name: Zhang, Jacques & Lai 2019 A study of cognates between Gyalrong and Old Chinese
+      (lexibank/zhangrgyalrong CLDF)
+    license_class: nc
+    documents: 0
+    documents_display: '0'
+    passages: 0
+    passages_display: '0'
+    entries: 122
+    entries_display: '122'
+    holdings: 122 entries
+    canonical_display: "<1 MB"
   zhongyuan:
     name: zhongyuan-data — 中原音韻 Old Mandarin rhyme book (nk2028)
     license_class: open
@@ -4686,11 +4721,11 @@ shelves:
     sources:
     - niupepa
     - ceipp-rongorongo
-    documents: 1003
-    documents_display: '1,003'
-    passages: 9128
-    passages_display: '9,128'
-    size_display: 1,003 / 9,128
+    documents: 1368
+    documents_display: '1,368'
+    passages: 12949
+    passages_display: '12,949'
+    size_display: 1,368 / 12,949
 disk:
   canonical_display: 170 GB
   derived_display: 251 GB

@@ -228,13 +228,13 @@ class LexibankDatasetsNcTest < Minitest::Test
 
   # --- registry -------------------------------------------------------------------------------
 
-  def test_each_dataset_is_registered_unwired_and_manual
+  def test_each_dataset_is_registered_wired_and_manual
     EXPECTED.each do |expect|
       slug = expect.klass.dataset.slug
       entry = registry[slug]
       refute_nil entry, "#{slug} must be registered in config/sources/"
       assert_equal expect.klass, entry.adapter_class
-      refute entry.wired, "#{slug}: wired flips only after the verified first sync"
+      assert entry.wired, "#{slug}: wired after the verified first sync (P189)"
       assert_equal "manual", entry.sync_policy
       assert_includes entry.axes, "etym", slug
     end
