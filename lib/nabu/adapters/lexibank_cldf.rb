@@ -65,15 +65,21 @@ module Nabu
         def label = ref || "default branch @ #{commit[0, 8]}"
       end
 
-      # One dataset's declaration (see the class note).
-      Dataset = Data.define(:slug, :name, :title, :label, :language, :license, :upstream_url,
-                            :release, :word_from, :varieties, :proto_varieties, :rejected_grains) do
+      # One dataset's declaration (see the class note). +license_class+
+      # defaults to attribution (the CC BY wave); a CC BY-NC dataset
+      # declares "nc". +concept_notes+ names extra parameters.csv columns
+      # whose value rides the set body under a label (zhangrgyalrong's
+      # Gloss_in_Source — the Chinese character the Old Chinese row reads).
+      Dataset = Data.define(:slug, :name, :title, :label, :language, :license, :license_class,
+                            :upstream_url, :release, :word_from, :varieties, :proto_varieties,
+                            :concept_notes, :rejected_grains) do
         def initialize(slug:, name:, title:, label:, language:, license:, upstream_url:, release:,
-                       word_from: :form, varieties: {}, proto_varieties: [], rejected_grains: {})
+                       license_class: "attribution", word_from: :form, varieties: {},
+                       proto_varieties: [], concept_notes: {}, rejected_grains: {})
           super(slug: slug, name: name, title: title, label: label, language: language, license: license,
-                upstream_url: upstream_url, release: release, word_from: word_from,
-                varieties: varieties.freeze, proto_varieties: proto_varieties.freeze,
-                rejected_grains: rejected_grains.freeze)
+                license_class: license_class, upstream_url: upstream_url, release: release,
+                word_from: word_from, varieties: varieties.freeze, proto_varieties: proto_varieties.freeze,
+                concept_notes: concept_notes.freeze, rejected_grains: rejected_grains.freeze)
         end
 
         def zenodo? = release.is_a?(ZenodoRelease)
@@ -94,7 +100,7 @@ module Nabu
       def self.manifest
         @manifest ||= Nabu::SourceManifest.new(
           id: dataset.slug, name: dataset.name, license: dataset.license,
-          license_class: "attribution", upstream_url: dataset.upstream_url,
+          license_class: dataset.license_class, upstream_url: dataset.upstream_url,
           parser_family: PARSER_FAMILY
         )
       end
@@ -181,7 +187,7 @@ module Nabu
       def parser
         LexibankCldfParser.new(slug: dataset.slug, language: dataset.language, label: dataset.label,
                                word_from: dataset.word_from, varieties: dataset.varieties,
-                               proto_varieties: dataset.proto_varieties)
+                               proto_varieties: dataset.proto_varieties, concept_notes: dataset.concept_notes)
       end
 
       def zenodo_fetch(workdir, progress:, force:)

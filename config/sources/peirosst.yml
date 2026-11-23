@@ -1,0 +1,16 @@
+peirosst:
+  adapter: Nabu::Adapters::Peirosst
+  adopted: "2026-11-23"
+  axes: [etym, sinitic]
+  wired: false   # until the first real sync is verified.
+                 # Expected (full-scale dry parse 2026-11-23): 1,806 entries /
+                 # 13,798 reflex rows; no unjudged forms.
+  sync_policy: manual
+  # Peiros 2004, Comparative Sino-Tibetan Wordlists, lexibank CLDF edition
+  # (CC BY-NC 4.0): 128 Sino-Tibetan varieties (Old Chinese and the Sinitic
+  # points, Tibetan, Burmish, Kuki-Chin, Naga, Bodo-Garo, Qiangic,
+  # Kiranti, Tani …) × 110 concepts, 1,806 cognate classes headed by their
+  # concept. Peiros's database cell (the source Value — Old Chinese with
+  # its character, tone digits, loan tags) is the reflex word. Never
+  # released: sparse GitFetch of the default branch (head 4619b46a at
+  # intake). Dictionary language `sit`.

@@ -1,0 +1,7 @@
+ID,Name,Glottocode,Glottolog_Name,ISO639P3code,Macroarea,Latitude,Longitude,Family,Chinese_Name,Source
+MiddleChinese,Middle Chinese,midd1344,Middle Chinese,ltc,Eurasia,34.27,108.9,Sino-Tibetan,中古汉语,Zhang2019
+OldChinese,Old Chinese,oldc1244,Old Chinese,och,Eurasia,36.12,114.32,Sino-Tibetan,上古汉语,Baxter2014
+CogtseSitu,Cogtse (Situ),maer1238,Maerkang,,Eurasia,31.67,102.29,Sino-Tibetan,卓克基话,Zhang2019
+BragbarSitu,Brag-bar (Situ),maer1238,Maerkang,,Eurasia,31.82,101.91,Sino-Tibetan,白湾话,Zhang2019
+Japhug,Japhug,dgon1234,dGonpa,,Eurasia,32.21,101.96,Sino-Tibetan,茶堡话,Zhang2019
+Zbu,Zbu,zbua1234,Zbu,,Eurasia,32.22,101.61,Sino-Tibetan,日部话,Zhang2019

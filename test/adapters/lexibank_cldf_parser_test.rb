@@ -145,6 +145,19 @@ class LexibankCldfParserTest < Minitest::Test
                  breast.reflexes.map { |r| [r.word, r.roman] }, "a bare transcription stays the word"
   end
 
+  # --- concept notes ------------------------------------------------------------------
+
+  def test_declared_concept_columns_ride_the_body_with_list_literals_decoded
+    notes = { "Gloss_in_Source" => "Chinese character" }
+    set = entry(read("zhangrgyalrong", language: "sit", word_from: :value, concept_notes: notes), "14")
+    assert_includes set.body, "Chinese character: 牛", "pylexibank's \"['牛']\" is a serialization, decoded"
+    bare = entry(read("zhangrgyalrong", language: "sit", word_from: :value), "14")
+    refute_includes bare.body, "牛", "undeclared, the column rides nowhere"
+    plain = { "Concepticon_Gloss" => "concepticon" }
+    concepticon = entry(read("zhangrgyalrong", language: "sit", concept_notes: plain), "14")
+    assert_includes concepticon.body, "concepticon: BOVINE", "a plain cell rides verbatim"
+  end
+
   def test_unknown_strategy_is_refused
     assert_raises(ArgumentError) { read("acd", language: "map", word_from: :segments) }
   end

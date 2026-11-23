@@ -1,0 +1,16 @@
+kitchensemitic:
+  adapter: Nabu::Adapters::Kitchensemitic
+  adopted: "2026-11-23"
+  axes: [etym]
+  wired: false   # until the first real sync is verified.
+                 # Expected (full-scale dry parse 2026-11-23): 665 entries /
+                 # 2,150 reflex rows (0 loan-flagged); 246 forms outside the
+                 # CognateTable mint nothing (counted); raw/ skipped by rule.
+  sync_policy: manual
+  # Kitchen, Ehret, Assefa & Mulligan 2009, Bayesian phylogenetic analysis
+  # of Semitic languages (Proc. R. Soc. B), lexibank CLDF edition v2.1
+  # (Zenodo 10.5281/zenodo.17510140, CC BY-NC 4.0): 25 Semitic varieties
+  # (Akkadian, Ugaritic, Hebrew, Aramaic, Ge'ez, the modern Ethiosemitic,
+  # Modern South Arabian and Arabic lists) × 97 concepts, 665 expert
+  # cognate sets headed by their concept (no reconstructions). Dictionary
+  # language `sem`. The lexibank-cldf family, wave 2 (nc).

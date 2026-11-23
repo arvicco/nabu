@@ -1,0 +1,15 @@
+sources:
+  # The lexibank-cldf wave 2 (nc) — the shared reading in kitchensemitic.yml.
+  zhangrgyalrong:
+    kind: {posture: unclassified, note: "a dictionary shelf — a cognate study; kind folds
+        documents only"}
+    lect: {posture: identity, note: "sit — the nabu-lects Sino-Tibetan anchor (its pro stage
+        is not claimed: no reconstructed variety); Old Chinese och and Middle Chinese ltc
+        resolve through the codemap to zho:old / zho:mid, Classical Tibetan xct on its
+        anchor; the four Gyalrongic varieties carry no ISO code upstream — display-only"}
+    dating: {posture: undatable, note: "a reference dataset (Zhang, Jacques & Lai 2019) — no dates"}
+    places: {posture: unplaced, note: "variety coordinates are doculect reference points, not
+        findspots — no place claim at dictionary grain"}
+    script: {posture: implied, note: "Baxter-Sagart Old Chinese and Baxter's Middle Chinese
+        notation, IPA-style Gyalrong transcriptions, Wylie-style Tibetan; the Chinese
+        character rides each set's body"}

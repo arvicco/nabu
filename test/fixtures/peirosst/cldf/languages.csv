@@ -1,0 +1,15 @@
+ID,Name,Glottocode,Glottolog_Name,ISO639P3code,Macroarea,Latitude,Longitude,Family,Number,Database,Abbreviation,Note
+Bodo,Bodo,bodo1269,Bodo-Mech,brx,Eurasia,26.1,92.0,Sino-Tibetan,3,bodo,bod,
+Dimasa,Dimasa,dima1251,Dimasa,dis,Eurasia,25.4198,93.1806,Sino-Tibetan,4,bodo,dim,
+Chepang,Chepang,chep1245,Chepang,cdm,Eurasia,27.7206,84.9017,Sino-Tibetan,17,che,chp,
+Tamang,Tamang,nucl1729,Nuclear Tamang,,,,,Sino-Tibetan,25,gur,tmn,
+Jiarug,Jiarug,,,,,,,,29,jar,jia,
+Motuo-M,Motuo-M,dakp1242,Dakpakha,dka,Eurasia,27.3762,91.8245,Sino-Tibetan,64,mot,mot,"Tawang Monpa, Dakpakha?"
+OldChinese,Old Chinese,oldc1244,Old Chinese,och,Eurasia,36.12,114.32,Sino-Tibetan,87,sino,och,
+Beijing,Beijing,mand1415,Mandarin Chinese,cmn,Eurasia,40.0209,116.228,Sino-Tibetan,88,sino,pek,
+CHN,CHN,,,,,,,,89,sino,scn,maybe cmn? or Northern Chinese
+JianchuanBai,Jianchuan Bai,jian1239,Jianchuan,,Eurasia,26.538056,99.91,Sino-Tibetan,90,sino,bai,
+Fuzhou,Fuzhou,mind1253,Min Dong Chinese,cdo,Eurasia,26.0,119.5,Sino-Tibetan,91,sino,fuz,
+Hakka,Hakka,hakk1236,Hakka Chinese,hak,Eurasia,25.0,116.0,Sino-Tibetan,92,sino,hkk,
+Horpa,Horpa,horp1239,Stau-Dgebshes,ero,Eurasia,31.1026,101.72,Sino-Tibetan,104,syc,dao,
+CuonaM,Cuona-M,,,,,,,,122,tib,cuo,
