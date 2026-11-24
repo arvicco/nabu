@@ -29,7 +29,7 @@ A source wears every desk it serves — these 30 answer this desk. Holdings are 
 | `eng-web` | texts | open | wired · manual | 84 docs / 37,624 passages |
 | `etcbc-syriac` | texts | nc | wired · manual | 31 docs / 18,132 passages |
 | `etcbc-syrnt` | texts | nc | wired · manual | 27 docs / 7,957 passages |
-| `etcbc-targum` | texts | nc | wired · manual | 47 docs / 25,430 passages |
+| `etcbc-targum` | texts | nc | wired · manual | 47 docs / 26,077 passages |
 | `extrabiblical` | texts | nc | wired · manual | 13 docs / 1,800 passages |
 | `hebrew-lexicon` | dictionary | attribution | wired · manual | 21,144 entries |
 | `hexapla` | texts | nc | wired · manual | 19 docs / 16,302 passages |

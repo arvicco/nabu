@@ -25,7 +25,7 @@ A source wears every desk it serves — these nineteen answer this desk. Holding
 | `dss` | texts | nc | wired · auto | 1,001 docs / 52,895 passages |
 | `dtucph-sp` | texts | nc | wired · manual | 5 docs / 5,841 passages |
 | `elephantine` | papyri & ostraca | attribution | wired · manual | 15,539 docs / 69,350 passages |
-| `etcbc-targum` | texts | nc | wired · manual | 47 docs / 25,430 passages |
+| `etcbc-targum` | texts | nc | wired · manual | 47 docs / 26,077 passages |
 | `extrabiblical` | texts | nc | wired · manual | 13 docs / 1,800 passages |
 | `hebrew-lexicon` | dictionary | attribution | wired · manual | 21,144 entries |
 | `hexapla` | texts | nc | wired · manual | 19 docs / 16,302 passages |

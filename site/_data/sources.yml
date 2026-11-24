@@ -1268,12 +1268,12 @@ sources:
     license_class: nc
     documents: 47
     documents_display: '47'
-    passages: 25430
-    passages_display: '25,430'
+    passages: 26077
+    passages_display: '26,077'
     entries: 0
     entries_display: '0'
-    holdings: 47 documents / 25,430 passages
-    canonical_display: 254 MB
+    holdings: 47 documents / 26,077 passages
+    canonical_display: 297 MB
   etcsl:
     name: ETCSL — Electronic Text Corpus of Sumerian Literature (Oxford, revised edition
       2006)
@@ -4418,9 +4418,9 @@ shelves:
     - ben-yehuda
     documents: 25808
     documents_display: '25,808'
-    passages: 2008909
-    passages_display: '2,008,909'
-    size_display: 25,808 / 2,008,909
+    passages: 2009556
+    passages_display: '2,009,556'
+    size_display: 25,808 / 2,009,556
   elephantine:
     sources:
     - elephantine
