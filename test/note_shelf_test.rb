@@ -128,7 +128,7 @@ class NoteShelfTest < Minitest::Test
                                             content_sha256: "x", revision: 1)
     Nabu::Store::Passage.create(document_id: document.id, urn: "urn:nabu:ccmh:mar:mt:1", sequence: 1,
                                 language: "chu", text: "искони", text_normalized: "искони",
-                                annotations_json: "{}", content_sha256: "x", revision: 1)
+                                annotations_json: "{}", content_sha_raw: "x", revision: 1)
     dictionary = Nabu::Store::Dictionary.create(source_id: source.id, slug: "lsj", title: "LSJ",
                                                 language: "grc")
     Nabu::Store::DictionaryEntry.create(dictionary_id: dictionary.id, urn: "urn:nabu:dict:lsj:n1",

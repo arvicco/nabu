@@ -246,12 +246,32 @@ module Store
     end
 
     def rows(dataset)
-      dataset.order(:id).all.map { |row| row.except(*VOLATILE).to_a }
+      dataset.order(:id).all.map { |row| pre_raw_shape(row.except(*VOLATILE)).to_a }
     end
 
+    # Migration 056 stores the passage hash as 32 raw bytes (content_sha_raw)
+    # behind the virtual hex content_sha256. A passages row serializes in
+    # its pre-056 shape — the SERVED hex in the stored column's slot — so
+    # the pins above held unchanged across the storage change: proof on
+    # every fixture corpus that readers see the identical hex. (Blob and
+    # lower-case hex are a bijection, so grain equality loses nothing; the
+    # stored form itself is pinned by passage_sha_storage_test.)
+    def pre_raw_shape(row)
+      return row unless row.key?(:content_sha_raw)
+
+      row.except(:content_sha256).to_h do |key, value|
+        key == :content_sha_raw ? [:content_sha256, row.fetch(:content_sha256)] : [key, value]
+      end
+    end
+
+    # The parse-settlement counts postdate the pins: a ZERO count is left out
+    # so the pinned digests stay valid, while any non-zero one still lands in
+    # the payload and fails the pin loudly.
     def report_payload(report)
       delta = report.index_delta
-      report.to_h.except(:index_delta).merge(
+      counts = report.to_h.except(:index_delta)
+                     .reject { |key, value| %i[parse_withdrawn parse_held].include?(key) && value.zero? }
+      counts.merge(
         upserted: [delta.upserted_ids.to_a.sort, delta.upserted_urns.to_a.sort],
         removed: [delta.removed_ids.to_a.sort, delta.removed_urns.to_a.sort],
         overflowed: delta.overflowed?

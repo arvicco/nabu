@@ -39,7 +39,7 @@ module Store
                      text: "In fronte pedes", annotations: nil)
       Nabu::Store::Passage.create(
         document_id: document.id, urn: urn, sequence: sequence, language: language,
-        text: text, text_normalized: text, content_sha256: "x", revision: 1,
+        text: text, text_normalized: text, content_sha_raw: "x", revision: 1,
         withdrawn: withdrawn, annotations_json: annotations ? JSON.generate(annotations) : "{}"
       )
     end

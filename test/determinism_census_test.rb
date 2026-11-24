@@ -32,6 +32,9 @@ class DeterminismCensusTest < Minitest::Test
                               "seeded RNG, never reaches minted content",
     "nabu/query/search.rb" => "the random-passage sampling lane of the same feature (@rng, seeded) — " \
                               "query-time only",
+    "nabu/ops/rebuild_verify.rb" => "the post-rebuild proof's source sample — Random.new(SEED) over the " \
+                                    "aggregates keys (deterministic per seed, the seed printed); a " \
+                                    "read-only check, never minted content",
     "nabu/ops/parallels_bench.rb" => "the recall@K harness's query sample — Random.new(SEED) over sorted " \
                                      "gold urns (deterministic per seed); a measurement, never minted " \
                                      "content (and report.sample is an attribute)"

@@ -53,7 +53,7 @@ class ScanMeterCommandTest < Minitest::Test
       ids = LINES.each_with_index.map do |text, i|
         catalog[:passages].insert(document_id: doc, urn: "urn:cts:latinLit:phi0690.phi003.t:1.#{i + 1}",
                                   sequence: i, language: "lat", text: text, text_normalized: text,
-                                  content_sha256: "sha-#{i}")
+                                  content_sha_raw: "sha-#{i}")
       end
       catalog[:enrichments].insert(passage_id: ids[0], kind: "meter", model: "pedecerto", model_version: "t",
                                    payload_json: JSON.generate("meter" => "H", "pattern" => "DDSS"), at: Time.now)

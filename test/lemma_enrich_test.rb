@@ -36,7 +36,7 @@ class LemmaEnrichTest < Minitest::Test
   def make_passage(urn:, text:, sequence:, language: "lat", annotations: nil)
     Nabu::Store::Passage.create(
       document_id: @doc.id, urn: urn, sequence: sequence, language: language,
-      text: text, text_normalized: text, content_sha256: "x", revision: 1,
+      text: text, text_normalized: text, content_sha_raw: "x", revision: 1,
       annotations_json: annotations ? JSON.generate(annotations) : "{}"
     )
   end

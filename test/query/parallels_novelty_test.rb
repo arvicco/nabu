@@ -39,7 +39,7 @@ module Query
         Nabu::Store::Passage.create(document_id: doc.id, urn: "urn:t:#{name}:#{i + 1}", sequence: (@seq += 1),
                                     language: "pli", text: body,
                                     text_normalized: Nabu::Normalize.search_form(body, language: "pli"),
-                                    content_sha256: "x", revision: 1)
+                                    content_sha_raw: "x", revision: 1)
         "urn:t:#{name}:#{i + 1}"
       end
     end

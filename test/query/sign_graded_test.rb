@@ -37,7 +37,7 @@ class SignGradedTest < Minitest::Test
     ].each_with_index do |(urn, text), i|
       Nabu::Store::Passage.create(
         document_id: @doc.id, urn: urn, sequence: i, language: "sux",
-        text: text, text_normalized: text, content_sha256: "x", revision: 1
+        text: text, text_normalized: text, content_sha_raw: "x", revision: 1
       )
     end
     outside_doc = Nabu::Store::Document.create(
@@ -46,7 +46,7 @@ class SignGradedTest < Minitest::Test
     )
     Nabu::Store::Passage.create(
       document_id: outside_doc.id, urn: "urn:k:1", sequence: 0, language: "lzh",
-      text: "ses", text_normalized: "ses", content_sha256: "x", revision: 1
+      text: "ses", text_normalized: "ses", content_sha_raw: "x", revision: 1
     )
     Nabu::Store::Indexer.rebuild!(catalog: @catalog, fulltext: @fulltext, sign_list: @sign_list)
     @graded = Nabu::Query::SignGraded.new(catalog: @catalog, fulltext: @fulltext,

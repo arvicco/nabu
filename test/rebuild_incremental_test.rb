@@ -18,6 +18,20 @@ class RebuildIncrementalTest < Minitest::Test
   MEMO_ANY_TREES = /memo: trees \d+ hit \d+ miss, repos 0 hit 0 miss/
   THEOGONY = "Theogony\nμουσάων\n"
 
+  # The rig declining a document BY RULE (Nabu::DocumentSkipped) when its
+  # title line is SKIP_TITLE — the loaded → rule-skipped transition.
+  class RuleSkipAdapter < TestAdapter
+    SKIP_TITLE = "CATALOG-ONLY"
+
+    def parse(document_ref)
+      if File.foreach(document_ref.path, encoding: Encoding::UTF_8).first&.strip == SKIP_TITLE
+        raise Nabu::DocumentSkipped.new("catalog-only #{document_ref.id}", reason: "catalog-only")
+      end
+
+      super
+    end
+  end
+
   def setup
     @root = Dir.mktmpdir("nabu-incremental")
     @canonical = File.join(@root, "canonical")
@@ -105,6 +119,110 @@ class RebuildIncrementalTest < Minitest::Test
 
     # And the final state ≡ a fresh full rebuild of the same tree.
     assert_incremental_state_equals_fresh_full_rebuild
+  end
+
+  # A loaded document whose file stops parsing (the rig raises ParseError
+  # on an empty file): a fresh full rebuild never mints it, so the
+  # incremental replay must take its passages out of the live set and the
+  # index too — kept only as a withdrawn tombstone, reason "quarantined".
+  # When the file parses again, the round trip lands back on the full
+  # rebuild's state exactly.
+  def test_incremental_withdraws_a_newly_quarantined_document_like_a_full_rebuild
+    full_rebuilder.run
+    good = File.read(File.join(@canonical, "beta", "b.txt"))
+
+    write_canonical("beta", "b.txt" => "")
+    result = incremental_rebuilder.run
+
+    assert_equal %w[beta], result.outcomes.map(&:slug)
+    report = result.outcomes.first.report
+    assert_equal [1, 1, 1], [report.errored, report.withdrawn, report.parse_withdrawn]
+    assert_equal [[true, Nabu::Store::Loader::QUARANTINED]], beta_withdrawal_state
+    assert_includes result.warnings, result.outcomes.first
+    assert(result.outcomes.first.warning_lines.any? { |line| line.start_with?("withdrew 1 held document(s)") },
+           "the rebuild output names the withdrawn-by-parse count")
+    assert_incremental_state_equals_fresh_full_rebuild(live: true)
+
+    write_canonical("beta", "b.txt" => good)
+    incremental_rebuilder.run
+
+    assert_equal [[false, nil]], beta_withdrawal_state
+    assert_incremental_state_equals_fresh_full_rebuild
+  end
+
+  # The rule-skip twin: a loaded document the adapter now declines by rule
+  # is withdrawn ("skipped-by-rule") exactly as a full rebuild would not
+  # mint it, and comes back when the rule lets it through.
+  def test_incremental_withdraws_a_newly_rule_skipped_document_like_a_full_rebuild
+    write_sources(<<~YAML)
+      alpha:
+        adapter: TestAdapter
+      beta:
+        adapter: RebuildIncrementalTest::RuleSkipAdapter
+      lexica:
+        adapter: Nabu::Adapters::Lexica
+    YAML
+    full_rebuilder.run
+    good = File.read(File.join(@canonical, "beta", "b.txt"))
+
+    write_canonical("beta", "b.txt" => "#{RuleSkipAdapter::SKIP_TITLE}\nἄνδρα\n")
+    report = incremental_rebuilder.run.outcomes.first.report
+
+    assert_equal [1, 1, 1], [report.skipped_by_rule, report.withdrawn, report.parse_withdrawn]
+    assert_equal [[true, Nabu::Store::Loader::SKIPPED_BY_RULE]], beta_withdrawal_state
+    assert_incremental_state_equals_fresh_full_rebuild(live: true)
+
+    write_canonical("beta", "b.txt" => good)
+    incremental_rebuilder.run
+
+    assert_equal [[false, nil]], beta_withdrawal_state
+    assert_incremental_state_equals_fresh_full_rebuild
+  end
+
+  # The parse breaker on the incremental path: eleven of thirteen held beta
+  # documents newly failing exceeds the limit (max(10, 20% of 13) = 10), so
+  # NOTHING is withdrawn and the state deliberately differs from a full
+  # rebuild until the operator decides. The source stays unstamped, so the
+  # next incremental replays it and warns again. A fresh full rebuild holds
+  # no rows, so the breaker never trips there.
+  def test_incremental_parse_breaker_keeps_rows_unstamped_until_the_parse_recovers
+    files = (1..12).to_h { |i| ["b#{i}.txt", "Odyssey #{i}\nστίχος #{i}\n"] }
+    write_canonical("beta", files)
+    full_rebuilder.run
+
+    write_canonical("beta", files.keys.first(11).to_h { |name| [name, ""] })
+    result = incremental_rebuilder.run
+
+    outcome = result.outcomes.find { |o| o.slug == "beta" }
+    assert_equal [11, 0, 0], outcome.report.to_h.values_at(:parse_held, :withdrawn, :parse_withdrawn)
+    assert outcome.report.parse_breaker_tripped?
+    breaker = outcome.warning_lines.find { |line| line.start_with?("PARSE BREAKER") }
+    assert breaker, "the rebuild output names the tripped breaker"
+    assert_includes breaker, "bin/nabu sync beta --parse-only --force"
+    assert_equal 13, raw_rows(:documents, source: "beta").count { |row| !row[:withdrawn] },
+                 "every held beta row stays served"
+    refute_equal content_state(fresh_full_dir, live: true), content_state(@db_dir, live: true),
+                 "under the breaker the incremental state deliberately differs from a full rebuild"
+    assert_equal [:dirty], incremental_rebuilder.plan.verdicts.select { |v| v.slug == "beta" }.map(&:state),
+                 "a tripped breaker leaves the source unstamped"
+    fresh = Nabu::Rebuild.new(config: config(db_dir: fresh_full_dir), registry: registry).run
+    refute(fresh.outcomes.any? { |o| o.report.parse_breaker_tripped? }, "inert on a fresh catalog")
+
+    write_canonical("beta", files)
+    incremental_rebuilder.run
+
+    assert_incremental_state_equals_fresh_full_rebuild
+  end
+
+  def fresh_full_dir
+    dir = File.join(@root, "db-fresh")
+    FileUtils.rm_rf(dir)
+    full_rebuilder(db_dir: dir).run
+    dir
+  end
+
+  def beta_withdrawal_state
+    raw_rows(:documents, source: "beta").map { |row| row.values_at(:withdrawn, :withdrawn_reason) }
   end
 
   # The dirty replay's run row stays open past its load: a kill in the
@@ -474,6 +592,96 @@ class RebuildIncrementalTest < Minitest::Test
     sweep = events.find { |event| event.first == :note && event[1].start_with?("verdict sweep") }
     assert_match(/\Averdict sweep: fingerprinting 3 canonical trees — ~\d+s \(last run \d+s over 3 rows\)\z/,
                  sweep[1])
+  end
+
+  # -- the stage ledger: every timed stage of a run (kind "incremental") ---
+
+  def test_a_dirty_run_records_every_stage_it_ran
+    full_rebuilder.run
+    write_canonical("beta", "b.txt" => THEOGONY)
+    result = incremental_rebuilder.run
+
+    rows = incremental_rows
+    corpus = %w[code_identities enrichments place_index person_index stats honkoku_ndl_catalog timeline
+                silver_dates silver_meter place_apply artifact_scripts facets kind_axis passage_facets
+                entity_index entry_facets hiero_postings sign_concordances lect_journal lect_facets
+                dictionary_stats derge_titles aes_titles lemma_rollups links analyze]
+    assert_equal corpus.sort, rows.select { |row| row[:scope] == "corpus" }.map { |row| row[:stage] }.sort
+    report = result.outcomes.first.report
+    assert_equal 1, report.added + report.updated, "beta's one document revised"
+    assert_equal({ %w[beta replay] => report.added + report.updated, %w[beta index_refresh] => result.indexed },
+                 rows.reject { |row| row[:scope] == "corpus" }.to_h { |row| [[row[:scope], row[:stage]], row[:rows]] },
+                 "per-source stages only for the dirty source: its replayed documents, its slice's members")
+    assert_equal 3, rows.find { |row| row[:stage] == "code_identities" }[:rows], "the sources pinned"
+    assert(rows.all? { |row| row[:seconds] >= 0 })
+    with_ledger do |ledger|
+      refute Nabu::Store::StageTimings.last(ledger, kind: "rebuild", scope: "beta", stage: "replay"),
+             "an incremental never writes the full rebuild's reference rows"
+    end
+  end
+
+  def test_a_clean_run_records_only_the_stages_a_clean_run_pays
+    full_rebuilder.run
+    incremental_rebuilder.run
+
+    assert_equal %w[code_identities enrichments lect_journal person_index place_index],
+                 incremental_rows.map { |row| row[:stage] }.sort,
+                 "no replay, no builders, no index work: a skip records no near-zero row"
+  end
+
+  def test_an_index_core_rederivation_records_the_whole_index_with_its_passage_count
+    full_rebuilder.run
+    result = with_changed_index_file("indexer.rb") { incremental_rebuilder.run }
+
+    row = incremental_rows.find { |found| found[:stage] == "fulltext_index" }
+    refute_nil row
+    assert_equal result.indexed, row[:rows]
+  end
+
+  def test_a_stage_reconcile_records_only_when_a_stage_rederived
+    full_rebuilder.run
+    ft = Nabu::Store.connect_fulltext(config.fulltext_path)
+    ft[:stage_stamps].where(stage: "clarify").update(version: "v0-stale")
+    ft.disconnect
+    incremental_rebuilder.run
+
+    assert_equal(["stage_reconcile"], incremental_rows.map { |row| row[:stage] } & %w[stage_reconcile])
+    incremental_rebuilder.run
+    assert_empty incremental_rows.map { |row| row[:stage] } & %w[stage_reconcile],
+                 "nothing stale: the reconcile is a stamp read, never a near-zero row"
+  end
+
+  def test_a_rebuilt_cjk_lane_records_its_passage_count
+    write_sources(<<~YAML)
+      alpha:
+        adapter: TestAdapter
+        cjk_index: true
+      beta:
+        adapter: TestAdapter
+    YAML
+    write_canonical("alpha", "a.txt" => "Alpha\n六龍御天\n")
+    full_rebuilder.run
+    write_canonical("alpha", "a.txt" => "Alpha\n六龍御天\n飛龍在天\n")
+    incremental_rebuilder.run
+
+    row = incremental_rows.find { |found| found[:stage] == "cjk_lane" }
+    assert_equal 2, row&.dig(:rows), "the flagged replay rebuilt the lane: rows = passages indexed"
+  end
+
+  # Recording only: the same dirty run with the recorder silenced lands
+  # the same catalog + index and the same result.
+  def test_the_recorder_leaves_the_run_unchanged
+    other_dir = File.join(@root, "db-twin")
+    full_rebuilder.run
+    full_rebuilder(db_dir: other_dir).run
+    write_canonical("beta", "b.txt" => THEOGONY)
+
+    silent = silencing_stage_timings { incremental_rebuilder(db_dir: other_dir).run }
+    recorded = incremental_rebuilder.run
+
+    summary = ->(result) { [result.outcomes.map(&:slug), result.cleans.map(&:slug), result.indexed] }
+    assert_equal summary.call(silent), summary.call(recorded)
+    assert_equal content_state(other_dir), content_state(@db_dir)
   end
 
   def test_unreplayable_sources_count_as_skipped_and_are_not_fingerprinted
@@ -897,9 +1105,30 @@ class RebuildIncrementalTest < Minitest::Test
     Nabu::Rebuild.new(config: config(db_dir: db_dir), registry: registry)
   end
 
-  def incremental_rebuilder(trust_derivations: false, code_voucher: nil)
-    Nabu::IncrementalRebuild.new(config: config, registry: registry,
+  def incremental_rebuilder(trust_derivations: false, code_voucher: nil, db_dir: @db_dir)
+    Nabu::IncrementalRebuild.new(config: config(db_dir: db_dir), registry: registry,
                                  trust_derivations: trust_derivations, code_voucher: code_voucher)
+  end
+
+  # The LAST incremental run's stage rows (kind "incremental"), oldest
+  # first — every row since the latest code_identities row (its first).
+  def incremental_rows
+    with_ledger do |ledger|
+      rows = ledger[:stage_timings].where(kind: Nabu::IncrementalRebuild::TIMING_KIND)
+      first = rows.where(stage: "code_identities").max(:id)
+      rows.where { id >= first }.order(:id).select(:scope, :stage, :seconds, :rows).all
+    end
+  end
+
+  # Run the block with StageTimings.record! declining (the table-less
+  # ledger's behavior) — the recorder off, everything else real.
+  def silencing_stage_timings
+    singleton = Nabu::Store::StageTimings.singleton_class
+    original = Nabu::Store::StageTimings.method(:record!)
+    singleton.define_method(:record!) { |*, **| nil }
+    yield
+  ensure
+    singleton.define_method(:record!, original)
   end
 
   # A progress spy recording stages ([:stage, label, eta]) and notes
@@ -1102,30 +1331,55 @@ class RebuildIncrementalTest < Minitest::Test
   # Content-equivalence comparator (modulo re-minted ids/revisions): urn-keyed
   # content columns for documents, passages and dictionary entries, plus the
   # index, axes and facet projections.
-  def content_state(db_dir)
+  #
+  # +live+: compare the LIVE set only (withdrawn documents and their
+  # passages left out) — for transitions whose incremental result honestly
+  # keeps a withdrawn tombstone a fresh full rebuild never mints. The
+  # caller pins the tombstone itself separately.
+  def content_state(db_dir, live: false)
     state = with_db(db_dir: db_dir) do |db|
+      documents = db[:documents]
+      passages = db[:passages]
+      if live
+        documents = documents.where(Sequel[:documents][:withdrawn] => false)
+        passages = passages.where(Sequel[:passages][:withdrawn] => false,
+                                  document_id: db[:documents].where(withdrawn: false).select(:id))
+      end
       {
-        documents: db[:documents].join(:sources, id: :source_id)
-                                 .select_order_map(%i[slug urn language title content_sha256 withdrawn]),
-        passages: db[:passages].select_order_map(%i[urn sequence language text text_normalized
-                                                    content_sha256 withdrawn]),
+        documents: documents.join(:sources, id: :source_id)
+                            .select_order_map(%i[slug urn language title content_sha256 withdrawn]),
+        passages: passages.select_order_map(%i[urn sequence language text text_normalized
+                                               content_sha256 withdrawn]),
         dictionary_entries: db[:dictionary_entries].select_order_map(%i[urn entry_id headword gloss
                                                                         body content_sha256 withdrawn]),
         axes: db[:document_axes].count,
         facets: db[:document_facets].count,
         # Migration 054: the O(1) accounting (timestamps are bookkeeping).
-        aggregates: db[:source_aggregates].join(:sources, id: :source_id)
-                                          .select_order_map(%i[slug documents_count passages_count
-                                                               fts_member_count fts_behind])
+        aggregates: aggregates_state(db, live: live)
       }
     end
     state.merge(fts: fts_snapshot(db_dir: db_dir))
   end
 
-  def assert_incremental_state_equals_fresh_full_rebuild
+  # The source_aggregates projection. +live+ also drops an all-zero row
+  # (no live documents, passages or index members): a source whose every
+  # document was withdrawn keeps its row at zero, which reads exactly as a
+  # fresh rebuild's absent row does (SourceAggregates.fetch's empty).
+  def aggregates_state(db, live:)
+    rows = db[:source_aggregates].join(:sources, id: :source_id)
+                                 .select_order_map(%i[slug documents_count passages_count fts_member_count fts_behind])
+    return rows unless live
+
+    rows.reject do |_slug, documents, passages, members, behind|
+      [documents, passages, members.to_i].all?(&:zero?) && !behind
+    end
+  end
+
+  def assert_incremental_state_equals_fresh_full_rebuild(live: false)
     fresh_dir = File.join(@root, "db-fresh")
+    FileUtils.rm_rf(fresh_dir)
     full_rebuilder(db_dir: fresh_dir).run
-    assert_equal content_state(fresh_dir), content_state(@db_dir),
+    assert_equal content_state(fresh_dir, live: live), content_state(@db_dir, live: live),
                  "incremental result must be content-equivalent to a fresh full rebuild"
   end
 end

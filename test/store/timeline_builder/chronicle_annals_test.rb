@@ -34,7 +34,7 @@ module Store
         Nabu::Store::Passage.create(
           document_id: doc.id, urn: "urn:nabu:proiel:lav:#{sid}", sequence: sequence,
           language: "orv", text: "x#{sid}", text_normalized: "x#{sid}",
-          content_sha256: sid, revision: 1, withdrawn: false
+          content_sha_raw: sid, revision: 1, withdrawn: false
         )
       end
       doc

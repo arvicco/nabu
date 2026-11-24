@@ -34,7 +34,7 @@ class LinkScopeReplayTest < Minitest::Test
     Nabu::Store::Passage.create(document_id: doc.id, urn: "urn:nabu:kanripo:d1:1",
                                 language: "lzh", text: "田何徙杜陵號杜田生",
                                 text_normalized: "田何徙杜陵號杜田生",
-                                content_sha256: "1" * 64, sequence: 0, revision: 1)
+                                content_sha_raw: "1" * 64, sequence: 0, revision: 1)
   end
 
   def teardown

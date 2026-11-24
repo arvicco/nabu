@@ -63,7 +63,7 @@ class PlaceMineTest < Minitest::Test
     ].each_with_index do |(urn, text), i|
       Nabu::Store::Passage.create(document_id: doc.id, urn: urn, language: "lzh",
                                   text: text, text_normalized: text,
-                                  content_sha256: i.to_s * 64, sequence: i, revision: 1)
+                                  content_sha_raw: i.to_s * 64, sequence: i, revision: 1)
     end
   end
 
@@ -122,7 +122,7 @@ class PlaceMineTest < Minitest::Test
       Nabu::Store::Passage.create(document_id: doc.id, urn: "urn:nabu:kanripo:d2:#{i}",
                                   language: "lzh", text: "出東門而去",
                                   text_normalized: "出東門而去",
-                                  content_sha256: format("%064x", 1000 + i),
+                                  content_sha_raw: format("%064x", 1000 + i),
                                   sequence: i, revision: 1)
     end
 
@@ -152,7 +152,7 @@ class PlaceMineTest < Minitest::Test
       Nabu::Store::Passage.create(document_id: doc.id, urn: "urn:nabu:kanripo:d3:#{i}",
                                   language: "lzh", text: "出東門而去",
                                   text_normalized: "出東門而去",
-                                  content_sha256: format("%064x", 2000 + i),
+                                  content_sha_raw: format("%064x", 2000 + i),
                                   sequence: i, revision: 1)
     end
 
@@ -235,7 +235,7 @@ class PlaceMineTest < Minitest::Test
             else live_doc
             end
       Nabu::Store::Passage.create(document_id: doc.id, urn: "urn:nabu:eq:#{i}", language: "lzh", text: text,
-                                  text_normalized: text, content_sha256: format("%064x", 5000 + i),
+                                  text_normalized: text, content_sha_raw: format("%064x", 5000 + i),
                                   sequence: seq += 1, revision: 1, withdrawn: (i % 9 == 8))
     end
   end

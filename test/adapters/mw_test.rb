@@ -282,7 +282,7 @@ class MwTest < Minitest::Test
       Nabu::Store::Passage.create(
         document_id: doc.id, urn: "#{doc.urn}:#{citation}", sequence: index,
         language: "san-Latn", text: "agním īḷe", text_normalized: "agnim ile",
-        content_sha256: "x", revision: 1
+        content_sha_raw: "x", revision: 1
       )
     end
     doc

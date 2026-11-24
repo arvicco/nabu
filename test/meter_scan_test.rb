@@ -26,7 +26,7 @@ class MeterScanTest < Minitest::Test
       doc = catalog[:documents].insert(source_id: src, urn: urn, language: "lat", content_sha256: "x")
       lines.each_with_index do |text, i|
         catalog[:passages].insert(document_id: doc, urn: "#{urn}:#{i + 1}", sequence: i, language: "lat", text: text,
-                                  text_normalized: text, content_sha256: "sha-#{urn}-#{i}")
+                                  text_normalized: text, content_sha_raw: "sha-#{urn}-#{i}")
       end
     end
     Dir.mktmpdir("nabu-meter-scan") do |root|
@@ -56,7 +56,7 @@ class MeterScanTest < Minitest::Test
       again = Nabu::MeterScan.new(catalog: catalog, shelf: shelf).run
       assert_equal 0, again.records, "everything current: nothing re-shelved"
       assert_equal 1, again.current_documents
-      catalog[:passages].where(urn: "urn:t:verse:2").update(content_sha256: "re-parsed")
+      catalog[:passages].where(urn: "urn:t:verse:2").update(content_sha_raw: "re-parsed")
       moved = Nabu::MeterScan.new(catalog: catalog, shelf: shelf).run
       assert_equal 1, moved.records
       assert_equal "re-parsed", shelf.latest_by_urn["urn:t:verse:2"].content_sha256
@@ -69,7 +69,7 @@ class MeterScanTest < Minitest::Test
       doc = catalog[:documents].insert(source_id: src, urn: "urn:t:long", language: "lat", content_sha256: "x")
       (Nabu::MeterScan::PROBE + 10).times do |i|
         catalog[:passages].insert(document_id: doc, urn: "urn:t:long:#{i}", sequence: i, language: "lat",
-                                  text: PROSE[i % 2], text_normalized: "p", content_sha256: "p#{i}")
+                                  text: PROSE[i % 2], text_normalized: "p", content_sha_raw: "p#{i}")
       end
       report = Nabu::MeterScan.new(catalog: catalog, shelf: shelf).run(urn_prefix: "urn:t:long")
       assert_equal Nabu::MeterScan::PROBE, report.passages, "only the probe was read and scanned"

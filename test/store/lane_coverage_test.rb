@@ -30,7 +30,7 @@ module Store
       doc = Nabu::Store::Document.create(source_id: src.id, urn: "urn:#{slug}", title: "t", language: "lzh",
                                          content_sha256: "x", revision: 1, withdrawn: false)
       Nabu::Store::Passage.create(document_id: doc.id, urn: "urn:#{slug}:1", sequence: 0, language: "lzh",
-                                  text: text, text_normalized: text, content_sha256: "x", revision: 1,
+                                  text: text, text_normalized: text, content_sha_raw: "x", revision: 1,
                                   withdrawn: false, annotations_json: "{}")
       src
     end

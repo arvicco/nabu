@@ -30,7 +30,7 @@ module Query
       Nabu::Store::Passage.create(
         document_id: doc.id, urn: "#{urn}:1", sequence: 1, language: language,
         text: text, text_normalized: Nabu::Normalize.search_form(text, language: language),
-        content_sha256: "#{urn}p", revision: 1, withdrawn: false
+        content_sha_raw: "#{urn}p", revision: 1, withdrawn: false
       )
       @catalog[:document_axes].insert(
         document_id: doc.id, not_before: not_before, not_after: not_after,

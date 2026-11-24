@@ -36,7 +36,7 @@ module Query
       count.times do |i|
         @catalog[:passages].insert(
           document_id: doc_id, urn: "#{urn}:#{i + 1}", sequence: i, language: language,
-          text: "text #{i}", text_normalized: "text #{i}", content_sha256: "x",
+          text: "text #{i}", text_normalized: "text #{i}", content_sha_raw: "x",
           revision: 1, withdrawn: withdrawn
         )
       end

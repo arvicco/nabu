@@ -75,7 +75,7 @@ module Query
       leaves.each do |leaf|
         Nabu::Store::Passage.create(document_id: doc.id, urn: "#{urn}:p#{leaf}", sequence: leaf,
                                     language: "deu", text: "p", text_normalized: "p",
-                                    content_sha256: "x", revision: 1)
+                                    content_sha_raw: "x", revision: 1)
       end
       doc
     end

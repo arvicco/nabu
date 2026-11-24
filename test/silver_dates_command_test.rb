@@ -120,7 +120,7 @@ class SilverDatesCommandTest < Minitest::Test
         db[:passages].insert(document_id: doc, urn: "#{urn}:1", sequence: 0, language: "grc",
                              text: "στρατηγος",
                              text_normalized: Nabu::Normalize.search_form("στρατηγος", language: "grc"),
-                             content_sha256: "x", revision: 1, withdrawn: false, annotations_json: "{}")
+                             content_sha_raw: "x", revision: 1, withdrawn: false, annotations_json: "{}")
         next unless bounds
 
         db[:document_axes].insert(document_id: doc, not_before: bounds[0], not_after: bounds[1],

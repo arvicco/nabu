@@ -34,8 +34,8 @@ module Nabu
     # Loads only the stdlib + Nabu::Shell, so script/demo-smoke runs on a
     # bare Ruby with no bundle.
     module DemoPublish
-      IMAGE = "ghcr.io/arvicco/nabu-ancient-texts"
-      SERVER_NAME = "io.github.arvicco/nabu-ancient-texts"
+      IMAGE = "ghcr.io/arvicco/nabu-ancient-corpora"
+      SERVER_NAME = "io.github.arvicco/nabu-ancient-corpora"
       PLATFORMS = %w[linux/amd64 linux/arm64].freeze
       SERVER_JSON = "server.json"
       CENSUS_FILE = "demo-census.json" # Nabu::DemoBuild::CENSUS_FILE (not loaded here)

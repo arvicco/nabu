@@ -38,21 +38,32 @@ module Nabu
     # temp_store=MEMORY — caused the measured ×1.6–3.4 load regression.
     LOAD_TX_BATCH = 1_000
 
-    # P78-r2: the indexer's six timed sub-stages — what the "fulltext index"
-    # umbrella estimate sums over (see index_eta).
-    INDEX_ETA_STAGES = %w[fts_lemma trigram passage_chars passage_signs alignment reflex].freeze
+    # P78-r2: the indexer's timed sub-stages — what the "fulltext index"
+    # umbrella estimate sums over (see index_eta): every corpus stage
+    # Indexer.rebuild! times, the cjk lane and the five tail lanes included.
+    INDEX_ETA_STAGES = %w[fts_lemma trigram cjk passage_chars passage_signs alignment reflex
+                          clarify translations glosses annotations gloss_lines].freeze
 
     # A source that was replayed, carrying its LoadReport. +quarantine+
     # (P18-7) is the DELTA-aware quarantine finding for this replay — nil when
     # the errored count matches the recorded ledger baseline, so a standing
     # (audited) quarantine population no longer shouts "parser regression?" at
     # every rebuild while a CHANGE still does, loudly, with the delta.
+    # #warning_lines adds the loader's parse-settlement lines
+    # (LoadReport#parse_withdrawal_messages): the held documents a failing
+    # parse withdrew, and a tripped parse breaker — never folded into the
+    # errored count. An incremental replay can meet both; a fresh full
+    # rebuild holds no rows, so there they stay empty.
     Outcome = Data.define(:slug, :report, :quarantine) do
       def initialize(slug:, report:, quarantine: nil)
         super
       end
 
-      def warning? = !quarantine.nil?
+      def warning_lines
+        [quarantine&.message, *report&.parse_withdrawal_messages(slug)].compact
+      end
+
+      def warning? = warning_lines.any?
     end
 
     # A source left untouched because it has no local canonical data yet.
@@ -169,12 +180,14 @@ module Nabu
       # minted hours into the run must describe the code the run loaded, not
       # whatever sits on disk by then (DerivationFingerprint#warm). The
       # links producers' code identity is pinned for the same reason.
-      warm_link_code
-      @registry.each_source { |entry| fingerprints.warm(entry) }
+      profile.measure(scope: RebuildProfile::CORPUS, stage: :code_identities) do
+        warm_link_code
+        @registry.each_source { |entry| fingerprints.warm(entry) }
+      end
       # Warming must COMPLETE before the first replay begins; folding it into
       # the replay loop would warm the last source hours after load time,
       # recreating the lying stamp.
-      @registry.each_source do |entry| # rubocop:disable Style/CombinableLoops
+      @registry.each_source do |entry|
         if replayable?(entry)
           progress&.stage(entry.slug, eta: load_eta(ledger, entry.slug))
           # The :load roll-up is the authoritative per-source number (parse +
@@ -183,19 +196,21 @@ module Nabu
           outcomes << profile.measure(scope: entry.slug, stage: :load) do
             replay(db, ledger, entry, progress, profile)
           end
-          stamp!(db, entry)
+          # The stamp hashes the source's canonical tree (the full rebuild
+          # never reads the identity memo) — its own per-source stage.
+          profile.measure(scope: entry.slug, stage: :stamp) { stamp!(db, entry) }
         else
           skips << Skip.new(slug: entry.slug, reason: :no_canonical)
         end
       end
-      replay_enrichments(db)
-      replay_place_index(db)
-      replay_person_index(db)
+      profile.measure(scope: RebuildProfile::CORPUS, stage: :enrichments) { replay_enrichments(db) }
+      profile.measure(scope: RebuildProfile::CORPUS, stage: :place_index) { replay_place_index(db) }
+      profile.measure(scope: RebuildProfile::CORPUS, stage: :person_index) { replay_person_index(db) }
       # P36-2: the bulk insert is done — build the deferred secondary indexes in
       # one pass BEFORE the query-side stages (timeline/facets/indexer). Their
       # passages.document_id joins never waited on this step: the unique
       # (document_id, sequence) index serves them and is never deferred.
-      Store.create_deferred_indexes!(db)
+      profile.measure(scope: RebuildProfile::CORPUS, stage: :deferred_indexes) { Store.create_deferred_indexes!(db) }
       # The honkoku <- ndl-kotenseki catalog join writes each NDL-held
       # material's NDL record onto its honkoku row BEFORE the builders,
       # which project it (facet map + MetadataDates); absent census = the
@@ -216,18 +231,24 @@ module Nabu
       # local-dates shelf only when the owner armed it (`nabu silver-dates
       # --project`); db/ stays f(canonical, config, local).
       progress&.stage("silver dates")
-      Store::SilverDates.replay!(catalog: db, shelf: DateShelf.present(@config))
+      profile.measure(scope: RebuildProfile::CORPUS, stage: :silver_dates) do
+        Store::SilverDates.replay!(catalog: db, shelf: DateShelf.present(@config))
+      end
       # P152: the armed silver-meter lane re-projects from the local-meter
       # shelf into the enrichments table the gold producers just re-derived
       # (it skips every gold-covered passage, so it must follow them).
       progress&.stage("silver meter")
-      Store::SilverMeter.replay!(catalog: db, shelf: MeterShelf.present(@config))
+      profile.measure(scope: RebuildProfile::CORPUS, stage: :silver_meter) do
+        Store::SilverMeter.replay!(catalog: db, shelf: MeterShelf.present(@config))
+      end
       # P63-7: the nabu-places registry projection re-runs AFTER the lanes
       # rebuilt document_axes (NULL-only, adapter-asserted wins) — db/ stays
       # a pure function of canonical/ incl. the registry under it. A missing
       # registry is the honest no-op.
       progress&.stage("place apply")
-      Nabu::PlaceApply.run(catalog: db, canonical_dir: @config.canonical_dir)
+      profile.measure(scope: RebuildProfile::CORPUS, stage: :place_apply) do
+        Nabu::PlaceApply.run(catalog: db, canonical_dir: @config.canonical_dir)
+      end
       # The facet table (P17-2) projects from the documents just replayed
       # (their metadata_json is f(canonical)), so it regenerates here too.
       progress&.stage("facets", eta: corpus_eta(ledger, "facets"))
@@ -486,8 +507,7 @@ module Nabu
     # six timed sub-stages, so its estimate sums them. No current-rows
     # denominator here — a rebuild doesn't know its document counts until it
     # parses, so the estimate is the last run verbatim (the CLI's in-stage
-    # extrapolation takes over once ticks flow). "place apply" has no
-    # profiler stage and stays bare.
+    # extrapolation takes over once ticks flow).
     def load_eta(ledger, slug)
       Nabu::Eta.for(ledger, kind: "rebuild", scope: slug, stage: "load")
     end
@@ -511,7 +531,8 @@ module Nabu
     # end stamps it via StageTimings.denominate!). A killed run's corpus
     # rows keep rows nil: no honest denominator, and the ETA renderer reads
     # nil as "no drift scaling". Only stages the profile knows record —
-    # source :load roll-ups and the labelled corpus stages, as before.
+    # source :load roll-ups, each source's :stamp, and the labelled corpus
+    # stages.
     def stage_flusher(ledger, flushed)
       lambda do |scope, stage, seconds, result|
         if scope == RebuildProfile::CORPUS
@@ -523,6 +544,10 @@ module Nabu
           report = result.respond_to?(:report) ? result.report : nil
           Store::StageTimings.record!(ledger, kind: "rebuild", scope: scope.to_s, stage: "load",
                                               seconds: seconds, rows: report && (report.added + report.updated))
+        elsif stage == :stamp
+          # The tree hash's work size (files/bytes hashed) is not in hand:
+          # rows nil, the estimate reads it verbatim.
+          Store::StageTimings.record!(ledger, kind: "rebuild", scope: scope.to_s, stage: "stamp", seconds: seconds)
         end
       end
     end
@@ -697,8 +722,9 @@ module Nabu
       # rebuild: true — the fast-and-unsafe rebuild-mode connection profile
       # (Store.rebuild_pragmas!): synchronous=OFF + big cache, sound only
       # because this db is regenerated from canonical/ (a crashed rebuild is
-      # re-run, never recovered).
-      db = Store.connect(db_path, rebuild: true)
+      # re-run, never recovered). connect_catalog: this is the catalog's
+      # from-scratch generation, minted at CATALOG_PAGE_SIZE.
+      db = Store.connect_catalog(db_path, rebuild: true)
       Store.migrate!(db)
       Store.setup!(db)
       db

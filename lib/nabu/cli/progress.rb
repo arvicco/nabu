@@ -85,14 +85,16 @@ module Nabu
       # the source whose slice the hygiene leaves pending after a kill.
       # +arm_kill+ false (the rebuild flavors) = heartbeats only unless the
       # owner's --deadline arms one (IndexWatcher.deadline_for's rationale).
-      def supervised_index_write(config, label:, estimate:, slug: nil, arm_kill: true, &)
+      # +log+ (an Ops::RunLog) receives the arming line and every watcher
+      # line too (stall, overrun, deadline) — the terminal keeps them.
+      def supervised_index_write(config, label:, estimate:, slug: nil, arm_kill: true, log: nil, &)
         deadline = Nabu::IndexWatcher.deadline_for(estimate: estimate, override_minutes: options[:deadline],
                                                    arm_default: arm_kill)
-        if deadline || $stderr.tty?
-          warn Nabu::IndexWatcher.arming_line(deadline: deadline, estimate: estimate, kill_default: arm_kill)
-        end
+        arming = Nabu::IndexWatcher.arming_line(deadline: deadline, estimate: estimate, kill_default: arm_kill)
+        warn arming if deadline || $stderr.tty?
+        log&.line(arming)
         Nabu::IndexWatcher.supervise(label: label, fulltext_path: config.fulltext_path, deadline: deadline,
-                                     slug: slug) do |tee|
+                                     slug: slug, log_path: log&.path, echo: !log.nil?) do |tee|
           @watch_tee = tee
           yield
         ensure

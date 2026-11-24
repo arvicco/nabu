@@ -21,7 +21,7 @@ module Nabu
     # and reports pass/fail per task plus a summary:
     #
     #   script/demo-eval                                  # docker run -i --rm <IMAGE>
-    #   script/demo-eval --image ghcr.io/arvicco/nabu-ancient-texts:1.0.0
+    #   script/demo-eval --image ghcr.io/arvicco/nabu-ancient-corpora:1.0.0
     #   script/demo-eval --url http://localhost:8080/mcp  # an HTTP-mode server
     #   script/demo-eval --command "bin/nabu mcp"         # a local stdio server
     #
@@ -51,7 +51,7 @@ module Nabu
     module DemoEval
       SCHEMA = "nabu.demo-eval/1"
       PACK = File.expand_path("../../../eval/demo/pack.yml", __dir__)
-      DEFAULT_IMAGE = "ghcr.io/arvicco/nabu-ancient-texts:latest" # Nabu::Ops::DemoPublish::IMAGE (not loaded here)
+      DEFAULT_IMAGE = "ghcr.io/arvicco/nabu-ancient-corpora:latest" # Nabu::Ops::DemoPublish::IMAGE (not loaded here)
       PROTOCOL_VERSION = "2025-11-25" # Nabu::MCP::Server::PROTOCOL_VERSION (not loaded here)
 
       # const: the MCP tool table's names (Nabu::MCP::Tools::TOOLS, not loaded

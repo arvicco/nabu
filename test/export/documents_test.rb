@@ -30,7 +30,7 @@ module Export
                                          license_override: license_override)
       passages.times do |seq|
         Nabu::Store::Passage.create(document_id: doc.id, urn: "#{urn}:#{seq}", sequence: seq, language: language,
-                                    text: "t", text_normalized: "t", content_sha256: "x", revision: 1,
+                                    text: "t", text_normalized: "t", content_sha_raw: "x", revision: 1,
                                     withdrawn: false)
       end
       doc

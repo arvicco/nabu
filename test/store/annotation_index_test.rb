@@ -31,7 +31,7 @@ module Store
       doc = Nabu::Store::Document.create(source_id: other.id, urn: "urn:x:1", title: "t", language: "lat",
                                          content_sha256: "x", revision: 1)
       Nabu::Store::Passage.create(document_id: doc.id, urn: "urn:x:1:1", sequence: 0, language: "lat",
-                                  text: "arma", text_normalized: "arma", content_sha256: "x", revision: 1,
+                                  text: "arma", text_normalized: "arma", content_sha_raw: "x", revision: 1,
                                   annotations_json: '{"notes":["praesul prasnik"]}')
     end
 

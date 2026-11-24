@@ -63,7 +63,7 @@ module MCP
       Nabu::Store::Passage.create(
         document_id: document.id, urn: urn, sequence: sequence, language: language,
         text: text, text_normalized: Nabu::Normalize.search_form(text, language: language),
-        annotations_json: annotations, content_sha256: "x", revision: 1
+        annotations_json: annotations, content_sha_raw: "x", revision: 1
       )
     end
 
@@ -3165,7 +3165,7 @@ module MCP
                             title: tail, language: lang)
         Nabu::Store::Passage.create(
           document_id: doc.id, urn: "#{doc.urn}:1", sequence: 0, language: lang,
-          text: text, text_normalized: text, content_sha256: "x", revision: 1,
+          text: text, text_normalized: text, content_sha_raw: "x", revision: 1,
           annotations_json: JSON.generate(
             "tokens" => [{ "citation_part" => "MARK 2.3", "form" => "x" }]
           )
@@ -3229,7 +3229,7 @@ module MCP
         doc = make_document(source: source, urn: doc_urn, title: "Psalms", language: lang)
         Nabu::Store::Passage.create(
           document_id: doc.id, urn: "#{doc_urn}:#{tail}", sequence: 0, language: lang,
-          text: text, text_normalized: text, content_sha256: "x", revision: 1, annotations_json: "{}"
+          text: text, text_normalized: text, content_sha_raw: "x", revision: 1, annotations_json: "{}"
         )
       end
       Nabu::Store::Indexer.rebuild!(catalog: @catalog, fulltext: @fulltext, alignments: registry)
@@ -3262,7 +3262,7 @@ module MCP
       doc = make_document(source: source, urn: "urn:nabu:proiel:lacunose", title: "lacunose", language: "got")
       Nabu::Store::Passage.create(
         document_id: doc.id, urn: "#{doc.urn}:1", sequence: 0, language: "got",
-        text: "jah qemun at imma", text_normalized: "jah qemun at imma", content_sha256: "x", revision: 1,
+        text: "jah qemun at imma", text_normalized: "jah qemun at imma", content_sha_raw: "x", revision: 1,
         annotations_json: JSON.generate("tokens" => [{ "citation_part" => "MARK 2.4", "form" => "x" }])
       )
       registry = align_registry(FOLD_REGISTRY_YAML)
@@ -3547,7 +3547,7 @@ module MCP
         rows.each_with_index do |(ref, lemma, form), seq|
           Nabu::Store::Passage.create(
             document_id: doc.id, urn: "#{doc.urn}:#{seq + 1}", sequence: seq, language: lang,
-            text: form, text_normalized: form, content_sha256: "x", revision: 1,
+            text: form, text_normalized: form, content_sha_raw: "x", revision: 1,
             annotations_json: JSON.generate(
               "citation" => ref,
               "tokens" => [{ "citation_part" => ref, "lemma" => lemma, "form" => form }]

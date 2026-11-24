@@ -23,7 +23,7 @@ module Ops
         Nabu::Store::Passage.create(document_id: doc.id, urn: "#{urn}:1", sequence: 0, language: lang,
                                     text: "libertas",
                                     text_normalized: Nabu::Normalize.search_form("libertas", language: lang),
-                                    content_sha256: "x", revision: 1)
+                                    content_sha_raw: "x", revision: 1)
       end
       Nabu::Store::Indexer.rebuild!(catalog: @catalog, fulltext: @fulltext)
     end

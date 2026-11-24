@@ -36,7 +36,7 @@ module Query
       citations.each_with_index do |citation, i|
         Nabu::Store::Passage.create(document_id: doc.id, urn: "#{urn}:#{citation}", sequence: i,
                                     language: language, text: "t", text_normalized: "t",
-                                    annotations_json: "{}", content_sha256: "x", revision: 1)
+                                    annotations_json: "{}", content_sha_raw: "x", revision: 1)
       end
       doc
     end

@@ -84,7 +84,7 @@ class ReviewHookTest < Minitest::Test
                                       content_sha256: "x", withdrawn: false)
       @db[:passages].insert(document_id: doc_id, urn: "urn:t:corpus:#{i}:p", sequence: 0,
                             language: "grc", text: "α", text_normalized: "α",
-                            content_sha256: "x", withdrawn: false)
+                            content_sha_raw: "x", withdrawn: false)
       @db[:provenance].insert(document_id: doc_id, event: "loaded", at: Time.now + i)
     end
     Nabu::Health::QuarantineBaseline.record!(@ledger, "corpus", errored: 1) if record_baseline

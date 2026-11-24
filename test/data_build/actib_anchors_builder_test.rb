@@ -156,7 +156,7 @@ class DataBuildActibAnchorsBuilderTest < Minitest::Test
       Nabu::Store::Passage.create(
         document_id: doc.id, urn: "#{doc_urn}:#{ref}", sequence: sequence, language: "xct",
         text: text, text_normalized: text,
-        content_sha256: Digest::SHA256.hexdigest(text), revision: 1, withdrawn: false
+        content_sha_raw: Digest::SHA256.hexdigest(text), revision: 1, withdrawn: false
       )
     end
   end

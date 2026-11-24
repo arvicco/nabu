@@ -33,10 +33,17 @@ module Nabu
     # (Store::IndexDelta, frozen) so the index refresh can work the delta
     # grain; nil for constructions that never collected one (defaulted, so
     # every existing construction stays valid).
+    # +parse_withdrawn+ counts the subset of +withdrawn+ that were HELD
+    # documents whose file no longer yields a document (a parse quarantine,
+    # a rule skip, a constraint quarantine) — distinct from +errored+, which
+    # counts failing FILES whether or not anything was held. +parse_held+
+    # counts such documents the parse breaker KEPT serving instead (the
+    # breaker tripped; Loader::ParseBreaker): non-zero IS the tripped flag.
+    # Both default to 0.
     LoadReport = Data.define(:added, :updated, :skipped, :withdrawn, :errored, :skipped_by_rule, :collided,
-                             :revised, :index_delta) do
+                             :revised, :index_delta, :parse_withdrawn, :parse_held) do
       def initialize(added:, updated:, skipped:, withdrawn:, errored:, skipped_by_rule: 0, collided: 0,
-                     revised: 0, index_delta: nil)
+                     revised: 0, index_delta: nil, parse_withdrawn: 0, parse_held: 0)
         super
       end
 
@@ -45,6 +52,27 @@ module Nabu
       # pure idempotent no-op) — the P109-5 lesson: such a load must never
       # trigger the whole-slice FTS delete+reinsert.
       def passages_changed? = (added + revised + withdrawn).positive?
+
+      # The parse breaker tripped: held documents that no longer parse were
+      # KEPT live, pending the operator's acceptance.
+      def parse_breaker_tripped? = parse_held.positive?
+
+      # The operator-facing lines for the withdrawals a failing parse caused
+      # (empty when there were none) — sync and rebuild print them beside
+      # the quarantine delta. +slug+ names the source in the accept command.
+      def parse_withdrawal_messages(slug)
+        lines = []
+        if parse_withdrawn.positive?
+          lines << "withdrew #{parse_withdrawn} held document(s) whose file no longer parses " \
+                   "(quarantined or skipped by rule; #{errored} file(s) errored this run)"
+        end
+        if parse_breaker_tripped?
+          lines << "PARSE BREAKER: #{parse_held} held document(s) now fail to parse — this looks like a " \
+                   "parser regression; their rows were KEPT (still served). If the change is intended, " \
+                   "accept the withdrawals with: bin/nabu sync #{slug} --parse-only --force"
+        end
+        lines
+      end
 
       # Field-wise sum (P104-4): a source with a secondary dictionary lane
       # records ONE run whose counts cover both loads — document- and
@@ -57,7 +85,8 @@ module Nabu
           added: added + other.added, updated: updated + other.updated,
           skipped: skipped + other.skipped, withdrawn: withdrawn + other.withdrawn,
           errored: errored + other.errored, skipped_by_rule: skipped_by_rule + other.skipped_by_rule,
-          collided: collided + other.collided, revised: revised + other.revised
+          collided: collided + other.collided, revised: revised + other.revised,
+          parse_withdrawn: parse_withdrawn + other.parse_withdrawn, parse_held: parse_held + other.parse_held
         )
       end
     end
@@ -83,7 +112,10 @@ module Nabu
     #   and counted (LoadReport#collided), the first file's content preserved.
     # - Nothing is ever hard-deleted. A full load (full: true) asserts batch
     #   completeness: this source's documents absent from the batch are marked
-    #   withdrawn (+ provenance); partial loads never infer deletions. Within
+    #   withdrawn (+ provenance), and so is a held document whose file now
+    #   quarantines or is skipped by rule (reasons QUARANTINED /
+    #   SKIPPED_BY_RULE — a full rebuild would not mint it), unless the
+    #   ParseBreaker trips; partial loads never infer deletions. Within
     #   a revised document, passages missing from the new parse are withdrawn
     #   the same way. Withdrawn rows that reappear are restored (+ provenance
     #   "restored"), bumping revision only if content also changed.
@@ -131,6 +163,51 @@ module Nabu
       # retired_upstream (architecture §8).
       UPSTREAM_GONE = "upstream-gone"
       REVISION_PRUNED = "revision-pruned"
+      # Two more document-grain reasons for a held (live) document whose file
+      # is still present upstream but no longer yields a document: its parse
+      # raises Nabu::ParseError (or its write hits a constraint) —
+      # QUARANTINED — or the adapter now declines it by rule
+      # (Nabu::DocumentSkipped) — SKIPPED_BY_RULE. A fresh full rebuild
+      # never mints such a document, so a full load takes it out of the live
+      # set too: incremental ≡ full (architecture §3, §8). Withdrawn, never
+      # deleted: the first load that yields it again restores it.
+      QUARANTINED = "quarantined"
+      SKIPPED_BY_RULE = "skipped-by-rule"
+
+      # The parse breaker: the loud stop that replaces the old quarantine
+      # shield. A parser (or skip-rule) regression would otherwise withdraw
+      # a mass of held texts on one sync — the failure mode the shield once
+      # guarded silently. When one full load's NEWLY failing held documents
+      # exceed #limit, the loader withdraws NONE of them, keeps serving
+      # them, and says so (LoadReport#parse_held / #parse_breaker_tripped?);
+      # the operator accepts with `sync <slug> --parse-only --force`. Until
+      # then the catalog deliberately differs from a full rebuild (which
+      # would hold none of them) — the one sanctioned exception to
+      # incremental ≡ full, and a loud one. A fresh full rebuild holds no
+      # rows, so the breaker is inert there by construction.
+      #
+      # The limit follows the mass-deletion breaker's philosophy (a share of
+      # the source, Adapter::MASS_DELETION_THRESHOLD = 20%) with two bounds:
+      # - +floor+ 10: a share alone would trip a 4-document source on one
+      #   genuinely broken upstream file. Up to ten newly failing documents
+      #   is the scale of ordinary upstream churn; past it, it is a pattern.
+      # - +cap+ 50: a share alone lets a regression of a hundred-odd texts
+      #   through on a source of tens of thousands (1% — far under 20%),
+      #   which is exactly the incident class the shield was minted for.
+      #   Fifty held texts newly unparseable in ONE load is a stop at any
+      #   source size.
+      # So limit = min(cap, max(floor, share × held)), and the breaker trips
+      # when the newly failing count is STRICTLY above it.
+      ParseBreaker = Data.define(:floor, :share, :cap) do
+        def limit(held) = (share * held).clamp(floor, cap)
+
+        def trips?(failing, held:) = failing > limit(held)
+      end
+      PARSE_BREAKER = ParseBreaker.new(floor: 10, share: Nabu::Adapter::MASS_DELETION_THRESHOLD, cap: 50)
+
+      # What a document withdrawal needs of its row, in #withdraw_document's
+      # positional order.
+      WITHDRAWAL_COLUMNS = %i[id urn content_sha256 language license_override retired_upstream].freeze
 
       # The outcomes that move a row in or out of the live passage set the
       # fulltext index serves — LoadReport#passages_changed?'s grain (the
@@ -161,8 +238,10 @@ module Nabu
       INSERT_SLICE_BYTES = 4 * 1024 * 1024
 
       # The passage columns the bulk insert writes, in VALUES order.
+      # The hash lands in content_sha_raw as 32 raw bytes (ContentHash.stored,
+      # migration 056); content_sha256 is the virtual hex read seam.
       PASSAGE_COLUMNS = %i[document_id urn sequence language text text_normalized annotations_json
-                           content_sha256 revision withdrawn].freeze
+                           content_sha_raw revision withdrawn].freeze
 
       # The stored text_normalized sentinels (#stored_normalized; the read
       # seam is passages.text_search, migrations 037 + 055): "" = the
@@ -203,8 +282,16 @@ module Nabu
       #   stays the single writer, consuming documents in parse order (see
       #   #load_from_pool). Rebuild passes it for adapters that declare
       #   parallel_parse?.
+      # parse_breaker: the ParseBreaker limits (tests shrink them; production
+      #   keeps PARSE_BREAKER).
+      # accept_parse_withdrawals: true overrides the parse breaker — every
+      #   newly failing held document is withdrawn whatever the count (the
+      #   sync path passes its --force).
       def initialize(db:, source:, ledger: nil, profile: nil, tx_batch: nil, tx_batch_rows: TX_BATCH_ROWS,
-                     index_delta_cap: IndexDelta::CAP, parse_workers: 1)
+                     index_delta_cap: IndexDelta::CAP, parse_workers: 1, parse_breaker: PARSE_BREAKER,
+                     accept_parse_withdrawals: false)
+        @parse_breaker = parse_breaker
+        @accept_parse_withdrawals = accept_parse_withdrawals
         @db = db
         @source = source
         @ledger = ledger
@@ -329,6 +416,11 @@ module Nabu
         # never an accumulation across a reused loader.
         @index_delta = IndexDelta.new(cap: @index_delta_cap)
         @aggregates&.reset!
+        # The parse-failure settlement's inputs: urns whose file yielded no
+        # document (urn => [reason, quarantine provenance or nil]) and urns
+        # whose document landed this pass (a landed urn is never settled).
+        @failing = {}
+        @landed = Set.new
         seen_urns = Set.new
         # P39-4: urns this pass has already PERSISTED a document for (insert,
         # revise or skip). A re-encounter of one is a within-pass collision, not
@@ -365,38 +457,52 @@ module Nabu
           end
         end
         # A quarantined ref's document is still PRESENT upstream — only its
-        # parse failed — so its urn shields any held row from the withdrawal
-        # sweep (P37-r2: the KR5-wave incident withdrew 102 held kanripo
-        # texts because a stricter parser quarantined them; recognition
-        # getting stricter must never unserve held content). ref.id is the
+        # parse failed — so its urn is never swept as "upstream-gone". But a
+        # fresh full rebuild would never mint it: a FULL load settles it at
+        # its end (#settle_parse_failures — withdrawn as "quarantined" if
+        # its row is held live, under the parse breaker). ref.id is the
         # document urn by the adapter contract (Adapter#discover_with_attic).
         quarantine = lambda do |ref, error|
           flush.call
           counts[:errored] += 1
           seen_urns.add(ref.id)
-          journal(event: "quarantined", params: { "ref_id" => ref.id, "error" => error.message })
+          note_failing(ref.id, QUARANTINED,
+                       journal(event: "quarantined", params: { "ref_id" => ref.id, "error" => error.message }))
           tick.call
         end
         # A discovered ref the parser declined by rule (Nabu::DocumentSkipped):
         # counted honestly, never quarantined and never journaled per-file — the
         # steady-state catalog-only skeletons must not spam provenance every sync
-        # (the 0-byte case's stance). Its urn still shields any existing row from
-        # the withdrawal sweep, exactly as a quarantined ref does.
+        # (the 0-byte case's stance). Never "upstream-gone" either; a HELD row
+        # it no longer yields settles like a quarantine, reason
+        # "skipped-by-rule" (only that transition journals).
         skip = lambda do |ref, _reason|
           flush.call
           counts[:skipped_by_rule] += 1
           seen_urns.add(ref.id)
+          note_failing(ref.id, SKIPPED_BY_RULE, nil)
           tick.call
         end
         yield(process, quarantine, skip)
         flush.call
-        sweep_withdrawn(seen_urns, counts) if full
+        if full
+          settle_parse_failures(counts)
+          sweep_withdrawn(seen_urns, counts)
+        end
         LoadReport.new(
           added: counts[:added], updated: counts[:updated], skipped: counts[:skipped],
           withdrawn: counts[:withdrawn], errored: counts[:errored],
           skipped_by_rule: counts[:skipped_by_rule], collided: counts[:collided],
-          revised: counts[:revised], index_delta: @index_delta.freeze
+          revised: counts[:revised], index_delta: @index_delta.freeze,
+          parse_withdrawn: counts[:parse_withdrawn], parse_held: counts[:parse_held]
         )
+      end
+
+      # Remember a urn whose file yielded no document this pass (first
+      # failure wins), with its quarantine provenance row when one was
+      # journaled — the settlement annotates it with what became of the row.
+      def note_failing(urn, reason, provenance)
+        @failing[urn] ||= [reason, provenance]
       end
 
       # Persist one buffered batch (P36-2) inside a SINGLE transaction, each
@@ -436,6 +542,7 @@ module Nabu
         # will commit with the batch) — its staged delta entries are real.
         @index_delta.commit!
         @aggregates&.commit!
+        @landed.add(document.urn)
         # Both update flavors count as :updated; only the content-bearing one
         # also feeds the revised counter (see LoadReport#revised).
         if %i[updated_content updated_metadata].include?(outcome)
@@ -457,7 +564,11 @@ module Nabu
         @index_delta.discard!
         @aggregates&.discard!
         counts[:errored] += 1
-        journal(event: "quarantined", params: { "urn" => document.urn, "error" => e.message })
+        # The rolled-back document left its held row (if any) at the OLD
+        # revision; a fresh full rebuild would hold nothing for it, so it
+        # settles like a parse quarantine.
+        note_failing(document.urn, QUARANTINED,
+                     journal(event: "quarantined", params: { "urn" => document.urn, "error" => e.message }))
       end
 
       # Migration 054: flag the source's slice behind, in the document's own
@@ -713,11 +824,13 @@ module Nabu
         old_sha = row.content_sha256
         was_withdrawn = row.withdrawn
         @index_delta.stage_upsert(row.id, row.urn)
-        row.update(
+        # A dataset update, not row.update: model typecasting would turn the
+        # stored blob into a text string (the raw column is declared String).
+        row.this.update(
           sequence: passage.sequence, language: passage.language,
           text: passage.text, text_normalized: stored_normalized(passage),
           annotations_json: annotations_json,
-          content_sha256: sha, revision: row.revision + 1, withdrawn: false
+          content_sha_raw: ContentHash.stored(sha), revision: row.revision + 1, withdrawn: false
         )
         journal(event: "revised", passage_id: row.id, params: { "old_sha" => old_sha, "new_sha" => sha })
         durable(event: "revised", urn: row.urn, old_sha: old_sha, new_sha: sha)
@@ -775,7 +888,8 @@ module Nabu
         each_insert_slice(passages) do |slice|
           values = slice.map do |passage|
             [document_id, passage.urn, passage.sequence, passage.language, passage.text,
-             stored_normalized(passage), annotations.fetch(passage.urn), passage_shas.fetch(passage.urn), 1, false]
+             stored_normalized(passage), annotations.fetch(passage.urn),
+             ContentHash.stored(passage_shas.fetch(passage.urn)), 1, false]
           end
           ids = insert_returning_ids(values)
           slice.each { |passage| @index_delta.stage_upsert(ids.fetch(passage.urn), passage.urn) }
@@ -883,33 +997,72 @@ module Nabu
       # one final transaction of their own.
       def sweep_withdrawn(seen_urns, counts)
         @db.transaction do
-          Document.where(source_id: @source.id, withdrawn: false)
-                  .select_map(%i[id urn content_sha256 language license_override retired_upstream])
-                  .each do |id, urn, sha, language, license_override, retired|
-            next if seen_urns.include?(urn)
+          live_documents.select_map(WITHDRAWAL_COLUMNS).each do |document|
+            next if seen_urns.include?(document[1])
 
             # P93-2: the sweep is the "upstream-gone" reason — the
-            # urn vanished from a FULL load's output. Stamped on the row
-            # (queryable projection) and the durable event (the record
-            # that survives rebuild).
-            Document.where(id: id).update(withdrawn: true, withdrawn_reason: UPSTREAM_GONE,
-                                          withdrawn_at: Time.now)
-            # P112-1: the document's live passages leave the live set with it
-            # (their own flags stay false — the document flag hides them).
-            # Direct, not staged: the sweep is one transaction, and a failure
-            # here aborts the load before any report escapes.
-            Passage.where(document_id: id, withdrawn: false)
-                   .select_map(%i[id urn])
-                   .each { |pid, purn| @index_delta.remove(pid, purn) }
-            journal(event: "withdrawn", document_id: id, params: { "reason" => UPSTREAM_GONE })
-            durable(event: "withdrawn", urn: urn, old_sha: sha, reason: UPSTREAM_GONE)
-            # P42-0: the withdrawn doc's live contribution leaves the stats.
-            @stats&.swept(id: id, language: language, license_override: license_override, retired: retired)
-            @aggregates&.mark_behind!
-            counts[:withdrawn] += 1
+            # urn vanished from a FULL load's output.
+            withdraw_document(*document, reason: UPSTREAM_GONE, counts: counts)
           end
         end
         @aggregates&.commit!
+      end
+
+      # A full load's end: the held (live) documents whose file yielded no
+      # document this pass are NEWLY failing — a never-loaded or
+      # long-failing one has no live row and needs nothing. Below the parse
+      # breaker's limit (or with the operator's acceptance) each is
+      # withdrawn under its reason; above it NONE is, they stay served, and
+      # the report carries the count (parse_held). Either way a quarantine's
+      # provenance row records the fate ("withdrawn" / "kept"). One
+      # transaction, like the sweep.
+      def settle_parse_failures(counts)
+        failing = @failing.except(*@landed)
+        return if failing.empty?
+
+        @db.transaction do
+          held = live_documents.where(urn: failing.keys).order(:id).select_map(WITHDRAWAL_COLUMNS)
+          next if held.empty?
+
+          if !@accept_parse_withdrawals && @parse_breaker.trips?(held.size, held: live_documents.count)
+            counts[:parse_held] += held.size
+            held.each { |row| annotate_failure(failing.fetch(row[1]).last, "kept" => "parse-breaker") }
+          else
+            held.each do |row|
+              reason, provenance = failing.fetch(row[1])
+              withdraw_document(*row, reason: reason, counts: counts)
+              counts[:parse_withdrawn] += 1
+              annotate_failure(provenance, "withdrawn" => true)
+            end
+          end
+        end
+        @aggregates&.commit!
+      end
+
+      def annotate_failure(provenance, fate)
+        provenance&.update(params_json: JSON.generate(JSON.parse(provenance.params_json).merge(fate)))
+      end
+
+      def live_documents = Document.where(source_id: @source.id, withdrawn: false)
+
+      # Withdraw one live document (inside the caller's transaction): the
+      # reason is stamped on the row (queryable projection) and the durable
+      # event (the record that survives rebuild).
+      def withdraw_document(id, urn, sha, language, license_override, retired, reason:, counts:)
+        Document.where(id: id).update(withdrawn: true, withdrawn_reason: reason, withdrawn_at: Time.now)
+        # P112-1: the document's live passages leave the live set with it
+        # (their own flags stay false — the document flag hides them).
+        # Direct, not staged: the withdrawal is its own transaction, and a
+        # failure here aborts the load before any report escapes.
+        Passage.where(document_id: id, withdrawn: false)
+               .select_map(%i[id urn])
+               .each { |pid, purn| @index_delta.remove(pid, purn) }
+        journal(event: "withdrawn", document_id: id, params: { "reason" => reason })
+        durable(event: "withdrawn", urn: urn, old_sha: sha, reason: reason)
+        # P42-0: the withdrawn doc's live contribution leaves the stats.
+        @stats&.swept(id: id, language: language, license_override: license_override, retired: retired)
+        @aggregates&.mark_behind!
+        counts[:withdrawn] += 1
       end
 
       def journal(event:, document_id: nil, passage_id: nil, params: nil)

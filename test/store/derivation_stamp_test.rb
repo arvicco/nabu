@@ -79,7 +79,7 @@ class DerivationStampLanguagesTest < Minitest::Test
   def insert_passage(document_id, urn:, language:)
     @db[:passages].insert(document_id: document_id, urn: urn, sequence: 0,
                           language: language, text: "x", text_normalized: "x",
-                          content_sha256: "0" * 64)
+                          content_sha_raw: "0" * 64)
   end
 
   def insert_dictionary(source_id, slug:, language:)

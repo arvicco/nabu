@@ -54,7 +54,15 @@ module Nabu
     # exactly what happened to six stages between P58 and P77; the census
     # test in rebuild_profile_test pins the two lists together now).
     CORPUS_STAGE_LABELS = {
+      code_identities: "code identities", # every source's parser-closure digest, pinned up front
+      enrichments: "enrichment replay",   # the enrichment producers' layers
+      place_index: "place index",         # the place_index producers' dumps
+      person_index: "person index",       # the person_index producers' slices
+      deferred_indexes: "deferred indexes", # the catalog's secondary indexes, built once
       timeline: "timeline",
+      silver_dates: "silver dates",       # the armed silver-date projection
+      silver_meter: "silver meter",       # the armed silver-meter projection
+      place_apply: "place apply",         # the nabu-places registry projection
       facets: "facets",
       kind_axis: "kind axis",             # P99: the kind projection + stats
       passage_facets: "passage facets",   # the passage-grain facet projection
@@ -77,6 +85,11 @@ module Nabu
       passage_signs: "sign index",        # P77-r16: the OSL sign postings
       alignment: "alignment refs",
       reflex: "reflex roots",
+      clarify: "clarify lane",            # the names lane (nabu_clarify)
+      translations: "translations lane",  # annotation-held translations
+      glosses: "token-gloss lane",        # the token-gloss word rows
+      annotations: "annotations lane",    # declared searchable annotation layers
+      gloss_lines: "gloss-lines lane",    # passage-grain token-gloss lines
       lemma_rollups: "lemma rollups",     # P121-2: lemma/curve/mix rollups
       links: "links re-mine",             # P70-3b: the re-derived links instrument
       analyze: "analyze" # P42-4: the bounded post-rebuild ANALYZE (catalog + index)

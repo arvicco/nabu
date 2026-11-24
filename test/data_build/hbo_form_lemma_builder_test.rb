@@ -64,7 +64,7 @@ class DataBuildHboFormLemmaBuilderTest < Minitest::Test
     tokens = [{ "form" => "BHSAFORM", "lemma" => "BHSALEMMA", "morph" => "HNcmsa", "lang" => "hbo" },
               { "form" => "בְּרֵאשִׁ֖ית", "lemma" => "b/7225", "morph" => "HR/Ncfsa", "lang" => "hbo" }]
     Nabu::Store::Passage.create(document_id: doc.id, urn: "urn:nabu:bhsa:genesis:1.1", sequence: 0,
-                                language: "hbo", text: "t", text_normalized: "t", content_sha256: "x",
+                                language: "hbo", text: "t", text_normalized: "t", content_sha_raw: "x",
                                 revision: 1, annotations_json: JSON.generate({ "tokens" => tokens }))
   end
 

@@ -38,7 +38,7 @@ module Ops
       texts.each_with_index do |text, index|
         Nabu::Store::Passage.create(document_id: doc.id, urn: "#{urn}:#{index + 1}", sequence: index,
                                     language: "akk", text: text, text_normalized: text,
-                                    content_sha256: "x", revision: 1)
+                                    content_sha_raw: "x", revision: 1)
       end
       doc
     end

@@ -25,7 +25,7 @@ module Store
                                          content_sha256: "x", revision: 1, withdrawn: false)
       @passage = Nabu::Store::Passage.create(
         document_id: doc.id, urn: "urn:d:s:1", sequence: 0, language: "lzh", text: "時乘六龍以御天",
-        text_normalized: "時乘六龍以御天", content_sha256: "x", revision: 1, withdrawn: false,
+        text_normalized: "時乘六龍以御天", content_sha_raw: "x", revision: 1, withdrawn: false,
         annotations_json: "{}"
       )
     end
@@ -145,7 +145,7 @@ module Store
       doc = Nabu::Store::Document.create(source_id: @source.id, urn: "urn:d:s2", title: "t", language: "lzh",
                                          content_sha256: "y", revision: 1, withdrawn: false)
       Nabu::Store::Passage.create(document_id: doc.id, urn: "urn:d:s2:1", sequence: 0, language: "lzh",
-                                  text: "六龍在天", text_normalized: "六龍在天", content_sha256: "y",
+                                  text: "六龍在天", text_normalized: "六龍在天", content_sha_raw: "y",
                                   revision: 1, withdrawn: false, annotations_json: "{}")
     end
 

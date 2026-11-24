@@ -178,7 +178,7 @@ class EntityCommandTest < Minitest::Test
     oracc = document(source("oracc"), "urn:nabu:oracc:p1")
     Nabu::Store::Passage.create(
       document_id: oracc.id, urn: "urn:nabu:oracc:p1:1", sequence: 1, language: "akk",
-      text: "{m}id-ri-mi a-na {d}IM", text_normalized: "id ri mi a na im", content_sha256: "x", revision: 1,
+      text: "{m}id-ri-mi a-na {d}IM", text_normalized: "id ri mi a na im", content_sha_raw: "x", revision: 1,
       annotations_json: JSON.generate("tokens" => [
                                         { "form" => "{m}id-ri-mi", "lemma" => "Idrimi", "pos" => "RN" },
                                         { "form" => "a-na", "lemma" => "ana", "pos" => "PRP" },
@@ -199,7 +199,7 @@ class EntityCommandTest < Minitest::Test
   def passage(document, sequence, text, entities)
     Nabu::Store::Passage.create(
       document_id: document.id, urn: "#{document.urn}:#{sequence}", sequence: sequence, language: "grc",
-      text: text, text_normalized: text, content_sha256: "x", revision: 1,
+      text: text, text_normalized: text, content_sha_raw: "x", revision: 1,
       annotations_json: JSON.generate(entities ? { "entities" => entities } : {})
     )
   end

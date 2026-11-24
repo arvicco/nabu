@@ -780,26 +780,25 @@ module Nabu
           ReflexRootsIndexer.rebuild!(catalog: catalog, fulltext: fulltext)
         end
         # The clarify lane (nabu_clarify): titles/sources/headwords/places,
-        # a catalog-only pass over names — no passage text. It rides inside
-        # the "fulltext index" umbrella stage, not yet a profiled sub-stage
-        # of its own: a stage label lives in RebuildProfile (the shared
-        # derivation core), whose edit would dirty every source stamp.
-        rebuild_clarify!(catalog: catalog, fulltext: fulltext)
+        # a catalog-only pass over names — no passage text. Each tail lane
+        # below is a profiled corpus sub-stage of its own (the "fulltext
+        # index" umbrella sums them, Rebuild::INDEX_ETA_STAGES).
+        timed(profile, :clarify) { rebuild_clarify!(catalog: catalog, fulltext: fulltext) }
         # The translations lane (annotation-held translations,
         # Store::TranslationIndex): a scoped pass over the registry's
-        # sources — same umbrella-stage stance as clarify above.
-        TranslationIndex.rebuild!(catalog: catalog, fulltext: fulltext)
+        # sources.
+        timed(profile, :translations) { TranslationIndex.rebuild!(catalog: catalog, fulltext: fulltext) }
         # The token-gloss lane (Store::GlossIndex): a scoped pass over the
-        # TokenGlosses sources — the same umbrella-stage stance.
-        GlossIndex.rebuild!(catalog: catalog, fulltext: fulltext)
+        # TokenGlosses sources.
+        timed(profile, :glosses) { GlossIndex.rebuild!(catalog: catalog, fulltext: fulltext) }
         # The annotations lane (Store::AnnotationIndex — declared
         # searchable annotation layers): a scoped pass over the
-        # AnnotationKeys sources — the same umbrella-stage stance.
-        AnnotationIndex.rebuild!(catalog: catalog, fulltext: fulltext)
+        # AnnotationKeys sources.
+        timed(profile, :annotations) { AnnotationIndex.rebuild!(catalog: catalog, fulltext: fulltext) }
         # The gloss-lines lane (Store::GlossLineIndex — passage-grain
         # content search of the token glosses): a scoped pass over the
-        # declared gloss sources — the same umbrella-stage stance.
-        GlossLineIndex.rebuild!(catalog: catalog, fulltext: fulltext)
+        # declared gloss sources.
+        timed(profile, :gloss_lines) { GlossLineIndex.rebuild!(catalog: catalog, fulltext: fulltext) }
         # P87-3: the reference path stamps every stage at its current
         # derivation version — the incremental path's comparison baseline.
         stamp_stages!(fulltext)

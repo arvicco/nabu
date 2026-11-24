@@ -128,12 +128,14 @@ module Ops
     end
 
     # The public name (owner ruling): the registry id and the GHCR image
-    # both carry nabu-ancient-texts; the retired nabu-demo id survives only
-    # in a dated news post. The listing and image re-mint at the next
-    # release, so every in-tree surface must already agree on this name.
-    def test_the_public_name_is_nabu_ancient_texts
-      assert_equal "ghcr.io/arvicco/nabu-ancient-texts", P::IMAGE
-      assert_equal "io.github.arvicco/nabu-ancient-texts", P::SERVER_NAME
+    # both carry nabu-ancient-corpora; the retired nabu-demo id survives
+    # only in a dated news post, the never-released nabu-ancient-texts
+    # nowhere but this guard. The listing
+    # and image re-mint at the next release, so every in-tree surface must
+    # already agree on this name.
+    def test_the_public_name_is_nabu_ancient_corpora
+      assert_equal "ghcr.io/arvicco/nabu-ancient-corpora", P::IMAGE
+      assert_equal "io.github.arvicco/nabu-ancient-corpora", P::SERVER_NAME
       workflow = File.read(File.join(ROOT, ".github", "workflows", "demo-release.yml"))
       surfaces = %w[server.json Dockerfile render.yaml site/docker-mcp-catalog.yaml]
                  .to_h { |path| [path, File.read(File.join(ROOT, path))] }
@@ -141,7 +143,14 @@ module Ops
       surfaces.each do |name, text|
         refute_includes text, "nabu-demo", "#{name} still names the retired public id"
       end
-      assert_includes workflow, "ghcr.io/arvicco/nabu-ancient-texts:latest"
+      %w[server.json Dockerfile render.yaml site/docker-mcp-catalog.yaml site/_data/mcp.yml
+         .github/workflows/demo-release.yml README.md llms-install.md SECURITY.md docs/mcp.md docs/ops.md
+         eval/demo/README.md script/demo-smoke Rakefile lib/nabu/ops/demo_eval.rb lib/nabu/ops/site_data.rb]
+        .each do |path|
+          refute_includes File.read(File.join(ROOT, path)), "nabu-ancient-texts",
+                          "#{path} still names the superseded public id"
+        end
+      assert_includes workflow, "ghcr.io/arvicco/nabu-ancient-corpora:latest"
     end
 
     def test_the_repo_server_json_names_the_published_image_and_label

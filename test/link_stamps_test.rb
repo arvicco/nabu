@@ -55,7 +55,7 @@ class LinkStampsTest < Minitest::Test
                                             content_sha256: Digest::SHA256.hexdigest(doc_urn))
     Nabu::Store::Passage.create(document_id: document.id, urn: urn, language: language, text: text,
                                 text_normalized: Nabu::Normalize.search_form(text, language: language),
-                                content_sha256: Digest::SHA256.hexdigest(text),
+                                content_sha_raw: Digest::SHA256.hexdigest(text),
                                 sequence: @catalog[:passages].where(document_id: document.id).count,
                                 revision: 1)
   end

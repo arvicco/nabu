@@ -219,7 +219,7 @@ class RenderConformanceTest < Minitest::Test
     catalog[:passages].insert(
       document_id: doc_id, urn: urn, sequence: sequence, language: language,
       text: text, text_normalized: Nabu::Normalize.search_form(text, language: language),
-      content_sha256: "x", revision: 1, withdrawn: false, annotations_json: annotations
+      content_sha_raw: "x", revision: 1, withdrawn: false, annotations_json: annotations
     )
   end
 end

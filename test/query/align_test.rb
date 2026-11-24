@@ -73,7 +73,7 @@ module Query
       doc_id = catalog[:documents].where(urn: doc_urn).get(:id)
       catalog[:passages].insert(
         document_id: doc_id, urn: "#{doc_urn}:#{urn_tail}", sequence: sequence,
-        language: language, text: text, text_normalized: text, content_sha256: "x",
+        language: language, text: text, text_normalized: text, content_sha_raw: "x",
         revision: 1, withdrawn: false,
         annotations_json: JSON.generate(
           "citation" => parts.first,
@@ -195,7 +195,7 @@ module Query
       verses.each_with_index do |(tail, text), sequence|
         @catalog[:passages].insert(
           document_id: doc_id, urn: "#{doc_urn}:#{tail}", sequence: sequence,
-          language: language, text: text, text_normalized: text, content_sha256: "x",
+          language: language, text: text, text_normalized: text, content_sha_raw: "x",
           revision: 1, withdrawn: false, annotations_json: "{}"
         )
       end

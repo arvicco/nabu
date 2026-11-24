@@ -75,7 +75,7 @@ class BatchCognatesTest < Minitest::Test
       document_id: doc.id, urn: "#{doc.urn}:#{seq + 1}", sequence: seq,
       language: doc.language, text: "t", text_normalized: "t",
       annotations_json: JSON.generate({ "citation" => ref, "tokens" => tokens }),
-      content_sha256: "x", revision: 1
+      content_sha_raw: "x", revision: 1
     )
   end
 

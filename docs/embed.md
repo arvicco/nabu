@@ -82,6 +82,10 @@ the library resembles this passage?" mid-discussion.
    batches, each saved immediately. Interrupting a run (Ctrl-C, sleep,
    crash) loses at most one batch; re-firing the command picks up
    where it left off. It is safe to run any night and stop any morning.
+4. **Timed on record.** A finished run writes its census and encoding
+   times to the history ledger (stage timings, kind `embed`) — the
+   measured figure `bin/nabu reconstruct plan` prices the vector layer
+   from. `--status` records nothing.
 
 The consequence of the delta design: the **first** run is the priced
 build — the literary core is about 4.9 million passages across 17

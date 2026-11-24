@@ -41,7 +41,7 @@ module Query
     def make_passage(document, urn:, sequence: 0)
       Nabu::Store::Passage.create(
         document_id: document.id, urn: urn, sequence: sequence, language: document.language,
-        text: "τ", text_normalized: "τ", content_sha256: "x", revision: 1
+        text: "τ", text_normalized: "τ", content_sha_raw: "x", revision: 1
       )
     end
 

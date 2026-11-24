@@ -50,7 +50,7 @@ module Query
         Nabu::Store::Passage.create(
           document_id: document.id, urn: "#{urn}:#{i + 1}", sequence: i,
           language: language, text: "t", text_normalized: "t",
-          annotations_json: annotations, content_sha256: "x", revision: 1
+          annotations_json: annotations, content_sha_raw: "x", revision: 1
         )
       end
     end

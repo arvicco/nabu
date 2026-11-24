@@ -2,6 +2,11 @@
 
 # Nabu::CLI — operations commands: migrate-local, rebuild, verify, health,
 # backup, mcp. Carved out of lib/nabu/cli.rb, the registry that loads it.
+require "English"
+require_relative "../ops/rebuild_preflight"
+require_relative "../ops/trickle"
+require_relative "../ops/run_log"
+
 module Nabu
   class CLI < Thor
     # A one-time instance migration: hidden from `nabu help` (every box has
@@ -59,31 +64,32 @@ module Nabu
     def rebuild
       config = Nabu::Config.load
       parse_workers = rebuild_parse_workers(config)
-      # P62 rider: rebuild DROPS the catalog — doing that under a live
-      # writer corrupts nothing (derived data) but wastes both runs; the
-      # pre-flight fails in a quarter second instead. Dry runs read only.
-      Nabu::Store.assert_writable!(config.catalog_path) unless options[:dry_run]
       registry = Nabu::SourceRegistry.load(config.sources_path)
       # db/ is derived data by design (architecture §1); dropping it is the whole
       # point, so a real run needs no confirmation. An empty registry has nothing
       # to replay.
       return say("Nothing to rebuild: no sources registered.") if registry.empty?
-      return rebuild_incremental(config, registry, parse_workers) if options[:incremental]
+
+      if options[:incremental]
+        # P62 rider: a live writer corrupts nothing (derived data) but wastes
+        # both runs; the pre-flight fails in a quarter second instead.
+        Nabu::Store.assert_writable!(config.catalog_path) unless options[:dry_run]
+        return rebuild_incremental(config, registry, parse_workers)
+      end
 
       rebuilder = Nabu::Rebuild.new(config: config, registry: registry, full_links: options[:full_links],
                                     parse_workers: parse_workers)
+      plan = rebuilder.plan
+      # The full rebuild's preflight (Ops::RebuildPreflight): the priced
+      # stage plan, the drop-first disk arithmetic and the writers — read
+      # and announced BEFORE anything is dropped; a blocker refuses here.
+      preflight = rebuild_preflight(config, plan)
       if options[:dry_run]
         # --profile implies nothing extra on a dry run: there is no run to time.
-        print_plan(rebuilder.plan)
+        print_plan(plan)
+        Nabu::Ops::RebuildPreflight.render(preflight).each { |line| say line }
       else
-        explain_command(:rebuild)
-        estimate = watcher_estimate(config, kind: "rebuild")
-        result = supervised_index_write(config, label: "rebuild", estimate: estimate, arm_kill: false) do
-          rebuilder.run(progress: progress_reporter)
-        end
-        finish_progress
-        print_result(result)
-        print_profile(result.profile) if options[:profile]
+        run_full_rebuild(config, rebuilder, preflight)
       end
     rescue Nabu::CatalogBusyError => e
       raise Thor::Error, e.message
@@ -363,6 +369,64 @@ module Nabu
     end
 
     no_commands do
+      # The full rebuild's preflight report over the plan's replayable
+      # sources, the ledger read through a short read-only-in-effect handle.
+      def rebuild_preflight(config, plan)
+        ledger = open_ledger(config)
+        slugs = plan.items.select { |_, action| action == :replay }.map(&:first)
+        Nabu::Ops::RebuildPreflight.new(db_dir: config.db_dir, catalog_path: config.catalog_path,
+                                        fulltext_path: config.fulltext_path, canonical_dir: config.canonical_dir,
+                                        slugs: slugs, ledger: ledger,
+                                        trickle_dir: File.join(config.local_dir, Nabu::Ops::Trickle::DIRNAME)).report
+      ensure
+        ledger&.disconnect
+      end
+
+      # The real full run: its own flushed log first (Ops::RunLog — the
+      # path is the first line printed), the preflight announced (the
+      # terminal gets the heaviest stages, the log every stage), a blocker
+      # refusing BEFORE the drop, then the supervised run with every stage
+      # and watcher line teed into the log. A run that does not complete
+      # says so as the log's last line; the restart path is a clean re-run.
+      def run_full_rebuild(config, rebuilder, preflight)
+        log = Nabu::Ops::RunLog.open(kind: "rebuild")
+        outcome = nil
+        say "rebuild log → #{log.path}  (follow it with: tail -f #{log.path})"
+        Nabu::Ops::RebuildPreflight.render(preflight, stages: false).each { |line| say line }
+        Nabu::Ops::RebuildPreflight.render(preflight).each { |line| log.line(line) }
+        if preflight.blocked?
+          outcome = "REFUSED before anything was dropped — #{preflight.blockers.join('; ')}"
+          log.line(outcome)
+          raise Thor::Error, "rebuild #{outcome}"
+        end
+        # P62 rider: the catalog's own write probe (a non-cooperating holder
+        # the lock files cannot name) — fails in a quarter second.
+        Nabu::Store.assert_writable!(config.catalog_path)
+        explain_command(:rebuild)
+        estimate = watcher_estimate(config, kind: "rebuild")
+        result = supervised_index_write(config, label: "rebuild", estimate: estimate, arm_kill: false,
+                                                log: log) do
+          rebuilder.run(progress: log.tee(progress_reporter))
+        end
+        finish_progress
+        log.close_stage
+        outcome = "rebuild COMPLETED — #{result.outcomes.size} source(s) replayed, #{result.skips.size} skipped, " \
+                  "indexed #{result.indexed} passages; next: bundle exec rake rebuild:verify"
+        log.line(outcome)
+        print_result(result)
+        print_profile(result.profile) if options[:profile]
+      ensure
+        if log
+          unless outcome
+            log.close_stage
+            log.line("rebuild did NOT complete (#{$ERROR_INFO&.message || 'interrupted'}) — the ledger's " \
+                     "rebuild run row stays open; there is no resume: re-run `bin/nabu rebuild` (drop-first, " \
+                     "so the re-run starts clean)")
+          end
+          log.close
+        end
+      end
+
       # Render `verify`: one line per source (OK with a count, or FAILED with
       # its itemized issues), then any never-synced skips, then a verdict.
       def print_verify(result)
@@ -506,9 +570,7 @@ module Nabu
         result.trusted.each { |item| say "  #{item.slug} trusted (re-stamped #{item.stamp_short} — no replay)" }
         result.outcomes.each { |outcome| say "  #{format_report(outcome.slug, outcome.report)}" }
         result.skips.each { |skip| say "  skip    #{skip.slug} (no canonical data — never synced)" }
-        result.warnings.each do |outcome|
-          say "  WARNING: #{outcome.slug} #{outcome.quarantine.message}", :yellow
-        end
+        print_outcome_warnings(result)
         summary = "  re-derived #{result.outcomes.size}, clean #{result.cleans.size}, " \
                   "skipped #{result.skips.size}"
         summary += ", trusted #{result.trusted.size}" if result.trusted.any?
@@ -549,9 +611,7 @@ module Nabu
         result.skips.each { |skip| say "  skip    #{skip.slug} (no canonical data — never synced)" }
         # DELTA-aware (P18-7): silence when a source's errored count matches its
         # recorded ledger baseline; a change (or first recording) speaks.
-        result.warnings.each do |outcome|
-          say "  WARNING: #{outcome.slug} #{outcome.quarantine.message}", :yellow
-        end
+        print_outcome_warnings(result)
         say "  #{format_report('TOTAL', total_report(result))}"
         say "  indexed #{result.indexed} passages"
         if result.axes
@@ -600,6 +660,17 @@ module Nabu
         say format("  %-#{width}s  %10s", "GRAND TOTAL", format_duration(profile.grand_total))
         say "  note: fts+lemma is one fused pass; parse/insert are per-document samples inside load."
         say "  note: text-normalization/fold (search_form) runs at Passage build, so it is inside parse."
+      end
+
+      # One WARNING line per Rebuild::Outcome#warning_lines entry: the
+      # quarantine delta and the parse settlement (withdrawn-by-parse count,
+      # a tripped parse breaker in red).
+      def print_outcome_warnings(result)
+        result.warnings.each do |outcome|
+          outcome.warning_lines.each do |line|
+            say "  WARNING: #{outcome.slug} #{line}", line.start_with?("PARSE BREAKER") ? :red : :yellow
+          end
+        end
       end
 
       def format_report(label, report)

@@ -172,7 +172,7 @@ class PersonCommandTest < Minitest::Test
                                      content_sha256: "x", revision: 1, withdrawn: false)
     LINES.each_with_index do |text, i|
       catalog[:passages].insert(document_id: doc, urn: "urn:nabu:edh:HD000001:#{i}", sequence: i, language: "lat",
-                                text: text, text_normalized: text.downcase, content_sha256: "x#{i}",
+                                text: text, text_normalized: text.downcase, content_sha_raw: "x#{i}",
                                 revision: 1, withdrawn: false, annotations_json: "{}")
     end
     Nabu::Store::PersonIndex.derive!(

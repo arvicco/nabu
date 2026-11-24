@@ -333,7 +333,7 @@ class HypotacticMeterTest < Minitest::Test
       Nabu::Store::Passage.create(
         document_id: doc.id, urn: urn, sequence: i, language: "grc",
         text: text, text_normalized: Nabu::Normalize.search_form(text, language: "grc"),
-        content_sha256: "x", revision: 1, withdrawn: false
+        content_sha_raw: "x", revision: 1, withdrawn: false
       )
     end
   end
