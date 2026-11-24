@@ -956,7 +956,11 @@ owner-fired. Three commands, in order, each with what to expect:
    EXPECT, before anything is dropped: `rebuild log → ~/Library/Logs/nabu/rebuild-<stamp>.log`,
    then the preflight — the summed price over the ledger's latest rebuild
    rows (`price: ~<total> summed over <n> of <m> stages`, unpriced stages
-   named, the last completed full run's wall time beside it), the disk
+   named, the last completed full run's wall time beside it; a source added
+   since the last full rebuild has no rebuild row and is priced from its
+   heaviest sync load row instead — a first estimate, shown `~4m (sync row)`
+   and counted apart in the price line as `<k> priced from a sync row`; a
+   rebuild row always wins), the disk
    line (`need ≈ … available at the drop …`) and `writers: none`, ending
    `verdict: CLEAR`. Then the usual stage lines until the result block.
    Follow it from another terminal with `tail -f` on the printed log path:
