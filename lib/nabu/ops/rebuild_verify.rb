@@ -7,6 +7,7 @@ require "time"
 # InspectedTextScan, the Loader's sentinels — come with it.
 require_relative "rebuild_census"
 require_relative "db_snapshot"
+require_relative "trickle"
 
 module Nabu
   module Ops
@@ -27,7 +28,11 @@ module Nabu
     #              does not survive a fresh build); a lost source or an
     #              unexplained loss FAILs, a passage loss with documents
     #              intact WARNs (a parser change since the census?), gains
-    #              are listed.
+    #              are listed. Dictionary-kind sources compare their live
+    #              entries: any loss FAILs (a dictionary run row counts
+    #              quarantined FILES, so no entry loss is provably
+    #              explained), a gain is a NOTE, and a census without
+    #              dictionary counts is a SKIP line.
     #   aggregates source_aggregates vs a live recount on a seeded sample
     #              of sources (SourceAggregates.drift — O(source) each)
     #   fulltext   held vs searchable: nothing flagged behind, membership
@@ -37,7 +42,9 @@ module Nabu
     #              (Store::LaneCoverage: flags vs built scope vs rows)
     #   stamps     every derivation stamp current — the incremental
     #              planner's verdict sweep (`rebuild --incremental
-    #              --dry-run`'s own), priced from its ledger row
+    #              --dry-run`'s own), priced from its ledger row; a
+    #              source whose canonical tree moved under a live trickle
+    #              crawl is a NOTE, not a failure
     #   fold       the text_normalized storage classes on a sample of
     #              rowid windows: "" / the one-byte lower sentinel / a
     #              stored fold — a fresh build stores no full fold equal to
@@ -49,7 +56,9 @@ module Nabu
     #              its watchdog vacates idle handles; a WARN, re-check)
     #   integrity  PRAGMA quick_check on every db/*.sqlite3 (heavy: reads
     #              every page; FULL_INTEGRITY=1 runs integrity_check, which
-    #              also cross-checks every index — far slower)
+    #              also cross-checks every index — far slower). On SQLite
+    #              ≥ 3.44 either pragma also runs each FTS5 table's own
+    #              integrity check, read-only (#fts5_coverage)
     #   inspect    no live passage text shaped like an inspected Ruby
     #              object (Nabu::InspectedText — the conformance detector;
     #              heavy: one scan of the passages table)
@@ -82,10 +91,13 @@ module Nabu
       FOLD_WINDOW_IDS = 5_000
       # const: how many sampled inspect-shaped hits are named
       INSPECT_SAMPLES = 5
+      # The SQLite release whose integrity pragmas began calling virtual
+      # tables' integrity methods (FTS5's included) — see #fts5_coverage.
+      FTS5_PRAGMA_SINCE = Gem::Version.new("3.44.0")
 
       def initialize(catalog:, fulltext:, ledger:, db_dir:, local_dir:, cjk_slugs: [], fuzzy_slugs: [],
                      stamps_plan: nil, quick: false, full_integrity: false, sample: 8, seed: 1,
-                     deleted_holders: nil, out: $stdout,
+                     deleted_holders: nil, trickle_dir: nil, alive: ProcessProbe.method(:alive?), out: $stdout,
                      clock: -> { Process.clock_gettime(Process::CLOCK_MONOTONIC) })
         @catalog = catalog
         @fulltext = fulltext
@@ -100,6 +112,8 @@ module Nabu
         @sample = sample
         @seed = seed
         @deleted_holders = deleted_holders || method(:lsof_deleted)
+        @trickle_dir = trickle_dir
+        @alive = alive
         @out = out
         @clock = clock
       end
@@ -243,17 +257,60 @@ module Nabu
         verdicts = (before.keys | now.keys).compact.sort.filter_map do |slug|
           source_verdict(slug, before.fetch(slug, {}), now.fetch(slug, {}), held[slug].to_i)
         end
+        dictionary_detail, dictionary_verdicts = dictionary_comparison(census["dictionaries"], held)
+        verdicts.concat(dictionary_verdicts)
         status = if verdicts.any? { |verdict, _| verdict == :fail } then :fail
                  elsif verdicts.any? { |verdict, _| verdict == :warn } then :warn
                  else :pass
                  end
         totals = ->(counts, key) { commas(counts.values.sum { |row| row[key].to_i }) }
-        detail = "#{(before.keys | now.keys).compact.size} sources, #{verdicts.size} changed; documents " \
+        changed = verdicts.count { |verdict, _| verdict != :skip }
+        detail = "#{(before.keys | now.keys).compact.size} sources, #{changed} changed; documents " \
                  "#{totals.call(before, 'documents')} → #{totals.call(now, 'documents')}, passages " \
-                 "#{totals.call(before, 'passages')} → #{totals.call(now, 'passages')}"
-        lines = verdicts.sort_by { |verdict, _| %i[fail warn note].index(verdict) }
+                 "#{totals.call(before, 'passages')} → #{totals.call(now, 'passages')}; #{dictionary_detail}"
+        lines = verdicts.sort_by { |verdict, _| %i[fail warn note skip].index(verdict) }
                         .map { |verdict, line| "#{verdict.to_s.upcase.ljust(4)} #{line}" }
         Check.new(name: "counts", status: status, detail: detail, lines: capped(lines))
+      end
+
+      # [detail fragment, [[verdict, line]]] for the dictionary-kind
+      # sources (RebuildCensus.dictionary_counts). A census captured before
+      # the census counted them has no "dictionaries" key: the comparison
+      # is a SKIP line with its reason, never a failure.
+      def dictionary_comparison(before, quarantined)
+        if before.nil?
+          return ["dictionary entries not compared (the census predates dictionary counts)",
+                  [[:skip, "dictionary entries: the census predates dictionary counts — not compared"]]]
+        end
+
+        now = RebuildCensus.dictionary_counts(@catalog)
+        slugs = (before.keys | now.keys).sort
+        verdicts = slugs.filter_map do |slug|
+          dictionary_verdict(slug, before.dig(slug, "entries").to_i, now.dig(slug, "entries").to_i,
+                             quarantined[slug].to_i)
+        end
+        total = ->(counts) { commas(counts.values.sum { |row| row["entries"].to_i }) }
+        ["dictionary entries #{total.call(before)} → #{total.call(now)} over #{slugs.size} source(s)", verdicts]
+      end
+
+      # A dictionary run row's errored count is quarantined FILES, not
+      # entries, so no entry loss can be proven explained from ops-side
+      # reads: every loss FAILs, naming the run's quarantined files as the
+      # likely cause when there are any; a gain is a NOTE.
+      def dictionary_verdict(slug, before, now, quarantined_files)
+        return nil if before == now
+
+        line = "#{slug}: dictionary entries #{commas(before)} → #{commas(now)}"
+        return [:note, "#{line} — gained"] if now > before
+        return [:fail, "#{line} — LOST the whole source"] if now.zero?
+
+        cause = if quarantined_files.positive?
+                  "the rebuild quarantined #{commas(quarantined_files)} dictionary file(s), but entry-grained " \
+                    "quarantine accounting is not readable — check by hand"
+                else
+                  "the rebuild quarantined none"
+                end
+        [:fail, "#{line} — #{commas(before - now)} entry(ies) lost; #{cause}"]
       end
 
       # [verdict, line] for a changed source, nil for an unchanged one.
@@ -361,25 +418,56 @@ module Nabu
 
       # A weak-identity source can never carry a stamp (its tree cannot be
       # proven unchanged — it re-derives on every incremental by design),
-      # so it WARNs; every other dirty verdict means a stamp the rebuild
-      # should have minted does not match current code — a FAIL.
+      # so it WARNs. A source whose canonical tree moved under a LIVE
+      # trickle crawl (Ops::Trickle — it only fetches into canonical/,
+      # never loads) drifted by design after the rebuild stamped it: a
+      # NOTE. Every other dirty verdict means a stamp the rebuild should
+      # have minted does not match current code — a FAIL.
+      #
+      # Caveat: a verdict names only the FIRST drift component the
+      # fingerprint finds (migration, canonical, parser, fold, config — in
+      # that order), so a parser or fold drift behind a trickle's canonical
+      # move reads as canonical here; the next sync re-derives the source
+      # either way.
       def stamps_verdict(plan)
         dirty = plan.verdicts.select { |verdict| verdict.state == :dirty }
         weak, drifted = dirty.partition { |verdict| verdict.reason == :weak_identity }
+        trickled, drifted = drifted.partition { |verdict| trickle_moved?(verdict) }
         lines = drifted.map { |verdict| "#{verdict.slug}: #{verdict.reason}" }
         lines.unshift("the corpus builders read dirty (builder code changed since the stamp)") if plan.builders_dirty
         lines.unshift("the fulltext index reads dirty (index code changed since the stamp)") if plan.index_dirty
         failed = !lines.empty?
         lines.concat(weak.map { |verdict| "#{verdict.slug}: weak identity — never stampable, re-derives every time" })
+        lines.concat(trickled.map { |verdict| trickle_note(verdict.slug) })
         clean = plan.verdicts.count { |verdict| verdict.state == :clean }
         status = if failed then :fail
                  elsif weak.any? then :warn
                  else :pass
                  end
+        moved = trickled.any? ? "#{trickled.size} moved by a live trickle crawl, " : ""
         Check.new(name: "stamps", status: status,
-                  detail: "#{clean} clean, #{drifted.size} dirty, #{weak.size} weak identity, " \
+                  detail: "#{clean} clean, #{drifted.size} dirty, #{moved}#{weak.size} weak identity, " \
                           "#{plan.verdicts.count { |verdict| verdict.state == :skip }} without canonical",
                   lines: capped(lines))
+      end
+
+      def trickle_moved?(verdict)
+        verdict.reason == :canonical && !trickle_pid(verdict.slug).nil?
+      end
+
+      # The live trickle runner's pid for +slug+ (its pidfile under
+      # local/trickle/, that pid alive — Trickle::Control#running_pid's
+      # rule), nil when none runs.
+      def trickle_pid(slug)
+        return nil if @trickle_dir.nil?
+
+        pid = Trickle.read_pid(File.join(@trickle_dir, "#{slug}.pid"))
+        pid && @alive.call(pid) ? pid : nil
+      end
+
+      def trickle_note(slug)
+        "NOTE #{slug}: canonical moved under its live trickle crawl (pid #{trickle_pid(slug)}) — later arrivals " \
+          "load at the source's next sync"
       end
 
       # -- fold ---------------------------------------------------------------
@@ -468,14 +556,34 @@ module Nabu
         return Check.new(name: "integrity", status: :skip, detail: "no db files") if files.empty?
 
         bytes = files.sum { |path| File.size(path) }
-        timed("integrity", "PRAGMA #{pragma} over #{files.size} file(s), #{human(bytes)} — reads every page " \
-                           "(minutes-class at library scale; QUICK=1 skips)") do
+        timed("integrity", "PRAGMA #{pragma} over #{files.size} file(s), #{human(bytes)} — reads every page; " \
+                           "#{fts5_coverage} (minutes-class at library scale; QUICK=1 skips)") do
           bad = files.filter_map do |path|
             result = pragma_result(path, pragma)
             "#{File.basename(path)}: #{result}" unless result == "ok"
           end
           Check.new(name: "integrity", status: bad.empty? ? :pass : :fail,
                     detail: "#{pragma}: #{files.size - bad.size} of #{files.size} file(s) ok", lines: bad)
+        end
+      end
+
+      # FTS5's internal integrity (the inverted index against its doclists,
+      # docsize and content) is NOT a separate command here: its own form,
+      # `INSERT INTO <fts>(<fts>) VALUES('integrity-check')`, is a write
+      # that a read-only handle refuses ("attempt to write a readonly
+      # database") — and the verify never opens a db writable. Since SQLite
+      # 3.44 the quick_check / integrity_check pragmas call every virtual
+      # table's integrity method, so FTS5 tables ARE checked by the pragma
+      # this check already runs, read-only (FTS5_PRAGMA_SINCE). Older
+      # SQLite: said, not hidden.
+      def fts5_coverage
+        version = @catalog.get(Sequel.function(:sqlite_version)).to_s
+        if Gem::Version.new(version) >= FTS5_PRAGMA_SINCE
+          "FTS5 tables' own integrity checks included (SQLite #{version} ≥ 3.44 runs them inside the pragma — " \
+            "each reads its whole index)"
+        else
+          "FTS5 internals NOT covered (SQLite #{version} < 3.44; their integrity-check command is a write the " \
+            "read-only verify does not run)"
         end
       end
 

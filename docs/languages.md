@@ -17,9 +17,10 @@ whole — EEBO joined by Evans and ECCO at the P155 gate);
 `lzh` (Literary Chinese, 20.6M — the hanmun written tradition beyond
 China: Korea's state records and Đại Việt's annals ride it) is third,
 Japanese (`jpn` 7.20M — Aozora joined by the NDL classical-book OCR and
-the Honkoku citizen transcriptions) fourth, Ancient Greek (`grc` 4.78M —
-the CLLG wave freed the TLG E canon) fifth, Latin (`lat` 4.65M — the
-P160 wave added NOSCEMUS's scientific Latin and the Socinian letters)
+the Honkoku citizen transcriptions) fourth, Latin (`lat` 5.55M — NOSCEMUS's
+scientific Latin and the Socinian letters, then the Wellcome
+Collection's early printed books arriving on the paced crawl) fifth,
+Ancient Greek (`grc` 4.85M — the CLLG wave freed the TLG E canon)
 sixth, and Sumerian (`sux` 3.04M) seventh.
 Below them the seven-figure floor has widened: Korean-tradition
 holdings (`ko` 1.48M via OKHC), Classical Tibetan (`xct` 1.45M — the
@@ -181,7 +182,7 @@ module if used), the old `-pro`-suffix string test, the old bracket names.
 | `hit` | Hittite | The Anatolian cuneiform corpus at fragment scale — the TLHdig transliterations beside the lexical-list entries, gold- and silver-lemmatized (0.36M passages). |
 | `syc` | Classical Syriac | The Digital Syriac Corpus (632 TEI documents) and the ETCBC Peshitta OT — extending the Aramaic axis by a millennium (0.17M passages). |
 | `egy` | Egyptian | The Ancient Egyptian Sentences (AES/TLA) and Late-Egyptian/Demotic Hugging-Face shelves — 0.12M gold-lemmatized passages from the Pyramid Texts onward; `egy-Egyd` holds a couple of Demotic papyri separately. |
-| `lat` | Latin | Republican and Imperial classics, Jerome's Vulgate, the Clementine bible, papyrus fragments, the Romance-wave shelves (BFM's medieval Latin side, CroALa, digilibLT, openMGH), Migne's Patrologia Latina (corpus-corporum, live 2026-08-21 — 5,248 patristic and medieval works / 0.9M passages, library.md §8ai) — and the EDH + EDR inscriptions, ~196,000 epigraphic documents (library.md §8g, §8aa) — and, since the P160 wave, NOSCEMUS's early modern scientific Latin (0.56M uncorrected-HTR passages) and the Socinian correspondence; 4.39M passages (2026-11-06). |
+| `lat` | Latin | Republican and Imperial classics, Jerome's Vulgate, the Clementine bible, papyrus fragments, the Romance-wave shelves (BFM's medieval Latin side, CroALa, digilibLT, openMGH), Migne's Patrologia Latina (corpus-corporum, live 2026-08-21 — 5,248 patristic and medieval works / 0.9M passages, library.md §8ai) — and the EDH + EDR inscriptions, ~196,000 epigraphic documents (library.md §8g, §8aa) — and, since the P160 wave, NOSCEMUS's early modern scientific Latin (0.56M uncorrected-HTR passages) and the Socinian correspondence, and the Wellcome Collection's early printed books (OCR, arriving on the paced crawl); 5.55M passages (2026-11-24). |
 | `cop` | Coptic | The last stage of Egyptian: documentary papyri plus the literary Coptic Scriptorium shelf in Sahidic and Bohairic, gold-lemmatized (233,020 rows; library.md §8f). |
 | `qpc` | Proto-cuneiform | The pre-linguistic administrative tablets of the late 4th millennium BCE (dcclt archaic lists) — signs before language. |
 | `hbo` | Biblical Hebrew | The Masoretic shelves — OSHB Westminster Leningrad, the BHSA/ETCBC treebank, the Dead Sea Scrolls — gold-lemmatized, NFC-exempt (0.13M passages). |

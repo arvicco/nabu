@@ -19,7 +19,7 @@ services:
     name: nabu-ancient-corpora
     runtime: image
     image:
-      url: ghcr.io/arvicco/nabu-ancient-corpora:1.8.0
+      url: ghcr.io/arvicco/nabu-ancient-corpora:1.9.0
     plan: free
     autoDeployTrigger: "off"
     autoDeploy: false
