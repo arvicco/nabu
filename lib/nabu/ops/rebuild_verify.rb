@@ -7,6 +7,7 @@ require "time"
 # InspectedTextScan, the Loader's sentinels — come with it.
 require_relative "rebuild_census"
 require_relative "db_snapshot"
+require_relative "trickle"
 
 module Nabu
   module Ops
@@ -37,7 +38,9 @@ module Nabu
     #              (Store::LaneCoverage: flags vs built scope vs rows)
     #   stamps     every derivation stamp current — the incremental
     #              planner's verdict sweep (`rebuild --incremental
-    #              --dry-run`'s own), priced from its ledger row
+    #              --dry-run`'s own), priced from its ledger row; a
+    #              source whose canonical tree moved under a live trickle
+    #              crawl is a NOTE, not a failure
     #   fold       the text_normalized storage classes on a sample of
     #              rowid windows: "" / the one-byte lower sentinel / a
     #              stored fold — a fresh build stores no full fold equal to
@@ -85,7 +88,7 @@ module Nabu
 
       def initialize(catalog:, fulltext:, ledger:, db_dir:, local_dir:, cjk_slugs: [], fuzzy_slugs: [],
                      stamps_plan: nil, quick: false, full_integrity: false, sample: 8, seed: 1,
-                     deleted_holders: nil, out: $stdout,
+                     deleted_holders: nil, trickle_dir: nil, alive: ProcessProbe.method(:alive?), out: $stdout,
                      clock: -> { Process.clock_gettime(Process::CLOCK_MONOTONIC) })
         @catalog = catalog
         @fulltext = fulltext
@@ -100,6 +103,8 @@ module Nabu
         @sample = sample
         @seed = seed
         @deleted_holders = deleted_holders || method(:lsof_deleted)
+        @trickle_dir = trickle_dir
+        @alive = alive
         @out = out
         @clock = clock
       end
@@ -361,25 +366,56 @@ module Nabu
 
       # A weak-identity source can never carry a stamp (its tree cannot be
       # proven unchanged — it re-derives on every incremental by design),
-      # so it WARNs; every other dirty verdict means a stamp the rebuild
-      # should have minted does not match current code — a FAIL.
+      # so it WARNs. A source whose canonical tree moved under a LIVE
+      # trickle crawl (Ops::Trickle — it only fetches into canonical/,
+      # never loads) drifted by design after the rebuild stamped it: a
+      # NOTE. Every other dirty verdict means a stamp the rebuild should
+      # have minted does not match current code — a FAIL.
+      #
+      # Caveat: a verdict names only the FIRST drift component the
+      # fingerprint finds (migration, canonical, parser, fold, config — in
+      # that order), so a parser or fold drift behind a trickle's canonical
+      # move reads as canonical here; the next sync re-derives the source
+      # either way.
       def stamps_verdict(plan)
         dirty = plan.verdicts.select { |verdict| verdict.state == :dirty }
         weak, drifted = dirty.partition { |verdict| verdict.reason == :weak_identity }
+        trickled, drifted = drifted.partition { |verdict| trickle_moved?(verdict) }
         lines = drifted.map { |verdict| "#{verdict.slug}: #{verdict.reason}" }
         lines.unshift("the corpus builders read dirty (builder code changed since the stamp)") if plan.builders_dirty
         lines.unshift("the fulltext index reads dirty (index code changed since the stamp)") if plan.index_dirty
         failed = !lines.empty?
         lines.concat(weak.map { |verdict| "#{verdict.slug}: weak identity — never stampable, re-derives every time" })
+        lines.concat(trickled.map { |verdict| trickle_note(verdict.slug) })
         clean = plan.verdicts.count { |verdict| verdict.state == :clean }
         status = if failed then :fail
                  elsif weak.any? then :warn
                  else :pass
                  end
+        moved = trickled.any? ? "#{trickled.size} moved by a live trickle crawl, " : ""
         Check.new(name: "stamps", status: status,
-                  detail: "#{clean} clean, #{drifted.size} dirty, #{weak.size} weak identity, " \
+                  detail: "#{clean} clean, #{drifted.size} dirty, #{moved}#{weak.size} weak identity, " \
                           "#{plan.verdicts.count { |verdict| verdict.state == :skip }} without canonical",
                   lines: capped(lines))
+      end
+
+      def trickle_moved?(verdict)
+        verdict.reason == :canonical && !trickle_pid(verdict.slug).nil?
+      end
+
+      # The live trickle runner's pid for +slug+ (its pidfile under
+      # local/trickle/, that pid alive — Trickle::Control#running_pid's
+      # rule), nil when none runs.
+      def trickle_pid(slug)
+        return nil if @trickle_dir.nil?
+
+        pid = Trickle.read_pid(File.join(@trickle_dir, "#{slug}.pid"))
+        pid && @alive.call(pid) ? pid : nil
+      end
+
+      def trickle_note(slug)
+        "NOTE #{slug}: canonical moved under its live trickle crawl (pid #{trickle_pid(slug)}) — later arrivals " \
+          "load at the source's next sync"
       end
 
       # -- fold ---------------------------------------------------------------

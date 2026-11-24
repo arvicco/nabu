@@ -205,6 +205,7 @@ namespace :rebuild do
     report = Nabu::Ops::RebuildVerify.new(
       catalog: catalog, fulltext: fulltext, ledger: ledger, db_dir: config.db_dir, local_dir: config.local_dir,
       cjk_slugs: registry.cjk_slugs, fuzzy_slugs: registry.fuzzy_slugs, stamps_plan: stamps_plan,
+      trickle_dir: File.join(config.local_dir, Nabu::Ops::Trickle::DIRNAME),
       quick: ENV["QUICK"] == "1", full_integrity: ENV["FULL_INTEGRITY"] == "1",
       sample: Integer(ENV.fetch("SAMPLE", "8"), 10), seed: Integer(ENV.fetch("SEED", "1"), 10)
     ).run!

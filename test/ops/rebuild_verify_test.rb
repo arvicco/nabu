@@ -218,6 +218,60 @@ module Ops
       assert_equal :skip, check(verify(stamps_plan: nil), "stamps").status
     end
 
+    # A trickle runner (Ops::Trickle) crawls into canonical/ after the
+    # rebuild stamped its source: the canonical identity moves, the stamp
+    # reads dirty — by design, not a failed rebuild. Only canonical drift,
+    # and only with the runner alive.
+    def trickle!(slug, pid)
+      dir = File.join(@local_dir, "trickle")
+      FileUtils.mkdir_p(dir)
+      File.write(File.join(dir, "#{slug}.pid"), "#{pid}\n")
+      dir
+    end
+
+    def trickle_plan(reason)
+      Plan.new(refusal: nil, verdicts: [Verdict.new(slug: "texts", state: :clean, reason: nil),
+                                        Verdict.new(slug: "wellcome", state: :dirty, reason: reason)],
+               builders_dirty: false, index_dirty: false)
+    end
+
+    def test_canonical_drift_under_a_live_trickle_crawl_is_a_note_not_a_failure
+      census!
+      full_run!
+      dir = trickle!("wellcome", 4242)
+      @plan = trickle_plan(:canonical)
+      stamps = check(verify(trickle_dir: dir, alive: ->(pid) { pid == 4242 }), "stamps")
+
+      assert_equal :pass, stamps.status
+      assert_equal "1 clean, 0 dirty, 1 moved by a live trickle crawl, 0 weak identity, 0 without canonical",
+                   stamps.detail.sub(/ \(\d.*\)\z/, "")
+      assert_equal ["NOTE wellcome: canonical moved under its live trickle crawl (pid 4242) — later arrivals " \
+                    "load at the source's next sync"], stamps.lines
+    end
+
+    def test_canonical_drift_with_a_dead_trickle_pidfile_still_fails
+      census!
+      full_run!
+      dir = trickle!("wellcome", 4242)
+      @plan = trickle_plan(:canonical)
+      stamps = check(verify(trickle_dir: dir, alive: ->(_pid) { false }), "stamps")
+
+      assert_equal :fail, stamps.status
+      assert_equal ["wellcome: canonical"], stamps.lines
+    end
+
+    def test_a_non_canonical_drift_under_a_live_trickle_still_fails
+      census!
+      full_run!
+      dir = trickle!("wellcome", 4242)
+      @plan = trickle_plan(:parser)
+      stamps = check(verify(trickle_dir: dir, alive: ->(_pid) { true }), "stamps")
+
+      assert_equal :fail, stamps.status
+      assert_equal ["wellcome: parser"], stamps.lines
+      assert_match(/\A1 clean, 1 dirty, 0 weak identity/, stamps.detail)
+    end
+
     def test_a_stored_fold_equal_to_lower_text_fails_the_fold_sample
       load(@texts, [document("u:a", 2, text: "Wrath"), document("u:b", 2)])
       census!

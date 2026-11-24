@@ -979,7 +979,13 @@ owner-fired. Three commands, in order, each with what to expect:
    `SUMMARY rebuild:verify — 10 pass, 0 warn, 0 fail, 0 skip in <elapsed>`; exit 0.
    The two honest WARNs: `stamps` naming weak-identity sources (never
    stampable — they re-derive on every incremental by design) and
-   `readers` (below); neither fails the rebuild.
+   `readers` (below); neither fails the rebuild. One honest NOTE: a source
+   whose ONLY stamp drift is `canonical` while its trickle runner is alive
+   (`local/trickle/<slug>.pid` naming a live pid) was crawled after the
+   rebuild stamped it — `stamps` stays PASS, counts it as `moved by a live
+   trickle crawl` and names it (later arrivals load at the source's next
+   sync). Any other drift reason, or a canonical drift with no live
+   runner, still FAILs.
    The heavy checks announce their cost before they start (`integrity`:
    `PRAGMA quick_check` reads every page of every db file; `inspect`: one
    scan of the passages table) — `QUICK=1` skips both (SKIP lines), and
