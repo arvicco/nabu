@@ -1,6 +1,6 @@
 # Nabu
 
-[![CI](https://github.com/arvicco/nabu/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/arvicco/nabu/actions/workflows/ci.yml) [![DOI](https://img.shields.io/badge/DOI-10.5281%2Fzenodo.21361956-blue.svg)](https://doi.org/10.5281/zenodo.21361956) [![Listed on mcpservers.org](https://mcpservers.org/badge.svg)](https://mcpservers.org/servers/arvicco/nabu)
+[![CI](https://github.com/arvicco/nabu/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/arvicco/nabu/actions/workflows/ci.yml) [![DOI](https://img.shields.io/badge/DOI-10.5281%2Fzenodo.21361956-blue.svg)](https://doi.org/10.5281/zenodo.21361956) [![Listed on mcpservers.org](https://mcpservers.org/badge.svg)](https://mcpservers.org/servers/arvicco/nabu) [![arvicco/nabu MCP server](https://glama.ai/mcp/servers/arvicco/nabu/badges/score.svg)](https://glama.ai/mcp/servers/arvicco/nabu)
 
 **A personal, local, license-honest library of the ancient world — that your
 AI tools can read.**
@@ -104,7 +104,7 @@ docker mcp catalog import https://arvicco.github.io/nabu/docker-mcp-catalog.yaml
 start the same `docker run -i --rm ghcr.io/arvicco/nabu-ancient-corpora:1.9.0`:
 
 [![Install in VS Code](https://img.shields.io/badge/VS_Code-Install_Nabu_demo-0098FF?logo=visualstudiocode&logoColor=white)](https://vscode.dev/redirect/mcp/install?name=nabu&config=%7B%22command%22%3A%22docker%22%2C%22args%22%3A%5B%22run%22%2C%22-i%22%2C%22--rm%22%2C%22ghcr.io%2Farvicco%2Fnabu-ancient-corpora%3A1.9.0%22%5D%7D)
-[![Add to Cursor](https://img.shields.io/badge/Cursor-Add_Nabu_demo-000000?logo=cursor&logoColor=white)](https://cursor.com/install-mcp?name=nabu&config=eyJjb21tYW5kIjoiZG9ja2VyIiwiYXJncyI6WyJydW4iLCItaSIsIi0tcm0iLCJnaGNyLmlvL2FydmljY28vbmFidS1hbmNpZW50LWNvcnBvcmE6MS44LjAiXX0%3D)
+[![Add to Cursor](https://img.shields.io/badge/Cursor-Add_Nabu_demo-000000?logo=cursor&logoColor=white)](https://cursor.com/install-mcp?name=nabu&config=eyJjb21tYW5kIjoiZG9ja2VyIiwiYXJncyI6WyJydW4iLCItaSIsIi0tcm0iLCJnaGNyLmlvL2FydmljY28vbmFidS1hbmNpZW50LWNvcnBvcmE6MS45LjAiXX0%3D)
 
 (GitHub strips custom-scheme links, so the badges go through the editors'
 https redirects to `vscode:mcp/install?…` and
