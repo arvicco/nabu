@@ -767,7 +767,7 @@ async def main():
     client = MultiServerMCPClient({
         "nabu": {
             "command": "docker",
-            "args": ["run", "-i", "--rm", "ghcr.io/arvicco/nabu-ancient-corpora:1.8.0"],
+            "args": ["run", "-i", "--rm", "ghcr.io/arvicco/nabu-ancient-corpora:1.9.0"],
             "transport": "stdio",
         }
     })
@@ -784,7 +784,7 @@ import asyncio
 from llama_index.tools.mcp import BasicMCPClient, McpToolSpec
 
 async def main():
-    client = BasicMCPClient("docker", args=["run", "-i", "--rm", "ghcr.io/arvicco/nabu-ancient-corpora:1.8.0"])
+    client = BasicMCPClient("docker", args=["run", "-i", "--rm", "ghcr.io/arvicco/nabu-ancient-corpora:1.9.0"])
     tools = await McpToolSpec(client=client).to_tool_list_async()  # FunctionTools
     print([tool.metadata.name for tool in tools])
 

@@ -74,7 +74,7 @@ async def main():
     client = MultiServerMCPClient({
         "nabu": {
             "command": "docker",
-            "args": ["run", "-i", "--rm", "ghcr.io/arvicco/nabu-ancient-corpora:1.8.0"],
+            "args": ["run", "-i", "--rm", "ghcr.io/arvicco/nabu-ancient-corpora:1.9.0"],
             "transport": "stdio",
         }
     })
