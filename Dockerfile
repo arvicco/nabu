@@ -31,8 +31,8 @@
 #
 # PORT sets the HTTP port (default 8080); the image binds 0.0.0.0
 # (NABU_MCP_HOST) since the container boundary is the network edge.
-FROM ruby:3.3 AS base
-RUN apt-get update -qq && apt-get install -y --no-install-recommends libsqlite3-dev && rm -rf /var/lib/apt/lists/*
+FROM ruby:3.3-slim AS base
+RUN apt-get update -qq && apt-get install -y --no-install-recommends build-essential libsqlite3-dev git && rm -rf /var/lib/apt/lists/*
 WORKDIR /app
 COPY Gemfile Gemfile.lock ./
 RUN bundle install
