@@ -175,11 +175,7 @@ namespace :rebuild do
     ledger = (Nabu::Store.connect(config.history_path, readonly: true) if File.file?(config.history_path))
     path, census = Nabu::Ops::RebuildCensus.capture!(catalog: catalog, db_dir: config.db_dir,
                                                      local_dir: config.local_dir, ledger: ledger)
-    totals = census.fetch("totals")
-    puts "SUMMARY rebuild:census — #{census.fetch('sources').size} sources · #{totals['documents_count']} documents " \
-         "· #{totals['passages_count']} passages · #{totals['behind_sources']} fulltext-behind · " \
-         "#{census.fetch('files').size} db file(s), " \
-         "#{Nabu::Ops::DbSnapshot.human(census.fetch('files').values.sum)} → #{path}"
+    puts Nabu::Ops::RebuildCensus.summary(census, path)
   rescue Nabu::Ops::RebuildCensus::Refused => e
     abort "rebuild:census refused — #{e.message}"
   ensure
@@ -205,6 +201,7 @@ namespace :rebuild do
     report = Nabu::Ops::RebuildVerify.new(
       catalog: catalog, fulltext: fulltext, ledger: ledger, db_dir: config.db_dir, local_dir: config.local_dir,
       cjk_slugs: registry.cjk_slugs, fuzzy_slugs: registry.fuzzy_slugs, stamps_plan: stamps_plan,
+      trickle_dir: File.join(config.local_dir, Nabu::Ops::Trickle::DIRNAME),
       quick: ENV["QUICK"] == "1", full_integrity: ENV["FULL_INTEGRITY"] == "1",
       sample: Integer(ENV.fetch("SAMPLE", "8"), 10), seed: Integer(ENV.fetch("SEED", "1"), 10)
     ).run!

@@ -170,6 +170,92 @@ module Ops
                              "(a parser change since the census?)"
     end
 
+    # -- counts: dictionary-kind sources -------------------------------------
+
+    # A dictionary-kind source holds entries, not passages (no
+    # source_aggregates row): the census counts its live entries, the
+    # verify compares them. No entry-grained quarantine accounting is
+    # readable ops-side (a dictionary run row counts quarantined FILES), so
+    # an entry loss is a FAIL that names those files; a gain is a NOTE.
+    def dictionary!(slug, entries, withdrawn: 0)
+      source = Nabu::Store::Source.first(slug: slug) || make_source(slug)
+      id = @db[:dictionaries].where(slug: slug).get(:id) ||
+           @db[:dictionaries].insert(source_id: source.id, slug: slug, title: slug, language: "grc")
+      @db[:dictionary_entries].where(dictionary_id: id).delete
+      (entries + withdrawn).times do |i|
+        @db[:dictionary_entries].insert(dictionary_id: id, urn: "#{slug}:#{i}", entry_id: i.to_s, key_raw: "k#{i}",
+                                        headword: "h#{i}", headword_folded: "h#{i}", body: "b", content_sha256: "s",
+                                        withdrawn: i >= entries)
+      end
+    end
+
+    def test_the_census_counts_dictionary_sources_live_entries
+      dictionary!("lexicon", 3, withdrawn: 2)
+      _, census = census!
+
+      assert_equal({ "lexicon" => { "dictionaries" => 1, "entries" => 3 } }, census.fetch("dictionaries"))
+      assert_equal 3, census.dig("totals", "dictionary_entries")
+      refute census.fetch("sources").key?("lexicon"), "passage sources stay where they were"
+    end
+
+    # The behind count is the loaders' write-time flag, not an index
+    # probe: the summary says so, and says for how many sources fulltext
+    # membership is recorded at all (unknown membership is not "0 behind").
+    def test_the_census_summary_counts_dictionaries_and_labels_the_behind_flag
+      dictionary!("lexicon", 3)
+      @db[Nabu::Store::SourceAggregates::TABLE].where(source_id: @other.id).update(fts_member_count: nil)
+      path, census = census!
+
+      summary = C.summary(census, path)
+      assert summary.start_with?("SUMMARY rebuild:census — 2 passage sources · 3 documents · 5 passages · " \
+                                 "3 dictionary entries over 1 dictionary source(s) · "), summary
+      assert_includes summary, " · 0 flagged fulltext-behind (the loaders' write-time flag, not an index probe; " \
+                               "membership recorded for 1 of 2 passage sources) · "
+      assert_match(/ · 1 db file\(s\), [\d.]+ KB → #{Regexp.escape(path)}\z/, summary)
+    end
+
+    def test_a_dictionary_entry_loss_fails_and_a_gain_is_a_note
+      dictionary!("lexicon", 3)
+      dictionary!("glossary", 2)
+      census!
+      dictionary!("lexicon", 2)
+      dictionary!("glossary", 4)
+      full_run!
+      quarantined!("lexicon", 1)
+
+      counts = check(verify, "counts")
+      assert_equal :fail, counts.status
+      assert_includes counts.lines, "FAIL lexicon: dictionary entries 3 → 2 — 1 entry(ies) lost; the rebuild " \
+                                    "quarantined 1 dictionary file(s), but entry-grained quarantine accounting is " \
+                                    "not readable — check by hand"
+      assert_includes counts.lines, "NOTE glossary: dictionary entries 2 → 4 — gained"
+      assert_match(/; dictionary entries 5 → 6 over 2 source\(s\)/, counts.detail)
+    end
+
+    def test_a_lost_dictionary_source_fails
+      dictionary!("lexicon", 3)
+      census!
+      dictionary!("lexicon", 0)
+      full_run!
+
+      counts = check(verify, "counts")
+      assert_equal :fail, counts.status
+      assert_includes counts.lines, "FAIL lexicon: dictionary entries 3 → 0 — LOST the whole source"
+    end
+
+    def test_a_census_without_dictionary_counts_still_verifies_and_says_it_skipped_them
+      dictionary!("lexicon", 3)
+      path, census = census!
+      census.delete("dictionaries")
+      File.write(path, JSON.generate(census))
+      full_run!
+
+      counts = check(verify, "counts")
+      assert_equal :pass, counts.status
+      assert_match(/; dictionary entries not compared \(the census predates dictionary counts\)/, counts.detail)
+      assert_includes counts.lines, "SKIP dictionary entries: the census predates dictionary counts — not compared"
+    end
+
     # -- aggregates / fulltext ----------------------------------------------
 
     def test_a_drifted_aggregate_row_fails_the_sampled_recount
@@ -218,6 +304,60 @@ module Ops
       assert_equal :skip, check(verify(stamps_plan: nil), "stamps").status
     end
 
+    # A trickle runner (Ops::Trickle) crawls into canonical/ after the
+    # rebuild stamped its source: the canonical identity moves, the stamp
+    # reads dirty — by design, not a failed rebuild. Only canonical drift,
+    # and only with the runner alive.
+    def trickle!(slug, pid)
+      dir = File.join(@local_dir, "trickle")
+      FileUtils.mkdir_p(dir)
+      File.write(File.join(dir, "#{slug}.pid"), "#{pid}\n")
+      dir
+    end
+
+    def trickle_plan(reason)
+      Plan.new(refusal: nil, verdicts: [Verdict.new(slug: "texts", state: :clean, reason: nil),
+                                        Verdict.new(slug: "wellcome", state: :dirty, reason: reason)],
+               builders_dirty: false, index_dirty: false)
+    end
+
+    def test_canonical_drift_under_a_live_trickle_crawl_is_a_note_not_a_failure
+      census!
+      full_run!
+      dir = trickle!("wellcome", 4242)
+      @plan = trickle_plan(:canonical)
+      stamps = check(verify(trickle_dir: dir, alive: ->(pid) { pid == 4242 }), "stamps")
+
+      assert_equal :pass, stamps.status
+      assert_equal "1 clean, 0 dirty, 1 moved by a live trickle crawl, 0 weak identity, 0 without canonical",
+                   stamps.detail.sub(/ \(\d.*\)\z/, "")
+      assert_equal ["NOTE wellcome: canonical moved under its live trickle crawl (pid 4242) — later arrivals " \
+                    "load at the source's next sync"], stamps.lines
+    end
+
+    def test_canonical_drift_with_a_dead_trickle_pidfile_still_fails
+      census!
+      full_run!
+      dir = trickle!("wellcome", 4242)
+      @plan = trickle_plan(:canonical)
+      stamps = check(verify(trickle_dir: dir, alive: ->(_pid) { false }), "stamps")
+
+      assert_equal :fail, stamps.status
+      assert_equal ["wellcome: canonical"], stamps.lines
+    end
+
+    def test_a_non_canonical_drift_under_a_live_trickle_still_fails
+      census!
+      full_run!
+      dir = trickle!("wellcome", 4242)
+      @plan = trickle_plan(:parser)
+      stamps = check(verify(trickle_dir: dir, alive: ->(_pid) { true }), "stamps")
+
+      assert_equal :fail, stamps.status
+      assert_equal ["wellcome: parser"], stamps.lines
+      assert_match(/\A1 clean, 1 dirty, 0 weak identity/, stamps.detail)
+    end
+
     def test_a_stored_fold_equal_to_lower_text_fails_the_fold_sample
       load(@texts, [document("u:a", 2, text: "Wrath"), document("u:b", 2)])
       census!
@@ -262,6 +402,28 @@ module Ops
       report = verify(quick: true)
       assert_equal %i[skip skip], [check(report, "integrity").status, check(report, "inspect").status]
       assert_match(/QUICK=1 — PRAGMA quick_check over 2 file\(s\) not run/, check(report, "integrity").detail)
+    end
+
+    # FTS5's own `INSERT INTO t(t) VALUES('integrity-check')` is a write a
+    # read-only handle refuses; since SQLite 3.44 the quick_check pragma
+    # runs each FTS5 table's integrity method itself, so a damaged inverted
+    # index fails the read-only check with no extra command.
+    def test_quick_check_covers_a_damaged_fts5_index_read_only
+      census!
+      full_run!
+      path = File.join(@db_dir, "fulltext.sqlite3")
+      db = Nabu::Store.connect(path)
+      db.run("CREATE VIRTUAL TABLE t USING fts5(x)")
+      20.times { |i| db[:t].insert(x: "hello world #{i}") }
+      db[:t_docsize].where { id < 10 }.delete
+      db.disconnect
+
+      report = verify
+      integrity = check(report, "integrity")
+      assert_equal :fail, integrity.status
+      assert_includes integrity.lines, "fulltext.sqlite3: malformed inverted index for FTS5 table main.t"
+      assert_match(/\.\.\.\.  integrity  .*FTS5 tables' own integrity checks included \(SQLite 3\.\d+/, @out.string,
+                   "the progress line says the FTS5 internals are covered, and by which SQLite")
     end
 
     def test_inspect_shaped_text_fails_with_the_urn_named

@@ -24,8 +24,11 @@ module Nabu
     #   profiler times (RebuildProfile::CORPUS_STAGE_LABELS), each priced
     #   from the LATEST stage_timings row the ledger holds for it (kind
     #   "rebuild" — the same rows the run's own stage announcements read).
-    #   A stage without a row is listed UNPRICED, never guessed; the total
-    #   sums the priced stages and says how many are not in it. Beside it,
+    #   A source load without a rebuild row (a source added since the last
+    #   full rebuild) takes its heaviest sync load row as a labelled first
+    #   estimate. A stage with neither is listed UNPRICED, never guessed;
+    #   the total sums the priced stages and says how many are not in it,
+    #   and how many of those in it are sync-row estimates. Beside it,
     #   the wall time of the last COMPLETED full run (rebuild_runs) — the
     #   cross-check a summed estimate cannot give (stage gaps, the small
     #   unprofiled stages).
@@ -65,9 +68,14 @@ module Nabu
 
       # +corpus+: a corpus stage (scope "corpus") vs a source's load — kept
       # as its own member so a source slugged "corpus" cannot pass for one.
-      Stage = Data.define(:scope, :stage, :seconds, :finished_at, :corpus) do
+      # +basis+: :rebuild (the stage's own rebuild row), :sync (a first
+      # estimate for a source never rebuilt — its heaviest sync load row)
+      # or nil (unpriced).
+      Stage = Data.define(:scope, :stage, :seconds, :finished_at, :corpus, :basis) do
+        def initialize(scope:, stage:, seconds:, finished_at:, corpus:, basis: seconds && :rebuild) = super
         def label = corpus ? RebuildProfile::CORPUS_STAGE_LABELS.fetch(stage.to_sym, stage) : "load #{scope}"
         def priced? = !seconds.nil?
+        def estimated? = basis == :sync
       end
 
       LastRun = Data.define(:started_at, :seconds)
@@ -75,6 +83,7 @@ module Nabu
       Forecast = Data.define(:stages, :last_full) do
         def priced = stages.select(&:priced?)
         def unpriced = stages.reject(&:priced?)
+        def estimated = stages.select(&:estimated?)
         def total = priced.sum(&:seconds)
       end
 
@@ -144,8 +153,24 @@ module Nabu
 
       def stage_row(scope, stage, corpus:)
         row = Store::StageTimings.last(@ledger, kind: "rebuild", scope: scope, stage: stage)
+        return sync_estimate(scope) if row.nil? && !corpus
+
         Stage.new(scope: scope, stage: stage, seconds: row && row[:seconds].to_f, finished_at: row && row[:finished_at],
                   corpus: corpus)
+      end
+
+      # A source added since the last full rebuild has no rebuild load row.
+      # Its first estimate is its HEAVIEST sync load row: a rebuild's load
+      # is a fresh, full one — the first sync's — while a later no-change
+      # sync skips every unchanged document in seconds and would underprice
+      # it. Labelled as an estimate; unpriced when it never synced either.
+      def sync_estimate(slug)
+        row = if Store::StageTimings.table?(@ledger)
+                @ledger[Store::StageTimings::TABLE].where(kind: "sync", scope: slug, stage: "load")
+                                                   .order(Sequel.desc(:seconds)).select(:seconds, :finished_at).first
+              end
+        Stage.new(scope: slug, stage: "load", seconds: row && row[:seconds].to_f, finished_at: row && row[:finished_at],
+                  corpus: false, basis: row && :sync)
       end
 
       def last_full
@@ -320,8 +345,11 @@ module Nabu
           head = "  price: ~#{fmt(forecast.total)} summed over #{forecast.priced.size} of " \
                  "#{forecast.stages.size} stages (#{loads} source loads + #{forecast.stages.size - loads} " \
                  "corpus stages; each stage's latest ledger row)"
-          head += " — #{forecast.unpriced.size} UNPRICED (no ledger row: first run, no estimate)" if
+          notes = []
+          notes << "#{forecast.estimated.size} priced from a sync row (an estimate)" if forecast.estimated.any?
+          notes << "#{forecast.unpriced.size} UNPRICED (no ledger row: first run, no estimate)" if
             forecast.unpriced.any?
+          head += " — #{notes.join(', ')}" if notes.any?
           out = [head]
           out << last_full_line(forecast.last_full)
           dated = forecast.priced.filter_map(&:finished_at)
@@ -333,7 +361,11 @@ module Nabu
         end
 
         def stage_line(stage)
-          format("      %-34<l>s %<t>s", l: stage.label, t: stage.priced? ? "~#{fmt(stage.seconds)}" : "unpriced")
+          price = if stage.estimated? then "~#{fmt(stage.seconds)} (sync row)"
+                  elsif stage.priced? then "~#{fmt(stage.seconds)}"
+                  else "unpriced"
+                  end
+          format("      %-34<l>s %<t>s", l: stage.label, t: price)
         end
 
         def last_full_line(last)

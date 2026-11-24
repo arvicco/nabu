@@ -59,9 +59,36 @@ class RebuildPreflightTest < Minitest::Test
     assert_equal 2 + corpus_count, forecast.stages.size, "every load, then every profiled corpus stage"
     assert_equal ["load pap", "load cdli", "code identities"], forecast.stages.first(3).map(&:label)
     assert_includes forecast.stages.map(&:label), "timeline"
-    assert_in_delta 3_720.0, forecast.total, 0.001, "600 + 120 + 3000 — a sync row never prices a rebuild load"
-    assert_includes forecast.unpriced.map(&:label), "load cdli"
-    assert_equal 2 + corpus_count - 3, forecast.unpriced.size
+    assert_in_delta 3_720.0 + 9_999, forecast.total, 0.001, "600 + 120 + 3000, plus cdli's sync-row estimate"
+    refute_includes forecast.unpriced.map(&:label), "load cdli"
+    assert_equal([["load cdli", :sync]], forecast.estimated.map { |stage| [stage.label, stage.basis] })
+    assert_equal 2 + corpus_count - 4, forecast.unpriced.size
+  end
+
+  # A source added since the last full rebuild has no rebuild row: its
+  # heaviest sync load row is a first estimate (a fresh load is a full one,
+  # so a later no-change sync's seconds would underprice it), labelled as
+  # such. A rebuild row always wins over any sync row.
+  def test_a_never_rebuilt_source_is_priced_from_its_heaviest_sync_load_row_and_labelled
+    sync = lambda do |slug, seconds|
+      Nabu::Store::StageTimings.record!(@ledger, kind: "sync", scope: slug, stage: "load", seconds: seconds)
+    end
+    sync.call("cdli", 240)
+    sync.call("cdli", 3) # a later no-change sync: not the price of a fresh load
+    sync.call("pap", 9_000)
+    record("pap", "load", 60) # the rebuild row wins
+
+    forecast = preflight.forecast
+    pap, cdli = forecast.stages.first(2)
+
+    assert_in_delta 60.0, pap.seconds, 0.001
+    assert_equal :rebuild, pap.basis
+    assert_in_delta 240.0, cdli.seconds, 0.001
+    assert_equal :sync, cdli.basis
+    lines = P.render(preflight.report)
+    assert_match(/1 priced from a sync row \(an estimate\), \d+ UNPRICED/, lines[1])
+    assert_includes lines, "      #{'load cdli'.ljust(34)} ~4m (sync row)"
+    assert_includes lines, "      #{'load pap'.ljust(34)} ~1m"
   end
 
   def test_the_last_completed_full_run_is_the_wall_time_cross_check
