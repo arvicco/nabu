@@ -52,7 +52,9 @@ module Nabu
     #              its watchdog vacates idle handles; a WARN, re-check)
     #   integrity  PRAGMA quick_check on every db/*.sqlite3 (heavy: reads
     #              every page; FULL_INTEGRITY=1 runs integrity_check, which
-    #              also cross-checks every index — far slower)
+    #              also cross-checks every index — far slower). On SQLite
+    #              ≥ 3.44 either pragma also runs each FTS5 table's own
+    #              integrity check, read-only (#fts5_coverage)
     #   inspect    no live passage text shaped like an inspected Ruby
     #              object (Nabu::InspectedText — the conformance detector;
     #              heavy: one scan of the passages table)
@@ -85,6 +87,9 @@ module Nabu
       FOLD_WINDOW_IDS = 5_000
       # const: how many sampled inspect-shaped hits are named
       INSPECT_SAMPLES = 5
+      # The SQLite release whose integrity pragmas began calling virtual
+      # tables' integrity methods (FTS5's included) — see #fts5_coverage.
+      FTS5_PRAGMA_SINCE = Gem::Version.new("3.44.0")
 
       def initialize(catalog:, fulltext:, ledger:, db_dir:, local_dir:, cjk_slugs: [], fuzzy_slugs: [],
                      stamps_plan: nil, quick: false, full_integrity: false, sample: 8, seed: 1,
@@ -504,14 +509,34 @@ module Nabu
         return Check.new(name: "integrity", status: :skip, detail: "no db files") if files.empty?
 
         bytes = files.sum { |path| File.size(path) }
-        timed("integrity", "PRAGMA #{pragma} over #{files.size} file(s), #{human(bytes)} — reads every page " \
-                           "(minutes-class at library scale; QUICK=1 skips)") do
+        timed("integrity", "PRAGMA #{pragma} over #{files.size} file(s), #{human(bytes)} — reads every page; " \
+                           "#{fts5_coverage} (minutes-class at library scale; QUICK=1 skips)") do
           bad = files.filter_map do |path|
             result = pragma_result(path, pragma)
             "#{File.basename(path)}: #{result}" unless result == "ok"
           end
           Check.new(name: "integrity", status: bad.empty? ? :pass : :fail,
                     detail: "#{pragma}: #{files.size - bad.size} of #{files.size} file(s) ok", lines: bad)
+        end
+      end
+
+      # FTS5's internal integrity (the inverted index against its doclists,
+      # docsize and content) is NOT a separate command here: its own form,
+      # `INSERT INTO <fts>(<fts>) VALUES('integrity-check')`, is a write
+      # that a read-only handle refuses ("attempt to write a readonly
+      # database") — and the verify never opens a db writable. Since SQLite
+      # 3.44 the quick_check / integrity_check pragmas call every virtual
+      # table's integrity method, so FTS5 tables ARE checked by the pragma
+      # this check already runs, read-only (FTS5_PRAGMA_SINCE). Older
+      # SQLite: said, not hidden.
+      def fts5_coverage
+        version = @catalog.get(Sequel.function(:sqlite_version)).to_s
+        if Gem::Version.new(version) >= FTS5_PRAGMA_SINCE
+          "FTS5 tables' own integrity checks included (SQLite #{version} ≥ 3.44 runs them inside the pragma — " \
+            "each reads its whole index)"
+        else
+          "FTS5 internals NOT covered (SQLite #{version} < 3.44; their integrity-check command is a write the " \
+            "read-only verify does not run)"
         end
       end
 

@@ -318,6 +318,28 @@ module Ops
       assert_match(/QUICK=1 — PRAGMA quick_check over 2 file\(s\) not run/, check(report, "integrity").detail)
     end
 
+    # FTS5's own `INSERT INTO t(t) VALUES('integrity-check')` is a write a
+    # read-only handle refuses; since SQLite 3.44 the quick_check pragma
+    # runs each FTS5 table's integrity method itself, so a damaged inverted
+    # index fails the read-only check with no extra command.
+    def test_quick_check_covers_a_damaged_fts5_index_read_only
+      census!
+      full_run!
+      path = File.join(@db_dir, "fulltext.sqlite3")
+      db = Nabu::Store.connect(path)
+      db.run("CREATE VIRTUAL TABLE t USING fts5(x)")
+      20.times { |i| db[:t].insert(x: "hello world #{i}") }
+      db[:t_docsize].where { id < 10 }.delete
+      db.disconnect
+
+      report = verify
+      integrity = check(report, "integrity")
+      assert_equal :fail, integrity.status
+      assert_includes integrity.lines, "fulltext.sqlite3: malformed inverted index for FTS5 table main.t"
+      assert_match(/\.\.\.\.  integrity  .*FTS5 tables' own integrity checks included \(SQLite 3\.\d+/, @out.string,
+                   "the progress line says the FTS5 internals are covered, and by which SQLite")
+    end
+
     def test_inspect_shaped_text_fails_with_the_urn_named
       doc = Nabu::Document.new(urn: "u:bad", title: "bad", language: "grc", canonical_path: "bad.xml", metadata: {})
       doc << Nabu::Passage.new(urn: "u:bad:1", sequence: 0, language: "grc", text: '{"text" => "μῆνιν"}',

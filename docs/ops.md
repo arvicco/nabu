@@ -991,7 +991,10 @@ owner-fired. Three commands, in order, each with what to expect:
    sync). Any other drift reason, or a canonical drift with no live
    runner, still FAILs.
    The heavy checks announce their cost before they start (`integrity`:
-   `PRAGMA quick_check` reads every page of every db file; `inspect`: one
+   `PRAGMA quick_check` reads every page of every db file, and on SQLite
+   ≥ 3.44 also runs every FTS5 table's own integrity check inside the
+   pragma — read-only, so FTS5's separate `'integrity-check'` command, a
+   write, is never needed; the progress line says which applies; `inspect`: one
    scan of the passages table) — `QUICK=1` skips both (SKIP lines), and
    `FULL_INTEGRITY=1` runs `integrity_check` instead (far slower: it also
    cross-checks every index). The checks: `run` (the latest full run
