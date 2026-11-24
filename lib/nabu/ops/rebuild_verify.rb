@@ -28,7 +28,11 @@ module Nabu
     #              does not survive a fresh build); a lost source or an
     #              unexplained loss FAILs, a passage loss with documents
     #              intact WARNs (a parser change since the census?), gains
-    #              are listed.
+    #              are listed. Dictionary-kind sources compare their live
+    #              entries: any loss FAILs (a dictionary run row counts
+    #              quarantined FILES, so no entry loss is provably
+    #              explained), a gain is a NOTE, and a census without
+    #              dictionary counts is a SKIP line.
     #   aggregates source_aggregates vs a live recount on a seeded sample
     #              of sources (SourceAggregates.drift — O(source) each)
     #   fulltext   held vs searchable: nothing flagged behind, membership
@@ -253,17 +257,60 @@ module Nabu
         verdicts = (before.keys | now.keys).compact.sort.filter_map do |slug|
           source_verdict(slug, before.fetch(slug, {}), now.fetch(slug, {}), held[slug].to_i)
         end
+        dictionary_detail, dictionary_verdicts = dictionary_comparison(census["dictionaries"], held)
+        verdicts.concat(dictionary_verdicts)
         status = if verdicts.any? { |verdict, _| verdict == :fail } then :fail
                  elsif verdicts.any? { |verdict, _| verdict == :warn } then :warn
                  else :pass
                  end
         totals = ->(counts, key) { commas(counts.values.sum { |row| row[key].to_i }) }
-        detail = "#{(before.keys | now.keys).compact.size} sources, #{verdicts.size} changed; documents " \
+        changed = verdicts.count { |verdict, _| verdict != :skip }
+        detail = "#{(before.keys | now.keys).compact.size} sources, #{changed} changed; documents " \
                  "#{totals.call(before, 'documents')} → #{totals.call(now, 'documents')}, passages " \
-                 "#{totals.call(before, 'passages')} → #{totals.call(now, 'passages')}"
-        lines = verdicts.sort_by { |verdict, _| %i[fail warn note].index(verdict) }
+                 "#{totals.call(before, 'passages')} → #{totals.call(now, 'passages')}; #{dictionary_detail}"
+        lines = verdicts.sort_by { |verdict, _| %i[fail warn note skip].index(verdict) }
                         .map { |verdict, line| "#{verdict.to_s.upcase.ljust(4)} #{line}" }
         Check.new(name: "counts", status: status, detail: detail, lines: capped(lines))
+      end
+
+      # [detail fragment, [[verdict, line]]] for the dictionary-kind
+      # sources (RebuildCensus.dictionary_counts). A census captured before
+      # the census counted them has no "dictionaries" key: the comparison
+      # is a SKIP line with its reason, never a failure.
+      def dictionary_comparison(before, quarantined)
+        if before.nil?
+          return ["dictionary entries not compared (the census predates dictionary counts)",
+                  [[:skip, "dictionary entries: the census predates dictionary counts — not compared"]]]
+        end
+
+        now = RebuildCensus.dictionary_counts(@catalog)
+        slugs = (before.keys | now.keys).sort
+        verdicts = slugs.filter_map do |slug|
+          dictionary_verdict(slug, before.dig(slug, "entries").to_i, now.dig(slug, "entries").to_i,
+                             quarantined[slug].to_i)
+        end
+        total = ->(counts) { commas(counts.values.sum { |row| row["entries"].to_i }) }
+        ["dictionary entries #{total.call(before)} → #{total.call(now)} over #{slugs.size} source(s)", verdicts]
+      end
+
+      # A dictionary run row's errored count is quarantined FILES, not
+      # entries, so no entry loss can be proven explained from ops-side
+      # reads: every loss FAILs, naming the run's quarantined files as the
+      # likely cause when there are any; a gain is a NOTE.
+      def dictionary_verdict(slug, before, now, quarantined_files)
+        return nil if before == now
+
+        line = "#{slug}: dictionary entries #{commas(before)} → #{commas(now)}"
+        return [:note, "#{line} — gained"] if now > before
+        return [:fail, "#{line} — LOST the whole source"] if now.zero?
+
+        cause = if quarantined_files.positive?
+                  "the rebuild quarantined #{commas(quarantined_files)} dictionary file(s), but entry-grained " \
+                    "quarantine accounting is not readable — check by hand"
+                else
+                  "the rebuild quarantined none"
+                end
+        [:fail, "#{line} — #{commas(before - now)} entry(ies) lost; #{cause}"]
       end
 
       # [verdict, line] for a changed source, nil for an unchanged one.

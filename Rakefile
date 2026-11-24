@@ -175,11 +175,7 @@ namespace :rebuild do
     ledger = (Nabu::Store.connect(config.history_path, readonly: true) if File.file?(config.history_path))
     path, census = Nabu::Ops::RebuildCensus.capture!(catalog: catalog, db_dir: config.db_dir,
                                                      local_dir: config.local_dir, ledger: ledger)
-    totals = census.fetch("totals")
-    puts "SUMMARY rebuild:census — #{census.fetch('sources').size} sources · #{totals['documents_count']} documents " \
-         "· #{totals['passages_count']} passages · #{totals['behind_sources']} fulltext-behind · " \
-         "#{census.fetch('files').size} db file(s), " \
-         "#{Nabu::Ops::DbSnapshot.human(census.fetch('files').values.sum)} → #{path}"
+    puts Nabu::Ops::RebuildCensus.summary(census, path)
   rescue Nabu::Ops::RebuildCensus::Refused => e
     abort "rebuild:census refused — #{e.message}"
   ensure

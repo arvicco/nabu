@@ -687,7 +687,7 @@ On this box run them as `bundle exec rake …` (§2).
 | `rake ops:drill` | Fresh-machine restore drill against a throwaway copy (§9). | Long; owner-fired. |
 | `rake "db:snapshot[TARGET_DIR]"` | Online snapshot of every `db/*.sqlite3` into an existing, empty-of-those-names dir, one `VACUUM INTO` per file (WAL-safe; a plain copy under WAL is the corruption trap). Prints per-file size + elapsed and a SUMMARY line. A CACHE of derived state — it saves a rebuild's hours, never unique data. | Owner-fired. Refuses a missing/non-writable/occupied target and a running rebuild. Restore: `rake "db:restore[DIR]"` (next row). |
 | `rake "db:restore[SNAPSHOT_DIR]"` | Put a `db:snapshot` back: each db file the snapshot holds is dropped WITH its `-wal`/`-shm` sidecars, then the snapshot copy is copied in. Prints a SUMMARY line with the stamp note (the restored catalog carries the snapshot's stamps — code merged since reads dirty to `rebuild --incremental --dry-run`). | Owner-fired. Refuses (nothing touched) an empty source, a running rebuild, or any process holding one of the files open — the holders are named. Design: `Nabu::Ops::DbSnapshot.restore!`. |
-| `rake rebuild:census` | The full rebuild's BEFORE picture (§9a step 1): per-source documents/passages/fulltext membership, the library totals, every db file's size and the quarantine baselines, into `local/rebuild/census-<UTC stamp>.json` (never overwritten). | Seconds (O(1) aggregate reads). Refuses a pre-054 catalog (`aggregates:backfill` first). Design: `Nabu::Ops::RebuildCensus`. |
+| `rake rebuild:census` | The full rebuild's BEFORE picture (§9a step 1): per-source documents/passages/fulltext membership, per dictionary-kind source its live entries, the library totals, every db file's size and the quarantine baselines, into `local/rebuild/census-<UTC stamp>.json` (never overwritten). | Seconds (O(1) aggregate reads + one grouped dictionary-entry count). Refuses a pre-054 catalog (`aggregates:backfill` first). Design: `Nabu::Ops::RebuildCensus`. |
 | `rake rebuild:verify` | The full rebuild's AFTER proof (§9a step 3): ten labeled PASS/WARN/FAIL/SKIP checks — run, counts vs census, aggregates recount, fulltext coverage, stamps, fold storage, sizes, deleted-file readers, integrity, inspect-shaped text. Exit 1 on any FAIL. | Read-only. Heavy checks (integrity, inspect) announce their cost first; `QUICK=1` skips them, `FULL_INTEGRITY=1` swaps `quick_check` for `integrity_check`, `SAMPLE`/`SEED` size the recount. Design: `Nabu::Ops::RebuildVerify`. |
 | `rake "diet:text_normalized[dry_run]"` / `rake "diet:text_normalized"` | The text_normalized diet's reclaim pass: catalog rows that store their search form in full although it equals `text` or SQLite's `lower(text)` take the `""` / one-byte `\u0001` sentinel in place (the loader already writes the slim form for every row it touches — migration 055 widened the `text_search` read seam). Batched in-SQL UPDATE by rowid window, one progress line per window. Run `[dry_run]` first: row counts per class + projected payload bytes, nothing written. | Owner-fired; the dry run is a full read of `passages` (size it like any full-table scan). Served `text_search`, content shas, revisions and the FTS index are unchanged. Resumable (cursor `db/text_normalized_diet.cursor`, ignored after a rebuild); one run at a time; refuses during a rebuild or on a pre-055 catalog; batches take the catalog write window, so syncs interleave. **The file does not shrink**: freed space returns to the OS only at VACUUM, the next full rebuild, or `db:snapshot` (VACUUM INTO) — the summary says so. `BATCH=<ids>` overrides the window (default 50,000). Design: `Nabu::Store::TextNormalizedDiet`. |
 | `rake acquisition:probe` | Batch HTTP state checks for the acquisition plan's park / re-check conditions, from the instance board's `.docs/acquisition/probes.yml` (rows: `name`, `url`, `expect` = a status code, `any`, or a body substring, `note`); one `name → state (expect …) — as expected / CHANGED` line each, then the held-vs-searchable line (catalog passages vs `passages_fts`, both dbs read-only). | Network; informational (never exits 1 on CHANGED). One request per row, 10 s timeout, no retries, ≤3 redirects. No probe list = announced skip; `ACQUISITION_PROBES=path` overrides. |
@@ -947,9 +947,14 @@ owner-fired. Three commands, in order, each with what to expect:
 
 1. **Capture the before picture.**
    `bundle exec rake rebuild:census`
-   EXPECT: `SUMMARY rebuild:census — <N> sources · <D> documents · <P> passages · <B> fulltext-behind · <F> db file(s), <size> → local/rebuild/census-<UTC stamp>.json`.
-   Seconds (it reads the O(1) `source_aggregates` rows and stats the db
-   files). A pre-054 catalog is refused — run `bundle exec rake aggregates:backfill` first.
+   EXPECT: `SUMMARY rebuild:census — <N> passage sources · <D> documents · <P> passages · <E> dictionary entries over <K> dictionary source(s) · <B> flagged fulltext-behind (the loaders' write-time flag, not an index probe; membership recorded for <M> of <N> passage sources) · <F> db file(s), <size> → local/rebuild/census-<UTC stamp>.json`.
+   Seconds (it reads the O(1) `source_aggregates` rows, counts the live
+   dictionary entries per dictionary-kind source in one grouped pass, and
+   stats the db files). The behind figure is the loaders' write-time flag,
+   not a probe of the index: a source whose membership is not recorded
+   (NULL — never refreshed since the aggregates were backfilled) is
+   neither behind nor current, hence the `membership recorded for` count
+   beside it. A pre-054 catalog is refused — run `bundle exec rake aggregates:backfill` first.
 
 2. **Run the rebuild.**
    `bin/nabu rebuild`
@@ -999,7 +1004,12 @@ owner-fired. Three commands, in order, each with what to expect:
    `FULL_INTEGRITY=1` runs `integrity_check` instead (far slower: it also
    cross-checks every index). The checks: `run` (the latest full run
    completed), `counts` (per source vs the census — a document loss is
-   explained only by the rebuild's own quarantines), `aggregates` (a seeded
+   explained only by the rebuild's own quarantines; dictionary-kind
+   sources compare their live entries, where any loss FAILs because a
+   dictionary run row counts quarantined files, not entries — the line
+   names those files — and a gain is a NOTE; a census captured before
+   dictionary counts existed reads `dictionary entries not compared`, a
+   SKIP line, never a failure), `aggregates` (a seeded
    live recount of `SAMPLE` sources, default 8), `fulltext` (held vs
    searchable per source, the indexer's own count vs the held total, the
    cjk/trigram lane coverage), `stamps` (the incremental planner's verdict

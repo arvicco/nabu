@@ -170,6 +170,92 @@ module Ops
                              "(a parser change since the census?)"
     end
 
+    # -- counts: dictionary-kind sources -------------------------------------
+
+    # A dictionary-kind source holds entries, not passages (no
+    # source_aggregates row): the census counts its live entries, the
+    # verify compares them. No entry-grained quarantine accounting is
+    # readable ops-side (a dictionary run row counts quarantined FILES), so
+    # an entry loss is a FAIL that names those files; a gain is a NOTE.
+    def dictionary!(slug, entries, withdrawn: 0)
+      source = Nabu::Store::Source.first(slug: slug) || make_source(slug)
+      id = @db[:dictionaries].where(slug: slug).get(:id) ||
+           @db[:dictionaries].insert(source_id: source.id, slug: slug, title: slug, language: "grc")
+      @db[:dictionary_entries].where(dictionary_id: id).delete
+      (entries + withdrawn).times do |i|
+        @db[:dictionary_entries].insert(dictionary_id: id, urn: "#{slug}:#{i}", entry_id: i.to_s, key_raw: "k#{i}",
+                                        headword: "h#{i}", headword_folded: "h#{i}", body: "b", content_sha256: "s",
+                                        withdrawn: i >= entries)
+      end
+    end
+
+    def test_the_census_counts_dictionary_sources_live_entries
+      dictionary!("lexicon", 3, withdrawn: 2)
+      _, census = census!
+
+      assert_equal({ "lexicon" => { "dictionaries" => 1, "entries" => 3 } }, census.fetch("dictionaries"))
+      assert_equal 3, census.dig("totals", "dictionary_entries")
+      refute census.fetch("sources").key?("lexicon"), "passage sources stay where they were"
+    end
+
+    # The behind count is the loaders' write-time flag, not an index
+    # probe: the summary says so, and says for how many sources fulltext
+    # membership is recorded at all (unknown membership is not "0 behind").
+    def test_the_census_summary_counts_dictionaries_and_labels_the_behind_flag
+      dictionary!("lexicon", 3)
+      @db[Nabu::Store::SourceAggregates::TABLE].where(source_id: @other.id).update(fts_member_count: nil)
+      path, census = census!
+
+      summary = C.summary(census, path)
+      assert summary.start_with?("SUMMARY rebuild:census — 2 passage sources · 3 documents · 5 passages · " \
+                                 "3 dictionary entries over 1 dictionary source(s) · "), summary
+      assert_includes summary, " · 0 flagged fulltext-behind (the loaders' write-time flag, not an index probe; " \
+                               "membership recorded for 1 of 2 passage sources) · "
+      assert_match(/ · 1 db file\(s\), [\d.]+ KB → #{Regexp.escape(path)}\z/, summary)
+    end
+
+    def test_a_dictionary_entry_loss_fails_and_a_gain_is_a_note
+      dictionary!("lexicon", 3)
+      dictionary!("glossary", 2)
+      census!
+      dictionary!("lexicon", 2)
+      dictionary!("glossary", 4)
+      full_run!
+      quarantined!("lexicon", 1)
+
+      counts = check(verify, "counts")
+      assert_equal :fail, counts.status
+      assert_includes counts.lines, "FAIL lexicon: dictionary entries 3 → 2 — 1 entry(ies) lost; the rebuild " \
+                                    "quarantined 1 dictionary file(s), but entry-grained quarantine accounting is " \
+                                    "not readable — check by hand"
+      assert_includes counts.lines, "NOTE glossary: dictionary entries 2 → 4 — gained"
+      assert_match(/; dictionary entries 5 → 6 over 2 source\(s\)/, counts.detail)
+    end
+
+    def test_a_lost_dictionary_source_fails
+      dictionary!("lexicon", 3)
+      census!
+      dictionary!("lexicon", 0)
+      full_run!
+
+      counts = check(verify, "counts")
+      assert_equal :fail, counts.status
+      assert_includes counts.lines, "FAIL lexicon: dictionary entries 3 → 0 — LOST the whole source"
+    end
+
+    def test_a_census_without_dictionary_counts_still_verifies_and_says_it_skipped_them
+      dictionary!("lexicon", 3)
+      path, census = census!
+      census.delete("dictionaries")
+      File.write(path, JSON.generate(census))
+      full_run!
+
+      counts = check(verify, "counts")
+      assert_equal :pass, counts.status
+      assert_match(/; dictionary entries not compared \(the census predates dictionary counts\)/, counts.detail)
+      assert_includes counts.lines, "SKIP dictionary entries: the census predates dictionary counts — not compared"
+    end
+
     # -- aggregates / fulltext ----------------------------------------------
 
     def test_a_drifted_aggregate_row_fails_the_sampled_recount
