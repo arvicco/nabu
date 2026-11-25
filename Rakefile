@@ -1384,13 +1384,14 @@ namespace :demo do
   # :latest, pushed to GHCR. It is SELF-CONTAINED: ghcr auth is probed
   # (and `docker login ghcr.io` run inline if missing), a multi-platform
   # buildx builder is found or created, the push is verified to be a real
-  # amd64+arm64 index on BOTH tags, and the pushed image is smoked — one
-  # command, no setup steps around it. Runs at RELEASE moments only (ops
+  # amd64+arm64 index on BOTH tags, the pushed image is smoked, and both
+  # tags must pull ANONYMOUSLY (demo:public) — one command, no setup steps
+  # around it. Runs at RELEASE moments only (ops
   # §12 step 7); .github/workflows/demo-release.yml is the normal path.
   # Knobs: DEMO_OUT (the slice, default tmp/demo), DEMO_PLATFORMS
   # (comma list, default linux/amd64,linux/arm64), DEMO_BUILDER (overrides
   # the preflight's builder choice).
-  desc "Build + push + verify + smoke the demo image (self-contained: auth, builder, multi-arch check inside)"
+  desc "Build + push + verify + smoke + public-check the demo image (self-contained: auth, builder, multi-arch inside)"
   task :publish do
     require_relative "lib/nabu/ops/demo_publish"
     publish = Nabu::Ops::DemoPublish
@@ -1411,7 +1412,26 @@ namespace :demo do
     publish.verify_pushed!(root: __dir__)
     image = "#{publish::IMAGE}:#{publish.version(root: __dir__)}"
     result = publish::Smoke.run!(image: image, docker_args: ["--pull=always"])
-    puts "pushed, verified + smoked #{image} — #{result.server}, #{result.tools.size} tools"
+    # The verify and the smoke both ran under this box's ghcr login; a new
+    # package lands PRIVATE, so success is reported only once an
+    # anonymous registry read of both tags answers 200 (demo:public).
+    publish::PublicPull.check!(root: __dir__, after_push: true)
+    puts "pushed, verified, smoked + public #{image} — #{result.server}, #{result.tools.size} tools"
+  rescue Nabu::Ops::DemoPublish::NotPublic => e
+    abort "demo:publish — #{e.message}"
+  end
+
+  # The anonymous-pull proof on its own (Nabu::Ops::DemoPublish::PublicPull):
+  # no credentials — an anonymous ghcr.io pull token, then each tag's
+  # manifest. Exits 1 naming the package settings page when the package is
+  # private. Release rail (ops §12 step 7): `gh release create` only after
+  # this passes.
+  desc "Prove the demo image's :<version> and :latest pull anonymously (no credentials) — run before gh release create"
+  task :public do
+    require_relative "lib/nabu/ops/demo_publish"
+    Nabu::Ops::DemoPublish::PublicPull.check!(root: __dir__, log: $stdout)
+  rescue Nabu::Ops::DemoPublish::NotPublic => e
+    abort "demo:public — #{e.message}"
   end
 
   # The MCP Registry listing as ONE command: installs mcp-publisher if

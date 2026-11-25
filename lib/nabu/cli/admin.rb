@@ -9,6 +9,17 @@ require_relative "../ops/run_log"
 
 module Nabu
   class CLI < Thor
+    class << self
+      # Extra Ops::RebuildPreflight collaborators (its +ps_output:+ /
+      # +holders:+ seams) merged into the full rebuild's preflight. Empty in
+      # production — the preflight's own real probes run. The suite sets a
+      # fixed process table here (test/support), so a real sync on the box
+      # cannot block the CLI rebuild tests.
+      attr_writer :rebuild_preflight_seams
+
+      def rebuild_preflight_seams = @rebuild_preflight_seams || {}
+    end
+
     # A one-time instance migration: hidden from `nabu help` (every box has
     # run it), still callable — the legacy-config refusals name it as the fix.
     desc "migrate-local", "Move the instance files (rulings, grants, profile…) from config/ to local/config/ (P71)",
@@ -377,7 +388,8 @@ module Nabu
         Nabu::Ops::RebuildPreflight.new(db_dir: config.db_dir, catalog_path: config.catalog_path,
                                         fulltext_path: config.fulltext_path, canonical_dir: config.canonical_dir,
                                         slugs: slugs, ledger: ledger,
-                                        trickle_dir: File.join(config.local_dir, Nabu::Ops::Trickle::DIRNAME)).report
+                                        trickle_dir: File.join(config.local_dir, Nabu::Ops::Trickle::DIRNAME),
+                                        **self.class.rebuild_preflight_seams).report
       ensure
         ledger&.disconnect
       end

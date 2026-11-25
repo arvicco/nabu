@@ -109,21 +109,79 @@ class AcquisitionProbeTest < Minitest::Test
     assert_match(/one → HTTP 200 after 1 redirect\(s\)/, lines.first)
   end
 
+  # The catalog's liveness shape (migration 001): withdrawn flags on BOTH
+  # documents and passages. The fulltext indexer indexes a passage only
+  # when neither it nor its document is withdrawn. Seeds one live document
+  # (live_passages live + 1 withdrawn passage) and one withdrawn document
+  # carrying 2 passages whose own flags are still false.
+  def seed_catalog(db, live_passages: 3)
+    db.create_table(:documents) do
+      primary_key :id
+      TrueClass :withdrawn, null: false, default: false
+    end
+    db.create_table(:passages) do
+      primary_key :id
+      foreign_key :document_id, :documents
+      TrueClass :withdrawn, null: false, default: false
+    end
+    live = db[:documents].insert(withdrawn: false)
+    gone = db[:documents].insert(withdrawn: true)
+    live_passages.times { db[:passages].insert(document_id: live, withdrawn: false) }
+    db[:passages].insert(document_id: live, withdrawn: true)
+    2.times { db[:passages].insert(document_id: gone, withdrawn: false) }
+    db
+  end
+
+  def test_held_counts_live_passages_with_the_indexers_predicate
+    db = seed_catalog(Sequel.sqlite)
+
+    assert_equal({ live: 3, withdrawn: 3 }, AP.held_counts(db),
+                 "a withdrawn passage and a live passage of a withdrawn document are both unindexable")
+  end
+
+  # The maintained per-source aggregate (live-on-live passages, the
+  # indexer's predicate) is read instead of joining 136M passages.
+  def test_held_counts_reads_the_maintained_aggregate_when_present
+    db = seed_catalog(Sequel.sqlite)
+    db.create_table(:source_aggregates) do
+      primary_key :id
+      Integer :source_id
+      Integer :passages_count, null: false, default: 0
+    end
+    db[:source_aggregates].insert(source_id: 1, passages_count: 1)
+    db[:source_aggregates].insert(source_id: 2, passages_count: 3)
+
+    assert_equal({ live: 4, withdrawn: 2 }, AP.held_counts(db), "the aggregate's sum, not a join, is the live side")
+  end
+
   def test_the_held_vs_searchable_delta_reads_both_dbs_read_only
     catalog = File.join(@tmp, "catalog.sqlite3")
     fulltext = File.join(@tmp, "fulltext.sqlite3")
-    db = Sequel.sqlite(catalog)
-    db.create_table(:passages) { primary_key :id }
-    5.times { db[:passages].insert({}) }
-    db.disconnect
+    seed_catalog(Sequel.sqlite(catalog), live_passages: 5).disconnect
     db = Sequel.sqlite(fulltext)
     db.run("CREATE VIRTUAL TABLE passages_fts USING fts5(text_normalized)")
     3.times { |i| db[:passages_fts].insert(text_normalized: "w#{i}") }
     db.disconnect
 
     line = AP.searchable_delta(catalog_path: catalog, fulltext_path: fulltext)
-    assert_equal "held-vs-searchable: 5 catalog passage(s), 3 in passages_fts — delta 2 " \
-                 "(held but not yet searchable)", line
+    assert_equal "held-vs-searchable: 5 live catalog passage(s) (+3 withdrawn, never indexed), " \
+                 "3 in passages_fts — delta 2 (held but not yet searchable)", line
+  end
+
+  # The old line counted withdrawn rows as held, so a fully indexed catalog
+  # with withdrawals reported a phantom gap.
+  def test_withdrawn_rows_alone_open_no_gap
+    catalog = File.join(@tmp, "catalog.sqlite3")
+    fulltext = File.join(@tmp, "fulltext.sqlite3")
+    seed_catalog(Sequel.sqlite(catalog)).disconnect
+    db = Sequel.sqlite(fulltext)
+    db.run("CREATE VIRTUAL TABLE passages_fts USING fts5(text_normalized)")
+    3.times { |i| db[:passages_fts].insert(text_normalized: "w#{i}") }
+    db.disconnect
+
+    assert_equal "held-vs-searchable: 3 live catalog passage(s) (+3 withdrawn, never indexed), " \
+                 "3 in passages_fts — delta 0",
+                 AP.searchable_delta(catalog_path: catalog, fulltext_path: fulltext)
   end
 
   def test_the_delta_skips_absent_or_unreadable_dbs

@@ -329,6 +329,120 @@ module Ops
       end
     end
 
+    # -- the anonymous pull: the tags must be PUBLIC, not just pushed ---------
+    #
+    # GHCR creates a new package PRIVATE. The verify and the smoke above
+    # both run under the pusher's own login, so a private package passes
+    # them; only a credential-less registry read proves the public install
+    # command works. WebMock stands in for ghcr.io.
+
+    REPO = "arvicco/nabu-ancient-corpora"
+    TOKEN_URL = "https://ghcr.io/token"
+    SETTINGS_URL = "https://github.com/users/arvicco/packages/container/nabu-ancient-corpora/settings"
+
+    def stub_token(status: 200, body: JSON.generate("token" => "anon-token"))
+      stub_request(:get, TOKEN_URL)
+        .with(query: { "service" => "ghcr.io", "scope" => "repository:#{REPO}:pull" })
+        .to_return(status: status, body: body, headers: { "Content-Type" => "application/json" })
+    end
+
+    def stub_manifest(tag, status: 200)
+      stub_request(:get, "https://ghcr.io/v2/#{REPO}/manifests/#{tag}")
+        .with(headers: { "Authorization" => "Bearer anon-token" })
+        .to_return(status: status, body: status == 200 ? index_json(%w[amd64 arm64]) : '{"errors":[]}')
+    end
+
+    def check_public(root, **)
+      P::PublicPull.check!(root: root, http: Faraday.new, log: StringIO.new, nabu_version: "1.2.3", **)
+    end
+
+    def test_public_pull_passes_when_both_tags_answer_anonymously
+      with_project do |root, _slice|
+        stub_token
+        version = stub_manifest("1.2.3")
+        latest = stub_manifest("latest")
+
+        assert_equal ["#{P::IMAGE}:1.2.3", "#{P::IMAGE}:latest"], check_public(root)
+        assert_requested version
+        assert_requested latest
+      end
+    end
+
+    def test_public_pull_asks_for_the_oci_index_without_credentials
+      with_project do |root, _slice|
+        stub_token
+        stub_manifest("1.2.3")
+        stub_manifest("latest")
+        check_public(root)
+
+        assert_requested(:get, "https://ghcr.io/v2/#{REPO}/manifests/latest") do |request|
+          request.headers["Accept"].to_s.include?("application/vnd.oci.image.index.v1+json")
+        end
+        assert_not_requested(:get, TOKEN_URL, headers: { "Authorization" => /.+/ })
+      end
+    end
+
+    def test_a_private_package_fails_with_the_settings_url_and_says_the_image_is_pushed
+      [401, 403].each do |status|
+        WebMock.reset!
+        with_project do |root, _slice|
+          stub_token
+          stub_manifest("1.2.3", status: status)
+          error = assert_raises(P::NotPublic) { check_public(root, after_push: true) }
+
+          assert_includes error.message, SETTINGS_URL
+          assert_includes error.message, "Change visibility → Public"
+          assert_includes error.message, "HTTP #{status}"
+          assert_match(/image IS pushed/, error.message)
+          assert_match(/rake demo:public/, error.message, "the re-check is its own cheap task")
+        end
+      end
+    end
+
+    def test_a_token_endpoint_refusal_is_the_private_package_case
+      with_project do |root, _slice|
+        stub_token(status: 403, body: '{"errors":[{"code":"DENIED"}]}')
+        error = assert_raises(P::NotPublic) { check_public(root) }
+
+        assert_includes error.message, SETTINGS_URL
+        assert_match(/token.*HTTP 403/, error.message)
+      end
+    end
+
+    def test_a_token_endpoint_failure_is_reported_not_crashed_on
+      with_project do |root, _slice|
+        stub_request(:get, TOKEN_URL).with(query: hash_including({})).to_timeout
+        error = assert_raises(P::NotPublic) { check_public(root) }
+        assert_match(/token endpoint/i, error.message)
+
+        WebMock.reset!
+        stub_token(status: 200, body: "<html>not json</html>")
+        error = assert_raises(P::NotPublic) { check_public(root) }
+        assert_match(/no token/i, error.message)
+
+        WebMock.reset!
+        stub_token(status: 502, body: "bad gateway")
+        error = assert_raises(P::NotPublic) { check_public(root) }
+        assert_match(/HTTP 502/, error.message)
+        assert_match(/rake demo:public/, error.message)
+      end
+    end
+
+    def test_the_standalone_check_does_not_claim_a_push_it_never_saw
+      with_project do |root, _slice|
+        stub_token
+        stub_manifest("1.2.3", status: 404)
+        error = assert_raises(P::NotPublic) { check_public(root) }
+
+        refute_match(/image IS pushed/, error.message)
+        assert_includes error.message, SETTINGS_URL
+      end
+    end
+
+    def test_the_settings_url_derives_from_the_image_name
+      assert_equal SETTINGS_URL, P::PublicPull.settings_url(P::IMAGE)
+    end
+
     # -- smoke: initialize FIRST, then tools/list, then one real call -----------
 
     # A scripted stand-in for the docker stdio session.
