@@ -119,30 +119,65 @@ module Nabu
         results
       end
 
-      # The held-vs-searchable line: catalog passages vs the fulltext
-      # index's passages_fts rows, each db opened READ-ONLY. An absent or
-      # unreadable (locked, mid-rebuild) db is an announced skip.
+      # The held-vs-searchable line: LIVE catalog passages vs the fulltext
+      # index's passages_fts rows, each db opened READ-ONLY, with the
+      # withdrawn passages printed beside them as their own number (they
+      # are never indexed, so counting them as held reported a gap made of
+      # nothing but withdrawals). An absent or unreadable (locked,
+      # mid-rebuild) db is an announced skip.
       def self.searchable_delta(catalog_path:, fulltext_path:)
         missing = [catalog_path, fulltext_path].reject { |path| File.file?(path) }
         return "held-vs-searchable: skipped (no #{missing.map { |p| File.basename(p) }.join(', ')})" unless
           missing.empty?
 
-        held = count(catalog_path, :passages)
-        searchable = count(fulltext_path, :passages_fts)
-        delta = held - searchable
-        "held-vs-searchable: #{held} catalog passage(s), #{searchable} in passages_fts — delta #{delta}" \
+        held = with_db(catalog_path) { |db| held_counts(db) }
+        searchable = with_db(fulltext_path) { |db| db[:passages_fts].count }
+        delta = held[:live] - searchable
+        "held-vs-searchable: #{held[:live]} live catalog passage(s) (+#{held[:withdrawn]} withdrawn, never " \
+          "indexed), #{searchable} in passages_fts — delta #{delta}" \
           "#{' (held but not yet searchable)' unless delta.zero?}"
       rescue Sequel::Error => e
         "held-vs-searchable: skipped (#{e.class.name.split('::').last}: #{e.message.lines.first.to_s.strip})"
       end
 
-      def self.count(path, table)
+      # { live:, withdrawn: } passages of +db+ (the catalog). "Live" is the
+      # fulltext indexer's own membership predicate (Store::Indexer's
+      # slice datasets): passages.withdrawn = false AND the passage's
+      # documents.withdrawn = false. Withdrawn is everything else — a
+      # withdrawn passage, or a still-flagged-live passage of a withdrawn
+      # document.
+      #
+      # Cost (the catalog holds ~136M passages): the live side reads the
+      # maintained source_aggregates table when present — passages_count is
+      # exactly that predicate's count, moved at write time in the loader's
+      # own transaction (Store::SourceAggregates) — a SUM over one row per
+      # source, O(#sources), effectively free. The withdrawn side is total
+      # minus live, and the total is the very COUNT(*) the old line ran (a
+      # scan of passages' narrowest index), so the probe costs what it did
+      # before plus that sum. Only a catalog predating the aggregate table
+      # falls back to counting the passages ⋈ documents join on the
+      # predicate — the same full scan plus a primary-key lookup per
+      # passage, roughly 2-3× the old count; there is no maintained figure
+      # to read instead.
+      def self.held_counts(db)
+        total = db[:passages].count
+        live = if Store::SourceAggregates.available?(db)
+                 db[Store::SourceAggregates::TABLE].sum(:passages_count).to_i
+               else
+                 db[:passages].join(:documents, id: Sequel[:passages][:document_id])
+                              .where(Sequel[:passages][:withdrawn] => false, Sequel[:documents][:withdrawn] => false)
+                              .count
+               end
+        { live: live, withdrawn: total - live }
+      end
+
+      def self.with_db(path)
         db = Store.connect(path, readonly: true)
-        db[table].count
+        yield db
       ensure
         db&.disconnect
       end
-      private_class_method :count
+      private_class_method :with_db
 
       private
 
