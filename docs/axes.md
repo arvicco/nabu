@@ -67,7 +67,7 @@ The Greco-Roman literary lane: the Perseus canons and First1KGreek, Diorisis, LS
 
 The Latin-to-vernacular continuum: CroALa's medieval and neo-Latin opens the desk; late-antique prose, the MGH critical editions, and the Old French treebanks and texts join as their shelves land.
 
-**Members** (42): `analecta-hymnica`, `aranese`, `bdcamoes`, `bfm`, `bim-sahcoba`, `cantigas`, `cantus`, `corpus-corporum`, `croala`, `ctilc`, `cv-sardinian`, `derom`, `digiliblt`, `disco`, `divinum-officium`, `formulae-open`, `gregobase`, `josephus-latin`, `littre`, `llct1`, `lo-congres`, `mazarinades`, `meloniromance`, `memis`, `nb-no`, `noscemus`, `openmgh`, `osta`, `pleias-french-books`, `saenkoromance`, `salom`, `socinian-letters`, `theatre-classique`, `typikon-bible`, `ud`, `wellcome`, `wiktionary-ca`, `wiktionary-frm`, `wiktionary-fro`, `wiktionary-oc`, `wiktionary-osp`, `wiktionary-pro`
+**Members** (43): `analecta-hymnica`, `aranese`, `bdcamoes`, `bfm`, `bim-sahcoba`, `cantigas`, `cantus`, `corpus-corporum`, `croala`, `ctilc`, `cv-sardinian`, `derom`, `digiliblt`, `disco`, `divinum-officium`, `formulae-open`, `gregobase`, `hrcak-marulana`, `josephus-latin`, `littre`, `llct1`, `lo-congres`, `mazarinades`, `meloniromance`, `memis`, `nb-no`, `noscemus`, `openmgh`, `osta`, `pleias-french-books`, `saenkoromance`, `salom`, `socinian-letters`, `theatre-classique`, `typikon-bible`, `ud`, `wellcome`, `wiktionary-ca`, `wiktionary-frm`, `wiktionary-fro`, `wiktionary-oc`, `wiktionary-osp`, `wiktionary-pro`
 
 ### epigraphy
 
@@ -83,7 +83,7 @@ Documentary corpora at the artifact grain: papyri, the Latin/Greek and Levantine
 
 Old Church Slavonic and its daughters: the OCS/Old Russian treebanks, the gospel and monument corpora, Freising, the Slovenian historical lane with PriLit's earliest narrative prose (1643–1866), Balkan damaskini, and the Church Slavonic dictionary shelves.
 
-**Members** (41): `archiv-slav-phil`, `bg-wikisource`, `ccmh`, `comenius`, `cs-wikisource`, `damaskini`, `elektire`, `elizabeth-bible`, `eltec-srp`, `freising`, `gams-zrcalo`, `goo300k`, `hr-wikisource`, `imp`, `kdsp`, `korba`, `korpus16`, `litopys`, `mdz-protestant`, `mk-wikisource`, `pl-wikisource`, `ponomar`, `prague-bible-1488`, `prilit`, `proiel`, `ru-wikisource`, `scat`, `scripta-bulgarica`, `senie`, `sl-lexica`, `sl-wikisource`, `slavistics-pd`, `slouniki-nasovic`, `sr-wikisource`, `torot`, `typikon-bible`, `ud`, `uk-wikisource`, `vuk-danicic`, `wiktionary-cu`, `wiktionary-sh`
+**Members** (42): `archiv-slav-phil`, `bg-wikisource`, `ccmh`, `comenius`, `cs-wikisource`, `damaskini`, `elektire`, `elizabeth-bible`, `eltec-srp`, `freising`, `gams-zrcalo`, `goo300k`, `hr-wikisource`, `hrcak-marulana`, `imp`, `kdsp`, `korba`, `korpus16`, `litopys`, `mdz-protestant`, `mk-wikisource`, `pl-wikisource`, `ponomar`, `prague-bible-1488`, `prilit`, `proiel`, `ru-wikisource`, `scat`, `scripta-bulgarica`, `senie`, `sl-lexica`, `sl-wikisource`, `slavistics-pd`, `slouniki-nasovic`, `sr-wikisource`, `torot`, `typikon-bible`, `ud`, `uk-wikisource`, `vuk-danicic`, `wiktionary-cu`, `wiktionary-sh`
 
 ### germanic
 

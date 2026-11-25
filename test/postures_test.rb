@@ -219,7 +219,7 @@ class PosturesTest < Minitest::Test
   def test_the_lect_migration_kept_the_p59_4_census
     lect = postures.declarations.select { |d| d.layer == "lect" }
     by_posture = lect.group_by(&:posture).transform_values(&:size)
-    assert_equal 213, lect.size,
+    assert_equal 214, lect.size,
                  "the P59-4 declarations survive the move (61 at migration; itant retired P61-3," \
                  "oracc retired P62-2, etcsl/ccmh/freising/coptic-scriptorium retired P64-6, " \
                  "titus-avestan retired P66-1, osta+fornsvenska retired P77-r8, achemenet " \
@@ -514,7 +514,9 @@ class PosturesTest < Minitest::Test
                  "digar-corpora ADDED — identity et (the DIGAR book corpus; edition-class print " \
                  "years never stage, the blbooks posture): 209→210; " \
                  "the lexibank-cldf wave 2 (nc) ADDS three dictionary shelves — kitchensemitic " \
-                 "identity sem, peirosst and zhangrgyalrong identity sit: 210→213"
+                 "identity sem, peirosst and zhangrgyalrong identity sit: 210→213; " \
+                 "hrcak-marulana ADDED — identity, per-PDF 639-2 codes (hrv/lat/ita/eng…; the Latin " \
+                 "declared coarse, no lat:ren rule source-wide): 213→214"
     # The epigraphic-belt registry package (merged + canonical-synced
     # 2026-10-18, the add-then-retire shape within one phase) retires both
     # P130 pendings, and the ociana-script rule + the ig-cyprus override
@@ -635,6 +637,8 @@ class PosturesTest < Minitest::Test
     # blbooks posture): 154→155.
     # The lexibank-cldf wave 2 (nc) joins identity: kitchensemitic (sem),
     # peirosst and zhangrgyalrong (sit): 155→158.
-    assert_equal({ "dates" => 33, "codemap" => 22, "identity" => 158 }, by_posture)
+    # hrcak-marulana joins identity (per-PDF 639-2 codes; the Latin declared
+    # coarse): 158→159.
+    assert_equal({ "dates" => 33, "codemap" => 22, "identity" => 159 }, by_posture)
   end
 end

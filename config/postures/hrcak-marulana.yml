@@ -1,0 +1,17 @@
+sources:
+  hrcak-marulana:
+    lect: {posture: identity, note: "upstream's per-PDF 639-2 codes are the claim (hrv → the hr
+        anchor, lat, ita, eng, fre → fr, ger → de, spa → es through the codemap), declared coarse:
+        the Latin is overwhelmingly Renaissance humanist Latin (Marulić and his circle) beside a
+        late-antique edition (Fortunatus) and scholars' Latin, so no lat:ren rule is asserted
+        source-wide; the Croatian cone spans modern scholarly prose and Marulić-era Čakavian
+        editions (hr mints no stages)"}
+    dating: {posture: dated, note: "every document carries the record's datacite Issued date
+        (the article's publication year) in the EDITION class — never a claim about when an
+        edited text was composed; the records carry no composition dates"}
+    places: {posture: unplaced, note: "the OAI records carry no place field; creator affiliations
+        (Zagreb, Split, Turin, …) are the authors', not the texts', and the publisher's seat
+        (Split) is the journal's"}
+    script: {posture: implied, note: "Latin script throughout (Croatian, Latin and the Western
+        languages); the early volumes' text layer is Paper Capture OCR kept verbatim, and the
+        slot-font PDFs of the PageMaker era are re-decoded at parse — whole-PDF or in-word (metadata legacy_font_repairs)"}

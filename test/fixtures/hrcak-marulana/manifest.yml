@@ -1,0 +1,142 @@
+# Nabu fixture manifest (P5-4 "fixture sentinel"). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# PDFs are whole byte copies; the records are re-rooted from ListRecords
+# responses, the OAI pages are documented trims and the text layers are
+# recorded mutool output — so adapter_test stays null.
+source: hrcak-marulana
+adapter_test: null
+retrieved: "2026-11-25"
+files:
+  - path: records/23933.oai_dc.xml
+    url: https://hrcak.srce.hr/oai/?verb=GetRecord&metadataPrefix=oai_dc&identifier=oai:hrcak.srce.hr:23933
+    whole: false
+    trim: the record element of the ListRecords response re-rooted as a standalone document (as the fetch holds it); the GetRecord url serves the same record in its own envelope
+  - path: records/23933.oai_openaire.xml
+    url: https://hrcak.srce.hr/oai/?verb=GetRecord&metadataPrefix=oai_openaire&identifier=oai:hrcak.srce.hr:23933
+    whole: false
+    trim: the record element of the ListRecords response re-rooted as a standalone document (as the fetch holds it); the GetRecord url serves the same record in its own envelope
+  - path: records/277980.oai_dc.xml
+    url: https://hrcak.srce.hr/oai/?verb=GetRecord&metadataPrefix=oai_dc&identifier=oai:hrcak.srce.hr:277980
+    whole: false
+    trim: the record element of the ListRecords response re-rooted as a standalone document (as the fetch holds it); the GetRecord url serves the same record in its own envelope
+  - path: records/277980.oai_openaire.xml
+    url: https://hrcak.srce.hr/oai/?verb=GetRecord&metadataPrefix=oai_openaire&identifier=oai:hrcak.srce.hr:277980
+    whole: false
+    trim: the record element of the ListRecords response re-rooted as a standalone document (as the fetch holds it); the GetRecord url serves the same record in its own envelope
+  - path: records/277999.oai_dc.xml
+    url: https://hrcak.srce.hr/oai/?verb=GetRecord&metadataPrefix=oai_dc&identifier=oai:hrcak.srce.hr:277999
+    whole: false
+    trim: the record element of the ListRecords response re-rooted as a standalone document (as the fetch holds it); the GetRecord url serves the same record in its own envelope
+  - path: records/277999.oai_openaire.xml
+    url: https://hrcak.srce.hr/oai/?verb=GetRecord&metadataPrefix=oai_openaire&identifier=oai:hrcak.srce.hr:277999
+    whole: false
+    trim: the record element of the ListRecords response re-rooted as a standalone document (as the fetch holds it); the GetRecord url serves the same record in its own envelope
+  - path: records/8030.oai_dc.xml
+    url: https://hrcak.srce.hr/oai/?verb=GetRecord&metadataPrefix=oai_dc&identifier=oai:hrcak.srce.hr:8030
+    whole: false
+    trim: the record element of the ListRecords response re-rooted as a standalone document (as the fetch holds it); the GetRecord url serves the same record in its own envelope
+  - path: records/8030.oai_openaire.xml
+    url: https://hrcak.srce.hr/oai/?verb=GetRecord&metadataPrefix=oai_openaire&identifier=oai:hrcak.srce.hr:8030
+    whole: false
+    trim: the record element of the ListRecords response re-rooted as a standalone document (as the fetch holds it); the GetRecord url serves the same record in its own envelope
+  - path: records/9874.oai_dc.xml
+    url: https://hrcak.srce.hr/oai/?verb=GetRecord&metadataPrefix=oai_dc&identifier=oai:hrcak.srce.hr:9874
+    whole: false
+    trim: the record element of the ListRecords response re-rooted as a standalone document (as the fetch holds it); the GetRecord url serves the same record in its own envelope
+  - path: records/9874.oai_openaire.xml
+    url: https://hrcak.srce.hr/oai/?verb=GetRecord&metadataPrefix=oai_openaire&identifier=oai:hrcak.srce.hr:9874
+    whole: false
+    trim: the record element of the ListRecords response re-rooted as a standalone document (as the fetch holds it); the GetRecord url serves the same record in its own envelope
+  - path: records/9875.oai_dc.xml
+    url: https://hrcak.srce.hr/oai/?verb=GetRecord&metadataPrefix=oai_dc&identifier=oai:hrcak.srce.hr:9875
+    whole: false
+    trim: the record element of the ListRecords response re-rooted as a standalone document (as the fetch holds it); the GetRecord url serves the same record in its own envelope
+  - path: records/9875.oai_openaire.xml
+    url: https://hrcak.srce.hr/oai/?verb=GetRecord&metadataPrefix=oai_openaire&identifier=oai:hrcak.srce.hr:9875
+    whole: false
+    trim: the record element of the ListRecords response re-rooted as a standalone document (as the fetch holds it); the GetRecord url serves the same record in its own envelope
+  - path: files/12183.pdf
+    url: https://hrcak.srce.hr/file/12183
+    whole: true
+    trim: none
+  - path: files/12184.pdf
+    url: https://hrcak.srce.hr/file/12184
+    whole: true
+    trim: none
+  - path: files/15232.pdf
+    url: https://hrcak.srce.hr/file/15232
+    whole: true
+    trim: none
+  - path: files/37682.pdf
+    url: https://hrcak.srce.hr/file/37682
+    whole: true
+    trim: none
+  - path: files/402550.pdf
+    url: https://hrcak.srce.hr/file/402550
+    whole: true
+    trim: none
+  - path: oai/oai_openaire-1.xml
+    url: https://hrcak.srce.hr/oai/?verb=ListRecords&metadataPrefix=oai_openaire&set=journal:43
+    whole: false
+    trim: 2 of the response's 100 records (641, 8030), resumptionToken kept; responseDate/expirationDate time-of-day zeroed
+  - path: oai/oai_openaire-2.xml
+    refetchable: false
+    provenance: local-trim
+    reason: the last ListRecords page is reachable only through a resumptionToken that expired 2026-11-26 — re-cut from a fresh harvest
+    copied: "2026-11-25"
+    whole: false
+    trim: 2 of the last response's 81 records (277980, 277999), no token; responseDate time-of-day zeroed
+  - path: oai/oai_dc-1.xml
+    url: https://hrcak.srce.hr/oai/?verb=ListRecords&metadataPrefix=oai_dc&set=journal:43
+    whole: false
+    trim: 2 of the response's 100 records (641, 8030), resumptionToken kept; responseDate/expirationDate time-of-day zeroed
+  - path: oai/oai_dc-2.xml
+    refetchable: false
+    provenance: local-trim
+    reason: the last ListRecords page is reachable only through a resumptionToken that expired 2026-11-26 — re-cut from a fresh harvest
+    copied: "2026-11-25"
+    whole: false
+    trim: 2 of the last response's 81 records (277980, 277999), no token; responseDate time-of-day zeroed
+  - path: textlayers/12183.txt
+    refetchable: false
+    provenance: local-trim
+    reason: recorded mutool extraction of the fixture PDF, not an upstream artifact — re-cut via `mutool draw -F text -o <txt> <pdf>`
+    copied: "2026-11-25"
+    whole: false
+    trim: the mutool 1.28 text layer of the whole fixture PDF, verbatim
+  - path: textlayers/12184.txt
+    refetchable: false
+    provenance: local-trim
+    reason: recorded mutool extraction of the fixture PDF, not an upstream artifact — re-cut via `mutool draw -F text -o <txt> <pdf>`
+    copied: "2026-11-25"
+    whole: false
+    trim: the mutool 1.28 text layer of the whole fixture PDF, verbatim
+  - path: textlayers/15232.txt
+    refetchable: false
+    provenance: local-trim
+    reason: recorded mutool extraction of the fixture PDF, not an upstream artifact — re-cut via `mutool draw -F text -o <txt> <pdf>`
+    copied: "2026-11-25"
+    whole: false
+    trim: the mutool 1.28 text layer of the whole fixture PDF, verbatim
+  - path: textlayers/37682.txt
+    refetchable: false
+    provenance: local-trim
+    reason: recorded mutool extraction of the fixture PDF, not an upstream artifact — re-cut via `mutool draw -F text -o <txt> <pdf>`
+    copied: "2026-11-25"
+    whole: false
+    trim: the mutool 1.28 text layer of the whole fixture PDF, verbatim
+  - path: textlayers/402550.txt
+    refetchable: false
+    provenance: local-trim
+    reason: recorded mutool extraction of the fixture PDF, not an upstream artifact — re-cut via `mutool draw -F text -o <txt> <pdf>`
+    copied: "2026-11-25"
+    whole: false
+    trim: the mutool 1.28 text layer of the whole fixture PDF, verbatim
+  - path: textlayers/4696-p1.txt
+    refetchable: false
+    provenance: local-trim
+    reason: recorded mutool extraction of page 1 of https://hrcak.srce.hr/file/4696 (vol. 14, a mixed slot-font/Unicode PDF not itself checked in) — re-cut via `mutool draw -F text -o <txt> <pdf> 1`
+    copied: "2026-11-25"
+    whole: false
+    trim: the mutool 1.28 text layer of the PDF's first page only, verbatim
