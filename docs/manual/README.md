@@ -96,6 +96,9 @@ Sources whose adapter is built but awaits the owner's first sync
   (13th-c. Early Middle Dutch, .fromdb, gold lemma+POS; P84-7).
 - [corpus-oudfries.md](corpus-oudfries.md) — INT/IvdNT Corpus Oudfries
   (Old Frisian text witnesses c. 1200–1550, TEI, lemma+POS+gloss).
+- [pcmep.md](pcmep.md) — the Parsed Corpus of Middle English Poetry
+  (57 poems c. 1150–1420, Penn-parsed .psd; one release zip delivered
+  by the maintainer by email, the download page is password-gated).
 
 Public-domain reference scans filed onto the library shelf through
 `nabu ingest` (no adapter; the doc pins the item, its license field,

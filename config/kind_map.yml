@@ -1860,7 +1860,12 @@ sources:
     #   詩鈔, 詩選, 詩詞集; 甌北集 and 渼陂集 are verse throughout, the latter
     #   opening with one 賦). The prefaces and the ci of the 詩詞集 ride inside
     #   their collections; the Masters prose texts are skipped by rule
-  ppchy:                     # census 2026-11-02: 63 texts, the sources page's Genre on ALL
+  pcmep:                     # the corpus's own scope (pcmep.net: "a fully parsed and
+    source_kind: literary/poetry   # annotated corpus of Middle English verse texts") — all
+    #   57 texts are poems (debates, lyrics, legends, romances, satire, proverb verse).
+    #   The site's per-text "Genre/subjects" keywords are website-only topical tags,
+    #   not in the zip; the whole-source shape (the lzh-collection precedent)
+  ppchy:                   # census 2026-11-02: 63 texts, the sources page's Genre on ALL
     metadata: genre          # (Prose 44 · Verse 12 · Vernacular 4 · Letter 3; the one
     #                          "Prose (preface), verse (main text)" record resolves per file
     #                          at parse). Upstream's label is a FORM, not a genre:
