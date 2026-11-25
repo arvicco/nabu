@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="https://hrcak.srce.hr/oai/Resources/oai2.xsl"?>
+<OAI-PMH xmlns="http://www.openarchives.org/OAI/2.0/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/ http://www.openarchives.org/OAI/2.0/OAI-PMH.xsd">
+  <responseDate>2026-11-25T00:00:00Z</responseDate>
+  <request verb="ListRecords" metadataPrefix="oai_openaire" set="journal:43">https://hrcak.srce.hr/oai/</request>
+  <ListRecords>
+    <record>
+      <header>
+        <identifier>oai:hrcak.srce.hr:641</identifier>
+        <datestamp>2006-03-15</datestamp>
+      </header>
+      <metadata>
+        <oaire:resource xmlns:oaire="http://namespace.openaire.eu/schema/oaire" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:datacite="http://datacite.org/schema/kernel-4" xsi:schemaLocation="http://namespace.openaire.eu/schema/oaire/ https://www.openaire.eu/schema/repo-lit/4.0/openaire.xsd">
+  <datacite:titles>
+    <datacite:title xml:lang="fre">L'Evangelistarium, maître-livre de Marulić</datacite:title>
+    <datacite:title xml:lang="hrv" titleType="TranslatedTitle">Evanđelistar - glavna Marulićeva knjiga</datacite:title>
+  </datacite:titles>
+  <datacite:creators>
+    <datacite:creator>
+      <datacite:creatorName nameType="Personal">Béné, Charles</datacite:creatorName>
+      <datacite:familyName>Béné</datacite:familyName>
+      <datacite:givenName>Charles</datacite:givenName>
+    </datacite:creator>
+  </datacite:creators>
+  <datacite:date dateType="Issued">2003-04-22</datacite:date>
+  <oaire:file accessRightsURI="http://purl.org/coar/access_right/c_abf2" mimeType="application/pdf" objectType="fulltext">https://hrcak.srce.hr/file/1309</oaire:file>
+  <dc:format>application/pdf</dc:format>
+  <oaire:resourceType resourceTypeGeneral="literature" uri="http://purl.org/coar/resource_type/c_2df8fbb1">research article</oaire:resourceType>
+  <dc:description xml:lang="hrv">Uspjeh Institucije, i u pogledu izdanja i u pogledu brojnih prijevoda, kao da je donekle zasjenio važnost Evanđelistara, ponajglavnijega Marulićeva djela. &#13;
+Evanđelistar, prema baselskim nakladnicima “čista riječ Božja”, bio je dočekan s divljenjem od samoga početka, i ostat će uzorom evanđeoskoga života dulje od dva stoljeća. Sastavljeno na tragu nazora pokreta Devotio moderna, djelo odbacuje antičke filozofe, predlažući život potpuno evanđeoskog utemeljenja, pomoću kreposti vjere, nade i ljubavi, koje ujedno čine glavnu strukturnu okosnicu. &#13;
+Djelo je izvrsno prihvaćeno u predluterovskom Baselu, pa u Kölnu, gdje je imalo sedam izdanja u desetak godina, služeći kao sredstvo borbe protiv luteranstva. U Londonu će ga čitati Henrik VIII, a u Parizu će biti objavljeno 40 godina prije Institucije, radi suprotstavljanja kalvinizmu; istu svrhu imat će i u Louvainu. &#13;
+Bit će duhovni saveznik progonjenima u Engleskoj, kako svjedoči primjerak s marginalnim bilješkama u British Library, te nadasve Dijalog o utjesi što ga je Thomas More napisao u zatočeništvu, djelo koje se nedvojbeno ugleda na Evanđelistar. &#13;
+Institucija pokazuje jasnu povezanost s Evanđelistarom; ona primjerima ilustrira ono što je Evanđelistar iznio u preceptivnom obliku.</dc:description>
+  <dc:language>fre</dc:language>
+  <dc:language>hrv</dc:language>
+  <oaire:citationTitle>Colloquia Maruliana</oaire:citationTitle>
+  <dc:publisher>Split Literary Circle - Marulianum, centre for Studies on Marko Marulić and his Humanist Circle</dc:publisher>
+  <datacite:relatedIdentifiers>
+    <datacite:relatedIdentifier relatedIdentifierType="EISSN" relationType="IsPartOf">1848-9613</datacite:relatedIdentifier>
+    <datacite:relatedIdentifier relatedIdentifierType="PISSN" relationType="IsPartOf">1332-3431</datacite:relatedIdentifier>
+    <datacite:relatedIdentifier relatedIdentifierType="ISSNL" relationType="IsPartOf">1332-3431</datacite:relatedIdentifier>
+    <datacite:relatedIdentifier relatedIdentifierType="URL" relationType="IsPartOf">https://marulianum.knjizevni-krug.hr/colloquia-maruliana/</datacite:relatedIdentifier>
+    <datacite:relatedIdentifier relatedIdentifierType="URL" relationType="IsPartOf">https://hrcak.srce.hr/colloquia-maruliana</datacite:relatedIdentifier>
+  </datacite:relatedIdentifiers>
+  <datacite:identifier identifierType="URL">https://hrcak.srce.hr/641</datacite:identifier>
+  <datacite:alternateIdentifiers/>
+  <oaire:citationVolume>12</oaire:citationVolume>
+  <datacite:rights rightsURI="http://purl.org/coar/access_right/c_abf2">open access</datacite:rights>
+  <oaire:citationStartPage>5</oaire:citationStartPage>
+  <oaire:citationEndPage>21</oaire:citationEndPage>
+  <oaire:citationStartPage>22</oaire:citationStartPage>
+  <oaire:citationEndPage>22</oaire:citationEndPage>
+  <oaire:fundingReferences/>
+  <datacite:subjects/>
+</oaire:resource>
+      </metadata>
+    </record>
+    <record>
+      <header>
+        <identifier>oai:hrcak.srce.hr:8030</identifier>
+        <datestamp>2007-02-06</datestamp>
+      </header>
+      <metadata>
+        <oaire:resource xmlns:oaire="http://namespace.openaire.eu/schema/oaire" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:datacite="http://datacite.org/schema/kernel-4" xsi:schemaLocation="http://namespace.openaire.eu/schema/oaire/ https://www.openaire.eu/schema/repo-lit/4.0/openaire.xsd">
+  <datacite:titles>
+    <datacite:title xml:lang="hrv">Utemeljenost metaforičkoga određenja: Marulić «otac umjetnoga hrvatskog pjesništva»</datacite:title>
+    <datacite:title xml:lang="eng">On the Making of a Metaphor: Father of FCroatian Art of Poetry</datacite:title>
+  </datacite:titles>
+  <datacite:creators>
+    <datacite:creator>
+      <datacite:creatorName nameType="Personal">Frangeš, Ivo</datacite:creatorName>
+      <datacite:familyName>Frangeš</datacite:familyName>
+      <datacite:givenName>Ivo</datacite:givenName>
+    </datacite:creator>
+  </datacite:creators>
+  <datacite:date dateType="Issued">2002-04-22</datacite:date>
+  <oaire:file accessRightsURI="http://purl.org/coar/access_right/c_abf2" mimeType="application/pdf" objectType="fulltext">https://hrcak.srce.hr/file/12183</oaire:file>
+  <dc:format>application/pdf</dc:format>
+  <oaire:file accessRightsURI="http://purl.org/coar/access_right/c_abf2" mimeType="application/pdf" objectType="fulltext">https://hrcak.srce.hr/file/12184</oaire:file>
+  <dc:format>application/pdf</dc:format>
+  <oaire:resourceType resourceTypeGeneral="literature" uri="http://purl.org/coar/resource_type/c_2df8fbb1">research article</oaire:resourceType>
+  <dc:language>hrv</dc:language>
+  <dc:language>eng</dc:language>
+  <oaire:citationTitle>Colloquia Maruliana</oaire:citationTitle>
+  <dc:publisher>Split Literary Circle - Marulianum, centre for Studies on Marko Marulić and his Humanist Circle</dc:publisher>
+  <datacite:relatedIdentifiers>
+    <datacite:relatedIdentifier relatedIdentifierType="EISSN" relationType="IsPartOf">1848-9613</datacite:relatedIdentifier>
+    <datacite:relatedIdentifier relatedIdentifierType="PISSN" relationType="IsPartOf">1332-3431</datacite:relatedIdentifier>
+    <datacite:relatedIdentifier relatedIdentifierType="ISSNL" relationType="IsPartOf">1332-3431</datacite:relatedIdentifier>
+    <datacite:relatedIdentifier relatedIdentifierType="URL" relationType="IsPartOf">https://marulianum.knjizevni-krug.hr/colloquia-maruliana/</datacite:relatedIdentifier>
+    <datacite:relatedIdentifier relatedIdentifierType="URL" relationType="IsPartOf">https://hrcak.srce.hr/colloquia-maruliana</datacite:relatedIdentifier>
+  </datacite:relatedIdentifiers>
+  <datacite:identifier identifierType="URL">https://hrcak.srce.hr/8030</datacite:identifier>
+  <datacite:alternateIdentifiers/>
+  <oaire:citationVolume>11</oaire:citationVolume>
+  <datacite:rights rightsURI="http://purl.org/coar/access_right/c_abf2">open access</datacite:rights>
+  <oaire:citationStartPage>5</oaire:citationStartPage>
+  <oaire:citationEndPage>12</oaire:citationEndPage>
+  <oaire:citationStartPage>13</oaire:citationStartPage>
+  <oaire:citationEndPage>13</oaire:citationEndPage>
+  <oaire:fundingReferences/>
+  <datacite:subjects/>
+</oaire:resource>
+      </metadata>
+    </record>
+    <resumptionToken expirationDate="2026-11-26T00:00:00Z" completeListSize="681" cursor="0">1795645779438_oai_openaire</resumptionToken>
+  
+  </ListRecords>
+</OAI-PMH>

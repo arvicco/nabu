@@ -10,14 +10,12 @@ sources:
         band. Dialect sub-lects (Southern, West Midlands, Kentish …) are a further
         candidate, but the per-text dialect claims live only on the pcmep.net text
         pages"}
-    dating: {posture: pending, note: "mined but dark: every document carries its file-name
-        period band (M1a 1150–1200 · M1b 1200–1250 · M2a 1250–1300 · M2b 1300–1350 · M3
-        1350–1420, the site's own table — the band of the estimated COMPOSITION date) as
-        metadata date in the :structured shape. Candidate: the MetadataDates SHAPES row
-        pcmep => :structured (a shared-core edit, held for a rebuild-safe moment; the
-        timeline-registration guard carries it as PENDING). A finer candidate: the site's
-        per-text Suggested date (one year per poem, texts.php) — website-only, not in the
-        zip"}
+    dating: {posture: dated, note: "every document carries its file-name period band (M1a
+        1150–1200 · M1b 1200–1250 · M2a 1250–1300 · M2b 1300–1350 · M3 1350–1420, the
+        site's own table — the band of the estimated COMPOSITION date) as metadata date in
+        the :structured shape, registered in MetadataDates SHAPES. Declared coarse: the
+        site's per-text Suggested date (one year per poem, texts.php) is website-only, not
+        in the zip, and is not mined"}
     places: {posture: pending, note: "the zip carries no place field. Candidate: each poem's
         'Dialect of original composition' and 'Manuscript dialect' (with localizations,
         e.g. AssumpVirg's manuscript language 'West Berkshire' after LALME) on the

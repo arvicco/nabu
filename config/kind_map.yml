@@ -2473,6 +2473,23 @@ sources:
       "feljtoni": literary/essay                 # 6 — feuilletons, prose of ideas
       "eseji": literary/essay                    # 3
       "pisma": letter/literary                   # 1 — literary letters
+  hrcak-marulana:     # census: 644 licensed records, OAI oaire:resourceType, 2026-11-25 —
+    facet: genre      # Hrčak's COAR resource types for a scholarly journal of Marulić
+    #                   studies; folded as the loop's call on each label's ordinary
+    #                   meaning inside a learned journal (the Acta eruditorum precedent:
+    #                   reviews and bibliographies are scholarship)
+    map:
+      "research article": scholarly              # 410
+      "book review": scholarly                   # 48 — the learned review
+      "bibliography": scholarly                  # 28 — the annual Marulić bibliography
+      "review article": scholarly                # 18
+      "conference paper": scholarly              # 3
+      "review": scholarly                        # 2
+      "editorial": paratext/preface              # 1 — the volume's introductory note
+      "corrigendum": paratext                    # 1 — errata to a volume
+    deliberate:
+      "other": "Hrčak's catch-all type — text editions, speeches, obituaries, prize citations, contributor guidelines (130)"
+      "journal article": "Hrčak's generic label here — greetings and exhibition speeches (3)"
   tamilex:            # census: 7,849 files, 21 works, 2026-10-18 — the work facet is
     facet: work       # the title's own work name (titleStmt/title/title), which for
     #                   the two devotional canons is the SUB-WORK title and for the

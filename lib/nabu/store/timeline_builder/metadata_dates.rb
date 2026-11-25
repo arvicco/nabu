@@ -244,6 +244,7 @@ module Nabu
           #                                  writes for NDL-held materials (出版日 envelope),
           #                                  else the label's nengō "date" (parse time)
           "hr-wikisource" => :era_band_key,
+          "hrcak-marulana" => :structured, # the record's datacite Issued year (class edition)
           "iedc" => :iso_prefix_key,
           "ig-cyprus" => :structured, # IG XV 1,1: origDate prose, unsigned BCE years and
           #                             centuries (the syllabary's era); place = origPlace
@@ -333,6 +334,7 @@ module Nabu
           #                              conversion of its AM/Seleucid/Hijri date), else the
           #                              scholar's inferred date (basis in raw); place = the
           #                              origin + its places.csv point; destination = a role row
+          "pcmep" => :structured, # the file-name period band (M1a 1150–1200 … M3 1350–1420)
           "pl-wikisource" => :era_band_key,
           "pleias-french-books" => :structured, # the Gallica catalogue's imprint year (ranges and
           #                                       "1607-16" closes widen it), class edition

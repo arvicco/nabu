@@ -428,6 +428,11 @@ sources:
   elektire:                   # 205 docs, 84 authors ("Dinko Šimunović"); the "authors"
     fields: #                   array duplicates the same names
       author: author
+  hrcak-marulana:             # 644 licensed records (OAI census 2026-11-25, not yet synced)
+    fields:
+      authors: author         # datacite creatorName verbatim ("Tomasović, Mirko"), 602 records,
+      #                         array; for a text edition upstream names the edited author
+      #                         ("Fortunatus, Venantius")
   eltec-srp:                  # 96 Serbian novels
     fields:
       author: author          # 63 authors ("Атанацковић, Богобој")
