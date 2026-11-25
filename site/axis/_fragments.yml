@@ -33,6 +33,7 @@ kinds:
   proiel: treebank
   helipad: treebank
   ppchy: treebank
+  pcmep: treebank
   torot: treebank
   dcs: treebank
   llct1: treebank

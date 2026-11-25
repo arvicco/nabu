@@ -1,0 +1,27 @@
+sources:
+  pcmep:
+    # kind machine-postured — the pcmep source_kind row in kind_map.yml (every
+    # text is verse: the corpus's own scope).
+    lect: {posture: pending, note: "bare enm (the registry's Middle English anchor, band
+        1100–1500, carries no stages). Candidate: date-band stages under enm minted in
+        nabu-lects on the Helsinki/PPCME2 periodization the corpus itself uses — M1
+        1150–1250, M2 1250–1350, M3 1350–1420 (the file names' bands; PCMEP splits M1/M2
+        into a/b halves) — after which date-band inference stages every text from its
+        band. Dialect sub-lects (Southern, West Midlands, Kentish …) are a further
+        candidate, but the per-text dialect claims live only on the pcmep.net text
+        pages"}
+    dating: {posture: pending, note: "mined but dark: every document carries its file-name
+        period band (M1a 1150–1200 · M1b 1200–1250 · M2a 1250–1300 · M2b 1300–1350 · M3
+        1350–1420, the site's own table — the band of the estimated COMPOSITION date) as
+        metadata date in the :structured shape. Candidate: the MetadataDates SHAPES row
+        pcmep => :structured (a shared-core edit, held for a rebuild-safe moment; the
+        timeline-registration guard carries it as PENDING). A finer candidate: the site's
+        per-text Suggested date (one year per poem, texts.php) — website-only, not in the
+        zip"}
+    places: {posture: pending, note: "the zip carries no place field. Candidate: each poem's
+        'Dialect of original composition' and 'Manuscript dialect' (with localizations,
+        e.g. AssumpVirg's manuscript language 'West Berkshire' after LALME) on the
+        pcmep.net per-text pages (textdetails.php) — website-only; the site states no
+        reuse terms for its pages beyond its copyright line, so pinning them as a tracked
+        table waits on that question"}
+    script: {posture: implied}

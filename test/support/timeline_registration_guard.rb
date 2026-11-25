@@ -80,7 +80,12 @@ module TimelineRegistrationGuard
   # registered — the defect this guard exists for, held visible (and the
   # suite green) until the SHAPES row lands; the ledger test then demands
   # the row's deletion. Never a home for a source that is not a defect.
-  PENDING = {}.freeze
+  PENDING = {
+    # The file-name period band (M1a 1150–1200 …) rides metadata "date" in
+    # the :structured shape; the SHAPES row is a shared-core edit held for
+    # a rebuild-safe moment (it dirties every stamp).
+    "pcmep" => "the period-band :structured date awaits its SHAPES row (a shared-core edit, held)"
+  }.freeze
 
   module_function
 
