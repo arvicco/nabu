@@ -235,6 +235,115 @@ module Nabu
         private_class_method :default_create
       end
 
+      # The pushed tags are not anonymously pullable (or that could not be
+      # established) — the public install command would fail.
+      class NotPublic < Nabu::Error; end
+
+      # The anonymous-pull proof. GHCR creates every NEW package private,
+      # and the verify + smoke above both run under the pusher's own docker
+      # login, so a private package passes them — that is how a release once
+      # shipped an install command the public could not pull. This check
+      # holds no credentials: it asks ghcr.io's token endpoint for an
+      # ANONYMOUS pull token, then GETs each tag's manifest (OCI index
+      # Accept) with it. Anything but 200 refuses, naming the package
+      # settings page where the visibility is flipped. `rake demo:publish`
+      # runs it before reporting success; `rake demo:public` runs it alone.
+      module PublicPull
+        REGISTRY = "ghcr.io"
+        TOKEN_URL = "https://ghcr.io/token"
+        TIMEOUT_S = 15
+        ACCEPT = %w[
+          application/vnd.oci.image.index.v1+json application/vnd.oci.image.manifest.v1+json
+          application/vnd.docker.distribution.manifest.list.v2+json
+          application/vnd.docker.distribution.manifest.v2+json
+        ].join(", ")
+        PRIVATE_STATUSES = [401, 403, 404].freeze
+
+        # Checks the version tag and :latest; returns the verified refs or
+        # raises NotPublic. +after_push+: the caller just pushed (the
+        # message then says so — the fix is a settings flip, not a rebuild).
+        # +http+: a Faraday connection (default: a fresh one, no
+        # credentials of any kind).
+        def self.check!(root:, http: nil, log: $stderr, after_push: false, nabu_version: Nabu::VERSION)
+          require "faraday" # lazily: script/demo-smoke loads this file on a bare Ruby
+          http ||= Faraday.new(request: { timeout: TIMEOUT_S, open_timeout: TIMEOUT_S })
+          repo = repository(IMAGE)
+          token = anonymous_token(http, repo, after_push: after_push)
+          [DemoPublish.version(root: root, nabu_version: nabu_version), "latest"].map do |tag|
+            image = "#{IMAGE}:#{tag}"
+            check_manifest!(http, repo, tag, token, image: image, after_push: after_push)
+            log.puts "public: #{image} pulls anonymously"
+            image
+          end
+        end
+
+        # "ghcr.io/arvicco/nabu-ancient-corpora" → "arvicco/nabu-ancient-corpora"
+        def self.repository(image) = image.delete_prefix("#{REGISTRY}/")
+
+        # Where a GHCR container package's visibility is changed.
+        def self.settings_url(image)
+          owner, package = repository(image).split("/", 2)
+          "https://github.com/users/#{owner}/packages/container/#{package}/settings"
+        end
+
+        def self.anonymous_token(http, repo, after_push:)
+          response = http.get(TOKEN_URL, { "service" => REGISTRY, "scope" => "repository:#{repo}:pull" })
+          if PRIVATE_STATUSES.include?(response.status)
+            raise NotPublic, not_public("#{IMAGE}: the anonymous pull token was refused (token endpoint " \
+                                        "HTTP #{response.status})", after_push: after_push)
+          end
+          unless response.status == 200
+            raise NotPublic, unverified("the token endpoint answered HTTP #{response.status}", after_push: after_push)
+          end
+
+          token = JSON.parse(response.body.to_s)["token"]
+          return token if token.is_a?(String) && !token.empty?
+
+          raise NotPublic, unverified("the token endpoint answered 200 but carried no token", after_push: after_push)
+        rescue JSON::ParserError
+          raise NotPublic, unverified("the token endpoint answered 200 but carried no token (non-JSON body)",
+                                      after_push: after_push)
+        rescue Faraday::Error => e
+          raise NotPublic, unverified("the token endpoint was unreachable (#{e.class.name.split('::').last}: " \
+                                      "#{e.message[0, 120]})", after_push: after_push)
+        end
+        private_class_method :anonymous_token
+
+        def self.check_manifest!(http, repo, tag, token, image:, after_push:)
+          response = http.get("https://#{REGISTRY}/v2/#{repo}/manifests/#{tag}", nil,
+                              { "Authorization" => "Bearer #{token}", "Accept" => ACCEPT })
+          return if response.status == 200
+
+          raise NotPublic, not_public("#{image} is NOT anonymously pullable (manifest HTTP #{response.status})",
+                                      after_push: after_push)
+        rescue Faraday::Error => e
+          raise NotPublic, unverified("the manifest read of #{image} failed (#{e.class.name.split('::').last}: " \
+                                      "#{e.message[0, 120]})", after_push: after_push)
+        end
+        private_class_method :check_manifest!
+
+        def self.not_public(cause, after_push:)
+          pushed = if after_push
+                     "The image IS pushed — only its visibility is wrong, so the fix is a settings flip and " \
+                       "re-running `rake demo:public` is cheap (nothing rebuilds)."
+                   else
+                     "If the tag was pushed, the package is private (GHCR creates every new package private); " \
+                       "re-run `rake demo:public` after the fix."
+                   end
+          "#{cause}. #{pushed} Fix: open #{settings_url(IMAGE)} → Danger Zone → Change visibility → Public. " \
+            "Do not create the GitHub release until `rake demo:public` passes."
+        end
+        private_class_method :not_public
+
+        def self.unverified(cause, after_push:)
+          pushed = after_push ? " The image IS pushed;" : ""
+          "#{IMAGE}: could not prove an anonymous pull — #{cause}.#{pushed} re-run `rake demo:public` " \
+            "(cheap: nothing rebuilds); if it keeps failing, check #{settings_url(IMAGE)} " \
+            "(Change visibility → Public)."
+        end
+        private_class_method :unverified
+      end
+
       # The MCP stdio smoke against a docker image.
       module Smoke
         PROTOCOL_VERSION = "2025-11-25" # Nabu::Mcp::Server::PROTOCOL_VERSION (not loaded here)

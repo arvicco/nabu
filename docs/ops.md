@@ -1266,7 +1266,14 @@ automatically; no per-release action.
    which a GitHub-hosted runner never has, so the order is
    `rake demo:build` (a FRESH slice — a kept tmp/demo can be a stale
    release's) then `rake demo:publish` (self-contained: auth probe,
-   builder, multi-arch verify, smoke — one command). The GitHub
+   builder, multi-arch verify, smoke — one command). A first push
+   under a new package name lands PRIVATE on GHCR, and the verify and
+   smoke run under the pusher's own login, so they cannot see it;
+   `rake demo:publish` therefore refuses to report success until an
+   anonymous (credential-less) pull of both tags works, naming the
+   package settings page (Change visibility → Public) when it does
+   not, and `rake demo:public` re-runs that check alone —
+   `gh release create` (step 4) is run only after it passes. The GitHub
    release in step 4 triggers `.github/workflows/demo-release.yml`
    for the halves CI CAN do — the two-arch smoke of the release's own
    tag and the MCP Registry publish — and its registry-publish job
