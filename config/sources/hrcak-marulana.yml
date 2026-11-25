@@ -2,7 +2,7 @@ hrcak-marulana:   # 02-sources row 249
   adapter: Nabu::Adapters::HrcakMarulana
   adopted: "2026-11-25"
   axes: [slavic, romance]
-  wired: false   # until the first real sync is verified
+  wired: true    # first sync verified 2026-11-25, exact on the OAI census: 644 docs (681 records − 37 in-copyright skipped by rule) / 9,757 passages / 0 errors, search-probed
   sync_policy: manual
   # Colloquia Maruliana — the annual journal of Marulić studies (Split
   # Literary Circle — Marulianum), vols. 1–35 (1992–2026), full text from

@@ -15,7 +15,7 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 A source wears every desk it serves — these 30 answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
-| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 24 November 2026)</span> |
+| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 26 November 2026)</span> |
 |---|---|---|---|---|
 | `betamasaheft-works` | texts | attribution | wired · auto | 3,825 docs / 66,940 passages |
 | `bhsa` | texts | nc | wired · manual | 39 docs / 23,213 passages |
@@ -48,9 +48,9 @@ A source wears every desk it serves — these 30 answer this desk. Holdings are 
 | `ud` | treebank | nc | wired · manual | 93 docs / 338,638 passages |
 | `vulgate` | texts | open | wired · manual | 73 docs / 35,809 passages |
 
-**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 24 November 2026)</span>: `hbo` 30,774 · `gez` 3,803 · `eng` 1,142 · `syc` 1,028 · `cop` 505 · `arc` 411 · `grc` 321 · `chu` 153 · `lat` 85 · `ron-Cyrl` 79 … and 10 more (`nabu axis biblical` lists all).
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 26 November 2026)</span>: `hbo` 30,774 · `gez` 3,803 · `eng` 1,142 · `syc` 1,028 · `cop` 505 · `arc` 411 · `grc` 321 · `chu` 153 · `lat` 85 · `ron-Cyrl` 79 … and 10 more (`nabu axis biblical` lists all).
 
-**Carried in by multilingual packs** (`ud` — whole-source members whose other languages ride along, as of 24 November 2026): `orv` 9 · `ota` 5 · `lzh` 4 · `egy` 3 · `frm` 3 … and 19 more (`nabu axis biblical` lists all).
+**Carried in by multilingual packs** (`ud` — whole-source members whose other languages ride along, as of 26 November 2026): `orv` 9 · `ota` 5 · `lzh` 4 · `egy` 3 · `frm` 3 … and 19 more (`nabu axis biblical` lists all).
 
 ## The desk's instruments
 
