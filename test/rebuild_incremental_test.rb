@@ -179,6 +179,35 @@ class RebuildIncrementalTest < Minitest::Test
     assert_incremental_state_equals_fresh_full_rebuild
   end
 
+  # The dictionary loader's entry-grain breaker on the incremental path:
+  # twelve held glossary entries whose file stops parsing exceed the limit
+  # (max(10, 20% of 12) = 10) — every entry stays served, the line names
+  # entries, and the source stays unstamped until the parse recovers.
+  def test_incremental_dictionary_parse_breaker_keeps_entries_unstamped
+    write_sources(<<~YAML)
+      glossy:
+        adapter: DictionaryTestAdapter
+    YAML
+    good = (1..12).map { |i| "g#{i}\tλόγος#{i}\tword #{i}\n" }.join
+    write_canonical("glossy", "glossary.tsv" => good)
+    full_rebuilder.run
+
+    write_canonical("glossy", "glossary.tsv" => "#{good}malformed\n")
+    outcome = incremental_rebuilder.run.outcomes.find { |o| o.slug == "glossy" }
+
+    assert_equal [12, 0], outcome.report.to_h.values_at(:parse_held, :withdrawn)
+    breaker = outcome.warning_lines.find { |line| line.start_with?("PARSE BREAKER") }
+    assert_match(/PARSE BREAKER: 12 held entr\(ies\)/, breaker)
+    assert_equal 12, raw_rows(:dictionary_entries).count { |row| !row[:withdrawn] }, "every held entry stays served"
+    assert_equal [:dirty], incremental_rebuilder.plan.verdicts.select { |v| v.slug == "glossy" }.map(&:state),
+                 "a tripped dictionary breaker leaves the source unstamped"
+
+    write_canonical("glossy", "glossary.tsv" => good)
+    incremental_rebuilder.run
+
+    assert_equal [:clean], incremental_rebuilder.plan.verdicts.select { |v| v.slug == "glossy" }.map(&:state)
+  end
+
   # The parse breaker on the incremental path: eleven of thirteen held beta
   # documents newly failing exceeds the limit (max(10, 20% of 13) = 10), so
   # NOTHING is withdrawn and the state deliberately differs from a full

@@ -59,15 +59,17 @@ module Nabu
 
       # The operator-facing lines for the withdrawals a failing parse caused
       # (empty when there were none) — sync and rebuild print them beside
-      # the quarantine delta. +slug+ names the source in the accept command.
-      def parse_withdrawal_messages(slug)
+      # the quarantine delta. +slug+ names the source in the accept command;
+      # +noun+ names the grain the counts are in (a dictionary report counts
+      # entries — Store::DictionaryLoader's entry-grain breaker).
+      def parse_withdrawal_messages(slug, noun: LoadReport::DOCUMENT_NOUN)
         lines = []
         if parse_withdrawn.positive?
-          lines << "withdrew #{parse_withdrawn} held document(s) whose file no longer parses " \
+          lines << "withdrew #{parse_withdrawn} held #{noun} whose file no longer parses " \
                    "(quarantined or skipped by rule; #{errored} file(s) errored this run)"
         end
         if parse_breaker_tripped?
-          lines << "PARSE BREAKER: #{parse_held} held document(s) now fail to parse — this looks like a " \
+          lines << "PARSE BREAKER: #{parse_held} held #{noun} now fail to parse — this looks like a " \
                    "parser regression; their rows were KEPT (still served). If the change is intended, " \
                    "accept the withdrawals with: bin/nabu sync #{slug} --parse-only --force"
         end
@@ -89,6 +91,14 @@ module Nabu
           parse_withdrawn: parse_withdrawn + other.parse_withdrawn, parse_held: parse_held + other.parse_held
         )
       end
+    end
+
+    # The grains #parse_withdrawal_messages names its counts in.
+    class LoadReport
+      DOCUMENT_NOUN = "document(s)"
+      ENTRY_NOUN = "entr(ies)"
+      # A combined report (a passages source plus its dictionary lane).
+      MIXED_NOUN = "document(s)/entr(ies)"
     end
 
     # Persists adapter output into the catalog with the idempotency /

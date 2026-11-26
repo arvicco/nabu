@@ -1075,6 +1075,18 @@ Ground rules:
   overlapping (a batch producer committing while a sync runs) wait each other
   out instead of crashing — but don't *schedule* concurrent writers; the
   timeout is a shock absorber, not a queue.
+- **A sync during a rebuild refuses at once.** The rebuild does not hold
+  the catalog write window for its whole run, so a sync started mid-rebuild
+  would load into the half-built catalog. Every catalog-writing sync —
+  `nabu sync` in any flavour (`--parse-only` and `--fetch-only` included;
+  both write the catalog's source row), `nabu quickstart`, and the shelf
+  sync `nabu ingest` runs after writing its shelf (the shelf write stands;
+  the next sync loads it) — checks first and, while a rebuild runs
+  (the ledger's rebuild row RUNNING with its pid alive, or a live
+  `nabu rebuild` process — the commit hook's and `db:snapshot`'s detector),
+  prints one `sync refused — rebuild (…) RUNNING since … (pid …)` line and
+  exits 1, without waiting. Re-run it once the rebuild ends. The trickle
+  runner is unaffected: it writes `canonical/` only.
 - Expect `<db>-wal`/`<db>-shm` sidecar files next to each db while any
   connection is open; the last connection to close checkpoints and removes
   them. Never delete or separate a `-wal` from its db by hand — backup handles

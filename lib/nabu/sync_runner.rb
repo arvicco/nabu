@@ -353,7 +353,7 @@ module Nabu
           load_report = load(source, adapter, workdir, progress, force: force)
           # P104-4: the secondary dictionary lane loads under the SAME run —
           # the block's return (the run row's counts) covers both shapes.
-          lane_report = load_dictionary_lane(entry, source, workdir, progress)
+          lane_report = load_dictionary_lane(entry, source, workdir, progress, force: force)
           lane_report ? load_report + lane_report : load_report
         end
       rescue Nabu::SyncAborted => e
@@ -801,8 +801,11 @@ module Nabu
       # count too — errored is file-grained either way); the withdrawal
       # trend below stays document-grained, so it reads the PRIMARY report.
       errored = load_report.errored + (lane_report&.errored || 0)
+      nouns = Store::LoadReport
+      primary_noun = adapter.class.content_kind == :dictionary ? nouns::ENTRY_NOUN : nouns::DOCUMENT_NOUN
       delta = [Health::QuarantineBaseline.delta_finding(@ledger, source.slug, errored: errored)] +
-              parse_withdrawal_findings(source, load_report)
+              parse_withdrawal_findings(source, load_report, noun: primary_noun) +
+              (lane_report ? parse_withdrawal_findings(source, lane_report, noun: nouns::ENTRY_NOUN) : [])
       # Dictionary and language sources (P11-4/P19-1): entry-/record-grained
       # counts against a document-count baseline would be apples-to-oranges —
       # the quarantine delta still applies (errored counts files either way),
@@ -816,9 +819,10 @@ module Nabu
     # The parse settlement's lines (Store::LoadReport#parse_withdrawal_messages):
     # held documents withdrawn because their file no longer yields one —
     # named apart from the errored-files count — and, loudest, a tripped
-    # parse breaker (rows KEPT, with the accept command).
-    def parse_withdrawal_findings(source, load_report)
-      load_report.parse_withdrawal_messages(source.slug).map do |message|
+    # parse breaker (rows KEPT, with the accept command). +noun+ is the
+    # report's grain: dictionary reports (primary or lane) count entries.
+    def parse_withdrawal_findings(source, load_report, noun:)
+      load_report.parse_withdrawal_messages(source.slug, noun: noun).map do |message|
         kind = message.start_with?("PARSE BREAKER") ? :parse_breaker : :parse_withdrawal
         Health::Finding.new(kind: kind, severity: :loud, message: message)
       end
@@ -978,8 +982,9 @@ module Nabu
     # dossier shelves through Store::LanguageDossierLoader, the owner-notes
     # shelf through Store::NoteLoader (P24-1) — same call shape, same
     # LoadReport.
-    # +force+ (the sync's --force) also accepts the passage loader's parse
-    # breaker — the house rule that --force overrides every breaker.
+    # +force+ (the sync's --force) also accepts the loaders' parse breakers
+    # (passage and dictionary) — the house rule that --force overrides
+    # every breaker.
     def load(source, adapter, workdir, progress, force: false)
       loader = build_loader(adapter, source, force: force)
       # P78-r3: the parse+load phase announces with its estimate (the tick
@@ -1006,13 +1011,14 @@ module Nabu
     # DictionaryDocuments), so load_from — attic rediscovery, per-file
     # quarantine, withdrawal sweep — applies unchanged. nil for every
     # lane-less source.
-    def load_dictionary_lane(entry, source, workdir, progress)
+    def load_dictionary_lane(entry, source, workdir, progress, force: false)
       lane = entry.adapter_class.dictionary_lane
       return nil if lane.nil?
 
       timed_stage(entry.slug, "dictionary_lane", "dictionary lane: #{entry.slug}", progress) do
         Store::DictionaryLoader.new(db: @db, source: source, ledger: @ledger,
-                                    language_shelf_dir: @config.source_workdir(Nabu::LanguageShelf::SLUG))
+                                    language_shelf_dir: @config.source_workdir(Nabu::LanguageShelf::SLUG),
+                                    accept_parse_withdrawals: force)
                                .load_from(lane, workdir: workdir, full: true,
                                                 on_document: progress&.method(:load_tick))
       end
@@ -1033,7 +1039,8 @@ module Nabu
       case adapter.class.content_kind
       when :dictionary
         Store::DictionaryLoader.new(db: @db, source: source, ledger: @ledger,
-                                    language_shelf_dir: @config.source_workdir(Nabu::LanguageShelf::SLUG))
+                                    language_shelf_dir: @config.source_workdir(Nabu::LanguageShelf::SLUG),
+                                    accept_parse_withdrawals: force)
       when :language
         Store::LanguageDossierLoader.new(db: @db, source: source, ledger: @ledger)
       when :notes

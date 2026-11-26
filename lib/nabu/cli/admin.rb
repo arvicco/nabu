@@ -678,9 +678,14 @@ module Nabu
       # quarantine delta and the parse settlement (withdrawn-by-parse count,
       # a tripped parse breaker in red).
       def print_outcome_warnings(result)
-        result.warnings.each do |outcome|
-          outcome.warning_lines.each do |line|
-            say "  WARNING: #{outcome.slug} #{line}", line.start_with?("PARSE BREAKER") ? :red : :yellow
+        outcome_warning_lines(result).each { |line, colour| say line, colour }
+      end
+
+      # The text seam (test/cli_warning_lines_test.rb): [line, colour] pairs.
+      def outcome_warning_lines(result)
+        result.warnings.flat_map do |outcome|
+          outcome.warning_lines.map do |line|
+            ["  WARNING: #{outcome.slug} #{line}", line.start_with?("PARSE BREAKER") ? :red : :yellow]
           end
         end
       end

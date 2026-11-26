@@ -479,7 +479,105 @@ class DictionaryLoaderTest < Minitest::Test
     assert_equal '{"field":["law"]}', @db[:dictionary_entries].where(entry_id: "a").get(:annotations_json)
   end
 
+  # --- the entry-grain parse breaker (the passage Loader's twin) -------------
+
+  # The Lewis & Short file (4 held entries) stops parsing. Under the
+  # production limits (min(50, max(10, 20% of 8 held)) = 10) four newly
+  # failing entries are ordinary churn: the full load withdraws them and
+  # names the count apart from the withdrawal total.
+  def test_a_newly_quarantined_file_below_the_breaker_limit_withdraws_its_entries
+    load!
+    report = loader.load_from(failing_adapter("lexica:lewis-short:lat.ls.perseus-eng2.xml"), workdir: @workdir)
+
+    assert_equal [1, 4, 4, 0], report.to_h.values_at(:errored, :withdrawn, :parse_withdrawn, :parse_held)
+    refute report.parse_breaker_tripped?
+    assert_equal 4, @db[:dictionary_entries].where(withdrawn: true).count
+  end
+
+  # Above the limit (shrunk here: floor 1 → limit 1.6 of 8 held) NOTHING
+  # is withdrawn: every held entry stays served, the report carries the
+  # kept count (so the rebuild leaves the source unstamped) and the loud
+  # line names the accept command.
+  def test_a_tripped_breaker_keeps_every_held_entry_and_says_so
+    load!
+    report = shrunk_loader.load_from(failing_adapter("lexica:lewis-short:lat.ls.perseus-eng2.xml"),
+                                     workdir: @workdir)
+
+    assert_equal [1, 0, 0, 4], report.to_h.values_at(:errored, :withdrawn, :parse_withdrawn, :parse_held)
+    assert report.parse_breaker_tripped?
+    assert_equal 0, @db[:dictionary_entries].where(withdrawn: true).count, "every held entry stays served"
+    line = report.parse_withdrawal_messages("lexica", noun: "entr(ies)").find { |l| l.start_with?("PARSE BREAKER") }
+    assert_match(/PARSE BREAKER: 4 held entr\(ies\) now fail to parse/, line)
+    assert_includes line, "bin/nabu sync lexica --parse-only --force"
+    kept = @db[:provenance].where(event: "quarantined").select_map(:params_json).map { |j| JSON.parse(j) }
+    assert_equal(["parse-breaker"], kept.map { |params| params["kept"] })
+  end
+
+  # The operator's acceptance (sync --force) withdraws whatever the count.
+  def test_accepting_parse_withdrawals_overrides_the_breaker
+    load!
+    accepting = Nabu::Store::DictionaryLoader.new(db: @db, source: @source, ledger: @ledger,
+                                                  parse_breaker: tiny_breaker, accept_parse_withdrawals: true)
+    report = accepting.load_from(failing_adapter("lexica:lewis-short:lat.ls.perseus-eng2.xml"), workdir: @workdir)
+
+    assert_equal [4, 4, 0], report.to_h.values_at(:withdrawn, :parse_withdrawn, :parse_held)
+  end
+
+  # A clean pass (no file failed) is the upstream-gone sweep, never the
+  # breaker's business: a full load of one document withdraws the other
+  # seven even under the shrunk limits.
+  def test_the_breaker_is_inert_when_no_file_failed
+    load!
+    report = shrunk_loader.load([modified_document], full: true)
+
+    assert_equal [7, 0, 0], report.to_h.values_at(:withdrawn, :parse_withdrawn, :parse_held)
+  end
+
+  # --- rolled-back files count nothing ---------------------------------------
+
+  # A held LSJ file gains a colliding entry AFTER its two unchanged ones:
+  # the file rolls back as one unit, so its two reached entries never
+  # committed a skip — only the other files' six entries count.
+  def test_a_rolled_back_file_contributes_nothing_to_the_counts
+    load!
+    parsed = @adapter.discover(@workdir).map { |ref| @adapter.parse(ref) }
+    target = parsed.find { |doc| doc.entries.any? { |e| e.entry_id == "n67485" } }
+    squatter = Nabu::Store::Dictionary.create(slug: "squatter", source_id: @source.id, title: "S", language: "grc")
+    @db[:dictionary_entries].insert(
+      dictionary_id: squatter.id, urn: "urn:nabu:dict:lsj:zz-new", entry_id: "zz", key_raw: "x",
+      headword: "x", headword_folded: "x", body: "x", content_sha256: "x", revision: 1, withdrawn: true
+    )
+    revised = Nabu::DictionaryDocument.new(slug: target.slug, language: target.language,
+                                           title: target.title, canonical_path: target.canonical_path)
+    target.entries.each { |entry| revised << entry }
+    revised << Nabu::DictionaryEntry.new(entry_id: "zz-new", key_raw: "νέος", language: "grc", headword: "νέος",
+                                         headword_folded: "νεοσ", gloss: "new", body: "νέος new", citations: [])
+
+    report = loader.load(parsed.map { |doc| doc.equal?(target) ? revised : doc }, full: false)
+
+    assert_equal [0, 0, 6, 1], report.to_h.values_at(:added, :updated, :skipped, :errored)
+  end
+
   private
+
+  def tiny_breaker = Nabu::Store::Loader::ParseBreaker.new(floor: 1, share: 0.2, cap: 50)
+
+  def shrunk_loader
+    Nabu::Store::DictionaryLoader.new(db: @db, source: @source, ledger: @ledger, parse_breaker: tiny_breaker)
+  end
+
+  # The real Lexica adapter with the named refs failing to parse — the
+  # parser-regression shape the breaker guards.
+  def failing_adapter(*ref_ids)
+    adapter = Nabu::Adapters::Lexica.new
+    real_parse = adapter.method(:parse)
+    adapter.define_singleton_method(:parse) do |ref|
+      raise Nabu::ParseError, "#{ref.id}: regressed" if ref_ids.include?(ref.id)
+
+      real_parse.call(ref)
+    end
+    adapter
+  end
 
   # The fixture μῆνις entry with its body replaced — a real model object, the
   # store-level testing seam (no fake TEI involved).
