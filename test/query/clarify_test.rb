@@ -14,6 +14,8 @@ module Query
     ILIAD = "urn:cts:greekLit:tlg0012.tlg001.perseus-grc2"
     ILIAD_ENG = "urn:cts:greekLit:tlg0012.tlg001.perseus-eng4"
     ODYSSEY = "urn:cts:greekLit:tlg0012.tlg002.perseus-grc2"
+    ETRUSCAN = "urn:nabu:open-etruscan:li-1.1"
+    AENEID = "urn:cts:latinLit:phi0690.phi003.perseus-lat2"
 
     def setup
       @catalog = store_test_db
@@ -154,6 +156,60 @@ module Query
       refute_nil iliad, "the trigram lane recovers the doubled-l typo"
       assert_equal "fuzzy", iliad.match
       refute result.is_ref, "a fuzzy match is a candidate, never a resolution"
+    end
+
+    # A misspelled title plus a citation: the title part reaches the work
+    # through the fuzzy lane and the citation resolves inside it — ranked
+    # above the whole string's fuzzy resemblance to an unrelated short
+    # label (the Etruscan inscription "Li 1.1"), never a resolution.
+    def test_a_misspelled_title_plus_citation_outranks_a_whole_string_fuzzy_label
+      etruscan
+      result = clarify("Illiad 1.1")
+      refute result.is_ref, "a fuzzy title is a guess, never a reference"
+      assert_nil result.resolved_urn
+      assert_equal ["#{ILIAD}:1.1", "#{ILIAD_ENG}:1.1"].sort, result.completions.first(2).filter_map(&:ref_urn).sort
+      assert_equal %w[fuzzy fuzzy], result.completions.first(2).map(&:match)
+      assert_includes result.completions.drop(2).map(&:key), ETRUSCAN, "the label stays a (lower) candidate"
+      assert_match(/near-title/, result.note)
+    end
+
+    def test_a_short_label_ending_in_a_citation_still_resolves_exactly
+      etruscan
+      result = clarify("Li 1.1")
+      assert result.is_ref
+      assert_equal ETRUSCAN, result.resolved_urn
+      assert_equal ["exact", ETRUSCAN], [result.completions.first.match, result.completions.first.key]
+    end
+
+    def test_a_transposed_title_plus_citation_reaches_the_work
+      document(AENEID, title: "Aeneid", citations: %w[1.1 1.2], language: "lat")
+      Nabu::Store::Indexer.rebuild!(catalog: @catalog, fulltext: @fulltext)
+      result = clarify("Aenied 1.1")
+      first = result.completions.first
+      assert_equal [AENEID, "#{AENEID}:1.1", "fuzzy"], [first.key, first.ref_urn, first.match]
+      assert_nil result.resolved_urn
+    end
+
+    # Token hits on a common word fill the title probe; the misspelled
+    # work must still reach the citation probe through the fuzzy lane.
+    def test_token_hits_do_not_crowd_the_misspelled_work_out
+      meta = "urn:cts:latinLit:phi0959.phi006.perseus-lat2"
+      document(meta, title: "Metamorphoses", citations: %w[1.1], language: "lat")
+      12.times { |i| document("urn:nabu:eebo:s#{i}", title: "A metamorphosis sermon #{i}", citations: %w[p1]) }
+      Nabu::Store::Indexer.rebuild!(catalog: @catalog, fulltext: @fulltext)
+      held = clarify("Metamorphosis 1.1", limit: 20).completions.find(&:ref_urn)
+      assert_equal ["#{meta}:1.1", "fuzzy"], [held&.ref_urn, held&.match]
+    end
+
+    def test_a_citation_the_near_title_lacks_adds_no_candidate
+      result = clarify("Illiad 9.9")
+      assert_empty result.completions.filter_map(&:ref_urn)
+      refute_match(/near-title/, result.note.to_s)
+    end
+
+    def etruscan
+      document(ETRUSCAN, title: "Li 1.1", citations: %w[1], language: "ett")
+      Nabu::Store::Indexer.rebuild!(catalog: @catalog, fulltext: @fulltext)
     end
 
     def test_sources_lemmas_and_places_are_typed_candidates

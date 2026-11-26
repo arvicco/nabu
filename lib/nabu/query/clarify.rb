@@ -205,18 +205,23 @@ module Nabu
                      note: name_note(completions, exact_documents.size))
       end
 
-      # "Title citation": the title's EXACT document readings, each probed
-      # for the citation (one indexed IN-list over passage urns); a unique
-      # holder resolves, several are listed (ref_urn each), none falls back
-      # to reading the WHOLE input as a name (a title may itself end in a
-      # number).
+      # "Title citation": the title's document readings, each probed for the
+      # citation (one indexed IN-list over passage urns). EXACT title
+      # holders: a unique one resolves, several are listed (ref_urn each).
+      # None falls back to reading the WHOLE input as a name (a title may
+      # itself end in a number) — merged with the NEAR title holders
+      # (prefix/token/fuzzy title, citation held), which are candidates
+      # only, never a resolution.
       def citation_result(text, split, limit)
-        documents = lookup(split[:title], CITATION_PROBES).select { |c| c.type == "document" && c.match == "exact" }
-        wanted = documents.to_h { |c| ["#{c.key}:#{split[:citation]}", c] }
-        held = wanted.empty? ? [] : @catalog[:passages].where(urn: wanted.keys, withdrawn: false).select_map(:urn)
-        return title_result(text, limit) if held.empty?
+        documents = lookup(split[:title], CITATION_PROBES).select { |c| c.type == "document" }
+        exact, near = citation_holders(documents, split[:citation]).partition { |c| c.match == "exact" }
+        if exact.empty?
+          near += citation_holders(fuzzy_documents(split[:title], documents.map(&:key)), split[:citation])
+          return near_citation_result(text, split[:citation], near, limit)
+        end
 
-        candidates = held.sort.map { |urn| wanted.fetch(urn).with(ref_urn: urn) }
+        held = exact.map(&:ref_urn).sort
+        candidates = exact.sort_by(&:ref_urn)
         ref = held.size == 1 ? passage_ref(held.first) : nil
         result(text, is_ref: true, resolved_urn: ref&.urn, ref: ref,
                      structure: ref && structure(ref.document_urn, citation_of(ref)),
@@ -227,6 +232,49 @@ module Nabu
                              "#{held.size} documents hold this citation — " \
                                "pick by ref_urn, never a silent guess"
                            end)
+      end
+
+      # The documents (in rank order) holding +citation+, each carrying the
+      # passage it names as ref_urn — one indexed IN-list probe.
+      def citation_holders(documents, citation)
+        wanted = documents.to_h { |c| ["#{c.key}:#{citation}", c] }
+        return [] if wanted.empty?
+
+        held = @catalog[:passages].where(urn: wanted.keys, withdrawn: false).select_map(:urn).to_set
+        wanted.filter_map { |urn, c| c.with(ref_urn: urn) if held.include?(urn) }
+      end
+
+      # The title part's misspelling-lane documents on their own: #lookup
+      # skips the fuzzy lane once prefix/token hits fill the page, so a
+      # common word ("Metamorphosis" tokens in long book titles) would
+      # otherwise crowd the misspelled work out of the citation probe.
+      def fuzzy_documents(title, seen)
+        folded = Nabu::Store::Indexer.clarify_fold(title)
+        return [] if folded.empty?
+
+        matches = fuzzy_lane(folded).to_h { |id, sim| [id, { match: "fuzzy", primary: nil, sim: sim }] }
+        candidates(matches, folded).select { |c| c.type == "document" && !seen.include?(c.key) }
+                                   .first(CITATION_PROBES)
+      end
+
+      # No exact title holds the citation: the whole input read as a name,
+      # with the near-title holders ("Illiad 1.1" → Iliad 1.1) ranked after
+      # its exact/prefix/token hits and BEFORE its whole-string fuzzy hits
+      # (a misspelled title plus a held citation is a better guess than a
+      # short label the whole string happens to resemble).
+      def near_citation_result(text, citation, near, limit)
+        whole = title_result(text, limit)
+        return whole if near.empty?
+
+        keys = near.to_set(&:key)
+        strong, fuzzy = whole.completions.reject { |c| keys.include?(c.key) }.partition { |c| c.match != "fuzzy" }
+        merged = (strong + near + fuzzy).first(limit)
+        return whole.with(completions: merged) if whole.is_ref
+
+        whole.with(completions: merged,
+                   note: "no exact title holds #{citation} — #{near.size} near-title reading(s) do " \
+                         "(ref_urn each; match says how the title was reached — a fuzzy match is a " \
+                         "misspelling guess, never a resolution)")
       end
 
       def name_note(completions, exact)

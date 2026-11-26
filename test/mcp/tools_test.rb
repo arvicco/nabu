@@ -1812,6 +1812,15 @@ module MCP
       assert body.dig("index", "present")
     end
 
+    def test_clarify_reads_a_misspelled_title_plus_citation_as_a_near_title_candidate
+      seed_corpus
+      body = payload(call("nabu_clarify", { "query" => "Illiad 1.1" }))
+      refute body.fetch("is_ref"), "a fuzzy title is never a resolution"
+      first = body.fetch("completions").first
+      assert_equal [@grc.urn, "#{@grc.urn}:1.1", "fuzzy"], first.values_at("key", "ref_urn", "match")
+      assert_match(/near-title/, body.fetch("note"))
+    end
+
     def test_clarify_lists_shared_titles_never_a_silent_pick
       seed_corpus
       second = make_document(urn: "urn:cts:greekLit:tlg0012.tlg001.first1k", title: "Iliad")

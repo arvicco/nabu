@@ -635,7 +635,12 @@ out:
   said so).
 
 Never a silent guess: two editions sharing a title, or a citation several of
-them hold, resolve to **nothing** and list every reading. Diacritics are
+them hold, resolve to **nothing** and list every reading. A citation no exact
+title holds is tried inside the near-title works (prefix · token · fuzzy title
+match): a misspelled title plus a citation (`Illiad 1.1`) lists the works
+holding that citation as candidates with `ref_urn`, ranked after the whole
+input's exact/prefix/token hits and before its fuzzy resemblances (a short
+label such as an inscription number) — never a resolution. Diacritics are
 optional both ways (`οδυσσεια` finds `Ὀδύσσεια`). Names resolve through a
 precompiled title index — the fulltext index's clarify lane (a B-tree prefix
 lane over folded names, an FTS5 token lane, an FTS5 trigram misspelling lane
