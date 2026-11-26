@@ -2,6 +2,8 @@
 
 # Nabu::CLI — acquisition commands: sync, quickstart, ingest. Carved out of
 # lib/nabu/cli.rb, the registry that loads it.
+require_relative "../ops/db_snapshot"
+
 module Nabu
   class CLI < Thor
     desc "sync [SOURCE...]", "Fetch and load sources, an axis's members, or --all live sources"
@@ -110,6 +112,11 @@ module Nabu
         raise Thor::Error, "sync: --review is single-source — name one slug" if options[:review]
       end
       config = Nabu::Config.load
+      # Mid-rebuild admission: a rebuild does not hold the catalog write
+      # window for its whole run, so a sync started now would load into the
+      # half-built catalog. Refuse at once (no wait), before the write-lock
+      # pre-flight below could queue this sync behind the rebuild.
+      refuse_sync_during_rebuild!(config)
       # P62 rider: the quarter-second write-lock pre-flight — a concurrent
       # sync/rebuild/apply fails HERE with one sentence, not minutes into a
       # load with a BusyException stack. A COOPERATIVE peer (a parallel
@@ -231,6 +238,7 @@ module Nabu
       return print_starter_list if options[:dry_run] || options[:list]
 
       config = Nabu::Config.load
+      refuse_sync_during_rebuild!(config)
       registry = Nabu::SourceRegistry.load(config.sources_path)
       # Ledger FIRST, as in sync: open_or_create_ledger lifts a pre-P7-1
       # catalog's history before open_or_create_catalog migrates it away.
@@ -844,6 +852,32 @@ module Nabu
         sync_warning_lines(outcome).each { |line, colour| say(line, colour) }
       end
 
+      # Mid-rebuild admission for every catalog-writing sync (any flavour,
+      # --parse-only and --fetch-only included — both write the catalog's
+      # source row): one line naming the running rebuild, exit 1, no wait.
+      # The detector is the commit hook's / db:snapshot's
+      # (Ops::DbSnapshot.rebuild_in_progress — the ledger's rebuild row
+      # RUNNING with its pid alive, or a live `nabu rebuild` process); the
+      # process table comes through the same injected seam as the rebuild
+      # preflight's, so the suite never reads the box's real one. The
+      # trickle runner never comes here: it writes canonical/ only.
+      def refuse_sync_during_rebuild!(config)
+        reason = running_rebuild(config)
+        return if reason.nil?
+
+        raise Thor::Error, "sync refused — #{reason}: a sync now would load into the half-built catalog; " \
+                           "re-run it once the rebuild ends"
+      end
+
+      def running_rebuild(config)
+        history = config.history_path
+        ledger = File.file?(history) ? Nabu::Store.connect(history, readonly: true) : nil
+        ps_output = self.class.rebuild_preflight_seams.fetch(:ps_output) { -> { Nabu::Ops::GitHooks.ps_output } }
+        Nabu::Ops::DbSnapshot.rebuild_in_progress(ledger: ledger, ps_output: ps_output.call)
+      ensure
+        ledger&.disconnect
+      end
+
       # The text seam (test/cli_warning_lines_test.rb): [line, colour] pairs.
       def sync_warning_lines(outcome)
         outcome.warnings.map do |finding|
@@ -1178,6 +1212,7 @@ module Nabu
       # Run one local shelf's ordinary sync (fetch = the LocalFetch re-scan;
       # no network) and print the standard sync accounting.
       def run_shelf_sync(config, slug)
+        refuse_sync_during_rebuild!(config)
         registry = Nabu::SourceRegistry.load(config.sources_path)
         ledger = open_or_create_ledger(config)
         db = open_or_create_catalog(config)
