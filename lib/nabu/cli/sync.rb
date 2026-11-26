@@ -837,9 +837,18 @@ module Nabu
       end
 
       # P5-5 inline deviation warnings: advisory one-liners after the counts line,
-      # in yellow, never affecting the exit code. Empty on a clean sync.
+      # in yellow, never affecting the exit code. Empty on a clean sync. A
+      # tripped parse breaker is a refusal (rows KEPT pending --force), not an
+      # advisory: red, as on the rebuild path.
       def print_sync_warnings(outcome)
-        outcome.warnings.each { |finding| say("  ! #{finding.message}", :yellow) }
+        sync_warning_lines(outcome).each { |line, colour| say(line, colour) }
+      end
+
+      # The text seam (test/cli_warning_lines_test.rb): [line, colour] pairs.
+      def sync_warning_lines(outcome)
+        outcome.warnings.map do |finding|
+          ["  ! #{finding.message}", finding.kind == :parse_breaker ? :red : :yellow]
+        end
       end
 
       # -- quickstart (P18-2) -------------------------------------------------
