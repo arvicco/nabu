@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="https://hrcak.srce.hr/oai/Resources/oai2.xsl"?>
+<OAI-PMH xmlns="http://www.openarchives.org/OAI/2.0/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/ http://www.openarchives.org/OAI/2.0/OAI-PMH.xsd">
+  <responseDate>2026-11-25T00:00:00Z</responseDate>
+  <request verb="ListRecords" metadataPrefix="oai_dc" set="journal:43">https://hrcak.srce.hr/oai/</request>
+  <ListRecords>
+    <record>
+      <header>
+        <identifier>oai:hrcak.srce.hr:641</identifier>
+        <datestamp>2006-03-15</datestamp>
+      </header>
+      <metadata>
+        <oai_dc:dc xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai_dc/ http://www.openarchives.org/OAI/2.0/oai_dc.xsd">
+  <dc:title xml:lang="fre">L'Evangelistarium, maître-livre de Marulić</dc:title>
+  <dc:title xml:lang="hrv">Evanđelistar - glavna Marulićeva knjiga</dc:title>
+  <dc:creator>Béné, Charles</dc:creator>
+  <dc:date>2003</dc:date>
+  <dc:type>text</dc:type>
+  <dc:type>info:eu-repo/semantics/article</dc:type>
+  <dc:type>info:eu-repo/semantics/publishedVersion</dc:type>
+  <dc:description xml:lang="hrv">Uspjeh Institucije, i u pogledu izdanja i u pogledu brojnih prijevoda, kao da je donekle zasjenio važnost Evanđelistara, ponajglavnijega Marulićeva djela. &#13;
+Evanđelistar, prema baselskim nakladnicima “čista riječ Božja”, bio je dočekan s divljenjem od samoga početka, i ostat će uzorom evanđeoskoga života dulje od dva stoljeća. Sastavljeno na tragu nazora pokreta Devotio moderna, djelo odbacuje antičke filozofe, predlažući život potpuno evanđeoskog utemeljenja, pomoću kreposti vjere, nade i ljubavi, koje ujedno čine glavnu strukturnu okosnicu. &#13;
+Djelo je izvrsno prihvaćeno u predluterovskom Baselu, pa u Kölnu, gdje je imalo sedam izdanja u desetak godina, služeći kao sredstvo borbe protiv luteranstva. U Londonu će ga čitati Henrik VIII, a u Parizu će biti objavljeno 40 godina prije Institucije, radi suprotstavljanja kalvinizmu; istu svrhu imat će i u Louvainu. &#13;
+Bit će duhovni saveznik progonjenima u Engleskoj, kako svjedoči primjerak s marginalnim bilješkama u British Library, te nadasve Dijalog o utjesi što ga je Thomas More napisao u zatočeništvu, djelo koje se nedvojbeno ugleda na Evanđelistar. &#13;
+Institucija pokazuje jasnu povezanost s Evanđelistarom; ona primjerima ilustrira ono što je Evanđelistar iznio u preceptivnom obliku.</dc:description>
+  <dc:language>fre</dc:language>
+  <dc:language>hrv</dc:language>
+  <dc:source>Colloquia Maruliana</dc:source>
+  <dc:publisher>Split Literary Circle - Marulianum, centre for Studies on Marko Marulić and his Humanist Circle</dc:publisher>
+  <dc:identifier>https://hrcak.srce.hr/641</dc:identifier>
+  <dc:source>ISSN 1848-9613 (Online)</dc:source>
+  <dc:source>ISSN 1332-3431 (Print)</dc:source>
+  <dc:source>ISSN-L 1332-3431</dc:source>
+  <dc:source>Volume 12</dc:source>
+  <dc:rights>info:eu-repo/semantics/openAccess</dc:rights>
+  <dc:rights>The annual journal Colloquia Maruliana is published in open access. Its entire content is freely available to users. Users may copy and distribute the material, as well as modify, adapt, and build upon it, in accordance with the terms of the Creative Commons Attribution 4.0 International License (CC BY 4.0). Authors retain unrestricted copyright to their published works.</dc:rights>
+</oai_dc:dc>
+      </metadata>
+    </record>
+    <record>
+      <header>
+        <identifier>oai:hrcak.srce.hr:8030</identifier>
+        <datestamp>2007-02-06</datestamp>
+      </header>
+      <metadata>
+        <oai_dc:dc xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai_dc/ http://www.openarchives.org/OAI/2.0/oai_dc.xsd">
+  <dc:title xml:lang="hrv">Utemeljenost metaforičkoga određenja: Marulić «otac umjetnoga hrvatskog pjesništva»</dc:title>
+  <dc:title xml:lang="eng">On the Making of a Metaphor: Father of FCroatian Art of Poetry</dc:title>
+  <dc:creator>Frangeš, Ivo</dc:creator>
+  <dc:date>2002</dc:date>
+  <dc:type>text</dc:type>
+  <dc:type>info:eu-repo/semantics/article</dc:type>
+  <dc:type>info:eu-repo/semantics/publishedVersion</dc:type>
+  <dc:language>hrv</dc:language>
+  <dc:language>eng</dc:language>
+  <dc:source>Colloquia Maruliana</dc:source>
+  <dc:publisher>Split Literary Circle - Marulianum, centre for Studies on Marko Marulić and his Humanist Circle</dc:publisher>
+  <dc:identifier>https://hrcak.srce.hr/8030</dc:identifier>
+  <dc:format>application/pdf</dc:format>
+  <dc:identifier xml:lang="hrv">https://hrcak.srce.hr/file/12183</dc:identifier>
+  <dc:identifier xml:lang="eng">https://hrcak.srce.hr/file/12184</dc:identifier>
+  <dc:source>ISSN 1848-9613 (Online)</dc:source>
+  <dc:source>ISSN 1332-3431 (Print)</dc:source>
+  <dc:source>ISSN-L 1332-3431</dc:source>
+  <dc:source>Volume 11</dc:source>
+  <dc:rights>info:eu-repo/semantics/openAccess</dc:rights>
+  <dc:rights>The annual journal Colloquia Maruliana is published in open access. Its entire content is freely available to users. Users may copy and distribute the material, as well as modify, adapt, and build upon it, in accordance with the terms of the Creative Commons Attribution 4.0 International License (CC BY 4.0). Authors retain unrestricted copyright to their published works.</dc:rights>
+</oai_dc:dc>
+      </metadata>
+    </record>
+    <resumptionToken expirationDate="2026-11-26T00:00:00Z" completeListSize="681" cursor="0">1795646479470_oai_dc</resumptionToken>
+  
+  </ListRecords>
+</OAI-PMH>

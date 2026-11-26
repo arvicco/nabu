@@ -3190,6 +3190,56 @@ class CLITest < Minitest::Test
     end
   end
 
+  # The CLI rebuild tests never read the box's real process table: the
+  # suite injects a fixed, empty one through Nabu::CLI.rebuild_preflight_seams
+  # (test/support/cli_rebuild_preflight_seams.rb), so a real `nabu sync`
+  # running on the box cannot block a full rebuild inside the suite.
+  FAKE_RUNNING_SYNC = "4242 ruby bin/nabu sync perseus\n"
+
+  def with_real_process_table(text)
+    original = Nabu::Ops::GitHooks.method(:ps_output)
+    Nabu::Ops::GitHooks.define_singleton_method(:ps_output) { text }
+    yield
+  ensure
+    Nabu::Ops::GitHooks.define_singleton_method(:ps_output, original)
+  end
+
+  def with_preflight_seams(seams)
+    original = Nabu::CLI.rebuild_preflight_seams
+    Nabu::CLI.rebuild_preflight_seams = seams
+    yield
+  ensure
+    Nabu::CLI.rebuild_preflight_seams = original
+  end
+
+  def test_a_running_sync_in_the_real_process_table_does_not_reach_the_cli_rebuild
+    with_real_process_table(FAKE_RUNNING_SYNC) do
+      with_rebuild_env do |config|
+        dry, = with_config(config) { run_cli(%w[rebuild --dry-run]) }
+        assert_match(/verdict: CLEAR/, dry)
+        refute_match(/pid 4242/, dry)
+
+        out, err, status = with_config(config) { run_cli(%w[rebuild]) }
+        assert_nil status, "the full rebuild ran:\n#{err}"
+        refute_match(/REFUSED/, out + err)
+      end
+    end
+  end
+
+  # The fake above sits where the real lister is read: with the injection
+  # lifted, the same fake sync blocks the preflight — the proof is live.
+  def test_without_the_injection_the_faked_sync_blocks_the_preflight
+    with_real_process_table(FAKE_RUNNING_SYNC) do
+      with_preflight_seams({}) do
+        with_rebuild_env do |config|
+          dry, = with_config(config) { run_cli(%w[rebuild --dry-run]) }
+          assert_match(/verdict: BLOCKED/, dry)
+          assert_match(/pid 4242/, dry)
+        end
+      end
+    end
+  end
+
   # The owner's whole sequence on a real (fixture-scale) library: census →
   # `nabu rebuild` → verify. The verify's unit tests hand-build their
   # catalogs; this is the one proof that what a REAL rebuild leaves behind —

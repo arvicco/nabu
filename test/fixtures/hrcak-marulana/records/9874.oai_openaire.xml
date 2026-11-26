@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record xmlns="http://www.openarchives.org/OAI/2.0/">
+      <header>
+        <identifier>oai:hrcak.srce.hr:9874</identifier>
+        <datestamp>2007-03-15</datestamp>
+      </header>
+      <metadata>
+        <oaire:resource xmlns:oaire="http://namespace.openaire.eu/schema/oaire" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:datacite="http://datacite.org/schema/kernel-4" xsi:schemaLocation="http://namespace.openaire.eu/schema/oaire/ https://www.openaire.eu/schema/repo-lit/4.0/openaire.xsd">
+  <datacite:titles>
+    <datacite:title xml:lang="lat">Ad Felicem episcopum De pascha</datacite:title>
+  </datacite:titles>
+  <datacite:creators>
+    <datacite:creator>
+      <datacite:creatorName nameType="Personal">Fortunatus, Venantius</datacite:creatorName>
+      <datacite:familyName>Fortunatus</datacite:familyName>
+      <datacite:givenName>Venantius</datacite:givenName>
+    </datacite:creator>
+  </datacite:creators>
+  <datacite:date dateType="Issued">1992-04-22</datacite:date>
+  <oaire:file accessRightsURI="http://purl.org/coar/access_right/c_abf2" mimeType="application/pdf" objectType="fulltext">https://hrcak.srce.hr/file/15232</oaire:file>
+  <dc:format>application/pdf</dc:format>
+  <oaire:resourceType resourceTypeGeneral="literature" uri="http://purl.org/coar/resource_type/c_1843">other</oaire:resourceType>
+  <dc:language>lat</dc:language>
+  <oaire:citationTitle>Colloquia Maruliana</oaire:citationTitle>
+  <dc:publisher>Split Literary Circle - Marulianum, centre for Studies on Marko Marulić and his Humanist Circle</dc:publisher>
+  <datacite:relatedIdentifiers>
+    <datacite:relatedIdentifier relatedIdentifierType="EISSN" relationType="IsPartOf">1848-9613</datacite:relatedIdentifier>
+    <datacite:relatedIdentifier relatedIdentifierType="PISSN" relationType="IsPartOf">1332-3431</datacite:relatedIdentifier>
+    <datacite:relatedIdentifier relatedIdentifierType="ISSNL" relationType="IsPartOf">1332-3431</datacite:relatedIdentifier>
+    <datacite:relatedIdentifier relatedIdentifierType="URL" relationType="IsPartOf">https://marulianum.knjizevni-krug.hr/colloquia-maruliana/</datacite:relatedIdentifier>
+    <datacite:relatedIdentifier relatedIdentifierType="URL" relationType="IsPartOf">https://hrcak.srce.hr/colloquia-maruliana</datacite:relatedIdentifier>
+  </datacite:relatedIdentifiers>
+  <datacite:identifier identifierType="URL">https://hrcak.srce.hr/9874</datacite:identifier>
+  <datacite:alternateIdentifiers/>
+  <oaire:citationVolume>1</oaire:citationVolume>
+  <datacite:rights rightsURI="http://purl.org/coar/access_right/c_abf2">open access</datacite:rights>
+  <oaire:citationStartPage>115</oaire:citationStartPage>
+  <oaire:citationEndPage>117</oaire:citationEndPage>
+  <oaire:fundingReferences/>
+  <datacite:subjects/>
+</oaire:resource>
+      </metadata>
+    </record>

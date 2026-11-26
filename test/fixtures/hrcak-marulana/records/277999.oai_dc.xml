@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record xmlns="http://www.openarchives.org/OAI/2.0/">
+      <header>
+        <identifier>oai:hrcak.srce.hr:277999</identifier>
+        <datestamp>2022-05-25</datestamp>
+      </header>
+      <metadata>
+        <oai_dc:dc xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai_dc/ http://www.openarchives.org/OAI/2.0/oai_dc.xsd">
+  <dc:title xml:lang="ger">Begrüssungsrede zur Vernissage der Ausstellung Marko Marulić – europski humanist / Marko Marulić – ein europäischer Humanist</dc:title>
+  <dc:creator>Leimgruber, Yvonne</dc:creator>
+  <dc:subject xml:lang="ger">Marko Marulić, Ausstellung</dc:subject>
+  <dc:date>2022</dc:date>
+  <dc:type>text</dc:type>
+  <dc:type>info:eu-repo/semantics/article</dc:type>
+  <dc:type>info:eu-repo/semantics/publishedVersion</dc:type>
+  <dc:language>ger</dc:language>
+  <dc:source>Colloquia Maruliana</dc:source>
+  <dc:publisher>Split Literary Circle - Marulianum, centre for Studies on Marko Marulić and his Humanist Circle</dc:publisher>
+  <dc:identifier>https://hrcak.srce.hr/277999</dc:identifier>
+  <dc:format>application/pdf</dc:format>
+  <dc:identifier xml:lang="ger">https://hrcak.srce.hr/file/402578</dc:identifier>
+  <dc:source>ISSN 1848-9613 (Online)</dc:source>
+  <dc:source>ISSN 1332-3431 (Print)</dc:source>
+  <dc:source>ISSN-L 1332-3431</dc:source>
+  <dc:source>Volume 31</dc:source>
+  <dc:source>Issue 31</dc:source>
+  <dc:rights>info:eu-repo/semantics/openAccess</dc:rights>
+  <dc:rights>The annual journal Colloquia Maruliana is published in open access. Its entire content is freely available to users. Users may copy and distribute the material, as well as modify, adapt, and build upon it, in accordance with the terms of the Creative Commons Attribution 4.0 International License (CC BY 4.0). Authors retain unrestricted copyright to their published works.</dc:rights>
+</oai_dc:dc>
+      </metadata>
+    </record>

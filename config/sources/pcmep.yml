@@ -1,0 +1,26 @@
+pcmep:   # 02-sources row 438
+  adapter: Nabu::Adapters::Pcmep
+  adopted: "2026-11-25"
+  axes: [germanic]
+  wired: false   # until the first real sync is verified: drop the release as
+                 # incoming/pcmep/pcmep.zip, then bin/nabu enable pcmep;
+                 # bin/nabu sync pcmep. EXPECT 57 docs (the 57 rows of
+                 # pcmep.net/texts.php), passages = the per-text pages'
+                 # "Token count" sum (one passage per tree), 0 errored;
+                 # eyeball nabu show urn:nabu:pcmep:TheGrave:1.1 ("Ðe wes
+                 # bold ȝebyld, er þu iboren were.") and 5 random; probe
+                 # nabu search with "ȝebyld" (include_restricted), then flip.
+  # PCMEP — the Parsed Corpus of Middle English Poetry (Richard Zimmermann,
+  # pcmep.net; release Nov 2025): 57 Middle English poems c. 1150–1420,
+  # 235,439 words, parsed in the PPCME2 annotation scheme. penn-psd family,
+  # :ppche profile + the adapter's PPCME2 escape decoding (+t þ, +d ð, +g ȝ,
+  # +a æ) and (LB ||) verse-line breaks on the code lane. One passage per
+  # tree. Period band (M1a/M1b/M2a/M2b/M3) mined from the file name.
+  # LICENSE: the pcmep.net download terms (research use, no commercial use,
+  # no redistribution without the creators' consent, cite the corpus);
+  # release delivered by the maintainer by email, 2026-11-23 →
+  # research_private. ACQUISITION: password-gated download → the Manual
+  # Adapter pattern (ruling Dp-a): the owner drops pcmep.zip into
+  # incoming/pcmep/; the ZIP is the canonical asset (members read
+  # in-process). See docs/manual/pcmep.md.
+  sync_policy: manual

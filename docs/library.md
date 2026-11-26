@@ -1031,7 +1031,10 @@ Croatian and Serbian: `hr-wikisource` — the premodern Croatian cone
 spasenja* digital edition (1 / 199), `sr-wikisource` — the Serbian
 oral-tradition cone, epic songs and Vuk (4,607 / 581,423),
 `vuk-danicic` — the Vuk–Daničić Bible (66 / 31,102; open), `eltec-srp`
-— the ELTeC Serbian novels (96 / 150,794). The other Wikisources:
+— the ELTeC Serbian novels (96 / 150,794), `hrcak-marulana` —
+*Colloquia Maruliana*, the journal of Marulić studies with its Latin and
+Croatian text editions (644 / 9,757; open, some articles
+non-commercial). The other Wikisources:
 `bg-wikisource` (26 / 220), `cs-wikisource` (330 / 4,748),
 `mk-wikisource` — the 19th-century Macedonian cone (836 / 31,114),
 `pl-wikisource` — premodern Polish plus Brückner's etymological

@@ -1,0 +1,25 @@
+hrcak-marulana:   # 02-sources row 249
+  adapter: Nabu::Adapters::HrcakMarulana
+  adopted: "2026-11-25"
+  axes: [slavic, romance]
+  wired: true    # first sync verified 2026-11-25, exact on the OAI census: 644 docs (681 records − 37 in-copyright skipped by rule) / 9,757 passages / 0 errors, search-probed
+  sync_policy: manual
+  # Colloquia Maruliana — the annual journal of Marulić studies (Split
+  # Literary Circle — Marulianum), vols. 1–35 (1992–2026), full text from
+  # Hrčak (hrcak.srce.hr, OAI set journal:43): scholarship on Marko Marulić
+  # and the Croatian humanists, plus Latin and Croatian text editions
+  # (Marulić, Fortunatus, the Dalmatian/Dubrovnik humanists). Harvest: OAI
+  # ListRecords in oai_openaire + oai_dc (7 pages each), then every
+  # licensed record's PDFs (/file/<id>), 1.5 s pacing; the portal rate-
+  # limits bursts with a bare 429 (60 s × attempt back-off). File
+  # downloads open since Hrčak lifted its bot protection (confirmed by
+  # email, 2026-11-24). Licence per record: the journal's CC BY 4.0
+  # statement (every record's dc:rights), unless the record's own licence
+  # condition says otherwise — BY-NC/BY-NC-ND → nc per document, InC →
+  # skipped by rule.
+  # EXPECTED FIRST SYNC (OAI census 2026-11-25): 681 records advertised →
+  # 644 docs + 37 InC skipped by rule; 732 PDFs (~7,700 journal pages by
+  # the records' page ranges → passages ≈ that, blank pages dropped);
+  # 37 docs nc-overridden; PDF languages hrv 599 · eng 96 · ita 15 ·
+  # lat 12 · fre 7 · ger 2 · spa 1; all 644 dated (issue year, edition
+  # class), 602 with creators.

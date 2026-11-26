@@ -428,6 +428,11 @@ sources:
   elektire:                   # 205 docs, 84 authors ("Dinko Šimunović"); the "authors"
     fields: #                   array duplicates the same names
       author: author
+  hrcak-marulana:             # 644 licensed records (OAI census 2026-11-25, not yet synced)
+    fields:
+      authors: author         # datacite creatorName verbatim ("Tomasović, Mirko"), 602 records,
+      #                         array; for a text edition upstream names the edited author
+      #                         ("Fortunatus, Venantius")
   eltec-srp:                  # 96 Serbian novels
     fields:
       author: author          # 63 authors ("Атанацковић, Богобој")
@@ -790,7 +795,10 @@ sources:
       #                         Lithuanian · Prague · Lublin · Lvov · Vilna · Holland · Northern
       #                         Germany · "halb-deytshish"; 22 texts — 17 of them places)
       genre: genre            # Prose 44 · Verse 12 · Vernacular 4 · Letter 3 (kind_map folds)
-  divinum-officium:           # census 2026-11-04 (full-tree parse at master 85183a9b): 4,003 docs
+  pcmep:                      # every file name's period band, verbatim (M1a · M1b · M2a · M2b ·
+    fields: #                   M3 — the site's table; counts land with the first sync)
+      period: period
+  divinum-officium:         # census 2026-11-04 (full-tree parse at master 85183a9b): 4,003 docs
     fields: #                   — all path-mined, plus the [Rank] class
       book: book              # horas (the Office) 3,057 · missa (the Mass) 946
       book_part: collection   # Sancti 1,663 · Tempora 1,472 · Martyrologium 367 · Psalmorum 202 ·

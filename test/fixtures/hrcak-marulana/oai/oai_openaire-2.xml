@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="https://hrcak.srce.hr/oai/Resources/oai2.xsl"?>
+<OAI-PMH xmlns="http://www.openarchives.org/OAI/2.0/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/ http://www.openarchives.org/OAI/2.0/OAI-PMH.xsd">
+  <responseDate>2026-11-25T00:00:00Z</responseDate>
+  <request verb="ListRecords" resumptionToken="1795645802966_oai_openaire">https://hrcak.srce.hr/oai/</request>
+  <ListRecords>
+    <record>
+      <header>
+        <identifier>oai:hrcak.srce.hr:277980</identifier>
+        <datestamp>2022-05-25</datestamp>
+      </header>
+      <metadata>
+        <oaire:resource xmlns:oaire="http://namespace.openaire.eu/schema/oaire" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:datacite="http://datacite.org/schema/kernel-4" xsi:schemaLocation="http://namespace.openaire.eu/schema/oaire/ https://www.openaire.eu/schema/repo-lit/4.0/openaire.xsd">
+  <datacite:titles>
+    <datacite:title xml:lang="hrv">Pozdravna riječ ministrice kulture i medija Republike Hrvatske</datacite:title>
+  </datacite:titles>
+  <datacite:creators>
+    <datacite:creator>
+      <datacite:creatorName nameType="Personal">Obuljen Koržinek, Nina</datacite:creatorName>
+      <datacite:familyName>Obuljen Koržinek</datacite:familyName>
+      <datacite:givenName>Nina</datacite:givenName>
+      <datacite:affiliation xml:lang="hrv">Ministarstvo kulture i medija Republike Hrvatske</datacite:affiliation>
+      <datacite:affiliation xml:lang="eng">Ministry of Culture and Media</datacite:affiliation>
+    </datacite:creator>
+  </datacite:creators>
+  <datacite:date dateType="Issued">2022-06-10</datacite:date>
+  <oaire:file accessRightsURI="http://purl.org/coar/access_right/c_abf2" mimeType="application/pdf" objectType="fulltext">https://hrcak.srce.hr/file/402550</oaire:file>
+  <dc:format>application/pdf</dc:format>
+  <oaire:resourceType resourceTypeGeneral="literature" uri="http://purl.org/coar/resource_type/c_6501">journal article</oaire:resourceType>
+  <dc:language>hrv</dc:language>
+  <oaire:citationTitle>Colloquia Maruliana</oaire:citationTitle>
+  <dc:publisher>Split Literary Circle - Marulianum, centre for Studies on Marko Marulić and his Humanist Circle</dc:publisher>
+  <datacite:relatedIdentifiers>
+    <datacite:relatedIdentifier relatedIdentifierType="EISSN" relationType="IsPartOf">1848-9613</datacite:relatedIdentifier>
+    <datacite:relatedIdentifier relatedIdentifierType="PISSN" relationType="IsPartOf">1332-3431</datacite:relatedIdentifier>
+    <datacite:relatedIdentifier relatedIdentifierType="ISSNL" relationType="IsPartOf">1332-3431</datacite:relatedIdentifier>
+    <datacite:relatedIdentifier relatedIdentifierType="URL" relationType="IsPartOf">https://marulianum.knjizevni-krug.hr/colloquia-maruliana/</datacite:relatedIdentifier>
+    <datacite:relatedIdentifier relatedIdentifierType="URL" relationType="IsPartOf">https://hrcak.srce.hr/colloquia-maruliana</datacite:relatedIdentifier>
+  </datacite:relatedIdentifiers>
+  <datacite:identifier identifierType="URL">https://hrcak.srce.hr/277980</datacite:identifier>
+  <datacite:alternateIdentifiers/>
+  <oaire:citationVolume>31</oaire:citationVolume>
+  <oaire:citationIssue>31</oaire:citationIssue>
+  <datacite:rights rightsURI="http://purl.org/coar/access_right/c_abf2">open access</datacite:rights>
+  <oaire:licenseCondition uri="http://creativecommons.org/licenses/by-nc/4.0/">Attribution-NonCommercial 4.0 International (CC BY-NC 4.0)</oaire:licenseCondition>
+  <oaire:citationStartPage>5</oaire:citationStartPage>
+  <oaire:citationEndPage>6</oaire:citationEndPage>
+  <oaire:fundingReferences/>
+  <datacite:subjects/>
+</oaire:resource>
+      </metadata>
+    </record>
+    <record>
+      <header>
+        <identifier>oai:hrcak.srce.hr:277999</identifier>
+        <datestamp>2022-05-25</datestamp>
+      </header>
+      <metadata>
+        <oaire:resource xmlns:oaire="http://namespace.openaire.eu/schema/oaire" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:datacite="http://datacite.org/schema/kernel-4" xsi:schemaLocation="http://namespace.openaire.eu/schema/oaire/ https://www.openaire.eu/schema/repo-lit/4.0/openaire.xsd">
+  <datacite:titles>
+    <datacite:title xml:lang="ger">Begrüssungsrede zur Vernissage der Ausstellung Marko Marulić – europski humanist / Marko Marulić – ein europäischer Humanist</datacite:title>
+  </datacite:titles>
+  <datacite:creators>
+    <datacite:creator>
+      <datacite:creatorName nameType="Personal">Leimgruber, Yvonne</datacite:creatorName>
+      <datacite:familyName>Leimgruber</datacite:familyName>
+      <datacite:givenName>Yvonne</datacite:givenName>
+      <datacite:affiliation xml:lang="hrv">Zentralbibliothek Solothurn</datacite:affiliation>
+    </datacite:creator>
+  </datacite:creators>
+  <datacite:date dateType="Issued">2022-06-10</datacite:date>
+  <oaire:file accessRightsURI="http://purl.org/coar/access_right/c_abf2" mimeType="application/pdf" objectType="fulltext">https://hrcak.srce.hr/file/402578</oaire:file>
+  <dc:format>application/pdf</dc:format>
+  <oaire:resourceType resourceTypeGeneral="literature" uri="http://purl.org/coar/resource_type/c_6501">journal article</oaire:resourceType>
+  <dc:language>ger</dc:language>
+  <oaire:citationTitle>Colloquia Maruliana</oaire:citationTitle>
+  <dc:publisher>Split Literary Circle - Marulianum, centre for Studies on Marko Marulić and his Humanist Circle</dc:publisher>
+  <datacite:relatedIdentifiers>
+    <datacite:relatedIdentifier relatedIdentifierType="EISSN" relationType="IsPartOf">1848-9613</datacite:relatedIdentifier>
+    <datacite:relatedIdentifier relatedIdentifierType="PISSN" relationType="IsPartOf">1332-3431</datacite:relatedIdentifier>
+    <datacite:relatedIdentifier relatedIdentifierType="ISSNL" relationType="IsPartOf">1332-3431</datacite:relatedIdentifier>
+    <datacite:relatedIdentifier relatedIdentifierType="URL" relationType="IsPartOf">https://marulianum.knjizevni-krug.hr/colloquia-maruliana/</datacite:relatedIdentifier>
+    <datacite:relatedIdentifier relatedIdentifierType="URL" relationType="IsPartOf">https://hrcak.srce.hr/colloquia-maruliana</datacite:relatedIdentifier>
+  </datacite:relatedIdentifiers>
+  <datacite:identifier identifierType="URL">https://hrcak.srce.hr/277999</datacite:identifier>
+  <datacite:alternateIdentifiers/>
+  <oaire:citationVolume>31</oaire:citationVolume>
+  <oaire:citationIssue>31</oaire:citationIssue>
+  <datacite:rights rightsURI="http://purl.org/coar/access_right/c_abf2">open access</datacite:rights>
+  <oaire:licenseCondition uri="http://rightsstatements.org/vocab/InC/1.0/">InCopyright</oaire:licenseCondition>
+  <oaire:citationStartPage>217</oaire:citationStartPage>
+  <oaire:citationEndPage>217</oaire:citationEndPage>
+  <oaire:fundingReferences/>
+  <datacite:subjects>
+    <datacite:subject>Marko Marulić, Ausstellung</datacite:subject>
+  </datacite:subjects>
+</oaire:resource>
+      </metadata>
+    </record>
+  </ListRecords>
+</OAI-PMH>

@@ -1860,7 +1860,12 @@ sources:
     #   詩鈔, 詩選, 詩詞集; 甌北集 and 渼陂集 are verse throughout, the latter
     #   opening with one 賦). The prefaces and the ci of the 詩詞集 ride inside
     #   their collections; the Masters prose texts are skipped by rule
-  ppchy:                     # census 2026-11-02: 63 texts, the sources page's Genre on ALL
+  pcmep:                     # the corpus's own scope (pcmep.net: "a fully parsed and
+    source_kind: literary/poetry   # annotated corpus of Middle English verse texts") — all
+    #   57 texts are poems (debates, lyrics, legends, romances, satire, proverb verse).
+    #   The site's per-text "Genre/subjects" keywords are website-only topical tags,
+    #   not in the zip; the whole-source shape (the lzh-collection precedent)
+  ppchy:                   # census 2026-11-02: 63 texts, the sources page's Genre on ALL
     metadata: genre          # (Prose 44 · Verse 12 · Vernacular 4 · Letter 3; the one
     #                          "Prose (preface), verse (main text)" record resolves per file
     #                          at parse). Upstream's label is a FORM, not a genre:
@@ -2468,6 +2473,23 @@ sources:
       "feljtoni": literary/essay                 # 6 — feuilletons, prose of ideas
       "eseji": literary/essay                    # 3
       "pisma": letter/literary                   # 1 — literary letters
+  hrcak-marulana:     # census: 644 licensed records, OAI oaire:resourceType, 2026-11-25 —
+    facet: genre      # Hrčak's COAR resource types for a scholarly journal of Marulić
+    #                   studies; folded as the loop's call on each label's ordinary
+    #                   meaning inside a learned journal (the Acta eruditorum precedent:
+    #                   reviews and bibliographies are scholarship)
+    map:
+      "research article": scholarly              # 410
+      "book review": scholarly                   # 48 — the learned review
+      "bibliography": scholarly                  # 28 — the annual Marulić bibliography
+      "review article": scholarly                # 18
+      "conference paper": scholarly              # 3
+      "review": scholarly                        # 2
+      "editorial": paratext/preface              # 1 — the volume's introductory note
+      "corrigendum": paratext                    # 1 — errata to a volume
+    deliberate:
+      "other": "Hrčak's catch-all type — text editions, speeches, obituaries, prize citations, contributor guidelines (130)"
+      "journal article": "Hrčak's generic label here — greetings and exhibition speeches (3)"
   tamilex:            # census: 7,849 files, 21 works, 2026-10-18 — the work facet is
     facet: work       # the title's own work name (titleStmt/title/title), which for
     #                   the two devotional canons is the SUB-WORK title and for the
