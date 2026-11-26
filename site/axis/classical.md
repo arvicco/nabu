@@ -47,13 +47,13 @@ A source wears every desk it serves — these 33 answer this desk. Holdings are 
 | `pta` | texts | attribution | wired · manual | 113 docs / 8,778 passages |
 | `sigla` | inscriptions | nc | wired · manual | 787 docs / 3,097 passages |
 | `suda-translations` | texts | nc | wired · manual | 27 docs / 31,341 passages |
-| `ud` | treebank | nc | wired · manual | 93 docs / 338,638 passages |
+| `ud` | treebank | nc | wired · manual | 97 docs / 339,886 passages |
 | `vulgate` | texts | open | wired · manual | 73 docs / 35,809 passages |
 | `wellcome` | texts | open | wired · manual | 4,772 docs / 1,130,632 passages |
 
 **Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 26 November 2026)</span>: `grc` 129,050 · `lat` 69,797 · `gmy` 5,890 · `eng` 4,336 · `lab` 787 · `grc-Latn` 510 · `deu` 225 · `en` 27 · `ecy-Latn` 22 · `gmh` 11 … and 5 more (`nabu axis classical` lists all).
 
-**Carried in by multilingual packs** (`ud` — whole-source members whose other languages ride along, as of 26 November 2026): `orv` 9 · `oge` 5 · `ota` 5 · `lzh` 4 · `egy` 3 … and 19 more (`nabu axis classical` lists all).
+**Carried in by multilingual packs** (`ud` — whole-source members whose other languages ride along, as of 26 November 2026): `orv` 9 · `oge` 5 · `ota` 5 · `lzh` 4 · `egy` 3 … and 23 more (`nabu axis classical` lists all).
 
 ## The desk's instruments
 

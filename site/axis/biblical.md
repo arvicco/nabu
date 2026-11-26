@@ -45,12 +45,12 @@ A source wears every desk it serves — these 30 answer this desk. Holdings are 
 | `syriac-corpus` | texts | attribution | wired · manual | 632 docs / 134,726 passages |
 | `syriac-htr-gt` | texts | attribution | wired · manual | 273 docs / 20,706 passages |
 | `typikon-bible` | texts | attribution | wired · manual | 229 docs / 105,698 passages |
-| `ud` | treebank | nc | wired · manual | 93 docs / 338,638 passages |
+| `ud` | treebank | nc | wired · manual | 97 docs / 339,886 passages |
 | `vulgate` | texts | open | wired · manual | 73 docs / 35,809 passages |
 
 **Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 26 November 2026)</span>: `hbo` 30,774 · `gez` 3,803 · `eng` 1,142 · `syc` 1,028 · `cop` 505 · `arc` 411 · `grc` 321 · `chu` 153 · `lat` 85 · `ron-Cyrl` 79 … and 10 more (`nabu axis biblical` lists all).
 
-**Carried in by multilingual packs** (`ud` — whole-source members whose other languages ride along, as of 26 November 2026): `orv` 9 · `ota` 5 · `lzh` 4 · `egy` 3 · `frm` 3 … and 19 more (`nabu axis biblical` lists all).
+**Carried in by multilingual packs** (`ud` — whole-source members whose other languages ride along, as of 26 November 2026): `orv` 9 · `ota` 5 · `lzh` 4 · `egy` 3 · `frm` 3 … and 23 more (`nabu axis biblical` lists all).
 
 ## The desk's instruments
 

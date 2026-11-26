@@ -19,11 +19,11 @@ A source wears every desk it serves — these three answer this desk. Holdings a
 |---|---|---|---|---|
 | `guaman-poma` | texts | open | wired · manual | 1,189 docs / 5,911 passages |
 | `ticha` | texts | attribution | wired · manual | 93 docs / 1,103 passages |
-| `ud` | treebank | nc | wired · manual | 93 docs / 338,638 passages |
+| `ud` | treebank | nc | wired · manual | 97 docs / 339,886 passages |
 
 **Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 26 November 2026)</span>: `spa` 1,280 · `zap` 2.
 
-**Carried in by multilingual packs** (`ud` — whole-source members whose other languages ride along, as of 26 November 2026): `lat` 11 · `grc` 9 · `orv` 9 · `oge` 5 · `ota` 5 … and 24 more (`nabu axis americas` lists all).
+**Carried in by multilingual packs** (`ud` — whole-source members whose other languages ride along, as of 26 November 2026): `lat` 11 · `grc` 9 · `orv` 9 · `oge` 5 · `ota` 5 … and 28 more (`nabu axis americas` lists all).
 
 ## The desk's instruments
 

@@ -57,7 +57,11 @@ module Store
     # form is SQLite's lower(text) now store the one-byte "\u0001"
     # sentinel — the stored column changes, the served text_search does
     # not (pinned by text_normalized_diet_test's oracle).
-    FIXTURE_DIGEST = "def9d62d074c246f0e5e6edf98a57af2bb7688112c516e495951540bc1edf115"
+    # Re-taken again when the ud fixture tree gained the four historical
+    # UD v2.19 treebanks (Ashokan Prakrit, Manchu, the 1526 Swedish New
+    # Testament, Zhelekhivka Ukrainian: four new documents; no loader
+    # change — the adapter change alone yields this digest).
+    FIXTURE_DIGEST = "80746a612f0f381df523801ed8b2103ba19833e973f9b086e6e419539bf1f043"
     WALK_DIGEST = "cf74dd259cfabc229a7828f6e8dc1c662aaf6eba4bb06dd3221af04eefe0fbcb"
 
     def test_fixture_corpora_load_byte_identically_on_both_grains

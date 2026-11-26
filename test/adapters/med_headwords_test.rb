@@ -136,12 +136,12 @@ class MedHeadwordsTest < Minitest::Test
 
   # --- registry ----------------------------------------------------------------
 
-  def test_registry_row_is_unwired_and_manual
+  def test_registry_row_is_wired_and_manual
     registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources", __dir__))
     entry = registry["med-headwords"]
     refute_nil entry, "config/sources/ must register med-headwords"
     assert_equal ADAPTER, entry.adapter_class
-    refute entry.wired, "wired only after the verified first sync"
+    assert entry.wired, "wired since the verified first sync (57,094 entries)"
     assert_equal "manual", entry.sync_policy
   end
 

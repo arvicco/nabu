@@ -20,12 +20,12 @@ A source wears every desk it serves — these five answer this desk. Holdings ar
 | `aclt` | texts | research_private | wired · manual | 266 docs / 2,682 passages |
 | `hittite-glossed` | texts | open | wired · manual | 7,099 docs / 72,507 passages |
 | `tlhdig` | tablets | attribution | wired · manual | 23,486 docs / 402,195 passages |
-| `ud` | treebank | nc | wired · manual | 93 docs / 338,638 passages |
+| `ud` | treebank | nc | wired · manual | 97 docs / 339,886 passages |
 | `wiktionary-hit` | dictionary | attribution | wired · manual | 481 entries |
 
 **Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 26 November 2026)</span>: `hit` 28,790 · `akk` 936 · `xhu` 698 · `xht` 326 · `hlu` 266 · `xlu` 206 · `sux` 80 · `plq` 30 · `und` 3.
 
-**Carried in by multilingual packs** (`ud` — whole-source members whose other languages ride along, as of 26 November 2026): `lat` 11 · `grc` 9 · `orv` 9 · `oge` 5 · `ota` 5 … and 22 more (`nabu axis hittite` lists all).
+**Carried in by multilingual packs** (`ud` — whole-source members whose other languages ride along, as of 26 November 2026): `lat` 11 · `grc` 9 · `orv` 9 · `oge` 5 · `ota` 5 … and 26 more (`nabu axis hittite` lists all).
 
 ## The desk's instruments
 

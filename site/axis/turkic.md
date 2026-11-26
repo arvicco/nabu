@@ -24,14 +24,14 @@ A source wears every desk it serves — these five answer this desk. Holdings ar
 | Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 26 November 2026)</span> |
 |---|---|---|---|---|
 | `atmo` | texts | attribution | wired · manual | 15 docs / 4,934 passages |
-| `ud` | treebank | nc | wired · manual | 93 docs / 338,638 passages |
+| `ud` | treebank | nc | wired · manual | 97 docs / 339,886 passages |
 | `westoldturkic` | dictionary | attribution | wired · manual | 480 entries |
 | `wiktionary-recon` | dictionary | attribution | wired · manual | 376,415 entries |
 | `wilkens-oui` | dictionary | attribution | wired · manual | 49,619 entries |
 
 **Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 26 November 2026)</span>: `oui` 50,065 · `chg` 614 · `trk` 480.
 
-**Carried in by multilingual packs** (`ud`, `wiktionary-recon` — whole-source members whose other languages ride along, as of 26 November 2026): `zho` 327,296 · `xcl` 8,544 · `sga` 6,691 · `gem-pro` 5,749 · `gmw-pro` 5,578 … and 42 more (`nabu axis turkic` lists all).
+**Carried in by multilingual packs** (`ud`, `wiktionary-recon` — whole-source members whose other languages ride along, as of 26 November 2026): `zho` 327,296 · `xcl` 8,544 · `sga` 6,691 · `gem-pro` 5,749 · `gmw-pro` 5,578 … and 45 more (`nabu axis turkic` lists all).
 
 ## The desk's instruments
 

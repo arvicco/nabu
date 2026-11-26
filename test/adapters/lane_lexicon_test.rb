@@ -35,11 +35,11 @@ class LaneLexiconTest < Minitest::Test
     assert_equal :dictionary, Nabu::Adapters::LaneLexicon.content_kind
   end
 
-  def test_registry_row_is_unwired_manual_and_on_the_arabic_desk
+  def test_registry_row_is_wired_manual_and_on_the_arabic_desk
     registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources", __dir__))
     entry = registry["lane-lexicon"]
     refute_nil entry, "config/sources/ must register lane-lexicon"
-    refute entry.wired, "wired: false until the first real sync is verified"
+    assert entry.wired, "wired since the verified first sync (37 documents, 48,795 entries)"
     assert_equal "manual", entry.sync_policy
     assert_equal %w[arabic], entry.axes
     assert_equal "lane-lexicon", entry.adapter_class.manifest.id
