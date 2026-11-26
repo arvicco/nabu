@@ -1,0 +1,1460 @@
+# sent_id = girnar-1-1
+# text = iyaṃ dhaṃma-lipī Devānaṃpriyena Priyadasinā rāña lekhāpitā
+# orig = iy[aṃ] dhaṃma-lipī Devānaṃpriyena Priyadasinā rāña lekh[ā]pitā
+1	iyaṃ	iyaṃ	PRON	_	Case=Nom|Gender=Fem|Number=Sing|PronType=Dem	3	det	_	Gloss=this|Orig=iy[aṃ]
+2-3	dhaṃma-lipī	_	_	_	_	_	_	_	_
+2	dhaṃma	dhaṃma	NOUN	_	Compound=Yes|Gender=Masc	3	compound	_	Gloss=morality
+3	lipī	lipi	NOUN	_	Case=Nom|Gender=Fem|Number=Sing	9	obj	_	Gloss=rescript
+4-5	Devānaṃpriyena	_	_	_	_	_	_	_	_
+4	devānaṃ	deva	NOUN	_	Case=Gen|Gender=Masc|Number=Plur	5	nmod	_	Gloss=of-the-Gods
+5	priyena	priya	ADJ	_	Case=Ins|Gender=Masc|Number=Sing	8	nmod:desc	_	Gloss=beloved
+6-7	Priyadasinā	_	_	_	_	_	_	_	_
+6	priya	priya	ADJ	_	Compound=Yes|Gender=Masc	7	amod	_	Gloss=friendly
+7	dasinā	dasin	ADJ	_	Case=Ins|Gender=Masc|Number=Sing	8	nmod:desc	_	Gloss=looking
+8	rāña	rājan	NOUN	_	Case=Ins|Gender=Masc|Number=Sing	9	nsubj	_	Gloss=by-king
+9	lekhāpitā	lekhāpaya	VERB	_	Case=Nom|Gender=Fem|Number=Sing|Tense=Past|VerbForm=Part|Voice=Cau,Pass	0	root	_	Gloss=has-been-caused-to-be-written|Orig=lekh[ā]pitā
+
+# sent_id = girnar-1-2
+# text = idha na kiṃci jīvaṃ ārabhitpā prajūhitavyaṃ
+# orig = [i]dha na kiṃci jīvaṃ ārabhitpā prajūhitavyaṃ
+1	idha	idha	ADV	_	AdvType=Loc	6	advmod:lmod	_	Gloss=here|Orig=[i]dha
+2	na	na	PART	_	Polarity=Neg	6	advmod	_	Gloss=not
+3	kiṃci	kiṃci	PRON	_	PronType=Ind	4	det	_	Gloss=any
+4	jīvaṃ	jīva	NOUN	_	Case=Nom|Gender=Neut|Number=Sing	5	obj	_	Gloss=living-being
+5	ārabhitpā	ārabha	VERB	_	VerbForm=Conv	6	advcl	_	Gloss=be-killed-and
+6	prajūhitavyaṃ	prajūha	VERB	_	Case=Nom|Gender=Neut|Number=Sing|Tense=Fut|VerbForm=Part|Voice=Pass	0	root	_	Gloss=must-be-sacrificed
+
+# sent_id = girnar-1-3
+# text = na ca samājo katavyo
+# orig = na ca samājo katavyo
+1	na	na	PART	_	Polarity=Neg	4	advmod	_	Gloss=no
+2	ca	ca	CCONJ	_	_	4	cc	_	Gloss=and
+3	samājo	samāja	NOUN	_	Case=Nom|Gender=Masc|Number=Sing	4	obj	_	Gloss=festival
+4	katavyo	karo	VERB	_	Case=Nom|Gender=Masc|Number=Sing|Tense=Fut|VerbForm=Part|Voice=Pass	0	root	_	Gloss=must-be-held
+
+# sent_id = girnar-1-4
+# text = bahukaṃ hi dosaṃ samājamhi pasati Devānaṃpriyo Priyadasi rājā
+# orig = bahukaṃ hi dosaṃ samājamhi pasati Devānaṃpriyo Priyadasi rājā
+1	bahukaṃ	bahuka	DET	_	Case=Acc|Gender=Masc|Number=Sing|PronType=Ind	3	det	_	Gloss=much
+2	hi	hi	PART	_	_	5	discourse	_	Gloss=for
+3	dosaṃ	dosa	NOUN	_	Case=Acc|Gender=Masc|Number=Sing	5	obj	_	Gloss=evil
+4	samājamhi	samāja	NOUN	_	Case=Loc|Gender=Masc|Number=Sing	5	obl:lmod	_	Gloss=in-festival-meetings
+5	pasati	pasa	VERB	_	Mood=Ind|Number=Sing|Person=3|Tense=Pres|VerbForm=Fin|Voice=Act	0	root	_	Gloss=sees
+6-7	Devānaṃpriyo	_	_	_	_	_	_	_	_
+6	devānaṃ	deva	NOUN	_	Case=Gen|Gender=Masc|Number=Plur	7	nmod	_	Gloss=of-the-Gods
+7	priyo	priya	ADJ	_	Case=Nom|Gender=Masc|Number=Sing	10	nmod:desc	_	Gloss=beloved
+8-9	Priyadasi	_	_	_	_	_	_	_	_
+8	priya	priya	ADJ	_	Compound=Yes|Gender=Masc	9	amod	_	Gloss=friendly
+9	dasi	dasin	ADJ	_	Case=Nom|Gender=Masc|Number=Sing	10	nmod:desc	_	Gloss=looking
+10	rājā	rājan	NOUN	_	Case=Nom|Gender=Masc|Number=Sing	5	nsubj	_	Gloss=king
+
+# sent_id = girnar-1-5
+# text = asti pi tu ekacā samājā sādhu-matā Devānaṃpriyasa Priyadasino rāño
+# orig = / asti pi tu ekacā samājā sādhu-matā Devānaṃ/priyasa Priyadasino rāño
+1	asti	as	VERB	_	Mood=Ind|Number=Plur|Person=3|Tense=Pres|VerbForm=Fin|Voice=Act	0	root	_	Gloss=there-are
+2	pi	pi	ADV	_	_	1	discourse	_	Gloss=also
+3	tu	tu	CCONJ	_	_	1	discourse	_	Gloss=but
+4	ekacā	ekacā	DET	_	PronType=Ind	5	det	_	Gloss=some
+5	samājā	samāja	NOUN	_	Case=Nom|Gender=Masc|Number=Plur	1	obj	_	Gloss=festival-meetings
+6-7	sādhu-matā	_	_	_	_	_	_	_	_
+6	sādhu	sādhu	ADV	_	AdvType=Man	7	advmod	_	Gloss=meritorious
+7	matā	maṃña	VERB	_	Case=Nom|Gender=Masc|Number=Plur|Tense=Past|VerbForm=Part|Voice=Pass	5	acl	_	Gloss=considered
+8-9	Devānaṃpriyasa	_	_	_	_	_	_	_	_
+8	devānaṃ	deva	NOUN	_	Case=Gen|Gender=Masc|Number=Plur	9	nmod	_	Gloss=of-the-Gods
+9	priyasa	priya	ADJ	_	Case=Gen|Gender=Masc|Number=Sing	12	nmod:desc	_	Gloss=beloved
+10-11	Priyadasino	_	_	_	_	_	_	_	_
+10	priya	priya	ADJ	_	Compound=Yes|Gender=Masc	11	amod	_	Gloss=friendly
+11	dasino	dasin	ADJ	_	Case=Gen|Gender=Masc|Number=Sing	12	nmod:desc	_	Gloss=looking
+12	rāño	rājan	NOUN	_	Case=Gen|Gender=Masc|Number=Sing	7	nsubj	_	Gloss=by-king
+
+# sent_id = girnar-1-6
+# text = pura mahānasamhi Devānaṃpriyasa Priyadasino rāño anudivasaṃ bahūni prāṇa-sata-sahasrāni ārabhisu sūpāthāya
+# orig = pura mahānas[amhi] / Devānaṃpriyasa Priy[a]dasino rāño anudivasaṃ ba/hūni prāṇa-sata-sahasrāni ārabhisu sūpāthāya
+1	pura	pura	ADV	_	AdvType=Tim	14	advmod:tmod	_	Gloss=formerly
+2	mahānasamhi	mahānasa	NOUN	_	Case=Loc|Gender=Neut|Number=Sing	14	obl:lmod	_	Gloss=in-the-kitchen|Orig=mahānas[amhi]
+3-4	Devānaṃpriyasa	_	_	_	_	_	_	_	_
+3	devānaṃ	deva	NOUN	_	Case=Gen|Gender=Masc|Number=Plur	4	nmod	_	Gloss=of-the-Gods
+4	priyasa	priya	ADJ	_	Case=Gen|Gender=Masc|Number=Sing	7	nmod:desc	_	Gloss=beloved
+5-6	Priyadasino	_	_	_	_	_	_	_	_
+5	priya	priya	ADJ	_	Compound=Yes|Gender=Masc	6	amod	_	Gloss=friendly|Orig=priy[a]
+6	dasino	dasin	ADJ	_	Case=Gen|Gender=Masc|Number=Sing	7	nmod:desc	_	Gloss=looking
+7	rāño	rājan	NOUN	_	Case=Gen|Gender=Masc|Number=Sing	2	nmod	_	Gloss=by-king
+8-9	anudivasaṃ	_	_	_	_	_	_	_	_
+8	anu	anu	DET	_	PronType=Tot	9	det	_	Gloss=every
+9	divasaṃ	divasa	NOUN	_	Case=Nom|Gender=Neut|Number=Sing	14	obl:tmod	_	Gloss=day
+10	bahūni	bahu	ADJ	_	Case=Nom|Gender=Neut|Number=Plur	13	amod	_	Gloss=many
+11-13	prāṇa-sata-sahasrāni	_	_	_	_	_	_	_	_
+11	prāṇa	prāṇa	NOUN	_	Compound=Yes|Gender=Masc	12	nmod	_	Gloss=living
+12	sata	sata	NOUN	_	Compound=Yes|Gender=Neut	13	nmod	_	Gloss=being
+13	sahasrāni	sahasra	NUM	_	Case=Nom|Gender=Masc|Number=Plur|NumType=Card	14	obj	_	Gloss=hundred-thousands-of
+14	ārabhisu	ārabha	VERB	_	Mood=Ind|Number=Sing|Person=3|Tense=Past|VerbForm=Fin|Voice=Pass	0	root	_	Gloss=were-killed
+15-16	sūpāthāya	_	_	_	_	_	_	_	_
+15	sūpa	sūpa	NOUN	_	Compound=Yes|Gender=Masc	14	obl	_	Gloss=curry
+16	athāya	atha	ADP	_	_	15	case	_	Gloss=for-the-sake-of
+
+# sent_id = girnar-1-7
+# text = se aja yadā ayaṃ dhaṃma-lipī likhitā tī eva prāṇā ārabhare sūpāthāya dvo morā eko mago so pi mago na dhruvo
+# orig = / se aja yadā ayaṃ dha[ṃ]ma-lip[ī] likhitā tī eva prā/ṇā ārabhare sūpāthāya dvo morā eko mago so pi / mago na dhruvo
+1	se	sa	CCONJ	_	_	11	cc	_	Gloss=but
+2	aja	aja	ADV	_	AdvType=Tim	11	advmod:tmod	_	Gloss=today
+3	yadā	yadā	SCONJ	_	_	7	mark	_	Gloss=when
+4	ayaṃ	ayaṃ	DET	_	Case=Nom|Gender=Masc|Number=Sing|PronType=Dem	6	det	_	Gloss=this
+5-6	dhaṃma-lipī	_	_	_	_	_	_	_	_
+5	dhaṃma	dhaṃma	NOUN	_	Compound=Yes|Gender=Masc	6	compound	_	Gloss=morality|Orig=dha[ṃ]ma
+6	lipī	lipi	NOUN	_	Case=Nom|Gender=Fem|Number=Sing	7	obj	_	Gloss=rescript|Orig=lip[ī]
+7	likhitā	likha	VERB	_	Case=Nom|Gender=Fem|Number=Sing|Tense=Past|VerbForm=Part|Voice=Pass	11	advcl	_	Gloss=is-written
+8	tī	ti	NUM	_	Case=Nom|Gender=Masc|Number=Plur|NumType=Card	10	nummod	_	Gloss=three
+9	eva	eva	PART	_	_	8	advmod:emph	_	Gloss=only
+10	prāṇā	prāṇa	NOUN	_	Case=Nom|Gender=Masc|Number=Plur	11	obj	_	Gloss=animals
+11	ārabhare	ārabha	VERB	_	Mood=Ind|Number=Plur|Person=3|Tense=Pres|VerbForm=Fin|Voice=Pass	0	root	_	Gloss=are-being-killed
+12-13	sūpāthāya	_	_	_	_	_	_	_	_
+12	sūpa	sūpa	NOUN	_	Compound=Yes|Gender=Masc	11	obl	_	Gloss=curry
+13	athāya	atha	ADP	_	_	12	case	_	Gloss=for-the-sake-of
+14	dvo	dva	NUM	_	Case=Nom|Gender=Masc|NumType=Card	15	nummod	_	Gloss=two
+15	morā	mora	NOUN	_	Case=Nom|Gender=Masc|Number=Plur	11	parataxis	_	Gloss=peacocks
+16	eko	eka	NUM	_	Case=Nom|Gender=Masc|NumType=Card	17	nummod	_	Gloss=one
+17	mago	maga	NOUN	_	Case=Nom|Gender=Masc|Number=Sing	15	conj	_	Gloss=deer
+18	so	sa	DET	_	Case=Nom|Gender=Masc|Number=Sing|PronType=Dem	20	det	_	Gloss=this
+19	pi	pi	ADV	_	_	18	discourse	_	Gloss=even
+20	mago	maga	NOUN	_	Case=Nom|Gender=Masc|Number=Sing	15	conj	_	Gloss=deer
+21	na	na	PART	_	Polarity=Neg	22	advmod:neg	_	Gloss=not
+22	dhruvo	dhruva	ADV	_	AdvType=Man	20	orphan	_	Gloss=regularly
+
+# sent_id = girnar-1-8
+# text = ete pi trī prāṇā pachā na ārabhisare
+# orig = ete pi tri prāṇā pachā na ārabhisare
+1	ete	eta	DET	_	Case=Nom|Gender=Masc|Number=Plur|PronType=Dem	4	det	_	Gloss=these
+2	pi	pi	ADV	_	_	1	discourse	_	Gloss=even
+3	trī	tri	NUM	_	Case=Nom|Gender=Masc|NumType=Card	4	nummod	_	Gloss=three
+4	prāṇā	prāṇa	NOUN	_	Case=Acc|Gender=Masc|Number=Plur	7	obj	_	Gloss=animals
+5	pachā	pachā	ADV	_	AdvType=Tim	7	advmod:tmod	_	Gloss=in-future
+6	na	na	PART	_	Polarity=Neg	7	advmod:neg	_	Gloss=not
+7	ārabhisare	ārabha	VERB	_	Mood=Ind|Number=Plur|Person=3|Tense=Fut|VerbForm=Fin|Voice=Pass	0	root	_	Gloss=shall-be-killed
+
+# sent_id = girnar-2-1
+# text = sarvata vijitamhi Devānaṃpriyasa Piyadasino rāño evamapi pracaṃtesu yathā Coḍa Pāḍā Satiyaputo Ketalaputo ā Taṃbapaṃṇī Aṃtiyako Yona-rājā ye vā pi tasa Aṃtiyakasa sāmīpaṃ rājāno sarvatra Devānaṃpriyasa Priyadasino rāño dve cikīcha katā manusa-cīkichā ca pasu-cikīchā ca
+# orig = sarvata vijitamhi Devānaṃpriyasa Piyadasino rāño / evamapi pracaṃtesu yathā Coḍa Pāḍā Satiyaputo Ketalaputo ā Taṃba/paṃṇī Aṃtiyako Yona-rājā ye va pi tasa Aṃtiy[a]kas[a] sāmīp[aṃ] / rājāno sarvatra Devānaṃpriyasa Priyadasino rāño dve cikīcha katā / manusa-cīkichā ca pasu-cikīchā ca
+1	sarvata	sarvata	ADV	_	AdvType=Loc	35	advmod:lmod	_	Gloss=everywhere
+2	vijitamhi	vijita	NOUN	_	Case=Loc|Gender=Masc|Number=Sing	1	obl	_	Gloss=in-the-dominion
+3-4	Devānaṃpriyasa	_	_	_	_	_	_	_	_
+3	devānaṃ	deva	NOUN	_	Case=Gen|Gender=Masc|Number=Plur	4	nmod	_	Gloss=Devānam
+4	priyasa	priya	ADJ	_	Case=Gen|Gender=Masc|Number=Sing	7	nmod:desc	_	Gloss=Priya
+5-6	Piyadasino	_	_	_	_	_	_	_	_
+5	piya	piya	ADJ	_	Compound=Yes|Gender=Masc	6	amod	_	Gloss=Priya
+6	dasino	dasin	ADJ	_	Case=Gen|Gender=Masc|Number=Sing	7	nmod:desc	_	Gloss=Darśin
+7	rāño	rājan	NOUN	_	Case=Gen|Gender=Masc|Number=Sing	2	nmod	_	Gloss=of-king
+8-9	evamapi	_	_	_	_	_	_	_	Gloss=likewise
+8	evam	evam	ADV	_	_	10	advmod	_	_
+9	api	api	ADV	_	_	10	advmod	_	_
+10	pracaṃtesu	pracaṃta	NOUN	_	Case=Loc|Gender=Masc|Number=Plur	2	conj	_	Gloss=among-borderers
+11	yathā	_	PART	_	_	12	case	_	Gloss=such-as
+12	Coḍa	Coḍa	PROPN	_	Case=Nom|Gender=Masc|Number=Plur	10	nmod	_	Gloss=Coḍa
+13	Pāḍā	Pāḍa	PROPN	_	Case=Nom|Gender=Masc|Number=Plur	12	conj	_	Gloss=Pāṇḍya
+14	Satiyaputo	Satiyaputa	PROPN	_	Case=Nom|Gender=Masc|Number=Sing	12	conj	_	Gloss=Satiyaputa
+15	Ketalaputo	Ketalaputa	PROPN	_	Case=Nom|Gender=Masc|Number=Sing	12	conj	_	Gloss=Ketalaputa
+16	ā	ā	ADP	_	_	17	case	_	Gloss=as-far-as
+17	Taṃbapaṃṇī	Taṃbapaṃṇin	PROPN	_	Case=Nom|Gender=Masc|Number=Sing	12	conj	_	Gloss=Tāmraparṇī
+18	Aṃtiyako	Aṃtiyaka	PROPN	_	Case=Nom|Gender=Masc|Number=Sing	12	conj	_	Gloss=Antiyaka
+19-20	Yona-rājā	_	_	_	_	_	_	_	_
+19	yona	yona	ADJ	_	Compound=Yes|Gender=Masc	20	amod	_	Gloss=Yona
+20	rājā	rājan	NOUN	_	Case=Nom|Gender=Masc|Number=Sing	12	conj	_	Gloss=king
+21	ye	ya	PRON	_	Case=Nom|Gender=Masc|Number=Sing|PronType=Rel	27	nsubj	_	Gloss=who
+22	vā	vā	CCONJ	_	_	21	cc	_	Gloss=indeed
+23	pi	pi	ADV	_	_	21	discourse	_	Gloss=also
+24	tasa	ta	PRON	_	Case=Gen|Gender=Masc|Number=Sing|PronType=Dem	25	det	_	Gloss=of-this
+25	Aṃtiyakasa	Aṃtiyaka	PROPN	_	Case=Gen|Gender=Masc|Number=Sing	27	nmod	_	Gloss=of-Antiyaka|Orig=Aṃtiy[a]kas[a]
+26	sāmīpaṃ	sāmīpa	ADJ	_	_	28	acl:relcl	_	Gloss=neighbour|Orig=sāmīp[aṃ]
+27	rājāno	rājan	NOUN	_	Case=Nom|Gender=Masc|Number=Plur	10	conj	_	Gloss=kings
+28	sarvatra	sarvatra	ADV	_	AdvType=Loc	36	advmod:lmod	_	Gloss=everywhere
+29-30	Devānaṃpriyasa	_	_	_	_	_	_	_	_
+29	devānaṃ	deva	NOUN	_	Case=Gen|Gender=Masc|Number=Plur	30	nmod	_	Gloss=Devānam
+30	priyasa	priya	ADJ	_	Case=Gen|Gender=Masc|Number=Sing	33	nmod:desc	_	Gloss=Priya
+31-32	Priyadasino	_	_	_	_	_	_	_	_
+31	priya	priya	ADJ	_	Compound=Yes|Gender=Masc	32	amod	_	Gloss=Priya
+32	dasino	dasin	ADJ	_	Case=Gen|Gender=Masc|Number=Sing	33	nmod:desc	_	Gloss=Darśin
+33	rāño	rājan	NOUN	_	Case=Gen|Gender=Masc|Number=Sing	36	nsubj	_	Gloss=king
+34	dve	dva	NUM	_	NumType=Card	35	nummod	_	Gloss=two
+35	cikīcha	cikīcha	NOUN	_	Case=Nom|Gender=Fem|Number=Plur	36	obj	_	Gloss=medical-treatment
+36	katā	karo	VERB	_	Case=Nom|Gender=Fem|Number=Plur|Tense=Past|VerbForm=Part|Voice=Pass	0	root	_	Gloss=were-established
+37-38	manusa-cīkichā	_	_	_	_	_	_	_	_
+37	manusa	manusa	NOUN	_	Compound=Yes|Gender=Masc	38	nmod	_	Gloss=man
+38	cīkichā	cīkicha	NOUN	_	Case=Nom|Gender=Fem|Number=Plur	35	appos	_	Gloss=medical-treatment
+39	ca	ca	CCONJ	_	_	38	cc	_	Gloss=and
+40-41	pasu-cikīchā	_	_	_	_	_	_	_	_
+40	pasu	pasu	NOUN	_	Compound=Yes|Gender=Masc	41	nmod	_	Gloss=cattle
+41	cikīchā	cīkicha	NOUN	_	Case=Nom|Gender=Fem|Number=Plur	38	conj	_	Gloss=medical-treatment
+42	ca	ca	CCONJ	_	_	41	cc	_	Gloss=and
+
+# sent_id = girnar-2-2
+# text = osuḍhāni ca yāni manusopagāni ca pasopagāni ca yata yata nāsti sarvatrā hārāpitāni ca ropāpitāni ca
+# orig = osuḍhāni ca yāni m[a]nusopagān[i] ca / paso[pa]gāni ca yata yata nāsti sarvatrā hārāpitāni ca ropāpitāni ca
+1	osuḍhāni	osuḍha	NOUN	_	Case=Nom|Gender=Neut|Number=Plur	12	nsubj	_	Gloss=herbs
+2	ca	ca	CCONJ	_	_	1	cc	_	Gloss=and
+3	yāni	ya	PRON	_	PronType=Rel	5	nsubj	_	Gloss=that
+4-5	manusopagāni	_	_	_	_	_	_	_	_
+4	manusa	manusa	NOUN	_	Compound=Yes|Gender=Masc	5	nmod	_	Gloss=man|Orig=m[a]nuso
+5	upagāni	upaga	ADJ	_	Case=Nom|Gender=Neut|Number=Plur	1	acl:relcl	_	Gloss=beneficial-to|Orig=pagān[i]
+6	ca	ca	CCONJ	_	_	5	cc	_	Gloss=and
+7-8	pasopagāni	_	_	_	_	_	_	_	_
+7	pasu	pasu	NOUN	_	Compound=Yes|Gender=Masc	8	nmod	_	Gloss=cattle
+8	upagāni	upaga	ADJ	_	Case=Nom|Gender=Neut|Number=Plur	5	conj	_	Gloss=beneficial-to|Orig=[pa]gāni
+9	ca	ca	CCONJ	_	_	8	cc	_	Gloss=and
+10	yata	yata	SCONJ	_	_	12	mark	_	Gloss=where
+11	yata	yata	SCONJ	_	_	12	mark	_	Gloss=where
+12	nāsti	nās	VERB	_	Mood=Ind|Number=Sing|Person=3|Tense=Pres|VerbForm=Fin|Voice=Act	14	advcl	_	Gloss=are-no
+13	sarvatrā	sarvatra	ADV	_	AdvType=Loc	14	advmod:lmod	_	Gloss=everywhere
+14	hārāpitāni	hārāpaya	VERB	_	Case=Nom|Gender=Neut|Number=Plur|Tense=Past|VerbForm=Part|Voice=Cau,Pass	0	root	_	Gloss=caused-to-be-imported
+15	ca	ca	CCONJ	_	_	14	cc	_	Gloss=and
+16	ropāpitāni	ropāpaya	VERB	_	Case=Nom|Gender=Neut|Number=Plur|Tense=Past|VerbForm=Part|Voice=Cau,Pass	14	conj	_	Gloss=caused-to-be-planted
+17	ca	ca	CCONJ	_	_	16	cc	_	Gloss=and
+
+# sent_id = girnar-2-3
+# text = mūlāni ca phalāni ca yata yatra nāsti sarvata hārāpitāni ca ropāpitāni ca
+# orig = / mūlāni ca phalāni ca yata yatra nāsti sarvata hārāpitāni ca rop[ā]pitāni ca
+1	mūlāni	mūla	NOUN	_	Case=Nom|Gender=Neut|Number=Plur	7	nsubj	_	Gloss=roots
+2	ca	ca	CCONJ	_	_	1	cc	_	Gloss=and
+3	phalāni	phala	NOUN	_	Case=Nom|Gender=Neut|Number=Plur	1	conj	_	Gloss=fruits
+4	ca	ca	CCONJ	_	_	3	cc	_	Gloss=and
+5	yata	yata	SCONJ	_	_	7	mark	_	Gloss=where
+6	yatra	yatra	SCONJ	_	_	7	mark	_	Gloss=where
+7	nāsti	nās	VERB	_	Mood=Ind|Person=3|Tense=Pres|VerbForm=Fin|Voice=Act	9	advcl	_	Gloss=were-not
+8	sarvata	sarvata	ADV	_	AdvType=Loc	9	advmod:lmod	_	Gloss=everywhere
+9	hārāpitāni	hārāpaya	VERB	_	Case=Nom|Gender=Neut|Number=Plur|Tense=Past|VerbForm=Part|Voice=Cau,Pass	0	root	_	Gloss=caused-to-be-imported
+10	ca	ca	CCONJ	_	_	9	cc	_	Gloss=and
+11	ropāpitāni	ropāpaya	VERB	_	Case=Nom|Gender=Neut|Number=Plur|Tense=Past|VerbForm=Part|Voice=Cau,Pass	9	conj	_	Gloss=caused-to-be-planted|Orig=rop[ā]pitāni
+12	ca	ca	CCONJ	_	_	11	cc	_	Gloss=and
+
+# sent_id = girnar-2-4
+# text = paṃthesū kūpā ca khānāpitā vrachā ca ropāpitā paribhogāya pasumanusānaṃ
+# orig = / paṃthesū kūpā ca khānāpitā vrachā ca ropāpit[ā] paribhogāya pasumanusānaṃ
+1	paṃthesū	paṃtha	NOUN	_	Case=Loc|Gender=Masc|Number=Plur	4	obl:lmod	_	Gloss=on-the-roads
+2	kūpā	kūpa	NOUN	_	Case=Nom|Gender=Masc|Number=Plur	4	obj	_	Gloss=wells
+3	ca	ca	CCONJ	_	_	2	cc	_	Gloss=and
+4	khānāpitā	khānāpaya	VERB	_	Case=Nom|Gender=Masc|Number=Plur|Tense=Past|VerbForm=Part|Voice=Cau,Pass	0	root	_	Gloss=were-caused-to-be-dug
+5	vrachā	vracha	NOUN	_	Case=Nom|Gender=Masc|Number=Plur	7	obj	_	Gloss=trees
+6	ca	ca	CCONJ	_	_	5	cc	_	Gloss=and
+7	ropāpitā	ropāpaya	VERB	_	Case=Nom|Gender=Masc|Number=Plur|Tense=Past|VerbForm=Part|Voice=Cau,Pass	4	conj	_	Gloss=caused-to-be-planted|Orig=ropāpit[ā]
+8	paribhogāya	paribhoga	NOUN	_	Case=Dat|Gender=Masc|Number=Sing	7	obl	_	Gloss=for-the-use
+9-10	pasumanusānaṃ	_	_	_	_	_	_	_	_
+9	pasu	_	NOUN	_	Compound=Yes|Gender=Masc	10	compound	_	Gloss=cattle
+10	manusānaṃ	manusa	NOUN	_	Case=Gen|Gender=Masc|Number=Plur	8	nmod	_	Gloss=of-men
+
+# sent_id = girnar-3-1
+# text = Devānaṃpiyo Piyadasi rājā evam āha
+# orig = Devānampiyo Piyadasi r[ā]jā evam āha
+1-2	Devānaṃpiyo	_	_	_	_	_	_	_	_
+1	devānaṃ	deva	NOUN	_	Case=Gen|Gender=Masc|Number=Plur	2	nmod	_	_
+2	piyo	piya	ADJ	_	Case=Nom|Gender=Masc|Number=Sing	5	nmod:desc	_	_
+3-4	Piyadasi	_	_	_	_	_	_	_	_
+3	piya	piya	ADJ	_	Compound=Yes|Gender=Masc	4	amod	_	_
+4	dasi	dasin	ADJ	_	Case=Nom|Gender=Masc|Number=Sing	5	nmod:desc	_	_
+5	rājā	rājan	NOUN	_	Case=Nom|Gender=Masc|Number=Sing	7	nsubj	_	Orig=r[ā]jā
+6	evam	evam	PART	_	_	7	advmod	_	_
+7	āha	āha	VERB	_	Aspect=Perf|Mood=Ind|Number=Sing|Person=3|Tense=Pres|VerbForm=Fin|Voice=Act	0	root	_	_
+
+# sent_id = girnar-3-2
+# text = dbādasa-vāsābhisitena mayā idaṃ āñapitaṃ
+# orig = dbādasa-vāsābhisitena mayā idaṃ āñ[a]pitaṃ
+1-3	dbādasa-vāsābhisitena	_	_	_	_	_	_	_	_
+1	dbādasa	dbādasa	NUM	_	Compound=Yes|NumType=Card	2	nummod	_	_
+2	vāsa	vāsa	NOUN	_	Compound=Yes|Gender=Masc	3	obl:tmod	_	_
+3	abhisitena	abhisiñca	VERB	_	Case=Ins|Gender=Masc|Number=Sing|Tense=Past|VerbForm=Part|Voice=Pass	4	amod	_	_
+4	mayā	aham	PRON	_	Case=Ins|Number=Sing|Person=1|PronType=Prs	6	nsubj	_	_
+5	idaṃ	idam	PRON	_	Case=Nom|Gender=Neut|Number=Sing|PronType=Dem	6	obj	_	_
+6	āñapitaṃ	āñā	VERB	_	Case=Nom|Gender=Neut|Number=Sing|Tense=Past|VerbForm=Part|Voice=Cau,Pass	0	root	_	Orig=āñ[a]pitaṃ
+
+# sent_id = girnar-3-3
+# text = sarvata vijite mama yutā ca rājūke ca prādesike ca paṃcasu paṃcasu vāsesu anusaṃyānaṃ niyātu etāyeva athāya imāya dhaṃmānusastiya yathā añāya pi kaṃmāya
+# orig = / sarvata vijite mama yutā ca rājūke ca prādesike ca paṃcasu paṃcasu vāsesu anusaṃ/y[ā]na[ṃ n]iyātu etāyeva athāya imāya dhaṃmānusastiya yathā añā/ya pi kaṃmāy[a]
+1	sarvata	sarvata	ADV	_	AdvType=Loc	14	advmod:lmod	_	_
+2	vijite	vijita	NOUN	_	Case=Loc|Gender=Masc|Number=Sing	1	obl	_	_
+3	mama	aham	PRON	_	Case=Gen|Number=Sing|Person=1|PronType=Prs	2	nmod	_	_
+4	yutā	yuta	NOUN	_	Case=Acc|Gender=Neut|Number=Plur	14	obj	_	_
+5	ca	ca	CCONJ	_	_	4	cc	_	_
+6	rājūke	rājūka	NOUN	_	Case=Acc|Gender=Masc|Number=Plur	4	conj	_	_
+7	ca	ca	CCONJ	_	_	6	cc	_	_
+8	prādesike	prādesika	NOUN	_	Case=Acc|Gender=Masc|Number=Plur	4	conj	_	_
+9	ca	ca	CCONJ	_	_	8	cc	_	_
+10	paṃcasu	paṃca	NUM	_	Case=Loc|Gender=Masc|Number=Plur|NumType=Card	12	nummod	_	_
+11	paṃcasu	paṃca	NUM	_	Case=Loc|Gender=Masc|Number=Plur|NumType=Card	10	compound:redup	_	_
+12	vāsesu	vāsa	NOUN	_	Case=Loc|Gender=Masc|Number=Plur	14	obl:tmod	_	_
+13	anusaṃyānaṃ	anusaṃyāna	NOUN	_	Case=Acc|Gender=Neut|Number=Sing	14	obl:lmod	_	Orig=anusaṃy[ā]na[ṃ]
+14	niyātu	niyā	VERB	_	Mood=Imp|Number=Sing|Person=3|Tense=Pres|VerbForm=Fin|Voice=Act	0	root	_	Orig=[n]iyātu
+15-16	etāyeva	_	_	_	_	_	_	_	_
+15	etāya	etad	PRON	_	Case=Dat|Gender=Masc|Number=Sing|PronType=Dem	17	det	_	_
+16	eva	eva	PART	_	_	15	advmod:emph	_	_
+17	athāya	atha	NOUN	_	Case=Dat|Gender=Masc|Number=Sing	14	obl	_	_
+18	imāya	idam	PRON	_	Case=Dat|Gender=Fem|Number=Sing|PronType=Dem	20	det	_	_
+19-20	dhaṃmānusastiya	_	_	_	_	_	_	_	_
+19	dhaṃma	dhaṃma	NOUN	_	Compound=Yes|Gender=Masc	20	nmod	_	_
+20	anusastiya	anusasti	NOUN	_	Case=Dat|Gender=Fem|Number=Sing	17	appos	_	_
+21	yathā	yathā	PART	_	_	24	cc	_	_
+22	añāya	aña	PRON	_	Case=Dat|Gender=Neut|Number=Sing|PronType=Ind	24	det	_	Gloss=other
+23	pi	pi	ADV	_	_	22	discourse	_	_
+24	kaṃmāya	kaṃma	NOUN	_	Case=Dat|Gender=Neut|Number=Sing	20	conj	_	Orig=kaṃmāy[a]
+
+# sent_id = girnar-3-4
+# text = sādhu matari ca pitari ca susrūsā mitra-saṃstuta-ñātīnaṃ bāmhaṇa-samaṇānaṃ sādhu dānaṃ prāṇānaṃ sādhu anāraṃbho apavyayatā apabhāḍatā sādhu
+# orig = [s]ādhu matari ca pitari ca susrūsā mitra-saṃstuta-ñātīnaṃ bāmhaṇa-/samaṇānaṃ sādh[u d]ānaṃ prāṇānaṃ sādhu anārambho apavyayatā apabhāḍatā sādhu
+1	sādhu	sādhu	ADJ	_	Case=Nom|Gender=Fem|Number=Sing	0	root	_	Orig=[s]ādhu
+2	matari	matar	NOUN	_	Case=Loc|Gender=Fem|Number=Sing	6	nmod	_	_
+3	ca	ca	CCONJ	_	_	2	cc	_	_
+4	pitari	pitar	NOUN	_	Case=Loc|Gender=Masc|Number=Sing	2	conj	_	_
+5	ca	ca	CCONJ	_	_	4	cc	_	_
+6	susrūsā	susrūsā	NOUN	_	Case=Nom|Gender=Fem|Number=Sing	1	nsubj	_	_
+7-9	mitra-saṃstuta-ñātīnaṃ	_	_	_	_	_	_	_	_
+7	mitra	mitra	NOUN	_	Compound=Yes|Gender=Masc	13	nmod	_	_
+8	saṃstuta	saṃstuta	ADJ	_	Compound=Yes	7	conj	_	_
+9	ñātīnaṃ	ñāti	NOUN	_	Case=Gen|Gender=Masc|Number=Plur	8	conj	_	_
+10-11	bāmhaṇa-samaṇānaṃ	_	_	_	_	_	_	_	_
+10	bāmhaṇa	bāmhaṇa	NOUN	_	Compound=Yes|Gender=Masc	9	conj	_	_
+11	samaṇānaṃ	samaṇa	NOUN	_	Case=Gen|Gender=Masc|Number=Plur	10	conj	_	_
+12	sādhu	sādhu	ADJ	_	Case=Nom|Gender=Neut|Number=Sing	1	parataxis	_	Orig=sādh[u]
+13	dānaṃ	dāna	NOUN	_	Case=Nom|Gender=Neut|Number=Sing	12	nsubj	_	Orig=[d]ānaṃ
+14	prāṇānaṃ	prāṇa	NOUN	_	Case=Gen|Gender=Masc|Number=Plur	16	nmod	_	_
+15	sādhu	sādhu	ADJ	_	Case=Nom|Gender=Masc|Number=Sing	1	parataxis	_	_
+16	anāraṃbho	anāraṃbha	NOUN	_	Case=Nom|Gender=Masc|Number=Sing	15	nsubj	_	_
+17	apavyayatā	apavyayatā	NOUN	_	Case=Nom|Gender=Fem|Number=Sing	19	nsubj	_	_
+18	apabhāḍatā	apabhāḍatā	NOUN	_	Case=Nom|Gender=Fem|Number=Sing	17	conj	_	_
+19	sādhu	sādhu	ADJ	_	Case=Nom|Gender=Masc|Number=Sing	1	parataxis	_	_
+
+# sent_id = girnar-3-5
+# text = parisā pi yute āñapayisati gaṇanāyaṃ hetuto ca vyaṃjanato ca
+# orig = / parisa pi yute āñapayisati gaṇanāyaṃ hetuto ca vyaṃjanato ca
+1	parisā	parisad	NOUN	_	Case=Nom|Gender=Fem|Number=Sing	4	nsubj	_	_
+2	pi	pi	ADV	_	_	1	discourse	_	_
+3	yute	yuta	NOUN	_	Case=Acc|Gender=Masc|Number=Plur	4	obj	_	_
+4	āñapayisati	āñā	VERB	_	Mood=Ind|Number=Sing|Person=3|VerbForm=Fin|Voice=Act	0	root	_	_
+5	gaṇanāyaṃ	gaṇa	NOUN	_	Case=Loc|Gender=Fem|Number=Sing	4	obl	_	_
+6	hetuto	hetuto	ADV	_	AdvType=Man	5	advmod	_	_
+7	ca	ca	CCONJ	_	_	6	cc	_	_
+8	vyaṃjanato	vyaṃjanato	ADV	_	AdvType=Man	6	conj	_	_
+9	ca	ca	CCONJ	_	_	8	cc	_	_
+
+# sent_id = girnar-4-1
+# text = atikataṃ aṃtaraṃ bahūni vāsa-satāni vaḍhito eva praṇāraṃbho vihiṃsa ca bhūtānāṃ ñātīsu asaṃpratipatī brāmhaṇa-sramaṇānāṃ asaṃpratīpatī
+# orig = / atikataṃ aṃt[a]raṃ bahūni vāsa-satāni vaḍhito eva praṇāraṃbho vihiṃsa ca bhūtānāṃ ñātīsu / a[s]aṃpratipati brā[m]haṇa-sramaṇānāṃ asaṃpratīpatī
+1	atikataṃ	atikata	ADJ	_	Case=Acc|Gender=Neut|Number=Sing	2	amod	_	_
+2	aṃtaraṃ	aṃtara	NOUN	_	Case=Acc|Gender=Neut|Number=Sing	6	obl:tmod	_	Orig=aṃt[a]raṃ
+3	bahūni	bahu	ADJ	_	Case=Acc|Gender=Neut|Number=Plur	5	amod	_	_
+4-5	vāsa-satāni	_	_	_	_	_	_	_	_
+4	vāsa	vāsa	NOUN	_	Compound=Yes|Gender=Masc	5	compound	_	_
+5	satāni	sata	NUM	_	Case=Acc|Gender=Neut|Number=Plur	6	obl:tmod	_	_
+6	vaḍhito	vaḍha	VERB	_	Case=Nom|Gender=Masc|Number=Sing|Tense=Past|VerbForm=Part|Voice=Pass	0	root	_	_
+7	eva	eva	PART	_	_	6	advmod	_	_
+8-9	praṇāraṃbho	_	_	_	_	_	_	_	_
+8	praṇa	praṇa	NOUN	_	Compound=Yes|Gender=Masc	9	nmod	_	_
+9	āraṃbho	āraṃbha	NOUN	_	Case=Nom|Gender=Masc|Number=Sing	6	nsubj	_	_
+10	vihiṃsa	vihiṃsa	NOUN	_	Case=Nom|Gender=Fem|Number=Sing	9	conj	_	_
+11	ca	ca	CCONJ	_	_	10	cc	_	_
+12	bhūtānāṃ	bhūta	NOUN	_	Case=Gen|Gender=Masc|Number=Plur	10	nmod	_	_
+13	ñātīsu	ñāti	NOUN	_	Case=Loc|Gender=Masc|Number=Plur	14	nmod	_	_
+14	asaṃpratipatī	asaṃpratipati	NOUN	_	Case=Nom|Gender=Fem|Number=Sing	9	conj	_	Orig=a[s]aṃpratipatī
+15-16	brāmhaṇa-sramaṇānāṃ	_	_	_	_	_	_	_	_
+15	brāmhaṇa	brāmhaṇa	NOUN	_	Compound=Yes|Gender=Masc	17	nmod	_	Orig=brā[m]haṇa
+16	sramaṇānāṃ	sramaṇa	NOUN	_	Case=Gen|Gender=Masc|Number=Plur	15	conj	_	_
+17	asaṃpratīpatī	asaṃpratīpati	NOUN	_	Case=Nom|Gender=Fem|Number=Sing	14	conj	_	_
+
+# sent_id = girnar-4-2
+# text = ta aja Devānaṃpriyasa Priyadasino rāño dhaṃma-caraṇena bherī-ghoso aho dhaṃma-ghoso vimāna-darsaṇā ca hastidasaṇā ca agi-khaṃdhāni ca añāni ca divyāni rūpāni dasayitpā janaṃ
+# orig = ta aja Devānaṃpriyasa Priyadasino rāño / dhaṃma-caraṇena [bhe]rī-ghoso aho dhaṃma-ghoso vimāna-darsaṇā ca hastida[sa]ṇā ca / agi-kh[a]ṃdhāni ca [a]ñāni ca divyāni rūpāni dasayitpā janaṃ
+1	ta	ta	ADV	_	_	12	advmod	_	_
+2	aja	aja	ADV	_	AdvType=Tim	12	advmod	_	_
+3-4	Devānaṃpriyasa	_	_	_	_	_	_	_	_
+3	devānaṃ	deva	NOUN	_	Case=Gen|Gender=Masc|Number=Plur	4	nmod	_	_
+4	priyasa	priya	ADJ	_	Case=Gen|Gender=Masc|Number=Sing	7	nmod:desc	_	_
+5-6	Priyadasino	_	_	_	_	_	_	_	_
+5	priya	priya	ADJ	_	Compound=Yes|Gender=Masc	6	amod	_	_
+6	dasino	dasin	ADJ	_	Case=Gen|Gender=Masc|Number=Sing	7	nmod:desc	_	_
+7	rāño	rājan	NOUN	_	Case=Gen|Gender=Masc|Number=Sing	9	nmod	_	_
+8-9	dhaṃma-caraṇena	_	_	_	_	_	_	_	_
+8	dhaṃma	dhaṃma	NOUN	_	Compound=Yes|Gender=Masc	9	compound	_	_
+9	caraṇena	caraṇa	NOUN	_	Case=Ins|Gender=Masc|Number=Sing	12	nsubj	_	_
+10-11	bherī-ghoso	_	_	_	_	_	_	_	Orig=[bhe]rī-ghoso
+10	bherī	bherī	NOUN	_	Compound=Yes|Gender=Fem	11	compound	_	Orig=[bhe]rī
+11	ghoso	ghosa	NOUN	_	Case=Nom|Gender=Masc|Number=Sing	12	obj	_	_
+12	aho	bhava	VERB	_	Mood=Ind|Number=Sing|Person=3|Tense=Imp|VerbForm=Fin|Voice=Act	0	root	_	_
+13-14	dhaṃma-ghoso	_	_	_	_	_	_	_	_
+13	dhaṃma	dhaṃma	NOUN	_	Compound=Yes|Gender=Masc	14	compound	_	_
+14	ghoso	ghosa	NOUN	_	Case=Nom|Gender=Masc|Number=Sing	12	obl	_	_
+15-16	vimāna-darsaṇā	_	_	_	_	_	_	_	_
+15	vimāna	vimāna	NOUN	_	Compound=Yes|Gender=Masc	16	compound	_	_
+16	darsaṇā	darsaṇa	NOUN	_	Case=Acc|Gender=Neut|Number=Plur	28	obj	_	_
+17	ca	ca	CCONJ	_	_	16	cc	_	_
+18-19	hastidasaṇā	_	_	_	_	_	_	_	Orig=hastida[sa]ṇā
+18	hasti	hastin	NOUN	_	Compound=Yes|Gender=Masc	19	compound	_	_
+19	dasaṇā	dasaṇa	NOUN	_	Case=Acc|Gender=Neut|Number=Plur	16	conj	_	Orig=da[sa]ṇā
+20	ca	ca	CCONJ	_	_	19	cc	_	_
+21-22	agi-khaṃdhāni	_	_	_	_	_	_	_	_
+21	agi	agi	NOUN	_	Compound=Yes|Gender=Masc	22	compound	_	_
+22	khaṃdhāni	khaṃdha	NOUN	_	Case=Acc|Gender=Neut|Number=Plur	16	conj	_	Orig=kh[a]ṃdhāni
+23	ca	ca	CCONJ	_	_	22	cc	_	_
+24	añāni	aña	DET	_	Case=Acc|Gender=Neut|Number=Plur|PronType=Ind	27	det	_	Gloss=other|Orig=[a]ñāni
+25	ca	ca	CCONJ	_	_	27	cc	_	_
+26	divyāni	divya	ADJ	_	Case=Acc|Gender=Neut|Number=Plur	27	compound	_	_
+27	rūpāni	rūpa	NOUN	_	Case=Acc|Gender=Neut|Number=Plur	16	conj	_	_
+28	dasayitpā	dasaya	VERB	_	VerbForm=Conv	12	advcl	_	_
+29	janaṃ	jana	NOUN	_	Case=Acc|Gender=Masc|Number=Sing	28	obl	_	_
+
+# sent_id = girnar-4-3
+# text = yārise bahūhi vāsasatehi na bhūta-puve tarise aja vaḍhite Devānaṃpriyasa Priyadasino rāño dhaṃmānusasṭiyā anāraṃbho prāṇānaṃ avihāsā bhūtānaṃ ñātīnaṃ saṃpaṭipatī bramhaṇa-samaṇānaṃ saṃpaṭipatī mātari pitari susrusā thaira-susrusā
+# orig = yārise bahūhi v[āsa]satehi / na bhūta-puve tarise aja vaḍhite Devānaṃpriyasa Priyadasino rāño dhaṃmānusasṭiyā anāraṃ/[bh]o prāṇānaṃ avihāsā bhūtānaṃ ñātīnaṃ saṃpaṭipatī bramhaṇa-sarnaṇānaṃ saṃpaṭipatī mātari pitari / [s]usrusā thaira-susrusā
+1	yārise	yārisa	SCONJ	_	_	8	mark	_	_
+2	bahūhi	bahu	ADJ	_	Case=Ins|Gender=Neut|Number=Plur	5	amod	_	_
+3-4	vāsasatehi	_	_	_	_	_	_	_	Orig=v[āsa]satehi
+3	vāsa	vāsa	NOUN	_	Compound=Yes|Gender=Masc	4	compound	_	Orig=v[āsa]
+4	satehi	sata	NUM	_	Case=Ins|Gender=Neut|Number=Plur	7	obl:tmod	_	_
+5	na	na	PART	_	Polarity=Neg	7	advmod	_	_
+6-7	bhūta-puve	_	_	_	_	_	_	_	_
+6	bhūta	bhūta	ADJ	_	Compound=Yes	7	compound	_	_
+7	puve	puva	ADJ	_	_	10	advcl	_	_
+8	tarise	tarisa	ADV	_	_	10	advmod	_	_
+9	aja	aja	ADV	_	AdvType=Tim	10	advmod	_	_
+10	vaḍhite	vaḍha	VERB	_	Case=Nom|Gender=Masc|Number=Sing|Tense=Past|VerbForm=Part|Voice=Pass	0	root	_	_
+11-12	Devānaṃpriyasa	_	_	_	_	_	_	_	_
+11	devānaṃ	deva	NOUN	_	Case=Gen|Gender=Masc|Number=Plur	12	nmod	_	_
+12	priyasa	priya	ADJ	_	Case=Gen|Gender=Masc|Number=Sing	15	nmod:desc	_	_
+13-14	Priyadasino	_	_	_	_	_	_	_	_
+13	priya	priya	ADJ	_	Compound=Yes|Gender=Masc	14	amod	_	_
+14	dasino	dasin	ADJ	_	Case=Gen|Gender=Masc|Number=Sing	15	nmod:desc	_	_
+15	rāño	rājan	NOUN	_	Case=Gen|Gender=Masc|Number=Sing	17	nmod	_	_
+16-17	dhaṃmānusasṭiyā	_	_	_	_	_	_	_	_
+16	dhaṃma	dhaṃma	NOUN	_	Compound=Yes|Gender=Masc	17	compound	_	_
+17	anusasṭiyā	anusasṭi	NOUN	_	Case=Ins|Gender=Fem|Number=Sing	10	obl	_	_
+18	anāraṃbho	anāraṃbha	NOUN	_	Case=Nom|Gender=Masc|Number=Sing	10	nsubj	_	Orig=anāraṃ[bh]o
+19	prāṇānaṃ	prāṇa	NOUN	_	Case=Gen|Gender=Masc|Number=Plur	18	nmod	_	_
+20	avihāsā	avihāsā	NOUN	_	Case=Nom|Gender=Fem|Number=Sing	18	conj	_	_
+21	bhūtānaṃ	bhūta	NOUN	_	Case=Gen|Gender=Masc|Number=Plur	20	nmod	_	_
+22	ñātīnaṃ	ñāti	NOUN	_	Case=Gen|Gender=Masc|Number=Plur	23	nmod	_	_
+23	saṃpaṭipatī	saṃpaṭipati	NOUN	_	Case=Nom|Gender=Fem|Number=Sing	18	conj	_	_
+24-25	bramhaṇa-samaṇānaṃ	_	_	_	_	_	_	_	_
+24	bramhaṇa	bramhaṇa	NOUN	_	Compound=Yes|Gender=Masc	25	compound	_	_
+25	samaṇānaṃ	samaṇa	NOUN	_	Case=Gen|Gender=Masc|Number=Plur	26	nmod	_	_
+26	saṃpaṭipatī	saṃpaṭipati	NOUN	_	Case=Nom|Gender=Fem|Number=Sing	18	conj	_	_
+27	mātari	mātar	NOUN	_	Case=Loc|Gender=Fem|Number=Sing	29	obl	_	_
+28	pitari	pitar	NOUN	_	Case=Loc|Gender=Masc|Number=Sing	27	conj	_	_
+29	susrusā	susrusā	NOUN	_	Case=Nom|Gender=Fem|Number=Sing	18	conj	_	Orig=[s]usrusā
+30-31	thaira-susrusā	_	_	_	_	_	_	_	_
+30	thaira	thaira	NOUN	_	Compound=Yes|Gender=Masc	31	obl	_	_
+31	susrusā	susrusā	NOUN	_	Case=Nom|Gender=Fem|Number=Sing	18	conj	_	_
+
+# sent_id = girnar-4-4
+# text = esa añe ca bahuvidhe dhaṃma-caraṇe vaḍhite
+# orig = esa añe ca bahuvidhe [dha]ṃma-caraṇe va[ḍhi]te
+1	esa	etad	PRON	_	Case=Nom|Gender=Masc|Number=Sing|PronType=Dem	5	det	_	_
+2	añe	aña	PRON	_	Case=Nom|Gender=Masc|Number=Sing|PronType=Ind	5	det	_	Gloss=other
+3	ca	ca	CCONJ	_	_	2	cc	_	_
+4-5	bahuvidhe	_	_	_	_	_	_	_	_
+4	bahu	bahu	ADJ	_	Compound=Yes	5	amod	_	_
+5	vidhe	vidha	NOUN	_	Case=Nom|Gender=Masc|Number=Sing	8	obl	_	_
+6-7	dhaṃma-caraṇe	_	_	_	_	_	_	_	Orig=[dha]ṃma-caraṇe
+6	dhaṃma	dhaṃma	NOUN	_	Compound=Yes|Gender=Masc	7	compound	_	Orig=[dha]ṃma
+7	caraṇe	caraṇa	NOUN	_	Case=Nom|Gender=Neut|Number=Sing	8	obj	_	_
+8	vaḍhite	vaḍha	VERB	_	Case=Nom|Gender=Masc|Number=Sing|Tense=Past|VerbForm=Part|Voice=Pass	0	root	_	Orig=va[ḍhi]te
+
+# sent_id = girnar-4-5
+# text = vaḍhayisati ceva Devānaṃpriyo Priyadasi rājā dhaṃma-caraṇaṃ idaṃ
+# orig = vaḍhayisati ceva Devānaṃpriyo / [Pri]ya[da]si rājā dhaṃma-[ca]raṇaṃ idaṃ
+1	vaḍhayisati	vaḍha	VERB	_	Mood=Ind|Number=Sing|Person=3|Tense=Fut|VerbForm=Fin|Voice=Act	0	root	_	_
+2-3	ceva	_	_	_	_	_	_	_	_
+2	ca	ca	CCONJ	_	_	1	cc	_	_
+3	eva	eva	PART	_	_	1	advmod:emph	_	_
+4-5	Devānaṃpriyo	_	_	_	_	_	_	_	_
+4	devānaṃ	deva	NOUN	_	Case=Gen|Gender=Masc|Number=Plur	5	nmod	_	_
+5	priyo	priya	ADJ	_	Case=Nom|Gender=Masc|Number=Sing	8	nmod:desc	_	_
+6-7	Priyadasi	_	_	_	_	_	_	_	Orig=[Pri]ya[da]si
+6	priya	priya	ADJ	_	Compound=Yes|Gender=Masc	7	amod	_	Orig=[pri]ya
+7	dasi	dasin	ADJ	_	Case=Nom|Gender=Masc|Number=Sing	8	nmod:desc	_	Orig=[da]si
+8	rājā	rājā	NOUN	_	Case=Nom|Gender=Masc|Number=Sing	1	nsubj	_	_
+9-10	dhaṃma-caraṇaṃ	_	_	_	_	_	_	_	Orig=dhaṃma-[ca]raṇaṃ
+9	dhaṃma	dhaṃma	NOUN	_	Compound=Yes|Gender=Masc	10	compound	_	_
+10	caraṇaṃ	caraṇa	NOUN	_	Case=Acc|Gender=Masc|Number=Sing	1	obj	_	Orig=[ca]raṇaṃ
+11	idaṃ	idam	PRON	_	Case=Acc|Gender=Masc|Number=Sing|PronType=Dem	10	det	_	Gloss=this
+
+# sent_id = girnar-4-6
+# text = putrā ca potrā ca prapotrā ca Devānaṃpriyasa Priyadasino rāño pravadhayisaṃti idaṃ dhaṃma-caraṇaṃ ava savaṭa-kapā dhaṃmamhi sīlamhi tisṭaṃto dhaṃmaṃ anusāsisaṃti
+# orig = putrā ca [p]otrā ca prapotrā ca Devānaṃpriyasa Priyadasino rāño / [pra]vadhayisaṃti idaṃ [dha]ṃma-caraṇaṃ ava savaṭa-kapā dhaṃmamhi sīlamhi tisṭaṃto [dha]ṃmaṃ anusāsisaṃti
+1	putrā	putra	NOUN	_	Case=Nom|Gender=Masc|Number=Plur	12	nsubj	_	_
+2	ca	ca	CCONJ	_	_	1	cc	_	_
+3	potrā	potra	NOUN	_	Case=Nom|Gender=Masc|Number=Plur	1	conj	_	Orig=[p]otrā
+4	ca	ca	CCONJ	_	_	3	cc	_	_
+5	prapotrā	prapotra	NOUN	_	Case=Nom|Gender=Masc|Number=Plur	1	conj	_	_
+6	ca	ca	CCONJ	_	_	5	cc	_	_
+7-8	Devānaṃpriyasa	_	_	_	_	_	_	_	_
+7	devānaṃ	deva	NOUN	_	Case=Gen|Gender=Masc|Number=Plur	8	nmod	_	_
+8	priyasa	priya	ADJ	_	Case=Gen|Gender=Masc|Number=Sing	11	nmod:desc	_	_
+9-10	Priyadasino	_	_	_	_	_	_	_	_
+9	priya	priya	ADJ	_	Compound=Yes|Gender=Masc	10	amod	_	_
+10	dasino	dasin	ADJ	_	Case=Gen|Gender=Masc|Number=Sing	11	nmod:desc	_	_
+11	rāño	rājan	NOUN	_	Case=Gen|Gender=Masc|Number=Sing	1	nmod	_	_
+12	pravadhayisaṃti	pravadha	VERB	_	Mood=Ind|Number=Plur|Person=3|Tense=Fut|VerbForm=Fin|Voice=Act	0	root	_	Orig=[pra]vadhayisaṃti
+13	idaṃ	idam	PRON	_	Case=Acc|Gender=Masc|Number=Sing|PronType=Dem	15	det	_	Gloss=this
+14-15	dhaṃma-caraṇaṃ	_	_	_	_	_	_	_	Orig=[dha]ṃma-caraṇaṃ
+14	dhaṃma	dhaṃma	NOUN	_	Compound=Yes|Gender=Masc	15	compound	_	Orig=[dha]ṃma
+15	caraṇaṃ	caraṇa	NOUN	_	Case=Acc|Gender=Masc|Number=Sing	12	obj	_	_
+16	ava	ava	ADP	_	_	18	case	_	_
+17-18	savaṭa-kapā	_	_	_	_	_	_	_	_
+17	savaṭa	savaṭa	NOUN	_	Compound=Yes|Gender=Masc	18	compound	_	_
+18	kapā	kapa	NOUN	_	Case=Abl|Gender=Masc|Number=Sing	12	obl:tmod	_	_
+19	dhaṃmamhi	dhaṃma	NOUN	_	Case=Loc|Gender=Masc|Number=Sing	21	obl	_	_
+20	sīlamhi	sīla	NOUN	_	Case=Loc|Gender=Neut|Number=Sing	19	conj	_	_
+21	tisṭaṃto	tisṭa	VERB	_	Case=Nom|Gender=Masc|Number=Plur|Tense=Pres|VerbForm=Part|Voice=Pass	23	xcomp	_	_
+22	dhaṃmaṃ	dhaṃma	NOUN	_	Case=Acc|Gender=Masc|Number=Sing	21	conj	_	Orig=[dha]ṃmaṃ
+23	anusāsisaṃti	anusāsa	VERB	_	Mood=Ind|Number=Plur|Person=3|Tense=Fut|VerbForm=Fin|Voice=Act	12	conj	_	_
+
+# sent_id = girnar-4-7
+# text = esa hi sesṭe kaṃme ya dhaṃmānusāsanaṃ
+# orig = / [e]sa hi sesṭe kamme ya dhaṃmānusāsanaṃ
+1	esa	etad	PRON	_	Case=Nom|Gender=Masc|Number=Sing|PronType=Dem	4	nsubj	_	Orig=[e]sa
+2	hi	hi	ADV	_	_	4	discourse	_	_
+3	sesṭe	sesṭa	ADJ	_	Case=Nom|Gender=Neut|Number=Sing	4	amod	_	_
+4	kaṃme	kaṃma	NOUN	_	Case=Nom|Gender=Neut|Number=Sing	0	root	_	_
+5	ya	yad	PRON	_	Case=Nom|Number=Sing|PronType=Rel	7	nsubj	_	_
+6-7	dhaṃmānusāsanaṃ	_	_	_	_	_	_	_	_
+6	dhaṃma	dhaṃma	NOUN	_	Compound=Yes|Gender=Masc	7	nmod	_	_
+7	anusāsanaṃ	anusāsana	NOUN	_	Case=Nom|Gender=Neut|Number=Sing	4	acl:relcl	_	_
+
+# sent_id = girnar-4-8
+# text = dhamma-caraṇe pi na bhavati asīlasa
+# orig = dhamma-caraṇe pi na [bha]vati asīlasa
+1-2	dhamma-caraṇe	_	_	_	_	_	_	_	_
+1	dhamma	dhamma	NOUN	_	Compound=Yes|Gender=Masc	2	nmod	_	_
+2	caraṇe	caraṇa	NOUN	_	Case=Nom|Gender=Neut|Number=Sing	5	nsubj	_	_
+3	pi	pi	ADV	_	_	5	discourse	_	_
+4	na	na	ADV	_	Polarity=Neg	5	advmod	_	_
+5	bhavati	bhava	VERB	_	Mood=Ind|Number=Sing|Person=3|Tense=Pres|VerbForm=Fin|Voice=Act	0	root	_	Orig=[bha]vati
+6	asīlasa	asīla	ADJ	_	Case=Gen|Gender=Neut|Number=Sing	5	obl	_	_
+
+# sent_id = girnar-4-9
+# text = ta imamhi athamhi vadhī ca ahīnī ca sādhu
+# orig = [ta] imamhi athamhi / [va]dhī ca ahīnī ca sādhu
+1	ta	ta	ADV	_	_	8	advmod	_	Orig=[ta]
+2	imamhi	idam	PRON	_	Case=Loc|Gender=Masc|Number=Sing|PronType=Dem	3	det	_	_
+3	athamhi	atha	NOUN	_	Case=Loc|Gender=Masc|Number=Sing	4	nmod	_	_
+4	vadhī	vadhi	NOUN	_	Case=Nom|Gender=Fem|Number=Sing	8	nsubj	_	Orig=[va]dhī
+5	ca	ca	CCONJ	_	_	4	cc	_	_
+6	ahīnī	ahīni	NOUN	_	Case=Nom|Gender=Fem|Number=Sing	4	conj	_	_
+7	ca	ca	CCONJ	_	_	6	cc	_	_
+8	sādhu	sādhu	ADJ	_	Case=Nom|Gender=Fem|Number=Sing	0	root	_	_
+
+# sent_id = girnar-4-10
+# text = etāya athāya idaṃ lekhāpitaṃ imasa athasa vadhi yujaṃtu hīni ca no locetavyā
+# orig = e[t]āya athāya ida[ṃ] lekhāpitaṃ imasa atha[sa] v[a]dhi yujaṃtu hīni c[a] / [no] locetavyā
+1	etāya	etad	PRON	_	Case=Dat|Gender=Masc|Number=Sing|PronType=Dem	2	det	_	Orig=e[t]āya
+2	athāya	atha	NOUN	_	Case=Dat|Gender=Masc|Number=Sing	4	obl	_	_
+3	idaṃ	idam	PRON	_	Case=Acc|Gender=Masc|Number=Sing|PronType=Dem	4	obj	_	Orig=ida[ṃ]
+4	lekhāpitaṃ	lekhāpaya	VERB	_	Case=Nom|Gender=Masc|Number=Sing|Tense=Past|VerbForm=Part|Voice=Cau,Pass	0	root	_	_
+5	imasa	idam	PRON	_	Case=Gen|Gender=Masc|Number=Sing|PronType=Dem	6	det	_	Gloss=this
+6	athasa	atha	NOUN	_	Case=Gen|Gender=Masc|Number=Sing	7	nmod	_	Orig=atha[sa]
+7	vadhi	vadhi	NOUN	_	Case=Acc|Gender=Fem|Number=Sing	8	obj	_	Orig=v[a]dhi
+8	yujaṃtu	yuja	VERB	_	Mood=Imp|Number=Plur|Person=3|Tense=Pres|VerbForm=Fin|Voice=Act	4	parataxis	_	_
+9	hīni	hīni	NOUN	_	Case=Acc|Gender=Fem|Number=Sing	12	obj	_	_
+10	ca	ca	CCONJ	_	_	12	cc	_	Orig=c[a]
+11	no	no	ADV	_	Polarity=Neg	12	advmod	_	Orig=[no]
+12	locetavyā	loca	VERB	_	Case=Nom|Gender=Fem|Number=Sing|Tense=Fut|VerbForm=Part|Voice=Pass	8	conj	_	_
+
+# sent_id = girnar-4-11
+# text = dbādasa-vāsābhisitena Devānaṃpriyena Priyadasinā rāñā idam lekhapitam
+# orig = dbadasa-vāsābhisitena Devān[a]ṃpriyena Priyadasinā rāñ[ā] idam lekhapitam
+1-3	dbādasa-vāsābhisitena	_	_	_	_	_	_	_	_
+1	dbādasa	dbādasa	NUM	_	Compound=Yes|NumType=Card	2	nummod	_	_
+2	vāsa	vāsa	NOUN	_	Compound=Yes|Gender=Masc	3	obl:tmod	_	_
+3	abhisitena	abhisiñca	VERB	_	Case=Ins|Gender=Masc|Number=Sing|Tense=Past|VerbForm=Part|Voice=Pass	8	acl	_	_
+4-5	Devānaṃpriyena	_	_	_	_	_	_	_	Orig=Devān[a]ṃpriyena
+4	devānaṃ	deva	NOUN	_	Case=Gen|Gender=Masc|Number=Plur	5	nmod	_	Orig=devān[a]ṃ
+5	priyena	priya	ADJ	_	Case=Ins|Gender=Masc|Number=Sing	8	nmod:desc	_	_
+6-7	Priyadasinā	_	_	_	_	_	_	_	_
+6	priya	priya	ADJ	_	Compound=Yes|Gender=Masc	7	amod	_	_
+7	dasinā	dasin	ADJ	_	Case=Ins|Gender=Masc|Number=Sing	8	nmod:desc	_	_
+8	rāñā	rājan	NOUN	_	Case=Ins|Gender=Masc|Number=Sing	10	nsubj	_	Orig=rāñ[ā]
+9	idam	idam	PRON	_	Case=Acc|Gender=Neut|Number=Sing|PronType=Dem	10	obj	_	_
+10	lekhapitam	lekhapaya	VERB	_	Case=Nom|Gender=Neut|Number=Sing|Tense=Past|VerbForm=Part|Voice=Cau,Pass	0	root	_	_
+
+# sent_id = girnar-5-1
+# text = Devānaṃpriyo Piyadasi rājā evaṃ āha
+# orig = D[e]vānaṃpriyo Piyadasi rājā evaṃ āha
+1-2	Devānaṃpriyo	_	_	_	_	_	_	_	_
+1	devānaṃ	deva	NOUN	_	Case=Nom|Gender=Masc|Number=Plur	2	nmod	_	Gloss=of-the-Gods|Orig=D[e]vānaṃ
+2	priyo	priya	ADJ	_	Case=Nom|Gender=Masc|Number=Sing	5	nmod:desc	_	Gloss=beloved
+3-4	Piyadasi	_	_	_	_	_	_	_	_
+3	piya	piya	ADJ	_	Compound=Yes|Gender=Masc	4	amod	_	Gloss=friendly
+4	dasi	dasin	ADJ	_	Case=Nom|Gender=Masc|Number=Sing	5	nmod:desc	_	Gloss=looking
+5	rājā	rājan	NOUN	_	Case=Nom|Gender=Masc|Number=Sing	7	nsubj	_	Gloss=king
+6	evaṃ	evaṃ	ADV	_	_	7	advmod	_	Gloss=thus
+7	āha	āha	VERB	_	Aspect=Perf|Mood=Ind|Number=Sing|Person=3|Tense=Pres|VerbForm=Fin|Voice=Act	0	root	_	Gloss=speaks
+
+# sent_id = girnar-5-2
+# text = kalāṇaṃ dukaraṃ
+# orig = kalāṇaṃ dukaraṃ
+1	kalāṇaṃ	kalāṇa	NOUN	_	Case=Nom|Gender=Neut|Number=Sing	2	nsubj	_	Gloss=virtuous-deeds
+2	dukaraṃ	dukara	NOUN	_	Case=Nom|Gender=Neut|Number=Sing	0	root	_	Gloss=difficult
+
+# sent_id = girnar-5-3
+# text = yo ādikaro kalāṇasa so dukaraṃ karoti
+# orig = y[o ādikaro] kalāṇ[a]sa so dukaraṃ karoti
+1	yo	ya	PRON	_	Case=Nom|Gender=Masc|Number=Sing|PronType=Rel	2	nsubj	_	Gloss=who|Orig=y[o]
+2	ādikaro	ādikara	NOUN	_	Case=Nom|Gender=Masc|Number=Sing	4	acl:relcl	_	Gloss=initiator|Orig=[ādikaro]
+3	kalāṇasa	kalāṇa	NOUN	_	Case=Gen|Gender=Neut|Number=Sing	2	nmod	_	Gloss=of-virtuous-deeds|Orig=kalāṇ[a]sa
+4	so	sa	PRON	_	Case=Nom|Gender=Masc|Number=Sing|PronType=Prs	6	nsubj	_	Gloss=he
+5	dukaraṃ	dukara	NOUN	_	Case=Nom|Gender=Neut|Number=Sing	6	obj	_	Gloss=something-difficult
+6	karoti	karo	VERB	_	Mood=Ind|Number=Sing|Person=3|Tense=Pres|VerbForm=Fin|Voice=Act	0	root	_	Gloss=accomplishes
+
+# sent_id = girnar-5-4
+# text = ta mayā bahu kalāṇaṃ kataṃ
+# orig = / ta mayā bahu kalāṇaṃ kataṃ
+1	ta	ta	CCONJ	_	_	5	advmod	_	Gloss=now
+2	mayā	ahaṃ	PRON	_	Case=Ins|Number=Sing|PronType=Prs	5	nsubj	_	Gloss=I
+3	bahu	bahu	DET	_	Compound=Yes|Gender=Neut|PronType=Ind	4	det	_	Gloss=many
+4	kalāṇaṃ	kalāṇa	NOUN	_	Case=Nom|Gender=Neut|Number=Sing	5	obj	_	Gloss=virtuous-deeds
+5	kataṃ	karo	VERB	_	Case=Nom|Gender=Neut|Number=Sing|Tense=Past|VerbForm=Part|Voice=Act	0	root	_	Gloss=have-done
+
+# sent_id = girnar-5-5
+# text = ta mama putā ca potā ca paraṃ ca tena ya me apacaṃ āva saṃvaṭa-kapā anuvatisare tathā so sukataṃ kāsati
+# orig = t[a] mama putā ca potā ca paraṃ ca tena y[a] me [a]pacaṃ āva saṃvaṭa-kapā anuvatisare tathā / so sukataṃ kāsati
+1	ta	ta	ADV	_	_	20	advmod	_	Gloss=therefore
+2	mama	ma	PRON	_	Case=Gen|Number=Sing|PronType=Prs	3	nmod	_	Gloss=my
+3	putā	puta	NOUN	_	Case=Nom|Gender=Masc|Number=Plur	16	nsubj	_	Gloss=sons
+4	ca	ca	CCONJ	_	_	3	cc	_	Gloss=and
+5	potā	pota	NOUN	_	Case=Nom|Gender=Masc|Number=Plur	3	conj	_	Gloss=grandsons
+6	ca	ca	CCONJ	_	_	5	cc	_	Gloss=and
+7	paraṃ	paraṃ	ADP	_	_	9	case	_	Gloss=beyond
+8	ca	ca	CCONJ	_	_	12	cc	_	Gloss=and
+9	tena	ta	PRON	_	Case=Ins|Gender=Masc|Number=Sing|PronType=Dem	12	acl:relcl	_	Gloss=that
+10	ya	ya	PRON	_	Case=Nom|Number=Sing|PronType=Rel	9	nsubj	_	Gloss=who
+11	me	ayaṃ	PRON	_	Case=Nom|Gender=Masc|Number=Plur|PronType=Dem	12	det	_	Gloss=my
+12	apacaṃ	apaca	NOUN	_	Case=Nom|Gender=Neut|Number=Sing	3	conj	_	Gloss=offspring
+13	āva	āva	ADP	_	_	15	case	_	Gloss=until
+14-15	saṃvaṭa-kapā	_	_	_	_	_	_	_	Gloss=end-of-cosmic-cycle
+14	saṃvaṭa	saṃvaṭa	NOUN	_	Compound=Yes|Gender=Masc	15	compound	_	_
+15	kapā	kapa	NOUN	_	Case=Abl|Gender=Masc|Number=Sing	16	obl:tmod	_	_
+16	anuvatisare	anuvata	VERB	_	Mood=Ind|Number=Plur|Person=3|Tense=Fut|VerbForm=Fin|Voice=Mid	18	acl:relcl	_	Gloss=will-follow
+17	tathā	tathā	ADV	_	AdvType=Man	20	advmod	_	Gloss=thus
+18	so	_	PRON	_	Case=Nom|Gender=Masc|Number=Sing|PronType=Prs	20	nsubj	_	Gloss=he
+19	sukataṃ	sukata	NOUN	_	Case=Acc|Gender=Neut|Number=Sing	20	obj	_	Gloss=good-deed
+20	kāsati	kāsa	VERB	_	Mood=Ind|Number=Sing|Person=3|Tense=Pres|VerbForm=Fin|Voice=Act	0	root	_	Gloss=will-do
+
+# sent_id = girnar-5-6
+# text = yo tu eta desaṃ pi hāpesati so dukataṃ kāsati
+# orig = yo tu eta desaṃ pi hāpesati so [du]kataṃ kāsati
+1	yo	yo	PRON	_	Case=Nom|Gender=Masc|Number=Sing|PronType=Prs	6	nsubj	_	_
+2	tu	tu	CCONJ	_	_	9	cc	_	_
+3	eta	eta	PRON	_	Case=Acc|Gender=Neut|Number=Sing|PronType=Dem	4	det	_	Gloss=these
+4	desaṃ	desa	NOUN	_	Case=Acc|Gender=Neut|Number=Sing	6	obj	_	_
+5	pi	pi	ADV	_	_	4	discourse	_	_
+6	hāpesati	hāpesa	VERB	_	Mood=Ind|Number=Sing|Person=3|Tense=Fut|VerbForm=Fin|Voice=Act	7	acl:relcl	_	_
+7	so	so	PRON	_	Case=Nom|Gender=Masc|Number=Sing|PronType=Prs	9	nsubj	_	_
+8	dukataṃ	dukata	NOUN	_	Case=Acc|Gender=Neut|Number=Sing	9	obj	_	_
+9	kāsati	kāsa	VERB	_	Mood=Ind|Number=Sing|Person=3|Tense=Pres|VerbForm=Fin|Voice=Act	0	root	_	_
+
+# sent_id = girnar-5-7
+# text = sukaraṃ hi pāpaṃ
+# orig = sukaraṃ hi pāpa[ṃ]
+1	sukaraṃ	sukara	NOUN	_	Case=Nom|Gender=Neut|Number=Sing	3	nsubj	_	_
+2	hi	hi	PART	_	_	3	discourse	_	_
+3	pāpaṃ	pāpa	NOUN	_	Case=Nom|Gender=Neut|Number=Sing	0	root	_	_
+
+# sent_id = girnar-5-8
+# text = atikataṃ aṃtaraṃ na bhūta-pruvaṃ dhaṃma-mahāmātā nāma
+# orig = atikataṃ aṃtaraṃ / na bhūta-pruvaṃ dhaṃma-mahāmātā nāma
+1	atikataṃ	atikata	ADJ	_	Case=Acc|Gender=Neut|Number=Sing	2	amod	_	_
+2	aṃtaraṃ	aṃtara	NOUN	_	Case=Acc|Gender=Neut|Number=Sing	8	obl:tmod	_	_
+3	na	na	ADV	_	Polarity=Neg	8	advmod	_	_
+4-5	bhūta-pruvaṃ	_	_	_	_	_	_	_	_
+4	bhūta	bhūta	VERB	_	Case=Acc|Gender=Neut|Number=Sing	5	amod	_	_
+5	pruvaṃ	pruva	ADJ	_	Case=Acc|Gender=Neut|Number=Sing	8	obl:tmod	_	_
+6-7	dhaṃma-mahāmātā	_	_	_	_	_	_	_	_
+6	dhaṃma	dhaṃma	NOUN	_	Compound=Yes|Gender=Masc	7	nmod	_	_
+7	mahāmātā	mahāmāta	NOUN	_	Case=Nom|Gender=Masc|Number=Plur	8	nmod	_	_
+8	nāma	nāman	NOUN	_	Case=Acc|Gender=Neut|Number=Sing	0	root	_	_
+
+# sent_id = girnar-5-9
+# text = ta mayā traidasavāsābhisitena dhaṃmamahāmātā katā
+# orig = ta m[a]yā traidasavāsābhi[s]i[tena] dhaṃm[a]mahāmātā katā
+1	ta	ta	CCONJ	_	_	8	cc	_	_
+2	mayā	ahaṃ	PRON	_	Case=Ins|Number=Sing|PronType=Prs	8	nsubj	_	Orig=m[a]yā
+3-5	traidasavāsābhisitena	_	_	_	_	_	_	_	Orig=traidasavāsābhi[s]i[tena]
+3	traidasa	traidasa	NUM	_	Compound=Yes|NumType=Card	4	nummod	_	_
+4	vāsa	vāsa	NOUN	_	Compound=Yes|Gender=Masc	5	compound	_	_
+5	abhisitena	abhisiñca	VERB	_	Case=Ins|Gender=Masc|Number=Sing|Tense=Past|VerbForm=Part|Voice=Pass	2	amod	_	Orig=abhi[s]i[tena]
+6-7	dhaṃmamahāmātā	_	_	_	_	_	_	_	Orig=dhaṃm[a]mahāmātā
+6	dhaṃma	dhaṃma	NUM	_	Compound=Yes|Gender=Masc	7	compound	_	Orig=dhaṃm[a]
+7	mahāmātā	mahāmāta	NOUN	_	Case=Nom|Gender=Masc|Number=Plur	8	obj	_	_
+8	katā	karo	VERB	_	Case=Nom|Gender=Masc|Number=Plur|Tense=Past|VerbForm=Part|Voice=Pass	0	root	_	_
+
+# sent_id = girnar-5-10
+# text = te sava-pāsaṃḍesu vyāpatā dhāmadhisṭānāya ... dhaṃma-yutasa ca
+# orig = te sava-pāsaṃḍesu vyāpatā dhāmadhisṭānāya / ... [dha]ṃma-yutasa ca
+1	te	so	PRON	_	Case=Nom|Gender=Masc|Number=Plur|PronType=Prs	4	nsubj	_	_
+2-3	sava-pāsaṃḍesu	_	_	_	_	_	_	_	_
+2	sava	sava	ADJ	_	Compound=Yes	3	amod	_	_
+3	pāsaṃḍesu	pāsaṃḍa	NOUN	_	Case=Loc|Gender=Masc|Number=Plur	4	obl:lmod	_	_
+4	vyāpatā	vyāpata	ADJ	_	Case=Nom|Gender=Masc|Number=Plur	0	root	_	_
+5-6	dhāmadhisṭānāya	_	_	_	_	_	_	_	_
+5	dhāma	dhāma	NOUN	_	Compound=Yes|Gender=Masc	6	compound	_	_
+6	adhisṭānāya	adhisṭāna	NOUN	_	Case=Dat|Gender=Neut|Number=Sing	4	obl	_	_
+7	...	...	PUNCT	_	_	6	punct	_	_
+8-9	dhaṃma-yutasa	_	_	_	_	_	_	_	Orig=[dha]mma-yutasa
+8	dhamma	dhamma	NOUN	_	Compound=Yes|Gender=Masc	9	compound	_	Orig=[dha]mma
+9	yutasa	yuta	NOUN	_	Case=Gen|Gender=Neut|Number=Sing	6	conj	_	_
+10	ca	ca	CCONJ	_	_	9	cc	_	_
+
+# sent_id = girnar-5-11
+# text = Yoṇa-Kaṃboja-Gaṃdhārānaṃ Risṭika-Peteṇikānaṃ ye vā pi aṃñe āparātā bhata mayesu vā ... sukhāya dhaṃma-yutānaṃ aparigodhāya vyāpatā te
+# orig = Yoṇa-K[a]ṃbo[ja]-Gaṃdhārānaṃ Risṭika-P[e]teṇikānaṃ ye vā pi a[ṃ]ñe [ā]parātā bhata mayesu vā ... [su]khā[ya dhaṃma]-yutānaṃ apar[i]godhāya vyāpatā te
+1-3	Yoṇa-Kaṃboja-Gaṃdhārānaṃ	_	_	_	_	_	_	_	Orig=Yoṇa-K[a]ṃbo[ja]-Gaṃdhārānaṃ
+1	Yoṇa	Yoṇa	PROPN	_	Compound=Yes|Gender=Masc	12	nmod	_	_
+2	Kaṃboja	Kaṃboja	PROPN	_	Compound=Yes|Gender=Masc	1	conj	_	Orig=K[a]ṃbo[ja]
+3	Gaṃdhārānaṃ	Gaṃdhāra	PROPN	_	Case=Gen|Gender=Masc|Number=Plur	2	conj	_	_
+4-5	Risṭika-Peteṇikānaṃ	_	_	_	_	_	_	_	Orig=Risṭika-P[e]teṇikānaṃ
+4	Risṭika	Risṭika	PROPN	_	Compound=Yes|Gender=Masc	3	conj	_	_
+5	Peteṇikānaṃ	Peteṇika	PROPN	_	Case=Gen|Gender=Masc|Number=Plur	4	conj	_	Orig=P[e]teṇikānaṃ
+6	ye	yo	PRON	_	Case=Nom|Gender=Masc|Number=Sing|PronType=Rel	3	conj	_	_
+7	vā	vā	CCONJ	_	_	6	cc	_	_
+8	pi	pi	ADV	_	_	6	discourse	_	_
+9	aṃñe	aṃña	ADJ	_	Case=Nom|Gender=Masc|Number=Plur	10	amod	_	Orig=a[ṃ]ñ[e]
+10	āparātā	aparāta	NOUN	_	Case=Nom|Gender=Masc|Number=Plur	6	acl:relcl	_	Orig=[ā]parātā
+11	bhata	bhata	NOUN	_	Compound=Yes|Gender=Masc	19	obl	_	_
+12	mayesu	maya	NOUN	_	Case=Loc|Gender=Masc|Number=Plur	11	conj	_	_
+13	vā	vā	CCONJ	_	_	12	cc	_	_
+14	...	...	PUNCT	_	_	12	punct	_	_
+15	sukhāya	sukha	NOUN	_	Case=Dat|Gender=Neut|Number=Sing	19	obl	_	Orig=[su]khā[ya]
+16-17	dhaṃma-yutānaṃ	_	_	_	_	_	_	_	Orig=[dhaṃma]-yutānaṃ
+16	dhaṃma	dhaṃma	NOUN	_	Compound=Yes|Gender=Masc	17	compound	_	Orig=[dhaṃma]
+17	yutānaṃ	yuta	NOUN	_	Case=Gen|Gender=Masc|Number=Plur	19	obl	_	_
+18	aparigodhāya	aparigodha	NOUN	_	Case=Dat|Gender=Neut|Number=Sing	19	obl	_	Orig=apar[i]godhāya
+19	vyāpatā	vyāpata	ADJ	_	Case=Nom|Gender=Masc|Number=Plur	0	root	_	_
+20	te	so	PRON	_	Case=Nom|Gender=Masc|Number=Plur|PronType=Prs	19	nsubj	_	_
+
+# sent_id = girnar-5-12
+# text = baṃdhana-badhasa paṭividhānāya ... prajā katābhākāresu vā thairesu vā vyāpatā te
+# orig = ba[ṃ]dhana-badhasa paṭividhānāya / ... [p]rajā katābhākāresu vā thairesu vā vyāpatā te
+1-2	baṃdhana-badhasa	_	_	_	_	_	_	_	Orig=ba[ṃ]dhana-badhasa
+1	baṃdhana	baṃdhana	NOUN	_	Compound=Yes|Gender=Neut	2	compound	_	Orig=ba[ṃ]dhana
+2	badhasa	badha	ADJ	_	Case=Gen|Gender=Neut|Number=Sing	3	nmod	_	_
+3	paṭividhānāya	paṭividhāna	NOUN	_	Case=Dat|Gender=Neut|Number=Sing	10	obl	_	_
+4	...	...	PUNCT	_	_	3	punct	_	_
+5	prajā	prajā	NOUN	_	Case=Nom|Gender=Fem|Number=Sing	2	parataxis	_	Orig=[p]rajā
+6	katābhākāresu	katābhākāra	ADJ	_	Case=Loc|Gender=Neut|Number=Plur	5	conj	_	_
+7	vā	vā	CCONJ	_	_	6	cc	_	_
+8	thairesu	thaira	ADJ	_	Case=Loc|Gender=Neut|Number=Plur	5	conj	_	_
+9	vā	vā	CCONJ	_	_	8	cc	_	_
+10	vyāpatā	vyāpata	ADJ	_	Case=Nom|Gender=Masc|Number=Plur	0	root	_	_
+11	te	so	PRON	_	Case=Nom|Gender=Masc|Number=Plur|PronType=Prs	10	nsubj	_	_
+
+# sent_id = girnar-5-13
+# text = Pāṭalipute ca bāhirasu ca ... ye vā pi me añe ñātikā sarvata vyāpatā te
+# orig = Pāṭalipute ca bāhirasu ca / ... [y]e vā pi me añe ñātikā sarvata vyāpatā te
+1	Pāṭalipute	Pāṭaliputa	PROPN	_	Case=Loc|Gender=Masc|Number=Sing	13	obl:lmod	_	_
+2	ca	ca	CCONJ	_	_	1	cc	_	_
+3	bāhirasu	bāhira	NOUN	_	Case=Loc|Gender=Masc|Number=Sing	1	conj	_	_
+4	ca	ca	CCONJ	_	_	3	cc	_	_
+5	...	...	PUNCT	_	_	1	punct	_	_
+6	ye	yo	PRON	_	Case=Nom|Gender=Masc|Number=Sing|PronType=Rel	1	conj	_	Orig=[y]e
+7	vā	vā	CCONJ	_	_	6	cc	_	_
+8	pi	pi	ADV	_	_	6	discourse	_	_
+9	me	ahaṃ	PRON	_	Case=Dat|Number=Plur|PronType=Prs	11	nmod	_	_
+10	añe	aña	ADJ	_	Case=Nom|Gender=Masc|Number=Plur	11	amod	_	_
+11	ñātikā	ñātika	NOUN	_	Case=Nom|Gender=Masc|Number=Plur	6	acl:relcl	_	_
+12	sarvata	sarvata	ADV	_	AdvType=Loc	13	advmod:lmod	_	_
+13	vyāpatā	vyāpata	ADJ	_	Case=Nom|Gender=Masc|Number=Plur	0	root	_	_
+14	te	so	PRON	_	Case=Nom|Gender=Masc|Number=Plur|PronType=Prs	13	nsubj	_	_
+
+# sent_id = girnar-5-14
+# text = yo ayaṃ dhaṃmanisrito ti va ... te dhaṃma-mahāmātā
+# orig = yo ayaṃ dhaṃmanisrito ti va / ... [t]e [dha]ṃma-mahāmātā
+1	yo	yo	PRON	_	Case=Nom|Gender=Masc|Number=Sing|PronType=Rel	0	root	_	_
+2	ayaṃ	ayaṃ	DET	_	Case=Nom|Gender=Masc|Number=Sing|PronType=Dem	4	det	_	_
+3-4	dhaṃmanisrito	_	_	_	_	_	_	_	_
+3	dhaṃma	dhaṃma	NOUN	_	Compound=Yes|Gender=Masc	4	compound	_	_
+4	nisrito	nisrita	ADJ	_	Case=Nom|Gender=Masc|Number=Sing	1	acl:relcl	_	_
+5	ti	ti	PART	_	_	1	discourse	_	_
+6	va	va	PART	_	_	1	discourse	_	_
+7	...	...	PUNCT	_	_	1	punct	_	_
+8	te	so	DET	_	Case=Nom|Gender=Masc|Number=Plur|PronType=Prs	10	det	_	Orig=[t]e
+9-10	dhaṃma-mahāmātā	_	_	_	_	_	_	_	Orig=[dha]ṃma-mahāmātā
+9	dhaṃma	dhaṃma	NOUN	_	Compound=Yes|Gender=Masc	10	compound	_	Orig=[dha]ṃma
+10	mahāmātā	mahāmāta	NOUN	_	Case=Nom|Gender=Masc|Number=Plur	1	parataxis	_	_
+
+# sent_id = girnar-5-15
+# text = etāya athāya ayaṃ dhaṃma-lipī likhitā ...
+# orig = etāya athāya ayaṃ dhaṃma-lipī likhitā / ...
+1	etāya	etad	PRON	_	Case=Dat|Gender=Masc|Number=Sing|PronType=Dem	2	det	_	_
+2	athāya	atha	NOUN	_	Case=Dat|Gender=Masc|Number=Sing	6	obl	_	_
+3	ayaṃ	ayaṃ	PRON	_	Case=Nom|Gender=Fem|Number=Sing|PronType=Dem	5	det	_	_
+4-5	dhaṃma-lipī	_	_	_	_	_	_	_	_
+4	dhaṃma	dhaṃma	NOUN	_	Compound=Yes|Gender=Masc	5	compound	_	_
+5	lipī	lipi	NOUN	_	Case=Nom|Gender=Fem|Number=Sing	6	obj	_	_
+6	likhitā	lekha	VERB	_	Case=Nom|Gender=Fem|Number=Sing|Tense=Past|VerbForm=Part|Voice=Pass	0	root	_	_
+7	...	...	PUNCT	_	_	6	punct	_	_
+
+# sent_id = shahbazgarhi-1-1
+# text = aya dhrama-dipi Devanapriasa raño likhapitu
+# orig = [aya] dhrama-dipi Devanapriasa raño likhapitu
+1	aya	aya	DET	_	Case=Nom|Gender=Fem|Number=Sing|PronType=Dem	3	det	_	Gloss=this|Orig=[aya]
+2-3	dhrama-dipi	_	_	_	_	_	_	_	_
+2	dhrama	dhrama	NOUN	_	Compound=Yes|Gender=Masc	3	compound	_	Gloss=morality
+3	dipi	dipi	NOUN	_	Case=Nom|Gender=Fem|Number=Sing	7	obj	_	Gloss=rescript
+4-5	Devanapriasa	_	_	_	_	_	_	_	_
+4	devana	devana	NOUN	_	Case=Gen|Gender=Masc|Number=Plur	5	nmod	_	Gloss=of-the-Gods
+5	priasa	pria	ADJ	_	Case=Gen|Gender=Masc|Number=Sing	6	nmod:desc	_	Gloss=beloved
+6	raño	rāyan	NOUN	_	Case=Gen|Gender=Masc|Number=Sing	7	nsubj	_	Gloss=by-king
+7	likhapitu	likhapaya	VERB	_	Case=Nom|Gender=Fem|Number=Sing|Tense=Past|VerbForm=Part|Voice=Cau,Pass	0	root	_	Gloss=has-been-caused-to-be-written
+
+# sent_id = shahbazgarhi-1-2
+# text = hida no kici jive arabhitu prayuhotave
+# orig = hida no kic[i] jive ara[bhitu p]rayuhotave
+1	hida	hida	ADV	_	AdvType=Loc	6	advmod:lmod	_	Gloss=here
+2	no	no	PART	_	Polarity=Neg	6	advmod	_	Gloss=not
+3	kici	kici	DET	_	PronType=Ind	4	det	_	Gloss=any
+4	jive	jiva	NOUN	_	Case=Nom|Gender=Neut|Number=Sing	5	obj	_	Gloss=living-being
+5	arabhitu	arabha	VERB	_	VerbForm=Conv	6	advcl	_	Gloss=be-killed-and|Orig=ara[bhitu]
+6	prayuhotave	prayuho	VERB	_	Case=Nom|Gender=Neut|Number=Sing|Tense=Fut|VerbForm=Part|Voice=Pass	0	root	_	Gloss=must-be-sacrificed|Orig=[p]rayuhotave
+
+# sent_id = shahbazgarhi-1-3
+# text = no pi ca samaja kaṭava
+# orig = no pi c[a] sama[ja] kaṭava
+1	no	no	PART	_	Polarity=Neg	5	advmod	_	Gloss=no
+2	pi	pi	ADV	_	_	5	advmod:emph	_	Gloss=also
+3	ca	ca	CCONJ	_	_	5	cc	_	Gloss=and|Orig=c[a]
+4	samaja	samaja	NOUN	_	Case=Nom|Gender=Masc|Number=Plur	5	obj	_	Gloss=festival-meetings|Orig=sama[ja]
+5	kaṭava	karo	VERB	_	Case=Nom|Gender=Masc|Number=Plur|Tense=Fut|VerbForm=Part|Voice=Pass	0	root	_	Gloss=must-be-held
+
+# sent_id = shahbazgarhi-1-4
+# text = bahuka hi dośa samayaspi Devaṇapriye Priadraśi raya dakhati
+# orig = ba[hu]ka [hi] dośa sa[maya]spi Devaṇapriy[e] Priadraśi ray[a da]khati
+1	bahuka	bahuka	DET	_	Case=Acc|Gender=Masc|Number=Sing|PronType=Ind	3	det	_	Gloss=much|Orig=ba[hu]ka
+2	hi	hi	PART	_	_	1	advmod:emph	_	Gloss=for|Orig=[hi]
+3	dośa	dośa	NOUN	_	Case=Acc|Gender=Masc|Number=Sing	10	obj	_	Gloss=evil
+4	samayaspi	samaya	NOUN	_	Case=Loc|Gender=Masc|Number=Sing	10	obl:lmod	_	Gloss=in-festival-meetings|Orig=sa[maya]spi
+5-6	Devaṇapriye	_	_	_	_	_	_	_	_
+5	devaṇa	deva	NOUN	_	Case=Gen|Gender=Masc|Number=Plur	6	nmod:poss	_	Gloss=of-the-Gods
+6	priye	priya	ADJ	_	Case=Nom|Gender=Masc|Number=Sing	9	nmod:desc	_	Gloss=beloved|Orig=priy[e]
+7-8	Priadraśi	_	_	_	_	_	_	_	_
+7	pria	pria	ADJ	_	Compound=Yes|Gender=Masc	8	amod	_	Gloss=friendly
+8	draśi	draśin	ADJ	_	Case=Nom|Gender=Masc|Number=Sing	9	nmod:desc	_	Gloss=looking
+9	raya	rāyan	NOUN	_	Case=Nom|Gender=Masc|Number=Sing	10	nsubj	_	Gloss=king|Orig=ray[a]
+10	dakhati	dakha	VERB	_	Mood=Ind|Number=Sing|Person=3|Tense=Pres|VerbForm=Fin|Voice=Act	0	root	_	Gloss=sees|Orig=[da]khati
+
+# sent_id = shahbazgarhi-1-5
+# text = asti pi cu ekatia samaye sasu-mate Devanapiasa Priadraśisa raño
+# orig = [a]sti pi cu ekatia samaye sasu-mate Devanapiasa Priadraśisa raño
+1	asti	as	VERB	_	Mood=Ind|Person=3|Tense=Pres|VerbForm=Fin|Voice=Act	0	root	_	Gloss=there-are|Orig=[a]sti
+2	pi	pi	ADV	_	_	1	advmod:emph	_	Gloss=also
+3	cu	cu	CCONJ	_	_	1	cc	_	Gloss=but
+4	ekatia	ekatia	DET	_	PronType=Ind	5	det	_	Gloss=some
+5	samaye	samaya	NOUN	_	Case=Nom|Gender=Masc|Number=Plur	1	obj	_	Gloss=festival-meetings
+6-7	sasu-mate	_	_	_	_	_	_	_	_
+6	sasu	sasu	ADV	_	AdvType=Man	7	advmod	_	Gloss=meritorious
+7	mate	maña	VERB	_	Case=Nom|Gender=Masc|Number=Plur|Tense=Past|VerbForm=Part|Voice=Pass	5	acl	_	Gloss=considered
+8-9	Devanapiasa	_	_	_	_	_	_	_	_
+8	devana	deva	NOUN	_	Case=Gen|Gender=Masc|Number=Plur	9	nmod	_	Gloss=of-the-Gods
+9	piasa	pia	ADJ	_	Case=Gen|Gender=Masc|Number=Sing	12	nmod:desc	_	Gloss=beloved
+10-11	Priadraśisa	_	_	_	_	_	_	_	_
+10	pria	pria	ADJ	_	Compound=Yes|Gender=Masc	11	amod	_	Gloss=friendly
+11	draśisa	draśin	ADJ	_	Case=Gen|Gender=Masc|Number=Sing	12	nmod:desc	_	Gloss=looking
+12	raño	rāyan	NOUN	_	Case=Gen|Gender=Masc|Number=Sing	7	nsubj	_	Gloss=by-king
+
+# sent_id = shahbazgarhi-1-6
+# text = pura mahanasasi Devanapriasa Priadraśisa raño anudivaso bahuni praṇa-sata-sahasani arabhiyisu supaṭhaye
+# orig = pura mahana[sas]i [Devana]pr[i]asa Priadraśisa raño anudivaso bahuni pra[ṇa]-sata-sahasani [arabhi]yis[u] supaṭhay[e]
+1	pura	pura	ADV	_	AdvType=Tim	14	advmod:tmod	_	Gloss=formerly
+2	mahanasasi	mahanasa	NOUN	_	Case=Loc|Gender=Neut|Number=Sing	14	obl:lmod	_	Gloss=in-the-kitchen|Orig=mahana[sas]i
+3-4	Devanapriasa	_	_	_	_	_	_	_	_
+3	devana	deva	NOUN	_	Case=Gen|Gender=Masc|Number=Plur	4	nmod	_	Gloss=of-the-Gods|Orig=[Devana]
+4	priasa	pria	ADJ	_	Case=Gen|Gender=Masc|Number=Sing	7	nmod:desc	_	Gloss=beloved|Orig=Pr[i]asa
+5-6	Priadraśisa	_	_	_	_	_	_	_	_
+5	pria	pria	ADJ	_	Compound=Yes|Gender=Masc	6	amod	_	Gloss=friendly
+6	draśisa	draśin	ADJ	_	Case=Gen|Gender=Masc|Number=Sing	7	nmod:desc	_	Gloss=looking
+7	raño	rāyan	NOUN	_	Case=Gen|Gender=Masc|Number=Sing	2	nmod	_	Gloss=by-king
+8-9	anudivaso	_	_	_	_	_	_	_	_
+8	anu	anu	DET	_	PronType=Tot	9	det	_	Gloss=every
+9	divaso	divasa	NOUN	_	Case=Nom|Gender=Masc|Number=Sing	14	obl:tmod	_	Gloss=day
+10	bahuni	bahu	ADJ	_	Case=Acc|Gender=Neut|Number=Sing	13	amod	_	Gloss=many
+11-13	praṇa-sata-sahasani	_	_	_	_	_	_	_	_
+11	praṇa	praṇa	NOUN	_	Compound=Yes|Gender=Masc	12	compound	_	Gloss=living|Orig=pra[ṇa]
+12	sata	sata	NOUN	_	Compound=Yes|Gender=Neut	13	compound	_	Gloss=being
+13	sahasani	sahasa	NUM	_	Case=Acc|Gender=Masc|Number=Plur|NumType=Card	14	obj	_	Gloss=hundred-thousands-of
+14	arabhiyisu	arabhiya	VERB	_	Mood=Ind|Number=Sing|Person=3|Tense=Past|VerbForm=Fin|Voice=Pass	0	root	_	Gloss=were-killed|Orig=[arabhi]yis[u]
+15-16	supaṭhaye	_	_	_	_	_	_	_	_
+15	supa	supa	NOUN	_	Compound=Yes|Gender=Masc	14	obl	_	Gloss=curry
+16	aṭhaye	aṭha	ADP	_	_	15	case	_	Gloss=for-the-sake-of|Orig=aṭhay[e]
+
+# sent_id = shahbazgarhi-1-7
+# text = so idani yada aya dhrama-dipi likhita tada trayo vo praṇa haṃñaṃti majura duvi mrugo so pi mrugo no dhruvaṃ
+# orig = s[o i]dani yada aya dhrama-dipi likhita tada trayo vo praṇa haṃñaṃt[i] majura duv[i] / mrugo so pi mrugo no dhruva[ṃ]
+1	so	sa	CCONJ	_	_	12	cc	_	Gloss=but|Orig=s[o]
+2	idani	idani	ADV	_	AdvType=Tim	12	advmod:tmod	_	Gloss=now|Orig=[i]dani
+3	yada	yada	SCONJ	_	_	7	mark	_	Gloss=when
+4	aya	aya	DET	_	PronType=Dem	6	det	_	Gloss=this
+5-6	dhrama-dipi	_	_	_	_	_	_	_	_
+5	dhrama	dhrama	NOUN	_	Compound=Yes|Gender=Masc	6	compound	_	Gloss=morality
+6	dipi	dipi	NOUN	_	Case=Nom|Gender=Fem|Number=Sing	7	obj	_	Gloss=rescript
+7	likhita	likha	VERB	_	Case=Nom|Gender=Fem|Number=Sing|Tense=Past|VerbForm=Part|Voice=Pass	11	advcl	_	Gloss=is-written
+8	tada	tada	ADV	_	PronType=Dem	12	advmod:tmod	_	Gloss=then
+9	trayo	trayas	NUM	_	Case=Nom|Gender=Masc|NumType=Card	11	nummod	_	Gloss=three
+10	vo	vo	PART	_	_	9	advmod:emph	_	Gloss=only
+11	praṇa	praṇa	NOUN	_	Case=Nom|Gender=Masc|Number=Plur	12	obj	_	Gloss=animals
+12	haṃñaṃti	haṃña	VERB	_	Mood=Ind|Number=Plur|Person=3|Tense=Pres|VerbForm=Fin|Voice=Pass	0	root	_	Gloss=are-being-killed|Orig=haṃñaṃt[i]
+13	majura	majura	NOUN	_	Case=Nom|Gender=Masc|Number=Plur	12	parataxis	_	Gloss=peacocks
+14	duvi	duva	NUM	_	Case=Nom|Gender=Masc|NumType=Card	13	nummod	_	Gloss=two|Orig=duv[i]
+15	mrugo	mruga	NOUN	_	Case=Nom|Gender=Masc|Number=Sing	13	conj	_	Gloss=deer
+16	so	sa	DET	_	PronType=Dem	18	det	_	Gloss=this
+17	pi	pi	ADV	_	_	16	advmod:emph	_	Gloss=even
+18	mrugo	mruga	NOUN	_	Case=Nom|Gender=Masc|Number=Sing	13	conj	_	Gloss=deer
+19	no	no	PART	_	Polarity=Neg	20	advmod:neg	_	Gloss=not
+20	dhruvaṃ	dhruva	ADV	_	AdvType=Man	18	orphan	_	Gloss=regularly|Orig=dhruva[ṃ]
+
+# sent_id = shahbazgarhi-1-8
+# text = eta pi praṇa trayo paca na arabhiśaṃti
+# orig = eta pi praṇa trayo paca na arabhiśaṃti
+1	eta	eta	DET	_	PronType=Dem	4	det	_	Gloss=these
+2	pi	pi	ADV	_	_	1	advmod:emph	_	Gloss=even
+3	praṇa	praṇa	NUM	_	Case=Nom|Gender=Masc|NumType=Card	7	obj	_	Gloss=animals
+4	trayo	trayas	NOUN	_	Case=Acc|Gender=Masc|Number=Plur	3	nummod	_	Gloss=three
+5	paca	paca	ADV	_	AdvType=Tim	7	advmod:tmod	_	Gloss=in-future
+6	na	na	PART	_	Polarity=Neg	7	advmod:neg	_	Gloss=not
+7	arabhiśaṃti	arabha	VERB	_	Mood=Ind|Number=Plur|Person=3|Tense=Fut|VerbForm=Fin|Voice=Pass	0	root	_	Gloss=shall-be-killed
+
+# sent_id = shahbazgarhi-2-1
+# text = savratra vijite Devanaṃpriyasa Priyadraśisa ye ca aṃta yathā Coḍa Paṃḍiya Satiyaputro Keraḍaputro Taṃbapaṃṇī Aṃtiyoko nāma Yona-raja ye ca aṃñe tasa Aṃtiyokasa samaṃta rajano savratra Devanaṃpriyasa Priyadraśisa raño duvi cikisa kriṭa manusa-cikisa ... paśu-cikisa ca
+# orig = sav[r]atra vijite [De]va[naṃ]priyasa Priyadraśisa y[e] ca [a]ṃta yathā [Coḍa] Paṃḍiya Satiyaputro Keraḍaputro Taṃbapaṃṇī Aṃtiyo[k]o nāma Yona-raja ye ca aṃñe tasa Aṃtiyokasa samaṃta rajano savratra Devanaṃpriyasa Priyadraśisa raño du[vi] cik[i]sa [kr]i[ṭa] manusa-cikisa .. pa[śu-c]ikisa [ca]
+1	savratra	savratra	ADV	_	AdvType=Loc	36	advmod:lmod	_	Orig=sav[r]atra
+2	vijite	vijita	NOUN	_	Case=Loc|Gender=Masc|Number=Sing	1	obl	_	_
+3-4	Devanaṃpriyasa	_	_	_	_	_	_	_	Orig=[De]va[naṃ]priyasa
+3	devanaṃ	deva	NOUN	_	Case=Gen|Gender=Masc|Number=Plur	4	nmod	_	_
+4	priyasa	priya	ADJ	_	Case=Gen|Gender=Masc|Number=Sing	6	nmod:desc	_	_
+5-6	Priyadraśisa	_	_	_	_	_	_	_	_
+5	priya	priya	ADJ	_	Compound=Yes|Gender=Masc	6	amod	_	_
+6	draśisa	draśin	ADJ	_	Case=Gen|Gender=Masc|Number=Sing	2	nmod	_	_
+7	ye	ya	PRON	_	Case=Nom|Gender=Masc|Number=Sing|PronType=Rel	9	nsubj	_	Orig=y[e]
+8	ca	ca	CCONJ	_	_	7	cc	_	_
+9	aṃta	aṃta	NOUN	_	Case=Nom|Gender=Masc|Number=Plur	2	conj	_	Orig=[a]ṃta
+10	yathā	yathā	PART	_	_	11	case	_	_
+11	Coḍa	Coḍa	PROPN	_	Case=Nom|Gender=Masc|Number=Plur	9	nmod	_	Orig=[Coḍa]
+12	Paṃḍiya	Paṃḍiya	PROPN	_	Case=Nom|Gender=Masc|Number=Plur	11	conj	_	_
+13	Satiyaputro	Satiyaputra	PROPN	_	Case=Nom|Gender=Masc|Number=Sing	11	conj	_	_
+14	Keraḍaputro	Keraḍaputra	PROPN	_	Case=Nom|Gender=Masc|Number=Sing	11	conj	_	_
+15	Taṃbapaṃṇī	Taṃbapaṃṇin	PROPN	_	Case=Nom|Gender=Masc|Number=Sing	11	conj	_	_
+16	Aṃtiyoko	Aṃtiyoka	PROPN	_	Case=Nom|Gender=Masc|Number=Sing	11	conj	_	Orig=Aṃtiyo[k]o
+17	nāma	nāma	NOUN	_	Case=Nom|Gender=Masc|Number=Sing	19	nmod	_	_
+18-19	Yona-raja	_	_	_	_	_	_	_	_
+18	yona	yona	PROPN	_	Compound=Yes|Gender=Masc	19	nmod	_	_
+19	raja	rajan	NOUN	_	Case=Nom|Gender=Masc|Number=Sing	11	conj	_	_
+20	ye	ya	PRON	_	Case=Nom|Gender=Masc|Number=Sing|PronType=Rel	26	nsubj	_	_
+21	ca	ca	CCONJ	_	_	20	cc	_	_
+22	aṃñe	aṃña	ADJ	_	Case=Loc|Gender=Masc|Number=Sing	26	amod	_	_
+23	tasa	tad	PRON	_	Case=Gen|Number=Sing|PronType=Dem	24	det	_	_
+24	Aṃtiyokasa	Aṃtiyoka	PROPN	_	Case=Gen|Gender=Masc|Number=Sing	25	nmod	_	_
+25	samaṃta	samaṃta	NOUN	_	Case=Nom|Gender=Masc|Number=Plur	26	acl:relcl	_	_
+26	rajano	raja	NOUN	_	Case=Nom|Gender=Masc|Number=Plur	2	conj	_	_
+27	savratra	savratra	ADV	_	AdvType=Loc	35	advmod:lmod	_	_
+28-29	Devanaṃpriyasa	_	_	_	_	_	_	_	_
+28	devanaṃ	deva	NOUN	_	Case=Gen|Gender=Masc|Number=Plur	29	nmod	_	_
+29	priyasa	priya	ADJ	_	Case=Gen|Gender=Masc|Number=Sing	32	nmod:desc	_	_
+30-31	Priyadraśisa	_	_	_	_	_	_	_	_
+30	priya	priya	ADJ	_	Compound=Yes|Gender=Masc	31	amod	_	_
+31	draśisa	draśin	ADJ	_	Case=Gen|Gender=Masc|Number=Sing	32	nmod:desc	_	_
+32	raño	rayan	NOUN	_	Case=Gen|Gender=Masc|Number=Sing	35	nsubj	_	_
+33	duvi	duva	NUM	_	NumType=Card	34	nummod	_	Orig=du[vi]
+34	cikisa	cikisa	NOUN	_	Case=Nom|Gender=Fem|Number=Plur	35	obj	_	Orig=cik[i]sa
+35	kriṭa	karo	VERB	_	Case=Nom|Gender=Fem|Number=Plur|Tense=Past|VerbForm=Part|Voice=Pass	0	root	_	Orig=[kr]i[ṭa]
+36-37	manusa-cikisa	_	_	_	_	_	_	_	_
+36	manusa	manusa	NOUN	_	Compound=Yes|Gender=Masc	37	nmod	_	_
+37	cikisa	cikisa	NOUN	_	Case=Nom|Gender=Fem|Number=Plur	34	appos	_	_
+38	...	...	PUNCT	_	_	37	punct	_	_
+39-40	paśu-cikisa	_	_	_	_	_	_	_	Orig=pa[śu-c]ikisa
+39	paśu	paśu	NOUN	_	Compound=Yes|Gender=Masc	40	nmod	_	Orig=pa[śu]
+40	cikisa	cikisa	NOUN	_	Case=Nom|Gender=Fem|Number=Plur	37	conj	_	Orig=[c]ikisa
+41	ca	ca	CCONJ	_	_	40	cc	_	Orig=[ca]
+
+# sent_id = shahbazgarhi-2-2
+# text = ośaḍhani manuśopakani ca paśopakani ca yatra yatra nāsti savatra harapita ca vuta ca
+# orig = [o]śa[ḍha]ni manuśopakani ca paśopakani ca yat[r]a yatra nāsti savatra harapita ca vuta ca
+1	ośaḍhani	ośaḍha	NOUN	_	Case=Nom|Gender=Neut|Number=Plur	10	nsubj	_	Orig=[o]śa[ḍha]ni
+2-3	manuśopakani	_	_	_	_	_	_	_	_
+2	manuśa	manuśa	NOUN	_	Compound=Yes|Gender=Masc	3	nmod	_	_
+3	upakani	upaka	ADJ	_	Case=Nom|Gender=Neut|Number=Plur	1	amod	_	_
+4	ca	ca	CCONJ	_	_	3	cc	_	_
+5-6	paśopakani	_	_	_	_	_	_	_	_
+5	paśu	paśu	NOUN	_	Compound=Yes|Gender=Masc	6	nmod	_	_
+6	upakani	upaka	ADJ	_	Case=Nom|Gender=Neut|Number=Plur	3	conj	_	_
+7	ca	ca	CCONJ	_	_	6	cc	_	_
+8	yatra	yatra	SCONJ	_	_	10	mark	_	Orig=yat[r]a
+9	yatra	yatra	SCONJ	_	_	10	mark	_	_
+10	nāsti	nās	VERB	_	Mood=Ind|Number=Sing|Person=3|Tense=Pres|VerbForm=Fin|Voice=Act	12	advcl	_	_
+11	savatra	savatra	ADV	_	AdvType=Loc	12	advmod:lmod	_	_
+12	harapita	harapaya	VERB	_	Case=Nom|Gender=Neut|Number=Plur|Tense=Past|VerbForm=Part|Voice=Cau,Pass	0	root	_	_
+13	ca	ca	CCONJ	_	_	12	cc	_	_
+14	vuta	vapa	VERB	_	Case=Nom|Gender=Neut|Number=Plur|Tense=Past|VerbForm=Part|Voice=Pass	12	conj	_	_
+15	ca	ca	CCONJ	_	_	14	cc	_	_
+
+# sent_id = shahbazgarhi-2-3
+# text = ...
+# orig = ...
+1	...	...	X	_	_	0	root	_	_
+
+# sent_id = shahbazgarhi-2-4
+# text = kupa ca khanapita pratibhogaye paśu-manuśanaṃ
+# orig = kupa ca khanapita pratibh[o]gaye paśu-manuśanaṃ
+1	kupa	kupa	NOUN	_	Case=Nom|Gender=Masc|Number=Plur	3	obj	_	_
+2	ca	ca	CCONJ	_	_	1	cc	_	_
+3	khanapita	khanapaya	VERB	_	Case=Nom|Gender=Masc|Number=Plur|Tense=Past|VerbForm=Part|Voice=Cau,Pass	0	root	_	_
+4	pratibhogaye	pratibhoga	NOUN	_	Case=Dat|Gender=Masc|Number=Sing	3	obl	_	Orig=pratibh[o]gaye
+5-6	paśu-manuśanaṃ	_	_	_	_	_	_	_	_
+5	paśu	paśu	NOUN	_	Compound=Yes|Gender=Masc	4	nmod	_	_
+6	manuśanaṃ	manuśa	NOUN	_	Case=Gen|Gender=Masc|Number=Plur	5	conj	_	_
+
+# sent_id = shahbazgarhi-3-1
+# text = Devanaṃpriyo Priyadraśi raja ahati
+# orig = Devanaṃpriyo Priyadraśi raja ahati
+1-2	Devanaṃpriyo	_	_	_	_	_	_	_	_
+1	devanaṃ	deva	NOUN	_	Case=Gen|Gender=Masc|Number=Plur	2	nmod	_	_
+2	priyo	priya	ADJ	_	Case=Nom|Gender=Masc|Number=Sing	5	nmod:desc	_	_
+3-4	Priyadraśi	_	_	_	_	_	_	_	_
+3	priya	priya	ADJ	_	Compound=Yes|Gender=Masc	4	amod	_	_
+4	draśi	draśin	ADJ	_	Case=Nom|Gender=Masc|Number=Sing	5	nmod:desc	_	_
+5	raja	rajan	NOUN	_	Case=Nom|Gender=Masc|Number=Sing	6	nsubj	_	_
+6	ahati	aha	VERB	_	Mood=Ind|Number=Sing|Person=3|Tense=Pres|VerbForm=Fin|Voice=Act	0	root	_	_
+
+# sent_id = shahbazgarhi-3-2
+# text = badaya-vaśabhisitena ...... aṇapitaṃ
+# orig = badaya-vaśabh[i]si[tena] ...... [a]ṇapi[taṃ]
+1-3	badaya-vaśabhisitena	_	_	_	_	_	_	_	Orig=vaśabh[i]si[tena]
+1	badaya	badaya	NUM	_	Compound=Yes|NumType=Card	2	nummod	_	_
+2	vaśa	vaśa	NOUN	_	Compound=Yes|Gender=Masc	3	obl:tmod	_	_
+3	abhisitena	abhisiñca	VERB	_	Case=Ins|Gender=Masc|Number=Sing|Tense=Past|VerbForm=Part|Voice=Pass	5	orphan	_	Orig=abh[i]si[tena]
+4	......	...	PUNCT	_	_	5	punct	_	_
+5	aṇapitaṃ	aṇa	VERB	_	Case=Nom|Gender=Neut|Number=Sing|Tense=Past|VerbForm=Part|Voice=Cau,Pass	0	root	_	Orig=[a]ṇapi[taṃ]
+
+# sent_id = kalsi-1-1
+# text = iyaṃ dhaṃma-lipi Devānaṃpiyena Piyadasinā lekhitā
+# orig = iyaṃ dhaṃma-lipi Devānaṃpiyena Piyadas[i]nā [lekhit]ā
+1	iyaṃ	iyaṃ	DET	_	Case=Nom|Gender=Fem|Number=Sing|PronType=Dem	3	det	_	Gloss=this
+2-3	dhaṃma-lipi	_	_	_	_	_	_	_	_
+2	dhaṃma	dhaṃma	NOUN	_	Compound=Yes|Gender=Masc	3	compound	_	Gloss=morality
+3	lipi	lipi	NOUN	_	Case=Nom|Gender=Fem|Number=Sing	8	obj	_	Gloss=rescript
+4-5	Devānaṃpiyena	_	_	_	_	_	_	_	_
+4	devānaṃ	deva	NOUN	_	Case=Gen|Gender=Masc|Number=Plur	5	nmod	_	Gloss=of-the-Gods
+5	piyena	piya	ADJ	_	Case=Ins|Gender=Masc|Number=Sing	7	nmod:desc	_	Gloss=beloved
+6-7	Piyadasinā	_	_	_	_	_	_	_	_
+6	piya	piya	ADJ	_	Compound=Yes|Gender=Masc	7	amod	_	Gloss=friendly
+7	dasinā	dasin	ADJ	_	Case=Ins|Gender=Masc|Number=Sing	8	nsubj	_	Gloss=looking|Orig=das[i]nā
+8	lekhitā	lekha	VERB	_	Case=Nom|Gender=Fem|Number=Sing|Tense=Past|VerbForm=Part|Voice=Cau,Pass	0	root	_	Gloss=has-been-caused-to-be-written|Orig=[lekhit]ā
+
+# sent_id = kalsi-1-2
+# text = hidā no kici jive ālabhitu pajohitaviye
+# orig = [h]idā no kichi jive ālabhitu pajohitaviye
+1	hidā	hida	ADV	_	AdvType=Loc	6	advmod:tmod	_	Gloss=here|Orig=[h]idā
+2	no	no	PART	_	Polarity=Neg	6	advmod	_	Gloss=not
+3	kici	kici	DET	_	PronType=Ind	4	det	_	Gloss=any
+4	jive	jiva	NOUN	_	Case=Nom|Gender=Neut|Number=Sing	5	obj	_	Gloss=living-being
+5	ālabhitu	ālabha	VERB	_	VerbForm=Conv	6	advcl	_	Gloss=be-killed-and
+6	pajohitaviye	pajoha	VERB	_	Case=Nom|Gender=Neut|Number=Sing|Tense=Fut|VerbForm=Part|Voice=Pass	0	root	_	Gloss=must-be-sacrificed
+
+# sent_id = kalsi-1-3
+# text = no pi ca samāje kaṭaviye
+# orig = / no pi c[a] samāje kaṭaviye
+1	no	no	PART	_	Polarity=Neg	5	advmod	_	Gloss=not
+2	pi	pi	ADV	_	_	1	advmod:emph	_	Gloss=also
+3	ca	ca	CCONJ	_	_	1	cc	_	Gloss=and|Orig=c[a]
+4	samāje	samāja	NOUN	_	Case=Nom|Gender=Masc|Number=Sing	5	obj	_	Gloss=festival_meeting
+5	kaṭaviye	karo	VERB	_	Case=Nom|Gender=Masc|Number=Sing|Tense=Fut|VerbForm=Part|Voice=Pass	0	root	_	Gloss=must-be-held
+
+# sent_id = kalsi-1-4
+# text = bahukā hi dosā samājasā Devānaṃpiye Piyadasī lājā dakhati
+# orig = bahuk[ā] hi dosā samājasā Devān[aṃ]piye Pi[ya]dasī lājā dakhati
+1	bahukā	bahuka	DET	_	Case=Acc|Gender=Masc|Number=Sing|PronType=Ind	3	det	_	Gloss=much|Orig=bahuk[ā]
+2	hi	hi	PART	_	_	1	advmod:emph	_	Gloss=for
+3	dosā	dosa	NOUN	_	Case=Acc|Gender=Masc|Number=Sing	10	obj	_	Gloss=evil
+4	samājasā	samāja	NOUN	_	Case=Gen|Gender=Masc|Number=Sing	10	obl	_	Gloss=in-festival-meetings
+5-6	Devānaṃpiye	_	_	_	_	_	_	_	_
+5	devānaṃ	deva	NOUN	_	Case=Gen|Gender=Masc|Number=Plur	6	nmod	_	Gloss=of-the-Gods|Orig=Devān[aṃ]
+6	piye	piya	ADJ	_	Case=Nom|Gender=Masc|Number=Sing	9	nmod:desc	_	Gloss=beloved
+7-8	Piyadasī	_	_	_	_	_	_	_	_
+7	piya	piya	ADJ	_	Compound=Yes|Gender=Masc	8	amod	_	Gloss=friendly|Orig=Pi[ya]
+8	dasī	dasin	ADJ	_	Case=Nom|Gender=Masc|Number=Sing	9	nmod:desc	_	Gloss=looking
+9	lājā	lājan	NOUN	_	Case=Nom|Gender=Masc|Number=Sing	10	nsubj	_	Gloss=king
+10	dakhati	dakha	VERB	_	Mood=Ind|Number=Sing|Person=3|Tense=Pres|VerbForm=Fin|Voice=Act	0	root	_	Gloss=sees
+
+# sent_id = kalsi-1-5
+# text = athi pi cā ekatiyā samājā sādhu-matā Devānaṃpiyasā Piyadasisā lājine
+# orig = athi pi c[ā e]katiyā samājā sādh[u]-matā Devānaṃpiyasā Piyadasis[ā] lājine
+1	athi	as	VERB	_	Mood=Ind|Person=3|Tense=Pres|VerbForm=Fin|Voice=Act	0	root	_	Gloss=there-are
+2	pi	pi	ADV	_	_	1	advmod:emph	_	Gloss=also
+3	cā	cā	CCONJ	_	_	1	cc	_	Gloss=but|Orig=c[ā]
+4	ekatiyā	ekatiya	DET	_	PronType=Ind	5	det	_	Gloss=some|Orig=[e]katiyā
+5	samājā	samāja	NOUN	_	Case=Nom|Gender=Masc|Number=Plur	1	obj	_	Gloss=festival-meetings
+6-7	sādhu-matā	_	_	_	_	_	_	_	_
+6	sādhu	sādhu	ADV	_	AdvType=Man	7	advmod	_	Gloss=meritorious|Orig=sādh[u]
+7	matā	mana	VERB	_	Case=Nom|Gender=Masc|Number=Plur|Tense=Past|VerbForm=Part|Voice=Pass	5	acl	_	Gloss=considered
+8-9	Devānaṃpiyasā	_	_	_	_	_	_	_	_
+8	devānaṃ	deva	NOUN	_	Case=Gen|Gender=Masc|Number=Plur	9	nmod	_	Gloss=of-the-Gods
+9	piyasa	piya	ADJ	_	Case=Gen|Gender=Masc|Number=Sing	12	nmod:desc	_	Gloss=beloved
+10-11	Piyadasisā	_	_	_	_	_	_	_	_
+10	piya	piya	ADJ	_	Compound=Yes|Gender=Masc	11	amod	_	Gloss=friendly
+11	dasisā	dasin	ADJ	_	Case=Gen|Gender=Masc|Number=Sing	12	nmod:desc	_	Gloss=looking|Orig=dasis[ā]
+12	lājine	lājan	NOUN	_	Case=Gen|Gender=Masc|Number=Sing	7	nsubj	_	Gloss=by-king
+
+# sent_id = kalsi-1-6
+# text = pule mahānasasi Devānaṃpiyasā Piyadasisā lājine anudivasaṃ bahuni pāta-sahasāni alaṃbhiyisu supaṭhāye
+# orig = / [p]ule mahānasasi Devānaṃpiyasā Piyadasisā lājin[e] anudivasaṃ bahuni pāta-sahasāni alaṃbhiyisu supaṭhāy[e]
+1	pule	pula	ADV	_	AdvType=Tim	13	advmod:tmod	_	Gloss=formerly
+2	mahānasasi	mahāna	NOUN	_	Case=Loc|Gender=Neut	13	obl:lmod	_	Gloss=in-the-kitchen
+3-4	Devānaṃpiyasā	_	_	_	_	_	_	_	_
+3	devānaṃ	deva	NOUN	_	Case=Gen|Gender=Masc|Number=Plur	4	nmod	_	Gloss=of-the-Gods
+4	piyasā	piya	ADJ	_	Case=Gen|Gender=Masc|Number=Sing	7	nmod:desc	_	Gloss=beloved
+5-6	Piyadasisā	_	_	_	_	_	_	_	_
+5	piya	piya	ADJ	_	Compound=Yes|Gender=Masc	6	amod	_	Gloss=friendly
+6	dasisā	dasin	ADJ	_	Case=Gen|Gender=Masc|Number=Sing	7	nmod:desc	_	Gloss=looking
+7	lājine	lājan	NOUN	_	Case=Gen|Gender=Masc|Number=Sing	2	nmod	_	Gloss=by-king|Orig=lājin[e]
+8-9	anudivasaṃ	_	_	_	_	_	_	_	_
+8	anu	anu	DET	_	PronType=Tot	9	det	_	Gloss=every
+9	divasaṃ	divasa	NOUN	_	Case=Nom|Gender=Neut|Number=Sing	13	obl:tmod	_	Gloss=day
+10	bahuni	bahu	ADJ	_	Case=Nom|Gender=Neut|Number=Plur	12	amod	_	Gloss=many|Orig=bah[ū]ni
+11-12	pāta-sahasāni	_	_	_	_	_	_	_	_
+11	pāta	pāta	NOUN	_	Compound=Yes|Gender=Masc	12	compound	_	Gloss=animal
+12	sahasāni	sahasa	NUM	_	Case=Nom|Gender=Masc|Number=Plur|NumType=Card	13	obj	_	Gloss=hundred-thousands-of
+13	alaṃbhiyisu	alaṃbhiya	VERB	_	Mood=Ind|Number=Sing|Person=3|Tense=Past|VerbForm=Fin|Voice=Pass	0	root	_	Gloss=were-killed
+14-15	supaṭhāye	_	_	_	_	_	_	_	_
+14	supa	supa	NOUN	_	Compound=Yes|Gender=Masc	13	obl	_	Gloss=curry
+15	aṭhāye	aṭha	ADP	_	_	14	case	_	Gloss=for-the-sake-of|Orig=aṭhāy[e]
+
+# sent_id = kalsi-1-7
+# text = se idāni yadā iyaṃ dhaṃma-lipi lekhitā tadā tiṃni yevā pānāni alabhiyaṃti duve majūlā eke mige se pi cū mige no dhruve
+# orig = se i[d]āni ya[dā] iyaṃ dhaṃma-lipi lekhitā tadā tiṃni yevā pānāni alabhi[yaṃ]ti / duve majūl[ā] eke mige se pi [cū] mige no dhruve
+1	se	sa	CCONJ	_	_	12	cc	_	Gloss=but
+2	idāni	idāni	ADV	_	AdvType=Tim	12	advmod:tmod	_	Gloss=now|Orig=i[d]āni
+3	yadā	yadā	SCONJ	_	_	7	mark	_	Gloss=when|Orig=ya[dā]
+4	iyaṃ	iyaṃ	DET	_	PronType=Dem	6	det	_	Gloss=this
+5-6	dhaṃma-lipi	_	_	_	_	_	_	_	_
+5	dhaṃma	dhaṃma	NOUN	_	Compound=Yes|Gender=Masc	6	compound	_	Gloss=morality
+6	lipi	lipi	NOUN	_	Case=Nom|Gender=Fem|Number=Sing	7	obj	_	Gloss=rescript
+7	lekhitā	lekha	VERB	_	Case=Nom|Gender=Fem|Number=Sing|Tense=Past|VerbForm=Part|Voice=Cau,Pass	12	advcl	_	Gloss=is-caused-to-be-written
+8	tadā	tadā	ADV	_	PronType=Dem	12	advmod:tmod	_	Gloss=then
+9	tiṃni	tiṃni	NUM	_	NumType=Card	11	nummod	_	Gloss=three
+10	yevā	yevā	PART	_	_	9	advmod:emph	_	Gloss=only
+11	pānāni	pāna	NOUN	_	Case=Nom|Gender=Masc|Number=Plur	12	obj	_	Gloss=animals
+12	alabhiyaṃti	alabhiya	VERB	_	Mood=Ind|Number=Plur|Person=3|Tense=Pres|VerbForm=Fin|Voice=Pass	0	root	_	Gloss=are-being-killed|Orig=alabhi[yaṃ]ti
+13	duve	duva	NUM	_	Case=Nom|Gender=Masc|NumType=Card	14	nummod	_	Gloss=two
+14	majūlā	majūla	NOUN	_	Case=Nom|Gender=Masc|Number=Plur	12	parataxis	_	Gloss=peacocks|Orig=majūl[ā]
+15	eke	eka	NUM	_	Case=Nom|Gender=Masc|NumType=Card	16	nummod	_	Gloss=one
+16	mige	miga	NOUN	_	Case=Nom|Gender=Masc|Number=Sing	14	conj	_	Gloss=deer
+17	se	se	DET	_	PronType=Dem	20	det	_	Gloss=this
+18	pi	pi	ADV	_	_	17	advmod:emph	_	Gloss=even
+19	cū	cū	CCONJ	_	_	17	cc	_	Gloss=but|Orig=[cū]
+20	mige	miga	NOUN	_	Case=Nom|Gender=Masc|Number=Sing	14	conj	_	Gloss=deer
+21	no	no	PART	_	Polarity=Neg	22	advmod	_	Gloss=not
+22	dhruve	dhruva	ADV	_	AdvType=Man	20	orphan	_	Gloss=regularly
+
+# sent_id = kalsi-1-8
+# text = etāni pi cu tini pānāni no alābhiyisaṃti
+# orig = e[t]āni pi c[u] tini pānā[n]i no alābhi[y]isa[ṃ]ti
+1	etāni	eta	DET	_	Case=Nom|Gender=Masc|Number=Plur|PronType=Dem	5	det	_	Gloss=these|Orig=e[t]āni
+2	pi	pi	ADV	_	_	1	advmod:emph	_	Gloss=even
+3	cu	cu	CCONJ	_	_	1	cc	_	Gloss=but|Orig=c[u]
+4	tini	tini	NUM	_	Case=Nom|Gender=Masc|NumType=Card	5	nummod	_	Gloss=three
+5	pānāni	pāna	NOUN	_	Case=Acc|Gender=Masc|Number=Plur	7	obj	_	Gloss=animals|Orig=pānā[n]i
+6	no	no	PART	_	Polarity=Neg	7	advmod	_	Gloss=not
+7	alābhiyisaṃti	alābhiya	VERB	_	Mood=Ind|Number=Plur|Person=3|Tense=Fut|VerbForm=Fin|Voice=Pass	0	root	_	Gloss=shall-be-killed|Orig=alābhi[y]isa[ṃ]ti
+
+# sent_id = mansehra-1-1
+# text = ayi dhramadipi Devanaṃpriyena Priyadraśina rajina likhapita
+# orig = ayi dhra[ma]dip[i] Devanaṃ[priye]na Priya[draśina rajina li]khapita
+1	ayi	ayi	DET	_	Case=Nom|Gender=Fem|Number=Sing|PronType=Dem	3	det	_	_
+2-3	dhramadipi	_	_	_	_	_	_	_	_
+2	dhrama	dhrama	NOUN	_	Compound=Yes|Gender=Masc	3	compound	_	Orig=dhra[ma]
+3	dipi	dipi	NOUN	_	Case=Nom|Gender=Fem|Number=Sing	9	obj	_	Orig=dip[i]
+4-5	Devanaṃpriyena	_	_	_	_	_	_	_	_
+4	devanam	deva	NOUN	_	Case=Gen|Gender=Masc|Number=Plur	5	nmod	_	_
+5	priyena	priya	ADJ	_	Case=Ins|Gender=Masc|Number=Sing	8	nmod:desc	_	Orig=[priye]na
+6-7	Priyadraśina	_	_	_	_	_	_	_	_
+6	priya	priya	ADJ	_	Compound=Yes|Gender=Masc	7	amod	_	_
+7	draśina	draśin	ADJ	_	Case=Ins|Gender=Masc|Number=Sing	8	nmod:desc	_	Orig=[draśina]
+8	rajina	rajan	NOUN	_	Case=Ins|Gender=Masc|Number=Sing	9	nsubj	_	Orig=[rajina]
+9	likhapita	likhapaya	VERB	_	Case=Nom|Gender=Fem|Number=Sing|Tense=Past|VerbForm=Part|Voice=Cau,Pass	0	root	_	Orig=[li]khapita
+
+# sent_id = mansehra-1-2
+# text = hida no kichi jive arabhitu prajohitaviye
+# orig = hi[da] no kichi ji[ve] ara[bhitu] pra[johi]/taviye
+1	hida	hida	ADV	_	AdvType=Loc	6	advmod	_	Orig=hi[da]
+2	no	no	PART	_	Polarity=Neg	6	advmod	_	_
+3	kichi	kichi	DET	_	PronType=Ind	4	det	_	_
+4	jive	jiva	NOUN	_	Case=Nom|Gender=Neut|Number=Sing	5	obj	_	Orig=ji[ve]
+5	arabhitu	arabha	VERB	_	VerbForm=Conv	6	advcl	_	Orig=ara[bhitu]
+6	prajohitaviye	prajoha	VERB	_	Case=Nom|Gender=Neut|Number=Sing|Tense=Fut|VerbForm=Part|Voice=Pass	0	root	_	Orig=pra[johi]taviye
+
+# sent_id = mansehra-1-3
+# text = no pi ca samaje kaṭaviye
+# orig = no pi [ca] samaj[e] kaṭaviye
+1	no	no	PART	_	Polarity=Neg	5	advmod	_	_
+2	pi	pi	ADV	_	_	5	advmod:emph	_	_
+3	ca	ca	CCONJ	_	_	5	cc	_	Orig=[ca]
+4	samaje	samaja	NOUN	_	Case=Nom|Gender=Masc|Number=Sing	5	obj	_	Orig=samaj[e]
+5	kaṭaviye	karo	VERB	_	Case=Nom|Gender=Masc|Number=Sing|Tense=Fut|VerbForm=Part|Voice=Pass	0	root	_	_
+
+# sent_id = mansehra-1-4
+# text = bahuka hi doṣa samajasa Devanaṃpriye Priyadraśi raja dakhati
+# orig = bahu[ka] hi [doṣa samajasa Devanaṃpriye] Priyadraśi raja [da]kha[ti]
+1	bahuka	bahu	DET	_	Case=Acc|Gender=Masc|Number=Sing|PronType=Ind	3	det	_	Orig=bahu[ka]
+2	hi	hi	PART	_	_	1	advmod:emph	_	_
+3	doṣa	doṣa	NOUN	_	Case=Acc|Gender=Masc|Number=Sing	10	obj	_	Orig=[doṣa]
+4	samajasa	samaja	NOUN	_	Case=Gen|Gender=Masc|Number=Sing	10	obl	_	Orig=[samajasa]
+5-6	Devanaṃpriye	_	_	_	_	_	_	_	_
+5	devanaṃ	deva	NOUN	_	Case=Gen|Gender=Masc|Number=Plur	6	nmod	_	Orig=[devanaṃ]
+6	priye	priya	ADJ	_	Case=Nom|Gender=Masc|Number=Sing	9	nmod:desc	_	Orig=[priye]
+7-8	Priyadraśi	_	_	_	_	_	_	_	_
+7	priya	priya	ADJ	_	Compound=Yes|Gender=Masc	8	amod	_	_
+8	draśi	draśin	ADJ	_	Case=Nom|Gender=Masc|Number=Sing	9	nmod:desc	_	_
+9	raja	rajan	NOUN	_	Case=Nom|Gender=Masc|Number=Sing	10	nsubj	_	_
+10	dakhati	dakha	VERB	_	Mood=Ind|Number=Sing|Person=3|Tense=Pres|VerbForm=Fin|Voice=Act	0	root	_	Orig=[da]kha[ti]
+
+# sent_id = mansehra-1-5
+# text = astipi cu ekatiya samaja sadhu-mata Devanapriyasa Priyadraśisa rajine
+# orig = asti[pi cu] / [eka]tiya samaja sa[dhu]-mata Devanapriyasa Priyadraśi[sa] rajine
+1	asti	as	VERB	_	Mood=Ind|Person=3|Tense=Pres|VerbForm=Fin|Voice=Act	0	root	_	SpaceAfter=No
+2	pi	pi	ADV	_	_	1	advmod:emph	_	Orig=[pi]
+3	cu	cu	CCONJ	_	_	1	cc	_	Orig=[cu]
+4	ekatiya	ekatiya	DET	_	PronType=Ind	5	det	_	Orig=[eka]tiya
+5	samaja	samaja	NOUN	_	Case=Nom|Gender=Masc|Number=Plur	1	obj	_	_
+6-7	sadhu-mata	_	_	_	_	_	_	_	_
+6	sadhu	sadhu	ADV	_	AdvType=Man	7	advmod	_	sa[dhu]
+7	mata	maña	VERB	_	Case=Nom|Gender=Masc|Number=Plur|Tense=Past|VerbForm=Part|Voice=Pass	5	acl	_	mata
+8-9	Devanapriyasa	_	_	_	_	_	_	_	_
+8	devana	deva	NOUN	_	Case=Gen|Gender=Masc|Number=Plur	9	nmod	_	_
+9	priyasa	priya	ADJ	_	Case=Gen|Gender=Masc|Number=Sing	12	nmod:desc	_	_
+10-11	Priyadraśisa	_	_	_	_	_	_	_	_
+10	priya	priya	ADJ	_	Compound=Yes|Gender=Masc	11	amod	_	_
+11	draśisa	draśin	ADJ	_	Case=Gen|Gender=Masc|Number=Sing	12	nmod:desc	_	Orig=draśi[sa]
+12	rajine	rajan	NOUN	_	Case=Gen|Gender=Masc|Number=Sing	7	nsubj	_	_
+
+# sent_id = mansehra-1-6
+# text = pura mahanasasi Devanapriyasa Priyadraśisa rajine anudivasa bahuni praṇa-śata-sahasrani arabhisu supathraye
+# orig = pura maha[nasa]si [Devana]pri[ya]sa Pri[yadra]śisa ra[/]jine anudiva[sa ba]huni praṇa-śa[ta]-sahas[r]ani [arabh]isu supa[thra]ye
+1	pura	pura	ADV	_	AdvType=Tim	14	advmod	_	_
+2	mahanasasi	mahanasa	NOUN	_	Case=Loc|Gender=Neut|Number=Sing	14	obl	_	Orig=maha[nasa]si
+3-4	Devanapriyasa	_	_	_	_	_	_	_	_
+3	devana	deva	NOUN	_	Case=Gen|Gender=Masc|Number=Plur	4	nmod	_	_
+4	priyasa	priya	ADJ	_	Case=Gen|Gender=Masc|Number=Sing	7	nmod:desc	_	_
+5-6	Priyadraśisa	_	_	_	_	_	_	_	_
+5	priya	priya	ADJ	_	Compound=Yes|Gender=Masc	6	amod	_	Orig=pri[ya]
+6	draśisa	draśin	ADJ	_	Case=Gen|Gender=Masc|Number=Sing	7	nmod:desc	_	Orig=[dra]śisa
+7	rajine	rajan	NOUN	_	Case=Gen|Gender=Masc|Number=Sing	2	nmod	_	_
+8-9	anudivasa	_	_	_	_	_	_	_	_
+8	anu	anu	DET	_	PronType=Tot	9	det	_	_
+9	divasa	divasa	NOUN	_	Case=Nom|Gender=Masc|Number=Sing	14	obl	_	Orig=diva[sa]
+10	bahuni	bahu	ADJ	_	Case=Acc|Gender=Neut|Number=Sing	13	amod	_	Orig=[ba]huni
+11-13	praṇa-śata-sahasrani	_	_	_	_	_	_	_	_
+11	praṇa	praṇa	NOUN	_	Compound=Yes|Gender=Masc	12	compound	_	_
+12	śata	śata	NOUN	_	Compound=Yes|Gender=Neut	13	compound	_	Orig=śa[ta]
+13	sahasrani	sahasra	NUM	_	Case=Acc|Gender=Masc|Number=Plur|NumType=Card	14	obj	_	Orig=sahas[r]ani
+14	arabhisu	arabha	VERB	_	Mood=Ind|Number=Sing|Person=3|Tense=Past|VerbForm=Fin|Voice=Pass	0	root	_	Orig=[arabh]isu
+15-16	supathraye	_	_	_	_	_	_	_	_
+15	supa	supa	NOUN	_	Compound=Yes|Gender=Masc	14	obl	_	_
+16	athraye	athra	ADP	_	_	15	case	_	Orig=a[thra]ye
+
+# sent_id = mansehra-1-7
+# text = se da ayi dhrama-dipi likhita tada tini yeva praṇani arabhiyaṃti duve majura eke mrige se pi cu mrige no dhruvam
+# orig = s[e] ... [da] ayi dhrama-dipi likhi[ta] ta[da] ti[ni] y[eva] pra[ṇa]ni [ara]bh[iyaṃti] du[v]e maju/ra [e]k[e] m[r]ig[e] s[e] p[i cu] mrig[e] no dhruvam
+1	se	sa	CCONJ	_	_	11	cc	_	Orig=s[e]
+2	da	yada	ADV	_	PronType=Rel	11	mark	_	Orig=[da]
+3	ayi	ayi	DET	_	PronType=Dem	5	det	_	_
+4-5	dhrama-dipi	_	_	_	_	_	_	_	_
+4	dhrama	dhrama	NOUN	_	Compound=Yes|Gender=Masc	5	compound	_	_
+5	dipi	dipi	NOUN	_	Case=Nom|Gender=Fem|Number=Sing	6	obj	_	_
+6	likhita	likha	VERB	_	Case=Nom|Gender=Fem|Number=Sing|Tense=Past|VerbForm=Part|Voice=Cau,Pass	11	advcl	_	Orig=likhi[ta]
+7	tada	tada	ADV	_	PronType=Dem	11	advmod	_	Orig=ta[da]
+8	tini	tini	NUM	_	NumType=Card	10	nummod	_	Orig=ti[ni]
+9	yeva	yeva	PART	_	_	8	advmod:emph	_	Orig=y[eva]
+10	praṇani	praṇa	NOUN	_	Case=Nom|Gender=Masc|Number=Plur	11	obj	_	Orig=pra[ṇa]ni
+11	arabhiyaṃti	arabhiya	VERB	_	Mood=Ind|Number=Plur|Person=3|Tense=Pres|VerbForm=Fin|Voice=Pass	0	root	_	Orig=[ara]bh[iyaṃti]
+12	duve	duva	NUM	_	Case=Nom|Gender=Masc|NumType=Card	13	nummod	_	Orig=du[v]e
+13	majura	majura	NOUN	_	Case=Nom|Gender=Masc|Number=Plur	11	parataxis	_	_
+14	eke	eka	NUM	_	Case=Nom|Gender=Masc|NumType=Card	15	nummod	_	Orig=[e]k[e]
+15	mrige	mriga	NOUN	_	Case=Nom|Gender=Masc|Number=Sing	13	conj	_	Orig=m[r]ig[e]
+16	se	sa	DET	_	PronType=Dem	19	det	_	Orig=s[e]
+17	pi	pi	ADV	_	_	16	advmod:emph	_	Orig=p[i]
+18	cu	cu	CCONJ	_	_	16	cc	_	Orig=[cu]
+19	mrige	mriga	NOUN	_	Case=Nom|Gender=Masc|Number=Sing	13	conj	_	Orig=mrig[e]
+20	no	no	PART	_	Polarity=Neg	21	advmod	_	_
+21	dhruvam	dhruva	ADV	_	AdvType=Man	19	orphan	_	_
+
+# sent_id = mansehra-1-8
+# text = etani pi cu tini praṇani paca no arabhi
+# orig = [e]tani pi cu [tini] praṇani paca no ara[bhi] ...
+1	etani	eta	DET	_	Case=Nom|Gender=Masc|Number=Plur|PronType=Dem	4	det	_	Orig=[e]tani
+2	pi	pi	ADV	_	_	1	advmod:emph	_	_
+3	cu	cu	CCONJ	_	_	1	cc	_	_
+4	tini	tini	NUM	_	Case=Nom|Gender=Masc|NumType=Card	5	nummod	_	Orig=[tini]
+5	praṇani	praṇa	NOUN	_	Case=Acc|Gender=Masc|Number=Plur	8	obj	_	_
+6	paca	paca	ADV	_	AdvType=Tim	8	advmod:tmod	_	_
+7	no	no	PART	_	Polarity=Neg	8	advmod:neg	_	_
+8	arabhi	arabha	VERB	_	Mood=Ind|Number=Plur|Person=3|Tense=Fut|VerbForm=Fin|Voice=Pass	0	root	_	Orig=ara[bhi]
+
+# sent_id = jaugada-1-1
+# text = iyaṃ dhaṃma-lipi Khepiṃgalasi pavatasi Devānaṃpiyena Piyadasinā lājinā likhāpitā
+# orig = iyaṃ dhaṃma-lipi Khepi[ṃ]galasi pavatasi Devānaṃpiyena Piyadasinā lājinā likhāpitā
+1	iyaṃ	iyaṃ	DET	_	Case=Nom|Gender=Fem|Number=Sing|PronType=Dem	3	det	_	Gloss=this
+2-3	dhaṃma-lipi	_	_	_	_	_	_	_	_
+2	dhaṃma	dhaṃma	NOUN	_	Compound=Yes|Gender=Masc	3	compound	_	Gloss=morality
+3	lipi	lipi	NOUN	_	Case=Nom|Gender=Fem|Number=Sing	11	obj	_	Gloss=rescript
+4	Khepiṃgalasi	Khepiṃgala	PROPN	_	Case=Loc|Gender=Masc|Number=Sing	5	compound	_	Gloss=on-Khepiṅgala|Orig=Khepi[ṃ]galasi
+5	pavatasi	pavata	NOUN	_	Case=Loc|Gender=Masc|Number=Sing	11	obl	_	Gloss=on-mountain
+6-7	Devānaṃpiyena	_	_	_	_	_	_	_	_
+6	devānaṃ	deva	NOUN	_	Case=Gen|Gender=Masc|Number=Plur	7	nmod	_	Gloss=of-the-Gods
+7	piyena	piya	ADJ	_	Case=Ins|Gender=Masc|Number=Sing	10	nmod:desc	_	Gloss=beloved
+8-9	Piyadasinā	_	_	_	_	_	_	_	_
+8	piya	piya	ADJ	_	Compound=Yes|Gender=Masc	9	amod	_	Gloss=friendly
+9	dasinā	dasin	ADJ	_	Case=Ins|Gender=Masc|Number=Sing	10	nmod:desc	_	Gloss=looking
+10	lājinā	lājan	NOUN	_	Case=Ins|Gender=Masc|Number=Sing	11	nsubj	_	Gloss=by-king
+11	likhāpitā	likhāpaya	VERB	_	Case=Nom|Gender=Fem|Number=Sing|Tense=Past|VerbForm=Part|Voice=Cau,Pass	0	root	_	Gloss=has-been-caused-to-be-written
+
+# sent_id = jaugada-1-2
+# text = hida no kichi jāvaṃ ālabhitu pajohitaviye
+# orig = hida no kichi jāvaṃ ālabhi[t]u pajohitaviye
+1	hida	hida	ADV	_	AdvType=Loc	6	advmod:lmod	_	Gloss=here
+2	no	no	PART	_	Polarity=Neg	6	advmod:lmod	_	Gloss=not
+3	kichi	kichi	DET	_	PronType=Ind	4	det	_	Gloss=any
+4	jāvaṃ	jāva	NOUN	_	Case=Acc|Gender=Neut|Number=Sing	5	obj	_	Gloss=living-being
+5	ālabhitu	ālabha	VERB	_	VerbForm=Conv	6	advcl	_	Gloss=be-killed-and|Orig=ālabhi[t]u
+6	pajohitaviye	pajoha	VERB	_	Case=Nom|Gender=Neut|Number=Sing|Tense=Fut|VerbForm=Part|Voice=Pass	0	root	_	Gloss=must-be-sacrificed
+
+# sent_id = jaugada-1-3
+# text = no pi ca samaje kaṭaviye
+# orig = / no pi ca samaje kaṭaviye
+1	no	no	PART	_	Polarity=Neg	5	advmod:neg	_	Gloss=no
+2	pi	pi	ADV	_	_	5	advmod:emph	_	Gloss=also
+3	ca	ca	CCONJ	_	_	5	cc	_	Gloss=and
+4	samaje	samaja	NOUN	_	Case=Nom|Gender=Masc|Number=Sing	5	obj	_	Gloss=festival-meeting
+5	kaṭaviye	karo	VERB	_	Case=Nom|Gender=Masc|Number=Sing|Tense=Fut|VerbForm=Part|Voice=Pass	0	root	_	Gloss=must-be-held
+
+# sent_id = jaugada-1-4
+# text = bahukaṃ hi dosaṃ samājasa drakhati Devānaṃpiye Piyadasī lājā
+# orig = bahukaṃ hi dosaṃ samājasa drakhati Devānaṃpiye Piyadasī lājā
+1	bahukaṃ	bahuka	DET	_	Case=Acc|Gender=Masc|Number=Sing|PronType=Ind	3	det	_	Gloss=much
+2	hi	hi	PART	_	_	1	advmod:emph	_	Gloss=for
+3	dosaṃ	dosa	NOUN	_	Case=Acc|Gender=Masc|Number=Sing	5	obj	_	Gloss=evil
+4	samājasa	samāja	NOUN	_	Case=Gen|Gender=Masc|Number=Sing	5	obl:lmod	_	Gloss=festival-meetings
+5	drakhati	drakha	VERB	_	Mood=Ind|Number=Sing|Person=3|Tense=Pres|VerbForm=Fin|Voice=Act	0	root	_	Gloss=sees
+6-7	Devānaṃpiye	_	_	_	_	_	_	_	_
+6	devānaṃ	deva	NOUN	_	Case=Gen|Gender=Masc|Number=Plur	7	nmod	_	Gloss=of-the-Gods
+7	piye	piya	ADJ	_	Case=Nom|Gender=Masc|Number=Sing	10	nmod:desc	_	Gloss=beloved
+8-9	Piyadasī	_	_	_	_	_	_	_	_
+8	Piya	piya	ADJ	_	Compound=Yes|Gender=Masc	9	amod	_	Gloss=friendly
+9	dasī	dasin	ADJ	_	Case=Nom|Gender=Masc|Number=Sing	10	nmod:desc	_	Gloss=looking
+10	lājā	lājan	NOUN	_	Case=Nom|Gender=Masc|Number=Sing	5	nsubj	_	Gloss=king
+
+# sent_id = jaugada-1-5
+# text = athi pi cu ekatiyā samājā sādhu-matā Devānaṃpiyasa Piyadrasine lājine
+# orig = athi pi cu ekatiyā samājā sādhu-matā Devānaṃpiyasa / Piyadrasine lājine
+1	athi	as	VERB	_	Mood=Ind|Person=3|Tense=Pres|VerbForm=Fin|Voice=Act	0	root	_	Gloss=there-are
+2	pi	pi	ADV	_	_	1	advmod:emph	_	Gloss=also
+3	cu	cu	CCONJ	_	_	1	cc	_	Gloss=but
+4	ekatiyā	ekatiya	DET	_	PronType=Ind	5	det	_	Gloss=some
+5	samājā	samāja	NOUN	_	Case=Nom|Gender=Masc|Number=Plur	1	obj	_	Gloss=festival-meetings
+6-7	sādhu-matā	_	_	_	_	_	_	_	_
+6	sādhu	sādhu	ADV	_	AdvType=Man	7	advmod	_	Gloss=meritorious
+7	matā	mana	VERB	_	Case=Nom|Gender=Masc|Number=Plur|Tense=Past|VerbForm=Part|Voice=Pass	5	acl	_	Gloss=considered
+8-9	Devānaṃpiyasa	_	_	_	_	_	_	_	_
+8	devānaṃ	deva	NOUN	_	Case=Gen|Gender=Masc|Number=Plur	9	nmod	_	Gloss=of-the-Gods
+9	piyasa	piya	ADJ	_	Case=Gen|Gender=Masc|Number=Sing	12	nmod:desc	_	Gloss=beloved
+10-11	Piyadrasine	_	_	_	_	_	_	_	_
+10	piya	piya	ADJ	_	Compound=Yes|Gender=Masc	11	amod	_	Gloss=friendly
+11	drasine	drasin	ADJ	_	Case=Gen|Gender=Masc|Number=Sing	12	nmod:desc	_	Gloss=looking
+12	lājine	lājan	NOUN	_	Case=Gen|Gender=Masc|Number=Sing	7	nsubj	_	Gloss=by-king
+
+# sent_id = jaugada-1-6
+# text = puluvaṃ mahānasasi Devānaṃpiyasa Piyadasine lājine anudivasaṃ bahūni pana-sata-sahasāni ālabhiyisu sūpaṭhāye
+# orig = puluvaṃ mahā[nasa]si Devānaṃpiyasa Piyadasine lājine anudivasaṃ bah[ū]ni pana-sata-sah[a]sāni ālabhiyisu sūpa[ṭh]āye
+1	puluvaṃ	puluva	ADV	_	AdvType=Tim	14	advmod:tmod	_	Gloss=formerly
+2	mahānasasi	mahānasa	NOUN	_	Case=Loc|Gender=Neut	14	obl:lmod	_	Gloss=in-the-kitchen|Orig=mahā[nasa]si
+3-4	Devānaṃpiyasa	_	_	_	_	_	_	_	_
+3	devānaṃ	deva	NOUN	_	Case=Gen|Gender=Masc|Number=Plur	4	nmod	_	Gloss=of-the-Gods
+4	piyasa	piya	ADJ	_	Case=Gen|Gender=Masc|Number=Sing	7	nmod:desc	_	Gloss=beloved
+5-6	Piyadasine	_	_	_	_	_	_	_	_
+5	piya	piya	ADJ	_	Compound=Yes|Gender=Masc	6	amod	_	Gloss=friendly
+6	dasine	dasin	ADJ	_	Case=Gen|Gender=Masc|Number=Sing	7	nmod:desc	_	Gloss=looking
+7	lājine	lājan	NOUN	_	Case=Gen|Gender=Masc|Number=Sing	2	nmod	_	Gloss=by-king
+8-9	anudivasaṃ	_	_	_	_	_	_	_	_
+8	anu	anu	DET	_	PronType=Tot	9	det	_	Gloss=every
+9	divasaṃ	divasa	NOUN	_	Case=Nom|Gender=Neut|Number=Sing	14	obl:tmod	_	Gloss=day
+10	bahūni	bahu	ADJ	_	Case=Acc|Gender=Neut|Number=Sing	13	amod	_	Gloss=many|Orig=bah[ū]ni
+11-13	pana-sata-sahasāni	_	_	_	_	_	_	_	_
+11	pana	pana	NOUN	_	Compound=Yes|Gender=Masc	12	compound	_	Gloss=living
+12	sata	sata	NOUN	_	Compound=Yes|Gender=Neut	13	compound	_	Gloss=being
+13	sahasāni	sahasa	NUM	_	Case=Acc|Gender=Masc|Number=Plur	14	obj	_	Gloss=hundred-thousands-of|Orig=sah[a]sāni
+14	ālabhiyisu	ālabhaya	VERB	_	Mood=Ind|Number=Sing|Person=3|Tense=Past|VerbForm=Fin|Voice=Pass	0	root	_	Gloss=were-killed
+15-16	sūpaṭhāye	_	_	_	_	_	_	_	_
+15	sūpa	sūpa	NOUN	_	Compound=Yes|Gender=Masc	14	obl	_	Gloss=curry
+16	aṭhāye	aṭha	ADP	_	_	15	case	_	Gloss=for-the-sake-of|Orig=[ṭh]āye
+
+# sent_id = jaugada-1-7
+# text = se aja adā iyaṃ dhaṃma-lipī likhitā tiṃni yeva pānāni ālaṃbhiyaṃti duve majūlā eke mige se pi cu mige no dhuvaṃ
+# orig = se aja adā iyaṃ dhaṃma-lipī likhitā tiṃni yeva pānāni āla[ṃ]bhiyaṃti duve majūlā eke mige se pi cu mige no dhuvaṃ
+1	se	sa	CCONJ	_	_	11	cc	_	Gloss=but
+2	aja	aja	ADV	_	AdvType=Tim	11	advmod:tmod	_	Gloss=now
+3	adā	adā	SCONJ	_	_	7	mark	_	Gloss=when
+4	iyaṃ	idaṃ	DET	_	PronType=Dem	6	det	_	Gloss=this
+5-6	dhaṃma-lipī	_	_	_	_	_	_	_	_
+5	dhaṃma	dhaṃma	NOUN	_	Compound=Yes|Gender=Masc	6	compound	_	Gloss=morality
+6	lipī	lipi	NOUN	_	Case=Nom|Gender=Fem|Number=Sing	7	obj	_	Gloss=rescript
+7	likhitā	likha	VERB	_	Case=Nom|Gender=Fem|Number=Sing|Tense=Past|VerbForm=Part|Voice=Pass	11	advcl	_	Gloss=is-written
+8	tiṃni	tiṃni	NUM	_	Case=Nom|Gender=Neut|NumType=Card	10	nummod	_	Gloss=three
+9	yeva	yeva	PART	_	_	8	advmod:emph	_	Gloss=only
+10	pānāni	pāna	NOUN	_	Case=Acc|Gender=Neut|Number=Plur	11	obj	_	Gloss=animals
+11	ālaṃbhiyaṃti	ālaṃbhiya	VERB	_	Mood=Ind|Number=Plur|Person=3|Tense=Pres|VerbForm=Fin|Voice=Pass	0	root	_	Gloss=are-being-killed|Orig=āla[ṃ]bhiyaṃti
+12	duve	duva	NUM	_	Case=Nom|Gender=Masc|NumType=Card	13	nummod	_	Gloss=two
+13	majūlā	majūla	NOUN	_	Case=Nom|Gender=Masc|Number=Plur	11	parataxis	_	Gloss=peacocks
+14	eke	eka	NUM	_	Case=Nom|Gender=Masc|NumType=Card	15	nummod	_	Gloss=one
+15	mige	miga	NOUN	_	Case=Nom|Gender=Masc|Number=Sing	13	conj	_	Gloss=deer
+16	se	sa	DET	_	PronType=Dem	19	det	_	Gloss=this
+17	pi	pi	ADV	_	_	16	advmod:emph	_	Gloss=even
+18	cu	cu	CCONJ	_	_	16	cc	_	Gloss=but
+19	mige	miga	NOUN	_	Case=Nom|Gender=Masc|Number=Sing	13	conj	_	Gloss=deer
+20	no	no	PART	_	Polarity=Neg	21	advmod	_	Gloss=not
+21	dhuvaṃ	dhuva	ADV	_	AdvType=Man	19	orphan	_	Gloss=regularly
+
+# sent_id = jaugada-1-8
+# text = etāni pi cu tiṃni pānāni pachā no ālabhiyisaṃti
+# orig = etāni pi cu tiṃni pānāni / pachā no āla[bh]iyisamti
+1	etāni	eta	DET	_	Case=Nom|Gender=Masc|Number=Plur|PronType=Dem	5	det	_	Gloss=these
+2	pi	pi	ADV	_	_	1	advmod:emph	_	Gloss=even
+3	cu	cu	CCONJ	_	_	1	cc	_	Gloss=but
+4	tiṃni	tiṃni	NUM	_	Case=Nom|Gender=Neut|NumType=Card	5	nummod	_	Gloss=three
+5	pānāni	pāna	NOUN	_	_	8	obj	_	Gloss=animals
+6	pachā	pachā	ADV	_	AdvType=Tim	8	advmod:tmod	_	Gloss=in-future
+7	no	no	PART	_	Polarity=Neg	8	advmod:neg	_	Gloss=not
+8	ālabhiyisaṃti	ālabhiya	VERB	_	Mood=Ind|Number=Plur|Person=3|Tense=Fut|VerbForm=Fin|Voice=Pass	0	root	_	Gloss=shall-be-killed|āla[bh]iyisaṃti
+
+# sent_id = dhauli-1-1
+# text = ... si pavatasi Devānaṃpiy ... nā lājina likha ...
+# orig = ... [si pava]tasi [D]e[v]ā[na]ṃp[iy] ... [nā lājina l]i[kha] ...
+1	...	...	PUNCT	_	_	9	punct	_	_
+2	si	?	NOUN	_	Case=Loc|Gender=Masc|Number=Sing	3	compound	_	_
+3	pavatasi	pavata	NOUN	_	Case=Loc|Gender=Masc|Number=Sing	9	obl	_	Orig=[pava]tasi
+4-5	Devānaṃpiy	_	_	_	_	_	_	_	Orig=[D]e[v]ā[na]ṃp[iy]
+4	devānaṃ	deva	NOUN	_	Case=Gen|Gender=Masc|Number=Plur	5	nmod	_	Orig=[d]e[v]ā[na]ṃ
+5	piy	piya	ADJ	_	_	8	nmod:desc	_	Orig=p[iy]
+6	...	...	PUNCT	_	_	7	punct	_	_
+7	nā	?	ADJ	_	Case=Ins|Gender=Masc|Number=Sing	8	nmod:desc	_	Orig=[nā]
+8	lājina	lājan	NOUN	_	Case=Ins|Gender=Masc|Number=Sing	9	nsubj	_	Orig=[lājina]
+9	likha	likha	VERB	_	_	0	root	_	Orig=[l]i[kha]
+10	...	...	PUNCT	_	_	9	punct	_	_
+
+# sent_id = dhauli-1-2
+# text = ... īvaṃ ālabhitu pajoh ...
+# orig = ... [ī]vaṃ ālabhitu pajo[h] ...
+1	...	...	PUNCT	_	_	4	punct	_	_
+2	īvaṃ	?	NOUN	_	Case=Acc|Gender=Neut|Number=Sing	3	obj	_	Orig=[ī]vaṃ
+3	ālabhitu	ālabha	VERB	_	VerbForm=Conv	4	advcl	_	_
+4	pajoh	pajoha	VERB	_	_	0	root	_	Orig=pajo[h]
+5	...	...	PUNCT	_	_	4	punct	_	_
+
+# sent_id = dhauli-1-3
+# text = no pi ca samāje ...
+# orig = / [no pi ca sam]ā[je] ...
+1	no	no	PART	_	Polarity=Neg	4	orphan	_	Orig=[no]
+2	pi	pi	ADV	_	_	4	orphan	_	Orig=[pi]
+3	ca	ca	CCONJ	_	_	4	orphan	_	Orig=[ca]
+4	samāje	samāja	NOUN	_	Case=Nom|Gender=Masc|Number=Sing	0	root	_	Orig=[sam]ā[je]
+5	...	...	PUNCT	_	_	4	punct	_	_
+

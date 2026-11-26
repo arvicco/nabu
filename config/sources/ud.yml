@@ -191,3 +191,20 @@ ud:
   # +8 docs (CronOc ships three splits) / +3,674 passages
   # (652 + 422 + 225 + 503 + 1,848 + 24). The fetch-breaker minimum
   # tripping count moves 8 → 9 (0.2 × 42 = 8.4).
+  # 2026-11-26: TREEBANKS grew to FORTY-SIX — four more v2.19 initial
+  # releases, the historical ones (every fact read at the r2.19 tag; all
+  # LICENSE.txt + README metadata CC BY-SA 4.0 → attribution, test only):
+  #   prakrit-dipi (pra; the Ashokan rock edicts at six sites, 84 sent.),
+  #   manchu-gdud (mnc; reference-grammar examples, 81 sent.),
+  #   swedish-modern (sv; the 1526 New Testament's Mark, 735 sent.),
+  #   ukrainian-zhelekhivka (uk; three Galician newspaper articles
+  #     1892/1917/1921 in the Zhelekhivka orthography, 348 sent.).
+  # DIPI, Swedish-Modern and Zhelekhivka date (and DIPI places) through
+  # the UdSentenceDates lane's treebank-level rules.
+  # The v2.19 updates of three HELD treebanks (Birchbark re-annotated,
+  # 3,399 sent.; ArmTDP 27 → 252 sent.; GLC 151 → 1,232 over three splits)
+  # landed with the 2026-11-16 sync — the fetch follows each repo's master,
+  # which UD advances to the release; no pin to move.
+  # EXPECTED SYNC DELTA at the next `bin/nabu sync ud`: +4 repo clones /
+  # +4 docs / +1,248 passages (84 + 81 + 735 + 348). The fetch-breaker
+  # minimum tripping count moves 9 → 10 (0.2 × 46 = 9.2).

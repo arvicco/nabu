@@ -1,0 +1,542 @@
+# newdoc id = NT1526:MRK [Markus]
+# sent_id = swedish-modern-nt1526-1
+# text = Första Capitel.
+1	Första	_	ADJ	_	_	2	amod	_	Ref=MRK_1.0
+2	Capitel	_	NOUN	_	_	0	root	_	Ref=MRK_1.0|SpaceAfter=No
+3	.	_	PUNCT	_	_	2	punct	_	Ref=MRK_1.0
+
+# sent_id = swedish-modern-nt1526-2
+# text = Thetta är begynnilsen aff Jesu Christi gudz sons euangelio / såsom scriffuit är j propheterna / Sy / iach sender min engel fram för titt ansichte / huilkin beredha skal thin wägh för tich /
+1	Thetta	_	PRON	_	_	3	nsubj	_	Ref=MRK_1.1
+2	är	_	AUX	_	_	3	cop	_	Ref=MRK_1.1
+3	begynnilsen	_	NOUN	_	_	0	root	_	Ref=MRK_1.1
+4	aff	_	ADP	_	_	9	case	_	Ref=MRK_1.1
+5	Jesu	_	PROPN	_	_	9	nmod:poss	_	Ref=MRK_1.1
+6	Christi	_	PROPN	_	_	5	flat:name	_	Ref=MRK_1.1
+7	gudz	_	NOUN	_	_	8	nmod:poss	_	Ref=MRK_1.1
+8	sons	_	NOUN	_	_	5	nmod	_	Ref=MRK_1.1
+9	euangelio	_	NOUN	_	_	3	obl	_	Ref=MRK_1.1
+10	/	_	PUNCT	_	_	12	punct	_	Ref=MRK_1.1
+11	såsom	_	ADV	_	_	12	advmod	_	Ref=MRK_1.2
+12	scriffuit	_	ADJ	_	_	3	advcl	_	Ref=MRK_1.2
+13	är	_	AUX	_	_	12	cop	_	Ref=MRK_1.2
+14	j	_	ADP	_	_	15	case	_	Ref=MRK_1.2
+15	propheterna	_	NOUN	_	_	12	obl	_	Ref=MRK_1.2
+16	/	_	PUNCT	_	_	17	punct	_	ModernForm=:|Ref=MRK_1.2
+17	Sy	_	VERB	_	_	12	ccomp	_	Ref=MRK_1.2
+18	/	_	PUNCT	_	_	20	punct	_	Ref=MRK_1.2
+19	iach	_	PRON	_	_	20	nsubj	_	Ref=MRK_1.2
+20	sender	_	VERB	_	_	17	parataxis	_	Ref=MRK_1.2
+21	min	_	PRON	_	_	22	nmod:poss	_	Ref=MRK_1.2
+22	engel	_	NOUN	_	_	20	obj	_	Ref=MRK_1.2
+23	fram	_	ADV	_	_	20	advmod	_	Ref=MRK_1.2
+24	för	_	ADP	_	_	26	case	_	Ref=MRK_1.2
+25	titt	_	PRON	_	_	26	nmod:poss	_	Ref=MRK_1.2
+26	ansichte	_	NOUN	_	_	20	obl	_	Ref=MRK_1.2
+27	/	_	PUNCT	_	_	29	punct	_	Ref=MRK_1.2
+28	huilkin	_	PRON	_	_	29	nsubj	_	Ref=MRK_1.2
+29	beredha	_	VERB	_	_	22	acl:relcl	_	Ref=MRK_1.2
+30	skal	_	AUX	_	_	29	aux	_	Ref=MRK_1.2
+31	thin	_	PRON	_	_	32	nmod:poss	_	Ref=MRK_1.2
+32	wägh	_	NOUN	_	_	29	obj	_	Ref=MRK_1.2
+33	för	_	ADP	_	_	34	case	_	Ref=MRK_1.2
+34	tich	_	PRON	_	_	29	obl	_	Ref=MRK_1.2
+35	/	_	PUNCT	_	_	3	punct	_	ModernForm=.|Ref=MRK_1.2
+
+# sent_id = swedish-modern-nt1526-3
+# text = En ropande röst är j öknen / bereedher herrans wägh / görer hans stijghar retta.
+1	En	_	DET	_	_	3	det	_	Ref=MRK_1.3
+2	ropande	_	ADJ	_	Abbr=Yes	3	amod	_	Ref=MRK_1.3
+3	röst	_	NOUN	_	_	6	nsubj	_	Ref=MRK_1.3
+4	är	_	AUX	_	_	6	cop	_	Ref=MRK_1.3
+5	j	_	ADP	_	_	6	case	_	Ref=MRK_1.3
+6	öknen	_	NOUN	_	_	0	root	_	Ref=MRK_1.3
+7	/	_	PUNCT	_	_	8	punct	_	ModernForm=:|Ref=MRK_1.3
+8	bereedher	_	VERB	_	_	6	conj	_	Ref=MRK_1.3
+9	herrans	_	NOUN	_	Abbr=Yes	10	nmod:poss	_	Ref=MRK_1.3
+10	wägh	_	NOUN	_	_	8	obj	_	Ref=MRK_1.3
+11	/	_	PUNCT	_	_	12	punct	_	Ref=MRK_1.3
+12	görer	_	VERB	_	_	6	conj	_	Ref=MRK_1.3
+13	hans	_	PRON	_	_	14	nmod:poss	_	Ref=MRK_1.3
+14	stijghar	_	NOUN	_	_	12	obj	_	Ref=MRK_1.3
+15	retta	_	ADJ	_	_	12	xcomp	_	Ref=MRK_1.3|SpaceAfter=No
+16	.	_	PUNCT	_	_	6	punct	_	Ref=MRK_1.3
+
+# sent_id = swedish-modern-nt1526-4
+# text = Joannes döpte j öknen och predicade bätringenes döpelse till syndernes förlåtilse /
+1	Joannes	_	PROPN	_	_	2	nsubj	_	Ref=MRK_1.4
+2	döpte	_	VERB	_	_	0	root	_	Ref=MRK_1.4
+3	j	_	ADP	_	_	4	case	_	Ref=MRK_1.4
+4	öknen	_	NOUN	_	_	2	obl	_	Ref=MRK_1.4
+5	och	_	CCONJ	_	_	6	cc	_	Ref=MRK_1.4
+6	predicade	_	VERB	_	_	2	conj	_	Ref=MRK_1.4
+7	bätringenes	_	NOUN	_	Abbr=Yes	8	nmod:poss	_	Ref=MRK_1.4
+8	döpelse	_	NOUN	_	_	6	obj	_	Ref=MRK_1.4
+9	till	_	ADP	_	_	11	case	_	Ref=MRK_1.4
+10	syndernes	_	NOUN	_	_	11	nmod:poss	_	Ref=MRK_1.4
+11	förlåtilse	_	NOUN	_	_	8	nmod	_	Ref=MRK_1.4
+12	/	_	PUNCT	_	_	2	punct	_	ModernForm=.|Ref=MRK_1.4
+
+# sent_id = swedish-modern-nt1526-5
+# text = Och till honom vtgingo hela Judhae landit / och the vtaff Hierusalem / och döptes alle aff honom j Jordans floodh / wedherkennandes theres synder.
+1	Och	_	CCONJ	_	_	4	cc	_	Ref=MRK_1.5
+2	till	_	ADP	_	_	3	case	_	Ref=MRK_1.5
+3	honom	_	PRON	_	Abbr=Yes	4	obl	_	Ref=MRK_1.5
+4	vtgingo	_	VERB	_	_	0	root	_	Ref=MRK_1.5
+5	hela	_	ADJ	_	_	7	amod	_	Ref=MRK_1.5
+6	Judhae	_	PROPN	_	_	7	nmod:poss	_	Ref=MRK_1.5
+7	landit	_	NOUN	_	_	4	nsubj	_	Ref=MRK_1.5
+8	/	_	PUNCT	_	_	10	punct	_	Ref=MRK_1.5
+9	och	_	CCONJ	_	_	10	cc	_	Ref=MRK_1.5
+10	the	_	PRON	_	_	7	conj	_	Ref=MRK_1.5
+11	vtaff	_	ADP	_	_	12	case	_	Ref=MRK_1.5
+12	Hierusalem	_	PROPN	_	_	10	nmod	_	Ref=MRK_1.5
+13	/	_	PUNCT	_	_	15	punct	_	Ref=MRK_1.5
+14	och	_	CCONJ	_	_	15	cc	_	Ref=MRK_1.5
+15	döptes	_	VERB	_	_	4	conj	_	Ref=MRK_1.5
+16	alle	_	PRON	_	_	15	nsubj:pass	_	Ref=MRK_1.5
+17	aff	_	ADP	_	_	18	case	_	Ref=MRK_1.5
+18	honom	_	PRON	_	_	15	obl:agent	_	Ref=MRK_1.5
+19	j	_	ADP	_	_	21	case	_	Ref=MRK_1.5
+20	Jordans	_	PROPN	_	_	21	nmod:poss	_	Ref=MRK_1.5
+21	floodh	_	NOUN	_	_	15	obl	_	Ref=MRK_1.5
+22	/	_	PUNCT	_	_	23	punct	_	Ref=MRK_1.5
+23	wedherkennandes	_	ADJ	_	_	15	advcl	_	Ref=MRK_1.5
+24	theres	_	PRON	_	_	25	nmod:poss	_	Ref=MRK_1.5
+25	synder	_	NOUN	_	_	23	obj	_	Ref=MRK_1.5|SpaceAfter=No
+26	.	_	PUNCT	_	_	4	punct	_	Ref=MRK_1.5
+
+# sent_id = swedish-modern-nt1526-6
+# text = Och Joannes war klädder medh camele håår / och medh en lädergiording om hans länder / och ååt gräszhoppor och villhonnugh / och predicadhe och sagde / En kommer effter mich som starkare är än iach / then iach icke wärdugh är / ath iach mich nedherböyer och vplöser hans skooremar
+1	Och	_	CCONJ	_	_	4	cc	_	NewPar=Yes|Ref=MRK_1.6
+2	Joannes	_	PROPN	_	_	4	nsubj	_	Ref=MRK_1.6
+3	war	_	AUX	_	_	4	cop	_	Ref=MRK_1.6
+4	klädder	_	ADJ	_	_	0	root	_	Ref=MRK_1.6
+5	medh	_	ADP	_	_	6	case	_	Ref=MRK_1.6
+6	camele	_	NOUN	_	Typo=Yes	4	obl	_	Ref=MRK_1.6
+7	håår	_	X	_	_	6	goeswith	_	Ref=MRK_1.6|SplitWord=Yes
+8	/	_	PUNCT	_	_	12	punct	_	Ref=MRK_1.6
+9	och	_	CCONJ	_	_	12	cc	_	Ref=MRK_1.6
+10	medh	_	ADP	_	_	12	case	_	Ref=MRK_1.6
+11	en	_	DET	_	_	12	det	_	Ref=MRK_1.6
+12	lädergiording	_	NOUN	_	_	6	conj	_	Ref=MRK_1.6
+13	om	_	ADP	_	_	15	case	_	Ref=MRK_1.6
+14	hans	_	PRON	_	_	15	nmod:poss	_	Ref=MRK_1.6
+15	länder	_	NOUN	_	_	12	nmod	_	Ref=MRK_1.6
+16	/	_	PUNCT	_	_	18	punct	_	Ref=MRK_1.6
+17	och	_	CCONJ	_	_	18	cc	_	Ref=MRK_1.6
+18	ååt	_	VERB	_	_	4	conj	_	Ref=MRK_1.6
+19	gräszhoppor	_	NOUN	_	_	18	obj	_	Ref=MRK_1.6
+20	och	_	CCONJ	_	_	21	cc	_	Ref=MRK_1.6
+21	villhonnugh	_	NOUN	_	Abbr=Yes	19	conj	_	Ref=MRK_1.6
+22	/	_	PUNCT	_	_	24	punct	_	Ref=MRK_1.6
+23	och	_	CCONJ	_	_	24	cc	_	Ref=MRK_1.7
+24	predicadhe	_	VERB	_	_	4	conj	_	Ref=MRK_1.7
+25	och	_	CCONJ	_	_	26	cc	_	Ref=MRK_1.7
+26	sagde	_	VERB	_	_	24	conj	_	Ref=MRK_1.7
+27	/	_	PUNCT	_	_	26	punct	_	ModernForm=:|Ref=MRK_1.7
+28	En	_	DET	_	_	29	nsubj	_	Ref=MRK_1.7
+29	kommer	_	VERB	_	_	26	ccomp	_	Ref=MRK_1.7
+30	effter	_	ADP	_	_	31	case	_	Ref=MRK_1.7
+31	mich	_	PRON	_	_	29	obl	_	Ref=MRK_1.7
+32	som	_	PRON	_	_	33	nsubj	_	Ref=MRK_1.7
+33	starkare	_	ADJ	_	_	28	acl:relcl	_	Ref=MRK_1.7
+34	är	_	AUX	_	_	33	cop	_	Ref=MRK_1.7
+35	än	_	SCONJ	_	_	36	case	_	Ref=MRK_1.7
+36	iach	_	PRON	_	_	33	obl	_	Ref=MRK_1.7
+37	/	_	PUNCT	_	_	41	punct	_	Ref=MRK_1.7
+38	then	_	PRON	_	Abbr=Yes	41	obj	_	Ref=MRK_1.7
+39	iach	_	PRON	_	_	41	nsubj	_	Ref=MRK_1.7
+40	icke	_	PART	_	_	41	advmod	_	Ref=MRK_1.7
+41	wärdugh	_	ADJ	_	_	33	conj	_	Ref=MRK_1.7
+42	är	_	AUX	_	_	41	cop	_	Ref=MRK_1.7
+43	/	_	PUNCT	_	_	47	punct	_	Ref=MRK_1.7
+44	ath	_	SCONJ	_	_	47	mark	_	Ref=MRK_1.7
+45	iach	_	PRON	_	_	47	nsubj	_	Ref=MRK_1.7
+46	mich	_	PRON	_	_	47	obj	_	Ref=MRK_1.7
+47	nedherböyer	_	VERB	_	Abbr=Yes	41	advcl	_	Ref=MRK_1.7
+48	och	_	CCONJ	_	_	49	cc	_	Ref=MRK_1.7
+49	vplöser	_	VERB	_	_	47	conj	_	Ref=MRK_1.7
+50	hans	_	PRON	_	Abbr=Yes	51	nmod:poss	_	Ref=MRK_1.7
+51	skooremar	_	NOUN	_	_	49	obj	_	EmendedPunctAfter=.|Ref=MRK_1.7
+
+# sent_id = swedish-modern-nt1526-7
+# text = Jach döper idher j watn / men han warder idher döpandes j them helgha anda.
+1	Jach	_	PRON	_	_	2	nsubj	_	Ref=MRK_1.8
+2	döper	_	VERB	_	_	0	root	_	Ref=MRK_1.8
+3	idher	_	PRON	_	_	2	obj	_	Ref=MRK_1.8
+4	j	_	ADP	_	_	5	case	_	Ref=MRK_1.8
+5	watn	_	NOUN	_	_	2	obl	_	Ref=MRK_1.8
+6	/	_	PUNCT	_	_	9	punct	_	Ref=MRK_1.8
+7	men	_	CCONJ	_	_	9	cc	_	Ref=MRK_1.8
+8	han	_	PRON	_	_	9	nsubj	_	Ref=MRK_1.8
+9	warder	_	VERB	_	_	2	conj	_	Ref=MRK_1.8
+10	idher	_	PRON	_	_	11	obj	_	Ref=MRK_1.8
+11	döpandes	_	VERB	_	Abbr=Yes	9	xcomp	_	Ref=MRK_1.8
+12	j	_	ADP	_	_	15	case	_	Ref=MRK_1.8
+13	them	_	DET	_	Abbr=Yes	15	det	_	Ref=MRK_1.8
+14	helgha	_	ADJ	_	_	15	amod	_	Ref=MRK_1.8
+15	anda	_	NOUN	_	_	11	obl	_	Ref=MRK_1.8|SpaceAfter=No
+16	.	_	PUNCT	_	_	2	punct	_	Ref=MRK_1.8
+
+# sent_id = swedish-modern-nt1526-8
+# text = Och thet begaff sich j the daghar / ath Jesus kom vtaff Galileam frå Nazaret / och wart döpt aff Joanne / vthi Jordans floodh / och strax thå han steegh vpp vthwr watnet / sågh han himblanar ypnas / och andan sååsom ena duffuo nedherkommandes öffuer honom / och en röst kom vtaff himmelen / Tw äst min kära son / vthi huilkom mich wälbehaghar.
+1	Och	_	CCONJ	_	_	3	cc	_	NewPar=Yes|Ref=MRK_1.9
+2	thet	_	PRON	_	_	3	expl	_	Ref=MRK_1.9
+3	begaff	_	VERB	_	_	0	root	_	Ref=MRK_1.9
+4	sich	_	PRON	_	_	3	obj	_	Ref=MRK_1.9
+5	j	_	ADP	_	_	7	case	_	Ref=MRK_1.9
+6	the	_	DET	_	_	7	det	_	Ref=MRK_1.9
+7	daghar	_	NOUN	_	_	3	obl	_	Ref=MRK_1.9
+8	/	_	PUNCT	_	_	11	punct	_	Ref=MRK_1.9
+9	ath	_	PART	_	_	11	mark	_	Ref=MRK_1.9
+10	Jesus	_	PROPN	_	_	11	nsubj	_	Ref=MRK_1.9
+11	kom	_	VERB	_	_	3	csubj	_	Ref=MRK_1.9
+12	vtaff	_	ADP	_	_	13	case	_	Ref=MRK_1.9
+13	Galileam	_	PROPN	_	_	11	obl	_	Ref=MRK_1.9
+14	frå	_	ADP	_	_	15	case	_	Ref=MRK_1.9
+15	Nazaret	_	PROPN	_	_	11	obl	_	Ref=MRK_1.9
+16	/	_	PUNCT	_	_	19	punct	_	Ref=MRK_1.9
+17	och	_	CCONJ	_	_	19	cc	_	Ref=MRK_1.9
+18	wart	_	AUX	_	_	19	aux:pass	_	Ref=MRK_1.9
+19	döpt	_	ADJ	_	_	11	conj	_	Ref=MRK_1.9
+20	aff	_	ADP	_	_	21	case	_	Ref=MRK_1.9
+21	Joanne	_	PROPN	_	Abbr=Yes	19	obl:agent	_	Ref=MRK_1.9
+22	/	_	PUNCT	_	_	25	punct	_	Ref=MRK_1.9
+23	vthi	_	ADP	_	_	25	case	_	Ref=MRK_1.9
+24	Jordans	_	PROPN	_	_	25	nmod:poss	_	Ref=MRK_1.9
+25	floodh	_	NOUN	_	_	19	obl	_	Ref=MRK_1.9
+26	/	_	PUNCT	_	_	36	punct	_	ModernForm=:|Ref=MRK_1.9
+27	och	_	CCONJ	_	_	36	cc	_	Ref=MRK_1.10
+28	strax	_	ADV	_	_	36	advmod	_	Ref=MRK_1.10
+29	thå	_	SCONJ	_	_	31	mark	_	Ref=MRK_1.10
+30	han	_	PRON	_	_	31	nsubj	_	Ref=MRK_1.10
+31	steegh	_	VERB	_	_	36	advcl	_	Ref=MRK_1.10
+32	vpp	_	ADV	_	_	31	compound:prt	_	Ref=MRK_1.10
+33	vthwr	_	ADP	_	_	34	case	_	Ref=MRK_1.10
+34	watnet	_	NOUN	_	_	31	obl	_	Ref=MRK_1.10
+35	/	_	PUNCT	_	_	31	punct	_	Ref=MRK_1.10
+36	sågh	_	VERB	_	_	11	conj	_	Ref=MRK_1.10
+37	han	_	PRON	_	_	36	nsubj	_	Ref=MRK_1.10
+38	himblanar	_	NOUN	_	_	36	obj	_	Ref=MRK_1.10
+39	ypnas	_	VERB	_	_	36	xcomp	_	Ref=MRK_1.10
+40	/	_	PUNCT	_	_	46	punct	_	Ref=MRK_1.10
+41	och	_	CCONJ	_	_	42	cc	_	Ref=MRK_1.10
+42	andan	_	NOUN	_	_	46	nsubj	_	Ref=MRK_1.10
+43	sååsom	_	ADP	_	_	45	case	_	Ref=MRK_1.10
+44	ena	_	DET	_	_	45	det	_	Ref=MRK_1.10
+45	duffuo	_	NOUN	_	_	46	obl	_	Ref=MRK_1.10
+46	nedherkommandes	_	ADJ	_	Abbr=Yes	39	conj	_	Ref=MRK_1.10
+47	öffuer	_	ADP	_	_	48	case	_	Ref=MRK_1.10
+48	honom	_	PRON	_	_	46	obl	_	Ref=MRK_1.10
+49	/	_	PUNCT	_	_	53	punct	_	Ref=MRK_1.10
+50	och	_	CCONJ	_	_	53	cc	_	Ref=MRK_1.11
+51	en	_	DET	_	_	52	det	_	Ref=MRK_1.11
+52	röst	_	NOUN	_	_	53	nsubj	_	Ref=MRK_1.11
+53	kom	_	VERB	_	_	11	conj	_	Ref=MRK_1.11
+54	vtaff	_	ADP	_	_	55	case	_	Ref=MRK_1.11
+55	himmelen	_	NOUN	_	Abbr=Yes	53	obl	_	Ref=MRK_1.11
+56	/	_	PUNCT	_	_	61	punct	_	ModernForm=:|Ref=MRK_1.11
+57	Tw	_	PRON	_	_	61	nsubj	_	Ref=MRK_1.11
+58	äst	_	AUX	_	_	61	cop	_	Ref=MRK_1.11
+59	min	_	PRON	_	_	61	nmod:poss	_	Ref=MRK_1.11
+60	kära	_	ADJ	_	_	61	amod	_	Ref=MRK_1.11
+61	son	_	NOUN	_	_	53	parataxis	_	Ref=MRK_1.11
+62	/	_	PUNCT	_	_	61	punct	_	Ref=MRK_1.11
+63	vthi	_	ADP	_	_	64	case	_	Ref=MRK_1.11
+64	huilkom	_	PRON	_	_	66	obl	_	Ref=MRK_1.11
+65	mich	_	PRON	_	_	66	obj	_	Ref=MRK_1.11
+66	wälbehaghar	_	VERB	_	_	61	acl:relcl	_	Ref=MRK_1.11|SpaceAfter=No
+67	.	_	PUNCT	_	_	3	punct	_	Ref=MRK_1.11
+
+# sent_id = swedish-modern-nt1526-9
+# text = Och anden dreeff hono strax vthi öknen / och han war j öknen fyratiyo daghar / och frestadhes aff satana / och war medh wildiuren / och englanar tiente honom.
+1	Och	_	CCONJ	_	_	3	cc	_	NewPar=Yes|Ref=MRK_1.12
+2	anden	_	NOUN	_	_	3	nsubj	_	Ref=MRK_1.12
+3	dreeff	_	VERB	_	_	0	root	_	Ref=MRK_1.12
+4	hono	_	PRON	_	Typo=Yes	3	obj	_	CorrectForm=honom|Ref=MRK_1.12
+5	strax	_	ADV	_	_	3	advmod	_	Ref=MRK_1.12
+6	vthi	_	ADP	_	_	7	case	_	Ref=MRK_1.12
+7	öknen	_	NOUN	_	_	3	obl	_	Ref=MRK_1.12
+8	/	_	PUNCT	_	_	13	punct	_	Ref=MRK_1.12
+9	och	_	CCONJ	_	_	13	cc	_	Ref=MRK_1.13
+10	han	_	PRON	_	_	13	nsubj	_	Ref=MRK_1.13
+11	war	_	AUX	_	_	13	cop	_	Ref=MRK_1.13
+12	j	_	ADP	_	_	13	case	_	Ref=MRK_1.13
+13	öknen	_	NOUN	_	_	3	conj	_	Ref=MRK_1.13
+14	fyratiyo	_	NUM	_	_	15	nummod	_	Ref=MRK_1.13
+15	daghar	_	NOUN	_	_	13	obl	_	Ref=MRK_1.13
+16	/	_	PUNCT	_	_	18	punct	_	Ref=MRK_1.13
+17	och	_	CCONJ	_	_	18	cc	_	Ref=MRK_1.13
+18	frestadhes	_	VERB	_	_	13	conj	_	Ref=MRK_1.13
+19	aff	_	ADP	_	_	20	case	_	Ref=MRK_1.13
+20	satana	_	NOUN	_	_	18	obl:agent	_	Ref=MRK_1.13
+21	/	_	PUNCT	_	_	25	punct	_	Ref=MRK_1.13
+22	och	_	CCONJ	_	_	25	cc	_	Ref=MRK_1.13
+23	war	_	AUX	_	_	25	cop	_	Ref=MRK_1.13
+24	medh	_	ADP	_	_	25	case	_	Ref=MRK_1.13
+25	wildiuren	_	NOUN	_	_	13	conj	_	Ref=MRK_1.13
+26	/	_	PUNCT	_	_	29	punct	_	Ref=MRK_1.13
+27	och	_	CCONJ	_	_	29	cc	_	Ref=MRK_1.13
+28	englanar	_	NOUN	_	_	29	nsubj	_	Ref=MRK_1.13
+29	tiente	_	VERB	_	_	13	conj	_	Ref=MRK_1.13
+30	honom	_	PRON	_	_	29	obj	_	Ref=MRK_1.13|SpaceAfter=No
+31	.	_	PUNCT	_	_	3	punct	_	Ref=MRK_1.13
+
+# sent_id = swedish-modern-nt1526-10
+# text = Men sedhan Joannes wort fongen / kom Jesus vthi Galileam och predicadhe euangelium om gudz rijke / säyandes / tijdhen är vpfylt / och gudz rijke är för handen /
+1	Men	_	CCONJ	_	_	7	cc	_	NewPar=Yes|Ref=MRK_1.14
+2	sedhan	_	SCONJ	_	_	5	mark	_	Ref=MRK_1.14
+3	Joannes	_	PROPN	_	_	5	nsubj:pass	_	Ref=MRK_1.14
+4	wort	_	AUX	_	_	5	aux:pass	_	Ref=MRK_1.14
+5	fongen	_	ADJ	_	_	7	advcl	_	Ref=MRK_1.14
+6	/	_	PUNCT	_	_	5	punct	_	Ref=MRK_1.14
+7	kom	_	VERB	_	_	0	root	_	Ref=MRK_1.14
+8	Jesus	_	PROPN	_	_	7	nsubj	_	Ref=MRK_1.14
+9	vthi	_	ADP	_	_	10	case	_	Ref=MRK_1.14
+10	Galileam	_	PROPN	_	Abbr=Yes	7	obl	_	Ref=MRK_1.14
+11	och	_	CCONJ	_	_	12	cc	_	Ref=MRK_1.14
+12	predicadhe	_	VERB	_	_	7	conj	_	Ref=MRK_1.14
+13	euangelium	_	NOUN	_	Abbr=Yes	12	obj	_	Ref=MRK_1.14
+14	om	_	ADP	_	_	16	case	_	Ref=MRK_1.14
+15	gudz	_	NOUN	_	_	16	nmod:poss	_	Ref=MRK_1.14
+16	rijke	_	NOUN	_	_	13	nmod	_	Ref=MRK_1.14
+17	/	_	PUNCT	_	_	18	punct	_	Ref=MRK_1.14
+18	säyandes	_	ADJ	_	_	12	advcl	_	Ref=MRK_1.15
+19	/	_	PUNCT	_	_	22	punct	_	ModernForm=:|Ref=MRK_1.15
+20	tijdhen	_	NOUN	_	_	22	nsubj	_	Ref=MRK_1.15
+21	är	_	AUX	_	_	22	cop	_	Ref=MRK_1.15
+22	vpfylt	_	VERB	_	_	18	ccomp	_	Ref=MRK_1.15
+23	/	_	PUNCT	_	_	29	punct	_	Ref=MRK_1.15
+24	och	_	CCONJ	_	_	29	cc	_	Ref=MRK_1.15
+25	gudz	_	NOUN	_	_	26	nmod:poss	_	Ref=MRK_1.15
+26	rijke	_	NOUN	_	_	29	nsubj	_	Ref=MRK_1.15
+27	är	_	AUX	_	_	29	cop	_	Ref=MRK_1.15
+28	för	_	ADP	_	_	29	case	_	Ref=MRK_1.15
+29	handen	_	NOUN	_	_	22	conj	_	Ref=MRK_1.15
+30	/	_	PUNCT	_	_	7	punct	_	ModernForm=.|Ref=MRK_1.15
+
+# sent_id = swedish-modern-nt1526-11
+# text = bätren idher / och troon euangelio.
+1	bätren	_	VERB	_	_	0	root	_	Ref=MRK_1.15
+2	idher	_	PRON	_	_	1	obj	_	Ref=MRK_1.15
+3	/	_	PUNCT	_	_	5	punct	_	Ref=MRK_1.15
+4	och	_	CCONJ	_	_	5	cc	_	Ref=MRK_1.15
+5	troon	_	VERB	_	_	1	conj	_	Ref=MRK_1.15
+6	euangelio	_	NOUN	_	_	5	obj	_	Ref=MRK_1.15|SpaceAfter=No
+7	.	_	PUNCT	_	_	1	punct	_	Ref=MRK_1.15
+
+# sent_id = swedish-modern-nt1526-12
+# text = När han gick vth medh thet Galileeske haffuet / sågh han Symonem och Andream hans brodher kastandes sin nät j haffuet / ty the woro fiskare /
+1	När	_	SCONJ	_	_	3	mark	_	NewPar=Yes|Ref=MRK_1.16
+2	han	_	PRON	_	_	3	nsubj	_	Ref=MRK_1.16
+3	gick	_	VERB	_	_	10	advcl	_	Ref=MRK_1.16
+4	vth	_	ADV	_	_	8	case	_	Ref=MRK_1.16
+5	medh	_	ADP	_	_	8	case	_	Ref=MRK_1.16
+6	thet	_	PRON	_	_	8	det	_	Ref=MRK_1.16
+7	Galileeske	_	ADJ	_	_	8	amod	_	Ref=MRK_1.16
+8	haffuet	_	NOUN	_	_	3	obl	_	Ref=MRK_1.16
+9	/	_	PUNCT	_	_	3	punct	_	Ref=MRK_1.16
+10	sågh	_	VERB	_	_	0	root	_	Ref=MRK_1.16
+11	han	_	PRON	_	_	10	nsubj	_	Ref=MRK_1.16
+12	Symonem	_	PROPN	_	_	10	obj	_	Ref=MRK_1.16
+13	och	_	CCONJ	_	_	14	cc	_	Ref=MRK_1.16
+14	Andream	_	PROPN	_	_	12	conj	_	Ref=MRK_1.16
+15	hans	_	PRON	_	_	16	nmod:poss	_	Ref=MRK_1.16
+16	brodher	_	NOUN	_	_	14	appos	_	Ref=MRK_1.16
+17	kastandes	_	VERB	_	_	10	advcl	_	Ref=MRK_1.16
+18	sin	_	PRON	_	_	19	nmod:poss	_	Ref=MRK_1.16
+19	nät	_	NOUN	_	_	17	obj	_	Ref=MRK_1.16
+20	j	_	ADP	_	_	21	case	_	Ref=MRK_1.16
+21	haffuet	_	NOUN	_	_	17	obl	_	Ref=MRK_1.16
+22	/	_	PUNCT	_	_	26	punct	_	Ref=MRK_1.16
+23	ty	_	CCONJ	_	_	26	cc	_	Ref=MRK_1.16
+24	the	_	PRON	_	_	26	nsubj	_	Ref=MRK_1.16
+25	woro	_	AUX	_	_	26	cop	_	Ref=MRK_1.16
+26	fiskare	_	NOUN	_	_	10	conj	_	Ref=MRK_1.16
+27	/	_	PUNCT	_	_	10	punct	_	ModernForm=.|Ref=MRK_1.16
+
+# sent_id = swedish-modern-nt1526-13
+# text = och Jesus sagde till them / fölier mich / och iach will göra idher menniskiors fiskare /
+1	och	_	CCONJ	_	_	3	cc	_	Ref=MRK_1.17
+2	Jesus	_	PROPN	_	_	3	nsubj	_	Ref=MRK_1.17
+3	sagde	_	VERB	_	_	0	root	_	Ref=MRK_1.17
+4	till	_	ADP	_	_	5	case	_	Ref=MRK_1.17
+5	them	_	PRON	_	_	3	obl	_	Ref=MRK_1.17
+6	/	_	PUNCT	_	_	7	punct	_	ModernForm=:|Ref=MRK_1.17
+7	fölier	_	VERB	_	_	3	ccomp	_	Ref=MRK_1.17
+8	mich	_	PRON	_	_	7	obj	_	Ref=MRK_1.17
+9	/	_	PUNCT	_	_	13	punct	_	Ref=MRK_1.17
+10	och	_	CCONJ	_	_	13	cc	_	Ref=MRK_1.17
+11	iach	_	PRON	_	_	13	nsubj	_	Ref=MRK_1.17
+12	will	_	AUX	_	_	13	aux	_	Ref=MRK_1.17
+13	göra	_	VERB	_	_	7	conj	_	Ref=MRK_1.17
+14	idher	_	PRON	_	_	13	obj	_	Ref=MRK_1.17
+15	menniskiors	_	NOUN	_	Abbr=Yes	16	nmod:poss	_	Ref=MRK_1.17
+16	fiskare	_	NOUN	_	_	13	xcomp	_	Ref=MRK_1.17
+17	/	_	PUNCT	_	_	3	punct	_	ModernForm=.|Ref=MRK_1.17
+
+# sent_id = swedish-modern-nt1526-14
+# text = strax gåffuo the theres nät vtöffuer / och fölgde honom.
+1	strax	_	ADV	_	_	2	advmod	_	Ref=MRK_1.18
+2	gåffuo	_	VERB	_	_	0	root	_	Ref=MRK_1.18
+3	the	_	PRON	_	_	2	nsubj	_	Ref=MRK_1.18
+4	theres	_	PRON	_	_	5	nmod:poss	_	Ref=MRK_1.18
+5	nät	_	NOUN	_	_	2	obj	_	Ref=MRK_1.18
+6	vtöffuer	_	ADP	_	_	2	compound:prt	_	Ref=MRK_1.18
+7	/	_	PUNCT	_	_	9	punct	_	Ref=MRK_1.18
+8	och	_	CCONJ	_	_	9	cc	_	Ref=MRK_1.18
+9	fölgde	_	VERB	_	_	2	conj	_	Ref=MRK_1.18
+10	honom	_	PRON	_	Abbr=Yes	9	obj	_	Ref=MRK_1.18|SpaceAfter=No
+11	.	_	PUNCT	_	_	2	punct	_	Ref=MRK_1.18
+
+# sent_id = swedish-modern-nt1526-15
+# text = Och thå han gick tädhan litith fram bäter / sågh han Jacobum Zebedei son / och Joannem hans brodher / the och j båtenom till hopa lagde theres nät / och strax kalladhe han them /
+1	Och	_	CCONJ	_	_	10	cc	_	NewPar=Yes|Ref=MRK_1.19
+2	thå	_	SCONJ	_	_	4	mark	_	Ref=MRK_1.19
+3	han	_	PRON	_	_	4	nsubj	_	Ref=MRK_1.19
+4	gick	_	VERB	_	_	10	advcl	_	Ref=MRK_1.19
+5	tädhan	_	ADV	_	_	4	advmod	_	Ref=MRK_1.19
+6	litith	_	ADV	_	_	7	advmod	_	Ref=MRK_1.19
+7	fram	_	ADV	_	_	4	advmod	_	Ref=MRK_1.19
+8	bäter	_	ADV	_	_	7	advmod	_	Ref=MRK_1.19
+9	/	_	PUNCT	_	_	4	punct	_	Ref=MRK_1.19
+10	sågh	_	VERB	_	_	0	root	_	Ref=MRK_1.19
+11	han	_	PRON	_	_	10	nsubj	_	Ref=MRK_1.19
+12	Jacobum	_	PROPN	_	_	10	obj	_	Ref=MRK_1.19
+13	Zebedei	_	PROPN	_	_	14	nmod:poss	_	Ref=MRK_1.19
+14	son	_	NOUN	_	_	12	appos	_	Ref=MRK_1.19
+15	/	_	PUNCT	_	_	17	punct	_	Ref=MRK_1.19
+16	och	_	CCONJ	_	_	17	cc	_	Ref=MRK_1.19
+17	Joannem	_	PROPN	_	_	12	conj	_	Ref=MRK_1.19
+18	hans	_	PRON	_	_	19	nmod:poss	_	Ref=MRK_1.19
+19	brodher	_	NOUN	_	_	17	appos	_	Ref=MRK_1.19
+20	/	_	PUNCT	_	_	27	punct	_	Ref=MRK_1.19
+21	the	_	PRON	_	_	27	nsubj	_	Ref=MRK_1.19
+22	och	_	ADV	_	_	27	advmod	_	Ref=MRK_1.19
+23	j	_	ADP	_	_	24	case	_	Ref=MRK_1.19
+24	båtenom	_	NOUN	_	_	27	obl	_	Ref=MRK_1.19
+25	till	_	ADP	_	_	26	case	_	Ref=MRK_1.19
+26	hopa	_	NOUN	_	_	27	obl	_	Ref=MRK_1.19
+27	lagde	_	VERB	_	_	10	parataxis	_	Ref=MRK_1.19
+28	theres	_	PRON	_	_	29	nmod:poss	_	Ref=MRK_1.19
+29	nät	_	NOUN	_	_	27	obj	_	Ref=MRK_1.19
+30	/	_	PUNCT	_	_	33	punct	_	Ref=MRK_1.19
+31	och	_	CCONJ	_	_	33	cc	_	Ref=MRK_1.20
+32	strax	_	ADV	_	_	33	advmod	_	Ref=MRK_1.20
+33	kalladhe	_	VERB	_	_	10	conj	_	Ref=MRK_1.20
+34	han	_	PRON	_	_	33	nsubj	_	Ref=MRK_1.20
+35	them	_	PRON	_	_	33	obj	_	Ref=MRK_1.20
+36	/	_	PUNCT	_	_	10	punct	_	ModernForm=.|Ref=MRK_1.20
+
+# sent_id = swedish-modern-nt1526-16
+# text = thå öffuergåffuo the theres fadher Zebedeum vti båten medh legodrängianar / och fölgde honom.
+1	thå	_	ADV	_	_	2	advmod	_	Ref=MRK_1.20
+2	öffuergåffuo	_	VERB	_	_	0	root	_	Ref=MRK_1.20
+3	the	_	PRON	_	_	2	nsubj	_	Ref=MRK_1.20
+4	theres	_	PRON	_	_	5	nmod:poss	_	Ref=MRK_1.20
+5	fadher	_	NOUN	_	_	2	obj	_	Ref=MRK_1.20
+6	Zebedeum	_	PROPN	_	_	5	appos	_	Ref=MRK_1.20
+7	vti	_	ADP	_	_	8	case	_	Ref=MRK_1.20
+8	båten	_	NOUN	_	_	2	obl	_	Ref=MRK_1.20
+9	medh	_	ADP	_	_	10	case	_	Ref=MRK_1.20
+10	legodrängianar	_	NOUN	_	_	8	nmod	_	Ref=MRK_1.20
+11	/	_	PUNCT	_	_	13	punct	_	Ref=MRK_1.20
+12	och	_	CCONJ	_	_	13	cc	_	Ref=MRK_1.20
+13	fölgde	_	VERB	_	_	2	conj	_	Ref=MRK_1.20
+14	honom	_	PRON	_	_	13	obj	_	Ref=MRK_1.20|SpaceAfter=No
+15	.	_	PUNCT	_	_	2	punct	_	Ref=MRK_1.20
+
+# sent_id = swedish-modern-nt1526-17
+# text = Och the gingo in vthi Capernaum / och strax om sabatz daghanar gick han in j synagoganar / och lärde /
+1	Och	_	CCONJ	_	_	3	cc	_	NewPar=Yes|Ref=MRK_1.21
+2	the	_	PRON	_	_	3	nsubj	_	Ref=MRK_1.21
+3	gingo	_	VERB	_	_	0	root	_	Ref=MRK_1.21
+4	in	_	ADV	_	_	3	advmod	_	Ref=MRK_1.21
+5	vthi	_	ADP	_	_	6	case	_	Ref=MRK_1.21
+6	Capernaum	_	PROPN	_	Abbr=Yes	3	obl	_	Ref=MRK_1.21
+7	/	_	PUNCT	_	_	13	punct	_	Ref=MRK_1.21
+8	och	_	CCONJ	_	_	13	cc	_	Ref=MRK_1.21
+9	strax	_	ADV	_	_	13	advmod	_	Ref=MRK_1.21
+10	om	_	ADP	_	_	11	case	_	Ref=MRK_1.21
+11	sabatz	_	NOUN	_	Typo=Yes	13	obl	_	Ref=MRK_1.21
+12	daghanar	_	X	_	_	11	goeswith	_	Ref=MRK_1.21|SplitWord=Yes
+13	gick	_	VERB	_	_	3	conj	_	Ref=MRK_1.21
+14	han	_	PRON	_	_	13	nsubj	_	Ref=MRK_1.21
+15	in	_	ADV	_	_	13	advmod	_	Ref=MRK_1.21
+16	j	_	ADP	_	_	17	case	_	Ref=MRK_1.21
+17	synagoganar	_	NOUN	_	_	13	obl	_	Ref=MRK_1.21
+18	/	_	PUNCT	_	_	20	punct	_	Ref=MRK_1.21
+19	och	_	CCONJ	_	_	20	cc	_	Ref=MRK_1.21
+20	lärde	_	VERB	_	_	13	conj	_	Ref=MRK_1.21
+21	/	_	PUNCT	_	_	3	punct	_	ModernForm=.|Ref=MRK_1.21
+
+# sent_id = swedish-modern-nt1526-18
+# text = och the förundradhe stoorligha på hans lärdom / för ty han lärde såsom / then ther wellugh war / och icke såsom the scrifftlärdhe.
+1	och	_	CCONJ	_	_	3	cc	_	Ref=MRK_1.22
+2	the	_	PRON	_	_	3	nsubj	_	Ref=MRK_1.22
+3	förundradhe	_	VERB	_	_	0	root	_	Ref=MRK_1.22
+4	stoorligha	_	ADV	_	_	3	advmod	_	Ref=MRK_1.22
+5	på	_	ADP	_	_	7	case	_	Ref=MRK_1.22
+6	hans	_	PRON	_	Abbr=Yes	7	nmod:poss	_	Ref=MRK_1.22
+7	lärdom	_	NOUN	_	_	3	obl	_	Ref=MRK_1.22
+8	/	_	PUNCT	_	_	12	punct	_	Ref=MRK_1.22
+9	för	_	CCONJ	_	_	12	cc	_	Ref=MRK_1.22
+10	ty	_	CCONJ	_	_	12	cc	_	Ref=MRK_1.22
+11	han	_	PRON	_	_	12	nsubj	_	Ref=MRK_1.22
+12	lärde	_	VERB	_	_	3	conj	_	Ref=MRK_1.22
+13	såsom	_	SCONJ	_	_	15	case	_	Ref=MRK_1.22
+14	/	_	PUNCT	_	_	15	punct	_	Ref=MRK_1.22
+15	then	_	PRON	_	Abbr=Yes	12	obl	_	Ref=MRK_1.22
+16	ther	_	PRON	_	_	17	nsubj	_	Ref=MRK_1.22
+17	wellugh	_	ADJ	_	_	15	acl:relcl	_	Ref=MRK_1.22
+18	war	_	AUX	_	_	17	cop	_	Ref=MRK_1.22
+19	/	_	PUNCT	_	_	17	punct	_	Ref=MRK_1.22
+20	och	_	CCONJ	_	_	24	cc	_	Ref=MRK_1.22
+21	icke	_	PART	_	_	24	advmod	_	Ref=MRK_1.22
+22	såsom	_	SCONJ	_	_	24	case	_	Ref=MRK_1.22
+23	the	_	PRON	_	_	24	det	_	Ref=MRK_1.22
+24	scrifftlärdhe	_	ADJ	_	_	17	conj	_	Ref=MRK_1.22|SpaceAfter=No
+25	.	_	PUNCT	_	_	3	punct	_	Ref=MRK_1.22
+
+# sent_id = swedish-modern-nt1526-19
+# text = Och j theres sinagoga war en menniskia besatt medh then fula andan / och han ropadhe / ah huad haffue wij medh tigh bestella Jesu Nazarene?
+1	Och	_	CCONJ	_	_	8	cc	_	NewPar=Yes|Ref=MRK_1.23
+2	j	_	ADP	_	_	4	case	_	Ref=MRK_1.23
+3	theres	_	PRON	_	_	4	nmod:poss	_	Ref=MRK_1.23
+4	sinagoga	_	NOUN	_	_	8	obl	_	Ref=MRK_1.23
+5	war	_	AUX	_	_	8	cop	_	Ref=MRK_1.23
+6	en	_	DET	_	_	7	det	_	Ref=MRK_1.23
+7	menniskia	_	NOUN	_	Abbr=Yes	8	nsubj	_	Ref=MRK_1.23
+8	besatt	_	ADJ	_	_	0	root	_	Ref=MRK_1.23
+9	medh	_	ADP	_	_	12	case	_	Ref=MRK_1.23
+10	then	_	DET	_	Abbr=Yes	12	det	_	Ref=MRK_1.23
+11	fula	_	ADJ	_	_	12	amod	_	Ref=MRK_1.23
+12	andan	_	NOUN	_	_	8	obl	_	Ref=MRK_1.23
+13	/	_	PUNCT	_	_	16	punct	_	Ref=MRK_1.23
+14	och	_	CCONJ	_	_	16	cc	_	Ref=MRK_1.23
+15	han	_	PRON	_	Abbr=Yes	16	nsubj	_	Ref=MRK_1.23
+16	ropadhe	_	VERB	_	_	8	conj	_	Ref=MRK_1.23
+17	/	_	PUNCT	_	_	20	punct	_	ModernForm=:|Ref=MRK_1.23
+18	ah	_	INTJ	_	_	20	discourse	_	Ref=MRK_1.24
+19	huad	_	PRON	_	_	20	obj	_	Ref=MRK_1.24
+20	haffue	_	VERB	_	_	16	ccomp	_	Ref=MRK_1.24
+21	wij	_	PRON	_	_	20	nsubj	_	Ref=MRK_1.24
+22	medh	_	ADP	_	_	23	case	_	Ref=MRK_1.24
+23	tigh	_	PRON	_	_	20	obl	_	Ref=MRK_1.24
+24	bestella	_	VERB	_	_	20	xcomp	_	Ref=MRK_1.24
+25	Jesu	_	PROPN	_	_	20	vocative	_	Ref=MRK_1.24
+26	Nazarene	_	ADJ	_	_	25	flat:name	_	Ref=MRK_1.24|SpaceAfter=No
+27	?	_	PUNCT	_	_	20	punct	_	Ref=MRK_1.24
+
+# sent_id = swedish-modern-nt1526-20
+# text = äst tw kommen till ath förderffna oss?
+1	äst	_	AUX	_	_	3	aux	_	Ref=MRK_1.24
+2	tw	_	PRON	_	_	3	nsubj	_	Ref=MRK_1.24
+3	kommen	_	ADJ	_	Abbr=Yes	0	root	_	Ref=MRK_1.24
+4	till	_	ADP	_	_	6	mark	_	Ref=MRK_1.24
+5	ath	_	PART	_	_	6	mark	_	Ref=MRK_1.24
+6	förderffna	_	VERB	_	Typo=Yes	3	advcl	_	CorrectForm=förderffua|Ref=MRK_1.24
+7	oss	_	PRON	_	_	6	obj	_	Ref=MRK_1.24|SpaceAfter=No
+8	?	_	PUNCT	_	_	3	punct	_	Ref=MRK_1.24
+

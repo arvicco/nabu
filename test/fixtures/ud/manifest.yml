@@ -262,3 +262,35 @@ files:
     url: https://raw.githubusercontent.com/UniversalDependencies/UD_Avestan-Old/r2.19/README.md
     whole: false
     trim: the machine-readable metadata block only (15 lines; Genre poetry)
+  - path: prakrit-dipi/pra_dipi-ud-test.conllu
+    url: https://raw.githubusercontent.com/UniversalDependencies/UD_Prakrit-DIPI/r2.19/pra_dipi-ud-test.conllu
+    whole: true
+    trim: none
+  - path: manchu-gdud/mnc_gdud-ud-test.conllu
+    url: https://raw.githubusercontent.com/UniversalDependencies/UD_Manchu-GDUD/r2.19/mnc_gdud-ud-test.conllu
+    whole: true
+    trim: none
+  - path: swedish-modern/sv_modern-ud-test-head20.conllu
+    url: https://raw.githubusercontent.com/UniversalDependencies/UD_Swedish-Modern/r2.19/sv_modern-ud-test.conllu
+    whole: false
+    trim: first 20 complete sentence blocks of sv_modern-ud-test.conllu (735 blocks upstream, 842,553 B -> 24,501 B)
+  - path: ukrainian-zhelekhivka/uk_zhelekhivka-ud-test-slices.conllu
+    url: https://raw.githubusercontent.com/UniversalDependencies/UD_Ukrainian-Zhelekhivka/r2.19/uk_zhelekhivka-ud-test.conllu
+    whole: false
+    trim: first 5 complete sentence blocks of each of the three newdoc runs of uk_zhelekhivka-ud-test.conllu (348 blocks upstream in runs of 198/128/22, 1,037,989 B -> 32,828 B)
+  - path: prakrit-dipi/README.md
+    url: https://raw.githubusercontent.com/UniversalDependencies/UD_Prakrit-DIPI/r2.19/README.md
+    whole: false
+    trim: the machine-readable metadata block only (15 lines; Genre nonfiction news)
+  - path: manchu-gdud/README.md
+    url: https://raw.githubusercontent.com/UniversalDependencies/UD_Manchu-GDUD/r2.19/README.md
+    whole: false
+    trim: the machine-readable metadata block only (15 lines; Genre grammar-examples)
+  - path: swedish-modern/README.md
+    url: https://raw.githubusercontent.com/UniversalDependencies/UD_Swedish-Modern/r2.19/README.md
+    whole: false
+    trim: the machine-readable metadata block only (15 lines; Genre bible)
+  - path: ukrainian-zhelekhivka/README.md
+    url: https://raw.githubusercontent.com/UniversalDependencies/UD_Ukrainian-Zhelekhivka/r2.19/README.md
+    whole: false
+    trim: the machine-readable metadata block only (15 lines; Genre news)

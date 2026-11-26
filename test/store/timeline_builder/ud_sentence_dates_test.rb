@@ -105,6 +105,70 @@ module Store
       end
     end
 
+    # The treebank-level claims (UD v2.19): treebanks whose sentences carry
+    # no date comment but whose upstream ids state one, or whose every
+    # sentence is one dated, placed object.
+    DERIVED = %w[ukrainian-zhelekhivka swedish-modern prakrit-dipi manchu-gdud].freeze
+    ZHELEKHIVKA = "urn:nabu:ud:ukrainian-zhelekhivka:uk_zhelekhivka-ud-test-slices"
+    SWEDISH = "urn:nabu:ud:swedish-modern:sv_modern-ud-test-head20"
+    PRAKRIT = "urn:nabu:ud:prakrit-dipi:pra_dipi-ud-test"
+    MANCHU = "urn:nabu:ud:manchu-gdud:mnc_gdud-ud-test"
+
+    def load_derived_fixtures
+      @db = store_test_db
+      source = Nabu::Store::Source.create(slug: "ud", name: "UD", adapter_class: "T", license_class: "nc")
+      Dir.mktmpdir do |workdir|
+        DERIVED.each { |slug| File.symlink(File.join(FIXTURES, slug), File.join(workdir, slug)) }
+        Nabu::Store::Loader.new(db: @db, source: source)
+                           .load_from(Nabu::Adapters::UniversalDependencies.new, workdir: workdir, full: true)
+      end
+    end
+
+    # Zhelekhivka's newdoc ids end in the article's year — each of the three
+    # articles becomes a year-grain run under a 1892…1921 envelope.
+    def test_zhelekhivka_articles_date_by_their_newdoc_year
+      load_derived_fixtures
+      lane.build(catalog: @db)
+      envelope, *runs = rows_for(ZHELEKHIVKA)
+      assert_equal [1892, 1921, "range"], envelope.values_at(:not_before, :not_after, :precision)
+      columns = %i[not_before not_after precision passage_seq_from passage_seq_to]
+      assert_equal([[1892, 1892, "year", 0, 4], [1921, 1921, "year", 5, 9], [1917, 1917, "year", 10, 14]],
+                   runs.map { |row| row.values_at(*columns) })
+      assert_equal "Vischovannja_pro_XX_vik_1892", runs.first[:date_raw], "the raw is upstream's own id"
+    end
+
+    # Swedish-Modern's one newdoc names the 1526 New Testament: one claim
+    # over the whole document → the envelope alone.
+    def test_swedish_modern_dates_by_the_1526_testament
+      load_derived_fixtures
+      lane.build(catalog: @db)
+      rows = rows_for(SWEDISH)
+      assert_equal 1, rows.size
+      assert_equal [1526, 1526, "year", "NT1526:MRK [Markus]"],
+                   rows.first.values_at(:not_before, :not_after, :precision, :date_raw)
+    end
+
+    # DIPI: every sentence is an Ashokan edict (README: "under the reign of
+    # Ashoka (r. 268--232 BCE)"), its sent_id prefix the inscription's site —
+    # one run per site, all inside the reign band.
+    def test_ashokan_edicts_place_by_site_inside_the_reign
+      load_derived_fixtures
+      lane.build(catalog: @db)
+      envelope, *runs = rows_for(PRAKRIT)
+      assert_equal [-268, -232, "reign"], envelope.values_at(:not_before, :not_after, :precision)
+      assert_equal "Girnar; Shahbazgarhi; Kalsi; Mansehra; Jaugada; Dhauli", envelope[:place_name]
+      assert_equal([["Girnar", 0, 42], ["Shahbazgarhi", 43, 56], ["Kalsi", 57, 64],
+                    ["Mansehra", 65, 72], ["Jaugada", 73, 80], ["Dhauli", 81, 83]],
+                   runs.map { |row| row.values_at(:place_name, :passage_seq_from, :passage_seq_to) })
+      assert(runs.all? { |row| row.values_at(:not_before, :not_after) == [-268, -232] })
+    end
+
+    def test_grammar_examples_stay_undated
+      load_derived_fixtures
+      lane.build(catalog: @db)
+      assert_empty rows_for(MANCHU), "reference-grammar examples state no date or place"
+    end
+
     # The censused claim grammar.
     def test_claim_grammar
       assert_equal [1430, 1450, "range"], lane.claim_bounds("1430-1450")

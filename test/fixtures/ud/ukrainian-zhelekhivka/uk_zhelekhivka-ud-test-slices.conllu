@@ -1,0 +1,362 @@
+# newdoc id = Vischovannja_pro_XX_vik_1892
+# doc_id = Vischovannja_pro_XX_vik_1892
+# generator = UDPipe 2, https://lindat.mff.cuni.cz/services/udpipe
+# udpipe_model = ukrainian-parlamint-ud-2.17-251125
+# udpipe_model_licence = CC BY-NC-SA
+# sent_id = Vischovannja_pro_XX_vik_1892-1
+# text = Віщовання про XX. вік.
+1	Віщовання	віщування	NOUN	NOUN	Animacy=Inan|Case=Nom|Gender=Neut|Number=Sing	0	root	_	TokenRange=0:9
+2	про	про	ADP	ADP	Case=Acc	4	case	_	TokenRange=10:13
+3	XX.	XX.	ADJ	_	Animacy=Inan|Case=Acc|Gender=Masc|Number=Sing	4	amod	_	_
+4	вік	вік	NOUN	NOUN	Animacy=Inan|Case=Acc|Gender=Masc|Number=Sing	1	nmod	_	SpaceAfter=No|TokenRange=18:21
+5	.	.	PUNCT	PUNCT	_	1	punct	_	SpacesAfter=\r\n|TokenRange=21:22
+
+# doc_id = Vischovannja_pro_XX_vik_1892
+# sent_id = Vischovannja_pro_XX_vik_1892-3_4
+# text = Живучи впереддень XX. віку, стоячи так мовити під дверми єго, зовсім натурально гадати: що буде в XX. в.?
+1	Живучи	жити	VERB	VERB	Aspect=Imp|Tense=Pres|VerbForm=Conv	14	advcl	_	TokenRange=35:41
+2	впереддень	впереддень	ADP	NOUN	Case=Gen	4	case	_	TokenRange=42:52
+3	XX.	XX.	ADJ	_	Case=Gen|Gender=Masc|Number=Sing	4	amod	_	_
+4	віку	вік	NOUN	NOUN	Animacy=Inan|Case=Gen|Gender=Masc|Number=Sing	1	obl	_	SpaceAfter=No|TokenRange=57:61
+5	,	,	PUNCT	PUNCT	_	6	punct	_	TokenRange=61:62
+6	стоячи	стояти	VERB	VERB	Aspect=Imp|Tense=Pres|VerbForm=Conv	1	conj	_	TokenRange=63:69
+7	так	так	ADV	ADV	PronType=Dem	8	advmod	_	TokenRange=70:73
+8	мовити	мовити	VERB	VERB	Aspect=Imp|VerbForm=Inf	6	parataxis	_	TokenRange=74:80
+9	під	під	ADP	ADP	Case=Acc	10	case	_	TokenRange=81:84
+10	дверми	двері	NOUN	NOUN	Animacy=Inan|Case=Ins|Number=Ptan	6	obl	_	TokenRange=85:91
+11	єго	його	DET	NOUN	Animacy=Inan|Case=Gen|Gender=Masc|Number=Sing|Person=3|PronType=Prs	10	det	_	SpaceAfter=No|TokenRange=92:95
+12	,	,	PUNCT	PUNCT	_	6	punct	_	TokenRange=95:96
+13	зовсім	зовсім	ADV	ADV	_	14	advmod	_	TokenRange=97:103
+14	натурально	натурально	ADV	ADV	Degree=Pos	0	root	_	TokenRange=104:114
+15	гадати	гадати	VERB	VERB	Aspect=Imp|VerbForm=Inf	14	csubj	_	SpaceAfter=No|TokenRange=115:121
+16	:	:	PUNCT	PUNCT	_	18	punct	_	TokenRange=121:122
+17	що	що	PRON	PRON	Animacy=Inan|Case=Nom|Gender=Neut|Number=Sing|PronType=Rel	18	nsubj	_	TokenRange=123:125
+18	буде	бути	VERB	AUX	Aspect=Imp|Mood=Ind|Number=Sing|Person=3|Tense=Fut|VerbForm=Fin	15	parataxis	_	TokenRange=126:130
+19	в	в	ADP	ADP	Case=Loc	21	case	_	TokenRange=131:132
+20	XX.	XX.	ADJ	_	Case=Loc|Gender=Masc|Number=Sing	21	amod	_	_
+21	в.	в.	NOUN	PUNCT	Animacy=Inan|Case=Loc|Gender=Masc|Number=Sing	18	obl	_	TokenRange=137:140|SpaceAfter=No
+22	?	?	PUNCT	PUNCT	_	14	punct	_	TokenRange=137:140
+
+# doc_id = Vischovannja_pro_XX_vik_1892
+# sent_id = Vischovannja_pro_XX_vik_1892-5
+# text = що він дасть людям?
+1	що	що	PRON	PRON	Animacy=Inan|Case=Acc|Gender=Neut|Number=Sing|PronType=Int	3	obj	_	TokenRange=141:143
+2	він	він	PRON	PRON	Case=Nom|Gender=Masc|Number=Sing|Person=3|PronType=Prs	3	nsubj	_	TokenRange=144:147
+3	дасть	дати	VERB	VERB	Aspect=Perf|Mood=Ind|Number=Sing|Person=3|Tense=Fut|VerbForm=Fin	0	root	_	TokenRange=148:153
+4	людям	людина	NOUN	NOUN	Animacy=Anim|Case=Dat|Gender=Fem|Number=Plur	3	iobj	_	SpaceAfter=No|TokenRange=154:159
+5	?	?	PUNCT	PUNCT	_	3	punct	_	TokenRange=159:160
+
+# doc_id = Vischovannja_pro_XX_vik_1892
+# sent_id = Vischovannja_pro_XX_vik_1892-6_7
+# text = Достеменно певної відповіди на такі питання нїхто дати не спроможен; але можна дати відповідь більш, чи менш близьку до правди і на те не треба бути пророком; треба тілько, віщуючи про XX. вік, стати на ґрунтї науковому.
+1	Достеменно	достеменно	ADV	ADV	Degree=Pos	10	advmod	_	TokenRange=161:171
+2	певної	певний	ADJ	ADJ	Case=Gen|Degree=Pos|Gender=Fem|Number=Sing	3	amod	_	TokenRange=172:178
+3	відповіди	відповідь	NOUN	NOUN	Animacy=Inan|Case=Gen|Gender=Fem|Number=Sing	10	obj	_	TokenRange=179:188
+4	на	на	ADP	ADP	Case=Acc	6	case	_	TokenRange=189:191
+5	такі	такий	DET	DET	Animacy=Inan|Case=Acc|Number=Plur|PronType=Dem	6	det	_	TokenRange=192:196
+6	питання	питання	NOUN	NOUN	Animacy=Inan|Case=Acc|Gender=Neut|Number=Plur	3	nmod	_	TokenRange=197:204
+7	нїхто	ніхто	PRON	PRON	Animacy=Anim|Case=Nom|PronType=Neg	10	nsubj	_	TokenRange=205:210
+8	дати	дати	VERB	VERB	Aspect=Perf|VerbForm=Inf	10	xcomp	_	TokenRange=211:215
+9	не	не	PART	PART	Polarity=Neg	10	advmod:neg	_	TokenRange=216:218
+10	спроможен	спроможний	ADJ	ADJ	Case=Nom|Gender=Masc|Number=Sing|Variant=Short	0	root	_	SpaceAfter=No|TokenRange=219:228|Variant=Short
+11	;	;	PUNCT	PUNCT	_	13	punct	_	TokenRange=228:229
+12	але	але	CCONJ	CCONJ	_	13	cc	_	TokenRange=230:233
+13	можна	можна	ADV	ADV	_	10	conj	_	TokenRange=234:239
+14	дати	дати	VERB	VERB	Aspect=Perf|VerbForm=Inf	13	csubj	_	TokenRange=240:244
+15	відповідь	відповідь	NOUN	NOUN	Animacy=Inan|Case=Acc|Gender=Fem|Number=Sing	14	obj	_	TokenRange=245:254
+16	більш	більш	ADV	ADV	Degree=Cmp|Variant=Short	20	advmod	_	SpaceAfter=No|TokenRange=255:260|Variant=Short
+17	,	,	PUNCT	PUNCT	_	19	punct	_	TokenRange=260:261
+18	чи	чи	CCONJ	CCONJ	_	19	cc	_	TokenRange=262:264
+19	менш	менш	ADV	ADV	Degree=Cmp|Variant=Short	16	conj	_	TokenRange=265:269|Variant=Short
+20	близьку	близький	ADJ	ADJ	Case=Acc|Degree=Pos|Gender=Fem|Number=Sing	15	amod	_	TokenRange=270:277
+21	до	до	ADP	ADP	Case=Gen	22	case	_	TokenRange=278:280
+22	правди	правда	NOUN	NOUN	Animacy=Inan|Case=Gen|Gender=Fem|Number=Sing	20	nmod	_	TokenRange=281:287
+23	і	і	CCONJ	CCONJ	_	27	cc	_	TokenRange=288:289
+24	на	на	ADP	ADP	Case=Acc	25	case	_	TokenRange=290:292
+25	те	те	PRON	PRON	Animacy=Inan|Case=Acc|Gender=Neut|Number=Sing|PronType=Dem	27	obl	_	TokenRange=293:295
+26	не	не	PART	PART	Polarity=Neg	27	advmod:neg	_	TokenRange=296:298
+27	треба	треба	ADV	ADV	_	13	conj	_	TokenRange=299:304
+28	бути	бути	AUX	AUX	Aspect=Imp|VerbForm=Inf	29	cop	_	TokenRange=305:309
+29	пророком	пророк	NOUN	NOUN	Animacy=Anim|Case=Ins|Gender=Masc|Number=Sing	27	csubj	_	SpaceAfter=No|TokenRange=310:318
+30	;	;	PUNCT	PUNCT	_	31	punct	_	TokenRange=318:319
+31	треба	треба	ADV	ADV	_	27	conj	_	TokenRange=320:325
+32	тілько	тільки	ADV	ADV	_	31	advmod	_	SpaceAfter=No|TokenRange=326:332
+33	,	,	PUNCT	PUNCT	_	34	punct	_	TokenRange=332:333
+34	віщуючи	віщувати	VERB	VERB	Aspect=Imp|Tense=Pres|VerbForm=Conv	31	advcl	_	TokenRange=334:341
+35	про	про	ADP	ADP	Case=Acc	37	case	_	TokenRange=342:345
+36	XX.	XX.	ADJ	_	Case=Acc|Gender=Masc|Number=Sing	37	amod	_	_
+37	вік	вік	NOUN	NOUN	Animacy=Inan|Case=Acc|Gender=Masc|Number=Sing	34	obl	_	SpaceAfter=No|TokenRange=350:353
+38	,	,	PUNCT	PUNCT	_	34	punct	_	TokenRange=353:354
+39	стати	стати	VERB	VERB	Aspect=Perf|VerbForm=Inf	31	csubj	_	TokenRange=355:360
+40	на	на	ADP	ADP	Case=Loc	41	case	_	TokenRange=361:363
+41	ґрунтї	ґрунт	NOUN	NOUN	Animacy=Inan|Case=Loc|Gender=Masc|Number=Sing	39	obl	_	TokenRange=364:370
+42	науковому	науковий	ADJ	ADJ	Case=Loc|Gender=Masc|Number=Sing	41	amod	_	SpaceAfter=No|TokenRange=371:380
+43	.	.	PUNCT	PUNCT	_	10	punct	_	TokenRange=380:381
+
+# doc_id = Vischovannja_pro_XX_vik_1892
+# sent_id = Vischovannja_pro_XX_vik_1892-8
+# text = Віщовання про життє народів, якого вони досягнуть через сотню лїт, зовсїм не буде чудним, коли воно буде виведене з безсторонного суду над минулим, з суду, зробленого пісьля безсторонної розваги.
+1	Віщовання	віщування	NOUN	NOUN	Animacy=Inan|Case=Nom|Gender=Neut|Number=Sing	16	nsubj	_	TokenRange=382:391
+2	про	про	ADP	ADP	Case=Acc	3	case	_	TokenRange=392:395
+3	життє	життя	NOUN	NOUN	Animacy=Inan|Case=Acc|Gender=Neut|Number=Sing	1	nmod	_	TokenRange=396:401
+4	народів	народ	NOUN	NOUN	Animacy=Inan|Case=Gen|Gender=Masc|Number=Plur	3	nmod	_	SpaceAfter=No|TokenRange=402:409
+5	,	,	PUNCT	PUNCT	_	8	punct	_	TokenRange=409:410
+6	якого	який	PRON	DET	Case=Gen|Gender=Neut|Number=Sing|PronType=Rel	8	obj	_	TokenRange=411:416
+7	вони	вони	PRON	PRON	Case=Nom|Number=Plur|Person=3|PronType=Prs	8	nsubj	_	TokenRange=417:421
+8	досягнуть	досягнути	VERB	VERB	Aspect=Perf|Mood=Ind|Number=Plur|Person=3|Tense=Fut|VerbForm=Fin	3	acl:relcl	_	TokenRange=422:431
+9	через	через	ADP	ADP	Case=Acc	10	case	_	TokenRange=432:437
+10	сотню	сотня	NOUN	NOUN	Animacy=Inan|Case=Acc|Gender=Fem|Number=Sing	8	obl	_	TokenRange=438:443
+11	лїт	літа	NOUN	NOUN	Animacy=Inan|Case=Gen|Number=Ptan	10	nmod	_	SpaceAfter=No|TokenRange=444:447
+12	,	,	PUNCT	PUNCT	_	8	punct	_	TokenRange=447:448
+13	зовсїм	зовсім	ADV	ADV	_	16	advmod	_	TokenRange=449:455
+14	не	не	PART	PART	Polarity=Neg	16	advmod:neg	_	TokenRange=456:458
+15	буде	бути	AUX	AUX	Aspect=Imp|Mood=Ind|Number=Sing|Person=3|Tense=Fut|VerbForm=Fin	16	cop	_	TokenRange=459:463
+16	чудним	чудний	ADJ	ADJ	Case=Ins|Degree=Pos|Gender=Neut|Number=Sing	0	root	_	SpaceAfter=No|TokenRange=464:470
+17	,	,	PUNCT	PUNCT	_	21	punct	_	TokenRange=470:471
+18	коли	коли	SCONJ	SCONJ	_	21	mark	_	TokenRange=472:476
+19	воно	воно	PRON	PRON	Case=Nom|Gender=Neut|Number=Sing|Person=3|PronType=Prs	21	nsubj:pass	_	TokenRange=477:481
+20	буде	бути	AUX	AUX	Aspect=Imp|Mood=Ind|Number=Sing|Person=3|Tense=Fut|VerbForm=Fin	21	cop	_	TokenRange=482:486
+21	виведене	виведений	ADJ	ADJ	Aspect=Perf|Case=Nom|Gender=Neut|Number=Sing|VerbForm=Part|Voice=Pass	16	advcl	_	TokenRange=487:495
+22	з	з	ADP	ADP	Case=Gen	24	case	_	TokenRange=496:497
+23	безсторонного	безсторонній	ADJ	ADJ	Case=Gen|Gender=Masc|Number=Sing	24	amod	_	TokenRange=498:511
+24	суду	суд	NOUN	NOUN	Animacy=Inan|Case=Gen|Gender=Masc|Number=Sing	21	obl	_	TokenRange=512:516
+25	над	над	ADP	ADP	Case=Ins	26	case	_	TokenRange=517:520
+26	минулим	минуле	ADJ	ADJ	Animacy=Inan|Case=Ins|Gender=Neut|Number=Sing	24	nmod	_	SpaceAfter=No|TokenRange=521:528
+27	,	,	PUNCT	PUNCT	_	29	punct	_	TokenRange=528:529
+28	з	з	ADP	ADP	Case=Gen	29	case	_	TokenRange=530:531
+29	суду	суд	NOUN	NOUN	Animacy=Inan|Case=Gen|Gender=Masc|Number=Sing	24	appos	_	SpaceAfter=No|TokenRange=532:536
+30	,	,	PUNCT	PUNCT	_	31	punct	_	TokenRange=536:537
+31	зробленого	зроблений	ADJ	ADJ	Aspect=Perf|Case=Gen|Gender=Masc|Number=Sing|VerbForm=Part|Voice=Pass	29	amod	_	TokenRange=538:548
+32	пісьля	після	NOUN	NOUN	Case=Gen	34	case	_	TokenRange=549:555
+33	безсторонної	безсторонній	ADJ	ADJ	Case=Gen|Gender=Fem|Number=Sing	34	amod	_	TokenRange=556:568
+34	розваги	розвага	NOUN	NOUN	Animacy=Inan|Case=Gen|Gender=Fem|Number=Sing	31	obl	_	SpaceAfter=No|TokenRange=569:576
+35	.	.	PUNCT	PUNCT	_	16	punct	_	SpacesAfter=\r\n\r\n\s\r\n\r\n|TokenRange=576:577
+
+# newdoc id = Ivan_Rybchyn_Chym_e_Drahomanov_dla_ukrainskoi_molodizhi_1921
+# doc_id = Ivan_Rybchyn_Chym_e_Drahomanov_dla_ukrainskoi_molodizhi_1921
+# generator = UDPipe 2, https://lindat.mff.cuni.cz/services/udpipe
+# udpipe_model = ukrainian-parlamint-ud-2.17-251125
+# udpipe_model_licence = CC BY-NC-SA
+# sent_id = Ivan_Rybchyn_Chym_e_Drahomanov_dla_ukrainskoi_molodizhi_1921-1_2
+# text = Чим є Мих. Драгоманів для української молодіжи?
+1	Чим	що	PRON	PRON	Animacy=Inan|Case=Ins|Gender=Neut|Number=Sing|PronType=Int	0	root	_	TokenRange=0:3
+2	є	бути	AUX	VERB	Aspect=Imp|Mood=Ind|Number=Sing|Person=3|Tense=Pres|VerbForm=Fin	1	cop	_	TokenRange=4:5
+3	Мих	Мих.	PROPN	PRON	Abbr=Yes|Animacy=Anim|Case=Nom|Gender=Masc|NameType=Giv|Number=Sing	1	nsubj	_	SpaceAfter=No|TokenRange=6:9
+4	.	.	PUNCT	PUNCT	_	3	punct	_	TokenRange=9:10
+5	Драгоманів	Драгоманов	PROPN	NOUN	Animacy=Anim|Case=Nom|Gender=Masc|NameType=Sur|Number=Sing	3	flat:name	_	TokenRange=11:21
+6	для	для	ADP	ADP	Case=Gen	8	case	_	TokenRange=22:25
+7	української	український	ADJ	ADJ	Case=Gen|Gender=Fem|Number=Sing	8	amod	_	TokenRange=26:37
+8	молодіжи	молодіж	NOUN	NOUN	Animacy=Inan|Case=Gen|Gender=Fem|Number=Sing	1	obl	_	SpaceAfter=No|TokenRange=38:46
+9	?	?	PUNCT	PUNCT	_	1	punct	_	SpacesAfter=\r\n|TokenRange=46:47
+
+# doc_id = Ivan_Rybchyn_Chym_e_Drahomanov_dla_ukrainskoi_molodizhi_1921
+# sent_id = Ivan_Rybchyn_Chym_e_Drahomanov_dla_ukrainskoi_molodizhi_1921-6
+# text = Михайло Драгоманів...
+1	Михайло	Михайло	PROPN	PROPN	Animacy=Anim|Case=Nom|Gender=Masc|NameType=Giv|Number=Sing	0	root	_	NameType=Giv|TokenRange=109:116
+2	Драгоманів	Драгоманов	PROPN	PROPN	Animacy=Anim|Case=Nom|Gender=Masc|NameType=Sur|Number=Sing	1	flat:name	_	NameType=Sur|SpaceAfter=No|TokenRange=117:127
+3	...	...	PUNCT	PUNCT	_	1	punct	_	TokenRange=127:130
+
+# doc_id = Ivan_Rybchyn_Chym_e_Drahomanov_dla_ukrainskoi_molodizhi_1921
+# sent_id = Ivan_Rybchyn_Chym_e_Drahomanov_dla_ukrainskoi_molodizhi_1921-7
+# text = В цьому імени якась дивна таємничість, щось, що своєю незбагнутою силою немов відмолоднює нас, переносить в ясні, соняшні країни молодости.
+1	В	в	ADP	ADP	Case=Loc	3	case	_	TokenRange=131:132
+2	цьому	цей	DET	DET	Case=Loc|Gender=Neut|Number=Sing|PronType=Dem	3	det	_	TokenRange=133:138
+3	імени	ім'я	NOUN	NOUN	Animacy=Inan|Case=Loc|Gender=Neut|Number=Sing	6	orphan	_	TokenRange=139:144
+4	якась	якийсь	DET	DET	Case=Nom|Gender=Fem|Number=Sing|PronType=Ind	6	det	_	TokenRange=145:150
+5	дивна	дивний	ADJ	ADJ	Case=Nom|Degree=Pos|Gender=Fem|Number=Sing	6	amod	_	TokenRange=151:156
+6	таємничість	таємничість	NOUN	NOUN	Animacy=Inan|Case=Nom|Gender=Fem|Number=Sing	0	root	_	SpaceAfter=No|TokenRange=157:168
+7	,	,	PUNCT	PUNCT	_	8	punct	_	TokenRange=168:169
+8	щось	щось	PRON	PRON	Animacy=Inan|Case=Nom|Gender=Neut|Number=Sing|PronType=Ind	6	conj	_	SpaceAfter=No|TokenRange=170:174
+9	,	,	PUNCT	PUNCT	_	15	punct	_	TokenRange=174:175
+10	що	що	SCONJ	SCONJ	_	15	mark	_	TokenRange=176:178
+11	своєю	свій	DET	DET	Case=Ins|Gender=Fem|Number=Sing|Poss=Yes|PronType=Prs|Reflex=Yes	13	det	_	TokenRange=179:184
+12	незбагнутою	незбагнутий	ADJ	ADJ	Aspect=Perf|Case=Ins|Gender=Fem|Number=Sing|VerbForm=Part|Voice=Pass	13	amod	_	TokenRange=185:196
+13	силою	сила	NOUN	NOUN	Animacy=Inan|Case=Ins|Gender=Fem|Number=Sing	15	obl	_	TokenRange=197:202
+14	немов	немов	PART	PART	_	15	discourse	_	TokenRange=203:208
+15	відмолоднює	відмолоднювати	VERB	VERB	Aspect=Imp|Mood=Ind|Number=Sing|Person=3|Tense=Pres|VerbForm=Fin	8	acl	_	TokenRange=209:220
+16	нас	ми	PRON	PRON	Animacy=Anim|Case=Acc|Number=Plur|Person=1|PronType=Prs	15	obj	_	SpaceAfter=No|TokenRange=221:224
+17	,	,	PUNCT	PUNCT	_	18	punct	_	TokenRange=224:225
+18	переносить	переносити	VERB	VERB	Aspect=Imp|Mood=Ind|Number=Sing|Person=3|Tense=Pres|VerbForm=Fin	15	conj	_	TokenRange=226:236
+19	в	в	ADP	ADP	Case=Acc	23	case	_	TokenRange=237:238
+20	ясні	ясний	ADJ	ADJ	Animacy=Inan|Case=Acc|Degree=Pos|Number=Plur	23	amod	_	SpaceAfter=No|TokenRange=239:243
+21	,	,	PUNCT	PUNCT	_	22	punct	_	TokenRange=243:244
+22	соняшні	соняшний	ADJ	ADJ	Animacy=Inan|Case=Acc|Number=Plur	20	conj	_	TokenRange=245:252
+23	країни	країна	NOUN	NOUN	Animacy=Inan|Case=Acc|Gender=Fem|Number=Plur	18	obl	_	TokenRange=253:259
+24	молодости	молодість	NOUN	NOUN	Animacy=Inan|Case=Gen|Gender=Fem|Number=Sing	23	nmod	_	SpaceAfter=No|TokenRange=260:269
+25	.	.	PUNCT	PUNCT	_	6	punct	_	SpacesAfter=\r\n\r\n\s\r\n\r\n|TokenRange=269:270
+
+# doc_id = Ivan_Rybchyn_Chym_e_Drahomanov_dla_ukrainskoi_molodizhi_1921
+# sent_id = Ivan_Rybchyn_Chym_e_Drahomanov_dla_ukrainskoi_molodizhi_1921-8
+# text = Кожний український інтелігент, що чує це імя, мимоволі переноситься думкою в свої молоді літа.
+1	Кожний	кожний	DET	DET	Case=Nom|Gender=Masc|Number=Sing|PronType=Tot	3	det	_	TokenRange=279:285
+2	український	український	ADJ	ADJ	Case=Nom|Gender=Masc|Number=Sing	3	amod	_	TokenRange=286:297
+3	інтелігент	інтелігент	NOUN	NOUN	Animacy=Anim|Case=Nom|Gender=Masc|Number=Sing	11	nsubj	_	SpaceAfter=No|TokenRange=298:308
+4	,	,	PUNCT	PUNCT	_	6	punct	_	TokenRange=308:309
+5	що	що	SCONJ	SCONJ	_	6	mark	_	TokenRange=310:312
+6	чує	чути	VERB	VERB	Aspect=Imp|Mood=Ind|Number=Sing|Person=3|Tense=Pres|VerbForm=Fin	3	acl:relcl	_	TokenRange=313:316
+7	це	цей	DET	DET	Case=Acc|Gender=Neut|Number=Sing|PronType=Dem	8	det	_	TokenRange=317:319
+8	імя	ім'я	NOUN	NOUN	Animacy=Inan|Case=Acc|Gender=Neut|Number=Sing	6	obj	_	SpaceAfter=No|TokenRange=320:323
+9	,	,	PUNCT	PUNCT	_	6	punct	_	TokenRange=323:324
+10	мимоволі	мимоволі	ADV	ADV	_	11	advmod	_	TokenRange=325:333
+11	переноситься	переноситися	VERB	VERB	Aspect=Imp|Mood=Ind|Number=Sing|Person=3|Reflex=Yes|Tense=Pres|VerbForm=Fin	0	root	_	TokenRange=334:346
+12	думкою	думка	NOUN	NOUN	Animacy=Inan|Case=Ins|Gender=Fem|Number=Sing	11	obl	_	TokenRange=347:353
+13	в	в	ADP	ADP	Case=Acc	16	case	_	TokenRange=354:355
+14	свої	свій	DET	DET	Animacy=Inan|Case=Acc|Number=Plur|Poss=Yes|PronType=Prs|Reflex=Yes	16	det	_	TokenRange=356:360
+15	молоді	молодий	ADJ	ADJ	Animacy=Inan|Case=Acc|Degree=Pos|Number=Plur	16	amod	_	TokenRange=361:367
+16	літа	літа	NOUN	NOUN	Animacy=Inan|Case=Acc|Number=Ptan	11	obl	_	SpaceAfter=No|TokenRange=368:372
+17	.	.	PUNCT	PUNCT	_	11	punct	_	TokenRange=372:373
+
+# doc_id = Ivan_Rybchyn_Chym_e_Drahomanov_dla_ukrainskoi_molodizhi_1921
+# sent_id = Ivan_Rybchyn_Chym_e_Drahomanov_dla_ukrainskoi_molodizhi_1921-9
+# text = Не тому, немовби те імя робило вражіння тільки в молодости — велич Драгоманового духа така богата в найріжнороднійші цінности, що їх не легко вичерпати і займаючись нею ціле життя, — а тому, що Драгоманів є особливо близьким українській молодіжи.
+1	Не	не	PART	PART	Polarity=Neg	2	advmod:neg	_	TokenRange=374:376
+2	тому	тому	ADV	ADV	_	0	root	_	SpaceAfter=No|TokenRange=377:381
+3	,	,	PUNCT	PUNCT	_	7	punct	_	TokenRange=381:382
+4	немовби	немовби	ADV	ADV	_	7	advmod	_	TokenRange=383:390
+5	те	той	DET	DET	Case=Nom|Gender=Neut|Number=Sing|PronType=Dem	6	det	_	TokenRange=391:393
+6	імя	ім'я	NOUN	NOUN	Animacy=Inan|Case=Nom|Gender=Neut|Number=Sing	7	nsubj	_	TokenRange=394:397
+7	робило	робити	VERB	VERB	Aspect=Imp|Gender=Neut|Mood=Ind|Number=Sing|Tense=Past|VerbForm=Fin	2	acl	_	TokenRange=398:404
+8	вражіння	враження	NOUN	NOUN	Animacy=Inan|Case=Acc|Gender=Neut|Number=Sing	7	obj	_	TokenRange=405:413
+9	тільки	тільки	PART	PART	_	11	discourse	_	TokenRange=414:420
+10	в	в	ADP	ADP	Case=Loc	11	case	_	TokenRange=421:422
+11	молодости	молодість	NOUN	NOUN	Animacy=Inan|Case=Loc|Gender=Fem|Number=Sing	7	obl	_	TokenRange=423:432
+12	—	—	PUNCT	PUNCT	_	17	punct	_	TokenRange=433:434
+13	велич	велич	NOUN	NOUN	Animacy=Inan|Case=Nom|Gender=Fem|Number=Sing	17	nsubj	_	TokenRange=435:440
+14	Драгоманового	драгомановів	ADJ	ADJ	Case=Gen|Gender=Masc|Number=Sing	15	amod	_	TokenRange=441:454
+15	духа	дух	NOUN	NOUN	Animacy=Inan|Case=Gen|Gender=Masc|Number=Sing	13	nmod	_	TokenRange=455:459
+16	така	такий	DET	DET	Case=Nom|Gender=Fem|Number=Sing|PronType=Dem	17	advmod:det	_	TokenRange=460:464
+17	богата	багатий	ADJ	ADJ	Case=Nom|Degree=Pos|Gender=Fem|Number=Sing	2	parataxis	_	TokenRange=465:471
+18	в	в	ADP	ADP	Case=Acc	20	case	_	TokenRange=472:473
+19	найріжнороднійші	найріжнороднійший	ADJ	ADJ	Animacy=Inan|Case=Acc|Degree=Sup|Number=Plur	20	amod	_	TokenRange=474:490
+20	цінности	цінність	NOUN	NOUN	Animacy=Inan|Case=Acc|Gender=Fem|Number=Plur	17	obl	_	SpaceAfter=No|TokenRange=491:499
+21	,	,	PUNCT	PUNCT	_	25	punct	_	TokenRange=499:500
+22	що	що	SCONJ	SCONJ	_	25	mark	_	TokenRange=501:503
+23	їх	вони	PRON	PRON	Case=Acc|Number=Plur|Person=3|PronType=Prs	26	obj	_	TokenRange=504:506
+24	не	не	PART	PART	Polarity=Neg	25	advmod:neg	_	TokenRange=507:509
+25	легко	легко	ADV	ADV	Degree=Pos	17	acl	_	TokenRange=510:515
+26	вичерпати	вичерпати	VERB	VERB	Aspect=Perf|VerbForm=Inf	25	csubj	_	TokenRange=516:525
+27	і	і	CCONJ	CCONJ	_	28	discourse	_	TokenRange=526:527
+28	займаючись	займатися	VERB	VERB	Aspect=Imp|Reflex=Yes|Tense=Pres|VerbForm=Conv	26	advcl	_	TokenRange=528:538
+29	нею	вона	PRON	PRON	Case=Ins|Gender=Fem|Number=Sing|Person=3|PronType=Prs	28	obl	_	TokenRange=539:542
+30	ціле	цілий	ADJ	ADJ	Case=Acc|Gender=Neut|Number=Sing	31	amod	_	TokenRange=543:547
+31	життя	життя	NOUN	NOUN	Animacy=Inan|Case=Acc|Gender=Neut|Number=Sing	28	obl	_	SpaceAfter=No|TokenRange=548:553
+32	,	,	PUNCT	PUNCT	_	28	punct	_	TokenRange=553:554
+33	—	—	PUNCT	PUNCT	_	35	punct	_	TokenRange=555:556
+34	а	а	CCONJ	CCONJ	_	35	cc	_	TokenRange=557:558
+35	тому	тому	ADV	ADV	PronType=Dem	2	conj	_	SpaceAfter=No|TokenRange=559:563
+36	,	,	PUNCT	PUNCT	_	41	punct	_	TokenRange=563:564
+37	що	що	SCONJ	SCONJ	_	41	mark	_	TokenRange=565:567
+38	Драгоманів	Драгоманов	PROPN	PROPN	Animacy=Anim|Case=Nom|Gender=Masc|NameType=Sur|Number=Sing	41	nsubj	_	NameType=Sur|TokenRange=568:578
+39	є	бути	AUX	AUX	Aspect=Imp|Mood=Ind|Number=Sing|Person=3|Tense=Pres|VerbForm=Fin	41	cop	_	TokenRange=579:580
+40	особливо	особливо	ADV	ADV	_	41	advmod	_	TokenRange=581:589
+41	близьким	близький	ADJ	ADJ	Case=Ins|Degree=Pos|Gender=Masc|Number=Sing	35	acl	_	TokenRange=590:598
+42	українській	український	ADJ	ADJ	Case=Dat|Gender=Fem|Number=Sing	43	amod	_	TokenRange=599:610
+43	молодіжи	молодіж	NOUN	NOUN	Animacy=Inan|Case=Dat|Gender=Fem|Number=Sing	41	obl	_	SpaceAfter=No|TokenRange=611:619
+44	.	.	PUNCT	PUNCT	_	2	punct	_	TokenRange=619:620
+
+# newdoc id = Stepan_Smal-Stockij_Omelan_Kaluzhnackij_1917
+# doc_id = Stepan_Smal-Stockij_Omelan_Kaluzhnackij_1917
+# generator = UDPipe 2, https://lindat.mff.cuni.cz/services/udpipe
+# udpipe_model = ukrainian-parlamint-ud-2.17-251125
+# udpipe_model_licence = CC BY-NC-SA
+# sent_id = Stepan_Smal-Stockij_Omelan_Kaluzhnackij_1917-1_split1
+# text = Омелян Калужняцький
+1	Омелян	Омелян	PROPN	PROPN	Animacy=Anim|Case=Nom|Gender=Masc|NameType=Giv|Number=Sing	0	root	_	NameType=Giv|TokenRange=0:6
+2	Калужняцький	Калужняцький	PROPN	PROPN	Animacy=Anim|Case=Nom|Gender=Masc|NameType=Sur|Number=Sing	1	flat:name	_	NameType=Sur|SpacesAfter=\n|TokenRange=7:19
+
+# doc_id = Stepan_Smal-Stockij_Omelan_Kaluzhnackij_1917
+# generator = UDPipe 2, https://lindat.mff.cuni.cz/services/udpipe
+# udpipe_model = ukrainian-parlamint-ud-2.17-251125
+# udpipe_model_licence = CC BY-NC-SA
+# sent_id = Stepan_Smal-Stockij_Omelan_Kaluzhnackij_1917-1_split2
+# text = Дня 6-го липня поховали в Чернівцях професора славянської фільольоґії черновецького унїверситету Омеляна Калужняцького.
+1	Дня	день	NOUN	NOUN	Animacy=Inan|Case=Gen|Gender=Masc|Number=Sing	4	obl	_	TokenRange=20:23
+2	6-го	6-ий	ADJ	ADJ	Case=Gen|Gender=Neut|Number=Sing|NumType=Ord	1	nmod	_	TokenRange=24:28
+3	липня	липень	NOUN	NOUN	Animacy=Inan|Case=Gen|Gender=Masc|Number=Sing	2	nmod	_	TokenRange=29:34
+4	поховали	поховати	VERB	VERB	Aspect=Perf|Mood=Ind|Number=Plur|Tense=Past|VerbForm=Fin	0	root	_	TokenRange=35:43
+5	в	в	ADP	ADP	Case=Loc	6	case	_	TokenRange=44:45
+6	Чернівцях	Чернівці	PROPN	PROPN	Animacy=Inan|Case=Loc|NameType=Geo|Number=Ptan	4	obl	_	NameType=Geo|TokenRange=46:55
+7	професора	професор	NOUN	NOUN	Animacy=Anim|Case=Acc|Gender=Masc|Number=Sing	4	obj	_	TokenRange=56:65
+8	славянської	слов'янський	ADJ	ADJ	Case=Gen|Gender=Fem|Number=Sing	9	amod	_	TokenRange=66:77
+9	фільольоґії	філологія	NOUN	NOUN	Animacy=Inan|Case=Gen|Gender=Fem|Number=Sing	7	nmod	_	TokenRange=78:89
+10	черновецького	черновецький	ADJ	ADJ	Case=Gen|Gender=Masc|Number=Sing	11	amod	_	TokenRange=90:103
+11	унїверситету	університет	NOUN	NOUN	Animacy=Inan|Case=Gen|Gender=Masc|Number=Sing	7	nmod	_	TokenRange=104:116
+12	Омеляна	Омелян	PROPN	PROPN	Animacy=Anim|Case=Acc|Gender=Masc|NameType=Giv|Number=Sing	7	appos	_	NameType=Giv|TokenRange=117:124
+13	Калужняцького	Калужняцький	PROPN	PROPN	Animacy=Anim|Case=Acc|Gender=Masc|NameType=Sur|Number=Sing	12	flat:name	_	NameType=Sur|SpaceAfter=No|TokenRange=125:138
+14	.	.	PUNCT	PUNCT	_	4	punct	_	TokenRange=138:139
+
+# doc_id = Stepan_Smal-Stockij_Omelan_Kaluzhnackij_1917
+# sent_id = Stepan_Smal-Stockij_Omelan_Kaluzhnackij_1917-2
+# text = Повних 39 лїт — від заснованя унїверситету в 1875-ім р. — займав він се важне місце.
+1	Повних	повний	ADJ	ADJ	Case=Gen|Degree=Pos|Number=Plur	3	amod	_	TokenRange=140:146
+2	39	39	NUM	NUM	Case=Nom|NumType=Card	3	nummod:gov	_	TokenRange=147:149
+3	лїт	літа	NOUN	NOUN	Animacy=Inan|Case=Gen|Number=Ptan	13	obl	_	TokenRange=150:153
+4	—	—	PUNCT	PUNCT	_	6	punct	_	TokenRange=154:155
+5	від	від	ADP	ADP	Case=Gen	6	case	_	TokenRange=156:159
+6	заснованя	заснування	NOUN	NOUN	Animacy=Inan|Case=Gen|Gender=Neut|Number=Sing	13	obl	_	TokenRange=160:169
+7	унїверситету	університет	NOUN	NOUN	Animacy=Inan|Case=Gen|Gender=Masc|Number=Sing	6	nmod	_	TokenRange=170:182
+8	в	в	ADP	ADP	Case=Loc	10	case	_	TokenRange=183:184
+9	1875-ім	1875-ий	ADJ	ADJ	Case=Loc|Gender=Masc|Number=Sing|NumType=Ord	10	amod	_	TokenRange=185:192
+10	р	р.	NOUN	NOUN	Abbr=Yes|Animacy=Inan|Case=Loc|Gender=Masc|InflClass=Ind|Number=Sing	6	nmod	_	SpaceAfter=No|TokenRange=193:194|Uninflect=Yes
+11	.	.	PUNCT	PUNCT	_	10	punct	_	TokenRange=194:195
+12	—	—	PUNCT	PUNCT	_	13	punct	_	TokenRange=196:197
+13	займав	займати	VERB	VERB	Aspect=Imp|Gender=Masc|Mood=Ind|Number=Sing|Tense=Past|VerbForm=Fin	0	root	_	TokenRange=198:204
+14	він	він	PRON	PRON	Case=Nom|Gender=Masc|Number=Sing|Person=3|PronType=Prs	13	nsubj	_	TokenRange=205:208
+15	се	сей	DET	DET	Case=Acc|Gender=Neut|Number=Sing|PronType=Dem	17	det	_	TokenRange=209:211
+16	важне	важний	ADJ	ADJ	Case=Acc|Degree=Pos|Gender=Neut|Number=Sing	17	amod	_	TokenRange=212:217
+17	місце	місце	NOUN	NOUN	Animacy=Inan|Case=Acc|Gender=Neut|Number=Sing	13	obj	_	SpaceAfter=No|TokenRange=218:223
+18	.	.	PUNCT	PUNCT	_	13	punct	_	SpacesAfter=\n\s\n|TokenRange=223:224
+
+# doc_id = Stepan_Smal-Stockij_Omelan_Kaluzhnackij_1917
+# sent_id = Stepan_Smal-Stockij_Omelan_Kaluzhnackij_1917-3
+# text = Дуже трудне становище мав молодий, в науці мало ще знаний професор зараз таки в перших початках своєї наукової кариєри, особливо в українській справі.
+1	Дуже	дуже	ADV	ADV	Degree=Pos	2	advmod	_	TokenRange=227:231
+2	трудне	трудний	ADJ	ADJ	Case=Acc|Degree=Pos|Gender=Neut|Number=Sing	3	amod	_	TokenRange=232:238
+3	становище	становище	NOUN	NOUN	Animacy=Inan|Case=Acc|Gender=Neut|Number=Sing	4	obj	_	TokenRange=239:248
+4	мав	мати	VERB	VERB	Aspect=Imp|Gender=Masc|Mood=Ind|Number=Sing|Tense=Past|VerbForm=Fin	0	root	_	TokenRange=249:252
+5	молодий	молодий	ADJ	ADJ	Case=Nom|Degree=Pos|Gender=Masc|Number=Sing	12	amod	_	SpaceAfter=No|TokenRange=253:260
+6	,	,	PUNCT	PUNCT	_	11	punct	_	TokenRange=260:261
+7	в	в	ADP	ADP	Case=Loc	8	case	_	TokenRange=262:263
+8	науці	наука	NOUN	NOUN	Animacy=Inan|Case=Loc|Gender=Fem|Number=Sing	11	nmod	_	TokenRange=264:269
+9	мало	мало	ADV	ADV	Degree=Pos	11	advmod	_	TokenRange=270:274
+10	ще	ще	ADV	ADV	_	11	advmod	_	TokenRange=275:277
+11	знаний	знаний	ADJ	ADJ	Aspect=Imp|Case=Nom|Degree=Pos|Gender=Masc|Number=Sing|VerbForm=Part|Voice=Pass	5	conj	_	TokenRange=278:284
+12	професор	професор	NOUN	NOUN	Animacy=Anim|Case=Nom|Gender=Masc|Number=Sing	4	nsubj	_	TokenRange=285:293
+13	зараз	зараз	ADV	ADV	PronType=Dem	4	advmod	_	TokenRange=294:299
+14	таки	таки	PART	PART	_	13	discourse	_	TokenRange=300:304
+15	в	в	ADP	ADP	Case=Loc	17	case	_	TokenRange=305:306
+16	перших	перший	ADJ	ADJ	Case=Loc|Number=Plur|NumType=Ord	17	amod	_	TokenRange=307:313
+17	початках	початок	NOUN	NOUN	Animacy=Inan|Case=Loc|Gender=Masc|Number=Plur	4	obl	_	TokenRange=314:322
+18	своєї	свій	DET	DET	Case=Gen|Gender=Fem|Number=Sing|Poss=Yes|PronType=Prs|Reflex=Yes	20	det	_	TokenRange=323:328
+19	наукової	науковий	ADJ	ADJ	Case=Gen|Gender=Fem|Number=Sing	20	amod	_	TokenRange=329:337
+20	кариєри	кар'єра	NOUN	NOUN	Animacy=Inan|Case=Gen|Gender=Fem|Number=Sing	17	nmod	_	SpaceAfter=No|TokenRange=338:345
+21	,	,	PUNCT	PUNCT	_	25	punct	_	TokenRange=345:346
+22	особливо	особливо	ADV	ADV	_	25	advmod	_	TokenRange=347:355
+23	в	в	ADP	ADP	Case=Loc	25	case	_	TokenRange=356:357
+24	українській	український	ADJ	ADJ	Case=Loc|Gender=Fem|Number=Sing	25	amod	_	TokenRange=358:369
+25	справі	справа	NOUN	NOUN	Animacy=Inan|Case=Loc|Gender=Fem|Number=Sing	4	obl	_	SpaceAfter=No|TokenRange=370:376
+26	.	.	PUNCT	PUNCT	_	4	punct	_	SpacesAfter=\n\s\n|TokenRange=376:377
+
+# doc_id = Stepan_Smal-Stockij_Omelan_Kaluzhnackij_1917
+# sent_id = Stepan_Smal-Stockij_Omelan_Kaluzhnackij_1917-4
+# text = Перша половина 70-их років се часи великого занепаду української національної ідеї, великої зневіри у власні сили нациї.
+1	Перша	перший	ADJ	ADJ	Case=Nom|Gender=Fem|Number=Sing|NumType=Ord	2	amod	_	TokenRange=380:385
+2	половина	половина	NOUN	NOUN	Animacy=Inan|Case=Nom|Gender=Fem|Number=Sing	6	nsubj	_	TokenRange=386:394
+3	70-их	70-ий	ADJ	ADJ	Case=Gen|Number=Plur|NumType=Ord	4	amod	_	TokenRange=395:400
+4	років	рік	NOUN	NOUN	Animacy=Inan|Case=Gen|Gender=Masc|Number=Plur	2	nmod	_	TokenRange=401:406
+5	се	се	PRON	PRON	Case=Nom|Gender=Neut|Number=Sing|PronType=Dem	6	expl	_	TokenRange=407:409
+6	часи	час	NOUN	NOUN	Animacy=Inan|Case=Nom|Gender=Masc|Number=Plur	0	root	_	TokenRange=410:414
+7	великого	великий	ADJ	ADJ	Case=Gen|Degree=Pos|Gender=Masc|Number=Sing	8	amod	_	TokenRange=415:423
+8	занепаду	занепад	NOUN	NOUN	Animacy=Inan|Case=Gen|Gender=Masc|Number=Sing	6	nmod	_	TokenRange=424:432
+9	української	український	ADJ	ADJ	Case=Gen|Gender=Fem|Number=Sing	11	amod	_	TokenRange=433:444
+10	національної	національний	ADJ	ADJ	Case=Gen|Gender=Fem|Number=Sing	11	amod	_	TokenRange=445:457
+11	ідеї	ідея	NOUN	NOUN	Animacy=Inan|Case=Gen|Gender=Fem|Number=Sing	8	nmod	_	SpaceAfter=No|TokenRange=458:462
+12	,	,	PUNCT	PUNCT	_	14	punct	_	TokenRange=462:463
+13	великої	великий	ADJ	ADJ	Case=Gen|Degree=Pos|Gender=Fem|Number=Sing	14	amod	_	TokenRange=464:471
+14	зневіри	зневіра	NOUN	NOUN	Animacy=Inan|Case=Gen|Gender=Fem|Number=Sing	8	conj	_	TokenRange=472:479
+15	у	у	ADP	ADP	Case=Acc	17	case	_	TokenRange=480:481
+16	власні	власний	ADJ	ADJ	Animacy=Inan|Case=Acc|Number=Plur	17	amod	_	TokenRange=482:488
+17	сили	сила	NOUN	NOUN	Animacy=Inan|Case=Acc|Gender=Fem|Number=Plur	14	nmod	_	TokenRange=489:493
+18	нациї	нація	NOUN	NOUN	Animacy=Inan|Case=Gen|Gender=Fem|Number=Sing	17	nmod	_	SpaceAfter=No|TokenRange=494:499
+19	.	.	PUNCT	PUNCT	_	6	punct	_	TokenRange=499:500
+
