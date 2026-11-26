@@ -781,6 +781,11 @@ sources:
       #                         (individual's name …) 613 … (21,344 entries carry none)
       etymon_languages: etymon_language  # the etymology rows' iso_code verbatim: grc · lat · ara ·
       #                         heb · per · syr · akk · pal · eng · fre · spa · san (2,995 named etymons)
+  lane-lexicon:               # census 2026-11-26 at the pinned 7dd04e1 (48,795 entries)
+    entry_fields:
+      root: root              # the div2 root heading's radicals verbatim — Lane's article grain, the
+      #                         root → entries grouping: 5,087 roots over 48,752 entries (the 43
+      #                         letter-article entries sit outside any root)
   wilkens-oui:                # the book's own tradition/script marks (Abkürzungen, PDF pp. 13–14),
     entry_fields:             # mapped by WilkensOui::MARK_FACETS; Buddhist terms go unmarked upstream
       tradition: tradition    # (m) manichäisch → Manichaean 611 · (c) christlich → Christian 119

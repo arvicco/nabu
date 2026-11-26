@@ -1,0 +1,27 @@
+lane-lexicon:   # 02-sources row 439
+  adapter: Nabu::Adapters::LaneLexicon
+  adopted: "2026-11-26"
+  axes: [arabic]
+  wired: false   # bin/nabu enable lane-lexicon, then bin/nabu sync lane-lexicon
+                 # (one ~67 MB git clone, pinned 7dd04e1). EXPECT 37 docs →
+                 # 48,795 entries (45,506 id entries + 3,289 id-less
+                 # paragraphs), 0 errored; discovery 8 skipped by rule (ua0.xml
+                 # collapsed onto u_0.xml + the lemma index + ids.dat + five
+                 # eXist __contents__.xml), 0 unrecognized (whole-repo census
+                 # 2026-11-26). Eyeball nabu define ذمر (root ذمر, Lane pp. 977–978)
+                 # and nabu show urn:nabu:dict:lane:n14041.1 (its "see 1"
+                 # pointer resolves), then flip.
+  sync_policy: manual
+  # Lane's Arabic-English Lexicon (E. W. Lane, 1863–1893; the posthumous
+  # parts and Supplement ed. Stanley Lane-Poole) — the library's first
+  # classical Arabic dictionary, beside the modern-usage wiktionary-ar.
+  # Perseus digitization with Alpheios corrections; TEI P4 letter buckets
+  # (new family lane-tei). One dictionary slug `lane`, language ara (lect
+  # ara:cla via config/lect_overrides.yml); entry id = the upstream @id,
+  # variant copies stem-prefixed, id-less paragraphs anchored on their
+  # preceding entry (the id design: the adapter's class note). Root,
+  # paragraph and printed page ride the annotations (root is an entry
+  # facet). LICENSE: README verbatim "This work is licensed under a
+  # Creative Commons Attribution-ShareAlike 3.0 United States License."
+  # (read 2026-11-26) → attribution. Upstream dormant since 2019 → pinned,
+  # manual.

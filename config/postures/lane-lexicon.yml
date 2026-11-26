@@ -1,0 +1,16 @@
+sources:
+  lane-lexicon:
+    # lect: machine-postured — the ara → ara:cla row in config/lect_overrides.yml.
+    kind: {posture: unclassified, note: "a dictionary shelf (content_kind dictionary) — the kind
+        axis folds documents only, so a kind_map row would be inert; Lane's is a bilingual
+        Arabic-English lexicon by its own title"}
+    dating: {posture: undatable, note: "a dictionary shelf — the asset carries no dates; the
+        work's own publication span (London, Williams and Norgate, 1863–1893, eight parts, the
+        last three and the Supplement edited by Stanley Lane-Poole) is edition-class, which the
+        inference law excludes, and the classical sources it digests are cited by siglum
+        (S, M, K, TA …) without dates"}
+    places: {posture: unplaced, note: "place and tribe names ride entry bodies (Lane's own
+        glosses), never a document place"}
+    script: {posture: implied, note: "Unicode Arabic script throughout (headwords, roots,
+        citations); Buckwalter transliteration survives only in the upstream file names and
+        div1/@n, never in the text"}

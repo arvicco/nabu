@@ -1,0 +1,43 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# Every file is a line-range TRIM (whole: false) of an upstream file at the
+# pinned commit, so a fresh GET returns the full file and is fetched for
+# URL-liveness only, never byte-compared; re-apply the README cuts after any
+# refresh. adapter_test is null: the adapter test asserts trim-level counts.
+source: lane-lexicon
+adapter_test:
+retrieved: 2026-11-26
+files:
+  - path: db/lexica/ara/lan/u_0.xml
+    url: https://raw.githubusercontent.com/alpheios-project/lan/7dd04e1182c13a4b0883978867d2a3b04616542a/db/lexica/ara/lan/u_0.xml
+    whole: false
+    trim: lines 1-25 + 8031-8426 + the last line (11,641 lines -> 422)
+  - path: db/lexica/ara/lan/ua0.xml
+    url: https://raw.githubusercontent.com/alpheios-project/lan/7dd04e1182c13a4b0883978867d2a3b04616542a/db/lexica/ara/lan/ua0.xml
+    whole: false
+    trim: lines 1-25 + 8031-8426 + the last line (the u_0.xml cut)
+  - path: db/lexica/ara/lan/u_Y0.xml
+    url: https://raw.githubusercontent.com/alpheios-project/lan/7dd04e1182c13a4b0883978867d2a3b04616542a/db/lexica/ara/lan/u_Y0.xml
+    whole: false
+    trim: lines 1-42 + 601-606 + the last line
+  - path: db/lexica/ara/lan/uq1.xml
+    url: https://raw.githubusercontent.com/alpheios-project/lan/7dd04e1182c13a4b0883978867d2a3b04616542a/db/lexica/ara/lan/uq1.xml
+    whole: false
+    trim: lines 1-46 + the last 4 lines
+  - path: db/lexica/ara/lan/uq2.xml
+    url: https://raw.githubusercontent.com/alpheios-project/lan/7dd04e1182c13a4b0883978867d2a3b04616542a/db/lexica/ara/lan/uq2.xml
+    whole: false
+    trim: lines 1-34 + 661-680 + 5007-5012 + the last line
+  - path: db/indexes/ara-lan-index.xml
+    url: https://raw.githubusercontent.com/alpheios-project/lan/7dd04e1182c13a4b0883978867d2a3b04616542a/db/indexes/ara-lan-index.xml
+    whole: false
+    trim: lines 1-9 + a closing </entrylist> (the upstream file's own last line)
+  - path: dat/ara-lan-ids.dat
+    url: https://raw.githubusercontent.com/alpheios-project/lan/7dd04e1182c13a4b0883978867d2a3b04616542a/dat/ara-lan-ids.dat
+    whole: false
+    trim: lines 1-10
+  - path: db/lexica/ara/lan/__contents__.xml
+    url: https://raw.githubusercontent.com/alpheios-project/lan/7dd04e1182c13a4b0883978867d2a3b04616542a/db/lexica/ara/lan/__contents__.xml
+    whole: false
+    trim: lines 1-5 + the last line
