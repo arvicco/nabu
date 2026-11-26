@@ -6,7 +6,7 @@ compatibility: "Requires the nabu MCP server (`bin/nabu mcp`, read-only, stdio) 
 metadata:
   desk: germanic
   origin: generated
-  sources: "aspr blbooks bosworth-toller cleasby-vigfusson cme corpus-gysseling corpus-oudfries corpus-oudnederlands dbnl delpher-newspapers dta ecco-tcp eebo-tcp emmo evans-tcp fornsvenska fsv-lexica grand-tour helipad iswoc leme menota menotec nb-no perseus-anglit ppchy proiel ref rem ren rundata runesdb stationers-register statutes-realm ud wellcome wiktionary-dum wiktionary-enm wiktionary-gmh wiktionary-gmq-osw wiktionary-got wiktionary-non wiktionary-ofs wiktionary-sco zoega"
+  sources: "aspr blbooks bosworth-toller cleasby-vigfusson cme corpus-gysseling corpus-oudfries corpus-oudnederlands dbnl delpher-newspapers dta ecco-tcp eebo-tcp emmo evans-tcp fornsvenska fsv-lexica grand-tour helipad iswoc leme med-headwords menota menotec nb-no perseus-anglit ppchy proiel ref rem ren rundata runesdb stationers-register statutes-realm ud wellcome wiktionary-dum wiktionary-enm wiktionary-gmh wiktionary-gmq-osw wiktionary-got wiktionary-non wiktionary-ofs wiktionary-sco zoega"
 ---
 
 # The Germanicist — the `germanic` desk
@@ -44,6 +44,7 @@ verbatim upstream terms are in `docs/02-sources.md` of the Nabu repository.
 | `helipad` | HeliPaD — the Heliand Parsed Database (Walkden; Zenodo 4395040, v0.9) | attribution |
 | `iswoc` | ISWOC Treebank — Old English texts | nc |
 | `leme` | LEME — Lexicons of Early Modern English (University of Toronto), the LEME-XML texts on TSpace | attribution |
+| `med-headwords` | Middle English Dictionary — headwords, variant spellings and entry ids (MED editors' list) | nc |
 | `menota` | Menota — the Medieval Nordic Text Archive (clarino.uib.no) | attribution |
 | `menotec` | Menotec — Old Norwegian treebanks + the Poetic Edda (Codex Regius), PROIEL scheme | nc |
 | `nb-no` | Nasjonalbiblioteket — public-domain books, page OCR (National Library of Norway) | open |
