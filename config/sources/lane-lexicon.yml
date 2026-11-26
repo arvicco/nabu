@@ -1,16 +1,8 @@
-lane-lexicon:   # 02-sources row 439
+lane-lexicon:   # 02-sources row 440
   adapter: Nabu::Adapters::LaneLexicon
   adopted: "2026-11-26"
   axes: [arabic]
-  wired: false   # bin/nabu enable lane-lexicon, then bin/nabu sync lane-lexicon
-                 # (one ~67 MB git clone, pinned 7dd04e1). EXPECT 37 docs →
-                 # 48,795 entries (45,506 id entries + 3,289 id-less
-                 # paragraphs), 0 errored; discovery 8 skipped by rule (ua0.xml
-                 # collapsed onto u_0.xml + the lemma index + ids.dat + five
-                 # eXist __contents__.xml), 0 unrecognized (whole-repo census
-                 # 2026-11-26). Eyeball nabu define ذمر (root ذمر, Lane pp. 977–978)
-                 # and nabu show urn:nabu:dict:lane:n14041.1 (its "see 1"
-                 # pointer resolves), then flip.
+  wired: true    # first sync verified 2026-11-26: 37 documents, 48,795 entries, 0 errored, 8 files skipped by rule, 0 unrecognized — exact on the dry-parse census
   sync_policy: manual
   # Lane's Arabic-English Lexicon (E. W. Lane, 1863–1893; the posthumous
   # parts and Supplement ed. Stanley Lane-Poole) — the library's first
