@@ -121,9 +121,13 @@ module Nabu
       # rebuild would hold none of its entries (the write fails the same
       # way), so the entries reached before the failing one must not stay
       # served either — the full load's sweep withdraws them (incremental ≡
-      # full), and the next clean load restores them.
+      # full), and the next clean load restores them. Its fates count the
+      # same way: they tally per file and join the run's counts only once
+      # the transaction commits, so a rolled-back file contributes nothing
+      # to added/updated/skipped — the report says what actually landed.
       def load_document(document, counts, seen)
         reached = []
+        fates = Hash.new(0)
         time_insert do
           @db.transaction do
             dictionary = upsert_dictionary(document)
@@ -132,12 +136,13 @@ module Nabu
               key = [document.slug, entry.entry_id]
               reached << key unless seen.include?(key)
               seen.add(key)
-              counts[upsert_entry(dictionary, document, entry)] += 1
+              fates[upsert_entry(dictionary, document, entry)] += 1
               entry.reflexes.each { |reflex| census[[reflex.lang_code, reflex.lang_name]] += 1 if reflex.lang_name }
             end
             replace_name_census(dictionary, census)
           end
         end
+        fates.each { |fate, count| counts[fate] += count }
         accrete_document_language_notes(document)
       rescue Sequel::ConstraintViolation => e
         # Constraint-shaped failures only (the passage Loader's rule): a

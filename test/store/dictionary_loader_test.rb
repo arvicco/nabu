@@ -479,6 +479,31 @@ class DictionaryLoaderTest < Minitest::Test
     assert_equal '{"field":["law"]}', @db[:dictionary_entries].where(entry_id: "a").get(:annotations_json)
   end
 
+  # --- rolled-back files count nothing ---------------------------------------
+
+  # A held LSJ file gains a colliding entry AFTER its two unchanged ones:
+  # the file rolls back as one unit, so its two reached entries never
+  # committed a skip — only the other files' six entries count.
+  def test_a_rolled_back_file_contributes_nothing_to_the_counts
+    load!
+    parsed = @adapter.discover(@workdir).map { |ref| @adapter.parse(ref) }
+    target = parsed.find { |doc| doc.entries.any? { |e| e.entry_id == "n67485" } }
+    squatter = Nabu::Store::Dictionary.create(slug: "squatter", source_id: @source.id, title: "S", language: "grc")
+    @db[:dictionary_entries].insert(
+      dictionary_id: squatter.id, urn: "urn:nabu:dict:lsj:zz-new", entry_id: "zz", key_raw: "x",
+      headword: "x", headword_folded: "x", body: "x", content_sha256: "x", revision: 1, withdrawn: true
+    )
+    revised = Nabu::DictionaryDocument.new(slug: target.slug, language: target.language,
+                                           title: target.title, canonical_path: target.canonical_path)
+    target.entries.each { |entry| revised << entry }
+    revised << Nabu::DictionaryEntry.new(entry_id: "zz-new", key_raw: "νέος", language: "grc", headword: "νέος",
+                                         headword_folded: "νεοσ", gloss: "new", body: "νέος new", citations: [])
+
+    report = loader.load(parsed.map { |doc| doc.equal?(target) ? revised : doc }, full: false)
+
+    assert_equal [0, 0, 6, 1], report.to_h.values_at(:added, :updated, :skipped, :errored)
+  end
+
   private
 
   # The fixture μῆνις entry with its body replaced — a real model object, the
