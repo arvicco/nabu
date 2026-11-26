@@ -343,6 +343,10 @@ class DerivabilityWritersTest < Minitest::Test
   # ~/Library/Logs/nabu — disposable ops evidence outside the permanent
   # folders, the ops/drill law kind; it opens with File.open, so the
   # pattern below does not see it — named here so the census stays whole.)
+  # hrcak_marulana_fetch writes the journal's OAI records (both formats,
+  # byte-compared, tmp+rename) and each licensed record's PDFs
+  # (.part+rename) into canonical/hrcak-marulana/ inside Adapter#fetch —
+  # the litopys_fetch law kind.
   WRITER_ALLOWLIST = %w[
     nabu/store/text_normalized_diet.rb
     nabu/ops/rebuild_census.rb nabu/ops/db_snapshot.rb
@@ -370,6 +374,7 @@ class DerivabilityWritersTest < Minitest::Test
     nabu/fetch/ben_yehuda_period_fetch.rb
     nabu/fetch/seal_fetch.rb nabu/fetch/aio_fetch.rb nabu/adapters/runesdb_lido_fetch.rb
     nabu/fetch/statutes_realm_fetch.rb
+    nabu/adapters/hrcak_marulana_fetch.rb
     nabu/fetch/sefaria_fetch.rb nabu/fetch/titus_fetch.rb nabu/url_download.rb
     nabu/fetch/litopys_fetch.rb
     nabu/fetch/wiki_fetch.rb nabu/fetch/zip_fetch.rb

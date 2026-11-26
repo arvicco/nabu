@@ -153,7 +153,7 @@ module Nabu
 
       def record_rewritten?(id, prefix, xml)
         path = self.class.record_path(@dir, id, prefix)
-        return false if File.file?(path) && File.binread(path) == xml.b
+        return false if File.file?(path) && Digest::SHA256.file(path).hexdigest == Digest::SHA256.hexdigest(xml.b)
 
         write_atomically(path, xml.b)
         true

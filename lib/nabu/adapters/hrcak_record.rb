@@ -4,6 +4,7 @@ require "nokogiri"
 
 require_relative "../errors"
 require_relative "../normalize"
+require_relative "source_read"
 
 module Nabu
   module Adapters
@@ -57,8 +58,8 @@ module Nabu
       attr_reader :id
 
       def self.from_files(openaire_path, dc_path = nil)
-        openaire = File.read(openaire_path, encoding: "UTF-8")
-        twin = dc_path && File.file?(dc_path) ? File.read(dc_path, encoding: "UTF-8") : nil
+        openaire = SourceRead.utf8_file(openaire_path, label: "hrcak record")
+        twin = dc_path && File.file?(dc_path) ? SourceRead.utf8_file(dc_path, label: "hrcak record (oai_dc)") : nil
         new(openaire: openaire, oai_dc: twin)
       end
 

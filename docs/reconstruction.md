@@ -20,6 +20,7 @@ The tool recipes, the human record of what those tasks do:
 - [The semantic-search tools — one-command bootstrap](manual/embed-venv.md)
 - [The git hook pack — one-command install](manual/git-hooks.md)
 - [The silver-lemma tools — one-command bootstrap](manual/silver-lemma-venv.md)
+- [The trickle runner — a standing paced crawl](manual/trickle-runner.md)
 
 ## 2 · The sister repositories
 
@@ -34,7 +35,7 @@ The sister repositories are `kind: module` sources like any other: `bin/nabu syn
 
 Every registered source falls in exactly one class: the route by which its canonical asset would come back.
 
-### Re-fetched from stable public URLs — `public_stable`, 355 sources
+### Re-fetched from stable public URLs — `public_stable`, 368 sources
 
 The adapter fetches each of these unattended from stable public URLs, and the enable/sync commands expand axis and group names — so pick the grain you actually want, from one source to the whole library; no per-source inventory is needed here.
 
@@ -50,21 +51,21 @@ bin/nabu enable SLUG && bin/nabu sync SLUG
 bin/nabu enable korean && bin/nabu sync korean
 ```
 
-[`classical`](axes.md#classical) (33), [`romance`](axes.md#romance) (42),
-[`epigraphy`](axes.md#epigraphy) (41), [`slavic`](axes.md#slavic) (41),
-[`germanic`](axes.md#germanic) (45), [`celtic`](axes.md#celtic) (12),
-[`italic`](axes.md#italic) (13), [`etym`](axes.md#etym) (23),
-[`biblical`](axes.md#biblical) (23), [`hebrew`](axes.md#hebrew) (18),
-[`syriac`](axes.md#syriac) (5), [`ethiopic`](axes.md#ethiopic) (4),
+[`classical`](axes.md#classical) (33), [`romance`](axes.md#romance) (43),
+[`epigraphy`](axes.md#epigraphy) (42), [`slavic`](axes.md#slavic) (42),
+[`germanic`](axes.md#germanic) (46), [`celtic`](axes.md#celtic) (12),
+[`italic`](axes.md#italic) (13), [`etym`](axes.md#etym) (26),
+[`biblical`](axes.md#biblical) (30), [`hebrew`](axes.md#hebrew) (19),
+[`syriac`](axes.md#syriac) (8), [`ethiopic`](axes.md#ethiopic) (4),
 [`arabic`](axes.md#arabic) (8), [`hittite`](axes.md#hittite) (5),
 [`cuneiform`](axes.md#cuneiform) (17), [`egyptian`](axes.md#egyptian) (9),
 [`iranian`](axes.md#iranian) (8), [`indic`](axes.md#indic) (35),
 [`buddhist`](axes.md#buddhist) (14), [`tibetan`](axes.md#tibetan) (15),
-[`korean`](axes.md#korean) (11), [`sea`](axes.md#sea) (12), [`sinitic`](axes.md#sinitic) (30),
+[`korean`](axes.md#korean) (11), [`sea`](axes.md#sea) (12), [`sinitic`](axes.md#sinitic) (32),
 [`japonic`](axes.md#japonic) (16), [`turkic`](axes.md#turkic) (5),
 [`mongolic`](axes.md#mongolic) (6), [`americas`](axes.md#americas) (3),
-[`africa`](axes.md#africa) (3), [`baltic`](axes.md#baltic) (4), [`pacific`](axes.md#pacific) (1),
-[`local`](axes.md#local) (5).
+[`africa`](axes.md#africa) (3), [`baltic`](axes.md#baltic) (5),
+[`pacific`](axes.md#pacific) (3), [`local`](axes.md#local) (5).
 
 The groups `core` (the registry instruments) and `signs` (the sign/char shelves) expand the same way — `bin/nabu enable signs && bin/nabu sync signs` restores the whole sign/char capability.
 
@@ -81,9 +82,10 @@ bin/nabu sync --all
 
 Each upstream is harvested by a polite paced crawl that resumes slice by slice: a full re-crawl is months-class wall clock. `rake rail:plan` prints the lanes and `rake rail:step[SLUG]` runs one yield-guarded slice; one slice proves the recipe, the rest is calendar time.
 
-`damos`, `korpus16`, `mdz-protestant`, `ndl-kotenseki`, `ntvmr`, `pleias-french-books`, `wellcome`.
+`damos`, `korpus16`, `mdz-protestant`, `ndl-kotenseki`, `ntvmr`, `pleias-french-books`,
+`wellcome`.
 
-### Re-acquired by a manual recipe — `manual`, 14 sources
+### Re-acquired by a manual recipe — `manual`, 15 sources
 
 Upstream serves these only to a human. Each has its recipe in docs/manual/; the files are dropped where the recipe says, and `bin/nabu sync SLUG` loads them (until then the sync prints the acquisition card).
 
@@ -97,6 +99,7 @@ Upstream serves these only to a human. Each has its recipe in docs/manual/; the 
 - [`goryeosa-jeoryo`](manual/goryeosa-jeoryo.md)
 - [`gpc`](manual/gpc.md)
 - [`itkc`](manual/itkc.md)
+- [`pcmep`](manual/pcmep.md)
 - [`sillok`](manual/sillok.md)
 - [`sjw`](manual/sjw.md)
 - [`suda-translations`](manual/suda-translations.md)
@@ -107,11 +110,12 @@ Further acquisition recipes that serve no single registered source:
 - [IvdNT corpora (Gysseling, Oudnederlands) — acquisition](manual/ivdnt-corpora.md)
 - [Steingass 1892 — acquisition (library-shelf reference scan)](manual/steingass-1892.md)
 
-### Re-fetched under a recorded license grant — `granted`, 16 sources
+### Re-fetched under a recorded license grant — `granted`, 17 sources
 
 Access rides a license grant from the source, recorded in the instance config; with it in place the adapter re-fetches like any other. Obtaining a grant is a matter between the instance holder and the source, outside this public page.
 
-`aclt`, `niupepa`, `starling`, plus 13 not listed (grant-gated holdings that are not public).
+`aclt`, `ceipp-rongorongo`, `niupepa`,
+`starling`, plus 13 not listed (grant-gated holdings that are not public).
 
 ### Re-obtained under the source's terms — `restricted`, 4 sources
 
@@ -163,7 +167,7 @@ These are the layers `bin/nabu rebuild` deliberately does not regenerate (the co
 
 ## 6 · Verification
 
-The published census is the reference a reconstruction is measured against. As of 17 November 2026 it stands at 2,913,884 documents and 134,069,213 passages in 289 language codes, across 353 live sources of 399 registry rows (`site/_data/census.yml`, regenerated by `rake site:refresh`). `bin/nabu reconstruct verify` probes a rebuilt instance against them in one command: the census diff, every live source's presence, one full-text search canary per source (loaded-but-unsearchable is the failure it catches) and each tool's data homes; `--strict` turns any drift into a nonzero exit. Against a reference box's manifest, `bin/nabu reconstruct verify --against MANIFEST` compares per source instead: carried trees must match the reference's counts exactly, re-synced trees may drift (upstream moved), the manifest's own canaries are resolved by URN in the rebuilt catalog and probed there, and a capability gap the reference itself shares is parity, not failure. `bin/nabu reconstruct plan` prints this book's order as a live card with measured time estimates from the instance's own history, and `rake reconstruction:census` its per-class source counts, attic list and `local/` inventory.
+The published census is the reference a reconstruction is measured against. As of 26 November 2026 it stands at 2,930,489 documents and 135,784,871 passages in 291 language codes, across 368 live sources of 416 registry rows (`site/_data/census.yml`, regenerated by `rake site:refresh`). `bin/nabu reconstruct verify` probes a rebuilt instance against them in one command: the census diff, every live source's presence, one full-text search canary per source (loaded-but-unsearchable is the failure it catches) and each tool's data homes; `--strict` turns any drift into a nonzero exit. Against a reference box's manifest, `bin/nabu reconstruct verify --against MANIFEST` compares per source instead: carried trees must match the reference's counts exactly, re-synced trees may drift (upstream moved), the manifest's own canaries are resolved by URN in the rebuilt catalog and probed there, and a capability gap the reference itself shares is parity, not failure. `bin/nabu reconstruct plan` prints this book's order as a live card with measured time estimates from the instance's own history, and `rake reconstruction:census` its per-class source counts, attic list and `local/` inventory.
 
 ## 7 · The combined path
 

@@ -187,11 +187,11 @@ module Adapters
       assert_equal "hrcak-oai-pdf", manifest.parser_family
     end
 
-    def test_registry_row_is_registered_unwired_and_manual
+    def test_registry_row_is_registered_wired_and_manual
       registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources", __dir__))
       entry = registry["hrcak-marulana"]
       refute_nil entry
-      refute entry.wired, "wired only after the first real sync is verified"
+      assert entry.wired, "wired: true — first sync verified 2026-11-25 (644 docs / 9,757 passages)"
       assert_equal "manual", entry.sync_policy
     end
 
