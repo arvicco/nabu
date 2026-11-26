@@ -46,7 +46,13 @@ module Nabu
       # the local-language shelf via Nabu::LanguageShelf (the
       # local shelf's sanctioned write gateway). nil (callers that cannot
       # name the corpus root — bare loader tests) accretes nothing, honestly.
-      def initialize(db:, source:, ledger: nil, language_shelf_dir: nil, profile: nil)
+      # +parse_breaker+ / +accept_parse_withdrawals+: the passage Loader's
+      # parse breaker at ENTRY grain (see #sweep_withdrawn) — same limits,
+      # same override (the sync path passes its --force).
+      def initialize(db:, source:, ledger: nil, language_shelf_dir: nil, profile: nil,
+                     parse_breaker: Loader::PARSE_BREAKER, accept_parse_withdrawals: false)
+        @parse_breaker = parse_breaker
+        @accept_parse_withdrawals = accept_parse_withdrawals
         @db = db
         @source = source
         @ledger = ledger
@@ -101,9 +107,10 @@ module Nabu
           load_document(document, counts, seen)
           tick.call
         end
+        @quarantines = []
         quarantine = lambda do |ref, error|
           counts[:errored] += 1
-          journal(event: "quarantined", params: { "ref_id" => ref.id, "error" => error.message })
+          @quarantines << journal(event: "quarantined", params: { "ref_id" => ref.id, "error" => error.message })
           tick.call
         end
         yield(process, quarantine)
@@ -111,7 +118,8 @@ module Nabu
         resolve_crossrefs
         LoadReport.new(
           added: counts[:added], updated: counts[:updated], skipped: counts[:skipped],
-          withdrawn: counts[:withdrawn], errored: counts[:errored]
+          withdrawn: counts[:withdrawn], errored: counts[:errored],
+          parse_withdrawn: counts[:parse_withdrawn], parse_held: counts[:parse_held]
         )
       end
 
@@ -151,7 +159,8 @@ module Nabu
         # aborts the load instead of being laundered into a quarantine.
         counts[:errored] += 1
         reached.each { |key| seen.delete(key) }
-        journal(event: "quarantined", params: { "path" => document.canonical_path, "error" => e.message })
+        @quarantines << journal(event: "quarantined",
+                                params: { "path" => document.canonical_path, "error" => e.message })
       end
 
       # P18-5, redirected by P19-1: the language layer's programmatic write
@@ -407,17 +416,58 @@ module Nabu
       end
 
       # Full loads assert completeness across this SOURCE's dictionaries.
+      #
+      # The entry-grain parse breaker (the passage Loader's ParseBreaker,
+      # same limits): when any file of this pass failed (a ParseError
+      # quarantine or a rolled-back constraint violation), the held entries
+      # the sweep would withdraw are attributed to that failure — an entry
+      # records no file, so the loader cannot tell a failed file's entries
+      # from ones upstream dropped elsewhere, and in a failing pass it
+      # deliberately treats them all as parse-caused (the conservative
+      # side). Above the limit — min(cap, max(floor, share × held live
+      # entries)) — NONE is withdrawn: every row stays served, the report
+      # carries the kept count (parse_held: the rebuild leaves the source
+      # unstamped, the sync prints the loud line) and each quarantine's
+      # provenance records "kept". At or below it, or with the operator's
+      # acceptance (sync --force), they are withdrawn and counted as
+      # parse_withdrawn. A pass with no failed file is the plain
+      # upstream-gone sweep, outside the breaker. A fresh full rebuild holds
+      # no entries, so the breaker is inert there by construction.
       def sweep_withdrawn(seen, counts)
         @db.transaction do
           dictionaries = Dictionary.where(source_id: @source.id).to_h { |row| [row.id, row.slug] }
-          DictionaryEntry.where(dictionary_id: dictionaries.keys, withdrawn: false).each do |row|
-            next if seen.include?([dictionaries.fetch(row.dictionary_id), row.entry_id])
-
-            row.update(withdrawn: true)
-            journal(event: "withdrawn", dictionary_entry_id: row.id)
-            durable(event: "withdrawn", urn: row.urn, old_sha: row.content_sha256)
-            counts[:withdrawn] += 1
+          live = DictionaryEntry.where(dictionary_id: dictionaries.keys, withdrawn: false)
+          # Key columns only: a big shelf's bodies never ride the sweep.
+          absent = live.select_map(%i[id dictionary_id entry_id urn content_sha256]).reject do |_, dict_id, entry_id|
+            seen.include?([dictionaries.fetch(dict_id), entry_id])
           end
+          next if absent.empty?
+          next hold_parse_failures(absent.size, counts) if parse_breaker_trips?(absent.size, held: live.count)
+
+          parse_caused = !@quarantines.empty?
+          absent.each do |id, _, _, urn, sha|
+            DictionaryEntry.where(id: id).update(withdrawn: true)
+            journal(event: "withdrawn", dictionary_entry_id: id)
+            durable(event: "withdrawn", urn: urn, old_sha: sha)
+            counts[:withdrawn] += 1
+            counts[:parse_withdrawn] += 1 if parse_caused
+          end
+          annotate_quarantines("withdrawn" => true) if parse_caused
+        end
+      end
+
+      def parse_breaker_trips?(failing, held:)
+        !@quarantines.empty? && !@accept_parse_withdrawals && @parse_breaker.trips?(failing, held: held)
+      end
+
+      def hold_parse_failures(count, counts)
+        counts[:parse_held] += count
+        annotate_quarantines("kept" => "parse-breaker")
+      end
+
+      def annotate_quarantines(fate)
+        @quarantines.each do |provenance|
+          provenance.update(params_json: JSON.generate(JSON.parse(provenance.params_json).merge(fate)))
         end
       end
 

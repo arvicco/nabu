@@ -53,14 +53,16 @@ module Nabu
     # (LoadReport#parse_withdrawal_messages): the held documents a failing
     # parse withdrew, and a tripped parse breaker — never folded into the
     # errored count. An incremental replay can meet both; a fresh full
-    # rebuild holds no rows, so there they stay empty.
-    Outcome = Data.define(:slug, :report, :quarantine) do
-      def initialize(slug:, report:, quarantine: nil)
+    # rebuild holds no rows, so there they stay empty. +noun+ names the
+    # report's grain in those lines (entries for a dictionary source, both
+    # for a passages source with a dictionary lane).
+    Outcome = Data.define(:slug, :report, :quarantine, :noun) do
+      def initialize(slug:, report:, quarantine: nil, noun: Store::LoadReport::DOCUMENT_NOUN)
         super
       end
 
       def warning_lines
-        [quarantine&.message, *report&.parse_withdrawal_messages(slug)].compact
+        [quarantine&.message, *report&.parse_withdrawal_messages(slug, noun: noun)].compact
       end
 
       def warning? = warning_lines.any?
@@ -499,7 +501,14 @@ module Nabu
       # against the PREVIOUS level, so each change announces exactly once).
       finding = Health::QuarantineBaseline.delta_finding(ledger, entry.slug, errored: report.errored)
       Health::QuarantineBaseline.record!(ledger, entry.slug, errored: report.errored)
-      Outcome.new(slug: entry.slug, report: report, quarantine: finding)
+      Outcome.new(slug: entry.slug, report: report, quarantine: finding, noun: report_noun(adapter, entry))
+    end
+
+    def report_noun(adapter, entry)
+      return Store::LoadReport::ENTRY_NOUN if adapter.class.content_kind == :dictionary
+      return Store::LoadReport::MIXED_NOUN if entry.adapter_class.dictionary_lane
+
+      Store::LoadReport::DOCUMENT_NOUN
     end
 
     # P78-r2: the estimates the stage announcements carry, read from
