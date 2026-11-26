@@ -827,6 +827,32 @@ namespace :outreach do
   end
 end
 
+# Save one message's attachments into the local intake folder
+# (Nabu::Ops::MailFetch, JMAP, read-only against the mailbox): the token
+# is the settings overlay's email.download_token; one line per file
+# (name · bytes · sha256); exit 1 on any failure.
+namespace :mail do
+  desc "Save a message's attachments into .docs/inbox/ over JMAP (read-only) — " \
+       "mail:fetch[EMAIL_ID,FILTER]; FILTER = optional case-insensitive file-name substring"
+  task :fetch, %i[email_id filter] do |_t, args|
+    $LOAD_PATH.unshift(File.expand_path("lib", __dir__))
+    require "nabu/config"
+    require "nabu/ops/mail_fetch"
+    fetch = Nabu::Ops::MailFetch
+    email_id = args[:email_id].to_s.strip
+    abort 'usage: rake "mail:fetch[EMAIL_ID]" or rake "mail:fetch[EMAIL_ID,FILTER]"' if email_id.empty?
+
+    token = fetch.token!(local_dir: Nabu::Config.load.local_dir)
+    inbox = File.expand_path(File.join(".docs", "inbox"), __dir__)
+    report = fetch.new(token: token, inbox_dir: inbox, log: $stdout).run(email_id, filter: args[:filter])
+    abort "mail:fetch — #{report.failures} failure(s) of #{report.outcomes.size}" unless report.ok?
+
+    puts "mail:fetch — #{report.outcomes.size} attachment(s) in #{inbox}"
+  rescue Nabu::Ops::MailFetch::Error => e
+    abort "mail:fetch — #{e.message}"
+  end
+end
+
 # The documented command flows EXECUTED, not proofread
 # (Nabu::Ops::DocsVerify; the plan is config/docs_verify.yml): the
 # quickstart walkthroughs, the README install block and the MCP
