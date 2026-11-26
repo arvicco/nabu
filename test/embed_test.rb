@@ -178,4 +178,88 @@ class EmbedTest < Minitest::Test
     assert_equal 1, census.missing
     assert_in_delta 2 / Nabu::Embed::TRIAL_RATE, census.eta_seconds, 0.001
   end
+
+  # -- the scope walk ------------------------------------------------------
+  #
+  # The walk is a keyset over (document, sequence) per scoped source,
+  # riding documents_source_id_index + passages_document_id_sequence_index
+  # with no sort: the earlier passage-id keyset over the joined scope
+  # re-collected and temp-sorted the WHOLE remaining scope on every page
+  # (quadratic in scope size; measured hours on the live library).
+
+  # A multi-source fixture with interleaved ids, a document larger than a
+  # page, withdrawn passages and documents, and an out-of-scope source.
+  def build_walk_fixture
+    third = Nabu::Store::Source.create(slug: "lit2", name: "Lit2", adapter_class: "TestAdapter",
+                                       license_class: "open")
+    docs = [make_document(urn: "urn:d:a"), make_document(source: third, urn: "urn:d:b"),
+            make_document(source: @other, urn: "urn:o:a"), make_document(urn: "urn:d:c")]
+    gone = make_document(urn: "urn:d:gone")
+    gone.update(withdrawn: true)
+    7.times do |i|
+      docs.each_with_index do |doc, j|
+        make_passage(doc, urn: "#{doc.urn}:#{i}", text: "t#{i}#{j}", sequence: i * 2)
+      end
+      make_passage(gone, urn: "urn:d:gone:#{i}", text: "g", sequence: i)
+    end
+    make_passage(docs[0], urn: "urn:d:a:w", text: "w", sequence: 99, withdrawn: true)
+  end
+
+  # The pre-fix scope definition, as a plain unpaged query: the set the
+  # walk must yield exactly.
+  def expected_scope_urns(slugs)
+    @catalog[:passages]
+      .join(:documents, id: Sequel[:passages][:document_id])
+      .join(:sources, id: Sequel[:documents][:source_id])
+      .where(Sequel[:passages][:withdrawn] => false, Sequel[:documents][:withdrawn] => false)
+      .where(Sequel[:sources][:slug] => slugs)
+      .select_map(Sequel[:passages][:urn]).sort
+  end
+
+  def walked_urns(walker)
+    pages = []
+    walker.send(:each_scope_page) { |rows| pages << rows.map { |row| row[:urn] } }
+    pages
+  end
+
+  def test_scope_walk_yields_exactly_the_scope_across_pages
+    build_walk_fixture
+    slugs = %w[lit lit2]
+    pages = walked_urns(embedder(slugs: slugs, page_size: 3))
+
+    assert_equal expected_scope_urns(slugs), pages.flatten.sort
+    assert_equal pages.flatten.uniq.size, pages.flatten.size, "no row yielded twice"
+    assert(pages.all? { |page| page.size <= 3 }, "pages stay bounded by the page size")
+    assert_operator pages.size, :>, 3, "the fixture really spans many pages"
+  end
+
+  def test_census_and_run_agree_with_the_scope_under_small_pages
+    build_walk_fixture
+    slugs = %w[lit lit2]
+    expected = expected_scope_urns(slugs)
+    assert_equal expected.size, embedder(slugs: slugs, page_size: 2).census.missing
+    assert_equal expected.size, embedder(slugs: slugs, page_size: 2).run!.embedded
+    assert_equal(expected, vector_rows.map { |row| row[:urn] })
+  end
+
+  def test_scope_walk_pages_need_no_sort
+    build_walk_fixture
+    sqls = []
+    logger = Object.new
+    logger.define_singleton_method(:info) { |msg| sqls << msg }
+    %i[debug warn error].each { |level| logger.define_singleton_method(level) { |_msg| nil } }
+    @catalog.loggers << logger
+    walked_urns(embedder(slugs: %w[lit lit2], page_size: 3))
+    @catalog.loggers.delete(logger)
+
+    pages = sqls.map { |line| line.sub(/\A\([\d.]+s\)\s*/, "") }
+                .select { |sql| sql.start_with?("SELECT") && sql.include?("FROM `passages`") }
+    refute_empty pages
+    pages.each do |sql|
+      plan = @catalog.fetch("EXPLAIN QUERY PLAN #{sql}").map { |row| row[:detail] }
+      refute(plan.any? { |step| step.include?("TEMP B-TREE") }, "page query sorts: #{plan.inspect}")
+      assert(plan.any? { |step| step.include?("passages_document_id_sequence_index") },
+             "page query rides the (document, sequence) index: #{plan.inspect}")
+    end
+  end
 end
