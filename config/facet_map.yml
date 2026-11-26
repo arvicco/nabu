@@ -746,6 +746,11 @@ sources:
     entry_fields:
       pos: word_class         # Karp partOfSpeech tags verbatim: nn 27,605 · vb 9,291 · av 5,599 ·
       #                         ab 2,226 · nl 117 · pp 135 · kn 75 · pn 74 … (6,825 entries carry none)
+  med-headwords:              # census 2026-11-26 over headwords_202310.xml (57,094 entries)
+    entry_fields:
+      pos: word_class         # every PS @EXPAN verbatim (57,959 over 57,086 entries; 8 POS empty):
+      #                         noun 27,098 · verb 10,323 · adjective 8,732 · adverb 4,167 ·
+      #                         gerund 4,032 · participle 2,183 · preposition 257 · phrase 220 …
   littre:                     # census 2026-11-02 over xml/a.xml … z.xml (78,483 articles)
     entry_fields:
       pos: word_class         # the printed gram verbatim: s. m. 25,277 · s. f. 19,701 · adj. 14,680 ·

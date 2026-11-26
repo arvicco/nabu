@@ -1,0 +1,26 @@
+med-headwords:   # 02-sources row 439
+  adapter: Nabu::Adapters::MedHeadwords
+  adopted: "2026-11-26"
+  axes: [germanic]
+  wired: false   # until the first real sync is verified: bin/nabu enable med-headwords;
+                 # bin/nabu sync med-headwords. EXPECT 1 dictionary doc → 57,094 entries,
+                 # 0 errored, 0 skipped (the whole-file census of headwords_202310.xml,
+                 # 2026-11-26: 57,094 <ENTRY>, 57,094 unique ids); eyeball
+                 # bin/nabu define zucarine (urn:nabu:dict:med-headwords:MED54083) and
+                 # bin/nabu define ane (the "Early forms" variants of MED3 a indef. art.
+                 # are body text, not lookup keys), then flip.
+  # The Middle English Dictionary's own headword list (MED editors,
+  # medictionary.info, "Most recent version (October 2023)"): every MED
+  # entry's headword spellings, "Also …" variant spellings, part of speech
+  # and MED entry id, excerpted from the dictionary's working XML — one
+  # 19.4 MB XML file, sha256-pinned (FileFetch). New family
+  # med-headwords-xml; entry id = the MED id (MED3, MED2.5), body = the
+  # form section as printed + the online entry URL (also the entry's one
+  # citation row); pos → word_class entry facet; the DUB/DEL editorial
+  # flags kept and stated. The list vintage (2023-10) rides the file name,
+  # the document title and the pin; a refreshed list is a re-pin.
+  # LICENSE: granted by email, 2026-11-06 (Paul F. Schaffner, MED): "to be
+  # used in whatever way you choose. No conditions whatever"; courtesy: the
+  # list is never re-posted for download; credit the MED → nc (kept out of
+  # every redistribution set). Language enm, bare.
+  sync_policy: manual
