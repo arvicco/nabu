@@ -403,6 +403,16 @@ sources:
     # tag) so the dictionary-language filter meets fornsvenska; this row
     # transcribes the books' own definition onto the existing node.
     sv: { lect: "sv:old", tier: certain }
+  lane-lexicon:
+    # Lane's Arabic-English Lexicon is by title page and scope a lexicon
+    # of the CLASSICAL language: compiled from the classical Arabic
+    # lexicons (the Taj al-'Arus and the Qamus, the Sihah, the Lisan al-
+    # 'Arab, the Mughrib, the Misbah …) and deliberately excluding the
+    # post-classical (muwallad) vocabulary its sources flag — the
+    # registry's ara:cla stage. The shelf stores ara (the house Arabic
+    # tag, which wiktionary-ar and openiti also carry); this row
+    # transcribes the book's own definition onto the existing node.
+    ara: { lect: "ara:cla", tier: certain }
   wiktionary-gmq-osw:
     # Wiktionary's Old Swedish (gmq-osw, no ISO code; the codemap's own
     # gmq-osw → sv:old row) stored under the held fornsvenska tag sv so
