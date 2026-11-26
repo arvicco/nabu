@@ -84,12 +84,26 @@ module Nabu
     # Deep-merge local/config/settings.yml over the nabu.yml data (the
     # overlay wins; hashes merge recursively, scalars replace).
     def self.overlay_settings(data, local_dir)
-      settings_path = File.join(local_dir, "config", "settings.yml")
-      return data unless File.exist?(settings_path)
-
-      deep_merge(data, YAML.safe_load_file(settings_path) || {})
+      deep_merge(data, local_settings(local_dir))
     end
     private_class_method :overlay_settings
+
+    # The settings overlay's path under a local/ dir.
+    def self.local_settings_path(local_dir)
+      File.join(local_dir, "config", "settings.yml")
+    end
+
+    # The raw settings overlay (an empty hash when absent). Secrets read
+    # from it (a mailbox token) are handed straight to their one consumer,
+    # never kept on a Config instance, so no inspect/log of the config can
+    # carry them.
+    def self.local_settings(local_dir)
+      path = local_settings_path(local_dir)
+      return {} unless File.exist?(path)
+
+      data = YAML.safe_load_file(path)
+      data.is_a?(Hash) ? data : {}
+    end
 
     def self.deep_merge(base, overlay)
       base.merge(overlay) do |_key, old, new|
