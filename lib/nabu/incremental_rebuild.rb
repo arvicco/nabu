@@ -46,13 +46,20 @@ module Nabu
     Trusted = Data.define(:slug, :stamp_short)
 
     # One source's dry-run verdict: state :clean | :dirty | :skip, +reason+
-    # the drift component for :dirty (:canonical/:parser/:config/:migration/
-    # :unstamped/:weak_identity, or — P39-1, a String because it names files —
-    # "fold(<module>, ...)") or :no_canonical for :skip.
-    Verdict = Data.define(:slug, :state, :reason, :stamp_short) do
-      def initialize(slug:, state:, reason: nil, stamp_short: nil)
-        super
+    # the FIRST drift component in blame order for :dirty (:canonical/
+    # :parser/:config/:migration/:unstamped/:weak_identity, or — P39-1, a
+    # String because it names files — "fold(<module>, ...)") or
+    # :no_canonical for :skip. +reasons+ (additive) carries EVERY drifted
+    # component in the same vocabulary, so code drift behind a canonical
+    # move is named too; [] for :clean. #drift_label is the owner's line.
+    Verdict = Data.define(:slug, :state, :reason, :stamp_short, :reasons) do
+      def initialize(slug:, state:, reason: nil, stamp_short: nil, reasons: nil)
+        reasons ||= reason.nil? ? [] : [reason]
+        super(slug: slug, state: state, reason: reason || reasons.first, stamp_short: stamp_short,
+              reasons: reasons.freeze)
       end
+
+      def drift_label = reasons.join(" + ")
     end
 
     # What `--dry-run --incremental` reports. +refusal+ (a message or nil)
@@ -558,12 +565,14 @@ module Nabu
     def replay_written?(entry) = entry.slug == LanguageShelf::SLUG
 
     def verdict_from(entry, fingerprint, stamp)
-      drift = fingerprint.drift_against(stamp)
-      return Verdict.new(slug: entry.slug, state: :clean, stamp_short: fingerprint.short) if drift.nil?
+      drifts = fingerprint.drifts_against(stamp)
+      return Verdict.new(slug: entry.slug, state: :clean, stamp_short: fingerprint.short) if drifts.empty?
 
       # A fold drift names the changed file(s) — the owner reads these lines.
-      drift = "fold(#{fingerprint.fold_blame(stamp).join(', ')})" if drift == :fold
-      Verdict.new(slug: entry.slug, state: :dirty, reason: drift)
+      drifts = drifts.map do |drift|
+        drift == :fold ? "fold(#{fingerprint.fold_blame(stamp).join(', ')})" : drift
+      end
+      Verdict.new(slug: entry.slug, state: :dirty, reasons: drifts)
     end
 
     # The current fingerprint, its fold digest scoped by the catalog's own

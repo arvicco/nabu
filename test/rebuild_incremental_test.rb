@@ -330,6 +330,24 @@ class RebuildIncrementalTest < Minitest::Test
     assert_equal [:clean, nil], verdicts.fetch("alpha")
   end
 
+  # A verdict carries EVERY drifted component (additively: +reason+ stays
+  # the first blame) — parser drift behind a canonical move is named too.
+  def test_a_dirty_verdict_names_every_drifted_component
+    full_rebuilder.run
+    with_db(write: true) do |db|
+      db[:derivation_stamps].where(slug: "beta").update(parser_digest: "0" * 64, fingerprint: "0" * 64)
+    end
+    write_canonical("beta", "b.txt" => THEOGONY)
+
+    verdict = incremental_rebuilder.plan.verdicts.find { |v| v.slug == "beta" }
+    assert_equal :dirty, verdict.state
+    assert_equal :canonical, verdict.reason
+    assert_equal %i[canonical parser], verdict.reasons
+    assert_equal "canonical + parser", verdict.drift_label
+    clean = incremental_rebuilder.plan.verdicts.find { |v| v.slug == "alpha" }
+    assert_empty clean.reasons
+  end
+
   # -- P89-1 (owner ruling, option c): the corpus-builder carve-out --------
 
   def test_full_rebuild_mints_the_builders_sentinel

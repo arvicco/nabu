@@ -47,6 +47,9 @@ module Nabu
   # full rebuild remains the reference after toolchain changes.
   class DerivationFingerprint
     SEPARATOR = "\x1f"
+    # Each blame component's derivation_stamps column, in blame order.
+    COMPONENT_COLUMNS = { migration: :migration_level, canonical: :canonical_identity, parser: :parser_digest,
+                          fold: :fold_digest, config: :config_json }.freeze
 
     LIB_DIR = File.expand_path(__dir__)
     ADAPTERS_DIR = File.join(LIB_DIR, "adapters")
@@ -305,16 +308,23 @@ module Nabu
       # row hash, or nil when unstamped): the first differing component in
       # blame order, or nil when the stamp matches. Weak identity blames
       # itself — it can never be clean.
-      def drift_against(stamp)
-        return :weak_identity if weak?
-        return :unstamped if stamp.nil?
-        return nil if stamp[:fingerprint] == combined
-        return :migration if stamp[:migration_level] != migration_level
-        return :canonical if stamp[:canonical_identity] != canonical_identity
-        return :parser if stamp[:parser_digest] != parser_digest
-        return :fold if stamp[:fold_digest] != fold_digest
+      def drift_against(stamp) = drifts_against(stamp).first
 
-        :config
+      # EVERY differing component, in blame order (migration, canonical,
+      # parser, fold, config) — [] when the stamp matches. A first-blame
+      # answer alone hides code drift behind a canonical move. A combined
+      # mismatch with every stored component equal (a fingerprint formula
+      # change) blames config, as the first-blame rule always has.
+      def drifts_against(stamp)
+        return [:weak_identity] if weak?
+        return [:unstamped] if stamp.nil?
+        return [] if stamp[:fingerprint] == combined
+
+        drifts = { migration: migration_level, canonical: canonical_identity, parser: parser_digest,
+                   fold: fold_digest, config: config_json }.filter_map do |component, mine|
+          component if stamp[COMPONENT_COLUMNS.fetch(component)] != mine
+        end
+        drifts.empty? ? [:config] : drifts
       end
 
       # The fold files whose identity drifted against +stamp+ — what the

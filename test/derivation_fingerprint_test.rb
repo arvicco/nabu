@@ -476,6 +476,24 @@ class DerivationFingerprintTest < Minitest::Test
     assert_equal :unstamped, after.drift_against(nil)
   end
 
+  # drift_against stays the first blame; drifts_against names EVERY drifted
+  # component, so parser drift behind a canonical move is not hidden.
+  def test_drifts_against_names_every_drifted_component
+    write_tree("corpus", "one.txt" => "Iliad\nμῆνιν\n")
+    before = computer.for_source(entry)
+    assert_empty before.drifts_against(stamp_row(before))
+    assert_equal [:unstamped], before.drifts_against(nil)
+
+    File.write(File.join(@canonical, "corpus", "one.txt"), "Iliad\nμῆνιν!\n")
+    after = computer(fresh: true).for_source(entry)
+    stale = stamp_row(before).merge(parser_digest: "0" * 64, config_json: "{}")
+    assert_equal %i[canonical parser config], after.drifts_against(stale)
+    assert_equal :canonical, after.drift_against(stale), "the first blame is unchanged"
+    assert_equal [:canonical], after.drifts_against(stamp_row(before))
+    formula = stamp_row(after).merge(fingerprint: "f" * 64)
+    assert_equal [:config], after.drifts_against(formula), "a formula-only change still blames config"
+  end
+
   # -- P89-1 (owner ruling, option c): the corpus-builder carve-out --------
 
   def test_builder_files_are_carved_out_of_the_shared_core
