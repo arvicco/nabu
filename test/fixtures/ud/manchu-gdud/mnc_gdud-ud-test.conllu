@@ -1,0 +1,771 @@
+# sent_id = Manchu_grammar_1
+# text = bi tere niyalma emgi gene-he
+# text[eng] = I went with that person.
+1	bi	bi	PRON	_	Number=Sing|Person=1|PronType=Prs	5	nsubj	_	_
+2	tere	tere	DET	_	PronType=Dem	3	det	_	_
+3	niyalma	niyalma	NOUN	_	Case=Gen	4	nmod:poss	_	_
+4	emgi	emgi	ADP	_	_	5	obl	_	_
+5	gene-he	gene	VERB	_	Mood=Ind|Number=Sing|Person=1|Tense=Past|VerbForm=Fin	0	root	_	_
+
+# sent_id = Manchu_grammar_2
+# text = tere sargan boo ci tuci-ke
+# text[eng] = That woman came out of the house.
+1	tere	tere	DET	_	PronType=Dem	2	det	_	_
+2	sargan	sargan	NOUN	_	Case=Nom	5	nsubj	_	_
+3	boo	boo	NOUN	_	Case=Loc	5	obl	_	_
+4	ci	ci	ADP	_	_	3	case	_	_
+5	tuci-ke	tuci	VERB	_	Mood=Ind|Tense=Past|VerbForm=Fin	0	root	_	_
+
+# sent_id = Manchu_grammar_3
+# text = tere sargan hoton de gene-he
+# text[eng] = That woman went to town.
+1	tere	tere	DET	_	PronType=Dem	2	det	_	_
+2	sargan	sargan	NOUN	_	Case=Nom	5	nsubj	_	_
+3	hoton	hoton	NOUN	_	Case=Dat	5	obl	_	_
+4	de	de	ADP	_	_	3	case	_	_
+5	gene-he	gene	VERB	_	Mood=Ind|Tense=Past|VerbForm=Fin	0	root	_	_
+
+# sent_id = Manchu_grammar_4
+# text = tere sargan boo ci tuci-fi, hoton de gene-he
+# text[eng] = That woman, having come out of the house, went to town.
+1	tere	tere	DET	_	PronType=Dem	9	dep	_	_
+2	sargan	sargan	NOUN	_	Case=Nom	9	dep	_	_
+3	boo	boo	NOUN	_	Case=Loc	9	dep	_	_
+4	ci	ci	ADP	_	_	9	dep	_	_
+5	tuci-fi	tuci	VERB	_	Tense=Past|VerbForm=Conv	9	dep	_	SpaceAfter=No
+6	,	,	PUNCT	_	_	9	punct	_	_
+7	hoton	hoton	NOUN	_	Case=Dat	9	dep	_	_
+8	de	de	ADP	_	_	9	dep	_	_
+9	gene-he	gene	VERB	_	Mood=Ind|Tense=Past|VerbForm=Fin	0	root	_	_
+
+# sent_id = Manchu_grammar_5
+# text = i boo be weile-mbi
+# text[eng] = He builds a house.
+1	i	i	PRON	_	Number=Sing|Person=3|PronType=Prs	4	nsubj	_	_
+2	boo	boo	NOUN	_	_	4	obj	_	_
+3	be	be	ADP	_	_	2	case	_	_
+4	weile-mbi	weile	VERB	_	Aspect=Imp|Mood=Ind|Tense=Pres|VerbForm=Fin	0	root	_	_
+
+# sent_id = Manchu_grammar_6
+# text = cira be tuwa-hakū
+# text[eng] = (Someone) did not see the face.
+1	cira	cira	NOUN	_	_	3	obj	_	_
+2	be	be	ADP	_	_	1	case	_	_
+3	tuwa-hakū	tuwa	VERB	_	Polarity=Neg|Tense=Past|VerbForm=Part	0	root	_	_
+
+# sent_id = Manchu_grammar_7
+# text = boo i ejen
+# text[eng] = The master of the house.
+1	boo	boo	NOUN	_	_	3	nmod:poss	_	_
+2	i	i	ADP	_	_	1	case	_	_
+3	ejen	ejen	NOUN	_	_	0	root	_	_
+
+# sent_id = Manchu_grammar_8
+# text = han i jui
+# text[eng] = The khan’s child.
+1	han	han	NOUN	_	_	3	nmod:poss	_	_
+2	i	i	ADP	_	_	1	case	_	_
+3	jui	jui	NOUN	_	_	0	root	_	_
+
+# sent_id = Manchu_grammar_9
+# text = niyalma sain mujilen i mimbe tuwa-mbi
+# text[eng] = People look at me with good intention.
+1	niyalma	niyalma	NOUN	_	Number=Plur	6	nsubj	_	_
+2	sain	sain	ADJ	_	_	3	amod	_	_
+3	mujilen	mujilen	NOUN	_	_	6	obl	_	_
+4	i	i	ADP	_	_	3	case	_	_
+5	mimbe	bi	PRON	_	Case=Acc|Number=Sing|Person=1|PronType=Prs	6	obj	_	_
+6	tuwa-mbi	tuwa	VERB	_	Aspect=Imp|Mood=Ind|Tense=Pres|VerbForm=Fin	0	root	_	_
+
+# sent_id = Manchu_grammar_10
+# text = ere niyalma de bu-mbi
+# text[eng] = (Someone) gives to this man.
+1	ere	ere	DET	_	PronType=Dem	2	det	_	_
+2	niyalma	niyalma	NOUN	_	_	4	obl	_	_
+3	de	de	ADP	_	_	2	case	_	_
+4	bu-mbi	bu	VERB	_	Aspect=Imp|Mood=Ind|Tense=Pres|VerbForm=Fin	0	root	_	_
+
+# sent_id = Manchu_grammar_11
+# text = ahun de bithe bi
+# text[eng] = The elder brother has a book.
+1	ahun	ahun	NOUN	_	_	4	obl	_	_
+2	de	de	ADP	_	_	1	case	_	_
+3	bithe	bithe	NOUN	_	_	4	nsubj	_	_
+4	bi	bi	AUX	_	Mood=Ind|Tense=Pres|VerbForm=Fin	0	root	_	_
+
+# sent_id = Manchu_grammar_12
+# text = angga de hūla, mujilen de eje
+# text[eng] = Use your lips to read and your brain to remember.
+1	angga	angga	NOUN	_	_	3	obl	_	_
+2	de	de	ADP	_	_	1	case	_	_
+3	hūla	hūla	VERB	_	Mood=Imp|VerbForm=Fin	0	root	_	SpaceAfter=No
+4	,	,	PUNCT	_	_	3	punct	_	_
+5	mujilen	mujilen	NOUN	_	_	7	obl	_	_
+6	de	de	ADP	_	_	5	case	_	_
+7	eje	eje	VERB	_	Mood=Imp|VerbForm=Fin	3	conj	_	_
+
+# sent_id = Manchu_grammar_13
+# text = julergi gurun joo de wa-bu-fi
+# text[eng] = (They) were killed by the Senior Zhao ruling house.
+1	julergi	julergi	ADJ	_	_	2	amod	_	_
+2	gurun	gurun	NOUN	_	_	3	compound	_	_
+3	joo	joo	NOUN	_	_	5	obl	_	_
+4	de	de	ADP	_	_	3	case	_	_
+5	wa-bu-fi	wa	VERB	_	VerbForm=Conv|Voice=Pass	0	root	_	_
+
+# sent_id = Manchu_grammar_14
+# text = alin bujan de tomo-mbi
+# text[eng] = (They) live in mountains and forests.
+1	alin	alin	NOUN	_	_	2	parataxis	_	_
+2	bujan	bujan	NOUN	_	_	4	obl	_	_
+3	de	de	ADP	_	_	2	case	_	_
+4	tomo-mbi	tomo	VERB	_	Aspect=Imp|Mood=Ind|VerbForm=Fin	0	root	_	_
+
+# sent_id = Manchu_grammar_15
+# text = boo ci tuci-ke
+# text[eng] = (Someone) went away from the house.
+1	boo	boo	NOUN	_	_	3	obl	_	_
+2	ci	ci	ADP	_	_	1	case	_	_
+3	tuci-ke	tuci	VERB	_	Mood=Ind|Tense=Past|VerbForm=Fin	0	root	_	_
+
+# sent_id = Manchu_grammar_16
+# text = ere erin ci oyonggo ningge akū
+# text[eng] = There is no time more important than the present.
+1	ere	ere	DET	_	PronType=Dem	2	det	_	_
+2	erin	erin	NOUN	_	_	4	obl	_	_
+3	ci	ci	ADP	_	_	2	case	_	_
+4	oyonggo	oyonggo	ADJ	_	Degree=Pos	5	amod	_	_
+5	ningge	ningge	NOUN	_	_	6	nsubj	_	_
+6	akū	akū	AUX	_	Mood=Ind|Polarity=Neg|VerbForm=Fin	0	root	_	_
+
+# sent_id = Manchu_grammar_17
+# text = encu hehe ši deri fulu tua-mbi
+# text[eng] = (He) began to consider her better than other women.
+1	encu	encu	DET	_	PronType=Ind	2	det	_	_
+2	hehe	hehe	NOUN	_	Number=Plur	5	obl	_	_
+3	ši	ši	ADP	_	_	2	case	_	_
+4	deri	deri	ADV	_	Degree=Cmp	5	advmod	_	_
+5	fulu	fulu	ADJ	_	Degree=Pos	6	xcomp	_	_
+6	tua-mbi	tua	VERB	_	Aspect=Imp|Mood=Ind|VerbForm=Fin	0	root	_	_
+
+# sent_id = Manchu_grammar_18
+# text = enenggi ere ba de ainu ebu-mbi
+# text[eng] = Why have you stopped here today?
+1	enenggi	enenggi	ADV	_	_	6	advmod	_	AdvType=Tim
+2	ere	ere	DET	_	PronType=Dem	3	det	_	_
+3	ba	ba	NOUN	_	_	6	obl	_	_
+4	de	de	ADP	_	_	3	case	_	_
+5	ainu	ainu	ADV	_	PronType=Int	6	advmod	_	_
+6	ebu-mbi	ebu	VERB	_	Aspect=Imp|Mood=Ind|Person=2|VerbForm=Fin	0	root	_	_
+
+# sent_id = Manchu_grammar_19
+# text = sain niyalma
+# text[eng] = A good person.
+1	sain	sain	ADJ	_	Degree=Pos	2	amod	_	_
+2	niyalma	niyalma	NOUN	_	_	0	root	_	_
+
+# sent_id = Manchu_grammar_20
+# text = niyalma sain
+# text[eng] = The person is good.
+1	niyalma	niyalma	NOUN	_	_	2	nsubj	_	_
+2	sain	sain	ADJ	_	Degree=Pos	0	root	_	_
+
+# sent_id = Manchu_grammar_21
+# text = morin indahūn ci amba
+# text[eng] = The horse is bigger than the dog.
+1	morin	morin	NOUN	_	_	4	nsubj	_	_
+2	indahūn	indahūn	NOUN	_	_	4	obl	_	_
+3	ci	ci	ADP	_	_	2	case	_	_
+4	amba	amba	ADJ	_	Degree=Cmp	0	root	_	_
+
+# sent_id = Manchu_grammar_22
+# text = habša-ra niyalma
+# text[eng] = A man who complains.
+1	habša-ra	habša	VERB	_	VerbForm=Part	2	acl	_	_
+2	niyalma	niyalma	NOUN	_	_	0	root	_	_
+
+# sent_id = Manchu_grammar_23
+# text = bi sinde ala-ra
+# text[eng] = I will tell you.
+1	bi	bi	PRON	_	Number=Sing|Person=1|PronType=Prs	3	nsubj	_	_
+2	sinde	si	PRON	_	Case=Acc|Number=Sing|Person=2|PronType=Prs	3	obj	_	_
+3	ala-ra	ala	VERB	_	Tense=Fut|VerbForm=Part	0	root	_	_
+
+# sent_id = Manchu_grammar_24
+# text = gisure-re be han donji-fi
+# text[eng] = The king, having heard what was being said.
+1	gisure-re	gisure	VERB	_	VerbForm=Part	4	obj	_	_
+2	be	be	ADP	_	_	1	case	_	_
+3	han	han	NOUN	_	_	4	nsubj	_	_
+4	donji-fi	donji	VERB	_	VerbForm=Conv	0	root	_	_
+
+# sent_id = Manchu_grammar_25
+# text = yuan fai i sargan jui hendu-re-nge tere ahūn deo nadan niyalma gemu hūsun amba niyalma
+# text[eng] = This is what Yuan Fai’s daughter says: all those seven brothers are powerful and big men.
+1	yuan	yuan	PROPN	_	_	2	compound	_	_
+2	fai	fai	PROPN	_	Case=Gen	5	nmod:poss	_	_
+3	i	i	PART	_	_	2	case	_	_
+4	sargan	sargan	NOUN	_	_	5	compound	_	_
+5	jui	jui	NOUN	_	_	6	nsubj	_	_
+6	hendu-re-nge	hendu	VERB	_	VerbForm=Part	15	csubj	_	Nominalizer=Yes
+7	tere	tere	DET	_	PronType=Dem	11	det	_	_
+8	ahūn	ahūn	NOUN	_	_	11	nmod	_	_
+9	deo	deo	NOUN	_	_	8	conj	_	_
+10	nadan	nadan	NUM	_	NumType=Card	11	nummod	_	_
+11	niyalma	niyalma	NOUN	_	_	15	nsubj:outer	_	_
+12	gemu	gemu	ADV	_	_	11	advmod	_	_
+13	hūsun	hūsun	NOUN	_	_	15	compound	_	_
+14	amba	amba	ADJ	_	_	15	amod	_	_
+15	niyalma	niyalma	NOUN	_	_	0	root	_	_
+
+# sent_id = Manchu_grammar_26
+# text = amba edun da-me deribu-he
+# text[eng] = A strong wind began to blow.
+1	amba	amba	ADJ	_	_	2	amod	_	_
+2	edun	edun	NOUN	_	_	4	nsubj	_	_
+3	da-me	da	VERB	_	Aspect=Imp|VerbForm=Conv	4	advcl	_	_
+4	deribu-he	deribu	VERB	_	Mood=Ind|Tense=Past|VerbForm=Fin	0	root	_	_
+
+# sent_id = Manchu_grammar_27
+# text = si boo-de isina-fi majige teye-fi buda je-fi dere obo-fi jai ji-ki
+# text[eng] = The Master said: Studying without thinking is useless. Thinking without studying is dangerous.
+# text[eng] = After you have come home, rested a little, eaten and washed your face, come (to me).
+1	si	si	PRON	_	Number=Sing|Person=2|PronType=Prs	3	nsubj	_	_
+2	boo-de	boo	NOUN	_	Case=Dat	3	obl	_	_
+3	isina-fi	isina	VERB	_	Aspect=Perf|VerbForm=Conv	9	advcl	_	_
+4	majige	majige	ADV	_	_	5	advmod	_	_
+5	teye-fi	teye	VERB	_	Aspect=Perf|VerbForm=Conv	3	conj	_	_
+6	buda	buda	NOUN	_	_	7	obj	_	_
+7	je-fi	je	VERB	_	Aspect=Perf|VerbForm=Conv	3	conj	_	_
+8	dere	dere	NOUN	_	_	9	obj	_	_
+9	obo-fi	obo	VERB	_	Aspect=Perf|VerbForm=Conv	11	advcl	_	_
+10	jai	jai	ADV	_	_	11	advmod	_	_
+11	ji-ki	ji	VERB	_	Mood=Opt|Number=Sing|Person=2|VerbForm=Fin	0	root	_	_
+
+# sent_id = Manchu_grammar_29
+# text = si tobsere niyalma o-fi
+# text[eng] = Since you are a trustworthy person, ...
+1	si	si	PRON	_	Number=Sing|Person=2|PronType=Prs	4	nsubj	_	_
+2	tobsere	tobsere	ADJ	_	_	3	amod	_	_
+3	niyalma	niyalma	NOUN	_	_	4	xcomp	_	_
+4	o-fi	o	VERB	_	Aspect=Perf|VerbForm=Conv	0	root	_	_
+
+# sent_id = Manchu_grammar_30
+# text = julge-ci te de isitala
+# text[eng] = From ancient times until the present
+1	julge	julge	NOUN	_	_	2	nmod	_	SpaceAfter=No
+2	-ci	-ci	ADP	_	Case=Abl	5	obl	_	_
+3	te	te	NOUN	_	_	4	nmod	_	_
+4	de	de	ADP	_	Case=Dat	5	obl	_	_
+5	isitala	isitala	ADP	_	_	0	root	_	_
+
+# sent_id = Manchu_grammar_31
+# text = indahūn dobori tuwahiya-mbi coko erde hūla-mbi
+# text[eng] = A dog keeps guard at night, a rooster crows early in the morning.
+1	indahūn	indahūn	NOUN	_	_	3	nsubj	_	_
+2	dobori	dobori	NOUN	_	_	3	obl	_	_
+3	tuwahiya-mbi	tuwahiya	VERB	_	Aspect=Imp|Mood=Ind|VerbForm=Fin	0	root	_	_
+4	coko	coko	NOUN	_	_	6	nsubj	_	_
+5	erde	erde	NOUN	_	_	6	obl	_	_
+6	hūla-mbi	hūla	VERB	_	Aspect=Imp|Mood=Ind|VerbForm=Fin	3	conj	_	_
+
+# sent_id = Manchu_grammar_32
+# text = bi hergen be ara-mbi
+# text[eng] = I am writing characters.
+1	bi	bi	PRON	_	Number=Sing|Person=1|PronType=Prs	0	root	_	_
+2	hergen	hergen	NOUN	_	_	1	parataxis	_	_
+3	be	be	ADP	_	Case=Acc	2	case	_	_
+4	ara-mbi	ara	VERB	_	Aspect=Imp|Mood=Ind|Number=Sing|Person=1|Tense=Pres|VerbForm=Fin	1	parataxis	_	_
+
+# sent_id = Manchu_grammar_33
+# text = si aibi de gene-mbi
+# text[eng] = Where are you going?
+1	si	si	PRON	_	Number=Sing|Person=2|PronType=Prs	4	nsubj	_	_
+2	aibi	aibi	PRON	_	PronType=Int	4	obl	_	_
+3	de	de	ADP	_	Case=Dat	2	case	_	_
+4	gene-mbi	gene	VERB	_	Aspect=Imp|Mood=Ind|Number=Sing|Person=2|Tense=Pres|VerbForm=Fin	0	root	_	_
+
+# sent_id = Manchu_grammar_34
+# text = i enenggi ji-mbi-o jide-rakū-n
+# text[eng] = Will he come today or not?
+1	i	i	PRON	_	Number=Sing|Person=3|PronType=Prs	4	nsubj	_	_
+2	enenggi	enenggi	ADV	_	_	4	advmod	_	AdvType=Tim
+3	ji-mbi-o	ji	VERB	_	Aspect=Imp|Mood=Int|Tense=Pres|VerbForm=Fin	4	parataxis	_	_
+4	jide-rakū-n	jide	VERB	_	Mood=Int|Polarity=Neg|VerbForm=Part	0	root	_	_
+
+# sent_id = Manchu_grammar_35
+# text = nimanggi i elden de bithe hūla-habi
+# text[eng] = One read books by the light reflected in snow.
+1	nimanggi	nimanggi	NOUN	_	_	6	dep	_	_
+2	i	i	ADP	_	Case=Gen	6	dep	_	_
+3	elden	elden	NOUN	_	_	6	dep	_	_
+4	de	de	ADP	_	Case=Dat	6	dep	_	_
+5	bithe	bithe	NOUN	_	_	6	obj	_	_
+6	hūla-habi	hūla	VERB	_	Aspect=Perf|Mood=Ind|Tense=Past|VerbForm=Fin	0	root	_	_
+
+# sent_id = Manchu_grammar_36
+# text = hūwangheo beye nimala fata-mbihebi
+# text[eng] = The Empresses themselves used to pick berries from the mulberry tree.
+1	hūwangheo	hūwangheo	NOUN	_	_	4	nsubj	_	_
+2	beye	beye	PRON	_	PronType=Prs|Reflex=Yes	1	appos	_	_
+3	nimala	nimala	NOUN	_	_	4	obj	_	_
+4	fata-mbihebi	fata	VERB	_	Mood=Ind|Tense=Past|VerbForm=Fin	0	root	_	Aspect=Freq
+
+# sent_id = Manchu_grammar_37
+# text = te gaija-r-akū o-ci gūwa gai-ka de sini dolo ume
+# text_en = If you don’t take it now and somebody else does, don’t hold it against him!
+1	te	te	ADV	_	_	2	advmod	_	_
+2	gaija-r-akū	gaija	VERB	_	Aspect=Imp|Polarity=Neg|VerbForm=Part	3	xcomp	_	Gloss=take-PTCP.IMPERF-NEG
+3	o-ci	o	VERB	_	Mood=Cnd|VerbForm=Conv	9	advcl	_	Gloss=become-CVB.COND
+4	gūwa	gūwa	PRON	_	PronType=Ind	5	nsubj	_	Gloss=other
+5	gai-ka	gai	VERB	_	Aspect=Perf|VerbForm=Part	3	conj	_	Gloss=take-PTCP.PERF
+6	de	de	ADP	_	Case=Dat	5	case	_	Gloss=DAT
+7	sini	sini	PRON	_	Case=Gen|Number=Sing|Person=2|PronType=Prs	8	nmod:poss	_	Gloss=you.GEN
+8	dolo	dolo	NOUN	_	_	9	obl	_	Gloss=inside
+9	ume	ume	VERB	_	Mood=Imp|VerbForm=Fin	0	root	_	Gloss=PTCL.PROH|Polarity=Proh
+
+# sent_id = Manchu_grammar_38
+# text = ama eme damu nime-rahū se-me jobo jobo-mbi
+# text[eng] = My only worry is that father and mother might get ill.
+1	ama	ama	NOUN	_	_	7	nsubj	_	_
+2	eme	eme	NOUN	_	_	1	conj	_	_
+3	damu	damu	ADV	_	_	1	advmod	_	_
+4	nime-rahū	nime	VERB	_	Polarity=Neg|VerbForm=Part	7	csubj:outer	_	_
+5	se-me	se	VERB	_	VerbForm=Conv	4	advcl	_	_
+6	jobo	jobo	NOUN	_	_	7	obj	_	_
+7	jobo-mbi	jobo	VERB	_	Aspect=Imp|Mood=Ind|VerbForm=Fin	0	root	_	_
+
+# sent_id = Manchu_grammar_39
+# text = baita de uša-bu-ha
+# text[eng] = (Someone) was charged with the matter.
+1	baita	baita	NOUN	_	_	3	obl	_	_
+2	de	de	ADP	_	_	1	case	_	_
+3	uša-bu-ha	uša	VERB	_	Aspect=Perf|VerbForm=Part|Voice=Pass	0	root	_	_
+
+# sent_id = Manchu_grammar_40
+# text = morin be dali-me boo de ji-he
+# text[eng] = He went home to hide the horses.
+1	morin	morin	NOUN	_	Case=Acc	3	obj	_	_
+2	be	be	ADP	_	_	1	case	_	_
+3	dali-me	dali	VERB	_	VerbForm=Conv	6	advcl	_	_
+4	boo	boo	NOUN	_	_	6	obl	_	_
+5	de	de	ADP	_	_	4	case	_	_
+6	ji-he	ji	VERB	_	Mood=Ind|Tense=Past|VerbForm=Fin	0	root	_	_
+
+# sent_id = Manchu_grammar_41
+# text = gurun dasa-bu-mbi
+# text[eng] = The state is improving.
+1	gurun	gurun	NOUN	_	_	2	nsubj	_	_
+2	dasa-bu-mbi	dasa	VERB	_	Aspect=Imp|Mood=Ind|VerbForm=Fin|Voice=Pass	0	root	_	_
+
+# sent_id = Manchu_grammar_42
+# text = tere gene-bu
+# text[eng] = Order him to go!
+1	tere	tere	PRON	_	Case=Acc|PronType=Prs	2	obj	_	_
+2	gene-bu	gene	VERB	_	Mood=Imp|VerbForm=Fin|Voice=Cau	0	root	_	_
+
+# sent_id = Manchu_grammar_43
+# text = ilan ubu ci emu
+# text[eng] = one-third
+1	ilan	ilan	NUM	_	NumType=Card	4	nmod	_	_
+2	ubu	ubu	NOUN	_	_	1	appos	_	_
+3	ci	ci	ADP	_	_	1	case	_	_
+4	emu	emu	NUM	_	NumType=Card	0	root	_	_
+
+# sent_id = Manchu_grammar_44
+# text = sunja ubu ci ilan
+# text[eng] = three fifths
+1	sunja	sunja	NUM	_	NumType=Card	4	nmod	_	_
+2	ubu	ubu	NOUN	_	_	1	appos	_	_
+3	ci	ci	ADP	_	_	1	case	_	_
+4	ilan	ilan	NUM	_	NumType=Card	0	root	_	_
+
+# sent_id = Manchu_grammar_45
+# text = ninggun ubu sunja
+# text[eng] = five sixths
+1	ninggun	ninggun	NUM	_	NumType=Card	2	nmod	_	_
+2	ubu	ubu	NOUN	_	Case=Gen	3	nmod:poss	_	_
+3	sunja	sunja	NUM	_	NumType=Card	0	root	_	_
+
+# sent_id = Manchu_grammar_46
+# text = ilan fesin loho
+# text[eng] = three swords
+1	ilan	ilan	NUM	_	NumType=Card	3	nummod	_	_
+2	fesin	fesin	NOUN	_	_	3	clf	_	_
+3	loho	loho	NOUN	_	_	0	root	_	_
+
+# sent_id = Manchu_grammar_47
+# text = be oci mafa gurun ilha
+# text[eng] = We are the fatherland's flowers.
+1	be	be	PRON	_	Number=Plur|Person=1|PronType=Prs	5	nsubj	_	_
+2	oci	oci	PART	_	_	1	discourse	_	_
+3	mafa	mafa	NOUN	_	_	4	nmod:poss	_	_
+4	gurun	gurun	NOUN	_	Case=Gen	5	nmod:poss	_	_
+5	ilha	ilha	NOUN	_	_	0	root	_	_
+
+# sent_id = Manchu_grammar_48
+# text = ajige orho i eme oci amba na
+# text[eng] = The mother of the small grass is the large land.
+1	ajige	ajige	ADJ	_	Degree=Pos	2	amod	_	_
+2	orho	orho	NOUN	_	_	4	nmod:poss	_	_
+3	i	i	PART	_	Case=Gen	2	case	_	_
+4	eme	eme	NOUN	_	_	6	nsubj	_	_
+5	oci	oci	PART	_	_	4	discourse	_	_
+6	amba	amba	ADJ	_	Degree=Pos	7	amod	_	_
+7	na	na	NOUN	_	_	0	root	_	_
+
+# sent_id = Manchu_grammar_49
+# text = ajige nimaha i eme oci amba mederi
+# text[eng] = The mother of the small fish is the large sea.
+1	ajige	ajige	ADJ	_	Degree=Pos	2	amod	_	_
+2	nimaha	nimaha	NOUN	_	_	4	nmod:poss	_	_
+3	i	i	PART	_	Case=Gen	2	case	_	_
+4	eme	eme	NOUN	_	_	6	nsubj	_	_
+5	oci	oci	PART	_	_	4	discourse	_	_
+6	amba	amba	ADJ	_	Degree=Pos	7	amod	_	_
+7	mederi	mederi	NOUN	_	_	0	root	_	_
+
+# sent_id = Manchu_grammar_50
+# text = usiha i eme oci abka i untuhun
+# text[eng] = The mother of the stars is the heavens.
+1	usiha	usiha	NOUN	_	_	3	nmod:poss	_	_
+2	i	i	PART	_	Case=Gen	1	case	_	_
+3	eme	eme	NOUN	_	_	5	nsubj	_	_
+4	oci	oci	PART	_	_	3	discourse	_	_
+5	abka	abka	NOUN	_	_	7	nmod:poss	_	_
+6	i	i	PART	_	Case=Gen	5	case	_	_
+7	untuhun	untuhun	NOUN	_	_	0	root	_	_
+
+# sent_id = Manchu_grammar_51
+# text = meni eme oci mafa gurun jungg’o
+# text[eng] = Our mother is our fatherland — China.
+1	meni	meni	PRON	_	Number=Plur|Person=1|Poss=Yes|PronType=Prs	2	nmod:poss	_	_
+2	eme	eme	NOUN	_	_	5	nsubj	_	_
+3	oci	oci	PART	_	_	2	discourse	_	_
+4	mafa	mafa	ADJ	_	Degree=Pos	5	amod	_	_
+5	gurun	gurun	NOUN	_	_	0	root	_	_
+6	jungg’o	jungg’o	PROPN	_	_	5	appos	_	_
+
+# sent_id = Manchu_grammar_52
+# text = fuldun fuldun ilha mafa gurun be miyamimbi
+# text[eng] = All these bunches of flowers decorate the fatherland.
+1	fuldun	fuldun	DET	_	PronType=Tot	3	det	_	_
+2	fuldun	fuldun	ADV	_	_	3	advmod	_	_
+3	ilha	ilha	NOUN	_	_	7	nsubj	_	_
+4	mafa	mafa	ADJ	_	Degree=Pos	5	amod	_	_
+5	gurun	gurun	NOUN	_	_	7	obj	_	_
+6	be	be	PART	_	Case=Acc	5	case	_	_
+7	miyamimbi	miyami	VERB	_	Aspect=Imp|Mood=Ind|Tense=Pres|VerbForm=Fin	0	root	_	_
+
+# sent_id = Manchu_grammar_53
+# text = mafa gurun membe ujime hvwaxabuha
+# text[eng] = The fatherland raised us.
+1	mafa	mafa	ADJ	_	Degree=Pos	2	amod	_	_
+2	gurun	gurun	NOUN	_	_	5	nsubj	_	_
+3	membe	be	PRON	_	Case=Acc|Number=Plur|Person=1|PronType=Prs	5	obj	_	_
+4	ujime	ujime	ADV	_	_	5	advmod	_	_
+5	hvwaxabuha	hvwaxabu	VERB	_	Aspect=Perf|Mood=Ind|VerbForm=Fin|Voice=Pass	0	root	_	_
+
+# sent_id = Manchu_grammar_54
+# text = be mafa gurun hairambi be
+# text[eng] = We love the fatherland.
+1	be	be	PRON	_	Number=Plur|Person=1|PronType=Prs	4	nsubj	_	_
+2	mafa	mafa	ADJ	_	Degree=Pos	3	amod	_	_
+3	gurun	gurun	NOUN	_	_	4	obj	_	_
+4	hairambi	hairambi	VERB	_	Aspect=Imp|Mood=Ind|Tense=Pres|VerbForm=Fin	0	root	_	_
+5	be	be	PART	_	Case=Acc	3	case	_	_
+
+# sent_id = Manchu_grammar_55
+# text = gucu te udu erin oho
+# text[eng] = Friend, what time is it?
+1	gucu	gucu	NOUN	_	_	5	vocative	_	_
+2	te	te	PART	_	_	5	discourse	_	_
+3	udu	udu	PRON	_	PronType=Int	4	det	_	_
+4	erin	erin	NOUN	_	_	5	nsubj	_	_
+5	oho	oho	VERB	_	Mood=Ind|Tense=Pres|VerbForm=Fin	0	root	_	_
+
+# sent_id = Manchu_grammar_56
+# text = juwan erin oho
+# text[eng] = It is ten o’clock.
+1	juwan	juwan	NUM	_	NumType=Card	2	nummod	_	_
+2	erin	erin	NOUN	_	_	3	nsubj	_	_
+3	oho	oho	VERB	_	Mood=Ind|Tense=Pres|VerbForm=Fin	0	root	_	_
+
+# sent_id = Manchu_grammar_57
+# text = baniha si oci Xiao Wang gucu i tacin inuo
+# text[eng] = Thank you. Are you Xiao Wang’s fellow student?
+1	baniha	baniha	INTJ	_	_	0	root	_	_
+2	si	si	PRON	_	Number=Sing|Person=2|PronType=Prs	6	nsubj	_	_
+3	oci	oci	PART	_	_	6	discourse	_	_
+4	Xiao	Xiao	PROPN	_	_	6	nmod:poss	_	_
+5	Wang	Wang	PROPN	_	_	4	flat:name	_	_
+6	gucu	gucu	NOUN	_	_	1	parataxis	_	_
+7	i	i	PART	_	Case=Gen	4	case	_	_
+8	tacin	tacin	NOUN	_	_	6	compound	_	_
+9	inuo	inuo	PART	_	_	6	discourse	_	_
+
+# sent_id = Manchu_grammar_58
+# text = inu bi Xiao Wang i emgi emu minggan uyun tanggv nadanju sunja taciha ci aniya oros gisun be
+# text[eng] = Yes. I studied Russian with Xiao Wang in 1975.
+1	inu	inu	INTJ	_	_	0	root	_	_
+2	bi	bi	PRON	_	Number=Sing|Person=1|PronType=Prs	13	nsubj	_	_
+3	Xiao	Xiao	PROPN	_	_	2	nmod	_	_
+4	Wang	Wang	PROPN	_	_	3	flat:name	_	_
+5	i	i	PART	_	Case=Gen	3	case	_	_
+6	emgi	emgi	ADP	_	_	3	case	_	_
+7	emu	emu	NUM	_	NumType=Card	11	nummod	_	_
+8	minggan	minggan	NUM	_	NumType=Card	11	nummod	_	_
+9	uyun	uyun	NUM	_	NumType=Card	11	nummod	_	_
+10	tanggv	tanggv	NUM	_	NumType=Card	11	nummod	_	_
+11	nadanju	nadanju	NUM	_	NumType=Card	12	nummod	_	_
+12	sunja	sunja	NUM	_	NumType=Card	13	obl:tmod	_	_
+13	taciha	taciha	VERB	_	Mood=Ind|Tense=Past|VerbForm=Fin	1	parataxis	_	_
+14	ci	ci	ADP	_	Case=Abl	12	case	_	_
+15	aniya	aniya	NOUN	_	_	12	nmod	_	_
+16	oros	oros	ADJ	_	_	17	amod	_	_
+17	gisun	gisun	NOUN	_	_	13	obj	_	_
+18	be	be	PART	_	Case=Acc	17	case	_	_
+
+# sent_id = Manchu_grammar_59
+# text = si ya tacikv de oros gisun taciha be
+# text[eng] = What school did you study Russian at?
+1	si	si	PRON	_	Number=Sing|Person=2|PronType=Prs	7	nsubj	_	_
+2	ya	ya	DET	_	PronType=Int	3	det	_	_
+3	tacikv	tacikv	NOUN	_	_	7	obl	_	_
+4	de	de	ADP	_	Case=Loc	3	case	_	_
+5	oros	oros	ADJ	_	_	6	amod	_	_
+6	gisun	gisun	NOUN	_	_	7	obj	_	_
+7	taciha	taciha	VERB	_	Mood=Ind|Tense=Past|VerbForm=Fin	0	root	_	_
+8	be	be	PART	_	Case=Acc	6	case	_	_
+
+# sent_id = Manchu_grammar_60
+# text = Qinghua amba tacikv de
+# text[eng] = At Qinghua University.
+1	Qinghua	Qinghua	PROPN	_	_	3	nmod	_	_
+2	amba	amba	ADJ	_	_	3	amod	_	_
+3	tacikv	tacikv	NOUN	_	_	0	root	_	_
+4	de	de	ADP	_	Case=Loc	3	case	_	_
+
+# sent_id = Manchu_grammar_61
+# text = si ere aniya udu se oho
+# text[eng] = How old are you this year?
+1	si	si	PRON	_	Number=Sing|Person=2|PronType=Prs	6	nsubj	_	_
+2	ere	ere	DET	_	PronType=Dem	3	det	_	_
+3	aniya	aniya	NOUN	_	_	6	obl:tmod	_	_
+4	udu	udu	NUM	_	PronType=Int	5	nummod	_	_
+5	se	se	NOUN	_	_	6	obl	_	_
+6	oho	oho	VERB	_	Mood=Ind|Tense=Past|VerbForm=Fin	0	root	_	_
+
+# sent_id = Manchu_grammar_62
+# text = bi susai juwe se oho
+# text[eng] = I am 52 years old.
+1	bi	bi	PRON	_	Number=Sing|Person=1|PronType=Prs	5	nsubj	_	_
+2	susai	susai	NUM	_	NumType=Card	4	nummod	_	_
+3	juwe	juwe	NUM	_	NumType=Card	4	nummod	_	_
+4	se	se	NOUN	_	_	5	obl	_	Gloss=year
+5	oho	oho	VERB	_	_	0	root	_	Gloss=be.exist|VerbType=Stat
+
+# sent_id = Manchu_grammar_63
+# text = sinde udu indahūn bio
+# text[eng] = How many dogs do you have?
+1	sinde	si	PRON	_	Case=Dat|Number=Sing|Person=2|PronType=Prs	4	obl	_	_
+2	udu	udu	DET	_	PronType=Int	3	det	_	Gloss=how.many
+3	indahūn	indahūn	NOUN	_	_	4	nsubj	_	Gloss=dog
+4	bio	bi	VERB	_	Mood=Int	0	root	_	Gloss=be.exist|VerbType=Exist
+
+# sent_id = Manchu_grammar_64
+# text = uheri tofohon indahūn bi
+# text[eng] = Altogether I have fifteen dogs.
+1	uheri	uheri	ADV	_	_	4	advmod	_	Gloss=altogether
+2	tofohon	tofohon	NUM	_	NumType=Card	3	nummod	_	Gloss=fifteen
+3	indahūn	indahūn	NOUN	_	_	4	nsubj	_	Gloss=dog
+4	bi	bi	VERB	_	_	0	root	_	Gloss=be.exist|VerbType=Exist
+
+# sent_id = Manchu_grammar_65
+# text = tofohon i ilan ubu emu boo de
+# text[eng] = One third of them are at home.
+1	tofohon	tofohon	NUM	_	NumType=Card	3	nmod:poss	_	_
+2	i	i	ADP	_	Case=Gen	1	case	_	_
+3	ilan	ilan	NUM	_	NumType=Card	5	nummod	_	_
+4	ubu	ubu	NOUN	_	_	3	nmod	_	Gloss=part
+5	emu	emu	NUM	_	NumType=Card	6	nsubj	_	Gloss=one
+6	boo	boo	NOUN	_	_	0	root	_	Gloss=house
+7	de	de	ADP	_	Case=Dat	6	case	_	_
+
+# sent_id = Manchu_grammar_66
+# text = tuttu oci boode udu indahvn bio
+# text[eng] = In that case, how many dogs do you have at home?
+1	tuttu	tuttu	ADV	_	_	6	advmod	_	Gloss=in.that.case
+2	oci	oci	ADP	_	Case=Loc	1	case	_	_
+3	boode	boo	NOUN	_	_	6	obl	_	Gloss=house
+4	udu	udu	DET	_	PronType=Int	5	det	_	Gloss=how.many
+5	indahvn	indahvn	NOUN	_	_	6	nsubj	_	Gloss=dog
+6	bio	bi	VERB	_	Mood=Int	0	root	_	Gloss=be.exist|VerbType=Exist
+
+# sent_id = Manchu_grammar_67
+# text = boode sunja indahvn bi
+# text[eng] = There are 5 dogs at home.
+1	boode	boo	NOUN	_	_	4	obl	_	Gloss=house
+2	sunja	sunja	NUM	_	NumType=Card	3	nummod	_	Gloss=five
+3	indahvn	indahvn	NOUN	_	_	4	nsubj	_	Gloss=dog
+4	bi	bi	VERB	_	_	0	root	_	Gloss=be.exist|VerbType=Exist
+
+# sent_id = Manchu_grammar_68
+# text = Hûwang ubaliya-kai besergen-ci ebu-fi
+# text[eng] = (Someone) got out of bed emphatically
+1	Hûwang	G'ai	PROPN	_	_	0	root	_	_
+2	ubaliya-kai	ubaliya	VERB	_	Mood=Ind|VerbForm=Fin	1	parataxis	_	Gloss=turn.over
+3	besergen-ci	besergen	NOUN	_	Case=Abl	1	parataxis	_	Gloss=from.bed
+4	ebu-fi	ebu	VERB	_	Mood=Ind|Number=Sing|Person=3|Tense=Past|VerbForm=Fin	1	parataxis	_	_
+
+# sent_id = Manchu_grammar_69
+# text = hengkile-me baniha bu-he
+# text[eng] = (Someone) gave thanks while kowtowing
+1	hengkile-me	hengkile	VERB	_	VerbForm=Conv	0	root	_	Gloss=kowtow-ing
+2	baniha	baniha	NOUN	_	_	1	parataxis	_	Gloss=thanks
+3	bu-he	bu	VERB	_	Mood=Ind|Number=Sing|Person=3|Tense=Past|VerbForm=Fin	1	parataxis	_	_
+
+# sent_id = Manchu_grammar_70
+# text = K'an Ze hendu-me Weile-be elhese-ci ojorakû Te uthai
+# text[eng] = K’an Ze said: "Do not slacken your work now at once."
+1	K'an	K'an	PROPN	_	_	3	nsubj	_	_
+2	Ze	Ze	PROPN	_	_	3	nsubj:outer	_	_
+3	hendu-me	hendu	VERB	_	VerbForm=Conv	0	root	_	Gloss=say-ing
+4	Weile-be	Weile	VERB	_	Case=Acc	6	obj	_	Gloss=work-Acc
+5	elhese-ci	elhese	NOUN	_	Case=Abl	6	obl	_	Gloss=slacken-ing
+6	ojorakû	ojo	VERB	_	Polarity=Neg|VerbForm=Part	3	parataxis	_	Gloss=won't.do
+7	Te	te	ADV	_	_	8	advmod	_	Gloss=now
+8	uthai	uthai	ADV	_	_	6	advmod	_	Gloss=at.once
+
+# sent_id = Manchu_grammar_71
+# text = yabu-ci aca-mbi
+# text[eng] = (You) must act
+1	yabu-ci	yabu	VERB	_	VerbForm=Conv	2	advcl	_	Gloss=act-ing
+2	aca-mbi	aca	VERB	_	Mood=Imp|Polarity=Pos|VerbForm=Fin	0	root	_	Gloss=must
+
+# sent_id = Manchu_grammar_72
+# text = Hûwang hendu-me Bithe ara-me waji-habi
+# text[eng] = Hûwang G’ai said: “He has finished writing the letter.”
+1	Hûwang	G'ai	PROPN	_	_	3	nsubj	_	_
+2	hendu-me	hendu	VERB	_	VerbForm=Conv	0	root	_	Gloss=say-ing
+3	Bithe	bithe	NOUN	_	Case=Acc	2	parataxis	_	Gloss=letter
+4	ara-me	ara	VERB	_	VerbForm=Conv	2	parataxis	_	Gloss=write-ing
+5	waji-habi	waji	VERB	_	Aspect=Perf|Mood=Ind|Number=Sing|Person=3|VerbForm=Fin	3	parataxis	_	Gloss=finish-ed
+
+# sent_id = Manchu_grammar_73
+# text = K'an Ze bithe-be gai-fi uthai tere dobori beye-be nimaha
+# text[eng] = K’an Ze, having taken the letter at once, caught fish himself that night.
+1	K'an	K'an	PROPN	_	_	4	nsubj	_	_
+2	Ze	Ze	PROPN	_	_	4	nsubj:outer	_	_
+3	bithe-be	bithe	NOUN	_	Case=Acc	4	obj	_	Gloss=letter
+4	gai-fi	gai	VERB	_	Aspect=Perf|VerbForm=Part	0	root	_	Gloss=take-ing
+5	uthai	uthai	ADV	_	_	4	advmod	_	Gloss=at.once
+6	tere	tere	DET	_	PronType=Dem	7	det	_	_
+7	dobori	dobori	NOUN	_	Case=Acc	4	iobj	_	Gloss=fish
+8	beye-be	beye	PRON	_	Case=Acc|Number=Sing|Person=3|PronType=Prs	7	compound:prt	_	Gloss=self
+9	nimaha	nimaha	ADV	_	_	4	advmod	_	Gloss=that.night
+
+# sent_id = Manchu_grammar_74
+# text = buta-ra niyalma obu-fi ajige weihu-de te-fi emhun suru-me amargi
+# text[eng] = (Someone) caught a man, put him in a small boat, and rowed north alone
+1	buta-ra	buta	VERB	_	VerbForm=Conv	7	advcl	_	Gloss=catch-ing
+2	niyalma	niyalma	NOUN	_	Case=Acc	7	obj	_	_
+3	obu-fi	obu	VERB	_	Aspect=Perf|Mood=Ind|VerbForm=Fin	7	parataxis	_	Gloss=make-ing
+4	ajige	ajige	DET	_	PronType=Dem	7	det	_	Gloss=small
+5	weihu-de	weihu	NOUN	_	Case=Loc	7	nmod	_	Gloss=boat-in
+6	te-fi	te	VERB	_	Aspect=Perf|Mood=Ind|VerbForm=Fin	7	parataxis	_	Gloss=sit-ing
+7	emhun	emhun	PRON	_	Case=Acc|PronType=Prs	8	nsubj	_	Gloss=I/He
+8	suru-me	suru	VERB	_	VerbForm=Conv	0	root	_	Gloss=row-ing
+9	amargi	amargi	ADV	_	_	8	advmod	_	Gloss=north.alone
+
+# sent_id = Manchu_grammar_75
+# text = dalin-i baru muke eyen-i dahashûn juraka tere dobori
+# text[eng] = (They) set out toward the current at the shore that night
+1	dalin-i	dalin	NOUN	_	Case=Gen	5	obl	_	Gloss=shore-'s
+2	baru	baru	NOUN	_	_	5	obl	_	Gloss=toward
+3	muke	muke	NOUN	_	_	5	obl	_	Gloss=water
+4	eyen-i	eyen	NOUN	_	Case=Gen	5	obl	_	Gloss=current-'s
+5	dahashûn	dahashûn	VERB	_	Aspect=Perf|Mood=Ind|VerbForm=Fin	0	root	_	Gloss=set.out
+6	juraka	juraka	ADV	_	_	5	advmod	_	Gloss=that.night
+7	tere	tere	DET	_	PronType=Dem	8	det	_	Gloss=that
+8	dobori	dobori	NOUN	_	_	5	obj	_	Gloss=fish
+
+# sent_id = Manchu_grammar_76
+# text = sahûrun usiha abka-i jalu dekde-hebi Ila-ci ging o-me muke-i
+# text[eng] = The stars float in the sky; during the third watch, the water is...
+1	sahûrun	sahûrun	NOUN	_	_	4	nsubj	_	Gloss=cold
+2	usiha	usiha	NOUN	_	_	4	nsubj:outer	_	Gloss=star
+3	abka-i	abka	NOUN	_	Case=Gen	4	obl	_	Gloss=sky-'s
+4	jalu	jalu	VERB	_	Aspect=Perf|Mood=Ind|VerbForm=Fin	0	root	_	Gloss=float-ed
+5	dekde-hebi	dekde	VERB	_	Aspect=Perf|Mood=Ind|VerbForm=Fin	4	parataxis	_	Gloss=has
+6	Ila-ci	ila	NUM	_	_	9	nummod	_	Gloss=third.watch
+7	ging	ging	NOUN	_	_	9	nsubj	_	Gloss=be-ing
+8	o-me	o	AUX	_	Tense=Pres	9	cop	_	Gloss=copula
+9	muke-i	muke	NOUN	_	Case=Gen	4	obl	_	Gloss=water-'s
+
+# sent_id = Manchu_grammar_77
+# text = ing-de isina-fi giyang-be bedere-re cooha-i niyalma-de jafa-bu-ha
+# text[eng] = Having reached the camp, they captured and handed over the river-patrol men
+1	ing-de	ing	ADV	_	_	2	obl	_	Gloss=camp-to
+2	isina-fi	isina	VERB	_	Aspect=Perf|Mood=Ind|VerbForm=Fin	0	root	_	Gloss=reach-ing
+3	giyang-be	giyang	NOUN	_	Case=Acc	5	obj	_	Gloss=river-ACC
+4	bedere-re	bedere	VERB	_	VerbForm=Conv	5	advcl	_	Gloss=patrol-ing
+5	cooha-i	cooha	VERB	_	Aspect=Perf|Mood=Ind|VerbForm=Fin	2	conj	_	Gloss=take-give-ed
+6	niyalma-de	niyalma	NOUN	_	Case=Gen	5	obl	_	Gloss=army-'s
+7	jafa-bu-ha	jafa	VERB	_	Aspect=Perf|Mood=Ind|VerbForm=Fin	5	conj	_	Gloss=men-by
+
+# sent_id = Manchu_grammar_78
+# text = K'an_Ze hendu-me Cenghiyang-de hûdula-me alana Dergi
+# text[eng] = K'an Ze said: "Report quickly to Chancellor Cenghiyang!"
+1	K'an_Ze	K'an_Ze	PROPN	_	_	2	nsubj	_	_
+2	hendu-me	hendu	VERB	_	VerbForm=Conv	0	root	_	Gloss=say-ing
+3	Cenghiyang-de	Cenghiyang	PROPN	_	Case=Dat	5	obl	_	Gloss=chancellor-to
+4	hûdula-me	hûdula	VERB	_	VerbForm=Conv	5	advcl	_	Gloss=hurry-ing
+5	alana	alana	VERB	_	Mood=Ind|Tense=Pres|VerbForm=Fin	2	ccomp	_	Gloss=report
+6	Dergi	Dergi	PROPN	_	_	5	obj	_	_
+
+# sent_id = Manchu_grammar_79
+# text = Gurun-i K'an_Ze K'an_Ze-de dalda-ra amba weile bi-fi cohome acanji-me
+# text[eng] = The kingdom's K'an Ze, hiding an important matter, especially met with (someone)
+1	Gurun-i	Gurun	NOUN	_	Case=Gen	2	nmod:poss	_	Gloss=kingdom-'s
+2	K'an_Ze	K'an_Ze	PROPN	_	_	6	nsubj	_	_
+3	K'an_Ze-de	K'an_Ze	PROPN	_	Case=Dat	6	nmod	_	Gloss=-by
+4	dalda-ra	dalda	VERB	_	VerbForm=Conv	6	advcl	_	Gloss=hide-ing
+5	amba	amba	ADJ	_	_	6	amod	_	Gloss=big
+6	weile	weile	NOUN	_	_	0	root	_	Gloss=matter.be-ing
+7	bi-fi	bi	VERB	_	Aspect=Perf|Mood=Ind|VerbForm=Fin	6	conj	_	Gloss=especially
+8	cohome	cohome	ADV	_	_	6	advmod	_	Gloss=meet-ing
+9	acanji-me	acanji	VERB	_	VerbForm=Conv	6	advcl	_	Gloss=especially
+
+# sent_id = Manchu_grammar_80
+# text = ji-hebi se-me hendu
+# text[eng] = Having come, (he) said!
+1	ji-hebi	ji	VERB	_	Aspect=Perf|Mood=Ind|VerbForm=Fin	3	advcl	_	Gloss=come-ed
+2	se-me	se	VERB	_	VerbForm=Conv	3	advcl	_	Gloss=say-ing
+3	hendu	hendu	VERB	_	Mood=Ind|Tense=Pres|VerbForm=Fin	0	root	_	Gloss=say
+
+# sent_id = Manchu_grammar_81
+# text = Tere dobori Z'oo Z'oo olhon-i ing-de bi-hebi Cooha-i
+# text[eng] = That night, at Z'oo Z'oo dry land's camp, there was (the army)
+1	Tere	tere	DET	_	PronType=Dem	5	det	_	Gloss=that
+2	dobori	dobori	NOUN	_	Case=Loc	5	nmod	_	Gloss=night
+3	Z'oo	Z'oo	PROPN	_	_	4	compound	_	_
+4	Z'oo	Z'oo	PROPN	_	_	5	compound	_	_
+5	olhon-i	olhon	NOUN	_	Case=Gen	6	nmod:poss	_	Gloss=dry land-'s
+6	ing-de	ing	ADV	_	_	8	obl	_	Gloss=camp-in
+7	bi-hebi	bi	VERB	_	Aspect=Perf|Mood=Ind|VerbForm=Fin	8	acl	_	Gloss=be-ed
+8	Cooha-i	cooha	VERB	_	Aspect=Perf|Mood=Ind|VerbForm=Fin	0	root	_	Gloss=army-'s
+
+# sent_id = Manchu_grammar_82
+# text = niyalma alana-ra jakade Z'oo Z'oo hendu-me Jiyansi waka sem-e-o
+# text[eng] = After reporting, the men said: "Did the spy not act?"
+1	niyalma	niyalma	NOUN	_	Case=Nom	2	nsubj	_	Gloss=men
+2	alana-ra	alana	VERB	_	VerbForm=Conv	7	advcl	_	Gloss=report-ing
+3	jakade	jakade	ADV	_	_	2	advmod	_	Gloss=after
+4	Z'oo	Z'oo	PROPN	_	_	5	compound	_	_
+5	Z'oo	Z'oo	PROPN	_	_	7	nmod	_	_
+6	hendu-me	hendu	VERB	_	VerbForm=Conv	7	advcl	_	Gloss=say-ing
+7	Jiyansi	Jiyansi	PROPN	_	_	0	root	_	Gloss=spy
+8	waka	waka	ADV	_	Polarity=Neg	9	advmod	_	Gloss=not
+9	sem-e-o	sem	VERB	_	Mood=Int|Polarity=Neg|VerbForm=Fin	7	ccomp	_	Gloss=act
+

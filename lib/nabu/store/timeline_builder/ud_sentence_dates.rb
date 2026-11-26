@@ -25,8 +25,12 @@ module Nabu
       #                 3,089 ("5th Dynasty" 1,258 / "6th Dynasty" 1,831 —
       #                 banded through config/period_bands.yml)
       #   place         egyptian-pc — "Saqqara" on all 3,089
+      # Plus the treebank-level DERIVED claims (UD v2.19): the Zhelekhivka
+      # articles' and the 1526 New Testament's years from their own newdoc
+      # ids, and DIPI's Ashokan edicts — the reign band, placed by site.
       # Every claim dates the text itself (the letter, the charter, the
-      # pyramid inscription) — the artifact class (date_class NULL).
+      # pyramid inscription, the newspaper article, the edict) — the
+      # artifact class (date_class NULL).
       #
       # Rows (axis_source "ud-sentences"):
       #   * a passage-grain run per stretch of consecutive sentences sharing
@@ -58,6 +62,28 @@ module Nabu
         BEFORE = /\Abefore\s+(\d{3,4})\z/i
 
         BATCH = 2_000
+
+        # Treebank-level claims for treebanks whose sentences carry no date
+        # comment but whose upstream ids or README state one (UD v2.19,
+        # read at the r2.19 tag 2026-11-26), keyed by the treebank slug in
+        # the document urn. A sentence's own comment date always wins.
+        #   newdoc_year  — the year the treebank's own newdoc id carries
+        #                  (Zhelekhivka: each article's id ends in its year;
+        #                  Swedish-Modern: NT1526:MRK — the 1526 New
+        #                  Testament); raw = the id itself
+        #   band + sites — DIPI's every sentence is an Ashokan edict (README:
+        #                  "under the reign of Ashoka (r. 268--232 BCE)"),
+        #                  placed by its sent_id prefix (girnar-1-1); an
+        #                  unknown prefix mints the band without a place
+        DERIVED = {
+          "ukrainian-zhelekhivka" => { newdoc_year: /_(\d{4})\z/ },
+          "swedish-modern" => { newdoc_year: /\ANT(\d{4}):/ },
+          "prakrit-dipi" => {
+            band: [-268, -232, "reign"], raw: "reign of Ashoka (r. 268–232 BCE)",
+            sites: { "girnar" => "Girnar", "shahbazgarhi" => "Shahbazgarhi", "kalsi" => "Kalsi",
+                     "mansehra" => "Mansehra", "jaugada" => "Jaugada", "dhauli" => "Dhauli" }
+          }
+        }.freeze
 
         module_function
 
@@ -96,12 +122,21 @@ module Nabu
         def claimed_documents(catalog, source_id)
           probe = Sequel.|(*PROBE_FIELDS.map { |field| Sequel.like(:annotations_json, %(%"#{field}"%)) })
           documents = catalog[:documents].where(source_id: source_id, withdrawn: false).select(:id)
-          catalog[:passages].where(document_id: documents, withdrawn: false).where(probe)
-                            .distinct.order(:document_id).select_map(:document_id)
+          probed = catalog[:passages].where(document_id: documents, withdrawn: false).where(probe)
+                                     .distinct.select_map(:document_id)
+          derived = Sequel.|(*DERIVED.keys.map { |slug| Sequel.like(:urn, "urn:nabu:ud:#{slug}:%") })
+          (probed + catalog[:documents].where(source_id: source_id, withdrawn: false).where(derived)
+                                       .select_map(:id)).uniq.sort
+        end
+
+        # The DERIVED rule of the document's treebank, or nil.
+        def derived_rule(catalog, document_id)
+          urn = catalog[:documents].where(id: document_id).get(:urn).to_s
+          DERIVED[urn.split(":")[3]]
         end
 
         def document_rows(catalog, document_id, counts)
-          runs, total = scan_runs(catalog, document_id, counts)
+          runs, total = scan_runs(catalog, document_id, counts, derived_rule(catalog, document_id))
           return [] if runs.empty?
 
           counts[:documents] += 1
@@ -114,15 +149,15 @@ module Nabu
 
         # Walk the document's live passages in order, folding consecutive
         # identical claims into runs. Returns [runs, passage count].
-        def scan_runs(catalog, document_id, counts)
+        def scan_runs(catalog, document_id, counts, rule = nil)
           runs = []
           current = nil
           total = 0
           catalog[:passages].where(document_id: document_id, withdrawn: false)
-                            .order(:sequence).select_map(%i[sequence annotations_json])
-                            .each do |sequence, json|
+                            .order(:sequence).select_map(%i[sequence annotations_json urn])
+                            .each do |sequence, json, urn|
                               total += 1
-                              claim = passage_claim(json, counts)
+                              claim = passage_claim(json, counts, rule: rule, urn: urn)
                               if claim.nil?
                                 runs << current if current
                                 current = nil
@@ -140,18 +175,36 @@ module Nabu
 
         # The sentence's claim — {key:, raw:, bounds:, place:} — or nil when
         # it names neither a readable date nor a place.
-        def passage_claim(json, counts)
+        def passage_claim(json, counts, rule: nil, urn: nil)
           annotations = JSON.parse(json.to_s)
           raw = DATE_KEYS.lazy.map { |key| annotations[key] }.find { |value| value.is_a?(String) && !value.empty? }
           place = annotations[PLACE_KEY]
           place = nil unless place.is_a?(String) && !place.strip.empty?
           bounds = raw && claim_bounds(raw)
           counts[:undated] += 1 if raw && bounds.nil?
+          return derived_claim(annotations, rule, urn) if raw.nil? && place.nil? && rule
           return nil if bounds.nil? && place.nil?
 
           { key: [annotations[DOCUMENT_KEY], raw, place], raw: bounds && raw, bounds: bounds, place: place }
         rescue JSON::ParserError
           nil
+        end
+
+        # A DERIVED rule's claim for one sentence, or nil when it reads
+        # nothing (a newdoc id without the year shape mints no bounds).
+        def derived_claim(annotations, rule, urn)
+          newdoc = annotations[DOCUMENT_KEY]
+          if rule[:newdoc_year]
+            year = newdoc.is_a?(String) && newdoc[rule[:newdoc_year], 1]
+            return nil unless year
+
+            year = Integer(year, 10)
+            return { key: [newdoc, newdoc, nil], raw: newdoc, bounds: [year, year, "year"], place: nil }
+          end
+
+          site = urn.to_s.split(":").last.to_s.split("-").first
+          place = rule[:sites][site]
+          { key: [newdoc, rule[:raw], place], raw: rule[:raw], bounds: rule[:band], place: place }
         end
 
         # A date claim → [not_before, not_after, precision], or nil. ";"

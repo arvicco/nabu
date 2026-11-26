@@ -40,6 +40,7 @@ class UniversalDependenciesTest < Minitest::Test
     "urn:nabu:ud:latin-llct:la_llct-ud-test-head50",
     "urn:nabu:ud:latin-perseus:la_perseus-ud-test-head50",
     "urn:nabu:ud:latin-udante:la_udante-ud-test-head50",
+    "urn:nabu:ud:manchu-gdud:mnc_gdud-ud-test",
     "urn:nabu:ud:middle-armenian-armtdp:axm_armtdp-ud-test",
     "urn:nabu:ud:middle-french-profiterole:frm_profiterole-ud-test-head50",
     "urn:nabu:ud:old-east-slavic-birchbark:orv_birchbark-ud-test-head50",
@@ -57,10 +58,13 @@ class UniversalDependenciesTest < Minitest::Test
     "urn:nabu:ud:ottoman-dudu:ota_dudu-ud-test-head50",
     "urn:nabu:ud:pali-palicanon:pi_palicanon-ud-test-head20",
     "urn:nabu:ud:phrygian-kul:xpg_kul-ud-test-head50",
+    "urn:nabu:ud:prakrit-dipi:pra_dipi-ud-test",
     "urn:nabu:ud:romanian-nonstandard:ro_nonstandard-ud-test-head50",
     "urn:nabu:ud:sanskrit-vedic:sa_vedic-ud-test-head50",
+    "urn:nabu:ud:swedish-modern:sv_modern-ud-test-head20",
     "urn:nabu:ud:tangut-mica:txg_mica-ud-test-head20",
-    "urn:nabu:ud:tupinamba-tudet:tpn_tudet-ud-test-head50"
+    "urn:nabu:ud:tupinamba-tudet:tpn_tudet-ud-test-head50",
+    "urn:nabu:ud:ukrainian-zhelekhivka:uk_zhelekhivka-ud-test-slices"
   ].freeze
 
   # --- AdapterConformance hooks -------------------------------------------
@@ -559,6 +563,70 @@ class UniversalDependenciesTest < Minitest::Test
     assert_includes forms, "kappe"
   end
 
+  # The four historical v2.19 newcomers (facts read at the r2.19 tag
+  # 2026-11-26), all test split only, all LICENSE.txt + README metadata
+  # agreeing on CC BY-SA 4.0 → attribution. Same tuple shape as UD_219.
+  # Languages are UD's own file prefixes, carried verbatim: pra (the 639-2
+  # Prakrit collective — Ashokan edicts), mnc, sv (Modern Swedish 1526–1880,
+  # today only the 1526 New Testament's Mark) and uk (Ukrainian in the
+  # Zhelekhivka orthography). Prakrit and Manchu are WHOLE files; Ukrainian
+  # is the first five blocks of each of its three newdoc runs.
+  UD_219_HISTORICAL = {
+    "prakrit-dipi" => ["UD_Prakrit-DIPI", "pra", "CC BY-SA 4.0", "attribution",
+                       "pra_dipi-ud-test", 84, %w[nonfiction news], "girnar-1-1",
+                       "iyaṃ dhaṃma-lipī Devānaṃpriyena Priyadasinā rāña lekhāpitā"],
+    "manchu-gdud" => ["UD_Manchu-GDUD", "mnc", "CC BY-SA 4.0", "attribution",
+                      "mnc_gdud-ud-test", 81, %w[grammar-examples], "Manchu_grammar_1",
+                      "bi tere niyalma emgi gene-he"],
+    "swedish-modern" => ["UD_Swedish-Modern", "sv", "CC BY-SA 4.0", "attribution",
+                         "sv_modern-ud-test-head20", 20, %w[bible], "swedish-modern-nt1526-1",
+                         "Första Capitel."],
+    "ukrainian-zhelekhivka" => ["UD_Ukrainian-Zhelekhivka", "uk", "CC BY-SA 4.0", "attribution",
+                                "uk_zhelekhivka-ud-test-slices", 15, %w[news],
+                                "Vischovannja_pro_XX_vik_1892-1", "Віщовання про XX. вік."]
+  }.freeze
+
+  def test_ud_219_historical_four_register_and_round_trip
+    treebanks = Nabu::Adapters::UniversalDependencies::TREEBANKS
+    adapter = Nabu::Adapters::UniversalDependencies.new
+    UD_219_HISTORICAL.each do |slug, (repo, language, license, license_class, stem, blocks, genres, sent_id, opening)|
+      assert_equal ["https://github.com/UniversalDependencies/#{repo}", language, license, license_class],
+                   treebanks.fetch(slug).values_at(:repo, :language, :license, :license_class), slug
+      urn = "urn:nabu:ud:#{slug}:#{stem}"
+      document = adapter.parse(ud_ref(urn))
+      assert_equal blocks, document.size, "#{slug}: sentence blocks in the fixture"
+      assert_equal language, document.language, slug
+      assert_equal license_class, document.license_override, slug
+      assert_equal genres, document.metadata["genres"], "#{slug}: the README Genre line"
+      first = document.passages.first
+      assert_equal "#{urn}:#{sent_id}", first.urn, slug
+      assert first.text.start_with?(Nabu::Normalize.nfc(opening)), "#{slug}: #{first.text}"
+    end
+  end
+
+  # What rides from the four: the Ukrainian and Swedish newdoc ids (the
+  # dating lane's year source), the Ashokan Leiden-bracketed Orig= MISC and
+  # the Prakrit MWT compounds, and Manchu's one text_en translation.
+  def test_ud_219_historical_layers_ride_through
+    adapter = Nabu::Adapters::UniversalDependencies.new
+    zhelekhivka = adapter.parse(ud_ref("urn:nabu:ud:ukrainian-zhelekhivka:uk_zhelekhivka-ud-test-slices"))
+    assert_equal %w[Vischovannja_pro_XX_vik_1892 Ivan_Rybchyn_Chym_e_Drahomanov_dla_ukrainskoi_molodizhi_1921
+                    Stepan_Smal-Stockij_Omelan_Kaluzhnackij_1917],
+                 zhelekhivka.passages.map { |passage| passage.annotations["newdoc_id"] }.uniq
+
+    mark = adapter.parse(ud_ref("urn:nabu:ud:swedish-modern:sv_modern-ud-test-head20")).passages.first
+    assert_equal "NT1526:MRK [Markus]", mark.annotations["newdoc_id"]
+
+    edict = adapter.parse(ud_ref("urn:nabu:ud:prakrit-dipi:pra_dipi-ud-test")).passages.first
+    forms = edict.annotations["tokens"].map { |token| token["form"] }
+    assert_includes forms, "dhaṃma"
+    assert_includes forms, "lipī"
+
+    manchu = adapter.parse(ud_ref("urn:nabu:ud:manchu-gdud:mnc_gdud-ud-test")).passages
+    translated = manchu.filter_map { |passage| passage.annotations.dig("translations", "text_en") }
+    assert_equal 1, translated.size, "only the one text_en block rides; the 81 text[eng] lines are declared coarseness"
+  end
+
   # The Romance pack flows through the same unchanged annotation→index
   # plumbing: the two Latin treebanks contribute rows to the ALREADY
   # lemma-indexed lat lane (filtered by urn — latin-ittb/latin-perseus also
@@ -643,7 +711,8 @@ class UniversalDependenciesTest < Minitest::Test
                       tupinamba-tudet guarani-oldtudet phrygian-kul
                       old-georgian-glc middle-armenian-armtdp
                       old-georgian-midglauro pali-palicanon tangut-mica
-                      old-occitan-cronoc avestan-old].freeze
+                      old-occitan-cronoc avestan-old
+                      prakrit-dipi manchu-gdud swedish-modern ukrainian-zhelekhivka].freeze
   BARE_SLUGS = %w[ancient-greek-perseus gothic-proiel greek-proiel latin-ittb latin-perseus
                   sanskrit-vedic old-irish-dipsgg].freeze
 
@@ -688,7 +757,7 @@ class UniversalDependenciesTest < Minitest::Test
 
   # --- discover -----------------------------------------------------------
 
-  def test_discover_finds_exactly_forty_three_files_sorted_by_urn
+  def test_discover_finds_exactly_forty_seven_files_sorted_by_urn
     refs = Nabu::Adapters::UniversalDependencies.new.discover(FIXTURES).to_a
     assert_equal EXPECTED_URNS, refs.map(&:id)
   end
@@ -1130,14 +1199,14 @@ class UniversalDependenciesTest < Minitest::Test
       adapter = ud_pointing_at(upstreams)
       adapter.fetch(workdir)
 
-      # First repo gains a file; the LAST NINE repos each lose their only
-      # treebank file. Re-derived at FORTY-TWO treebanks (the six of the
-      # UD v2.19 bundle): the guard trips on strictly greater,
-      # `doomed > 0.2 × ingestible`, so 9 > 0.2 × 42 = 8.4 trips while 8
-      # does not — 9 is the new minimum tripping count (it was 8 at
-      # thirty-six treebanks).
+      # First repo gains a file; the LAST TEN repos each lose their only
+      # treebank file. Re-derived at FORTY-SIX treebanks (the four
+      # historical v2.19 newcomers): the guard trips on strictly greater,
+      # `doomed > 0.2 × ingestible`, so 10 > 0.2 × 46 = 9.2 trips while 9
+      # does not — 10 is the new minimum tripping count (it was 9 at
+      # forty-two treebanks).
       first = slugs.first
-      doomed = slugs.last(9)
+      doomed = slugs.last(10)
       File.write(File.join(upstreams[first], "new.txt"), "new\n")
       git(upstreams[first], "add", ".")
       git(upstreams[first], "-c", "user.email=t@t", "-c", "user.name=t", "commit", "-q", "-m", "grow")
@@ -1155,7 +1224,7 @@ class UniversalDependenciesTest < Minitest::Test
       refute Dir.exist?(File.join(workdir, ".attic"))
 
       report = adapter.fetch(workdir, force: true)
-      assert_includes report.notes, "atticked 9"
+      assert_includes report.notes, "atticked 10"
       doomed.each do |slug|
         assert File.file?(File.join(workdir, ".attic", slug, "#{slug}.conllu")),
                "the attic preserves the <treebank>/<file> shape discover expects"
