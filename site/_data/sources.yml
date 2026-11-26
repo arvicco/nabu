@@ -4585,15 +4585,16 @@ shelves:
     - elektire
     - sr-wikisource
     - eltec-srp
+    - hrcak-marulana
     - vuk-danicic
     - slavistics-pd
     - archiv-slav-phil
     - korpus16
-    documents: 14042
-    documents_display: '14,042'
-    passages: 2325468
-    passages_display: '2,325,468'
-    size_display: 14,042 / 2,325,468
+    documents: 14686
+    documents_display: '14,686'
+    passages: 2335225
+    passages_display: '2,335,225'
+    size_display: 14,686 / 2,335,225
   baltic-finnic-basque:
     sources:
     - senie
