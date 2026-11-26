@@ -570,7 +570,7 @@ module Nabu
         plan.verdicts.each do |verdict|
           case verdict.state
           in :clean then say "  clean   #{verdict.slug} (stamp #{verdict.stamp_short})"
-          in :dirty then say "  dirty   #{verdict.slug} (#{verdict.reason})"
+          in :dirty then say "  dirty   #{verdict.slug} (#{verdict.drift_label})"
           in :skip then say "  skip    #{verdict.slug} (no canonical data)"
           end
         end

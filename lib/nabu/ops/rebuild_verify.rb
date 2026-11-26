@@ -424,16 +424,14 @@ module Nabu
       # NOTE. Every other dirty verdict means a stamp the rebuild should
       # have minted does not match current code — a FAIL.
       #
-      # Caveat: a verdict names only the FIRST drift component the
-      # fingerprint finds (migration, canonical, parser, fold, config — in
-      # that order), so a parser or fold drift behind a trickle's canonical
-      # move reads as canonical here; the next sync re-derives the source
-      # either way.
+      # A verdict names EVERY drifted component, so only a canonical-ONLY
+      # drift is excused as the trickle's; code drift behind the crawl's
+      # canonical move fails, naming both.
       def stamps_verdict(plan)
         dirty = plan.verdicts.select { |verdict| verdict.state == :dirty }
         weak, drifted = dirty.partition { |verdict| verdict.reason == :weak_identity }
         trickled, drifted = drifted.partition { |verdict| trickle_moved?(verdict) }
-        lines = drifted.map { |verdict| "#{verdict.slug}: #{verdict.reason}" }
+        lines = drifted.map { |verdict| "#{verdict.slug}: #{verdict.drift_label}" }
         lines.unshift("the corpus builders read dirty (builder code changed since the stamp)") if plan.builders_dirty
         lines.unshift("the fulltext index reads dirty (index code changed since the stamp)") if plan.index_dirty
         failed = !lines.empty?
@@ -452,7 +450,7 @@ module Nabu
       end
 
       def trickle_moved?(verdict)
-        verdict.reason == :canonical && !trickle_pid(verdict.slug).nil?
+        verdict.reasons == [:canonical] && !trickle_pid(verdict.slug).nil?
       end
 
       # The live trickle runner's pid for +slug+ (its pidfile under
